@@ -298,14 +298,14 @@ export class SummaryRenderer {
       }
       const orderedRows: Array<[number, HTMLElement[]]> = Array.from(rows.entries()).sort(([a], [b]) => a - b);
       const selectedRow: [number, HTMLElement[]] | undefined = orderedRows.find(([, row]) => event.clientY <= Math.max(...row.map((item) => item.getBoundingClientRect().bottom)))
-        || orderedRows.at(-1);
+        || orderedRows[orderedRows.length - 1];
       if (!selectedRow) return;
       const rowItems: HTMLElement[] = selectedRow[1].sort((a, b) => a.getBoundingClientRect().left - b.getBoundingClientRect().left);
       const target = rowItems.find((item) => {
         const rect = item.getBoundingClientRect();
         return event.clientX < rect.left + rect.width / 2;
       });
-      const targetItem = target || rowItems.at(-1);
+      const targetItem = target || rowItems[rowItems.length - 1];
       if (!targetItem) return;
       const after = !target;
       targetItem.toggleClass("is-drop-before", !after);

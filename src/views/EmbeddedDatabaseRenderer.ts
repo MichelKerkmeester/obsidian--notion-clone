@@ -3360,7 +3360,7 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
     // conditionalFormats/summaryRules/chart 显示设置等）。排除稳定身份字段（id/name）、
     // 运行时字段（baseThisFilePath）、共享 schema（view.schema === database.schema 契约，
     // 不能被独立副本覆盖——见 ColumnConfig.linkDatabaseSchema）。
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars -- destructuring intentionally excludes non-persisted view fields
     const { id: _id, name: _name, baseThisFilePath: _baseThisFilePath, schema: _schema, ...persisted } = this.config;
     Object.assign(origView, persisted);
     for (const col of this.config.schema.columns) {

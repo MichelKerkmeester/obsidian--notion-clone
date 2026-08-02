@@ -1809,7 +1809,7 @@ export class CalendarTimelineRenderer {
         this.actions.reorderTimelineEvent?.(event.row, undefined, paths[0]);
       }));
       menu.addItem((item) => item.setTitle(t("mobile.moveBottom")).setIcon("chevrons-down").setDisabled(paths.length === 0).onClick(() => {
-        this.actions.reorderTimelineEvent?.(event.row, paths.at(-1), undefined);
+        this.actions.reorderTimelineEvent?.(event.row, paths[paths.length - 1], undefined);
       }));
     }
     if (this.canMoveTimelineAcrossLane(config) && config.timelineGroupField) {
@@ -1817,7 +1817,7 @@ export class CalendarTimelineRenderer {
       for (const lane of lanes) {
         if (lane.key === groupKey) continue;
         menu.addItem((item) => item.setTitle(`${t("mobile.moveTo")} ${lane.label}`).setIcon("move-right").onClick(() => {
-          const beforePath: string | undefined = lane.events.map((candidate) => candidate.row.file.path).at(-1);
+          const beforePath: string | undefined = lane.events[lane.events.length - 1]?.row.file.path;
           void this.actions.moveTimelineEventToGroup?.(event.row, config.timelineGroupField!, groupKey, lane.key, beforePath, undefined);
         }));
       }
