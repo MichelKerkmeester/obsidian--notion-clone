@@ -61,7 +61,7 @@ Edit frontmatter in place, save several views of the same notes, and keep every 
 
 Each view keeps its own filters, sorting, grouping, visible properties, title property, and layout—without duplicating the notes.
 
-## New in 1.2.7
+## New in 1.2.8
 
 | Faster filter and sort controls |
 | --- |
