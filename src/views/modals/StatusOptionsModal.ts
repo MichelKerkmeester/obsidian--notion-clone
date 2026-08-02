@@ -191,23 +191,23 @@ export class StatusOptionsModal extends Modal {
     this.listEl.empty();
     this.options.forEach((option, index) => {
       const row = this.listEl!.createDiv({ cls: "db-status-option-row" });
-      row.draggable = true;
-      row.ondragstart = (event) => {
-        if (this.shouldIgnoreOptionDrag(event)) {
-          event.preventDefault();
-          return;
-        }
-        this.startDrag(event, index, row);
-      };
       row.ondragover = (event) => {
         event.preventDefault();
         row.addClass("is-drop-target");
       };
       row.ondragleave = () => row.removeClass("is-drop-target");
       row.ondrop = (event) => this.dropOn(event, index, row);
-      row.ondragend = () => this.finishDrag();
 
       const drag = row.createSpan({ cls: "db-status-option-drag", text: "⋮⋮" });
+      drag.draggable = true;
+      drag.ondragstart = (event) => {
+        if (this.shouldIgnoreOptionDrag(event)) {
+          event.preventDefault();
+          return;
+        }
+        this.startDrag(event, index, row);
+      };
+      drag.ondragend = () => this.finishDrag();
       drag.title = t("panel.dragToSort");
       const moveControls = row.createSpan({ cls: "db-mobile-reorder-controls db-status-option-mobile-controls" });
       const upBtn = moveControls.createEl("button", {

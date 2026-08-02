@@ -15,6 +15,7 @@ import {
   isSourceRuleGroup,
   isSourceRuleLeaf,
   isSourceRuleNot,
+  sourceRuleContainsValue,
   sourceRuleValuesLooseEqual,
   sourceRuleValuesStrictEqual,
 } from "./SourceRules";
@@ -111,6 +112,8 @@ interface RuleApplyContext {
   appliedEqValues: Map<string, unknown>;
   /** 负向规则必须等正向规则全部应用后再校验，避免树顺序影响最终诊断。 */
   deferredNegativeRules: SourceRule[];
+  /** file.basename contains 延迟到精确文件名规则全部收集后统一求解，保证树顺序无关。 */
+  filenameContainsRules: SourceRule[];
 }
 
 export function planCreateEntry(input: CreateEntryPlanInput): CreateEntryPlan {
@@ -140,6 +143,7 @@ export function planCreateEntry(input: CreateEntryPlanInput): CreateEntryPlan {
     folderCandidates: [],
     appliedEqValues: new Map(),
     deferredNegativeRules: [],
+    filenameContainsRules: [],
   };
 
   // 1. 先记录"存在但无法采纳为创建约束"的规则（多分支 OR / NOT / expression），
@@ -150,6 +154,10 @@ export function planCreateEntry(input: CreateEntryPlanInput): CreateEntryPlan {
   for (const rule of getRequiredSourceRules(input.sourceRuleTree)) {
     applyRequiredRule(ctx, rule);
   }
+
+  // file.basename contains 可以安全反推最小文件名。延迟处理以兼容同一 AND 中先后出现的
+  // basename/name 精确规则：精确名称优先，contains 只负责校验；没有精确名称时合并片段。
+  applyFilenameContainsRules(ctx);
 
   // 负向规则不负责生成值，但必须检查所有正向规则和默认值合并后的最终候选值。
   // intentionalContextKeys 只决定诊断类型，不能决定是否执行匹配检查。
@@ -228,6 +236,8 @@ function applyRequiredRule(ctx: RuleApplyContext, rule: SourceRule): void {
           plan.diagnostics.push({ reason: "filenameNormalized", field, op, detail: value });
         }
       }
+    } else if (op === "contains") {
+      ctx.filenameContainsRules.push(rule);
     } else {
       plan.diagnostics.push({ reason: "unconstructable", field, op });
     }
@@ -333,6 +343,47 @@ function setFilenameFromRule(plan: CreateEntryPlan, field: string, op: SourceRul
   }
   plan.filename = value;
   plan.hasExactFilenameRule = true;
+}
+
+/**
+ * 构造 file.basename contains 的最小满足文件名。
+ *
+ * contains 在没有 valueType 时按查询端语义忽略大小写；这里直接复用
+ * sourceRuleContainsValue 做最终校验。多个 contains 片段用空格连接即可同时包含。
+ * 若片段自身有首尾空格，用下划线包住，避免 DataSource.createNote 的 trim 破坏约束。
+ */
+function applyFilenameContainsRules(ctx: RuleApplyContext): void {
+  const rules = ctx.filenameContainsRules.filter((rule) => getFilenameContainsNeedle(rule).length > 0);
+  if (rules.length === 0) return;
+
+  const plan = ctx.plan;
+  if (plan.hasExactFilenameRule) {
+    for (const rule of rules) {
+      if (!sourceRuleContainsValue(plan.filename, rule)) {
+        plan.diagnostics.push({ reason: "conflictSameField", field: rule.field, op: rule.op });
+      }
+    }
+    return;
+  }
+
+  const fragments = Array.from(new Set(rules.map((rule) => getFilenameContainsNeedle(rule))));
+  const candidate = fragments
+    .map((fragment) => fragment === fragment.trim() ? fragment : `_${fragment}_`)
+    .join(" ");
+  plan.filename = candidate;
+
+  for (const rule of rules) {
+    if (!sourceRuleContainsValue(candidate, rule)) {
+      plan.diagnostics.push({ reason: "unconstructable", field: rule.field, op: rule.op });
+    }
+  }
+  if (/[\\/]/.test(candidate)) {
+    plan.diagnostics.push({ reason: "filenameInvalid", field: "file.basename", op: "contains", detail: candidate });
+  }
+}
+
+function getFilenameContainsNeedle(rule: SourceRule): string {
+  return stringifyValue(rule.valueType ? getSourceRuleTypedValue(rule) : rule.value);
 }
 
 /** schema 外的 vault 属性：无类型信息，按文本写入可构造 op，其余记诊断。 */

@@ -1,3 +1,5 @@
+import { FORMULA_BUILTIN_CONSTANTS, scanFormulaSegments } from "./FormulaTokenizer";
+import { FORMULA_FILE_FIELDS } from "./FormulaFields";
 import { ColumnDef, ComputedFieldDef } from "./types";
 import { safeEval } from "./SafeEval";
 import { safeString } from "./SafeString";
@@ -236,7 +238,8 @@ export class ComputedFieldEngine {
         if (s == null) return "";
         return safeString(s).replace(/\b\w/g, (c) => c.toUpperCase());
       },
-      len: (s: unknown) => (s != null ? safeString(s).length : 0),
+      // Text length for scalar values; item count for list-valued fields such as file.tags.
+      len: (s: unknown) => Array.isArray(s) ? s.length : (s != null ? safeString(s).length : 0),
       contains: (s: unknown, sub: unknown) => {
         if (s == null || sub == null) return false;
         return safeString(s).includes(safeString(sub));
@@ -378,15 +381,34 @@ export class ComputedFieldEngine {
 
   /**
    * Extract field dependencies from a formula expression.
-   * After normalizeFormula(), `[field]` becomes `field("field")`,
-   * so we only need to match the `field("...")` pattern.
+   * 支持 [field]、[label]→key、field("x")、裸标识符四种引用形式；排除函数调用（后跟 `(`）、
+   * 无关成员访问（前跟 `.`）与字符串字面量内的内容；Bases 的 `formula.*` 是派生字段引用，
+   * 需映射回 schema 中的 computed/Rollup 列。只在 schema 列集合内的标识符才计入依赖
+   * （内置 pi/today/note 等不计）。修复 Bug Z：原先只匹配 field("...")，漏掉默认形式 [field]
+   * 与裸标识符，导致 automatic 模式增量保存漏算依赖列、computed 存储值停留旧值。
    */
-  static extractDependencies(expression: string): string[] {
+  static extractDependencies(expression: string, columns: ColumnDef[] = []): string[] {
+    const allColumns = [...columns, ...FORMULA_FILE_FIELDS];
+    const byKey = new Map(allColumns.map((c) => [c.key, c]));
+    const byLabel = new Map(allColumns.map((c) => [c.label, c]));
     const deps: string[] = [];
-    const re = /field\(\s*["']([^"']+)["']\s*\)/g;
-    let m: RegExpExecArray | null;
-    while ((m = re.exec(expression)) !== null) {
-      if (!deps.includes(m[1])) deps.push(m[1]);
+    const add = (name: string): void => {
+      const col = byKey.get(name) || byLabel.get(name);
+      if (col && !deps.includes(col.key)) deps.push(col.key);
+    };
+    for (const seg of scanFormulaSegments(expression)) {
+      if (seg.kind === "bracket-ref" || seg.kind === "field-call") add(seg.name);
+      else if (seg.kind === "member-ref" && seg.object === "formula") {
+        // Bases formulas address derived fields as formula.<key>. Resolve only
+        // known computed/Rollup columns so arbitrary object members stay out
+        // of the dependency graph.
+        const col = allColumns.find((candidate) =>
+          (candidate.type === "computed" || candidate.type === "rollup") &&
+          (candidate.computedKey === seg.name || candidate.key === seg.name || candidate.key === `formula.${seg.name}`)
+        );
+        if (col && !deps.includes(col.key)) deps.push(col.key);
+      }
+      else if (seg.kind === "identifier" && !seg.isCall && !seg.isMember && !FORMULA_BUILTIN_CONSTANTS.has(seg.text)) add(seg.text);
     }
     return deps;
   }
@@ -541,6 +563,13 @@ export class ComputedFieldEngine {
     const key = String(name).trim();
     const column = this.columns.find((col) => col.label === key || col.key === key);
     if (column) {
+      // Rollups are virtual, authoritative row values. A stale or legacy
+      // frontmatter property with the same key must never shadow them.
+      if (column.type === "rollup") {
+        return Object.prototype.hasOwnProperty.call(computed, column.key)
+          ? this.coerceValue(computed[column.key])
+          : undefined;
+      }
       if (Object.prototype.hasOwnProperty.call(frontmatter, column.key)) {
         return this.coerceValue(frontmatter[column.key]);
       }

@@ -7,6 +7,8 @@ import { createDropdownField } from "./DropdownField";
 import { positionToolbarPopover } from "./PopoverPosition";
 import { renderDropdownPropertyTypeIcon, toPropertyDropdownOption } from "./PropertyTypeIcon";
 import { DatabaseViewState } from "./ViewStateStore";
+import { getViewRuleColumns, removeFilterRuleAt } from "./ViewRuleOperations";
+import { closeActiveDateValuePicker, renderDateValuePicker } from "./DateValuePicker";
 
 export interface FilterPanelActions {
   saveState(): void;
@@ -54,6 +56,7 @@ export class FilterPanelRenderer {
     anchorEl?: HTMLElement
   ): void {
     const savedScroll = this.panelEl?.scrollTop ?? 0;
+    closeActiveDateValuePicker(containerEl.ownerDocument);
     if (this.panelEl) {
       this.panelEl.remove();
       this.panelEl = null;
@@ -91,7 +94,7 @@ export class FilterPanelRenderer {
       text: `+ ${t("panel.addCondition")}`,
     });
     addBtn.onclick = () => {
-      const first = this.getFilterColumns(config)[0]?.key || "file.name";
+      const first = getViewRuleColumns(config)[0]?.key || "file.name";
       state.filters.push({ field: first, op: "contains", value: "" });
       actions.saveState();
       this.render(containerEl, true, state, config, actions, this.anchorEl || undefined);
@@ -99,6 +102,24 @@ export class FilterPanelRenderer {
     };
     positionToolbarPopover(panel, this.anchorEl || undefined);
     if (savedScroll) panel.scrollTop = savedScroll;
+  }
+
+  renderSingleRuleEditor(
+    parent: HTMLElement,
+    containerEl: HTMLElement,
+    index: number,
+    state: DatabaseViewState,
+    config: ViewConfig,
+    actions: FilterPanelActions
+  ): void {
+    closeActiveDateValuePicker(containerEl.ownerDocument);
+    parent.empty();
+    if (!state.filters[index]) return;
+    this.renderFilterRow(parent, index, containerEl, state, config, actions, {
+      compact: true,
+      showRemove: false,
+      rerender: () => this.renderSingleRuleEditor(parent, containerEl, index, state, config, actions),
+    });
   }
 
   private renderHeader(
@@ -130,13 +151,22 @@ export class FilterPanelRenderer {
     containerEl: HTMLElement,
     state: DatabaseViewState,
     config: ViewConfig,
-    actions: FilterPanelActions
+    actions: FilterPanelActions,
+    options?: {
+      compact?: boolean;
+      showRemove?: boolean;
+      rerender?: () => void;
+    }
   ): void {
     const rule = state.filters[index];
     if (!rule) return;
     const row = panel.createDiv({ cls: "db-panel-row" });
+    if (options?.compact) row.addClass("db-active-rule-editor-row");
+    const rerender = options?.rerender || (() => {
+      this.render(containerEl, true, state, config, actions, this.anchorEl || undefined);
+    });
 
-    const allCols = this.getFilterColumns(config);
+    const allCols = getViewRuleColumns(config);
     const firstKey = allCols[0]?.key || "status";
     const currentField = rule.field || firstKey;
     const currentCol = allCols.find((col) => col.key === currentField) || allCols[0];
@@ -155,7 +185,7 @@ export class FilterPanelRenderer {
         if (!nextOps.some(([op]) => op === rule.op)) rule.op = nextOps[0]?.[0] || "eq";
         rule.value = "";
         actions.saveState();
-        this.render(containerEl, true, state, config, actions, this.anchorEl || undefined);
+        rerender();
         actions.refresh();
       },
     });
@@ -180,7 +210,7 @@ export class FilterPanelRenderer {
       onChange: (value) => {
         rule.op = value as FilterRule["op"];
         actions.saveState();
-        this.render(containerEl, true, state, config, actions, this.anchorEl || undefined);
+        rerender();
         actions.refresh();
       },
     });
@@ -191,24 +221,31 @@ export class FilterPanelRenderer {
       row.createSpan({ text: "—", cls: "db-panel-empty-value" });
     }
 
-    const rmBtn = row.createEl("button", { cls: "db-panel-button", text: "×" });
-    rmBtn.onclick = () => {
-      state.filters.splice(index, 1);
-      actions.saveState();
-      this.render(containerEl, true, state, config, actions, this.anchorEl || undefined);
-      actions.refresh();
-    };
-  }
-
-  private getFilterColumns(config: ViewConfig): ColumnDef[] {
-    const columns = config.schema?.columns || [];
-    if (columns.some((col) => col.key === "file.name")) return columns;
-    return [{ key: "file.name", label: t("defaults.nameColumn"), type: "text" }, ...columns];
+    if (options?.showRemove !== false) {
+      const rmBtn = row.createEl("button", { cls: "db-panel-button", text: "×" });
+      rmBtn.onclick = () => {
+        removeFilterRuleAt(state, index);
+        actions.saveState();
+        rerender();
+        actions.refresh();
+      };
+    }
   }
 
   private renderValueInput(row: HTMLElement, rule: FilterRule, col: ColumnDef | undefined, actions: FilterPanelActions): void {
     if (isDateLikeColumnType(col?.type)) {
-      this.renderDateInput(row, rule, actions);
+      renderDateValuePicker({
+        parent: row,
+        value: rule.value || "",
+        placeholder: t("panel.value"),
+        includeTime: col?.type === "datetime",
+        className: "db-panel-date-value db-filter-value-control",
+        onChange: (value) => {
+          rule.value = value;
+          actions.saveState();
+          actions.refresh();
+        },
+      });
       return;
     }
     if (col?.type === "select" || col?.type === "status") {
@@ -289,89 +326,6 @@ export class FilterPanelRenderer {
     };
   }
 
-  private renderDateInput(row: HTMLElement, rule: FilterRule, actions: FilterPanelActions): void {
-    const wrap = row.createDiv({ cls: "db-date-segments db-filter-date-segments" });
-    const yearInp = wrap.createEl("input", { cls: "db-date-seg", attr: { maxlength: "4", placeholder: "YYYY" } });
-    wrap.createSpan({ cls: "db-date-sep", text: "-" });
-    const monthInp = wrap.createEl("input", { cls: "db-date-seg", attr: { maxlength: "2", placeholder: "MM" } });
-    wrap.createSpan({ cls: "db-date-sep", text: "-" });
-    const dayInp = wrap.createEl("input", { cls: "db-date-seg", attr: { maxlength: "2", placeholder: "DD" } });
-    let committedValue = String(rule.value || "").substring(0, 10);
-    const setInputsFromValue = (value: string) => {
-      const parts = value.split("-");
-      yearInp.value = parts[0] || "";
-      monthInp.value = parts[1] || "";
-      dayInp.value = parts[2] || "";
-    };
-    setInputsFromValue(committedValue);
-    const updateValue = () => {
-      const y = yearInp.value.replace(/\D/g, "");
-      const m = monthInp.value.replace(/\D/g, "");
-      const d = dayInp.value.replace(/\D/g, "");
-      yearInp.value = y;
-      monthInp.value = m;
-      dayInp.value = d;
-      rule.value = y && m && d ? `${y}-${this.pad2(m)}-${this.pad2(d)}` : "";
-      this.scheduleRefresh(actions);
-    };
-    const commitValue = () => {
-      this.commitDraftValue(rule, String(rule.value || ""), committedValue, actions, (value) => {
-        committedValue = value;
-      });
-    };
-    const restoreValue = () => {
-      rule.value = committedValue;
-      setInputsFromValue(committedValue);
-      this.clearPendingRefresh();
-      actions.refresh();
-    };
-    const keyHandler = (event: KeyboardEvent, input: HTMLInputElement, prev?: HTMLInputElement) => {
-      if (isImeComposing(event)) return;
-      if (event.key === "Backspace" && input.value === "" && prev) {
-        event.preventDefault();
-        prev.focus();
-        return;
-      }
-      if (event.key === "Enter") {
-        event.preventDefault();
-        commitValue();
-        input.blur();
-        return;
-      }
-      if (event.key === "Escape") {
-        event.preventDefault();
-        restoreValue();
-        input.blur();
-        return;
-      }
-      if (["Backspace", "Delete", "Tab", "ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) return;
-      if (!/^\d$/.test(event.key)) event.preventDefault();
-    };
-    yearInp.onkeydown = (event) => keyHandler(event, yearInp);
-    monthInp.onkeydown = (event) => keyHandler(event, monthInp, yearInp);
-    dayInp.onkeydown = (event) => keyHandler(event, dayInp, monthInp);
-    yearInp.oninput = () => {
-      updateValue();
-      if (yearInp.value.length === 4) monthInp.focus();
-    };
-    monthInp.oninput = () => {
-      monthInp.value = monthInp.value.replace(/\D/g, "");
-      if (monthInp.value.length === 1 && /^[2-9]$/.test(monthInp.value)) monthInp.value = `0${monthInp.value}`;
-      updateValue();
-      if (monthInp.value.length >= 2) dayInp.focus();
-    };
-    dayInp.oninput = () => {
-      dayInp.value = dayInp.value.replace(/\D/g, "");
-      if (dayInp.value.length === 1 && /^[4-9]$/.test(dayInp.value)) dayInp.value = `0${dayInp.value}`;
-      updateValue();
-    };
-    wrap.addEventListener("focusout", (event) => {
-      const next = event.relatedTarget;
-      if (next instanceof Node && wrap.contains(next)) return;
-      commitValue();
-    });
-  }
-
   private commitDraftValue(
     rule: FilterRule,
     nextValue: string,
@@ -386,10 +340,6 @@ export class FilterPanelRenderer {
       onCommitted(nextValue);
     }
     actions.refresh();
-  }
-
-  private pad2(value: string): string {
-    return value.length === 1 ? `0${value}` : value;
   }
 
   private scheduleRefresh(actions: FilterPanelActions): void {

@@ -1,11 +1,14 @@
-import { App, Menu, setIcon, setTooltip, TFile } from "obsidian";
-import { getColumnOptions, isObsidianTagsKey, normalizeOptionValueForKey, toBooleanValue, toMultiSelectValuesForKey } from "../data/ColumnTypes";
+import { App, Menu, setIcon, setTooltip } from "obsidian";
+import { isObsidianTagsKey, resolveOptionDisplay, toBooleanValue, toMultiSelectValuesForKey } from "../data/ColumnTypes";
 import { isExplicitlySorted } from "../data/ManualOrder";
 import { getColumnDisplayType, getNumberDisplayStyle } from "../data/ColumnDisplay";
 import { formatDateTimeValueDisplay, formatDateValueDisplay } from "../data/DateTimeFormat";
 import { getFileFieldFixedType, getRowFileFieldValue, isFileFieldKey, isReadonlyFileField } from "../data/FileFields";
+import { resolveCoverImage } from "../data/CoverImage";
 import { formatGroupKeyDisplay, isComputedGroupField } from "../data/GroupDisplay";
-import { isExternalUrl, parseTextLink } from "../data/TextLink";
+import { renderGroupLabel } from "./GroupLabelRenderer";
+import { markNoteHoverLink } from "./HoverLinkPreview";
+import { parseTextLink } from "../data/TextLink";
 import { parseInlineMarkdown } from "../data/InlineMarkdown";
 import { ColumnDef, CreateEntryPosition, NO_TITLE_FIELD, RowCreateContext, RowData, ViewConfig } from "../data/types";
 import { t } from "../i18n";
@@ -72,14 +75,6 @@ interface ParsedLink {
   external: boolean;
 }
 
-interface ParsedImage {
-  alt: string;
-  label: string;
-  target: string;
-  src: string;
-  external: boolean;
-}
-
 export class GalleryRenderer {
   private resizeState?: { startX: number; startWidth: number };
   private container: HTMLElement | null = null;
@@ -123,7 +118,7 @@ export class GalleryRenderer {
         this.actions.toggleGroupCollapsed?.(groupField, group.key);
       };
       this.renderGroupCheckbox(header, group.rows);
-      header.createSpan({ cls: "db-gallery-group-title", text: formatGroupKeyDisplay(config, groupField, group.key) });
+      renderGroupLabel(header, config, groupField, group.key, "db-gallery-group-title");
       header.createSpan({ cls: "db-gallery-group-count", text: String(group.count) });
       this.actions.renderGroupSummaries?.(header, group.rows, config);
       if (collapsed) continue;
@@ -131,9 +126,10 @@ export class GalleryRenderer {
       this.setupGroupDropTarget(gallery, groupField, group.key);
       const visibleCount = getGroupVisibleCount(config, groupField, group.key, group.rows.length);
       for (const row of group.rows.slice(0, visibleCount)) this.renderCard(gallery, config, row, groupField, group.key, groups, group.rows);
-      renderGroupExpandControls(gallery, config, groupField, group.key, group.rows.length, this.actions);
+      const footer = gallery.createDiv({ cls: "db-gallery-group-footer" });
       const computedGroup = isComputedGroupField(config, groupField);
-      this.renderNewCard(gallery, computedGroup ? undefined : { [groupField]: group.key || "" }, group.rows, computedGroup);
+      this.renderNewCard(footer, computedGroup ? undefined : { [groupField]: group.key || "" }, group.rows, computedGroup);
+      renderGroupExpandControls(footer, config, groupField, group.key, group.rows.length, this.actions);
     }
   }
 
@@ -219,6 +215,7 @@ export class GalleryRenderer {
         cls: "db-gallery-card-title",
         attr: { title: title.isFileTitle ? row.file.path : title.isEmpty ? "" : title.text },
       });
+      markNoteHoverLink(titleEl, row.file.path, row.file.path);
       if (title.isFileTitle) {
         renderStackedFileTitle(titleEl, getFileTitleDisplay(row, Array.from(this.rowByPath.values())), true);
         if (!this.actions.isReadOnly && this.actions.editFileName) {
@@ -442,20 +439,33 @@ export class GalleryRenderer {
   private renderCover(card: HTMLElement, config: ViewConfig, row: RowData): void {
     const cover = card.createDiv({ cls: "db-gallery-cover" });
     cover.style.setProperty("--db-gallery-image-fit", config.galleryImageFit || "cover");
-    const image = this.getCoverImage(config, row);
+    const image = resolveCoverImage(config.galleryImageField, row, this.app);
     if (!image) {
       cover.addClass("is-empty");
       setIcon(cover.createSpan({ cls: "db-gallery-cover-placeholder" }), "image");
       return;
     }
-    const button = cover.createEl("button", { cls: "db-gallery-cover-button" });
-    setTooltip(button, image.label, { delay: 100 });
-    button.onclick = (event) => {
-      event.preventDefault();
-      event.stopPropagation();
+    const coverLink = cover.createEl("div", {
+      cls: "db-gallery-cover-button",
+      attr: { role: "button", tabindex: "0", "aria-label": image.label },
+    });
+    setTooltip(coverLink, image.label, { delay: 100 });
+    const openCover = (): void => {
       void this.openTarget(row, image.target, image.external);
     };
-    button.createEl("img", { attr: { src: image.src, alt: image.alt } });
+    coverLink.onclick = (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      openCover();
+    };
+    coverLink.onkeydown = (event) => {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        event.stopPropagation();
+        openCover();
+      }
+    };
+    coverLink.createEl("img", { attr: { src: image.src, alt: image.alt, draggable: "false" } });
   }
 
   private renderNewCard(gallery: HTMLElement, defaults?: Record<string, unknown>, rows: RowData[] = [], computedGroup = false): void {
@@ -475,18 +485,6 @@ export class GalleryRenderer {
   private getCreatePosition(rows: RowData[]): CreateEntryPosition | undefined {
     const last = rows[rows.length - 1];
     return last ? { afterPath: last.file.path } : undefined;
-  }
-
-  private getCoverImage(config: ViewConfig, row: RowData): ParsedImage | null {
-    const field = config.galleryImageField;
-    if (!field) return null;
-    const value = row.frontmatter[field];
-    const values = Array.isArray(value) ? value : [value];
-    for (const entry of values) {
-      const image = this.parseImage(entry, row);
-      if (image) return image;
-    }
-    return null;
   }
 
   private getCellValue(row: RowData, col: ColumnDef): unknown {
@@ -582,8 +580,8 @@ export class GalleryRenderer {
         parsed.forEach((nodes, idx) => {
           if (idx > 0) valueEl.appendText(", ");
           if (nodes) {
-            if (parsed.length === 1) renderInlineMarkdown(valueEl, nodes, { onOpenLink, onResolveImage });
-            else renderInlineMarkdown(valueEl.createSpan(), nodes, { onOpenLink, onResolveImage });
+            if (parsed.length === 1) renderInlineMarkdown(valueEl, nodes, { onOpenLink, onResolveImage, sourcePath: row.file.path });
+            else renderInlineMarkdown(valueEl.createSpan(), nodes, { onOpenLink, onResolveImage, sourcePath: row.file.path });
           } else {
             valueEl.appendText(String(mdValues[idx]));
           }
@@ -653,42 +651,22 @@ export class GalleryRenderer {
   }
 
   private renderBadge(parent: HTMLElement, col: ColumnDef, value: string): void {
-    const badge = parent.createSpan({ cls: "status-badge", text: value });
-    badge.title = value;
-    const option = getColumnOptions(col).find((item) => normalizeOptionValueForKey(col.key, item.value) === value);
-    badge.addClass(`status-color-${option?.color || "gray"}`);
+    const resolved = resolveOptionDisplay(col, value);
+    const display = resolved.value || t("common.empty");
+    const badge = parent.createSpan({ cls: "status-badge", text: display });
+    badge.title = display;
+    badge.addClass(`status-color-${resolved.option?.color || "gray"}`);
   }
 
   private renderLink(parent: HTMLElement, row: RowData, link: ParsedLink): void {
     const anchor = parent.createEl("a", { cls: "db-gallery-link", text: link.label, attr: { title: link.label } });
     anchor.href = link.external ? link.target : "#";
+    if (!link.external) markNoteHoverLink(anchor, link.target, row.file.path);
     anchor.onclick = (event) => {
       event.preventDefault();
       event.stopPropagation();
       void this.openTarget(row, link.target, link.external);
     };
-  }
-
-  private parseImage(value: unknown, row: RowData): ParsedImage | null {
-    if (typeof value !== "string") return null;
-    const text = value.trim();
-    let target = text;
-    let alt = text;
-    const mdImg = text.match(/^!\[([^\]]*)\]\(([^)]+)\)$/);
-    const wikiImg = text.match(/^!\[\[([^\]|]+)(?:\|([^\]]+))?\]\]$/);
-    if (mdImg) { target = mdImg[2]; alt = mdImg[1] || mdImg[2]; }
-    else if (wikiImg) { target = wikiImg[1]; alt = wikiImg[2] || wikiImg[1]; }
-    if (!this.isImageTarget(target)) return null;
-    const external = isExternalUrl(target);
-    const src = external ? target : this.resolveImageSrc(target, row);
-    if (!src) return null;
-    return { alt, label: alt, target, src, external };
-  }
-
-  private resolveImageSrc(target: string, row: RowData): string | null {
-    const file = this.app.metadataCache.getFirstLinkpathDest(target, row.file.path);
-    if (file instanceof TFile) return this.app.vault.getResourcePath(file);
-    return isExternalUrl(target) ? target : null;
   }
 
   private async openTarget(row: RowData, target: string, external: boolean): Promise<void> {
@@ -697,10 +675,6 @@ export class GalleryRenderer {
       return;
     }
     await this.app.workspace.openLinkText(target, row.file.path);
-  }
-
-  private isImageTarget(target: string): boolean {
-    return /\.(png|jpe?g|gif|webp|svg|avif|bmp)(?:[?#].*)?$/i.test(target);
   }
 
   private getCardSize(config: ViewConfig): number {

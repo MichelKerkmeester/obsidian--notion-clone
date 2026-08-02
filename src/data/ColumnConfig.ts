@@ -2,6 +2,7 @@ import { ColumnDef, DatabaseConfig, RowData, SourceRule, ViewConfig } from "./ty
 import { DatabaseViewState } from "../views/ViewStateStore";
 import { isOptionColumnType } from "./ColumnTypes";
 import { getRowFileFieldValue, isBaseFileField } from "./FileFields";
+import { FORMULA_BUILTIN_CONSTANTS, scanFormulaSegments } from "./FormulaTokenizer";
 import { updateSourceRuleTreeKeyReferences } from "./SourceRules";
 
 /**
@@ -138,6 +139,7 @@ export function updateColumnKeyReferences(
   config.titleField = replaceValue(config.titleField);
   config.recordIconField = replaceValue(config.recordIconField);
   config.galleryImageField = replaceValue(config.galleryImageField);
+  config.boardImageField = replaceValue(config.boardImageField);
   config.boardGroupField = replaceValue(config.boardGroupField);
   config.boardSubgroupField = replaceValue(config.boardSubgroupField);
   config.chartGroupField = replaceValue(config.chartGroupField);
@@ -305,80 +307,34 @@ export function updateSummaryFormulaReferences(
   return changed;
 }
 
-function replaceFormulaFieldReferences(expression: string, names: Set<string>, newKey: string): string {
-  let next = expression.replace(/\[([^\]]+)\]/g, (match, rawName: string) => {
-    const name = String(rawName || "").trim();
-    return names.has(name) ? `[${newKey}]` : match;
-  });
-  next = next.replace(/\bfield\(\s*(["'`])([^"'`]+)\1\s*\)/g, (match, quote: string, rawName: string) => {
-    const name = String(rawName || "").trim();
-    return names.has(name) ? `field(${quote}${newKey}${quote})` : match;
-  });
-  for (const name of names) {
-    next = replaceBaseFormulaFieldReference(next, name, newKey);
-  }
-  return next;
-}
-
-function replaceBaseFormulaFieldReference(expression: string, oldKey: string, newKey: string): string {
-  const escaped = oldKey.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-  const newJson = JSON.stringify(newKey);
-  let next = expression
-    .replace(new RegExp(`\\b(note|properties)\\.${escaped}\\b`, "g"), (_match, prefix) => `${prefix}[${newJson}]`)
-    .replace(new RegExp(`\\b(note|properties)\\[\\s*(["'])${escaped}\\2\\s*\\]`, "g"), (_match, prefix) => `${prefix}[${newJson}]`);
-  if (oldKey.startsWith("formula.")) {
-    const oldFormulaKey = oldKey.slice("formula.".length);
-    const newFormulaKey = newKey.startsWith("formula.") ? newKey.slice("formula.".length) : newKey;
-    const escapedFormulaKey = oldFormulaKey.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-    const newFormulaJson = JSON.stringify(newFormulaKey);
-    next = next
-      .replace(new RegExp(`\\bformula\\.${escapedFormulaKey}\\b`, "g"), `formula[${newFormulaJson}]`)
-      .replace(new RegExp(`\\bformula\\[\\s*(["'])${escapedFormulaKey}\\1\\s*\\]`, "g"), `formula[${newFormulaJson}]`);
-  }
-  return replaceBaseBareIdentifierOutsideStrings(next, oldKey, newKey);
-}
-
-function replaceBaseBareIdentifierOutsideStrings(expression: string, oldKey: string, newKey: string): string {
-  if (!/^[A-Za-z_$][A-Za-z0-9_$]*$/.test(oldKey)) return expression;
-  const replacement = /^[A-Za-z_$][A-Za-z0-9_$]*$/.test(newKey) ? newKey : `note[${JSON.stringify(newKey)}]`;
-  let result = "";
-  let index = 0;
-  let quote: string | null = null;
-  while (index < expression.length) {
-    const char = expression[index];
-    if (quote) {
-      result += char;
-      if (char === "\\") {
-        index += 1;
-        if (index < expression.length) result += expression[index];
-      } else if (char === quote) {
-        quote = null;
+export function replaceFormulaFieldReferences(expression: string, names: Set<string>, newKey: string): string {
+  // 全部走 scanFormulaSegments（跳过字符串/注释/正则、递归模板、member-ref 由扫描器产生），
+  // 不再对原始表达式跑正则。修复 GPT 复核：① 字符串内引用不改写；② [多词标签] 不破坏；
+  // ③ 内置/语言字面量不随同名列改写；④ 字符串内 note.price 不被正则误改。
+  const segments = scanFormulaSegments(expression);
+  const replacements: Array<{ start: number; end: number; text: string }> = [];
+  for (const seg of segments) {
+    if (seg.kind === "bracket-ref") {
+      if (names.has(seg.name)) replacements.push({ start: seg.start, end: seg.end, text: `[${newKey}]` });
+    } else if (seg.kind === "field-call") {
+      if (names.has(seg.name)) replacements.push({ start: seg.start, end: seg.end, text: `field(${seg.quote}${newKey}${seg.quote})` });
+    } else if (seg.kind === "member-ref") {
+      // formula.total 的重命名集合用完整键 formula.total，需匹配 object.name；其余（note.x/properties.x）按 name。
+      const fullKey = seg.object === "formula" ? `formula.${seg.name}` : seg.name;
+      if (seg.object === "formula" ? names.has(fullKey) : names.has(seg.name)) {
+        const text = seg.object === "formula"
+          ? `formula[${JSON.stringify(newKey.startsWith("formula.") ? newKey.slice("formula.".length) : newKey)}]`
+          : `${seg.object}[${JSON.stringify(newKey)}]`;
+        replacements.push({ start: seg.start, end: seg.end, text });
       }
-      index += 1;
-      continue;
+    } else if (seg.kind === "identifier" && !seg.isCall && !seg.isMember && !FORMULA_BUILTIN_CONSTANTS.has(seg.text) && names.has(seg.text)) {
+      const replacement = /^[A-Za-z_$][A-Za-z0-9_$]*$/.test(newKey) ? newKey : `note[${JSON.stringify(newKey)}]`;
+      replacements.push({ start: seg.start, end: seg.end, text: replacement });
     }
-    if (char === "\"" || char === "'" || char === "`") {
-      quote = char;
-      result += char;
-      index += 1;
-      continue;
-    }
-    if (
-      expression.startsWith(oldKey, index) &&
-      !isIdentifierChar(expression[index - 1]) &&
-      !isIdentifierChar(expression[index + oldKey.length]) &&
-      expression[index - 1] !== "."
-    ) {
-      result += replacement;
-      index += oldKey.length;
-      continue;
-    }
-    result += char;
-    index += 1;
+  }
+  let result = expression;
+  for (let i = replacements.length - 1; i >= 0; i -= 1) {
+    result = result.slice(0, replacements[i].start) + replacements[i].text + result.slice(replacements[i].end);
   }
   return result;
-}
-
-function isIdentifierChar(char: string | undefined): boolean {
-  return !!char && /[A-Za-z0-9_$]/.test(char);
 }

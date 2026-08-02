@@ -211,11 +211,20 @@ function openDropdownPopover(anchor: HTMLElement, options: DropdownFieldOptions,
     if (target && (panel.contains(target) || anchor.contains(target))) return;
     close();
   };
+  const onKeydown = (event: KeyboardEvent) => {
+    if (event.key !== "Escape") return;
+    event.preventDefault();
+    event.stopPropagation();
+    close();
+    anchor.focus();
+  };
   const outsideTimer = window.setTimeout(() => window.activeDocument.addEventListener("mousedown", onOutside, true), 0);
+  panel.addEventListener("keydown", onKeydown);
   const removeAutoClose = installPopoverAutoClose({ panel, anchorEl: anchor, close });
   return () => {
     window.clearTimeout(outsideTimer);
     window.activeDocument.removeEventListener("mousedown", onOutside, true);
+    panel.removeEventListener("keydown", onKeydown);
     removeAutoClose();
     panel.remove();
   };

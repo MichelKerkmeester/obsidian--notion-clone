@@ -16,6 +16,7 @@ import { App, finishRenderMath, renderMath, TFile } from "obsidian";
 import { parseInlineMarkdown, type InlineMarkdownNode } from "../data/InlineMarkdown";
 import type { RowData } from "../data/types";
 import { parseTextLink } from "../data/TextLink";
+import { markNoteHoverLink } from "./HoverLinkPreview";
 
 export type LinkClickStrategy = "table" | "card";
 
@@ -29,6 +30,8 @@ export interface RenderInlineMarkdownOptions {
   baseClass?: string;
   /** How anchor clicks coexist with the host interaction. Default "card". */
   linkClickStrategy?: LinkClickStrategy;
+  /** Source note path used to resolve relative internal links and Page Preview. */
+  sourcePath?: string;
 }
 
 export interface RenderedTextWidthMeasurer {
@@ -214,6 +217,9 @@ function appendNode(
         cls: `${baseClass}-md-link ${node.external ? "external-link" : "internal-link"}`,
         attr: { href: node.external ? node.target : "#", title: node.target },
       });
+      if (!node.external && options.sourcePath) {
+        markNoteHoverLink(anchor, node.target, options.sourcePath);
+      }
       for (const child of node.label) appendNode(anchor, child, options, baseClass, strategy);
       attachAnchorClick(anchor, () => options.onOpenLink(node.target, node.external), strategy);
       break;
@@ -224,6 +230,7 @@ function appendNode(
         text: node.label,
         attr: { href: "#", title: node.target },
       });
+      if (options.sourcePath) markNoteHoverLink(anchor, node.target, options.sourcePath);
       attachAnchorClick(anchor, () => options.onOpenLink(node.target, false), strategy);
       break;
     }

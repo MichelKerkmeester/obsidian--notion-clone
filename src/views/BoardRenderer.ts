@@ -1,11 +1,14 @@
 import { App, Menu, setIcon, setTooltip } from "obsidian";
-import { getColumnOptions, isObsidianTagsKey, normalizeOptionValueForKey, toBooleanValue, toMultiSelectValuesForKey } from "../data/ColumnTypes";
+import { isObsidianTagsKey, resolveOptionDisplay, toBooleanValue, toMultiSelectValuesForKey } from "../data/ColumnTypes";
 import { OPTION_REGISTRATION_COLORS } from "../data/OptionRegistration";
 import { isExplicitlySorted } from "../data/ManualOrder";
 import { getColumnDisplayType, getNumberDisplayStyle } from "../data/ColumnDisplay";
 import { formatDateTimeValueDisplay, formatDateValueDisplay } from "../data/DateTimeFormat";
 import { getFileFieldFixedType, getRowFileFieldValue, isFileFieldKey, isReadonlyFileField } from "../data/FileFields";
+import { resolveCoverImage } from "../data/CoverImage";
 import { formatGroupKeyDisplay, isComputedGroupField } from "../data/GroupDisplay";
+import { renderGroupLabel } from "./GroupLabelRenderer";
+import { markNoteHoverLink } from "./HoverLinkPreview";
 import { parseTextLink } from "../data/TextLink";
 import { parseInlineMarkdown } from "../data/InlineMarkdown";
 import { ColumnDef, CreateEntryPosition, NO_TITLE_FIELD, RowCreateContext, RowData, StatusColor, ViewConfig } from "../data/types";
@@ -21,7 +24,7 @@ import { renderInlineMarkdown, resolveInlineImageSrc, valueToTooltip } from "./I
 import { clampCardFieldWidth, getFieldWidth } from "./ColumnWidth";
 import { renderGroupExpandControls } from "./GroupExpandControls";
 import { getGroupVisibleCount } from "../data/GroupVisibility";
-import { resolveBoardCardDropIntent, resolveBoardColumnByPoint, resolveBoardContainerDropOrder, type BoardDropCandidate } from "../data/BoardContainerDrop";
+import { isSameBoardGroup, resolveBoardCardDropIntent, resolveBoardColumnByPoint, resolveBoardContainerDropOrder, type BoardDropCandidate } from "../data/BoardContainerDrop";
 import { resolveTitleFieldDisplay } from "../data/TitleFieldDisplay";
 import { isImeComposing } from "../data/KeyboardUtils";
 import { openOptionColorPicker } from "./OptionColorPicker";
@@ -332,7 +335,7 @@ export class BoardRenderer {
       checkbox.onchange = () => this.actions.toggleRowsSelected(group.rows, checkbox.checked);
     }
     const headerText = header.createDiv({ cls: "db-board-header-text" });
-    this.renderGroupTitle(headerText, config, groupField, group.key, "db-board-column-title");
+    renderGroupLabel(headerText, config, groupField, group.key, "db-board-column-title");
     headerText.createSpan({ cls: "db-board-count", text: String(group.count) });
     if (config.summaryRules?.length) {
       const summaries = headerText.createSpan({ cls: "db-board-header-summaries" });
@@ -399,7 +402,7 @@ export class BoardRenderer {
       checkbox.onchange = () => this.actions.toggleRowsSelected(subgroup.rows, checkbox.checked);
     }
     const headerText = header.createDiv({ cls: "db-board-header-text" });
-    this.renderGroupTitle(headerText, config, subgroupField, subgroup.key, "db-board-subgroup-title");
+    renderGroupLabel(headerText, config, subgroupField, subgroup.key, "db-board-subgroup-title");
     headerText.createSpan({ cls: "db-board-subgroup-count", text: String(subgroup.count) });
     if (config.summaryRules?.length) {
       const summaries = headerText.createSpan({ cls: "db-board-header-summaries" });
@@ -561,6 +564,8 @@ export class BoardRenderer {
         const intent = resolveBoardCardDropIntent({
           fromGroup,
           targetGroupKey: group.key,
+          fromSubgroup,
+          targetSubgroupKey: subgroupKey,
           explicitlySorted: isExplicitlySorted(config),
         });
         if (intent === "ignore") return;
@@ -575,6 +580,8 @@ export class BoardRenderer {
         this.endBoardDragPreview();
       });
     }
+
+    if (config.boardImageField) this.renderCover(card, config, row);
 
     const controls = card.createDiv({ cls: "db-board-card-controls" });
     if (!this.actions.isReadOnly) {
@@ -608,6 +615,7 @@ export class BoardRenderer {
         cls: "db-board-card-title",
         attr: { title: title.isFileTitle ? row.file.path : title.isEmpty ? "" : title.text },
       });
+      markNoteHoverLink(titleEl, row.file.path, row.file.path);
       if (title.isFileTitle) {
         renderStackedFileTitle(titleEl, getFileTitleDisplay(row, Array.from(this.rowByPath.values())), true);
         if (!this.actions.isReadOnly && this.actions.editFileName) {
@@ -643,6 +651,44 @@ export class BoardRenderer {
       this.attachColumnContextMenu(label, col);
       this.renderPreviewValue(item, row, col, displayValue, empty, displayType);
     }
+  }
+
+  private renderCover(card: HTMLElement, config: ViewConfig, row: RowData): void {
+    const cover = card.createDiv({ cls: "db-board-card-cover" });
+    const ratio = Math.max(0.35, Math.min(2.5, config.boardImageAspectRatio ?? 0.75));
+    cover.style.aspectRatio = String(ratio);
+    cover.style.setProperty("--db-board-image-fit", config.boardImageFit || "cover");
+    const image = resolveCoverImage(config.boardImageField, row, this.app);
+    if (!image) {
+      cover.addClass("is-empty");
+      setIcon(cover.createSpan({ cls: "db-board-card-cover-placeholder" }), "image");
+      return;
+    }
+    const coverLink = cover.createEl("div", {
+      cls: "db-board-card-cover-button",
+      attr: { role: "button", tabindex: "0", "aria-label": image.label },
+    });
+    setTooltip(coverLink, image.label, { delay: 100 });
+    const openCover = (): void => {
+      if (image.external) {
+        window.open(image.target);
+        return;
+      }
+      void this.app.workspace.openLinkText(image.target, row.file.path);
+    };
+    coverLink.onclick = (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      openCover();
+    };
+    coverLink.onkeydown = (event) => {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        event.stopPropagation();
+        openCover();
+      }
+    };
+    coverLink.createEl("img", { attr: { src: image.src, alt: image.alt, draggable: "false" } });
   }
 
   private attachRowContextMenu(el: HTMLElement, row: RowData, context?: RowCreateContext): void {
@@ -826,10 +872,10 @@ export class BoardRenderer {
     if (!order.includes(draggedPath)) order = [...order, draggedPath];
     const position = this.getDropPositionFromOrder(order, draggedPath);
     const groupUpdates: Array<{ field: string; fromGroupKey: string; toGroupKey: string }> = [];
-    if (fromGroup && fromGroup !== groupKey) {
+    if (fromGroup != null && !isSameBoardGroup(fromGroup, groupKey)) {
       groupUpdates.push({ field: groupField, fromGroupKey: fromGroup, toGroupKey: groupKey });
     }
-    if (subgroupField && subgroupKey != null && fromSubgroup && fromSubgroup !== subgroupKey) {
+    if (subgroupField && subgroupKey != null && fromSubgroup != null && !isSameBoardGroup(fromSubgroup, subgroupKey)) {
       groupUpdates.push({ field: subgroupField, fromGroupKey: fromSubgroup, toGroupKey: subgroupKey });
     }
     if (groupUpdates.length > 0 && this.actions.moveRowWithGroupUpdatesAndPosition) {
@@ -1009,8 +1055,8 @@ export class BoardRenderer {
         parsed.forEach((nodes, idx) => {
           if (idx > 0) valueEl.appendText(", ");
           if (nodes) {
-            if (parsed.length === 1) renderInlineMarkdown(valueEl, nodes, { onOpenLink, onResolveImage });
-            else renderInlineMarkdown(valueEl.createSpan(), nodes, { onOpenLink, onResolveImage });
+            if (parsed.length === 1) renderInlineMarkdown(valueEl, nodes, { onOpenLink, onResolveImage, sourcePath: row.file.path });
+            else renderInlineMarkdown(valueEl.createSpan(), nodes, { onOpenLink, onResolveImage, sourcePath: row.file.path });
           } else {
             valueEl.appendText(String(mdValues[idx]));
           }
@@ -1079,41 +1125,12 @@ export class BoardRenderer {
   }
 
   private renderBadge(parent: HTMLElement, col: ColumnDef, value: string): void {
-    const badge = parent.createSpan({ cls: "status-badge", text: value });
-    badge.title = value;
-    const option = getColumnOptions(col).find((item) => normalizeOptionValueForKey(col.key, item.value) === value);
-    if (option) badge.addClass(`status-color-${option.color}`);
+    const resolved = resolveOptionDisplay(col, value);
+    const display = resolved.value || t("common.empty");
+    const badge = parent.createSpan({ cls: "status-badge", text: display });
+    badge.title = display;
+    if (resolved.option) badge.addClass(`status-color-${resolved.option.color}`);
     else badge.addClass("status-color-gray");
-  }
-
-  private renderGroupTitle(
-    parent: HTMLElement,
-    config: ViewConfig,
-    field: string,
-    groupKey: string,
-    className: string
-  ): void {
-    const label = formatGroupKeyDisplay(config, field, groupKey);
-    const title = parent.createSpan({ cls: className });
-    title.title = label;
-    const column = config.schema.columns.find((candidate) => candidate.key === field);
-    const option = column
-      ? getColumnOptions(column).find((candidate) =>
-        normalizeOptionValueForKey(column.key, candidate.value) ===
-        normalizeOptionValueForKey(column.key, groupKey))
-      : undefined;
-    const displayType = column
-      ? getColumnDisplayType(column, config.schema.computedFields)
-      : undefined;
-    const isOptionGroup = displayType === "status" || displayType === "select" || displayType === "multi-select";
-    if (!isOptionGroup) {
-      title.setText(label);
-      return;
-    }
-    title.createSpan({
-      cls: `status-badge status-color-${option?.color || "gray"}`,
-      text: label,
-    });
   }
 
   private startColumnResize(event: MouseEvent, board: HTMLElement, config: ViewConfig): void {
@@ -1163,6 +1180,7 @@ export class BoardRenderer {
   private renderLink(parent: HTMLElement, row: RowData, link: ParsedLink): void {
     const anchor = parent.createEl("a", { cls: "db-board-card-link", text: link.label, attr: { title: link.label } });
     anchor.href = link.external ? link.target : "#";
+    if (!link.external) markNoteHoverLink(anchor, link.target, row.file.path);
     anchor.onclick = (event) => {
       event.preventDefault();
       event.stopPropagation();

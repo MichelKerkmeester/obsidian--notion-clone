@@ -72,6 +72,17 @@ export function addDateKeyDays(dateKey: string, days: number): string {
   return dateKeyFromUtc(addUtcDays(base, days));
 }
 
+/**
+ * 日历日期导航（shiftDay/shiftWeek 共用）：基于日期键加减天数，返回新日期键与所属月份键。
+ * 全程 UTC 口径（addDateKeyDays），月份由日期键 slice(0,7) 得到，不读 local Date 分量，
+ * 因此任何时区（含负偏移）下都不会跳月（Bug M）。非法日期返回 null。
+ */
+export function navigateCalendarDate(dateKey: string, deltaDays: number): { day: string; month: string } | null {
+  const day = addDateKeyDays(dateKey, deltaDays);
+  if (day === dateKey) return null;
+  return { day, month: day.slice(0, 7) };
+}
+
 export function dateKeyDaysBetween(startKey: string, endKey: string): number | null {
   const start = parseDateKeyToUtc(startKey);
   const end = parseDateKeyToUtc(endKey);
@@ -138,4 +149,29 @@ function clampInteger(value: unknown, min: number, max: number, fallback: number
   const numeric = typeof value === "number" ? value : Number(value);
   if (!Number.isFinite(numeric)) return fallback;
   return Math.max(min, Math.min(max, Math.round(numeric)));
+}
+
+/**
+ * 日历列宽范围（月 / 周 / 日三 scale 共用）。
+ * - day：单列宽范围 300–1900，接近 Obsidian 全宽。
+ * - month / week：7 列紧凑范围 80–320，防止过宽。
+ *
+ * Renderer 拖拽、Toolbar slider、getColumnWidth 读取三处共用此范围，
+ * 避免写入 clamp 与读取 clamp 漂移（Bug N）。
+ */
+export function getCalendarColumnWidthRange(scale: string | undefined): { min: number; max: number } {
+  if (scale === "day") return { min: 300, max: 1900 };
+  return { min: 80, max: 320 };
+}
+
+/**
+ * 开启自定义列宽模式时初始化 calendarCustomColumnWidth（Bug N 补）。
+ * - day：fallback 用 min（300），不能用 120（会越界，与 getColumnWidth 渲染值不一致）。
+ * - month / week：fallback=120（落在 [80,320] 内）。
+ * 已有值经范围 clamp，避免越界残留（如旧配置写入的 120 在 day 视图被收敛到 300）。
+ */
+export function resolveCalendarCustomColumnWidth(scale: string | undefined, existing: number | undefined): number {
+  const { min, max } = getCalendarColumnWidthRange(scale);
+  const fallback = scale === "day" ? min : 120;
+  return Math.max(min, Math.min(max, existing ?? fallback));
 }

@@ -76,3 +76,13 @@ export function openOptionColorPicker(
   activePickers.set(doc, close);
   return close;
 }
+
+/** Close the currently-open option color picker on `doc`, if any.
+ *  Reuses the picker's own `close()` so its DOM node, event listeners, and
+ *  `activePickers` entry are all cleaned up. Returns true if a picker was open. */
+export function closeActiveOptionColorPicker(doc: Document): boolean {
+  const close = activePickers.get(doc);
+  if (!close) return false;
+  close();
+  return true;
+}

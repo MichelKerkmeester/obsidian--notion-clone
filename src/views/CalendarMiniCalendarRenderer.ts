@@ -38,6 +38,10 @@ export interface MiniCalendarOptions {
   onSelectMonth(monthKey: string): void;
   onSelectYear(year: number): void;
   onSelectToday(todayKey: string): void;
+  footerAction?: {
+    label: string;
+    onSelect(): void;
+  };
 }
 
 export function buildMiniCalendarEventIndex(options: MiniCalendarEventIndexOptions): MiniCalendarEventIndex {
@@ -104,6 +108,17 @@ export function renderMiniCalendar(options: MiniCalendarOptions): void {
   }
 
   const footer = popover.createDiv({ cls: "db-calendar-mini-footer" });
+  if (options.footerAction) {
+    const action = footer.createEl("button", {
+      cls: "db-calendar-mini-footer-action",
+      text: options.footerAction.label,
+      attr: { type: "button" },
+    });
+    action.onclick = (event) => {
+      event.stopPropagation();
+      options.footerAction?.onSelect();
+    };
+  }
   const todayKey = options.todayKey;
   const today = footer.createEl("button", {
     cls: "db-calendar-mini-today",

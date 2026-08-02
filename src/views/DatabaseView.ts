@@ -7,8 +7,9 @@ import { moveDatabaseFilePath, sortDatabaseFileEntries } from "../data/DatabaseF
 import { QueryEngine } from "../data/QueryEngine";
 import { PropertyService } from "../data/PropertyService";
 import { ComputedFieldEngine } from "../data/ComputedField";
-import { evaluateComputedFields } from "../data/ComputedEvaluator";
+import { evaluateComputedFields, hasRollupComputedDependency } from "../data/ComputedEvaluator";
 import { applyRangeSelection } from "../data/RangeSelection";
+import { installNoteHoverPreview } from "./HoverLinkPreview";
 import { resolveViewSelection } from "../data/ViewSelection";
 import {
   ensureColumnOrder,
@@ -67,6 +68,9 @@ import { FilterPanelRenderer } from "./FilterPanelRenderer";
 import { ColumnManagerRenderer } from "./ColumnManagerRenderer";
 import { SortPanelRenderer } from "./SortPanelRenderer";
 import { ToolbarRenderer } from "./ToolbarRenderer";
+import { ActiveViewControlsRenderer } from "./ActiveViewControlsRenderer";
+import { ActiveRulePopoverRenderer } from "./ActiveRulePopoverRenderer";
+import { removeFilterRuleAt, removeSortRuleAt } from "./ViewRuleOperations";
 import { ViewConfigPanelRenderer } from "./ViewConfigPanelRenderer";
 import { ColumnOperations, FrontmatterValueChange } from "./ColumnOperations";
 import { BoardGroup, BoardRenderer } from "./BoardRenderer";
@@ -86,8 +90,8 @@ import { CalendarTimelineCreateOptions, CalendarTimelineDateChange, CalendarTime
 import { CalendarRenderer } from "./CalendarRenderer";
 import { CalendarToolbarRenderer } from "./CalendarToolbarRenderer";
 import { ColumnRenameModal, ColumnRenameResult } from "./modals/ColumnRenameModal";
-import { RelationRollupConfigModal } from "./modals/RelationRollupConfigModal";
-import { CreateRecordIconFieldModal } from "./modals/CreateRecordIconFieldModal";
+import { RelationRollupConfigModal, RelationRollupConfigResult, RelationTargetChangeImpact } from "./modals/RelationRollupConfigModal";
+import { CreatePropertyModal } from "./modals/CreatePropertyModal";
 import { DeleteDatabaseModal } from "./modals/DeleteDatabaseModal";
 import { confirmWithModal } from "./modals/ConfirmModal";
 import { AddDatabaseModal } from "./modals/AddDatabaseModal";
@@ -138,8 +142,10 @@ import { openBulkEditFieldMenu } from "./BulkEditFieldMenu";
 import { positionToolbarPopover } from "./PopoverPosition";
 import { closeRecordDetailPanel, getOpenRecordDetailPath, openRecordDetailPanel, refreshRecordDetailPanel } from "./RecordDetailPanel";
 import { syncTableColumnLayouts } from "./TableColumnLayoutSync";
+import { hasRelationValue, planRelationTargetChange } from "../data/RelationTargetChange";
 import { highlightSearchMatches, renderSearchHighlightedText } from "./SearchHighlight";
 import { isImeComposing } from "../data/KeyboardUtils";
+import { PhysicalShortcutGuard } from "../data/PhysicalShortcutGuard";
 import {
   cycleTableSelectionActiveCell,
   isTableCellAtGridEdge,
@@ -327,6 +333,8 @@ export class DatabaseView extends FileView {
   private sortPanelRenderer = new SortPanelRenderer();
   private viewConfigPanelRenderer = new ViewConfigPanelRenderer();
   private toolbarRenderer = new ToolbarRenderer();
+  private activeViewControlsRenderer = new ActiveViewControlsRenderer();
+  private activeRulePopoverRenderer = new ActiveRulePopoverRenderer();
   private boardRenderer: BoardRenderer;
   private galleryRenderer: GalleryRenderer;
   private listRenderer: ListRenderer;
@@ -467,6 +475,7 @@ export class DatabaseView extends FileView {
   private databaseFolder: string;
   private readonly instanceId = generateId();
   private scrollbarIdleTimer: number | null = null;
+  private physicalShortcutGuard = new PhysicalShortcutGuard();
   private descriptionScrollTimers = new WeakMap<HTMLElement, number>();
   private refreshCoordinator: RefreshCoordinator;
   private pendingSourceReload = false;
@@ -509,6 +518,7 @@ export class DatabaseView extends FileView {
       (row, col, intent) => this.restoreTableCellFocus(row, col, intent),
       (row, newName) => this.renameFileWithHistory(row, newName),
       this.instanceId,
+      (col, row) => this.showRelationRollupConfigModal(col, row),
     );
     this.columnOperations = new ColumnOperations({
       app: this.app,
@@ -681,7 +691,7 @@ export class DatabaseView extends FileView {
       editStatusOptions: (col) => this.showStatusOptionsModal(col),
       showOptionsEditor: (col) => this.showStatusOptionsModal(col),
       changeColumnType: (col, type) => { void this.changeColumnType(col, type); },
-      insertColumn: (col, side) => { void this.columnOperations.insertColumnNear(col, side); },
+      insertColumn: (col, side) => { void this.openCreatePropertyModal({ nearCol: col, side }); },
       duplicateColumn: (col) => { void this.columnOperations.duplicateColumn(col); },
       moveColumn: (key, offset) => this.columnOperations.moveColumn(key, offset),
       hideColumn: (col) => this.columnOperations.hideColumn(col),
@@ -826,7 +836,9 @@ export class DatabaseView extends FileView {
       ".db-group-order-popover:not(.is-hidden), .db-chart-options-popover:not(.is-hidden), " +
       ".db-calendar-options-popover:not(.is-hidden), .db-calendar-timeline-options-popover:not(.is-hidden), " +
       ".db-database-popover:not(.is-hidden), .db-view-tab-popover:not(.is-hidden), " +
-      ".db-add-view-popover:not(.is-hidden), .db-board-drag-group-preview"
+      ".db-add-view-popover:not(.is-hidden), .db-board-drag-group-preview, " +
+      ".db-icon-picker-popover:not(.is-hidden), .db-calendar-day-popover:not(.is-hidden), " +
+      ".db-calendar-week-allday-popover:not(.is-hidden), .db-calendar-mini-popover:not(.is-hidden)"
     ));
   }
 
@@ -1166,6 +1178,7 @@ export class DatabaseView extends FileView {
   async onOpen(): Promise<void> {
     this.containerEl_ = this.contentEl;
     this.containerEl_.addClass("note-database-container");
+    installNoteHoverPreview(this, this.containerEl_, this.app, this.leaf);
     this.undoActionEl = this.addAction("undo-2", t("toolbar.undo"), () => { void this.undoLastEdit(); });
     this.undoActionEl.addClass("db-view-undo-action");
     window.requestAnimationFrame(() => this.positionUndoActionNearNavigation());
@@ -1175,6 +1188,13 @@ export class DatabaseView extends FileView {
       this.registerDomEvent(this.containerEl_.parentElement, "wheel", (event) => this.forwardOuterWheelScroll(event));
     }
     window.activeDocument.addEventListener("mousedown", this.handleOutsideClickBound, true);
+    this.registerDomEvent(window.activeDocument, "keydown", (event) => this.physicalShortcutGuard.handleKeyDown(event), { capture: true });
+    this.registerDomEvent(window.activeDocument, "keyup", (event) => this.physicalShortcutGuard.handleKeyUp(event), { capture: true });
+    this.registerDomEvent(window.activeDocument, "mousedown", (event) => this.physicalShortcutGuard.beginPointerGesture(event), { capture: true });
+    this.registerDomEvent(window.activeDocument, "mouseup", () => {
+      this.physicalShortcutGuard.endPointerGesture();
+      this.getRefreshWindow().requestAnimationFrame(() => this.physicalShortcutGuard.settlePointerGesture());
+    }, { capture: true });
     this.registerDomEvent(window.activeDocument, "keydown", (event) => this.handleDatabaseKeydown(event));
     // Cmd/Ctrl+F：view scope keymap 优先于全局 editor:open-search（DOM bubble/capture 都会被
     // Obsidian keymap 抢先 stopPropagation）。Mod 自动适配 macOS Cmd / 其它平台 Ctrl；
@@ -1186,7 +1206,12 @@ export class DatabaseView extends FileView {
     this.scope.register(["Mod"], "y", (event) => this.handleHistoryShortcut(event, "redo"));
     this.scope.register(["Mod"], "d", (event) => this.handleTableFillShortcut(event, "down"));
     this.scope.register(["Mod"], "r", (event) => this.handleTableFillShortcut(event, "right"));
+    this.scope.register(["Mod"], "a", (event) => this.handleTableClipboardShortcut(event, "select-all"));
+    this.scope.register(["Mod"], "c", (event) => this.handleTableClipboardShortcut(event, "copy"));
+    this.scope.register(["Mod"], "x", (event) => this.handleTableClipboardShortcut(event, "cut"));
+    this.scope.register(["Mod"], "v", (event) => this.handleTableClipboardShortcut(event, "paste"));
     this.scope.register([], "Escape", (event) => this.handleInlineEditorEscape(event));
+    this.registerDomEvent(this.getRefreshWindow(), "blur", () => this.physicalShortcutGuard.reset());
     this.registerDomEvent(this.getRefreshWindow(), "focus", () => this.refreshOnActivation());
     this.registerEvent(this.app.workspace.on("active-leaf-change", (leaf) => {
       if (leaf === this.leaf) this.refreshOnActivation();
@@ -1363,6 +1388,29 @@ export class DatabaseView extends FileView {
     return false;
   }
 
+  private handleTableClipboardShortcut(
+    event: KeyboardEvent,
+    action: "select-all" | "copy" | "cut" | "paste",
+  ): boolean {
+    const active = window.activeDocument.activeElement;
+    const isEditing = isHTMLElement(active)
+      && active.closest("input, textarea, select, .db-cell-editing, .db-cell-popover-editing, .modal") != null;
+    const hasCellPopover = this.containerEl_?.querySelector(
+      ".db-cell-option-popover, .db-cell-date-popover, .db-color-picker-popup"
+    ) != null;
+    if (!this.isActiveView() || isEditing || hasCellPopover || !this.cellSelection || this.getConfig()?.viewType !== "table") {
+      return true;
+    }
+    event.preventDefault();
+    event.stopPropagation();
+    if (!this.physicalShortcutGuard.allowsModShortcut(event)) return false;
+    if (action === "select-all") this.selectEntireTableGrid();
+    else if (action === "copy") void this.copySelectedCells();
+    else if (action === "cut") void this.cutSelectedCells();
+    else void this.pasteCellsFromClipboard();
+    return false;
+  }
+
   private handleDatabaseKeydown(event: KeyboardEvent): void {
     if (!this.containerEl_?.isConnected) return;
     const active = window.activeDocument.activeElement;
@@ -1374,26 +1422,6 @@ export class DatabaseView extends FileView {
     if (isEditing) return;
     // 字段编辑弹出层（选项/日期/颜色选择器）打开时，方向键/Enter 由弹出层自己的 keydown 处理，不导航单元格
     if (this.containerEl_?.querySelector(".db-cell-option-popover, .db-cell-date-popover, .db-color-picker-popup")) return;
-    if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "a" && this.cellSelection) {
-      event.preventDefault();
-      this.selectEntireTableGrid();
-      return;
-    }
-    if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "c" && this.cellSelection) {
-      event.preventDefault();
-      void this.copySelectedCells();
-      return;
-    }
-    if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "x" && this.cellSelection) {
-      event.preventDefault();
-      void this.cutSelectedCells();
-      return;
-    }
-    if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "v" && this.cellSelection) {
-      event.preventDefault();
-      void this.pasteCellsFromClipboard();
-      return;
-    }
     if (event.key === "Escape" && this.cellSelection) {
       event.preventDefault();
       if (this.pendingCellCut) {
@@ -1806,6 +1834,7 @@ export class DatabaseView extends FileView {
     this.applyDisplayWidth();
     if (!this.hasActiveDatabase()) return;
     const currentConfig = this.getConfig();
+    this.activeRulePopoverRenderer.close();
     const needsSetup = !currentConfig?.schema?.columns || currentConfig.schema.columns.length < 2;
     this.toolbarRenderer.render(this.containerEl_, this.viewEntries, this.currentDbIndex, this.currentViewIndex, this.vs(), {
       selectDatabase: (index) => this.selectView(index),
@@ -1847,7 +1876,7 @@ export class DatabaseView extends FileView {
       toggleCalendarOptions: (containerEl, anchor, config) => {
         this.calendarToolbarRenderer.togglePopover(containerEl, anchor, config, {
           database: this.getActiveDb(),
-          createRecordIconField: () => this.openCreateRecordIconFieldModal("view"),
+          createRecordIconField: () => { void this.openCreateRecordIconFieldModal("view"); },
           onChange: (label) => {
             this.pendingUndoLabel = label || t("undo.viewTypeConfig");
             this.scheduleConfigSave();
@@ -1859,7 +1888,7 @@ export class DatabaseView extends FileView {
       },
       getTimelineInvalidEventCount: () => this.getTimelineInvalidEventCount(),
       openTimelineInvalidEvents: () => { void this.openInvalidEvents(); },
-      createRecordIconField: () => this.openCreateRecordIconFieldModal("view"),
+      createRecordIconField: () => { void this.openCreateRecordIconFieldModal("view"); },
       updateViewConfig: (label) => this.updateToolbarViewConfig(label),
       updateTimelineScale: (scale, label) => this.updateTimelineScale(scale, label),
       toggleFilterPanel: (anchorEl) => this.toggleHeaderPopover("filter", anchorEl),
@@ -1884,8 +1913,96 @@ export class DatabaseView extends FileView {
       exportData: (format) => this.exportData(format),
       exportCsvMarkdownZip: () => { void this.exportCurrentViewAsCsvMarkdownZip(); },
     });
+    this.renderActiveViewControls();
     this.renderDatabaseCover();
     this.updateStickyOffsets();
+  }
+
+  private renderActiveViewControls(): void {
+    if (!this.containerEl_) return;
+    const config = this.getConfig();
+    if (!config) return;
+    this.activeViewControlsRenderer.render(this.containerEl_, config, this.vs(), {
+      editFilter: (index, anchorEl) => this.openActiveRulePopover("filter", index, anchorEl),
+      editSort: (index, anchorEl) => this.openActiveRulePopover("sort", index, anchorEl),
+      removeFilter: (index) => this.removeActiveFilterRule(index),
+      removeSort: (index) => this.removeActiveSortRule(index),
+      toggleFilterLogic: () => this.toggleActiveFilterLogic(),
+    });
+    this.updateStickyOffsets();
+  }
+
+  private openActiveRulePopover(kind: "filter" | "sort", index: number, anchorEl: HTMLElement): void {
+    if (!this.containerEl_) return;
+    const config = this.getConfig();
+    if (!config) return;
+    if (this.showFilterPanel || this.showSortPanel || this.showColumnManager || this.showViewConfigPanel) {
+      this.closeHeaderPopovers();
+    }
+    if (kind === "filter") {
+      this.activeRulePopoverRenderer.toggleFilter({
+        containerEl: this.containerEl_,
+        anchorEl,
+        index,
+        state: this.vs(),
+        config,
+        renderer: this.filterPanelRenderer,
+        actions: {
+          saveState: () => {
+            this.pendingUndoLabel = t("undo.filterConfig");
+            this.scheduleViewStateSave();
+          },
+          refresh: () => this.refresh({ viewport: "reset-top" }),
+          close: () => this.activeRulePopoverRenderer.close(),
+        },
+        onClose: () => this.updateToolbarIndicators(),
+      });
+      return;
+    }
+    this.activeRulePopoverRenderer.toggleSort({
+      containerEl: this.containerEl_,
+      anchorEl,
+      index,
+      state: this.vs(),
+      config,
+      renderer: this.sortPanelRenderer,
+      actions: {
+        save: () => {
+          this.pendingUndoLabel = t("undo.sortConfig");
+          this.scheduleViewStateSave();
+        },
+        refresh: () => this.refresh({ viewport: "reset-top" }),
+        close: () => this.activeRulePopoverRenderer.close(),
+      },
+      onClose: () => this.updateToolbarIndicators(),
+    });
+  }
+
+  private removeActiveFilterRule(index: number): void {
+    this.activeRulePopoverRenderer.close();
+    if (!removeFilterRuleAt(this.vs(), index)) return;
+    this.pendingUndoLabel = t("undo.filterConfig");
+    this.scheduleViewStateSave();
+    this.updateToolbarIndicators();
+    this.refresh({ viewport: "reset-top" });
+  }
+
+  private removeActiveSortRule(index: number): void {
+    this.activeRulePopoverRenderer.close();
+    if (!removeSortRuleAt(this.vs(), index)) return;
+    this.pendingUndoLabel = t("undo.sortConfig");
+    this.scheduleViewStateSave();
+    this.updateToolbarIndicators();
+    this.refresh({ viewport: "reset-top" });
+  }
+
+  private toggleActiveFilterLogic(): void {
+    const state = this.vs();
+    state.filterLogic = state.filterLogic === "and" ? "or" : "and";
+    this.pendingUndoLabel = t("undo.filterConfig");
+    this.scheduleViewStateSave();
+    this.updateToolbarIndicators();
+    this.refresh({ viewport: "reset-top" });
   }
 
   private renderDatabaseCover(): void {
@@ -1910,59 +2027,62 @@ export class DatabaseView extends FileView {
     });
     const initialPosition = Math.max(0, Math.min(100, database.coverImagePositionY ?? 50));
     image.style.objectPosition = `center ${initialPosition}%`;
-    if (!this.hideDatabaseActions) {
-      let dragStartY = 0;
-      let dragStartPosition = initialPosition;
-      let dragging = false;
-      cover.addClass("is-repositionable");
-      cover.onpointerdown = (event) => {
-        if (event.button !== 0 || (event.target as HTMLElement | null)?.closest("button")) return;
-        dragging = true;
-        dragStartY = event.clientY;
-        dragStartPosition = this.getActiveDb().coverImagePositionY ?? 50;
-        cover.addClass("is-repositioning");
-        cover.setPointerCapture(event.pointerId);
-        event.preventDefault();
-      };
-      cover.onpointermove = (event) => {
-        if (!dragging) return;
-        const height = Math.max(1, cover.getBoundingClientRect().height);
-        const next = Math.max(0, Math.min(100, dragStartPosition - ((event.clientY - dragStartY) / height) * 100));
+    // Cover repositioning + change-cover button are editing actions, not database-
+    // switching actions — they apply to any view that renders this cover (dashboard
+    // AND db_view file). Only embedded read-only views skip this method entirely,
+    // so no hideDatabaseActions gate here (that flag only gates the database
+    // switcher / new / delete / open-database-file toolbar items).
+    let dragStartY = 0;
+    let dragStartPosition = initialPosition;
+    let dragging = false;
+    cover.addClass("is-repositionable");
+    cover.onpointerdown = (event) => {
+      if (event.button !== 0 || (event.target as HTMLElement | null)?.closest("button")) return;
+      dragging = true;
+      dragStartY = event.clientY;
+      dragStartPosition = this.getActiveDb().coverImagePositionY ?? 50;
+      cover.addClass("is-repositioning");
+      cover.setPointerCapture(event.pointerId);
+      event.preventDefault();
+    };
+    cover.onpointermove = (event) => {
+      if (!dragging) return;
+      const height = Math.max(1, cover.getBoundingClientRect().height);
+      const next = Math.max(0, Math.min(100, dragStartPosition - ((event.clientY - dragStartY) / height) * 100));
+      const current = this.getActiveDb();
+      current.coverImagePositionY = next;
+      image.style.objectPosition = `center ${next}%`;
+    };
+    const finishReposition = (event: PointerEvent) => {
+      if (!dragging) return;
+      dragging = false;
+      cover.removeClass("is-repositioning");
+      if (cover.hasPointerCapture(event.pointerId)) cover.releasePointerCapture(event.pointerId);
+      this.pendingUndoLabel = t("undo.databaseCoverConfig");
+      void this.saveConfigImmediately(this.getCurrentDatabaseMutationTarget());
+    };
+    cover.onpointerup = finishReposition;
+    cover.onpointercancel = finishReposition;
+    const change = cover.createEl("button", {
+      cls: "db-database-cover-change db-icon-only-button",
+      attr: { type: "button", "aria-label": t("databaseCover.choose") },
+    });
+    setIcon(change, "image-up");
+    change.onclick = (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      new ImageFileSuggestModal(this.app, (selected) => {
         const current = this.getActiveDb();
-        current.coverImagePositionY = next;
-        image.style.objectPosition = `center ${next}%`;
-      };
-      const finishReposition = (event: PointerEvent) => {
-        if (!dragging) return;
-        dragging = false;
-        cover.removeClass("is-repositioning");
-        if (cover.hasPointerCapture(event.pointerId)) cover.releasePointerCapture(event.pointerId);
+        if (!current) return;
+        current.coverImage = selected.path;
+        current.coverImagePositionY = 50;
         this.pendingUndoLabel = t("undo.databaseCoverConfig");
-        void this.saveConfigImmediately();
-      };
-      cover.onpointerup = finishReposition;
-      cover.onpointercancel = finishReposition;
-      const change = cover.createEl("button", {
-        cls: "db-database-cover-change db-icon-only-button",
-        attr: { type: "button", "aria-label": t("databaseCover.choose") },
-      });
-      setIcon(change, "image-up");
-      change.onclick = (event) => {
-        event.preventDefault();
-        event.stopPropagation();
-        new ImageFileSuggestModal(this.app, (selected) => {
-          const current = this.getActiveDb();
-          if (!current) return;
-          current.coverImage = selected.path;
-          current.coverImagePositionY = 50;
-          this.pendingUndoLabel = t("undo.databaseCoverConfig");
-          void this.saveConfigImmediately().then(() => {
-            this.rerenderToolbar();
-            this.renderDatabaseCover();
-          });
-        }, t("databaseCover.choose")).open();
-      };
-    }
+        void this.saveConfigImmediately(this.getCurrentDatabaseMutationTarget()).then(() => {
+          this.rerenderToolbar();
+          this.renderDatabaseCover();
+        });
+      }, t("databaseCover.choose")).open();
+    };
     if (header) this.containerEl_.insertBefore(cover, header);
   }
 
@@ -2060,9 +2180,9 @@ export class DatabaseView extends FileView {
   ): { rows: RowData[]; scope: ComputedSyncScope } {
     if ((config.schema.computedFields || []).some((definition) =>
       /\bbacklinks\b/i.test(definition.expression)
-    )) {
-      // A link edit can change another note's backlinks without an event for
-      // that target note, so cross-file formulas require the full database.
+    ) || hasRollupComputedDependency(config.schema.computedFields || [], config.schema.columns)) {
+      // Backlinks and Rollups can change because another note changed, without
+      // the source row path appearing in changedPaths. Sync the full database.
       return { rows, scope: "database" };
     }
     return {
@@ -2355,6 +2475,7 @@ export class DatabaseView extends FileView {
   }
 
   private toggleHeaderPopover(kind: HeaderPopoverKind, anchorEl: HTMLElement): void {
+    this.activeRulePopoverRenderer.close();
     this.chartToolbarRenderer.closePopover();
     this.calendarToolbarRenderer.closePopover();
     const wasClosingActivePopover = this.activeHeaderPopover != null && this.isHeaderPopoverVisible(this.activeHeaderPopover);
@@ -2431,7 +2552,7 @@ export class DatabaseView extends FileView {
       anchorEl: this.headerPopoverAnchorEl,
       close: () => this.closeHeaderPopovers(),
       isActiveTarget: (target) => target instanceof HTMLElement &&
-        Boolean(target.closest(".db-color-picker-popup, .db-dropdown-popover")),
+        Boolean(target.closest(".db-color-picker-popup, .db-dropdown-popover, .db-date-value-popover")),
     });
   }
 
@@ -2444,7 +2565,7 @@ export class DatabaseView extends FileView {
     }
     if (!this.showFilterPanel && !this.showSortPanel && !this.showColumnManager && !this.showViewConfigPanel) return;
     if (this.containerEl_?.contains(target)) {
-      if (target.closest(".db-filter-panel, .db-sort-panel, .db-column-manager, .db-view-config-panel, .db-dropdown-popover, .db-toolbar, .db-header")) {
+      if (target.closest(".db-filter-panel, .db-sort-panel, .db-column-manager, .db-view-config-panel, .db-dropdown-popover, .db-date-value-popover, .db-toolbar, .db-header")) {
         return;
       }
     }
@@ -2452,15 +2573,20 @@ export class DatabaseView extends FileView {
   }
 
   private shouldClearCellSelectionFromPointer(target: HTMLElement): boolean {
-    if (!this.containerEl_?.contains(target)) return !target.closest(".modal");
+    // 容器外的点击：菜单项点击不清选区——菜单项操作（排序/清除排序等）会触发 refresh()
+    // 重建 DOM，焦点恢复由菜单 onHide → restoreCellFocusAfterKeyboardMenu 负责。
+    // 若此处清选区，菜单关闭后 restoreCellFocusAfterKeyboardMenu 因 cellSelection 已
+    // 清空而直接 return，导致排序后方向键导航失效（Bug AC）。
+    if (!this.containerEl_?.contains(target)) return !target.closest(".modal, .menu");
     return !target.closest(
       "td[data-note-database-row-path][data-note-database-column-key], " +
       ".db-selection-status-bar, .db-cell-editing, input, textarea, select, button, a, " +
-      ".db-filter-panel, .db-sort-panel, .db-column-manager, .db-view-config-panel, .db-dropdown-popover, .db-group-order-popover, .menu"
+      ".db-filter-panel, .db-sort-panel, .db-column-manager, .db-view-config-panel, .db-dropdown-popover, .db-date-value-popover, .db-group-order-popover, .menu"
     );
   }
 
   private closeHeaderPopovers(): void {
+    this.activeRulePopoverRenderer.close();
     this.toolbarRenderer.closePopovers();
     this.chartToolbarRenderer.closePopover();
     this.calendarToolbarRenderer.closePopover();
@@ -2892,7 +3018,10 @@ export class DatabaseView extends FileView {
     }
     if (this.currentViewIndex < 0) this.currentViewIndex = 0;
     this.clearViewStateCache();
-    this.rerenderToolbar();
+    // Don't rerenderToolbar here: the database popover is updated in place by
+    // ToolbarRenderer.moveDatabasePopoverEntry (populate + updateState), and a
+    // full toolbar rerender would close it (Bug E). refresh() only redraws the
+    // active view, not the toolbar/popover.
     this.refresh({ viewport: "reset-top" });
   }
 
@@ -2907,7 +3036,7 @@ export class DatabaseView extends FileView {
     const db = this.getActiveDb();
     if (!db) return;
     db.name = name.trim() || t("common.untitledDatabase");
-    this.saveCurrentViewConfigInBackground();
+    this.saveCurrentViewConfigInBackground(this.getCurrentDatabaseMutationTarget());
     this.rerenderToolbar();
   }
 
@@ -3225,17 +3354,9 @@ export class DatabaseView extends FileView {
   ): RowData[] {
     const configured = database || this.getActiveDb();
     let derived: Map<string, Record<string, unknown>> | undefined;
-    if (configured?.schema.columns.some((column) => column.type === "rollup")) {
-      const entries = this.viewEntries;
-      const databases = entries.map((entry) => entry.config);
-      if (!databases.some((candidate) => candidate.id === configured.id)) databases.push(configured);
-      const result = buildRelationRollups({
-        app: this.app,
-        sourceRecords: records,
-        sourceDatabase: configured,
-        databases,
-        getRecordsForDatabase: (target) => this.dataSource.getRecordsForDatabase(target),
-      });
+    const rollups = configured ? this.calculateRelationRollups(records, configured) : undefined;
+    if (rollups) {
+      const { result, entries, databases } = rollups;
       derived = result.valuesByPath;
       if (cacheTargets) {
         this.relationTargetPaths = result.targetPaths;
@@ -3262,6 +3383,21 @@ export class DatabaseView extends FileView {
       this.app,
       derived,
     );
+  }
+
+  private calculateRelationRollups(records: NoteRecord[], database: DatabaseConfig) {
+    if (!database.schema.columns.some((column) => column.type === "rollup")) return undefined;
+    const entries = this.viewEntries;
+    const databases = entries.map((entry) => entry.config);
+    if (!databases.some((candidate) => candidate.id === database.id)) databases.push(database);
+    const result = buildRelationRollups({
+      app: this.app,
+      sourceRecords: records,
+      sourceDatabase: database,
+      databases,
+      getRecordsForDatabase: (target) => this.dataSource.getRecordsForDatabase(target),
+    });
+    return { result, entries, databases };
   }
 
   private duplicateView(viewIndex = this.currentViewIndex): void {
@@ -4322,6 +4458,7 @@ export class DatabaseView extends FileView {
     }
     const colBtn = this.containerEl_.querySelector(".db-col-manager-btn");
     if (isHTMLElement(colBtn)) this.updateToolbarBadge(colBtn, Math.max(0, (this.getConfig()?.schema.columns.length || 0) - state.hiddenColumns.size));
+    this.renderActiveViewControls();
   }
 
   private updateToolbarBadge(button: HTMLElement, count: number): void {
@@ -4355,7 +4492,7 @@ export class DatabaseView extends FileView {
         moveColumnTo: (key, targetKey, placement) => this.columnOperations.moveColumnTo(key, targetKey, placement),
         toggleColumnWrap: (col) => this.toggleColumnWrap(col),
         editColumn: (col) => this.showColumnRenameModal(col),
-        addColumn: () => { void this.columnOperations.appendColumn(); },
+        addColumn: () => { void this.openCreatePropertyModal(); },
         addFileFieldColumn: (key) => { void this.columnOperations.addFileFieldColumn(key); },
         deleteColumn: (col) => { void this.columnOperations.deleteColumn(col); },
       },
@@ -4378,12 +4515,13 @@ export class DatabaseView extends FileView {
       onViewTypeChange: (value) => this.setViewType(value),
       onDatabaseChange: (label) => {
         this.pendingUndoLabel = label || t("undo.viewConfig");
-        this.scheduleConfigSave();
+        this.scheduleConfigSave(undefined, this.getCurrentDatabaseMutationTarget());
         this.updateDatabaseChrome();
         this.updateStickyOffsets();
         this.refresh();
       },
-      createRecordIconField: (target) => this.openCreateRecordIconFieldModal(target),
+      createRecordIconField: (target) => { void this.openCreateRecordIconFieldModal(target); },
+      createProperty: (options) => { void this.openCreatePropertyModal(options ?? {}); },
       onComputedSyncModeChange: () => this.rerenderToolbar(),
       onComputedFrontmatterCleanup: () => this.showComputedFrontmatterCleanupModal(),
       statusPresets: this.getStatusPresetsForLevel("database", db),
@@ -4572,7 +4710,7 @@ export class DatabaseView extends FileView {
         };
         if (nextValue === "__create_view_record_icon_field__" || nextValue === "__create_database_record_icon_field__") {
           const target = nextValue === "__create_view_record_icon_field__" ? "view" : "database";
-          this.openCreateRecordIconFieldModal(target, reopen);
+          void this.openCreateRecordIconFieldModal(target, reopen);
           return;
         }
         if (nextValue === "__inherit_record_icon_field__") {
@@ -4619,38 +4757,39 @@ export class DatabaseView extends FileView {
     });
   }
 
-  private openCreateRecordIconFieldModal(target: "database" | "view", afterCreate?: () => void): void {
+  private async openCreateRecordIconFieldModal(target: "database" | "view", afterCreate?: () => void): Promise<void> {
     const database = this.getActiveDb();
     const config = this.getConfig();
     if (!database || !config) return;
-    new CreateRecordIconFieldModal(this.app, config.schema.columns, async (key, label) => {
-      const oldDatabaseField = database.recordIconField;
-      const oldOverrideEnabled = config.recordIconFieldOverrideEnabled;
-      const oldViewField = config.recordIconField;
-      const result = await this.columnOperations.appendNamedTextColumn(
-        key,
-        label,
-        () => {
-          if (target === "view") {
-            config.recordIconFieldOverrideEnabled = true;
-            config.recordIconField = key;
-          } else {
-            database.recordIconField = key;
-            config.recordIconFieldOverrideEnabled = undefined;
-            config.recordIconField = undefined;
-          }
-        },
-        () => {
-          database.recordIconField = oldDatabaseField;
-          config.recordIconFieldOverrideEnabled = oldOverrideEnabled;
-          config.recordIconField = oldViewField;
-        },
-      );
-      if (!result) return false;
-      this.refresh();
-      afterCreate?.();
-      return true;
-    }).open();
+    const oldDatabaseField = database.recordIconField;
+    const oldOverrideEnabled = config.recordIconFieldOverrideEnabled;
+    const oldViewField = config.recordIconField;
+    const suggestedIconKey = config.schema.columns.some((column) => column.key === "icon") ? "record_icon" : "icon";
+    const result = await this.openCreatePropertyModal({
+      initialKey: suggestedIconKey,
+      initialLabel: suggestedIconKey,
+      initialType: "text",
+      lockType: true,
+      title: t("recordIcon.createField"),
+      applyReference: (column) => {
+        if (target === "view") {
+          config.recordIconFieldOverrideEnabled = true;
+          config.recordIconField = column.key;
+        } else {
+          database.recordIconField = column.key;
+          config.recordIconFieldOverrideEnabled = undefined;
+          config.recordIconField = undefined;
+        }
+      },
+      rollbackReference: () => {
+        database.recordIconField = oldDatabaseField;
+        config.recordIconFieldOverrideEnabled = oldOverrideEnabled;
+        config.recordIconField = oldViewField;
+      },
+    });
+    if (!result) return;
+    this.refresh();
+    afterCreate?.();
   }
 
   private findRecordIconAnchor(row: RowData): HTMLElement | null {
@@ -4722,6 +4861,7 @@ export class DatabaseView extends FileView {
     const description = db?.description || "";
     const placeholder = t("viewConfig.descriptionPlaceholder");
     if (!existing && heading?.parentElement?.nextSibling) header.insertBefore(desc, heading.parentElement.nextSibling);
+    header.toggleClass("has-empty-description", !description);
     desc.textContent = description;
     desc.toggleClass("is-empty", !description);
     desc.setAttribute("title", description || placeholder);
@@ -4743,22 +4883,156 @@ export class DatabaseView extends FileView {
         this.applyColumnTypeToColumn(col, decision.type);
       }
       await this.columnOperations.renameColumn(col, result);
-    }, config.schema.computedFields).open();
+    }).open();
   }
 
-  private showRelationRollupConfigModal(col: ColumnDef): void {
+  /** Open the unified CreatePropertyModal and, on confirm, create the column via
+   *  appendColumnWithName. Advanced types (computed/relation/rollup) auto-open their
+   *  config modal afterwards. Returns the created column, or null if cancelled/failed. */
+  private async openCreatePropertyModal(options: {
+    nearCol?: ColumnDef;
+    side?: "left" | "right";
+    initialLabel?: string;
+    initialKey?: string;
+    initialType?: ColumnDef["type"];
+    lockType?: boolean;
+    title?: string;
+    applyReference?: (column: ColumnDef) => void;
+    rollbackReference?: () => void;
+  } = {}): Promise<ColumnDef | null> {
+    const config = this.getConfig();
+    if (!config) return null;
+    const result = await new CreatePropertyModal(this.app, config, {
+      initialLabel: options.initialLabel,
+      initialKey: options.initialKey,
+      initialType: options.initialType,
+      lockType: options.lockType,
+      title: options.title,
+    }).openAndWait();
+    if (!result) return null;
+    const col = await this.columnOperations.appendColumnWithName(
+      result.key,
+      result.label,
+      result.type,
+      {
+        nearCol: options.nearCol,
+        side: options.side,
+        applyReference: options.applyReference,
+        rollbackReference: options.rollbackReference,
+      },
+    );
+    if (col && (col.type === "computed" || col.type === "relation" || col.type === "rollup")) {
+      this.openAdvancedColumnConfig(col);
+    }
+    return col;
+  }
+
+  private openAdvancedColumnConfig(col: ColumnDef): void {
+    if (col.type === "computed") this.showFormulaModal(col);
+    else if (col.type === "relation" || col.type === "rollup") this.showRelationRollupConfigModal(col);
+  }
+
+  private showRelationRollupConfigModal(col: ColumnDef, restoreFocusRow?: RowData): void {
     const database = this.getActiveDb();
     if (!database || (col.type !== "relation" && col.type !== "rollup")) return;
-    const entries = this.dataSource.getViewDefFiles();
+    const entries = sortDatabaseFileEntries(this.dataSource.getViewDefFiles(), this.databaseFileOrder);
     const databases = entries.map((entry) => entry.config);
     if (!databases.some((candidate) => candidate.id === database.id)) databases.push(database);
-    new RelationRollupConfigModal(this.app, col, database, databases, async () => {
-      this.pendingUndoLabel = col.type === "relation"
-        ? t("undo.relationConfig")
-        : t("undo.rollupConfig");
+    new RelationRollupConfigModal(
+      this.app,
+      col,
+      database,
+      databases,
+      async (result) => this.applyRelationRollupConfigResult(col, database, databases, result),
+      getNoteDatabasePlugin(this.app)?.settings.showDatabaseIcon !== false,
+      (targetDatabaseId) => this.getRelationTargetChangeImpact(col, database, databases, targetDatabaseId),
+      () => {
+        if (!restoreFocusRow) return;
+        window.requestAnimationFrame(() => this.restoreTableCellFocus(restoreFocusRow, col));
+      },
+    ).open();
+  }
+
+  private getRelationTargetChangeImpact(
+    col: ColumnDef,
+    database: DatabaseConfig,
+    databases: DatabaseConfig[],
+    targetDatabaseId: string,
+  ): RelationTargetChangeImpact {
+    const targetDatabase = databases.find((candidate) => candidate.id === targetDatabaseId);
+    if (!targetDatabase || col.type !== "relation") {
+      return { clearRecordCount: 0, dependentRollupCount: 0, invalidatedRollupLabels: [] };
+    }
+    const clearRecordCount = this.getRecordsForActiveDatabaseBaseScope()
+      .filter((record) => hasRelationValue(record.frontmatter[col.key])).length;
+    const plan = planRelationTargetChange(database, col.key, targetDatabase);
+    return {
+      clearRecordCount,
+      dependentRollupCount: plan.dependentRollupCount,
+      invalidatedRollupLabels: plan.invalidatedRollupLabels,
+    };
+  }
+
+  private async applyRelationRollupConfigResult(
+    col: ColumnDef,
+    database: DatabaseConfig,
+    databases: DatabaseConfig[],
+    result: RelationRollupConfigResult,
+  ): Promise<void> {
+    if (result.type === "rollup") {
+      col.rollupConfig = {
+        relationField: result.relationField,
+        targetField: result.targetField,
+        aggregation: result.aggregation,
+      };
+      col.relationConfig = undefined;
+      this.pendingUndoLabel = t("undo.rollupConfig");
       await this.saveConfigImmediately();
       this.refreshSchemaChanged();
-    }, getNoteDatabasePlugin(this.app)?.settings.showDatabaseIcon !== false).open();
+      return;
+    }
+    const previousTargetDatabaseId = col.relationConfig?.targetDatabaseId || "";
+    if (!previousTargetDatabaseId || previousTargetDatabaseId === result.targetDatabaseId) {
+      col.relationConfig = { targetDatabaseId: result.targetDatabaseId };
+      col.rollupConfig = undefined;
+      this.pendingUndoLabel = t("undo.relationConfig");
+      await this.saveConfigImmediately();
+      this.refreshSchemaChanged();
+      return;
+    }
+    const targetDatabase = databases.find((candidate) => candidate.id === result.targetDatabaseId);
+    const entry = this.getCurrentEntry();
+    if (!targetDatabase || !entry) throw new Error(t("relation.targetDatabaseRequired"));
+    const before = this.cloneDatabaseConfig(entry.config);
+    const changes: CellEditChange[] = this.getRecordsForActiveDatabaseBaseScope()
+      .filter((record) => hasRelationValue(record.frontmatter[col.key]))
+      .map((record) => ({
+        file: record.file,
+        path: record.file.path,
+        key: col.key,
+        oldValue: this.cloneFillValue(record.frontmatter[col.key]),
+        oldExists: Object.prototype.hasOwnProperty.call(record.frontmatter, col.key),
+        newValue: null,
+      }));
+    const missingTarget = changes.find((change) => !(this.app.vault.getAbstractFileByPath(change.path) instanceof TFile));
+    if (missingTarget) throw new Error(`Relation target record is unavailable: ${missingTarget.path}`);
+    const plan = planRelationTargetChange(database, col.key, targetDatabase);
+    col.relationConfig = { targetDatabaseId: result.targetDatabaseId };
+    col.rollupConfig = undefined;
+    for (const change of plan.rollupChanges) {
+      const rollup = database.schema.columns.find((candidate) => candidate.key === change.columnKey);
+      if (rollup?.rollupConfig) rollup.rollupConfig.targetField = change.nextTargetField;
+    }
+    try {
+      await this.commitConfigAndCellChanges(entry, before, changes, t("undo.relationTargetChange"));
+      new Notice(t("notice.relationTargetChanged", {
+        records: changes.length,
+        rollups: plan.invalidatedRollupLabels.length,
+      }));
+    } catch (err) {
+      new Notice(t("errors.updateFailed", { error: String(err) }));
+      throw err;
+    }
   }
 
   private setAllColumnsVisible(visible: boolean): void {
@@ -5280,7 +5554,7 @@ export class DatabaseView extends FileView {
       col,
       computedField,
       this.rows,
-      config.schema.columns.filter((candidate) => candidate.type !== "rollup"),
+      config.schema.columns,
       normalizeComputedSyncMode(entry.config.computedSyncMode),
       async (result) => {
       const decision = await this.confirmPropertyTypeConflictBeforeFormulaSave(col, result.resultType);
@@ -5293,7 +5567,7 @@ export class DatabaseView extends FileView {
         ...result,
         resultType: decision.resultType || result.resultType,
       });
-    }, baseThisFile instanceof TFile ? baseThisFile : undefined, baseThisFrontmatter, initialResultType, () => {
+    }, baseThisFile instanceof TFile ? baseThisFile : undefined, baseThisFrontmatter, initialResultType, restoreFocusRow?.file.path, () => {
       if (!restoreFocusRow) return;
       window.requestAnimationFrame(() => this.restoreTableCellFocus(restoreFocusRow, col));
     }).open();
@@ -5791,7 +6065,15 @@ export class DatabaseView extends FileView {
     return this.dataSource.getRecordsForConfig(this.getEffectiveConfig(this.getActiveDb()));
   }
 
-  private async saveConfigImmediately(): Promise<void> {
+  private getRecordsForActiveDatabaseBaseScope(): NoteRecord[] {
+    const view = this.getConfig();
+    const databaseOnlyView = view.viewSourceRulesEnabled === true
+      ? { ...view, viewSourceRulesEnabled: false }
+      : view;
+    return this.dataSource.getRecordsForConfig(this.getEffectiveConfig(this.getActiveDb(), databaseOnlyView));
+  }
+
+  private async saveConfigImmediately(mutationOverride?: ViewConfigMutation): Promise<void> {
     if (this.configSaveTimer !== null) {
       window.clearTimeout(this.configSaveTimer);
       this.configSaveTimer = null;
@@ -5799,10 +6081,10 @@ export class DatabaseView extends FileView {
     const pending = this.pendingConfigSave;
     if (pending) {
       this.pendingConfigSave = null;
-      await this.saveViewEntryConfig(pending.entry, pending.mutation, pending);
+      await this.saveViewEntryConfig(pending.entry, mutationOverride || pending.mutation, pending);
       return;
     }
-    await this.saveCurrentViewConfig();
+    await this.saveCurrentViewConfig(mutationOverride);
   }
 
   private saveConfigImmediatelyInBackground(): void {
@@ -5821,7 +6103,15 @@ export class DatabaseView extends FileView {
   /** Show a floating context menu on column header right-click */
   private showContextMenu(event: MouseEvent, col: ColumnDef, anchorEl?: HTMLElement, options?: ColumnMenuOptions): void {
     const config = this.getConfig();
-    this.columnMenu.show(event, col, anchorEl, { ...options, computedFields: config?.schema.computedFields });
+    const merged: ColumnMenuOptions = { ...options, computedFields: config?.schema.computedFields };
+    // 鼠标打开列菜单时若存在单元格选区，菜单关闭后恢复焦点（对齐键盘路径
+    // openFocusedColumnMenu 的 onClose）。已有 onClose（键盘路径）不覆盖，避免双重恢复。
+    // 排序/清除排序等改 sortRules 的菜单项触发 refresh() 重建 DOM，焦点恢复必须等
+    // 菜单真正关闭（onHide）后由双 RAF 完成，不能在 sortByColumn 里立即恢复。
+    if (!merged.onClose && this.cellSelection) {
+      merged.onClose = () => this.restoreCellFocusAfterKeyboardMenu();
+    }
+    this.columnMenu.show(event, col, anchorEl, merged);
   }
 
   /** Save the current view config back to its source (settings or file) */
@@ -5906,15 +6196,32 @@ export class DatabaseView extends FileView {
     };
   }
 
+  private mergeConfigMutation(
+    existing: ViewConfigMutation | undefined,
+    next: ViewConfigMutation | undefined,
+  ): ViewConfigMutation | undefined {
+    if (!existing) return next;
+    if (!next) return existing;
+    if (existing.viewId && next.viewId) return next;
+    return {
+      dbId: next.dbId ?? existing.dbId,
+      dbPath: next.dbPath || existing.dbPath,
+      sourceInstanceId: next.sourceInstanceId || existing.sourceInstanceId,
+    };
+  }
+
   /** Debounced config save: batch rapid changes (drag, resize) into one write */
-  private scheduleConfigSave(metadataOverride?: Partial<ConfigSaveMetadata>): void {
+  private scheduleConfigSave(
+    metadataOverride?: Partial<ConfigSaveMetadata>,
+    mutationOverride?: ViewConfigMutation,
+  ): void {
     // Protect in-memory config mutations immediately. Frontmatter writes can emit
     // metadata events before the debounced view-definition write reaches disk.
     this.suppressDataReload(2500);
     const entry = this.getCurrentEntry();
     if (!entry) return;
     const metadata = { ...this.consumePendingConfigMetadata(), ...metadataOverride };
-    const mutation = this.getCurrentMutationTarget();
+    const mutation = mutationOverride || this.getCurrentMutationTarget();
     if (this.pendingConfigSave && this.pendingConfigSave.entry !== entry) {
       const pending = this.pendingConfigSave;
       void this.saveViewEntryConfig(pending.entry, pending.mutation, pending).catch((err) => {
@@ -5926,7 +6233,7 @@ export class DatabaseView extends FileView {
     this.pendingConfigSave = this.pendingConfigSave
       ? {
         ...this.pendingConfigSave,
-        mutation,
+        mutation: this.mergeConfigMutation(this.pendingConfigSave.mutation, mutation),
         ...this.mergeConfigSaveMetadata(this.pendingConfigSave, metadata),
       }
       : { entry, mutation, ...metadata };
@@ -6361,6 +6668,12 @@ export class DatabaseView extends FileView {
     if (columnKeys.size === 1) {
       const config = this.getConfig();
       const col = config?.schema.columns.find((c) => c.key === [...columnKeys][0]);
+      if (col?.type === "rollup") {
+        this.showCellFillInput = false;
+        this.pendingCellFillDraft = null;
+        new Notice(t("cell.rollupReadonly"));
+        return;
+      }
       if (col && getBulkEditableColumns([col]).length && anchor) {
         this.showCellFillInput = false;
         this.pendingCellFillDraft = null;
@@ -6700,7 +7013,18 @@ export class DatabaseView extends FileView {
       undoBtn.onclick = () => { void this.undoLastEdit(); };
     }
     const summary = this.containerEl_.querySelector(":scope > .db-summary");
-    if (summary?.parentElement) summary.parentElement.insertBefore(bar, summary.nextSibling);
+    if (summary) {
+      bar.addClass("is-summary-overlay");
+      summary.before(bar);
+    } else {
+      // Fallback (mirrors EmbeddedDatabaseRenderer): when no .db-summary is
+      // present, anchor the bar above whichever result root exists so it still
+      // shows instead of being silently dropped.
+      const resultRoot = this.containerEl_.querySelector<HTMLElement>(
+        ":scope > .db-table-wrap, :scope > .db-grouped-table, :scope > .db-board, :scope > .db-gallery, :scope > .db-gallery-grouped, :scope > .db-list, :scope > .db-list-grouped",
+      );
+      resultRoot?.before(bar);
+    }
   }
 
   private renderCellFillInput(bar: HTMLElement): void {
@@ -7491,6 +7815,26 @@ export class DatabaseView extends FileView {
     }
     this.selectedRows = new Set(Array.from(this.selectedRows, remap));
     if (this.lastSelectedRowPath) this.lastSelectedRowPath = remap(this.lastSelectedRowPath);
+    // Bug 5: 迁移创建期 pending 状态（pendingNewFilePath / pendingNewRecords key + file 引用）。
+    // 重命名后 pendingNewRecords 的 key 仍是 oldPath，includePendingNewRecords 查不到 →
+    // 行回落到未就绪的 metadataCache → 属性空 → 分组消失。
+    if (this.pendingNewFilePath) this.pendingNewFilePath = remap(this.pendingNewFilePath);
+    if (this.pendingNewRecords.size > 0) {
+      const remapped = new Map<string, NoteRecord & { expiresAt: number }>();
+      for (const [path, record] of this.pendingNewRecords) {
+        const newPath = remap(path);
+        // Bug 5: 不 spread TFile（丢失原型/instanceof/name/basename/parent）。用 vault 中
+        // 真实的新路径 TFile；若 vault 未就绪则保留原 TFile（Obsidian 重命名时更新原实例 path）。
+        const resolvedFile = newPath === path
+          ? record.file
+          : this.app.vault.getAbstractFileByPath(newPath);
+        remapped.set(newPath, {
+          ...record,
+          file: resolvedFile instanceof TFile ? resolvedFile : record.file,
+        });
+      }
+      this.pendingNewRecords = remapped;
+    }
   }
 
   private renderCell(
@@ -7557,6 +7901,7 @@ export class DatabaseView extends FileView {
     if (config.viewType === "board" && config.boardSubgroupField === col.key) return false;
     if (config.viewType !== "table" && config.titleField === col.key) return false;
     if (config.viewType === "gallery" && config.galleryImageField === col.key) return false;
+    if (config.viewType === "board" && config.boardImageField === col.key) return false;
     if (state.searchText.trim()) return false;
     if (state.sortColumn === col.key || state.sortRules.some((rule) => rule.field === col.key)) return false;
     if (getEffectiveFilterRules(state.filters).some((rule) => rule.field === col.key)) return false;
@@ -8815,11 +9160,21 @@ export class DatabaseView extends FileView {
         applied.push(...pathChanges);
       }
     } catch (err) {
-      if (applied.length > 0) await this.applyFrontmatterChanges(applied, "old");
+      if (applied.length > 0) {
+        try {
+          await this.applyFrontmatterChanges(applied, "old");
+        } catch (rollbackErr) {
+          console.error("Note Database: failed to roll back config transaction cell values", rollbackErr);
+        }
+      }
       this.replaceDatabaseConfig(entry.config, before);
       if (configSaved && file instanceof TFile) {
-        this.suppressDataReload(2500);
-        await this.dataSource.updateViewDefFile(file, entry.config, this.getCurrentMutationTarget());
+        try {
+          this.suppressDataReload(2500);
+          await this.dataSource.updateViewDefFile(file, entry.config, this.getCurrentMutationTarget());
+        } catch (rollbackErr) {
+          console.error("Note Database: failed to roll back config transaction database config", rollbackErr);
+        }
       }
       this.configSnapshots.set(this.getConfigHistoryKey(entry), this.cloneDatabaseConfig(entry.config));
       throw err;
@@ -9887,12 +10242,16 @@ export class DatabaseView extends FileView {
     config = this.getConfig()
   ): Promise<void> {
     if (!config?.schema.computedFields.length || !this.isAutomaticComputedSync()) return;
+    const database = this.getCurrentEntry()?.config;
+    const derivedValues = database
+      ? this.calculateRelationRollups([{ file, frontmatter }], database)?.result.valuesByPath.get(file.path)
+      : undefined;
 
     const computed = evaluateComputedFields(
       config.schema.computedFields,
       config.schema.columns,
       frontmatter,
-      this.getBaseComputedEvaluationContext(file, config)
+      { ...this.getBaseComputedEvaluationContext(file, config), derivedValues }
     );
 
     const computedColumns = config.schema.columns.filter(col => col.type === "computed");
@@ -9901,7 +10260,8 @@ export class DatabaseView extends FileView {
     for (const col of computedColumns) {
       if (affectedFields?.length) {
         const deps = ComputedFieldEngine.extractDependencies(
-          config.schema.computedFields.find(cf => cf.key === (col.computedKey || col.key))?.expression || ""
+          config.schema.computedFields.find(cf => cf.key === (col.computedKey || col.key))?.expression || "",
+          config.schema.columns
         );
         const allRelevant = [...affectedFields, ...computedColumns.flatMap(c => [c.key, getComputedStorageKey(c)])];
         if (!deps.some(d => allRelevant.includes(d))) continue;
@@ -9988,13 +10348,19 @@ export class DatabaseView extends FileView {
         : db
           ? this.dataSource.getRecordsForDatabase(recordConfig || this.getEffectiveConfig(db, config))
           : scopedRecords;
+      const rollupValues = db
+        ? this.calculateRelationRollups(records, recordConfig || db)?.result.valuesByPath
+        : undefined;
       let changed = 0;
       for (const record of records) {
         const computed = evaluateComputedFields(
           config.schema.computedFields,
           config.schema.columns,
           record.frontmatter,
-          this.getBaseComputedEvaluationContext(record.file, recordConfig || config)
+          {
+            ...this.getBaseComputedEvaluationContext(record.file, recordConfig || config),
+            derivedValues: rollupValues?.get(record.file.path),
+          }
         );
         const updates: Record<string, unknown> = {};
         for (const col of computedColumns) {

@@ -1,355 +1,191 @@
 # Note Database
 
-[English README](README.md)
+<p align="center">
+  <a href="README.md">English</a>
+</p>
 
-为 Obsidian Markdown 笔记提供本地数据库视图。
+<p align="center">
+  <strong>把 Markdown 笔记变成可以直接编辑、组织和计算的本地数据库。</strong><br>
+  同一批笔记，七种视图，依然只是 Markdown。
+</p>
 
-Note Database 可以把 Markdown 文件和 frontmatter 属性组织成可编辑的表格、看板、画廊、列表、图表、日历和时间线视图。它保持本地优先，直接使用普通 Markdown 文件，并把数据库配置保存在你的 vault 中。
+<p align="center">
+  <a href="obsidian://show-plugin?id=note-database"><img alt="在 Obsidian 中安装 Note Database" src="https://img.shields.io/static/v1?style=for-the-badge&amp;label=安装&amp;message=Obsidian&amp;logo=obsidian&amp;logoColor=white&amp;labelColor=363A4F&amp;color=7C3AED"></a>
+  <a href="https://github.com/pangy9/obsidian-note-database"><img alt="GitHub Star 数量" src="https://img.shields.io/github/stars/pangy9/obsidian-note-database?style=for-the-badge&amp;label=Stars&amp;logo=github&amp;logoColor=white&amp;labelColor=363A4F&amp;color=E3B341"></a>
+  <a href="https://obsidian.md/plugins?id=note-database"><img alt="Obsidian 社区下载量" src="https://img.shields.io/badge/dynamic/json?style=for-the-badge&amp;url=https%3A%2F%2Fraw.githubusercontent.com%2Fobsidianmd%2Fobsidian-releases%2Fmaster%2Fcommunity-plugin-stats.json&amp;query=%24%5B%22note-database%22%5D.downloads&amp;label=下载量&amp;logo=obsidian&amp;logoColor=white&amp;labelColor=363A4F&amp;color=7C3AED"></a>
+  <a href="https://github.com/pangy9/obsidian-note-database/releases/latest"><img alt="最新 GitHub 版本" src="https://img.shields.io/github/v/release/pangy9/obsidian-note-database?style=for-the-badge&amp;label=版本&amp;labelColor=363A4F&amp;color=0969DA"></a>
+  <a href="LICENSE"><img alt="MIT 许可证" src="https://img.shields.io/static/v1?style=for-the-badge&amp;label=许可证&amp;message=MIT&amp;labelColor=363A4F&amp;color=2DA44E"></a>
+</p>
 
-## 核心亮点
+直接编辑 frontmatter，用多个视图查看同一批笔记，而所有记录仍留在你原来的 vault 中。
 
-- **七种数据库视图**：同一组笔记可以在表格、看板、画廊、列表、图表、日历和时间线之间切换。
-- **Markdown 优先存储**：每个数据库都保存为 vault 中普通的 `db_view: true` Markdown 文件。
-- **直接编辑属性**：可以在视图中编辑文本、数字、日期、货币、复选框、单选、多选、状态和文件名。
-- **类电子表格的表格操作**：支持键盘导航与选区、填充和粘贴范围、越界补行、安全文件改名，以及把多单元格操作作为一次事务撤销。
-- **类型化批量编辑**：使用原生字段编辑器批量修改多条记录的同一属性，并提供影响预览、风险确认、失败回滚和单步撤销。
-- **数据库与记录图标**：为数据库和记录使用 Unicode Emoji 或 Lucide 图标，支持数据库默认值和按视图指定记录图标属性。
-- **来源感知的新建记录**：新建或插入笔记时保留可写来源规则、当前可见分组上下文和手动排序。
-- **文本属性支持 inline Markdown**：任意文本列都可渲染加粗、斜体、高亮、删除线、行内代码、链接、`[[双链]]` 和 LaTeX，编辑时还有浮动格式工具栏。
-- **数字显示样式**：数字字段可显示为评分（星标或 emoji）、进度条或圆环，并支持货币、千分位和小数格式。
-- **灵活筛选与分组**：支持筛选、排序、分组、隐藏字段、标题字段、手动排序和每个视图独立的布局设置。
-- **统一的来源规则**：用文件夹、标签、属性、链接和兼容 Bases 的规则决定哪些笔记属于数据库，支持按视图启用/禁用，内置 `aliases` 支持。
-- **图表视图**：把当前筛选后的记录可视化为柱状、折线、面积、环形、数字、堆叠、分组和混合图表。
-- **日历和时间线视图**：用 date 和 datetime 属性安排月、周、日和长期时间线计划。
-- **看板子组和拖拽反馈**：可以为看板列增加二级分组，并在拖拽时显示更清晰的目标反馈。
-- **计算字段**：用字段引用、内置函数、实时预览和可选 frontmatter 同步来构建公式。
-- **嵌入视图**：可以把只读数据库视图嵌入任意笔记，同时保留视图切换、筛选、排序、分组、显示字段和导出工具。
-- **数据库文件 tab 控制**：可以选择数据库文件是否总是在新标签页打开，以及是否避免重复打开同一个数据库文件。
-- **导入导出与 Bases 转换**：支持 CSV + Markdown ZIP 导入导出，也可以转换 Obsidian `.base` 文件。
-- **本地与隐私**：vault 内容、metadata、公式和设置都保留在本机。
+![包含快捷筛选、分组、小计、公式和文件属性的 Note Database](assets/screenshots/zh-1.2.7-overview.png)
 
-## 1.2.6 新增
+## 功能亮点
 
-- **数据库封面**：为数据库设置本地图片封面，并可纵向拖动图片来调整可见裁切位置。
+- **七种数据库视图：** 用表格、看板、画廊、列表、图表、日历和时间线查看同一批笔记。
+- **Markdown 本地存储：** 数据库是带 `db_view: true` 的普通 Markdown 文件；记录、属性与关联也都保存在 vault 中。
+- **直接编辑属性：** 不用逐篇打开笔记，即可编辑文本、数字、货币、日期、选项、状态、复选框和文件名；新建属性时统一确认显示名、属性名与类型。
+- **电子表格式操作：** 支持键盘导航、范围选择、复制粘贴、填充、越界补行、批量编辑与一步撤销。
+- **灵活组织记录：** 组合搜索、筛选、排序、分组、子组、手动顺序、快捷条件标签和结果限制。
+- **来源感知的新建：** 按文件夹、标签、属性、链接或表达式界定记录，并在新建时保留来源与分组默认值、套用模板。
+- **更直观的展示：** 使用数据库/记录图标、数据库/卡片封面、行内 Markdown、彩色选项、数字样式和条件格式。
+- **小计与图表：** 汇总当前结果，在分组中显示多项小计，并从图表数值查看对应笔记。
+- **公式、关联与汇总：** 安全计算属性，通过 Obsidian 双链关联笔记，再生成数量、总和、平均值或列表。
+- **Obsidian 原生链接体验：** 使用 `file.*` 文件元数据，并通过核心 Page preview 预览记录标题、关联和文本中的内部链接。
+- **日期规划：** 在月/周/日日历和日/周/月/季时间线中拖动、调整日期及时间范围。
+- **内嵌与迁移：** 把只读数据库视图放进笔记，复制或导出数据，并转换 Obsidian `.base` 文件。
+- **本地且私密：** 不建立云端数据副本，不把 vault 内容、metadata、公式或设置发送给外部服务。
 
-![Note Database 1.2.6 总览：封面、条件格式、分组小计、关联与汇总](assets/screenshots/zh-1.2.6-overview.png)
-
-- **视图级条件格式**：按照数字、日期、复选框、选项、文本或空值规则，为记录或命中的属性填色。
-
-![视图级条件格式规则](assets/screenshots/zh-conditional-format.png)
-
-- **分组小计**：在分组表格、看板、画廊、列表和时间线中显示多项可拖动排序的计数、求和、平均值、最值等汇总。
-
-- **新记录模板**：新建记录时套用 Obsidian Markdown 模板或 Templater 模板，同时保留视图上下文和来源规则的显式默认值。
-
-- **本地优先的关联与汇总**：关联值直接保存为 Obsidian 原生 wikilink，并在所选目标数据库范围内只读计算计数、求和、平均值或列表汇总。
-
-- **看板内新建分组**：可以在看板末端直接创建带颜色的单选、状态或多选分组，分组标题沿用选项颜色。
-
-![看板分组标题与分组小计](assets/screenshots/zh-board-groups-summaries.png)
-
-- **更流畅稳定的编辑**：在安全时增量刷新受影响行，缩短内联编辑后的等待，并更可靠地保留表格/看板的焦点和视口位置。
-
-
-## 多视图展示
+## 同一批笔记，七种视图
 
 | 表格 | 看板 |
 | --- | --- |
-| ![表格视图](assets/screenshots/zh-table-view.png) | ![看板视图](assets/screenshots/zh-status-board.png) |
-| 适合密集属性编辑、列排序、分组、批量选择、列宽调整和结构化检查。 | 适合按状态推进的任务流，支持分组列、子组、卡片字段、手动排序和拖拽更新。 |
+| ![表格视图](assets/screenshots/zh-1.2.7-overview.png) | ![看板视图](assets/screenshots/status-board.png) |
+| 密集编辑、范围粘贴与填充、分组排序，以及键盘导航。 | 推进状态、使用子分组和封面，并通过拖拽调整记录。 |
 
 | 画廊 | 列表 |
 | --- | --- |
-| ![画廊视图](assets/screenshots/zh-gallery-view.png) | ![列表视图](assets/screenshots/zh-list-view.png) |
-| 适合阅读计划、图片资料、作品集和卡片式内容库等视觉浏览场景。 | 适合任务、目录、研究笔记和需要快速浏览的长列表。 |
+| ![画廊视图](assets/screenshots/gallery-view.png) | ![列表视图](assets/screenshots/list-view.png) |
+| 用封面、属性、分组和小计浏览视觉内容库。 | 快速浏览任务、目录、研究笔记和高密度清单。 |
 
 | 图表 | 时间线 |
 | --- | --- |
-| ![图表视图](assets/screenshots/zh-chart-view.png) | ![时间线视图](assets/screenshots/zh-timeline-view.png) |
-| 将当前搜索与筛选结果聚合成可配置图表，支持汇总、明细钻取、色板和导出。 | 适合短期精读和长期压缩概览，支持日、周、月、季尺度、分组、拖拽和 resize。 |
+| ![图表视图](assets/screenshots/chart-view.png) | ![时间线视图](assets/screenshots/timeline-view.png) |
+| 把当前筛选结果转成图表、小计和明细，并导出 PNG。 | 在日、周、月、季尺度中规划，拖动或调整日期范围。 |
 
-| 日历(月) | 日历(周) |
+| 日历月视图 | 日历周视图 |
 | --- | --- |
-| ![日历月视图](assets/screenshots/zh-calendar-view-month.png) | ![日历周视图](assets/screenshots/zh-calendar-view-week.png) |
-| 适合按月查看安排、跨日全天事件和多日计划，并支持直接拖拽或调整起止日期。 | 适合近程排期和具体时段安排，全天区与时间网格可以同时呈现 date 和 datetime 事件。 |
+| ![日历月视图](assets/screenshots/calendar-view-month.png) | ![日历周视图](assets/screenshots/calendar-view-week.png) |
+| 在月历中安排全天与跨日记录。 | 在细化的时间网格中处理全天和具体时段记录。 |
 
-每个视图都可以保存自己的筛选、排序、分组、显示字段、标题字段和布局设置。
+每个视图都能保存自己的筛选、排序、分组、显示属性、标题属性和布局，但不会复制笔记。
 
-## 编辑、图标与新建记录
+## 1.2.7 新增
 
-表格、看板、画廊和列表支持类型化批量编辑，并复用单条属性原本的编辑器。对于风险较高的修改，Note Database 会先展示影响范围并要求确认，同时把失败回滚和撤销保持在同一个事务中。
+| 更快的筛选与排序 |
+| --- |
+| ![筛选与排序快捷条件标签](assets/screenshots/zh-1.2.7-facet-controls.png) |
+| 顶栏直接显示当前规则；点开编辑一条，或直接移除。 |
 
-![类型化批量编辑](assets/screenshots/zh-bulk-edit.png)
-
-数据库和记录都可以使用 Unicode Emoji 或 Lucide 图标。数据库可以指定全局记录图标属性，同一组笔记也可以在不同视图中覆盖为不同的图标属性。
-
-![数据库与记录图标](assets/screenshots/zh-database-icons.png)
-
-新笔记会根据当前来源规则生成创建计划。分组按钮、行内插入等入口会尽量保留可写的文件夹、标签、属性、分组、子组和手动排序上下文；无法保证新笔记属于数据库时会明确提示，而不是静默创建到范围外。
-
-## 文本属性与 inline Markdown
-
-任意文本属性都可以在列菜单中选择渲染方式：
-
-- **纯文本（plain）**：按原值显示（默认）。
-- **链接（link）**：把 URL 和路径变成可点击链接。
-- **Markdown**：渲染 inline markdown。
-
-Markdown 模式支持加粗、斜体、删除线、高亮、行内代码、标准链接 `[显示](目标)`、`[[双链]]`、换行和 LaTeX 公式 `$...$`。解析是递归的，因此标记可以嵌套（比如加粗里包含斜体）。像 `5 * 3` 或孤立的 `**` 这类不成对标记会原样保留，普通文本不会被误伤。
-
-编辑 markdown 单元格时，会浮出一个小工具栏，无需手敲标记就能切换加粗、斜体、删除线、高亮、代码和链接。
+| 看板记录封面 |
+|  --- |
+|![带记录封面的看板与封面设置](assets/screenshots/zh-1.2.7-board-covers.png) |
+| 每个看板独立选择封面属性、裁切方式和宽高比。 |
 
 
-| ![](assets/screenshots/zh-inline-markdown-toolbar.png) | ![](assets/screenshots/zh-inline-markdown.png) |
+| 更清楚的公式编辑器 | 统一的新建属性窗口 |
 | --- | --- |
+| ![公式编辑器字段详情与取值预览](assets/screenshots/zh-1.2.7-formula-editor.png) | ![新建属性窗口](assets/screenshots/zh-1.2.7-new-property-dialog.png) |
+| 区分显示名称与 frontmatter 属性名，预览实际代入值，并用 `IFERROR` 处理空值或错误。 | 所有入口都确认显示名称、frontmatter 属性名与属性类型。 |
 
-
-渲染只由文本节点构建，插件绝不注入原始 HTML，危险链接协议（`javascript:`、`data:`、`file:` 等）一律拒绝。原始 markdown 源码保持不变，排序、搜索和编辑都基于真实值。
-
-## 数字显示样式
-
-数字字段可以用多种方式呈现，且不改变存储的原值：
-
-- **评分（rating）**：星标或自定义 emoji 刻度，适合优先级、难度或评分。
-- **进度条（progress bar）**：水平填充条，可自定义等于 100% 的值。
-- **圆环（progress ring）**：环形填充，适合紧凑的看板。
-
-这些样式仅用于显示，frontmatter 里的原始数字不会被改写，排序、公式和导出都基于真实值。
-
-
-| ![](assets/screenshots/zh-number-styles-popover.png) | ![](assets/screenshots/zh-number-styles.png) |
+| 关联 | 汇总 |
 | --- | --- |
+| ![关联选择](assets/screenshots/zh-1.2.7-relation-rollup_1.png) | ![Rollup 配置](assets/screenshots/zh-1.2.7-relation-rollup_2.png)|
+| 关联保存为双链；切库清理可一步撤销。 | 表格中双击即可配置 Rollup。 |
 
+| 原生笔记预览 |
+|  --- |
+|![从记录链接打开 Obsidian Page Preview](assets/screenshots/zh-1.2.7-page-preview.png) |
+| 内部链接复用 Obsidian Page Preview，并遵循用户设置的修饰键。 |
 
-## 图表视图
+需要先启用 Obsidian 核心插件 **Page preview（页面预览）**。支持记录标题、Relation 属性、可点击的 `file.*` 文件属性、设为 Link 显示模式的文本属性，以及行内 Markdown 文本/计算文本中的内部链接和 `[[双链]]`；Table、Board、Gallery、List、Calendar、Timeline、详情面板、数据库文件视图与内嵌视图使用同一套预览行为。
 
-图表视图使用当前数据库在搜索、筛选和结果数量限制之后的记录。它支持计数和数值聚合、日期和数字分桶、可见分组、累计序列、参考线、数据标签、图例和 PNG 导出。
+## 不用逐篇打开，也能批量编辑
 
-点击图表中的柱子、点或扇区，可以先查看匹配记录，再决定是否应用为筛选条件。
+属性编辑器支持文本、数字、货币、日期、复选框、单选、多选、状态和文件名。表格还支持范围选择、复制粘贴、填充、越界补行、安全改名和一步撤销。
 
-![图表明细](assets/screenshots/zh-chart-drilldown.png)
-
-汇总栏现在可以组合计数、数值、日期、复选框和唯一值等多种统计方式。
-
-![汇总栏](assets/screenshots/zh-summary-bar.png)
-
-## 日历和时间线视图
-
-日历视图可以把 date 和 datetime 字段变成月、周、日三种日程视图。跨日事件会在格子中连续显示，全天事件可以拖拽移动或调整起止日期，周/日时间网格可以创建和编辑具体时段事件。datetime 字段也可以选择"忽略时刻"按日期分组，让同一天不同时刻的事件归到同一组。
-
-时间线视图更适合跨多天和长期范围的计划。日尺度用于 datetime 细节，周尺度用于近程精读，月尺度用于多日概览，季尺度用于长期压缩概览。事件可以分组、拖拽、调整范围，并用紧凑的范围标签查看起止时间。
-
-## 快速开始
-
-点击左侧 ribbon 的数据库图标，或在命令面板中运行 `Note database: 打开面板`。你也可以通过命令面板导入数据、转换 `.base` 文件，或打开对应数据库文件。
-
-![命令面板](assets/screenshots/zh-command-list.png)
-
-创建数据库后，选择来源文件夹，再添加属性和视图。来源文件夹决定哪些 Markdown 笔记会被纳入数据库；视图设置决定这组笔记以什么方式呈现。
-
-完整数据库界面的设置面板会区分“当前数据库”和“当前视图”：数据库设置负责名称、描述、来源文件夹和新建目录；视图设置负责标题字段、默认字段宽度、画廊封面、看板子组、状态预设等布局行为。
-
-![设置面板](assets/screenshots/zh-settings-panel.png)
-
-插件设置页用于配置全局选项，例如语言、默认数据库文件夹、全局状态预设、数据库文件、导入导出和插件回收站。
-
-![插件设置](assets/screenshots/zh-settings.png)
-
-数据库文件的打开方式也可以在插件设置中调整：你可以让数据库文件总是在新标签页打开，也可以防止同一个数据库文件被重复打开，或按自己的 Obsidian 分栏习惯组合使用。这个策略会同时作用于 Dashboard 打开、文件管理器打开，以及拖拽/打开数据库文件的 fallback 路径。
-
-## 嵌入视图
-
-在完整数据库中右键视图标签，或从导出菜单复制当前视图的嵌入代码。
-
-![复制到剪贴板](assets/screenshots/zh-copy-to-clipboard.png)
-
-把代码粘贴到任意 Obsidian 笔记中，就可以得到一个只读的嵌入数据库视图。嵌入视图仍然保留视图切换、筛选、排序、分组、属性显示、计算字段和复制导出等工具栏能力。
-
-![内嵌视图](assets/screenshots/zh-embed-view.png)
-
-如果希望嵌入块省略数据库表头，并把区域尽量留给视图内容，可以使用嵌入块顶部的浮动切换按钮，或手动添加 `hideHeader: true`。
-
-![隐藏表头的内嵌视图](assets/screenshots/zh-embed-headerless.png)
-
-嵌入代码示例：
-
-~~~markdown
-```note-database
-dbPath: database/Example.md
-viewId: mh2g9dz3_abcd123
-```
-~~~
-
-所有数据库配置现在都会保存为带有 `db_view: true` 的 Markdown 文件，并把配置存储在 frontmatter 的 `database` 对象中。旧版本中保存在插件设置里的数据库会自动迁移。
-
-![打开对应数据库文件](assets/screenshots/zh-generate-or-open-database-file.png)
-
-## 计算字段 / 公式
-
-计算字段支持 `[字段名]` 这样的方括号引用。直接变量名和 `field("field_key")` 也会作为兼容形式保留，但推荐优先使用方括号写法。公式使用安全表达式求值，并提供一组适合笔记数据库的内置函数。
-
-常用函数示例：
-
-| 函数 | 说明 |
+| 类型化批量编辑 | 行内 Markdown 与数字样式 |
 | --- | --- |
-| `TODAY()` | 当前日期 |
-| `NOW()` | 当前日期和时间 |
-| `DAYS(start_date, end_date)` | 计算两个日期之间的天数 |
-| `DAYSFROMNOW(date)` | 计算某日期距离今天的天数 |
-| `ADDDAYS(date, days)` | 给日期增加指定天数 |
-| `DATEADD(date, amount, "days")` | 按天、周、月或年增加日期 |
-| `NETWORKDAYS(start, end, [holidays])` | 两个日期之间的工作日数，跳过周末和可选节假日 |
-| `WEEKDAY(date, [return_type])` | 一周中的第几天；默认 0=周日..6=周六，可选 Excel return type |
-| `ROUND(number, digits)` | 四舍五入 |
-| `FLOOR(number)`, `CEILING(number)` | 数学取整函数 |
-| `MAX(a, b, ...)`, `MIN(a, b, ...)` | 比较大小 |
-| `TEXT(value, format)` | 格式化数字（如 `#,##0.00`、`0%`）或日期 |
-| `CONCAT(text1, text2, ...)` | 拼接文本 |
-| `IF(condition, trueValue, falseValue)` | 条件判断 |
+| ![同时修改多条记录的一个属性](assets/screenshots/zh-bulk-edit.png) | ![行内 Markdown 文本属性](assets/screenshots/markdown-number.png) |
+| 先查看影响范围；风险写入需要确认，事务失败会回滚。 | 文本可显示为链接或行内 Markdown；数字可显示为评分、进度条或进度环。 |
 
-公式编辑器会显示可用字段（每个带类型图标）、函数列表、示例、实时预览、引用字段值和逐步替换过程，避免用户在一个大文本框里盲写公式。右上角还提供复制 AI 提示词的入口，方便把当前字段、函数和公式草稿发给任意 AI 辅助修改。
+## 筛选、着色与小计
 
-打开数据库视图时，计算值始终会刷新用于展示。你可以在数据库设置中选择仅展示的虚拟属性、不写回 frontmatter；自动写回；或者只在点击手动同步按钮后写回。
+| 条件格式 | 分组小计 |
+| --- | --- |
+| ![条件格式规则](assets/screenshots/zh-conditional-format.png) | ![带小计的分组](assets/screenshots/zh-board-groups-summaries.png) |
+| 按当前视图的规则，为命中的属性或整条记录着色。 | 在分组视图中添加并排序计数、求和、平均值、最大/最小值等小计。 |
 
-![公式编辑器](assets/screenshots/zh-formula-editor.png)
+快捷筛选与排序标签和工具栏完整面板使用同一套规则。来源规则可用 `AND`、`OR`、`NOT` 组合文件夹、标签、属性、链接和表达式。
 
-如果你曾经把计算结果保存进笔记 frontmatter，后来又决定只在数据库中显示，可以使用清理入口，从当前数据库范围内的笔记中删除已保存的计算属性。
+## 计算，也让笔记彼此关联
 
-![清理计算字段属性](assets/screenshots/zh-computed-cleanup.png)
+| 计算属性 | 关联与汇总 |
+| --- | --- |
+| ![公式编辑器](assets/screenshots/zh-formula-editor.png) | ![关联笔记与 Rollup 结果](assets/screenshots/zh-relation-rollup.png) |
+| 使用属性引用、日期/文本/数字函数、实时预览，以及可选的 frontmatter 同步。 | 用普通 Obsidian 双链保存关联，再计算数量、总和、平均值或列表。 |
 
-## 搜索与来源规则
+插件不会使用 `eval`，也不会建立隐藏的关联数据库或云端副本。
 
-**搜索** 会匹配所有可见属性值以及文件名中的文字，并在结果里高亮命中处。搜索是临时的会话级筛选 —— 不会写入数据库或笔记文件，因此切换分栏不会留下陈旧的查询。日期属性会匹配可见的本地化显示文本或显式日期格式（`YYYY-MM-DD`、`YYYY-MM`、`MM-DD`）。
+## 让记录更容易辨认
 
-![搜索高亮](assets/screenshots/zh-search-highlight.png)
+| 数据库与记录图标 | 封面与视觉卡片 |
+| --- | --- |
+| ![数据库与记录图标](assets/screenshots/zh-database-icons.png) | ![数据库、看板与画廊封面](assets/screenshots/zh-dataset-covers-setting.png) ![](assets/screenshots/zh-board-covers-setting.png)|
+| 使用 Unicode Emoji 或 Lucide 图标，并允许每个视图选择不同的记录图标属性。 | 拖动数据库封面调整位置；看板与画廊分别保存自己的封面设置。 |
 
-**来源规则** 决定哪些笔记属于数据库。可以用文件夹、标签、属性、链接和表达式规则，配合 `AND` / `OR` / `NOT` 逻辑组合。每个视图都可以在数据库级规则之上单独启用/禁用自己的来源规则，这样一个数据库就能驱动多个不同范围的视图。自定义属性选择器可搜索且带类型图标，Obsidian 内置的 `aliases` 等 list 属性会按多值字段处理。
+选项类分组标题在表格、看板、画廊和列表中保持相同颜色。搜索会高亮文件名、可见属性和本地化日期。
 
-如果你已经在用 Obsidian Bases，来源规则、`aliases` 和 `.base` 转换会与普通筛选、分组、排序对多值字段的处理保持一致。
+## 安排日期，查看结果
 
-## 文件元数据字段
+| 日历与时间线搜索 | 图表明细与小计 |
+| --- | --- |
+| ![日历与时间线搜索结果](assets/screenshots/zh-calendar-timeline-search-results.png) | ![图表明细](assets/screenshots/zh-chart-drilldown.png) |
+| 搜索事件卡片中的可见字段，再拖动或调整 date / datetime 记录。 | 点击图表数值，先查看对应笔记，再决定是否加入筛选。 |
 
-`file.name`、`file.tags`、`file.links`、`file.folder` 和文件时间等内置字段会被视为文件元数据，而不是普通 frontmatter 属性。`file.name` 可以重命名笔记，`file.tags` 可以更新 frontmatter tags，只读文件元数据会被保护，避免误写入。
+日历支持月、周、日；时间线支持日、周、月、季。
 
-![文件元数据字段](assets/screenshots/zh-file-fields.png)
+## 把数据库放进任意笔记
 
-## 导入导出与 .base 转换
+| 内嵌视图 | 隐藏表头的内嵌视图 |
+| --- | --- |
+| ![嵌入笔记中的数据库视图](assets/screenshots/zh-embed-view.png) | ![隐藏表头的紧凑内嵌视图](assets/screenshots/zh-embed-headerless.png) |
+| 把自动生成的 `note-database` 代码块粘贴到任意笔记。 | 当笔记正文已经提供上下文时，可以隐藏数据库表头。 |
 
-Note Database 支持把当前数据库导出为 CSV + Markdown ZIP，也支持再导入这种格式。导出时可以选择 ZIP 保存位置，也可以选择是否把 frontmatter 字段写入 Markdown 文件，ZIP 内还会包含数据库元数据，方便在重新导入时尽量恢复属性、视图和配置结构。
+内嵌视图中的记录保持只读，但仍可切换视图、筛选、排序、分组、查看计算值，以及使用复制和导出工具。
 
-如果导入的 CSV + Markdown 文件没有包含数据库元数据，插件会根据 CSV 内容推断字段类型，并在导入前弹出确认界面，让你检查日期、数字、复选框、单选、多选、状态等字段类型。
+## Markdown 始终是数据源
 
-工具栏的导出菜单还可以把当前视图复制为嵌入代码、CSV 或 Markdown 表格。
+| 内容 | 保存方式 |
+| --- | --- |
+| 数据库 | 带有 `db_view: true` 的普通 Markdown 文件 |
+| 记录与属性值 | Markdown 笔记及其 frontmatter |
+| 关联 | frontmatter 中的 Obsidian 双链 |
+| 模板 | 现有的 Obsidian Templates 或 Templater 文件 |
+| 视图 | 保存在数据库文件中的配置 |
 
-![复制到剪贴板](assets/screenshots/zh-copy-to-clipboard.png)
+可以根据来源规则、分组、子组或当前行新建记录，并在创建时套用模板。也可导出 CSV + Markdown ZIP、复制 CSV / Markdown 表格，或转换 Obsidian `.base` 文件。
 
-如果你已经使用了 Obsidian Bases，可以通过命令面板把当前 `.base` 文件转换为 Note Database 数据库。转换会尽量保留来源规则、列顺序、列宽、排序、分组，以及 cards/list 视图信息。
+## 三步开始
 
-来源筛选会保留嵌套的 `AND`、`OR` 和 `NOT` 结构，不会被压平成近似规则。简单规则会以字段和操作符形式编辑；更完整的 Bases 筛选语句会保留为可编辑的表达式规则，并通过内置兼容层执行。插件扩展等无法支持的表达式不会被静默简化。
+1. 安装并启用 Note Database，从 ribbon 或命令面板打开数据库面板。
+2. 创建数据库，选择文件夹或来源规则。
+3. 添加属性与视图；编辑会写回原始 Markdown 文件。
 
-转换后会弹出属性确认界面，你可以在导入前检查字段类型，把日期、数字、复选框、单选、多选、状态等字段调整到合适类型。
+![](assets/screenshots/zh-create-dataset.png)
+![命令面板中的 Note Database 命令](assets/screenshots/zh-command-list.png)
 
 ## 安装
 
-### 从 Obsidian 社区插件市场安装
-
-1. 打开 Settings -> Community Plugins。
-2. 搜索 `Note Database`。
+1. 打开 **设置 → 第三方插件**。
+2. 搜索 **Note Database**。
 3. 安装并启用插件。
 
-### 手动安装
-
-1. 从最新 release 下载 `main.js`、`styles.css` 和 `manifest.json`。
-2. 在 vault 中创建 `.obsidian/plugins/note-database/` 文件夹。
-3. 把三个文件复制进去。
-4. 在 Settings -> Community Plugins 中启用插件。
+手动安装时，从[最新版本](https://github.com/pangy9/obsidian-note-database/releases/latest)下载 `main.js`、`styles.css` 和 `manifest.json`，复制到 `.obsidian/plugins/note-database/`。
 
 ## 隐私
 
-Note Database 完全在 Obsidian 本地运行。它不会把 vault 内容、metadata、公式或设置发送到任何外部服务。详情见 [PRIVACY.md](PRIVACY.md)。
+Note Database 完全在 Obsidian 本地运行，不会把 vault 内容、metadata、公式或设置发送给外部服务。详情见[隐私说明](PRIVACY.md)。
 
 ## 支持与打赏
 
-如果 Note Database 帮到了你，欢迎 star 或通过下面的链接支持后续开发：
+如果 Note Database 对你有帮助，可以给[仓库点一个 Star](https://github.com/pangy9/obsidian-note-database)，或支持后续开发：
 
 <a href="https://paypal.me/pangy9">
   <img src="https://img.shields.io/badge/PayPal-打赏支持-00457C?style=for-the-badge&logo=paypal&logoColor=white" alt="通过 PayPal 打赏支持">
 </a>
 
-<img src="assets/screenshots/wechat_sponsor.jpg" width="300" alt="Sponsor on WeChat">
+<img src="assets/screenshots/wechat_sponsor.jpg" width="220" alt="通过微信赞赏支持">
 
-## 更新记录
-
-### 1.2.6
-
-- 新增可调整图片位置的数据库封面、视图级条件格式、跨视图分组小计、新记录模板，以及由 Obsidian wikilink 驱动的本地关联与汇总字段。
-- 新增看板内直接创建带颜色的单选、状态和多选分组。
-- 扩展类电子表格的键盘导航、范围选择、填充、粘贴、越界补行、事务化文件改名和焦点恢复。
-- 新增增量记录刷新和局部 DOM 更新，改善内联编辑响应，并更安全地保护编辑器、选区和视口。
-- 改进记录图标、复选框分组、日历/时间线折叠详情、全天图标、新建入口浮窗保护、列插入、多选刷新和看板小计截断。
-
-### 1.2.5
-
-- 新增来源规则驱动的新建记录：新笔记会根据当前数据库和视图来源规则反推可写的文件名、文件夹、标签、属性和支持的边界条件；无法保证满足的规则会明确警告。
-- 新增跨表格、看板、画廊和列表的类型化批量编辑，复用原生字段编辑器，并统一提供影响预览、风险确认、选项登记、失败回滚和单步撤销。
-- 通过插件 UI 明确输入或采用的单选、状态和多选新值会自动登记；外部编辑写入的值仍不会自动污染数据库 schema。
-- 新增可配置的数据库图标和记录图标，支持 Unicode Emoji 与 Lucide 图标。看板、画廊、列表、日历和时间线可继承数据库图标字段，也可按视图覆盖。
-- 行右键菜单新增“在上方插入”和“在下方插入”，会保留当前可见分组、子分组和可用的手动排序上下文。
-
-- 插件设置变更后，已打开的 dashboard 会立即刷新；数据库重排或删除后会按数据库身份恢复当前选择。
-- 自动列宽现在会按 Markdown、链接、粗体、行内代码和 MathJax 公式的实际渲染结果测量，并改进画廊分组宽度联动和新增列定位。
-- 改进 `file.*` 字段、标题编辑、Cmd/Ctrl+F 搜索聚焦、移动端数据库列表，以及分组插入和弹窗交互的多个边缘问题。
-
-### 1.2.4
-
-- 修复表格选择列 checkbox 对齐。
-
-### 1.2.3
-
-- 新增全局属性类型冲突检测：当多个数据库文件把同一个 frontmatter 属性定义成不兼容的底层存储形态时，会弹出可直接修复的冲突处理窗口。
-- 新增日历和时间线事件的浮动记录详情面板，支持编辑字段、重命名文件名、文本链接/Markdown 渲染和图片缩略图。
-- 改进日历和时间线搜索：搜索框聚焦时显示结果浮层，展示总命中数、当前范围命中数、分组结果、点击跳转和跳转高亮反馈。
-- 优化日历和时间线的事件布局、拖拽、resize、mini-calendar 标记、无效事件过滤和月视图行密度，跨日事件表现更一致。
-- 新增表格键盘导航、选项弹窗焦点保护、记录复制/克隆，并修复 CSV/Markdown 剪贴板粘贴时逗号内容被截断的问题。
-- 统一看板、画廊、列表、日历、时间线的标题字段行为：标题字段已配置但为空时显示明确的空标题，不再静默退回文件名。
-- 新增列管理器中的文件属性快捷入口、删除列时可选择是否清理笔记 frontmatter、日期/时间小日历编辑，以及列表卡片字段的紧凑换行布局。
-
-### 1.2.2
-
-- 文本属性新增 inline Markdown 渲染（加粗、斜体、高亮、删除线、代码、链接、双链、LaTeX），支持按列切换纯文本/链接/Markdown 渲染模式，编辑时带浮动格式工具栏。
-- 数字字段新增显示样式：评分（星标或 emoji）、进度条、圆环 —— 仅用于显示，绝不改写存储值。
-- 公式扩展 `NETWORKDAYS`、`WEEKDAY`（可选 return type）、`TEXT`，公式编辑器属性联想补字段类型图标。
-- 搜索增强：匹配所有属性值加文件名、结果高亮命中文字，搜索改为临时态，切换分栏不丢不留旧查询。
-- 来源规则统一：legacy typeFilter 迁移到来源规则、按视图启用/禁用开关、可搜索的类型图标属性选择器，`aliases` / Bases 多值语义全面对齐。
-- 新增 checkbox 范围（shift 点击）选择（表格与选项弹窗）、文本编辑器 IME 合成期 Enter/Esc 保护、分组记录数限制。
-- 改进移动端布局，包括专门的列宽调整面板和更合理的卡片字段宽度。
-
-### 1.2.1
-
-- 新增手机端表格列宽调整面板，优化移动端设置与表格选择列。
-- 新增分组记录数限制与看板卡片字段宽度控制（board/gallery 限宽、list 生效）。
-- 新增数字评分/进度条/圆环显示样式，修复看板长组标题顶住列宽的问题。
-- 改进 datetime 编辑（时刻分段输入）与 datetime "忽略时刻" 分组。
-- 完善嵌入引用处理与无效事件的只读 warning。
-
-### 1.2.0
-
-- 新增日历和时间线视图，支持基于 date / datetime 属性的月、周、日、日尺度时间线、周/月/季时间线。
-- 改进日期和日期时间处理，包括本地化显示、datetime 公式、跨日标签、无效区间检测和修复提示。
-- 打磨日历和时间线交互，包括拖拽、resize、当前范围高亮、迷你日历跳转、裁切事件 fade 和响应式时间线窗口。
-- 修复日历和时间线按天拖拽 datetime 事件时丢失具体时刻的问题。
-- 改进看板视图中，卡片、分组、行和时间线事件的拖拽反馈。
-- 改进嵌入视图刷新行为，避免数据库嵌入块刷新时把正在编辑的 Markdown 笔记滚回嵌入区域。
-
-### 1.1.0
-
-- 新增图表视图，支持柱状、水平柱状、折线、面积、环形、数字、堆叠、分组、百分比堆叠和混合图。
-- 新增图表设置、图表汇总、可见分组、色板、参考线、明细钻取，以及 PNG 导出/复制。
-- 汇总栏扩展为总和、数值、日期、复选框、唯一值、空值和已填写等多种统计方式。
-- 新增受保护的文件元数据字段，包括可编辑的 `file.name`、`file.tags`、可点击文件链接和只读元数据防护。
-- 新增计算字段 frontmatter 清理入口，方便移除曾经写入笔记属性区的计算结果。
-- 新增数据库文件 tab 控制，可以设置总是在新标签页打开数据库文件，以及避免重复打开同一个数据库文件。
-- 改进嵌入视图、共享下拉菜单、来源规则、拖拽反馈、选项编辑和发布前 UI 细节。
-
-
-完整历史见 [GitHub Releases](https://github.com/pangy9/obsidian-note-database/releases)。
+版本说明和完整更新历史见 [GitHub Releases](https://github.com/pangy9/obsidian-note-database/releases)。

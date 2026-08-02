@@ -18,8 +18,10 @@ import { buildCalendarMonthModel, CalendarDayModel, CalendarTimelineEvent, getCa
 import {
 	CALENDAR_TIME_SNAP_MINUTES,
 	addDateKeyDays,
+	navigateCalendarDate,
 	dateKeyDaysBetween,
 	dateKeyFromUtc,
+	getCalendarColumnWidthRange,
 	getLocalDateKey,
 	getLocaleWeekStartsOn,
 	getWeekdayLabels,
@@ -34,6 +36,7 @@ import { ColumnDef, RowData, ViewConfig } from "../data/types";
 import { getEffectiveLocale, t } from "../i18n";
 import { openDropdownMenu } from "./DropdownField";
 import { buildMiniCalendarEventIndex, MiniCalendarMode, renderMiniCalendar } from "./CalendarMiniCalendarRenderer";
+import { markNoteHoverLink } from "./HoverLinkPreview";
 
 const TIME_SNAP_MINUTES = CALENDAR_TIME_SNAP_MINUTES;
 const TIMED_EVENT_TIME_VISIBILITY_HEIGHT = 42;
@@ -229,7 +232,8 @@ export class CalendarRenderer {
 				}
 			}
 			this.actions.renderRecordIcon?.(eventEl, segment.event.row, config, true);
-			eventEl.createSpan({ cls: `db-calendar-month-title${segment.event.titleIsEmpty ? " is-empty-title" : ""}`, text: segment.event.title });
+			const titleEl = eventEl.createSpan({ cls: `db-calendar-month-title${segment.event.titleIsEmpty ? " is-empty-title" : ""}`, text: segment.event.title });
+			markNoteHoverLink(titleEl, segment.event.row.file.path, segment.event.row.file.path);
 			// Show the start–end date range on multi-day all-day segments so a spanning
 			// event reads as a date range rather than just a title bar.
 			if (!segment.isTimed && segment.event.endDateKey > segment.event.startDateKey) {
@@ -356,7 +360,8 @@ export class CalendarRenderer {
 				}
 			}
 			this.actions.renderRecordIcon?.(eventEl, event.row, config, true);
-			eventEl.createSpan({ cls: `db-calendar-month-title${event.titleIsEmpty ? " is-empty-title" : ""}`, text: event.title });
+			const titleEl = eventEl.createSpan({ cls: `db-calendar-month-title${event.titleIsEmpty ? " is-empty-title" : ""}`, text: event.title });
+			markNoteHoverLink(titleEl, event.row.file.path, event.row.file.path);
 			eventEl.createSpan({ cls: "db-calendar-month-dates", text: this.formatMonthDateRange(event.startDateKey, event.endDateKey, event.startMinutes, event.endMinutes) });
 			this.attachEventOpenHandlers(eventEl, event);
 		}
@@ -579,7 +584,8 @@ export class CalendarRenderer {
 			this.actions.applyConditionalFormat?.(eventEl, segment.event.row, config);
 			const content = eventEl.createSpan({ cls: "db-calendar-week-allday-content" });
 			this.actions.renderRecordIcon?.(content, segment.event.row, config, true);
-			content.createSpan({ cls: `db-calendar-month-title${segment.event.titleIsEmpty ? " is-empty-title" : ""}`, text: segment.event.title });
+			const titleEl = content.createSpan({ cls: `db-calendar-month-title${segment.event.titleIsEmpty ? " is-empty-title" : ""}`, text: segment.event.title });
+			markNoteHoverLink(titleEl, segment.event.row.file.path, segment.event.row.file.path);
 			if (segment.event.endDateKey > segment.event.startDateKey) {
 				content.createSpan({ cls: "db-calendar-month-dates", text: this.formatMonthDateRange(segment.event.startDateKey, segment.event.endDateKey, segment.event.startMinutes, segment.event.endMinutes) });
 			}
@@ -645,7 +651,8 @@ export class CalendarRenderer {
 			this.applyEventColor(eventEl, event.color);
 			this.actions.applyConditionalFormat?.(eventEl, event.row, config);
 			this.actions.renderRecordIcon?.(eventEl, event.row, config, true);
-			eventEl.createSpan({ cls: `db-calendar-month-title${event.titleIsEmpty ? " is-empty-title" : ""}`, text: event.title });
+			const titleEl = eventEl.createSpan({ cls: `db-calendar-month-title${event.titleIsEmpty ? " is-empty-title" : ""}`, text: event.title });
+			markNoteHoverLink(titleEl, event.row.file.path, event.row.file.path);
 			eventEl.createSpan({ cls: "db-calendar-month-dates", text: this.formatMonthDateRange(event.startDateKey, event.endDateKey, event.startMinutes, event.endMinutes) });
 			this.attachEventOpenHandlers(eventEl, event);
 		}
@@ -748,7 +755,8 @@ export class CalendarRenderer {
 		// Title first (top) so a short card still shows what the event is; the
 		// time range renders below only when there's room.
 		this.actions.renderRecordIcon?.(content, layout.event.row, config, true);
-		content.createDiv({ cls: `db-calendar-week-event-title${layout.event.titleIsEmpty ? " is-empty-title" : ""}`, text: layout.event.title });
+		const titleEl = content.createDiv({ cls: `db-calendar-week-event-title${layout.event.titleIsEmpty ? " is-empty-title" : ""}`, text: layout.event.title });
+		markNoteHoverLink(titleEl, layout.event.row.file.path, layout.event.row.file.path);
 		if (!isCompact) {
 			content.createDiv({
 				cls: "db-calendar-week-event-time",
@@ -1474,7 +1482,7 @@ export class CalendarRenderer {
 		btn.onclick = (event) => {
 			event.preventDefault();
 			event.stopPropagation();
-			this.toggleMiniCalendar(header, config);
+			this.toggleMiniCalendar(header, config, btn);
 		};
 	}
 
@@ -1519,7 +1527,7 @@ export class CalendarRenderer {
 
 	/** Mini month calendar that doubles as a "jump to date" picker. Days with
 	 *  events show the day number inside a filled accent circle. */
-	private toggleMiniCalendar(header: HTMLElement, config: ViewConfig): void {
+	private toggleMiniCalendar(header: HTMLElement, config: ViewConfig, trigger: HTMLElement): void {
 		if (this.miniCalendarEl?.isConnected) {
 			this.closeMiniCalendar();
 			return;
@@ -1533,7 +1541,9 @@ export class CalendarRenderer {
 
 		const onOutside = (event: MouseEvent) => {
 			const target = event.target as Node | null;
-			if (target && popover.contains(target)) return;
+			// Exempt the toolbar header (incl. the trigger button) so re-clicking
+			// the toggle closes via the click handler, not mousedown-then-reopen.
+			if (target && (popover.contains(target) || trigger.contains(target))) return;
 			this.closeMiniCalendar();
 		};
 		const onKey = (event: KeyboardEvent) => {
@@ -1541,9 +1551,10 @@ export class CalendarRenderer {
 			event.preventDefault();
 			this.closeMiniCalendar();
 		};
-		window.setTimeout(() => window.activeDocument.addEventListener("mousedown", onOutside, true), 0);
+		const openTimer = window.setTimeout(() => window.activeDocument.addEventListener("mousedown", onOutside, true), 0);
 		window.activeDocument.addEventListener("keydown", onKey, true);
 		this.miniCalendarCleanup = () => {
+			window.clearTimeout(openTimer);
 			window.activeDocument.removeEventListener("mousedown", onOutside, true);
 			window.activeDocument.removeEventListener("keydown", onKey, true);
 			popover.remove();
@@ -1725,12 +1736,12 @@ export class CalendarRenderer {
 	private shiftWeek(config: ViewConfig, weekDays: CalendarDayModel[], direction: 1 | -1): void {
 		if (weekDays.length === 0) return;
 		const referenceDay = direction === -1 ? weekDays[0] : weekDays[weekDays.length - 1];
-		const targetDate = parseDateKeyToUtc(referenceDay.dateKey);
-		if (!targetDate) return;
-		targetDate.setUTCDate(targetDate.getUTCDate() + direction * 7);
-		config.calendarWeekStart = this.dateKeyFromDate(targetDate);
-		config.calendarDay = config.calendarWeekStart;
-		config.calendarMonth = this.monthKeyFromDate(targetDate);
+		// navigateCalendarDate 全 UTC 口径 + slice(0,7)，避免负时区跳月（Bug M）。
+		const next = navigateCalendarDate(referenceDay.dateKey, direction * 7);
+		if (!next) return;
+		config.calendarWeekStart = next.day;
+		config.calendarDay = next.day;
+		config.calendarMonth = next.month;
 		this.actions.onConfigChange?.(t("undo.calendarMonthConfig"));
 	}
 
@@ -1744,12 +1755,12 @@ export class CalendarRenderer {
 	}
 
 	private shiftDay(config: ViewConfig, dateKey: string, direction: 1 | -1): void {
-		const date = parseDateKeyToUtc(dateKey);
-		if (!date) return;
-		date.setUTCDate(date.getUTCDate() + direction);
-		config.calendarDay = this.dateKeyFromDate(date);
-		config.calendarWeekStart = config.calendarDay;
-		config.calendarMonth = this.monthKeyFromDate(date);
+		// navigateCalendarDate 全 UTC 口径 + slice(0,7)，避免负时区跳月（Bug M）。
+		const next = navigateCalendarDate(dateKey, direction);
+		if (!next) return;
+		config.calendarDay = next.day;
+		config.calendarWeekStart = next.day;
+		config.calendarMonth = next.month;
 		this.actions.onConfigChange?.(t("undo.calendarMonthConfig"));
 	}
 
@@ -1841,10 +1852,11 @@ export class CalendarRenderer {
 			event.stopPropagation();
 			const startX = event.clientX;
 			const startWidth = this.getColumnWidth(config);
+			const { min: colMin, max: colMax } = getCalendarColumnWidthRange(config.calendarScale);
 			let dragged = false;
 			const onMove = (moveEvent: MouseEvent) => {
 				dragged = true;
-				const next = Math.max(60, Math.min(300, startWidth + moveEvent.clientX - startX));
+				const next = Math.max(colMin, Math.min(colMax, startWidth + moveEvent.clientX - startX));
 				config.calendarColumnSizeMode = "custom";
 				config.calendarCustomColumnWidth = next;
 				wrap.style.setProperty("--db-calendar-col-width", `${next}px`);
@@ -1893,10 +1905,8 @@ export class CalendarRenderer {
 	}
 
 	private getColumnWidth(config: ViewConfig): number {
-		// 日视图单列：宽范围 300–1900，接近 Obsidian 全宽
-		// 月/周 7 列：保持 80–320 上限防止过宽
-		const colMin = config.calendarScale === "day" ? 300 : 80;
-		const colMax = config.calendarScale === "day" ? 1900 : 320;
+		// 列宽范围由共享纯函数统一（Bug N：拖拽/slider/读取三处一致）
+		const { min: colMin, max: colMax } = getCalendarColumnWidthRange(config.calendarScale);
 		if (config.calendarColumnSizeMode === "custom" && config.calendarCustomColumnWidth) return Math.max(colMin, Math.min(colMax, config.calendarCustomColumnWidth));
 		return Math.max(colMin, Math.min(240, this.getDefaultColumnWidth(config)));
 	}

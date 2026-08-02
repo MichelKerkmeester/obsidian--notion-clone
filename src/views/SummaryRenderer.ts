@@ -296,11 +296,11 @@ export class SummaryRenderer {
         row.push(item);
         rows.set(rowKey, row);
       }
-      const orderedRows = Array.from(rows.entries()).sort(([a], [b]) => a - b);
-      const selectedRow = orderedRows.find(([, row]) => event.clientY <= Math.max(...row.map((item) => item.getBoundingClientRect().bottom)))
+      const orderedRows: Array<[number, HTMLElement[]]> = Array.from(rows.entries()).sort(([a], [b]) => a - b);
+      const selectedRow: [number, HTMLElement[]] | undefined = orderedRows.find(([, row]) => event.clientY <= Math.max(...row.map((item) => item.getBoundingClientRect().bottom)))
         || orderedRows.at(-1);
       if (!selectedRow) return;
-      const rowItems = selectedRow[1].sort((a, b) => a.getBoundingClientRect().left - b.getBoundingClientRect().left);
+      const rowItems: HTMLElement[] = selectedRow[1].sort((a, b) => a.getBoundingClientRect().left - b.getBoundingClientRect().left);
       const target = rowItems.find((item) => {
         const rect = item.getBoundingClientRect();
         return event.clientX < rect.left + rect.width / 2;

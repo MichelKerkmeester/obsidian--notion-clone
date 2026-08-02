@@ -1,4 +1,5 @@
 import { App, Modal, Notice } from "obsidian";
+import { isRollupNumericTarget } from "../../data/ColumnDisplay";
 import { ColumnDef, DatabaseConfig } from "../../data/types";
 import { t } from "../../i18n";
 import { createDropdownField, DropdownOption } from "../DropdownField";
@@ -11,8 +12,10 @@ export class RelationRollupConfigModal extends Modal {
     private column: ColumnDef,
     private sourceDatabase: DatabaseConfig,
     private databases: DatabaseConfig[],
-    private onSave: () => Promise<void>,
+    private onSave: (result: RelationRollupConfigResult) => Promise<void>,
     private showDatabaseIcons = true,
+    private getRelationImpact?: (targetDatabaseId: string) => RelationTargetChangeImpact,
+    private onClosed?: () => void,
   ) {
     super(app);
   }
@@ -33,7 +36,39 @@ export class RelationRollupConfigModal extends Modal {
   }
 
   private renderRelation(): void {
-    let targetDatabaseId = this.column.relationConfig?.targetDatabaseId || this.databases[0]?.id || "";
+    const initialTargetDatabaseId = this.column.relationConfig?.targetDatabaseId || "";
+    let targetDatabaseId = initialTargetDatabaseId || this.databases[0]?.id || "";
+    let saveButton: HTMLButtonElement | undefined;
+    let impactHost: HTMLElement | undefined;
+    const renderImpact = () => {
+      if (!impactHost) return;
+      impactHost.empty();
+      const changed = Boolean(initialTargetDatabaseId && targetDatabaseId !== initialTargetDatabaseId);
+      const impact = changed ? this.getRelationImpact?.(targetDatabaseId) : undefined;
+      if (impact) {
+        const notice = impactHost.createDiv({ cls: "db-relation-target-impact" });
+        notice.createDiv({
+          cls: "db-relation-target-impact-main",
+          text: t("relation.targetChangeImpact", {
+            records: impact.clearRecordCount,
+            rollups: impact.dependentRollupCount,
+          }),
+        });
+        if (impact.invalidatedRollupLabels.length > 0) {
+          notice.createDiv({
+            cls: "db-relation-target-impact-detail",
+            text: t("relation.targetChangeInvalidRollups", {
+              names: impact.invalidatedRollupLabels.join(", "),
+            }),
+          });
+        }
+      }
+      if (saveButton) {
+        saveButton.textContent = changed && (impact?.clearRecordCount || 0) > 0
+          ? t("relation.saveAndClear")
+          : t("common.save");
+      }
+    };
     this.renderDropdownField(
       this.contentEl,
       t("relation.targetDatabase"),
@@ -43,18 +78,19 @@ export class RelationRollupConfigModal extends Modal {
         icon: getDatabaseDropdownIcon(database, this.showDatabaseIcons),
       })),
       targetDatabaseId,
-      (value) => { targetDatabaseId = value; },
+      (value) => { targetDatabaseId = value; renderImpact(); },
       renderDatabaseDropdownIcon,
     );
-    this.renderActions(async () => {
+    impactHost = this.contentEl.createDiv({ cls: "db-relation-target-impact-host" });
+    saveButton = this.renderActions(async () => {
       if (!targetDatabaseId) {
         new Notice(t("relation.targetDatabaseRequired"));
         return false;
       }
-      this.column.relationConfig = { targetDatabaseId };
-      this.column.rollupConfig = undefined;
+      await this.onSave({ type: "relation", targetDatabaseId });
       return true;
     });
+    renderImpact();
   }
 
   private renderRollup(): void {
@@ -95,17 +131,26 @@ export class RelationRollupConfigModal extends Modal {
       const targetDatabase = this.databases.find(
         (database) => database.id === relation?.relationConfig?.targetDatabaseId
       );
-      const targetColumns = (targetDatabase?.schema.columns || []).filter(
-        (column) => column.type !== "rollup"
-      );
+      // Bug T：目标字段按 aggregation 过滤——sum/avg 仅数值列（getColumnDisplayType === "number"，
+      // 含数字 computed，排除 file.name / text / date / checkbox computed）；list/count 允许所有非
+      // rollup 列（含 file.name / relation）。aggregation 变更触发 renderFields 重选。
+      const isSumAvg = aggregation === "sum" || aggregation === "avg";
+      const isNumericTarget = (column: ColumnDef) =>
+        isRollupNumericTarget(column, targetDatabase?.schema.computedFields);
+      const targetColumns = (targetDatabase?.schema.columns || []).filter((column) => {
+        if (column.type === "rollup") return false;
+        if (isSumAvg) return isNumericTarget(column);
+        return true;
+      });
       if (!targetField || !targetColumns.some((column) => column.key === targetField)) {
-        targetField = targetColumns[0]?.key || "file.name";
+        // sum/avg 无数值字段时 targetField 留空（保存时提示）；count/list 保留 file.name 兼容。
+        targetField = isSumAvg ? (targetColumns[0]?.key || "") : (targetColumns[0]?.key || "file.name");
       }
       this.renderDropdownField(
         configHost,
         t("rollup.targetField"),
         [
-          { value: "file.name", text: t("viewConfig.titleAuto"), icon: getPropertyDropdownIcon("text") },
+          ...(isSumAvg ? [] : [{ value: "file.name", text: t("viewConfig.titleAuto"), icon: getPropertyDropdownIcon("text") }]),
           ...targetColumns
             .filter((column) => column.key !== "file.name")
             .map((column) => ({
@@ -128,7 +173,7 @@ export class RelationRollupConfigModal extends Modal {
           { value: "list", text: t("rollup.list") },
         ],
         aggregation,
-        (value) => { aggregation = value as typeof aggregation; },
+        (value) => { aggregation = value as typeof aggregation; renderFields(); },
       );
     };
     renderFields();
@@ -137,8 +182,7 @@ export class RelationRollupConfigModal extends Modal {
         new Notice(t("rollup.configurationRequired"));
         return false;
       }
-      this.column.rollupConfig = { relationField, targetField, aggregation };
-      this.column.relationConfig = undefined;
+      await this.onSave({ type: "rollup", relationField, targetField, aggregation });
       return true;
     });
   }
@@ -165,14 +209,15 @@ export class RelationRollupConfigModal extends Modal {
     });
   }
 
-  private renderActions(apply: () => Promise<boolean>): void {
+  private renderActions(apply: () => Promise<boolean>): HTMLButtonElement {
     const row = this.contentEl.createDiv({ cls: "modal-button-container" });
     row.createEl("button", { text: t("common.cancel") }).onclick = () => this.close();
-    row.createEl("button", { text: t("common.save"), cls: "mod-cta" }).onclick = async () => {
+    const save = row.createEl("button", { text: t("common.save"), cls: "mod-cta" });
+    save.onclick = async () => {
       if (!await apply()) return;
-      await this.onSave();
       this.close();
     };
+    return save;
   }
 
   private renderCancelOnly(): void {
@@ -182,5 +227,21 @@ export class RelationRollupConfigModal extends Modal {
 
   onClose(): void {
     this.contentEl.empty();
+    this.onClosed?.();
   }
 }
+
+export interface RelationTargetChangeImpact {
+  clearRecordCount: number;
+  dependentRollupCount: number;
+  invalidatedRollupLabels: string[];
+}
+
+export type RelationRollupConfigResult =
+  | { type: "relation"; targetDatabaseId: string }
+  | {
+    type: "rollup";
+    relationField: string;
+    targetField: string;
+    aggregation: "count" | "sum" | "avg" | "list";
+  };

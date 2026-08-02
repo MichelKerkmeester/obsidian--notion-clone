@@ -2,6 +2,7 @@ import type { App } from "obsidian";
 import { evaluateComputedFields } from "./ComputedEvaluator";
 import { getRowFileFieldValue, isFileFieldKey } from "./FileFields";
 import { parseRelationValues } from "./RelationLinks";
+import { toChartNumber } from "./ChartAggregation";
 import { stringifyValue } from "./Stringify";
 import type { ColumnDef, DatabaseConfig } from "./types";
 import type { NoteRecord } from "./DataSource";
@@ -117,9 +118,11 @@ function aggregateRollup(
     }
     return result;
   }
+  // Bug T：原先 Number(replace(/[^0-9.-]/)) 会从笔记名/wikilink 随意提取数字（[[Task 42]]→42），
+  // 且 Number("")===0 把无数字值当 0 累加。改用 toChartNumber：直接 Number(value)，非数字→null 被过滤。
   const numbers = values
-    .map((value) => typeof value === "number" ? value : Number(stringifyValue(value).replace(/[^0-9.-]/g, "")))
-    .filter((value) => Number.isFinite(value));
+    .map((value) => toChartNumber(value))
+    .filter((value): value is number => value != null);
   if (numbers.length === 0) return null;
   const sum = numbers.reduce((total, value) => total + value, 0);
   return aggregation === "avg" ? sum / numbers.length : sum;

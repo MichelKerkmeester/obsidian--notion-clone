@@ -1,10 +1,12 @@
 import { App, Menu, setIcon, setTooltip } from "obsidian";
-import { getColumnOptions, isObsidianTagsKey, normalizeOptionValueForKey, toBooleanValue, toMultiSelectValuesForKey } from "../data/ColumnTypes";
+import { isObsidianTagsKey, resolveOptionDisplay, toBooleanValue, toMultiSelectValuesForKey } from "../data/ColumnTypes";
 import { isExplicitlySorted } from "../data/ManualOrder";
 import { getColumnDisplayType, getNumberDisplayStyle } from "../data/ColumnDisplay";
 import { formatDateTimeValueDisplay, formatDateValueDisplay } from "../data/DateTimeFormat";
 import { getFileFieldFixedType, getRowFileFieldValue, isFileFieldKey, isReadonlyFileField } from "../data/FileFields";
 import { formatGroupKeyDisplay, isComputedGroupField } from "../data/GroupDisplay";
+import { renderGroupLabel } from "./GroupLabelRenderer";
+import { markNoteHoverLink } from "./HoverLinkPreview";
 import { parseTextLink } from "../data/TextLink";
 import { parseInlineMarkdown } from "../data/InlineMarkdown";
 import { ColumnDef, CreateEntryPosition, NO_TITLE_FIELD, RowCreateContext, RowData, ViewConfig } from "../data/types";
@@ -109,7 +111,7 @@ export class ListRenderer {
         this.actions.toggleGroupCollapsed?.(groupField, group.key);
       };
       this.renderGroupCheckbox(label, group.rows);
-      label.createSpan({ cls: "db-list-group-title", text: formatGroupKeyDisplay(config, groupField, group.key) });
+      renderGroupLabel(label, config, groupField, group.key, "db-list-group-title");
       label.createSpan({ cls: "db-list-group-count", text: String(group.count) });
       this.actions.renderGroupSummaries?.(label, group.rows, config);
       if (collapsed) continue;
@@ -117,9 +119,9 @@ export class ListRenderer {
       this.setupGroupDropTarget(list, groupField, group.key);
       const visibleCount = getGroupVisibleCount(config, groupField, group.key, group.rows.length);
       for (const row of group.rows.slice(0, visibleCount)) this.renderRow(list, config, row, groupField, group.key, groups, group.rows);
-      renderGroupExpandControls(list, config, groupField, group.key, group.rows.length, this.actions);
       const computedGroup = isComputedGroupField(config, groupField);
       this.renderNewRow(list, computedGroup ? undefined : { [groupField]: group.key || "" }, group.rows, computedGroup);
+      renderGroupExpandControls(list, config, groupField, group.key, group.rows.length, this.actions);
     }
   }
 
@@ -195,6 +197,7 @@ export class ListRenderer {
         cls: "db-list-row-title",
         attr: { title: titleDisplay.isFileTitle ? row.file.path : titleDisplay.isEmpty ? "" : titleDisplay.text },
       });
+      markNoteHoverLink(title, row.file.path, row.file.path);
       if (titleDisplay.isFileTitle) {
         renderStackedFileTitle(title, getFileTitleDisplay(row, Array.from(this.rowByPath.values())), true);
       } else {
@@ -537,8 +540,8 @@ export class ListRenderer {
         parsed.forEach((nodes, idx) => {
           if (idx > 0) valueEl.appendText(", ");
           if (nodes) {
-            if (parsed.length === 1) renderInlineMarkdown(valueEl, nodes, { onOpenLink, onResolveImage });
-            else renderInlineMarkdown(valueEl.createSpan(), nodes, { onOpenLink, onResolveImage });
+            if (parsed.length === 1) renderInlineMarkdown(valueEl, nodes, { onOpenLink, onResolveImage, sourcePath: row.file.path });
+            else renderInlineMarkdown(valueEl.createSpan(), nodes, { onOpenLink, onResolveImage, sourcePath: row.file.path });
           } else {
             valueEl.appendText(String(mdValues[idx]));
           }
@@ -595,15 +598,17 @@ export class ListRenderer {
   }
 
   private renderBadge(parent: HTMLElement, col: ColumnDef, value: string): void {
-    const badge = parent.createSpan({ cls: "status-badge", text: value });
-    badge.title = value;
-    const option = getColumnOptions(col).find((item) => normalizeOptionValueForKey(col.key, item.value) === value);
-    badge.addClass(`status-color-${option?.color || "gray"}`);
+    const resolved = resolveOptionDisplay(col, value);
+    const display = resolved.value || t("common.empty");
+    const badge = parent.createSpan({ cls: "status-badge", text: display });
+    badge.title = display;
+    badge.addClass(`status-color-${resolved.option?.color || "gray"}`);
   }
 
   private renderLink(parent: HTMLElement, row: RowData, link: ParsedLink): void {
     const anchor = parent.createEl("a", { cls: "db-list-link", text: link.label, attr: { title: link.label } });
     anchor.href = link.external ? link.target : "#";
+    if (!link.external) markNoteHoverLink(anchor, link.target, row.file.path);
     anchor.onclick = (event) => {
       event.preventDefault();
       event.stopPropagation();

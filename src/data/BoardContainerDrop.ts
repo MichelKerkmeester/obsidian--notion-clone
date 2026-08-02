@@ -7,6 +7,9 @@
 // 用结构类型 BoardDropRow 而非 RowData，避免引入 obsidian 依赖，便于纯单测
 // （见 src/__tests__/board-container-drop.test.ts）。RowData 满足该结构，可直接传入。
 
+import { isEmptyGroupId } from "./MultiSelect";
+import { stringifyValue } from "./Stringify";
+
 /** 容器拖拽决策只需要行的 file.path。 */
 export interface BoardDropRow {
   file: { path: string };
@@ -35,7 +38,8 @@ export function resolveBoardContainerDropOrder(params: {
   subgroupKey: string | undefined;
 }): BoardContainerDropOrder {
   const sameGroup =
-    params.fromGroup === params.groupKey && params.fromSubgroup === params.subgroupKey;
+    isSameBoardGroup(params.fromGroup, params.groupKey) &&
+    isSameBoardGroup(params.fromSubgroup, params.subgroupKey);
   if (sameGroup) return { keepInPlace: true };
   const others = params.rows
     .map((row) => row.file.path)
@@ -47,12 +51,30 @@ export function resolveBoardContainerDropOrder(params: {
 export type BoardCardDropIntent = "cross-group-move" | "same-group-reorder" | "ignore";
 
 /**
+ * 判断两个分组 key 是否指向同一分组（主组与子组通用）。
+ * 用 isEmptyGroupId 归一化：空串 / EMPTY_GROUP / 未分类 / Uncategorized / 未分類 等
+ * 空组变体互为相同；空与非空不同；非空按规范化值比较。替代 truthy 判断（Bug L：未分组
+ * 空串曾被当 falsy，导致从未分组移入子组时漏更新）。非空 key 去除首尾空格，
+ * 与 QueryEngine 的分组键及选项编辑/注册口径一致。
+ */
+export function isSameBoardGroup(a: string | undefined, b: string | undefined): boolean {
+  const aEmpty = isEmptyGroupId(a);
+  const bEmpty = isEmptyGroupId(b);
+  if (aEmpty || bEmpty) return aEmpty && bEmpty;
+  return stringifyValue(a).trim() === stringifyValue(b).trim();
+}
+
+/**
  * 决定卡片 drop 到某张卡片上时的行为意图。
  *
- * - 跨组（fromGroup 有值且与目标分组不同）→ "cross-group-move"：只改分组值，与排序
- *   规则无关，显式排序状态下也允许（移到目标组后组内位置由排序决定）。
+ * - 跨组（主组或子组任一变化）→ "cross-group-move"：只改分组值，与排序规则无关，
+ *   显式排序状态下也允许（移到目标组后组内位置由排序决定）。
  * - 同组 + 未显式排序 → "same-group-reorder"：组内精确重排序。
  * - 同组 + 显式排序 → "ignore"：manual order 被排序覆盖，重排无意义。
+ *
+ * 主组与子组都经 isSameBoardGroup 归一化比较；fromGroup/fromSubgroup 为 undefined
+ * （信息缺失）时不作为跨组依据，保持向后兼容。子组维度修复 Bug L：显式排序 + 子分组
+ * 下同列跨子组的 card-to-card drop 不再被当同组重排吞掉。
  *
  * 与 resolveBoardContainerDropOrder 的区别：本函数只判定「拖到卡片上」的意图（是否
  * 允许、移动还是重排），不计算具体插入顺序（顺序仍由 getCardDropOrder 计算）。
@@ -60,9 +82,12 @@ export type BoardCardDropIntent = "cross-group-move" | "same-group-reorder" | "i
 export function resolveBoardCardDropIntent(params: {
   fromGroup: string | undefined;
   targetGroupKey: string;
+  fromSubgroup?: string | undefined;
+  targetSubgroupKey?: string | undefined;
   explicitlySorted: boolean;
 }): BoardCardDropIntent {
-  const crossGroup = params.fromGroup != null && params.fromGroup !== params.targetGroupKey;
+  const crossGroup = (params.fromGroup != null && !isSameBoardGroup(params.fromGroup, params.targetGroupKey))
+    || (params.fromSubgroup != null && !isSameBoardGroup(params.fromSubgroup, params.targetSubgroupKey));
   if (crossGroup) return "cross-group-move";
   if (params.explicitlySorted) return "ignore";
   return "same-group-reorder";

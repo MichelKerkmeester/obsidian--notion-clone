@@ -2,6 +2,7 @@ import { ColumnDef, RowData, ViewConfig } from "../data/types";
 import { toMultiSelectValuesForKey } from "../data/ColumnTypes";
 import { InlineMarkdownNode, parseInlineMarkdown, inlineMarkdownToPlainText } from "../data/InlineMarkdown";
 import { parseTextLink } from "../data/TextLink";
+import { getRelationDisplayLabel, parseRelationValues } from "../data/RelationLinks";
 
 /** Resolved width (px) for a column: explicit columnWidths > col.width > defaultColumnWidth > fallback. */
 export function getFieldWidth(config: ViewConfig, col: ColumnDef, fallback = 150): number {
@@ -78,6 +79,17 @@ function estimateCellContentWidth(
     const badges = values.reduce((total, value) => total + measureBadgeText(value) + 14, 0);
     const gaps = Math.max(0, values.length - 1) * 4;
     return Math.ceil(Math.min(badges + gaps + 20, 560));
+  }
+  if (col.type === "relation") {
+    const links = parseRelationValues(row.frontmatter[col.key]);
+    if (links.length === 0) return 0;
+    // Match RelationValueRenderer: each item shows an icon plus the alias or
+    // basename, never the full wikilink syntax or folder path.
+    const linksWidth = links.reduce((total, link) => {
+      return total + measureBodyText(getRelationDisplayLabel(link)) + 27;
+    }, 0);
+    const gaps = Math.max(0, links.length - 1) * 4;
+    return Math.ceil(Math.min(linksWidth + gaps + 20, 560));
   }
   const raw = getDisplayText(row, col);
   if (col.textRenderMode === "markdown") {

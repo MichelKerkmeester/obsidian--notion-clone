@@ -265,10 +265,17 @@ export class QueryEngine {
     if (column?.type === "date" || (column?.type === "datetime" && dateGroupMode === "date")) {
       const parts = parseDateTimeParts(value);
       if (parts) return [parts.dateKey];
-      if (value == null || value === "") return [t("common.uncategorized")];
-      return [stringifyValue(value)];
+      const fallback = stringifyValue(value).trim();
+      return fallback ? [fallback] : [t("common.uncategorized")];
     }
-    const keys = this.getComparableValues(value);
+    // Group identity is user-facing and must use the same surrounding-whitespace
+    // normalization as option editing/registration. Otherwise an externally
+    // authored `"   A"` and an editor-authored `"A"` become two internal groups
+    // whose headings both look like A, and later moves/edits can target the wrong
+    // group. Keep filter comparison unchanged; normalize only grouping keys.
+    const keys = this.getComparableValues(value)
+      .map((key) => key.trim())
+      .filter(Boolean);
     if (keys.length === 0) return [t("common.uncategorized")];
     return Array.from(new Set(keys));
   }

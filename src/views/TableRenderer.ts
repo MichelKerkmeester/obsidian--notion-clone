@@ -2,6 +2,7 @@ import { Menu } from "obsidian";
 import { ColumnDef, CreateEntryPosition, RowCreateContext, RowData, ViewConfig } from "../data/types";
 import { isExplicitlySorted } from "../data/ManualOrder";
 import { formatGroupKeyDisplay, isComputedGroupField, resolveGroupCreateDefaults } from "../data/GroupDisplay";
+import { renderGroupLabel } from "./GroupLabelRenderer";
 import { t } from "../i18n";
 import { DragDropFeedbackState, resolveDropPlacement } from "./DragDropFeedback";
 import { renderMobileMoveIcon } from "./MobileMoveIcon";
@@ -124,10 +125,7 @@ export class TableRenderer {
           this.actions.toggleGroupCollapsed?.(groupField, group.key);
         };
       }
-      label.createSpan({
-        cls: "db-group-title-text",
-        text: formatGroupKeyDisplay(config, groupField, group.key),
-      });
+      renderGroupLabel(label, config, groupField, group.key, "db-group-title-text");
       label.createSpan({ cls: "db-group-count", text: String(group.count) });
       this.actions.renderGroupSummaries?.(groupHeader, group.rows, config);
 

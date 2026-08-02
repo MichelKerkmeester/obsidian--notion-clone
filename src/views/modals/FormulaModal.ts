@@ -1,8 +1,10 @@
-import { App, Modal, Notice } from "obsidian";
+import { App, Modal, Notice, setIcon } from "obsidian";
 import { evaluateBaseExpression } from "../../data/BaseExpression";
 import { isImeComposing } from "../../data/KeyboardUtils";
 import { COLUMN_TYPE_LABELS, getColumnOptions, isOptionColumnType, toMultiSelectValuesForKey } from "../../data/ColumnTypes";
 import { ComputedFieldEngine } from "../../data/ComputedField";
+import { FORMULA_FILE_FIELDS } from "../../data/FormulaFields";
+import { getFileFieldValue } from "../../data/FileFields";
 import { getComputedStorageKey } from "../../data/ColumnDisplay";
 import { ColumnDef, ComputedFieldDef, ComputedSyncMode, RowData, StatusOptionDef } from "../../data/types";
 import { getEffectiveLocale, t } from "../../i18n";
@@ -11,6 +13,7 @@ import { createDropdownField } from "../DropdownField";
 import { confirmWithModal } from "./ConfirmModal";
 import { safeString } from "../../data/SafeString";
 import { isDateLikeColumnType } from "../../data/DateTimeFormat";
+import { scanFormulaSegments, type FormulaSegment } from "../../data/FormulaTokenizer";
 
 export interface FormulaSaveResult {
   expression: string;
@@ -48,7 +51,9 @@ interface FormulaValidationState {
 interface FormulaReferencedField {
   col: ColumnDef;
   ref: string;
-  source: "bracket" | "direct";
+  source: "bracket" | "direct" | "field-call" | "member";
+  object?: string;
+  syntax: string;
   value: unknown;
 }
 
@@ -142,6 +147,7 @@ export class FormulaModal extends Modal {
     private baseThisFile?: RowData["file"],
     private baseThisFrontmatter?: Record<string, unknown>,
     private initialResultType?: ComputedFieldDef["type"],
+    private initialPreviewRowPath?: string,
     private onClosed?: () => void
   ) {
     super(app);
@@ -155,7 +161,10 @@ export class FormulaModal extends Modal {
     this.originalExpression = this.computedField?.expression || "";
     this.originalResultType = this.computedField?.type || "text";
     this.selectedResultType = this.initialResultType || this.originalResultType;
-    this.selectedPreviewIndex = 0;
+    const initialPreviewIndex = this.initialPreviewRowPath
+      ? this.rows.findIndex((row) => row.file.path === this.initialPreviewRowPath)
+      : -1;
+    this.selectedPreviewIndex = initialPreviewIndex >= 0 ? initialPreviewIndex : 0;
     this.expressionSyntax = this.computedField?.expressionSyntax || "note-database";
 
     this.renderHeader();
@@ -194,7 +203,8 @@ export class FormulaModal extends Modal {
     titleWrap.createDiv({ cls: "db-formula-subtitle", text: this.getStorageSubtitle() });
     titleWrap.createDiv({ cls: "db-formula-storage-note", text: this.getStorageNote() });
 
-    const typeLabel = header.createEl("label", { cls: "db-formula-result-type" });
+    const typeWrap = header.createDiv({ cls: "db-formula-result-type-wrap" });
+    const typeLabel = typeWrap.createEl("label", { cls: "db-formula-result-type" });
     typeLabel.createSpan({ text: t("formula.resultType") });
     createDropdownField({
       parent: typeLabel,
@@ -210,6 +220,7 @@ export class FormulaModal extends Modal {
         this.renderHelpBrowserContent();
       },
     });
+    typeWrap.createDiv({ cls: "db-formula-result-type-note", text: t("formula.typeCoercionHint") });
   }
 
   private getStorageSubtitle(): string {
@@ -338,19 +349,32 @@ export class FormulaModal extends Modal {
       }
     });
 
-    parent.createDiv({
-      cls: "db-formula-reference-note",
-      text: t("formula.referenceNote"),
+    const referenceNote = parent.createDiv({ cls: "db-formula-reference-note" });
+    setIcon(referenceNote.createSpan({ cls: "db-formula-reference-note-icon" }), "brackets");
+    const referenceText = referenceNote.createDiv({ cls: "db-formula-reference-note-text" });
+    referenceText.createDiv({
+      cls: "db-formula-reference-note-main",
+      text: t(this.expressionSyntax === "base" ? "formula.referenceNoteBase" : "formula.referenceNote"),
     });
+    referenceText.createDiv({
+      cls: "db-formula-reference-note-secondary",
+      text: t(this.expressionSyntax === "base" ? "formula.referenceNoteBaseAdvanced" : "formula.referenceNoteAdvanced"),
+    });
+    const fallbackHint = parent.createDiv({ cls: "db-formula-iferror-hint" });
+    setIcon(fallbackHint.createSpan({ cls: "db-formula-iferror-hint-icon" }), "circle-alert");
+    fallbackHint.createSpan({ text: t("formula.ifErrorFallbackHint") });
   }
 
   private renderPreview(parent: HTMLElement): void {
     const preview = parent.createDiv({ cls: "db-formula-preview" });
     const row = preview.createDiv({ cls: "db-formula-preview-row" });
     row.createSpan({ cls: "db-formula-preview-label", text: t("formula.previewItem") });
-    const previewRows = this.rows.slice(0, 80);
-    this.selectedPreviewIndex = Math.min(this.selectedPreviewIndex, Math.max(previewRows.length - 1, 0));
-    if (previewRows.length === 0) {
+    if (!this.rows[this.selectedPreviewIndex]) this.selectedPreviewIndex = 0;
+    const previewRowIndexes = this.rows.slice(0, 80).map((_, index) => index);
+    if (this.rows[this.selectedPreviewIndex] && !previewRowIndexes.includes(this.selectedPreviewIndex)) {
+      previewRowIndexes.push(this.selectedPreviewIndex);
+    }
+    if (previewRowIndexes.length === 0) {
       createDropdownField({
         parent: row,
         label: t("formula.previewItem"),
@@ -365,9 +389,9 @@ export class FormulaModal extends Modal {
       createDropdownField({
         parent: row,
         label: t("formula.previewItem"),
-        options: previewRows.map((rowData, index) => ({
+        options: previewRowIndexes.map((index) => ({
           value: String(index),
-          text: rowData.file.name.replace(/\.md$/, ""),
+          text: this.rows[index].file.name.replace(/\.md$/, ""),
         })),
         value: String(this.selectedPreviewIndex),
         className: "db-modal-dropdown db-formula-preview-dropdown",
@@ -382,7 +406,7 @@ export class FormulaModal extends Modal {
     const result = preview.createDiv({ cls: "db-formula-result-card" });
     result.createSpan({ cls: "db-formula-preview-label", text: t("formula.calcResult") });
     this.previewOutput = result.createDiv({ cls: "db-formula-preview-output", text: t("formula.notCalculated") });
-    this.previewStatus = preview.createDiv({ cls: "db-formula-preview-status", text: t("formula.waitingForFormula") });
+    this.previewStatus = result.createDiv({ cls: "db-formula-preview-status", text: t("formula.waitingForFormula") });
     this.previewDetails = preview.createDiv({ cls: "db-formula-preview-details" });
   }
 
@@ -472,7 +496,7 @@ export class FormulaModal extends Modal {
       renderPropertyTypeIcon(button, item.col, "db-formula-field-icon");
       const text = button.createDiv({ cls: "db-formula-help-row-text" });
       text.createSpan({ text: item.col.label || item.col.key });
-      text.createSpan({ text: `[${item.col.key}] · ${COLUMN_TYPE_LABELS()[item.col.type]}` });
+      text.createSpan({ text: `${t("formula.referenceShort")}: ${this.getFormulaFieldReference(item.col)} · ${COLUMN_TYPE_LABELS()[item.col.type]}` });
       return;
     }
     if (item.kind === "example") {
@@ -488,13 +512,21 @@ export class FormulaModal extends Modal {
     if (!this.helpDetailEl || !item) return;
     this.helpDetailEl.empty();
     if (item.kind === "field") {
-      this.helpDetailEl.createEl("h4", { text: item.col.label || item.col.key });
-      this.helpDetailEl.createDiv({ cls: "db-formula-signature", text: `[${item.col.key}]` });
-      this.helpDetailEl.createDiv({ cls: "db-formula-function-desc", text: `${COLUMN_TYPE_LABELS()[item.col.type]} · frontmatter key: ${item.col.key}` });
+      const heading = this.helpDetailEl.createDiv({ cls: "db-formula-field-detail-heading" });
+      const title = heading.createDiv({ cls: "db-formula-field-detail-title" });
+      title.createEl("h4", { text: item.col.label || item.col.key, attr: { title: item.col.label || item.col.key } });
+      title.createDiv({ cls: "db-formula-field-title-kind", text: t("formula.columnTitle") });
+      const type = heading.createDiv({ cls: "db-formula-field-detail-type" });
+      renderPropertyTypeIcon(type, item.col, "db-formula-field-detail-type-icon");
+      type.createSpan({ text: COLUMN_TYPE_LABELS()[item.col.type] });
+      const referenceMap = this.helpDetailEl.createDiv({ cls: "db-formula-field-reference-map" });
+      const formulaReference = this.getFormulaFieldReference(item.col);
+      this.renderFieldReferenceRow(referenceMap, t("formula.formulaReference"), formulaReference, true);
+      this.renderFieldReferenceRow(referenceMap, t("modal.propertyKey"), item.col.key, true);
       this.renderFieldOptions(this.helpDetailEl, item.col);
       const insert = this.helpDetailEl.createEl("button", {
         cls: "db-formula-insert-example",
-        text: t("formula.insertField", { key: item.col.key }),
+        text: t("formula.insertField", { reference: formulaReference }),
       });
       insert.onclick = () => this.insertHelpItem(item);
       this.helpDetailEl.createDiv({
@@ -525,6 +557,27 @@ export class FormulaModal extends Modal {
       cls: "db-formula-hint",
       text: t("formula.syntaxHint"),
     });
+  }
+
+  private renderFieldReferenceRow(parent: HTMLElement, label: string, value: string, monospace = false): void {
+    const row = parent.createDiv({ cls: "db-formula-field-reference-row" });
+    row.createSpan({ cls: "db-formula-field-reference-label", text: label });
+    row.createSpan({
+      cls: `db-formula-field-reference-value${monospace ? " is-monospace" : ""}`,
+      text: value,
+      attr: { title: value },
+    });
+  }
+
+  private getFormulaFieldReference(col: ColumnDef): string {
+    if (this.expressionSyntax !== "base") return `[${col.key}]`;
+    if (col.key.startsWith("file.")) return col.key;
+    const isDerived = col.type === "computed" || col.type === "rollup";
+    const object = isDerived ? "formula" : "note";
+    const key = col.type === "computed" ? getComputedStorageKey(col) : col.key;
+    return /^[A-Za-z_$][A-Za-z0-9_$]*$/.test(key)
+      ? `${object}.${key}`
+      : `${object}[${JSON.stringify(key)}]`;
   }
 
   private renderFieldOptions(parent: HTMLElement, col: ColumnDef): void {
@@ -625,11 +678,13 @@ export class FormulaModal extends Modal {
 
   private getAvailableFields(): ColumnDef[] {
     const currentKeys = new Set([this.col.key, this.col.computedKey || ""]);
-    return this.columns.filter((candidate) =>
-      candidate.key !== "file.name" &&
-      !currentKeys.has(candidate.key) &&
-      !currentKeys.has(candidate.computedKey || "")
-    );
+    const seen = new Set<string>();
+    return [...this.columns, ...FORMULA_FILE_FIELDS].filter((candidate) => {
+      if (currentKeys.has(candidate.key) || currentKeys.has(candidate.computedKey || "")) return false;
+      if (seen.has(candidate.key)) return false;
+      seen.add(candidate.key);
+      return true;
+    });
   }
 
   private getExamples(): FormulaExampleHelp[] {
@@ -709,7 +764,7 @@ export class FormulaModal extends Modal {
 
   private insertHelpItem(item: FormulaHelpItem): void {
     if (item.kind === "field") {
-      this.insertAtCursor(`[${item.col.key}]`);
+      this.insertAtCursor(this.getFormulaFieldReference(item.col));
     } else if (item.kind === "example") {
       this.insertExample(item.example.expression);
     } else {
@@ -736,13 +791,14 @@ export class FormulaModal extends Modal {
     const previewOutput = state.severity === "error" ? "ERROR" : state.output;
     this.previewOutput.textContent = previewOutput;
     this.previewOutput.title = state.severity === "error" ? state.message : state.output;
+    this.previewStatus.title = state.message;
     this.previewOutput.toggleClass("is-error", state.severity === "error");
     this.previewOutput.toggleClass("is-warning", state.severity === "warning");
     this.previewStatus.textContent = state.message;
     this.previewStatus.toggleClass("is-error", state.severity === "error");
     this.previewStatus.toggleClass("is-warning", state.severity === "warning");
     this.previewStatus.toggleClass("is-ok", state.severity === "ok");
-    this.renderPreviewDetails(state);
+    this.renderPreviewDetails();
     this.updateSaveState(state);
   }
 
@@ -776,7 +832,15 @@ export class FormulaModal extends Modal {
           computedValues: row.computed,
         });
       } else {
-        const result = new ComputedFieldEngine([], this.columns).evaluateSingleDetailed(expression, row.frontmatter, row.computed);
+        const fileCache = row.file && this.app ? this.app.metadataCache.getFileCache(row.file) : null;
+        const enrichedFm = row.file && this.app
+          ? {
+              ...row.frontmatter,
+              "file.name": getFileFieldValue(row.file, "file.name", row.frontmatter, fileCache, this.app),
+              "file.tags": getFileFieldValue(row.file, "file.tags", row.frontmatter, fileCache, this.app),
+            }
+          : row.frontmatter;
+        const result = new ComputedFieldEngine([], this.columns).evaluateSingleDetailed(expression, enrichedFm, row.computed);
         if (result.error) {
           return { valid: false, empty: false, message: result.error, output: result.error, severity: "error" };
         }
@@ -797,19 +861,7 @@ export class FormulaModal extends Modal {
 
   private validateReferencedFields(expression: string): string | null {
     if (this.expressionSyntax === "base") return null;
-    // 1. Check bracket references [field_key]
-    const refs = Array.from(expression.matchAll(/\[([^\]]+)\]/g)).map((match) => String(match[1] || "").trim()).filter(Boolean);
-    const available = this.columns.filter((candidate) => candidate.key !== "file.name");
-    for (const ref of refs) {
-      const col = available.find((candidate) => candidate.key === ref || candidate.label === ref);
-      if (!col) {
-        return t("formula.fieldNotExist", { name: ref });
-      }
-    }
-
-    // 2. Check direct variable references (identifiers not inside [] or strings)
-    const masked = this.maskStringsAndBracketRefs(expression);
-    const identifiers = Array.from(masked.matchAll(/\b([A-Za-z_$][A-Za-z0-9_$]*)\b/g)).map((m) => m[1]);
+    const available = [...this.columns, ...FORMULA_FILE_FIELDS];
     const knownNames = new Set([
       ...available.map((col) => col.key),
       ...FUNCTIONS.map((fn) => fn.name),
@@ -819,8 +871,22 @@ export class FormulaModal extends Modal {
       "Math", "Number", "String", "Boolean", "Date", "Array", "Object", "JSON",
       "Infinity", "NaN", "console",
     ]);
-    for (const id of identifiers) {
+    for (const segment of scanFormulaSegments(expression)) {
+      if (segment.kind === "bracket-ref" || segment.kind === "field-call") {
+        const col = available.find((candidate) => candidate.key === segment.name || candidate.label === segment.name);
+        if (!col) return t("formula.fieldNotExist", { name: segment.name });
+        continue;
+      }
+      const id = segment.kind === "member-ref"
+        ? segment.object
+        : segment.kind === "identifier" && !segment.isMember
+          ? segment.text
+          : "";
       if (!knownNames.has(id) && id.length > 1) {
+        const labelMatch = available.find((candidate) => candidate.label === id && candidate.key !== id);
+        if (labelMatch) {
+          return t("formula.columnTitleAsVariable", { label: id, key: labelMatch.key });
+        }
         return t("formula.undefinedVariable", { name: id });
       }
     }
@@ -859,7 +925,7 @@ export class FormulaModal extends Modal {
     this.saveBtn.textContent = !dirty ? t("formula.notModified") : state.valid ? t("formula.save") : t("formula.invalid");
   }
 
-  private renderPreviewDetails(state: FormulaValidationState): void {
+  private renderPreviewDetails(): void {
     if (!this.previewDetails) return;
     this.previewDetails.empty();
     const expression = this.textarea?.value.trim() || "";
@@ -873,8 +939,24 @@ export class FormulaModal extends Modal {
     }
 
     const refs = this.getReferencedFields(expression, row);
-    const fieldsSection = this.previewDetails.createDiv({ cls: "db-formula-preview-section" });
-    fieldsSection.createDiv({ cls: "db-formula-preview-section-title", text: t("formula.referencedFields") });
+    const expressionSection = this.previewDetails.createDiv({
+      cls: "db-formula-preview-section db-formula-preview-expression-section",
+    });
+    expressionSection.createDiv({
+      cls: "db-formula-preview-section-title",
+      text: t("formula.substitutedFormula"),
+    });
+    const substituted = this.buildSubstitutedExpression(expression, refs);
+    expressionSection.createEl("code", {
+      cls: "db-formula-preview-expression-code",
+      text: substituted || t("formula.emptyValue"),
+      attr: { title: substituted || t("formula.emptyValue") },
+    });
+
+    const fieldsSection = this.previewDetails.createDiv({
+      cls: "db-formula-preview-section db-formula-preview-fields-section",
+    });
+    fieldsSection.createDiv({ cls: "db-formula-preview-section-title", text: t("formula.fieldValues") });
     if (refs.length === 0) {
       fieldsSection.createDiv({ cls: "db-formula-preview-empty", text: t("formula.noReferencedFields") });
     } else {
@@ -885,7 +967,7 @@ export class FormulaModal extends Modal {
         main.createSpan({ cls: "db-formula-preview-field-name", text: ref.col.label || ref.col.key });
         main.createSpan({
           cls: "db-formula-preview-field-ref",
-          text: ref.source === "bracket" ? `[${ref.ref}]` : ref.ref,
+          text: ref.syntax,
         });
         item.createDiv({
           cls: "db-formula-preview-field-value",
@@ -894,25 +976,6 @@ export class FormulaModal extends Modal {
         });
       }
     }
-
-    const stepsSection = this.previewDetails.createDiv({ cls: "db-formula-preview-section" });
-    stepsSection.createDiv({ cls: "db-formula-preview-section-title", text: t("formula.calcSteps") });
-    const steps = stepsSection.createEl("ol", { cls: "db-formula-preview-steps" });
-    this.createPreviewStep(steps, t("formula.originalFormula"), expression);
-    if (refs.length > 0) {
-      this.createPreviewStep(steps, t("formula.substitutedValues"), this.buildSubstitutedExpression(expression, refs));
-    }
-    this.createPreviewStep(steps, state.severity === "error" ? t("formula.errorMessage") : t("formula.finalResult"), state.output);
-  }
-
-  private createPreviewStep(parent: HTMLElement, label: string, value: string): void {
-    const item = parent.createEl("li");
-    item.createSpan({ cls: "db-formula-preview-step-label", text: label });
-    item.createEl("code", {
-      cls: "db-formula-preview-step-code",
-      text: value || t("formula.emptyValue"),
-      attr: { title: value || t("formula.emptyValue") },
-    });
   }
 
   private getPreviewRow(): RowData | undefined {
@@ -923,118 +986,91 @@ export class FormulaModal extends Modal {
   private getReferencedFields(expression: string, row: RowData): FormulaReferencedField[] {
     const result: FormulaReferencedField[] = [];
     const seen = new Set<string>();
-    for (const match of expression.matchAll(/\[([^\]]+)\]/g)) {
-      const ref = String(match[1] || "").trim();
-      const col = this.columns.find((candidate) => candidate.key !== "file.name" && (candidate.key === ref || candidate.label === ref));
-      if (!col) continue;
-      const key = `bracket:${col.key}:${ref}`;
+    for (const segment of scanFormulaSegments(expression)) {
+      const resolved = this.resolveFormulaReference(expression, segment);
+      if (!resolved) continue;
+      const key = `${resolved.source}:${resolved.object || ""}:${resolved.col.key}:${resolved.ref}`;
       if (seen.has(key)) continue;
       seen.add(key);
-      result.push({ col, ref, source: "bracket", value: this.getColumnValueForRow(col, row) });
-    }
-
-    const directExpression = this.maskStringsAndBracketRefs(expression);
-    const directMatches = directExpression.matchAll(/\b[A-Za-z_$][A-Za-z0-9_$]*\b/g);
-    for (const match of directMatches) {
-      const ref = match[0];
-      const col = this.columns.find((candidate) => candidate.key !== "file.name" && candidate.key === ref);
-      if (!col) continue;
-      const key = `direct:${col.key}`;
-      if (seen.has(key)) continue;
-      seen.add(key);
-      result.push({ col, ref, source: "direct", value: this.getColumnValueForRow(col, row) });
+      result.push({ ...resolved, value: this.getColumnValueForRow(resolved.col, row) });
     }
     return result;
   }
 
+  private resolveFormulaReference(
+    expression: string,
+    segment: FormulaSegment
+  ): Omit<FormulaReferencedField, "value"> | null {
+    const available = [...this.columns, ...FORMULA_FILE_FIELDS];
+    let source: FormulaReferencedField["source"];
+    let ref: string;
+    let object: string | undefined;
+    let col: ColumnDef | undefined;
+    if (segment.kind === "bracket-ref" || segment.kind === "field-call") {
+      source = segment.kind === "bracket-ref" ? "bracket" : "field-call";
+      ref = segment.name;
+      col = available.find((candidate) => candidate.key === ref || candidate.label === ref);
+    } else if (segment.kind === "identifier" && !segment.isCall && !segment.isMember) {
+      source = "direct";
+      ref = segment.text;
+      col = available.find((candidate) => candidate.key === ref);
+    } else if (segment.kind === "member-ref" && this.expressionSyntax === "base") {
+      source = "member";
+      ref = segment.name;
+      object = segment.object;
+      col = object === "formula"
+        ? available.find((candidate) => (candidate.type === "computed" || candidate.type === "rollup") && (
+            candidate.computedKey === ref || candidate.key === ref || candidate.key === `formula.${ref}`
+          ))
+        : available.find((candidate) => candidate.key === ref);
+    } else {
+      return null;
+    }
+    if (!col) return null;
+    return {
+      col,
+      ref,
+      source,
+      object,
+      syntax: expression.slice(segment.start, segment.end),
+    };
+  }
+
   private getColumnValueForRow(col: ColumnDef, row: RowData): unknown {
-    if (col.type === "computed") return row.computed[col.computedKey || col.key];
+    if (col.type === "computed") return row.computed[getComputedStorageKey(col)];
+    if (col.type === "rollup") return row.computed[col.key];
+    if (col.key === "file.name" || col.key === "file.tags") {
+      return getFileFieldValue(row.file, col.key, row.frontmatter, row.cache ?? null, row.app);
+    }
     return row.frontmatter[col.key];
   }
 
   private buildSubstitutedExpression(expression: string, refs: FormulaReferencedField[]): string {
-    let substituted = expression.replace(/\[([^\]]+)\]/g, (match, rawRef: string) => {
-      const ref = String(rawRef || "").trim();
-      const item = refs.find((candidate) => candidate.source === "bracket" && candidate.ref === ref);
-      return item ? this.formatFormulaLiteral(item.value) : match;
-    });
-    const directRefs = refs.filter((ref) => ref.source === "direct");
-    for (const ref of directRefs) {
-      substituted = this.replaceIdentifierOutsideStrings(substituted, ref.ref, this.formatFormulaLiteral(ref.value));
+    const replacements: Array<{ start: number; end: number; text: string }> = [];
+    for (const segment of scanFormulaSegments(expression)) {
+      const resolved = this.resolveFormulaReference(expression, segment);
+      const item = resolved
+        ? refs.find((candidate) =>
+            candidate.source === resolved.source &&
+            candidate.ref === resolved.ref &&
+            candidate.object === resolved.object &&
+            candidate.col.key === resolved.col.key
+          )
+        : undefined;
+      if (item) {
+        replacements.push({
+          start: segment.start,
+          end: segment.end,
+          text: this.formatFormulaLiteral(item.value),
+        });
+      }
+    }
+    let substituted = expression;
+    for (let index = replacements.length - 1; index >= 0; index -= 1) {
+      const replacement = replacements[index];
+      substituted = substituted.slice(0, replacement.start) + replacement.text + substituted.slice(replacement.end);
     }
     return substituted;
-  }
-
-  private replaceIdentifierOutsideStrings(expression: string, identifier: string, replacement: string): string {
-    let output = "";
-    let index = 0;
-    while (index < expression.length) {
-      const char = expression[index];
-      if (char === "\"" || char === "'" || char === "`") {
-        const start = index;
-        index += 1;
-        while (index < expression.length) {
-          if (expression[index] === "\\") {
-            index += 2;
-            continue;
-          }
-          if (expression[index] === char) {
-            index += 1;
-            break;
-          }
-          index += 1;
-        }
-        output += expression.slice(start, index);
-        continue;
-      }
-      if (
-        expression.slice(index, index + identifier.length) === identifier &&
-        !/[A-Za-z0-9_$]/.test(expression[index - 1] || "") &&
-        !/[A-Za-z0-9_$]/.test(expression[index + identifier.length] || "")
-      ) {
-        output += replacement;
-        index += identifier.length;
-        continue;
-      }
-      output += char;
-      index += 1;
-    }
-    return output;
-  }
-
-  private maskStringsAndBracketRefs(expression: string): string {
-    let output = "";
-    let index = 0;
-    while (index < expression.length) {
-      const char = expression[index];
-      if (char === "[") {
-        const end = expression.indexOf("]", index + 1);
-        const next = end >= 0 ? end + 1 : index + 1;
-        output += " ".repeat(next - index);
-        index = next;
-        continue;
-      }
-      if (char === "\"" || char === "'" || char === "`") {
-        const start = index;
-        index += 1;
-        while (index < expression.length) {
-          if (expression[index] === "\\") {
-            index += 2;
-            continue;
-          }
-          if (expression[index] === char) {
-            index += 1;
-            break;
-          }
-          index += 1;
-        }
-        output += " ".repeat(index - start);
-        continue;
-      }
-      output += char;
-      index += 1;
-    }
-    return output;
   }
 
   private formatFormulaLiteral(value: unknown): string {
@@ -1233,8 +1269,8 @@ export class FormulaModal extends Modal {
         const item = this.propertySuggestEl.createEl("button", { cls: "db-formula-property-suggestion" });
         renderPropertyTypeIcon(item, col, "db-formula-property-suggestion-icon");
         item.createSpan({ cls: "db-formula-property-suggestion-label", text: col.label || col.key });
-        item.createSpan({ text: `[${col.key}]` });
-        item.onclick = () => this.insertProperty(openIndex, cursor, col.key);
+        item.createSpan({ text: this.getFormulaFieldReference(col) });
+        item.onclick = () => this.insertProperty(openIndex, cursor, col);
       }
       this.activateFirstSuggestion();
       return;
@@ -1341,8 +1377,8 @@ export class FormulaModal extends Modal {
     };
   }
 
-  private insertProperty(openIndex: number, cursor: number, key: string): void {
-    const insertion = `[${key}]`;
+  private insertProperty(openIndex: number, cursor: number, col: ColumnDef): void {
+    const insertion = this.getFormulaFieldReference(col);
     this.replaceRange(openIndex, cursor, insertion);
   }
 
@@ -1372,7 +1408,7 @@ export class FormulaModal extends Modal {
       return String(value);
     }
     if (typeof value === "boolean") return value ? "true" : "false";
-    if (Array.isArray(value)) return value.join(", ");
+    if (Array.isArray(value)) return JSON.stringify(value);
     if (typeof value === "object") {
       try {
         return JSON.stringify(value);
@@ -1402,7 +1438,7 @@ export class FormulaModal extends Modal {
           "The formula must return one value: a number, text, boolean, or date string.",
         ],
         fieldsTitle: "## Available Database Fields",
-        label: "label",
+        label: "column title",
         options: "options",
         functionsTitle: "## Available Functions",
         specialTitle: "## Special Values",
@@ -1430,7 +1466,7 @@ export class FormulaModal extends Modal {
             "公式必須回傳一個值：數字、文字、布林值或日期字串。",
           ],
           fieldsTitle: "## 可用資料庫欄位",
-          label: "顯示名稱",
+          label: "欄標題",
           options: "可選項",
           functionsTitle: "## 可用函式",
           specialTitle: "## 特殊值",
@@ -1457,7 +1493,7 @@ export class FormulaModal extends Modal {
             "公式必须返回一个值：数字、文本、布尔值或日期字符串。",
           ],
           fieldsTitle: "## 可用数据库字段",
-          label: "显示名称",
+          label: "列标题",
           options: "可选项",
           functionsTitle: "## 可用函数",
           specialTitle: "## 特殊值",

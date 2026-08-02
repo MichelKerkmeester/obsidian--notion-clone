@@ -1,5 +1,5 @@
 import { App, setIcon, setTooltip } from "obsidian";
-import { getColumnOptions, isObsidianTagsKey, normalizeOptionValueForKey, toBooleanValue, toMultiSelectValuesForKey } from "../data/ColumnTypes";
+import { isObsidianTagsKey, resolveOptionDisplay, toBooleanValue, toMultiSelectValuesForKey } from "../data/ColumnTypes";
 import { getColumnDisplayType, getNumberDisplayStyle } from "../data/ColumnDisplay";
 import { formatDateValueDisplay, formatDateTimeValueDisplay } from "../data/DateTimeFormat";
 import { getFileFieldFixedType, getRowFileFieldValue, isFileFieldKey, isReadonlyFileField } from "../data/FileFields";
@@ -17,6 +17,7 @@ import { renderRelationValue } from "./RelationValueRenderer";
 import { getFieldWidth } from "./ColumnWidth";
 import { parseInlineMarkdown } from "../data/InlineMarkdown";
 import { renderInlineMarkdown, resolveInlineImageSrc, valueToTooltip } from "./InlineMarkdownRenderer";
+import { markNoteHoverLink } from "./HoverLinkPreview";
 import { positionToolbarPopover } from "./PopoverPosition";
 
 /**
@@ -137,6 +138,9 @@ export function openRecordDetailPanel(opts: OpenRecordDetailOptions): void {
     if (event.key === "Escape") {
       // 嵌套编辑器拥有第一层 Escape：先关闭/取消编辑器，详情面板继续保留。
       if (isRecordDetailChildPopoverTarget(event.target)) return;
+      // 焦点留在触发按钮时（如记录图标按钮打开 IconPickerPopover），event.target 不在白名单内。
+      // 收窄到图标/颜色选择器（会留焦点的嵌套浮层），避免其他位置同类浮窗误命中。
+      if (window.activeDocument.querySelector(".db-icon-picker-popover, .db-color-picker-popup")) return;
       event.preventDefault();
       close();
     }
@@ -153,6 +157,7 @@ export function openRecordDetailPanel(opts: OpenRecordDetailOptions): void {
     const header = panel.createDiv({ cls: "db-record-detail-header" });
     actions.renderRecordIcon?.(header, r, config);
     const titleEl = header.createDiv({ cls: "db-record-detail-title", text: title.text });
+    markNoteHoverLink(titleEl, r.file.path, r.file.path);
     actions.applyConditionalFormat?.(titleEl, r, config, titleField);
     if (title.isEmpty) titleEl.addClass("is-empty-title");
     // 仅 file.name 标题可双击重命名；其它字段标题只读（用字段编辑改值）
@@ -353,8 +358,8 @@ function renderRecordValue(
       parsed.forEach((nodes, idx) => {
         if (idx > 0) valueEl.appendText(", ");
         if (nodes) {
-          if (parsed.length === 1) renderInlineMarkdown(valueEl, nodes, { onOpenLink, onResolveImage });
-          else renderInlineMarkdown(valueEl.createSpan(), nodes, { onOpenLink, onResolveImage });
+          if (parsed.length === 1) renderInlineMarkdown(valueEl, nodes, { onOpenLink, onResolveImage, sourcePath: row.file.path });
+          else renderInlineMarkdown(valueEl.createSpan(), nodes, { onOpenLink, onResolveImage, sourcePath: row.file.path });
         } else {
           valueEl.appendText(safeString(mdValues[idx]));
         }
@@ -413,10 +418,11 @@ function getEmptyDisplayValue(displayType: ColumnDef["type"]): unknown {
 }
 
 function renderBadge(parent: HTMLElement, col: ColumnDef, value: string): void {
-  const badge = parent.createSpan({ cls: "status-badge", text: value });
-  badge.title = value;
-  const option = getColumnOptions(col).find((item) => normalizeOptionValueForKey(col.key, item.value) === value);
-  badge.addClass(option ? `status-color-${option.color}` : "status-color-gray");
+  const resolved = resolveOptionDisplay(col, value);
+  const display = resolved.value || t("common.empty");
+  const badge = parent.createSpan({ cls: "status-badge", text: display });
+  badge.title = display;
+  badge.addClass(resolved.option ? `status-color-${resolved.option.color}` : "status-color-gray");
 }
 
 /** 打开内部 / 外部链接（markdown 内联链接 / 图片点击复用）。 */
@@ -438,6 +444,7 @@ interface ParsedLink {
 function renderLink(parent: HTMLElement, link: ParsedLink, app: App, row: RowData): void {
   const anchor = parent.createEl("a", { cls: "db-board-card-link", text: link.label, attr: { title: link.label } });
   anchor.href = link.external ? link.target : "#";
+  if (!link.external) markNoteHoverLink(anchor, link.target, row.file.path);
   anchor.onclick = (event) => {
     event.preventDefault();
     event.stopPropagation();

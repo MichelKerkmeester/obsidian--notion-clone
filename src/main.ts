@@ -29,6 +29,7 @@ import { hasDateTimeValue, parseDateTimeParts } from "./data/DateTimeFormat";
 import { linkDatabaseSchemas } from "./data/ColumnConfig";
 import { safeString, isRecord } from "./data/SafeString";
 import { isElement } from "./views/DomGuards";
+import { NOTE_DATABASE_HOVER_LINK_SOURCE } from "./views/HoverLinkPreview";
 
 /** Parsed view data from a .base file */
 interface BaseFileViewData {
@@ -81,6 +82,10 @@ export default class NoteDatabasePlugin extends Plugin {
   };
 
   async onload(): Promise<void> {
+    this.registerHoverLinkSource(NOTE_DATABASE_HOVER_LINK_SOURCE, {
+      display: "Note Database",
+      defaultMod: true,
+    });
     // Preload MathJax at startup so inline-markdown `$...$` rendering (renderMath)
     // works on first paint; without this Obsidian throws "MathJax is not defined".
     void loadMathJax();
@@ -233,12 +238,20 @@ export default class NoteDatabasePlugin extends Plugin {
       }
     }));
     this.registerEvent(this.app.vault.on("create", () => this.scheduleVaultPropertyCacheRefresh()));
-    this.registerEvent(this.app.vault.on("delete", () => this.scheduleVaultPropertyCacheRefresh()));
-    this.registerEvent(this.app.vault.on("rename", () => this.scheduleVaultPropertyCacheRefresh()));
+    this.registerEvent(this.app.vault.on("delete", (file) => {
+      this.databaseFileConfigCache.delete(file.path);
+      this.scheduleVaultPropertyCacheRefresh();
+    }));
+    this.registerEvent(this.app.vault.on("rename", (file, oldPath) => {
+      this.databaseFileConfigCache.delete(oldPath);
+      this.databaseFileConfigCache.delete(file.path);
+      this.scheduleVaultPropertyCacheRefresh();
+    }));
     this.registerDomEvent(window.activeDocument, "click", (event) => {
       this.handleDatabaseFileExplorerClick(event);
     }, { capture: true });
     this.app.workspace.onLayoutReady(() => {
+      void this.maybeShowChangelog();
       if (this.isDatabasePluginLeaf(this.currentWorkspaceLeaf)) {
         this.markDatabaseFilesInExplorer();
         return;
@@ -252,7 +265,6 @@ export default class NoteDatabasePlugin extends Plugin {
       if (!this.settings.databasesMigrated && legacyDatabases.length > 0) {
         void this.migrateDatabasesToFiles();
       }
-      void this.maybeShowChangelog();
     });
 
     // Register database view
@@ -337,7 +349,7 @@ export default class NoteDatabasePlugin extends Plugin {
       id: "undo-last-database-edit",
       name: t("command.undoDatabaseEdit"),
       callback: async () => {
-        await this.getActiveDbView()?.undoLastEdit();
+        await this.getActiveDatabaseView()?.undoLastEdit();
       },
     });
 
@@ -381,8 +393,14 @@ export default class NoteDatabasePlugin extends Plugin {
     modal.contentEl.addClass("note-database-changelog");
     const component = new Component();
     modal.onClose = () => component.unload();
+    const notesEl = modal.contentEl.createDiv("note-database-changelog-notes");
+    modal.contentEl.createEl("a", {
+      cls: "note-database-changelog-link",
+      text: t("changelog.viewPluginPage"),
+      attr: { href: "obsidian://show-plugin?id=note-database" },
+    });
     modal.open();
-    void MarkdownRenderer.render(this.app, t("changelog.releaseNotes"), modal.contentEl, "", component);
+    void MarkdownRenderer.render(this.app, t("changelog.releaseNotes"), notesEl, "", component);
   }
 
   /**
@@ -662,7 +680,13 @@ export default class NoteDatabasePlugin extends Plugin {
     if (this.shouldAlwaysOpenDatabaseFilesInNewTab()) {
       return this.app.workspace.getLeaf("tab");
     }
-    return this.app.workspace.getMostRecentLeaf() || this.app.workspace.getLeaf(false);
+    const recent = this.app.workspace.getMostRecentLeaf();
+    // Protect dashboard / database-file plugin views: if the most-recent leaf is
+    // one of ours, open the database file in a new tab instead of overwriting it.
+    if (recent && this.isDatabasePluginLeaf(recent)) {
+      return this.app.workspace.getLeaf("tab");
+    }
+    return recent || this.app.workspace.getLeaf(false);
   }
 
   /** Notify the database view and status bar that settings have changed */
@@ -727,15 +751,19 @@ export default class NoteDatabasePlugin extends Plugin {
   }
 
   private getActiveDatabaseView(): DatabaseView | null {
-    // Check both dashboard view and single-file view types
     const viewTypes = [DATABASE_VIEW_TYPE, DATABASE_FILE_VIEW_TYPE];
+    // 1. Prefer the truly active leaf across BOTH view types — otherwise a
+    //    background dashboard would be returned (via the per-type fallback below)
+    //    when a database-file view is the actual active view.
     for (const viewType of viewTypes) {
       for (const leaf of this.app.workspace.getLeavesOfType(viewType)) {
         if ((leaf as unknown as { active?: boolean }).active && leaf.view instanceof DatabaseView) {
           return leaf.view;
         }
       }
-      // Fallback: check if any leaf of this type exists
+    }
+    // 2. Fallback: any existing leaf of either type.
+    for (const viewType of viewTypes) {
       const leaves = this.app.workspace.getLeavesOfType(viewType);
       if (leaves.length > 0 && leaves[0].view instanceof DatabaseView) {
         return leaves[0].view;
@@ -2636,10 +2664,7 @@ export default class NoteDatabasePlugin extends Plugin {
         const existingBadge = item.querySelector(".nav-file-tag.note-database-tag");
         if (isDb && !existingBadge) {
           if (self) {
-            const badge = window.activeDocument.createElement("div");
-            badge.className = "nav-file-tag note-database-tag";
-            badge.textContent = "DB";
-            self.appendChild(badge);
+            self.createDiv({ cls: "nav-file-tag note-database-tag", text: "DB" });
           }
         } else if (!isDb && existingBadge) {
           existingBadge.remove();

@@ -216,9 +216,6 @@ export class ColumnOperations {
       targetCol.key = newKey;
       targetCol.label = newLabel;
       targetCol.wrap = result.wrap || undefined;
-      if (result.numberDisplayStyle !== undefined) {
-        targetCol.numberDisplayStyle = result.numberDisplayStyle === "plain" ? undefined : result.numberDisplayStyle;
-      }
       if (newIsFileField) {
         targetCol.type = getFileFieldFixedType(newKey);
         targetCol.statusOptions = undefined;
@@ -468,6 +465,7 @@ export class ColumnOperations {
     if (config.titleField === key) config.titleField = undefined;
     if (config.recordIconField === key) config.recordIconField = undefined;
     if (config.galleryImageField === key) config.galleryImageField = undefined;
+    if (config.boardImageField === key) config.boardImageField = undefined;
     if (config.boardGroupField === key) config.boardGroupField = undefined;
     if (config.boardSubgroupField === key) config.boardSubgroupField = undefined;
     if (config.calendarStartDateField === key) config.calendarStartDateField = undefined;
@@ -599,6 +597,104 @@ export class ColumnOperations {
       new Notice(t("column.actionFailed", { action: t("recordIcon.createField"), error: String(err) }));
       return null;
     }
+  }
+
+  /** Create a property with an explicit name and type (used by the unified
+   *  CreatePropertyModal). Mirrors appendNamedTextColumn but accepts any type and
+   *  optional insert position (nearCol/side). Returns the created column so the
+   *  caller can open follow-up config (formula/relation/rollup) if needed. */
+  async appendColumnWithName(
+    key: string,
+    label: string,
+    type: ColumnDef["type"],
+    options: {
+      nearCol?: ColumnDef;
+      side?: "left" | "right";
+      applyReference?: (column: ColumnDef) => void;
+      rollbackReference?: () => void;
+    } = {},
+  ): Promise<ColumnDef | null> {
+    const config = this.deps.getMutableConfig();
+    if (!config || !key || isFileFieldKey(key) || config.schema.columns.some((column) => column.key === key)) return null;
+    const newCol = this.createColumnWithDefaults(config, key, label, type);
+    ensureColumnOrder(config);
+    if (options.nearCol) {
+      const nearKey = options.nearCol.key;
+      const idx = config.schema.columns.findIndex((column) => column.key === nearKey);
+      const orderIdx = config.columnOrder!.indexOf(nearKey);
+      const insertAt = idx < 0 ? config.schema.columns.length : options.side === "left" ? idx : idx + 1;
+      const orderInsertAt = orderIdx < 0 ? config.columnOrder!.length : options.side === "left" ? orderIdx : orderIdx + 1;
+      config.schema.columns.splice(insertAt, 0, newCol);
+      config.columnOrder!.splice(orderInsertAt, 0, key);
+    } else {
+      config.schema.columns.push(newCol);
+      config.columnOrder!.push(key);
+    }
+    if (type === "computed" && newCol.computedKey) {
+      const existing = config.schema.computedFields.find((field) => field.key === newCol.computedKey);
+      if (!existing) {
+        config.schema.computedFields.push({
+          key: newCol.computedKey,
+          label: newCol.label,
+          expression: `=[${key}]`,
+          type: "text",
+        });
+      }
+    }
+    options.applyReference?.(newCol);
+    const changes = this.getEnsureKeyChanges(config, newCol);
+    this.deps.markPendingColumn(key);
+    this.deps.setPendingUndoLabel(t("undo.insertColumnConfig"));
+    this.deps.setPendingConfigCellChanges(changes);
+    try {
+      await this.deps.saveConfigImmediately();
+      // computed/rollup are virtual (no frontmatter key) — getEnsureKeyChanges
+      // already returns [] for them, so skip propertySync.ensure too, otherwise it
+      // writes a default value to every file unconditionally.
+      if (type !== "computed" && type !== "rollup") {
+        await this.propertySync.ensure(config, newCol);
+      }
+      await this.deps.refreshAfterSave();
+      this.deps.refreshSchemaChanged({ preserveViewport: true });
+      new Notice(t("column.addedProperty", { prefix: t("column.addedColumn"), key, count: changes.length }));
+      return newCol;
+    } catch (err) {
+      for (const change of changes) {
+        try { await this.deps.dataSource.updateFrontmatter(change.file, { [key]: null }); } catch { /* best-effort compensation */ }
+      }
+      config.schema.columns = config.schema.columns.filter((column) => column !== newCol);
+      config.columnOrder = (config.columnOrder || []).filter((candidate) => candidate !== key);
+      if (type === "computed" && newCol.computedKey) {
+        config.schema.computedFields = config.schema.computedFields.filter((field) => field.key !== newCol.computedKey);
+      }
+      options.rollbackReference?.();
+      try { await this.deps.saveConfigImmediately(); } catch { /* original failure is reported below */ }
+      console.error("Note Database: failed to create property", err);
+      new Notice(t("column.actionFailed", { action: t("modal.createProperty"), error: String(err) }));
+      return null;
+    }
+  }
+
+  /** Build a new ColumnDef with type-appropriate defaults (status options, computed key,
+   *  relation/rollup config). Simplified vs changeColumnType — no data inference or
+   *  conversion prompts, since the column is brand new with no existing values. */
+  private createColumnWithDefaults(config: ViewConfig, key: string, label: string, type: ColumnDef["type"]): ColumnDef {
+    const col: ColumnDef = { key, label: label || key, type };
+    if (isOptionColumnType(type)) {
+      col.statusOptions = type === "status" ? this.deps.getDefaultStatusOptions() : [];
+      col.statusPresetId = type === "status" ? this.deps.getDefaultStatusPresetId() : undefined;
+    }
+    if (type === "computed") col.computedKey = key;
+    if (type === "relation") col.relationConfig = { targetDatabaseId: this.deps.getActiveDb().id };
+    if (type === "rollup") {
+      const relation = config.schema.columns.find((column) => column.type === "relation" && column.relationConfig?.targetDatabaseId);
+      col.rollupConfig = {
+        relationField: relation?.key ?? "",
+        targetField: "file.name",
+        aggregation: "count",
+      };
+    }
+    return col;
   }
 
   async duplicateColumn(col: ColumnDef): Promise<void> {

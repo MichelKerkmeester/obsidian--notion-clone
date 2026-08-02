@@ -24,3 +24,8 @@ export function parseRelationValues(value: unknown): ParsedRelationLink[] {
   const values = Array.isArray(value) ? value : value == null || value === "" ? [] : [value];
   return values.map(parseRelationLink).filter((link): link is ParsedRelationLink => link != null);
 }
+
+/** Text shown for a Relation link across cells, groups, and width measurement. */
+export function getRelationDisplayLabel(link: ParsedRelationLink, fallback = link.target): string {
+  return link.alias || link.target.split("/").pop() || fallback;
+}

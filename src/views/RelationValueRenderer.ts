@@ -1,7 +1,8 @@
-import { App } from "obsidian";
-import { parseRelationValues } from "../data/RelationLinks";
+import { App, setIcon } from "obsidian";
+import { getRelationDisplayLabel, parseRelationValues } from "../data/RelationLinks";
 import { RowData } from "../data/types";
 import { setFieldTooltip } from "./FieldTooltip";
+import { markNoteHoverLink } from "./HoverLinkPreview";
 
 export function renderRelationValue(
   parent: HTMLElement,
@@ -17,8 +18,14 @@ export function renderRelationValue(
   for (const link of links) {
     const anchor = wrap.createEl("a", {
       cls: "db-relation-link internal-link",
-      text: link.alias || link.target.split("/").pop() || link.target,
       attr: { href: "#", title: link.target },
+    });
+    markNoteHoverLink(anchor, link.target, row.file.path);
+    const icon = anchor.createSpan({ cls: "db-relation-link-icon" });
+    setIcon(icon, "file-text");
+    anchor.createSpan({
+      cls: "db-relation-link-label",
+      text: getRelationDisplayLabel(link),
     });
     anchor.onclick = (event) => {
       event.preventDefault();

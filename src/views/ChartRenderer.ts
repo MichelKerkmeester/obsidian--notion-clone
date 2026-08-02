@@ -16,6 +16,7 @@ import {
   isNumericChartAggregation,
   requiresChartValueField,
   toChartNumber,
+  computePerCategoryTotals,
 } from "../data/ChartAggregation";
 import { CHART_PRESET_PALETTES } from "../data/ChartPalettes";
 import { formatChartDrilldownCellValue, getChartFilterRules, getChartTitle, getChartHeightClass, getDrilldownRows, isChartCumulativeSupported, normalizeChartAggregationForValueField } from "../data/ChartViewModel";
@@ -395,7 +396,10 @@ export class ChartRenderer {
           legend: {
             display: config?.chartShowLegend !== false && (isPie || isDonut || isSeries || isMixed),
             position: "bottom",
-            onClick: (_event, item) => this.toggleLegendGroup(item.text || ""),
+            // 非 mixed 图：自定义 onClick 把图例项映射到 chartHiddenGroups（按 group key 过滤类别）。
+            // mixed 图：dataset label 是聚合文案（"Count"/"Sum"）非 group key，自定义 onClick 会
+            // 写脏 chartHiddenGroups；省略 onClick（undefined）让 Chart.js 走默认 dataset 显隐（Bug S）。
+            onClick: isMixed ? undefined : (_event, item) => this.toggleLegendGroup(item.text || ""),
             labels: {
               color: colors.text,
               boxWidth: 10,
@@ -475,6 +479,7 @@ export class ChartRenderer {
         createDataLabelsPlugin(formatValue, isDonut, config?.chartShowDataLabels === true, config?.chartDataLabelMode || "value", config?.chartDataLabelColor || "auto", colors, {
           placeInsideBars: isStacked || isPercentStacked,
           isHorizontal,
+          percentByCategory: chartType === "stacked-bar" || chartType === "grouped-bar" || chartType === "percent-stacked-bar",
         }),
         createDonutCenterPlugin(formatValue, isDonut ? getDonutCenterMode(config) : "hidden", getDonutCenterValue(result, config)),
         ...(referenceLines.length > 0 && !isPie && !isDonut ? [createReferenceLinesPlugin(referenceLines, isHorizontal, colors)] : []),
@@ -1042,7 +1047,7 @@ function createDataLabelsPlugin(
   mode: ViewConfig["chartDataLabelMode"],
   colorMode: NonNullable<ViewConfig["chartDataLabelColor"]>,
   colors: ThemeColors,
-  options: { placeInsideBars?: boolean; isHorizontal?: boolean } = {},
+  options: { placeInsideBars?: boolean; isHorizontal?: boolean; percentByCategory?: boolean } = {},
 ): Plugin {
   return {
     id: "noteDatabaseDataLabels",
@@ -1053,6 +1058,16 @@ function createDataLabelsPlugin(
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
       ctx.font = "11px sans-serif";
+      // For percent mode with multiple datasets (stacked/grouped), the denominator
+      // must be the per-category total across ALL datasets, not the current series
+      // sum — otherwise percentages within a category won't add up to 100%.
+      const datasetCount = chart.data.datasets.length;
+      // Only stacked/grouped/percent-stacked bars need per-category denominators;
+      // line/area/mixed multi-dataset charts keep the whole-series total.
+      const isMultiDatasetBar = datasetCount > 1 && options.percentByCategory === true;
+      const perIndexTotals = (mode === "percent" && isMultiDatasetBar)
+        ? computePerCategoryTotals(chart.data.datasets, Array.isArray(chart.data.labels) ? chart.data.labels.length : 0)
+        : [];
       for (const dataset of chart.data.datasets) {
         const meta = chart.getDatasetMeta(chart.data.datasets.indexOf(dataset));
         const values = Array.isArray(dataset.data)
@@ -1065,7 +1080,10 @@ function createDataLabelsPlugin(
           const position = element.tooltipPosition(true);
           if (typeof position.x !== "number" || typeof position.y !== "number") return;
           const label = toFullCategoryLabel(Array.isArray(chart.data.labels) ? chart.data.labels[index] : "");
-          const text = formatDataLabelText(value, label, total, mode, formatValue);
+          const denom = mode === "percent" && isMultiDatasetBar
+            ? (perIndexTotals[index] || 0)
+            : total;
+          const text = formatDataLabelText(value, label, denom, mode, formatValue);
           const point = getDataLabelPoint(element, chart.chartArea, {
             isDonut,
             placeInsideBars: options.placeInsideBars === true,

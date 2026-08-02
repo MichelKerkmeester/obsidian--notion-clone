@@ -4,7 +4,7 @@ import { formatDateTimeValueDisplay, formatDateValueDisplay } from "./DateTimeFo
 import { stringifyValue } from "./Stringify";
 import { toBooleanValue } from "./ColumnTypes";
 import { DateGroupMode, ViewConfig } from "./types";
-import { parseRelationLink } from "./RelationLinks";
+import { getRelationDisplayLabel, parseRelationLink } from "./RelationLinks";
 
 export interface GroupDisplayOptions {
   uncategorizedLabel?: string;
@@ -16,6 +16,15 @@ export function getDateGroupMode(config: ViewConfig, field: string | undefined):
   return (field && config.dateGroupModes?.[field]) || "exact";
 }
 
+/** Whether a group key represents the empty "uncategorized" group.
+ *  QueryEngine emits `t("common.uncategorized")` for records whose group field has
+ *  no value, so both the empty string and the localized label must be treated as
+ *  uncategorized. */
+export function isUncategorizedGroupKey(groupKey: unknown): boolean {
+  const key = stringifyValue(groupKey).trim();
+  return !key || key === t("common.uncategorized");
+}
+
 export function formatGroupKeyDisplay(
   config: ViewConfig,
   groupField: string | undefined,
@@ -24,7 +33,7 @@ export function formatGroupKeyDisplay(
 ): string {
   const key = stringifyValue(groupKey).trim();
   const uncategorizedLabel = options.uncategorizedLabel || t("common.uncategorized");
-  if (!key || key === t("common.uncategorized") || options.uncategorizedKeys?.includes(key)) return uncategorizedLabel;
+  if (isUncategorizedGroupKey(groupKey) || options.uncategorizedKeys?.includes(key)) return uncategorizedLabel;
 
   const column = groupField ? config.schema.columns.find((candidate) => candidate.key === groupField) : undefined;
   const displayType = column ? getColumnDisplayType(column, config.schema.computedFields) : undefined;
@@ -37,7 +46,7 @@ export function formatGroupKeyDisplay(
   if (displayType === "checkbox") return toBooleanValue(key) ? t("common.true") : t("common.false");
   if (displayType === "relation") {
     const link = parseRelationLink(key);
-    return link?.alias || link?.target.split("/").pop() || key;
+    return link ? getRelationDisplayLabel(link, key) : key;
   }
   return key;
 }

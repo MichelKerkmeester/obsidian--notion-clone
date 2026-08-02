@@ -817,7 +817,7 @@ export class ChartToolbarRenderer {
     this.renderReferenceLineColorPicker(wrap, line, actions);
     const remove = wrap.createEl("button", { cls: "db-chart-reference-line-remove", attr: { type: "button" } });
     this.renderOptionIcon(remove, "trash-2");
-    setTooltip(remove, t("toolbar.delete"), { delay: 100 });
+    setTooltip(remove, t("common.delete"), { delay: 100 });
     remove.onclick = () => {
       config.chartReferenceLines = (config.chartReferenceLines || []).filter((candidate) => candidate !== line);
       if (config.chartReferenceLines.length === 0) config.chartReferenceLines = undefined;

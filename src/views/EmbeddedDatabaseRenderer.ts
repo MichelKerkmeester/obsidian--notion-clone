@@ -1,4 +1,4 @@
-import { App, MarkdownRenderChild, MarkdownSectionInformation, Menu, normalizePath, Notice, setIcon, setTooltip, TFile } from "obsidian";
+import { App, HoverPopover, MarkdownRenderChild, MarkdownSectionInformation, Menu, normalizePath, Notice, setIcon, setTooltip, TFile } from "obsidian";
 import { t } from "../i18n";
 import { DataChangeBatch, DataSource, NoteRecord, ViewConfigMutation } from "../data/DataSource";
 import { RefreshCoordinator } from "../data/RefreshCoordinator";
@@ -64,6 +64,9 @@ import { FileTitleDisplay, getFileTitleDisplay } from "./FileTitleDisplay";
 import { TableRenderer } from "./TableRenderer";
 import { isHTMLElement } from "./DomGuards";
 import { ToolbarRenderer } from "./ToolbarRenderer";
+import { ActiveViewControlsRenderer } from "./ActiveViewControlsRenderer";
+import { ActiveRulePopoverRenderer } from "./ActiveRulePopoverRenderer";
+import { removeFilterRuleAt, removeSortRuleAt } from "./ViewRuleOperations";
 import { ViewConfigPanelRenderer } from "./ViewConfigPanelRenderer";
 import { DATABASE_VIEW_TYPE, DatabaseView } from "./DatabaseView";
 
@@ -78,6 +81,7 @@ import { getComputedStorageKey, isNumberDisplayColumn } from "../data/ColumnDisp
 import { getRequiredSourceRules, getSourceRuleTree, getSourceRuleTypedValue, mergeDbAndViewSourceRuleTrees } from "../data/SourceRules";
 import { getRowFileFieldValue, isFileFieldKey } from "../data/FileFields";
 import { applyRangeSelection } from "../data/RangeSelection";
+import { installNoteHoverPreview } from "./HoverLinkPreview";
 
 type HeaderPopoverKind = "filter" | "sort" | "columns" | "view";
 
@@ -97,6 +101,7 @@ interface EmbeddedReference {
 }
 
 export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
+  hoverPopover: HoverPopover | null = null;
   private queryEngine = new QueryEngine();
   private rowPipeline = new RowPipeline();
   private rows: RowData[] = [];
@@ -181,6 +186,8 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
     });
   }
   private toolbarRenderer = new ToolbarRenderer();
+  private activeViewControlsRenderer = new ActiveViewControlsRenderer();
+  private activeRulePopoverRenderer = new ActiveRulePopoverRenderer();
   private filterPanelRenderer = new FilterPanelRenderer();
   private columnManagerRenderer = new ColumnManagerRenderer();
   private viewConfigPanelRenderer = new ViewConfigPanelRenderer();
@@ -410,6 +417,7 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
   onload(): void {
     this.containerEl.addClass("note-database-container");
     this.containerEl.addClass("note-database-embed");
+    installNoteHoverPreview(this, this.containerEl, this.app, this);
     this.markEmbedCodeBlockHost();
     this.unsubscribe = this.dataSource.onDataChanged((batch) => this.handleDataChanged(batch));
     this.unsubscribeViewConfig = this.dataSource.onViewConfigChanged((mutation) => this.handlePeerViewConfigChanged(mutation));
@@ -807,7 +815,10 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
       this.closePopovers();
       return;
     }
-    if (target.closest(".db-filter-panel, .db-sort-panel, .db-column-manager, .db-view-config-panel, .db-dropdown-popover, .db-toolbar, .db-header")) return;
+    if (target.closest(
+      ".db-filter-panel, .db-sort-panel, .db-column-manager, .db-view-config-panel, " +
+      ".db-dropdown-popover, .db-date-value-popover, .db-toolbar, .db-header"
+    )) return;
     this.closePopovers();
   }
 
@@ -816,11 +827,13 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
     return !target.closest(
       "td[data-note-database-row-path][data-note-database-column-key], " +
       ".db-selection-status-bar, .db-cell-editing, input, textarea, select, button, a, " +
-      ".db-filter-panel, .db-sort-panel, .db-column-manager, .db-view-config-panel, .db-dropdown-popover, .db-group-order-popover, .menu"
+      ".db-filter-panel, .db-sort-panel, .db-column-manager, .db-view-config-panel, " +
+      ".db-dropdown-popover, .db-date-value-popover, .db-group-order-popover, .menu"
     );
   }
 
   private closePopovers(): void {
+    this.activeRulePopoverRenderer.close();
     this.toolbarRenderer.closePopovers();
     this.calendarToolbarRenderer.closePopover();
     this.chartToolbarRenderer.closePopover();
@@ -1170,6 +1183,7 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
   }
 
   private renderToolbar(config: ViewConfig): void {
+    this.activeRulePopoverRenderer.close();
     // Use the currentDbConfig if available (for multi-view support)
     const baseDbConfig = this.currentDbConfig || {
       id: "embedded",
@@ -1359,7 +1373,89 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
       hideDatabaseActions: this.persistMode === "frontmatter",
       hideHeaderChrome: this.shouldHideHeaderChrome(),
     });
+    this.renderActiveViewControls(config);
     this.updateStickyOffsets();
+  }
+
+  private renderActiveViewControls(config: ViewConfig): void {
+    this.activeViewControlsRenderer.render(this.containerEl, config, this.vs(config), {
+      editFilter: (index, anchorEl) => this.openActiveRulePopover(config, "filter", index, anchorEl),
+      editSort: (index, anchorEl) => this.openActiveRulePopover(config, "sort", index, anchorEl),
+      removeFilter: (index) => this.removeActiveFilterRule(config, index),
+      removeSort: (index) => this.removeActiveSortRule(config, index),
+      toggleFilterLogic: () => this.toggleActiveFilterLogic(config),
+    });
+    this.updateStickyOffsets();
+  }
+
+  private openActiveRulePopover(config: ViewConfig, kind: "filter" | "sort", index: number, anchorEl: HTMLElement): void {
+    if (this.showFilterPanel || this.showSortPanel || this.showColumnManager || this.showViewConfigPanel) {
+      this.closePopovers();
+    }
+    if (kind === "filter") {
+      this.activeRulePopoverRenderer.toggleFilter({
+        containerEl: this.containerEl,
+        anchorEl,
+        index,
+        state: this.vs(config),
+        config,
+        renderer: this.filterPanelRenderer,
+        actions: {
+          saveState: () => this.persistEmbeddedConfigLocally(config),
+          refresh: () => this.renderResults(config, { viewport: "reset-top" }),
+          close: () => this.activeRulePopoverRenderer.close(),
+        },
+        onClose: () => {
+          this.updateToolbarIndicators(config);
+          this.saveEmbeddedConfigInBackground();
+        },
+      });
+      return;
+    }
+    this.activeRulePopoverRenderer.toggleSort({
+      containerEl: this.containerEl,
+      anchorEl,
+      index,
+      state: this.vs(config),
+      config,
+      renderer: this.sortPanelRenderer,
+      actions: {
+        save: () => this.persistEmbeddedConfigLocally(config),
+        refresh: () => this.renderResults(config, { viewport: "reset-top" }),
+        close: () => this.activeRulePopoverRenderer.close(),
+      },
+      onClose: () => {
+        this.updateToolbarIndicators(config);
+        this.saveEmbeddedConfigInBackground();
+      },
+    });
+  }
+
+  private removeActiveFilterRule(config: ViewConfig, index: number): void {
+    this.activeRulePopoverRenderer.close();
+    if (!removeFilterRuleAt(this.vs(config), index)) return;
+    this.persistEmbeddedConfigLocally(config);
+    this.updateToolbarIndicators(config);
+    this.renderResults(config, { viewport: "reset-top" });
+    this.saveEmbeddedConfigInBackground();
+  }
+
+  private removeActiveSortRule(config: ViewConfig, index: number): void {
+    this.activeRulePopoverRenderer.close();
+    if (!removeSortRuleAt(this.vs(config), index)) return;
+    this.persistEmbeddedConfigLocally(config);
+    this.updateToolbarIndicators(config);
+    this.renderResults(config, { viewport: "reset-top" });
+    this.saveEmbeddedConfigInBackground();
+  }
+
+  private toggleActiveFilterLogic(config: ViewConfig): void {
+    const state = this.vs(config);
+    state.filterLogic = state.filterLogic === "and" ? "or" : "and";
+    this.persistEmbeddedConfigLocally(config);
+    this.updateToolbarIndicators(config);
+    this.renderResults(config, { viewport: "reset-top" });
+    this.saveEmbeddedConfigInBackground();
   }
 
   private renderHeaderChromeToggle(config: ViewConfig): void {
@@ -1421,6 +1517,7 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
   }
 
   private toggleHeaderPopover(config: ViewConfig, kind: HeaderPopoverKind, anchorEl: HTMLElement): void {
+    this.activeRulePopoverRenderer.close();
     this.chartToolbarRenderer.closePopover();
     const wasClosingActivePopover = this.activeHeaderPopover != null && this.isHeaderPopoverVisible(this.activeHeaderPopover);
     if (wasClosingActivePopover) this.persistVisibleHeaderPopoverState(config);
@@ -1475,6 +1572,8 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
       panel,
       anchorEl: this.headerPopoverAnchorEl,
       close: () => this.closePopovers(),
+      isActiveTarget: (target) => target instanceof HTMLElement &&
+        Boolean(target.closest(".db-color-picker-popup, .db-dropdown-popover, .db-date-value-popover")),
     });
   }
 
@@ -2747,7 +2846,8 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
     for (const col of computedColumns) {
       if (affectedFields?.length) {
         const deps = ComputedFieldEngine.extractDependencies(
-          config.schema.computedFields.find(cf => cf.key === (col.computedKey || col.key))?.expression || ""
+          config.schema.computedFields.find(cf => cf.key === (col.computedKey || col.key))?.expression || "",
+          config.schema.columns
         );
         const allRelevant = [...affectedFields, ...computedColumns.flatMap(c => [c.key, getComputedStorageKey(c)])];
         if (!deps.some(d => allRelevant.includes(d))) continue;
@@ -2861,6 +2961,7 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
         : state.groupByField;
       groupBtn.toggleClass("is-active", Boolean(groupValue));
     }
+    this.renderActiveViewControls(config);
   }
 
   private normalizeBoardSubgroupAfterGroupChange(config: ViewConfig, groupField: string): void {
@@ -3255,6 +3356,13 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
     origView.sourceLogic = this.config.sourceLogic;
     origView.sourceRuleTree = this.config.sourceRuleTree;
     origView.viewSourceRulesEnabled = this.config.viewSourceRulesEnabled;
+    // Bug 2: 整体覆盖所有持久化视图配置，修复手抄白名单漏字段（图标/dateGroupModes/
+    // conditionalFormats/summaryRules/chart 显示设置等）。排除稳定身份字段（id/name）、
+    // 运行时字段（baseThisFilePath）、共享 schema（view.schema === database.schema 契约，
+    // 不能被独立副本覆盖——见 ColumnConfig.linkDatabaseSchema）。
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { id: _id, name: _name, baseThisFilePath: _baseThisFilePath, schema: _schema, ...persisted } = this.config;
+    Object.assign(origView, persisted);
     for (const col of this.config.schema.columns) {
       const sourceCol = this.currentDbConfig.schema.columns.find((candidate) => candidate.key === col.key);
       if (!sourceCol) continue;
@@ -3455,6 +3563,7 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
 
     const summary = this.containerEl.querySelector(".db-summary");
     if (summary) {
+      bar.addClass("is-summary-overlay");
       summary.before(bar);
     } else {
       const tableWrap = this.containerEl.querySelector(".db-table-wrap");

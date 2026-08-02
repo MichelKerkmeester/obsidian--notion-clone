@@ -9,6 +9,7 @@ import { installPopoverAutoClose } from "./PopoverAutoClose";
 import { positionToolbarPopover } from "./PopoverPosition";
 import { getPropertyDropdownIcon, renderDropdownPropertyTypeIcon } from "./PropertyTypeIcon";
 import { getOrderedRecordIconColumns, getRecordIconFieldLabel, resolveRecordIconField } from "../data/RecordIcon";
+import { getCalendarColumnWidthRange, resolveCalendarCustomColumnWidth } from "../data/CalendarDateTime";
 
 /** Actions exposed by the calendar toolbar settings panel. */
 export interface CalendarToolbarActions {
@@ -301,7 +302,7 @@ export class CalendarToolbarRenderer {
 			], config.calendarColumnSizeMode || "adaptive", (value) => {
 				config.calendarColumnSizeMode = value === "custom" ? "custom" : "adaptive";
 				if (value === "custom") {
-					config.calendarCustomColumnWidth = config.calendarCustomColumnWidth || 120;
+					config.calendarCustomColumnWidth = resolveCalendarCustomColumnWidth(config.calendarScale, config.calendarCustomColumnWidth);
 				} else {
 					config.calendarCustomColumnWidth = undefined;
 				}
@@ -311,8 +312,7 @@ export class CalendarToolbarRenderer {
 
 			// Column width range slider (only when custom mode is active)
 			if (config.calendarColumnSizeMode === "custom") {
-					const colMin = config.calendarScale === "day" ? 300 : 60;
-					const colMax = config.calendarScale === "day" ? 1900 : 300;
+					const { min: colMin, max: colMax } = getCalendarColumnWidthRange(config.calendarScale);
 					const setColumnWidth = (value: number) => {
 						config.calendarCustomColumnWidth = Math.max(colMin, Math.min(colMax, Math.round(value)));
 					};

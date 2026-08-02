@@ -340,6 +340,12 @@ export interface ViewConfig {
   boardSubgroupField?: string;
   /** Shared board column width in pixels. */
   boardColumnWidth?: number;
+  /** Board card cover image property. Empty = no cover. */
+  boardImageField?: string;
+  /** Board card cover aspect ratio as width / height. */
+  boardImageAspectRatio?: number;
+  /** Board card cover image fit mode. */
+  boardImageFit?: "cover" | "contain";
   /** Default display width applied to all properties in the active view. */
   defaultColumnWidth?: number;
   /** Explicit column key order. When absent, schema.columns array order is used. */

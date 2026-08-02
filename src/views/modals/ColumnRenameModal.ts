@@ -1,17 +1,13 @@
 import { App, Modal, Notice } from "obsidian";
 import { isFileFieldKey } from "../../data/FileFields";
-import { ColumnDef, ComputedFieldDef, NumberDisplayStyle } from "../../data/types";
+import { ColumnDef } from "../../data/types";
 import { t } from "../../i18n";
-import { createDropdownField } from "../DropdownField";
-import { isNumberDisplayColumn } from "../../data/ColumnDisplay";
 
 export interface ColumnRenameResult {
   key: string;
   label: string;
   migrateValues: boolean;
   wrap: boolean;
-  /** Only present for number columns (plain/rating/progress). */
-  numberDisplayStyle?: NumberDisplayStyle;
 }
 
 export class ColumnRenameModal extends Modal {
@@ -20,7 +16,6 @@ export class ColumnRenameModal extends Modal {
     private col: ColumnDef,
     private allColumns: ColumnDef[],
     private onSave: (result: ColumnRenameResult) => Promise<void | boolean>,
-    private computedFields: ComputedFieldDef[] = []
   ) {
     super(app);
   }
@@ -57,26 +52,6 @@ export class ColumnRenameModal extends Modal {
     const wrapCheckbox = wrapRow.createEl("input", { attr: { type: "checkbox" } });
     wrapCheckbox.checked = !!this.col.wrap;
     wrapRow.createSpan({ text: t("modal.wrapContent") });
-
-    let numberDisplayStyle: NumberDisplayStyle | undefined;
-    if (isNumberDisplayColumn(this.col, this.computedFields)) {
-      numberDisplayStyle = this.col.numberDisplayStyle ?? "plain";
-      const styleRow = contentEl.createDiv({
-        attr: { style: "margin-top: 10px; font-size: 12px;" },
-      });
-      createDropdownField({
-        parent: styleRow,
-        label: t("modal.numberDisplayStyle"),
-        value: numberDisplayStyle,
-        options: [
-          { value: "plain", text: t("menu.numberStylePlain") },
-          { value: "rating", text: t("menu.numberStyleRating") },
-          { value: "progress", text: t("menu.numberStyleProgress") },
-          { value: "ring", text: t("menu.numberStyleRing") },
-        ],
-        onChange: (value) => { numberDisplayStyle = value as NumberDisplayStyle; },
-      });
-    }
 
     const canMigrate = !fileField && this.col.type !== "computed" && this.col.type !== "rollup";
     let migrateCheckbox: HTMLInputElement | undefined;
@@ -131,7 +106,6 @@ export class ColumnRenameModal extends Modal {
         migrateValues: migrateCheckbox?.checked ?? false,
         wrap: wrapCheckbox.checked,
       };
-      if (numberDisplayStyle !== undefined) result.numberDisplayStyle = numberDisplayStyle;
       const saved = await this.onSave(result);
       if (saved !== false) this.close();
     };

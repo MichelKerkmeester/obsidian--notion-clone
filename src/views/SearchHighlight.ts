@@ -106,9 +106,7 @@ export function renderSearchHighlightedText(parent: HTMLElement, text: string, q
   const doc = parent.ownerDocument || window.activeDocument;
   while (match) {
     if (match.index > lastEnd) parent.appendChild(doc.createTextNode(text.slice(lastEnd, match.index)));
-    const mark = doc.createElement("mark");
-    mark.className = "db-search-highlight";
-    mark.textContent = text.slice(match.index, match.index + match.length);
+    const mark = parent.createEl("mark", { cls: "db-search-highlight", text: text.slice(match.index, match.index + match.length) });
     parent.appendChild(mark);
     lastEnd = match.index + match.length;
     match = findNextSearchHighlightMatch(lower, terms, lastEnd);

@@ -4,6 +4,7 @@ import {
   getInvalidObsidianTagValues,
   normalizeValidObsidianTagValue,
   normalizeOptionValueForKey,
+  resolveOptionDisplay,
   toBooleanValue,
   toMultiSelectValuesForKey,
   toValidObsidianTagValues,
@@ -15,7 +16,7 @@ import { renderRecordIcon } from "./RecordIconRenderer";
 import { DataSource } from "../data/DataSource";
 import { formatDateTimeValueDisplay, formatDateValueDisplay, parseDateTimeParts } from "../data/DateTimeFormat";
 import { isImeComposing } from "../data/KeyboardUtils";
-import { openOptionColorPicker } from "./OptionColorPicker";
+import { closeActiveOptionColorPicker, openOptionColorPicker } from "./OptionColorPicker";
 import { normalizeExternalUrlTarget, parseTextLink } from "../data/TextLink";
 import { parseInlineMarkdown } from "../data/InlineMarkdown";
 import { getFileFieldFixedType, getRowFileFieldValue, isFileFieldKey, isReadonlyFileField } from "../data/FileFields";
@@ -32,21 +33,14 @@ import { confirmWithModal } from "./modals/ConfirmModal";
 import { renderSpecialFileFieldValue, shouldRenderSpecialFileField } from "./FileFieldRenderer";
 import { renderRating, renderProgress, renderProgressRing } from "./NumberDisplayRenderer";
 import { renderInlineMarkdown, resolveInlineImageSrc } from "./InlineMarkdownRenderer";
-import {
-  addUtcDays,
-  dateKeyFromUtc,
-  getLocaleWeekStartsOn,
-  getLocalDateKey,
-  getWeekdayLabels,
-  makeUtcDate,
-  parseDateKeyToUtc,
-} from "../data/CalendarDateTime";
-import { CalendarDayModel } from "../data/CalendarTimelineModel";
+import { getLocaleWeekStartsOn, getLocalDateKey, getWeekdayLabels, parseDateKeyToUtc } from "../data/CalendarDateTime";
 import { MiniCalendarEventIndex, MiniCalendarMode, renderMiniCalendar } from "./CalendarMiniCalendarRenderer";
+import { buildDatePickerWeeks, formatDatePickerMonthTitle, getDatePickerYearRangeStart, shiftDatePickerMonth } from "./DatePickerModel";
 import { OPTION_REGISTRATION_COLORS as OPTION_COLORS } from "../data/OptionRegistration";
 import { shouldCommitEmptyBulkDateClear } from "../data/BulkEdit";
 import { SerialTaskQueue } from "../data/SerialTaskQueue";
 import type { TableCellNavigationIntent } from "../data/TableKeyboardNavigation";
+import { markNoteHoverLink } from "./HoverLinkPreview";
 
 export interface CellOptionTransaction {
   previousOptions?: StatusOptionDef[];
@@ -100,6 +94,7 @@ export class CellRenderer {
     private finishTableCellEdit?: (row: RowData, col: ColumnDef, intent: TableCellNavigationIntent) => void,
     private renameFile?: (row: RowData, newName: string) => Promise<boolean>,
     private sourceInstanceId?: string,
+    private editRelationRollup?: (col: ColumnDef, row: RowData) => void,
   ) {}
 
   private finishInlineEdit(
@@ -125,6 +120,7 @@ export class CellRenderer {
         cls: "internal-link",
         attr: { title: displayInfo.fullPath },
       });
+      markNoteHoverLink(link, row.file.path, row.file.path);
       renderInlineFileTitle(link, displayInfo, true);
       link.addEventListener("click", (event) => {
         event.preventDefault();
@@ -156,6 +152,10 @@ export class CellRenderer {
       if (!this.isReadOnly && col.type === "computed") {
         this.makeComputedEditable(td, row, col);
         setFieldTooltip(td, t("common.empty"), t("cell.doubleClickEditFormula"));
+      }
+      if (!this.isReadOnly && col.type === "rollup") {
+        this.makeRollupConfigurable(td, row, col);
+        setFieldTooltip(td, t("common.empty"), t("cell.doubleClickConfigureRollup"));
       }
       if (!this.isReadOnly && this.isEditableCellColumn(col)) {
         td.addClass("db-editable-cell");
@@ -213,6 +213,7 @@ export class CellRenderer {
           if (nodes) {
             td.empty();
             renderInlineMarkdown(td, nodes, {
+              sourcePath: row.file.path,
               linkClickStrategy: "table",
               onOpenLink: (target, external) => {
                 if (external) window.open(target);
@@ -234,6 +235,9 @@ export class CellRenderer {
     if (!this.isReadOnly && col.type === "computed") {
       this.makeComputedEditable(td, row, col);
       setFieldTooltip(td, this.getTooltipValue(col, value), t("cell.doubleClickEditFormula"));
+    } else if (!this.isReadOnly && col.type === "rollup") {
+      this.makeRollupConfigurable(td, row, col);
+      setFieldTooltip(td, this.getTooltipValue(col, value), t("cell.doubleClickConfigureRollup"));
     } else if (!this.isReadOnly && this.isEditableCellColumn(col)) {
       td.addClass("db-editable-cell");
       this.makeEditable(td, row, col, value);
@@ -269,6 +273,7 @@ export class CellRenderer {
       text: link.label,
       attr: { title: link.target, href: link.external ? link.target : "#" },
     });
+    if (!link.external) markNoteHoverLink(anchor, link.target, row.file.path);
     let openTimer: number | undefined;
     anchor.addEventListener("click", (event) => {
       event.preventDefault();
@@ -298,12 +303,16 @@ export class CellRenderer {
   }
 
   private renderStatus(td: HTMLElement, col: ColumnDef, status: string): void {
+    const resolved = resolveOptionDisplay(col, status);
+    if (!resolved.value) {
+      td.textContent = t("common.empty");
+      return;
+    }
     const badge = td.createSpan({ cls: "status-badge" });
-    badge.textContent = status;
-    badge.title = status;
-    const option = col.statusOptions?.find((item) => normalizeOptionValueForKey(col.key, item.value) === status);
-    if (option) {
-      badge.addClass(`status-color-${option.color}`);
+    badge.textContent = resolved.value;
+    badge.title = resolved.value;
+    if (resolved.option) {
+      badge.addClass(`status-color-${resolved.option.color}`);
     } else {
       badge.addClass("status-color-gray");
     }
@@ -324,7 +333,12 @@ export class CellRenderer {
 
   private getTooltipValue(col: ColumnDef, value: unknown): unknown {
     if (col.key === "file.tags") return toValidObsidianTagValues(value);
-    return this.getEffectiveDisplayType(col) === "multi-select" ? toMultiSelectValuesForKey(col.key, value) : value;
+    const displayType = this.getEffectiveDisplayType(col);
+    if (displayType === "multi-select") return toMultiSelectValuesForKey(col.key, value);
+    if (displayType === "select" || displayType === "status") {
+      return resolveOptionDisplay(col, value).value || t("common.empty");
+    }
+    return value;
   }
 
   private renderCheckbox(td: HTMLElement, row: RowData, col: ColumnDef, value: unknown): void {
@@ -400,11 +414,20 @@ export class CellRenderer {
 
   private makeComputedEditable(td: HTMLElement, row: RowData, col: ColumnDef): void {
     td.addClass("db-formula-cell");
-    td.title = t("cell.doubleClickEditFormula");
     td.addEventListener("dblclick", (event) => {
       event.preventDefault();
       event.stopPropagation();
       this.editFormula?.(col, row);
+    });
+  }
+
+  private makeRollupConfigurable(td: HTMLElement, row: RowData, col: ColumnDef): void {
+    td.addClass("db-rollup-cell");
+    td.addEventListener("dblclick", (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      if (this.editRelationRollup) this.editRelationRollup(col, row);
+      else new Notice(t("cell.rollupReadonly"));
     });
   }
 
@@ -434,7 +457,11 @@ export class CellRenderer {
 
     if (!session && this.focusExistingEditor(target, event)) return;
     if (col.type === "rollup") {
-      new Notice(t("cell.rollupReadonly"));
+      // Table keyboard entry (Enter/F2) has no MouseEvent. Card/detail renderers call
+      // startEdit from a single click and must keep the existing read-only behavior;
+      // Table mouse double-click is handled by makeRollupConfigurable above.
+      if (!event && this.editRelationRollup) this.editRelationRollup(col, row);
+      else new Notice(t("cell.rollupReadonly"));
       return;
     }
     if (col.type === "computed") {
@@ -680,8 +707,9 @@ export class CellRenderer {
     const list = popover.createDiv({ cls: "db-cell-option-list db-relation-option-list" });
     const footer = popover.createDiv({ cls: "db-relation-popover-footer" });
     const count = footer.createSpan({ cls: "db-relation-selected-count" });
-    const cancel = footer.createEl("button", { text: t("common.cancel") });
-    const apply = footer.createEl("button", { text: t("common.save"), cls: "mod-cta" });
+    const clear = footer.createEl("button", { text: t("common.clear"), cls: "db-relation-clear" });
+    const actions = footer.createDiv({ cls: "db-relation-footer-actions" });
+    const apply = actions.createEl("button", { text: t("common.save"), cls: "mod-cta db-relation-footer-button" });
     let closed = false;
     const close = () => {
       if (closed) return;
@@ -704,16 +732,16 @@ export class CellRenderer {
         const haystack = `${title} ${record.file.path}`.toLowerCase();
         if (query && !haystack.includes(query)) continue;
         const option = list.createEl("button", {
-          cls: `db-dropdown-option has-icon${selectedPaths.has(record.file.path) ? " is-selected" : ""}`,
+          cls: `db-cell-option-item db-relation-option-item${selectedPaths.has(record.file.path) ? " is-selected" : ""}`,
           attr: { type: "button" },
         });
-        const check = option.createSpan({ cls: "db-dropdown-option-check" });
-        if (selectedPaths.has(record.file.path)) setIcon(check, "check");
         renderRecordIcon(option, recordIconField ? record.frontmatter[recordIconField] : undefined, {
           compact: true,
           defaultIcon: "file-text",
         }).addClass("db-relation-option-icon");
         option.createSpan({ cls: "db-dropdown-option-label", text: title });
+        const check = option.createSpan({ cls: "db-option-check db-relation-option-check" });
+        if (selectedPaths.has(record.file.path)) setIcon(check, "check");
         option.onclick = () => {
           if (selectedPaths.has(record.file.path)) {
             selectedPaths.delete(record.file.path);
@@ -729,7 +757,17 @@ export class CellRenderer {
       count.textContent = t("relation.selectedCount", { count: selectedPaths.size });
     };
     search.oninput = renderList;
-    cancel.onclick = close;
+    search.onkeydown = (event) => {
+      if (event.key !== "Escape") return;
+      event.preventDefault();
+      close();
+    };
+    clear.onclick = () => {
+      selectedPaths.clear();
+      selectedOrder.splice(0, selectedOrder.length);
+      unresolved.splice(0, unresolved.length);
+      renderList();
+    };
     apply.onclick = () => {
       const values = [
         ...unresolved,
@@ -785,6 +823,14 @@ export class CellRenderer {
 
     const close = (intent?: TableCellNavigationIntent) => {
       if (closed) return;
+      // Esc ("stay"): if the option color picker is open, only close it (via the
+      // shared closer that also cleans its listeners) and keep this option popover
+      // open. This is the funnel point for BOTH Esc paths — the scope-registered
+      // Esc (handleInlineEditorEscape → cancelActiveInlineEditor) and the document
+      // keydown Esc — so guarding here covers both.
+      if (intent === "stay" && closeActiveOptionColorPicker(window.activeDocument)) {
+        return;
+      }
       closed = true;
       if (this.activeOptionPopoverClose === closeFromKeyboard) this.activeOptionPopoverClose = undefined;
       if (this.activeInlineEditorCancel === closeFromKeyboard) this.activeInlineEditorCancel = undefined;
@@ -1679,20 +1725,20 @@ export class CellRenderer {
         popover: datePicker,
         mode: pickerMode,
         monthKey: pickerMonthKey,
-        monthTitle: this.formatDatePickerMonthTitle(year, monthIndex),
+        monthTitle: formatDatePickerMonthTitle(year, monthIndex, getEffectiveLocale()),
         visibleYear: year,
-        yearRangeStart: this.getDatePickerYearRangeStart(year),
-        weeks: this.buildDatePickerWeeks(year, monthIndex, weekStartsOn),
+        yearRangeStart: getDatePickerYearRangeStart(year),
+        weeks: buildDatePickerWeeks(year, monthIndex, weekStartsOn),
         weekdays: getWeekdayLabels(getEffectiveLocale(), weekStartsOn),
         todayKey: getLocalDateKey(),
         selectedKeys: new Set([getDraftDateKey()]),
         eventIndex: pickerEventIndex,
         onPrevious: () => {
-          pickerMonthKey = this.shiftDatePickerMonth(pickerMonthKey, pickerMode === "day" ? -1 : pickerMode === "month" ? -12 : -144);
+          pickerMonthKey = shiftDatePickerMonth(pickerMonthKey, pickerMode === "day" ? -1 : pickerMode === "month" ? -12 : -144);
           renderDatePicker();
         },
         onNext: () => {
-          pickerMonthKey = this.shiftDatePickerMonth(pickerMonthKey, pickerMode === "day" ? 1 : pickerMode === "month" ? 12 : 144);
+          pickerMonthKey = shiftDatePickerMonth(pickerMonthKey, pickerMode === "day" ? 1 : pickerMode === "month" ? 12 : 144);
           renderDatePicker();
         },
         onTitleClick: () => {
@@ -1836,54 +1882,6 @@ export class CellRenderer {
       window.activeDocument.addEventListener("mousedown", onOutside, true);
       window.activeDocument.addEventListener("keydown", onDocumentKeydown, true);
     }, 0);
-  }
-
-  private buildDatePickerWeeks(year: number, monthIndex: number, weekStartsOn: number): CalendarDayModel[][] {
-    const msPerWeek = 7 * 86400000;
-    const firstOfMonth = makeUtcDate(year, monthIndex, 1);
-    const lastOfMonth = makeUtcDate(year, monthIndex + 1, 0);
-    const offset = (firstOfMonth.getUTCDay() - weekStartsOn + 7) % 7;
-    const firstVisible = addUtcDays(firstOfMonth, -offset);
-    const endOffset = (weekStartsOn + 6 - lastOfMonth.getUTCDay() + 7) % 7;
-    const lastVisible = addUtcDays(lastOfMonth, endOffset);
-    const weekCount = Math.max(1, Math.ceil((lastVisible.getTime() - firstVisible.getTime() + 1) / msPerWeek));
-    const weeks: CalendarDayModel[][] = [];
-    for (let week = 0; week < weekCount; week++) {
-      const days: CalendarDayModel[] = [];
-      for (let day = 0; day < 7; day++) {
-        const date = addUtcDays(firstVisible, week * 7 + day);
-        days.push({
-          dateKey: dateKeyFromUtc(date),
-          inCurrentMonth: date.getUTCFullYear() === year && date.getUTCMonth() === monthIndex,
-          events: [],
-        });
-      }
-      weeks.push(days);
-    }
-    return weeks;
-  }
-
-  private shiftDatePickerMonth(monthKey: string, deltaMonths: number): string {
-    const [ys, ms] = monthKey.split("-");
-    const year = Number(ys);
-    const monthIndex = Number(ms) - 1;
-    const shifted = makeUtcDate(
-      Number.isFinite(year) ? year : new Date().getFullYear(),
-      Number.isFinite(monthIndex) ? monthIndex + deltaMonths : deltaMonths,
-      1,
-    );
-    return dateKeyFromUtc(shifted).slice(0, 7);
-  }
-
-  private getDatePickerYearRangeStart(year: number): number {
-    const safeYear = Number.isFinite(year) ? year : new Date().getFullYear();
-    return Math.floor(safeYear / 12) * 12;
-  }
-
-  private formatDatePickerMonthTitle(year: number, monthIndex: number): string {
-    const safeYear = Number.isFinite(year) ? year : new Date().getFullYear();
-    const safeMonth = Number.isFinite(monthIndex) ? monthIndex : new Date().getMonth();
-    return new Intl.DateTimeFormat(getEffectiveLocale(), { month: "long", year: "numeric" }).format(new Date(safeYear, safeMonth, 1));
   }
 
   private positionDateEditPopover(popover: HTMLElement, td: HTMLElement, container: HTMLElement | null, session?: CellEditSession): void {

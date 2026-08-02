@@ -3,6 +3,8 @@ export interface PopoverAutoCloseOptions {
   anchorEl?: HTMLElement;
   close: () => void;
   delayMs?: number;
+  closeOnOutsidePointerDown?: boolean;
+  closeOnEscape?: boolean;
   isActiveTarget?(target: EventTarget | null): boolean;
 }
 
@@ -47,6 +49,19 @@ export function installPopoverAutoClose(options: PopoverAutoCloseOptions): () =>
       return;
     }
     pointerInsideLinkedSurface = false;
+    if (options.closeOnOutsidePointerDown && event.type === "mousedown") close();
+  };
+  const onDocumentKeydown = (event: KeyboardEvent) => {
+    if (options.isActiveTarget?.(event.target)) {
+      onDocumentActivity(event);
+      return;
+    }
+    if (options.closeOnEscape && event.key === "Escape") {
+      event.preventDefault();
+      close();
+      return;
+    }
+    onDocumentActivity(event);
   };
   const onWindowBlur = () => close();
   const onVisibilityChange = () => {
@@ -74,7 +89,7 @@ export function installPopoverAutoClose(options: PopoverAutoCloseOptions): () =>
   window.activeDocument.addEventListener("pointermove", onDocumentActivity, true);
   window.activeDocument.addEventListener("pointerover", onDocumentActivity, true);
   window.activeDocument.addEventListener("mousedown", onDocumentActivity, true);
-  window.activeDocument.addEventListener("keydown", onDocumentActivity, true);
+  window.activeDocument.addEventListener("keydown", onDocumentKeydown, true);
   window.activeDocument.addEventListener("wheel", onDocumentActivity, { passive: true, capture: true });
   window.addEventListener("blur", onWindowBlur);
   window.activeDocument.addEventListener("visibilitychange", onVisibilityChange);
@@ -92,7 +107,7 @@ export function installPopoverAutoClose(options: PopoverAutoCloseOptions): () =>
     window.activeDocument.removeEventListener("pointermove", onDocumentActivity, true);
     window.activeDocument.removeEventListener("pointerover", onDocumentActivity, true);
     window.activeDocument.removeEventListener("mousedown", onDocumentActivity, true);
-    window.activeDocument.removeEventListener("keydown", onDocumentActivity, true);
+    window.activeDocument.removeEventListener("keydown", onDocumentKeydown, true);
     window.activeDocument.removeEventListener("wheel", onDocumentActivity, true);
     window.removeEventListener("blur", onWindowBlur);
     window.activeDocument.removeEventListener("visibilitychange", onVisibilityChange);

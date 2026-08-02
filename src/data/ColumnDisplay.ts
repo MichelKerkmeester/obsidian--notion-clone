@@ -38,6 +38,15 @@ export function isNumberDisplayColumn(col: ColumnDef, computedFields?: ComputedF
   return getColumnDisplayType(col, computedFields) === "number";
 }
 
+/** True when a column can serve as a numeric rollup target (sum/avg): number, currency,
+ *  or a computed column whose formula result type is number. Unlike isNumberDisplayColumn
+ *  this includes currency — rollup sum/avg over a currency column is meaningful (Bug T).
+ *  Excludes text / date / checkbox / relation / multi-select etc. */
+export function isRollupNumericTarget(col: ColumnDef, computedFields?: ComputedFieldDef[]): boolean {
+  const displayType = getColumnDisplayType(col, computedFields);
+  return displayType === "number" || displayType === "currency";
+}
+
 export function getComputedStorageKey(col: Pick<ColumnDef, "key" | "type" | "computedKey">): string {
   if (col.type !== "computed") return col.key;
   return normalizeComputedStorageKey(col.computedKey || col.key);

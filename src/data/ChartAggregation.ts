@@ -878,3 +878,23 @@ function getMedianValue(values: number[]): number {
     ? sorted[middle]
     : (sorted[middle - 1] + sorted[middle]) / 2;
 }
+
+/** For percent-mode data labels with multiple datasets (stacked/grouped bars),
+ *  the denominator for each category must be the total across ALL datasets at
+ *  that index, so percentages within a category sum to 100%. Single-dataset
+ *  charts keep using the whole-series total (handled by the caller). */
+export function computePerCategoryTotals(
+  datasets: { data: unknown }[],
+  labelCount: number,
+): number[] {
+  const totals: number[] = [];
+  for (let i = 0; i < labelCount; i++) {
+    let sum = 0;
+    for (const ds of datasets) {
+      const v = Array.isArray(ds.data) ? Number(ds.data[i]) : Number.NaN;
+      if (Number.isFinite(v)) sum += v;
+    }
+    totals[i] = sum;
+  }
+  return totals;
+}

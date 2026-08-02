@@ -25,6 +25,7 @@ import { openDropdownMenu } from "./DropdownField";
 import { buildMiniCalendarEventIndex, MiniCalendarMode, renderMiniCalendar } from "./CalendarMiniCalendarRenderer";
 import { renderGroupExpandControls } from "./GroupExpandControls";
 import { getGroupVisibleCount } from "../data/GroupVisibility";
+import { markNoteHoverLink } from "./HoverLinkPreview";
 
 const TIME_SNAP_MINUTES = CALENDAR_TIME_SNAP_MINUTES;
 
@@ -447,7 +448,8 @@ export class CalendarTimelineRenderer {
     this.actions.applyConditionalFormat?.(button, event.row, config);
     const content = button.createSpan({ cls: "db-timeline-event-content" });
     this.actions.renderRecordIcon?.(content, event.row, config, true);
-    content.createSpan({ cls: `db-timeline-event-title${event.titleIsEmpty ? " is-empty-title" : ""}`, text: event.title });
+    const titleEl = content.createSpan({ cls: `db-timeline-event-title${event.titleIsEmpty ? " is-empty-title" : ""}`, text: event.title });
+    markNoteHoverLink(titleEl, event.row.file.path, event.row.file.path);
     content.createSpan({ cls: "db-timeline-event-meta", text: dateText });
     button.onclick = (mouseEvent: MouseEvent) => {
       if ((mouseEvent.target as HTMLElement | null)?.closest(".db-timeline-resize-handle")) return;
@@ -798,7 +800,7 @@ export class CalendarTimelineRenderer {
     button.onclick = (event) => {
       event.preventDefault();
       event.stopPropagation();
-      this.toggleTimelineMiniCalendar(header, config);
+      this.toggleTimelineMiniCalendar(header, config, button);
     };
   }
 
@@ -842,7 +844,7 @@ export class CalendarTimelineRenderer {
       });
   }
 
-  private toggleTimelineMiniCalendar(header: HTMLElement, config: ViewConfig): void {
+  private toggleTimelineMiniCalendar(header: HTMLElement, config: ViewConfig, trigger: HTMLElement): void {
     if (this.miniCalendarEl?.isConnected) {
       this.closeTimelineMiniCalendar();
       return;
@@ -856,7 +858,9 @@ export class CalendarTimelineRenderer {
 
     const onOutside = (event: MouseEvent) => {
       const target = event.target as Node | null;
-      if (target && popover.contains(target)) return;
+      // Exempt the toolbar header (incl. the trigger button) so re-clicking
+      // the toggle closes via the click handler, not mousedown-then-reopen.
+      if (target && (popover.contains(target) || trigger.contains(target))) return;
       this.closeTimelineMiniCalendar();
     };
     const onKey = (event: KeyboardEvent) => {
@@ -864,9 +868,10 @@ export class CalendarTimelineRenderer {
       event.preventDefault();
       this.closeTimelineMiniCalendar();
     };
-    window.setTimeout(() => window.activeDocument.addEventListener("mousedown", onOutside, true), 0);
+    const openTimer = window.setTimeout(() => window.activeDocument.addEventListener("mousedown", onOutside, true), 0);
     window.activeDocument.addEventListener("keydown", onKey, true);
     this.miniCalendarCleanup = () => {
+      window.clearTimeout(openTimer);
       window.activeDocument.removeEventListener("mousedown", onOutside, true);
       window.activeDocument.removeEventListener("keydown", onKey, true);
       popover.remove();
@@ -1798,7 +1803,7 @@ export class CalendarTimelineRenderer {
       }));
     }
     if (this.canTimelineReorder(config)) {
-      const paths = laneEvents.map((candidate) => candidate.row.file.path).filter((path) => path !== event.row.file.path);
+      const paths: string[] = laneEvents.map((candidate) => candidate.row.file.path).filter((path) => path !== event.row.file.path);
       menu.addSeparator();
       menu.addItem((item) => item.setTitle(t("mobile.moveTop")).setIcon("chevrons-up").setDisabled(paths.length === 0).onClick(() => {
         this.actions.reorderTimelineEvent?.(event.row, undefined, paths[0]);
@@ -1812,7 +1817,7 @@ export class CalendarTimelineRenderer {
       for (const lane of lanes) {
         if (lane.key === groupKey) continue;
         menu.addItem((item) => item.setTitle(`${t("mobile.moveTo")} ${lane.label}`).setIcon("move-right").onClick(() => {
-          const beforePath = lane.events.map((candidate) => candidate.row.file.path).at(-1);
+          const beforePath: string | undefined = lane.events.map((candidate) => candidate.row.file.path).at(-1);
           void this.actions.moveTimelineEventToGroup?.(event.row, config.timelineGroupField!, groupKey, lane.key, beforePath, undefined);
         }));
       }

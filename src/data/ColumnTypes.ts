@@ -313,6 +313,24 @@ export function normalizeOptionValueForKey(key: string, value: unknown): string 
   return isObsidianTagsKey(key) ? normalizeObsidianTagValue(value) : stringifyValue(value).trim();
 }
 
+/**
+ * Resolve an externally authored option value against the configured option set.
+ * Option values use trimmed identity throughout editing and registration, so the
+ * read-only render path must do the same: `"   A"` is the configured `A`, not a
+ * second unknown gray option. This normalizes display only and does not rewrite
+ * the note's frontmatter.
+ */
+export function resolveOptionDisplay(
+  col: ColumnDef,
+  value: unknown
+): { value: string; option: StatusOptionDef | undefined } {
+  const normalized = normalizeOptionValueForKey(col.key, value);
+  const option = getColumnOptions(col).find(
+    (candidate) => normalizeOptionValueForKey(col.key, candidate.value) === normalized
+  );
+  return { value: normalized, option };
+}
+
 export function toBooleanValue(value: unknown): boolean {
   if (typeof value === "boolean") return value;
   if (typeof value === "number") return value !== 0;

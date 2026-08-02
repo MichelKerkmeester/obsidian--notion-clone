@@ -151,10 +151,12 @@ export class ToolbarRenderer {
 
     // Row 0: Database name heading
     if (actions.showDatabaseChrome) {
+      const description = currentDb?.description || "";
+      header.toggleClass("has-empty-description", !description);
       const headingRow = header.createDiv({ cls: "db-heading-row" });
       if (currentDb && actions.showDatabaseIcon !== false) {
         renderRecordIcon(headingRow, currentDb.icon, {
-          editable: Boolean(actions.editDatabaseIcon && !actions.hideDatabaseActions),
+          editable: actions.editDatabaseIcon != null,
           defaultIcon: "database",
           tooltip: currentDb.name,
           onClick: (anchor) => actions.editDatabaseIcon?.(anchor),
@@ -203,7 +205,6 @@ export class ToolbarRenderer {
         moreBtn.onclick = (event) => this.showTitleActionsMenu(event, moreBtn, actions, currentDb?.name || "", heading);
       }
       if (currentDb?.description || actions.updateDatabaseDescription) {
-        const description = currentDb?.description || "";
         const placeholder = t("viewConfig.descriptionPlaceholder");
         const descEl = header.createDiv({
           cls: `db-description${description ? "" : " is-empty"}`,
@@ -978,16 +979,26 @@ export class ToolbarRenderer {
     nameEl.replaceWith(input);
     input.focus();
     input.select();
+    // Dedupe submit: Enter triggers finish(), and the toolbar rerender that
+    // follows may detach the focused input and fire blur -> finish() again.
+    // Whether blur actually fires depends on the DOM detach path; guard either way.
+    let done = false;
     const finish = () => {
+      if (done) return;
+      done = true;
       const newName = input.value.trim();
-      if (newName) actions.renameView(viewIndex, newName);
-      // Re-render will replace the input
+      // Empty name = cancel: restore the original name (rerender replaces input),
+      // so the input never gets stuck after an empty Enter.
+      actions.renameView(viewIndex, newName || nameEl.textContent || "");
     };
     input.onblur = finish;
     input.onkeydown = (e) => {
       if (isImeComposing(e)) return;
       if (e.key === "Enter") finish();
-      if (e.key === "Escape") actions.renameView(viewIndex, nameEl.textContent || ""); // cancel
+      if (e.key === "Escape") {
+        done = true; // cancel: prevent a later blur from re-submitting
+        actions.renameView(viewIndex, nameEl.textContent || ""); // cancel
+      }
     };
   }
 

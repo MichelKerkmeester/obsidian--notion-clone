@@ -175,6 +175,18 @@ export class DataSource {
     track(this.vault.on("rename", (file, oldPath) => {
       this.recordCache?.delete(oldPath);
       this.refreshCachedRecord(file);
+      // Bug 5: 迁移 optimistic overrides old→new（不清除，否则丢掉等待 metadata cache 接管
+      // 的 frontmatter——新创建文件被快速重命名时尤其关键）。
+      const fmOverride = this.frontmatterOverrides.get(oldPath);
+      if (fmOverride) {
+        this.frontmatterOverrides.delete(oldPath);
+        this.frontmatterOverrides.set(file.path, fmOverride);
+      }
+      const vdOverride = this.viewDefOverrides.get(oldPath);
+      if (vdOverride) {
+        this.viewDefOverrides.delete(oldPath);
+        this.viewDefOverrides.set(file.path, vdOverride);
+      }
       this.scheduleNotify("renamed", file.path, oldPath, "vault");
     }));
   }
@@ -662,6 +674,9 @@ export class DataSource {
           galleryImageAspectRatio: typeof source["galleryImageAspectRatio"] === "number" ? source["galleryImageAspectRatio"] : undefined,
           galleryCardSize: typeof source["galleryCardSize"] === "number" ? source["galleryCardSize"] : undefined,
           galleryImageFit: source["galleryImageFit"] === "contain" ? "contain" : source["galleryImageFit"] === "cover" ? "cover" : undefined,
+          boardImageField: safeString(source["boardImageField"]) || undefined,
+          boardImageAspectRatio: typeof source["boardImageAspectRatio"] === "number" ? source["boardImageAspectRatio"] : undefined,
+          boardImageFit: source["boardImageFit"] === "contain" ? "contain" : source["boardImageFit"] === "cover" ? "cover" : undefined,
           showEmptyFields: source["showEmptyFields"] === true || (Array.isArray(source["alwaysShowEmptyFields"]) && (source["alwaysShowEmptyFields"] as unknown[]).length > 0),
           listCompactFields: source["listCompactFields"] === true,
           columnOrder: Array.isArray(source["columnOrder"]) ? source["columnOrder"] as string[] : undefined,
@@ -857,6 +872,9 @@ export class DataSource {
       galleryImageAspectRatio: typeof v["galleryImageAspectRatio"] === "number" ? v["galleryImageAspectRatio"] : undefined,
       galleryCardSize: typeof v["galleryCardSize"] === "number" ? v["galleryCardSize"] : undefined,
       galleryImageFit: v["galleryImageFit"] === "contain" ? "contain" : v["galleryImageFit"] === "cover" ? "cover" : undefined,
+      boardImageField: safeString(v["boardImageField"]) || undefined,
+      boardImageAspectRatio: typeof v["boardImageAspectRatio"] === "number" ? v["boardImageAspectRatio"] : undefined,
+      boardImageFit: v["boardImageFit"] === "contain" ? "contain" : v["boardImageFit"] === "cover" ? "cover" : undefined,
       showEmptyFields: v["showEmptyFields"] === true || (Array.isArray(v["alwaysShowEmptyFields"]) && (v["alwaysShowEmptyFields"] as unknown[]).length > 0),
       listCompactFields: v["listCompactFields"] === true,
       columnOrder: Array.isArray(v["columnOrder"]) ? v["columnOrder"] as string[] : undefined,
@@ -1088,6 +1106,9 @@ export class DataSource {
       galleryImageAspectRatio: view.galleryImageAspectRatio || 0.75,
       galleryCardSize: view.galleryCardSize || 250,
       galleryImageFit: view.galleryImageFit || "cover",
+      boardImageField: view.boardImageField || "",
+      boardImageAspectRatio: view.boardImageAspectRatio || 0.75,
+      boardImageFit: view.boardImageFit || "cover",
       showEmptyFields: view.showEmptyFields === true,
       listCompactFields: view.listCompactFields === true,
       statusPresets: view.statusPresets || [],
@@ -1196,6 +1217,9 @@ export class DataSource {
       "galleryImageAspectRatio",
       "galleryCardSize",
       "galleryImageFit",
+      "boardImageField",
+      "boardImageAspectRatio",
+      "boardImageFit",
       "alwaysShowEmptyFields",
       "showEmptyFields",
       "listCompactFields",

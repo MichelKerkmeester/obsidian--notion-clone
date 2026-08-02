@@ -4,6 +4,7 @@ import { isFileLinkListField, isFileSelfLinkField } from "../data/FileFields";
 import { stringifyValue } from "../data/Stringify";
 import { ColumnDef, RowData } from "../data/types";
 import { setFieldTooltip } from "./FieldTooltip";
+import { markNoteHoverLink } from "./HoverLinkPreview";
 
 interface ParsedFileLink {
   label: string;
@@ -73,6 +74,7 @@ export function renderFileLinkList(
   for (const link of links) {
     const itemClass = context.linkItemClass || "db-file-link-list-item";
     const anchor = wrap.createEl("a", { cls: `internal-link ${itemClass}`, text: link.label, attr: { title: link.target } });
+    markNoteHoverLink(anchor, link.target, row.file.path);
     anchor.href = "#";
     anchor.onclick = (event) => {
       event.preventDefault();
@@ -98,6 +100,7 @@ export function renderFileSelfLink(
     text,
     attr: { title: row.file.path, href: "#" },
   });
+  markNoteHoverLink(anchor, row.file.path, row.file.path);
   anchor.onclick = (event) => {
     event.preventDefault();
     event.stopPropagation();

@@ -115,21 +115,26 @@ export class RowPipeline {
     const thisFrontmatter = thisFile instanceof TFile
       ? app?.metadataCache.getFileCache(thisFile)?.frontmatter
       : undefined;
-    return records.map((record) => ({
-      app,
-      file: record.file,
-      frontmatter: record.frontmatter,
-      cache: app?.metadataCache.getFileCache(record.file) ?? null,
-      computed: {
-        ...evaluateComputedFields(config.schema.computedFields, config.schema.columns, record.frontmatter, {
-          app,
-          file: record.file,
-          thisFile: thisFile instanceof TFile ? thisFile : undefined,
-          thisFrontmatter,
-        }),
-        ...(derivedValues?.get(record.file.path) || {}),
-      },
-    }));
+    return records.map((record) => {
+      const derived = derivedValues?.get(record.file.path) || {};
+      return {
+        app,
+        file: record.file,
+        frontmatter: record.frontmatter,
+        cache: app?.metadataCache.getFileCache(record.file) ?? null,
+        computed: {
+          ...evaluateComputedFields(config.schema.computedFields, config.schema.columns, record.frontmatter, {
+            app,
+            file: record.file,
+            thisFile: thisFile instanceof TFile ? thisFile : undefined,
+            thisFrontmatter,
+            derivedValues: derived,
+          }),
+          // Rollup columns stay authoritative if a malformed schema reuses a key.
+          ...derived,
+        },
+      };
+    });
   }
 
   private withComputedResultTypes(config: ViewConfig): ColumnDef[] {

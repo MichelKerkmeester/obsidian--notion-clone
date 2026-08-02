@@ -17,6 +17,7 @@ import { ImageFileSuggestModal } from "./ImageFileSuggestModal";
 import { openOptionColorPicker } from "./OptionColorPicker";
 import { MarkdownFileSuggestModal } from "./MarkdownFileSuggestModal";
 import { getFilterOperatorsForColumn } from "./FilterPanelRenderer";
+import { closeActiveDateValuePicker, renderDateValuePicker } from "./DateValuePicker";
 
 const CUSTOM_SOURCE_RULE_FIELD = "__custom__";
 
@@ -214,6 +215,7 @@ export interface ViewConfigPanelActions {
   onViewTypeChange?(viewType: DatabaseViewType): void;
   onDatabaseChange?(label?: string): void;
   createRecordIconField?(target: "database" | "view"): void;
+  createProperty?(options?: { applyReference?: (column: ColumnDef) => void; rollbackReference?: () => void }): void;
   onComputedSyncModeChange?(): void;
   onComputedFrontmatterCleanup?(): void;
   database?: DatabaseConfig;
@@ -556,6 +558,7 @@ export class ViewConfigPanelRenderer {
   ): void {
     const section = panel.createDiv({ cls: "db-conditional-format-settings" });
     const renderRules = () => {
+      closeActiveDateValuePicker(section.ownerDocument);
       section.empty();
       const heading = section.createDiv({ cls: "db-conditional-format-heading" });
       heading.createSpan({ text: t("conditionalFormat.title") });
@@ -636,26 +639,7 @@ export class ViewConfigPanelRenderer {
             persist(true);
           },
         });
-        createDropdownField({
-          parent: row,
-          label: t("conditionalFormat.valueSource"),
-          value: rule.valueSource || "literal",
-          options: [
-            { value: "literal", text: t("conditionalFormat.literal") },
-            ...(isDateLikeColumnType(currentColumn?.type)
-              ? [{ value: "today", text: t("conditionalFormat.today") }]
-              : []),
-          ],
-          hideLabel: true,
-          disabled: Boolean(readOnly),
-          className: "db-conditional-format-dropdown db-conditional-format-value-mode",
-          onChange: (next) => {
-            rule.valueSource = next === "today" ? "today" : "literal";
-            persist(true);
-          },
-        });
-
-        const valueDisabled = Boolean(readOnly) || rule.valueSource === "today" ||
+        const valueDisabled = Boolean(readOnly) ||
           rule.condition.op === "empty" || rule.condition.op === "notempty";
         if (valueDisabled) {
           row.createSpan({ cls: "db-conditional-format-empty-value", text: "—" });
@@ -676,15 +660,36 @@ export class ViewConfigPanelRenderer {
               persist();
             },
           });
+        } else if (isDateLikeColumnType(currentColumn?.type)) {
+          renderDateValuePicker({
+            parent: row,
+            value: rule.condition.value || "",
+            placeholder: t("filter.value"),
+            disabled: Boolean(readOnly),
+            includeTime: currentColumn?.type === "datetime",
+            displayText: rule.valueSource === "today" ? t("conditionalFormat.dynamicToday") : undefined,
+            className: "db-conditional-format-value db-conditional-format-date-field",
+            onChange: (next) => {
+              rule.valueSource = "literal";
+              rule.condition.value = next;
+              persist(true);
+            },
+            footerAction: {
+              label: t("conditionalFormat.dynamicToday"),
+              onSelect: () => {
+                rule.valueSource = "today";
+                rule.condition.value = "";
+                persist(true);
+              },
+            },
+          });
         } else {
           const value = row.createEl("input", {
             cls: "db-view-config-text db-conditional-format-value",
             attr: {
               type: currentColumn?.type === "number" || currentColumn?.type === "currency"
                 ? "number"
-                : isDateLikeColumnType(currentColumn?.type)
-                  ? "date"
-                  : "text",
+                : "text",
               placeholder: t("filter.value"),
             },
           });
@@ -1444,7 +1449,17 @@ export class ViewConfigPanelRenderer {
     field.createDiv({ cls: "db-view-config-help", text: t("viewConfig.newRecordFolderLocked") });
   }
 
-  private renderGallerySettings(panel: HTMLElement, config: ViewConfig, actions: ViewConfigPanelActions): void {
+  private renderCoverSettings(
+    panel: HTMLElement,
+    config: ViewConfig,
+    actions: ViewConfigPanelActions,
+    fieldKey: "galleryImageField" | "boardImageField",
+    fitKey: "galleryImageFit" | "boardImageFit",
+    ratioKey: "galleryImageAspectRatio" | "boardImageAspectRatio",
+    undoField: string,
+    undoFit: string,
+    undoRatio: string,
+  ): void {
     this.renderSelect(
       panel,
       t("viewConfig.coverField"),
@@ -1453,11 +1468,20 @@ export class ViewConfigPanelRenderer {
         ...config.schema.columns
           .filter((col) => col.key !== "file.name")
           .map((col) => this.toFieldDropdownOption(config, col)),
+        ...(actions.createProperty ? [{ value: "__create_property__", text: t("panel.createProperty"), icon: "plus", preserveValueOnSelect: true }] : []),
       ],
-      config.galleryImageField || "",
+      config[fieldKey] || "",
       (value) => {
-        config.galleryImageField = value || undefined;
-        actions.onChange(t("undo.galleryCoverFieldConfig"));
+        if (value === "__create_property__") {
+          const prevCover = config[fieldKey];
+          actions.createProperty?.({
+            applyReference: (col) => { config[fieldKey] = col.key; },
+            rollbackReference: () => { config[fieldKey] = prevCover; },
+          });
+          return;
+        }
+        config[fieldKey] = value || undefined;
+        actions.onChange(undoField);
       }
     );
 
@@ -1468,20 +1492,12 @@ export class ViewConfigPanelRenderer {
         { value: "cover", text: t("viewConfig.cover") },
         { value: "contain", text: t("viewConfig.contain") },
       ],
-      config.galleryImageFit || "cover",
+      config[fitKey] || "cover",
       (value) => {
-        config.galleryImageFit = value === "contain" ? "contain" : "cover";
-        actions.onChange(t("undo.galleryImageFitConfig"));
+        config[fitKey] = value === "contain" ? "contain" : "cover";
+        actions.onChange(undoFit);
       }
     );
-
-    const setGalleryCardSize = (value: number) => {
-      config.galleryCardSize = value;
-    };
-    this.renderRange(panel, t("viewConfig.cardSize"), config.galleryCardSize || 250, 160, 420, 10, (value) => {
-      setGalleryCardSize(value);
-      actions.onChange(t("undo.cardSizeConfig"));
-    }, setGalleryCardSize);
 
     const ratioOptions = [
       { value: "0.6", text: t("viewConfig.ratioPortrait") },
@@ -1490,17 +1506,29 @@ export class ViewConfigPanelRenderer {
       { value: "1.333", text: t("viewConfig.ratioLandscape") },
       { value: "1.777", text: t("viewConfig.ratioWide") },
     ];
-    const ratio = String(config.galleryImageAspectRatio || 0.75);
+    const ratio = String(config[ratioKey] || 0.75);
     if (!ratioOptions.some((item) => item.value === ratio)) {
       ratioOptions.push({ value: ratio, text: t("viewConfig.ratioCurrent", { ratio }) });
     }
     this.renderSelect(panel, t("viewConfig.coverRatio"), ratioOptions, ratio, (value) => {
       const next = Number(value);
       if (Number.isFinite(next)) {
-        config.galleryImageAspectRatio = next;
-        actions.onChange(t("undo.galleryCoverRatioConfig"));
+        config[ratioKey] = next;
+        actions.onChange(undoRatio);
       }
     });
+  }
+
+  private renderGallerySettings(panel: HTMLElement, config: ViewConfig, actions: ViewConfigPanelActions): void {
+    this.renderCoverSettings(panel, config, actions, "galleryImageField", "galleryImageFit", "galleryImageAspectRatio", t("undo.galleryCoverFieldConfig"), t("undo.galleryImageFitConfig"), t("undo.galleryCoverRatioConfig"));
+
+    const setGalleryCardSize = (value: number) => {
+      config.galleryCardSize = value;
+    };
+    this.renderRange(panel, t("viewConfig.cardSize"), config.galleryCardSize || 250, 160, 420, 10, (value) => {
+      setGalleryCardSize(value);
+      actions.onChange(t("undo.cardSizeConfig"));
+    }, setGalleryCardSize);
   }
 
   private renderTitleField(panel: HTMLElement, config: ViewConfig, actions: ViewConfigPanelActions): void {
@@ -1511,9 +1539,18 @@ export class ViewConfigPanelRenderer {
         { value: "", text: t("viewConfig.titleAuto") },
         { value: NO_TITLE_FIELD, text: t("viewConfig.noTitle") },
         ...config.schema.columns.map((col) => this.toFieldDropdownOption(config, col)),
+        ...(actions.createProperty ? [{ value: "__create_property__", text: t("panel.createProperty"), icon: "plus", preserveValueOnSelect: true }] : []),
       ],
       config.titleField || "",
       (value) => {
+        if (value === "__create_property__") {
+          const prevTitle = config.titleField;
+          actions.createProperty?.({
+            applyReference: (col) => { config.titleField = col.key; },
+            rollbackReference: () => { config.titleField = prevTitle; },
+          });
+          return;
+        }
         config.titleField = value || undefined;
         actions.onChange(t("undo.titleFieldConfig"));
       },
@@ -1531,9 +1568,19 @@ export class ViewConfigPanelRenderer {
         ...config.schema.columns
           .filter((col) => col.key !== "file.name" && col.key !== groupField)
           .map((col) => this.toFieldDropdownOption(config, col)),
+        ...(actions.createProperty ? [{ value: "__create_property__", text: t("panel.createProperty"), icon: "plus", preserveValueOnSelect: true }] : []),
       ],
       config.boardSubgroupEnabled === true || config.boardSubgroupField ? config.boardSubgroupField || "" : "",
       (value) => {
+        if (value === "__create_property__") {
+          const prevEnabled = config.boardSubgroupEnabled;
+          const prevField = config.boardSubgroupField;
+          actions.createProperty?.({
+            applyReference: (col) => { config.boardSubgroupEnabled = true; config.boardSubgroupField = col.key; },
+            rollbackReference: () => { config.boardSubgroupEnabled = prevEnabled; config.boardSubgroupField = prevField; },
+          });
+          return;
+        }
         config.boardSubgroupEnabled = Boolean(value);
         config.boardSubgroupField = value || undefined;
         actions.onChange(t("undo.boardSubgroupConfig"));
@@ -1546,6 +1593,8 @@ export class ViewConfigPanelRenderer {
       setBoardColumnWidth(value);
       actions.onChange(t("undo.boardColumnWidthConfig"));
     }, setBoardColumnWidth);
+
+    this.renderCoverSettings(panel, config, actions, "boardImageField", "boardImageFit", "boardImageAspectRatio", t("undo.boardCoverFieldConfig"), t("undo.boardImageFitConfig"), t("undo.boardCoverRatioConfig"));
   }
 
   private renderReadonlyField(panel: HTMLElement, label: string, value: string): void {
