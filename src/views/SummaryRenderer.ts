@@ -4,6 +4,7 @@ import { isDateLikeColumnType, parseDateTimeParts, toDateTimestamp } from "../da
 import { getRowFileFieldValue, isBaseFileField } from "../data/FileFields";
 import { getColumnDisplayType } from "../data/ColumnDisplay";
 import { stringifyValue } from "../data/Stringify";
+import { formatEuroNumber2 } from "../data/EuroFormat";
 import { t } from "../i18n";
 import { DropdownOption, openDropdownMenu } from "./DropdownField";
 import { getPropertyDropdownIcon, renderDropdownPropertyTypeIcon } from "./PropertyTypeIcon";
@@ -552,7 +553,7 @@ export class SummaryRenderer {
     if (typeof value === "number") {
       if (!Number.isFinite(value)) return "";
       if (Math.abs(value) >= 86400000 && value % 86400000 === 0) return `${value / 86400000}d`;
-      return Number.isInteger(value) ? String(value) : String(Math.round(value * 1000) / 1000);
+      return formatEuroNumber2(value);
     }
     return stringifyValue(value);
   }

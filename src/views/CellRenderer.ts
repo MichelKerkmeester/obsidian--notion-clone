@@ -10,6 +10,7 @@ import {
   toValidObsidianTagValues,
 } from "../data/ColumnTypes";
 import { getColumnDisplayType, getNumberDisplayStyle } from "../data/ColumnDisplay";
+import { formatEuroNumber, formatEuroCurrency } from "../data/EuroFormat";
 import { parseRelationValues } from "../data/RelationLinks";
 import { renderRelationValue } from "./RelationValueRenderer";
 import { renderRecordIcon } from "./RecordIconRenderer";
@@ -194,7 +195,7 @@ export class CellRenderer {
         break;
       case "currency": {
         const num = typeof value === "number" ? value : parseFloat(String(value));
-        td.textContent = isNaN(num) ? "-" : this.formatNumber(num);
+        td.textContent = isNaN(num) ? "-" : formatEuroCurrency(num);
         break;
       }
       case "number": {
@@ -2572,10 +2573,7 @@ export class CellRenderer {
   }
 
   private formatNumber(value: number): string {
-    if (!Number.isFinite(value)) return "-";
-    return Number.isInteger(value)
-      ? String(value)
-      : value.toLocaleString(undefined, { maximumFractionDigits: 6 });
+    return formatEuroNumber(value);
   }
 
   private createOptionDragPreview(item: HTMLElement, event: MouseEvent): OptionDragPreview {
