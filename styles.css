@@ -4740,6 +4740,35 @@
   width: 16px;
   height: 16px;
   margin: 0;
+  /* Draw our own centred checkmark rather than the platform's native glyph,
+     which renders off-centre inside a hard-sized box on mobile. Mirrors the
+     modal checkbox so the box and the check share one centring model. */
+  appearance: none;
+  -webkit-appearance: none;
+  border: 1px solid var(--checkbox-border-color, var(--background-modifier-border));
+  border-radius: var(--db-radius-sm);
+  background: var(--background-primary);
+  box-shadow: none;
+  outline: none;
+  cursor: pointer;
+}
+
+.note-database-container .db-table .db-select-col .db-select-inner input[type="checkbox"]:checked,
+.note-database-container .db-table .db-select-col .db-select-inner input[type="checkbox"]:indeterminate {
+  border-color: var(--interactive-accent);
+  background-color: var(--interactive-accent);
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.note-database-container .db-table .db-select-col .db-select-inner input[type="checkbox"]:checked {
+  background-image: url("data:image/svg+xml,%3Csvg width='14' height='14' viewBox='0 0 14 14' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M3.1 7.2L5.7 9.8L10.9 4.2' stroke='white' stroke-width='2.1' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-size: 12px 12px;
+}
+
+.note-database-container .db-table .db-select-col .db-select-inner input[type="checkbox"]:indeterminate {
+  background-image: url("data:image/svg+xml,%3Csvg width='14' height='14' viewBox='0 0 14 14' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M3 7H11' stroke='white' stroke-width='2.1' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-size: 12px 12px;
 }
 
 /* 笔记名称列的链接样式 */
