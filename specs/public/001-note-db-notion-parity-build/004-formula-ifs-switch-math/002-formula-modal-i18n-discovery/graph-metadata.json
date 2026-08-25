@@ -1,0 +1,212 @@
+{
+  "schema_version": 1,
+  "packet_id": "obsidian/002-note-db-notion-parity-build/004-formula-ifs-switch-math/002-formula-modal-i18n-discovery",
+  "spec_folder": "obsidian/002-note-db-notion-parity-build/004-formula-ifs-switch-math/002-formula-modal-i18n-discovery",
+  "parent_id": "obsidian/002-note-db-notion-parity-build/004-formula-ifs-switch-math",
+  "children_ids": [],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "formula modal discovery",
+      "FUNCTIONS concat",
+      "formula.fn.IFS",
+      "i18n formula",
+      "autocomplete highlighting",
+      "formula modal plan",
+      "formula modal tasks",
+      "formula modal summary"
+    ],
+    "key_topics": [
+      "formula",
+      "modal",
+      "discovery",
+      "functions",
+      "concat",
+      "ifs",
+      "i18n",
+      "autocomplete",
+      "highlighting",
+      "plan",
+      "tasks",
+      "summary"
+    ],
+    "importance_tier": "high",
+    "status": "planned",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "implementation-summary.md"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Formula Modal",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Parent Spec",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Handoff Criteria",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Problem Statement Even",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Purpose Import",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Plan",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Technical Context",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Obsidian Modal",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Obsidian Plugin",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Overview Import",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Notation",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Format",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Completion Criteria",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "eight",
+        "kind": "key_phrase",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "no",
+        "kind": "key_phrase",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Summary",
+        "kind": "proper_noun",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "Spec Folder",
+        "kind": "proper_noun",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "Actual Effort",
+        "kind": "proper_noun",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "What Was Built Nothing",
+        "kind": "proper_noun",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "Even after child 001 evaluates, the editor's own registry drives autocomplete, `NAME(` highlighting, and help",
+    "created_at": "2026-08-25T19:11:18Z",
+    "last_save_at": "2026-08-25T19:20:19.579Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "implementation-summary.md"
+    ],
+    "source_fingerprint": "sha256:b84cc836f66c31fdb45b2dda7995bdc1adbed7b2377fb2aa55772eef21f5f703",
+    "source_doc_hashes": {
+      "spec.md": "909be06c831c82c5cdf34dbfc112bed6776039fe2543909889654ba7c3c78920",
+      "plan.md": "9e4423ae5f1f5e111e6dc16e8bd7871d07fa0acfd194e9e8363640d5b46edaae",
+      "tasks.md": "aa536eb61b8be90823cbbe49d471f8a02c370ac4c0fbd58e4f40fb6891bb26b5",
+      "implementation-summary.md": "1dd3a706a79ba896902562039a8fcffb35effb4a2c7f9363967fc7e6fa8d7d3c"
+    },
+    "last_active_child_id": null,
+    "last_active_at": null
+  }
+}

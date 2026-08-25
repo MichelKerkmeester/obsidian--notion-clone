@@ -1,0 +1,25 @@
+{
+  "level": "1",
+  "specFolder": "obsidian/002-note-db-notion-parity-build/002-rollup-aggregation-pack/002-date-aggregation-pack",
+  "description": "Notion Date-property rollups expose Earliest date / Latest date / Date range",
+  "keywords": [
+    "notion",
+    "date-property",
+    "rollups",
+    "expose",
+    "earliest",
+    "date",
+    "latest",
+    "range"
+  ],
+  "lastUpdated": "2026-08-25T19:03:50.265Z",
+  "specId": "002",
+  "folderSlug": "date-aggregation-pack",
+  "parentChain": [
+    "obsidian",
+    "002-note-db-notion-parity-build",
+    "002-rollup-aggregation-pack"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": []
+}

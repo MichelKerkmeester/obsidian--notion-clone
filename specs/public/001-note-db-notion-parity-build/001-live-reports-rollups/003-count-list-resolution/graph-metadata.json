@@ -1,0 +1,212 @@
+{
+  "schema_version": 1,
+  "packet_id": "obsidian/002-note-db-notion-parity-build/001-live-reports-rollups/003-count-list-resolution",
+  "spec_folder": "obsidian/002-note-db-notion-parity-build/001-live-reports-rollups/003-count-list-resolution",
+  "parent_id": "obsidian/002-note-db-notion-parity-build/001-live-reports-rollups",
+  "children_ids": [],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "count list resolution",
+      "diagnostic list rollup",
+      "file.name list",
+      "relation resolution proof",
+      "count list plan",
+      "resolution proof",
+      "count list tasks",
+      "count list summary"
+    ],
+    "key_topics": [
+      "count",
+      "list",
+      "resolution",
+      "diagnostic",
+      "rollup",
+      "file",
+      "name",
+      "relation",
+      "proof",
+      "plan",
+      "tasks",
+      "summary"
+    ],
+    "importance_tier": "high",
+    "status": "planned",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "implementation-summary.md"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Count List Resolution",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Bind Reports",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Parent Spec",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Handoff Criteria",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Problem Statement",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Plan",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Technical Context",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Overview One",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Empty Report",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Pattern Configure",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Notation",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Format",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Add Reports",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Completion Criteria",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Phase 1: Setup",
+        "kind": "heading",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Summary",
+        "kind": "proper_noun",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "Spec Folder",
+        "kind": "proper_noun",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "Actual Effort",
+        "kind": "proper_noun",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "What Was Built Nothing",
+        "kind": "proper_noun",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "A wrong amount key or empty relation is UI-indistinguishable from \"no children\" (`emptyRollupValue` → COUNT `0`, SUM `null`, `RelationRollup.ts:159-160`)",
+    "created_at": "2026-08-25T19:11:31Z",
+    "last_save_at": "2026-08-25T19:21:32.807Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "implementation-summary.md"
+    ],
+    "source_fingerprint": "sha256:c8824478180bf4c40b5357d71b1b2be96095aee2f4e5afb565b304a9fda27884",
+    "source_doc_hashes": {
+      "spec.md": "9f9fdcc3ca263056bf5fbdacc79039f47099f39965df0b1b5f94b940405b78e6",
+      "plan.md": "9117378a04788e25568b276984909c68fc8e3741a30ad06c10a60eebf45bd353",
+      "tasks.md": "3b9fc380517605670380626046ec096ebb150a323f08415c7c95a51e8bacddf9",
+      "implementation-summary.md": "d19c0aa606da3c0aaef219f9224ae04cc465015f5885f2254d4418ade6532f30"
+    },
+    "last_active_child_id": null,
+    "last_active_at": null
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "specFolder": "obsidian/002-note-db-notion-parity-build/009-view-filter-tree/001-view-filter-tree-module",
+  "description": "Phase 1: view-filter-tree-module",
+  "keywords": [
+    "phase",
+    "view-filter-tree-module"
+  ],
+  "lastUpdated": "2026-08-25T19:40:27.131Z",
+  "specId": "001",
+  "folderSlug": "view-filter-tree-module",
+  "parentChain": [
+    "obsidian",
+    "002-note-db-notion-parity-build",
+    "009-view-filter-tree"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": [],
+  "level": "1"
+}

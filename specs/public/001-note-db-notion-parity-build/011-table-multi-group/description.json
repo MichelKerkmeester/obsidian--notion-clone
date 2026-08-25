@@ -1,0 +1,29 @@
+{
+  "level": "2",
+  "specFolder": "obsidian/002-note-db-notion-parity-build/011-table-multi-group",
+  "description": "Multi-field grouping for TABLE views: groupByFields[] with recursive, indented group headers in TableRenderer.ts.",
+  "keywords": [
+    "multi-field",
+    "grouping",
+    "table",
+    "views",
+    "groupbyfields",
+    "recursive",
+    "indented",
+    "group",
+    "headers",
+    "tablerenderer"
+  ],
+  "lastUpdated": "2026-08-25T14:53:24.619Z",
+  "specId": "011",
+  "folderSlug": "table-multi-group",
+  "parentChain": [
+    "obsidian",
+    "002-note-db-notion-parity-build"
+  ],
+  "memorySequence": 2,
+  "memoryNameHistory": [
+    "25-08-26_15-50__reconciled-planning-docs-with-final-plan-md.md",
+    "25-08-26_15-53__compacted-continuity-action-fields-to-satisfy.md"
+  ]
+}

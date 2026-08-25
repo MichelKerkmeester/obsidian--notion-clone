@@ -1,0 +1,37 @@
+{
+  "researchTopic": "Perfect the \"Reports Remaining/Saved Computed Fields\" feature for the forked Note Database Obsidian plugin (fork src at /Users/michelkerkmeester/MEGA/Development/Obsidian Plugin/src) toward Notion parity. First read the bound spec folder spec.md and plan.md for the exact feature. Uncover the best UI/UX, core logic and algorithm, fork integration via the isolated-module EuroFormat pattern (new module under src plus 1-3 call-site edits, rebase-safe), edge cases, and mobile plus iCloud safety (display-only unless the spec says otherwise). Mine the two cloned reference repos under specs/obsidian/002-note-db-notion-parity-build/context for how they implement this capability, citing real path and line: AppFlowy (appflowy/frontend/rust-lib/flowy-database2 Rust grid model and appflowy/frontend/appflowy_flutter/lib/plugins/database Flutter UI) and Anytype (anytype-ts/src/ts). Also cite Notion behavior via WebFetch. Ground every finding in real source, no hand-waving. Deliverable: a ranked, evidence-cited enrichment of this feature.",
+  "specFolder": "specs/obsidian/002-note-db-notion-parity-build/003-reports-computed-fields",
+  "maxIterations": 10,
+  "convergenceThreshold": 0.05,
+  "antiConvergence": {
+    "convergenceMode": "off",
+    "divergent": {}
+  },
+  "executionMode": "auto",
+  "resource_map": {
+    "emit": true
+  },
+  "executor": {
+    "type": "cli-pi",
+    "model": "x-ai/ox-alpha",
+    "reasoningEffort": "xhigh",
+    "timeoutSeconds": 900
+  },
+  "fanout": {
+    "executors": [
+      {
+        "kind": "cli-pi",
+        "model": "x-ai/ox-alpha",
+        "reasoningEffort": "xhigh",
+        "label": "ox-alpha-cline",
+        "count": 1,
+        "iterations": 10
+      }
+    ],
+    "concurrency": 1
+  },
+  "stopPolicy": "max-iterations",
+  "lineageTimeoutHours": 2,
+  "createdAt": "2026-08-24T22:42:59Z",
+  "status": "initialized"
+}

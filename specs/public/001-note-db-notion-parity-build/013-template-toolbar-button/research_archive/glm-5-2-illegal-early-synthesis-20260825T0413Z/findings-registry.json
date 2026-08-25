@@ -1,0 +1,34 @@
+{
+  "openQuestions": [],
+  "resolvedQuestions": [
+    {"id": "Q1", "answer": "Create path = createBlankEntry → loadNewRecordTemplate → buildCreateEntryPlan → planCreateEntry → createNote. Template auto-applied when database.newRecordTemplate configured. No second engine needed.", "evidence": ["src/views/DatabaseView.ts:3528-3680", "src/data/CreateEntryPlan.ts:119-173"]},
+    {"id": "Q2", "answer": "Toolbar = ToolbarRenderer.renderNewButton (2 render sites at lines 236, 282). Row-menu = RowMenu.show. ≤2 new call sites, within 1-3 budget.", "evidence": ["src/views/ToolbarRenderer.ts:236,282,1683", "src/views/RowMenu.ts:1-121"]},
+    {"id": "Q3", "answer": "confirmWithModal exists in views/modals/ConfirmModal.ts, mobile-safe (extends Modal), used by RowMenu for delete. REQ-004 needs zero new modal code.", "evidence": ["src/views/modals/ConfirmModal.ts:1-71", "src/views/RowMenu.ts:102-107"]},
+    {"id": "Q4", "answer": "AppFlowy = no record-template concept (GridAddRowButton footer, RowService.createRow, no template param). Anytype = rich: per-view defaultTemplateId, MenuTemplateList picker, dedicated template button adjacent to add-row (controls.tsx:750-760).", "evidence": ["appflowy/.../grid_footer.dart:18-44", "anytype-ts/.../dataview.ts:254", "anytype-ts/.../template/list.tsx", "anytype-ts/.../controls.tsx:750-760"]},
+    {"id": "Q5", "answer": "Notion = blue New button with dropdown arrow at top-right. Click New = new page (default template if set). Click dropdown = template picker. Per-database templates. Repeating templates & database buttons are OUT of scope.", "evidence": ["https://www.notion.com/help/database-templates", "https://www.notion.com/help/database-buttons"]},
+    {"id": "Q6", "answer": "Empty/zero templates → dropdown hidden, main New does blank create. Deleted template → existing Notice error, no write. Concurrent clicks → existing suppressNextCreate/hasActiveOverlay guard. iCloud → one createNote per click. Mobile → Menu + ConfirmModal mobile-safe.", "evidence": ["src/views/DatabaseView.ts:845-850,3537-3542,3675", "src/views/RowMenu.ts:45"]},
+    {"id": "Q7", "answer": "Module = src/data/TemplateToolbarAction.ts (pure functions, EuroFormat shape). 2 call sites (toolbar split-button + row-menu item) + wiring in DatabaseView. 4 new i18n keys. skipTemplate deferred. Optional confirm via confirmWithModal.", "evidence": ["src/data/EuroFormat.ts:1-42", "src/views/ToolbarRenderer.ts:1683", "src/views/RowMenu.ts:63-75"]}
+  ],
+  "keyFindings": [
+    {"id": "F1", "finding": "Existing create path auto-applies configured template; no second create engine needed.", "source": "src/views/DatabaseView.ts:3528-3680"},
+    {"id": "F2", "finding": "Toolbar host = renderNewButton (2 sites); row-menu host = RowMenu.show; ≤2 new call sites.", "source": "src/views/ToolbarRenderer.ts:236,282,1683"},
+    {"id": "F3", "finding": "Mobile-safe ConfirmModal already exists and is used by RowMenu.", "source": "src/views/modals/ConfirmModal.ts:1-71"},
+    {"id": "F5", "finding": "Anytype has per-view defaultTemplateId + template picker + dedicated template button adjacent to add-row.", "source": "anytype-ts/.../controls.tsx:750-760"},
+    {"id": "F6", "finding": "Notion UX = blue New button with dropdown arrow → template picker; per-database; repeating/buttons OUT of scope.", "source": "https://www.notion.com/help/database-templates"},
+    {"id": "F7", "finding": "Recommended UX = split-button (Option A): main New + dropdown caret; Notion parity, minimal scope, 2 call sites.", "source": "synthesis"},
+    {"id": "F8", "finding": "Isolated module = TemplateToolbarAction.ts, pure functions, resolves context + builds display-only menu items; does NOT call createBlankEntry.", "source": "src/data/EuroFormat.ts pattern"},
+    {"id": "F11", "finding": "Empty template set → dropdown hidden, blank create via existing path; deleted template → existing Notice error.", "source": "src/views/DatabaseView.ts:3537-3542,3675"},
+    {"id": "F12", "finding": "Concurrent clicks handled by existing suppressNextCreate/hasActiveOverlay guard (.menu is an overlay).", "source": "src/views/DatabaseView.ts:845-850,870"},
+    {"id": "F15", "finding": "skipTemplate deferred — not spec-mandated; keeps create-path signature untouched.", "source": "spec REQ-001 analysis"}
+  ],
+  "ruledOutDirections": [
+    {"direction": "New create engine", "reason": "REQ-002 forbids; existing planCreateEntry + createBlankEntry complete"},
+    {"direction": "New modal", "reason": "ConfirmModal exists, mobile-safe"},
+    {"direction": "Multi-template picker", "reason": "Exceeds 1-3 call-site + Effort S; requires NewRecordTemplateConfig schema change"},
+    {"direction": "Repeating/scheduler templates", "reason": "Spec OUT of scope (REQ-003)"},
+    {"direction": "Network buttons (mail/webhook/Slack)", "reason": "Spec OUT of scope"},
+    {"direction": "Labeling-only approach", "reason": "Fails Notion parity + discoverability"},
+    {"direction": "Pre-validating template file on render", "reason": "iCloud churn risk; existing error path correct"},
+    {"direction": "New debounce/queue for concurrent clicks", "reason": "Existing suppressNextCreate guard handles it"}
+  ]
+}

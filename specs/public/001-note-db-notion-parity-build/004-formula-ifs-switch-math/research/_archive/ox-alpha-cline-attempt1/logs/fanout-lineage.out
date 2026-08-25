@@ -1,0 +1,15 @@
+All phases complete. Verification results:
+
+**phase_init** — artifact_dir bound directly to `…/research/lineages/ox-alpha-cline` (override honored, resolveArtifactRoot skipped); config, strategy, registry, dashboard written.
+
+**phase_main_loop** — 5 iterations to legal convergence:
+- Iter 1 (fork source): two-tier function table pinned (`ComputedField.ts:310–378` uppercase tier is the insertion point); eager-arg evaluation discovered; SafeEval keyword list proves lowercase mirrors safe.
+- Iter 2 (reference repos): negative finding — AppFlowy's FieldType has **no Formula variant** and Anytype's FormulaType is a closed aggregate enum; mined instead their type-gated sectioned picker UX with full path:line chains.
+- Iter 3–4 (Notion official docs): `ifs()` pairs + optional else (blank on no-match); pivotal: **`switch()` doesn't exist in Notion 2.0** → SWITCH is Excel parity; no general `log(n,base)` in Notion; edge-case matrix, mobile/iCloud posture confirmed read-only.
+- Iter 5 (thought): Q1–Q5 coverage verified, guards pass, newInfoRatio 0.0 < 0.05 → STOP converged.
+
+**phase_synthesis** — `research.md` delivers 7 ranked recommendations (total-function wrappers with null fallback → Excel-parity SWITCH positioning → Math.* aliases with optional-base LOG → EuroFormat-pattern module option → test matrix → docs-inventory UX → iCloud-safety-by-construction), plus documented Notion divergences.
+
+**Final-state proof**: all artifacts exist; JSONL parses (6 records, required fields present); 47 `[SOURCE:]` citations across deliverables; stray-file sweep clean (untracked `.opencode/bin/compiled-routing` dirs are pre-existing advisor-daemon runtime output, not touched). Zero writes outside the lineage dir; no repo tooling executed.
+
+FANOUT_LINEAGE_COMPLETE:ox-alpha-cline

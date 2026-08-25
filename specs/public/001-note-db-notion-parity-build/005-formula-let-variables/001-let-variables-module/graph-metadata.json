@@ -1,0 +1,213 @@
+{
+  "schema_version": 1,
+  "packet_id": "obsidian/002-note-db-notion-parity-build/005-formula-let-variables/001-let-variables-module",
+  "spec_folder": "obsidian/002-note-db-notion-parity-build/005-formula-let-variables/001-let-variables-module",
+  "parent_id": "obsidian/002-note-db-notion-parity-build/005-formula-let-variables",
+  "children_ids": [],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "let variables module",
+      "LetVariables",
+      "transformLetCalls",
+      "registerLetHelper",
+      "nested __let",
+      "formula letArgCount",
+      "let variables plan",
+      "let variables tasks",
+      "let variables summary"
+    ],
+    "key_topics": [
+      "let",
+      "variables",
+      "module",
+      "letvariables",
+      "transformletcalls",
+      "registerlethelper",
+      "nested",
+      "formula",
+      "letargcount",
+      "plan",
+      "tasks",
+      "summary"
+    ],
+    "importance_tier": "high",
+    "status": "planned",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "implementation-summary.md"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Let Variables Module",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Parent Spec",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Handoff Criteria",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Problem Statement Notion",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Purpose Create",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Plan",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Technical Context",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Obsidian Plugin",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Overview Land",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Pattern Isolated",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Notation",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Format",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Completion Criteria",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Phase 1: Setup",
+        "kind": "heading",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Phase 2: Implementation",
+        "kind": "heading",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Summary",
+        "kind": "proper_noun",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "Spec Folder",
+        "kind": "proper_noun",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "Actual Effort",
+        "kind": "proper_noun",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "What Was Built Nothing",
+        "kind": "proper_noun",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "Notion formulas bind per-row names with `let`/`lets` (`let(person, \"Alan\", \"Hello, \" + person + \"!\")` = `\"Hello, Alan!\"`)",
+    "created_at": "2026-08-25T19:25:11Z",
+    "last_save_at": "2026-08-25T19:32:51.014Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "implementation-summary.md"
+    ],
+    "source_fingerprint": "sha256:2999b6873dc75730e6d16ce5885f50a87a7adeaf700f25f8b4715d88ed7a90e7",
+    "source_doc_hashes": {
+      "spec.md": "0008980e357270cb4e48c9ed7dda087fdde8cfeb61a8c3ccc5a3835aeceef8cd",
+      "plan.md": "acef9b5027a2cc8081d51c06aec6b451835ac102806ac36bebcace01eb352703",
+      "tasks.md": "167c0f1bdac6911a1ac3e5723c7e6341173bdaa96181eea7b3c9d8946ee74aa0",
+      "implementation-summary.md": "c0e72c30117e01497a45fe04d2eeb284ece60956403c4416348339f2e86a1ea5"
+    },
+    "last_active_child_id": null,
+    "last_active_at": null
+  }
+}

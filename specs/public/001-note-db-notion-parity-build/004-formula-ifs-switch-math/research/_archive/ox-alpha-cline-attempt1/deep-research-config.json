@@ -1,0 +1,24 @@
+{
+  "mode": "research",
+  "sessionId": "fanout-ox-alpha-cline-1787614633518-33q0rc",
+  "lineage": {
+    "kind": "fanout",
+    "label": "ox-alpha-cline",
+    "artifact_dir": "specs/obsidian/002-note-db-notion-parity-build/004-formula-ifs-switch-math/research/lineages/ox-alpha-cline",
+    "bound_via": "config.fanout_lineage_artifact_dir override (step_resolve_artifact_root bypassed by operator instruction)"
+  },
+  "executor": { "kind": "cli-pi", "model": "x-ai/ox-alpha" },
+  "loopType": "research",
+  "specFolder": "specs/obsidian/002-note-db-notion-parity-build/004-formula-ifs-switch-math",
+  "topic": "Perfect the Formula IFS/SWITCH + Math Function Aliases feature for the forked Note Database Obsidian plugin toward Notion parity: UI/UX, core logic and algorithm, fork integration via the isolated-module pattern, edge cases, mobile/iCloud safety; mine AppFlowy + Anytype reference repos with path:line citations; cite Notion behavior via web.",
+  "convergence": { "threshold": 0.05, "signal": "newInfoRatio", "semantics": "fully-new=1.0, partially-new=0.5, +0.10 simplicity bonus capped 1.0" },
+  "stopPolicy": { "type": "max-iterations", "maxIterations": 6 },
+  "writeSurface": ["specs/obsidian/002-note-db-notion-parity-build/004-formula-ifs-switch-math/research/lineages/ox-alpha-cline"],
+  "forbidden": ["generate-context.js", "validate.sh", "any git write command", "writes outside writeSurface"],
+  "forkSrcRoot": "/Users/michelkerkmeester/MEGA/Development/Obsidian Plugin/src",
+  "referenceRepos": [
+    "specs/obsidian/002-note-db-notion-parity-build/context/appflowy",
+    "specs/obsidian/002-note-db-notion-parity-build/context/anytype-ts"
+  ],
+  "createdAt": "2026-07-22T00:00:00Z"
+}

@@ -1,0 +1,29 @@
+{
+  "level": "2",
+  "specFolder": "obsidian/002-note-db-notion-parity-build/009-view-filter-tree",
+  "description": "View filters today are a flat `FilterRule[]` with a single global `filterLogic` (`and` | `or`) applied uniformly across every rule",
+  "keywords": [
+    "view",
+    "filters",
+    "today",
+    "flat",
+    "filterrule",
+    "single",
+    "global",
+    "filterlogic",
+    "applied",
+    "uniformly",
+    "across",
+    "every",
+    "rule"
+  ],
+  "lastUpdated": "2026-08-25T14:17:41.650Z",
+  "specId": "009",
+  "folderSlug": "view-filter-tree",
+  "parentChain": [
+    "obsidian",
+    "002-note-db-notion-parity-build"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": []
+}

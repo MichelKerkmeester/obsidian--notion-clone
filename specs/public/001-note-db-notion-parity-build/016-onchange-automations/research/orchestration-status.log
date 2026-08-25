@@ -1,0 +1,22 @@
+{"event":"started","label":"deepseek-flash-max","index":0,"attempt":1,"at":"2026-08-25T04:20:14.951Z","gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"deepseek-flash-max","at":"2026-08-25T04:21:15.023Z","duration_ms":60002,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"failed","label":"deepseek-flash-max","index":0,"attempt":1,"at":"2026-08-25T04:22:05.604Z","duration_ms":110652,"terminal":false,"error":{"name":"Error","message":"lineage deepseek-flash-max exited 0 but did not produce expected artifact: specs/obsidian/002-note-db-notion-parity-build/016-onchange-automations/research/lineages/deepseek-flash-max/research.md","failure_class":"salvage_miss","retry_verdict":"transient","retryable":true,"exit_code":0,"timed_out":false,"salvage":{"salvaged":0,"failed":1}},"gauges":{"lag":1,"pending":0,"failed":0},"skippedCount":0,"slotDurationMs":110207.013666}
+{"event":"retry_scheduled","label":"deepseek-flash-max","index":0,"at":"2026-08-25T04:22:05.607Z","retry_count":1,"next_attempt":2,"max_retries":5,"failure_class":"salvage_miss","retry_verdict":"transient","gauges":{"lag":1,"pending":1,"failed":0,"oldest_pending_lag_ms":80583}}
+{"event":"started","label":"deepseek-flash-max","index":0,"attempt":2,"at":"2026-08-25T04:22:05.607Z","gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"deepseek-flash-max","at":"2026-08-25T04:23:05.612Z","duration_ms":60000,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"deepseek-flash-max","at":"2026-08-25T04:24:05.615Z","duration_ms":120003,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"deepseek-flash-max","at":"2026-08-25T04:25:05.617Z","duration_ms":180005,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"deepseek-flash-max","at":"2026-08-25T04:26:05.619Z","duration_ms":240007,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"deepseek-flash-max","at":"2026-08-25T04:27:05.619Z","duration_ms":300007,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"deepseek-flash-max","at":"2026-08-25T04:28:05.621Z","duration_ms":360009,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"deepseek-flash-max","at":"2026-08-25T04:29:05.622Z","duration_ms":420010,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"deepseek-flash-max","at":"2026-08-25T04:30:05.622Z","duration_ms":480010,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"deepseek-flash-max","at":"2026-08-25T04:31:05.625Z","duration_ms":540013,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"deepseek-flash-max","at":"2026-08-25T04:32:05.627Z","duration_ms":600015,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"deepseek-flash-max","at":"2026-08-25T04:33:05.629Z","duration_ms":660017,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"deepseek-flash-max","at":"2026-08-25T04:34:05.631Z","duration_ms":720019,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"deepseek-flash-max","at":"2026-08-25T04:35:05.634Z","duration_ms":780022,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"deepseek-flash-max","at":"2026-08-25T04:36:05.635Z","duration_ms":840023,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"deepseek-flash-max","at":"2026-08-25T04:37:05.638Z","duration_ms":900026,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"deepseek-flash-max","at":"2026-08-25T04:38:05.639Z","duration_ms":960027,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"failed","label":"deepseek-flash-max","index":0,"attempt":2,"at":"2026-08-25T04:39:01.358Z","duration_ms":1015751,"terminal":true,"error":{"name":"Error","message":"lineage deepseek-flash-max violated max-iterations stop policy: stopPolicy=max-iterations requires a positive lineage iteration cap","failure_class":"exit","retry_verdict":"fatal","retryable":false,"exit_code":0,"timed_out":false,"salvage":{"salvaged":0,"failed":0}},"gauges":{"lag":0,"pending":0,"failed":1},"skippedCount":15,"slotDurationMs":1015311.899667}

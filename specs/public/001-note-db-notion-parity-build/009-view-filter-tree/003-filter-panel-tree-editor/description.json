@@ -1,0 +1,19 @@
+{
+  "specFolder": "obsidian/002-note-db-notion-parity-build/009-view-filter-tree/003-filter-panel-tree-editor",
+  "description": "Phase 3: filter-panel-tree-editor",
+  "keywords": [
+    "phase",
+    "filter-panel-tree-editor"
+  ],
+  "lastUpdated": "2026-08-25T19:40:28.512Z",
+  "specId": "003",
+  "folderSlug": "filter-panel-tree-editor",
+  "parentChain": [
+    "obsidian",
+    "002-note-db-notion-parity-build",
+    "009-view-filter-tree"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": [],
+  "level": "1"
+}

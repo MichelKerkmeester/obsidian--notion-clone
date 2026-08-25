@@ -1,0 +1,220 @@
+{
+  "schema_version": 1,
+  "packet_id": "obsidian/002-note-db-notion-parity-build/017-excluded-parity-items",
+  "spec_folder": "obsidian/002-note-db-notion-parity-build/017-excluded-parity-items",
+  "parent_id": "obsidian/002-note-db-notion-parity-build",
+  "children_ids": [],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "excluded parity items",
+      "out of scope parity",
+      "person people property",
+      "me() function",
+      "goodbases renderer",
+      "notion file cdn",
+      "rich-text style output",
+      "identity model revisit",
+      "implementation plan",
+      "no build planned",
+      "tasks",
+      "implementation summary"
+    ],
+    "key_topics": [
+      "excluded",
+      "parity",
+      "items",
+      "scope",
+      "person",
+      "people",
+      "property",
+      "function",
+      "goodbases",
+      "renderer",
+      "notion",
+      "file"
+    ],
+    "importance_tier": "medium",
+    "status": "in_progress",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "implementation-summary.md",
+      "research/research.md",
+      "research/synthesis.md"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "research.md",
+        "kind": "doc",
+        "path": "research/research.md",
+        "source": "derived"
+      },
+      {
+        "name": "synthesis.md",
+        "kind": "doc",
+        "path": "research/synthesis.md",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "On Hold",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Problem Statement The Notion",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Purpose Record",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "In Scope",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Fetching Notion",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Plan",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Technical Context",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Overview This",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Pattern Decision",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Key Components",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Data Flow None",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Notation",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Format",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Setup The",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation No",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Completion Criteria",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Summary",
+        "kind": "proper_noun",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "The Notion-parity research (10 iterations, evidence in `research/research.md`, decision-ready summary in `research/synthesis.md`) surfaced a long feature list",
+    "created_at": "2026-08-24T18:24:24.049Z",
+    "last_save_at": "2026-08-25T15:33:24.900Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "implementation-summary.md",
+      "research/research.md"
+    ],
+    "source_fingerprint": "sha256:ac727cf3b173690be236ea3757c2cf0a87cb1bd2bcf6b7f8108045e21e5eadf9",
+    "source_doc_hashes": {
+      "spec.md": "a849f9284f4b348dabda28dac9c9bf2f6c5ca80836aa6f035e12e0d75a2befa1",
+      "plan.md": "c476b5f42155a96a26deb638cfd2dafac681c86780f97edfbeae11a55118a0da",
+      "tasks.md": "9791149bfbfe3fe9660bcb27fc94b927b7d32c70aac8dbc17901c4c9fd3462cb",
+      "implementation-summary.md": "d536d7254a65d7bf28160dac88714fea39dce31f3e5466e921738022c50fa39d",
+      "research/research.md": "aea2a0efbf596e5980c1f2176cb121492bd6ed335eb08592c8e0d992643821ef"
+    },
+    "last_active_child_id": null,
+    "last_active_at": null
+  }
+}

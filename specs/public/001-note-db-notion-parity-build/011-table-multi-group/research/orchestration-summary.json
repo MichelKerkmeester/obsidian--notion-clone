@@ -1,0 +1,71 @@
+{
+  "run_id": "1787631269412-5xz0hz",
+  "loop_type": "research",
+  "spec_folder": "specs/obsidian/002-note-db-notion-parity-build/011-table-multi-group",
+  "base_artifact_dir": "specs/obsidian/002-note-db-notion-parity-build/011-table-multi-group/research",
+  "total_cli_lineages": 1,
+  "orphaned_lineages": [],
+  "total": 1,
+  "succeeded": 1,
+  "failed": 0,
+  "all_failed": false,
+  "gauges": {
+    "lag": 0,
+    "pending": 0,
+    "failed": 0
+  },
+  "failure_classes": {
+    "timeout": 0,
+    "exit": 0,
+    "salvage_miss": 0
+  },
+  "timestamp_anomalies": [
+    {
+      "label": "deepseek-flash-max-r2",
+      "state_log": "specs/obsidian/002-note-db-notion-parity-build/011-table-multi-group/research/lineages/deepseek-flash-max-r2/deep-research-state.jsonl",
+      "window": {
+        "start_at_iso": "2026-08-25T04:28:15.500Z",
+        "end_at_iso": "2026-08-25T04:31:02.088Z",
+        "tolerance_ms": 120000
+      },
+      "counts": {
+        "anomalous": 15,
+        "untimestamped": 1,
+        "unparseable": 0,
+        "total": 16
+      },
+      "sample": [
+        {
+          "index": 1,
+          "reason": "after_window",
+          "timestamp": "2026-08-25T05:50:00.000Z",
+          "deltaMs": 4617912
+        },
+        {
+          "index": 2,
+          "reason": "after_window",
+          "timestamp": "2026-08-25T05:56:00.000Z",
+          "deltaMs": 4977912
+        },
+        {
+          "index": 3,
+          "reason": "after_window",
+          "timestamp": "2026-08-25T06:02:00.000Z",
+          "deltaMs": 5337912
+        },
+        {
+          "index": 4,
+          "reason": "after_window",
+          "timestamp": "2026-08-25T06:08:00.000Z",
+          "deltaMs": 5697912
+        },
+        {
+          "index": 5,
+          "reason": "after_window",
+          "timestamp": "2026-08-25T06:14:00.000Z",
+          "deltaMs": 6057912
+        }
+      ]
+    }
+  ]
+}

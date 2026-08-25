@@ -1,0 +1,200 @@
+{
+  "schema_version": 1,
+  "packet_id": "obsidian/002-note-db-notion-parity-build/001-live-reports-rollups/005-snapshot-audit-columns",
+  "spec_folder": "obsidian/002-note-db-notion-parity-build/001-live-reports-rollups/005-snapshot-audit-columns",
+  "parent_id": "obsidian/002-note-db-notion-parity-build/001-live-reports-rollups",
+  "children_ids": [],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "snapshot audit columns",
+      "snapshot totals",
+      "saved static",
+      "req-005 snapshot",
+      "snapshot plan",
+      "audit columns",
+      "snapshot tasks",
+      "snapshot summary"
+    ],
+    "key_topics": [
+      "snapshot",
+      "audit",
+      "columns",
+      "totals",
+      "saved",
+      "static",
+      "req-005",
+      "plan",
+      "tasks",
+      "summary",
+      "notion",
+      "screenshot-freeze"
+    ],
+    "importance_tier": "high",
+    "status": "planned",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "implementation-summary.md"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Snapshot Audit Columns",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Authored Snapshot",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Parent Spec",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Handoff Criteria",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Problem Statement Notion",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Plan",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Technical Context",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Overview Default",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Pattern Typed",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Notation",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Format",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Completion Criteria",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Phase 1: Setup",
+        "kind": "heading",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Summary",
+        "kind": "proper_noun",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "Planned Snapshot",
+        "kind": "proper_noun",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "Spec Folder",
+        "kind": "proper_noun",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "Actual Effort",
+        "kind": "proper_noun",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "Notion has no screenshot-freeze; this vault does",
+    "created_at": "2026-08-25T19:11:32Z",
+    "last_save_at": "2026-08-25T19:23:37.720Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "implementation-summary.md"
+    ],
+    "source_fingerprint": "sha256:9df975f31c06754518b23302627d018360d6157cca50576a24b887edd837e07a",
+    "source_doc_hashes": {
+      "spec.md": "ba0d8466d0c4c742a4e114c9c2c96fc7345ae3a20372ead1f5d4ce80584ed51b",
+      "plan.md": "4a1c1453e6692babe09d6f27bac42c080433a61a2b02ca4a9baf5e17fc8df670",
+      "tasks.md": "60cb8be2458ea12aa3f3ab62ade6d824fb432463ccabb516de93db13a539640c",
+      "implementation-summary.md": "e8ca51fb6b6567d36c79c39cf4f40d0a960a0d16b1c61dd17c55172ba47f4f56"
+    },
+    "last_active_child_id": null,
+    "last_active_at": null
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "level": "3",
+  "specFolder": "obsidian/002-note-db-notion-parity-build",
+  "description": "The forked Note Database plugin is already far more capable than the legacy feature list assumed: it ships two formula engines (the Excel-style",
+  "keywords": [
+    "forked",
+    "note",
+    "database",
+    "plugin",
+    "already",
+    "far",
+    "capable",
+    "legacy",
+    "feature",
+    "list",
+    "assumed",
+    "ships",
+    "two",
+    "formula",
+    "engines",
+    "excel-style"
+  ],
+  "lastUpdated": "2026-08-25T04:51:32.168Z",
+  "specId": "002",
+  "folderSlug": "note-db-notion-parity-build",
+  "parentChain": [
+    "obsidian"
+  ],
+  "memorySequence": 8,
+  "memoryNameHistory": [
+    "24-08-26_23-54__blocking-watcher-bg3eig2th-is-pending-it-drives.md",
+    "25-08-26_00-57__progressing-normally-not-stalled-it-s-01-56-only.md",
+    "25-08-26_02-07__good-news-on-the-mechanism-the-glm-devin-fallback.md",
+    "25-08-26_02-38__006-is-progressing-normally-it-started-1-min-ago.md",
+    "25-08-26_03-08__progressing-it-s-only-1-min-since-my-last-check.md",
+    "25-08-26_03-39__007-just-started-1-min-ago-04-38-on-ox-alpha.md",
+    "25-08-26_05-18__research-run-progressing-though-the-later-phases.md",
+    "25-08-26_05-51__the-debug-agent-is-progressing-normally-its.md"
+  ]
+}

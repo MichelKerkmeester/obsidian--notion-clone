@@ -1,0 +1,86 @@
+{"event":"started","label":"ox-alpha-cline","index":0,"attempt":1,"at":"2026-08-24T19:20:43.723Z","gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"ox-alpha-cline","at":"2026-08-24T19:21:43.733Z","duration_ms":60003,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"ox-alpha-cline","at":"2026-08-24T19:22:43.735Z","duration_ms":120005,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"ox-alpha-cline","at":"2026-08-24T19:23:43.694Z","duration_ms":179964,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"ox-alpha-cline","at":"2026-08-24T19:24:43.693Z","duration_ms":239963,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"ox-alpha-cline","at":"2026-08-24T19:25:43.694Z","duration_ms":299964,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"ox-alpha-cline","at":"2026-08-24T19:26:43.695Z","duration_ms":359965,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"ox-alpha-cline","at":"2026-08-24T19:27:43.696Z","duration_ms":419966,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"ox-alpha-cline","at":"2026-08-24T19:28:43.697Z","duration_ms":479967,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"ox-alpha-cline","at":"2026-08-24T19:29:43.698Z","duration_ms":539968,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"ox-alpha-cline","at":"2026-08-24T19:30:43.699Z","duration_ms":599969,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"ox-alpha-cline","at":"2026-08-24T19:31:43.701Z","duration_ms":659971,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"ox-alpha-cline","at":"2026-08-24T19:32:43.702Z","duration_ms":719972,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"ox-alpha-cline","at":"2026-08-24T19:33:43.703Z","duration_ms":779973,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"ox-alpha-cline","at":"2026-08-24T19:34:43.705Z","duration_ms":839975,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"ox-alpha-cline","at":"2026-08-24T19:35:43.707Z","duration_ms":899977,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"ox-alpha-cline","at":"2026-08-24T19:36:43.708Z","duration_ms":959978,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"ox-alpha-cline","at":"2026-08-24T19:37:43.708Z","duration_ms":1019978,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"ox-alpha-cline","at":"2026-08-24T19:38:43.710Z","duration_ms":1079980,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"ox-alpha-cline","at":"2026-08-24T19:39:43.712Z","duration_ms":1139982,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"ox-alpha-cline","at":"2026-08-24T19:40:43.714Z","duration_ms":1199984,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"stall_detected","label":"ox-alpha-cline","at":"2026-08-24T19:40:43.728Z","severity":"warning","metric":"time_since_last_lineage_event","stall_watchdog_ms":300000,"quiet_ms":300000,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"ox-alpha-cline","at":"2026-08-24T19:41:43.715Z","duration_ms":1259985,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"ox-alpha-cline","at":"2026-08-24T19:42:43.715Z","duration_ms":1319985,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"ox-alpha-cline","at":"2026-08-24T19:43:43.717Z","duration_ms":1379987,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"ox-alpha-cline","at":"2026-08-24T19:44:43.718Z","duration_ms":1439988,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"ox-alpha-cline","at":"2026-08-24T19:45:43.720Z","duration_ms":1499990,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"ox-alpha-cline","at":"2026-08-24T19:46:43.721Z","duration_ms":1559991,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"ox-alpha-cline","at":"2026-08-24T19:47:43.724Z","duration_ms":1619995,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"ox-alpha-cline","at":"2026-08-24T19:48:43.741Z","duration_ms":1680011,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"failed","label":"ox-alpha-cline","index":0,"attempt":1,"at":"2026-08-24T19:48:46.391Z","duration_ms":1682667,"terminal":true,"error":{"name":"Error","message":"lineage ox-alpha-cline violated max-iterations stop policy: stopPolicy=max-iterations requires a positive lineage iteration cap","failure_class":"exit","retry_verdict":"fatal","retryable":false,"exit_code":0,"timed_out":false,"salvage":{"salvaged":0,"failed":0}},"gauges":{"lag":0,"pending":0,"failed":1},"skippedCount":27,"slotDurationMs":1682220.324417}
+{"event":"started","label":"ox-alpha-cline","index":0,"attempt":1,"at":"2026-08-24T20:00:09.341Z","gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"ox-alpha-cline","at":"2026-08-24T20:01:09.350Z","duration_ms":60001,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"ox-alpha-cline","at":"2026-08-24T20:02:09.351Z","duration_ms":120002,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"ox-alpha-cline","at":"2026-08-24T20:03:09.353Z","duration_ms":180004,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"ox-alpha-cline","at":"2026-08-24T20:04:09.355Z","duration_ms":240006,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"ox-alpha-cline","at":"2026-08-24T20:05:09.357Z","duration_ms":300008,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"ox-alpha-cline","at":"2026-08-24T20:06:09.357Z","duration_ms":360008,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"ox-alpha-cline","at":"2026-08-24T20:07:09.359Z","duration_ms":420010,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"ox-alpha-cline","at":"2026-08-24T20:08:09.384Z","duration_ms":480035,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"ox-alpha-cline","at":"2026-08-24T20:09:09.394Z","duration_ms":540045,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"ox-alpha-cline","at":"2026-08-24T20:10:09.396Z","duration_ms":600047,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"ox-alpha-cline","at":"2026-08-24T20:11:09.398Z","duration_ms":660049,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"ox-alpha-cline","at":"2026-08-24T20:12:09.399Z","duration_ms":720050,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"ox-alpha-cline","at":"2026-08-24T20:13:09.399Z","duration_ms":780050,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"ox-alpha-cline","at":"2026-08-24T20:14:09.399Z","duration_ms":840050,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"ox-alpha-cline","at":"2026-08-24T20:15:09.400Z","duration_ms":900051,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"ox-alpha-cline","at":"2026-08-24T20:16:09.403Z","duration_ms":960054,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"ox-alpha-cline","at":"2026-08-24T20:17:09.404Z","duration_ms":1020055,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"ox-alpha-cline","at":"2026-08-24T20:18:09.406Z","duration_ms":1080057,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"ox-alpha-cline","at":"2026-08-24T20:19:09.409Z","duration_ms":1140060,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"ox-alpha-cline","at":"2026-08-24T20:20:09.411Z","duration_ms":1200062,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"ox-alpha-cline","at":"2026-08-24T20:21:09.414Z","duration_ms":1260065,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"ox-alpha-cline","at":"2026-08-24T20:22:09.416Z","duration_ms":1320067,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"ox-alpha-cline","at":"2026-08-24T20:23:09.418Z","duration_ms":1380069,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"ox-alpha-cline","at":"2026-08-24T20:24:09.420Z","duration_ms":1440071,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"ox-alpha-cline","at":"2026-08-24T20:25:09.422Z","duration_ms":1500073,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"ox-alpha-cline","at":"2026-08-24T20:26:09.424Z","duration_ms":1560075,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"ox-alpha-cline","at":"2026-08-24T20:27:09.426Z","duration_ms":1620077,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"ox-alpha-cline","at":"2026-08-24T20:28:09.428Z","duration_ms":1680079,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"failed","label":"ox-alpha-cline","index":0,"attempt":1,"at":"2026-08-24T20:28:32.112Z","duration_ms":1702771,"terminal":false,"error":{"name":"Error","message":"lineage ox-alpha-cline exited 0 but did not produce expected artifact: specs/obsidian/002-note-db-notion-parity-build/001-live-reports-rollups/research/lineages/ox-alpha-cline/research.md","failure_class":"salvage_miss","retry_verdict":"transient","retryable":true,"exit_code":0,"timed_out":false,"salvage":{"salvaged":0,"failed":1}},"gauges":{"lag":1,"pending":0,"failed":0},"skippedCount":27,"slotDurationMs":1702281.871917}
+{"event":"retry_scheduled","label":"ox-alpha-cline","index":0,"at":"2026-08-24T20:28:32.113Z","retry_count":1,"next_attempt":2,"max_retries":5,"failure_class":"salvage_miss","retry_verdict":"transient","gauges":{"lag":1,"pending":1,"failed":0,"oldest_pending_lag_ms":52641}}
+{"event":"started","label":"ox-alpha-cline","index":0,"attempt":2,"at":"2026-08-24T20:28:32.113Z","gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"ox-alpha-cline","at":"2026-08-24T20:29:32.120Z","duration_ms":60002,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"ox-alpha-cline","at":"2026-08-24T20:30:32.123Z","duration_ms":120005,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"failed","label":"ox-alpha-cline","index":0,"attempt":2,"at":"2026-08-24T20:31:07.469Z","duration_ms":155356,"terminal":false,"error":{"name":"Error","message":"lineage ox-alpha-cline exited 0 but did not produce expected artifact: specs/obsidian/002-note-db-notion-parity-build/001-live-reports-rollups/research/lineages/ox-alpha-cline/research.md","failure_class":"salvage_miss","retry_verdict":"transient","retryable":true,"exit_code":0,"timed_out":false,"salvage":{"salvaged":0,"failed":1}},"gauges":{"lag":1,"pending":0,"failed":0},"skippedCount":1,"slotDurationMs":154895.145334}
+{"event":"retry_scheduled","label":"ox-alpha-cline","index":0,"at":"2026-08-24T20:31:07.469Z","retry_count":2,"next_attempt":3,"max_retries":5,"failure_class":"salvage_miss","retry_verdict":"transient","gauges":{"lag":1,"pending":1,"failed":0,"oldest_pending_lag_ms":125347}}
+{"event":"started","label":"ox-alpha-cline","index":0,"attempt":3,"at":"2026-08-24T20:31:07.469Z","gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"ox-alpha-cline","at":"2026-08-24T20:32:07.475Z","duration_ms":60002,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"ox-alpha-cline","at":"2026-08-24T20:33:07.476Z","duration_ms":120004,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"ox-alpha-cline","at":"2026-08-24T20:34:07.477Z","duration_ms":180004,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"failed","label":"ox-alpha-cline","index":0,"attempt":3,"at":"2026-08-24T20:35:07.820Z","duration_ms":240351,"terminal":false,"error":{"name":"Error","message":"lineage ox-alpha-cline exited 0 but did not produce expected artifact: specs/obsidian/002-note-db-notion-parity-build/001-live-reports-rollups/research/lineages/ox-alpha-cline/research.md","failure_class":"salvage_miss","retry_verdict":"transient","retryable":true,"exit_code":0,"timed_out":false,"salvage":{"salvaged":0,"failed":1}},"gauges":{"lag":1,"pending":0,"failed":0},"skippedCount":2,"slotDurationMs":239864.22975}
+{"event":"retry_scheduled","label":"ox-alpha-cline","index":0,"at":"2026-08-24T20:35:07.821Z","retry_count":3,"next_attempt":4,"max_retries":5,"failure_class":"salvage_miss","retry_verdict":"transient","gauges":{"lag":1,"pending":1,"failed":0,"oldest_pending_lag_ms":30336}}
+{"event":"started","label":"ox-alpha-cline","index":0,"attempt":4,"at":"2026-08-24T20:35:07.821Z","gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"ox-alpha-cline","at":"2026-08-24T20:36:07.826Z","duration_ms":60002,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"failed","label":"ox-alpha-cline","index":0,"attempt":4,"at":"2026-08-24T20:36:56.726Z","duration_ms":108905,"terminal":false,"error":{"name":"Error","message":"lineage ox-alpha-cline exited 0 but did not produce expected artifact: specs/obsidian/002-note-db-notion-parity-build/001-live-reports-rollups/research/lineages/ox-alpha-cline/research.md","failure_class":"salvage_miss","retry_verdict":"transient","retryable":true,"exit_code":0,"timed_out":false,"salvage":{"salvaged":0,"failed":1}},"gauges":{"lag":1,"pending":0,"failed":0},"skippedCount":0,"slotDurationMs":108420.999666}
+{"event":"retry_scheduled","label":"ox-alpha-cline","index":0,"at":"2026-08-24T20:36:56.726Z","retry_count":4,"next_attempt":5,"max_retries":5,"failure_class":"salvage_miss","retry_verdict":"transient","gauges":{"lag":1,"pending":1,"failed":0,"oldest_pending_lag_ms":78899}}
+{"event":"started","label":"ox-alpha-cline","index":0,"attempt":5,"at":"2026-08-24T20:36:56.726Z","gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"ox-alpha-cline","at":"2026-08-24T20:37:56.734Z","duration_ms":60002,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"ox-alpha-cline","at":"2026-08-24T20:38:56.736Z","duration_ms":120004,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"failed","label":"ox-alpha-cline","index":0,"attempt":5,"at":"2026-08-24T20:39:15.705Z","duration_ms":138979,"terminal":false,"error":{"name":"Error","message":"lineage ox-alpha-cline exited 0 but did not produce expected artifact: specs/obsidian/002-note-db-notion-parity-build/001-live-reports-rollups/research/lineages/ox-alpha-cline/research.md","failure_class":"salvage_miss","retry_verdict":"transient","retryable":true,"exit_code":0,"timed_out":false,"salvage":{"salvaged":0,"failed":1}},"gauges":{"lag":1,"pending":0,"failed":0},"skippedCount":1,"slotDurationMs":138529.019542}
+{"event":"retry_scheduled","label":"ox-alpha-cline","index":0,"at":"2026-08-24T20:39:15.705Z","retry_count":5,"next_attempt":6,"max_retries":5,"failure_class":"salvage_miss","retry_verdict":"transient","gauges":{"lag":1,"pending":1,"failed":0,"oldest_pending_lag_ms":108968}}
+{"event":"started","label":"ox-alpha-cline","index":0,"attempt":6,"at":"2026-08-24T20:39:15.705Z","gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"ox-alpha-cline","at":"2026-08-24T20:40:15.711Z","duration_ms":60001,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"ox-alpha-cline","at":"2026-08-24T20:41:15.713Z","duration_ms":120003,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"failed","label":"ox-alpha-cline","index":0,"attempt":6,"at":"2026-08-24T20:42:09.994Z","duration_ms":174289,"terminal":true,"error":{"name":"Error","message":"lineage ox-alpha-cline exited 0 but did not produce expected artifact: specs/obsidian/002-note-db-notion-parity-build/001-live-reports-rollups/research/lineages/ox-alpha-cline/research.md","failure_class":"salvage_miss","retry_verdict":"transient","retryable":true,"exit_code":0,"timed_out":false,"salvage":{"salvaged":0,"failed":1}},"gauges":{"lag":0,"pending":0,"failed":1},"skippedCount":1,"slotDurationMs":173806.464541}

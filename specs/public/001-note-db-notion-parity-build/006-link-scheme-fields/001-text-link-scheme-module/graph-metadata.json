@@ -1,0 +1,212 @@
+{
+  "schema_version": 1,
+  "packet_id": "obsidian/002-note-db-notion-parity-build/006-link-scheme-fields/001-text-link-scheme-module",
+  "spec_folder": "obsidian/002-note-db-notion-parity-build/006-link-scheme-fields/001-text-link-scheme-module",
+  "parent_id": "obsidian/002-note-db-notion-parity-build/006-link-scheme-fields",
+  "children_ids": [],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "text link scheme",
+      "assembleSchemeLinkTarget",
+      "textLinkScheme",
+      "mailto tel https hint",
+      "cell renderer delayed open",
+      "text link scheme plan",
+      "text link scheme tasks",
+      "text link scheme summary"
+    ],
+    "key_topics": [
+      "text",
+      "link",
+      "scheme",
+      "assembleschemelinktarget",
+      "textlinkscheme",
+      "mailto",
+      "tel",
+      "https",
+      "hint",
+      "cell",
+      "renderer",
+      "delayed"
+    ],
+    "importance_tier": "high",
+    "status": "planned",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "implementation-summary.md"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Text Link Scheme Module",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Parent Spec",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Handoff Criteria",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Problem Statement Notion",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Purpose Create",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Plan",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Technical Context",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Obsidian Plugin",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Overview Land",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Pattern Isolated",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Notation",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Format",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Completion Criteria",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "T003",
+        "kind": "key_phrase",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Phase 1: Setup",
+        "kind": "heading",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Summary",
+        "kind": "proper_noun",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "Spec Folder",
+        "kind": "proper_noun",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "Actual Effort",
+        "kind": "proper_noun",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "What Was Built Nothing",
+        "kind": "proper_noun",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "Notion URL / Email / Phone properties store ordinary text and differ only in click behavior",
+    "created_at": "2026-08-25T19:27:08Z",
+    "last_save_at": "2026-08-25T19:35:48.032Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "implementation-summary.md"
+    ],
+    "source_fingerprint": "sha256:3f9e299b577952f247c71ee18ae55e1bbd4d5d8110d3037cbbc1d82d46b2af7b",
+    "source_doc_hashes": {
+      "spec.md": "7332d8ed4a3d7563acd391695bee3a151050f1a8cfe3a748cd9302807c584493",
+      "plan.md": "aa9682768d957d1f93bf5b3955f124af69d371719c4718ec169fadfae4b1cdb9",
+      "tasks.md": "d1514262aac3eef1230e3d4db174251792af9899d8851ef300b09da2020a972f",
+      "implementation-summary.md": "ef40ee38ca9fbfcd03079f8592bc06bf4894a7d2f21a82cda5a1803a9bcf5937"
+    },
+    "last_active_child_id": null,
+    "last_active_at": null
+  }
+}

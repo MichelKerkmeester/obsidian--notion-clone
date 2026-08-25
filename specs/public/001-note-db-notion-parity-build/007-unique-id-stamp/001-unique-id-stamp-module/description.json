@@ -1,0 +1,25 @@
+{
+  "level": "1",
+  "specFolder": "obsidian/002-note-db-notion-parity-build/007-unique-id-stamp/001-unique-id-stamp-module",
+  "description": "The fork writes frontmatter in `planCreateEntry` (`CreateEntryPlan.ts:119-173`) but has no sequential identity allocator",
+  "keywords": [
+    "fork",
+    "writes",
+    "frontmatter",
+    "plancreateentry",
+    "createentryplan",
+    "sequential",
+    "identity",
+    "allocator"
+  ],
+  "lastUpdated": "2026-08-25T19:37:37.619Z",
+  "specId": "001",
+  "folderSlug": "unique-id-stamp-module",
+  "parentChain": [
+    "obsidian",
+    "002-note-db-notion-parity-build",
+    "007-unique-id-stamp"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": []
+}

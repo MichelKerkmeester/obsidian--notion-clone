@@ -1,0 +1,30 @@
+{
+  "updatedInIteration": 5,
+  "source": "reducer refresh after iteration 5; citations live in iterations/iteration-00N.md",
+  "findings": [
+    {"id": "F1.1", "question": "Q1", "claim": "Rollup kinds are exactly count|sum|avg|list", "citations": ["src/data/types.ts:44", "src/data/RelationRollup.ts:99,110,127-128"]},
+    {"id": "F1.2", "question": "Q1", "claim": "Rollups compute per parent row over target-database records (Notion-shaped)", "citations": ["src/data/RelationRollup.ts:24-86,66-75"]},
+    {"id": "F1.3", "question": "Q7", "claim": "Empty relation degrades to 0/null/[] without crashing", "citations": ["src/data/RelationRollup.ts:81-83,160"]},
+    {"id": "F1.4", "question": "Q3", "claim": "Rollup-of-rollup blocked; computed fields ARE valid rollup inputs", "citations": ["src/data/RelationRollup.ts:96,135-152"]},
+    {"id": "F1.5", "question": "Q7", "claim": "display-only is the DEFAULT computedSyncMode", "citations": ["src/data/ComputedSync.ts:4,41-44"]},
+    {"id": "F1.6", "question": "Q7", "claim": "Writes queue per path; rollup values never enqueue parent", "citations": ["src/data/DataSource.ts:89-117", "src/views/DatabaseView.ts:3393-3412,10351-10362"]},
+    {"id": "F1.7", "question": "Q2", "claim": "Child edits refresh Reports view via relationTargetPaths without file writes", "citations": ["src/views/DatabaseView.ts:3360-3362,2119-2158"]},
+    {"id": "F1.8", "question": "Q2", "claim": "Rollup cells render read-only via db-rollup-cell; no click-through to sources", "citations": ["src/views/CellRenderer.ts:115,301,426,460-465,656"]},
+    {"id": "F2.1", "question": "Q4", "claim": "AppFlowy has no rollup field; totals are view-level calculations", "citations": ["context/appflowy/frontend/rust-lib/flowy-database2/src/services/calculations/service.rs:17-31"]},
+    {"id": "F2.3", "question": "Q4", "claim": "AppFlowy recalcs via task scheduler + per-field cache + notifications", "citations": ["context/appflowy/frontend/rust-lib/flowy-database2/src/services/calculations/controller.rs:65,86-99,117-133,202-235"]},
+    {"id": "F2.4", "question": "Q4", "claim": "Flutter renders clickable footer CalculateCell per column", "citations": ["context/appflowy/frontend/appflowy_flutter/lib/plugins/database/grid/presentation/widgets/calculations/calculate_cell.dart:15-27"]},
+    {"id": "F3.1", "question": "Q5", "claim": "Anytype stores formulaType on ViewRelation; 13 kinds incl. median/min/max/range/percent", "citations": ["context/anytype-ts/src/ts/interface/block/dataview.ts:104-119,155", "context/anytype-ts/src/ts/model/viewRelation.ts:9,16,22"]},
+    {"id": "F3.2", "question": "Q5", "claim": "Anytype computes client-side on render; results are ephemeral state, no write-back", "citations": ["context/anytype-ts/src/ts/component/block/dataview/view/grid/foot/cell.tsx:33,55-62", "context/anytype-ts/src/ts/lib/dataview.ts:980+"]},
+    {"id": "F3.3", "question": "Q5", "claim": "Footer click-to-change-formula UX gated by relation format", "citations": ["context/anytype-ts/src/ts/component/block/dataview/view/grid/foot/cell.tsx:52-53,64-95"]},
+    {"id": "F3.4", "question": "Q5", "claim": "Anytype also lacks parent-row relation rollups — fork uniquely owns that primitive", "citations": ["context/anytype-ts/src/ts/model/content/dataview.ts:1-45"]},
+    {"id": "F4.1", "question": "Q6", "claim": "Notion taxonomy mapped to fork kinds; percent/min/max/range/date families missing on relations", "citations": ["[SOURCE: https://www.notion.com/help/relations-and-rollups]", "src/data/types.ts:44"]},
+    {"id": "F4.2", "question": "Q6", "claim": "No-rollup-of-rollup invariant holds in Notion and fork", "citations": ["[SOURCE: notion.com/help/relations-and-rollups FAQ]", "src/data/RelationRollup.ts:96"]},
+    {"id": "F4.3", "question": "Q8", "claim": "EuroFormat pattern = one module + 2 call sites; already covers rollup rendering", "citations": ["src/data/EuroFormat.ts:1-42", "src/views/CellRenderer.ts:13", "src/views/SummaryRenderer.ts:7"]},
+    {"id": "F4.4", "question": "Q2", "claim": "Footer summaries compose over numeric rollup columns (SUM..STDDEV menu)", "citations": ["src/views/SummaryRenderer.ts:76-85,423-426"]},
+    {"id": "F5.1", "question": "Q7", "claim": "computedSyncMode gates formula write-back only; rollups structurally cannot rewrite notes", "citations": ["src/views/DatabaseView.ts:10390-10392,5597-5604", "src/data/ComputedSync.ts:1-45"]},
+    {"id": "F5.2", "question": "Q7", "claim": "Formulas depending on rollups escalate sync scope to whole database (successor tripwire)", "citations": ["src/views/DatabaseView.ts getIncrementalComputedSyncPlan + hasRollupComputedDependency"]},
+    {"id": "F5.3", "question": "Q7", "claim": "Mobile uses same rollup rendering path; Platform.isMobile branches only affect popover hosting", "citations": ["src/views/CellRenderer.ts:1484-1508"]},
+    {"id": "F5.4", "question": "Q7", "claim": "Aggregation ignores currency dimension — mixed currencies sum silently", "citations": ["src/data/RelationRollup.ts:124-128", "src/data/types.ts:50"]},
+    {"id": "F5.5", "question": "Q3", "claim": "DOM fast-path patch deliberately skipped for rollup views (correctness first)", "citations": ["src/views/DatabaseView.ts tryPatchExternalTableRows early return"]}
+  ]
+}

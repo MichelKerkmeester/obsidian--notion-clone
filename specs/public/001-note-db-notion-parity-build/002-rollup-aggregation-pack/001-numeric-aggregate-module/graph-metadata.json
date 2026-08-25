@@ -1,0 +1,203 @@
+{
+  "schema_version": 1,
+  "packet_id": "obsidian/002-note-db-notion-parity-build/002-rollup-aggregation-pack/001-numeric-aggregate-module",
+  "spec_folder": "obsidian/002-note-db-notion-parity-build/002-rollup-aggregation-pack/001-numeric-aggregate-module",
+  "parent_id": "obsidian/002-note-db-notion-parity-build/002-rollup-aggregation-pack",
+  "children_ids": [],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "numeric aggregate",
+      "aggregate ts",
+      "min max median range",
+      "isNumericRollupKind",
+      "rollup config modal",
+      "vitest harness",
+      "numeric aggregate plan",
+      "aggregate module",
+      "same-diff numeric",
+      "numeric aggregate tasks",
+      "numeric aggregate summary"
+    ],
+    "key_topics": [
+      "numeric",
+      "aggregate",
+      "min",
+      "max",
+      "median",
+      "range",
+      "isnumericrollupkind",
+      "rollup",
+      "config",
+      "modal",
+      "vitest",
+      "harness"
+    ],
+    "importance_tier": "high",
+    "status": "planned",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "implementation-summary.md"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Numeric Aggregate Module",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implement Aggregate",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Parent Spec",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Handoff Criteria",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Problem Statement Rollup",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Plan",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Technical Context",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Obsidian Plugin",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Overview Land",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Notation",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Format",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Completion Criteria",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "T003",
+        "kind": "key_phrase",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Summary",
+        "kind": "proper_noun",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "Spec Folder",
+        "kind": "proper_noun",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "Actual Effort",
+        "kind": "proper_noun",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "What Was Built Nothing",
+        "kind": "proper_noun",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "Rollup columns are stuck on `count | sum | avg | list` at `src/data/types.ts:44`",
+    "created_at": "2026-08-25T18:58:57Z",
+    "last_save_at": "2026-08-25T19:05:35.189Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "implementation-summary.md"
+    ],
+    "source_fingerprint": "sha256:9985e763096e8a76d10067fd7149d94036b694733fc0936f815bf6f883316dd5",
+    "source_doc_hashes": {
+      "spec.md": "044edea748460eb7a99560b3dc4ffa436f13abcfdaaf4fe134af1832dca5a9ba",
+      "plan.md": "48518ab5e333b6e1ecbcdf1ae4ff416ce5b7c913446f664cc5cd942eaca24dd8",
+      "tasks.md": "cc48c6c288f94c090b38571642b5853aa7ca5aec2f9dea7be27f8018df75e170",
+      "implementation-summary.md": "c5847e6827a070ec80023e933cfabf01536d238fadbbfa1a5b0aa9e7815a7acd"
+    },
+    "last_active_child_id": null,
+    "last_active_at": null
+  }
+}

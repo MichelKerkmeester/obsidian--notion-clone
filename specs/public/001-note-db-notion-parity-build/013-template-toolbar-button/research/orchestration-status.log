@@ -1,0 +1,27 @@
+{"event":"started","label":"glm-5-2","index":0,"attempt":1,"at":"2026-08-25T03:55:31.867Z","gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"glm-5-2","at":"2026-08-25T03:56:32.013Z","duration_ms":60002,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"glm-5-2","at":"2026-08-25T03:57:32.015Z","duration_ms":120004,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"glm-5-2","at":"2026-08-25T03:58:32.018Z","duration_ms":180007,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"glm-5-2","at":"2026-08-25T03:59:32.021Z","duration_ms":240010,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"glm-5-2","at":"2026-08-25T04:00:32.023Z","duration_ms":300012,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"glm-5-2","at":"2026-08-25T04:01:32.025Z","duration_ms":360014,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"glm-5-2","at":"2026-08-25T04:02:32.027Z","duration_ms":420016,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"glm-5-2","at":"2026-08-25T04:03:32.030Z","duration_ms":480019,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"failed","label":"glm-5-2","index":0,"attempt":1,"at":"2026-08-25T04:03:52.324Z","duration_ms":500456,"terminal":true,"error":{"name":"Error","message":"lineage glm-5-2 violated max-iterations stop policy: stopPolicy=max-iterations requires a positive lineage iteration cap","failure_class":"exit","retry_verdict":"fatal","retryable":false,"exit_code":0,"timed_out":false,"salvage":{"salvaged":0,"failed":0}},"gauges":{"lag":0,"pending":0,"failed":1},"skippedCount":7,"slotDurationMs":500002.324958}
+{"event":"started","label":"glm-5-2","index":0,"attempt":1,"at":"2026-08-25T04:14:00.432Z","gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"glm-5-2","at":"2026-08-25T04:15:00.501Z","duration_ms":60002,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"glm-5-2","at":"2026-08-25T04:16:00.503Z","duration_ms":120004,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"glm-5-2","at":"2026-08-25T04:17:00.505Z","duration_ms":180006,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"glm-5-2","at":"2026-08-25T04:18:00.506Z","duration_ms":240007,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"glm-5-2","at":"2026-08-25T04:19:00.508Z","duration_ms":300009,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"glm-5-2","at":"2026-08-25T04:20:00.510Z","duration_ms":360011,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"glm-5-2","at":"2026-08-25T04:21:00.512Z","duration_ms":420013,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"glm-5-2","at":"2026-08-25T04:22:00.512Z","duration_ms":480013,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"glm-5-2","at":"2026-08-25T04:23:00.515Z","duration_ms":540016,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"glm-5-2","at":"2026-08-25T04:24:00.516Z","duration_ms":600017,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"glm-5-2","at":"2026-08-25T04:25:00.519Z","duration_ms":660020,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"glm-5-2","at":"2026-08-25T04:26:00.522Z","duration_ms":720023,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"glm-5-2","at":"2026-08-25T04:27:00.523Z","duration_ms":780024,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"glm-5-2","at":"2026-08-25T04:28:00.525Z","duration_ms":840026,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"timestamp_anomaly","status":"warning","severity":"warning","label":"glm-5-2","at":"2026-08-25T04:28:12.127Z","state_log":"specs/obsidian/002-note-db-notion-parity-build/013-template-toolbar-button/research/lineages/glm-5-2/deep-research-state.jsonl","window":{"start_at_iso":"2026-08-25T04:14:00.434Z","end_at_iso":"2026-08-25T04:28:12.126Z","tolerance_ms":120000},"counts":{"anomalous":12,"untimestamped":0,"unparseable":0,"total":12},"sample":[{"index":0,"reason":"before_window","timestamp":"2026-08-25T00:00:00Z","deltaMs":15120434},{"index":1,"reason":"before_window","timestamp":"2026-08-25T00:01:00Z","deltaMs":15060434},{"index":2,"reason":"before_window","timestamp":"2026-08-25T00:02:00Z","deltaMs":15000434},{"index":3,"reason":"before_window","timestamp":"2026-08-25T00:03:00Z","deltaMs":14940434},{"index":4,"reason":"before_window","timestamp":"2026-08-25T00:04:00Z","deltaMs":14880434}]}
+{"event":"completed","label":"glm-5-2","index":0,"attempt":1,"at":"2026-08-25T04:28:12.127Z","duration_ms":851695,"terminal":true,"gauges":{"lag":0,"pending":0,"failed":0},"skippedCount":13,"slotDurationMs":851214.089833}

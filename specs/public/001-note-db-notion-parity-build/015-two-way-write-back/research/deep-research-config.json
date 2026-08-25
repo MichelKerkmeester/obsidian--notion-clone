@@ -1,0 +1,115 @@
+{
+  "topic": "Perfect the \"Stored two-way write-back\" feature for the forked Note Database Obsidian plugin (fork src at /Users/michelkerkmeester/MEGA/Development/Obsidian Plugin/src) toward Notion parity. First read the bound spec folder spec.md and plan.md for the exact feature. Uncover the best UI/UX, core logic and algorithm, fork integration via the isolated-module EuroFormat pattern (new module under src plus 1-3 call-site edits, rebase-safe), edge cases, and mobile plus iCloud safety (display-only unless the spec says otherwise). Mine the two cloned reference repos under specs/obsidian/002-note-db-notion-parity-build/context for how they implement this capability, citing real path and line: AppFlowy (appflowy/frontend/rust-lib/flowy-database2 Rust grid model and appflowy/frontend/appflowy_flutter/lib/plugins/database Flutter UI) and Anytype (anytype-ts/src/ts). Also cite Notion behavior via WebFetch. Ground every finding in real source, no hand-waving. Deliverable: a ranked, evidence-cited enrichment of this feature.",
+  "researchTopic": "Perfect the \"Stored two-way write-back\" feature for the forked Note Database Obsidian plugin (fork src at /Users/michelkerkmeester/MEGA/Development/Obsidian Plugin/src) toward Notion parity. First read the bound spec folder spec.md and plan.md for the exact feature. Uncover the best UI/UX, core logic and algorithm, fork integration via the isolated-module EuroFormat pattern (new module under src plus 1-3 call-site edits, rebase-safe), edge cases, and mobile plus iCloud safety (display-only unless the spec says otherwise). Mine the two cloned reference repos under specs/obsidian/002-note-db-notion-parity-build/context for how they implement this capability, citing real path and line: AppFlowy (appflowy/frontend/rust-lib/flowy-database2 Rust grid model and appflowy/frontend/appflowy_flutter/lib/plugins/database Flutter UI) and Anytype (anytype-ts/src/ts). Also cite Notion behavior via WebFetch. Ground every finding in real source, no hand-waving. Deliverable: a ranked, evidence-cited enrichment of this feature.",
+  "maxIterations": 10,
+  "minIterations": 3,
+  "convergenceThreshold": 0.05,
+  "antiConvergence": {
+    "minIterations": 3,
+    "convergenceMode": "off",
+    "divergent": {},
+    "stopPolicy": "fail-closed"
+  },
+  "stopPolicy": "max-iterations",
+  "stuckThreshold": 3,
+  "minIdeaObservations": 2,
+  "maxDurationMinutes": 120,
+  "progressiveSynthesis": true,
+  "specFolder": "specs/obsidian/002-note-db-notion-parity-build/015-two-way-write-back",
+  "resource_map_present": false,
+  "resource_map": {
+    "emit": true
+  },
+  "createdAt": "2026-08-25T04:14:56.332Z",
+  "status": "initialized",
+  "executionMode": "auto",
+  "executor": {
+    "kind": "native",
+    "model": null,
+    "reasoningEffort": null,
+    "serviceTier": null,
+    "sandboxMode": null,
+    "timeoutSeconds": 900
+  },
+  "fanout": {
+    "executors": [
+      {
+        "kind": "cli-devin",
+        "model": "deepseek-v4-flash-max",
+        "label": "deepseek-flash-max",
+        "count": 1,
+        "iters": 10
+      }
+    ],
+    "concurrency": 1
+  },
+  "lineageTimeoutHours": 3,
+  "lineage": {
+    "sessionId": "dr-auto-015-two-way-write-back",
+    "parentSessionId": null,
+    "lineageMode": "new",
+    "allowedModes": [
+      "new",
+      "resume",
+      "restart"
+    ],
+    "deferredModes": [
+      "fork",
+      "completed-continue"
+    ],
+    "generation": 1,
+    "continuedFromRun": null
+  },
+  "reducer": {
+    "enabled": true,
+    "version": "1.0",
+    "registryFile": "research/findings-registry.json",
+    "dashboardFile": "research/deep-research-dashboard.md",
+    "strategyFile": "research/deep-research-strategy.md",
+    "machineOwnedSections": [
+      "key-questions",
+      "answered-questions",
+      "what-worked",
+      "what-failed",
+      "exhausted-approaches",
+      "ruled-out-directions",
+      "divergence-frontier",
+      "next-focus"
+    ]
+  },
+  "capabilityMatrixPath": ".opencode/skills/system-deep-loop/deep-research/assets/runtime-capabilities.json",
+  "capabilityMatrixDocPath": ".opencode/skills/system-deep-loop/deep-research/references/guides/capability-matrix.md",
+  "runtimeCapabilityResolver": ".opencode/skills/system-deep-loop/deep-research/scripts/runtime-capabilities.cjs",
+  "reducerScriptPath": ".opencode/skills/system-deep-loop/deep-research/scripts/reduce-state.cjs",
+  "pauseSentinelPath": "research/.deep-research-pause",
+  "archiveRoot": "research_archive",
+  "migrationWindowDays": 28,
+  "fileProtection": {
+    "deep-research-config.json": "immutable",
+    "deep-research-state.jsonl": "append-only",
+    "deep-research-strategy.md": "mutable",
+    "deep-research-dashboard.md": "auto-generated",
+    "findings-registry.json": "auto-generated",
+    "iteration-*.md": "write-once",
+    "research/research.md": "mutable"
+  },
+  "_optimizerManaged": {
+    "description": "Fields managed by the offline loop optimizer (042.004). See optimizer-manifest.json for the canonical tunable/locked field registry.",
+    "manifestPath": ".opencode/skills/system-spec-kit/scripts/optimizer/optimizer-manifest.json",
+    "tunableFields": [
+      "convergenceThreshold",
+      "stuckThreshold",
+      "maxIterations"
+    ],
+    "lockedFields": [
+      "lineage",
+      "reducer",
+      "fileProtection",
+      "sessionId",
+      "status",
+      "antiConvergence.convergenceMode",
+      "antiConvergence.stopPolicy"
+    ],
+    "promotionMode": "advisory-only"
+  }
+}

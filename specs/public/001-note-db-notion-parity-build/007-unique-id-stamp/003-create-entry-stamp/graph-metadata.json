@@ -1,0 +1,213 @@
+{
+  "schema_version": 1,
+  "packet_id": "obsidian/002-note-db-notion-parity-build/007-unique-id-stamp/003-create-entry-stamp",
+  "spec_folder": "obsidian/002-note-db-notion-parity-build/007-unique-id-stamp/003-create-entry-stamp",
+  "parent_id": "obsidian/002-note-db-notion-parity-build/007-unique-id-stamp",
+  "children_ids": [],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "create entry unique id",
+      "planCreateEntry stamp",
+      "stampUniqueId",
+      "core-template allocate once",
+      "unique id rollback",
+      "paste unique id",
+      "create entry stamp plan",
+      "create entry stamp tasks",
+      "create entry stamp summary"
+    ],
+    "key_topics": [
+      "entry",
+      "unique",
+      "plancreateentry",
+      "stamp",
+      "stampuniqueid",
+      "core-template",
+      "allocate",
+      "rollback",
+      "paste",
+      "plan",
+      "tasks",
+      "summary"
+    ],
+    "importance_tier": "high",
+    "status": "planned",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "implementation-summary.md"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Entry Unique",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Parent Spec",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Handoff Criteria",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Problem Statement Even",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Purpose Stamp",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Plan",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Technical Context",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Obsidian Plugin",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Overview Call",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Key Components",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Notation",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Format",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Completion Criteria",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "paired",
+        "kind": "key_phrase",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "a",
+        "kind": "key_phrase",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Summary",
+        "kind": "proper_noun",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "Spec Folder",
+        "kind": "proper_noun",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "Actual Effort",
+        "kind": "proper_noun",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "What Was Built Nothing",
+        "kind": "proper_noun",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "Even after children 001–002, creates never allocate",
+    "created_at": "2026-08-25T19:30:00Z",
+    "last_save_at": "2026-08-25T19:36:38.657Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "implementation-summary.md"
+    ],
+    "source_fingerprint": "sha256:24ef9fa95105d730a4d2b5675ffab4d7e1e1e8f3bd870a7f8502886ae4c512fe",
+    "source_doc_hashes": {
+      "spec.md": "e4fdd19d69aeacaa16c81ba1c6553f40108279d2a3a44b0ac79db1e5abf813cc",
+      "plan.md": "8243de5fbd107337f3f429a9124bc2eb8adab97f3ded80c012bff4c3bf81621a",
+      "tasks.md": "c46d7a5b056ad2a4fa20f71355c67dfb460874c9aed5d802ad2be9149b91b514",
+      "implementation-summary.md": "95024ce0171e0b9514b20bda9a47b8c9712715188af289a7be8c2fccc2ad066f"
+    },
+    "last_active_child_id": null,
+    "last_active_at": null
+  }
+}

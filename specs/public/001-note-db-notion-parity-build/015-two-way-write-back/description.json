@@ -1,0 +1,30 @@
+{
+  "level": "1",
+  "specFolder": "obsidian/002-note-db-notion-parity-build/015-two-way-write-back",
+  "description": "The Wave 6 question was whether to port Notion's two-way relations into the note-database fork as stored dual frontmatter mirrors — i.e., on every",
+  "keywords": [
+    "wave",
+    "question",
+    "whether",
+    "port",
+    "notion",
+    "two-way",
+    "relations",
+    "note-database",
+    "fork",
+    "stored",
+    "dual",
+    "frontmatter",
+    "mirrors",
+    "every"
+  ],
+  "lastUpdated": "2026-08-25T11:07:58.021Z",
+  "specId": "015",
+  "folderSlug": "two-way-write-back",
+  "parentChain": [
+    "obsidian",
+    "002-note-db-notion-parity-build"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": []
+}

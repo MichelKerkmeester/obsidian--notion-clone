@@ -1,0 +1,24 @@
+{
+  "level": "1",
+  "specFolder": "obsidian/002-note-db-notion-parity-build/001-live-reports-rollups/001-reports-relation-wiring",
+  "description": "Notion exposes both directions (Reports.Expenses (R) ↔ child Month)",
+  "keywords": [
+    "notion",
+    "exposes",
+    "directions",
+    "reports",
+    "expenses",
+    "child",
+    "month"
+  ],
+  "lastUpdated": "2026-08-25T19:15:29.597Z",
+  "specId": "001",
+  "folderSlug": "reports-relation-wiring",
+  "parentChain": [
+    "obsidian",
+    "002-note-db-notion-parity-build",
+    "001-live-reports-rollups"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": []
+}

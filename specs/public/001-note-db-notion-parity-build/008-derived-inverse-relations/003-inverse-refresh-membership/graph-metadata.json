@@ -1,0 +1,212 @@
+{
+  "schema_version": 1,
+  "packet_id": "obsidian/002-note-db-notion-parity-build/008-derived-inverse-relations/003-inverse-refresh-membership",
+  "spec_folder": "obsidian/002-note-db-notion-parity-build/008-derived-inverse-relations/003-inverse-refresh-membership",
+  "parent_id": "obsidian/002-note-db-notion-parity-build/008-derived-inverse-relations",
+  "children_ids": [],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "inverse refresh membership",
+      "sourceDatabaseIds",
+      "relationTargetDatabases",
+      "handleDataChangeBatch inverse",
+      "buildRowsWithRelations",
+      "inverse refresh plan",
+      "inverse refresh tasks",
+      "inverse refresh summary"
+    ],
+    "key_topics": [
+      "inverse",
+      "refresh",
+      "membership",
+      "sourcedatabaseids",
+      "relationtargetdatabases",
+      "handledatachangebatch",
+      "buildrowswithrelations",
+      "plan",
+      "tasks",
+      "summary",
+      "refreshes",
+      "relationtargetpaths"
+    ],
+    "importance_tier": "high",
+    "status": "planned",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "implementation-summary.md"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Inverse Refresh Membership",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Parent Spec",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Handoff Criteria",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Problem Statement",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Purpose After",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Plan",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Technical Context",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Obsidian Plugin",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Overview Hunk",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Open Report",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Notation",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Format",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Completion Criteria",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "the",
+        "kind": "key_phrase",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "a Report",
+        "kind": "key_phrase",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Summary",
+        "kind": "proper_noun",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "Spec Folder",
+        "kind": "proper_noun",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "Actual Effort",
+        "kind": "proper_noun",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "What Was Built Nothing",
+        "kind": "proper_noun",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "`handleDataChangeBatch` refreshes when `relationTargetPaths.has(change.path)` or the record matches `relationTargetDatabases` (`DatabaseView.ts:2120-2128`)",
+    "created_at": "2026-08-25T19:36:49Z",
+    "last_save_at": "2026-08-25T19:44:05.167Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "implementation-summary.md"
+    ],
+    "source_fingerprint": "sha256:52bf208640b7e79f7816a090a9fa976ff446dd631b142ee8f124397793306386",
+    "source_doc_hashes": {
+      "spec.md": "a950fa91b99424ceec7fb09f5d7e973c178f877fa288d31713bed2b0cf8f1fca",
+      "plan.md": "2c950b05a7e48172a3a82318e8dd55be7f27965363992d1fba11a5050e1fd2b2",
+      "tasks.md": "7c144673a3fca6e9de9ad3bd178304f59af2fd345ba54afaba449ac87b7bf9d9",
+      "implementation-summary.md": "1d00224b98d511565529dc2e2c64ece7c0d3d43bac7ad5859e1a86a3e9387a34"
+    },
+    "last_active_child_id": null,
+    "last_active_at": null
+  }
+}

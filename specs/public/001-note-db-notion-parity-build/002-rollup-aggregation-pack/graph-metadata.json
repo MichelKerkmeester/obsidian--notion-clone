@@ -1,0 +1,227 @@
+{
+  "schema_version": 1,
+  "packet_id": "obsidian/002-note-db-notion-parity-build/002-rollup-aggregation-pack",
+  "spec_folder": "obsidian/002-note-db-notion-parity-build/002-rollup-aggregation-pack",
+  "parent_id": "obsidian/002-note-db-notion-parity-build",
+  "children_ids": [
+    "obsidian/002-note-db-notion-parity-build/002-rollup-aggregation-pack/001-numeric-aggregate-module",
+    "obsidian/002-note-db-notion-parity-build/002-rollup-aggregation-pack/002-date-aggregation-pack",
+    "obsidian/002-note-db-notion-parity-build/002-rollup-aggregation-pack/003-percent-aggregation-pack"
+  ],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "rollup aggregation",
+      "aggregate ts",
+      "min max median",
+      "earliest latest",
+      "percent empty",
+      "summary footer math",
+      "chart aggregation",
+      "notion rollup parity",
+      "aggregate module",
+      "numeric pack",
+      "date pack",
+      "percent pack"
+    ],
+    "key_topics": [
+      "rollup",
+      "aggregation",
+      "aggregate",
+      "min",
+      "max",
+      "median",
+      "earliest",
+      "latest",
+      "percent",
+      "empty",
+      "summary",
+      "footer"
+    ],
+    "importance_tier": "high",
+    "status": "planned",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "checklist.md",
+      "implementation-summary.md",
+      "research/synthesis.md",
+      "research/research.md"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "checklist.md",
+        "kind": "doc",
+        "path": "checklist.md",
+        "source": "derived"
+      },
+      {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "synthesis.md",
+        "kind": "doc",
+        "path": "research/synthesis.md",
+        "source": "derived"
+      },
+      {
+        "name": "research.md",
+        "kind": "doc",
+        "path": "research/research.md",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Rollup Aggregation Pack",
+        "kind": "proper_noun",
+        "path": "research/research.md",
+        "source": "derived"
+      },
+      {
+        "name": "Problem Statement The",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Purpose Build",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "In Scope",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "File Path",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Plan",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Technical Context",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Obsidian Plugin",
+        "kind": "proper_noun",
+        "path": "research/research.md",
+        "source": "derived"
+      },
+      {
+        "name": "Overview This",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Key Components",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Notation",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Format",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Task",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Historical Notion",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Unit Tests",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Verification Checklist",
+        "kind": "proper_noun",
+        "path": "checklist.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "The fork's rollup columns are stuck on four kinds — `count | sum | avg | list` (`src/data/types.ts:44`) — while Notion exposes ~18 rollup calculations (9 universal + 6 number-only + 3 date-only)",
+    "created_at": "2026-08-24T17:58:29.331Z",
+    "last_save_at": "2026-08-25T19:05:35.954Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "checklist.md",
+      "implementation-summary.md",
+      "research/research.md"
+    ],
+    "source_fingerprint": "sha256:3eb808ed6d6e7e52085b9f50ba2879906c2d9ce27e6bbc1c2d3005f8fe8f82a3",
+    "source_doc_hashes": {
+      "spec.md": "796d18807c2ee80bb7402746afb1c20a61cf394107a84f5449b25a74d775513c",
+      "plan.md": "52743b5b0162605c6ac20c9b763539c84ee9d1e7a0dda33629dff239b049b7fd",
+      "tasks.md": "997511c4753be3bbeec127cedb3a62be6b3316cbe671a25c0509c94c34e02f2c",
+      "checklist.md": "ca19c62871e549b9a8f1c869045841d840ee6fff8d3560a5efc66daea5ba358e",
+      "implementation-summary.md": "7e49b9c5d31b05ff1edeef6d7dcb07a78bd35c008a20a2636dde53447b0abff7",
+      "research/research.md": "13f52a74afec75e4276199877df53c2b52e6314e0ad11440d55839a79f49d7b4"
+    },
+    "last_active_child_id": "obsidian/002-note-db-notion-parity-build/002-rollup-aggregation-pack/003-percent-aggregation-pack",
+    "last_active_at": null
+  }
+}

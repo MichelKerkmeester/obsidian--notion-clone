@@ -1,0 +1,16 @@
+{"event":"started","label":"deepseek-flash-max","index":0,"attempt":1,"at":"2026-08-25T03:20:12.014Z","gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"deepseek-flash-max","at":"2026-08-25T03:21:12.087Z","duration_ms":60002,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"deepseek-flash-max","at":"2026-08-25T03:22:12.089Z","duration_ms":120004,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"deepseek-flash-max","at":"2026-08-25T03:23:12.092Z","duration_ms":180007,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"deepseek-flash-max","at":"2026-08-25T03:24:12.094Z","duration_ms":240009,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"deepseek-flash-max","at":"2026-08-25T03:25:12.100Z","duration_ms":300015,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"deepseek-flash-max","at":"2026-08-25T03:26:12.105Z","duration_ms":360020,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"deepseek-flash-max","at":"2026-08-25T03:27:12.107Z","duration_ms":420022,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"deepseek-flash-max","at":"2026-08-25T03:28:12.108Z","duration_ms":480023,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"deepseek-flash-max","at":"2026-08-25T03:29:12.108Z","duration_ms":540023,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"deepseek-flash-max","at":"2026-08-25T03:30:12.110Z","duration_ms":600025,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"deepseek-flash-max","at":"2026-08-25T03:31:12.111Z","duration_ms":660026,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"deepseek-flash-max","at":"2026-08-25T03:32:12.111Z","duration_ms":720026,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"deepseek-flash-max","at":"2026-08-25T03:33:12.112Z","duration_ms":780027,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"timestamp_anomaly","status":"warning","severity":"warning","label":"deepseek-flash-max","at":"2026-08-25T03:33:36.400Z","state_log":"specs/obsidian/002-note-db-notion-parity-build/007-unique-id-stamp/research/lineages/deepseek-flash-max/deep-research-state.jsonl","window":{"start_at_iso":"2026-08-25T03:20:12.016Z","end_at_iso":"2026-08-25T03:33:36.400Z","tolerance_ms":120000},"counts":{"anomalous":9,"untimestamped":1,"unparseable":0,"total":13},"sample":[{"index":4,"reason":"after_window","timestamp":"2026-08-25T03:36:00Z","deltaMs":23600},{"index":5,"reason":"after_window","timestamp":"2026-08-25T03:42:00Z","deltaMs":383600},{"index":6,"reason":"after_window","timestamp":"2026-08-25T03:48:00Z","deltaMs":743600},{"index":7,"reason":"after_window","timestamp":"2026-08-25T03:54:00Z","deltaMs":1103600},{"index":8,"reason":"after_window","timestamp":"2026-08-25T04:00:00Z","deltaMs":1463600}]}
+{"event":"completed","label":"deepseek-flash-max","index":0,"attempt":1,"at":"2026-08-25T03:33:36.401Z","duration_ms":804386,"terminal":true,"gauges":{"lag":0,"pending":0,"failed":0},"skippedCount":12,"slotDurationMs":803014.03425}

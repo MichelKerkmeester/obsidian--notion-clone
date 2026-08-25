@@ -1,0 +1,57 @@
+# Final Plan: Toolbar New-From-Template Button
+> Reviewed & optimized build plan, from a fresh Grok 4.6 (xhigh-fast) review of this phase's rewritten spec/plan/tasks/checklist plus its synthesis and research.
+
+## Review — strengths, gaps, risks
+
+**Solid.** The diagnosis is right and the engine work is correctly forbidden. `renderNewButton` already calls `actions.createEntry()` with no args (`src/views/ToolbarRenderer.ts:1683-1691`), which reaches `createBlankEntry` → `loadNewRecordTemplate` → `buildCreateEntryPlan` / `planCreateEntry` (`src/views/DatabaseView.ts:3528-3538, 3673-3679`). Research F1.1: the gap is labeling, not a second create path. `NewRecordTemplateConfig` is a single `{ path, engine }` (`src/data/types.ts:154-157, 279`), so split-button / multi-template / inline “+ New template” are correctly `[B]`. EuroFormat isolation (`src/data/EuroFormat.ts:1-42`) fits: a pure decision module plus three view hosts. `confirmWithModal` is already imported (`DatabaseView.ts:96`, `RowMenu.ts:6`) and cancel/onClose is a no-write (`ConfirmModal.ts:40, 56-58`). Empty-path, missing-file, chart/read-only/calendar guards, and iCloud “one `createNote` per confirmed click” (`DatabaseView.ts:3561-3567`) are specified tightly.
+
+**Wrong sequencing / redundant tasks.** T004 already exports `getNewFromTemplateTooltip`; T009 is the same work restated. T027 (phone-density) is ranked #4 in `research/synthesis.md` and is a 3-line branch inside `renderNewButton` using the existing `isPhoneLayout()` (`ToolbarRenderer.ts:285-287`); parking it `[B]` while shipping a longer label onto the phone title-row + toolbar (`:236` and `:282`) is the overflow failure the synthesis flagged.
+
+**Correctness trap — double create.** The locked algorithm says `executeNewFromTemplate` itself calls `createEntry()` (`research/synthesis.md` step 4). Call-site prose in spec/plan/tasks says `onclick → executeNewFromTemplate then actions.createEntry()`. An implementer who follows both writes two notes per click. The module must be the only caller.
+
+**Correctness trap — confirm result type.** `confirmWithModal` returns `Promise<boolean | string>` (`ConfirmModal.ts:69-71`). `if (!ok) return` treats a secondary-button string as success. Branch on `ok === true`.
+
+**Confirm is mis-scoped as the default.** REQ-004 is vault-friction, not parity (synthesis item 3). Today’s unlabeled **New** already creates with no modal. Overlay suppression already exists (`DatabaseView.ts:845-850, 552-554`). Adding a modal only when a template is set makes the discoverability control *more* expensive than the blank path. That is a product regression. Overlay guard is the in-budget double-click mitigation; confirm is optional.
+
+**Row-menu empty state is a UX leak.** Spec Q4 would show an adaptive **New** on the row menu when no template is set. Insert above/below already create (`RowMenu.ts:58-74`) with positional `createEntry(defaults, position)`. A no-arg `createEntry?.()` is a worse duplicate, not a twin. Toolbar REQ-001 (visible with zero templates) does not require the row-menu item to lie.
+
+**Dead API.** `shouldShowNewFromTemplate` is exported but visibility is inherited (`!isReadOnly && !isChartView` at `ToolbarRenderer.ts:236, 282`; row-menu calendar/timeline guard at `RowMenu.ts:54-58`). Do not ship it. `shouldConfirmNewFromTemplate` inlines to `confirmEnabled && hasRecordTemplate`.
+
+**Effort.** ~3.5h / S is fair once T009 is merged and confirm is optional. It is not fair if confirm injection plus a second create path are allowed to sprawl.
+
+## Optimizations
+
+1. **Single create caller.** `onclick` is only `void executeNewFromTemplate({ config, confirmEnabled, confirm, createEntry: () => actions.createEntry() })`. Hosts never call `createEntry` afterwards.
+2. **Defer REQ-004.** Ship the adaptive label + row-menu twin first. Overlay guard stays the double-click backstop. If the operator later wants confirm, inject `confirmCreate` from `DatabaseView` (toolbar has no `App`) and reuse `RowMenu`’s existing `confirmWithModal`; put title/message on the module as `getNewFromTemplateConfirmCopy(config)`.
+3. **Fold T009 + T027 into the toolbar call site.** Phone + template → icon `file-plus-2` only, `aria-label` / `title` stay the full string. Desktop keeps the full label.
+4. **Row-menu item only when `hasRecordTemplate(config)`.** Toolbar still shows **New** with zero templates (REQ-001 / SC-005).
+5. **Do not add a DatabaseView pass-through for the toolbar label.** `ToolbarRenderer.render` already has `currentDb` (`ToolbarRenderer.ts:137`). Pass it into `renderNewButton` internally at `:236` and `:282`. DatabaseView’s toolbar hunk is confirm-only; if confirm is deferred, DatabaseView only wires `getDatabaseConfig` on the RowMenu ctor (`:555-567`).
+6. **Keep locked-out items 6–10 `[B]`.** Schema + call-site budget still forbid them (`types.ts:154-157`; `ViewConfigPanelRenderer.ts:420-477`).
+7. **Treat i18n as data, not a 4th call site** — unchanged.
+
+## Final build plan (ordered)
+
+1. **Setup re-read (no code)** — `RecordTemplate.ts:51-57`, `DatabaseView.ts:845-856, 3528-3573, 3673-3679`, `ToolbarRenderer.ts:236, 282, 1683-1691`, `RowMenu.ts:6, 54-75`, `ConfirmModal.ts:13-71`, `EuroFormat.ts:1-42`. **Effort S.** **Accept:** create-with-defaults is already on **New**; no second engine queued. **Deps:** none.
+
+2. **Create `src/data/TemplateToolbarAction.ts`** — EuroFormat-shaped: import `t` from `../i18n`, `DatabaseConfig` from `./types`; no `src/views/` imports. Export `hasRecordTemplate` (`!!config?.newRecordTemplate?.path`), `getNewFromTemplateLabel`, `getNewFromTemplateTooltip` (full `newRecordTemplate.path`), `executeNewFromTemplate`. `executeNewFromTemplate({ config, confirmEnabled, confirm, createEntry })`: if `confirmEnabled && hasRecordTemplate(config)`, `await confirm()` and return unless `=== true`; then `createEntry()` once. No network, no timers, no `Menu`. **Effort S.** **Accept:** cancel/`false`/`undefined` writes nothing; a unit-level table of (no template / template+confirm true / template+confirm false) covers the branch. **Deps:** step 1.
+
+3. **i18n data** — `src/i18n.ts` near `toolbar.new` (`:177` en; zh-CN/zh-TW peers). Add `toolbar.newFromTemplate`, `toolbar.newFromTemplateTooltip` (`{path}`), `menu.newFromTemplate`. Add `toolbar.confirmNewFromTemplate` only if step 7 ships. `t("common.create")` already exists (`:134`). **Effort S.** **Accept:** all three locales resolve; no missing-key fallback in the UI. **Deps:** step 2.
+
+4. **Call site 1 — `src/views/ToolbarRenderer.ts`** — Import the module. Change `renderNewButton(toolbar, actions, currentDb?)` (`:1683-1691`). Pass `currentDb` from `render()` at `:236` and `:282`. Adaptive: template → `t("toolbar.newFromTemplate")` + `file-plus-2` + tooltip/aria-label from `getNewFromTemplateTooltip`; else keep `t("toolbar.new")` + `plus`. If `isPhoneLayout()` (`:285-287`) and template set, omit the visible text span; keep aria-label/title. `onclick` = `void executeNewFromTemplate({ config: currentDb, confirmEnabled: false, confirm: async () => true, createEntry: () => actions.createEntry() })` until step 7. Do not extend `ToolbarActions` unless confirm ships. **Effort S.** **Accept:** desktop template DB shows **New from template** + path tooltip; zero-template stays **New**; chart/read-only still hidden by existing guards (`:236, 282`); phone template control is icon-only and still clicks through the existing create path. **Deps:** steps 2–3.
+
+5. **Call site 2 — `src/views/RowMenu.ts`** — Import module + `DatabaseConfig`. Add `getDatabaseConfig?: () => DatabaseConfig | undefined`. After the insert separator (`:75`), inside `!isReadOnly` and `viewType !== "calendar" && viewType !== "timeline"` (`:54-58`), add the item **only if** `hasRecordTemplate(getDatabaseConfig?.())`. Icon `file-plus-2`, title `getNewFromTemplateLabel`, tooltip path. `onClick` = `void executeNewFromTemplate({ ..., createEntry: () => this.actions.createEntry?.() })` with no extra `createEntry` after. Do not pass insert `position` (this is not insert-above/below). **Effort S.** **Accept:** item present on table/board/gallery/list with a template; absent with zero templates, on calendar/timeline, and when read-only. **Deps:** steps 2–3.
+
+6. **Call site 3 — `src/views/DatabaseView.ts` (RowMenu ctor `:555-567`)** — Add `getDatabaseConfig: () => this.getActiveDb()` (`getActiveDb` at `:783-786`). `newRecordTemplate` lives on `DatabaseConfig` (`types.ts:279`), not on `ViewConfig` (`getConfig()` at `:794-796`). No new import. Do not touch `RecordTemplate.ts`, `CreateEntryPlan.ts`, `ViewConfigPanelRenderer.ts`. **Effort S.** **Accept:** row-menu item sees the active DB’s template path; diff is still three files + i18n. **Deps:** step 5.
+
+7. **Optional REQ-004 (skip unless operator overrides)** — Extend `ToolbarActions` with `confirmNewFromTemplate?` + `confirmCreate?`. DatabaseView toolbar actions (`:1902` region): `confirmNewFromTemplate: true`, `confirmCreate: () => confirmWithModal(this.app, { title, message: getNewFromTemplateConfirmCopy(db), confirmText: t("common.create") })`. RowMenu uses its existing import (`:6`) with the same copy. Enable confirm only when `hasRecordTemplate`. **Effort S.** **Accept:** cancel/onClose → zero writes (`ConfirmModal.ts:40, 56-58`); `ok === true` is the only proceed path. **Deps:** steps 4–6.
+
+8. **Verify** — Desktop: template click creates one row via `createBlankEntry`; `{{date}}` / `{{title}}` still from `resolveCoreRecordTemplate` (`RecordTemplate.ts:51-57`) / `runTemplaterOnCreatedFile` (`DatabaseView.ts:3568-3573`). Zero-template click still creates (`loadNewRecordTemplate` returns `undefined` at `:3674-3675`). Missing template file: existing `t("template.missing")` / `t("template.loadFailed")` (`:3677, 3539-3542`); no pre-click vault read. Two rapid clicks: overlay guard only. Mobile: `createEl("button")` + `setUseNativeMenu(false)` (`RowMenu.ts:45`). Diff: one new `src/data/` file, three hosts, i18n data; grep shows no `fetch` / `setInterval` / webhook. **Effort S.** **Deps:** steps 4–6 (and 7 if shipped).
+
+## Risks & open decisions
+
+- **REQ-004 confirm now vs later.** Default: **defer**. Today’s **New** is already a one-click write; overlay guard (`DatabaseView.ts:845-850`) is the double-click backstop; a template-only modal is anti-parity friction. Ship only if accidental templated creates in the finance vault hurt more than an extra click. Record the choice in `implementation-summary.md`.
+- **Row-menu item with zero templates.** Default: **hide**. Toolbar stays visible (REQ-001). Showing **New** next to insert above/below duplicates a worse create. Override only if the operator wants a discoverability twin even when it labels a blank create.
+- **Tooltip = full vault path vs basename.** Default: **full path** (that is the config key). Shorten later with no schema change if noisy.
+- **Double-create regression.** Default: module is the only `createEntry` caller. Treat “then `actions.createEntry()`” in the current spec/plan as a drafting error, not an instruction.
+- **Phone overflow.** Default: **icon-only on `body.is-phone` when a template is set**, full string on `aria-label`/`title`. Do not wait for a follow-up packet.
+- **Split-button / multi-template / scheduler / network buttons.** Default: **do not build**. Revisit only with a `NewRecordTemplateConfig` schema change and a new packet. Recurrence stays on duplicate-row (`RowMenu.ts:89-92`).

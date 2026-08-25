@@ -1,0 +1,219 @@
+{
+  "schema_version": 1,
+  "packet_id": "obsidian/002-note-db-notion-parity-build/003-reports-computed-fields/003-reports-display-proof",
+  "spec_folder": "obsidian/002-note-db-notion-parity-build/003-reports-computed-fields/003-reports-display-proof",
+  "parent_id": "obsidian/002-note-db-notion-parity-build/003-reports-computed-fields",
+  "children_ids": [],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "reports display proof",
+      "known pair remaining",
+      "empty month dash",
+      "mistype Incme",
+      "report note hash",
+      "engine freeze",
+      "reports display proof plan",
+      "known pair",
+      "empty month",
+      "reports display proof tasks",
+      "reports display proof checklist",
+      "reports display proof summary"
+    ],
+    "key_topics": [
+      "reports",
+      "display",
+      "proof",
+      "known",
+      "pair",
+      "remaining",
+      "empty",
+      "month",
+      "dash",
+      "mistype",
+      "incme",
+      "report"
+    ],
+    "importance_tier": "high",
+    "status": "planned",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "checklist.md",
+      "implementation-summary.md"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "checklist.md",
+        "kind": "doc",
+        "path": "checklist.md",
+        "source": "derived"
+      },
+      {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Reports Display Proof",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Prove Remaining",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Parent Spec",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Handoff Criteria",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Problem Statement Without",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Plan",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Technical Context",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Obsidian Reports",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Manual Reports",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Overview Final",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Notation",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Format",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Proofs",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Completion Criteria",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "live Income",
+        "kind": "key_phrase",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Verification Checklist",
+        "kind": "proper_noun",
+        "path": "checklist.md",
+        "source": "derived"
+      },
+      {
+        "name": "Verification Protocol",
+        "kind": "proper_noun",
+        "path": "checklist.md",
+        "source": "derived"
+      },
+      {
+        "name": "Completion Impact",
+        "kind": "proper_noun",
+        "path": "checklist.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "Without the locked proofs, Remaining can “pass” while showing `0` on empty months",
+    "created_at": "2026-08-25T19:12:38Z",
+    "last_save_at": "2026-08-25T19:21:32.238Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "checklist.md",
+      "implementation-summary.md"
+    ],
+    "source_fingerprint": "sha256:5b87614964d4958a1d8251557f603e7501c93d81a11c3f384616c0f9b8d3b816",
+    "source_doc_hashes": {
+      "spec.md": "7d7b614a343f347ce60534d190ddb38ea926ad0a9cc201147052d8fdc360ef73",
+      "plan.md": "e151e0ce6f1e40050f2eb816f17cdd818b87ffacd20aeb37ead64b89962ff828",
+      "tasks.md": "d306d7ef86e7c196828520c6ea3d25cabccea8744e932f1fe4e635dd46f5484d",
+      "checklist.md": "b944f4b74d54afb3e2fc7fe25c98cd4175f88c67150fac355cfebf825fa13308",
+      "implementation-summary.md": "c44b13b2a8255907d6f98b5b0c5973af980e48042d6aaf08a4e34f211c776f36"
+    },
+    "last_active_child_id": null,
+    "last_active_at": null
+  }
+}

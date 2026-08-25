@@ -1,0 +1,222 @@
+{
+  "schema_version": 1,
+  "packet_id": "obsidian/002-note-db-notion-parity-build/009-view-filter-tree",
+  "spec_folder": "obsidian/002-note-db-notion-parity-build/009-view-filter-tree",
+  "parent_id": "obsidian/002-note-db-notion-parity-build",
+  "children_ids": [],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "view filter",
+      "nested and or",
+      "filter tree",
+      "filter groups",
+      "filter panel",
+      "filter parity",
+      "applyfiltertree",
+      "and or filters",
+      "checklist",
+      "implementation summary"
+    ],
+    "key_topics": [
+      "view",
+      "filter",
+      "nested",
+      "tree",
+      "groups",
+      "panel",
+      "parity",
+      "applyfiltertree",
+      "filters",
+      "checklist",
+      "implementation",
+      "summary"
+    ],
+    "importance_tier": "high",
+    "status": "planned",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "checklist.md",
+      "implementation-summary.md",
+      "research/synthesis.md",
+      "research/research.md",
+      "research/final-plan.md"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "checklist.md",
+        "kind": "doc",
+        "path": "checklist.md",
+        "source": "derived"
+      },
+      {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "synthesis.md",
+        "kind": "doc",
+        "path": "research/synthesis.md",
+        "source": "derived"
+      },
+      {
+        "name": "research.md",
+        "kind": "doc",
+        "path": "research/research.md",
+        "source": "derived"
+      },
+      {
+        "name": "final-plan.md",
+        "kind": "doc",
+        "path": "research/final-plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "View Filter Tree",
+        "kind": "proper_noun",
+        "path": "research/research.md",
+        "source": "derived"
+      },
+      {
+        "name": "Problem Statement View",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Purpose Close",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "In Scope",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Change All",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Plan",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Technical Context",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Overview This",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Pattern Recursive",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Locked Module",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Notation",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Format",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Acceptance Checks",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Unit Tests",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Verify Kleene",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "View filters today are a flat `FilterRule[]` with a single global `filterLogic` (`and` | `or`) applied uniformly across every rule (`QueryEngine.ts:74-89`)",
+    "created_at": "2026-08-24T17:58:43.513Z",
+    "last_save_at": "2026-08-25T14:22:20.724Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "checklist.md",
+      "implementation-summary.md",
+      "research/research.md"
+    ],
+    "source_fingerprint": "sha256:eb90127628b186150dd230ed3165ce0e0e0d29a9eb0bb5e9119a8251858be924",
+    "source_doc_hashes": {
+      "spec.md": "ada6e530129bcbe7920c853a1f14ac4cbea9f4fac50c36209dfa9d63e7087f87",
+      "plan.md": "2852a3ae622dd96c33fe79b803986546bf1090e127d7ce623a0f98079c1308f1",
+      "tasks.md": "24cde7e353872c875b0a592bd6b598f5c2617233ef9eaaef840a63da2b7ab5bb",
+      "checklist.md": "c5ff33b62ab6b808c1495aab8a334f7513ea4c9e6ca8936afcb12f2529421b2c",
+      "implementation-summary.md": "ae27b2f14cc6242be286d4a4dab135f1e14ca8a0687641ab209316f96ec0d96d",
+      "research/research.md": "6ee5f1d994f1abf05bf547c5ae4a2374bd9695fe077bf1b27e49b2e3670e83cc"
+    },
+    "last_active_child_id": null,
+    "last_active_at": null
+  }
+}

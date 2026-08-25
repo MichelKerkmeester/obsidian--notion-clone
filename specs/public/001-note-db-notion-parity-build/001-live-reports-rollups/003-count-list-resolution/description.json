@@ -1,0 +1,28 @@
+{
+  "level": "1",
+  "specFolder": "obsidian/002-note-db-notion-parity-build/001-live-reports-rollups/003-count-list-resolution",
+  "description": "A wrong amount key or empty relation is UI-indistinguishable from \"no children\" (`emptyRollupValue` → COUNT `0`, SUM `null`,",
+  "keywords": [
+    "wrong",
+    "amount",
+    "key",
+    "empty",
+    "relation",
+    "ui-indistinguishable",
+    "children",
+    "emptyrollupvalue",
+    "count",
+    "sum",
+    "null"
+  ],
+  "lastUpdated": "2026-08-25T19:17:42.498Z",
+  "specId": "003",
+  "folderSlug": "count-list-resolution",
+  "parentChain": [
+    "obsidian",
+    "002-note-db-notion-parity-build",
+    "001-live-reports-rollups"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": []
+}

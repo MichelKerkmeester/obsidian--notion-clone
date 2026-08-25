@@ -1,0 +1,27 @@
+{
+  "level": "2",
+  "specFolder": "obsidian/002-note-db-notion-parity-build/007-unique-id-stamp",
+  "description": "The note-database fork creates rows through `planCreateEntry` in `src/data/CreateEntryPlan.ts` and writes frontmatter, but it never allocates a",
+  "keywords": [
+    "note-database",
+    "fork",
+    "rows",
+    "plancreateentry",
+    "src",
+    "data",
+    "createentryplan",
+    "writes",
+    "frontmatter",
+    "never",
+    "allocates"
+  ],
+  "lastUpdated": "2026-08-25T19:31:40.618Z",
+  "specId": "007",
+  "folderSlug": "unique-id-stamp",
+  "parentChain": [
+    "obsidian",
+    "002-note-db-notion-parity-build"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": []
+}

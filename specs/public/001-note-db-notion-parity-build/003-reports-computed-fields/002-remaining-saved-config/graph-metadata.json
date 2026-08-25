@@ -1,0 +1,216 @@
+{
+  "schema_version": 1,
+  "packet_id": "obsidian/002-note-db-notion-parity-build/003-reports-computed-fields/002-remaining-saved-config",
+  "spec_folder": "obsidian/002-note-db-notion-parity-build/003-reports-computed-fields/002-remaining-saved-config",
+  "parent_id": "obsidian/002-note-db-notion-parity-build/003-reports-computed-fields",
+  "children_ids": [],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "remaining saved config",
+      "saveFormula",
+      "computed fields yaml",
+      "columnOrder remaining",
+      "display-only sync",
+      "null-guard remaining",
+      "remaining saved config plan",
+      "flattened computedFields",
+      "display-only pin",
+      "remaining saved config tasks",
+      "columnOrder",
+      "remaining saved config summary"
+    ],
+    "key_topics": [
+      "remaining",
+      "saved",
+      "config",
+      "saveformula",
+      "computed",
+      "fields",
+      "yaml",
+      "columnorder",
+      "display-only",
+      "sync",
+      "null-guard",
+      "plan"
+    ],
+    "importance_tier": "high",
+    "status": "planned",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "implementation-summary.md"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Remaining Saved Config",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Parent Spec",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Handoff Criteria",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Problem Statement Reports",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Purpose After",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Plan",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Technical Context",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Overview Final",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Pattern Vault",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Key Components",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Notation",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Format",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Add Remaining",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Completion Criteria",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "inspected",
+        "kind": "key_phrase",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Summary",
+        "kind": "proper_noun",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "Spec Folder",
+        "kind": "proper_noun",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "Actual Effort",
+        "kind": "proper_noun",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "What Was Built Nothing",
+        "kind": "proper_noun",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "Reports still lacks Remaining and Saved as live computed columns",
+    "created_at": "2026-08-25T19:12:37Z",
+    "last_save_at": "2026-08-25T19:21:32.097Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "implementation-summary.md"
+    ],
+    "source_fingerprint": "sha256:19dcc52398a0a61de12a5d8b9cd048757f59aab07c23593881921dbbf9fa0e16",
+    "source_doc_hashes": {
+      "spec.md": "261aa03daac359eef4de1cba20d3eb7ab83824914a619928bad6ae5554045c55",
+      "plan.md": "28c9c4e6cc7c2c69d100e83e4a338be11c2ef28e35ca2e2127a5eb8431ea50f5",
+      "tasks.md": "74224f75235e895d3b34410387db2f08702e8bf4910a3362a3d8a5dedfe7b577",
+      "implementation-summary.md": "ed6db7e36329b12311b8401f36fa4863827ae1d51d89ab35baee0630641ab0c4"
+    },
+    "last_active_child_id": null,
+    "last_active_at": null
+  }
+}

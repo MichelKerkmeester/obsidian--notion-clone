@@ -1,0 +1,31 @@
+{
+  "level": "2",
+  "specFolder": "obsidian/002-note-db-notion-parity-build/005-formula-let-variables",
+  "description": "Notion formulas support `let()` / `lets()` to bind named intermediate values in a per-row child scope (`let(person, \"Alan\", \"Hello, \" + person + \"!\")`",
+  "keywords": [
+    "notion",
+    "formulas",
+    "support",
+    "let",
+    "lets",
+    "bind",
+    "named",
+    "intermediate",
+    "values",
+    "per-row",
+    "child",
+    "scope",
+    "person",
+    "alan",
+    "hello"
+  ],
+  "lastUpdated": "2026-08-25T19:27:22.391Z",
+  "specId": "005",
+  "folderSlug": "formula-let-variables",
+  "parentChain": [
+    "obsidian",
+    "002-note-db-notion-parity-build"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": []
+}

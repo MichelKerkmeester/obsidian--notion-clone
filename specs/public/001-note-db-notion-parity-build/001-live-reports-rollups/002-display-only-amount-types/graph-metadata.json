@@ -1,0 +1,214 @@
+{
+  "schema_version": 1,
+  "packet_id": "obsidian/002-note-db-notion-parity-build/001-live-reports-rollups/002-display-only-amount-types",
+  "spec_folder": "obsidian/002-note-db-notion-parity-build/001-live-reports-rollups/002-display-only-amount-types",
+  "parent_id": "obsidian/002-note-db-notion-parity-build/001-live-reports-rollups",
+  "children_ids": [],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "computed sync display-only",
+      "amount column types",
+      "icloud-safe rollups",
+      "number currency schema",
+      "display-only plan",
+      "amount types plan",
+      "display-only tasks",
+      "amount types tasks",
+      "display-only summary",
+      "amount types summary"
+    ],
+    "key_topics": [
+      "computed",
+      "sync",
+      "display-only",
+      "amount",
+      "column",
+      "types",
+      "icloud-safe",
+      "rollups",
+      "number",
+      "currency",
+      "schema",
+      "plan"
+    ],
+    "importance_tier": "high",
+    "status": "planned",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "implementation-summary.md"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Only Amount Types",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Pin Reports",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Parent Spec",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Handoff Criteria",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Problem Statement The",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Plan",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Technical Context",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Overview Two",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Pattern Vault",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Key Components",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Notation",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Format",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Obsidian Plugin",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Confirm Reports",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Summary",
+        "kind": "proper_noun",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "Spec Folder",
+        "kind": "proper_noun",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "Actual Effort",
+        "kind": "proper_noun",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "What Was Built Nothing",
+        "kind": "proper_noun",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "Files Changed",
+        "kind": "proper_noun",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "The fork defaults to display-only (`ComputedSync.ts:3`; load-time coerce at `DataSource.ts:787`), but leaving the view-config UI on `automatic` would `updateFrontmatter` computed keys and enqueue Report/child paths",
+    "created_at": "2026-08-25T19:11:30Z",
+    "last_save_at": "2026-08-25T19:23:37.159Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "implementation-summary.md"
+    ],
+    "source_fingerprint": "sha256:93b5288dc5d8db56c3903afa9d3dd1e8121dfc91db79a1e02d26bc3c8f98ef51",
+    "source_doc_hashes": {
+      "spec.md": "bb1ebf8a3abc0b6a6c2faecaaa526f77d3c206be772498112ca65db0b632d489",
+      "plan.md": "74dafe9d0529960e212e9e809bf48c998e240e5bbd46e664a863b2debe163ef7",
+      "tasks.md": "342c8599602d79fe26b8d1a86425ba76f929d9045aa48d1ee89df263dce8017f",
+      "implementation-summary.md": "e7976d19a32a196b9d3a47d75a874bf1c149c2638df945eb673dd9031217e417"
+    },
+    "last_active_child_id": null,
+    "last_active_at": null
+  }
+}

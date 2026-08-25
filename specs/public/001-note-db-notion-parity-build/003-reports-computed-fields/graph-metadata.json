@@ -1,0 +1,228 @@
+{
+  "schema_version": 1,
+  "packet_id": "obsidian/002-note-db-notion-parity-build/003-reports-computed-fields",
+  "spec_folder": "obsidian/002-note-db-notion-parity-build/003-reports-computed-fields",
+  "parent_id": "obsidian/002-note-db-notion-parity-build",
+  "children_ids": [
+    "obsidian/002-note-db-notion-parity-build/003-reports-computed-fields/001-live-reports-inspect",
+    "obsidian/002-note-db-notion-parity-build/003-reports-computed-fields/002-remaining-saved-config",
+    "obsidian/002-note-db-notion-parity-build/003-reports-computed-fields/003-reports-display-proof"
+  ],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "reports remaining",
+      "saved computed field",
+      "remaining income expenses",
+      "reports computed columns",
+      "display-only formula",
+      "computedsyncmode",
+      "rollup formula reference",
+      "savings from rollups",
+      "reports remaining plan",
+      "computed column config",
+      "native formula engine",
+      "remaining formula"
+    ],
+    "key_topics": [
+      "reports",
+      "remaining",
+      "saved",
+      "computed",
+      "field",
+      "income",
+      "expenses",
+      "columns",
+      "display-only",
+      "formula",
+      "computedsyncmode",
+      "rollup"
+    ],
+    "importance_tier": "high",
+    "status": "planned",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "checklist.md",
+      "implementation-summary.md",
+      "research/synthesis.md",
+      "research/research.md",
+      "research/final-plan.md"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "checklist.md",
+        "kind": "doc",
+        "path": "checklist.md",
+        "source": "derived"
+      },
+      {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "synthesis.md",
+        "kind": "doc",
+        "path": "research/synthesis.md",
+        "source": "derived"
+      },
+      {
+        "name": "research.md",
+        "kind": "doc",
+        "path": "research/research.md",
+        "source": "derived"
+      },
+      {
+        "name": "final-plan.md",
+        "kind": "doc",
+        "path": "research/final-plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Reports Remaining",
+        "kind": "proper_noun",
+        "path": "research/research.md",
+        "source": "derived"
+      },
+      {
+        "name": "Saved Computed Fields",
+        "kind": "proper_noun",
+        "path": "research/research.md",
+        "source": "derived"
+      },
+      {
+        "name": "Problem Statement The",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Purpose Verdict",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Configure Remaining",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Plan",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Technical Context",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Manual Reports",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Overview Wave",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Notation",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Format",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Setup Ranked",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Ranked",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Verification Checklist",
+        "kind": "proper_noun",
+        "path": "checklist.md",
+        "source": "derived"
+      },
+      {
+        "name": "Verification Protocol",
+        "kind": "proper_noun",
+        "path": "checklist.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "The finance Reports view lacks Remaining and Saved as live computed columns",
+    "created_at": "2026-08-24T17:58:31.318Z",
+    "last_save_at": "2026-08-25T19:21:32.383Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "checklist.md",
+      "implementation-summary.md",
+      "research/research.md"
+    ],
+    "source_fingerprint": "sha256:91735f80fdf62559ff64e9618624b1cbb6967c9a467295ba29b9f933e7210aae",
+    "source_doc_hashes": {
+      "spec.md": "5e0e27729fb456ac86224e891bcb250537c8c14a07bf3f3137299b49140d8ac0",
+      "plan.md": "94e315ebd4eac692623e58592ada8a7c03f52b34dfad3dd28bf9a1638248860b",
+      "tasks.md": "84130d9449110db18309bd8f81c1ec660c7d815c95fd608e12fed63dd34c780a",
+      "checklist.md": "a6ca41ccbde7fd39e96852287032d2ee005b58ed3bf1f958886f503b08dad0f4",
+      "implementation-summary.md": "3b3e04731867b3872cd5621d04acb9d34d7b98ed1d978bb336190253baf6d5ea",
+      "research/research.md": "8729da9b654dc4ba16bf105550b3bdbc51837d64aa7aa9f2e285c43f010d3b39"
+    },
+    "last_active_child_id": "obsidian/002-note-db-notion-parity-build/003-reports-computed-fields/003-reports-display-proof",
+    "last_active_at": null
+  }
+}

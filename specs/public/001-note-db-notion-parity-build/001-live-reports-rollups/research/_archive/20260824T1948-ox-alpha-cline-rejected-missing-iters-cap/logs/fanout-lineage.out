@@ -1,0 +1,9 @@
+Lineage complete. Final state, all verified by the checks above:
+
+- **phase_init** — `artifact_dir` bound to the fanout override (resolve command skipped); config/strategy/state-log/dashboard/registry seeded inside `.../research/lineages/ox-alpha-cline`.
+- **phase_main_loop** — 5 iterations to legal convergence (newInfoRatio 1.0→0.6; projected next delta ≈0.03 < 0.05 threshold; question coverage 8/8). Each iteration wrote a non-empty `iterations/iteration-NNN.md` plus a valid JSONL delta (6 records, all parse, all required fields present).
+- **Evidence base:** fork src with file:line citations (`RelationRollup.ts`, `ComputedSync.ts`, `DataSource.ts`, `DatabaseView.ts`, `SummaryRenderer.ts`, `CellRenderer.ts`, `EuroFormat.ts`), AppFlowy Rust+Flutter, Anytype ts, and Notion official docs.
+- **Deliverable:** `research.md` — ranked enrichment: (1) REQ-003 risk-model correction — rollups structurally can't rewrite notes; display-only is already default, (2) single-currency key guarantee as an ops contract blocker, (3) free footer-summary composition over rollup columns, (4) Snapshot* as text-typed audit columns, (5) successor-pack brief from Anytype FormulaType + AppFlowy recalc architecture, (6) EuroFormat pattern documented as ceiling-not-path for this phase.
+- **Write-surface compliance:** every created file is inside the lineage dir (verified inventory); no git writes, no `generate-context.js`, no `validate.sh`; pre-existing ledger/lock files untouched.
+
+FANOUT_LINEAGE_COMPLETE:ox-alpha-cline

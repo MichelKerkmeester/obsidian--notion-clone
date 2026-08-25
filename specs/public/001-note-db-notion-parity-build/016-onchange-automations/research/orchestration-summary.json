@@ -1,0 +1,22 @@
+{
+  "run_id": "1787631614949-xdgx5i",
+  "loop_type": "research",
+  "spec_folder": "specs/obsidian/002-note-db-notion-parity-build/016-onchange-automations",
+  "base_artifact_dir": "specs/obsidian/002-note-db-notion-parity-build/016-onchange-automations/research",
+  "total_cli_lineages": 1,
+  "orphaned_lineages": [],
+  "total": 1,
+  "succeeded": 0,
+  "failed": 1,
+  "all_failed": true,
+  "gauges": {
+    "lag": 0,
+    "pending": 0,
+    "failed": 1
+  },
+  "failure_classes": {
+    "timeout": 0,
+    "exit": 1,
+    "salvage_miss": 0
+  }
+}

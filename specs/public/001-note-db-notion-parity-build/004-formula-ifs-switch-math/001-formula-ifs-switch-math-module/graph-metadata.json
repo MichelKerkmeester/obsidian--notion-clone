@@ -1,0 +1,214 @@
+{
+  "schema_version": 1,
+  "packet_id": "obsidian/002-note-db-notion-parity-build/004-formula-ifs-switch-math/001-formula-ifs-switch-math-module",
+  "spec_folder": "obsidian/002-note-db-notion-parity-build/004-formula-ifs-switch-math/001-formula-ifs-switch-math-module",
+  "parent_id": "obsidian/002-note-db-notion-parity-build/004-formula-ifs-switch-math",
+  "children_ids": [],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "formula ifs switch math",
+      "FormulaIfsSwitchMath",
+      "excel log",
+      "ifs varargs",
+      "switch varargs",
+      "math aliases",
+      "formula ifs switch plan",
+      "computed field spread",
+      "formula ifs switch tasks",
+      "formula ifs switch summary"
+    ],
+    "key_topics": [
+      "formula",
+      "ifs",
+      "switch",
+      "math",
+      "formulaifsswitchmath",
+      "excel",
+      "log",
+      "varargs",
+      "aliases",
+      "plan",
+      "computed",
+      "field"
+    ],
+    "importance_tier": "high",
+    "status": "planned",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "implementation-summary.md"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Math Module",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Parent Spec",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Handoff Criteria",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Problem Statement The",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Purpose Create",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Plan",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Technical Context",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Obsidian Plugin",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Overview Land",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Pattern Isolated",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Notation",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Format",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Completion Criteria",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Phase 1: Setup",
+        "kind": "heading",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Phase 2: Implementation",
+        "kind": "heading",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Summary",
+        "kind": "proper_noun",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "Spec Folder",
+        "kind": "proper_noun",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "Actual Effort",
+        "kind": "proper_noun",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "What Was Built Nothing",
+        "kind": "proper_noun",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "The fork already evaluates `IF` (`ComputedField.ts:325`), exposes `Math` on eval scope (`:433-437`), and dual-names `POWER`/`POW` (`:372-373`), but Notion `ifs(cond, val, …, [else])` is absent and the Excel-style names `SQRT` / `LN` / `LOG10` / `EXP` / `CBRT` are missing even though raw `Math.` works",
+    "created_at": "2026-08-25T19:11:18Z",
+    "last_save_at": "2026-08-25T19:19:41.313Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "implementation-summary.md"
+    ],
+    "source_fingerprint": "sha256:170c4c783c7af8a6d622f998d4956c814e52ba7d7ad3f533096e963eae0bb70c",
+    "source_doc_hashes": {
+      "spec.md": "06937c0da824c7f25ede04d9313c311fcde0d1f7289a2399925a367b0d254a64",
+      "plan.md": "ec826b778015acb5ab73d6b6e9261b626beb263df6f17045a90762b8c7a9fe13",
+      "tasks.md": "2273670087f305707702e75306c5a814c8f7b10a8b8eef681b567f52b0e22c6f",
+      "implementation-summary.md": "192884a4270e8e1e957bbb2a0ea6a933026495808872962661b5758dbdab95be"
+    },
+    "last_active_child_id": null,
+    "last_active_at": null
+  }
+}

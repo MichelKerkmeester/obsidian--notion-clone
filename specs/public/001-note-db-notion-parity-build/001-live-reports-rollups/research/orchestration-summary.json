@@ -1,0 +1,22 @@
+{
+  "run_id": "1787601609339-f4qpwv",
+  "loop_type": "research",
+  "spec_folder": "specs/obsidian/002-note-db-notion-parity-build/001-live-reports-rollups",
+  "base_artifact_dir": "specs/obsidian/002-note-db-notion-parity-build/001-live-reports-rollups/research",
+  "total_cli_lineages": 1,
+  "orphaned_lineages": [],
+  "total": 1,
+  "succeeded": 0,
+  "failed": 1,
+  "all_failed": true,
+  "gauges": {
+    "lag": 0,
+    "pending": 0,
+    "failed": 1
+  },
+  "failure_classes": {
+    "timeout": 0,
+    "exit": 0,
+    "salvage_miss": 1
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "level": "1",
+  "specFolder": "obsidian/002-note-db-notion-parity-build/002-rollup-aggregation-pack/003-percent-aggregation-pack",
+  "description": "Notion universal rollups include Percent empty / Percent not empty",
+  "keywords": [
+    "notion",
+    "universal",
+    "rollups",
+    "include",
+    "percent",
+    "empty"
+  ],
+  "lastUpdated": "2026-08-25T19:04:52.139Z",
+  "specId": "003",
+  "folderSlug": "percent-aggregation-pack",
+  "parentChain": [
+    "obsidian",
+    "002-note-db-notion-parity-build",
+    "002-rollup-aggregation-pack"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": []
+}

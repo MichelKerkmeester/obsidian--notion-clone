@@ -1,0 +1,27 @@
+{
+  "lineage": "ox-alpha-cline",
+  "findings": [
+    { "id": "F1", "claim": "Two-tier function table; uppercase Object.assign block (:310-378) is the insertion point", "source": "data/ComputedField.ts:135,146,310,325", "confidence": 0.99 },
+    { "id": "F2", "claim": "All call arguments evaluate eagerly; IF/IFS/SWITCH cannot short-circuit", "source": "data/SafeEval.ts evalNode; data/ComputedField.ts:325", "confidence": 0.97 },
+    { "id": "F3", "claim": "SafeEval keyword set (true/false/null/undefined/typeof/if/else/return) leaves lowercase ifs/switch as plain identifiers; RESERVED blocks field shadowing of switch", "source": "data/SafeEval.ts:265-275; data/ComputedField.ts:119-124", "confidence": 0.95 },
+    { "id": "F4", "claim": "Math/Number injected into eval scope; aliases are direct Math.* refs; LOG takes Excel optional base; non-finite results handled via iferror", "source": "data/ComputedField.ts:397-404,296-307,339", "confidence": 0.98 },
+    { "id": "F5", "claim": "Unknown name → 'X is not defined' → i18n undefinedVar, cell null; empty-varargs precedent sum()=0", "source": "data/ComputedField.ts:476-479,159-161", "confidence": 0.96 },
+    { "id": "F6", "claim": "Context-table additions add zero evaluation paths; SafeEval zero-diff achievable", "source": "data/ComputedField.ts:442-497; data/SafeEval.ts:1-12", "confidence": 0.99 },
+    { "id": "F7", "claim": "EuroFormat isolated-module pattern is precedent for Option B (new FormulaConditionalMath.ts spread into table) vs spec-pinned inline Option A", "source": "data/EuroFormat.ts:1-42", "confidence": 0.9 },
+    { "id": "F8", "claim": "AppFlowy clone has NO Formula FieldType and no expression functions; only closed aggregate Calculations; Anytype FormulaType likewise a closed aggregate enum", "source": "context/appflowy/.../field_entities.rs:427-441; .../calculations/service.rs:17-27; context/anytype-ts/src/ts/interface/block/dataview.ts:104-119", "confidence": 0.97 },
+    { "id": "F9", "claim": "Anytype computes formulas client-side as pure switch over records; null on no data; Number(x)||0 coercion idiom", "source": "context/anytype-ts/src/ts/lib/dataview.ts:981-1170", "confidence": 0.98 },
+    { "id": "F10", "claim": "Anytype UX: type-gated options + two-level sectioned picker + short labels", "source": "context/anytype-ts/src/ts/lib/relation.ts:163-253; util/menu.ts:1406-1425; grid/foot/cell.tsx:36-80", "confidence": 0.95 },
+    { "id": "F11", "claim": "AppFlowy Flutter centralizes long+short localized labels in a calculation_type_ext extension", "source": "context/appflowy/.../calculation_type_ext.dart:5-34", "confidence": 0.93 },
+    { "id": "F12", "claim": "Both references compute read-only display values — corroborates iCloud-safe posture", "source": "service.rs:31-84; dataview.ts:1041+", "confidence": 0.92 },
+    { "id": "F13", "claim": "Notion ifs(): condition/then pairs + optional trailing else; no else ⇒ blank", "source": "https://www.notion.com/help/formula-syntax ; thomasjfrank.com/formulas/functions/ifs/", "confidence": 0.97 },
+    { "id": "F14", "claim": "Notion has NO switch() in formula 2.0; SWITCH is Excel parity, not Notion parity", "source": "https://www.notion.com/help/formula-syntax ; wisechecker.com corroboration", "confidence": 0.95 },
+    { "id": "F15", "claim": "Notion math set: sqrt/cbrt/exp/ln/log10/log2; no general log(n,base); fork LOG should take Excel optional base", "source": "https://www.notion.com/help/formula-syntax", "confidence": 0.96 },
+    { "id": "F16", "claim": "Edge-case matrix: empty args→null, no-match→null, JS truthiness, NaN/-Infinity via IFERROR, eager-branch caveat, shadowing rules", "source": "iterations/iteration-003.md F16 (derived)", "confidence": 0.94 },
+    { "id": "F17", "claim": "No autocomplete surface exists in fork; UX work = docs inventory update grouped Conditionals/Math; short-label discipline for future pickers", "source": "data/ComputedField.ts:33-77; iteration-002 F10/F11", "confidence": 0.9 },
+    { "id": "F18", "claim": "Addition is pure compute, platform-neutral, iCloud-safe; SafeEval pure TS runs on mobile", "source": "data/SafeEval.ts:1-12", "confidence": 0.95 },
+    { "id": "F19", "claim": "Notion blank is typed (empty()); fork dynamic typing is looser — document divergence", "source": "https://www.notion.com/help/common-formula-errors", "confidence": 0.95 },
+    { "id": "F20", "claim": "Notion recommends if/ifs guards on empties; fork's eager eval degrades gracefully because date built-ins return null/'' instead of throwing", "source": "notion.com/help/common-formula-errors; data/ComputedField.ts:272-296", "confidence": 0.93 },
+    { "id": "F21", "claim": "Notion caps nesting at 15 layers — background only, relevant to phase 005", "source": "https://www.notion.com/help/common-formula-errors", "confidence": 0.99 },
+    { "id": "F22", "claim": "Residual UNKNOWNs declared: Notion ifs() laziness unverified from official sources", "source": "iterations/iteration-004.md F22", "confidence": 1.0 }
+  ]
+}

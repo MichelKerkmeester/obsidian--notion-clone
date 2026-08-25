@@ -1,0 +1,25 @@
+{
+  "level": "1",
+  "specFolder": "obsidian/002-note-db-notion-parity-build/004-formula-ifs-switch-math/003-computed-formulas-vitest",
+  "description": "Parent plan.md's “run the plugin test suite” currently has nothing to run",
+  "keywords": [
+    "parent",
+    "plan",
+    "run",
+    "plugin",
+    "test",
+    "suite",
+    "currently",
+    "nothing"
+  ],
+  "lastUpdated": "2026-08-25T19:20:09.558Z",
+  "specId": "003",
+  "folderSlug": "computed-formulas-vitest",
+  "parentChain": [
+    "obsidian",
+    "002-note-db-notion-parity-build",
+    "004-formula-ifs-switch-math"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": []
+}

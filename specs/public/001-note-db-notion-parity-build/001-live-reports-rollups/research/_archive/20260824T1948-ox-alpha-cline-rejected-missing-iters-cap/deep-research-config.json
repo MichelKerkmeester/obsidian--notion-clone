@@ -1,0 +1,25 @@
+{
+  "sessionId": "fanout-ox-alpha-cline-1787599243721-mhlsly",
+  "mode": "research",
+  "lifecycle": "new",
+  "specFolder": "specs/obsidian/002-note-db-notion-parity-build/001-live-reports-rollups",
+  "artifactDir": "specs/obsidian/002-note-db-notion-parity-build/001-live-reports-rollups/research/lineages/ox-alpha-cline",
+  "artifactDirBinding": "config.fanout_lineage_artifact_dir override (step_resolve_artifact_root skipped by operator instruction)",
+  "executor": { "kind": "cli-pi", "model": "x-ai/ox-alpha" },
+  "loopType": "research",
+  "stopPolicy": "max-iterations",
+  "convergenceThreshold": 0.05,
+  "convergenceSignal": "newInfoRatio",
+  "maxIterations": 8,
+  "resourceMapPresent": false,
+  "writeSurface": "specs/obsidian/002-note-db-notion-parity-build/001-live-reports-rollups/research/lineages/ox-alpha-cline (exclusive; no generate-context.js, no validate.sh, no git writes)",
+  "researchTopic": "Perfect the Live Reports Roll-ups feature for the forked Note Database Obsidian plugin toward Notion parity: UI/UX, core logic, fork integration via the isolated-module EuroFormat pattern, edge cases, mobile + iCloud safety. Reference mining: AppFlowy (flowy-database2 Rust + Flutter UI) and Anytype (anytype-ts), plus Notion rollup behavior via web.",
+  "statePaths": {
+    "stateLog": "deep-research-state.jsonl",
+    "strategy": "deep-research-strategy.md",
+    "dashboard": "deep-research-dashboard.md",
+    "findingsRegistry": "findings-registry.json",
+    "iterations": "iterations/",
+    "synthesis": "research.md"
+  }
+}

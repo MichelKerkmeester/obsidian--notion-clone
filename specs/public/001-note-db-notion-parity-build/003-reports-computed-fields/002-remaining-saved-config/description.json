@@ -1,0 +1,25 @@
+{
+  "level": "1",
+  "specFolder": "obsidian/002-note-db-notion-parity-build/003-reports-computed-fields/002-remaining-saved-config",
+  "description": "Reports still lacks Remaining and Saved as live computed columns",
+  "keywords": [
+    "reports",
+    "still",
+    "lacks",
+    "remaining",
+    "saved",
+    "live",
+    "computed",
+    "columns"
+  ],
+  "lastUpdated": "2026-08-25T19:19:00.143Z",
+  "specId": "002",
+  "folderSlug": "remaining-saved-config",
+  "parentChain": [
+    "obsidian",
+    "002-note-db-notion-parity-build",
+    "003-reports-computed-fields"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": []
+}

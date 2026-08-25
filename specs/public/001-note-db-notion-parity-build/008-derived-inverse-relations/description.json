@@ -1,0 +1,31 @@
+{
+  "level": "2",
+  "specFolder": "obsidian/002-note-db-notion-parity-build/008-derived-inverse-relations",
+  "description": "Notion two-way relations store a second property on the target data source and mirror it on write: the relation type object is `{ datasourceid,",
+  "keywords": [
+    "notion",
+    "two-way",
+    "relations",
+    "store",
+    "second",
+    "property",
+    "target",
+    "data",
+    "source",
+    "mirror",
+    "write",
+    "relation",
+    "type",
+    "object",
+    "datasourceid"
+  ],
+  "lastUpdated": "2026-08-25T19:39:12.460Z",
+  "specId": "008",
+  "folderSlug": "derived-inverse-relations",
+  "parentChain": [
+    "obsidian",
+    "002-note-db-notion-parity-build"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": []
+}

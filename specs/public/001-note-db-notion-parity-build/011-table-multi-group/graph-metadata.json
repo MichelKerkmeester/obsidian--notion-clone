@@ -1,0 +1,223 @@
+{
+  "schema_version": 1,
+  "packet_id": "obsidian/002-note-db-notion-parity-build/011-table-multi-group",
+  "spec_folder": "obsidian/002-note-db-notion-parity-build/011-table-multi-group",
+  "parent_id": "obsidian/002-note-db-notion-parity-build",
+  "children_ids": [],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "table group by",
+      "group by multiple fields",
+      "multi-field grouping",
+      "groupbyfields",
+      "nested group headers",
+      "table subgroup",
+      "group by 2 fields",
+      "multi-field grouping plan",
+      "recursive group by",
+      "indented group headers",
+      "table grouping implementation",
+      "table subgroup plan"
+    ],
+    "key_topics": [
+      "table",
+      "group",
+      "multiple",
+      "fields",
+      "multi-field",
+      "grouping",
+      "groupbyfields",
+      "nested",
+      "headers",
+      "subgroup",
+      "plan",
+      "recursive"
+    ],
+    "importance_tier": "high",
+    "status": "planned",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "checklist.md",
+      "implementation-summary.md",
+      "research/synthesis.md",
+      "research/research.md"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "checklist.md",
+        "kind": "doc",
+        "path": "checklist.md",
+        "source": "derived"
+      },
+      {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "synthesis.md",
+        "kind": "doc",
+        "path": "research/synthesis.md",
+        "source": "derived"
+      },
+      {
+        "name": "research.md",
+        "kind": "doc",
+        "path": "research/research.md",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Table Group",
+        "kind": "proper_noun",
+        "path": "research/research.md",
+        "source": "derived"
+      },
+      {
+        "name": "Problem Statement",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Purpose Extend",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "In Scope",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Table Sub",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Plan",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Technical Context",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Obsidian Plugin",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Overview Add",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Pattern Isolated",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Notation",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Format",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Render Matrix",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Verification Checklist",
+        "kind": "proper_noun",
+        "path": "checklist.md",
+        "source": "derived"
+      },
+      {
+        "name": "Verification Protocol",
+        "kind": "proper_noun",
+        "path": "checklist.md",
+        "source": "derived"
+      },
+      {
+        "name": "Completion Impact",
+        "kind": "proper_noun",
+        "path": "checklist.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "TABLE views in the note-database fork group rows by a single string (`groupByField`) only, while Notion's current View settings expose Group + Sub-group (exactly two levels) and the fork already ships the 2-level algorithm on the board (`applyBoardSubgroups` / `getBoardSubgroups`)",
+    "created_at": "2026-08-24T17:58:47.637Z",
+    "last_save_at": "2026-08-25T14:53:24.619Z",
+    "save_lineage": "same_pass",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "checklist.md",
+      "implementation-summary.md",
+      "research/research.md"
+    ],
+    "source_fingerprint": "sha256:a889e8a3fa57c091c7daa07f5f60df4b9b3664758205508a7b95e17a19d73a7a",
+    "source_doc_hashes": {
+      "spec.md": "1e501bc9c95cd5561e6c8005bd0371c7c4bd2f6b078273dfa6778dd441904841",
+      "plan.md": "da03b7bb645c62c888f4e9b24e8ea6415c3dfffafcfb0df6d72ab18209f3db15",
+      "tasks.md": "d1ee3901a47a563dd11168abfed53ace009d583b63235ca52c0b5934efb0eeeb",
+      "checklist.md": "b90ec303263da59632075489a1afccda997723e932391049755b244ce0df83ec",
+      "implementation-summary.md": "19395dc4b38f73b420b319fef06b1ce232282e1bfd8535b2cf8d7a359dd1ca9f",
+      "research/research.md": "4f89a3363c26e5c7453fc0a5cc5d9acbcde271e2b3e0d1128516a7500c911a83"
+    },
+    "last_active_child_id": null,
+    "last_active_at": null
+  }
+}

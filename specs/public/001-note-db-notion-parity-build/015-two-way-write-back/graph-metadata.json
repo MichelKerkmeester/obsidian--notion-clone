@@ -1,0 +1,221 @@
+{
+  "schema_version": 1,
+  "packet_id": "obsidian/002-note-db-notion-parity-build/015-two-way-write-back",
+  "spec_folder": "obsidian/002-note-db-notion-parity-build/015-two-way-write-back",
+  "parent_id": "obsidian/002-note-db-notion-parity-build",
+  "children_ids": [],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "two-way write-back",
+      "stored write-back",
+      "syncwrites",
+      "relation mirror writes",
+      "two-way frontmatter",
+      "deferred write-back",
+      "icloud write churn",
+      "dual note write",
+      "implementation plan",
+      "no build planned",
+      "tasks",
+      "implementation summary"
+    ],
+    "key_topics": [
+      "two-way",
+      "write-back",
+      "stored",
+      "syncwrites",
+      "relation",
+      "mirror",
+      "writes",
+      "frontmatter",
+      "deferred",
+      "icloud",
+      "write",
+      "churn"
+    ],
+    "importance_tier": "medium",
+    "status": "deferred",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "implementation-summary.md",
+      "research/synthesis.md",
+      "research/research.md",
+      "research/final-plan.md"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "synthesis.md",
+        "kind": "doc",
+        "path": "research/synthesis.md",
+        "source": "derived"
+      },
+      {
+        "name": "research.md",
+        "kind": "doc",
+        "path": "research/research.md",
+        "source": "derived"
+      },
+      {
+        "name": "final-plan.md",
+        "kind": "doc",
+        "path": "research/final-plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Problem Statement The Wave",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Purpose Record",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "In Scope",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "File Path",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Change Type",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Plan",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Technical Context",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Overview This",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Pattern Decision",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Key Components",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Data Flow None",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Notation",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Format",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Setup The",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation No",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Completion Criteria",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "The Wave 6 question was whether to port Notion's two-way relations into the note-database fork as stored dual frontmatter mirrors — i.e., on every relation click, mirror the wikilink into both notes' frontmatter",
+    "created_at": "2026-08-24T18:16:22.374Z",
+    "last_save_at": "2026-08-25T15:21:42.542Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "implementation-summary.md",
+      "research/research.md"
+    ],
+    "source_fingerprint": "sha256:7bff6e0b283d208065abac801d4d7b8f69d0426438fe26bf74a46c9b53405c48",
+    "source_doc_hashes": {
+      "spec.md": "cf011879de8a97958ebf99b518583c2cc30615098f8e1600ecc116395a98ba5a",
+      "plan.md": "c368297cc09ce2bc849d752341b7213314ef2c335200ef3d9eb9d97d6e8d7c1e",
+      "tasks.md": "a62db7d9c76f4d2f6062b935a58abf5c1568d756f8117261242b5fcb265f2cda",
+      "implementation-summary.md": "9dd56f9a84d2c5f4af7f852b0fc503fbe0564d4a6b8943e040ebfeabdb0fe0d8",
+      "research/research.md": "9a7306e5f281df4aea96315f100ca1a9ffc2b769575967180583aa719869a79f"
+    },
+    "last_active_child_id": null,
+    "last_active_at": null
+  }
+}

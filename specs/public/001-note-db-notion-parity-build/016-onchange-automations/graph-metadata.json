@@ -1,0 +1,220 @@
+{
+  "schema_version": 1,
+  "packet_id": "obsidian/002-note-db-notion-parity-build/016-onchange-automations",
+  "spec_folder": "obsidian/002-note-db-notion-parity-build/016-onchange-automations",
+  "parent_id": "obsidian/002-note-db-notion-parity-build",
+  "children_ids": [],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "on-change automations",
+      "onchange automations",
+      "vault change hook",
+      "field change trigger",
+      "cron templates",
+      "network buttons",
+      "icloud metadata echo",
+      "out of scope automations",
+      "implementation plan",
+      "no build planned",
+      "tasks",
+      "implementation summary"
+    ],
+    "key_topics": [
+      "on-change",
+      "automations",
+      "onchange",
+      "vault",
+      "change",
+      "hook",
+      "field",
+      "trigger",
+      "cron",
+      "templates",
+      "network",
+      "buttons"
+    ],
+    "importance_tier": "medium",
+    "status": "in_progress",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "implementation-summary.md",
+      "research/synthesis.md",
+      "research/research.md"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "synthesis.md",
+        "kind": "doc",
+        "path": "research/synthesis.md",
+        "source": "derived"
+      },
+      {
+        "name": "research.md",
+        "kind": "doc",
+        "path": "research/research.md",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "On Hold",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Problem Statement Notion",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Obsidian Sync",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Purpose Record",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "In Scope",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Plan",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Technical Context",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Overview This",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Pattern Decision",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Key Components",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Notation",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Format",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation No",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Vault Change Feed",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Thomas Frank",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Summary",
+        "kind": "proper_noun",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "Spec Folder",
+        "kind": "proper_noun",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "Notion-style on-change automations (\"when field X changes, do Y\"), triggers, and recurring/cron templates look like remaining parity gaps, but the synthesis Verdict is DO-NOT-BUILD / HOLD",
+    "created_at": "2026-08-24T17:59:00.271Z",
+    "last_save_at": "2026-08-25T15:35:36.737Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "implementation-summary.md",
+      "research/research.md"
+    ],
+    "source_fingerprint": "sha256:c6baa99c29f9c5db463ac243ad4bb7a1e64f21ad6d3dd4e69ae163a738f90762",
+    "source_doc_hashes": {
+      "spec.md": "06d5a914683914f9b00586727ee2bee2f5d2660408028cc37a9988ecadc81f36",
+      "plan.md": "84334e075f98e08bf4818896b7f7eb8060a9f95f5118f12f4db4f52e38f7e77e",
+      "tasks.md": "94a9e61a5422972bc29804483cb17553f883aeb0b09683e128aa1bf01be2fa5d",
+      "implementation-summary.md": "c46756c2a44652a318ce5e77443a7dc3cd404ab839000385591aa09a0047eb91",
+      "research/research.md": "c27447e55e042c8b362b5626d8d580c5084aba0765f612a04c5e1448395abb81"
+    },
+    "last_active_child_id": null,
+    "last_active_at": null
+  }
+}

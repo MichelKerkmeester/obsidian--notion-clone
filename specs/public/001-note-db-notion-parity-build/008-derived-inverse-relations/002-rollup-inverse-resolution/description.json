@@ -1,0 +1,27 @@
+{
+  "level": "1",
+  "specFolder": "obsidian/002-note-db-notion-parity-build/008-derived-inverse-relations/002-rollup-inverse-resolution",
+  "description": "Notion rollups compute over the related-pages set on whichever side the rollup column lives",
+  "keywords": [
+    "notion",
+    "rollups",
+    "compute",
+    "related-pages",
+    "set",
+    "whichever",
+    "side",
+    "rollup",
+    "column",
+    "lives"
+  ],
+  "lastUpdated": "2026-08-25T19:42:08.229Z",
+  "specId": "002",
+  "folderSlug": "rollup-inverse-resolution",
+  "parentChain": [
+    "obsidian",
+    "002-note-db-notion-parity-build",
+    "008-derived-inverse-relations"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": []
+}

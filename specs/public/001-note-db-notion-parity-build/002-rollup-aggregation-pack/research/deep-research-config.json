@@ -1,0 +1,35 @@
+{
+  "researchTopic": "Perfect the \"Rollup Aggregation Pack\" feature for the forked Note Database Obsidian plugin (fork src at /Users/michelkerkmeester/MEGA/Development/Obsidian Plugin/src) toward Notion parity. First read the bound spec folder spec.md and plan.md for the exact feature. Uncover the best UI/UX, core logic and algorithm, fork integration via the isolated-module EuroFormat pattern (new module under src plus 1-3 call-site edits, rebase-safe), edge cases, and mobile plus iCloud safety (display-only unless the spec says otherwise). Mine the two cloned reference repos under specs/obsidian/002-note-db-notion-parity-build/context for how they implement this capability, citing real path and line: AppFlowy (appflowy/frontend/rust-lib/flowy-database2 Rust grid model and appflowy/frontend/appflowy_flutter/lib/plugins/database Flutter UI) and Anytype (anytype-ts/src/ts). Also cite Notion behavior via WebFetch. Ground every finding in real source, no hand-waving. Deliverable: a ranked, evidence-cited enrichment of this feature.",
+  "specFolder": "specs/obsidian/002-note-db-notion-parity-build/002-rollup-aggregation-pack",
+  "maxIterations": 10,
+  "minIterations": 3,
+  "convergenceThreshold": 0.05,
+  "antiConvergence": {
+    "convergenceMode": "off",
+    "divergent": {}
+  },
+  "stopPolicy": "max-iterations",
+  "lineageTimeoutHours": 2,
+  "executionMode": "auto",
+  "resource_map": {
+    "emit": true
+  },
+  "resource_map_present": false,
+  "fanout": {
+    "executors": [
+      {
+        "kind": "cli-pi",
+        "model": "x-ai/ox-alpha",
+        "reasoningEffort": "xhigh",
+        "label": "ox-alpha-cline",
+        "count": 1,
+        "iterations": 10
+      }
+    ],
+    "concurrency": 1
+  },
+  "config.fanout_lineage_artifact_dir": null,
+  "artifactDir": "specs/obsidian/002-note-db-notion-parity-build/002-rollup-aggregation-pack/research",
+  "createdAt": "2026-08-24T00:00:00Z",
+  "status": "initialized"
+}

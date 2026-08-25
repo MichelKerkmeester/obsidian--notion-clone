@@ -1,0 +1,214 @@
+{
+  "schema_version": 1,
+  "packet_id": "obsidian/002-note-db-notion-parity-build/008-derived-inverse-relations/001-relation-inverse-module",
+  "spec_folder": "obsidian/002-note-db-notion-parity-build/008-derived-inverse-relations/001-relation-inverse-module",
+  "parent_id": "obsidian/002-note-db-notion-parity-build/008-derived-inverse-relations",
+  "children_ids": [],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "relation inverse module",
+      "RelationInverse",
+      "buildRelationInverse",
+      "SYNC_WRITES_DEFAULT",
+      "inboundByPath",
+      "sourceDatabaseIds",
+      "relation inverse plan",
+      "relation inverse tasks",
+      "vitest setup",
+      "relation inverse summary"
+    ],
+    "key_topics": [
+      "relation",
+      "inverse",
+      "module",
+      "relationinverse",
+      "buildrelationinverse",
+      "inboundbypath",
+      "sourcedatabaseids",
+      "plan",
+      "tasks",
+      "vitest",
+      "setup",
+      "summary"
+    ],
+    "importance_tier": "high",
+    "status": "planned",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "implementation-summary.md"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Relation Inverse Module",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Parent Spec",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Handoff Criteria",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Problem Statement Notion",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Purpose Create",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Plan",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Technical Context",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Obsidian Plugin",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Overview Land",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Pattern Isolated",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Notation",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Format",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Completion Criteria",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "no",
+        "kind": "key_phrase",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "T003",
+        "kind": "key_phrase",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Summary",
+        "kind": "proper_noun",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "Spec Folder",
+        "kind": "proper_noun",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "Actual Effort",
+        "kind": "proper_noun",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "What Was Built Nothing",
+        "kind": "proper_noun",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "Notion shows related pages on the target via a second stored relation (`dualproperty`)",
+    "created_at": "2026-08-25T19:36:48Z",
+    "last_save_at": "2026-08-25T19:44:04.588Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "implementation-summary.md"
+    ],
+    "source_fingerprint": "sha256:24cb624a95d9c17dd59f52d04b3cfc7d2f8590d8e88a9f90d854f9f259eabbaf",
+    "source_doc_hashes": {
+      "spec.md": "39a73066441115b36b7accb7d7bcd046a7fc046e1cb117051d98b03b49234c2f",
+      "plan.md": "d1dedac48442598eced6627175d9a8abe316464d1aa12319151b766444d08691",
+      "tasks.md": "369a45c1128c041201bc2dc5c3731bb16781d345dc789628bcf9139ca9e18166",
+      "implementation-summary.md": "c26a1a901b7c5c393af894095f03f7051db323ebe732f417598c0496696a20c8"
+    },
+    "last_active_child_id": null,
+    "last_active_at": null
+  }
+}

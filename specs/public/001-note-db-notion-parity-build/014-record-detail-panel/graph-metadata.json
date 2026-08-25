@@ -1,0 +1,223 @@
+{
+  "schema_version": 1,
+  "packet_id": "obsidian/002-note-db-notion-parity-build/014-record-detail-panel",
+  "spec_folder": "obsidian/002-note-db-notion-parity-build/014-record-detail-panel",
+  "parent_id": "obsidian/002-note-db-notion-parity-build",
+  "children_ids": [],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "record detail panel",
+      "hover open",
+      "properties panel",
+      "detail panel",
+      "hover chrome",
+      "notion feel",
+      "implementation plan",
+      "tasks",
+      "checklist",
+      "verification",
+      "implementation summary"
+    ],
+    "key_topics": [
+      "record",
+      "detail",
+      "panel",
+      "hover",
+      "open",
+      "properties",
+      "chrome",
+      "notion",
+      "feel",
+      "implementation",
+      "plan",
+      "tasks"
+    ],
+    "importance_tier": "high",
+    "status": "planned",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "checklist.md",
+      "implementation-summary.md",
+      "research/synthesis.md",
+      "research/research.md",
+      "research/final-plan.md"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "checklist.md",
+        "kind": "doc",
+        "path": "checklist.md",
+        "source": "derived"
+      },
+      {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "synthesis.md",
+        "kind": "doc",
+        "path": "research/synthesis.md",
+        "source": "derived"
+      },
+      {
+        "name": "research.md",
+        "kind": "doc",
+        "path": "research/research.md",
+        "source": "derived"
+      },
+      {
+        "name": "final-plan.md",
+        "kind": "doc",
+        "path": "research/final-plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Record Detail Panel",
+        "kind": "proper_noun",
+        "path": "research/research.md",
+        "source": "derived"
+      },
+      {
+        "name": "Core Obsidian",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Problem Statement This",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Obsidian Page Preview",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Purpose Ship",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Plan",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Technical Context",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Overview Build",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Status Planned",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Pattern Isolated",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Notation",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Format",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Page Preview",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Omit Anytype",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Bare Enter",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "This is an S-tier polish phase, not a capability project",
+    "created_at": "2026-08-24T17:58:55.219Z",
+    "last_save_at": "2026-08-25T15:22:37.005Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "checklist.md",
+      "implementation-summary.md",
+      "research/research.md"
+    ],
+    "source_fingerprint": "sha256:cfcd15a51c2c3a5c9b7921d30c0fd62d4756756d7011277c57dc07ffb54be33d",
+    "source_doc_hashes": {
+      "spec.md": "d19483d8b44d2d7281a6d8e2e4abb87d804047999de241a360f70a19cfc47f55",
+      "plan.md": "2caed342306125f07be65bbc2825219a31acebe2df85182fc1fd1c374bf79302",
+      "tasks.md": "ce2d0bf258c17bae08005724b220be7803a423b3ad2ff61439c07658a735b538",
+      "checklist.md": "138abedb8337e964f40b2273dc5d1b9451db5c2254e4fdf8513cff0a4e265ce8",
+      "implementation-summary.md": "900794497fd188e03cf2c13f080e295cbaacc44c4bf55e491ad3df963754d019",
+      "research/research.md": "7feaab3f84a4bb7b1cb38c91fcffd320bd817f154ae69e22cbe20c6a4744c282"
+    },
+    "last_active_child_id": null,
+    "last_active_at": null
+  }
+}

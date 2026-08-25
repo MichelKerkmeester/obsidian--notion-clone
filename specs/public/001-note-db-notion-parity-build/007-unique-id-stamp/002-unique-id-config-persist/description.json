@@ -1,0 +1,25 @@
+{
+  "level": "1",
+  "specFolder": "obsidian/002-note-db-notion-parity-build/007-unique-id-stamp/002-unique-id-config-persist",
+  "description": "Notion owns the unique-ID counter server-side (only `prefix` is configurable)",
+  "keywords": [
+    "notion",
+    "owns",
+    "unique-id",
+    "counter",
+    "server-side",
+    "only",
+    "prefix",
+    "configurable"
+  ],
+  "lastUpdated": "2026-08-25T19:34:30.361Z",
+  "specId": "002",
+  "folderSlug": "unique-id-config-persist",
+  "parentChain": [
+    "obsidian",
+    "002-note-db-notion-parity-build",
+    "007-unique-id-stamp"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": []
+}

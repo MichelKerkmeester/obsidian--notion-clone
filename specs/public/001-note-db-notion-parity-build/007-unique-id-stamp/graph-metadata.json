@@ -1,0 +1,228 @@
+{
+  "schema_version": 1,
+  "packet_id": "obsidian/002-note-db-notion-parity-build/007-unique-id-stamp",
+  "spec_folder": "obsidian/002-note-db-notion-parity-build/007-unique-id-stamp",
+  "parent_id": "obsidian/002-note-db-notion-parity-build",
+  "children_ids": [
+    "obsidian/002-note-db-notion-parity-build/007-unique-id-stamp/001-unique-id-stamp-module",
+    "obsidian/002-note-db-notion-parity-build/007-unique-id-stamp/002-unique-id-config-persist",
+    "obsidian/002-note-db-notion-parity-build/007-unique-id-stamp/003-create-entry-stamp"
+  ],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "unique id stamp",
+      "unique-id",
+      "auto-increment id",
+      "createentryplan unique id",
+      "invoice unique id",
+      "db_view counter",
+      "unique id prefix",
+      "row create stamp",
+      "unique-id plan",
+      "createentryplan stamp",
+      "euroformat isolated diff",
+      "row create unique id"
+    ],
+    "key_topics": [
+      "unique",
+      "stamp",
+      "unique-id",
+      "auto-increment",
+      "createentryplan",
+      "invoice",
+      "counter",
+      "prefix",
+      "row",
+      "plan",
+      "euroformat",
+      "isolated"
+    ],
+    "importance_tier": "high",
+    "status": "planned",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "checklist.md",
+      "implementation-summary.md",
+      "research/synthesis.md",
+      "research/research.md",
+      "research/final-plan.md"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "checklist.md",
+        "kind": "doc",
+        "path": "checklist.md",
+        "source": "derived"
+      },
+      {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "synthesis.md",
+        "kind": "doc",
+        "path": "research/synthesis.md",
+        "source": "derived"
+      },
+      {
+        "name": "research.md",
+        "kind": "doc",
+        "path": "research/research.md",
+        "source": "derived"
+      },
+      {
+        "name": "final-plan.md",
+        "kind": "doc",
+        "path": "research/final-plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Row Create",
+        "kind": "proper_noun",
+        "path": "research/research.md",
+        "source": "derived"
+      },
+      {
+        "name": "Problem Statement The",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Purpose Close",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "In Scope",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "File Path",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Plan",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Technical Context",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Obsidian Plugin",
+        "kind": "proper_noun",
+        "path": "research/research.md",
+        "source": "derived"
+      },
+      {
+        "name": "Overview This",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Pattern Isolated",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Notation",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Format",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Core Documents",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Verification Documents",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Verification Checklist",
+        "kind": "proper_noun",
+        "path": "checklist.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "The note-database fork creates rows through `planCreateEntry` in `src/data/CreateEntryPlan.ts` and writes frontmatter, but it never allocates a Notion-style sequential unique ID at create time (`CreateEntryPlan.ts:119-173`)",
+    "created_at": "2026-08-24T17:23:16.662Z",
+    "last_save_at": "2026-08-25T19:36:38.962Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "checklist.md",
+      "implementation-summary.md",
+      "research/research.md"
+    ],
+    "source_fingerprint": "sha256:2664cfe1bc22817dbd9133f776f6ffa5fd37eb796b608fb62429bcab1c60044f",
+    "source_doc_hashes": {
+      "spec.md": "5ed8803c339e785e8b2d9e1618b1c13ea1bb1212e335e3122b90a80c66c62dc2",
+      "plan.md": "a6bf48376311deec9bc0bca3023327a625b911f8de53c511a4b800c539ec5639",
+      "tasks.md": "358bec2600bc8f59ba7d0ce089e14515e183ce671b7ad4c9a0c42a0da629a76b",
+      "checklist.md": "adcbcc685b3c92b7c9f689f7cf758247ad783ba2204e4c43df4b19d94cbd69d6",
+      "implementation-summary.md": "acd893edcbfc135a472f84ad71df538a83995c12331579f1454298ce966829aa",
+      "research/research.md": "f20e556ed43c9b9034f788a04e271777c92d1bd84b8731ca9b44bae541e336c2"
+    },
+    "last_active_child_id": "obsidian/002-note-db-notion-parity-build/007-unique-id-stamp/003-create-entry-stamp",
+    "last_active_at": null
+  }
+}

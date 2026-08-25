@@ -1,0 +1,32 @@
+{
+  "level": "2",
+  "specFolder": "obsidian/002-note-db-notion-parity-build/006-link-scheme-fields",
+  "description": "Notion treats URL, email, and phone property values as first-class clickable links: URL opens in a new tab, Email launches the mail client, Phone",
+  "keywords": [
+    "notion",
+    "treats",
+    "url",
+    "email",
+    "phone",
+    "property",
+    "values",
+    "first-class",
+    "clickable",
+    "links",
+    "opens",
+    "new",
+    "tab",
+    "launches",
+    "mail",
+    "client"
+  ],
+  "lastUpdated": "2026-08-25T19:29:59.323Z",
+  "specId": "006",
+  "folderSlug": "link-scheme-fields",
+  "parentChain": [
+    "obsidian",
+    "002-note-db-notion-parity-build"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": []
+}

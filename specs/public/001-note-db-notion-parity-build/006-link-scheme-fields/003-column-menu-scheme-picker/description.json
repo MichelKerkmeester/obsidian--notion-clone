@@ -1,0 +1,25 @@
+{
+  "level": "1",
+  "specFolder": "obsidian/002-note-db-notion-parity-build/006-link-scheme-fields/003-column-menu-scheme-picker",
+  "description": "Notion users pick URL / Email / Phone in the property-type menu",
+  "keywords": [
+    "notion",
+    "users",
+    "pick",
+    "url",
+    "email",
+    "phone",
+    "property-type",
+    "menu"
+  ],
+  "lastUpdated": "2026-08-25T19:34:49.511Z",
+  "specId": "003",
+  "folderSlug": "column-menu-scheme-picker",
+  "parentChain": [
+    "obsidian",
+    "002-note-db-notion-parity-build",
+    "006-link-scheme-fields"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": []
+}

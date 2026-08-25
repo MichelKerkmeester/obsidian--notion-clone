@@ -1,0 +1,19 @@
+{
+  "specFolder": "obsidian/002-note-db-notion-parity-build/009-view-filter-tree/004-non-panel-filter-coherence",
+  "description": "Phase 4: non-panel-filter-coherence",
+  "keywords": [
+    "phase",
+    "non-panel-filter-coherence"
+  ],
+  "lastUpdated": "2026-08-25T19:40:29.226Z",
+  "specId": "004",
+  "folderSlug": "non-panel-filter-coherence",
+  "parentChain": [
+    "obsidian",
+    "002-note-db-notion-parity-build",
+    "009-view-filter-tree"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": [],
+  "level": "1"
+}

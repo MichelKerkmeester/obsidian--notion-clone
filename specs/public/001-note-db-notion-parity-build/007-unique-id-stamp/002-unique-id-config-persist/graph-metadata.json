@@ -1,0 +1,213 @@
+{
+  "schema_version": 1,
+  "packet_id": "obsidian/002-note-db-notion-parity-build/007-unique-id-stamp/002-unique-id-config-persist",
+  "spec_folder": "obsidian/002-note-db-notion-parity-build/007-unique-id-stamp/002-unique-id-config-persist",
+  "parent_id": "obsidian/002-note-db-notion-parity-build/007-unique-id-stamp",
+  "children_ids": [],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "unique id config persist",
+      "DatabaseConfig uniqueId",
+      "toDatabasePayload uniqueId",
+      "parseDatabaseConfig uniqueId",
+      "db_view counter persist",
+      "unique id persist plan",
+      "toDatabasePayload",
+      "unique id persist tasks",
+      "unique id persist summary"
+    ],
+    "key_topics": [
+      "unique",
+      "config",
+      "persist",
+      "databaseconfig",
+      "uniqueid",
+      "todatabasepayload",
+      "parsedatabaseconfig",
+      "counter",
+      "plan",
+      "tasks",
+      "summary",
+      "notion"
+    ],
+    "importance_tier": "high",
+    "status": "planned",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "implementation-summary.md"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Config Persist",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Parent Spec",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Handoff Criteria",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Problem Statement Notion",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Purpose Add",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Plan",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Technical Context",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Obsidian Plugin",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Overview Call",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Key Components",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Notation",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Format",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Completion Criteria",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Phase 1: Setup",
+        "kind": "heading",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Phase 2: Implementation",
+        "kind": "heading",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Summary",
+        "kind": "proper_noun",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "Spec Folder",
+        "kind": "proper_noun",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "Actual Effort",
+        "kind": "proper_noun",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "What Was Built Nothing",
+        "kind": "proper_noun",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "Notion owns the unique-ID counter server-side (only `prefix` is configurable)",
+    "created_at": "2026-08-25T19:29:59Z",
+    "last_save_at": "2026-08-25T19:36:38.373Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "implementation-summary.md"
+    ],
+    "source_fingerprint": "sha256:52219b9d307b5e96a380ee6e774c20f13c3372330f05fb7df510d91008447218",
+    "source_doc_hashes": {
+      "spec.md": "02d5237993c89cbd6aab306e2f3035c43272853ded72ea664d64bfccbbf2c6a9",
+      "plan.md": "263fb97e4a08818182817eff5ee8f5d4c47cae133d9f0578ad6c4a9f23cde061",
+      "tasks.md": "895d074084f2f42ce5dbc38472ca30a9b11eeea078d23607374922a324f258bb",
+      "implementation-summary.md": "d878f91023351ed8521b591c75f50b1fe53ec1b7aff66a6a6561487aba58d178"
+    },
+    "last_active_child_id": null,
+    "last_active_at": null
+  }
+}

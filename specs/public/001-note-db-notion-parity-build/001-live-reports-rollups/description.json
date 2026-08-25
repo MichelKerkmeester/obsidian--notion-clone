@@ -1,0 +1,32 @@
+{
+  "level": "2",
+  "specFolder": "obsidian/002-note-db-notion-parity-build/001-live-reports-rollups",
+  "description": "The four Reports figures (Income, Expenses, Sales, Saved) are static numbers typed into Report notes to match Notion screenshots during the earlier",
+  "keywords": [
+    "four",
+    "reports",
+    "figures",
+    "income",
+    "expenses",
+    "sales",
+    "saved",
+    "static",
+    "numbers",
+    "typed",
+    "report",
+    "notes",
+    "match",
+    "notion",
+    "screenshots",
+    "earlier"
+  ],
+  "lastUpdated": "2026-08-25T19:14:02.777Z",
+  "specId": "001",
+  "folderSlug": "live-reports-rollups",
+  "parentChain": [
+    "obsidian",
+    "002-note-db-notion-parity-build"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": []
+}

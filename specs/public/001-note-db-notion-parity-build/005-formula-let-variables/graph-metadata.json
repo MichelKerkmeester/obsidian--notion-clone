@@ -1,0 +1,227 @@
+{
+  "schema_version": 1,
+  "packet_id": "obsidian/002-note-db-notion-parity-build/005-formula-let-variables",
+  "spec_folder": "obsidian/002-note-db-notion-parity-build/005-formula-let-variables",
+  "parent_id": "obsidian/002-note-db-notion-parity-build",
+  "children_ids": [
+    "obsidian/002-note-db-notion-parity-build/005-formula-let-variables/001-let-variables-module",
+    "obsidian/002-note-db-notion-parity-build/005-formula-let-variables/002-let-vitest-matrix",
+    "obsidian/002-note-db-notion-parity-build/005-formula-let-variables/003-formula-modal-let-help"
+  ],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "let variable",
+      "lets variable",
+      "formula let",
+      "notion let",
+      "named intermediate",
+      "computed field scope",
+      "formula variable binding",
+      "child scope binding",
+      "computed field context",
+      "formula tasks",
+      "computed field",
+      "checklist"
+    ],
+    "key_topics": [
+      "let",
+      "variable",
+      "lets",
+      "formula",
+      "notion",
+      "named",
+      "intermediate",
+      "computed",
+      "field",
+      "scope",
+      "binding",
+      "child"
+    ],
+    "importance_tier": "high",
+    "status": "planned",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "checklist.md",
+      "implementation-summary.md",
+      "research/synthesis.md",
+      "research/research.md"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "checklist.md",
+        "kind": "doc",
+        "path": "checklist.md",
+        "source": "derived"
+      },
+      {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "synthesis.md",
+        "kind": "doc",
+        "path": "research/synthesis.md",
+        "source": "derived"
+      },
+      {
+        "name": "research.md",
+        "kind": "doc",
+        "path": "research/research.md",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Adds Notion",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Problem Statement Notion",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Purpose Close",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "In Scope",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Notion April",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Plan",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Technical Context",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Overview Build",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Pattern Trusted",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Key Components",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Core Algorithm User",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Notation",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Format",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Core Transform",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Engine Call Sites",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Test Files",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "Notion formulas support `let()` / `lets()` to bind named intermediate values in a per-row child scope (`let(person, \"Alan\", \"Hello, \" + person + \"!\")` = `\"Hello, Alan!\"`); the fork's native engine (`ComputedField.ts` over the `SafeEval.ts` sandbox) has no binding construct, so long formulas duplicate sub-expressions",
+    "created_at": "2026-08-24T17:58:35.358Z",
+    "last_save_at": "2026-08-25T19:32:51.835Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "checklist.md",
+      "implementation-summary.md",
+      "research/research.md"
+    ],
+    "source_fingerprint": "sha256:ef1483eafdcf7dae42f635a7b795fc87138a9e280d6332b88eabb96a89b056e3",
+    "source_doc_hashes": {
+      "spec.md": "d7fbe71e301c451a12ad2fc9fc04df37e51a5231be6dfa554421a8a1c6957ed2",
+      "plan.md": "ade6547150e0b570b1ed5c1601875ab637b4223356d529e68d080ac6aba6757e",
+      "tasks.md": "bb76b5142880e0e1a56de2ba81ef3ce50f104b502a415706883117b45232f60a",
+      "checklist.md": "0fb17a4feaa60176d45cd4fafdea182d688f093339520f0eaf7fd9172a43810d",
+      "implementation-summary.md": "6abd5e4a4a186729067852a50723137adad0a3e59c4f97fa6a97743226fcb73f",
+      "research/research.md": "634323b1d235e2b3ffe2ae77aa2b4b0b32b7c7bd88e7a51a7dfdc18efba92893"
+    },
+    "last_active_child_id": "obsidian/002-note-db-notion-parity-build/005-formula-let-variables/003-formula-modal-let-help",
+    "last_active_at": null
+  }
+}

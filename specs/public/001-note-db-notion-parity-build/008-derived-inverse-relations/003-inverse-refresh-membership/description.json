@@ -1,0 +1,25 @@
+{
+  "level": "1",
+  "specFolder": "obsidian/002-note-db-notion-parity-build/008-derived-inverse-relations/003-inverse-refresh-membership",
+  "description": "`handleDataChangeBatch` refreshes when `relationTargetPaths.has(change.path)` or the record matches `relationTargetDatabases`",
+  "keywords": [
+    "handledatachangebatch",
+    "refreshes",
+    "relationtargetpaths",
+    "change",
+    "path",
+    "record",
+    "matches",
+    "relationtargetdatabases"
+  ],
+  "lastUpdated": "2026-08-25T19:43:45.111Z",
+  "specId": "003",
+  "folderSlug": "inverse-refresh-membership",
+  "parentChain": [
+    "obsidian",
+    "002-note-db-notion-parity-build",
+    "008-derived-inverse-relations"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": []
+}

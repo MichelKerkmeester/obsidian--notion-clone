@@ -1,0 +1,20 @@
+{
+  "topic": "Perfect the Toolbar New-From-Template Button feature for the forked Note Database Obsidian plugin toward Notion parity. Mine AppFlowy and Anytype references; cite Notion behavior via WebFetch. Deliverable: ranked, evidence-cited enrichment.",
+  "specFolder": "specs/obsidian/002-note-db-notion-parity-build/013-template-toolbar-button",
+  "artifactDir": "specs/obsidian/002-note-db-notion-parity-build/013-template-toolbar-button/research/lineages/glm-5-2",
+  "sessionId": "fanout-glm-5-2-1787630131864-cpa84y",
+  "lineageMode": "new",
+  "generation": 1,
+  "loopType": "research",
+  "executor": { "kind": "cli-devin", "model": "glm-5-2" },
+  "stopPolicy": "max-iterations",
+  "maxIterations": 6,
+  "convergenceThreshold": 0.05,
+  "maxToolCallsPerIteration": 12,
+  "maxMinutesPerIteration": 10,
+  "stuckThreshold": 3,
+  "convergenceMode": "default",
+  "resourceMapPresent": false,
+  "status": "complete",
+  "createdAt": "2026-08-25T06:00:00Z"
+}

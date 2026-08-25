@@ -1,0 +1,9 @@
+# Override the operator's global /specs ignore so the plugin specs live in this repo.
+!/specs/
+# Keep real finance-data packet + heavy working dirs OUT of the public repo.
+specs/personal/
+specs/**/context/
+specs/**/scratch/
+specs/**/research/**/lineages/
+.DS_Store
+node_modules/

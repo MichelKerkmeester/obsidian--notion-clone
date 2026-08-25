@@ -1,0 +1,32 @@
+{
+  "level": "1",
+  "specFolder": "obsidian/002-note-db-notion-parity-build/003-reports-computed-fields/001-live-reports-inspect",
+  "description": "The single biggest risk for this phase is writing the wrong `[field]` names or Saved expression before inspecting live Reports column ids after",
+  "keywords": [
+    "single",
+    "biggest",
+    "risk",
+    "phase",
+    "writing",
+    "wrong",
+    "field",
+    "names",
+    "saved",
+    "expression",
+    "inspecting",
+    "live",
+    "reports",
+    "column",
+    "ids"
+  ],
+  "lastUpdated": "2026-08-25T19:22:19.374Z",
+  "specId": "001",
+  "folderSlug": "live-reports-inspect",
+  "parentChain": [
+    "obsidian",
+    "002-note-db-notion-parity-build",
+    "003-reports-computed-fields"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": []
+}

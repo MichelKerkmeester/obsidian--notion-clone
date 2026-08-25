@@ -1,0 +1,224 @@
+{
+  "schema_version": 1,
+  "packet_id": "obsidian/002-note-db-notion-parity-build/013-template-toolbar-button",
+  "spec_folder": "obsidian/002-note-db-notion-parity-build/013-template-toolbar-button",
+  "parent_id": "obsidian/002-note-db-notion-parity-build",
+  "children_ids": [],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "toolbar new from template",
+      "new from template button",
+      "record template toolbar",
+      "create entry plan",
+      "template toolbar button",
+      "notion buttons parity",
+      "confirm modal template",
+      "row menu new from template",
+      "template toolbar plan",
+      "euroformat isolated module",
+      "create entry plan tasks",
+      "template toolbar tasks"
+    ],
+    "key_topics": [
+      "toolbar",
+      "new",
+      "template",
+      "button",
+      "record",
+      "entry",
+      "plan",
+      "notion",
+      "buttons",
+      "parity",
+      "confirm",
+      "modal"
+    ],
+    "importance_tier": "high",
+    "status": "planned",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "checklist.md",
+      "implementation-summary.md",
+      "research/synthesis.md",
+      "research/research.md",
+      "research/final-plan.md"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "checklist.md",
+        "kind": "doc",
+        "path": "checklist.md",
+        "source": "derived"
+      },
+      {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "synthesis.md",
+        "kind": "doc",
+        "path": "research/synthesis.md",
+        "source": "derived"
+      },
+      {
+        "name": "research.md",
+        "kind": "doc",
+        "path": "research/research.md",
+        "source": "derived"
+      },
+      {
+        "name": "final-plan.md",
+        "kind": "doc",
+        "path": "research/final-plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Toolbar New",
+        "kind": "proper_noun",
+        "path": "research/research.md",
+        "source": "derived"
+      },
+      {
+        "name": "Template Button",
+        "kind": "proper_noun",
+        "path": "research/research.md",
+        "source": "derived"
+      },
+      {
+        "name": "Problem Statement The",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Purpose Ship",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Notion Buttons",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Plan",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Technical Context",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Overview The",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Obsidian Plugin",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Notation",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Format",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Completion Criteria",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "locked-out",
+        "kind": "key_phrase",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Verification Checklist",
+        "kind": "proper_noun",
+        "path": "checklist.md",
+        "source": "derived"
+      },
+      {
+        "name": "Verification Protocol",
+        "kind": "proper_noun",
+        "path": "checklist.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "The note-database fork already implements Notion-style record templates and already wires them to the toolbar New button",
+    "created_at": "2026-08-24T17:58:52.659Z",
+    "last_save_at": "2026-08-25T15:12:36.702Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "checklist.md",
+      "implementation-summary.md",
+      "research/research.md"
+    ],
+    "source_fingerprint": "sha256:ea58ca0038a59be7f023572b06df301cdf66a839838838ca7340771f5ea474e9",
+    "source_doc_hashes": {
+      "spec.md": "563d3cded3ed3b35ba6a3203eca396b1f8c57d35b546ec1052acc14338177537",
+      "plan.md": "66c61047f15e46eece87419f7d3d0a4a23f405de088aedea995baf35ed4459bc",
+      "tasks.md": "78632bf52e298a71715e39dda3dfd36d9f077e3b62fcf3476f13b99079d74b7d",
+      "checklist.md": "67af14517757b30359fb65e16d489a272567b1d94e7a650720be838910817822",
+      "implementation-summary.md": "dca9168a37303c932a9dd174deb4439877043501115eac1b7ed2afe400edf5d8",
+      "research/research.md": "954022523a7f57f1e120bc994203e0efaf68631d5c928efdcf302d06495d0fde"
+    },
+    "last_active_child_id": null,
+    "last_active_at": null
+  }
+}

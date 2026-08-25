@@ -1,0 +1,29 @@
+{"event":"started","label":"deepseek-flash-max","index":0,"attempt":1,"at":"2026-08-25T04:14:56.586Z","gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"deepseek-flash-max","at":"2026-08-25T04:15:56.671Z","duration_ms":60002,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"deepseek-flash-max","at":"2026-08-25T04:16:56.673Z","duration_ms":120004,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"deepseek-flash-max","at":"2026-08-25T04:17:56.676Z","duration_ms":180007,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"deepseek-flash-max","at":"2026-08-25T04:18:56.678Z","duration_ms":240009,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"deepseek-flash-max","at":"2026-08-25T04:19:56.680Z","duration_ms":300011,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"deepseek-flash-max","at":"2026-08-25T04:20:56.680Z","duration_ms":360011,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"deepseek-flash-max","at":"2026-08-25T04:21:56.682Z","duration_ms":420013,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"deepseek-flash-max","at":"2026-08-25T04:22:56.685Z","duration_ms":480016,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"deepseek-flash-max","at":"2026-08-25T04:23:56.687Z","duration_ms":540018,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"deepseek-flash-max","at":"2026-08-25T04:24:56.689Z","duration_ms":600020,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"failed","label":"deepseek-flash-max","index":0,"attempt":1,"at":"2026-08-25T04:25:44.958Z","duration_ms":648371,"terminal":true,"error":{"name":"Error","message":"lineage deepseek-flash-max violated max-iterations stop policy: stopPolicy=max-iterations requires a positive lineage iteration cap","failure_class":"exit","retry_verdict":"fatal","retryable":false,"exit_code":0,"timed_out":false,"salvage":{"salvaged":0,"failed":0}},"gauges":{"lag":0,"pending":0,"failed":1},"skippedCount":9,"slotDurationMs":647870.992625}
+{"event":"started","label":"deepseek-flash-max","index":0,"attempt":1,"at":"2026-08-25T04:30:19.855Z","gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"deepseek-flash-max","at":"2026-08-25T04:31:19.928Z","duration_ms":60003,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"deepseek-flash-max","at":"2026-08-25T04:32:19.928Z","duration_ms":120003,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"deepseek-flash-max","at":"2026-08-25T04:33:19.930Z","duration_ms":180006,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"deepseek-flash-max","at":"2026-08-25T04:34:19.933Z","duration_ms":240008,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"deepseek-flash-max","at":"2026-08-25T04:35:19.935Z","duration_ms":300010,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"deepseek-flash-max","at":"2026-08-25T04:36:19.937Z","duration_ms":360012,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"deepseek-flash-max","at":"2026-08-25T04:37:19.939Z","duration_ms":420014,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"deepseek-flash-max","at":"2026-08-25T04:38:19.941Z","duration_ms":480016,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"deepseek-flash-max","at":"2026-08-25T04:39:19.941Z","duration_ms":540016,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"deepseek-flash-max","at":"2026-08-25T04:40:19.942Z","duration_ms":600017,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"deepseek-flash-max","at":"2026-08-25T04:41:19.941Z","duration_ms":660016,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"deepseek-flash-max","at":"2026-08-25T04:42:19.942Z","duration_ms":720017,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"deepseek-flash-max","at":"2026-08-25T04:43:19.944Z","duration_ms":780019,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"deepseek-flash-max","at":"2026-08-25T04:44:19.945Z","duration_ms":840020,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"progress","label":"deepseek-flash-max","at":"2026-08-25T04:45:19.946Z","duration_ms":900021,"gauges":{"lag":1,"pending":0,"failed":0}}
+{"event":"failed","label":"deepseek-flash-max","index":0,"attempt":1,"at":"2026-08-25T04:46:00.283Z","duration_ms":940427,"terminal":true,"error":{"name":"Error","message":"Effect evidence append was denied by the transition gateway: audit_storage_failure","failure_class":"exit","retry_verdict":"fatal","retryable":false,"exit_code":null,"timed_out":false,"salvage":null},"gauges":{"lag":0,"pending":0,"failed":1}}

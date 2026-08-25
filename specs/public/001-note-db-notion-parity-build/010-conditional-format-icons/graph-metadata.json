@@ -1,0 +1,224 @@
+{
+  "schema_version": 1,
+  "packet_id": "obsidian/002-note-db-notion-parity-build/010-conditional-format-icons",
+  "spec_folder": "obsidian/002-note-db-notion-parity-build/010-conditional-format-icons",
+  "parent_id": "obsidian/002-note-db-notion-parity-build",
+  "children_ids": [],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "conditional formatting",
+      "multi-condition format",
+      "format icons",
+      "applyconditionalformat",
+      "icon bold attribute",
+      "and or format rules",
+      "first-match formatting",
+      "conditional formatting plan",
+      "multi-condition cf",
+      "euroformat isolated diff",
+      "view filter tree reuse",
+      "conditional formatting tasks"
+    ],
+    "key_topics": [
+      "conditional",
+      "formatting",
+      "multi-condition",
+      "format",
+      "icons",
+      "applyconditionalformat",
+      "icon",
+      "bold",
+      "attribute",
+      "rules",
+      "first-match",
+      "plan"
+    ],
+    "importance_tier": "high",
+    "status": "planned",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "checklist.md",
+      "implementation-summary.md",
+      "research/synthesis.md",
+      "research/research.md",
+      "research/final-plan.md"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "checklist.md",
+        "kind": "doc",
+        "path": "checklist.md",
+        "source": "derived"
+      },
+      {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "synthesis.md",
+        "kind": "doc",
+        "path": "research/synthesis.md",
+        "source": "derived"
+      },
+      {
+        "name": "research.md",
+        "kind": "doc",
+        "path": "research/research.md",
+        "source": "derived"
+      },
+      {
+        "name": "final-plan.md",
+        "kind": "doc",
+        "path": "research/final-plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Conditional Formatting Multi",
+        "kind": "proper_noun",
+        "path": "research/research.md",
+        "source": "derived"
+      },
+      {
+        "name": "Problem Statement The",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Purpose Extend",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "In Scope",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Match Option",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Plan",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Technical Context",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Obsidian Plugin",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Overview After",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Pattern Single",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Notation",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Format",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Tasks",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Optional Intl",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Verification Checklist",
+        "kind": "proper_noun",
+        "path": "checklist.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "The fork already matches Notion's core conditional-format contract — per-view rules, first-match, row-or-property color — through one shared helper (`getConditionalFormatMatch` / `applyConditionalFormat` in `src/data/ConditionalFormatting.ts:23-69`) that all ten renderer consumers call",
+    "created_at": "2026-08-24T17:58:45.574Z",
+    "last_save_at": "2026-08-25T14:37:59.754Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "checklist.md",
+      "implementation-summary.md",
+      "research/research.md"
+    ],
+    "source_fingerprint": "sha256:d58ec0b28dbbda8f06e65a8226f392d5531a29ba93e74378bbf6340ffff4b93b",
+    "source_doc_hashes": {
+      "spec.md": "9d61a0164c169bad7dd78cec04c04fb7c6f168dddfdb1323475c9efb620757cf",
+      "plan.md": "28194e777752541bb5d132b1227dec8ea0aea712c29d11ab00ed25386e3aef17",
+      "tasks.md": "02fd663a10065439731bfd1528b15841a92e8e3c7ec6807c17fed02e2f625964",
+      "checklist.md": "f29d172d44ced69c35ddf3d468ec6c8487a4acc47ab089dbd1244499e3c96d29",
+      "implementation-summary.md": "01ee13829c27bce5dad70550dd962d3399d4968eddb120cfee3939dab88b4c91",
+      "research/research.md": "a0381849bdf4f821a0e4a4c2fdcc64a51d5516050a46173994e97e9fb09a3c98"
+    },
+    "last_active_child_id": null,
+    "last_active_at": null
+  }
+}

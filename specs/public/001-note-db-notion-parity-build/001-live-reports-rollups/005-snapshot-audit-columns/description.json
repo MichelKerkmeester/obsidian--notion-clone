@@ -1,0 +1,20 @@
+{
+  "level": "1",
+  "specFolder": "obsidian/002-note-db-notion-parity-build/001-live-reports-rollups/005-snapshot-audit-columns",
+  "description": "Notion has no screenshot-freeze; this vault does",
+  "keywords": [
+    "notion",
+    "screenshot-freeze",
+    "vault"
+  ],
+  "lastUpdated": "2026-08-25T19:23:12.791Z",
+  "specId": "005",
+  "folderSlug": "snapshot-audit-columns",
+  "parentChain": [
+    "obsidian",
+    "002-note-db-notion-parity-build",
+    "001-live-reports-rollups"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": []
+}
