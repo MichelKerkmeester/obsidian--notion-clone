@@ -1,6 +1,6 @@
 {
   "level": "1",
-  "specFolder": "obsidian/002-note-db-notion-parity-build/016-onchange-automations",
+  "specFolder": "public/001-note-db-notion-parity-build/016-onchange-automations",
   "description": "Notion-style on-change automations (\"when field X changes, do Y\"), triggers, and recurring/cron templates look like remaining parity gaps, but the",
   "keywords": [
     "notion-style",
@@ -18,12 +18,12 @@
     "parity",
     "gaps"
   ],
-  "lastUpdated": "2026-08-25T15:33:10.402Z",
+  "lastUpdated": "2026-08-25T20:13:40.950Z",
   "specId": "016",
   "folderSlug": "onchange-automations",
   "parentChain": [
-    "obsidian",
-    "002-note-db-notion-parity-build"
+    "public",
+    "001-note-db-notion-parity-build"
   ],
   "memorySequence": 0,
   "memoryNameHistory": []

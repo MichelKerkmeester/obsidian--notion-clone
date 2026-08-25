@@ -1,0 +1,29 @@
+{
+  "specFolder": "public/001-note-db-notion-parity-build/014-record-detail-panel/003-title-open-affordance",
+  "description": "The title cell already navigates on click (`CellRenderer.ts:126-129` → `openNote`) and already feeds Page Preview via `markNoteHoverLink`",
+  "keywords": [
+    "title",
+    "cell",
+    "already",
+    "navigates",
+    "click",
+    "cellrenderer",
+    "opennote",
+    "feeds",
+    "page",
+    "preview",
+    "via",
+    "marknotehoverlink"
+  ],
+  "lastUpdated": "2026-08-25T21:21:14.298Z",
+  "specId": "003",
+  "folderSlug": "title-open-affordance",
+  "parentChain": [
+    "public",
+    "001-note-db-notion-parity-build",
+    "014-record-detail-panel"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": [],
+  "level": "1"
+}

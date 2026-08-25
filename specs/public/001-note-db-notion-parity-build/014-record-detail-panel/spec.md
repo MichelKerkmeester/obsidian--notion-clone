@@ -12,11 +12,11 @@ importance_tier: "high"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "obsidian/002-note-db-notion-parity-build/014-record-detail-panel"
-    last_updated_at: "2026-08-25T00:00:00Z"
-    last_updated_by: "markdown-agent"
-    recent_action: "Reconciled docs vs final-plan.md per-step acceptance (grep + view-switch); Planned"
-    next_safe_action: "Build phase 014 per plan.md and tasks.md (8 ordered steps)"
+    packet_pointer: "public/001-note-db-notion-parity-build/014-record-detail-panel"
+    last_updated_at: "2026-08-25T21:20:00Z"
+    last_updated_by: "phase-architect"
+    recent_action: "Nested sub-phases authored from synthesis and final-plan"
+    next_safe_action: "Build 001-table-record-peek-module per its plan.md and tasks.md"
     blockers: []
     key_files:
       - "spec.md"
@@ -66,7 +66,7 @@ This is an S-tier polish phase, not a capability project. The fork already has t
 3. **Module-name collision** — `src/views/RecordDetailPanel.ts` is a live ~450-line **editable** calendar/timeline overlay that already exports `openRecordDetailPanel`, `closeRecordDetailPanel`, `refreshRecordDetailPanel`, `getOpenRecordDetailPath` (`RecordDetailPanel.ts:84-104`) and is already imported by `DatabaseView.ts:143`, `CalendarRenderer.ts:1402-1403`, `CalendarTimelineRenderer.ts:456-457`, and `EmbeddedDatabaseRenderer.ts:57-61`. Creating a second `RecordDetailPanel.ts` (in `src/data/` or anywhere) with the same export names is a compile-time and runtime collision. The research baseline never found this file. The new module must be a distinct sibling, not a name-share.
 
 ### Purpose
-Ship a **display-only CSS-docked right side-peek** from a new `src/views/TableRecordPeek.ts` (a sibling of — and entirely distinct from — the existing calendar `src/views/RecordDetailPanel.ts`, which stays untouched), with an OPEN `<button>` appended as a sibling of the title `<a>` in `.db-title-cell`, Anytype's two-group IA (header + collapsible hidden; drop Anytype's third `local` group — no per-object local relations in this fork), and CSS scoped under `.note-database-container` using theme variables only. Do **not** reuse `openRow` / `dataSource.openNote`, do **not** reuse the calendar `openRecordDetailPanel` (it edits in place, calls `openNote`, uses `positionToolbarPopover` geometry, lacks scroll-dismiss, lacks a hidden group, and truncates values — it would ship 015 write-back and fight this phase's side-peek IA), do **not** use an Obsidian `Modal` (it blocks the grid; Notion's table default is Side peek), and do **not** restyle the core toolbar. Write-back stays in successor `015`.
+Ship a **display-only CSS-docked right side-peek** from a new `src/views/TableRecordPeek.ts` (a sibling of — and entirely distinct from — the existing calendar `src/views/RecordDetailPanel.ts`, which stays untouched), with an OPEN `<button>` appended as a sibling of the title `<a>` in `.db-title-cell`, Anytype's two-group IA (header + collapsible hidden; drop Anytype's third `local` group — no per-object local relations in this fork), and CSS scoped under `.note-database-container` using theme variables only. Do **not** reuse `openRow` / `dataSource.openNote`, do **not** reuse the calendar `openRecordDetailPanel` (it edits in place, calls `openNote`, uses `positionToolbarPopover` geometry, lacks scroll-dismiss, lacks a hidden group, and truncates values — it would ship 015 write-back and fight this phase's side-peek IA), do **not** use an Obsidian `Modal` (it blocks the grid; Notion's table default is Side peek), and do **not** restyle the core toolbar. Write-back stays in successor `015`. Nested children below own the ordered slices: TableRecordPeek module plus i18n first, then peek CSS, then title OPEN plus overlay lifecycle, then Mod+Enter, then display proofs.
 
 <!-- /ANCHOR:problem -->
 ---
@@ -97,11 +97,11 @@ Ship a **display-only CSS-docked right side-peek** from a new `src/views/TableRe
 
 | File Path | Change Type | Description |
 |-----------|-------------|-------------|
-| `specs/obsidian/002-note-db-notion-parity-build/014-record-detail-panel/spec.md` | Edit | Level 2 specification rewritten to match synthesis + final-plan review |
-| `specs/obsidian/002-note-db-notion-parity-build/014-record-detail-panel/plan.md` | Edit | Level 2 implementation plan rewritten to match synthesis + final-plan review |
-| `specs/obsidian/002-note-db-notion-parity-build/014-record-detail-panel/tasks.md` | Edit | Level 2 task list rewritten to match synthesis ranked backlog + final-plan review |
-| `specs/obsidian/002-note-db-notion-parity-build/014-record-detail-panel/checklist.md` | Edit | Level 2 verification checklist rewritten to match synthesis edge cases + final-plan review |
-| `specs/obsidian/002-note-db-notion-parity-build/014-record-detail-panel/implementation-summary.md` | Untouched | Nothing is implemented yet |
+| `specs/public/001-note-db-notion-parity-build/014-record-detail-panel/spec.md` | Edit | Level 2 specification rewritten to match synthesis + final-plan review |
+| `specs/public/001-note-db-notion-parity-build/014-record-detail-panel/plan.md` | Edit | Level 2 implementation plan rewritten to match synthesis + final-plan review |
+| `specs/public/001-note-db-notion-parity-build/014-record-detail-panel/tasks.md` | Edit | Level 2 task list rewritten to match synthesis ranked backlog + final-plan review |
+| `specs/public/001-note-db-notion-parity-build/014-record-detail-panel/checklist.md` | Edit | Level 2 verification checklist rewritten to match synthesis edge cases + final-plan review |
+| `specs/public/001-note-db-notion-parity-build/014-record-detail-panel/implementation-summary.md` | Untouched | Nothing is implemented yet |
 | `src/views/TableRecordPeek.ts` (fork) | Create (planned) | Display-only CSS-docked side-peek panel + title-cell OPEN affordance; distinct exports (`attachTitleOpenAffordance`, `openTableRecordPeek`, `closeTableRecordPeek`, `syncTableRecordPeek`); no `DataSource` import; sibling of — and distinct from — the existing calendar `src/views/RecordDetailPanel.ts` |
 | `src/views/DatabaseView.ts` (fork) | Edit (planned) | Three hunks: (A) `renderCell` (~7840-7848) attaches the affordance for `col.key === "file.name"` or the first visible data column when the title is hidden; (B) `handleDatabaseKeydown` (~1523) handles Mod+Enter before `editAtCellSelection()`; (C) overlay lifecycle — `hasActiveOverlay` (`:834`), `closeActiveOverlays` (`:864`), `refresh()` (`:10483-10488`) |
 | `src/i18n.ts` (fork) | Edit (planned) | Add `panel.open`, `panel.noProperties`, `panel.hiddenProperties` × en / zh-CN / zh-TW |
@@ -270,3 +270,35 @@ Operator decisions (defaults locked in plan.md from the final-plan review; revis
 - **Research Baseline**: See `research/synthesis.md` (decision-ready) and `research/research.md` (full evidence trail)
 
 <!-- /ANCHOR:related-docs -->
+
+<!-- ANCHOR:phase-map -->
+## PHASE DOCUMENTATION MAP
+
+> This spec uses phased decomposition. Each phase is an independently executable child spec folder. All implementation details (plan, tasks, checklist, decisions, continuity) live inside the phase children.
+
+| Phase | Folder | Focus | Status |
+|-------|--------|-------|--------|
+| 1 | 001-table-record-peek-module/ | Create `src/views/TableRecordPeek.ts` plus i18n `panel.*` keys as a display-only sibling of the calendar panel | Planned |
+| 2 | 002-peek-panel-css/ | Append toolbar-safe theme-variable peek CSS, including phone-persistent OPEN | Planned |
+| 3 | 003-title-open-affordance/ | Attach Name-cell OPEN in `renderCell` and wire overlay lifecycle so refresh cannot orphan the peek | Planned |
+| 4 | 004-peek-keyboard-open/ | Open the peek with Mod+Enter before the bare-Enter edit branch | Planned |
+| 5 | 005-peek-display-proof/ | Prove typecheck, greps, and the locked manual desktop/phone scenarios | Planned |
+
+Future / out of this phase (not child folders): board/gallery hosts; body/markdown preview and two-way write-back (successor `015`); Anytype `local` group; Anytype `Storage.setToggle`; reuse of calendar `openRecordDetailPanel`; Obsidian `Modal`; follow-on-scroll; a pushed keymap `Scope`; `src/data/RecordDetailPanel.ts`; `PopoverPosition` clamp/flip.
+
+### Phase Transition Rules
+
+- Each phase MUST pass `validate.sh` independently before the next phase begins
+- Parent spec tracks aggregate progress via this map
+- Use `/speckit:resume [parent-folder]/[NNN-phase]/` to resume a specific phase
+- Run `validate.sh --recursive` on parent to validate all phases as integrated unit
+
+### Phase Handoff Criteria
+
+| From | To | Criteria | Verification |
+|------|-----|----------|--------------|
+| 001-table-record-peek-module | 002-peek-panel-css | `src/views/TableRecordPeek.ts` exports `attachTitleOpenAffordance`, `openTableRecordPeek`, `closeTableRecordPeek`, `syncTableRecordPeek`; i18n `panel.open` / `panel.noProperties` / `panel.hiddenProperties` exist × en / zh-CN / zh-TW; calendar `src/views/RecordDetailPanel.ts` is untouched | Grep of the new module shows no `DataSource` / `mutateFrontmatter` / `openNote`; calendar exports at `RecordDetailPanel.ts:84-104` still compile |
+| 002-peek-panel-css | 003-title-open-affordance | Plugin-root `styles.css` has one appended `.note-database-container` block for `.db-record-peek-panel` / `.db-record-open-btn` / `.db-record-peek-field`; phone OPEN is CSS-only | `git diff styles.css` is one appended block; grep of that diff for `toolbar` / `patchToolbarNew` / `.db-record-detail-` is empty; `body.is-phone` opacity-1 rule present; z-index 998 |
+| 003-title-open-affordance | 004-peek-keyboard-open | `renderCell` (~7840-7848) attaches OPEN on `file.name` or the first visible data column; overlay selector, `closeActiveOverlays`, and `refresh()` sync the peek | Title `<a>` still navigates (`CellRenderer.ts:126-129`); button has no `data-note-database-hover-link`; `refresh()` calls `syncTableRecordPeek(this.rows)` (`DatabaseView.ts:10483-10488`) |
+| 004-peek-keyboard-open | 005-peek-display-proof | Mod+Enter on a focused cell opens the peek and returns before `editAtCellSelection()`; bare Enter / F2 unchanged | Mod+Enter opens peek; Enter still edits (`DatabaseView.ts:1523-1531`); Esc stays document capture in the module (`RecordDetailPanel.ts:128-147` pattern), not a pushed `Scope` |
+<!-- /ANCHOR:phase-map -->

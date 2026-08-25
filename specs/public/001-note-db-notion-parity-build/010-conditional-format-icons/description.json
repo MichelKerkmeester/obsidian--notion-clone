@@ -1,6 +1,6 @@
 {
   "level": "2",
-  "specFolder": "obsidian/002-note-db-notion-parity-build/010-conditional-format-icons",
+  "specFolder": "public/001-note-db-notion-parity-build/010-conditional-format-icons",
   "description": "The fork already matches Notion's core conditional-format contract — per-view rules, first-match, row-or-property color — through one shared helper",
   "keywords": [
     "fork",
@@ -19,12 +19,12 @@
     "shared",
     "helper"
   ],
-  "lastUpdated": "2026-08-25T10:39:42.443Z",
+  "lastUpdated": "2026-08-25T21:01:35.046Z",
   "specId": "010",
   "folderSlug": "conditional-format-icons",
   "parentChain": [
-    "obsidian",
-    "002-note-db-notion-parity-build"
+    "public",
+    "001-note-db-notion-parity-build"
   ],
   "memorySequence": 0,
   "memoryNameHistory": []

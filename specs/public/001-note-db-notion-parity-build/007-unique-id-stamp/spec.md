@@ -14,7 +14,7 @@ importance_tier: "high"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "obsidian/002-note-db-notion-parity-build/007-unique-id-stamp"
+    packet_pointer: "public/001-note-db-notion-parity-build/007-unique-id-stamp"
     last_updated_at: "2026-08-25T21:35:00Z"
     last_updated_by: "phase-architect"
     recent_action: "Nested sub-phases authored; UniqueIdStamp module first"

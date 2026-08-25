@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "packet_id": "obsidian/002-note-db-notion-parity-build/001-live-reports-rollups/006-nowrite-proof-runbook",
-  "spec_folder": "obsidian/002-note-db-notion-parity-build/001-live-reports-rollups/006-nowrite-proof-runbook",
-  "parent_id": "obsidian/002-note-db-notion-parity-build/001-live-reports-rollups",
+  "packet_id": "public/001-note-db-notion-parity-build/001-live-reports-rollups/006-nowrite-proof-runbook",
+  "spec_folder": "public/001-note-db-notion-parity-build/001-live-reports-rollups/006-nowrite-proof-runbook",
+  "parent_id": "public/001-note-db-notion-parity-build/001-live-reports-rollups",
   "children_ids": [],
   "manual": {
     "depends_on": [],
@@ -192,7 +192,7 @@
     ],
     "causal_summary": "Notion rollups are not page storage",
     "created_at": "2026-08-25T19:11:32Z",
-    "last_save_at": "2026-08-25T19:23:37.995Z",
+    "last_save_at": "2026-08-25T20:14:51.310Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -201,12 +201,12 @@
       "tasks.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:a2261f9dbb6420f5c6d47af4375573d53c32f9f2695089210305c1f3e2ca25fe",
+    "source_fingerprint": "sha256:8bba161dfecb131ebca6bddf872f1cdaae5673aaba9e816738224f5ecec5e66b",
     "source_doc_hashes": {
-      "spec.md": "befc43957ad3372678350920dd46e6ddea63cdf0fa0201339d54f234e4aa4b89",
-      "plan.md": "08227a539866dd35d385d1c61f7eebbd6e11e36a07eed8ddf8756d8b0f0b168e",
-      "tasks.md": "7d3afe6fc7e57e2da32d208d0939870391a93d660450b80d0edf372c74d624cf",
-      "implementation-summary.md": "62f7c94589a5b97f1b897bb2a97e05df5398b748f8dc9fe90a74d024f586d4cb"
+      "spec.md": "cad4a3e3f0e65e9ee8316e2b4ae88e37e3f24e93c3129fb9ba6185f4e461bbd9",
+      "plan.md": "fee99436c5f97d1e8d411340d2b432471ce94d29df29e48a23721fd1a81c6a42",
+      "tasks.md": "c2dd89968f3073e65ac85e656173cfa44260cf931853894fc1c0be0cd1c3df9a",
+      "implementation-summary.md": "3a56a9b7060ec1eefca59aaaab7496f7f2ed7d85ac8eba054f33ff8f80be411a"
     },
     "last_active_child_id": null,
     "last_active_at": null

@@ -1,6 +1,6 @@
 {
   "level": "2",
-  "specFolder": "obsidian/002-note-db-notion-parity-build/003-reports-computed-fields",
+  "specFolder": "public/001-note-db-notion-parity-build/003-reports-computed-fields",
   "description": "The finance Reports view lacks Remaining and Saved as live computed columns",
   "keywords": [
     "finance",
@@ -13,12 +13,12 @@
     "computed",
     "columns"
   ],
-  "lastUpdated": "2026-08-25T19:15:23.985Z",
+  "lastUpdated": "2026-08-25T20:13:40.840Z",
   "specId": "003",
   "folderSlug": "reports-computed-fields",
   "parentChain": [
-    "obsidian",
-    "002-note-db-notion-parity-build"
+    "public",
+    "001-note-db-notion-parity-build"
   ],
   "memorySequence": 0,
   "memoryNameHistory": []

@@ -1,12 +1,15 @@
 {
   "schema_version": 1,
-  "packet_id": "obsidian/002-note-db-notion-parity-build/004-formula-ifs-switch-math",
-  "spec_folder": "obsidian/002-note-db-notion-parity-build/004-formula-ifs-switch-math",
-  "parent_id": "obsidian/002-note-db-notion-parity-build",
+  "packet_id": "public/001-note-db-notion-parity-build/004-formula-ifs-switch-math",
+  "spec_folder": "public/001-note-db-notion-parity-build/004-formula-ifs-switch-math",
+  "parent_id": "public/001-note-db-notion-parity-build",
   "children_ids": [
     "obsidian/002-note-db-notion-parity-build/004-formula-ifs-switch-math/001-formula-ifs-switch-math-module",
     "obsidian/002-note-db-notion-parity-build/004-formula-ifs-switch-math/002-formula-modal-i18n-discovery",
-    "obsidian/002-note-db-notion-parity-build/004-formula-ifs-switch-math/003-computed-formulas-vitest"
+    "obsidian/002-note-db-notion-parity-build/004-formula-ifs-switch-math/003-computed-formulas-vitest",
+    "public/001-note-db-notion-parity-build/004-formula-ifs-switch-math/001-formula-ifs-switch-math-module",
+    "public/001-note-db-notion-parity-build/004-formula-ifs-switch-math/002-formula-modal-i18n-discovery",
+    "public/001-note-db-notion-parity-build/004-formula-ifs-switch-math/003-computed-formulas-vitest"
   ],
   "manual": {
     "depends_on": [],
@@ -201,7 +204,7 @@
     ],
     "causal_summary": "The note database fork's native Excel-style formula engine already evaluates `IF`, exposes `Math` on the sandbox eval scope (`ComputedField.ts:433-437`), and already dual-names `POWER`/`POW` — but Notion's `ifs(cond, val, ..., [else])` branch chain is absent (users must hand-nest `IF`), and the common Excel-style math names `SQRT` / `LN` / `LOG10` / `EXP` / `CBRT` are missing even though raw `Math.` works",
     "created_at": "2026-08-24T17:58:33.351Z",
-    "last_save_at": "2026-08-25T19:18:37.642Z",
+    "last_save_at": "2026-08-25T20:14:57.107Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -212,13 +215,13 @@
       "implementation-summary.md",
       "research/research.md"
     ],
-    "source_fingerprint": "sha256:15dff61b71e91570f71951a1ebcea87d5d9cf1a9078e9d5058b906b8947bdbaa",
+    "source_fingerprint": "sha256:f419358d07cddba29a4f96994dd4e7890345fb233e8c918c8f82f33b2a11efc4",
     "source_doc_hashes": {
-      "spec.md": "7d7b7684f4f409118feef9eb0bc22648e056ead7d6a31bbef87cc289769c9257",
-      "plan.md": "8d4454de383e528056d7a22009f39eadb44d8c89fa395a752a7d584caca3f93b",
-      "tasks.md": "cd98778fa63cde8d533d01863be596ebbb4a33e4c9495656623b4abcece5258f",
-      "checklist.md": "e0da3a5ad4d80502d5629b4054398e79ed243ef247dd5fa4db5afb7036ebea35",
-      "implementation-summary.md": "6e291580cbbd6cc1cfa7a012886196019472a7c7230788ad7ead5b894cb3c231",
+      "spec.md": "9f80147f0320aaf0eae04954ef1ac5c47029189abf3353773524f4beaa1b53f7",
+      "plan.md": "c098c2d45a76081016dd97ab67a3b46b4917ade6fddb826ac992c0a04926a788",
+      "tasks.md": "e4fe860621d81c4cee8e059ffc89fb16b57b4294b083511fff8faa9a41d6c084",
+      "checklist.md": "75b8cd65b2778b890323b5600fa89219da3e369241ae9bea80e616286e0d0010",
+      "implementation-summary.md": "ab51a32322c6674dbb208d6fdb691df9ee13280438a919c05b7c980deb0bcccb",
       "research/research.md": "15b90fd8e0a146445ba40d773c3f2c84f901f0cd8f8bd97fc03f3f07c7205159"
     },
     "last_active_child_id": "obsidian/002-note-db-notion-parity-build/004-formula-ifs-switch-math/003-computed-formulas-vitest",

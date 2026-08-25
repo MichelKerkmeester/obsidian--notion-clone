@@ -13,7 +13,7 @@ importance_tier: "high"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "obsidian/002-note-db-notion-parity-build/008-derived-inverse-relations"
+    packet_pointer: "public/001-note-db-notion-parity-build/008-derived-inverse-relations"
     last_updated_at: "2026-08-25T00:00:00Z"
     last_updated_by: "markdown-agent"
     recent_action: "Compacted continuity fields after final-plan findings applied to docs"

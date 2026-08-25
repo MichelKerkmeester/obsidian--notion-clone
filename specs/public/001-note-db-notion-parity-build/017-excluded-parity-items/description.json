@@ -1,6 +1,6 @@
 {
   "level": "1",
-  "specFolder": "obsidian/002-note-db-notion-parity-build/017-excluded-parity-items",
+  "specFolder": "public/001-note-db-notion-parity-build/017-excluded-parity-items",
   "description": "The Notion-parity research (10 iterations, evidence in `research/research.md`, decision-ready summary in `research/synthesis.md`) surfaced a long",
   "keywords": [
     "notion-parity",
@@ -13,12 +13,12 @@
     "surfaced",
     "long"
   ],
-  "lastUpdated": "2026-08-25T15:33:09.741Z",
+  "lastUpdated": "2026-08-25T20:13:40.850Z",
   "specId": "017",
   "folderSlug": "excluded-parity-items",
   "parentChain": [
-    "obsidian",
-    "002-note-db-notion-parity-build"
+    "public",
+    "001-note-db-notion-parity-build"
   ],
   "memorySequence": 0,
   "memoryNameHistory": []

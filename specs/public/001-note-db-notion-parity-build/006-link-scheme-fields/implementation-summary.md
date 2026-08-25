@@ -12,7 +12,7 @@ importance_tier: "high"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "obsidian/002-note-db-notion-parity-build/006-link-scheme-fields"
+    packet_pointer: "public/001-note-db-notion-parity-build/006-link-scheme-fields"
     last_updated_at: "2026-08-24T00:00:00Z"
     last_updated_by: "swarm"
     recent_action: "Scaffolded phase 006 docs; status Planned"
@@ -61,11 +61,11 @@ This phase is **NOT built yet**. No fork source has been modified. What exists i
 
 | File | Action | Purpose |
 |------|--------|---------|
-| `specs/obsidian/002-note-db-notion-parity-build/006-link-scheme-fields/spec.md` | Scaffolded | Requirements, scope, success criteria, NFRs, edge cases |
-| `specs/obsidian/002-note-db-notion-parity-build/006-link-scheme-fields/plan.md` | Scaffolded | Architecture, phases, testing, rollback, effort |
-| `specs/obsidian/002-note-db-notion-parity-build/006-link-scheme-fields/tasks.md` | Scaffolded | Task breakdown with pending checkboxes |
-| `specs/obsidian/002-note-db-notion-parity-build/006-link-scheme-fields/checklist.md` | Scaffolded | Pending verification checklist |
-| `specs/obsidian/002-note-db-notion-parity-build/006-link-scheme-fields/implementation-summary.md` | Scaffolded | Honest unbuilt-state summary |
+| `specs/public/001-note-db-notion-parity-build/006-link-scheme-fields/spec.md` | Scaffolded | Requirements, scope, success criteria, NFRs, edge cases |
+| `specs/public/001-note-db-notion-parity-build/006-link-scheme-fields/plan.md` | Scaffolded | Architecture, phases, testing, rollback, effort |
+| `specs/public/001-note-db-notion-parity-build/006-link-scheme-fields/tasks.md` | Scaffolded | Task breakdown with pending checkboxes |
+| `specs/public/001-note-db-notion-parity-build/006-link-scheme-fields/checklist.md` | Scaffolded | Pending verification checklist |
+| `specs/public/001-note-db-notion-parity-build/006-link-scheme-fields/implementation-summary.md` | Scaffolded | Honest unbuilt-state summary |
 
 <!-- /ANCHOR:what-built -->
 ---

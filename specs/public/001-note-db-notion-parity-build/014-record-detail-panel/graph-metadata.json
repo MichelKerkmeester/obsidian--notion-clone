@@ -1,9 +1,15 @@
 {
   "schema_version": 1,
-  "packet_id": "obsidian/002-note-db-notion-parity-build/014-record-detail-panel",
-  "spec_folder": "obsidian/002-note-db-notion-parity-build/014-record-detail-panel",
-  "parent_id": "obsidian/002-note-db-notion-parity-build",
-  "children_ids": [],
+  "packet_id": "public/001-note-db-notion-parity-build/014-record-detail-panel",
+  "spec_folder": "public/001-note-db-notion-parity-build/014-record-detail-panel",
+  "parent_id": "public/001-note-db-notion-parity-build",
+  "children_ids": [
+    "public/001-note-db-notion-parity-build/014-record-detail-panel/001-table-record-peek-module",
+    "public/001-note-db-notion-parity-build/014-record-detail-panel/002-peek-panel-css",
+    "public/001-note-db-notion-parity-build/014-record-detail-panel/003-title-open-affordance",
+    "public/001-note-db-notion-parity-build/014-record-detail-panel/004-peek-keyboard-open",
+    "public/001-note-db-notion-parity-build/014-record-detail-panel/005-peek-display-proof"
+  ],
   "manual": {
     "depends_on": [],
     "supersedes": [],
@@ -197,7 +203,7 @@
     ],
     "causal_summary": "This is an S-tier polish phase, not a capability project",
     "created_at": "2026-08-24T17:58:55.219Z",
-    "last_save_at": "2026-08-25T15:22:37.005Z",
+    "last_save_at": "2026-08-25T21:25:34.363Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -208,16 +214,16 @@
       "implementation-summary.md",
       "research/research.md"
     ],
-    "source_fingerprint": "sha256:cfcd15a51c2c3a5c9b7921d30c0fd62d4756756d7011277c57dc07ffb54be33d",
+    "source_fingerprint": "sha256:461f989616a6627606eeb546197c13dfc8a8800b87127a42b4ad2835f0ae4d15",
     "source_doc_hashes": {
-      "spec.md": "d19483d8b44d2d7281a6d8e2e4abb87d804047999de241a360f70a19cfc47f55",
-      "plan.md": "2caed342306125f07be65bbc2825219a31acebe2df85182fc1fd1c374bf79302",
-      "tasks.md": "ce2d0bf258c17bae08005724b220be7803a423b3ad2ff61439c07658a735b538",
-      "checklist.md": "138abedb8337e964f40b2273dc5d1b9451db5c2254e4fdf8513cff0a4e265ce8",
-      "implementation-summary.md": "900794497fd188e03cf2c13f080e295cbaacc44c4bf55e491ad3df963754d019",
+      "spec.md": "5711412ddf60be7441a7ec0c6d83d9ac3a55306d5915f2a99b2850073ecd1f40",
+      "plan.md": "23c3fe43348329480f649f12ecdbf0c1e568639d622efe71afce0138f3b4b169",
+      "tasks.md": "eeeddbc42c6b1cd767c4183a37d8571298203fdb5dcb71524c2c72aab7ebd673",
+      "checklist.md": "c6f86b2578e48ff29706ee11d8bd989a92feb1e0f759a44cf73c66782a22dc2f",
+      "implementation-summary.md": "34ba80cb8b3569ca132470bae4fc16569b3b8ec3b625a34df9088ca75785e2e6",
       "research/research.md": "7feaab3f84a4bb7b1cb38c91fcffd320bd817f154ae69e22cbe20c6a4744c282"
     },
-    "last_active_child_id": null,
+    "last_active_child_id": "public/001-note-db-notion-parity-build/014-record-detail-panel/005-peek-display-proof",
     "last_active_at": null
   }
 }

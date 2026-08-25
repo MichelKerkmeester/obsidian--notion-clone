@@ -13,7 +13,7 @@ importance_tier: "medium"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "obsidian/002-note-db-notion-parity-build/017-excluded-parity-items"
+    packet_pointer: "public/001-note-db-notion-parity-build/017-excluded-parity-items"
     last_updated_at: "2026-08-24T00:00:00Z"
     last_updated_by: "assistant"
     recent_action: "Authored phase 017 docs; status Out of scope"

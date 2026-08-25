@@ -12,7 +12,7 @@ importance_tier: "high"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "obsidian/002-note-db-notion-parity-build/011-table-multi-group"
+    packet_pointer: "public/001-note-db-notion-parity-build/011-table-multi-group"
     last_updated_at: "2026-08-25T00:00:00Z"
     last_updated_by: "markdown-agent"
     recent_action: "Applied final-plan.md review findings; refreshed graph metadata; compacted continuity fields"

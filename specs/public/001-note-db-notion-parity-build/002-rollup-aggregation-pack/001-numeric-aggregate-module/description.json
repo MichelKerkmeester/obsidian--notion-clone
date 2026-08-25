@@ -1,6 +1,6 @@
 {
   "level": "1",
-  "specFolder": "obsidian/002-note-db-notion-parity-build/002-rollup-aggregation-pack/001-numeric-aggregate-module",
+  "specFolder": "public/001-note-db-notion-parity-build/002-rollup-aggregation-pack/001-numeric-aggregate-module",
   "description": "Rollup columns are stuck on `count | sum | avg | list` at `src/data/types.ts:44`",
   "keywords": [
     "rollup",
@@ -14,12 +14,12 @@
     "data",
     "types"
   ],
-  "lastUpdated": "2026-08-25T19:02:45.390Z",
+  "lastUpdated": "2026-08-25T20:13:40.997Z",
   "specId": "001",
   "folderSlug": "numeric-aggregate-module",
   "parentChain": [
-    "obsidian",
-    "002-note-db-notion-parity-build",
+    "public",
+    "001-note-db-notion-parity-build",
     "002-rollup-aggregation-pack"
   ],
   "memorySequence": 0,

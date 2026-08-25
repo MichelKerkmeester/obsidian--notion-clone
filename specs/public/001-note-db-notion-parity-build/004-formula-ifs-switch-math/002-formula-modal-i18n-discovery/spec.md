@@ -11,7 +11,7 @@ importance_tier: "high"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "obsidian/002-note-db-notion-parity-build/004-formula-ifs-switch-math/002-formula-modal-i18n-discovery"
+    packet_pointer: "public/001-note-db-notion-parity-build/004-formula-ifs-switch-math/002-formula-modal-i18n-discovery"
     last_updated_at: "2026-08-25T19:15:00Z"
     last_updated_by: "phase-architect"
     recent_action: "Authored discovery child from synthesis rank 5 and final-plan steps 4-5"

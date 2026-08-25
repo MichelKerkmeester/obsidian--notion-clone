@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "packet_id": "obsidian/002-note-db-notion-parity-build/006-link-scheme-fields/001-text-link-scheme-module",
-  "spec_folder": "obsidian/002-note-db-notion-parity-build/006-link-scheme-fields/001-text-link-scheme-module",
-  "parent_id": "obsidian/002-note-db-notion-parity-build/006-link-scheme-fields",
+  "packet_id": "public/001-note-db-notion-parity-build/006-link-scheme-fields/001-text-link-scheme-module",
+  "spec_folder": "public/001-note-db-notion-parity-build/006-link-scheme-fields/001-text-link-scheme-module",
+  "parent_id": "public/001-note-db-notion-parity-build/006-link-scheme-fields",
   "children_ids": [],
   "manual": {
     "depends_on": [],
@@ -190,7 +190,7 @@
     ],
     "causal_summary": "Notion URL / Email / Phone properties store ordinary text and differ only in click behavior",
     "created_at": "2026-08-25T19:27:08Z",
-    "last_save_at": "2026-08-25T19:35:48.032Z",
+    "last_save_at": "2026-08-25T20:14:47.361Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -199,12 +199,12 @@
       "tasks.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:3f9e299b577952f247c71ee18ae55e1bbd4d5d8110d3037cbbc1d82d46b2af7b",
+    "source_fingerprint": "sha256:971e8b43a2a52149dd233a34c8056c85be7197079d96f5e05badd6af284e3a34",
     "source_doc_hashes": {
-      "spec.md": "7332d8ed4a3d7563acd391695bee3a151050f1a8cfe3a748cd9302807c584493",
-      "plan.md": "aa9682768d957d1f93bf5b3955f124af69d371719c4718ec169fadfae4b1cdb9",
-      "tasks.md": "d1514262aac3eef1230e3d4db174251792af9899d8851ef300b09da2020a972f",
-      "implementation-summary.md": "ef40ee38ca9fbfcd03079f8592bc06bf4894a7d2f21a82cda5a1803a9bcf5937"
+      "spec.md": "591770014d0b5b149e0814b10d52d58bc3dfdf0bd01fc8ef55edb3209caa8f78",
+      "plan.md": "2f2667c1bb686b0500be39347bb6102cfb04b43db678d4b5a670c4b59cca3703",
+      "tasks.md": "3c307323693bfdca612612faeacc57a18f1350961e8ec6bbd5b60650cd64d519",
+      "implementation-summary.md": "890969a9ebd0c88bcba01bedc95e6699337f6ebebbcec28dfd76a0f0958ef74b"
     },
     "last_active_child_id": null,
     "last_active_at": null

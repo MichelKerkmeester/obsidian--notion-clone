@@ -1,6 +1,6 @@
 {
-  "level": "3",
-  "specFolder": "obsidian/002-note-db-notion-parity-build",
+  "level": "2",
+  "specFolder": "public/001-note-db-notion-parity-build",
   "description": "The forked Note Database plugin is already far more capable than the legacy feature list assumed: it ships two formula engines (the Excel-style",
   "keywords": [
     "forked",
@@ -20,11 +20,11 @@
     "engines",
     "excel-style"
   ],
-  "lastUpdated": "2026-08-25T04:51:32.168Z",
-  "specId": "002",
+  "lastUpdated": "2026-08-25T20:13:40.688Z",
+  "specId": "001",
   "folderSlug": "note-db-notion-parity-build",
   "parentChain": [
-    "obsidian"
+    "public"
   ],
   "memorySequence": 8,
   "memoryNameHistory": [

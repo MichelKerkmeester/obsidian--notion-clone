@@ -14,7 +14,7 @@ importance_tier: "high"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "obsidian/002-note-db-notion-parity-build/007-unique-id-stamp"
+    packet_pointer: "public/001-note-db-notion-parity-build/007-unique-id-stamp"
     last_updated_at: "2026-08-24T00:00:00Z"
     last_updated_by: "swarm"
     recent_action: "Scaffolded phase 007 docs; status Planned"
@@ -63,11 +63,11 @@ This phase is **not built yet**. The fork still lacks a create-time unique-ID st
 
 | File | Action | Purpose |
 |------|--------|---------|
-| `specs/obsidian/002-note-db-notion-parity-build/007-unique-id-stamp/spec.md` | Authored (Planned scaffold) | Requirements for create-time unique IDs |
-| `specs/obsidian/002-note-db-notion-parity-build/007-unique-id-stamp/plan.md` | Authored (Planned scaffold) | Isolated-module architecture and rollback |
-| `specs/obsidian/002-note-db-notion-parity-build/007-unique-id-stamp/tasks.md` | Authored (Planned scaffold) | Unchecked implementation tasks |
-| `specs/obsidian/002-note-db-notion-parity-build/007-unique-id-stamp/checklist.md` | Authored (Planned scaffold) | Unchecked verification items (0 verified) |
-| `specs/obsidian/002-note-db-notion-parity-build/007-unique-id-stamp/implementation-summary.md` | Authored (Planned scaffold) | This summary; not a completion claim |
+| `specs/public/001-note-db-notion-parity-build/007-unique-id-stamp/spec.md` | Authored (Planned scaffold) | Requirements for create-time unique IDs |
+| `specs/public/001-note-db-notion-parity-build/007-unique-id-stamp/plan.md` | Authored (Planned scaffold) | Isolated-module architecture and rollback |
+| `specs/public/001-note-db-notion-parity-build/007-unique-id-stamp/tasks.md` | Authored (Planned scaffold) | Unchecked implementation tasks |
+| `specs/public/001-note-db-notion-parity-build/007-unique-id-stamp/checklist.md` | Authored (Planned scaffold) | Unchecked verification items (0 verified) |
+| `specs/public/001-note-db-notion-parity-build/007-unique-id-stamp/implementation-summary.md` | Authored (Planned scaffold) | This summary; not a completion claim |
 | Fork `src/data/` allocator, `CreateEntryPlan.ts`, db_view config, optional `ColumnTypes.ts` | Not modified | Implementation targets for the future build |
 
 <!-- /ANCHOR:what-built -->
@@ -104,7 +104,7 @@ Not delivered. Implementation has not started. Delivery, when it happens, is a n
 
 | Test Type | Status | Coverage | Notes |
 |-----------|--------|----------|-------|
-| Strict validation | Pending | This phase folder | `bash .opencode/skills/system-spec-kit/scripts/spec/validate.sh specs/obsidian/002-note-db-notion-parity-build/007-unique-id-stamp --strict` |
+| Strict validation | Pending | This phase folder | `bash .opencode/skills/system-spec-kit/scripts/spec/validate.sh specs/public/001-note-db-notion-parity-build/007-unique-id-stamp --strict` |
 | Allocator / create-plan tests | Pending | Not written | Fork test command UNKNOWN until build reads the fork’s test scripts |
 | Manual create-two-rows | Pending | 0% | Example expectation: prefix `INV` yields `INV-001` then `INV-002`; reload continues the counter |
 

@@ -1,0 +1,28 @@
+{
+  "specFolder": "public/001-note-db-notion-parity-build/013-template-toolbar-button/001-adaptive-toolbar-control",
+  "description": "`renderNewButton` already calls `actions.createEntry()` with no args (`src/views/ToolbarRenderer.ts:1683-1691`), which reaches `createBlankEntry` then",
+  "keywords": [
+    "rendernewbutton",
+    "already",
+    "calls",
+    "actions",
+    "createentry",
+    "args",
+    "src",
+    "views",
+    "toolbarrenderer",
+    "reaches",
+    "createblankentry"
+  ],
+  "lastUpdated": "2026-08-25T21:14:26.636Z",
+  "specId": "001",
+  "folderSlug": "adaptive-toolbar-control",
+  "parentChain": [
+    "public",
+    "001-note-db-notion-parity-build",
+    "013-template-toolbar-button"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": [],
+  "level": "1"
+}

@@ -1,0 +1,216 @@
+{
+  "schema_version": 1,
+  "packet_id": "public/001-note-db-notion-parity-build/010-conditional-format-icons/005-format-display-proof",
+  "spec_folder": "public/001-note-db-notion-parity-build/010-conditional-format-icons/005-format-display-proof",
+  "parent_id": "public/001-note-db-notion-parity-build/010-conditional-format-icons",
+  "children_ids": [],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "format display proof",
+      "conditionalformatting.test",
+      "cf helper cases",
+      "nowrite cf proof",
+      "chart no matcher",
+      "format display proof plan",
+      "format display proof tasks",
+      "format display proof checklist",
+      "format display proof summary"
+    ],
+    "key_topics": [
+      "format",
+      "display",
+      "proof",
+      "conditionalformatting",
+      "test",
+      "helper",
+      "cases",
+      "nowrite",
+      "chart",
+      "matcher",
+      "plan",
+      "tasks"
+    ],
+    "importance_tier": "high",
+    "status": "planned",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "checklist.md",
+      "implementation-summary.md"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "checklist.md",
+        "kind": "doc",
+        "path": "checklist.md",
+        "source": "derived"
+      },
+      {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Format Display Proof",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Parent Spec",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Handoff Criteria",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Problem Statement The",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Purpose Land",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Plan",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Technical Context",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Overview Final",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Pattern Colocated",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Key Components",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Notation",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Format",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Completion Criteria",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Phase 1: Setup",
+        "kind": "heading",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Phase 2: Implementation",
+        "kind": "heading",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Verification Checklist",
+        "kind": "proper_noun",
+        "path": "checklist.md",
+        "source": "derived"
+      },
+      {
+        "name": "Verification Protocol",
+        "kind": "proper_noun",
+        "path": "checklist.md",
+        "source": "derived"
+      },
+      {
+        "name": "Completion Impact",
+        "kind": "proper_noun",
+        "path": "checklist.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "The fork has zero `.test.ts` files and `vitest.config.ts:1-8` points at a missing `src/tests/setup.ts`",
+    "created_at": "2026-08-25T21:00:25Z",
+    "last_save_at": "2026-08-25T21:10:37.261Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "checklist.md",
+      "implementation-summary.md"
+    ],
+    "source_fingerprint": "sha256:36a9756dd8ee9014c35e62a3c1faa2f81155eec021bd159ace7a83c361519de2",
+    "source_doc_hashes": {
+      "spec.md": "539ca8f8605b7c5a220a5d2f562649ff3f710409393d6d3ef1bc05b3763632f4",
+      "plan.md": "4a0a52887369a3afef62229daa1efa2e3e66610d50a52ea47760aa9f857ceff0",
+      "tasks.md": "e524f95d2d5e3ea6d17daaf4f59ad97bb32bb9774b1d640b8b8a7e5f45b6b5ff",
+      "checklist.md": "22279ccd45612744dea8dcf1660331e74e1a8b500bdf7ff9da2d73c6f239172b",
+      "implementation-summary.md": "fc41a7212f635fb56ae143bbee5cd1b5744051f1573654fcc54864d94141e96d"
+    },
+    "last_active_child_id": null,
+    "last_active_at": null
+  }
+}

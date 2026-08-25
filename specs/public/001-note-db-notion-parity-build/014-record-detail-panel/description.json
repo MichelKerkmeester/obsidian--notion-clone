@@ -1,6 +1,6 @@
 {
   "level": "2",
-  "specFolder": "obsidian/002-note-db-notion-parity-build/014-record-detail-panel",
+  "specFolder": "public/001-note-db-notion-parity-build/014-record-detail-panel",
   "description": "This is an S-tier polish phase, not a capability project",
   "keywords": [
     "s-tier",
@@ -9,12 +9,12 @@
     "capability",
     "project"
   ],
-  "lastUpdated": "2026-08-25T10:59:52.100Z",
+  "lastUpdated": "2026-08-25T21:17:19.834Z",
   "specId": "014",
   "folderSlug": "record-detail-panel",
   "parentChain": [
-    "obsidian",
-    "002-note-db-notion-parity-build"
+    "public",
+    "001-note-db-notion-parity-build"
   ],
   "memorySequence": 0,
   "memoryNameHistory": []

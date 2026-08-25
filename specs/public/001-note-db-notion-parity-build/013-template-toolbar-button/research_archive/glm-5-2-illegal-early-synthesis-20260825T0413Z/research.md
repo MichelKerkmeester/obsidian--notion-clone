@@ -1,6 +1,6 @@
 # Research: Toolbar New-From-Template Button
 
-> Spec: `specs/obsidian/002-note-db-notion-parity-build/013-template-toolbar-button`
+> Spec: `specs/public/001-note-db-notion-parity-build/013-template-toolbar-button`
 > Lineage: `glm-5-2` · Session: `fanout-glm-5-2-1787630131864-cpa84y`
 > Converged: 2026-08-25 · 3 iterations · stopReason: `converged`
 

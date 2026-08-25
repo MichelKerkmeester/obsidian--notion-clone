@@ -11,7 +11,7 @@ importance_tier: "high"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "obsidian/002-note-db-notion-parity-build/004-formula-ifs-switch-math"
+    packet_pointer: "public/001-note-db-notion-parity-build/004-formula-ifs-switch-math"
     last_updated_at: "2026-08-24T00:00:00Z"
     last_updated_by: "swarm"
     recent_action: "Scaffolded phase 004 docs; status Planned"
@@ -62,11 +62,11 @@ The planned change: add `IFS` / `SWITCH` varargs wrappers and `SQRT` / `LN` / `L
 
 | File | Action | Purpose |
 |------|--------|---------|
-| `specs/obsidian/002-note-db-notion-parity-build/004-formula-ifs-switch-math/spec.md` | Scaffolded | Phase specification |
-| `specs/obsidian/002-note-db-notion-parity-build/004-formula-ifs-switch-math/plan.md` | Scaffolded | Implementation plan |
-| `specs/obsidian/002-note-db-notion-parity-build/004-formula-ifs-switch-math/tasks.md` | Scaffolded | Task breakdown |
-| `specs/obsidian/002-note-db-notion-parity-build/004-formula-ifs-switch-math/checklist.md` | Scaffolded | Verification checklist |
-| `specs/obsidian/002-note-db-notion-parity-build/004-formula-ifs-switch-math/implementation-summary.md` | Scaffolded | This summary |
+| `specs/public/001-note-db-notion-parity-build/004-formula-ifs-switch-math/spec.md` | Scaffolded | Phase specification |
+| `specs/public/001-note-db-notion-parity-build/004-formula-ifs-switch-math/plan.md` | Scaffolded | Implementation plan |
+| `specs/public/001-note-db-notion-parity-build/004-formula-ifs-switch-math/tasks.md` | Scaffolded | Task breakdown |
+| `specs/public/001-note-db-notion-parity-build/004-formula-ifs-switch-math/checklist.md` | Scaffolded | Verification checklist |
+| `specs/public/001-note-db-notion-parity-build/004-formula-ifs-switch-math/implementation-summary.md` | Scaffolded | This summary |
 | `<fork>/src/data/ComputedField.ts` | Planned (not started) | Function-table addition: IFS/SWITCH wrappers + math aliases |
 
 <!-- /ANCHOR:what-built -->

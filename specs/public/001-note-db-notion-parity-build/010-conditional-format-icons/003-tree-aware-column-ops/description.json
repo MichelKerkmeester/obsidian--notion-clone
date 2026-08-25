@@ -1,0 +1,23 @@
+{
+  "level": "1",
+  "specFolder": "public/001-note-db-notion-parity-build/010-conditional-format-icons/003-tree-aware-column-ops",
+  "description": "Column rename rewrites `rule.condition.field` (~193)",
+  "keywords": [
+    "column",
+    "rename",
+    "rewrites",
+    "rule",
+    "condition",
+    "field"
+  ],
+  "lastUpdated": "2026-08-25T21:05:06.628Z",
+  "specId": "003",
+  "folderSlug": "tree-aware-column-ops",
+  "parentChain": [
+    "public",
+    "001-note-db-notion-parity-build",
+    "010-conditional-format-icons"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": []
+}

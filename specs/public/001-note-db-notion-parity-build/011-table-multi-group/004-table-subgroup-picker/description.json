@@ -1,0 +1,31 @@
+{
+  "level": "1",
+  "specFolder": "public/001-note-db-notion-parity-build/011-table-multi-group/004-table-subgroup-picker",
+  "description": "Parse acceptance (child 001) meets REQ-001 technically, but Notion's View settings surface needs a Group + Sub-group control",
+  "keywords": [
+    "parse",
+    "acceptance",
+    "child",
+    "meets",
+    "req-001",
+    "technically",
+    "notion",
+    "view",
+    "settings",
+    "surface",
+    "needs",
+    "group",
+    "sub-group",
+    "control"
+  ],
+  "lastUpdated": "2026-08-25T21:00:46.309Z",
+  "specId": "004",
+  "folderSlug": "table-subgroup-picker",
+  "parentChain": [
+    "public",
+    "001-note-db-notion-parity-build",
+    "011-table-multi-group"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": []
+}

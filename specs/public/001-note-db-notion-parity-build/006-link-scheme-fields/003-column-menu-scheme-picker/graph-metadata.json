@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "packet_id": "obsidian/002-note-db-notion-parity-build/006-link-scheme-fields/003-column-menu-scheme-picker",
-  "spec_folder": "obsidian/002-note-db-notion-parity-build/006-link-scheme-fields/003-column-menu-scheme-picker",
-  "parent_id": "obsidian/002-note-db-notion-parity-build/006-link-scheme-fields",
+  "packet_id": "public/001-note-db-notion-parity-build/006-link-scheme-fields/003-column-menu-scheme-picker",
+  "spec_folder": "public/001-note-db-notion-parity-build/006-link-scheme-fields/003-column-menu-scheme-picker",
+  "parent_id": "public/001-note-db-notion-parity-build/006-link-scheme-fields",
   "children_ids": [],
   "manual": {
     "depends_on": [],
@@ -189,7 +189,7 @@
     ],
     "causal_summary": "Notion users pick URL / Email / Phone in the property-type menu",
     "created_at": "2026-08-25T19:27:10Z",
-    "last_save_at": "2026-08-25T19:35:48.598Z",
+    "last_save_at": "2026-08-25T20:14:46.766Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -198,12 +198,12 @@
       "tasks.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:8c4d8cde32e1f0be8b527ef5a5376ee064e2aab7dc494c747f90e25fc2d887b8",
+    "source_fingerprint": "sha256:c7dd13ab703c64545052fc212b664b0f2e07f8c5f65501c280a273f145c5f58b",
     "source_doc_hashes": {
-      "spec.md": "ef47a9fae61b0120ec8aaba668087d8a6d5b6a0b776491f2835716fbf6f6c88c",
-      "plan.md": "456df820f6bb8de0373f42d7399dbd129c6fc842d4334a39f961457daea0fba3",
-      "tasks.md": "6c1a7ea0d0e53be8af6e572dac966ef777e92d6b602b3778e4b7662ca757fdf2",
-      "implementation-summary.md": "e49ed23b0a18515f6be86cb907d7b1eeef03d8b85c5b8f4bcaf387e2ea48a789"
+      "spec.md": "cd3dc8b91b673467a7eabc1e93f1aa68a33d8cc55e1d74d3168c99fead6f2c05",
+      "plan.md": "10cd5fb4f5b7bfbcd9495d1206c743f36ef71d3d67299ea26ecee66818d61448",
+      "tasks.md": "b16feae9a43dd09ea6a18b0d4dd78dce3b44ff4962da8ab7f5fc12acef2c983c",
+      "implementation-summary.md": "2ea71fd5e4fd5699df99d3493f6a6d06d201b1ef18c3b44a7b21c7a38288a842"
     },
     "last_active_child_id": null,
     "last_active_at": null

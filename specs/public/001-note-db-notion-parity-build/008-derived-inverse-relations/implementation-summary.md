@@ -13,7 +13,7 @@ importance_tier: "high"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "obsidian/002-note-db-notion-parity-build/008-derived-inverse-relations"
+    packet_pointer: "public/001-note-db-notion-parity-build/008-derived-inverse-relations"
     last_updated_at: "2026-08-24T00:00:00Z"
     last_updated_by: "swarm"
     recent_action: "Scaffolded phase 008 docs; status Planned"
@@ -102,7 +102,7 @@ Not delivered. Implementation has not started. Delivery, when it happens, follow
 
 | Test Type | Status | Coverage | Notes |
 |-----------|--------|----------|-------|
-| Strict validation | Pending | This phase folder | `bash .opencode/skills/system-spec-kit/scripts/spec/validate.sh specs/obsidian/002-note-db-notion-parity-build/008-derived-inverse-relations --strict` |
+| Strict validation | Pending | This phase folder | `bash .opencode/skills/system-spec-kit/scripts/spec/validate.sh specs/public/001-note-db-notion-parity-build/008-derived-inverse-relations --strict` |
 | Unit (inverse scan) | Pending | Empty / one / many / dangling / cross-db miss | Test path UNKNOWN until the fork test tree is read |
 | Write-path | Pending | Single `DataSource.writeQueues` path | Must prove the Report file is not rewritten when `syncWrites` is OFF |
 | Call-site wiring | Pending | `RelationRollup.ts`, `RelationLinks.ts` | Not implemented |

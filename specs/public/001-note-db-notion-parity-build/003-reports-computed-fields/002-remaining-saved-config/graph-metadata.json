@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "packet_id": "obsidian/002-note-db-notion-parity-build/003-reports-computed-fields/002-remaining-saved-config",
-  "spec_folder": "obsidian/002-note-db-notion-parity-build/003-reports-computed-fields/002-remaining-saved-config",
-  "parent_id": "obsidian/002-note-db-notion-parity-build/003-reports-computed-fields",
+  "packet_id": "public/001-note-db-notion-parity-build/003-reports-computed-fields/002-remaining-saved-config",
+  "spec_folder": "public/001-note-db-notion-parity-build/003-reports-computed-fields/002-remaining-saved-config",
+  "parent_id": "public/001-note-db-notion-parity-build/003-reports-computed-fields",
   "children_ids": [],
   "manual": {
     "depends_on": [],
@@ -194,7 +194,7 @@
     ],
     "causal_summary": "Reports still lacks Remaining and Saved as live computed columns",
     "created_at": "2026-08-25T19:12:37Z",
-    "last_save_at": "2026-08-25T19:21:32.097Z",
+    "last_save_at": "2026-08-25T20:14:49.783Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -203,12 +203,12 @@
       "tasks.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:19dcc52398a0a61de12a5d8b9cd048757f59aab07c23593881921dbbf9fa0e16",
+    "source_fingerprint": "sha256:d7ba765b5d9e399251737dfa4f3b2e500da01f6238f57face2ea14d82ed2d958",
     "source_doc_hashes": {
-      "spec.md": "261aa03daac359eef4de1cba20d3eb7ab83824914a619928bad6ae5554045c55",
-      "plan.md": "28c9c4e6cc7c2c69d100e83e4a338be11c2ef28e35ca2e2127a5eb8431ea50f5",
-      "tasks.md": "74224f75235e895d3b34410387db2f08702e8bf4910a3362a3d8a5dedfe7b577",
-      "implementation-summary.md": "ed6db7e36329b12311b8401f36fa4863827ae1d51d89ab35baee0630641ab0c4"
+      "spec.md": "192e3fac2a98a87c6ee5880633ff1f5d414398fb5850ce45918c2c886ee20c31",
+      "plan.md": "d1e798b2c88fa432df13d75cfc885214f09629641e9422a8879bd33accd7d56b",
+      "tasks.md": "715cc2b7791b2544610c3cd99087bf6e2d0214843f3e327d2448e266c4e2a368",
+      "implementation-summary.md": "de71afe312e6f319fa9356c4e1acabb7915c7e5eca51262f0b583f2b209416b5"
     },
     "last_active_child_id": null,
     "last_active_at": null

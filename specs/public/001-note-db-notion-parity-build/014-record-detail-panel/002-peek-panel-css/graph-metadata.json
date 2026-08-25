@@ -1,0 +1,211 @@
+{
+  "schema_version": 1,
+  "packet_id": "public/001-note-db-notion-parity-build/014-record-detail-panel/002-peek-panel-css",
+  "spec_folder": "public/001-note-db-notion-parity-build/014-record-detail-panel/002-peek-panel-css",
+  "parent_id": "public/001-note-db-notion-parity-build/014-record-detail-panel",
+  "children_ids": [],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "peek panel css",
+      "db-record-open-btn",
+      "db-record-peek-panel",
+      "phone persistent open",
+      "peek panel css plan",
+      "peek panel css tasks",
+      "peek panel css summary"
+    ],
+    "key_topics": [
+      "peek",
+      "panel",
+      "css",
+      "db-record-open-btn",
+      "db-record-peek-panel",
+      "phone",
+      "persistent",
+      "open",
+      "plan",
+      "tasks",
+      "summary",
+      "obsidian"
+    ],
+    "importance_tier": "high",
+    "status": "planned",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "implementation-summary.md"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Peek Panel",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Parent Spec",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Handoff Criteria",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Problem Statement Obsidian",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Purpose Append",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Plan",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Technical Context",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Overview Final",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Pattern Append",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Key Components",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Notation",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Format",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Completion Criteria",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "theme",
+        "kind": "key_phrase",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Phase 1: Setup",
+        "kind": "heading",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Summary",
+        "kind": "proper_noun",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "Spec Folder",
+        "kind": "proper_noun",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "Actual Effort",
+        "kind": "proper_noun",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "What Was Built Nothing",
+        "kind": "proper_noun",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "Obsidian loads only plugin-root `styles.css` (no esbuild CSS pipeline)",
+    "created_at": "2026-08-25T21:14:47Z",
+    "last_save_at": "2026-08-25T21:25:33.350Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "implementation-summary.md"
+    ],
+    "source_fingerprint": "sha256:47700f547d9b6d44a8cb72a003d8626a77e5d532d6e10bb8de45124de0f37cf9",
+    "source_doc_hashes": {
+      "spec.md": "0cfeb45a90af89f96ada67a1f8e8ff9adeff0e09d2a1b2b06b3338b1ff630314",
+      "plan.md": "f6454a9c653d497d51c82d068b8e879f4b750ca830fa9d355a3098a7130305bc",
+      "tasks.md": "9b7fc9d9cc71c68a8f39354683a10f4a9b4fd7b55db0dd8df062c897949afef1",
+      "implementation-summary.md": "b69c533f04b68a848200eeb4e3e1da1dbeb4d0932dea61bca152ea447eca0054"
+    },
+    "last_active_child_id": null,
+    "last_active_at": null
+  }
+}

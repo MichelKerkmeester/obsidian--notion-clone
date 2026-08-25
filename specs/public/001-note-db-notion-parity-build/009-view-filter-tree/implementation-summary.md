@@ -12,7 +12,7 @@ importance_tier: "high"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "obsidian/002-note-db-notion-parity-build/009-view-filter-tree"
+    packet_pointer: "public/001-note-db-notion-parity-build/009-view-filter-tree"
     last_updated_at: "2026-08-24T00:00:00Z"
     last_updated_by: "swarm"
     recent_action: "Scaffolded phase 009 docs; status Planned"
@@ -61,11 +61,11 @@ This phase is **NOT built yet**. Status is Planned (wave 4). The scaffolded docu
 
 | File | Action | Purpose |
 |------|--------|---------|
-| `specs/obsidian/002-note-db-notion-parity-build/009-view-filter-tree/spec.md` | Scaffolded | Phase definition, requirements, success criteria |
-| `specs/obsidian/002-note-db-notion-parity-build/009-view-filter-tree/plan.md` | Scaffolded | Architecture, phases, testing, rollback |
-| `specs/obsidian/002-note-db-notion-parity-build/009-view-filter-tree/tasks.md` | Scaffolded | Task breakdown T001-T035 |
-| `specs/obsidian/002-note-db-notion-parity-build/009-view-filter-tree/checklist.md` | Scaffolded | Verification checklist (all pending) |
-| `specs/obsidian/002-note-db-notion-parity-build/009-view-filter-tree/implementation-summary.md` | Scaffolded | This honest summary |
+| `specs/public/001-note-db-notion-parity-build/009-view-filter-tree/spec.md` | Scaffolded | Phase definition, requirements, success criteria |
+| `specs/public/001-note-db-notion-parity-build/009-view-filter-tree/plan.md` | Scaffolded | Architecture, phases, testing, rollback |
+| `specs/public/001-note-db-notion-parity-build/009-view-filter-tree/tasks.md` | Scaffolded | Task breakdown T001-T035 |
+| `specs/public/001-note-db-notion-parity-build/009-view-filter-tree/checklist.md` | Scaffolded | Verification checklist (all pending) |
+| `specs/public/001-note-db-notion-parity-build/009-view-filter-tree/implementation-summary.md` | Scaffolded | This honest summary |
 
 <!-- /ANCHOR:what-built -->
 ---

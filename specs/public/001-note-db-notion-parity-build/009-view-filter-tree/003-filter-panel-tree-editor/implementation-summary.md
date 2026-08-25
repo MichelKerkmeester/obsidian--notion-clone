@@ -1,35 +1,36 @@
 ---
-title: "Implementation Summary [template:level-1/implementation-summary.md]"
-description: "Open with a hook: what changed and why it matters. One paragraph, impact first."
+title: "Implementation Summary: Filter Panel Tree Editor"
+description: "Planned one-slice FilterPanelRenderer.ts tree editor. Not yet implemented in the fork."
 trigger_phrases:
-  - "implementation"
-  - "summary"
-  - "template"
-  - "impl summary core"
-importance_tier: "normal"
-contextType: "general"
+  - "filter panel tree summary"
+  - "wrap into group"
+importance_tier: "high"
+contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "scaffold/003-filter-panel-tree-editor"
-    last_updated_at: "2026-08-25T19:40:28Z"
-    last_updated_by: "template-author"
-    recent_action: "Initialize continuity block"
-    next_safe_action: "Replace template defaults on first save"
+    packet_pointer: "public/001-note-db-notion-parity-build/009-view-filter-tree/003-filter-panel-tree-editor"
+    last_updated_at: "2026-08-25T21:00:00Z"
+    last_updated_by: "phase-architect"
+    recent_action: "Authored filter-panel-tree-editor child from synthesis ranks 4/6/7/8-UI and final-plan step 8"
+    next_safe_action: "Extend FilterPanelRenderer.ts with recursive group/not chrome; keep existing leaves"
     blockers: []
-    key_files: []
+    key_files:
+      - "spec.md"
+      - "plan.md"
+      - "tasks.md"
+      - "checklist.md"
+      - "implementation-summary.md"
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
-      session_id: "scaffold-scaffold/003-filter-panel-tree-editor"
+      session_id: "decompose-003-filter-panel-tree-editor"
       parent_session_id: null
     completion_pct: 0
     open_questions: []
     answered_questions: []
 ---
 <!-- SPECKIT_TEMPLATE_SOURCE: impl-summary-core | v2.2 -->
+<!-- SPECKIT_LEVEL: 2 -->
 # Implementation Summary
-
-<!-- SPECKIT_LEVEL: 1 -->
-<!-- HVR_REFERENCE: .opencode/skills/sk-doc/references/hvr-rules.md -->
 
 ---
 
@@ -39,8 +40,9 @@ _memory:
 | Field | Value |
 |-------|-------|
 | **Spec Folder** | 003-filter-panel-tree-editor |
-| **Completed** | 2026-08-25 |
-| **Level** | 1 |
+| **Completed** | Not yet (Planned) |
+| **Level** | 2 |
+| **Actual Effort** | Not started |
 <!-- /ANCHOR:metadata -->
 
 ---
@@ -48,28 +50,17 @@ _memory:
 <!-- ANCHOR:what-built -->
 ## What Was Built
 
-<!-- Voice guide:
-     Open with a hook: what changed and why it matters. One paragraph, impact first.
-     Then use ### subsections per feature. Each subsection: what it does + why it exists.
-     Write "You can now inspect the trace" not "Trace inspection was implemented."
-     NO "Files Changed" table for Level 3/3+. The narrative IS the summary.
-     For Level 1-2, a Files Changed table after the narrative is fine.
-     Reference: specs/system-spec-kit/020-mcp-working-memory-hybrid-rag/implementation-summary.md -->
-
-[Opening hook: 2-3 sentences on what changed and why it matters. Lead with impact.]
-
-### [Feature Name]
-
-[What this feature does and why it exists. 1-2 paragraphs. Use direct address.
-Explain what the user gains, not what files you touched.]
+Nothing in the fork yet. This child is Planned: one `FilterPanelRenderer.ts` change so wrap, depth cap, labeled `not`, and auto-collapse ship together.
 
 ### Files Changed
 
-<!-- Include for Level 1-2. Omit for Level 3/3+ where the narrative carries. -->
-
 | File | Action | Purpose |
 |------|--------|---------|
-| [path] | [Created/Modified/Deleted] | [What this change accomplishes] |
+| `spec.md` | Authored | Panel editor scope |
+| `plan.md` | Authored | Chrome-only copy + depth |
+| `tasks.md` | Authored | T001–T004 atomic T002 |
+| `checklist.md` | Authored | Mobile width and source-op leak checks |
+| `implementation-summary.md` | Authored | Honest pre-build record |
 <!-- /ANCHOR:what-built -->
 
 ---
@@ -77,13 +68,7 @@ Explain what the user gains, not what files you touched.]
 <!-- ANCHOR:how-delivered -->
 ## How It Was Delivered
 
-<!-- Voice guide:
-     Tell the delivery story. What gave you confidence this works?
-     "All features shipped behind feature flags" not "Feature flags were used."
-     For Level 1: a single sentence is enough.
-     For Level 3+: describe stages (testing, rollout, verification). -->
-
-[How was this tested, verified and shipped? What was the rollout approach?]
+Not delivered. Implementation follows `tasks.md` as one renderer diff against `Obsidian Plugin/src/views/FilterPanelRenderer.ts`.
 <!-- /ANCHOR:how-delivered -->
 
 ---
@@ -91,12 +76,12 @@ Explain what the user gains, not what files you touched.]
 <!-- ANCHOR:decisions -->
 ## Key Decisions
 
-<!-- Voice guide: "Why" column should read like you're explaining to a colleague.
-     "Chose X because Y" not "X was selected due to Y." -->
-
 | Decision | Why |
 |----------|-----|
-| [What was decided] | [Active-voice rationale with specific reasoning] |
+| Keep wrap, depth, `not` chrome, and auto-collapse in one child | Final-plan: T016+T022–T025 are one renderer change |
+| Copy group/`not` chrome only; keep `107-123` leaves | `renderSourceRuleLeaf` (`931+`) is a source-op editor; leaked ops match every row (`QueryEngine.ts:124-125`) |
+| Add `depth`; do not copy `901-916` as-is | Those lines have no depth cap |
+| Reuse `.db-source-rule-*` | `styles.css:9192-9234` already has indent, `min-width: 0`, flex 180/130 |
 <!-- /ANCHOR:decisions -->
 
 ---
@@ -104,12 +89,11 @@ Explain what the user gains, not what files you touched.]
 <!-- ANCHOR:verification -->
 ## Verification
 
-<!-- Voice guide: Be honest. Show failures alongside passes.
-     "FAIL, TS2349 error in benchmarks.ts" not "Minor issues detected." -->
-
 | Check | Result |
 |-------|--------|
-| [Validation, lint, tests, manual check] | [PASS/FAIL with specifics] |
+| Phone-width nested edit | Not run (Planned) |
+| Source-op grep / `styles.css` clean | Not run (Planned) |
+| `bash .opencode/skills/system-spec-kit/scripts/spec/validate.sh` on this folder `--strict` | Pending after authoring |
 <!-- /ANCHOR:verification -->
 
 ---
@@ -117,19 +101,6 @@ Explain what the user gains, not what files you touched.]
 <!-- ANCHOR:limitations -->
 ## Known Limitations
 
-<!-- Voice guide: Number them. Be specific and actionable.
-     "Adaptive fusion is enabled by default. Set SPECKIT_ADAPTIVE_FUSION=false to disable."
-     not "Some features may require configuration."
-     Write "None identified." if nothing applies. -->
-
-1. **[Limitation]** [Specific detail with workaround if one exists.]
+1. **Non-panel mutators still desync nested trees until child 004.** Panel+eval without chips/delete/drilldown is only correct until the next non-panel edit.
+2. **Rail AND/OR toggle is still a lie on nested trees until child 004 hides it** (`ActiveViewControlsRenderer.ts:82-89`).
 <!-- /ANCHOR:limitations -->
-
----
-
-<!--
-CORE TEMPLATE: Post-implementation documentation, created AFTER work completes.
-Write in human voice: active, direct, specific. No em dashes, no hedging, no AI filler.
-HVR rules: .opencode/skills/sk-doc/references/hvr-rules.md
--->
-

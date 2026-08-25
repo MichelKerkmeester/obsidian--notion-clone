@@ -1,34 +1,37 @@
 ---
-title: "Tasks: Phase 3: filter-panel-tree-editor [template:level-1/tasks.md]"
-description: "Task Format: T### [P?] Description (file path)"
+title: "Tasks: Filter Panel Tree Editor"
+description: "One-slice tasks for FilterPanelRenderer.ts: recursive group/not chrome, wrap-into-group, auto-collapse, depth cap 3, existing leaves."
 trigger_phrases:
-  - "tasks"
-  - "name"
-  - "template"
-  - "tasks core"
-importance_tier: "normal"
-contextType: "general"
+  - "filter panel tree tasks"
+  - "wrap into group"
+  - "filter depth cap"
+importance_tier: "high"
+contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "scaffold/003-filter-panel-tree-editor"
-    last_updated_at: "2026-08-25T19:40:28Z"
-    last_updated_by: "template-author"
-    recent_action: "Initialize continuity block"
-    next_safe_action: "Replace template defaults on first save"
+    packet_pointer: "public/001-note-db-notion-parity-build/009-view-filter-tree/003-filter-panel-tree-editor"
+    last_updated_at: "2026-08-25T21:00:00Z"
+    last_updated_by: "phase-architect"
+    recent_action: "Authored filter-panel-tree-editor child from synthesis ranks 4/6/7/8-UI and final-plan step 8"
+    next_safe_action: "Extend FilterPanelRenderer.ts with recursive group/not chrome; keep existing leaves"
     blockers: []
-    key_files: []
+    key_files:
+      - "spec.md"
+      - "plan.md"
+      - "tasks.md"
+      - "checklist.md"
+      - "implementation-summary.md"
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
-      session_id: "scaffold-scaffold/003-filter-panel-tree-editor"
+      session_id: "decompose-003-filter-panel-tree-editor"
       parent_session_id: null
     completion_pct: 0
     open_questions: []
     answered_questions: []
 ---
-<!-- SPECKIT_TEMPLATE_SOURCE: tasks-core | v2.2 -->
-# Tasks: Phase 3: filter-panel-tree-editor
-
-<!-- SPECKIT_LEVEL: 1 -->
+<!-- SPECKIT_TEMPLATE_SOURCE: tasks-core + level2-verify | v2.2 -->
+<!-- SPECKIT_LEVEL: 2 -->
+# Tasks: Filter Panel Tree Editor
 
 ---
 
@@ -42,7 +45,9 @@ _memory:
 | `[P]` | Parallelizable |
 | `[B]` | Blocked |
 
-**Task Format**: `T### [P?] Description (file path)`
+**Task Format**: `T### [P?] Description (target — fork file:line)`
+
+T002 is one atomic renderer change (final-plan merge of T016+T022–T025). Do not split wrap / depth / `not` / auto-collapse.
 <!-- /ANCHOR:notation -->
 
 ---
@@ -50,9 +55,7 @@ _memory:
 <!-- ANCHOR:phase-1 -->
 ## Phase 1: Setup
 
-- [ ] T001 Create project structure
-- [ ] T002 Install dependencies
-- [ ] T003 [P] Configure development tools
+- [ ] T001 Re-read `FilterPanelRenderer.ts:81-90`, `107-123`, `125-146` and `ViewConfigPanelRenderer.ts:846-929`; note `renderSourceRuleLeaf` (`931+`) is a source-op editor and `901-916` has no `depth` [S]
 <!-- /ANCHOR:phase-1 -->
 
 ---
@@ -60,10 +63,7 @@ _memory:
 <!-- ANCHOR:phase-2 -->
 ## Phase 2: Implementation
 
-- [ ] T004 [Implement core feature 1]
-- [ ] T005 [Implement core feature 2]
-- [ ] T006 [Implement core feature 3]
-- [ ] T007 [Add error handling]
+- [ ] T002 One `FilterPanelRenderer.ts` change: recursive group/`not` copied from `renderSourceRuleNode` / `renderSourceRuleGroup` (`846-929`) with a `depth` argument; leaves stay `renderFilterRow` / `renderSingleRuleEditor` (`107-123`); reuse `.db-source-rule-*` (`styles.css:9192-9234`); keep `actions.saveState()` (`99/142/187/212/228/245/264/285/339`); on commit dual-write DFS leaves → `state.filters` and root logic → `state.filterLogic`. Gestures in the same diff: wrap-into-AND-group (Anytype `group.tsx:109-122`); auto-collapse empty groups (do not hoist a remaining single child except persist-normalization); hide “add group” at `depth >= 3`; labeled `not` wrapper like `858-869`; no add-expression; no add-empty-group (`src/views/FilterPanelRenderer.ts`) [L]
 <!-- /ANCHOR:phase-2 -->
 
 ---
@@ -71,9 +71,8 @@ _memory:
 <!-- ANCHOR:phase-3 -->
 ## Phase 3: Verification
 
-- [ ] T008 Test happy path manually
-- [ ] T009 Test edge cases
-- [ ] T010 Update documentation
+- [ ] T003 `(A and B) or C` editable at mobile width; wrap / auto-collapse / depth 3 / `not`; rail popover still edits one leaf (`107-123`) [M]
+- [ ] T004 Grep: no `inFolder` / `hasProperty` / `strictEq` / source `expression` in `FilterPanelRenderer.ts`; `styles.css` and `i18n.ts` untouched [S]
 <!-- /ANCHOR:phase-3 -->
 
 ---
@@ -83,7 +82,8 @@ _memory:
 
 - [ ] All tasks marked `[x]`
 - [ ] No `[B]` blocked tasks remaining
-- [ ] Manual verification passed
+- [ ] T002 shipped as one diff
+- [ ] checklist.md mobile-width evidence recorded
 <!-- /ANCHOR:completion -->
 
 ---
@@ -93,14 +93,7 @@ _memory:
 
 - **Specification**: See `spec.md`
 - **Plan**: See `plan.md`
+- **Checklist**: See `checklist.md`
+- **Parent synthesis**: `../research/synthesis.md` ranks 4, 6, 7, 8 UI
+- **Parent final-plan**: `../research/final-plan.md` step 8
 <!-- /ANCHOR:cross-refs -->
-
----
-
-<!--
-CORE TEMPLATE (~60 lines)
-- Simple task tracking
-- 3 phases: Setup, Implementation, Verification
-- Add L2/L3 addendums for complexity
--->
-

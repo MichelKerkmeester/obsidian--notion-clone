@@ -1,6 +1,6 @@
 {
   "level": "2",
-  "specFolder": "obsidian/002-note-db-notion-parity-build/004-formula-ifs-switch-math",
+  "specFolder": "public/001-note-db-notion-parity-build/004-formula-ifs-switch-math",
   "description": "The note database fork's native Excel-style formula engine already evaluates `IF`, exposes `Math` on the sandbox eval scope",
   "keywords": [
     "note",
@@ -18,12 +18,12 @@
     "eval",
     "scope"
   ],
-  "lastUpdated": "2026-08-25T19:14:37.700Z",
+  "lastUpdated": "2026-08-25T20:13:40.871Z",
   "specId": "004",
   "folderSlug": "formula-ifs-switch-math",
   "parentChain": [
-    "obsidian",
-    "002-note-db-notion-parity-build"
+    "public",
+    "001-note-db-notion-parity-build"
   ],
   "memorySequence": 0,
   "memoryNameHistory": []

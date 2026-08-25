@@ -1,0 +1,20 @@
+{
+  "level": "1",
+  "specFolder": "public/001-note-db-notion-parity-build/012-files-column/002-files-type-registry",
+  "description": "The fork union is 12 types (`types.ts:50`)",
+  "keywords": [
+    "fork",
+    "union",
+    "types"
+  ],
+  "lastUpdated": "2026-08-25T21:13:10.258Z",
+  "specId": "002",
+  "folderSlug": "files-type-registry",
+  "parentChain": [
+    "public",
+    "001-note-db-notion-parity-build",
+    "012-files-column"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": []
+}

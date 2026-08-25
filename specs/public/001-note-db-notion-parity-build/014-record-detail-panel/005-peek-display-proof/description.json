@@ -1,0 +1,31 @@
+{
+  "specFolder": "public/001-note-db-notion-parity-build/014-record-detail-panel/005-peek-display-proof",
+  "description": "Without the locked proofs, OPEN can look done while still navigating (title `<a>` at `CellRenderer.ts:126-129`), fighting Page Preview",
+  "keywords": [
+    "without",
+    "locked",
+    "proofs",
+    "open",
+    "look",
+    "done",
+    "while",
+    "still",
+    "navigating",
+    "title",
+    "cellrenderer",
+    "fighting",
+    "page",
+    "preview"
+  ],
+  "lastUpdated": "2026-08-25T21:23:58.848Z",
+  "specId": "005",
+  "folderSlug": "peek-display-proof",
+  "parentChain": [
+    "public",
+    "001-note-db-notion-parity-build",
+    "014-record-detail-panel"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": [],
+  "level": "2"
+}

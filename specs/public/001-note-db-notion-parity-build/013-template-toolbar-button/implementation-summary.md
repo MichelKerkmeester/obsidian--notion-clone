@@ -13,7 +13,7 @@ importance_tier: "high"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "obsidian/002-note-db-notion-parity-build/013-template-toolbar-button"
+    packet_pointer: "public/001-note-db-notion-parity-build/013-template-toolbar-button"
     last_updated_at: "2026-08-24T00:00:00Z"
     last_updated_by: "swarm"
     recent_action: "Scaffolded phase 013 docs; status Planned"
@@ -62,11 +62,11 @@ This phase is **not built yet**. The swarm scaffolded planning docs only. Plugin
 
 | File | Action | Purpose |
 |------|--------|---------|
-| `specs/obsidian/002-note-db-notion-parity-build/013-template-toolbar-button/spec.md` | Scaffolded | Phase specification (Planned) |
-| `specs/obsidian/002-note-db-notion-parity-build/013-template-toolbar-button/plan.md` | Scaffolded | Isolated-module implementation plan |
-| `specs/obsidian/002-note-db-notion-parity-build/013-template-toolbar-button/tasks.md` | Scaffolded | Unchecked build tasks |
-| `specs/obsidian/002-note-db-notion-parity-build/013-template-toolbar-button/checklist.md` | Scaffolded | Pending verification (0 verified) |
-| `specs/obsidian/002-note-db-notion-parity-build/013-template-toolbar-button/implementation-summary.md` | Scaffolded | Honest unbuilt summary plus frozen design decisions |
+| `specs/public/001-note-db-notion-parity-build/013-template-toolbar-button/spec.md` | Scaffolded | Phase specification (Planned) |
+| `specs/public/001-note-db-notion-parity-build/013-template-toolbar-button/plan.md` | Scaffolded | Isolated-module implementation plan |
+| `specs/public/001-note-db-notion-parity-build/013-template-toolbar-button/tasks.md` | Scaffolded | Unchecked build tasks |
+| `specs/public/001-note-db-notion-parity-build/013-template-toolbar-button/checklist.md` | Scaffolded | Pending verification (0 verified) |
+| `specs/public/001-note-db-notion-parity-build/013-template-toolbar-button/implementation-summary.md` | Scaffolded | Honest unbuilt summary plus frozen design decisions |
 | Fork plugin sources (`RecordTemplate.ts`, `CreateEntryPlan.ts`, toolbar/row-menu hosts) | Unchanged | Create path already exists; UI control not wired |
 
 <!-- /ANCHOR:what-built -->
@@ -102,7 +102,7 @@ Not delivered. On 2026-08-24 the swarm wrote this packet as a Planned scaffold f
 
 | Test Type | Status | Coverage | Notes |
 |-----------|--------|----------|-------|
-| Strict validation | Pending | This packet | `bash .opencode/skills/system-spec-kit/scripts/spec/validate.sh specs/obsidian/002-note-db-notion-parity-build/013-template-toolbar-button --strict` — not run as a build-complete claim |
+| Strict validation | Pending | This packet | `bash .opencode/skills/system-spec-kit/scripts/spec/validate.sh specs/public/001-note-db-notion-parity-build/013-template-toolbar-button --strict` — not run as a build-complete claim |
 | Fork unit tests | Pending | Isolated `src/data/` action | Harness command UNKNOWN until located; plugin code not written |
 | Manual toolbar/row-menu | Pending | Desktop + mobile | Requires the unbuilt control |
 | Diff contract | Pending | One `src/data/` module, ≤ 3 call sites | Compare to `EuroFormat.ts` after implementation |

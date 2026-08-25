@@ -1,0 +1,215 @@
+{
+  "schema_version": 1,
+  "packet_id": "public/001-note-db-notion-parity-build/014-record-detail-panel/005-peek-display-proof",
+  "spec_folder": "public/001-note-db-notion-parity-build/014-record-detail-panel/005-peek-display-proof",
+  "parent_id": "public/001-note-db-notion-parity-build/014-record-detail-panel",
+  "children_ids": [],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "peek display proof",
+      "record peek verify",
+      "hover open proof",
+      "nowrite peek",
+      "peek display proof plan",
+      "peek display proof tasks",
+      "peek display proof checklist",
+      "peek display proof summary"
+    ],
+    "key_topics": [
+      "peek",
+      "display",
+      "proof",
+      "record",
+      "verify",
+      "hover",
+      "open",
+      "nowrite",
+      "plan",
+      "tasks",
+      "checklist",
+      "summary"
+    ],
+    "importance_tier": "high",
+    "status": "planned",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "checklist.md",
+      "implementation-summary.md"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "checklist.md",
+        "kind": "doc",
+        "path": "checklist.md",
+        "source": "derived"
+      },
+      {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Peek Display Proof",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Page Preview",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Parent Spec",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Handoff Criteria",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Problem Statement Without",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Plan",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Technical Context",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Overview Final",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Pattern Observation",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Key Components",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Notation",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Format",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Proofs",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Completion Criteria",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Verification Checklist",
+        "kind": "proper_noun",
+        "path": "checklist.md",
+        "source": "derived"
+      },
+      {
+        "name": "Verification Protocol",
+        "kind": "proper_noun",
+        "path": "checklist.md",
+        "source": "derived"
+      },
+      {
+        "name": "Completion Impact",
+        "kind": "proper_noun",
+        "path": "checklist.md",
+        "source": "derived"
+      },
+      {
+        "name": "Code Quality",
+        "kind": "proper_noun",
+        "path": "checklist.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "Without the locked proofs, OPEN can look done while still navigating (title `<a>` at `CellRenderer.ts:126-129`), fighting Page Preview (`HoverLinkPreview.ts:8-17`), orphaning after `refresh()` (`DatabaseView.ts:10483-10488`), truncating via `.db-record-detail-` (`styles.css:7592-7597`), or writing via a `DataSource` import",
+    "created_at": "2026-08-25T21:14:48Z",
+    "last_save_at": "2026-08-25T21:25:34.106Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "checklist.md",
+      "implementation-summary.md"
+    ],
+    "source_fingerprint": "sha256:166272c25454b7f57cad7becee887648bcf5b6f303e1d77dd31176f804e4e543",
+    "source_doc_hashes": {
+      "spec.md": "cc082baccf7fda5860d6114c077f64832c0f0d2af047047e7731339a9e6557dd",
+      "plan.md": "d7f88d33997f163d9637b2aa0c0200dfe842fb9c66830ce16f72b85e153727e1",
+      "tasks.md": "22b555908a55fac0fe85158999cc9fba97b4d318c34dc8101b220f2ce15b3ad7",
+      "checklist.md": "41d77b7de0836eca42970bf7784e23a8264a071216661bc7396acc642a120d15",
+      "implementation-summary.md": "c82ed50c139acff8fb7cc9e5a68dc8333853485bd62d413f2ded770784095922"
+    },
+    "last_active_child_id": null,
+    "last_active_at": null
+  }
+}

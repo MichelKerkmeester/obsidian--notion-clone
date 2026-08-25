@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "packet_id": "obsidian/002-note-db-notion-parity-build/006-link-scheme-fields/004-scheme-column-width",
-  "spec_folder": "obsidian/002-note-db-notion-parity-build/006-link-scheme-fields/004-scheme-column-width",
-  "parent_id": "obsidian/002-note-db-notion-parity-build/006-link-scheme-fields",
+  "packet_id": "public/001-note-db-notion-parity-build/006-link-scheme-fields/004-scheme-column-width",
+  "spec_folder": "public/001-note-db-notion-parity-build/006-link-scheme-fields/004-scheme-column-width",
+  "parent_id": "public/001-note-db-notion-parity-build/006-link-scheme-fields",
   "children_ids": [],
   "manual": {
     "depends_on": [],
@@ -189,7 +189,7 @@
     ],
     "causal_summary": "Notion sizes on the visible value",
     "created_at": "2026-08-25T19:27:11Z",
-    "last_save_at": "2026-08-25T19:35:48.865Z",
+    "last_save_at": "2026-08-25T20:14:46.464Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -198,12 +198,12 @@
       "tasks.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:f83923b85197ef300473412b5c53fa18f633cb425556673c1498374a2e4ca260",
+    "source_fingerprint": "sha256:059bf39c5e90a24f36072d5ec10009359facc491e5d582f002414026214e24cd",
     "source_doc_hashes": {
-      "spec.md": "df1bcea015f1f6f5d4c368b7002490a616f339acabb1c8c0419db03a1e66820e",
-      "plan.md": "96385574356422d0387db7df1f022f2ab60916cb666f041f41b3d34b3dc467bf",
-      "tasks.md": "a15bd59e6b28cf1ff776dfa6b9a2ca1d19e77d23629044281588336057193dbb",
-      "implementation-summary.md": "5409407ab9efbb0a38bdc211e314d4ab6848a5eb3a12d62fea3a1eb30728ced4"
+      "spec.md": "4d7338b6f35302eab62d912583ceeaf0f1e2536a5e7f55ec8e9c828f749b5534",
+      "plan.md": "a2dabcd48640d78b13eb4435a7b24bb98b2d14d86a27fd281a6b2be89a41b598",
+      "tasks.md": "7019c75dd06bf52157cf0da916ccee4de9f88c7902a2d2f79ca0d1e1e02a3212",
+      "implementation-summary.md": "d6e2a912ba9745524c37712f4a5740d5bc9f1d7d81988783b833fa0f3e9c117d"
     },
     "last_active_child_id": null,
     "last_active_at": null

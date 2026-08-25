@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "packet_id": "obsidian/002-note-db-notion-parity-build/001-live-reports-rollups/004-sum-rollups",
-  "spec_folder": "obsidian/002-note-db-notion-parity-build/001-live-reports-rollups/004-sum-rollups",
-  "parent_id": "obsidian/002-note-db-notion-parity-build/001-live-reports-rollups",
+  "packet_id": "public/001-note-db-notion-parity-build/001-live-reports-rollups/004-sum-rollups",
+  "spec_folder": "public/001-note-db-notion-parity-build/001-live-reports-rollups/004-sum-rollups",
+  "parent_id": "public/001-note-db-notion-parity-build/001-live-reports-rollups",
   "children_ids": [],
   "manual": {
     "depends_on": [],
@@ -191,7 +191,7 @@
     ],
     "causal_summary": "The vault still stores screenshot-era static totals",
     "created_at": "2026-08-25T19:11:31Z",
-    "last_save_at": "2026-08-25T19:23:37.446Z",
+    "last_save_at": "2026-08-25T20:14:51.924Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -200,12 +200,12 @@
       "tasks.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:732fb1fd52aa852b1d65b1afed315b88d271438e8693c557f382664fa2ca2edd",
+    "source_fingerprint": "sha256:7e59e376c47fde982279eaffc78b2acc9e591db5ce6536070982d2a328b14a55",
     "source_doc_hashes": {
-      "spec.md": "52ea1534837ffe51724305fa413391e43c6bd6edbe27b7abaddfa747998ba59d",
-      "plan.md": "dda828c7ce8824d4cbc7c775dfe0d60f2aac01356af2061292c461b439a2a4ff",
-      "tasks.md": "8317118a51ca111893c48f2dbd2dcf16fe583e7840ee539dbc222dc8c84654e2",
-      "implementation-summary.md": "e926aeba3fd72e7dc03faabe879a071117dcd9c9840979e7559f9e31719a2d7e"
+      "spec.md": "6405d1a344ed27d09f75992ff3b44ef2ca85ff3cc8935e1f9a29e265e0796ba1",
+      "plan.md": "9c92945ac8699d33243291138a26181045945e587353534ccc5f88c9633e0beb",
+      "tasks.md": "18a5cd710e3ba645aa94f5e420935582bc8609485c3af27057d774a511303b95",
+      "implementation-summary.md": "f6221fa94d1a10470c9430d21569e5fcd1e6756e8da15efef28e787d158538ed"
     },
     "last_active_child_id": null,
     "last_active_at": null

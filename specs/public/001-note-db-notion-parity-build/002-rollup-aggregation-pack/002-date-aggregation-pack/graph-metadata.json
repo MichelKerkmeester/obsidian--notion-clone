@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "packet_id": "obsidian/002-note-db-notion-parity-build/002-rollup-aggregation-pack/002-date-aggregation-pack",
-  "spec_folder": "obsidian/002-note-db-notion-parity-build/002-rollup-aggregation-pack/002-date-aggregation-pack",
-  "parent_id": "obsidian/002-note-db-notion-parity-build/002-rollup-aggregation-pack",
+  "packet_id": "public/001-note-db-notion-parity-build/002-rollup-aggregation-pack/002-date-aggregation-pack",
+  "spec_folder": "public/001-note-db-notion-parity-build/002-rollup-aggregation-pack/002-date-aggregation-pack",
+  "parent_id": "public/001-note-db-notion-parity-build/002-rollup-aggregation-pack",
   "children_ids": [],
   "manual": {
     "depends_on": [],
@@ -189,7 +189,7 @@
     ],
     "causal_summary": "Notion Date-property rollups expose Earliest date / Latest date / Date range",
     "created_at": "2026-08-25T18:58:58Z",
-    "last_save_at": "2026-08-25T19:05:35.448Z",
+    "last_save_at": "2026-08-25T20:14:50.707Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -198,12 +198,12 @@
       "tasks.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:0fc71f664e395befb538c85646670859fafe2452fbb23eb626e81eb75efcbb8c",
+    "source_fingerprint": "sha256:1d7473df1f77b2003b9c4f0c149aaf1075e9afcc51e1efb04601f0dbac5cceb7",
     "source_doc_hashes": {
-      "spec.md": "67e3bd28282e86508ba1932c48c06a4f0627c67a1c65cd0458c9783a29d148cf",
-      "plan.md": "458aa7c03146653324d40c08bcf954d2c496fa3494577b634947cc8b5abde4c5",
-      "tasks.md": "6918d6ee65d47becb0f7d18d7412c47c9e9778ca44a38611d29505ee10a5ecd1",
-      "implementation-summary.md": "e54da481dd15758865c10ab0daaa7cd12d941c19a063ae5ec016732a66f32e3c"
+      "spec.md": "a7d47778c73ec8c28117397393645eb1bb7150db2449b4a583e45a0851172dd9",
+      "plan.md": "f55009882799e39d861b32012209880eabde5e838e9b083bf5fcffe4421e1a0b",
+      "tasks.md": "7328820dbffcbc68f1f5646d4db22f8d7238a5141af1fcbf9e7639b77e1a546e",
+      "implementation-summary.md": "8a648cf6f968bc3dca8cb4ae87244e97c6c4342fa69750356e440496d2598851"
     },
     "last_active_child_id": null,
     "last_active_at": null

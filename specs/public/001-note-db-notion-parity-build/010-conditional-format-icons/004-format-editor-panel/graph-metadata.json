@@ -1,0 +1,212 @@
+{
+  "schema_version": 1,
+  "packet_id": "public/001-note-db-notion-parity-build/010-conditional-format-icons/004-format-editor-panel",
+  "spec_folder": "public/001-note-db-notion-parity-build/010-conditional-format-icons/004-format-editor-panel",
+  "parent_id": "public/001-note-db-notion-parity-build/010-conditional-format-icons",
+  "children_ids": [],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "format editor panel",
+      "renderconditionalformatting",
+      "cf group chrome",
+      "icon picker bold",
+      "conditionalformat.icon",
+      "format editor panel plan",
+      "format editor panel tasks",
+      "format editor panel summary"
+    ],
+    "key_topics": [
+      "format",
+      "editor",
+      "panel",
+      "renderconditionalformatting",
+      "group",
+      "chrome",
+      "icon",
+      "picker",
+      "bold",
+      "conditionalformat",
+      "plan",
+      "tasks"
+    ],
+    "importance_tier": "high",
+    "status": "planned",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "implementation-summary.md"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Format Editor Panel",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Parent Spec",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Handoff Criteria",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Problem Statement",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Purpose Replace",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Plan",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Technical Context",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Overview Copy",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Pattern In",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Key Components",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Notation",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Format",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Completion Criteria",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Phase 1: Setup",
+        "kind": "heading",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Phase 2: Implementation",
+        "kind": "heading",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Summary",
+        "kind": "proper_noun",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "Spec Folder",
+        "kind": "proper_noun",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "Actual Effort",
+        "kind": "proper_noun",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "What Was Built Nothing",
+        "kind": "proper_noun",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "`renderConditionalFormatting` (`ViewConfigPanelRenderer.ts:552-766`) is one field/op/value row per rule",
+    "created_at": "2026-08-25T21:00:25Z",
+    "last_save_at": "2026-08-25T21:10:37.002Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "implementation-summary.md"
+    ],
+    "source_fingerprint": "sha256:cdb20bc37267633e98fb1aba581d179f1c0c5c451588e76d9fec52c91c53eb14",
+    "source_doc_hashes": {
+      "spec.md": "2809b41b3baa4b3c0873c3203d5bec02cab57586b3b8f9d941d5d627e18cd9c7",
+      "plan.md": "94209de5508ec92f2d0d91dd30110f16bb61191995000867f32fa9ece7a7c5df",
+      "tasks.md": "c59d3d919dc3af0557137fae4aad3ba88a5804fe8bebb47312e4fda4a811b342",
+      "implementation-summary.md": "fafdfb70a35bd88933d4a6de24cf57bb911786c500d0b2a85bf27dca4ea43a11"
+    },
+    "last_active_child_id": null,
+    "last_active_at": null
+  }
+}

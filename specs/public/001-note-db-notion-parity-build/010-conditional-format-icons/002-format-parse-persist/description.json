@@ -1,0 +1,21 @@
+{
+  "level": "1",
+  "specFolder": "public/001-note-db-notion-parity-build/010-conditional-format-icons/002-format-parse-persist",
+  "description": "`parseConditionalFormats` (`DataSource.ts:800-825`) whitelist-builds CF rules",
+  "keywords": [
+    "parseconditionalformats",
+    "datasource",
+    "whitelist-builds",
+    "rules"
+  ],
+  "lastUpdated": "2026-08-25T21:04:32.244Z",
+  "specId": "002",
+  "folderSlug": "format-parse-persist",
+  "parentChain": [
+    "public",
+    "001-note-db-notion-parity-build",
+    "010-conditional-format-icons"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": []
+}

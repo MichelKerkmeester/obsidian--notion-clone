@@ -12,7 +12,7 @@ importance_tier: "high"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "obsidian/002-note-db-notion-parity-build/003-reports-computed-fields/002-remaining-saved-config"
+    packet_pointer: "public/001-note-db-notion-parity-build/003-reports-computed-fields/002-remaining-saved-config"
     last_updated_at: "2026-08-25T19:30:00Z"
     last_updated_by: "phase-architect"
     recent_action: "Authored remaining-saved config child from synthesis and final-plan"

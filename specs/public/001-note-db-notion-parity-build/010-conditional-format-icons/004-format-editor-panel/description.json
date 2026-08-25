@@ -1,0 +1,25 @@
+{
+  "level": "1",
+  "specFolder": "public/001-note-db-notion-parity-build/010-conditional-format-icons/004-format-editor-panel",
+  "description": "`renderConditionalFormatting` (`ViewConfigPanelRenderer.ts:552-766`) is one field/op/value row per rule",
+  "keywords": [
+    "renderconditionalformatting",
+    "viewconfigpanelrenderer",
+    "one",
+    "field",
+    "value",
+    "row",
+    "per",
+    "rule"
+  ],
+  "lastUpdated": "2026-08-25T21:06:17.033Z",
+  "specId": "004",
+  "folderSlug": "format-editor-panel",
+  "parentChain": [
+    "public",
+    "001-note-db-notion-parity-build",
+    "010-conditional-format-icons"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": []
+}

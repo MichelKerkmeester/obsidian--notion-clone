@@ -1,25 +1,31 @@
 {
   "level": "2",
-  "specFolder": "obsidian/002-note-db-notion-parity-build/011-table-multi-group",
-  "description": "Multi-field grouping for TABLE views: groupByFields[] with recursive, indented group headers in TableRenderer.ts.",
+  "specFolder": "public/001-note-db-notion-parity-build/011-table-multi-group",
+  "description": "TABLE views in the note-database fork group rows by a single string (`groupByField`) only, while Notion's current View settings expose Group +",
   "keywords": [
-    "multi-field",
-    "grouping",
     "table",
     "views",
-    "groupbyfields",
-    "recursive",
-    "indented",
+    "note-database",
+    "fork",
     "group",
-    "headers",
-    "tablerenderer"
+    "rows",
+    "single",
+    "string",
+    "groupbyfield",
+    "only",
+    "while",
+    "notion",
+    "current",
+    "view",
+    "settings",
+    "expose"
   ],
-  "lastUpdated": "2026-08-25T14:53:24.619Z",
+  "lastUpdated": "2026-08-25T20:53:04.601Z",
   "specId": "011",
   "folderSlug": "table-multi-group",
   "parentChain": [
-    "obsidian",
-    "002-note-db-notion-parity-build"
+    "public",
+    "001-note-db-notion-parity-build"
   ],
   "memorySequence": 2,
   "memoryNameHistory": [

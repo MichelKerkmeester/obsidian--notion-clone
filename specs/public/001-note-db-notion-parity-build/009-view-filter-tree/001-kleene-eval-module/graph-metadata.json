@@ -1,0 +1,214 @@
+{
+  "schema_version": 1,
+  "packet_id": "public/001-note-db-notion-parity-build/009-view-filter-tree/001-kleene-eval-module",
+  "spec_folder": "public/001-note-db-notion-parity-build/009-view-filter-tree/001-kleene-eval-module",
+  "parent_id": "public/001-note-db-notion-parity-build/009-view-filter-tree",
+  "children_ids": [],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "kleene eval module",
+      "view filter tree",
+      "applyfiltertree",
+      "evaluatefiltertree",
+      "buildviewfiltertree",
+      "vitest harness",
+      "kleene eval plan",
+      "view filter tree module",
+      "kleene eval tasks",
+      "kleene eval summary"
+    ],
+    "key_topics": [
+      "kleene",
+      "eval",
+      "module",
+      "view",
+      "filter",
+      "tree",
+      "applyfiltertree",
+      "evaluatefiltertree",
+      "buildviewfiltertree",
+      "vitest",
+      "harness",
+      "plan"
+    ],
+    "importance_tier": "high",
+    "status": "planned",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "implementation-summary.md"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Kleene Eval Module",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Parent Spec",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Handoff Criteria",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Problem Statement View",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Purpose Land",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Plan",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Technical Context",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Obsidian Plugin",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Pattern Isolated",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Key Components",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Notation",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Format",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Completion Criteria",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Phase 1: Setup",
+        "kind": "heading",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Phase 2: Implementation",
+        "kind": "heading",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Summary",
+        "kind": "proper_noun",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "Planned Kleene",
+        "kind": "proper_noun",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "Spec Folder",
+        "kind": "proper_noun",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "Actual Effort",
+        "kind": "proper_noun",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "View filters are a flat `FilterRule[]` plus one global `filterLogic`, so `(A and B) or C` is inexpressible",
+    "created_at": "2026-08-25T20:51:12Z",
+    "last_save_at": "2026-08-25T21:02:27.138Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "implementation-summary.md"
+    ],
+    "source_fingerprint": "sha256:0ffe3534b4c0588ea4e16acecff39a7ac001551e941974dc36184a2fee6fe671",
+    "source_doc_hashes": {
+      "spec.md": "f5c4dc39adb8b4b0b32b46e622856fc89bf969e7f2def1311c342f33e8df36ac",
+      "plan.md": "59fe2d170273db805b5a6c42fae760b9914062a20d8620af8dc7a4e477d3d7a9",
+      "tasks.md": "30f13df8c4fb827cb3587367f4635e3e7bc9e2325103d9d37553e5a8c654e526",
+      "implementation-summary.md": "dd171bc4607751694bfc900a8b752267b325799a6dba694d0cd8d416c6441aae"
+    },
+    "last_active_child_id": null,
+    "last_active_at": null
+  }
+}

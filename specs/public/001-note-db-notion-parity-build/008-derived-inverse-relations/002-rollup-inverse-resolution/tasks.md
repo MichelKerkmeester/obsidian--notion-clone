@@ -9,7 +9,7 @@ importance_tier: "high"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "obsidian/002-note-db-notion-parity-build/008-derived-inverse-relations/002-rollup-inverse-resolution"
+    packet_pointer: "public/001-note-db-notion-parity-build/008-derived-inverse-relations/002-rollup-inverse-resolution"
     last_updated_at: "2026-08-25T21:40:00Z"
     last_updated_by: "phase-architect"
     recent_action: "Authored rollup inverse-resolution child from synthesis ranks 2 and 4 and final-plan step 3"

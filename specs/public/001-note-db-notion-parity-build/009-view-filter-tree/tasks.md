@@ -13,7 +13,7 @@ importance_tier: "high"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "obsidian/002-note-db-notion-parity-build/009-view-filter-tree"
+    packet_pointer: "public/001-note-db-notion-parity-build/009-view-filter-tree"
     last_updated_at: "2026-08-25T00:00:00Z"
     last_updated_by: "markdown-agent"
     recent_action: "Applied final-plan findings; 12-step reorder, merged T016, T040-T042"

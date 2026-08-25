@@ -1,6 +1,6 @@
 {
   "level": "1",
-  "specFolder": "obsidian/002-note-db-notion-parity-build/007-unique-id-stamp/003-create-entry-stamp",
+  "specFolder": "public/001-note-db-notion-parity-build/007-unique-id-stamp/003-create-entry-stamp",
   "description": "Even after children 001–002, creates never allocate",
   "keywords": [
     "even",
@@ -8,12 +8,12 @@
     "never",
     "allocate"
   ],
-  "lastUpdated": "2026-08-25T19:36:12.450Z",
+  "lastUpdated": "2026-08-25T20:13:41.090Z",
   "specId": "003",
   "folderSlug": "create-entry-stamp",
   "parentChain": [
-    "obsidian",
-    "002-note-db-notion-parity-build",
+    "public",
+    "001-note-db-notion-parity-build",
     "007-unique-id-stamp"
   ],
   "memorySequence": 0,

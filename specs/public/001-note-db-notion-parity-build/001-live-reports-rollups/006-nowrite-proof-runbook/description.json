@@ -1,6 +1,6 @@
 {
   "level": "1",
-  "specFolder": "obsidian/002-note-db-notion-parity-build/001-live-reports-rollups/006-nowrite-proof-runbook",
+  "specFolder": "public/001-note-db-notion-parity-build/001-live-reports-rollups/006-nowrite-proof-runbook",
   "description": "Notion rollups are not page storage",
   "keywords": [
     "notion",
@@ -8,12 +8,12 @@
     "page",
     "storage"
   ],
-  "lastUpdated": "2026-08-25T19:23:12.591Z",
+  "lastUpdated": "2026-08-25T20:13:41.204Z",
   "specId": "006",
   "folderSlug": "nowrite-proof-runbook",
   "parentChain": [
-    "obsidian",
-    "002-note-db-notion-parity-build",
+    "public",
+    "001-note-db-notion-parity-build",
     "001-live-reports-rollups"
   ],
   "memorySequence": 0,

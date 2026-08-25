@@ -1,12 +1,15 @@
 {
   "schema_version": 1,
-  "packet_id": "obsidian/002-note-db-notion-parity-build/003-reports-computed-fields",
-  "spec_folder": "obsidian/002-note-db-notion-parity-build/003-reports-computed-fields",
-  "parent_id": "obsidian/002-note-db-notion-parity-build",
+  "packet_id": "public/001-note-db-notion-parity-build/003-reports-computed-fields",
+  "spec_folder": "public/001-note-db-notion-parity-build/003-reports-computed-fields",
+  "parent_id": "public/001-note-db-notion-parity-build",
   "children_ids": [
     "obsidian/002-note-db-notion-parity-build/003-reports-computed-fields/001-live-reports-inspect",
     "obsidian/002-note-db-notion-parity-build/003-reports-computed-fields/002-remaining-saved-config",
-    "obsidian/002-note-db-notion-parity-build/003-reports-computed-fields/003-reports-display-proof"
+    "obsidian/002-note-db-notion-parity-build/003-reports-computed-fields/003-reports-display-proof",
+    "public/001-note-db-notion-parity-build/003-reports-computed-fields/001-live-reports-inspect",
+    "public/001-note-db-notion-parity-build/003-reports-computed-fields/002-remaining-saved-config",
+    "public/001-note-db-notion-parity-build/003-reports-computed-fields/003-reports-display-proof"
   ],
   "manual": {
     "depends_on": [],
@@ -202,7 +205,7 @@
     ],
     "causal_summary": "The finance Reports view lacks Remaining and Saved as live computed columns",
     "created_at": "2026-08-24T17:58:31.318Z",
-    "last_save_at": "2026-08-25T19:21:32.383Z",
+    "last_save_at": "2026-08-25T20:14:57.415Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -213,13 +216,13 @@
       "implementation-summary.md",
       "research/research.md"
     ],
-    "source_fingerprint": "sha256:91735f80fdf62559ff64e9618624b1cbb6967c9a467295ba29b9f933e7210aae",
+    "source_fingerprint": "sha256:520e7e324fee591113bd7d5cac92cc07012b7a8365ada3e09ee7f9e81533b6f1",
     "source_doc_hashes": {
-      "spec.md": "5e0e27729fb456ac86224e891bcb250537c8c14a07bf3f3137299b49140d8ac0",
-      "plan.md": "94e315ebd4eac692623e58592ada8a7c03f52b34dfad3dd28bf9a1638248860b",
-      "tasks.md": "84130d9449110db18309bd8f81c1ec660c7d815c95fd608e12fed63dd34c780a",
-      "checklist.md": "a6ca41ccbde7fd39e96852287032d2ee005b58ed3bf1f958886f503b08dad0f4",
-      "implementation-summary.md": "3b3e04731867b3872cd5621d04acb9d34d7b98ed1d978bb336190253baf6d5ea",
+      "spec.md": "24ca76b237b52865be73eeb28c90677556c1c276aa8fd969595030ac0108e739",
+      "plan.md": "975fdfafe61ca59a576a8f2a5c3a3a30758db9bedc05216fc34d94887aa5b6b9",
+      "tasks.md": "4bc3a6399e467260cda9f9d73f0c21270664a345a87cc430381a2ac401bece8d",
+      "checklist.md": "d080df0b81c10440e2d5b781086aee2f6374f9dcb1983ed159f75fc3a64c3bec",
+      "implementation-summary.md": "c58c2cfa01e6a8e6294081efb2371a1f8174866c5a1734a21975d4a7ff1b0be9",
       "research/research.md": "8729da9b654dc4ba16bf105550b3bdbc51837d64aa7aa9f2e285c43f010d3b39"
     },
     "last_active_child_id": "obsidian/002-note-db-notion-parity-build/003-reports-computed-fields/003-reports-display-proof",

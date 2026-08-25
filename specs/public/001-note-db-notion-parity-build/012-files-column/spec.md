@@ -13,11 +13,11 @@ importance_tier: "high"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "obsidian/002-note-db-notion-parity-build/012-files-column"
-    last_updated_at: "2026-08-25T00:00:00Z"
-    last_updated_by: "markdown-agent"
-    recent_action: "Applied final-plan.md review findings to planning docs"
-    next_safe_action: "Build phase 012 per plan.md and tasks.md (live fork: Obsidian Plugin/src)"
+    packet_pointer: "public/001-note-db-notion-parity-build/012-files-column"
+    last_updated_at: "2026-08-25T21:20:00Z"
+    last_updated_by: "phase-architect"
+    recent_action: "Nested sub-phases authored from synthesis and final-plan"
+    next_safe_action: "Build 001-files-column-module per its plan.md and tasks.md"
     blockers: []
     key_files:
       - "spec.md"
@@ -63,7 +63,7 @@ _memory:
 Notion databases natively carry a first-class Files & Media property (images, PDFs, attachments), but the note-database fork's column union is 12 types with no files/media type. In the finance vault, Sales PDFs have no native home inside a database row, and gallery view cannot derive a cover from a column's media the way Notion's `Layout → Card preview` does. The fork already has the prerequisite machinery — vault-local wikilink resolution, a chip renderer, an array-aware `CoverImage` parser, and a gallery/board cover pipeline — so the missing piece is a 13th column type plus one EuroFormat-style module that normalizes `string[]` wikilinks and adapts the existing cover path.
 
 ### Purpose
-Add a first-class Files/media column (`"files"`, the 13th type) backed by an isolated `src/data/FilesColumn.ts` module that stores vault wikilink `string[]`, registers in the column registry, dispatches one `CellRenderer` case, and points `galleryImageField` at the new column. The hard constraint: files stay vault-local — rendering resolves wikilinks to files already inside the vault and never fetches Notion CDN URLs, avoiding both a network dependency and iCloud duplication of vault copies. No second cover parser, no CDN fetch, no upload UI.
+Add a first-class Files/media column (`"files"`, the 13th type) backed by an isolated `src/data/FilesColumn.ts` module that stores vault wikilink `string[]`, registers in the column registry, dispatches one `CellRenderer` case, and points `galleryImageField` at the new column. The hard constraint: files stay vault-local — rendering resolves wikilinks to files already inside the vault and never fetches Notion CDN URLs, avoiding both a network dependency and iCloud duplication of vault copies. No second cover parser, no CDN fetch, no upload UI. Nested children own the ordered slices: isolated FilesColumn module, registry plus pickers, CellRenderer render/save/edit, cover wiring, then vault-local proof.
 
 <!-- /ANCHOR:problem -->
 ---
@@ -97,11 +97,11 @@ Add a first-class Files/media column (`"files"`, the 13th type) backed by an iso
 
 | File Path | Change Type | Description |
 |-----------|-------------|-------------|
-| `specs/obsidian/002-note-db-notion-parity-build/012-files-column/spec.md` | Edit | This phase specification (rewritten to match synthesis) |
-| `specs/obsidian/002-note-db-notion-parity-build/012-files-column/plan.md` | Edit | Implementation plan (rewritten to match synthesis) |
-| `specs/obsidian/002-note-db-notion-parity-build/012-files-column/tasks.md` | Edit | Task breakdown (rewritten to synthesis ranked backlog) |
-| `specs/obsidian/002-note-db-notion-parity-build/012-files-column/checklist.md` | Edit | Verification checklist (rewritten to synthesis edge cases) |
-| `specs/obsidian/002-note-db-notion-parity-build/012-files-column/implementation-summary.md` | Untouched | Scaffold state — nothing implemented yet |
+| `specs/public/001-note-db-notion-parity-build/012-files-column/spec.md` | Edit | This phase specification (rewritten to match synthesis) |
+| `specs/public/001-note-db-notion-parity-build/012-files-column/plan.md` | Edit | Implementation plan (rewritten to match synthesis) |
+| `specs/public/001-note-db-notion-parity-build/012-files-column/tasks.md` | Edit | Task breakdown (rewritten to synthesis ranked backlog) |
+| `specs/public/001-note-db-notion-parity-build/012-files-column/checklist.md` | Edit | Verification checklist (rewritten to synthesis edge cases) |
+| `specs/public/001-note-db-notion-parity-build/012-files-column/implementation-summary.md` | Untouched | Scaffold state — nothing implemented yet |
 | `<fork>/src/data/FilesColumn.ts` (planned) | Create | Isolated module: normalize, `formatForEdit`/`parseEdit`, classify, resolve, `renderChips`, chip cap |
 | `<fork>/src/data/types.ts:50` (planned) | Edit | Add `"files"` to `ColumnDef["type"]` union |
 | `<fork>/src/data/ColumnTypes.ts:108-138,172-177` (planned) | Edit | `COLUMN_TYPE_LABELS`, `isColumnType`, `getDefaultCellValue` → `[]` |
@@ -265,3 +265,35 @@ Operator decisions from `research/synthesis.md` (recommended defaults shown; the
 - **Fork (live source)**: `/Users/michelkerkmeester/MEGA/Development/Obsidian Plugin` (`src/data/EuroFormat.ts` is the isolated-diff model; `src/data/CoverImage.ts` is the reused cover pipeline)
 
 <!-- /ANCHOR:related-docs -->
+
+<!-- ANCHOR:phase-map -->
+## PHASE DOCUMENTATION MAP
+
+> This spec uses phased decomposition. Each phase is an independently executable child spec folder. All implementation details (plan, tasks, checklist, decisions, continuity) live inside the phase children.
+
+| Phase | Folder | Focus | Status |
+|-------|--------|-------|--------|
+| 1 | 001-files-column-module/ | Isolated `FilesColumn.ts`: normalize vault wikilink `string[]`, edit serialize, resolve, classify, `renderChips` (cap 5, unresolved, optional thumbnails) | Planned |
+| 2 | 002-files-type-registry/ | Register `"files"` as the 13th type across union, labels, icon, pickers, three i18n dictionaries, and `files` to `multitext` conflict | Planned |
+| 3 | 003-files-cell-dispatch/ | CellRenderer `case "files"` chips, save-time URL strip, and `startEdit` wikilink text editor | Planned |
+| 4 | 004-files-cover-wiring/ | Gallery/board cover guard skips `image.external` on files columns, `onerror` placeholder, auto-prefer files | Planned |
+| 5 | 005-files-column-proof/ | Typecheck, grep, desktop/mobile, iCloud, and rebase-shape proof for REQ-001–007 and SC-001–004 | Planned |
+
+Future / out of this phase (not child folders): gallery "N attachments" count badge; per-file Notion menu plus reorder; GalleryRenderer/ListRenderer card-body stringify unless a finance gallery shows the files column as a field; empty-aware sort; `db-file-pending` overlay; Notion CDN fetch; upload UI; widening `IMAGE_TARGET_RE` for HEIC/TIFF/ICO.
+
+### Phase Transition Rules
+
+- Each phase MUST pass `validate.sh` independently before the next phase begins
+- Parent spec tracks aggregate progress via this map
+- Use `/speckit:resume [parent-folder]/[NNN-phase]/` to resume a specific phase
+- Run `validate.sh --recursive` on parent to validate all phases as integrated unit
+
+### Phase Handoff Criteria
+
+| From | To | Criteria | Verification |
+|------|-----|----------|--------------|
+| 001-files-column-module | 002-files-type-registry | `src/data/FilesColumn.ts` exists with `normalize`, `formatForEdit`/`parseEdit`, `resolveFileTarget`, `classifyFileType`/`isImageTarget`, `FILE_CHIP_CAP`, and `renderChips`; no `fetch`/`cdn`/`adapter.exists`/`electron`/`fs`; `FileFieldRenderer.ts` untouched | Scratch cases for `[]`, URL drop, duplicate targets, dangling dest, 50+ tooltip names (`EuroFormat.ts:1-42` isolation) |
+| 002-files-type-registry | 003-files-cell-dispatch | `"files"` on the union, labels, `isColumnType`, default `[]`, icon name in `PROPERTY_TYPE_ICON_DEFS`, advanced picker + `PROPERTY_TYPES`, three `columnType.files` keys, `files` maps to `multitext` | `npx tsc --noEmit` passes before chips render; add-column shows a localized Files label (`types.ts:50`, `ColumnMenu.ts:261-264`) |
+| 003-files-cell-dispatch | 004-files-cover-wiring | `case "files"` paints chips; `normalizeCellValueForSave` is the write gate; `startEdit` uses `formatForEdit`; mobile inherits `is-inline-overlay` | Empty `[]` is `db-empty-value`; typing `[[Sales.pdf]]` plus a URL stores only the wikilink (`CellRenderer.ts:185,2476-2482,449-524`) |
+| 004-files-cover-wiring | 005-files-column-proof | Cover guard at both `renderCover` sites skips `image.external` when type is `"files"`; `<img> onerror` placeholder; auto-prefer `col.type === "files"`; `CoverImage.ts` untouched | Gallery with image + Sales PDFs, network off, shows the image; a hand-edited URL does not become a network `<img>` (`GalleryRenderer.ts:442-468`, `BoardRenderer.ts:661`) |
+<!-- /ANCHOR:phase-map -->

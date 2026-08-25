@@ -1,0 +1,29 @@
+{
+  "specFolder": "public/001-note-db-notion-parity-build/013-template-toolbar-button/003-create-path-proof",
+  "description": "Call-site prose that says `onclick` then `actions.createEntry()` after `executeNewFromTemplate` writes two notes per click",
+  "keywords": [
+    "call-site",
+    "prose",
+    "says",
+    "onclick",
+    "actions",
+    "createentry",
+    "executenewfromtemplate",
+    "writes",
+    "two",
+    "notes",
+    "per",
+    "click"
+  ],
+  "lastUpdated": "2026-08-25T21:17:28.910Z",
+  "specId": "003",
+  "folderSlug": "create-path-proof",
+  "parentChain": [
+    "public",
+    "001-note-db-notion-parity-build",
+    "013-template-toolbar-button"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": [],
+  "level": "2"
+}

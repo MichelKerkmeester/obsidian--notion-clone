@@ -1,15 +1,21 @@
 {
   "schema_version": 1,
-  "packet_id": "obsidian/002-note-db-notion-parity-build/001-live-reports-rollups",
-  "spec_folder": "obsidian/002-note-db-notion-parity-build/001-live-reports-rollups",
-  "parent_id": "obsidian/002-note-db-notion-parity-build",
+  "packet_id": "public/001-note-db-notion-parity-build/001-live-reports-rollups",
+  "spec_folder": "public/001-note-db-notion-parity-build/001-live-reports-rollups",
+  "parent_id": "public/001-note-db-notion-parity-build",
   "children_ids": [
     "obsidian/002-note-db-notion-parity-build/001-live-reports-rollups/001-reports-relation-wiring",
     "obsidian/002-note-db-notion-parity-build/001-live-reports-rollups/002-display-only-amount-types",
     "obsidian/002-note-db-notion-parity-build/001-live-reports-rollups/003-count-list-resolution",
     "obsidian/002-note-db-notion-parity-build/001-live-reports-rollups/004-sum-rollups",
     "obsidian/002-note-db-notion-parity-build/001-live-reports-rollups/005-snapshot-audit-columns",
-    "obsidian/002-note-db-notion-parity-build/001-live-reports-rollups/006-nowrite-proof-runbook"
+    "obsidian/002-note-db-notion-parity-build/001-live-reports-rollups/006-nowrite-proof-runbook",
+    "public/001-note-db-notion-parity-build/001-live-reports-rollups/001-reports-relation-wiring",
+    "public/001-note-db-notion-parity-build/001-live-reports-rollups/002-display-only-amount-types",
+    "public/001-note-db-notion-parity-build/001-live-reports-rollups/003-count-list-resolution",
+    "public/001-note-db-notion-parity-build/001-live-reports-rollups/004-sum-rollups",
+    "public/001-note-db-notion-parity-build/001-live-reports-rollups/005-snapshot-audit-columns",
+    "public/001-note-db-notion-parity-build/001-live-reports-rollups/006-nowrite-proof-runbook"
   ],
   "manual": {
     "depends_on": [],
@@ -201,7 +207,7 @@
     ],
     "causal_summary": "The four Reports figures (Income, Expenses, Sales, Saved) are static numbers typed into Report notes to match Notion screenshots during the earlier Bases migration",
     "created_at": "2026-08-24T17:58:27.296Z",
-    "last_save_at": "2026-08-25T19:21:33.881Z",
+    "last_save_at": "2026-08-25T20:14:58.025Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -212,13 +218,13 @@
       "implementation-summary.md",
       "research/research.md"
     ],
-    "source_fingerprint": "sha256:1609380279cc1ed59a00492eace4b1fd502b89ef429ba3153c652b436e0d217c",
+    "source_fingerprint": "sha256:3c59bb1f714801f634795c5ac09e10dc14075389766e7ec5b80376a93e8549e4",
     "source_doc_hashes": {
-      "spec.md": "afbc6db68114369b11ec455e171669bcdb98e6c5d828e555f1b5ef1d39019fc1",
-      "plan.md": "ba7758c2aad3864c8c5f15a950e7e908668716ab33c6c4a411de953a1853b75b",
-      "tasks.md": "3058e81f4db0070b313732137db4c0fa685bca8b7d31980f72a3df0ebc2a31f0",
-      "checklist.md": "b610550f6e2a3323e4d88d9db72b399533d18d1918b8207bb13eda273e10f127",
-      "implementation-summary.md": "0dd797faece4607602720c0707f1d208d342afacc2000f54e889f4de93f0d920",
+      "spec.md": "b5c65591d04edf1a41ce9223d9c2bb0d5b82a3dad15274bb3bac390a395f4e20",
+      "plan.md": "ae53d9614e0f7082be2bc3fbd547e5f46d9c3cb43fc80cb656a976cf707aef94",
+      "tasks.md": "9a1876a50790f4c02f5d4fac9d6c4c1aa5bf0995f1287bda0d90ec3915a14bde",
+      "checklist.md": "f7b4ccfd3d6c1c017a3434d03d33636e24294e2cef5dd2708052b5950461c23f",
+      "implementation-summary.md": "5acd97103508a6cf4c2c2e081e14a477ffe1f2953b4968812e21a95970fdda86",
       "research/research.md": "248a4a052dd458be099313a521616296782ed4a3627a40b279471bcf1e8e87b7"
     },
     "last_active_child_id": "obsidian/002-note-db-notion-parity-build/001-live-reports-rollups/006-nowrite-proof-runbook",

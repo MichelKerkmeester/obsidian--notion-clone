@@ -14,11 +14,11 @@ importance_tier: "high"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "obsidian/002-note-db-notion-parity-build/013-template-toolbar-button"
-    last_updated_at: "2026-08-25T00:00:00Z"
-    last_updated_by: "markdown-agent"
-    recent_action: "Applied final-plan.md review findings to spec/plan/tasks/checklist; status Planned"
-    next_safe_action: "Build phase 013 per plan.md and tasks.md"
+    packet_pointer: "public/001-note-db-notion-parity-build/013-template-toolbar-button"
+    last_updated_at: "2026-08-25T21:20:00Z"
+    last_updated_by: "phase-architect"
+    recent_action: "Nested sub-phases authored from synthesis and final-plan"
+    next_safe_action: "Build 001-adaptive-toolbar-control per its plan.md and tasks.md"
     blockers: []
     key_files:
       - "spec.md"
@@ -64,7 +64,7 @@ _memory:
 The note-database fork already implements Notion-style record templates and already wires them to the toolbar **New** button. `renderNewButton` calls `actions.createEntry()` with no args (`src/views/ToolbarRenderer.ts:1683-1691`), which reaches `createBlankEntry` → `loadNewRecordTemplate` → `buildCreateEntryPlan` / `planCreateEntry` (`src/views/DatabaseView.ts:845-850, 3528-3538, 3673-3679`). The create-with-defaults engine therefore already exists. The gap is **discoverability**, not a second engine: the button is labeled only `"New"` (`src/i18n.ts:177`), so an operator who configured `database.newRecordTemplate` has no visible indication that clicking **New** applies that template, and the row menu has no template entry at all (`src/views/RowMenu.ts:36-120`).
 
 ### Purpose
-Ship an adaptive **New from template** label on the toolbar plus a row-menu twin, via one EuroFormat-style `src/data/` module and exactly three call sites, reusing the existing `confirmWithModal` for an optional confirm-before-create. `NewRecordTemplateConfig` is a single `{ path, engine }` (`src/data/types.ts:154-157, 279`); a Notion-style multi-template picker would require a schema change and exceeds the 1–3 call-site budget, so it is explicitly out. Duplicate-row already covers recurrence. The rest of Notion Buttons — scheduler/cron and network actions (mail, webhook, Slack, notifications) — is not a local vault feature and is out of this phase. Source of truth: `research/synthesis.md` (evidence trail: `research/research.md`). Fork root: `/Users/michelkerkmeester/MEGA/Development/Obsidian Plugin`.
+Ship an adaptive **New from template** label on the toolbar plus a row-menu twin, via one EuroFormat-style `src/data/` module and exactly three call sites, reusing the existing `confirmWithModal` for an optional confirm-before-create. `NewRecordTemplateConfig` is a single `{ path, engine }` (`src/data/types.ts:154-157, 279`); a Notion-style multi-template picker would require a schema change and exceeds the 1–3 call-site budget, so it is explicitly out. Duplicate-row already covers recurrence. The rest of Notion Buttons — scheduler/cron and network actions (mail, webhook, Slack, notifications) — is not a local vault feature and is out of this phase. Nested children own the ordered slices: adaptive toolbar module plus host first, then the row-menu twin, then create-path proof. Source of truth: `research/synthesis.md` (evidence trail: `research/research.md`). Fork root: `/Users/michelkerkmeester/MEGA/Development/Obsidian Plugin`.
 
 <!-- /ANCHOR:problem -->
 ---
@@ -249,3 +249,31 @@ Ship an adaptive **New from template** label on the toolbar plus a row-menu twin
 - **Fork root**: `/Users/michelkerkmeester/MEGA/Development/Obsidian Plugin`
 
 <!-- /ANCHOR:related-docs -->
+
+<!-- ANCHOR:phase-map -->
+## PHASE DOCUMENTATION MAP
+
+> This spec uses phased decomposition. Each phase is an independently executable child spec folder. All implementation details (plan, tasks, checklist, decisions, continuity) live inside the phase children.
+
+| Phase | Folder | Focus | Status |
+|-------|--------|-------|--------|
+| 1 | 001-adaptive-toolbar-control/ | Isolated `TemplateToolbarAction.ts` plus i18n and the adaptive toolbar New host (path tooltip, phone icon-only) | Planned |
+| 2 | 002-row-menu-template-item/ | Row-menu New-from-template item when a template is set, plus DatabaseView `getDatabaseConfig` wiring | Planned |
+| 3 | 003-create-path-proof/ | Prove one create via the existing path, no double create, phone and empty-set behavior, and the three-host diff | Planned |
+
+Future / out of this phase (not child folders): REQ-004 confirm-before-create (deferred; overlay guard is the double-click backstop); Notion split-button plus template dropdown; inline "+ New template"; multi-template / per-view `defaultTemplateId`; repeating or scheduled templates; AppFlowy-style payload pre-fill as a new engine; network buttons (mail, webhook, Slack).
+
+### Phase Transition Rules
+
+- Each phase MUST pass `validate.sh` independently before the next phase begins
+- Parent spec tracks aggregate progress via this map
+- Use `/speckit:resume [parent-folder]/[NNN-phase]/` to resume a specific phase
+- Run `validate.sh --recursive` on parent to validate all phases as integrated unit
+
+### Phase Handoff Criteria
+
+| From | To | Criteria | Verification |
+|------|-----|----------|--------------|
+| 001-adaptive-toolbar-control | 002-row-menu-template-item | `src/data/TemplateToolbarAction.ts` exports `hasRecordTemplate`, `getNewFromTemplateLabel`, `getNewFromTemplateTooltip`, and `executeNewFromTemplate`; i18n keys include `toolbar.newFromTemplate`, `toolbar.newFromTemplateTooltip`, and `menu.newFromTemplate`; toolbar adaptive label plus phone icon-only land; the module is the only toolbar `createEntry` caller; `confirmEnabled` stays false | Desktop template DB shows **New from template** plus path tooltip; zero-template stays **New**; chart/read-only still hidden (`ToolbarRenderer.ts:236, 282`); phone template control is icon-only with full `aria-label` / `title` (`:285-287`) |
+| 002-row-menu-template-item | 003-create-path-proof | Row-menu item exists only when `hasRecordTemplate` inside the existing `!isReadOnly` and calendar/timeline guards; DatabaseView RowMenu ctor wires `getDatabaseConfig: () => this.getActiveDb()`; the module is the only row-menu `createEntry` caller | Item present on table/board/gallery/list with a template; absent with zero templates, on calendar/timeline, and when read-only (`RowMenu.ts:54-75`); `getActiveDb` at `DatabaseView.ts:783-786` |
+<!-- /ANCHOR:phase-map -->

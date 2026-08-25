@@ -1,0 +1,22 @@
+{
+  "specFolder": "public/001-note-db-notion-parity-build/013-template-toolbar-button/002-row-menu-template-item",
+  "description": "Notion exposes templates from the New control",
+  "keywords": [
+    "notion",
+    "exposes",
+    "templates",
+    "new",
+    "control"
+  ],
+  "lastUpdated": "2026-08-25T21:15:46.417Z",
+  "specId": "002",
+  "folderSlug": "row-menu-template-item",
+  "parentChain": [
+    "public",
+    "001-note-db-notion-parity-build",
+    "013-template-toolbar-button"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": [],
+  "level": "1"
+}

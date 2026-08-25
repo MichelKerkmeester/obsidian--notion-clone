@@ -1,12 +1,15 @@
 {
   "schema_version": 1,
-  "packet_id": "obsidian/002-note-db-notion-parity-build/002-rollup-aggregation-pack",
-  "spec_folder": "obsidian/002-note-db-notion-parity-build/002-rollup-aggregation-pack",
-  "parent_id": "obsidian/002-note-db-notion-parity-build",
+  "packet_id": "public/001-note-db-notion-parity-build/002-rollup-aggregation-pack",
+  "spec_folder": "public/001-note-db-notion-parity-build/002-rollup-aggregation-pack",
+  "parent_id": "public/001-note-db-notion-parity-build",
   "children_ids": [
     "obsidian/002-note-db-notion-parity-build/002-rollup-aggregation-pack/001-numeric-aggregate-module",
     "obsidian/002-note-db-notion-parity-build/002-rollup-aggregation-pack/002-date-aggregation-pack",
-    "obsidian/002-note-db-notion-parity-build/002-rollup-aggregation-pack/003-percent-aggregation-pack"
+    "obsidian/002-note-db-notion-parity-build/002-rollup-aggregation-pack/003-percent-aggregation-pack",
+    "public/001-note-db-notion-parity-build/002-rollup-aggregation-pack/001-numeric-aggregate-module",
+    "public/001-note-db-notion-parity-build/002-rollup-aggregation-pack/002-date-aggregation-pack",
+    "public/001-note-db-notion-parity-build/002-rollup-aggregation-pack/003-percent-aggregation-pack"
   ],
   "manual": {
     "depends_on": [],
@@ -201,7 +204,7 @@
     ],
     "causal_summary": "The fork's rollup columns are stuck on four kinds — `count | sum | avg | list` (`src/data/types.ts:44`) — while Notion exposes ~18 rollup calculations (9 universal + 6 number-only + 3 date-only)",
     "created_at": "2026-08-24T17:58:29.331Z",
-    "last_save_at": "2026-08-25T19:05:35.954Z",
+    "last_save_at": "2026-08-25T20:14:57.725Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -212,13 +215,13 @@
       "implementation-summary.md",
       "research/research.md"
     ],
-    "source_fingerprint": "sha256:3eb808ed6d6e7e52085b9f50ba2879906c2d9ce27e6bbc1c2d3005f8fe8f82a3",
+    "source_fingerprint": "sha256:9c179afe69c32b39ebf9d9b74c0015d5629b584a7de5abf7fef92cdb81676448",
     "source_doc_hashes": {
-      "spec.md": "796d18807c2ee80bb7402746afb1c20a61cf394107a84f5449b25a74d775513c",
-      "plan.md": "52743b5b0162605c6ac20c9b763539c84ee9d1e7a0dda33629dff239b049b7fd",
-      "tasks.md": "997511c4753be3bbeec127cedb3a62be6b3316cbe671a25c0509c94c34e02f2c",
-      "checklist.md": "ca19c62871e549b9a8f1c869045841d840ee6fff8d3560a5efc66daea5ba358e",
-      "implementation-summary.md": "7e49b9c5d31b05ff1edeef6d7dcb07a78bd35c008a20a2636dde53447b0abff7",
+      "spec.md": "c83f16dd2da7c43ab9b162d976b2a1f4258e8b974ec1abe5df98b3b007913e99",
+      "plan.md": "e66d0d86ca1dfc13e88d9777ef684d5e0bffdfe0ef11cf9627f28dbd354d78b9",
+      "tasks.md": "1f378f060a2e87afe331b24683ee61e984d9782b14ac9b3b0bec80ef884c38c5",
+      "checklist.md": "0041e01c048ff188e5400611fcf652351ce7abcfb6e69045412cb365db483c86",
+      "implementation-summary.md": "adbc3bbe5c156217326254a4286dbf1e457a348acd85297a4cfc28849843631d",
       "research/research.md": "13f52a74afec75e4276199877df53c2b52e6314e0ad11440d55839a79f49d7b4"
     },
     "last_active_child_id": "obsidian/002-note-db-notion-parity-build/002-rollup-aggregation-pack/003-percent-aggregation-pack",

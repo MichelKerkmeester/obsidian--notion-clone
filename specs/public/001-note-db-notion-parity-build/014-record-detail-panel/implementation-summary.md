@@ -11,7 +11,7 @@ importance_tier: "high"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "obsidian/002-note-db-notion-parity-build/014-record-detail-panel"
+    packet_pointer: "public/001-note-db-notion-parity-build/014-record-detail-panel"
     last_updated_at: "2026-08-24T00:00:00Z"
     last_updated_by: "swarm"
     recent_action: "Scaffolded phase 014 docs; status Planned"
@@ -60,11 +60,11 @@ This phase is NOT built yet. The five scaffolded documents define the planned Re
 
 | File | Action | Purpose |
 |------|--------|---------|
-| `specs/obsidian/002-note-db-notion-parity-build/014-record-detail-panel/spec.md` | Created (scaffold) | Level 2 specification |
-| `specs/obsidian/002-note-db-notion-parity-build/014-record-detail-panel/plan.md` | Created (scaffold) | Level 2 implementation plan |
-| `specs/obsidian/002-note-db-notion-parity-build/014-record-detail-panel/tasks.md` | Created (scaffold) | Level 2 task list |
-| `specs/obsidian/002-note-db-notion-parity-build/014-record-detail-panel/checklist.md` | Created (scaffold) | Level 2 verification checklist (all pending) |
-| `specs/obsidian/002-note-db-notion-parity-build/014-record-detail-panel/implementation-summary.md` | Created (scaffold) | Level 2 implementation summary |
+| `specs/public/001-note-db-notion-parity-build/014-record-detail-panel/spec.md` | Created (scaffold) | Level 2 specification |
+| `specs/public/001-note-db-notion-parity-build/014-record-detail-panel/plan.md` | Created (scaffold) | Level 2 implementation plan |
+| `specs/public/001-note-db-notion-parity-build/014-record-detail-panel/tasks.md` | Created (scaffold) | Level 2 task list |
+| `specs/public/001-note-db-notion-parity-build/014-record-detail-panel/checklist.md` | Created (scaffold) | Level 2 verification checklist (all pending) |
+| `specs/public/001-note-db-notion-parity-build/014-record-detail-panel/implementation-summary.md` | Created (scaffold) | Level 2 implementation summary |
 
 Planned (not yet created): the detail-panel IA module and scoped CSS under `note-database-fork/src/data/`, plus ≤3 minimal call-site edits — see `plan.md` §3 and `tasks.md` Phase 2.
 

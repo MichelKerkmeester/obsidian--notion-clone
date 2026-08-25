@@ -1,0 +1,215 @@
+{
+  "schema_version": 1,
+  "packet_id": "public/001-note-db-notion-parity-build/011-table-multi-group/005-multigroup-display-proof",
+  "spec_folder": "public/001-note-db-notion-parity-build/011-table-multi-group/005-multigroup-display-proof",
+  "parent_id": "public/001-note-db-notion-parity-build/011-table-multi-group",
+  "children_ids": [],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "multigroup display proof",
+      "table grouping matrix",
+      "groupbyfields reload",
+      "1-field patch",
+      "multigroup display proof plan",
+      "multigroup display proof tasks",
+      "multigroup display proof checklist",
+      "multigroup display proof summary"
+    ],
+    "key_topics": [
+      "multigroup",
+      "display",
+      "proof",
+      "table",
+      "grouping",
+      "matrix",
+      "groupbyfields",
+      "reload",
+      "1-field",
+      "patch",
+      "plan",
+      "tasks"
+    ],
+    "importance_tier": "high",
+    "status": "planned",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "checklist.md",
+      "implementation-summary.md"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "checklist.md",
+        "kind": "doc",
+        "path": "checklist.md",
+        "source": "derived"
+      },
+      {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Multigroup Display Proof",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Parent Spec",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Handoff Criteria",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Problem Statement Without",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Purpose Prove",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Plan",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Technical Context",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Overview Final",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Pattern Observation",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Key Components",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Notation",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Format",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Completion Criteria",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Phase 1: Setup",
+        "kind": "heading",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Phase 2: Implementation",
+        "kind": "heading",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Verification Checklist",
+        "kind": "proper_noun",
+        "path": "checklist.md",
+        "source": "derived"
+      },
+      {
+        "name": "Verification Protocol",
+        "kind": "proper_noun",
+        "path": "checklist.md",
+        "source": "derived"
+      },
+      {
+        "name": "Completion Impact",
+        "kind": "proper_noun",
+        "path": "checklist.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "Without the locked proofs, a 2-field table can \"pass\" while 1-field hide keys change, while persist drops `groupByFields`, while a Type header writes on drop, or while empty months of grouping (nulls, multi-select fan-out, computed leftovers) throw",
+    "created_at": "2026-08-25T20:50:01Z",
+    "last_save_at": "2026-08-25T21:02:24.010Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "checklist.md",
+      "implementation-summary.md"
+    ],
+    "source_fingerprint": "sha256:e2da450fadbae2d5e2aaebf8ece34c5f6c4c588f5abf725c40b3ecc014790e35",
+    "source_doc_hashes": {
+      "spec.md": "112bc0bbba9647bc8ea955bb7904d5b26fde84f42c735af1db4335f7aade85fa",
+      "plan.md": "a4a68c504e03824ead2d52d3ca6f7dbb76c21993792563be3c955bf39d9ca773",
+      "tasks.md": "0402a09bc9717ae1ccf600bde0229569805fa6bca283ef0de6b7e44ec5b6f71a",
+      "checklist.md": "8d428b5749acc075bc8ba7eca56b7b46ff8602880cac1d554ed5c9d3246ed936",
+      "implementation-summary.md": "f94c7583b244818b4a7bb039e1f97068af196168715564d3daa88e6c793ed002"
+    },
+    "last_active_child_id": null,
+    "last_active_at": null
+  }
+}

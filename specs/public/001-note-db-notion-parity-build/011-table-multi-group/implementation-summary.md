@@ -11,7 +11,7 @@ importance_tier: "high"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "obsidian/002-note-db-notion-parity-build/011-table-multi-group"
+    packet_pointer: "public/001-note-db-notion-parity-build/011-table-multi-group"
     last_updated_at: "2026-08-24T00:00:00Z"
     last_updated_by: "swarm"
     recent_action: "Scaffolded phase 011 docs; status Planned"
@@ -62,11 +62,11 @@ Implementation will follow `plan.md` (architecture and phases) and `tasks.md` (t
 
 | File | Action | Purpose |
 |------|--------|---------|
-| `specs/obsidian/002-note-db-notion-parity-build/011-table-multi-group/spec.md` | Scaffolded | Requirements, scope, NFRs, edge cases for multi-field table grouping |
-| `specs/obsidian/002-note-db-notion-parity-build/011-table-multi-group/plan.md` | Scaffolded | Implementation approach on the `EuroFormat.ts` isolated-diff model |
-| `specs/obsidian/002-note-db-notion-parity-build/011-table-multi-group/tasks.md` | Scaffolded | Task breakdown for setup, implementation, and verification |
-| `specs/obsidian/002-note-db-notion-parity-build/011-table-multi-group/checklist.md` | Scaffolded | Pending verification items (0 verified) |
-| `specs/obsidian/002-note-db-notion-parity-build/011-table-multi-group/implementation-summary.md` | Scaffolded | This honest status record |
+| `specs/public/001-note-db-notion-parity-build/011-table-multi-group/spec.md` | Scaffolded | Requirements, scope, NFRs, edge cases for multi-field table grouping |
+| `specs/public/001-note-db-notion-parity-build/011-table-multi-group/plan.md` | Scaffolded | Implementation approach on the `EuroFormat.ts` isolated-diff model |
+| `specs/public/001-note-db-notion-parity-build/011-table-multi-group/tasks.md` | Scaffolded | Task breakdown for setup, implementation, and verification |
+| `specs/public/001-note-db-notion-parity-build/011-table-multi-group/checklist.md` | Scaffolded | Pending verification items (0 verified) |
+| `specs/public/001-note-db-notion-parity-build/011-table-multi-group/implementation-summary.md` | Scaffolded | This honest status record |
 
 <!-- /ANCHOR:what-built -->
 ---

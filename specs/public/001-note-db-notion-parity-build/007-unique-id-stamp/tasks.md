@@ -14,7 +14,7 @@ importance_tier: "high"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "obsidian/002-note-db-notion-parity-build/007-unique-id-stamp"
+    packet_pointer: "public/001-note-db-notion-parity-build/007-unique-id-stamp"
     last_updated_at: "2026-08-25T00:00:00Z"
     last_updated_by: "markdown-agent"
     recent_action: "Applied final-plan review findings; status Planned"
@@ -118,7 +118,7 @@ _memory:
 
 ### Documentation
 - [ ] T019 Reconcile spec/plan/tasks with the shipped diff (`spec.md`, `plan.md`, `tasks.md`, `checklist.md`) [15m]
-- [ ] T020 Run packet strict validation (`bash .opencode/skills/system-spec-kit/scripts/spec/validate.sh specs/obsidian/002-note-db-notion-parity-build/007-unique-id-stamp --strict`) [10m]
+- [ ] T020 Run packet strict validation (`bash .opencode/skills/system-spec-kit/scripts/spec/validate.sh specs/public/001-note-db-notion-parity-build/007-unique-id-stamp --strict`) [10m]
 
 ### Diff Gate (final build plan step 9)
 - [ ] T021 Confirm the scoped diff: `UniqueIdStamp.ts` (new), `types.ts`, `DataSource.ts`, `CreateEntryPlan.ts`, `DatabaseView.ts`, plus `src/__tests__/setup.ts` and `src/data/UniqueIdStamp.test.ts` only — no `ColumnTypes.ts`, no `EuroFormat.ts`, no 006/008, no telemetry, no `settings.ts` counter path, no 13th type; comments are durable-why only [10m] — **Depends:** steps 14–18
@@ -134,7 +134,7 @@ _memory:
 
 - [ ] All non-deferred tasks marked `[x]`. Pending — no build has run; do not mark complete from this scaffold. Non-deferred tasks are T001–T011 and T014–T021.
 - [ ] No unblocked `[B]` tasks remaining in-phase. Pending — T012 (config UI) and T013 (read-only cell) are P2-cut this phase; T022 (lookup URLs) is blocked/out-of-scope. The build tasks are unchecked and unblocked (`depends_on: none` for the allocator; later tasks depend on prior steps as noted).
-- [ ] Strict validation passed. Pending — command is `bash .opencode/skills/system-spec-kit/scripts/spec/validate.sh specs/obsidian/002-note-db-notion-parity-build/007-unique-id-stamp --strict`.
+- [ ] Strict validation passed. Pending — command is `bash .opencode/skills/system-spec-kit/scripts/spec/validate.sh specs/public/001-note-db-notion-parity-build/007-unique-id-stamp --strict`.
 - [ ] Checklist.md fully verified. Pending — `checklist.md` Verification Summary must stay 0 verified until the build produces evidence.
 
 <!-- /ANCHOR:completion -->

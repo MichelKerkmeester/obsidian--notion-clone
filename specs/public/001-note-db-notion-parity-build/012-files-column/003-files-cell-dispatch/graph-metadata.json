@@ -1,0 +1,212 @@
+{
+  "schema_version": 1,
+  "packet_id": "public/001-note-db-notion-parity-build/012-files-column/003-files-cell-dispatch",
+  "spec_folder": "public/001-note-db-notion-parity-build/012-files-column/003-files-cell-dispatch",
+  "parent_id": "public/001-note-db-notion-parity-build/012-files-column",
+  "children_ids": [],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "files cell dispatch",
+      "cellrenderer files",
+      "normalize files save",
+      "startedit files",
+      "inline overlay files",
+      "files cell dispatch plan",
+      "files cell dispatch tasks",
+      "files cell dispatch summary"
+    ],
+    "key_topics": [
+      "files",
+      "cell",
+      "dispatch",
+      "cellrenderer",
+      "normalize",
+      "save",
+      "startedit",
+      "inline",
+      "overlay",
+      "plan",
+      "tasks",
+      "summary"
+    ],
+    "importance_tier": "high",
+    "status": "planned",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "implementation-summary.md"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Files Cell Dispatch",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Parent Spec",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Handoff Criteria",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Problem Statement",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Purpose Dispatch",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Plan",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Technical Context",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Overview Three",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Pattern One",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Key Components",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Notation",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Format",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Completion Criteria",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Phase 1: Setup",
+        "kind": "heading",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Phase 2: Implementation",
+        "kind": "heading",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Summary",
+        "kind": "proper_noun",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "Spec Folder",
+        "kind": "proper_noun",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "Actual Effort",
+        "kind": "proper_noun",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "What Was Built Nothing",
+        "kind": "proper_noun",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "A `\"files\"` column would fall through the `displayType` switch (`CellRenderer.ts:185-234`) to `default` and `String(value)`",
+    "created_at": "2026-08-25T21:08:51Z",
+    "last_save_at": "2026-08-25T21:17:30.354Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "implementation-summary.md"
+    ],
+    "source_fingerprint": "sha256:15b9834e2e1068c117e1b5b1d4b4b2a3ec7d4fe2c595af57922097de3d950149",
+    "source_doc_hashes": {
+      "spec.md": "c567703114656de15dc572aac8d0892422d4d6c3b92b94fc8f7bf3c8987e14a8",
+      "plan.md": "4ed807113f2861f78f8eb115a001e50aa3064249d58fadd535c3d60c58a02e53",
+      "tasks.md": "993dbd2a8161505f9fa5ce5ac834b723522f6b7e7e72a0b9fa9eddb390d53b88",
+      "implementation-summary.md": "88d6def5b88231c5c61df6683bccf3e5210ec3f60c2ca40f3f2a514b231207e3"
+    },
+    "last_active_child_id": null,
+    "last_active_at": null
+  }
+}

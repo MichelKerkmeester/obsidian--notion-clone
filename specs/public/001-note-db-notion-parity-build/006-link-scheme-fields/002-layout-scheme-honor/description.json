@@ -1,6 +1,6 @@
 {
   "level": "1",
-  "specFolder": "obsidian/002-note-db-notion-parity-build/006-link-scheme-fields/002-layout-scheme-honor",
+  "specFolder": "public/001-note-db-notion-parity-build/006-link-scheme-fields/002-layout-scheme-honor",
   "description": "Notion properties click in every layout",
   "keywords": [
     "notion",
@@ -9,12 +9,12 @@
     "every",
     "layout"
   ],
-  "lastUpdated": "2026-08-25T19:33:14.408Z",
+  "lastUpdated": "2026-08-25T20:13:41.327Z",
   "specId": "002",
   "folderSlug": "layout-scheme-honor",
   "parentChain": [
-    "obsidian",
-    "002-note-db-notion-parity-build",
+    "public",
+    "001-note-db-notion-parity-build",
     "006-link-scheme-fields"
   ],
   "memorySequence": 0,

@@ -14,7 +14,7 @@ importance_tier: "high"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "obsidian/002-note-db-notion-parity-build/006-link-scheme-fields"
+    packet_pointer: "public/001-note-db-notion-parity-build/006-link-scheme-fields"
     last_updated_at: "2026-08-25T19:40:00Z"
     last_updated_by: "phase-architect"
     recent_action: "Nested sub-phases authored from synthesis and final-plan"
@@ -97,8 +97,8 @@ Ship a closed-allowlist `textLinkScheme` hint (`https` | `mailto` | `tel`) on th
 | `src/data/types.ts` (~line 62) | Edit | Add optional `textLinkScheme?: TextLinkScheme` to `ColumnDef`, sibling to `textRenderMode` |
 | `src/data/textLinkScheme.ts` | Add | New isolated module: closed allowlist + `assembleSchemeLinkTarget` (EuroFormat diff model) |
 | `src/views/CellRenderer.ts` (default branch ~211-233; helper ~269-291) | Edit | Consult hint; emit delayed-open anchor or fall through to existing markdown → link-mode → plain order |
-| `specs/obsidian/002-note-db-notion-parity-build/006-link-scheme-fields/spec.md` | Add | This specification |
-| `specs/obsidian/002-note-db-notion-parity-build/006-link-scheme-fields/plan.md` + `tasks.md` + `checklist.md` + `implementation-summary.md` | Add | Phase plan, task breakdown, verification checklist, and summary |
+| `specs/public/001-note-db-notion-parity-build/006-link-scheme-fields/spec.md` | Add | This specification |
+| `specs/public/001-note-db-notion-parity-build/006-link-scheme-fields/plan.md` + `tasks.md` + `checklist.md` + `implementation-summary.md` | Add | Phase plan, task breakdown, verification checklist, and summary |
 
 > Paths are relative to the fork root (`specs/obsidian/001-notion-finance-migration/build/note-database-fork`). The scaffold's `components/CellRenderer.ts` and loose `types.ts` references are corrected here to `views/CellRenderer.ts` and `data/types.ts`.
 

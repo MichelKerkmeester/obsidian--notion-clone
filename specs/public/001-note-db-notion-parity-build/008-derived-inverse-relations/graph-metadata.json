@@ -1,12 +1,15 @@
 {
   "schema_version": 1,
-  "packet_id": "obsidian/002-note-db-notion-parity-build/008-derived-inverse-relations",
-  "spec_folder": "obsidian/002-note-db-notion-parity-build/008-derived-inverse-relations",
-  "parent_id": "obsidian/002-note-db-notion-parity-build",
+  "packet_id": "public/001-note-db-notion-parity-build/008-derived-inverse-relations",
+  "spec_folder": "public/001-note-db-notion-parity-build/008-derived-inverse-relations",
+  "parent_id": "public/001-note-db-notion-parity-build",
   "children_ids": [
     "obsidian/002-note-db-notion-parity-build/008-derived-inverse-relations/001-relation-inverse-module",
     "obsidian/002-note-db-notion-parity-build/008-derived-inverse-relations/002-rollup-inverse-resolution",
-    "obsidian/002-note-db-notion-parity-build/008-derived-inverse-relations/003-inverse-refresh-membership"
+    "obsidian/002-note-db-notion-parity-build/008-derived-inverse-relations/003-inverse-refresh-membership",
+    "public/001-note-db-notion-parity-build/008-derived-inverse-relations/001-relation-inverse-module",
+    "public/001-note-db-notion-parity-build/008-derived-inverse-relations/002-rollup-inverse-resolution",
+    "public/001-note-db-notion-parity-build/008-derived-inverse-relations/003-inverse-refresh-membership"
   ],
   "manual": {
     "depends_on": [],
@@ -202,7 +205,7 @@
     ],
     "causal_summary": "Notion two-way relations store a second property on the target data source and mirror it on write: the relation type object is `{ datasourceid, dualproperty: { syncedpropertyid, syncedpropertyname } }` (Notion API, `developers.notion.com/reference/property-object#relation`), and \"with two-way relations, the edits work both ways\" (`notion.com/help/relations-and-rollups`)",
     "created_at": "2026-08-24T17:58:41.421Z",
-    "last_save_at": "2026-08-25T19:44:05.461Z",
+    "last_save_at": "2026-08-25T20:14:55.870Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -213,13 +216,13 @@
       "implementation-summary.md",
       "research/research.md"
     ],
-    "source_fingerprint": "sha256:df8c0fc5598395209a1a013abf3f65446339c5a813cb326a4c205861652daae9",
+    "source_fingerprint": "sha256:c4dabdc80e9d51016a8cf479d987f120a4c061fba185a9a07307fc75034ba428",
     "source_doc_hashes": {
-      "spec.md": "6e76b7f0999aab5a6c11b5a176da72fa05031a2cfba7fefcafb460433701635d",
-      "plan.md": "2d2b66a8252535ec54e49a4ada08b4ec28cd6771b69d4b58718e93830a9f9d1e",
-      "tasks.md": "2e776d4050db50c744637fb1b8133a6733714c0a478081d7e8fd5a728b22df93",
-      "checklist.md": "38f67e50559e3bc464526685c32c498e7c65f616ba06d53ebc0a917529a13f33",
-      "implementation-summary.md": "463ff644ecb5e92487d274464543eafab63292379ec35c16085320c420ee00e1",
+      "spec.md": "711654440d87685d940cee08e4e55c396d8ad83a3113fc936281d7602cdde987",
+      "plan.md": "08444ae25c4e9ea3816deb853c4b2d3b74111d92994d95e28e5e176ea2cf58a2",
+      "tasks.md": "c258ba5c530be44236c19d6d628c46badf79461aecdfd8b48371538fbc643138",
+      "checklist.md": "472687fdd1bdf5fa2984bfd97d440fabfb565da4265bf4f7b62372ec6c00689f",
+      "implementation-summary.md": "dcb36370540dfbe468e5144098d394f50797d21f214d017ed0e0aad4a3933e52",
       "research/research.md": "75684800a31f01a5c208c14cbc999b5be8b8cfcf4b182aa97e24774fa1b766be"
     },
     "last_active_child_id": "obsidian/002-note-db-notion-parity-build/008-derived-inverse-relations/003-inverse-refresh-membership",

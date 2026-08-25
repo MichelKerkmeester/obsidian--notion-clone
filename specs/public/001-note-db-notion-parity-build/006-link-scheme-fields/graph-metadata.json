@@ -1,13 +1,17 @@
 {
   "schema_version": 1,
-  "packet_id": "obsidian/002-note-db-notion-parity-build/006-link-scheme-fields",
-  "spec_folder": "obsidian/002-note-db-notion-parity-build/006-link-scheme-fields",
-  "parent_id": "obsidian/002-note-db-notion-parity-build",
+  "packet_id": "public/001-note-db-notion-parity-build/006-link-scheme-fields",
+  "spec_folder": "public/001-note-db-notion-parity-build/006-link-scheme-fields",
+  "parent_id": "public/001-note-db-notion-parity-build",
   "children_ids": [
     "obsidian/002-note-db-notion-parity-build/006-link-scheme-fields/001-text-link-scheme-module",
     "obsidian/002-note-db-notion-parity-build/006-link-scheme-fields/002-layout-scheme-honor",
     "obsidian/002-note-db-notion-parity-build/006-link-scheme-fields/003-column-menu-scheme-picker",
-    "obsidian/002-note-db-notion-parity-build/006-link-scheme-fields/004-scheme-column-width"
+    "obsidian/002-note-db-notion-parity-build/006-link-scheme-fields/004-scheme-column-width",
+    "public/001-note-db-notion-parity-build/006-link-scheme-fields/001-text-link-scheme-module",
+    "public/001-note-db-notion-parity-build/006-link-scheme-fields/002-layout-scheme-honor",
+    "public/001-note-db-notion-parity-build/006-link-scheme-fields/003-column-menu-scheme-picker",
+    "public/001-note-db-notion-parity-build/006-link-scheme-fields/004-scheme-column-width"
   ],
   "manual": {
     "depends_on": [],
@@ -203,7 +207,7 @@
     ],
     "causal_summary": "Notion treats URL, email, and phone property values as first-class clickable links: URL opens in a new tab, Email launches the mail client, Phone prompts a call, while the stored value stays an ordinary string",
     "created_at": "2026-08-24T17:23:14.443Z",
-    "last_save_at": "2026-08-25T19:35:49.158Z",
+    "last_save_at": "2026-08-25T20:14:56.484Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -214,13 +218,13 @@
       "implementation-summary.md",
       "research/research.md"
     ],
-    "source_fingerprint": "sha256:d83db6122e8db8b9cf28e36e7a7ede76a803eb4ca6cff9ff1c5a3aeb3c179433",
+    "source_fingerprint": "sha256:35ccf511f4db77734d2484c5de97eff76be3515664d7f66f298706dfe0152700",
     "source_doc_hashes": {
-      "spec.md": "653a85c046bae5a11825c1348ca51826fa6c68c7d22476d78448ef0c250ffbf4",
-      "plan.md": "84e845320f0f363304c37d4c5f2432151f29aef19d48c0d9a40cbed7f66e23cd",
-      "tasks.md": "1b7567e6fb0adb86144fb208b0b10484e8ec04460dfbaa511726cab0de9ef4d4",
-      "checklist.md": "f73397c01bc909e02286038699b2892a160e8ee65ba3cb0211914853a5d88f5f",
-      "implementation-summary.md": "b2029f2d723429a84e1d154b855b0ed761862d2eb3bf929b32cd102b42dca903",
+      "spec.md": "61ac15d44ab85a4dfcef0ee10040dac881bf3d9ac249c3abbe122998f15098e5",
+      "plan.md": "9f16533b89fd6f70b27e989c638dca5f746ae8e373428f905a92be219a5701c5",
+      "tasks.md": "4106fd9ba7d60c9beb2fa7d9ecee7656c5cecf90e8d904bea7b3a1b20c85854c",
+      "checklist.md": "83b4939c3dc9d526f86d480be35614c9b1e0db39fd878f1d82d158e236403c8a",
+      "implementation-summary.md": "f2f74619db5a04561ed25bde272e1022906f6b8a6f5d5e67af02e1bec154163c",
       "research/research.md": "91acebd6d99f67cab4be7b96d36ba5c72b924009e328a247f277340987aac54a"
     },
     "last_active_child_id": "obsidian/002-note-db-notion-parity-build/006-link-scheme-fields/004-scheme-column-width",

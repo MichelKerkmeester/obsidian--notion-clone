@@ -1,0 +1,212 @@
+{
+  "schema_version": 1,
+  "packet_id": "public/001-note-db-notion-parity-build/009-view-filter-tree/004-nonpanel-filter-coherence",
+  "spec_folder": "public/001-note-db-notion-parity-build/009-view-filter-tree/004-nonpanel-filter-coherence",
+  "parent_id": "public/001-note-db-notion-parity-build/009-view-filter-tree",
+  "children_ids": [],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "nonpanel filter coherence",
+      "dual-write filtertree",
+      "applychartfilters",
+      "toggleactivefilterlogic",
+      "getrequiredviewfilterleaves",
+      "nonpanel filter coherence plan",
+      "nonpanel filter coherence tasks",
+      "nonpanel filter coherence summary"
+    ],
+    "key_topics": [
+      "nonpanel",
+      "filter",
+      "coherence",
+      "dual-write",
+      "filtertree",
+      "applychartfilters",
+      "toggleactivefilterlogic",
+      "getrequiredviewfilterleaves",
+      "plan",
+      "tasks",
+      "summary",
+      "fork"
+    ],
+    "importance_tier": "high",
+    "status": "planned",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "implementation-summary.md"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Nonpanel Filter Coherence",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Parent Spec",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Handoff Criteria",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Problem Statement The",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Purpose Dual",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Plan",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Technical Context",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Pattern Same",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Key Components",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Data Flow Non",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Notation",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Format",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Completion Criteria",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Phase 1: Setup",
+        "kind": "heading",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Phase 2: Implementation",
+        "kind": "heading",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Summary",
+        "kind": "proper_noun",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "Spec Folder",
+        "kind": "proper_noun",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "Actual Effort",
+        "kind": "proper_noun",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "What Was Built Nothing",
+        "kind": "proper_noun",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "The fork also mutates `state.filters` from the active rail, column delete/rename, and chart drilldown",
+    "created_at": "2026-08-25T20:51:13Z",
+    "last_save_at": "2026-08-25T21:02:27.551Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "implementation-summary.md"
+    ],
+    "source_fingerprint": "sha256:5d3f1648f0c2e1a361b54204e70f2c5865f90f2196a2eeed8673adf39c20b364",
+    "source_doc_hashes": {
+      "spec.md": "f0c6b696ed1238a44188b684322fd0eb67b327a0f78f12d0fa57d2ef27b4fb80",
+      "plan.md": "1d9dc77b9e4f5bf1ba204ef4080a14ea6ff3ed6abbc575ef77383c9c95506d42",
+      "tasks.md": "a0fd511e906e05ce048ea9fdcf80d475f89f099a432125d4adf5f5067a976744",
+      "implementation-summary.md": "7801d4d8a9ad848be69650a37ecca7ab2658c36598af827c6168a7df3029c4ae"
+    },
+    "last_active_child_id": null,
+    "last_active_at": null
+  }
+}

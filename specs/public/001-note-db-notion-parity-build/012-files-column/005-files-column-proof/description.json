@@ -1,0 +1,31 @@
+{
+  "level": "2",
+  "specFolder": "public/001-note-db-notion-parity-build/012-files-column/005-files-column-proof",
+  "description": "Without this proof, `\"files\"` can compile while cells still stringify, covers still fetch URLs, or `PROPERTYTYPEICONNAMES` is missing and `tsc` was",
+  "keywords": [
+    "without",
+    "proof",
+    "files",
+    "compile",
+    "while",
+    "cells",
+    "still",
+    "stringify",
+    "covers",
+    "fetch",
+    "urls",
+    "propertytypeiconnames",
+    "missing",
+    "tsc"
+  ],
+  "lastUpdated": "2026-08-25T21:16:42.241Z",
+  "specId": "005",
+  "folderSlug": "files-column-proof",
+  "parentChain": [
+    "public",
+    "001-note-db-notion-parity-build",
+    "012-files-column"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": []
+}

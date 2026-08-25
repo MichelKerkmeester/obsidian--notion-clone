@@ -12,7 +12,7 @@ importance_tier: "high"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "obsidian/002-note-db-notion-parity-build/002-rollup-aggregation-pack"
+    packet_pointer: "public/001-note-db-notion-parity-build/002-rollup-aggregation-pack"
     last_updated_at: "2026-08-24T00:00:00Z"
     last_updated_by: "swarm"
     recent_action: "Checklist reconciled to final-plan.md; status Planned"

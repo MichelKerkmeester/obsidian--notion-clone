@@ -1,6 +1,6 @@
 {
   "level": "2",
-  "specFolder": "obsidian/002-note-db-notion-parity-build/013-template-toolbar-button",
+  "specFolder": "public/001-note-db-notion-parity-build/013-template-toolbar-button",
   "description": "The note-database fork already implements Notion-style record templates and already wires them to the toolbar New button",
   "keywords": [
     "note-database",
@@ -16,12 +16,12 @@
     "new",
     "button"
   ],
-  "lastUpdated": "2026-08-25T10:53:10.875Z",
+  "lastUpdated": "2026-08-25T21:12:57.157Z",
   "specId": "013",
   "folderSlug": "template-toolbar-button",
   "parentChain": [
-    "obsidian",
-    "002-note-db-notion-parity-build"
+    "public",
+    "001-note-db-notion-parity-build"
   ],
   "memorySequence": 0,
   "memoryNameHistory": []

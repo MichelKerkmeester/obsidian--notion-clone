@@ -1,0 +1,28 @@
+{
+  "level": "2",
+  "specFolder": "public/001-note-db-notion-parity-build/010-conditional-format-icons/005-format-display-proof",
+  "description": "The fork has zero `.test.ts` files and `vitest.config.ts:1-8` points at a missing `src/tests/setup.ts`",
+  "keywords": [
+    "fork",
+    "zero",
+    "test",
+    "files",
+    "vitest",
+    "config",
+    "points",
+    "missing",
+    "src",
+    "tests",
+    "setup"
+  ],
+  "lastUpdated": "2026-08-25T21:10:28.322Z",
+  "specId": "005",
+  "folderSlug": "format-display-proof",
+  "parentChain": [
+    "public",
+    "001-note-db-notion-parity-build",
+    "010-conditional-format-icons"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": []
+}

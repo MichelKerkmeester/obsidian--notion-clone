@@ -1,6 +1,6 @@
 {
   "level": "1",
-  "specFolder": "obsidian/002-note-db-notion-parity-build/001-live-reports-rollups/004-sum-rollups",
+  "specFolder": "public/001-note-db-notion-parity-build/001-live-reports-rollups/004-sum-rollups",
   "description": "The vault still stores screenshot-era static totals",
   "keywords": [
     "vault",
@@ -10,12 +10,12 @@
     "static",
     "totals"
   ],
-  "lastUpdated": "2026-08-25T19:23:10.195Z",
+  "lastUpdated": "2026-08-25T20:13:41.214Z",
   "specId": "004",
   "folderSlug": "sum-rollups",
   "parentChain": [
-    "obsidian",
-    "002-note-db-notion-parity-build",
+    "public",
+    "001-note-db-notion-parity-build",
     "001-live-reports-rollups"
   ],
   "memorySequence": 0,

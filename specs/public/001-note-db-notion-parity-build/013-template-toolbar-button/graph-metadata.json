@@ -1,9 +1,13 @@
 {
   "schema_version": 1,
-  "packet_id": "obsidian/002-note-db-notion-parity-build/013-template-toolbar-button",
-  "spec_folder": "obsidian/002-note-db-notion-parity-build/013-template-toolbar-button",
-  "parent_id": "obsidian/002-note-db-notion-parity-build",
-  "children_ids": [],
+  "packet_id": "public/001-note-db-notion-parity-build/013-template-toolbar-button",
+  "spec_folder": "public/001-note-db-notion-parity-build/013-template-toolbar-button",
+  "parent_id": "public/001-note-db-notion-parity-build",
+  "children_ids": [
+    "public/001-note-db-notion-parity-build/013-template-toolbar-button/001-adaptive-toolbar-control",
+    "public/001-note-db-notion-parity-build/013-template-toolbar-button/002-row-menu-template-item",
+    "public/001-note-db-notion-parity-build/013-template-toolbar-button/003-create-path-proof"
+  ],
   "manual": {
     "depends_on": [],
     "supersedes": [],
@@ -198,7 +202,7 @@
     ],
     "causal_summary": "The note-database fork already implements Notion-style record templates and already wires them to the toolbar New button",
     "created_at": "2026-08-24T17:58:52.659Z",
-    "last_save_at": "2026-08-25T15:12:36.702Z",
+    "last_save_at": "2026-08-25T21:17:50.565Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -209,16 +213,16 @@
       "implementation-summary.md",
       "research/research.md"
     ],
-    "source_fingerprint": "sha256:ea58ca0038a59be7f023572b06df301cdf66a839838838ca7340771f5ea474e9",
+    "source_fingerprint": "sha256:c53d2c6bf9b10ad3e181fdb0058c40af2bc0a3977e1657ca6a2f5161383f7a98",
     "source_doc_hashes": {
-      "spec.md": "563d3cded3ed3b35ba6a3203eca396b1f8c57d35b546ec1052acc14338177537",
-      "plan.md": "66c61047f15e46eece87419f7d3d0a4a23f405de088aedea995baf35ed4459bc",
-      "tasks.md": "78632bf52e298a71715e39dda3dfd36d9f077e3b62fcf3476f13b99079d74b7d",
-      "checklist.md": "67af14517757b30359fb65e16d489a272567b1d94e7a650720be838910817822",
-      "implementation-summary.md": "dca9168a37303c932a9dd174deb4439877043501115eac1b7ed2afe400edf5d8",
+      "spec.md": "821de51bd84f3da111bc40aff6cc8e0104d8c8dba9a627b81f83413c25e65e40",
+      "plan.md": "996c1457c4e34216f482ad2ddba83b334282bf5893e31c6445d97e344f475984",
+      "tasks.md": "da283c347122b9d86b1ef9fe2e1c90a82171c3fb8278f023a6779926137af533",
+      "checklist.md": "8fadca495b01e1784612cd61db4ed92509d2db9ebb7e0944e06c6bac489a2326",
+      "implementation-summary.md": "eb159bd892a069e288db36c1dc3c0eeb1860cdc2a3061afcace8308d0649261a",
       "research/research.md": "954022523a7f57f1e120bc994203e0efaf68631d5c928efdcf302d06495d0fde"
     },
-    "last_active_child_id": null,
+    "last_active_child_id": "public/001-note-db-notion-parity-build/013-template-toolbar-button/003-create-path-proof",
     "last_active_at": null
   }
 }

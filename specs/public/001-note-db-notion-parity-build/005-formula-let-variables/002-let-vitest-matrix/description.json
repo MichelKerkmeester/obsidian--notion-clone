@@ -1,6 +1,6 @@
 {
   "level": "1",
-  "specFolder": "obsidian/002-note-db-notion-parity-build/005-formula-let-variables/002-let-vitest-matrix",
+  "specFolder": "public/001-note-db-notion-parity-build/005-formula-let-variables/002-let-vitest-matrix",
   "description": "Parent success criteria assume “the fork’s formula test suite.” It does not exist",
   "keywords": [
     "parent",
@@ -13,12 +13,12 @@
     "suite",
     "exist"
   ],
-  "lastUpdated": "2026-08-25T19:31:05.170Z",
+  "lastUpdated": "2026-08-25T20:13:41.135Z",
   "specId": "002",
   "folderSlug": "let-vitest-matrix",
   "parentChain": [
-    "obsidian",
-    "002-note-db-notion-parity-build",
+    "public",
+    "001-note-db-notion-parity-build",
     "005-formula-let-variables"
   ],
   "memorySequence": 0,

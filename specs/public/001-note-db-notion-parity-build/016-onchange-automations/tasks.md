@@ -13,7 +13,7 @@ importance_tier: "medium"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "obsidian/002-note-db-notion-parity-build/016-onchange-automations"
+    packet_pointer: "public/001-note-db-notion-parity-build/016-onchange-automations"
     last_updated_at: "2026-08-25T00:00:00Z"
     last_updated_by: "markdown-agent"
     recent_action: "Applied final-plan opt 1: marked T001/T013 done, reframed completion criteria"

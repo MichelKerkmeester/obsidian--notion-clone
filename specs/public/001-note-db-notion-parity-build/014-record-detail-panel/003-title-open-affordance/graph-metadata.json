@@ -1,0 +1,206 @@
+{
+  "schema_version": 1,
+  "packet_id": "public/001-note-db-notion-parity-build/014-record-detail-panel/003-title-open-affordance",
+  "spec_folder": "public/001-note-db-notion-parity-build/014-record-detail-panel/003-title-open-affordance",
+  "parent_id": "public/001-note-db-notion-parity-build/014-record-detail-panel",
+  "children_ids": [],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "title open affordance",
+      "renderCell open",
+      "title hidden fallback",
+      "syncTableRecordPeek",
+      "closeActiveOverlays peek",
+      "title open affordance plan",
+      "title open affordance tasks",
+      "title open affordance summary"
+    ],
+    "key_topics": [
+      "title",
+      "open",
+      "affordance",
+      "rendercell",
+      "hidden",
+      "fallback",
+      "synctablerecordpeek",
+      "closeactiveoverlays",
+      "peek",
+      "plan",
+      "tasks",
+      "summary"
+    ],
+    "importance_tier": "high",
+    "status": "planned",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "implementation-summary.md"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Title Open Affordance",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Page Preview",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Parent Spec",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Handoff Criteria",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Problem Statement The",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Plan",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Technical Context",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Overview Final",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Pattern Rebase",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Notation",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Format",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Completion Criteria",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Phase 1: Setup",
+        "kind": "heading",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Summary",
+        "kind": "proper_noun",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "Spec Folder",
+        "kind": "proper_noun",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "Actual Effort",
+        "kind": "proper_noun",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "What Was Built Nothing",
+        "kind": "proper_noun",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "Files Changed",
+        "kind": "proper_noun",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "The title cell already navigates on click (`CellRenderer.ts:126-129` → `openNote`) and already feeds Page Preview via `markNoteHoverLink` (`CellRenderer.ts:124`; `HoverLinkPreview.ts:8-17`)",
+    "created_at": "2026-08-25T21:14:47Z",
+    "last_save_at": "2026-08-25T21:25:33.601Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "implementation-summary.md"
+    ],
+    "source_fingerprint": "sha256:dceb5f6edb34940c12c8f062cffdd1fa25f897d0f21415b63b82100ce24b861e",
+    "source_doc_hashes": {
+      "spec.md": "42f065b1e1187613febb42d5e1613a4ba0e20b9af2d8279f247984631355fe17",
+      "plan.md": "977b8536ced3d9ca2249d0f7bbebcd45c5a597fc24fdf07b5cf7d59db504ad4a",
+      "tasks.md": "38bd848d3467ed4c98b85170f80e21ea4dad1f9f563bccfae7407a230fe3ac24",
+      "implementation-summary.md": "5b831d3db933cffae76072faa00bfffe9b0278566065adf9a37d1220edf9283a"
+    },
+    "last_active_child_id": null,
+    "last_active_at": null
+  }
+}

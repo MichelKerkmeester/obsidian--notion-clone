@@ -10,7 +10,7 @@ importance_tier: "high"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "obsidian/002-note-db-notion-parity-build/005-formula-let-variables/001-let-variables-module"
+    packet_pointer: "public/001-note-db-notion-parity-build/005-formula-let-variables/001-let-variables-module"
     last_updated_at: "2026-08-25T21:30:00Z"
     last_updated_by: "phase-architect"
     recent_action: "Authored engine-module child from synthesis ranks 1-4 and final-plan steps 3,5-7"

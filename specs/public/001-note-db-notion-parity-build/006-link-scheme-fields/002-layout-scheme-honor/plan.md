@@ -8,7 +8,7 @@ importance_tier: "high"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "obsidian/002-note-db-notion-parity-build/006-link-scheme-fields/002-layout-scheme-honor"
+    packet_pointer: "public/001-note-db-notion-parity-build/006-link-scheme-fields/002-layout-scheme-honor"
     last_updated_at: "2026-08-25T19:40:00Z"
     last_updated_by: "phase-architect"
     recent_action: "Authored layout-honor child from synthesis rank 3 and final-plan T011"

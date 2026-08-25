@@ -1,6 +1,6 @@
 {
   "level": "1",
-  "specFolder": "obsidian/002-note-db-notion-parity-build/006-link-scheme-fields/001-text-link-scheme-module",
+  "specFolder": "public/001-note-db-notion-parity-build/006-link-scheme-fields/001-text-link-scheme-module",
   "description": "Notion URL / Email / Phone properties store ordinary text and differ only in click behavior",
   "keywords": [
     "notion",
@@ -16,12 +16,12 @@
     "click",
     "behavior"
   ],
-  "lastUpdated": "2026-08-25T19:31:57.428Z",
+  "lastUpdated": "2026-08-25T20:13:41.315Z",
   "specId": "001",
   "folderSlug": "text-link-scheme-module",
   "parentChain": [
-    "obsidian",
-    "002-note-db-notion-parity-build",
+    "public",
+    "001-note-db-notion-parity-build",
     "006-link-scheme-fields"
   ],
   "memorySequence": 0,

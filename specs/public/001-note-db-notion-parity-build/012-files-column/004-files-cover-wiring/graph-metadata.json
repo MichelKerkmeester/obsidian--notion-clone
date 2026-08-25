@@ -1,0 +1,214 @@
+{
+  "schema_version": 1,
+  "packet_id": "public/001-note-db-notion-parity-build/012-files-column/004-files-cover-wiring",
+  "spec_folder": "public/001-note-db-notion-parity-build/012-files-column/004-files-cover-wiring",
+  "parent_id": "public/001-note-db-notion-parity-build/012-files-column",
+  "children_ids": [],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "files cover wiring",
+      "gallery image field files",
+      "board cover files",
+      "image external skip",
+      "cover onerror",
+      "files cover wiring plan",
+      "gallery cover guard",
+      "board cover onerror",
+      "files cover wiring tasks",
+      "files cover wiring summary"
+    ],
+    "key_topics": [
+      "files",
+      "cover",
+      "wiring",
+      "gallery",
+      "image",
+      "field",
+      "board",
+      "external",
+      "skip",
+      "onerror",
+      "plan",
+      "guard"
+    ],
+    "importance_tier": "high",
+    "status": "planned",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "implementation-summary.md"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Files Cover Wiring",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Parent Spec",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Handoff Criteria",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Problem Statement",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Purpose After",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Plan",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Technical Context",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Overview Cover",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Pattern Call",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Key Components",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Notation",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Format",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Completion Criteria",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "image",
+        "kind": "key_phrase",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Phase 1: Setup",
+        "kind": "heading",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Summary",
+        "kind": "proper_noun",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "Spec Folder",
+        "kind": "proper_noun",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "Actual Effort",
+        "kind": "proper_noun",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "What Was Built Nothing",
+        "kind": "proper_noun",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "`parseCoverImage` sets `external: true` for URLs (`CoverImage.ts:41-44`) and `resolveImageSrc` returns that URL as `src` (`:22-23`)",
+    "created_at": "2026-08-25T21:08:52Z",
+    "last_save_at": "2026-08-25T21:17:30.609Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "implementation-summary.md"
+    ],
+    "source_fingerprint": "sha256:5134782b32015b49392f69f37378564377df4b9fd90f73e3ce5fc2f6753840f0",
+    "source_doc_hashes": {
+      "spec.md": "ddefd815fd99020da6ae679b3bdd816db7e5995153f5b56444503cf2fdc53d69",
+      "plan.md": "ba00cfb2f5e5b70353e008a34c9b55283864ac9d93554ece43238d14d6cc34e9",
+      "tasks.md": "c72c61c2a6bed14afdffe459fed0d9df528073403de5f45de291602262f7087b",
+      "implementation-summary.md": "8f1aadbbb0ebf0049b6e60c1f05860268873ed435a0da849029ce904fd212ae7"
+    },
+    "last_active_child_id": null,
+    "last_active_at": null
+  }
+}

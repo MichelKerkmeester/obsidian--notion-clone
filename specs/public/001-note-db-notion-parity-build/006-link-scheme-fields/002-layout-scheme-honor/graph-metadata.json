@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "packet_id": "obsidian/002-note-db-notion-parity-build/006-link-scheme-fields/002-layout-scheme-honor",
-  "spec_folder": "obsidian/002-note-db-notion-parity-build/006-link-scheme-fields/002-layout-scheme-honor",
-  "parent_id": "obsidian/002-note-db-notion-parity-build/006-link-scheme-fields",
+  "packet_id": "public/001-note-db-notion-parity-build/006-link-scheme-fields/002-layout-scheme-honor",
+  "spec_folder": "public/001-note-db-notion-parity-build/006-link-scheme-fields/002-layout-scheme-honor",
+  "parent_id": "public/001-note-db-notion-parity-build/006-link-scheme-fields",
   "children_ids": [],
   "manual": {
     "depends_on": [],
@@ -177,7 +177,7 @@
     ],
     "causal_summary": "Notion properties click in every layout",
     "created_at": "2026-08-25T19:27:09Z",
-    "last_save_at": "2026-08-25T19:35:48.310Z",
+    "last_save_at": "2026-08-25T20:14:47.064Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -186,12 +186,12 @@
       "tasks.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:e92f5f092c52c6a400eb03cfa8318e996ed837119e985ec810f04f071a04d671",
+    "source_fingerprint": "sha256:16d923990befae0ae5355c7ea3b39f9b4073e8958d45ccf70368fc2068fdfece",
     "source_doc_hashes": {
-      "spec.md": "460ea5912720a7d895e5363226a0d5a7b12a2feecaee27557676ccb7837ce129",
-      "plan.md": "129a61a8cbd8aff1bbada865496d4a13cc370b20e32d3498f0b045d0cbce1b26",
-      "tasks.md": "3e7ee986237015efbb7e09a507326695c32cb141f357d2bb0020547007aceef1",
-      "implementation-summary.md": "a905f838b4c7085b6d6768c98f56c91f07bd7ff13b92e5b6ff35abdd491af583"
+      "spec.md": "f8e685741cadb2b7f2db39939748aba016d75d5b5443d80cd7a4577bd59659c6",
+      "plan.md": "531a48bdbd2df53bbf822332d9221b4948e86f69cfb10e289386c00e45a84431",
+      "tasks.md": "df08e712adadb22f55e6757d6b2c6c55e7154e51b498e9c257f5b85ddc730c02",
+      "implementation-summary.md": "b5df588fa075e39e34a973245300dabc20bf84c7140318a46e0291c2bc9e2b7f"
     },
     "last_active_child_id": null,
     "last_active_at": null

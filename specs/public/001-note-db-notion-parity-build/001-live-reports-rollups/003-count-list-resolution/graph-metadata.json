@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "packet_id": "obsidian/002-note-db-notion-parity-build/001-live-reports-rollups/003-count-list-resolution",
-  "spec_folder": "obsidian/002-note-db-notion-parity-build/001-live-reports-rollups/003-count-list-resolution",
-  "parent_id": "obsidian/002-note-db-notion-parity-build/001-live-reports-rollups",
+  "packet_id": "public/001-note-db-notion-parity-build/001-live-reports-rollups/003-count-list-resolution",
+  "spec_folder": "public/001-note-db-notion-parity-build/001-live-reports-rollups/003-count-list-resolution",
+  "parent_id": "public/001-note-db-notion-parity-build/001-live-reports-rollups",
   "children_ids": [],
   "manual": {
     "depends_on": [],
@@ -190,7 +190,7 @@
     ],
     "causal_summary": "A wrong amount key or empty relation is UI-indistinguishable from \"no children\" (`emptyRollupValue` → COUNT `0`, SUM `null`, `RelationRollup.ts:159-160`)",
     "created_at": "2026-08-25T19:11:31Z",
-    "last_save_at": "2026-08-25T19:21:32.807Z",
+    "last_save_at": "2026-08-25T20:14:52.222Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -199,12 +199,12 @@
       "tasks.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:c8824478180bf4c40b5357d71b1b2be96095aee2f4e5afb565b304a9fda27884",
+    "source_fingerprint": "sha256:0264f52c1663bf49576c307f2a5a09b2c2e7c32a29270a9a2db17b859d871fe9",
     "source_doc_hashes": {
-      "spec.md": "9f9fdcc3ca263056bf5fbdacc79039f47099f39965df0b1b5f94b940405b78e6",
-      "plan.md": "9117378a04788e25568b276984909c68fc8e3741a30ad06c10a60eebf45bd353",
-      "tasks.md": "3b9fc380517605670380626046ec096ebb150a323f08415c7c95a51e8bacddf9",
-      "implementation-summary.md": "d19c0aa606da3c0aaef219f9224ae04cc465015f5885f2254d4418ade6532f30"
+      "spec.md": "c94ccf560fcbc57f09f394c5dc3db7596f2de3d5fd5dfe090c748a33d2e682fc",
+      "plan.md": "26b34125b772fbd72a02d18221be40dff82365dd828f7e552900175330ec2589",
+      "tasks.md": "e30f50a3af533aad88ba99f696aa82b13e758832e81704f0eda8b63afa4e2bb0",
+      "implementation-summary.md": "eaaab309808c539c5f32048504a786b4a201338f95b55c515094511691d2ff22"
     },
     "last_active_child_id": null,
     "last_active_at": null

@@ -1,0 +1,211 @@
+{
+  "schema_version": 1,
+  "packet_id": "public/001-note-db-notion-parity-build/011-table-multi-group/002-grouped-table-flatten",
+  "spec_folder": "public/001-note-db-notion-parity-build/011-table-multi-group/002-grouped-table-flatten",
+  "parent_id": "public/001-note-db-notion-parity-build/011-table-multi-group",
+  "children_ids": [],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "grouped table flatten",
+      "depth-aware table loop",
+      "db-group-header depth",
+      "renderGroupedTable",
+      "grouped table flatten plan",
+      "grouped table flatten tasks",
+      "grouped table flatten summary"
+    ],
+    "key_topics": [
+      "grouped",
+      "table",
+      "flatten",
+      "depth-aware",
+      "loop",
+      "db-group-header",
+      "depth",
+      "rendergroupedtable",
+      "plan",
+      "tasks",
+      "summary",
+      "dispatch"
+    ],
+    "importance_tier": "high",
+    "status": "planned",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "implementation-summary.md"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Grouped Table Flatten",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Parent Spec",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Handoff Criteria",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Problem Statement Table",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Purpose Gate",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Plan",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Technical Context",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Obsidian Plugin",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Overview Do",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Pattern Call",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Notation",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Format",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Completion Criteria",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Phase 1: Setup",
+        "kind": "heading",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Phase 2: Implementation",
+        "kind": "heading",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Summary",
+        "kind": "proper_noun",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "Spec Folder",
+        "kind": "proper_noun",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "Actual Effort",
+        "kind": "proper_noun",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "What Was Built Nothing",
+        "kind": "proper_noun",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "Table dispatch is still one string (`DatabaseView.ts:6332-6333` → `renderGroupedTable` `9539-9545`)",
+    "created_at": "2026-08-25T20:50:00Z",
+    "last_save_at": "2026-08-25T21:01:26.511Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "implementation-summary.md"
+    ],
+    "source_fingerprint": "sha256:7d3a80187ddc3328fe93cc489c29e6d4ba71cb6beea3fa773c00293476bf1907",
+    "source_doc_hashes": {
+      "spec.md": "67c16c1ebf9f65ac462c2614b5431252993cf825d12f91b488d48f81ead473da",
+      "plan.md": "b1485af051bcf24b250f2beac65809981922f22173d76689068b7109221a7184",
+      "tasks.md": "94dbc5bfdf4707a978e8cc6f3402db1a1956be58d260b59132b18837bbf6d0ec",
+      "implementation-summary.md": "f01294cf553b695f7879ea66b0614ffad2d1310753c40c2247785df4ed206a4b"
+    },
+    "last_active_child_id": null,
+    "last_active_at": null
+  }
+}

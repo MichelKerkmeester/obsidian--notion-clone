@@ -1,0 +1,29 @@
+{
+  "specFolder": "public/001-note-db-notion-parity-build/014-record-detail-panel/001-table-record-peek-module",
+  "description": "The fork already hydrates records (`RowData` at `src/data/types.ts:113-119`) and stringifies values (`getColumnValue` at `ColumnDisplay.ts:63`;",
+  "keywords": [
+    "fork",
+    "already",
+    "hydrates",
+    "records",
+    "rowdata",
+    "src",
+    "data",
+    "types",
+    "stringifies",
+    "values",
+    "getcolumnvalue",
+    "columndisplay"
+  ],
+  "lastUpdated": "2026-08-25T21:18:50.851Z",
+  "specId": "001",
+  "folderSlug": "table-record-peek-module",
+  "parentChain": [
+    "public",
+    "001-note-db-notion-parity-build",
+    "014-record-detail-panel"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": [],
+  "level": "1"
+}

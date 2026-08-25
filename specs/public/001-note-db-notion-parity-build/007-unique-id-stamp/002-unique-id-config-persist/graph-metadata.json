@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "packet_id": "obsidian/002-note-db-notion-parity-build/007-unique-id-stamp/002-unique-id-config-persist",
-  "spec_folder": "obsidian/002-note-db-notion-parity-build/007-unique-id-stamp/002-unique-id-config-persist",
-  "parent_id": "obsidian/002-note-db-notion-parity-build/007-unique-id-stamp",
+  "packet_id": "public/001-note-db-notion-parity-build/007-unique-id-stamp/002-unique-id-config-persist",
+  "spec_folder": "public/001-note-db-notion-parity-build/007-unique-id-stamp/002-unique-id-config-persist",
+  "parent_id": "public/001-note-db-notion-parity-build/007-unique-id-stamp",
   "children_ids": [],
   "manual": {
     "depends_on": [],
@@ -191,7 +191,7 @@
     ],
     "causal_summary": "Notion owns the unique-ID counter server-side (only `prefix` is configurable)",
     "created_at": "2026-08-25T19:29:59Z",
-    "last_save_at": "2026-08-25T19:36:38.373Z",
+    "last_save_at": "2026-08-25T20:14:45.866Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -200,12 +200,12 @@
       "tasks.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:52219b9d307b5e96a380ee6e774c20f13c3372330f05fb7df510d91008447218",
+    "source_fingerprint": "sha256:d7354d60ca749cf85aabe7a3d6694caf0edd18cc0cc51db407af2edcc51c66a5",
     "source_doc_hashes": {
-      "spec.md": "02d5237993c89cbd6aab306e2f3035c43272853ded72ea664d64bfccbbf2c6a9",
-      "plan.md": "263fb97e4a08818182817eff5ee8f5d4c47cae133d9f0578ad6c4a9f23cde061",
-      "tasks.md": "895d074084f2f42ce5dbc38472ca30a9b11eeea078d23607374922a324f258bb",
-      "implementation-summary.md": "d878f91023351ed8521b591c75f50b1fe53ec1b7aff66a6a6561487aba58d178"
+      "spec.md": "59b93d6b349653a3c01e626e0b797e2db7308f9c192cae8168093fca86836f17",
+      "plan.md": "f0865e677d2f7c62e8dd8b3aec29c031ab7d04ee15a17012578030e26555ae38",
+      "tasks.md": "c15a2dab39c02e5fc373858603995f4578461b448e36b0d8c3a7c2d6a4aec06e",
+      "implementation-summary.md": "2d909efe404453fd76be4cdd36921c97dc601e8657c2877a4c7641a18ec50b0e"
     },
     "last_active_child_id": null,
     "last_active_at": null

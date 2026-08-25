@@ -1,0 +1,22 @@
+{
+  "level": "1",
+  "specFolder": "public/001-note-db-notion-parity-build/009-view-filter-tree/002-filter-tree-persistence",
+  "description": "Notion groups survive close/reopen",
+  "keywords": [
+    "notion",
+    "groups",
+    "survive",
+    "close",
+    "reopen"
+  ],
+  "lastUpdated": "2026-08-25T20:57:01.347Z",
+  "specId": "002",
+  "folderSlug": "filter-tree-persistence",
+  "parentChain": [
+    "public",
+    "001-note-db-notion-parity-build",
+    "009-view-filter-tree"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": []
+}

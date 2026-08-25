@@ -1,6 +1,6 @@
 {
   "level": "2",
-  "specFolder": "obsidian/002-note-db-notion-parity-build/002-rollup-aggregation-pack",
+  "specFolder": "public/001-note-db-notion-parity-build/002-rollup-aggregation-pack",
   "description": "The fork's rollup columns are stuck on four kinds — `count | sum | avg | list` (`src/data/types.ts:44`) — while Notion exposes ~18 rollup calculations",
   "keywords": [
     "fork",
@@ -21,12 +21,12 @@
     "exposes",
     "calculations"
   ],
-  "lastUpdated": "2026-08-25T19:01:04.964Z",
+  "lastUpdated": "2026-08-25T20:13:40.698Z",
   "specId": "002",
   "folderSlug": "rollup-aggregation-pack",
   "parentChain": [
-    "obsidian",
-    "002-note-db-notion-parity-build"
+    "public",
+    "001-note-db-notion-parity-build"
   ],
   "memorySequence": 0,
   "memoryNameHistory": []

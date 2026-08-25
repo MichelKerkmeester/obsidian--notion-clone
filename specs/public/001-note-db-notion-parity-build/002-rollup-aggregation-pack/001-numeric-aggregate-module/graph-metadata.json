@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "packet_id": "obsidian/002-note-db-notion-parity-build/002-rollup-aggregation-pack/001-numeric-aggregate-module",
-  "spec_folder": "obsidian/002-note-db-notion-parity-build/002-rollup-aggregation-pack/001-numeric-aggregate-module",
-  "parent_id": "obsidian/002-note-db-notion-parity-build/002-rollup-aggregation-pack",
+  "packet_id": "public/001-note-db-notion-parity-build/002-rollup-aggregation-pack/001-numeric-aggregate-module",
+  "spec_folder": "public/001-note-db-notion-parity-build/002-rollup-aggregation-pack/001-numeric-aggregate-module",
+  "parent_id": "public/001-note-db-notion-parity-build/002-rollup-aggregation-pack",
   "children_ids": [],
   "manual": {
     "depends_on": [],
@@ -181,7 +181,7 @@
     ],
     "causal_summary": "Rollup columns are stuck on `count | sum | avg | list` at `src/data/types.ts:44`",
     "created_at": "2026-08-25T18:58:57Z",
-    "last_save_at": "2026-08-25T19:05:35.189Z",
+    "last_save_at": "2026-08-25T20:14:51.010Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -190,12 +190,12 @@
       "tasks.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:9985e763096e8a76d10067fd7149d94036b694733fc0936f815bf6f883316dd5",
+    "source_fingerprint": "sha256:1f534ad841044a509b3cc865cc9d6e2cfec019a0262732fe17278bcd7fc82378",
     "source_doc_hashes": {
-      "spec.md": "044edea748460eb7a99560b3dc4ffa436f13abcfdaaf4fe134af1832dca5a9ba",
-      "plan.md": "48518ab5e333b6e1ecbcdf1ae4ff416ce5b7c913446f664cc5cd942eaca24dd8",
-      "tasks.md": "cc48c6c288f94c090b38571642b5853aa7ca5aec2f9dea7be27f8018df75e170",
-      "implementation-summary.md": "c5847e6827a070ec80023e933cfabf01536d238fadbbfa1a5b0aa9e7815a7acd"
+      "spec.md": "5a3a389e6ef6a9bb7402c33b2d677f499c44cc826ada3456d497512b6842c9d1",
+      "plan.md": "5b93211a9bed72bc8eb0ad256b8a72f93da0190ecac4423deb5586a9d59aa822",
+      "tasks.md": "c75c66e2295a34a13459fdeee3ec89d77680ba8f28cc53ad2fb0588bb81f3d60",
+      "implementation-summary.md": "be471f1714b253ed2f44aab29f360479e049f8b033af212e8c790d4d3979457a"
     },
     "last_active_child_id": null,
     "last_active_at": null

@@ -1,0 +1,217 @@
+{
+  "schema_version": 1,
+  "packet_id": "public/001-note-db-notion-parity-build/009-view-filter-tree/005-filter-tree-proof",
+  "spec_folder": "public/001-note-db-notion-parity-build/009-view-filter-tree/005-filter-tree-proof",
+  "parent_id": "public/001-note-db-notion-parity-build/009-view-filter-tree",
+  "children_ids": [],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "filter tree proof",
+      "view filter vitest",
+      "filtertree grep",
+      "010 evaluatefiltertree",
+      "nowrite filter panel",
+      "filter tree proof plan",
+      "filter tree proof tasks",
+      "filter tree proof checklist",
+      "vitest viewfiltertree",
+      "filter tree proof summary"
+    ],
+    "key_topics": [
+      "filter",
+      "tree",
+      "proof",
+      "view",
+      "vitest",
+      "filtertree",
+      "grep",
+      "evaluatefiltertree",
+      "nowrite",
+      "panel",
+      "plan",
+      "tasks"
+    ],
+    "importance_tier": "high",
+    "status": "planned",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "checklist.md",
+      "implementation-summary.md"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "checklist.md",
+        "kind": "doc",
+        "path": "checklist.md",
+        "source": "derived"
+      },
+      {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Filter Tree Proof",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Run Vitest",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Parent Spec",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Handoff Criteria",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Problem Statement Without",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Plan",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Technical Context",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Overview No",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Pattern Verification",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Notation",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Format",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Completion Criteria",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Phase 1: Setup",
+        "kind": "heading",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Verification Checklist",
+        "kind": "proper_noun",
+        "path": "checklist.md",
+        "source": "derived"
+      },
+      {
+        "name": "Vitest Kleene",
+        "kind": "proper_noun",
+        "path": "checklist.md",
+        "source": "derived"
+      },
+      {
+        "name": "Verification Protocol",
+        "kind": "proper_noun",
+        "path": "checklist.md",
+        "source": "derived"
+      },
+      {
+        "name": "Completion Impact",
+        "kind": "proper_noun",
+        "path": "checklist.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Summary",
+        "kind": "proper_noun",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "Without recorded proofs, nested AND/OR can look done while `DataSource.ts` drops `filterTree` on reload, a source-op leak matches every row (`QueryEngine.ts:124-125`), or phase 010 is forced into `applyFilterTree([row])` (null-passes would paint every row)",
+    "created_at": "2026-08-25T20:51:14Z",
+    "last_save_at": "2026-08-25T21:05:12.863Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "checklist.md",
+      "implementation-summary.md"
+    ],
+    "source_fingerprint": "sha256:ab931fc675cfd32d29ecf7613ebe7e4117ae2057709d2a418c8993210f28d47d",
+    "source_doc_hashes": {
+      "spec.md": "39d4126a5678b6638f9f9659a0e7f59b63b387e6267c883881a69a45156f59cc",
+      "plan.md": "3433fbeec5089a1a28388dc61077d6199fc6525d5d1feecd7bb2829c845e169f",
+      "tasks.md": "0827f30681dc39ab16dfacc652d4f6b39d94efebadc91bfdce236fadf01fc94c",
+      "checklist.md": "19f9da2c7f018712a5e4791f475ff35d124057f267dabef556838f070c07ba9a",
+      "implementation-summary.md": "0835b5a58a94622ee0583a0740a46bb2c0b1fd6b0c11d7a625de5714cf16d838"
+    },
+    "last_active_child_id": null,
+    "last_active_at": null
+  }
+}

@@ -1,6 +1,6 @@
 {
   "level": "1",
-  "specFolder": "obsidian/002-note-db-notion-parity-build/001-live-reports-rollups/002-display-only-amount-types",
+  "specFolder": "public/001-note-db-notion-parity-build/001-live-reports-rollups/002-display-only-amount-types",
   "description": "The fork defaults to display-only (`ComputedSync.ts:3`; load-time coerce at `DataSource.ts:787`), but leaving the view-config UI on `automatic` would",
   "keywords": [
     "fork",
@@ -14,12 +14,12 @@
     "view-config",
     "automatic"
   ],
-  "lastUpdated": "2026-08-25T19:23:08.231Z",
+  "lastUpdated": "2026-08-25T20:13:41.209Z",
   "specId": "002",
   "folderSlug": "display-only-amount-types",
   "parentChain": [
-    "obsidian",
-    "002-note-db-notion-parity-build",
+    "public",
+    "001-note-db-notion-parity-build",
     "001-live-reports-rollups"
   ],
   "memorySequence": 0,

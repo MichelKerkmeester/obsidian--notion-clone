@@ -11,7 +11,7 @@ importance_tier: "high"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "obsidian/002-note-db-notion-parity-build/012-files-column"
+    packet_pointer: "public/001-note-db-notion-parity-build/012-files-column"
     last_updated_at: "2026-08-24T00:00:00Z"
     last_updated_by: "swarm"
     recent_action: "Scaffolded phase 012 docs; status Planned"
@@ -60,11 +60,11 @@ This phase is **NOT built yet**. At scaffold time (2026-08-24) only the five pha
 
 | File | Action | Purpose |
 |------|--------|---------|
-| `specs/obsidian/002-note-db-notion-parity-build/012-files-column/spec.md` | Created | Phase specification |
-| `specs/obsidian/002-note-db-notion-parity-build/012-files-column/plan.md` | Created | Implementation plan |
-| `specs/obsidian/002-note-db-notion-parity-build/012-files-column/tasks.md` | Created | Task breakdown |
-| `specs/obsidian/002-note-db-notion-parity-build/012-files-column/checklist.md` | Created | Verification checklist (all pending) |
-| `specs/obsidian/002-note-db-notion-parity-build/012-files-column/implementation-summary.md` | Created | This scaffold summary |
+| `specs/public/001-note-db-notion-parity-build/012-files-column/spec.md` | Created | Phase specification |
+| `specs/public/001-note-db-notion-parity-build/012-files-column/plan.md` | Created | Implementation plan |
+| `specs/public/001-note-db-notion-parity-build/012-files-column/tasks.md` | Created | Task breakdown |
+| `specs/public/001-note-db-notion-parity-build/012-files-column/checklist.md` | Created | Verification checklist (all pending) |
+| `specs/public/001-note-db-notion-parity-build/012-files-column/implementation-summary.md` | Created | This scaffold summary |
 
 <!-- /ANCHOR:what-built -->
 ---

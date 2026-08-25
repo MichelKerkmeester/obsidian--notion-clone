@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "packet_id": "obsidian/002-note-db-notion-parity-build/004-formula-ifs-switch-math/003-computed-formulas-vitest",
-  "spec_folder": "obsidian/002-note-db-notion-parity-build/004-formula-ifs-switch-math/003-computed-formulas-vitest",
-  "parent_id": "obsidian/002-note-db-notion-parity-build/004-formula-ifs-switch-math",
+  "packet_id": "public/001-note-db-notion-parity-build/004-formula-ifs-switch-math/003-computed-formulas-vitest",
+  "spec_folder": "public/001-note-db-notion-parity-build/004-formula-ifs-switch-math/003-computed-formulas-vitest",
+  "parent_id": "public/001-note-db-notion-parity-build/004-formula-ifs-switch-math",
   "children_ids": [],
   "manual": {
     "depends_on": [],
@@ -189,7 +189,7 @@
     ],
     "causal_summary": "Parent plan.md's “run the plugin test suite” currently has nothing to run",
     "created_at": "2026-08-25T19:11:19Z",
-    "last_save_at": "2026-08-25T19:20:19.871Z",
+    "last_save_at": "2026-08-25T20:14:48.559Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -198,12 +198,12 @@
       "tasks.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:0f54368a250349c4843d3b01d764a56ea585fe0d76f61804ac5ab729f72d7b54",
+    "source_fingerprint": "sha256:8d902dc843f48b79f1a7d7492a0e5ad2de31e1c3ee4e5891b320fd0036e44833",
     "source_doc_hashes": {
-      "spec.md": "3bf9ec047899301b0702a2aa3acfe86bbd72d68ef26b268ae262ecc740af5fbb",
-      "plan.md": "8a46a65f49ca83c94cfc36dad38eec678c9ef056330398904e643748eb376fe1",
-      "tasks.md": "f1151bf28b492b91ccd819d5e70a9e93b506a6db5e17050c591831c2bb5ed2c8",
-      "implementation-summary.md": "a1cb8baf04ac7d297ffb4239ca895ea29eea679071a58a68c253b33c7536900b"
+      "spec.md": "66bd9d4f8136a251abbe05ab3e53df6bdb41333eb2d35a804eb2e4cc06335f45",
+      "plan.md": "c07c89aa737816fa16fb7f53c2f6e02a2d76efd8eb5401864f59d8d91fc06b84",
+      "tasks.md": "fb1f87cc6924be9e2c8985685ffdc1a484bc249ad429e7e4a4c546c5153940e2",
+      "implementation-summary.md": "5965cfdc12f2c79724461827d4f733859235b2da9f725974880569226e9957d1"
     },
     "last_active_child_id": null,
     "last_active_at": null

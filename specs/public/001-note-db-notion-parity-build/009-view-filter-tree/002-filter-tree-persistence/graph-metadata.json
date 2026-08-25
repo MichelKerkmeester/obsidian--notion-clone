@@ -1,0 +1,213 @@
+{
+  "schema_version": 1,
+  "packet_id": "public/001-note-db-notion-parity-build/009-view-filter-tree/002-filter-tree-persistence",
+  "spec_folder": "public/001-note-db-notion-parity-build/009-view-filter-tree/002-filter-tree-persistence",
+  "parent_id": "public/001-note-db-notion-parity-build/009-view-filter-tree",
+  "children_ids": [],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "filter tree persistence",
+      "datasource filtertree",
+      "viewstatestore filtertree",
+      "legacy filter promotion",
+      "icloud quiet filtertree",
+      "filter tree persistence plan",
+      "viewstatestore persist",
+      "filter tree persistence tasks",
+      "filter tree persistence summary"
+    ],
+    "key_topics": [
+      "filter",
+      "tree",
+      "persistence",
+      "datasource",
+      "filtertree",
+      "viewstatestore",
+      "legacy",
+      "promotion",
+      "icloud",
+      "quiet",
+      "plan",
+      "persist"
+    ],
+    "importance_tier": "high",
+    "status": "planned",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "implementation-summary.md"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Filter Tree Persistence",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Parent Spec",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Handoff Criteria",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Problem Statement Notion",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Purpose Parse",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Plan",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Technical Context",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Pattern Additive",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Key Components",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Data Flow Load",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Notation",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Format",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Completion Criteria",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Phase 1: Setup",
+        "kind": "heading",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Phase 2: Implementation",
+        "kind": "heading",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Summary",
+        "kind": "proper_noun",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "Spec Folder",
+        "kind": "proper_noun",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "Actual Effort",
+        "kind": "proper_noun",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "What Was Built Nothing",
+        "kind": "proper_noun",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "Notion groups survive close/reopen",
+    "created_at": "2026-08-25T20:51:12Z",
+    "last_save_at": "2026-08-25T21:02:27.280Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "implementation-summary.md"
+    ],
+    "source_fingerprint": "sha256:f9bd14de66654453287e1965a483b8d06368175f8cb12661e23cefd4ec6237da",
+    "source_doc_hashes": {
+      "spec.md": "99aeb5a844eadbaab26b2aa043cf9effad6fab1e209c704982b294b18ec94cc3",
+      "plan.md": "54624bb2e4964a2286ccaa67e0b3c1f8e675bf9f93f431fd1348599058b0a335",
+      "tasks.md": "08d0c2f30e4c3cf14c1d486b3212befe74ecd19d73e6a705415097da734d2034",
+      "implementation-summary.md": "78886dfd1b873ae881c2394240c306f77d8fffa2e7010aaa94612d2faf3d674b"
+    },
+    "last_active_child_id": null,
+    "last_active_at": null
+  }
+}

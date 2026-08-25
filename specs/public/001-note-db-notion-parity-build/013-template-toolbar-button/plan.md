@@ -13,7 +13,7 @@ importance_tier: "high"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "obsidian/002-note-db-notion-parity-build/013-template-toolbar-button"
+    packet_pointer: "public/001-note-db-notion-parity-build/013-template-toolbar-button"
     last_updated_at: "2026-08-25T00:00:00Z"
     last_updated_by: "markdown-agent"
     recent_action: "Applied final-plan.md review findings to spec/plan/tasks/checklist; status Planned"
@@ -157,7 +157,7 @@ Operator clicks New control → `executeNewFromTemplate` (module) → optional `
 | Unit (if harness exists) | `TemplateToolbarAction` decisions + `executeNewFromTemplate` cancel/confirm branching | Fork test runner — command recorded when found |
 | Manual | Toolbar + row-menu click; adaptive label; zero-template; confirm cancel; mobile + desktop | Obsidian on iOS/iPadOS or mobile emulator plus desktop |
 | Diff contract | One `src/data/` module + three call sites; no cron/network/picker | `git diff` against the `EuroFormat.ts` shape |
-| Packet (docs only) | This phase folder structure | `bash .opencode/skills/system-spec-kit/scripts/spec/validate.sh specs/obsidian/002-note-db-notion-parity-build/013-template-toolbar-button --strict` (not a substitute for plugin verification) |
+| Packet (docs only) | This phase folder structure | `bash .opencode/skills/system-spec-kit/scripts/spec/validate.sh specs/public/001-note-db-notion-parity-build/013-template-toolbar-button --strict` (not a substitute for plugin verification) |
 
 <!-- /ANCHOR:testing -->
 ---

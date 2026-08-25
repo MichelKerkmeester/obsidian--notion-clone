@@ -1,26 +1,217 @@
 {
   "schema_version": 1,
-  "packet_id": "/Users/michelkerkmeester/MEGA/Development/Code_Environment/Public/specs/obsidian/002-note-db-notion-parity-build/009-view-filter-tree/003-filter-panel-tree-editor",
-  "spec_folder": "/Users/michelkerkmeester/MEGA/Development/Code_Environment/Public/specs/obsidian/002-note-db-notion-parity-build/009-view-filter-tree/003-filter-panel-tree-editor",
-  "parent_id": null,
+  "packet_id": "public/001-note-db-notion-parity-build/009-view-filter-tree/003-filter-panel-tree-editor",
+  "spec_folder": "public/001-note-db-notion-parity-build/009-view-filter-tree/003-filter-panel-tree-editor",
+  "parent_id": "public/001-note-db-notion-parity-build/009-view-filter-tree",
   "children_ids": [],
   "manual": {
     "depends_on": [],
     "supersedes": [],
     "related_to": []
   },
-    "derived": {
-    "trigger_phrases": [],
-    "key_topics": [],
-    "importance_tier": "important",
+  "derived": {
+    "trigger_phrases": [
+      "filter panel tree editor",
+      "wrap into group",
+      "filter depth cap",
+      "renderfilterrow",
+      "source rule chrome",
+      "filter panel tree plan",
+      "filter panel tree tasks",
+      "filter panel tree checklist",
+      "source op leak",
+      "filter panel tree summary"
+    ],
+    "key_topics": [
+      "filter",
+      "panel",
+      "tree",
+      "editor",
+      "wrap",
+      "group",
+      "depth",
+      "cap",
+      "renderfilterrow",
+      "source",
+      "rule",
+      "chrome"
+    ],
+    "importance_tier": "high",
     "status": "planned",
-    "key_files": ["spec.md","plan.md","tasks.md"],
-    "entities": [],
-    "causal_summary": "Phase 3: filter-panel-tree-editor",
-    "created_at": "2026-08-25T19:40:27Z",
-    "last_save_at": "2026-08-25T19:40:27Z",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "checklist.md",
+      "implementation-summary.md"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "checklist.md",
+        "kind": "doc",
+        "path": "checklist.md",
+        "source": "derived"
+      },
+      {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Filter Panel Tree Editor",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Parent Spec",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Handoff Criteria",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Problem Statement The",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Purpose Extend",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Plan",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Technical Context",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Overview One",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Pattern Recursive",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Key Components",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Notation",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Format",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Completion Criteria",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "recursive",
+        "kind": "key_phrase",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "a",
+        "kind": "key_phrase",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Verification Checklist",
+        "kind": "proper_noun",
+        "path": "checklist.md",
+        "source": "derived"
+      },
+      {
+        "name": "Verification Protocol",
+        "kind": "proper_noun",
+        "path": "checklist.md",
+        "source": "derived"
+      },
+      {
+        "name": "Completion Impact",
+        "kind": "proper_noun",
+        "path": "checklist.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "The filter panel is a global AND/OR toggle plus a flat row list (`FilterPanelRenderer.ts` `renderHeader` `125-146` and the flat loop `81-90`)",
+    "created_at": "2026-08-25T20:51:13Z",
+    "last_save_at": "2026-08-25T21:02:27.418Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
-    "source_docs": ["spec.md","plan.md","tasks.md"]
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "checklist.md",
+      "implementation-summary.md"
+    ],
+    "source_fingerprint": "sha256:7e877dbff42b76d06cdf8a2c904cfde9fdb0a3ca548c08a0e40a9db9d9b9f425",
+    "source_doc_hashes": {
+      "spec.md": "c216265d8611763ed27030fff752075ec25c5982b381d21476364b461901ec9b",
+      "plan.md": "3155183a66e48e077cfb521c0e330f554690e832a796d8f5969ac9a7a7fd1c09",
+      "tasks.md": "6961e1af04bd9122b287502172838c2bf73eb0e79a95948419f116e775eb63a6",
+      "checklist.md": "76f9793b16d239f02782c5f6b0cbdf2eec74cff36b17d0a2cee187f8ce254050",
+      "implementation-summary.md": "a7aa216e770043f15f6fe3b9b7c373fa61bcea96f0e58d22381a49db2b7c1d91"
+    },
+    "last_active_child_id": null,
+    "last_active_at": null
   }
 }

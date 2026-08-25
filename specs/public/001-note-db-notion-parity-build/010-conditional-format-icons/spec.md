@@ -13,11 +13,11 @@ importance_tier: "high"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "obsidian/002-note-db-notion-parity-build/010-conditional-format-icons"
-    last_updated_at: "2026-08-25T21:45:00Z"
+    packet_pointer: "public/001-note-db-notion-parity-build/010-conditional-format-icons"
+    last_updated_at: "2026-08-25T21:15:00Z"
     last_updated_by: "phase-architect"
-    recent_action: "Nested sub-phases authored; match-paint first after 009"
-    next_safe_action: "Wait for 009 to ship evaluateFilterTree, then build 001-conditional-format-match-paint"
+    recent_action: "Nested sub-phases authored from synthesis and final-plan"
+    next_safe_action: "Build 001-format-match-paint-module per its plan.md and tasks.md"
     blockers: []
     key_files:
       - "spec.md"
@@ -63,7 +63,7 @@ _memory:
 The fork already matches Notion's core conditional-format contract — per-view rules, first-match, row-or-property color — through one shared helper (`getConditionalFormatMatch` / `applyConditionalFormat` in `src/data/ConditionalFormatting.ts:23-69`) that all ten renderer consumers call. What the finance vault still needs is a small, rebase-safe **superset**: AND/OR inside a single rule, plus an icon and a bold flag. The single biggest risk is sequencing — phase `009-view-filter-tree` is still Planned and `src/data/ViewFilterTree.ts` is absent from the fork, so starting 010 now would force a private CF walker, which REQ-001 and §8 forbid.
 
 ### Purpose
-Extend `src/data/ConditionalFormatting.ts` in place (it is already the EuroFormat-shaped isolation surface), reuse 009's `SourceRuleNode` tree through `QueryEngine.evaluateFilterTree` (matching `=== true`; the array-filter `applyFilterTree` treats root `null` as visible and must NOT be used for CF match), store icons as the existing `RecordIcon` token, and paint icon/bold inside `applyConditionalFormat` so the ten renderer consumers stay untouched. Types in `src/data/types.ts` stay additive so stored single-condition, color-only, first-match rules keep evaluating unchanged. Nested children own the ordered slices: match and paint on the shared helper first, then parse, column-tree rewrite, editor groups with icon and bold, then the colocated vitest gate.
+Extend `src/data/ConditionalFormatting.ts` in place (it is already the EuroFormat-shaped isolation surface), reuse 009's `SourceRuleNode` tree through `QueryEngine.evaluateFilterTree` (matching `=== true`; the array-filter `applyFilterTree` treats root `null` as visible and must NOT be used for CF match), store icons as the existing `RecordIcon` token, and paint icon/bold inside `applyConditionalFormat` so the ten renderer consumers stay untouched. Types in `src/data/types.ts` stay additive so stored single-condition, color-only, first-match rules keep evaluating unchanged. Nested children own the ordered slices: in-place match-and-paint, additive parse, tree-aware column ops, the CF editor, then display proof.
 
 <!-- /ANCHOR:problem -->
 ---
@@ -277,11 +277,13 @@ Fork path (was Open Question 3) is no longer UNKNOWN: live source is `/Users/mic
 
 | Phase | Folder | Focus | Status |
 |-------|--------|-------|--------|
-| 1 | 001-conditional-format-match-paint/ | [Phase 1 scope] | Pending |
-| 2 | 002-conditional-format-parse/ | [Phase 2 scope] | Pending |
-| 3 | 003-column-ops-tree-rewrite/ | [Phase 3 scope] | Pending |
-| 4 | 004-editor-groups-icon-bold/ | [Phase 4 scope] | Pending |
-| 5 | 005-conditional-format-vitest/ | [Phase 5 scope] | Pending |
+| 1 | 001-format-match-paint-module/ | In-place `ConditionalFormatting.ts` types, AND/OR tree eval, icon/bold/color-optional paint, and CF CSS | Planned |
+| 2 | 002-format-parse-persist/ | Additive `parseConditionalFormats` of `conditionTree` / `icon` / `bold` / optional `color` via 009 `normalizeViewFilterTree` | Planned |
+| 3 | 003-tree-aware-column-ops/ | Rename and delete walk `conditionTree` with existing source-tree helpers | Planned |
+| 4 | 004-format-editor-panel/ | CF panel group chrome, icon picker, bold toggle, and three i18n keys | Planned |
+| 5 | 005-format-display-proof/ | Twelve helper cases, grep guards, and table plus non-table display proof | Planned |
+
+Future / out of this phase (not child folders): `Intl.Segmenter` guard in `RecordIcon.ts`; Notion Match Option; Chart CF; a third dialect `ConditionalFormatTree.ts`; shipping icon/bold before trees.
 
 ### Phase Transition Rules
 
@@ -294,8 +296,8 @@ Fork path (was Open Question 3) is no longer UNKNOWN: live source is `/Users/mic
 
 | From | To | Criteria | Verification |
 |------|-----|----------|--------------|
-| 001-conditional-format-match-paint | 002-conditional-format-parse | [Criteria TBD] | [Verification TBD] |
-| 002-conditional-format-parse | 003-column-ops-tree-rewrite | [Criteria TBD] | [Verification TBD] |
-| 003-column-ops-tree-rewrite | 004-editor-groups-icon-bold | [Criteria TBD] | [Verification TBD] |
-| 004-editor-groups-icon-bold | 005-conditional-format-vitest | [Criteria TBD] | [Verification TBD] |
+| 001-format-match-paint-module | 002-format-parse-persist | 009 halt passed; additive types land; match uses `evaluateFilterTree(...) === true`; paint covers icon/bold/optional color; CSS classes exist; no renderer consumer edits | Legacy color-only matches the baseline; first-match does not merge later icon/bold (`ConditionalFormatting.ts:39`); `applyFilterTree` is not the CF matcher |
+| 002-format-parse-persist | 003-tree-aware-column-ops | `parseConditionalFormats` loads `conditionTree` via `normalizeViewFilterTree`, `icon` ≤64 chars, `bold`, optional `color`; never `parseSourceRuleTree` | Color-only JSON loads unchanged; tree+icon+bold JSON loads; invalid tree dropped and `condition` kept (`DataSource.ts:800-825`) |
+| 003-tree-aware-column-ops | 004-format-editor-panel | Rename updates tree keys; delete removes tree refs and drops the CF rule only if nothing remains | No stale `conditionTree` keys after rename (`SourceRules.ts:183-206`); last-leaf delete drops the rule (`:208-225`) |
+| 004-format-editor-panel | 005-format-display-proof | Panel copies group chrome only; leaves stay field/op/value; wrap-into-group dual-writes `condition` + `conditionTree`; icon picker and bold toggle persist | AND/OR group plus icon plus bold save and reload; no add-expression; no Chart CF UI (`ViewConfigPanelRenderer.ts:552-766`) |
 <!-- /ANCHOR:phase-map -->

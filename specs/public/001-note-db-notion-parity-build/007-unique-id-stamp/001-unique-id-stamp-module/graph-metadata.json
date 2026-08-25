@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "packet_id": "obsidian/002-note-db-notion-parity-build/007-unique-id-stamp/001-unique-id-stamp-module",
-  "spec_folder": "obsidian/002-note-db-notion-parity-build/007-unique-id-stamp/001-unique-id-stamp-module",
-  "parent_id": "obsidian/002-note-db-notion-parity-build/007-unique-id-stamp",
+  "packet_id": "public/001-note-db-notion-parity-build/007-unique-id-stamp/001-unique-id-stamp-module",
+  "spec_folder": "public/001-note-db-notion-parity-build/007-unique-id-stamp/001-unique-id-stamp-module",
+  "parent_id": "public/001-note-db-notion-parity-build/007-unique-id-stamp",
   "children_ids": [],
   "manual": {
     "depends_on": [],
@@ -192,7 +192,7 @@
     ],
     "causal_summary": "The fork writes frontmatter in `planCreateEntry` (`CreateEntryPlan.ts:119-173`) but has no sequential identity allocator",
     "created_at": "2026-08-25T19:29:59Z",
-    "last_save_at": "2026-08-25T19:37:43.953Z",
+    "last_save_at": "2026-08-25T20:14:46.165Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -201,12 +201,12 @@
       "tasks.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:0b1d3f1876183ac6b8d73bbe041533cebd88311a2e379f0873e69c6dc4eb3e8f",
+    "source_fingerprint": "sha256:e5db4e82963d9095f77ebb5db4c2f4a443b7714ea1c55aeb118068a29d7d5b92",
     "source_doc_hashes": {
-      "spec.md": "1d71a50dfc295c9a871008ca713d3c621890592eb2ce505f0afbf68e6cc0ade2",
-      "plan.md": "09b8b6a003704642ee70aaff40e4d54dd1ca72b200e48c23c100472743abcdee",
-      "tasks.md": "c1ecb0b6f35d1271af17a247a223f79046dd00a8a372fe076fa962a79fb88af5",
-      "implementation-summary.md": "654f0ceda3bcfd1ae91036ed76a02e03cd03b544d673d7a2d0e0f61a55c5b0d6"
+      "spec.md": "3398e57a777d8c88f50bbe80275b1a8e43c247644b08a71f1eb7c610ae357186",
+      "plan.md": "bc0c188b1a8d2c07ff0b751529e27afefd8cad6516946d3cbc21723b7e592622",
+      "tasks.md": "170ae9d902662bac5ad088860c6c300680b7d3bdd054de9a9cbabcce3d95c57e",
+      "implementation-summary.md": "38bd6634fee8b54fb92edb2fa7ae020f10adf59b05c8e472f18305a6a20a6cd5"
     },
     "last_active_child_id": null,
     "last_active_at": null

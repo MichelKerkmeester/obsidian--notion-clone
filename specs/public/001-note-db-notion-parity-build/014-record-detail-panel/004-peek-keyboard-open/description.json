@@ -1,0 +1,23 @@
+{
+  "specFolder": "public/001-note-db-notion-parity-build/014-record-detail-panel/004-peek-keyboard-open",
+  "description": "Spec §8 requires a keyboard path beside hover",
+  "keywords": [
+    "spec",
+    "requires",
+    "keyboard",
+    "path",
+    "beside",
+    "hover"
+  ],
+  "lastUpdated": "2026-08-25T21:22:11.872Z",
+  "specId": "004",
+  "folderSlug": "peek-keyboard-open",
+  "parentChain": [
+    "public",
+    "001-note-db-notion-parity-build",
+    "014-record-detail-panel"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": [],
+  "level": "1"
+}

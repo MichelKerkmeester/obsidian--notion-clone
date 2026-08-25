@@ -13,11 +13,11 @@ importance_tier: "high"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "obsidian/002-note-db-notion-parity-build/011-table-multi-group"
-    last_updated_at: "2026-08-25T00:00:00Z"
-    last_updated_by: "markdown-agent"
-    recent_action: "Applied final-plan.md review findings; refreshed graph metadata; compacted continuity fields"
-    next_safe_action: "Build phase 011 per plan.md and tasks.md (T001 then T002)"
+    packet_pointer: "public/001-note-db-notion-parity-build/011-table-multi-group"
+    last_updated_at: "2026-08-25T20:50:00Z"
+    last_updated_by: "phase-architect"
+    recent_action: "Nested sub-phases authored from synthesis and final-plan"
+    next_safe_action: "Build 001-multifield-grouping-module per its plan.md and tasks.md"
     blockers: []
     key_files:
       - "spec.md"
@@ -63,7 +63,7 @@ _memory:
 TABLE views in the note-database fork group rows by a single string (`groupByField`) only, while Notion's current View settings expose **Group + Sub-group** (exactly two levels) and the fork already ships the 2-level algorithm on the board (`applyBoardSubgroups` / `getBoardSubgroups`). The fork's table dispatch reads one field at `src/views/DatabaseView.ts:6332-6333`; there is no way to nest a second grouping level inside a table without falling back to the board view.
 
 ### Purpose
-Extend table grouping to more than one field by adding `groupByFields?: string[]` to the table view config and recursing `groupBy` through a new isolated module, rendering indented group headers per depth. The locked shape is **composition, not a rewrite**: one `EuroFormat`-style module (`src/data/MultiFieldGrouping.ts`) that recursively reuses `QueryEngine.groupBy` and the existing per-field maps, then a flatten-with-depth pass in `TableRenderer`. Effort stays **M**. The single biggest risk is a persistence miss — `DataSource` parse/serialize is a whitelist, so a `groupByFields[]` that is never serialized is deleted on the next config save — plus any nested `setupGroupDropTarget` that would write two frontmatter fields and break the display-only / iCloud contract.
+Extend table grouping to more than one field by adding `groupByFields?: string[]` to the table view config and recursing `groupBy` through a new isolated module, rendering indented group headers per depth. The locked shape is **composition, not a rewrite**: one `EuroFormat`-style module (`src/data/MultiFieldGrouping.ts`) that recursively reuses `QueryEngine.groupBy` and the existing per-field maps, then a flatten-with-depth pass in `TableRenderer`. Effort stays **M**. The single biggest risk is a persistence miss — `DataSource` parse/serialize is a whitelist, so a `groupByFields[]` that is never serialized is deleted on the next config save — plus any nested `setupGroupDropTarget` that would write two frontmatter fields and break the display-only / iCloud contract. Nested children below own the ordered slices: the module plus persist first, then the flatten table loop, then embedded grouping, then the table Sub-group picker, then display proofs.
 
 <!-- /ANCHOR:problem -->
 ---
@@ -96,7 +96,7 @@ Extend table grouping to more than one field by adding `groupByFields?: string[]
 | File Path | Change Type | Description |
 |-----------|-------------|-------------|
 | `src/data/MultiFieldGrouping.ts` (new) | Add | Isolated multi-field grouping helper; `EuroFormat.ts:1-42` contract — pure functions, no renderer imports. Exports `effectiveGroupFields`, `buildGroupTree`, `flattenGroupTree` (optional `dropComputedGroupFields`). |
-| `src/data/types.ts` (`362`) | Modify | Add `groupByFields?: string[]` beside `groupByField`; `collapsedGroups` (`368`) unchanged. |
+| `src/data/types.ts` (`362`) | Modify | Add `groupByFields?: string[]` beside `groupByField`; group-hide map at `:368` unchanged. |
 | `src/data/DataSource.ts` (`885`, `1088`) | Modify | Parse `groupByFields` at `885`; serialize at `1088` as `view.groupByFields?.length ? view.groupByFields : undefined`. No `legacyViewKeys` strip entry. |
 | `src/views/DatabaseView.ts` (`6332-6333`, `9539-9545`) | Modify | Dispatch `6332-6333` becomes `effectiveGroupFields(...).length > 0`; `renderGroupedTable` `9539-9545` builds the tree then calls `tableRenderer.renderGroupedTable(..., flattened, fields[0])`. |
 | `src/views/TableRenderer.ts` (`17-21`, `82-155`, `148-151`, `470`) | Modify | Extend `TableGroup` additively (`depth?`, `path?`, `field?`, `collapseKey?`, `children?`); depth-aware loop `82-155` only; `setupGroupDropTarget` only at depth 0 using the plain leaf `key` (not `collapseKey`); create-entry merges `resolveGroupCreateDefaults` per `(field, key)` in the path. |
@@ -209,7 +209,7 @@ Extend table grouping to more than one field by adding `groupByFields?: string[]
 ### Concurrent Operations
 - **Regrouping is display-only** and writes no vault data, so it cannot race with note sync.
 - **Collapse/expand** only `scheduleConfigSave` the view definition (`DatabaseView.ts:9850-9856`), serialized per-file.
-- **Collapsed parent:** flatten is preorder; skip while `depth > collapsedDepth` (`TableRenderer.ts:132` today only skips the table).
+- **Hidden parent group:** flatten is preorder; skip nested headers while `depth` is deeper than the hidden ancestor (`TableRenderer.ts:132` today only skips the table).
 - **Sticky stacking:** every `.db-group-header` shares one `position: sticky; top: calc(...); z-index: 26` slot (`styles.css:6171-6184`); two depths paint over each other. **Sticky only at depth 0**; depth ≥ 1 headers are `position: relative`.
 - **Patch path:** `patchGroupedRows` requires each header's next sibling to be `.db-table-wrap` (`TableRenderer.ts:209-250`); parent nodes skip the table, so 2-field trees return `false` and `tryPatchExternalTableRows` (`DatabaseView.ts:2199-2272`) falls through to a full refresh. Do **not** extend `patchGroupedRows` this phase; do prove 1-field still patches.
 - **DnD:** depth-0 drop targets unchanged; nested groups have no drop target so regrouping cannot `updateBoardGroup` two fields. `setupGroupDropTarget` uses the plain leaf `key` (not `collapseKey`).
@@ -259,3 +259,35 @@ Operator decisions recorded with defaults (from research synthesis):
 - **Research Source**: `research/synthesis.md` (ranked, decision-ready findings) and `research/research.md` (full evidence trail)
 
 <!-- /ANCHOR:related-docs -->
+
+<!-- ANCHOR:phase-map -->
+## PHASE DOCUMENTATION MAP
+
+> This spec uses phased decomposition. Each phase is an independently executable child spec folder. All implementation details (plan, tasks, checklist, decisions, continuity) live inside the phase children.
+
+| Phase | Folder | Focus | Status |
+|-------|--------|-------|--------|
+| 1 | 001-multifield-grouping-module/ | New `MultiFieldGrouping.ts`, `groupByFields[]` on ViewConfig, and DataSource parse/serialize in one same-diff | Planned |
+| 2 | 002-grouped-table-flatten/ | Table dispatch plus depth-aware TableRenderer loop, indent CSS, and full-path create defaults | Planned |
+| 3 | 003-embedded-table-grouping/ | Embedded table grouped dispatch and `groupByFields` copy-back so linked views nest the same way | Planned |
+| 4 | 004-table-subgroup-picker/ | Table-gated toolbar Sub-group section cloned from the board popover, picker max 2 | Planned |
+| 5 | 005-multigroup-display-proof/ | Prove 1/2/3-field render, persist round-trip, 1-field patch, mobile, and display-only | Planned |
+
+Future / out of this phase (not child folders): nested-group row drag (multi-field write); a ViewConfigPanel table Sub-group section; a second toolbar picker; unifying `groupByFields[]` with `boardSubgroupField`; ViewStateStore threading; extending `patchGroupedRows`.
+
+### Phase Transition Rules
+
+- Each phase MUST pass `validate.sh` independently before the next phase begins
+- Parent spec tracks aggregate progress via this map
+- Use `/speckit:resume [parent-folder]/[NNN-phase]/` to resume a specific phase
+- Run `validate.sh --recursive` on parent to validate all phases as integrated unit
+
+### Phase Handoff Criteria
+
+| From | To | Criteria | Verification |
+|------|-----|----------|--------------|
+| 001-multifield-grouping-module | 002-grouped-table-flatten | Module exports `effectiveGroupFields`, `buildGroupTree`, `flattenGroupTree`, `dropComputedGroupFields`; `types.ts:362` has `groupByFields?`; DataSource parse `885` + serialize `1088` round-trip in the same commit | 1-field `effectiveGroupFields` equals `[groupByField]`; YAML keeps `groupByFields: [Category, Type]` and omits the key when unset |
+| 002-grouped-table-flatten | 003-embedded-table-grouping | Table dispatch uses `effectiveGroupFields`; `renderGroupedTable` builds the tree then flattens; loop indents, hides a Category subtree, drop-target only at depth 0, create defaults per path | 2-field Category/Type nests; 1-field DOM and hide keys match today; new row in `Cat / Type` gets both properties |
+| 003-embedded-table-grouping | 004-table-subgroup-picker | Embedded table branch uses the same tree + flatten; copy-back at `EmbeddedDatabaseRenderer.ts:3353` keeps `groupByFields` | Embedded 2-field table matches top-level; an embed settings save does not strip `groupByFields` |
+| 004-table-subgroup-picker | 005-multigroup-display-proof | Table-only Sub-group section writes `config.groupByFields`; board UI unchanged; gallery/list never see the array | Sub-group appears only on table views; reload after picking two fields still nests |
+<!-- /ANCHOR:phase-map -->

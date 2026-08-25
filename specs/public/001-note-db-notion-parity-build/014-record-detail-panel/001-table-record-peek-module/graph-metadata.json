@@ -1,0 +1,212 @@
+{
+  "schema_version": 1,
+  "packet_id": "public/001-note-db-notion-parity-build/014-record-detail-panel/001-table-record-peek-module",
+  "spec_folder": "public/001-note-db-notion-parity-build/014-record-detail-panel/001-table-record-peek-module",
+  "parent_id": "public/001-note-db-notion-parity-build/014-record-detail-panel",
+  "children_ids": [],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "table record peek",
+      "TableRecordPeek",
+      "record detail sibling",
+      "panel i18n",
+      "hidden property group",
+      "table record peek plan",
+      "table record peek tasks",
+      "table record peek summary"
+    ],
+    "key_topics": [
+      "table",
+      "record",
+      "peek",
+      "tablerecordpeek",
+      "detail",
+      "sibling",
+      "panel",
+      "i18n",
+      "hidden",
+      "property",
+      "group",
+      "plan"
+    ],
+    "importance_tier": "high",
+    "status": "planned",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "implementation-summary.md"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Table Record Peek Module",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Parent Spec",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Handoff Criteria",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Problem Statement The",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Purpose Create",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Plan",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Technical Context",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Obsidian Plugin",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Overview Final",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Key Components",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Notation",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Format",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Completion Criteria",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "hard-coded English",
+        "kind": "key_phrase",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Phase 1: Setup",
+        "kind": "heading",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Summary",
+        "kind": "proper_noun",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "Spec Folder",
+        "kind": "proper_noun",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "Actual Effort",
+        "kind": "proper_noun",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "What Was Built Nothing",
+        "kind": "proper_noun",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "The fork already hydrates records (`RowData` at `src/data/types.ts:113-119`) and stringifies values (`getColumnValue` at `ColumnDisplay.ts:63`; `stringifyValue` at `Stringify.ts:1`)",
+    "created_at": "2026-08-25T21:14:46Z",
+    "last_save_at": "2026-08-25T21:25:33.100Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "implementation-summary.md"
+    ],
+    "source_fingerprint": "sha256:6bfd9c253d60f0c3c98ce441ae46ec91ba788c918d30a3438707729bfb83071e",
+    "source_doc_hashes": {
+      "spec.md": "aeb6d49444cc0c241d7fe698155d0cb16f9b71cfbeaf79e891e95f32b2691ad7",
+      "plan.md": "327c992261b3d437e43757c2c37c3b98c457abc65d25b7e8a407d2abbece8844",
+      "tasks.md": "88d1ec30ceb1cfb25d5001ad77d336ef16c21b75b386766387fb5e160279fe5d",
+      "implementation-summary.md": "cf530a633db4aa07039d997634cb2bcb4a028ac5d592d1b99fe4cf80c2b5065b"
+    },
+    "last_active_child_id": null,
+    "last_active_at": null
+  }
+}

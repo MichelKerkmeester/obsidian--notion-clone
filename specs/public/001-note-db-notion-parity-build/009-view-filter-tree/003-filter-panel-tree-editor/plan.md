@@ -1,42 +1,37 @@
 ---
-title: "Implementation Plan: Phase 3: filter-panel-tree-editor [template:level-1/plan.md]"
-description: "[2-3 sentences: what this implements and the technical approach]"
+title: "Implementation Plan: Filter Panel Tree Editor"
+description: "One FilterPanelRenderer.ts change: recursive group/not chrome with depth, wrap-into-group, auto-collapse, cap 3, existing view-filter leaves."
 trigger_phrases:
-  - "implementation"
-  - "plan"
-  - "name"
-  - "template"
-  - "plan core"
-importance_tier: "normal"
-contextType: "general"
+  - "filter panel tree plan"
+  - "wrap into group"
+  - "filter depth cap"
+importance_tier: "high"
+contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "scaffold/003-filter-panel-tree-editor"
-    last_updated_at: "2026-08-25T19:40:28Z"
-    last_updated_by: "template-author"
-    recent_action: "Initialize continuity block"
-    next_safe_action: "Replace template defaults on first save"
+    packet_pointer: "public/001-note-db-notion-parity-build/009-view-filter-tree/003-filter-panel-tree-editor"
+    last_updated_at: "2026-08-25T21:00:00Z"
+    last_updated_by: "phase-architect"
+    recent_action: "Authored filter-panel-tree-editor child from synthesis ranks 4/6/7/8-UI and final-plan step 8"
+    next_safe_action: "Extend FilterPanelRenderer.ts with recursive group/not chrome; keep existing leaves"
     blockers: []
-    key_files: []
+    key_files:
+      - "spec.md"
+      - "plan.md"
+      - "tasks.md"
+      - "checklist.md"
+      - "implementation-summary.md"
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
-      session_id: "scaffold-scaffold/003-filter-panel-tree-editor"
+      session_id: "decompose-003-filter-panel-tree-editor"
       parent_session_id: null
     completion_pct: 0
     open_questions: []
     answered_questions: []
 ---
-<!-- SPECKIT_TEMPLATE_SOURCE: plan-core | v2.2 -->
-# Implementation Plan: Phase 3: filter-panel-tree-editor
-
-<!-- SPECKIT_LEVEL: 1 -->
-<!--
-SELF-CHECK:
-- Confirm the plan names the simplest viable approach, affected surfaces, and verification path.
-- Match phases to the stated scope; remove setup theater that does not change the outcome.
-FAILURE MODES:
-- Over-planning, missing rollback, and treating assumptions as dependencies.
--->
+<!-- SPECKIT_TEMPLATE_SOURCE: plan-core + level2-verify | v2.2 -->
+<!-- SPECKIT_LEVEL: 2 -->
+# Implementation Plan: Filter Panel Tree Editor
 
 ---
 
@@ -47,13 +42,13 @@ FAILURE MODES:
 
 | Aspect | Value |
 |--------|-------|
-| **Language/Stack** | [e.g., TypeScript, Python 3.11] |
-| **Framework** | [e.g., React, FastAPI] |
-| **Storage** | [e.g., PostgreSQL, None] |
-| **Testing** | [e.g., Jest, pytest] |
+| **Language/Stack** | TypeScript (Obsidian plugin fork) |
+| **Framework** | Existing toolbar popover (`FilterPanelRenderer.ts:71-77`) |
+| **Storage** | Child 002 persist path via `actions.saveState()` |
+| **Testing** | Vault at phone width; grep source-op leak |
 
 ### Overview
-[2-3 sentences: what this implements and the technical approach]
+One UI change in `FilterPanelRenderer.ts`. Copy group/`not` chrome from `ViewConfigPanelRenderer.ts:846-929` with a new `depth` argument. Reuse `.db-source-rule-*` so `styles.css` stays out of the diff. Wrap-into-AND-group is the create-group gesture.
 <!-- /ANCHOR:summary -->
 
 ---
@@ -62,14 +57,15 @@ FAILURE MODES:
 ## 2. QUALITY GATES
 
 ### Definition of Ready
-- [ ] Problem statement clear and scope documented
-- [ ] Success criteria measurable
-- [ ] Dependencies identified
+- [x] Final-plan step 8 merge (T016+T022–T025) confirmed as one renderer change.
+- [x] Leaf editors locked: `107-123`, not `renderSourceRuleLeaf` `931+`.
+- [x] Child 002 persist omit/hydrate available.
 
 ### Definition of Done
-- [ ] All acceptance criteria met
-- [ ] Tests passing (if applicable)
-- [ ] Docs updated (spec/plan/tasks)
+- [ ] `(A and B) or C` editable at mobile width.
+- [ ] Wrap, auto-collapse, depth 3, labeled `not`; no add-expression / add-empty-group.
+- [ ] Rail popover still edits one leaf.
+- [ ] `styles.css` / `i18n.ts` untouched; checklist.md items recorded.
 <!-- /ANCHOR:quality-gates -->
 
 ---
@@ -78,33 +74,21 @@ FAILURE MODES:
 ## 3. ARCHITECTURE
 
 ### Pattern
-[MVC | MVVM | Clean Architecture | Serverless | Monolith | Other]
+Recursive renderer with positional `onReplace` (`SourceRuleNode` is positional — `ViewConfigPanelRenderer.ts:921-927`). Do not extract a shared tree-editor module this phase.
 
 ### Key Components
-- **[Component 1]**: [Purpose]
-- **[Component 2]**: [Purpose]
+- **Group chrome**: header AND/OR, add-rule / add-group / add-not / remove, `depth`.
+- **Leaves**: existing `renderFilterRow` / `renderSingleRuleEditor`.
+- **Commit**: tree canonical; dual-write DFS leaves + root logic; `saveState()`.
 
 ### Data Flow
-[Brief description of how data moves through the system]
+Edit → in-memory `SourceRuleNode` → dual-write `state.filters` / `state.filterLogic` → `saveState()` → child 002 persist omits `filterTree` when flat-equivalent.
 <!-- /ANCHOR:architecture -->
 
 ---
 
 <!-- ANCHOR:affected-surfaces -->
-## FIX ADDENDUM: AFFECTED SURFACES
-
-Use this section when `research_intent=fix_bug`, when planning from a deep-review FAIL/CONDITIONAL verdict, or when any finding touches security, path handling, env precedence, schema boundaries, persistence, public responses, or shared policy.
-
-| Surface | Current Role | Action | Verification |
-|---------|--------------|--------|--------------|
-| [producer/helper/policy] | [what owns the behavior] | [update/unchanged/not a consumer] | [grep/test/doc evidence] |
-| [consumer/status/docs/tests] | [how it observes the behavior] | [update/unchanged/not a consumer] | [grep/test/doc evidence] |
-
-Required inventories:
-- Same-class producers: `rg -n '<field|string|helper|literal|error-pattern>' <module-or-files>`.
-- Consumers of changed symbols: `rg -n '<changedSymbol>|<changedConstant>|<changedPublicField>' . --glob '*.ts' --glob '*.js' --glob '*.md'`.
-- Matrix axes: list every independent input axis and the required rows before implementation.
-- Algorithm invariant: for path/redaction/parser/resolver/security fixes, state the invariant and adversarial cases.
+Not a bug-fix packet. Producer: `FilterPanelRenderer.ts`. Consumers: `ViewStateStore.saveState` path already used at `99/142/187/212/228/245/264/285/339`. Do not use `removeSourceRuleTreeReferences` (`SourceRules.ts:222-224`) — it hoists; use `removeLeafAt` / positional splice. Algorithm invariant: no source-operator leaf in this file.
 <!-- /ANCHOR:affected-surfaces -->
 
 ---
@@ -113,19 +97,13 @@ Required inventories:
 ## 4. IMPLEMENTATION PHASES
 
 ### Phase 1: Setup
-- [ ] Project structure created
-- [ ] Dependencies installed
-- [ ] Development environment ready
+- [ ] Re-read `FilterPanelRenderer.ts:71-90`, `107-123`, `125-146` and `ViewConfigPanelRenderer.ts:846-929` (note no depth at `901-916`).
 
 ### Phase 2: Core Implementation
-- [ ] [Core feature 1]
-- [ ] [Core feature 2]
-- [ ] [Core feature 3]
+- [ ] Recursive group/`not` with `depth`; wrap; auto-collapse; cap 3; dual-write on commit.
 
 ### Phase 3: Verification
-- [ ] Manual testing complete
-- [ ] Edge cases handled
-- [ ] Documentation updated
+- [ ] Phone-width popover; wrap / collapse / depth / `not`; grep source ops; `styles.css` clean.
 <!-- /ANCHOR:phases -->
 
 ---
@@ -135,9 +113,9 @@ Required inventories:
 
 | Test Type | Scope | Tools |
 |-----------|-------|-------|
-| Unit | [Components/functions] | [Jest/pytest/etc.] |
-| Integration | [API endpoints/flows] | [Tools] |
-| Manual | [User journeys] | Browser |
+| Unit | Not this child — renderer is DOM | — |
+| Integration | None required | — |
+| Manual | Nested filter at phone width; wrap / collapse / depth 3 / `not`; rail popover leaf | Obsidian fork + checklist.md |
 <!-- /ANCHOR:testing -->
 
 ---
@@ -147,7 +125,9 @@ Required inventories:
 
 | Dependency | Type | Status | Impact if Blocked |
 |------------|------|--------|-------------------|
-| [System/Library] | [Internal/External] | [Green/Yellow/Red] | [Impact] |
+| Child 001 leaf helpers (`appendLeaf`, `removeLeafAt`) | Internal | Required | Panel surgery would invent ids |
+| Child 002 persist | Internal | Required | Nested edits session-only |
+| `.db-source-rule-*` (`styles.css:9192-9234`) | Internal | Green | Do not edit CSS |
 <!-- /ANCHOR:dependencies -->
 
 ---
@@ -155,16 +135,6 @@ Required inventories:
 <!-- ANCHOR:rollback -->
 ## 7. ROLLBACK PLAN
 
-- **Trigger**: [Conditions requiring rollback]
-- **Procedure**: [How to revert changes]
+- **Trigger**: Source-op leak, 4th group layer allowed, or `styles.css` touched.
+- **Procedure**: Revert `FilterPanelRenderer.ts` only. Do not leave a half-recursive header with the old flat loop.
 <!-- /ANCHOR:rollback -->
-
----
-
-<!--
-CORE TEMPLATE (~90 lines)
-- Essential technical planning
-- Simple phase structure
-- Add L2/L3 addendums for complexity
--->
-

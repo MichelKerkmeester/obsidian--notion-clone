@@ -12,7 +12,7 @@ importance_tier: "high"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "obsidian/002-note-db-notion-parity-build/012-files-column"
+    packet_pointer: "public/001-note-db-notion-parity-build/012-files-column"
     last_updated_at: "2026-08-25T00:00:00Z"
     last_updated_by: "markdown-agent"
     recent_action: "Applied final-plan.md review findings to planning docs"
@@ -127,7 +127,7 @@ Collapsed into four code steps per the final build plan. T012/T013/T015 are not 
 - [ ] T036 Mobile: files column renders and inline-edits via `is-inline-overlay`; no `electron`/`fs`/Node in the module (NFR-M01) [20m]
 
 ### Documentation
-- [ ] T037 Record verified evidence in `checklist.md` (`specs/obsidian/002-note-db-notion-parity-build/012-files-column/checklist.md`) [10m]
+- [ ] T037 Record verified evidence in `checklist.md` (`specs/public/001-note-db-notion-parity-build/012-files-column/checklist.md`) [10m]
 
 <!-- /ANCHOR:phase-3 -->
 ---

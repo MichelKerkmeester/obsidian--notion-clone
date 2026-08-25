@@ -1,0 +1,212 @@
+{
+  "schema_version": 1,
+  "packet_id": "public/001-note-db-notion-parity-build/010-conditional-format-icons/003-tree-aware-column-ops",
+  "spec_folder": "public/001-note-db-notion-parity-build/010-conditional-format-icons/003-tree-aware-column-ops",
+  "parent_id": "public/001-note-db-notion-parity-build/010-conditional-format-icons",
+  "children_ids": [],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "tree aware column ops",
+      "conditional format rename",
+      "conditiontree delete",
+      "updatesourceruletreekeyreferences",
+      "tree aware column ops plan",
+      "conditiontree rename",
+      "tree aware column ops tasks",
+      "tree aware column ops summary"
+    ],
+    "key_topics": [
+      "tree",
+      "aware",
+      "column",
+      "ops",
+      "conditional",
+      "format",
+      "rename",
+      "conditiontree",
+      "delete",
+      "updatesourceruletreekeyreferences",
+      "plan",
+      "tasks"
+    ],
+    "importance_tier": "high",
+    "status": "planned",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "implementation-summary.md"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Aware Column Ops",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Parent Spec",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Handoff Criteria",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Problem Statement Column",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Purpose On",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Plan",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Technical Context",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Overview Reuse",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Pattern Call",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Key Components",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Notation",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Format",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Completion Criteria",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "existing SourceRules",
+        "kind": "key_phrase",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Phase 1: Setup",
+        "kind": "heading",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Summary",
+        "kind": "proper_noun",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "Spec Folder",
+        "kind": "proper_noun",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "Actual Effort",
+        "kind": "proper_noun",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "What Was Built Nothing",
+        "kind": "proper_noun",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "Column rename rewrites `rule.condition.field` (~193)",
+    "created_at": "2026-08-25T21:00:24Z",
+    "last_save_at": "2026-08-25T21:10:36.872Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "implementation-summary.md"
+    ],
+    "source_fingerprint": "sha256:2825891d1e968a484673f7f6c15a052af2ea4877d4f0c88cbf5f8216c23151e8",
+    "source_doc_hashes": {
+      "spec.md": "5e07d76ae667ec4c5c7e49fc73ec3355a2113b2b6ae7c6a36db2a5b9488bb40e",
+      "plan.md": "4af1407b58f8cb55976dc40a91eb897c4327631eb822e193408cdb6f18b6ba2f",
+      "tasks.md": "ed2c66f27f2bf368191edd857adc3f8e8252e8bf20bc4a2b3c31b2e19381b4d7",
+      "implementation-summary.md": "11a8ce1fc0f30c482eb1cc058fb74d831855e2ea3a2b7d7288d482d7c8325713"
+    },
+    "last_active_child_id": null,
+    "last_active_at": null
+  }
+}

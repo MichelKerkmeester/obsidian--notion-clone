@@ -1,0 +1,199 @@
+{
+  "schema_version": 1,
+  "packet_id": "public/001-note-db-notion-parity-build/014-record-detail-panel/004-peek-keyboard-open",
+  "spec_folder": "public/001-note-db-notion-parity-build/014-record-detail-panel/004-peek-keyboard-open",
+  "parent_id": "public/001-note-db-notion-parity-build/014-record-detail-panel",
+  "children_ids": [],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "peek keyboard",
+      "mod enter peek",
+      "handleDatabaseKeydown",
+      "inline edit enter",
+      "peek keyboard plan",
+      "peek keyboard tasks",
+      "peek keyboard summary"
+    ],
+    "key_topics": [
+      "peek",
+      "keyboard",
+      "mod",
+      "enter",
+      "handledatabasekeydown",
+      "inline",
+      "edit",
+      "plan",
+      "tasks",
+      "summary",
+      "spec",
+      "requires"
+    ],
+    "importance_tier": "high",
+    "status": "planned",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "implementation-summary.md"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Peek Keyboard Open",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Handle Mod",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Add Mod",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Parent Spec",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Handoff Criteria",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Plan",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Technical Context",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Manual Mod",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Overview Final",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Notation",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Format",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Bare Enter",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Completion Criteria",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Summary",
+        "kind": "proper_noun",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "Planned Mod",
+        "kind": "proper_noun",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "Spec Folder",
+        "kind": "proper_noun",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "Actual Effort",
+        "kind": "proper_noun",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "Spec §8 requires a keyboard path beside hover",
+    "created_at": "2026-08-25T21:14:48Z",
+    "last_save_at": "2026-08-25T21:25:33.853Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "implementation-summary.md"
+    ],
+    "source_fingerprint": "sha256:ec21e20285d6477219b9e7f14483fb78c945353095ef9a6e2931daef067ca1b2",
+    "source_doc_hashes": {
+      "spec.md": "5e9f0aa5c22f9d374494fc4869ced2516865eee7a43753717b8a9659b0f64405",
+      "plan.md": "87791c2d1f7cc91435eed1fed2de138d8af1d052ceeef5f3b33713212850b6bd",
+      "tasks.md": "ad3b3044e42a29e842245f4900cc8dad771bd2df198f7b3d4e8f816036ae2c40",
+      "implementation-summary.md": "6c73fca2b833c2697355eadaad54f3f58b8c0b8a786e60edd281fc027a5fb3bc"
+    },
+    "last_active_child_id": null,
+    "last_active_at": null
+  }
+}

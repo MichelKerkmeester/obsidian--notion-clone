@@ -13,7 +13,7 @@ importance_tier: "high"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "obsidian/002-note-db-notion-parity-build/004-formula-ifs-switch-math"
+    packet_pointer: "public/001-note-db-notion-parity-build/004-formula-ifs-switch-math"
     last_updated_at: "2026-08-24T00:00:00Z"
     last_updated_by: "markdown"
     recent_action: "Reconciled checklist with final-plan review findings"

@@ -1,0 +1,210 @@
+{
+  "schema_version": 1,
+  "packet_id": "public/001-note-db-notion-parity-build/011-table-multi-group/003-embedded-table-grouping",
+  "spec_folder": "public/001-note-db-notion-parity-build/011-table-multi-group/003-embedded-table-grouping",
+  "parent_id": "public/001-note-db-notion-parity-build/011-table-multi-group",
+  "children_ids": [],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "embedded table grouping",
+      "groupbyfields copy-back",
+      "embedded grouped dispatch",
+      "embedded table grouping plan",
+      "embedded table grouping tasks",
+      "embedded table grouping summary"
+    ],
+    "key_topics": [
+      "embedded",
+      "table",
+      "grouping",
+      "groupbyfields",
+      "copy-back",
+      "grouped",
+      "dispatch",
+      "plan",
+      "tasks",
+      "summary",
+      "spec",
+      "requires"
+    ],
+    "importance_tier": "high",
+    "status": "planned",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "implementation-summary.md"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Embedded Table Grouping",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Parent Spec",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Handoff Criteria",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Problem Statement Spec",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Purpose Use",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Plan",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Technical Context",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Obsidian Plugin",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Overview One",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Pattern Additive",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Notation",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Format",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Completion Criteria",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Phase 1: Setup",
+        "kind": "heading",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Phase 2: Implementation",
+        "kind": "heading",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Summary",
+        "kind": "proper_noun",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "Spec Folder",
+        "kind": "proper_noun",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "Actual Effort",
+        "kind": "proper_noun",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "What Was Built Nothing",
+        "kind": "proper_noun",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "Spec §8 requires identical nested headers in linked/embedded views",
+    "created_at": "2026-08-25T20:50:00Z",
+    "last_save_at": "2026-08-25T21:01:26.638Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "implementation-summary.md"
+    ],
+    "source_fingerprint": "sha256:d0471f3e84b1dc9ce38c78370a6e034454170248b13d44d55d9a642d31774bb3",
+    "source_doc_hashes": {
+      "spec.md": "5a5fe7afbcb6f770c51e12fa104d4540cc3841f1aaf79765b1c435e0525bdf4d",
+      "plan.md": "4a336dc87539d3a6a31401e7c21bdca90af607fc35316dce115bd47f20d0396f",
+      "tasks.md": "a412663dd06d1fd06ec1def8a11a6b5597f3bcf7931c31bc7d67a69146d3050e",
+      "implementation-summary.md": "56d32f91e1606e901414300e18d07317fda0d310e0d689c315d1e3570e694835"
+    },
+    "last_active_child_id": null,
+    "last_active_at": null
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "specFolder": "public/001-note-db-notion-parity-build/014-record-detail-panel/002-peek-panel-css",
+  "description": "Obsidian loads only plugin-root `styles.css` (no esbuild CSS pipeline)",
+  "keywords": [
+    "obsidian",
+    "loads",
+    "only",
+    "plugin-root",
+    "styles",
+    "css",
+    "esbuild",
+    "pipeline"
+  ],
+  "lastUpdated": "2026-08-25T21:19:57.861Z",
+  "specId": "002",
+  "folderSlug": "peek-panel-css",
+  "parentChain": [
+    "public",
+    "001-note-db-notion-parity-build",
+    "014-record-detail-panel"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": [],
+  "level": "1"
+}

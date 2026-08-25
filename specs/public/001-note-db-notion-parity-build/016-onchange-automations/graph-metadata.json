@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "packet_id": "obsidian/002-note-db-notion-parity-build/016-onchange-automations",
-  "spec_folder": "obsidian/002-note-db-notion-parity-build/016-onchange-automations",
-  "parent_id": "obsidian/002-note-db-notion-parity-build",
+  "packet_id": "public/001-note-db-notion-parity-build/016-onchange-automations",
+  "spec_folder": "public/001-note-db-notion-parity-build/016-onchange-automations",
+  "parent_id": "public/001-note-db-notion-parity-build",
   "children_ids": [],
   "manual": {
     "depends_on": [],
@@ -196,7 +196,7 @@
     ],
     "causal_summary": "Notion-style on-change automations (\"when field X changes, do Y\"), triggers, and recurring/cron templates look like remaining parity gaps, but the synthesis Verdict is DO-NOT-BUILD / HOLD",
     "created_at": "2026-08-24T17:59:00.271Z",
-    "last_save_at": "2026-08-25T15:35:36.737Z",
+    "last_save_at": "2026-08-25T20:14:53.446Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -206,12 +206,12 @@
       "implementation-summary.md",
       "research/research.md"
     ],
-    "source_fingerprint": "sha256:c6baa99c29f9c5db463ac243ad4bb7a1e64f21ad6d3dd4e69ae163a738f90762",
+    "source_fingerprint": "sha256:38721f6cb8d64c8b4a19d486f08f6c5426a7dbcf7ca5185eb9f91a5ab60146ba",
     "source_doc_hashes": {
-      "spec.md": "06d5a914683914f9b00586727ee2bee2f5d2660408028cc37a9988ecadc81f36",
-      "plan.md": "84334e075f98e08bf4818896b7f7eb8060a9f95f5118f12f4db4f52e38f7e77e",
-      "tasks.md": "94a9e61a5422972bc29804483cb17553f883aeb0b09683e128aa1bf01be2fa5d",
-      "implementation-summary.md": "c46756c2a44652a318ce5e77443a7dc3cd404ab839000385591aa09a0047eb91",
+      "spec.md": "fb15b4b0f2f0dba82ea1b780c14336ccfd252cb47eebeec421c4656faadbd7ae",
+      "plan.md": "dc0033f49779b2a3f124169370bf35cb55c14dc047b903eaf8fd6b587fade23c",
+      "tasks.md": "e43af5d28daf9c98c74d4f67d031fc39bf35a4e0b5472e2107021e345eeacd38",
+      "implementation-summary.md": "e063446aa11cd084bd3ced46b9a33bade025c79424df95dbe877480ed27d1e4e",
       "research/research.md": "c27447e55e042c8b362b5626d8d580c5084aba0765f612a04c5e1448395abb81"
     },
     "last_active_child_id": null,

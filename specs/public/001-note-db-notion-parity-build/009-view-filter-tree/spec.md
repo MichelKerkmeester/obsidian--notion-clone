@@ -13,11 +13,11 @@ importance_tier: "high"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "obsidian/002-note-db-notion-parity-build/009-view-filter-tree"
-    last_updated_at: "2026-08-25T19:45:00Z"
+    packet_pointer: "public/001-note-db-notion-parity-build/009-view-filter-tree"
+    last_updated_at: "2026-08-25T21:00:00Z"
     last_updated_by: "phase-architect"
-    recent_action: "Nested sub-phases authored; Kleene module first"
-    next_safe_action: "Build 001-view-filter-tree-module per its plan.md and tasks.md"
+    recent_action: "Nested sub-phases authored from synthesis and final-plan"
+    next_safe_action: "Build 001-kleene-eval-module per its plan.md and tasks.md"
     blockers: []
     key_files:
       - "spec.md"
@@ -63,7 +63,7 @@ _memory:
 View filters today are a flat `FilterRule[]` with a single global `filterLogic` (`and` | `or`) applied uniformly across every rule (`QueryEngine.ts:74-89`). A user cannot express `(A and B) or C` in a view. The data-SOURCE rules already solve this with a recursive `SourceRuleNode` tree (`group` | `not` | `expression`, `types.ts:234-250`) and a working nested editor (`ViewConfigPanelRenderer.ts:804-929`). The view side is the Notion-parity gap: Notion's own API defines recursive `and`/`or` compound filter objects with no depth cap (`https://developers.notion.com/reference/post-database-query-filter`), and its UI caps nesting at three layers.
 
 ### Purpose
-Close the gap by reusing the `SourceRuleNode` tree type in a new isolated `src/data/ViewFilterTree.ts` module with a **Kleene three-valued** evaluator (`evaluateViewFilterTree`) and a leaf callback into `QueryEngine`'s private `matchesFilter`. Do **not** reuse `matchesSourceRuleTree` for views — its empty-AND→true / empty-OR→false semantics (`SourceRules.ts:152`) poison nested OR groups. Do **not** invent a `FilterGroup` AST. The module follows the fork's `EuroFormat.ts` isolated-diff model (`EuroFormat.ts:9-10`): type-only import from `./types`, zero runtime import from `SourceRules.ts` or `QueryEngine.ts`. This unblocks phase 010 (multi-condition conditional formatting reuses the same tree).
+Close the gap by reusing the `SourceRuleNode` tree type in a new isolated `src/data/ViewFilterTree.ts` module with a **Kleene three-valued** evaluator (`evaluateViewFilterTree`) and a leaf callback into `QueryEngine`'s private `matchesFilter`. Do **not** reuse `matchesSourceRuleTree` for views — its empty-AND→true / empty-OR→false semantics (`SourceRules.ts:152`) poison nested OR groups. Do **not** invent a `FilterGroup` AST. The module follows the fork's `EuroFormat.ts` isolated-diff model (`EuroFormat.ts:9-10`): type-only import from `./types`, zero runtime import from `SourceRules.ts` or `QueryEngine.ts`. This unblocks phase 010 (multi-condition conditional formatting reuses the same tree). Nested children own the ordered slices: Kleene eval module, persistence, panel editor, non-panel coherence, then proof.
 
 <!-- /ANCHOR:problem -->
 ---
@@ -265,12 +265,13 @@ All paths are relative to the fork root.
 
 | Phase | Folder | Focus | Status |
 |-------|--------|-------|--------|
-| 1 | 001-view-filter-tree-module/ | Isolated `ViewFilterTree.ts` Kleene evaluator, additive `filterTree` types, QueryEngine bridges, RowPipeline caller, Vitest harness, phase-010 API freeze | Planned |
-| 2 | 002-filter-tree-persist/ | Persist `filterTree` through DataSource parse/serialize and ViewStateStore hydrate / omit-when-flat / recursive prune | Planned |
-| 3 | 003-filter-panel-tree-editor/ | Recursive filter-panel group/not editor: wrap-into-AND-group, empty-group removal, UI depth cap 3, dual-write DFS leaves | Planned |
-| 4 | 004-non-panel-filter-coherence/ | Dual-write chips / column delete / rename / chart drilldown; hide nested rail logic toggle; AND-required new-record leaves | Planned |
+| 1 | 001-kleene-eval-module/ | Isolated `ViewFilterTree.ts` Kleene evaluator, QueryEngine bridges, RowPipeline routing, additive `filterTree` types, Vitest harness and module tests | Planned |
+| 2 | 002-filter-tree-persistence/ | Disk round-trip: `DataSource.ts` parse/serialize plus `ViewStateStore` hydrate/persist/prune; omit `filterTree` when flat | Planned |
+| 3 | 003-filter-panel-tree-editor/ | Recursive group/`not` filter panel: wrap-into-group, auto-collapse empty groups, UI depth cap 3, existing filter leaves | Planned |
+| 4 | 004-nonpanel-filter-coherence/ | Dual-write chips, column delete/rename, chart drilldown; hide nested rail logic toggle; AND-required new-record leaves | Planned |
+| 5 | 005-filter-tree-proof/ | 010 API freeze, `(A and B) or C` plus legacy tests, vault reload, grep guards | Planned |
 
-Future / out of this phase (not child folders): new `FilterGroup` AST; id-based tree surgery; AppFlowy `DashMap` cache; AppFlowy chip-Wrap group editor; Anytype `In`/`AllIn`/`ExactIn`; changes to `matchesSourceRuleTree`; evaluator depth cap; `styles.css` / `i18n.ts` edits; `ConditionalFormatting.ts:38` (owned by phase 010).
+Future / out of this phase (not child folders): a new `FilterGroup` AST; id-based tree surgery; AppFlowy `DashMap` cache; chip-`Wrap` group editor; Anytype `In`/`AllIn`/`ExactIn`; changes to `matchesSourceRuleTree`; a 3-level cap in the evaluator; `styles.css` edits; `ConditionalFormatting.ts:38` stays on `applyFilters` until phase 010.
 
 ### Phase Transition Rules
 
@@ -283,7 +284,8 @@ Future / out of this phase (not child folders): new `FilterGroup` AST; id-based 
 
 | From | To | Criteria | Verification |
 |------|-----|----------|--------------|
-| 001-view-filter-tree-module | 002-filter-tree-persist | `ViewFilterTree.ts` exports build/normalize/prune/evaluate (Kleene)/serialize/leaf helpers/`getRequiredViewFilterLeaves`; `QueryEngine.applyFilterTree` + `evaluateFilterTree`; `RowPipeline.ts:93-97` routes through the tree path; `types.ts` has additive `filterTree?`; harness + `ViewFilterTree.test.ts` green; `ConditionalFormatting.ts:38` still `applyFilters` | `npx vitest run` on `ViewFilterTree.test.ts`; `(A and B) or C`; nested empty AND under OR is skip; grep no `FilterGroup`; no CF import of the new APIs |
-| 002-filter-tree-persist | 003-filter-panel-tree-editor | `DataSource.ts` parses/serializes `filterTree` via `normalizeViewFilterTree` at both constructors and `legacyViewKeys()`; `ViewStateStore` hydrates/persists/prunes; `toPersistedState` omits `filterTree` when flat | Nested tree survives save/reload; flat views do not grow a `filterTree` key; no `parseSourceRuleTree` on the view path |
-| 003-filter-panel-tree-editor | 004-non-panel-filter-coherence | `FilterPanelRenderer.ts` recursive group/not editor with UI depth cap 3; wrap-into-AND-group; empty groups removed at edit time; dual-write DFS leaves; no add-expression; leaves stay `renderFilterRow` / `renderSingleRuleEditor` | `(A and B) or C` editable; 4th group layer refused; rail popover still edits one leaf; `styles.css` untouched |
+| 001-kleene-eval-module | 002-filter-tree-persistence | `ViewFilterTree.ts` exports Kleene eval plus leaf helpers; `QueryEngine.applyFilterTree` and `evaluateFilterTree` additive; `RowPipeline.ts:93-97` routes; `types.ts` has `filterTree?`; `npx vitest run` green on `ViewFilterTree.test.ts`; `applyFilters` `74-89` and `matchesFilter` `91-127` untouched | Single-leaf ≡ flat; empty/missing tree ≡ all rows (`QueryEngine.ts:80`); no runtime import from `SourceRules.ts`; `matchesFilter` not exported |
+| 002-filter-tree-persistence | 003-filter-panel-tree-editor | Nested tree survives save/reload; flat views omit `filterTree`; `create` hydrates via `normalizeViewFilterTree`; dead-field prune is recursive | `DataSource.ts` constructors `701-702`/`908-909`, serializable object `1116-1117`, `legacyViewKeys()` `1239-1240`; `toPersistedState` `115-127` omits when flat |
+| 003-filter-panel-tree-editor | 004-nonpanel-filter-coherence | `(A and B) or C` editable in the panel at mobile width; wrap-into-group; empty groups removed; 4th group layer refused; rail popover still edits one leaf | Copy group/`not` chrome only (`ViewConfigPanelRenderer.ts:846-929`); leaves stay `renderFilterRow`/`renderSingleRuleEditor` (`107-123`); `styles.css` untouched |
+| 004-nonpanel-filter-coherence | 005-filter-tree-proof | Chip delete, column delete/rename, and chart drilldown dual-write `state.filters` and `state.filterTree`; nested rail AND/OR toggle hidden; new-record seeding uses AND-required leaves only | Sites: `ViewRuleOperations.ts:12-15`, `ColumnOperations.ts:499-514`, `ColumnConfig.ts:246-249`, `applyChartFilters` `9651-9667` and `1779-1793`, `ActiveViewControlsRenderer.ts:82-89`, `getRequiredViewFilterLeaves` at `DatabaseView.ts:3991-4009` |
 <!-- /ANCHOR:phase-map -->

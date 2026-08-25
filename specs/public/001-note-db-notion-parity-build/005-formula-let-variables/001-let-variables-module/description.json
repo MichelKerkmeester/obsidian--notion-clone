@@ -1,6 +1,6 @@
 {
   "level": "1",
-  "specFolder": "obsidian/002-note-db-notion-parity-build/005-formula-let-variables/001-let-variables-module",
+  "specFolder": "public/001-note-db-notion-parity-build/005-formula-let-variables/001-let-variables-module",
   "description": "Notion formulas bind per-row names with `let`/`lets` (`let(person, \"Alan\", \"Hello, \" + person + \"!\")` = `\"Hello, Alan!\"`)",
   "keywords": [
     "notion",
@@ -14,12 +14,12 @@
     "alan",
     "hello"
   ],
-  "lastUpdated": "2026-08-25T19:29:18.921Z",
+  "lastUpdated": "2026-08-25T20:13:41.116Z",
   "specId": "001",
   "folderSlug": "let-variables-module",
   "parentChain": [
-    "obsidian",
-    "002-note-db-notion-parity-build",
+    "public",
+    "001-note-db-notion-parity-build",
     "005-formula-let-variables"
   ],
   "memorySequence": 0,

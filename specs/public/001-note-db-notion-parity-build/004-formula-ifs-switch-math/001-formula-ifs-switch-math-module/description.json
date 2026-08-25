@@ -1,6 +1,6 @@
 {
   "level": "1",
-  "specFolder": "obsidian/002-note-db-notion-parity-build/004-formula-ifs-switch-math/001-formula-ifs-switch-math-module",
+  "specFolder": "public/001-note-db-notion-parity-build/004-formula-ifs-switch-math/001-formula-ifs-switch-math-module",
   "description": "The fork already evaluates `IF` (`ComputedField.ts:325`), exposes `Math` on eval scope (`:433-437`), and dual-names `POWER`/`POW` (`:372-373`), but",
   "keywords": [
     "fork",
@@ -15,12 +15,12 @@
     "power",
     "pow"
   ],
-  "lastUpdated": "2026-08-25T19:19:26.353Z",
+  "lastUpdated": "2026-08-25T20:13:41.302Z",
   "specId": "001",
   "folderSlug": "formula-ifs-switch-math-module",
   "parentChain": [
-    "obsidian",
-    "002-note-db-notion-parity-build",
+    "public",
+    "001-note-db-notion-parity-build",
     "004-formula-ifs-switch-math"
   ],
   "memorySequence": 0,

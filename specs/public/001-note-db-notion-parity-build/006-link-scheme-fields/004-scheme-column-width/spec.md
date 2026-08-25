@@ -10,7 +10,7 @@ importance_tier: "high"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "obsidian/002-note-db-notion-parity-build/006-link-scheme-fields/004-scheme-column-width"
+    packet_pointer: "public/001-note-db-notion-parity-build/006-link-scheme-fields/004-scheme-column-width"
     last_updated_at: "2026-08-25T19:40:00Z"
     last_updated_by: "phase-architect"
     recent_action: "Authored column-width child from synthesis rank 5 and final-plan T013"

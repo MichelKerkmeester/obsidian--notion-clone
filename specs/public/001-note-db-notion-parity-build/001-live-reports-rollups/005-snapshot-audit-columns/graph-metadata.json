@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "packet_id": "obsidian/002-note-db-notion-parity-build/001-live-reports-rollups/005-snapshot-audit-columns",
-  "spec_folder": "obsidian/002-note-db-notion-parity-build/001-live-reports-rollups/005-snapshot-audit-columns",
-  "parent_id": "obsidian/002-note-db-notion-parity-build/001-live-reports-rollups",
+  "packet_id": "public/001-note-db-notion-parity-build/001-live-reports-rollups/005-snapshot-audit-columns",
+  "spec_folder": "public/001-note-db-notion-parity-build/001-live-reports-rollups/005-snapshot-audit-columns",
+  "parent_id": "public/001-note-db-notion-parity-build/001-live-reports-rollups",
   "children_ids": [],
   "manual": {
     "depends_on": [],
@@ -178,7 +178,7 @@
     ],
     "causal_summary": "Notion has no screenshot-freeze; this vault does",
     "created_at": "2026-08-25T19:11:32Z",
-    "last_save_at": "2026-08-25T19:23:37.720Z",
+    "last_save_at": "2026-08-25T20:14:51.616Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -187,12 +187,12 @@
       "tasks.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:9df975f31c06754518b23302627d018360d6157cca50576a24b887edd837e07a",
+    "source_fingerprint": "sha256:2276586290af2ad8e9d51aa7310968cd13ec8678da10b6542c306cda5f7016b2",
     "source_doc_hashes": {
-      "spec.md": "ba0d8466d0c4c742a4e114c9c2c96fc7345ae3a20372ead1f5d4ce80584ed51b",
-      "plan.md": "4a1c1453e6692babe09d6f27bac42c080433a61a2b02ca4a9baf5e17fc8df670",
-      "tasks.md": "60cb8be2458ea12aa3f3ab62ade6d824fb432463ccabb516de93db13a539640c",
-      "implementation-summary.md": "e8ca51fb6b6567d36c79c39cf4f40d0a960a0d16b1c61dd17c55172ba47f4f56"
+      "spec.md": "109fbcadcf29776b40178bf75b6aa2a3c3d439f8f1bf3e57221786b27585b630",
+      "plan.md": "b1940094cf1a9cef977e046d1529d91a6f6c2ec7c69740e47ff5766988782a94",
+      "tasks.md": "0bf8133ed98b9b7fea78418207fc45b530f00cadae55810a0ec1f9960799eab5",
+      "implementation-summary.md": "d195ec6d88ff6249817423643bd660b714af613bd43e605dfeafdaf664dd7681"
     },
     "last_active_child_id": null,
     "last_active_at": null

@@ -12,7 +12,7 @@ importance_tier: "high"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "obsidian/002-note-db-notion-parity-build/006-link-scheme-fields"
+    packet_pointer: "public/001-note-db-notion-parity-build/006-link-scheme-fields"
     last_updated_at: "2026-08-25T00:00:00Z"
     last_updated_by: "markdown-agent"
     recent_action: "Reconciled plan with final-plan.md review findings"

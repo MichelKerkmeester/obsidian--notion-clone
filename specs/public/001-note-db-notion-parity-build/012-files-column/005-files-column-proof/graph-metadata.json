@@ -1,0 +1,218 @@
+{
+  "schema_version": 1,
+  "packet_id": "public/001-note-db-notion-parity-build/012-files-column/005-files-column-proof",
+  "spec_folder": "public/001-note-db-notion-parity-build/012-files-column/005-files-column-proof",
+  "parent_id": "public/001-note-db-notion-parity-build/012-files-column",
+  "children_ids": [],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "files column proof",
+      "files tsc sc-001",
+      "vault local grep",
+      "sales pdf chips",
+      "gallery cover offline",
+      "files column proof plan",
+      "files diff shape",
+      "files column proof tasks",
+      "files column proof checklist",
+      "files tsc",
+      "files column proof summary"
+    ],
+    "key_topics": [
+      "files",
+      "column",
+      "proof",
+      "tsc",
+      "sc-001",
+      "vault",
+      "local",
+      "grep",
+      "sales",
+      "pdf",
+      "chips",
+      "gallery"
+    ],
+    "importance_tier": "high",
+    "status": "planned",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "checklist.md",
+      "implementation-summary.md"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "checklist.md",
+        "kind": "doc",
+        "path": "checklist.md",
+        "source": "derived"
+      },
+      {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Files Column Proof",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Parent Spec",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Handoff Criteria",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Problem Statement Without",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Purpose Prove",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Plan",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Technical Context",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Overview Final",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Pattern Observation",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Key Components",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Notation",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Format",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Proofs",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Obsidian Plugin",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Completion Criteria",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Verification Checklist",
+        "kind": "proper_noun",
+        "path": "checklist.md",
+        "source": "derived"
+      },
+      {
+        "name": "Verification Protocol",
+        "kind": "proper_noun",
+        "path": "checklist.md",
+        "source": "derived"
+      },
+      {
+        "name": "Completion Impact",
+        "kind": "proper_noun",
+        "path": "checklist.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "Without this proof, `\"files\"` can compile while cells still stringify, covers still fetch URLs, or `PROPERTYTYPEICONNAMES` is missing and `tsc` was never re-run",
+    "created_at": "2026-08-25T21:08:53Z",
+    "last_save_at": "2026-08-25T21:17:30.861Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "checklist.md",
+      "implementation-summary.md"
+    ],
+    "source_fingerprint": "sha256:21f6ba8d710c348268c5db3171fe3f2ac38a4d7ac1db3ea818a4e92e434b6c84",
+    "source_doc_hashes": {
+      "spec.md": "d7872548a06e6307de4bbf94c1368ea0f63de6ba4b0e2abb73f96cde482823ac",
+      "plan.md": "4b9ca5662613a598c98c0f6bbf32e1350d7cf0b146e18848efea4eaa4970d9b4",
+      "tasks.md": "4e187aefbfac1c8d55ca4f5418f67889477a12a707e3b1c060cb79019dc4bd20",
+      "checklist.md": "e7548d1366f0bb59771c0b72d18e5fbd1cfed5948699a058d9f93e08bf371010",
+      "implementation-summary.md": "c430baa1c58ce121475df5a86e53c1d1fbc86a4d3f11ae96326b8a00d6669452"
+    },
+    "last_active_child_id": null,
+    "last_active_at": null
+  }
+}

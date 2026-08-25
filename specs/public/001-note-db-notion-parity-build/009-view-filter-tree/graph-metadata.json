@@ -1,9 +1,20 @@
 {
   "schema_version": 1,
-  "packet_id": "obsidian/002-note-db-notion-parity-build/009-view-filter-tree",
-  "spec_folder": "obsidian/002-note-db-notion-parity-build/009-view-filter-tree",
-  "parent_id": "obsidian/002-note-db-notion-parity-build",
-  "children_ids": [],
+  "packet_id": "public/001-note-db-notion-parity-build/009-view-filter-tree",
+  "spec_folder": "public/001-note-db-notion-parity-build/009-view-filter-tree",
+  "parent_id": "public/001-note-db-notion-parity-build",
+  "children_ids": [
+    "obsidian/002-note-db-notion-parity-build/009-view-filter-tree/001-kleene-eval-module",
+    "obsidian/002-note-db-notion-parity-build/009-view-filter-tree/002-filter-tree-persistence",
+    "obsidian/002-note-db-notion-parity-build/009-view-filter-tree/003-filter-panel-tree-editor",
+    "obsidian/002-note-db-notion-parity-build/009-view-filter-tree/004-nonpanel-filter-coherence",
+    "obsidian/002-note-db-notion-parity-build/009-view-filter-tree/005-filter-tree-proof",
+    "public/001-note-db-notion-parity-build/009-view-filter-tree/001-kleene-eval-module",
+    "public/001-note-db-notion-parity-build/009-view-filter-tree/002-filter-tree-persistence",
+    "public/001-note-db-notion-parity-build/009-view-filter-tree/003-filter-panel-tree-editor",
+    "public/001-note-db-notion-parity-build/009-view-filter-tree/004-nonpanel-filter-coherence",
+    "public/001-note-db-notion-parity-build/009-view-filter-tree/005-filter-tree-proof"
+  ],
   "manual": {
     "depends_on": [],
     "supersedes": [],
@@ -196,7 +207,7 @@
     ],
     "causal_summary": "View filters today are a flat `FilterRule[]` with a single global `filterLogic` (`and` | `or`) applied uniformly across every rule (`QueryEngine.ts:74-89`)",
     "created_at": "2026-08-24T17:58:43.513Z",
-    "last_save_at": "2026-08-25T14:22:20.724Z",
+    "last_save_at": "2026-08-25T21:02:27.827Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -207,16 +218,16 @@
       "implementation-summary.md",
       "research/research.md"
     ],
-    "source_fingerprint": "sha256:eb90127628b186150dd230ed3165ce0e0e0d29a9eb0bb5e9119a8251858be924",
+    "source_fingerprint": "sha256:d917f4e5a79386b06e4bcfeb7b0439f45a9b52adeef94aebe30a8b5961ec094f",
     "source_doc_hashes": {
-      "spec.md": "ada6e530129bcbe7920c853a1f14ac4cbea9f4fac50c36209dfa9d63e7087f87",
-      "plan.md": "2852a3ae622dd96c33fe79b803986546bf1090e127d7ce623a0f98079c1308f1",
-      "tasks.md": "24cde7e353872c875b0a592bd6b598f5c2617233ef9eaaef840a63da2b7ab5bb",
-      "checklist.md": "c5ff33b62ab6b808c1495aab8a334f7513ea4c9e6ca8936afcb12f2529421b2c",
-      "implementation-summary.md": "ae27b2f14cc6242be286d4a4dab135f1e14ca8a0687641ab209316f96ec0d96d",
+      "spec.md": "cd362f25ce522ae69b771a6b66f5ec7c7b61128b8e20959e07fb0ed0f940559a",
+      "plan.md": "670335f18bfef1fd29868258420b54f9d43371e9dcef5f67713305cddeb9723c",
+      "tasks.md": "4f6a7c189370107b72f8c02d1424fec402da9ca3360a312a2553b39f16e9817b",
+      "checklist.md": "dab67d0d39e94279f34193b93197c6f8278aacbf5f0477f1c5757d7fa023557d",
+      "implementation-summary.md": "96197681cde473dcb35f9e4773bccb98b1b2c72606c87ec49904ed82a3b64e38",
       "research/research.md": "6ee5f1d994f1abf05bf547c5ae4a2374bd9695fe077bf1b27e49b2e3670e83cc"
     },
-    "last_active_child_id": null,
+    "last_active_child_id": "public/001-note-db-notion-parity-build/009-view-filter-tree/005-filter-tree-proof",
     "last_active_at": null
   }
 }

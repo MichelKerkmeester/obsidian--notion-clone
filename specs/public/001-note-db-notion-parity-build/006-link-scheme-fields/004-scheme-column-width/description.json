@@ -1,6 +1,6 @@
 {
   "level": "1",
-  "specFolder": "obsidian/002-note-db-notion-parity-build/006-link-scheme-fields/004-scheme-column-width",
+  "specFolder": "public/001-note-db-notion-parity-build/006-link-scheme-fields/004-scheme-column-width",
   "description": "Notion sizes on the visible value",
   "keywords": [
     "notion",
@@ -8,12 +8,12 @@
     "visible",
     "value"
   ],
-  "lastUpdated": "2026-08-25T19:35:28.748Z",
+  "lastUpdated": "2026-08-25T20:13:41.346Z",
   "specId": "004",
   "folderSlug": "scheme-column-width",
   "parentChain": [
-    "obsidian",
-    "002-note-db-notion-parity-build",
+    "public",
+    "001-note-db-notion-parity-build",
     "006-link-scheme-fields"
   ],
   "memorySequence": 0,

@@ -12,7 +12,7 @@ importance_tier: "high"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "obsidian/002-note-db-notion-parity-build/002-rollup-aggregation-pack/001-numeric-aggregate-module"
+    packet_pointer: "public/001-note-db-notion-parity-build/002-rollup-aggregation-pack/001-numeric-aggregate-module"
     last_updated_at: "2026-08-25T19:05:00Z"
     last_updated_by: "phase-architect"
     recent_action: "Authored numeric same-diff child from synthesis and final-plan"

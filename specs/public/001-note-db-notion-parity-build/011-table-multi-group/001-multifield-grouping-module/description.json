@@ -1,0 +1,32 @@
+{
+  "level": "1",
+  "specFolder": "public/001-note-db-notion-parity-build/011-table-multi-group/001-multifield-grouping-module",
+  "description": "Tables still dispatch on one string (`src/views/DatabaseView.ts:6332-6333`) while Notion View settings expose Group + Sub-group",
+  "keywords": [
+    "tables",
+    "still",
+    "dispatch",
+    "one",
+    "string",
+    "src",
+    "views",
+    "databaseview",
+    "while",
+    "notion",
+    "view",
+    "settings",
+    "expose",
+    "group",
+    "sub-group"
+  ],
+  "lastUpdated": "2026-08-25T20:54:34.827Z",
+  "specId": "001",
+  "folderSlug": "multifield-grouping-module",
+  "parentChain": [
+    "public",
+    "001-note-db-notion-parity-build",
+    "011-table-multi-group"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": []
+}

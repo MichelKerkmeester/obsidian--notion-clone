@@ -1,6 +1,6 @@
 {
   "level": "1",
-  "specFolder": "obsidian/002-note-db-notion-parity-build/004-formula-ifs-switch-math/002-formula-modal-i18n-discovery",
+  "specFolder": "public/001-note-db-notion-parity-build/004-formula-ifs-switch-math/002-formula-modal-i18n-discovery",
   "description": "Even after child 001 evaluates, the editor's own registry drives autocomplete, `NAME(` highlighting, and help",
   "keywords": [
     "even",
@@ -15,12 +15,12 @@
     "highlighting",
     "help"
   ],
-  "lastUpdated": "2026-08-25T19:20:09.558Z",
+  "lastUpdated": "2026-08-25T20:13:41.291Z",
   "specId": "002",
   "folderSlug": "formula-modal-i18n-discovery",
   "parentChain": [
-    "obsidian",
-    "002-note-db-notion-parity-build",
+    "public",
+    "001-note-db-notion-parity-build",
     "004-formula-ifs-switch-math"
   ],
   "memorySequence": 0,

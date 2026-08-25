@@ -1,6 +1,6 @@
 {
   "level": "1",
-  "specFolder": "obsidian/002-note-db-notion-parity-build/005-formula-let-variables/003-formula-modal-let-help",
+  "specFolder": "public/001-note-db-notion-parity-build/005-formula-let-variables/003-formula-modal-let-help",
   "description": "Even after child 001 evaluates `let`/`lets`, the editor's own registry drives autocomplete, `NAME(` highlighting, and help",
   "keywords": [
     "even",
@@ -17,12 +17,12 @@
     "highlighting",
     "help"
   ],
-  "lastUpdated": "2026-08-25T19:32:28.939Z",
+  "lastUpdated": "2026-08-25T20:13:41.125Z",
   "specId": "003",
   "folderSlug": "formula-modal-let-help",
   "parentChain": [
-    "obsidian",
-    "002-note-db-notion-parity-build",
+    "public",
+    "001-note-db-notion-parity-build",
     "005-formula-let-variables"
   ],
   "memorySequence": 0,

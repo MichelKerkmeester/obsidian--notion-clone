@@ -14,7 +14,7 @@ importance_tier: "high"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "obsidian/002-note-db-notion-parity-build/003-reports-computed-fields"
+    packet_pointer: "public/001-note-db-notion-parity-build/003-reports-computed-fields"
     last_updated_at: "2026-08-24T00:00:00Z"
     last_updated_by: "markdown-agent"
     recent_action: "Reconciled planning docs with final-plan.md review; status Planned"

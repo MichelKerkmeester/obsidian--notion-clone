@@ -14,7 +14,7 @@ importance_tier: "high"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "obsidian/002-note-db-notion-parity-build/007-unique-id-stamp"
+    packet_pointer: "public/001-note-db-notion-parity-build/007-unique-id-stamp"
     last_updated_at: "2026-08-25T00:00:00Z"
     last_updated_by: "markdown-agent"
     recent_action: "Applied final-plan review findings; status Planned"
@@ -209,7 +209,7 @@ User creates a row → `buildCreateEntryPlan` passes `this.getActiveDb()?.unique
 
 | Test Type | Scope | Tools |
 |-----------|-------|-------|
-| Strict validation | This phase folder | `bash .opencode/skills/system-spec-kit/scripts/spec/validate.sh specs/obsidian/002-note-db-notion-parity-build/007-unique-id-stamp --strict` |
+| Strict validation | This phase folder | `bash .opencode/skills/system-spec-kit/scripts/spec/validate.sh specs/public/001-note-db-notion-parity-build/007-unique-id-stamp --strict` |
 | Allocator unit tests | `nextUniqueId`: format, increment, defaults, prefix-less `001`, `prefix.trim()` (no `INV--001`); `parseUniqueIdConfig`: absent → `undefined`, non-object → `undefined`, `{}` → field `unique-id`, stub `{ prefix: "INV" }` → defaults | `npx vitest run src/data/UniqueIdStamp.test.ts` (vitest is a devDependency; `vitest.config.ts` exists but points at missing `src/__tests__/setup.ts` — bootstrap it empty; do not add a `package.json` script) |
 | Create-plan integration | Stamp happens once per create (core-template first-call `stampUniqueId: false` does not double-allocate); second create advances; reload continues from `DatabaseConfig.uniqueId.counter`; `padWidth`/`field` frozen on first allocate | Tests around `CreateEntryPlan.ts` / `DatabaseView.buildCreateEntryPlan` |
 | Rollback test | `createNote` failure restores `beforeConfig` (counter unchanged in memory and on disk — create-then-persist); persist failure after a successful create restores config + `trashNote` (no live note with rolled-back counter; no duplicate on retry) | Extend existing create-failure test path |

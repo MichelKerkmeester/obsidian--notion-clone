@@ -1,0 +1,25 @@
+{
+  "level": "1",
+  "specFolder": "public/001-note-db-notion-parity-build/011-table-multi-group/003-embedded-table-grouping",
+  "description": "Spec §8 requires identical nested headers in linked/embedded views",
+  "keywords": [
+    "spec",
+    "requires",
+    "identical",
+    "nested",
+    "headers",
+    "linked",
+    "embedded",
+    "views"
+  ],
+  "lastUpdated": "2026-08-25T20:57:06.965Z",
+  "specId": "003",
+  "folderSlug": "embedded-table-grouping",
+  "parentChain": [
+    "public",
+    "001-note-db-notion-parity-build",
+    "011-table-multi-group"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": []
+}

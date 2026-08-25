@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "packet_id": "obsidian/002-note-db-notion-parity-build/017-excluded-parity-items",
-  "spec_folder": "obsidian/002-note-db-notion-parity-build/017-excluded-parity-items",
-  "parent_id": "obsidian/002-note-db-notion-parity-build",
+  "packet_id": "public/001-note-db-notion-parity-build/017-excluded-parity-items",
+  "spec_folder": "public/001-note-db-notion-parity-build/017-excluded-parity-items",
+  "parent_id": "public/001-note-db-notion-parity-build",
   "children_ids": [],
   "manual": {
     "depends_on": [],
@@ -196,7 +196,7 @@
     ],
     "causal_summary": "The Notion-parity research (10 iterations, evidence in `research/research.md`, decision-ready summary in `research/synthesis.md`) surfaced a long feature list",
     "created_at": "2026-08-24T18:24:24.049Z",
-    "last_save_at": "2026-08-25T15:33:24.900Z",
+    "last_save_at": "2026-08-25T20:14:53.137Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -206,12 +206,12 @@
       "implementation-summary.md",
       "research/research.md"
     ],
-    "source_fingerprint": "sha256:ac727cf3b173690be236ea3757c2cf0a87cb1bd2bcf6b7f8108045e21e5eadf9",
+    "source_fingerprint": "sha256:96396a3d78a468f9c7354209818d058222c94598c975bdc12f50e75ab246ac7d",
     "source_doc_hashes": {
-      "spec.md": "a849f9284f4b348dabda28dac9c9bf2f6c5ca80836aa6f035e12e0d75a2befa1",
-      "plan.md": "c476b5f42155a96a26deb638cfd2dafac681c86780f97edfbeae11a55118a0da",
-      "tasks.md": "9791149bfbfe3fe9660bcb27fc94b927b7d32c70aac8dbc17901c4c9fd3462cb",
-      "implementation-summary.md": "d536d7254a65d7bf28160dac88714fea39dce31f3e5466e921738022c50fa39d",
+      "spec.md": "f16f3b1ee7bb491ace527d63b6252ec3b0bcbbeacbaed2664137b155e4790543",
+      "plan.md": "582b6003f705df7203d72448d35e19a24400ec50e4ab88c044e022d3758d409e",
+      "tasks.md": "887867a465d767513fa4d356da5847498e4b76984b65e30f1a0a2fd753b16561",
+      "implementation-summary.md": "3b195b01aa94f4f2f8558ad2f27dd3a137c0a3a55ff8a3b9cc339c885446b58b",
       "research/research.md": "aea2a0efbf596e5980c1f2176cb121492bd6ed335eb08592c8e0d992643821ef"
     },
     "last_active_child_id": null,

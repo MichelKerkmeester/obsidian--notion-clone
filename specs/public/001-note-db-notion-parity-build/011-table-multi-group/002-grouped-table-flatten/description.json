@@ -1,0 +1,24 @@
+{
+  "level": "1",
+  "specFolder": "public/001-note-db-notion-parity-build/011-table-multi-group/002-grouped-table-flatten",
+  "description": "Table dispatch is still one string (`DatabaseView.ts:6332-6333` → `renderGroupedTable` `9539-9545`)",
+  "keywords": [
+    "table",
+    "dispatch",
+    "still",
+    "one",
+    "string",
+    "databaseview",
+    "rendergroupedtable"
+  ],
+  "lastUpdated": "2026-08-25T20:56:06.013Z",
+  "specId": "002",
+  "folderSlug": "grouped-table-flatten",
+  "parentChain": [
+    "public",
+    "001-note-db-notion-parity-build",
+    "011-table-multi-group"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": []
+}

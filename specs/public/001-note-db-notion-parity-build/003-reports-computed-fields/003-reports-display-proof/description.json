@@ -1,6 +1,6 @@
 {
   "level": "2",
-  "specFolder": "obsidian/002-note-db-notion-parity-build/003-reports-computed-fields/003-reports-display-proof",
+  "specFolder": "public/001-note-db-notion-parity-build/003-reports-computed-fields/003-reports-display-proof",
   "description": "Without the locked proofs, Remaining can “pass” while showing `0` on empty months",
   "keywords": [
     "without",
@@ -13,12 +13,12 @@
     "empty",
     "months"
   ],
-  "lastUpdated": "2026-08-25T19:21:12.096Z",
+  "lastUpdated": "2026-08-25T20:13:41.151Z",
   "specId": "003",
   "folderSlug": "reports-display-proof",
   "parentChain": [
-    "obsidian",
-    "002-note-db-notion-parity-build",
+    "public",
+    "001-note-db-notion-parity-build",
     "003-reports-computed-fields"
   ],
   "memorySequence": 0,
