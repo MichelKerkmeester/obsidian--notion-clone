@@ -4771,6 +4771,17 @@
   background-size: 12px 12px;
 }
 
+.note-database-container .db-table .db-select-col .db-select-inner input[type="checkbox"]:checked::after,
+.note-database-container .db-table .db-select-col .db-select-inner input[type="checkbox"]:indeterminate::after {
+  /* The core checkbox theme paints its own checkmark via input:checked::after,
+     sized to --checkbox-size and pinned to the box's top-left corner
+     (top/left: -1px). This box is a fixed 16px, so that native glyph lands
+     high and to the left of centre. Suppress it and let only the centred
+     background-image above draw the mark. */
+  display: none;
+  content: "";
+}
+
 /* 笔记名称列的链接样式 */
 .note-database-container .db-title-cell a {
   display: inline-flex;

@@ -1,3 +1,4 @@
+import { isNumericRollupKind } from "./Aggregate";
 import { ColumnDef, ComputedFieldDef, NumberDisplayStyle } from "./types";
 
 export type ColumnDisplayType = Exclude<ColumnDef["type"], "computed" | "rollup">;
@@ -16,11 +17,7 @@ export function getColumnDisplayType(
   computedFields?: ComputedFieldDef[]
 ): ColumnDisplayType {
   if (col.type === "rollup") {
-    return col.rollupConfig?.aggregation === "count" ||
-      col.rollupConfig?.aggregation === "sum" ||
-      col.rollupConfig?.aggregation === "avg"
-      ? "number"
-      : "text";
+    return isNumericRollupKind(col.rollupConfig?.aggregation ?? "") ? "number" : "text";
   }
   if (col.type !== "computed") return col.type;
   return getComputedFieldForColumn(col, computedFields)?.type || "text";

@@ -1,6 +1,7 @@
 import { t } from "../i18n";
 import { getColumnOptionValues, isOptionColumnType, toBooleanValue } from "./ColumnTypes";
 import { isDateLikeColumnType } from "./DateTimeFormat";
+import { isNumericRollupKind, max as aggregateMax, median as aggregateMedian, min as aggregateMin, range as aggregateRange } from "./Aggregate";
 import { stringifyValue } from "./Stringify";
 import { ChartAggregation as ChartAggregationType, ChartDateBucket, ChartNumberBucket, ColumnDef, ComputedFieldDef, RowData } from "./types";
 
@@ -99,9 +100,7 @@ export function isChartDateGroupColumn(column: ColumnDef, computedFields: Comput
 export function isChartNumberGroupColumn(column: ColumnDef, computedFields: ComputedFieldDef[] = []): boolean {
   if (column.type === "number" || column.type === "currency") return true;
   if (column.type === "rollup") {
-    return column.rollupConfig?.aggregation === "count" ||
-      column.rollupConfig?.aggregation === "sum" ||
-      column.rollupConfig?.aggregation === "avg";
+    return isNumericRollupKind(column.rollupConfig?.aggregation ?? "");
   }
   if (column.type !== "computed") return false;
   const computedKey = getChartComputedKey(column);
@@ -128,9 +127,7 @@ export function isChartSeriesColumn(column: ColumnDef, computedFields: ComputedF
 export function isChartValueColumn(column: ColumnDef, computedFields: ComputedFieldDef[] = []): boolean {
   if (column.type === "number" || column.type === "currency") return true;
   if (column.type === "rollup") {
-    return column.rollupConfig?.aggregation === "count" ||
-      column.rollupConfig?.aggregation === "sum" ||
-      column.rollupConfig?.aggregation === "avg";
+    return isNumericRollupKind(column.rollupConfig?.aggregation ?? "");
   }
   if (column.type !== "computed") return false;
   const computedKey = getChartComputedKey(column);
@@ -779,9 +776,9 @@ function getStatValue(
   if (aggregation === "sum") return stat.sum;
   if (aggregation === "avg") return stat.numericCount > 0 ? stat.sum / stat.numericCount : 0;
   if (aggregation === "median") return getMedianValue(stat.numericValues);
-  if (aggregation === "min") return stat.min ?? 0;
-  if (aggregation === "max") return stat.max ?? 0;
-  if (aggregation === "range") return stat.min == null || stat.max == null ? 0 : stat.max - stat.min;
+  if (aggregation === "min") return aggregateMin(stat.numericValues) ?? 0;
+  if (aggregation === "max") return aggregateMax(stat.numericValues) ?? 0;
+  if (aggregation === "range") return aggregateRange(stat.numericValues) ?? 0;
   if (aggregation === "unique") return stat.unique.size;
   if (aggregation === "empty") return stat.emptyCount;
   if (aggregation === "not-empty") return stat.notEmptyCount;
@@ -871,12 +868,7 @@ function mergeStats(stats: ChartStat[]): ChartStat {
 }
 
 function getMedianValue(values: number[]): number {
-  if (values.length === 0) return 0;
-  const sorted = [...values].sort((left, right) => left - right);
-  const middle = Math.floor(sorted.length / 2);
-  return sorted.length % 2 === 1
-    ? sorted[middle]
-    : (sorted[middle - 1] + sorted[middle]) / 2;
+  return aggregateMedian(values) ?? 0;
 }
 
 /** For percent-mode data labels with multiple datasets (stacked/grouped bars),

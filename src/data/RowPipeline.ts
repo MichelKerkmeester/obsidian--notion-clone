@@ -11,6 +11,7 @@ import { isFileFieldKey, getFileFieldFixedType, getRowFileFieldValue } from "./F
 import { parseDateTimeParts } from "./DateTimeFormat";
 import { getDefaultEventDateField } from "./CalendarTimelineModel";
 import { getColumnDisplayType } from "./ColumnDisplay";
+import { isNumericRollupKind } from "./Aggregate";
 import { getDateSearchDisplayText, isDateSearchColumn, matchesDateSearch, normalizeSearchQuery } from "./Search";
 import { resolveTitleFieldDisplay } from "./TitleFieldDisplay";
 
@@ -140,11 +141,7 @@ export class RowPipeline {
   private withComputedResultTypes(config: ViewConfig): ColumnDef[] {
     return config.schema.columns.map((col) => {
       if (col.type === "rollup") {
-        const type = col.rollupConfig?.aggregation === "count" ||
-          col.rollupConfig?.aggregation === "sum" ||
-          col.rollupConfig?.aggregation === "avg"
-          ? "number"
-          : "text";
+        const type = isNumericRollupKind(col.rollupConfig?.aggregation ?? "") ? "number" : "text";
         return { ...col, type };
       }
       if (col.type !== "computed") return col;

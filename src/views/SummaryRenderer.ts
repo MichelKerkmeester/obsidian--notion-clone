@@ -1,3 +1,4 @@
+import { isNumericRollupKind, max as aggregateMax, median as aggregateMedian, min as aggregateMin, range as aggregateRange } from "../data/Aggregate";
 import { ColumnDef, DatabaseConfig, RowData, ViewConfig } from "../data/types";
 import { toChartNumber } from "../data/ChartAggregation";
 import { isDateLikeColumnType, parseDateTimeParts, toDateTimestamp } from "../data/DateTimeFormat";
@@ -74,9 +75,7 @@ function getSummaryKindLabel(kind: SummaryKind): string {
 function isNumericSummaryColumn(config: ViewConfig, col: ColumnDef): boolean {
   if (col.type === "number" || col.type === "currency") return true;
   if (col.type === "rollup") {
-    return col.rollupConfig?.aggregation === "count" ||
-      col.rollupConfig?.aggregation === "sum" ||
-      col.rollupConfig?.aggregation === "avg";
+    return isNumericRollupKind(col.rollupConfig?.aggregation ?? "");
   }
   if (col.type !== "computed") return false;
   const computedKey = col.computedKey || col.key;
@@ -441,10 +440,10 @@ export class SummaryRenderer {
       if (custom != null) return custom;
     }
     if (name === "average" || name === "mean") return numbers.length ? this.sum(numbers) / numbers.length : "";
-    if (name === "min") return numbers.length ? Math.min(...numbers) : "";
-    if (name === "max") return numbers.length ? Math.max(...numbers) : "";
+    if (name === "min") return aggregateMin(numbers) ?? "";
+    if (name === "max") return aggregateMax(numbers) ?? "";
     if (name === "sum") return numbers.length ? this.sum(numbers) : "";
-    if (name === "median") return this.median(numbers);
+    if (name === "median") return aggregateMedian(numbers) ?? "";
     if (compactName === "stddev" || compactName === "stdev" || compactName === "standarddeviation") return this.stddev(numbers);
     if (name === "checked") return booleans.filter(Boolean).length;
     if (name === "unchecked") return booleans.filter((value) => !value).length;
@@ -455,7 +454,8 @@ export class SummaryRenderer {
     if (name === "earliest") return dates.length ? new Date(Math.min(...dates)) : "";
     if (name === "latest") return dates.length ? new Date(Math.max(...dates)) : "";
     if (name === "range") {
-      if (numbers.length) return Math.max(...numbers) - Math.min(...numbers);
+      const numericRange = aggregateRange(numbers);
+      if (numericRange != null) return numericRange;
       if (dates.length) return Math.max(...dates) - Math.min(...dates);
     }
     return "";

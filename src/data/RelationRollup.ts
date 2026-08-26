@@ -3,6 +3,7 @@ import { evaluateComputedFields } from "./ComputedEvaluator";
 import { getRowFileFieldValue, isFileFieldKey } from "./FileFields";
 import { parseRelationValues } from "./RelationLinks";
 import { toChartNumber } from "./ChartAggregation";
+import { max, median, min, range } from "./Aggregate";
 import { stringifyValue } from "./Stringify";
 import type { ColumnDef, DatabaseConfig } from "./types";
 import type { NoteRecord } from "./DataSource";
@@ -124,8 +125,15 @@ function aggregateRollup(
     .map((value) => toChartNumber(value))
     .filter((value): value is number => value != null);
   if (numbers.length === 0) return null;
+  switch (aggregation) {
+    case "min": return min(numbers);
+    case "max": return max(numbers);
+    case "median": return median(numbers);
+    case "range": return range(numbers);
+  }
   const sum = numbers.reduce((total, value) => total + value, 0);
-  return aggregation === "avg" ? sum / numbers.length : sum;
+  if (aggregation === "avg") return sum / numbers.length;
+  return aggregation === "sum" ? sum : null;
 }
 
 function getTargetFieldValue(
