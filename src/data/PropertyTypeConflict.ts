@@ -72,6 +72,8 @@ export function mapColumnTypeToObservablePropertyType(
       return null;
     case "relation":
       return "multitext";
+    case "files":
+      return "multitext";
     default:
       return null;
   }

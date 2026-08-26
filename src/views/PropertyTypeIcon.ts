@@ -17,6 +17,7 @@ export const PROPERTY_TYPE_ICON_NAMES: Record<ColumnDef["type"], string> = {
   computed: "math-function",
   relation: "link",
   rollup: "sum",
+  files: "link",
 };
 
 interface SvgPathDef {

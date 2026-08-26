@@ -263,7 +263,7 @@ export class ColumnMenu {
     const groups: Array<{ title: string; types: ColumnDef["type"][] }> = [
       { title: t("columnType.group.basic"), types: ["text", "number", "date", "datetime", "currency", "checkbox"] },
       { title: t("columnType.group.options"), types: ["select", "multi-select", "status"] },
-      { title: t("columnType.group.advanced"), types: ["computed", "relation", "rollup"] },
+      { title: t("columnType.group.advanced"), types: ["computed", "relation", "rollup", "files"] },
     ];
     groups.forEach((group) => {
       panel.createDiv({ cls: "db-dropdown-section-title", text: group.title });

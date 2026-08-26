@@ -119,6 +119,7 @@ export function COLUMN_TYPE_LABELS(): Record<ColumnDef["type"], string> {
     computed: t("columnType.computed"),
     relation: t("columnType.relation"),
     rollup: t("columnType.rollup"),
+    files: t("columnType.files"),
   };
 }
 
@@ -134,7 +135,8 @@ export function isColumnType(value: unknown): value is ColumnDef["type"] {
     value === "checkbox" ||
     value === "computed" ||
     value === "relation" ||
-    value === "rollup";
+    value === "rollup" ||
+    value === "files";
 }
 
 export function isComputedFieldType(value: unknown): value is ComputedFieldDef["type"] {
@@ -172,6 +174,7 @@ export function getColumnOptionValues(col?: ColumnDef): string[] {
 export function getDefaultCellValue(col: ColumnDef): unknown {
   if (col.type === "checkbox") return false;
   if (col.type === "multi-select") return [];
+  if (col.type === "files") return [];
   if (isOptionColumnType(col.type)) return getColumnOptions(col)[0]?.value || "";
   return "";
 }

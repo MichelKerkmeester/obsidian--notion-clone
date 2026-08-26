@@ -49,7 +49,7 @@ export interface RollupConfig {
 export interface ColumnDef {
   key: string;
   label: string;
-  type: "text" | "number" | "date" | "datetime" | "currency" | "select" | "multi-select" | "status" | "checkbox" | "computed" | "relation" | "rollup";
+  type: "text" | "number" | "date" | "datetime" | "currency" | "select" | "multi-select" | "status" | "checkbox" | "computed" | "relation" | "rollup" | "files";
   width?: number;
   urgency?: { enabled: boolean; thresholdDays: number };
   dateFormat?: string;
