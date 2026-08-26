@@ -416,7 +416,7 @@ export class ColumnMenu {
         row.onclick = () => { this.actions.setTextRenderMode(col, value); render(); };
       }
 
-      const schemeSection = this.createDisplayOptionSection(panel, "Link scheme");
+      const schemeSection = this.createDisplayOptionSection(panel, t("menu.textLinkSchemeTitle"));
       const currentScheme = getTextLinkSchemeChoice(col.textLinkScheme);
       for (const option of TEXT_LINK_SCHEME_MENU_OPTIONS) {
         const selected = option.value === currentScheme;
@@ -427,7 +427,7 @@ export class ColumnMenu {
         const check = row.createSpan({ cls: "db-dropdown-option-check" });
         if (selected) setIcon(check, "check");
         setIcon(row.createSpan({ cls: "db-dropdown-option-icon" }), option.icon);
-        row.createSpan({ cls: "db-dropdown-option-label", text: option.label });
+        row.createSpan({ cls: "db-dropdown-option-label", text: t(option.labelKey) });
         row.onclick = () => { this.actions.setTextLinkScheme(col, option.value); render(); };
       }
     };
