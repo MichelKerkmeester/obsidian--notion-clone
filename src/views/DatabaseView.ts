@@ -146,6 +146,12 @@ import { parseClipboardTable, serializeSelectedCells as serializeClipboardSelect
 import { openBulkEditFieldMenu } from "./BulkEditFieldMenu";
 import { positionToolbarPopover } from "./PopoverPosition";
 import { closeRecordDetailPanel, getOpenRecordDetailPath, openRecordDetailPanel, refreshRecordDetailPanel } from "./RecordDetailPanel";
+import {
+  attachTitleOpenAffordance,
+  closeTableRecordPeek,
+  openTableRecordPeek,
+  syncTableRecordPeek,
+} from "./TableRecordPeek";
 import { syncTableColumnLayouts } from "./TableColumnLayoutSync";
 import { hasRelationValue, planRelationTargetChange } from "../data/RelationTargetChange";
 import { highlightSearchMatches, renderSearchHighlightedText } from "./SearchHighlight";
@@ -838,7 +844,8 @@ export class DatabaseView extends FileView {
       ".db-dropdown-popover:not(.is-hidden), .db-view-config-panel:not(.is-hidden), " +
       ".db-group-popover:not(.is-hidden), .db-export-popover:not(.is-hidden), " +
       ".db-title-actions-popover:not(.is-hidden), .db-color-picker-popup:not(.is-hidden), " +
-      ".db-record-detail-panel:not(.is-hidden), .db-filter-panel:not(.is-hidden), " +
+      ".db-record-detail-panel:not(.is-hidden), .db-record-peek-panel:not(.is-hidden), " +
+      ".db-filter-panel:not(.is-hidden), " +
       ".db-sort-panel:not(.is-hidden), .db-column-manager:not(.is-hidden), " +
       ".db-group-order-popover:not(.is-hidden), .db-chart-options-popover:not(.is-hidden), " +
       ".db-calendar-options-popover:not(.is-hidden), .db-calendar-timeline-options-popover:not(.is-hidden), " +
@@ -869,6 +876,7 @@ export class DatabaseView extends FileView {
     this.cellRenderer?.closeActiveBulkEditor();
     this.closeHeaderPopovers();
     closeRecordDetailPanel();
+    closeTableRecordPeek();
     const doc = this.containerEl_?.ownerDocument || window.activeDocument;
     doc.querySelectorAll(
       ".db-color-picker-popup:not(.is-hidden), .db-icon-picker-popover:not(.is-hidden), " +
@@ -7912,7 +7920,30 @@ export class DatabaseView extends FileView {
   ): void {
     this.cellRenderer.renderCell(td, row, col);
     const config = this.getConfig();
-    if (config) applyConditionalFormat(td, row, config, this.getActiveDb(), col.key);
+    if (config) {
+      applyConditionalFormat(td, row, config, this.getActiveDb(), col.key);
+      const visible = getVisibleColumns(config, this.rows, this.vs(), this.pendingShowColumns);
+      const titleVisible = visible.some((column) => column.key === "file.name");
+      const container = this.containerEl_;
+      if (
+        container &&
+        (col.key === "file.name" || (!titleVisible && col.key === visible[0]?.key))
+      ) {
+        attachTitleOpenAffordance(td, row, {
+          open: () => openTableRecordPeek({
+            anchor: td,
+            row,
+            config,
+            visibleColumns: visible,
+            allColumns: getColumnsInOrder(config),
+            container,
+            returnFocus: () => td.focus(),
+            renderRecordIcon: (parent, currentRow, currentConfig) =>
+              this.renderRowRecordIcon(parent, currentRow, currentConfig),
+          }),
+        });
+      }
+    }
     this.setupTableCellSelection(td, row, col);
   }
 
@@ -10551,6 +10582,7 @@ export class DatabaseView extends FileView {
     )
       .forEach(el => el.remove());
     this.render();
+    syncTableRecordPeek(this.rows);
     if (viewport && this.containerEl_) restoreDatabaseViewport(this.containerEl_, viewport);
     if (rawViewport && this.containerEl_) {
       this.containerEl_.scrollTop = rawViewport.top;
