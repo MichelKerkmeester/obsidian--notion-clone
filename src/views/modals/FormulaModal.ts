@@ -61,6 +61,8 @@ interface FormulaReferencedField {
 const FUNCTIONS: FormulaFunctionHelp[] = [
   { categoryKey: "formula.catLogic", name: "IF", signature: "IF(condition, trueValue, falseValue)", descriptionKey: "formula.fn.IF.desc", example: '=IF([status] === "done", 1, 0)' },
   { categoryKey: "formula.catLogic", name: "IFERROR", signature: "IFERROR(value, fallback)", descriptionKey: "formula.fn.IFERROR.desc", example: "=IFERROR([price] / [days], 0)" },
+  { categoryKey: "formula.catLogic", name: "LET", signature: "let(name, value, expression)", descriptionKey: "formula.fn.LET.desc", example: '=let("rate", 0.05, amount * rate)' },
+  { categoryKey: "formula.catLogic", name: "LETS", signature: "lets(name1, value1, ..., expression)", descriptionKey: "formula.fn.LETS.desc", example: '=lets("base", amount, "power", 2, base ** power)' },
   { categoryKey: "formula.catDate", name: "DAYS", signature: "DAYS(start_date, end_date)", descriptionKey: "formula.fn.DAYS.desc", example: "=DAYS([start_date], [end_date])" },
   { categoryKey: "formula.catDate", name: "ADDDAYS", signature: "ADDDAYS(date, days)", descriptionKey: "formula.fn.ADDDAYS.desc", example: "=ADDDAYS([start_date], [duration])" },
   { categoryKey: "formula.catText", name: "TEXT", signature: "TEXT(value, format)", descriptionKey: "formula.fn.TEXT.desc", example: '=TEXT([date], "YYYY-MM-DD")' },
