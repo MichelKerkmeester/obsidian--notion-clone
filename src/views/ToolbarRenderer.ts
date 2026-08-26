@@ -15,6 +15,7 @@ import { isDateLikeColumnType } from "../data/DateTimeFormat";
 import { isEmptyGroupVisibilityColumn, shouldShowEmptyGroups } from "../data/GroupVisibility";
 import { getDateGroupMode } from "../data/GroupDisplay";
 import { getTableSubgroupCandidates, getTableSubgroupField } from "../data/TableSubgroupPicker";
+import { executeNewFromTemplate, getNewFromTemplateLabel, getNewFromTemplateTooltip, hasRecordTemplate } from "../data/TemplateToolbarAction";
 import { isHTMLElement } from "./DomGuards";
 import { renderRecordIcon } from "./RecordIconRenderer";
 
@@ -235,7 +236,7 @@ export class ToolbarRenderer {
       const titleActions = titleRow.createDiv({ cls: "db-title-actions" });
       this.renderFullViewButton(titleActions, actions);
       if (actions.toggleHeaderChrome && phoneLayout) this.renderHeaderChromeButton(titleActions, actions, false);
-      if (!actions.isReadOnly && !isChartView) this.renderNewButton(titleActions, actions);
+      if (!actions.isReadOnly && !isChartView) this.renderNewButton(titleActions, actions, currentDb);
       if (currentDb?.description) {
         header.createDiv({
           cls: "db-description db-description-embed",
@@ -281,7 +282,7 @@ export class ToolbarRenderer {
       this.renderCalendarTimelineOptionsButton(right, currentView, currentDb, actions);
     }
     if (!phoneLayout && !isChartView) this.renderSearch(right, state, actions);
-    if (!actions.isReadOnly && !isChartView) this.renderNewButton(right, actions);
+    if (!actions.isReadOnly && !isChartView) this.renderNewButton(right, actions, currentDb);
   }
 
   private isPhoneLayout(): boolean {
@@ -1712,14 +1713,29 @@ export class ToolbarRenderer {
     };
   }
 
-  private renderNewButton(toolbar: HTMLElement, actions: ToolbarActions): void {
+  private renderNewButton(toolbar: HTMLElement, actions: ToolbarActions, currentDb?: DatabaseConfig): void {
+    const hasTemplate = hasRecordTemplate(currentDb);
+    const label = hasTemplate ? getNewFromTemplateLabel() : t("toolbar.new");
+    const tooltip = hasTemplate ? getNewFromTemplateTooltip(currentDb) : label;
+    const attributes: Record<string, string> = {
+      "aria-label": hasTemplate ? tooltip : label,
+    };
+    if (hasTemplate) attributes.title = tooltip;
     const newBtn = toolbar.createEl("button", {
       cls: "db-new-button",
-      attr: { "aria-label": t("toolbar.new") },
+      attr: attributes,
     });
-    setIcon(newBtn.createSpan({ cls: "db-new-button-icon" }), "plus");
-    newBtn.createSpan({ text: t("toolbar.new") });
-    newBtn.onclick = () => actions.createEntry();
+    setIcon(newBtn.createSpan({ cls: "db-new-button-icon" }), hasTemplate ? "file-plus-2" : "plus");
+    if (!hasTemplate || !this.isPhoneLayout()) newBtn.createSpan({ text: label });
+    if (hasTemplate) setTooltip(newBtn, tooltip, { delay: 100 });
+    newBtn.onclick = () => {
+      void executeNewFromTemplate({
+        config: currentDb,
+        confirmEnabled: false,
+        confirm: async () => true,
+        createEntry: () => actions.createEntry(),
+      });
+    };
   }
 
   private renderFullViewButton(toolbar: HTMLElement, actions: ToolbarActions): void {
