@@ -10,6 +10,7 @@ import { renderPropertyTypeIcon } from "./PropertyTypeIcon";
 import { getTableColumnStyle, getTableLayout, getTableMinWidth as calculateTableMinWidth } from "./TableLayout";
 import { renderGroupExpandControls } from "./GroupExpandControls";
 import { getGroupVisibleCount } from "../data/GroupVisibility";
+import { getGroupHeaderClassName, getGroupHeaderDepthValue } from "../data/MultiGroupDisplay";
 
 const ROW_MIME = "application/x-note-database-row";
 const ROW_FROM_GROUP_MIME = "application/x-note-database-row-from-group";
@@ -119,12 +120,13 @@ export class TableRenderer {
       if (displayField) fieldsByDepth[depth] = displayField;
       const collapseKey = group.collapseKey ?? group.key;
       const groupHeader = container.createEl("div", {
-        cls: `db-group-header db-group-header--depth-${depth}`,
+        cls: getGroupHeaderClassName(depth),
         attr: {
           "data-note-database-group-key": group.key,
         },
       });
-      groupHeader.style.setProperty("--db-group-depth", String(depth));
+      const depthValue = getGroupHeaderDepthValue(depth);
+      if (depthValue !== undefined) groupHeader.style.setProperty("--db-group-depth", depthValue);
       if (groupField && depth === 0) this.setupGroupDropTarget(groupHeader, groupField, group.key);
       groupHeader.style.minWidth = `${tableMinWidth}px`;
       const collapsed = Boolean(groupField && this.actions.isGroupCollapsed?.(groupField, collapseKey));

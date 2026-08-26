@@ -41,7 +41,8 @@ import { getDefaultGroupOrder, getEffectiveGroupOrder, mergeGroupOrder } from ".
 import { formatGroupKeyDisplay, isComputedGroupField, resolveGroupCreateDefaults } from "../data/GroupDisplay";
 import { getTableSubgroupField, resolveTableSubgroupField } from "../data/TableSubgroupPicker";
 import { setShowEmptyGroups, setGroupExpandedCount, withEmptyOptionGroups } from "../data/GroupVisibility";
-import { buildGroupTree, dropComputedGroupFields, effectiveGroupFields, flattenGroupTree } from "../data/MultiFieldGrouping";
+import { buildGroupTree, flattenGroupTree } from "../data/MultiFieldGrouping";
+import { getDisplayGroupFields } from "../data/MultiGroupDisplay";
 import { isEmptyGroupId, moveMultiSelectGroupValue } from "../data/MultiSelect";
 import { generateRanks, rankBetween, rebalanceRanks, resolveNewEntryRankBounds } from "../data/ManualOrder";
 import { CellEditSession, CellOptionTransaction, CellRenderer } from "./CellRenderer";
@@ -6392,10 +6393,13 @@ export class DatabaseView extends FileView {
       this.calendarRenderer.render(this.containerEl_, config, this.rows);
     } else if (config.viewType === "timeline") {
       this.calendarTimelineRenderer.renderTimeline(this.containerEl_, this.getTimelineRenderConfig(config), this.rows);
-    } else if (effectiveGroupFields(config, this.vs()).length > 0) {
-      this.renderGroupedTable(config);
     } else {
-      this.renderTable(config);
+      const groupFields = getDisplayGroupFields(config, this.vs());
+      if (groupFields.length > 0) {
+        this.renderGroupedTable(config, groupFields);
+      } else {
+        this.renderTable(config);
+      }
     }
     if (config.viewType === "chart") this.renderSummary(config);
     this.renderCalendarTimelineSearchResultsPanel(config);
@@ -9599,9 +9603,8 @@ export class DatabaseView extends FileView {
     nav.insertAdjacentElement("afterend", action);
   }
 
-  private renderGroupedTable(config: ViewConfig): void {
+  private renderGroupedTable(config: ViewConfig, fields: string[]): void {
     if (!this.containerEl_) return;
-    const fields = dropComputedGroupFields(effectiveGroupFields(config, this.vs()), config);
     const groupFn = (groupConfig: ViewConfig, field: string, rows: RowData[]) => {
       const groups = withEmptyOptionGroups(
         groupConfig,

@@ -21,7 +21,8 @@ import {
 import { getDefaultGroupOrder, getEffectiveGroupOrder, mergeGroupOrder } from "../data/GroupOrder";
 import { formatGroupKeyDisplay } from "../data/GroupDisplay";
 import { setShowEmptyGroups, setGroupExpandedCount, withEmptyOptionGroups } from "../data/GroupVisibility";
-import { buildGroupTree, dropComputedGroupFields, effectiveGroupFields, flattenGroupTree } from "../data/MultiFieldGrouping";
+import { buildGroupTree, flattenGroupTree } from "../data/MultiFieldGrouping";
+import { getDisplayGroupFields } from "../data/MultiGroupDisplay";
 import { getEffectiveFilterRules } from "../data/FilterRules";
 import { CellAddress, serializeSelectedCells, getCellDisplayText } from "../data/ClipboardSerializer";
 import { createCsvMarkdownZip } from "../data/CsvMarkdownZipExport";
@@ -1012,27 +1013,29 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
         sortDirection: state.sortDirection,
         sortRules: state.sortRules,
       }, this.rows);
-    } else if (effectiveGroupFields(config, this.vs(config)).length > 0) {
-      const fields = dropComputedGroupFields(effectiveGroupFields(config, this.vs(config)), config);
-      const groupFn = (groupConfig: ViewConfig, field: string, rows: RowData[]) => {
-        const groups = withEmptyOptionGroups(
-          groupConfig,
-          field,
-          this.queryEngine.groupBy(
-            rows,
-            field,
-            [],
-            groupConfig.schema.columns.find((column) => column.key === field),
-            groupConfig,
-          ),
-        );
-        const order = getEffectiveGroupOrder(groupConfig, field, groups.map((group) => group.key));
-        return this.queryEngine.sortGroups(groups, order);
-      };
-      const flattened = flattenGroupTree(buildGroupTree(this.rows, fields, config, groupFn));
-      this.tableRenderer.renderGroupedTable(target, renderConfig, this.rows, flattened, fields[0]);
     } else {
-      this.tableRenderer.renderTable(target, renderConfig, this.rows);
+      const fields = getDisplayGroupFields(config, this.vs(config));
+      if (fields.length === 0) {
+        this.tableRenderer.renderTable(target, renderConfig, this.rows);
+      } else {
+        const groupFn = (groupConfig: ViewConfig, field: string, rows: RowData[]) => {
+          const groups = withEmptyOptionGroups(
+            groupConfig,
+            field,
+            this.queryEngine.groupBy(
+              rows,
+              field,
+              [],
+              groupConfig.schema.columns.find((column) => column.key === field),
+              groupConfig,
+            ),
+          );
+          const order = getEffectiveGroupOrder(groupConfig, field, groups.map((group) => group.key));
+          return this.queryEngine.sortGroups(groups, order);
+        };
+        const flattened = flattenGroupTree(buildGroupTree(this.rows, fields, config, groupFn));
+        this.tableRenderer.renderGroupedTable(target, renderConfig, this.rows, flattened, fields[0]);
+      }
     }
     if (config.viewType === "chart") {
       this.summaryRenderer.render(target, this.rows, config, this.currentDbConfig, {
