@@ -470,6 +470,18 @@
   background-color: var(--db-conditional-format-bg);
 }
 
+.note-database-container .db-conditional-format-bold {
+  font-weight: 700;
+}
+
+.note-database-container tr.db-conditional-format-bold > td {
+  font-weight: 700;
+}
+
+.note-database-container .db-conditional-format-icon {
+  margin-left: 4px;
+}
+
 .note-database-container tr.db-conditional-format > td:not(.db-conditional-format) {
   background-color: var(--db-conditional-format-bg);
 }
@@ -6184,6 +6196,16 @@
   padding: 0;
 }
 
+.note-database-container .db-group-header[class*="db-group-header--depth-"] {
+  padding-left: calc(16px * var(--db-group-depth, 0));
+}
+
+.note-database-container .db-group-header:not(.db-group-header--depth-0) {
+  position: relative;
+  top: auto;
+  z-index: auto;
+}
+
 .note-database-container .db-group-header-label {
   position: sticky;
   left: 0;
@@ -6253,6 +6275,10 @@
 
 /* 分组之间的间距 */
 .note-database-container .db-grouped-table > .db-table-wrap + .db-group-header {
+  margin-top: 5px;
+}
+
+.note-database-container .db-grouped-table > .db-group-header + .db-group-header {
   margin-top: 5px;
 }
 
