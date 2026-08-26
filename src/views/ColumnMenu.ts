@@ -6,6 +6,7 @@ import { isNumberDisplayColumn } from "../data/ColumnDisplay";
 import { t } from "../i18n";
 import { renderPropertyTypeIcon } from "./PropertyTypeIcon";
 import { createDropdownField, DropdownOption } from "./DropdownField";
+import { getTextLinkSchemeChoice, TEXT_LINK_SCHEME_MENU_OPTIONS, TextLinkSchemeChoice } from "../data/TextLinkSchemeMenu";
 
 export interface ColumnMenuActions {
   editColumn(col: ColumnDef): void;
@@ -20,6 +21,7 @@ export interface ColumnMenuActions {
   hideColumn(col: ColumnDef): void;
   toggleColumnWrap(col: ColumnDef): void;
   setTextRenderMode(col: ColumnDef, mode: "plain" | "link" | "markdown"): void;
+  setTextLinkScheme(col: ColumnDef, scheme: TextLinkSchemeChoice): void;
   setNumberDisplayStyle(col: ColumnDef, style: NumberDisplayStyle): void;
   updateNumberDisplayConfig(col: ColumnDef, partial: Partial<NumberDisplayConfig>): void;
   sortByColumn(col: ColumnDef): void;
@@ -412,6 +414,21 @@ export class ColumnMenu {
         setIcon(row.createSpan({ cls: "db-dropdown-option-icon" }), icon);
         row.createSpan({ cls: "db-dropdown-option-label", text: t(key) });
         row.onclick = () => { this.actions.setTextRenderMode(col, value); render(); };
+      }
+
+      const schemeSection = this.createDisplayOptionSection(panel, "Link scheme");
+      const currentScheme = getTextLinkSchemeChoice(col.textLinkScheme);
+      for (const option of TEXT_LINK_SCHEME_MENU_OPTIONS) {
+        const selected = option.value === currentScheme;
+        const row = schemeSection.createEl("button", {
+          cls: `db-dropdown-option has-icon${selected ? " is-selected" : ""}`,
+          attr: { type: "button", role: "option", "aria-selected": selected ? "true" : "false" },
+        });
+        const check = row.createSpan({ cls: "db-dropdown-option-check" });
+        if (selected) setIcon(check, "check");
+        setIcon(row.createSpan({ cls: "db-dropdown-option-icon" }), option.icon);
+        row.createSpan({ cls: "db-dropdown-option-label", text: option.label });
+        row.onclick = () => { this.actions.setTextLinkScheme(col, option.value); render(); };
       }
     };
     render();

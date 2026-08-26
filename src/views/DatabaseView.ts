@@ -697,6 +697,7 @@ export class DatabaseView extends FileView {
       hideColumn: (col) => this.columnOperations.hideColumn(col),
       toggleColumnWrap: (col) => this.toggleColumnWrap(col),
       setTextRenderMode: (col, mode) => this.setTextRenderMode(col, mode),
+      setTextLinkScheme: (col, scheme) => this.setTextLinkScheme(col, scheme),
       setNumberDisplayStyle: (col, style) => this.setNumberDisplayStyle(col, style),
       updateNumberDisplayConfig: (col, partial) => this.updateNumberDisplayConfig(col, partial),
       sortByColumn: (col) => this.sortByColumn(col),
@@ -5095,6 +5096,14 @@ export class DatabaseView extends FileView {
 
   private setTextRenderMode(col: ColumnDef, mode: "plain" | "link" | "markdown"): void {
     col.textRenderMode = mode === "plain" ? undefined : mode;
+    this.scheduleConfigSave();
+    this.renderColumnManager();
+    this.refresh();
+  }
+
+  private setTextLinkScheme(col: ColumnDef, scheme: ColumnDef["textLinkScheme"]): void {
+    if (col.type !== "text" || isFileFieldKey(col.key)) return;
+    col.textLinkScheme = scheme;
     this.scheduleConfigSave();
     this.renderColumnManager();
     this.refresh();
