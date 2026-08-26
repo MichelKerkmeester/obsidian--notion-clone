@@ -19,6 +19,7 @@ import {
 import { RowPipeline } from "../data/RowPipeline";
 import { buildRelationRollups } from "../data/RelationRollup";
 import { mergeRelationInverseMembership } from "../data/RelationInverse";
+import { autoDetectReportsFields } from "../data/ReportsComputedConfig";
 import { ViewConfig, ColumnDef, ComputedFieldDef, RowData, DatabaseConfig, DatabaseViewType, FilterRule, GroupOrderMode, SourceRule, StatusColor, StatusOptionDef, StatusPresetDef, generateId, CreateEntryPosition, NumberDisplayStyle, NumberDisplayConfig, DateGroupMode, RowCreateContext } from "../data/types";
 import {
   getDefaultCellValue as getColumnDefaultCellValue,
@@ -9396,6 +9397,47 @@ export class DatabaseView extends FileView {
 
   async redoLastEdit(): Promise<void> {
     await this.replayHistory("redo");
+  }
+
+  /** Reachable entry point for the Reports Remaining/Saved computed columns: auto-detects
+   *  the Income/Expenses SUM rollups on the active db_view by column label and writes them
+   *  as display-only computed fields. Saved is intentionally left out here — whether a
+   *  "Sales" rollup is an outflow, income, or unused needs an operator decision this
+   *  hands-off command does not collect, so it always defaults to the safe "unknown" sales
+   *  meaning (skip Saved rather than guess). Use the formula editor for Saved or for a
+   *  view whose Income/Expenses columns are not labeled exactly that. */
+  async configureReportsComputedFields(): Promise<void> {
+    const file = this.file;
+    if (!file) {
+      new Notice(t("notice.reportsNoActiveFile"));
+      return;
+    }
+    const record = this.dataSource.inspectDatabaseView(file);
+    if (!record) {
+      new Notice(t("notice.reportsNotADatabaseView"));
+      return;
+    }
+    const detected = autoDetectReportsFields(record);
+    if (!detected) {
+      new Notice(t("notice.reportsMissingRollups"));
+      return;
+    }
+    try {
+      const result = await this.dataSource.saveReportsComputedConfig(file, record, {
+        income: detected.income,
+        expenses: detected.expenses,
+        viewId: this.hasActiveDatabase() ? this.getConfig().id : undefined,
+      });
+      if (!result) {
+        new Notice(t("notice.reportsNotADatabaseView"));
+        return;
+      }
+      if (this.file?.path === file.path) this.refresh();
+      new Notice(t("notice.reportsComputedFieldsApplied"));
+    } catch (err) {
+      console.error("Note Database: failed to configure Reports computed fields", err);
+      new Notice(t("errors.updateFailed", { error: String(err) }));
+    }
   }
 
   private async replayHistory(direction: "undo" | "redo"): Promise<void> {

@@ -5,10 +5,30 @@ import type {
   ReportsExpressionLockOptions,
   ReportsFieldReference,
   ReportsInspectRecord,
+  ReportsRollupColumn,
 } from "./ReportsInspector";
 
 export const REPORTS_REMAINING_KEY = "remaining";
 export const REPORTS_SAVED_KEY = "saved";
+
+export interface ReportsAutoDetectedFields {
+  income: ReportsRollupColumn;
+  expenses: ReportsRollupColumn;
+}
+
+/** Best-effort field detection for a hands-off entry point: matches SUM rollups whose
+ *  label is exactly "Income" / "Expenses" (case-insensitive). Returns null when either
+ *  is missing so callers fail closed instead of guessing at a renamed or absent rollup —
+ *  a mismatch here should surface as "cannot configure", not a wrong formula. */
+export function autoDetectReportsFields(record: ReportsInspectRecord): ReportsAutoDetectedFields | null {
+  const findSumRollupByLabel = (label: string): ReportsRollupColumn | undefined =>
+    record.rollupColumns.find(
+      (column) => column.aggregation === "sum" && column.label.trim().toLowerCase() === label
+    );
+  const income = findSumRollupByLabel("income");
+  const expenses = findSumRollupByLabel("expenses");
+  return income && expenses ? { income, expenses } : null;
+}
 
 export interface ReportsComputedConfigOptions extends ReportsExpressionLockOptions {
   viewId?: string;

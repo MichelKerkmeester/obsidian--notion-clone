@@ -9,10 +9,10 @@ import {
   toMultiSelectValuesForKey,
   toValidObsidianTagValues,
 } from "../data/ColumnTypes";
-import { getColumnDisplayType, getNumberDisplayStyle } from "../data/ColumnDisplay";
+import { getColumnDisplayType, getNumberDisplayStyle, isEmptyValue } from "../data/ColumnDisplay";
 import { formatEuroCurrency } from "../data/EuroFormat";
 import * as FilesColumn from "../data/FilesColumn";
-import { formatReportsNumber } from "../data/ReportsDisplay";
+import { formatReportsNumber, isReportsComputedColumn } from "../data/ReportsDisplay";
 import { parseRelationValues } from "../data/RelationLinks";
 import { renderRelationValue } from "./RelationValueRenderer";
 import { renderRecordIcon } from "./RecordIconRenderer";
@@ -180,7 +180,7 @@ export class CellRenderer {
       return;
     }
 
-    if (this.isEmptyValue(value) && displayType !== "number") {
+    if (isEmptyValue(value) && !isReportsComputedColumn(col)) {
       td.createSpan({ cls: "db-empty-value", text: t("common.empty") });
       if (!this.isReadOnly && col.type === "computed") {
         this.makeComputedEditable(td, row, col);
@@ -2692,10 +2692,5 @@ export class CellRenderer {
       container?.scrollLeft || 0,
       container?.scrollTop || 0
     );
-  }
-
-  private isEmptyValue(value: unknown): boolean {
-    if (Array.isArray(value)) return value.length === 0;
-    return value == null || value === "";
   }
 }

@@ -65,3 +65,10 @@ export function getColumnValue(row: import("./types").RowData, col: ColumnDef): 
   if (col.type === "rollup") return row.computed[col.key];
   return row.frontmatter[col.key];
 }
+
+/** True when a cell value should be treated as empty for display purposes:
+ *  null/undefined, an empty string, or an empty array (multi-select/relation/files). */
+export function isEmptyValue(value: unknown): boolean {
+  if (Array.isArray(value)) return value.length === 0;
+  return value == null || value === "";
+}

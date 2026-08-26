@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { inspectReportsConfig } from "./ReportsInspector";
-import { applyReportsComputedConfig } from "./ReportsComputedConfig";
-import type { ColumnDef, ComputedFieldDef, DatabaseConfig } from "./types";
+import { applyReportsComputedConfig, autoDetectReportsFields } from "./ReportsComputedConfig";
+import type { ColumnDef, ComputedFieldDef, DatabaseConfig, RollupConfig } from "./types";
 
 function createConfig(includeSaved = false): DatabaseConfig {
   const columns: ColumnDef[] = [
@@ -168,5 +168,77 @@ describe("ReportsComputedConfig", () => {
       income: "gross_income",
       expenses: "operating_costs",
     })).toThrow("other-db");
+  });
+});
+
+/** Builds a minimal Reports-shaped config with configurable rollup labels/aggregations,
+ *  for exercising the "Configure Reports computed fields" command's auto-detection. */
+function createLabeledConfig(
+  rollups: Array<{ key: string; label: string; aggregation: RollupConfig["aggregation"] }>,
+): DatabaseConfig {
+  const columns: ColumnDef[] = rollups.map((rollup) => ({
+    key: rollup.key,
+    label: rollup.label,
+    type: "rollup",
+    rollupConfig: { relationField: "month", targetField: "amount", aggregation: rollup.aggregation },
+  }));
+  const schema = { columns, computedFields: [] };
+  return {
+    id: "reports-db",
+    name: "Reports",
+    sourceFolder: "Finance",
+    computedSyncMode: "display-only",
+    schema,
+    views: [{ id: "table-view", name: "Table", sourceFolder: "Finance", schema, columnOrder: [], hiddenColumns: [] }],
+  };
+}
+
+describe("autoDetectReportsFields", () => {
+  it("finds Income and Expenses SUM rollups by exact label", () => {
+    const config = createLabeledConfig([
+      { key: "col_income", label: "Income", aggregation: "sum" },
+      { key: "col_expenses", label: "Expenses", aggregation: "sum" },
+    ]);
+    const record = inspectReportsConfig(config, "Finance/Reports.md");
+
+    const detected = autoDetectReportsFields(record);
+
+    expect(detected).not.toBeNull();
+    expect(detected?.income.key).toBe("col_income");
+    expect(detected?.expenses.key).toBe("col_expenses");
+  });
+
+  it("matches labels case-insensitively", () => {
+    const config = createLabeledConfig([
+      { key: "col_income", label: "income", aggregation: "sum" },
+      { key: "col_expenses", label: "EXPENSES", aggregation: "sum" },
+    ]);
+    const record = inspectReportsConfig(config, "Finance/Reports.md");
+
+    expect(autoDetectReportsFields(record)).not.toBeNull();
+  });
+
+  it("returns null when Expenses is missing", () => {
+    const config = createLabeledConfig([{ key: "col_income", label: "Income", aggregation: "sum" }]);
+    const record = inspectReportsConfig(config, "Finance/Reports.md");
+
+    expect(autoDetectReportsFields(record)).toBeNull();
+  });
+
+  it("returns null when a matching label is not a SUM rollup", () => {
+    const config = createLabeledConfig([
+      { key: "col_income", label: "Income", aggregation: "avg" },
+      { key: "col_expenses", label: "Expenses", aggregation: "sum" },
+    ]);
+    const record = inspectReportsConfig(config, "Finance/Reports.md");
+
+    expect(autoDetectReportsFields(record)).toBeNull();
+  });
+
+  it("returns null when there are no rollup columns at all", () => {
+    const config = createLabeledConfig([]);
+    const record = inspectReportsConfig(config, "Finance/Reports.md");
+
+    expect(autoDetectReportsFields(record)).toBeNull();
   });
 });

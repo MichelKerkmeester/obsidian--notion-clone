@@ -352,6 +352,13 @@ export default class NoteDatabasePlugin extends Plugin {
         await this.getActiveDatabaseView()?.undoLastEdit();
       },
     });
+    this.addCommand({
+      id: "configure-reports-computed-fields",
+      name: t("command.configureReportsComputedFields"),
+      callback: async () => {
+        await this.getActiveDatabaseView()?.configureReportsComputedFields();
+      },
+    });
 
     this.registerMarkdownCodeBlockProcessor("note-database", (source, el, ctx) => {
       ctx.addChild(new EmbeddedDatabaseRenderer(
