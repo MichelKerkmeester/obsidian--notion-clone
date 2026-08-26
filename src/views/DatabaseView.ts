@@ -566,6 +566,7 @@ export class DatabaseView extends FileView {
       canToggleRecordIcon: () => ["table", "board", "gallery", "list", "calendar", "timeline"].includes(this.getConfig()?.viewType || "table"),
       toggleRecordIcon: (anchor, row) => this.toggleCurrentViewRecordIcon(anchor, row),
       createEntry: (defaults, position) => this.guardedCreateEntry(defaults, position),
+      getDatabaseConfig: () => this.getActiveDb(),
       getConfig: () => this.getConfig(),
       getVisibleRows: () => this.rows,
       getCreateDefaults: (row, context) => this.getCreateEntryDefaultsForRow(row, context),

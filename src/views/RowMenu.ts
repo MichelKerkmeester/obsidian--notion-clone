@@ -1,6 +1,12 @@
 import { App, Menu } from "obsidian";
-import { CreateEntryPosition, RowCreateContext, RowData, ViewConfig } from "../data/types";
+import { CreateEntryPosition, DatabaseConfig, RowCreateContext, RowData, ViewConfig } from "../data/types";
 import { isExplicitlySorted } from "../data/ManualOrder";
+import {
+  executeNewFromTemplate,
+  getNewFromTemplateLabel,
+  getNewFromTemplateTooltip,
+  hasRecordTemplate,
+} from "../data/TemplateToolbarAction";
 import { t } from "../i18n";
 import { isHTMLElement } from "./DomGuards";
 import { confirmWithModal } from "./modals/ConfirmModal";
@@ -15,6 +21,7 @@ export interface RowMenuActions {
   toggleRecordIcon?(anchor: HTMLElement, row: RowData): void;
   createEntry?(defaults?: Record<string, unknown>, position?: CreateEntryPosition): void;
   getConfig?(): ViewConfig | undefined;
+  getDatabaseConfig?: () => DatabaseConfig | undefined;
   getVisibleRows?(): RowData[];
   getCreateDefaults?(row: RowData, context?: RowCreateContext): Record<string, unknown>;
   readonly isReadOnly?: boolean;
@@ -73,6 +80,25 @@ export class RowMenu {
           .onClick(() => this.actions.createEntry?.(defaults, { afterPath: row.file.path, beforePath: index < paths.length - 1 ? paths[index + 1] : undefined }))
         );
         menu.addSeparator();
+        const databaseConfig = this.actions.getDatabaseConfig?.();
+        if (hasRecordTemplate(databaseConfig)) {
+          menu.addItem((item) => {
+            item
+              .setTitle(getNewFromTemplateLabel())
+              .setIcon("file-plus-2")
+              .onClick(() => {
+                void executeNewFromTemplate({
+                  config: databaseConfig,
+                  confirmEnabled: false,
+                  confirm: async () => true,
+                  createEntry: () => this.actions.createEntry?.(),
+                });
+              });
+            const menuItem = item as unknown as { dom?: HTMLElement };
+            menuItem.dom?.setAttribute("title", getNewFromTemplateTooltip(databaseConfig));
+            return item;
+          });
+        }
       }
       if (this.actions.toggleRecordIcon && this.actions.canToggleRecordIcon?.() === true) {
         menu.addItem((item) => item
