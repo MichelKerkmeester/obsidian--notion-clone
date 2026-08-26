@@ -1,4 +1,5 @@
-import { FilterRule, SortRule, ViewConfig } from "../data/types";
+import { buildViewFilterTree, normalizeViewFilterTree, pruneViewFilterTree } from "../data/ViewFilterTree";
+import type { FilterRule, SortRule, SourceRuleNode, ViewConfig } from "../data/types";
 
 const BUILTIN_VIEW_FIELDS = new Set([
   "file.name",
@@ -20,6 +21,7 @@ export interface DatabaseViewState {
   filters: FilterRule[];
   hiddenColumns: Set<string>;
   filterLogic: "and" | "or";
+  filterTree?: SourceRuleNode;
   sortColumn?: string;
   sortDirection: "asc" | "desc";
   sortRules: SortRule[];
@@ -44,6 +46,7 @@ export class ViewStateStore {
         if (!validKeys.has(key)) state.hiddenColumns.delete(key);
       }
       state.filters = state.filters.filter((rule) => validKeys.has(rule.field));
+      state.filterTree = pruneViewFilterTree(state.filterTree, (rule) => validKeys.has(rule.field));
       state.sortRules = state.sortRules.filter((rule) => validKeys.has(rule.field));
       if (state.sortColumn && !validKeys.has(state.sortColumn)) {
         state.sortColumn = undefined;
@@ -78,6 +81,7 @@ export class ViewStateStore {
     viewConfig.groupByField = persisted.groupByField;
     viewConfig.filterLogic = persisted.filterLogic;
     viewConfig.filters = persisted.filters;
+    viewConfig.filterTree = persisted.filterTree;
     viewConfig.sortColumn = persisted.sortColumn;
     viewConfig.sortDirection = persisted.sortDirection;
     viewConfig.sortRules = persisted.sortRules;
@@ -95,6 +99,8 @@ export class ViewStateStore {
         direction: persisted?.sortDirection ?? "asc",
       });
     }
+    const filterTree = normalizeViewFilterTree(persisted?.filterTree)
+      ?? buildViewFilterTree(persisted?.filters, persisted?.filterLogic);
     return {
       // searchText is intentionally transient: never read back from persisted
       // config. Search is a quick in-session filter, not part of the view
@@ -106,6 +112,7 @@ export class ViewStateStore {
       filters: this.copyFilters(persisted?.filters),
       hiddenColumns: new Set(persisted?.hiddenColumns ?? []),
       filterLogic: persisted?.filterLogic ?? "and",
+      filterTree,
       sortColumn: sortRules.length > 0 ? undefined : legacySortColumn,
       sortDirection: sortRules.length > 0 ? "asc" : persisted?.sortDirection ?? "asc",
       sortRules,
@@ -114,12 +121,14 @@ export class ViewStateStore {
 
   private toPersistedState(state: DatabaseViewState): import("../data/types").ViewModeStateDef {
     const hiddenColumns = Array.from(state.hiddenColumns);
+    const filterTree = shouldPersistFilterTree(state.filterTree) ? state.filterTree : undefined;
     return {
       hiddenColumns: hiddenColumns.length > 0 ? hiddenColumns : undefined,
       statusFilter: state.statusFilter || undefined,
       groupByField: state.groupByField || undefined,
       filterLogic: state.filterLogic === "or" ? "or" : undefined,
       filters: state.filters.length > 0 ? this.copyFilters(state.filters) : undefined,
+      ...(filterTree ? { filterTree } : {}),
       sortColumn: state.sortColumn || undefined,
       sortDirection: state.sortColumn ? state.sortDirection : undefined,
       sortRules: state.sortRules.length > 0 ? this.copySortRules(state.sortRules) : undefined,
@@ -137,4 +146,11 @@ export class ViewStateStore {
   private getKey(dbIndex: number, viewIndex: number): string {
     return `${dbIndex}:${viewIndex}`;
   }
+}
+
+function shouldPersistFilterTree(tree: SourceRuleNode | undefined): boolean {
+  if (!tree || !("type" in tree)) return false;
+  if (tree.type === "not" || tree.type === "expression") return true;
+  if (tree.type !== "group") return false;
+  return tree.rules.some((rule) => "type" in rule);
 }

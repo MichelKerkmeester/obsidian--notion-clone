@@ -14,6 +14,7 @@ import type { ReportsInspectRecord, ReportsSalesMeaning } from "./ReportsInspect
 import { applyReportsComputedConfig } from "./ReportsComputedConfig";
 import type { ReportsComputedConfigOptions, ReportsComputedConfigResult } from "./ReportsComputedConfig";
 import { parseUniqueIdConfig } from "./UniqueIdStamp";
+import { normalizeViewFilterTree } from "./ViewFilterTree";
 import { t } from "../i18n";
 
 const MAX_SOURCE_RULE_MATCH_TEXT_LENGTH = 10000;
@@ -737,6 +738,7 @@ export class DataSource {
             : undefined,
           filterLogic: source["filterLogic"] === "or" ? "or" : "and",
           filters: Array.isArray(source["filters"]) ? source["filters"] as FilterRule[] : undefined,
+          filterTree: normalizeViewFilterTree(source["filterTree"]),
           resultLimit: this.parseResultLimit(source["resultLimit"]),
           summaryRules: this.parseSummaryRules(source["summaryRules"]),
           conditionalFormats: this.parseConditionalFormats(source["conditionalFormats"]),
@@ -945,6 +947,7 @@ export class DataSource {
         : undefined,
       filterLogic: v["filterLogic"] === "or" ? "or" : "and",
       filters: Array.isArray(v["filters"]) ? v["filters"] as FilterRule[] : undefined,
+      filterTree: normalizeViewFilterTree(v["filterTree"]),
       resultLimit: this.parseResultLimit(v["resultLimit"]),
       summaryRules: this.parseSummaryRules(v["summaryRules"]),
       conditionalFormats: this.parseConditionalFormats(v["conditionalFormats"]),
@@ -1154,6 +1157,7 @@ export class DataSource {
       defaultStatusPresetId: view.defaultStatusPresetId || "",
       filterLogic: view.filterLogic || "and",
       filters: view.filters || [],
+      filterTree: view.filterTree,
       resultLimit: view.resultLimit,
       summaryRules: view.summaryRules || [],
       conditionalFormats: view.conditionalFormats || [],
@@ -1277,6 +1281,7 @@ export class DataSource {
       "boardCardOrders",
       "filterLogic",
       "filters",
+      "filterTree",
       "resultLimit",
       "summaryRules",
       "conditionalFormats",
