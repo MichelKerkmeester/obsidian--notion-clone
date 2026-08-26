@@ -1,7 +1,7 @@
 import { t } from "../i18n";
 import { getColumnOptionValues, isOptionColumnType, toBooleanValue } from "./ColumnTypes";
 import { isDateLikeColumnType } from "./DateTimeFormat";
-import { isNumericRollupKind, max as aggregateMax, median as aggregateMedian, min as aggregateMin, range as aggregateRange } from "./Aggregate";
+import { isNumericRollupKind, max as aggregateMax, median as aggregateMedian, min as aggregateMin, percentEmpty as aggregatePercentEmpty, percentFilled as aggregatePercentFilled, range as aggregateRange } from "./Aggregate";
 import { stringifyValue } from "./Stringify";
 import { ChartAggregation as ChartAggregationType, ChartDateBucket, ChartNumberBucket, ColumnDef, ComputedFieldDef, RowData } from "./types";
 
@@ -782,8 +782,8 @@ function getStatValue(
   if (aggregation === "unique") return stat.unique.size;
   if (aggregation === "empty") return stat.emptyCount;
   if (aggregation === "not-empty") return stat.notEmptyCount;
-  if (aggregation === "percent-empty") return stat.groupCount > 0 ? (stat.emptyCount / stat.groupCount) * 100 : 0;
-  if (aggregation === "percent-not-empty") return stat.groupCount > 0 ? (stat.notEmptyCount / stat.groupCount) * 100 : 0;
+  if (aggregation === "percent-empty") return aggregatePercentEmpty(stat.groupCount, stat.emptyCount) ?? 0;
+  if (aggregation === "percent-not-empty") return aggregatePercentFilled(stat.groupCount, stat.emptyCount) ?? 0;
   if (aggregation === "checked") return stat.checkedCount;
   if (aggregation === "unchecked") return stat.uncheckedCount;
   if (aggregation === "percent-checked") {

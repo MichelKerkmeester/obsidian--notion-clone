@@ -182,6 +182,8 @@ export class RelationRollupConfigModal extends Modal {
           { value: "range", text: t("chart.rangeAggregation") },
           { value: "earliest", text: t("viewConfig.summaryEarliest") },
           { value: "latest", text: t("viewConfig.summaryLatest") },
+          { value: "percentEmpty", text: t("chart.percentEmptyAggregation") },
+          { value: "percentFilled", text: t("chart.percentNotEmptyAggregation") },
           { value: "list", text: t("rollup.list") },
         ],
         aggregation,
@@ -255,5 +257,5 @@ export type RelationRollupConfigResult =
     type: "rollup";
     relationField: string;
     targetField: string;
-    aggregation: "count" | "sum" | "avg" | "min" | "max" | "median" | "range" | "earliest" | "latest" | "list";
+    aggregation: "count" | "sum" | "avg" | "min" | "max" | "median" | "range" | "earliest" | "latest" | "percentEmpty" | "percentFilled" | "list";
   };

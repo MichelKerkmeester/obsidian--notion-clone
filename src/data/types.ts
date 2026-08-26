@@ -41,7 +41,7 @@ export interface RollupConfig {
   relationField: string;
   /** Field read from each valid related record in the target database. */
   targetField: string;
-  aggregation: "count" | "sum" | "avg" | "min" | "max" | "median" | "range" | "earliest" | "latest" | "list";
+  aggregation: "count" | "sum" | "avg" | "min" | "max" | "median" | "range" | "earliest" | "latest" | "percentEmpty" | "percentFilled" | "list";
 }
 
 export interface ColumnDef {

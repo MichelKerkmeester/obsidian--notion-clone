@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { earliest, isNumericRollupKind, latest, max, median, min, range } from "./Aggregate";
+import { earliest, isNumericRollupKind, latest, max, median, min, percentEmpty, percentFilled, range } from "./Aggregate";
 
 type AggregateName = "min" | "max" | "median" | "range";
 type Aggregate = (numbers: readonly number[]) => number | null;
@@ -132,6 +132,23 @@ describe("date aggregates", () => {
       });
     }
   }
+});
+
+describe("percent aggregates", () => {
+  it("returns zero when there are no rows", () => {
+    expect(percentEmpty(0, 0)).toBe(0);
+    expect(percentFilled(0, 0)).toBe(0);
+  });
+
+  it("returns 100 percent empty and 0 percent filled for all-empty rows", () => {
+    expect(percentEmpty(3, 3)).toBe(100);
+    expect(percentFilled(3, 3)).toBe(0);
+  });
+
+  it("uses all rows as the denominator for mixed values", () => {
+    expect(percentEmpty(4, 1)).toBe(25);
+    expect(percentFilled(4, 1)).toBe(75);
+  });
 });
 
 describe("isNumericRollupKind", () => {

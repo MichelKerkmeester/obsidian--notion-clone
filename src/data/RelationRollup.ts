@@ -4,7 +4,7 @@ import { getRowFileFieldValue, isFileFieldKey } from "./FileFields";
 import { parseRelationValues } from "./RelationLinks";
 import { toChartNumber } from "./ChartAggregation";
 import { toDateTimestamp } from "./DateTimeFormat";
-import { earliest, latest, max, median, min, range } from "./Aggregate";
+import { earliest, latest, max, median, min, percentEmpty, percentFilled, range } from "./Aggregate";
 import { stringifyValue } from "./Stringify";
 import type { ColumnDef, DatabaseConfig } from "./types";
 import type { NoteRecord } from "./DataSource";
@@ -101,6 +101,15 @@ function aggregateRollup(
   if (aggregation === "count") return records.length;
   const column = database.schema.columns.find((candidate) => candidate.key === targetField);
   if (column?.type === "rollup") return emptyRollupValue(aggregation);
+  if (aggregation === "percentEmpty" || aggregation === "percentFilled") {
+    if (!column && !isFileFieldKey(targetField)) return emptyRollupValue(aggregation);
+    const emptyCount = records.filter((record) => isEmptyRollupValue(
+      getTargetFieldValue(record, database, column, targetField, app)
+    )).length;
+    return aggregation === "percentEmpty"
+      ? percentEmpty(records.length, emptyCount)
+      : percentFilled(records.length, emptyCount);
+  }
   const values = records.flatMap((record) => {
     const value = getTargetFieldValue(record, database, column, targetField, app);
     return Array.isArray(value)
@@ -169,6 +178,12 @@ function getTargetFieldValue(
     return computed[column.computedKey || column.key];
   }
   return record.frontmatter[targetField];
+}
+
+function isEmptyRollupValue(value: unknown): boolean {
+  if (value == null) return true;
+  if (typeof value === "string") return value.trim().length === 0;
+  return Array.isArray(value) && (value.length === 0 || value.every((item) => isEmptyRollupValue(item)));
 }
 
 function emptyRollupValue(aggregation: NonNullable<ColumnDef["rollupConfig"]>["aggregation"]): unknown {

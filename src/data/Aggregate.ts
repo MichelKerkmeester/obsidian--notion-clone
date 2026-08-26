@@ -57,6 +57,14 @@ export function latest(timestamps: readonly number[]): Date | null {
   return finite.length > 0 ? new Date(Math.max(...finite)) : null;
 }
 
+export function percentEmpty(total: number, emptyCount: number): number {
+  return total === 0 ? 0 : (emptyCount / total) * 100;
+}
+
+export function percentFilled(total: number, emptyCount: number): number {
+  return total === 0 ? 0 : 100 - percentEmpty(total, emptyCount);
+}
+
 function finiteNumbers(numbers: readonly number[]): number[] {
   return numbers.filter((value) => Number.isFinite(value));
 }
