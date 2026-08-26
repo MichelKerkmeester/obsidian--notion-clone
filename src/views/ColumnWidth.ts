@@ -2,6 +2,7 @@ import { ColumnDef, RowData, ViewConfig } from "../data/types";
 import { toMultiSelectValuesForKey } from "../data/ColumnTypes";
 import { InlineMarkdownNode, parseInlineMarkdown, inlineMarkdownToPlainText } from "../data/InlineMarkdown";
 import { parseTextLink } from "../data/TextLink";
+import { isTextLinkScheme } from "../data/textLinkScheme";
 import { getRelationDisplayLabel, parseRelationValues } from "../data/RelationLinks";
 
 /** Resolved width (px) for a column: explicit columnWidths > col.width > defaultColumnWidth > fallback. */
@@ -20,7 +21,7 @@ export function clampCardFieldWidth(fieldWidth: number, cardWidth: number): numb
  *  (`[label](url)`, `**bold**`) over-estimates the column width. Plain text and
  *  non-text columns return the input unchanged. */
 export function resolveRenderedDisplayText(text: string, col: ColumnDef): string {
-  if (col.textRenderMode === "link") {
+  if (col.textRenderMode === "link" || isTextLinkScheme(col.textLinkScheme)) {
     const link = parseTextLink(text);
     if (link) return link.label;
   }
@@ -45,7 +46,7 @@ export function estimateAutoColumnWidth(
   if (col.type === "checkbox") return Math.max(42, Math.min(headerWidth, 220));
   if (col.wrap) return Math.max(36, Math.min(headerWidth, 360));
 
-  const renderedTextMeasurer = col.textRenderMode === "markdown" || col.textRenderMode === "link"
+  const renderedTextMeasurer = col.textRenderMode === "markdown" || col.textRenderMode === "link" || isTextLinkScheme(col.textLinkScheme)
     ? createRenderedTextMeasurer?.() ?? null
     : null;
   try {
@@ -98,7 +99,7 @@ function estimateCellContentWidth(
     const nodes = parseInlineMarkdown(raw);
     if (nodes) return Math.ceil(measureMarkdownNodes(nodes) + 24);
   }
-  if (col.textRenderMode === "link") {
+  if (col.textRenderMode === "link" || isTextLinkScheme(col.textLinkScheme)) {
     const domWidth = renderedTextMeasurer?.measure(raw, "link") ?? null;
     if (domWidth !== null) return domWidth;
     const link = parseTextLink(raw);
