@@ -1,5 +1,5 @@
 import { App, TFile } from "obsidian";
-import { RowData } from "./types";
+import { ColumnDef, RowData } from "./types";
 import { isExternalUrl } from "./TextLink";
 
 export interface ParsedImage {
@@ -55,4 +55,13 @@ export function resolveCoverImage(field: string | undefined, row: RowData, app: 
     if (image) return image;
   }
   return null;
+}
+
+/** Whether a resolved (non-null) cover image must be treated as empty for its source
+ *  column. Files/Attachments columns only ever store vault-relative links written
+ *  through the app; a raw http(s) URL sitting there can only arrive via a hand-edited
+ *  frontmatter value that bypassed the app's write-time URL strip, so it must never
+ *  render as a live network image. Callers still need their own null check on `image`. */
+export function isCoverImageBlocked(image: ParsedImage, columnType: ColumnDef["type"] | undefined): boolean {
+  return columnType === "files" && image.external;
 }

@@ -5,7 +5,7 @@ import { isExplicitlySorted } from "../data/ManualOrder";
 import { getColumnDisplayType, getNumberDisplayStyle } from "../data/ColumnDisplay";
 import { formatDateTimeValueDisplay, formatDateValueDisplay } from "../data/DateTimeFormat";
 import { getFileFieldFixedType, getRowFileFieldValue, isFileFieldKey, isReadonlyFileField } from "../data/FileFields";
-import { resolveCoverImage } from "../data/CoverImage";
+import { isCoverImageBlocked, resolveCoverImage } from "../data/CoverImage";
 import { markCoverImageLoadError } from "../data/CoverWiring";
 import { formatGroupKeyDisplay, isComputedGroupField } from "../data/GroupDisplay";
 import { renderGroupLabel } from "./GroupLabelRenderer";
@@ -663,7 +663,7 @@ export class BoardRenderer {
     cover.style.setProperty("--db-board-image-fit", config.boardImageFit || "cover");
     const image = resolveCoverImage(config.boardImageField, row, this.app);
     const coverColumn = config.schema.columns.find((col) => col.key === config.boardImageField);
-    if (!image || (coverColumn?.type === "files" && image.external)) {
+    if (!image || isCoverImageBlocked(image, coverColumn?.type)) {
       cover.addClass("is-empty");
       setIcon(cover.createSpan({ cls: "db-board-card-cover-placeholder" }), "image");
       return;

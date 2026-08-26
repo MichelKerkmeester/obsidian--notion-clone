@@ -4,7 +4,7 @@ import { isExplicitlySorted } from "../data/ManualOrder";
 import { getColumnDisplayType, getNumberDisplayStyle } from "../data/ColumnDisplay";
 import { formatDateTimeValueDisplay, formatDateValueDisplay } from "../data/DateTimeFormat";
 import { getFileFieldFixedType, getRowFileFieldValue, isFileFieldKey, isReadonlyFileField } from "../data/FileFields";
-import { resolveCoverImage } from "../data/CoverImage";
+import { isCoverImageBlocked, resolveCoverImage } from "../data/CoverImage";
 import { markCoverImageLoadError } from "../data/CoverWiring";
 import { formatGroupKeyDisplay, isComputedGroupField } from "../data/GroupDisplay";
 import { renderGroupLabel } from "./GroupLabelRenderer";
@@ -444,7 +444,7 @@ export class GalleryRenderer {
     cover.style.setProperty("--db-gallery-image-fit", config.galleryImageFit || "cover");
     const image = resolveCoverImage(config.galleryImageField, row, this.app);
     const coverColumn = config.schema.columns.find((col) => col.key === config.galleryImageField);
-    if (!image || (coverColumn?.type === "files" && image.external)) {
+    if (!image || isCoverImageBlocked(image, coverColumn?.type)) {
       cover.addClass("is-empty");
       setIcon(cover.createSpan({ cls: "db-gallery-cover-placeholder" }), "image");
       return;
