@@ -5,6 +5,7 @@ import { getColumnDisplayType, getNumberDisplayStyle } from "../data/ColumnDispl
 import { formatDateTimeValueDisplay, formatDateValueDisplay } from "../data/DateTimeFormat";
 import { getFileFieldFixedType, getRowFileFieldValue, isFileFieldKey, isReadonlyFileField } from "../data/FileFields";
 import { resolveCoverImage } from "../data/CoverImage";
+import { markCoverImageLoadError } from "../data/CoverWiring";
 import { formatGroupKeyDisplay, isComputedGroupField } from "../data/GroupDisplay";
 import { renderGroupLabel } from "./GroupLabelRenderer";
 import { markNoteHoverLink } from "./HoverLinkPreview";
@@ -442,7 +443,8 @@ export class GalleryRenderer {
     const cover = card.createDiv({ cls: "db-gallery-cover" });
     cover.style.setProperty("--db-gallery-image-fit", config.galleryImageFit || "cover");
     const image = resolveCoverImage(config.galleryImageField, row, this.app);
-    if (!image) {
+    const coverColumn = config.schema.columns.find((col) => col.key === config.galleryImageField);
+    if (!image || (coverColumn?.type === "files" && image.external)) {
       cover.addClass("is-empty");
       setIcon(cover.createSpan({ cls: "db-gallery-cover-placeholder" }), "image");
       return;
@@ -467,7 +469,8 @@ export class GalleryRenderer {
         openCover();
       }
     };
-    coverLink.createEl("img", { attr: { src: image.src, alt: image.alt, draggable: "false" } });
+    const imageEl = coverLink.createEl("img", { attr: { src: image.src, alt: image.alt, draggable: "false" } });
+    imageEl.onerror = () => markCoverImageLoadError(cover, coverLink, "db-gallery-cover-placeholder");
   }
 
   private renderNewCard(gallery: HTMLElement, defaults?: Record<string, unknown>, rows: RowData[] = [], computedGroup = false): void {

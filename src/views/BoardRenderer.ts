@@ -6,6 +6,7 @@ import { getColumnDisplayType, getNumberDisplayStyle } from "../data/ColumnDispl
 import { formatDateTimeValueDisplay, formatDateValueDisplay } from "../data/DateTimeFormat";
 import { getFileFieldFixedType, getRowFileFieldValue, isFileFieldKey, isReadonlyFileField } from "../data/FileFields";
 import { resolveCoverImage } from "../data/CoverImage";
+import { markCoverImageLoadError } from "../data/CoverWiring";
 import { formatGroupKeyDisplay, isComputedGroupField } from "../data/GroupDisplay";
 import { renderGroupLabel } from "./GroupLabelRenderer";
 import { markNoteHoverLink } from "./HoverLinkPreview";
@@ -661,7 +662,8 @@ export class BoardRenderer {
     cover.style.aspectRatio = String(ratio);
     cover.style.setProperty("--db-board-image-fit", config.boardImageFit || "cover");
     const image = resolveCoverImage(config.boardImageField, row, this.app);
-    if (!image) {
+    const coverColumn = config.schema.columns.find((col) => col.key === config.boardImageField);
+    if (!image || (coverColumn?.type === "files" && image.external)) {
       cover.addClass("is-empty");
       setIcon(cover.createSpan({ cls: "db-board-card-cover-placeholder" }), "image");
       return;
@@ -690,7 +692,8 @@ export class BoardRenderer {
         openCover();
       }
     };
-    coverLink.createEl("img", { attr: { src: image.src, alt: image.alt, draggable: "false" } });
+    const imageEl = coverLink.createEl("img", { attr: { src: image.src, alt: image.alt, draggable: "false" } });
+    imageEl.onerror = () => markCoverImageLoadError(cover, coverLink, "db-board-card-cover-placeholder");
   }
 
   private attachRowContextMenu(el: HTMLElement, row: RowData, context?: RowCreateContext): void {

@@ -9678,7 +9678,11 @@ export class DatabaseView extends FileView {
 
   private getDefaultGalleryImageField(config: ViewConfig): string | undefined {
     return config.galleryImageField ||
-      config.schema.columns.find((col) => /封面|cover|image|图片|图像|thumbnail|poster/i.test(col.key) || /封面|图片|图像/.test(col.label))?.key;
+      config.schema.columns.find((col) =>
+        /封面|cover|image|图片|图像|thumbnail|poster/i.test(col.key) ||
+        /封面|图片|图像/.test(col.label) ||
+        col.type === "files"
+      )?.key;
   }
 
   private getBoardGroups(config: ViewConfig, field: string): BoardGroup[] {
