@@ -1,7 +1,9 @@
+import { setIcon, setTooltip } from "obsidian";
 import { getColumnOptions, isObsidianTagsKey } from "../data/ColumnTypes";
 import { isImeComposing } from "../data/KeyboardUtils";
 import { isDateLikeColumnType } from "../data/DateTimeFormat";
-import { ColumnDef, FilterRule, ViewConfig } from "../data/types";
+import type { ColumnDef, FilterRule, SourceRuleNode, ViewConfig } from "../data/types";
+import { appendLeaf, buildViewFilterTree, flattenLeaves, removeLeafAt } from "../data/ViewFilterTree";
 import { t } from "../i18n";
 import { createDropdownField } from "./DropdownField";
 import { positionToolbarPopover } from "./PopoverPosition";
@@ -9,6 +11,59 @@ import { renderDropdownPropertyTypeIcon, toPropertyDropdownOption } from "./Prop
 import { DatabaseViewState } from "./ViewStateStore";
 import { getViewRuleColumns, removeFilterRuleAt } from "./ViewRuleOperations";
 import { closeActiveDateValuePicker, renderDateValuePicker } from "./DateValuePicker";
+
+const MAX_FILTER_GROUP_DEPTH = 3;
+
+type FilterGroupNode = Extract<SourceRuleNode, { type: "group" }>;
+type FilterNotNode = Extract<SourceRuleNode, { type: "not" }>;
+type FilterLeafNode = Extract<SourceRuleNode, { field: string }>;
+
+function isFilterGroup(node: SourceRuleNode): node is FilterGroupNode {
+  return "type" in node && node.type === "group";
+}
+
+function isFilterNot(node: SourceRuleNode): node is FilterNotNode {
+  return "type" in node && node.type === "not";
+}
+
+function isFilterLeaf(node: SourceRuleNode): node is FilterLeafNode {
+  return !("type" in node);
+}
+
+function nestedFilterGroupDepth(node: SourceRuleNode): number {
+  if (isFilterGroup(node)) {
+    return 1 + Math.max(0, ...node.rules.map((child) => nestedFilterGroupDepth(child)));
+  }
+  if (isFilterNot(node)) return nestedFilterGroupDepth(node.rule);
+  return 0;
+}
+
+function collapseEmptyFilterGroups(node: SourceRuleNode): SourceRuleNode | undefined {
+  if (isFilterGroup(node)) {
+    const rules = node.rules
+      .map((child) => collapseEmptyFilterGroups(child))
+      .filter((child): child is SourceRuleNode => child !== undefined);
+    if (rules.length === 0) return undefined;
+    if (rules.length === node.rules.length && rules.every((child, index) => child === node.rules[index])) return node;
+    return { ...node, rules };
+  }
+  if (isFilterNot(node)) {
+    const rule = collapseEmptyFilterGroups(node.rule);
+    if (!rule) return undefined;
+    return rule === node.rule ? node : { ...node, rule };
+  }
+  return node;
+}
+
+function canWrapFilterNode(node: SourceRuleNode, depth: number): boolean {
+  if (depth >= MAX_FILTER_GROUP_DEPTH) return false;
+  return depth + nestedFilterGroupDepth(node) <= MAX_FILTER_GROUP_DEPTH;
+}
+
+function createDefaultFilterRule(config: ViewConfig): FilterRule {
+  const first = getViewRuleColumns(config)[0]?.key || "file.name";
+  return { field: first, op: "contains", value: "" };
+}
 
 export interface FilterPanelActions {
   saveState(): void;
@@ -77,16 +132,27 @@ export class FilterPanelRenderer {
     }
     this.panelEl = panel;
 
-    this.renderHeader(panel, containerEl, state, config, actions);
-    if (state.filters.length === 0) {
+    const tree = this.ensureFilterTree(state);
+    this.renderHeader(panel, containerEl, state, config, actions, tree);
+    if (!tree || flattenLeaves(tree).length === 0) {
       panel.createDiv({
         cls: "db-panel-empty",
         text: t("panel.emptyFilters"),
       });
     } else {
-      for (let i = 0; i < state.filters.length; i++) {
-        this.renderFilterRow(panel, i, containerEl, state, config, actions);
-      }
+      const leafCursor = { value: 0 };
+      const rootDepth = isFilterLeaf(tree) ? 0 : 1;
+      this.renderFilterTreeNode(
+        panel,
+        tree,
+        rootDepth,
+        leafCursor,
+        containerEl,
+        state,
+        config,
+        actions,
+        (next) => this.replaceFilterTree(containerEl, state, config, actions, next)
+      );
     }
 
     const addBtn = panel.createEl("button", {
@@ -94,8 +160,8 @@ export class FilterPanelRenderer {
       text: `+ ${t("panel.addCondition")}`,
     });
     addBtn.onclick = () => {
-      const first = getViewRuleColumns(config)[0]?.key || "file.name";
-      state.filters.push({ field: first, op: "contains", value: "" });
+      const next = appendLeaf(state.filterTree, createDefaultFilterRule(config), state.filterLogic);
+      this.commitFilterTree(state, next);
       actions.saveState();
       this.render(containerEl, true, state, config, actions, this.anchorEl || undefined);
       actions.refresh();
@@ -113,6 +179,7 @@ export class FilterPanelRenderer {
     actions: FilterPanelActions
   ): void {
     closeActiveDateValuePicker(containerEl.ownerDocument);
+    this.ensureFilterTree(state);
     parent.empty();
     if (!state.filters[index]) return;
     this.renderFilterRow(parent, index, containerEl, state, config, actions, {
@@ -127,10 +194,12 @@ export class FilterPanelRenderer {
     containerEl: HTMLElement,
     state: DatabaseViewState,
     config: ViewConfig,
-    actions: FilterPanelActions
+    actions: FilterPanelActions,
+    tree: SourceRuleNode | undefined
   ): void {
     const header = panel.createDiv({ cls: "db-panel-header" });
     header.createSpan({ cls: "db-panel-title", text: t("toolbar.filter") });
+    if (tree && !isFilterLeaf(tree)) return;
     const right = header.createDiv({ cls: "db-panel-header-actions" });
     const logicBtn = header.createEl("button", {
       cls: "db-panel-button",
@@ -145,6 +214,175 @@ export class FilterPanelRenderer {
     };
   }
 
+  private ensureFilterTree(state: DatabaseViewState): SourceRuleNode | undefined {
+    const candidate = state.filterTree ?? buildViewFilterTree(state.filters, state.filterLogic);
+    const tree = candidate ? collapseEmptyFilterGroups(candidate) : undefined;
+    this.commitFilterTree(state, tree);
+    return tree;
+  }
+
+  private commitFilterTree(state: DatabaseViewState, tree: SourceRuleNode | undefined): void {
+    state.filterTree = tree;
+    state.filters = tree ? flattenLeaves(tree) : [];
+    if (tree && isFilterGroup(tree)) state.filterLogic = tree.logic;
+  }
+
+  private replaceFilterTree(
+    containerEl: HTMLElement,
+    state: DatabaseViewState,
+    config: ViewConfig,
+    actions: FilterPanelActions,
+    next: SourceRuleNode | undefined
+  ): void {
+    this.commitFilterTree(state, next ? collapseEmptyFilterGroups(next) : undefined);
+    actions.saveState();
+    this.render(containerEl, true, state, config, actions, this.anchorEl || undefined);
+    actions.refresh();
+  }
+
+  private renderFilterTreeNode(
+    parent: HTMLElement,
+    node: SourceRuleNode,
+    depth: number,
+    leafCursor: { value: number },
+    containerEl: HTMLElement,
+    state: DatabaseViewState,
+    config: ViewConfig,
+    actions: FilterPanelActions,
+    onReplace: (node: SourceRuleNode | undefined) => void
+  ): void {
+    if (isFilterGroup(node)) {
+      this.renderFilterTreeGroup(parent, node, depth, leafCursor, containerEl, state, config, actions, onReplace);
+      return;
+    }
+    if (isFilterNot(node)) {
+      this.renderFilterTreeNot(parent, node, depth, leafCursor, containerEl, state, config, actions, onReplace);
+      return;
+    }
+    if (!isFilterLeaf(node)) return;
+
+    const index = leafCursor.value;
+    leafCursor.value += 1;
+    this.renderFilterRow(parent, index, containerEl, state, config, actions, {
+      onWrap: canWrapFilterNode(node, depth)
+        ? () => onReplace({ type: "group", logic: "and", rules: [node] })
+        : undefined,
+      onNot: () => onReplace({ type: "not", rule: node }),
+      onRemove: () => {
+        const next = removeLeafAt(state.filterTree, index);
+        this.replaceFilterTree(containerEl, state, config, actions, next);
+      },
+    });
+  }
+
+  private renderFilterTreeGroup(
+    parent: HTMLElement,
+    group: FilterGroupNode,
+    depth: number,
+    leafCursor: { value: number },
+    containerEl: HTMLElement,
+    state: DatabaseViewState,
+    config: ViewConfig,
+    actions: FilterPanelActions,
+    onReplace: (node: SourceRuleNode | undefined) => void
+  ): void {
+    const wrap = parent.createDiv({ cls: "db-source-rule-node db-source-rule-group" });
+    const header = wrap.createDiv({ cls: "db-source-rule-header" });
+    createDropdownField({
+      parent: header,
+      label: t("viewConfig.sourceRules.logic"),
+      options: [
+        { value: "and", text: t("panel.and") },
+        { value: "or", text: t("panel.or") },
+      ],
+      value: group.logic,
+      className: "db-source-rule-dropdown db-source-rule-logic",
+      hideLabel: true,
+      onChange: (value) => onReplace({ ...group, logic: value === "or" ? "or" : "and" }),
+    });
+    const groupActions = header.createDiv({ cls: "db-source-rule-actions" });
+    this.createFilterTreeIconButton(groupActions, "plus", t("viewConfig.sourceRules.addRule"), () => {
+      onReplace(appendLeaf(group, createDefaultFilterRule(config), group.logic));
+    });
+    if (canWrapFilterNode(group, depth)) {
+      this.createFilterTreeIconButton(groupActions, "folder-plus", t("viewConfig.sourceRules.addGroup"), () => {
+        onReplace({ type: "group", logic: "and", rules: [group] });
+      });
+    }
+    this.createFilterTreeIconButton(groupActions, "circle-slash-2", t("viewConfig.sourceRules.addNot"), () => {
+      onReplace({ type: "not", rule: group });
+    });
+    this.createFilterTreeIconButton(groupActions, "trash-2", t("viewConfig.sourceRules.remove"), () => onReplace(undefined));
+
+    const children = wrap.createDiv({ cls: "db-source-rule-children" });
+    if (group.rules.length === 0) {
+      children.createDiv({ cls: "db-source-rules-empty", text: t("viewConfig.sourceRules.emptyGroup") });
+    }
+    for (let index = 0; index < group.rules.length; index += 1) {
+      this.renderFilterTreeNode(
+        children,
+        group.rules[index],
+        depth + 1,
+        leafCursor,
+        containerEl,
+        state,
+        config,
+        actions,
+        (next) => {
+          const rules = [...group.rules];
+          if (next) rules[index] = next;
+          else rules.splice(index, 1);
+          onReplace(rules.length > 0 ? { ...group, rules } : undefined);
+        }
+      );
+    }
+  }
+
+  private renderFilterTreeNot(
+    parent: HTMLElement,
+    node: FilterNotNode,
+    depth: number,
+    leafCursor: { value: number },
+    containerEl: HTMLElement,
+    state: DatabaseViewState,
+    config: ViewConfig,
+    actions: FilterPanelActions,
+    onReplace: (node: SourceRuleNode | undefined) => void
+  ): void {
+    const wrap = parent.createDiv({ cls: "db-source-rule-node db-source-rule-not" });
+    const header = wrap.createDiv({ cls: "db-source-rule-header" });
+    header.createSpan({ cls: "db-source-rule-not-label", text: t("viewConfig.sourceRules.not") });
+    const nodeActions = header.createDiv({ cls: "db-source-rule-actions" });
+    this.createFilterTreeIconButton(nodeActions, "undo-2", t("viewConfig.sourceRules.removeNot"), () => onReplace(node.rule));
+    this.createFilterTreeIconButton(nodeActions, "trash-2", t("viewConfig.sourceRules.remove"), () => onReplace(undefined));
+    const content = wrap.createDiv({ cls: "db-source-rule-children" });
+    this.renderFilterTreeNode(
+      content,
+      node.rule,
+      depth,
+      leafCursor,
+      containerEl,
+      state,
+      config,
+      actions,
+      (next) => next ? onReplace({ ...node, rule: next }) : onReplace(undefined)
+    );
+  }
+
+  private createFilterTreeIconButton(parent: HTMLElement, icon: string, title: string, onClick: () => void): void {
+    const button = parent.createEl("button", {
+      cls: "db-source-rule-icon-button",
+      attr: { type: "button", "aria-label": title },
+    });
+    setIcon(button, icon);
+    setTooltip(button, title, { delay: 100 });
+    button.onclick = (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      onClick();
+    };
+  }
+
   private renderFilterRow(
     panel: HTMLElement,
     index: number,
@@ -156,6 +394,9 @@ export class FilterPanelRenderer {
       compact?: boolean;
       showRemove?: boolean;
       rerender?: () => void;
+      onWrap?: () => void;
+      onNot?: () => void;
+      onRemove?: () => void;
     }
   ): void {
     const rule = state.filters[index];
@@ -222,8 +463,18 @@ export class FilterPanelRenderer {
     }
 
     if (options?.showRemove !== false) {
+      if (options?.onWrap) {
+        this.createFilterTreeIconButton(row, "folder-plus", t("viewConfig.sourceRules.addGroup"), options.onWrap);
+      }
+      if (options?.onNot) {
+        this.createFilterTreeIconButton(row, "circle-slash-2", t("viewConfig.sourceRules.addNot"), options.onNot);
+      }
       const rmBtn = row.createEl("button", { cls: "db-panel-button", text: "×" });
       rmBtn.onclick = () => {
+        if (options?.onRemove) {
+          options.onRemove();
+          return;
+        }
         removeFilterRuleAt(state, index);
         actions.saveState();
         rerender();
