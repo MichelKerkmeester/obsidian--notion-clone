@@ -6,6 +6,7 @@ import { toChartNumber } from "./ChartAggregation";
 import { toDateTimestamp } from "./DateTimeFormat";
 import { earliest, latest, max, median, min, percentEmpty, percentFilled, range } from "./Aggregate";
 import { stringifyValue } from "./Stringify";
+import { buildRelationInverse } from "./RelationInverse";
 import type { ColumnDef, DatabaseConfig } from "./types";
 import type { NoteRecord } from "./DataSource";
 
@@ -21,11 +22,13 @@ export interface RelationRollupResult {
   valuesByPath: Map<string, Record<string, unknown>>;
   /** Valid target paths referenced by the source rows, used to scope refreshes. */
   targetPaths: Set<string>;
+  sourceDatabaseIds: Set<string>;
 }
 
 export function buildRelationRollups(context: RelationRollupContext): RelationRollupResult {
   const valuesByPath = new Map<string, Record<string, unknown>>();
   const targetPaths = new Set<string>();
+  const sourceDatabaseIds = new Set<string>();
   const databaseById = new Map(context.databases.map((database) => [database.id, database]));
   const relationColumns = new Map(
     context.sourceDatabase.schema.columns
@@ -35,7 +38,9 @@ export function buildRelationRollups(context: RelationRollupContext): RelationRo
   const rollupColumns = context.sourceDatabase.schema.columns.filter(
     (column) => column.type === "rollup" && column.rollupConfig
   );
-  if (rollupColumns.length === 0) return { valuesByPath, targetPaths };
+  if (rollupColumns.length === 0) return { valuesByPath, targetPaths, sourceDatabaseIds };
+
+  let inverseResult: ReturnType<typeof buildRelationInverse> | undefined;
 
   const targetCache = new Map<string, {
     database: DatabaseConfig;
@@ -62,8 +67,39 @@ export function buildRelationRollups(context: RelationRollupContext): RelationRo
     for (const rollup of rollupColumns) {
       const config = rollup.rollupConfig!;
       const relation = relationColumns.get(config.relationField);
-      const target = relation ? getTarget(relation) : null;
-      if (!relation || !target) {
+      if (!relation) {
+        inverseResult ??= buildRelationInverse(context);
+        const inboundEdges = (inverseResult.inboundByPath.get(sourceRecord.file.path) || [])
+          .filter((edge) => (
+            edge.relationColumn.key === config.relationField
+            && edge.relationColumn.type === "relation"
+            && edge.relationColumn.relationConfig?.targetDatabaseId === context.sourceDatabase.id
+          ));
+        if (inboundEdges.length === 0) {
+          derived[rollup.key] = emptyRollupValue(config.aggregation);
+          continue;
+        }
+        const relatedRecords: NoteRecord[] = [];
+        const seenPaths = new Set<string>();
+        for (const edge of inboundEdges) {
+          sourceDatabaseIds.add(edge.sourceDatabase.id);
+          const path = edge.sourceRecord.file.path;
+          if (seenPaths.has(path)) continue;
+          seenPaths.add(path);
+          targetPaths.add(path);
+          relatedRecords.push(edge.sourceRecord);
+        }
+        derived[rollup.key] = aggregateRollup(
+          relatedRecords,
+          inboundEdges[0].sourceDatabase,
+          config.targetField,
+          config.aggregation,
+          context.app
+        );
+        continue;
+      }
+      const target = getTarget(relation);
+      if (!target) {
         derived[rollup.key] = emptyRollupValue(config.aggregation);
         continue;
       }
@@ -88,7 +124,7 @@ export function buildRelationRollups(context: RelationRollupContext): RelationRo
     }
     valuesByPath.set(sourceRecord.file.path, derived);
   }
-  return { valuesByPath, targetPaths };
+  return { valuesByPath, targetPaths, sourceDatabaseIds };
 }
 
 function aggregateRollup(

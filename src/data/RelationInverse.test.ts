@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import type { App } from "obsidian";
 import {
   buildRelationInverse,
@@ -6,8 +6,12 @@ import {
   SYNC_WRITES_DEFAULT,
   type RelationInverseContext,
 } from "./RelationInverse";
+import { buildRelationRollups } from "./RelationRollup";
+import type { RelationRollupContext } from "./RelationRollup";
 import type { NoteRecord } from "./DataSource";
 import type { ColumnDef, DatabaseConfig } from "./types";
+
+vi.mock("obsidian", () => ({}));
 
 const relationColumn = (key: string, targetDatabaseId: string): ColumnDef => ({
   key,
@@ -17,6 +21,18 @@ const relationColumn = (key: string, targetDatabaseId: string): ColumnDef => ({
 });
 
 const textColumn = (key: string): ColumnDef => ({ key, label: key, type: "text" });
+
+const rollupColumn = (
+  key: string,
+  relationField: string,
+  targetField: string,
+  aggregation: NonNullable<ColumnDef["rollupConfig"]>["aggregation"],
+): ColumnDef => ({
+  key,
+  label: key,
+  type: "rollup",
+  rollupConfig: { relationField, targetField, aggregation },
+});
 
 const database = (id: string, columns: ColumnDef[]): DatabaseConfig => ({
   id,
@@ -47,6 +63,20 @@ function contextFor(
     } as unknown as App,
     databases,
     getRecordsForDatabase: (sourceDatabase) => recordsByDatabase.get(sourceDatabase.id) || [],
+  };
+}
+
+function rollupContextFor(
+  inverseContext: RelationInverseContext,
+  sourceDatabase: DatabaseConfig,
+  sourceRecords: NoteRecord[],
+): RelationRollupContext {
+  return {
+    app: inverseContext.app,
+    sourceRecords,
+    sourceDatabase,
+    databases: inverseContext.databases,
+    getRecordsForDatabase: inverseContext.getRecordsForDatabase,
   };
 }
 
@@ -217,4 +247,89 @@ describe("inverse membership", () => {
 
 it("keeps inverse writes disabled by default", () => {
   expect(SYNC_WRITES_DEFAULT).toBe(false);
+});
+
+describe("rollup inverse resolution", () => {
+  it("rolls up matching inbound records when the local relation key is missing", () => {
+    const reports = database("reports", [
+      rollupColumn("ExpenseCount", "Month", "amount", "count"),
+      rollupColumn("ExpenseAmounts", "Month", "amount", "list"),
+    ]);
+    const expenses = database("expenses", [relationColumn("Month", reports.id), textColumn("amount")]);
+    const sales = database("sales", [relationColumn("Report", reports.id), textColumn("amount")]);
+    const report = record("Reports/January.md");
+    const coffee = record("Expenses/Coffee.md", { Month: "[[Reports/January]]", amount: 4 });
+    const train = record("Expenses/Train.md", { Month: "[[Reports/January]]", amount: 8 });
+    const sale = record("Sales/January.md", { Report: "[[Reports/January]]", amount: 99 });
+    const inverseContext = contextFor(
+      [expenses, sales, reports],
+      new Map([
+        [expenses.id, [coffee, train]],
+        [sales.id, [sale]],
+        [reports.id, [report]],
+      ]),
+      new Map([["Reports/January", report.file.path]]),
+    );
+
+    const result = buildRelationRollups(rollupContextFor(inverseContext, reports, [report]));
+    const derived = result.valuesByPath.get(report.file.path);
+
+    expect(derived?.ExpenseCount).toBe(2);
+    expect(derived?.ExpenseAmounts).toEqual([4, 8]);
+    expect(result.targetPaths).toEqual(new Set([coffee.file.path, train.file.path]));
+    expect(result.sourceDatabaseIds).toEqual(new Set([expenses.id]));
+  });
+
+  it("keeps a local relation authoritative over a foreign relation with the same key", () => {
+    const localTargets = database("local-targets", [textColumn("amount")]);
+    const reports = database("reports", [
+      relationColumn("Month", localTargets.id),
+      rollupColumn("ExpenseCount", "Month", "amount", "count"),
+    ]);
+    const expenses = database("expenses", [relationColumn("Month", reports.id), textColumn("amount")]);
+    const report = record("Reports/January.md", { Month: "[[Local/January]]" });
+    const localTarget = record("Local/January.md", { amount: 1 });
+    const expense = record("Expenses/Coffee.md", { Month: "[[Reports/January]]", amount: 4 });
+    const inverseContext = contextFor(
+      [expenses, reports, localTargets],
+      new Map([
+        [expenses.id, [expense]],
+        [reports.id, [report]],
+        [localTargets.id, [localTarget]],
+      ]),
+      new Map([
+        ["Reports/January", report.file.path],
+        ["Local/January", localTarget.file.path],
+      ]),
+    );
+
+    const result = buildRelationRollups(rollupContextFor(inverseContext, reports, [report]));
+
+    expect(result.valuesByPath.get(report.file.path)?.ExpenseCount).toBe(1);
+    expect(result.targetPaths).toEqual(new Set([localTarget.file.path]));
+    expect(result.sourceDatabaseIds).toEqual(new Set());
+  });
+
+  it("returns empty rollup values when no matching inbound relation exists", () => {
+    const reports = database("reports", [
+      rollupColumn("ExpenseCount", "Month", "amount", "count"),
+      rollupColumn("ExpenseAmounts", "Month", "amount", "list"),
+    ]);
+    const expenses = database("expenses", [relationColumn("Other", reports.id), textColumn("amount")]);
+    const report = record("Reports/January.md");
+    const expense = record("Expenses/Coffee.md", { Other: "[[Reports/January]]", amount: 4 });
+    const inverseContext = contextFor(
+      [expenses, reports],
+      new Map([[expenses.id, [expense]], [reports.id, [report]]]),
+      new Map([["Reports/January", report.file.path]]),
+    );
+
+    const result = buildRelationRollups(rollupContextFor(inverseContext, reports, [report]));
+    const derived = result.valuesByPath.get(report.file.path);
+
+    expect(derived?.ExpenseCount).toBe(0);
+    expect(derived?.ExpenseAmounts).toEqual([]);
+    expect(result.targetPaths).toEqual(new Set());
+    expect(result.sourceDatabaseIds).toEqual(new Set());
+  });
 });
