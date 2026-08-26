@@ -897,6 +897,9 @@ export class DataSource {
       sortColumnOrder: safeString(v["sortColumnOrder"]) || undefined,
       statusFilter: safeString(v["statusFilter"]) || undefined,
       groupByField: safeString(v["groupByField"]) || undefined,
+      groupByFields: Array.isArray(v["groupByFields"])
+        ? (v["groupByFields"] as unknown[]).filter((field): field is string => typeof field === "string")
+        : undefined,
       groupOrders: v["groupOrders"] && typeof v["groupOrders"] === "object"
         ? v["groupOrders"] as Record<string, string[]>
         : undefined,
@@ -1102,6 +1105,7 @@ export class DataSource {
       sortColumnOrder: view.sortColumnOrder || "",
       statusFilter: view.statusFilter || "",
       groupByField: view.groupByField || "",
+      groupByFields: view.groupByFields?.length ? view.groupByFields : undefined,
       groupOrders: view.groupOrders || {},
       showEmptyGroups: view.showEmptyGroups || {},
       collapsedGroups: view.collapsedGroups || {},

@@ -76,4 +76,32 @@ describe("DataSource view filter tree persistence", () => {
 
     expect(parsed?.views[0].filterTree).toBeUndefined();
   });
+
+  it("round-trips non-empty multi-field grouping and omits an empty array", () => {
+    const dataSource = source();
+    const parsed = dataSource.parseDatabaseConfig({
+      database: {
+        id: "database",
+        views: [{
+          id: "view",
+          name: "View",
+          viewType: "table",
+          sourceFolder: "",
+          groupByFields: ["Category", 42, "Type"],
+        }],
+      },
+    });
+    const view = parsed!.views[0];
+    const payload = (dataSource as unknown as {
+      toViewPayload(view: NonNullable<typeof parsed>["views"][number]): Record<string, unknown>;
+    }).toViewPayload(view);
+
+    expect(view.groupByFields).toEqual(["Category", "Type"]);
+    expect(payload.groupByFields).toEqual(["Category", "Type"]);
+
+    const emptyPayload = (dataSource as unknown as {
+      toViewPayload(view: NonNullable<typeof parsed>["views"][number]): Record<string, unknown>;
+    }).toViewPayload({ ...view, groupByFields: [] });
+    expect(emptyPayload.groupByFields).toBeUndefined();
+  });
 });

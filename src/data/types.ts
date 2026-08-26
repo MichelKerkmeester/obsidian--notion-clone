@@ -368,6 +368,8 @@ export interface ViewConfig {
   statusFilter?: string;
   /** Persisted group-by property key. */
   groupByField?: string;
+  /** Ordered group-by property keys for nested display grouping. */
+  groupByFields?: string[];
   /** Explicit group display order keyed by grouped property. */
   groupOrders?: Record<string, string[]>;
   /** Override empty-group visibility keyed by grouped option/status/multi-select property. */
