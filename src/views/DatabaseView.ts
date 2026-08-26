@@ -40,6 +40,7 @@ import {
 import { getDefaultGroupOrder, getEffectiveGroupOrder, mergeGroupOrder } from "../data/GroupOrder";
 import { formatGroupKeyDisplay, isComputedGroupField, resolveGroupCreateDefaults } from "../data/GroupDisplay";
 import { setShowEmptyGroups, setGroupExpandedCount, withEmptyOptionGroups } from "../data/GroupVisibility";
+import { buildGroupTree, dropComputedGroupFields, effectiveGroupFields, flattenGroupTree } from "../data/MultiFieldGrouping";
 import { isEmptyGroupId, moveMultiSelectGroupValue } from "../data/MultiSelect";
 import { generateRanks, rankBetween, rebalanceRanks, resolveNewEntryRankBounds } from "../data/ManualOrder";
 import { CellEditSession, CellOptionTransaction, CellRenderer } from "./CellRenderer";
@@ -6369,8 +6370,8 @@ export class DatabaseView extends FileView {
       this.calendarRenderer.render(this.containerEl_, config, this.rows);
     } else if (config.viewType === "timeline") {
       this.calendarTimelineRenderer.renderTimeline(this.containerEl_, this.getTimelineRenderConfig(config), this.rows);
-    } else if (this.vs().groupByField) {
-      this.renderGroupedTable(config, this.vs().groupByField);
+    } else if (effectiveGroupFields(config, this.vs()).length > 0) {
+      this.renderGroupedTable(config);
     } else {
       this.renderTable(config);
     }
@@ -9576,12 +9577,26 @@ export class DatabaseView extends FileView {
     nav.insertAdjacentElement("afterend", action);
   }
 
-  private renderGroupedTable(config: ViewConfig, field: string): void {
+  private renderGroupedTable(config: ViewConfig): void {
     if (!this.containerEl_) return;
-    const groups = withEmptyOptionGroups(config, field, this.queryEngine.groupBy(this.rows, field, [], config.schema.columns.find((c) => c.key === field), config));
-    const order = getEffectiveGroupOrder(config, field, groups.map((group) => group.key));
-    const sortedGroups = this.queryEngine.sortGroups(groups, order);
-    this.tableRenderer.renderGroupedTable(this.containerEl_, this.getStatefulConfig(config), this.rows, sortedGroups, field);
+    const fields = dropComputedGroupFields(effectiveGroupFields(config, this.vs()), config);
+    const groupFn = (groupConfig: ViewConfig, field: string, rows: RowData[]) => {
+      const groups = withEmptyOptionGroups(
+        groupConfig,
+        field,
+        this.queryEngine.groupBy(
+          rows,
+          field,
+          [],
+          groupConfig.schema.columns.find((column) => column.key === field),
+          groupConfig,
+        ),
+      );
+      const order = getEffectiveGroupOrder(groupConfig, field, groups.map((group) => group.key));
+      return this.queryEngine.sortGroups(groups, order);
+    };
+    const flattened = flattenGroupTree(buildGroupTree(this.rows, fields, config, groupFn));
+    this.tableRenderer.renderGroupedTable(this.containerEl_, this.getStatefulConfig(config), this.rows, flattened, fields[0]);
   }
 
   private renderBoard(config: ViewConfig): void {

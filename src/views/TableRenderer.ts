@@ -18,6 +18,11 @@ export interface TableGroup {
   key: string;
   rows: RowData[];
   count: number;
+  depth?: number;
+  path?: string[];
+  field?: string;
+  collapseKey?: string;
+  children?: TableGroup[];
 }
 
 export interface TableRendererActions {
@@ -100,17 +105,29 @@ export class TableRenderer {
     const container = containerEl.createDiv({ cls: "db-grouped-table" });
     const visibleColumns = this.actions.getVisibleColumns(config, rows);
     const tableMinWidth = this.getTableMinWidth(config, visibleColumns);
+    const fieldsByDepth: string[] = [];
+    let collapsedDepth: number | undefined;
 
     for (const group of groups) {
+      const depth = Math.max(0, group.depth ?? 0);
+      if (collapsedDepth != null) {
+        if (depth > collapsedDepth) continue;
+        collapsedDepth = undefined;
+      }
+      fieldsByDepth.length = depth + 1;
+      const displayField = group.field ?? (depth === 0 ? groupField : fieldsByDepth[depth]);
+      if (displayField) fieldsByDepth[depth] = displayField;
+      const collapseKey = group.collapseKey ?? group.key;
       const groupHeader = container.createEl("div", {
-        cls: "db-group-header",
+        cls: `db-group-header db-group-header--depth-${depth}`,
         attr: {
           "data-note-database-group-key": group.key,
         },
       });
-      if (groupField) this.setupGroupDropTarget(groupHeader, groupField, group.key);
+      groupHeader.style.setProperty("--db-group-depth", String(depth));
+      if (groupField && depth === 0) this.setupGroupDropTarget(groupHeader, groupField, group.key);
       groupHeader.style.minWidth = `${tableMinWidth}px`;
-      const collapsed = Boolean(groupField && this.actions.isGroupCollapsed?.(groupField, group.key));
+      const collapsed = Boolean(groupField && this.actions.isGroupCollapsed?.(groupField, collapseKey));
       groupHeader.toggleClass("is-collapsed", collapsed);
       const label = groupHeader.createSpan({ cls: "db-group-header-label" });
       if (groupField) {
@@ -122,18 +139,22 @@ export class TableRenderer {
         toggle.onclick = (event) => {
           event.preventDefault();
           event.stopPropagation();
-          this.actions.toggleGroupCollapsed?.(groupField, group.key);
+          this.actions.toggleGroupCollapsed?.(groupField, collapseKey);
         };
       }
-      renderGroupLabel(label, config, groupField, group.key, "db-group-title-text");
+      renderGroupLabel(label, config, displayField, group.key, "db-group-title-text");
       label.createSpan({ cls: "db-group-count", text: String(group.count) });
       this.actions.renderGroupSummaries?.(groupHeader, group.rows, config);
 
-      if (collapsed) continue;
+      if (collapsed) {
+        collapsedDepth = depth;
+        continue;
+      }
+      if (group.children?.length) continue;
 
       const tableWrap = container.createDiv({ cls: "db-table-wrap" });
       tableWrap.setAttr("data-note-database-group-key", group.key);
-      if (groupField) this.setupGroupDropTarget(tableWrap, groupField, group.key);
+      if (groupField && depth === 0) this.setupGroupDropTarget(tableWrap, groupField, group.key);
       const table = tableWrap.createEl("table", { cls: "db-table" });
       table.toggleClass("is-create-entry-hidden", Boolean(this.actions.hideCreateEntry));
       const availableWidth = this.getAvailableTableWidth(tableWrap);
@@ -142,15 +163,29 @@ export class TableRenderer {
       this.renderColgroup(table, config, visibleColumns, availableWidth);
       this.renderHeader(table, config, visibleColumns, group.rows);
       const tbody = table.createEl("tbody");
-      if (groupField) this.setupGroupDropTarget(tbody, groupField, group.key);
-      const visibleCount = groupField ? getGroupVisibleCount(config, groupField, group.key, group.rows.length) : group.rows.length;
-      this.renderRows(tbody, config, group.rows.slice(0, visibleCount), visibleColumns, groupField, group.key, groups);
+      if (groupField && depth === 0) this.setupGroupDropTarget(tbody, groupField, group.key);
+      const visibleCount = groupField ? getGroupVisibleCount(config, groupField, collapseKey, group.rows.length) : group.rows.length;
+      const groupPath = this.getGroupPath(group, fieldsByDepth, groupField);
+      const rowMoveGroups = depth === 0 ? groups.filter((candidate) => (candidate.depth ?? 0) === 0) : undefined;
+      this.renderRows(
+        tbody,
+        config,
+        group.rows.slice(0, visibleCount),
+        visibleColumns,
+        groupField,
+        group.key,
+        rowMoveGroups,
+        groupPath,
+        depth === 0,
+      );
       if (!this.actions.hideCreateEntry) {
-        const computedGroup = Boolean(groupField) && isComputedGroupField(config, groupField);
-        const defaults = (!computedGroup && groupField) ? this.getGroupDefaults(config, groupField, group.key) : undefined;
+        const computedGroup = groupPath.some((pathGroup) => isComputedGroupField(config, pathGroup.field));
+        const defaults = !computedGroup && groupPath.length > 0
+          ? this.getGroupDefaults(config, groupPath)
+          : undefined;
         this.renderNewRow(tbody, visibleColumns.length + this.getUtilityColumnCount(config), defaults, group.rows, computedGroup);
       }
-      if (groupField) renderGroupExpandControls(tableWrap, config, groupField, group.key, group.rows.length, this.actions);
+      if (groupField) renderGroupExpandControls(tableWrap, config, groupField, collapseKey, group.rows.length, this.actions);
     }
   }
 
@@ -440,10 +475,12 @@ export class TableRenderer {
     columns: ColumnDef[],
     groupField?: string,
     groupKey?: string,
-    groups?: TableGroup[]
+    groups?: TableGroup[],
+    groupPath?: Array<{ field: string; key: string }>,
+    allowGroupMove = true,
   ): void {
     for (const row of rows) {
-      this.renderRow(tbody, config, row, rows, columns, groupField, groupKey, groups);
+      this.renderRow(tbody, config, row, rows, columns, groupField, groupKey, groups, groupPath, allowGroupMove);
     }
   }
 
@@ -455,7 +492,9 @@ export class TableRenderer {
     columns: ColumnDef[],
     groupField?: string,
     groupKey?: string,
-    groups?: TableGroup[]
+    groups?: TableGroup[],
+    groupPath?: Array<{ field: string; key: string }>,
+    allowGroupMove = true,
   ): HTMLElement {
     const tr = tbody.createEl("tr", {
       attr: { "data-note-database-row-path": row.file.path },
@@ -467,16 +506,18 @@ export class TableRenderer {
     }
     this.actions.setupRow(tr, row, {
       visibleRows: rows,
-      groups: groupField && groupKey != null ? [{ field: groupField, key: groupKey }] : undefined,
+      groups: groupPath ?? (groupField && groupKey != null ? [{ field: groupField, key: groupKey }] : undefined),
     });
     if (!this.actions.isReadOnly) {
       const selectTd = tr.createEl("td", { cls: "db-select-col" });
       const selectInner = selectTd.createDiv({ cls: "db-select-inner" });
       // 拖拽手柄（左）与 checkbox（右）放入同一 flex 容器：先建手柄、再建 checkbox，
       // checkbox 用 margin-left:auto 贴右，使各行 checkbox 与表头 checkbox 上下对齐。
-      this.setupRowDrag(selectInner, tr, row, rows, config, groupField, groupKey);
-      if (this.isPhoneLayout() && (this.canManualReorder(config) || Boolean(groupField && groups?.length))) {
-        this.renderMobileMoveButton(selectInner, config, row, rows, groupField, groupKey, groups);
+      const rowMoveField = allowGroupMove ? groupField : undefined;
+      const rowMoveKey = allowGroupMove ? groupKey : undefined;
+      this.setupRowDrag(selectInner, tr, row, rows, config, rowMoveField, rowMoveKey);
+      if (this.isPhoneLayout() && (this.canManualReorder(config) || Boolean(rowMoveField && groups?.length))) {
+        this.renderMobileMoveButton(selectInner, config, row, rows, rowMoveField, rowMoveKey, groups);
       }
       const cb = selectInner.createEl("input", { attr: { type: "checkbox" } });
       cb.checked = this.actions.isRowSelected(row);
@@ -760,8 +801,30 @@ export class TableRenderer {
     return window.activeDocument.body.classList.contains("is-phone");
   }
 
-  private getGroupDefaults(config: ViewConfig, groupField: string, groupKey: string): Record<string, unknown> {
-    return resolveGroupCreateDefaults(config, groupField, groupKey);
+  private getGroupPath(
+    group: TableGroup,
+    fieldsByDepth: readonly string[],
+    groupField?: string,
+  ): Array<{ field: string; key: string }> {
+    const keys = group.path?.length ? group.path : [group.key];
+    return keys
+      .map((key, index) => ({
+        field: fieldsByDepth[index] || (index === 0 ? groupField : index === keys.length - 1 ? group.field : undefined),
+        key,
+      }))
+      .filter((pathGroup): pathGroup is { field: string; key: string } => Boolean(pathGroup.field));
+  }
+
+  private getGroupDefaults(
+    config: ViewConfig,
+    groupPath: Array<{ field: string; key: string }>,
+  ): Record<string, unknown> {
+    const defaults: Record<string, unknown> = {};
+    for (const { field, key } of groupPath) {
+      if (isComputedGroupField(config, field)) continue;
+      Object.assign(defaults, resolveGroupCreateDefaults(config, field, key));
+    }
+    return defaults;
   }
 
 }
