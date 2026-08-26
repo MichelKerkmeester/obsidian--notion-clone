@@ -250,7 +250,7 @@ Operator decisions from the synthesis (recommended defaults in parentheses):
 | 2 | 002-remaining-saved-config/ | One config transaction: Remaining, Saved if distinct, view columnOrder, human labels, explicit display-only | Planned |
 | 3 | 003-reports-display-proof/ | Known-pair, empty-month, mistype, desktop hash, and engine-freeze proofs with packet evidence | Planned |
 
-Future / out of this phase (not child folders): percent-of-income Saved; rollup MAX/Median/Range; inline formula-error cells; LET / 1M-3M-1Y projections.
+Future / out of this phase (not child folders): percent-of-income Saved; rollup MAX/Median/Range/percent-empty; inline formula-error cells; LET / 1M-3M-1Y projections.
 
 ### Phase Transition Rules
 

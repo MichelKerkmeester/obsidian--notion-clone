@@ -198,11 +198,11 @@
       "tasks.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:8d902dc843f48b79f1a7d7492a0e5ad2de31e1c3ee4e5891b320fd0036e44833",
+    "source_fingerprint": "sha256:c3152ebfe75a48a97af2bfac9a7c9327ca5d527c4814a8318c6aa012ece6dc04",
     "source_doc_hashes": {
       "spec.md": "66bd9d4f8136a251abbe05ab3e53df6bdb41333eb2d35a804eb2e4cc06335f45",
-      "plan.md": "c07c89aa737816fa16fb7f53c2f6e02a2d76efd8eb5401864f59d8d91fc06b84",
-      "tasks.md": "fb1f87cc6924be9e2c8985685ffdc1a484bc249ad429e7e4a4c546c5153940e2",
+      "plan.md": "8c71fbf29cf72f6d14ed99749412346e699ec53644235795620a328158910a9e",
+      "tasks.md": "f122e2d206d6b9657b010a3dcca2b4c94063fb9b48979dfd29565d9a32c59fa9",
       "implementation-summary.md": "5965cfdc12f2c79724461827d4f733859235b2da9f725974880569226e9957d1"
     },
     "last_active_child_id": null,

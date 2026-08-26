@@ -42,7 +42,7 @@ _memory:
 | Aspect | Value |
 |--------|-------|
 | **Language/Stack** | TypeScript (Obsidian plugin fork) |
-| **Framework** | Vitest (`vitest.config.ts:1-11`); node environment |
+| **Framework** | Vitest (`vitest.config.ts:1-9`); node environment |
 | **Storage** | None |
 | **Testing** | `npx vitest run` — no `npm test` script |
 
@@ -84,7 +84,7 @@ Vitest loads `setupFiles` → imports the test file → calls exported functions
 ---
 
 <!-- ANCHOR:affected-surfaces -->
-Test producers: new setup stub and new test file. Consumer: Vitest runner via `vitest.config.ts:1-11`. Non-consumers: FormulaModal, i18n, SafeEval. Algorithm invariant under test: unary LOG is log10, not ln.
+Test producers: new setup stub and new test file. Consumer: Vitest runner via `vitest.config.ts:1-9`. Non-consumers: FormulaModal, i18n, SafeEval. Algorithm invariant under test: unary LOG is log10, not ln.
 <!-- /ANCHOR:affected-surfaces -->
 
 ---

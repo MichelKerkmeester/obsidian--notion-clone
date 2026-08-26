@@ -47,7 +47,7 @@ _memory:
 | **Testing** | Write-path assert Report untouched; manual live-view refresh |
 
 ### Overview
-Hunk 2 is the two `buildRowsWithRelations` copies. After inverse rollups, register Expenses via `sourceDatabaseIds` / `sourcePaths` so `handleDataChangeBatch` (`DatabaseView.ts:2120-2128`) sees Expense creates and retargets. Prefer the tiny helper next to `buildRelationInverse` so the copies do not diverge.
+Hunk 2 is the two `buildRowsWithRelations` copies. After inverse rollups, register Expenses via `sourceDatabaseIds` / `sourcePaths` from Hunk 1's `RelationRollupResult` (or equivalent) so `handleDataChangeBatch` (`DatabaseView.ts:2120-2128`) sees Expense creates and retargets. Prefer the tiny helper next to `buildRelationInverse` so the copies do not diverge.
 <!-- /ANCHOR:summary -->
 
 ---
@@ -56,7 +56,7 @@ Hunk 2 is the two `buildRowsWithRelations` copies. After inverse rollups, regist
 ## 2. QUALITY GATES
 
 ### Definition of Ready
-- [x] Children 001–002 specified; this child needs `sourceDatabaseIds` and inverse rollups already computing.
+- [x] Children 001–002 specified; this child needs `sourceDatabaseIds` (or equivalent) on Hunk 1's `RelationRollupResult` and inverse rollups already computing.
 - [x] Final-plan step 4 and synthesis rank 7 read; `planRelationTargetChange` ruled out as the refresh path.
 - [x] `enqueueWrite` stays private; spy `processFrontMatter` instead.
 
@@ -78,10 +78,10 @@ EuroFormat call site 2: two rebase-safe hunks that share one helper. Not a new p
 ### Key Components
 - **`DatabaseView.buildRowsWithRelations` (`:3348-3372`)**: after filling local `targetIds`, also merge inverse membership.
 - **`EmbeddedDatabaseRenderer.buildRowsWithRelations` (`:3190-3221`)**: same merge.
-- **Helper next to `buildRelationInverse`**: pure merge of `sourceDatabaseIds` / `sourcePaths` into the existing sets (child 001 already exports the fields).
+- **Helper next to `buildRelationInverse`**: pure merge of `sourceDatabaseIds` / `sourcePaths` from Hunk 1's `RelationRollupResult` (or equivalent) into the existing sets (child 001 already exports the fields; child 002 must return them on the rollup result).
 
 ### Data Flow
-Inverse rollup result → helper merges source DBs/paths → `relationTargetDatabases` / `relationTargetDatabasePaths` → `handleDataChangeBatch` (`:2120-2128`) refreshes the Report view. Expense write still goes through `enqueueWrite` keyed by the Expense path only.
+Inverse rollup result → helper merges source DBs/paths from `RelationRollupResult.sourceDatabaseIds` (or equivalent) → `relationTargetDatabases` / `relationTargetDatabasePaths` → `handleDataChangeBatch` (`:2120-2128`) refreshes the Report view. Expense write still goes through `enqueueWrite` keyed by the Expense path only.
 <!-- /ANCHOR:architecture -->
 
 ---
@@ -96,7 +96,7 @@ Producers: the two `buildRowsWithRelations` copies. Consumers: `handleDataChange
 ## 4. IMPLEMENTATION PHASES
 
 ### Phase 1: Setup
-- [ ] Confirm child 002 left inverse rollups plus `sourcePaths` on `targetPaths`.
+- [ ] Confirm child 002 left inverse rollups plus `sourcePaths` on `targetPaths` and `sourceDatabaseIds` (or equivalent) on `RelationRollupResult`.
 - [ ] Confirm live lines `DatabaseView.ts:2101-2140,2120-2128,3348-3401,3362-3372` and `EmbeddedDatabaseRenderer.ts:3190-3221,3210-3221`.
 
 ### Phase 2: Core Implementation
@@ -128,7 +128,7 @@ Producers: the two `buildRowsWithRelations` copies. Consumers: `handleDataChange
 | Dependency | Type | Status | Impact if Blocked |
 |------------|------|--------|-------------------|
 | `001-relation-inverse-module` | Internal | Planned first | No `sourceDatabaseIds` / helper |
-| `002-rollup-inverse-resolution` | Internal | Planned second | No inverse rollup cells to refresh |
+| `002-rollup-inverse-resolution` | Internal | Planned second | No inverse rollup cells / no `sourceDatabaseIds` (or equivalent) on `RelationRollupResult` |
 | `handleDataChangeBatch` (`:2120-2128`) | Internal | Exists | Do not invent a second refresh bus |
 <!-- /ANCHOR:dependencies -->
 

@@ -92,8 +92,8 @@ _memory:
   - **Evidence**: Pending — `npx vitest run` green on table-driven `Aggregate.test.ts` (`vitest.config.ts` requires the created `src/__tests__/setup.ts` stub).
 - [ ] CHK-022 [P1] Three-surface agreement (SC-002): rollup columns, footers, and charts render the same value per new kind
   - **Evidence**: Pending — manual view check on a sample relation; empty-render conventions preserved per surface (cell empty / footer blank / chart 0).
-- [ ] CHK-023 [P1] Edge-case matrix verified (empty relation, all-null, single value, even median, mixed types, invalid dates, NaN)
-  - **Evidence**: Pending — single value: min=max=median=value, range=`0`; even-length median = mean of middle two (never nearest-rank); NaN dropped by `toChartNumber`.
+- [ ] CHK-023 [P1] Edge-case matrix verified (empty relation, all-null, single value, even median, mixed types, invalid dates, NaN/Infinity)
+  - **Evidence**: Pending — single value: min=max=median=value, range=`0`; even-length median = mean of middle two (never nearest-rank); NaN/Infinity dropped by `toChartNumber`.
 - [ ] CHK-024 [P1] New kinds type as `"number"` everywhere; modal offers them filtered by target field type
   - **Evidence**: Pending — all five eligibility clones consume `isNumericRollupKind` (`RowPipeline.ts`, `ColumnDisplay.ts`, `SummaryRenderer.ts`, `ChartAggregation.ts` ×2); the predicate covers numeric + percent ids only (not `earliest`/`latest`); modal shows numeric kinds only for numeric targets, earliest/latest only for date-like targets.
 

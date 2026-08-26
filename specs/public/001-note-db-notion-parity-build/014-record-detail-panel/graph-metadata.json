@@ -214,11 +214,11 @@
       "implementation-summary.md",
       "research/research.md"
     ],
-    "source_fingerprint": "sha256:461f989616a6627606eeb546197c13dfc8a8800b87127a42b4ad2835f0ae4d15",
+    "source_fingerprint": "sha256:e1fee142dab4d506c0b50ae9dfb87044832ca4103add17cbc3977626e168802e",
     "source_doc_hashes": {
       "spec.md": "5711412ddf60be7441a7ec0c6d83d9ac3a55306d5915f2a99b2850073ecd1f40",
-      "plan.md": "23c3fe43348329480f649f12ecdbf0c1e568639d622efe71afce0138f3b4b169",
-      "tasks.md": "eeeddbc42c6b1cd767c4183a37d8571298203fdb5dcb71524c2c72aab7ebd673",
+      "plan.md": "cd4ba978d792eefc9e03fa9fda8d23895feba2c4c0bf87ecbfb0279fe6ba005e",
+      "tasks.md": "3915121423ce5d301d48c01027b6438386a71b480df270f6a0499b48beb304e0",
       "checklist.md": "c6f86b2578e48ff29706ee11d8bd989a92feb1e0f759a44cf73c66782a22dc2f",
       "implementation-summary.md": "34ba80cb8b3569ca132470bae4fc16569b3b8ec3b625a34df9088ca75785e2e6",
       "research/research.md": "7feaab3f84a4bb7b1cb38c91fcffd320bd817f154ae69e22cbe20c6a4744c282"

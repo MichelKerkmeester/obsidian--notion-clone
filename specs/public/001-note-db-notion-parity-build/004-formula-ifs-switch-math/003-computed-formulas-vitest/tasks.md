@@ -55,7 +55,7 @@ T003–T004 land together: `vitest.config.ts:6-7` requires `setup.ts` before any
 ## Phase 1: Setup
 
 - [ ] T001 Confirm child 001 exported `formulaIfsSwitchMath`; read synthesis rank 6 and final-plan step 7 (module-only tests, `npx vitest run`) [15m]
-- [ ] T002 Confirm `vitest.config.ts:1-11` `include: src/**/*.test.ts` and `setupFiles: src/__tests__/setup.ts`; confirm `package.json` has no test script [10m]
+- [ ] T002 Confirm `vitest.config.ts:1-9` `include: src/**/*.test.ts` and `setupFiles: src/__tests__/setup.ts`; confirm `package.json` has no test script [10m]
 <!-- /ANCHOR:phase-1 -->
 
 ---

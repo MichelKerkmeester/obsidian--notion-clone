@@ -199,11 +199,11 @@
       "tasks.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:482f202dc26690190b0b690abf2f00830903095ff28ba1f03a5ef3f3abaed72e",
+    "source_fingerprint": "sha256:1b1e1546a3ef284a0fc1b7e1db4ba86cb0e12672cc35ea8741737bc63e9a69b8",
     "source_doc_hashes": {
-      "spec.md": "e333c6eaac6bdd6f554d2799d47a346668025a5d801fcc2476fbfe636d0ea0b0",
-      "plan.md": "c3e5074454699d2e460171dab8588754ca0a0b01ec9d369a8a732c85d000e3e1",
-      "tasks.md": "8bef8f29bae23db742e793505b9ba2a5f9e15e57a8fe94c33d657154d594e9ae",
+      "spec.md": "28819cc0cccaf4081d4a6f05ecedcf0e972ee2ecacd0a6d8ee7280ca65696c49",
+      "plan.md": "048951b5f3f9bb2d0da8811f1b47d3a4a88574d22f1318a14c8f7e029938224c",
+      "tasks.md": "6604666d0853459ef29fbbfe8b45a31ef8a56d60d24ddd830820f8c7893d72cf",
       "implementation-summary.md": "84c4f9ecf84cd89e3542a9b0335b01c8e5735bcd4557f14628e25ebaef047310"
     },
     "last_active_child_id": null,

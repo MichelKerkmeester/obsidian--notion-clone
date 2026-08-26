@@ -216,9 +216,9 @@
       "implementation-summary.md",
       "research/research.md"
     ],
-    "source_fingerprint": "sha256:520e7e324fee591113bd7d5cac92cc07012b7a8365ada3e09ee7f9e81533b6f1",
+    "source_fingerprint": "sha256:d288b03d0bcf622f5f1e771ea19d4e5e8d56e14f8c2f338059d0a46fff39a536",
     "source_doc_hashes": {
-      "spec.md": "24ca76b237b52865be73eeb28c90677556c1c276aa8fd969595030ac0108e739",
+      "spec.md": "12ed4d6d3497f4d83f586975bb75de8f3a68d1164828bd30c9badaff32264496",
       "plan.md": "975fdfafe61ca59a576a8f2a5c3a3a30758db9bedc05216fc34d94887aa5b6b9",
       "tasks.md": "4bc3a6399e467260cda9f9d73f0c21270664a345a87cc430381a2ac401bece8d",
       "checklist.md": "d080df0b81c10440e2d5b781086aee2f6374f9dcb1983ed159f75fc3a64c3bec",

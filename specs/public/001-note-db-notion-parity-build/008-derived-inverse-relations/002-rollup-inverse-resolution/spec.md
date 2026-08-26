@@ -1,6 +1,6 @@
 ---
 title: "Feature Specification: Rollup Inverse Resolution"
-description: "After a local relationField miss, resolve that key as a foreign relation targeting this DB, feed inbound NoteRecords to existing aggregateRollup, and union inverse sourcePaths into targetPaths. No new aggregation kinds and no types.ts change."
+description: "After a local relationField miss, resolve that key as a foreign relation targeting this DB, feed inbound NoteRecords to existing aggregateRollup, union inverse sourcePaths into targetPaths, and return sourceDatabaseIds (or equivalent) on RelationRollupResult. No new aggregation kinds and no types.ts change."
 trigger_phrases:
   - "rollup inverse resolution"
   - "key-scoped inverse"
@@ -48,7 +48,7 @@ _memory:
 | **Phase** | 2 of 3 |
 | **Predecessor** | 001-relation-inverse-module |
 | **Successor** | 003-inverse-refresh-membership |
-| **Handoff Criteria** | Local miss resolves by key into aggregateRollup; sourcePaths unioned into targetPaths; local relation still wins; unresolved inverse is emptyRollupValue |
+| **Handoff Criteria** | Local miss resolves by key into aggregateRollup; sourcePaths unioned into targetPaths; sourceDatabaseIds (or equivalent) returned on RelationRollupResult; local relation still wins; unresolved inverse is emptyRollupValue |
 <!-- /ANCHOR:metadata -->
 
 ---
@@ -68,7 +68,7 @@ This child is synthesis ranked items 2 (rollup-over-inverse) and 4 (hide-when-em
 Notion rollups compute over the related-pages set on whichever side the rollup column lives. Today `buildRelationRollups` only follows a *local* `RollupConfig.relationField` and writes `emptyRollupValue` when that key is missing (`src/data/RelationRollup.ts:62-66`). A Report with `relationField: "Month"` and no local `Month` column therefore cannot count Expenses. The full fan-in index unions *all* inbound edges; a Report rollup with `relationField: "Month"` must match columns **named `Month`** that target Reports (`research/final-plan.md` key-scoped union). Hide-when-empty is already `emptyRollupValue` (`:159-160`) plus ordinary rollup cells (`CellRenderer.ts:115-116,656`).
 
 ### Purpose
-After `relationColumns.get(config.relationField)` misses (`RelationRollup.ts:62-66`) and the `:36` gate has passed, resolve inverse by key: columns in `context.databases` with `column.key === config.relationField && column.type === "relation" && column.relationConfig.targetDatabaseId === context.sourceDatabase.id`. Feed those inbound `NoteRecord`s for the current `sourceRecord` into existing `aggregateRollup` (`:92-129`). Union inverse `sourcePaths` into `targetPaths` (`:21,76`). Do not add aggregation kinds. Do not change `RollupConfig` shape (`types.ts:39-45`).
+After `relationColumns.get(config.relationField)` misses (`RelationRollup.ts:62-66`) and the `:36` gate has passed, resolve inverse by key: columns in `context.databases` with `column.key === config.relationField && column.type === "relation" && column.relationConfig.targetDatabaseId === context.sourceDatabase.id`. Feed those inbound `NoteRecord`s for the current `sourceRecord` into existing `aggregateRollup` (`:92-129`). Union inverse `sourcePaths` into `targetPaths` (`:21,76`). Return `sourceDatabaseIds` (or equivalent) on `RelationRollupResult` (`:18-22`). Do not add aggregation kinds. Do not change `RollupConfig` shape (`types.ts:39-45`).
 <!-- /ANCHOR:problem -->
 
 ---
@@ -80,9 +80,9 @@ After `relationColumns.get(config.relationField)` misses (`RelationRollup.ts:62-
 - `src/data/RelationRollup.ts:58-88` (Hunk 1): after local miss, call `buildRelationInverse` (not as the sole entry; the function already passed `:36`). Build inbound `NoteRecord[]` for the current `sourceRecord` from `inboundByPath.get(sourceRecord.file.path)` filtered to that relation key (or compute that slice lazily).
 - Key-scoped union, not all inbound regardless of column key. `Sales.Report` (different key) is a second rollup column.
 - Pass inbound records to existing `aggregateRollup` (`:92-129`). No new aggregation kinds. Local relation always wins if the key exists on the viewed DB.
-- Union inverse `sourcePaths` into `targetPaths` (`:21,76`) so existing `relationTargetPaths` assignment (`DatabaseView.ts:3362`) sees Expense paths. Child 003 still has to register `sourceDatabaseIds`.
+- Union inverse `sourcePaths` into `targetPaths` (`:21,76`) so existing `relationTargetPaths` assignment (`DatabaseView.ts:3362`) sees Expense paths. Return `sourceDatabaseIds` (or equivalent) on `RelationRollupResult` (`:18-22`) so child 003 can register the Expenses database in `relationTargetDatabases` (`DatabaseView.ts:3363-3372`). Child 003 still performs that registration; this child owns the handoff.
 - Fail-closed: unresolved inverse → `emptyRollupValue` (`:159-160`); never a second scanner. Empty inbound is hide-when-empty (ranked item 4) with no new persistence.
-- Integration tests: fixture a DB that *has* rollup columns so `buildRelationRollups` does not early-return; inverse `count === 2` / `list` contains both Expenses via `aggregateRollup` (`research/final-plan.md` step 6).
+- Integration tests: fixture a DB that *has* rollup columns so `buildRelationRollups` does not early-return; inverse `count === 2` / `list` contains both Expenses via `aggregateRollup`; result `sourceDatabaseIds` (or equivalent) includes the Expenses database (`research/final-plan.md` step 6).
 
 ### Out of Scope
 - `RelationInverse.ts` implementation (child 001).
@@ -93,7 +93,7 @@ After `relationColumns.get(config.relationField)` misses (`RelationRollup.ts:62-
 
 | File Path | Change Type | Description |
 |-----------|-------------|-------------|
-| `src/data/RelationRollup.ts` | Modify | Hunk 1: key-scoped inverse resolution after local miss; union `sourcePaths` into `targetPaths` |
+| `src/data/RelationRollup.ts` | Modify | Hunk 1: key-scoped inverse resolution after local miss; union `sourcePaths` into `targetPaths`; return `sourceDatabaseIds` (or equivalent) on `RelationRollupResult` |
 | `src/data/RelationInverse.test.ts` | Modify | Add round-trip `count`/`list` cases that call `buildRelationRollups` on a DB with rollup columns |
 <!-- /ANCHOR:scope -->
 
@@ -114,7 +114,7 @@ After `relationColumns.get(config.relationField)` misses (`RelationRollup.ts:62-
 
 | ID | Requirement | Acceptance Criteria |
 |----|-------------|---------------------|
-| REQ-004 | Inverse `sourcePaths` reach existing `targetPaths` | Union inverse `sourcePaths` into `targetPaths` (`:21,76`) so `DatabaseView.ts:3362` can see Expense paths; no `types.ts` / `RollupConfig` shape change |
+| REQ-004 | Inverse `sourcePaths` and `sourceDatabaseIds` reach Hunk 2 | Union inverse `sourcePaths` into `targetPaths` (`:21,76`) so `DatabaseView.ts:3362` can see Expense paths; return `sourceDatabaseIds` (or equivalent) on `RelationRollupResult` (`:18-22`) so child 003 can register Expenses in `relationTargetDatabases`; no `types.ts` / `RollupConfig` shape change |
 <!-- /ANCHOR:requirements -->
 
 ---
@@ -124,7 +124,7 @@ After `relationColumns.get(config.relationField)` misses (`RelationRollup.ts:62-
 
 - **SC-001**: A Report `count`/`list` over two Expenses with only forward `Month` links and no Report frontmatter relation yields `count === 2` and a list containing both Expenses via `aggregateRollup`.
 - **SC-002**: A local relation key still uses the forward loop unchanged.
-- **SC-003**: Unresolved inverse is `emptyRollupValue`; `types.ts` and both view files are untouched in this child's diff.
+- **SC-003**: Unresolved inverse is `emptyRollupValue`; `RelationRollupResult` returns `sourceDatabaseIds` (or equivalent); `types.ts` and both view files are untouched in this child's diff.
 
 ### Acceptance Scenarios
 
@@ -132,6 +132,7 @@ After `relationColumns.get(config.relationField)` misses (`RelationRollup.ts:62-
 - **Given** the viewed DB already has a local relation keyed `Month`, **when** the same rollup runs, **then** the forward loop is used and inverse is unused.
 - **Given** `relationField: "Month"` but no source DB has a `Month` relation targeting this DB, **when** the rollup runs, **then** the cell is `emptyRollupValue`.
 - **Given** a second source DB uses key `Report` instead of `Month`, **when** the `Month` rollup runs, **then** those rows are not included (key-scoped union).
+- **Given** Hunk 1 resolves inbound Expenses, **when** `buildRelationRollups` returns, **then** `RelationRollupResult` includes those Expense paths in `targetPaths` and the Expenses database in `sourceDatabaseIds` (or equivalent).
 <!-- /ANCHOR:success-criteria -->
 
 ---
@@ -144,6 +145,7 @@ After `relationColumns.get(config.relationField)` misses (`RelationRollup.ts:62-
 | Risk | Inverse called before the `:36` gate | Work on DBs with zero rollups; contradicts rollup-only SC-002 | Call inverse only inside the rollup loop after `:36` and a local miss |
 | Risk | All-inbound instead of key-scoped | `Sales.Report` leaks into a `Month` rollup | Filter edges to `column.key === config.relationField` |
 | Risk | New `RollupConfig` field | Schema migration and a fourth-file risk | Resolution rule only (`types.ts:39-45` unchanged) |
+| Risk | `sourcePaths` unioned without `sourceDatabaseIds` on the result | Child 003 cannot register Expenses for first-time creates | Same `RelationRollup.ts` diff returns `sourceDatabaseIds` (or equivalent) on `RelationRollupResult` (`:18-22`) |
 | Dependency | Child 001 exports | Cannot resolve inbound | Start after `buildRelationInverse` exists |
 <!-- /ANCHOR:risks -->
 

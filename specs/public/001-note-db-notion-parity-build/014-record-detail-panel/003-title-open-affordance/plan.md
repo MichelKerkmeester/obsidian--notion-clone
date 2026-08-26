@@ -42,7 +42,7 @@ _memory:
 | Aspect | Value |
 |--------|-------|
 | **Language/Stack** | TypeScript (Obsidian plugin fork) |
-| **Framework** | `DatabaseView` host; table-only `renderCell` from `TableRenderer.ts:586` |
+| **Framework** | `DatabaseView` host; table-only `renderCell` wired at `DatabaseView.ts:586` (`TableRenderer.ts:502` invokes `this.actions.renderCell(...)`) |
 | **Storage** | None — display-only peek |
 | **Testing** | Manual hover/title-click/Page Preview; refresh orphan check |
 

@@ -68,7 +68,7 @@ This child is synthesis ranked item 7 plus `research/final-plan.md` step 4 and t
 `handleDataChangeBatch` refreshes when `relationTargetPaths.has(change.path)` **or** the record matches `relationTargetDatabases` (`DatabaseView.ts:2120-2128`). Those sets are filled from **local** relation columns on the viewed DB (`3362-3372`; duplicate at `EmbeddedDatabaseRenderer.ts:3210-3221`): `targetIds` = `columns.filter(type === "relation")`. A Report that only has rollup columns (the 008 default surface) has **zero** local relations. Editing or creating an Expense does not refresh the Report view. Stale inbound counts are the silent failure mode — the same class as 001's "silent empty SUM". Child 002's `sourcePaths` union into `targetPaths` is not enough for a first-time `Month` link whose path was not in the previous `targetPaths` set.
 
 ### Purpose
-After inverse rollups, include databases in `sourceDatabaseIds` (Expenses) and their `sourcePath`s in `relationTargetDatabasePaths` in **both** `buildRowsWithRelations` copies (`DatabaseView.ts:3348-3372` and `EmbeddedDatabaseRenderer.ts:3190-3221`). Prefer the tiny helper next to `buildRelationInverse` (child 001) so the two view copies do not diverge. That makes `handleDataChangeBatch` refresh Reports when an Expense is created, retargeted, or edited. The Report file is not written.
+After inverse rollups, include databases in `sourceDatabaseIds` (Expenses) from Hunk 1's `RelationRollupResult` (or equivalent) and their `sourcePath`s in `relationTargetDatabasePaths` in **both** `buildRowsWithRelations` copies (`DatabaseView.ts:3348-3372` and `EmbeddedDatabaseRenderer.ts:3190-3221`). Prefer the tiny helper next to `buildRelationInverse` (child 001) so the two view copies do not diverge. That makes `handleDataChangeBatch` refresh Reports when an Expense is created, retargeted, or edited. The Report file is not written.
 <!-- /ANCHOR:problem -->
 
 ---
@@ -77,7 +77,7 @@ After inverse rollups, include databases in `sourceDatabaseIds` (Expenses) and t
 ## 3. SCOPE
 
 ### In Scope
-- `src/views/DatabaseView.ts` `buildRowsWithRelations` (`:3348-3372`): after inverse rollups, include `sourceDatabaseIds` in `relationTargetDatabases` and inverse `sourcePath`s in `relationTargetDatabasePaths` so `handleDataChangeBatch` (`:2120-2128`, also confirm `:2101-2140`) refreshes Reports.
+- `src/views/DatabaseView.ts` `buildRowsWithRelations` (`:3348-3372`): after inverse rollups, include `sourceDatabaseIds` from Hunk 1's `RelationRollupResult` (or equivalent) in `relationTargetDatabases` and inverse `sourcePath`s in `relationTargetDatabasePaths` so `handleDataChangeBatch` (`:2120-2128`, also confirm `:2101-2140`) refreshes Reports.
 - `src/views/EmbeddedDatabaseRenderer.ts` `buildRowsWithRelations` (`:3190-3221`): same membership change. Call the tiny helper next to `buildRelationInverse` rather than forking the merge.
 - Write-path proof: set Expense.Month; assert Report path is not passed to `processFrontMatter`; `enqueueWrite` stays private (`DataSource.ts:99`) — do not export it. Spy `processFrontMatter` / `vault.create` or assert Report mtime/content unchanged (`research/final-plan.md`).
 - Manual accept: with a Report view open, changing Expense.Month to that Report updates the inverse `count` without a manual refresh; Report file is not written; empty Month → 0/`[]`; dangling omitted.
@@ -105,7 +105,7 @@ After inverse rollups, include databases in `sourceDatabaseIds` (Expenses) and t
 
 | ID | Requirement | Acceptance Criteria |
 |----|-------------|---------------------|
-| REQ-001 | Both `buildRowsWithRelations` copies register inverse sources | After inverse rollups, `relationTargetDatabases` includes `sourceDatabaseIds` (Expenses) and `relationTargetDatabasePaths` includes inverse `sourcePath`s (`DatabaseView.ts:3348-3372`, `EmbeddedDatabaseRenderer.ts:3190-3221`) |
+| REQ-001 | Both `buildRowsWithRelations` copies register inverse sources | After inverse rollups, `relationTargetDatabases` includes Hunk 1's `sourceDatabaseIds` (or equivalent; Expenses) and `relationTargetDatabasePaths` includes inverse `sourcePath`s (`DatabaseView.ts:3348-3372`, `EmbeddedDatabaseRenderer.ts:3190-3221`) |
 | REQ-002 | Live Report view refreshes without a manual reload | With a Report view open, creating, retargeting, or editing Expense.Month to that Report updates inverse `count`/`list` via `handleDataChangeBatch` (`:2120-2128`), including first-time links whose paths were not in the previous `targetPaths` set |
 | REQ-003 | Report file is not a write participant | Setting Expense.Month does not pass the Report path to `processFrontMatter`; `RelationInverse.ts` still never joins `writeQueues` (`DataSource.ts:89,99-120`) |
 
@@ -144,7 +144,7 @@ After inverse rollups, include databases in `sourceDatabaseIds` (Expenses) and t
 | Risk | Only `DatabaseView.ts` updated | Embedded reports stay stale | Same helper in both copies |
 | Risk | Spy `enqueueWrite` | Method is private (`DataSource.ts:99`) | Do not export it; assert Report file untouched |
 | Risk | `planRelationTargetChange` assumed sufficient | It only walks rollups on the *source* DB whose `relationField` matches a changed *local* relation (`:23-49`) | Do not treat it as the refresh path; register `sourceDatabaseIds` instead |
-| Dependency | Children 001 and 002 | No `sourceDatabaseIds` / no inverse rollups | Start after Hunk 1 lands |
+| Dependency | Children 001 and 002 | No `sourceDatabaseIds` on `RelationRollupResult` (or equivalent) / no inverse rollups | Start after Hunk 1 lands the handoff |
 <!-- /ANCHOR:risks -->
 
 ---

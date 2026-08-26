@@ -50,7 +50,7 @@ _memory:
 | **Language/Stack** | TypeScript (Obsidian plugin fork) |
 | **Framework** | Obsidian API; live fork source at `Obsidian Plugin/src` (the older `001-notion-finance-migration/build/note-database-fork` path is stale — line numbers in this plan cite the live fork) |
 | **Storage** | None — display-only; no frontmatter writes (iCloud-safe); `ComputedSync.ts:3` default vocabulary is already `"display-only"` |
-| **Testing** | Vitest is configured (`vitest.config.ts:1-11` includes `src/**/*.test.ts`, setup `src/__tests__/setup.ts`) but the harness directory does not exist — bootstrap it this phase; run via `npx vitest run`. Harness is `setup.ts` stub + `Aggregate.test.ts` only — no general test migration |
+| **Testing** | Vitest is configured (`vitest.config.ts:1-9` includes `src/**/*.test.ts`, setup `src/__tests__/setup.ts`) but the harness directory does not exist — bootstrap it this phase; run via `npx vitest run`. Harness is `setup.ts` stub + `Aggregate.test.ts` only — no general test migration |
 
 ### Overview
 This plan implements the synthesis's verdict: one EuroFormat-shaped module, `src/data/Aggregate.ts` (module-level pure functions, no plugin state), consumed by the three aggregators that already exist — `RelationRollup.ts` (rollup columns), `SummaryRenderer.ts` (footers), `ChartAggregation.ts` (charts) — plus four small supporting edits (type widening at `types.ts:44`, shared `isNumericRollupKind`, config-modal options, Vitest bootstrap). Build order: numeric pack first (unblocks Reports MAX/SUM in phase 003), dates next, percents last. Rollup-of-rollup stays forbidden; results are display-only.
@@ -151,7 +151,7 @@ Related rows → `buildRelationRollups` builds an in-memory `valuesByPath` map (
 - [ ] Bootstrap the Vitest harness: create `src/__tests__/setup.ts` stub required by `vitest.config.ts`.
 
 ### Phase 2: Numeric Pack (one commit-sized same-diff unit — Median cannot ship as text or as an unlisted dropdown id)
-- [ ] Implement min, max, median, range in `Aggregate.ts` with locked semantics; table-driven unit tests (kind × empty/all-null/single/odd/even/mixed/NaN). Aggregate takes coerced `readonly number[]`; imports nothing from the three aggregators.
+- [ ] Implement min, max, median, range in `Aggregate.ts` with locked semantics; table-driven unit tests (kind × empty/all-null/single/odd/even/mixed/NaN/Infinity). Aggregate takes coerced `readonly number[]`; imports nothing from the three aggregators.
 - [ ] Widen `types.ts:44`; dispatch numeric kinds in `RelationRollup.ts` `aggregateRollup` via an **exhaustive switch before the sum/avg tail** (tail narrowed to `aggregation === "sum"` only).
 - [ ] Export `isNumericRollupKind` (numeric ids only — not earliest/latest); replace the five eligibility clones (**same diff** — otherwise Median ships as type `"text"`).
 - [ ] Add modal numeric options with target filtering (`RelationRollupConfigModal.ts`); route footer MIN/MAX/MEDIAN/RANGE-when-numbers-exist and chart median (required; min/max/range via Aggregate or keep `stat.min`/`stat.max`) through Aggregate. Keep the footer date-ms RANGE fallback local.

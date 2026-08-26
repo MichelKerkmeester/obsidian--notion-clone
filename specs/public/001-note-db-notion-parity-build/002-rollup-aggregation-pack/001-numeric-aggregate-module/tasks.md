@@ -56,7 +56,7 @@ T003–T008 are **one atomic diff**. Do not ship T003 without T004–T008.
 ## Phase 1: Setup
 
 - [ ] T001 Read parent `research/synthesis.md` ranks 1–4 and 7 plus `research/final-plan.md` steps 1–7 (same-diff coupling, cycle rule, sum-only tail) [15m]
-- [ ] T002 Record fork baseline — expect missing `src/__tests__/` despite `vitest.config.ts:1-11`; note lint/test starting state [10m]
+- [ ] T002 Record fork baseline — expect missing `src/__tests__/` despite `vitest.config.ts:1-9`; note lint/test starting state [10m]
 <!-- /ANCHOR:phase-1 -->
 
 ---
@@ -65,7 +65,7 @@ T003–T008 are **one atomic diff**. Do not ship T003 without T004–T008.
 ## Phase 2: Implementation
 
 - [ ] T003 **Create `src/data/Aggregate.ts`** (numeric only): `min`/`max`/`median`/`range` on `readonly number[]`; empty/all-empty → `null`; single value min=max=median=value, range=`0`; even median = mean of two middle (copy-sort; match `SummaryRenderer.ts:576-581`); never null→0; EuroFormat header (`EuroFormat.ts:1-9`); export `isNumericRollupKind` including future percent ids, excluding `earliest|latest`; **no imports** from `ChartAggregation.ts` / `SummaryRenderer.ts` / `RelationRollup.ts` (`src/data/Aggregate.ts`) [S]
-- [ ] T004 **Harness + table tests** — land with T003: `src/__tests__/setup.ts` stub; `src/data/Aggregate.test.ts` per kind × empty / all-null / single / odd / even / mixed (pass already-filtered numbers). No general test migration (`vitest.config.ts:1-11`) [S]
+- [ ] T004 **Harness + table tests** — land with T003: `src/__tests__/setup.ts` stub; `src/data/Aggregate.test.ts` per kind × empty / all-null / single / odd / even / mixed / NaN / Infinity (pass already-filtered numbers). No general test migration (`vitest.config.ts:1-9`) [S]
 - [ ] T005 **Widen union + numeric dispatch** — same diff as T003: `types.ts:44` add `"min" \| "max" \| "median" \| "range"`; in `aggregateRollup` keep `count` `:99`, rollup-of-rollup `:101`, `list` `:110-119`; after `toChartNumber` `:123-125` switch min/max/median/range **before** the empty/avg tail; change `:128` to `aggregation === "sum"` only; leave `emptyRollupValue` `:159-161` (`src/data/types.ts`, `src/data/RelationRollup.ts:123-128`) [S]
 - [ ] T006 **Shared predicate in five clones** — same diff as T003: replace `count\|sum\|avg` tests in `RowPipeline.ts:143-147`, `ColumnDisplay.ts:19-23`, `SummaryRenderer.ts:77-79`, `ChartAggregation.ts:102-104` and `:131-133`. Do not put `earliest|latest` in the predicate (`src/data/Aggregate.ts`) [S]
 - [ ] T007 **Config modal numeric options** — same diff as T003: `RelationRollupConfigModal.ts:137-176` and result type `:246`; extend `isSumAvg` to sum/avg/min/max/median/range; reuse `chart.minAggregation` / `chart.medianAggregation`; numeric target filter still excludes text (`:137-143`) [S]

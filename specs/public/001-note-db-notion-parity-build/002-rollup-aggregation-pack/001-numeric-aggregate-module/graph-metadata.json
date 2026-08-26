@@ -190,11 +190,11 @@
       "tasks.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:1f534ad841044a509b3cc865cc9d6e2cfec019a0262732fe17278bcd7fc82378",
+    "source_fingerprint": "sha256:98cce1c98e99a9249d46d169a9345eef41d29cf999c0562c193dd11aa38b175a",
     "source_doc_hashes": {
-      "spec.md": "5a3a389e6ef6a9bb7402c33b2d677f499c44cc826ada3456d497512b6842c9d1",
-      "plan.md": "5b93211a9bed72bc8eb0ad256b8a72f93da0190ecac4423deb5586a9d59aa822",
-      "tasks.md": "c75c66e2295a34a13459fdeee3ec89d77680ba8f28cc53ad2fb0588bb81f3d60",
+      "spec.md": "36a16f6edb0f179bce8a741c245d19887e59109c0ce7a029ca8346d211bec143",
+      "plan.md": "384cd00f31dd0c60b2d94a8cbfa495456cc207b7c73a591c0becc1cb8535ee21",
+      "tasks.md": "3570499f7ebbea7011ab7125c72bebecdd61d886c6d7cabcc9e8e4a0da84e82e",
       "implementation-summary.md": "be471f1714b253ed2f44aab29f360479e049f8b033af212e8c790d4d3979457a"
     },
     "last_active_child_id": null,

@@ -14,10 +14,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "public/001-note-db-notion-parity-build/017-excluded-parity-items"
-    last_updated_at: "2026-08-24T00:00:00Z"
-    last_updated_by: "assistant"
-    recent_action: "Authored phase 017 docs; status Out of scope"
-    next_safe_action: "Revisit only if the recorded trigger fires"
+    last_updated_at: "2026-08-26T00:00:00Z"
+    last_updated_by: "markdown-agent"
+    recent_action: "Recorded HOLD packet as empty-diff deliverable"
+    next_safe_action: "Keep closed; reopen person/me() only on identity + Wave 6"
     blockers: []
     key_files:
       - "spec.md"
@@ -45,7 +45,7 @@ _memory:
 | Field | Value |
 |-------|-------|
 | **Spec Folder** | 017-excluded-parity-items |
-| **Completed** | Not yet implemented (Planned) |
+| **Completed** | On Hold (DO-NOT-BUILD) — packet is the deliverable; fork proof is empty diff |
 | **Level** | 1 |
 
 <!-- /ANCHOR:metadata -->
@@ -54,7 +54,7 @@ _memory:
 <!-- ANCHOR:what-built -->
 ## What Was Built
 
-This phase is NOT built yet, and by design most of it never will be. Wave 6 records five Notion parity items as out of scope: person/people property, `style()`/`unstyle()` rich-text formula output, `me()`, GoodBases as the table renderer, and fetching Notion file CDN URLs. Each exclusion and its reason live in `spec.md`. `plan.md` and `tasks.md` state that no build is planned; they are not a work breakdown.
+This phase is On Hold by design, not a planned build. Wave 6 records five Notion parity items as out of scope: person/people property, `style()`/`unstyle()` rich-text formula output, `me()`, GoodBases as the table renderer, and fetching Notion file CDN URLs. Each exclusion and its reason live in `spec.md`. `plan.md` and `tasks.md` state that no build is planned; T004–T008 are retired exclusion reasons, not a work breakdown.
 
 ### Files Changed
 
@@ -63,7 +63,7 @@ This phase is NOT built yet, and by design most of it never will be. Wave 6 reco
 | `spec.md` | Created (scaffold) | Level 1 out-of-scope decision spec |
 | `plan.md` | Created (scaffold) | Level 1 plan stating no build |
 | `tasks.md` | Created (scaffold) | Level 1 task list with no plugin work |
-| `implementation-summary.md` | Created (scaffold) | Honest unbuilt status |
+| `implementation-summary.md` | Created (scaffold) | Honest HOLD status |
 
 Plugin fork (`MEGA/Development/Obsidian Plugin`): no files created or modified.
 
@@ -73,7 +73,7 @@ Plugin fork (`MEGA/Development/Obsidian Plugin`): no files created or modified.
 <!-- ANCHOR:how-delivered -->
 ## How It Was Delivered
 
-Authored as an Out-of-scope packet. The four Level 1 documents were written from the phase brief and the parent Wave 6 map. No implementation work has been performed.
+Authored as an Out-of-scope packet. The four Level 1 documents were written from the phase brief and the parent Wave 6 map. No implementation work has been performed; the deliverable is the HOLD packet plus an empty fork diff.
 
 <!-- /ANCHOR:how-delivered -->
 ---
@@ -88,7 +88,7 @@ Authored as an Out-of-scope packet. The four Level 1 documents were written from
 | Exclude `me()` | There is no person type to resolve "me" to; it depends on the excluded person/people model. |
 | Do not adopt GoodBases as the renderer | Chrome-only, with no formulas, rollups, or footers; building on it would drop the fork's engines. Mine only its hover-open idea in `014-record-detail-panel`. |
 | Exclude fetching Notion file CDN URLs | Network fetch plus iCloud duplication of the bytes; the `012-files-column` ruling already rejects this. |
-| Single revisit trigger | Reopen the excluded set only if Obsidian gains a user/identity model. Notion-parity-for-its-own-sake is not a trigger. |
+| Single revisit trigger | Reopen **only person/people and `me()`** if Obsidian gains a plugin-visible user/identity model **and** Wave 6 is explicitly entered. CDN fetch and GoodBases never reopen. `style()`/`unstyle()` stays excluded even after identity. Notion-parity-for-its-own-sake is not a trigger. |
 
 <!-- /ANCHOR:decisions -->
 ---
@@ -98,10 +98,10 @@ Authored as an Out-of-scope packet. The four Level 1 documents were written from
 
 | Check | Result |
 |-------|--------|
-| Plugin typecheck / tests | Pending |
-| Any excluded item present in the fork | Pending (all must remain absent) |
-| Notion CDN fetch on a files column | Pending (must remain absent) |
-| Fork diff for this phase | Pending (must be empty) |
+| Plugin typecheck / tests | N/A — no new code; HOLD packet is the deliverable, not a typecheck of a module |
+| Any excluded item present in the fork | Must remain absent (emoji `people` keys do not count) |
+| Notion CDN fetch on a files column | Must remain absent |
+| Fork diff for this phase | Must be empty — empty `git diff --stat` is the fork proof |
 
 Concrete gate: a `git diff --stat` in the fork must show no change from this phase, and `validate.sh 017-excluded-parity-items --strict` is the packet gate (Errors: 0 required).
 
@@ -111,10 +111,10 @@ Concrete gate: a `git diff --stat` in the fork must show no change from this pha
 <!-- ANCHOR:limitations -->
 ## Known Limitations
 
-1. **Not built, mostly never.** Every verification row is Pending. `plan.md` and `tasks.md` describe a non-build, not an implementation sequence.
-2. **People are a relation, not a directory.** Until Obsidian provides a user/identity model, person/people and `me()` have no owned data to resolve against.
+1. **HOLD, mostly never.** Fork proof is an empty diff, not a typecheck of new code. `plan.md` and `tasks.md` describe a non-build; T004–T008 are retired exclusion reasons, not an implementation sequence.
+2. **People are a relation, not a directory.** Until Obsidian provides a user/identity model **and** Wave 6 is explicitly entered, person/people and `me()` have no owned data to resolve against.
 3. **Hover-open is the only GoodBases takeaway.** Its renderer is excluded; only the interaction idea carries forward, in `014-record-detail-panel`.
-4. **The revisit trigger is narrow.** Obsidian gaining a user/identity model reopens the identity-linked items; the CDN-fetch and GoodBases-renderer exclusions rest on separate rulings and are not reopened by it.
+4. **The revisit trigger is three buckets.** Identity unlocks **only** person/people and `me()`. CDN fetch and GoodBases-as-renderer **never** reopen. `style()`/`unstyle()` stays excluded even after identity.
 
 <!-- /ANCHOR:limitations -->
 

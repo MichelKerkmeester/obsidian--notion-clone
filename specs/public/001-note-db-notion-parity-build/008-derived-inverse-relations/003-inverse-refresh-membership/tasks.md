@@ -54,7 +54,7 @@ T003–T004 are **one atomic view-membership seam**. Do not ship `DatabaseView.t
 <!-- ANCHOR:phase-1 -->
 ## Phase 1: Setup
 
-- [ ] T001 Confirm children 001–002 left `sourceDatabaseIds` / the membership helper and inverse rollups; read synthesis rank 7 and final-plan step 4 [15m]
+- [ ] T001 Confirm children 001–002 left `sourceDatabaseIds` (or equivalent) on `RelationRollupResult` / the membership helper and inverse rollups; read synthesis rank 7 and final-plan step 4 [15m]
 - [ ] T002 Confirm live lines `DatabaseView.ts:2101-2140,2120-2128,3348-3401,3362-3372` and `EmbeddedDatabaseRenderer.ts:3190-3221,3210-3221`; confirm `planRelationTargetChange.ts:23-49` is not the refresh path [10m]
 <!-- /ANCHOR:phase-1 -->
 
@@ -63,7 +63,7 @@ T003–T004 are **one atomic view-membership seam**. Do not ship `DatabaseView.t
 <!-- ANCHOR:phase-2 -->
 ## Phase 2: Implementation
 
-- [ ] T003 **Hunk 2 — `DatabaseView.buildRowsWithRelations` (`:3348-3372`)**: after inverse rollups, include `sourceDatabaseIds` in `relationTargetDatabases` and inverse `sourcePath`s in `relationTargetDatabasePaths` via the helper next to `buildRelationInverse` so `handleDataChangeBatch` (`:2120-2128`) refreshes on Expense create/retarget/edit (`src/views/DatabaseView.ts`) [S]
+- [ ] T003 **Hunk 2 — `DatabaseView.buildRowsWithRelations` (`:3348-3372`)**: after inverse rollups, include `sourceDatabaseIds` from Hunk 1's `RelationRollupResult` (or equivalent) in `relationTargetDatabases` and inverse `sourcePath`s in `relationTargetDatabasePaths` via the helper next to `buildRelationInverse` so `handleDataChangeBatch` (`:2120-2128`) refreshes on Expense create/retarget/edit (`src/views/DatabaseView.ts`) [S]
 - [ ] T004 **Hunk 2 mirror — `EmbeddedDatabaseRenderer.buildRowsWithRelations` (`:3190-3221`)** — same seam as T003: same helper, same membership; do not fork the merge (`src/views/EmbeddedDatabaseRenderer.ts`) [S]
 <!-- /ANCHOR:phase-2 -->
 

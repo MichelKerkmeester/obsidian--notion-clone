@@ -215,12 +215,12 @@
       "implementation-summary.md",
       "research/research.md"
     ],
-    "source_fingerprint": "sha256:9c179afe69c32b39ebf9d9b74c0015d5629b584a7de5abf7fef92cdb81676448",
+    "source_fingerprint": "sha256:7e10f2c84db5627c9fed0241f445ce2aaa2efaeba32056d8c4e31b770502a2b9",
     "source_doc_hashes": {
       "spec.md": "c83f16dd2da7c43ab9b162d976b2a1f4258e8b974ec1abe5df98b3b007913e99",
-      "plan.md": "e66d0d86ca1dfc13e88d9777ef684d5e0bffdfe0ef11cf9627f28dbd354d78b9",
-      "tasks.md": "1f378f060a2e87afe331b24683ee61e984d9782b14ac9b3b0bec80ef884c38c5",
-      "checklist.md": "0041e01c048ff188e5400611fcf652351ce7abcfb6e69045412cb365db483c86",
+      "plan.md": "3d1152eaa52bbc4386a713094324b3a5f934e90b805b592b051b38d78f29d748",
+      "tasks.md": "a802dde8531114c3f74db147cddd60524711f9ad8d1a44113be5deff1f8c5225",
+      "checklist.md": "60d3337c05646cc0d714d21e0935bab1a1a03260e761069d764d363783aeec71",
       "implementation-summary.md": "adbc3bbe5c156217326254a4286dbf1e457a348acd85297a4cfc28849843631d",
       "research/research.md": "13f52a74afec75e4276199877df53c2b52e6314e0ad11440d55839a79f49d7b4"
     },

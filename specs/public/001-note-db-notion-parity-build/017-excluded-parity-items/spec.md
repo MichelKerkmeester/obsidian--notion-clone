@@ -15,9 +15,9 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "public/001-note-db-notion-parity-build/017-excluded-parity-items"
-    last_updated_at: "2026-08-25T00:00:00Z"
+    last_updated_at: "2026-08-26T00:00:00Z"
     last_updated_by: "markdown-agent"
-    recent_action: "Reconciled spec with final-plan review findings"
+    recent_action: "Fixed verification concerns: 014 citations for hover-open/toolbar and REQ-004"
     next_safe_action: "Keep closed; reopen person/me() only on identity + Wave 6"
     blockers: []
     key_files:
@@ -77,7 +77,7 @@ Record the five deliberately-excluded parity items as a decision record, not a c
   2. **person / people property** — Notion `people` is an array of workspace user objects; the fork has relation-to-records only (`src/data/types.ts:34-37,50,67-68`) and zero `Clients`/person types in plugin code. Feasibility **blocked** until Obsidian ships a user directory; effort **L**; stand-in today is a vault `Clients` relation.
   3. **`me()` / "Me" filter token** — expands to the authenticated workspace user; feasibility **blocked** (depends on item 2); effort **M** after a real person type exists, **L** if invented as a settings-stored id; build-order after person/people, never first.
   4. **Fetching Notion file CDN URLs** — Notion-hosted `type: "file"` URLs are temporary (valid 1 hour) and the API says not to cache them; `external` URLs never expire. Feasibility **blocked** (product ruling, not missing code); effort **L** and negative-value if forced; files stay vault-local wikilinks (`012-files-column/spec.md:66,86`).
-  5. **Adopting GoodBases as the table renderer** — chrome-only (hover OPEN, pills), no own formulas, no rollups, footers listed as "next"; adoption would replace the fork's 12 column types, 7 views, two formula syntaxes, and `count|sum|avg|list` rollups. Feasibility **blocked**; effort **L** rewrite; never as renderer — hover-open already scoped to `014-record-detail-panel` (`014-record-detail-panel/spec.md:82,115`).
+  5. **Adopting GoodBases as the table renderer** — chrome-only (hover OPEN, pills), no own formulas, no rollups, footers listed as "next"; adoption would replace the fork's 12 column types, 7 views, two formula syntaxes, and `count|sum|avg|list` rollups. Feasibility **blocked**; effort **L** rewrite; never as renderer — hover-open already scoped to `014-record-detail-panel` (`014-record-detail-panel/spec.md:79,87,146`).
 - Recording the single revisit trigger (REQ-003) and the cheaper/safer alternatives the synthesis names (read-only `Clients` relation; platform precondition)
 - Recording the reserved reopen-contract design (see `plan.md`) so a future revisit is design-ready, not a blank slate
 
@@ -112,7 +112,7 @@ Record the five deliberately-excluded parity items as a decision record, not a c
 | ID | Requirement | Acceptance Criteria |
 |----|-------------|---------------------|
 | REQ-003 | Keep one concrete revisit trigger | **Only person/people and `me()` reopen** — and only if (a) Obsidian gains a plugin-visible user/identity model **and** (b) Wave 6 is explicitly entered (`roadmap.md:66-70`). Notion CDN fetch and GoodBases-as-renderer **never** reopen, even after identity. `style()`/`unstyle()` stays excluded even after identity. Default: keep closed |
-| REQ-004 | Record the reserved reopen-contract design | If the identity trigger fires, the build follows the EuroFormat isolated-diff model: one new module under `src/data/` + ≤3 call-site edits, rebase-safe (`014-record-detail-panel/spec.md:121`). Reserved module: `src/data/PersonIdentity.ts` only — maps a plugin-visible user id onto the existing relation/wikilink value model; **no `"people"` union member** (`src/data/types.ts:50` stays as-is), no parallel directory. A forced `style()` build is a type-system project, not an isolated override, so no `FormulaStyle.ts` is reserved — not built now |
+| REQ-004 | Record the reserved reopen-contract design | If the identity trigger fires, the build follows the EuroFormat isolated-diff model: one new module under `src/data/` + ≤3 call-site edits, rebase-safe (`014-record-detail-panel/spec.md:128`). Reserved module: `src/data/PersonIdentity.ts` only — maps a plugin-visible user id onto the existing relation/wikilink value model; **no `"people"` union member** (`src/data/types.ts:50` stays as-is), no parallel directory. A forced `style()` build is a type-system project, not an isolated override, so no `FormulaStyle.ts` is reserved — not built now |
 
 <!-- /ANCHOR:requirements -->
 ---
@@ -134,7 +134,7 @@ Record the five deliberately-excluded parity items as a decision record, not a c
 | Type | Item | Impact | Mitigation |
 |------|------|--------|------------|
 | Risk | Reopening person/people or `me()` "for parity" | Medium: both need a user directory Obsidian does not provide; a home-grown settings-stored id is per-vault, not per-viewer — the same iCloud vault on two devices disagrees | Keep excluded; model people as a `Clients` relation. Reopen only on the REQ-003 trigger |
-| Risk | Building on GoodBases as the renderer | High: chrome-only, no own formulas/rollups/footers (footers are "next"); adoption replaces the fork's 12 column types, 7 views, two formula syntaxes, and `count\|sum\|avg\|list` rollups | Keep excluded; take only its hover-open idea into `014-record-detail-panel` (`014-record-detail-panel/spec.md:82,115`) |
+| Risk | Building on GoodBases as the renderer | High: chrome-only, no own formulas/rollups/footers (footers are "next"); adoption replaces the fork's 12 column types, 7 views, two formula syntaxes, and `count\|sum\|avg\|list` rollups | Keep excluded; take only its hover-open idea into `014-record-detail-panel` (`014-record-detail-panel/spec.md:79,87,146`) |
 | Risk | Fetching Notion file CDN URLs | High: Notion `file` URLs expire in 1 hour and the API says do not cache; download → iCloud re-upload is a double transfer, and the vault copy is stale by design | Keep excluded; files stay vault-local wikilinks (`012-files-column/spec.md:66,86`) |
 | Risk | `style()` write-back corruption | Medium: `stringifyValue` has no rich-text branch (`src/data/Stringify.ts:1-14`); `ComputedSyncMode` includes `automatic` (`src/data/types.ts:111`), so `**`/`==` persisted to YAML re-parses as markup under `textRenderMode: "markdown"` | Keep excluded; default computed sync is already `"display-only"` (`src/data/ComputedSync.ts:3,42-44`) |
 | Dependency | Markdown `textRenderMode` | Green (baseline) | Already renders bold/italic/strike/highlight/code/links (`src/data/InlineMarkdown.ts:8-9`); `style()` output is redundant, not blocked |

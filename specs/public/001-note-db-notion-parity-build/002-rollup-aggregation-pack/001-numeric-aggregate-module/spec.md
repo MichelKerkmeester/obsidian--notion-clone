@@ -100,8 +100,8 @@ Create one EuroFormat-shaped leaf `src/data/Aggregate.ts` (`EuroFormat.ts:1-9` h
 | File Path | Change Type | Description |
 |-----------|-------------|-------------|
 | `src/data/Aggregate.ts` | Create | Numeric functions + `isNumericRollupKind` (percent ids included, dates excluded) |
-| `src/__tests__/setup.ts` | Create | Vitest stub required by `vitest.config.ts:1-11` |
-| `src/data/Aggregate.test.ts` | Create | Table tests per numeric kind × empty / all-null / single / odd / even / mixed |
+| `src/__tests__/setup.ts` | Create | Vitest stub required by `vitest.config.ts:1-9` |
+| `src/data/Aggregate.test.ts` | Create | Table tests per numeric kind × empty / all-null / single / odd / even / mixed / NaN / Infinity |
 | `src/data/types.ts` | Edit | Widen aggregation union at `:44` |
 | `src/data/RelationRollup.ts` | Edit | Numeric dispatch after `:123-125`; sum-only tail at `:128` |
 | `src/data/RowPipeline.ts` | Edit | Eligibility clone `:143-147` uses the predicate |

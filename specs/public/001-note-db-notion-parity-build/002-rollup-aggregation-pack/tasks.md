@@ -60,7 +60,7 @@ Tasks below follow the research synthesis's RANKED BACKLOG order (rank # in pare
 ## Phase 1: Setup
 
 - [ ] T001 Read this phase's decision-ready findings and evidence trail (`research/synthesis.md`, `research/research.md`) — replaces the stale `008-note-db-notion-parity` pointer [15m]
-- [ ] T002 Record the fork's baseline test/lint state — expect zero tests (`src/__tests__/` does not exist despite `vitest.config.ts:1-11`) [10m]
+- [ ] T002 Record the fork's baseline test/lint state — expect zero tests (`src/__tests__/` does not exist despite `vitest.config.ts:1-9`) [10m]
 
 <!-- /ANCHOR:phase-1 -->
 ---
@@ -71,7 +71,7 @@ Tasks below follow the research synthesis's RANKED BACKLOG order (rank # in pare
 Task order follows the synthesis RANKED BACKLOG (rank # shown per task).
 
 - [ ] T010 **(rank 1) Numeric pack on rollup columns** — **same diff as T012+T013+T014 (do not ship T010 without them, or Median compiles as text and never appears in the modal)**: create `Aggregate.ts` with min/max/median/range taking coerced `readonly number[]` (imports nothing from the three aggregators — no cycle); widen the kind union at `types.ts:44`; dispatch new kinds in `RelationRollup.ts` `aggregateRollup` after the existing `toChartNumber` extraction (`RelationRollup.ts:123-128`) via an **exhaustive switch before the sum/avg tail** — narrow the tail (`:128`) to `aggregation === "sum"` only (not `else sum`) so unknown ids cannot silently SUM. Leave `count` (`:99`), `list` (`:110-119`), sum/avg (`:127-128`), rollup-of-rollup guard (`:101`), and `emptyRollupValue` (`:159-161`) untouched. Unblocks phase 003 MAX/SUM. (`src/data/Aggregate.ts`, `src/data/types.ts`, `RelationRollup.ts`) [S]
-- [ ] T011 **(rank 7, lands with T010) Vitest harness bootstrap** — SC-001 is currently unrunnable: create the missing `src/__tests__/setup.ts` stub required by `vitest.config.ts`; write table-driven `Aggregate.test.ts` per kind × empty/all-null/single/odd/even/mixed/NaN (`vitest.config.ts:1-11`). Harness is `setup.ts` stub + `Aggregate.test.ts` only — **no general test migration**. (`src/__tests__/setup.ts`, `src/data/Aggregate.test.ts`) [S]
+- [ ] T011 **(rank 7, lands with T010) Vitest harness bootstrap** — SC-001 is currently unrunnable: create the missing `src/__tests__/setup.ts` stub required by `vitest.config.ts`; write table-driven `Aggregate.test.ts` per kind × empty/all-null/single/odd/even/mixed/NaN/Infinity (`vitest.config.ts:1-9`). Harness is `setup.ts` stub + `Aggregate.test.ts` only — **no general test migration**. (`src/__tests__/setup.ts`, `src/data/Aggregate.test.ts`) [S]
 - [ ] T012 **(rank 2) Shared `isNumericRollupKind`** — **same diff as T010**: export the predicate from `Aggregate.ts` (numeric + percent ids only — **`earliest`/`latest` are NOT in it**; they map to `"date"` via the separate T015 display-type edit); replace the five `count|sum|avg` eligibility clones so Median/Min/Max/Range/percents type as `"number"`, not `"text"` (`src/data/RowPipeline.ts:143-147`, `src/data/ColumnDisplay.ts:19-23`, `src/views/SummaryRenderer.ts:77-79`, `src/data/ChartAggregation.ts:102-104` and `:131-133`) [S]
 - [ ] T013 **(rank 3) Config modal offers the new kinds + target filtering** — **same diff as T010**: add options and extend the result type; reuse existing i18n keys (`chart.minAggregation`, `chart.medianAggregation`, `viewConfig.summaryEarliest`, `chart.percentEmptyAggregation`, … — no new `i18n.ts` block unless a key is actually missing); extend `isSumAvg` to all numeric kinds; add a date-kind filter via `isDateLikeColumnType` (`src/views/modals/RelationRollupConfigModal.ts:137-176`, result type `:246`) [S]
 - [ ] T014 **(rank 4, numeric split) Footer + chart numeric consume Aggregate.ts** — numeric pack only; date footer routing is T015, chart percent routing is T016: route footer MIN/MAX/MEDIAN/RANGE-when-numbers-exist through Aggregate from `calculateSummary`, keeping STDDEV/COUNT/UNIQUE/CHECKED local, custom-formula preemption (`:439-442`), and the **date-ms RANGE fallback** (`:457-459`) local so date RANGE does not regress (`src/views/SummaryRenderer.ts:431-462`, private median `:576-581`); route chart **median** through Aggregate (required) and min/max/range via Aggregate on `stat.numericValues` **or** keep `stat.min`/`stat.max` if tests prove identical, keeping `?? 0` at the edge (`src/data/ChartAggregation.ts:775-797`, `getMedianValue :873-880`); map Aggregate `null` → footer `""`, chart `0`. Do not unify chart chrome with rollup empty-text or footer `""`. [S]
@@ -91,7 +91,7 @@ Task order follows the synthesis RANKED BACKLOG (rank # shown per task).
 ## Phase 3: Verification
 
 ### Unit Tests
-- [ ] T050 Run `npx vitest run`: every `Aggregate.test.ts` case passes for all kinds × {empty, all-null, single-value, odd-n, even-n median, mixed types, invalid dates, NaN} (`src/data/Aggregate.test.ts`) [20m]
+- [ ] T050 Run `npx vitest run`: every `Aggregate.test.ts` case passes for all kinds × {empty, all-null, single-value, odd-n, even-n median, mixed types, invalid dates, NaN/Infinity} (`src/data/Aggregate.test.ts`) [20m]
 
 ### Integration & Manual
 - [ ] T051 Fork lint passes; no console errors/warnings after wiring the new kinds (all touched files) [15m]

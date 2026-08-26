@@ -1,6 +1,6 @@
 ---
 title: "Implementation Plan: Rollup Inverse Resolution"
-description: "Plan for key-scoped inverse resolution inside RelationRollup.ts after a local relationField miss, feeding inbound records to existing aggregateRollup and unioning sourcePaths into targetPaths."
+description: "Plan for key-scoped inverse resolution inside RelationRollup.ts after a local relationField miss, feeding inbound records to existing aggregateRollup, unioning sourcePaths into targetPaths, and returning sourceDatabaseIds (or equivalent) on RelationRollupResult."
 trigger_phrases:
   - "rollup inverse plan"
   - "key-scoped inverse"
@@ -47,7 +47,7 @@ _memory:
 | **Testing** | Extend `RelationInverse.test.ts` with `buildRelationRollups` round-trips |
 
 ### Overview
-Hunk 1 is one `RelationRollup.ts` edit: local miss → key-scoped inverse → existing `aggregateRollup`. Union inverse `sourcePaths` into `targetPaths` in the same diff so later view membership can see Expense paths. Do not add kinds. Do not change `RollupConfig`.
+Hunk 1 is one `RelationRollup.ts` edit: local miss → key-scoped inverse → existing `aggregateRollup`. Union inverse `sourcePaths` into `targetPaths` and return `sourceDatabaseIds` (or equivalent) on `RelationRollupResult` in the same diff so later view membership can see Expense paths and the Expenses database. Do not add kinds. Do not change `RollupConfig`.
 <!-- /ANCHOR:summary -->
 
 ---
@@ -64,6 +64,7 @@ Hunk 1 is one `RelationRollup.ts` edit: local miss → key-scoped inverse → ex
 - [ ] Local miss feeds inbound records to `aggregateRollup` (`:92-129`).
 - [ ] Local relation still wins; unresolved inverse is `emptyRollupValue`.
 - [ ] Inverse `sourcePaths` unioned into `targetPaths`.
+- [ ] Inverse `sourceDatabaseIds` (or equivalent) returned on `RelationRollupResult`.
 - [ ] Round-trip `count === 2` / `list` green; `types.ts` and both view files untouched.
 <!-- /ANCHOR:quality-gates -->
 
@@ -79,15 +80,16 @@ EuroFormat call site 1: one rebase-safe hunk in `RelationRollup.ts`. Resolution 
 - **Local-miss branch (`:62-66`)**: after `:36`, call `buildRelationInverse` and slice `inboundByPath` by current `sourceRecord.file.path` and `config.relationField`.
 - **`aggregateRollup` (`:92-129`)**: unchanged kinds; inbound `NoteRecord[]` is just another related set.
 - **`targetPaths` (`:21,76`)**: union inverse `sourcePaths` so Expense paths are visible to existing `relationTargetPaths` assignment.
+- **`sourceDatabaseIds` (`RelationRollupResult` `:18-22`)**: return inverse source DB ids (or equivalent) on the same result so child 003 can register Expenses without a second scan.
 
 ### Data Flow
-Viewed DB with rollup columns → `buildRelationRollups` passes `:36` → local `relationField` miss → `buildRelationInverse` → key-scoped inbound records → `aggregateRollup` → `row.computed[col.key]`. Empty inbound → `emptyRollupValue`.
+Viewed DB with rollup columns → `buildRelationRollups` passes `:36` → local `relationField` miss → `buildRelationInverse` → key-scoped inbound records → `aggregateRollup` → `row.computed[col.key]`; inverse `sourcePaths` unioned into `targetPaths` and `sourceDatabaseIds` (or equivalent) returned on `RelationRollupResult`. Empty inbound → `emptyRollupValue`.
 <!-- /ANCHOR:architecture -->
 
 ---
 
 <!-- ANCHOR:affected-surfaces -->
-Producers: `RelationRollup.ts` miss branch. Consumers not in this child: `DatabaseView.buildRowsWithRelations` / `EmbeddedDatabaseRenderer.buildRowsWithRelations` (child 003) still need `sourceDatabaseIds` on `relationTargetDatabases`. Unchanged: `types.ts`, `RelationLinks.ts`, `CellRenderer.ts` (already renders `row.computed`). Invariant: never a second scanner; local relation always wins.
+Producers: `RelationRollup.ts` miss branch, including the `sourcePaths`→`targetPaths` union and `sourceDatabaseIds` (or equivalent) on `RelationRollupResult`. Consumers not in this child: `DatabaseView.buildRowsWithRelations` / `EmbeddedDatabaseRenderer.buildRowsWithRelations` (child 003) register those ids on `relationTargetDatabases`. Unchanged: `types.ts`, `RelationLinks.ts`, `CellRenderer.ts` (already renders `row.computed`). Invariant: never a second scanner; local relation always wins.
 <!-- /ANCHOR:affected-surfaces -->
 
 ---
@@ -97,14 +99,14 @@ Producers: `RelationRollup.ts` miss branch. Consumers not in this child: `Databa
 
 ### Phase 1: Setup
 - [ ] Confirm child 001 left `buildRelationInverse` and `sourcePaths` / `sourceDatabaseIds`.
-- [ ] Confirm live lines `RelationRollup.ts:36,58-88,62-66,92-129,21,76,159-160`.
+- [ ] Confirm live lines `RelationRollup.ts:18-22,36,58-88,62-66,92-129,21,76,159-160`.
 
 ### Phase 2: Core Implementation
-- [ ] Local-miss inverse resolution + `sourcePaths` union in one `RelationRollup.ts` edit.
+- [ ] Local-miss inverse resolution + `sourcePaths` union + `sourceDatabaseIds` (or equivalent) on `RelationRollupResult` in one `RelationRollup.ts` edit.
 - [ ] Add rollup round-trip cases to `RelationInverse.test.ts` (DB that has rollup columns).
 
 ### Phase 3: Verification
-- [ ] `count === 2` / `list` contains both Expenses; local key still forward; empty → `emptyRollupValue`.
+- [ ] `count === 2` / `list` contains both Expenses; result includes Expenses in `sourceDatabaseIds` (or equivalent); local key still forward; empty → `emptyRollupValue`.
 - [ ] Confirm `types.ts` and both view files untouched.
 <!-- /ANCHOR:phases -->
 
@@ -115,7 +117,7 @@ Producers: `RelationRollup.ts` miss branch. Consumers not in this child: `Databa
 
 | Test Type | Scope | Tools |
 |-----------|-------|-------|
-| Integration | Inverse `count === 2` / `list` via `aggregateRollup`; local relation still wins; empty fail-closed | Vitest (extend `RelationInverse.test.ts`) |
+| Integration | Inverse `count === 2` / `list` via `aggregateRollup`; `sourceDatabaseIds` (or equivalent) on the result includes Expenses; local relation still wins; empty fail-closed | Vitest (extend `RelationInverse.test.ts`) |
 | Unit | Child 001 fixtures still green | Vitest |
 | Manual | Optional YAML `relationField: "Month"` on a Report (child 003 live refresh) | Obsidian fork |
 <!-- /ANCHOR:testing -->
@@ -129,7 +131,7 @@ Producers: `RelationRollup.ts` miss branch. Consumers not in this child: `Databa
 |------------|------|--------|-------------------|
 | `001-relation-inverse-module` | Internal | Planned first | No `buildRelationInverse` |
 | Existing `aggregateRollup` (`:92-129`) | Internal | Exists | Do not add kinds |
-| Child 003 view membership | Internal | Later | `sourcePaths` in `targetPaths` is necessary but not sufficient for first-time Expense creates |
+| Child 003 view membership | Internal | Later | `sourcePaths` in `targetPaths` and `sourceDatabaseIds` on `RelationRollupResult` (or equivalent) are the Hunk 1 handoff; child 003 still registers them |
 <!-- /ANCHOR:dependencies -->
 
 ---

@@ -45,7 +45,7 @@ _memory:
 | **Language/Stack** | TypeScript (Obsidian plugin fork) |
 | **Framework** | Obsidian API; live fork source at `Obsidian Plugin/src` |
 | **Storage** | None — display-only; `ComputedSync.ts:3` is already `"display-only"` |
-| **Testing** | Vitest (`vitest.config.ts:1-11`); harness directory missing today |
+| **Testing** | Vitest (`vitest.config.ts:1-9`); harness directory missing today |
 
 ### Overview
 Land one EuroFormat-shaped leaf plus the numeric seams in a single shippable diff so Median cannot type as `"text"` or sit unused in the kind union. `Aggregate.ts` takes coerced `readonly number[]` and must not import the three aggregators. Range is scalar `max − min`. Footer date-ms RANGE stays local.
@@ -120,7 +120,7 @@ Not a bug-fix packet. Numeric producers: new `Aggregate.ts`. Consumers in this s
 
 | Test Type | Scope | Tools |
 |-----------|-------|-------|
-| Unit | `min`/`max`/`median`/`range` × empty / all-null / single / odd / even / mixed (pre-filtered numbers) | Vitest (`npx vitest run`) |
+| Unit | `min`/`max`/`median`/`range` × empty / all-null / single / odd / even / mixed / NaN / Infinity (pre-filtered numbers) | Vitest (`npx vitest run`) |
 | Integration | Not this child — no Obsidian API in Aggregate | — |
 | Manual | Median on a numeric relation; modal lists kinds; footer/chart match cell | Obsidian fork |
 <!-- /ANCHOR:testing -->
