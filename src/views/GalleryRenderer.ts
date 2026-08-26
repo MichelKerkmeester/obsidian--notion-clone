@@ -569,7 +569,7 @@ export class GalleryRenderer {
       return;
     }
 
-    const schemeTarget = !isFileFieldKey(col.key) && isTextLinkScheme(col.textLinkScheme)
+    const schemeTarget = col.type === "text" && !isFileFieldKey(col.key) && isTextLinkScheme(col.textLinkScheme)
       ? assembleSchemeLinkTarget(col.textLinkScheme, value)
       : null;
     if (schemeTarget !== null) {
