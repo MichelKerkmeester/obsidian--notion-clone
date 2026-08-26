@@ -20,10 +20,11 @@ import { createOptionsFromValues, isOptionColumnType } from "../data/ColumnTypes
 import { getDefaultChartDateBucket, getDefaultChartNumberBucket, isChartAggregationValueColumn, requiresChartValueField } from "../data/ChartAggregation";
 import { normalizeTimelineDayScale } from "../data/CalendarTimelineModel";
 import { isDateLikeColumnType } from "../data/DateTimeFormat";
+import { getConditionalFormatConditionFromTree } from "../data/ConditionalFormatColumnOps";
 import { removeSourceRuleTreeReferences, updateSourceRuleTreeKeyReferences } from "../data/SourceRules";
 import { pruneViewFilterTree } from "../data/ViewFilterTree";
 import { getColumnDisplayType, getComputedStorageKey, normalizeComputedStorageKey } from "../data/ColumnDisplay";
-import { ColumnDef, DatabaseConfig, StatusOptionDef, ViewConfig } from "../data/types";
+import { ColumnDef, DatabaseConfig, SourceRuleNode, StatusOptionDef, ViewConfig } from "../data/types";
 import { getFileFieldFixedType, isFileFieldKey, isSupportedFileField } from "../data/FileFields";
 import { ColumnRenameResult } from "./modals/ColumnRenameModal";
 import { confirmWithModal } from "./modals/ConfirmModal";
@@ -193,6 +194,7 @@ export class ColumnOperations {
       for (const view of db.views || [config]) {
         for (const rule of view.conditionalFormats || []) {
           if (rule.condition.field === oldKey) rule.condition.field = newKey;
+          updateSourceRuleTreeKeyReferences(rule.conditionTree, oldKey, newKey);
         }
       }
       for (const schema of new Set([db.schema, ...(db.views || []).map((view) => view.schema)])) {
@@ -368,9 +370,19 @@ export class ColumnOperations {
     }
     const state = this.deps.getState();
     for (const view of db.views || [config]) {
-      view.conditionalFormats = (view.conditionalFormats || []).filter(
-        (rule) => !keysToRemove.has(rule.condition.field)
-      );
+      view.conditionalFormats = (view.conditionalFormats || []).filter((rule) => {
+        if (!rule.conditionTree) return !keysToRemove.has(rule.condition.field);
+
+        let conditionTree: SourceRuleNode | undefined = rule.conditionTree;
+        for (const key of keysToRemove) {
+          conditionTree = removeSourceRuleTreeReferences(conditionTree, key);
+          if (!conditionTree) return false;
+        }
+        rule.conditionTree = conditionTree;
+        const condition = getConditionalFormatConditionFromTree(conditionTree);
+        if (condition) rule.condition = condition;
+        return true;
+      });
       for (const key of keysToRemove) this.removeColumnReferences(view, key);
       normalizeColumnOrder(view);
     }
