@@ -1,6 +1,7 @@
 import { App, CachedMetadata, TFile } from "obsidian";
 import { LocaleCode } from "../i18n";
 import type { TextLinkScheme } from "./textLinkScheme";
+import type { UniqueIdConfig } from "./UniqueIdStamp";
 
 export interface RecordSchema {
   columns: ColumnDef[];
@@ -288,6 +289,7 @@ export interface DatabaseConfig {
   computedSyncMode?: ComputedSyncMode;
   /** Custom summary formulas imported from Obsidian Bases. */
   summaryFormulas?: Record<string, string>;
+  uniqueId?: UniqueIdConfig;
   /** 1~15 个视图，每个有独立的排序/筛选/显示配置 */
   views: ViewConfig[];
 }

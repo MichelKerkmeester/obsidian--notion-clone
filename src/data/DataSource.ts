@@ -13,6 +13,7 @@ import { inspectReportsConfig } from "./ReportsInspector";
 import type { ReportsInspectRecord, ReportsSalesMeaning } from "./ReportsInspector";
 import { applyReportsComputedConfig } from "./ReportsComputedConfig";
 import type { ReportsComputedConfigOptions, ReportsComputedConfigResult } from "./ReportsComputedConfig";
+import { parseUniqueIdConfig } from "./UniqueIdStamp";
 import { t } from "../i18n";
 
 const MAX_SOURCE_RULE_MATCH_TEXT_LENGTH = 10000;
@@ -822,6 +823,7 @@ export class DataSource {
         newRecordTemplate: this.parseNewRecordTemplate(source["newRecordTemplate"]),
         computedSyncMode: normalizeComputedSyncMode(source["computedSyncMode"]),
         summaryFormulas: this.parseStringMap(source["summaryFormulas"]),
+        uniqueId: parseUniqueIdConfig(source["uniqueId"] ?? database["uniqueId"]),
         schema: sharedSchema,
         statusPresets: normalizeStatusPresets(source["statusPresets"] || [], []),
         defaultStatusPresetId: safeString(source["defaultStatusPresetId"]) || undefined,
@@ -1091,6 +1093,7 @@ export class DataSource {
       newRecordTemplate: dbConfig.newRecordTemplate,
       computedSyncMode: normalizeComputedSyncMode(dbConfig.computedSyncMode),
       summaryFormulas: dbConfig.summaryFormulas || {},
+      ...(dbConfig.uniqueId ? { uniqueId: dbConfig.uniqueId } : {}),
       columns: dbConfig.schema.columns || [],
       computedFields: dbConfig.schema.computedFields || [],
       statusPresets: dbConfig.statusPresets || [],
