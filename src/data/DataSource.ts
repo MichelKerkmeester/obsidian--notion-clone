@@ -9,6 +9,8 @@ import { normalizeComputedSyncMode } from "./ComputedSync";
 import { fileHasLink, getBaseFileFieldType, getFileFieldValue, isBaseFileField } from "./FileFields";
 import { absorbTypeFilterIntoRules, getSourceRuleTree, matchesBaseSourceType, matchesSourceRuleTree, parseSourceRuleTree, sourceRuleContainsValue, sourceRuleValuesLooseEqual, sourceRuleValuesStrictEqual } from "./SourceRules";
 import { linkDatabaseSchema } from "./ColumnConfig";
+import { inspectReportsConfig } from "./ReportsInspector";
+import type { ReportsInspectRecord, ReportsSalesMeaning } from "./ReportsInspector";
 import { t } from "../i18n";
 
 const MAX_SOURCE_RULE_MATCH_TEXT_LENGTH = 10000;
@@ -501,6 +503,20 @@ export class DataSource {
     }
 
     return results;
+  }
+
+  /** Capture a live db_view payload without changing the vault or its sync mode. */
+  inspectDatabaseView(
+    file: TFile,
+    salesMeaning: ReportsSalesMeaning = "unknown",
+  ): ReportsInspectRecord | null {
+    const override = this.getViewDefOverride(file.path);
+    if (override) return inspectReportsConfig(override, file.path, salesMeaning);
+
+    const frontmatter = this.metadataCache.getFileCache(file)?.frontmatter;
+    if (!frontmatter || frontmatter["db_view"] !== true) return null;
+    const config = this.parseDatabaseConfig(frontmatter);
+    return config ? inspectReportsConfig(config, file.path, salesMeaning) : null;
   }
 
   private assignUniqueDatabaseIds(results: { file: TFile; config: DatabaseConfig }[]): DatabaseIdDedupTarget[] {
