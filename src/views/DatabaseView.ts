@@ -39,6 +39,7 @@ import {
 } from "../data/ColumnTypes";
 import { getDefaultGroupOrder, getEffectiveGroupOrder, mergeGroupOrder } from "../data/GroupOrder";
 import { formatGroupKeyDisplay, isComputedGroupField, resolveGroupCreateDefaults } from "../data/GroupDisplay";
+import { getTableSubgroupField, resolveTableSubgroupField } from "../data/TableSubgroupPicker";
 import { setShowEmptyGroups, setGroupExpandedCount, withEmptyOptionGroups } from "../data/GroupVisibility";
 import { buildGroupTree, dropComputedGroupFields, effectiveGroupFields, flattenGroupTree } from "../data/MultiFieldGrouping";
 import { isEmptyGroupId, moveMultiSelectGroupValue } from "../data/MultiSelect";
@@ -1873,6 +1874,7 @@ export class DatabaseView extends FileView {
       setGroupRowLimit: (limit) => this.setGroupRowLimit(limit),
       setBoardSubgroupEnabled: (enabled) => this.setBoardSubgroupEnabled(enabled),
       setBoardSubgroupField: (value) => this.setBoardSubgroupField(value),
+      setTableSubgroupField: (value) => this.setTableSubgroupField(value),
       toggleViewConfig: (anchorEl) => this.toggleHeaderPopover("view", anchorEl),
       configureGroupOrder: () => this.showGroupOrderPopover(),
       toggleSortPanel: (anchorEl) => this.toggleHeaderPopover("sort", anchorEl),
@@ -2424,6 +2426,12 @@ export class DatabaseView extends FileView {
       this.normalizeBoardSubgroupAfterGroupChange(config, value);
     } else {
       this.vs().groupByField = value;
+      if (config.viewType === "table") {
+        const subgroupField = value
+          ? resolveTableSubgroupField(config, value, getTableSubgroupField(config))
+          : undefined;
+        config.groupByFields = subgroupField ? [value, subgroupField] : undefined;
+      }
     }
     // Update group button active state without full toolbar re-render
     const groupBtn = this.containerEl_?.querySelector(".db-group-btn");
@@ -2480,6 +2488,20 @@ export class DatabaseView extends FileView {
     this.pendingUndoLabel = t("undo.boardSubgroupConfig");
     this.scheduleConfigSave();
     this.updateToolbarIndicators();
+    this.refresh({ viewport: "reset-top" });
+  }
+
+  private setTableSubgroupField(value: string): void {
+    const config = this.getConfig();
+    if (!config || config.viewType !== "table") return;
+    const primaryField = this.vs().groupByField || config.groupByFields?.[0] || "";
+    if (!primaryField) return;
+    const subgroupField = resolveTableSubgroupField(config, primaryField, value);
+    config.groupByFields = subgroupField ? [primaryField, subgroupField] : undefined;
+    this.vs().groupByField = primaryField;
+    this.pendingUndoLabel = t("undo.groupConfig");
+    this.viewStateStore.persist(config, this.vs());
+    this.saveCurrentViewConfigInBackground();
     this.refresh({ viewport: "reset-top" });
   }
 

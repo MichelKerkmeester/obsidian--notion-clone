@@ -14,6 +14,7 @@ import { CalendarTimelineToolbarRenderer } from "./CalendarTimelineToolbarRender
 import { isDateLikeColumnType } from "../data/DateTimeFormat";
 import { isEmptyGroupVisibilityColumn, shouldShowEmptyGroups } from "../data/GroupVisibility";
 import { getDateGroupMode } from "../data/GroupDisplay";
+import { getTableSubgroupCandidates, getTableSubgroupField } from "../data/TableSubgroupPicker";
 import { isHTMLElement } from "./DomGuards";
 import { renderRecordIcon } from "./RecordIconRenderer";
 
@@ -61,6 +62,7 @@ export interface ToolbarActions {
   setGroupRowLimit(limit: number): void;
   setBoardSubgroupEnabled(enabled: boolean): void;
   setBoardSubgroupField(value: string): void;
+  setTableSubgroupField?(value: string): void;
   toggleViewConfig(anchorEl: HTMLElement): void;
   configureGroupOrder(): void;
   toggleSortPanel(anchorEl: HTMLElement): void;
@@ -1264,6 +1266,9 @@ export class ToolbarRenderer {
     if (currentViewType === "board" && this.isBoardSubgroupEnabled(config)) {
       this.renderBoardSubgroupSection(panel, config, groupValue, actions);
     }
+    if (currentViewType === "table" && groupValue) {
+      this.renderTableSubgroupSection(panel, config, groupValue, actions);
+    }
   }
 
   private rebuildGroupPopover(): void {
@@ -1443,6 +1448,33 @@ export class ToolbarRenderer {
         column: col,
         active: subgroupField === col.key,
         onClick: () => actions.setBoardSubgroupField(col.key),
+      });
+    }
+  }
+
+  private renderTableSubgroupSection(
+    panel: HTMLElement,
+    config: ViewConfig,
+    groupValue: string,
+    actions: ToolbarActions
+  ): void {
+    this.renderGroupPopoverSection(panel, t("toolbar.subgroupBy"));
+    const candidates = getTableSubgroupCandidates(config, groupValue);
+    const subgroupField = getTableSubgroupField(config);
+    const hasActiveSubgroup = candidates.some((col) => col.key === subgroupField);
+    if (candidates.length === 0) {
+      this.renderGroupPopoverNotice(panel, t("toolbar.noAvailableBoardSubgroupFields"), "info");
+      return;
+    }
+    if (!hasActiveSubgroup) {
+      this.renderGroupPopoverNotice(panel, t("toolbar.selectBoardSubgroupField"), "info");
+    }
+    for (const col of candidates) {
+      this.renderGroupPopoverRow(panel, {
+        label: col.label,
+        column: col,
+        active: subgroupField === col.key,
+        onClick: () => actions.setTableSubgroupField?.(col.key),
       });
     }
   }
