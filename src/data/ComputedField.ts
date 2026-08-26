@@ -1,5 +1,6 @@
 import { FORMULA_BUILTIN_CONSTANTS, scanFormulaSegments } from "./FormulaTokenizer";
 import { FORMULA_FILE_FIELDS } from "./FormulaFields";
+import { formulaIfsSwitchMath } from "./FormulaIfsSwitchMath";
 import { ColumnDef, ComputedFieldDef } from "./types";
 import { safeEval } from "./SafeEval";
 import { safeString } from "./SafeString";
@@ -375,6 +376,7 @@ export class ComputedFieldEngine {
       COUNT: (...args: unknown[]) => args.filter((arg) => typeof Number(arg) === "number" && !isNaN(Number(arg))).length,
       COUNTA: (...args: unknown[]) => args.filter((arg) => arg != null && arg !== "").length,
       COUNTIF: (values: unknown, criterion: unknown) => this.countIf(values, criterion),
+      ...formulaIfsSwitchMath,
     });
     return context;
   }
