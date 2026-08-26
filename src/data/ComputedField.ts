@@ -6,6 +6,7 @@ import { safeEval } from "./SafeEval";
 import { safeString } from "./SafeString";
 import { hasDateTimeValue } from "./DateTimeFormat";
 import type { MomentConstructor, MomentLike } from "./MomentTypes";
+import { registerLetHelper, transformLetCalls } from "./LetVariables";
 import { t } from "../i18n";
 
 declare const moment: MomentConstructor;
@@ -304,6 +305,7 @@ export class ComputedFieldEngine {
         }
       },
     };
+    registerLetHelper(context);
     for (const [key, value] of Object.entries(computed)) {
       if (context[key] === undefined) context[key] = this.coerceValue(value);
     }
@@ -439,14 +441,21 @@ export class ComputedFieldEngine {
     };
 
     let expressionError: unknown;
+    let transformedExpr = normalizedExpr;
     try {
-      const result = safeEval(normalizedExpr, scope);
+      try {
+        transformedExpr = transformLetCalls(normalizedExpr);
+      } catch (transformError) {
+        return { value: null, error: this.formatEvaluationError(transformError) };
+      }
+
+      const result = safeEval(transformedExpr, scope);
       return { value: result };
     } catch (err) {
       expressionError = err;
       // Try as statement (for expressions like `if(...) return val;`)
       try {
-        const result = safeEval(normalizedExpr, scope, { allowStatements: true });
+        const result = safeEval(transformedExpr, scope, { allowStatements: true });
         return { value: result };
       } catch (statementErr) {
         return { value: null, error: this.formatEvaluationError(statementErr || expressionError) };
@@ -513,6 +522,9 @@ export class ComputedFieldEngine {
   private formatEvaluationError(error: unknown): string {
     const message = error instanceof Error ? error.message : safeString(error);
     const errorName = error instanceof Error ? error.constructor.name : "";
+
+    if (message.startsWith("let:argCount")) return t("formula.error.letArgCount");
+    if (message.startsWith("let:name")) return t("formula.error.letName");
 
     // Undefined variable/field
     const ref = message.match(/^([A-Za-z_$][A-Za-z0-9_$]*) is not defined$/);
