@@ -4,6 +4,7 @@ import { isImeComposing } from "../../data/KeyboardUtils";
 import { COLUMN_TYPE_LABELS, getColumnOptions, isOptionColumnType, toMultiSelectValuesForKey } from "../../data/ColumnTypes";
 import { ComputedFieldEngine } from "../../data/ComputedField";
 import { FORMULA_FILE_FIELDS } from "../../data/FormulaFields";
+import { formulaIfsSwitchMathHelp } from "../../data/FormulaIfsSwitchMath";
 import { getFileFieldValue } from "../../data/FileFields";
 import { getComputedStorageKey } from "../../data/ColumnDisplay";
 import { ColumnDef, ComputedFieldDef, ComputedSyncMode, RowData, StatusOptionDef } from "../../data/types";
@@ -102,6 +103,7 @@ const FUNCTIONS: FormulaFunctionHelp[] = [
   { categoryKey: "formula.catStats", name: "COUNT", signature: "COUNT(value1, value2, ...)", descriptionKey: "formula.fn.COUNT.desc", example: "=COUNT([price], [fee])" },
   { categoryKey: "formula.catStats", name: "COUNTA", signature: "COUNTA(value1, value2, ...)", descriptionKey: "formula.fn.COUNTA.desc", example: "=COUNTA([title], [status])" },
   { categoryKey: "formula.catStats", name: "COUNTIF", signature: "COUNTIF(value_or_list, criterion)", descriptionKey: "formula.fn.COUNTIF.desc", example: '=COUNTIF([status], "done")' },
+  ...formulaIfsSwitchMathHelp,
 ];
 
 const RESULT_TYPE_KEYS: Array<[ComputedFieldDef["type"], string]> = [["number", "formula.typeNumber"], ["text", "formula.typeText"], ["date", "formula.typeDate"], ["datetime", "formula.typeDatetime"], ["checkbox", "formula.typeCheckbox"]];
