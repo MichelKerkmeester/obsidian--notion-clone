@@ -11,6 +11,7 @@ import {
 } from "../data/ColumnTypes";
 import { getColumnDisplayType, getNumberDisplayStyle } from "../data/ColumnDisplay";
 import { formatEuroCurrency } from "../data/EuroFormat";
+import * as FilesColumn from "../data/FilesColumn";
 import { formatReportsNumber } from "../data/ReportsDisplay";
 import { parseRelationValues } from "../data/RelationLinks";
 import { renderRelationValue } from "./RelationValueRenderer";
@@ -223,6 +224,9 @@ export class CellRenderer {
         break;
       case "relation":
         this.renderRelation(td, row, value);
+        break;
+      case "files":
+        FilesColumn.renderChips(td, this.app, row, FilesColumn.parseEdit(value));
         break;
       case "currency": {
         const num = typeof value === "number" ? value : parseFloat(String(value));
@@ -519,6 +523,11 @@ export class CellRenderer {
 
     if (col.type === "date" || col.type === "datetime") {
       this.editDatePopover(target, row, col, currentValue, col.type === "datetime", session);
+      return;
+    }
+
+    if (col.type === "files") {
+      this.editText(target, row, col, FilesColumn.formatForEdit(currentValue), origText, session);
       return;
     }
 
@@ -2205,7 +2214,7 @@ export class CellRenderer {
   }
 
   private shouldUsePopoverEditor(_target: HTMLElement, col: ColumnDef, _value: string): boolean {
-    return col.type === "text";
+    return col.type === "text" || col.type === "files";
   }
 
   /** Build a format toolbar above the textarea for markdown-mode text columns.
@@ -2497,6 +2506,7 @@ export class CellRenderer {
 
   private normalizeCellValueForSave(col: ColumnDef, value: unknown): unknown {
     if (value == null) return value;
+    if (col.type === "files") return FilesColumn.normalize(FilesColumn.parseEdit(value));
     if (col.key === "file.tags") return toValidObsidianTagValues(value);
     if (col.type === "multi-select") return toMultiSelectValuesForKey(col.key, value);
     if (col.type === "select" || col.type === "status") return normalizeOptionValueForKey(col.key, value);
