@@ -20,6 +20,8 @@ import {
   sourceRuleValuesStrictEqual,
 } from "./SourceRules";
 import { stringifyValue } from "./Stringify";
+import { nextUniqueId } from "./UniqueIdStamp";
+import type { UniqueIdConfig } from "./UniqueIdStamp";
 import { ColumnDef, RecordSchema, SourceRule, SourceRuleNode, SourceRuleOperator } from "./types";
 
 /**
@@ -95,6 +97,8 @@ export interface CreateEntryPlanInput {
   defaultFilename: string;
   /** 文件夹规范化函数（注入以避免依赖 obsidian normalizePath）。 */
   normalizeFolder: (folder: string) => string;
+  /** Live database identity configuration, mutated only when a new value is allocated. */
+  uniqueId?: UniqueIdConfig;
 }
 
 interface RuleApplyContext {
@@ -169,7 +173,29 @@ export function planCreateEntry(input: CreateEntryPlanInput): CreateEntryPlan {
   // 4. 决定文件名。
   plan.filename = resolveFilename(ctx);
 
+  stampUniqueId(plan, input.schema, input.uniqueId);
+
   return plan;
+}
+
+function stampUniqueId(plan: CreateEntryPlan, schema: RecordSchema, uniqueId: UniqueIdConfig | undefined): void {
+  if (!uniqueId) return;
+
+  const field = typeof uniqueId.field === "string" && uniqueId.field.trim()
+    ? uniqueId.field.trim()
+    : "unique-id";
+  const column = schema.columns.find((candidate) => candidate.key === field);
+  if (column?.type === "computed" || column?.type === "rollup") return;
+  if (!isSourceRuleEmptyValue(plan.frontmatter[field])) return;
+
+  const padWidth = typeof uniqueId.padWidth === "number" && Number.isFinite(uniqueId.padWidth) && uniqueId.padWidth >= 1
+    ? uniqueId.padWidth
+    : 3;
+  uniqueId.field = field;
+  uniqueId.padWidth = padWidth;
+  const allocation = nextUniqueId(uniqueId);
+  plan.frontmatter[field] = allocation.value;
+  uniqueId.counter = allocation.nextCounter;
 }
 
 /** 遍历规则树，把多分支 OR、NOT、expression 记为"无法自动保证"的诊断。 */

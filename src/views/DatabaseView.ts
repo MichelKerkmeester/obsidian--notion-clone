@@ -3543,6 +3543,8 @@ export class DatabaseView extends FileView {
     }
     const beforeConfig = this.cloneDatabaseConfig(entry.config);
     let registeredGroupOption = false;
+    let uniqueIdChanged = false;
+    let configPersisted = false;
     for (const [key, value] of Object.entries(defaults)) {
       const col = config.schema.columns.find((candidate) => candidate.key === key);
       if (!col) continue;
@@ -3552,11 +3554,18 @@ export class DatabaseView extends FileView {
       if (optionPlan.clearPresetId) col.statusPresetId = undefined;
       registeredGroupOption = true;
     }
-    let plan = this.buildCreateEntryPlan(config, defaults, template?.frontmatter);
+    let plan = this.buildCreateEntryPlan(config, defaults, template?.frontmatter, {
+      stampUniqueId: template?.engine !== "core",
+    });
     if (template?.engine === "core") {
       template = resolveCoreRecordTemplate(template, plan.filename);
+      const uniqueIdField = entry.config.uniqueId?.field?.trim() || "unique-id";
+      if (entry.config.uniqueId && !this.isBaseSourceEmptyValue(plan.frontmatter[uniqueIdField])) {
+        defaults[uniqueIdField] = plan.frontmatter[uniqueIdField];
+      }
       plan = this.buildCreateEntryPlan(config, defaults, template.frontmatter);
     }
+    uniqueIdChanged = JSON.stringify(beforeConfig.uniqueId) !== JSON.stringify(entry.config.uniqueId);
     const diagnostics = [...plan.diagnostics];
     try {
       const file = await this.dataSource.createNote(
@@ -3591,32 +3600,37 @@ export class DatabaseView extends FileView {
         void this.syncComputedForFile(file, plan.frontmatter, undefined, config);
       }
       this.assignManualRankForNewEntry(config, file.path, position);
-      if (registeredGroupOption) {
+      if (registeredGroupOption || uniqueIdChanged) {
         try {
-          const dbFile = this.app.vault.getAbstractFileByPath(entry.sourcePath);
-          if (dbFile instanceof TFile) {
-            this.suppressDataReload(2500);
-            await this.dataSource.updateViewDefFile(dbFile, entry.config, this.getCurrentMutationTarget());
-          }
+          await this.saveViewEntryConfig(entry, this.getCurrentMutationTarget(), {
+            undoLabel: null,
+            cellChanges: null,
+            skipHistory: true,
+          });
+          configPersisted = true;
           const after = this.cloneDatabaseConfig(entry.config);
           this.configSnapshots.set(this.getConfigHistoryKey(entry), after);
-          this.pushHistory({
-            type: "config",
-            label: t("undo.createRow"),
-            dbId: entry.config.id,
-            dbPath: entry.sourcePath,
-            viewId: config.id,
-            before: beforeConfig,
-            after,
-            createdFiles: [{ path: file.path }],
-          });
+          if (registeredGroupOption) {
+            this.pushHistory({
+              type: "config",
+              label: t("undo.createRow"),
+              dbId: entry.config.id,
+              dbPath: entry.sourcePath,
+              viewId: config.id,
+              before: beforeConfig,
+              after,
+              createdFiles: [{ path: file.path }],
+            });
+          } else {
+            this.pushHistory({ type: "created", label: t("undo.createRow"), file: { path: file.path } });
+          }
         } catch (err) {
           this.replaceDatabaseConfig(entry.config, beforeConfig);
           this.configSnapshots.set(this.getConfigHistoryKey(entry), this.cloneDatabaseConfig(entry.config));
           try {
             await this.dataSource.trashNote(file, { sourceInstanceId: this.instanceId });
           } catch (rollbackErr) {
-            console.error("Note Database: failed to roll back created note after option config save failure", rollbackErr);
+            console.error("Note Database: failed to roll back created note after config save failure", rollbackErr);
           }
           throw err;
         }
@@ -3627,7 +3641,7 @@ export class DatabaseView extends FileView {
       await this.refreshAfterSave();
       return file;
     } catch (err) {
-      if (registeredGroupOption) {
+      if (!configPersisted && (registeredGroupOption || uniqueIdChanged)) {
         this.replaceDatabaseConfig(entry.config, beforeConfig);
         this.configSnapshots.set(this.getConfigHistoryKey(entry), this.cloneDatabaseConfig(entry.config));
       }
@@ -3640,6 +3654,7 @@ export class DatabaseView extends FileView {
     config: ViewConfig,
     defaults: Record<string, unknown>,
     templateFrontmatter: Record<string, unknown> = {},
+    options: { stampUniqueId?: boolean } = {},
   ): CreateEntryPlan {
     const sourceConfig = this.getCreateContextConfig(config);
     // 上下文默认值（列默认 < 视图筛选/状态 < 用户/日历/分组 defaults）。来源规则由
@@ -3668,6 +3683,7 @@ export class DatabaseView extends FileView {
       intentionalContextKeys,
       defaultFilename: t("defaults.untitledNote"),
       normalizeFolder: (folder) => this.normalizeVaultFolder(folder),
+      uniqueId: options.stampUniqueId === false ? undefined : this.getActiveDb()?.uniqueId,
     });
   }
 
