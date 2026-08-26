@@ -21,7 +21,8 @@ export function clampCardFieldWidth(fieldWidth: number, cardWidth: number): numb
  *  (`[label](url)`, `**bold**`) over-estimates the column width. Plain text and
  *  non-text columns return the input unchanged. */
 export function resolveRenderedDisplayText(text: string, col: ColumnDef): string {
-  if (col.textRenderMode === "link" || isTextLinkScheme(col.textLinkScheme)) {
+  if (isTextLinkScheme(col.textLinkScheme)) return text;
+  if (col.textRenderMode === "link") {
     const link = parseTextLink(text);
     if (link) return link.label;
   }
@@ -93,13 +94,23 @@ function estimateCellContentWidth(
     return Math.ceil(Math.min(linksWidth + gaps + 20, 560));
   }
   const raw = getDisplayText(row, col);
+  if (isTextLinkScheme(col.textLinkScheme)) {
+    const text = normalizeInlineText(raw);
+    if (!text) return 0;
+    const link = parseTextLink(raw);
+    if (link && normalizeInlineText(link.label) === text) {
+      const domWidth = renderedTextMeasurer?.measure(raw, "link") ?? null;
+      if (domWidth !== null) return domWidth;
+    }
+    return Math.ceil(measureBodyText(text) + 24 + 16);
+  }
   if (col.textRenderMode === "markdown") {
     const domWidth = renderedTextMeasurer?.measure(raw, "markdown") ?? null;
     if (domWidth !== null) return domWidth;
     const nodes = parseInlineMarkdown(raw);
     if (nodes) return Math.ceil(measureMarkdownNodes(nodes) + 24);
   }
-  if (col.textRenderMode === "link" || isTextLinkScheme(col.textLinkScheme)) {
+  if (col.textRenderMode === "link") {
     const domWidth = renderedTextMeasurer?.measure(raw, "link") ?? null;
     if (domWidth !== null) return domWidth;
     const link = parseTextLink(raw);
