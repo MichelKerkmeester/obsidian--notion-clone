@@ -7,6 +7,7 @@ import {
   getRequiredViewFilterLeaves,
   mapLeafAt,
   normalizeViewFilterTree,
+  pruneViewFilterTree,
   removeLeafAt,
   serializeViewFilterTree,
 } from "../ViewFilterTree";
@@ -109,5 +110,99 @@ describe("view filter tree evaluation", () => {
       leaf("b", "3"),
       leaf("c", "4"),
     ]);
+  });
+});
+
+// Column rename/delete/chip-delete mutate state.filterTree and the legacy flat state.filters
+// side by side. These tests lock the property that both representations end up describing
+// the same set of leaves after the pure helpers each call site delegates to are applied.
+describe("dual-write coherence between filterTree and the flat filters array", () => {
+  it("prunes a doomed field out of both the flat array and a nested OR group without poisoning the group", () => {
+    const filters = [leaf("keep", "1"), leaf("doomed", "2"), leaf("also-keep", "3")];
+    const tree: SourceRuleNode = {
+      type: "group",
+      logic: "and",
+      rules: [
+        leaf("keep", "1"),
+        { type: "group", logic: "or", rules: [leaf("doomed", "2"), leaf("also-keep", "3")] },
+      ],
+    };
+    const survives = (rule: FilterRule) => rule.field !== "doomed";
+
+    const prunedFilters = filters.filter(survives);
+    const prunedTree = pruneViewFilterTree(tree, survives);
+
+    expect(prunedFilters).toEqual([leaf("keep", "1"), leaf("also-keep", "3")]);
+    // Same predicate, same source data: the tree's surviving leaves must match the array exactly.
+    expect(flattenLeaves(prunedTree)).toEqual(prunedFilters);
+    // The OR branch keeps its remaining leaf as a real group instead of collapsing to an
+    // always-true/always-false stand-in once its sibling is pruned.
+    expect(prunedTree).toEqual({
+      type: "group",
+      logic: "and",
+      rules: [
+        leaf("keep", "1"),
+        { type: "group", logic: "or", rules: [leaf("also-keep", "3")] },
+      ],
+    });
+    expect(evaluateViewFilterTree(prunedTree, matcher(new Set(["keep:1"])))).toBe(false);
+    expect(evaluateViewFilterTree(prunedTree, matcher(new Set(["keep:1", "also-keep:3"])))).toBe(true);
+  });
+
+  it("renames every leaf occurrence of a field by flattened position across nested AND/OR/NOT groups", () => {
+    const tree: SourceRuleNode = {
+      type: "group",
+      logic: "and",
+      rules: [
+        leaf("old", "1"),
+        { type: "group", logic: "or", rules: [leaf("old", "2"), leaf("untouched", "x")] },
+        { type: "not", rule: leaf("old", "3") },
+      ],
+    };
+    // Mirrors the column-rename call site: find every leaf with the old field key by its
+    // flattened position, then remap each one in place without disturbing sibling leaves.
+    let renamed: SourceRuleNode | undefined = tree;
+    flattenLeaves(tree).forEach((current, index) => {
+      if (current.field !== "old") return;
+      renamed = mapLeafAt(renamed, index, (rule) => ({ ...rule, field: "new" }));
+    });
+
+    expect(flattenLeaves(renamed)).toEqual([
+      leaf("new", "1"),
+      leaf("new", "2"),
+      leaf("untouched", "x"),
+      leaf("new", "3"),
+    ]);
+    expect(renamed).toEqual({
+      type: "group",
+      logic: "and",
+      rules: [
+        leaf("new", "1"),
+        { type: "group", logic: "or", rules: [leaf("new", "2"), leaf("untouched", "x")] },
+        { type: "not", rule: leaf("new", "3") },
+      ],
+    });
+  });
+
+  it("excludes leaves nested two levels under an OR ancestor from the required frontmatter set", () => {
+    const tree: SourceRuleNode = {
+      type: "group",
+      logic: "and",
+      rules: [
+        leaf("required", "yes"),
+        {
+          type: "group",
+          logic: "or",
+          rules: [
+            { type: "group", logic: "and", rules: [leaf("nested-a", "1"), leaf("nested-b", "2")] },
+            leaf("nested-c", "3"),
+          ],
+        },
+      ],
+    };
+    // If nested-a/nested-b leaked into the required set, a newly created row would be
+    // pre-populated with values that only satisfy one OR branch, poisoning it against
+    // any row that should have matched through the nested-c branch instead.
+    expect(getRequiredViewFilterLeaves(tree)).toEqual([leaf("required", "yes")]);
   });
 });
