@@ -1,19 +1,22 @@
 import { App, Notice, setIcon, setTooltip } from "obsidian";
-import { ColumnDef, ComputedSyncMode, ConditionalFormatRule, DatabaseConfig, DatabaseViewType, FilterOperator, NO_TITLE_FIELD, SourceRule, SourceRuleGroup, SourceRuleNode, SourceRuleOperator, StatusColor, StatusPresetDef, ViewConfig, generateId } from "../data/types";
+import { ColumnDef, ComputedSyncMode, ConditionalFormatRule, DatabaseConfig, DatabaseViewType, FilterOperator, FilterRule, NO_TITLE_FIELD, SourceRule, SourceRuleGroup, SourceRuleNode, SourceRuleOperator, StatusColor, StatusPresetDef, ViewConfig, generateId } from "../data/types";
 import { normalizeComputedSyncMode } from "../data/ComputedSync";
 import { getColumnOptions, isObsidianAliasesKey, isObsidianTagsKey } from "../data/ColumnTypes";
 import { getColumnDisplayType } from "../data/ColumnDisplay";
 import { isDateLikeColumnType } from "../data/DateTimeFormat";
 import { BASE_FILE_FIELD_KEYS, getBaseFileFieldType, isBaseFileField } from "../data/FileFields";
-import { getSourceRuleTree, isSourceRuleExpression, isSourceRuleGroup, isSourceRuleNot } from "../data/SourceRules";
+import { getSourceRuleTree, isSourceRuleExpression, isSourceRuleGroup, isSourceRuleLeaf, isSourceRuleNot } from "../data/SourceRules";
 import { getVaultProperties, VaultProperty } from "../data/VaultProperties";
+import { createConditionalFormatLeaf, getConditionalFormatCondition, isConditionalFormatOperator } from "../data/ConditionalFormatEditor";
 import { t } from "../i18n";
 import { positionToolbarPopover } from "./PopoverPosition";
 import { confirmWithModal } from "./modals/ConfirmModal";
 import { createDropdownField, DropdownOption, openDropdownMenu } from "./DropdownField";
 import { getPropertyDropdownIcon, isPropertyDropdownIcon, renderDropdownPropertyTypeIcon, renderPropertyTypeIcon } from "./PropertyTypeIcon";
-import { getOrderedRecordIconColumns, getRecordIconFieldLabel, resolveRecordIconField } from "../data/RecordIcon";
+import { getOrderedRecordIconColumns, getRecordIconFieldLabel, parseRecordIconToken, resolveRecordIconField } from "../data/RecordIcon";
+import { getValidRecordIconIds, renderRecordIcon } from "./RecordIconRenderer";
 import { ImageFileSuggestModal } from "./ImageFileSuggestModal";
+import { openIconPickerPopover } from "./IconPickerPopover";
 import { openOptionColorPicker } from "./OptionColorPicker";
 import { MarkdownFileSuggestModal } from "./MarkdownFileSuggestModal";
 import { getFilterOperatorsForColumn } from "./FilterPanelRenderer";
@@ -587,26 +590,87 @@ export class ViewConfigPanelRenderer {
         section.createDiv({ cls: "db-view-config-help", text: t("conditionalFormat.empty") });
         return;
       }
-      rules.forEach((rule, index) => {
-        const row = section.createDiv({ cls: "db-conditional-format-rule" });
-        const currentColumn = database.schema.columns.find((col) => col.key === rule.condition.field);
+
+      const defaultCondition = (): FilterRule => ({
+        field: database.schema.columns[0]?.key || "file.name",
+        op: "eq",
+        value: "",
+      });
+      const persist = (rerender = false) => {
+        config.conditionalFormats = [...rules];
+        actions.onChange(t("undo.conditionalFormatConfig"));
+        if (rerender) renderRules();
+      };
+      const removeRule = (rule: ConditionalFormatRule) => {
+        config.conditionalFormats = rules.filter((candidate) => candidate.id !== rule.id);
+        actions.onChange(t("undo.conditionalFormatConfig"));
+        renderRules();
+      };
+      const replaceTree = (rule: ConditionalFormatRule, next: SourceRuleNode | undefined) => {
+        if (!next) {
+          removeRule(rule);
+          return;
+        }
+        rule.conditionTree = next;
+        const condition = getConditionalFormatCondition(next);
+        if (condition) rule.condition = condition;
+        persist(true);
+      };
+      const createTreeButton = (
+        parent: HTMLElement,
+        icon: string,
+        label: string,
+        onClick: () => void,
+      ): HTMLButtonElement => {
+        const button = parent.createEl("button", {
+          cls: "db-source-rule-icon-button",
+          attr: { type: "button", "aria-label": label },
+        });
+        setIcon(button, icon);
+        setTooltip(button, label, { delay: 100 });
+        button.onclick = (event) => {
+          event.preventDefault();
+          event.stopPropagation();
+          onClick();
+        };
+        return button;
+      };
+
+      const renderLeaf = (
+        parent: HTMLElement,
+        leaf: SourceRule,
+        rule: ConditionalFormatRule,
+        onReplace: (next: SourceRuleNode | undefined) => void,
+        showTreeActions: boolean,
+      ) => {
+        const currentColumn = database.schema.columns.find((col) => col.key === leaf.field);
         const operators = getFilterOperatorsForColumn(currentColumn);
-        if (!operators.some(([op]) => op === rule.condition.op)) {
-          rule.condition.op = operators[0]?.[0] || "eq";
-          rule.condition.value = "";
+        if (!operators.some(([op]) => op === leaf.op)) {
+          leaf.op = operators[0]?.[0] || "eq";
+          leaf.value = "";
+          if (!showTreeActions) {
+            const condition = getConditionalFormatCondition(leaf);
+            if (condition) rule.condition = condition;
+          }
         }
         if (!isDateLikeColumnType(currentColumn?.type) && rule.valueSource === "today") {
           rule.valueSource = "literal";
         }
-        const persist = (rerender = false) => {
-          config.conditionalFormats = [...rules];
-          actions.onChange(t("undo.conditionalFormatConfig"));
-          if (rerender) renderRules();
+        const commitLeaf = (rerender = false) => {
+          if (!isConditionalFormatOperator(leaf.op)) return;
+          const condition = getConditionalFormatCondition(leaf);
+          if (!condition) return;
+          rule.condition = condition;
+          if (showTreeActions) {
+            onReplace(leaf);
+            return;
+          }
+          persist(rerender);
         };
         createDropdownField({
-          parent: row,
+          parent,
           label: t("filter.field"),
-          value: rule.condition.field,
+          value: leaf.field,
           options: database.schema.columns.map((col) => ({
             value: col.key,
             text: col.label || col.key,
@@ -617,37 +681,36 @@ export class ViewConfigPanelRenderer {
           className: "db-conditional-format-dropdown db-conditional-format-field",
           renderIcon: renderDropdownPropertyTypeIcon,
           onChange: (next) => {
-            rule.condition.field = next;
+            leaf.field = next;
             const nextColumn = database.schema.columns.find((col) => col.key === next);
-            rule.condition.op = getFilterOperatorsForColumn(nextColumn)[0]?.[0] || "eq";
-            rule.condition.value = "";
+            leaf.op = getFilterOperatorsForColumn(nextColumn)[0]?.[0] || "eq";
+            leaf.value = "";
             if (!isDateLikeColumnType(nextColumn?.type)) rule.valueSource = "literal";
-            persist(true);
+            commitLeaf(true);
           },
         });
         createDropdownField({
-          parent: row,
+          parent,
           label: t("filter.operator"),
-          value: rule.condition.op,
+          value: leaf.op,
           options: operators.map(([value, text]) => ({ value, text })),
           hideLabel: true,
           disabled: Boolean(readOnly),
           className: "db-conditional-format-dropdown",
           onChange: (next) => {
-            rule.condition.op = next as FilterOperator;
-            if (next === "empty" || next === "notempty") rule.condition.value = "";
-            persist(true);
+            leaf.op = next as FilterOperator;
+            if (next === "empty" || next === "notempty") leaf.value = "";
+            commitLeaf(true);
           },
         });
-        const valueDisabled = Boolean(readOnly) ||
-          rule.condition.op === "empty" || rule.condition.op === "notempty";
+        const valueDisabled = Boolean(readOnly) || leaf.op === "empty" || leaf.op === "notempty";
         if (valueDisabled) {
-          row.createSpan({ cls: "db-conditional-format-empty-value", text: "—" });
+          parent.createSpan({ cls: "db-conditional-format-empty-value", text: "—" });
         } else if (currentColumn && ["select", "status", "multi-select"].includes(currentColumn.type)) {
           createDropdownField({
-            parent: row,
+            parent,
             label: t("filter.value"),
-            value: rule.condition.value || "",
+            value: leaf.value || "",
             options: [
               { value: "", text: t("filter.value") },
               ...getColumnOptions(currentColumn).map((option) => ({ value: option.value, text: option.value })),
@@ -656,14 +719,14 @@ export class ViewConfigPanelRenderer {
             disabled: Boolean(readOnly),
             className: "db-conditional-format-dropdown db-conditional-format-value",
             onChange: (next) => {
-              rule.condition.value = next;
-              persist();
+              leaf.value = next;
+              commitLeaf();
             },
           });
         } else if (isDateLikeColumnType(currentColumn?.type)) {
           renderDateValuePicker({
-            parent: row,
-            value: rule.condition.value || "",
+            parent,
+            value: leaf.value || "",
             placeholder: t("filter.value"),
             disabled: Boolean(readOnly),
             includeTime: currentColumn?.type === "datetime",
@@ -671,34 +734,106 @@ export class ViewConfigPanelRenderer {
             className: "db-conditional-format-value db-conditional-format-date-field",
             onChange: (next) => {
               rule.valueSource = "literal";
-              rule.condition.value = next;
-              persist(true);
+              leaf.value = next;
+              commitLeaf(true);
             },
             footerAction: {
               label: t("conditionalFormat.dynamicToday"),
               onSelect: () => {
                 rule.valueSource = "today";
-                rule.condition.value = "";
-                persist(true);
+                leaf.value = "";
+                commitLeaf(true);
               },
             },
           });
         } else {
-          const value = row.createEl("input", {
+          const value = parent.createEl("input", {
             cls: "db-view-config-text db-conditional-format-value",
             attr: {
-              type: currentColumn?.type === "number" || currentColumn?.type === "currency"
-                ? "number"
-                : "text",
+              type: currentColumn?.type === "number" || currentColumn?.type === "currency" ? "number" : "text",
               placeholder: t("filter.value"),
             },
           });
-          value.value = rule.condition.value || "";
+          value.value = leaf.value || "";
           value.disabled = Boolean(readOnly);
           value.onchange = () => {
-            rule.condition.value = value.value;
-            persist();
+            leaf.value = value.value;
+            commitLeaf();
           };
+        }
+        if (showTreeActions && !readOnly) {
+          const leafActions = parent.createDiv({ cls: "db-source-rule-actions" });
+          createTreeButton(leafActions, "folder-plus", t("conditionalFormat.group"), () => {
+            onReplace({ type: "group", logic: "and", rules: [leaf] });
+          });
+          createTreeButton(leafActions, "trash-2", t("common.delete"), () => onReplace(undefined));
+        }
+      };
+
+      const renderConditionNode = (
+        parent: HTMLElement,
+        node: SourceRuleNode,
+        rule: ConditionalFormatRule,
+        onReplace: (next: SourceRuleNode | undefined) => void,
+      ): void => {
+        if (isSourceRuleGroup(node)) {
+          const wrap = parent.createDiv({ cls: "db-source-rule-node db-source-rule-group" });
+          const header = wrap.createDiv({ cls: "db-source-rule-header" });
+          createDropdownField({
+            parent: header,
+            label: t("conditionalFormat.group"),
+            options: [
+              { value: "and", text: t("panel.and") },
+              { value: "or", text: t("panel.or") },
+            ],
+            value: node.logic,
+            className: "db-source-rule-dropdown db-source-rule-logic",
+            hideLabel: true,
+            disabled: Boolean(readOnly),
+            onChange: (value) => onReplace({ ...node, logic: value === "or" ? "or" : "and" }),
+          });
+          if (!readOnly) {
+            const groupActions = header.createDiv({ cls: "db-source-rule-actions" });
+            createTreeButton(groupActions, "plus", t("panel.addCondition"), () => {
+              onReplace({ ...node, rules: [...node.rules, createConditionalFormatLeaf(defaultCondition())] });
+            });
+            createTreeButton(groupActions, "folder-plus", t("conditionalFormat.group"), () => {
+              onReplace({
+                ...node,
+                rules: [...node.rules, { type: "group", logic: "and", rules: [createConditionalFormatLeaf(defaultCondition())] }],
+              });
+            });
+            createTreeButton(groupActions, "trash-2", t("common.delete"), () => onReplace(undefined));
+          }
+          const children = wrap.createDiv({ cls: "db-source-rule-children" });
+          if (node.rules.length === 0) {
+            children.createDiv({ cls: "db-source-rules-empty", text: t("conditionalFormat.group") });
+          }
+          for (let index = 0; index < node.rules.length; index += 1) {
+            renderConditionNode(children, node.rules[index], rule, (next) => {
+              const rules = [...node.rules];
+              if (next) rules[index] = next;
+              else rules.splice(index, 1);
+              onReplace(rules.length > 0 ? { ...node, rules } : undefined);
+            });
+          }
+          return;
+        }
+        if (!isSourceRuleLeaf(node)) return;
+        const wrap = parent.createDiv({ cls: "db-source-rule-node db-source-rule-leaf" });
+        const controls = wrap.createDiv({ cls: "db-source-rule-leaf-controls" });
+        renderLeaf(controls, node, rule, onReplace, true);
+      };
+
+      rules.forEach((rule, index) => {
+        const row = section.createDiv({ cls: "db-conditional-format-rule" });
+        const conditionTree = rule.conditionTree;
+        if (conditionTree && isSourceRuleGroup(conditionTree)) {
+          const group = row.createDiv({ cls: "db-conditional-format-condition-group" });
+          group.style.gridColumn = "1 / -1";
+          renderConditionNode(group, conditionTree, rule, (next) => replaceTree(rule, next));
+        } else {
+          renderLeaf(row, createConditionalFormatLeaf(rule.condition), rule, () => persist(), false);
         }
 
         createDropdownField({
@@ -728,14 +863,68 @@ export class ViewConfigPanelRenderer {
         color.disabled = Boolean(readOnly);
         color.onclick = () => {
           openOptionColorPicker(color, rule.color || "gray", (next: StatusColor) => {
-              rule.color = next;
-              actions.onChange(t("undo.conditionalFormatConfig"));
-              renderRules();
+            rule.color = next;
+            persist(true);
           });
+        };
+
+        const validIconIds = new Set(getValidRecordIconIds());
+        const icon = row.createEl("button", {
+          cls: "db-icon-only-button db-conditional-format-icon-button",
+          attr: { type: "button", "aria-label": t("conditionalFormat.icon") },
+        });
+        const currentIcon = rule.icon && parseRecordIconToken(rule.icon, validIconIds) ? rule.icon : undefined;
+        renderRecordIcon(icon, currentIcon, { defaultIcon: "smile" });
+        icon.disabled = Boolean(readOnly);
+        icon.onclick = () => {
+          if (readOnly) return;
+          openIconPickerPopover({
+            anchor: icon,
+            current: currentIcon,
+            onSelect: (value) => {
+              if (value !== null && !parseRecordIconToken(value, validIconIds)) return;
+              rule.icon = value || undefined;
+              persist(true);
+            },
+          });
+        };
+
+        const bold = row.createEl("button", {
+          cls: `db-icon-only-button db-conditional-format-bold-toggle${rule.bold ? " is-active" : ""}`,
+          attr: {
+            type: "button",
+            "aria-label": t("conditionalFormat.bold"),
+            "aria-pressed": String(rule.bold === true),
+          },
+        });
+        setIcon(bold, "bold");
+        bold.disabled = Boolean(readOnly);
+        bold.onclick = () => {
+          if (readOnly) return;
+          rule.bold = rule.bold !== true;
+          persist(true);
         };
 
         if (!readOnly) {
           const controls = row.createDiv({ cls: "db-conditional-format-controls" });
+          if (!conditionTree || !isSourceRuleGroup(conditionTree)) {
+            const group = controls.createEl("button", {
+              cls: "db-icon-only-button",
+              attr: { type: "button", "aria-label": t("conditionalFormat.group") },
+            });
+            setIcon(group, "folder-plus");
+            setTooltip(group, t("conditionalFormat.group"), { delay: 100 });
+            group.onclick = (event) => {
+              event.preventDefault();
+              event.stopPropagation();
+              rule.conditionTree = {
+                type: "group",
+                logic: "and",
+                rules: [createConditionalFormatLeaf(rule.condition)],
+              };
+              persist(true);
+            };
+          }
           const up = controls.createEl("button", { cls: "db-icon-only-button", attr: { type: "button", "aria-label": t("common.moveUp") } });
           setIcon(up, "chevron-up");
           up.disabled = index === 0;
@@ -754,11 +943,7 @@ export class ViewConfigPanelRenderer {
           };
           const remove = controls.createEl("button", { cls: "db-icon-only-button", attr: { type: "button", "aria-label": t("common.delete") } });
           setIcon(remove, "trash-2");
-          remove.onclick = () => {
-            config.conditionalFormats = rules.filter((candidate) => candidate.id !== rule.id);
-            actions.onChange(t("undo.conditionalFormatConfig"));
-            renderRules();
-          };
+          remove.onclick = () => removeRule(rule);
         }
       });
     };
