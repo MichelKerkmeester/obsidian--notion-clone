@@ -10,6 +10,7 @@ import { formatGroupKeyDisplay, isComputedGroupField } from "../data/GroupDispla
 import { renderGroupLabel } from "./GroupLabelRenderer";
 import { markNoteHoverLink } from "./HoverLinkPreview";
 import { parseTextLink } from "../data/TextLink";
+import { assembleSchemeLinkTarget, isTextLinkScheme } from "../data/textLinkScheme";
 import { parseInlineMarkdown } from "../data/InlineMarkdown";
 import { ColumnDef, CreateEntryPosition, NO_TITLE_FIELD, RowCreateContext, RowData, StatusColor, ViewConfig } from "../data/types";
 import { t } from "../i18n";
@@ -28,6 +29,7 @@ import { isSameBoardGroup, resolveBoardCardDropIntent, resolveBoardColumnByPoint
 import { resolveTitleFieldDisplay } from "../data/TitleFieldDisplay";
 import { isImeComposing } from "../data/KeyboardUtils";
 import { openOptionColorPicker } from "./OptionColorPicker";
+import { renderDelayedExternalLink } from "./CellRenderer";
 
 const CARD_MIME = "application/x-note-database-card";
 const CARD_FROM_GROUP_MIME = "application/x-note-database-card-from-group";
@@ -1041,6 +1043,18 @@ export class BoardRenderer {
     }
 
     const values = Array.isArray(value) ? value : [value];
+
+    const schemeTarget = !isFileFieldKey(col.key) && isTextLinkScheme(col.textLinkScheme)
+      ? assembleSchemeLinkTarget(col.textLinkScheme, value)
+      : null;
+    if (schemeTarget !== null) {
+      renderDelayedExternalLink(valueEl, row, {
+        label: String(value),
+        target: schemeTarget,
+        external: true,
+      });
+      return;
+    }
 
     if (col.textRenderMode === "markdown" && !isFileFieldKey(col.key)) {
       const mdValues = Array.isArray(value) ? value : [value];

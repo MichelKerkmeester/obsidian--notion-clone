@@ -6,6 +6,7 @@ import { getFileFieldFixedType, getRowFileFieldValue, isFileFieldKey, isReadonly
 import { isImeComposing } from "../data/KeyboardUtils";
 import { safeString } from "../data/SafeString";
 import { parseTextLink } from "../data/TextLink";
+import { assembleSchemeLinkTarget, isTextLinkScheme } from "../data/textLinkScheme";
 import { ColumnDef, RowData, ViewConfig } from "../data/types";
 import { resolveTitleFieldDisplay } from "../data/TitleFieldDisplay";
 import { t } from "../i18n";
@@ -19,6 +20,7 @@ import { parseInlineMarkdown } from "../data/InlineMarkdown";
 import { renderInlineMarkdown, resolveInlineImageSrc, valueToTooltip } from "./InlineMarkdownRenderer";
 import { markNoteHoverLink } from "./HoverLinkPreview";
 import { positionToolbarPopover } from "./PopoverPosition";
+import { renderDelayedExternalLink } from "./CellRenderer";
 
 /**
  * 日历 / 时间线事件卡片「展开为可编辑浮动面板」。
@@ -341,6 +343,18 @@ function renderRecordValue(
       if (style === "progress") { renderProgress(valueEl, num, col.numberDisplayConfig); return; }
       if (style === "ring") { renderProgressRing(valueEl, num, col.numberDisplayConfig); return; }
     }
+  }
+
+  const schemeTarget = !isFileFieldKey(col.key) && isTextLinkScheme(col.textLinkScheme)
+    ? assembleSchemeLinkTarget(col.textLinkScheme, value)
+    : null;
+  if (schemeTarget !== null) {
+    renderDelayedExternalLink(valueEl, row, {
+      label: String(value),
+      target: schemeTarget,
+      external: true,
+    });
+    return;
   }
 
   // markdown 内联（text 字段 textRenderMode === "markdown"）：对齐看板卡片渲染，

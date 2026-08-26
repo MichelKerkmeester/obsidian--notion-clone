@@ -8,6 +8,7 @@ import { formatGroupKeyDisplay, isComputedGroupField } from "../data/GroupDispla
 import { renderGroupLabel } from "./GroupLabelRenderer";
 import { markNoteHoverLink } from "./HoverLinkPreview";
 import { parseTextLink } from "../data/TextLink";
+import { assembleSchemeLinkTarget, isTextLinkScheme } from "../data/textLinkScheme";
 import { parseInlineMarkdown } from "../data/InlineMarkdown";
 import { ColumnDef, CreateEntryPosition, NO_TITLE_FIELD, RowCreateContext, RowData, ViewConfig } from "../data/types";
 import { t } from "../i18n";
@@ -24,6 +25,7 @@ import { renderGroupExpandControls } from "./GroupExpandControls";
 import { getGroupVisibleCount } from "../data/GroupVisibility";
 import { DragDropFeedbackState, resolveDropPlacement } from "./DragDropFeedback";
 import { resolveTitleFieldDisplay } from "../data/TitleFieldDisplay";
+import { renderDelayedExternalLink } from "./CellRenderer";
 
 const ROW_MIME = "application/x-note-database-row";
 const ROW_FROM_GROUP_MIME = "application/x-note-database-row-from-group";
@@ -524,6 +526,18 @@ export class ListRenderer {
         ? formatDateTimeValueDisplay(value, { mode: "full", showTimeWhenMissing: true })
         : formatDateValueDisplay(value);
       valueEl.title = valueEl.textContent;
+      return;
+    }
+
+    const schemeTarget = !isFileFieldKey(col.key) && isTextLinkScheme(col.textLinkScheme)
+      ? assembleSchemeLinkTarget(col.textLinkScheme, value)
+      : null;
+    if (schemeTarget !== null) {
+      renderDelayedExternalLink(valueEl, row, {
+        label: String(value),
+        target: schemeTarget,
+        external: true,
+      });
       return;
     }
 
