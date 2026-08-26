@@ -4,6 +4,21 @@ import { isOptionColumnType } from "./ColumnTypes";
 import { getRowFileFieldValue, isBaseFileField } from "./FileFields";
 import { FORMULA_BUILTIN_CONSTANTS, scanFormulaSegments } from "./FormulaTokenizer";
 import { updateSourceRuleTreeKeyReferences } from "./SourceRules";
+import { flattenLeaves, mapLeafAt } from "./ViewFilterTree";
+import type { SourceRuleNode } from "./types";
+
+function renameViewFilterTreeFields(
+  tree: SourceRuleNode | undefined,
+  oldKey: string,
+  newKey: string,
+): SourceRuleNode | undefined {
+  let next = tree;
+  for (const [index, leaf] of flattenLeaves(tree).entries()) {
+    if (leaf.field !== oldKey) continue;
+    next = mapLeafAt(next, index, (current) => ({ ...current, field: newKey }));
+  }
+  return next;
+}
 
 /**
  * After JSON deserialization, db.schema and each view.schema can become
@@ -167,6 +182,11 @@ export function updateColumnKeyReferences(
       changed = true;
     }
   }
+  const renamedConfigFilterTree = renameViewFilterTreeFields(config.filterTree, oldKey, newKey);
+  if (renamedConfigFilterTree !== config.filterTree) {
+    config.filterTree = renamedConfigFilterTree;
+    changed = true;
+  }
   for (const rule of config.sortRules || []) {
     if (rule.field === oldKey) {
       rule.field = newKey;
@@ -228,6 +248,11 @@ export function updateColumnKeyReferences(
         changed = true;
       }
     }
+    const renamedViewFilterTree = renameViewFilterTreeFields(viewState.filterTree, oldKey, newKey);
+    if (renamedViewFilterTree !== viewState.filterTree) {
+      viewState.filterTree = renamedViewFilterTree;
+      changed = true;
+    }
   }
   if (state) {
     const hiddenChanged = state.hiddenColumns.delete(oldKey);
@@ -248,6 +273,11 @@ export function updateColumnKeyReferences(
         rule.field = newKey;
         changed = true;
       }
+    }
+    const renamedStateFilterTree = renameViewFilterTreeFields(state.filterTree, oldKey, newKey);
+    if (renamedStateFilterTree !== state.filterTree) {
+      state.filterTree = renamedStateFilterTree;
+      changed = true;
     }
   }
   return updateComputedFormulaReferences(config, oldKey, newKey, oldLabel, newLabel) || changed;

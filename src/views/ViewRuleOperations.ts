@@ -1,4 +1,5 @@
 import { ColumnDef, ViewConfig } from "../data/types";
+import { removeLeafAt } from "../data/ViewFilterTree";
 import { t } from "../i18n";
 import { DatabaseViewState } from "./ViewStateStore";
 
@@ -12,6 +13,7 @@ export function getViewRuleColumns(config: ViewConfig): ColumnDef[] {
 export function removeFilterRuleAt(state: DatabaseViewState, index: number): boolean {
   if (index < 0 || index >= state.filters.length) return false;
   state.filters.splice(index, 1);
+  state.filterTree = removeLeafAt(state.filterTree, index);
   return true;
 }
 

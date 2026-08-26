@@ -1,6 +1,6 @@
 import { setIcon } from "obsidian";
 import { getEffectiveFilterRules } from "../data/FilterRules";
-import { ColumnDef, FilterRule, ViewConfig } from "../data/types";
+import { ColumnDef, FilterRule, SourceRuleNode, ViewConfig } from "../data/types";
 import { getViewRuleColumns } from "./ViewRuleOperations";
 import { t } from "../i18n";
 import { getFilterOperatorsForColumn } from "./FilterPanelRenderer";
@@ -17,6 +17,12 @@ export interface ActiveViewControlsActions {
 interface EffectiveFilterEntry {
   rule: FilterRule;
   index: number;
+}
+
+function isNestedFilterTree(tree: SourceRuleNode | undefined): boolean {
+  if (!tree || !("type" in tree)) return false;
+  if (tree.type !== "group") return true;
+  return tree.rules.some((rule) => "type" in rule);
 }
 
 export class ActiveViewControlsRenderer {
@@ -79,7 +85,7 @@ export class ActiveViewControlsRenderer {
         cls: "db-active-control-group is-filter",
         attr: { "aria-label": t("toolbar.filter") },
       });
-      if (filters.length > 1) {
+      if (filters.length > 1 && !isNestedFilterTree(state.filterTree)) {
         const logicLabel = state.filterLogic === "and" ? t("panel.and") : t("panel.or");
         const logic = filterGroup.createEl("button", {
           cls: "db-active-control-logic",

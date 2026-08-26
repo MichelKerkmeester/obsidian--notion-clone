@@ -21,6 +21,7 @@ import { getDefaultChartDateBucket, getDefaultChartNumberBucket, isChartAggregat
 import { normalizeTimelineDayScale } from "../data/CalendarTimelineModel";
 import { isDateLikeColumnType } from "../data/DateTimeFormat";
 import { removeSourceRuleTreeReferences, updateSourceRuleTreeKeyReferences } from "../data/SourceRules";
+import { pruneViewFilterTree } from "../data/ViewFilterTree";
 import { getColumnDisplayType, getComputedStorageKey, normalizeComputedStorageKey } from "../data/ColumnDisplay";
 import { ColumnDef, DatabaseConfig, StatusOptionDef, ViewConfig } from "../data/types";
 import { getFileFieldFixedType, isFileFieldKey, isSupportedFileField } from "../data/FileFields";
@@ -492,6 +493,7 @@ export class ColumnOperations {
     }
     this.removeSourceRuleReferences(config.sourceRules, key);
     config.sourceRuleTree = removeSourceRuleTreeReferences(config.sourceRuleTree, key);
+    config.filterTree = pruneViewFilterTree(config.filterTree, (rule) => rule.field !== key);
     delete config.groupOrders?.[key];
     delete config.showEmptyGroups?.[key];
     delete config.collapsedGroups?.[key];
@@ -500,6 +502,7 @@ export class ColumnOperations {
       if (!viewState) continue;
       viewState.hiddenColumns = (viewState.hiddenColumns || []).filter((candidate) => candidate !== key);
       viewState.filters = (viewState.filters || []).filter((rule) => rule.field !== key);
+      viewState.filterTree = pruneViewFilterTree(viewState.filterTree, (rule) => rule.field !== key);
       viewState.sortRules = (viewState.sortRules || []).filter((rule) => rule.field !== key);
       if (viewState.sortColumn === key) {
         viewState.sortColumn = undefined;
@@ -512,6 +515,7 @@ export class ColumnOperations {
   private removeColumnFromState(state: DatabaseViewState, key: string): void {
     state.hiddenColumns.delete(key);
     state.filters = state.filters.filter((rule) => rule.field !== key);
+    state.filterTree = pruneViewFilterTree(state.filterTree, (rule) => rule.field !== key);
     state.sortRules = state.sortRules.filter((rule) => rule.field !== key);
     if (state.sortColumn === key) {
       state.sortColumn = undefined;

@@ -133,6 +133,7 @@ import { t } from "../i18n";
 import { createStoredZip, ZipEntry } from "../data/ZipExport";
 import { saveZipWithPicker } from "../data/ExportSaveTarget";
 import { getEffectiveFilterRules } from "../data/FilterRules";
+import { appendLeaf, buildViewFilterTree, getRequiredViewFilterLeaves } from "../data/ViewFilterTree";
 import { installPopoverAutoClose } from "./PopoverAutoClose";
 import { estimateAutoColumnWidth } from "./ColumnWidth";
 import { createRenderedTextWidthMeasurer } from "./InlineMarkdownRenderer";
@@ -2000,7 +2001,12 @@ export class DatabaseView extends FileView {
 
   private toggleActiveFilterLogic(): void {
     const state = this.vs();
+    const tree = state.filterTree;
+    if (tree && (!("type" in tree) || tree.type !== "group" || tree.rules.some((rule) => "type" in rule))) return;
     state.filterLogic = state.filterLogic === "and" ? "or" : "and";
+    if (tree && "type" in tree && tree.type === "group") {
+      state.filterTree = { ...tree, logic: state.filterLogic };
+    }
     this.pendingUndoLabel = t("undo.filterConfig");
     this.scheduleViewStateSave();
     this.updateToolbarIndicators();
@@ -4018,9 +4024,9 @@ export class DatabaseView extends FileView {
     const state = this.vs();
     const frontmatter: Record<string, unknown> = {};
     if (state.statusFilter) frontmatter["status"] = state.statusFilter;
-    if (state.filterLogic === "or") return frontmatter;
 
-    for (const rule of state.filters) {
+    const filterTree = state.filterTree ?? buildViewFilterTree(state.filters, state.filterLogic);
+    for (const rule of getRequiredViewFilterLeaves(filterTree)) {
       if (!rule.field || rule.field.startsWith("file.") || !rule.value) continue;
       const col = config.schema.columns.find((candidate) => candidate.key === rule.field);
       if (col?.type === "computed" || col?.type === "rollup") continue;
@@ -9685,14 +9691,24 @@ export class DatabaseView extends FileView {
   private applyChartFilters(config: ViewConfig, rules: FilterRule[]): void {
     if (rules.length === 0) return;
     const state = this.vs();
+    let filterTree = state.filterTree ?? buildViewFilterTree(state.filters, state.filterLogic);
+    if (filterTree && "type" in filterTree) {
+      if (filterTree.type === "group" && (filterTree.logic === "and" || filterTree.rules.every((rule) => !("type" in rule)))) {
+        filterTree = { ...filterTree, logic: "and" };
+      } else {
+        filterTree = { type: "group", logic: "and", rules: [filterTree] };
+      }
+    }
     let changed = false;
     for (const rule of rules) {
       if (state.filters.some((existing) => filtersEqual(existing, rule))) continue;
       state.filters.push(rule);
+      filterTree = appendLeaf(filterTree, rule, "and");
       changed = true;
     }
     if (!changed) return;
     state.filterLogic = "and";
+    state.filterTree = filterTree;
     this.pendingUndoLabel = t("undo.chartDrilldownFilterConfig");
     this.viewStateStore.persist(config, state);
     this.scheduleConfigSave();

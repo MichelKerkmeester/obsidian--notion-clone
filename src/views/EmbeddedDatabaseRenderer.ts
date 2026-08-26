@@ -80,6 +80,7 @@ import { highlightSearchMatches, renderSearchHighlightedText } from "./SearchHig
 import { normalizeComputedSyncMode } from "../data/ComputedSync";
 import { getComputedStorageKey, isNumberDisplayColumn } from "../data/ColumnDisplay";
 import { getRequiredSourceRules, getSourceRuleTree, getSourceRuleTypedValue, mergeDbAndViewSourceRuleTrees } from "../data/SourceRules";
+import { appendLeaf, buildViewFilterTree } from "../data/ViewFilterTree";
 import { getRowFileFieldValue, isFileFieldKey } from "../data/FileFields";
 import { applyRangeSelection } from "../data/RangeSelection";
 import { installNoteHoverPreview } from "./HoverLinkPreview";
@@ -1452,7 +1453,12 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
 
   private toggleActiveFilterLogic(config: ViewConfig): void {
     const state = this.vs(config);
+    const tree = state.filterTree;
+    if (tree && (!("type" in tree) || tree.type !== "group" || tree.rules.some((rule) => "type" in rule))) return;
     state.filterLogic = state.filterLogic === "and" ? "or" : "and";
+    if (tree && "type" in tree && tree.type === "group") {
+      state.filterTree = { ...tree, logic: state.filterLogic };
+    }
     this.persistEmbeddedConfigLocally(config);
     this.updateToolbarIndicators(config);
     this.renderResults(config, { viewport: "reset-top" });
@@ -1780,14 +1786,24 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
   private applyChartFilters(config: ViewConfig, rules: FilterRule[]): void {
     if (rules.length === 0) return;
     const state = this.vs(config);
+    let filterTree = state.filterTree ?? buildViewFilterTree(state.filters, state.filterLogic);
+    if (filterTree && "type" in filterTree) {
+      if (filterTree.type === "group" && (filterTree.logic === "and" || filterTree.rules.every((rule) => !("type" in rule)))) {
+        filterTree = { ...filterTree, logic: "and" };
+      } else {
+        filterTree = { type: "group", logic: "and", rules: [filterTree] };
+      }
+    }
     let changed = false;
     for (const rule of rules) {
       if (state.filters.some((existing) => filtersEqual(existing, rule))) continue;
       state.filters.push(rule);
+      filterTree = appendLeaf(filterTree, rule, "and");
       changed = true;
     }
     if (!changed) return;
     state.filterLogic = "and";
+    state.filterTree = filterTree;
     this.persistEmbeddedConfigLocally(config);
     this.renderResults(config, { viewport: "reset-top" });
     this.saveEmbeddedConfigInBackground();
