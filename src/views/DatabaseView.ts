@@ -1535,6 +1535,26 @@ export class DatabaseView extends FileView {
         this.moveCellFocus(intent, event.shiftKey);
         return;
       }
+      if (mod && event.key === "Enter") {
+        const context = this.getCellSelectionFocusContext();
+        if (context && this.containerEl_) {
+          event.preventDefault();
+          const config = this.getConfig();
+          const visible = getVisibleColumns(config, this.rows, this.vs(), this.pendingShowColumns);
+          openTableRecordPeek({
+            anchor: context.td,
+            row: context.row,
+            config,
+            visibleColumns: visible,
+            allColumns: getColumnsInOrder(config),
+            container: this.containerEl_,
+            returnFocus: () => context.td.focus(),
+            renderRecordIcon: (parent, currentRow, currentConfig) =>
+              this.renderRowRecordIcon(parent, currentRow, currentConfig),
+          });
+          return;
+        }
+      }
       if (event.key === "Enter") {
         event.preventDefault();
         this.editAtCellSelection();
