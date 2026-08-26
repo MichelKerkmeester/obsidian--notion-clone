@@ -1,5 +1,6 @@
 import { App, CachedMetadata, TFile } from "obsidian";
 import { LocaleCode } from "../i18n";
+import type { TextLinkScheme } from "./textLinkScheme";
 
 export interface RecordSchema {
   columns: ColumnDef[];
@@ -60,6 +61,7 @@ export interface ColumnDef {
    *  "markdown" renders inline markdown (bold/italic/strike/highlight/code/links);
    *  undefined = plain text. */
   textRenderMode?: "plain" | "link" | "markdown";
+  textLinkScheme?: TextLinkScheme;
   /** Per-column display style for number values. Undefined = plain number. */
   numberDisplayStyle?: NumberDisplayStyle;
   /** Per-column tuning for the number display style (icon/max/divisor/showValue/color). */

@@ -20,6 +20,7 @@ import { formatDateTimeValueDisplay, formatDateValueDisplay, parseDateTimeParts 
 import { isImeComposing } from "../data/KeyboardUtils";
 import { closeActiveOptionColorPicker, openOptionColorPicker } from "./OptionColorPicker";
 import { normalizeExternalUrlTarget, parseTextLink } from "../data/TextLink";
+import { assembleSchemeLinkTarget, isTextLinkScheme } from "../data/textLinkScheme";
 import { parseInlineMarkdown } from "../data/InlineMarkdown";
 import { getFileFieldFixedType, getRowFileFieldValue, isFileFieldKey, isReadonlyFileField } from "../data/FileFields";
 import { getRenamedMarkdownPath } from "../data/FileRenamePlan";
@@ -72,6 +73,35 @@ interface OptionDragPreview {
 
 interface MetadataCacheWithTags {
   getTags?(): Record<string, number>;
+}
+
+export function renderDelayedExternalLink(
+  td: HTMLElement,
+  row: RowData,
+  link: { label: string; target: string; external?: boolean },
+  app?: App,
+): void {
+  const external = link.external ?? true;
+  const anchor = td.createEl("a", {
+    cls: `db-text-link ${external ? "external-link" : "internal-link"}`,
+    text: link.label,
+    attr: { title: link.target, href: external ? link.target : "#" },
+  });
+  if (!external) markNoteHoverLink(anchor, link.target, row.file.path);
+
+  let openTimer: number | undefined;
+  anchor.addEventListener("click", (event) => {
+    event.preventDefault();
+    if (event.detail > 1) {
+      if (openTimer !== undefined) { window.clearTimeout(openTimer); openTimer = undefined; }
+      return;
+    }
+    openTimer = window.setTimeout(() => {
+      openTimer = undefined;
+      if (external) window.open(link.target);
+      else void app?.workspace.openLinkText(link.target, row.file.path);
+    }, 280);
+  });
 }
 
 export class CellRenderer {
@@ -209,8 +239,17 @@ export class CellRenderer {
       case "datetime":
         this.renderDate(td, row, col, value, true);
         break;
-      default:
-        if (col.textRenderMode === "markdown" && !isFileFieldKey(col.key)) {
+      default: {
+        const schemeTarget = !isFileFieldKey(col.key) && isTextLinkScheme(col.textLinkScheme)
+          ? assembleSchemeLinkTarget(col.textLinkScheme, value)
+          : null;
+        if (schemeTarget !== null) {
+          renderDelayedExternalLink(td, row, {
+            label: String(value),
+            target: schemeTarget,
+            external: true,
+          });
+        } else if (col.textRenderMode === "markdown" && !isFileFieldKey(col.key)) {
           const nodes = parseInlineMarkdown(value);
           if (nodes) {
             td.empty();
@@ -232,6 +271,8 @@ export class CellRenderer {
         } else {
           td.textContent = String(value);
         }
+        break;
+      }
     }
 
     if (!this.isReadOnly && col.type === "computed") {
@@ -270,27 +311,7 @@ export class CellRenderer {
   private renderTextLink(td: HTMLElement, row: RowData, value: unknown): void {
     const link = parseTextLink(value);
     if (!link) { td.textContent = String(value); return; }
-    const anchor = td.createEl("a", {
-      cls: `db-text-link ${link.external ? "external-link" : "internal-link"}`,
-      text: link.label,
-      attr: { title: link.target, href: link.external ? link.target : "#" },
-    });
-    if (!link.external) markNoteHoverLink(anchor, link.target, row.file.path);
-    let openTimer: number | undefined;
-    anchor.addEventListener("click", (event) => {
-      event.preventDefault();
-      // Second click of a double-click: cancel the pending open so the dblclick
-      // (inline edit) wins.
-      if (event.detail > 1) {
-        if (openTimer !== undefined) { window.clearTimeout(openTimer); openTimer = undefined; }
-        return;
-      }
-      openTimer = window.setTimeout(() => {
-        openTimer = undefined;
-        if (link.external) window.open(link.target);
-        else void this.app?.workspace.openLinkText(link.target, row.file.path);
-      }, 280);
-    });
+    renderDelayedExternalLink(td, row, link, this.app);
   }
 
   private getEffectiveDisplayType(col: ColumnDef): ColumnDef["type"] {
