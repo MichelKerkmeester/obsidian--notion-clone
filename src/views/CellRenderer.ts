@@ -10,7 +10,8 @@ import {
   toValidObsidianTagValues,
 } from "../data/ColumnTypes";
 import { getColumnDisplayType, getNumberDisplayStyle } from "../data/ColumnDisplay";
-import { formatEuroNumber, formatEuroCurrency } from "../data/EuroFormat";
+import { formatEuroCurrency } from "../data/EuroFormat";
+import { formatReportsNumber, toReportsDisplayNumber } from "../data/ReportsDisplay";
 import { parseRelationValues } from "../data/RelationLinks";
 import { renderRelationValue } from "./RelationValueRenderer";
 import { renderRecordIcon } from "./RecordIconRenderer";
@@ -148,7 +149,7 @@ export class CellRenderer {
       return;
     }
 
-    if (this.isEmptyValue(value)) {
+    if (this.isEmptyValue(value) && displayType !== "number") {
       td.createSpan({ cls: "db-empty-value", text: t("common.empty") });
       if (!this.isReadOnly && col.type === "computed") {
         this.makeComputedEditable(td, row, col);
@@ -253,8 +254,8 @@ export class CellRenderer {
 
   /** Render a number cell value, honoring the column's numberDisplayStyle (plain/rating/progress). */
   private renderNumberValue(td: HTMLElement, col: ColumnDef, value: unknown): void {
-    const num = typeof value === "number" ? value : parseFloat(String(value));
-    if (isNaN(num)) { td.textContent = "-"; return; }
+    const num = toReportsDisplayNumber(value);
+    if (num === null) { td.textContent = formatReportsNumber(value); return; }
     const style = getNumberDisplayStyle(col);
     if (style === "rating") { td.empty(); renderRating(td, num, col.numberDisplayConfig); return; }
     if (style === "progress") { td.empty(); renderProgress(td, num, col.numberDisplayConfig); return; }
@@ -2573,7 +2574,7 @@ export class CellRenderer {
   }
 
   private formatNumber(value: number): string {
-    return formatEuroNumber(value);
+    return formatReportsNumber(value);
   }
 
   private createOptionDragPreview(item: HTMLElement, event: MouseEvent): OptionDragPreview {
