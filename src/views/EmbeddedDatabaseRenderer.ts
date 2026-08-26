@@ -21,6 +21,7 @@ import {
 import { getDefaultGroupOrder, getEffectiveGroupOrder, mergeGroupOrder } from "../data/GroupOrder";
 import { formatGroupKeyDisplay } from "../data/GroupDisplay";
 import { setShowEmptyGroups, setGroupExpandedCount, withEmptyOptionGroups } from "../data/GroupVisibility";
+import { buildGroupTree, dropComputedGroupFields, effectiveGroupFields, flattenGroupTree } from "../data/MultiFieldGrouping";
 import { getEffectiveFilterRules } from "../data/FilterRules";
 import { CellAddress, serializeSelectedCells, getCellDisplayText } from "../data/ClipboardSerializer";
 import { createCsvMarkdownZip } from "../data/CsvMarkdownZipExport";
@@ -1011,11 +1012,25 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
         sortDirection: state.sortDirection,
         sortRules: state.sortRules,
       }, this.rows);
-    } else if (this.vs(config).groupByField) {
-      const field = this.vs(config).groupByField;
-      const groups = withEmptyOptionGroups(config, field, this.queryEngine.groupBy(this.rows, field, [], config.schema.columns.find((c) => c.key === field), config));
-      const order = getEffectiveGroupOrder(config, field, groups.map((group) => group.key));
-      this.tableRenderer.renderGroupedTable(target, renderConfig, this.rows, this.queryEngine.sortGroups(groups, order), field);
+    } else if (effectiveGroupFields(config, this.vs(config)).length > 0) {
+      const fields = dropComputedGroupFields(effectiveGroupFields(config, this.vs(config)), config);
+      const groupFn = (groupConfig: ViewConfig, field: string, rows: RowData[]) => {
+        const groups = withEmptyOptionGroups(
+          groupConfig,
+          field,
+          this.queryEngine.groupBy(
+            rows,
+            field,
+            [],
+            groupConfig.schema.columns.find((column) => column.key === field),
+            groupConfig,
+          ),
+        );
+        const order = getEffectiveGroupOrder(groupConfig, field, groups.map((group) => group.key));
+        return this.queryEngine.sortGroups(groups, order);
+      };
+      const flattened = flattenGroupTree(buildGroupTree(this.rows, fields, config, groupFn));
+      this.tableRenderer.renderGroupedTable(target, renderConfig, this.rows, flattened, fields[0]);
     } else {
       this.tableRenderer.renderTable(target, renderConfig, this.rows);
     }
@@ -3376,6 +3391,7 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
     origView.filterLogic = this.config.filterLogic;
     origView.sortRules = this.config.sortRules;
     origView.groupByField = this.config.groupByField;
+    origView.groupByFields = this.config.groupByFields;
     origView.viewStates = this.config.viewStates;
     origView.sourceRules = this.config.sourceRules;
     origView.sourceLogic = this.config.sourceLogic;
