@@ -7,6 +7,7 @@ import { ensureColumnOrder, getColumnsInOrder, getVisibleColumns } from "../data
 import { QueryEngine } from "../data/QueryEngine";
 import { RowPipeline } from "../data/RowPipeline";
 import { buildRelationRollups } from "../data/RelationRollup";
+import { mergeRelationInverseMembership } from "../data/RelationInverse";
 import { ColumnDef, DatabaseConfig, FilterRule, GroupOrderMode, RowData, ViewConfig, generateId, NumberDisplayStyle } from "../data/types";
 import { ComputedFieldEngine } from "../data/ComputedField";
 import { setDateDisplayMode } from "../data/DateTimeFormat";
@@ -3214,6 +3215,14 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
             .filter((column) => column.type === "relation")
             .map((column) => column.relationConfig?.targetDatabaseId)
             .filter((id): id is string => Boolean(id))
+        );
+        mergeRelationInverseMembership(
+          {
+            sourcePaths: result.targetPaths,
+            sourceDatabaseIds: result.sourceDatabaseIds,
+          },
+          this.relationTargetPaths,
+          targetIds,
         );
         this.relationTargetDatabases = databases.filter((candidate) => targetIds.has(candidate.id));
         this.relationTargetDatabasePaths = new Set(

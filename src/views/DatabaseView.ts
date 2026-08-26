@@ -18,6 +18,7 @@ import {
 } from "../data/ColumnConfig";
 import { RowPipeline } from "../data/RowPipeline";
 import { buildRelationRollups } from "../data/RelationRollup";
+import { mergeRelationInverseMembership } from "../data/RelationInverse";
 import { ViewConfig, ColumnDef, ComputedFieldDef, RowData, DatabaseConfig, DatabaseViewType, FilterRule, GroupOrderMode, SourceRule, StatusColor, StatusOptionDef, StatusPresetDef, generateId, CreateEntryPosition, NumberDisplayStyle, NumberDisplayConfig, DateGroupMode, RowCreateContext } from "../data/types";
 import {
   getDefaultCellValue as getColumnDefaultCellValue,
@@ -3366,6 +3367,14 @@ export class DatabaseView extends FileView {
             .filter((column) => column.type === "relation")
             .map((column) => column.relationConfig?.targetDatabaseId)
             .filter((id): id is string => Boolean(id))
+        );
+        mergeRelationInverseMembership(
+          {
+            sourcePaths: result.targetPaths,
+            sourceDatabaseIds: result.sourceDatabaseIds,
+          },
+          this.relationTargetPaths,
+          targetIds,
         );
         this.relationTargetDatabases = databases.filter((candidate) => targetIds.has(candidate.id));
         this.relationTargetDatabasePaths = new Set(
