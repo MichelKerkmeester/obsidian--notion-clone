@@ -4,7 +4,7 @@ import { generateId } from "./types";
 import { evaluateBaseFilterExpression } from "./BaseExpression";
 import { evaluateComputedFields } from "./ComputedEvaluator";
 import { safeString } from "./SafeString";
-import { hasObsidianTagValue, normalizeStatusPresets, OPTION_COLORS, toMultiSelectValues, toObsidianTagValues } from "./ColumnTypes";
+import { hasObsidianTagValue, normalizeStatusPresets, toMultiSelectValues, toObsidianTagValues } from "./ColumnTypes";
 import { normalizeComputedSyncMode } from "./ComputedSync";
 import { fileHasLink, getBaseFileFieldType, getFileFieldValue, isBaseFileField } from "./FileFields";
 import { absorbTypeFilterIntoRules, getSourceRuleTree, matchesBaseSourceType, matchesSourceRuleTree, parseSourceRuleTree, sourceRuleContainsValue, sourceRuleValuesLooseEqual, sourceRuleValuesStrictEqual } from "./SourceRules";
@@ -14,6 +14,7 @@ import type { ReportsInspectRecord, ReportsSalesMeaning } from "./ReportsInspect
 import { applyReportsComputedConfig } from "./ReportsComputedConfig";
 import type { ReportsComputedConfigOptions, ReportsComputedConfigResult } from "./ReportsComputedConfig";
 import { parseUniqueIdConfig } from "./UniqueIdStamp";
+import { parseConditionalFormats as parseConditionalFormatsValue } from "./ConditionalFormatParser";
 import { normalizeViewFilterTree } from "./ViewFilterTree";
 import { t } from "../i18n";
 
@@ -838,34 +839,7 @@ export class DataSource {
   }
 
   private parseConditionalFormats(value: unknown): ConditionalFormatRule[] | undefined {
-    if (!Array.isArray(value)) return undefined;
-    const operators = new Set(["eq", "neq", "contains", "hasTag", "gt", "lt", "gte", "lte", "empty", "notempty"]);
-    const colors = new Set<string>(OPTION_COLORS);
-    const rules: ConditionalFormatRule[] = [];
-    for (const item of value) {
-      if (!item || typeof item !== "object" || Array.isArray(item)) continue;
-      const source = item as Record<string, unknown>;
-      const condition = source["condition"];
-      if (!condition || typeof condition !== "object" || Array.isArray(condition)) continue;
-      const conditionSource = condition as Record<string, unknown>;
-      const field = safeString(conditionSource["field"]).trim();
-      const op = safeString(conditionSource["op"]);
-      const target = source["target"] === "field" ? "field" : source["target"] === "record" ? "record" : null;
-      const color = safeString(source["color"]);
-      if (!field || !operators.has(op) || !target || !colors.has(color)) continue;
-      rules.push({
-        id: safeString(source["id"]).trim() || generateId(),
-        condition: {
-          field,
-          op: op as ConditionalFormatRule["condition"]["op"],
-          value: safeString(conditionSource["value"]) || undefined,
-        },
-        valueSource: source["valueSource"] === "today" ? "today" : "literal",
-        target,
-        color: color as ConditionalFormatRule["color"],
-      });
-    }
-    return rules.length > 0 ? rules : undefined;
+    return parseConditionalFormatsValue(value);
   }
 
   private parseNewRecordTemplate(value: unknown): NewRecordTemplateConfig | undefined {
