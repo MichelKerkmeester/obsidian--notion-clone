@@ -141,7 +141,10 @@ export class RowPipeline {
   private withComputedResultTypes(config: ViewConfig): ColumnDef[] {
     return config.schema.columns.map((col) => {
       if (col.type === "rollup") {
-        const type = isNumericRollupKind(col.rollupConfig?.aggregation ?? "") ? "number" : "text";
+        const aggregation = col.rollupConfig?.aggregation ?? "";
+        const type = aggregation === "earliest" || aggregation === "latest"
+          ? "date"
+          : isNumericRollupKind(aggregation) ? "number" : "text";
         return { ...col, type };
       }
       if (col.type !== "computed") return col;

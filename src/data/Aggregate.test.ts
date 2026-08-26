@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { isNumericRollupKind, max, median, min, range } from "./Aggregate";
+import { earliest, isNumericRollupKind, latest, max, median, min, range } from "./Aggregate";
 
 type AggregateName = "min" | "max" | "median" | "range";
 type Aggregate = (numbers: readonly number[]) => number | null;
@@ -79,6 +79,59 @@ describe("numeric aggregates", () => {
     expect(median(values)).toBe(4);
     expect(values).toEqual([9, 1, 5, 3]);
   });
+});
+
+type DateAggregateName = "earliest" | "latest";
+type DateAggregate = (timestamps: readonly number[]) => Date | null;
+
+type DateCase = {
+  name: string;
+  values: readonly number[];
+  expected: Record<DateAggregateName, Date | null>;
+};
+
+const dateAggregateFunctions: ReadonlyArray<readonly [DateAggregateName, DateAggregate]> = [
+  ["earliest", earliest],
+  ["latest", latest],
+];
+
+const dateCases: DateCase[] = [
+  {
+    name: "empty",
+    values: [],
+    expected: { earliest: null, latest: null },
+  },
+  {
+    name: "all-invalid",
+    values: [Number.NaN, Number.POSITIVE_INFINITY, Number.NEGATIVE_INFINITY],
+    expected: { earliest: null, latest: null },
+  },
+  {
+    name: "single",
+    values: [Date.UTC(2024, 0, 2, 10, 30)],
+    expected: {
+      earliest: new Date(Date.UTC(2024, 0, 2, 10, 30)),
+      latest: new Date(Date.UTC(2024, 0, 2, 10, 30)),
+    },
+  },
+  {
+    name: "mixed valid and invalid",
+    values: [Number.NaN, Date.UTC(2024, 0, 3), Number.POSITIVE_INFINITY, Date.UTC(2024, 0, 1)],
+    expected: {
+      earliest: new Date(Date.UTC(2024, 0, 1)),
+      latest: new Date(Date.UTC(2024, 0, 3)),
+    },
+  },
+];
+
+describe("date aggregates", () => {
+  for (const testCase of dateCases) {
+    for (const [name, aggregate] of dateAggregateFunctions) {
+      it(`${name} handles ${testCase.name} timestamps`, () => {
+        expect(aggregate(testCase.values)).toEqual(testCase.expected[name]);
+      });
+    }
+  }
 });
 
 describe("isNumericRollupKind", () => {

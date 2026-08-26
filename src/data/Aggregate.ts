@@ -47,6 +47,16 @@ export function range(numbers: readonly number[]): number | null {
   return Math.max(...finite) - Math.min(...finite);
 }
 
+export function earliest(timestamps: readonly number[]): Date | null {
+  const finite = finiteNumbers(timestamps);
+  return finite.length > 0 ? new Date(Math.min(...finite)) : null;
+}
+
+export function latest(timestamps: readonly number[]): Date | null {
+  const finite = finiteNumbers(timestamps);
+  return finite.length > 0 ? new Date(Math.max(...finite)) : null;
+}
+
 function finiteNumbers(numbers: readonly number[]): number[] {
   return numbers.filter((value) => Number.isFinite(value));
 }

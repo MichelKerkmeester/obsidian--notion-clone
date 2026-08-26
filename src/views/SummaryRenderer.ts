@@ -1,4 +1,4 @@
-import { isNumericRollupKind, max as aggregateMax, median as aggregateMedian, min as aggregateMin, range as aggregateRange } from "../data/Aggregate";
+import { earliest as aggregateEarliest, isNumericRollupKind, latest as aggregateLatest, max as aggregateMax, median as aggregateMedian, min as aggregateMin, range as aggregateRange } from "../data/Aggregate";
 import { ColumnDef, DatabaseConfig, RowData, ViewConfig } from "../data/types";
 import { toChartNumber } from "../data/ChartAggregation";
 import { isDateLikeColumnType, parseDateTimeParts, toDateTimestamp } from "../data/DateTimeFormat";
@@ -451,8 +451,8 @@ export class SummaryRenderer {
     if (compactName === "filled" || compactName === "count" || compactName === "countfilled" || compactName === "countnonempty") return nonEmpty.length;
     if (compactName === "countall") return values.length;
     if (compactName === "unique" || compactName === "countunique") return this.uniqueCount(nonEmpty);
-    if (name === "earliest") return dates.length ? new Date(Math.min(...dates)) : "";
-    if (name === "latest") return dates.length ? new Date(Math.max(...dates)) : "";
+    if (name === "earliest") return aggregateEarliest(dates) ?? "";
+    if (name === "latest") return aggregateLatest(dates) ?? "";
     if (name === "range") {
       const numericRange = aggregateRange(numbers);
       if (numericRange != null) return numericRange;

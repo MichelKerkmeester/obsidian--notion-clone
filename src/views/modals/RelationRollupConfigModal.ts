@@ -1,5 +1,6 @@
 import { App, Modal, Notice } from "obsidian";
-import { isRollupNumericTarget } from "../../data/ColumnDisplay";
+import { getColumnDisplayType, isRollupNumericTarget } from "../../data/ColumnDisplay";
+import { isDateLikeColumnType } from "../../data/DateTimeFormat";
 import { ColumnDef, DatabaseConfig } from "../../data/types";
 import { t } from "../../i18n";
 import { createDropdownField, DropdownOption } from "../DropdownField";
@@ -136,11 +137,15 @@ export class RelationRollupConfigModal extends Modal {
       // rollup 列（含 file.name / relation）。aggregation 变更触发 renderFields 重选。
       const isSumAvg = aggregation === "sum" || aggregation === "avg" ||
         aggregation === "min" || aggregation === "max" || aggregation === "median" || aggregation === "range";
+      const isDateAggregation = aggregation === "earliest" || aggregation === "latest";
       const isNumericTarget = (column: ColumnDef) =>
         isRollupNumericTarget(column, targetDatabase?.schema.computedFields);
+      const isDateTarget = (column: ColumnDef) =>
+        isDateLikeColumnType(getColumnDisplayType(column, targetDatabase?.schema.computedFields));
       const targetColumns = (targetDatabase?.schema.columns || []).filter((column) => {
         if (column.type === "rollup") return false;
         if (isSumAvg) return isNumericTarget(column);
+        if (isDateAggregation) return isDateTarget(column);
         return true;
       });
       if (!targetField || !targetColumns.some((column) => column.key === targetField)) {
@@ -151,7 +156,7 @@ export class RelationRollupConfigModal extends Modal {
         configHost,
         t("rollup.targetField"),
         [
-          ...(isSumAvg ? [] : [{ value: "file.name", text: t("viewConfig.titleAuto"), icon: getPropertyDropdownIcon("text") }]),
+          ...((isSumAvg || isDateAggregation) ? [] : [{ value: "file.name", text: t("viewConfig.titleAuto"), icon: getPropertyDropdownIcon("text") }]),
           ...targetColumns
             .filter((column) => column.key !== "file.name")
             .map((column) => ({
@@ -175,6 +180,8 @@ export class RelationRollupConfigModal extends Modal {
           { value: "min", text: t("chart.minAggregation") },
           { value: "max", text: t("chart.maxAggregation") },
           { value: "range", text: t("chart.rangeAggregation") },
+          { value: "earliest", text: t("viewConfig.summaryEarliest") },
+          { value: "latest", text: t("viewConfig.summaryLatest") },
           { value: "list", text: t("rollup.list") },
         ],
         aggregation,
@@ -248,5 +255,5 @@ export type RelationRollupConfigResult =
     type: "rollup";
     relationField: string;
     targetField: string;
-    aggregation: "count" | "sum" | "avg" | "min" | "max" | "median" | "range" | "list";
+    aggregation: "count" | "sum" | "avg" | "min" | "max" | "median" | "range" | "earliest" | "latest" | "list";
   };

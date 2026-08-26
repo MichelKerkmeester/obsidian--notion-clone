@@ -17,7 +17,10 @@ export function getColumnDisplayType(
   computedFields?: ComputedFieldDef[]
 ): ColumnDisplayType {
   if (col.type === "rollup") {
-    return isNumericRollupKind(col.rollupConfig?.aggregation ?? "") ? "number" : "text";
+    const aggregation = col.rollupConfig?.aggregation ?? "";
+    return aggregation === "earliest" || aggregation === "latest"
+      ? "date"
+      : isNumericRollupKind(aggregation) ? "number" : "text";
   }
   if (col.type !== "computed") return col.type;
   return getComputedFieldForColumn(col, computedFields)?.type || "text";

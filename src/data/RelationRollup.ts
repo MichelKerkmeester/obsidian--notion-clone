@@ -3,7 +3,8 @@ import { evaluateComputedFields } from "./ComputedEvaluator";
 import { getRowFileFieldValue, isFileFieldKey } from "./FileFields";
 import { parseRelationValues } from "./RelationLinks";
 import { toChartNumber } from "./ChartAggregation";
-import { max, median, min, range } from "./Aggregate";
+import { toDateTimestamp } from "./DateTimeFormat";
+import { earliest, latest, max, median, min, range } from "./Aggregate";
 import { stringifyValue } from "./Stringify";
 import type { ColumnDef, DatabaseConfig } from "./types";
 import type { NoteRecord } from "./DataSource";
@@ -118,6 +119,12 @@ function aggregateRollup(
       result.push(value);
     }
     return result;
+  }
+  if (aggregation === "earliest" || aggregation === "latest") {
+    const timestamps = values
+      .map((value) => toDateTimestamp(value))
+      .filter((value): value is number => value != null);
+    return aggregation === "earliest" ? earliest(timestamps) : latest(timestamps);
   }
   // Bug T：原先 Number(replace(/[^0-9.-]/)) 会从笔记名/wikilink 随意提取数字（[[Task 42]]→42），
   // 且 Number("")===0 把无数字值当 0 累加。改用 toChartNumber：直接 Number(value)，非数字→null 被过滤。
