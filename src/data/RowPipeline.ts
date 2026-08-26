@@ -4,7 +4,7 @@ import { NoteRecord } from "./DataSource";
 import { QueryEngine } from "./QueryEngine";
 import { ColumnDef, RowData, ViewConfig } from "./types";
 import { DatabaseViewState } from "../views/ViewStateStore";
-import { getEffectiveFilterRules } from "./FilterRules";
+import { getEffectiveFilterRules, isEffectiveFilterRule } from "./FilterRules";
 import { sortByManualRank } from "./ManualOrder";
 import { stringifyValue } from "./Stringify";
 import { isFileFieldKey, getFileFieldFixedType, getRowFileFieldValue } from "./FileFields";
@@ -14,6 +14,8 @@ import { getColumnDisplayType } from "./ColumnDisplay";
 import { isNumericRollupKind } from "./Aggregate";
 import { getDateSearchDisplayText, isDateSearchColumn, matchesDateSearch, normalizeSearchQuery } from "./Search";
 import { resolveTitleFieldDisplay } from "./TitleFieldDisplay";
+import { buildViewFilterTree, pruneViewFilterTree } from "./ViewFilterTree";
+import type { SourceRuleNode, ViewModeStateDef } from "./types";
 
 export class RowPipeline {
   private queryEngine = new QueryEngine();
@@ -21,7 +23,7 @@ export class RowPipeline {
   build(
     records: NoteRecord[],
     config: ViewConfig,
-    state: DatabaseViewState,
+    state: DatabaseViewState & Pick<ViewModeStateDef, "filterTree">,
     app?: App,
     derivedValues?: ReadonlyMap<string, Record<string, unknown>>,
   ): RowData[] {
@@ -93,7 +95,12 @@ export class RowPipeline {
 
     const validFields = new Set(config.schema.columns.map((col) => col.key));
     const effectiveFilters = getEffectiveFilterRules(state.filters, validFields);
-    if (effectiveFilters.length > 0) {
+    const tree: SourceRuleNode | undefined = state.filterTree
+      ? pruneViewFilterTree(state.filterTree, (rule) => isEffectiveFilterRule(rule, validFields))
+      : buildViewFilterTree(effectiveFilters, state.filterLogic);
+    if (tree) {
+      rows = this.queryEngine.applyFilterTree(rows, tree, queryColumns);
+    } else {
       rows = this.queryEngine.applyFilters(rows, effectiveFilters, state.filterLogic, queryColumns);
     }
 

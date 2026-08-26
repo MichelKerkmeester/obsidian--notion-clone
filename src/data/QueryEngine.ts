@@ -7,6 +7,8 @@ import { compareMultiSelect } from "./MultiSelect";
 import { stringifyValue } from "./Stringify";
 import { ColumnDef, DateGroupMode, RowData, FilterRule, SortRule, ViewConfig } from "./types";
 import { t } from "../i18n";
+import { evaluateViewFilterTree } from "./ViewFilterTree";
+import type { SourceRuleNode } from "./types";
 
 export type SortDirection = "asc" | "desc";
 
@@ -124,6 +126,33 @@ export class QueryEngine {
       default:
         return true;
     }
+  }
+
+  applyFilterTree(
+    rows: RowData[],
+    tree: SourceRuleNode | null | undefined,
+    columns: ColumnDef[] = [],
+  ): RowData[] {
+    if (!tree) return rows;
+    const columnMap = new Map(columns.map((col) => [col.key, col]));
+    return rows.filter((row) => this.evaluateFilterTreeWithColumns(row, tree, columnMap) !== false);
+  }
+
+  evaluateFilterTree(
+    row: RowData,
+    tree: SourceRuleNode | null | undefined,
+    columns: ColumnDef[] = [],
+  ): boolean | null {
+    const columnMap = new Map(columns.map((col) => [col.key, col]));
+    return this.evaluateFilterTreeWithColumns(row, tree, columnMap);
+  }
+
+  private evaluateFilterTreeWithColumns(
+    row: RowData,
+    tree: SourceRuleNode | null | undefined,
+    columnMap: Map<string, ColumnDef>,
+  ): boolean | null {
+    return evaluateViewFilterTree(tree, (leaf) => this.matchesFilter(row, leaf, columnMap.get(leaf.field)));
   }
 
   /**

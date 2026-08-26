@@ -170,6 +170,7 @@ export interface ViewModeStateDef {
   groupByField?: string;
   filterLogic?: "and" | "or";
   filters?: FilterRule[];
+  filterTree?: SourceRuleNode;
   sortColumn?: string;
   sortDirection?: "asc" | "desc";
   sortRules?: SortRule[];
@@ -401,6 +402,7 @@ export interface ViewConfig {
   filterLogic?: "and" | "or";
   /** Persisted advanced filters. */
   filters?: FilterRule[];
+  filterTree?: SourceRuleNode;
   /** Optional maximum number of rows shown by this view, imported from Obsidian Bases limit. */
   resultLimit?: number;
   /** Ordered summary rules. The same property may appear more than once with different aggregations. */
