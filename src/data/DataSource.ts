@@ -11,6 +11,8 @@ import { absorbTypeFilterIntoRules, getSourceRuleTree, matchesBaseSourceType, ma
 import { linkDatabaseSchema } from "./ColumnConfig";
 import { inspectReportsConfig } from "./ReportsInspector";
 import type { ReportsInspectRecord, ReportsSalesMeaning } from "./ReportsInspector";
+import { applyReportsComputedConfig } from "./ReportsComputedConfig";
+import type { ReportsComputedConfigOptions, ReportsComputedConfigResult } from "./ReportsComputedConfig";
 import { t } from "../i18n";
 
 const MAX_SOURCE_RULE_MATCH_TEXT_LENGTH = 10000;
@@ -517,6 +519,24 @@ export class DataSource {
     if (!frontmatter || frontmatter["db_view"] !== true) return null;
     const config = this.parseDatabaseConfig(frontmatter);
     return config ? inspectReportsConfig(config, file.path, salesMeaning) : null;
+  }
+
+  async saveReportsComputedConfig(
+    file: TFile,
+    record: ReportsInspectRecord,
+    options: ReportsComputedConfigOptions,
+    mutation?: ViewConfigMutation,
+  ): Promise<ReportsComputedConfigResult | null> {
+    let config = this.getViewDefOverride(file.path);
+    if (!config) {
+      const frontmatter = this.metadataCache.getFileCache(file)?.frontmatter;
+      if (!frontmatter || frontmatter["db_view"] !== true) return null;
+      config = this.parseDatabaseConfig(frontmatter);
+    }
+    if (!config) return null;
+    const result = applyReportsComputedConfig(config, record, options);
+    await this.updateViewDefFile(file, result.config, mutation);
+    return result;
   }
 
   private assignUniqueDatabaseIds(results: { file: TFile; config: DatabaseConfig }[]): DatabaseIdDedupTarget[] {
