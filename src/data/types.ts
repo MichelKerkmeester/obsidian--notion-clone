@@ -146,12 +146,15 @@ export interface FilterRule {
 export interface ConditionalFormatRule {
   id: string;
   condition: FilterRule;
+  conditionTree?: SourceRuleNode;
   /** Resolve the comparison value dynamically at render time. */
   valueSource?: "literal" | "today";
   target: "record" | "field";
   /** @deprecated Field targets now always use condition.field. Kept only for legacy reads. */
   targetField?: string;
-  color: StatusColor;
+  icon?: string;
+  bold?: boolean;
+  color?: StatusColor;
 }
 
 export interface NewRecordTemplateConfig {
