@@ -15,7 +15,7 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "public/001-note-db-notion-parity-build/003-reports-computed-fields"
-    last_updated_at: "2026-08-27T12:25:50Z"
+    last_updated_at: "2026-08-27T17:09:01Z"
     last_updated_by: "markdown-agent"
     recent_action: "Completion docs reconciled to shipped state; gate green; Sonnet-verified"
     next_safe_action: "Operator input needed to classify Saved-field semantics (REQ-004, deferred)"
@@ -86,8 +86,8 @@ _memory:
 <!-- ANCHOR:testing -->
 ## Testing
 
-- [ ] CHK-020 [P0] All acceptance criteria met
-  - **Evidence**: [EVIDENCE: DEFERRED -- Saved-field classification remains unresolved, so all acceptance criteria are not closed]
+- [ ] CHK-020 [P0] Remaining acceptance criteria met; Saved (REQ-004) deferred
+  - **Evidence**: [EVIDENCE: DEFERRED -- Saved (REQ-004) classification remains unresolved; acceptance criteria are not all closed]
 - [ ] CHK-021 [P0] **DEFERRED** — Manual testing complete against the known pair
   - **Evidence**: [EVIDENCE: DEFERRED -- no witnessed desktop known-pair session was performed]
 - [x] CHK-022 [P1] Edge cases tested per the synthesis list
@@ -101,8 +101,8 @@ _memory:
 <!-- ANCHOR:fix-completeness -->
 ## Fix Completeness
 
-- [x] CHK-024 [P0] Requested Remaining and Saved columns configured, ordered, and labeled
-  - **Evidence**: [EVIDENCE: src/data/ReportsComputedConfig.ts:42-102,128-193; src/data/ReportsComputedConfig.test.ts:52-160 (9/9)]
+- [x] CHK-024 [P0] Remaining-only column configured, ordered, and labeled
+  - **Evidence**: [EVIDENCE: src/data/ReportsComputedConfig.ts:61-68,79-89; src/data/ReportsComputedConfig.test.ts:53-97]
 - [x] CHK-025 [P1] Formula engine and rollup modules left unchanged
   - **Evidence**: [EVIDENCE: `src/data/ComputedField.ts:563-569`; `src/data/SafeEval.ts:961-973`; `src/data/BaseExpression.ts:1-7`; `src/data/RelationRollup.ts:130-155`; no Reports-specific references]
 - [x] CHK-026 [P0] Desktop persistence + display-only proven; mobile parity operator-optional

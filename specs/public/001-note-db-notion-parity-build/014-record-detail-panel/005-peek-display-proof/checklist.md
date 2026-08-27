@@ -10,7 +10,7 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "public/001-note-db-notion-parity-build/014-record-detail-panel/005-peek-display-proof"
-    last_updated_at: "2026-08-27T12:27:53Z"
+    last_updated_at: "2026-08-27T17:27:13Z"
     last_updated_by: "docs-reconciliation"
     recent_action: "Completion docs reconciled to shipped state; gate green; Sonnet-verified"
     next_safe_action: "None — parent phase 014 complete"
@@ -25,7 +25,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "decompose-005-peek-display-proof"
       parent_session_id: null
-    completion_pct: 100
+    completion_pct: 86
     open_questions: []
     answered_questions: []
 ---
@@ -79,10 +79,10 @@ _memory:
 <!-- ANCHOR:testing -->
 ## Testing
 
-- [x] CHK-020 [P0] All acceptance criteria met [EVIDENCE: pending]
-  - **Evidence**: Verified (phase-wide Sonnet 5 read-only CONCERNS review substituting for a separately-run manual matrix; commits `c4ceb74`, `cc11f90`, `668bc97`, `02929b0` + CSS fix `c90aee6`, `tsc0/build0/vitest 194/19 green`). REQ-001 through REQ-006 assessed by the phase-wide Sonnet 5 review; REQ-001 (hidden-group collapse) initially FAILED (P1 CSS gap) and was fixed same-day in `c90aee6` — see CHK-023.
-- [x] CHK-021 [P0] Desktop hover-open manual test [EVIDENCE: pending]
-  - **Evidence**: Verified (phase-wide Sonnet 5 read-only CONCERNS review substituting for a separately-run manual matrix; commits `c4ceb74`, `cc11f90`, `668bc97`, `02929b0` + CSS fix `c90aee6`, `tsc0/build0/vitest 194/19 green`). OPEN on Name cell; grid stays interactive.
+- [ ] CHK-020 [P0] All acceptance criteria met [EVIDENCE: DEFERRED -- manual proof not run; superseded by code-level verification]
+  - **Evidence**: [EVIDENCE: DEFERRED -- manual proof not run; superseded by code-level verification]
+- [ ] CHK-021 [P0] Desktop hover-open manual test [EVIDENCE: DEFERRED -- manual proof not run; superseded by code-level verification]
+  - **Evidence**: [EVIDENCE: DEFERRED -- manual proof not run; superseded by code-level verification]
 - [x] CHK-022 [P1] Phone persistent OPEN [EVIDENCE: pending]
   - **Evidence**: Verified (phase-wide Sonnet 5 read-only CONCERNS review substituting for a separately-run manual matrix; commits `c4ceb74`, `cc11f90`, `668bc97`, `02929b0` + CSS fix `c90aee6`, `tsc0/build0/vitest 194/19 green`). `body.is-phone .db-record-open-btn { opacity: 1 }`.
 - [x] CHK-023 [P1] Edge cases: title-hidden, zero-property, wrap, hidden-group, scroll dismiss [EVIDENCE: Sonnet 5 review + c90aee6]
@@ -94,8 +94,8 @@ _memory:
 <!-- ANCHOR:fix-completeness -->
 ## Fix Completeness
 
-- [x] CHK-024 [P0] Requested proofs executed on the shipped peek [EVIDENCE: pending]
-  - **Evidence**: Verified (phase-wide Sonnet 5 read-only CONCERNS review substituting for a separately-run manual matrix; commits `c4ceb74`, `cc11f90`, `668bc97`, `02929b0` + CSS fix `c90aee6`, `tsc0/build0/vitest 194/19 green`). Children 001–004 already shipped the surface; this child only proves it.
+- [ ] CHK-024 [P0] Requested proofs executed on the shipped peek [EVIDENCE: DEFERRED -- manual proof not run; superseded by code-level verification]
+  - **Evidence**: [EVIDENCE: DEFERRED -- manual proof not run; superseded by code-level verification]
 - [x] CHK-025 [P1] Calendar module left unchanged [EVIDENCE: pending]
   - **Evidence**: Verified (phase-wide Sonnet 5 read-only CONCERNS review substituting for a separately-run manual matrix; commits `c4ceb74`, `cc11f90`, `668bc97`, `02929b0` + CSS fix `c90aee6`, `tsc0/build0/vitest 194/19 green`). `git diff` empty on `src/views/RecordDetailPanel.ts`.
 - [x] CHK-026 [P0] Title click vs OPEN vs Page Preview proven [EVIDENCE: pending]
@@ -146,7 +146,7 @@ _memory:
 
 | Category | Total | Verified |
 |----------|-------|----------|
-| P0 Items | 10 | 10/10 |
+| P0 Items | 10 | 7/10 |
 | P1 Items | 10 | 10/10 |
 | P2 Items | 2 | 2/2 |
 

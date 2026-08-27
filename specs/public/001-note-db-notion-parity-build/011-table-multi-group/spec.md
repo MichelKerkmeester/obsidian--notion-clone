@@ -14,7 +14,7 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "public/001-note-db-notion-parity-build/011-table-multi-group"
-    last_updated_at: "2026-08-27T12:25:50Z"
+    last_updated_at: "2026-08-27T17:27:13Z"
     last_updated_by: "phase-architect"
     recent_action: "Nested sub-phases authored from synthesis and final-plan"
     next_safe_action: "Build 001-multifield-grouping-module per its plan.md and tasks.md"
@@ -271,7 +271,7 @@ Operator decisions recorded with defaults (from research synthesis):
 | 2 | 002-grouped-table-flatten/ | Table dispatch plus depth-aware TableRenderer loop, indent CSS, and full-path create defaults | Complete |
 | 3 | 003-embedded-table-grouping/ | Embedded table grouped dispatch and `groupByFields` copy-back so linked views nest the same way | Complete |
 | 4 | 004-table-subgroup-picker/ | Table-gated toolbar Sub-group section cloned from the board popover, picker max 2 | Complete |
-| 5 | 005-multigroup-display-proof/ | Prove 1/2/3-field render, persist round-trip, 1-field patch, mobile, and display-only | Complete |
+| 5 | 005-multigroup-display-proof/ | Prove 1/2/3-field render, persist round-trip, 1-field patch, mobile, and display-only | Deferred |
 
 Future / out of this phase (not child folders): nested-group row drag (multi-field write); a ViewConfigPanel table Sub-group section; a second toolbar picker; unifying `groupByFields[]` with `boardSubgroupField`; ViewStateStore threading; extending `patchGroupedRows`.
 

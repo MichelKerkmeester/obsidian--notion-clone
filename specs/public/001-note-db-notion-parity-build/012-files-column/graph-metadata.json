@@ -45,7 +45,7 @@
       "implementation"
     ],
     "importance_tier": "high",
-    "status": "complete",
+    "status": "in_progress",
     "key_files": [
       "spec.md",
       "plan.md",
@@ -203,7 +203,7 @@
     ],
     "causal_summary": "Notion databases natively carry a first-class Files & Media property (images, PDFs, attachments), but the note-database fork's column union is 12 types with no files/media type",
     "created_at": "2026-08-24T18:16:20.278Z",
-    "last_save_at": "2026-08-27T12:25:54.725Z",
+    "last_save_at": "2026-08-27T17:09:02.304Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -214,13 +214,13 @@
       "implementation-summary.md",
       "research/research.md"
     ],
-    "source_fingerprint": "sha256:ac5355fc9372f2b4545d7f9a9beb0463ce5c0f2748868a9db2b34e3daec70962",
+    "source_fingerprint": "sha256:3d85e8c4447934b4af4b3f015d68e4ca1445950add3a98ae0996ed3c1089b97c",
     "source_doc_hashes": {
-      "spec.md": "53ebdbb369d2671933901a986eca9843d968bbcf74759d420a55d214f752dae4",
-      "plan.md": "38953b52dd66276af7df26ace9b96001ea3de5f0192851d5cffced159a4fa73e",
-      "tasks.md": "549d774985c0bc429494f96a09ab69c3c4b30897a3cf0067d77007cf5342a796",
-      "checklist.md": "5a4762df93c02a7e946b9ba62b28e12c9f3f689be7f36c4a12d25aaa142c9911",
-      "implementation-summary.md": "e88c53e31ae1f74020af696af70995b91dfc03e381ad4390451ce78dee26e754",
+      "spec.md": "ed9884f63abee98a5315276e008a57fd2c7725544e254d85413e897d3032d246",
+      "plan.md": "7c3f610da20b0fabfa1f709d28de30fbf864235962817ac1acba210c12d158df",
+      "tasks.md": "a51fef9da59b66726030ac576f9d363252e582a3b8f5c57204037bdec97dcb71",
+      "checklist.md": "99db2aa228b09d114914e1ec317e0ba03e52f81f06c6a5af8835c47c1a623649",
+      "implementation-summary.md": "dbc9cc919b2e5199fdb88faace78da82255ac944c7ec2c33cd0086c411549985",
       "research/research.md": "775ebeed7178fb69462fe6d46e343ffd80ffa288e65ab53adb3f76ea10b5c145"
     },
     "last_active_child_id": "public/001-note-db-notion-parity-build/012-files-column/005-files-column-proof",

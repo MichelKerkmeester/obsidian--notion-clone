@@ -15,7 +15,7 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "public/001-note-db-notion-parity-build/003-reports-computed-fields"
-    last_updated_at: "2026-08-27T12:25:50Z"
+    last_updated_at: "2026-08-27T17:09:01Z"
     last_updated_by: "markdown-agent"
     recent_action: "Reconciled planning docs with final-plan.md review; status Planned"
     next_safe_action: "Build phase 003 per reconciled plan.md/tasks.md once 001 and 002 ship SUM"
@@ -97,7 +97,7 @@ Locked with the design (ordered per `research/final-plan.md` final build plan):
 - [ ] T007 Known-pair proof: Reports view, desktop. Row with live Income=1000, Expenses=400 → Remaining displays 600 (nl-NL grouping via `formatEuroNumber`, `CellRenderer.ts:2575-2577`). Saved matches the locked expression (if shipped). [S] -- DEFERRED: no witnessed desktop known-pair click-through was produced.
 - [ ] T008 Empty-month proof: a row whose Income and/or Expenses rollup is `null` (`RelationRollup.ts:126`) — default null-guard shows `"-"` not `0`; zero opt-in (bare subtraction) shows `0`. No YAML write either way. (Gap from `research/final-plan.md` — the old T007 would have "passed" while showing `0`.) [S] -- DEFERRED: no witnessed empty-month row proof was produced.
 - [ ] T009 Negative control: temporarily set Remaining to `[Incme] - [Expenses]` → cell blanks (`formatEvaluationError`, `ComputedField.ts:511-546`), last-pass `console.warn` (`ComputedEvaluator.ts:68-72`), note bytes unchanged; restore correct spelling and re-prove T007. [S] -- DEFERRED: no Reports-specific typo, warning, and manual byte-preservation proof was produced.
-- [x] T010 Persistence proof (P0): hash Report note bytes before/after open+scroll on **desktop**; `computedSyncMode: display-only` explicit in the payload. Mobile/two-device hash is operator-optional (not a single-implementer blocker — `research/final-plan.md` optimization 7); mobile uses the same eval path (Platform checks at `DatabaseView.ts:4648,6848` are icon/bulk-editor only). [S] -- DataSource.ts:saveReportsComputedConfig
+- [x] T010 Persistence proof (P0): hash Report note bytes before/after open+scroll on **desktop**; `computedSyncMode: display-only` explicit in the payload. Mobile/two-device hash is operator-optional (not a single-implementer blocker — `research/final-plan.md` optimization 7); mobile uses the same eval path (Platform checks at `DatabaseView.ts:4648,6848` are icon/bulk-editor only). [S] -- Structural display-only proof: `computedSyncMode: display-only` is explicit in the config payload; not a byte-hash of note contents.
 - [x] T011 Engine freeze: `git diff` empty on `ComputedField.ts`, `SafeEval.ts`, `BaseExpression.ts`, `RelationRollup.ts` under `specs/obsidian/001-notion-finance-migration/build/note-database-fork`. [S] -- done during build
 - [x] T012 Record evidence: inspect record, locked formula strings, inspected column names, and the blank-vs-zero decision in `checklist.md` evidence rows + an honest `implementation-summary.md` (formulas, names, blank-vs-zero). Build evidence is recorded; keep the remaining deferrals honest. [S] -- checklist.md evidence rows + implementation-summary.md
 

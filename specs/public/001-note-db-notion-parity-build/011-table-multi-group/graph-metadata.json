@@ -45,7 +45,7 @@
       "recursive"
     ],
     "importance_tier": "high",
-    "status": "complete",
+    "status": "in_progress",
     "key_files": [
       "spec.md",
       "plan.md",
@@ -204,7 +204,7 @@
     ],
     "causal_summary": "TABLE views in the note-database fork group rows by a single string (`groupByField`) only, while Notion's current View settings expose Group + Sub-group (exactly two levels) and the fork already ships the 2-level algorithm on the board (`applyBoardSubgroups` / `getBoardSubgroups`)",
     "created_at": "2026-08-24T17:58:47.637Z",
-    "last_save_at": "2026-08-27T12:25:54.462Z",
+    "last_save_at": "2026-08-27T17:27:13.477Z",
     "save_lineage": "same_pass",
     "last_accessed_at": null,
     "source_docs": [
@@ -215,13 +215,13 @@
       "implementation-summary.md",
       "research/research.md"
     ],
-    "source_fingerprint": "sha256:7c93ec67caf86ece6d7313907deb484fedce92cc6253085ae6ca7202e1e20e1a",
+    "source_fingerprint": "sha256:aa5eb8d2df0e9877b3a8c7adbcfad956ae1f0c6fcbc892647b3aa59eec4180b1",
     "source_doc_hashes": {
-      "spec.md": "7e69f1d992f27b259be41d0533a5daa52915a8a389736316e9d44215559e7987",
-      "plan.md": "56eee701429c6d11ec1f60e420051fafc5eef57bbba0610a05b7b25fa5c21d9f",
-      "tasks.md": "4ee366dba0b3d929f5909b9412886226c09862b95eed8fa696e69e7544ffb7c6",
-      "checklist.md": "3c7d687bc2e86eeac733b536cb1fb7fb67809fe27e3fba3070125f7a7774f226",
-      "implementation-summary.md": "f9916d9ec23474623a65b7b626025b7d9ba071af565c5775b13e8337e20a4d61",
+      "spec.md": "980841ccbb59f20cf49d650a89002aa823eeeefc30b01ec09929992ee0d060bd",
+      "plan.md": "4698b9c32d3af1a5d2230188e36ccb844e9ac3444ce2e62dd9068b4e2a894dcc",
+      "tasks.md": "a4e22e9d03aeb2c482a82c990b5733fcf94093af1d432bef4bb72268fe9e46fe",
+      "checklist.md": "48bf498b2e6c3cc9ed82a7f992f66856c3eb65e672dbad9a455996c019a8a85f",
+      "implementation-summary.md": "f01f9a0e6a453d8fcb14810dfa4fb7e37459064e5f9a7547e54d3fe1730ea8b1",
       "research/research.md": "4f89a3363c26e5c7453fc0a5cc5d9acbcde271e2b3e0d1128516a7500c911a83"
     },
     "last_active_child_id": "public/001-note-db-notion-parity-build/011-table-multi-group/005-multigroup-display-proof",

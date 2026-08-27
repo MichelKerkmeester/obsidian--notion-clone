@@ -11,7 +11,7 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "public/001-note-db-notion-parity-build/003-reports-computed-fields/003-reports-display-proof"
-    last_updated_at: "2026-08-27T12:50:04Z"
+    last_updated_at: "2026-08-27T17:27:13Z"
     last_updated_by: "phase-architect"
     recent_action: "Completion docs reconciled to shipped state; gate green; Sonnet-verified"
     next_safe_action: "None — sub-phase complete"
@@ -26,7 +26,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "decompose-003-reports-display-proof"
       parent_session_id: null
-    completion_pct: 95
+    completion_pct: 73
     open_questions: []
     answered_questions: []
 ---
@@ -80,10 +80,10 @@ _memory:
 <!-- ANCHOR:testing -->
 ## Testing
 
-- [x] CHK-020 [P0] All acceptance criteria met
-  - **Evidence**: Verified — commits `6cb5331`/`202635d`/`c766117`, tsc0/build0/vitest green. REQ-001, 002, 003, 005, 006 confirmed by Sonnet code trace; REQ-004 (Saved classification) remains deferred, tracked in the parent checklist.
-- [x] CHK-021 [P0] Known-pair manual test
-  - **Evidence**: Verified by code trace, not a recorded manual click-through — `CellRenderer.ts:2577` `formatReportsNumber` path and `ReportsInspector.ts` arithmetic confirmed correct by Sonnet 5 (2026-08-26); no separate screenshot/hash artifact exists in this packet.
+- [ ] CHK-020 [P0] Remaining acceptance criteria met; Saved (REQ-004) deferred
+  - **Evidence**: [EVIDENCE: DEFERRED -- manual proof not run; superseded by code-level verification]
+- [ ] CHK-021 [P0] Known-pair manual test
+  - **Evidence**: [EVIDENCE: DEFERRED -- manual proof not run; superseded by code-level verification]
 - [x] CHK-022 [P1] Empty-month edge case
   - **Evidence**: Verified — null-guard implementation confirmed at code level; renders `"-"` per `CellRenderer.ts:255-257`.
 - [x] CHK-023 [P1] Blank-vs-zero decision validated
@@ -95,8 +95,8 @@ _memory:
 <!-- ANCHOR:fix-completeness -->
 ## Fix Completeness
 
-- [x] CHK-024 [P0] Requested proofs executed on the configured columns
-  - **Evidence**: Verified at code level — commit `6cb5331`, tsc0/build0/vitest green; live desktop click-through not separately recorded (see CHK-021).
+- [ ] CHK-024 [P0] Remaining-only configured; requested manual proofs not executed
+  - **Evidence**: [EVIDENCE: DEFERRED -- manual proof not run; superseded by code-level verification]
 - [x] CHK-025 [P1] Formula engine left unchanged
   - **Evidence**: Verified — `git diff` empty, confirmed at Sonnet 5 verification.
 - [x] CHK-026 [P0] Desktop persistence proven
@@ -147,7 +147,7 @@ _memory:
 
 | Category | Total | Verified |
 |----------|-------|----------|
-| P0 Items | 10 | 10/10 |
+| P0 Items | 10 | 7/10 |
 | P1 Items | 10 | 8/10 |
 | P2 Items | 2 | 1/2 |
 

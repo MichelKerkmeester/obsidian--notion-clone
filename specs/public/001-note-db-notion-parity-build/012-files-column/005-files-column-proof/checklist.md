@@ -11,7 +11,7 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "public/001-note-db-notion-parity-build/012-files-column/005-files-column-proof"
-    last_updated_at: "2026-08-27T12:27:53Z"
+    last_updated_at: "2026-08-27T17:27:13Z"
     last_updated_by: "docs-reconciliation"
     recent_action: "Completion docs reconciled to shipped state; gate green; Sonnet-verified"
     next_safe_action: "None — parent phase 012 complete"
@@ -26,7 +26,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "decompose-005-files-column-proof"
       parent_session_id: null
-    completion_pct: 100
+    completion_pct: 86
     open_questions: []
     answered_questions: []
 ---
@@ -80,10 +80,10 @@ _memory:
 <!-- ANCHOR:testing -->
 ## Testing
 
-- [x] CHK-020 [P0] All acceptance criteria met [EVIDENCE: pending]
-  - **Evidence**: Verified (phase-wide Sonnet 5 read-only PASS review substituting for a separately-run manual matrix; commits `b97ee1e..f84a193`, `tsc0/build0/vitest 194/19 green`). REQ-001 through REQ-006 confirmed by the phase-wide Sonnet 5 review; this child's own matrix was not separately run (see CHK-010).
-- [x] CHK-021 [P0] Offline gallery cover [EVIDENCE: pending]
-  - **Evidence**: Verified (phase-wide Sonnet 5 read-only PASS review substituting for a separately-run manual matrix; commits `b97ee1e..f84a193`, `tsc0/build0/vitest 194/19 green`). Files column as `galleryImageField` shows the first internal image with network off (SC-003).
+- [ ] CHK-020 [P0] All acceptance criteria met [EVIDENCE: DEFERRED -- manual proof not run; superseded by code-level verification]
+  - **Evidence**: [EVIDENCE: DEFERRED -- manual proof not run; superseded by code-level verification]
+- [ ] CHK-021 [P0] Offline gallery cover [EVIDENCE: DEFERRED -- manual proof not run; superseded by code-level verification]
+  - **Evidence**: [EVIDENCE: DEFERRED -- manual proof not run; superseded by code-level verification]
 - [x] CHK-022 [P1] Edge matrix [EVIDENCE: pending]
   - **Evidence**: Verified (phase-wide Sonnet 5 read-only PASS review substituting for a separately-run manual matrix; commits `b97ee1e..f84a193`, `tsc0/build0/vitest 194/19 green`). Dangling `is-unresolved`; 50+ cap + tooltip; empty `[]` `db-empty-value`; HEIC `onerror` if present; stale URL is not a network `<img>`.
 - [x] CHK-023 [P1] Inline-edit round-trip [EVIDENCE: pending]
@@ -95,8 +95,8 @@ _memory:
 <!-- ANCHOR:fix-completeness -->
 ## Fix Completeness
 
-- [x] CHK-024 [P0] Table chips open vault files [EVIDENCE: pending]
-  - **Evidence**: Verified (phase-wide Sonnet 5 read-only PASS review substituting for a separately-run manual matrix; commits `b97ee1e..f84a193`, `tsc0/build0/vitest 194/19 green`). Sales PDF chips; `openLinkText` (SC-004).
+- [ ] CHK-024 [P0] Table chips open vault files [EVIDENCE: DEFERRED -- manual proof not run; superseded by code-level verification]
+  - **Evidence**: [EVIDENCE: DEFERRED -- manual proof not run; superseded by code-level verification]
 - [x] CHK-025 [P1] Mobile overlay [EVIDENCE: pending]
   - **Evidence**: Verified (phase-wide Sonnet 5 read-only PASS review substituting for a separately-run manual matrix; commits `b97ee1e..f84a193`, `tsc0/build0/vitest 194/19 green`). Render + inline-edit via `is-inline-overlay` (`CellRenderer.ts:1484-1528`); no `electron`/`fs` in the module.
 - [x] CHK-026 [P0] Diff-shape proven [EVIDENCE: pending]
@@ -147,7 +147,7 @@ _memory:
 
 | Category | Total | Verified |
 |----------|-------|----------|
-| P0 Items | 10 | 10/10 |
+| P0 Items | 10 | 7/10 |
 | P1 Items | 10 | 10/10 |
 | P2 Items | 2 | 2/2 |
 

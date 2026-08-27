@@ -15,9 +15,9 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "public/001-note-db-notion-parity-build"
-    last_updated_at: "2026-08-24T00:00:00Z"
+    last_updated_at: "2026-08-27T17:17:44Z"
     last_updated_by: "swarm"
-    recent_action: "Build phases 002-014 shipped + Sonnet-verified; parent reconciled to Complete"
+    recent_action: "Phases 002-014 In Progress with documented deferrals"
     next_safe_action: "Build phases in wave order starting at 001-live-reports-rollups; see roadmap.md"
     blockers: []
     key_files:
@@ -121,19 +121,19 @@ Turn the 008 backlog into seven dependency-ordered waves (0..6) that close each 
 | Phase | Folder | Focus | Wave | Status |
 |-------|--------|-------|------|--------|
 | 001 | `001-live-reports-rollups/` | Live Reports roll-ups (config, no code) | 0 | Planned |
-| 002 | `002-rollup-aggregation-pack/` | Aggregate.ts roll-up pack (min/max/median/range/earliest/latest) | 1 | Complete |
-| 003 | `003-reports-computed-fields/` | Reports Remaining/Saved computed fields | 2 | Complete |
-| 004 | `004-formula-ifs-switch-math/` | Formula IFS/SWITCH + math aliases | 2 | Complete |
-| 005 | `005-formula-let-variables/` | Formula LET/LETS variables | 2 | Complete |
-| 006 | `006-link-scheme-fields/` | URL/email/phone link fields | 3 | Complete |
-| 007 | `007-unique-id-stamp/` | Unique-ID stamp on create | 3 | Complete |
-| 008 | `008-derived-inverse-relations/` | Derived inverse (safe two-way) relations | 4 | Complete |
-| 009 | `009-view-filter-tree/` | Nested AND/OR view filter tree | 4 | Complete |
-| 010 | `010-conditional-format-icons/` | Conditional formatting: multi-condition + icons | 4 | Complete |
-| 011 | `011-table-multi-group/` | Table group-by 2+ fields | 4 | Complete |
-| 012 | `012-files-column/` | Files/attachments column | 5 | Complete |
-| 013 | `013-template-toolbar-button/` | Toolbar new-from-template button | 5 | Complete |
-| 014 | `014-record-detail-panel/` | Record detail panel / hover-open | 5 | Complete |
+| 002 | `002-rollup-aggregation-pack/` | Aggregate.ts roll-up pack (min/max/median/range/earliest/latest) | 1 | In Progress |
+| 003 | `003-reports-computed-fields/` | Reports Remaining/Saved computed fields | 2 | In Progress |
+| 004 | `004-formula-ifs-switch-math/` | Formula IFS/SWITCH + math aliases | 2 | In Progress |
+| 005 | `005-formula-let-variables/` | Formula LET/LETS variables | 2 | In Progress |
+| 006 | `006-link-scheme-fields/` | URL/email/phone link fields | 3 | In Progress |
+| 007 | `007-unique-id-stamp/` | Unique-ID stamp on create | 3 | In Progress |
+| 008 | `008-derived-inverse-relations/` | Derived inverse (safe two-way) relations | 4 | In Progress |
+| 009 | `009-view-filter-tree/` | Nested AND/OR view filter tree | 4 | In Progress |
+| 010 | `010-conditional-format-icons/` | Conditional formatting: multi-condition + icons | 4 | In Progress |
+| 011 | `011-table-multi-group/` | Table group-by 2+ fields | 4 | In Progress |
+| 012 | `012-files-column/` | Files/attachments column | 5 | In Progress |
+| 013 | `013-template-toolbar-button/` | Toolbar new-from-template button | 5 | In Progress |
+| 014 | `014-record-detail-panel/` | Record detail panel / hover-open | 5 | In Progress |
 | 015 | `015-two-way-write-back/` | Two-way write-back (DEFERRED) | 6 | Deferred |
 | 016 | `016-onchange-automations/` | On-change automations (OUT) | 6 | Out of scope |
 | 017 | `017-excluded-parity-items/` | Excluded parity items: person/style()/GoodBases (OUT) | 6 | Out of scope |

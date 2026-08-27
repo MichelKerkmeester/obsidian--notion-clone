@@ -10,10 +10,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "public/001-note-db-notion-parity-build"
-    last_updated_at: "2026-08-27T00:00:00Z"
+    last_updated_at: "2026-08-27T17:17:44Z"
     last_updated_by: "docs-consistency-fix"
-    recent_action: "Waves 1-5 (phases 002-014) shipped, Sonnet-verified, gate-green (tsc0/build0/vitest) on branch impl; see spec.md Status"
-    next_safe_action: "Land wave 0 (phase 001, config-only, no code) to close the last pending item; wave 6 (015-017) stays deferred/out of scope and never-default unless an owner reopens it"
+    recent_action: "Waves 1-5 (phases 002-014) shipped and gate-green; see spec.md Status"
+    next_safe_action: "Land wave 0 (phase 001, config-only) to close the last pending item"
     blockers: []
     key_files:
       - "spec.md"
@@ -30,6 +30,46 @@ _memory:
 
 <!-- SPECKIT_LEVEL: 3 -->
 <!-- SPECKIT_TEMPLATE_SOURCE: roadmap | v2.2 -->
+
+<!-- ANCHOR:metadata -->
+## METADATA
+
+| Field | Value |
+|-------|-------|
+| **Program** | Note DB to Notion parity: 14 build phases across 7 dependency-ordered waves |
+| **Status** | In Progress — waves 1-5 (002-014) shipped and gate-green; wave 0 (001) pending; wave 6 (015-017) deferred/out of scope |
+| **Build model** | EuroFormat isolated-module: a new module under `src/data/` plus 1-3 rebase-clean call-site edits per phase |
+<!-- /ANCHOR:metadata -->
+
+---
+
+<!-- ANCHOR:now-next-later -->
+## NOW / NEXT / LATER
+
+- **Now (done):** Waves 1-5 — phases 002-014 shipped as code, Sonnet-verified, gate-green (tsc0/build0/vitest) on branch impl, with documented deferrals.
+- **Next:** Wave 0 — phase 001 live Reports roll-ups (config-only vault wiring, no plugin code) to close the last pending build item.
+- **Later:** Wave 6 — 015 two-way write-back (deferred), 016 automations and 017 excluded items (out of scope); never-default, owner decision required.
+<!-- /ANCHOR:now-next-later -->
+
+---
+
+<!-- ANCHOR:milestones-targets -->
+## MILESTONES & TARGETS
+
+- Waves 1-5 complete: extended rollups, Reports computed fields, formula IFS/SWITCH/LET, link fields, unique-id, inverse relations, nested filter tree, conditional formatting + icons, multi-field grouping, files column, template toolbar, and record peek — all shipped and gate-green.
+- Target to full close: land wave 0 (phase 001) configuration; keep wave 6 deferred by design.
+<!-- /ANCHOR:milestones-targets -->
+
+---
+
+<!-- ANCHOR:dependencies -->
+## DEPENDENCIES
+
+- Hard gates only: 003 needs 001+002; 005 needs 004; 008 needs 001; 010 needs 009. Every other phase is independent.
+- Cross-cutting constraint: iCloud/mobile safety — rollups and computed fields stay display-only, so nothing rewrites Report notes on child edits.
+<!-- /ANCHOR:dependencies -->
+
+---
 
 <!-- ANCHOR:waves -->
 ## 1. DEPENDENCY-ORDERED WAVES

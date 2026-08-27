@@ -12,7 +12,7 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "public/001-note-db-notion-parity-build/002-rollup-aggregation-pack"
-    last_updated_at: "2026-08-27T12:25:50Z"
+    last_updated_at: "2026-08-27T17:09:01Z"
     last_updated_by: "swarm"
     recent_action: "Completion docs reconciled to shipped state; gate green; Sonnet-verified"
     next_safe_action: "None — phase complete"
@@ -44,7 +44,7 @@ _memory:
 | Field | Value |
 |-------|-------|
 | **Spec Folder** | 002-rollup-aggregation-pack |
-| **Completed** | 2026-08-26 — shipped on branch `impl`; Sonnet 5 verification PASS |
+| **Status** | In Progress — shipped with documented deferrals; Sonnet 5 verification PASS |
 | **Level** | 2 |
 | **Actual Effort** | ~3 hours (estimated: ~3 hours, Effort S) |
 
@@ -54,7 +54,7 @@ _memory:
 <!-- ANCHOR:what-built -->
 ## What Was Built
 
-**Shipped.** All three sub-phases (numeric, date, percent) landed on branch `impl`, each `tsc0/build0/vitest green`, and passed a read-only Sonnet 5 adversarial verification pass (2026-08-26) with a **PASS** verdict.
+**Shipped with documented deferrals.** All three sub-phases (numeric, date, percent) landed on branch `impl`, each `tsc0/build0/vitest green`, and passed a read-only Sonnet 5 adversarial verification pass (2026-08-26) with a **PASS** verdict.
 
 ### Files Changed
 
@@ -66,7 +66,7 @@ _memory:
 | `src/data/ColumnDisplay.ts` | Edited | `earliest`/`latest` map to `"date"` display type; eligibility clone uses the shared predicate |
 | `src/data/RowPipeline.ts` | Edited | Same date-display mapping and shared-predicate eligibility clone |
 | `src/views/SummaryRenderer.ts` | Edited | Footer MIN/MAX/MEDIAN/RANGE/EARLIEST/LATEST route through `Aggregate.ts`; date-ms RANGE fallback kept local |
-| `src/views/ChartAggregation.ts` | Edited | Chart median and percent-empty/percent-not-empty route through `Aggregate.ts` |
+| `src/data/ChartAggregation.ts` | Edited | Chart median and percent-empty/percent-not-empty route through `Aggregate.ts` |
 | `src/views/modals/RelationRollupConfigModal.ts` | Edited | Config modal offers the new kinds, filtered by target column kind |
 | `src/__tests__/setup.ts` | Created | Vitest harness bootstrap |
 | `src/data/Aggregate.test.ts` | Created | Table-driven unit tests (57 assertions) across empty/all-null/single/odd/even/mixed/NaN/Infinity inputs |

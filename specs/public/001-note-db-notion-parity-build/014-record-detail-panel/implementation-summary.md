@@ -12,7 +12,7 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "public/001-note-db-notion-parity-build/014-record-detail-panel"
-    last_updated_at: "2026-08-27T12:25:50Z"
+    last_updated_at: "2026-08-27T17:09:01Z"
     last_updated_by: "docs-reconciliation"
     recent_action: "Completion docs reconciled to shipped state; gate green; Sonnet-verified"
     next_safe_action: "None — phase complete"
@@ -44,7 +44,7 @@ _memory:
 | Field | Value |
 |-------|-------|
 | **Spec Folder** | 014-record-detail-panel |
-| **Completed** | 2026-08-26 (branch `impl`, commits `c4ceb74..02929b0`; CSS fix `c90aee6`; tests `86eee77`) |
+| **Status** | In Progress — shipped with documented deferrals (branch `impl`, commits `c4ceb74..02929b0`; CSS fix `c90aee6`; tests `86eee77`) |
 | **Level** | 2 |
 | **Actual Effort** | M (~6h, matching the operator-overridden effort in `spec.md` §9 Q14), not the original S estimate |
 
@@ -80,7 +80,7 @@ Built on Luna-via-cursor after the Codex OpenAI executor's quota died mid-run (s
 <!-- ANCHOR:how-delivered -->
 ## How It Was Delivered
 
-Built serially through sub-phases 001-004 (module+i18n → panel CSS → title OPEN affordance+overlay lifecycle → Mod+Enter), each gated on `tsc --noEmit` + `npm run build` + `vitest` before commit. Sub-phase 005 (`005-peek-display-proof`) was scoped as a manual verification pass and was never separately executed or committed. Verified read-only by a fresh Claude Sonnet 5 review after the phase completed, which surfaced the CSS-collapse and test-coverage gaps; both were fixed in same-phase/post-phase follow-up commits (`c90aee6`, `86eee77`).
+Built serially through sub-phases 001-004 (module+i18n → panel CSS → title OPEN affordance+overlay lifecycle → Mod+Enter), each gated on `tsc --noEmit` + `npm run build` + `vitest` before commit. Sub-phase 005 (`005-peek-display-proof`) was scoped as a manual verification pass and was never separately executed or committed. Verified read-only by a fresh Claude Sonnet 5 review while the phase remained In Progress, which surfaced the CSS-collapse and test-coverage gaps; both were fixed in same-phase/post-phase follow-up commits (`c90aee6`, `86eee77`).
 
 <!-- /ANCHOR:how-delivered -->
 ---
@@ -93,7 +93,7 @@ Built serially through sub-phases 001-004 (module+i18n → panel CSS → title O
 | Anytype-style properties sections (header group / hidden group) | Closest match to Notion's properties-panel feel among peer apps |
 | GoodBases-style hover-open chrome | Fastest row-to-detail path; the most visible Notion-feel gap |
 | Never restyle the core Obsidian toolbar | Hard constraint — GoodBases had to revert exactly that |
-| Isolated module under `src/data/` + ≤3 call-site edits | EuroFormat override model keeps upstream rebases clean |
+| Isolated module under `src/views/TableRecordPeek.ts` + ≤3 call-site edits | EuroFormat override model keeps upstream rebases clean |
 | Read-only panel; rollups stay display-only (count\|sum\|avg\|list) | iCloud-safe; no churny writes |
 | Effort S, value 1 | Lowest-value build phase, but highest-visibility polish |
 
@@ -141,7 +141,7 @@ Built serially through sub-phases 001-004 (module+i18n → panel CSS → title O
 2. Rollups remain count|sum|avg|list and display-only; this phase adds no rollup expansion.
 3. Two-way write-back from the panel is out of scope — owned by successor phase `015-two-way-write-back`.
 4. Hover-open requires a touch/tap fallback because hover does not exist on mobile; phone OPEN is CSS-only, confirmed by code trace.
-5. **The hidden-properties CSS gap (P1) and zero test coverage (P2) were real defects at the time of the Sonnet review**, both fixed in follow-up commits (`c90aee6`, `86eee77`) rather than caught before the phase was marked done.
+5. **The hidden-properties CSS gap (P1) and zero test coverage (P2) were real defects at the time of the Sonnet review**, both fixed in follow-up commits (`c90aee6`, `86eee77`) while the phase remained In Progress.
 
 <!-- /ANCHOR:limitations -->
 ---

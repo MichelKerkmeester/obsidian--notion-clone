@@ -208,7 +208,7 @@
     ],
     "causal_summary": "View filters today are a flat `FilterRule[]` with a single global `filterLogic` (`and` | `or`) applied uniformly across every rule (`QueryEngine.ts:74-89`)",
     "created_at": "2026-08-24T17:58:43.513Z",
-    "last_save_at": "2026-08-27T12:25:53.974Z",
+    "last_save_at": "2026-08-27T17:09:02.098Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -219,13 +219,13 @@
       "implementation-summary.md",
       "research/research.md"
     ],
-    "source_fingerprint": "sha256:0aa4a64fec66e0fb54efc643f10b2b8b13facdca60fa90210f954acacdadc35b",
+    "source_fingerprint": "sha256:59b832738a0042f8655badaab82fe0bacdb9e8628dc1062704d4b868a89c7249",
     "source_doc_hashes": {
-      "spec.md": "1b532295610546cb436799bfb8cb742b2c8f5aec5fff35a88504eb747c2f80fe",
-      "plan.md": "4ec5d1cb1cc2c6396f995afce641b70ffb9a3d32de362c1aa2759282f645073e",
-      "tasks.md": "125911d3135f9e627669e117e8e7e855c71eb25239c37f1f155068e1c1cfdfb2",
-      "checklist.md": "768640fae133ff768ea30cffdfdc82ddaa7f73fc9f4530938d06f7242c708d10",
-      "implementation-summary.md": "55167a85c47edb14208980ced6e6df846204fb86466dff30cb71161fc1865290",
+      "spec.md": "d85320632bfdb3763ccc9f18fb341667dcc65bef2b741e72b69ca55d0e139b1b",
+      "plan.md": "f993a23e158cdaac4e65d39b3073ccc375ec1d7f13afa218751604ffd38d7528",
+      "tasks.md": "9cc1fc607b986fbd92f3f039d71008c488839958f537f9b87c9d9ac4fe7c21bb",
+      "checklist.md": "ce505ba1fb5e529a52a42dc048fde0e638d8482ceaec874eb1957e50fbe9f94f",
+      "implementation-summary.md": "e72d38a6d35417e7921b54e9ab514f922d5d8a05146a395a3ffa5b1faf9228eb",
       "research/research.md": "6ee5f1d994f1abf05bf547c5ae4a2374bd9695fe077bf1b27e49b2e3670e83cc"
     },
     "last_active_child_id": "public/001-note-db-notion-parity-build/009-view-filter-tree/005-filter-tree-proof",

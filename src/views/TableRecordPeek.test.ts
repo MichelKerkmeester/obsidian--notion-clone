@@ -73,6 +73,9 @@ class FakeElement extends FakeEventTarget {
   get classList() {
     const classes = this.classes;
     return {
+      add(...names: string[]): void {
+        for (const name of names) classes.add(name);
+      },
       toggle(name: string, force?: boolean): boolean {
         const next = force === undefined ? !classes.has(name) : force;
         if (next) classes.add(name); else classes.delete(name);
@@ -377,7 +380,7 @@ describe("TableRecordPeek row sync", () => {
 });
 
 describe("attachTitleOpenAffordance", () => {
-  it("adds exactly one open button and wires it to the open callback", () => {
+  it("marks a fallback host cell for the title-hidden path and wires one open button", () => {
     const { document } = makeContainer();
     const td = document.createElement("td");
     const open = vi.fn();
@@ -388,6 +391,7 @@ describe("attachTitleOpenAffordance", () => {
 
     const buttons = findByClass(td, "db-record-open-btn");
     expect(buttons).toHaveLength(1);
+    expect(td.classList.contains("db-record-open-host")).toBe(true);
 
     buttons[0].dispatch("click", { preventDefault: vi.fn(), stopPropagation: vi.fn() });
     expect(open).toHaveBeenCalledWith(testRow);

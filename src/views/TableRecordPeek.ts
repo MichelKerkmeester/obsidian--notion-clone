@@ -40,6 +40,7 @@ export function attachTitleOpenAffordance(
   row: RowData,
   deps: TitleOpenAffordanceDeps,
 ): void {
+  td.classList.add("db-record-open-host");
   if (td.querySelector(".db-record-open-btn")) return;
 
   const button = td.ownerDocument.createElement("button");

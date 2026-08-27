@@ -195,7 +195,7 @@
     ],
     "causal_summary": "Without the locked proofs, Remaining can “pass” while showing `0` on empty months",
     "created_at": "2026-08-25T19:12:38Z",
-    "last_save_at": "2026-08-27T12:50:05.149Z",
+    "last_save_at": "2026-08-27T17:27:14.203Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -205,13 +205,13 @@
       "checklist.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:272d8bb05aad91299762ade74f26d59950c30194bcf9ea7ffd650913b705e7f5",
+    "source_fingerprint": "sha256:5cc0413123fb6ee9e50c7350778c94ff83561591439823e4935784184c2a5bdd",
     "source_doc_hashes": {
-      "spec.md": "175cadeefc5c1d0941dcc5a9bd750ffc22a75ecab2090ed876fc831a91a624dc",
-      "plan.md": "68ac679c72b905857bbb41343ccda05d3bd0a92d46dea9a6d4a10892078b4a84",
-      "tasks.md": "a45128c1e5cd2646e23d81056cea7bffb02228b8d5473df59b7e6960fa746743",
-      "checklist.md": "4a110f3c758b6721ce0628adb8fa5afc0d12c08b8ec6aba57bfdd1f7874e9646",
-      "implementation-summary.md": "45c5be1c447bbc0bca3c31137b4abbc2153f0b3c228dfe31ad37c465882bd1f3"
+      "spec.md": "398d395812b6579e2c6c5698073cd24fba6f26fcbc2c9bae8f3657aff1ad7726",
+      "plan.md": "2200151852d31b5fb141597ab9d8e6731bd30ed1e1ed5a7389c3704b3c08512e",
+      "tasks.md": "053b9aba20897561917d758178805dc0104257adeecfdc7f4d67463997c80141",
+      "checklist.md": "9f762ba0590da6a47bc0cbb1bf915e3da93b7b0c6076f4d4029ba61ae4b03d43",
+      "implementation-summary.md": "926bf5228866d5b1f784ff8badcefdd060273cb62f969bff7b9e16505b73c469"
     },
     "last_active_child_id": null,
     "last_active_at": null

@@ -13,7 +13,7 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "public/001-note-db-notion-parity-build/009-view-filter-tree"
-    last_updated_at: "2026-08-27T12:25:50Z"
+    last_updated_at: "2026-08-27T17:09:01Z"
     last_updated_by: "swarm"
     recent_action: "Completion docs reconciled to shipped state; gate green; Sonnet-verified"
     next_safe_action: "None outstanding for the shipped code"
@@ -45,7 +45,7 @@ _memory:
 | Field | Value |
 |-------|-------|
 | **Spec Folder** | 009-view-filter-tree |
-| **Completed** | Complete — shipped on branch `impl`. Sub-phase 005's manual proof step is **Deferred — non-blocking, superseded by independent Sonnet code-level verification** of the same acceptance criteria (see Known Limitations); it never ran as its own literal session, but that is not treated as gating this parent's Complete status. |
+| **Status** | In Progress — shipped with deferrals; sub-phase 005 manual proof is Deferred and superseded by independent Sonnet code-level verification. |
 | **Level** | 2 |
 | **Actual Effort** | Not separately tracked (delivered across 4 sub-phase commits plus 1 fix commit) |
 
@@ -140,7 +140,7 @@ Delivered through the packet's serial, resumable build driver (`scratch/stage4-i
 <!-- ANCHOR:limitations -->
 ## Known Limitations
 
-1. **Sub-phase `005-filter-tree-proof` is Deferred — non-blocking to this parent's Complete status.** It has no implementation commit; its `implementation-summary.md` and `checklist.md` are left in their honest Deferred state rather than falsely marked shipped. This parent's Complete status is not contradicted by that: the automated portions of what 005 would have proven (Vitest green, 010 export-surface freeze, grep guards for `FilterGroup`/`matchesFilter`/`SourceRules` imports) are independently confirmed true by `research/sonnet-verification.md` (this phase's and 010's), and that independent verification is treated as substituting for 005's automated checks. Only the literal manual vault click-through (phone-width nesting, popover collapse/depth-3, chip+column-delete+drilldown live in a vault) was never executed and remains genuinely un-run — it is an optional follow-up if the operator wants it, not a blocker this parent is silently ignoring.
+1. **Sub-phase `005-filter-tree-proof` is Deferred while this parent remains In Progress.** It has no implementation commit; its `implementation-summary.md` and `checklist.md` are left in their honest Deferred state rather than falsely marked shipped. The automated portions of what 005 would have proven (Vitest green, 010 export-surface freeze, grep guards for `FilterGroup`/`matchesFilter`/`SourceRules` imports) are independently confirmed true by `research/sonnet-verification.md` (this phase's and 010's), and that independent verification is treated as substituting for 005's automated checks. Only the literal manual vault click-through (phone-width nesting, popover collapse/depth-3, chip+column-delete+drilldown live in a vault) was never executed and remains genuinely un-run — it is an optional follow-up if the operator wants it, not a blocker this parent is silently ignoring.
 2. Mobile ergonomics of deep nested-group editing are code-reviewed (DOM-heavy, hand-traced), not manually click-tested end-to-end.
 3. `package.json`'s `"test": "vitest run"` script (T002) exists only as an uncommitted working-tree edit on `impl` — `npx vitest run` works regardless, but the script itself was never committed (P2, `research/sonnet-verification.md`).
 4. Phase 010 (conditional-format-icons) consumed this tree successfully — 010's own Sonnet review confirmed the export-freeze contract was honored.
@@ -155,7 +155,7 @@ Delivered through the packet's serial, resumable build driver (`scratch/stage4-i
 |---------|--------|--------|
 | Implement `applyFilterTree` and the panel tree UI | Shipped as planned across sub-phases 001-004 (`3a070e9`, `312108e`, `2471e01`, `64163dc`) | No functional deviation |
 | Sub-phase 004 ships with coherence tests | Shipped with zero tests initially; fixed in a dedicated pass (`e854681`, +9 tests) after independent review flagged it P1 | Build-driver gate does not require tests per-file; caught by Sonnet review, not the gate |
-| Sub-phase 005 runs the manual/grep proof and records evidence | Never executed; no commit exists for this sub-phase | Build driver moved on to phase 010 without dispatching 005; documented here rather than silently marked done |
+| Sub-phase 005 runs the manual/grep proof and records evidence | Never executed; no commit exists for this sub-phase | Build driver moved on to phase 010 without dispatching 005; documented here while the parent remains In Progress |
 | Completion docs updated alongside the build | Docs lagged the shipped code until this reconciliation pass | Build driver did not write completion state back on commit (packet-wide pattern, see `synthesis.md` §8) |
 
 <!-- /ANCHOR:deviations -->

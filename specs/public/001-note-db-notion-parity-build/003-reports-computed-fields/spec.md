@@ -15,7 +15,7 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "public/001-note-db-notion-parity-build/003-reports-computed-fields"
-    last_updated_at: "2026-08-27T12:25:50Z"
+    last_updated_at: "2026-08-27T17:09:01Z"
     last_updated_by: "phase-architect"
     recent_action: "Nested sub-phases authored; live inspect first"
     next_safe_action: "Build 001-live-reports-inspect per its plan.md and tasks.md once predecessors ship SUM"
@@ -248,7 +248,7 @@ Operator decisions from the synthesis (recommended defaults in parentheses):
 |-------|--------|-------|--------|
 | 1 | 001-live-reports-inspect/ | Inspect live Reports `db_view` after predecessors ship SUM; lock Remaining/Saved expressions and blank-vs-zero; no formula write | Complete |
 | 2 | 002-remaining-saved-config/ | One config transaction: Remaining, Saved if distinct, view columnOrder, human labels, explicit display-only | Complete |
-| 3 | 003-reports-display-proof/ | Known-pair, empty-month, mistype, desktop hash, and engine-freeze proofs with packet evidence | Complete |
+| 3 | 003-reports-display-proof/ | Known-pair, empty-month, mistype, desktop hash, and engine-freeze proofs with packet evidence | Deferred |
 
 Future / out of this phase (not child folders): percent-of-income Saved; rollup MAX/Median/Range/percent-empty; inline formula-error cells; LET / 1M-3M-1Y projections.
 

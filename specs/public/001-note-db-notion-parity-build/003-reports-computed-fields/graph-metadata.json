@@ -46,7 +46,7 @@
       "rollup"
     ],
     "importance_tier": "high",
-    "status": "complete",
+    "status": "in_progress",
     "key_files": [
       "spec.md",
       "plan.md",
@@ -206,7 +206,7 @@
     ],
     "causal_summary": "The finance Reports view lacks Remaining and Saved as live computed columns",
     "created_at": "2026-08-24T17:58:31.318Z",
-    "last_save_at": "2026-08-27T12:25:52.514Z",
+    "last_save_at": "2026-08-27T17:09:01.691Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -217,13 +217,13 @@
       "implementation-summary.md",
       "research/research.md"
     ],
-    "source_fingerprint": "sha256:09b96000e20f3c282bc965872a92334e6abd6fb43ce3bfc84a04a8db4b2cbc27",
+    "source_fingerprint": "sha256:17f20e3bc5af99e1219c080346cee17d568dc862188496cfa51b0c609dadcdaa",
     "source_doc_hashes": {
-      "spec.md": "ec751ddb9578f8363662b347fe5e82a015cefa3dfd3f0c9e06385e227e7370c8",
-      "plan.md": "672fa99c541a74970ed084f631961932a878aeadf79d90bd2f688fd72d5fe2ad",
-      "tasks.md": "3650b04db0f2aaf5bafc7a3467412f374cac731e0818b3c458a3ae36e063005e",
-      "checklist.md": "3242807a97e34903ebc9f063a4228af3d5bd702f1560c80074507d3d604c2dd6",
-      "implementation-summary.md": "59c40dab5a00645b72915d3a40be82032bbcef46516bb3f32e9136aeb7341609",
+      "spec.md": "c351bbb3f52a6e866721c5191135aeba310ea86b17e43a11844ece82fd783374",
+      "plan.md": "035eb06efa65942956d50cf66d61ec80c3aaddfd329d31f03d2dfb800bc31e32",
+      "tasks.md": "3057be4f28516780762ad1f57cc3794f76f52b17980cb0d73e243741c486f71f",
+      "checklist.md": "e7b38a9845cfcc02539c543b08c7aa332e74c8c0b5621cf072ba1c92c4e4b759",
+      "implementation-summary.md": "8b00e0a1b73c50c5464c5e19560b0b3cf6939f58fc6777e18192a095b908448f",
       "research/research.md": "8729da9b654dc4ba16bf105550b3bdbc51837d64aa7aa9f2e285c43f010d3b39"
     },
     "last_active_child_id": "obsidian/002-note-db-notion-parity-build/003-reports-computed-fields/003-reports-display-proof",

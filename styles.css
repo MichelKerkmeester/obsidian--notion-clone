@@ -16272,6 +16272,10 @@ img.db-text-md-image {
   position: relative;
 }
 
+.note-database-container td.db-record-open-host {
+  position: relative;
+}
+
 .note-database-container .db-record-open-btn {
   position: absolute;
   top: 50%;
@@ -16420,4 +16424,38 @@ body.is-phone .note-database-container .db-record-open-btn {
 .note-database-container .db-record-peek-field-value {
   flex: 1;
   min-width: 0;
+}
+
+/* Elevate floating popovers/dropdowns so they read as raised above the surface
+   instead of blending into it. Appended last to win over the earlier per-popover
+   shadows (which were too faint on dark backgrounds). */
+.note-database-container .db-dropdown-popover,
+.note-database-container .db-filter-panel,
+.note-database-container .db-sort-panel,
+.note-database-container .db-view-config-panel,
+.note-database-container .db-column-manager,
+.note-database-container .db-group-popover,
+.note-database-container .db-group-order-popover,
+.note-database-container .db-view-tab-popover,
+.note-database-container .db-database-popover,
+.note-database-container .db-chart-options-popover,
+.note-database-container .db-chart-dropdown-popover,
+.note-database-container .db-conditional-format-dropdown,
+.note-database-container .db-displayopt-dropdown-popover,
+.note-database-container .db-column-menu-subpopover,
+.note-database-container .db-relation-popover,
+.note-database-container .db-icon-picker-popover,
+.note-database-container .db-cell-option-popover,
+.note-database-container .db-cell-edit-popover,
+.note-database-container .db-cell-line-edit-popover,
+.note-database-container .db-date-value-popover,
+.db-filter-panel,
+.db-sort-panel,
+.db-dropdown-popover,
+.db-date-edit-popover,
+.db-calendar-mini-popover,
+.db-calendar-day-popover,
+.db-icon-picker-popover,
+.db-relation-popover {
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.40), 0 3px 8px rgba(0, 0, 0, 0.28);
 }

@@ -191,7 +191,7 @@
     ],
     "causal_summary": "Without the locked proofs, OPEN can look done while still navigating (title `<a>` at `CellRenderer.ts:126-129`), fighting Page Preview (`HoverLinkPreview.ts:8-17`), orphaning after `refresh()` (`DatabaseView.ts:10483-10488`), truncating via `.db-record-detail-` (`styles.css:7592-7597`), or writing via a `DataSource` import",
     "created_at": "2026-08-25T21:14:48Z",
-    "last_save_at": "2026-08-27T12:28:06.405Z",
+    "last_save_at": "2026-08-27T17:27:14.022Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -201,13 +201,13 @@
       "checklist.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:473b1067f5447844f9ac3aaaf4cc2da6659c18e0453ead82f6f5898e9deca570",
+    "source_fingerprint": "sha256:cdbbaa2d87f7b9ea67fd0e05f4c86e25acf6eca6395d36bbacd8e9793b9c3aa1",
     "source_doc_hashes": {
-      "spec.md": "0b25ac10add4fcbe60baa9bc520559e9877d2fe54de3ff4fb21109f55b94058d",
-      "plan.md": "72bd546c2895d24a522d836c5eeafd187ff8810a428ba03a5ca20513f52a46f4",
-      "tasks.md": "86b78305e3250f3bdfdb4b4ff7f2fdbb09083fd1fad2fb2d885920be736c0901",
-      "checklist.md": "013295737152b238deb4da1dd4516d661f1058cff335583aad82b2e451536a56",
-      "implementation-summary.md": "d764db0b34074fc3cd0f01a3196beaae594e923164b37c691145a1fdf3846236"
+      "spec.md": "ae0274a90df5b0f5e3c6940b0b06cc19959516738f44203edbee5828da6e4eb6",
+      "plan.md": "bf9113a75e48836eb16bdaeb2ee7c2ff9d5700760173e6f07e592cceb4d253e9",
+      "tasks.md": "d15128eecb2b2207a49fe8abf69b4b084d0efe7a781e37d3486baf0f6c19006b",
+      "checklist.md": "f4ae702686b9ad6446d7896e2a85512ae05fa0caa63725176af116c7c13208a8",
+      "implementation-summary.md": "2fb9a8b6d3e1518c56922441a7a9471eebdf0c77c1a5519a2e988cd55de4f3c1"
     },
     "last_active_child_id": null,
     "last_active_at": null

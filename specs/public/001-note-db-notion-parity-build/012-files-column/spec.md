@@ -14,7 +14,7 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "public/001-note-db-notion-parity-build/012-files-column"
-    last_updated_at: "2026-08-27T12:25:50Z"
+    last_updated_at: "2026-08-27T17:09:01Z"
     last_updated_by: "phase-architect"
     recent_action: "Nested sub-phases authored from synthesis and final-plan"
     next_safe_action: "Build 001-files-column-module per its plan.md and tasks.md"
@@ -277,7 +277,7 @@ Operator decisions from `research/synthesis.md` (recommended defaults shown; the
 | 2 | 002-files-type-registry/ | Register `"files"` as the 13th type across union, labels, icon, pickers, three i18n dictionaries, and `files` to `multitext` conflict | Complete |
 | 3 | 003-files-cell-dispatch/ | CellRenderer `case "files"` chips, save-time URL strip, and `startEdit` wikilink text editor | Complete |
 | 4 | 004-files-cover-wiring/ | Gallery/board cover guard skips `image.external` on files columns, `onerror` placeholder, auto-prefer files | Complete |
-| 5 | 005-files-column-proof/ | Typecheck, grep, desktop/mobile, iCloud, and rebase-shape proof for REQ-001–007 and SC-001–004 | Complete |
+| 5 | 005-files-column-proof/ | Typecheck, grep, desktop/mobile, iCloud, and rebase-shape proof for REQ-001–007 and SC-001–004 | Deferred |
 
 Future / out of this phase (not child folders): gallery "N attachments" count badge; per-file Notion menu plus reorder; GalleryRenderer/ListRenderer card-body stringify unless a finance gallery shows the files column as a field; empty-aware sort; `db-file-pending` overlay; Notion CDN fetch; upload UI; widening `IMAGE_TARGET_RE` for HEIC/TIFF/ICO.
 

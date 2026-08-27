@@ -10,7 +10,7 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "public/001-note-db-notion-parity-build/011-table-multi-group/005-multigroup-display-proof"
-    last_updated_at: "2026-08-27T12:27:53Z"
+    last_updated_at: "2026-08-27T17:27:13Z"
     last_updated_by: "docs-reconciliation"
     recent_action: "Completion docs reconciled to shipped state; gate green; Sonnet-verified"
     next_safe_action: "None — sub-phase complete"
@@ -25,7 +25,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "decompose-005-multigroup-display-proof"
       parent_session_id: null
-    completion_pct: 100
+    completion_pct: 95
     open_questions: []
     answered_questions: []
 ---
@@ -81,7 +81,7 @@ _memory:
 
 - [x] CHK-020 [P0] All acceptance criteria met [EVIDENCE: pending]
   - **Evidence**: Verified (Sonnet 5 read-only review substituting for a separately-run manual matrix; commit `d9e038c`, `tsc0/build0/vitest 181/17 green`). REQ-001 through REQ-008 confirmed by code trace + gate re-run; REQ-003's CSS half was found missing and fixed same-day in `929769d`.
-- [x] CHK-021 [P0] 2-field nest manual test [EVIDENCE: pending]
+- [ ] CHK-021 [P0] 2-field nest manual test [EVIDENCE: DEFERRED -- manual proof not run; superseded by code-level verification]
   - **Evidence**: Verified (Sonnet 5 read-only review substituting for a separately-run manual matrix; commit `d9e038c`, `tsc0/build0/vitest 181/17 green`). Category/Type indented headers; hiding Category conceals Type.
 - [x] CHK-022 [P1] Edge matrix [EVIDENCE: pending]
   - **Evidence**: Verified (Sonnet 5 read-only review substituting for a separately-run manual matrix; commit `d9e038c`, `tsc0/build0/vitest 181/17 green`). Nulls (`QueryEngine.ts:279`), empty groups (`GroupVisibility.ts:52-60`), mixed types, checkbox/date, multi-select fan-out (`:143-147`), empty DB (`TableRenderer.ts:92-98`), filter-before-group (`DatabaseView.ts:6313`).

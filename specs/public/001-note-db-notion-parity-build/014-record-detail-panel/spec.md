@@ -13,7 +13,7 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "public/001-note-db-notion-parity-build/014-record-detail-panel"
-    last_updated_at: "2026-08-27T12:25:50Z"
+    last_updated_at: "2026-08-27T17:09:01Z"
     last_updated_by: "phase-architect"
     recent_action: "Nested sub-phases authored from synthesis and final-plan"
     next_safe_action: "Build 001-table-record-peek-module per its plan.md and tasks.md"
@@ -282,7 +282,7 @@ Operator decisions (defaults locked in plan.md from the final-plan review; revis
 | 2 | 002-peek-panel-css/ | Append toolbar-safe theme-variable peek CSS, including phone-persistent OPEN | Complete |
 | 3 | 003-title-open-affordance/ | Attach Name-cell OPEN in `renderCell` and wire overlay lifecycle so refresh cannot orphan the peek | Complete |
 | 4 | 004-peek-keyboard-open/ | Open the peek with Mod+Enter before the bare-Enter edit branch | Complete |
-| 5 | 005-peek-display-proof/ | Prove typecheck, greps, and the locked manual desktop/phone scenarios | Complete |
+| 5 | 005-peek-display-proof/ | Prove typecheck, greps, and the locked manual desktop/phone scenarios | Deferred |
 
 Future / out of this phase (not child folders): board/gallery hosts; body/markdown preview and two-way write-back (successor `015`); Anytype `local` group; Anytype `Storage.setToggle`; reuse of calendar `openRecordDetailPanel`; Obsidian `Modal`; follow-on-scroll; a pushed keymap `Scope`; `src/data/RecordDetailPanel.ts`; `PopoverPosition` clamp/flip.
 
