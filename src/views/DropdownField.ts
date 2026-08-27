@@ -168,7 +168,14 @@ function openDropdownPopover(anchor: HTMLElement, options: DropdownFieldOptions,
     });
     row.setAttr("data-value", option.value);
     row.setAttr("data-search-text", `${option.text} ${option.value} ${option.disabledReason || ""}`.toLowerCase());
-    row.disabled = option.disabled === true;
+    if (option.disabled && option.disabledReason) {
+      // A natively-disabled <button> swallows hover events in Chromium, so its
+      // title tooltip never appears. Keep it enabled but aria-disabled so the
+      // hover tooltip works; the click handler below guards activation instead.
+      row.setAttr("aria-disabled", "true");
+    } else {
+      row.disabled = option.disabled === true;
+    }
     if (option.disabledReason) {
       row.setAttr("title", option.disabledReason);
       row.setAttr("aria-label", `${option.text}: ${option.disabledReason}`);
@@ -182,7 +189,6 @@ function openDropdownPopover(anchor: HTMLElement, options: DropdownFieldOptions,
     }
     const text = row.createSpan({ cls: "db-dropdown-option-text" });
     text.createSpan({ cls: "db-dropdown-option-label", text: option.text });
-    if (option.disabledReason) text.createSpan({ cls: "db-dropdown-option-reason", text: option.disabledReason });
     if (option.swatches?.length) {
       const swatches = row.createSpan({ cls: "db-dropdown-option-swatches", attr: { "aria-hidden": "true" } });
       for (const color of option.swatches.slice(0, 5)) {
@@ -190,7 +196,7 @@ function openDropdownPopover(anchor: HTMLElement, options: DropdownFieldOptions,
       }
     }
     row.onclick = () => {
-      if (row.disabled) return;
+      if (row.disabled || option.disabled) return;
       if (!option.preserveValueOnSelect) {
         syncDropdownSelection(sectionRows, option.value);
         valueEl.setText(option.text);
