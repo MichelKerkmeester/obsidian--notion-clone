@@ -62,8 +62,8 @@ _memory:
   - **Evidence**: Verified — commits `6639789`/`0baacde`/`6cb5331`/`202635d`/`c766117` on branch `impl` (tsc0/build0/vitest green; Sonnet 5 verification 2026-08-26). `spec.md` requirements are documented; note the **delivery mechanism deviated** from the config-only build the synthesis specified — see `implementation-summary.md` Deviations.
 - [x] CHK-002 [P0] Technical approach defined in plan.md and matching the locked design
   - **Evidence**: Verified — same commits, tsc0/build0/vitest green. The shipped path adds `ReportsInspector.ts`/`ReportsComputedConfig.ts`/`ReportsDisplay.ts` rather than a raw vault-config edit; multi-pass evaluation and the null-guarded default-blank expression are correctly implemented per Sonnet verification (`ReportsInspector.ts:126-154`).
-- [x] CHK-003 [P1] Dependencies identified and available; live columns inspected before any formula is written
-  - **Evidence**: Verified — commit `6639789` (`001-live-reports-inspect`), tsc0/build0/vitest green. Predecessors `001-live-reports-rollups` and `002-rollup-aggregation-pack` shipped first; inspect logic lands in `ReportsInspector.ts`.
+- [ ] CHK-003 [P1] Dependencies identified and available; live columns inspected before any formula is written
+  - **Evidence**: **NOT MET AS CLAIMED.** The predecessor named here, `001-live-reports-rollups`, is config-only and was never built — its parent-map status is `Planned`, not shipped (see `../spec.md` Phase Documentation Map). Only `002-rollup-aggregation-pack` (Complete) actually closed before this phase. The live-column inspect step itself did land, in `ReportsInspector.ts` (commit `6639789`), but it ran independently of 001's vault config rather than after it, because 003 shipped as code instead of the planned config-only edit (see CHK-013). Corrected 2026-08-27: previously checked on the false claim that both predecessors shipped. `001-live-reports-rollups` remains a pending config-only task and does not block 003's already-shipped code.
 
 <!-- /ANCHOR:pre-impl -->
 ---
@@ -88,8 +88,8 @@ _memory:
 
 - [x] CHK-020 [P0] All acceptance criteria met
   - **Evidence**: Verified — commits `6639789`/`0baacde`/`6cb5331`/`202635d`/`c766117`, tsc0/build0/vitest green. REQ-001, 002, 003, 005, 006, 007 confirmed by Sonnet verification (arithmetic, display-only sync, untouched engine, mobile/iCloud-safe, column order/labels, blank-fail-closed). **REQ-004 (Saved classification) partial**: skip-on-duplicate logic is implemented, but the classification decision itself remains deferred pending operator input.
-- [x] CHK-021 [P0] Manual testing complete against the known pair
-  - **Evidence**: Verified by code trace + unit tests (18/18) — `ReportsInspector.ts:126-154` correctly implements the null-guarded Remaining arithmetic per Sonnet's line-level review; reachable via the `c766117` "Configure Reports computed fields" command. The packet does not separately record a live desktop click-through screenshot; the arithmetic correctness is confirmed at the code level, not by a witnessed manual session.
+- [ ] CHK-021 [P0] Manual testing complete against the known pair
+  - **Evidence**: **NOT MET AS CLAIMED.** No witnessed manual testing session exists for this phase — nobody opened the Reports view, ran the `configure-reports-computed-fields` command, and confirmed the known-pair result (Income=1000, Expenses=400 → 600) by eye. What exists is code-level verification: `ReportsInspector.ts:126-154` correctly implements the null-guarded Remaining arithmetic per Sonnet 5's line-level review, and unit tests (18/18) pass. That code review substitutes for the code-correctness claims elsewhere in this checklist (CHK-010–CHK-012, CHK-023) but does not substitute for the literal manual session this item asks for. Corrected 2026-08-27: previously checked on code-trace evidence alone. Deferred to operator per the P0 handling rule — a witnessed click-through is the remaining action to close this item, or the operator can explicitly accept code + unit-test verification as sufficient.
 - [x] CHK-022 [P1] Edge cases tested per the synthesis list
   - **Evidence**: Verified — commits `6639789`/`0baacde`, tsc0/build0/vitest green. Null-guard, currency-string coercion, and definition-order handling confirmed correct by Sonnet's code trace. Saved's duplicate-skip logic is implemented in `ReportsInspector.ts`, but the underlying classification (REQ-004) is deferred — see CHK-020.
 - [x] CHK-023 [P1] Blank-vs-zero decision recorded and validated
@@ -153,11 +153,11 @@ _memory:
 
 | Category | Total | Verified |
 |----------|-------|----------|
-| P0 Items | 10 | 10/10 |
-| P1 Items | 10 | 9/10 |
+| P0 Items | 10 | 9/10 |
+| P1 Items | 10 | 8/10 |
 | P2 Items | 2 | 1/2 |
 
-**Verification Date**: 2026-08-26
-**Verified By**: Claude Sonnet 5 (read-only adversarial verification) — commits `6639789`/`0baacde`/`6cb5331`/`202635d`/`c766117` on branch `impl`; `tsc --noEmit` clean; new-module unit tests 18/18. Initial verdict **CONCERNS (severe)** (config-only mandate violated, dead code, untested global regression); fixed same day in `c766117`. **CHK-013 stays unchecked** (config-only pattern not respected — code shipped instead, deviation documented and accepted). Saved-field classification (REQ-004) remains deferred pending operator input.
+**Verification Date**: 2026-08-26 (checklist corrected 2026-08-27)
+**Verified By**: Claude Sonnet 5 (read-only adversarial verification) — commits `6639789`/`0baacde`/`6cb5331`/`202635d`/`c766117` on branch `impl`; `tsc --noEmit` clean; new-module unit tests 18/18. Initial verdict **CONCERNS (severe)** (config-only mandate violated, dead code, untested global regression); fixed same day in `c766117`. **CHK-013 stays unchecked** (config-only pattern not respected — code shipped instead, deviation documented and accepted). **CHK-003 corrected to unchecked** (its named predecessor `001-live-reports-rollups` never shipped — was falsely credited as shipped). **CHK-021 corrected to unchecked** (no witnessed manual testing session exists; only code-level/unit-test verification). Saved-field classification (REQ-004) remains deferred pending operator input.
 
 <!-- /ANCHOR:summary -->

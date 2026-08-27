@@ -10,10 +10,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "public/001-note-db-notion-parity-build"
-    last_updated_at: "2026-08-24T00:00:00Z"
-    last_updated_by: "swarm"
-    recent_action: "Scaffolded phase parent docs; status Planned"
-    next_safe_action: "Build phases in wave order starting at 001-live-reports-rollups; see roadmap.md"
+    last_updated_at: "2026-08-27T00:00:00Z"
+    last_updated_by: "docs-consistency-fix"
+    recent_action: "Waves 1-5 (phases 002-014) shipped, Sonnet-verified, gate-green (tsc0/build0/vitest) on branch impl; see spec.md Status"
+    next_safe_action: "Land wave 0 (phase 001, config-only, no code) to close the last pending item; wave 6 (015-017) stays deferred/out of scope and never-default unless an owner reopens it"
     blockers: []
     key_files:
       - "spec.md"
@@ -22,7 +22,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "note-db-parity-scaffold"
       parent_session_id: null
-    completion_pct: 0
+    completion_pct: 93
     open_questions: []
     answered_questions: []
 ---

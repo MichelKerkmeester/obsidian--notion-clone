@@ -98,9 +98,9 @@ Not delivered. Proofs follow `tasks.md` against the live fork and vault. This ch
 
 | Check | Result |
 |-------|--------|
-| `npx vitest run` | Not run (Planned) |
-| Vault nested persist / mobile / dual-write | Not run (Planned) |
-| Grep freeze + CF still `applyFilters` | Not run (Planned) |
+| `npx vitest run` | Not run by this child — Deferred; equivalent evidence confirmed independently (`research/sonnet-verification.md`, see Known Limitations #1) |
+| Vault nested persist / mobile / dual-write | Not run — Deferred; genuinely unconfirmed anywhere (see Known Limitations #1-2) |
+| Grep freeze + CF still `applyFilters` | Not run by this child — Deferred; equivalent evidence confirmed independently (009's own `sonnet-verification.md` hand-trace, see Known Limitations #1) |
 | `bash .opencode/skills/system-spec-kit/scripts/spec/validate.sh` on this folder `--strict` | Pending after authoring |
 <!-- /ANCHOR:verification -->
 
