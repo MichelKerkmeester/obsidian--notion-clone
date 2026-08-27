@@ -70,7 +70,7 @@
       "switch"
     ],
     "importance_tier": "high",
-    "status": "in_progress",
+    "status": "complete",
     "key_files": [
       "spec.md",
       "001-live-reports-rollups/spec.md",

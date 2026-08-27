@@ -39,7 +39,7 @@
       "buttons"
     ],
     "importance_tier": "medium",
-    "status": "in_progress",
+    "status": "deferred",
     "key_files": [
       "spec.md",
       "plan.md",
