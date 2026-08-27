@@ -1,6 +1,6 @@
 ---
 title: "Implementation Summary: Unique-ID Config Persist"
-description: "Planned DatabaseConfig.uniqueId round-trip through parseDatabaseConfig and toDatabasePayload. Not yet implemented in the fork."
+description: "Shipped DatabaseConfig.uniqueId round-trip through parseDatabaseConfig and toDatabasePayload, commit 576240b on branch impl, Sonnet-verified PASS."
 trigger_phrases:
   - "unique id persist summary"
   - "toDatabasePayload uniqueId"
@@ -9,10 +9,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "public/001-note-db-notion-parity-build/007-unique-id-stamp/002-unique-id-config-persist"
-    last_updated_at: "2026-08-25T21:35:00Z"
-    last_updated_by: "phase-architect"
-    recent_action: "Authored uniqueId persist child from synthesis rank 2 and final-plan steps 2-3"
-    next_safe_action: "Add uniqueId to DatabaseConfig and wire parseDatabaseConfig plus toDatabasePayload"
+    last_updated_at: "2026-08-27T00:00:00Z"
+    last_updated_by: "docs-reconciliation"
+    recent_action: "Reconciled to shipped state: commit 576240b on branch impl, tsc0/build0/vitest green, Sonnet 5 PASS"
+    next_safe_action: "None — sub-phase complete"
     blockers: []
     key_files:
       - "spec.md"
@@ -23,7 +23,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "decompose-002-unique-id-config-persist"
       parent_session_id: null
-    completion_pct: 0
+    completion_pct: 100
     open_questions: []
     answered_questions: []
 ---
@@ -39,9 +39,9 @@ _memory:
 | Field | Value |
 |-------|-------|
 | **Spec Folder** | 002-unique-id-config-persist |
-| **Completed** | Not yet (Planned) |
+| **Completed** | 2026-08-25 (commit `576240b` on branch `impl`) |
 | **Level** | 1 |
-| **Actual Effort** | Not started |
+| **Actual Effort** | Shipped and Sonnet-verified PASS |
 <!-- /ANCHOR:metadata -->
 
 ---
@@ -49,18 +49,18 @@ _memory:
 <!-- ANCHOR:what-built -->
 ## What Was Built
 
-Nothing in the fork yet. This child is Planned: persist the allocator block so child 003 can increment a counter that survives reload.
+Shipped on branch `impl` (commit `576240b`): the persisted allocator block, so child 003 can increment a counter that survives reload.
 
-Planned work adds `uniqueId?: UniqueIdConfig` on `DatabaseConfig` and wires `parseDatabaseConfig` (`DataSource.ts:773-793`) plus `toDatabasePayload` (`1041-1063`) in one `DataSource.ts` diff.
+`uniqueId?: UniqueIdConfig` exists on `DatabaseConfig`; `parseDatabaseConfig` (`DataSource.ts:773-793`) and `toDatabasePayload` (`:1041-1063`) both carry `uniqueId` in one `DataSource.ts` diff. Sonnet review confirmed the whitelist includes `uniqueId` and defaults normalize on parse.
 
 ### Files Changed
 
 | File | Action | Purpose |
 |------|--------|---------|
-| `spec.md` | Authored | Persist scope and whitelist coupling |
-| `plan.md` | Authored | Type-only import + existing write path |
-| `tasks.md` | Authored | T004–T005 atomic DataSource.ts unit |
-| `implementation-summary.md` | Authored | Honest pre-build record |
+| `src/data/types.ts` | Modified | `uniqueId?: UniqueIdConfig` on `DatabaseConfig` via type-only import |
+| `src/data/DataSource.ts` | Modified | Parse in `parseDatabaseConfig` (`:773-793`) and serialize in `toDatabasePayload` (`:1041-1063`) |
+| `spec.md` | Reconciled | Status Planned → Complete |
+| `implementation-summary.md` | Reconciled | This record — shipped-state evidence |
 <!-- /ANCHOR:what-built -->
 
 ---
@@ -68,7 +68,7 @@ Planned work adds `uniqueId?: UniqueIdConfig` on `DatabaseConfig` and wires `par
 <!-- ANCHOR:how-delivered -->
 ## How It Was Delivered
 
-Not delivered. Starts only after `001-unique-id-stamp-module` has `UniqueIdStamp.ts` on disk.
+Delivered after `001-unique-id-stamp-module` (commit `3566ccc`) landed `UniqueIdStamp.ts`. Gated `tsc --noEmit` 0 / `npm run build` 0 / `npx vitest run` green, committed `576240b`, then independently Sonnet-verified as part of the parent phase review.
 <!-- /ANCHOR:how-delivered -->
 
 ---
@@ -91,9 +91,9 @@ Not delivered. Starts only after `001-unique-id-stamp-module` has `UniqueIdStamp
 
 | Check | Result |
 |-------|--------|
-| Round-trip `{ prefix: "INV" }` through parse+payload | Not run (Planned) |
-| `npx vitest run src/data/UniqueIdStamp.test.ts` | Not run (Planned) |
-| `validate.sh` on this folder `--strict` | Pending after authoring |
+| Round-trip `{ prefix: "INV" }` through parse+payload | **Confirmed** — Sonnet trace of `parseDatabaseConfig` + `toDatabasePayload` |
+| `npx vitest run src/data/UniqueIdStamp.test.ts` | **Green — 10/10** |
+| `validate.sh` on this folder `--strict` | Not run by this reconciliation pass (docs-only; see task scope) |
 <!-- /ANCHOR:verification -->
 
 ---

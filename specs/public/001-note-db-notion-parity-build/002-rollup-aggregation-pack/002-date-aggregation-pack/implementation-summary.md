@@ -1,6 +1,6 @@
 ---
 title: "Implementation Summary: Date Aggregation Pack"
-description: "Planned earliest/latest rollup kinds. Not yet implemented in the fork."
+description: "Shipped earliest/latest rollup kinds, gate-green and Sonnet-verified PASS."
 trigger_phrases:
   - "date aggregation summary"
   - "earliest latest"
@@ -11,8 +11,8 @@ _memory:
     packet_pointer: "public/001-note-db-notion-parity-build/002-rollup-aggregation-pack/002-date-aggregation-pack"
     last_updated_at: "2026-08-25T19:05:00Z"
     last_updated_by: "phase-architect"
-    recent_action: "Authored date-pack child from synthesis rank 5 and final-plan step 8"
-    next_safe_action: "Implement earliest/latest after the numeric same-diff child"
+    recent_action: "Shipped commit 58490ee (feat(impl): 002-date-aggregation-pack); tsc0/build0/vitest green; Sonnet 5 verification PASS 2026-08-26"
+    next_safe_action: "None — sub-phase complete"
     blockers: []
     key_files:
       - "spec.md"
@@ -23,7 +23,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "decompose-002-date-aggregation-pack"
       parent_session_id: null
-    completion_pct: 0
+    completion_pct: 100
     open_questions: []
     answered_questions: []
 ---
@@ -39,9 +39,9 @@ _memory:
 | Field | Value |
 |-------|-------|
 | **Spec Folder** | 002-date-aggregation-pack |
-| **Completed** | Not yet (Planned) |
+| **Completed** | 2026-08-26 — commit `58490ee` on branch `impl` |
 | **Level** | 1 |
-| **Actual Effort** | Not started |
+| **Actual Effort** | Shipped as one commit |
 <!-- /ANCHOR:metadata -->
 
 ---
@@ -49,9 +49,7 @@ _memory:
 <!-- ANCHOR:what-built -->
 ## What Was Built
 
-Nothing in the fork yet. This child is Planned: date kinds after the numeric module exists.
-
-Planned work extends `src/data/Aggregate.ts` with `earliest`/`latest`, dispatches them from `src/data/RelationRollup.ts` before `:126`, and maps those ids to `"date"` in `ColumnDisplay.ts` / `RowPipeline.ts`.
+Shipped in commit `58490ee` on branch `impl`. `src/data/Aggregate.ts` now exports `earliest`/`latest` returning `Date | null`; `src/data/RelationRollup.ts` dispatches them before the numeric empty-return; `ColumnDisplay.ts` and `RowPipeline.ts` map those ids to `"date"` display type so cells render via `renderDate`/`parseDateTimeParts`, not `String(Date)` (confirmed in Sonnet verification).
 
 ### Files Changed
 
@@ -68,7 +66,7 @@ Planned work extends `src/data/Aggregate.ts` with `earliest`/`latest`, dispatche
 <!-- ANCHOR:how-delivered -->
 ## How It Was Delivered
 
-Not delivered. Starts only after `001-numeric-aggregate-module` has `Aggregate.ts` on disk.
+Delivered as commit `58490ee` on branch `impl`, after `001-numeric-aggregate-module` (`b83d666`) landed `Aggregate.ts`, per the build-order requirement.
 <!-- /ANCHOR:how-delivered -->
 
 ---
@@ -90,9 +88,9 @@ Not delivered. Starts only after `001-numeric-aggregate-module` has `Aggregate.t
 
 | Check | Result |
 |-------|--------|
-| `npx vitest run` after earliest/latest tests | Not run (Planned) |
-| Scenario 2 dateKey match | Not run (Planned) |
-| `validate.sh` on this folder `--strict` | Pending after authoring |
+| `npx vitest run` after earliest/latest tests | Pass — tsc0/build0/vitest green (commit `58490ee`) |
+| Scenario 2 dateKey match | Confirmed — Sonnet verification traced `earliest\|latest` → `"date"` mapping in `ColumnDisplay.ts:19-23` / `RowPipeline.ts:150-155` |
+| Full Vitest suite at Sonnet re-verification | Pass — 160/160 (2026-08-26) |
 <!-- /ANCHOR:verification -->
 
 ---

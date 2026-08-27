@@ -41,7 +41,7 @@ _memory:
 |-------|-------|
 | **Level** | 1 |
 | **Priority** | P1 |
-| **Status** | Planned |
+| **Status** | Complete |
 | **Created** | 2026-08-25 |
 | **Branch** | `006-link-scheme-fields` |
 | **Parent Spec** | ../spec.md |

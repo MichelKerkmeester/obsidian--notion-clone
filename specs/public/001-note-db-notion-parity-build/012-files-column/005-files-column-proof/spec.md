@@ -42,7 +42,7 @@ _memory:
 |-------|-------|
 | **Level** | 2 |
 | **Priority** | P1 |
-| **Status** | Planned |
+| **Status** | Complete |
 | **Created** | 2026-08-25 |
 | **Branch** | `012-files-column` |
 | **Parent Spec** | ../spec.md |

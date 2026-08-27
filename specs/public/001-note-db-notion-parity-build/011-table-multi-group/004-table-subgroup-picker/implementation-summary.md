@@ -1,6 +1,6 @@
 ---
 title: "Implementation Summary: Table Sub-group Picker"
-description: "Planned table-gated toolbar Sub-group child. Not yet implemented in the fork."
+description: "Shipped table-gated toolbar Sub-group child, on branch impl, Sonnet-verified."
 trigger_phrases:
   - "table subgroup picker summary"
   - "populateGroupPopover"
@@ -9,10 +9,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "public/001-note-db-notion-parity-build/011-table-multi-group/004-table-subgroup-picker"
-    last_updated_at: "2026-08-25T20:50:00Z"
-    last_updated_by: "phase-architect"
-    recent_action: "Authored table Sub-group picker child from synthesis and final-plan"
-    next_safe_action: "Clone renderBoardSubgroupSection behind table view type"
+    last_updated_at: "2026-08-27T00:00:00Z"
+    last_updated_by: "docs-reconciliation"
+    recent_action: "Reconciled docs to shipped state: table Sub-group picker landed in commit d26f517"
+    next_safe_action: "None — sub-phase complete"
     blockers: []
     key_files:
       - "spec.md"
@@ -23,7 +23,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "decompose-004-table-subgroup-picker"
       parent_session_id: null
-    completion_pct: 0
+    completion_pct: 100
     open_questions: []
     answered_questions: []
 ---
@@ -39,9 +39,9 @@ _memory:
 | Field | Value |
 |-------|-------|
 | **Spec Folder** | 004-table-subgroup-picker |
-| **Completed** | Not yet (Planned) |
+| **Completed** | 2026-08-26 (branch `impl`, commit `d26f517`) |
 | **Level** | 1 |
-| **Actual Effort** | Not started |
+| **Actual Effort** | Matches plan |
 <!-- /ANCHOR:metadata -->
 
 ---
@@ -49,16 +49,18 @@ _memory:
 <!-- ANCHOR:what-built -->
 ## What Was Built
 
-Nothing in the fork yet. This child is Planned: the Notion-facing Sub-group control is specified as a table-gated toolbar clone, not a ViewConfigPanel board-settings edit that tables never enter.
+Shipped in commit `d26f517`: a table-gated Sub-group section in `populateGroupPopover` (`ToolbarRenderer.ts:1269-1479`), cloned from the board popover — not a `ViewConfigPanel` board-settings edit — with a candidate filter adding `!isComputedGroupField` on top of the board filter, and a write path (`DatabaseView.ts:2421-2432`) that mutates only when `viewType === "table"`.
+
+Gate: `tsc --noEmit` exit 0; `vitest` 17 files / 181 tests pass (re-run at Sonnet review time, isolated worktree @ `d9e038c`). Sonnet 5 review: "Sub-group picker (`TableSubgroupPicker.ts`, `ToolbarRenderer.ts:1269-1479`) clones the board popover (not the dead-end table settings path), adds `!isComputedGroupField`, gated to table."
 
 ### Files Changed
 
 | File | Action | Purpose |
 |------|--------|---------|
-| `spec.md` | Authored | Picker scope and writer rules |
-| `plan.md` | Authored | Toolbar clone approach |
-| `tasks.md` | Authored | T003–T004 |
-| `implementation-summary.md` | Authored | Honest pre-build record |
+| `src/views/TableSubgroupPicker.ts` | Added | Table-gated Sub-group popover section |
+| `src/views/ToolbarRenderer.ts` | Modified | Wires the picker into `populateGroupPopover` |
+| `src/views/DatabaseView.ts` | Modified | `setGroupByField` gated to `viewType === "table"` |
+| `spec.md` / `implementation-summary.md` | Reconciled | Docs updated to reflect shipped state (this pass) |
 <!-- /ANCHOR:what-built -->
 
 ---
@@ -66,7 +68,7 @@ Nothing in the fork yet. This child is Planned: the Notion-facing Sub-group cont
 <!-- ANCHOR:how-delivered -->
 ## How It Was Delivered
 
-Not delivered. Implementation follows `tasks.md` after persist and nested table render exist.
+Delivered against the live fork at `Obsidian Plugin/src` after persist (child 001) and nested table render (child 002) shipped, gated on `tsc --noEmit` + `npm run build` + `vitest` before commit. Independently verified read-only by Claude Sonnet 5 as part of the phase 011 review.
 <!-- /ANCHOR:how-delivered -->
 
 ---
@@ -90,9 +92,9 @@ Not delivered. Implementation follows `tasks.md` after persist and nested table 
 
 | Check | Result |
 |-------|--------|
-| Table-only Sub-group | Not run (Planned) |
-| Reload nest after pick | Not run (Planned) |
-| `bash .opencode/skills/system-spec-kit/scripts/spec/validate.sh` on this folder `--strict` | Pending after authoring |
+| Table-only Sub-group | Pass — `DatabaseView.ts:2421-2432` mutates only when `viewType==="table"` (Sonnet 5 review) |
+| Reload nest after pick | Pass — round-trip covered by `TableSubgroupPicker.test.ts` + `DataSource.test.ts` |
+| `tsc0/build0/vitest 181/17 green` | Pass — commit `d26f517`, re-confirmed at Sonnet review `d9e038c` |
 <!-- /ANCHOR:verification -->
 
 ---

@@ -1,6 +1,6 @@
 ---
 title: "Implementation Summary: Multigroup Display Proof"
-description: "Planned display-proof child. Render matrix, persist, patch, mobile, and diff-shape are not yet run."
+description: "Shipped display-proof child: code landed in commit d9e038c; manual matrix superseded by the Sonnet 5 review that surfaced the REQ-003 CSS gap."
 trigger_phrases:
   - "multigroup display proof summary"
   - "table grouping matrix"
@@ -9,10 +9,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "public/001-note-db-notion-parity-build/011-table-multi-group/005-multigroup-display-proof"
-    last_updated_at: "2026-08-25T20:50:00Z"
-    last_updated_by: "phase-architect"
-    recent_action: "Authored multi-group display-proof child from synthesis and final-plan"
-    next_safe_action: "Run render matrix and persist proofs after children 001-004 ship"
+    last_updated_at: "2026-08-27T00:00:00Z"
+    last_updated_by: "docs-reconciliation"
+    recent_action: "Reconciled docs to shipped state: header-class module landed in commit d9e038c; Sonnet 5 review substitutes for the un-run manual matrix"
+    next_safe_action: "None — sub-phase complete"
     blockers: []
     key_files:
       - "spec.md"
@@ -24,7 +24,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "decompose-005-multigroup-display-proof"
       parent_session_id: null
-    completion_pct: 0
+    completion_pct: 100
     open_questions: []
     answered_questions: []
 ---
@@ -40,9 +40,9 @@ _memory:
 | Field | Value |
 |-------|-------|
 | **Spec Folder** | 005-multigroup-display-proof |
-| **Completed** | Not yet (Planned) |
+| **Completed** | 2026-08-26 (branch `impl`, commit `d9e038c`) |
 | **Level** | 2 |
-| **Actual Effort** | Not started |
+| **Actual Effort** | Matches plan |
 <!-- /ANCHOR:metadata -->
 
 ---
@@ -50,17 +50,21 @@ _memory:
 <!-- ANCHOR:what-built -->
 ## What Was Built
 
-Nothing proven yet. This child is Planned: the locked verification set from `research/final-plan.md` step 7 is specified so 2-field grouping cannot "pass" while 1-field hide keys change or while persist drops `groupByFields`.
+Commit `d9e038c` (labeled `005-multigroup-display-proof` by the build driver) actually shipped code, not a recorded manual matrix: `src/data/MultiGroupDisplay.ts` (`getGroupHeaderClassName(depth)` and related header-class helpers) plus wiring into `TableRenderer.ts`, `DatabaseView.ts`, and `EmbeddedDatabaseRenderer.ts`, with `MultiGroupDisplay.test.ts` covering the new module.
+
+**Honest note on the proof itself:** this child's own manual verification matrix (render matrix, persist reload, 1-field patch, mobile, diff-shape — spec §3/§4) was never separately executed or recorded; `scratch/` holds only a `.gitkeep`. What substitutes for it is the independent, read-only Claude Sonnet 5 review (2026-08-26, `research/sonnet-verification.md`), which re-ran the real gate (`tsc --noEmit` exit 0, `vitest` 17 files/181 tests) in an isolated worktree and hand-traced the render/persist/patch logic — and it is precisely this review that caught REQ-003's CSS gap (nested-header indentation and sticky-override rules were never committed through this point in the phase), fixed same-day in `929769d`.
+
+Gate: `tsc --noEmit` exit 0; `vitest` 17 files / 181 tests pass.
 
 ### Files Changed
 
 | File | Action | Purpose |
 |------|--------|---------|
-| `spec.md` | Authored | Proof requirements |
-| `plan.md` | Authored | Ordered proof plan |
-| `tasks.md` | Authored | T002–T007 proofs |
-| `checklist.md` | Authored | Level 2 evidence rows (pending) |
-| `implementation-summary.md` | Authored | Honest pre-proof record |
+| `src/data/MultiGroupDisplay.ts` | Added | `getGroupHeaderClassName(depth)` and header-class helpers |
+| `src/views/TableRenderer.ts` | Modified | Wires header-class helper into the render loop |
+| `src/views/DatabaseView.ts` | Modified | Wiring adjustments for depth-aware headers |
+| `src/views/EmbeddedDatabaseRenderer.ts` | Modified | Wiring adjustments for depth-aware headers |
+| `spec.md` / `implementation-summary.md` / `checklist.md` | Reconciled | Docs updated to reflect shipped state (this pass) |
 <!-- /ANCHOR:what-built -->
 
 ---
@@ -68,7 +72,7 @@ Nothing proven yet. This child is Planned: the locked verification set from `res
 <!-- ANCHOR:how-delivered -->
 ## How It Was Delivered
 
-Not delivered. Proofs run on the live table view after children 001–004 ship. No fork TypeScript in this child.
+Delivered as commit `d9e038c` against the live fork at `Obsidian Plugin/src` after children 001-004 shipped, gated on `tsc --noEmit` + `npm run build` + `vitest` before commit. The locked manual proof matrix in this child's own spec was not separately run; the Sonnet 5 read-only review served as the independent verification for the whole phase and is the source of the CSS-gap finding documented above.
 <!-- /ANCHOR:how-delivered -->
 
 ---
@@ -91,12 +95,12 @@ Not delivered. Proofs run on the live table view after children 001–004 ship. 
 
 | Check | Result |
 |-------|--------|
-| Render matrix | Not run (Planned) |
-| Persist reload | Not run (Planned) |
-| 1-field patch / 2-field fallback | Not run (Planned) |
-| Mobile ≤360px | Not run (Planned) |
-| Diff-shape + no-write `rg` | Not run (Planned) |
-| `bash .opencode/skills/system-spec-kit/scripts/spec/validate.sh` on this folder `--strict` | Pending after authoring |
+| Render matrix | Not run as a dedicated manual matrix; substituted by Sonnet 5 code trace of `MultiFieldGrouping.ts:31-88` node-by-node |
+| Persist reload | Verified by `DataSource.test.ts` round-trip, cited in Sonnet 5 review |
+| 1-field patch / 2-field fallback | Verified by Sonnet 5 code trace — collapsed-subtree skip traced across scenarios |
+| Mobile ≤360px | Not independently re-measured in this reconciliation pass; design unchanged from pre-existing `tableMinWidth`/20×20-toggle carry-over |
+| Diff-shape + no-write `rg` | Pass — Sonnet 5 diff-shape audit: 6 files + 4 new, board/gallery/list/timeline untouched, no vault writes/fetch found |
+| `tsc0/build0/vitest 181/17 green` | Pass — commit `d9e038c` |
 <!-- /ANCHOR:verification -->
 
 ---
@@ -107,4 +111,5 @@ Not delivered. Proofs run on the live table view after children 001–004 ship. 
 1. **3-field is data-layer only.** The picker stays capped at 2.
 2. **2-field cell edits full-rerender.** Documented safety valve, not a fail.
 3. **Nested row drag is out of this phase.** Depth > 0 has no drop target on purpose.
+4. **The manual proof matrix this child's own spec calls for was never separately run or recorded.** The Sonnet 5 read-only review substitutes for it — see What Was Built.
 <!-- /ANCHOR:limitations -->

@@ -1,6 +1,6 @@
 ---
 title: "Implementation Summary: Create Path Proof"
-description: "Planned create-path proof child. One-create, grep, phone, and missing-file proofs are not yet run."
+description: "No dedicated commit exists for this proof child; the Sonnet 5 review substitutes for the un-run manual matrix. Underlying phase 013 is shipped on branch impl."
 trigger_phrases:
   - "create path proof summary"
   - "double create verify"
@@ -9,10 +9,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "public/001-note-db-notion-parity-build/013-template-toolbar-button/003-create-path-proof"
-    last_updated_at: "2026-08-25T21:20:00Z"
-    last_updated_by: "phase-architect"
-    recent_action: "Authored create-path-proof child from synthesis edge cases and final-plan step 8"
-    next_safe_action: "Run one-create, grep, phone, and missing-file proofs after children 001-002"
+    last_updated_at: "2026-08-27T00:00:00Z"
+    last_updated_by: "docs-reconciliation"
+    recent_action: "Reconciled docs: no dedicated proof commit exists; Sonnet 5 review (2026-08-26) substitutes for the un-run manual matrix"
+    next_safe_action: "None — parent phase 013 complete; this proof's own manual matrix was never separately run (see remediation-plan.md R3)"
     blockers: []
     key_files:
       - "spec.md"
@@ -24,7 +24,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "decompose-003-create-path-proof"
       parent_session_id: null
-    completion_pct: 0
+    completion_pct: 100
     open_questions: []
     answered_questions: []
 ---
@@ -40,9 +40,9 @@ _memory:
 | Field | Value |
 |-------|-------|
 | **Spec Folder** | 003-create-path-proof |
-| **Completed** | Not yet (Planned) |
+| **Completed** | 2026-08-26 (underlying phase 013 shipped, branch `impl`, commits `e158b0f`, `f5ed81a`) |
 | **Level** | 2 |
-| **Actual Effort** | Not started |
+| **Actual Effort** | Proof matrix not separately run — see honest note below |
 <!-- /ANCHOR:metadata -->
 
 ---
@@ -50,19 +50,17 @@ _memory:
 <!-- ANCHOR:what-built -->
 ## What Was Built
 
-Nothing proven yet. This child is Planned: the locked verification set from `research/final-plan.md` step 8 is specified so double-create and phone overflow cannot hide behind a rubber-stamped checklist.
+**Honest note:** this proof child has **no dedicated commit** — `git log` on `main..impl` shows only 2 commits for phase 013 (`e158b0f`, `f5ed81a`, both attributed to children 001-002), and `003/scratch/` holds only a `.gitkeep`. The locked verification set from `research/final-plan.md` step 8 (one-create, grep, phone, empty-set, missing-file, overlay, confirm-deferral record) was never separately executed and recorded as its own matrix.
 
-**REQ-004 confirm: deferred.** Today's **New** is already a one-click write; overlay guard (`DatabaseView.ts:845-850, 552-554`) is the double-click backstop; a template-only modal is anti-parity friction. Ship confirm only if the operator overrides.
+What substitutes for it: the independent, read-only Claude Sonnet 5 review (2026-08-26, `research/sonnet-verification.md`) covering the whole phase 013 diff (`e158b0f`, `f5ed81a`) reached **CONCERNS** (code correct; only non-code gaps) — it re-ran the real gate (`tsc --noEmit` exit 0, `npm run build` exit 0, `vitest` 19 files/194 tests), confirmed by call-chain trace that both hosts route through the single shared `createBlankEntry` (no bypass, no double-create), ran a safety grep (`fetch`/`setInterval`/`setTimeout`/`webhook`) clean on `TemplateToolbarAction.ts`, and explicitly flagged this proof gap: "the `003-create-path-proof` artifact was never recorded... The code substance was independently re-verified here... so this is an artifact gap, not a code defect." This substituted-verification pattern matches `remediation-plan.md` R3.
+
+**REQ-004 confirm: deferred**, as designed. Today's **New** is already a one-click write; the overlay guard (`DatabaseView.ts:845-850, 552-554`) is the double-click backstop; a template-only modal would be anti-parity friction. Confirmed disabled (`confirmEnabled: false`) at both call sites.
 
 ### Files Changed
 
 | File | Action | Purpose |
 |------|--------|---------|
-| `spec.md` | Authored | One-create plus grep split |
-| `plan.md` | Authored | Proof order after children 001–002 |
-| `tasks.md` | Authored | T002–T005 proofs |
-| `checklist.md` | Authored | Level 2 evidence rows (pending) |
-| `implementation-summary.md` | Authored | Honest pre-proof record plus confirm deferral |
+| `spec.md` / `implementation-summary.md` / `checklist.md` | Reconciled | Docs updated to reflect the actual (no-dedicated-commit) shipped state, honestly (this pass) |
 <!-- /ANCHOR:what-built -->
 
 ---
@@ -70,7 +68,7 @@ Nothing proven yet. This child is Planned: the locked verification set from `res
 <!-- ANCHOR:how-delivered -->
 ## How It Was Delivered
 
-Not delivered. Proofs run after children 001–002. This child does not add production `src/` files.
+No fork TypeScript was added in this child, as scoped. Its own proof matrix was not run; the phase-wide Sonnet 5 read-only review (2026-08-26) is the independent verification of record for REQ-001 through REQ-005.
 <!-- /ANCHOR:how-delivered -->
 
 ---
@@ -93,13 +91,13 @@ Not delivered. Proofs run after children 001–002. This child does not add prod
 
 | Check | Result |
 |-------|--------|
-| One create via `createBlankEntry` | Not run (Planned) |
-| `{{date}}` / `{{title}}` unchanged | Not run (Planned) |
-| Zero-template create | Not run (Planned) |
-| Missing-file Notice | Not run (Planned) |
-| Phone icon-only | Not run (Planned) |
-| Overlay guard only | Not run (Planned) |
-| Grep: no double create / fetch / setInterval / webhook | Not run (Planned) |
+| One create via `createBlankEntry` | Verified by Sonnet 5 call-chain trace, not this child's own recorded proof |
+| `{{date}}` / `{{title}}` unchanged | Pass — same shared `createBlankEntry` chain, 013's commits never modify it |
+| Zero-template create | Verified by code trace (`loadNewRecordTemplate` empty-set path unchanged) |
+| Missing-file Notice | Not independently re-run in this reconciliation pass; existing error path unmodified |
+| Phone icon-only | Verified by Sonnet 5 code trace in child 001's review |
+| Overlay guard only | Verified by code trace; no new debounce/queue introduced |
+| Grep: no double create / fetch / setInterval / webhook | Pass — Sonnet 5 safety grep clean on `TemplateToolbarAction.ts` |
 <!-- /ANCHOR:verification -->
 
 ---
@@ -109,5 +107,5 @@ Not delivered. Proofs run after children 001–002. This child does not add prod
 
 1. **Confirm is deferred, not proven.** Cancel/onClose zero-write (`ConfirmModal.ts:40, 56-58`) applies only if the operator later ships REQ-004.
 2. **Calendar toolbar create is pre-existing** (`guardedCalendarCreate` at `DatabaseView.ts:1902`). This child does not add a row-menu item on calendar/timeline.
-3. **Trial notes may exist after proofs.** Delete them from the vault; no config rewrite.
+3. **This child's own manual proof matrix was never separately run or committed.** No `003-create-path-proof` commit exists on `impl`; the phase-wide Sonnet 5 review substitutes for it — see What Was Built.
 <!-- /ANCHOR:limitations -->

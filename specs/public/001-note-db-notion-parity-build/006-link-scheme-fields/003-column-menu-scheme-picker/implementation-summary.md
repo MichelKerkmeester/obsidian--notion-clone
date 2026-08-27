@@ -1,6 +1,6 @@
 ---
 title: "Implementation Summary: Column Menu Scheme Picker"
-description: "Planned column-menu picker for textLinkScheme. Not yet implemented in the fork."
+description: "Shipped column-menu picker for textLinkScheme, commit c3d3a01 on branch impl; Sonnet found the picker labels hardcoded English (P1), fixed via i18n in commit 29d7b14."
 trigger_phrases:
   - "column menu scheme picker summary"
   - "setTextLinkScheme"
@@ -9,10 +9,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "public/001-note-db-notion-parity-build/006-link-scheme-fields/003-column-menu-scheme-picker"
-    last_updated_at: "2026-08-25T19:40:00Z"
-    last_updated_by: "phase-architect"
-    recent_action: "Authored menu-picker child from synthesis rank 4 and final-plan T012"
-    next_safe_action: "Implement ColumnMenu picker and setTextLinkScheme after the table same-diff child"
+    last_updated_at: "2026-08-27T00:00:00Z"
+    last_updated_by: "docs-reconciliation"
+    recent_action: "Reconciled to shipped state: commit c3d3a01 + i18n fix 29d7b14 on branch impl, tsc0/build0/vitest green"
+    next_safe_action: "None — sub-phase complete"
     blockers: []
     key_files:
       - "spec.md"
@@ -23,7 +23,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "decompose-003-column-menu-scheme-picker"
       parent_session_id: null
-    completion_pct: 0
+    completion_pct: 100
     open_questions: []
     answered_questions: []
 ---
@@ -39,9 +39,9 @@ _memory:
 | Field | Value |
 |-------|-------|
 | **Spec Folder** | 003-column-menu-scheme-picker |
-| **Completed** | Not yet (Planned) |
+| **Completed** | 2026-08-25 (commit `c3d3a01`; i18n fix `29d7b14`, both on branch `impl`) |
 | **Level** | 1 |
-| **Actual Effort** | Not started |
+| **Actual Effort** | Shipped; one P1 finding fixed |
 <!-- /ANCHOR:metadata -->
 
 ---
@@ -49,16 +49,19 @@ _memory:
 <!-- ANCHOR:what-built -->
 ## What Was Built
 
-Nothing in the fork yet. This child is Planned: the menu picker is specified so discoverability is not mixed into the EuroFormat table same-diff (REQ-005 tension).
+Shipped on branch `impl` (commit `c3d3a01`): the menu picker, kept out of the EuroFormat table same-diff (REQ-005 tension) as designed. `ColumnMenu.ts` gained a "Link scheme" section under the existing display popover (`https`/`Email`/`Phone`/`None`), and `DatabaseView.ts` gained `setTextLinkScheme` beside `setTextRenderMode`.
+
+A fresh Claude Sonnet 5 review found a confirmed P1: the new picker labels (`"HTTPS"`/`"Email"`/`"Phone"`/`"None"`, `ColumnMenu.ts:419,423-430`) were raw literals, not routed through `t()` — a regression against the immediately preceding `textRenderMode` section in the same function, which correctly used `t()`. This was fixed in commit `29d7b14`: labels now route through `t()`, with keys added to all 3 locales (en/zh-Hans/zh-Hant).
 
 ### Files Changed
 
 | File | Action | Purpose |
 |------|--------|---------|
-| `spec.md` | Authored | Menu-picker scope and requirements |
-| `plan.md` | Authored | Popover + setter plan |
-| `tasks.md` | Authored | T003–T004 atomic unit |
-| `implementation-summary.md` | Authored | Honest pre-build record |
+| `src/views/ColumnMenu.ts` | Modified | Scheme choices under the existing display popover (`:133-150,393-418`); labels localized via `t()` in fix `29d7b14` |
+| `src/views/DatabaseView.ts` | Modified | `setTextLinkScheme` beside `setTextRenderMode` (`:5104-5110`) |
+| `src/i18n.ts` | Modified (fix `29d7b14`) | Link-scheme picker label keys in en / zh-Hans / zh-Hant |
+| `spec.md` | Reconciled | Status Planned → Complete |
+| `implementation-summary.md` | Reconciled | This record — shipped-state evidence plus the i18n fix |
 <!-- /ANCHOR:what-built -->
 
 ---
@@ -66,7 +69,7 @@ Nothing in the fork yet. This child is Planned: the menu picker is specified so 
 <!-- ANCHOR:how-delivered -->
 ## How It Was Delivered
 
-Not delivered. Implementation follows `tasks.md` after child 001 lands the `ColumnDef` field.
+Delivered after child 001 (commit `74b836a`) landed the `ColumnDef` field. Gated `tsc --noEmit` 0 / `npm run build` 0 / `npx vitest run` green, committed `c3d3a01`. The parent-phase Sonnet review found the hardcoded-label P1; fixed and re-gated in the packet-wide fix stage (`29d7b14`).
 <!-- /ANCHOR:how-delivered -->
 
 ---
@@ -88,9 +91,10 @@ Not delivered. Implementation follows `tasks.md` after child 001 lands the `Colu
 
 | Check | Result |
 |-------|--------|
-| Manual set / clear from menu | Not run (Planned) |
-| `types.ts:50` / `textRenderMode` union untouched | Not run (Planned) |
-| `bash .opencode/skills/system-spec-kit/scripts/spec/validate.sh` on this folder `--strict` | Pending after authoring |
+| Manual set / clear from menu | Confirmed via code trace (setter wiring, config round-trip); on-device manual click not separately performed |
+| `types.ts:50` / `textRenderMode` union untouched | **Confirmed untouched** (Sonnet-traced) |
+| Picker labels localized | **Fixed and confirmed** — `t()` routing added in `29d7b14`, keys present in all 3 locales |
+| `bash .opencode/skills/system-spec-kit/scripts/spec/validate.sh` on this folder `--strict` | Not run by this reconciliation pass (docs-only; see task scope) |
 <!-- /ANCHOR:verification -->
 
 ---

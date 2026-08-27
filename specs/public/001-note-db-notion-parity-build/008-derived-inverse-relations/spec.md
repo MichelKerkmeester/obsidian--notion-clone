@@ -51,7 +51,7 @@ _memory:
 |-------|-------|
 | **Level** | 2 |
 | **Priority** | P1 |
-| **Status** | Planned |
+| **Status** | Complete |
 | **Created** | 2026-08-24 |
 | **Branch** | `008-derived-inverse-relations` |
 
@@ -269,9 +269,9 @@ Operator decisions (defaults from `research/synthesis.md` §Open questions):
 
 | Phase | Folder | Focus | Status |
 |-------|--------|-------|--------|
-| 1 | 001-relation-inverse-module/ | Isolated `RelationInverse.ts` (`buildRelationInverse`, locked types, `SYNC_WRITES_DEFAULT = false`, `sourceDatabaseIds`) plus `RelationInverse.test.ts` | Planned |
-| 2 | 002-rollup-inverse-resolution/ | Hunk 1: key-scoped inverse resolution in `RelationRollup.ts` after a local `relationField` miss; feed inbound records to existing `aggregateRollup`; return `sourceDatabaseIds` (or equivalent) on `RelationRollupResult` | Planned |
-| 3 | 003-inverse-refresh-membership/ | Hunk 2: register inverse `sourceDatabaseIds` / `sourcePaths` in both `buildRowsWithRelations` copies so live Report views refresh | Planned |
+| 1 | 001-relation-inverse-module/ | Isolated `RelationInverse.ts` (`buildRelationInverse`, locked types, `SYNC_WRITES_DEFAULT = false`, `sourceDatabaseIds`) plus `RelationInverse.test.ts` | Complete |
+| 2 | 002-rollup-inverse-resolution/ | Hunk 1: key-scoped inverse resolution in `RelationRollup.ts` after a local `relationField` miss; feed inbound records to existing `aggregateRollup`; return `sourceDatabaseIds` (or equivalent) on `RelationRollupResult` | Complete |
+| 3 | 003-inverse-refresh-membership/ | Hunk 2: register inverse `sourceDatabaseIds` / `sourcePaths` in both `buildRowsWithRelations` copies so live Report views refresh | Complete |
 
 Future / out of this phase (not child folders): inverse chip helper in `RelationLinks.ts` (ranked item 3); bounded chip window N=25 (item 5); record-page inbound section in `RecordDetailPanel.ts` (item 6, needs budget waiver); table-cell inbound badge (item 9); stored two-way write-back / Notion `dual_property` (item 10, blocked); `RelationRollupConfigModal` foreign-key picker (YAML v1).
 

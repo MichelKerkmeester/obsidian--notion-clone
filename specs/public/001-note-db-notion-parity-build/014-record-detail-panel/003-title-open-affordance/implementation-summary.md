@@ -1,6 +1,6 @@
 ---
 title: "Implementation Summary: Title Open Affordance"
-description: "Planned DatabaseView renderCell OPEN attach plus overlay lifecycle. Not yet implemented in the fork."
+description: "Shipped DatabaseView renderCell OPEN attach plus overlay lifecycle, on branch impl, Sonnet-verified."
 trigger_phrases:
   - "title open affordance summary"
   - "renderCell open"
@@ -9,10 +9,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "public/001-note-db-notion-parity-build/014-record-detail-panel/003-title-open-affordance"
-    last_updated_at: "2026-08-25T21:20:00Z"
-    last_updated_by: "phase-architect"
-    recent_action: "Authored title-open affordance child from synthesis ranks 1 and 5 and final-plan steps 5 and 7"
-    next_safe_action: "Add DatabaseView renderCell attach plus overlay lifecycle hunks"
+    last_updated_at: "2026-08-27T00:00:00Z"
+    last_updated_by: "docs-reconciliation"
+    recent_action: "Reconciled docs to shipped state: renderCell attach + overlay lifecycle landed in commit 668bc97"
+    next_safe_action: "None — sub-phase complete"
     blockers: []
     key_files:
       - "spec.md"
@@ -23,7 +23,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "decompose-003-title-open-affordance"
       parent_session_id: null
-    completion_pct: 0
+    completion_pct: 100
     open_questions: []
     answered_questions: []
 ---
@@ -39,9 +39,9 @@ _memory:
 | Field | Value |
 |-------|-------|
 | **Spec Folder** | 003-title-open-affordance |
-| **Completed** | Not yet (Planned) |
+| **Completed** | 2026-08-26 (branch `impl`, commit `668bc97`) |
 | **Level** | 1 |
-| **Actual Effort** | Not started |
+| **Actual Effort** | Matches plan |
 <!-- /ANCHOR:metadata -->
 
 ---
@@ -49,16 +49,16 @@ _memory:
 <!-- ANCHOR:what-built -->
 ## What Was Built
 
-Nothing in the fork yet. This child is Planned: the `renderCell` attach and overlay lifecycle hunks so OPEN can ship without a stale peek after `refresh()`.
+Shipped in commit `668bc97`: the Name-cell OPEN affordance attaches after `cellRenderer.renderCell` paints `db-title-cell` (`DatabaseView.ts` `renderCell` hunk); title-cell isolation confirmed — button has no hover-link attribute, click `preventDefault`/`stopPropagation`, `CellRenderer.ts` untouched. Overlay lifecycle wired: `hasActiveOverlay` includes the peek panel, `closeActiveOverlays` closes it, `refresh()` calls `syncTableRecordPeek` — no orphan DOM.
+
+Gate: `tsc --noEmit` exit 0; `vitest` 19 files / 194 tests pass (re-run at Sonnet 5 review time). Sonnet 5 review: "Overlay lifecycle: `hasActiveOverlay` includes the peek panel (`:847`), `closeActiveOverlays` closes it (`:879`), `refresh()` calls `syncTableRecordPeek` (`:10605`) — no orphan-DOM."
 
 ### Files Changed
 
 | File | Action | Purpose |
 |------|--------|---------|
-| `spec.md` | Authored | Same-diff attach + overlay scope |
-| `plan.md` | Authored | Insertion point and stale-DOM fix |
-| `tasks.md` | Authored | T003–T004 atomic unit |
-| `implementation-summary.md` | Authored | Honest pre-build record |
+| `src/views/DatabaseView.ts` | Modified | `renderCell` OPEN-affordance hunk; overlay-lifecycle hunk (`hasActiveOverlay`, `closeActiveOverlays`, `refresh()`) |
+| `spec.md` / `implementation-summary.md` | Reconciled | Docs updated to reflect shipped state (this pass) |
 <!-- /ANCHOR:what-built -->
 
 ---
@@ -66,7 +66,7 @@ Nothing in the fork yet. This child is Planned: the `renderCell` attach and over
 <!-- ANCHOR:how-delivered -->
 ## How It Was Delivered
 
-Not delivered. Implementation is two hunks in `src/views/DatabaseView.ts` after children 001–002 exist.
+Delivered as commit `668bc97` against the live fork at `Obsidian Plugin/src` after children 001-002 shipped, gated on `tsc --noEmit` + `npm run build` + `vitest` before commit. Independently verified read-only by Claude Sonnet 5 as part of the phase 014 review.
 <!-- /ANCHOR:how-delivered -->
 
 ---
@@ -88,10 +88,10 @@ Not delivered. Implementation is two hunks in `src/views/DatabaseView.ts` after 
 
 | Check | Result |
 |-------|--------|
-| Hover OPEN vs title click vs Page Preview | Not run (Planned) |
-| Title-hidden fallback | Not run (Planned) |
-| Refresh/view-switch no orphan | Not run (Planned) |
-| `validate.sh` on this folder `--strict` | Pending after authoring |
+| Hover OPEN vs title click vs Page Preview | Pass — Sonnet 5 code trace, `CellRenderer.ts` untouched |
+| Title-hidden fallback | Pass — `visible[0]?.key` fallback (`DatabaseView.ts:7936-7968`) confirmed by Sonnet 5 review |
+| Refresh/view-switch no orphan | Pass — overlay lifecycle confirmed by Sonnet 5 review |
+| `tsc0/build0/vitest 194/19 green` | Pass — commit `668bc97`, re-confirmed at Sonnet review time |
 <!-- /ANCHOR:verification -->
 
 ---
@@ -99,6 +99,6 @@ Not delivered. Implementation is two hunks in `src/views/DatabaseView.ts` after 
 <!-- ANCHOR:limitations -->
 ## Known Limitations
 
-1. **Mod+Enter is not this child.** Keyboard open is `004-peek-keyboard-open`.
+1. **Mod+Enter is not this child.** Keyboard open is `004-peek-keyboard-open` (commit `02929b0`).
 2. **Table-only.** `renderCell` is wired from `TableRenderer.ts:586`; board/gallery are out.
 <!-- /ANCHOR:limitations -->

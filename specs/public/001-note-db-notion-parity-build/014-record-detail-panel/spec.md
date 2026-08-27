@@ -48,7 +48,7 @@ _memory:
 |-------|-------|
 | **Level** | 2 |
 | **Priority** | P1 |
-| **Status** | Planned |
+| **Status** | Complete |
 | **Created** | 2026-08-24 |
 | **Branch** | `014-record-detail-panel` |
 
@@ -278,11 +278,11 @@ Operator decisions (defaults locked in plan.md from the final-plan review; revis
 
 | Phase | Folder | Focus | Status |
 |-------|--------|-------|--------|
-| 1 | 001-table-record-peek-module/ | Create `src/views/TableRecordPeek.ts` plus i18n `panel.*` keys as a display-only sibling of the calendar panel | Planned |
-| 2 | 002-peek-panel-css/ | Append toolbar-safe theme-variable peek CSS, including phone-persistent OPEN | Planned |
-| 3 | 003-title-open-affordance/ | Attach Name-cell OPEN in `renderCell` and wire overlay lifecycle so refresh cannot orphan the peek | Planned |
-| 4 | 004-peek-keyboard-open/ | Open the peek with Mod+Enter before the bare-Enter edit branch | Planned |
-| 5 | 005-peek-display-proof/ | Prove typecheck, greps, and the locked manual desktop/phone scenarios | Planned |
+| 1 | 001-table-record-peek-module/ | Create `src/views/TableRecordPeek.ts` plus i18n `panel.*` keys as a display-only sibling of the calendar panel | Complete |
+| 2 | 002-peek-panel-css/ | Append toolbar-safe theme-variable peek CSS, including phone-persistent OPEN | Complete |
+| 3 | 003-title-open-affordance/ | Attach Name-cell OPEN in `renderCell` and wire overlay lifecycle so refresh cannot orphan the peek | Complete |
+| 4 | 004-peek-keyboard-open/ | Open the peek with Mod+Enter before the bare-Enter edit branch | Complete |
+| 5 | 005-peek-display-proof/ | Prove typecheck, greps, and the locked manual desktop/phone scenarios | Complete |
 
 Future / out of this phase (not child folders): board/gallery hosts; body/markdown preview and two-way write-back (successor `015`); Anytype `local` group; Anytype `Storage.setToggle`; reuse of calendar `openRecordDetailPanel`; Obsidian `Modal`; follow-on-scroll; a pushed keymap `Scope`; `src/data/RecordDetailPanel.ts`; `PopoverPosition` clamp/flip.
 

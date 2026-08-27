@@ -49,7 +49,7 @@ _memory:
 |-------|-------|
 | **Level** | 2 |
 | **Priority** | P1 |
-| **Status** | Planned |
+| **Status** | Complete |
 | **Created** | 2026-08-24 |
 | **Branch** | `011-table-multi-group` |
 
@@ -267,11 +267,11 @@ Operator decisions recorded with defaults (from research synthesis):
 
 | Phase | Folder | Focus | Status |
 |-------|--------|-------|--------|
-| 1 | 001-multifield-grouping-module/ | New `MultiFieldGrouping.ts`, `groupByFields[]` on ViewConfig, and DataSource parse/serialize in one same-diff | Planned |
-| 2 | 002-grouped-table-flatten/ | Table dispatch plus depth-aware TableRenderer loop, indent CSS, and full-path create defaults | Planned |
-| 3 | 003-embedded-table-grouping/ | Embedded table grouped dispatch and `groupByFields` copy-back so linked views nest the same way | Planned |
-| 4 | 004-table-subgroup-picker/ | Table-gated toolbar Sub-group section cloned from the board popover, picker max 2 | Planned |
-| 5 | 005-multigroup-display-proof/ | Prove 1/2/3-field render, persist round-trip, 1-field patch, mobile, and display-only | Planned |
+| 1 | 001-multifield-grouping-module/ | New `MultiFieldGrouping.ts`, `groupByFields[]` on ViewConfig, and DataSource parse/serialize in one same-diff | Complete |
+| 2 | 002-grouped-table-flatten/ | Table dispatch plus depth-aware TableRenderer loop, indent CSS, and full-path create defaults | Complete |
+| 3 | 003-embedded-table-grouping/ | Embedded table grouped dispatch and `groupByFields` copy-back so linked views nest the same way | Complete |
+| 4 | 004-table-subgroup-picker/ | Table-gated toolbar Sub-group section cloned from the board popover, picker max 2 | Complete |
+| 5 | 005-multigroup-display-proof/ | Prove 1/2/3-field render, persist round-trip, 1-field patch, mobile, and display-only | Complete |
 
 Future / out of this phase (not child folders): nested-group row drag (multi-field write); a ViewConfigPanel table Sub-group section; a second toolbar picker; unifying `groupByFields[]` with `boardSubgroupField`; ViewStateStore threading; extending `patchGroupedRows`.
 

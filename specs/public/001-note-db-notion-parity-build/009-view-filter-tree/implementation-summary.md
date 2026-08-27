@@ -15,8 +15,8 @@ _memory:
     packet_pointer: "public/001-note-db-notion-parity-build/009-view-filter-tree"
     last_updated_at: "2026-08-24T00:00:00Z"
     last_updated_by: "swarm"
-    recent_action: "Scaffolded phase 009 docs; status Planned"
-    next_safe_action: "Build phase 009 per plan.md and tasks.md"
+    recent_action: "Shipped across 4 commits (3a070e9, 312108e, 2471e01, 64163dc) + fix commit e854681 (coherence tests); tsc0/build0/vitest green; Sonnet 5 verified (CONCERNS -> fixed + docs reconciled). Sub-phase 005's manual proof never ran (Deferred, see that folder)"
+    next_safe_action: "None outstanding for the shipped code; 005-filter-tree-proof's manual vault/grep click-through remains unexecuted if the operator wants it run literally"
     blockers: []
     key_files:
       - "spec.md"
@@ -28,7 +28,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "note-db-parity-scaffold"
       parent_session_id: null
-    completion_pct: 0
+    completion_pct: 90
     open_questions: []
     answered_questions: []
 ---
@@ -45,9 +45,9 @@ _memory:
 | Field | Value |
 |-------|-------|
 | **Spec Folder** | 009-view-filter-tree |
-| **Completed** | Not yet implemented (Planned) |
+| **Completed** | Complete — shipped on branch `impl` (sub-phase 005's manual proof step never ran; see Known Limitations) |
 | **Level** | 2 |
-| **Actual Effort** | None yet (scaffold only) |
+| **Actual Effort** | Not separately tracked (delivered across 4 sub-phase commits plus 1 fix commit) |
 
 <!-- /ANCHOR:metadata -->
 ---
@@ -55,17 +55,27 @@ _memory:
 <!-- ANCHOR:what-built -->
 ## What Was Built
 
-This phase is **NOT built yet**. Status is Planned (wave 4). The scaffolded documents below define the work; no fork source has been touched. Implementation starts per `plan.md` and `tasks.md` once the phase is dispatched — the fork lives at `specs/obsidian/001-notion-finance-migration/build/note-database-fork`.
+Shipped and gate-green on branch `impl` (not yet merged to `main`/`v4` — operator ff-merge gate). The nested AND/OR view-filter tree landed across its sub-phases:
+
+- **`src/data/ViewFilterTree.ts`** (new, 001, commit `3a070e9`) — Kleene three-valued evaluator (`evaluateViewFilterTree`), `normalizeViewFilterTree`, leaf helpers, `getRequiredViewFilterLeaves`; additive `QueryEngine.applyFilterTree`/`evaluateFilterTree`; `RowPipeline.ts` routing; additive `filterTree?` types.
+- **`src/data/DataSource.ts` + `src/views/ViewStateStore.ts`** (002, commit `312108e`) — disk round-trip: parse/serialize `filterTree` at both view constructors and `legacyViewKeys()`; hydrate/persist/prune in `ViewStateStore`; omitted when flat (iCloud-quiet).
+- **`src/views/FilterPanelRenderer.ts`** (003, commit `2471e01`) — recursive group/`not` editor: wrap-into-group, auto-collapse empty groups, UI depth cap 3, leaves stay the existing view-filter editors (no source-operator leak).
+- **`ColumnConfig.ts`, `ColumnOperations.ts`, `ViewRuleOperations.ts`, `DatabaseView.ts`, `EmbeddedDatabaseRenderer.ts`** (004, commit `64163dc`) — non-panel dual-write coherence: chip delete, column delete/rename, chart drilldown, rail-toggle hide, AND-required new-record seeding.
+- **Fix pass (commit `e854681`)** — the independent Sonnet 5 review found sub-phase 004 shipped its dual-write coherence sites with **zero tests** (the spec's own risk register named this "the single biggest risk"). A dedicated fix pass added 9 tests directly on the coherence helpers, closing the gap.
+
+Independent read-only Claude Sonnet 5 verification (`research/sonnet-verification.md`, 2026-08-26) confirmed: correct Kleene three-valued logic (diverges intentionally from `SourceRules.ts:152`'s empty-AND-poisons-OR and from AppFlowy's OR-of-all-skips-hides-every-row), correct persistence round-trip (tested), correct panel editor (no source-operator leak; depth cap enforced), and correctly hand-traced non-panel dual-write sites. Verdict: **CONCERNS** — the untested-coherence gap (now fixed, `e854681`) and the un-run sub-phase 005 manual proof (see Known Limitations, not fixed — that sub-phase's own docs remain honest about it).
 
 ### Files Changed
 
 | File | Action | Purpose |
 |------|--------|---------|
-| `specs/public/001-note-db-notion-parity-build/009-view-filter-tree/spec.md` | Scaffolded | Phase definition, requirements, success criteria |
-| `specs/public/001-note-db-notion-parity-build/009-view-filter-tree/plan.md` | Scaffolded | Architecture, phases, testing, rollback |
-| `specs/public/001-note-db-notion-parity-build/009-view-filter-tree/tasks.md` | Scaffolded | Task breakdown T001-T035 |
-| `specs/public/001-note-db-notion-parity-build/009-view-filter-tree/checklist.md` | Scaffolded | Verification checklist (all pending) |
-| `specs/public/001-note-db-notion-parity-build/009-view-filter-tree/implementation-summary.md` | Scaffolded | This honest summary |
+| `src/data/ViewFilterTree.ts` | Created (`3a070e9`) | Kleene evaluator + leaf helpers |
+| `src/data/QueryEngine.ts`, `src/data/RowPipeline.ts`, `src/data/types.ts` | Modified (`3a070e9`) | Additive tree bridges/routing/types |
+| `src/data/DataSource.ts`, `src/views/ViewStateStore.ts` | Modified (`312108e`) | Disk round-trip |
+| `src/views/FilterPanelRenderer.ts` | Modified (`2471e01`) | Recursive tree editor |
+| `src/views/ColumnConfig.ts`, `ColumnOperations.ts`, `ViewRuleOperations.ts`, `DatabaseView.ts`, `EmbeddedDatabaseRenderer.ts` | Modified (`64163dc`) | Non-panel dual-write coherence |
+| Coherence test files | Extended (`e854681`) | +9 tests on the dual-write coherence helpers |
+| `spec.md`, `plan.md`, `tasks.md`, `checklist.md`, `implementation-summary.md` | Authored | Phase documentation |
 
 <!-- /ANCHOR:what-built -->
 ---
@@ -73,7 +83,7 @@ This phase is **NOT built yet**. Status is Planned (wave 4). The scaffolded docu
 <!-- ANCHOR:how-delivered -->
 ## How It Was Delivered
 
-Scaffolded from the ranked backlog research (`specs/obsidian/001-notion-finance-migration/008-note-db-notion-parity/research/research.md`) and confirmed fork citations: the flat `FilterRule[]` + `filterLogic` view-filter path (`QueryEngine.ts` 74-89), the recursive `SourceRuleNode` tree (`types.ts` 234-270), and the filter panel renderer (`FilterPanelRenderer.ts` 137-141). No source edits were made.
+Delivered through the packet's serial, resumable build driver (`scratch/stage4-implement.cjs`): per sub-phase implement -> gate (`tsc --noEmit` / `npm run build` / `npx vitest run`) -> commit -> in-loop DeepSeek V4 review. A fresh, independent Claude Sonnet 5 read-only review then verified the shipped code against `spec.md` and `research/synthesis.md`, surfacing the untested-coherence gap. A dedicated fix agent added the missing tests, re-gated, and committed (`e854681`). Sub-phase 005's own manual vault/grep proof plan was never executed as its own run — see that sub-phase's docs for the honest, unaltered record.
 
 <!-- /ANCHOR:how-delivered -->
 ---
@@ -98,15 +108,19 @@ Scaffolded from the ranked backlog research (`specs/obsidian/001-notion-finance-
 
 | Test Type | Status | Coverage | Notes |
 |-----------|--------|----------|-------|
-| Unit tests (T030-T032) | Pending | Not run | Tree evaluation, round-trip, legacy regression — run in Phase 3 |
-| Integration (T033-T034) | Pending | Not run | Fork lint/build + manual vault check at mobile width |
-| Checklist (checklist.md) | Pending | 0 verified | All CHK items pending until implementation |
+| Gate (tsc/build/vitest) | **PASS** | Whole suite | `tsc --noEmit` exit 0; `13 files / 160 tests pass` at review time (incl. new `ViewFilterTree.test.ts`, `ViewStateStore.test.ts`, `DataSource.test.ts`) |
+| Unit tests (Kleene, round-trip, legacy regression) | **PASS** | `ViewFilterTree.test.ts`, `DataSource.test.ts` | `(A and B) or C`; empty-group skip; `not`; single-leaf ≡ flat; serialize round-trip; legacy promotion |
+| Non-panel coherence tests | **PASS (fixed)** | Chip/column-delete/rename/drilldown helpers | Shipped with zero tests in `64163dc` (Sonnet-flagged P1); +9 tests added in fix commit `e854681` |
+| Manual vault/grep proof (sub-phase 005 plan) | **NOT RUN** | Phone-width nesting, popover collapse, chip+column-delete+drilldown click-through | Sub-phase `005-filter-tree-proof` has no implementation commit; the automated portions of its plan (Vitest, 010 export freeze, grep guards) are independently satisfied by other evidence, but the manual click-through itself never happened |
+| Independent review | **CONCERNS** (fixed + docs-only residue) | Full phase vs spec + synthesis | `research/sonnet-verification.md`, 2026-08-26 |
 
 ### Test Coverage Summary
 
 | File | Statements | Branches | Functions |
 |------|------------|----------|-----------|
-| Fork source changes | N/A — not yet implemented | N/A | N/A |
+| `ViewFilterTree.ts` | Covered by Kleene test suite | AND/OR/NOT/empty-group/expression branches covered | `evaluateViewFilterTree`, `normalizeViewFilterTree`, leaf helpers covered |
+| `DataSource.ts` / `ViewStateStore.ts` | Covered by round-trip + malformed-root tests | Nested vs flat omit branch covered | hydrate/persist/prune covered |
+| Non-panel coherence sites | Covered post-fix (`e854681`, +9 tests) | Chip/column/rename/drilldown branches covered | dual-write helpers covered |
 
 <!-- /ANCHOR:verification -->
 ---
@@ -116,9 +130,9 @@ Scaffolded from the ranked backlog research (`specs/obsidian/001-notion-finance-
 
 | NFR ID | Target | Actual | Status |
 |--------|--------|--------|--------|
-| NFR-P01 | Linear tree evaluation on vault-scale views | Not measured | Pending |
-| NFR-S01 | No secrets, no telemetry, MIT-forkable | Not reviewed (no code yet) | Pending |
-| NFR-R01 | Mobile-safe, iCloud-safe (no churny writes) | Not tested | Pending |
+| NFR-P01 | Linear tree evaluation on vault-scale views | Single-pass O(rows x nodes) evaluator with short-circuit AND/OR, stack O(depth); confirmed by code review | Met |
+| NFR-S01 | No secrets, no telemetry, MIT-forkable | Confirmed by Sonnet review; cross-platform Obsidian APIs only | Met |
+| NFR-R01 | Mobile-safe, iCloud-safe (no churny writes) | `filterTree` omitted when flat; rides existing `scheduleConfigSave` debounce; panel is DOM-heavy so this specific claim is code-reviewed, not manually click-tested (mobile popover width measurement was part of the un-run sub-phase 005) | Met (code-level); manual click-through not run |
 
 <!-- /ANCHOR:nfr-verify -->
 ---
@@ -126,9 +140,10 @@ Scaffolded from the ranked backlog research (`specs/obsidian/001-notion-finance-
 <!-- ANCHOR:limitations -->
 ## Known Limitations
 
-1. This phase is not implemented; every evidence claim above is PENDING until Phase 3 runs.
-2. Mobile ergonomics of deep nested-group editing are unvalidated.
-3. Phase 010 (conditional-format-icons) is blocked until this tree ships.
+1. **Sub-phase `005-filter-tree-proof` never ran.** It has no implementation commit; its `implementation-summary.md` and `checklist.md` are left in their honest "Not yet (Planned)" / "Pending" state rather than falsely marked shipped. The automated portions of what it would have proven (Vitest green, 010 export-surface freeze, grep guards for `FilterGroup`/`matchesFilter`/`SourceRules` imports) are independently confirmed true by `research/sonnet-verification.md` (this phase's and 010's), but the manual vault click-through (phone-width nesting, popover collapse/depth-3, chip+column-delete+drilldown live in a vault) was never executed.
+2. Mobile ergonomics of deep nested-group editing are code-reviewed (DOM-heavy, hand-traced), not manually click-tested end-to-end.
+3. `package.json`'s `"test": "vitest run"` script (T002) exists only as an uncommitted working-tree edit on `impl` — `npx vitest run` works regardless, but the script itself was never committed (P2, `research/sonnet-verification.md`).
+4. Phase 010 (conditional-format-icons) consumed this tree successfully — 010's own Sonnet review confirmed the export-freeze contract was honored.
 
 <!-- /ANCHOR:limitations -->
 ---
@@ -138,6 +153,9 @@ Scaffolded from the ranked backlog research (`specs/obsidian/001-notion-finance-
 
 | Planned | Actual | Reason |
 |---------|--------|--------|
-| Implement `applyFilterTree` and the panel tree UI | No source changes — docs scaffold only | Phase is Planned (wave 4); implementation starts after swarm dispatch |
+| Implement `applyFilterTree` and the panel tree UI | Shipped as planned across sub-phases 001-004 (`3a070e9`, `312108e`, `2471e01`, `64163dc`) | No functional deviation |
+| Sub-phase 004 ships with coherence tests | Shipped with zero tests initially; fixed in a dedicated pass (`e854681`, +9 tests) after independent review flagged it P1 | Build-driver gate does not require tests per-file; caught by Sonnet review, not the gate |
+| Sub-phase 005 runs the manual/grep proof and records evidence | Never executed; no commit exists for this sub-phase | Build driver moved on to phase 010 without dispatching 005; documented here rather than silently marked done |
+| Completion docs updated alongside the build | Docs lagged the shipped code until this reconciliation pass | Build driver did not write completion state back on commit (packet-wide pattern, see `synthesis.md` §8) |
 
 <!-- /ANCHOR:deviations -->

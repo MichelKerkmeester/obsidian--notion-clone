@@ -40,7 +40,7 @@ _memory:
 |-------|-------|
 | **Level** | 1 |
 | **Priority** | P1 |
-| **Status** | Planned |
+| **Status** | Complete |
 | **Created** | 2026-08-25 |
 | **Branch** | `004-formula-ifs-switch-math` |
 | **Parent Spec** | ../spec.md |

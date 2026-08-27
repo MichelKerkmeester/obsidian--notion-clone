@@ -11,8 +11,8 @@ _memory:
     packet_pointer: "public/001-note-db-notion-parity-build/010-conditional-format-icons/002-format-parse-persist"
     last_updated_at: "2026-08-25T21:15:00Z"
     last_updated_by: "phase-architect"
-    recent_action: "Authored format-parse-persist child from synthesis rank 4 and final-plan step 5"
-    next_safe_action: "Parse conditionTree/icon/bold/optional color in DataSource.parseConditionalFormats"
+    recent_action: "Shipped additive parseConditionalFormats (commit e37ff2b); tsc0/build0/vitest green; Sonnet 5 verified"
+    next_safe_action: "None outstanding for this sub-phase"
     blockers: []
     key_files:
       - "spec.md"
@@ -23,7 +23,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "decompose-002-format-parse-persist"
       parent_session_id: null
-    completion_pct: 0
+    completion_pct: 100
     open_questions: []
     answered_questions: []
 ---
@@ -39,9 +39,9 @@ _memory:
 | Field | Value |
 |-------|-------|
 | **Spec Folder** | 002-format-parse-persist |
-| **Completed** | Not yet (Planned) |
+| **Completed** | Complete — shipped `e37ff2b` |
 | **Level** | 1 |
-| **Actual Effort** | Not started |
+| **Actual Effort** | Not separately tracked |
 <!-- /ANCHOR:metadata -->
 
 ---
@@ -49,16 +49,17 @@ _memory:
 <!-- ANCHOR:what-built -->
 ## What Was Built
 
-Nothing in the fork yet. This child is Planned: the whitelist parse slice is specified so child 001's `conditionTree` / `icon` / `bold` / optional `color` cannot vanish on reload.
+Shipped: `parseConditionalFormats` (`DataSource.ts`) additively parses `conditionTree` via 009's `normalizeViewFilterTree`, `icon` string capped at 64 chars, and `bold` boolean. `color` is no longer required at parse (present values still constrained to `OPTION_COLORS`); a parseable `condition` object is still required for Apply-to and rollback. Unknown extra keys are ignored; an invalid tree is dropped while `condition` is kept. The legacy db-level copy stays `{...rule.condition}` unchanged.
 
 ### Files Changed
 
 | File | Action | Purpose |
 |------|--------|---------|
+| `src/data/DataSource.ts` | Modified (`e37ff2b`) | Additive parse of `conditionTree`/`icon`/`bold`; optional `color` |
 | `spec.md` | Authored | Parse scope and requirements |
 | `plan.md` | Authored | `normalizeViewFilterTree` only |
 | `tasks.md` | Authored | T003 parse including color-optional |
-| `implementation-summary.md` | Authored | Honest pre-build record |
+| `implementation-summary.md` | Updated | Shipped-state record |
 <!-- /ANCHOR:what-built -->
 
 ---
@@ -66,7 +67,7 @@ Nothing in the fork yet. This child is Planned: the whitelist parse slice is spe
 <!-- ANCHOR:how-delivered -->
 ## How It Was Delivered
 
-Not delivered. Implementation follows `tasks.md` after child 001 types and 009 `normalizeViewFilterTree` exist.
+Delivered per `tasks.md` after child 001 types and 009's `normalizeViewFilterTree` existed, gated (tsc 0 / build 0 / vitest green) and committed at `e37ff2b`.
 <!-- /ANCHOR:how-delivered -->
 
 ---
@@ -89,9 +90,10 @@ Not delivered. Implementation follows `tasks.md` after child 001 types and 009 `
 
 | Check | Result |
 |-------|--------|
-| Color-only JSON load | Not run (Planned) |
-| Tree+icon+bold JSON load | Not run (Planned) |
-| No `parseSourceRuleTree` | Not run (Planned) |
+| Color-only JSON load | **PASS** — unchanged legacy load path |
+| Tree+icon+bold JSON load | **PASS** — additive parse confirmed |
+| No `parseSourceRuleTree` | **PASS** — grep confirmed; uses `normalizeViewFilterTree` only |
+| `npx tsc --noEmit` / `npx vitest run` | **PASS** — 0 / 176/176 at review time |
 <!-- /ANCHOR:verification -->
 
 ---
@@ -99,7 +101,7 @@ Not delivered. Implementation follows `tasks.md` after child 001 types and 009 `
 <!-- ANCHOR:limitations -->
 ## Known Limitations
 
-1. **Editor does not write trees yet.** Child 004 dual-writes `conditionTree`.
-2. **Rename/delete do not walk the tree yet.** Child 003 owns that.
-3. **Parse does not wrap legacy rules into trees.** Eval-time wrap stays in child 001.
+1. **Editor did not write trees from this sub-phase's own diff alone.** Child 004 shipped the dual-write editor separately (`5b3e64f`).
+2. **Rename/delete did not walk the tree from this sub-phase's own diff alone.** Child 003 shipped that separately (`ffd42eb`, fixed `e3600d2`).
+3. **Parse does not wrap legacy rules into trees.** Eval-time wrap lives in child 001 — by design, not a gap.
 <!-- /ANCHOR:limitations -->

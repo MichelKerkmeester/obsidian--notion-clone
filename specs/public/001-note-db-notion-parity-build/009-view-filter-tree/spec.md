@@ -49,7 +49,7 @@ _memory:
 |-------|-------|
 | **Level** | 2 |
 | **Priority** | P1 |
-| **Status** | Planned |
+| **Status** | Complete |
 | **Created** | 2026-08-24 |
 | **Branch** | `009-view-filter-tree` |
 
@@ -265,11 +265,11 @@ All paths are relative to the fork root.
 
 | Phase | Folder | Focus | Status |
 |-------|--------|-------|--------|
-| 1 | 001-kleene-eval-module/ | Isolated `ViewFilterTree.ts` Kleene evaluator, QueryEngine bridges, RowPipeline routing, additive `filterTree` types, Vitest harness and module tests | Planned |
-| 2 | 002-filter-tree-persistence/ | Disk round-trip: `DataSource.ts` parse/serialize plus `ViewStateStore` hydrate/persist/prune; omit `filterTree` when flat | Planned |
-| 3 | 003-filter-panel-tree-editor/ | Recursive group/`not` filter panel: wrap-into-group, auto-collapse empty groups, UI depth cap 3, existing filter leaves | Planned |
-| 4 | 004-nonpanel-filter-coherence/ | Dual-write chips, column delete/rename, chart drilldown; hide nested rail logic toggle; AND-required new-record leaves | Planned |
-| 5 | 005-filter-tree-proof/ | 010 API freeze, `(A and B) or C` plus legacy tests, vault reload, grep guards | Planned |
+| 1 | 001-kleene-eval-module/ | Isolated `ViewFilterTree.ts` Kleene evaluator, QueryEngine bridges, RowPipeline routing, additive `filterTree` types, Vitest harness and module tests | Complete |
+| 2 | 002-filter-tree-persistence/ | Disk round-trip: `DataSource.ts` parse/serialize plus `ViewStateStore` hydrate/persist/prune; omit `filterTree` when flat | Complete |
+| 3 | 003-filter-panel-tree-editor/ | Recursive group/`not` filter panel: wrap-into-group, auto-collapse empty groups, UI depth cap 3, existing filter leaves | Complete |
+| 4 | 004-nonpanel-filter-coherence/ | Dual-write chips, column delete/rename, chart drilldown; hide nested rail logic toggle; AND-required new-record leaves | Complete (coherence tests added in a later fix pass, commit `e854681`) |
+| 5 | 005-filter-tree-proof/ | 010 API freeze, `(A and B) or C` plus legacy tests, vault reload, grep guards | Deferred — manual vault/grep proof never executed; the automated portions (Vitest, 010 export freeze) are independently confirmed by `research/sonnet-verification.md` |
 
 Future / out of this phase (not child folders): a new `FilterGroup` AST; id-based tree surgery; AppFlowy `DashMap` cache; chip-`Wrap` group editor; Anytype `In`/`AllIn`/`ExactIn`; changes to `matchesSourceRuleTree`; a 3-level cap in the evaluator; `styles.css` edits; `ConditionalFormatting.ts:38` stays on `applyFilters` until phase 010.
 

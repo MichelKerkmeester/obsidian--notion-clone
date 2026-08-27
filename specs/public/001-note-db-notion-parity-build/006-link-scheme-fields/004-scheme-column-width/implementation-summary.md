@@ -1,6 +1,6 @@
 ---
 title: "Implementation Summary: Scheme Column Width"
-description: "Planned ColumnWidth measuring for scheme-hint cells. Not yet implemented in the fork."
+description: "Shipped ColumnWidth measuring for scheme-hint cells, commits 30ce2ea + review fix a179b97 on branch impl, Sonnet-verified sound."
 trigger_phrases:
   - "scheme column width summary"
   - "parseTextLink label"
@@ -9,10 +9,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "public/001-note-db-notion-parity-build/006-link-scheme-fields/004-scheme-column-width"
-    last_updated_at: "2026-08-25T19:40:00Z"
-    last_updated_by: "phase-architect"
-    recent_action: "Authored column-width child from synthesis rank 5 and final-plan T013"
-    next_safe_action: "Implement ColumnWidth scheme-hint measuring after the table same-diff child"
+    last_updated_at: "2026-08-27T00:00:00Z"
+    last_updated_by: "docs-reconciliation"
+    recent_action: "Reconciled to shipped state: commits 30ce2ea + a179b97 (review fix) on branch impl, tsc0/build0/vitest green, Sonnet 5 review sound"
+    next_safe_action: "None — sub-phase complete"
     blockers: []
     key_files:
       - "spec.md"
@@ -23,7 +23,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "decompose-004-scheme-column-width"
       parent_session_id: null
-    completion_pct: 0
+    completion_pct: 100
     open_questions: []
     answered_questions: []
 ---
@@ -39,9 +39,9 @@ _memory:
 | Field | Value |
 |-------|-------|
 | **Spec Folder** | 004-scheme-column-width |
-| **Completed** | Not yet (Planned) |
+| **Completed** | 2026-08-25 (commits `30ce2ea` + `a179b97` on branch `impl`) |
 | **Level** | 1 |
-| **Actual Effort** | Not started |
+| **Actual Effort** | Shipped and Sonnet-verified sound |
 <!-- /ANCHOR:metadata -->
 
 ---
@@ -49,16 +49,15 @@ _memory:
 <!-- ANCHOR:what-built -->
 ## What Was Built
 
-Nothing in the fork yet. This child is Planned: width measuring is specified so scheme-hint columns do not over-fit on assembled hrefs after the table slice lands.
+Shipped on branch `impl` (commit `30ce2ea`, review fix `a179b97`): width measuring, so scheme-hint columns do not over-fit on assembled hrefs. `ColumnWidth.ts` now measures `isTextLinkScheme(col.textLinkScheme)` cells like link-mode labels (auto-width and wrap), matching the pre-existing `textRenderMode === "link"` / `parseTextLink` label path.
 
 ### Files Changed
 
 | File | Action | Purpose |
 |------|--------|---------|
-| `spec.md` | Authored | Column-width scope and requirements |
-| `plan.md` | Authored | Label-measure plan |
-| `tasks.md` | Authored | T003–T004 atomic unit |
-| `implementation-summary.md` | Authored | Honest pre-build record |
+| `src/views/ColumnWidth.ts` | Modified | Scheme-hint cells measure like link-mode labels (`:17-31,48,101-105`); review fix `a179b97` addressed concerns raised on first pass |
+| `spec.md` | Reconciled | Status Planned → Complete |
+| `implementation-summary.md` | Reconciled | This record — shipped-state evidence |
 <!-- /ANCHOR:what-built -->
 
 ---
@@ -66,7 +65,7 @@ Nothing in the fork yet. This child is Planned: width measuring is specified so 
 <!-- ANCHOR:how-delivered -->
 ## How It Was Delivered
 
-Not delivered. Implementation follows `tasks.md` after child 001 exports `isTextLinkScheme`.
+Delivered after child 001 (commit `74b836a`) exported `isTextLinkScheme`. Gated `tsc --noEmit` 0 / `npm run build` 0 / `npx vitest run` green, committed `30ce2ea`; an in-loop review found a concern, fixed and re-gated in `a179b97`; then independently Sonnet-verified as part of the parent phase review.
 <!-- /ANCHOR:how-delivered -->
 
 ---
@@ -88,9 +87,9 @@ Not delivered. Implementation follows `tasks.md` after child 001 exports `isText
 
 | Check | Result |
 |-------|--------|
-| Manual auto-width on a hinted URL column | Not run (Planned) |
-| Link-mode / unhinted regression | Not run (Planned) |
-| `bash .opencode/skills/system-spec-kit/scripts/spec/validate.sh` on this folder `--strict` | Pending after authoring |
+| Manual auto-width on a hinted URL column | Confirmed via code trace (label-measure call sites); on-device manual measurement not separately performed |
+| Link-mode / unhinted regression | **Confirmed unchanged** — `parseTextLink` label path untouched (Sonnet-traced) |
+| `bash .opencode/skills/system-spec-kit/scripts/spec/validate.sh` on this folder `--strict` | Not run by this reconciliation pass (docs-only; see task scope) |
 <!-- /ANCHOR:verification -->
 
 ---

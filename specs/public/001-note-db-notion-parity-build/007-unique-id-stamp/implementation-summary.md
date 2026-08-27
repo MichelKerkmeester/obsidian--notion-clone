@@ -1,6 +1,6 @@
 ---
 title: "Implementation Summary: Unique-ID Stamp on Row Create"
-description: "Honest Planned scaffold summary for unique-ID stamping: design decisions are recorded, fork code is not built, and verification remains pending."
+description: "Shipped-state summary for unique-ID stamping — implemented, gate-green, and Sonnet-verified PASS on branch impl."
 trigger_phrases:
   - "unique id implementation summary"
   - "unique-id stamp summary"
@@ -15,10 +15,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "public/001-note-db-notion-parity-build/007-unique-id-stamp"
-    last_updated_at: "2026-08-24T00:00:00Z"
-    last_updated_by: "swarm"
-    recent_action: "Scaffolded phase 007 docs; status Planned"
-    next_safe_action: "Build phase 007 per plan.md and tasks.md"
+    last_updated_at: "2026-08-27T00:00:00Z"
+    last_updated_by: "docs-reconciliation"
+    recent_action: "Reconciled docs to shipped state: commits 3566ccc/576240b/e43f5c1 on branch impl, Sonnet 5 verification PASS"
+    next_safe_action: "None — phase complete. Packet-wide follow-up: operator ff-merge of impl to main/v4"
     blockers: []
     key_files:
       - "spec.md"
@@ -30,7 +30,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "note-db-parity-scaffold"
       parent_session_id: null
-    completion_pct: 0
+    completion_pct: 100
     open_questions: []
     answered_questions: []
 ---
@@ -47,9 +47,9 @@ _memory:
 | Field | Value |
 |-------|-------|
 | **Spec Folder** | 007-unique-id-stamp |
-| **Completed** | Not yet implemented (Planned) |
+| **Completed** | 2026-08-25 (branch `impl`, not yet merged to `main`/`v4`) |
 | **Level** | 2 |
-| **Actual Effort** | Not yet implemented (estimated: 5 hours, Effort S) |
+| **Actual Effort** | Shipped (estimated: 5 hours, Effort S) |
 
 <!-- /ANCHOR:metadata -->
 ---
@@ -57,18 +57,27 @@ _memory:
 <!-- ANCHOR:what-built -->
 ## What Was Built
 
-This phase is **not built yet**. The fork still lacks a create-time unique-ID stamp. No allocator module has been added under `specs/obsidian/001-notion-finance-migration/build/note-database-fork/src/data/`, and `CreateEntryPlan.ts` has not been edited. Build from `plan.md` and `tasks.md` (T001–T014). These five packet files are documentation scaffold only.
+This phase is **shipped** on branch `impl` (not yet merged to `main`/`v4` — operator ff-merge gate). `src/data/UniqueIdStamp.ts` is the zero-runtime-import allocator (`UniqueIdConfig`, `parseUniqueIdConfig`, `nextUniqueId`); `types.ts` + `DataSource.ts` carry the `DatabaseConfig.uniqueId` round-trip through `parseDatabaseConfig` and `toDatabasePayload`; `CreateEntryPlan.ts` stamps at create time; `DatabaseView.ts` wires `stampUniqueId`, the core-template allocate-once guard, and create-then-persist with paired rollback.
+
+A fresh Claude Sonnet 5 adversarial review (`research/sonnet-verification.md`) returned **PASS**: the synchronous increment, allocate-once-across-template-rebuild guard, create-failure rollback, persist-failure pairing, and undo-does-not-reissue-IDs behavior were all independently traced and confirmed correct.
 
 ### Files Changed
 
 | File | Action | Purpose |
 |------|--------|---------|
-| `specs/public/001-note-db-notion-parity-build/007-unique-id-stamp/spec.md` | Authored (Planned scaffold) | Requirements for create-time unique IDs |
-| `specs/public/001-note-db-notion-parity-build/007-unique-id-stamp/plan.md` | Authored (Planned scaffold) | Isolated-module architecture and rollback |
-| `specs/public/001-note-db-notion-parity-build/007-unique-id-stamp/tasks.md` | Authored (Planned scaffold) | Unchecked implementation tasks |
-| `specs/public/001-note-db-notion-parity-build/007-unique-id-stamp/checklist.md` | Authored (Planned scaffold) | Unchecked verification items (0 verified) |
-| `specs/public/001-note-db-notion-parity-build/007-unique-id-stamp/implementation-summary.md` | Authored (Planned scaffold) | This summary; not a completion claim |
-| Fork `src/data/` allocator, `CreateEntryPlan.ts`, db_view config, optional `ColumnTypes.ts` | Not modified | Implementation targets for the future build |
+| `src/data/UniqueIdStamp.ts` | Created | Zero-runtime-import allocator: `UniqueIdConfig`, `parseUniqueIdConfig`, `nextUniqueId` |
+| `src/data/types.ts` | Modified | `uniqueId?: UniqueIdConfig` on `DatabaseConfig` via type-only import |
+| `src/data/DataSource.ts` | Modified | Parse in `parseDatabaseConfig` (`:773-793`) and serialize in `toDatabasePayload` (`:1041-1063`) |
+| `src/data/CreateEntryPlan.ts` | Modified | Stamp after the source-rule overlay (`:170-172` onward); freezes `padWidth`/`field` on first allocate |
+| `src/views/DatabaseView.ts` | Modified | `stampUniqueId` wiring (`buildCreateEntryPlan` `:3638-3671`), core-template allocate-once guard (`:3572-3583`), create-then-persist with paired rollback (`:3628-3662`) |
+| `src/__tests__/setup.ts` | Reused | Vitest harness bootstrap (shared with phase 005) |
+| `src/data/UniqueIdStamp.test.ts` | Created | 10 tests (prefix trim/defaults, missing-field defaults, non-object → `undefined`, trailing-hyphen de-dup, invalid counter/padding fallback) |
+| `specs/public/001-note-db-notion-parity-build/007-unique-id-stamp/spec.md` | Reconciled | Status Planned → Complete |
+| `specs/public/001-note-db-notion-parity-build/007-unique-id-stamp/plan.md` / `tasks.md` | Unchanged | Already matched the shipped design |
+| `specs/public/001-note-db-notion-parity-build/007-unique-id-stamp/checklist.md` | Reconciled | All items verified against the shipped commits |
+| `specs/public/001-note-db-notion-parity-build/007-unique-id-stamp/implementation-summary.md` | Reconciled | This record — shipped-state evidence |
+
+Commits on branch `impl`: `3566ccc` (001-unique-id-stamp-module), `576240b` (002-unique-id-config-persist), `e43f5c1` (003-create-entry-stamp).
 
 <!-- /ANCHOR:what-built -->
 ---
@@ -76,7 +85,7 @@ This phase is **not built yet**. The fork still lacks a create-time unique-ID st
 <!-- ANCHOR:how-delivered -->
 ## How It Was Delivered
 
-Not delivered. Implementation has not started. Delivery, when it happens, is a new isolated module under fork `src/data/` (imitating `EuroFormat.ts`), a stamp inside `CreateEntryPlan.ts`, and persistence of counter plus optional prefix in db_view config, then the checks in `plan.md` Phase 3 and `tasks.md` T010–T014.
+Delivered by the serial, resumable build driver (`../scratch/stage4-implement.cjs`) per sub-phase: implement → gate (`tsc --noEmit` 0, `npm run build` 0, `npx vitest run` green) → commit → in-loop review → fix pass on concerns. Each of the three sub-phases landed as its own commit; the phase then received one independent, fresh Claude Sonnet 5 adversarial review against `spec.md` and `research/synthesis.md`, returning **PASS**.
 
 <!-- /ANCHOR:how-delivered -->
 ---
@@ -104,16 +113,17 @@ Not delivered. Implementation has not started. Delivery, when it happens, is a n
 
 | Test Type | Status | Coverage | Notes |
 |-----------|--------|----------|-------|
-| Strict validation | Pending | This phase folder | `bash .opencode/skills/system-spec-kit/scripts/spec/validate.sh specs/public/001-note-db-notion-parity-build/007-unique-id-stamp --strict` |
-| Allocator / create-plan tests | Pending | Not written | Fork test command UNKNOWN until build reads the fork’s test scripts |
-| Manual create-two-rows | Pending | 0% | Example expectation: prefix `INV` yields `INV-001` then `INV-002`; reload continues the counter |
+| Strict validation | Not run by this reconciliation pass | This phase folder | Docs-only reconciliation task; see task scope |
+| Allocator / create-plan tests | **Green** | 10/10 | `UniqueIdStamp.test.ts`; `vitest` 160/160 at Sonnet review time |
+| Manual create-two-rows | Confirmed via code trace | Sonnet hand-trace of both `buildCreateEntryPlan` branches | Synchronous increment (`CreateEntryPlan.ts:182-199`) confirmed to mutate the persisted `getActiveDb()` object; on-device manual create not separately performed |
+| Sonnet 5 independent review | **PASS** | `research/sonnet-verification.md` | Read-only, hunter/skeptic/referee adversarial self-check |
 
 ### Test Coverage Summary
 
 | File | Statements | Branches | Functions |
 |------|------------|----------|-----------|
-| Fork allocator (not created) | Pending | Pending | Pending |
-| `CreateEntryPlan.ts` stamp (not edited) | Pending | Pending | Pending |
+| `UniqueIdStamp.ts` | Covered by 10 tests | Prefix trim, defaults, non-object guard, padding fallback | `parseUniqueIdConfig`, `nextUniqueId` |
+| `CreateEntryPlan.ts` stamp | Covered by Sonnet hand-trace | Allocate-once, rollback, paste inherit | `stampUniqueId()` (`:182-199`) |
 
 <!-- /ANCHOR:verification -->
 ---
@@ -123,9 +133,9 @@ Not delivered. Implementation has not started. Delivery, when it happens, is a n
 
 | NFR ID | Target | Actual | Status |
 |--------|--------|--------|--------|
-| NFR-P01 | Constant-time allocate at create; no vault scan | Not measured (unbuilt) | Pending |
-| NFR-S01 | No secrets or telemetry | Unbuilt; design forbids both | Pending |
-| NFR-R01 | Persisted counter survives reload; no extra note churn | Unbuilt | Pending |
+| NFR-P01 | Constant-time allocate at create; no vault scan | Confirmed — synchronous in-memory read-increment-write, no vault scan (Sonnet-traced) | **Met** |
+| NFR-S01 | No secrets or telemetry | Confirmed — `UniqueIdStamp.ts` has zero imports; ids are local sequential labels | **Met** |
+| NFR-R01 | Persisted counter survives reload; no extra note churn | Confirmed — `toDatabasePayload` serializes `uniqueId`; `text` storage reused, no extra churn | **Met** |
 
 <!-- /ANCHOR:nfr-verify -->
 ---
@@ -133,11 +143,11 @@ Not delivered. Implementation has not started. Delivery, when it happens, is a n
 <!-- ANCHOR:limitations -->
 ## Known Limitations
 
-1. Nothing in the fork implements unique-ID stamping yet; this packet is Planned scaffold.
-2. Existing notes will not receive ids (create-time only; no backfill).
-3. Concurrent creates on two devices before iCloud merge can still collide; the design does not add desktop-only locks.
-4. Default prefix-less format and pad width are UNKNOWN until db_view schema is read at build (backlog illustration is `INV-001`).
-5. Whether a stamped id is immutable in the UI after create is UNKNOWN; this phase only requires the stamp.
+1. Existing notes do not receive ids (create-time only; no backfill — by design, not a gap).
+2. Concurrent creates on two devices before iCloud merge can still collide (`enqueueWrite` serializes per file on one device only); the design does not add desktop-only locks. Documented as the single biggest risk, accepted best-effort.
+3. Prefix-less format is `001` (empty prefix, pad 3, a documented fork extension over Notion's unpadded `TASK-3`), confirmed shipped.
+4. A stamped id stays editable in the UI after create (Notion read-only is P2, backlog item 10, not built).
+5. `DataSource.ts:828` `parseUniqueIdConfig(source["uniqueId"] ?? database["uniqueId"])` is redundant (`source` already spreads `database` with priority) — harmless style nit noted in Sonnet review, not a defect.
 
 <!-- /ANCHOR:limitations -->
 ---
@@ -147,7 +157,7 @@ Not delivered. Implementation has not started. Delivery, when it happens, is a n
 
 | Planned | Actual | Reason |
 |---------|--------|--------|
-| Build the allocator and stamp per `plan.md` | Not started | Scaffold only; status Planned |
-| Record verification evidence | Verification Summary 0 verified | No implementation yet |
+| Build the allocator and stamp per `plan.md` | Shipped exactly as designed — allocator, persist round-trip, create-time stamp, allocate-once guard, paired rollback | No deviation; Sonnet verification confirmed all design claims (synchronous increment, allocate-once, rollback pairing, undo behavior) |
+| Docs updated when the build completes | Docs were left saying "Planned" until this reconciliation pass (2026-08-27) | Universal packet-wide gap: the build/gate/in-loop review approved the code but nothing wrote completion state back (see `../synthesis.md` §4, §8) |
 
 <!-- /ANCHOR:deviations -->

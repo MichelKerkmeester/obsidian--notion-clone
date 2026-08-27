@@ -1,6 +1,6 @@
 ---
 title: "Implementation Summary: Rollup Aggregation Pack"
-description: "Scaffold summary for the Rollup Aggregation Pack phase: not yet implemented; records the phase's agreed design decisions and planned work."
+description: "Shipped summary for the Rollup Aggregation Pack phase: Aggregate.ts min/max/median/range/earliest/latest/percentEmpty/percentFilled shipped and Sonnet-verified PASS across all three sub-phases."
 trigger_phrases:
   - "rollup aggregation"
   - "aggregate module"
@@ -14,8 +14,8 @@ _memory:
     packet_pointer: "public/001-note-db-notion-parity-build/002-rollup-aggregation-pack"
     last_updated_at: "2026-08-24T00:00:00Z"
     last_updated_by: "swarm"
-    recent_action: "Scaffolded phase 002 docs; status Planned"
-    next_safe_action: "Build phase 002 per plan.md and tasks.md"
+    recent_action: "Shipped: Aggregate.ts (min/max/median/range/earliest/latest/percentEmpty/percentFilled) landed on branch impl across 001-003; tsc0/build0/vitest green; Sonnet 5 verification PASS 2026-08-26"
+    next_safe_action: "None — phase complete. Cross-phase note: inverse-relation rollup path (phase 008) short-circuits percent kinds to null on zero inbound edges; not a 002 regression"
     blockers: []
     key_files:
       - "spec.md"
@@ -27,7 +27,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "note-db-parity-scaffold"
       parent_session_id: null
-    completion_pct: 0
+    completion_pct: 100
     open_questions: []
     answered_questions: []
 ---
@@ -44,9 +44,9 @@ _memory:
 | Field | Value |
 |-------|-------|
 | **Spec Folder** | 002-rollup-aggregation-pack |
-| **Completed** | Not yet implemented (Planned) |
+| **Completed** | 2026-08-26 — shipped on branch `impl`; Sonnet 5 verification PASS |
 | **Level** | 2 |
-| **Actual Effort** | Not started (estimated: ~3 hours, Effort S) |
+| **Actual Effort** | ~3 hours (estimated: ~3 hours, Effort S) |
 
 <!-- /ANCHOR:metadata -->
 ---
@@ -54,19 +54,24 @@ _memory:
 <!-- ANCHOR:what-built -->
 ## What Was Built
 
-**Nothing yet.** The phase is scaffolded (status: Planned, 2026-08-24) but not implemented — no code exists in the fork. This summary will be rewritten at completion; the build follows `plan.md` and `tasks.md`.
+**Shipped.** All three sub-phases (numeric, date, percent) landed on branch `impl`, each `tsc0/build0/vitest green`, and passed a read-only Sonnet 5 adversarial verification pass (2026-08-26) with a **PASS** verdict.
 
 ### Files Changed
 
 | File | Action | Purpose |
 |------|--------|---------|
-| `spec.md` | Created (scaffold) | Phase specification: scope, requirements, edge cases |
-| `plan.md` | Created (scaffold) | Implementation plan: module design, phases, rollback |
-| `tasks.md` | Created (scaffold) | Task breakdown with verification steps |
-| `checklist.md` | Created (scaffold) | Pending verification checklist (0 items verified) |
-| `implementation-summary.md` | Created (scaffold) | This file — honest pre-build record |
+| `src/data/Aggregate.ts` | Created | Shared pure-function aggregation math: `min`, `max`, `median`, `range`, `earliest`, `latest`, `percentEmpty`, `percentFilled`, plus the shared `isNumericRollupKind` predicate |
+| `src/data/RelationRollup.ts` | Edited | `aggregateRollup` dispatches the new kinds via an exhaustive switch before the sum/avg tail (tail narrowed to `aggregation === "sum"` only); percent dispatch runs before the numeric flatten |
+| `src/data/types.ts` | Edited | Rollup `aggregation` union widened |
+| `src/data/ColumnDisplay.ts` | Edited | `earliest`/`latest` map to `"date"` display type; eligibility clone uses the shared predicate |
+| `src/data/RowPipeline.ts` | Edited | Same date-display mapping and shared-predicate eligibility clone |
+| `src/views/SummaryRenderer.ts` | Edited | Footer MIN/MAX/MEDIAN/RANGE/EARLIEST/LATEST route through `Aggregate.ts`; date-ms RANGE fallback kept local |
+| `src/views/ChartAggregation.ts` | Edited | Chart median and percent-empty/percent-not-empty route through `Aggregate.ts` |
+| `src/views/modals/RelationRollupConfigModal.ts` | Edited | Config modal offers the new kinds, filtered by target column kind |
+| `src/__tests__/setup.ts` | Created | Vitest harness bootstrap |
+| `src/data/Aggregate.test.ts` | Created | Table-driven unit tests (57 assertions) across empty/all-null/single/odd/even/mixed/NaN/Infinity inputs |
 
-Planned fork changes (not yet made): `note-database-fork/src/data/Aggregate.ts` (create) plus minimal edits to `RelationRollup.ts`, `SummaryRenderer.ts`, and `ChartAggregation.ts`.
+Commits on branch `impl`: `b83d666` (001-numeric-aggregate-module), `58490ee` (002-date-aggregation-pack), `18e5461` (003-percent-aggregation-pack). All three are additive-only per `git show` (confirmed in Sonnet verification); `count`/`sum`/`avg`/`list` behavior is byte-identical to pre-phase.
 
 <!-- /ANCHOR:what-built -->
 ---
@@ -74,7 +79,7 @@ Planned fork changes (not yet made): `note-database-fork/src/data/Aggregate.ts` 
 <!-- ANCHOR:how-delivered -->
 ## How It Was Delivered
 
-Not delivered. Only the phase documentation packet was scaffolded; the implementation is the next action per `plan.md` and `tasks.md`.
+Delivered in build order per plan: numeric pack first (`b83d666`), then dates (`58490ee`), then percents (`18e5461`), each as its own `feat(impl):` commit on branch `impl` gated on `tsc --noEmit` clean and the full Vitest suite green before landing.
 
 <!-- /ANCHOR:how-delivered -->
 ---
@@ -100,16 +105,16 @@ Not delivered. Only the phase documentation packet was scaffolded; the implement
 
 | Test Type | Status | Coverage | Notes |
 |-----------|--------|----------|-------|
-| Unit tests (Aggregate.ts kinds) | Pending | All kinds incl. empty/mixed/invalid inputs | Planned in `tasks.md` |
-| Integration (rollups/footers/charts) | Pending | Three call sites | Planned in `tasks.md` |
-| Display-only check | Pending | `git diff` on rendered notes | Planned in `tasks.md` |
-| Fork test suite + lint vs baseline | Pending | Regression baseline per `tasks.md` T003 | Planned in `tasks.md` |
+| Unit tests (Aggregate.ts kinds) | Pass | All kinds incl. empty/mixed/invalid inputs | `Aggregate.test.ts` — 57/57 assertions green |
+| Integration (rollups/footers/charts) | Pass | Three call sites | Sonnet verification confirmed one shared math path across RelationRollup, SummaryRenderer, ChartAggregation |
+| Display-only check | Pass | Rendering writes nothing to frontmatter | Confirmed: consumers never write back; `DEFAULT_COMPUTED_SYNC_MODE` stays `"display-only"` |
+| Fork test suite + lint vs baseline | Pass | `tsc --noEmit` clean; full Vitest suite | 160/160 tests green at Sonnet re-verification (2026-08-26) |
 
 ### Test Coverage Summary
 
 | File | Statements | Branches | Functions |
 |------|------------|----------|-----------|
-| Aggregate.ts | N/A — not built | N/A — not built | N/A — not built |
+| Aggregate.ts | Covered via 57 table-driven assertions | Empty/all-null/single/odd/even/mixed/NaN/Infinity per kind | All 8 exported functions + `isNumericRollupKind` |
 
 <!-- /ANCHOR:verification -->
 ---
@@ -119,9 +124,9 @@ Not delivered. Only the phase documentation packet was scaffolded; the implement
 
 | NFR ID | Target | Actual | Status |
 |--------|--------|--------|--------|
-| NFR-P01 | Single-pass aggregations, responsive rendering | Not run | Pending |
-| NFR-S01 | No secrets, no telemetry, no network calls | Not run | Pending |
-| NFR-R01 | Deterministic, iCloud-safe (display-only) | Not run | Pending |
+| NFR-P01 | Single-pass aggregations, responsive rendering | Values extracted once per cell via existing `targetCache`; no workers, no memoization | Met |
+| NFR-S01 | No secrets, no telemetry, no network calls | `Aggregate.ts` has zero imports (cycle-free); no network/telemetry code added | Met |
+| NFR-R01 | Deterministic, iCloud-safe (display-only) | Confirmed: consumers never write to frontmatter; renders idempotent | Met |
 
 <!-- /ANCHOR:nfr-verify -->
 ---
@@ -129,9 +134,9 @@ Not delivered. Only the phase documentation packet was scaffolded; the implement
 <!-- ANCHOR:limitations -->
 ## Known Limitations
 
-1. Phase not implemented — this packet is a scaffold, not a completion record.
-2. Call-site file paths inside the fork are confirmed at build start (only `src/data/Aggregate.ts` is fixed by the brief).
-3. If percent-empty/filled is deferred, chart percent-empty keeps its own math until it ships.
+1. Count-unique / show-unique-values, checkbox percent kinds, and a `RollupConfig` number-format slot remain out of scope (roadmap items), by design.
+2. Cross-phase interaction: the inverse-relation rollup path added later by phase 008 (`RelationRollup.ts`, commit `90c335d`) short-circuits percent kinds to `null` on zero inbound edges, instead of this phase's "0 related rows → 0" rule. This is a phase-008 concern, not a regression in this phase's forward-relation path (per Sonnet verification).
+3. Docs-reconciliation history: prior to this update, all three sub-phases' `implementation-summary.md` still read "Not yet implemented (Planned)" despite gate-green commits — flagged as a P2 finding in Sonnet verification and fixed here.
 
 <!-- /ANCHOR:limitations -->
 ---
@@ -141,6 +146,6 @@ Not delivered. Only the phase documentation packet was scaffolded; the implement
 
 | Planned | Actual | Reason |
 |---------|--------|--------|
-| Implement Aggregate.ts + call-site edits | Not started (docs scaffolded only) | Wave 1 scaffold precedes the build; status Planned |
+| Implement Aggregate.ts + call-site edits | Shipped as planned across three sub-phase commits | No deviation — build followed `plan.md`/`tasks.md` build order (numeric → dates → percents) |
 
 <!-- /ANCHOR:deviations -->

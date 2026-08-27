@@ -1,6 +1,6 @@
 ---
 title: "Implementation Summary: Layout Scheme Honor"
-description: "Planned four-layout honor of textLinkScheme. Not yet implemented in the fork."
+description: "Shipped four-layout honor of textLinkScheme, commits 1b0527f + review fix be9516b on branch impl, Sonnet-verified sound."
 trigger_phrases:
   - "layout scheme honor summary"
   - "board gallery list detail"
@@ -9,10 +9,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "public/001-note-db-notion-parity-build/006-link-scheme-fields/002-layout-scheme-honor"
-    last_updated_at: "2026-08-25T19:40:00Z"
-    last_updated_by: "phase-architect"
-    recent_action: "Authored layout-honor child from synthesis rank 3 and final-plan T011"
-    next_safe_action: "Implement Board/Gallery/List/RecordDetail one-liners after the table same-diff child"
+    last_updated_at: "2026-08-27T00:00:00Z"
+    last_updated_by: "docs-reconciliation"
+    recent_action: "Reconciled to shipped state: commits 1b0527f + be9516b (review fix) on branch impl, tsc0/build0/vitest green, Sonnet 5 review sound"
+    next_safe_action: "None — sub-phase complete"
     blockers: []
     key_files:
       - "spec.md"
@@ -23,7 +23,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "decompose-002-layout-scheme-honor"
       parent_session_id: null
-    completion_pct: 0
+    completion_pct: 100
     open_questions: []
     answered_questions: []
 ---
@@ -39,9 +39,9 @@ _memory:
 | Field | Value |
 |-------|-------|
 | **Spec Folder** | 002-layout-scheme-honor |
-| **Completed** | Not yet (Planned) |
+| **Completed** | 2026-08-25 (commits `1b0527f` + `be9516b` on branch `impl`) |
 | **Level** | 1 |
-| **Actual Effort** | Not started |
+| **Actual Effort** | Shipped and Sonnet-verified sound |
 <!-- /ANCHOR:metadata -->
 
 ---
@@ -49,16 +49,18 @@ _memory:
 <!-- ANCHOR:what-built -->
 ## What Was Built
 
-Nothing in the fork yet. This child is Planned: the four layout call sites are specified so a CellRenderer-only table slice cannot be mistaken for Notion-complete Wave 3.
+Shipped on branch `impl` (commit `1b0527f`, review fix `be9516b`): the four layout call sites, so the CellRenderer-only table slice from child 001 is not mistaken for Notion-complete Wave 3. Board, Gallery, List, and RecordDetail all honor `textLinkScheme` via the shared `renderDelayedExternalLink` helper (`Board/Gallery/List/RecordDetailPanel.ts`) — no second 280ms timer.
 
 ### Files Changed
 
 | File | Action | Purpose |
 |------|--------|---------|
-| `spec.md` | Authored | Layout-honor scope and requirements |
-| `plan.md` | Authored | One-line delegation plan |
-| `tasks.md` | Authored | T003–T006 atomic unit |
-| `implementation-summary.md` | Authored | Honest pre-build record |
+| `src/views/BoardRenderer.ts` | Modified | Delegate via `{label,target}` helper |
+| `src/views/GalleryRenderer.ts` | Modified | Delegate via `{label,target}` helper |
+| `src/views/ListRenderer.ts` | Modified | Delegate via `{label,target}` helper |
+| `src/views/RecordDetailPanel.ts` | Modified | Delegate via `{label,target}` helper |
+| `spec.md` | Reconciled | Status Planned → Complete |
+| `implementation-summary.md` | Reconciled | This record — shipped-state evidence |
 <!-- /ANCHOR:what-built -->
 
 ---
@@ -66,7 +68,7 @@ Nothing in the fork yet. This child is Planned: the four layout call sites are s
 <!-- ANCHOR:how-delivered -->
 ## How It Was Delivered
 
-Not delivered. Implementation follows `tasks.md` after child 001 exports the delayed opener.
+Delivered after child 001 (commit `74b836a`) exported the delayed opener. Gated `tsc --noEmit` 0 / `npm run build` 0 / `npx vitest run` green, committed `1b0527f`; an in-loop review found a concern, fixed and re-gated in `be9516b`; then independently Sonnet-verified as part of the parent phase review.
 <!-- /ANCHOR:how-delivered -->
 
 ---
@@ -88,9 +90,9 @@ Not delivered. Implementation follows `tasks.md` after child 001 exports the del
 
 | Check | Result |
 |-------|--------|
-| Manual click on four layouts | Not run (Planned) |
-| Grep for copied 280 ms timer | Not run (Planned) |
-| `bash .opencode/skills/system-spec-kit/scripts/spec/validate.sh` on this folder `--strict` | Pending after authoring |
+| Manual click on four layouts | Confirmed via code trace (call-site delegation, guard placement); on-device manual click not separately performed |
+| Grep for copied 280 ms timer | **Confirmed — one implementation**, shared helper, no copy (Sonnet-traced) |
+| `bash .opencode/skills/system-spec-kit/scripts/spec/validate.sh` on this folder `--strict` | Not run by this reconciliation pass (docs-only; see task scope) |
 <!-- /ANCHOR:verification -->
 
 ---

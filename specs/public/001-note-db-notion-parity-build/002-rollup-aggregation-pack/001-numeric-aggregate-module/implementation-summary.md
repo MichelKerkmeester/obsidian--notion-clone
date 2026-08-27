@@ -1,6 +1,6 @@
 ---
 title: "Implementation Summary: Numeric Aggregate Module"
-description: "Planned same-diff numeric slice for Aggregate.ts. Not yet implemented in the fork."
+description: "Shipped same-diff numeric slice for Aggregate.ts: min/max/median/range plus isNumericRollupKind, gate-green and Sonnet-verified PASS."
 trigger_phrases:
   - "numeric aggregate summary"
   - "aggregate module"
@@ -12,8 +12,8 @@ _memory:
     packet_pointer: "public/001-note-db-notion-parity-build/002-rollup-aggregation-pack/001-numeric-aggregate-module"
     last_updated_at: "2026-08-25T19:05:00Z"
     last_updated_by: "phase-architect"
-    recent_action: "Authored numeric same-diff child from synthesis and final-plan"
-    next_safe_action: "Implement Aggregate.ts numeric functions plus the same-diff call sites"
+    recent_action: "Shipped commit b83d666 (feat(rollup): numeric aggregation pack via isolated Aggregate.ts module); tsc0/build0/vitest green; Sonnet 5 verification PASS 2026-08-26"
+    next_safe_action: "None — sub-phase complete"
     blockers: []
     key_files:
       - "spec.md"
@@ -24,7 +24,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "decompose-001-numeric-aggregate-module"
       parent_session_id: null
-    completion_pct: 0
+    completion_pct: 100
     open_questions: []
     answered_questions: []
 ---
@@ -40,9 +40,9 @@ _memory:
 | Field | Value |
 |-------|-------|
 | **Spec Folder** | 001-numeric-aggregate-module |
-| **Completed** | Not yet (Planned) |
+| **Completed** | 2026-08-26 — commit `b83d666` on branch `impl` |
 | **Level** | 1 |
-| **Actual Effort** | Not started |
+| **Actual Effort** | Shipped as one same-diff commit |
 <!-- /ANCHOR:metadata -->
 
 ---
@@ -50,9 +50,7 @@ _memory:
 <!-- ANCHOR:what-built -->
 ## What Was Built
 
-Nothing in the fork yet. This child is Planned: the numeric same-diff slice is specified so Median cannot ship as `"text"` or as an unlisted dropdown id.
-
-Planned first artifact is `src/data/Aggregate.ts` with `min`/`max`/`median`/`range` on coerced `readonly number[]`, plus `isNumericRollupKind`, `src/__tests__/setup.ts`, and `src/data/Aggregate.test.ts`.
+Shipped in commit `b83d666` on branch `impl`. `src/data/Aggregate.ts` now exports `min`/`max`/`median`/`range` on coerced `readonly number[]`, plus the shared `isNumericRollupKind` predicate, `src/__tests__/setup.ts`, and `src/data/Aggregate.test.ts`. Median renders and types as `"number"`, not `"text"`, and appears in `RelationRollupConfigModal.ts`.
 
 ### Files Changed
 
@@ -69,7 +67,7 @@ Planned first artifact is `src/data/Aggregate.ts` with `min`/`max`/`median`/`ran
 <!-- ANCHOR:how-delivered -->
 ## How It Was Delivered
 
-Not delivered. Implementation follows `tasks.md` as one diff against the live fork at `Obsidian Plugin/src`.
+Delivered as commit `b83d666` on branch `impl`, one diff against the live fork at `Obsidian Plugin/src`, following `tasks.md` T003-T008 as a single atomic unit.
 <!-- /ANCHOR:how-delivered -->
 
 ---
@@ -93,9 +91,9 @@ Not delivered. Implementation follows `tasks.md` as one diff against the live fo
 
 | Check | Result |
 |-------|--------|
-| `npx vitest run` on `src/data/Aggregate.test.ts` | Not run (Planned) |
-| `bash .opencode/skills/system-spec-kit/scripts/spec/validate.sh` on this folder `--strict` | Pending after authoring |
-| Three-surface numeric agreement | Not run (Planned) |
+| `npx vitest run` on `src/data/Aggregate.test.ts` | Pass — 57/57 assertions green (commit `b83d666`) |
+| `tsc --noEmit` / build | Pass — tsc0/build0/vitest green, re-confirmed at Sonnet 5 verification (2026-08-26) |
+| Three-surface numeric agreement | Confirmed by Sonnet verification — RelationRollup, SummaryRenderer, ChartAggregation route through the same `Aggregate.ts` functions |
 <!-- /ANCHOR:verification -->
 
 ---

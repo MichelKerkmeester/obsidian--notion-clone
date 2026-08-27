@@ -11,8 +11,8 @@ _memory:
     packet_pointer: "public/001-note-db-notion-parity-build/008-derived-inverse-relations/002-rollup-inverse-resolution"
     last_updated_at: "2026-08-25T21:40:00Z"
     last_updated_by: "phase-architect"
-    recent_action: "Authored rollup inverse-resolution child from synthesis ranks 2 and 4 and final-plan step 3"
-    next_safe_action: "Wire key-scoped inverse into RelationRollup.ts after a local relationField miss"
+    recent_action: "Shipped key-scoped inverse resolution in RelationRollup.ts (commit 90c335d); tsc0/build0/vitest green; Sonnet 5 verified"
+    next_safe_action: "None outstanding for this sub-phase"
     blockers: []
     key_files:
       - "spec.md"
@@ -23,7 +23,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "decompose-002-rollup-inverse-resolution"
       parent_session_id: null
-    completion_pct: 0
+    completion_pct: 100
     open_questions: []
     answered_questions: []
 ---
@@ -39,9 +39,9 @@ _memory:
 | Field | Value |
 |-------|-------|
 | **Spec Folder** | 002-rollup-inverse-resolution |
-| **Completed** | Not yet (Planned) |
+| **Completed** | Complete — shipped `90c335d` |
 | **Level** | 1 |
-| **Actual Effort** | Not started |
+| **Actual Effort** | Not separately tracked |
 <!-- /ANCHOR:metadata -->
 
 ---
@@ -49,18 +49,20 @@ _memory:
 <!-- ANCHOR:what-built -->
 ## What Was Built
 
-Nothing in the fork yet. This child is Planned: Hunk 1 so a Report `count`/`list` can consume inbound Expenses without a stored back-property.
+Shipped: Hunk 1 in `src/data/RelationRollup.ts`. After `relationColumns.get(config.relationField)` misses and the `:36` rollup-columns gate has passed, the rollup resolves a **key-scoped** inverse (`column.key === config.relationField && column.type === "relation" && column.relationConfig.targetDatabaseId === sourceDatabase.id`) and feeds inbound records for the current row to the existing `aggregateRollup`. Inverse `sourcePaths` are unioned into `targetPaths`; `sourceDatabaseIds` is returned on `RelationRollupResult` for child 003 to consume. No new aggregation kinds; `types.ts`/`RollupConfig` shape untouched. `RelationInverse.test.ts` was extended with round-trip `count`/`list` cases against a DB with rollup columns.
 
-Planned work edits `RelationRollup.ts` after a local `relationField` miss and extends `RelationInverse.test.ts` with rollup round-trips.
+Independent Sonnet 5 review confirmed the handoff (`sourceDatabaseIds` produced at `RelationInverse.ts:42,80`, re-aggregated at `RelationRollup.ts:31,85`) and confirmed local-relation-precedence and empty-inbound behavior via tests.
 
 ### Files Changed
 
 | File | Action | Purpose |
 |------|--------|---------|
+| `src/data/RelationRollup.ts` | Modified (`90c335d`) | Key-scoped inverse resolution after local miss; +44/-6 |
+| `src/data/RelationInverse.test.ts` | Extended (`90c335d`) | Round-trip `count`/`list` cases |
 | `spec.md` | Authored | Key-scoped resolution and fail-closed empty |
 | `plan.md` | Authored | Call inverse only after the `:36` gate |
 | `tasks.md` | Authored | T003–T004 atomic RelationRollup.ts unit |
-| `implementation-summary.md` | Authored | Honest pre-build record |
+| `implementation-summary.md` | Updated | Shipped-state record |
 <!-- /ANCHOR:what-built -->
 
 ---
@@ -68,7 +70,7 @@ Planned work edits `RelationRollup.ts` after a local `relationField` miss and ex
 <!-- ANCHOR:how-delivered -->
 ## How It Was Delivered
 
-Not delivered. Starts only after `001-relation-inverse-module` has `RelationInverse.ts` on disk.
+Delivered after `001-relation-inverse-module` landed `RelationInverse.ts`; gated (tsc 0 / build 0 / vitest green) and committed at `90c335d`.
 <!-- /ANCHOR:how-delivered -->
 
 ---
@@ -92,9 +94,11 @@ Not delivered. Starts only after `001-relation-inverse-module` has `RelationInve
 
 | Check | Result |
 |-------|--------|
-| Inverse `count === 2` / `list` via `aggregateRollup` | Not run (Planned) |
-| `npx vitest run src/data/RelationInverse.test.ts` | Not run (Planned) |
-| `validate.sh` on this folder `--strict` | Pending after authoring |
+| Inverse `count === 2` / `list` via `aggregateRollup` | **PASS** — round-trip cases green |
+| `npx vitest run src/data/RelationInverse.test.ts` | **PASS** — 12/12 (160/160 whole suite at review time) |
+| `npx tsc --noEmit` | **PASS** — exit 0 |
+| Independent Sonnet 5 review | **PASS** on correctness/coverage (`../research/sonnet-verification.md`) |
+| `validate.sh` on this folder `--strict` | Not re-run by this reconciliation pass |
 <!-- /ANCHOR:verification -->
 
 ---
@@ -102,7 +106,7 @@ Not delivered. Starts only after `001-relation-inverse-module` has `RelationInve
 <!-- ANCHOR:limitations -->
 ## Known Limitations
 
-1. **Live views can still go stale.** A Report with only rollup columns has zero local relations, so `relationTargetDatabases` stays empty until child 003.
+1. **Live views can still go stale from this sub-phase's diff alone.** A Report with only rollup columns has zero local relations, so `relationTargetDatabases` stays empty until child 003's refresh-membership wiring (shipped separately, `fdaf730`).
 2. **YAML v1.** `RelationRollupConfigModal.ts` still lists only local relations; inverse `relationField` is hand-edited.
-3. **No chips.** Rollup `list`/`count` render as ordinary computed cells (`CellRenderer.ts:115-116,656`).
+3. **No chips.** Rollup `list`/`count` render as ordinary computed cells (`CellRenderer.ts:115-116,656`) — deferred by design.
 <!-- /ANCHOR:limitations -->

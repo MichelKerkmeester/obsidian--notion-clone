@@ -1,6 +1,6 @@
 ---
 title: "Implementation Summary: Multi-Field Grouping Module"
-description: "Planned same-diff data slice for MultiFieldGrouping.ts. Not yet implemented in the fork."
+description: "Shipped same-diff data slice for MultiFieldGrouping.ts, on branch impl, Sonnet-verified."
 trigger_phrases:
   - "multifield grouping summary"
   - "groupbyfields persist"
@@ -9,10 +9,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "public/001-note-db-notion-parity-build/011-table-multi-group/001-multifield-grouping-module"
-    last_updated_at: "2026-08-25T20:50:00Z"
-    last_updated_by: "phase-architect"
-    recent_action: "Authored MultiFieldGrouping same-diff child from synthesis and final-plan"
-    next_safe_action: "Implement MultiFieldGrouping.ts plus types and DataSource persist"
+    last_updated_at: "2026-08-27T00:00:00Z"
+    last_updated_by: "docs-reconciliation"
+    recent_action: "Reconciled docs to shipped state: MultiFieldGrouping.ts + types.ts + DataSource persist landed in commit 8a14675"
+    next_safe_action: "None — sub-phase complete"
     blockers: []
     key_files:
       - "spec.md"
@@ -23,7 +23,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "decompose-001-multifield-grouping-module"
       parent_session_id: null
-    completion_pct: 0
+    completion_pct: 100
     open_questions: []
     answered_questions: []
 ---
@@ -39,9 +39,9 @@ _memory:
 | Field | Value |
 |-------|-------|
 | **Spec Folder** | 001-multifield-grouping-module |
-| **Completed** | Not yet (Planned) |
+| **Completed** | 2026-08-26 (branch `impl`, commit `8a14675`) |
 | **Level** | 1 |
-| **Actual Effort** | Not started |
+| **Actual Effort** | Matches plan |
 <!-- /ANCHOR:metadata -->
 
 ---
@@ -49,18 +49,18 @@ _memory:
 <!-- ANCHOR:what-built -->
 ## What Was Built
 
-Nothing in the fork yet. This child is Planned: the data same-diff slice is specified so `groupByFields[]` cannot land on `ViewConfig` and then vanish on the next save.
+Shipped in commit `8a14675`: `src/data/MultiFieldGrouping.ts` with `effectiveGroupFields`, `buildGroupTree`, `flattenGroupTree`, and `dropComputedGroupFields`, plus `groupByFields?: string[]` on `types.ts` beside `groupByField`, and `DataSource.ts` parse/serialize so the array round-trips through vault YAML.
 
-Planned first artifact is `src/data/MultiFieldGrouping.ts` with `effectiveGroupFields`, `buildGroupTree`, `flattenGroupTree`, and `dropComputedGroupFields`, plus `types.ts:362` and DataSource parse `885` / serialize `1088`.
+Gate: `tsc --noEmit` exit 0; `vitest` 17 files / 181 tests pass (re-run at Sonnet 5 review time, isolated worktree @ `d9e038c`, covering this commit's diff). Sonnet 5 hand-traced `MultiFieldGrouping.ts:31-88` node-by-node against `MultiFieldGrouping.test.ts` — recursion, computed-field drop, and persistence round-trip all confirmed correct.
 
 ### Files Changed
 
 | File | Action | Purpose |
 |------|--------|---------|
-| `spec.md` | Authored | Data same-diff scope and requirements |
-| `plan.md` | Authored | EuroFormat module + persist seams |
-| `tasks.md` | Authored | T003–T005 atomic unit |
-| `implementation-summary.md` | Authored | Honest pre-build record |
+| `src/data/MultiFieldGrouping.ts` | Added | Pure module: `effectiveGroupFields`, `buildGroupTree`, `flattenGroupTree`, `dropComputedGroupFields` |
+| `src/data/types.ts` | Modified | `groupByFields?: string[]` beside `groupByField` |
+| `src/data/DataSource.ts` | Modified | Parse/serialize `groupByFields` (whitelist round-trip, `undefined` when empty) |
+| `spec.md` / `implementation-summary.md` | Reconciled | Docs updated to reflect shipped state (this pass) |
 <!-- /ANCHOR:what-built -->
 
 ---
@@ -68,7 +68,7 @@ Planned first artifact is `src/data/MultiFieldGrouping.ts` with `effectiveGroupF
 <!-- ANCHOR:how-delivered -->
 ## How It Was Delivered
 
-Not delivered. Implementation follows `tasks.md` as one diff against the live fork at `Obsidian Plugin/src`.
+Delivered as a single commit (`8a14675`) against the live fork at `Obsidian Plugin/src`, gated on `tsc --noEmit` + `npm run build` + `vitest` before commit. Independently verified read-only by Claude Sonnet 5 as part of the phase 011 review.
 <!-- /ANCHOR:how-delivered -->
 
 ---
@@ -92,10 +92,10 @@ Not delivered. Implementation follows `tasks.md` as one diff against the live fo
 
 | Check | Result |
 |-------|--------|
-| 1-field `effectiveGroupFields` | Not run (Planned) |
-| YAML round-trip of `groupByFields` | Not run (Planned) |
-| Computed-drop warning | Not run (Planned) |
-| `bash .opencode/skills/system-spec-kit/scripts/spec/validate.sh` on this folder `--strict` | Pending after authoring |
+| 1-field `effectiveGroupFields` | Pass — verified by `MultiFieldGrouping.test.ts`, Sonnet 5 code trace |
+| YAML round-trip of `groupByFields` | Pass — `DataSource.test.ts` round-trips + filters non-strings + omits empty |
+| Computed-drop warning | Pass — verified by code trace, warns once, never writes |
+| `tsc0/build0/vitest 181/17 green` | Pass — commit `8a14675`, re-confirmed at Sonnet review `d9e038c` |
 <!-- /ANCHOR:verification -->
 
 ---
@@ -103,7 +103,7 @@ Not delivered. Implementation follows `tasks.md` as one diff against the live fo
 <!-- ANCHOR:limitations -->
 ## Known Limitations
 
-1. **No nested table yet.** Dispatch, flatten loop, Embedded, and the Sub-group picker land in later children.
+1. **No nested table rendering in this commit.** Dispatch, flatten loop, Embedded, and the Sub-group picker land in commits `c70d665`/`0729c0c`/`d26f517` (children 002-004).
 2. **Picker cap at 2 is not this child.** Compute stays unbounded so a 3-field config still nests in the data layer.
 3. **Nested row drag stays out.** Depth > 0 drop targets are a later product decision, not grouping display.
 <!-- /ANCHOR:limitations -->

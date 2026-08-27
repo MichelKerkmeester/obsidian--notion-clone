@@ -1,6 +1,6 @@
 ---
 title: "Implementation Summary: Let Vitest Matrix"
-description: "Planned vitest harness and 18-case LET matrix. Not yet implemented in the fork."
+description: "Shipped vitest harness and 18-case LET matrix, commit 4b0b987 on branch impl, Sonnet-verified PASS."
 trigger_phrases:
   - "let vitest summary"
   - "18-case matrix"
@@ -10,10 +10,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "public/001-note-db-notion-parity-build/005-formula-let-variables/002-let-vitest-matrix"
-    last_updated_at: "2026-08-25T21:30:00Z"
-    last_updated_by: "phase-architect"
-    recent_action: "Authored vitest child from synthesis rank 5 and final-plan steps 1-2, 4, 8-10"
-    next_safe_action: "Create setup.ts, the test script, LetVariables.test.ts, and ComputedField.let.test.ts"
+    last_updated_at: "2026-08-27T00:00:00Z"
+    last_updated_by: "docs-reconciliation"
+    recent_action: "Reconciled to shipped state: commit 4b0b987 on branch impl, tsc0/build0/vitest green, Sonnet 5 PASS"
+    next_safe_action: "None — sub-phase complete"
     blockers: []
     key_files:
       - "spec.md"
@@ -24,7 +24,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "decompose-002-let-vitest-matrix"
       parent_session_id: null
-    completion_pct: 0
+    completion_pct: 100
     open_questions: []
     answered_questions: []
 ---
@@ -40,9 +40,9 @@ _memory:
 | Field | Value |
 |-------|-------|
 | **Spec Folder** | 002-let-vitest-matrix |
-| **Completed** | Not yet (Planned) |
+| **Completed** | 2026-08-25 (commit `4b0b987` on branch `impl`) |
 | **Level** | 1 |
-| **Actual Effort** | Not started |
+| **Actual Effort** | Shipped and Sonnet-verified PASS |
 <!-- /ANCHOR:metadata -->
 
 ---
@@ -50,18 +50,20 @@ _memory:
 <!-- ANCHOR:what-built -->
 ## What Was Built
 
-Nothing in the fork yet. This child is Planned: the harness and matrix so SC-001 / SC-002 are runnable.
+Shipped on branch `impl` (commit `4b0b987`): the harness and matrix, so SC-001 / SC-002 are provable. 27 tests total (19 pure-transform + 8 engine matrix) are green; `vitest` 160/160 at Sonnet review time.
 
-Planned artifacts are `src/__tests__/setup.ts`, a `"test": "vitest run"` script, `src/data/__tests__/LetVariables.test.ts`, and `src/data/__tests__/ComputedField.let.test.ts`.
+`src/__tests__/setup.ts`, `"test": "vitest run"` in `package.json`, `src/data/__tests__/LetVariables.test.ts`, and `src/data/__tests__/ComputedField.let.test.ts` all exist and pass.
 
 ### Files Changed
 
 | File | Action | Purpose |
 |------|--------|---------|
-| `spec.md` | Authored | Harness scope and corrected-matrix lock |
-| `plan.md` | Authored | Pure tests before engine tests |
-| `tasks.md` | Authored | Rank-5 / steps 1–2, 4, 8–10 task list |
-| `implementation-summary.md` | Authored | Honest pre-build record |
+| `src/__tests__/setup.ts` | Created | Minimal `globalThis.moment` stub for `vitest.config.ts` `setupFiles` |
+| `package.json` | Modified | `"test": "vitest run"` |
+| `src/data/__tests__/LetVariables.test.ts` | Created | Pure-transform scanner/emission/error cases (19 tests) |
+| `src/data/__tests__/ComputedField.let.test.ts` | Created | Engine 18-case matrix via `evaluateSingleDetailed` (8 tests) |
+| `spec.md` | Reconciled | Status Planned → Complete |
+| `implementation-summary.md` | Reconciled | This record — shipped-state evidence |
 <!-- /ANCHOR:what-built -->
 
 ---
@@ -69,7 +71,7 @@ Planned artifacts are `src/__tests__/setup.ts`, a `"test": "vitest run"` script,
 <!-- ANCHOR:how-delivered -->
 ## How It Was Delivered
 
-Not delivered. Starts after `001-let-variables-module` has the module (and, for engine tests, the wiring) on disk. Harness files may overlap the tail of child 001.
+Delivered after `001-let-variables-module` (commit `1601703`) landed the module and wiring, gated `tsc --noEmit` 0 / `npm run build` 0 / `npx vitest run` green, committed `4b0b987`, then independently Sonnet-verified as part of the parent phase review.
 <!-- /ANCHOR:how-delivered -->
 
 ---
@@ -95,9 +97,9 @@ Not delivered. Starts after `001-let-variables-module` has the module (and, for 
 
 | Check | Result |
 |-------|--------|
-| `npx vitest run` | Not run (Planned) |
-| Case 17 gated if 004 `sqrt` absent | Not run (Planned) |
-| `bash .opencode/skills/system-spec-kit/scripts/spec/validate.sh` on this folder `--strict` | Pending after authoring |
+| `npx vitest run` | **Green** — 27 tests (19+8); `vitest` 160/160 at Sonnet review time |
+| Case 17 gated if 004 `sqrt` absent | **N/A — 004 merged first**; case 17 runs as part of the full matrix |
+| `bash .opencode/skills/system-spec-kit/scripts/spec/validate.sh` on this folder `--strict` | Not run by this reconciliation pass (docs-only; see task scope) |
 <!-- /ANCHOR:verification -->
 
 ---

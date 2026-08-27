@@ -50,7 +50,7 @@ _memory:
 |-------|-------|
 | **Level** | 2 |
 | **Priority** | P1 |
-| **Status** | Planned |
+| **Status** | Complete |
 | **Created** | 2026-08-24 |
 | **Branch** | `007-unique-id-stamp` |
 
@@ -264,9 +264,9 @@ Research resolved the prior UNKNOWNs. The remaining items are operator decisions
 
 | Phase | Folder | Focus | Status |
 |-------|--------|-------|--------|
-| 1 | 001-unique-id-stamp-module/ | Zero-import `UniqueIdStamp.ts` (`UniqueIdConfig`, `parseUniqueIdConfig`, `nextUniqueId`, pad-3 defaults) plus `setup.ts` and `UniqueIdStamp.test.ts` | Planned |
-| 2 | 002-unique-id-config-persist/ | Attach `uniqueId` on `DatabaseConfig` and round-trip it through `parseDatabaseConfig` plus `toDatabasePayload` | Planned |
-| 3 | 003-create-entry-stamp/ | Stamp in `planCreateEntry`, wire `DatabaseView`, allocate once on core-template rebuild, create-then-persist with paired rollback and paste inherit | Planned |
+| 1 | 001-unique-id-stamp-module/ | Zero-import `UniqueIdStamp.ts` (`UniqueIdConfig`, `parseUniqueIdConfig`, `nextUniqueId`, pad-3 defaults) plus `setup.ts` and `UniqueIdStamp.test.ts` | Complete |
+| 2 | 002-unique-id-config-persist/ | Attach `uniqueId` on `DatabaseConfig` and round-trip it through `parseDatabaseConfig` plus `toDatabasePayload` | Complete |
+| 3 | 003-create-entry-stamp/ | Stamp in `planCreateEntry`, wire `DatabaseView`, allocate once on core-template rebuild, create-then-persist with paired rollback and paste inherit | Complete |
 
 Future / out of this phase (not child folders): prefix config UI and i18n modal (ranked item 9); read-only unique-ID cell (item 10); Notion lookup URLs (item 11, blocked); a 13th `unique_id` column type (item 7, negative work).
 

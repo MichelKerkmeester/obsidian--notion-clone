@@ -1,6 +1,6 @@
 ---
 title: "Implementation Summary: Formula IFS/SWITCH Math Module"
-description: "Planned one-module engine slice for FormulaIfsSwitchMath.ts. Not yet implemented in the fork."
+description: "Shipped one-module engine slice for FormulaIfsSwitchMath.ts, gate-green and Sonnet-verified PASS; landed under commit dd61bcc (a traceability nit, not a functional gap)."
 trigger_phrases:
   - "formula ifs switch summary"
   - "FormulaIfsSwitchMath"
@@ -12,8 +12,8 @@ _memory:
     packet_pointer: "public/001-note-db-notion-parity-build/004-formula-ifs-switch-math/001-formula-ifs-switch-math-module"
     last_updated_at: "2026-08-25T19:15:00Z"
     last_updated_by: "phase-architect"
-    recent_action: "Authored engine-module child from synthesis ranks 1-4 and final-plan steps 2-3"
-    next_safe_action: "Implement FormulaIfsSwitchMath.ts plus the ComputedField Object.assign spread"
+    recent_action: "Shipped under commit dd61bcc (labeled 'address review concerns on 002-formula-modal-i18n-discovery' — traceability nit per Sonnet verification); tsc0/build0/vitest green"
+    next_safe_action: "None — sub-phase complete"
     blockers: []
     key_files:
       - "spec.md"
@@ -24,7 +24,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "decompose-001-formula-ifs-switch-math-module"
       parent_session_id: null
-    completion_pct: 0
+    completion_pct: 100
     open_questions: []
     answered_questions: []
 ---
@@ -40,9 +40,9 @@ _memory:
 | Field | Value |
 |-------|-------|
 | **Spec Folder** | 001-formula-ifs-switch-math-module |
-| **Completed** | Not yet (Planned) |
+| **Completed** | 2026-08-26 — commit `dd61bcc` on branch `impl` |
 | **Level** | 1 |
-| **Actual Effort** | Not started |
+| **Actual Effort** | Shipped as one commit (see traceability note in How It Was Delivered) |
 <!-- /ANCHOR:metadata -->
 
 ---
@@ -50,9 +50,7 @@ _memory:
 <!-- ANCHOR:what-built -->
 ## What Was Built
 
-Nothing in the fork yet. This child is Planned: the one-module engine slice so IFS/SWITCH/LOG cannot ship as four separate files or as `LOG: Math.log`.
-
-Planned first artifact is `src/data/FormulaIfsSwitchMath.ts` exporting `formulaIfsSwitchMath` and `formulaIfsSwitchMathHelp`, plus one spread inside `ComputedField.ts:310-378`.
+Shipped as `src/data/FormulaIfsSwitchMath.ts`, one module exporting `formulaIfsSwitchMath` and `formulaIfsSwitchMathHelp` — IFS/SWITCH/LOG did not ship as separate files, and `LOG` is correctly base-10, not `Math.log`. Wired via one additive spread at `ComputedField.ts:381`. Sonnet 5 verification (2026-08-26) hand-traced the tax-bracket boundary cases and confirmed `LOG`'s `base == null` check runs before `Number(base)`, avoiding the `Number(null)===0` trap.
 
 ### Files Changed
 
@@ -69,7 +67,7 @@ Planned first artifact is `src/data/FormulaIfsSwitchMath.ts` exporting `formulaI
 <!-- ANCHOR:how-delivered -->
 ## How It Was Delivered
 
-Not delivered. Implementation follows `tasks.md` as one diff against the live fork at `Obsidian Plugin/src`.
+Delivered as one diff against the live fork at `Obsidian Plugin/src`, following `tasks.md`. **Traceability note**: this sub-phase's deliverable landed under commit `dd61bcc`, whose message reads "address review concerns on 002-formula-modal-i18n-discovery" rather than a dedicated 001 commit — flagged as a nit by Sonnet 5 verification (2026-08-26). The end state is correct; only the commit-to-sub-phase mapping is inexact.
 <!-- /ANCHOR:how-delivered -->
 
 ---
@@ -93,9 +91,9 @@ Not delivered. Implementation follows `tasks.md` as one diff against the live fo
 
 | Check | Result |
 |-------|--------|
-| `git diff <upstream-base> -- src/data/SafeEval.ts` | Not run (Planned) |
-| `LOG(100)` vs `Math.log(100)` | Not run (Planned) |
-| `bash .opencode/skills/system-spec-kit/scripts/spec/validate.sh` on this folder `--strict` | Pending after authoring |
+| `git diff <upstream-base> -- src/data/SafeEval.ts` | Pass — empty, confirmed at Sonnet 5 verification (2026-08-26) |
+| `LOG(100)` vs `Math.log(100)` | Pass — `LOG(100)` is base-10 (`≈2`), confirmed distinct from `Math.log(100)` (`LN`) by a direct regression-guard test |
+| Gate: `tsc --noEmit` / build / vitest | Pass — tsc0/build0/vitest green (commit `dd61bcc`); 13 files / 160 tests pass at Sonnet re-verification |
 <!-- /ANCHOR:verification -->
 
 ---

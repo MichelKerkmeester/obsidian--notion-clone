@@ -1,6 +1,6 @@
 ---
 title: "Implementation Summary: Files Cover Wiring"
-description: "Planned gallery/board files cover guards, onerror, and auto-prefer. Not yet implemented in the fork."
+description: "Shipped gallery/board files cover guards, onerror, and auto-prefer, on branch impl; a dead unwired helper in the first commit was caught and fixed same-phase."
 trigger_phrases:
   - "files cover wiring summary"
   - "gallery cover guard"
@@ -9,10 +9,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "public/001-note-db-notion-parity-build/012-files-column/004-files-cover-wiring"
-    last_updated_at: "2026-08-25T21:20:00Z"
-    last_updated_by: "phase-architect"
-    recent_action: "Authored files cover-wiring child from synthesis ranks 5,8 and final-plan step 5"
-    next_safe_action: "Add renderCover external skip, onerror, and auto-prefer files"
+    last_updated_at: "2026-08-27T00:00:00Z"
+    last_updated_by: "docs-reconciliation"
+    recent_action: "Reconciled docs to shipped state: cover wiring landed in d2fbc5b, dead-helper defect fixed in f84a193"
+    next_safe_action: "None — sub-phase complete"
     blockers: []
     key_files:
       - "spec.md"
@@ -23,7 +23,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "decompose-004-files-cover-wiring"
       parent_session_id: null
-    completion_pct: 0
+    completion_pct: 100
     open_questions: []
     answered_questions: []
 ---
@@ -39,9 +39,9 @@ _memory:
 | Field | Value |
 |-------|-------|
 | **Spec Folder** | 004-files-cover-wiring |
-| **Completed** | Not yet (Planned) |
+| **Completed** | 2026-08-26 (branch `impl`, commit `d2fbc5b`; fix `f84a193`) |
 | **Level** | 1 |
-| **Actual Effort** | Not started |
+| **Actual Effort** | Matches plan (plus one same-day fix pass) |
 <!-- /ANCHOR:metadata -->
 
 ---
@@ -49,16 +49,20 @@ _memory:
 <!-- ANCHOR:what-built -->
 ## What Was Built
 
-Nothing in the fork yet. This child is Planned: cover wiring is specified so a FilesColumn helper cannot sit unused while `renderCover` still feeds `image.external` to a network `<img>`.
+Shipped in commit `d2fbc5b`, fixed in `f84a193`: `GalleryRenderer.ts:445-446` and `BoardRenderer.ts:664-665` both block `coverColumn?.type==="files" && image.external`, so a hand-edited raw-frontmatter `https://` URL cannot become a network `<img>`; `onerror` placeholders added on both cover `<img>` elements; `DatabaseView.ts` auto-prefers `col.type === "files"` for the default gallery image field. `CoverImage.ts` stayed untouched, as locked.
+
+**Honest note on the build:** the first commit (`d2fbc5b`) shipped a dead, unwired cover-guard helper — the safety-critical conditional existed but wasn't actually called at either `renderCover` site. This was caught by the in-loop DeepSeek review during the build (not left to the later Sonnet review), and the real guard was wired in the same-phase fix commit `f84a193` before the phase was marked done.
+
+Gate: `tsc --noEmit` exit 0; `vitest` 19 files / 194 tests pass (re-run at Sonnet 5 review time). Sonnet 5 review independently re-traced the fixed guard at `f84a193` HEAD and confirmed it wired at both call sites — "no unguarded path."
 
 ### Files Changed
 
 | File | Action | Purpose |
 |------|--------|---------|
-| `spec.md` | Authored | Cover-guard scope |
-| `plan.md` | Authored | Two call-site one-liners |
-| `tasks.md` | Authored | T002–T004 |
-| `implementation-summary.md` | Authored | Honest pre-build record |
+| `src/data/CoverWiring.ts` | Added | Cover-guard predicate |
+| `src/views/GalleryRenderer.ts`, `src/views/BoardRenderer.ts` | Modified | External-image guard wired at both cover call sites; `onerror` placeholder |
+| `src/views/DatabaseView.ts` | Modified | Auto-prefer `col.type === "files"` |
+| `spec.md` / `implementation-summary.md` | Reconciled | Docs updated to reflect shipped state (this pass) |
 <!-- /ANCHOR:what-built -->
 
 ---
@@ -66,7 +70,7 @@ Nothing in the fork yet. This child is Planned: cover wiring is specified so a F
 <!-- ANCHOR:how-delivered -->
 ## How It Was Delivered
 
-Not delivered. Implementation follows `tasks.md` against the live fork at `Obsidian Plugin/src`.
+Delivered against the live fork at `Obsidian Plugin/src` after children 001-003 shipped, gated on `tsc --noEmit` + `npm run build` + `vitest` before commit. The in-loop DeepSeek review caught the dead-helper defect in the first commit; the fix landed same-phase (`f84a193`) before the phase was marked done. Independently re-verified read-only by Claude Sonnet 5 as part of the phase 012 review (PASS).
 <!-- /ANCHOR:how-delivered -->
 
 ---
@@ -88,9 +92,9 @@ Not delivered. Implementation follows `tasks.md` against the live fork at `Obsid
 
 | Check | Result |
 |-------|--------|
-| Offline gallery cover | Not run (Planned) |
-| Stale URL not a network `<img>` | Not run (Planned) |
-| `CoverImage.ts` clean | Not run (Planned) |
+| Offline gallery cover | Verified by code trace — Sonnet 5 review, `f84a193` HEAD |
+| Stale URL not a network `<img>` | Pass — guard wired at both call sites after the `f84a193` fix; no dedicated regression test at phase completion (closed post-phase by `bd8e467`, see parent implementation-summary.md) |
+| `CoverImage.ts` clean | Pass — no diff in either commit |
 <!-- /ANCHOR:verification -->
 
 ---
@@ -98,7 +102,8 @@ Not delivered. Implementation follows `tasks.md` against the live fork at `Obsid
 <!-- ANCHOR:limitations -->
 ## Known Limitations
 
-1. **Count badge is not this child.** Gallery “N attachments” stays deferred.
+1. **Count badge is not this child.** Gallery "N attachments" stays deferred.
 2. **Card-body stringify remains.** Do not pre-open `GalleryRenderer.renderValue` / `ListRenderer.renderValue`.
 3. **WebKit mobile may still paint HEIC.** Chromium desktop must not hang; `onerror` covers that.
+4. **First commit shipped a dead, unwired guard helper**, fixed same-phase in `f84a193` — see What Was Built. The guard had no dedicated automated test until the post-phase follow-up `bd8e467`.
 <!-- /ANCHOR:limitations -->

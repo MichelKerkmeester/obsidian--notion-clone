@@ -1,6 +1,6 @@
 ---
 title: "Implementation Summary: Grouped Table Flatten"
-description: "Planned table dispatch and depth-aware loop child. Not yet implemented in the fork."
+description: "Shipped table dispatch and depth-aware loop child, on branch impl, Sonnet-verified with a same-day CSS fix."
 trigger_phrases:
   - "grouped table flatten summary"
   - "depth-aware table loop"
@@ -9,10 +9,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "public/001-note-db-notion-parity-build/011-table-multi-group/002-grouped-table-flatten"
-    last_updated_at: "2026-08-25T20:50:00Z"
-    last_updated_by: "phase-architect"
-    recent_action: "Authored flatten-loop child from synthesis and final-plan"
-    next_safe_action: "Implement table dispatch, TableRenderer loop, and indent CSS"
+    last_updated_at: "2026-08-27T00:00:00Z"
+    last_updated_by: "docs-reconciliation"
+    recent_action: "Reconciled docs to shipped state: dispatch + depth-aware loop landed in commit c70d665; CSS follow-up in 929769d"
+    next_safe_action: "None — sub-phase complete"
     blockers: []
     key_files:
       - "spec.md"
@@ -23,7 +23,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "decompose-002-grouped-table-flatten"
       parent_session_id: null
-    completion_pct: 0
+    completion_pct: 100
     open_questions: []
     answered_questions: []
 ---
@@ -39,9 +39,9 @@ _memory:
 | Field | Value |
 |-------|-------|
 | **Spec Folder** | 002-grouped-table-flatten |
-| **Completed** | Not yet (Planned) |
+| **Completed** | 2026-08-26 (branch `impl`, commit `c70d665`; CSS follow-up `929769d`) |
 | **Level** | 1 |
-| **Actual Effort** | Not started |
+| **Actual Effort** | Matches plan |
 <!-- /ANCHOR:metadata -->
 
 ---
@@ -49,16 +49,20 @@ _memory:
 <!-- ANCHOR:what-built -->
 ## What Was Built
 
-Nothing in the fork yet. This child is Planned: table dispatch plus the depth-aware loop are specified so a 2-field config can nest without a DOM rewrite and without a nested drop target that would write two frontmatter fields.
+Shipped in commit `c70d665`: table dispatch on `effectiveGroupFields` (`DatabaseView.ts:6332-6333`), the depth-aware `TableRenderer.ts` loop (`:82-155`), path-qualified collapse keys, depth-0-only drop targets, and full-path create defaults.
+
+The `db-group-header--depth-N` indent + sticky-override CSS this loop references was **not** committed in this commit or the 4 that followed — a Sonnet 5 read-only review (2026-08-26) found REQ-003 (indented, non-overlapping nested headers) unshipped: the code correctly applied the depth classes, but no CSS rule gave them any visual effect, so nested headers rendered flush and shared one sticky slot with their parent (a P0 finding, since the risk was explicitly named in this spec's §6). Root cause: the build driver's stage-4 script staged only `src/` and `main.js`, never `styles.css`. Fixed same-day in the packet-wide catch-up commit `929769d`.
+
+Gate: `tsc --noEmit` exit 0; `vitest` 17 files / 181 tests pass (re-run at Sonnet review time, isolated worktree @ `d9e038c`).
 
 ### Files Changed
 
 | File | Action | Purpose |
 |------|--------|---------|
-| `spec.md` | Authored | Dispatch + loop + CSS scope |
-| `plan.md` | Authored | Flatten-with-depth approach |
-| `tasks.md` | Authored | T003 dispatch + T004 one loop edit |
-| `implementation-summary.md` | Authored | Honest pre-build record |
+| `src/views/DatabaseView.ts` | Modified | Dispatch on `effectiveGroupFields`; `renderGroupedTable` builds tree then flattens |
+| `src/views/TableRenderer.ts` | Modified | Additive `TableGroup` fields; depth-aware loop; create-path per-level defaults |
+| `styles.css` | Modified (via `929769d`) | `db-group-header--depth-N` indent, sticky-at-depth-0-only, consecutive-header margin |
+| `spec.md` / `implementation-summary.md` | Reconciled | Docs updated to reflect shipped state (this pass) |
 <!-- /ANCHOR:what-built -->
 
 ---
@@ -66,7 +70,7 @@ Nothing in the fork yet. This child is Planned: table dispatch plus the depth-aw
 <!-- ANCHOR:how-delivered -->
 ## How It Was Delivered
 
-Not delivered. Implementation follows `tasks.md` against the live fork at `Obsidian Plugin/src` after child 001 ships the module.
+Delivered against the live fork at `Obsidian Plugin/src` after child 001 shipped the module, gated on `tsc --noEmit` + `npm run build` + `vitest` before commit. The CSS half of this child's scope landed one commit later than intended due to the build driver's staging gap; the Sonnet 5 review caught the gap and the fix landed same-day.
 <!-- /ANCHOR:how-delivered -->
 
 ---
@@ -90,10 +94,10 @@ Not delivered. Implementation follows `tasks.md` against the live fork at `Obsid
 
 | Check | Result |
 |-------|--------|
-| 2-field nested headers | Not run (Planned) |
-| 1-field patch | Not run (Planned) |
-| Create both path fields | Not run (Planned) |
-| `bash .opencode/skills/system-spec-kit/scripts/spec/validate.sh` on this folder `--strict` | Pending after authoring |
+| 2-field nested headers | Fixed via CSS catch-up `929769d`; logic verified by Sonnet 5 code trace (`getGroupHeaderClassName`/`getGroupPath`) |
+| 1-field patch | Pass — collapsed-subtree skip traced across collapse-at-0/1/sibling scenarios (Sonnet 5 review) |
+| Create both path fields | Pass — `getGroupPath`/`getGroupDefaults` (`TableRenderer.ts:225-246`) confirmed no `Cat::Type` conflation |
+| `tsc0/build0/vitest 181/17 green` | Pass — commit `c70d665`, re-confirmed at Sonnet review `d9e038c` |
 <!-- /ANCHOR:verification -->
 
 ---
@@ -101,7 +105,8 @@ Not delivered. Implementation follows `tasks.md` against the live fork at `Obsid
 <!-- ANCHOR:limitations -->
 ## Known Limitations
 
-1. **Embedded tables are not this child.** Copy-back and embed dispatch land in child 003.
-2. **No Sub-group picker yet.** Power users set `groupByFields` in YAML until child 004.
+1. **Embedded tables are not this child.** Copy-back and embed dispatch land in child 003 (commit `0729c0c`).
+2. **No Sub-group picker yet.** Power users set `groupByFields` in YAML until child 004 (commit `d26f517`).
 3. **2-field cell edits full-rerender.** That is the documented safety valve, not a patch rewrite.
+4. **REQ-003 CSS shipped one commit late.** The depth-indent/sticky CSS this child specifies landed in `929769d`, not in `c70d665` itself — see What Was Built.
 <!-- /ANCHOR:limitations -->

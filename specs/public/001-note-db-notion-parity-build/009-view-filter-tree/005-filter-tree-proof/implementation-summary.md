@@ -11,8 +11,8 @@ _memory:
     packet_pointer: "public/001-note-db-notion-parity-build/009-view-filter-tree/005-filter-tree-proof"
     last_updated_at: "2026-08-25T21:00:00Z"
     last_updated_by: "phase-architect"
-    recent_action: "Authored filter-tree-proof child from synthesis rank 9 and final-plan steps 10-12"
-    next_safe_action: "Run Vitest, vault, grep, and 010 freeze after 001-004"
+    recent_action: "Predecessors 001-004 shipped (commits 3a070e9/312108e/2471e01/64163dc + fix e854681) and were independently Sonnet-verified, but this child's own manual/grep run was never dispatched by the build driver — no implementation commit exists for 005"
+    next_safe_action: "If literal manual vault/grep proof is still wanted, run tasks.md T001-T006 against the now-shipped 001-004; otherwise this sub-phase stays Deferred"
     blockers: []
     key_files:
       - "spec.md"
@@ -40,7 +40,7 @@ _memory:
 | Field | Value |
 |-------|-------|
 | **Spec Folder** | 005-filter-tree-proof |
-| **Completed** | Not yet (Planned) |
+| **Completed** | Deferred — never executed (predecessors 001-004 shipped and gated separately; the build driver moved on to phase 010 without dispatching this proof child) |
 | **Level** | 2 |
 | **Actual Effort** | Not started |
 <!-- /ANCHOR:metadata -->
@@ -50,7 +50,15 @@ _memory:
 <!-- ANCHOR:what-built -->
 ## What Was Built
 
-Nothing proven yet. This child is Planned: run the harness and record vault/grep/010-freeze evidence after children 001–004 ship.
+Nothing was built by this specific sub-phase — it was scoped as verification-only from the start (no `src/` changes; see plan.md). It remains genuinely un-run: no commit exists for `005-filter-tree-proof` between predecessor `64163dc` and the first 010 commit `b5cec25`.
+
+**However**, most of what this child would have proven is independently confirmed true by other evidence gathered after 001–004 shipped:
+- REQ-001 (Vitest suite green) — confirmed: `research/sonnet-verification.md` (2026-08-26) re-ran the gate at `tsc --noEmit` exit 0, `vitest` 13 files / 160 tests pass, including `ViewFilterTree.test.ts`.
+- REQ-002 (010 contract freeze) — confirmed: 010's own `research/sonnet-verification.md` states "009 export-freeze honored: all 4 CF modules import only `normalizeViewFilterTree`... no `matchesFilter`/`evaluateViewFilterTree` imported."
+- REQ-004 (grep guards) — confirmed: 009's sonnet-verification hand-traced no source-operator leak (`inFolder|hasProperty|strictEq|renderSourceRuleLeaf` grep empty).
+- REQ-006 (fork lint/build) — confirmed: tsc/build both exit 0 at synthesis time.
+
+**Not confirmed — genuinely never run:** REQ-003 / T004's literal manual vault check (nested filter at phone width, wrap/collapse/depth-3, live persistence, chip+column-delete+drilldown click-through in a real vault). No artifact records this having happened.
 
 ### Files Changed
 
@@ -101,6 +109,6 @@ Not delivered. Proofs follow `tasks.md` against the live fork and vault. This ch
 <!-- ANCHOR:limitations -->
 ## Known Limitations
 
-1. **Cannot run until 001–004 exist in the fork.** Spec authoring is not a substitute for `npx vitest run`.
-2. **Mobile popover width is measured, not redesigned.** Child 003 already locked row-list + flex-shrink.
+1. **001–004 now exist and are gate-green + Sonnet-verified, but this child was never dispatched to run its own tasks.md against them.** Spec authoring is not a substitute for the literal manual vault/grep run this child was scoped to perform.
+2. **Mobile popover width was never measured.** Child 003 locked row-list + flex-shrink at the code level (Sonnet-reviewed), but the literal phone-width measurement this child owned was not executed.
 <!-- /ANCHOR:limitations -->

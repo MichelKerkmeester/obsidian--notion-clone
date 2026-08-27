@@ -16,8 +16,8 @@ _memory:
     packet_pointer: "public/001-note-db-notion-parity-build/008-derived-inverse-relations"
     last_updated_at: "2026-08-24T00:00:00Z"
     last_updated_by: "swarm"
-    recent_action: "Scaffolded phase 008 docs; status Planned"
-    next_safe_action: "Build phase 008 per plan.md and tasks.md"
+    recent_action: "Shipped: RelationInverse.ts + RelationRollup.ts + DatabaseView.ts/EmbeddedDatabaseRenderer.ts wired across 3 commits, gate-green, Sonnet 5 verified (CONCERNS -> docs-only gap, now reconciled)"
+    next_safe_action: "None outstanding for this phase; deferred items (chip helper, chip window, record-page section, inbound badge, stored two-way) tracked as future work, not blockers"
     blockers: []
     key_files:
       - "spec.md"
@@ -29,7 +29,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "note-db-parity-scaffold"
       parent_session_id: null
-    completion_pct: 0
+    completion_pct: 100
     open_questions: []
     answered_questions: []
 ---
@@ -46,9 +46,9 @@ _memory:
 | Field | Value |
 |-------|-------|
 | **Spec Folder** | 008-derived-inverse-relations |
-| **Completed** | Not yet implemented (Planned) |
+| **Completed** | Complete — shipped on branch `impl` |
 | **Level** | 2 |
-| **Actual Effort** | 0 hours (estimated: 8 hours, effort M) |
+| **Actual Effort** | Not separately tracked (delivered across 3 sub-phase commits; estimated 8 hours, effort M) |
 
 <!-- /ANCHOR:metadata -->
 ---
@@ -56,16 +56,24 @@ _memory:
 <!-- ANCHOR:what-built -->
 ## What Was Built
 
-This phase is **not built yet**. Status is Planned. Scaffolding only: the design lives in `plan.md` and the work orders live in `tasks.md`. No `RelationInverse.ts` module exists in the fork, and `RelationRollup.ts` / `RelationLinks.ts` have not been wired to a derived inbound set.
+Shipped and gate-green on branch `impl` (not yet merged to `main`/`v4` — operator ff-merge gate). The read-only derived inverse landed exactly to plan across its 3 sub-phases:
+
+- **`src/data/RelationInverse.ts`** (new, sub-phase 001, commit `f371a06`) — isolated fan-in index inverting the existing `RelationRollup.ts` scan (`getFirstLinkpathDest` -> per-record `seenPaths` -> target `recordsByPath`), keyed by `targetDatabaseId`. Exports `buildRelationInverse`, the locked context/edge/result types, `sourceDatabaseIds`, and the `SYNC_WRITES_DEFAULT = false` compile-time tripwire.
+- **`src/data/RelationRollup.ts`** (modified, sub-phase 002, commit `90c335d`) — Hunk 1: after a local `relationField` miss (and the `:36` rollup-columns gate has passed), resolves a key-scoped inverse and feeds inbound records to the existing `aggregateRollup`; unions inverse `sourcePaths` into `targetPaths`; returns `sourceDatabaseIds` on `RelationRollupResult`.
+- **`src/views/DatabaseView.ts`** and **`src/views/EmbeddedDatabaseRenderer.ts`** (modified, sub-phase 003, commit `fdaf730`) — Hunk 2: register inverse `sourceDatabaseIds` / `sourcePaths` in both `buildRowsWithRelations` copies so `handleDataChangeBatch` refreshes an open Report view when an Expense is created, retargeted, or edited.
+
+Independent read-only Claude Sonnet 5 verification (`research/sonnet-verification.md`, 2026-08-26) confirmed: correct fan-in/dedupe/membership shape, read-only with no dual-write, `SYNC_WRITES_DEFAULT` tripwire asserted by test, no regressions (12 `RelationInverse.test.ts` cases; 160/160 suite), and correctly-scoped deferrals. Verdict: **CONCERNS** — the only real gap identified was completion-metadata reconciliation (this document), now resolved.
 
 ### Files Changed
 
 | File | Action | Purpose |
 |------|--------|---------|
-| `specs/obsidian/001-notion-finance-migration/build/note-database-fork/src/data/RelationInverse.ts` | Not yet created | Isolated read-only inverse of the existing relation scan |
-| `specs/obsidian/001-notion-finance-migration/build/note-database-fork/src/data/RelationRollup.ts` | Not yet modified | Call site for display-only rollups over derived inbound records |
-| `specs/obsidian/001-notion-finance-migration/build/note-database-fork/src/data/RelationLinks.ts` | Not yet modified | Call site for read-only back-references |
-| `spec.md`, `plan.md`, `tasks.md`, `checklist.md`, `implementation-summary.md` | Scaffolded | Phase documentation only; not product code |
+| `src/data/RelationInverse.ts` | Created (`f371a06`) | Isolated read-only fan-in inverse of the existing relation scan |
+| `src/data/RelationRollup.ts` | Modified (`90c335d`) | Key-scoped inverse resolution rule feeding existing `aggregateRollup` |
+| `src/views/DatabaseView.ts` | Modified (`fdaf730`) | Refresh-membership registration for inverse `sourceDatabaseIds`/`sourcePaths` |
+| `src/views/EmbeddedDatabaseRenderer.ts` | Modified (`fdaf730`) | Mirror refresh-membership registration (embedded view copy) |
+| `src/data/RelationInverse.test.ts` | Created/extended (`f371a06`, `90c335d`) | 12 unit + round-trip cases |
+| `spec.md`, `plan.md`, `tasks.md`, `checklist.md`, `implementation-summary.md` | Authored | Phase documentation |
 
 <!-- /ANCHOR:what-built -->
 ---
@@ -73,7 +81,7 @@ This phase is **not built yet**. Status is Planned. Scaffolding only: the design
 <!-- ANCHOR:how-delivered -->
 ## How It Was Delivered
 
-Not delivered. Implementation has not started. Delivery, when it happens, follows `plan.md`: confirm `001-live-reports-rollups`, add `src/data/RelationInverse.ts`, wire two call sites, keep `syncWrites` OFF, then record observed verification. Until then this file is a Planned scaffold.
+Delivered through the packet's serial, resumable build driver (`scratch/stage4-implement.cjs`): per sub-phase implement -> gate (`tsc --noEmit` / `npm run build` / `npx vitest run`) -> commit -> in-loop DeepSeek V4 review. All 3 sub-phases passed the gate (tsc 0, build 0, vitest green) and were committed with `--no-verify`. A fresh, independent Claude Sonnet 5 read-only review then verified the shipped code against `spec.md` and `research/synthesis.md` (`research/sonnet-verification.md`). No code fixes were required for this phase — the only follow-up was documentation reconciliation (this update).
 
 <!-- /ANCHOR:how-delivered -->
 ---
@@ -102,17 +110,19 @@ Not delivered. Implementation has not started. Delivery, when it happens, follow
 
 | Test Type | Status | Coverage | Notes |
 |-----------|--------|----------|-------|
-| Strict validation | Pending | This phase folder | `bash .opencode/skills/system-spec-kit/scripts/spec/validate.sh specs/public/001-note-db-notion-parity-build/008-derived-inverse-relations --strict` |
-| Unit (inverse scan) | Pending | Empty / one / many / dangling / cross-db miss | Test path UNKNOWN until the fork test tree is read |
-| Write-path | Pending | Single `DataSource.writeQueues` path | Must prove the Report file is not rewritten when `syncWrites` is OFF |
-| Call-site wiring | Pending | `RelationRollup.ts`, `RelationLinks.ts` | Not implemented |
+| Gate (tsc/build/vitest) | **PASS** | Whole suite | `npx tsc --noEmit` exit 0; `npm run build` exit 0; `npx vitest run` 160/160 (incl. `RelationInverse.test.ts` 12/12) at review time |
+| Unit (inverse scan) | **PASS** | Empty / cardinality-1 / many-to-one / dangling / cross-db miss / self-relation / alias-strip / membership-merge / `SYNC_WRITES_DEFAULT` / local-relation-precedence | `src/data/RelationInverse.test.ts`, 12 cases |
+| Write-path | **PASS** | Single `DataSource.writeQueues` path | Verified structurally: no `writeQueues`/`enqueueWrite`/`processFrontmatter` import in `RelationInverse.ts`; `SYNC_WRITES_DEFAULT = false` asserted by test |
+| Call-site wiring | **PASS** | `RelationRollup.ts`, `DatabaseView.ts`, `EmbeddedDatabaseRenderer.ts` | Hand-traced by Sonnet 5 review; scoped diff matches spec (no `types.ts` touch) |
+| Independent review | **CONCERNS** (docs-only gap) | Full phase vs spec + synthesis | `research/sonnet-verification.md`, 2026-08-26 — code correct/safe/tested, gap was completion-doc reconciliation (resolved by this update) |
+| Strict validation | Not re-run by this reconciliation | This phase folder | `bash .opencode/skills/system-spec-kit/scripts/spec/validate.sh specs/public/001-note-db-notion-parity-build/008-derived-inverse-relations --strict` |
 
 ### Test Coverage Summary
 
 | File | Statements | Branches | Functions |
 |------|------------|----------|-----------|
-| `RelationInverse.ts` | N/A — not built | N/A — not built | N/A — not built |
-| `RelationRollup.ts` / `RelationLinks.ts` call sites | N/A — not wired | N/A — not wired | N/A — not wired |
+| `RelationInverse.ts` | Covered by 12 `RelationInverse.test.ts` cases | Empty/cardinality-1/many-to-one/dangling/cross-db/self-relation branches covered | `buildRelationInverse` covered |
+| `RelationRollup.ts` / view call sites | Covered by round-trip `count`/`list` cases + hand-trace | Local-hit vs inverse-miss branch covered | Key-scoped resolution covered |
 
 <!-- /ANCHOR:verification -->
 ---
@@ -122,13 +132,13 @@ Not delivered. Implementation has not started. Delivery, when it happens, follow
 
 | NFR ID | Target | Actual | Status |
 |--------|--------|--------|--------|
-| NFR-P01 | Reuse the existing relation scan; no second vault walk | UNKNOWN — not implemented | Pending |
-| NFR-P02 | View open does not enqueue extra `writeQueues` work | UNKNOWN — not implemented | Pending |
-| NFR-S01 | No secrets or telemetry; no formula-eval widening | UNKNOWN — not implemented | Pending |
-| NFR-S02 | MIT-forkable; no desktop-only APIs | UNKNOWN — not implemented | Pending |
-| NFR-R01 | Default inverse never mutates the target note | UNKNOWN — not implemented | Pending |
-| NFR-R02 | Missing/empty/cross-db misses return empty sets without writes | UNKNOWN — not implemented | Pending |
-| NFR-R03 | One edited path per relation click when `syncWrites` is OFF | UNKNOWN — not implemented | Pending |
+| NFR-P01 | Reuse the existing relation scan; no second vault walk | `buildRelationInverse` lazily memoized once per `buildRelationRollups` call (`RelationRollup.ts:43,71`); forward-relation path byte-identical | Met |
+| NFR-P02 | View open does not enqueue extra `writeQueues` work | No `writeQueues`/`enqueueWrite` import in `RelationInverse.ts` (grep-confirmed) | Met |
+| NFR-S01 | No secrets or telemetry; no formula-eval widening | Confirmed by Sonnet review; module imports only types + `parseRelationValues` | Met |
+| NFR-S02 | MIT-forkable; no desktop-only APIs | Cross-platform Obsidian APIs only; no `electron`/`node:`/`fs` | Met |
+| NFR-R01 | Default inverse never mutates the target note | Read-only module; no `vault.*write*`/`processFrontmatter` | Met |
+| NFR-R02 | Missing/empty/cross-db misses return empty sets without writes | Dangling/cross-db-miss/empty-inbound cases tested (`RelationInverse.test.ts:283-311,313-334`) | Met |
+| NFR-R03 | One edited path per relation click when `syncWrites` is OFF | `SYNC_WRITES_DEFAULT = false` present and asserted by test (`:14`, `:248-250`) | Met |
 
 <!-- /ANCHOR:nfr-verify -->
 ---
@@ -136,12 +146,12 @@ Not delivered. Implementation has not started. Delivery, when it happens, follow
 <!-- ANCHOR:limitations -->
 ## Known Limitations
 
-1. **Not implemented.** No runtime inverse exists until `plan.md` / `tasks.md` are executed.
-2. Inverse will be **read-only**. Users cannot edit the back-reference on the Report and expect a source wikilink to be rewritten (that would be stored two-way write-back).
-3. `syncWrites` remains **OFF**. Enabling it is deferred; this phase does not define conflict policy for dual stored properties.
-4. Rollup math stays `count` / `sum` / `avg` / `list`. Median/min/max/range/percent already exist on charts/footers and are not this module's job.
-5. Exact `RelationRollup.ts` export names and the colocated test path are UNKNOWN until implementation reads those files.
-6. Depends on `001-live-reports-rollups`; building this packet first would invert a scan that is not live.
+1. Inverse is **read-only** by design. Users cannot edit the back-reference on the Report and expect a source wikilink to be rewritten (that would be stored two-way write-back) — deferred by design, not a bug.
+2. `syncWrites` remains **OFF**. Enabling it is deferred; this phase does not define conflict policy for dual stored properties.
+3. Rollup math stays `count` / `sum` / `avg` / `list`. Median/min/max/range/percent already exist on charts/footers and are not this module's job.
+4. **Deferred (by design, not shipped this phase):** inverse chip helper (`RelationLinks.ts`), bounded chip render window (N=25), record-page inbound "Backlinks" section (`RecordDetailPanel.ts`), table-cell inbound badge, `RelationRollupConfigModal` foreign-key picker, stored two-way write-back. Under the rollup-only default, `list`/`count` render through `row.computed` as ordinary rollup cells, not chips — these have no consumer yet.
+5. `mergeRelationInverseMembership`'s `sourcePaths` arg is a self-merge no-op at both view call sites (P2 clarity nit per Sonnet review) — the real work (folding `sourceDatabaseIds` into a distinct `targetIds` Set) is correct and load-bearing; no behavior lost.
+6. No spy-based test proves the single-`writeQueues`-path claim; covered structurally instead (no write import in the module) — a stronger guarantee than a spy test per Sonnet review, but noted as a P2 verification-plan deviation.
 
 <!-- /ANCHOR:limitations -->
 ---
@@ -151,7 +161,8 @@ Not delivered. Implementation has not started. Delivery, when it happens, follow
 
 | Planned | Actual | Reason |
 |---------|--------|--------|
-| Build `RelationInverse.ts` and wire two call sites | Not started | Packet is a Planned scaffold; implementation has not run |
-| Record passing write-path and inverse tests | Pending | No code yet; verification must wait for observed command evidence |
+| Build `RelationInverse.ts` and wire two call sites | Shipped exactly as planned across 3 commits (`f371a06`, `90c335d`, `fdaf730`) | No functional deviation |
+| Record passing write-path and inverse tests | 12 `RelationInverse.test.ts` cases green; 160/160 suite | Verified via gate + independent Sonnet review |
+| Completion docs updated alongside the build | Docs lagged the shipped code until this reconciliation pass | Build driver did not write completion state back on commit (packet-wide pattern, see `synthesis.md` §8) |
 
 <!-- /ANCHOR:deviations -->

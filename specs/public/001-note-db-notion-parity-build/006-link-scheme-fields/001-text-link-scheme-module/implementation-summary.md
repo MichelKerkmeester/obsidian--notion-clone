@@ -1,6 +1,6 @@
 ---
 title: "Implementation Summary: Text Link Scheme Module"
-description: "Planned same-diff table slice for textLinkScheme.ts. Not yet implemented in the fork."
+description: "Shipped same-diff table slice for textLinkScheme.ts, commit 74b836a on branch impl, Sonnet-verified sound (packet-wide i18n fix landed separately)."
 trigger_phrases:
   - "text link scheme summary"
   - "assembleSchemeLinkTarget"
@@ -9,10 +9,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "public/001-note-db-notion-parity-build/006-link-scheme-fields/001-text-link-scheme-module"
-    last_updated_at: "2026-08-25T19:40:00Z"
-    last_updated_by: "phase-architect"
-    recent_action: "Authored table same-diff child from synthesis ranks 1, 2, 6 and final-plan steps 1–9"
-    next_safe_action: "Implement textLinkScheme.ts plus the same-diff types.ts and CellRenderer call sites"
+    last_updated_at: "2026-08-27T00:00:00Z"
+    last_updated_by: "docs-reconciliation"
+    recent_action: "Reconciled to shipped state: commit 74b836a on branch impl, tsc0/build0/vitest green, Sonnet 5 review sound"
+    next_safe_action: "None — sub-phase complete"
     blockers: []
     key_files:
       - "spec.md"
@@ -23,7 +23,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "decompose-001-text-link-scheme-module"
       parent_session_id: null
-    completion_pct: 0
+    completion_pct: 100
     open_questions: []
     answered_questions: []
 ---
@@ -39,9 +39,9 @@ _memory:
 | Field | Value |
 |-------|-------|
 | **Spec Folder** | 001-text-link-scheme-module |
-| **Completed** | Not yet (Planned) |
+| **Completed** | 2026-08-25 (commit `74b836a` on branch `impl`) |
 | **Level** | 1 |
-| **Actual Effort** | Not started |
+| **Actual Effort** | Shipped and Sonnet-verified sound |
 <!-- /ANCHOR:metadata -->
 
 ---
@@ -49,18 +49,21 @@ _memory:
 <!-- ANCHOR:what-built -->
 ## What Was Built
 
-Nothing in the fork yet. This child is Planned: the table same-diff slice is specified so URL / email / phone clicks can ship without a 13th column type and without splitting tel-strip or the family gate into a later pass.
+Shipped on branch `impl` (commit `74b836a`): the table same-diff slice, exactly as specified — URL / email / phone clicks ship without a 13th column type and without splitting tel-strip or the family gate into a later pass.
 
-Planned first artifact is `src/data/textLinkScheme.ts` with `assembleSchemeLinkTarget`, plus `types.ts:62` `textLinkScheme?`, the CellRenderer default-branch case, and `src/data/__tests__/textLinkScheme.test.ts`.
+`src/data/textLinkScheme.ts` exports `assembleSchemeLinkTarget` (closed allowlist + family gate + tel-strip), `types.ts:62` carries `textLinkScheme?`, `CellRenderer.ts` renders the default-branch delayed-open case, and `src/data/__tests__/textLinkScheme.test.ts` covers T1–T11 plus guards and JSON round-trip. Sonnet review confirmed all correctness claims sound (`../research/sonnet-verification.md`); the one P1 finding (hardcoded picker labels) lives in child 003's `ColumnMenu.ts`, not this module, and was fixed packet-wide in commit `29d7b14`.
 
 ### Files Changed
 
 | File | Action | Purpose |
 |------|--------|---------|
-| `spec.md` | Authored | Table same-diff scope and requirements |
-| `plan.md` | Authored | EuroFormat module + two call sites + shared opener |
-| `tasks.md` | Authored | T003–T007 atomic unit |
-| `implementation-summary.md` | Authored | Honest pre-build record |
+| `src/data/textLinkScheme.ts` | Created | Allowlist + `assembleSchemeLinkTarget`; tel-strip on every `tel:` target; zero imports |
+| `src/data/__tests__/textLinkScheme.test.ts` | Created | T1–T11, unknown-hint guard, JSON round-trip (15 tests) |
+| `src/__tests__/setup.ts` | Reused | Vitest stub already landed in phase 005 |
+| `src/data/types.ts` | Modified | Optional `textLinkScheme` after `textRenderMode` (`:62`); `:50` union untouched |
+| `src/views/CellRenderer.ts` | Modified | Default-branch scheme case + extracted/exported `renderDelayedExternalLink` |
+| `spec.md` | Reconciled | Status Planned → Complete |
+| `implementation-summary.md` | Reconciled | This record — shipped-state evidence |
 <!-- /ANCHOR:what-built -->
 
 ---
@@ -68,7 +71,7 @@ Planned first artifact is `src/data/textLinkScheme.ts` with `assembleSchemeLinkT
 <!-- ANCHOR:how-delivered -->
 ## How It Was Delivered
 
-Not delivered. Implementation follows `tasks.md` as one diff against the live fork at `Obsidian Plugin/src`.
+Delivered as one diff against the live fork at `Obsidian Plugin/src`, gated `tsc --noEmit` 0 / `npm run build` 0 / `npx vitest run` green, committed `74b836a`, then independently Sonnet-verified as part of the parent phase review.
 <!-- /ANCHOR:how-delivered -->
 
 ---
@@ -93,10 +96,10 @@ Not delivered. Implementation follows `tasks.md` as one diff against the live fo
 
 | Check | Result |
 |-------|--------|
-| `npx vitest run` on `src/data/__tests__/textLinkScheme.test.ts` | Not run (Planned) |
-| `npm run build` / `npm run lint` | Not run (Planned) |
-| `bash .opencode/skills/system-spec-kit/scripts/spec/validate.sh` on this folder `--strict` | Pending after authoring |
-| Desktop click / dblclick | Not run (Planned) |
+| `npx vitest run` on `src/data/__tests__/textLinkScheme.test.ts` | **Green — 15/15** |
+| `npm run build` / `npm run lint` | **0 / 0** at commit gate |
+| `bash .opencode/skills/system-spec-kit/scripts/spec/validate.sh` on this folder `--strict` | Not run by this reconciliation pass (docs-only; see task scope) |
+| Desktop click / dblclick | Confirmed via anchor-construction + guard-placement code trace (Sonnet review); on-device tap test not separately performed |
 <!-- /ANCHOR:verification -->
 
 ---

@@ -1,6 +1,6 @@
 ---
 title: "Implementation Summary: Files Column Module"
-description: "Planned isolated FilesColumn.ts module. Not yet implemented in the fork."
+description: "Shipped isolated FilesColumn.ts module, on branch impl, Sonnet-verified PASS."
 trigger_phrases:
   - "files column module summary"
   - "filescolumn ts"
@@ -9,10 +9,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "public/001-note-db-notion-parity-build/012-files-column/001-files-column-module"
-    last_updated_at: "2026-08-25T21:20:00Z"
-    last_updated_by: "phase-architect"
-    recent_action: "Authored FilesColumn module child from synthesis ranks 1,6,7,11 and final-plan step 2"
-    next_safe_action: "Create src/data/FilesColumn.ts on the EuroFormat isolation rule"
+    last_updated_at: "2026-08-27T00:00:00Z"
+    last_updated_by: "docs-reconciliation"
+    recent_action: "Reconciled docs to shipped state: FilesColumn.ts module landed in commit b97ee1e"
+    next_safe_action: "None — sub-phase complete"
     blockers: []
     key_files:
       - "spec.md"
@@ -23,7 +23,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "decompose-001-files-column-module"
       parent_session_id: null
-    completion_pct: 0
+    completion_pct: 100
     open_questions: []
     answered_questions: []
 ---
@@ -39,9 +39,9 @@ _memory:
 | Field | Value |
 |-------|-------|
 | **Spec Folder** | 001-files-column-module |
-| **Completed** | Not yet (Planned) |
+| **Completed** | 2026-08-26 (branch `impl`, commit `b97ee1e`) |
 | **Level** | 1 |
-| **Actual Effort** | Not started |
+| **Actual Effort** | Matches plan |
 <!-- /ANCHOR:metadata -->
 
 ---
@@ -49,18 +49,16 @@ _memory:
 <!-- ANCHOR:what-built -->
 ## What Was Built
 
-Nothing in the fork yet. This child is Planned: the isolated value module is specified so cap, unresolved chips, classify, and optional thumbnails cannot split into later diffs.
+Shipped in commit `b97ee1e`: `src/data/FilesColumn.ts` with `normalize`, `formatForEdit`/`parseEdit`, `resolveFileTarget`, `classifyFileType`/`isImageTarget`, `FILE_CHIP_CAP = 5`, and `renderChips` — no imports pulling `CellRenderer`, no `fetch`, no `adapter.exists`.
 
-Planned first artifact is `src/data/FilesColumn.ts` with `normalize`, `formatForEdit`/`parseEdit`, `resolveFileTarget`, `classifyFileType`/`isImageTarget`, `FILE_CHIP_CAP`, and `renderChips`.
+Gate: `tsc --noEmit` exit 0; `vitest` 19 files / 194 tests pass (re-run at Sonnet 5 review time). Sonnet 5 review confirmed round-trip correctness (empty `[]`, URL-drop, dedupe-by-target, wikilink/markdown/bare forms, malformed-as-chip) via `FilesColumn.ts:47-86` and its tests `:93-137`.
 
 ### Files Changed
 
 | File | Action | Purpose |
 |------|--------|---------|
-| `spec.md` | Authored | Module scope and requirements |
-| `plan.md` | Authored | EuroFormat isolation plan |
-| `tasks.md` | Authored | T001–T005 |
-| `implementation-summary.md` | Authored | Honest pre-build record |
+| `src/data/FilesColumn.ts` | Added | Isolated module: normalize, `formatForEdit`/`parseEdit`, classify, resolve, `renderChips`, chip cap |
+| `spec.md` / `implementation-summary.md` | Reconciled | Docs updated to reflect shipped state (this pass) |
 <!-- /ANCHOR:what-built -->
 
 ---
@@ -68,7 +66,7 @@ Planned first artifact is `src/data/FilesColumn.ts` with `normalize`, `formatFor
 <!-- ANCHOR:how-delivered -->
 ## How It Was Delivered
 
-Not delivered. Implementation follows `tasks.md` against the live fork at `Obsidian Plugin/src`.
+Delivered as commit `b97ee1e` against the live fork at `Obsidian Plugin/src`, gated on `tsc --noEmit` + `npm run build` + `vitest` before commit, with an in-loop DeepSeek review. Independently verified read-only by Claude Sonnet 5 as part of the phase 012 review (PASS).
 <!-- /ANCHOR:how-delivered -->
 
 ---
@@ -91,9 +89,9 @@ Not delivered. Implementation follows `tasks.md` against the live fork at `Obsid
 
 | Check | Result |
 |-------|--------|
-| Scratch cases (`[]`, URL drop, dangling, 50+) | Not run (Planned) |
-| Grep `fetch`/`cdn`/`adapter.exists` | Not run (Planned) |
-| `FileFieldRenderer.ts` clean | Not run (Planned) |
+| Scratch cases (`[]`, URL drop, dangling, 50+) | Pass — `FilesColumn.test.ts:93-137`, Sonnet 5 review |
+| Grep `fetch`/`cdn`/`adapter.exists` | Pass — zero hits confirmed by Sonnet 5 review |
+| `FileFieldRenderer.ts` clean | Pass — no diff in this commit |
 <!-- /ANCHOR:verification -->
 
 ---
@@ -101,7 +99,7 @@ Not delivered. Implementation follows `tasks.md` against the live fork at `Obsid
 <!-- ANCHOR:limitations -->
 ## Known Limitations
 
-1. **The module does not register `"files"`.** Child 002 owns the union and pickers.
-2. **Chips do not appear in the table until child 003.** `renderChips` is unused until `CellRenderer.ts:185`.
-3. **Thumbnails are optional.** Text chips satisfy parent REQ-005 if `getResourcePath` needs new CSS.
+1. **The module does not register `"files"`.** Child 002 owns the union and pickers (commit `953b15f`).
+2. **Chips do not appear in the table until child 003.** `renderChips` is unused until `CellRenderer.ts:185` (commit `a920f64`).
+3. **Thumbnails are optional.** Text chips satisfy parent REQ-005; no new CSS was needed (Sonnet 5 review: "no CSS added, and none missing for function").
 <!-- /ANCHOR:limitations -->

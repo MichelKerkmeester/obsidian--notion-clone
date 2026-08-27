@@ -42,7 +42,7 @@ _memory:
 |-------|-------|
 | **Level** | 1 |
 | **Priority** | P1 |
-| **Status** | Planned |
+| **Status** | Complete |
 | **Created** | 2026-08-25 |
 | **Branch** | `005-formula-let-variables` |
 | **Parent Spec** | ../spec.md |

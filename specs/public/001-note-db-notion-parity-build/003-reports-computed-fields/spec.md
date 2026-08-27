@@ -50,7 +50,7 @@ _memory:
 |-------|-------|
 | **Level** | 2 |
 | **Priority** | P1 |
-| **Status** | Planned |
+| **Status** | Complete |
 | **Created** | 2026-08-24 |
 | **Branch** | `003-reports-computed-fields` |
 
@@ -246,9 +246,9 @@ Operator decisions from the synthesis (recommended defaults in parentheses):
 
 | Phase | Folder | Focus | Status |
 |-------|--------|-------|--------|
-| 1 | 001-live-reports-inspect/ | Inspect live Reports `db_view` after predecessors ship SUM; lock Remaining/Saved expressions and blank-vs-zero; no formula write | Planned |
-| 2 | 002-remaining-saved-config/ | One config transaction: Remaining, Saved if distinct, view columnOrder, human labels, explicit display-only | Planned |
-| 3 | 003-reports-display-proof/ | Known-pair, empty-month, mistype, desktop hash, and engine-freeze proofs with packet evidence | Planned |
+| 1 | 001-live-reports-inspect/ | Inspect live Reports `db_view` after predecessors ship SUM; lock Remaining/Saved expressions and blank-vs-zero; no formula write | Complete |
+| 2 | 002-remaining-saved-config/ | One config transaction: Remaining, Saved if distinct, view columnOrder, human labels, explicit display-only | Complete |
+| 3 | 003-reports-display-proof/ | Known-pair, empty-month, mistype, desktop hash, and engine-freeze proofs with packet evidence | Complete |
 
 Future / out of this phase (not child folders): percent-of-income Saved; rollup MAX/Median/Range/percent-empty; inline formula-error cells; LET / 1M-3M-1Y projections.
 

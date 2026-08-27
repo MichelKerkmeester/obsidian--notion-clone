@@ -50,7 +50,7 @@ _memory:
 |-------|-------|
 | **Level** | 2 |
 | **Priority** | P1 |
-| **Status** | Planned |
+| **Status** | Complete |
 | **Created** | 2026-08-24 |
 | **Branch** | `002-rollup-aggregation-pack` |
 | **Wave** | 1 |
@@ -128,7 +128,7 @@ Build one EuroFormat-shaped module, `src/data/Aggregate.ts` — pure functions, 
 |----|-------------|---------------------|
 | REQ-001 | `Aggregate.ts` exists in the fork under `src/data/` | Exports pure functions for min, max, median, range, earliest, latest, and percent-empty/filled (empty/filled only — no checkbox percents); returns raw values/nulls, never formatted strings; compiles under the fork's TypeScript config |
 | REQ-002 | Rollup columns gain the new kinds | `types.ts:44` widened; `RelationRollup.ts` dispatches the new kinds through Aggregate.ts via an **exhaustive switch before the sum/avg tail** (tail narrowed to `aggregation === "sum"` only — no `else sum` fallthrough, so unknown ids cannot silently SUM); existing count/sum/avg/list behavior is unchanged; new kinds inherit the `null` fallback from `emptyRollupValue` |
-| REQ-003 | Rollup-of-rollup stays forbidden | The `column?.type === "rollup"` → empty guard (`RelationRollup.ts:101`) is preserved byte-for-byte; no new dispatch path enables rollup-of-rollup |
+| REQ-003 | Rollup-of-rollup stays forbidden | The `column?.type === "rollup"` → empty guard (`RelationRollup.ts:139`) is preserved byte-for-byte; no new dispatch path enables rollup-of-rollup |
 | REQ-004 | Results are display-only | Rendering the new kinds writes nothing to frontmatter or any other persistence; `ComputedSync` vocabulary stays `"display-only"` |
 
 ### P1 - Required (complete OR user-approved deferral)
@@ -206,7 +206,7 @@ Build one EuroFormat-shaped module, `src/data/Aggregate.ts` — pure functions, 
 - Even-length median: mean of the two middle values (three-way lock: fork footer ≡ AppFlowy ≡ Anytype). Never nearest-rank.
 - Mixed types: non-numerics skipped via `toChartNumber`; invalid dates skipped via `toDateTimestamp`. A skip is never treated as zero.
 - NaN/Infinity: dropped by `toChartNumber`'s finite-only filter (`ChartAggregation.ts:192`).
-- Rollup-of-rollup: empty, never aggregated (`RelationRollup.ts:101`).
+- Rollup-of-rollup: empty, never aggregated (`RelationRollup.ts:139`).
 
 ### Error Scenarios
 - Percent denominators: percentEmpty/Filled divide by total related rows **including empties**. Three distinct cases must not be conflated: **0 related rows → `0`** (empty relation); **N rows all empty → percentEmpty `100` / percentFilled `0`** (all-null targets); **missing target field → `null`** via the existing `emptyRollupValue` (`RelationRollup.ts:159-161`). Percent dispatches from `records` + `getTargetFieldValue` **before** the numeric `numbers.length === 0` early return (`:126`), not from flattened `numbers`. This differs deliberately from average's non-empty denominator. Two denominators, documented, not unified.
@@ -272,9 +272,9 @@ All operator decisions below carry the synthesis's recommended default; none blo
 
 | Phase | Folder | Focus | Status |
 |-------|--------|-------|--------|
-| 1 | 001-numeric-aggregate-module/ | Shared `Aggregate.ts` numeric kinds (min/max/median/range), Vitest harness, type widening, rollup dispatch, `isNumericRollupKind`, numeric modal options, footer/chart numeric consume — one same-diff slice | Planned |
-| 2 | 002-date-aggregation-pack/ | Earliest/latest date kinds, date extraction before the numeric empty return, `earliest\|latest` display type `"date"`, date modal filter, footer EARLIEST/LATEST via Aggregate | Planned |
-| 3 | 003-percent-aggregation-pack/ | Percent empty/filled from related-row totals (not flattened numbers), percent modal options, chart percent-empty / percent-not-empty via Aggregate | Planned |
+| 1 | 001-numeric-aggregate-module/ | Shared `Aggregate.ts` numeric kinds (min/max/median/range), Vitest harness, type widening, rollup dispatch, `isNumericRollupKind`, numeric modal options, footer/chart numeric consume — one same-diff slice | Complete |
+| 2 | 002-date-aggregation-pack/ | Earliest/latest date kinds, date extraction before the numeric empty return, `earliest\|latest` display type `"date"`, date modal filter, footer EARLIEST/LATEST via Aggregate | Complete |
+| 3 | 003-percent-aggregation-pack/ | Percent empty/filled from related-row totals (not flattened numbers), percent modal options, chart percent-empty / percent-not-empty via Aggregate | Complete |
 
 Future / out of this phase (not child folders): count unique / show unique values; checkbox checked / unchecked / percent-checked; `RollupConfig` number-format and decimal-placement slot.
 
@@ -289,6 +289,6 @@ Future / out of this phase (not child folders): count unique / show unique value
 
 | From | To | Criteria | Verification |
 |------|-----|----------|--------------|
-| 001-numeric-aggregate-module | 002-date-aggregation-pack | `Aggregate.ts` exports min/max/median/range plus `isNumericRollupKind` covering numeric and future percent ids; `types.ts:44` widened; `aggregateRollup` dispatches numeric kinds before a sum-only tail; five eligibility clones use the predicate; numeric modal options exist; footer/chart numeric kinds consume Aggregate; rollup-of-rollup guard at `RelationRollup.ts:101` unchanged | `npx vitest run` green on `Aggregate.test.ts`; Median rollup cell types as `"number"` not `"text"` (`ColumnDisplay.ts:19-23`) |
+| 001-numeric-aggregate-module | 002-date-aggregation-pack | `Aggregate.ts` exports min/max/median/range plus `isNumericRollupKind` covering numeric and future percent ids; `types.ts:44` widened; `aggregateRollup` dispatches numeric kinds before a sum-only tail; five eligibility clones use the predicate; numeric modal options exist; footer/chart numeric kinds consume Aggregate; rollup-of-rollup guard at `RelationRollup.ts:139` unchanged | `npx vitest run` green on `Aggregate.test.ts`; Median rollup cell types as `"number"` not `"text"` (`ColumnDisplay.ts:19-23`) |
 | 002-date-aggregation-pack | 003-percent-aggregation-pack | `earliest`/`latest` take timestamps and return `Date \| null`; date extraction runs before `numbers.length === 0`; `earliest\|latest` map to `"date"` in `ColumnDisplay` / `RowPipeline`; modal offers date kinds via `isDateLikeColumnType`; footer EARLIEST/LATEST route through Aggregate and keep `parseDateTimeParts(...)?.dateKey` at `SummaryRenderer.ts:552` | Scenario 2: earliest/latest match footer dateKey on the same dates; cells use `renderDate` not `String(Date)` |
 <!-- /ANCHOR:phase-map -->

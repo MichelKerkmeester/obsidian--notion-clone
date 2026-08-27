@@ -1,6 +1,6 @@
 ---
 title: "Implementation Summary: Let Variables Module"
-description: "Planned one-module engine slice for LetVariables.ts. Not yet implemented in the fork."
+description: "Shipped one-module engine slice for LetVariables.ts, commit 1601703 on branch impl, Sonnet-verified PASS."
 trigger_phrases:
   - "let variables summary"
   - "LetVariables"
@@ -11,10 +11,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "public/001-note-db-notion-parity-build/005-formula-let-variables/001-let-variables-module"
-    last_updated_at: "2026-08-25T21:30:00Z"
-    last_updated_by: "phase-architect"
-    recent_action: "Authored engine-module child from synthesis ranks 1-4 and final-plan steps 3,5-7"
-    next_safe_action: "Implement LetVariables.ts plus ComputedField wiring and P0 error i18n"
+    last_updated_at: "2026-08-27T00:00:00Z"
+    last_updated_by: "docs-reconciliation"
+    recent_action: "Reconciled to shipped state: commit 1601703 on branch impl, tsc0/build0/vitest green, Sonnet 5 PASS"
+    next_safe_action: "None — sub-phase complete"
     blockers: []
     key_files:
       - "spec.md"
@@ -25,7 +25,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "decompose-001-let-variables-module"
       parent_session_id: null
-    completion_pct: 0
+    completion_pct: 100
     open_questions: []
     answered_questions: []
 ---
@@ -41,9 +41,9 @@ _memory:
 | Field | Value |
 |-------|-------|
 | **Spec Folder** | 001-let-variables-module |
-| **Completed** | Not yet (Planned) |
+| **Completed** | 2026-08-25 (commit `1601703` on branch `impl`) |
 | **Level** | 1 |
-| **Actual Effort** | Not started |
+| **Actual Effort** | Shipped and Sonnet-verified PASS |
 <!-- /ANCHOR:metadata -->
 
 ---
@@ -51,18 +51,20 @@ _memory:
 <!-- ANCHOR:what-built -->
 ## What Was Built
 
-Nothing in the fork yet. This child is Planned: the one-module engine slice so LET/LETS cannot ship as a `context.let` helper, an IIFE, or a flat multi-param `__let`.
+Shipped on branch `impl` (commit `1601703`): the one-module engine slice, exactly as designed — LET/LETS ship as the nested `__let` transform, not a `context.let` helper, an IIFE, or a flat multi-param `__let`.
 
-Planned first artifact is `src/data/LetVariables.ts` exporting `transformLetCalls` and `registerLetHelper`, plus two `ComputedField.ts` call sites and the two P0 error i18n keys.
+`src/data/LetVariables.ts` exports `transformLetCalls` and `registerLetHelper`, wired into two `ComputedField.ts` call sites, plus the two P0 error i18n keys (`formula.error.letArgCount` / `letName`) in en / zh-CN / zh-TW. A fresh Claude Sonnet 5 read-only review confirmed the correct locked design (not the ruled-out sketch) and returned **PASS** (`../research/sonnet-verification.md`).
 
 ### Files Changed
 
 | File | Action | Purpose |
 |------|--------|---------|
-| `spec.md` | Authored | Engine-module scope and nested-`__let` lock |
-| `plan.md` | Authored | EuroFormat module + two call sites + P0 error map |
-| `tasks.md` | Authored | T003–T006 atomic unit |
-| `implementation-summary.md` | Authored | Honest pre-build record |
+| `src/data/LetVariables.ts` | Created | `transformLetCalls` (`:28-86`) nested-arrow rewrite + `registerLetHelper` |
+| `src/data/ComputedField.ts` | Modified | Transform inside the evaluation try (`:445-464`); `__let` registered near `iferror` |
+| `src/i18n.ts` | Modified | `formula.error.letArgCount` / `letName` in en / zh-CN / zh-TW |
+| `spec.md` | Reconciled | Status Planned → Complete |
+| `plan.md` / `tasks.md` | Unchanged | Already matched the shipped design |
+| `implementation-summary.md` | Reconciled | This record — shipped-state evidence |
 <!-- /ANCHOR:what-built -->
 
 ---
@@ -70,7 +72,7 @@ Planned first artifact is `src/data/LetVariables.ts` exporting `transformLetCall
 <!-- ANCHOR:how-delivered -->
 ## How It Was Delivered
 
-Not delivered. Implementation follows `tasks.md` as one diff against the live fork at `Obsidian Plugin/src`.
+Delivered as one diff against the live fork at `Obsidian Plugin/src`, gated `tsc --noEmit` 0 / `npm run build` 0 / `npx vitest run` green, committed `1601703`, then independently Sonnet-verified.
 <!-- /ANCHOR:how-delivered -->
 
 ---
@@ -97,9 +99,10 @@ Not delivered. Implementation follows `tasks.md` as one diff against the live fo
 
 | Check | Result |
 |-------|--------|
-| `git diff --exit-code -- src/data/SafeEval.ts` | Not run (Planned) |
-| `lets("a", 1)` maps to `formula.error.letArgCount` | Not run (Planned) |
-| `bash .opencode/skills/system-spec-kit/scripts/spec/validate.sh` on this folder `--strict` | Pending after authoring |
+| `git diff --exit-code -- src/data/SafeEval.ts` | **0 — byte-identical** (Sonnet-confirmed) |
+| `lets("a", 1)` maps to `formula.error.letArgCount` | **Confirmed** (tested, Sonnet-traced) |
+| `tsc --noEmit` / `npm run build` / `npx vitest run` | **0 / 0 / green** at commit gate and Sonnet review time |
+| `bash .opencode/skills/system-spec-kit/scripts/spec/validate.sh` on this folder `--strict` | Not run by this reconciliation pass (docs-only; see task scope) |
 <!-- /ANCHOR:verification -->
 
 ---

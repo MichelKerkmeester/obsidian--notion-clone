@@ -11,8 +11,8 @@ _memory:
     packet_pointer: "public/001-note-db-notion-parity-build/009-view-filter-tree/001-kleene-eval-module"
     last_updated_at: "2026-08-25T21:00:00Z"
     last_updated_by: "phase-architect"
-    recent_action: "Authored kleene-eval-module child from synthesis rank 1 and final-plan steps 1-5 plus 11"
-    next_safe_action: "Create ViewFilterTree.ts, QueryEngine bridges, RowPipeline routing, and ViewFilterTree.test.ts"
+    recent_action: "Shipped ViewFilterTree.ts + QueryEngine bridges + RowPipeline routing + ViewFilterTree.test.ts (commit 3a070e9); tsc0/build0/vitest green; Sonnet 5 verified"
+    next_safe_action: "None outstanding for this sub-phase"
     blockers: []
     key_files:
       - "spec.md"
@@ -23,7 +23,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "decompose-001-kleene-eval-module"
       parent_session_id: null
-    completion_pct: 0
+    completion_pct: 100
     open_questions: []
     answered_questions: []
 ---
@@ -39,9 +39,9 @@ _memory:
 | Field | Value |
 |-------|-------|
 | **Spec Folder** | 001-kleene-eval-module |
-| **Completed** | Not yet (Planned) |
+| **Completed** | Complete — shipped `3a070e9` |
 | **Level** | 1 |
-| **Actual Effort** | Not started |
+| **Actual Effort** | Not separately tracked |
 <!-- /ANCHOR:metadata -->
 
 ---
@@ -49,18 +49,24 @@ _memory:
 <!-- ANCHOR:what-built -->
 ## What Was Built
 
-Nothing in the fork yet. This child is Planned: isolated Kleene evaluation so `(A and B) or C` can run without `matchesSourceRuleTree`.
+Shipped: `src/data/ViewFilterTree.ts` with the Kleene three-valued evaluator (`evaluateViewFilterTree`), `normalizeViewFilterTree`, `buildViewFilterTree`, leaf helpers (`flattenLeaves`/`mapLeafAt`/`removeLeafAt`/`appendLeaf`), and `getRequiredViewFilterLeaves` (AND-required only). Additive `QueryEngine.applyFilterTree`/`evaluateFilterTree` call the existing private `matchesFilter`; `RowPipeline.ts:93-97` routes to the tree path when present, else legacy `applyFilters`; two additive `filterTree?: SourceRuleNode` type fields landed on `ViewModeStateDef`/`ViewConfig`. `src/__tests__/setup.ts` and `src/data/__tests__/ViewFilterTree.test.ts` shipped alongside.
 
-Planned first artifact is `src/data/ViewFilterTree.ts` plus `QueryEngine.applyFilterTree` / `evaluateFilterTree`, `RowPipeline.ts:93-97` routing, additive `filterTree?` fields, `src/__tests__/setup.ts`, and `src/data/__tests__/ViewFilterTree.test.ts`.
+Independent Sonnet 5 review confirmed: AND short-circuits on first `false`, OR is the dual, empty group -> `null` (skip, not poison), `not(null)=null`, `expression -> false` — matching spec §8/REQ-001 and correctly diverging from `SourceRules.ts:152`'s empty-AND-poisons-OR semantics.
 
 ### Files Changed
 
 | File | Action | Purpose |
 |------|--------|---------|
+| `src/data/ViewFilterTree.ts` | Created (`3a070e9`) | Kleene module + leaf helpers |
+| `src/data/types.ts` | Modified (`3a070e9`) | Additive `filterTree?: SourceRuleNode` fields |
+| `src/data/QueryEngine.ts` | Modified (`3a070e9`) | Additive `applyFilterTree`/`evaluateFilterTree` |
+| `src/data/RowPipeline.ts` | Modified (`3a070e9`) | Tree-path routing |
+| `src/__tests__/setup.ts` | Created (`3a070e9`) | No-op Vitest setup stub |
+| `src/data/__tests__/ViewFilterTree.test.ts` | Created (`3a070e9`) | Kleene + legacy-regression cases |
 | `spec.md` | Authored | Kleene eval scope and requirements |
 | `plan.md` | Authored | EuroFormat module + QueryEngine/RowPipeline seams |
 | `tasks.md` | Authored | T001–T009 |
-| `implementation-summary.md` | Authored | Honest pre-build record |
+| `implementation-summary.md` | Updated | Shipped-state record |
 <!-- /ANCHOR:what-built -->
 
 ---
@@ -68,7 +74,7 @@ Planned first artifact is `src/data/ViewFilterTree.ts` plus `QueryEngine.applyFi
 <!-- ANCHOR:how-delivered -->
 ## How It Was Delivered
 
-Not delivered. Implementation follows `tasks.md` against the live fork at `Obsidian Plugin/src`.
+Delivered per `tasks.md` against the live fork at `Obsidian Plugin/src`, gated (tsc 0 / build 0 / vitest green) and committed at `3a070e9`.
 <!-- /ANCHOR:how-delivered -->
 
 ---
@@ -91,9 +97,10 @@ Not delivered. Implementation follows `tasks.md` against the live fork at `Obsid
 
 | Check | Result |
 |-------|--------|
-| `npx vitest run` on `src/data/__tests__/ViewFilterTree.test.ts` | Not run (Planned) |
-| Grep `FilterGroup` / `SourceRules` runtime import / `matchesFilter` export | Not run (Planned) |
-| `bash .opencode/skills/system-spec-kit/scripts/spec/validate.sh` on this folder `--strict` | Pending after authoring |
+| `npx vitest run` on `src/data/__tests__/ViewFilterTree.test.ts` | **PASS** — part of 160/160 whole-suite run at review time |
+| `npx tsc --noEmit` | **PASS** — exit 0 |
+| Grep `FilterGroup` / `SourceRules` runtime import / `matchesFilter` export | **PASS** — no `FilterGroup` type; no runtime import from `SourceRules.ts`; `matchesFilter` not exported |
+| `bash .opencode/skills/system-spec-kit/scripts/spec/validate.sh` on this folder `--strict` | Not re-run by this reconciliation pass |
 <!-- /ANCHOR:verification -->
 
 ---
@@ -101,7 +108,7 @@ Not delivered. Implementation follows `tasks.md` against the live fork at `Obsid
 <!-- ANCHOR:limitations -->
 ## Known Limitations
 
-1. **Nested trees do not survive reload until child 002.** `DataSource.ts` still whitelist-builds `filters` / `filterLogic` only (`701-702`, `908-909`).
-2. **The panel still cannot edit groups until child 003.** Evaluation can already run an in-memory tree.
-3. **Non-panel mutators still write only `state.filters` until child 004.**
+1. **Nested trees did not survive reload from this sub-phase's own diff alone.** `DataSource.ts` wiring was child 002's scope (shipped separately, `312108e`).
+2. **The panel could not edit groups from this sub-phase's own diff alone.** Child 003 shipped the editor separately (`2471e01`).
+3. **Non-panel mutators dual-write was child 004's scope** (shipped separately, `64163dc`, with a test-coverage gap fixed later in `e854681`).
 <!-- /ANCHOR:limitations -->

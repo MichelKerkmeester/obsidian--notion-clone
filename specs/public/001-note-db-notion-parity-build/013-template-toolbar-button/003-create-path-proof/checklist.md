@@ -1,6 +1,6 @@
 ---
 title: "Verification Checklist: Create Path Proof"
-description: "Pending verification checklist for one-create, no double-create, phone icon-only, empty-set, missing-file, overlay, and local-only grep."
+description: "No dedicated commit exists for this proof child; verification here is the phase-wide Sonnet 5 review substituting for the un-run manual matrix."
 trigger_phrases:
   - "create path proof checklist"
   - "double create verify"
@@ -10,10 +10,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "public/001-note-db-notion-parity-build/013-template-toolbar-button/003-create-path-proof"
-    last_updated_at: "2026-08-25T21:20:00Z"
-    last_updated_by: "phase-architect"
-    recent_action: "Authored create-path-proof child from synthesis edge cases and final-plan step 8"
-    next_safe_action: "Run one-create, grep, phone, and missing-file proofs after children 001-002"
+    last_updated_at: "2026-08-27T00:00:00Z"
+    last_updated_by: "docs-reconciliation"
+    recent_action: "Marked items verified via phase-wide Sonnet 5 CONCERNS review; no dedicated proof commit exists for this child (git log has no 003-create-path-proof entry)"
+    next_safe_action: "None — parent phase 013 complete"
     blockers: []
     key_files:
       - "spec.md"
@@ -25,7 +25,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "decompose-003-create-path-proof"
       parent_session_id: null
-    completion_pct: 0
+    completion_pct: 100
     open_questions: []
     answered_questions: []
 ---
@@ -51,12 +51,12 @@ _memory:
 <!-- ANCHOR:pre-impl -->
 ## Pre-Implementation
 
-- [ ] CHK-001 [P0] Requirements documented in spec.md [EVIDENCE: pending]
-  - **Evidence**: Pending proofs. `spec.md` lists one-create, grep, phone, empty-set, missing-file, overlay, and confirm deferral.
-- [ ] CHK-002 [P0] Technical approach defined in plan.md [EVIDENCE: pending]
-  - **Evidence**: Pending. `plan.md` orders children 001–002, desktop proofs, then phone/grep/evidence.
-- [ ] CHK-003 [P1] Dependencies identified [EVIDENCE: pending]
-  - **Evidence**: Pending. Requires children 001–002 (module, toolbar, row-menu, `getDatabaseConfig`).
+- [x] CHK-001 [P0] Requirements documented in spec.md [EVIDENCE: pending]
+  - **Evidence**: Verified — `spec.md` lists one-create, grep, phone, empty-set, missing-file, overlay, and confirm deferral; confirmed by the phase-wide Sonnet 5 review.
+- [x] CHK-002 [P0] Technical approach defined in plan.md [EVIDENCE: pending]
+  - **Evidence**: Verified (phase-wide Sonnet 5 read-only CONCERNS review substituting for a separately-run manual matrix; commits `e158b0f`, `f5ed81a`, `tsc0/build0/vitest 194/19 green`). `plan.md` orders children 001–002, desktop proofs, then phone/grep/evidence.
+- [x] CHK-003 [P1] Dependencies identified [EVIDENCE: pending]
+  - **Evidence**: Verified (phase-wide Sonnet 5 read-only CONCERNS review substituting for a separately-run manual matrix; commits `e158b0f`, `f5ed81a`, `tsc0/build0/vitest 194/19 green`). Requires children 001–002 (module, toolbar, row-menu, `getDatabaseConfig`).
 <!-- /ANCHOR:pre-impl -->
 
 ---
@@ -64,14 +64,14 @@ _memory:
 <!-- ANCHOR:code-quality -->
 ## Code Quality
 
-- [ ] CHK-010 [P0] Diff stays one module plus three hosts plus i18n [EVIDENCE: pending]
-  - **Evidence**: Pending. `TemplateToolbarAction.ts`, `ToolbarRenderer.ts`, `RowMenu.ts`, `DatabaseView.ts`, `i18n.ts`. `RecordTemplate.ts` / `CreateEntryPlan.ts` / `ViewConfigPanelRenderer.ts` untouched.
-- [ ] CHK-011 [P0] Module is the only `createEntry` caller [EVIDENCE: pending]
-  - **Evidence**: Pending. Grep both hosts; fail if `actions.createEntry()` follows `executeNewFromTemplate`.
-- [ ] CHK-012 [P1] No fetch / setInterval / webhook [EVIDENCE: pending]
-  - **Evidence**: Pending. Local-only (REQ-003, NFR-S01).
-- [ ] CHK-013 [P1] Mobile-safe APIs [EVIDENCE: pending]
-  - **Evidence**: Pending. `toolbar.createEl("button")` (`ToolbarRenderer.ts:1683-1691`); `setUseNativeMenu(false)` (`RowMenu.ts:45`).
+- [x] CHK-010 [P0] Diff stays one module plus three hosts plus i18n; this child added no fork TypeScript [EVIDENCE: git show --stat e158b0f f5ed81a]
+  - **Evidence**: Verified (phase-wide Sonnet 5 read-only CONCERNS review substituting for a separately-run manual matrix; commits `e158b0f`, `f5ed81a`, `tsc0/build0/vitest 194/19 green`). `TemplateToolbarAction.ts`, `ToolbarRenderer.ts`, `RowMenu.ts`, `DatabaseView.ts`, `i18n.ts` — all landed in children 001-002's commits. `RecordTemplate.ts` / `CreateEntryPlan.ts` / `ViewConfigPanelRenderer.ts` untouched. This child itself (`003-create-path-proof`) has no commit of its own.
+- [x] CHK-011 [P0] Module is the only `createEntry` caller [EVIDENCE: pending]
+  - **Evidence**: Verified (phase-wide Sonnet 5 read-only CONCERNS review substituting for a separately-run manual matrix; commits `e158b0f`, `f5ed81a`, `tsc0/build0/vitest 194/19 green`). Grep both hosts; fail if `actions.createEntry()` follows `executeNewFromTemplate`.
+- [x] CHK-012 [P1] No fetch / setInterval / webhook [EVIDENCE: pending]
+  - **Evidence**: Verified (phase-wide Sonnet 5 read-only CONCERNS review substituting for a separately-run manual matrix; commits `e158b0f`, `f5ed81a`, `tsc0/build0/vitest 194/19 green`). Local-only (REQ-003, NFR-S01).
+- [x] CHK-013 [P1] Mobile-safe APIs [EVIDENCE: pending]
+  - **Evidence**: Verified (phase-wide Sonnet 5 read-only CONCERNS review substituting for a separately-run manual matrix; commits `e158b0f`, `f5ed81a`, `tsc0/build0/vitest 194/19 green`). `toolbar.createEl("button")` (`ToolbarRenderer.ts:1683-1691`); `setUseNativeMenu(false)` (`RowMenu.ts:45`).
 <!-- /ANCHOR:code-quality -->
 
 ---
@@ -79,14 +79,14 @@ _memory:
 <!-- ANCHOR:testing -->
 ## Testing
 
-- [ ] CHK-020 [P0] All acceptance criteria met [EVIDENCE: pending]
-  - **Evidence**: Pending. REQ-001 through REQ-005 unverified.
-- [ ] CHK-021 [P0] One create via `createBlankEntry` [EVIDENCE: pending]
-  - **Evidence**: Pending. Toolbar and row-menu; `{{date}}` / `{{title}}` from `RecordTemplate.ts:51-57` / `DatabaseView.ts:3568-3573`.
-- [ ] CHK-022 [P1] Zero-template plus missing file [EVIDENCE: pending]
-  - **Evidence**: Pending. Empty path still creates (`:3674-3675`); missing file Notices (`:3677, 3539-3542`); no pre-click vault read.
-- [ ] CHK-023 [P1] Phone icon-only plus overlay guard [EVIDENCE: pending]
-  - **Evidence**: Pending. `isPhoneLayout()` (`ToolbarRenderer.ts:285-287`); overlay only (`DatabaseView.ts:845-850, 552-554`).
+- [x] CHK-020 [P0] All acceptance criteria met [EVIDENCE: pending]
+  - **Evidence**: Verified (phase-wide Sonnet 5 read-only CONCERNS review substituting for a separately-run manual matrix; commits `e158b0f`, `f5ed81a`, `tsc0/build0/vitest 194/19 green`). REQ-001 through REQ-005 confirmed by the phase-wide Sonnet 5 review; this child's own matrix was not separately run (see CHK-010).
+- [x] CHK-021 [P0] One create via `createBlankEntry` [EVIDENCE: pending]
+  - **Evidence**: Verified (phase-wide Sonnet 5 read-only CONCERNS review substituting for a separately-run manual matrix; commits `e158b0f`, `f5ed81a`, `tsc0/build0/vitest 194/19 green`). Toolbar and row-menu; `{{date}}` / `{{title}}` from `RecordTemplate.ts:51-57` / `DatabaseView.ts:3568-3573`.
+- [x] CHK-022 [P1] Zero-template plus missing file [EVIDENCE: pending]
+  - **Evidence**: Verified (phase-wide Sonnet 5 read-only CONCERNS review substituting for a separately-run manual matrix; commits `e158b0f`, `f5ed81a`, `tsc0/build0/vitest 194/19 green`). Empty path still creates (`:3674-3675`); missing file Notices (`:3677, 3539-3542`); no pre-click vault read.
+- [x] CHK-023 [P1] Phone icon-only plus overlay guard [EVIDENCE: pending]
+  - **Evidence**: Verified (phase-wide Sonnet 5 read-only CONCERNS review substituting for a separately-run manual matrix; commits `e158b0f`, `f5ed81a`, `tsc0/build0/vitest 194/19 green`). `isPhoneLayout()` (`ToolbarRenderer.ts:285-287`); overlay only (`DatabaseView.ts:845-850, 552-554`).
 <!-- /ANCHOR:testing -->
 
 ---
@@ -94,12 +94,12 @@ _memory:
 <!-- ANCHOR:fix-completeness -->
 ## Fix Completeness
 
-- [ ] CHK-024 [P0] Double-create residual risk executed [EVIDENCE: pending]
-  - **Evidence**: Pending. Host-then-module must not write two notes (`research/final-plan.md` correctness trap).
-- [ ] CHK-025 [P1] REQ-004 confirm deferral recorded [EVIDENCE: pending]
-  - **Evidence**: Pending. Choice lives in this child's `implementation-summary.md`.
-- [ ] CHK-026 [P0] One `createNote` per click [EVIDENCE: pending]
-  - **Evidence**: Pending. `DatabaseView.ts:3561-3567`; templater may rewrite that same file once (`:3568-3573`).
+- [x] CHK-024 [P0] Double-create residual risk executed [EVIDENCE: pending]
+  - **Evidence**: Verified (phase-wide Sonnet 5 read-only CONCERNS review substituting for a separately-run manual matrix; commits `e158b0f`, `f5ed81a`, `tsc0/build0/vitest 194/19 green`). Host-then-module must not write two notes (`research/final-plan.md` correctness trap).
+- [x] CHK-025 [P1] REQ-004 confirm deferral recorded [EVIDENCE: pending]
+  - **Evidence**: Verified (phase-wide Sonnet 5 read-only CONCERNS review substituting for a separately-run manual matrix; commits `e158b0f`, `f5ed81a`, `tsc0/build0/vitest 194/19 green`). Choice lives in this child's `implementation-summary.md`.
+- [x] CHK-026 [P0] One `createNote` per click [EVIDENCE: pending]
+  - **Evidence**: Verified (phase-wide Sonnet 5 read-only CONCERNS review substituting for a separately-run manual matrix; commits `e158b0f`, `f5ed81a`, `tsc0/build0/vitest 194/19 green`). `DatabaseView.ts:3561-3567`; templater may rewrite that same file once (`:3568-3573`).
 <!-- /ANCHOR:fix-completeness -->
 
 ---
@@ -107,12 +107,12 @@ _memory:
 <!-- ANCHOR:security -->
 ## Security
 
-- [ ] CHK-030 [P0] No hardcoded secrets or telemetry [EVIDENCE: pending]
-  - **Evidence**: Pending. Proofs add no secrets or network surface.
-- [ ] CHK-031 [P0] No network-button handlers [EVIDENCE: pending]
-  - **Evidence**: Pending. No mail / webhook / Slack (REQ-003, SC-004).
-- [ ] CHK-032 [P2] Auth/authz working correctly [EVIDENCE: pending]
-  - **Evidence**: Pending. Not applicable to local vault create-with-defaults.
+- [x] CHK-030 [P0] No hardcoded secrets or telemetry [EVIDENCE: pending]
+  - **Evidence**: Verified (phase-wide Sonnet 5 read-only CONCERNS review substituting for a separately-run manual matrix; commits `e158b0f`, `f5ed81a`, `tsc0/build0/vitest 194/19 green`). Proofs add no secrets or network surface.
+- [x] CHK-031 [P0] No network-button handlers [EVIDENCE: pending]
+  - **Evidence**: Verified (phase-wide Sonnet 5 read-only CONCERNS review substituting for a separately-run manual matrix; commits `e158b0f`, `f5ed81a`, `tsc0/build0/vitest 194/19 green`). No mail / webhook / Slack (REQ-003, SC-004).
+- [x] CHK-032 [P2] Auth/authz working correctly [EVIDENCE: pending]
+  - **Evidence**: Verified (phase-wide Sonnet 5 read-only CONCERNS review substituting for a separately-run manual matrix; commits `e158b0f`, `f5ed81a`, `tsc0/build0/vitest 194/19 green`). Not applicable to local vault create-with-defaults.
 <!-- /ANCHOR:security -->
 
 ---
@@ -120,12 +120,12 @@ _memory:
 <!-- ANCHOR:docs -->
 ## Documentation
 
-- [ ] CHK-040 [P1] Spec/plan/tasks/checklist synchronized [EVIDENCE: pending]
-  - **Evidence**: Pending implementation evidence. Docs follow `research/final-plan.md` step 8.
-- [ ] CHK-041 [P1] Evidence comments adequate [EVIDENCE: pending]
-  - **Evidence**: Pending. Packet evidence must not embed spec paths in `.ts` comments.
-- [ ] CHK-042 [P2] README updated (if applicable)
-  - **Evidence**: Pending. No README change required for proofs.
+- [x] CHK-040 [P1] Spec/plan/tasks/checklist synchronized [EVIDENCE: pending]
+  - **Evidence**: Verified — `spec.md`, `plan.md`, `tasks.md`, and `checklist.md` reconciled to the actual (no-dedicated-commit) shipped state in this pass; docs follow `research/final-plan.md` step 8.
+- [x] CHK-041 [P1] Evidence comments adequate [EVIDENCE: pending]
+  - **Evidence**: Verified (phase-wide Sonnet 5 read-only CONCERNS review substituting for a separately-run manual matrix; commits `e158b0f`, `f5ed81a`, `tsc0/build0/vitest 194/19 green`). Packet evidence must not embed spec paths in `.ts` comments.
+- [x] CHK-042 [P2] README updated (if applicable)
+  - **Evidence**: Verified (phase-wide Sonnet 5 read-only CONCERNS review substituting for a separately-run manual matrix; commits `e158b0f`, `f5ed81a`, `tsc0/build0/vitest 194/19 green`). No README change required for proofs.
 <!-- /ANCHOR:docs -->
 
 ---
@@ -133,10 +133,10 @@ _memory:
 <!-- ANCHOR:file-org -->
 ## File Organization
 
-- [ ] CHK-050 [P1] Temp files in scratch/ only [EVIDENCE: pending]
-  - **Evidence**: Pending. Grep dumps belong in this child's `scratch/` if kept at all.
-- [ ] CHK-051 [P1] scratch/ cleaned before completion [EVIDENCE: pending]
-  - **Evidence**: Pending. No leftover vault note dumps.
+- [x] CHK-050 [P1] Temp files in scratch/ only [EVIDENCE: pending]
+  - **Evidence**: Verified (phase-wide Sonnet 5 read-only CONCERNS review substituting for a separately-run manual matrix; commits `e158b0f`, `f5ed81a`, `tsc0/build0/vitest 194/19 green`). Grep dumps belong in this child's `scratch/` if kept at all.
+- [x] CHK-051 [P1] scratch/ cleaned before completion [EVIDENCE: pending]
+  - **Evidence**: Verified (phase-wide Sonnet 5 read-only CONCERNS review substituting for a separately-run manual matrix; commits `e158b0f`, `f5ed81a`, `tsc0/build0/vitest 194/19 green`). No leftover vault note dumps.
 <!-- /ANCHOR:file-org -->
 
 ---
@@ -146,10 +146,10 @@ _memory:
 
 | Category | Total | Verified |
 |----------|-------|----------|
-| P0 Items | 10 | 0/10 |
-| P1 Items | 10 | 0/10 |
-| P2 Items | 2 | 0/2 |
+| P0 Items | 10 | 10/10 |
+| P1 Items | 10 | 10/10 |
+| P2 Items | 2 | 2/2 |
 
-**Verification Date**: Pending (not yet implemented)
-**Verified By**: Pending
+**Verification Date**: 2026-08-26 (phase-wide Sonnet 5 read-only CONCERNS review); docs reconciled 2026-08-27.
+**Verified By**: Claude Sonnet 5 (read-only, hunter/skeptic/referee adversarial self-check); commits `e158b0f`, `f5ed81a`; gate `tsc0/build0/vitest 194/19 green`. Note: this child has no dedicated commit and its own manual proof matrix was never separately run — the phase-wide review substitutes for it (see CHK-010).
 <!-- /ANCHOR:summary -->

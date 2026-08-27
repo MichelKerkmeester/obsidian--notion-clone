@@ -1,6 +1,6 @@
 ---
 title: "Implementation Summary: Formula Modal LET Help"
-description: "Planned FormulaModal LET/LETS FUNCTIONS rows and six i18n help strings. Not yet implemented in the fork."
+description: "Shipped FormulaModal LET/LETS FUNCTIONS rows and six i18n help strings, commit cfd9626 on branch impl, Sonnet-verified PASS (with a documented P2 uppercase-display nit)."
 trigger_phrases:
   - "formula modal let summary"
   - "LET help"
@@ -10,10 +10,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "public/001-note-db-notion-parity-build/005-formula-let-variables/003-formula-modal-let-help"
-    last_updated_at: "2026-08-25T21:30:00Z"
-    last_updated_by: "phase-architect"
-    recent_action: "Authored P2 discovery child from synthesis rank 6 and final-plan step 11"
-    next_safe_action: "Add LET/LETS FUNCTIONS rows and formula.fn.LET.desc / LETS.desc in three locales"
+    last_updated_at: "2026-08-27T00:00:00Z"
+    last_updated_by: "docs-reconciliation"
+    recent_action: "Reconciled to shipped state: commit cfd9626 on branch impl, tsc0/build0/vitest green, Sonnet 5 PASS"
+    next_safe_action: "None — sub-phase complete"
     blockers: []
     key_files:
       - "spec.md"
@@ -24,7 +24,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "decompose-003-formula-modal-let-help"
       parent_session_id: null
-    completion_pct: 0
+    completion_pct: 100
     open_questions: []
     answered_questions: []
 ---
@@ -40,9 +40,9 @@ _memory:
 | Field | Value |
 |-------|-------|
 | **Spec Folder** | 003-formula-modal-let-help |
-| **Completed** | Not yet (Planned) |
+| **Completed** | 2026-08-25 (commit `cfd9626` on branch `impl`) |
 | **Level** | 1 |
-| **Actual Effort** | Not started |
+| **Actual Effort** | Shipped and Sonnet-verified PASS |
 <!-- /ANCHOR:metadata -->
 
 ---
@@ -50,18 +50,18 @@ _memory:
 <!-- ANCHOR:what-built -->
 ## What Was Built
 
-Nothing in the fork yet. This child is Planned: editor discovery so LET/LETS from child 001 are not invisible.
+Shipped on branch `impl` (commit `cfd9626`): editor discovery so LET/LETS from child 001 are discoverable. LET/LETS rows exist at `FormulaModal.ts:60-105` under `formula.catLogic`, and `formula.fn.LET.desc` / `LETS.desc` are appended in all three locales.
 
-Planned work adds LET/LETS rows at `FormulaModal.ts:60-105` under `formula.catLogic` and appends `formula.fn.LET.desc` / `LETS.desc` in three locales.
+One P2 finding from Sonnet review: `FormulaModal.ts:64-65` displays `name:"LET"/"LETS"` uppercase for the help-panel row while invocable syntax is lowercase-only. This is harmless — `insertFunction` always inserts the correct lowercase signature (`:788-790`) and the live engine re-validates every keystroke (`:809-856`), so a mistaken uppercase surfaces the correct runtime error, never a silent wrong answer.
 
 ### Files Changed
 
 | File | Action | Purpose |
 |------|--------|---------|
-| `spec.md` | Authored | Discovery scope and no-`__let` lock |
-| `plan.md` | Authored | FUNCTIONS / i18n help call sites |
-| `tasks.md` | Authored | Rank-6 / step-11 task list |
-| `implementation-summary.md` | Authored | Honest pre-build record |
+| `src/views/modals/FormulaModal.ts` | Modified | LET/LETS rows under `formula.catLogic` at `FUNCTIONS` init (`:60-105`) |
+| `src/i18n.ts` | Modified | `formula.fn.LET.desc` / `formula.fn.LETS.desc` in en / zh-CN / zh-TW |
+| `spec.md` | Reconciled | Status Planned → Complete |
+| `implementation-summary.md` | Reconciled | This record — shipped-state evidence plus the P2 display nit |
 <!-- /ANCHOR:what-built -->
 
 ---
@@ -69,7 +69,7 @@ Planned work adds LET/LETS rows at `FormulaModal.ts:60-105` under `formula.catLo
 <!-- ANCHOR:how-delivered -->
 ## How It Was Delivered
 
-Not delivered. Same PR as children 001–002, second commit, after the engine and in-scope matrix are in place.
+Delivered as the second commit in the same PR as children 001–002, after the engine (`1601703`) and in-scope matrix (`4b0b987`) landed. Gated `tsc --noEmit` 0 / `npm run build` 0 / `npx vitest run` green, committed `cfd9626`, then independently Sonnet-verified as part of the parent phase review.
 <!-- /ANCHOR:how-delivered -->
 
 ---
@@ -93,9 +93,9 @@ Not delivered. Same PR as children 001–002, second commit, after the engine an
 
 | Check | Result |
 |-------|--------|
-| FormulaModal autocomplete lists LET/LETS | Not run (Planned) |
-| Three locales × two help keys | Not run (Planned) |
-| `bash .opencode/skills/system-spec-kit/scripts/spec/validate.sh` on this folder `--strict` | Pending after authoring |
+| FormulaModal autocomplete lists LET/LETS | **Confirmed** — rows registered at `FUNCTIONS` init, not pushed later (Sonnet-traced) |
+| Three locales × two help keys | **Confirmed** — en / zh-CN / zh-TW all carry `formula.fn.LET.desc` / `LETS.desc` |
+| `bash .opencode/skills/system-spec-kit/scripts/spec/validate.sh` on this folder `--strict` | Not run by this reconciliation pass (docs-only; see task scope) |
 <!-- /ANCHOR:verification -->
 
 ---

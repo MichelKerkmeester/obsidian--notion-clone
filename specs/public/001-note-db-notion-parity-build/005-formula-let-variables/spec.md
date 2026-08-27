@@ -49,7 +49,7 @@ _memory:
 |-------|-------|
 | **Level** | 2 |
 | **Priority** | P1 |
-| **Status** | Planned |
+| **Status** | Complete |
 | **Created** | 2026-08-24 |
 | **Branch** | `005-formula-let-variables` |
 
@@ -256,9 +256,9 @@ Explicitly out of scope (parent backlog): lazy `if`/`ifs`; static typing; Notion
 
 | Phase | Folder | Focus | Status |
 |-------|--------|-------|--------|
-| 1 | 001-let-variables-module/ | New `LetVariables.ts` nested `__let` transform (let+lets, sequential binding, transform-side validation) plus two ComputedField call sites and P0 `formula.error.let*` i18n | Planned |
-| 2 | 002-let-vitest-matrix/ | Bootstrap vitest `setup.ts`/`test` script, pure-transform tests, and the corrected 18-case engine matrix | Planned |
-| 3 | 003-formula-modal-let-help/ | P2 FormulaModal LET/LETS help under `formula.catLogic` plus `formula.fn.LET.desc`/`LETS.desc` in three locales | Planned |
+| 1 | 001-let-variables-module/ | New `LetVariables.ts` nested `__let` transform (let+lets, sequential binding, transform-side validation) plus two ComputedField call sites and P0 `formula.error.let*` i18n | Complete |
+| 2 | 002-let-vitest-matrix/ | Bootstrap vitest `setup.ts`/`test` script, pure-transform tests, and the corrected 18-case engine matrix | Complete |
+| 3 | 003-formula-modal-let-help/ | P2 FormulaModal LET/LETS help under `formula.catLogic` plus `formula.fn.LET.desc`/`LETS.desc` in three locales | Complete |
 
 Future / out of this phase (not child folders): lazy `if`/`ifs` (synthesis rank 7); unbound identifiers / static typing (rank 8); Notion method-chaining on bound values; Bases dialect; any `SafeEval.ts` edit.
 

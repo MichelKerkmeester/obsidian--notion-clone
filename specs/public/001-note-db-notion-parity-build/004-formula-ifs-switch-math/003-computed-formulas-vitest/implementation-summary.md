@@ -1,6 +1,6 @@
 ---
 title: "Implementation Summary: Computed Formulas Vitest"
-description: "Planned first plugin vitest harness for FormulaIfsSwitchMath.ts. Not yet implemented in the fork."
+description: "Shipped first plugin vitest harness for FormulaIfsSwitchMath.ts: 7/7 tests pass, gate-green and Sonnet-verified PASS."
 trigger_phrases:
   - "computed formulas vitest summary"
   - "formula test harness"
@@ -11,8 +11,8 @@ _memory:
     packet_pointer: "public/001-note-db-notion-parity-build/004-formula-ifs-switch-math/003-computed-formulas-vitest"
     last_updated_at: "2026-08-25T19:15:00Z"
     last_updated_by: "phase-architect"
-    recent_action: "Authored vitest child from synthesis rank 6 and final-plan step 7"
-    next_safe_action: "Create setup.ts and computed-formulas.test.ts importing only the new module"
+    recent_action: "Shipped commit 79b9b98 (feat(impl): 003-computed-formulas-vitest); tsc0/build0/vitest green (7/7 in computed-formulas.test.ts); Sonnet 5 verification PASS 2026-08-26"
+    next_safe_action: "None — sub-phase complete"
     blockers: []
     key_files:
       - "spec.md"
@@ -23,7 +23,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "decompose-003-computed-formulas-vitest"
       parent_session_id: null
-    completion_pct: 0
+    completion_pct: 100
     open_questions: []
     answered_questions: []
 ---
@@ -39,9 +39,9 @@ _memory:
 | Field | Value |
 |-------|-------|
 | **Spec Folder** | 003-computed-formulas-vitest |
-| **Completed** | Not yet (Planned) |
+| **Completed** | 2026-08-26 — commit `79b9b98` on branch `impl` |
 | **Level** | 1 |
-| **Actual Effort** | Not started |
+| **Actual Effort** | Shipped as one commit |
 <!-- /ANCHOR:metadata -->
 
 ---
@@ -49,9 +49,7 @@ _memory:
 <!-- ANCHOR:what-built -->
 ## What Was Built
 
-Nothing in the fork yet. This child is Planned: the first plugin vitest files so SC-001 is runnable.
-
-Planned artifacts are `src/__tests__/setup.ts` (moment stub) and `src/data/__tests__/computed-formulas.test.ts` importing only `FormulaIfsSwitchMath.ts`.
+Shipped in commit `79b9b98` on branch `impl`, giving SC-001 a runnable harness. `src/__tests__/setup.ts` (moment stub) and `computed-formulas.test.ts` import only `FormulaIfsSwitchMath.ts` — 7 meaningful cases including a direct LOG-vs-LN regression guard and IEEE edge cases (NaN/-Infinity/non-finite), confirmed by Sonnet 5 verification (2026-08-26).
 
 ### Files Changed
 
@@ -68,7 +66,7 @@ Planned artifacts are `src/__tests__/setup.ts` (moment stub) and `src/data/__tes
 <!-- ANCHOR:how-delivered -->
 ## How It Was Delivered
 
-Not delivered. Starts after `001-formula-ifs-switch-math-module` has the module on disk. May overlap child 002.
+Delivered as commit `79b9b98` on branch `impl`, after `001-formula-ifs-switch-math-module` had the module on disk.
 <!-- /ANCHOR:how-delivered -->
 
 ---
@@ -91,8 +89,8 @@ Not delivered. Starts after `001-formula-ifs-switch-math-module` has the module 
 
 | Check | Result |
 |-------|--------|
-| `npx vitest run` | Not run (Planned) |
-| `bash .opencode/skills/system-spec-kit/scripts/spec/validate.sh` on this folder `--strict` | Pending after authoring |
+| `npx vitest run` | Pass — 7/7 in `computed-formulas.test.ts` |
+| Gate: `tsc --noEmit` / build / vitest | Pass — tsc0/build0/vitest green (commit `79b9b98`); 13 files / 160 tests pass at Sonnet re-verification (2026-08-26) |
 <!-- /ANCHOR:verification -->
 
 ---
@@ -103,4 +101,5 @@ Not delivered. Starts after `001-formula-ifs-switch-math-module` has the module 
 1. **Does not prove the ComputedField spread in-process.** That stays a scratch-vault check in children 001/002 unless someone later adds an engine smoke.
 2. **Does not assert FormulaModal autocomplete.** Child 002 owns discovery.
 3. **Does not add `npm test`.** Operator can add a script later.
+4. **Doc-only line-citation nit** (flagged by Sonnet 5 verification, 2026-08-26): this packet's docs cite `vitest.config.ts:1-11`; the real file is 9 lines. No functional impact.
 <!-- /ANCHOR:limitations -->

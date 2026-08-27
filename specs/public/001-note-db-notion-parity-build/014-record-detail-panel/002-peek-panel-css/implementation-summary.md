@@ -1,6 +1,6 @@
 ---
 title: "Implementation Summary: Peek Panel CSS"
-description: "Planned append-only styles.css block for the table record peek. Not yet implemented in the fork."
+description: "Shipped append-only styles.css block for the table record peek, on branch impl; initially incomplete (4/13 selector groups), completed same-phase in a follow-up commit after Sonnet review."
 trigger_phrases:
   - "peek panel css summary"
   - "db-record-open-btn"
@@ -9,10 +9,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "public/001-note-db-notion-parity-build/014-record-detail-panel/002-peek-panel-css"
-    last_updated_at: "2026-08-25T21:20:00Z"
-    last_updated_by: "phase-architect"
-    recent_action: "Authored peek-panel CSS child from synthesis ranks 4 and 6 and final-plan step 4"
-    next_safe_action: "Append the delimited styles.css block after class names from child 001"
+    last_updated_at: "2026-08-27T00:00:00Z"
+    last_updated_by: "docs-reconciliation"
+    recent_action: "Reconciled docs to shipped state: initial CSS landed in commit cc11f90 (incomplete, 4/13 groups); completed in c90aee6 after Sonnet review found the hidden-group collapse broken"
+    next_safe_action: "None — sub-phase complete"
     blockers: []
     key_files:
       - "spec.md"
@@ -23,7 +23,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "decompose-002-peek-panel-css"
       parent_session_id: null
-    completion_pct: 0
+    completion_pct: 100
     open_questions: []
     answered_questions: []
 ---
@@ -39,9 +39,9 @@ _memory:
 | Field | Value |
 |-------|-------|
 | **Spec Folder** | 002-peek-panel-css |
-| **Completed** | Not yet (Planned) |
+| **Completed** | 2026-08-26 (branch `impl`, commit `cc11f90`; completed in follow-up `c90aee6`) |
 | **Level** | 1 |
-| **Actual Effort** | Not started |
+| **Actual Effort** | Matches plan (plus one same-day/next-day fix pass) |
 <!-- /ANCHOR:metadata -->
 
 ---
@@ -49,16 +49,19 @@ _memory:
 <!-- ANCHOR:what-built -->
 ## What Was Built
 
-Nothing in the fork yet. This child is Planned: one appended `styles.css` block so OPEN hover/phone reveal and the docked peek can paint without touching the calendar `.db-record-detail-*` rules at `styles.css:7543-7618`.
+Commit `cc11f90` appended a `.note-database-container` CSS block to plugin-root `styles.css` — but shipped only **4 of the 13** selector groups the module's DOM actually references (`db-title-cell` position, `.db-record-open-btn`, `.db-record-peek-panel`, `.db-record-peek-field`). The other 9 classes (`.db-record-peek-header/-title/-properties/-empty/-hidden-group/-hidden-toggle/-hidden-fields/-field-label/-field-value`) had **no rules at all**, and there was no `.is-hidden{display:none}` collapse rule — so the hidden-properties toggle (built in child 001, wired in child 003) flipped a class with zero visual effect. A fresh Claude Sonnet 5 review (2026-08-26) caught this as a P1: "the hidden-properties group is not actually collapsible (missing CSS)."
+
+**Fixed in the same-day follow-up commit `c90aee6`**, which added the 9 missing peek-panel selectors plus the `.is-hidden` collapse rule. Zero toolbar selectors and zero `.db-record-detail-*` reuse were confirmed clean in both commits.
+
+Gate: `tsc --noEmit` exit 0 (CSS has no type-level gate); `vitest` 19 files / 194 tests pass (unaffected by CSS, re-run at Sonnet review time).
 
 ### Files Changed
 
 | File | Action | Purpose |
 |------|--------|---------|
-| `spec.md` | Authored | CSS-only scope |
-| `plan.md` | Authored | Append-only + theme-variable plan |
-| `tasks.md` | Authored | T003 append + T004–T005 grep |
-| `implementation-summary.md` | Authored | Honest pre-build record |
+| `styles.css` | Modified (`cc11f90`) | Initial `.note-database-container` peek block — 4 of 13 needed selector groups |
+| `styles.css` | Modified (`c90aee6`, follow-up) | The 9 missing peek-panel classes + `.is-hidden` collapse rule |
+| `spec.md` / `implementation-summary.md` | Reconciled | Docs updated to reflect the actual (initially-incomplete) shipped state, honestly (this pass) |
 <!-- /ANCHOR:what-built -->
 
 ---
@@ -66,7 +69,7 @@ Nothing in the fork yet. This child is Planned: one appended `styles.css` block 
 <!-- ANCHOR:how-delivered -->
 ## How It Was Delivered
 
-Not delivered. Implementation is a single EOF append to plugin-root `styles.css`.
+Delivered as a single EOF append to plugin-root `styles.css` in `cc11f90`, gated on `tsc --noEmit` + `npm run build` + `vitest` before commit — but the gate does not typecheck CSS completeness, so the missing 9 classes shipped undetected until the Sonnet 5 review. The fix landed in `c90aee6`.
 <!-- /ANCHOR:how-delivered -->
 
 ---
@@ -89,9 +92,9 @@ Not delivered. Implementation is a single EOF append to plugin-root `styles.css`
 
 | Check | Result |
 |-------|--------|
-| `git diff styles.css` one appended block | Not run (Planned) |
-| Grep diff for `toolbar` / `.db-record-detail-` empty | Not run (Planned) |
-| `validate.sh` on this folder `--strict` | Pending after authoring |
+| `git diff styles.css` one appended block | Pass — confirmed for both `cc11f90` and `c90aee6` |
+| Grep diff for `toolbar` / `.db-record-detail-` empty | Pass — Sonnet 5 review confirms zero toolbar/`.db-record-detail-*` selectors |
+| Hidden-group collapse actually works | **Initially FAILED** (missing `.is-hidden` rule + 9 classes) — fixed in `c90aee6` |
 <!-- /ANCHOR:verification -->
 
 ---
@@ -99,6 +102,7 @@ Not delivered. Implementation is a single EOF append to plugin-root `styles.css`
 <!-- ANCHOR:limitations -->
 ## Known Limitations
 
-1. **Unwired DOM.** Until child 003 attaches the button, these rules match nothing.
+1. **Unwired DOM until child 003.** These rules match nothing until the button attaches (commit `668bc97`).
 2. **No second stylesheet.** A `RecordDetailPanel.css` sibling would not load at runtime.
+3. **This commit's own CSS was incomplete** (4/13 selector groups) and did not implement the collapse rule the module's toggle depends on. A fresh Sonnet 5 review caught the gap; fixed same-day in `c90aee6`.
 <!-- /ANCHOR:limitations -->

@@ -50,7 +50,7 @@ _memory:
 |-------|-------|
 | **Level** | 2 |
 | **Priority** | P1 |
-| **Status** | Planned |
+| **Status** | Complete |
 | **Created** | 2026-08-24 |
 | **Branch** | `004-formula-ifs-switch-math` |
 
@@ -247,9 +247,9 @@ Build it, as named wrappers over an engine that needs no new evaluation machiner
 
 | Phase | Folder | Focus | Status |
 |-------|--------|-------|--------|
-| 1 | 001-formula-ifs-switch-math-module/ | New `FormulaIfsSwitchMath.ts` (IFS, SWITCH, SQRT/LN/LOG10/EXP/CBRT, Excel LOG) plus P0 spread into `ComputedField.ts` createContext — one module write | Planned |
-| 2 | 002-formula-modal-i18n-discovery/ | Concat help rows into FormulaModal `FUNCTIONS` at array init and append eight `formula.fn.*.desc` keys in en / zh-CN / zh-TW | Planned |
-| 3 | 003-computed-formulas-vitest/ | Bootstrap `src/__tests__/setup.ts` and `computed-formulas.test.ts` against the new module (`npx vitest run`) | Planned |
+| 1 | 001-formula-ifs-switch-math-module/ | New `FormulaIfsSwitchMath.ts` (IFS, SWITCH, SQRT/LN/LOG10/EXP/CBRT, Excel LOG) plus P0 spread into `ComputedField.ts` createContext — one module write | Complete |
+| 2 | 002-formula-modal-i18n-discovery/ | Concat help rows into FormulaModal `FUNCTIONS` at array init and append eight `formula.fn.*.desc` keys in en / zh-CN / zh-TW | Complete |
+| 3 | 003-computed-formulas-vitest/ | Bootstrap `src/__tests__/setup.ts` and `computed-formulas.test.ts` against the new module (`npx vitest run`) | Complete |
 
 Future / out of this phase (not child folders): `LOG2` alias (synthesis rank 7, outside the six-name freeze); candidate upstream PR notes stay in leftover parent docs until asked to open.
 

@@ -42,7 +42,7 @@ _memory:
 |-------|-------|
 | **Level** | 2 |
 | **Priority** | P1 |
-| **Status** | Planned |
+| **Status** | Deferred — never executed (predecessors 001-004 shipped; this proof's manual/grep run has no implementation commit; see `implementation-summary.md`) |
 | **Created** | 2026-08-25 |
 | **Branch** | `009-view-filter-tree` |
 | **Parent Spec** | ../spec.md |

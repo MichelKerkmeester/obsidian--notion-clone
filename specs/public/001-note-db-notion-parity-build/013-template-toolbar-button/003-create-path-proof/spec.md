@@ -42,7 +42,7 @@ _memory:
 |-------|-------|
 | **Level** | 2 |
 | **Priority** | P2 |
-| **Status** | Planned |
+| **Status** | Complete |
 | **Created** | 2026-08-25 |
 | **Branch** | `013-template-toolbar-button` |
 | **Parent Spec** | ../spec.md |

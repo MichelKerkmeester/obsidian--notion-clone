@@ -49,7 +49,7 @@ _memory:
 |-------|-------|
 | **Level** | 2 |
 | **Priority** | P1 |
-| **Status** | Planned |
+| **Status** | Complete |
 | **Created** | 2026-08-24 |
 | **Branch** | `012-files-column` |
 
@@ -273,11 +273,11 @@ Operator decisions from `research/synthesis.md` (recommended defaults shown; the
 
 | Phase | Folder | Focus | Status |
 |-------|--------|-------|--------|
-| 1 | 001-files-column-module/ | Isolated `FilesColumn.ts`: normalize vault wikilink `string[]`, edit serialize, resolve, classify, `renderChips` (cap 5, unresolved, optional thumbnails) | Planned |
-| 2 | 002-files-type-registry/ | Register `"files"` as the 13th type across union, labels, icon, pickers, three i18n dictionaries, and `files` to `multitext` conflict | Planned |
-| 3 | 003-files-cell-dispatch/ | CellRenderer `case "files"` chips, save-time URL strip, and `startEdit` wikilink text editor | Planned |
-| 4 | 004-files-cover-wiring/ | Gallery/board cover guard skips `image.external` on files columns, `onerror` placeholder, auto-prefer files | Planned |
-| 5 | 005-files-column-proof/ | Typecheck, grep, desktop/mobile, iCloud, and rebase-shape proof for REQ-001–007 and SC-001–004 | Planned |
+| 1 | 001-files-column-module/ | Isolated `FilesColumn.ts`: normalize vault wikilink `string[]`, edit serialize, resolve, classify, `renderChips` (cap 5, unresolved, optional thumbnails) | Complete |
+| 2 | 002-files-type-registry/ | Register `"files"` as the 13th type across union, labels, icon, pickers, three i18n dictionaries, and `files` to `multitext` conflict | Complete |
+| 3 | 003-files-cell-dispatch/ | CellRenderer `case "files"` chips, save-time URL strip, and `startEdit` wikilink text editor | Complete |
+| 4 | 004-files-cover-wiring/ | Gallery/board cover guard skips `image.external` on files columns, `onerror` placeholder, auto-prefer files | Complete |
+| 5 | 005-files-column-proof/ | Typecheck, grep, desktop/mobile, iCloud, and rebase-shape proof for REQ-001–007 and SC-001–004 | Complete |
 
 Future / out of this phase (not child folders): gallery "N attachments" count badge; per-file Notion menu plus reorder; GalleryRenderer/ListRenderer card-body stringify unless a finance gallery shows the files column as a field; empty-aware sort; `db-file-pending` overlay; Notion CDN fetch; upload UI; widening `IMAGE_TARGET_RE` for HEIC/TIFF/ICO.
 

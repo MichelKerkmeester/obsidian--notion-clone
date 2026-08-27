@@ -1,6 +1,6 @@
 ---
 title: "Implementation Summary: Percent Aggregation Pack"
-description: "Planned percentEmpty/percentFilled rollup kinds. Not yet implemented in the fork."
+description: "Shipped percentEmpty/percentFilled rollup kinds, gate-green and Sonnet-verified PASS."
 trigger_phrases:
   - "percent aggregation summary"
   - "percent empty"
@@ -11,8 +11,8 @@ _memory:
     packet_pointer: "public/001-note-db-notion-parity-build/002-rollup-aggregation-pack/003-percent-aggregation-pack"
     last_updated_at: "2026-08-25T19:05:00Z"
     last_updated_by: "phase-architect"
-    recent_action: "Authored percent-pack child from synthesis rank 6 and final-plan step 9"
-    next_safe_action: "Implement percentEmpty/percentFilled after numeric and date children"
+    recent_action: "Shipped commit 18e5461 (feat(impl): 003-percent-aggregation-pack); tsc0/build0/vitest green; Sonnet 5 verification PASS 2026-08-26"
+    next_safe_action: "None — sub-phase complete"
     blockers: []
     key_files:
       - "spec.md"
@@ -23,7 +23,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "decompose-003-percent-aggregation-pack"
       parent_session_id: null
-    completion_pct: 0
+    completion_pct: 100
     open_questions: []
     answered_questions: []
 ---
@@ -39,9 +39,9 @@ _memory:
 | Field | Value |
 |-------|-------|
 | **Spec Folder** | 003-percent-aggregation-pack |
-| **Completed** | Not yet (Planned) |
+| **Completed** | 2026-08-26 — commit `18e5461` on branch `impl` |
 | **Level** | 1 |
-| **Actual Effort** | Not started |
+| **Actual Effort** | Shipped as one commit |
 <!-- /ANCHOR:metadata -->
 
 ---
@@ -49,9 +49,7 @@ _memory:
 <!-- ANCHOR:what-built -->
 ## What Was Built
 
-Nothing in the fork yet. This child is Planned: percents last so `src/data/Aggregate.ts` stays one module.
-
-Planned work adds `percentEmpty`/`percentFilled` on row totals, dispatches from `src/data/RelationRollup.ts` `records` before `:126`, and routes `ChartAggregation.ts:788-789` through Aggregate.
+Shipped in commit `18e5461` on branch `impl`, landing last so `src/data/Aggregate.ts` stayed one module. `percentEmpty`/`percentFilled` now compute on row totals, dispatch from `src/data/RelationRollup.ts` `records` before the numeric flatten (`:140-148`), and `ChartAggregation.ts` percent-empty/percent-not-empty route through Aggregate with the existing `?? 0` edge mapping.
 
 ### Files Changed
 
@@ -68,7 +66,7 @@ Planned work adds `percentEmpty`/`percentFilled` on row totals, dispatches from 
 <!-- ANCHOR:how-delivered -->
 ## How It Was Delivered
 
-Not delivered. Starts after numeric and date children so the shared leaf is not split.
+Delivered as commit `18e5461` on branch `impl`, after numeric (`b83d666`) and date (`58490ee`) children so the shared leaf was not split.
 <!-- /ANCHOR:how-delivered -->
 
 ---
@@ -91,9 +89,9 @@ Not delivered. Starts after numeric and date children so the shared leaf is not 
 
 | Check | Result |
 |-------|--------|
-| `npx vitest run` after percent tests | Not run (Planned) |
-| Two-denominator check vs avg | Not run (Planned) |
-| `validate.sh` on this folder `--strict` | Pending after authoring |
+| `npx vitest run` after percent tests | Pass — tsc0/build0/vitest green (commit `18e5461`) |
+| Two-denominator check vs avg | Confirmed by Sonnet verification — percent dispatch runs from `records` before the numeric flatten; average's non-empty denominator untouched |
+| Full Vitest suite at Sonnet re-verification | Pass — 160/160 (2026-08-26) |
 <!-- /ANCHOR:verification -->
 
 ---
@@ -104,4 +102,5 @@ Not delivered. Starts after numeric and date children so the shared leaf is not 
 1. **No checkbox percent kinds.** Empty/filled only.
 2. **No footer percent kinds this phase.**
 3. **Chart empty chrome stays 0** via `?? 0`; rollup cells stay empty text on missing targets.
+4. **Cross-phase interaction (not a regression here):** the later inverse-relation rollup path added by phase 008 (`RelationRollup.ts`, commit `90c335d`) short-circuits to `emptyRollupValue` (`null`) on zero inbound edges, instead of this phase's "0 related rows → 0" rule for `percentEmpty`/`percentFilled`. This phase's forward-relation path is correct per Sonnet verification; the inverse-relation gap belongs to phase 008.
 <!-- /ANCHOR:limitations -->

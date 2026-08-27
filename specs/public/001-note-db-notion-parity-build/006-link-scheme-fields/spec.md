@@ -50,7 +50,7 @@ _memory:
 |-------|-------|
 | **Level** | 2 |
 | **Priority** | P1 |
-| **Status** | Planned |
+| **Status** | Complete |
 | **Created** | 2026-08-24 |
 | **Branch** | `006-link-scheme-fields` |
 
@@ -259,10 +259,10 @@ Ship a closed-allowlist `textLinkScheme` hint (`https` | `mailto` | `tel`) on th
 
 | Phase | Folder | Focus | Status |
 |-------|--------|-------|--------|
-| 1 | 001-text-link-scheme-module/ | New `textLinkScheme.ts` (closed allowlist + assemble including tel-strip), `ColumnDef` hint, CellRenderer default-branch delayed-open, shared opener extract, vitest T1–T11 plus JSON round-trip — one same-diff slice | Planned |
-| 2 | 002-layout-scheme-honor/ | Honor the hint in Board, Gallery, List, and record-detail via the shared `{label,target}` helper | Planned |
-| 3 | 003-column-menu-scheme-picker/ | Column-menu picker for https, mailto, tel, or none, plus `setTextLinkScheme` beside `setTextRenderMode` | Planned |
-| 4 | 004-scheme-column-width/ | Auto-width / wrap treats scheme-hint cells like link-mode labels | Planned |
+| 1 | 001-text-link-scheme-module/ | New `textLinkScheme.ts` (closed allowlist + assemble including tel-strip), `ColumnDef` hint, CellRenderer default-branch delayed-open, shared opener extract, vitest T1–T11 plus JSON round-trip — one same-diff slice | Complete |
+| 2 | 002-layout-scheme-honor/ | Honor the hint in Board, Gallery, List, and record-detail via the shared `{label,target}` helper | Complete |
+| 3 | 003-column-menu-scheme-picker/ | Column-menu picker for https, mailto, tel, or none, plus `setTextLinkScheme` beside `setTextRenderMode` | Complete |
+| 4 | 004-scheme-column-width/ | Auto-width / wrap treats scheme-hint cells like link-mode labels | Complete |
 
 Future / out of this phase (not child folders): Copy / Visit affordance; auto-detect URL / email / phone in unhinted text; a 13th column type; persisting assembled hrefs; extending `textRenderMode`; DNS / Google-search fallbacks; AppFlowy confirm sheet; speculative `db-text-link` CSS.
 

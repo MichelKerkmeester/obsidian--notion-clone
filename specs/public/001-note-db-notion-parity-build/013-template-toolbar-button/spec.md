@@ -50,7 +50,7 @@ _memory:
 |-------|-------|
 | **Level** | 2 |
 | **Priority** | P2 |
-| **Status** | Planned |
+| **Status** | Complete |
 | **Created** | 2026-08-24 |
 | **Branch** | `013-template-toolbar-button` |
 
@@ -257,9 +257,9 @@ Ship an adaptive **New from template** label on the toolbar plus a row-menu twin
 
 | Phase | Folder | Focus | Status |
 |-------|--------|-------|--------|
-| 1 | 001-adaptive-toolbar-control/ | Isolated `TemplateToolbarAction.ts` plus i18n and the adaptive toolbar New host (path tooltip, phone icon-only) | Planned |
-| 2 | 002-row-menu-template-item/ | Row-menu New-from-template item when a template is set, plus DatabaseView `getDatabaseConfig` wiring | Planned |
-| 3 | 003-create-path-proof/ | Prove one create via the existing path, no double create, phone and empty-set behavior, and the three-host diff | Planned |
+| 1 | 001-adaptive-toolbar-control/ | Isolated `TemplateToolbarAction.ts` plus i18n and the adaptive toolbar New host (path tooltip, phone icon-only) | Complete |
+| 2 | 002-row-menu-template-item/ | Row-menu New-from-template item when a template is set, plus DatabaseView `getDatabaseConfig` wiring | Complete |
+| 3 | 003-create-path-proof/ | Prove one create via the existing path, no double create, phone and empty-set behavior, and the three-host diff | Complete |
 
 Future / out of this phase (not child folders): REQ-004 confirm-before-create (deferred; overlay guard is the double-click backstop); Notion split-button plus template dropdown; inline "+ New template"; multi-template / per-view `defaultTemplateId`; repeating or scheduled templates; AppFlowy-style payload pre-fill as a new engine; network buttons (mail, webhook, Slack).
 

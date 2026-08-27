@@ -1,6 +1,6 @@
 ---
 title: "Implementation Summary"
-description: "Honest scaffold status for phase 014: the record detail panel is not yet built; design decisions and pending verification are recorded."
+description: "Shipped status for phase 014: the record detail panel is built, gate-green, and Sonnet-verified (core mechanics solid; CSS gap found and fixed same-day; tests added post-review)."
 trigger_phrases:
   - "record detail panel"
   - "implementation summary"
@@ -12,10 +12,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "public/001-note-db-notion-parity-build/014-record-detail-panel"
-    last_updated_at: "2026-08-24T00:00:00Z"
-    last_updated_by: "swarm"
-    recent_action: "Scaffolded phase 014 docs; status Planned"
-    next_safe_action: "Build phase 014 per plan.md and tasks.md"
+    last_updated_at: "2026-08-27T00:00:00Z"
+    last_updated_by: "docs-reconciliation"
+    recent_action: "Reconciled phase 014 docs to shipped state (commits c4ceb74..02929b0 + CSS fix c90aee6 + post-review tests 86eee77); Sonnet-verified"
+    next_safe_action: "None — phase complete. Packet-wide completion-doc reconciliation continues per remediation-plan.md R1."
     blockers: []
     key_files:
       - "spec.md"
@@ -27,7 +27,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "note-db-parity-scaffold"
       parent_session_id: null
-    completion_pct: 0
+    completion_pct: 100
     open_questions: []
     answered_questions: []
 ---
@@ -44,9 +44,9 @@ _memory:
 | Field | Value |
 |-------|-------|
 | **Spec Folder** | 014-record-detail-panel |
-| **Completed** | Not yet implemented (Planned) |
+| **Completed** | 2026-08-26 (branch `impl`, commits `c4ceb74..02929b0`; CSS fix `c90aee6`; tests `86eee77`) |
 | **Level** | 2 |
-| **Actual Effort** | N/A — phase not yet built (estimated: ~2.5 hours, effort S) |
+| **Actual Effort** | M (~6h, matching the operator-overridden effort in `spec.md` §9 Q14), not the original S estimate |
 
 <!-- /ANCHOR:metadata -->
 ---
@@ -54,19 +54,25 @@ _memory:
 <!-- ANCHOR:what-built -->
 ## What Was Built
 
-This phase is NOT built yet. The five scaffolded documents define the planned RecordDetailPanel work — Anytype-style properties sections (header/hidden groups) plus GoodBases-style hover-open chrome, scoped CSS only, no core Obsidian toolbar restyle. Implementation follows `plan.md` and `tasks.md`; no code has been created or modified in the fork.
+Shipped on branch `impl` (commits `c4ceb74`, `cc11f90`, `668bc97`, `02929b0`): a display-only CSS-docked side-peek record detail panel via the new `src/views/TableRecordPeek.ts` module (a sibling of, and distinct from, the existing calendar `src/views/RecordDetailPanel.ts`, which stayed untouched) — header + collapsible hidden-property groups, a Name-cell OPEN affordance, Mod+Enter keyboard open, and overlay-lifecycle wiring so `refresh()` / view-switch cannot orphan the panel.
+
+Gate: `tsc --noEmit` exit 0; `vitest` 19 files / 194 tests pass (re-run at Sonnet 5 review time). Independently verified by a fresh, read-only Claude Sonnet 5 review (2026-08-26, hunter/skeptic/referee adversarial self-check): **CONCERNS**, score 86/100 (ACCEPTABLE) — core mechanics (open/close/keyboard/overlay-lifecycle/isolation/safety) verified solid, but the hidden-properties group was not actually collapsible due to incomplete CSS, and the module had zero test coverage at review time. Both gaps were closed same-day / next-day:
+
+- **P1 — hidden-properties group not functionally collapsible.** The dedicated CSS sub-phase (`002-peek-panel-css`, commit `cc11f90`) committed only 4 of the 13 selector groups the DOM references, so `.db-record-peek-hidden-fields` had no `.is-hidden{display:none}` rule and was visible from first paint regardless of the toggle — breaking REQ-001. Fixed same-day in `c90aee6`, which added the 9 missing peek-panel classes and the `.is-hidden` collapse rule.
+- **P2 — zero test coverage for the new module.** No `.test.ts` referenced `TableRecordPeek`/`openTableRecordPeek` at review time. Closed the next day by `86eee77` (`src/views/TableRecordPeek.test.ts`, 395 lines), part of a broader deep-review fix pass.
+
+Built on Luna-via-cursor after the Codex OpenAI executor's quota died mid-run (see `synthesis.md` §3).
 
 ### Files Changed
 
 | File | Action | Purpose |
 |------|--------|---------|
-| `specs/public/001-note-db-notion-parity-build/014-record-detail-panel/spec.md` | Created (scaffold) | Level 2 specification |
-| `specs/public/001-note-db-notion-parity-build/014-record-detail-panel/plan.md` | Created (scaffold) | Level 2 implementation plan |
-| `specs/public/001-note-db-notion-parity-build/014-record-detail-panel/tasks.md` | Created (scaffold) | Level 2 task list |
-| `specs/public/001-note-db-notion-parity-build/014-record-detail-panel/checklist.md` | Created (scaffold) | Level 2 verification checklist (all pending) |
-| `specs/public/001-note-db-notion-parity-build/014-record-detail-panel/implementation-summary.md` | Created (scaffold) | Level 2 implementation summary |
-
-Planned (not yet created): the detail-panel IA module and scoped CSS under `note-database-fork/src/data/`, plus ≤3 minimal call-site edits — see `plan.md` §3 and `tasks.md` Phase 2.
+| `src/views/TableRecordPeek.ts` | Added | Display-only side-peek module: open/close/sync, header + hidden-group IA |
+| `src/views/TableRecordPeek.test.ts` | Added (post-review, `86eee77`) | Unit tests closing the P2 zero-coverage gap |
+| `src/views/DatabaseView.ts` | Modified | `renderCell` OPEN-affordance hunk, Mod+Enter keyboard hunk, overlay-lifecycle hunk |
+| `src/i18n.ts` | Modified | `panel.open`, `panel.noProperties`, `panel.hiddenProperties` in en/zh-CN/zh-TW |
+| `styles.css` | Modified (`cc11f90`, completed in `c90aee6`) | `.db-record-peek-*` panel CSS + the 9 missing classes and `.is-hidden` collapse rule |
+| `specs/public/001-note-db-notion-parity-build/014-record-detail-panel/{spec,plan,tasks,checklist,implementation-summary}.md` | Reconciled | Docs updated to reflect shipped state (this pass) |
 
 <!-- /ANCHOR:what-built -->
 ---
@@ -74,7 +80,7 @@ Planned (not yet created): the detail-panel IA module and scoped CSS under `note
 <!-- ANCHOR:how-delivered -->
 ## How It Was Delivered
 
-Scaffolded as a Planned packet: the five template-compliant documents were authored from the phase brief and the 008 research baseline (`specs/obsidian/001-notion-finance-migration/008-note-db-notion-parity/research/research.md`). No implementation work has been performed.
+Built serially through sub-phases 001-004 (module+i18n → panel CSS → title OPEN affordance+overlay lifecycle → Mod+Enter), each gated on `tsc --noEmit` + `npm run build` + `vitest` before commit. Sub-phase 005 (`005-peek-display-proof`) was scoped as a manual verification pass and was never separately executed or committed. Verified read-only by a fresh Claude Sonnet 5 review after the phase completed, which surfaced the CSS-collapse and test-coverage gaps; both were fixed in same-phase/post-phase follow-up commits (`c90aee6`, `86eee77`).
 
 <!-- /ANCHOR:how-delivered -->
 ---
@@ -99,17 +105,17 @@ Scaffolded as a Planned packet: the five template-compliant documents were autho
 
 | Test Type | Status | Coverage | Notes |
 |-----------|--------|----------|-------|
-| Fork typecheck | Pending | Fork with phase diff | Not yet run — phase unbuilt |
-| Toolbar-style diff audit | Pending | Phase diff | Not yet run |
-| Manual desktop + mobile pass | Pending | Hover-open, tap fallback, hidden groups | Not yet run |
-| Regression sweep | Pending | Views, formulas, filters, rollups | Not yet run |
+| Fork typecheck | Pass | Fork with phase diff | `tsc --noEmit` exit 0, re-run at Sonnet review time |
+| Toolbar-style diff audit | Pass | Phase diff | Sonnet 5 review: zero toolbar selector edits; `RecordDetailPanel.ts` (calendar) untouched |
+| Manual desktop + mobile pass | Verified by code trace | Hover-open, tap fallback, hidden groups | No dedicated manual matrix recorded (005 proof never ran); Sonnet 5 code trace confirmed open/close/keyboard/overlay-lifecycle |
+| Regression sweep | Pass | Views, formulas, filters, rollups | Sonnet 5 review: calendar `RecordDetailPanel.ts` untouched, table-only wiring, one `renderCell` call site, no duplicate rendering |
 
 ### Test Coverage Summary
 
 | File | Statements | Branches | Functions |
 |------|------------|----------|-----------|
-| Panel module (planned) | N/A — not yet written | N/A — not yet written | N/A — not yet written |
-| Scoped CSS (planned) | N/A — not yet written | N/A — not yet written | N/A — not yet written |
+| `TableRecordPeek.ts` | Zero coverage at Sonnet review time (P2 finding); covered post-review by `TableRecordPeek.test.ts` (`86eee77`, 395 lines) | Same | Same |
+| Scoped CSS (`.db-record-peek-*`) | N/A (CSS) | N/A | N/A — initial commit shipped only 4/13 selector groups (P1); completed in `c90aee6` |
 
 <!-- /ANCHOR:verification -->
 ---
@@ -119,11 +125,11 @@ Scaffolded as a Planned packet: the five template-compliant documents were autho
 
 | NFR ID | Target | Actual | Status |
 |--------|--------|--------|--------|
-| NFR-P01 | Panel opens without layout jank | Not yet measured | Pending |
-| NFR-S01 | No secrets or telemetry | Not yet scanned | Pending |
-| NFR-S02 | No new evaluation paths | Not yet scanned | Pending |
-| NFR-R01 | Read-only, iCloud-safe | Not yet confirmed | Pending |
-| NFR-R02 | Rebase-friendly isolated diff | Not yet verified | Pending |
+| NFR-P01 | Panel opens without layout jank | Not independently re-measured in this reconciliation pass; no new global style recalcs by design | Pass (by design) |
+| NFR-S01 | No secrets or telemetry | Confirmed — Sonnet 5 review found none | Pass |
+| NFR-S02 | No new evaluation paths | Confirmed — no `DataSource`/`mutateFrontmatter`/`openNote` in the module (grep) | Pass |
+| NFR-R01 | Read-only, iCloud-safe | Confirmed — display-only/iCloud-safe per Sonnet 5 review; toggle state in-memory | Pass |
+| NFR-R02 | Rebase-friendly isolated diff | Confirmed — 1 new view module + i18n data + 1 appended `styles.css` block + 1 host file with 3 hunks | Pass |
 
 <!-- /ANCHOR:nfr-verify -->
 ---
@@ -131,10 +137,11 @@ Scaffolded as a Planned packet: the five template-compliant documents were autho
 <!-- ANCHOR:limitations -->
 ## Known Limitations
 
-1. The phase is scaffolded only; every verification row is pending until implementation follows `plan.md` and `tasks.md`.
+1. **This phase's own manual proof matrix (`005-peek-display-proof`) was never separately run or committed.** The Sonnet 5 review substitutes for it — see What Was Built.
 2. Rollups remain count|sum|avg|list and display-only; this phase adds no rollup expansion.
 3. Two-way write-back from the panel is out of scope — owned by successor phase `015-two-way-write-back`.
-4. Hover-open requires a touch/tap fallback because hover does not exist on mobile.
+4. Hover-open requires a touch/tap fallback because hover does not exist on mobile; phone OPEN is CSS-only, confirmed by code trace.
+5. **The hidden-properties CSS gap (P1) and zero test coverage (P2) were real defects at the time of the Sonnet review**, both fixed in follow-up commits (`c90aee6`, `86eee77`) rather than caught before the phase was marked done.
 
 <!-- /ANCHOR:limitations -->
 ---
@@ -144,6 +151,10 @@ Scaffolded as a Planned packet: the five template-compliant documents were autho
 
 | Planned | Actual | Reason |
 |---------|--------|--------|
-| Build the record detail panel | Not yet started — docs scaffolded only | Phase status is Planned; implementation is the next action |
+| Build the record detail panel (effort S, ~2.5h) | Built at effort M (~6h) across 4 sub-phase commits | Operator override recorded in `spec.md` §9 Q14: calendar coexistence and the refresh/overlay hunk were not optional |
+| Codex-executor build throughout | Codex OpenAI quota died mid-run; rebuilt on Luna-via-cursor | Executor swap, documented in `synthesis.md` §3 |
+| `002-peek-panel-css` ships all peek-panel CSS in one commit | Shipped only 4 of 13 selector groups; the collapse-relevant classes and `.is-hidden` rule landed one day later in `c90aee6` | Sonnet 5 review (2026-08-26) caught the hidden-group collapse regression before it shipped further; fix landed same-day |
+| Module ships with tests per sibling-module convention | Shipped with zero tests; Sonnet 5 flagged as P2 | Tests added post-review in `86eee77` (part of a broader deep-review fix pass), not before the phase was marked done |
+| Run the `005-peek-display-proof` manual matrix and record it | Never executed or committed — no `005-peek-display-proof` commit exists on `impl` | The code substance was independently re-verified by the Sonnet 5 review (open/close/keyboard/overlay trace + real `tsc`/`vitest` + safety grep) in place of the un-run manual proof; this is an artifact gap, not a code defect (per `research/sonnet-verification.md`) |
 
 <!-- /ANCHOR:deviations -->

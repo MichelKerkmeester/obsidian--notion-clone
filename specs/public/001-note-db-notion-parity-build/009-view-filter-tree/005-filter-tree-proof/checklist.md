@@ -13,8 +13,8 @@ _memory:
     packet_pointer: "public/001-note-db-notion-parity-build/009-view-filter-tree/005-filter-tree-proof"
     last_updated_at: "2026-08-25T21:00:00Z"
     last_updated_by: "phase-architect"
-    recent_action: "Authored filter-tree-proof child from synthesis rank 9 and final-plan steps 10-12"
-    next_safe_action: "Run Vitest, vault, grep, and 010 freeze after 001-004"
+    recent_action: "Predecessors 001-004 shipped and Sonnet-verified (see ../research/sonnet-verification.md); this child's own manual/grep run was never dispatched — checklist below remains an honest Pending record, not a false Complete"
+    next_safe_action: "If literal manual vault/grep proof is still wanted, run tasks.md T001-T006; otherwise this sub-phase stays Deferred alongside ../implementation-summary.md and ../spec.md"
     blockers: []
     key_files:
       - "spec.md"

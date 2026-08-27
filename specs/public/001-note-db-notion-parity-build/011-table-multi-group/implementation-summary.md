@@ -1,6 +1,6 @@
 ---
 title: "Implementation Summary"
-description: "Honest status for phase 011: scaffolded and planned, multi-field table grouping not yet built."
+description: "Shipped status for phase 011: multi-field table grouping built, gate-green, and Sonnet-verified on branch impl."
 trigger_phrases:
   - "groupbyfields summary"
   - "multi-field grouping status"
@@ -12,10 +12,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "public/001-note-db-notion-parity-build/011-table-multi-group"
-    last_updated_at: "2026-08-24T00:00:00Z"
-    last_updated_by: "swarm"
-    recent_action: "Scaffolded phase 011 docs; status Planned"
-    next_safe_action: "Build phase 011 per plan.md and tasks.md"
+    last_updated_at: "2026-08-27T00:00:00Z"
+    last_updated_by: "docs-reconciliation"
+    recent_action: "Reconciled phase 011 docs to shipped state (commits 8a14675..d9e038c + CSS catch-up 929769d); Sonnet-verified"
+    next_safe_action: "None — phase complete. Packet-wide completion-doc reconciliation continues per remediation-plan.md R1."
     blockers: []
     key_files:
       - "spec.md"
@@ -27,7 +27,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "note-db-parity-scaffold"
       parent_session_id: null
-    completion_pct: 0
+    completion_pct: 100
     open_questions: []
     answered_questions: []
 ---
@@ -44,9 +44,9 @@ _memory:
 | Field | Value |
 |-------|-------|
 | **Spec Folder** | 011-table-multi-group |
-| **Completed** | Not yet implemented (Planned) |
+| **Completed** | 2026-08-26 (branch `impl`) |
 | **Level** | 2 |
-| **Actual Effort** | UNKNOWN — not started (planned: M, ≈5 hours) |
+| **Actual Effort** | M, ≈5 hours (matches plan estimate) |
 
 <!-- /ANCHOR:metadata -->
 ---
@@ -54,19 +54,26 @@ _memory:
 <!-- ANCHOR:what-built -->
 ## What Was Built
 
-This phase is NOT built yet. No fork code was changed. The packet currently contains only the scaffolded planning documents for multi-field table grouping (`groupByFields[]` plus recursive, indented group headers in `TableRenderer.ts`).
+Shipped on branch `impl` (commits `8a14675^..d9e038c`, 5 commits, plus CSS catch-up `929769d`): multi-field table grouping via `groupByFields?: string[]` on `ViewConfig`, a new isolated module `src/data/MultiFieldGrouping.ts` (`effectiveGroupFields`, `buildGroupTree`, `flattenGroupTree`, `dropComputedGroupFields`), depth-aware nested group headers in `src/views/TableRenderer.ts`, persistence round-trip in `src/data/DataSource.ts`, embedded-table parity in `src/views/EmbeddedDatabaseRenderer.ts`, and a table-gated Sub-group picker (`src/views/ToolbarRenderer.ts` / `MultiGroupDisplay.ts` / `TableSubgroupPicker.ts`) cloned from the board popover.
 
-Implementation will follow `plan.md` (architecture and phases) and `tasks.md` (task list). Nothing beyond these documents exists in this phase folder.
+Gate: `tsc --noEmit` exit 0; `vitest` 17 files / 181 tests pass (re-run in an isolated worktree at `d9e038c` for the Sonnet 5 verification, `research/sonnet-verification.md`).
+
+Independently verified by a fresh, read-only Claude Sonnet 5 review (2026-08-26): the recursive grouping/flatten logic, collapse-key/leaf-value/create-defaults separation, persistence, embedded copy-back, and the sub-group picker were traced correct. That review also caught a real gap — see Deviations below — which was fixed same-day in `929769d`.
 
 ### Files Changed
 
 | File | Action | Purpose |
 |------|--------|---------|
-| `specs/public/001-note-db-notion-parity-build/011-table-multi-group/spec.md` | Scaffolded | Requirements, scope, NFRs, edge cases for multi-field table grouping |
-| `specs/public/001-note-db-notion-parity-build/011-table-multi-group/plan.md` | Scaffolded | Implementation approach on the `EuroFormat.ts` isolated-diff model |
-| `specs/public/001-note-db-notion-parity-build/011-table-multi-group/tasks.md` | Scaffolded | Task breakdown for setup, implementation, and verification |
-| `specs/public/001-note-db-notion-parity-build/011-table-multi-group/checklist.md` | Scaffolded | Pending verification items (0 verified) |
-| `specs/public/001-note-db-notion-parity-build/011-table-multi-group/implementation-summary.md` | Scaffolded | This honest status record |
+| `src/data/MultiFieldGrouping.ts` | Added | Pure module: `effectiveGroupFields`, `buildGroupTree`, `flattenGroupTree`, `dropComputedGroupFields` |
+| `src/data/MultiGroupDisplay.ts` | Added | `getGroupHeaderClassName(depth)` etc. for depth-aware header classes (commit `d9e038c`) |
+| `src/views/TableSubgroupPicker.ts` | Added | Table-gated Sub-group popover section cloned from the board picker |
+| `src/data/types.ts` | Modified | `groupByFields?: string[]` beside `groupByField` |
+| `src/data/DataSource.ts` | Modified | Parse/serialize `groupByFields` (whitelist round-trip) |
+| `src/views/DatabaseView.ts` | Modified | Dispatch on `effectiveGroupFields`; `setGroupByField` gated to `viewType === "table"` |
+| `src/views/EmbeddedDatabaseRenderer.ts` | Modified | Same tree/flatten as top-level; `groupByFields` copy-back |
+| `src/views/ToolbarRenderer.ts` | Modified | Sub-group popover section, computed-field filter |
+| `styles.css` | Modified (via `929769d`) | `db-group-header--depth-N` indent, sticky-at-depth-0-only, consecutive-header margin |
+| `specs/public/001-note-db-notion-parity-build/011-table-multi-group/{spec,plan,tasks,checklist,implementation-summary}.md` | Reconciled | Docs updated to reflect shipped state (this pass) |
 
 <!-- /ANCHOR:what-built -->
 ---
@@ -74,7 +81,7 @@ Implementation will follow `plan.md` (architecture and phases) and `tasks.md` (t
 <!-- ANCHOR:how-delivered -->
 ## How It Was Delivered
 
-Scaffold only: the five planning documents above were created on 2026-08-24 as a wave-4 phase packet. No fork code was written and no verification was run. The build follows `plan.md` and `tasks.md` once this phase is picked up.
+Built serially through sub-phases 001-004 (module+persist → depth-aware table loop → embedded parity → sub-group picker), each gated on `tsc --noEmit` + `npm run build` + `vitest` before commit. Sub-phase 005 (`d9e038c`) landed the header-class computation (`MultiGroupDisplay.ts`) alongside the depth-aware loop wiring. A packet-wide CSS catch-up commit (`929769d`, same day) added the `db-group-header--depth-N` indent and sticky-override rules that the build driver's stage-4 script had left uncommitted (it staged only `src/` and `main.js`, not `styles.css`). Verified read-only by a fresh Claude Sonnet 5 review in an isolated `git worktree` at `d9e038c`, insulated from the concurrent dirty 012 tree.
 
 <!-- /ANCHOR:how-delivered -->
 ---
@@ -98,16 +105,19 @@ Scaffold only: the five planning documents above were created on 2026-08-24 as a
 
 | Test Type | Status | Coverage | Notes |
 |-----------|--------|----------|-------|
-| Render matrix (1/2/3 fields, nulls, empty groups) | Pending | 0% | Dev vault manual verification per `tasks.md` T009 |
-| Mobile viewport check (≤360px) | Pending | 0% | Per `tasks.md` T010 |
-| Diff-shape audit | Pending | 0% | One new module + ≤3 call sites per `tasks.md` T011 |
-| Rebase dry-run | Pending | 0% | Scratch branch per `tasks.md` T012 |
+| `tsc --noEmit` | Pass | Exit 0 | Re-run at Sonnet review time in isolated worktree @ `d9e038c` |
+| `vitest` | Pass | 17 files / 181 tests | `MultiFieldGrouping/MultiGroupDisplay/TableSubgroupPicker.test.ts` + `DataSource.test.ts` cover recursion, computed-field drop, candidate filtering, persistence |
+| Render matrix (1/2/3 fields, nulls, empty groups) | Verified by code trace | — | Sonnet review hand-traced `MultiFieldGrouping.ts:31-88` node-by-node; no `TableRenderer.test.ts` DOM test exists (house convention — no renderer DOM tests project-wide) |
+| Mobile viewport check (≤360px) | Not independently re-run | — | Covered by `tableMinWidth`-per-header design carried over unchanged; not re-verified in this pass |
+| Diff-shape audit | Pass | — | Sonnet review: diff scoped to 6 files + 4 new; board/gallery/list/timeline + `patchGroupedRows` untouched |
+| REQ-003 (nested-header CSS indent) | Fixed | — | Initially missing from the 5 phase commits (P0 finding); committed same-day in `929769d` |
 
 ### Test Coverage Summary
 
 | File | Statements | Branches | Functions |
 |------|------------|----------|-----------|
-| Fork code changes | 0% — not yet written | 0% — not yet written | 0% — not yet written |
+| `MultiFieldGrouping.ts` / `MultiGroupDisplay.ts` / `TableSubgroupPicker.ts` | Covered by dedicated `*.test.ts` files | Covered (recursion, candidate filtering) | Covered (exported functions unit-tested) |
+| `TableRenderer.ts` depth-aware loop | No DOM test | — | Manually/Sonnet-verified only, per pre-existing project convention (no renderer DOM tests anywhere in the codebase) |
 
 <!-- /ANCHOR:verification -->
 ---
@@ -117,10 +127,10 @@ Scaffold only: the five planning documents above were created on 2026-08-24 as a
 
 | NFR ID | Target | Actual | Status |
 |--------|--------|--------|--------|
-| NFR-P01 | No interaction regression on ~5k-row tables | UNKNOWN — not measured | Pending |
-| NFR-S01 | No secrets, no network | UNKNOWN — no code yet | Pending |
-| NFR-R01 | Deterministic, display-only, no vault writes | UNKNOWN — no code yet | Pending |
-| NFR-M01 | Usable at ≤360px viewport | UNKNOWN — not measured | Pending |
+| NFR-P01 | No interaction regression on ~5k-row tables | O(N·D) Map passes, no memoization added (`QueryEngine.ts:140-148`) — same complexity class as before | Pass |
+| NFR-S01 | No secrets, no network | Confirmed — module is pure, no `fetch`/renderer imports | Pass |
+| NFR-R01 | Deterministic, display-only, no vault writes | Confirmed — `groupBy` stays pure; collapse/expand only `scheduleConfigSave`; grep clean for vault writes in `MultiFieldGrouping.ts` | Pass |
+| NFR-M01 | Usable at ≤360px viewport | Design carried over unchanged (`tableMinWidth` per header, 20×20 toggles); not independently re-measured in this pass | Pass (by design carry-over) |
 
 <!-- /ANCHOR:nfr-verify -->
 ---
@@ -128,9 +138,9 @@ Scaffold only: the five planning documents above were created on 2026-08-24 as a
 <!-- ANCHOR:limitations -->
 ## Known Limitations
 
-1. The phase is not implemented; all verification results are pending.
-2. Board (`boardSubgroupField`) and table (`groupByFields[]`) subgroup naming are not unified — an open question in `spec.md`.
-3. Exact upstream shape of `TableRenderer.ts` and the module path under `src/data/` are UNKNOWN until build time.
+1. Board (`boardSubgroupField`) and table (`groupByFields[]`) subgroup naming are not unified — locked as a deliberate default in `spec.md` §9 Q1, not a gap.
+2. Nested drag-and-drop and a second toolbar picker are explicitly deferred (spec §3 Out of Scope); depth-0 drop targets only.
+3. This child's own manual proof matrix (`005-multigroup-display-proof`) was not separately recorded as a matrix run — the Sonnet 5 read-only verification (code-path tracing + real `tsc`/`vitest` re-run + safety grep) served as the independent proof and is what surfaced the CSS gap below.
 
 <!-- /ANCHOR:limitations -->
 ---
@@ -140,6 +150,7 @@ Scaffold only: the five planning documents above were created on 2026-08-24 as a
 
 | Planned | Actual | Reason |
 |---------|--------|--------|
-| Build multi-field table grouping (effort M) | Not started — scaffold only | Phase is planned for wave 4, after nested filters; nothing built yet |
+| Build multi-field table grouping (effort M) | Built as planned, ≈5 hours across 5 sub-phase commits | Matches estimate |
+| REQ-003 nested-header CSS lands in the same commit as the depth-aware loop (sub-phase 002) | CSS landed one commit later, in the packet-wide catch-up `929769d` | The build driver's stage-4 script staged only `src/` and `main.js`; `styles.css` was never staged, so the group-header depth indent/sticky-override rules the code already referenced went uncommitted through sub-phases 002-005. A fresh Sonnet 5 review (2026-08-26) caught this as a P0 (nested headers rendered with zero indentation and shared one sticky slot) before the fix landed same-day. |
 
 <!-- /ANCHOR:deviations -->

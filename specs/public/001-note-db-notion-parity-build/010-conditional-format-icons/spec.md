@@ -49,7 +49,7 @@ _memory:
 |-------|-------|
 | **Level** | 2 |
 | **Priority** | P1 |
-| **Status** | Planned |
+| **Status** | Complete |
 | **Created** | 2026-08-24 |
 | **Branch** | `010-conditional-format-icons` |
 
@@ -277,11 +277,11 @@ Fork path (was Open Question 3) is no longer UNKNOWN: live source is `/Users/mic
 
 | Phase | Folder | Focus | Status |
 |-------|--------|-------|--------|
-| 1 | 001-format-match-paint-module/ | In-place `ConditionalFormatting.ts` types, AND/OR tree eval, icon/bold/color-optional paint, and CF CSS | Planned |
-| 2 | 002-format-parse-persist/ | Additive `parseConditionalFormats` of `conditionTree` / `icon` / `bold` / optional `color` via 009 `normalizeViewFilterTree` | Planned |
-| 3 | 003-tree-aware-column-ops/ | Rename and delete walk `conditionTree` with existing source-tree helpers | Planned |
-| 4 | 004-format-editor-panel/ | CF panel group chrome, icon picker, bold toggle, and three i18n keys | Planned |
-| 5 | 005-format-display-proof/ | Twelve helper cases, grep guards, and table plus non-table display proof | Planned |
+| 1 | 001-format-match-paint-module/ | In-place `ConditionalFormatting.ts` types, AND/OR tree eval, icon/bold/color-optional paint, and CF CSS | Complete (bold CSS initially uncommitted by the build driver; fixed in commit `929769d`) |
+| 2 | 002-format-parse-persist/ | Additive `parseConditionalFormats` of `conditionTree` / `icon` / `bold` / optional `color` via 009 `normalizeViewFilterTree` | Complete |
+| 3 | 003-tree-aware-column-ops/ | Rename and delete walk `conditionTree` with existing source-tree helpers | Complete (column-delete could orphan `condition.field` on multi-leaf trees; fixed in commit `e3600d2`) |
+| 4 | 004-format-editor-panel/ | CF panel group chrome, icon picker, bold toggle, and three i18n keys | Complete |
+| 5 | 005-format-display-proof/ | Twelve helper cases, grep guards, and table plus non-table display proof | Complete |
 
 Future / out of this phase (not child folders): `Intl.Segmenter` guard in `RecordIcon.ts`; Notion Match Option; Chart CF; a third dialect `ConditionalFormatTree.ts`; shipping icon/bold before trees.
 

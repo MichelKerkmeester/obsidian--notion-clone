@@ -11,8 +11,8 @@ _memory:
     packet_pointer: "public/001-note-db-notion-parity-build/009-view-filter-tree/003-filter-panel-tree-editor"
     last_updated_at: "2026-08-25T21:00:00Z"
     last_updated_by: "phase-architect"
-    recent_action: "Authored filter-panel-tree-editor child from synthesis ranks 4/6/7/8-UI and final-plan step 8"
-    next_safe_action: "Extend FilterPanelRenderer.ts with recursive group/not chrome; keep existing leaves"
+    recent_action: "Shipped recursive group/not FilterPanelRenderer.ts editor (commit 2471e01); tsc0/build0/vitest green; Sonnet 5 verified"
+    next_safe_action: "None outstanding for this sub-phase"
     blockers: []
     key_files:
       - "spec.md"
@@ -24,7 +24,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "decompose-003-filter-panel-tree-editor"
       parent_session_id: null
-    completion_pct: 0
+    completion_pct: 100
     open_questions: []
     answered_questions: []
 ---
@@ -40,9 +40,9 @@ _memory:
 | Field | Value |
 |-------|-------|
 | **Spec Folder** | 003-filter-panel-tree-editor |
-| **Completed** | Not yet (Planned) |
+| **Completed** | Complete — shipped `2471e01` |
 | **Level** | 2 |
-| **Actual Effort** | Not started |
+| **Actual Effort** | Not separately tracked |
 <!-- /ANCHOR:metadata -->
 
 ---
@@ -50,17 +50,20 @@ _memory:
 <!-- ANCHOR:what-built -->
 ## What Was Built
 
-Nothing in the fork yet. This child is Planned: one `FilterPanelRenderer.ts` change so wrap, depth cap, labeled `not`, and auto-collapse ship together.
+Shipped: one `FilterPanelRenderer.ts` diff with wrap-into-group, auto-collapse of empty groups, UI depth cap 3, and labeled `not` chrome — all copying **group/`not` chrome only** from `renderSourceRuleGroup`, with leaves staying on the existing `renderFilterRow`/`renderSingleRuleEditor` view-filter editors (no source-operator leak). `styles.css` and `i18n.ts` stayed out of the diff (reused existing `.db-source-rule-*` CSS and strings).
+
+Independent Sonnet 5 review confirmed the diff touches only `FilterPanelRenderer.ts`, found no source-operator leak (grep for `inFolder|hasProperty|strictEq|renderSourceRuleLeaf` empty), and confirmed `MAX_FILTER_GROUP_DEPTH = 3` caps the UI while the evaluator stays unbounded (REQ-004). The mobile depth-cap check was noted as DOM-heavy with no automated test — see Known Limitations.
 
 ### Files Changed
 
 | File | Action | Purpose |
 |------|--------|---------|
+| `src/views/FilterPanelRenderer.ts` | Modified (`2471e01`) | Recursive group/`not` tree editor |
 | `spec.md` | Authored | Panel editor scope |
 | `plan.md` | Authored | Chrome-only copy + depth |
 | `tasks.md` | Authored | T001–T004 atomic T002 |
-| `checklist.md` | Authored | Mobile width and source-op leak checks |
-| `implementation-summary.md` | Authored | Honest pre-build record |
+| `checklist.md` | Updated | Mobile width and source-op leak checks reconciled |
+| `implementation-summary.md` | Updated | Shipped-state record |
 <!-- /ANCHOR:what-built -->
 
 ---
@@ -68,7 +71,7 @@ Nothing in the fork yet. This child is Planned: one `FilterPanelRenderer.ts` cha
 <!-- ANCHOR:how-delivered -->
 ## How It Was Delivered
 
-Not delivered. Implementation follows `tasks.md` as one renderer diff against `Obsidian Plugin/src/views/FilterPanelRenderer.ts`.
+Delivered per `tasks.md` as one renderer diff against `Obsidian Plugin/src/views/FilterPanelRenderer.ts`, gated (tsc 0 / build 0 / vitest green) and committed at `2471e01`.
 <!-- /ANCHOR:how-delivered -->
 
 ---
@@ -91,9 +94,10 @@ Not delivered. Implementation follows `tasks.md` as one renderer diff against `O
 
 | Check | Result |
 |-------|--------|
-| Phone-width nested edit | Not run (Planned) |
-| Source-op grep / `styles.css` clean | Not run (Planned) |
-| `bash .opencode/skills/system-spec-kit/scripts/spec/validate.sh` on this folder `--strict` | Pending after authoring |
+| Phone-width nested edit | **NOT RUN** — DOM-heavy manual check; no automated test; substituted by Sonnet code review (structural correctness confirmed, literal click-through not performed) |
+| Source-op grep / `styles.css` clean | **PASS** — grep for `inFolder`/`hasProperty`/`strictEq`/`renderSourceRuleLeaf` empty; `styles.css`/`i18n.ts` untouched in the diff |
+| `npx tsc --noEmit` / `npx vitest run` | **PASS** — 0 / 160/160 at review time |
+| `bash .opencode/skills/system-spec-kit/scripts/spec/validate.sh` on this folder `--strict` | Not re-run by this reconciliation pass |
 <!-- /ANCHOR:verification -->
 
 ---
@@ -101,6 +105,7 @@ Not delivered. Implementation follows `tasks.md` as one renderer diff against `O
 <!-- ANCHOR:limitations -->
 ## Known Limitations
 
-1. **Non-panel mutators still desync nested trees until child 004.** Panel+eval without chips/delete/drilldown is only correct until the next non-panel edit.
-2. **Rail AND/OR toggle is still a lie on nested trees until child 004 hides it** (`ActiveViewControlsRenderer.ts:82-89`).
+1. **Non-panel mutators dual-write was child 004's scope** (shipped separately, `64163dc`, with a test-coverage gap fixed in `e854681`).
+2. **Rail AND/OR toggle hide is child 004's scope** (`ActiveViewControlsRenderer.ts:82-89`), shipped in `64163dc`.
+3. **The phone-width manual click-through was never literally executed.** Sub-phase `005-filter-tree-proof` (which owned this check) has no implementation commit.
 <!-- /ANCHOR:limitations -->
