@@ -192,7 +192,7 @@
     ],
     "causal_summary": "The fork defaults to display-only (`ComputedSync.ts:3`; load-time coerce at `DataSource.ts:787`), but leaving the view-config UI on `automatic` would `updateFrontmatter` computed keys and enqueue Report/child paths",
     "created_at": "2026-08-25T19:11:30Z",
-    "last_save_at": "2026-08-25T20:14:52.524Z",
+    "last_save_at": "2026-08-27T12:27:54.553Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -203,10 +203,10 @@
     ],
     "source_fingerprint": "sha256:2352b8c480d2286f653c25fc563c7341987bad555dcf3fe373f4e0580b14500c",
     "source_doc_hashes": {
-      "spec.md": "00c687d36262432dc9b09dd1b75d7a2c7009c80a903a50cbb5949b9fd06b1704",
-      "plan.md": "21332eccfe629cdb11baf736a9fbc0a5e155cf927ac6d69e4916d5597799ca58",
-      "tasks.md": "62841e6800da44bfd5713ed217604de4384d8cfa60ce942da0a3c5f1f10010bf",
-      "implementation-summary.md": "d9143597db56675eeee80fddb8e62b1b3ef2c2f8e390fcc8aaa38e543ffea5df"
+      "spec.md": "1cced63f74de309614deb5568f404343a4283eca85410cd1fc1e4ec91d003fec",
+      "plan.md": "221787a4678a71977508f53f9bcdd7cefec0039402fba4225a3923727b0addd3",
+      "tasks.md": "6ae8c8cd97be7b7f6807479d3cb5c3b882c0aedc54881454c2f801472bc1f69d",
+      "implementation-summary.md": "f677c32db23e2f73269225d1cb1dca8c71929fca54696f53bf207cb04bf413ff"
     },
     "last_active_child_id": null,
     "last_active_at": null

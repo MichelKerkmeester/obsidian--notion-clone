@@ -36,7 +36,7 @@
       "persist"
     ],
     "importance_tier": "high",
-    "status": "complete",
+    "status": "in_progress",
     "key_files": [
       "spec.md",
       "plan.md",
@@ -81,6 +81,12 @@
         "source": "derived"
       },
       {
+        "name": "In Progress",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
         "name": "Parent Spec",
         "kind": "proper_noun",
         "path": "spec.md",
@@ -94,12 +100,6 @@
       },
       {
         "name": "Problem Statement Notion",
-        "kind": "proper_noun",
-        "path": "spec.md",
-        "source": "derived"
-      },
-      {
-        "name": "Purpose Parse",
         "kind": "proper_noun",
         "path": "spec.md",
         "source": "derived"
@@ -183,7 +183,7 @@
         "source": "derived"
       },
       {
-        "name": "What Was Built Nothing",
+        "name": "What Was Built Shipped",
         "kind": "proper_noun",
         "path": "implementation-summary.md",
         "source": "derived"
@@ -191,7 +191,7 @@
     ],
     "causal_summary": "Notion groups survive close/reopen",
     "created_at": "2026-08-25T20:51:12Z",
-    "last_save_at": "2026-08-25T21:02:27.280Z",
+    "last_save_at": "2026-08-27T12:27:59.997Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -200,12 +200,12 @@
       "tasks.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:f9bd14de66654453287e1965a483b8d06368175f8cb12661e23cefd4ec6237da",
+    "source_fingerprint": "sha256:cb8306fcdbb14b0b2b00ed4d312039605aeb3d477fa1b214dace10814d585163",
     "source_doc_hashes": {
-      "spec.md": "99aeb5a844eadbaab26b2aa043cf9effad6fab1e209c704982b294b18ec94cc3",
-      "plan.md": "54624bb2e4964a2286ccaa67e0b3c1f8e675bf9f93f431fd1348599058b0a335",
-      "tasks.md": "08d0c2f30e4c3cf14c1d486b3212befe74ecd19d73e6a705415097da734d2034",
-      "implementation-summary.md": "78886dfd1b873ae881c2394240c306f77d8fffa2e7010aaa94612d2faf3d674b"
+      "spec.md": "d6b5812075de6075d7236bc0e422a25a6db48d1eb284aaf27900441353f82a0f",
+      "plan.md": "b13801018e670418ddfcb11eb4f58740614c52244b0752eec64bfde80cae6be6",
+      "tasks.md": "60a54cd2ba8a73fd17b4c1d5867d150f740afb15920c07b5f5bd6f5a7a9f0be8",
+      "implementation-summary.md": "becf843075a1b08850f2d8450cfb670075c5b20007d9135424e25c955fc404a5"
     },
     "last_active_child_id": null,
     "last_active_at": null

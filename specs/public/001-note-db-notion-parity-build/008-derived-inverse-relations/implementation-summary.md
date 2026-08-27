@@ -1,6 +1,6 @@
 ---
 title: "Implementation Summary: Derived Inverse (Safe Two-Way) Relations"
-description: "Honest unbuilt summary of the planned read-only derived inverse for many-to-one wikilinks."
+description: "Shipped implementation summary of the read-only derived inverse for many-to-one wikilinks."
 trigger_phrases:
   - "derived inverse summary"
   - "inverse relations implementation"
@@ -14,10 +14,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "public/001-note-db-notion-parity-build/008-derived-inverse-relations"
-    last_updated_at: "2026-08-24T00:00:00Z"
+    last_updated_at: "2026-08-27T12:25:50Z"
     last_updated_by: "swarm"
-    recent_action: "Shipped: RelationInverse.ts + RelationRollup.ts + DatabaseView.ts/EmbeddedDatabaseRenderer.ts wired across 3 commits, gate-green, Sonnet 5 verified (CONCERNS -> docs-only gap, now reconciled)"
-    next_safe_action: "None outstanding for this phase; deferred items (chip helper, chip window, record-page section, inbound badge, stored two-way) tracked as future work, not blockers"
+    recent_action: "Reconciled shipped artifacts and proof gaps; 13 of 22 task IDs verified"
+    next_safe_action: "None for shipped code"
     blockers: []
     key_files:
       - "spec.md"
@@ -29,7 +29,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "note-db-parity-scaffold"
       parent_session_id: null
-    completion_pct: 100
+    completion_pct: 59
     open_questions: []
     answered_questions: []
 ---
@@ -46,7 +46,7 @@ _memory:
 | Field | Value |
 |-------|-------|
 | **Spec Folder** | 008-derived-inverse-relations |
-| **Completed** | Complete — shipped on branch `impl` |
+| **Completed** | Implementation shipped; 13/22 task IDs verified, with proof gaps deferred |
 | **Level** | 2 |
 | **Actual Effort** | Not separately tracked (delivered across 3 sub-phase commits; estimated 8 hours, effort M) |
 
@@ -115,7 +115,7 @@ Delivered through the packet's serial, resumable build driver (`scratch/stage4-i
 | Write-path | **PASS** | Single `DataSource.writeQueues` path | Verified structurally: no `writeQueues`/`enqueueWrite`/`processFrontmatter` import in `RelationInverse.ts`; `SYNC_WRITES_DEFAULT = false` asserted by test |
 | Call-site wiring | **PASS** | `RelationRollup.ts`, `DatabaseView.ts`, `EmbeddedDatabaseRenderer.ts` | Hand-traced by Sonnet 5 review; scoped diff matches spec (no `types.ts` touch) |
 | Independent review | **CONCERNS** (docs-only gap) | Full phase vs spec + synthesis | `research/sonnet-verification.md`, 2026-08-26 — code correct/safe/tested, gap was completion-doc reconciliation (resolved by this update) |
-| Strict validation | Not re-run by this reconciliation | This phase folder | `bash .opencode/skills/system-spec-kit/scripts/spec/validate.sh specs/public/001-note-db-notion-parity-build/008-derived-inverse-relations --strict` |
+| Strict validation | **PASS** | This phase folder | Validator exit 0; recursive validation was auto-enabled because child folders exist |
 
 ### Test Coverage Summary
 

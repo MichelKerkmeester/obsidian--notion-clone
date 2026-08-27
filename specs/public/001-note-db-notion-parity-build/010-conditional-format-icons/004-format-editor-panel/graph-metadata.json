@@ -35,7 +35,7 @@
       "tasks"
     ],
     "importance_tier": "high",
-    "status": "complete",
+    "status": "in_progress",
     "key_files": [
       "spec.md",
       "plan.md",
@@ -80,6 +80,12 @@
         "source": "derived"
       },
       {
+        "name": "In Progress",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
         "name": "Parent Spec",
         "kind": "proper_noun",
         "path": "spec.md",
@@ -93,12 +99,6 @@
       },
       {
         "name": "Problem Statement",
-        "kind": "proper_noun",
-        "path": "spec.md",
-        "source": "derived"
-      },
-      {
-        "name": "Purpose Replace",
         "kind": "proper_noun",
         "path": "spec.md",
         "source": "derived"
@@ -182,7 +182,7 @@
         "source": "derived"
       },
       {
-        "name": "What Was Built Nothing",
+        "name": "What Was Built Shipped",
         "kind": "proper_noun",
         "path": "implementation-summary.md",
         "source": "derived"
@@ -190,7 +190,7 @@
     ],
     "causal_summary": "`renderConditionalFormatting` (`ViewConfigPanelRenderer.ts:552-766`) is one field/op/value row per rule",
     "created_at": "2026-08-25T21:00:25Z",
-    "last_save_at": "2026-08-25T21:10:37.002Z",
+    "last_save_at": "2026-08-27T12:28:01.527Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -199,12 +199,12 @@
       "tasks.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:cdb20bc37267633e98fb1aba581d179f1c0c5c451588e76d9fec52c91c53eb14",
+    "source_fingerprint": "sha256:606a3cfe5496b7c20e736286647bd2fd5fcef8cb251b303ba11c5fba5bfab39f",
     "source_doc_hashes": {
-      "spec.md": "2809b41b3baa4b3c0873c3203d5bec02cab57586b3b8f9d941d5d627e18cd9c7",
-      "plan.md": "94209de5508ec92f2d0d91dd30110f16bb61191995000867f32fa9ece7a7c5df",
-      "tasks.md": "c59d3d919dc3af0557137fae4aad3ba88a5804fe8bebb47312e4fda4a811b342",
-      "implementation-summary.md": "fafdfb70a35bd88933d4a6de24cf57bb911786c500d0b2a85bf27dca4ea43a11"
+      "spec.md": "ef61d35a237b49078c74c70010b154d266e5ab05b07d0d06ac9ac4212586c7d2",
+      "plan.md": "766e9dfe025a5c26ae188c05a07001a7634036a4c10edd86ab13dca430572517",
+      "tasks.md": "3fac50b8683140a33f9ee4b45f11c61290ef98c5c10e8a67c613002964b6373c",
+      "implementation-summary.md": "b6d780ef62ee7ffbf89244b01f5b63c30e52d1c76ff78de258d8a8be337a085a"
     },
     "last_active_child_id": null,
     "last_active_at": null

@@ -37,7 +37,7 @@
       "plan"
     ],
     "importance_tier": "high",
-    "status": "complete",
+    "status": "in_progress",
     "key_files": [
       "spec.md",
       "plan.md",
@@ -82,6 +82,12 @@
         "source": "derived"
       },
       {
+        "name": "In Progress",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
         "name": "Parent Spec",
         "kind": "proper_noun",
         "path": "spec.md",
@@ -95,12 +101,6 @@
       },
       {
         "name": "Problem Statement",
-        "kind": "proper_noun",
-        "path": "spec.md",
-        "source": "derived"
-      },
-      {
-        "name": "Purpose Create",
         "kind": "proper_noun",
         "path": "spec.md",
         "source": "derived"
@@ -184,7 +184,7 @@
         "source": "derived"
       },
       {
-        "name": "What Was Built Nothing",
+        "name": "What Was Built Shipped",
         "kind": "proper_noun",
         "path": "implementation-summary.md",
         "source": "derived"
@@ -192,7 +192,7 @@
     ],
     "causal_summary": "`renderNewButton` already calls `actions.createEntry()` with no args (`src/views/ToolbarRenderer.ts:1683-1691`), which reaches `createBlankEntry` then `loadNewRecordTemplate` then `buildCreateEntryPlan` / `planCreateEntry` (`src/views/DatabaseView.ts:845-850, 3528-3538, 3673-3679`)",
     "created_at": "2026-08-25T21:10:03Z",
-    "last_save_at": "2026-08-25T21:17:50.136Z",
+    "last_save_at": "2026-08-27T12:28:04.604Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -201,12 +201,12 @@
       "tasks.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:e3577fed83cbe7a418c1247188301e6aeec53a4925950e676afc61ff8c769135",
+    "source_fingerprint": "sha256:35be2005d3d5e150c0488e66269fe6f2f970275fe99c5ad389ca48705c99f62c",
     "source_doc_hashes": {
-      "spec.md": "d56aa1bcd129e43bcbd7176bebae71584d5e5e3fcc6bbd617af1e54e9407a46f",
-      "plan.md": "f136198fe274a55eddeeb6566017da72447f40ef3cb15db81b311abacfa8d80f",
-      "tasks.md": "fbe0bccda6a4709123bc0c8c0fd8a4e5a4bda1862e9bec986da635b14624530c",
-      "implementation-summary.md": "13491c34d53fb898162f2519290d153054e1ca151b983852a724105c2b44c631"
+      "spec.md": "6e2fe5475affd4311caa9abb091706aab8e63701ecb5b7d290fcdd27408e1c81",
+      "plan.md": "179874cc9342958d724c8c9f305680b5ed6f447381f852f30eae329986bcc98b",
+      "tasks.md": "4c9dee65b78d0245f0107d40a0dfdd6905e9c9140eaa0a4f6f95f9232fc6659a",
+      "implementation-summary.md": "f2f0e8ba46f62fc6f75e4af777dbc6de111d13c17bfee0d8ae2ffde4d69acfd2"
     },
     "last_active_child_id": null,
     "last_active_at": null

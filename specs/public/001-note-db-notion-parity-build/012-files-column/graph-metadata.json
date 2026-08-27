@@ -53,8 +53,7 @@
       "checklist.md",
       "implementation-summary.md",
       "research/synthesis.md",
-      "research/research.md",
-      "research/final-plan.md"
+      "research/research.md"
     ],
     "entities": [
       {
@@ -100,12 +99,6 @@
         "source": "derived"
       },
       {
-        "name": "final-plan.md",
-        "kind": "doc",
-        "path": "research/final-plan.md",
-        "source": "derived"
-      },
-      {
         "name": "Feature Specification",
         "kind": "proper_noun",
         "path": "spec.md",
@@ -115,6 +108,12 @@
         "name": "Attachments Column",
         "kind": "proper_noun",
         "path": "research/research.md",
+        "source": "derived"
+      },
+      {
+        "name": "In Progress",
+        "kind": "proper_noun",
+        "path": "spec.md",
         "source": "derived"
       },
       {
@@ -136,13 +135,13 @@
         "source": "derived"
       },
       {
-        "name": "Obsidian Plugin",
+        "name": "Implementation Plan",
         "kind": "proper_noun",
-        "path": "spec.md",
+        "path": "plan.md",
         "source": "derived"
       },
       {
-        "name": "Implementation Plan",
+        "name": "Obsidian Plugin",
         "kind": "proper_noun",
         "path": "plan.md",
         "source": "derived"
@@ -204,7 +203,7 @@
     ],
     "causal_summary": "Notion databases natively carry a first-class Files & Media property (images, PDFs, attachments), but the note-database fork's column union is 12 types with no files/media type",
     "created_at": "2026-08-24T18:16:20.278Z",
-    "last_save_at": "2026-08-25T21:17:31.116Z",
+    "last_save_at": "2026-08-27T12:25:54.725Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -215,13 +214,13 @@
       "implementation-summary.md",
       "research/research.md"
     ],
-    "source_fingerprint": "sha256:4d8ea35074a8c1be45dea079fdcee63f7f08612c616ef991597a72440a1442b8",
+    "source_fingerprint": "sha256:ac5355fc9372f2b4545d7f9a9beb0463ce5c0f2748868a9db2b34e3daec70962",
     "source_doc_hashes": {
-      "spec.md": "4ee246b6e6d89c22db63a5ee3d8f810ed2a4164ec1b76aa759aa9fd40ac2defe",
-      "plan.md": "323a3246b4e3a3e36fab8b9dfc6317d932373a22b863ae1c467ec8fd2c4cf7eb",
-      "tasks.md": "cc7d266adae79e0c6ef0631d63a0850e19ab792d12aabd1d2fe6249382e0bd66",
-      "checklist.md": "9c0cd7d7417963422fcccbb98e63abc5f6ba9f2cc732eb0657b8db9165f736af",
-      "implementation-summary.md": "f9182ed52f8bff35efa33983f596daaccfa03bdca7444974c75008d008a0a4ba",
+      "spec.md": "53ebdbb369d2671933901a986eca9843d968bbcf74759d420a55d214f752dae4",
+      "plan.md": "38953b52dd66276af7df26ace9b96001ea3de5f0192851d5cffced159a4fa73e",
+      "tasks.md": "549d774985c0bc429494f96a09ab69c3c4b30897a3cf0067d77007cf5342a796",
+      "checklist.md": "5a4762df93c02a7e946b9ba62b28e12c9f3f689be7f36c4a12d25aaa142c9911",
+      "implementation-summary.md": "e88c53e31ae1f74020af696af70995b91dfc03e381ad4390451ce78dee26e754",
       "research/research.md": "775ebeed7178fb69462fe6d46e343ffd80ffa288e65ab53adb3f76ea10b5c145"
     },
     "last_active_child_id": "public/001-note-db-notion-parity-build/012-files-column/005-files-column-proof",

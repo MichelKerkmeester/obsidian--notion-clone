@@ -37,7 +37,7 @@
       "plan"
     ],
     "importance_tier": "high",
-    "status": "complete",
+    "status": "in_progress",
     "key_files": [
       "spec.md",
       "plan.md",
@@ -82,6 +82,12 @@
         "source": "derived"
       },
       {
+        "name": "In Progress",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
         "name": "Parent Spec",
         "kind": "proper_noun",
         "path": "spec.md",
@@ -95,12 +101,6 @@
       },
       {
         "name": "Problem Statement The",
-        "kind": "proper_noun",
-        "path": "spec.md",
-        "source": "derived"
-      },
-      {
-        "name": "Purpose Create",
         "kind": "proper_noun",
         "path": "spec.md",
         "source": "derived"
@@ -178,7 +178,7 @@
         "source": "derived"
       },
       {
-        "name": "What Was Built Nothing",
+        "name": "What Was Built Shipped",
         "kind": "proper_noun",
         "path": "implementation-summary.md",
         "source": "derived"
@@ -192,7 +192,7 @@
     ],
     "causal_summary": "The fork already resolves vault wikilinks (`CoverImage.ts:22-26`, `FileFieldRenderer.ts:74-84`) but has no files-column value type",
     "created_at": "2026-08-25T21:08:49Z",
-    "last_save_at": "2026-08-25T21:17:29.849Z",
+    "last_save_at": "2026-08-27T12:28:03.383Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -201,12 +201,12 @@
       "tasks.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:1c82a4086fd9028a8dcd77c7b3b0c87763ec84297057b221a636c8bcc49dbe82",
+    "source_fingerprint": "sha256:d3eac929c0a515e433a9e8063c734f94fa4cc40422b72bfa5ad393a62fde7186",
     "source_doc_hashes": {
-      "spec.md": "bd99fa2016bdcee1a6e1950df34e71c1f5aa7112fb46dda226b3bdb005459b96",
-      "plan.md": "b29341200ab5f5f361b93d6998c663581fa867c0d02d11b70c1c541d7fc91dfa",
-      "tasks.md": "9329558e3adc5cd122a91b80a6af4f799dcec98845972bdc05ae382eb7d11ea2",
-      "implementation-summary.md": "4952a8e330550f671781054f47a274a89f8c64ffd477c61bf5ec34e96b20710a"
+      "spec.md": "1c6393af79940ed885bbb96a9f3d9d90ebf71ddce9d954cef1e6f042cda95f91",
+      "plan.md": "27b32d0e1f3d6245bede7e4d894b7d02cf8375f18bbbf1048d4572abe09dae69",
+      "tasks.md": "e2b7150cce65dd25b0601cc6c781239e1e7ad547eb309d38968bebc75a59098a",
+      "implementation-summary.md": "353e3fc06897a0d44d46b4a3aecfab4e95f63d8c4e40ae8cf05c4d266a932e16"
     },
     "last_active_child_id": null,
     "last_active_at": null

@@ -36,7 +36,7 @@
       "notion"
     ],
     "importance_tier": "high",
-    "status": "complete",
+    "status": "in_progress",
     "key_files": [
       "spec.md",
       "plan.md",
@@ -81,6 +81,12 @@
         "source": "derived"
       },
       {
+        "name": "In Progress",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
         "name": "Parent Spec",
         "kind": "proper_noun",
         "path": "spec.md",
@@ -94,12 +100,6 @@
       },
       {
         "name": "Problem Statement Notion",
-        "kind": "proper_noun",
-        "path": "spec.md",
-        "source": "derived"
-      },
-      {
-        "name": "Purpose Add",
         "kind": "proper_noun",
         "path": "spec.md",
         "source": "derived"
@@ -183,7 +183,7 @@
         "source": "derived"
       },
       {
-        "name": "What Was Built Nothing",
+        "name": "What Was Built Shipped",
         "kind": "proper_noun",
         "path": "implementation-summary.md",
         "source": "derived"
@@ -191,7 +191,7 @@
     ],
     "causal_summary": "Notion owns the unique-ID counter server-side (only `prefix` is configurable)",
     "created_at": "2026-08-25T19:29:59Z",
-    "last_save_at": "2026-08-25T20:14:45.866Z",
+    "last_save_at": "2026-08-27T12:27:58.833Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -200,12 +200,12 @@
       "tasks.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:d7354d60ca749cf85aabe7a3d6694caf0edd18cc0cc51db407af2edcc51c66a5",
+    "source_fingerprint": "sha256:6b2dcc280fe4918fc7174ad9da77aa920cf7d849e21f68da2887ad88b46f7adc",
     "source_doc_hashes": {
-      "spec.md": "59b93d6b349653a3c01e626e0b797e2db7308f9c192cae8168093fca86836f17",
-      "plan.md": "f0865e677d2f7c62e8dd8b3aec29c031ab7d04ee15a17012578030e26555ae38",
-      "tasks.md": "c15a2dab39c02e5fc373858603995f4578461b448e36b0d8c3a7c2d6a4aec06e",
-      "implementation-summary.md": "2d909efe404453fd76be4cdd36921c97dc601e8657c2877a4c7641a18ec50b0e"
+      "spec.md": "1e4eb29f29db96c8e54c6cf6e07eb6c63321adf200db479c76c7335e28d9a166",
+      "plan.md": "fe4a87549a60d2bba57100ab83b8279e34cc00efe9bba429fefcc663d9d14ee8",
+      "tasks.md": "3c256641ea54a2b5383fb8f113362a1259161f8d2be32b678c9082b0cb170e77",
+      "implementation-summary.md": "32ed2d223244a32541749a99e470c7feb839dd1c9a596f8161f5067116f735c7"
     },
     "last_active_child_id": null,
     "last_active_at": null

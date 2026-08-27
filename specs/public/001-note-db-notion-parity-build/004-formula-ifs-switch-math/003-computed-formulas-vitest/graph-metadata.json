@@ -34,7 +34,7 @@
       "plan"
     ],
     "importance_tier": "high",
-    "status": "complete",
+    "status": "in_progress",
     "key_files": [
       "spec.md",
       "plan.md",
@@ -79,6 +79,12 @@
         "source": "derived"
       },
       {
+        "name": "In Progress",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
         "name": "Parent Spec",
         "kind": "proper_noun",
         "path": "spec.md",
@@ -92,12 +98,6 @@
       },
       {
         "name": "Problem Statement Parent",
-        "kind": "proper_noun",
-        "path": "spec.md",
-        "source": "derived"
-      },
-      {
-        "name": "Purpose Create",
         "kind": "proper_noun",
         "path": "spec.md",
         "source": "derived"
@@ -181,7 +181,7 @@
         "source": "derived"
       },
       {
-        "name": "What Was Built Nothing",
+        "name": "What Was Built Shipped",
         "kind": "proper_noun",
         "path": "implementation-summary.md",
         "source": "derived"
@@ -189,7 +189,7 @@
     ],
     "causal_summary": "Parent plan.md's “run the plugin test suite” currently has nothing to run",
     "created_at": "2026-08-25T19:11:19Z",
-    "last_save_at": "2026-08-25T20:14:48.559Z",
+    "last_save_at": "2026-08-27T12:27:56.983Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -198,12 +198,12 @@
       "tasks.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:c3152ebfe75a48a97af2bfac9a7c9327ca5d527c4814a8318c6aa012ece6dc04",
+    "source_fingerprint": "sha256:e31bf36161fca258edc3660ba517b06281fa18c12581cd6c4795573f49959305",
     "source_doc_hashes": {
-      "spec.md": "66bd9d4f8136a251abbe05ab3e53df6bdb41333eb2d35a804eb2e4cc06335f45",
-      "plan.md": "8c71fbf29cf72f6d14ed99749412346e699ec53644235795620a328158910a9e",
-      "tasks.md": "f122e2d206d6b9657b010a3dcca2b4c94063fb9b48979dfd29565d9a32c59fa9",
-      "implementation-summary.md": "5965cfdc12f2c79724461827d4f733859235b2da9f725974880569226e9957d1"
+      "spec.md": "ca195491cc77650093a1cbfb2003b733e8be591bddc6b3f2a09292ead4ee38d6",
+      "plan.md": "1c621ec947569a8b11f2fea5e07e3bc5c1e453f9cb2935eb312ef6ce38f8d190",
+      "tasks.md": "96d4648b714ddf28454071e959cabe4a678094b8e997f38dea09907368bf3baf",
+      "implementation-summary.md": "8489641ca1ef1b097967525c9fb9f0e79eb840ac8ad8944aec08e382c01351a9"
     },
     "last_active_child_id": null,
     "last_active_at": null

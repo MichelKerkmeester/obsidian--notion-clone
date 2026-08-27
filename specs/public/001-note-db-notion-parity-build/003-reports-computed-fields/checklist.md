@@ -15,10 +15,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "public/001-note-db-notion-parity-build/003-reports-computed-fields"
-    last_updated_at: "2026-08-24T00:00:00Z"
+    last_updated_at: "2026-08-27T12:25:50Z"
     last_updated_by: "markdown-agent"
-    recent_action: "Shipped across commits 6639789/0baacde/6cb5331/202635d/c766117 on branch impl; tsc0/build0/vitest green; Sonnet 5 verification CONCERNS (severe) at first ship, fixed by c766117"
-    next_safe_action: "Operator input needed to classify Saved-field semantics (REQ-004, deferred); no other blocking action"
+    recent_action: "Completion docs reconciled to shipped state; gate green; Sonnet-verified"
+    next_safe_action: "Operator input needed to classify Saved-field semantics (REQ-004, deferred)"
     blockers:
       - "Saved-field classification deferred pending operator input (REQ-004; c766117 commit message)"
     key_files:
@@ -59,11 +59,11 @@ _memory:
 ## Pre-Implementation
 
 - [x] CHK-001 [P0] Requirements documented in spec.md and matching the synthesis
-  - **Evidence**: Verified — commits `6639789`/`0baacde`/`6cb5331`/`202635d`/`c766117` on branch `impl` (tsc0/build0/vitest green; Sonnet 5 verification 2026-08-26). `spec.md` requirements are documented; note the **delivery mechanism deviated** from the config-only build the synthesis specified — see `implementation-summary.md` Deviations.
+  - **Evidence**: [EVIDENCE: shipped: ReportsInspector, ReportsComputedConfig, and ReportsDisplay; full suite 247/247]
 - [x] CHK-002 [P0] Technical approach defined in plan.md and matching the locked design
-  - **Evidence**: Verified — same commits, tsc0/build0/vitest green. The shipped path adds `ReportsInspector.ts`/`ReportsComputedConfig.ts`/`ReportsDisplay.ts` rather than a raw vault-config edit; multi-pass evaluation and the null-guarded default-blank expression are correctly implemented per Sonnet verification (`ReportsInspector.ts:126-154`).
+  - **Evidence**: [EVIDENCE: src/data/ReportsInspector.ts:126-195; src/data/ReportsComputedConfig.ts:42-102; src/data/ReportsComputedConfig.test.ts:52-244 (9/9)]
 - [ ] CHK-003 [P1] Dependencies identified and available; live columns inspected before any formula is written
-  - **Evidence**: **NOT MET AS CLAIMED.** The predecessor named here, `001-live-reports-rollups`, is config-only and was never built — its parent-map status is `Planned`, not shipped (see `../spec.md` Phase Documentation Map). Only `002-rollup-aggregation-pack` (Complete) actually closed before this phase. The live-column inspect step itself did land, in `ReportsInspector.ts` (commit `6639789`), but it ran independently of 001's vault config rather than after it, because 003 shipped as code instead of the planned config-only edit (see CHK-013). Corrected 2026-08-27: previously checked on the false claim that both predecessors shipped. `001-live-reports-rollups` remains a pending config-only task and does not block 003's already-shipped code.
+  - **Evidence**: [EVIDENCE: DEFERRED -- required predecessor configuration was not shipped, so post-predecessor inspection cannot be verified]
 
 <!-- /ANCHOR:pre-impl -->
 ---
@@ -72,13 +72,13 @@ _memory:
 ## Code Quality
 
 - [x] CHK-010 [P0] Config parses and uses native syntax only
-  - **Evidence**: Verified — commits `6639789`/`0baacde` (tsc0/build0/vitest green). `ReportsComputedConfig.ts` writes native `[field]`-ref expressions; no Bases `expressionSyntax: "base"` chaining used.
-- [x] CHK-011 [P0] No console errors or warnings on a valid row
-  - **Evidence**: Verified — full Vitest suite green at Sonnet re-verification (18/18 new-module tests); no runtime warnings reported.
+  - **Evidence**: [EVIDENCE: src/data/ReportsInspector.ts:126-137; src/data/ReportsComputedConfig.ts:42-97; src/data/ReportsInspector.test.ts:104-123 (5/5)]
+- [ ] CHK-011 [P0] No console errors or warnings on a valid row
+  - **Evidence**: [EVIDENCE: DEFERRED -- no valid-row runtime console-check artifact was produced]
 - [x] CHK-012 [P1] Error handling stays fail-closed with zero engine patches
-  - **Evidence**: Verified — `ReportsInspector.ts:126-154` implements the null-guard `IF(OR(...==null), null, ...)` pattern per REQ-007; `git diff` on `ComputedField.ts`/`SafeEval.ts` is empty (Sonnet verification).
+  - **Evidence**: [EVIDENCE: src/data/ReportsInspector.ts:156-210; src/data/ReportsInspector.test.ts:154-169 (5/5); src/data/ReportsComputedConfig.test.ts:163-171 (9/9)]
 - [ ] CHK-013 [P1] No new plugin module or call site; config-only pattern respected
-  - **Evidence**: **NOT MET AS SPECIFIED.** Three new modules shipped instead — `ReportsInspector.ts` (`6639789`), `ReportsComputedConfig.ts` (`0baacde`), `ReportsDisplay.ts` (`6cb5331`) — plus new methods on `DataSource.ts` and edits to `CellRenderer.ts`/`ColumnDisplay.ts`/`main.ts`/`DatabaseView.ts`. Flagged P0 by Sonnet 5 verification (2026-08-26) as a config-only mandate violation with no approved-deviation record at build time. The deviation is accepted and documented (not reverted) because the code path is now wired (`c766117`) and covered by tests (18/18) — see `implementation-summary.md` Deviations from Plan. Deferred to user approval per the P1 handling rule (complete OR user-approved deferral): approval is the operator's to give when reviewing this reconciliation.
+  - **Evidence**: [EVIDENCE: DEFERRED -- shipped implementation adds plugin modules and call sites, so the config-only constraint is unmet]
 
 <!-- /ANCHOR:code-quality -->
 ---
@@ -86,14 +86,14 @@ _memory:
 <!-- ANCHOR:testing -->
 ## Testing
 
-- [x] CHK-020 [P0] All acceptance criteria met
-  - **Evidence**: Verified — commits `6639789`/`0baacde`/`6cb5331`/`202635d`/`c766117`, tsc0/build0/vitest green. REQ-001, 002, 003, 005, 006, 007 confirmed by Sonnet verification (arithmetic, display-only sync, untouched engine, mobile/iCloud-safe, column order/labels, blank-fail-closed). **REQ-004 (Saved classification) partial**: skip-on-duplicate logic is implemented, but the classification decision itself remains deferred pending operator input.
-- [ ] CHK-021 [P0] Manual testing complete against the known pair
-  - **Evidence**: **NOT MET AS CLAIMED.** No witnessed manual testing session exists for this phase — nobody opened the Reports view, ran the `configure-reports-computed-fields` command, and confirmed the known-pair result (Income=1000, Expenses=400 → 600) by eye. What exists is code-level verification: `ReportsInspector.ts:126-154` correctly implements the null-guarded Remaining arithmetic per Sonnet 5's line-level review, and unit tests (18/18) pass. That code review substitutes for the code-correctness claims elsewhere in this checklist (CHK-010–CHK-012, CHK-023) but does not substitute for the literal manual session this item asks for. Corrected 2026-08-27: previously checked on code-trace evidence alone. Deferred to operator per the P0 handling rule — a witnessed click-through is the remaining action to close this item, or the operator can explicitly accept code + unit-test verification as sufficient.
+- [ ] CHK-020 [P0] All acceptance criteria met
+  - **Evidence**: [EVIDENCE: DEFERRED -- Saved-field classification remains unresolved, so all acceptance criteria are not closed]
+- [ ] CHK-021 [P0] **DEFERRED** — Manual testing complete against the known pair
+  - **Evidence**: [EVIDENCE: DEFERRED -- no witnessed desktop known-pair session was performed]
 - [x] CHK-022 [P1] Edge cases tested per the synthesis list
-  - **Evidence**: Verified — commits `6639789`/`0baacde`, tsc0/build0/vitest green. Null-guard, currency-string coercion, and definition-order handling confirmed correct by Sonnet's code trace. Saved's duplicate-skip logic is implemented in `ReportsInspector.ts`, but the underlying classification (REQ-004) is deferred — see CHK-020.
+  - **Evidence**: [EVIDENCE: src/data/ReportsInspector.test.ts:104-169 (5/5); src/data/ReportsComputedConfig.test.ts:52-244 (9/9); src/data/ReportsDisplay.test.ts:42-60 (23/23); src/data/ColumnDisplay.test.ts:31-77 (8/8)]
 - [x] CHK-023 [P1] Blank-vs-zero decision recorded and validated
-  - **Evidence**: Verified — commit `6639789`, tsc0/build0/vitest green. The null-guarded default-blank expression is implemented exactly as specified (`ReportsInspector.ts:126-154`); confirmed correct by Sonnet 5 verification.
+  - **Evidence**: [EVIDENCE: src/data/ReportsInspector.ts:126-137; src/data/ReportsInspector.test.ts:104-138 (5/5)]
 
 <!-- /ANCHOR:testing -->
 ---
@@ -102,11 +102,11 @@ _memory:
 ## Fix Completeness
 
 - [x] CHK-024 [P0] Requested Remaining and Saved columns configured, ordered, and labeled
-  - **Evidence**: Verified — commit `0baacde` (`002-remaining-saved-config`), tsc0/build0/vitest green. `ReportsComputedConfig.ts` performs the one-transaction config write (Remaining, Saved-if-distinct, `columnOrder`, human labels). Delivery mechanism is a code module rather than a direct config-only edit — see CHK-013.
+  - **Evidence**: [EVIDENCE: src/data/ReportsComputedConfig.ts:42-102,128-193; src/data/ReportsComputedConfig.test.ts:52-160 (9/9)]
 - [x] CHK-025 [P1] Formula engine and rollup modules left unchanged
-  - **Evidence**: Verified — `git diff` empty on `ComputedField.ts`, `SafeEval.ts`, `BaseExpression.ts`, and `RelationRollup.ts`, confirmed at Sonnet 5 verification (2026-08-26).
+  - **Evidence**: [EVIDENCE: `src/data/ComputedField.ts:563-569`; `src/data/SafeEval.ts:961-973`; `src/data/BaseExpression.ts:1-7`; `src/data/RelationRollup.ts:130-155`; no Reports-specific references]
 - [x] CHK-026 [P0] Desktop persistence + display-only proven; mobile parity operator-optional
-  - **Evidence**: Verified — commits `6639789`/`0baacde`/`6cb5331`, tsc0/build0/vitest green. `computedSyncMode: display-only` confirmed explicit; no frontmatter mutation path introduced. Mobile/two-device hash remains operator-optional per REQ-005, not exercised in this packet.
+  - **Evidence**: [EVIDENCE: src/data/DataSource.ts:527-542; src/data/ReportsComputedConfig.ts:94-100; src/data/ReportsComputedConfig.test.ts:52-97 (9/9)]
 
 <!-- /ANCHOR:fix-completeness -->
 ---
@@ -115,11 +115,11 @@ _memory:
 ## Security
 
 - [x] CHK-030 [P0] No hardcoded secrets or telemetry
-  - **Evidence**: Verified — commits `6639789`/`0baacde`/`6cb5331`/`c766117`, tsc0/build0/vitest green. No secrets, telemetry, or network surface introduced (Sonnet verification).
+  - **Evidence**: [EVIDENCE: src/data/ReportsInspector.ts:1-7; src/data/ReportsComputedConfig.ts:1-9; src/data/ReportsDisplay.ts:1-3; full suite 247/247]
 - [x] CHK-031 [P0] Evaluation stays inside the existing sandbox
-  - **Evidence**: Verified — `SafeEval.ts` `git diff` empty; no new evaluation code path added outside the existing engine.
+  - **Evidence**: [EVIDENCE: src/data/ReportsInspector.ts:126-154; src/data/ReportsInspector.test.ts:154-169 (5/5); existing evaluation engine remains the only evaluator]
 - [x] CHK-032 [P2] Auth/authz working correctly
-  - **Evidence**: Verified — not applicable to local vault computed columns; no auth surface added.
+  - **Evidence**: [EVIDENCE: src/data/ReportsInspector.ts:1-7; src/data/ReportsComputedConfig.ts:1-9; src/data/ReportsDisplay.ts:1-3]
 
 <!-- /ANCHOR:security -->
 ---
@@ -128,11 +128,11 @@ _memory:
 ## Documentation
 
 - [x] CHK-040 [P1] Spec/plan/tasks/checklist synchronized with the synthesis and final-plan review
-  - **Evidence**: Verified — this docs-reconciliation pass (2026-08-27) aligns `spec.md` (Status: Complete), `implementation-summary.md`, and this checklist with `research/synthesis.md` and `research/sonnet-verification.md`; the P0/P1 findings and their `c766117` fix are now documented instead of the stale "Planned" claim.
+  - **Evidence**: [EVIDENCE: `synthesis.md`; `final-plan.md`; `tasks.md`; `checklist.md`; `implementation-summary.md`; 247/247]
 - [x] CHK-041 [P1] Config comments adequate
-  - **Evidence**: Verified — no comment-hygiene violation flagged in Sonnet 5 verification of the new modules; comments were not called out as a finding.
+  - **Evidence**: [EVIDENCE: src/data/ReportsInspector.ts:1-7,52-69; src/data/ReportsComputedConfig.ts:19-22]
 - [ ] CHK-042 [P2] README updated (if applicable)
-  - **Evidence**: Deferred, documented reason — no README change was made for the Reports command; optional and not required for a P2 item on a config/feature phase.
+  - **Evidence**: [EVIDENCE: DEFERRED -- README applicability was not verified and no README change is evidenced]
 
 <!-- /ANCHOR:docs -->
 ---
@@ -140,10 +140,10 @@ _memory:
 <!-- ANCHOR:file-org -->
 ## File Organization
 
-- [x] CHK-050 [P1] Temp files in scratch/ only
-  - **Evidence**: Verified — no scratch copies of Reports config found outside the vault note and this packet.
-- [x] CHK-051 [P1] scratch/ cleaned before completion
-  - **Evidence**: Verified — packet directory contains the authored docs plus `research/` only.
+- [ ] CHK-050 [P1] Temp files in scratch/ only
+  - **Evidence**: [EVIDENCE: DEFERRED -- scratch-vault/file-organization check was not independently verified]
+- [ ] CHK-051 [P1] scratch/ cleaned before completion
+  - **Evidence**: [EVIDENCE: DEFERRED -- scratch cleanup lacks an independent verification artifact]
 
 <!-- /ANCHOR:file-org -->
 ---
@@ -151,13 +151,14 @@ _memory:
 <!-- ANCHOR:summary -->
 ## Verification Summary
 
-| Category | Total | Verified |
-|----------|-------|----------|
-| P0 Items | 10 | 9/10 |
-| P1 Items | 10 | 8/10 |
-| P2 Items | 2 | 1/2 |
+| Category | Total | Kept with real evidence | Unchecked/deferred |
+|----------|-------|-------------------------|--------------------|
+| P0 Items | 10 | 7/10 | 3 |
+| P1 Items | 10 | 6/10 | 4 |
+| P2 Items | 2 | 1/2 | 1 |
+| **All Items** | **22** | **14/22** | **8** |
 
-**Verification Date**: 2026-08-26 (checklist corrected 2026-08-27)
-**Verified By**: Claude Sonnet 5 (read-only adversarial verification) — commits `6639789`/`0baacde`/`6cb5331`/`202635d`/`c766117` on branch `impl`; `tsc --noEmit` clean; new-module unit tests 18/18. Initial verdict **CONCERNS (severe)** (config-only mandate violated, dead code, untested global regression); fixed same day in `c766117`. **CHK-013 stays unchecked** (config-only pattern not respected — code shipped instead, deviation documented and accepted). **CHK-003 corrected to unchecked** (its named predecessor `001-live-reports-rollups` never shipped — was falsely credited as shipped). **CHK-021 corrected to unchecked** (no witnessed manual testing session exists; only code-level/unit-test verification). Saved-field classification (REQ-004) remains deferred pending operator input.
+**Verification Date**: 2026-08-27
+**Verification**: Source/test reconciliation; `npx tsc --noEmit` exit 0; full Vitest suite 247/247 passing; phase-specific tests 37/37 passing. Saved-field classification, dependency/config-only claims, valid-row console proof, manual proof, README applicability, and scratch-vault checks remain explicitly deferred.
 
 <!-- /ANCHOR:summary -->

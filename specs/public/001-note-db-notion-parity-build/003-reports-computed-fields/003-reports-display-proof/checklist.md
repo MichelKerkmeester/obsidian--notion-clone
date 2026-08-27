@@ -11,10 +11,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "public/001-note-db-notion-parity-build/003-reports-computed-fields/003-reports-display-proof"
-    last_updated_at: "2026-08-25T19:30:00Z"
+    last_updated_at: "2026-08-27T12:50:04Z"
     last_updated_by: "phase-architect"
-    recent_action: "Shipped commit 6cb5331, fixed by 202635d and c766117; tsc0/build0/vitest green; proof logic confirmed by Sonnet 5 code trace + 18/18 unit tests"
-    next_safe_action: "None — sub-phase complete. No new module was to be added during proofs (CHK-013) but ReportsDisplay.ts shipped; documented as a deviation"
+    recent_action: "Completion docs reconciled to shipped state; gate green; Sonnet-verified"
+    next_safe_action: "None — sub-phase complete"
     blockers: []
     key_files:
       - "spec.md"
@@ -57,7 +57,7 @@ _memory:
 - [x] CHK-002 [P0] Technical approach defined in plan.md
   - **Evidence**: Verified — same commits, tsc0/build0/vitest green.
 - [x] CHK-003 [P1] Dependencies identified
-  - **Evidence**: Verified — built on child `002-remaining-saved-config` (`0baacde`) defs and child `001-live-reports-inspect` (`6639789`) locked expressions.
+  - **Evidence**: `src/data/ReportsComputedConfig.ts:2` imports `ReportsInspector`; `src/data/ReportsInspector.ts:71` inspects configured columns and views.
 <!-- /ANCHOR:pre-impl -->
 
 ---
@@ -109,7 +109,7 @@ _memory:
 ## Security
 
 - [x] CHK-030 [P0] No hardcoded secrets or telemetry
-  - **Evidence**: Verified — no secrets or network surface added, confirmed at Sonnet verification.
+  - **Evidence**: `grep -ri secret src/` returned no matches; `rg -n -i '\btelemetry\b|\bfetch\s*\(|\bsendBeacon\s*\(|\bnew\s+WebSocket\b|\bXMLHttpRequest\s*\(' src --glob '*.ts'` returned no matches.
 - [x] CHK-031 [P0] Evaluation stays inside SafeEval
   - **Evidence**: Verified — `SafeEval.ts` unchanged; no new `eval` path.
 - [x] CHK-032 [P2] Auth/authz working correctly
@@ -123,8 +123,8 @@ _memory:
 
 - [x] CHK-040 [P1] Spec/plan/tasks/checklist synchronized
   - **Evidence**: Verified — this docs-reconciliation pass (2026-08-27) aligns this checklist with `implementation-summary.md` and the parent's Deviations section.
-- [x] CHK-041 [P1] Evidence comments adequate
-  - **Evidence**: Verified — no comment-hygiene violation flagged in Sonnet 5 verification.
+- [ ] CHK-041 [P1] Evidence comments adequate
+  - **Evidence**: [EVIDENCE: DEFERRED -- no recorded comment-hygiene check or concrete review artifact]
 - [ ] CHK-042 [P2] README updated (if applicable)
   - **Evidence**: Deferred, documented reason — no README change required for this code path.
 <!-- /ANCHOR:docs -->
@@ -137,7 +137,7 @@ _memory:
 - [x] CHK-050 [P1] Temp files in scratch/ only
   - **Evidence**: Verified — no scratch copies of `db_view` config found outside this packet.
 - [x] CHK-051 [P1] scratch/ cleaned before completion
-  - **Evidence**: Verified — no leftover dumps found.
+  - **Evidence**: command `ls -la scratch` shows only `.gitkeep`; no leftover dumps.
 <!-- /ANCHOR:file-org -->
 
 ---
@@ -148,9 +148,9 @@ _memory:
 | Category | Total | Verified |
 |----------|-------|----------|
 | P0 Items | 10 | 10/10 |
-| P1 Items | 10 | 9/10 |
+| P1 Items | 10 | 8/10 |
 | P2 Items | 2 | 1/2 |
 
 **Verification Date**: 2026-08-26
-**Verified By**: Claude Sonnet 5 (read-only adversarial verification) — commits `6cb5331`/`202635d`/`c766117` on branch `impl`; `tsc --noEmit` clean; 18/18 new-module unit tests. **CHK-013 stays unchecked** (a new module shipped despite the no-new-module proof intent — same documented deviation as the parent phase).
+**Verified By**: Claude Sonnet 5 (read-only adversarial verification) — commits `6cb5331`/`202635d`/`c766117` on branch `impl`; `tsc --noEmit` clean; 18/18 new-module unit tests. **CHK-013 and CHK-041 stay unchecked** (CHK-013 reflects the shipped new module; CHK-041 has no recorded comment-hygiene check or concrete review artifact).
 <!-- /ANCHOR:summary -->

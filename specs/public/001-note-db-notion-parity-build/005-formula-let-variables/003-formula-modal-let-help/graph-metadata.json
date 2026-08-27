@@ -36,7 +36,7 @@
       "child"
     ],
     "importance_tier": "high",
-    "status": "complete",
+    "status": "in_progress",
     "key_files": [
       "spec.md",
       "plan.md",
@@ -81,6 +81,12 @@
         "source": "derived"
       },
       {
+        "name": "In Progress",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
         "name": "Parent Spec",
         "kind": "proper_noun",
         "path": "spec.md",
@@ -94,12 +100,6 @@
       },
       {
         "name": "Problem Statement Even",
-        "kind": "proper_noun",
-        "path": "spec.md",
-        "source": "derived"
-      },
-      {
-        "name": "Purpose Add",
         "kind": "proper_noun",
         "path": "spec.md",
         "source": "derived"
@@ -183,7 +183,7 @@
         "source": "derived"
       },
       {
-        "name": "What Was Built Nothing",
+        "name": "What Was Built Shipped",
         "kind": "proper_noun",
         "path": "implementation-summary.md",
         "source": "derived"
@@ -191,7 +191,7 @@
     ],
     "causal_summary": "Even after child 001 evaluates `let`/`lets`, the editor's own registry drives autocomplete, `NAME(` highlighting, and help",
     "created_at": "2026-08-25T19:25:12Z",
-    "last_save_at": "2026-08-25T20:14:47.656Z",
+    "last_save_at": "2026-08-27T12:27:57.537Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -200,12 +200,12 @@
       "tasks.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:8de8a20764e86710bd19a557440b7d04f6e56d6fb6ef89377a5e444df0131533",
+    "source_fingerprint": "sha256:a68c61b2ab80cb66e5ae95c1a24deed999bd03e92e2ea478484f7646613c6f52",
     "source_doc_hashes": {
-      "spec.md": "0542f3814c8e73a42f64ddcb7d3b092c63917b6beae1ccda1708dc05594179e7",
-      "plan.md": "da6ebeb5916873455b8377be23ebe936b0fc9dd9738ef505b0d3fb841bc6a364",
-      "tasks.md": "dc6fb43d1831c99c41360212c4d523014618ee6a30e3a418870daaf535fc0a7c",
-      "implementation-summary.md": "6a43dfc1ec3131aacff4c8960ed5eb375241dc94706de1eab5c68304cabeafd5"
+      "spec.md": "ecc82a72fc6ffd103ce224c934646ff44be29421b9b238b76388d8ca6e03f1c2",
+      "plan.md": "0f558c60ae08ce5daf622f6f2cf862111bc91372362e060443fb19cf51e044ff",
+      "tasks.md": "2a6e2418afc9de1ee4009332dac9d9131503138428f615b724f1f9dfaa7d19b1",
+      "implementation-summary.md": "3e20e1db9ba84de588642648bde61d0d6d3f8f722c22750aaed86779bb106576"
     },
     "last_active_child_id": null,
     "last_active_at": null

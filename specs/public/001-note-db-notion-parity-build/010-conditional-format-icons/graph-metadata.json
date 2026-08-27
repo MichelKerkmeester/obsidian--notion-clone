@@ -52,6 +52,7 @@
       "tasks.md",
       "checklist.md",
       "implementation-summary.md",
+      "research/sonnet-verification.md",
       "research/synthesis.md",
       "research/research.md",
       "research/final-plan.md"
@@ -88,6 +89,12 @@
         "source": "derived"
       },
       {
+        "name": "sonnet-verification.md",
+        "kind": "doc",
+        "path": "research/sonnet-verification.md",
+        "source": "derived"
+      },
+      {
         "name": "synthesis.md",
         "kind": "doc",
         "path": "research/synthesis.md",
@@ -118,6 +125,12 @@
         "source": "derived"
       },
       {
+        "name": "In Progress",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
         "name": "Problem Statement The",
         "kind": "proper_noun",
         "path": "spec.md",
@@ -131,12 +144,6 @@
       },
       {
         "name": "In Scope",
-        "kind": "proper_noun",
-        "path": "spec.md",
-        "source": "derived"
-      },
-      {
-        "name": "Match Option",
         "kind": "proper_noun",
         "path": "spec.md",
         "source": "derived"
@@ -194,17 +201,11 @@
         "kind": "proper_noun",
         "path": "tasks.md",
         "source": "derived"
-      },
-      {
-        "name": "Verification Checklist",
-        "kind": "proper_noun",
-        "path": "checklist.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "The fork already matches Notion's core conditional-format contract — per-view rules, first-match, row-or-property color — through one shared helper (`getConditionalFormatMatch` / `applyConditionalFormat` in `src/data/ConditionalFormatting.ts:23-69`) that all ten renderer consumers call",
     "created_at": "2026-08-24T17:58:45.574Z",
-    "last_save_at": "2026-08-25T21:09:05.584Z",
+    "last_save_at": "2026-08-27T12:25:54.218Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -215,13 +216,13 @@
       "implementation-summary.md",
       "research/research.md"
     ],
-    "source_fingerprint": "sha256:fd51793d5e763cb4b7ecc5130fc25be22cf40a875d9c678ad12c1814487bbc38",
+    "source_fingerprint": "sha256:6029b21dfbdc4dc63e8eb4dc9282a60b6ff1c1fb56edb87f049b1021642d4438",
     "source_doc_hashes": {
-      "spec.md": "cf0e8567dca22d7606ad53670e15fcd65e1c35f1d59ad6a81b743d0ca0070ccc",
-      "plan.md": "9647145a21ffa3c933f86515847fceec131e98c24d71c4fc79170611646ec4d0",
-      "tasks.md": "77fcbf623efb990282551d8e6a695b8353eabfc0cb15b0f950aa38bbf993435f",
-      "checklist.md": "89054316d6d5a78598da2c676bb91f4f39b10dbb00ebbe068c651cd47af1c5ef",
-      "implementation-summary.md": "ff5a23fbbc7788388d6f2806ff12bf728331d2b56b096037a41b23792153f490",
+      "spec.md": "e7dd2d9d0f740161d29e5d3102e64d4c96230cff26bddee8eaa4670822d1baa6",
+      "plan.md": "3236e050ddc88b781f594b881529a3672dcfa216076d610bacc9d8da8e248701",
+      "tasks.md": "bb326adff5c2ec8b4a9652a0db7dd23fe224fd5ed52d3460e7050649fc00d988",
+      "checklist.md": "2be300da5467d439c574a08222d195409a7a8ebe48fcc3e55ff465086c71db3e",
+      "implementation-summary.md": "d13a0ede7f82808a07549e24ea387d41731b612bafa6eafe16951093a5900df5",
       "research/research.md": "a0381849bdf4f821a0e4a4c2fdcc64a51d5516050a46173994e97e9fb09a3c98"
     },
     "last_active_child_id": "public/001-note-db-notion-parity-build/010-conditional-format-icons/005-format-display-proof",

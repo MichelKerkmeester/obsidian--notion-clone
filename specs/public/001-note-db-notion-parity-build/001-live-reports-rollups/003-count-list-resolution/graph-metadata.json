@@ -190,7 +190,7 @@
     ],
     "causal_summary": "A wrong amount key or empty relation is UI-indistinguishable from \"no children\" (`emptyRollupValue` → COUNT `0`, SUM `null`, `RelationRollup.ts:159-160`)",
     "created_at": "2026-08-25T19:11:31Z",
-    "last_save_at": "2026-08-25T20:14:52.222Z",
+    "last_save_at": "2026-08-27T12:27:54.711Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -201,10 +201,10 @@
     ],
     "source_fingerprint": "sha256:0264f52c1663bf49576c307f2a5a09b2c2e7c32a29270a9a2db17b859d871fe9",
     "source_doc_hashes": {
-      "spec.md": "c94ccf560fcbc57f09f394c5dc3db7596f2de3d5fd5dfe090c748a33d2e682fc",
-      "plan.md": "26b34125b772fbd72a02d18221be40dff82365dd828f7e552900175330ec2589",
-      "tasks.md": "e30f50a3af533aad88ba99f696aa82b13e758832e81704f0eda8b63afa4e2bb0",
-      "implementation-summary.md": "eaaab309808c539c5f32048504a786b4a201338f95b55c515094511691d2ff22"
+      "spec.md": "d56b217b1fd074ac387241424271524f20028d3eb5a2634ca1a02a228148efef",
+      "plan.md": "ee19ca05dadade25529b5daadead8194ef992dde56fec2477166adfdac54265d",
+      "tasks.md": "c486dc3a9d6494565d6e794bf46df1e68a318f33a24dc3a537a2e986a598aa21",
+      "implementation-summary.md": "9d78705c15e10bb0ab1d51d3c61f8d8d6f27c93e85c55b09ee8cb0fab9fdd2b7"
     },
     "last_active_child_id": null,
     "last_active_at": null

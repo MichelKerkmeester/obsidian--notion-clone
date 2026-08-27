@@ -13,7 +13,7 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "public/001-note-db-notion-parity-build/003-reports-computed-fields/003-reports-display-proof"
-    last_updated_at: "2026-08-25T19:30:00Z"
+    last_updated_at: "2026-08-27T12:50:04Z"
     last_updated_by: "phase-architect"
     recent_action: "Authored reports display-proof child from synthesis and final-plan"
     next_safe_action: "Run known-pair, empty-month, mistype, hash, and engine-freeze proofs after config ships"
@@ -43,7 +43,7 @@ _memory:
 |-------|-------|
 | **Level** | 2 |
 | **Priority** | P1 |
-| **Status** | Complete |
+| **Status** | In Progress |
 | **Created** | 2026-08-25 |
 | **Branch** | `003-reports-computed-fields` |
 | **Parent Spec** | ../spec.md |
@@ -178,7 +178,7 @@ Prove Remaining (and Saved if shipped) on the live Reports view: known pair Inco
 ### Data Boundaries
 - Missing/non-numeric Income or Expenses: rollup `null` (`RelationRollup.ts:126`). Bare subtraction → `0`. Null-guard → `"-" `.
 - Currency strings still subtract (`coerceValue`, `ComputedField.ts:590-597`).
-- Sales unused by Remaining is allowed; never rollup-of-rollup (`RelationRollup.ts:101`).
+- Sales unused by Remaining is allowed; never rollup-of-rollup (`RelationRollup.ts:139`).
 
 ### Error Scenarios
 - Mistyped `[field]`: localized error, `null` cell, no persistence (`ComputedField.ts:508-546`).

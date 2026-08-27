@@ -47,7 +47,7 @@ _memory:
 |-------|-------|
 | **Level** | Phase parent |
 | **Priority** | P1 |
-| **Status** | Complete — build phases 002-014 shipped, Sonnet-verified, gate-green (tsc0/build0/vitest) on branch impl; 001 config-only (pending), 015-017 deferred/out of scope |
+| **Status** | In Progress — build phases 002-014 shipped as code, Sonnet-verified, gate-green (tsc0/build0/vitest) on branch impl, with documented deferrals (manual proofs, roadmap items); 001 config-only (pending), 015-017 deferred/out of scope |
 | **Created** | 2026-08-24 |
 | **Branch** | `002-note-db-notion-parity-build` |
 | **Track** | `notion-parity` |
@@ -140,8 +140,8 @@ Turn the 008 backlog into seven dependency-ordered waves (0..6) that close each 
 
 ### Phase Transition Rules
 
-- Phases execute in wave order (0..6). A phase enters only when the phases its wave depends on have closed; hard dependencies: 003 needs 001+002; 005 needs 004; 008 needs 001; 010 needs 009. **Reconciled (2026-08-27):** 003 is Complete and 001 is still Planned (never built) — 003 shipped as code independently of 001's vault config (see `003-reports-computed-fields/spec.md` Out of Scope and `implementation-summary.md` Deviations from Plan). The 003→001 dependency above is now informational precedent, not an enforced blocker; 003's dependency on 002 (Complete) held as stated.
-- Wave 0 (phase 001) is configuration only and has no code diff; it must land before 003 and 008. **In practice, 003 shipped without 001 landing first** (001 remains a pending, unbuilt config-only task); 008 also shipped as code independently of 001 (008 Complete, 001 pending), so like 003 its 001 dependency is informational precedent, not an enforced blocker.
+- Phases execute in wave order (0..6). A phase enters only when the phases its wave depends on have closed; hard dependencies: 003 needs 001+002; 005 needs 004; 008 needs 001; 010 needs 009. **Reconciled (2026-08-27):** 003 shipped its code (now In Progress with deferrals) and 001 is still Planned (never built) — 003 shipped as code independently of 001's vault config (see `003-reports-computed-fields/spec.md` Out of Scope and `implementation-summary.md` Deviations from Plan). The 003-to-001 dependency above is now informational precedent, not an enforced blocker; 003's dependency on 002 held as stated.
+- Wave 0 (phase 001) is configuration only and has no code diff; it **was planned** to land before 003 and 008. **In practice it did not** — 001 remains pending, config-only, and unbuilt; 003 and 008 both shipped as code independently of it (see the reconciliation note above), so this precedence is historical-plan framing, not an enforced blocker.
 - Wave 6 is never-default: 015, 016, and 017 are entered only on an explicit owner decision. 015 carries a lean decision spec; 016 and 017 are recorded as out of scope and get no build plan.
 - Every child must pass strict validation at intake and closure. The parent map remains the coordination truth; detailed execution lives in children.
 

@@ -33,7 +33,7 @@
       "requires"
     ],
     "importance_tier": "high",
-    "status": "complete",
+    "status": "in_progress",
     "key_files": [
       "spec.md",
       "plan.md",
@@ -78,6 +78,12 @@
         "source": "derived"
       },
       {
+        "name": "In Progress",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
         "name": "Parent Spec",
         "kind": "proper_noun",
         "path": "spec.md",
@@ -91,12 +97,6 @@
       },
       {
         "name": "Problem Statement Spec",
-        "kind": "proper_noun",
-        "path": "spec.md",
-        "source": "derived"
-      },
-      {
-        "name": "Purpose Use",
         "kind": "proper_noun",
         "path": "spec.md",
         "source": "derived"
@@ -180,7 +180,7 @@
         "source": "derived"
       },
       {
-        "name": "What Was Built Nothing",
+        "name": "What Was Built Shipped",
         "kind": "proper_noun",
         "path": "implementation-summary.md",
         "source": "derived"
@@ -188,7 +188,7 @@
     ],
     "causal_summary": "Spec §8 requires identical nested headers in linked/embedded views",
     "created_at": "2026-08-25T20:50:00Z",
-    "last_save_at": "2026-08-25T21:01:26.638Z",
+    "last_save_at": "2026-08-27T12:28:02.654Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -197,12 +197,12 @@
       "tasks.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:d0471f3e84b1dc9ce38c78370a6e034454170248b13d44d55d9a642d31774bb3",
+    "source_fingerprint": "sha256:8ad61d238d53cd20d3272b8f1d39c150eae10d00ef185b329d04af87179cb9c6",
     "source_doc_hashes": {
-      "spec.md": "5a5fe7afbcb6f770c51e12fa104d4540cc3841f1aaf79765b1c435e0525bdf4d",
-      "plan.md": "4a336dc87539d3a6a31401e7c21bdca90af607fc35316dce115bd47f20d0396f",
-      "tasks.md": "a412663dd06d1fd06ec1def8a11a6b5597f3bcf7931c31bc7d67a69146d3050e",
-      "implementation-summary.md": "56d32f91e1606e901414300e18d07317fda0d310e0d689c315d1e3570e694835"
+      "spec.md": "58eaafdb8dc997261f1a1111b19dcf655e7df5670bf45c687a275cd34c3ee8be",
+      "plan.md": "874f2e76c412e7032a80920eab02eb943fe45d1999469da327da8c9fd6dc8cad",
+      "tasks.md": "6423094d9971a8407e95332a2059b4fa09bc76dd3c7ec20159fd8d9d0e79ab90",
+      "implementation-summary.md": "07871f760d44544d8e6633484dc967b0a34e65dff37c761db2d8422521d47847"
     },
     "last_active_child_id": null,
     "last_active_at": null

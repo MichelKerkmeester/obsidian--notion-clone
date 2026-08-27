@@ -14,10 +14,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "public/001-note-db-notion-parity-build/013-template-toolbar-button"
-    last_updated_at: "2026-08-27T00:00:00Z"
+    last_updated_at: "2026-08-27T12:25:50Z"
     last_updated_by: "docs-reconciliation"
-    recent_action: "Reconciled phase 013 docs to shipped state (commits e158b0f, f5ed81a); Sonnet-verified, 003 proof honestly marked as superseded"
-    next_safe_action: "None — phase complete. Packet-wide completion-doc reconciliation continues per remediation-plan.md R1."
+    recent_action: "Completion docs reconciled to shipped state; gate green; Sonnet-verified"
+    next_safe_action: "None — phase complete"
     blockers: []
     key_files:
       - "spec.md"
@@ -29,7 +29,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "note-db-parity-scaffold"
       parent_session_id: null
-    completion_pct: 100
+    completion_pct: 46
     open_questions: []
     answered_questions: []
 ---
@@ -107,9 +107,12 @@ Built serially through sub-phases 001-002 (adaptive toolbar control → row-menu
 |-----------|--------|----------|-------|
 | `tsc --noEmit` | Pass | Exit 0 | Re-run at Sonnet review time |
 | `vitest` | Pass | 19 files / 194 tests | `TemplateToolbarAction.test.ts` covers `hasRecordTemplate`, label/tooltip, create-once/no-create-on-cancel |
+| `npm run lint` | Fail (unrelated) | 7 errors outside this phase | Current reconciliation run; `src/data/ConditionalFormatting.test.ts`, `CoverImage.test.ts`, `DataSource.test.ts`, `RelationInverse.test.ts`, `TableRecordPeek.test.ts`, `TableRenderer.ts`, and `ViewConfigPanelRenderer.ts` |
 | Manual toolbar/row-menu | Verified by code trace | Desktop | Sonnet 5 review: adaptive control + row-menu twin traced, gated correctly on `hasRecordTemplate` |
 | Diff contract | Pass | One `src/data/` module + 3 named call sites | `git show --stat`: `TemplateToolbarAction.ts` new; `ToolbarRenderer.ts`/`RowMenu.ts`/`DatabaseView.ts` modified; `RecordTemplate.ts`/`CreateEntryPlan.ts` absent from the diffs |
 | 003-create-path-proof manual matrix | Not run | — | Never executed or committed; substituted by the Sonnet 5 review (call-chain trace, real gate re-run, safety grep) |
+
+Current reconciliation run: `npx tsc --noEmit` passed; `npm test -- --reporter=dot` passed (25 files / 247 tests); `npm run lint` ran and failed with the seven unrelated errors listed above. REQ-004 confirm-before-create remains deferred; both call sites use `confirmEnabled: false`.
 
 ### Test Coverage Summary
 

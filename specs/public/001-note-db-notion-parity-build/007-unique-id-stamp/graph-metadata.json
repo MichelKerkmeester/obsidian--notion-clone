@@ -53,6 +53,7 @@
       "tasks.md",
       "checklist.md",
       "implementation-summary.md",
+      "research/sonnet-verification.md",
       "research/synthesis.md",
       "research/research.md",
       "research/final-plan.md"
@@ -89,6 +90,12 @@
         "source": "derived"
       },
       {
+        "name": "sonnet-verification.md",
+        "kind": "doc",
+        "path": "research/sonnet-verification.md",
+        "source": "derived"
+      },
+      {
         "name": "synthesis.md",
         "kind": "doc",
         "path": "research/synthesis.md",
@@ -119,6 +126,12 @@
         "source": "derived"
       },
       {
+        "name": "In Progress",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
         "name": "Problem Statement The",
         "kind": "proper_noun",
         "path": "spec.md",
@@ -132,12 +145,6 @@
       },
       {
         "name": "In Scope",
-        "kind": "proper_noun",
-        "path": "spec.md",
-        "source": "derived"
-      },
-      {
-        "name": "File Path",
         "kind": "proper_noun",
         "path": "spec.md",
         "source": "derived"
@@ -195,17 +202,11 @@
         "kind": "proper_noun",
         "path": "tasks.md",
         "source": "derived"
-      },
-      {
-        "name": "Verification Checklist",
-        "kind": "proper_noun",
-        "path": "checklist.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "The note-database fork creates rows through `planCreateEntry` in `src/data/CreateEntryPlan.ts` and writes frontmatter, but it never allocates a Notion-style sequential unique ID at create time (`CreateEntryPlan.ts:119-173`)",
     "created_at": "2026-08-24T17:23:16.662Z",
-    "last_save_at": "2026-08-25T20:14:56.176Z",
+    "last_save_at": "2026-08-27T12:25:53.355Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -216,13 +217,13 @@
       "implementation-summary.md",
       "research/research.md"
     ],
-    "source_fingerprint": "sha256:5ee70f75dbb79c17c6804779376827720a1b672d85e9625db7281f5b8d63f440",
+    "source_fingerprint": "sha256:5a495746ce6f676bb23ee804a5599f74b1c086d9a8f8ff838022835b0fdd31b3",
     "source_doc_hashes": {
-      "spec.md": "697eb5e0b518bf1b7226584cd26479606eb142c20b14236f4a96b91b88bc052f",
-      "plan.md": "f3cb449ceab158067aff4d963d84eb6cb8913033c0ef60db4c47ee1ad4e1dc1d",
-      "tasks.md": "43f70a7bf3057ebbea0da465d0dfac331f2b4665653f79cce24128d38e0f1bbf",
-      "checklist.md": "bc6eeda8dee27ddd993d52869e311a31789ae18f2de3b6a68e683252ea86808c",
-      "implementation-summary.md": "e4b3034d29cef41a262e36f519f5d40450cc2d5a6325f48c2cd6295216a66d9e",
+      "spec.md": "4a89a25aa27f3124db1c6a4a410984edd3675790814f2272044f7eb0abaeecf7",
+      "plan.md": "01d2f173c811b99fabc563835ffe267434bc3a5cadf65d12b8152cc109ed2a58",
+      "tasks.md": "97b21cc03ce0dfb4a4961f9afa5c998162d5f5e30a05c491f7edde2feed63a74",
+      "checklist.md": "923db0806b32bf31da0632fe404371eca501255facb089c89ac164c59707d801",
+      "implementation-summary.md": "b242f192ea0d0f6289e9e23f24471db1a1ebe8eaf7fdbea95eb04db74ad915f2",
       "research/research.md": "f20e556ed43c9b9034f788a04e271777c92d1bd84b8731ca9b44bae541e336c2"
     },
     "last_active_child_id": "obsidian/002-note-db-notion-parity-build/007-unique-id-stamp/003-create-entry-stamp",

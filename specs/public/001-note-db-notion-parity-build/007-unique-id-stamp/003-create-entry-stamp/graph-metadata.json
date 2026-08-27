@@ -36,7 +36,7 @@
       "summary"
     ],
     "importance_tier": "high",
-    "status": "complete",
+    "status": "in_progress",
     "key_files": [
       "spec.md",
       "plan.md",
@@ -81,6 +81,12 @@
         "source": "derived"
       },
       {
+        "name": "In Progress",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
         "name": "Parent Spec",
         "kind": "proper_noun",
         "path": "spec.md",
@@ -94,12 +100,6 @@
       },
       {
         "name": "Problem Statement Even",
-        "kind": "proper_noun",
-        "path": "spec.md",
-        "source": "derived"
-      },
-      {
-        "name": "Purpose Stamp",
         "kind": "proper_noun",
         "path": "spec.md",
         "source": "derived"
@@ -183,7 +183,7 @@
         "source": "derived"
       },
       {
-        "name": "What Was Built Nothing",
+        "name": "What Was Built Shipped",
         "kind": "proper_noun",
         "path": "implementation-summary.md",
         "source": "derived"
@@ -191,7 +191,7 @@
     ],
     "causal_summary": "Even after children 001–002, creates never allocate",
     "created_at": "2026-08-25T19:30:00Z",
-    "last_save_at": "2026-08-25T20:14:45.572Z",
+    "last_save_at": "2026-08-27T12:27:58.998Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -200,12 +200,12 @@
       "tasks.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:1323911a5a20e15610cb271f8e6c99778a33a8c2fc585a4fb8885bc696461899",
+    "source_fingerprint": "sha256:7c2cc5ddd79acd9a91e0958aab8f5eb48ecb02944814cc367be09ee5e8fd1716",
     "source_doc_hashes": {
-      "spec.md": "5ba05991b80c968ba28c9bb9ddd2aa07d5f875729b3bfea854cb72196aa0a1b6",
-      "plan.md": "0df4f53a43b3d3fe09bd6b2a35faf28b3bef108fdd97265aa2285cc55ebaab03",
-      "tasks.md": "053201a4175a49f307c56d548defdebe7e34a591fe50e569ffa70aec0bb2a00f",
-      "implementation-summary.md": "df6cb48cc2f547bca63cc7e7304b246be43b2cfc5cb3153b1af3fcc26815eb56"
+      "spec.md": "e3d57382efded5564b564053826e44db8fd6ebe65e9ff22bef573fa4c74bf18a",
+      "plan.md": "fade36be0d91b7e6648aed7f367c82adc356d38e61bfb53ef27b20436be7623c",
+      "tasks.md": "33df63fd0eb2b60f9e33e367875eb2f643b9a7bceb808f3b06eab2017d746e67",
+      "implementation-summary.md": "a285058560edaa3fa55738db8cc7dc18cb707b04550cd67fb1e302805d50df91"
     },
     "last_active_child_id": null,
     "last_active_at": null

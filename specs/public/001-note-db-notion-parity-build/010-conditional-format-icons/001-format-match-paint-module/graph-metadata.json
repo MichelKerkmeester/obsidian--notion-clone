@@ -36,7 +36,7 @@
       "plan"
     ],
     "importance_tier": "high",
-    "status": "complete",
+    "status": "in_progress",
     "key_files": [
       "spec.md",
       "plan.md",
@@ -81,6 +81,12 @@
         "source": "derived"
       },
       {
+        "name": "In Progress",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
         "name": "Parent Spec",
         "kind": "proper_noun",
         "path": "spec.md",
@@ -94,12 +100,6 @@
       },
       {
         "name": "Problem Statement The",
-        "kind": "proper_noun",
-        "path": "spec.md",
-        "source": "derived"
-      },
-      {
-        "name": "Purpose Halt",
         "kind": "proper_noun",
         "path": "spec.md",
         "source": "derived"
@@ -183,7 +183,7 @@
         "source": "derived"
       },
       {
-        "name": "What Was Built Nothing",
+        "name": "What Was Built Shipped",
         "kind": "proper_noun",
         "path": "implementation-summary.md",
         "source": "derived"
@@ -191,7 +191,7 @@
     ],
     "causal_summary": "The shared helper already matches Notion's core CF contract through `getConditionalFormatMatch` / `applyConditionalFormat` (`ConditionalFormatting.ts:23-69`) and returns `{ color, ruleId }` only",
     "created_at": "2026-08-25T21:00:23Z",
-    "last_save_at": "2026-08-25T21:10:36.743Z",
+    "last_save_at": "2026-08-27T12:28:00.926Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -200,12 +200,12 @@
       "tasks.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:be7b85e0e98262b4663490f64d085e55a7e01afa85baf415712851605fb9a16e",
+    "source_fingerprint": "sha256:924e20e4e000a55d867d9575784868d1bf046e8d7d151b05752b1a4bb1758b72",
     "source_doc_hashes": {
-      "spec.md": "0486520fc238e6301eb2268b5f21d2a384196dca60c51374486811d1291d4e02",
-      "plan.md": "fc3176c14585f234914abc2489e0e7e72472941d150fe1a66a620cc77f88fcbb",
-      "tasks.md": "7f5db4ab74c3e68cd614fb392320f332da402987b13d662dcfbbd6f7357cc86a",
-      "implementation-summary.md": "dcfa1e630c33ea257feb0618eeaee3a8669b7f3aeb6fecd24ac4c595b7763311"
+      "spec.md": "a6e50f9020a0fb140f20620400eb6c2940b5a004245c980bf495550b66892c69",
+      "plan.md": "7e0f812fb6c7809216bb03b8f13c63e2191599e832560351df4e549ef354593b",
+      "tasks.md": "9735eda23b1bbfd5210b291da81937419f36c7c210ab3589d76e9e15f5af46d6",
+      "implementation-summary.md": "051fd42fa45b232aee99ebcc087743f1710d016c2cf1be19308f295b2dbe2681"
     },
     "last_active_child_id": null,
     "last_active_at": null

@@ -178,7 +178,7 @@
     ],
     "causal_summary": "Notion has no screenshot-freeze; this vault does",
     "created_at": "2026-08-25T19:11:32Z",
-    "last_save_at": "2026-08-25T20:14:51.616Z",
+    "last_save_at": "2026-08-27T12:27:55.048Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -189,10 +189,10 @@
     ],
     "source_fingerprint": "sha256:2276586290af2ad8e9d51aa7310968cd13ec8678da10b6542c306cda5f7016b2",
     "source_doc_hashes": {
-      "spec.md": "109fbcadcf29776b40178bf75b6aa2a3c3d439f8f1bf3e57221786b27585b630",
-      "plan.md": "b1940094cf1a9cef977e046d1529d91a6f6c2ec7c69740e47ff5766988782a94",
-      "tasks.md": "0bf8133ed98b9b7fea78418207fc45b530f00cadae55810a0ec1f9960799eab5",
-      "implementation-summary.md": "d195ec6d88ff6249817423643bd660b714af613bd43e605dfeafdaf664dd7681"
+      "spec.md": "00124c31bb628b9dbb6b7fd8a7d2ed4f98e63c409862f7fb65bfb15a0ab92786",
+      "plan.md": "3b79c5bd1ce22dbb1f5cf23d56db762d7f184fefb74304ba608017b1c753de37",
+      "tasks.md": "519e4c9f0676a0aeb9f53fc48ef641deadd32f3bb6191646fd61109921c19e70",
+      "implementation-summary.md": "1f44349f7ca3c0134910d933333620551d27188d8bb7f68df57dbad3c56772b7"
     },
     "last_active_child_id": null,
     "last_active_at": null

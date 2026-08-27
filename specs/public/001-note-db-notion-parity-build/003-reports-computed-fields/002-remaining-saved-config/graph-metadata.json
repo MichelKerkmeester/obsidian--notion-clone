@@ -39,7 +39,7 @@
       "plan"
     ],
     "importance_tier": "high",
-    "status": "complete",
+    "status": "in_progress",
     "key_files": [
       "spec.md",
       "plan.md",
@@ -84,6 +84,12 @@
         "source": "derived"
       },
       {
+        "name": "In Progress",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
         "name": "Parent Spec",
         "kind": "proper_noun",
         "path": "spec.md",
@@ -97,12 +103,6 @@
       },
       {
         "name": "Problem Statement Reports",
-        "kind": "proper_noun",
-        "path": "spec.md",
-        "source": "derived"
-      },
-      {
-        "name": "Purpose After",
         "kind": "proper_noun",
         "path": "spec.md",
         "source": "derived"
@@ -186,7 +186,7 @@
         "source": "derived"
       },
       {
-        "name": "What Was Built Nothing",
+        "name": "What Was Built Shipped",
         "kind": "proper_noun",
         "path": "implementation-summary.md",
         "source": "derived"
@@ -194,7 +194,7 @@
     ],
     "causal_summary": "Reports still lacks Remaining and Saved as live computed columns",
     "created_at": "2026-08-25T19:12:37Z",
-    "last_save_at": "2026-08-25T20:14:49.783Z",
+    "last_save_at": "2026-08-27T12:27:56.193Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -203,12 +203,12 @@
       "tasks.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:d7ba765b5d9e399251737dfa4f3b2e500da01f6238f57face2ea14d82ed2d958",
+    "source_fingerprint": "sha256:da10454b684180ba712c7c5cd697ff2919366650532b80319f8cde854ce426d6",
     "source_doc_hashes": {
-      "spec.md": "192e3fac2a98a87c6ee5880633ff1f5d414398fb5850ce45918c2c886ee20c31",
-      "plan.md": "d1e798b2c88fa432df13d75cfc885214f09629641e9422a8879bd33accd7d56b",
-      "tasks.md": "715cc2b7791b2544610c3cd99087bf6e2d0214843f3e327d2448e266c4e2a368",
-      "implementation-summary.md": "de71afe312e6f319fa9356c4e1acabb7915c7e5eca51262f0b583f2b209416b5"
+      "spec.md": "ea810d442804990dadce93724d237ddb44f82af6b96c6098db39bbefeffe94f7",
+      "plan.md": "4406412ee7325653525a00062be012653b790c9883f9950f8c24cf30026762da",
+      "tasks.md": "6da062d9607527d4e62d71eb62ca34479d672bf4d41e5168f6ad7804c8e00106",
+      "implementation-summary.md": "7b2cf24a149403706721a7f021fb4e309eaf98a914674d106a5116d64986ec9e"
     },
     "last_active_child_id": null,
     "last_active_at": null

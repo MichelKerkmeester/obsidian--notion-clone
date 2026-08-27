@@ -37,7 +37,7 @@
       "vitest"
     ],
     "importance_tier": "high",
-    "status": "complete",
+    "status": "in_progress",
     "key_files": [
       "spec.md",
       "plan.md",
@@ -82,6 +82,12 @@
         "source": "derived"
       },
       {
+        "name": "In Progress",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
         "name": "Parent Spec",
         "kind": "proper_noun",
         "path": "spec.md",
@@ -95,12 +101,6 @@
       },
       {
         "name": "Problem Statement The",
-        "kind": "proper_noun",
-        "path": "spec.md",
-        "source": "derived"
-      },
-      {
-        "name": "Purpose Create",
         "kind": "proper_noun",
         "path": "spec.md",
         "source": "derived"
@@ -184,7 +184,7 @@
         "source": "derived"
       },
       {
-        "name": "What Was Built Nothing",
+        "name": "What Was Built Shipped",
         "kind": "proper_noun",
         "path": "implementation-summary.md",
         "source": "derived"
@@ -192,7 +192,7 @@
     ],
     "causal_summary": "The fork writes frontmatter in `planCreateEntry` (`CreateEntryPlan.ts:119-173`) but has no sequential identity allocator",
     "created_at": "2026-08-25T19:29:59Z",
-    "last_save_at": "2026-08-25T20:14:46.165Z",
+    "last_save_at": "2026-08-27T12:27:58.658Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -201,12 +201,12 @@
       "tasks.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:e5db4e82963d9095f77ebb5db4c2f4a443b7714ea1c55aeb118068a29d7d5b92",
+    "source_fingerprint": "sha256:1911fd67c2a50499fe595839358219c511ea1e9a5cff4d9119f0177fac25f131",
     "source_doc_hashes": {
-      "spec.md": "3398e57a777d8c88f50bbe80275b1a8e43c247644b08a71f1eb7c610ae357186",
-      "plan.md": "bc0c188b1a8d2c07ff0b751529e27afefd8cad6516946d3cbc21723b7e592622",
-      "tasks.md": "170ae9d902662bac5ad088860c6c300680b7d3bdd054de9a9cbabcce3d95c57e",
-      "implementation-summary.md": "38bd6634fee8b54fb92edb2fa7ae020f10adf59b05c8e472f18305a6a20a6cd5"
+      "spec.md": "778c344edff6df3d4c3087df623fd7c3cb9570017d66907b6e6a0cdd3b39f8f5",
+      "plan.md": "9e9e861989b435231354e8c9b259d813c88baba571f269b6241ae13f66b53b88",
+      "tasks.md": "d3d48822ee8685102d9a3094a2061909f8b453373f90c5340c2db64df3c9ab13",
+      "implementation-summary.md": "0fc1ed711b3e10beb5f815674b6dcbe71fb3cab7ac32c21b777f3a1864581883"
     },
     "last_active_child_id": null,
     "last_active_at": null

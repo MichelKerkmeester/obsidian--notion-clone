@@ -35,7 +35,7 @@
       "fork"
     ],
     "importance_tier": "high",
-    "status": "complete",
+    "status": "in_progress",
     "key_files": [
       "spec.md",
       "plan.md",
@@ -80,6 +80,12 @@
         "source": "derived"
       },
       {
+        "name": "In Progress",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
         "name": "Parent Spec",
         "kind": "proper_noun",
         "path": "spec.md",
@@ -93,12 +99,6 @@
       },
       {
         "name": "Problem Statement The",
-        "kind": "proper_noun",
-        "path": "spec.md",
-        "source": "derived"
-      },
-      {
-        "name": "Purpose Dual",
         "kind": "proper_noun",
         "path": "spec.md",
         "source": "derived"
@@ -182,7 +182,7 @@
         "source": "derived"
       },
       {
-        "name": "What Was Built Nothing",
+        "name": "What Was Built Shipped",
         "kind": "proper_noun",
         "path": "implementation-summary.md",
         "source": "derived"
@@ -190,7 +190,7 @@
     ],
     "causal_summary": "The fork also mutates `state.filters` from the active rail, column delete/rename, and chart drilldown",
     "created_at": "2026-08-25T20:51:13Z",
-    "last_save_at": "2026-08-25T21:02:27.551Z",
+    "last_save_at": "2026-08-27T12:28:00.456Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -199,12 +199,12 @@
       "tasks.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:5d3f1648f0c2e1a361b54204e70f2c5865f90f2196a2eeed8673adf39c20b364",
+    "source_fingerprint": "sha256:827f5f0d11e00c76b23297cee2073b0bbc78072b89de53783a7eaa5b59747eb6",
     "source_doc_hashes": {
-      "spec.md": "f0c6b696ed1238a44188b684322fd0eb67b327a0f78f12d0fa57d2ef27b4fb80",
-      "plan.md": "1d9dc77b9e4f5bf1ba204ef4080a14ea6ff3ed6abbc575ef77383c9c95506d42",
-      "tasks.md": "a0fd511e906e05ce048ea9fdcf80d475f89f099a432125d4adf5f5067a976744",
-      "implementation-summary.md": "7801d4d8a9ad848be69650a37ecca7ab2658c36598af827c6168a7df3029c4ae"
+      "spec.md": "b0a823b37be4777d0bca6df46b43835750c77a910ffa7d5ea20616bb34a01a62",
+      "plan.md": "35e59baee2db7c5ac482e70a642fa7cb93977d7b79ab5fda7c647ca96dc0e0c1",
+      "tasks.md": "465e19102bb02949a6727327a786f38e6e1db36f91bfa7ecaf5986bf0cad44b3",
+      "implementation-summary.md": "28fb97e71d186a96e3a15a744fcb07024f200758d86a62df1af1e87ce98b8dbf"
     },
     "last_active_child_id": null,
     "last_active_at": null

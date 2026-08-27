@@ -38,7 +38,7 @@
       "harness"
     ],
     "importance_tier": "high",
-    "status": "complete",
+    "status": "in_progress",
     "key_files": [
       "spec.md",
       "plan.md",
@@ -89,6 +89,12 @@
         "source": "derived"
       },
       {
+        "name": "In Progress",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
         "name": "Parent Spec",
         "kind": "proper_noun",
         "path": "spec.md",
@@ -96,12 +102,6 @@
       },
       {
         "name": "Handoff Criteria",
-        "kind": "proper_noun",
-        "path": "spec.md",
-        "source": "derived"
-      },
-      {
-        "name": "Problem Statement Rollup",
         "kind": "proper_noun",
         "path": "spec.md",
         "source": "derived"
@@ -173,7 +173,13 @@
         "source": "derived"
       },
       {
-        "name": "What Was Built Nothing",
+        "name": "What Was Built Shipped",
+        "kind": "proper_noun",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "Files Changed",
         "kind": "proper_noun",
         "path": "implementation-summary.md",
         "source": "derived"
@@ -181,7 +187,7 @@
     ],
     "causal_summary": "Rollup columns are stuck on `count | sum | avg | list` at `src/data/types.ts:44`",
     "created_at": "2026-08-25T18:58:57Z",
-    "last_save_at": "2026-08-25T20:14:51.010Z",
+    "last_save_at": "2026-08-27T12:27:55.392Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -190,12 +196,12 @@
       "tasks.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:98cce1c98e99a9249d46d169a9345eef41d29cf999c0562c193dd11aa38b175a",
+    "source_fingerprint": "sha256:2d1d2b1b83ad2a2f00af5d0297094831cce8b4b4f3a54327973088eb7b9973a5",
     "source_doc_hashes": {
-      "spec.md": "36a16f6edb0f179bce8a741c245d19887e59109c0ce7a029ca8346d211bec143",
-      "plan.md": "384cd00f31dd0c60b2d94a8cbfa495456cc207b7c73a591c0becc1cb8535ee21",
-      "tasks.md": "3570499f7ebbea7011ab7125c72bebecdd61d886c6d7cabcc9e8e4a0da84e82e",
-      "implementation-summary.md": "be471f1714b253ed2f44aab29f360479e049f8b033af212e8c790d4d3979457a"
+      "spec.md": "b6920eb864d298d43dacfeead1d8406ce6e7f56fc4f3610192eef4fae2454748",
+      "plan.md": "c6bb1edee0f5ee9f596c7156a90c0c5c6ed7f9baea370a00fc38cdb0ef26644b",
+      "tasks.md": "5359e25eb9443106a29a2ab5da9761c90aa95587b4acef115e998106827451da",
+      "implementation-summary.md": "68783b83ffb0d8e358037440adcb5ac669559aa753d5e134f09df722738678c0"
     },
     "last_active_child_id": null,
     "last_active_at": null

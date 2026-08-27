@@ -34,7 +34,7 @@
       "requires"
     ],
     "importance_tier": "high",
-    "status": "complete",
+    "status": "in_progress",
     "key_files": [
       "spec.md",
       "plan.md",
@@ -91,13 +91,13 @@
         "source": "derived"
       },
       {
-        "name": "Parent Spec",
+        "name": "In Progress",
         "kind": "proper_noun",
         "path": "spec.md",
         "source": "derived"
       },
       {
-        "name": "Handoff Criteria",
+        "name": "Parent Spec",
         "kind": "proper_noun",
         "path": "spec.md",
         "source": "derived"
@@ -157,7 +157,7 @@
         "source": "derived"
       },
       {
-        "name": "Planned Mod",
+        "name": "Shipped Mod",
         "kind": "proper_noun",
         "path": "implementation-summary.md",
         "source": "derived"
@@ -173,11 +173,17 @@
         "kind": "proper_noun",
         "path": "implementation-summary.md",
         "source": "derived"
+      },
+      {
+        "name": "What Was Built Shipped",
+        "kind": "proper_noun",
+        "path": "implementation-summary.md",
+        "source": "derived"
       }
     ],
     "causal_summary": "Spec §8 requires a keyboard path beside hover",
     "created_at": "2026-08-25T21:14:48Z",
-    "last_save_at": "2026-08-25T21:25:33.853Z",
+    "last_save_at": "2026-08-27T12:28:06.141Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -186,12 +192,12 @@
       "tasks.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:ec21e20285d6477219b9e7f14483fb78c945353095ef9a6e2931daef067ca1b2",
+    "source_fingerprint": "sha256:41ffe8b726457dfe254586a3d714cccc1bd016efb13840f5f76a423696c50a68",
     "source_doc_hashes": {
-      "spec.md": "5e9f0aa5c22f9d374494fc4869ced2516865eee7a43753717b8a9659b0f64405",
-      "plan.md": "87791c2d1f7cc91435eed1fed2de138d8af1d052ceeef5f3b33713212850b6bd",
-      "tasks.md": "ad3b3044e42a29e842245f4900cc8dad771bd2df198f7b3d4e8f816036ae2c40",
-      "implementation-summary.md": "6c73fca2b833c2697355eadaad54f3f58b8c0b8a786e60edd281fc027a5fb3bc"
+      "spec.md": "a7fbf5f1f30bbfce10b53d8c6a0f6323603b04f6fe315db271fdda1159936f47",
+      "plan.md": "2ce708b85e7ccc008ae3c9fb11d7cac508c5bf5c1d20bff76ea3f6bfd6ae8788",
+      "tasks.md": "d605ac5d976a910190494bba20629fd11394d4b03f32997b12ab1da44ba8261b",
+      "implementation-summary.md": "ff6edebe6a15b57d262ee13f3f14029a8ce4f3acb2e64f8b81ed46b898f70132"
     },
     "last_active_child_id": null,
     "last_active_at": null

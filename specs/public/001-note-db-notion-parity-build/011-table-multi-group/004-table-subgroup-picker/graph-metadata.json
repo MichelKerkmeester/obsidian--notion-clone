@@ -34,7 +34,7 @@
       "acceptance"
     ],
     "importance_tier": "high",
-    "status": "complete",
+    "status": "in_progress",
     "key_files": [
       "spec.md",
       "plan.md",
@@ -79,6 +79,12 @@
         "source": "derived"
       },
       {
+        "name": "In Progress",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
         "name": "Parent Spec",
         "kind": "proper_noun",
         "path": "spec.md",
@@ -92,12 +98,6 @@
       },
       {
         "name": "Problem Statement Parse",
-        "kind": "proper_noun",
-        "path": "spec.md",
-        "source": "derived"
-      },
-      {
-        "name": "Table Group",
         "kind": "proper_noun",
         "path": "spec.md",
         "source": "derived"
@@ -181,7 +181,7 @@
         "source": "derived"
       },
       {
-        "name": "What Was Built Nothing",
+        "name": "What Was Built Shipped",
         "kind": "proper_noun",
         "path": "implementation-summary.md",
         "source": "derived"
@@ -189,7 +189,7 @@
     ],
     "causal_summary": "Parse acceptance (child 001) meets REQ-001 technically, but Notion's View settings surface needs a Group + Sub-group control",
     "created_at": "2026-08-25T20:50:01Z",
-    "last_save_at": "2026-08-25T21:01:26.772Z",
+    "last_save_at": "2026-08-27T12:28:02.936Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -198,12 +198,12 @@
       "tasks.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:91207275e1bcd24bb16ceea30faa767b99d4a20a523849fadcd00ea6180c2c2e",
+    "source_fingerprint": "sha256:978ea6b84e14890403032a71837df5320c7e13503bfdf60b2e4849c8c8935b6d",
     "source_doc_hashes": {
-      "spec.md": "097de6f7cb9c10202af0d2168b29effc228dd313009130bd8b5d9b1c8f7f46c5",
-      "plan.md": "fe68e34071a5b896462793d805b602549754d6922769f0cf60432c4940e7819e",
-      "tasks.md": "a5ed97425e5c26503043c84509b7e42273937b40a8c9a2de226336a77c6675c9",
-      "implementation-summary.md": "9d87f5bc2076392c95ccf2ea9c174943dc696962bf13cc5daf342f538da65641"
+      "spec.md": "3989248ecab4b58da58bea05d94d3dd0688c3d25deb7fc8479c6687e8a4d798b",
+      "plan.md": "ea0e62c496912102bd8e4ba7c15a9c8a6fdfaf820e7189c1b408eabd92c9bf8a",
+      "tasks.md": "ed92ae132995c6110772fa5f651ee0ba75761f904d27921efe4a2c036d934d64",
+      "implementation-summary.md": "d6c5c169a45b4f617709355e673d90e5acbf2a0e236c23ca01e3e051a3c57fc0"
     },
     "last_active_child_id": null,
     "last_active_at": null

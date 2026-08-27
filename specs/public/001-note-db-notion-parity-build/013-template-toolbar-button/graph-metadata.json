@@ -50,6 +50,7 @@
       "tasks.md",
       "checklist.md",
       "implementation-summary.md",
+      "research/sonnet-verification.md",
       "research/synthesis.md",
       "research/research.md",
       "research/final-plan.md"
@@ -83,6 +84,12 @@
         "name": "implementation-summary.md",
         "kind": "doc",
         "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "sonnet-verification.md",
+        "kind": "doc",
+        "path": "research/sonnet-verification.md",
         "source": "derived"
       },
       {
@@ -122,6 +129,12 @@
         "source": "derived"
       },
       {
+        "name": "In Progress",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
         "name": "Problem Statement The",
         "kind": "proper_noun",
         "path": "spec.md",
@@ -129,12 +142,6 @@
       },
       {
         "name": "Purpose Ship",
-        "kind": "proper_noun",
-        "path": "spec.md",
-        "source": "derived"
-      },
-      {
-        "name": "Notion Buttons",
         "kind": "proper_noun",
         "path": "spec.md",
         "source": "derived"
@@ -192,17 +199,11 @@
         "kind": "proper_noun",
         "path": "checklist.md",
         "source": "derived"
-      },
-      {
-        "name": "Verification Protocol",
-        "kind": "proper_noun",
-        "path": "checklist.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "The note-database fork already implements Notion-style record templates and already wires them to the toolbar New button",
     "created_at": "2026-08-24T17:58:52.659Z",
-    "last_save_at": "2026-08-25T21:17:50.565Z",
+    "last_save_at": "2026-08-27T12:25:55.001Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -213,13 +214,13 @@
       "implementation-summary.md",
       "research/research.md"
     ],
-    "source_fingerprint": "sha256:c53d2c6bf9b10ad3e181fdb0058c40af2bc0a3977e1657ca6a2f5161383f7a98",
+    "source_fingerprint": "sha256:b2e683e946ecd67e7d792012c11e45ea607f045ae83de8d572038346a6ad9fda",
     "source_doc_hashes": {
-      "spec.md": "821de51bd84f3da111bc40aff6cc8e0104d8c8dba9a627b81f83413c25e65e40",
-      "plan.md": "996c1457c4e34216f482ad2ddba83b334282bf5893e31c6445d97e344f475984",
-      "tasks.md": "da283c347122b9d86b1ef9fe2e1c90a82171c3fb8278f023a6779926137af533",
-      "checklist.md": "8fadca495b01e1784612cd61db4ed92509d2db9ebb7e0944e06c6bac489a2326",
-      "implementation-summary.md": "eb159bd892a069e288db36c1dc3c0eeb1860cdc2a3061afcace8308d0649261a",
+      "spec.md": "f89a42b3dc57fce565bcf8d63d4d13160c2b321c31b34107e610123089e37892",
+      "plan.md": "d6fbc765bdbb60ef02ca03de0061294cf1e2e30576c172b17fab2ccb8f16643d",
+      "tasks.md": "c2bd62e0063dbea3a941cccdd45e862fcfb6a4667605c364a53b850613c062c3",
+      "checklist.md": "a8f4df31a5e33038ba43b9d19e1cdded31a4e5bc7d315abf232f630e81fecb94",
+      "implementation-summary.md": "c73c9de213fe1a091a7fe0466ff3f1ba681a849bb4221a4652a2f95b3356b769",
       "research/research.md": "954022523a7f57f1e120bc994203e0efaf68631d5c928efdcf302d06495d0fde"
     },
     "last_active_child_id": "public/001-note-db-notion-parity-build/013-template-toolbar-button/003-create-path-proof",

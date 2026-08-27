@@ -192,7 +192,7 @@
     ],
     "causal_summary": "Notion rollups are not page storage",
     "created_at": "2026-08-25T19:11:32Z",
-    "last_save_at": "2026-08-25T20:14:51.310Z",
+    "last_save_at": "2026-08-27T12:27:55.218Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -203,10 +203,10 @@
     ],
     "source_fingerprint": "sha256:8bba161dfecb131ebca6bddf872f1cdaae5673aaba9e816738224f5ecec5e66b",
     "source_doc_hashes": {
-      "spec.md": "cad4a3e3f0e65e9ee8316e2b4ae88e37e3f24e93c3129fb9ba6185f4e461bbd9",
-      "plan.md": "fee99436c5f97d1e8d411340d2b432471ce94d29df29e48a23721fd1a81c6a42",
-      "tasks.md": "c2dd89968f3073e65ac85e656173cfa44260cf931853894fc1c0be0cd1c3df9a",
-      "implementation-summary.md": "3a56a9b7060ec1eefca59aaaab7496f7f2ed7d85ac8eba054f33ff8f80be411a"
+      "spec.md": "7fd97948b80f859de1365bc6e066bda73c8ed72f1d20079b81dd0fe697396bb0",
+      "plan.md": "2bad94af0ebb297564bfff9210049b48dd7d7f2cdc21c10b544fb8d395332c50",
+      "tasks.md": "3f49fbc12bd3a58b2bbe346884afbe70d821c4edc006f1732ec66b1831ff863d",
+      "implementation-summary.md": "abdb742c65f48a4d19b13725bc513bc2cad81437d3977ac68c7d9ebc8e8b46c9"
     },
     "last_active_child_id": null,
     "last_active_at": null

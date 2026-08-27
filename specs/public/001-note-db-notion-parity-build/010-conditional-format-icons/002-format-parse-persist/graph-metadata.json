@@ -35,7 +35,7 @@
       "datasource"
     ],
     "importance_tier": "high",
-    "status": "complete",
+    "status": "in_progress",
     "key_files": [
       "spec.md",
       "plan.md",
@@ -80,6 +80,12 @@
         "source": "derived"
       },
       {
+        "name": "In Progress",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
         "name": "Parent Spec",
         "kind": "proper_noun",
         "path": "spec.md",
@@ -93,12 +99,6 @@
       },
       {
         "name": "Problem Statement",
-        "kind": "proper_noun",
-        "path": "spec.md",
-        "source": "derived"
-      },
-      {
-        "name": "Purpose Additively",
         "kind": "proper_noun",
         "path": "spec.md",
         "source": "derived"
@@ -182,7 +182,7 @@
         "source": "derived"
       },
       {
-        "name": "What Was Built Nothing",
+        "name": "What Was Built Shipped",
         "kind": "proper_noun",
         "path": "implementation-summary.md",
         "source": "derived"
@@ -190,7 +190,7 @@
     ],
     "causal_summary": "`parseConditionalFormats` (`DataSource.ts:800-825`) whitelist-builds CF rules",
     "created_at": "2026-08-25T21:00:24Z",
-    "last_save_at": "2026-08-25T21:09:04.451Z",
+    "last_save_at": "2026-08-27T12:28:01.148Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -199,12 +199,12 @@
       "tasks.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:ebb53fc9d125d3cca21cd0b7b2fa1ea1e8a144a8bb1ce54258f6cf96adbe11f4",
+    "source_fingerprint": "sha256:379232c4da4f1d4797f8301abfee9e651944e8df500bb4571ca470beb2bf1f87",
     "source_doc_hashes": {
-      "spec.md": "bf13b49e424fe4bdd341ad30d87267f56f502cd1fb6fe31e7a1c627682ff9af3",
-      "plan.md": "90e8a58a9b5974d6f0c3d3d69479f161df0dcf109f08e086276477e94b982666",
-      "tasks.md": "41dc5ce209ed3b1b2cb3dd27aa786edd5c9b7153687308829b951c66a8257aec",
-      "implementation-summary.md": "0201ffb13ad5eb1dddcd85852a229e7333fde88fa2593229f2685abea8a9bd16"
+      "spec.md": "0c407584d15c2790207e13a058cae0d6ac9b638c3997ac2c5a4738439908210a",
+      "plan.md": "1ee6b4b1bbf647ecf20c11387e2877df7b29f1c0df76636c216e95b4797fe05a",
+      "tasks.md": "8a05f254e673007511555fb6ade5d23b46530d337c775a66566e26a28f491609",
+      "implementation-summary.md": "2a05d22c80b11e49d48311add5de1bb4c744e62a38500fff12cbf735f305987f"
     },
     "last_active_child_id": null,
     "last_active_at": null

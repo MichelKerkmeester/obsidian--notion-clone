@@ -35,7 +35,7 @@
       "summary"
     ],
     "importance_tier": "high",
-    "status": "complete",
+    "status": "in_progress",
     "key_files": [
       "spec.md",
       "plan.md",
@@ -86,6 +86,12 @@
         "source": "derived"
       },
       {
+        "name": "In Progress",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
         "name": "Parent Spec",
         "kind": "proper_noun",
         "path": "spec.md",
@@ -93,12 +99,6 @@
       },
       {
         "name": "Handoff Criteria",
-        "kind": "proper_noun",
-        "path": "spec.md",
-        "source": "derived"
-      },
-      {
-        "name": "Problem Statement The",
         "kind": "proper_noun",
         "path": "spec.md",
         "source": "derived"
@@ -170,7 +170,7 @@
         "source": "derived"
       },
       {
-        "name": "What Was Built Nothing",
+        "name": "What Was Built Shipped",
         "kind": "proper_noun",
         "path": "implementation-summary.md",
         "source": "derived"
@@ -184,7 +184,7 @@
     ],
     "causal_summary": "The title cell already navigates on click (`CellRenderer.ts:126-129` → `openNote`) and already feeds Page Preview via `markNoteHoverLink` (`CellRenderer.ts:124`; `HoverLinkPreview.ts:8-17`)",
     "created_at": "2026-08-25T21:14:47Z",
-    "last_save_at": "2026-08-25T21:25:33.601Z",
+    "last_save_at": "2026-08-27T12:28:05.814Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -193,12 +193,12 @@
       "tasks.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:209e4fcbe5cc946ff41b514ccdf035a7653fe790b6495a031ebd1a75bf9b1d25",
+    "source_fingerprint": "sha256:89a99b10e2e55fcc7a5f0b13823e303454fa2600972d17293832a584cbd88bdb",
     "source_doc_hashes": {
-      "spec.md": "11d499c751c45f34be73452d4fc210e1391cc3deda4d8535a773eae3c907f275",
-      "plan.md": "7e181138a6c4df66b1095b81c640f4b5ee73eac88253d0090faa243347de4877",
-      "tasks.md": "007c9dc316ebe19aa81adea76a99443d1b7ae9c831ede88e5ddaa1dad0a75965",
-      "implementation-summary.md": "5b831d3db933cffae76072faa00bfffe9b0278566065adf9a37d1220edf9283a"
+      "spec.md": "34ad31a22cf3839ba3282724fd4b83c36279cd95d42ab632b84c892a3003ac18",
+      "plan.md": "78865c0519563c150de5f362423846ccf4063da95e0ef26fc07b77f8a46a19e8",
+      "tasks.md": "7c3df49f3e75fbb44e93f83303f47be3d0532c0925265e7e5b41cedd94808d2f",
+      "implementation-summary.md": "75bfbe8525b2ed6edff3d2a0a95b613f21c3659769ada829c54ea97a4e08d0e1"
     },
     "last_active_child_id": null,
     "last_active_at": null

@@ -191,7 +191,7 @@
     ],
     "causal_summary": "The vault still stores screenshot-era static totals",
     "created_at": "2026-08-25T19:11:31Z",
-    "last_save_at": "2026-08-25T20:14:51.924Z",
+    "last_save_at": "2026-08-27T12:27:54.894Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -202,10 +202,10 @@
     ],
     "source_fingerprint": "sha256:7e59e376c47fde982279eaffc78b2acc9e591db5ce6536070982d2a328b14a55",
     "source_doc_hashes": {
-      "spec.md": "6405d1a344ed27d09f75992ff3b44ef2ca85ff3cc8935e1f9a29e265e0796ba1",
-      "plan.md": "9c92945ac8699d33243291138a26181045945e587353534ccc5f88c9633e0beb",
-      "tasks.md": "18a5cd710e3ba645aa94f5e420935582bc8609485c3af27057d774a511303b95",
-      "implementation-summary.md": "f6221fa94d1a10470c9430d21569e5fcd1e6756e8da15efef28e787d158538ed"
+      "spec.md": "dac0bdf9ad3ee99d91ee6dd3f5230964461af477ca3502ebdd9f6c025985950e",
+      "plan.md": "658b293cc828b3087cc6f728fb2cfd96a0d87b35d92392375e36eb0a3994f998",
+      "tasks.md": "f53448918ab96d5955aef49fe24f813982c0774d80bade28521f5420a9bce0d3",
+      "implementation-summary.md": "1bb16ea0556cd0808704a938120a07c8e0b5b390213e161793ef0344365e8953"
     },
     "last_active_child_id": null,
     "last_active_at": null

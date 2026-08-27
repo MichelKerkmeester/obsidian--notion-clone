@@ -35,7 +35,7 @@
       "universal"
     ],
     "importance_tier": "high",
-    "status": "complete",
+    "status": "in_progress",
     "key_files": [
       "spec.md",
       "plan.md",
@@ -80,6 +80,12 @@
         "source": "derived"
       },
       {
+        "name": "In Progress",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
         "name": "Parent Spec",
         "kind": "proper_noun",
         "path": "spec.md",
@@ -93,12 +99,6 @@
       },
       {
         "name": "Problem Statement Notion",
-        "kind": "proper_noun",
-        "path": "spec.md",
-        "source": "derived"
-      },
-      {
-        "name": "Purpose Add",
         "kind": "proper_noun",
         "path": "spec.md",
         "source": "derived"
@@ -182,7 +182,7 @@
         "source": "derived"
       },
       {
-        "name": "What Was Built Nothing",
+        "name": "What Was Built Shipped",
         "kind": "proper_noun",
         "path": "implementation-summary.md",
         "source": "derived"
@@ -190,7 +190,7 @@
     ],
     "causal_summary": "Notion universal rollups include Percent empty / Percent not empty",
     "created_at": "2026-08-25T18:58:58Z",
-    "last_save_at": "2026-08-25T20:14:50.399Z",
+    "last_save_at": "2026-08-27T12:27:55.789Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -199,12 +199,12 @@
       "tasks.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:b04ec114b2cd21ce2a14a6e96ba47f64f850c2e7ea2bdd79a99f1508b7e178fb",
+    "source_fingerprint": "sha256:2738dea6996fb57a66cbeaf7f67edf2985048f856cecbc6b04cfcfa47253221b",
     "source_doc_hashes": {
-      "spec.md": "fa7b15bb7d878d61cb903b58934ebd177653e39998e64b4bfe73cc883394a896",
-      "plan.md": "3e24445ab527888a7c1437358ebcc02b9cd324c8c1f978e55f270bb70f96e035",
-      "tasks.md": "b12e79cd77a262849704bf42553eafe845c2220c8d562dfa689997f62bb763e4",
-      "implementation-summary.md": "f06172ff26eb8435da9993b3f560aa519a7bc7f238a95c18d1bd925406233f2c"
+      "spec.md": "3d7932c26a634d467d4b7f5b2ee4cea48f3ff9fc25a54b033bd58233d5eae91a",
+      "plan.md": "18da5a38406c9236da688ab67a9443c5cf6990313f4fa613895fb8dacd6dbfc6",
+      "tasks.md": "d05f237e6ff4df535f8c622d3442452dbdae74fda9c6a601efd1ecefa0c612e1",
+      "implementation-summary.md": "02a5d0925f87bc6ff7b71317b8230f2e78847fabb339e1ff643872e398470a41"
     },
     "last_active_child_id": null,
     "last_active_at": null

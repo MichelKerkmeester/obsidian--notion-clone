@@ -53,6 +53,7 @@
       "tasks.md",
       "checklist.md",
       "implementation-summary.md",
+      "research/sonnet-verification.md",
       "research/synthesis.md",
       "research/research.md",
       "research/final-plan.md"
@@ -86,6 +87,12 @@
         "name": "implementation-summary.md",
         "kind": "doc",
         "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "sonnet-verification.md",
+        "kind": "doc",
+        "path": "research/sonnet-verification.md",
         "source": "derived"
       },
       {
@@ -125,6 +132,12 @@
         "source": "derived"
       },
       {
+        "name": "In Progress",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
         "name": "Problem Statement Notion",
         "kind": "proper_noun",
         "path": "spec.md",
@@ -132,12 +145,6 @@
       },
       {
         "name": "Purpose Ship Notion",
-        "kind": "proper_noun",
-        "path": "spec.md",
-        "source": "derived"
-      },
-      {
-        "name": "In Scope",
         "kind": "proper_noun",
         "path": "spec.md",
         "source": "derived"
@@ -195,17 +202,11 @@
         "kind": "proper_noun",
         "path": "checklist.md",
         "source": "derived"
-      },
-      {
-        "name": "Completion Impact",
-        "kind": "proper_noun",
-        "path": "checklist.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "Notion two-way relations store a second property on the target data source and mirror it on write: the relation type object is `{ datasourceid, dualproperty: { syncedpropertyid, syncedpropertyname } }` (Notion API, `developers.notion.com/reference/property-object#relation`), and \"with two-way relations, the edits work both ways\" (`notion.com/help/relations-and-rollups`)",
     "created_at": "2026-08-24T17:58:41.421Z",
-    "last_save_at": "2026-08-25T20:14:55.870Z",
+    "last_save_at": "2026-08-27T12:25:53.690Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -216,13 +217,13 @@
       "implementation-summary.md",
       "research/research.md"
     ],
-    "source_fingerprint": "sha256:a8f137aef71a6b8304f93c79ad405487b2f4beb142dea0994ff7d58f37160c50",
+    "source_fingerprint": "sha256:b70d228367e32895c410fb5b50bab681aab23b9015bb77f6f58fce01120411da",
     "source_doc_hashes": {
-      "spec.md": "6bada3b2ce2a384dd70196703cc175dbe5b662d29e876d20cefeb575d1e4196c",
-      "plan.md": "64cc99b45761898511b3ebd634b37b07215484449bdee5f818e4a48075800717",
-      "tasks.md": "58ba008df9a981c7b62eabaecfbba58c298e2c429eb6368b9ff1999542d4c9c7",
-      "checklist.md": "4d806c3457c87f000a5f81fdfb95e0e71a385a6cbca10b781c6c1537d8667d25",
-      "implementation-summary.md": "dcb36370540dfbe468e5144098d394f50797d21f214d017ed0e0aad4a3933e52",
+      "spec.md": "775447115b3b35adfbfae610ee69024b1bbf0d9f726e95867e9b8eddc6b5656e",
+      "plan.md": "a779d768573ae49b0c2aee5749fa2521d930792ff283137671b2c69a3463a240",
+      "tasks.md": "a48dcaff74633eab7c9d814fea452d51b8724bfb1c068fb97213dee986ae255b",
+      "checklist.md": "8a9fd6a1f8e74ca2c8409e45c419183ef6af39cc60722b4c28650f7914fdf512",
+      "implementation-summary.md": "4ae0a441c8906f35bdf0f610056b412c5ef371f1101f323f36dbafa75a7d97be",
       "research/research.md": "75684800a31f01a5c208c14cbc999b5be8b8cfcf4b182aa97e24774fa1b766be"
     },
     "last_active_child_id": "obsidian/002-note-db-notion-parity-build/008-derived-inverse-relations/003-inverse-refresh-membership",

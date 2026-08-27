@@ -70,12 +70,12 @@
       "switch"
     ],
     "importance_tier": "high",
-    "status": "complete",
+    "status": "in_progress",
     "key_files": [
       "spec.md",
+      "003-reports-computed-fields/spec.md",
       "001-live-reports-rollups/spec.md",
       "002-rollup-aggregation-pack/spec.md",
-      "003-reports-computed-fields/spec.md",
       "004-formula-ifs-switch-math/spec.md",
       "005-formula-let-variables/spec.md",
       "006-link-scheme-fields/spec.md",
@@ -115,6 +115,12 @@
         "source": "derived"
       },
       {
+        "name": "In Progress",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
         "name": "Handoff Criteria",
         "kind": "proper_noun",
         "path": "spec.md",
@@ -125,25 +131,19 @@
         "kind": "proper_noun",
         "path": "spec.md",
         "source": "derived"
-      },
-      {
-        "name": "Purpose Turn",
-        "kind": "proper_noun",
-        "path": "spec.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "The forked Note Database plugin is already far more capable than the legacy feature list assumed: it ships two formula engines (the Excel-style ComputedField.ts and the Bases method-chaining dialect BaseExpression.ts), 12 column types, 7 view types, and live cross-database relations with display-only rollups",
     "created_at": "2026-08-24T17:59:05.431Z",
-    "last_save_at": "2026-08-25T20:14:58.324Z",
+    "last_save_at": "2026-08-27T11:03:29.092Z",
     "save_lineage": "same_pass",
     "last_accessed_at": null,
     "source_docs": [
       "spec.md"
     ],
-    "source_fingerprint": "sha256:68126274ee0713c445f21c8e3e9e4dbe4c0197592fc7cadfb3f79fee924aeca1",
+    "source_fingerprint": "sha256:2d4ee53e69da0f32d2aeac2d355cd74c8ae58fa0b0d1d6790ca2e2f203a56e14",
     "source_doc_hashes": {
-      "spec.md": "9366f8299c2fdb7367231a4c24f7f75d49fe401befdea1880e1c731a38564201"
+      "spec.md": "3254ebb0be7027522b1e44e13d3d6513048f234b27333e6e8988d89e0207a778"
     },
     "last_active_child_id": "obsidian/002-note-db-notion-parity-build/011-table-multi-group",
     "last_active_at": "2026-08-25T14:53:26.525Z"

@@ -36,7 +36,7 @@
       "summary"
     ],
     "importance_tier": "high",
-    "status": "complete",
+    "status": "in_progress",
     "key_files": [
       "spec.md",
       "plan.md",
@@ -81,6 +81,12 @@
         "source": "derived"
       },
       {
+        "name": "In Progress",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
         "name": "Parent Spec",
         "kind": "proper_noun",
         "path": "spec.md",
@@ -94,12 +100,6 @@
       },
       {
         "name": "Problem Statement Notion",
-        "kind": "proper_noun",
-        "path": "spec.md",
-        "source": "derived"
-      },
-      {
-        "name": "Purpose Create",
         "kind": "proper_noun",
         "path": "spec.md",
         "source": "derived"
@@ -183,7 +183,7 @@
         "source": "derived"
       },
       {
-        "name": "What Was Built Nothing",
+        "name": "What Was Built Shipped",
         "kind": "proper_noun",
         "path": "implementation-summary.md",
         "source": "derived"
@@ -191,7 +191,7 @@
     ],
     "causal_summary": "Notion formulas bind per-row names with `let`/`lets` (`let(person, \"Alan\", \"Hello, \" + person + \"!\")` = `\"Hello, Alan!\"`)",
     "created_at": "2026-08-25T19:25:11Z",
-    "last_save_at": "2026-08-25T20:14:48.253Z",
+    "last_save_at": "2026-08-27T12:27:57.150Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -200,12 +200,12 @@
       "tasks.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:b25ed0bf02062dbd1472364024beb14e3332027399293c4cf24a8f29d5371d22",
+    "source_fingerprint": "sha256:5abf516d0add6a3c6db329490eb6a59816f99dff16f0a9d9d0b6b6ace4022e2e",
     "source_doc_hashes": {
-      "spec.md": "01730b12b2b8e3663ad38f599b26058204ba80ef02d5c675f4df4721e8450da2",
-      "plan.md": "758915d15f321cfc709bb137d92d7d1f5ca5c8c6ce06864f86667971b0199295",
-      "tasks.md": "f2aa3864f2eeca5d36df459a086d32394436d1b5d8f70199570fb6a39616373e",
-      "implementation-summary.md": "c291a4c7193813c3840541fc18acf6f7b97bc778a47f103d962d49f52d101119"
+      "spec.md": "841c0d2535e1e7e37406235df168a0bc4e52fd3b3b987c04e358fed7045ba87b",
+      "plan.md": "e07f1bd006f9068a308157b15887f964ea16f0dd4f1155a317b33587b9d29957",
+      "tasks.md": "77daeefea102e4d1f8631dfb70127b55a5a6de0d7812f4db6f98fdf92dd186ff",
+      "implementation-summary.md": "4f20ccad3280f2f98e13cfb3bf9bf5202cc9cf749b001f6b139738a4127268a9"
     },
     "last_active_child_id": null,
     "last_active_at": null

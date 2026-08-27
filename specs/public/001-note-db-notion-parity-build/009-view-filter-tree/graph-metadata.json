@@ -48,13 +48,14 @@
       "summary"
     ],
     "importance_tier": "high",
-    "status": "complete",
+    "status": "in_progress",
     "key_files": [
       "spec.md",
       "plan.md",
       "tasks.md",
       "checklist.md",
       "implementation-summary.md",
+      "research/sonnet-verification.md",
       "research/synthesis.md",
       "research/research.md",
       "research/final-plan.md"
@@ -91,6 +92,12 @@
         "source": "derived"
       },
       {
+        "name": "sonnet-verification.md",
+        "kind": "doc",
+        "path": "research/sonnet-verification.md",
+        "source": "derived"
+      },
+      {
         "name": "synthesis.md",
         "kind": "doc",
         "path": "research/synthesis.md",
@@ -121,6 +128,12 @@
         "source": "derived"
       },
       {
+        "name": "In Progress",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
         "name": "Problem Statement View",
         "kind": "proper_noun",
         "path": "spec.md",
@@ -134,12 +147,6 @@
       },
       {
         "name": "In Scope",
-        "kind": "proper_noun",
-        "path": "spec.md",
-        "source": "derived"
-      },
-      {
-        "name": "Change All",
         "kind": "proper_noun",
         "path": "spec.md",
         "source": "derived"
@@ -197,17 +204,11 @@
         "kind": "proper_noun",
         "path": "tasks.md",
         "source": "derived"
-      },
-      {
-        "name": "Verify Kleene",
-        "kind": "proper_noun",
-        "path": "tasks.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "View filters today are a flat `FilterRule[]` with a single global `filterLogic` (`and` | `or`) applied uniformly across every rule (`QueryEngine.ts:74-89`)",
     "created_at": "2026-08-24T17:58:43.513Z",
-    "last_save_at": "2026-08-25T21:02:27.827Z",
+    "last_save_at": "2026-08-27T12:25:53.974Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -218,13 +219,13 @@
       "implementation-summary.md",
       "research/research.md"
     ],
-    "source_fingerprint": "sha256:d917f4e5a79386b06e4bcfeb7b0439f45a9b52adeef94aebe30a8b5961ec094f",
+    "source_fingerprint": "sha256:0aa4a64fec66e0fb54efc643f10b2b8b13facdca60fa90210f954acacdadc35b",
     "source_doc_hashes": {
-      "spec.md": "cd362f25ce522ae69b771a6b66f5ec7c7b61128b8e20959e07fb0ed0f940559a",
-      "plan.md": "670335f18bfef1fd29868258420b54f9d43371e9dcef5f67713305cddeb9723c",
-      "tasks.md": "4f6a7c189370107b72f8c02d1424fec402da9ca3360a312a2553b39f16e9817b",
-      "checklist.md": "dab67d0d39e94279f34193b93197c6f8278aacbf5f0477f1c5757d7fa023557d",
-      "implementation-summary.md": "96197681cde473dcb35f9e4773bccb98b1b2c72606c87ec49904ed82a3b64e38",
+      "spec.md": "1b532295610546cb436799bfb8cb742b2c8f5aec5fff35a88504eb747c2f80fe",
+      "plan.md": "4ec5d1cb1cc2c6396f995afce641b70ffb9a3d32de362c1aa2759282f645073e",
+      "tasks.md": "125911d3135f9e627669e117e8e7e855c71eb25239c37f1f155068e1c1cfdfb2",
+      "checklist.md": "768640fae133ff768ea30cffdfdc82ddaa7f73fc9f4530938d06f7242c708d10",
+      "implementation-summary.md": "55167a85c47edb14208980ced6e6df846204fb86466dff30cb71161fc1865290",
       "research/research.md": "6ee5f1d994f1abf05bf547c5ae4a2374bd9695fe077bf1b27e49b2e3670e83cc"
     },
     "last_active_child_id": "public/001-note-db-notion-parity-build/009-view-filter-tree/005-filter-tree-proof",

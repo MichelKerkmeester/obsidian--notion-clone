@@ -35,7 +35,7 @@
       "plan"
     ],
     "importance_tier": "high",
-    "status": "complete",
+    "status": "in_progress",
     "key_files": [
       "spec.md",
       "plan.md",
@@ -80,6 +80,12 @@
         "source": "derived"
       },
       {
+        "name": "In Progress",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
         "name": "Parent Spec",
         "kind": "proper_noun",
         "path": "spec.md",
@@ -93,12 +99,6 @@
       },
       {
         "name": "Problem Statement The",
-        "kind": "proper_noun",
-        "path": "spec.md",
-        "source": "derived"
-      },
-      {
-        "name": "Purpose Create",
         "kind": "proper_noun",
         "path": "spec.md",
         "source": "derived"
@@ -182,7 +182,7 @@
         "source": "derived"
       },
       {
-        "name": "What Was Built Nothing",
+        "name": "What Was Built Shipped",
         "kind": "proper_noun",
         "path": "implementation-summary.md",
         "source": "derived"
@@ -190,7 +190,7 @@
     ],
     "causal_summary": "The fork already hydrates records (`RowData` at `src/data/types.ts:113-119`) and stringifies values (`getColumnValue` at `ColumnDisplay.ts:63`; `stringifyValue` at `Stringify.ts:1`)",
     "created_at": "2026-08-25T21:14:46Z",
-    "last_save_at": "2026-08-25T21:25:33.100Z",
+    "last_save_at": "2026-08-27T12:28:05.362Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -199,12 +199,12 @@
       "tasks.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:6bfd9c253d60f0c3c98ce441ae46ec91ba788c918d30a3438707729bfb83071e",
+    "source_fingerprint": "sha256:8caa26293cbc41b942473497d2bf57fe48210e4208614194f39a87c27a0cc390",
     "source_doc_hashes": {
-      "spec.md": "aeb6d49444cc0c241d7fe698155d0cb16f9b71cfbeaf79e891e95f32b2691ad7",
-      "plan.md": "327c992261b3d437e43757c2c37c3b98c457abc65d25b7e8a407d2abbece8844",
-      "tasks.md": "88d1ec30ceb1cfb25d5001ad77d336ef16c21b75b386766387fb5e160279fe5d",
-      "implementation-summary.md": "cf530a633db4aa07039d997634cb2bcb4a028ac5d592d1b99fe4cf80c2b5065b"
+      "spec.md": "c96f6ce0c416bbf7852ab1128424ef67e3a1823b37b1529bce9d582f6ece83f4",
+      "plan.md": "e8e4c2af9c0888efa8c2d5b3d7546ffc77a98bdd710e3564e2d7c654344ef378",
+      "tasks.md": "d082dc11b2cc47cadcf49ec0a6827a9a836f5bbe00104be5457f0e733234b7c1",
+      "implementation-summary.md": "885c64bea1a80cd983da4feb8a7f5545c09a56999922fd76270ac1743b11d6af"
     },
     "last_active_child_id": null,
     "last_active_at": null

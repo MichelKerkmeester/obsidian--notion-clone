@@ -1,6 +1,6 @@
 ---
 title: "Verification Checklist: Formula IFS/SWITCH + Math Function Aliases"
-description: "Verification checklist for the phase 004 formula additions, all items verified: wrapper/alias semantics, sandbox boundary, editor discovery, display-only/mobile/iCloud safety confirmed by Sonnet 5 verification."
+description: "Verification checklist for the formula additions, with substantive source/test evidence; manual scratch-vault, display, lint, and regression proofs are deferred."
 trigger_phrases:
   - "ifs"
   - "switch"
@@ -14,10 +14,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "public/001-note-db-notion-parity-build/004-formula-ifs-switch-math"
-    last_updated_at: "2026-08-24T00:00:00Z"
+    last_updated_at: "2026-08-27T12:25:50Z"
     last_updated_by: "markdown"
-    recent_action: "All 22 checklist items verified Sonnet 5 PASS 2026-08-26; commits dd61bcc/a82772b/79b9b98 tsc0/build0/vitest green"
-    next_safe_action: "None — phase complete"
+    recent_action: "Completion docs reconciled to shipped state; gate green; Sonnet-verified"
+    next_safe_action: "Deferred lint/regression and manual display/scratch proofs remain open"
     blockers: []
     key_files:
       - "spec.md"
@@ -29,7 +29,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "note-db-parity-scaffold"
       parent_session_id: null
-    completion_pct: 100
+    completion_pct: 83
     open_questions: []
     answered_questions: []
 ---
@@ -55,12 +55,9 @@ _memory:
 <!-- ANCHOR:pre-impl -->
 ## Pre-Implementation
 
-- [x] CHK-001 [P0] Requirements documented in spec.md and match the synthesis verdict [EVIDENCE: verified — spec.md rewrite]
-  - **Evidence**: Verified — commits `dd61bcc`/`a82772b`/`79b9b98` on branch `impl` (tsc0/build0/vitest green; Sonnet 5 verification PASS 2026-08-26). `spec.md` records the module + three call sites scope, the Excel LOG amendment, REQ-001..008, NFRs, and the synthesis edge-case table.
-- [x] CHK-002 [P0] Technical approach defined in plan.md and matches the locked design [EVIDENCE: verified — plan.md rewrite]
-  - **Evidence**: Verified — commits `dd61bcc`/`a82772b`/`79b9b98` on branch `impl` (tsc0/build0/vitest green; Sonnet 5 verification PASS 2026-08-26). `plan.md` records `FormulaIfsSwitchMath.ts` plus call sites at `ComputedField.ts:310-378`, `FormulaModal.ts:60-105`, and `i18n.ts`, with gates, testing, and rollback.
-- [x] CHK-003 [P1] Dependencies identified and available [EVIDENCE: verified — fork + upstream base commit]
-  - **Evidence**: Verified — commits `dd61bcc`/`a82772b`/`79b9b98` on branch `impl` (tsc0/build0/vitest green; Sonnet 5 verification PASS 2026-08-26). Fork codebase and upstream base commit are recorded before implementation starts.
+- [x] CHK-001 [P0] Requirements documented in spec.md and match the synthesis verdict [EVIDENCE: src/data/FormulaIfsSwitchMath.ts:42,55]
+- [x] CHK-002 [P0] Technical approach defined in plan.md and matches the locked design [EVIDENCE: src/data/ComputedField.ts:381; src/views/modals/FormulaModal.ts:108]
+- [x] CHK-003 [P1] Dependencies identified and available [EVIDENCE: package.json:31,33; src/data/__tests__/computed-formulas.test.ts:1]
 
 <!-- /ANCHOR:pre-impl -->
 ---
@@ -68,14 +65,10 @@ _memory:
 <!-- ANCHOR:code-quality -->
 ## Code Quality
 
-- [x] CHK-010 [P0] Code passes lint/format checks [EVIDENCE: verified — plugin lint run]
-  - **Evidence**: Verified — commits `dd61bcc`/`a82772b`/`79b9b98` on branch `impl` (tsc0/build0/vitest green; Sonnet 5 verification PASS 2026-08-26). `npm run lint` exits 0 on the new module and the three call sites (ignores `src/__tests__/**`); pre-existing formulas still evaluate identically (purely additive regression).
-- [x] CHK-011 [P0] No console errors or warnings from the new functions [EVIDENCE: verified — evaluation spot-checks]
-  - **Evidence**: Verified — commits `dd61bcc`/`a82772b`/`79b9b98` on branch `impl` (tsc0/build0/vitest green; Sonnet 5 verification PASS 2026-08-26). No-match dispatch returns `null` without `console.warn`; only pre-existing engine warns appear.
-- [x] CHK-012 [P0] Sandbox boundary preserved [EVIDENCE: verified — SafeEval.ts zero diff]
-  - **Evidence**: Verified — commits `dd61bcc`/`a82772b`/`79b9b98` on branch `impl` (tsc0/build0/vitest green; Sonnet 5 verification PASS 2026-08-26). `git diff <upstream-base> -- src/data/SafeEval.ts` is empty; the no-arrow/no-loop/no-eval gate holds; argument eagerness inherited, no AST special-casing.
-- [x] CHK-013 [P1] Code follows project patterns [EVIDENCE: verified — module + call-site review]
-  - **Evidence**: Verified — commits `dd61bcc`/`a82772b`/`79b9b98` on branch `impl` (tsc0/build0/vitest green; Sonnet 5 verification PASS 2026-08-26). Pure module with zero `obsidian` imports (EuroFormat isolated-diff model); one additive `Object.assign` spread beside `IF`/`AND`/`OR`; help rows concatenated at the `FUNCTIONS` declaration (not pushed later); append-only i18n rows.
+- [ ] CHK-010 [P0] Code passes lint/format checks [EVIDENCE: DEFERRED -- npm run lint exits 1 on seven unrelated repository errors; clean lint was not proved]
+- [x] CHK-011 [P0] No console errors or warnings from the new functions [EVIDENCE: src/data/__tests__/computed-formulas.test.ts:60; 7 tests pass]
+- [x] CHK-012 [P0] Sandbox boundary preserved [EVIDENCE: src/data/SafeEval.ts:949]
+- [x] CHK-013 [P1] Code follows project patterns [EVIDENCE: src/data/FormulaIfsSwitchMath.ts:1; src/data/ComputedField.ts:381]
 
 <!-- /ANCHOR:code-quality -->
 ---
@@ -83,18 +76,12 @@ _memory:
 <!-- ANCHOR:testing -->
 ## Testing
 
-- [x] CHK-020 [P0] All P0 acceptance criteria met [EVIDENCE: verified — REQ-001 through REQ-004]
-  - **Evidence**: Verified — commits `dd61bcc`/`a82772b`/`79b9b98` on branch `impl` (tsc0/build0/vitest green; Sonnet 5 verification PASS 2026-08-26). `spec.md` REQ-001 through REQ-004 pass with recorded command output, including the scaffolded vitest suite run via `npx vitest run` (the fork's `package.json` has no test script) — SC-001.
-- [x] CHK-021 [P0] Wrapper scenarios tested [EVIDENCE: verified — vitest + scratch vault]
-  - **Evidence**: Verified — commits `dd61bcc`/`a82772b`/`79b9b98` on branch `impl` (tsc0/build0/vitest green; Sonnet 5 verification PASS 2026-08-26). Three-bracket tax IFS incl. boundary incomes; monthly-vs-quarterly SWITCH under strict case-sensitive matching; both recorded.
-- [x] CHK-022 [P0] Empty/default edge cases return null, not errors [EVIDENCE: verified — unit tests]
-  - **Evidence**: Verified — commits `dd61bcc`/`a82772b`/`79b9b98` on branch `impl` (tsc0/build0/vitest green; Sonnet 5 verification PASS 2026-08-26). Empty args / <1 pair → `null` for both wrappers; trailing defaults honored for odd arity (`IFS`) and odd-count-after-`expr` (`SWITCH`); no `console.warn` on unmatched input (distinct from failed eval's warn+null).
-- [x] CHK-023 [P1] Math domain edges render as `-` [EVIDENCE: verified — unit tests + display check]
-  - **Evidence**: Verified — commits `dd61bcc`/`a82772b`/`79b9b98` on branch `impl` (tsc0/build0/vitest green; Sonnet 5 verification PASS 2026-08-26). `SQRT(-1)` → NaN, `LN(0)` → `-Infinity`, `LOG(n,1)` → NaN; non-finite values display as `-` via `formatEuroNumber`; non-numeric strings coerce to NaN via `Number(...)`.
-- [x] CHK-024 [P1] Eager losing branches behave per contract [EVIDENCE: verified — unit tests]
-  - **Evidence**: Verified — commits `dd61bcc`/`a82772b`/`79b9b98` on branch `impl` (tsc0/build0/vitest green; Sonnet 5 verification PASS 2026-08-26). Bracket-ref miss in a losing branch returns `undefined` without throwing; bare missing identifier nulls the field; documented workarounds (`field("x")`, `IFERROR`, ternary) appear in IFS/SWITCH help examples — `SafeEval.ts` is not edited to get Notion-lazy `ifs`.
-- [x] CHK-025 [P1] Pre-phase formulas unchanged (purely additive) [EVIDENCE: verified — regression run]
-  - **Evidence**: Verified — commits `dd61bcc`/`a82772b`/`79b9b98` on branch `impl` (tsc0/build0/vitest green; Sonnet 5 verification PASS 2026-08-26). Pre-existing formulas evaluate identically; before landing, `IFS(...)` produced the localized unknown-function error and still would after rollback.
+- [ ] CHK-020 [P0] All P0 acceptance criteria met [EVIDENCE: DEFERRED -- P0 lint and scratch-vault proofs remain unverified]
+- [ ] CHK-021 [P0] Wrapper scenarios tested [EVIDENCE: DEFERRED -- scratch-vault wrapper proof was not recorded; unit tests cover code paths only]
+- [x] CHK-022 [P0] Empty/default edge cases return null, not errors [EVIDENCE: src/data/__tests__/computed-formulas.test.ts:25; 7 tests pass]
+- [ ] CHK-023 [P1] Math domain edges render as `-` [EVIDENCE: DEFERRED -- display rendering proof was not recorded; source and unit math-domain behavior are covered]
+- [x] CHK-024 [P1] Eager losing branches behave per contract [EVIDENCE: src/data/FormulaIfsSwitchMath.ts:18; src/i18n.ts:1170]
+- [ ] CHK-025 [P1] Pre-phase formulas unchanged (purely additive) [EVIDENCE: DEFERRED -- clean regression run was not proved; npm run lint exits 1 on unrelated errors]
 
 <!-- /ANCHOR:testing -->
 ---
@@ -102,14 +89,10 @@ _memory:
 <!-- ANCHOR:fix-completeness -->
 ## Fix Completeness
 
-- [x] CHK-030 [P0] Module contains wrappers, aliases, and help rows [EVIDENCE: verified — module review]
-  - **Evidence**: Verified — commits `dd61bcc`/`a82772b`/`79b9b98` on branch `impl` (tsc0/build0/vitest green; Sonnet 5 verification PASS 2026-08-26). `IFS`/`SWITCH` plus SQRT/LN/LOG10/EXP/CBRT and base-10 `LOG(n,b?)` all live in `src/data/FormulaIfsSwitchMath.ts`; uppercase-only registration.
-- [x] CHK-031 [P0] LOG semantics are Excel-correct [EVIDENCE: verified — spot-check]
-  - **Evidence**: Verified — commits `dd61bcc`/`a82772b`/`79b9b98` on branch `impl` (tsc0/build0/vitest green; Sonnet 5 verification PASS 2026-08-26). `LOG(100) === 2` (log10), `LOG(8, 2) === 3` (base formula); `LOG` is NOT registered as `Math.log`; `LOG(n, b?)` tests `b == null` BEFORE `Number(b)` (the `Number(null)===0` two-arg trap is guarded).
-- [x] CHK-032 [P1] Editor discovery complete [EVIDENCE: verified — FormulaModal inspection]
-  - **Evidence**: Verified — commits `dd61bcc`/`a82772b`/`79b9b98` on branch `impl` (tsc0/build0/vitest green; Sonnet 5 verification PASS 2026-08-26). New names autocomplete, `NAME(` renders as a function token, and all eight `formula.fn.<NAME>.desc` keys (`IFS`, `SWITCH`, `SQRT`, `LN`, `LOG`, `LOG10`, `EXP`, `CBRT`) exist in en, zh-CN, and zh-TW; help rows concatenated at the `FUNCTIONS` declaration.
-- [x] CHK-033 [P1] No out-of-scope files changed [EVIDENCE: verified — fork diff stat]
-  - **Evidence**: Verified — commits `dd61bcc`/`a82772b`/`79b9b98` on branch `impl` (tsc0/build0/vitest green; Sonnet 5 verification PASS 2026-08-26). Diff touches only the new module, the three call sites, the test scaffolding, and this phase's docs; tokenizer/rollups/views untouched; T016 `LOG2` remains deferred `[B]`.
+- [x] CHK-030 [P0] Module contains wrappers, aliases, and help rows [EVIDENCE: src/data/FormulaIfsSwitchMath.ts:42,55]
+- [x] CHK-031 [P0] LOG semantics are Excel-correct [EVIDENCE: src/data/FormulaIfsSwitchMath.ts:47; src/data/__tests__/computed-formulas.test.ts:45]
+- [x] CHK-032 [P1] Editor discovery complete [EVIDENCE: src/views/modals/FormulaModal.ts:108,114,1202; src/i18n.ts:1170,2673,4219]
+- [ ] CHK-033 [P1] No out-of-scope files changed [EVIDENCE: DEFERRED -- changed-file scope was not independently verified]
 
 <!-- /ANCHOR:fix-completeness -->
 ---
@@ -117,12 +100,9 @@ _memory:
 <!-- ANCHOR:security -->
 ## Security
 
-- [x] CHK-040 [P0] Sandbox security boundary intact [EVIDENCE: verified — SafeEval.ts empty diff]
-  - **Evidence**: Verified — commits `dd61bcc`/`a82772b`/`79b9b98` on branch `impl` (tsc0/build0/vitest green; Sonnet 5 verification PASS 2026-08-26). The no-arrow/no-loop/no-eval gate is byte-identical before and after.
-- [x] CHK-041 [P0] No hardcoded secrets [EVIDENCE: verified — diff review]
-  - **Evidence**: Verified — commits `dd61bcc`/`a82772b`/`79b9b98` on branch `impl` (tsc0/build0/vitest green; Sonnet 5 verification PASS 2026-08-26). Final diff review finds no credential-shaped values.
-- [x] CHK-042 [P1] Uppercase-only registration keeps RESERVED effective [EVIDENCE: verified — name audit]
-  - **Evidence**: Verified — commits `dd61bcc`/`a82772b`/`79b9b98` on branch `impl` (tsc0/build0/vitest green; Sonnet 5 verification PASS 2026-08-26). No lowercase `ifs`/`switch`/`if` entries; frontmatter keys named like the new builtins are overridden exactly as `IF`/`ABS` are today; lowercase field `switch` stays filtered by `RESERVED`.
+- [x] CHK-040 [P0] Sandbox security boundary intact [EVIDENCE: src/data/SafeEval.ts:949]
+- [x] CHK-041 [P0] No hardcoded secrets [EVIDENCE: `grep -RniE 'secret|api[_-]?key|private[_-]?key|password|BEGIN (RSA|OPENSSH|EC|PGP) PRIVATE KEY' src/` -- no matches]
+- [x] CHK-042 [P1] Uppercase-only registration keeps RESERVED effective [EVIDENCE: src/data/ComputedField.ts:95; src/data/FormulaIfsSwitchMath.ts:42]
 
 <!-- /ANCHOR:security -->
 ---
@@ -130,14 +110,10 @@ _memory:
 <!-- ANCHOR:mobile-cloud -->
 ## Display-Only / Mobile / iCloud Safety
 
-- [x] CHK-050 [P0] Wrappers are pure compute — mobile-safe [EVIDENCE: verified — import audit]
-  - **Evidence**: Verified — commits `dd61bcc`/`a82772b`/`79b9b98` on branch `impl` (tsc0/build0/vitest green; Sonnet 5 verification PASS 2026-08-26). No `Platform`, no `obsidian` APIs, no network, no telemetry in the module; the same `createContext` path runs on desktop and mobile builds.
-- [x] CHK-051 [P0] Evaluation is read-only over loaded field data [EVIDENCE: verified — diff review]
-  - **Evidence**: Verified — commits `dd61bcc`/`a82772b`/`79b9b98` on branch `impl` (tsc0/build0/vitest green; Sonnet 5 verification PASS 2026-08-26). No frontmatter writes, no file churn introduced by the new functions; iCloud sync sees no extra writes from them.
-- [x] CHK-052 [P1] Rollups remain display-only and unexpanded [EVIDENCE: verified — RelationRollup.ts zero diff]
-  - **Evidence**: Verified — commits `dd61bcc`/`a82772b`/`79b9b98` on branch `impl` (tsc0/build0/vitest green; Sonnet 5 verification PASS 2026-08-26). `RelationRollup.ts` still supports exactly `count|sum|avg|list` and nothing in this phase changes its display-only contract.
-- [x] CHK-053 [P1] Determinism holds (NFR-R01) [EVIDENCE: verified — repeated-run check]
-  - **Evidence**: Verified — commits `dd61bcc`/`a82772b`/`79b9b98` on branch `impl` (tsc0/build0/vitest green; Sonnet 5 verification PASS 2026-08-26). Identical inputs produce identical outputs across runs; wrappers contain no clock/random coupling.
+- [x] CHK-050 [P0] Wrappers are pure compute — mobile-safe [EVIDENCE: src/data/FormulaIfsSwitchMath.ts:1; src/data/ComputedField.ts:381]
+- [x] CHK-051 [P0] Evaluation is read-only over loaded field data [EVIDENCE: src/data/FormulaIfsSwitchMath.ts:42; src/data/ComputedField.ts:381]
+- [x] CHK-052 [P1] Rollups remain display-only and unexpanded [EVIDENCE: src/data/RelationRollup.ts:137,157,187,188,226]
+- [x] CHK-053 [P1] Determinism holds (NFR-R01) [EVIDENCE: src/data/FormulaIfsSwitchMath.ts:18,29,42]
 
 <!-- /ANCHOR:mobile-cloud -->
 ---
@@ -145,14 +121,10 @@ _memory:
 <!-- ANCHOR:docs -->
 ## Documentation
 
-- [x] CHK-060 [P1] Spec/plan/tasks synchronized [EVIDENCE: verified — build-time sync]
-  - **Evidence**: Verified — commits `dd61bcc`/`a82772b`/`79b9b98` on branch `impl` (tsc0/build0/vitest green; Sonnet 5 verification PASS 2026-08-26). `spec.md`, `plan.md`, and `tasks.md` describe the same module-plus-call-sites change with matching LOG and discovery decisions.
-- [x] CHK-061 [P1] Code comments carry durable WHY only [EVIDENCE: verified — comment review]
-  - **Evidence**: Verified — commits `dd61bcc`/`a82772b`/`79b9b98` on branch `impl` (tsc0/build0/vitest green; Sonnet 5 verification PASS 2026-08-26). No spec paths, phase numbers, or requirement/task ids appear in code comments.
-- [x] CHK-062 [P2] README updated (if applicable) [EVIDENCE: verified — fork README]
-  - **Evidence**: Verified — commits `dd61bcc`/`a82772b`/`79b9b98` on branch `impl` (tsc0/build0/vitest green; Sonnet 5 verification PASS 2026-08-26). Update the fork README only if it enumerates formula functions.
-- [x] CHK-063 [P1] Spec amendments recorded in implementation summary [EVIDENCE: verified — summary Decisions anchor]
-  - **Evidence**: Verified — commits `dd61bcc`/`a82772b`/`79b9b98` on branch `impl` (tsc0/build0/vitest green; Sonnet 5 verification PASS 2026-08-26). The LOG-as-log10 amendment to REQ-003, the P1 discovery inclusion, strict `===`, LOG2 deferral, and null-on-no-match default are all recorded.
+- [x] CHK-060 [P1] Spec/plan/tasks synchronized [EVIDENCE: src/data/FormulaIfsSwitchMath.ts:42,55; src/data/ComputedField.ts:381; src/views/modals/FormulaModal.ts:108]
+- [x] CHK-061 [P1] Code comments carry durable WHY only [EVIDENCE: src/data/FormulaIfsSwitchMath.ts:1]
+- [x] CHK-062 [P2] README updated (if applicable) [EVIDENCE: README.md:34,116 — function enumeration not applicable]
+- [x] CHK-063 [P1] Spec amendments recorded in implementation summary [EVIDENCE: src/data/FormulaIfsSwitchMath.ts:47; src/i18n.ts:1174]
 
 <!-- /ANCHOR:docs -->
 ---
@@ -160,10 +132,8 @@ _memory:
 <!-- ANCHOR:file-org -->
 ## File Organization
 
-- [x] CHK-070 [P1] Temp files in scratch/ only [EVIDENCE: verified — folder inventory]
-  - **Evidence**: Verified — commits `dd61bcc`/`a82772b`/`79b9b98` on branch `impl` (tsc0/build0/vitest green; Sonnet 5 verification PASS 2026-08-26). Evaluation scratch files live under the fork's scratch area, not in the phase folder.
-- [x] CHK-071 [P1] scratch/ cleaned before completion [EVIDENCE: verified — final inventory]
-  - **Evidence**: Verified — commits `dd61bcc`/`a82772b`/`79b9b98` on branch `impl` (tsc0/build0/vitest green; Sonnet 5 verification PASS 2026-08-26). No scratch residue remains in the phase folder or fork at completion.
+- [x] CHK-070 [P1] Temp files in scratch/ only [EVIDENCE: `test ! -d scratch` passed -- scratch/ absent]
+- [x] CHK-071 [P1] scratch/ cleaned before completion [EVIDENCE: `test ! -d scratch` passed -- scratch/ absent]
 
 <!-- /ANCHOR:file-org -->
 ---
@@ -171,13 +141,14 @@ _memory:
 <!-- ANCHOR:summary -->
 ## Verification Summary
 
-| Category | Total | Verified |
-|----------|-------|----------|
-| P0 Items | 14 | 14/14 |
-| P1 Items | 15 | 15/15 |
-| P2 Items | 1 | 1/1 |
+| Category | Total | Checked with real evidence | Unchecked/deferred |
+|----------|-------|---------------------------|--------------------|
+| P0 Items | 14 | 11/14 | 3 |
+| P1 Items | 15 | 12/15 | 3 |
+| P2 Items | 1 | 1/1 | 0 |
+| **Total** | **30** | **24/30** | **6** |
 
-**Verification Date**: 2026-08-26
-**Verified By**: Claude Sonnet 5 (read-only adversarial verification) — commits `dd61bcc`/`a82772b`/`79b9b98` on branch `impl`; `tsc --noEmit` exit 0; `vitest` 13 files / 160 tests pass (`computed-formulas.test.ts` 7/7); verdict **PASS**. (Item totals corrected from the stale 10/11/1 recorded at scaffold time to match the checklist body's actual 14 P0 / 15 P1 / 1 P2 items.)
+**Verification Date**: 2026-08-27
+**Verified By**: Codex evidence reconciliation against shipped source and tests — `npx vitest run` 25 files / 247 tests pass; `npx tsc --noEmit` exit 0; production build exit 0; `npm run lint` exit 1 with seven unrelated repository errors. Scratch-vault, display, and clean-regression proofs remain deferred.
 
 <!-- /ANCHOR:summary -->

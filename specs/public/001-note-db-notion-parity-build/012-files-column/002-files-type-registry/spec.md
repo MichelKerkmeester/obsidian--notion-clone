@@ -12,7 +12,7 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "public/001-note-db-notion-parity-build/012-files-column/002-files-type-registry"
-    last_updated_at: "2026-08-25T21:20:00Z"
+    last_updated_at: "2026-08-27T12:27:53Z"
     last_updated_by: "phase-architect"
     recent_action: "Authored files type-registry child from synthesis ranks 2,3,10,12 and final-plan step 3"
     next_safe_action: "Add files to the union, labels, icon, pickers, i18n, and conflict map"
@@ -41,7 +41,7 @@ _memory:
 |-------|-------|
 | **Level** | 1 |
 | **Priority** | P1 |
-| **Status** | Complete |
+| **Status** | In Progress |
 | **Created** | 2026-08-25 |
 | **Branch** | `012-files-column` |
 | **Parent Spec** | ../spec.md |

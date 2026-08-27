@@ -34,7 +34,7 @@
       "dispatch"
     ],
     "importance_tier": "high",
-    "status": "complete",
+    "status": "in_progress",
     "key_files": [
       "spec.md",
       "plan.md",
@@ -79,6 +79,12 @@
         "source": "derived"
       },
       {
+        "name": "In Progress",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
         "name": "Parent Spec",
         "kind": "proper_noun",
         "path": "spec.md",
@@ -92,12 +98,6 @@
       },
       {
         "name": "Problem Statement Table",
-        "kind": "proper_noun",
-        "path": "spec.md",
-        "source": "derived"
-      },
-      {
-        "name": "Purpose Gate",
         "kind": "proper_noun",
         "path": "spec.md",
         "source": "derived"
@@ -181,7 +181,7 @@
         "source": "derived"
       },
       {
-        "name": "What Was Built Nothing",
+        "name": "What Was Built Shipped",
         "kind": "proper_noun",
         "path": "implementation-summary.md",
         "source": "derived"
@@ -189,7 +189,7 @@
     ],
     "causal_summary": "Table dispatch is still one string (`DatabaseView.ts:6332-6333` → `renderGroupedTable` `9539-9545`)",
     "created_at": "2026-08-25T20:50:00Z",
-    "last_save_at": "2026-08-25T21:01:26.511Z",
+    "last_save_at": "2026-08-27T12:28:02.373Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -198,12 +198,12 @@
       "tasks.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:7d3a80187ddc3328fe93cc489c29e6d4ba71cb6beea3fa773c00293476bf1907",
+    "source_fingerprint": "sha256:d77a0d3ca1be8ecd40c9f760b79bad62c6f09dcd4e6a794c39c372e0be8cc5f7",
     "source_doc_hashes": {
-      "spec.md": "67c16c1ebf9f65ac462c2614b5431252993cf825d12f91b488d48f81ead473da",
-      "plan.md": "b1485af051bcf24b250f2beac65809981922f22173d76689068b7109221a7184",
-      "tasks.md": "94dbc5bfdf4707a978e8cc6f3402db1a1956be58d260b59132b18837bbf6d0ec",
-      "implementation-summary.md": "f01294cf553b695f7879ea66b0614ffad2d1310753c40c2247785df4ed206a4b"
+      "spec.md": "62c1c66977153e92477fe358dc2d4078931f8c74ecd6a9d0cf95ddc3e5cd96b3",
+      "plan.md": "9679fd041b73c5fa07130f9eff66c5d31648685ffa3a0630eaf99dad0a1491d9",
+      "tasks.md": "684d4e401cdde906c45ec8a4cf24225ae65d3c19e608dc96a1f9120899732df6",
+      "implementation-summary.md": "0f99a585a819180ce67923183b82f766b6fc9482e0de189c68e0d715ae0ee054"
     },
     "last_active_child_id": null,
     "last_active_at": null

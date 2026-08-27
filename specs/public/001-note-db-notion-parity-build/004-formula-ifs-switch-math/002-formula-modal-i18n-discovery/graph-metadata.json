@@ -35,7 +35,7 @@
       "summary"
     ],
     "importance_tier": "high",
-    "status": "complete",
+    "status": "in_progress",
     "key_files": [
       "spec.md",
       "plan.md",
@@ -80,6 +80,12 @@
         "source": "derived"
       },
       {
+        "name": "In Progress",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
         "name": "Parent Spec",
         "kind": "proper_noun",
         "path": "spec.md",
@@ -93,12 +99,6 @@
       },
       {
         "name": "Problem Statement Even",
-        "kind": "proper_noun",
-        "path": "spec.md",
-        "source": "derived"
-      },
-      {
-        "name": "Purpose Import",
         "kind": "proper_noun",
         "path": "spec.md",
         "source": "derived"
@@ -182,7 +182,7 @@
         "source": "derived"
       },
       {
-        "name": "What Was Built Nothing",
+        "name": "What Was Built Shipped",
         "kind": "proper_noun",
         "path": "implementation-summary.md",
         "source": "derived"
@@ -190,7 +190,7 @@
     ],
     "causal_summary": "Even after child 001 evaluates, the editor's own registry drives autocomplete, `NAME(` highlighting, and help",
     "created_at": "2026-08-25T19:11:18Z",
-    "last_save_at": "2026-08-25T20:14:48.856Z",
+    "last_save_at": "2026-08-27T12:27:56.799Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -199,12 +199,12 @@
       "tasks.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:00187b036cac9a32c088e7331529bcfdf6240b84a7752b76112d19efacc1273e",
+    "source_fingerprint": "sha256:fc40ef54cf32dd32397403913d3765218f959e1c75e1f1222fa051165c557c61",
     "source_doc_hashes": {
-      "spec.md": "88818fa468c554e590d3fa70bb3b6e37f38fecdd41e3fe3aab6629811115b4fd",
-      "plan.md": "cfbd061c841e37ebe7bc29f3540a2e9f60472258e6c0d3b29f33d8d1b8af852c",
-      "tasks.md": "6cc6e01bc86612d5c2d67877411c48c47c08782ade8f8a1052d20007ad3f4109",
-      "implementation-summary.md": "683999ed81c8b897ca03aa8bbd054fccb9d0811d537b86a7bb3fd7343cb13907"
+      "spec.md": "60d86aa5d492fe35371303b779ef7645369c822665c734d87b901bd620d2203c",
+      "plan.md": "a18eab648b2201b2d6dc7265c7b9589ed261b6bd9941a58e1f72a83748d1a031",
+      "tasks.md": "195dcfd9ce015be0d70c0539f1a18fef238e461c4ca3575a547798f297e465b7",
+      "implementation-summary.md": "6a1c54cc4fa312fb8b390818e2f6437d846a9e42a5e693ae274e3f28b6c76ebc"
     },
     "last_active_child_id": null,
     "last_active_at": null

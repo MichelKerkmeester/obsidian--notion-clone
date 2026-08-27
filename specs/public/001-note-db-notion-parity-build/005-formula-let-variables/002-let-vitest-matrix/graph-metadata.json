@@ -36,7 +36,7 @@
       "run"
     ],
     "importance_tier": "high",
-    "status": "complete",
+    "status": "in_progress",
     "key_files": [
       "spec.md",
       "plan.md",
@@ -81,6 +81,12 @@
         "source": "derived"
       },
       {
+        "name": "In Progress",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
         "name": "Parent Spec",
         "kind": "proper_noun",
         "path": "spec.md",
@@ -94,12 +100,6 @@
       },
       {
         "name": "Problem Statement Parent",
-        "kind": "proper_noun",
-        "path": "spec.md",
-        "source": "derived"
-      },
-      {
-        "name": "Purpose Bootstrap",
         "kind": "proper_noun",
         "path": "spec.md",
         "source": "derived"
@@ -183,7 +183,7 @@
         "source": "derived"
       },
       {
-        "name": "What Was Built Nothing",
+        "name": "What Was Built Shipped",
         "kind": "proper_noun",
         "path": "implementation-summary.md",
         "source": "derived"
@@ -191,7 +191,7 @@
     ],
     "causal_summary": "Parent success criteria assume “the fork’s formula test suite.” It does not exist",
     "created_at": "2026-08-25T19:25:11Z",
-    "last_save_at": "2026-08-25T20:14:47.959Z",
+    "last_save_at": "2026-08-27T12:27:57.353Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -200,12 +200,12 @@
       "tasks.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:cfa746808f8e80ba1ae06ee46c47828e1f641e5493cd02305dcd1aa40e341e4e",
+    "source_fingerprint": "sha256:a4de12939940c2f2040e1abe8d684c07a5e0b551da655dad2b623cb9047ffeea",
     "source_doc_hashes": {
-      "spec.md": "afe1bce0c50f81d9515d377326512a8667d5fad718b70db02c69d638d657dae0",
-      "plan.md": "7748c9f090c9e247521c39b8c22003695d34218fe6ed090167927bdedaf10b18",
-      "tasks.md": "9e3ce265e72a0e35a31eb3d4695a57c78111d818bc0b2328241a99e6676867c3",
-      "implementation-summary.md": "baf7a25c184a2b1703a3bedb23d0b7e9efe3b46269de4a1e5484e85e330835a6"
+      "spec.md": "bbf8ea33b5f010021017ab46aa0f6c4d4e985cb36b4284d517f1b4b01ae26097",
+      "plan.md": "21595019b8691d8390b38aec88791e26fe0dacaa5703b3486cd5242d7ac4d32d",
+      "tasks.md": "a4558c83ade3d825e669661e11b9914e00c0fa27a5cf5aee010f84a115ced5c1",
+      "implementation-summary.md": "5f2de2195d48ff540dbe4fbe78181b550e8c7e18b447989d820ab197ecbfea87"
     },
     "last_active_child_id": null,
     "last_active_at": null

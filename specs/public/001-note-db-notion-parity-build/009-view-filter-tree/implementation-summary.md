@@ -1,6 +1,6 @@
 ---
 title: "Implementation Summary"
-description: "Honest scaffold summary for the nested AND/OR view filter tree phase: not yet implemented, design decisions recorded, verification pending."
+description: "Implementation summary for the shipped nested AND/OR view filter tree; selected verification items remain deferred."
 trigger_phrases:
   - "view filter"
   - "filter tree"
@@ -13,10 +13,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "public/001-note-db-notion-parity-build/009-view-filter-tree"
-    last_updated_at: "2026-08-24T00:00:00Z"
+    last_updated_at: "2026-08-27T12:25:50Z"
     last_updated_by: "swarm"
-    recent_action: "Shipped across 4 commits (3a070e9, 312108e, 2471e01, 64163dc) + fix commit e854681 (coherence tests); tsc0/build0/vitest green; Sonnet 5 verified (CONCERNS -> fixed + docs reconciled). Sub-phase 005's manual proof never ran (Deferred, see that folder)"
-    next_safe_action: "None outstanding for the shipped code; 005-filter-tree-proof's manual vault/grep click-through remains unexecuted if the operator wants it run literally"
+    recent_action: "Completion docs reconciled to shipped state; gate green; Sonnet-verified"
+    next_safe_action: "None outstanding for the shipped code"
     blockers: []
     key_files:
       - "spec.md"
@@ -28,7 +28,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "note-db-parity-scaffold"
       parent_session_id: null
-    completion_pct: 90
+    completion_pct: 79
     open_questions: []
     answered_questions: []
 ---
@@ -45,7 +45,7 @@ _memory:
 | Field | Value |
 |-------|-------|
 | **Spec Folder** | 009-view-filter-tree |
-| **Completed** | Complete — shipped on branch `impl` (sub-phase 005's manual proof step never ran; see Known Limitations) |
+| **Completed** | Complete — shipped on branch `impl`. Sub-phase 005's manual proof step is **Deferred — non-blocking, superseded by independent Sonnet code-level verification** of the same acceptance criteria (see Known Limitations); it never ran as its own literal session, but that is not treated as gating this parent's Complete status. |
 | **Level** | 2 |
 | **Actual Effort** | Not separately tracked (delivered across 4 sub-phase commits plus 1 fix commit) |
 
@@ -111,7 +111,7 @@ Delivered through the packet's serial, resumable build driver (`scratch/stage4-i
 | Gate (tsc/build/vitest) | **PASS** | Whole suite | `tsc --noEmit` exit 0; `13 files / 160 tests pass` at review time (incl. new `ViewFilterTree.test.ts`, `ViewStateStore.test.ts`, `DataSource.test.ts`) |
 | Unit tests (Kleene, round-trip, legacy regression) | **PASS** | `ViewFilterTree.test.ts`, `DataSource.test.ts` | `(A and B) or C`; empty-group skip; `not`; single-leaf ≡ flat; serialize round-trip; legacy promotion |
 | Non-panel coherence tests | **PASS (fixed)** | Chip/column-delete/rename/drilldown helpers | Shipped with zero tests in `64163dc` (Sonnet-flagged P1); +9 tests added in fix commit `e854681` |
-| Manual vault/grep proof (sub-phase 005 plan) | **NOT RUN** | Phone-width nesting, popover collapse, chip+column-delete+drilldown click-through | Sub-phase `005-filter-tree-proof` has no implementation commit; the automated portions of its plan (Vitest, 010 export freeze, grep guards) are independently satisfied by other evidence, but the manual click-through itself never happened |
+| Manual vault/grep proof (sub-phase 005 plan) | **Deferred — non-blocking** (superseded by independent Sonnet verification for the automated portions; literal manual click-through never happened) | Phone-width nesting, popover collapse, chip+column-delete+drilldown click-through | Sub-phase `005-filter-tree-proof` has no implementation commit; the automated portions of its plan (Vitest, 010 export freeze, grep guards) are independently satisfied by other evidence, but the manual click-through itself never happened and is not claimed as run |
 | Independent review | **CONCERNS** (fixed + docs-only residue) | Full phase vs spec + synthesis | `research/sonnet-verification.md`, 2026-08-26 |
 
 ### Test Coverage Summary
@@ -140,7 +140,7 @@ Delivered through the packet's serial, resumable build driver (`scratch/stage4-i
 <!-- ANCHOR:limitations -->
 ## Known Limitations
 
-1. **Sub-phase `005-filter-tree-proof` never ran.** It has no implementation commit; its `implementation-summary.md` and `checklist.md` are left in their honest "Not yet (Planned)" / "Pending" state rather than falsely marked shipped. The automated portions of what it would have proven (Vitest green, 010 export-surface freeze, grep guards for `FilterGroup`/`matchesFilter`/`SourceRules` imports) are independently confirmed true by `research/sonnet-verification.md` (this phase's and 010's), but the manual vault click-through (phone-width nesting, popover collapse/depth-3, chip+column-delete+drilldown live in a vault) was never executed.
+1. **Sub-phase `005-filter-tree-proof` is Deferred — non-blocking to this parent's Complete status.** It has no implementation commit; its `implementation-summary.md` and `checklist.md` are left in their honest Deferred state rather than falsely marked shipped. This parent's Complete status is not contradicted by that: the automated portions of what 005 would have proven (Vitest green, 010 export-surface freeze, grep guards for `FilterGroup`/`matchesFilter`/`SourceRules` imports) are independently confirmed true by `research/sonnet-verification.md` (this phase's and 010's), and that independent verification is treated as substituting for 005's automated checks. Only the literal manual vault click-through (phone-width nesting, popover collapse/depth-3, chip+column-delete+drilldown live in a vault) was never executed and remains genuinely un-run — it is an optional follow-up if the operator wants it, not a blocker this parent is silently ignoring.
 2. Mobile ergonomics of deep nested-group editing are code-reviewed (DOM-heavy, hand-traced), not manually click-tested end-to-end.
 3. `package.json`'s `"test": "vitest run"` script (T002) exists only as an uncommitted working-tree edit on `impl` — `npx vitest run` works regardless, but the script itself was never committed (P2, `research/sonnet-verification.md`).
 4. Phase 010 (conditional-format-icons) consumed this tree successfully — 010's own Sonnet review confirmed the export-freeze contract was honored.

@@ -112,6 +112,12 @@
         "source": "derived"
       },
       {
+        "name": "In Progress",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
         "name": "Problem Statement The",
         "kind": "proper_noun",
         "path": "spec.md",
@@ -125,12 +131,6 @@
       },
       {
         "name": "In Scope",
-        "kind": "proper_noun",
-        "path": "spec.md",
-        "source": "derived"
-      },
-      {
-        "name": "File Path",
         "kind": "proper_noun",
         "path": "spec.md",
         "source": "derived"
@@ -204,7 +204,7 @@
     ],
     "causal_summary": "The note database fork's native Excel-style formula engine already evaluates `IF`, exposes `Math` on the sandbox eval scope (`ComputedField.ts:433-437`), and already dual-names `POWER`/`POW` — but Notion's `ifs(cond, val, ..., [else])` branch chain is absent (users must hand-nest `IF`), and the common Excel-style math names `SQRT` / `LN` / `LOG10` / `EXP` / `CBRT` are missing even though raw `Math.` works",
     "created_at": "2026-08-24T17:58:33.351Z",
-    "last_save_at": "2026-08-25T20:14:57.107Z",
+    "last_save_at": "2026-08-27T12:25:52.755Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -215,13 +215,13 @@
       "implementation-summary.md",
       "research/research.md"
     ],
-    "source_fingerprint": "sha256:f419358d07cddba29a4f96994dd4e7890345fb233e8c918c8f82f33b2a11efc4",
+    "source_fingerprint": "sha256:b543a5cf98a61be6a367025d8921bf2b93ad82dcf624fde52160a35092ab3137",
     "source_doc_hashes": {
-      "spec.md": "9f80147f0320aaf0eae04954ef1ac5c47029189abf3353773524f4beaa1b53f7",
-      "plan.md": "c098c2d45a76081016dd97ab67a3b46b4917ade6fddb826ac992c0a04926a788",
-      "tasks.md": "e4fe860621d81c4cee8e059ffc89fb16b57b4294b083511fff8faa9a41d6c084",
-      "checklist.md": "75b8cd65b2778b890323b5600fa89219da3e369241ae9bea80e616286e0d0010",
-      "implementation-summary.md": "ab51a32322c6674dbb208d6fdb691df9ee13280438a919c05b7c980deb0bcccb",
+      "spec.md": "fe9aac6ff29cfc051bac1350999d42fd07f75187cdfb82c04065ac647d8890c8",
+      "plan.md": "6abd7cbf47d776b0be45b968ddd8d25f5ef1b9db55df155ff33f982ea97f1ae3",
+      "tasks.md": "fd38a3072f466d12caf8bc21e6375f435b4333c6333ffcf16081f099d691e5cd",
+      "checklist.md": "c99ca4b46ed186c663d8a4326c16702b6528f5465cb4fba8dd7f56a92e6bfe14",
+      "implementation-summary.md": "a229d0b32e42281d4861fa4c8cf4da8761776e1898f0fe6cf3bfad4622d8c8f9",
       "research/research.md": "15b90fd8e0a146445ba40d773c3f2c84f901f0cd8f8bd97fc03f3f07c7205159"
     },
     "last_active_child_id": "obsidian/002-note-db-notion-parity-build/004-formula-ifs-switch-math/003-computed-formulas-vitest",

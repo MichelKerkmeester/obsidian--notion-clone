@@ -11,7 +11,7 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "public/001-note-db-notion-parity-build/010-conditional-format-icons/003-tree-aware-column-ops"
-    last_updated_at: "2026-08-25T21:15:00Z"
+    last_updated_at: "2026-08-27T12:27:53Z"
     last_updated_by: "phase-architect"
     recent_action: "Authored tree-aware-column-ops child from synthesis rank 5 and final-plan step 6"
     next_safe_action: "Wire conditionTree rename/delete in ColumnOperations.ts"
@@ -40,7 +40,7 @@ _memory:
 |-------|-------|
 | **Level** | 1 |
 | **Priority** | P1 |
-| **Status** | Complete |
+| **Status** | In Progress |
 | **Created** | 2026-08-25 |
 | **Branch** | `010-conditional-format-icons` |
 | **Parent Spec** | ../spec.md |

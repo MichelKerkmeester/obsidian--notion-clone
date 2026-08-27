@@ -112,6 +112,12 @@
         "source": "derived"
       },
       {
+        "name": "In Progress",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
         "name": "Problem Statement The",
         "kind": "proper_noun",
         "path": "spec.md",
@@ -125,12 +131,6 @@
       },
       {
         "name": "In Scope",
-        "kind": "proper_noun",
-        "path": "spec.md",
-        "source": "derived"
-      },
-      {
-        "name": "File Path",
         "kind": "proper_noun",
         "path": "spec.md",
         "source": "derived"
@@ -204,7 +204,7 @@
     ],
     "causal_summary": "The fork's rollup columns are stuck on four kinds — `count | sum | avg | list` (`src/data/types.ts:44`) — while Notion exposes ~18 rollup calculations (9 universal + 6 number-only + 3 date-only)",
     "created_at": "2026-08-24T17:58:29.331Z",
-    "last_save_at": "2026-08-25T20:14:57.725Z",
+    "last_save_at": "2026-08-27T12:25:52.291Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -215,13 +215,13 @@
       "implementation-summary.md",
       "research/research.md"
     ],
-    "source_fingerprint": "sha256:7e10f2c84db5627c9fed0241f445ce2aaa2efaeba32056d8c4e31b770502a2b9",
+    "source_fingerprint": "sha256:a88ce822027ce116793fd9188cb078aa8a30024204871090feb15b79db39443f",
     "source_doc_hashes": {
-      "spec.md": "c83f16dd2da7c43ab9b162d976b2a1f4258e8b974ec1abe5df98b3b007913e99",
-      "plan.md": "3d1152eaa52bbc4386a713094324b3a5f934e90b805b592b051b38d78f29d748",
-      "tasks.md": "a802dde8531114c3f74db147cddd60524711f9ad8d1a44113be5deff1f8c5225",
-      "checklist.md": "60d3337c05646cc0d714d21e0935bab1a1a03260e761069d764d363783aeec71",
-      "implementation-summary.md": "adbc3bbe5c156217326254a4286dbf1e457a348acd85297a4cfc28849843631d",
+      "spec.md": "fdd17c1a653d678dbc927ed6533efe1ad84e37849249f5d86e5db0b6b47e3b17",
+      "plan.md": "0c28d80c34f8fab62ebd110669f492a76d1648835bf130641b813030268b4762",
+      "tasks.md": "47ceb7df36a5e46f1d34d4ef44266ee4683c6261896a53e004c7b652e7e7f513",
+      "checklist.md": "df9df29c11d37bedb73358544a729345ddcbc53416a3ca99d44a2d5cd8b40676",
+      "implementation-summary.md": "8e4225fa7afe60e41304d293a9a0bd89d3fb27635930c2bbb5abd94c6cc4bd39",
       "research/research.md": "13f52a74afec75e4276199877df53c2b52e6314e0ad11440d55839a79f49d7b4"
     },
     "last_active_child_id": "obsidian/002-note-db-notion-parity-build/002-rollup-aggregation-pack/003-percent-aggregation-pack",

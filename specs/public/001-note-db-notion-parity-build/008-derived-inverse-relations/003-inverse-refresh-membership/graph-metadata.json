@@ -35,7 +35,7 @@
       "relationtargetpaths"
     ],
     "importance_tier": "high",
-    "status": "complete",
+    "status": "in_progress",
     "key_files": [
       "spec.md",
       "plan.md",
@@ -80,6 +80,12 @@
         "source": "derived"
       },
       {
+        "name": "In Progress",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
         "name": "Parent Spec",
         "kind": "proper_noun",
         "path": "spec.md",
@@ -93,12 +99,6 @@
       },
       {
         "name": "Problem Statement",
-        "kind": "proper_noun",
-        "path": "spec.md",
-        "source": "derived"
-      },
-      {
-        "name": "Purpose After",
         "kind": "proper_noun",
         "path": "spec.md",
         "source": "derived"
@@ -182,7 +182,7 @@
         "source": "derived"
       },
       {
-        "name": "What Was Built Nothing",
+        "name": "What Was Built Shipped",
         "kind": "proper_noun",
         "path": "implementation-summary.md",
         "source": "derived"
@@ -190,7 +190,7 @@
     ],
     "causal_summary": "`handleDataChangeBatch` refreshes when `relationTargetPaths.has(change.path)` or the record matches `relationTargetDatabases` (`DatabaseView.ts:2120-2128`)",
     "created_at": "2026-08-25T19:36:49Z",
-    "last_save_at": "2026-08-25T20:14:44.670Z",
+    "last_save_at": "2026-08-27T12:27:59.592Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -199,12 +199,12 @@
       "tasks.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:2bf7b979a89d61d460e88cbaf29805564629bb40bbfce3386bb4748b59e44c71",
+    "source_fingerprint": "sha256:d755bf2bcc804a285ddf9033d178c63b0a9a5be0a86086aa7d87e51b9016ee7a",
     "source_doc_hashes": {
-      "spec.md": "7eccbde006050e41fc18a7b481eef32910f3f155e65a6a953bbd3d82085bcc1d",
-      "plan.md": "d470e35bbbc7d771830b3ef83bd8022a50e7962f88fd4d9b1d44682cdf58541e",
-      "tasks.md": "04f2538fe1fe0be9709abe94a6ad6046dfa048f10c329488d87f6c7fcc388254",
-      "implementation-summary.md": "bbef3826df897c65ab71416191c27289941ce024c2b0543bd334f5355985c744"
+      "spec.md": "762b48e440388c9f5847c3c0107555e16d776c8d5987927ad65ed61dcb8f6c66",
+      "plan.md": "6b135eaa21f3217952e3cf913f48bf76c2958831f69880fe7b729fb2d4193bfe",
+      "tasks.md": "8f7811f8d84044ac3bcb481a3dad651533654161e986e10f4b7fdbbbf1f5c7d0",
+      "implementation-summary.md": "b826e62dd97cec787a637251fede80dc48505d9122b610bb9c237a772264dbb6"
     },
     "last_active_child_id": null,
     "last_active_at": null

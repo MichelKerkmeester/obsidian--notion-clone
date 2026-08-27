@@ -25,7 +25,7 @@
 | 011 table-multi-group | group table by 2+ fields, nested headers | `data/MultiFieldGrouping.ts`, `MultiGroupDisplay.ts`, `TableSubgroupPicker.ts` | TableRenderer, DataSource, DatabaseView, Embedded, ToolbarRenderer, styles.css | `MultiFieldGrouping/MultiGroupDisplay/TableSubgroupPicker.test.ts` | CONCERNS (P0 CSS) → **fixed** |
 | 012 files-column | Files/Attachments column, vault-local + cover images | `data/FilesColumn.ts`, `CoverWiring.ts` | type registry, CellRenderer, Gallery/Board, CoverImage | `FilesColumn.test.ts`, `CoverImage.test.ts` | **PASS** |
 | 013 template-toolbar | adaptive New-from-template toolbar + row-menu | `data/TemplateToolbarAction.ts` | ToolbarRenderer, RowMenu, DatabaseView | `TemplateToolbarAction.test.ts` | CONCERNS (docs/proof) |
-| 014 record-peek | table row peek detail panel | `views/TableRecordPeek.ts` | DatabaseView, styles.css, i18n | — (deferred) | CONCERNS (P1 CSS) → **fixed** |
+| 014 record-peek | table row peek detail panel | `views/TableRecordPeek.ts` | DatabaseView, styles.css, i18n | `TableRecordPeek.test.ts` (added `86eee77`) | CONCERNS (P1 CSS) → **fixed** |
 
 Phase 001 (config-only vault YAML) and 015–017 (don't-build decision specs) carry no code, by design.
 
@@ -56,10 +56,12 @@ All genuine code defects the verifiers surfaced were fixed serially (each: Sonne
 | `bd8e467` | 012 cover-guard safety-critical conditional untested (P1) | extracted `isCoverImageBlocked()`, 7 tests |
 | `e854681` | 009 non-panel dual-write coherence untested (P1) | +9 tests on the real coherence helpers |
 | `c766117` | 003 vault-wide empty-cell regression + dead-code feature (P0) | rescoped the guard to Reports computed columns only; wired the feature behind a registered command; tests (negative-control proven) |
+| `86eee77` | Second deep-review round: 012 FilesColumn treated only http/https as an external scheme, letting other URL schemes slip through as vault wikilinks; 009 ViewFilterTree left a fully-dead ROOT filter group uncollapsed | FilesColumn now discards any URL-scheme value (not just http/https); view-filter prune collapses a fully-dead ROOT group to no-filter while keeping nested empty groups (they still contribute Kleene skip to their parent); also added the 014 record-peek unit tests (`TableRecordPeek.test.ts`, 8 cases) |
+| `0587cd3` | Second deep-review round: 012 CoverImage used the same http(s)-only scheme check as the FilesColumn defect above | switched CoverImage to the shared `hasUrlScheme` predicate so any URL scheme is treated as external; added `CoverImage.test.ts` |
 
 ## 6. Coverage vs original research recommendations
 
-Each phase implemented its synthesis "Recommended build" backlog and explicitly deferred the out-of-scope items (recorded in each `sonnet-verification.md`). No research recommendation was silently dropped; deferrals are all documented per phase (e.g. 008 chips/badge, 011 nested drag-and-drop, 012 attachment-count badge/per-file menu, 013 optional-confirm/split-button, 014 tests).
+Each phase implemented its synthesis "Recommended build" backlog and explicitly deferred the out-of-scope items (recorded in each `sonnet-verification.md`). No research recommendation was silently dropped; deferrals are all documented per phase (e.g. 008 chips/badge, 011 nested drag-and-drop, 012 attachment-count badge/per-file menu, 013 optional-confirm/split-button; 014's deferred renderer tests were later added in the remediation fix stage, `86eee77`).
 
 ## 7. Current state of the plugin
 
@@ -67,8 +69,8 @@ All 13 feature phases are built, wired, and reachable; the suite is 232 tests ac
 
 ## 8. Deferred / remaining (feeds the remediation plan)
 
-- **Packet-wide completion-doc reconciliation** (P1, documentation): all 002–014 `implementation-summary.md`/`checklist.md`/`graph-metadata.json`/`spec.md` Status still say "Planned" despite shipped, gate-green, Sonnet-verified code.
+- **Packet-wide completion-doc reconciliation** (P1, documentation) — **DONE**: 002–014 `implementation-summary.md`/`checklist.md`/`graph-metadata.json`/`spec.md` Status reconciled to the shipped state (`fc06153`, `35f1888`, `dccbf3d`; see remediation-plan.md R1).
 - **003 Saved-field classification** (deferred by design): the wired command auto-detects Income/Expenses → Remaining; "Saved" needs an operator "Sales" classification UI that is unbuilt.
 - **Un-run manual proof sub-phases** (013/003, 014/005, others): the Sonnet reviews substitute as the real proof, but the phases' own proof artifacts were never produced.
-- **Test gaps by house convention** (DOM renderers): 014 peek module has no tests; view-renderer DOM paths remain manually verified.
+- **Test gaps by house convention** (DOM renderers): 014 peek module tests landed in the remediation fix stage (`86eee77`, `src/views/TableRecordPeek.test.ts`, 8 cases); other view-renderer DOM paths remain manually verified per house convention.
 - Assorted P2s (cosmetic CSS hooks, style-alias nits) itemized in the per-phase verdicts.

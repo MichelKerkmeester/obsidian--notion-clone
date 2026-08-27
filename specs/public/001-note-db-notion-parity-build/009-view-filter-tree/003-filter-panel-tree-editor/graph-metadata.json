@@ -37,7 +37,7 @@
       "chrome"
     ],
     "importance_tier": "high",
-    "status": "complete",
+    "status": "in_progress",
     "key_files": [
       "spec.md",
       "plan.md",
@@ -89,6 +89,12 @@
         "source": "derived"
       },
       {
+        "name": "In Progress",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
         "name": "Parent Spec",
         "kind": "proper_noun",
         "path": "spec.md",
@@ -102,12 +108,6 @@
       },
       {
         "name": "Problem Statement The",
-        "kind": "proper_noun",
-        "path": "spec.md",
-        "source": "derived"
-      },
-      {
-        "name": "Purpose Extend",
         "kind": "proper_noun",
         "path": "spec.md",
         "source": "derived"
@@ -193,7 +193,7 @@
     ],
     "causal_summary": "The filter panel is a global AND/OR toggle plus a flat row list (`FilterPanelRenderer.ts` `renderHeader` `125-146` and the flat loop `81-90`)",
     "created_at": "2026-08-25T20:51:13Z",
-    "last_save_at": "2026-08-25T21:02:27.418Z",
+    "last_save_at": "2026-08-27T12:50:05.364Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -203,13 +203,13 @@
       "checklist.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:7e877dbff42b76d06cdf8a2c904cfde9fdb0a3ca548c08a0e40a9db9d9b9f425",
+    "source_fingerprint": "sha256:b6ca693993d3df8b7eda10ac68a80f34444da693fa44ab8711c1d167e9a5be1a",
     "source_doc_hashes": {
-      "spec.md": "c216265d8611763ed27030fff752075ec25c5982b381d21476364b461901ec9b",
-      "plan.md": "3155183a66e48e077cfb521c0e330f554690e832a796d8f5969ac9a7a7fd1c09",
-      "tasks.md": "6961e1af04bd9122b287502172838c2bf73eb0e79a95948419f116e775eb63a6",
-      "checklist.md": "76f9793b16d239f02782c5f6b0cbdf2eec74cff36b17d0a2cee187f8ce254050",
-      "implementation-summary.md": "a7aa216e770043f15f6fe3b9b7c373fa61bcea96f0e58d22381a49db2b7c1d91"
+      "spec.md": "36116672ae3778fcab5ec3b2f5fd0582d324426e8f0b006203d5d4c6b0a86354",
+      "plan.md": "51ca7944be7848fe3b1e43749088455b906b3425cb220ffb0d399aae238539fb",
+      "tasks.md": "53badacf4426ed590b62e176fd170ed5886019fa154052f5a077b301aeb280ab",
+      "checklist.md": "7cbd2f5e1b5693ccc8db446e1899f16063e917534195e91e145201589ff31a05",
+      "implementation-summary.md": "9bb4f27afac275541c666c38ebef7ad154569026b8b0a8cdf53847586a7de7e0"
     },
     "last_active_child_id": null,
     "last_active_at": null

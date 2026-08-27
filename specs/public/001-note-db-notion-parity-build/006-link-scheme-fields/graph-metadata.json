@@ -55,6 +55,7 @@
       "tasks.md",
       "checklist.md",
       "implementation-summary.md",
+      "research/sonnet-verification.md",
       "research/synthesis.md",
       "research/final-plan.md",
       "research/research.md"
@@ -91,6 +92,12 @@
         "source": "derived"
       },
       {
+        "name": "sonnet-verification.md",
+        "kind": "doc",
+        "path": "research/sonnet-verification.md",
+        "source": "derived"
+      },
+      {
         "name": "synthesis.md",
         "kind": "doc",
         "path": "research/synthesis.md",
@@ -121,6 +128,12 @@
         "source": "derived"
       },
       {
+        "name": "In Progress",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
         "name": "Problem Statement Notion",
         "kind": "proper_noun",
         "path": "spec.md",
@@ -134,12 +147,6 @@
       },
       {
         "name": "In Scope",
-        "kind": "proper_noun",
-        "path": "spec.md",
-        "source": "derived"
-      },
-      {
-        "name": "Open Questions",
         "kind": "proper_noun",
         "path": "spec.md",
         "source": "derived"
@@ -181,6 +188,12 @@
         "source": "derived"
       },
       {
+        "name": "Open Questions",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
         "name": "Task Format",
         "kind": "proper_noun",
         "path": "tasks.md",
@@ -191,23 +204,11 @@
         "kind": "proper_noun",
         "path": "tasks.md",
         "source": "derived"
-      },
-      {
-        "name": "Ranked Backlog",
-        "kind": "proper_noun",
-        "path": "tasks.md",
-        "source": "derived"
-      },
-      {
-        "name": "Verification Checklist",
-        "kind": "proper_noun",
-        "path": "checklist.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "Notion treats URL, email, and phone property values as first-class clickable links: URL opens in a new tab, Email launches the mail client, Phone prompts a call, while the stored value stays an ordinary string",
     "created_at": "2026-08-24T17:23:14.443Z",
-    "last_save_at": "2026-08-25T20:14:56.484Z",
+    "last_save_at": "2026-08-27T12:25:53.130Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -218,13 +219,13 @@
       "implementation-summary.md",
       "research/research.md"
     ],
-    "source_fingerprint": "sha256:35ccf511f4db77734d2484c5de97eff76be3515664d7f66f298706dfe0152700",
+    "source_fingerprint": "sha256:8f0cb6a4dc983509a78e4f5c71d8f7a32e0ed5ed6e38d36357bc1237fb82225b",
     "source_doc_hashes": {
-      "spec.md": "61ac15d44ab85a4dfcef0ee10040dac881bf3d9ac249c3abbe122998f15098e5",
-      "plan.md": "9f16533b89fd6f70b27e989c638dca5f746ae8e373428f905a92be219a5701c5",
-      "tasks.md": "4106fd9ba7d60c9beb2fa7d9ecee7656c5cecf90e8d904bea7b3a1b20c85854c",
-      "checklist.md": "83b4939c3dc9d526f86d480be35614c9b1e0db39fd878f1d82d158e236403c8a",
-      "implementation-summary.md": "f2f74619db5a04561ed25bde272e1022906f6b8a6f5d5e67af02e1bec154163c",
+      "spec.md": "64b3052dba3ddfbb60d10b47f9eb01d4f558770360beaf6f27957054b4f3d3e3",
+      "plan.md": "d0157ce695330a20e2aac2dde1a2a27e31ccbd40ea2594b7363aa5a5c3b1f72d",
+      "tasks.md": "03c97d01063fda7ccb64d3b6a9a02aabbc38df463e3f95a27570ba532b8198dc",
+      "checklist.md": "25999cb5b1f5c91c6cd2452034091a0e1e4c04f334fe069e7381a9941c411658",
+      "implementation-summary.md": "65f21432e2a82045d11edd10fa70d69ca0f74f99905d8aec737fa6ea69b4daee",
       "research/research.md": "91acebd6d99f67cab4be7b96d36ba5c72b924009e328a247f277340987aac54a"
     },
     "last_active_child_id": "obsidian/002-note-db-notion-parity-build/006-link-scheme-fields/004-scheme-column-width",

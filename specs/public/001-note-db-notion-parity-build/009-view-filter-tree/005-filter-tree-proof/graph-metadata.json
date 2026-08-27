@@ -37,7 +37,7 @@
       "tasks"
     ],
     "importance_tier": "high",
-    "status": "deferred",
+    "status": "in_progress",
     "key_files": [
       "spec.md",
       "plan.md",
@@ -185,15 +185,15 @@
         "source": "derived"
       },
       {
-        "name": "Implementation Summary",
+        "name": "Code Quality",
         "kind": "proper_noun",
-        "path": "implementation-summary.md",
+        "path": "checklist.md",
         "source": "derived"
       }
     ],
     "causal_summary": "Without recorded proofs, nested AND/OR can look done while `DataSource.ts` drops `filterTree` on reload, a source-op leak matches every row (`QueryEngine.ts:124-125`), or phase 010 is forced into `applyFilterTree([row])` (null-passes would paint every row)",
     "created_at": "2026-08-25T20:51:14Z",
-    "last_save_at": "2026-08-25T21:05:12.863Z",
+    "last_save_at": "2026-08-27T12:28:00.687Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -203,13 +203,13 @@
       "checklist.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:ab931fc675cfd32d29ecf7613ebe7e4117ae2057709d2a418c8993210f28d47d",
+    "source_fingerprint": "sha256:4cd32f21ee25da86d2cf99842d41d086edc2ed4864dcad6ce81373a1cc9dbb30",
     "source_doc_hashes": {
-      "spec.md": "39d4126a5678b6638f9f9659a0e7f59b63b387e6267c883881a69a45156f59cc",
-      "plan.md": "3433fbeec5089a1a28388dc61077d6199fc6525d5d1feecd7bb2829c845e169f",
-      "tasks.md": "0827f30681dc39ab16dfacc652d4f6b39d94efebadc91bfdce236fadf01fc94c",
-      "checklist.md": "19f9da2c7f018712a5e4791f475ff35d124057f267dabef556838f070c07ba9a",
-      "implementation-summary.md": "0835b5a58a94622ee0583a0740a46bb2c0b1fd6b0c11d7a625de5714cf16d838"
+      "spec.md": "eb5271409a96e3fb7165aeb4f15361f95b9def50cea53f6d92520cc136c56ce2",
+      "plan.md": "dcea6aaa76103ccf9b607e7f228eebf89ba4727c33fadaa8054be3dbd1332dba",
+      "tasks.md": "c4148fdcec891f6da71822e568e7571dd828f055062f9673493ce95f80b7050d",
+      "checklist.md": "3c2fd4433ecaef1eda2e345b327c9ff04137d634a1569bafb5b05431e604ca4d",
+      "implementation-summary.md": "f4aeaa7f2e78d6b90604dda7694ff1b654760534d0637d0e52d00a9b8d91aa12"
     },
     "last_active_child_id": null,
     "last_active_at": null

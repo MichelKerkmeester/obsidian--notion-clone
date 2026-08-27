@@ -52,6 +52,7 @@
       "tasks.md",
       "checklist.md",
       "implementation-summary.md",
+      "research/sonnet-verification.md",
       "research/synthesis.md",
       "research/research.md"
     ],
@@ -87,6 +88,12 @@
         "source": "derived"
       },
       {
+        "name": "sonnet-verification.md",
+        "kind": "doc",
+        "path": "research/sonnet-verification.md",
+        "source": "derived"
+      },
+      {
         "name": "synthesis.md",
         "kind": "doc",
         "path": "research/synthesis.md",
@@ -111,6 +118,12 @@
         "source": "derived"
       },
       {
+        "name": "In Progress",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
         "name": "Problem Statement",
         "kind": "proper_noun",
         "path": "spec.md",
@@ -124,12 +137,6 @@
       },
       {
         "name": "In Scope",
-        "kind": "proper_noun",
-        "path": "spec.md",
-        "source": "derived"
-      },
-      {
-        "name": "Table Sub",
         "kind": "proper_noun",
         "path": "spec.md",
         "source": "derived"
@@ -177,6 +184,12 @@
         "source": "derived"
       },
       {
+        "name": "Table Sub",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
         "name": "Render Matrix",
         "kind": "proper_noun",
         "path": "tasks.md",
@@ -187,23 +200,11 @@
         "kind": "proper_noun",
         "path": "checklist.md",
         "source": "derived"
-      },
-      {
-        "name": "Verification Protocol",
-        "kind": "proper_noun",
-        "path": "checklist.md",
-        "source": "derived"
-      },
-      {
-        "name": "Completion Impact",
-        "kind": "proper_noun",
-        "path": "checklist.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "TABLE views in the note-database fork group rows by a single string (`groupByField`) only, while Notion's current View settings expose Group + Sub-group (exactly two levels) and the fork already ships the 2-level algorithm on the board (`applyBoardSubgroups` / `getBoardSubgroups`)",
     "created_at": "2026-08-24T17:58:47.637Z",
-    "last_save_at": "2026-08-25T21:01:27.034Z",
+    "last_save_at": "2026-08-27T12:25:54.462Z",
     "save_lineage": "same_pass",
     "last_accessed_at": null,
     "source_docs": [
@@ -214,13 +215,13 @@
       "implementation-summary.md",
       "research/research.md"
     ],
-    "source_fingerprint": "sha256:a0197d189ddbf5107aa3b17a45ef9f087016bd324648cfb63c71681f6e0215d5",
+    "source_fingerprint": "sha256:7c93ec67caf86ece6d7313907deb484fedce92cc6253085ae6ca7202e1e20e1a",
     "source_doc_hashes": {
-      "spec.md": "c73a7c59e86424e815a304617d2239dbe4d9e1df9e9f67e8eb3bfc2bd80c2db4",
-      "plan.md": "4faef85c62ceb04f498a5a2659f4eeb7c8a31baba86710d068b032d1c763bf2d",
-      "tasks.md": "18ee706ddcebbf366beb837dd8427e31c0475729199a5bf0169b18a52054e769",
-      "checklist.md": "47490af55b44f8cc6fccd8a95f28d77e0054348883cab4c82dd5619788154f67",
-      "implementation-summary.md": "c6188607fe52fcb524e1fa14ef0f30b75c157bf4e1c997e9e4746689c45f9208",
+      "spec.md": "7e69f1d992f27b259be41d0533a5daa52915a8a389736316e9d44215559e7987",
+      "plan.md": "56eee701429c6d11ec1f60e420051fafc5eef57bbba0610a05b7b25fa5c21d9f",
+      "tasks.md": "4ee366dba0b3d929f5909b9412886226c09862b95eed8fa696e69e7544ffb7c6",
+      "checklist.md": "3c7d687bc2e86eeac733b536cb1fb7fb67809fe27e3fba3070125f7a7774f226",
+      "implementation-summary.md": "f9916d9ec23474623a65b7b626025b7d9ba071af565c5775b13e8337e20a4d61",
       "research/research.md": "4f89a3363c26e5c7453fc0a5cc5d9acbcde271e2b3e0d1128516a7500c911a83"
     },
     "last_active_child_id": "public/001-note-db-notion-parity-build/011-table-multi-group/005-multigroup-display-proof",

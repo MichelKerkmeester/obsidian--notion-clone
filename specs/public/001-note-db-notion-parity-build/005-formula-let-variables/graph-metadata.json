@@ -53,6 +53,7 @@
       "tasks.md",
       "checklist.md",
       "implementation-summary.md",
+      "research/sonnet-verification.md",
       "research/synthesis.md",
       "research/research.md"
     ],
@@ -88,6 +89,12 @@
         "source": "derived"
       },
       {
+        "name": "sonnet-verification.md",
+        "kind": "doc",
+        "path": "research/sonnet-verification.md",
+        "source": "derived"
+      },
+      {
         "name": "synthesis.md",
         "kind": "doc",
         "path": "research/synthesis.md",
@@ -112,6 +119,12 @@
         "source": "derived"
       },
       {
+        "name": "In Progress",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
         "name": "Problem Statement Notion",
         "kind": "proper_noun",
         "path": "spec.md",
@@ -125,12 +138,6 @@
       },
       {
         "name": "In Scope",
-        "kind": "proper_noun",
-        "path": "spec.md",
-        "source": "derived"
-      },
-      {
-        "name": "Notion April",
         "kind": "proper_noun",
         "path": "spec.md",
         "source": "derived"
@@ -194,17 +201,11 @@
         "kind": "proper_noun",
         "path": "tasks.md",
         "source": "derived"
-      },
-      {
-        "name": "Test Files",
-        "kind": "proper_noun",
-        "path": "tasks.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "Notion formulas support `let()` / `lets()` to bind named intermediate values in a per-row child scope (`let(person, \"Alan\", \"Hello, \" + person + \"!\")` = `\"Hello, Alan!\"`); the fork's native engine (`ComputedField.ts` over the `SafeEval.ts` sandbox) has no binding construct, so long formulas duplicate sub-expressions",
     "created_at": "2026-08-24T17:58:35.358Z",
-    "last_save_at": "2026-08-25T20:14:56.797Z",
+    "last_save_at": "2026-08-27T12:25:52.947Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -215,13 +216,13 @@
       "implementation-summary.md",
       "research/research.md"
     ],
-    "source_fingerprint": "sha256:6b3f095abeb32ce0099551d504298c9650281d639b232b5c41a4e72d1309d781",
+    "source_fingerprint": "sha256:a263074a940ee7c25356fb400ecfa40cb55cee9b7e4cb8ed0552b488cf6f9365",
     "source_doc_hashes": {
-      "spec.md": "1a4442daabde24e78e1bc4724bfb6dc6aa5264751d062c80cd013335f3ce51e9",
-      "plan.md": "f056d6654e6cdf13346be1dd02d2730327dfbea18b09c2db6c40ae6bfd087a07",
-      "tasks.md": "b9c5783c3ec6cfba4cbbb54b2c2ca5ec940693b087e707e54373273e8b8f5185",
-      "checklist.md": "765240bade1387a1adb33578f40ee9f38eefd43239bb09bd21acf3a3d77431e7",
-      "implementation-summary.md": "c4cc4a54024faf3c8bd19c2d9c2a48240bd5e869565bcea885bec2897e8ec34f",
+      "spec.md": "9490315a48d77a3b135c20159cdc4b62e3b339ea384f0370755bed1daae34690",
+      "plan.md": "41ccdfda39166576ddcf599eb58539811f582a90f168c44ed9645d801e1a5202",
+      "tasks.md": "cbef854786943fda4d4711438ce66869e2f6bead9e310697073d7194039d4e38",
+      "checklist.md": "8aaa09fbf25e338626427c287a65a0a0fb98ec69ed0926e446284bd259d281ea",
+      "implementation-summary.md": "f23aa3006b94a01ff95e2138bf5a0e68951feb76faa429b76df473074e668cfe",
       "research/research.md": "634323b1d235e2b3ffe2ae77aa2b4b0b32b7c7bd88e7a51a7dfdc18efba92893"
     },
     "last_active_child_id": "obsidian/002-note-db-notion-parity-build/005-formula-let-variables/003-formula-modal-let-help",

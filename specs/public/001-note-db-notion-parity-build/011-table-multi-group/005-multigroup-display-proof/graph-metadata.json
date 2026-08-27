@@ -35,7 +35,7 @@
       "tasks"
     ],
     "importance_tier": "high",
-    "status": "complete",
+    "status": "in_progress",
     "key_files": [
       "spec.md",
       "plan.md",
@@ -87,6 +87,12 @@
         "source": "derived"
       },
       {
+        "name": "In Progress",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
         "name": "Parent Spec",
         "kind": "proper_noun",
         "path": "spec.md",
@@ -100,12 +106,6 @@
       },
       {
         "name": "Problem Statement Without",
-        "kind": "proper_noun",
-        "path": "spec.md",
-        "source": "derived"
-      },
-      {
-        "name": "Purpose Prove",
         "kind": "proper_noun",
         "path": "spec.md",
         "source": "derived"
@@ -191,7 +191,7 @@
     ],
     "causal_summary": "Without the locked proofs, a 2-field table can \"pass\" while 1-field hide keys change, while persist drops `groupByFields`, while a Type header writes on drop, or while empty months of grouping (nulls, multi-select fan-out, computed leftovers) throw",
     "created_at": "2026-08-25T20:50:01Z",
-    "last_save_at": "2026-08-25T21:02:24.010Z",
+    "last_save_at": "2026-08-27T12:28:03.178Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -201,13 +201,13 @@
       "checklist.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:e2da450fadbae2d5e2aaebf8ece34c5f6c4c588f5abf725c40b3ecc014790e35",
+    "source_fingerprint": "sha256:29811bd65fa5271e4f3803e4b5fe920c42cb45bbc1db5dc211de30cb7e8afef7",
     "source_doc_hashes": {
-      "spec.md": "112bc0bbba9647bc8ea955bb7904d5b26fde84f42c735af1db4335f7aade85fa",
-      "plan.md": "a4a68c504e03824ead2d52d3ca6f7dbb76c21993792563be3c955bf39d9ca773",
-      "tasks.md": "0402a09bc9717ae1ccf600bde0229569805fa6bca283ef0de6b7e44ec5b6f71a",
-      "checklist.md": "8d428b5749acc075bc8ba7eca56b7b46ff8602880cac1d554ed5c9d3246ed936",
-      "implementation-summary.md": "f94c7583b244818b4a7bb039e1f97068af196168715564d3daa88e6c793ed002"
+      "spec.md": "54d9f9865edc6f558c1827787027812b838a2b43a4241f56c5bfe4d34f28b13e",
+      "plan.md": "a28fa164540f2416574b629f6954a340b5ae54de0a942c763dc81427b65f66b2",
+      "tasks.md": "d48de7052c37859f054ba0cf710dd8b5aa7d5bbba12efae6bf1c8baf110ea5af",
+      "checklist.md": "f623bee7f75e6c24465f1af5baeeabd5a65553cd9b2b33df732525558883a7ae",
+      "implementation-summary.md": "bf0f95a6a042f0324a856302e5f3a1cc84e279bffff4737c3a262de9f24b25dc"
     },
     "last_active_child_id": null,
     "last_active_at": null

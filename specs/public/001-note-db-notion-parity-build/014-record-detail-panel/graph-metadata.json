@@ -51,6 +51,7 @@
       "tasks.md",
       "checklist.md",
       "implementation-summary.md",
+      "research/sonnet-verification.md",
       "research/synthesis.md",
       "research/research.md",
       "research/final-plan.md"
@@ -84,6 +85,12 @@
         "name": "implementation-summary.md",
         "kind": "doc",
         "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "sonnet-verification.md",
+        "kind": "doc",
+        "path": "research/sonnet-verification.md",
         "source": "derived"
       },
       {
@@ -123,6 +130,12 @@
         "source": "derived"
       },
       {
+        "name": "In Progress",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
         "name": "Problem Statement This",
         "kind": "proper_noun",
         "path": "spec.md",
@@ -130,12 +143,6 @@
       },
       {
         "name": "Obsidian Page Preview",
-        "kind": "proper_noun",
-        "path": "spec.md",
-        "source": "derived"
-      },
-      {
-        "name": "Purpose Ship",
         "kind": "proper_noun",
         "path": "spec.md",
         "source": "derived"
@@ -193,17 +200,11 @@
         "kind": "proper_noun",
         "path": "tasks.md",
         "source": "derived"
-      },
-      {
-        "name": "Bare Enter",
-        "kind": "proper_noun",
-        "path": "tasks.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "This is an S-tier polish phase, not a capability project",
     "created_at": "2026-08-24T17:58:55.219Z",
-    "last_save_at": "2026-08-25T21:25:34.363Z",
+    "last_save_at": "2026-08-27T12:25:55.250Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -214,13 +215,13 @@
       "implementation-summary.md",
       "research/research.md"
     ],
-    "source_fingerprint": "sha256:e1fee142dab4d506c0b50ae9dfb87044832ca4103add17cbc3977626e168802e",
+    "source_fingerprint": "sha256:c6b0a57e7eee5c5da6b187576f9f498a46c12738a948b1468061999b0e3cae30",
     "source_doc_hashes": {
-      "spec.md": "5711412ddf60be7441a7ec0c6d83d9ac3a55306d5915f2a99b2850073ecd1f40",
-      "plan.md": "cd4ba978d792eefc9e03fa9fda8d23895feba2c4c0bf87ecbfb0279fe6ba005e",
-      "tasks.md": "3915121423ce5d301d48c01027b6438386a71b480df270f6a0499b48beb304e0",
-      "checklist.md": "c6f86b2578e48ff29706ee11d8bd989a92feb1e0f759a44cf73c66782a22dc2f",
-      "implementation-summary.md": "34ba80cb8b3569ca132470bae4fc16569b3b8ec3b625a34df9088ca75785e2e6",
+      "spec.md": "ca3527e922b54ce26e7f575b9343421a614e0576cebc7560b82c51ddcbf70aa1",
+      "plan.md": "f5c0a61e899fe3cd9ce78b1dca85332139c40ee7024d4ac8ebfcdaddf4ede5a9",
+      "tasks.md": "73ce11860774b153d4f4e7024573dac478d64bd52065e80730be3bb740985e20",
+      "checklist.md": "82d7167c288ec2e59fe651eaeb2660af775165dcc65394ed56b4161ea7669209",
+      "implementation-summary.md": "3ac4d703011dde0b3758e2e6b53b1342e67447d9811db8392a6a86d9b33c37bd",
       "research/research.md": "7feaab3f84a4bb7b1cb38c91fcffd320bd817f154ae69e22cbe20c6a4744c282"
     },
     "last_active_child_id": "public/001-note-db-notion-parity-build/014-record-detail-panel/005-peek-display-proof",

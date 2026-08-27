@@ -38,7 +38,7 @@
       "gallery"
     ],
     "importance_tier": "high",
-    "status": "complete",
+    "status": "in_progress",
     "key_files": [
       "spec.md",
       "plan.md",
@@ -90,6 +90,12 @@
         "source": "derived"
       },
       {
+        "name": "In Progress",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
         "name": "Parent Spec",
         "kind": "proper_noun",
         "path": "spec.md",
@@ -103,12 +109,6 @@
       },
       {
         "name": "Problem Statement Without",
-        "kind": "proper_noun",
-        "path": "spec.md",
-        "source": "derived"
-      },
-      {
-        "name": "Purpose Prove",
         "kind": "proper_noun",
         "path": "spec.md",
         "source": "derived"
@@ -194,7 +194,7 @@
     ],
     "causal_summary": "Without this proof, `\"files\"` can compile while cells still stringify, covers still fetch URLs, or `PROPERTYTYPEICONNAMES` is missing and `tsc` was never re-run",
     "created_at": "2026-08-25T21:08:53Z",
-    "last_save_at": "2026-08-25T21:17:30.861Z",
+    "last_save_at": "2026-08-27T12:28:04.391Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -204,13 +204,13 @@
       "checklist.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:21f6ba8d710c348268c5db3171fe3f2ac38a4d7ac1db3ea818a4e92e434b6c84",
+    "source_fingerprint": "sha256:e4b7ad22ba30dd619f22fe1fc112ac579708eab0c912b7a9ba1f73827ac0b458",
     "source_doc_hashes": {
-      "spec.md": "d7872548a06e6307de4bbf94c1368ea0f63de6ba4b0e2abb73f96cde482823ac",
-      "plan.md": "4b9ca5662613a598c98c0f6bbf32e1350d7cf0b146e18848efea4eaa4970d9b4",
-      "tasks.md": "4e187aefbfac1c8d55ca4f5418f67889477a12a707e3b1c060cb79019dc4bd20",
-      "checklist.md": "e7548d1366f0bb59771c0b72d18e5fbd1cfed5948699a058d9f93e08bf371010",
-      "implementation-summary.md": "c430baa1c58ce121475df5a86e53c1d1fbc86a4d3f11ae96326b8a00d6669452"
+      "spec.md": "6d193635f3f1e797e7f60de0421ee2e351bd5781ed86a55666da28ead8046847",
+      "plan.md": "09796be5ae7c4f0133a5a4f4428f595fb285c613d1b9810e4293c64a5998b0fe",
+      "tasks.md": "e34b84098ee3cc4cbf2247a1c8cc6c4f0e5d0343f8bf1d903e55de77faf3f022",
+      "checklist.md": "120ed0d993d4d46e9edc396cce95afae0a603096cf0968bab4d91806690118a0",
+      "implementation-summary.md": "308045ce494ceb26709ae2d07e1d4f599220a03ab0b28e81715971c8eeb9938d"
     },
     "last_active_child_id": null,
     "last_active_at": null

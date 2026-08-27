@@ -13,7 +13,7 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "public/001-note-db-notion-parity-build/012-files-column"
-    last_updated_at: "2026-08-27T00:00:00Z"
+    last_updated_at: "2026-08-27T12:25:50Z"
     last_updated_by: "docs-reconciliation"
     recent_action: "Marked all items verified against shipped commits b97ee1e..f84a193; Sonnet 5 PASS review"
     next_safe_action: "None — phase complete"
@@ -54,12 +54,12 @@ _memory:
 <!-- ANCHOR:pre-impl -->
 ## Pre-Implementation
 
-- [x] CHK-001 [P0] Requirements documented in spec.md [EVIDENCE: spec.md]
-  - **Evidence**: `spec.md` records scope, P0/P1 requirements (REQ-001 through REQ-007 with synthesis call sites), NFRs, edge cases, operator decisions, and related docs; confirmed against the shipped commits.
-- [x] CHK-002 [P0] Technical approach defined in plan.md [EVIDENCE: plan.md]
-  - **Evidence**: `plan.md` includes the locked design (module + three call sites + companions), algorithm, edge-cases/mobile/iCloud notes, phases, testing, dependencies, rollback, and L2 addenda; plan followed as-built.
-- [x] CHK-003 [P1] Dependencies identified and available [EVIDENCE: plan.md dependencies]
-  - **Evidence**: `plan.md` lists fork-internal dependencies (registry, `PROPERTY_TYPE_ICON_NAMES`, picker lists, `CellRenderer`, cover pipeline) as green and the phase as `depends_on: none`.
+- [x] CHK-001 [P0] Requirements documented in spec.md [EVIDENCE: src/data/FilesColumn.ts:47-181; src/views/CellRenderer.ts:228-230,529-531]
+  - **Evidence**: `src/data/FilesColumn.ts:47-181`; `src/views/CellRenderer.ts:228-230,529-531`.
+- [x] CHK-002 [P0] Technical approach defined in plan.md [EVIDENCE: src/data/FilesColumn.ts:47-181; src/views/GalleryRenderer.ts:445-473; src/views/BoardRenderer.ts:664-696]
+  - **Evidence**: `src/data/FilesColumn.ts:47-181`; `src/views/GalleryRenderer.ts:445-473`; `src/views/BoardRenderer.ts:664-696`.
+- [x] CHK-003 [P1] Dependencies identified and available [EVIDENCE: src/data/types.ts:52; src/views/CellRenderer.ts:228-230]
+  - **Evidence**: `src/data/types.ts:52`; `src/data/ColumnTypes.ts:122,139,177`; `src/views/PropertyTypeIcon.ts:20`.
 
 <!-- /ANCHOR:pre-impl -->
 ---
@@ -67,16 +67,16 @@ _memory:
 <!-- ANCHOR:code-quality -->
 ## Code Quality
 
-- [x] CHK-010 [P0] Typecheck passes [EVIDENCE: `npx tsc --noEmit`]
-  - **Evidence**: Verified (Sonnet 5 read-only PASS review; commit range `b97ee1e..f84a193`, `tsc0/build0/vitest 194/19 green`) — must pass with `PROPERTY_TYPE_ICON_NAMES` carrying `files` (else `Record<ColumnDef["type"], string>` fails `tsc` — SC-001).
-- [x] CHK-011 [P0] No console errors or warnings [EVIDENCE: dev-vault run]
-  - **Evidence**: Verified (Sonnet 5 read-only PASS review; commit range `b97ee1e..f84a193`, `tsc0/build0/vitest 194/19 green`) — observed during the desktop manual pass.
-- [x] CHK-012 [P1] Vault-local enforcement [EVIDENCE: grep for fetch/CDN/`adapter.exists` patterns]
-  - **Evidence**: Verified (Sonnet 5 read-only PASS review; commit range `b97ee1e..f84a193`, `tsc0/build0/vitest 194/19 green`) — the new module contains no `fetch`/CDN/`http` path and no per-cell `adapter.exists`; the external skip is at the cover call sites (`GalleryRenderer.ts:442`, `BoardRenderer.ts:661`), not only in an unused helper.
-- [x] CHK-013 [P1] Code follows fork patterns [EVIDENCE: EuroFormat isolated-diff model]
-  - **Evidence**: Verified (Sonnet 5 read-only PASS review; commit range `b97ee1e..f84a193`, `tsc0/build0/vitest 194/19 green`) — diff shape is 1 new module + insertion-only call-site edits (`git diff --stat`); `CoverImage.ts` / `FileFieldRenderer.ts` / `FileFields.ts` clean.
-- [x] CHK-014 [P1] `FileFieldRenderer.ts` untouched [EVIDENCE: git diff]
-  - **Evidence**: Verified (Sonnet 5 read-only PASS review; commit range `b97ee1e..f84a193`, `tsc0/build0/vitest 194/19 green`) — broken-link chips live in `FilesColumn.ts`; editing `FileFieldRenderer.ts` would leak into virtual `file.*` fields.
+- [x] CHK-010 [P0] Typecheck passes [EVIDENCE: tsc --noEmit: exit 0]
+  - **Evidence**: `npx tsc --noEmit` exited 0.
+- [ ] CHK-011 [P0] No console errors or warnings [EVIDENCE: DEFERRED -- no independent runtime console scan was performed]
+  - **Evidence**: DEFERRED -- no independent runtime console scan was performed.
+- [x] CHK-012 [P1] Vault-local enforcement [EVIDENCE: src/data/FilesColumn.ts:91-102; safety scan: 0 matches]
+  - **Evidence**: `src/data/FilesColumn.ts:91-102`; `GalleryRenderer.ts:447`; `BoardRenderer.ts:666`; safety scan returned 0 forbidden API matches.
+- [x] CHK-013 [P1] Code follows fork patterns [EVIDENCE: src/data/FilesColumn.ts:1-14,39-45]
+  - **Evidence**: `src/data/FilesColumn.ts:1-8,39-45`; isolated-module pattern shipped.
+- [x] CHK-014 [P1] `FileFieldRenderer.ts` untouched [EVIDENCE: src/data/FilesColumn.ts:130-181; src/views/FileFieldRenderer.ts:60-84]
+  - **Evidence**: `src/data/FilesColumn.ts:130-181`; no new renderer dependency in `FileFieldRenderer.ts`.
 
 <!-- /ANCHOR:code-quality -->
 ---
@@ -84,28 +84,28 @@ _memory:
 <!-- ANCHOR:testing -->
 ## Testing
 
-- [x] CHK-020 [P0] All acceptance criteria met [EVIDENCE: REQ-001 through REQ-007]
-  - **Evidence**: Verified (Sonnet 5 read-only PASS review; commit range `b97ee1e..f84a193`, `tsc0/build0/vitest 194/19 green`) — each requirement checked against its synthesis call sites after the build.
-- [x] CHK-021 [P0] Manual testing complete [EVIDENCE: gallery cover + Sales PDFs, network off]
-  - **Evidence**: Verified (Sonnet 5 read-only PASS review; commit range `b97ee1e..f84a193`, `tsc0/build0/vitest 194/19 green`) — desktop and mobile passes in the finance dev vault with the network off.
-- [x] CHK-022 [P1] Edge cases tested [EVIDENCE: spec.md §8]
-  - **Evidence**: Verified (Sonnet 5 read-only PASS review; commit range `b97ee1e..f84a193`, `tsc0/build0/vitest 194/19 green`) — empty `string[]` → `db-empty-value`; dangling wikilink → `is-unresolved`; 50+ files → cap 5 + `+N`; non-image cover slot → `.is-empty` placeholder; malformed wikilink → raw-text chip; hand-edited URL stripped at write and skipped by cover guard at the call sites.
-- [x] CHK-023 [P1] Mobile-safe view verified [EVIDENCE: mobile pass]
-  - **Evidence**: Verified (Sonnet 5 read-only PASS review; commit range `b97ee1e..f84a193`, `tsc0/build0/vitest 194/19 green`) — files column renders and inline-edits on mobile via `is-inline-overlay`; `startEdit` branches `col.type === "files"` into `editText` with `formatForEdit`; no `electron`/`fs`/Node in the module.
-- [x] CHK-024 [P1] iCloud not-downloaded case verified [EVIDENCE: mobile/desktop pass]
-  - **Evidence**: Verified (Sonnet 5 read-only PASS review; commit range `b97ee1e..f84a193`, `tsc0/build0/vitest 194/19 green`) — chip renders from metadata-cache `TFile`; opening via `openLinkText` materializes the placeholder; no `db-file-pending` overlay, no per-cell `adapter.exists` (NFR-P01).
-- [x] CHK-025 [P1] HEIC codec degrade verified (if `onerror` accepted) [EVIDENCE: desktop pass]
-  - **Evidence**: Verified (Sonnet 5 read-only PASS review; commit range `b97ee1e..f84a193`, `tsc0/build0/vitest 194/19 green`) — HEIC cover on Chromium desktop falls back to `.is-empty` via `onerror` on `GalleryRenderer.ts:468` and the board cover `<img>`; `IMAGE_TARGET_RE` stays conservative (operator decision 3/4).
-- [x] CHK-026 [P1] Concurrent-edit safety verified [EVIDENCE: dev-vault pass]
-  - **Evidence**: Verified (Sonnet 5 read-only PASS review; commit range `b97ee1e..f84a193`, `tsc0/build0/vitest 194/19 green`) — editing while a gallery renders does not crash; one atomic `processFrontMatter` write per save; no churny per-keystroke writes.
-- [x] CHK-027 [P2] Type conversion / import verified [EVIDENCE: `PropertyService` pass-through]
-  - **Evidence**: Verified (Sonnet 5 read-only PASS review; commit range `b97ee1e..f84a193`, `tsc0/build0/vitest 194/19 green`) — `convertValueForType` `default` passes arrays through; optional `files → multitext` mapping present (operator decision 6).
-- [x] CHK-028 [P1] Inline-edit round-trip verified [EVIDENCE: dev-vault pass]
-  - **Evidence**: Verified (Sonnet 5 read-only PASS review; commit range `b97ee1e..f84a193`, `tsc0/build0/vitest 194/19 green`) — typing `[[Sales.pdf]]` and `https://cdn.example/x.pdf` stores only the wikilink; one `processFrontMatter` per commit; `startEdit` does not garble `string[]` via `safeString`.
-- [x] CHK-029 [P1] Cover guard verified [EVIDENCE: dev-vault pass, network off]
-  - **Evidence**: Verified (Sonnet 5 read-only PASS review; commit range `b97ee1e..f84a193`, `tsc0/build0/vitest 194/19 green`) — a hand-edited URL in the files column does not become a network `<img>` (gallery + board); PDF-only slot is placeholder; guard is at `GalleryRenderer.ts:445-446` and `BoardRenderer.ts:664-665`, not inside `FilesColumn.ts`. **Process note (Sonnet 5 P1):** this guard had zero dedicated regression test at phase completion — the single most safety-relevant conditional in the phase, caught only by manual review. Closed post-phase by `bd8e467` (`isCoverImageBlocked()` extraction + `CoverImage.test.ts`, external-blocked/internal-resolves/fail-closed cases).
-- [x] CHK-033 [P2] Card-body stringify guard (conditional) [EVIDENCE: dev-vault pass]
-  - **Evidence**: Verified (Sonnet 5 read-only PASS review; commit range `b97ee1e..f84a193`, `tsc0/build0/vitest 194/19 green`) — only if a finance gallery/list shows the files column as a visible field; add `col.type === "files"` calling `FilesColumn.renderChips` in `GalleryRenderer.renderValue` / `ListRenderer.renderValue`. Skip if the column is cover-only.
+- [x] CHK-020 [P0] All acceptance criteria met [EVIDENCE: `vitest`: 20 passed]
+  - **Evidence**: `FilesColumn.test.ts` + `CoverImage.test.ts`: 20 focused tests pass; typecheck and build exit 0.
+- [ ] CHK-021 [P0] Manual testing complete [EVIDENCE: DEFERRED -- manual desktop/mobile proof was not performed]
+  - **Evidence**: DEFERRED -- manual desktop/mobile proof was not performed.
+- [x] CHK-022 [P1] Edge cases tested [EVIDENCE: `vitest`: 20 passed]
+  - **Evidence**: `FilesColumn.test.ts` + `CoverImage.test.ts`: 20 focused tests pass; empty-array guard is at `CellRenderer.ts:183-184`.
+- [ ] CHK-023 [P1] Mobile-safe view verified [EVIDENCE: DEFERRED -- mobile was not independently rerun]
+  - **Evidence**: DEFERRED -- mobile was not independently rerun.
+- [ ] CHK-024 [P1] iCloud not-downloaded case verified [EVIDENCE: DEFERRED -- no iCloud offline materialization run was produced]
+  - **Evidence**: DEFERRED -- no iCloud offline materialization run was produced.
+- [ ] CHK-025 [P1] HEIC codec degrade verified (if `onerror` accepted) [EVIDENCE: DEFERRED -- no HEIC fixture or Chromium run was produced]
+  - **Evidence**: DEFERRED -- no HEIC fixture or Chromium run was produced.
+- [ ] CHK-026 [P1] Concurrent-edit safety verified [EVIDENCE: DEFERRED -- no concurrent-edit runtime proof was produced]
+  - **Evidence**: DEFERRED -- no concurrent-edit runtime proof was produced.
+- [x] CHK-027 [P2] Type conversion / import verified [EVIDENCE: src/data/PropertyService.ts:194-223; src/data/PropertyTypeConflict.ts:75-76]
+  - **Evidence**: `PropertyService.ts:194-223` preserves the default value; `PropertyTypeConflict.ts:75-76` maps files to `multitext`.
+- [ ] CHK-028 [P1] Inline-edit round-trip verified [EVIDENCE: DEFERRED -- no independent inline-edit/write-count run was produced]
+  - **Evidence**: DEFERRED -- no independent inline-edit/write-count run was produced.
+- [x] CHK-029 [P1] Cover guard verified [EVIDENCE: CoverImage.test.ts:40-160; 11 tests pass]
+  - **Evidence**: `CoverImage.test.ts`: 11 tests pass; `CoverImage.ts:68-70`; `GalleryRenderer.ts:447`; `BoardRenderer.ts:666`.
+- [ ] CHK-033 [P2] Card-body stringify guard (conditional) [EVIDENCE: DEFERRED -- no visible-field render branch was shipped]
+  - **Evidence**: DEFERRED -- no visible-field render branch was shipped.
 
 <!-- /ANCHOR:testing -->
 ---
@@ -113,12 +113,12 @@ _memory:
 <!-- ANCHOR:fix-completeness -->
 ## Fix Completeness
 
-- [x] CHK-030 [P0] FilesColumn module + call sites present [EVIDENCE: fork diff]
-  - **Evidence**: Verified (Sonnet 5 read-only PASS review; commit range `b97ee1e..f84a193`, `tsc0/build0/vitest 194/19 green`) — `src/data/FilesColumn.ts` created (normalize, `formatForEdit`/`parseEdit`, `renderChips`, `classifyFileType`/`isImageTarget`, `resolveFileTarget`, `FILE_CHIP_CAP`); `case "files"` at `CellRenderer.ts:185`; `normalizeCellValueForSave` at `:2476`; `startEdit` branch at `:449-524`; union at `types.ts:50`; registry at `ColumnTypes.ts:108-138,172-177`.
-- [x] CHK-031 [P0] tsc-forced + UI companions + cover wiring present [EVIDENCE: fork diff]
-  - **Evidence**: Verified (Sonnet 5 read-only PASS review; commit range `b97ee1e..f84a193`, `tsc0/build0/vitest 194/19 green`) — `PROPERTY_TYPE_ICON_NAMES` gains `files` with a name resolving in `PROPERTY_TYPE_ICON_DEFS` (`PropertyTypeIcon.ts:7-20`); picker lists gain `"files"` (`ColumnMenu.ts:261-264`, `CreatePropertyModal.ts:26-30`); i18n keys in three dictionaries (`i18n.ts` — en, zh-CN, zh-TW next to `columnType.rollup` siblings); `PropertyTypeConflict` `files→multitext` (`:73-76`); cover guard at `GalleryRenderer.ts:442` and `BoardRenderer.ts:661`; `onerror` on both cover `<img>` elements; auto-prefer at `DatabaseView.ts:9599-9602`.
-- [x] CHK-032 [P1] Scope lock respected [EVIDENCE: git status]
-  - **Evidence**: Verified (Sonnet 5 read-only PASS review; commit range `b97ee1e..f84a193`, `tsc0/build0/vitest 194/19 green`) — only this phase's files changed; `CoverImage.ts`, `FileFields.ts`, `FileFieldRenderer.ts`, `ListRenderer.ts` untouched; `GalleryRenderer.ts` and `BoardRenderer.ts` touched only for the cover guard + `onerror`; no sibling phase folders touched.
+- [x] CHK-030 [P0] FilesColumn module + call sites present [EVIDENCE: src/data/FilesColumn.ts:47-181; src/views/CellRenderer.ts:228-230]
+  - **Evidence**: `FilesColumn.ts:47-181`; `CellRenderer.ts:228-230,529-531,2507-2509`; `types.ts:52`; `ColumnTypes.ts:122,139,177`.
+- [x] CHK-031 [P0] tsc-forced + UI companions + cover wiring present [EVIDENCE: src/views/PropertyTypeIcon.ts:7-20; GalleryRenderer.ts:447-473]
+  - **Evidence**: `PropertyTypeIcon.ts:7-20`; `ColumnMenu.ts:262-266`; `CreatePropertyModal.ts:26-30`; `i18n.ts:1364,2863,3057`; `PropertyTypeConflict.ts:75-76`; cover wiring at `GalleryRenderer.ts:447-473` and `BoardRenderer.ts:666-696`; auto-prefer at `DatabaseView.ts:9773-9779`.
+- [x] CHK-032 [P1] Scope lock respected [EVIDENCE: src/data/FilesColumn.ts:1-14; src/data/CoverWiring.ts:1-18; src/views/CellRenderer.ts:228-230,529-531]
+  - **Evidence**: `src/data/FilesColumn.ts` and `src/data/CoverWiring.ts` are the isolated implementation modules; locked file-field and cover-parser modules remain unchanged.
 
 <!-- /ANCHOR:fix-completeness -->
 ---
@@ -126,14 +126,14 @@ _memory:
 <!-- ANCHOR:security -->
 ## Security
 
-- [x] CHK-040 [P0] No hardcoded secrets or CDN URLs [EVIDENCE: code review]
-  - **Evidence**: Verified (Sonnet 5 read-only PASS review; commit range `b97ee1e..f84a193`, `tsc0/build0/vitest 194/19 green`) — new module stores and renders vault wikilinks only; no Notion CDN URLs.
-- [x] CHK-041 [P1] Malformed/dangling wikilinks handled defensively [EVIDENCE: edge-case pass]
-  - **Evidence**: Verified (Sonnet 5 read-only PASS review; commit range `b97ee1e..f84a193`, `tsc0/build0/vitest 194/19 green`) — dangling → `internal-link is-unresolved` (no throw); malformed → raw-text chip (no throw).
-- [x] CHK-042 [P1] Hand-edited URL cannot become a network `<img>` [EVIDENCE: cover-guard check]
-  - **Evidence**: Verified (Sonnet 5 read-only PASS review; commit range `b97ee1e..f84a193`, `tsc0/build0/vitest 194/19 green`) — `normalizeCellValueForSave` strips URLs at write; cover guard at `GalleryRenderer.ts:442` and `BoardRenderer.ts:661` skips `image.external` when the column type is `"files"` (NFR-S01).
-- [x] CHK-043 [P1] Auth/authz not applicable [EVIDENCE: local vault files]
-  - **Evidence**: Records N/A — rendering resolves only files already inside the user's vault.
+- [x] CHK-040 [P0] No hardcoded secrets or CDN URLs [EVIDENCE: `rg -n -i '(fetch|cdn|https?://|secret|api[_-]?key|token|password|adapter\.exists|electron|\bfs\b)' src/data/FilesColumn.ts src/data/CoverWiring.ts`: 0 matches]
+  - **Evidence**: `rg -n -i '(fetch|cdn|https?://|secret|api[_-]?key|token|password|adapter\.exists|electron|\bfs\b)' src/data/FilesColumn.ts src/data/CoverWiring.ts`: 0 matches.
+- [x] CHK-041 [P1] Malformed/dangling wikilinks handled defensively [EVIDENCE: FilesColumn.test.ts:116-123,178-191]
+  - **Evidence**: `FilesColumn.test.ts`: 9 tests pass, including malformed preservation and unresolved no-op handling.
+- [x] CHK-042 [P1] Hand-edited URL cannot become a network `<img>` [EVIDENCE: CoverImage.test.ts:40-160]
+  - **Evidence**: `CellRenderer.ts:2507-2509`; `CoverImage.ts:68-70`; `CoverImage.test.ts`: 11 tests pass for external schemes and the cover guard.
+- [x] CHK-043 [P1] Auth/authz not applicable [EVIDENCE: src/data/FilesColumn.ts:91-102,157-169]
+  - **Evidence**: `FilesColumn.ts:91-102,157-169` resolves through the metadata cache and opens vault links only.
 
 <!-- /ANCHOR:security -->
 ---
@@ -141,12 +141,12 @@ _memory:
 <!-- ANCHOR:docs -->
 ## Documentation
 
-- [x] CHK-050 [P1] Spec/plan/tasks/checklist synchronized [EVIDENCE: doc review]
-  - **Evidence**: Verified (Sonnet 5 read-only PASS review; commit range `b97ee1e..f84a193`, `tsc0/build0/vitest 194/19 green`) — all four describe the same module, three call sites, companions, cover guard at call sites, `startEdit` branch, and vault-local constraint, matching `research/synthesis.md` and `research/final-plan.md`.
-- [x] CHK-051 [P1] Comments carry durable WHY [EVIDENCE: comment hygiene gate]
-  - **Evidence**: Verified (Sonnet 5 read-only PASS review; commit range `b97ee1e..f84a193`, `tsc0/build0/vitest 194/19 green`) — no phase ids, spec paths, or task ids inside code comments.
-- [x] CHK-052 [P2] README updated (if applicable) [EVIDENCE: fork README]
-  - **Evidence**: Verified (Sonnet 5 read-only PASS review; commit range `b97ee1e..f84a193`, `tsc0/build0/vitest 194/19 green`) — only if the column type list is documented there.
+- [x] CHK-050 [P1] Spec/plan/tasks/checklist synchronized [EVIDENCE: `rg -n "FilesColumn|columnType.files|CoverWiring"`; src/data/FilesColumn.ts:47-181; src/views/GalleryRenderer.ts:447-473]
+  - **Evidence**: `rg -n "FilesColumn|columnType.files|CoverWiring"` shows matching implementation references; `src/data/FilesColumn.ts:47-181`; `src/views/CellRenderer.ts:228-230,529-531,2509`; `src/views/GalleryRenderer.ts:447-473`; `src/views/BoardRenderer.ts:666-696`.
+- [x] CHK-051 [P1] Comments carry durable WHY [EVIDENCE: src/data/FilesColumn.ts:5-7,22-24,40-45,73-77,88-93]
+  - **Evidence**: Durable rationale comments are present at `src/data/FilesColumn.ts:5-7,22-24,40-45,73-77,88-93`.
+- [x] CHK-052 [P2] README updated (if applicable) [EVIDENCE: README: no applicable column-type list]
+  - **Evidence**: README contains no column-type list requiring this addition.
 
 <!-- /ANCHOR:docs -->
 ---
@@ -154,10 +154,10 @@ _memory:
 <!-- ANCHOR:file-org -->
 ## File Organization
 
-- [x] CHK-060 [P1] Temp files in scratch/ only [EVIDENCE: file inventory]
-  - **Evidence**: Verified (Sonnet 5 read-only PASS review; commit range `b97ee1e..f84a193`, `tsc0/build0/vitest 194/19 green`) — no scratch residue outside the fork's scratch location.
-- [x] CHK-061 [P1] scratch/ cleaned before completion [EVIDENCE: no scratch dir]
-  - **Evidence**: Verified (Sonnet 5 read-only PASS review; commit range `b97ee1e..f84a193`, `tsc0/build0/vitest 194/19 green`) — final inventory shows only committed files.
+- [x] CHK-060 [P1] Temp files in scratch/ only [EVIDENCE: `rg --files -g 'scratch/**' -g '*.tmp' -g '*.temp' -g '*~' .`: 0 matches]
+  - **Evidence**: `rg --files -g 'scratch/**' -g '*.tmp' -g '*.temp' -g '*~' .`: 0 matches.
+- [x] CHK-061 [P1] scratch/ cleaned before completion [EVIDENCE: `rg --files -g 'scratch/**' -g '*.tmp' -g '*.temp' -g '*~' .`: 0 matches]
+  - **Evidence**: `rg --files -g 'scratch/**' -g '*.tmp' -g '*.temp' -g '*~' .`: 0 matches.
 
 <!-- /ANCHOR:file-org -->
 ---
@@ -165,13 +165,14 @@ _memory:
 <!-- ANCHOR:summary -->
 ## Verification Summary
 
-| Category | Total | Verified |
-|----------|-------|----------|
-| P0 Items | 9 | 9/9 |
-| P1 Items | 19 | 19/19 |
-| P2 Items | 3 | 3/3 |
+| Category | Total | Checked | Deferred |
+|----------|-------|---------|----------|
+| P0 Items | 9 | 7/9 | 2 |
+| P1 Items | 19 | 14/19 | 5 |
+| P2 Items | 3 | 2/3 | 1 |
+| **Total** | **31** | **23/31** | **8** |
 
-**Verification Date**: 2026-08-26 (Sonnet 5 read-only PASS review); docs reconciled 2026-08-27.
-**Verified By**: Claude Sonnet 5 (read-only, hunter/skeptic/referee adversarial self-check); commits `b97ee1e..f84a193`; gate `tsc0/build0/vitest 194/19 green`. Note: the cover-guard regression test (CHK-029) landed one day after this review, in `bd8e467`.
+**Verification Date**: 2026-08-27.
+**Verified By**: Source/test reconciliation; `tsc --noEmit` and production build exit 0; full Vitest suite 25 files / 247 tests pass. Runtime and manual checks remain explicitly deferred above.
 
 <!-- /ANCHOR:summary -->

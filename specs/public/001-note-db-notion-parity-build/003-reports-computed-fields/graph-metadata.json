@@ -53,6 +53,7 @@
       "tasks.md",
       "checklist.md",
       "implementation-summary.md",
+      "research/sonnet-verification.md",
       "research/synthesis.md",
       "research/research.md",
       "research/final-plan.md"
@@ -86,6 +87,12 @@
         "name": "implementation-summary.md",
         "kind": "doc",
         "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "sonnet-verification.md",
+        "kind": "doc",
+        "path": "research/sonnet-verification.md",
         "source": "derived"
       },
       {
@@ -125,6 +132,12 @@
         "source": "derived"
       },
       {
+        "name": "In Progress",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
         "name": "Problem Statement The",
         "kind": "proper_noun",
         "path": "spec.md",
@@ -132,12 +145,6 @@
       },
       {
         "name": "Purpose Verdict",
-        "kind": "proper_noun",
-        "path": "spec.md",
-        "source": "derived"
-      },
-      {
-        "name": "Configure Remaining",
         "kind": "proper_noun",
         "path": "spec.md",
         "source": "derived"
@@ -195,17 +202,11 @@
         "kind": "proper_noun",
         "path": "checklist.md",
         "source": "derived"
-      },
-      {
-        "name": "Verification Protocol",
-        "kind": "proper_noun",
-        "path": "checklist.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "The finance Reports view lacks Remaining and Saved as live computed columns",
     "created_at": "2026-08-24T17:58:31.318Z",
-    "last_save_at": "2026-08-25T20:14:57.415Z",
+    "last_save_at": "2026-08-27T12:25:52.514Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -216,13 +217,13 @@
       "implementation-summary.md",
       "research/research.md"
     ],
-    "source_fingerprint": "sha256:d288b03d0bcf622f5f1e771ea19d4e5e8d56e14f8c2f338059d0a46fff39a536",
+    "source_fingerprint": "sha256:09b96000e20f3c282bc965872a92334e6abd6fb43ce3bfc84a04a8db4b2cbc27",
     "source_doc_hashes": {
-      "spec.md": "12ed4d6d3497f4d83f586975bb75de8f3a68d1164828bd30c9badaff32264496",
-      "plan.md": "975fdfafe61ca59a576a8f2a5c3a3a30758db9bedc05216fc34d94887aa5b6b9",
-      "tasks.md": "4bc3a6399e467260cda9f9d73f0c21270664a345a87cc430381a2ac401bece8d",
-      "checklist.md": "d080df0b81c10440e2d5b781086aee2f6374f9dcb1983ed159f75fc3a64c3bec",
-      "implementation-summary.md": "c58c2cfa01e6a8e6294081efb2371a1f8174866c5a1734a21975d4a7ff1b0be9",
+      "spec.md": "ec751ddb9578f8363662b347fe5e82a015cefa3dfd3f0c9e06385e227e7370c8",
+      "plan.md": "672fa99c541a74970ed084f631961932a878aeadf79d90bd2f688fd72d5fe2ad",
+      "tasks.md": "3650b04db0f2aaf5bafc7a3467412f374cac731e0818b3c458a3ae36e063005e",
+      "checklist.md": "3242807a97e34903ebc9f063a4228af3d5bd702f1560c80074507d3d604c2dd6",
+      "implementation-summary.md": "59c40dab5a00645b72915d3a40be82032bbcef46516bb3f32e9136aeb7341609",
       "research/research.md": "8729da9b654dc4ba16bf105550b3bdbc51837d64aa7aa9f2e285c43f010d3b39"
     },
     "last_active_child_id": "obsidian/002-note-db-notion-parity-build/003-reports-computed-fields/003-reports-display-proof",

@@ -37,7 +37,7 @@
       "guard"
     ],
     "importance_tier": "high",
-    "status": "complete",
+    "status": "in_progress",
     "key_files": [
       "spec.md",
       "plan.md",
@@ -82,6 +82,12 @@
         "source": "derived"
       },
       {
+        "name": "In Progress",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
         "name": "Parent Spec",
         "kind": "proper_noun",
         "path": "spec.md",
@@ -95,12 +101,6 @@
       },
       {
         "name": "Problem Statement",
-        "kind": "proper_noun",
-        "path": "spec.md",
-        "source": "derived"
-      },
-      {
-        "name": "Purpose After",
         "kind": "proper_noun",
         "path": "spec.md",
         "source": "derived"
@@ -184,7 +184,7 @@
         "source": "derived"
       },
       {
-        "name": "What Was Built Nothing",
+        "name": "What Was Built Shipped",
         "kind": "proper_noun",
         "path": "implementation-summary.md",
         "source": "derived"
@@ -192,7 +192,7 @@
     ],
     "causal_summary": "`parseCoverImage` sets `external: true` for URLs (`CoverImage.ts:41-44`) and `resolveImageSrc` returns that URL as `src` (`:22-23`)",
     "created_at": "2026-08-25T21:08:52Z",
-    "last_save_at": "2026-08-25T21:17:30.609Z",
+    "last_save_at": "2026-08-27T12:28:04.139Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -201,12 +201,12 @@
       "tasks.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:5134782b32015b49392f69f37378564377df4b9fd90f73e3ce5fc2f6753840f0",
+    "source_fingerprint": "sha256:1c1fdf3ed346cf3a570780b4407e3b73ff31d3a310db0e3fd69514a1a799b096",
     "source_doc_hashes": {
-      "spec.md": "ddefd815fd99020da6ae679b3bdd816db7e5995153f5b56444503cf2fdc53d69",
-      "plan.md": "ba00cfb2f5e5b70353e008a34c9b55283864ac9d93554ece43238d14d6cc34e9",
-      "tasks.md": "c72c61c2a6bed14afdffe459fed0d9df528073403de5f45de291602262f7087b",
-      "implementation-summary.md": "8f1aadbbb0ebf0049b6e60c1f05860268873ed435a0da849029ce904fd212ae7"
+      "spec.md": "878cc3e31cb2ff6ee6e5233310bf80e85a5c3fff9b1d95e4f9e28552d30d35d4",
+      "plan.md": "e97e1108166ad0f7b0f95a93381e46e73be13cfb145558a58e207266bec123bc",
+      "tasks.md": "83925ca1ddc7c2f9629a483ba63b82c5d3bed722a1d386cc42d39887148c74af",
+      "implementation-summary.md": "b8f163d9bd005c9e4d78b44f9a8b0f59788238863753c7e3fa106fe39043ac3c"
     },
     "last_active_child_id": null,
     "last_active_at": null

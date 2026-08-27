@@ -2,11 +2,12 @@
 
 - Date: 2026-08-26
 - Scope: residual items after the build + verification + fix stage on branch `impl`
-- Status of code defects: **already resolved** in the fix stage (see `synthesis.md` §5). No gate failed; the suite is green (tsc 0, build 0, vitest 232/24). This plan therefore covers what REMAINS — documentation, deferred sub-features, test gaps, and un-run proofs.
+- Status of code defects: **already resolved** — the original fix stage (see `synthesis.md` §5) plus a second deep-review round that fixed 3 more (files-column URL-scheme `86eee77`, view-filter prune `86eee77`, CoverImage scheme `0587cd3`). No gate failed at either stage. This plan therefore covers what REMAINS — documentation and deferred sub-features.
 - **Do NOT auto-implement.** Each item is surfaced for the operator to schedule. Rankings are by user-facing/integrity impact.
 
-## R1 — Packet-wide completion-doc reconciliation  [P1, documentation]
+## R1 — Packet-wide completion-doc reconciliation  [P1, documentation] — **DONE**
 
+- **Status:** Resolved. Phases 002–014 `spec.md` Status, `implementation-summary.md`, `checklist.md`, and `graph-metadata.json` reconciled to the shipped state across `fc06153` (doc reconciliation + stale `RelationRollup.ts` citation fix), `35f1888` (graph-metadata `derived.status` backfill), and `dccbf3d` (003 deviation honesty + dependency reconciliation). `fc06153`'s own message records `validate --recursive --strict: exit 0`.
 - **Defect:** every built phase's `spec.md` Status, `implementation-summary.md`, `checklist.md`, and `graph-metadata.json` still read "Planned / 0% / not built," despite shipped, gate-green, Sonnet-verified code. Flagged by all 13 verdicts.
 - **Root cause:** the build's in-loop gate approved code per sub-phase but never wrote completion state back into the packet docs; the metadata is derived from those docs, so it stays "planned."
 - **Proposed fix:** for phases 002–014 (parents + children), mark `checklist.md` items `[x]` with the real gate evidence (commit hash + tsc/vitest result), set each `implementation-summary.md` to the shipped state (module + call sites + tests, which `synthesis.md` §2 already enumerates), flip `spec.md` Status → Complete, then regenerate `graph-metadata.json` via `backfill-graph-metadata.js`.
@@ -26,12 +27,12 @@
 - **Root cause:** proofs are manual matrices; the automated build skipped them, and the Sonnet reviews substituted equivalent evidence (code-path tracing + real tsc/vitest + grep).
 - **Proposed fix:** either run the manual matrices and record them, or formally mark them superseded by the Sonnet verification records. Note: 014's un-run proof is exactly what would have caught the (now-fixed) collapsible-CSS defect — worth actually running for 014.
 
-## R4 — Test coverage gaps  [P2, test]
+## R4 — Test coverage gaps  [P2, test] — **DONE**
 
-- **Defect:** the 014 record-peek module (`TableRecordPeek.ts`) has no tests; DOM view-renderer paths remain manually verified per house convention.
+- **Status:** Resolved. Unit tests for the 014 record-peek module landed in `86eee77` (`src/views/TableRecordPeek.test.ts`, 8 cases covering open/close/state and hidden-field filtering). Other DOM view-renderer paths remain manually verified per house convention (unchanged).
+- **Defect (as filed):** the 014 record-peek module (`TableRecordPeek.ts`) has no tests; DOM view-renderer paths remain manually verified per house convention.
 - **Root cause:** the phase's own tasks never scheduled a test; the repo has no renderer DOM-test convention.
-- **Proposed fix:** add unit tests for the peek module's pure logic (open/close/state, hidden-field filtering). The fix stage already closed the two highest-risk gaps (012 cover-guard, 009 coherence).
-- **Re-gate:** new tests green in the suite.
+- **Fix applied:** unit tests for the peek module's pure logic (open/close/state, hidden-field filtering). The fix stage already closed the two highest-risk gaps (012 cover-guard, 009 coherence).
 
 ## R5 — Cosmetic / low-severity items  [P2/P3]
 
@@ -43,4 +44,4 @@
 ## Not in scope here
 
 - Merging `impl` → `v4`/`main`: an explicit operator ff-merge gate, not a remediation item.
-- The already-fixed code defects (003, 006, 009, 010, 011, 012, 014): see `synthesis.md` §5 for their commits.
+- The already-fixed code defects (003, 006, 009, 010, 011, 012, 014), plus the second-round deep-review fixes (files-column URL-scheme, view-filter prune, CoverImage scheme — `86eee77`/`0587cd3`): see `synthesis.md` §5 for their commits.

@@ -12,10 +12,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "public/001-note-db-notion-parity-build/011-table-multi-group"
-    last_updated_at: "2026-08-27T00:00:00Z"
+    last_updated_at: "2026-08-27T12:25:50Z"
     last_updated_by: "docs-reconciliation"
-    recent_action: "Marked all items verified against shipped commits 8a14675..d9e038c + CSS catch-up 929769d, Sonnet 5 verification"
-    next_safe_action: "None — phase complete"
+    recent_action: "Completion docs reconciled to shipped state; gate green; Sonnet-verified"
+    next_safe_action: "Run deferred render, mobile, and compatibility proofs; resolve lint findings"
     blockers: []
     key_files:
       - "spec.md"
@@ -27,7 +27,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "note-db-parity-scaffold"
       parent_session_id: null
-    completion_pct: 100
+    completion_pct: 74
     open_questions: []
     answered_questions: []
 ---
@@ -53,12 +53,12 @@ _memory:
 <!-- ANCHOR:pre-impl -->
 ## Pre-Implementation
 
-- [x] CHK-001 [P0] Requirements documented in spec.md [EVIDENCE: spec.md]
-  - **Evidence**: `spec.md` documents `groupByFields[]` requirements REQ-001 through REQ-008, NFRs, edge cases, and the locked 1-module + 3-call-site design from `research/synthesis.md`. (Verified — commits `8a14675..d9e038c` match this design.)
-- [x] CHK-002 [P0] Technical approach defined in plan.md [EVIDENCE: plan.md]
-  - **Evidence**: `plan.md` includes summary, architecture (MultiFieldGrouping exports, depth-aware loop, path-qualified collapse keys), phases, testing, dependencies, rollback, and L2 addenda. (Verified — plan followed as-built.)
-- [x] CHK-003 [P1] Dependencies identified and available [EVIDENCE: plan.md dependencies]
-  - **Evidence**: `plan.md` lists the upstream fork, `boardSubgroupField` / `getBoardSubgroups` precedent, `EuroFormat.ts` isolated-diff model, and the research synthesis as dependencies. (Verified — build proceeded without dependency blockers.)
+- [x] CHK-001 [P0] Requirements documented in spec.md [EVIDENCE: src/data/MultiFieldGrouping.ts:30-103; src/data/DataSource.ts:899-902, 1107-1108]
+  - **Evidence**: `src/data/MultiFieldGrouping.ts:30-103; src/data/DataSource.ts:899-902, 1107-1108` implement the documented grouping and persistence contract.
+- [x] CHK-002 [P0] Technical approach defined in plan.md [EVIDENCE: src/data/MultiFieldGrouping.ts:30-102; src/views/TableRenderer.ts:88-190]
+  - **Evidence**: `src/data/MultiFieldGrouping.ts:30-102; src/views/TableRenderer.ts:88-190` show field resolution, recursive flattening, and depth-aware rendering.
+- [x] CHK-003 [P1] Dependencies identified and available [EVIDENCE: src/data/MultiFieldGrouping.ts:8-10; src/views/DatabaseView.ts:9700-9718]
+  - **Evidence**: `src/data/MultiFieldGrouping.ts:8-10; src/views/DatabaseView.ts:9700-9718` show the shared data-layer dependency and live call-site wiring.
 
 <!-- /ANCHOR:pre-impl -->
 ---
@@ -66,16 +66,16 @@ _memory:
 <!-- ANCHOR:code-quality -->
 ## Code Quality
 
-- [x] CHK-010 [P0] Code passes lint/build checks [EVIDENCE: plugin lint/build command]
-  - **Evidence**: `tsc --noEmit` exit 0; `npm run build` exit 0 (re-confirmed at Sonnet review time, commit `d9e038c`, tsc0/build0/vitest green).
-- [x] CHK-011 [P0] No console errors during render matrix [EVIDENCE: dev vault]
-  - **Evidence**: Dev vault console must be free of thrown errors across the render matrix (1/2/3 fields, nulls, empty groups, mixed types, checkbox/date at depth, multi-select fan-out, computed/rollup refusal, empty DB, collapsed parent, filter-before-group). The module's planned `console.warn` for leftover computed/rollup fields (`GroupDisplay.ts:64-69`) is an allowed warning, not a failure — fail only on thrown errors. (Verified by code trace — Sonnet 5 review confirms the warning path never throws; `research/sonnet-verification.md`.)
-- [x] CHK-012 [P1] Null/empty-group handling implemented [EVIDENCE: render matrix cases]
-  - **Evidence**: Each level gets `t("common.uncategorized")` (`QueryEngine.ts:279`); hide via `showEmptyGroups[field]` (`GroupVisibility.ts:24-30`); `withEmptyOptionGroups` per level (`GroupVisibility.ts:52-60`); multi-select defaults to hidden empties (`:20`); distinct nodes per depth. (Verified by code trace, `MultiFieldGrouping.ts:31-88`, Sonnet 5 review.)
-- [x] CHK-013 [P1] Code follows the isolated-diff pattern [EVIDENCE: EuroFormat model]
-  - **Evidence**: One new module `src/data/MultiFieldGrouping.ts` (pure functions, no renderer imports, `EuroFormat.ts:1-42` contract) + 3 logical call sites; CSS + Embedded additive. (Verified — Sonnet 5 diff-shape audit: 6 files + 4 new, board/gallery/list/timeline untouched.)
-- [x] CHK-014 [P1] Computed/rollup refusal implemented [EVIDENCE: render matrix]
-  - **Evidence**: Table Sub-group picker candidate filter = board filter plus `!isComputedGroupField` (board candidates exclude `file.name` + primary at `ToolbarRenderer.ts:1462`); module drops leftovers with a console warning (`GroupDisplay.ts:64-69`; create gate `TableRenderer.ts:149-150`); never crashes, never writes. (Verified by code trace, Sonnet 5 review.)
+- [ ] CHK-010 [P0] Code passes lint/build checks [EVIDENCE: DEFERRED -- npm run lint exits 1 with 7 errors]
+  - **Evidence**: DEFERRED — `npm run lint` exits 1 with 7 errors; typecheck and production build pass.
+- [ ] CHK-011 [P0] No console errors during render matrix [EVIDENCE: DEFERRED -- runtime console and render matrix were not exercised]
+  - **Evidence**: DEFERRED — no dev-vault render matrix or runtime console capture was produced.
+- [x] CHK-012 [P1] Null/empty-group handling implemented [EVIDENCE: src/data/MultiFieldGrouping.ts:61-82; src/data/GroupVisibility.ts:24-59]
+  - **Evidence**: `src/data/MultiFieldGrouping.ts:61-82; src/data/GroupVisibility.ts:24-59` implement recursive grouping, empty-group visibility, and per-level empty options.
+- [x] CHK-013 [P1] Code follows the isolated-diff pattern [EVIDENCE: src/data/MultiFieldGrouping.ts:1-10; src/views/DatabaseView.ts:6427-6429]
+  - **Evidence**: `src/data/MultiFieldGrouping.ts:1-10; src/views/DatabaseView.ts:6427-6429` show the renderer-free module and narrow table dispatch.
+- [x] CHK-014 [P1] Computed/rollup refusal implemented [EVIDENCE: src/data/MultiFieldGrouping.test.ts:77-93 (3 passed); src/data/TableSubgroupPicker.ts:9-29]
+  - **Evidence**: `src/data/MultiFieldGrouping.test.ts:77-93 (3 passed); src/data/TableSubgroupPicker.ts:9-29` cover computed/rollup removal and candidate filtering.
 
 <!-- /ANCHOR:code-quality -->
 ---
@@ -83,18 +83,18 @@ _memory:
 <!-- ANCHOR:testing -->
 ## Testing
 
-- [x] CHK-020 [P0] All acceptance criteria met [EVIDENCE: REQ-001 through REQ-008]
-  - **Evidence**: `spec.md` REQ-001 through REQ-008 pass; REQ-003 required a same-day CSS follow-up (`929769d`) after the initial P0 finding — see CHK-023. `tsc0/build0/vitest 181/17 green`, commit `d9e038c`.
-- [x] CHK-021 [P0] Manual render matrix complete [EVIDENCE: dev vault]
-  - **Evidence**: 1/2/3-field configs, nulls, empty groups, mixed types, checkbox/date at depth, multi-select fan-out, computed/rollup refusal, empty DB, collapsed parent, filter-before-group (`DatabaseView.ts:6313` then `:6332`) verified by code trace (Sonnet 5 review); no dedicated dev-vault manual matrix was separately recorded — the Sonnet review's code-path tracing + real `tsc`/`vitest` re-run served as the independent proof for this cycle (see 005-multigroup-display-proof/implementation-summary.md).
-- [x] CHK-022 [P1] Edge cases tested [EVIDENCE: spec.md edge cases]
-  - **Evidence**: Edge cases in `spec.md` §8 covered: legacy 1-field byte-identical, null/missing, empty groups, empty DB, filter-before-group, mixed types, checkbox/date at depth, multi-select fan-out, 3+ fields, computed/rollup, collapsed parent, DnD depth-0 only. (Verified by code trace, Sonnet 5 review.)
-- [x] CHK-023 [P1] Mobile viewport + sticky validated [EVIDENCE: ≤360px check]
-  - **Evidence**: Nested headers verified at ≤360px; no new media queries; no desktop-only APIs; `tableMinWidth` per header (`TableRenderer.ts:112`) keeps horizontal overflow equal to today (SC-004); collapse toggles stay 20×20; **sticky only at depth 0** (depth ≥ 1 not sticky — no stacked `top` offsets). (Verified — the sticky-override + indent CSS landed in the catch-up commit `929769d` after Sonnet's review surfaced it missing from the 5 phase commits; mobile viewport not independently re-measured in this reconciliation pass.)
-- [x] CHK-024 [P1] Persistence round-trip verified [EVIDENCE: dev vault reload]
-  - **Evidence**: Set `groupByFields`, reload, confirm preservation; serialize `undefined` when empty (`DataSource.ts:885, 1088`); no `legacyViewKeys` strip entry. (Verified — `DataSource.test.ts` round-trips + filters non-strings + omits empty, per Sonnet 5 review.)
-- [x] CHK-025 [P1] Embedded-view regression verified [EVIDENCE: dev vault]
-  - **Evidence**: Embedded views render identical nested headers; copy-back `EmbeddedDatabaseRenderer.ts:3353` preserves `groupByFields`. (Verified by code trace, `EmbeddedDatabaseRenderer.ts:1013-1039,3397`, Sonnet 5 review.)
+- [ ] CHK-020 [P0] All acceptance criteria met [EVIDENCE: DEFERRED -- render-matrix and compatibility proofs remain unrun]
+  - **Evidence**: DEFERRED — the render matrix and single-field compatibility proof remain unrun.
+- [ ] CHK-021 [P0] Manual render matrix complete [EVIDENCE: DEFERRED -- manual dev-vault render matrix was never run]
+  - **Evidence**: DEFERRED — no manual dev-vault render matrix was recorded.
+- [ ] CHK-022 [P1] Edge cases tested [EVIDENCE: DEFERRED -- edge-case matrix was not run; source trace is not a test]
+  - **Evidence**: DEFERRED — core unit tests pass, but the full edge-case matrix was not run.
+- [ ] CHK-023 [P1] Mobile viewport + sticky validated [EVIDENCE: DEFERRED -- mobile viewport was not independently rerun or measured]
+  - **Evidence**: DEFERRED — CSS anchors are shipped, but no independent ≤360px measurement was recorded.
+- [x] CHK-024 [P1] Persistence round-trip verified [EVIDENCE: src/data/DataSource.test.ts:80-105; npm test (25 files/247 tests passed)]
+  - **Evidence**: `src/data/DataSource.test.ts:80-105; npm test (25 files/247 tests passed)` verifies filtering, round-trip preservation, and empty-array omission.
+- [x] CHK-025 [P1] Embedded-view regression verified [EVIDENCE: src/views/EmbeddedDatabaseRenderer.ts:1017-1037,3400-3413]
+  - **Evidence**: `src/views/EmbeddedDatabaseRenderer.ts:1017-1037,3400-3413` uses the grouped-table pipeline and copies back `groupByFields`.
 
 <!-- /ANCHOR:testing -->
 ---
@@ -102,14 +102,14 @@ _memory:
 <!-- ANCHOR:fix-completeness -->
 ## Fix Completeness
 
-- [x] CHK-026 [P0] Multi-field grouping implemented [EVIDENCE: fork diff]
-  - **Evidence**: `groupByFields[]` accepted; recursive indented headers render in `TableRenderer.ts`; `MultiFieldGrouping.ts` exports `effectiveGroupFields`, `buildGroupTree`, `flattenGroupTree`, `dropComputedGroupFields`; `TableGroup` carries `depth?`, `path?`, `field?`, `collapseKey?`, `children?`. (Verified — shipped in commits `8a14675..d9e038c`; commit hash for the module: `8a14675`.)
-- [x] CHK-027 [P0] Single-field backward compatibility + patch behavior [EVIDENCE: before/after render]
-  - **Evidence**: `groupByFields` absent ⇒ `effectiveGroupFields = [groupByField]`; flatten depth 0; collapse keys unchanged; before/after render byte-identical; 1-field external patch still succeeds; 2-field patch falls back to full render (safety valve). (Verified by code trace, Sonnet 5 review: collapsed-subtree skip traced across collapse-at-0/1/sibling scenarios.)
-- [x] CHK-028 [P1] Path-qualified collapse keys + namespace separation [EVIDENCE: render matrix]
-  - **Evidence**: Collapse key = `path.join("::")` under `groupByFields[0]` (depth 0 ⇒ `collapseKey === key`); collapsed parent hides subtree (skip while `depth > collapsedDepth`); `collapsedGroups` (`types.ts:368`) unchanged; collapse key, leaf value, and create defaults are three distinct fields — a new row in `Cat / Type` gets `Category = <cat>` and `Type = <type>`, not `Category = "Cat::Type"`. (Verified — `TableRenderer.ts:225-236` `getGroupPath` + `:238-246` `getGroupDefaults`, Sonnet 5 review confirmed no conflation.)
-- [x] CHK-029 [P1] Diff-shape audit [EVIDENCE: git diff --stat]
-  - **Evidence**: One new `src/data/MultiFieldGrouping.ts` module + 3 logical call sites (DatabaseView, TableRenderer, settings types.ts+DataSource.ts); CSS + Embedded additive; no `ViewStateStore`; nested DnD out. (Verified — Sonnet 5 diff-shape audit against `8a14675^..d9e038c`.)
+- [x] CHK-026 [P0] Multi-field grouping implemented [EVIDENCE: src/data/MultiFieldGrouping.ts:30-103]
+  - **Evidence**: `src/data/MultiFieldGrouping.ts:30-103` exports field resolution, tree construction, flattening, and computed-field filtering for nested table grouping.
+- [ ] CHK-027 [P0] Single-field backward compatibility + patch behavior [EVIDENCE: DEFERRED -- renderer DOM and before/after patch proof were not produced]
+  - **Evidence**: DEFERRED — no renderer DOM or before/after patch proof was produced.
+- [x] CHK-028 [P1] Path-qualified collapse keys + namespace separation [EVIDENCE: src/data/MultiFieldGrouping.ts:85-102; src/views/TableRenderer.ts:121-190,806-829]
+  - **Evidence**: `src/data/MultiFieldGrouping.ts:85-102; src/views/TableRenderer.ts:121-190,806-829` preserve path-qualified collapse keys and separate leaf values from create defaults.
+- [x] CHK-029 [P1] Diff-shape audit [EVIDENCE: src/data/MultiFieldGrouping.ts:1-10; src/views/DatabaseView.ts:6427-6429; styles.css:6199-6207]
+  - **Evidence**: `src/data/MultiFieldGrouping.ts:1-10; src/views/DatabaseView.ts:6427-6429; styles.css:6199-6207` show the isolated module, narrow table dispatch, and additive nested-header styling.
 
 <!-- /ANCHOR:fix-completeness -->
 ---
@@ -117,14 +117,14 @@ _memory:
 <!-- ANCHOR:security -->
 ## Security
 
-- [x] CHK-030 [P0] No hardcoded secrets [EVIDENCE: diff audit]
-  - **Evidence**: Sonnet 5 safety review found no credential-shaped values in the diff.
-- [x] CHK-031 [P0] No network/telemetry [EVIDENCE: diff audit]
-  - **Evidence**: No network calls or telemetry in the change (REQ-008); confirmed by Sonnet 5 review (`MultiFieldGrouping.ts`/`MultiGroupDisplay.ts` pure, no fetch/renderer imports).
-- [x] CHK-032 [P0] Display-only / iCloud-safe (no new write paths) [EVIDENCE: diff + render audit]
-  - **Evidence**: `groupBy` is pure (`QueryEngine.ts:132-152`); the new module writes nothing; collapse/expand only `scheduleConfigSave` view definition (`DatabaseView.ts:9850-9856`), serialized per-file; no note-body / frontmatter row writes; nested DnD deferred so no new write path (REQ-007 / NFR-R01); grep the new module for vault writes / `fetch`. (Verified — Sonnet 5 review: `MultiFieldGrouping.ts`/`MultiGroupDisplay.ts` pure, no renderer imports/fetch/writes; `setupGroupDropTarget` + row-move gated to `depth===0` everywhere.)
-- [x] CHK-033 [P1] Nested DnD deferred [EVIDENCE: diff audit]
-  - **Evidence**: `setupGroupDropTarget` called only at depth 0 using the plain leaf `key` (not `collapseKey`); nested groups have no drop target so regrouping cannot `updateBoardGroup` two fields. (Verified — Sonnet 5 review confirmed `depth===0` gating throughout.)
+- [x] CHK-030 [P0] No hardcoded secrets [EVIDENCE: `src/data/MultiFieldGrouping.ts:1-103`; `rg -n -i 'secret|password|api[_-]?key|credential|access[_-]?token' src/data/MultiFieldGrouping.ts` (no matches)]
+  - **Evidence**: `rg -n -i 'secret|password|api[_-]?key|credential|access[_-]?token' src/data/MultiFieldGrouping.ts` returned no matches; `src/data/MultiFieldGrouping.ts:1-103` is pure grouping logic.
+- [x] CHK-031 [P0] No network/telemetry [EVIDENCE: src/data/MultiFieldGrouping.ts:1-103; src/data/MultiGroupDisplay.ts:1-36]
+  - **Evidence**: `src/data/MultiFieldGrouping.ts:1-103; src/data/MultiGroupDisplay.ts:1-36` contain no fetch, network, or telemetry path.
+- [x] CHK-032 [P0] Display-only / iCloud-safe (no new write paths) [EVIDENCE: src/data/MultiFieldGrouping.ts:61-103; src/views/TableRenderer.ts:151-190]
+  - **Evidence**: `src/data/MultiFieldGrouping.ts:61-103; src/views/TableRenderer.ts:151-190` only build/display groups; row writes are gated to depth zero.
+- [x] CHK-033 [P1] Nested DnD deferred [EVIDENCE: src/views/TableRenderer.ts:112-131,157-181]
+  - **Evidence**: `src/views/TableRenderer.ts:112-131,157-181` installs group drop targets and row-move groups only at depth zero.
 
 <!-- /ANCHOR:security -->
 ---
@@ -132,12 +132,12 @@ _memory:
 <!-- ANCHOR:docs -->
 ## Documentation
 
-- [x] CHK-040 [P1] Spec/plan/tasks synchronized [EVIDENCE: phase 011 files]
-  - **Evidence**: `spec.md`, `plan.md`, and `tasks.md` all describe `groupByFields[]`, the `MultiFieldGrouping.ts` module, recursive indented headers, the table-gated toolbar Sub-group picker (not a ViewConfigPanel section), and the 1-module + 3-call-site diff shape. (Verified — this reconciliation pass confirmed spec.md/implementation-summary.md/checklist.md consistency against the shipped commits.)
-- [x] CHK-041 [P1] Code comments carry durable WHY only [EVIDENCE: diff review]
-  - **Evidence**: No spec paths, phase numbers, or requirement IDs inside code comments (Sonnet 5 review raised no comment-hygiene findings).
-- [x] CHK-042 [P2] README updated (if applicable)
-  - **Evidence**: Not applicable for a display-only view setting change.
+- [x] CHK-040 [P1] Spec/plan/tasks synchronized [EVIDENCE: src/data/MultiFieldGrouping.ts:30-103; src/views/DatabaseView.ts:6427-6432, 9700-9718]
+  - **Evidence**: `src/data/MultiFieldGrouping.ts:30-103; src/views/DatabaseView.ts:6427-6432, 9700-9718` match the documented field-resolution, recursive-grouping, and table-dispatch contract.
+- [x] CHK-041 [P1] Code comments carry durable WHY only [EVIDENCE: src/data/MultiFieldGrouping.ts:1-6; src/data/MultiGroupDisplay.ts:1-7]
+  - **Evidence**: `src/data/MultiFieldGrouping.ts:1-6; src/data/MultiGroupDisplay.ts:1-7` contain durable rationale comments without prohibited identifiers.
+- [x] CHK-042 [P2] README updated (if applicable) [EVIDENCE: shipped: src/data/MultiFieldGrouping.ts; README update not applicable]
+  - **Evidence**: `shipped: src/data/MultiFieldGrouping.ts`; README update is not applicable to this display-only setting.
 
 <!-- /ANCHOR:docs -->
 ---
@@ -145,10 +145,10 @@ _memory:
 <!-- ANCHOR:file-org -->
 ## File Organization
 
-- [x] CHK-050 [P1] Temp files in scratch/ only [EVIDENCE: no temp files]
-  - **Evidence**: No task-created residue outside the fork diff and this phase folder; `scratch/` contains only `.gitkeep`.
-- [x] CHK-051 [P1] scratch/ cleaned before completion [EVIDENCE: no scratch dir]
-  - **Evidence**: `scratch/` holds only `.gitkeep`, no task residue.
+- [x] CHK-050 [P1] Temp files in scratch/ only [EVIDENCE: `if [ -d scratch ]; then ls -la scratch; else echo 'scratch absent'; fi` (scratch absent)]
+  - **Evidence**: `if [ -d scratch ]; then ls -la scratch; else echo 'scratch absent'; fi` reported `scratch absent`.
+- [x] CHK-051 [P1] scratch/ cleaned before completion [EVIDENCE: `if [ -d scratch ]; then ls -la scratch; else echo 'scratch absent'; fi` (scratch absent)]
+  - **Evidence**: `if [ -d scratch ]; then ls -la scratch; else echo 'scratch absent'; fi` reported `scratch absent`.
 
 <!-- /ANCHOR:file-org -->
 ---
@@ -156,13 +156,14 @@ _memory:
 <!-- ANCHOR:summary -->
 ## Verification Summary
 
-| Category | Total | Verified |
-|----------|-------|----------|
-| P0 Items | 9 | 9/9 |
-| P1 Items | 11 | 11/11 |
-| P2 Items | 1 | 1/1 |
+| Category | Total | Verified | Deferred |
+|----------|-------|----------|----------|
+| P0 Items | 11 | 6/11 | 5 |
+| P1 Items | 15 | 13/15 | 2 |
+| P2 Items | 1 | 1/1 | 0 |
+| All Items | 27 | 20/27 | 7 |
 
-**Verification Date**: 2026-08-26 (Sonnet 5 read-only review); docs reconciled 2026-08-27.
-**Verified By**: Claude Sonnet 5 (read-only, isolated `git worktree` @ `d9e038c`); commits `8a14675..d9e038c` + CSS catch-up `929769d`; gate `tsc0/build0/vitest 181/17 green`.
+**Verification Date**: 2026-08-27 (source/test reconciliation; manual, mobile, and compatibility checks left deferred).
+**Verified By**: `npx tsc --noEmit` exit 0; `npm run build` exit 0; `npm test` 25 files/247 tests passed; `npm run lint` exit 1 with 7 errors.
 
 <!-- /ANCHOR:summary -->
