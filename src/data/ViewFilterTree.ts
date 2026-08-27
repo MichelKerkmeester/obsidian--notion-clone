@@ -133,24 +133,44 @@ export function normalizeViewFilterTree(value: unknown): SourceRuleNode | undefi
   return normalizeNode(value, new WeakSet<object>());
 }
 
-export function pruneViewFilterTree(
+function pruneNode(
   tree: SourceRuleNode | null | undefined,
-  effective: (rule: ViewFilterLeaf) => boolean = isEffectiveFilterRule,
+  effective: (rule: ViewFilterLeaf) => boolean,
 ): SourceRuleNode | undefined {
   if (!tree) return undefined;
   if (isLeaf(tree)) return effective(tree) ? tree : undefined;
   if (isExpression(tree)) return { type: "expression", expression: tree.expression };
   if (isNot(tree)) {
-    const rule = pruneViewFilterTree(tree.rule, effective);
+    const rule = pruneNode(tree.rule, effective);
     return rule ? { type: "not", rule } : undefined;
   }
   if (isGroup(tree)) {
     const rules = tree.rules
-      .map((rule) => pruneViewFilterTree(rule, effective))
+      .map((rule) => pruneNode(rule, effective))
       .filter((rule): rule is SourceRuleNode => rule !== undefined);
     return { type: "group", logic: tree.logic, rules };
   }
   return undefined;
+}
+
+/**
+ * Prune dead leaves out of a filter tree.
+ *
+ * A nested group that loses every rule is deliberately left in place as an
+ * explicit empty group rather than spliced out of its parent: it evaluates
+ * to the same Kleene `null`/skip as a missing branch, and removing it would
+ * let a sibling AND/OR resolve past it instead of staying unknown (see the
+ * "skips an empty branch" evaluation test). Only the outermost result
+ * collapses an empty group to `undefined` — evaluateViewFilterTree already
+ * treats an empty group and `undefined` identically, so this only clears the
+ * "no active filter" case instead of leaving a stray root node behind.
+ */
+export function pruneViewFilterTree(
+  tree: SourceRuleNode | null | undefined,
+  effective: (rule: ViewFilterLeaf) => boolean = isEffectiveFilterRule,
+): SourceRuleNode | undefined {
+  const pruned = pruneNode(tree, effective);
+  return pruned && isGroup(pruned) && pruned.rules.length === 0 ? undefined : pruned;
 }
 
 export function evaluateViewFilterTree(

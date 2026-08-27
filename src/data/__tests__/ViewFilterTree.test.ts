@@ -113,6 +113,52 @@ describe("view filter tree evaluation", () => {
   });
 });
 
+describe("pruneViewFilterTree collapses a fully-dead root but not a nested one", () => {
+  it("collapses a root group whose leaves all die to a clean undefined result", () => {
+    const tree: SourceRuleNode = {
+      type: "group",
+      logic: "and",
+      rules: [leaf("gone-a", "1"), leaf("gone-b", "2")],
+    };
+    const allDead = () => false;
+
+    const pruned = pruneViewFilterTree(tree, allDead);
+
+    expect(pruned).toBeUndefined();
+    expect(flattenLeaves(pruned)).toEqual([]);
+    // An empty group and `undefined` are the same Kleene value everywhere
+    // evaluateViewFilterTree is called, so collapsing the root cannot change
+    // what any caller observes.
+    expect(evaluateViewFilterTree(pruned, () => true)).toBe(
+      evaluateViewFilterTree({ type: "group", logic: "and", rules: [] }, () => true),
+    );
+  });
+
+  it("retains a nested all-dead-leaf group instead of collapsing it, so it keeps skipping rather than passing the AND", () => {
+    const tree: SourceRuleNode = {
+      type: "group",
+      logic: "and",
+      rules: [
+        leaf("keep", "1"),
+        { type: "group", logic: "or", rules: [leaf("gone", "x")] },
+      ],
+    };
+    const survives = (rule: FilterRule) => rule.field !== "gone";
+
+    const pruned = pruneViewFilterTree(tree, survives);
+
+    // Splicing the empty OR branch out here would let a matching "keep" leaf
+    // resolve the whole AND to true, when the doomed branch's outcome is
+    // genuinely unknown rather than vacuously satisfied.
+    expect(pruned).toEqual({
+      type: "group",
+      logic: "and",
+      rules: [leaf("keep", "1"), { type: "group", logic: "or", rules: [] }],
+    });
+    expect(evaluateViewFilterTree(pruned, matcher(new Set(["keep:1"])))).toBe(null);
+  });
+});
+
 // Column rename/delete/chip-delete mutate state.filterTree and the legacy flat state.filters
 // side by side. These tests lock the property that both representations end up describing
 // the same set of leaves after the pure helpers each call site delegates to are applied.

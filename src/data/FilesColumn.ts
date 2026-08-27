@@ -9,7 +9,7 @@
 
 import type { App, TFile } from "obsidian";
 import { isImageTarget as isCoverImageTarget } from "./CoverImage";
-import { isExternalUrl, getLinkLabel } from "./TextLink";
+import { hasUrlScheme, getLinkLabel } from "./TextLink";
 import { stringifyValue } from "./Stringify";
 import type { RowData } from "./types";
 
@@ -184,7 +184,7 @@ function parseFileValue(value: unknown): ParsedFileValue | null {
   const raw = getRawFileText(value);
   const text = raw.trim();
   if (!text) return null;
-  if (isExternalUrl(text)) return null;
+  if (hasUrlScheme(text)) return null;
 
   const wikilink = text.match(/^\[\[([\s\S]*?)\]\]$/);
   if (wikilink) {
@@ -196,7 +196,7 @@ function parseFileValue(value: unknown): ParsedFileValue | null {
       : getLinkLabel(target);
 
     if (!target) return malformedFileValue(text);
-    if (isExternalUrl(target)) return null;
+    if (hasUrlScheme(target)) return null;
     return {
       target,
       label,
@@ -210,7 +210,7 @@ function parseFileValue(value: unknown): ParsedFileValue | null {
     const target = markdownLink[2].trim();
     const label = markdownLink[1].trim() || getLinkLabel(target);
     if (!target) return malformedFileValue(text);
-    if (isExternalUrl(target)) return null;
+    if (hasUrlScheme(target)) return null;
     return {
       target,
       label,

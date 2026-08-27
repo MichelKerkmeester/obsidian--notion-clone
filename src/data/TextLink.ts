@@ -33,6 +33,17 @@ export function isExternalUrl(target: string): boolean {
 const URL_SCHEME_RE = /^[a-z][a-z0-9+.-]*:/i;
 const BARE_WEB_URL_RE = /^(?:www\.)?(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z]{2,63}(?::\d{1,5})?(?:[/?#][^\s]*)?$/i;
 
+/**
+ * True for any explicit URI scheme (`http(s):`, `javascript:`, `file:`,
+ * `mailto:`, `data:`, `tel:`, `ftp:`, ...), not just http(s). Callers that
+ * must never treat a scheme-shaped value as a vault-internal target (e.g.
+ * file/link columns storing wikilinks) should reject on this rather than
+ * `isExternalUrl`, which only recognizes http(s).
+ */
+export function hasUrlScheme(target: string): boolean {
+  return URL_SCHEME_RE.test(target);
+}
+
 /** Return a safe http(s) URL, adding https:// for domain-like bare URLs. */
 export function normalizeExternalUrlTarget(target: string): string | null {
   const text = target.trim();

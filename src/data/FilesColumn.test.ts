@@ -97,6 +97,22 @@ describe("FilesColumn value helpers", () => {
     ]);
   });
 
+  it("discards any URL-scheme value instead of promoting it to a file wikilink", () => {
+    expect(normalize([
+      "javascript:alert(1)",
+      "file:///etc/passwd",
+      "mailto:x@y.z",
+      "data:text/html,<script>alert(1)</script>",
+      "[[javascript:alert(1)]]",
+      "[Passwd](file:///etc/passwd)",
+    ])).toEqual([]);
+
+    // Existing internal-wikilink and http(s)-drop behavior stays intact.
+    expect(normalize(["[[Sales.pdf|Sales]]", "https://example.test/Sales.pdf"])).toEqual([
+      "[[Sales.pdf|Sales]]",
+    ]);
+  });
+
   it("deduplicates equivalent targets and preserves malformed text safely", () => {
     expect(normalize([
       "[[Sales.pdf]]",
