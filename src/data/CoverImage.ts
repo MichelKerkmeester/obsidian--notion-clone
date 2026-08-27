@@ -1,6 +1,6 @@
 import { App, TFile } from "obsidian";
 import { ColumnDef, RowData } from "./types";
-import { isExternalUrl } from "./TextLink";
+import { hasUrlScheme } from "./TextLink";
 
 export interface ParsedImage {
   alt: string;
@@ -38,7 +38,10 @@ export function parseCoverImage(value: unknown, row: RowData, app: App): ParsedI
   if (mdImg) { target = mdImg[2]; alt = mdImg[1] || mdImg[2]; }
   else if (wikiImg) { target = wikiImg[1]; alt = wikiImg[2] || wikiImg[1]; }
   if (!isImageTarget(target)) return null;
-  const external = isExternalUrl(target);
+  // Any explicit URI scheme (not just http/https) must be treated as external so a
+  // non-http(s) scheme (javascript:, file:, data:, ...) can never be mistaken for a
+  // vault-internal target and routed through vault resolution.
+  const external = hasUrlScheme(target);
   const src = resolveImageSrc(app, row, target, external);
   if (!src) return null;
   return { alt, label: alt, target, src, external };

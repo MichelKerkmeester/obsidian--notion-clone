@@ -113,4 +113,49 @@ describe("CoverImage safety: external URLs never yield a network src for Files c
     const blocked = !missing || isCoverImageBlocked(missing, "files");
     expect(blocked).toBe(true);
   });
+
+  it("marks a javascript: scheme cover value as external, never touching vault resolution", () => {
+    const app = appWithDestination(null);
+
+    const image = parseCoverImage("javascript:alert(1).png", row(), app);
+
+    expect(image).not.toBeNull();
+    expect(image?.external).toBe(true);
+    expect(image?.target).toBe("javascript:alert(1).png");
+    // Same guarantee as the https:// case: a scheme-typed target resolves to itself
+    // and never reaches vault resolution.
+    expect(app.getFirstLinkpathDest).not.toHaveBeenCalled();
+    expect(app.getResourcePath).not.toHaveBeenCalled();
+  });
+
+  it("marks a data: scheme cover value as external, never touching vault resolution", () => {
+    const app = appWithDestination(null);
+
+    const image = parseCoverImage("data:image/png;base64,AAAA.png", row(), app);
+
+    expect(image).not.toBeNull();
+    expect(image?.external).toBe(true);
+    expect(app.getFirstLinkpathDest).not.toHaveBeenCalled();
+    expect(app.getResourcePath).not.toHaveBeenCalled();
+  });
+
+  it("blocks a non-http(s) scheme cover image from a Files column same as an https URL", () => {
+    const app = appWithDestination(null);
+    const image = parseCoverImage("javascript:alert(1).png", row(), app);
+    if (!image) throw new Error("expected the scheme-typed image to parse as external");
+
+    expect(isCoverImageBlocked(image, "files")).toBe(true);
+    expect(isCoverImageBlocked(image, "text")).toBe(false);
+  });
+
+  it("still resolves an internal wikilink cover to a real local src after the scheme-detection fix", () => {
+    const destination = makeVaultFile("Attachments/cover.png");
+    const app = appWithDestination(destination);
+
+    const image = parseCoverImage("[[cover.png]]", row(), app);
+
+    expect(image).not.toBeNull();
+    expect(image?.external).toBe(false);
+    expect(image?.src).toBe("app://local-resource/cover.png");
+  });
 });
