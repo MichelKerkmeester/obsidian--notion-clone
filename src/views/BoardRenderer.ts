@@ -1,28 +1,20 @@
 import { App, Menu, setIcon, setTooltip } from "obsidian";
-import { isObsidianTagsKey, resolveOptionDisplay, toBooleanValue, toMultiSelectValuesForKey } from "../data/ColumnTypes";
+import { isObsidianTagsKey, toMultiSelectValuesForKey } from "../data/ColumnTypes";
 import { OPTION_REGISTRATION_COLORS } from "../data/OptionRegistration";
 import { isExplicitlySorted } from "../data/ManualOrder";
-import { getColumnDisplayType, getNumberDisplayStyle } from "../data/ColumnDisplay";
-import { formatDateTimeValueDisplay, formatDateValueDisplay } from "../data/DateTimeFormat";
-import { getFileFieldFixedType, getRowFileFieldValue, isFileFieldKey, isReadonlyFileField } from "../data/FileFields";
+import { getColumnDisplayType } from "../data/ColumnDisplay";
+import { getFileFieldFixedType, getRowFileFieldValue, isFileFieldKey } from "../data/FileFields";
 import { isCoverImageBlocked, resolveCoverImage } from "../data/CoverImage";
 import { markCoverImageLoadError } from "../data/CoverWiring";
 import { formatGroupKeyDisplay, isComputedGroupField } from "../data/GroupDisplay";
 import { renderGroupLabel } from "./GroupLabelRenderer";
 import { markNoteHoverLink } from "./HoverLinkPreview";
-import { parseTextLink } from "../data/TextLink";
-import { assembleSchemeLinkTarget, isTextLinkScheme } from "../data/textLinkScheme";
-import { parseInlineMarkdown } from "../data/InlineMarkdown";
 import { ColumnDef, CreateEntryPosition, NO_TITLE_FIELD, RowCreateContext, RowData, StatusColor, ViewConfig } from "../data/types";
 import { t } from "../i18n";
 import { isHTMLElement } from "./DomGuards";
 import { setFieldTooltip } from "./FieldTooltip";
 import { getFileTitleDisplay, renderStackedFileTitle } from "./FileTitleDisplay";
 import { renderMobileMoveIcon } from "./MobileMoveIcon";
-import { renderSpecialFileFieldValue, shouldRenderSpecialFileField } from "./FileFieldRenderer";
-import { renderRating, renderProgress, renderProgressRing } from "./NumberDisplayRenderer";
-import { renderRelationValue } from "./RelationValueRenderer";
-import { renderInlineMarkdown, resolveInlineImageSrc, valueToTooltip } from "./InlineMarkdownRenderer";
 import { clampCardFieldWidth, getFieldWidth } from "./ColumnWidth";
 import { renderGroupExpandControls } from "./GroupExpandControls";
 import { getGroupVisibleCount } from "../data/GroupVisibility";
@@ -30,12 +22,12 @@ import { isSameBoardGroup, resolveBoardCardDropIntent, resolveBoardColumnByPoint
 import { resolveTitleFieldDisplay } from "../data/TitleFieldDisplay";
 import { isImeComposing } from "../data/KeyboardUtils";
 import { openOptionColorPicker } from "./OptionColorPicker";
-import { renderDelayedExternalLink } from "./CellRenderer";
 import { EmptyStateOptions, EmptyStateRenderer } from "./EmptyStateRenderer";
-import { renderCardField, renderCardFieldValue } from "./CardFieldRenderer";
+import { renderCardField } from "./CardFieldRenderer";
 import { EdgeAutoScroller } from "./EdgeAutoScroller";
 import { DragDropFeedbackState, resolveDropPlacement } from "./DragDropFeedback";
 import { attachLongPress, isTouchDevice } from "../data/TouchEnvironment";
+import { CardRovingController, syncCardRoving, wireCardKeyboard } from "./CardRovingTabindex";
 
 const CARD_MIME = "application/x-note-database-card";
 const CARD_FROM_GROUP_MIME = "application/x-note-database-card-from-group";
@@ -126,6 +118,7 @@ export class BoardRenderer {
   private boardDragLabelByKey = new Map<string, string>();
   private boundBoardDragOver?: (event: DragEvent) => void;
   private emptyStateRenderer = new EmptyStateRenderer();
+  private rovingController = new CardRovingController();
 
   constructor(private app: App, private actions: BoardRendererActions) {}
 
@@ -137,7 +130,7 @@ export class BoardRenderer {
     this.rowByPath = new Map(groups.flatMap((group) => group.rows.map((row) => [row.file.path, row] as const)));
     const hiddenGroups = new Set(config.boardHiddenGroups?.[groupField] || []);
     groups = groups.filter((group) => !hiddenGroups.has(group.key));
-    const board = container.createDiv({ cls: "db-board" });
+    const board = container.createDiv({ cls: "db-board", attr: { role: "grid" } });
     // 缓存当前看板与分组元数据，供拖拽期间实时列命中（方案 A/B）复用。
     this.boardEl = board;
     this.boardGroups = groups;
@@ -147,10 +140,11 @@ export class BoardRenderer {
       : undefined;
     board.style.setProperty("--db-board-column-width", `${this.getBoardColumnWidth(config)}px`);
     this.attachBoardContainerDropHandlers(board, groupField);
+    const emptyStateTracker = { actionsRendered: false };
     if (this.boardSubgroupField && groups.some((group) => (group.subgroups?.length || 0) > 0)) {
-      this.renderSwimlaneBoard(board, config, groups, groupField, this.boardSubgroupField, emptyState);
+      this.renderSwimlaneBoard(board, config, groups, groupField, this.boardSubgroupField, emptyState, emptyStateTracker);
     } else {
-      for (const group of groups) this.renderColumn(board, config, groups, group, groupField, emptyState);
+      for (const group of groups) this.renderColumn(board, config, groups, group, groupField, emptyState, emptyStateTracker);
       this.renderBoardPagination(board);
     }
     if (groups.length === 0) {
@@ -165,6 +159,37 @@ export class BoardRenderer {
     ) {
       this.renderAddGroupControl(board, config, groupField);
     }
+    const cardEls = Array.from(board.querySelectorAll<HTMLElement>(".db-board-card"));
+    let columnIndices: number[][] | undefined;
+    const swimlaneEl = board.querySelector<HTMLElement>(":scope > .db-board-swimlane-board");
+    if (swimlaneEl) {
+      const lanes = Array.from(swimlaneEl.querySelectorAll<HTMLElement>(":scope > .db-board-swimlane"));
+      const groupCount = Math.max(1, groups.length);
+      const columnCardLists: HTMLElement[][] = Array.from({ length: groupCount }, () => []);
+      for (const lane of lanes) {
+        const cells = Array.from(lane.querySelectorAll<HTMLElement>(":scope > .db-board-swimlane-columns > .db-board-swimlane-column"));
+        cells.forEach((cell, gIdx) => {
+          const cards = Array.from(cell.querySelectorAll<HTMLElement>(".db-board-card"));
+          if (columnCardLists[gIdx]) {
+            columnCardLists[gIdx].push(...cards);
+          }
+        });
+      }
+      const derived = columnCardLists
+        .map((colCards) => colCards.map((c) => cardEls.indexOf(c)).filter((i) => i >= 0))
+        .filter((col) => col.length > 0);
+      if (derived.length > 0) columnIndices = derived;
+    } else {
+      const columnEls = Array.from(board.querySelectorAll<HTMLElement>(":scope > .db-board-column"));
+      const derived = columnEls
+        .map((colEl) => {
+          const colCards = Array.from(colEl.querySelectorAll<HTMLElement>(".db-board-card"));
+          return colCards.map((c) => cardEls.indexOf(c)).filter((i) => i >= 0);
+        })
+        .filter((col) => col.length > 0);
+      if (derived.length > 0) columnIndices = derived;
+    }
+    syncCardRoving(board, this.rovingController, ".db-board-card", columnIndices);
   }
 
   private canCreateGroup(config: ViewConfig, groupField: string): boolean {
@@ -205,6 +230,7 @@ export class BoardRenderer {
     groupField: string,
     subgroupField: string,
     emptyState?: EmptyStateOptions,
+    emptyStateTracker?: { actionsRendered: boolean },
   ): void {
     const shell = board.createDiv({ cls: "db-board-swimlane-board" });
     shell.style.setProperty("--db-board-swimlane-column-count", String(Math.max(1, groups.length)));
@@ -219,7 +245,10 @@ export class BoardRenderer {
       toggle.createSpan({ cls: "db-collapse-triangle" });
       toggle.onclick = (event) => { event.preventDefault(); event.stopPropagation(); this.actions.toggleGroupCollapsed?.(groupField, group.key); };
       if (!this.actions.isReadOnly) {
-        const checkbox = header.createEl("input", { cls: "db-board-column-checkbox", attr: { type: "checkbox" } });
+        const checkbox = header.createEl("input", {
+          cls: "db-board-column-checkbox",
+          attr: { type: "checkbox", "aria-label": group.key || t("common.noGroup") },
+        });
         checkbox.checked = this.actions.areAllRowsSelected(group.rows);
         checkbox.indeterminate = group.rows.some((row) => this.actions.isRowSelected(row)) && !checkbox.checked;
         checkbox.onclick = (event) => event.stopPropagation();
@@ -250,16 +279,29 @@ export class BoardRenderer {
         const cell = cells.createDiv({ cls: "db-board-swimlane-column" });
         const collapsed = Boolean(this.actions.isGroupCollapsed?.(groupField, group.key)) || Boolean(this.actions.isGroupCollapsed?.(subgroupField, laneKey));
         cell.toggleClass("is-collapsed", collapsed);
-        if (collapsed || !subgroup) continue;
-        const cards = this.createCardsContainer(cell, config, group, groupField, subgroupField, subgroup);
-        const visibleCount = getGroupVisibleCount(config, subgroupField, subgroup.key, subgroup.rows.length);
-        for (const row of subgroup.rows.slice(0, visibleCount)) this.renderCard(cards, config, groups, group, row, groupField, subgroupField, subgroup.key, subgroup.rows);
-        renderGroupExpandControls(cards, config, subgroupField, subgroup.key, subgroup.rows.length, this.actions);
+        if (collapsed) continue;
+        const currentSubgroup = subgroup || { key: laneKey, rows: [], count: 0 };
+        const cards = this.createCardsContainer(cell, config, group, groupField, subgroupField, currentSubgroup);
+        const visibleCount = getGroupVisibleCount(config, subgroupField, currentSubgroup.key, currentSubgroup.rows.length);
+        if (visibleCount === 0) {
+          const groupEmptyOptions: EmptyStateOptions = emptyState
+            ? (emptyStateTracker?.actionsRendered && emptyState.actions
+              ? { ...emptyState, actions: undefined }
+              : emptyState)
+            : { reason: "empty-group" };
+          if (groupEmptyOptions.actions && groupEmptyOptions.actions.length > 0 && emptyStateTracker) {
+            emptyStateTracker.actionsRendered = true;
+          }
+          const empty = this.emptyStateRenderer.renderCard(cards, groupEmptyOptions);
+          empty.addClass("db-board-empty-slot");
+        }
+        for (const row of currentSubgroup.rows.slice(0, visibleCount)) this.renderCard(cards, config, groups, group, row, groupField, subgroupField, currentSubgroup.key, currentSubgroup.rows);
+        renderGroupExpandControls(cards, config, subgroupField, currentSubgroup.key, currentSubgroup.rows.length, this.actions);
         if (!this.actions.isReadOnly && !this.actions.hideCreateEntry) {
           if (isComputedGroupField(config, groupField) || isComputedGroupField(config, subgroupField)) {
             cards.createEl("button", { cls: "db-board-new-card is-disabled", text: t("group.computedCreateDisabled"), attr: { type: "button", disabled: "true" } });
           } else {
-            cards.createEl("button", { cls: "db-board-new-card", text: `+ ${t("toolbar.new")}`, attr: { type: "button" } }).onclick = () => this.createEntryNearEnd({ [groupField]: group.key || "", [subgroupField]: laneKey }, subgroup.rows);
+            cards.createEl("button", { cls: "db-board-new-card", text: `+ ${t("toolbar.new")}`, attr: { type: "button" } }).onclick = () => this.createEntryNearEnd({ [groupField]: group.key || "", [subgroupField]: laneKey }, currentSubgroup.rows);
           }
         }
       }
@@ -369,6 +411,7 @@ export class BoardRenderer {
     group: BoardGroup,
     groupField: string,
     emptyState?: EmptyStateOptions,
+    emptyStateTracker?: { actionsRendered: boolean },
   ): void {
     const column = board.createDiv({ cls: "db-board-column" });
     column.setAttr("id", this.getGroupSectionId(groupField, group.key));
@@ -454,7 +497,10 @@ export class BoardRenderer {
       this.actions.toggleGroupCollapsed?.(groupField, group.key);
     };
     if (!this.actions.isReadOnly) {
-      const checkbox = header.createEl("input", { cls: "db-board-column-checkbox", attr: { type: "checkbox" } });
+      const checkbox = header.createEl("input", {
+        cls: "db-board-column-checkbox",
+        attr: { type: "checkbox", "aria-label": group.key || t("common.noGroup") },
+      });
       checkbox.checked = this.actions.areAllRowsSelected(group.rows);
       checkbox.indeterminate = group.rows.some((row) => this.actions.isRowSelected(row)) && !checkbox.checked;
       checkbox.onclick = (event) => event.stopPropagation();
@@ -477,7 +523,7 @@ export class BoardRenderer {
     if (subgroupField && group.subgroups?.length) {
       const subgroups = column.createDiv({ cls: "db-board-subgroups" });
       for (const subgroup of group.subgroups) {
-        this.renderSubgroup(subgroups, config, groups, group, subgroup, groupField, subgroupField, emptyState);
+        this.renderSubgroup(subgroups, config, groups, group, subgroup, groupField, subgroupField, emptyState, emptyStateTracker);
       }
       return;
     }
@@ -485,7 +531,15 @@ export class BoardRenderer {
     const cards = this.createCardsContainer(column, config, group, groupField);
     const visibleCount = getGroupVisibleCount(config, groupField, group.key, group.rows.length);
     if (visibleCount === 0) {
-      const empty = this.emptyStateRenderer.renderCard(cards, emptyState || { reason: "empty-group" });
+      const groupEmptyOptions: EmptyStateOptions = emptyState
+        ? (emptyStateTracker?.actionsRendered && emptyState.actions
+          ? { ...emptyState, actions: undefined }
+          : emptyState)
+        : { reason: "empty-group" };
+      if (groupEmptyOptions.actions && groupEmptyOptions.actions.length > 0 && emptyStateTracker) {
+        emptyStateTracker.actionsRendered = true;
+      }
+      const empty = this.emptyStateRenderer.renderCard(cards, groupEmptyOptions);
       empty.addClass("db-board-empty-slot");
     }
     for (const row of group.rows.slice(0, visibleCount)) {
@@ -511,6 +565,7 @@ export class BoardRenderer {
     groupField: string,
     subgroupField: string,
     emptyState?: EmptyStateOptions,
+    emptyStateTracker?: { actionsRendered: boolean },
   ): void {
     const section = parent.createDiv({ cls: "db-board-subgroup" });
     section.setAttr("id", this.getGroupSectionId(subgroupField, subgroup.key));
@@ -528,7 +583,10 @@ export class BoardRenderer {
       this.actions.toggleGroupCollapsed?.(subgroupField, subgroup.key);
     };
     if (!this.actions.isReadOnly) {
-      const checkbox = header.createEl("input", { cls: "db-board-subgroup-checkbox", attr: { type: "checkbox" } });
+      const checkbox = header.createEl("input", {
+        cls: "db-board-subgroup-checkbox",
+        attr: { type: "checkbox", "aria-label": subgroup.key || t("common.noGroup") },
+      });
       checkbox.checked = this.actions.areAllRowsSelected(subgroup.rows);
       checkbox.indeterminate = subgroup.rows.some((row) => this.actions.isRowSelected(row)) && !checkbox.checked;
       checkbox.onclick = (event) => event.stopPropagation();
@@ -546,7 +604,15 @@ export class BoardRenderer {
     const cards = this.createCardsContainer(section, config, group, groupField, subgroupField, subgroup);
     const visibleCount = getGroupVisibleCount(config, subgroupField, subgroup.key, subgroup.rows.length);
     if (visibleCount === 0) {
-      const empty = this.emptyStateRenderer.renderCard(cards, emptyState || { reason: "empty-group" });
+      const groupEmptyOptions: EmptyStateOptions = emptyState
+        ? (emptyStateTracker?.actionsRendered && emptyState.actions
+          ? { ...emptyState, actions: undefined }
+          : emptyState)
+        : { reason: "empty-group" };
+      if (groupEmptyOptions.actions && groupEmptyOptions.actions.length > 0 && emptyStateTracker) {
+        emptyStateTracker.actionsRendered = true;
+      }
+      const empty = this.emptyStateRenderer.renderCard(cards, groupEmptyOptions);
       empty.addClass("db-board-empty-slot");
     }
     for (const row of subgroup.rows.slice(0, visibleCount)) {
@@ -571,7 +637,10 @@ export class BoardRenderer {
     subgroupField?: string,
     subgroup?: BoardSubgroup
   ): HTMLElement {
-    const cards = parent.createDiv({ cls: "db-board-cards" });
+    // Board cards sit two levels below the grid (column, then this container),
+    // unlike gallery and list where they are direct children. Without an explicit
+    // owning rowgroup the cards' row role has no valid parent in the a11y tree.
+    const cards = parent.createDiv({ cls: "db-board-cards", attr: { role: "rowgroup" } });
     cards.addEventListener("dragover", (event) => {
       if (this.actions.isReadOnly) return;
       if (!this.isCardDrag(event)) return;
@@ -633,18 +702,22 @@ export class BoardRenderer {
   ): void {
     const card = cards.createDiv({
       cls: "db-board-card",
-      attr: { "data-note-database-row-path": row.file.path, title: row.file.path },
+      attr: {
+        "data-note-database-row-path": row.file.path,
+        title: row.file.path,
+        role: "row",
+        "aria-keyshortcuts": "Enter Space F2",
+      },
+    });
+    wireCardKeyboard({
+      card,
+      rovingController: this.rovingController,
+      onActivate: this.actions.openRecordDetail ? () => this.actions.openRecordDetail?.(card, row) : undefined,
+      ignoreSelector: "a, button, input, select, textarea, .db-cell-editing, .db-board-card-cover-button",
     });
     if (this.actions.openRecordDetail) {
-      card.tabIndex = 0;
-      card.setAttribute("role", "button");
       card.addEventListener("click", (event) => {
         if (isHTMLElement(event.target) && event.target.closest("a, button, input, select, textarea, .db-cell-editing, .db-board-card-cover-button")) return;
-        this.actions.openRecordDetail?.(card, row);
-      });
-      card.addEventListener("keydown", (event) => {
-        if (event.key !== "Enter" && event.key !== " ") return;
-        event.preventDefault();
         this.actions.openRecordDetail?.(card, row);
       });
     }
@@ -753,7 +826,10 @@ export class BoardRenderer {
 
     const controls = card.createDiv({ cls: "db-board-card-controls" });
     if (!this.actions.isReadOnly) {
-      const checkbox = controls.createEl("input", { cls: "db-board-card-checkbox", attr: { type: "checkbox" } });
+      const checkbox = controls.createEl("input", {
+        cls: "db-board-card-checkbox",
+        attr: { type: "checkbox", "aria-label": row.file.basename || row.file.path },
+      });
       checkbox.checked = this.actions.isRowSelected(row);
       checkbox.onclick = (event) => {
         event.stopPropagation();
@@ -762,6 +838,7 @@ export class BoardRenderer {
     }
     const openBtn = controls.createEl("button", {
       cls: "db-board-card-open",
+      attr: { type: "button", "aria-label": t("menu.openNote") },
     });
     setIcon(openBtn, "maximize-2");
     setTooltip(openBtn, t("menu.openNote"), { delay: 100 });
@@ -770,7 +847,9 @@ export class BoardRenderer {
       event.stopPropagation();
       this.actions.openRow(row);
     };
-    if (!this.actions.isReadOnly && isTouchDevice(this.boardEl)) {
+    // The move menu is the only reorder path that does not require dragging, so it
+    // stays available on every pointer type rather than touch alone.
+    if (!this.actions.isReadOnly) {
       this.renderMobileMoveButton(controls, config, groups, group, row, groupField, subgroupField, subgroupKey);
     }
     const columns = this.actions.getColumns(config);
@@ -860,16 +939,6 @@ export class BoardRenderer {
     attachLongPress(el, {
       ignoreTarget: (event) => isHTMLElement(event.target) && Boolean(event.target.closest("input, select, textarea, button, a")),
       onLongPress: (event) => this.actions.showRowMenu?.(event as unknown as MouseEvent, row, context),
-    });
-  }
-
-  private attachColumnContextMenu(el: HTMLElement, col: ColumnDef): void {
-    el.addEventListener("contextmenu", (event) => {
-      if (!this.actions.showColumnMenu) return;
-      if (isHTMLElement(event.target) && event.target.closest("input, select, textarea, button, a")) return;
-      event.preventDefault();
-      event.stopPropagation();
-      this.actions.showColumnMenu(event, col, el);
     });
   }
 
@@ -1203,132 +1272,6 @@ export class BoardRenderer {
     return config.titleField || "file.name";
   }
 
-  private renderPreviewValue(item: HTMLElement, row: RowData, col: ColumnDef, value: unknown, empty = false, displayType: ColumnDef["type"] = col.type): void {
-    const valueEl = item.createDiv({ cls: "db-board-card-value" });
-    if (empty) valueEl.addClass("db-card-empty-placeholder");
-    item.addEventListener("click", (event) => {
-      if (this.actions.isReadOnly || isReadonlyFileField(col.key)) return;
-      if (isHTMLElement(event.target) && event.target.closest("a, button, input, textarea, .db-cell-editing")) return;
-      event.stopPropagation();
-      this.actions.editCell(valueEl, row, col, event);
-    });
-    if (displayType === "checkbox") {
-      valueEl.addClass("db-checkbox-cell");
-      const cb = valueEl.createEl("input", { attr: { type: "checkbox" } });
-      cb.checked = toBooleanValue(value);
-      if (col.type === "computed") {
-        // 计算型 checkbox：点击打开公式编辑器
-        cb.disabled = !!this.actions.isReadOnly;
-        cb.onclick = (event) => {
-          event.preventDefault();
-          event.stopPropagation();
-          if (!this.actions.isReadOnly) this.actions.editFormula?.(col);
-        };
-      } else {
-        cb.onclick = (event) => event.stopPropagation();
-        cb.disabled = !!this.actions.isReadOnly;
-        if (!this.actions.isReadOnly) {
-          cb.onchange = () => {
-            void this.actions.editCell(valueEl, row, col);
-          };
-        }
-      }
-      setFieldTooltip(valueEl, cb.checked ? t("common.true") : t("common.false"));
-      return;
-    }
-    if (shouldRenderSpecialFileField(col) && renderSpecialFileFieldValue(valueEl, this.app, row, col, value, {
-      tagsContainerClass: "db-board-card-badges",
-      linkItemClass: "db-board-card-link",
-    })) {
-      valueEl.addClass("has-badges");
-      return;
-    }
-    if (col.type === "select" || col.type === "status") {
-      this.renderBadge(valueEl, col, String(value));
-      return;
-    }
-    if (col.type === "multi-select") {
-      const values = toMultiSelectValuesForKey(col.key, value);
-      valueEl.addClass("has-badges");
-      const wrap = valueEl.createDiv({ cls: "db-board-card-badges" });
-      setFieldTooltip(wrap, values);
-      for (const entry of values) this.renderBadge(wrap, col, entry);
-      return;
-    }
-    if (col.type === "relation" && renderRelationValue(valueEl, this.app, row, value, true)) {
-      valueEl.addClass("has-badges");
-      return;
-    }
-    if (displayType === "date" || displayType === "datetime") {
-      valueEl.addClass("db-date-value");
-      valueEl.textContent = displayType === "datetime"
-        ? formatDateTimeValueDisplay(value, { mode: "full", showTimeWhenMissing: true })
-        : formatDateValueDisplay(value);
-      setFieldTooltip(valueEl, valueEl.textContent);
-      return;
-    }
-
-    const values = Array.isArray(value) ? value : [value];
-
-    const schemeTarget = col.type === "text" && !isFileFieldKey(col.key) && isTextLinkScheme(col.textLinkScheme)
-      ? assembleSchemeLinkTarget(col.textLinkScheme, value)
-      : null;
-    if (schemeTarget !== null) {
-      renderDelayedExternalLink(valueEl, row, {
-        label: String(value),
-        target: schemeTarget,
-        external: true,
-      });
-      return;
-    }
-
-    if (col.textRenderMode === "markdown" && !isFileFieldKey(col.key)) {
-      const mdValues = Array.isArray(value) ? value : [value];
-      const parsed = mdValues.map((entry) => parseInlineMarkdown(entry));
-      if (parsed.some((nodes) => nodes !== null)) {
-        valueEl.empty();
-        const onOpenLink = (target: string, external: boolean): void => {
-          void this.openTarget(row, target, external);
-        };
-        const onResolveImage = (target: string, external: boolean): string | null =>
-          resolveInlineImageSrc(this.app, row, target, external);
-        parsed.forEach((nodes, idx) => {
-          if (idx > 0) valueEl.appendText(", ");
-          if (nodes) {
-            if (parsed.length === 1) renderInlineMarkdown(valueEl, nodes, { onOpenLink, onResolveImage, sourcePath: row.file.path });
-            else renderInlineMarkdown(valueEl.createSpan(), nodes, { onOpenLink, onResolveImage, sourcePath: row.file.path });
-          } else {
-            valueEl.appendText(String(mdValues[idx]));
-          }
-        });
-        setFieldTooltip(valueEl, valueToTooltip(value));
-        return;
-      }
-    }
-
-    if (col.textRenderMode === "link") {
-      const links = values
-        .map((entry) => parseTextLink(entry))
-        .filter((entry): entry is ParsedLink => entry !== null);
-      if (links.length > 0) {
-        for (const link of links) this.renderLink(valueEl, row, link);
-        return;
-      }
-    }
-
-    if (displayType === "number") {
-      const num = typeof value === "number" ? value : parseFloat(String(value));
-      if (!isNaN(num)) {
-        const style = getNumberDisplayStyle(col);
-        if (style === "rating") { renderRating(valueEl, num, col.numberDisplayConfig); return; }
-        if (style === "progress") { renderProgress(valueEl, num, col.numberDisplayConfig); return; }
-        if (style === "ring") { renderProgressRing(valueEl, num, col.numberDisplayConfig); return; }
-      }
-    }
-    valueEl.textContent = Array.isArray(value) ? value.join(", ") : String(value);
-    setFieldTooltip(valueEl, valueEl.textContent);
-  }
-
   renderCardFieldContent(
     row: RowData,
     col: ColumnDef,
@@ -1366,15 +1309,6 @@ export class BoardRenderer {
     if (displayType === "multi-select") return [t("common.empty")];
     if (displayType === "checkbox") return false;
     return t("common.empty");
-  }
-
-  private renderBadge(parent: HTMLElement, col: ColumnDef, value: string): void {
-    const resolved = resolveOptionDisplay(col, value);
-    const display = resolved.value || t("common.empty");
-    const badge = parent.createSpan({ cls: "status-badge", text: display });
-    badge.title = display;
-    if (resolved.option) badge.addClass(`status-color-${resolved.option.color}`);
-    else badge.addClass("status-color-gray");
   }
 
   private startColumnResize(event: MouseEvent, board: HTMLElement, config: ViewConfig): void {
@@ -1419,17 +1353,6 @@ export class BoardRenderer {
 
   private clampBoardColumnWidth(width: number): number {
     return Math.max(220, Math.min(520, Math.round(width)));
-  }
-
-  private renderLink(parent: HTMLElement, row: RowData, link: ParsedLink): void {
-    const anchor = parent.createEl("a", { cls: "db-board-card-link", text: link.label, attr: { title: link.label } });
-    anchor.href = link.external ? link.target : "#";
-    if (!link.external) markNoteHoverLink(anchor, link.target, row.file.path);
-    anchor.onclick = (event) => {
-      event.preventDefault();
-      event.stopPropagation();
-      void this.openTarget(row, link.target, link.external);
-    };
   }
 
   private async openTarget(row: RowData, target: string, external: boolean): Promise<void> {

@@ -228,6 +228,10 @@ describe("TableRecordPeek visible/hidden column split", () => {
       container: container as unknown as HTMLElement,
     });
 
+    const panel = container.children.find((child) => child.className.includes("db-record-peek-panel"))!;
+    expect(panel.getAttribute("role")).toBe("dialog");
+    expect(panel.getAttribute("aria-modal")).toBe("true");
+
     const properties = findByClass(container, "db-record-peek-properties")[0];
     const visibleLabels = findByClass(properties, "db-record-peek-field-label").map((el) => el.textContent);
     // file.name is excluded from the visible section even though it was in visibleColumns.
@@ -392,6 +396,8 @@ describe("attachTitleOpenAffordance", () => {
     const buttons = findByClass(td, "db-record-open-btn");
     expect(buttons).toHaveLength(1);
     expect(td.classList.contains("db-record-open-host")).toBe(true);
+    expect(buttons[0].getAttribute("tabindex")).toBeNull();
+    expect(buttons[0].getAttribute("aria-label")).toBe("panel.open");
 
     buttons[0].dispatch("click", { preventDefault: vi.fn(), stopPropagation: vi.fn() });
     expect(open).toHaveBeenCalledWith(testRow);

@@ -1,36 +1,29 @@
 import { App, Menu, setIcon, setTooltip } from "obsidian";
-import { isObsidianTagsKey, resolveOptionDisplay, toBooleanValue, toMultiSelectValuesForKey } from "../data/ColumnTypes";
+import { isObsidianTagsKey, toMultiSelectValuesForKey } from "../data/ColumnTypes";
 import { isExplicitlySorted } from "../data/ManualOrder";
-import { getColumnDisplayType, getNumberDisplayStyle } from "../data/ColumnDisplay";
-import { formatDateTimeValueDisplay, formatDateValueDisplay } from "../data/DateTimeFormat";
-import { getFileFieldFixedType, getRowFileFieldValue, isFileFieldKey, isReadonlyFileField } from "../data/FileFields";
+import { getColumnDisplayType } from "../data/ColumnDisplay";
+import { getFileFieldFixedType, getRowFileFieldValue, isFileFieldKey } from "../data/FileFields";
 import { isCoverImageBlocked, resolveCoverImage } from "../data/CoverImage";
 import { markCoverImageLoadError } from "../data/CoverWiring";
 import { formatGroupKeyDisplay, isComputedGroupField } from "../data/GroupDisplay";
 import { renderGroupLabel } from "./GroupLabelRenderer";
 import { markNoteHoverLink } from "./HoverLinkPreview";
-import { parseTextLink } from "../data/TextLink";
-import { assembleSchemeLinkTarget, isTextLinkScheme } from "../data/textLinkScheme";
-import { parseInlineMarkdown } from "../data/InlineMarkdown";
 import { ColumnDef, CreateEntryPosition, NO_TITLE_FIELD, RowCreateContext, RowData, ViewConfig } from "../data/types";
 import { t } from "../i18n";
 import { isHTMLElement } from "./DomGuards";
 import { setFieldTooltip } from "./FieldTooltip";
 import { getFileTitleDisplay, renderStackedFileTitle } from "./FileTitleDisplay";
 import { renderMobileMoveIcon } from "./MobileMoveIcon";
-import { renderSpecialFileFieldValue, shouldRenderSpecialFileField } from "./FileFieldRenderer";
-import { renderRating, renderProgress, renderProgressRing } from "./NumberDisplayRenderer";
-import { renderRelationValue } from "./RelationValueRenderer";
-import { renderInlineMarkdown, resolveInlineImageSrc, valueToTooltip } from "./InlineMarkdownRenderer";
 import { clampCardFieldWidth, getFieldWidth } from "./ColumnWidth";
 import { renderGroupExpandControls } from "./GroupExpandControls";
 import { getGroupVisibleCount } from "../data/GroupVisibility";
 import { DragDropFeedbackState, resolveDropPlacement } from "./DragDropFeedback";
 import { resolveTitleFieldDisplay } from "../data/TitleFieldDisplay";
-import { renderDelayedExternalLink } from "./CellRenderer";
 import { EmptyStateOptions, EmptyStateRenderer } from "./EmptyStateRenderer";
-import { renderCardField, renderCardFieldValue } from "./CardFieldRenderer";
+import { renderCardField } from "./CardFieldRenderer";
 import { attachLongPress, isTouchDevice } from "../data/TouchEnvironment";
+import { CardRovingController, syncCardRoving, wireCardKeyboard } from "./CardRovingTabindex";
+import { isImeComposing } from "../data/KeyboardUtils";
 
 const ROW_MIME = "application/x-note-database-row";
 const ROW_FROM_GROUP_MIME = "application/x-note-database-row-from-group";
@@ -95,6 +88,7 @@ export class GalleryRenderer {
   private rowDropFeedback = new DragDropFeedbackState();
   private draggingPaths: string[] = [];
   private emptyStateRenderer = new EmptyStateRenderer();
+  private rovingController = new CardRovingController();
 
   constructor(private app: App, private actions: GalleryRendererActions) {}
 
@@ -110,6 +104,7 @@ export class GalleryRenderer {
     }
     for (const row of rows) this.renderCard(gallery, config, row, undefined, undefined, undefined, rows);
     this.renderNewCard(gallery, undefined, rows);
+    syncCardRoving(container, this.rovingController, ".db-gallery-card");
   }
 
   renderGrouped(
@@ -124,6 +119,7 @@ export class GalleryRenderer {
     container.style.setProperty("--db-gallery-card-width", `${this.getCardSize(config)}px`);
     this.rowByPath = new Map(groups.flatMap((group) => group.rows.map((row) => [row.file.path, row] as const)));
     const grouped = container.createDiv({ cls: "db-gallery-grouped" });
+    let actionsRendered = false;
     for (const group of groups) {
       const section = grouped.createDiv({ cls: "db-gallery-group" });
       const sectionId = `group-section-${encodeURIComponent(`${groupField}:${group.key}`)}`;
@@ -142,7 +138,7 @@ export class GalleryRenderer {
         event.stopPropagation();
         this.actions.toggleGroupCollapsed?.(groupField, group.key);
       };
-      this.renderGroupCheckbox(header, group.rows);
+      this.renderGroupCheckbox(header, group.rows, group.key || t("common.noGroup"));
       renderGroupLabel(header, config, groupField, group.key, "db-gallery-group-title");
       header.createSpan({ cls: "db-gallery-group-count", text: String(group.count) });
       this.actions.renderGroupSummaries?.(header, group.rows, config);
@@ -164,9 +160,17 @@ export class GalleryRenderer {
       this.setupGroupDropTarget(gallery, groupField, group.key);
       const visibleCount = getGroupVisibleCount(config, groupField, group.key, group.rows.length);
       if (visibleCount === 0) {
+        const groupEmptyOptions: EmptyStateOptions = emptyState
+          ? (actionsRendered && emptyState.actions
+            ? { ...emptyState, actions: undefined }
+            : emptyState)
+          : { reason: "empty-group" };
+        if (groupEmptyOptions.actions && groupEmptyOptions.actions.length > 0) {
+          actionsRendered = true;
+        }
         const empty = this.emptyStateRenderer.renderCard(
           gallery,
-          emptyState || { reason: "empty-group" },
+          groupEmptyOptions,
         );
         empty.addClass("db-gallery-empty-group");
       }
@@ -176,18 +180,22 @@ export class GalleryRenderer {
       this.renderNewCard(footer, computedGroup ? undefined : { [groupField]: group.key || "" }, group.rows, computedGroup);
       renderGroupExpandControls(footer, config, groupField, group.key, group.rows.length, this.actions);
     }
+    syncCardRoving(container, this.rovingController, ".db-gallery-card");
   }
 
   private renderTotalHeader(container: HTMLElement, rows: RowData[]): void {
     const header = container.createDiv({ cls: "db-gallery-total-header" });
-    this.renderGroupCheckbox(header, rows);
+    this.renderGroupCheckbox(header, rows, t("common.total"));
     header.createSpan({ cls: "db-gallery-group-title", text: t("common.total") });
     header.createSpan({ cls: "db-gallery-group-count", text: String(rows.length) });
   }
 
-  private renderGroupCheckbox(parent: HTMLElement, rows: RowData[]): void {
+  private renderGroupCheckbox(parent: HTMLElement, rows: RowData[], label?: string): void {
     if (this.actions.isReadOnly) return;
-    const checkbox = parent.createEl("input", { cls: "db-gallery-group-checkbox", attr: { type: "checkbox" } });
+    const checkbox = parent.createEl("input", {
+      cls: "db-gallery-group-checkbox",
+      attr: { type: "checkbox", "aria-label": label || t("common.total") },
+    });
     checkbox.checked = this.actions.areAllRowsSelected(rows);
     checkbox.indeterminate = rows.some((row) => this.actions.isRowSelected(row)) && !checkbox.checked;
     checkbox.onclick = (event) => event.stopPropagation();
@@ -195,7 +203,7 @@ export class GalleryRenderer {
   }
 
   private createGallery(container: HTMLElement, config: ViewConfig): HTMLElement {
-    const gallery = container.createDiv({ cls: "db-gallery" });
+    const gallery = container.createDiv({ cls: "db-gallery", attr: { role: "grid" } });
     // --db-gallery-card-width 由 container 级设置，所有分组 gallery inherit，
     // 拖动调整时联动更新（对齐 Board 的容器级 --db-board-column-width）。
     gallery.style.setProperty("--db-gallery-cover-ratio", String(this.getCoverRatio(config)));
@@ -205,18 +213,22 @@ export class GalleryRenderer {
   private renderCard(gallery: HTMLElement, config: ViewConfig, row: RowData, groupField?: string, groupKey?: string, groups?: GalleryGroup[], allRows?: RowData[]): void {
     const card = gallery.createDiv({
       cls: "db-gallery-card",
-      attr: { "data-note-database-row-path": row.file.path, title: row.file.path },
+      attr: {
+        "data-note-database-row-path": row.file.path,
+        title: row.file.path,
+        role: "row",
+        "aria-keyshortcuts": "Enter Space F2",
+      },
+    });
+    wireCardKeyboard({
+      card,
+      rovingController: this.rovingController,
+      onActivate: this.actions.openRecordDetail ? () => this.actions.openRecordDetail?.(card, row) : undefined,
+      ignoreSelector: "a, button, input, select, textarea, .db-cell-editing, .db-gallery-cover-button",
     });
     if (this.actions.openRecordDetail) {
-      card.tabIndex = 0;
-      card.setAttribute("role", "button");
       card.addEventListener("click", (event) => {
         if (isHTMLElement(event.target) && event.target.closest("a, button, input, select, textarea, .db-cell-editing, .db-gallery-cover-button")) return;
-        this.actions.openRecordDetail?.(card, row);
-      });
-      card.addEventListener("keydown", (event) => {
-        if (event.key !== "Enter" && event.key !== " ") return;
-        event.preventDefault();
         this.actions.openRecordDetail?.(card, row);
       });
     }
@@ -242,7 +254,10 @@ export class GalleryRenderer {
     const body = card.createDiv({ cls: "db-gallery-card-body" });
     const controls = body.createDiv({ cls: "db-gallery-card-controls" });
     if (!this.actions.isReadOnly) {
-      const checkbox = controls.createEl("input", { cls: "db-gallery-card-checkbox", attr: { type: "checkbox" } });
+      const checkbox = controls.createEl("input", {
+        cls: "db-gallery-card-checkbox",
+        attr: { type: "checkbox", "aria-label": row.file.basename || row.file.path },
+      });
       checkbox.checked = this.actions.isRowSelected(row);
       checkbox.onclick = (event) => {
         event.stopPropagation();
@@ -251,6 +266,7 @@ export class GalleryRenderer {
     }
     const openBtn = controls.createEl("button", {
       cls: "db-gallery-card-open",
+      attr: { type: "button", "aria-label": t("menu.openNote") },
     });
     setIcon(openBtn, "maximize-2");
     setTooltip(openBtn, t("menu.openNote"), { delay: 100 });
@@ -259,7 +275,9 @@ export class GalleryRenderer {
       event.stopPropagation();
       this.actions.openRow(row);
     };
-    if (!this.actions.isReadOnly && isTouchDevice(this.container) && (this.canManualReorder(config) || Boolean(groupField && groups?.length))) {
+    // The move menu is the only reorder path that does not require dragging, so it
+    // stays available on every pointer type rather than touch alone.
+    if (!this.actions.isReadOnly && (this.canManualReorder(config) || Boolean(groupField && groups?.length))) {
       this.renderMobileMoveButton(controls, config, row, allRows || [], groupField, groupKey, groups);
     }
 
@@ -309,16 +327,6 @@ export class GalleryRenderer {
     attachLongPress(el, {
       ignoreTarget: (event) => isHTMLElement(event.target) && Boolean(event.target.closest("input, select, textarea, button, a")),
       onLongPress: (event) => this.actions.showRowMenu?.(event as unknown as MouseEvent, row, context),
-    });
-  }
-
-  private attachColumnContextMenu(el: HTMLElement, col: ColumnDef): void {
-    el.addEventListener("contextmenu", (event) => {
-      if (!this.actions.showColumnMenu) return;
-      if (isHTMLElement(event.target) && event.target.closest("input, select, textarea, button, a")) return;
-      event.preventDefault();
-      event.stopPropagation();
-      this.actions.showColumnMenu(event, col, el);
     });
   }
 
@@ -620,131 +628,6 @@ export class GalleryRenderer {
     return config.titleField || "file.name";
   }
 
-  private renderValue(item: HTMLElement, row: RowData, col: ColumnDef, value: unknown, empty = false, displayType: ColumnDef["type"] = col.type): void {
-    const valueEl = item.createDiv({ cls: "db-gallery-field-value" });
-    if (empty) valueEl.addClass("db-card-empty-placeholder");
-    item.addEventListener("click", (event) => {
-      if (this.actions.isReadOnly || isReadonlyFileField(col.key)) return;
-      if (isHTMLElement(event.target) && event.target.closest("a, button, input, textarea, .db-cell-editing")) return;
-      event.stopPropagation();
-      this.actions.editCell(valueEl, row, col, event);
-    });
-    if (displayType === "checkbox") {
-      valueEl.addClass("db-checkbox-cell");
-      const cb = valueEl.createEl("input", { attr: { type: "checkbox" } });
-      cb.checked = toBooleanValue(value);
-      if (col.type === "computed") {
-        // 计算型 checkbox：点击打开公式编辑器
-        cb.disabled = !!this.actions.isReadOnly;
-        cb.onclick = (event) => {
-          event.preventDefault();
-          event.stopPropagation();
-          if (!this.actions.isReadOnly) this.actions.editFormula?.(col);
-        };
-      } else {
-        cb.onclick = (event) => event.stopPropagation();
-        cb.disabled = !!this.actions.isReadOnly;
-        if (!this.actions.isReadOnly) {
-          cb.onchange = () => {
-            void this.actions.editCell(valueEl, row, col);
-          };
-        }
-      }
-      setFieldTooltip(valueEl, cb.checked ? t("common.true") : t("common.false"));
-      return;
-    }
-    if (shouldRenderSpecialFileField(col) && renderSpecialFileFieldValue(valueEl, this.app, row, col, value, {
-      tagsContainerClass: "db-gallery-badges",
-      linkItemClass: "db-gallery-link",
-    })) {
-      valueEl.addClass("has-badges");
-      return;
-    }
-    if (col.type === "select" || col.type === "status") {
-      this.renderBadge(valueEl, col, String(value));
-      return;
-    }
-    if (col.type === "multi-select") {
-      valueEl.addClass("has-badges");
-      const wrap = valueEl.createDiv({ cls: "db-gallery-badges" });
-      const values = toMultiSelectValuesForKey(col.key, value);
-      setFieldTooltip(wrap, values);
-      for (const entry of values) this.renderBadge(wrap, col, entry);
-      return;
-    }
-    if (col.type === "relation" && renderRelationValue(valueEl, this.app, row, value, true)) {
-      valueEl.addClass("has-badges");
-      return;
-    }
-    if (displayType === "date" || displayType === "datetime") {
-      valueEl.addClass("db-date-value");
-      valueEl.textContent = displayType === "datetime"
-        ? formatDateTimeValueDisplay(value, { mode: "full", showTimeWhenMissing: true })
-        : formatDateValueDisplay(value);
-      setFieldTooltip(valueEl, valueEl.textContent);
-      return;
-    }
-
-    const schemeTarget = col.type === "text" && !isFileFieldKey(col.key) && isTextLinkScheme(col.textLinkScheme)
-      ? assembleSchemeLinkTarget(col.textLinkScheme, value)
-      : null;
-    if (schemeTarget !== null) {
-      renderDelayedExternalLink(valueEl, row, {
-        label: String(value),
-        target: schemeTarget,
-        external: true,
-      });
-      return;
-    }
-
-    if (col.textRenderMode === "markdown" && !isFileFieldKey(col.key)) {
-      const mdValues = Array.isArray(value) ? value : [value];
-      const parsed = mdValues.map((entry) => parseInlineMarkdown(entry));
-      if (parsed.some((nodes) => nodes !== null)) {
-        valueEl.empty();
-        const onOpenLink = (target: string, external: boolean): void => {
-          void this.openTarget(row, target, external);
-        };
-        const onResolveImage = (target: string, external: boolean): string | null =>
-          resolveInlineImageSrc(this.app, row, target, external);
-        parsed.forEach((nodes, idx) => {
-          if (idx > 0) valueEl.appendText(", ");
-          if (nodes) {
-            if (parsed.length === 1) renderInlineMarkdown(valueEl, nodes, { onOpenLink, onResolveImage, sourcePath: row.file.path });
-            else renderInlineMarkdown(valueEl.createSpan(), nodes, { onOpenLink, onResolveImage, sourcePath: row.file.path });
-          } else {
-            valueEl.appendText(String(mdValues[idx]));
-          }
-        });
-        setFieldTooltip(valueEl, valueToTooltip(value));
-        return;
-      }
-    }
-
-    if (col.textRenderMode === "link") {
-      const values = Array.isArray(value) ? value : [value];
-      const links = values
-        .map((entry) => parseTextLink(entry))
-        .filter((entry): entry is ParsedLink => entry !== null);
-      if (links.length > 0) {
-        for (const link of links) this.renderLink(valueEl, row, link);
-        return;
-      }
-    }
-
-    if (displayType === "number") {
-      const num = typeof value === "number" ? value : parseFloat(String(value));
-      if (!isNaN(num)) {
-        const style = getNumberDisplayStyle(col);
-        if (style === "rating") { renderRating(valueEl, num, col.numberDisplayConfig); return; }
-        if (style === "progress") { renderProgress(valueEl, num, col.numberDisplayConfig); return; }
-        if (style === "ring") { renderProgressRing(valueEl, num, col.numberDisplayConfig); return; }
-      }
-    }
-    valueEl.textContent = Array.isArray(value) ? value.join(", ") : String(value);
-    setFieldTooltip(valueEl, valueEl.textContent);
-  }
-
   renderCardFieldContent(
     row: RowData,
     col: ColumnDef,
@@ -782,25 +665,6 @@ export class GalleryRenderer {
     if (displayType === "multi-select") return [t("common.empty")];
     if (displayType === "checkbox") return false;
     return t("common.empty");
-  }
-
-  private renderBadge(parent: HTMLElement, col: ColumnDef, value: string): void {
-    const resolved = resolveOptionDisplay(col, value);
-    const display = resolved.value || t("common.empty");
-    const badge = parent.createSpan({ cls: "status-badge", text: display });
-    badge.title = display;
-    badge.addClass(`status-color-${resolved.option?.color || "gray"}`);
-  }
-
-  private renderLink(parent: HTMLElement, row: RowData, link: ParsedLink): void {
-    const anchor = parent.createEl("a", { cls: "db-gallery-link", text: link.label, attr: { title: link.label } });
-    anchor.href = link.external ? link.target : "#";
-    if (!link.external) markNoteHoverLink(anchor, link.target, row.file.path);
-    anchor.onclick = (event) => {
-      event.preventDefault();
-      event.stopPropagation();
-      void this.openTarget(row, link.target, link.external);
-    };
   }
 
   private async openTarget(row: RowData, target: string, external: boolean): Promise<void> {

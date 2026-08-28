@@ -47,7 +47,6 @@ export function attachTitleOpenAffordance(
   const button = td.ownerDocument.createElement("button");
   button.type = "button";
   button.className = "db-record-open-btn";
-  button.setAttribute("tabindex", "-1");
   button.setAttribute("aria-label", t("panel.open"));
   button.textContent = t("panel.open");
   button.addEventListener("click", (event) => {
@@ -88,7 +87,7 @@ export function openTableRecordPeek(options: OpenTableRecordPeekOptions): void {
   panel.className = "db-record-peek-panel";
   panel.tabIndex = -1;
   panel.setAttribute("role", "dialog");
-  panel.setAttribute("aria-modal", "false");
+  panel.setAttribute("aria-modal", "true");
   panel.setAttribute("data-note-database-row-path", row.file.path);
   container.appendChild(panel);
 

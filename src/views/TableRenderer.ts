@@ -154,6 +154,7 @@ export class TableRenderer {
         emptyState || { reason: "no-matching-data" },
       );
     }
+    let actionsRendered = false;
     for (const renderable of renderableGroups) {
       const group = renderable.group;
       const divider = this.renderGroupDividerRow(tbody, config, renderable, visibleColumns.length + this.getUtilityColumnCount(config));
@@ -181,10 +182,18 @@ export class TableRenderer {
         computedGroup,
       );
       if (group.rows.length === 0) {
+        const groupEmptyOptions: EmptyStateOptions = emptyState
+          ? (actionsRendered && emptyState.actions
+            ? { ...emptyState, actions: undefined }
+            : emptyState)
+          : { reason: "empty-group" };
+        if (groupEmptyOptions.actions && groupEmptyOptions.actions.length > 0) {
+          actionsRendered = true;
+        }
         this.emptyStateRenderer.renderTableRow(
           tbody,
           visibleColumns.length + this.getUtilityColumnCount(config),
-          emptyState || { reason: "empty-group" },
+          groupEmptyOptions,
         );
       }
       if (!this.actions.hideCreateEntry) {

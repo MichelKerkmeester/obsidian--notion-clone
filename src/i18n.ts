@@ -1446,6 +1446,14 @@ const en: Dictionary = {
   "emptyState.technicalDetails": "Technical details",
   "emptyState.createDatabase": "Create Database",
   "emptyState.starterPresets": "Start with a template",
+  "emptyState.presetTasksTitle": "Tasks",
+  "emptyState.presetTasksDesc": "Track work with status, priority, and due dates.",
+  "emptyState.presetProjectsTitle": "Projects",
+  "emptyState.presetProjectsDesc": "Keep projects, owners, statuses, and target dates together.",
+  "emptyState.presetReadingListTitle": "Reading List",
+  "emptyState.presetReadingListDesc": "Organize books by author, progress, rating, and category.",
+  "emptyState.presetNotesTitle": "Notes",
+  "emptyState.presetNotesDesc": "Create a simple vault index with tags and timestamps.",
   "emptyState.searchDiagnostics": "{visible} of {total} records match search",
   "emptyState.filterDiagnostics": "{visible} of {total} records match filters",
   "emptyState.limitDiagnostics": "{visible} of {total} records shown by the result limit",
@@ -3024,6 +3032,15 @@ const zhCN: Dictionary = {
   "empty.noDatabases": "还没有数据库文件。",
   "empty.createFirstDatabase": "创建自己的第一个 Note Database",
   "empty.noColumnsDb": "数据库「{name}」没有配置列。请在设置中添加至少一个属性列。",
+  "emptyState.starterPresets": "从模板开始",
+  "emptyState.presetTasksTitle": "任务",
+  "emptyState.presetTasksDesc": "通过状态、优先级与截止日期跟踪工作。",
+  "emptyState.presetProjectsTitle": "项目",
+  "emptyState.presetProjectsDesc": "集中管理项目、负责人、状态和目标日期。",
+  "emptyState.presetReadingListTitle": "阅读清单",
+  "emptyState.presetReadingListDesc": "按作者、进度、评分与分类整理书籍。",
+  "emptyState.presetNotesTitle": "笔记",
+  "emptyState.presetNotesDesc": "使用标签和时间戳建立简单的仓库索引。",
   "modal.editProperty": "编辑属性 — {label}",
   "modal.propertyKey": "属性键",
   "modal.propertyKeyHint": "普通属性会以此键存入笔记 YAML/frontmatter，公式引用也使用这个键。",
@@ -4623,6 +4640,15 @@ const zhTW: Dictionary = {
   "errors.saveViewConfigFailed": "保存視圖配置失敗: {error}",
   "errors.updateFailed": "更新失敗: {error}",
   "errors.viewConfigEmpty": "視圖配置為空",
+  "emptyState.starterPresets": "從範本開始",
+  "emptyState.presetTasksTitle": "任務",
+  "emptyState.presetTasksDesc": "透過狀態、優先級與截止日期追蹤工作。",
+  "emptyState.presetProjectsTitle": "專案",
+  "emptyState.presetProjectsDesc": "集中管理專案、負責人、狀態和目標日期。",
+  "emptyState.presetReadingListTitle": "閱讀清單",
+  "emptyState.presetReadingListDesc": "按作者、進度、評分與分類整理書籍。",
+  "emptyState.presetNotesTitle": "筆記",
+  "emptyState.presetNotesDesc": "使用標籤和時間戳建立簡單的倉庫索引。",
   "modal.addOption": "+ 添加選項",
   "modal.confirmDeleteOption": "確認刪除選項「{name}」？",
   "modal.displayName": "欄標題",
@@ -4721,7 +4747,9 @@ export function getLocale(): LocaleCode {
 
 export function getEffectiveLocale(locale: LocaleCode = currentLocale): Exclude<LocaleCode, "system"> {
   if (locale !== "system") return locale;
-  const lang = (window.activeDocument.documentElement.lang || navigator.language || "").toLowerCase();
+  const docLang = typeof window !== "undefined" && window.activeDocument?.documentElement?.lang;
+  const navLang = typeof navigator !== "undefined" && navigator.language;
+  const lang = (docLang || navLang || "").toLowerCase();
   if (lang.includes("zh-tw") || lang.includes("zh-hk") || lang.includes("zh-hant")) return "zh-TW";
   if (lang.startsWith("zh")) return "zh-CN";
   return "en";

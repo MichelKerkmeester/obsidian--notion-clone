@@ -179,7 +179,10 @@ function openDropdownPopover(anchor: HTMLElement, options: DropdownFieldOptions,
   let currentSectionEl: HTMLElement | undefined;
   const sectionRows: DropdownRow[] = [];
   const emptyRow = optionsHost.createDiv({ cls: "db-dropdown-empty", text: t("dropdown.noResults"), attr: { role: "status", hidden: "true" } });
-  let activeIndex = options.options.findIndex((option) => !option.disabled);
+  let activeIndex = options.options.findIndex((option) => option.value === options.value && !option.disabled);
+  if (activeIndex < 0) {
+    activeIndex = options.options.findIndex((option) => !option.disabled);
+  }
   if (activeIndex < 0) activeIndex = 0;
   let typeahead = "";
   let typeaheadTimer: number | undefined;
@@ -284,6 +287,9 @@ function openDropdownPopover(anchor: HTMLElement, options: DropdownFieldOptions,
     window.setTimeout(() => searchInput?.focus(), 0);
   }
   positionToolbarPopover(panel, anchor, { preferredWidth: 280, maxWidth: 360, minWidth: 180, gap: 6 });
+  if (!searchInput) {
+    syncActiveOption(true);
+  }
 
   const onKeydown = (event: KeyboardEvent) => {
     if (isImeComposing(event) || event.target === searchInput) return;

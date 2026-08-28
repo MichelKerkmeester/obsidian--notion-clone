@@ -39,6 +39,8 @@ import { buildMiniCalendarEventIndex, MiniCalendarMode, renderMiniCalendar } fro
 import { markNoteHoverLink } from "./HoverLinkPreview";
 import { EmptyStateReason, EmptyStateRenderer } from "./EmptyStateRenderer";
 import { isTouchDevice } from "../data/TouchEnvironment";
+import { isImeComposing } from "../data/KeyboardUtils";
+import { attachCalendarGridKeyboard, focusCalendarCell } from "./CalendarKeyboardNavigation";
 
 const TIME_SNAP_MINUTES = CALENDAR_TIME_SNAP_MINUTES;
 const TIMED_EVENT_TIME_VISIBILITY_HEIGHT = 42;
@@ -160,6 +162,25 @@ export class CalendarRenderer {
 		}
 	}
 
+	private safeUpdateEventDates(
+		row: RowData,
+		changes: CalendarEventDateChange,
+		onRevert?: () => void,
+	): void {
+		try {
+			const result = this.actions.updateEventDates?.(row, changes);
+			if (result && typeof (result as Promise<void>).catch === "function") {
+				(result as Promise<void>).catch((err) => {
+					onRevert?.();
+					console.error("Note Database: failed to update event dates", err);
+				});
+			}
+		} catch (err) {
+			onRevert?.();
+			console.error("Note Database: failed to update event dates", err);
+		}
+	}
+
 	private setupBacklogDropTarget(target: HTMLElement, config: ViewConfig, dateKey: string): void {
 		if (this.actions.isReadOnly || !this.actions.updateEventDates) return;
 		target.addEventListener("dragover", (event) => {
@@ -175,7 +196,13 @@ export class CalendarRenderer {
 			event.preventDefault();
 			event.stopPropagation();
 			target.removeClass("is-backlog-drop-target");
-			this.actions.updateEventDates?.(row, { startField: config.calendarStartDateField || getDefaultEventDateField(config) || "", startDateKey: dateKey, endField: config.calendarEndDateField, endDateKey: dateKey, changedEdge: "both" });
+			this.safeUpdateEventDates(row, {
+				startField: config.calendarStartDateField || getDefaultEventDateField(config) || "",
+				startDateKey: dateKey,
+				endField: config.calendarEndDateField,
+				endDateKey: dateKey,
+				changedEdge: "both",
+			});
 		});
 	}
 
@@ -208,18 +235,52 @@ export class CalendarRenderer {
 		this.renderUnscheduledBacklog(wrap, config, rows, startField);
 		this.renderWeekdayLabels(wrap, config, weekStartsOn);
 
-		const grid = wrap.createDiv({ cls: "db-calendar-grid db-calendar-month-grid" });
+		const monthTitle = formatCalendarTitleParts({
+			scale: "month",
+			startDateKey: `${String(model.year).padStart(4, "0")}-${String(model.monthIndex + 1).padStart(2, "0")}-01`,
+			locale: getEffectiveLocale(),
+		}).ariaLabel;
+		const grid = wrap.createDiv({
+			cls: "db-calendar-grid db-calendar-month-grid",
+			attr: { role: "grid", "aria-label": monthTitle },
+		});
 		const layouts = buildCalendarMonthWeekLayouts(model.weeks, config);
 		const todayKey = this.getTodayDateKey();
+		const allDays = model.weeks.flat();
+		const focusDateKey = allDays.find((d) => d.dateKey === todayKey && d.inCurrentMonth)?.dateKey
+			?? allDays.find((d) => d.inCurrentMonth)?.dateKey
+			?? allDays[0]?.dateKey;
+
 		for (const layout of layouts) {
-			this.renderMonthWeek(grid, config, layout, todayKey);
+			this.renderMonthWeek(grid, config, layout, todayKey, focusDateKey);
 		}
+
+		attachCalendarGridKeyboard({
+			grid,
+			cellSelector: ".db-calendar-day[role=gridcell]",
+			columns: 7,
+			onSelectDate: (dateKey) => {
+				this.actions.createEntryForDate?.(config, dateKey);
+			},
+			onPreviousPage: () => {
+				this.shiftMonth(config, model, -1);
+			},
+			onNextPage: () => {
+				this.shiftMonth(config, model, 1);
+			},
+		});
 	}
 
-	private renderMonthWeek(parent: HTMLElement, config: ViewConfig, layout: CalendarMonthWeekLayout, todayKey: string): void {
+	private renderMonthWeek(
+		parent: HTMLElement,
+		config: ViewConfig,
+		layout: CalendarMonthWeekLayout,
+		todayKey: string,
+		focusDateKey?: string,
+	): void {
 		const weekEl = parent.createDiv({
 			cls: "db-calendar-month-week",
-			attr: { "data-week-index": String(layout.weekIndex) },
+			attr: { "data-week-index": String(layout.weekIndex), role: "row" },
 		});
 		const rowHeight = this.getRowHeight(config, layout.weekIndex);
 		const laneLimit = this.getMonthVisibleLaneLimit(config);
@@ -230,7 +291,7 @@ export class CalendarRenderer {
 		// appended as an extra row so it never hides one of the configured events.
 		const totalLaneRows = visibleRowCount + (hasOverflow ? 1 : 0);
 
-			// Single grid: heading row + fixed-height event lanes + row-gap budget + a filler row.
+		// Single grid: heading row + fixed-height event lanes + row-gap budget + a filler row.
 		// The filler absorbs spare height so sparse weeks do not stretch event spacing.
 		weekEl.style.gridTemplateRows = `28px repeat(${totalLaneRows}, 22px) minmax(0, 1fr)`;
 
@@ -246,7 +307,12 @@ export class CalendarRenderer {
 					day.inCurrentMonth ? "" : "is-outside-month",
 					day.dateKey === todayKey ? "is-today" : "",
 				].filter(Boolean).join(" "),
-				attr: { "data-date-key": day.dateKey },
+				attr: {
+					"data-date-key": day.dateKey,
+					role: "gridcell",
+					tabindex: day.dateKey === focusDateKey ? "0" : "-1",
+					"aria-label": day.dateKey,
+				},
 			});
 			// Explicit grid placement: column index + span all rows as background
 			cell.style.gridColumn = String(dayIndex + 1);
@@ -538,7 +604,7 @@ export class CalendarRenderer {
 		const weekDays = model.weeks[weekIndex];
 		this.currentVisibleRange = this.getDaysVisibleRange(weekDays || []);
 		if (!weekDays || weekDays.length === 0) {
-			this.renderEmpty(container, "no-events");
+			this.renderEmpty(container, "read-failed");
 			return;
 		}
 
@@ -585,7 +651,7 @@ export class CalendarRenderer {
 	}
 
 	private renderTimeHeaderRow(parent: HTMLElement, sizingWrap: HTMLElement, config: ViewConfig, days: CalendarDayModel[]): void {
-		const row = parent.createDiv({ cls: "db-calendar-time-header-row" });
+		const row = parent.createDiv({ cls: "db-calendar-time-header-row", attr: { role: "row" } });
 		row.createDiv({ cls: "db-calendar-time-header-gutter" });
 		const daysEl = row.createDiv({ cls: "db-calendar-time-header-days" });
 		daysEl.style.setProperty("--db-calendar-time-day-count", String(days.length));
@@ -593,7 +659,7 @@ export class CalendarRenderer {
 		for (const day of days) {
 			const button = daysEl.createEl("button", {
 				cls: `db-calendar-time-header-day${day.dateKey === todayKey ? " is-today" : ""}`,
-				attr: { type: "button", title: day.dateKey, "data-date-key": day.dateKey },
+				attr: { type: "button", title: day.dateKey, "data-date-key": day.dateKey, role: "columnheader" },
 			});
 			button.createSpan({ cls: "db-calendar-week-day-name", text: this.formatWeekDayName(day.dateKey) });
 			this.attachDayViewNavigation(button, config, day.dateKey);
@@ -810,16 +876,24 @@ export class CalendarRenderer {
 			});
 		}
 
-		const body = timeGrid.createDiv({ cls: "db-calendar-week-body" });
+		const body = timeGrid.createDiv({ cls: "db-calendar-week-body", attr: { role: "grid", "aria-label": t("calendar.week") } });
 		body.style.height = `${metrics.gridHeight}px`;
 		body.style.setProperty("--db-calendar-time-day-count", String(days.length));
 		this.renderTimeGridLines(body, visible.startMinutes, visible.endMinutes, slotDuration, hourHeight);
-		const columns = body.createDiv({ cls: "db-calendar-time-columns" });
+		const columns = body.createDiv({ cls: "db-calendar-time-columns", attr: { role: "row" } });
 		columns.style.setProperty("--db-calendar-time-day-count", String(days.length));
-		for (const day of days) {
+		const todayKey = this.getTodayDateKey();
+		const focusIndex = Math.max(0, days.findIndex((day) => day.dateKey === todayKey));
+		for (let dayIndex = 0; dayIndex < days.length; dayIndex++) {
+			const day = days[dayIndex];
 			const col = columns.createDiv({
-				cls: `db-calendar-week-day-col${day.dateKey === this.getTodayDateKey() ? " is-today" : ""}`,
-				attr: { "data-date-key": day.dateKey },
+				cls: `db-calendar-week-day-col${day.dateKey === todayKey ? " is-today" : ""}`,
+				attr: {
+					"data-date-key": day.dateKey,
+					role: "gridcell",
+					tabindex: dayIndex === focusIndex ? "0" : "-1",
+					"aria-label": day.dateKey,
+				},
 			});
 			this.setupBacklogDropTarget(col, config, day.dateKey);
 			this.setupTimeRangeSelection(col, config, day.dateKey, metrics);
@@ -828,6 +902,29 @@ export class CalendarRenderer {
 			}
 			this.renderCurrentTimeLine(col, day.dateKey, metrics);
 		}
+
+		attachCalendarGridKeyboard({
+			grid: columns,
+			cellSelector: ".db-calendar-week-day-col[role=gridcell]",
+			columns: days.length,
+			onSelectDate: (dateKey) => {
+				this.actions.createEntryForDate?.(config, dateKey);
+			},
+			onPreviousPage: () => {
+				if (config.calendarScale === "day") {
+					this.shiftDay(config, days[0]?.dateKey || todayKey, -1);
+				} else {
+					this.shiftWeek(config, days, -1);
+				}
+			},
+			onNextPage: () => {
+				if (config.calendarScale === "day") {
+					this.shiftDay(config, days[0]?.dateKey || todayKey, 1);
+				} else {
+					this.shiftWeek(config, days, 1);
+				}
+			},
+		});
 	}
 
 	private renderTimeGridLines(body: HTMLElement, startMinutes: number, endMinutes: number, slotDuration: number, hourHeight: number): void {
@@ -850,11 +947,14 @@ export class CalendarRenderer {
 		const isCompact = height < TIMED_EVENT_TIME_VISIBILITY_HEIGHT;
 		const left = (layout.columnIndex / layout.columnCount) * 100;
 		const width = 100 / layout.columnCount;
-		const eventEl = dayCol.createDiv({
+		const eventTitle = `${formatCalendarTime(layout.startMinutes)} - ${formatCalendarTime(layout.endMinutes)} ${layout.event.title}`;
+		const eventEl = dayCol.createEl("button", {
 			cls: `db-calendar-week-timed-event${isCompact ? " is-compact" : ""}`,
 			attr: {
+				type: "button",
 				style: `top: ${top}px; height: ${height}px; left: calc(${left}% + 4px); width: calc(${width}% - 8px);`,
-				title: `${formatCalendarTime(layout.startMinutes)} - ${formatCalendarTime(layout.endMinutes)} ${layout.event.title}`,
+				title: eventTitle,
+				"aria-label": eventTitle,
 				"data-note-database-row-path": layout.event.row.file.path,
 			},
 		});
@@ -1067,7 +1167,7 @@ export class CalendarRenderer {
 				startMinutes: segment.event.startMinutes,
 				endMinutes: segment.event.endMinutes,
 			});
-			void this.actions.updateEventDates?.(segment.event.row, change);
+			this.safeUpdateEventDates(segment.event.row, change, resetSegmentGrid);
 		};
 
 		window.activeDocument.addEventListener("mousemove", onMove);
@@ -1194,7 +1294,7 @@ export class CalendarRenderer {
 			}
 			const startDateKey = targetKey;
 			const endDateKey = endField ? addDateKeyDays(targetKey, durationDays - 1) : undefined;
-			void this.actions.updateEventDates?.(segment.event.row, resolveDayMoveChange({
+			this.safeUpdateEventDates(segment.event.row, resolveDayMoveChange({
 				startField,
 				startDateKey,
 				endField,
@@ -1202,7 +1302,7 @@ export class CalendarRenderer {
 				// 透传原时刻分量（date 事件为 undefined，写纯日期不受影响）—— datetime 事件 move 保时间。
 				startMinutes: segment.event.startMinutes,
 				endMinutes: segment.event.endMinutes,
-			}));
+			}), resetSegmentGrid);
 		};
 
 		window.activeDocument.addEventListener("mousemove", onMove);
@@ -1492,7 +1592,7 @@ export class CalendarRenderer {
 				nextStart = next.start;
 				nextEnd = next.end;
 				targetDateKey = next.dateKey;
-				void this.actions.updateEventDates?.(layout.event.row, {
+				this.safeUpdateEventDates(layout.event.row, {
 					startField: config.calendarStartDateField || getDefaultEventDateField(config) || "",
 					startDateKey: targetDateKey,
 					startTimeMinutes: nextStart,
@@ -1500,7 +1600,7 @@ export class CalendarRenderer {
 					endDateKey: config.calendarEndDateField ? targetDateKey : undefined,
 					endTimeMinutes: config.calendarEndDateField ? nextEnd : undefined,
 					changedEdge: mode === "resize-start" ? "start" : mode === "resize-end" ? "end" : "both",
-				});
+				}, () => applyLivePosition(originalStart, originalEnd));
 			};
 			window.activeDocument.addEventListener("mousemove", onMove, true);
 			window.activeDocument.addEventListener("mouseup", onUp, true);
@@ -1622,9 +1722,16 @@ export class CalendarRenderer {
 		const initialCount = typeof result === "number" ? result : this.calendarInvalidWarningCount;
 		if (typeof result === "number") this.calendarInvalidWarningCount = result;
 		if (typeof result === "number" && result <= 0) return;
+		const defaultLabel = initialCount && initialCount > 0
+			? t("timeline.invalidEventsConflictNotice", { count: initialCount })
+			: t("timeline.invalidEventsTitle");
 		const button = controls.createEl("button", {
 			cls: `db-calendar-nav-button is-icon db-calendar-invalid-toggle${initialCount && initialCount > 0 ? "" : " is-hidden"}`,
-			attr: { type: "button" },
+			attr: {
+				type: "button",
+				title: defaultLabel,
+				"aria-label": defaultLabel,
+			},
 		});
 		setIcon(button.createSpan({ cls: "db-calendar-nav-icon" }), "alert-triangle");
 		button.onclick = (event) => {
@@ -1648,7 +1755,8 @@ export class CalendarRenderer {
 		if (typeof result === "number") return;
 		void result
 			.then((count) => applyCount(count))
-			.catch(() => {
+			.catch((err) => {
+				console.error("Note Database: failed to get calendar invalid event count", err);
 				if (button.isConnected) button.remove();
 			});
 	}
@@ -1918,9 +2026,9 @@ export class CalendarRenderer {
 	}
 
 	private renderWeekdayLabels(wrap: HTMLElement, config: ViewConfig, weekStartsOn: number): void {
-		const weekdaysRow = wrap.createDiv({ cls: "db-calendar-weekdays" });
+		const weekdaysRow = wrap.createDiv({ cls: "db-calendar-weekdays", attr: { role: "row" } });
 		for (const weekday of this.getWeekdayLabels(weekStartsOn)) {
-			const wdDiv = weekdaysRow.createDiv({ cls: "db-calendar-weekday" });
+			const wdDiv = weekdaysRow.createDiv({ cls: "db-calendar-weekday", attr: { role: "columnheader" } });
 			wdDiv.createSpan({ text: weekday });
 			if (!this.actions.isReadOnly && this.actions.onConfigChange) {
 				const resizeHandle = wdDiv.createDiv({ cls: "db-calendar-col-resize-handle" });
@@ -2338,14 +2446,15 @@ export class CalendarRenderer {
 	}
 
 	private renderEmpty(container: HTMLElement, reason: EmptyStateReason): void {
+		const actions = reason === "no-date-field" && this.actions.openDateConfig ? [{
+			label: t("emptyState.selectDateProperty"),
+			icon: "settings-2",
+			primary: true,
+			onClick: () => this.actions.openDateConfig?.(),
+		}] : undefined;
 		this.emptyStateRenderer.renderCard(container, {
 			reason,
-			actions: this.actions.openDateConfig ? [{
-				label: t("emptyState.selectDateProperty"),
-				icon: "settings-2",
-				primary: true,
-				onClick: () => this.actions.openDateConfig?.(),
-			}] : undefined,
+			actions,
 		});
 	}
 }

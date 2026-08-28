@@ -47,4 +47,45 @@ describe("DragDropFeedbackState", () => {
     expect(resolveDropPlacement(target, { clientX: 20, clientY: 80 } as DragEvent, "horizontal")).toBe("before");
     expect(resolveDropPlacement(target, { clientX: 80, clientY: 80 } as DragEvent, "horizontal")).toBe("after");
   });
+
+  it("announces feedback phase updates to an aria-live region", () => {
+    const state = new DragDropFeedbackState();
+    let statusContent = "";
+    const mockLiveRegion = {
+      className: "db-sr-status",
+      getAttribute: (name: string) => (name === "aria-live" ? "polite" : null),
+      setAttribute: () => undefined,
+      set textContent(value: string) {
+        statusContent = value;
+      },
+      get textContent() {
+        return statusContent;
+      },
+    };
+    const mockDoc = {
+      createElement: () => mockLiveRegion,
+    };
+    const mockContainer = {
+      querySelector: () => null,
+      appendChild: () => undefined,
+    };
+    const target = {
+      ...fakeElement(),
+      ownerDocument: mockDoc,
+      closest: () => mockContainer,
+    } as unknown as HTMLElement;
+
+    state.begin("row-a", ["a.md", "b.md"]);
+    state.update(target, "after", "row-c");
+
+    state.setPending();
+    expect(mockLiveRegion.getAttribute("aria-live")).toBe("polite");
+    expect(mockLiveRegion.textContent).toContain("2");
+
+    state.commit();
+    expect(mockLiveRegion.textContent).toContain("2");
+
+    state.fail(new Error("custom drag error"));
+    expect(mockLiveRegion.textContent).toContain("custom drag error");
+  });
 });

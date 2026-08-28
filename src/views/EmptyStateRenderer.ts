@@ -55,8 +55,8 @@ export interface EmptyStateHeroOptions {
 export const STARTER_PRESETS: ReadonlyArray<StarterPreset> = [
   {
     id: "tasks",
-    name: "Tasks",
-    description: "Track work with status, priority, and due dates.",
+    get name() { return t("emptyState.presetTasksTitle"); },
+    get description() { return t("emptyState.presetTasksDesc"); },
     icon: "check-square",
     columns: [
       { key: "file.name", label: "Title", type: "text" },
@@ -75,8 +75,8 @@ export const STARTER_PRESETS: ReadonlyArray<StarterPreset> = [
   },
   {
     id: "projects",
-    name: "Projects",
-    description: "Keep projects, owners, statuses, and target dates together.",
+    get name() { return t("emptyState.presetProjectsTitle"); },
+    get description() { return t("emptyState.presetProjectsDesc"); },
     icon: "briefcase-business",
     columns: [
       { key: "file.name", label: "Project Name", type: "text" },
@@ -88,8 +88,8 @@ export const STARTER_PRESETS: ReadonlyArray<StarterPreset> = [
   },
   {
     id: "reading-list",
-    name: "Reading List",
-    description: "Organize books by author, progress, rating, and category.",
+    get name() { return t("emptyState.presetReadingListTitle"); },
+    get description() { return t("emptyState.presetReadingListDesc"); },
     icon: "book-open",
     columns: [
       { key: "file.name", label: "Book Title", type: "text" },
@@ -101,8 +101,8 @@ export const STARTER_PRESETS: ReadonlyArray<StarterPreset> = [
   },
   {
     id: "notes",
-    name: "Notes",
-    description: "Create a simple vault index with tags and timestamps.",
+    get name() { return t("emptyState.presetNotesTitle"); },
+    get description() { return t("emptyState.presetNotesDesc"); },
     icon: "notebook-tabs",
     columns: [
       { key: "file.name", label: "Note Title", type: "text" },
@@ -281,7 +281,7 @@ export class EmptyStateRenderer {
     for (const preset of STARTER_PRESETS) {
       const card = presetGrid.createEl("button", {
         cls: "db-empty-preset-card",
-        attr: { type: "button", "aria-label": preset.name },
+        attr: { type: "button" },
       });
       const presetIcon = card.createDiv({ cls: "db-empty-preset-icon", attr: { "aria-hidden": "true" } });
       setIcon(presetIcon, preset.icon);

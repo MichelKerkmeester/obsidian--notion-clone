@@ -29,9 +29,17 @@ vi.mock("../i18n", () => ({
       "emptyState.filterDiagnostics": "{visible} of {total} records match filters",
       "emptyState.limitDiagnostics": "{visible} of {total} records shown due to limit",
       "emptyState.sourceDiagnostics": "{total} records in source",
+      "emptyState.presetTasksTitle": "Tasks",
+      "emptyState.presetTasksDesc": "Track work with status, priority, and due dates.",
+      "emptyState.presetProjectsTitle": "Projects",
+      "emptyState.presetProjectsDesc": "Keep projects, owners, statuses, and target dates together.",
+      "emptyState.presetReadingListTitle": "Reading List",
+      "emptyState.presetReadingListDesc": "Organize books by author, progress, rating, and category.",
+      "emptyState.presetNotesTitle": "Notes",
+      "emptyState.presetNotesDesc": "Create a simple vault index with tags and timestamps.",
     };
     const message = messages[key] || key;
-    if (!vars) return key;
+    if (!vars) return message;
     return message.replace(/\{(\w+)\}/g, (_, name: string) => String(vars[name] ?? ""));
   },
 }));
@@ -139,6 +147,8 @@ describe("EmptyStateRenderer", () => {
     });
     const presetGrid = elementWithClass(root, "db-empty-preset-grid");
     expect(presetGrid?.children).toHaveLength(4);
+    expect(presetGrid?.children[0]?.getAttribute("aria-label")).toBeNull();
+    expect(STARTER_PRESETS[0].name).toBe("Tasks");
     presetGrid?.children[0]?.onclick?.();
     expect(selected).toEqual(["tasks"]);
 
@@ -156,6 +166,16 @@ describe("EmptyStateRenderer", () => {
     expect(row.tagName).toBe("tr");
     expect(row.children[0]?.getAttribute("colspan")).toBe("5");
     expect(elementWithClass(row as unknown as FakeElement, "db-empty-card")?.classes.has("is-compact")).toBe(true);
+  });
+
+  it("renders compact card without action button when actions are undefined or stripped for deduplication", () => {
+    const tbody = new FakeElement("tbody");
+    const row = new EmptyStateRenderer().renderTableRow(tbody as unknown as HTMLElement, 3, {
+      reason: "filter-empty",
+      actions: undefined,
+    });
+    const actionButton = elementWithClass(row as unknown as FakeElement, "db-empty-action");
+    expect(actionButton).toBeUndefined();
   });
 });
 

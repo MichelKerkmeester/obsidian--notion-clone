@@ -4,6 +4,7 @@ import { formatDateTimeValueDisplay, formatDateValueDisplay } from "../data/Date
 import { getFileFieldFixedType, isFileFieldKey, isReadonlyFileField } from "../data/FileFields";
 import { getNumberDisplayStyle } from "../data/ColumnDisplay";
 import { parseInlineMarkdown } from "../data/InlineMarkdown";
+import { isImeComposing } from "../data/KeyboardUtils";
 import { assembleSchemeLinkTarget, isTextLinkScheme } from "../data/textLinkScheme";
 import { parseTextLink } from "../data/TextLink";
 import { ColumnDef, RowData, ViewConfig } from "../data/types";
@@ -74,6 +75,7 @@ export function renderCardField(options: CardFieldRendererOptions): HTMLElement 
   const field = window.activeDocument.createElement("div");
   field.className = fieldClass;
   field.setAttribute("data-note-database-column-key", col.key);
+  field.setAttribute("role", "gridcell");
   options.applyConditionalFormat?.(field, row, config, col.key);
   if (options.fieldWidth != null) field.style.setProperty("--db-card-field-width", `${options.fieldWidth}px`);
   if (options.wrap || col.wrap) field.addClass(`${fieldClass}-wrap`);
@@ -97,10 +99,30 @@ export function renderCardField(options: CardFieldRendererOptions): HTMLElement 
   setFieldTooltip(valueEl, value);
 
   if (options.onEdit && !options.readOnly && !isReadonlyFileField(col.key)) {
+    field.tabIndex = -1;
     field.addEventListener("click", (event) => {
-      if (isHTMLElement(event.target) && event.target.closest("a, button, input, textarea, .db-cell-editing")) return;
+      const target = event.target as HTMLElement | null;
+      if (target && typeof target === "object" && typeof target.closest === "function" && target.closest("a, button, input, textarea, .db-cell-editing")) return;
       event.stopPropagation();
       options.onEdit?.(valueEl, row, col, event);
+    });
+    field.addEventListener("keydown", (event) => {
+      if (isImeComposing(event)) return;
+      if (event.key === "Enter" || event.key === " ") {
+        const target = event.target as HTMLElement | null;
+        if (target && typeof target === "object" && typeof target.closest === "function" && target.closest("a, button, input, textarea, .db-cell-editing")) return;
+        event.preventDefault();
+        event.stopPropagation();
+        options.onEdit?.(valueEl, row, col);
+        return;
+      }
+      if ((event.shiftKey && event.key === "F10") || event.key === "ContextMenu") {
+        const target = event.target as HTMLElement | null;
+        if (target && typeof target === "object" && typeof target.closest === "function" && target.closest("a, button, input, textarea, .db-cell-editing")) return;
+        event.preventDefault();
+        event.stopPropagation();
+        options.onShowColumnMenu?.(createContextMenuEvent(), col, field);
+      }
     });
   }
   return field;
@@ -235,6 +257,16 @@ export function renderCardFieldValue(
   valueEl.textContent = formatCardNumber(value);
 }
 
+function createContextMenuEvent(): MouseEvent {
+  if (typeof MouseEvent !== "undefined") {
+    return new MouseEvent("contextmenu", { bubbles: true, cancelable: true });
+  }
+  return {
+    preventDefault: () => undefined,
+    stopPropagation: () => undefined,
+  } as unknown as MouseEvent;
+}
+
 function attachColumnMenu(
   field: HTMLElement,
   label: HTMLElement,
@@ -242,13 +274,24 @@ function attachColumnMenu(
   showColumnMenu: (event: MouseEvent, col: ColumnDef, anchorEl?: HTMLElement) => void,
 ): void {
   const handler = (event: MouseEvent): void => {
-    if (isHTMLElement(event.target) && event.target.closest("input, select, textarea, button, a")) return;
+    const target = event.target as HTMLElement | null;
+    if (target && typeof target === "object" && typeof target.closest === "function" && target.closest("input, select, textarea, button, a")) return;
     event.preventDefault();
     event.stopPropagation();
     showColumnMenu(event, col, field);
   };
   field.addEventListener("contextmenu", handler);
   label.addEventListener("contextmenu", handler);
+  label.tabIndex = -1;
+  label.setAttribute("aria-haspopup", "menu");
+  label.addEventListener("keydown", (event: KeyboardEvent) => {
+    if (isImeComposing(event)) return;
+    if (event.key === "Enter" || event.key === " " || event.key === "ContextMenu" || (event.shiftKey && event.key === "F10")) {
+      event.preventDefault();
+      event.stopPropagation();
+      showColumnMenu(createContextMenuEvent(), col, label);
+    }
+  });
 }
 
 export function getDisplayTypeForCard(config: ViewConfig, col: ColumnDef): ColumnDef["type"] {

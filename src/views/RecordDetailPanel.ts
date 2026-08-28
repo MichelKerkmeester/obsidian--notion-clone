@@ -119,6 +119,8 @@ export function openRecordDetailPanel(opts: OpenRecordDetailOptions): void {
 
   const panel = host.createDiv({ cls: "db-record-detail-panel" });
   panel.tabIndex = -1;
+  panel.setAttribute("role", "dialog");
+  panel.setAttribute("aria-modal", "true");
 
   // 关闭逻辑（先定义，renderContent 的「打开笔记」按钮复用 close）
   let closed = false;
@@ -161,6 +163,7 @@ export function openRecordDetailPanel(opts: OpenRecordDetailOptions): void {
     panel.empty();
     const explicitTitleField = getRecordEventTitleField(config);
     const title = resolveTitleFieldDisplay(r, config, explicitTitleField);
+    panel.setAttribute("aria-label", title.text || r.file.basename);
     const titleField = title.field || "file.name";
     // 标题区（对齐事件卡片标题）+ 右上角「打开笔记」按钮（复用看板卡片 db-board-card-open 样式）
     const header = panel.createDiv({ cls: "db-record-detail-header" });
@@ -182,6 +185,7 @@ export function openRecordDetailPanel(opts: OpenRecordDetailOptions): void {
     }
     const openBtn = header.createEl("button", {
       cls: "db-board-card-open",
+      attr: { type: "button", "aria-label": t("menu.openNote") },
     });
     setIcon(openBtn, "maximize-2");
     setTooltip(openBtn, t("menu.openNote"), { delay: 100 });

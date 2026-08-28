@@ -1843,7 +1843,8 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
 
   private getEmptyStateOptions(config: ViewConfig): EmptyStateOptions | undefined {
     const diagnostics = this.pipelineDiagnostics;
-    if (diagnostics.visibleCount !== 0) return undefined;
+    const hasActiveQuery = diagnostics.hasActiveSearch || diagnostics.hasActiveFilters || diagnostics.hasActiveLimit;
+    if (diagnostics.visibleCount !== 0 && !hasActiveQuery) return undefined;
     const state = this.vs(config);
     const reason = getEmptyStateReason(diagnostics);
     const clearSearch = () => {

@@ -395,7 +395,6 @@ export class ToolbarRenderer {
           this.closeUtilitiesPopover();
           actions.toggleViewConfig?.(button);
           button.setAttribute("aria-expanded", "true");
-          button.setAttribute("aria-pressed", "true");
         });
       }
       this.setPopoverTriggerState(button, true);
@@ -864,9 +863,14 @@ export class ToolbarRenderer {
   }
 
   private handleTabKeydown(event: KeyboardEvent, tabs: HTMLElement, tabEls: { el: HTMLElement; index: number }[]): void {
-    if (!tabEls.length) return;
+    if (isImeComposing(event) || !tabEls.length) return;
     const current = event.target instanceof HTMLElement ? tabEls.findIndex((entry) => entry.el === event.target) : -1;
     if (current < 0) return;
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      tabEls[current].el.click();
+      return;
+    }
     let next = current;
     if (event.key === "ArrowRight") next = (current + 1) % tabEls.length;
     else if (event.key === "ArrowLeft") next = (current - 1 + tabEls.length) % tabEls.length;
@@ -877,7 +881,6 @@ export class ToolbarRenderer {
     const target = tabEls[next].el;
     this.setRovingTab(tabEls, target);
     target.focus();
-    if (event.key === "ArrowRight" || event.key === "ArrowLeft" || event.key === "Home" || event.key === "End") target.click();
     void tabs;
   }
 
@@ -1962,7 +1965,6 @@ export class ToolbarRenderer {
 
   private setPopoverTriggerState(button: HTMLElement, expanded: boolean): void {
     button.setAttribute("aria-expanded", String(expanded));
-    button.setAttribute("aria-pressed", String(expanded));
     button.toggleClass("is-open", expanded);
   }
 

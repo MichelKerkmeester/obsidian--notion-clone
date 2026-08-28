@@ -1,34 +1,27 @@
 import { App, Menu, setIcon, setTooltip } from "obsidian";
-import { isObsidianTagsKey, resolveOptionDisplay, toBooleanValue, toMultiSelectValuesForKey } from "../data/ColumnTypes";
+import { isObsidianTagsKey, toMultiSelectValuesForKey } from "../data/ColumnTypes";
 import { isExplicitlySorted } from "../data/ManualOrder";
-import { getColumnDisplayType, getNumberDisplayStyle } from "../data/ColumnDisplay";
-import { formatDateTimeValueDisplay, formatDateValueDisplay } from "../data/DateTimeFormat";
-import { getFileFieldFixedType, getRowFileFieldValue, isFileFieldKey, isReadonlyFileField } from "../data/FileFields";
+import { getColumnDisplayType } from "../data/ColumnDisplay";
+import { getFileFieldFixedType, getRowFileFieldValue, isFileFieldKey } from "../data/FileFields";
 import { formatGroupKeyDisplay, isComputedGroupField } from "../data/GroupDisplay";
 import { renderGroupLabel } from "./GroupLabelRenderer";
 import { markNoteHoverLink } from "./HoverLinkPreview";
-import { parseTextLink } from "../data/TextLink";
-import { assembleSchemeLinkTarget, isTextLinkScheme } from "../data/textLinkScheme";
-import { parseInlineMarkdown } from "../data/InlineMarkdown";
 import { ColumnDef, CreateEntryPosition, NO_TITLE_FIELD, RowCreateContext, RowData, ViewConfig } from "../data/types";
 import { t } from "../i18n";
 import { setFieldTooltip } from "./FieldTooltip";
 import { getFileTitleDisplay, renderStackedFileTitle } from "./FileTitleDisplay";
 import { isHTMLElement } from "./DomGuards";
 import { renderMobileMoveIcon } from "./MobileMoveIcon";
-import { renderSpecialFileFieldValue, shouldRenderSpecialFileField } from "./FileFieldRenderer";
-import { renderRating, renderProgress, renderProgressRing } from "./NumberDisplayRenderer";
-import { renderRelationValue } from "./RelationValueRenderer";
-import { renderInlineMarkdown, resolveInlineImageSrc, valueToTooltip } from "./InlineMarkdownRenderer";
 import { getFieldWidth } from "./ColumnWidth";
 import { renderGroupExpandControls } from "./GroupExpandControls";
 import { getGroupVisibleCount } from "../data/GroupVisibility";
 import { DragDropFeedbackState, resolveDropPlacement } from "./DragDropFeedback";
 import { resolveTitleFieldDisplay } from "../data/TitleFieldDisplay";
-import { renderDelayedExternalLink } from "./CellRenderer";
 import { EmptyStateOptions, EmptyStateRenderer } from "./EmptyStateRenderer";
-import { renderCardField, renderCardFieldValue } from "./CardFieldRenderer";
+import { renderCardField } from "./CardFieldRenderer";
 import { attachLongPress, isTouchDevice } from "../data/TouchEnvironment";
+import { CardRovingController, syncCardRoving, wireCardKeyboard } from "./CardRovingTabindex";
+import { isImeComposing } from "../data/KeyboardUtils";
 
 const ROW_MIME = "application/x-note-database-row";
 const ROW_FROM_GROUP_MIME = "application/x-note-database-row-from-group";
@@ -91,6 +84,7 @@ export class ListRenderer {
   private draggingPaths: string[] = [];
   private rowDropFeedback = new DragDropFeedbackState();
   private emptyStateRenderer = new EmptyStateRenderer();
+  private rovingController = new CardRovingController();
 
   constructor(private app: App, private actions: ListRendererActions) {}
 
@@ -105,6 +99,7 @@ export class ListRenderer {
     }
     for (const row of rows) this.renderRow(list, config, row, undefined, undefined, undefined, rows);
     this.renderNewRow(list, undefined, rows);
+    syncCardRoving(container, this.rovingController, ".db-list-row");
   }
 
   renderGrouped(
@@ -118,6 +113,7 @@ export class ListRenderer {
     this.container = container;
     this.rowByPath = new Map(groups.flatMap((group) => group.rows.map((row) => [row.file.path, row] as const)));
     const grouped = container.createDiv({ cls: "db-list-grouped" });
+    let actionsRendered = false;
     for (const group of groups) {
       const section = grouped.createDiv({ cls: "db-list-group" });
       const sectionId = `group-section-${encodeURIComponent(`${groupField}:${group.key}`)}`;
@@ -137,7 +133,7 @@ export class ListRenderer {
         event.stopPropagation();
         this.actions.toggleGroupCollapsed?.(groupField, group.key);
       };
-      this.renderGroupCheckbox(label, group.rows);
+      this.renderGroupCheckbox(label, group.rows, group.key || t("common.noGroup"));
       renderGroupLabel(label, config, groupField, group.key, "db-list-group-title");
       label.createSpan({ cls: "db-list-group-count", text: String(group.count) });
       this.actions.renderGroupSummaries?.(label, group.rows, config);
@@ -159,9 +155,17 @@ export class ListRenderer {
       this.setupGroupDropTarget(list, groupField, group.key);
       const visibleCount = getGroupVisibleCount(config, groupField, group.key, group.rows.length);
       if (visibleCount === 0) {
+        const groupEmptyOptions: EmptyStateOptions = emptyState
+          ? (actionsRendered && emptyState.actions
+            ? { ...emptyState, actions: undefined }
+            : emptyState)
+          : { reason: "empty-group" };
+        if (groupEmptyOptions.actions && groupEmptyOptions.actions.length > 0) {
+          actionsRendered = true;
+        }
         const empty = this.emptyStateRenderer.renderCard(
           list,
-          emptyState || { reason: "empty-group" },
+          groupEmptyOptions,
         );
         empty.addClass("db-list-empty-group");
       }
@@ -170,19 +174,23 @@ export class ListRenderer {
       this.renderNewRow(list, computedGroup ? undefined : { [groupField]: group.key || "" }, group.rows, computedGroup);
       renderGroupExpandControls(list, config, groupField, group.key, group.rows.length, this.actions);
     }
+    syncCardRoving(container, this.rovingController, ".db-list-row");
   }
 
   private renderTotalHeader(container: HTMLElement, rows: RowData[]): void {
     const header = container.createDiv({ cls: "db-list-total-header" });
     const label = header.createSpan({ cls: "db-list-group-header-label" });
-    this.renderGroupCheckbox(label, rows);
+    this.renderGroupCheckbox(label, rows, t("common.total"));
     label.createSpan({ cls: "db-list-group-title", text: t("common.total") });
     label.createSpan({ cls: "db-list-group-count", text: String(rows.length) });
   }
 
-  private renderGroupCheckbox(parent: HTMLElement, rows: RowData[]): void {
+  private renderGroupCheckbox(parent: HTMLElement, rows: RowData[], label?: string): void {
     if (this.actions.isReadOnly) return;
-    const checkbox = parent.createEl("input", { cls: "db-list-group-checkbox", attr: { type: "checkbox" } });
+    const checkbox = parent.createEl("input", {
+      cls: "db-list-group-checkbox",
+      attr: { type: "checkbox", "aria-label": label || t("common.total") },
+    });
     checkbox.checked = this.actions.areAllRowsSelected(rows);
     checkbox.indeterminate = rows.some((row) => this.actions.isRowSelected(row)) && !checkbox.checked;
     checkbox.onclick = (event) => event.stopPropagation();
@@ -190,7 +198,7 @@ export class ListRenderer {
   }
 
   private createList(parent: HTMLElement, config: ViewConfig): HTMLElement {
-    const list = parent.createDiv({ cls: "db-list" });
+    const list = parent.createDiv({ cls: "db-list", attr: { role: "grid" } });
     if (config.listCompactFields === true) list.addClass("is-compact-fields");
     return list;
   }
@@ -198,18 +206,22 @@ export class ListRenderer {
   private renderRow(list: HTMLElement, config: ViewConfig, row: RowData, groupField?: string, groupKey?: string, groups?: ListGroup[], allRows?: RowData[]): void {
     const item = list.createDiv({
       cls: "db-list-row",
-      attr: { "data-note-database-row-path": row.file.path, title: row.file.path },
+      attr: {
+        "data-note-database-row-path": row.file.path,
+        title: row.file.path,
+        role: "row",
+        "aria-keyshortcuts": "Enter Space F2",
+      },
+    });
+    wireCardKeyboard({
+      card: item,
+      rovingController: this.rovingController,
+      onActivate: this.actions.openRecordDetail ? () => this.actions.openRecordDetail?.(item, row) : undefined,
+      ignoreSelector: "a, button, input, select, textarea, .db-cell-editing",
     });
     if (this.actions.openRecordDetail) {
-      item.tabIndex = 0;
-      item.setAttribute("role", "button");
       item.addEventListener("click", (event) => {
         if (isHTMLElement(event.target) && event.target.closest("a, button, input, select, textarea, .db-cell-editing")) return;
-        this.actions.openRecordDetail?.(item, row);
-      });
-      item.addEventListener("keydown", (event) => {
-        if (event.key !== "Enter" && event.key !== " ") return;
-        event.preventDefault();
         this.actions.openRecordDetail?.(item, row);
       });
     }
@@ -224,7 +236,10 @@ export class ListRenderer {
     }
     const controls = item.createDiv({ cls: "db-list-row-controls" });
     if (!this.actions.isReadOnly) {
-      const checkbox = controls.createEl("input", { cls: "db-list-row-checkbox", attr: { type: "checkbox" } });
+      const checkbox = controls.createEl("input", {
+        cls: "db-list-row-checkbox",
+        attr: { type: "checkbox", "aria-label": row.file.basename || row.file.path },
+      });
       checkbox.checked = this.actions.isRowSelected(row);
       checkbox.onclick = (event) => {
         event.stopPropagation();
@@ -233,6 +248,7 @@ export class ListRenderer {
     }
     const openBtn = controls.createEl("button", {
       cls: "db-list-row-open",
+      attr: { type: "button", "aria-label": t("menu.openNote") },
     });
     setIcon(openBtn, "maximize-2");
     setTooltip(openBtn, t("menu.openNote"), { delay: 100 });
@@ -241,7 +257,9 @@ export class ListRenderer {
       event.stopPropagation();
       this.actions.openRow(row);
     };
-    if (!this.actions.isReadOnly && isTouchDevice(this.container) && (this.canManualReorder(config) || Boolean(groupField && groups?.length))) {
+    // The move menu is the only reorder path that does not require dragging, so it
+    // stays available on every pointer type rather than touch alone.
+    if (!this.actions.isReadOnly && (this.canManualReorder(config) || Boolean(groupField && groups?.length))) {
       this.renderMobileMoveButton(controls, config, row, allRows || [], groupField, groupKey, groups);
     }
 
@@ -305,16 +323,6 @@ export class ListRenderer {
     attachLongPress(el, {
       ignoreTarget: (event) => isHTMLElement(event.target) && Boolean(event.target.closest("input, select, textarea, button, a")),
       onLongPress: (event) => this.actions.showRowMenu?.(event as unknown as MouseEvent, row, context),
-    });
-  }
-
-  private attachColumnContextMenu(el: HTMLElement, col: ColumnDef): void {
-    el.addEventListener("contextmenu", (event) => {
-      if (!this.actions.showColumnMenu) return;
-      if (isHTMLElement(event.target) && event.target.closest("input, select, textarea, button, a")) return;
-      event.preventDefault();
-      event.stopPropagation();
-      this.actions.showColumnMenu(event, col, el);
     });
   }
 
@@ -566,128 +574,6 @@ export class ListRenderer {
     return config.titleField || "file.name";
   }
 
-  private renderValue(field: HTMLElement, row: RowData, col: ColumnDef, value: unknown, empty = false, displayType: ColumnDef["type"] = col.type): void {
-    const valueEl = field.createDiv({ cls: "db-list-field-value" });
-    if (empty) valueEl.addClass("db-card-empty-placeholder");
-    field.addEventListener("click", (event) => {
-      if (this.actions.isReadOnly || isReadonlyFileField(col.key)) return;
-      if (isHTMLElement(event.target) && event.target.closest("a, button, input, textarea, .db-cell-editing")) return;
-      event.stopPropagation();
-      this.actions.editCell(valueEl, row, col, event);
-    });
-    if (displayType === "checkbox") {
-      valueEl.addClass("db-checkbox-cell");
-      const cb = valueEl.createEl("input", { attr: { type: "checkbox" } });
-      cb.checked = toBooleanValue(value);
-      if (col.type === "computed") {
-        // 计算型 checkbox：点击打开公式编辑器
-        cb.disabled = !!this.actions.isReadOnly;
-        cb.onclick = (event) => {
-          event.preventDefault();
-          event.stopPropagation();
-          if (!this.actions.isReadOnly) this.actions.editFormula?.(col);
-        };
-      } else {
-        cb.onclick = (event) => event.stopPropagation();
-        cb.disabled = !!this.actions.isReadOnly;
-        if (!this.actions.isReadOnly) {
-          cb.onchange = () => {
-            void this.actions.editCell(valueEl, row, col);
-          };
-        }
-      }
-      setFieldTooltip(valueEl, cb.checked ? t("common.true") : t("common.false"));
-      return;
-    }
-    if (shouldRenderSpecialFileField(col) && renderSpecialFileFieldValue(valueEl, this.app, row, col, value, {
-      tagsContainerClass: "db-list-badges",
-      linkItemClass: "db-list-link",
-    })) {
-      return;
-    }
-    if (col.type === "select" || col.type === "status") {
-      this.renderBadge(valueEl, col, String(value));
-      return;
-    }
-    if (col.type === "multi-select") {
-      const badges = valueEl.createDiv({ cls: "db-list-badges" });
-      const values = toMultiSelectValuesForKey(col.key, value);
-      setFieldTooltip(badges, values);
-      for (const entry of values) this.renderBadge(badges, col, entry);
-      return;
-    }
-    if (col.type === "relation" && renderRelationValue(valueEl, this.app, row, value, true)) {
-      return;
-    }
-    if (displayType === "date" || displayType === "datetime") {
-      valueEl.addClass("db-date-value");
-      valueEl.textContent = displayType === "datetime"
-        ? formatDateTimeValueDisplay(value, { mode: "full", showTimeWhenMissing: true })
-        : formatDateValueDisplay(value);
-      valueEl.title = valueEl.textContent;
-      return;
-    }
-
-    const schemeTarget = col.type === "text" && !isFileFieldKey(col.key) && isTextLinkScheme(col.textLinkScheme)
-      ? assembleSchemeLinkTarget(col.textLinkScheme, value)
-      : null;
-    if (schemeTarget !== null) {
-      renderDelayedExternalLink(valueEl, row, {
-        label: String(value),
-        target: schemeTarget,
-        external: true,
-      });
-      return;
-    }
-
-    if (col.textRenderMode === "markdown" && !isFileFieldKey(col.key)) {
-      const mdValues = Array.isArray(value) ? value : [value];
-      const parsed = mdValues.map((entry) => parseInlineMarkdown(entry));
-      if (parsed.some((nodes) => nodes !== null)) {
-        valueEl.empty();
-        const onOpenLink = (target: string, external: boolean): void => {
-          void this.openTarget(row, target, external);
-        };
-        const onResolveImage = (target: string, external: boolean): string | null =>
-          resolveInlineImageSrc(this.app, row, target, external);
-        parsed.forEach((nodes, idx) => {
-          if (idx > 0) valueEl.appendText(", ");
-          if (nodes) {
-            if (parsed.length === 1) renderInlineMarkdown(valueEl, nodes, { onOpenLink, onResolveImage, sourcePath: row.file.path });
-            else renderInlineMarkdown(valueEl.createSpan(), nodes, { onOpenLink, onResolveImage, sourcePath: row.file.path });
-          } else {
-            valueEl.appendText(String(mdValues[idx]));
-          }
-        });
-        valueEl.title = valueToTooltip(value);
-        return;
-      }
-    }
-
-    if (col.textRenderMode === "link") {
-      const values = Array.isArray(value) ? value : [value];
-      const links = values
-        .map((entry) => parseTextLink(entry))
-        .filter((entry): entry is ParsedLink => entry !== null);
-      if (links.length > 0) {
-        for (const link of links) this.renderLink(valueEl, row, link);
-        return;
-      }
-    }
-
-    if (displayType === "number") {
-      const num = typeof value === "number" ? value : parseFloat(String(value));
-      if (!isNaN(num)) {
-        const style = getNumberDisplayStyle(col);
-        if (style === "rating") { renderRating(valueEl, num, col.numberDisplayConfig); return; }
-        if (style === "progress") { renderProgress(valueEl, num, col.numberDisplayConfig); return; }
-        if (style === "ring") { renderProgressRing(valueEl, num, col.numberDisplayConfig); return; }
-      }
-    }
-    valueEl.textContent = Array.isArray(value) ? value.join(", ") : String(value);
-    valueEl.title = valueEl.textContent;
-  }
-
   renderRowFieldContent(
     row: RowData,
     col: ColumnDef,
@@ -711,25 +597,6 @@ export class ListRenderer {
       onNumberChange: (targetRow, targetCol, next) => this.actions.saveCellValue?.(targetRow, targetCol, next),
       onShowColumnMenu: this.actions.showColumnMenu,
     });
-  }
-
-  private renderBadge(parent: HTMLElement, col: ColumnDef, value: string): void {
-    const resolved = resolveOptionDisplay(col, value);
-    const display = resolved.value || t("common.empty");
-    const badge = parent.createSpan({ cls: "status-badge", text: display });
-    badge.title = display;
-    badge.addClass(`status-color-${resolved.option?.color || "gray"}`);
-  }
-
-  private renderLink(parent: HTMLElement, row: RowData, link: ParsedLink): void {
-    const anchor = parent.createEl("a", { cls: "db-list-link", text: link.label, attr: { title: link.label } });
-    anchor.href = link.external ? link.target : "#";
-    if (!link.external) markNoteHoverLink(anchor, link.target, row.file.path);
-    anchor.onclick = (event) => {
-      event.preventDefault();
-      event.stopPropagation();
-      void this.openTarget(row, link.target, link.external);
-    };
   }
 
   private async openTarget(row: RowData, target: string, external: boolean): Promise<void> {

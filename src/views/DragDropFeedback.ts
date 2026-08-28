@@ -1,3 +1,5 @@
+import { t } from "../i18n";
+
 export type DropPlacement = "before" | "after";
 export type DropAxis = "vertical" | "horizontal";
 export type DragDropPhase = "over" | "pending" | "committed" | "failed";
@@ -96,6 +98,35 @@ export class DragDropFeedbackState {
     this.target?.classList.toggle("is-drop-pending", phase === "pending");
     this.target?.classList.toggle("is-drop-committed", phase === "committed");
     this.target?.classList.toggle("is-drop-failed", phase === "failed");
+
+    const count = this.sourcePaths.length || 1;
+    if (phase === "pending") {
+      this.announce(t("drag.movingItems", { count }));
+    } else if (phase === "committed") {
+      this.announce(t("operation.moved", { count }));
+    } else if (phase === "failed") {
+      this.announce(this.error || t("operation.failed"));
+    }
+  }
+
+  private announce(message: string): void {
+    if (!message) return;
+    const doc = this.target?.ownerDocument ?? (typeof document !== "undefined" ? document : null);
+    if (!doc) return;
+    const container = (this.target && typeof this.target.closest === "function" ? this.target.closest(".note-database-container") : null) ?? doc.body;
+    if (!container) return;
+    let liveRegion = typeof container.querySelector === "function" ? container.querySelector<HTMLElement>(":scope > .db-sr-status, .db-sr-status") : null;
+    if (!liveRegion && typeof doc.createElement === "function" && typeof container.appendChild === "function") {
+      liveRegion = doc.createElement("div");
+      liveRegion.className = "db-sr-status";
+      liveRegion.setAttribute("role", "status");
+      liveRegion.setAttribute("aria-live", "polite");
+      liveRegion.setAttribute("aria-atomic", "true");
+      container.appendChild(liveRegion);
+    }
+    if (liveRegion) {
+      liveRegion.textContent = message;
+    }
   }
 
   private removePlacementClasses(): void {
