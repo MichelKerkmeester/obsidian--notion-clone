@@ -1257,8 +1257,12 @@ export class ToolbarRenderer {
     });
     const cards = panel.createDiv({ cls: "db-add-view-cards" });
     for (const { value, text, icon } of this.getViewTypeOptions()) {
+      // Deliberately not a db-menu-item: that class describes a single-line menu row (row
+      // min-height, row hover, row radius), which is the wrong contract for a tile stacking
+      // a preview over a caption and would collapse it again if the row rule ever changes.
+      // Keyboard navigation keys off role=menuitem, not the class, so it still works.
       const card = cards.createEl("button", {
-        cls: "db-add-view-card db-menu-item",
+        cls: "db-add-view-card",
         attr: { type: "button", role: "menuitem", "aria-label": text },
       });
       const preview = card.createDiv({ cls: `db-add-view-preview is-${value}` });

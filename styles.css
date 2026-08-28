@@ -18532,14 +18532,24 @@ body.is-tablet .note-database-container .db-record-open-btn {
   overflow: auto;
 }
 
+/* The viewport clamp above is only honoured if the popover's own padding and border count
+   toward the declared width; on a content box the frame adds ~18px and the tile grid ends
+   up wider than the space the popover was allowed to take. */
+.note-database-container .db-add-view-popover {
+  box-sizing: border-box;
+}
+
 .note-database-container .db-all-views-header {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   gap: var(--db-space-2);
 }
 
+/* Full-bleed sizing is meant for the free-text fields and the key-field select. A
+   checkbox caught by a bare `input` selector loses its native box and renders as an
+   empty pill the width of the form, so the toggles are excluded by type. */
 .note-database-container .db-all-views-search,
-.note-database-container .db-add-view-form input,
+.note-database-container .db-add-view-form input:not([type="checkbox"]):not([type="radio"]),
 .note-database-container .db-add-view-form select {
   width: 100%;
   min-height: 32px;
@@ -18602,39 +18612,89 @@ body.is-tablet .note-database-container .db-record-open-btn {
   font-size: var(--db-font-sm);
 }
 
+/* No width or height here on purpose: the native checkbox metrics are correct, the box
+   only needs to stop being a flex-shrink target so the caption stays on the same line. */
+.note-database-container .db-add-view-duplicate input {
+  flex: 0 0 auto;
+  margin: 0;
+}
+
 .note-database-container .db-add-view-cards {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
+  /* Equal rows keep the tiles a uniform size when one caption wraps and its neighbours don't. */
+  grid-auto-rows: 1fr;
   gap: var(--db-space-2);
   padding: var(--db-space-2) var(--db-space-3);
 }
 
+/* A bare <button> is pinned to the app's single-line input height, which is shorter than
+   the preview and caption stacked inside it. Without the height reset the tile stays one
+   line tall and its own contents paint outside it, over the neighbouring tiles. The
+   inherited nowrap comes from the same place and has to be released for captions to wrap. */
 .note-database-container .db-add-view-card {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: auto auto;
+  align-content: start;
   gap: var(--db-space-1);
+  width: 100%;
+  height: auto;
   min-width: 0;
+  box-sizing: border-box;
   padding: var(--db-space-2);
   border: 1px solid var(--db-border-regular);
   border-radius: var(--db-radius-md);
   background: var(--background-primary);
-  text-align: start;
+  box-shadow: none;
+  text-align: center;
+  white-space: normal;
+  transition: background-color 120ms ease-out, border-color 120ms ease-out;
 }
 
 .note-database-container .db-add-view-card:hover {
   border-color: var(--interactive-accent);
+  background: var(--db-hover-bg, var(--background-modifier-hover));
+}
+
+.note-database-container .db-add-view-card:focus-visible {
+  border-color: var(--interactive-accent);
+  outline: none;
+  box-shadow: var(--db-accent-focus-ring);
+}
+
+.note-database-container .db-add-view-card-label {
+  min-width: 0;
+  color: var(--text-normal);
+  font-size: var(--db-font-xs);
+  line-height: var(--db-font-xs-line-height);
+  overflow-wrap: anywhere;
 }
 
 .note-database-container .db-add-view-preview {
   display: grid;
   place-items: center;
+  min-width: 0;
   min-height: 48px;
   border-radius: var(--db-radius-sm);
   background: var(--background-secondary);
   color: var(--text-muted);
 }
 
+.note-database-container .db-add-view-preview-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.note-database-container .db-add-view-preview-icon svg {
+  width: 18px;
+  height: 18px;
+}
+
 .note-database-container .db-add-view-preview-lines {
   width: 42px;
+  max-width: 100%;
   height: 18px;
   border-block: 2px solid currentColor;
   opacity: 0.35;
@@ -18677,6 +18737,16 @@ body.is-tablet .note-database-container .db-record-open-btn {
 .note-database-container .db-new-template-default-action:hover,
 .note-database-container .db-add-view-duplicate-action:hover {
   background: var(--background-modifier-hover);
+}
+
+/* Closing action for the add-view popover: a row of its own under the tile grid, with a
+   rule separating it from the tiles so it does not read as a stray card caption. */
+.note-database-container .db-add-view-duplicate-action {
+  height: auto;
+  margin-top: var(--db-space-2);
+  border-top: 1px solid var(--db-border-subtle);
+  border-radius: 0;
+  box-shadow: none;
 }
 
 .note-database-container .db-active-view-controls {

@@ -1,0 +1,23 @@
+{
+  "level": "1",
+  "specFolder": "public/003-ui-improvement-build/010-add-view-popover-layout",
+  "description": "A user reported that \"the view selector is completely broken ui wise\"",
+  "keywords": [
+    "user",
+    "reported",
+    "view",
+    "selector",
+    "completely",
+    "broken",
+    "wise"
+  ],
+  "lastUpdated": "2026-08-28T12:42:22.180Z",
+  "specId": "010",
+  "folderSlug": "add-view-popover-layout",
+  "parentChain": [
+    "public",
+    "003-ui-improvement-build"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": []
+}

@@ -42,7 +42,7 @@ _memory:
 ---
 # Feature Specification: Mobile, Responsiveness & Accessibility
 
-> Phase chain: parent [`../spec.md`](../spec.md), predecessor `007-micro-interactions`, successor none (final build phase).
+> Phase chain: parent [`../spec.md`](../spec.md), predecessor `007-micro-interactions`, successor `009-header-affordance-defects`.
 
 <!-- SPECKIT_LEVEL: 2 -->
 <!-- SPECKIT_TEMPLATE_SOURCE: spec-core + level2-verify | v2.2 -->

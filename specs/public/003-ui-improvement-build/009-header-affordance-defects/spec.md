@@ -35,7 +35,7 @@ _memory:
 ---
 # Feature Specification: Column Header Menu Affordance Defects
 
-> Phase chain: parent [`../spec.md`](../spec.md), predecessor `008-mobile-and-accessibility`.
+> Phase chain: parent [`../spec.md`](../spec.md), predecessor `008-mobile-and-accessibility`, successor `010-add-view-popover-layout`.
 
 <!-- SPECKIT_LEVEL: 1 -->
 <!-- SPECKIT_TEMPLATE_SOURCE: spec-core | v2.2 -->

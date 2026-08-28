@@ -115,6 +115,8 @@ Turn that research into eight independently shippable build phases, each grounde
 | 006 | `006-views-parity-polish/` | Board, gallery, calendar, list parity | Planned |
 | 007 | `007-micro-interactions/` | Hover, drag, inline edit, selection, feedback | Planned |
 | 008 | `008-mobile-and-accessibility/` | Mobile, responsive, contrast, focus, ARIA | Planned |
+| 009 | `009-header-affordance-defects/` | Column header menu placement, truncation, cursors | Complete |
+| 010 | `010-add-view-popover-layout/` | Add-view popover box model and card tiles | Complete |
 
 ### Phase Sequencing
 
