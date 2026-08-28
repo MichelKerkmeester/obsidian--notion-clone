@@ -47,27 +47,48 @@ function arg(flag, fallback) {
   return i !== -1 && process.argv[i + 1] ? process.argv[i + 1] : fallback;
 }
 
-function buildPage(scenario, theme, styles, themeCss, runtimeCss) {
+/* Obsidian marks phone layouts with `is-phone` on the body, and a large part of the
+   plugin's responsive CSS keys off it. Without the class a narrow viewport is just a
+   cramped desktop, so the mobile capture would not show the mobile design at all. */
+const DEVICES = [
+  { id: "desktop", width: 1440, height: 900, bodyClass: "" },
+  { id: "mobile", width: 402, height: 874, bodyClass: "is-phone" },
+];
+
+/* A full view is documented inside a device frame; a component is documented on its own,
+   sized to itself on a transparent ground so it can sit on any background. Scenarios may
+   override with an explicit `capture` field. */
+function captureMode(scenario) {
+  return scenario.capture || (scenario.group === "views" ? "viewport" : "element");
+}
+
+function buildPage(scenario, theme, styles, themeCss, runtimeCss, device) {
   // captureCss lands after the plugin stylesheet so a scenario can undo the parts of a
   // rule that only make sense against a live anchor — an overlay positioned absolutely
   // against a toolbar contributes no height here and would photograph as an empty box.
   // It must never restyle what is being photographed, only make it visible.
   const overrides = scenario.captureCss ? `<style>${scenario.captureCss}</style>` : "";
   return `<!doctype html>
-<html class="${theme === "dark" ? "theme-dark" : "theme-light"}">
+<html class="${[theme === "dark" ? "theme-dark" : "theme-light", captureMode(scenario) === "element" ? "capture-element" : ""].filter(Boolean).join(" ")}">
 <head><meta charset="utf-8">
 <style>${themeCss}</style>
 <style>${styles}</style>
 <style>${runtimeCss}</style>
 ${overrides}
 </head>
-<body><div id="shot">${scenario.html()}</div></body></html>`;
+<body class="${device.bodyClass}"><div id="shot">${scenario.html()}</div></body></html>`;
 }
 
 async function main() {
   const only = arg("--only", null);
   const themeArg = arg("--theme", "both");
   const themes = themeArg === "both" ? ["dark", "light"] : [themeArg];
+  const deviceArg = arg("--device", "both");
+  const devices = deviceArg === "both" ? DEVICES : DEVICES.filter((d) => d.id === deviceArg);
+  if (!devices.length) {
+    console.error(`No device matched --device ${deviceArg} (expected desktop or mobile)`);
+    process.exit(1);
+  }
   const list = only ? SCENARIOS.filter((s) => s.id === only) : SCENARIOS;
   if (!list.length) {
     console.error(`No scenario matched --only ${only}`);
@@ -92,25 +113,63 @@ async function main() {
 
   const browser = await chromium.launch({ executablePath: findChrome() });
   const manifest = [];
+  const failures = [];
   let count = 0;
 
   try {
     for (const scenario of list) {
+      for (const device of devices) {
       for (const theme of themes) {
         const page = await browser.newPage({
-          viewport: { width: scenario.width || 900, height: 600 },
+          viewport: { width: device.width, height: device.height },
           deviceScaleFactor: 2,
+          isMobile: device.id === "mobile",
+          hasTouch: device.id === "mobile",
         });
-        const html = buildPage(scenario, theme, styles, themeCss, runtimeCss);
-        const tmpFile = join(TMP, `${scenario.id}-${theme}.html`);
+        const html = buildPage(scenario, theme, styles, themeCss, runtimeCss, device);
+        const tmpFile = join(TMP, `${scenario.id}-${device.id}-${theme}.html`);
         writeFileSync(tmpFile, html, "utf8");
         await page.goto(pathToFileURL(tmpFile).href, { waitUntil: "load" });
 
         const target = await page.$("#shot");
-        const rel = `${scenario.group}/${scenario.id}-${theme}.png`;
+
+        // Measure before capturing. A fixture that resolves to an absurd size takes the
+        // whole browser down with it, which reads as an unexplained crash; measuring first
+        // turns that into a number naming the scenario and its dimensions.
+        const box = await target.boundingBox();
+        const LIMIT = 12000;
+        if (!box || box.width > LIMIT || box.height > LIMIT) {
+          const size = box ? `${Math.round(box.width)}x${Math.round(box.height)}` : "unmeasurable";
+          failures.push(`${scenario.group}/${scenario.id}-${device.id}-${theme}.png: refused, renders ${size}px (limit ${LIMIT})`);
+          console.log(`  OVERSIZE ${scenario.id}-${device.id}-${theme}: ${size}px`);
+          await page.close();
+          continue;
+        }
+        const rel = `${scenario.group}/${scenario.id}-${device.id}-${theme}.png`;
         const dest = join(OUT, rel);
         mkdirSync(dirname(dest), { recursive: true });
-        await target.screenshot({ path: dest });
+        try {
+          // A scenario whose markup never settles - a running animation, a zero-size box -
+          // would otherwise wait forever and take the whole run down with it, leaving the
+          // manifest unwritten and every later surface unphotographed. Bound it, record the
+          // failure, and keep going so one bad fixture costs one screenshot.
+          // Capture the viewport, not the element. An element shot grows to its own content,
+          // so a wide table photographed on a phone viewport comes back full desktop width
+          // and the responsive layout never appears. A viewport shot is exactly the device
+          // frame the surface would occupy, and content wider than it scrolls as it would.
+          if (captureMode(scenario) === "element") {
+            await target.screenshot({
+              path: dest, timeout: 15000, animations: "disabled", omitBackground: true,
+            });
+          } else {
+            await page.screenshot({ path: dest, timeout: 15000, animations: "disabled" });
+          }
+        } catch (err) {
+          failures.push(`${rel}: ${err.message.split("\n")[0]}`);
+          console.log(`  FAILED ${rel}`);
+          await page.close();
+          continue;
+        }
 
         const bytes = readFileSync(dest);
         manifest.push({
@@ -118,17 +177,20 @@ async function main() {
           title: scenario.title,
           group: scenario.group,
           theme,
+          device: device.id,
           file: `screenshots/${rel}`,
           sources: scenario.sources,
           sourceHashes: Object.fromEntries(
             [...scenario.sources, "styles.css"].map((s) => [s, fingerprint(s)])
           ),
           note: scenario.note || null,
+          capture: captureMode(scenario),
           bytes: bytes.length,
         });
         count += 1;
         console.log(`  captured ${rel} (${bytes.length} bytes)`);
         await page.close();
+      }
       }
     }
   } finally {
@@ -138,7 +200,7 @@ async function main() {
 
   // Only rewrite the manifest on a full run; a --only run would otherwise drop every
   // scenario it did not capture and make the freshness check read as complete.
-  if (!only && themeArg === "both") {
+  if (!only && themeArg === "both" && deviceArg === "both") {
     const payload = {
       generatedFrom: { stylesheet: `styles.css@${stylesHash}` },
       scenarios: manifest.sort((a, b) => a.file.localeCompare(b.file)),
@@ -180,7 +242,12 @@ async function main() {
   } else {
     console.log("  partial run: manifest left unchanged");
   }
+  if (failures.length) {
+    console.log(`  ${failures.length} capture(s) FAILED:`);
+    for (const f of failures) console.log(`    ${f}`);
+  }
   console.log(`  done: ${count} screenshots`);
+  if (failures.length) process.exitCode = 1;
 }
 
 main().catch((err) => {

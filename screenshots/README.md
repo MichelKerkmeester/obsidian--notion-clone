@@ -15,7 +15,127 @@ Tiles keep icon and caption inside their own bounds; the duplicate checkbox is n
 
 | dark | light |
 |---|---|
-| ![add-view-popover dark](components/add-view-popover-dark.png) | ![add-view-popover light](components/add-view-popover-light.png) |
+| ![add-view-popover dark](components/add-view-popover-mobile-dark.png) | ![add-view-popover light](components/add-view-popover-mobile-light.png) |
+
+Sources: `src/views/ToolbarRenderer.ts`
+
+### Active rule popover — filter
+
+Editing one chip opens the filter panel's single-rule editor: field, operator and value, with no remove button.
+
+| dark | light |
+|---|---|
+| ![chrome-active-rule-popover-filter dark](components/chrome-active-rule-popover-filter-mobile-dark.png) | ![chrome-active-rule-popover-filter light](components/chrome-active-rule-popover-filter-mobile-light.png) |
+
+Sources: `src/views/ActiveRulePopoverRenderer.ts`, `src/views/FilterPanelRenderer.ts`
+
+### Active rule popover — sort
+
+The sort variant adds db-sort-panel and drops the drag handle and reorder buttons the full panel shows.
+
+| dark | light |
+|---|---|
+| ![chrome-active-rule-popover-sort dark](components/chrome-active-rule-popover-sort-mobile-dark.png) | ![chrome-active-rule-popover-sort light](components/chrome-active-rule-popover-sort-mobile-light.png) |
+
+Sources: `src/views/ActiveRulePopoverRenderer.ts`, `src/views/SortPanelRenderer.ts`
+
+### Active filter and sort chips
+
+The rail lives in the header below the toolbar. Sort chips come first and carry their position as a superscript; the AND button between the groups toggles filter logic.
+
+| dark | light |
+|---|---|
+| ![chrome-active-view-controls dark](components/chrome-active-view-controls-mobile-dark.png) | ![chrome-active-view-controls light](components/chrome-active-view-controls-mobile-light.png) |
+
+Sources: `src/views/ActiveViewControlsRenderer.ts`
+
+### Chart view — empty state
+
+Every other chart type is a Chart.js canvas painted at runtime, so this recovery state and the single-number chart are what a capture can show of the chart body.
+
+| dark | light |
+|---|---|
+| ![chrome-chart-empty dark](components/chrome-chart-empty-mobile-dark.png) | ![chrome-chart-empty light](components/chrome-chart-empty-mobile-light.png) |
+
+Sources: `src/views/ChartRenderer.ts`
+
+### Chart view — single number
+
+The one chart type the stylesheet draws in full: renderNumber writes three divs and no canvas, so this is the only plotted chart a screenshot can show. The height class is what sizes it.
+
+| dark | light |
+|---|---|
+| ![chrome-chart-number dark](components/chrome-chart-number-mobile-dark.png) | ![chrome-chart-number light](components/chrome-chart-number-mobile-light.png) |
+
+Sources: `src/views/ChartRenderer.ts`
+
+### Chart options popover
+
+What the chart view uses instead of a toolbar of its own: the chart-options button in the toolbar opens this panel. Every row is a 18px/1fr/16px grid, so selects, switches, drill-in entries and export buttons line up on one set of columns.
+
+| dark | light |
+|---|---|
+| ![chrome-chart-options-popover dark](components/chrome-chart-options-popover-mobile-dark.png) | ![chrome-chart-options-popover light](components/chrome-chart-options-popover-mobile-light.png) |
+
+Sources: `src/views/ChartToolbarRenderer.ts`
+
+### Grouped table header rows
+
+An option-typed group field renders its key as a colored status badge; a field with no options renders plain text, as the nested Revolut subgroup does. Per-group summaries sit at the right of each divider.
+
+| dark | light |
+|---|---|
+| ![chrome-group-header-row dark](components/chrome-group-header-row-mobile-dark.png) | ![chrome-group-header-row light](components/chrome-group-header-row-mobile-light.png) |
+
+Sources: `src/views/GroupLabelRenderer.ts`, `src/views/TableRenderer.ts`, `src/views/SummaryRenderer.ts`
+
+### Summary row
+
+Total is always present; each configured summary rule is a draggable, clickable item, and the faint + Summary entry adds another.
+
+| dark | light |
+|---|---|
+| ![chrome-summary-row dark](components/chrome-summary-row-mobile-dark.png) | ![chrome-summary-row light](components/chrome-summary-row-mobile-light.png) |
+
+Sources: `src/views/SummaryRenderer.ts`
+
+### Table footer aggregates
+
+A column with summary rules stacks each kind over its result; a column without one shows a + Calculate hint that the stylesheet keeps at zero opacity until the trigger is hovered, so it is invisible here by design.
+
+| dark | light |
+|---|---|
+| ![chrome-table-footer dark](components/chrome-table-footer-mobile-dark.png) | ![chrome-table-footer light](components/chrome-table-footer-mobile-light.png) |
+
+Sources: `src/views/TableFooterRenderer.ts`, `src/views/TableRenderer.ts`
+
+### Main toolbar
+
+View switcher on the left; query, properties, utilities and creation clusters on the right. The search control sits collapsed in the utilities cluster until it has text or focus.
+
+| dark | light |
+|---|---|
+| ![chrome-toolbar dark](components/chrome-toolbar-mobile-dark.png) | ![chrome-toolbar light](components/chrome-toolbar-mobile-light.png) |
+
+Sources: `src/views/ToolbarRenderer.ts`
+
+### Toolbar search, collapsed and expanded
+
+The wrap is 28px wide at rest and widens to 150px under is-active; the clear button is hidden until the input has text.
+
+| dark | light |
+|---|---|
+| ![chrome-toolbar-search dark](components/chrome-toolbar-search-mobile-dark.png) | ![chrome-toolbar-search light](components/chrome-toolbar-search-mobile-light.png) |
+
+Sources: `src/views/ToolbarRenderer.ts`
+
+### View switcher tablist
+
+The active tab carries is-active; the ⋯ tab appears only once the toolbar has measured tabs out of view, and opens the all-views hub.
+
+| dark | light |
+|---|---|
+| ![chrome-view-switcher dark](components/chrome-view-switcher-mobile-dark.png) | ![chrome-view-switcher light](components/chrome-view-switcher-mobile-light.png) |
 
 Sources: `src/views/ToolbarRenderer.ts`
 
@@ -25,7 +145,7 @@ A disabled option is dimmed and carries a tooltip rather than inline explanatory
 
 | dark | light |
 |---|---|
-| ![dropdown-field dark](components/dropdown-field-dark.png) | ![dropdown-field light](components/dropdown-field-light.png) |
+| ![dropdown-field dark](components/dropdown-field-mobile-dark.png) | ![dropdown-field light](components/dropdown-field-mobile-light.png) |
 
 Sources: `src/views/DropdownField.ts`
 
@@ -35,9 +155,203 @@ The menu trigger sits inline after the label and the label truncates before it m
 
 | dark | light |
 |---|---|
-| ![table-column-header dark](components/table-column-header-dark.png) | ![table-column-header light](components/table-column-header-light.png) |
+| ![table-column-header dark](components/table-column-header-mobile-dark.png) | ![table-column-header light](components/table-column-header-mobile-light.png) |
 
 Sources: `src/views/ColumnHeaderController.ts`
+
+## fields
+
+### Select cell in edit state
+
+Each row carries a drag handle, a colour dot that opens the colour picker, the check mark and a delete button. An unregistered value offers a plus instead of a trash icon.
+
+| dark | light |
+|---|---|
+| ![field-cell-edit-select dark](fields/field-cell-edit-select-mobile-dark.png) | ![field-cell-edit-select light](fields/field-cell-edit-select-mobile-light.png) |
+
+Sources: `src/views/CellRenderer.ts`, `src/data/ColumnTypes.ts`
+
+### Text cell in edit state
+
+Both editors keep the cell's rendered value visible underneath. The multi-line editor marks its cell with db-cell-editing (the accent inset); the single-line one marks its cell with db-cell-popover-editing, which the stylesheet declares no rule for, so that cell shows no edit affordance. Markdown columns gain the format toolbar.
+
+| dark | light |
+|---|---|
+| ![field-cell-edit-text dark](fields/field-cell-edit-text-mobile-dark.png) | ![field-cell-edit-text light](fields/field-cell-edit-text-mobile-light.png) |
+
+Sources: `src/views/CellRenderer.ts`
+
+### Date value picker
+
+The trigger shows the committed value; the popover stacks quick dates, the three segment inputs and the mini calendar, which renders flat inside the date popover rather than as its own floating surface.
+
+| dark | light |
+|---|---|
+| ![field-date-value-picker dark](fields/field-date-value-picker-mobile-dark.png) | ![field-date-value-picker light](fields/field-date-value-picker-mobile-light.png) |
+
+Sources: `src/views/DateValuePicker.ts`, `src/views/CalendarMiniCalendarRenderer.ts`
+
+### Date value picker with time
+
+A datetime column adds hour and minute segments after the date, and the trigger swaps calendar-days for calendar-clock.
+
+| dark | light |
+|---|---|
+| ![field-date-value-picker-datetime dark](fields/field-date-value-picker-datetime-mobile-dark.png) | ![field-date-value-picker-datetime light](fields/field-date-value-picker-datetime-mobile-light.png) |
+
+Sources: `src/views/DateValuePicker.ts`, `src/views/CalendarMiniCalendarRenderer.ts`
+
+### File fields
+
+file.tags render as status badges, link-list fields as compact chips, and file.file as a link back to the row's own note. The per-tag remove buttons are in the DOM of a writable cell but sit at opacity 0 until the badge is hovered, so they do not appear here.
+
+| dark | light |
+|---|---|
+| ![field-file-fields dark](fields/field-file-fields-mobile-dark.png) | ![field-file-fields light](fields/field-file-fields-mobile-light.png) |
+
+Sources: `src/views/FileFieldRenderer.ts`
+
+### Icon picker popover
+
+The Icons tab adds the colour strip; the picker is created on document.body, so it is a top-level element here rather than a child of the container.
+
+| dark | light |
+|---|---|
+| ![field-icon-picker dark](fields/field-icon-picker-mobile-dark.png) | ![field-icon-picker light](fields/field-icon-picker-mobile-light.png) |
+
+Sources: `src/views/IconPickerPopover.ts`, `src/views/RecordIconRenderer.ts`
+
+### Number display styles
+
+Rating, progress bar and progress ring all tint through db-num-color-*, which sets --db-number-color. Half slots are the accent overlay clipped to 50%.
+
+| dark | light |
+|---|---|
+| ![field-number-displays dark](fields/field-number-displays-mobile-dark.png) | ![field-number-displays light](fields/field-number-displays-mobile-light.png) |
+
+Sources: `src/views/NumberDisplayRenderer.ts`, `src/data/NumberDisplay.ts`
+
+### Option colour picker
+
+Sixteen swatches in the persisted order, the current colour ringed. Opened from the colour dot in the select editor and created on document.body.
+
+| dark | light |
+|---|---|
+| ![field-option-color-picker dark](fields/field-option-color-picker-mobile-dark.png) | ![field-option-color-picker light](fields/field-option-color-picker-mobile-light.png) |
+
+Sources: `src/views/OptionColorPicker.ts`, `src/data/StatusColors.ts`
+
+### Record icon
+
+The table puts record icons in a 28px gutter column of their own, whose header is blank so the first property header can borrow the width. An unparsed token falls back to file-text and is-default; a lucide token carries db-record-icon-color-*; an emoji token renders through db-record-icon-emoji.
+
+| dark | light |
+|---|---|
+| ![field-record-icon dark](fields/field-record-icon-mobile-dark.png) | ![field-record-icon light](fields/field-record-icon-mobile-light.png) |
+
+Sources: `src/views/RecordIconRenderer.ts`, `src/views/TableRenderer.ts`, `src/data/RecordIcon.ts`
+
+### Relation values, resolved and broken
+
+A resolved target renders file-text on a tinted chip; a target the metadata cache cannot find renders alert-triangle inside a dashed warning outline.
+
+| dark | light |
+|---|---|
+| ![field-relation-values dark](fields/field-relation-values-mobile-dark.png) | ![field-relation-values light](fields/field-relation-values-mobile-light.png) |
+
+Sources: `src/views/RelationValueRenderer.ts`
+
+### Status colour range
+
+Every select, status, multi-select and tag value in the plugin is a status-badge in one of these sixteen status-color-* variants, so this is the whole colour vocabulary in one shot. The multi-select remove buttons only become visible on hover.
+
+| dark | light |
+|---|---|
+| ![field-status-colors dark](fields/field-status-colors-mobile-dark.png) | ![field-status-colors light](fields/field-status-colors-mobile-light.png) |
+
+Sources: `src/data/StatusColors.ts`, `src/views/CellRenderer.ts`
+
+## panels
+
+### Column manager
+
+One row per property: drag handle, visibility checkbox, type icon, name with its frontmatter key, then wrap, edit and delete.
+
+| dark | light |
+|---|---|
+| ![panel-column-manager dark](panels/panel-column-manager-mobile-dark.png) | ![panel-column-manager light](panels/panel-column-manager-mobile-light.png) |
+
+Sources: `src/views/ColumnManagerRenderer.ts`, `src/views/PropertyTypeIcon.ts`
+
+### Filter panel with active conditions
+
+Three conditions build a group node, so the panel header drops its AND/OR button and the group's own logic dropdown carries it instead.
+
+| dark | light |
+|---|---|
+| ![panel-filter-conditions dark](panels/panel-filter-conditions-mobile-dark.png) | ![panel-filter-conditions light](panels/panel-filter-conditions-mobile-light.png) |
+
+Sources: `src/views/FilterPanelRenderer.ts`, `src/views/DropdownField.ts`
+
+### Filter panel with a nested group and a NOT
+
+Nesting stops at three levels: the innermost rows lose their add-group button because the tree can go no deeper.
+
+| dark | light |
+|---|---|
+| ![panel-filter-nested-group dark](panels/panel-filter-nested-group-mobile-dark.png) | ![panel-filter-nested-group light](panels/panel-filter-nested-group-mobile-light.png) |
+
+Sources: `src/views/FilterPanelRenderer.ts`, `src/data/ViewFilterTree.ts`
+
+### Record detail panel
+
+Opened from a calendar or timeline event card. Fields are click-to-edit; an empty field only appears when the view asks for empty properties.
+
+| dark | light |
+|---|---|
+| ![panel-record-detail dark](panels/panel-record-detail-mobile-dark.png) | ![panel-record-detail light](panels/panel-record-detail-mobile-light.png) |
+
+Sources: `src/views/RecordDetailPanel.ts`, `src/views/CardFieldRenderer.ts`
+
+### Table record peek
+
+Docks against the right edge of the table it was opened from. Values are display-only text, and properties hidden from the table sit behind the disclosure.
+
+| dark | light |
+|---|---|
+| ![panel-record-peek dark](panels/panel-record-peek-mobile-dark.png) | ![panel-record-peek light](panels/panel-record-peek-mobile-light.png) |
+
+Sources: `src/views/TableRecordPeek.ts`, `src/views/TableRenderer.ts`
+
+### Sort panel with no rules, calendar hint
+
+Calendar views add a hint above the empty state because layout order wins over user sort.
+
+| dark | light |
+|---|---|
+| ![panel-sort-calendar-empty dark](panels/panel-sort-calendar-empty-mobile-dark.png) | ![panel-sort-calendar-empty light](panels/panel-sort-calendar-empty-mobile-light.png) |
+
+Sources: `src/views/SortPanelRenderer.ts`
+
+### Sort panel with two rules
+
+Rows are draggable; the first rule's move-up and the last rule's move-down are disabled.
+
+| dark | light |
+|---|---|
+| ![panel-sort-rules dark](panels/panel-sort-rules-mobile-dark.png) | ![panel-sort-rules light](panels/panel-sort-rules-mobile-light.png) |
+
+Sources: `src/views/SortPanelRenderer.ts`, `src/views/DropdownField.ts`
+
+### View configuration panel
+
+The top of the panel for a table view: database-scoped rows above the section divider, view-scoped rows below. Conditional formatting and status presets sit further down and are not in frame.
+
+| dark | light |
+|---|---|
+| ![panel-view-config dark](panels/panel-view-config-mobile-dark.png) | ![panel-view-config light](panels/panel-view-config-mobile-light.png) |
+
+Sources: `src/views/ViewConfigPanelRenderer.ts`, `src/views/DropdownField.ts`
 
 ## states
 
@@ -45,7 +359,7 @@ Sources: `src/views/ColumnHeaderController.ts`
 
 | dark | light |
 |---|---|
-| ![empty-state dark](states/empty-state-dark.png) | ![empty-state light](states/empty-state-light.png) |
+| ![empty-state dark](states/empty-state-mobile-dark.png) | ![empty-state light](states/empty-state-mobile-light.png) |
 
 Sources: `src/views/EmptyStateRenderer.ts`
 
@@ -55,15 +369,55 @@ Sources: `src/views/EmptyStateRenderer.ts`
 
 | dark | light |
 |---|---|
-| ![board-view dark](views/board-view-dark.png) | ![board-view light](views/board-view-light.png) |
+| ![board-view dark](views/board-view-mobile-dark.png) | ![board-view light](views/board-view-mobile-light.png) |
 
 Sources: `src/views/BoardRenderer.ts`, `src/views/CardFieldRenderer.ts`
+
+### Mini calendar date picker
+
+Days with events carry a short accent underline; the visible week reads as the selected pill run.
+
+| dark | light |
+|---|---|
+| ![calendar-mini-calendar dark](views/calendar-mini-calendar-mobile-dark.png) | ![calendar-mini-calendar light](views/calendar-mini-calendar-mobile-light.png) |
+
+Sources: `src/views/CalendarMiniCalendarRenderer.ts`, `src/views/CalendarRenderer.ts`
+
+### Calendar month view
+
+Multi-day all-day bars, timed events, an overflow week and one event carried across the week boundary.
+
+| dark | light |
+|---|---|
+| ![calendar-month-view dark](views/calendar-month-view-mobile-dark.png) | ![calendar-month-view light](views/calendar-month-view-mobile-light.png) |
+
+Sources: `src/views/CalendarRenderer.ts`
+
+### Calendar settings popover
+
+The Time section only exists in week and day scale; the setup preview card below Data carries no stylesheet rules.
+
+| dark | light |
+|---|---|
+| ![calendar-toolbar-options dark](views/calendar-toolbar-options-mobile-dark.png) | ![calendar-toolbar-options light](views/calendar-toolbar-options-mobile-light.png) |
+
+Sources: `src/views/CalendarToolbarRenderer.ts`, `src/views/DropdownField.ts`
+
+### Calendar week time grid
+
+Sticky day header and all-day strip over the 08–16 time grid; the current-time ruler sits on Wednesday at 13:45.
+
+| dark | light |
+|---|---|
+| ![calendar-week-time-grid dark](views/calendar-week-time-grid-mobile-dark.png) | ![calendar-week-time-grid light](views/calendar-week-time-grid-mobile-light.png) |
+
+Sources: `src/views/CalendarRenderer.ts`
 
 ### Gallery view
 
 | dark | light |
 |---|---|
-| ![gallery-view dark](views/gallery-view-dark.png) | ![gallery-view light](views/gallery-view-light.png) |
+| ![gallery-view dark](views/gallery-view-mobile-dark.png) | ![gallery-view light](views/gallery-view-mobile-light.png) |
 
 Sources: `src/views/GalleryRenderer.ts`, `src/views/CardFieldRenderer.ts`
 
@@ -71,7 +425,7 @@ Sources: `src/views/GalleryRenderer.ts`, `src/views/CardFieldRenderer.ts`
 
 | dark | light |
 |---|---|
-| ![list-view dark](views/list-view-dark.png) | ![list-view light](views/list-view-light.png) |
+| ![list-view dark](views/list-view-mobile-dark.png) | ![list-view light](views/list-view-mobile-light.png) |
 
 Sources: `src/views/ListRenderer.ts`, `src/views/CardFieldRenderer.ts`
 
@@ -79,6 +433,26 @@ Sources: `src/views/ListRenderer.ts`, `src/views/CardFieldRenderer.ts`
 
 | dark | light |
 |---|---|
-| ![table-view dark](views/table-view-dark.png) | ![table-view light](views/table-view-light.png) |
+| ![table-view dark](views/table-view-mobile-dark.png) | ![table-view light](views/table-view-mobile-light.png) |
 
 Sources: `src/views/TableRenderer.ts`, `src/views/ColumnHeaderController.ts`, `src/views/CellRenderer.ts`
+
+### Timeline settings popover
+
+Column width is a switch plus a slider here, not the calendar's mode dropdown; the slider only appears once the switch is on.
+
+| dark | light |
+|---|---|
+| ![timeline-toolbar-options dark](views/timeline-toolbar-options-mobile-dark.png) | ![timeline-toolbar-options light](views/timeline-toolbar-options-mobile-light.png) |
+
+Sources: `src/views/CalendarTimelineToolbarRenderer.ts`, `src/views/DropdownField.ts`
+
+### Timeline view
+
+Two weeks at one column per day; the April band marks the month boundary and the today line sits at 25 March 13:45.
+
+| dark | light |
+|---|---|
+| ![timeline-view dark](views/timeline-view-mobile-dark.png) | ![timeline-view light](views/timeline-view-mobile-light.png) |
+
+Sources: `src/views/CalendarTimelineRenderer.ts`

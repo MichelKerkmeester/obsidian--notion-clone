@@ -16,7 +16,13 @@ function collectSources(dir: string, acc: string[] = []): string[] {
   return acc;
 }
 
-const scenarios = readFileSync(join(REPO, "tools/screenshots/scenarios.mjs"), "utf8");
+// Scenario markup lives in one module per surface family, so the guard has to read the
+// whole directory; reading only the aggregator would scan no markup and pass vacuously.
+const scenarioDir = join(REPO, "tools/screenshots/scenarios");
+const scenarios = readdirSync(scenarioDir)
+  .filter((f) => f.endsWith(".mjs"))
+  .map((f) => readFileSync(join(scenarioDir, f), "utf8"))
+  .join("\n");
 const stylesheet = readFileSync(join(REPO, "styles.css"), "utf8");
 const sourceText = collectSources(join(REPO, "src")).join("\n");
 

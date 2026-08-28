@@ -70,17 +70,67 @@
 html, body {
   margin: 0;
   padding: 0;
+  height: 100%;
   background: var(--background-primary);
   color: var(--text-normal);
   font-family: var(--font-interface);
   font-size: 14px;
 }
 
+/* Two capture modes.
+
+   A full view is photographed inside a device frame, so the box is pinned to the viewport;
+   an inline-block would grow past it and a narrow device would come back as a full-width
+   desktop with the responsive rules never engaging.
+
+   A component is photographed on its own, so the box shrinks to the content and the page
+   paints nothing behind it. The surface keeps whatever background its own rules give it,
+   and everything around it stays transparent. */
+/* A view lives in a full-height Obsidian pane and is built to fill it: the calendar grid,
+   the board columns and the timeline all stretch to the space they are given. Letting the
+   capture box collapse to content height photographs them floating in dead space, which is
+   not how the surface looks in the app. */
 #shot {
   padding: 16px;
-  display: inline-block;
-  min-width: 100%;
+  display: block;
+  width: 100%;
+  height: 100%;
   box-sizing: border-box;
+  overflow: auto;
+}
+
+#shot > .note-database-container {
+  height: 100%;
+}
+
+html.capture-element #shot > .note-database-container {
+  /* The container reserves a minimum pane height for a full view. Photographing a single
+     component inside it would pad the shot out to that reserve, so the scope is collapsed
+     to its contents; it is only present here to carry the plugin's styling context. */
+  height: auto;
+  min-height: 0;
+  padding: 0;
+}
+
+html.capture-element,
+html.capture-element body {
+  background: transparent;
+}
+
+html.capture-element #shot {
+  display: inline-block;
+  width: max-content;
+  /* The viewport-fill height that lets a calendar stretch would otherwise pad a component
+     out to the full device height, leaving a small popover sitting in a page of empty
+     space. A component is measured by its own content in both axes. */
+  height: auto;
+  /* Bounded rather than unlimited: a fixture containing a table resolves to a runaway
+     width when nothing constrains the columns, and max-content would faithfully honour it
+     all the way to a browser crash. A component that legitimately needs more than this is
+     a full view and belongs in viewport mode. */
+  max-width: 1440px;
+  overflow: hidden;
+  background: transparent;
 }
 
 /* ── Host form-control baseline ──────────────────────────────────────────────────────
