@@ -8776,11 +8776,13 @@
 }
 
 /* 日历 / 时间线事件卡片「展开为可编辑浮动面板」
-   z-index 999：低于字段编辑子气泡（db-cell-option-popover 1000 / date 1001 / color 1002），
-   子气泡浮在面板之上；不得加 transform / filter / will-change，否则会建立新的 containing
-   block 破坏子气泡相对 .note-database-container 的 absolute 定位。 */
+   The field editors this panel opens are appended to .note-database-container, so they are
+   siblings rather than descendants and are ordered against the panel by the shared layer
+   scale. The panel therefore has to sit on the panel tier, below the popover tier, or it
+   paints over its own editors. 不得加 transform / filter / will-change，否则会建立新的
+   containing block 破坏子气泡相对 .note-database-container 的 absolute 定位。 */
 .note-database-container .db-record-detail-panel {
-  z-index: 999;
+  z-index: var(--db-layer-panel, 50);
   max-height: 60vh;
   overflow-y: auto;
   background: var(--background-primary);

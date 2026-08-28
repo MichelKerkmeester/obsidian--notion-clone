@@ -1748,7 +1748,7 @@ export class CellRenderer {
       const scrollTop = editScrollContainer.scrollTop || 0;
       const relativeTop = tdRect.top - containerRect.top + scrollTop;
 
-      popover.setCssProps({ position: "absolute", left: "0", right: "0", top: `${relativeTop + tdRect.height + 2}px`, zIndex: "1000" });
+      popover.setCssProps({ position: "absolute", left: "0", right: "0", top: `${relativeTop + tdRect.height + 2}px`, zIndex: "var(--db-layer-popover, 100)" });
 
       closeBtn = popover.createEl("button", {
         cls: "db-cell-edit-close",
@@ -2310,7 +2310,7 @@ export class CellRenderer {
       const relativeTop = tdRect.top - containerRect.top + scrollTop;
       
       // 定位在单元格正下方
-      popover.setCssProps({ position: "absolute", left: "0", right: "0", top: `${relativeTop + tdRect.height + 2}px`, zIndex: "1000" });
+      popover.setCssProps({ position: "absolute", left: "0", right: "0", top: `${relativeTop + tdRect.height + 2}px`, zIndex: "var(--db-layer-popover, 100)" });
       
       // 关闭按钮
       closeBtn = popover.createEl("button", {

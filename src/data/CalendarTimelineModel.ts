@@ -161,7 +161,10 @@ export function getTimelineColumnWidthSpec(scale: TimelineScale): TimelineColumn
     case "quarter":
       return { defaultWidth: 15, min: 15, max: 40 };
     case "year":
-      return { defaultWidth: 56, min: 32, max: 180 };
+      // Year spans a full year of day-wide units, so the per-unit width has to be an order
+      // of magnitude smaller than the coarser scales to keep the whole year within a screen
+      // or two. Day granularity is retained because events are positioned by day offset.
+      return { defaultWidth: 4, min: 3, max: 24 };
     default:
       return assertNever(scale);
   }
