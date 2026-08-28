@@ -972,9 +972,21 @@
   box-shadow: none;
 }
 
+/* A flex row that hugs its content so the options button can sit right beside the group
+   name instead of being flung to the far edge of the header. Only the title shrinks; the
+   count, summaries and options button keep their intrinsic width. */
 .note-database-container .db-board-header-text {
+  display: flex;
+  flex: 0 1 auto;
+  align-items: center;
+  min-width: 0;
+  white-space: nowrap;
+}
+
+.note-database-container .db-board-header-text > .db-board-column-title,
+.note-database-container .db-board-header-text > .db-board-subgroup-title {
   display: block;
-  flex: 1 1 auto;
+  flex: 0 1 auto;
   min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -983,6 +995,7 @@
 
 .note-database-container .db-board-header-summaries {
   display: inline;
+  flex: 0 0 auto;
   margin-left: 8px;
   white-space: nowrap;
 }
@@ -4600,11 +4613,32 @@
   white-space: nowrap;
 }
 
+/* Only real property columns are draggable, so the grab affordance is scoped to them and
+   kept off the select / record-icon / add-column cells. The name and the menu trigger
+   re-assert the pointer below, leaving grab to mean "drag the header background". */
+.note-database-container .db-table th[data-note-database-column-key] {
+  cursor: grab;
+}
+
+.note-database-container .db-table th .db-th-label,
+.note-database-container .db-table th .db-property-icon,
+.note-database-container .db-table th .sort-indicator {
+  cursor: pointer;
+}
+
+/* The whole header cell is one flex row so the menu trigger is a sibling of the label
+   rather than a separate block that can wrap onto its own line. Spacing is declared per
+   child instead of as a row gap because the trigger hugs the label far tighter than the
+   type icon and sort arrow sit from it. */
 .note-database-container .db-th-content {
   display: flex;
   align-items: center;
-  gap: 6px;
+  width: 100%;
   min-width: 0;
+}
+
+.note-database-container .db-th-content > .db-property-icon {
+  margin-right: 6px;
 }
 
 /* 列头左侧的类型图标 */
@@ -4637,10 +4671,14 @@
   font-weight: 600;
 }
 
+/* The only child of the header row allowed to shrink: a cramped column ellipsises the
+   name rather than displacing the menu trigger. */
 .note-database-container .db-th-label {
+  flex: 0 1 auto;
   min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .note-database-container .db-table th:hover {
@@ -4653,14 +4691,20 @@
   color: color-mix(in srgb, var(--text-normal) 76%, var(--text-muted));
 }
 
-/* Keep the column action reachable on touch and visible to keyboard users while
-   retaining a low-emphasis resting state. */
+/* Sits inline right after the name as a fixed-width, non-shrinking flex sibling. It is
+   deliberately in flow: taking it out with absolute positioning is what let a later
+   `position: relative` touch-target rule drop it onto a line of its own. Keeps the column
+   action reachable on touch and visible to keyboard users while retaining a low-emphasis
+   resting state. */
 .note-database-container .db-column-menu-trigger {
-  position: absolute;
-  top: 5px;
-  right: 5px;
+  position: relative;
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
   width: 22px;
   height: 22px;
+  margin-left: 2px;
   padding: 0;
   border: 0;
   border-radius: var(--db-radius-lg);
@@ -4668,9 +4712,14 @@
   background: transparent;
   color: var(--text-muted);
   cursor: pointer;
-  line-height: 18px;
+  line-height: 1;
   pointer-events: auto;
   touch-action: manipulation;
+}
+
+.note-database-container .db-column-menu-trigger svg {
+  width: 16px;
+  height: 16px;
 }
 
 .note-database-container .db-column-menu-trigger::before,
@@ -4679,8 +4728,10 @@
   content: "";
 }
 
+/* Grows the hit area into the cell padding but never leftwards, because the name now sits
+   2px away and a symmetric halo would steal its click-to-sort taps. */
 .note-database-container .db-column-menu-trigger::before {
-  inset: -11px;
+  inset: -8px -8px -8px 0;
 }
 
 .note-database-container .db-table .db-table-row-drag-handle::before {
@@ -4708,6 +4759,7 @@
   display: inline-flex;
   align-items: center;
   flex: 0 0 auto;
+  margin-left: 6px;
   color: var(--text-accent);
   font-size: 11px;
   font-weight: 700;
@@ -8304,6 +8356,50 @@
   margin: 0;
 }
 
+/* Mirrors the table column trigger: an inline, fixed-width, non-shrinking sibling of the
+   group name, so a long name ellipsises before the button ever moves or wraps. */
+.note-database-container .db-board-column-options {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  margin-left: 2px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--db-radius-lg);
+  opacity: 0.42;
+  background: transparent;
+  box-shadow: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  line-height: 1;
+  touch-action: manipulation;
+}
+
+.note-database-container .db-board-column-options svg {
+  width: 16px;
+  height: 16px;
+}
+
+.note-database-container .db-board-column-header:hover .db-board-column-options,
+.note-database-container .db-board-column-header:focus-within .db-board-column-options,
+.note-database-container .db-board-column-options:focus-visible {
+  opacity: 1;
+}
+
+.note-database-container .db-board-column-options:hover {
+  background: var(--background-modifier-hover);
+  color: var(--text-normal);
+}
+
+/* The header background owns the grab affordance; the name group carves out the pointer so
+   grab only ever appears over draggable chrome. */
+.note-database-container .db-board-column-header .db-board-header-text {
+  cursor: pointer;
+}
+
 /* 列宽拖拽手柄（列右边缘的隐形拖拽区域） */
 .note-database-container .db-board-column-resize-handle {
   position: absolute;
@@ -8368,6 +8464,7 @@
 
 .note-database-container .db-board-count {
   display: inline;
+  flex: 0 0 auto;
   margin-left: 8px;
   color: var(--text-faint);
   font-size: 12px;
@@ -8446,6 +8543,7 @@
 
 .note-database-container .db-board-subgroup-count {
   display: inline;
+  flex: 0 0 auto;
   margin-left: 8px;
   color: var(--text-faint);
   font-size: 11px;
@@ -17269,7 +17367,6 @@ img.db-text-md-image {
 .note-database-container .db-toolbar-button,
 .note-database-container .db-active-control-edit,
 .note-database-container .db-active-control-remove,
-.note-database-container .db-column-menu-trigger,
 .note-database-container .db-group-collapse-toggle,
 .note-database-container .db-gallery-group-toggle,
 .note-database-container .db-list-group-toggle,
@@ -17290,6 +17387,7 @@ img.db-text-md-image {
     .db-toolbar-button,
     .db-active-control-edit,
     .db-column-menu-trigger,
+    .db-board-column-options,
     .db-group-collapse-toggle,
     .db-gallery-group-toggle,
     .db-list-group-toggle,
@@ -17329,10 +17427,11 @@ img.db-text-md-image {
     overflow: visible;
   }
 
+  /* The column menu trigger is intentionally absent: it declares its own asymmetric halo
+     so the halo cannot reach leftwards over the column name it now sits beside. */
   .note-database-container .db-toolbar-icon-button::before,
   .note-database-container .db-toolbar-button::before,
   .note-database-container .db-active-control-edit::before,
-  .note-database-container .db-column-menu-trigger::before,
   .note-database-container .db-group-collapse-toggle::before,
   .note-database-container .db-gallery-group-toggle::before,
   .note-database-container .db-list-group-toggle::before,

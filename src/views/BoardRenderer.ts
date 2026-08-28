@@ -199,12 +199,14 @@ export class BoardRenderer {
     return displayType === "status" || displayType === "select" || displayType === "multi-select";
   }
 
+  // `parent` is the header's name row, not the header itself: mounting the button beside the
+  // group name keeps it inline with the text instead of parked at the far header edge.
   private renderBoardGroupOptions(parent: HTMLElement, config: ViewConfig, field: string, group: BoardGroup): void {
     const button = parent.createEl("button", {
       cls: "db-board-column-options",
       attr: { type: "button", "aria-label": t("board.columnOptions"), title: t("board.columnOptions") },
     });
-    setIcon(button, "more-horizontal");
+    setIcon(button, "more-vertical");
     button.onclick = (event) => {
       event.preventDefault();
       event.stopPropagation();
@@ -257,7 +259,7 @@ export class BoardRenderer {
       const title = header.createDiv({ cls: "db-board-header-text" });
       renderGroupLabel(title, config, groupField, group.key, "db-board-column-title");
       title.createSpan({ cls: "db-board-count", text: String(group.count) });
-      this.renderBoardGroupOptions(header, config, groupField, group);
+      this.renderBoardGroupOptions(title, config, groupField, group);
     }
 
     const laneKeys: string[] = [];
@@ -513,7 +515,7 @@ export class BoardRenderer {
       const summaries = headerText.createSpan({ cls: "db-board-header-summaries" });
       this.actions.renderGroupSummaries?.(summaries, group.rows, config);
     }
-    this.renderBoardGroupOptions(header, config, groupField, group);
+    this.renderBoardGroupOptions(headerText, config, groupField, group);
     if (!isTouchDevice(board)) {
       const resizeHandle = column.createDiv({ cls: "db-board-column-resize-handle" });
       resizeHandle.addEventListener("mousedown", (event) => this.startColumnResize(event, board, config));

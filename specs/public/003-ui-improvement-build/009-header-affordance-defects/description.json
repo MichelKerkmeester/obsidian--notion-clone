@@ -1,0 +1,30 @@
+{
+  "level": "1",
+  "specFolder": "public/003-ui-improvement-build/009-header-affordance-defects",
+  "description": "A user reported that on table column headers — and in the same shape on board column headers — the three-dots menu button renders on its own line",
+  "keywords": [
+    "user",
+    "reported",
+    "table",
+    "column",
+    "headers",
+    "same",
+    "shape",
+    "board",
+    "three-dots",
+    "menu",
+    "button",
+    "renders",
+    "own",
+    "line"
+  ],
+  "lastUpdated": "2026-08-28T12:18:47.939Z",
+  "specId": "009",
+  "folderSlug": "header-affordance-defects",
+  "parentChain": [
+    "public",
+    "003-ui-improvement-build"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": []
+}

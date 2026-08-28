@@ -44,11 +44,14 @@ export class ColumnHeaderController {
   }
 
   private setupMenuTrigger(th: HTMLElement, col: ColumnDef): void {
-    const button = th.createEl("button", {
+    // Mounted inside the header's flex row rather than on the cell, so the button is a
+    // sibling of the label instead of a block that wraps onto its own line beneath it.
+    const row = th.querySelector<HTMLElement>(".db-th-content") || th;
+    const button = row.createEl("button", {
       cls: "db-column-menu-trigger",
       attr: { type: "button", "aria-label": t("column.openMenu", { label: col.label }) },
     });
-    setIcon(button, "more-horizontal");
+    setIcon(button, "more-vertical");
     button.addEventListener("click", (event) => {
       event.preventDefault();
       event.stopPropagation();

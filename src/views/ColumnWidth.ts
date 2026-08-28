@@ -43,7 +43,10 @@ export function estimateAutoColumnWidth(
   createRenderedTextMeasurer?: () => RenderedTextWidthMeasurer | null,
 ): number {
   const label = col.label || col.key;
-  const headerWidth = Math.ceil(measureHeaderText(label) + 46);
+  // Chrome the header name has to share the cell with: 8px padding either side, the 16px
+  // type icon and its 6px margin, and the 22px menu button with its 2px margin. The button
+  // sits in flow beside the name, so an auto-fit that ignored it would ellipsise the name.
+  const headerWidth = Math.ceil(measureHeaderText(label) + 70);
   if (col.type === "checkbox") return Math.max(42, Math.min(headerWidth, 220));
   if (col.wrap) return Math.max(36, Math.min(headerWidth, 360));
 
