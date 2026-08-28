@@ -75,6 +75,7 @@ function formatEnglishTitleMain(scale: CalendarTitleScale, start: Date, end: Dat
     return `${englishMonth(start)} ${RANGE_DASH} ${englishMonth(end)}`;
   }
   if (scale === "quarter") return `${englishMonth(start)} ${RANGE_DASH} ${englishMonth(end)}`;
+  if (scale === "year") return String(start.getUTCFullYear());
   if (sameUtcMonth(start, end) && sameUtcYear(start, end)) {
     return `${englishMonth(start)} ${start.getUTCDate()} ${COMPACT_RANGE_SEPARATOR} ${end.getUTCDate()}`;
   }
@@ -88,6 +89,7 @@ function formatChineseTitleMain(scale: CalendarTitleScale, start: Date, end: Dat
     return `${chineseMonth(start)} ${RANGE_DASH} ${chineseMonth(end)}`;
   }
   if (scale === "quarter") return `${chineseMonth(start)} ${RANGE_DASH} ${chineseMonth(end)}`;
+  if (scale === "year") return String(start.getUTCFullYear());
   if (sameUtcMonth(start, end) && sameUtcYear(start, end)) {
     return `${chineseMonthDay(start)} ${COMPACT_RANGE_SEPARATOR} ${chineseDay(end.getUTCDate())}`;
   }

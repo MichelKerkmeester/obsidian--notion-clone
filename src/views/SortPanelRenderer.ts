@@ -36,7 +36,7 @@ export class SortPanelRenderer {
     }
     if (anchorEl?.isConnected) this.anchorEl = anchorEl;
 
-    const panel = containerEl.createDiv({ cls: "db-sort-panel db-filter-panel" });
+    const panel = containerEl.createDiv({ cls: "db-sort-panel db-filter-panel", attr: { id: "db-sort-panel" } });
     const header = containerEl.querySelector(".db-header") || containerEl.querySelector(".db-toolbar");
     if (header?.parentElement) header.parentElement.insertBefore(panel, header.nextSibling);
     this.panelEl = panel;

@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import { TFile, type App } from "obsidian";
+import { TFile, type App, type CachedMetadata } from "obsidian";
 import { isCoverImageBlocked, parseCoverImage, resolveCoverImage } from "./CoverImage";
 import type { RowData } from "./types";
 
@@ -157,5 +157,18 @@ describe("CoverImage safety: external URLs never yield a network src for Files c
     expect(image).not.toBeNull();
     expect(image?.external).toBe(false);
     expect(image?.src).toBe("app://local-resource/cover.png");
+  });
+
+  it("falls back to the first cached markdown image when the cover property is empty", () => {
+    const destination = makeVaultFile("Attachments/embedded.png");
+    const app = appWithDestination(destination);
+    // Only the embed link is read here; a full metadata fixture would be noise.
+    const cache = { embeds: [{ link: "Attachments/embedded.png" }] } as unknown as CachedMetadata;
+    app.metadataCache.getFileCache = vi.fn((_file: TFile) => cache);
+
+    const image = resolveCoverImage(undefined, row(), app);
+
+    expect(image?.target).toBe("Attachments/embedded.png");
+    expect(app.metadataCache.getFileCache).toHaveBeenCalled();
   });
 });

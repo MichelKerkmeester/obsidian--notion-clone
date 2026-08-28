@@ -1,0 +1,30 @@
+{
+  "specFolder": "public/003-ui-improvement-build/008-mobile-and-accessibility",
+  "description": "While the Note Database plugin provides rich underlying database calculation and querying capabilities, its mobile ergonomics, touch responsiveness,",
+  "keywords": [
+    "while",
+    "note",
+    "database",
+    "plugin",
+    "provides",
+    "rich",
+    "underlying",
+    "calculation",
+    "querying",
+    "capabilities",
+    "mobile",
+    "ergonomics",
+    "touch",
+    "responsiveness"
+  ],
+  "lastUpdated": "2026-08-27T19:53:18.601Z",
+  "specId": "008",
+  "folderSlug": "mobile-and-accessibility",
+  "parentChain": [
+    "public",
+    "003-ui-improvement-build"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": [],
+  "level": "2"
+}

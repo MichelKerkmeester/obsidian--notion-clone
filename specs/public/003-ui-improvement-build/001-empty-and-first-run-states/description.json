@@ -1,0 +1,30 @@
+{
+  "level": "2",
+  "specFolder": "public/003-ui-improvement-build/001-empty-and-first-run-states",
+  "description": "Currently, empty and first-run states across the Note Database plugin are visually stark, inconsistent, and functionally dead ends:",
+  "keywords": [
+    "currently",
+    "empty",
+    "first-run",
+    "states",
+    "across",
+    "note",
+    "database",
+    "plugin",
+    "visually",
+    "stark",
+    "inconsistent",
+    "functionally",
+    "dead",
+    "ends"
+  ],
+  "lastUpdated": "2026-08-27T19:14:59.972Z",
+  "specId": "001",
+  "folderSlug": "empty-and-first-run-states",
+  "parentChain": [
+    "public",
+    "003-ui-improvement-build"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": []
+}

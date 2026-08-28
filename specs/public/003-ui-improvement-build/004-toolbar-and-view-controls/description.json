@@ -1,0 +1,27 @@
+{
+  "specFolder": "public/003-ui-improvement-build/004-toolbar-and-view-controls",
+  "description": "The toolbar and view controls form the primary operational command deck of the Note Database plugin",
+  "keywords": [
+    "toolbar",
+    "view",
+    "controls",
+    "form",
+    "primary",
+    "operational",
+    "command",
+    "deck",
+    "note",
+    "database",
+    "plugin"
+  ],
+  "lastUpdated": "2026-08-27T19:53:18.597Z",
+  "specId": "004",
+  "folderSlug": "toolbar-and-view-controls",
+  "parentChain": [
+    "public",
+    "003-ui-improvement-build"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": [],
+  "level": "2"
+}

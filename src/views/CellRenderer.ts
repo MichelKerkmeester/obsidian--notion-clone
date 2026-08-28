@@ -27,8 +27,10 @@ import { getFileFieldFixedType, getRowFileFieldValue, isFileFieldKey, isReadonly
 import { getRenamedMarkdownPath } from "../data/FileRenamePlan";
 import { ColumnDef, ComputedFieldDef, RowData, StatusOptionDef } from "../data/types";
 import { getEffectiveLocale, t } from "../i18n";
-import { clamp, getVisiblePopoverBounds, resolveAnchoredPopoverTop, setPosition } from "./PopoverPosition";
+import { clamp, getVisiblePopoverBounds, resolveAnchoredPopoverTop, resolvePopoverHorizontalLeft, setPosition } from "./PopoverPosition";
+import { positionToolbarPopover } from "./PopoverPosition";
 import { openDropdownMenu } from "./DropdownField";
+import { installPopoverAutoClose } from "./PopoverAutoClose";
 import { setFieldTooltip } from "./FieldTooltip";
 import { FileTitleDisplay, getFileTitleDisplay, renderInlineFileTitle } from "./FileTitleDisplay";
 import { isHTMLElement } from "./DomGuards";
@@ -45,6 +47,8 @@ import { shouldCommitEmptyBulkDateClear } from "../data/BulkEdit";
 import { SerialTaskQueue } from "../data/SerialTaskQueue";
 import type { TableCellNavigationIntent } from "../data/TableKeyboardNavigation";
 import { markNoteHoverLink } from "./HoverLinkPreview";
+
+let nextRelationListId = 0;
 
 export interface CellOptionTransaction {
   previousOptions?: StatusOptionDef[];
@@ -181,7 +185,7 @@ export class CellRenderer {
     }
 
     if (isEmptyValue(value) && !isReportsComputedColumn(col)) {
-      td.createSpan({ cls: "db-empty-value", text: t("common.empty") });
+      td.createSpan({ cls: "db-empty-value" });
       if (!this.isReadOnly && col.type === "computed") {
         this.makeComputedEditable(td, row, col);
         setFieldTooltip(td, t("common.empty"), t("cell.doubleClickEditFormula"));
@@ -193,7 +197,7 @@ export class CellRenderer {
       if (!this.isReadOnly && this.isEditableCellColumn(col)) {
         td.addClass("db-editable-cell");
         this.makeEditable(td, row, col, "");
-        setFieldTooltip(td, t("common.empty"), t("cell.doubleClickEdit"));
+        setFieldTooltip(td, t("common.empty"), this.getEditHint(col));
       } else if (!this.isReadOnly && isReadonlyFileField(col.key)) {
         this.makeReadonlyFileFieldNotice(td, col);
       }
@@ -207,7 +211,7 @@ export class CellRenderer {
       if (!this.isReadOnly && this.isEditableCellColumn(col)) {
         td.addClass("db-editable-cell");
         this.makeEditable(td, row, col, value);
-        setFieldTooltip(td, this.getTooltipValue(col, value), t("cell.doubleClickEdit"));
+        setFieldTooltip(td, this.getTooltipValue(col, value), this.getEditHint(col));
       } else {
         setFieldTooltip(td, this.getTooltipValue(col, value));
       }
@@ -230,6 +234,7 @@ export class CellRenderer {
         break;
       case "currency": {
         const num = typeof value === "number" ? value : parseFloat(String(value));
+        td.addClass("db-numeric-value");
         td.textContent = isNaN(num) ? "-" : formatEuroCurrency(num);
         break;
       }
@@ -288,7 +293,7 @@ export class CellRenderer {
     } else if (!this.isReadOnly && this.isEditableCellColumn(col)) {
       td.addClass("db-editable-cell");
       this.makeEditable(td, row, col, value);
-      setFieldTooltip(td, this.getTooltipValue(col, value), t("cell.doubleClickEdit"));
+      setFieldTooltip(td, this.getTooltipValue(col, value), this.getEditHint(col));
     } else if (!this.isReadOnly && isReadonlyFileField(col.key)) {
       this.makeReadonlyFileFieldNotice(td, col);
       setFieldTooltip(td, this.getTooltipValue(col, value), t("fileField.readonly", { label: col.label || col.key }));
@@ -299,6 +304,7 @@ export class CellRenderer {
 
   /** Render a number cell value, honoring the column's numberDisplayStyle (plain/rating/progress). */
   private renderNumberValue(td: HTMLElement, col: ColumnDef, value: unknown): void {
+    td.addClass("db-numeric-value");
     const num = typeof value === "number" ? value : parseFloat(String(value));
     if (isNaN(num)) { td.textContent = "-"; return; }
     const style = getNumberDisplayStyle(col);
@@ -332,12 +338,13 @@ export class CellRenderer {
   private renderStatus(td: HTMLElement, col: ColumnDef, status: string): void {
     const resolved = resolveOptionDisplay(col, status);
     if (!resolved.value) {
-      td.textContent = t("common.empty");
+      td.createSpan({ cls: "db-empty-value" });
       return;
     }
     const badge = td.createSpan({ cls: "status-badge" });
     badge.textContent = resolved.value;
     badge.title = resolved.value;
+    badge.setAttribute("data-status-color", resolved.option?.color || "gray");
     if (resolved.option) {
       badge.addClass(`status-color-${resolved.option.color}`);
     } else {
@@ -381,7 +388,10 @@ export class CellRenderer {
       this.makeComputedEditable(td, row, col);
       return;
     }
-    checkbox.onclick = (event) => event.stopPropagation();
+    checkbox.onclick = (event) => {
+      if (!this.isReadOnly) this.selectCell(td);
+      event.stopPropagation();
+    };
     if (this.isReadOnly) return;
     checkbox.onchange = () => {
       void this.saveValue(row, col, checkbox.checked);
@@ -407,7 +417,8 @@ export class CellRenderer {
   }
 
   private makeEditable(td: HTMLElement, row: RowData, col: ColumnDef, currentValue: unknown): void {
-    td.title = t("cell.doubleClickEdit");
+    const opensOnClick = this.opensPickerOnClick(col);
+    td.title = this.getEditHint(col);
     td.tabIndex = 0;
 
     const startEdit = (event?: MouseEvent) => {
@@ -418,6 +429,11 @@ export class CellRenderer {
     td.addEventListener("click", (event) => {
       event.stopPropagation();
       if (this.focusExistingEditor(td, event, false)) return;
+      if (opensOnClick) {
+        this.selectCell(td);
+        startEdit(event);
+        return;
+      }
       this.selectCell(td);
     });
     td.addEventListener("dblclick", (event) => {
@@ -427,6 +443,14 @@ export class CellRenderer {
     });
     // Enter on a cell is handled at the document level (handleDatabaseKeydown → editAtCellSelection)
     // so that a multi-cell selection routes to bulk edit, not just editing the focus cell.
+  }
+
+  private opensPickerOnClick(col: ColumnDef): boolean {
+    return col.type === "select" || col.type === "status" || col.type === "date" || col.type === "datetime";
+  }
+
+  private getEditHint(col: ColumnDef): string {
+    return this.opensPickerOnClick(col) ? t("cell.clickToEdit") : t("cell.doubleClickEdit");
   }
 
   private makeReadonlyFileFieldNotice(td: HTMLElement, col: ColumnDef): void {
@@ -727,52 +751,75 @@ export class CellRenderer {
       else unresolved.push(link.raw);
     }
 
-    const host = target.closest<HTMLElement>(".note-database-container") || window.activeDocument.body;
+    const host = window.activeDocument.body;
     const popover = host.createDiv({ cls: "db-cell-option-popover db-relation-popover" });
+    popover.setAttr("role", "dialog");
+    popover.setAttr("aria-label", col.label || col.key);
     const header = popover.createDiv({ cls: "db-relation-popover-header" });
     header.createDiv({ cls: "db-relation-popover-title", text: col.label || col.key });
     const search = header.createEl("input", {
       cls: "db-cell-option-search",
-      attr: { type: "search", placeholder: t("relation.search") },
+      attr: { type: "search", placeholder: t("relation.search"), "aria-label": t("relation.search"), "aria-autocomplete": "list" },
     });
     search.value = initialSearch;
-    const list = popover.createDiv({ cls: "db-cell-option-list db-relation-option-list" });
+    const list = popover.createDiv({ cls: "db-cell-option-list db-relation-option-list", attr: { role: "listbox", "aria-multiselectable": "true", "aria-label": col.label || col.key } });
+    const listId = `db-relation-list-${++nextRelationListId}`;
+    list.setAttr("id", listId);
+    search.setAttr("aria-controls", listId);
     const footer = popover.createDiv({ cls: "db-relation-popover-footer" });
     const count = footer.createSpan({ cls: "db-relation-selected-count" });
-    const clear = footer.createEl("button", { text: t("common.clear"), cls: "db-relation-clear" });
+    const clear = footer.createEl("button", { text: t("common.clear"), cls: "db-relation-clear", attr: { type: "button" } });
     const actions = footer.createDiv({ cls: "db-relation-footer-actions" });
-    const apply = actions.createEl("button", { text: t("common.save"), cls: "mod-cta db-relation-footer-button" });
+    const apply = actions.createEl("button", { text: t("common.save"), cls: "mod-cta db-relation-footer-button", attr: { type: "button" } });
     let closed = false;
+    let removeAutoClose: (() => void) | undefined;
+    let activeIndex = 0;
+    const rowHeight = 34;
+    const windowSize = 80;
+    let scrollFrame: number | undefined;
     const close = () => {
       if (closed) return;
       closed = true;
+      removeAutoClose?.();
       popover.remove();
-      window.activeDocument.removeEventListener("mousedown", onOutside, true);
       if (this.activeOptionPopoverClose === close) this.activeOptionPopoverClose = undefined;
       session?.onClose?.();
     };
-    const onOutside = (event: MouseEvent) => {
-      const eventTarget = event.target;
-      if (!(eventTarget instanceof Node) || popover.contains(eventTarget) || target.contains(eventTarget)) return;
-      close();
-    };
-    const renderList = () => {
-      list.empty();
+    const getFilteredRecords = () => {
       const query = search.value.trim().toLowerCase();
-      for (const record of records) {
+      return records.filter((record) => {
+        if (!query) return true;
         const title = record.file.basename || record.file.name.replace(/\.md$/i, "");
-        const haystack = `${title} ${record.file.path}`.toLowerCase();
-        if (query && !haystack.includes(query)) continue;
+        return `${title} ${record.file.path}`.toLowerCase().includes(query);
+      });
+    };
+    const renderList = (preserveScroll = true) => {
+      const scrollTop = preserveScroll ? list.scrollTop : 0;
+      const filtered = getFilteredRecords();
+      if (activeIndex >= filtered.length) activeIndex = Math.max(0, filtered.length - 1);
+      list.empty();
+      const empty = list.createDiv({ cls: "db-dropdown-empty db-relation-empty", text: t("relation.noResults"), attr: { role: "status", hidden: filtered.length > 0 ? "true" : "false" } });
+      if (!filtered.length) {
+        empty.removeAttribute("hidden");
+        count.textContent = t("relation.selectedCount", { count: selectedPaths.size });
+        return;
+      }
+      const start = Math.max(0, Math.min(Math.max(0, filtered.length - windowSize), Math.floor(scrollTop / rowHeight) - 8));
+      const end = Math.min(filtered.length, start + windowSize);
+      if (start > 0) list.createDiv({ cls: "db-relation-list-spacer", attr: { "aria-hidden": "true", style: `height: ${start * rowHeight}px` } });
+      for (let filteredIndex = start; filteredIndex < end; filteredIndex++) {
+        const record = filtered[filteredIndex];
+        const title = record.file.basename || record.file.name.replace(/\.md$/i, "");
         const option = list.createEl("button", {
-          cls: `db-cell-option-item db-relation-option-item${selectedPaths.has(record.file.path) ? " is-selected" : ""}`,
-          attr: { type: "button" },
+          cls: `db-cell-option-item db-menu-item db-relation-option-item${selectedPaths.has(record.file.path) ? " is-selected" : ""}`,
+          attr: { type: "button", role: "option", "aria-selected": selectedPaths.has(record.file.path) ? "true" : "false", tabindex: filteredIndex === activeIndex ? "0" : "-1", "data-index": String(filteredIndex) },
         });
         renderRecordIcon(option, recordIconField ? record.frontmatter[recordIconField] : undefined, {
           compact: true,
           defaultIcon: "file-text",
         }).addClass("db-relation-option-icon");
-        option.createSpan({ cls: "db-dropdown-option-label", text: title });
-        const check = option.createSpan({ cls: "db-option-check db-relation-option-check" });
+        option.createSpan({ cls: "db-dropdown-option-label db-menu-item-label", text: title });
+        const check = option.createSpan({ cls: "db-option-check db-menu-item-check db-relation-option-check" });
         if (selectedPaths.has(record.file.path)) setIcon(check, "check");
         option.onclick = () => {
           if (selectedPaths.has(record.file.path)) {
@@ -783,16 +830,65 @@ export class CellRenderer {
             selectedPaths.add(record.file.path);
             selectedOrder.push(record.file.path);
           }
+          activeIndex = filteredIndex;
           renderList();
         };
       }
+      if (end < filtered.length) list.createDiv({ cls: "db-relation-list-spacer", attr: { "aria-hidden": "true", style: `height: ${(filtered.length - end) * rowHeight}px` } });
+      if (preserveScroll) list.scrollTop = scrollTop;
       count.textContent = t("relation.selectedCount", { count: selectedPaths.size });
     };
-    search.oninput = renderList;
+    const focusActive = () => {
+      const active = list.querySelector<HTMLButtonElement>(`[data-index="${activeIndex}"]`);
+      active?.focus({ preventScroll: true });
+    };
+    const moveActive = (delta: number) => {
+      const filtered = getFilteredRecords();
+      if (!filtered.length) return;
+      activeIndex = Math.max(0, Math.min(filtered.length - 1, activeIndex + delta));
+      const currentScroll = list.scrollTop;
+      const nextTop = activeIndex * rowHeight;
+      if (nextTop < currentScroll) list.scrollTop = nextTop;
+      else if (nextTop + rowHeight > currentScroll + list.clientHeight) list.scrollTop = nextTop - list.clientHeight + rowHeight;
+      renderList();
+      window.requestAnimationFrame(focusActive);
+    };
+    search.oninput = () => { activeIndex = 0; renderList(false); };
     search.onkeydown = (event) => {
+      if (isImeComposing(event)) return;
+      if (event.key === "ArrowDown") {
+        event.preventDefault();
+        list.focus();
+        moveActive(0);
+        return;
+      }
+      if (event.key === "Enter") {
+        event.preventDefault();
+        list.querySelector<HTMLButtonElement>("[data-index=\"0\"]")?.click();
+        return;
+      }
       if (event.key !== "Escape") return;
       event.preventDefault();
       close();
+    };
+    list.onkeydown = (event) => {
+      if (isImeComposing(event)) return;
+      const option = (event.target as HTMLElement | null)?.closest<HTMLButtonElement>("[role=option]");
+      if (!option) return;
+      const index = Number(option.getAttribute("data-index"));
+      if (Number.isFinite(index)) activeIndex = index;
+      if (event.key === "ArrowDown") { event.preventDefault(); moveActive(1); }
+      else if (event.key === "ArrowUp") { event.preventDefault(); moveActive(-1); }
+      else if (event.key === "Home") { event.preventDefault(); activeIndex = 0; renderList(false); window.requestAnimationFrame(focusActive); }
+      else if (event.key === "End") { event.preventDefault(); activeIndex = Math.max(0, getFilteredRecords().length - 1); renderList(); window.requestAnimationFrame(focusActive); }
+      else if (event.key === "Enter" || event.key === " ") { event.preventDefault(); option.click(); }
+    };
+    list.onscroll = () => {
+      if (getFilteredRecords().length <= windowSize || scrollFrame !== undefined) return;
+      scrollFrame = window.requestAnimationFrame(() => {
+        scrollFrame = undefined;
+        renderList();
+      });
     };
     clear.onclick = () => {
       selectedPaths.clear();
@@ -811,12 +907,10 @@ export class CellRenderer {
           this.finishInlineEdit(row, col, session, "down");
         });
     };
-    const container = target.closest<HTMLElement>(".note-database-container");
-    this.positionOptionPopover(popover, target, container);
-    window.requestAnimationFrame(() => this.positionOptionPopover(popover, target, container));
-    renderList();
+    renderList(false);
+    positionToolbarPopover(popover, target, { minWidth: 360, preferredWidth: 420, maxWidth: 520, gap: 4 });
     this.activeOptionPopoverClose = close;
-    window.activeDocument.addEventListener("mousedown", onOutside, true);
+    removeAutoClose = installPopoverAutoClose({ panel: popover, anchorEl: target, close });
     window.setTimeout(() => search.focus(), 0);
   }
 
@@ -852,6 +946,7 @@ export class CellRenderer {
     let activeOptionIndex = 0;
     let closed = false;
     let sessionClose: (() => void) | undefined;
+    let removeAutoClose: (() => void) | undefined;
 
     const close = (intent?: TableCellNavigationIntent) => {
       if (closed) return;
@@ -867,10 +962,10 @@ export class CellRenderer {
       if (this.activeOptionPopoverClose === closeFromKeyboard) this.activeOptionPopoverClose = undefined;
       if (this.activeInlineEditorCancel === closeFromKeyboard) this.activeInlineEditorCancel = undefined;
       if (sessionClose && this.activeTextEditClose === sessionClose) this.activeTextEditClose = undefined;
+      removeAutoClose?.();
       popover.remove();
       // Clean up any leaked color picker popups on window.activeDocument.body
       window.activeDocument.body.querySelectorAll(".db-color-picker-popup").forEach(el => el.remove());
-      window.activeDocument.removeEventListener("mousedown", onOutside, true);
       window.activeDocument.removeEventListener("keydown", onKeydown, true);
       session?.onClose?.();
       if (intent) this.finishInlineEdit(row, col, session, intent);
@@ -882,12 +977,6 @@ export class CellRenderer {
       sessionClose = () => close();
       this.activeTextEditClose = sessionClose;
     }
-    const onOutside = (event: MouseEvent) => {
-      const target = event.target as Node | null;
-      if (target && (popover.contains(target) || td.contains(target))) return;
-      if (target && (target as HTMLElement).closest?.(".db-color-picker-popup")) return;
-      close();
-    };
     const onKeydown = (event: KeyboardEvent) => {
       if (isImeComposing(event)) return;
       if (event.key === "Escape") {
@@ -1318,8 +1407,8 @@ export class CellRenderer {
         addInput.setSelectionRange(addInput.value.length, addInput.value.length);
       });
     }
-    window.activeDocument.addEventListener("mousedown", onOutside, true);
     window.activeDocument.addEventListener("keydown", onKeydown, true);
+    removeAutoClose = installPopoverAutoClose({ panel: popover, anchorEl: td, close: () => close(), closeOnEscape: false });
   }
 
   private editNumber(
@@ -2648,7 +2737,7 @@ export class CellRenderer {
   private positionOptionPopover(
     popover: HTMLElement,
     td: HTMLElement,
-    container: HTMLElement | null,
+    _container: HTMLElement | null,
     anchorPoint?: { x: number; y: number },
     session?: CellEditSession,
   ): void {
@@ -2657,7 +2746,7 @@ export class CellRenderer {
     const anchorRect = this.bulkAnchorRect(session);
     const rect = anchorRect ?? td.getBoundingClientRect();
     const popoverRect = popover.getBoundingClientRect();
-    const bounds = getVisiblePopoverBounds(container);
+    const bounds = getVisiblePopoverBounds(null);
 
     const relationPopover = popover.hasClass("db-relation-popover");
     const minWidth = relationPopover ? 360 : 160;
@@ -2669,8 +2758,12 @@ export class CellRenderer {
     );
     const anchorX = anchorRect ? anchorRect.left : (anchorPoint?.x ?? rect.left);
     const anchorY = anchorRect ? anchorRect.bottom : (anchorPoint?.y ?? rect.bottom);
-
-    const left = clamp(anchorX, bounds.left + margin, bounds.right - width - margin);
+    const horizontalAnchor = {
+      left: anchorX,
+      right: anchorX + rect.width,
+      width: rect.width,
+    };
+    const left = resolvePopoverHorizontalLeft(horizontalAnchor, bounds, width, gap, margin, "left");
 
     const below = bounds.bottom - anchorY - gap - margin;
     const above = anchorY - gap - margin;
@@ -2682,15 +2775,7 @@ export class CellRenderer {
     const globalTop = useAbove ? anchorY - gap - height : anchorY + gap;
     const globalClampedTop = clamp(globalTop, bounds.top + margin, bounds.bottom - height - margin);
 
-    popover.setCssProps({ width: `${width}px`, maxHeight: `${Math.min(availableHeight, maxHeight)}px` });
-
-    setPosition(
-      popover,
-      left,
-      globalClampedTop,
-      container?.getBoundingClientRect(),
-      container?.scrollLeft || 0,
-      container?.scrollTop || 0
-    );
+    popover.setCssProps({ position: "fixed", width: `${width}px`, maxHeight: `${Math.min(availableHeight, maxHeight)}px` });
+    setPosition(popover, left, globalClampedTop, undefined, 0, 0);
   }
 }

@@ -4,12 +4,10 @@ import {
   normalizeOptionValueForKey,
   toMultiSelectValuesForKey,
 } from "./ColumnTypes";
+import { STATUS_COLORS } from "./StatusColors";
 import { ColumnDef, StatusColor, StatusOptionDef } from "./types";
 
-export const OPTION_REGISTRATION_COLORS: StatusColor[] = [
-  "gray", "brown", "orange", "yellow", "green", "blue", "purple", "pink",
-  "red", "slate", "cyan", "teal", "lime", "indigo", "violet", "rose",
-];
+export const OPTION_REGISTRATION_COLORS: StatusColor[] = [...STATUS_COLORS];
 
 export interface OptionRegistrationPlan {
   participates: boolean;

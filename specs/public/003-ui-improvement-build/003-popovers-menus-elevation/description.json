@@ -1,0 +1,28 @@
+{
+  "specFolder": "public/003-ui-improvement-build/003-popovers-menus-elevation",
+  "description": "Popovers, menus, dropdowns, and floating pickers form the interactive overlay layer of the Note Database plugin",
+  "keywords": [
+    "popovers",
+    "menus",
+    "dropdowns",
+    "floating",
+    "pickers",
+    "form",
+    "interactive",
+    "overlay",
+    "layer",
+    "note",
+    "database",
+    "plugin"
+  ],
+  "lastUpdated": "2026-08-27T19:53:18.597Z",
+  "specId": "003",
+  "folderSlug": "popovers-menus-elevation",
+  "parentChain": [
+    "public",
+    "003-ui-improvement-build"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": [],
+  "level": "2"
+}

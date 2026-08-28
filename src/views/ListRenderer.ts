@@ -26,6 +26,8 @@ import { getGroupVisibleCount } from "../data/GroupVisibility";
 import { DragDropFeedbackState, resolveDropPlacement } from "./DragDropFeedback";
 import { resolveTitleFieldDisplay } from "../data/TitleFieldDisplay";
 import { renderDelayedExternalLink } from "./CellRenderer";
+import { EmptyStateOptions, EmptyStateRenderer } from "./EmptyStateRenderer";
+import { renderCardField, renderCardFieldValue } from "./CardFieldRenderer";
 
 const ROW_MIME = "application/x-note-database-row";
 const ROW_FROM_GROUP_MIME = "application/x-note-database-row-from-group";
@@ -38,6 +40,7 @@ export interface ListGroup {
 
 export interface ListRendererActions {
   openRow(row: RowData): void;
+  openRecordDetail?(anchorEl: HTMLElement, row: RowData): void;
   createEntry(defaults?: Record<string, unknown>, position?: CreateEntryPosition): void;
   isRowSelected(row: RowData): boolean;
   toggleRowSelected(row: RowData, selected: boolean, event?: MouseEvent): void;
@@ -79,19 +82,29 @@ export class ListRenderer {
   private rowByPath = new Map<string, RowData>();
   private draggingPath: string | undefined;
   private rowDropFeedback = new DragDropFeedbackState();
+  private emptyStateRenderer = new EmptyStateRenderer();
 
   constructor(private app: App, private actions: ListRendererActions) {}
 
-  render(container: HTMLElement, config: ViewConfig, rows: RowData[]): void {
+  render(container: HTMLElement, config: ViewConfig, rows: RowData[], emptyState?: EmptyStateOptions): void {
     this.clear(container);
     this.rowByPath = new Map(rows.map((row) => [row.file.path, row]));
-    this.renderTotalHeader(container, rows);
+    if (rows.length > 0) this.renderTotalHeader(container, rows);
     const list = this.createList(container, config);
+    if (rows.length === 0) {
+      this.emptyStateRenderer.renderCard(list, emptyState || { reason: "no-matching-data" });
+    }
     for (const row of rows) this.renderRow(list, config, row, undefined, undefined, undefined, rows);
     this.renderNewRow(list, undefined, rows);
   }
 
-  renderGrouped(container: HTMLElement, config: ViewConfig, groups: ListGroup[], groupField: string): void {
+  renderGrouped(
+    container: HTMLElement,
+    config: ViewConfig,
+    groups: ListGroup[],
+    groupField: string,
+    emptyState?: EmptyStateOptions,
+  ): void {
     this.clear(container);
     this.rowByPath = new Map(groups.flatMap((group) => group.rows.map((row) => [row.file.path, row] as const)));
     const grouped = container.createDiv({ cls: "db-list-grouped" });
@@ -116,10 +129,30 @@ export class ListRenderer {
       renderGroupLabel(label, config, groupField, group.key, "db-list-group-title");
       label.createSpan({ cls: "db-list-group-count", text: String(group.count) });
       this.actions.renderGroupSummaries?.(label, group.rows, config);
+      if (!collapsed && !this.actions.isReadOnly && !this.actions.hideCreateEntry) {
+        const newButton = header.createEl("button", {
+          cls: "db-list-group-new",
+          text: `+ ${t("toolbar.new")}`,
+          attr: { type: "button" },
+        });
+        newButton.onclick = (event) => {
+          event.preventDefault();
+          event.stopPropagation();
+          if (isComputedGroupField(config, groupField)) return;
+          this.createEntryNearEnd({ [groupField]: group.key || "" }, group.rows);
+        };
+      }
       if (collapsed) continue;
       const list = this.createList(section, config);
       this.setupGroupDropTarget(list, groupField, group.key);
       const visibleCount = getGroupVisibleCount(config, groupField, group.key, group.rows.length);
+      if (visibleCount === 0) {
+        const empty = this.emptyStateRenderer.renderCard(
+          list,
+          emptyState || { reason: "empty-group" },
+        );
+        empty.addClass("db-list-empty-group");
+      }
       for (const row of group.rows.slice(0, visibleCount)) this.renderRow(list, config, row, groupField, group.key, groups, group.rows);
       const computedGroup = isComputedGroupField(config, groupField);
       this.renderNewRow(list, computedGroup ? undefined : { [groupField]: group.key || "" }, group.rows, computedGroup);
@@ -155,6 +188,19 @@ export class ListRenderer {
       cls: "db-list-row",
       attr: { "data-note-database-row-path": row.file.path, title: row.file.path },
     });
+    if (this.actions.openRecordDetail) {
+      item.tabIndex = 0;
+      item.setAttribute("role", "button");
+      item.addEventListener("click", (event) => {
+        if (isHTMLElement(event.target) && event.target.closest("a, button, input, select, textarea, .db-cell-editing")) return;
+        this.actions.openRecordDetail?.(item, row);
+      });
+      item.addEventListener("keydown", (event) => {
+        if (event.key !== "Enter" && event.key !== " ") return;
+        event.preventDefault();
+        this.actions.openRecordDetail?.(item, row);
+      });
+    }
     this.actions.applyConditionalFormat?.(item, row, config);
     this.attachRowContextMenu(item, row, {
       visibleRows: allRows,
@@ -235,18 +281,7 @@ export class ListRenderer {
       const empty = this.isEmptyValue(value) && displayType !== "checkbox";
       if (empty && config.showEmptyFields !== true) continue;
       const displayValue = empty ? this.getEmptyDisplayValue(col, displayType) : value;
-      const field = meta.createDiv({ cls: "db-list-field", attr: { "data-note-database-column-key": col.key } });
-      this.actions.applyConditionalFormat?.(field, row, config, col.key);
-      if (col.wrap) field.setCssProps({ flex: "0 0 auto" });
-      else field.style.setProperty("--db-card-field-width", `${getFieldWidth(config, col)}px`);
-      setFieldTooltip(field, displayValue, col.label);
-      if (empty) field.addClass("is-empty-field");
-      if (displayType === "checkbox") field.addClass("is-checkbox-field");
-      if (col.wrap) field.addClass("db-list-field-wrap");
-      const label = field.createSpan({ cls: "db-list-field-label", text: col.label });
-      this.attachColumnContextMenu(field, col);
-      this.attachColumnContextMenu(label, col);
-      this.renderValue(field, row, col, displayValue, empty, displayType);
+      meta.appendChild(this.renderRowFieldContent(row, col, config, displayValue, displayType, empty));
     }
   }
 
@@ -589,26 +624,28 @@ export class ListRenderer {
     valueEl.title = valueEl.textContent;
   }
 
-  renderRowFieldContent(row: RowData, col: ColumnDef, config: ViewConfig): HTMLElement {
+  renderRowFieldContent(
+    row: RowData,
+    col: ColumnDef,
+    config: ViewConfig,
+    resolvedValue?: unknown,
+    resolvedDisplayType?: ColumnDef["type"],
+    resolvedEmpty?: boolean,
+  ): HTMLElement {
     const value = this.getCellValue(row, col);
-    const displayType = this.getDisplayType(config, col);
-    const empty = this.isEmptyValue(value) && displayType !== "checkbox";
-    const displayValue = empty ? this.getEmptyDisplayValue(col, displayType) : value;
-    const field = window.activeDocument.createElement("div");
-    field.className = "db-list-field";
-    field.setAttribute("data-note-database-column-key", col.key);
-    this.actions.applyConditionalFormat?.(field, row, config, col.key);
-    if (col.wrap) field.setCssProps({ flex: "0 0 auto" });
-    else field.style.setProperty("--db-card-field-width", `${getFieldWidth(config, col)}px`);
-    setFieldTooltip(field, displayValue, col.label);
-    if (empty) field.classList.add("is-empty-field");
-    if (displayType === "checkbox") field.classList.add("is-checkbox-field");
-    if (col.wrap) field.classList.add("db-list-field-wrap");
-    const label = field.createSpan({ cls: "db-list-field-label", text: col.label });
-    this.attachColumnContextMenu(field, col);
-    this.attachColumnContextMenu(label, col);
-    this.renderValue(field, row, col, displayValue, empty, displayType);
-    return field;
+    const displayType = resolvedDisplayType || this.getDisplayType(config, col);
+    const empty = resolvedEmpty ?? (this.isEmptyValue(value) && displayType !== "checkbox");
+    const displayValue = resolvedValue ?? (empty ? this.getEmptyDisplayValue(col, displayType) : value);
+    return renderCardField({
+      app: this.app, row, col, config, value: displayValue, displayType, empty,
+      fieldClass: "db-list-field", valueClass: "db-list-field-value", labelClass: "db-list-field-label",
+      badgesClass: "db-list-badges", linkClass: "db-list-link", fieldWidth: col.wrap ? undefined : getFieldWidth(config, col),
+      wrap: col.wrap, readOnly: this.actions.isReadOnly, applyConditionalFormat: this.actions.applyConditionalFormat,
+      onEdit: (target, editRow, editCol, event) => this.actions.editCell(target, editRow, editCol, event),
+      onEditFormula: (editCol) => this.actions.editFormula?.(editCol),
+      onOpenTarget: (targetRow, target, external) => this.openTarget(targetRow, target, external),
+      onShowColumnMenu: this.actions.showColumnMenu,
+    });
   }
 
   private renderBadge(parent: HTMLElement, col: ColumnDef, value: string): void {

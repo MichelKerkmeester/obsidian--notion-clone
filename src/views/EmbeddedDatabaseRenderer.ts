@@ -5,7 +5,7 @@ import { RefreshCoordinator } from "../data/RefreshCoordinator";
 import { isRefreshBlockedByDrag } from "../data/RefreshBlockers";
 import { ensureColumnOrder, getColumnsInOrder, getVisibleColumns } from "../data/ColumnConfig";
 import { QueryEngine } from "../data/QueryEngine";
-import { RowPipeline } from "../data/RowPipeline";
+import { getRowPipelineDiagnostics, RowPipeline, RowPipelineDiagnostics } from "../data/RowPipeline";
 import { buildRelationRollups } from "../data/RelationRollup";
 import { mergeRelationInverseMembership } from "../data/RelationInverse";
 import { ColumnDef, DatabaseConfig, FilterRule, GroupOrderMode, RowData, ViewConfig, generateId, NumberDisplayStyle } from "../data/types";
@@ -72,6 +72,7 @@ import { ActiveRulePopoverRenderer } from "./ActiveRulePopoverRenderer";
 import { removeFilterRuleAt, removeSortRuleAt } from "./ViewRuleOperations";
 import { ViewConfigPanelRenderer } from "./ViewConfigPanelRenderer";
 import { DATABASE_VIEW_TYPE, DatabaseView } from "./DatabaseView";
+import { resolveViewIndex } from "../data/ViewSelection";
 
 import { installPopoverAutoClose } from "./PopoverAutoClose";
 import { estimateAutoColumnWidth } from "./ColumnWidth";
@@ -86,6 +87,12 @@ import { appendLeaf, buildViewFilterTree } from "../data/ViewFilterTree";
 import { getRowFileFieldValue, isFileFieldKey } from "../data/FileFields";
 import { applyRangeSelection } from "../data/RangeSelection";
 import { installNoteHoverPreview } from "./HoverLinkPreview";
+import {
+  EmptyStateOptions,
+  EmptyStateRenderer,
+  formatEmptyStateDiagnostics,
+  getEmptyStateReason,
+} from "./EmptyStateRenderer";
 
 type HeaderPopoverKind = "filter" | "sort" | "columns" | "view";
 
@@ -108,6 +115,17 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
   hoverPopover: HoverPopover | null = null;
   private queryEngine = new QueryEngine();
   private rowPipeline = new RowPipeline();
+  private pipelineDiagnostics: RowPipelineDiagnostics = {
+    sourceCount: 0,
+    postSearchCount: 0,
+    postFilterCount: 0,
+    postLimitCount: 0,
+    visibleCount: 0,
+    hasActiveSearch: false,
+    hasActiveFilters: false,
+    hasActiveLimit: false,
+  };
+  private emptyStateRenderer = new EmptyStateRenderer();
   private rows: RowData[] = [];
   private relationTargetPaths = new Set<string>();
   private relationTargetDatabases: DatabaseConfig[] = [];
@@ -140,6 +158,9 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
       this.renderResults(this.config);
       this.saveEmbeddedConfigInBackground();
     },
+    openDateConfig: () => {
+      if (this.config) this.openDateConfiguration(this.config);
+    },
     getColumns: (config) => getVisibleColumns(config, this.rows, this.vs(config), this.pendingShowColumns),
     getCalendarInvalidEventCount: () => this.getEmbeddedInvalidEventCount(),
     openCalendarInvalidEvents: () => this.openEmbeddedInvalidEvents(),
@@ -160,6 +181,9 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
       this.persistEmbeddedConfigLocally(this.config);
       this.renderResults(this.config);
       this.saveEmbeddedConfigInBackground();
+    },
+    openDateConfig: () => {
+      if (this.config) this.openDateConfiguration(this.config);
     },
     getTimelineInvalidEventCount: () => this.getEmbeddedInvalidEventCount(),
     openTimelineInvalidEvents: () => this.openEmbeddedInvalidEvents(),
@@ -280,7 +304,8 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
       getConfig: () => this.config,
       ensureColumnOrder: (config) => ensureColumnOrder(config),
       showContextMenu: (event, col, anchorEl) => this.showColumnContextMenu(event, col, anchorEl),
-      sortByColumn: (col) => this.sortByColumn(col),
+      sortByColumn: (col, append) => this.sortByColumn(col, append),
+      autoFitColumn: (col) => { if (this.config) this.autoFitColumn(this.config, col); },
       saveConfig: () => this.persistEmbeddedConfigToSource(),
       setUndoLabel: (_label: string) => { /* no-op in embed mode */ },
       refresh: () => { if (this.config) this.renderResults(this.config); },
@@ -292,7 +317,7 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
       areAllRowsSelected: (rows) => rows.length > 0 && rows.every((row) => this.selectedRows.has(row.file.path)),
       toggleRowsSelected: (rows, selected) => this.toggleRowsSelected(rows, selected),
       setupColumnHeader: (th, col) => this.columnHeaderController.setup(th, col),
-      setupRow: (tr, row) => this.rowMenu.attachToRow(tr, row),
+      setupRow: (tr, row, context) => this.rowMenu.attachToRow(tr, row, context),
       renderCell: (td, row, col) => {
         if (isCodeBlock) this.renderReadOnlyCell(td, row, col);
         else this.cellRenderer.renderCell(td, row, col);
@@ -304,6 +329,9 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
       applyConditionalFormat: (element, row, config, targetField) => applyConditionalFormat(element, row, config, this.currentDbConfig, targetField),
       moveRowToPosition: (movedPath, beforePath, afterPath) => this.moveRowToPosition(movedPath, beforePath, afterPath),
       createEntry: (defaults) => { if (!isCodeBlock) void this.createBlankEntry(defaults); },
+      addColumn: () => { new Notice(t("notice.editInFullView", { action: t("panel.addColumn") })); },
+      showRowMenu: (event, row, context, anchorEl) => this.rowMenu.show(event, row, context, anchorEl),
+      changeColumnCalculation: (columnKey, calculation) => this.changeColumnCalculation(columnKey, calculation),
       isGroupCollapsed: (field, key) => this.isGroupCollapsed(this.config, field, key),
       toggleGroupCollapsed: (field, key) => this.toggleGroupCollapsed(this.config, field, key),
     expandGroup: (field, key, count) => this.expandGroup(this.config, field, key, count),
@@ -536,7 +564,18 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
     this.containerEl.toggleClass("note-database-embed-headerless", this.shouldHideHeaderChrome());
     const config = this.getEmbeddedConfig();
     if (!config) {
-      this.containerEl.createDiv({ cls: "db-empty", text: t("errors.databaseViewNotFound") });
+      this.emptyStateRenderer.renderCard(this.containerEl, {
+        reason: "read-failed",
+        title: t("errors.databaseViewNotFound"),
+        message: t("emptyState.missingViewMessage"),
+        compact: true,
+        actions: [{
+          label: t("emptyState.retry"),
+          icon: "refresh-cw",
+          primary: true,
+          onClick: () => this.hardRefreshFromSource(),
+        }],
+      });
       this.restoreEmbeddedHostViewport(hostViewport);
       return;
     }
@@ -778,13 +817,17 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
       config,
       this.getIncrementalComputedSyncRows(config, this.rows, changedPaths)
     );
-    this.summaryRenderer.render(this.containerEl, this.rows, config, this.currentDbConfig, {
-      onChange: () => {
-        this.persistEmbeddedConfigLocally(config);
-        this.renderResults(config);
-        this.saveEmbeddedConfigInBackground();
-      },
-    });
+    if (config.viewType === "table") {
+      this.containerEl.querySelector(".db-summary")?.remove();
+    } else {
+      this.summaryRenderer.render(this.containerEl, this.rows, config, this.currentDbConfig, {
+        onChange: () => {
+          this.persistEmbeddedConfigLocally(config);
+          this.renderResults(config);
+          this.saveEmbeddedConfigInBackground();
+        },
+      });
+    }
     const summary = this.containerEl.querySelector<HTMLElement>(":scope > .db-summary");
     const tableRoot = this.containerEl.querySelector<HTMLElement>(
       ":scope > .db-table-wrap, :scope > .db-grouped-table"
@@ -943,7 +986,17 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
       : ".db-summary, .db-table-wrap, .db-grouped-table, .db-board, .db-gallery, .db-gallery-grouped, .db-gallery-total-header, .db-list, .db-list-grouped, .db-list-total-header, .db-chart, .db-chart-empty, .db-chart-number, .db-calendar, .db-timeline, .db-empty";
     target.querySelectorAll(staleViewSelector).forEach((el) => el.remove());
     if (!config.schema.columns || config.schema.columns.length === 0) {
-      target.createDiv({ cls: "db-empty", text: t("errors.noColumns") });
+      this.emptyStateRenderer.renderCard(target, {
+        reason: "no-columns",
+        message: t("errors.noColumns"),
+        compact: true,
+        actions: [{
+          label: t("emptyState.addProperty"),
+          icon: "plus",
+          primary: true,
+          onClick: () => { void this.openFullDatabaseView(config, { openPropertyModal: true }); },
+        }],
+      });
       this.restoreEmbeddedHostViewport(hostViewport);
       return;
     }
@@ -951,7 +1004,17 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
     try {
       records = this.dataSource.getRecordsForConfig(this.getEffectiveConfig(config));
     } catch (err) {
-      target.createDiv({ cls: "db-empty", text: t("errors.dataReadFailed", { error: String(err) }) });
+      this.emptyStateRenderer.renderCard(target, {
+        reason: "read-failed",
+        message: t("errors.dataReadFailed", { error: String(err) }),
+        compact: true,
+        actions: [{
+          label: t("emptyState.retry"),
+          icon: "refresh-cw",
+          primary: true,
+          onClick: () => this.hardRefreshFromSource(),
+        }],
+      });
       this.restoreEmbeddedHostViewport(hostViewport);
       return;
     }
@@ -972,24 +1035,42 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
     const renderConfig = this.getStatefulConfig(config);
     if (config.viewType === "board") {
       const field = config.boardGroupField || this.vs(config).groupByField || this.getDefaultBoardField(config);
-      this.boardRenderer.render(target, renderConfig, this.getBoardGroups(config, field), field);
+      this.boardRenderer.render(
+        target,
+        renderConfig,
+        this.getBoardGroups(config, field),
+        field,
+        this.getEmptyStateOptions(config),
+      );
     } else if (config.viewType === "gallery") {
       if (this.vs(config).groupByField) {
         const field = this.vs(config).groupByField;
         const groups = withEmptyOptionGroups(config, field, this.queryEngine.groupBy(this.rows, field, [], config.schema.columns.find((c) => c.key === field), config));
         const order = getEffectiveGroupOrder(config, field, groups.map((group) => group.key));
-        this.galleryRenderer.renderGrouped(target, renderConfig, this.queryEngine.sortGroups(groups, order), field);
+        this.galleryRenderer.renderGrouped(
+          target,
+          renderConfig,
+          this.queryEngine.sortGroups(groups, order),
+          field,
+          this.getEmptyStateOptions(config),
+        );
       } else {
-        this.galleryRenderer.render(target, renderConfig, this.rows);
+        this.galleryRenderer.render(target, renderConfig, this.rows, this.getEmptyStateOptions(config));
       }
     } else if (config.viewType === "list") {
       if (this.vs(config).groupByField) {
         const field = this.vs(config).groupByField;
         const groups = withEmptyOptionGroups(config, field, this.queryEngine.groupBy(this.rows, field, [], config.schema.columns.find((c) => c.key === field), config));
         const order = getEffectiveGroupOrder(config, field, groups.map((group) => group.key));
-        this.listRenderer.renderGrouped(target, renderConfig, this.queryEngine.sortGroups(groups, order), field);
+        this.listRenderer.renderGrouped(
+          target,
+          renderConfig,
+          this.queryEngine.sortGroups(groups, order),
+          field,
+          this.getEmptyStateOptions(config),
+        );
       } else {
-        this.listRenderer.render(target, renderConfig, this.rows);
+        this.listRenderer.render(target, renderConfig, this.rows, this.getEmptyStateOptions(config));
       }
     } else if (config.viewType === "chart") {
       this.chartRenderer.render(target, renderConfig, this.rows, config.schema.columns, {
@@ -1016,7 +1097,7 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
     } else {
       const fields = getDisplayGroupFields(config, this.vs(config));
       if (fields.length === 0) {
-        this.tableRenderer.renderTable(target, renderConfig, this.rows);
+        this.tableRenderer.renderTable(target, renderConfig, this.rows, this.getEmptyStateOptions(config));
       } else {
         const groupFn = (groupConfig: ViewConfig, field: string, rows: RowData[]) => {
           const groups = withEmptyOptionGroups(
@@ -1034,7 +1115,14 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
           return this.queryEngine.sortGroups(groups, order);
         };
         const flattened = flattenGroupTree(buildGroupTree(this.rows, fields, config, groupFn));
-        this.tableRenderer.renderGroupedTable(target, renderConfig, this.rows, flattened, fields[0]);
+        this.tableRenderer.renderGroupedTable(
+          target,
+          renderConfig,
+          this.rows,
+          flattened,
+          fields[0],
+          this.getEmptyStateOptions(config),
+        );
       }
     }
     if (config.viewType === "chart") {
@@ -1222,12 +1310,15 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
       : { ...baseDbConfig, views: baseDbConfig.views.map((view, idx) => (idx === this.currentViewIndex ? config : view)) };
     this.toolbarRenderer.render(this.containerEl, [{ config: dbConfig, sourcePath: this.currentSourcePath }], 0, this.currentViewIndex, this.vs(config), {
       selectDatabase: () => undefined,
-      selectViewInView: (_dbIndex: number, viewIndex: number) => {
-        if (!this.currentDbConfig || viewIndex === this.currentViewIndex) return;
+      selectViewInView: (_dbIndex: number, viewIndex: number, viewId?: string) => {
+        const resolvedIndex = this.currentDbConfig
+          ? resolveViewIndex(this.currentDbConfig.views.map((view) => view.id), viewId, viewIndex)
+          : viewIndex;
+        if (!this.currentDbConfig || resolvedIndex === this.currentViewIndex) return;
         const descriptionScroll = this.saveDescriptionScroll();
         this.closePopovers();
-        this.currentViewIndex = viewIndex;
-        this.viewIndexOverride = viewIndex;
+        this.currentViewIndex = resolvedIndex;
+        this.viewIndexOverride = resolvedIndex;
         this.config = undefined;
         this.state = undefined;
         const newConfig = this.getEmbeddedConfig()!;
@@ -1404,6 +1495,7 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
       removeFilter: (index) => this.removeActiveFilterRule(config, index),
       removeSort: (index) => this.removeActiveSortRule(config, index),
       toggleFilterLogic: () => this.toggleActiveFilterLogic(config),
+      clearAll: () => this.clearActiveViewControls(config),
     });
     this.updateStickyOffsets();
   }
@@ -1477,6 +1569,22 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
     if (tree && "type" in tree && tree.type === "group") {
       state.filterTree = { ...tree, logic: state.filterLogic };
     }
+    this.persistEmbeddedConfigLocally(config);
+    this.updateToolbarIndicators(config);
+    this.renderResults(config, { viewport: "reset-top" });
+    this.saveEmbeddedConfigInBackground();
+  }
+
+  private clearActiveViewControls(config: ViewConfig): void {
+    const state = this.vs(config);
+    state.filters = [];
+    state.filterTree = undefined;
+    state.filterLogic = "and";
+    state.sortRules = [];
+    state.sortColumn = undefined;
+    state.sortDirection = "asc";
+    state.statusFilter = "";
+    this.activeRulePopoverRenderer.close();
     this.persistEmbeddedConfigLocally(config);
     this.updateToolbarIndicators(config);
     this.renderResults(config, { viewport: "reset-top" });
@@ -1674,6 +1782,84 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
     };
   }
 
+  private getEmptyStateOptions(config: ViewConfig): EmptyStateOptions | undefined {
+    const diagnostics = this.pipelineDiagnostics;
+    if (diagnostics.visibleCount !== 0) return undefined;
+    const state = this.vs(config);
+    const reason = getEmptyStateReason(diagnostics);
+    const clearSearch = () => {
+      state.searchText = "";
+      this.updateToolbarIndicators(config);
+      this.renderResults(config, { viewport: "reset-top" });
+    };
+    const resetFilters = () => {
+      state.filters = [];
+      state.filterTree = undefined;
+      state.statusFilter = "";
+      this.stateStore.persist(config, state);
+      this.persistEmbeddedConfigLocally(config);
+      this.updateToolbarIndicators(config);
+      this.renderResults(config, { viewport: "reset-top" });
+      this.saveEmbeddedConfigInBackground();
+    };
+    const actions: NonNullable<EmptyStateOptions["actions"]> = [];
+    if (reason === "search-empty" || reason === "filter-and-search-empty") {
+      actions.push({ label: t("emptyState.clearSearch"), icon: "x", onClick: clearSearch });
+    }
+    if (reason === "filter-empty" || reason === "filter-and-search-empty") {
+      actions.push({ label: t("emptyState.resetFilters"), icon: "filter-x", onClick: resetFilters });
+    }
+    if (reason === "filter-and-search-empty") {
+      actions.push({
+        label: t("emptyState.clearAll"),
+        icon: "rotate-ccw",
+        primary: true,
+        onClick: () => {
+          state.searchText = "";
+          state.filters = [];
+          state.filterTree = undefined;
+          state.statusFilter = "";
+          this.stateStore.persist(config, state);
+          this.persistEmbeddedConfigLocally(config);
+          this.updateToolbarIndicators(config);
+          this.renderResults(config, { viewport: "reset-top" });
+          this.saveEmbeddedConfigInBackground();
+        },
+      });
+    }
+    if (reason === "limit-empty") {
+      actions.push({
+        label: t("emptyState.showAll"),
+        icon: "list",
+        primary: true,
+        onClick: () => {
+          config.resultLimit = undefined;
+          this.persistEmbeddedConfigLocally(config);
+          this.renderResults(config, { viewport: "reset-top" });
+          this.saveEmbeddedConfigInBackground();
+        },
+      });
+    }
+    return {
+      reason,
+      title: reason === "search-empty"
+        ? t("emptyState.searchResultsFor", { query: state.searchText.trim() })
+        : undefined,
+      diagnostics: formatEmptyStateDiagnostics(diagnostics),
+      actions: actions.length > 0 ? actions : undefined,
+      compact: true,
+    };
+  }
+
+  private openDateConfiguration(config: ViewConfig): void {
+    const button = this.containerEl.querySelector<HTMLElement>(".db-toolbar-more-btn");
+    if (button) {
+      this.toggleHeaderPopover(config, "view", button);
+      return;
+    }
+    void this.openFullDatabaseView(config);
+  }
+
   private renderColumnManager(config: ViewConfig): void {
     this.columnManagerRenderer.render(this.containerEl, this.showColumnManager, config, this.vs(config), getColumnsInOrder(config), {
       close: () => {
@@ -1793,6 +1979,23 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
         this.render();
         this.saveEmbeddedConfigInBackground();
       },
+      onOpenLayoutOptions: (anchor) => {
+        if (config.viewType === "chart") {
+          this.toggleChartOptions(config, anchor);
+          return;
+        }
+        this.closePopovers();
+        this.calendarToolbarRenderer.togglePopover(this.containerEl, anchor, config, {
+          database: this.currentDbConfig,
+          onChange: () => {
+            this.persistEmbeddedConfigLocally(config);
+            this.renderResults(config);
+            this.saveEmbeddedConfigInBackground();
+          },
+          getInvalidEventCount: () => this.getEmbeddedInvalidEventCount(config),
+          openInvalidEvents: () => this.openEmbeddedInvalidEvents(),
+        });
+      },
       onDatabaseChange: () => {
         this.persistEmbeddedConfigLocally(config);
         this.renderResults(config);
@@ -1896,7 +2099,7 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
     }
   }
 
-  private async openFullDatabaseView(config: ViewConfig): Promise<void> {
+  private async openFullDatabaseView(config: ViewConfig, options: { openPropertyModal?: boolean } = {}): Promise<void> {
     let leaf = this.app.workspace.getLeavesOfType(DATABASE_VIEW_TYPE)[0];
     if (!leaf) {
       leaf = this.app.workspace.getLeaf(false);
@@ -1906,6 +2109,7 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
     const view = leaf.view;
     if (view instanceof DatabaseView) {
       view.openViewReference(this.currentSourcePath, config.id);
+      if (options.openPropertyModal) view.openCreatePropertyModalFromEmbed();
     }
   }
 
@@ -2167,6 +2371,26 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
     this.saveEmbeddedConfigInBackground();
   }
 
+  private changeColumnCalculation(columnKey: string, calculation: string | null): void {
+    const config = this.config;
+    if (!config) return;
+    const next = [...(config.summaryRules || [])];
+    const index = next.findIndex((rule) => rule.field === columnKey);
+    if (calculation) {
+      const rule = { field: columnKey, summary: calculation };
+      if (index >= 0) next[index] = rule;
+      else next.push(rule);
+    } else {
+      for (let i = next.length - 1; i >= 0; i -= 1) {
+        if (next[i].field === columnKey) next.splice(i, 1);
+      }
+    }
+    config.summaryRules = next.length > 0 ? next : undefined;
+    this.persistEmbeddedConfigLocally(config);
+    this.renderResults(config);
+    this.saveEmbeddedConfigInBackground();
+  }
+
   private calculateAutoColumnWidth(col: ColumnDef, rows: RowData[]): number {
     return estimateAutoColumnWidth(
       col,
@@ -2196,12 +2420,32 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
     return safeString(value);
   }
 
-  private sortByColumn(col: ColumnDef): void {
+  private sortByColumn(col: ColumnDef, append = false): void {
     const config = this.config;
     if (!config) return;
     const state = this.vs(config);
-    const currentRule = state.sortRules.length === 1 && state.sortRules[0].field === col.key
-      ? state.sortRules[0]
+    const existingRules = state.sortRules.length > 0
+      ? [...state.sortRules]
+      : state.sortColumn
+        ? [{ field: state.sortColumn, direction: state.sortDirection }]
+        : [];
+    if (append) {
+      const nextRules = existingRules;
+      const index = nextRules.findIndex((rule) => rule.field === col.key);
+      if (index < 0) nextRules.push({ field: col.key, direction: "asc" });
+      else if (nextRules[index].direction === "asc") nextRules[index] = { field: col.key, direction: "desc" };
+      else nextRules.splice(index, 1);
+      state.sortColumn = undefined;
+      state.sortDirection = "asc";
+      state.sortRules = nextRules;
+      this.persistEmbeddedConfigLocally(config);
+      this.updateToolbarIndicators(config);
+      this.renderResults(config, { viewport: "reset-top" });
+      this.saveEmbeddedConfigInBackground();
+      return;
+    }
+    const currentRule = existingRules.length === 1 && existingRules[0].field === col.key
+      ? existingRules[0]
       : undefined;
     state.sortColumn = undefined;
     state.sortDirection = "asc";
@@ -2220,7 +2464,7 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
 
   private getColumnSortDirection(config: ViewConfig, col: ColumnDef): "asc" | "desc" | null {
     const state = this.vs(config);
-    const rule = state.sortRules.length === 1 ? state.sortRules[0] : undefined;
+    const rule = state.sortRules.find((candidate) => candidate.field === col.key);
     if (rule?.field === col.key) return rule.direction;
     if (state.sortRules.length === 0 && state.sortColumn === col.key) return state.sortDirection;
     return null;
@@ -2992,7 +3236,7 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
       this.updateToolbarBadge(sortBtn, count);
     }
     const colBtn = this.containerEl.querySelector(".db-col-manager-btn");
-    if (isHTMLElement(colBtn)) this.updateToolbarBadge(colBtn, Math.max(0, (config.schema.columns.length || 0) - state.hiddenColumns.size));
+    if (isHTMLElement(colBtn)) this.updateHiddenToolbarBadge(colBtn, state.hiddenColumns.size);
     const groupBtn = this.containerEl.querySelector(".db-group-btn");
     if (isHTMLElement(groupBtn)) {
       const groupValue = config.viewType === "board"
@@ -3011,6 +3255,12 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
     button.querySelector(".db-toolbar-badge")?.remove();
     if (count <= 0) return;
     button.createSpan({ cls: "db-toolbar-badge", text: String(count) });
+  }
+
+  private updateHiddenToolbarBadge(button: HTMLElement, count: number): void {
+    button.querySelector(".db-toolbar-badge")?.remove();
+    button.setAttribute("aria-label", count > 0 ? t("toolbar.propertiesHidden", { count }) : t("toolbar.properties"));
+    if (count > 0) button.createSpan({ cls: "db-toolbar-badge db-toolbar-badge-neutral", text: t("toolbar.hiddenCount", { count }) });
   }
 
   private persistEmbeddedConfigToSource(): void {
@@ -3272,13 +3522,15 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
       this.relationTargetDatabases = [];
       this.relationTargetDatabasePaths.clear();
     }
-    return this.rowPipeline.build(
+    const output = this.rowPipeline.buildWithDiagnostics(
       records,
       this.withBaseThisContext(view),
       state,
       this.app,
       derived,
     );
+    this.pipelineDiagnostics = getRowPipelineDiagnostics(output);
+    return output.rows;
   }
 
   private getRowsForExportView(dbConfig: DatabaseConfig, viewIndex: number): RowData[] {
@@ -3331,6 +3583,7 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
     origView.boardSubgroupEnabled = this.config.boardSubgroupEnabled;
     origView.boardSubgroupField = this.config.boardSubgroupField;
     origView.defaultColumnWidth = this.config.defaultColumnWidth;
+    origView.rowDensity = this.config.rowDensity;
     origView.groupOrders = this.config.groupOrders;
     origView.showEmptyGroups = this.config.showEmptyGroups;
     origView.collapsedGroups = this.config.collapsedGroups;

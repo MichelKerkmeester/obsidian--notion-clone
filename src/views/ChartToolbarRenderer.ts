@@ -44,14 +44,14 @@ interface ChildPopoverSizeOptions {
 }
 
 const REFERENCE_LINE_COLORS = [
-  { value: "", color: "#94a3b8", labelKey: "chart.referenceLineColorDefault" },
-  { value: "#64748b", color: "#64748b", labelKey: "chart.referenceLineColorGray" },
-  { value: "#3b82f6", color: "#3b82f6", labelKey: "chart.referenceLineColorBlue" },
-  { value: "#22c55e", color: "#22c55e", labelKey: "chart.referenceLineColorGreen" },
-  { value: "#f59e0b", color: "#f59e0b", labelKey: "chart.referenceLineColorAmber" },
-  { value: "#ef4444", color: "#ef4444", labelKey: "chart.referenceLineColorRed" },
-  { value: "#8b5cf6", color: "#8b5cf6", labelKey: "chart.referenceLineColorPurple" },
-  { value: "#ec4899", color: "#ec4899", labelKey: "chart.referenceLineColorPink" },
+  { value: "", color: "var(--db-border-emphasis)", labelKey: "chart.referenceLineColorDefault" },
+  { value: "#64748b", color: "var(--status-color-fg-slate)", labelKey: "chart.referenceLineColorGray" },
+  { value: "#3b82f6", color: "var(--status-color-fg-blue)", labelKey: "chart.referenceLineColorBlue" },
+  { value: "#22c55e", color: "var(--status-color-fg-green)", labelKey: "chart.referenceLineColorGreen" },
+  { value: "#f59e0b", color: "var(--status-color-fg-orange)", labelKey: "chart.referenceLineColorAmber" },
+  { value: "#ef4444", color: "var(--status-color-fg-red)", labelKey: "chart.referenceLineColorRed" },
+  { value: "#8b5cf6", color: "var(--status-color-fg-violet)", labelKey: "chart.referenceLineColorPurple" },
+  { value: "#ec4899", color: "var(--status-color-fg-pink)", labelKey: "chart.referenceLineColorPink" },
 ];
 
 function getChartGroupOptions(config: ViewConfig): SelectOption[] {

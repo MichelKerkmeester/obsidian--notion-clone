@@ -1,0 +1,32 @@
+{
+  "specFolder": "public/003-ui-improvement-build/006-views-parity-polish",
+  "description": "While the Table view provides the tabular foundation for high-density record management, the Note Database plugin's non-table views (Board, Gallery,",
+  "keywords": [
+    "while",
+    "table",
+    "view",
+    "provides",
+    "tabular",
+    "foundation",
+    "high-density",
+    "record",
+    "management",
+    "note",
+    "database",
+    "plugin",
+    "non-table",
+    "views",
+    "board",
+    "gallery"
+  ],
+  "lastUpdated": "2026-08-27T19:53:18.599Z",
+  "specId": "006",
+  "folderSlug": "views-parity-polish",
+  "parentChain": [
+    "public",
+    "003-ui-improvement-build"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": [],
+  "level": "2"
+}

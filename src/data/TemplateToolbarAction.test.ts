@@ -2,6 +2,8 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { setLocale } from "../i18n";
 import {
   executeNewFromTemplate,
+  getCreateEntryPosition,
+  getRegisteredRecordTemplates,
   getNewFromTemplateLabel,
   getNewFromTemplateTooltip,
   hasRecordTemplate,
@@ -46,6 +48,18 @@ describe("TemplateToolbarAction", () => {
     expect(createEntry).toHaveBeenCalledOnce();
   });
 
+  it("passes the requested insertion position to the creator", async () => {
+    const createEntry = vi.fn();
+    await executeNewFromTemplate({
+      config: undefined,
+      confirmEnabled: false,
+      confirm: async () => true,
+      position: { beforePath: "first.md" },
+      createEntry,
+    });
+    expect(createEntry).toHaveBeenCalledWith({ beforePath: "first.md" });
+  });
+
   it("creates once only when enabled confirmation returns true", async () => {
     const confirm = vi.fn<() => Promise<boolean | string | undefined>>(async () => true);
     const createEntry = vi.fn();
@@ -74,5 +88,23 @@ describe("TemplateToolbarAction", () => {
 
     expect(confirm).toHaveBeenCalledOnce();
     expect(createEntry).not.toHaveBeenCalled();
+  });
+
+  it("returns sorted, duplicate-free vault templates and preserves the configured engine", () => {
+    expect(getRegisteredRecordTemplates([
+      "Templates/Z.md",
+      "Templates/Meeting.md",
+      "Templates/Z.md",
+      "Assets/logo.png",
+    ], { path: "Templates/Meeting.md", engine: "templater" })).toEqual([
+      { path: "Templates/Meeting.md", engine: "templater", label: "Meeting" },
+      { path: "Templates/Z.md", engine: "markdown", label: "Z" },
+    ]);
+  });
+
+  it("resolves insertion positions from the selected placement", () => {
+    expect(getCreateEntryPosition("top", "first.md", "last.md")).toEqual({ beforePath: "first.md" });
+    expect(getCreateEntryPosition("bottom", "first.md", "last.md")).toEqual({ afterPath: "last.md" });
+    expect(getCreateEntryPosition("bottom")).toBeUndefined();
   });
 });

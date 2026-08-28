@@ -18,9 +18,10 @@ import {
   toChartNumber,
   computePerCategoryTotals,
 } from "../data/ChartAggregation";
-import { CHART_PRESET_PALETTES } from "../data/ChartPalettes";
+import { getChartPaletteColors, getChartStatusColors } from "../data/ChartPalettes";
 import { formatChartDrilldownCellValue, getChartFilterRules, getChartTitle, getChartHeightClass, getDrilldownRows, isChartCumulativeSupported, normalizeChartAggregationForValueField } from "../data/ChartViewModel";
-import { ChartColorPalette, ChartReferenceLine, ChartType, ColumnDef, FilterRule, RowData, ViewConfig } from "../data/types";
+import { ChartColorPalette, ChartReferenceLine, ChartType, ColumnDef, FilterRule, RowData, StatusColor, ViewConfig } from "../data/types";
+import { STATUS_COLORS } from "../data/StatusColors";
 import { t } from "../i18n";
 import { isHTMLElement } from "./DomGuards";
 
@@ -31,6 +32,9 @@ interface ThemeColors {
   accent: string;
   accentHover: string;
   background: string;
+  onAccent: string;
+  status: Record<StatusColor, string>;
+  isDark: boolean;
 }
 
 interface ChartRenderSnapshot {
@@ -74,22 +78,31 @@ function getOwnerWindow(container: HTMLElement): WindowWithChartResizeObserver |
 
 function getCssValue(container: HTMLElement, name: string): string {
   const ownerWindow = getOwnerWindow(container);
-  const body = container.ownerDocument?.body;
-  if (!ownerWindow || !body) return "";
-  return ownerWindow.getComputedStyle(body).getPropertyValue(name).trim();
+  if (!ownerWindow) return "";
+  return ownerWindow.getComputedStyle(container).getPropertyValue(name).trim();
 }
 
 function getThemeColors(container: HTMLElement): ThemeColors {
   const accentRgb = getCssValue(container, "--interactive-accent-rgb");
   const accent = getCssValue(container, "--interactive-accent") ||
     (accentRgb ? `rgb(${accentRgb})` : "#3b82f6");
+  const background = getCssValue(container, "--background-primary") || "#ffffff";
+  const luminance = getRelativeLuminance(background);
+  const isDark = luminance != null ? luminance < 0.45 : false;
+  const status = getChartStatusColors(isDark ? "dark" : "light");
+  for (const color of STATUS_COLORS) {
+    status[color] = getCssValue(container, `--status-color-fg-${color}`) || status[color];
+  }
   return {
     text: getCssValue(container, "--text-normal") || "#1f2937",
     muted: getCssValue(container, "--text-muted") || "#64748b",
     grid: getCssValue(container, "--background-modifier-border") || "rgba(148, 163, 184, 0.35)",
     accent,
     accentHover: accentRgb ? `rgba(${accentRgb}, 0.95)` : accent,
-    background: getCssValue(container, "--background-primary") || "#ffffff",
+    background,
+    onAccent: getCssValue(container, "--text-on-accent") || "#ffffff",
+    status,
+    isDark,
   };
 }
 
@@ -351,7 +364,7 @@ export class ChartRenderer {
     const isPercentStacked = chartType === "percent-stacked-bar" && isSeries;
     const valueAxis = getValueAxisOptions(config, isPercentStacked);
     const valueAxisGrace = config?.chartShowDataLabels === true && valueAxis.max == null ? "12%" : undefined;
-    const referenceLines = resolveReferenceLines(result, config?.chartReferenceLines || [], formatValue);
+    const referenceLines = resolveReferenceLines(result, config?.chartReferenceLines || [], formatValue, colors);
     const rawChartLabels = isStackedResult(result) ? result.labels : result.points.map((point) => point.label);
     const chartLabels = rawChartLabels.map((label) => wrapCategoryLabel(label));
     const categoryTickLabel = (value: string | number, index?: number) => {
@@ -481,7 +494,7 @@ export class ChartRenderer {
           isHorizontal,
           percentByCategory: chartType === "stacked-bar" || chartType === "grouped-bar" || chartType === "percent-stacked-bar",
         }),
-        createDonutCenterPlugin(formatValue, isDonut ? getDonutCenterMode(config) : "hidden", getDonutCenterValue(result, config)),
+        createDonutCenterPlugin(formatValue, isDonut ? getDonutCenterMode(config) : "hidden", getDonutCenterValue(result, config), colors),
         ...(referenceLines.length > 0 && !isPie && !isDonut ? [createReferenceLinesPlugin(referenceLines, isHorizontal, colors)] : []),
       ],
     });
@@ -776,19 +789,19 @@ export class ChartRenderer {
     if (config?.chartColorByValue && isSingleSeriesBarChart(config.chartType || "bar")) {
       return createValueIntensityColors(result.points.map((point) => point.value), colors.accent);
     }
-    const optionColors = getOptionPointColors(result, config, columns);
+    const optionColors = getOptionPointColors(result, config, columns, colors);
     if (optionColors && (config?.chartColorPalette === "option" || config?.chartColorPalette === "auto" || !config?.chartColorPalette)) return optionColors;
     if (config?.chartColorPalette === "accent") return Array.from({ length: result.points.length }, () => colors.accent);
-    return createPaletteForConfig(config?.chartColorPalette, colors.accent, result.points.length);
+    return createPaletteForConfig(config?.chartColorPalette, colors, result.points.length);
   }
 
   private getSeriesColors(result: ChartStackedAggregateResult, colors: ThemeColors): string[] {
     const config = this.lastRender?.config;
     const columns = this.lastRender?.columns || [];
-    const optionColors = getOptionSeriesColors(result, config, columns);
+    const optionColors = getOptionSeriesColors(result, config, columns, colors);
     if (optionColors && (config?.chartColorPalette === "option" || config?.chartColorPalette === "auto" || !config?.chartColorPalette)) return optionColors;
     if (config?.chartColorPalette === "accent") return Array.from({ length: result.series.length }, () => colors.accent);
-    return createPaletteForConfig(config?.chartColorPalette, colors.accent, result.series.length);
+    return createPaletteForConfig(config?.chartColorPalette, colors, result.series.length);
   }
 
   private createMixedDatasets(result: ChartStackedAggregateResult, colors: ThemeColors): ChartDataset[] {
@@ -812,10 +825,10 @@ export class ChartRenderer {
         order: 1,
         label: line.label,
         data: line.values,
-        borderColor: "#f59e0b",
-        backgroundColor: "#f59e0b",
+        borderColor: colors.status.orange,
+        backgroundColor: colors.status.orange,
         borderWidth: 2,
-        pointBackgroundColor: "#f59e0b",
+        pointBackgroundColor: colors.status.orange,
         pointBorderColor: colors.background,
         pointBorderWidth: 1,
         pointRadius: 3,
@@ -1135,11 +1148,11 @@ function getDataLabelColor(
   background: string | null,
 ): string {
   if (mode === "dark") return colors.text;
-  if (mode === "light") return "#ffffff";
+  if (mode === "light") return colors.onAccent;
   if (mode === "accent") return colors.accent;
   const luminance = background ? getRelativeLuminance(background) : null;
-  if (luminance == null) return "#ffffff";
-  return luminance > 0.58 ? "#111827" : "#ffffff";
+  if (luminance == null) return colors.onAccent;
+  return luminance > 0.58 ? colors.text : colors.onAccent;
 }
 
 function getDatasetBackgroundColor(dataset: ChartDataset, index: number): string | null {
@@ -1225,6 +1238,7 @@ function createDonutCenterPlugin(
   formatValue: (value: number | null | undefined) => string,
   mode: NonNullable<ViewConfig["chartDonutCenterMode"]>,
   value: number | null,
+  colors: ThemeColors,
 ): DonutCenterPlugin {
   return {
     id: "noteDatabaseDonutCenter",
@@ -1234,7 +1248,7 @@ function createDonutCenterPlugin(
       const area = chart.chartArea;
       const ctx = chart.ctx;
       ctx.save();
-      ctx.fillStyle = "#64748b";
+      ctx.fillStyle = colors.muted;
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
       ctx.font = "600 18px sans-serif";
@@ -1302,6 +1316,7 @@ function resolveReferenceLines(
   result: ChartRenderResult,
   lines: ChartReferenceLine[],
   formatValue: (value: number | null | undefined) => string,
+  colors: ThemeColors,
 ): ResolvedReferenceLine[] {
   const values = getResultValues(result);
   return lines
@@ -1313,11 +1328,26 @@ function resolveReferenceLines(
         id: line.id,
         value,
         label,
-        color: line.color,
+        color: resolveChartSemanticColor(line.color, colors),
         style: line.style || "solid",
       };
     })
     .filter((line): line is ResolvedReferenceLine => line != null);
+}
+
+function resolveChartSemanticColor(color: string | undefined, colors: ThemeColors): string | undefined {
+  if (!color) return undefined;
+  const knownColors: Record<string, StatusColor> = {
+    "#64748b": "slate",
+    "#3b82f6": "blue",
+    "#22c55e": "green",
+    "#f59e0b": "orange",
+    "#ef4444": "red",
+    "#8b5cf6": "violet",
+    "#ec4899": "pink",
+  };
+  const statusColor = knownColors[color.toLowerCase()];
+  return statusColor ? colors.status[statusColor] : color;
 }
 
 function getResultValues(result: ChartRenderResult): number[] {
@@ -1373,8 +1403,8 @@ function createReferenceLinesPlugin(lines: ResolvedReferenceLine[], isHorizontal
       for (const line of lines) {
         const pixel = scale.getPixelForValue(line.value);
         if (!Number.isFinite(pixel)) continue;
-        ctx.strokeStyle = line.color || colors.muted;
-        ctx.fillStyle = line.color || colors.muted;
+        ctx.strokeStyle = line.color || colors.status.slate;
+        ctx.fillStyle = line.color || colors.status.slate;
         ctx.lineWidth = 1;
         ctx.setLineDash(getReferenceLineDash(line.style));
         ctx.beginPath();
@@ -1570,28 +1600,11 @@ function getFallbackThemeColors(): ThemeColors {
     accent: "#3b82f6",
     accentHover: "#2563eb",
     background: "#ffffff",
+    onAccent: "#ffffff",
+    status: getChartStatusColors("light"),
+    isDark: false,
   };
 }
-
-const STATUS_COLOR_HEX: Record<string, string> = {
-  gray: "#787774",
-  brown: "#8f5d45",
-  orange: "#b65f00",
-  yellow: "#8f6a00",
-  green: "#448361",
-  blue: "#2f6fad",
-  purple: "#6940a5",
-  pink: "#a83272",
-  red: "#d44c47",
-  slate: "#64748b",
-  cyan: "#0891b2",
-  teal: "#0f766e",
-  lime: "#65a30d",
-  indigo: "#4f46e5",
-  violet: "#7c3aed",
-  rose: "#e11d48",
-};
-const FILE_TAG_CHART_COLORS = ["#64748b", "#94a3b8", "#475569", "#cbd5e1"];
 
 function getSingleSeriesBarColors(
   chartType: ChartType,
@@ -1603,11 +1616,11 @@ function getSingleSeriesBarColors(
   if (config?.chartColorByValue && isSingleSeriesBarChart(chartType)) {
     return createValueIntensityColors(result.points.map((point) => point.value), colors.accent);
   }
-  const optionColors = getOptionPointColors(result, config, columns);
+  const optionColors = getOptionPointColors(result, config, columns, colors);
   if (optionColors && (config?.chartColorPalette === "option" || config?.chartColorPalette === "auto" || !config?.chartColorPalette)) return optionColors;
   if (config?.chartColorPalette === "accent") return colors.accent;
   if (result.points.length <= 1 && (!config?.chartColorPalette || config.chartColorPalette === "auto")) return colors.accent;
-  return createPaletteForConfig(config?.chartColorPalette, colors.accent, result.points.length);
+  return createPaletteForConfig(config?.chartColorPalette, colors, result.points.length);
 }
 
 function getSingleSeriesBarHoverColors(
@@ -1623,32 +1636,33 @@ function getSingleSeriesBarHoverColors(
     : colors.accentHover;
 }
 
-function getOptionPointColors(result: ChartAggregateResult, config: ViewConfig | undefined, columns: ColumnDef[]): string[] | null {
+function getOptionPointColors(result: ChartAggregateResult, config: ViewConfig | undefined, columns: ColumnDef[], colors: ThemeColors): string[] | null {
   const column = config?.chartGroupField ? columns.find((col) => col.key === config.chartGroupField) : undefined;
-  if (column?.key === "file.tags") return createFileTagChartColors(result.points.length);
-  const colorMap = getOptionColorMap(column);
+  if (column?.key === "file.tags") return createFileTagChartColors(result.points.length, colors);
+  const colorMap = getOptionColorMap(column, colors);
   if (!colorMap) return null;
-  return result.points.map((point) => colorMap.get(point.key) || STATUS_COLOR_HEX.gray);
+  return result.points.map((point) => colorMap.get(point.key) || colors.status.gray);
 }
 
-function getOptionSeriesColors(result: ChartStackedAggregateResult, config: ViewConfig | undefined, columns: ColumnDef[]): string[] | null {
+function getOptionSeriesColors(result: ChartStackedAggregateResult, config: ViewConfig | undefined, columns: ColumnDef[], colors: ThemeColors): string[] | null {
   const seriesField = config ? getConfigSeriesField(config) : undefined;
   const column = seriesField ? columns.find((col) => col.key === seriesField) : undefined;
-  if (column?.key === "file.tags") return createFileTagChartColors(result.series.length);
-  const colorMap = getOptionColorMap(column);
+  if (column?.key === "file.tags") return createFileTagChartColors(result.series.length, colors);
+  const colorMap = getOptionColorMap(column, colors);
   if (!colorMap) return null;
-  return result.series.map((series) => colorMap.get(series.key) || STATUS_COLOR_HEX.gray);
+  return result.series.map((series) => colorMap.get(series.key) || colors.status.gray);
 }
 
-function createFileTagChartColors(count: number): string[] {
-  return Array.from({ length: count }, (_, index) => FILE_TAG_CHART_COLORS[index % FILE_TAG_CHART_COLORS.length]);
+function createFileTagChartColors(count: number, colors: ThemeColors): string[] {
+  const palette = [colors.status.slate, colors.muted, colors.status.gray, colors.text];
+  return Array.from({ length: count }, (_, index) => palette[index % palette.length]);
 }
 
-function getOptionColorMap(column: ColumnDef | undefined): Map<string, string> | null {
+function getOptionColorMap(column: ColumnDef | undefined, colors: ThemeColors): Map<string, string> | null {
   if (!column?.statusOptions?.length) return null;
   const entries = column.statusOptions
     .filter((option) => option.value)
-    .map((option) => [option.value, STATUS_COLOR_HEX[option.color] || STATUS_COLOR_HEX.gray] as const);
+    .map((option) => [option.value, colors.status[option.color] || colors.status.gray] as const);
   return entries.length > 0 ? new Map(entries) : null;
 }
 
@@ -1718,19 +1732,18 @@ function transparentize(color: string, alpha: number): string {
   return color;
 }
 
-function createPaletteForConfig(palette: ChartColorPalette | undefined, accent: string, count: number): string[] {
+function createPaletteForConfig(palette: ChartColorPalette | undefined, colors: ThemeColors, count: number): string[] {
   if (count <= 0) return [];
-  if (palette === "accent") return Array.from({ length: count }, () => accent || CHART_PRESET_PALETTES.colorful[0]);
+  if (palette === "accent") return Array.from({ length: count }, () => colors.accent);
   if (!palette || palette === "auto" || palette === "option") {
-    const fallback = CHART_PRESET_PALETTES.colorful;
+    const fallback = getChartPaletteColors("colorful", colors.isDark ? "dark" : "light");
     return Array.from({ length: count }, (_, index) => {
-      if (index === 0 && accent) return accent;
+      if (index === 0 && colors.accent) return colors.accent;
       return fallback[index % fallback.length];
     });
   }
-  const preset = palette;
-  const colors = CHART_PRESET_PALETTES[preset] || CHART_PRESET_PALETTES.colorful;
-  return Array.from({ length: count }, (_, index) => colors[index % colors.length]);
+  const presetColors = getChartPaletteColors(palette, colors.isDark ? "dark" : "light");
+  return Array.from({ length: count }, (_, index) => presetColors[index % presetColors.length]);
 }
 
 function dataUrlToBlob(dataUrl: string): Blob {

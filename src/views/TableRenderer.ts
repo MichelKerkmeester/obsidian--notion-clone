@@ -1,4 +1,4 @@
-import { Menu } from "obsidian";
+import { Menu, setIcon } from "obsidian";
 import { ColumnDef, CreateEntryPosition, RowCreateContext, RowData, ViewConfig } from "../data/types";
 import { isExplicitlySorted } from "../data/ManualOrder";
 import { formatGroupKeyDisplay, isComputedGroupField, resolveGroupCreateDefaults } from "../data/GroupDisplay";
@@ -11,6 +11,9 @@ import { getTableColumnStyle, getTableLayout, getTableMinWidth as calculateTable
 import { renderGroupExpandControls } from "./GroupExpandControls";
 import { getGroupVisibleCount } from "../data/GroupVisibility";
 import { getGroupHeaderClassName, getGroupHeaderDepthValue } from "../data/MultiGroupDisplay";
+import { EmptyStateOptions, EmptyStateRenderer } from "./EmptyStateRenderer";
+import { getSelectionState } from "../data/RangeSelection";
+import { TableFooterRenderer } from "./TableFooterRenderer";
 
 const ROW_MIME = "application/x-note-database-row";
 const ROW_FROM_GROUP_MIME = "application/x-note-database-row-from-group";
@@ -26,6 +29,16 @@ export interface TableGroup {
   children?: TableGroup[];
 }
 
+interface RenderableTableGroup {
+  group: TableGroup;
+  depth: number;
+  displayField?: string;
+  collapseKey: string;
+  collapsed: boolean;
+  visibleRows: RowData[];
+  groupPath: Array<{ field: string; key: string }>;
+}
+
 export interface TableRendererActions {
   getVisibleColumns(config: ViewConfig, rows: RowData[]): ColumnDef[];
   isRowSelected(row: RowData): boolean;
@@ -33,6 +46,9 @@ export interface TableRendererActions {
   areAllRowsSelected(rows: RowData[]): boolean;
   toggleRowsSelected(rows: RowData[], selected: boolean): void;
   setupColumnHeader(th: HTMLElement, col: ColumnDef): void;
+  addColumn?(): void | Promise<void>;
+  showRowMenu?(event: MouseEvent, row: RowData, context?: RowCreateContext, anchorEl?: HTMLElement): void;
+  changeColumnCalculation?(columnKey: string, calculation: string | null): void;
   setupRow(tr: HTMLElement, row: RowData, context?: RowCreateContext): void;
   renderCell(td: HTMLElement, row: RowData, col: ColumnDef): void;
   renderRecordIcon?(parent: HTMLElement, row: RowData, config: ViewConfig, compact?: boolean): HTMLElement | null;
@@ -63,12 +79,15 @@ export class TableRenderer {
   private rowByPath = new Map<string, RowData>();
   private draggingPath: string | undefined;
   private rowDropFeedback = new DragDropFeedbackState();
+  private emptyStateRenderer = new EmptyStateRenderer();
+  private footerRenderer = new TableFooterRenderer();
 
   constructor(private actions: TableRendererActions) {}
 
-  renderTable(container: HTMLElement, config: ViewConfig, rows: RowData[]): void {
+  renderTable(container: HTMLElement, config: ViewConfig, rows: RowData[], emptyState?: EmptyStateOptions): void {
     this.clearTable(container);
     this.rowByPath = new Map(rows.map((row) => [row.file.path, row]));
+    this.applyDensity(container, config);
 
     const visibleColumns = this.actions.getVisibleColumns(config, rows);
     const tableWrap = container.createDiv({ cls: "db-table-wrap" });
@@ -80,9 +99,17 @@ export class TableRenderer {
     this.renderHeader(table, config, visibleColumns, rows);
     const tbody = table.createEl("tbody");
     this.renderRows(tbody, config, rows, visibleColumns);
+    if (rows.length === 0) {
+      this.emptyStateRenderer.renderTableRow(
+        tbody,
+        visibleColumns.length + this.getUtilityColumnCount(config),
+        emptyState || { reason: "no-matching-data" },
+      );
+    }
     if (!this.actions.hideCreateEntry) {
       this.renderNewRow(tbody, visibleColumns.length + this.getUtilityColumnCount(config), undefined, rows);
     }
+    this.renderFooter(table, config, visibleColumns, rows);
   }
 
   renderGroupedTable(
@@ -90,105 +117,79 @@ export class TableRenderer {
     config: ViewConfig,
     rows: RowData[],
     groups: TableGroup[],
-    groupField?: string
+    groupField?: string,
+    emptyState?: EmptyStateOptions,
   ): void {
     this.clearTable(containerEl);
     this.rowByPath = new Map(rows.map((row) => [row.file.path, row]));
-
-    if (rows.length === 0) {
-      containerEl.createDiv({
-        cls: "db-empty",
-        text: t("common.noMatchingData"),
-      });
-      return;
-    }
+    this.applyDensity(containerEl, config);
 
     const container = containerEl.createDiv({ cls: "db-grouped-table" });
     const visibleColumns = this.actions.getVisibleColumns(config, rows);
     const tableMinWidth = this.getTableMinWidth(config, visibleColumns);
-    const fieldsByDepth: string[] = [];
-    let collapsedDepth: number | undefined;
+    const tableWrap = container.createDiv({ cls: "db-table-wrap" });
+    tableWrap.style.minWidth = `${tableMinWidth}px`;
+    const table = tableWrap.createEl("table", { cls: "db-table" });
+    table.toggleClass("is-create-entry-hidden", Boolean(this.actions.hideCreateEntry));
+    const availableWidth = this.getAvailableTableWidth(tableWrap);
+    this.applyTableWidth(table, config, visibleColumns, availableWidth);
+    this.renderColgroup(table, config, visibleColumns, availableWidth);
+    this.renderHeader(table, config, visibleColumns, rows);
+    const tbody = table.createEl("tbody");
+    const renderableGroups = this.getRenderableGroups(config, groups, groupField);
+    if (renderableGroups.length === 0) {
+      this.emptyStateRenderer.renderTableRow(
+        tbody,
+        visibleColumns.length + this.getUtilityColumnCount(config),
+        emptyState || { reason: "no-matching-data" },
+      );
+    }
+    for (const renderable of renderableGroups) {
+      const group = renderable.group;
+      const divider = this.renderGroupDividerRow(tbody, config, renderable, visibleColumns.length + this.getUtilityColumnCount(config));
+      if (groupField && renderable.depth === 0) this.setupGroupDropTarget(divider, groupField, group.key);
+      if (renderable.collapsed || group.children?.length) continue;
 
-    for (const group of groups) {
-      const depth = Math.max(0, group.depth ?? 0);
-      if (collapsedDepth != null) {
-        if (depth > collapsedDepth) continue;
-        collapsedDepth = undefined;
-      }
-      fieldsByDepth.length = depth + 1;
-      const displayField = group.field ?? (depth === 0 ? groupField : fieldsByDepth[depth]);
-      if (displayField) fieldsByDepth[depth] = displayField;
-      const collapseKey = group.collapseKey ?? group.key;
-      const groupHeader = container.createEl("div", {
-        cls: getGroupHeaderClassName(depth),
-        attr: {
-          "data-note-database-group-key": group.key,
-        },
-      });
-      const depthValue = getGroupHeaderDepthValue(depth);
-      if (depthValue !== undefined) groupHeader.style.setProperty("--db-group-depth", depthValue);
-      if (groupField && depth === 0) this.setupGroupDropTarget(groupHeader, groupField, group.key);
-      groupHeader.style.minWidth = `${tableMinWidth}px`;
-      const collapsed = Boolean(groupField && this.actions.isGroupCollapsed?.(groupField, collapseKey));
-      groupHeader.toggleClass("is-collapsed", collapsed);
-      const label = groupHeader.createSpan({ cls: "db-group-header-label" });
-      if (groupField) {
-        const toggle = label.createEl("button", {
-          cls: `db-group-collapse-toggle${collapsed ? " is-collapsed" : ""}`,
-          attr: { type: "button", "aria-label": collapsed ? t("group.expand") : t("group.collapse") },
-        });
-        toggle.createSpan({ cls: "db-collapse-triangle" });
-        toggle.onclick = (event) => {
-          event.preventDefault();
-          event.stopPropagation();
-          this.actions.toggleGroupCollapsed?.(groupField, collapseKey);
-        };
-      }
-      renderGroupLabel(label, config, displayField, group.key, "db-group-title-text");
-      label.createSpan({ cls: "db-group-count", text: String(group.count) });
-      this.actions.renderGroupSummaries?.(groupHeader, group.rows, config);
-
-      if (collapsed) {
-        collapsedDepth = depth;
-        continue;
-      }
-      if (group.children?.length) continue;
-
-      const tableWrap = container.createDiv({ cls: "db-table-wrap" });
-      tableWrap.setAttr("data-note-database-group-key", group.key);
-      if (groupField && depth === 0) this.setupGroupDropTarget(tableWrap, groupField, group.key);
-      const table = tableWrap.createEl("table", { cls: "db-table" });
-      table.toggleClass("is-create-entry-hidden", Boolean(this.actions.hideCreateEntry));
-      const availableWidth = this.getAvailableTableWidth(tableWrap);
-      this.applyTableWidth(table, config, visibleColumns, availableWidth);
-      tableWrap.style.minWidth = `${this.getTableWidth(config, visibleColumns, availableWidth)}px`;
-      this.renderColgroup(table, config, visibleColumns, availableWidth);
-      this.renderHeader(table, config, visibleColumns, group.rows);
-      const tbody = table.createEl("tbody");
-      if (groupField && depth === 0) this.setupGroupDropTarget(tbody, groupField, group.key);
-      const visibleCount = groupField ? getGroupVisibleCount(config, groupField, collapseKey, group.rows.length) : group.rows.length;
-      const groupPath = this.getGroupPath(group, fieldsByDepth, groupField);
-      const rowMoveGroups = depth === 0 ? groups.filter((candidate) => (candidate.depth ?? 0) === 0) : undefined;
+      const computedGroup = renderable.groupPath.some((pathGroup) => isComputedGroupField(config, pathGroup.field));
+      const defaults = !computedGroup && renderable.groupPath.length > 0
+        ? this.getGroupDefaults(config, renderable.groupPath)
+        : undefined;
+      const rowMoveGroups = renderable.depth === 0
+        ? groups.filter((candidate) => (candidate.depth ?? 0) === 0)
+        : undefined;
       this.renderRows(
         tbody,
         config,
-        group.rows.slice(0, visibleCount),
+        renderable.visibleRows,
         visibleColumns,
         groupField,
         group.key,
         rowMoveGroups,
-        groupPath,
-        depth === 0,
+        renderable.groupPath,
+        renderable.depth === 0,
+        defaults,
+        computedGroup,
       );
+      if (group.rows.length === 0) {
+        this.emptyStateRenderer.renderTableRow(
+          tbody,
+          visibleColumns.length + this.getUtilityColumnCount(config),
+          emptyState || { reason: "empty-group" },
+        );
+      }
       if (!this.actions.hideCreateEntry) {
-        const computedGroup = groupPath.some((pathGroup) => isComputedGroupField(config, pathGroup.field));
-        const defaults = !computedGroup && groupPath.length > 0
-          ? this.getGroupDefaults(config, groupPath)
-          : undefined;
         this.renderNewRow(tbody, visibleColumns.length + this.getUtilityColumnCount(config), defaults, group.rows, computedGroup);
       }
-      if (groupField) renderGroupExpandControls(tableWrap, config, groupField, collapseKey, group.rows.length, this.actions);
+      if (groupField) this.renderGroupExpandRow(
+        tbody,
+        config,
+        groupField,
+        renderable.collapseKey,
+        group.rows.length,
+        visibleColumns.length + this.getUtilityColumnCount(config),
+      );
     }
+    this.renderFooter(table, config, visibleColumns, rows);
   }
 
   /**
@@ -257,50 +258,42 @@ export class TableRenderer {
     // dedicated patch path, prefer the normal grouped render over stale totals.
     if (config.summaryRules && config.summaryRules.length > 0) return false;
 
-    const renderedHeaders = Array.from(
-      grouped.querySelectorAll<HTMLElement>(":scope > .db-group-header")
-    );
-    if (renderedHeaders.length !== groups.length) return false;
-
     const visibleColumns = this.actions.getVisibleColumns(config, rows);
+    const table = grouped.querySelector<HTMLElement>(":scope > .db-table-wrap > table.db-table");
+    const tbody = table?.querySelector<HTMLElement>(":scope > tbody");
+    const renderedHeaders = tbody
+      ? Array.from(tbody.querySelectorAll<HTMLElement>(":scope > tr.db-group-divider-row"))
+      : [];
+    const renderableGroups = this.getRenderableGroups(config, groups, groupField);
+    if (!table || !tbody || renderedHeaders.length !== renderableGroups.length) return false;
+    const renderedColumnKeys = Array.from(
+      table.querySelectorAll<HTMLElement>(":scope > thead [data-note-database-column-key]")
+    ).map((header) => header.getAttribute("data-note-database-column-key") || "");
+    if (renderedColumnKeys.length !== visibleColumns.length ||
+        renderedColumnKeys.some((key, index) => key !== visibleColumns[index]?.key)) {
+      return false;
+    }
+
     const renderedRowsByGroup: Array<{
       tbody: HTMLElement;
       renderedRows: HTMLElement[];
-      group: TableGroup;
+      renderable: RenderableTableGroup;
       visibleRows: RowData[];
     }> = [];
 
-    for (let index = 0; index < groups.length; index += 1) {
-      const group = groups[index];
+    for (let index = 0; index < renderableGroups.length; index += 1) {
+      const renderable = renderableGroups[index];
+      const group = renderable.group;
       const header = renderedHeaders[index];
       if (header.getAttribute("data-note-database-group-key") !== group.key) return false;
       if (header.querySelector<HTMLElement>(".db-group-count")?.textContent !== String(group.count)) return false;
 
-      const collapsed = Boolean(this.actions.isGroupCollapsed?.(groupField, group.key));
+      const collapsed = renderable.collapsed;
       if (header.classList.contains("is-collapsed") !== collapsed) return false;
-      if (collapsed) continue;
-
-      const tableWrap = header.nextElementSibling as HTMLElement | null;
-      if (!tableWrap?.classList.contains("db-table-wrap") ||
-          tableWrap.getAttribute("data-note-database-group-key") !== group.key) {
-        return false;
-      }
-      const table = tableWrap.querySelector<HTMLElement>(":scope > table.db-table");
-      const tbody = table?.querySelector<HTMLElement>(":scope > tbody");
-      if (!table || !tbody) return false;
-
-      const renderedColumnKeys = Array.from(
-        table.querySelectorAll<HTMLElement>(":scope > thead [data-note-database-column-key]")
-      ).map((headerEl) => headerEl.getAttribute("data-note-database-column-key") || "");
-      if (renderedColumnKeys.length !== visibleColumns.length ||
-          renderedColumnKeys.some((key, columnIndex) => key !== visibleColumns[columnIndex]?.key)) {
-        return false;
-      }
-
-      const visibleCount = getGroupVisibleCount(config, groupField, group.key, group.rows.length);
-      const visibleRows = group.rows.slice(0, visibleCount);
+      const visibleRows = collapsed || group.children?.length ? [] : renderable.visibleRows;
       const renderedRows = Array.from(
-        tbody.querySelectorAll<HTMLElement>(":scope > tr[data-note-database-row-path]")
+        this.rowsBetweenGroupDividers(header, renderedHeaders[index + 1])
+          .filter((rowEl) => rowEl.hasAttribute("data-note-database-row-path"))
       );
       const renderedPaths = renderedRows.map((rowEl) =>
         rowEl.getAttribute("data-note-database-row-path") || ""
@@ -310,11 +303,12 @@ export class TableRenderer {
           renderedPaths.some((path, rowIndex) => path !== nextPaths[rowIndex])) {
         return false;
       }
-      renderedRowsByGroup.push({ tbody, renderedRows, group, visibleRows });
+      renderedRowsByGroup.push({ tbody, renderedRows, renderable, visibleRows });
     }
 
     this.rowByPath = new Map(rows.map((row) => [row.file.path, row]));
-    for (const { tbody, renderedRows, group, visibleRows } of renderedRowsByGroup) {
+    for (const { tbody, renderedRows, renderable, visibleRows } of renderedRowsByGroup) {
+      const { group } = renderable;
       for (const oldRow of renderedRows) {
         const path = oldRow.getAttribute("data-note-database-row-path") || "";
         if (!changedPaths.has(path)) continue;
@@ -328,12 +322,24 @@ export class TableRenderer {
           visibleColumns,
           groupField,
           group.key,
-          groups
+          groups,
+          renderable.groupPath,
+          renderable.depth === 0,
         );
         oldRow.replaceWith(replacement);
       }
     }
     return true;
+  }
+
+  private rowsBetweenGroupDividers(current: HTMLElement, next?: HTMLElement): HTMLElement[] {
+    const rows: HTMLElement[] = [];
+    let sibling = current.nextElementSibling as HTMLElement | null;
+    while (sibling && sibling !== next) {
+      rows.push(sibling);
+      sibling = sibling.nextElementSibling as HTMLElement | null;
+    }
+    return rows;
   }
 
   private clearTable(container: HTMLElement): void {
@@ -365,6 +371,10 @@ export class TableRenderer {
       if (style.width) colEl.style.width = style.width;
       if (style.minWidth) colEl.style.minWidth = style.minWidth;
     });
+    const addColumn = colgroup.createEl("col", { cls: "db-add-column-colgroup" });
+    addColumn.setAttr("width", String(this.getAddColumnWidth()));
+    addColumn.style.width = `${this.getAddColumnWidth()}px`;
+    addColumn.style.minWidth = `${this.getAddColumnWidth()}px`;
   }
 
   private getTableMinWidth(config: ViewConfig, columns: ColumnDef[]): number {
@@ -403,11 +413,20 @@ export class TableRenderer {
 
   private getUtilityColumnsWidth(config: ViewConfig): number {
     return (this.actions.isReadOnly ? 0 : this.getSelectionColumnWidth())
-      + (this.shouldRenderRecordIcon(config) ? this.getRecordIconColumnWidth() : 0);
+      + (this.shouldRenderRecordIcon(config) ? this.getRecordIconColumnWidth() : 0)
+      + this.getAddColumnWidth();
   }
 
   private getUtilityColumnCount(config: ViewConfig): number {
-    return (this.actions.isReadOnly ? 0 : 1) + (this.shouldRenderRecordIcon(config) ? 1 : 0);
+    return (this.actions.isReadOnly ? 0 : 1) + (this.shouldRenderRecordIcon(config) ? 1 : 0) + 1;
+  }
+
+  private getAddColumnWidth(): number {
+    return 42;
+  }
+
+  private applyDensity(container: HTMLElement, config: ViewConfig): void {
+    container.setAttribute("data-row-density", config.rowDensity || "default");
   }
 
   private getAvailableTableWidth(tableWrap: HTMLElement): number {
@@ -448,10 +467,163 @@ export class TableRenderer {
       if (sort) {
         const arrow = sort.direction === "asc" ? "▲" : "▼";
         const suffix = sort.total > 1 ? String(sort.index + 1) : "";
-        content.createSpan({ text: `${arrow}${suffix}`, cls: "sort-indicator" });
+        content.createSpan({
+          text: `${arrow}${suffix}`,
+          cls: `sort-indicator sort-indicator-${sort.direction}`,
+          attr: { title: sort.total > 1 ? `${sort.index + 1}. ${sort.direction}` : sort.direction },
+        });
       }
       this.actions.setupColumnHeader(th, col);
     }
+    const addTh = headerRow.createEl("th", { cls: "db-add-column-th" });
+    const addButton = addTh.createEl("button", {
+      cls: "db-add-column-button",
+      attr: { type: "button", "aria-label": t("table.addColumn"), title: t("table.addColumn") },
+    });
+    setIcon(addButton, "plus");
+    if (this.actions.isReadOnly || !this.actions.addColumn) {
+      addButton.disabled = true;
+    } else {
+      addButton.onclick = (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        void this.actions.addColumn?.();
+      };
+    }
+  }
+
+  private getRenderableGroups(config: ViewConfig, groups: TableGroup[], groupField?: string): RenderableTableGroup[] {
+    const result: RenderableTableGroup[] = [];
+    const fieldsByDepth: string[] = [];
+    let collapsedDepth: number | undefined;
+
+    for (const group of groups) {
+      const depth = Math.max(0, group.depth ?? 0);
+      if (collapsedDepth != null) {
+        if (depth > collapsedDepth) continue;
+        collapsedDepth = undefined;
+      }
+      fieldsByDepth.length = depth + 1;
+      const displayField = group.field ?? (depth === 0 ? groupField : fieldsByDepth[depth]);
+      if (displayField) fieldsByDepth[depth] = displayField;
+      const collapseKey = group.collapseKey ?? group.key;
+      const collapsed = Boolean(groupField && this.actions.isGroupCollapsed?.(groupField, collapseKey));
+      const visibleCount = groupField
+        ? getGroupVisibleCount(config, groupField, collapseKey, group.rows.length)
+        : group.rows.length;
+      result.push({
+        group,
+        depth,
+        displayField,
+        collapseKey,
+        collapsed,
+        visibleRows: group.rows.slice(0, visibleCount),
+        groupPath: this.getGroupPath(group, fieldsByDepth, groupField),
+      });
+      if (collapsed) collapsedDepth = depth;
+    }
+    return result;
+  }
+
+  private renderGroupDividerRow(
+    tbody: HTMLElement,
+    config: ViewConfig,
+    renderable: RenderableTableGroup,
+    colspan: number,
+  ): HTMLElement {
+    const { group, depth, displayField, collapseKey, collapsed } = renderable;
+    const selectionRows = group.rows;
+    const divider = tbody.createEl("tr", {
+      cls: `db-group-divider-row ${getGroupHeaderClassName(depth)}${collapsed ? " is-collapsed" : ""}`,
+      attr: {
+        "data-note-database-group-key": group.key,
+        "data-note-database-group-field": displayField || "",
+        "data-note-database-group-paths": JSON.stringify(selectionRows.map((row) => row.file.path)),
+      },
+    });
+    const depthValue = getGroupHeaderDepthValue(depth);
+    if (depthValue !== undefined) divider.style.setProperty("--db-group-depth", depthValue);
+    const cell = divider.createEl("td", { attr: { colspan: String(Math.max(1, colspan)) } });
+    const content = cell.createDiv({ cls: "db-group-divider-content" });
+    if (!this.actions.isReadOnly) {
+      const selectedIds = new Set(selectionRows.filter((row) => this.actions.isRowSelected(row)).map((row) => row.file.path));
+      const selection = getSelectionState(selectionRows.map((row) => row.file.path), selectedIds);
+      const checkbox = content.createEl("input", {
+        cls: "db-group-divider-checkbox",
+        attr: { type: "checkbox", "aria-label": t("group.selectRows") },
+      });
+      checkbox.checked = selection.checked;
+      checkbox.indeterminate = selection.indeterminate;
+      checkbox.onclick = (event) => event.stopPropagation();
+      checkbox.onchange = () => this.actions.toggleRowsSelected(selectionRows, checkbox.checked);
+    }
+    const label = content.createSpan({ cls: "db-group-header-label" });
+    if (displayField) {
+      const toggle = label.createEl("button", {
+        cls: `db-group-collapse-toggle${collapsed ? " is-collapsed" : ""}`,
+        attr: { type: "button", "aria-label": collapsed ? t("group.expand") : t("group.collapse") },
+      });
+      toggle.createSpan({ cls: "db-collapse-triangle" });
+      toggle.onclick = (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        this.actions.toggleGroupCollapsed?.(displayField, collapseKey);
+      };
+    }
+    renderGroupLabel(label, config, displayField, group.key, "db-group-title-text");
+    label.createSpan({ cls: "db-group-count", text: String(group.count) });
+    const summaries = content.createDiv({ cls: "db-group-divider-summaries" });
+    this.actions.renderGroupSummaries?.(summaries, group.rows, config);
+    return divider;
+  }
+
+  private renderGroupExpandRow(
+    tbody: HTMLElement,
+    config: ViewConfig,
+    field: string,
+    key: string,
+    totalCount: number,
+    colspan: number,
+  ): void {
+    const row = tbody.createEl("tr", { cls: "db-group-expand-row" });
+    const cell = row.createEl("td", { attr: { colspan: String(Math.max(1, colspan)) } });
+    if (!renderGroupExpandControls(cell, config, field, key, totalCount, this.actions)) row.remove();
+  }
+
+  private renderRowInsertionLine(
+    tbody: HTMLElement,
+    config: ViewConfig,
+    defaults: Record<string, unknown> | undefined,
+    afterPath: string,
+    beforePath: string,
+    colspan: number,
+  ): void {
+    if (this.actions.isReadOnly || this.actions.hideCreateEntry || !this.actions.createEntry || isExplicitlySorted(config)) return;
+    const line = tbody.createEl("tr", {
+      cls: "db-row-insert-line",
+      attr: { "data-before-path": beforePath, "data-after-path": afterPath },
+    });
+    const cell = line.createEl("td", { attr: { colspan: String(Math.max(1, colspan)) } });
+    const button = cell.createEl("button", {
+      cls: "db-row-insert-button",
+      attr: { type: "button", "aria-label": t("table.insertRow") },
+    });
+    setIcon(button, "plus");
+    button.onclick = (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      this.actions.createEntry?.(defaults, { beforePath, afterPath });
+    };
+  }
+
+  private renderFooter(table: HTMLElement, config: ViewConfig, columns: ColumnDef[], rows: RowData[]): void {
+    this.footerRenderer.renderFooter(table as HTMLTableElement, config, columns, rows, {
+      isReadOnly: this.actions.isReadOnly,
+      hasRecordIcon: this.shouldRenderRecordIcon(config),
+      onCalculationChange: (columnKey, calculation) => {
+        this.actions.changeColumnCalculation?.(columnKey, calculation);
+      },
+    });
   }
 
   private getColumnSortState(config: ViewConfig, col: ColumnDef): { direction: "asc" | "desc"; index: number; total: number } | null {
@@ -480,10 +652,15 @@ export class TableRenderer {
     groups?: TableGroup[],
     groupPath?: Array<{ field: string; key: string }>,
     allowGroupMove = true,
+    insertDefaults?: Record<string, unknown>,
+    computedGroup = false,
   ): void {
-    for (const row of rows) {
+    rows.forEach((row, index) => {
       this.renderRow(tbody, config, row, rows, columns, groupField, groupKey, groups, groupPath, allowGroupMove);
-    }
+      if (index < rows.length - 1 && !computedGroup) {
+        this.renderRowInsertionLine(tbody, config, insertDefaults, rows[index].file.path, rows[index + 1].file.path, columns.length + this.getUtilityColumnCount(config));
+      }
+    });
   }
 
   private renderRow(
@@ -517,7 +694,10 @@ export class TableRenderer {
       // checkbox 用 margin-left:auto 贴右，使各行 checkbox 与表头 checkbox 上下对齐。
       const rowMoveField = allowGroupMove ? groupField : undefined;
       const rowMoveKey = allowGroupMove ? groupKey : undefined;
-      this.setupRowDrag(selectInner, tr, row, rows, config, rowMoveField, rowMoveKey);
+      this.setupRowDrag(selectInner, tr, row, rows, config, rowMoveField, rowMoveKey, {
+        visibleRows: rows,
+        groups: groupPath ?? (groupField && groupKey != null ? [{ field: groupField, key: groupKey }] : undefined),
+      });
       if (this.isPhoneLayout() && (this.canManualReorder(config) || Boolean(rowMoveField && groups?.length))) {
         this.renderMobileMoveButton(selectInner, config, row, rows, rowMoveField, rowMoveKey, groups);
       }
@@ -546,6 +726,7 @@ export class TableRenderer {
       this.actions.applyConditionalFormat?.(td, row, config, col.key);
       if (!this.actions.isReadOnly) this.actions.setupFillHandle?.(td, row, col);
     }
+    tr.createEl("td", { cls: "db-add-column-cell", attr: { "aria-hidden": "true" } });
     return tr;
   }
 
@@ -636,26 +817,32 @@ export class TableRenderer {
     rows: RowData[],
     config: ViewConfig,
     groupField?: string,
-    groupKey?: string
+    groupKey?: string,
+    context?: RowCreateContext,
   ): void {
     const canMoveGroup = Boolean(groupField && groupKey != null && typeof this.actions.moveRowsToGroup === "function");
     const canReorder = this.canManualReorder(config);
-    if (this.actions.isReadOnly || (!canMoveGroup && !canReorder)) return;
+    if (this.actions.isReadOnly) return;
     if (this.isPhoneLayout()) return;
     if (!handleParent) return;
 
     const handle = handleParent.createEl("button", {
       cls: "db-table-row-drag-handle",
-      text: "⋮⋮",
       attr: { type: "button", title: t("panel.dragToSort"), "aria-label": t("panel.dragToSort") },
     });
-    handle.draggable = true;
+    setIcon(handle, "grip-vertical");
+    handle.draggable = canMoveGroup || canReorder;
     tr.addClass("is-manual-row-draggable");
     handle.addEventListener("click", (event) => {
       event.preventDefault();
       event.stopPropagation();
+      this.actions.showRowMenu?.(event, row, context, handle);
     });
     handle.addEventListener("dragstart", (event) => {
+      if (!handle.draggable) {
+        event.preventDefault();
+        return;
+      }
       event.stopPropagation();
       event.dataTransfer?.setData(ROW_MIME, row.file.path);
       event.dataTransfer?.setData("text/plain", row.file.path);
@@ -824,7 +1011,8 @@ export class TableRenderer {
     const defaults: Record<string, unknown> = {};
     for (const { field, key } of groupPath) {
       if (isComputedGroupField(config, field)) continue;
-      Object.assign(defaults, resolveGroupCreateDefaults(config, field, key));
+      const groupDefaults = resolveGroupCreateDefaults(config, field, key);
+      for (const [defaultKey, value] of Object.entries(groupDefaults)) defaults[defaultKey] = value;
     }
     return defaults;
   }

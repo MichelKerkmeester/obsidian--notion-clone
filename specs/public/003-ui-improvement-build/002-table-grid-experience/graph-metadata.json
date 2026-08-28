@@ -1,0 +1,225 @@
+{
+  "schema_version": 1,
+  "packet_id": "public/003-ui-improvement-build/002-table-grid-experience",
+  "spec_folder": "public/003-ui-improvement-build/002-table-grid-experience",
+  "parent_id": "public/003-ui-improvement-build",
+  "children_ids": [],
+  "manual": {
+    "depends_on": [
+      {
+        "packet_id": "public/003-ui-improvement-build/005-design-tokens-typography",
+        "reason": "Imported from legacy graph-metadata.json",
+        "source": "legacy"
+      }
+    ],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "table grid experience",
+      "grouped table sticky header",
+      "table calculation tfoot",
+      "trailing add column header",
+      "column resize auto fit",
+      "single click cell picker",
+      "frozen column schema",
+      "svg row drag grip",
+      "row density modes",
+      "wai aria grid semantics",
+      "table grid plan",
+      "table footer renderer"
+    ],
+    "key_topics": [
+      "table",
+      "grid",
+      "experience",
+      "grouped",
+      "sticky",
+      "header",
+      "calculation",
+      "tfoot",
+      "trailing",
+      "column",
+      "resize",
+      "auto"
+    ],
+    "importance_tier": "high",
+    "status": "complete",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "checklist.md",
+      "implementation-summary.md"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "checklist.md",
+        "kind": "doc",
+        "path": "checklist.md",
+        "source": "derived"
+      },
+      {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Grid Experience",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Problem Statement The",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Note Database",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Repeating Grouped Table Headers",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Spatially Detached Summary Calculations",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Plan",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Technical Context",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Obsidian Plugin",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Native Obsidian",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Overview This",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Notation",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Format",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Task",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Consume Phase",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Unit Tests",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Verification Checklist",
+        "kind": "proper_noun",
+        "path": "checklist.md",
+        "source": "derived"
+      },
+      {
+        "name": "Verification Protocol",
+        "kind": "proper_noun",
+        "path": "checklist.md",
+        "source": "derived"
+      },
+      {
+        "name": "Completion Impact",
+        "kind": "proper_noun",
+        "path": "checklist.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "The table/grid view is the primary data surface of the Note Database plugin, but its user experience is compromised by structural layout stutter, hidden affordances, and interaction friction:",
+    "created_at": "2026-08-27T19:53:19.293Z",
+    "last_save_at": "2026-08-28T01:12:27.798Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "checklist.md",
+      "implementation-summary.md"
+    ],
+    "source_fingerprint": "sha256:3fbdf61aa444b817c2dfcf52a634f83582983629fc59bc639f75c419ae644807",
+    "source_doc_hashes": {
+      "spec.md": "faf133519d16ecd0523af62a91be1112c07c52cc2be59b4d1250e1fe643d5b77",
+      "plan.md": "1177cfb727324ba75c3464d55b7a36c66070433d8b556d8e4105bf6321a94a98",
+      "tasks.md": "2766c05a5401a70c6218b78656710c2c153ce8cc6e472f8c610e539cdac8fa81",
+      "checklist.md": "30e08415834a52b139ccc8869c216c1a0f133a8291de98a491bbba8a8bdde992",
+      "implementation-summary.md": "2b7c9572ebeab1f1a7550c6dc2545c1c98868886279ed48c81624494cab1cf91"
+    },
+    "last_active_child_id": null,
+    "last_active_at": null
+  }
+}

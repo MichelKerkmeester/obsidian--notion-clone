@@ -1,0 +1,219 @@
+{
+  "schema_version": 1,
+  "packet_id": "public/003-ui-improvement-build/006-views-parity-polish",
+  "spec_folder": "public/003-ui-improvement-build/006-views-parity-polish",
+  "parent_id": "public/003-ui-improvement-build",
+  "children_ids": [],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "views parity polish",
+      "board kanban swimlanes",
+      "gallery cover preview",
+      "calendar workday autoscroll",
+      "list view metadata alignment",
+      "card field renderer",
+      "unscheduled notes tray",
+      "universal object peek",
+      "timeline canvas zoom",
+      "board column collapsing",
+      "views parity plan",
+      "board swimlanes plan"
+    ],
+    "key_topics": [
+      "views",
+      "parity",
+      "polish",
+      "board",
+      "kanban",
+      "swimlanes",
+      "gallery",
+      "cover",
+      "preview",
+      "calendar",
+      "workday",
+      "autoscroll"
+    ],
+    "importance_tier": "high",
+    "status": "in_progress",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "checklist.md",
+      "implementation-summary.md"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "checklist.md",
+        "kind": "doc",
+        "path": "checklist.md",
+        "source": "derived"
+      },
+      {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Views Parity",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "View Affordances",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Problem Statement While",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Note Database",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Jarring Inspection Disconnect Across Views",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Plan",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Technical Context",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Obsidian View Component Engine",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Pointer Events",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Breakdown",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Notation",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Time Estimate",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Delete Group",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Quality Checklist",
+        "kind": "proper_noun",
+        "path": "checklist.md",
+        "source": "derived"
+      },
+      {
+        "name": "Verification Protocol",
+        "kind": "proper_noun",
+        "path": "checklist.md",
+        "source": "derived"
+      },
+      {
+        "name": "Code Quality",
+        "kind": "proper_noun",
+        "path": "checklist.md",
+        "source": "derived"
+      },
+      {
+        "name": "Calendar Week",
+        "kind": "proper_noun",
+        "path": "checklist.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Summary",
+        "kind": "proper_noun",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "While the Table view provides the tabular foundation for high-density record management, the Note Database plugin's non-table views (Board, Gallery, Calendar, Timeline, and List) suffer from acute cross-view feature disparities, layout fragmentation, duplicated rendering logic, and missing per-view affordances:",
+    "created_at": "2026-08-27T19:53:20.436Z",
+    "last_save_at": "2026-08-28T01:12:28.540Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "checklist.md",
+      "implementation-summary.md"
+    ],
+    "source_fingerprint": "sha256:7d527582b792e0d11203bbbc3aef4a9aee39cb8c971579953fc0bad6b9932f7b",
+    "source_doc_hashes": {
+      "spec.md": "c7d651a87eb53efe1e00756373de79921404560259fc2718cf8866f9c793a3e9",
+      "plan.md": "5ef603111b93a417c0fb07663daf7203f20ddbde9a56274bbeefe763171f24dd",
+      "tasks.md": "ae9a2a82584a4218a0ddafa6ba1aa35fd2ac7ded3c9a72cbc095b0659dd67802",
+      "checklist.md": "3354a74bb3c7e756733679d1cde81f10e2b8d2e81ca0af5f72fdb19cacb0300f",
+      "implementation-summary.md": "72efc6e3adc7a98d7593c49f4d035acb599a7473054ff684e947cc41d63a0e09"
+    },
+    "last_active_child_id": null,
+    "last_active_at": null
+  }
+}

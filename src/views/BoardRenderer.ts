@@ -31,6 +31,8 @@ import { resolveTitleFieldDisplay } from "../data/TitleFieldDisplay";
 import { isImeComposing } from "../data/KeyboardUtils";
 import { openOptionColorPicker } from "./OptionColorPicker";
 import { renderDelayedExternalLink } from "./CellRenderer";
+import { EmptyStateOptions, EmptyStateRenderer } from "./EmptyStateRenderer";
+import { renderCardField, renderCardFieldValue } from "./CardFieldRenderer";
 
 const CARD_MIME = "application/x-note-database-card";
 const CARD_FROM_GROUP_MIME = "application/x-note-database-card-from-group";
@@ -52,10 +54,13 @@ export interface BoardSubgroup {
 
 export interface BoardRendererActions {
   openRow(row: RowData): void;
+  openRecordDetail?(anchorEl: HTMLElement, row: RowData): void;
   createEntry(defaults?: Record<string, unknown>, position?: CreateEntryPosition): void;
   createGroup?(field: string, name: string, color: StatusColor): Promise<boolean>;
   updateGroup(row: RowData, field: string, value: string, fromValue?: string): Promise<void>;
   updateGroupOrder(field: string, order: string[]): void;
+  hideGroup?(field: string, key: string): void;
+  deleteGroup?(field: string, key: string): void;
   updateCardOrder(field: string, groupKey: string, paths: string[]): void;
   moveRowToPosition(movedPath: string, beforePath?: string, afterPath?: string): void;
   moveRowWithGroupUpdatesAndPosition?(
@@ -110,15 +115,18 @@ export class BoardRenderer {
   private boardDragPreview: HTMLElement | null = null;
   private boardDragLabelByKey = new Map<string, string>();
   private boundBoardDragOver?: (event: DragEvent) => void;
+  private emptyStateRenderer = new EmptyStateRenderer();
 
   constructor(private app: App, private actions: BoardRendererActions) {}
 
-  render(container: HTMLElement, config: ViewConfig, groups: BoardGroup[], groupField: string): void {
+  render(container: HTMLElement, config: ViewConfig, groups: BoardGroup[], groupField: string, emptyState?: EmptyStateOptions): void {
     this.clear(container);
     // 幂等清理：拖拽中途若触发 re-render 导致 board DOM 被替换，dragend 可能不再触发，
     // 这里兜底移除残留的浮动列名 preview 与 dragover 监听，避免孤儿元素与监听器泄漏。
     this.endBoardDragPreview();
     this.rowByPath = new Map(groups.flatMap((group) => group.rows.map((row) => [row.file.path, row] as const)));
+    const hiddenGroups = new Set(config.boardHiddenGroups?.[groupField] || []);
+    groups = groups.filter((group) => !hiddenGroups.has(group.key));
     const board = container.createDiv({ cls: "db-board" });
     // 缓存当前看板与分组元数据，供拖拽期间实时列命中（方案 A/B）复用。
     this.boardEl = board;
@@ -129,8 +137,14 @@ export class BoardRenderer {
       : undefined;
     board.style.setProperty("--db-board-column-width", `${this.getBoardColumnWidth(config)}px`);
     this.attachBoardContainerDropHandlers(board, groupField);
-    for (const group of groups) {
-      this.renderColumn(board, config, groups, group, groupField);
+    if (this.boardSubgroupField && groups.some((group) => (group.subgroups?.length || 0) > 0)) {
+      this.renderSwimlaneBoard(board, config, groups, groupField, this.boardSubgroupField, emptyState);
+    } else {
+      for (const group of groups) this.renderColumn(board, config, groups, group, groupField, emptyState);
+    }
+    if (groups.length === 0) {
+      const empty = this.emptyStateRenderer.renderCard(board, emptyState || { reason: "no-matching-data" });
+      empty.addClass("db-board-empty-slot");
     }
     if (
       !this.actions.isReadOnly
@@ -147,6 +161,96 @@ export class BoardRenderer {
     if (!column || column.type === "computed" || column.type === "rollup" || isObsidianTagsKey(column.key)) return false;
     const displayType = getColumnDisplayType(column, config.schema.computedFields);
     return displayType === "status" || displayType === "select" || displayType === "multi-select";
+  }
+
+  private renderBoardGroupOptions(parent: HTMLElement, config: ViewConfig, field: string, group: BoardGroup): void {
+    const button = parent.createEl("button", {
+      cls: "db-board-column-options",
+      attr: { type: "button", "aria-label": t("board.columnOptions"), title: t("board.columnOptions") },
+    });
+    setIcon(button, "more-horizontal");
+    button.onclick = (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      const menu = new Menu();
+      menu.addItem((item) => item.setTitle(t("board.sortAscending")).setIcon("arrow-up-a-z").onClick(() => {
+        this.actions.updateCardOrder(field, group.key, group.rows.map((row) => row.file.path).slice().sort());
+      }));
+      menu.addItem((item) => item.setTitle(t("board.sortDescending")).setIcon("arrow-down-a-z").onClick(() => {
+        this.actions.updateCardOrder(field, group.key, group.rows.map((row) => row.file.path).slice().sort().reverse());
+      }));
+      menu.addSeparator();
+      menu.addItem((item) => item.setTitle(t("board.collapseGroup")).setIcon("fold-vertical").onClick(() => this.actions.toggleGroupCollapsed?.(field, group.key)));
+      if (this.actions.hideGroup) menu.addItem((item) => item.setTitle(t("board.hideColumn")).setIcon("eye-off").onClick(() => this.actions.hideGroup?.(field, group.key)));
+      if (this.actions.deleteGroup) menu.addItem((item) => item.setTitle(t("board.deleteGroup")).setIcon("trash-2").onClick(() => this.actions.deleteGroup?.(field, group.key)));
+      menu.showAtMouseEvent(event);
+    };
+  }
+
+  private renderSwimlaneBoard(
+    board: HTMLElement,
+    config: ViewConfig,
+    groups: BoardGroup[],
+    groupField: string,
+    subgroupField: string,
+    emptyState?: EmptyStateOptions,
+  ): void {
+    const shell = board.createDiv({ cls: "db-board-swimlane-board" });
+    shell.style.setProperty("--db-board-swimlane-column-count", String(Math.max(1, groups.length)));
+    const headers = shell.createDiv({ cls: "db-board-swimlane-column-headers" });
+    headers.createDiv({ cls: "db-board-swimlane-label-spacer" });
+    for (const group of groups) {
+      const header = headers.createDiv({ cls: "db-board-column-header db-board-swimlane-primary-header" });
+      const collapsed = Boolean(this.actions.isGroupCollapsed?.(groupField, group.key));
+      const toggle = header.createEl("button", { cls: `db-board-group-toggle${collapsed ? " is-collapsed" : ""}`, attr: { type: "button", "aria-label": collapsed ? t("group.expand") : t("group.collapse") } });
+      toggle.createSpan({ cls: "db-collapse-triangle" });
+      toggle.onclick = (event) => { event.preventDefault(); event.stopPropagation(); this.actions.toggleGroupCollapsed?.(groupField, group.key); };
+      if (!this.actions.isReadOnly) {
+        const checkbox = header.createEl("input", { cls: "db-board-column-checkbox", attr: { type: "checkbox" } });
+        checkbox.checked = this.actions.areAllRowsSelected(group.rows);
+        checkbox.indeterminate = group.rows.some((row) => this.actions.isRowSelected(row)) && !checkbox.checked;
+        checkbox.onclick = (event) => event.stopPropagation();
+        checkbox.onchange = () => this.actions.toggleRowsSelected(group.rows, checkbox.checked);
+      }
+      const title = header.createDiv({ cls: "db-board-header-text" });
+      renderGroupLabel(title, config, groupField, group.key, "db-board-column-title");
+      title.createSpan({ cls: "db-board-count", text: String(group.count) });
+      this.renderBoardGroupOptions(header, config, groupField, group);
+    }
+
+    const laneKeys: string[] = [];
+    const seen = new Set<string>();
+    for (const group of groups) for (const subgroup of group.subgroups || []) {
+      if (seen.has(subgroup.key)) continue;
+      seen.add(subgroup.key);
+      laneKeys.push(subgroup.key);
+    }
+    for (const laneKey of laneKeys) {
+      const lane = shell.createDiv({ cls: "db-board-swimlane" });
+      const laneHeader = lane.createDiv({ cls: "db-board-swimlane-header" });
+      renderGroupLabel(laneHeader, config, subgroupField, laneKey, "db-board-subgroup-title");
+      const laneCount = groups.reduce((sum, group) => sum + (group.subgroups?.find((subgroup) => subgroup.key === laneKey)?.count || 0), 0);
+      laneHeader.createSpan({ cls: "db-board-subgroup-count", text: String(laneCount) });
+      const cells = lane.createDiv({ cls: "db-board-swimlane-columns" });
+      for (const group of groups) {
+        const subgroup = group.subgroups?.find((candidate) => candidate.key === laneKey);
+        const cell = cells.createDiv({ cls: "db-board-swimlane-column" });
+        const collapsed = Boolean(this.actions.isGroupCollapsed?.(groupField, group.key)) || Boolean(this.actions.isGroupCollapsed?.(subgroupField, laneKey));
+        cell.toggleClass("is-collapsed", collapsed);
+        if (collapsed || !subgroup) continue;
+        const cards = this.createCardsContainer(cell, config, group, groupField, subgroupField, subgroup);
+        const visibleCount = getGroupVisibleCount(config, subgroupField, subgroup.key, subgroup.rows.length);
+        for (const row of subgroup.rows.slice(0, visibleCount)) this.renderCard(cards, config, groups, group, row, groupField, subgroupField, subgroup.key, subgroup.rows);
+        renderGroupExpandControls(cards, config, subgroupField, subgroup.key, subgroup.rows.length, this.actions);
+        if (!this.actions.isReadOnly && !this.actions.hideCreateEntry) {
+          if (isComputedGroupField(config, groupField) || isComputedGroupField(config, subgroupField)) {
+            cards.createEl("button", { cls: "db-board-new-card is-disabled", text: t("group.computedCreateDisabled"), attr: { type: "button", disabled: "true" } });
+          } else {
+            cards.createEl("button", { cls: "db-board-new-card", text: `+ ${t("toolbar.new")}`, attr: { type: "button" } }).onclick = () => this.createEntryNearEnd({ [groupField]: group.key || "", [subgroupField]: laneKey }, subgroup.rows);
+          }
+        }
+      }
+    }
   }
 
   private renderAddGroupControl(board: HTMLElement, config: ViewConfig, groupField: string): void {
@@ -250,7 +354,8 @@ export class BoardRenderer {
     config: ViewConfig,
     groups: BoardGroup[],
     group: BoardGroup,
-    groupField: string
+    groupField: string,
+    emptyState?: EmptyStateOptions,
   ): void {
     const column = board.createDiv({ cls: "db-board-column" });
     const subgroupField = config.boardSubgroupEnabled !== false && config.boardSubgroupField && config.boardSubgroupField !== groupField
@@ -344,6 +449,7 @@ export class BoardRenderer {
       const summaries = headerText.createSpan({ cls: "db-board-header-summaries" });
       this.actions.renderGroupSummaries?.(summaries, group.rows, config);
     }
+    this.renderBoardGroupOptions(header, config, groupField, group);
     if (!this.isPhoneLayout()) {
       const resizeHandle = column.createDiv({ cls: "db-board-column-resize-handle" });
       resizeHandle.addEventListener("mousedown", (event) => this.startColumnResize(event, board, config));
@@ -353,13 +459,17 @@ export class BoardRenderer {
     if (subgroupField && group.subgroups?.length) {
       const subgroups = column.createDiv({ cls: "db-board-subgroups" });
       for (const subgroup of group.subgroups) {
-        this.renderSubgroup(subgroups, config, groups, group, subgroup, groupField, subgroupField);
+        this.renderSubgroup(subgroups, config, groups, group, subgroup, groupField, subgroupField, emptyState);
       }
       return;
     }
 
     const cards = this.createCardsContainer(column, config, group, groupField);
     const visibleCount = getGroupVisibleCount(config, groupField, group.key, group.rows.length);
+    if (visibleCount === 0) {
+      const empty = this.emptyStateRenderer.renderCard(cards, emptyState || { reason: "empty-group" });
+      empty.addClass("db-board-empty-slot");
+    }
     for (const row of group.rows.slice(0, visibleCount)) {
       this.renderCard(cards, config, groups, group, row, groupField, undefined, undefined, group.rows);
     }
@@ -381,7 +491,8 @@ export class BoardRenderer {
     group: BoardGroup,
     subgroup: BoardSubgroup,
     groupField: string,
-    subgroupField: string
+    subgroupField: string,
+    emptyState?: EmptyStateOptions,
   ): void {
     const section = parent.createDiv({ cls: "db-board-subgroup" });
     const header = section.createDiv({ cls: "db-board-subgroup-header" });
@@ -415,6 +526,10 @@ export class BoardRenderer {
 
     const cards = this.createCardsContainer(section, config, group, groupField, subgroupField, subgroup);
     const visibleCount = getGroupVisibleCount(config, subgroupField, subgroup.key, subgroup.rows.length);
+    if (visibleCount === 0) {
+      const empty = this.emptyStateRenderer.renderCard(cards, emptyState || { reason: "empty-group" });
+      empty.addClass("db-board-empty-slot");
+    }
     for (const row of subgroup.rows.slice(0, visibleCount)) {
       this.renderCard(cards, config, groups, group, row, groupField, subgroupField, subgroup.key, subgroup.rows);
     }
@@ -495,6 +610,19 @@ export class BoardRenderer {
       cls: "db-board-card",
       attr: { "data-note-database-row-path": row.file.path, title: row.file.path },
     });
+    if (this.actions.openRecordDetail) {
+      card.tabIndex = 0;
+      card.setAttribute("role", "button");
+      card.addEventListener("click", (event) => {
+        if (isHTMLElement(event.target) && event.target.closest("a, button, input, select, textarea, .db-cell-editing, .db-board-card-cover-button")) return;
+        this.actions.openRecordDetail?.(card, row);
+      });
+      card.addEventListener("keydown", (event) => {
+        if (event.key !== "Enter" && event.key !== " ") return;
+        event.preventDefault();
+        this.actions.openRecordDetail?.(card, row);
+      });
+    }
     this.actions.applyConditionalFormat?.(card, row, config);
     this.attachRowContextMenu(card, row, {
       visibleRows,
@@ -635,24 +763,15 @@ export class BoardRenderer {
       }
     }
     const meta = card.createDiv({ cls: "db-board-card-meta" });
-    const fields = columns.filter((col) => col.key !== titleField);
+    const groupedFields = new Set([groupField, ...(subgroupField ? [subgroupField] : [])]);
+    const fields = columns.filter((col) => col.key !== titleField && !groupedFields.has(col.key));
     for (const col of fields) {
       const value = this.getCellValue(row, col);
       const displayType = this.getDisplayType(config, col);
       const empty = this.isEmptyValue(value) && displayType !== "checkbox";
       if (empty && !this.shouldShowEmptyField(config, col)) continue;
       const displayValue = empty ? this.getEmptyDisplayValue(col, displayType) : value;
-      const item = meta.createDiv({ cls: "db-board-card-field", attr: { "data-note-database-column-key": col.key } });
-      this.actions.applyConditionalFormat?.(item, row, config, col.key);
-      item.style.setProperty("--db-card-field-width", `${this.getCardFieldWidth(config, col)}px`);
-      setFieldTooltip(item, displayValue, col.label);
-      if (empty) item.addClass("is-empty-field");
-      if (displayType === "checkbox") item.addClass("is-checkbox-field");
-      if (col.wrap) item.addClass("db-board-card-field-wrap");
-      const label = item.createSpan({ text: col.label });
-      this.attachColumnContextMenu(item, col);
-      this.attachColumnContextMenu(label, col);
-      this.renderPreviewValue(item, row, col, displayValue, empty, displayType);
+      meta.appendChild(this.renderCardFieldContent(row, col, config, displayValue, displayType, empty));
     }
   }
 
@@ -1106,25 +1225,28 @@ export class BoardRenderer {
     setFieldTooltip(valueEl, valueEl.textContent);
   }
 
-  renderCardFieldContent(row: RowData, col: ColumnDef, config: ViewConfig): HTMLElement {
+  renderCardFieldContent(
+    row: RowData,
+    col: ColumnDef,
+    config: ViewConfig,
+    resolvedValue?: unknown,
+    resolvedDisplayType?: ColumnDef["type"],
+    resolvedEmpty?: boolean,
+  ): HTMLElement {
     const value = this.getCellValue(row, col);
-    const displayType = this.getDisplayType(config, col);
-    const empty = this.isEmptyValue(value) && displayType !== "checkbox";
-    const displayValue = empty ? this.getEmptyDisplayValue(col, displayType) : value;
-    const item = window.activeDocument.createElement("div");
-    item.className = "db-board-card-field";
-    item.setAttribute("data-note-database-column-key", col.key);
-    this.actions.applyConditionalFormat?.(item, row, config, col.key);
-    item.style.setProperty("--db-card-field-width", `${this.getCardFieldWidth(config, col)}px`);
-    setFieldTooltip(item, displayValue, col.label);
-    if (empty) item.classList.add("is-empty-field");
-    if (displayType === "checkbox") item.classList.add("is-checkbox-field");
-    if (col.wrap) item.classList.add("db-board-card-field-wrap");
-    const label = item.createSpan({ text: col.label });
-    this.attachColumnContextMenu(item, col);
-    this.attachColumnContextMenu(label, col);
-    this.renderPreviewValue(item, row, col, displayValue, empty, displayType);
-    return item;
+    const displayType = resolvedDisplayType || this.getDisplayType(config, col);
+    const empty = resolvedEmpty ?? (this.isEmptyValue(value) && displayType !== "checkbox");
+    const displayValue = resolvedValue ?? (empty ? this.getEmptyDisplayValue(col, displayType) : value);
+    return renderCardField({
+      app: this.app, row, col, config, value: displayValue, displayType, empty,
+      fieldClass: "db-board-card-field", valueClass: "db-board-card-value", labelClass: "db-board-card-field-label",
+      badgesClass: "db-board-card-badges", linkClass: "db-board-card-link", fieldWidth: this.getCardFieldWidth(config, col),
+      wrap: col.wrap, readOnly: this.actions.isReadOnly, applyConditionalFormat: this.actions.applyConditionalFormat,
+      onEdit: (target, editRow, editCol, event) => this.actions.editCell(target, editRow, editCol, event),
+      onEditFormula: (editCol) => this.actions.editFormula?.(editCol),
+      onOpenTarget: (targetRow, target, external) => this.openTarget(targetRow, target, external),
+      onShowColumnMenu: this.actions.showColumnMenu,
+    });
   }
 
   private isEmptyValue(value: unknown): boolean {

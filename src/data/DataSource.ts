@@ -707,11 +707,15 @@ export class DataSource {
           boardSubgroupEnabled: this.parseBoardSubgroupEnabled(source),
           boardSubgroupField: safeString(source["boardSubgroupField"]) || undefined,
           boardColumnWidth: typeof source["boardColumnWidth"] === "number" ? source["boardColumnWidth"] : undefined,
+          boardHiddenGroups: this.parseStringArrayMap(source["boardHiddenGroups"]),
           defaultColumnWidth: typeof source["defaultColumnWidth"] === "number" ? source["defaultColumnWidth"] : undefined,
+          rowDensity: source["rowDensity"] === "compact" || source["rowDensity"] === "comfortable" ? source["rowDensity"] : undefined,
           titleField: safeString(source["titleField"]) || undefined,
           galleryImageField: safeString(source["galleryImageField"]) || undefined,
           galleryImageAspectRatio: typeof source["galleryImageAspectRatio"] === "number" ? source["galleryImageAspectRatio"] : undefined,
           galleryCardSize: typeof source["galleryCardSize"] === "number" ? source["galleryCardSize"] : undefined,
+          galleryCardSizePreset: this.parseGalleryCardSizePreset(source["galleryCardSizePreset"]),
+          galleryImageAspectRatioPreset: this.parseGalleryAspectPreset(source["galleryImageAspectRatioPreset"]),
           galleryImageFit: source["galleryImageFit"] === "contain" ? "contain" : source["galleryImageFit"] === "cover" ? "cover" : undefined,
           boardImageField: safeString(source["boardImageField"]) || undefined,
           boardImageAspectRatio: typeof source["boardImageAspectRatio"] === "number" ? source["boardImageAspectRatio"] : undefined,
@@ -880,11 +884,15 @@ export class DataSource {
       boardSubgroupEnabled: this.parseBoardSubgroupEnabled(v),
       boardSubgroupField: safeString(v["boardSubgroupField"]) || undefined,
       boardColumnWidth: typeof v["boardColumnWidth"] === "number" ? v["boardColumnWidth"] : undefined,
+      boardHiddenGroups: this.parseStringArrayMap(v["boardHiddenGroups"]),
       defaultColumnWidth: typeof v["defaultColumnWidth"] === "number" ? v["defaultColumnWidth"] : undefined,
+      rowDensity: v["rowDensity"] === "compact" || v["rowDensity"] === "comfortable" ? v["rowDensity"] : undefined,
       titleField: safeString(v["titleField"]) || undefined,
       galleryImageField: safeString(v["galleryImageField"]) || undefined,
       galleryImageAspectRatio: typeof v["galleryImageAspectRatio"] === "number" ? v["galleryImageAspectRatio"] : undefined,
       galleryCardSize: typeof v["galleryCardSize"] === "number" ? v["galleryCardSize"] : undefined,
+      galleryCardSizePreset: this.parseGalleryCardSizePreset(v["galleryCardSizePreset"]),
+      galleryImageAspectRatioPreset: this.parseGalleryAspectPreset(v["galleryImageAspectRatioPreset"]),
       galleryImageFit: v["galleryImageFit"] === "contain" ? "contain" : v["galleryImageFit"] === "cover" ? "cover" : undefined,
       boardImageField: safeString(v["boardImageField"]) || undefined,
       boardImageAspectRatio: typeof v["boardImageAspectRatio"] === "number" ? v["boardImageAspectRatio"] : undefined,
@@ -1117,14 +1125,18 @@ export class DataSource {
       boardSubgroupField: view.boardSubgroupField || "",
       boardColumnWidth: view.boardColumnWidth || 280,
       defaultColumnWidth: view.defaultColumnWidth || 150,
+      rowDensity: view.rowDensity === "compact" || view.rowDensity === "comfortable" ? view.rowDensity : undefined,
       titleField: view.titleField || "",
       boardCardOrders: view.boardCardOrders || {},
+      boardHiddenGroups: view.boardHiddenGroups || {},
       manualOrder: view.manualOrder && view.manualOrder.ranks && Object.keys(view.manualOrder.ranks).length > 0
         ? view.manualOrder
         : undefined,
       galleryImageField: view.galleryImageField || "",
       galleryImageAspectRatio: view.galleryImageAspectRatio || 0.75,
       galleryCardSize: view.galleryCardSize || 250,
+      galleryCardSizePreset: view.galleryCardSizePreset,
+      galleryImageAspectRatioPreset: view.galleryImageAspectRatioPreset,
       galleryImageFit: view.galleryImageFit || "cover",
       boardImageField: view.boardImageField || "",
       boardImageAspectRatio: view.boardImageAspectRatio || 0.75,
@@ -1232,11 +1244,15 @@ export class DataSource {
       "boardSubgroupEnabled",
       "boardSubgroupField",
       "boardColumnWidth",
+      "boardHiddenGroups",
       "defaultColumnWidth",
+      "rowDensity",
       "titleField",
       "galleryImageField",
       "galleryImageAspectRatio",
       "galleryCardSize",
+      "galleryCardSizePreset",
+      "galleryImageAspectRatioPreset",
       "galleryImageFit",
       "boardImageField",
       "boardImageAspectRatio",
@@ -1373,6 +1389,17 @@ export class DataSource {
     return entries.length > 0 ? Object.fromEntries(entries) : undefined;
   }
 
+  private parseStringArrayMap(value: unknown): Record<string, string[]> | undefined {
+    if (!value || typeof value !== "object" || Array.isArray(value)) return undefined;
+    const result: Record<string, string[]> = {};
+    for (const [key, entries] of Object.entries(value as Record<string, unknown>)) {
+      if (!Array.isArray(entries)) continue;
+      const strings = entries.filter((entry): entry is string => typeof entry === "string");
+      if (strings.length > 0) result[key] = strings;
+    }
+    return Object.keys(result).length > 0 ? result : undefined;
+  }
+
   private parseTrueMap(value: unknown): Record<string, true> | undefined {
     if (!value || typeof value !== "object" || Array.isArray(value)) return undefined;
     const entries = Object.entries(value as Record<string, unknown>)
@@ -1505,8 +1532,16 @@ export class DataSource {
   }
 
   private parseTimelineScale(value: unknown): ViewConfig["timelineScale"] {
-    if (value === "day" || value === "week" || value === "month" || value === "quarter") return value;
+    if (value === "day" || value === "week" || value === "month" || value === "quarter" || value === "year") return value;
     return undefined;
+  }
+
+  private parseGalleryCardSizePreset(value: unknown): ViewConfig["galleryCardSizePreset"] {
+    return value === "small" || value === "medium" || value === "large" ? value : undefined;
+  }
+
+  private parseGalleryAspectPreset(value: unknown): ViewConfig["galleryImageAspectRatioPreset"] {
+    return value === "square" || value === "banner" || value === "portrait" || value === "landscape" ? value : undefined;
   }
 
   private parseCalendarScale(value: unknown): ViewConfig["calendarScale"] {

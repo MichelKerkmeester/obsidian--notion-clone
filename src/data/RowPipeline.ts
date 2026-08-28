@@ -17,6 +17,28 @@ import { resolveTitleFieldDisplay } from "./TitleFieldDisplay";
 import { buildViewFilterTree, pruneViewFilterTree } from "./ViewFilterTree";
 import type { SourceRuleNode, ViewModeStateDef } from "./types";
 
+export interface RowPipelineDiagnostics {
+  sourceCount: number;
+  postSearchCount: number;
+  postFilterCount: number;
+  postLimitCount: number;
+  visibleCount: number;
+  hasActiveSearch: boolean;
+  hasActiveFilters: boolean;
+  hasActiveLimit: boolean;
+}
+
+export interface RowPipelineOutput {
+  rows: RowData[];
+  diagnostics: RowPipelineDiagnostics;
+}
+
+/** Return a detached diagnostics snapshot suitable for display decisions. */
+export function getRowPipelineDiagnostics(output: RowPipelineOutput | RowPipelineDiagnostics): RowPipelineDiagnostics {
+  const diagnostics = "diagnostics" in output ? output.diagnostics : output;
+  return { ...diagnostics };
+}
+
 export class RowPipeline {
   private queryEngine = new QueryEngine();
 
@@ -27,7 +49,18 @@ export class RowPipeline {
     app?: App,
     derivedValues?: ReadonlyMap<string, Record<string, unknown>>,
   ): RowData[] {
+    return this.buildWithDiagnostics(records, config, state, app, derivedValues).rows;
+  }
+
+  buildWithDiagnostics(
+    records: NoteRecord[],
+    config: ViewConfig,
+    state: DatabaseViewState & Pick<ViewModeStateDef, "filterTree">,
+    app?: App,
+    derivedValues?: ReadonlyMap<string, Record<string, unknown>>,
+  ): RowPipelineOutput {
     let rows = this.buildRows(records, config, app, derivedValues);
+    const sourceCount = rows.length;
     const queryColumns = this.withComputedResultTypes(config);
 
     if (state.sortRules.length > 0) {
@@ -88,6 +121,7 @@ export class RowPipeline {
         return false;
       });
     }
+    const postSearchCount = rows.length;
 
     if (state.statusFilter) {
       rows = rows.filter((row) => row.frontmatter["status"] === state.statusFilter);
@@ -103,12 +137,29 @@ export class RowPipeline {
     } else {
       rows = this.queryEngine.applyFilters(rows, effectiveFilters, state.filterLogic, queryColumns);
     }
+    const postFilterCount = rows.length;
+    const hasActiveFilters = Boolean(state.statusFilter) || Boolean(tree);
+    const hasActiveLimit = typeof config.resultLimit === "number" &&
+      Number.isFinite(config.resultLimit) && config.resultLimit >= 0;
+    const postLimitCount = rows.length;
 
-    if (typeof config.resultLimit === "number" && Number.isFinite(config.resultLimit) && config.resultLimit > 0) {
-      rows = rows.slice(0, Math.floor(config.resultLimit));
+    if (hasActiveLimit) {
+      rows = rows.slice(0, Math.floor(config.resultLimit ?? 0));
     }
 
-    return rows;
+    return {
+      rows,
+      diagnostics: {
+        sourceCount,
+        postSearchCount,
+        postFilterCount,
+        postLimitCount,
+        visibleCount: rows.length,
+        hasActiveSearch: Boolean(q),
+        hasActiveFilters,
+        hasActiveLimit,
+      },
+    };
   }
 
   private buildRows(

@@ -1,0 +1,219 @@
+{
+  "schema_version": 1,
+  "packet_id": "public/003-ui-improvement-build/008-mobile-and-accessibility",
+  "spec_folder": "public/003-ui-improvement-build/008-mobile-and-accessibility",
+  "parent_id": "public/003-ui-improvement-build",
+  "children_ids": [],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "mobile accessibility",
+      "touch targets",
+      "mobile bottom sheet",
+      "isTouchDevice",
+      "visualViewport keyboard",
+      "touch long press",
+      "kanban swipe snapping",
+      "aria grid",
+      "aria tablist",
+      "aria live status",
+      "embed keyboard navigation",
+      "interaction scope registry"
+    ],
+    "key_topics": [
+      "mobile",
+      "accessibility",
+      "touch",
+      "targets",
+      "bottom",
+      "sheet",
+      "istouchdevice",
+      "visualviewport",
+      "keyboard",
+      "long",
+      "press",
+      "kanban"
+    ],
+    "importance_tier": "high",
+    "status": "planned",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "checklist.md",
+      "implementation-summary.md"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "checklist.md",
+        "kind": "doc",
+        "path": "checklist.md",
+        "source": "derived"
+      },
+      {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Accessibility Handoffs",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Problem Statement While",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Note Database",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Tiny Touch Targets Violating",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Desktop Anchored Popovers Clip",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Plan",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Technical Context",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Obsidian View Component Engine",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Pointer Events",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Native Obsidian",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Breakdown",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Notation",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Time Estimate",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Verify Phase",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "View Switcher",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Quality Checklist",
+        "kind": "proper_noun",
+        "path": "checklist.md",
+        "source": "derived"
+      },
+      {
+        "name": "Verification Protocol",
+        "kind": "proper_noun",
+        "path": "checklist.md",
+        "source": "derived"
+      },
+      {
+        "name": "Completion Impact",
+        "kind": "proper_noun",
+        "path": "checklist.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "While the Note Database plugin provides rich underlying database calculation and querying capabilities, its mobile ergonomics, touch responsiveness, keyboard ownership, and accessibility semantics suffer from severe structural shortcomings:",
+    "created_at": "2026-08-27T19:53:20.990Z",
+    "last_save_at": "2026-08-28T01:12:28.926Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "checklist.md",
+      "implementation-summary.md"
+    ],
+    "source_fingerprint": "sha256:0346e3b4082d7f34e5eaea870a2b804cba1c9ad1828409cbf5a051976ba5a3c4",
+    "source_doc_hashes": {
+      "spec.md": "05b5f63144102a258bdb55e6af762a26980268a459634fb4da758f021567fc99",
+      "plan.md": "9e549fd90e3462e84d56e5e401d3c470c808af63c7520c01be395b53ccd81962",
+      "tasks.md": "12f0a86ea1cd8234bb084d050b5d0ef8c883486b7cc232cc4d0d768b1129fde4",
+      "checklist.md": "cc8e093326f2d60bb1ae5c70373870bf41e9a2429dca3eafebecbdb796107a0a",
+      "implementation-summary.md": "96e140be783f54562d5ff1b7e729a415a2beee891f9e01bd4a5803f49bc7a5ac"
+    },
+    "last_active_child_id": null,
+    "last_active_at": null
+  }
+}

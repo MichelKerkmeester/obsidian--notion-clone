@@ -1,0 +1,225 @@
+{
+  "schema_version": 1,
+  "packet_id": "public/003-ui-improvement-build/003-popovers-menus-elevation",
+  "spec_folder": "public/003-ui-improvement-build/003-popovers-menus-elevation",
+  "parent_id": "public/003-ui-improvement-build",
+  "children_ids": [],
+  "manual": {
+    "depends_on": [
+      {
+        "packet_id": "public/003-ui-improvement-build/005-design-tokens-typography",
+        "reason": "Imported from legacy graph-metadata.json",
+        "source": "legacy"
+      }
+    ],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "popovers menus elevation",
+      "popover auto close removal",
+      "mobile bottom sheets",
+      "dropdown listbox keyboard navigation",
+      "searchable dropdown enter select",
+      "elevation glassmorphism tokens",
+      "drilldown submenus column menu",
+      "date value picker presets",
+      "calendar mini keyboard navigation",
+      "icon picker live search",
+      "option color picker palette",
+      "standardized menu item anatomy"
+    ],
+    "key_topics": [
+      "popovers",
+      "menus",
+      "elevation",
+      "popover",
+      "auto",
+      "close",
+      "removal",
+      "mobile",
+      "bottom",
+      "sheets",
+      "dropdown",
+      "listbox"
+    ],
+    "importance_tier": "high",
+    "status": "complete",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "checklist.md",
+      "implementation-summary.md"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "checklist.md",
+        "kind": "doc",
+        "path": "checklist.md",
+        "source": "derived"
+      },
+      {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Problem Statement Popovers",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Note Database",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Second Inactivity Auto",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Close Timer",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Mobile Viewport Clipping",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Plan",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Technical Context",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Obsidian Plugin",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Native Obsidian",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Overview This",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Mobile Bottom Sheets",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Notation",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Format",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Task",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Apply Phase",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Next Week",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Unit Tests",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Verification Checklist",
+        "kind": "proper_noun",
+        "path": "checklist.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "Popovers, menus, dropdowns, and floating pickers form the interactive overlay layer of the Note Database plugin",
+    "created_at": "2026-08-27T19:53:19.572Z",
+    "last_save_at": "2026-08-28T01:12:27.986Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "checklist.md",
+      "implementation-summary.md"
+    ],
+    "source_fingerprint": "sha256:94724b6cde023d707e92c3ad2b3cadcd97134db88f159a628e10e2172e0c6880",
+    "source_doc_hashes": {
+      "spec.md": "28c5dd1a0c421ca6a9c962693172081d6c9e069ba1c72406f12e06b7a4ea094c",
+      "plan.md": "0b89f85a0df978324064eaab211260614050f15eb65a3b7d2fe6ac5a832c0f62",
+      "tasks.md": "c5d336baed63c65360b479bbb6e90a125b8e2c611dfa36867dca01522f038008",
+      "checklist.md": "f15971012868bae163bb2482e3ff678e49207bcf686b31318b9e7372a089f782",
+      "implementation-summary.md": "9f8a4b4ce9d7c1b552084218107733e142d7b7ce5291d0467a6334f6c5d71e71"
+    },
+    "last_active_child_id": null,
+    "last_active_at": null
+  }
+}

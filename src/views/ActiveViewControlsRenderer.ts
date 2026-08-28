@@ -12,6 +12,7 @@ export interface ActiveViewControlsActions {
   removeFilter(index: number): void;
   removeSort(index: number): void;
   toggleFilterLogic(): void;
+  clearAll(): void;
 }
 
 interface EffectiveFilterEntry {
@@ -99,6 +100,22 @@ export class ActiveViewControlsRenderer {
       }
     }
     scroller.scrollLeft = previousScrollLeft;
+    const clear = rail.createEl("button", {
+      cls: "db-active-view-controls-clear",
+      text: t("toolbar.clearAll"),
+      attr: { type: "button", "aria-label": t("toolbar.clearAll") },
+    });
+    clear.onclick = () => actions.clearAll();
+    const updateOverflow = () => scroller.toggleClass("is-overflowing", scroller.scrollWidth > scroller.clientWidth + 1);
+    scroller.addEventListener("scroll", updateOverflow, { passive: true });
+    if (typeof ResizeObserver !== "undefined") {
+      const observer = new ResizeObserver(() => {
+        if (scroller.isConnected) updateOverflow();
+        else observer.disconnect();
+      });
+      observer.observe(scroller);
+    }
+    window.requestAnimationFrame(updateOverflow);
   }
 
   private renderFilterChip(

@@ -173,6 +173,22 @@ export class CalendarToolbarRenderer {
 			config.showEmptyFields = value || undefined;
 			actions.onChange(t("undo.showEmptyFieldsConfig"));
 		}, "rows-3");
+		this.renderSetupPreview(data, config);
+	}
+
+	private renderSetupPreview(parent: HTMLElement, config: ViewConfig): void {
+		const preview = parent.createDiv({ cls: "db-calendar-setup-preview" });
+		preview.createDiv({ cls: "db-calendar-setup-preview-label", text: t("calendar.setupPreview") });
+		const card = preview.createDiv({ cls: "db-calendar-preview-card" });
+		const titleField = config.calendarTitleField ? config.schema.columns.find((column) => column.key === config.calendarTitleField) : undefined;
+		const startField = config.calendarStartDateField ? config.schema.columns.find((column) => column.key === config.calendarStartDateField) : undefined;
+		const endField = config.calendarEndDateField ? config.schema.columns.find((column) => column.key === config.calendarEndDateField) : undefined;
+		const colorField = config.calendarColorField ? config.schema.columns.find((column) => column.key === config.calendarColorField) : undefined;
+		card.createDiv({ cls: "db-calendar-preview-title", text: titleField?.label || t("calendar.previewEvent") });
+		card.createDiv({ cls: "db-calendar-preview-date", text: `${startField?.label || t("viewConfig.eventStartDateField")} → ${endField?.label || t("viewConfig.eventEndDateField")}` });
+		const color = card.createDiv({ cls: "db-calendar-preview-color" });
+		color.setAttribute("aria-label", colorField?.label || t("viewConfig.eventColorField"));
+		color.setAttribute("title", colorField?.label || t("viewConfig.eventColorField"));
 	}
 
 	private renderSameDateFieldWarning(parent: HTMLElement, startField: string | undefined, endField: string | undefined): void {

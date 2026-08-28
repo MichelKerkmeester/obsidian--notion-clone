@@ -22,6 +22,7 @@ export function renderRating(parent: HTMLElement, value: number, config?: Number
   const container = parent.createSpan({
     cls: `db-cell-rating${config?.ratingVariant === "outline" && !isEmoji ? " is-outline" : ""}${isEmoji ? " is-emoji" : ""}`,
   });
+  container.addClass("db-numeric-value");
   if (!isEmoji) applyColorClass(container, config?.color);
   for (const slot of buildRatingSlots(value, max)) {
     const star = container.createSpan({ cls: "db-rating-star" });
@@ -43,6 +44,7 @@ export function renderProgress(parent: HTMLElement, value: number, config?: Numb
   if (percent == null) return;
   const showValue = config?.progressShowValue !== false;
   const container = parent.createDiv({ cls: "db-cell-progress" });
+  container.addClass("db-numeric-value");
   applyColorClass(container, config?.color);
   const track = container.createDiv({ cls: "db-cell-progress-track" });
   const fill = track.createDiv({ cls: "db-cell-progress-fill" });
@@ -60,6 +62,7 @@ export function renderProgressRing(parent: HTMLElement, value: number, config?: 
   const RADIUS = 9;
   const { circumference, dashOffset } = ringGeometry(percent, RADIUS);
   const container = parent.createSpan({ cls: "db-cell-progress-ring" });
+  container.addClass("db-numeric-value");
   applyColorClass(container, config?.color);
   const svg = container.createSvg("svg", { attr: { viewBox: "0 0 24 24", width: 20, height: 20 } });
   svg.createSvg("circle", { attr: { cx: 12, cy: 12, r: RADIUS, fill: "none", "stroke-width": 4 } })

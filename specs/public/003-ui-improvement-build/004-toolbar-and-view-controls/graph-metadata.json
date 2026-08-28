@@ -1,0 +1,219 @@
+{
+  "schema_version": 1,
+  "packet_id": "public/003-ui-improvement-build/004-toolbar-and-view-controls",
+  "spec_folder": "public/003-ui-improvement-build/004-toolbar-and-view-controls",
+  "parent_id": "public/003-ui-improvement-build",
+  "children_ids": [],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "toolbar and view controls",
+      "4 cluster toolbar",
+      "view switcher tabs",
+      "split new button",
+      "all views overflow hub",
+      "unswallowed new button",
+      "add view preset sheet",
+      "jitter free search clear",
+      "unified view settings",
+      "separate badge vocabulary",
+      "database selector nested button fix",
+      "embed expand full view"
+    ],
+    "key_topics": [
+      "toolbar",
+      "view",
+      "controls",
+      "cluster",
+      "switcher",
+      "tabs",
+      "split",
+      "new",
+      "button",
+      "views",
+      "overflow",
+      "hub"
+    ],
+    "importance_tier": "high",
+    "status": "complete",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "checklist.md",
+      "implementation-summary.md"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "checklist.md",
+        "kind": "doc",
+        "path": "checklist.md",
+        "source": "derived"
+      },
+      {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "View Controls",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "All Views",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Add View",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "View Settings",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Problem Statement The",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Plan",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Technical Context",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Notation",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Format",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Task",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Cluster Semantic Toolbar Reorganization",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Query Cluster",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Verification Checklist",
+        "kind": "proper_noun",
+        "path": "checklist.md",
+        "source": "derived"
+      },
+      {
+        "name": "Verification Protocol",
+        "kind": "proper_noun",
+        "path": "checklist.md",
+        "source": "derived"
+      },
+      {
+        "name": "Completion Impact",
+        "kind": "proper_noun",
+        "path": "checklist.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Summary",
+        "kind": "proper_noun",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "Spec Folder",
+        "kind": "proper_noun",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "Actual Effort",
+        "kind": "proper_noun",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "The toolbar and view controls form the primary operational command deck of the Note Database plugin",
+    "created_at": "2026-08-27T19:53:19.853Z",
+    "last_save_at": "2026-08-28T01:12:28.176Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "checklist.md",
+      "implementation-summary.md"
+    ],
+    "source_fingerprint": "sha256:8777db4b611c95838c84d6ee16a4e2287e2193cbc1eee19b1a097b517d9563af",
+    "source_doc_hashes": {
+      "spec.md": "3869bed1427d091f3a2d62120caaefd7ff76fb4338e3d7e1b0c361e710fb1d67",
+      "plan.md": "ec62d100379d242fbb7194a61a661c78997920b9934f9c6cd21f6f5ce76adb73",
+      "tasks.md": "9a2f87fe86e1e94d9037b8b742dc351b65dbd90ae14bb39d490426072f0866da",
+      "checklist.md": "c6a0789d96bdc534fdf67dc112c384afe9d9e795e1721b223432984e1bb32619",
+      "implementation-summary.md": "26e24f6007173751f322ac5c7dad35c6513d1cad26549bd4eec2375c0b02db9f"
+    },
+    "last_active_child_id": null,
+    "last_active_at": null
+  }
+}

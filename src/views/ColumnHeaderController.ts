@@ -2,12 +2,14 @@ import { ColumnDef, ViewConfig } from "../data/types";
 import { t } from "../i18n";
 import { isHTMLElement } from "./DomGuards";
 import { syncTableColumnLayouts } from "./TableColumnLayoutSync";
+import { setIcon } from "obsidian";
 
 export interface ColumnHeaderActions {
   getConfig(): ViewConfig | undefined;
   ensureColumnOrder(config: ViewConfig): void;
   showContextMenu(event: MouseEvent, col: ColumnDef, anchorEl?: HTMLElement): void;
-  sortByColumn(col: ColumnDef): void;
+  sortByColumn(col: ColumnDef, append?: boolean): void;
+  autoFitColumn?(col: ColumnDef): void;
   saveConfig(): void;
   setUndoLabel(label: string): void;
   refresh(): void;
@@ -23,7 +25,7 @@ export class ColumnHeaderController {
       if (Date.now() < this.suppressSortUntil) return;
       const target = event.target;
       if (isHTMLElement(target) && target.closest("button, .db-resize-handle")) return;
-      this.actions.sortByColumn(col);
+      this.actions.sortByColumn(col, event.shiftKey);
     });
     th.addEventListener("contextmenu", (e) => this.actions.showContextMenu(e, col, th));
     this.setupMenuTrigger(th, col);
@@ -36,9 +38,9 @@ export class ColumnHeaderController {
   private setupMenuTrigger(th: HTMLElement, col: ColumnDef): void {
     const button = th.createEl("button", {
       cls: "db-column-menu-trigger",
-      text: "...",
-      attr: { "aria-label": t("column.openMenu", { label: col.label }) },
+      attr: { type: "button", "aria-label": t("column.openMenu", { label: col.label }) },
     });
+    setIcon(button, "more-horizontal");
     button.addEventListener("click", (event) => {
       event.preventDefault();
       event.stopPropagation();
@@ -83,6 +85,12 @@ export class ColumnHeaderController {
       e.preventDefault();
       e.stopPropagation();
       this.suppressSortUntil = Date.now() + 300;
+    });
+    handle.addEventListener("dblclick", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      this.suppressSortUntil = Date.now() + 300;
+      this.actions.autoFitColumn?.(col);
     });
   }
 

@@ -7,7 +7,10 @@ export interface ToolbarPopoverPositionOptions {
   margin?: number;
   gap?: number;
   align?: "left" | "center" | "right";
+  preferredSide?: "left" | "right";
 }
+
+const positionCleanups = new WeakMap<HTMLElement, () => void>();
 
 export function positionToolbarPopover(
   panel: HTMLElement,
@@ -21,12 +24,30 @@ export function positionToolbarPopover(
   const minWidth = options.minWidth ?? 160;
   const preferredWidth = options.preferredWidth ?? 520;
   const maxPreferredWidth = options.maxWidth ?? preferredWidth;
-  const rawContainer = panel.closest(".note-database-container");
-  const container = isHTMLElement(rawContainer) ? rawContainer : null;
+  const ownerDocument = panel.ownerDocument;
+  const view = ownerDocument.defaultView || window;
+  const mobileSheet = isMobileBottomSheet(ownerDocument);
+  positionCleanups.get(panel)?.();
 
   panel.addClass("db-anchored-popover");
+  panel.toggleClass("db-mobile-bottom-sheet", mobileSheet);
+  const existingHandle = panel.querySelector<HTMLElement>(".db-mobile-bottom-sheet-handle");
+  if (mobileSheet && !existingHandle) {
+    const handle = ownerDocument.createElement("div");
+    handle.className = "db-mobile-bottom-sheet-handle";
+    handle.setAttribute("aria-hidden", "true");
+    panel.prepend(handle);
+  } else if (!mobileSheet) {
+    existingHandle?.remove();
+  }
+  if (!panel.hasClass("is-visible")) {
+    panel.addClass("db-overlay-enter");
+    view.requestAnimationFrame(() => {
+      if (panel.isConnected) panel.addClass("is-visible");
+    });
+  }
   panel.setCssProps({
-    position: container ? "absolute" : "fixed",
+    position: "fixed",
     right: "auto",
     bottom: "auto",
     boxSizing: "border-box",
@@ -37,13 +58,9 @@ export function positionToolbarPopover(
   const place = () => {
     if (!panel.isConnected || !anchorEl.isConnected) return;
 
-    // 保存 popover 内部滚动位置，reposition 后恢复
     const savedPanelScroll = panel.scrollTop;
 
-    const bounds = getVisiblePopoverBounds(container);
-    const containerRect = container?.getBoundingClientRect();
-    const scrollLeft = container?.scrollLeft || 0;
-    const scrollTop = container?.scrollTop || 0;
+    const bounds = getVisiblePopoverBounds(null);
     const anchorRect = anchorEl.getBoundingClientRect();
     const maxWidth = Math.max(minWidth, Math.min(maxPreferredWidth, bounds.width - margin * 2));
     const width = Math.min(preferredWidth, maxWidth);
@@ -53,33 +70,51 @@ export function positionToolbarPopover(
       maxWidth: `${maxWidth}px`,
       maxHeight: "",
     });
-    setPosition(panel, bounds.left + margin, bounds.top + margin, containerRect, scrollLeft, scrollTop);
+    if (mobileSheet) {
+      panel.style.setProperty("--db-mobile-sheet-bottom", `${Math.max(0, view.innerHeight - bounds.bottom)}px`);
+      panel.setCssProps({
+        left: "0px",
+        right: "0px",
+        top: "auto",
+        bottom: `${Math.max(0, view.innerHeight - bounds.bottom)}px`,
+        width: "100%",
+        maxWidth: "100%",
+        maxHeight: `${Math.max(160, bounds.height - margin * 2)}px`,
+      });
+      panel.scrollTop = savedPanelScroll;
+      return;
+    }
 
+    setPosition(panel, bounds.left + margin, bounds.top + margin, undefined, 0, 0);
     const panelRect = panel.getBoundingClientRect();
     const measuredWidth = Math.min(panelRect.width || width, maxWidth);
-    const alignEdge = options.align ?? "right";
-    const anchorLeft = alignEdge === "left"
-      ? anchorRect.left
-      : alignEdge === "center"
-        ? anchorRect.left + anchorRect.width / 2 - measuredWidth / 2
-        : anchorRect.right - measuredWidth;
     const naturalHeight = Math.max(panel.scrollHeight, panelRect.height || 0);
     const belowSpace = Math.max(0, bounds.bottom - anchorRect.bottom - gap - margin);
     const aboveSpace = Math.max(0, anchorRect.top - bounds.top - gap - margin);
     const useAbove = aboveSpace > belowSpace && belowSpace < Math.min(naturalHeight, 240);
     const availableHeight = useAbove ? aboveSpace : belowSpace;
+    const anchorLeft = resolvePopoverHorizontalLeft(
+      anchorRect,
+      bounds,
+      measuredWidth,
+      gap,
+      margin,
+      options.align ?? "right",
+      options.preferredSide,
+    );
 
     if (availableHeight <= 0) {
       const fallbackHeight = Math.max(0, bounds.height - margin * 2);
       setPosition(
         panel,
-        clamp(anchorLeft, bounds.left + margin, bounds.right - measuredWidth - margin),
+        anchorLeft,
         bounds.top + margin,
-        containerRect,
-        scrollLeft,
-        scrollTop
+        undefined,
+        0,
+        0
       );
       panel.style.maxHeight = `${fallbackHeight}px`;
+      panel.scrollTop = savedPanelScroll;
       return;
     }
 
@@ -89,18 +124,82 @@ export function positionToolbarPopover(
       : anchorRect.bottom + gap;
     setPosition(
       panel,
-      clamp(anchorLeft, bounds.left + margin, bounds.right - measuredWidth - margin),
+      anchorLeft,
       clamp(top, bounds.top + margin, bounds.bottom - renderedHeight - margin),
-      containerRect,
-      scrollLeft,
-      scrollTop
+      undefined,
+      0,
+      0
     );
     panel.style.maxHeight = `${availableHeight}px`;
     panel.scrollTop = savedPanelScroll;
   };
 
   place();
-  window.requestAnimationFrame(place);
+  view.requestAnimationFrame(place);
+
+  let frame: number | undefined;
+  const schedule = () => {
+    if (!panel.isConnected) {
+      cleanup();
+      return;
+    }
+    if (frame !== undefined) return;
+    frame = view.requestAnimationFrame(() => {
+      frame = undefined;
+      place();
+    });
+  };
+  const visualViewport = view.visualViewport;
+  const cleanup = () => {
+    if (frame !== undefined) view.cancelAnimationFrame(frame);
+    view.removeEventListener("resize", schedule);
+    ownerDocument.removeEventListener("scroll", schedule, true);
+    visualViewport?.removeEventListener("resize", schedule);
+    visualViewport?.removeEventListener("scroll", schedule);
+    if (positionCleanups.get(panel) === cleanup) positionCleanups.delete(panel);
+  };
+  view.addEventListener("resize", schedule);
+  ownerDocument.addEventListener("scroll", schedule, true);
+  visualViewport?.addEventListener("resize", schedule);
+  visualViewport?.addEventListener("scroll", schedule);
+  positionCleanups.set(panel, cleanup);
+}
+
+export function resolvePopoverHorizontalLeft(
+  anchor: Pick<DOMRect, "left" | "right" | "width">,
+  bounds: Pick<DOMRect, "left" | "right">,
+  width: number,
+  gap: number,
+  margin: number,
+  align: "left" | "center" | "right" = "right",
+  preferredSide?: "left" | "right",
+): number {
+  const minLeft = bounds.left + margin;
+  const maxLeft = Math.max(minLeft, bounds.right - width - margin);
+  const aligned = align === "left"
+    ? anchor.left
+    : align === "center"
+      ? anchor.left + anchor.width / 2 - width / 2
+      : anchor.right - width;
+  if (preferredSide === "right") {
+    const right = anchor.right + gap;
+    if (right <= maxLeft) return right;
+    const left = anchor.left - gap - width;
+    if (left >= minLeft) return left;
+  } else if (preferredSide === "left") {
+    const left = anchor.left - gap - width;
+    if (left >= minLeft) return left;
+    const right = anchor.right + gap;
+    if (right <= maxLeft) return right;
+  } else {
+    const alignedFits = aligned >= minLeft && aligned <= maxLeft;
+    if (alignedFits) return aligned;
+    const right = anchor.right + gap;
+    if (right <= maxLeft) return right;
+    const left = anchor.left - gap - width;
+    if (left >= minLeft) return left;
+  }
+  return clamp(aligned, minLeft, maxLeft);
 }
 
 export function setPosition(
@@ -122,8 +221,10 @@ export function setPosition(
 }
 
 export function getVisiblePopoverBounds(container: HTMLElement | null): DOMRect {
-  const viewport = getVisualViewportBounds();
-  const app = window.activeDocument.querySelector(".app-container") || window.activeDocument.querySelector(".workspace");
+  const doc = container?.ownerDocument || window.activeDocument;
+  const view = doc.defaultView || window;
+  const viewport = getVisualViewportBounds(view);
+  const app = doc.querySelector(".app-container") || doc.querySelector(".workspace");
   const appRect = isHTMLElement(app) ? app.getBoundingClientRect() : viewport;
   const containerRect = container?.getBoundingClientRect() || viewport;
   const left = Math.max(viewport.left, appRect.left, containerRect.left);
@@ -131,19 +232,26 @@ export function getVisiblePopoverBounds(container: HTMLElement | null): DOMRect 
   const right = Math.min(viewport.right, appRect.right, containerRect.right);
   let bottom = Math.min(viewport.bottom, appRect.bottom, containerRect.bottom);
   // 移动端底部导航栏留空：手机 Obsidian 有固定底部 tab bar，popover 底部按钮需避让
-  if (window.activeDocument.body.classList.contains("is-phone")) {
-    const navbar = window.activeDocument.querySelector(".mobile-navbar");
+  if (doc.body.classList.contains("is-phone")) {
+    const navbar = doc.querySelector(".mobile-navbar");
     const navbarHeight = isHTMLElement(navbar) ? navbar.getBoundingClientRect().height : 50;
-    const safeBottom = parseFloat(getComputedStyle(window.activeDocument.body).getPropertyValue("--safe-area-inset-bottom") || "0");
+    const safeBottom = parseFloat(getComputedStyle(doc.body).getPropertyValue("--safe-area-inset-bottom") || "0");
     bottom = Math.min(bottom, viewport.bottom - navbarHeight - safeBottom);
   }
   if (right <= left || bottom <= top) return viewport;
   return new DOMRect(left, top, right - left, bottom - top);
 }
 
-function getVisualViewportBounds(): DOMRect {
-  const visual = window.visualViewport;
-  if (!visual) return new DOMRect(0, 0, window.innerWidth, window.innerHeight);
+function isMobileBottomSheet(doc: Document): boolean {
+  if (doc.body.classList.contains("is-phone")) return true;
+  const view = doc.defaultView;
+  const touchPoints = typeof navigator !== "undefined" ? navigator.maxTouchPoints : 0;
+  return Boolean(view && view.innerWidth <= 600 && touchPoints > 0);
+}
+
+function getVisualViewportBounds(view: Window): DOMRect {
+  const visual = view.visualViewport;
+  if (!visual) return new DOMRect(0, 0, view.innerWidth, view.innerHeight);
   return new DOMRect(visual.offsetLeft, visual.offsetTop, visual.width, visual.height);
 }
 

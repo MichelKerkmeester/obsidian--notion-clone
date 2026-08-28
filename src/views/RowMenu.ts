@@ -1,4 +1,4 @@
-import { App, Menu } from "obsidian";
+import { App, Menu, MenuItem } from "obsidian";
 import { CreateEntryPosition, DatabaseConfig, RowCreateContext, RowData, ViewConfig } from "../data/types";
 import { isExplicitlySorted } from "../data/ManualOrder";
 import {
@@ -50,9 +50,14 @@ export class RowMenu {
     event.preventDefault();
     const displayName = row.file.name.replace(/\.md$/, "");
     const menu = new Menu().setUseNativeMenu(false);
-    if (onClose) menu.onHide(onClose);
+    if (onClose || anchorEl) {
+      menu.onHide(() => {
+        onClose?.();
+        anchorEl?.focus({ preventScroll: true });
+      });
+    }
 
-    menu.addItem((item) => item
+    this.addItem(menu, (item) => item
       .setTitle(t("menu.openNote"))
       .setIcon("file-text")
       .onClick(() => this.actions.openRow(row))
@@ -67,13 +72,13 @@ export class RowMenu {
         const paths = visibleRows.map((r) => r.file.path);
         const index = paths.indexOf(row.file.path);
         const sorted = isExplicitlySorted(config);
-        menu.addItem((item) => item
+        this.addItem(menu, (item) => item
           .setTitle(t("menu.insertAbove"))
           .setIcon("chevron-up")
           .setDisabled(sorted)
           .onClick(() => this.actions.createEntry?.(defaults, { afterPath: index > 0 ? paths[index - 1] : undefined, beforePath: row.file.path }))
         );
-        menu.addItem((item) => item
+        this.addItem(menu, (item) => item
           .setTitle(t("menu.insertBelow"))
           .setIcon("chevron-down")
           .setDisabled(sorted)
@@ -82,7 +87,7 @@ export class RowMenu {
         menu.addSeparator();
         const databaseConfig = this.actions.getDatabaseConfig?.();
         if (hasRecordTemplate(databaseConfig)) {
-          menu.addItem((item) => {
+          this.addItem(menu, (item) => {
             item
               .setTitle(getNewFromTemplateLabel())
               .setIcon("file-plus-2")
@@ -101,7 +106,7 @@ export class RowMenu {
         }
       }
       if (this.actions.toggleRecordIcon && this.actions.canToggleRecordIcon?.() === true) {
-        menu.addItem((item) => item
+        this.addItem(menu, (item) => item
           .setTitle(t("recordIcon.show"))
           .setIcon("smile-plus")
           .setChecked(this.actions.isRecordIconShown?.() === true)
@@ -112,7 +117,7 @@ export class RowMenu {
         );
         menu.addSeparator();
       }
-      menu.addItem((item) => item
+      this.addItem(menu, (item) => item
         .setTitle(t("menu.duplicateRecord"))
         .setIcon("copy")
         .onClick(() => { void this.actions.duplicateRow?.(row); })
@@ -120,7 +125,7 @@ export class RowMenu {
 
       menu.addSeparator();
 
-      menu.addItem((item) => item
+      this.addItem(menu, (item) => item
         .setTitle(t("menu.deleteRow", { name: displayName }))
         .setIcon("trash")
         .setWarning(true)
@@ -143,5 +148,16 @@ export class RowMenu {
     } else {
       menu.showAtMouseEvent(event);
     }
+  }
+
+  private addItem(menu: Menu, configure: (item: MenuItem) => void): void {
+    menu.addItem((item) => {
+      configure(item);
+      const dom = (item as unknown as { dom?: HTMLElement }).dom;
+      dom?.addClass("db-menu-item");
+      dom?.querySelector<HTMLElement>(".menu-item-icon")?.addClass("db-menu-item-icon");
+      dom?.querySelector<HTMLElement>(".menu-item-title")?.addClass("db-menu-item-label");
+      return item;
+    });
   }
 }

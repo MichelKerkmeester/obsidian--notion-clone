@@ -265,6 +265,19 @@ describe("conditional formatting display", () => {
     expect(element.children).toHaveLength(1);
   });
 
+  it("uses layered semantic colors for a colored match", () => {
+    const element = new FakeElement();
+    const rule = recordRule("colored", condition("status", "ready"), { color: "green" });
+
+    applyConditionalFormat(element as unknown as HTMLElement, row({ status: "ready" }), config([rule]), undefined);
+
+    expect(element.style.values.get("--db-conditional-format-bg")).toBe(
+      "color-mix(in srgb, var(--status-color-bg-green) 60%, transparent)",
+    );
+    expect(element.style.values.get("--db-conditional-format-fg")).toBe("var(--status-color-fg-green)");
+    expect(element.style.values.get("--db-conditional-format-accent")).toBe("var(--status-color-fg-green)");
+  });
+
   it("places a record icon in the first non-select table cell", () => {
     const tr = new FakeElement("tr");
     const selectCell = new FakeElement("td");

@@ -10,17 +10,25 @@ import { ComputedFieldEngine } from "../data/ComputedField";
 import { evaluateComputedFields, hasRollupComputedDependency } from "../data/ComputedEvaluator";
 import { applyRangeSelection } from "../data/RangeSelection";
 import { installNoteHoverPreview } from "./HoverLinkPreview";
-import { resolveViewSelection } from "../data/ViewSelection";
+import { getRowPipelineDiagnostics, RowPipeline, RowPipelineDiagnostics } from "../data/RowPipeline";
+import {
+  createStarterViewConfig,
+  EmptyStateOptions,
+  EmptyStateRenderer,
+  formatEmptyStateDiagnostics,
+  getEmptyStateReason,
+  StarterPreset,
+} from "./EmptyStateRenderer";
+import { resolveViewIndex, resolveViewSelection } from "../data/ViewSelection";
 import {
   ensureColumnOrder,
   getColumnsInOrder,
   getVisibleColumns,
 } from "../data/ColumnConfig";
-import { RowPipeline } from "../data/RowPipeline";
 import { buildRelationRollups } from "../data/RelationRollup";
 import { mergeRelationInverseMembership } from "../data/RelationInverse";
 import { autoDetectReportsFields } from "../data/ReportsComputedConfig";
-import { ViewConfig, ColumnDef, ComputedFieldDef, RowData, DatabaseConfig, DatabaseViewType, FilterRule, GroupOrderMode, SourceRule, StatusColor, StatusOptionDef, StatusPresetDef, generateId, CreateEntryPosition, NumberDisplayStyle, NumberDisplayConfig, DateGroupMode, RowCreateContext } from "../data/types";
+import { ViewConfig, ColumnDef, ComputedFieldDef, RowData, DatabaseConfig, DatabaseViewType, FilterRule, GroupOrderMode, SourceRule, StatusColor, StatusOptionDef, StatusPresetDef, generateId, CreateEntryPosition, NewRecordTemplateConfig, NumberDisplayStyle, NumberDisplayConfig, DateGroupMode, RowCreateContext } from "../data/types";
 import {
   getDefaultCellValue as getColumnDefaultCellValue,
   getStatusPresetOptions,
@@ -59,6 +67,7 @@ import { renderRecordIcon } from "./RecordIconRenderer";
 import { resolveRecordIconField } from "../data/RecordIcon";
 import { applyConditionalFormat } from "../data/ConditionalFormatting";
 import { ParsedRecordTemplate, parseRecordTemplate, resolveCoreRecordTemplate } from "../data/RecordTemplate";
+import { getCreateEntryPosition as resolveCreateEntryPosition, getRegisteredRecordTemplates, NewRecordPlacement } from "../data/TemplateToolbarAction";
 import { TableRenderer } from "./TableRenderer";
 import {
   captureDatabaseViewport,
@@ -72,7 +81,7 @@ import { SummaryRenderer } from "./SummaryRenderer";
 import { FilterPanelRenderer } from "./FilterPanelRenderer";
 import { ColumnManagerRenderer } from "./ColumnManagerRenderer";
 import { SortPanelRenderer } from "./SortPanelRenderer";
-import { ToolbarRenderer } from "./ToolbarRenderer";
+import { AddViewOptions, CreateEntryIntent, ToolbarRenderer } from "./ToolbarRenderer";
 import { ActiveViewControlsRenderer } from "./ActiveViewControlsRenderer";
 import { ActiveRulePopoverRenderer } from "./ActiveRulePopoverRenderer";
 import { removeFilterRuleAt, removeSortRuleAt } from "./ViewRuleOperations";
@@ -379,6 +388,7 @@ export class DatabaseView extends FileView {
       this.scheduleConfigSave();
       this.refresh();
     },
+    openDateConfig: () => this.openDateConfiguration(),
     renderRecordIcon: (parent, row, config, compact) => this.renderRowRecordIcon(parent, row, config, compact),
     renderGroupSummaries: (parent, rows, config) => this.summaryRenderer.renderGroupItems(parent, rows, config, this.getActiveDb()),
     applyConditionalFormat: (element, row, config) => applyConditionalFormat(element, row, config, this.getActiveDb()),
@@ -400,6 +410,7 @@ export class DatabaseView extends FileView {
       this.scheduleConfigSave();
       this.refresh();
     },
+    openDateConfig: () => this.openDateConfiguration(),
     getColumns: (config) => getVisibleColumns(config, this.rows, this.vs(), this.pendingShowColumns),
     getCalendarInvalidEventCount: () => this.getTimelineInvalidEventCount(),
     renderRecordIcon: (parent, row, config, compact) => this.renderRowRecordIcon(parent, row, config, compact),
@@ -410,6 +421,17 @@ export class DatabaseView extends FileView {
   private calendarToolbarRenderer = new CalendarToolbarRenderer();
   private queryEngine = new QueryEngine();
   private rowPipeline = new RowPipeline();
+  private pipelineDiagnostics: RowPipelineDiagnostics = {
+    sourceCount: 0,
+    postSearchCount: 0,
+    postFilterCount: 0,
+    postLimitCount: 0,
+    visibleCount: 0,
+    hasActiveSearch: false,
+    hasActiveFilters: false,
+    hasActiveLimit: false,
+  };
+  private emptyStateRenderer = new EmptyStateRenderer();
   private containerEl_: HTMLElement | null = null;
   /** Combined database entries from vault files */
   private viewEntries: ViewEntry[] = [];
@@ -583,7 +605,8 @@ export class DatabaseView extends FileView {
       getConfig: () => this.getConfig(),
       ensureColumnOrder: (config) => ensureColumnOrder(config),
       showContextMenu: (event, col, anchorEl) => this.showContextMenu(event, col, anchorEl),
-      sortByColumn: (col) => this.sortByColumn(col),
+      sortByColumn: (col, append) => this.sortByColumn(col, append),
+      autoFitColumn: (col) => this.autoFitColumn(col),
       saveConfig: () => this.scheduleConfigSave(),
       setUndoLabel: (label) => { this.pendingUndoLabel = label; },
       refresh: () => this.refresh(),
@@ -606,6 +629,9 @@ export class DatabaseView extends FileView {
       moveRowToGroupAndPosition: (row, field, fromGroupKey, toGroupKey, beforePath, afterPath) =>
         this.moveRowToGroupAndPosition(row, field, fromGroupKey, toGroupKey, beforePath, afterPath),
       createEntry: (defaults, position) => this.guardedCreateEntry(defaults, position),
+      addColumn: () => { void this.openCreatePropertyModal(); },
+      showRowMenu: (event, row, context, anchorEl) => this.rowMenu.show(event, row, context, anchorEl),
+      changeColumnCalculation: (columnKey, calculation) => this.changeColumnCalculation(columnKey, calculation),
       isGroupCollapsed: (field, key) => this.isGroupCollapsed(this.getConfig(), field, key),
       toggleGroupCollapsed: (field, key) => this.toggleGroupCollapsed(this.getConfig(), field, key),
     expandGroup: (field, key, count) => this.expandGroup(this.getConfig(), field, key, count),
@@ -613,6 +639,7 @@ export class DatabaseView extends FileView {
     });
     this.boardRenderer = new BoardRenderer(this.app, {
       openRow: (row) => this.dataSource.openNote(row.file),
+      openRecordDetail: (anchorEl, row) => this.openRecordDetailPanel(anchorEl, row),
       createEntry: (defaults, position) => this.guardedCreateEntry(defaults, position),
       createGroup: (field, name, color) => this.createBoardGroup(field, name, color),
       updateGroup: (row, field, value, fromValue) => this.updateBoardGroup(row, field, value, fromValue),
@@ -644,6 +671,7 @@ export class DatabaseView extends FileView {
     });
     this.galleryRenderer = new GalleryRenderer(this.app, {
       openRow: (row) => this.dataSource.openNote(row.file),
+      openRecordDetail: (anchorEl, row) => this.openRecordDetailPanel(anchorEl, row),
       createEntry: (defaults, position) => this.guardedCreateEntry(defaults, position),
       isRowSelected: (row) => this.selectedRows.has(row.file.path),
       toggleRowSelected: (row, selected, event) => this.toggleRowSelected(row, selected, event),
@@ -672,6 +700,7 @@ export class DatabaseView extends FileView {
     });
     this.listRenderer = new ListRenderer(this.app, {
       openRow: (row) => this.dataSource.openNote(row.file),
+      openRecordDetail: (anchorEl, row) => this.openRecordDetailPanel(anchorEl, row),
       createEntry: (defaults, position) => this.guardedCreateEntry(defaults, position),
       isRowSelected: (row) => this.selectedRows.has(row.file.path),
       toggleRowSelected: (row, selected, event) => this.toggleRowSelected(row, selected, event),
@@ -714,6 +743,8 @@ export class DatabaseView extends FileView {
       setNumberDisplayStyle: (col, style) => this.setNumberDisplayStyle(col, style),
       updateNumberDisplayConfig: (col, partial) => this.updateNumberDisplayConfig(col, partial),
       sortByColumn: (col) => this.sortByColumn(col),
+      sortColumnDirection: (col, direction) => this.sortColumnDirection(col, direction),
+      filterByColumn: (col) => this.filterByColumn(col),
       getColumnSortDirection: (col) => this.getColumnSortDirection(col),
       clearColumnSort: (col) => this.clearColumnSort(col),
       openColumnWidthPanel: (col) => this.showMobileColumnWidthPanel(col),
@@ -857,18 +888,25 @@ export class DatabaseView extends FileView {
     ));
   }
 
-  private guardedCreateEntry(defaults?: Record<string, unknown>, position?: { beforePath?: string; afterPath?: string }): void {
-    const suppressed = this.suppressNextCreate || this.hasActiveOverlay();
+  private guardedCreateEntry(defaults?: Record<string, unknown>, position?: CreateEntryPosition, intent?: CreateEntryIntent): void {
+    const suppressed = !intent?.allowOverlayTransition && (this.suppressNextCreate || this.hasActiveOverlay());
     this.suppressNextCreate = false;
     if (suppressed) { this.closeActiveOverlays(); return; }
+    if (intent?.allowOverlayTransition) this.closeActiveOverlays();
     void this.createBlankEntry(defaults ?? {}, position);
   }
 
-  private guardedCalendarCreate(defaults?: Record<string, unknown>): void {
-    const suppressed = this.suppressNextCreate || this.hasActiveOverlay();
+  private guardedCalendarCreate(
+    defaults?: Record<string, unknown>,
+    position?: CreateEntryPosition,
+    intent?: CreateEntryIntent,
+    templateOverride?: NewRecordTemplateConfig | null,
+  ): void {
+    const suppressed = !intent?.allowOverlayTransition && (this.suppressNextCreate || this.hasActiveOverlay());
     this.suppressNextCreate = false;
     if (suppressed) { this.closeActiveOverlays(); return; }
-    void this.createCalendarAwareCreateEntry(defaults);
+    if (intent?.allowOverlayTransition) this.closeActiveOverlays();
+    void this.createCalendarAwareCreateEntry(defaults, position, templateOverride);
   }
 
   private closeActiveOverlays(): void {
@@ -1245,10 +1283,20 @@ export class DatabaseView extends FileView {
       const configInfo = this.viewEntries.length > 0
         ? t("errors.currentDb", { name: this.viewEntries[this.currentDbIndex]?.config.name || "?" })
         : t("errors.viewConfigEmpty");
-      this.containerEl_.createDiv({
-        cls: "db-empty db-error-display",
-        text: `${t("errors.renderError", { message: errMsg })}\n${configInfo}\n\n${stack ? stack.substring(0, 500) : t("errors.noStack")}`,
+      const card = this.emptyStateRenderer.renderCard(this.containerEl_, {
+        reason: "read-failed",
+        title: t("errors.renderError", { message: errMsg }),
+        message: configInfo,
+        actions: [{
+          label: t("emptyState.retry"),
+          icon: "refresh-cw",
+          primary: true,
+          onClick: () => this.refresh(),
+        }],
       });
+      const details = card.createEl("details", { cls: "db-error-display" });
+      details.createEl("summary", { text: t("emptyState.technicalDetails") });
+      details.createEl("pre", { text: stack ? stack.substring(0, 500) : t("errors.noStack") });
     }
   }
 
@@ -1875,10 +1923,18 @@ export class DatabaseView extends FileView {
     this.toolbarRenderer.render(this.containerEl_, this.viewEntries, this.currentDbIndex, this.currentViewIndex, this.vs(), {
       selectDatabase: (index) => this.selectView(index),
       moveDatabase: (fromIndex, toIndex) => this.moveDatabase(fromIndex, toIndex),
-      selectViewInView: (_dbIndex, viewIndex) => this.switchView(viewIndex),
-      addView: (viewType) => this.addView(viewType),
+      selectViewInView: (_dbIndex, viewIndex, viewId) => this.switchView(viewIndex, viewId),
+      addView: (viewType, options) => this.addView(viewType, options),
       deleteView: (viewIndex) => this.deleteView(viewIndex),
       renameView: (viewIndex, name) => this.renameView(viewIndex, name),
+      setViewIcon: (viewIndex, icon) => {
+        const view = this.getActiveDb()?.views[viewIndex];
+        if (!view) return;
+        view.icon = icon || undefined;
+        this.saveCurrentViewConfigInBackground();
+        this.rerenderToolbar();
+      },
+      editViewIcon: (viewIndex, anchor) => this.openViewIconPicker(anchor, viewIndex),
       moveView: (fromIndex, toIndex) => this.moveView(fromIndex, toIndex),
       renameDatabase: (name) => this.renameDatabase(name),
       updateDatabaseDescription: (description) => this.updateDatabaseDescription(description),
@@ -1936,7 +1992,21 @@ export class DatabaseView extends FileView {
       pendingRefreshUnknown: this.refreshCoordinator.getState().pendingUnknown,
       isRefreshingDatabase: this.refreshCoordinator.getState().refreshing,
       closeToolbarPopovers: () => this.closeHeaderPopovers(),
-      createEntry: (defaults) => this.guardedCalendarCreate(defaults),
+      createEntry: (defaults, position, intent) => this.guardedCalendarCreate(defaults, position, intent),
+      createEntryFromTemplate: (template, position, intent) => this.guardedCalendarCreate(undefined, position, intent, template),
+      getCreateEntryPosition: (placement) => this.getCreateEntryPosition(placement),
+      recordTemplates: getRegisteredRecordTemplates(
+        this.app.vault.getMarkdownFiles().map((file) => file.path),
+        this.getActiveDb()?.newRecordTemplate,
+      ),
+      defaultTemplatePath: this.getActiveDb()?.newRecordTemplate?.path,
+      setDefaultTemplate: (template) => {
+        const db = this.getActiveDb();
+        if (!db) return;
+        db.newRecordTemplate = template ? { path: template.path, engine: template.engine } : undefined;
+        this.saveCurrentViewConfigInBackground();
+        this.rerenderToolbar();
+      },
       isReadOnly: needsSetup,
       showChartOptions: true,
       showDatabaseChrome: true,
@@ -1965,8 +2035,25 @@ export class DatabaseView extends FileView {
       removeFilter: (index) => this.removeActiveFilterRule(index),
       removeSort: (index) => this.removeActiveSortRule(index),
       toggleFilterLogic: () => this.toggleActiveFilterLogic(),
+      clearAll: () => this.clearActiveViewControls(),
     });
     this.updateStickyOffsets();
+  }
+
+  private clearActiveViewControls(): void {
+    const state = this.vs();
+    state.filters = [];
+    state.filterTree = undefined;
+    state.filterLogic = "and";
+    state.sortRules = [];
+    state.sortColumn = undefined;
+    state.sortDirection = "asc";
+    state.statusFilter = "";
+    this.activeRulePopoverRenderer.close();
+    this.pendingUndoLabel = t("undo.filterConfig");
+    this.scheduleViewStateSave();
+    this.updateToolbarIndicators();
+    this.refresh({ viewport: "reset-top" });
   }
 
   private openActiveRulePopover(kind: "filter" | "sort", index: number, anchorEl: HTMLElement): void {
@@ -2966,11 +3053,16 @@ export class DatabaseView extends FileView {
     this.refresh({ viewport: "reset-top" });
   }
 
+  private getCreateEntryPosition(placement: NewRecordPlacement): CreateEntryPosition | undefined {
+    return resolveCreateEntryPosition(placement, this.rows[0]?.file.path, this.rows[this.rows.length - 1]?.file.path);
+  }
+
   /** Switch to a different view within the current database */
-  private switchView(viewIndex: number): void {
+  private switchView(viewIndex: number, viewId?: string): void {
     const descriptionScroll = this.saveDescriptionScrollPosition();
     this.closeHeaderPopovers();
-    this.currentViewIndex = viewIndex;
+    const db = this.getActiveDb();
+    this.currentViewIndex = db ? resolveViewIndex(db.views.map((view) => view.id), viewId, viewIndex) : viewIndex;
     this.clearSelection();
     this.clearCellSelection();
     this.rerenderToolbar();
@@ -2979,16 +3071,29 @@ export class DatabaseView extends FileView {
   }
 
   /** Add a new view to the current database */
-  private addView(viewType: DatabaseViewType): void {
+  private addView(viewType: DatabaseViewType, options: AddViewOptions = {}): void {
     const db = this.getActiveDb();
     if (!db || db.views.length >= 15) return;
-    const sourceView = db.views[0];
-    const newView: ViewConfig = {
+    const sourceView = options.duplicateCurrent ? db.views[this.currentViewIndex] : db.views[0];
+    const newView: ViewConfig = options.duplicateCurrent && sourceView
+      ? {
+        ...sourceView,
+        id: generateId(),
+        name: options.name || this.getDefaultViewName(viewType),
+        viewType,
+        icon: options.icon || sourceView.icon,
+        titleField: options.keyField || sourceView.titleField,
+        schema: db.schema,
+        columnOrder: sourceView.columnOrder ? [...sourceView.columnOrder] : undefined,
+      }
+      : {
       id: generateId(),
-      name: this.getDefaultViewName(viewType),
+      name: options.name || this.getDefaultViewName(viewType),
+      icon: options.icon,
       viewType,
       sourceFolder: "",
       schema: db.schema,
+      titleField: options.keyField || undefined,
       columnOrder: sourceView?.columnOrder ? [...sourceView.columnOrder] : undefined,
       boardGroupField: viewType === "board"
         ? (db.schema.columns.find(c => c.key !== "file.name")?.key || "file.name")
@@ -3010,7 +3115,7 @@ export class DatabaseView extends FileView {
       timelineStartDateField: viewType === "timeline"
         ? getDefaultEventDateField({ schema: db.schema } as ViewConfig)
         : undefined,
-    };
+      };
     db.views.push(newView);
     this.currentViewIndex = db.views.length - 1;
     this.clearViewStateCache();
@@ -3131,7 +3236,7 @@ export class DatabaseView extends FileView {
   }
 
   /** Add a new database via modal dialog */
-  private async addDatabase(): Promise<void> {
+  private async addDatabase(starterPreset?: StarterPreset): Promise<void> {
     const modal = new AddDatabaseModal(this.app, this.statusPresets, this.defaultStatusPresetId);
     const result = await modal.openAndWait();
     if (!result) return;
@@ -3139,6 +3244,15 @@ export class DatabaseView extends FileView {
     const dbName = this.getUniqueDatabaseName(result.name);
     const newDb = await buildDatabaseWithInferredColumns(this.app, result, dbName);
     if (!newDb) return;
+    if (starterPreset) {
+      const presetView = createStarterViewConfig(starterPreset);
+      newDb.schema = presetView.schema;
+      newDb.views[0] = {
+        ...newDb.views[0],
+        name: presetView.name,
+        schema: newDb.schema,
+      };
+    }
     if (!await this.confirmNewDatabasePropertyTypeConflicts(newDb)) return;
 
     const file = await this.dataSource.createViewDefFile(
@@ -3446,13 +3560,15 @@ export class DatabaseView extends FileView {
       this.relationTargetDatabases = [];
       this.relationTargetDatabasePaths.clear();
     }
-    return this.rowPipeline.build(
+    const output = this.rowPipeline.buildWithDiagnostics(
       records,
       this.withBaseThisContext(view),
       state,
       this.app,
       derived,
     );
+    this.pipelineDiagnostics = getRowPipelineDiagnostics(output);
+    return output.rows;
   }
 
   private calculateRelationRollups(records: NoteRecord[], database: DatabaseConfig) {
@@ -3536,6 +3652,10 @@ export class DatabaseView extends FileView {
     }
   }
 
+  openCreatePropertyModalFromEmbed(): void {
+    void this.openCreatePropertyModal();
+  }
+
   /** Re-render toolbar with current state (used after view switch) */
   private rerenderToolbar(): void {
     if (!this.containerEl_) return;
@@ -3578,7 +3698,11 @@ export class DatabaseView extends FileView {
   }
 
   /** 日历/时间线视图的 toolbar 新建：注入今日日期作为开始日期，否则新建笔记无日期不在视图中显示 */
-  private async createCalendarAwareCreateEntry(defaults?: Record<string, unknown>): Promise<void> {
+  private async createCalendarAwareCreateEntry(
+    defaults?: Record<string, unknown>,
+    position?: CreateEntryPosition,
+    templateOverride?: NewRecordTemplateConfig | null,
+  ): Promise<void> {
     const config = this.getConfig();
     const viewType = config?.viewType;
     if ((viewType === "calendar" || viewType === "timeline") && !defaults) {
@@ -3588,24 +3712,25 @@ export class DatabaseView extends FileView {
       if (startField) {
         const d = new Date();
         const todayKey = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
-        void this.createBlankEntry({ [startField]: todayKey });
+        void this.createBlankEntry({ [startField]: todayKey }, position, undefined, templateOverride);
         return;
       }
     }
-    void this.createBlankEntry(defaults);
+    void this.createBlankEntry(defaults || {}, position, undefined, templateOverride);
   }
 
   private async createBlankEntry(
     defaults: Record<string, unknown> = {},
     position?: CreateEntryPosition,
     focusColumnKey?: string,
+    templateOverride?: NewRecordTemplateConfig | null,
   ): Promise<TFile | null> {
     const config = this.getConfig();
     const entry = this.getCurrentEntry();
     if (!config || !entry) return null;
     let template: ParsedRecordTemplate | undefined;
     try {
-      template = await this.loadNewRecordTemplate(entry.config);
+      template = await this.loadNewRecordTemplate(entry.config, templateOverride);
     } catch (error) {
       new Notice(t("template.loadFailed", { error: String(error) }));
       return null;
@@ -3756,8 +3881,8 @@ export class DatabaseView extends FileView {
     });
   }
 
-  private async loadNewRecordTemplate(database: DatabaseConfig): Promise<ParsedRecordTemplate | undefined> {
-    const setting = database.newRecordTemplate;
+  private async loadNewRecordTemplate(database: DatabaseConfig, override?: NewRecordTemplateConfig | null): Promise<ParsedRecordTemplate | undefined> {
+    const setting = override === null ? undefined : override || database.newRecordTemplate;
     if (!setting?.path) return undefined;
     const file = this.app.vault.getAbstractFileByPath(normalizePath(setting.path));
     if (!(file instanceof TFile)) throw new Error(t("template.missing"));
@@ -4543,7 +4668,7 @@ export class DatabaseView extends FileView {
       this.updateToolbarBadge(sortBtn, count);
     }
     const colBtn = this.containerEl_.querySelector(".db-col-manager-btn");
-    if (isHTMLElement(colBtn)) this.updateToolbarBadge(colBtn, Math.max(0, (this.getConfig()?.schema.columns.length || 0) - state.hiddenColumns.size));
+    if (isHTMLElement(colBtn)) this.updateHiddenToolbarBadge(colBtn, state.hiddenColumns.size);
     this.renderActiveViewControls();
   }
 
@@ -4551,6 +4676,12 @@ export class DatabaseView extends FileView {
     button.querySelector(".db-toolbar-badge")?.remove();
     if (count <= 0) return;
     button.createSpan({ cls: "db-toolbar-badge", text: String(count) });
+  }
+
+  private updateHiddenToolbarBadge(button: HTMLElement, count: number): void {
+    button.querySelector(".db-toolbar-badge")?.remove();
+    button.setAttribute("aria-label", count > 0 ? t("toolbar.propertiesHidden", { count }) : t("toolbar.properties"));
+    if (count > 0) button.createSpan({ cls: "db-toolbar-badge db-toolbar-badge-neutral", text: t("toolbar.hiddenCount", { count }) });
   }
 
   /** Render column management panel below the toolbar */
@@ -4599,6 +4730,26 @@ export class DatabaseView extends FileView {
         this.refresh();
       },
       onViewTypeChange: (value) => this.setViewType(value),
+      onOpenLayoutOptions: (anchor) => {
+        const active = this.getConfig();
+        if (!active) return;
+        this.closeHeaderPopovers();
+        if (active.viewType === "chart") {
+          this.toggleChartOptions(anchor);
+          return;
+        }
+        this.calendarToolbarRenderer.togglePopover(this.containerEl_ || anchor, anchor, active, {
+          database: this.getActiveDb(),
+          createRecordIconField: () => { void this.openCreateRecordIconFieldModal("view"); },
+          onChange: (label) => {
+            this.pendingUndoLabel = label || t("undo.viewTypeConfig");
+            this.scheduleConfigSave();
+            this.refresh();
+          },
+          getInvalidEventCount: () => this.getTimelineInvalidEventCount(),
+          openInvalidEvents: () => { void this.openInvalidEvents(); },
+        });
+      },
       onDatabaseChange: (label) => {
         this.pendingUndoLabel = label || t("undo.viewConfig");
         this.scheduleConfigSave(undefined, this.getCurrentDatabaseMutationTarget());
@@ -4663,6 +4814,25 @@ export class DatabaseView extends FileView {
         if (!db) return;
         db.icon = value || undefined;
         this.pendingUndoLabel = t("recordIcon.icons");
+        await this.saveConfigImmediately();
+        this.rerenderToolbar();
+      },
+    });
+  }
+
+  private openViewIconPicker(anchor: HTMLElement, viewIndex: number): void {
+    const database = this.getActiveDb();
+    const view = database?.views[viewIndex];
+    if (!database || !view) return;
+    openIconPickerPopover({
+      anchor,
+      current: view.icon,
+      recent: this.getRecentRecordIcons(),
+      onRecentChange: (recent) => this.setRecentRecordIcons(recent),
+      onSelect: async (value) => {
+        const current = this.getActiveDb()?.views[viewIndex];
+        if (!current) return;
+        current.icon = value || undefined;
         await this.saveConfigImmediately();
         this.rerenderToolbar();
       },
@@ -6364,20 +6534,36 @@ export class DatabaseView extends FileView {
     const viewTypeChanged = this.lastRenderedViewType !== viewType;
     this.applyViewTypeClass(viewType);
     if (!config.schema || !config.schema.columns || config.schema.columns.length === 0) {
-      this.containerEl_?.createDiv({
-        cls: "db-empty",
-        text: t("empty.noColumnsDb", { name: dbConfig.name }),
-      });
+      if (this.containerEl_) {
+        this.emptyStateRenderer.renderCard(this.containerEl_, {
+          reason: "no-columns",
+          message: t("empty.noColumnsDb", { name: dbConfig.name }),
+          actions: [{
+            label: t("emptyState.addProperty"),
+            icon: "plus",
+            primary: true,
+            onClick: () => { void this.openCreatePropertyModal(); },
+          }],
+        });
+      }
       return;
     }
     let records: NoteRecord[];
     try {
       records = this.includePendingNewRecords(this.dataSource.getRecordsForConfig(this.getEffectiveConfig(dbConfig)));
     } catch (e) {
-      this.containerEl_?.createDiv({
-        cls: "db-empty",
-        text: t("errors.readFolderFailed", { error: String(e) }),
-      });
+      if (this.containerEl_) {
+        this.emptyStateRenderer.renderCard(this.containerEl_, {
+          reason: "read-failed",
+          message: t("errors.readFolderFailed", { error: String(e) }),
+          actions: [{
+            label: t("emptyState.retry"),
+            icon: "refresh-cw",
+            primary: true,
+            onClick: () => this.refresh(),
+          }],
+        });
+      }
       return;
     }
 
@@ -6622,20 +6808,29 @@ export class DatabaseView extends FileView {
   }
 
   private renderEmptyDashboard(): void {
-    const empty = this.containerEl_?.createDiv({ cls: "db-empty db-empty-dashboard" });
-    empty?.createDiv({ cls: "db-empty-title", text: t("empty.noDatabases") });
-    const button = empty?.createEl("button", {
-      cls: "mod-cta db-empty-action",
-      text: t("empty.createFirstDatabase"),
+    const container = this.containerEl_;
+    if (!container) return;
+    const empty = container.createDiv({ cls: "db-empty db-empty-dashboard" });
+    this.emptyStateRenderer.renderHero(empty, {
+      title: t("emptyState.noDatabaseTitle"),
+      desc: t("emptyState.noDatabaseMessage"),
+      onCreateDb: () => this.addDatabase(),
+      onSelectPreset: (preset) => this.addDatabase(preset),
     });
-    button?.addEventListener("click", () => {
-      void this.addDatabase();
-    });
+  }
+
+  private openDateConfiguration(): void {
+    const button = this.containerEl_?.querySelector<HTMLElement>(".db-calendar-timeline-options-toolbar-btn");
+    button?.click();
   }
 
   private renderSummary(config?: ViewConfig): void {
     if (!this.containerEl_) return;
     const viewConfig = config || this.getConfig();
+    if (viewConfig.viewType === "table") {
+      this.containerEl_.querySelector(".db-summary")?.remove();
+      return;
+    }
     const isChart = viewConfig.viewType === "chart";
     this.summaryRenderer.render(
       this.containerEl_,
@@ -7200,6 +7395,12 @@ export class DatabaseView extends FileView {
         this.getSelectionPaths(table, "tbody tr[data-note-database-row-path]")
       );
     });
+    this.containerEl_.querySelectorAll<HTMLElement>(".db-group-divider-row").forEach((divider) => {
+      this.syncScopeSelectionInput(
+        divider.querySelector<HTMLInputElement>(".db-group-divider-checkbox"),
+        this.getGroupDividerSelectionPaths(divider),
+      );
+    });
     this.containerEl_.querySelectorAll<HTMLElement>(".db-board-column").forEach((column) => {
       this.syncScopeSelectionInput(
         column.querySelector<HTMLInputElement>(".db-board-column-checkbox"),
@@ -7246,6 +7447,17 @@ export class DatabaseView extends FileView {
     return Array.from(parent.querySelectorAll<HTMLElement>(selector))
       .map((el) => el.getAttribute("data-note-database-row-path") || "")
       .filter((path) => path.length > 0);
+  }
+
+  private getGroupDividerSelectionPaths(divider: HTMLElement): string[] {
+    const raw = divider.getAttribute("data-note-database-group-paths");
+    if (!raw) return [];
+    try {
+      const paths: unknown = JSON.parse(raw);
+      return Array.isArray(paths) ? paths.filter((path): path is string => typeof path === "string" && path.length > 0) : [];
+    } catch {
+      return [];
+    }
   }
 
   private syncScopeSelectionInput(input: HTMLInputElement | null, paths: string[]): void {
@@ -7583,6 +7795,66 @@ export class DatabaseView extends FileView {
       .filter((element) => !element.matches("col"));
   }
 
+  private getEmptyStateOptions(config: ViewConfig): EmptyStateOptions | undefined {
+    const diagnostics = this.pipelineDiagnostics;
+    if (diagnostics.visibleCount !== 0) return undefined;
+    const state = this.vs();
+    const reason = getEmptyStateReason(diagnostics);
+    const clearSearch = () => {
+      state.searchText = "";
+      this.refresh({ viewport: "reset-top" });
+    };
+    const resetFilters = () => {
+      state.filters = [];
+      state.filterTree = undefined;
+      state.statusFilter = "";
+      this.scheduleViewStateSave();
+      this.refresh({ viewport: "reset-top" });
+    };
+    const actions: NonNullable<EmptyStateOptions["actions"]> = [];
+    if (reason === "search-empty" || reason === "filter-and-search-empty") {
+      actions.push({ label: t("emptyState.clearSearch"), icon: "x", onClick: clearSearch });
+    }
+    if (reason === "filter-empty" || reason === "filter-and-search-empty") {
+      actions.push({ label: t("emptyState.resetFilters"), icon: "filter-x", onClick: resetFilters });
+    }
+    if (reason === "filter-and-search-empty") {
+      actions.push({
+        label: t("emptyState.clearAll"),
+        icon: "rotate-ccw",
+        primary: true,
+        onClick: () => {
+          state.searchText = "";
+          state.filters = [];
+          state.filterTree = undefined;
+          state.statusFilter = "";
+          this.scheduleViewStateSave();
+          this.refresh({ viewport: "reset-top" });
+        },
+      });
+    }
+    if (reason === "limit-empty") {
+      actions.push({
+        label: t("emptyState.showAll"),
+        icon: "list",
+        primary: true,
+        onClick: () => {
+          config.resultLimit = undefined;
+          this.scheduleConfigSave();
+          this.refresh({ viewport: "reset-top" });
+        },
+      });
+    }
+    return {
+      reason,
+      title: reason === "search-empty"
+        ? t("emptyState.searchResultsFor", { query: state.searchText.trim() })
+        : undefined,
+      diagnostics: formatEmptyStateDiagnostics(diagnostics),
+      actions: actions.length > 0 ? actions : undefined,
+    };
+  }
+
   private schedulePendingNewRowRevealRetry(): void {
     if (!this.pendingNewFilePath) return;
     const pending = this.pendingNewRecords.get(this.pendingNewFilePath);
@@ -7620,7 +7892,12 @@ export class DatabaseView extends FileView {
 
   private renderTable(config: ViewConfig): void {
     if (!this.containerEl_) return;
-    this.tableRenderer.renderTable(this.containerEl_, this.getStatefulConfig(config), this.rows);
+    this.tableRenderer.renderTable(
+      this.containerEl_,
+      this.getStatefulConfig(config),
+      this.rows,
+      this.getEmptyStateOptions(config),
+    );
   }
 
   private setupRowInteractions(tr: HTMLElement, row: RowData, context?: RowCreateContext): void {
@@ -9715,14 +9992,27 @@ export class DatabaseView extends FileView {
       return this.queryEngine.sortGroups(groups, order);
     };
     const flattened = flattenGroupTree(buildGroupTree(this.rows, fields, config, groupFn));
-    this.tableRenderer.renderGroupedTable(this.containerEl_, this.getStatefulConfig(config), this.rows, flattened, fields[0]);
+    this.tableRenderer.renderGroupedTable(
+      this.containerEl_,
+      this.getStatefulConfig(config),
+      this.rows,
+      flattened,
+      fields[0],
+      this.getEmptyStateOptions(config),
+    );
   }
 
   private renderBoard(config: ViewConfig): void {
     if (!this.containerEl_) return;
     const groupField = config.boardGroupField || this.vs().groupByField || this.getDefaultBoardField(config);
     const groups = this.getBoardGroups(config, groupField);
-    this.boardRenderer.render(this.containerEl_, this.getStatefulConfig(config), groups, groupField);
+    this.boardRenderer.render(
+      this.containerEl_,
+      this.getStatefulConfig(config),
+      groups,
+      groupField,
+      this.getEmptyStateOptions(config),
+    );
   }
 
   private renderGallery(config: ViewConfig): void {
@@ -9732,10 +10022,16 @@ export class DatabaseView extends FileView {
       const field = this.vs().groupByField;
       const groups = withEmptyOptionGroups(config, field, this.queryEngine.groupBy(this.rows, field, [], config.schema.columns.find((c) => c.key === field), config));
       const order = getEffectiveGroupOrder(config, field, groups.map((group) => group.key));
-      this.galleryRenderer.renderGrouped(this.containerEl_, renderConfig, this.queryEngine.sortGroups(groups, order), field);
+      this.galleryRenderer.renderGrouped(
+        this.containerEl_,
+        renderConfig,
+        this.queryEngine.sortGroups(groups, order),
+        field,
+        this.getEmptyStateOptions(config),
+      );
       return;
     }
-    this.galleryRenderer.render(this.containerEl_, renderConfig, this.rows);
+    this.galleryRenderer.render(this.containerEl_, renderConfig, this.rows, this.getEmptyStateOptions(config));
   }
 
   private renderList(config: ViewConfig): void {
@@ -9745,10 +10041,16 @@ export class DatabaseView extends FileView {
       const field = this.vs().groupByField;
       const groups = withEmptyOptionGroups(config, field, this.queryEngine.groupBy(this.rows, field, [], config.schema.columns.find((c) => c.key === field), config));
       const order = getEffectiveGroupOrder(config, field, groups.map((group) => group.key));
-      this.listRenderer.renderGrouped(this.containerEl_, renderConfig, this.queryEngine.sortGroups(groups, order), field);
+      this.listRenderer.renderGrouped(
+        this.containerEl_,
+        renderConfig,
+        this.queryEngine.sortGroups(groups, order),
+        field,
+        this.getEmptyStateOptions(config),
+      );
       return;
     }
-    this.listRenderer.render(this.containerEl_, renderConfig, this.rows);
+    this.listRenderer.render(this.containerEl_, renderConfig, this.rows, this.getEmptyStateOptions(config));
   }
 
   private getStatefulConfig(config: ViewConfig): ViewConfig {
@@ -10217,13 +10519,33 @@ export class DatabaseView extends FileView {
     return toValue;
   }
 
-  private sortByColumn(col: ColumnDef): void {
+  private sortByColumn(col: ColumnDef, append = false): void {
     const config = this.getConfig();
     if (!config) return;
     ensureColumnOrder(config);
     const state = this.vs();
-    const currentRule = state.sortRules.length === 1 && state.sortRules[0].field === col.key
-      ? state.sortRules[0]
+    const existingRules = state.sortRules.length > 0
+      ? [...state.sortRules]
+      : state.sortColumn
+        ? [{ field: state.sortColumn, direction: state.sortDirection }]
+        : [];
+    if (append) {
+      const nextRules = existingRules;
+      const index = nextRules.findIndex((rule) => rule.field === col.key);
+      if (index < 0) nextRules.push({ field: col.key, direction: "asc" });
+      else if (nextRules[index].direction === "asc") nextRules[index] = { field: col.key, direction: "desc" };
+      else nextRules.splice(index, 1);
+      state.sortColumn = undefined;
+      state.sortDirection = "asc";
+      state.sortRules = nextRules;
+      this.pendingUndoLabel = t("undo.sortConfig");
+      this.scheduleViewStateSave();
+      this.updateToolbarIndicators();
+      this.refresh();
+      return;
+    }
+    const currentRule = existingRules.length === 1 && existingRules[0].field === col.key
+      ? existingRules[0]
       : undefined;
     state.sortColumn = undefined;
     state.sortDirection = "asc";
@@ -10240,11 +10562,20 @@ export class DatabaseView extends FileView {
     this.refresh();
   }
 
+  private sortColumnDirection(col: ColumnDef, direction: "asc" | "desc"): void {
+    const state = this.vs();
+    state.sortColumn = undefined;
+    state.sortDirection = "asc";
+    state.sortRules = [{ field: col.key, direction }];
+    this.pendingUndoLabel = t("undo.sortConfig");
+    this.scheduleViewStateSave();
+    this.updateToolbarIndicators();
+    this.refresh();
+  }
+
   private getColumnSortDirection(col: ColumnDef): "asc" | "desc" | null {
     const state = this.vs();
-    const rule = state.sortRules.length === 1
-      ? state.sortRules[0]
-      : undefined;
+    const rule = state.sortRules.find((candidate) => candidate.field === col.key);
     if (rule?.field === col.key) return rule.direction;
     if (state.sortRules.length === 0 && state.sortColumn === col.key) return state.sortDirection;
     return null;
@@ -10260,6 +10591,50 @@ export class DatabaseView extends FileView {
     this.pendingUndoLabel = t("undo.sortConfig");
     this.scheduleViewStateSave();
     this.updateToolbarIndicators();
+    this.refresh();
+  }
+
+  private filterByColumn(col: ColumnDef): void {
+    const config = this.getConfig();
+    if (!config) return;
+    const state = this.vs();
+    const rule: FilterRule = { field: col.key, op: "notempty" };
+    if (state.filters.some((existing) => filtersEqual(existing, rule))) return;
+    state.filters.push(rule);
+    let filterTree = state.filterTree ?? buildViewFilterTree(state.filters.slice(0, -1), state.filterLogic);
+    if (filterTree && "type" in filterTree) {
+      if (filterTree.type === "group" && (filterTree.logic === "and" || filterTree.rules.every((item) => !("type" in item)))) {
+        filterTree = { ...filterTree, logic: "and" };
+      } else {
+        filterTree = { type: "group", logic: "and", rules: [filterTree] };
+      }
+    }
+    state.filterLogic = "and";
+    state.filterTree = appendLeaf(filterTree, rule, "and");
+    this.pendingUndoLabel = t("undo.filterConfig");
+    this.viewStateStore.persist(config, state);
+    this.scheduleConfigSave();
+    this.rerenderToolbar();
+    this.refresh();
+  }
+
+  private changeColumnCalculation(columnKey: string, calculation: string | null): void {
+    const config = this.getConfig();
+    if (!config) return;
+    const next = [...(config.summaryRules || [])];
+    const index = next.findIndex((rule) => rule.field === columnKey);
+    if (calculation) {
+      const rule = { field: columnKey, summary: calculation };
+      if (index >= 0) next[index] = rule;
+      else next.push(rule);
+    } else {
+      for (let i = next.length - 1; i >= 0; i -= 1) {
+        if (next[i].field === columnKey) next.splice(i, 1);
+      }
+    }
+    config.summaryRules = next.length > 0 ? next : undefined;
+    this.pendingUndoLabel = t("undo.summaryConfig");
+    this.scheduleConfigSave();
     this.refresh();
   }
 

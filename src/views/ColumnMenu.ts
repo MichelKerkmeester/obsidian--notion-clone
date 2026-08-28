@@ -1,4 +1,4 @@
-import { Menu, setIcon } from "obsidian";
+import { Menu, MenuItem, setIcon } from "obsidian";
 import { COLUMN_TYPE_LABELS, isOptionColumnType, OPTION_COLORS } from "../data/ColumnTypes";
 import { isFileFieldKey } from "../data/FileFields";
 import { ColumnDef, ComputedFieldDef, NumberDisplayStyle, NumberDisplayConfig, StatusColor } from "../data/types";
@@ -6,6 +6,8 @@ import { isNumberDisplayColumn } from "../data/ColumnDisplay";
 import { t } from "../i18n";
 import { renderPropertyTypeIcon } from "./PropertyTypeIcon";
 import { createDropdownField, DropdownOption } from "./DropdownField";
+import { installPopoverAutoClose } from "./PopoverAutoClose";
+import { positionToolbarPopover } from "./PopoverPosition";
 import { getTextLinkSchemeChoice, TEXT_LINK_SCHEME_MENU_OPTIONS, TextLinkSchemeChoice } from "../data/TextLinkSchemeMenu";
 
 export interface ColumnMenuActions {
@@ -25,6 +27,8 @@ export interface ColumnMenuActions {
   setNumberDisplayStyle(col: ColumnDef, style: NumberDisplayStyle): void;
   updateNumberDisplayConfig(col: ColumnDef, partial: Partial<NumberDisplayConfig>): void;
   sortByColumn(col: ColumnDef): void;
+  sortColumnDirection?(col: ColumnDef, direction: "asc" | "desc"): void;
+  filterByColumn?(col: ColumnDef): void;
   getColumnSortDirection?(col: ColumnDef): "asc" | "desc" | null;
   clearColumnSort?(col: ColumnDef): void;
   openColumnWidthPanel?(col: ColumnDef): void;
@@ -63,17 +67,22 @@ export class ColumnMenu {
     const includeLayoutActions = options.includeLayoutActions !== false;
     const includeWidthActions = options.includeWidthActions !== false;
     const menu = new Menu().setUseNativeMenu(false);
-    if (options.onClose) menu.onHide(options.onClose);
+    if (options.onClose || anchorEl) {
+      menu.onHide(() => {
+        options.onClose?.();
+        anchorEl?.focus({ preventScroll: true });
+      });
+    }
 
     if (!readonly) {
-      menu.addItem((item) => item
+      this.addMenuItem(menu, (item) => item
         .setTitle(t("menu.editProperty", { name: col.label }))
         .setIcon("edit")
         .onClick(() => this.actions.editColumn(col))
       );
 
       if (isOptionColumnType(col.type) && !isFileFieldKey(col.key)) {
-        menu.addItem((item) => item
+        this.addMenuItem(menu, (item) => item
           .setTitle(t("menu.editOptions"))
           .setIcon("palette")
           .onClick(() => this.actions.editStatusOptions(col))
@@ -81,49 +90,59 @@ export class ColumnMenu {
       }
 
       if (col.type === "computed") {
-        menu.addItem((item) => item
+        this.addMenuItem(menu, (item) => item
           .setTitle(t("menu.openFormula"))
           .setIcon("sigma")
           .onClick(() => this.actions.editFormula(col))
         );
       }
       if ((col.type === "relation" || col.type === "rollup") && this.actions.editRelationRollup) {
-        menu.addItem((item) => item
+        this.addMenuItem(menu, (item) => item
           .setTitle(col.type === "relation" ? t("relation.configure") : t("rollup.configure"))
           .setIcon(col.type === "relation" ? "link" : "sigma")
           .onClick(() => this.actions.editRelationRollup?.(col))
         );
       }
 
-      menu.addItem((item) => {
+      this.addMenuItem(menu, (item) => {
         const isFileField = isFileFieldKey(col.key);
         item.setTitle(t("menu.changeType")).setIcon("layers");
         item.setDisabled(isFileField);
         if (isFileField) return item;
         const menuItem = item as unknown as MenuItemWithDom;
-        const open = (evt: MouseEvent) => {
+        this.decorateMenuItem(menuItem.dom);
+        menuItem.dom?.setAttr("aria-haspopup", "listbox");
+        menuItem.dom?.setAttr("aria-expanded", "false");
+        const open = (evt: MouseEvent | KeyboardEvent) => {
+          if (evt instanceof KeyboardEvent && !["ArrowRight", "Enter", " "].includes(evt.key)) return;
           evt.preventDefault();
           evt.stopPropagation();
+          evt.stopImmediatePropagation();
+          menuItem.dom?.setAttr("aria-expanded", "true");
           this.showColumnTypePopover(evt, col, menu, menuItem.dom);
         };
-        menuItem.dom?.addEventListener("mouseenter", open);
-        menuItem.dom?.addEventListener("mousedown", open, true);
         menuItem.dom?.addEventListener("click", open, true);
+        menuItem.dom?.addEventListener("keydown", open);
         return item;
       });
 
       if (isNumberDisplayColumn(col, options.computedFields)) {
-        menu.addItem((item) => {
+        this.addMenuItem(menu, (item) => {
           item.setTitle(t("menu.numberDisplayStyle")).setIcon("paintbrush");
           const menuItem = item as unknown as MenuItemWithDom;
-          const open = (evt: MouseEvent) => {
+          this.decorateMenuItem(menuItem.dom);
+          menuItem.dom?.setAttr("aria-haspopup", "listbox");
+          menuItem.dom?.setAttr("aria-expanded", "false");
+          const open = (evt: MouseEvent | KeyboardEvent) => {
+            if (evt instanceof KeyboardEvent && !["ArrowRight", "Enter", " "].includes(evt.key)) return;
             evt.preventDefault();
             evt.stopPropagation();
+            evt.stopImmediatePropagation();
+            menuItem.dom?.setAttr("aria-expanded", "true");
             this.showNumberDisplayStylePopover(evt, col, menu, menuItem.dom);
           };
-          menuItem.dom?.addEventListener("mouseenter", open);
-          menuItem.dom?.addEventListener("mousedown", open, true);
           menuItem.dom?.addEventListener("click", open, true);
+          menuItem.dom?.addEventListener("keydown", open);
           const numberStyleKey = col.numberDisplayStyle === "rating" ? "menu.numberStyleRating"
             : col.numberDisplayStyle === "progress" ? "menu.numberStyleProgress"
             : col.numberDisplayStyle === "ring" ? "menu.numberStyleRing"
@@ -133,17 +152,22 @@ export class ColumnMenu {
         });
       }
       if (col.type === "text" && !isFileFieldKey(col.key)) {
-        menu.addItem((item) => {
+        this.addMenuItem(menu, (item) => {
           item.setTitle(t("menu.numberDisplayStyle")).setIcon("paintbrush");
           const menuItem = item as unknown as MenuItemWithDom;
-          const open = (evt: MouseEvent) => {
+          this.decorateMenuItem(menuItem.dom);
+          menuItem.dom?.setAttr("aria-haspopup", "listbox");
+          menuItem.dom?.setAttr("aria-expanded", "false");
+          const open = (evt: MouseEvent | KeyboardEvent) => {
+            if (evt instanceof KeyboardEvent && !["ArrowRight", "Enter", " "].includes(evt.key)) return;
             evt.preventDefault();
             evt.stopPropagation();
+            evt.stopImmediatePropagation();
+            menuItem.dom?.setAttr("aria-expanded", "true");
             this.showTextRenderModePopover(evt, col, menu, menuItem.dom);
           };
-          menuItem.dom?.addEventListener("mouseenter", open);
-          menuItem.dom?.addEventListener("mousedown", open, true);
           menuItem.dom?.addEventListener("click", open, true);
+          menuItem.dom?.addEventListener("keydown", open);
           const textMode = col.textRenderMode ?? "plain";
           this.appendItemHint(menuItem.dom, t(
             textMode === "link" ? "menu.textRenderLink"
@@ -158,17 +182,17 @@ export class ColumnMenu {
     if (!readonly && includeLayoutActions) {
       menu.addSeparator();
 
-      menu.addItem((item) => item
+      this.addMenuItem(menu, (item) => item
         .setTitle(t("menu.insertLeft"))
         .setIcon("arrow-left-to-line")
         .onClick(() => this.actions.insertColumn(col, "left"))
       );
-      menu.addItem((item) => item
+      this.addMenuItem(menu, (item) => item
         .setTitle(t("menu.insertRight"))
         .setIcon("arrow-right-to-line")
         .onClick(() => this.actions.insertColumn(col, "right"))
       );
-      menu.addItem((item) => item
+      this.addMenuItem(menu, (item) => item
         .setTitle(t("menu.duplicateColumn"))
         .setIcon("copy")
         .onClick(() => this.actions.duplicateColumn(col))
@@ -179,12 +203,12 @@ export class ColumnMenu {
     if (!readonly && includeLayoutActions) {
       menu.addSeparator();
 
-      menu.addItem((item) => item
+      this.addMenuItem(menu, (item) => item
         .setTitle(t("menu.moveUp"))
         .setIcon("arrow-up")
         .onClick(() => this.actions.moveColumn(col.key, -1))
       );
-      menu.addItem((item) => item
+      this.addMenuItem(menu, (item) => item
         .setTitle(t("menu.moveDown"))
         .setIcon("arrow-down")
         .onClick(() => this.actions.moveColumn(col.key, 1))
@@ -193,44 +217,64 @@ export class ColumnMenu {
 
     menu.addSeparator();
 
-    menu.addItem((item) => item
+    this.addMenuItem(menu, (item) => item
       .setTitle(t("menu.hideProperty", { name: col.label }))
       .setIcon("eye-off")
       .onClick(() => this.actions.hideColumn(col))
     );
-    menu.addItem((item) => item
+    this.addMenuItem(menu, (item) => item
       .setTitle(col.wrap ? t("menu.disableWrap") : t("menu.enableWrap"))
       .setIcon("wrap-text")
       .onClick(() => this.actions.toggleColumnWrap(col))
     );
+    if (this.actions.filterByColumn) {
+      this.addMenuItem(menu, (item) => item
+        .setTitle(t("menu.filterByValue", { name: col.label }))
+        .setIcon("filter")
+        .onClick(() => this.actions.filterByColumn?.(col))
+      );
+    }
     if (this.isPhoneLayout() && includeWidthActions && !readonly && this.actions.openColumnWidthPanel) {
-      menu.addItem((item) => item
+      this.addMenuItem(menu, (item) => item
         .setTitle(t("menu.adjustColumnWidth"))
         .setIcon("ruler-dimension-line")
         .onClick(() => this.actions.openColumnWidthPanel?.(col))
       );
     }
     if (includeWidthActions && this.actions.autoFitColumn) {
-      menu.addItem((item) => item
+      this.addMenuItem(menu, (item) => item
         .setTitle(t("menu.autoFitColumn"))
         .setIcon("ruler-dimension-line")
         .onClick(() => this.actions.autoFitColumn?.(col))
       );
     }
     if (includeWidthActions && this.actions.autoFitAllColumns) {
-      menu.addItem((item) => item
+      this.addMenuItem(menu, (item) => item
         .setTitle(t("menu.autoFitAllColumns"))
         .setIcon("scan-line")
         .onClick(() => this.actions.autoFitAllColumns?.())
       );
     }
-    menu.addItem((item) => item
-      .setTitle(t("menu.sortBy", { name: col.label }))
-      .setIcon("arrow-up-down")
-      .onClick(() => this.actions.sortByColumn(col))
-    );
+    if (this.actions.sortColumnDirection) {
+      this.addMenuItem(menu, (item) => item
+        .setTitle(t("menu.sortAscending"))
+        .setIcon("arrow-up")
+        .onClick(() => this.actions.sortColumnDirection?.(col, "asc"))
+      );
+      this.addMenuItem(menu, (item) => item
+        .setTitle(t("menu.sortDescending"))
+        .setIcon("arrow-down")
+        .onClick(() => this.actions.sortColumnDirection?.(col, "desc"))
+      );
+    } else {
+      this.addMenuItem(menu, (item) => item
+        .setTitle(t("menu.sortBy", { name: col.label }))
+        .setIcon("arrow-up-down")
+        .onClick(() => this.actions.sortByColumn(col))
+      );
+    }
     if (this.actions.getColumnSortDirection?.(col)) {
-      menu.addItem((item) => item
+      this.addMenuItem(menu, (item) => item
         .setTitle(t("menu.clearSort"))
         .setIcon("x")
         .onClick(() => this.actions.clearColumnSort?.(col))
@@ -240,7 +284,7 @@ export class ColumnMenu {
     if (!readonly && includeLayoutActions) {
       menu.addSeparator();
 
-      menu.addItem((item) => item
+      this.addMenuItem(menu, (item) => item
         .setTitle(t("menu.deleteColumn"))
         .setIcon("trash")
         .setDisabled(col.key === "file.name")
@@ -269,17 +313,17 @@ export class ColumnMenu {
       panel.createDiv({ cls: "db-dropdown-section-title", text: group.title });
       for (const type of group.types) {
         const row = panel.createEl("button", {
-          cls: `db-dropdown-option has-icon${type === col.type ? " is-selected" : ""}`,
+          cls: `db-dropdown-option db-menu-item has-icon${type === col.type ? " is-selected" : ""}`,
           attr: { type: "button", role: "option", "aria-selected": type === col.type ? "true" : "false" },
         });
-        const check = row.createSpan({ cls: "db-dropdown-option-check" });
+        const check = row.createSpan({ cls: "db-dropdown-option-check db-menu-item-check" });
         if (type === col.type) setIcon(check, "check");
-        renderPropertyTypeIcon(row.createSpan({ cls: "db-dropdown-option-icon db-column-type-option-icon" }), {
+        renderPropertyTypeIcon(row.createSpan({ cls: "db-dropdown-option-icon db-menu-item-icon db-column-type-option-icon" }), {
           key: type,
           label: labels[type],
           type,
         });
-        row.createSpan({ cls: "db-dropdown-option-label", text: labels[type] });
+        row.createSpan({ cls: "db-dropdown-option-label db-menu-item-label", text: labels[type] });
         row.onclick = () => {
           cleanup();
           menu.hide();
@@ -290,7 +334,7 @@ export class ColumnMenu {
   }
 
   private showNumberDisplayStylePopover(evt: MouseEvent | KeyboardEvent, col: ColumnDef, _menu: Menu, anchorEl?: HTMLElement): void {
-    const { panel } = this.createColumnMenuSubpopover(evt, "db-column-display-style-popover db-column-number-style-popover", anchorEl);
+    const { panel, cleanup } = this.createColumnMenuSubpopover(evt, "db-column-display-style-popover db-column-number-style-popover", anchorEl);
     const RATING_ICONS = ["star", "flame", "heart", "thumbs-up", "gem"];
     const DIVISOR_PRESETS = ["100", "10"];
     const DEFAULT_CUSTOM_COLOR: StatusColor = "green";
@@ -302,6 +346,7 @@ export class ColumnMenu {
 
     const render = (): void => {
       panel.empty();
+      this.addSubmenuBackButton(panel, cleanup, anchorEl);
       panel.setAttr("role", "listbox");
       const cfg = col.numberDisplayConfig ?? {};
       const currentStyle = col.numberDisplayStyle ?? "plain";
@@ -316,13 +361,13 @@ export class ColumnMenu {
       ];
       for (const { value, key } of styles) {
         const row = styleSection.createEl("button", {
-          cls: `db-dropdown-option has-icon${value === currentStyle ? " is-selected" : ""}`,
+          cls: `db-dropdown-option db-menu-item has-icon${value === currentStyle ? " is-selected" : ""}`,
           attr: { type: "button", role: "option", "aria-selected": value === currentStyle ? "true" : "false" },
         });
-        const check = row.createSpan({ cls: "db-dropdown-option-check" });
+        const check = row.createSpan({ cls: "db-dropdown-option-check db-menu-item-check" });
         if (value === currentStyle) setIcon(check, "check");
-        this.renderNumberStyleMenuIcon(row.createSpan({ cls: "db-dropdown-option-icon db-number-style-menu-icon" }), value);
-        row.createSpan({ cls: "db-dropdown-option-label", text: t(key) });
+        this.renderNumberStyleMenuIcon(row.createSpan({ cls: "db-dropdown-option-icon db-menu-item-icon db-number-style-menu-icon" }), value);
+        row.createSpan({ cls: "db-dropdown-option-label db-menu-item-label", text: t(key) });
         row.onclick = () => { this.actions.setNumberDisplayStyle(col, value); render(); };
       }
 
@@ -383,6 +428,9 @@ export class ColumnMenu {
           (checked) => { this.actions.updateNumberDisplayConfig(col, { progressShowValue: checked }); render(); });
         this.renderColorControls(optSection, cfg.color, (color) => setColor(color ?? DEFAULT_CUSTOM_COLOR), setColor);
       }
+      if (anchorEl?.isConnected) {
+        positionToolbarPopover(panel, anchorEl, { preferredWidth: 292, minWidth: 292, maxWidth: 292, preferredSide: "right", gap: 6 });
+      }
     };
     render();
   }
@@ -392,10 +440,39 @@ export class ColumnMenu {
     dom.createSpan({ cls: "db-menu-item-current", text });
   }
 
+  private addMenuItem(menu: Menu, configure: (item: MenuItem) => unknown): void {
+    menu.addItem((item) => {
+      configure(item);
+      this.decorateMenuItem((item as unknown as MenuItemWithDom).dom);
+      return item;
+    });
+  }
+
+  private decorateMenuItem(dom: HTMLElement | undefined): void {
+    dom?.addClass("db-menu-item");
+    dom?.querySelector<HTMLElement>(".menu-item-icon")?.addClass("db-menu-item-icon");
+    dom?.querySelector<HTMLElement>(".menu-item-title")?.addClass("db-menu-item-label");
+  }
+
+  private addSubmenuBackButton(panel: HTMLElement, cleanup: () => void, anchorEl?: HTMLElement): void {
+    const back = panel.createEl("button", {
+      cls: "db-column-menu-back db-menu-item",
+      attr: { type: "button", "aria-label": t("menu.back") },
+    });
+    back.createSpan({ cls: "db-menu-item-label", text: t("menu.back") });
+    back.onclick = (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      cleanup();
+      anchorEl?.focus({ preventScroll: true });
+    };
+  }
+
   private showTextRenderModePopover(evt: MouseEvent | KeyboardEvent, col: ColumnDef, _menu: Menu, anchorEl?: HTMLElement): void {
-    const { panel } = this.createColumnMenuSubpopover(evt, "db-column-display-style-popover db-column-text-style-popover", anchorEl);
+    const { panel, cleanup } = this.createColumnMenuSubpopover(evt, "db-column-display-style-popover db-column-text-style-popover", anchorEl);
     const render = (): void => {
       panel.empty();
+      this.addSubmenuBackButton(panel, cleanup, anchorEl);
       panel.setAttr("role", "listbox");
       const section = this.createDisplayOptionSection(panel, t("menu.numberDisplayStyle"));
       const options: { value: "plain" | "link" | "markdown"; key: string; icon: string }[] = [
@@ -406,13 +483,13 @@ export class ColumnMenu {
       const current: "plain" | "link" | "markdown" = col.textRenderMode ?? "plain";
       for (const { value, key, icon } of options) {
         const row = section.createEl("button", {
-          cls: `db-dropdown-option has-icon${value === current ? " is-selected" : ""}`,
+          cls: `db-dropdown-option db-menu-item has-icon${value === current ? " is-selected" : ""}`,
           attr: { type: "button", role: "option", "aria-selected": value === current ? "true" : "false" },
         });
-        const check = row.createSpan({ cls: "db-dropdown-option-check" });
+        const check = row.createSpan({ cls: "db-dropdown-option-check db-menu-item-check" });
         if (value === current) setIcon(check, "check");
-        setIcon(row.createSpan({ cls: "db-dropdown-option-icon" }), icon);
-        row.createSpan({ cls: "db-dropdown-option-label", text: t(key) });
+        setIcon(row.createSpan({ cls: "db-dropdown-option-icon db-menu-item-icon" }), icon);
+        row.createSpan({ cls: "db-dropdown-option-label db-menu-item-label" , text: t(key) });
         row.onclick = () => { this.actions.setTextRenderMode(col, value); render(); };
       }
 
@@ -421,14 +498,17 @@ export class ColumnMenu {
       for (const option of TEXT_LINK_SCHEME_MENU_OPTIONS) {
         const selected = option.value === currentScheme;
         const row = schemeSection.createEl("button", {
-          cls: `db-dropdown-option has-icon${selected ? " is-selected" : ""}`,
+          cls: `db-dropdown-option db-menu-item has-icon${selected ? " is-selected" : ""}`,
           attr: { type: "button", role: "option", "aria-selected": selected ? "true" : "false" },
         });
-        const check = row.createSpan({ cls: "db-dropdown-option-check" });
+        const check = row.createSpan({ cls: "db-dropdown-option-check db-menu-item-check" });
         if (selected) setIcon(check, "check");
-        setIcon(row.createSpan({ cls: "db-dropdown-option-icon" }), option.icon);
-        row.createSpan({ cls: "db-dropdown-option-label", text: t(option.labelKey) });
+        setIcon(row.createSpan({ cls: "db-dropdown-option-icon db-menu-item-icon" }), option.icon);
+        row.createSpan({ cls: "db-dropdown-option-label db-menu-item-label" , text: t(option.labelKey) });
         row.onclick = () => { this.actions.setTextLinkScheme(col, option.value); render(); };
+      }
+      if (anchorEl?.isConnected) {
+        positionToolbarPopover(panel, anchorEl, { preferredWidth: 292, minWidth: 292, maxWidth: 292, preferredSide: "right", gap: 6 });
       }
     };
     render();
@@ -569,92 +649,42 @@ export class ColumnMenu {
   ): { panel: HTMLElement; cleanup: () => void } {
     this.closeActiveColumnSubmenu();
     const doc = window.activeDocument;
-    const view = doc.defaultView || window;
     doc.querySelectorAll(".db-column-menu-subpopover, .db-column-type-popover, .db-number-style-popover, .db-column-display-style-popover, .db-column-number-style-popover, .db-column-text-style-popover")
       .forEach((existing) => existing.remove());
     const panel = doc.body.createDiv({ cls: `db-dropdown-popover db-column-menu-subpopover ${className}` });
     const estimatedWidth = className.includes("db-column-display-style-popover") ? 292 : 220;
-    if (anchorEl?.isConnected) {
-      const rect = anchorEl.getBoundingClientRect();
-      panel.setCssProps({
-        position: "fixed",
-        left: `${Math.max(8, Math.min(rect.right + 6, view.innerWidth - estimatedWidth - 8))}px`,
-        top: `${Math.max(8, Math.min(rect.top, view.innerHeight - 320))}px`,
-      });
-    } else {
-      const point = "clientX" in evt ? { x: evt.clientX, y: evt.clientY } : undefined;
-      if (point) {
-        panel.setCssProps({
-          position: "fixed",
-          left: `${Math.max(8, Math.min(point.x + 8, view.innerWidth - estimatedWidth - 8))}px`,
-          top: `${Math.max(8, Math.min(point.y - 8, view.innerHeight - 320))}px`,
-        });
-      }
-    }
-
-    let pointerInsidePanel = false;
-    let pointerInsideAnchor = anchorEl?.matches(":hover") === true;
-    let hoverTimer: number | undefined;
     let closed = false;
+    let removeAutoClose: (() => void) | undefined;
     let cleanup: () => void = () => undefined;
-
-    const clearHoverTimer = () => {
-      if (hoverTimer === undefined) return;
-      view.clearTimeout(hoverTimer);
-      hoverTimer = undefined;
-    };
-    const scheduleHoverClose = () => {
-      clearHoverTimer();
-      hoverTimer = view.setTimeout(() => {
-        hoverTimer = undefined;
-        const nestedDropdownActive = doc.querySelector(".db-displayopt-dropdown-popover:hover") != null;
-        if (!pointerInsidePanel && !pointerInsideAnchor && !nestedDropdownActive) cleanup();
-      }, 140);
-    };
-    const onAnchorEnter = () => {
-      pointerInsideAnchor = true;
-      clearHoverTimer();
-    };
-    const onAnchorLeave = () => {
-      pointerInsideAnchor = false;
-      scheduleHoverClose();
-    };
-    const onPanelEnter = () => {
-      pointerInsidePanel = true;
-      clearHoverTimer();
-    };
-    const onPanelLeave = () => {
-      pointerInsidePanel = false;
-      scheduleHoverClose();
-    };
-    const onOutside = (event: MouseEvent) => {
-      const target = event.target as Node | null;
-      if (target && (panel.contains(target) || (anchorEl?.contains(target) ?? false))) return;
-      cleanup();
-    };
-    const onKey = (event: KeyboardEvent) => {
-      if (event.key === "Escape") cleanup();
-    };
-    const timer = view.setTimeout(() => doc.addEventListener("mousedown", onOutside, true), 0);
-    doc.addEventListener("keydown", onKey, true);
-    anchorEl?.addEventListener("pointerenter", onAnchorEnter);
-    anchorEl?.addEventListener("pointerleave", onAnchorLeave);
-    panel.addEventListener("pointerenter", onPanelEnter);
-    panel.addEventListener("pointerleave", onPanelLeave);
     cleanup = () => {
       if (closed) return;
       closed = true;
-      clearHoverTimer();
-      view.clearTimeout(timer);
-      doc.removeEventListener("mousedown", onOutside, true);
-      doc.removeEventListener("keydown", onKey, true);
-      anchorEl?.removeEventListener("pointerenter", onAnchorEnter);
-      anchorEl?.removeEventListener("pointerleave", onAnchorLeave);
-      panel.removeEventListener("pointerenter", onPanelEnter);
-      panel.removeEventListener("pointerleave", onPanelLeave);
+      removeAutoClose?.();
       panel.remove();
+      anchorEl?.setAttr("aria-expanded", "false");
       if (this.activeSubmenuCleanup === cleanup) this.activeSubmenuCleanup = undefined;
     };
+    this.addSubmenuBackButton(panel, cleanup, anchorEl);
+    panel.addEventListener("keydown", (event) => {
+      if (event.key !== "ArrowLeft") return;
+      event.preventDefault();
+      cleanup();
+      anchorEl?.focus({ preventScroll: true });
+    });
+    if (anchorEl?.isConnected) {
+      positionToolbarPopover(panel, anchorEl, {
+        preferredWidth: estimatedWidth,
+        minWidth: estimatedWidth,
+        maxWidth: estimatedWidth,
+        preferredSide: "right",
+        gap: 6,
+      });
+    } else {
+      const point = "clientX" in evt ? { x: evt.clientX, y: evt.clientY } : undefined;
+      const view = doc.defaultView || window;
+      if (point) panel.setCssProps({ position: "fixed", left: `${Math.max(8, Math.min(point.x + 8, view.innerWidth - estimatedWidth - 8))}px`, top: `${Math.max(8, Math.min(point.y - 8, view.innerHeight - 320))}px` });
+    }
+    removeAutoClose = installPopoverAutoClose({ panel, anchorEl, close: cleanup });
     this.activeSubmenuCleanup = cleanup;
     return { panel, cleanup };
   }

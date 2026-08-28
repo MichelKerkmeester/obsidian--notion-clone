@@ -107,6 +107,7 @@ export class CalendarTimelineToolbarRenderer {
       { value: "week", text: t("viewConfig.timelineScale.week") },
       { value: "month", text: t("viewConfig.timelineScale.month") },
       { value: "quarter", text: t("viewConfig.timelineScale.quarter") },
+      { value: "year", text: t("viewConfig.timelineScale.year") },
     ], config.timelineScale || "week", (value) => {
       const nextScale = this.normalizeTimelineScale(value);
       if (actions.updateTimelineScale) {
@@ -208,7 +209,7 @@ export class CalendarTimelineToolbarRenderer {
   }
 
   private normalizeTimelineScale(value: string): NonNullable<ViewConfig["timelineScale"]> {
-    return value === "day" || value === "month" || value === "quarter" ? value : "week";
+    return value === "day" || value === "month" || value === "quarter" || value === "year" ? value : "week";
   }
 
   private refreshTimelineScaleDependentOptions(config: ViewConfig, actions: CalendarTimelineToolbarActions): void {

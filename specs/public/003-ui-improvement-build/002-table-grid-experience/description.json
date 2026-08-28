@@ -1,0 +1,31 @@
+{
+  "specFolder": "public/003-ui-improvement-build/002-table-grid-experience",
+  "description": "The table/grid view is the primary data surface of the Note Database plugin, but its user experience is compromised by structural layout stutter,",
+  "keywords": [
+    "table",
+    "grid",
+    "view",
+    "primary",
+    "data",
+    "surface",
+    "note",
+    "database",
+    "plugin",
+    "user",
+    "experience",
+    "compromised",
+    "structural",
+    "layout",
+    "stutter"
+  ],
+  "lastUpdated": "2026-08-27T19:53:18.596Z",
+  "specId": "002",
+  "folderSlug": "table-grid-experience",
+  "parentChain": [
+    "public",
+    "003-ui-improvement-build"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": [],
+  "level": "2"
+}

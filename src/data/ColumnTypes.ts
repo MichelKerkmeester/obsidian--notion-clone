@@ -1,6 +1,7 @@
 import { t } from "../i18n";
 import { stringifyValue } from "./Stringify";
 import { ColumnDef, ComputedFieldDef, StatusColor, StatusOptionDef, StatusPresetDef } from "./types";
+import { STATUS_COLORS } from "./StatusColors";
 
 export const STATUS_OPTION_PRESETS: Array<{ key: string; label: string; options: StatusOptionDef[] }> = [
   {
@@ -143,10 +144,7 @@ export function isComputedFieldType(value: unknown): value is ComputedFieldDef["
   return value === "number" || value === "text" || value === "date" || value === "datetime" || value === "checkbox";
 }
 
-export const OPTION_COLORS: StatusColor[] = [
-  "blue", "green", "orange", "purple", "pink", "yellow", "red", "brown",
-  "gray", "teal", "cyan", "lime", "indigo", "violet", "rose", "slate",
-];
+export const OPTION_COLORS: StatusColor[] = [...STATUS_COLORS];
 
 export function isOptionColumnType(type: ColumnDef["type"]): boolean {
   return type === "select" || type === "multi-select" || type === "status";

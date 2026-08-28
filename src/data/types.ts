@@ -10,6 +10,16 @@ export interface RecordSchema {
 
 export type NumberDisplayStyle = "plain" | "rating" | "progress" | "ring";
 
+export type RowDensity = "compact" | "default" | "comfortable";
+
+export type GalleryCardSizePreset = "small" | "medium" | "large";
+export type GalleryImageAspectRatioPreset = "square" | "banner" | "portrait" | "landscape";
+
+export type TableCalculationKind =
+  | "SUM" | "AVERAGE" | "MEDIAN" | "MIN" | "MAX" | "RANGE" | "STDDEV"
+  | "COUNT" | "UNIQUE" | "EMPTY" | "FILLED" | "CHECKED" | "UNCHECKED"
+  | "EARLIEST" | "LATEST";
+
 /** How a date/datetime group field is grouped.
  *  "exact" = datetime by full value / date by dateKey (default);
  *  "date" = ignore time, group by dateKey; "smart" = relative buckets (Phase 2). */
@@ -210,7 +220,7 @@ export type ChartDonutCenterMode = "hidden" | "total" | "aggregation";
 export type ChartValueAxisRange = "auto" | "zero-based" | "custom";
 export type ChartReferenceLineType = "constant" | "average" | "median" | "min" | "max";
 export type ChartReferenceLineStyle = "solid" | "dashed" | "dotted";
-export type TimelineScale = "day" | "week" | "month" | "quarter";
+export type TimelineScale = "day" | "week" | "month" | "quarter" | "year";
 export type GroupOrderMode = "text-asc" | "text-desc" | "number-asc" | "number-desc" | "date-asc" | "date-desc" | "checkbox-false-first" | "checkbox-true-first" | "option-asc" | "option-desc" | "multi-select-priority";
 export const NO_TITLE_FIELD = "__none";
 
@@ -309,6 +319,8 @@ export interface DatabaseConfig {
 export interface ViewConfig {
   id?: string;
   name: string;
+  /** Optional emoji or lucide:<id>@<color> token shown beside the view name. */
+  icon?: string;
   sourceFolder: string;
   /** File collection rules. When absent, sourceFolder is used for backwards compatibility. */
   sourceRules?: SourceRule[];
@@ -356,6 +368,8 @@ export interface ViewConfig {
   boardImageFit?: "cover" | "contain";
   /** Default display width applied to all properties in the active view. */
   defaultColumnWidth?: number;
+  /** Vertical table density. Undefined uses the default 34px row token. */
+  rowDensity?: RowDensity;
   /** Explicit column key order. When absent, schema.columns array order is used. */
   columnOrder?: string[];
   /** Per-view property widths imported from Obsidian Bases columnSize. Falls back to shared column widths. */
@@ -387,6 +401,8 @@ export interface ViewConfig {
   expandedGroupRows?: Record<string, Record<string, number>>;
   /** Manual board card order keyed by board group field and group key. */
   boardCardOrders?: Record<string, Record<string, string[]>>;
+  /** Board groups hidden from this view without changing their source values. */
+  boardHiddenGroups?: Record<string, string[]>;
   /** Manual row ordering. Key = file.path, value = base62 rank string. */
   manualOrder?: { ranks?: Record<string, string> };
   /** Gallery cover image property. */
@@ -397,6 +413,10 @@ export interface ViewConfig {
   galleryImageAspectRatio?: number;
   /** Gallery card width in pixels. */
   galleryCardSize?: number;
+  /** Gallery card width preset; the numeric width remains the source of truth for custom values. */
+  galleryCardSizePreset?: GalleryCardSizePreset;
+  /** Gallery cover aspect preset for the compact gallery controls. */
+  galleryImageAspectRatioPreset?: GalleryImageAspectRatioPreset;
   /** Gallery cover image fit mode. */
   galleryImageFit?: "cover" | "contain";
   /** Render currently visible properties on cards/lists even when the value is empty. */

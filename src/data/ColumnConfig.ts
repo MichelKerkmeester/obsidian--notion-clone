@@ -98,11 +98,17 @@ export function getVisibleColumns(
   const autoHidden = new Set<string>();
   const explicitlyOrderedKeys = new Set(config.columnOrder || []);
   const allCols = getColumnsInOrder(config);
+  // Once the result set is narrowed, an absent value is a data result rather than
+  // evidence that the property is unused. Keep the schema stable while filtering.
+  const hasActiveNarrowing = Boolean(
+    state.searchText.trim() || state.statusFilter || state.filters.length > 0 || state.filterTree,
+  );
   for (const col of allCols) {
     if (rows.length === 0) continue;
     if (col.type === "computed" || col.type === "rollup" || col.key === "file.name" || isOptionColumnType(col.type) || col.type === "checkbox") continue;
     if (pendingShowColumns.has(col.key)) continue;
     if (explicitlyOrderedKeys.has(col.key)) continue;
+    if (hasActiveNarrowing) continue;
     const hasValue = rows.some((row) => {
       const val = isBaseFileField(col.key)
         ? getRowFileFieldValue(row, col.key)

@@ -36,11 +36,19 @@ export function resolveViewSelection(
   const viewIds = entries[databaseIndex]?.viewIds || [];
   if (viewIds.length === 0) return { databaseIndex, viewIndex: 0 };
 
-  const identityViewIndex = identity.viewId ? viewIds.indexOf(identity.viewId) : -1;
-  const viewIndex = identityViewIndex >= 0
-    ? identityViewIndex
-    : clampIndex(fallbackViewIndex, viewIds.length);
+  const viewIndex = resolveViewIndex(viewIds, identity.viewId, fallbackViewIndex);
   return { databaseIndex, viewIndex };
+}
+
+/** Resolve a tab selection at the moment it is activated, after the view list
+ * may have been reordered or refreshed. */
+export function resolveViewIndex(
+  viewIds: readonly (string | undefined)[],
+  viewId: string | undefined,
+  fallbackIndex = 0,
+): number {
+  const identityIndex = viewId ? viewIds.indexOf(viewId) : -1;
+  return identityIndex >= 0 ? identityIndex : clampIndex(fallbackIndex, viewIds.length);
 }
 
 function clampIndex(index: number, length: number): number {

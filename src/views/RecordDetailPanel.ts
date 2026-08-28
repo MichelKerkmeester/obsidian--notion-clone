@@ -21,6 +21,7 @@ import { renderInlineMarkdown, resolveInlineImageSrc, valueToTooltip } from "./I
 import { markNoteHoverLink } from "./HoverLinkPreview";
 import { positionToolbarPopover } from "./PopoverPosition";
 import { renderDelayedExternalLink } from "./CellRenderer";
+import { renderCardField } from "./CardFieldRenderer";
 
 /**
  * 日历 / 时间线事件卡片「展开为可编辑浮动面板」。
@@ -233,40 +234,24 @@ function renderRecordField(
   const empty = isEmptyValue(value) && displayType !== "checkbox";
   const displayValue = empty ? getEmptyDisplayValue(displayType) : value;
 
-  const field = parent.createDiv({ cls: "db-record-detail-field" });
-  field.setAttribute("data-note-database-column-key", col.key);
-  actions.applyConditionalFormat?.(field, row, config, col.key);
-  if (actions.isReadOnly || isReadonlyFileField(col.key)) field.addClass("is-readonly");
-  if (col.wrap) field.addClass("db-board-card-field-wrap");
-  field.style.setProperty("--db-card-field-width", `${getFieldWidth(config, col)}px`);
-  field.createSpan({ cls: "db-record-detail-field-label", text: col.label });
-  setFieldTooltip(field, displayValue, col.label);
-
-  const valueEl = field.createDiv({ cls: "db-board-card-value" });
-  if (empty) valueEl.addClass("db-card-empty-placeholder");
-
-  // 右键字段 → 列菜单（对齐看板 attachColumnContextMenu；只读视图不接 showColumnMenu 则不绑）
-  const showColumnMenu = actions.showColumnMenu;
-  if (showColumnMenu) {
-    field.addEventListener("contextmenu", (event) => {
-      if (isHTMLElement(event.target) && event.target.closest("input, select, textarea, button, a")) return;
-      event.preventDefault();
-      event.stopPropagation();
-      showColumnMenu(event, col, field);
-    });
-  }
-
-  // 点击字段值进入内联编辑（仿 BoardRenderer.renderPreviewValue 的守卫）
-  field.addEventListener("click", (event) => {
-    if (actions.isReadOnly || isReadonlyFileField(col.key)) return;
-    if (isHTMLElement(event.target) && event.target.closest("a, button, input, textarea, .db-cell-editing")) return;
-    event.stopPropagation();
-    actions.editCell(valueEl, row, col, event);
+  const field = renderCardField({
+    app, row, col, config, value: displayValue, displayType, empty,
+    fieldClass: "db-record-detail-field", valueClass: "db-board-card-value", labelClass: "db-record-detail-field-label",
+    badgesClass: "db-board-card-badges", linkClass: "db-board-card-link", fieldWidth: getFieldWidth(config, col),
+    wrap: col.wrap, readOnly: actions.isReadOnly || isReadonlyFileField(col.key),
+    applyConditionalFormat: actions.applyConditionalFormat,
+    onEdit: (target, editRow, editCol, event) => actions.editCell(target, editRow, editCol, event),
+    onOpenTarget: (targetRow, target, external) => openTarget(app, targetRow, target, external),
+    onShowColumnMenu: actions.showColumnMenu
+      ? (event, menuCol, anchorEl) => actions.showColumnMenu?.(event, menuCol, anchorEl || fieldPlaceholder())
+      : undefined,
   });
+  if (actions.isReadOnly || isReadonlyFileField(col.key)) field.addClass("is-readonly");
+  parent.appendChild(field);
+}
 
-  renderRecordValue(valueEl, row, col, displayValue, displayType, app, actions);
-  // renderRecordValue 部分分支（file 特殊 / select / number）未给 valueEl 设 title；统一补上，hover 值显示完整内容
-  setFieldTooltip(valueEl, displayValue);
+function fieldPlaceholder(): HTMLElement {
+  return window.activeDocument.body;
 }
 
 /** 渲染字段值展示（移植自 BoardRenderer.renderPreviewValue 的展示分支，markdown/link/image 首版降级为文本）。 */

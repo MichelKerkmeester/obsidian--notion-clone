@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import { updateColumnKeyReferences } from "./ColumnConfig";
+import { getVisibleColumns, updateColumnKeyReferences } from "./ColumnConfig";
 import { flattenLeaves } from "./ViewFilterTree";
 import type { DatabaseViewState } from "../views/ViewStateStore";
 import type { FilterRule, SourceRuleNode, ViewConfig } from "./types";
@@ -111,5 +111,32 @@ describe("updateColumnKeyReferences keeps filters and filterTree coherent", () =
     expect(config.filterTree).toEqual(filterTree);
     expect(state.filters).toEqual([leaf("keep", "1")]);
     expect(state.filterTree).toEqual(filterTree);
+  });
+});
+
+describe("getVisibleColumns keeps the table schema stable for narrowed results", () => {
+  it("does not auto-hide a property just because the filtered rows have no value", () => {
+    const config = viewConfig({
+      schema: {
+        columns: [{ key: "category", label: "Category", type: "text" }],
+        computedFields: [],
+      },
+    });
+    const row = { file: { path: "one.md" }, frontmatter: {}, computed: {} } as never;
+    const state = viewState({ filters: [leaf("category", "missing")] });
+
+    expect(getVisibleColumns(config, [row], state, new Set())).toHaveLength(1);
+  });
+
+  it("still auto-hides an unused property before any narrowing is active", () => {
+    const config = viewConfig({
+      schema: {
+        columns: [{ key: "category", label: "Category", type: "text" }],
+        computedFields: [],
+      },
+    });
+    const row = { file: { path: "one.md" }, frontmatter: {}, computed: {} } as never;
+
+    expect(getVisibleColumns(config, [row], viewState(), new Set())).toHaveLength(0);
   });
 });

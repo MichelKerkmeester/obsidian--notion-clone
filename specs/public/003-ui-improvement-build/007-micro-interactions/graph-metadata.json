@@ -1,0 +1,219 @@
+{
+  "schema_version": 1,
+  "packet_id": "public/003-ui-improvement-build/007-micro-interactions",
+  "spec_folder": "public/003-ui-improvement-build/007-micro-interactions",
+  "parent_id": "public/003-ui-improvement-build",
+  "children_ids": [],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "micro-interactions",
+      "selection bounding perimeter",
+      "floating selection dock",
+      "batch drag count badge",
+      "edge auto scroller",
+      "formula error diagnostic badge",
+      "inline validation shake",
+      "broken relation pill",
+      "direct tag dismissal",
+      "interactive rating progress",
+      "drag drop feedback state",
+      "persistence aware inline editor"
+    ],
+    "key_topics": [
+      "micro-interactions",
+      "selection",
+      "bounding",
+      "perimeter",
+      "floating",
+      "dock",
+      "batch",
+      "drag",
+      "count",
+      "badge",
+      "edge",
+      "auto"
+    ],
+    "importance_tier": "high",
+    "status": "planned",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "checklist.md",
+      "implementation-summary.md"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "checklist.md",
+        "kind": "doc",
+        "path": "checklist.md",
+        "source": "derived"
+      },
+      {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Sensory Feedback",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Selection Surfaces",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Problem Statement While",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Note Database",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Cluttered Cell Selection Inset Shadows",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Plan",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Technical Context",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Obsidian View Component Engine",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Pointer Events",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Breakdown",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Notation",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Time Estimate",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Completion Criteria",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Quality Checklist",
+        "kind": "proper_noun",
+        "path": "checklist.md",
+        "source": "derived"
+      },
+      {
+        "name": "Verification Protocol",
+        "kind": "proper_noun",
+        "path": "checklist.md",
+        "source": "derived"
+      },
+      {
+        "name": "Completion Impact",
+        "kind": "proper_noun",
+        "path": "checklist.md",
+        "source": "derived"
+      },
+      {
+        "name": "Code Quality",
+        "kind": "proper_noun",
+        "path": "checklist.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Summary",
+        "kind": "proper_noun",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "While the Note Database plugin provides rich underlying database querying and calculations, its micro-interactions and tactile feedback surfaces suffer from visual fragmentation, timer-driven state destruction, layout jitter, and silent failure modes:",
+    "created_at": "2026-08-27T19:53:20.711Z",
+    "last_save_at": "2026-08-28T01:12:28.736Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "checklist.md",
+      "implementation-summary.md"
+    ],
+    "source_fingerprint": "sha256:20ded5a7fe2f886655abbfe00ad1ac470b2acffa5ef94d1bfe149e512dd0eb96",
+    "source_doc_hashes": {
+      "spec.md": "1537fd65df217772d3edb51ce5c7a08fd71d73764abb2edf61e2015605c951d6",
+      "plan.md": "c023839472d9d61a27abd6197a278495d74b2e14f977dfe359555670e6449a8e",
+      "tasks.md": "9b7f73b7ecf8ea51594f2fcefb68e0ced76a6120c7d3cf1d6cd7068528020f31",
+      "checklist.md": "bbef222da38213f8ae21d5847b6f2b12ccd0444fb1d82f1d846b06894b20e77d",
+      "implementation-summary.md": "d078ef0ed3fca09fe83e7f1b4e8c7e0aa435c51aeb2195e36281a77ea47eefb0"
+    },
+    "last_active_child_id": null,
+    "last_active_at": null
+  }
+}

@@ -16,7 +16,9 @@ export function syncTableColumnLayouts(root: ParentNode, config: ViewConfig): vo
     const baseWidths = keys.map((key) => getColumnWidth(columnByKey.get(key), config));
     const selectionCol = colgroup.querySelector<HTMLElement>("col.db-select-colgroup");
     const selectionWidth = selectionCol ? getSelectionColumnWidth(selectionCol) : 0;
-    const layout = getTableLayout(selectionWidth, baseWidths, getAvailableTableWidth(table));
+    const recordIconWidth = colgroup.querySelector("col.db-record-icon-colgroup") ? 28 : 0;
+    const addColumnWidth = colgroup.querySelector("col.db-add-column-colgroup") ? 42 : 0;
+    const layout = getTableLayout(selectionWidth + recordIconWidth + addColumnWidth, baseWidths, getAvailableTableWidth(table));
 
     table.style.width = `${layout.tableWidth}px`;
     table.style.minWidth = `${layout.tableWidth}px`;

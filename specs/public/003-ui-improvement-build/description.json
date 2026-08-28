@@ -1,0 +1,30 @@
+{
+  "specFolder": "public/003-ui-improvement-build",
+  "description": "The forked Note Database plugin is functionally rich — 12 column types, 7 view types, live relations and rollups — but its interface has not kept pace",
+  "keywords": [
+    "forked",
+    "note",
+    "database",
+    "plugin",
+    "functionally",
+    "rich",
+    "column",
+    "types",
+    "view",
+    "live",
+    "relations",
+    "rollups",
+    "interface",
+    "kept",
+    "pace"
+  ],
+  "lastUpdated": "2026-08-27T18:58:31.183Z",
+  "specId": "003",
+  "folderSlug": "ui-improvement-build",
+  "parentChain": [
+    "public"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": [],
+  "level": "2"
+}

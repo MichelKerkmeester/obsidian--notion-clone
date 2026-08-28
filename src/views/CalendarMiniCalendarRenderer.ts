@@ -3,6 +3,7 @@ import { addDateKeyDays, dateKeyDaysBetween } from "../data/CalendarDateTime";
 import { buildCalendarTimelineEvents, CalendarDayModel, CalendarTimelineEvent } from "../data/CalendarTimelineModel";
 import { RowData, ViewConfig } from "../data/types";
 import { getEffectiveLocale, t } from "../i18n";
+import { isImeComposing } from "../data/KeyboardUtils";
 
 export type MiniCalendarMode = "day" | "month" | "year";
 
@@ -35,6 +36,7 @@ export interface MiniCalendarOptions {
   onNext(): void;
   onTitleClick(): void;
   onSelectDate(dateKey: string): void;
+  onNavigateDate?(dateKey: string): void;
   onSelectMonth(monthKey: string): void;
   onSelectYear(year: number): void;
   onSelectToday(todayKey: string): void;
@@ -133,15 +135,23 @@ export function renderMiniCalendar(options: MiniCalendarOptions): void {
 
 function renderMiniCalendarDayGrid(options: MiniCalendarOptions): void {
   const weekdayRow = options.popover.createDiv({ cls: "db-calendar-mini-weekdays" });
+  weekdayRow.setAttr("role", "row");
   for (const label of options.weekdays) {
-    weekdayRow.createDiv({ cls: "db-calendar-mini-weekday", text: label });
+    weekdayRow.createDiv({ cls: "db-calendar-mini-weekday", text: label, attr: { role: "columnheader" } });
   }
 
   const grid = options.popover.createDiv({ cls: "db-calendar-mini-grid" });
+  grid.setAttr("role", "grid");
+  grid.setAttr("aria-label", options.monthTitle);
+  const selectedDate = getFirstSelectedDate(options);
+  const focusIndex = Math.max(0, options.weeks.flat().findIndex((day) => day.dateKey === selectedDate || day.dateKey === options.todayKey));
+  const rows = options.weeks.flat();
   for (const week of options.weeks) {
+    const row = grid.createDiv({ cls: "db-calendar-mini-week", attr: { role: "row" } });
     for (const day of week) {
+      const dayIndex = rows.findIndex((candidate) => candidate.dateKey === day.dateKey);
       const hasEvents = options.eventIndex.dateKeys.has(day.dateKey) || day.events.length > 0;
-      const cell = grid.createEl("button", {
+      const cell = row.createEl("button", {
         cls: [
           "db-calendar-mini-day",
           day.inCurrentMonth ? "" : "is-outside",
@@ -149,7 +159,15 @@ function renderMiniCalendarDayGrid(options: MiniCalendarOptions): void {
           options.selectedKeys.has(day.dateKey) ? "is-selected" : "",
           hasEvents ? "has-events" : "",
         ].filter(Boolean).join(" "),
-        attr: { type: "button", "data-date-key": day.dateKey, title: day.dateKey },
+        attr: {
+          type: "button",
+          role: "gridcell",
+          "data-date-key": day.dateKey,
+          title: day.dateKey,
+          "aria-selected": options.selectedKeys.has(day.dateKey) ? "true" : "false",
+          ...(day.dateKey === options.todayKey ? { "aria-current": "date" } : {}),
+          tabindex: dayIndex === focusIndex ? "0" : "-1",
+        },
       });
       cell.createSpan({ cls: "db-calendar-mini-day-num", text: String(Number(day.dateKey.slice(8, 10))) });
       cell.createSpan({ cls: "db-calendar-mini-day-dot" });
@@ -159,10 +177,50 @@ function renderMiniCalendarDayGrid(options: MiniCalendarOptions): void {
       };
     }
   }
+  grid.onkeydown = (event) => {
+    if (isImeComposing(event)) return;
+    const target = event.target as HTMLElement | null;
+    const cells = Array.from(grid.querySelectorAll<HTMLButtonElement>("[role=gridcell]"));
+    const index = target ? cells.indexOf(target as HTMLButtonElement) : -1;
+    if (index < 0) return;
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      cells[index].click();
+      return;
+    }
+    let nextIndex: number | undefined;
+    if (event.key === "ArrowLeft") nextIndex = index - 1;
+    if (event.key === "ArrowRight") nextIndex = index + 1;
+    if (event.key === "ArrowUp") nextIndex = index - 7;
+    if (event.key === "ArrowDown") nextIndex = index + 7;
+    if (event.key === "Home") nextIndex = index - (index % 7);
+    if (event.key === "End") nextIndex = index + (6 - (index % 7));
+    if (event.key === "PageUp") {
+      event.preventDefault();
+      options.onPrevious();
+      return;
+    }
+    if (event.key === "PageDown") {
+      event.preventDefault();
+      options.onNext();
+      return;
+    }
+    if (nextIndex == null || nextIndex < 0 || nextIndex >= cells.length) return;
+    event.preventDefault();
+    const next = cells[nextIndex];
+    const dateKey = next.getAttribute("data-date-key");
+    if (dateKey && next.hasClass("is-outside")) {
+      options.onNavigateDate?.(dateKey);
+      return;
+    }
+    focusCalendarCell(cells, nextIndex);
+  };
 }
 
 function renderMiniCalendarMonthGrid(options: MiniCalendarOptions): void {
   const grid = options.popover.createDiv({ cls: "db-calendar-mini-view-grid is-month-grid" });
+  grid.setAttr("role", "grid");
+  grid.setAttr("aria-label", getMiniCalendarTitle(options));
   const eventIndex = options.eventIndex;
   const selectedMonth = getSelectedMonthKey(options);
   for (let month = 0; month < 12; month++) {
@@ -175,7 +233,15 @@ function renderMiniCalendarMonthGrid(options: MiniCalendarOptions): void {
         options.todayKey.startsWith(monthKey) ? "is-today" : "",
         hasEvents ? "has-events" : "",
       ].filter(Boolean).join(" "),
-      attr: { type: "button", "data-month-key": monthKey, title: monthKey },
+      attr: {
+        type: "button",
+        role: "gridcell",
+        "data-month-key": monthKey,
+        title: monthKey,
+        "aria-selected": selectedMonth === monthKey ? "true" : "false",
+        ...(options.todayKey.startsWith(monthKey) ? { "aria-current": "date" } : {}),
+        tabindex: selectedMonth === monthKey ? "0" : "-1",
+      },
     });
     cell.createSpan({ cls: "db-calendar-mini-view-label", text: getMonthLabel(options.visibleYear, month) });
     cell.createSpan({ cls: "db-calendar-mini-view-dot" });
@@ -184,10 +250,13 @@ function renderMiniCalendarMonthGrid(options: MiniCalendarOptions): void {
       options.onSelectMonth(monthKey);
     };
   }
+  addCalendarGridNavigation(grid, 4, options.onPrevious, options.onNext);
 }
 
 function renderMiniCalendarYearGrid(options: MiniCalendarOptions): void {
   const grid = options.popover.createDiv({ cls: "db-calendar-mini-view-grid is-year-grid" });
+  grid.setAttr("role", "grid");
+  grid.setAttr("aria-label", getMiniCalendarTitle(options));
   const eventIndex = options.eventIndex;
   const selectedYear = getSelectedYear(options);
   for (let offset = 0; offset < 12; offset++) {
@@ -201,7 +270,15 @@ function renderMiniCalendarYearGrid(options: MiniCalendarOptions): void {
         options.todayKey.startsWith(yearKey) ? "is-today" : "",
         hasEvents ? "has-events" : "",
       ].filter(Boolean).join(" "),
-      attr: { type: "button", "data-year": yearKey, title: yearKey },
+      attr: {
+        type: "button",
+        role: "gridcell",
+        "data-year": yearKey,
+        title: yearKey,
+        "aria-selected": selectedYear === year ? "true" : "false",
+        ...(options.todayKey.startsWith(yearKey) ? { "aria-current": "date" } : {}),
+        tabindex: selectedYear === year ? "0" : "-1",
+      },
     });
     cell.createSpan({ cls: "db-calendar-mini-view-label", text: yearKey });
     cell.createSpan({ cls: "db-calendar-mini-view-dot" });
@@ -210,6 +287,49 @@ function renderMiniCalendarYearGrid(options: MiniCalendarOptions): void {
       options.onSelectYear(year);
     };
   }
+  addCalendarGridNavigation(grid, 4, options.onPrevious, options.onNext);
+}
+
+function addCalendarGridNavigation(
+  grid: HTMLElement,
+  columns: number,
+  onPrevious: () => void,
+  onNext: () => void,
+): void {
+  grid.onkeydown = (event) => {
+    if (isImeComposing(event)) return;
+    const target = event.target as HTMLElement | null;
+    const cells = Array.from(grid.querySelectorAll<HTMLButtonElement>("[role=gridcell]"));
+    const index = target ? cells.indexOf(target as HTMLButtonElement) : -1;
+    if (index < 0) return;
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      cells[index].click();
+      return;
+    }
+    let nextIndex: number | undefined;
+    if (event.key === "ArrowLeft") nextIndex = index - 1;
+    if (event.key === "ArrowRight") nextIndex = index + 1;
+    if (event.key === "ArrowUp") nextIndex = index - columns;
+    if (event.key === "ArrowDown") nextIndex = index + columns;
+    if (event.key === "Home") nextIndex = index - (index % columns);
+    if (event.key === "End") nextIndex = index + (columns - 1 - (index % columns));
+    if (event.key === "PageUp") { event.preventDefault(); onPrevious(); return; }
+    if (event.key === "PageDown") { event.preventDefault(); onNext(); return; }
+    if (nextIndex == null || nextIndex < 0 || nextIndex >= cells.length) return;
+    event.preventDefault();
+    focusCalendarCell(cells, nextIndex);
+  };
+}
+
+function focusCalendarCell(cells: HTMLButtonElement[], index: number): void {
+  cells.forEach((cell, cellIndex) => cell.setAttr("tabindex", cellIndex === index ? "0" : "-1"));
+  cells[index]?.focus();
+  cells[index]?.scrollIntoView?.({ block: "nearest" });
+}
+
+function getFirstSelectedDate(options: MiniCalendarOptions): string | undefined {
+  return Array.from(options.selectedKeys)[0];
 }
 
 function addDateRangeToIndex(index: MiniCalendarEventIndex, start: string, end: string): void {

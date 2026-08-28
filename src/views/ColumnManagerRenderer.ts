@@ -45,6 +45,7 @@ export class ColumnManagerRenderer {
 
     const panel = containerEl.createDiv({
       cls: "db-column-manager",
+      attr: { id: "db-column-manager" },
     });
     const header = containerEl.querySelector(".db-header") || containerEl.querySelector(".db-toolbar");
     if (header?.parentElement) {

@@ -14,7 +14,7 @@ import {
 	EVENT_CARD_MIN_HEIGHT,
 } from "../data/CalendarLayoutModel";
 import { CalendarTitleParts, formatCalendarTitleParts } from "../data/CalendarTitleFormatter";
-import { buildCalendarMonthModel, CalendarDayModel, CalendarTimelineEvent, getCalendarAnchorMonth, getDefaultEventDateField, shiftCalendarMonth } from "../data/CalendarTimelineModel";
+import { buildCalendarMonthModel, CalendarDayModel, CalendarTimelineEvent, collectUnscheduledTimelineRows, getCalendarAnchorMonth, getDefaultEventDateField, shiftCalendarMonth } from "../data/CalendarTimelineModel";
 import {
 	CALENDAR_TIME_SNAP_MINUTES,
 	addDateKeyDays,
@@ -29,7 +29,7 @@ import {
 	parseDateKeyToUtc,
 	snapMinutes,
 } from "../data/CalendarDateTime";
-import { CalendarEventCreateOptions, CalendarEventDateChange, resolveAllDayResizeChange, resolveDayMoveChange, resolveDayRangeResize, resolveTimedDragRange } from "../data/CalendarInteractionModel";
+import { CalendarEventCreateOptions, CalendarEventDateChange, resolveAllDayResizeChange, resolveCalendarCreateDateRange, resolveDayMoveChange, resolveDayRangeResize, resolveTimedDragRange } from "../data/CalendarInteractionModel";
 import { CalendarTimelineSearchVisibleRange } from "../data/CalendarTimelineSearchResults";
 import { formatDateTimeRangeDisplay, formatDateValueDisplay, parseDateTimeParts } from "../data/DateTimeFormat";
 import { ColumnDef, RowData, ViewConfig } from "../data/types";
@@ -37,9 +37,11 @@ import { getEffectiveLocale, t } from "../i18n";
 import { openDropdownMenu } from "./DropdownField";
 import { buildMiniCalendarEventIndex, MiniCalendarMode, renderMiniCalendar } from "./CalendarMiniCalendarRenderer";
 import { markNoteHoverLink } from "./HoverLinkPreview";
+import { EmptyStateReason, EmptyStateRenderer } from "./EmptyStateRenderer";
 
 const TIME_SNAP_MINUTES = CALENDAR_TIME_SNAP_MINUTES;
 const TIMED_EVENT_TIME_VISIBILITY_HEIGHT = 42;
+const UNSCHEDULED_MIME = "application/x-note-database-unscheduled";
 
 export interface CalendarRendererActions {
 	openRow(row: RowData): void;
@@ -56,6 +58,7 @@ export interface CalendarRendererActions {
 	getCalendarInvalidEventCount?(): number | Promise<number>;
 	/** 打开无效时间事件修复弹窗。 */
 	openCalendarInvalidEvents?(): void;
+	openDateConfig?(): void;
 	readonly isReadOnly?: boolean;
 }
 
@@ -83,7 +86,9 @@ export class CalendarRenderer {
 	private calendarScaleMenuCleanup: (() => void) | null = null;
 	private pendingFlashDateKey: string | null = null;
 	private calendarRoot: HTMLElement | null = null;
+	private backlogCollapsed = false;
 	private currentVisibleRange: CalendarTimelineSearchVisibleRange | null = null;
+	private emptyStateRenderer = new EmptyStateRenderer();
 
 	constructor(private actions: CalendarRendererActions) {}
 
@@ -115,10 +120,67 @@ export class CalendarRenderer {
 		return this.currentVisibleRange;
 	}
 
+	private renderUnscheduledBacklog(parent: HTMLElement, config: ViewConfig, rows: RowData[], startField: string): void {
+		const unscheduled = collectUnscheduledTimelineRows(rows, config, startField);
+		if (unscheduled.length === 0) return;
+		const drawer = parent.createDiv({ cls: `db-calendar-backlog${this.backlogCollapsed ? " is-collapsed" : ""}` });
+		const header = drawer.createDiv({ cls: "db-calendar-backlog-header" });
+		const toggle = header.createEl("button", {
+			cls: "db-calendar-backlog-toggle",
+			text: `${t("calendar.unscheduled")} (${unscheduled.length})`,
+			attr: { type: "button", "aria-expanded": this.backlogCollapsed ? "false" : "true" },
+		});
+		toggle.onclick = () => {
+			this.backlogCollapsed = !this.backlogCollapsed;
+			drawer.toggleClass("is-collapsed", this.backlogCollapsed);
+			toggle.setAttribute("aria-expanded", this.backlogCollapsed ? "false" : "true");
+		};
+		const list = drawer.createDiv({ cls: "db-calendar-backlog-list" });
+		for (const row of unscheduled) {
+			const item = list.createEl("button", {
+				cls: "db-calendar-backlog-item",
+				text: row.file.basename || row.file.name,
+				attr: { type: "button", title: row.file.path },
+			});
+			item.onclick = (event) => {
+				event.preventDefault();
+				event.stopPropagation();
+				if (this.actions.openRecordDetail) this.actions.openRecordDetail(item, row);
+				else this.actions.openRow(row);
+			};
+			if (!this.actions.isReadOnly && this.actions.updateEventDates) {
+				item.draggable = true;
+				item.addEventListener("dragstart", (event) => {
+					event.dataTransfer?.setData(UNSCHEDULED_MIME, row.file.path);
+					event.dataTransfer?.setData("text/plain", row.file.path);
+				});
+			}
+		}
+	}
+
+	private setupBacklogDropTarget(target: HTMLElement, config: ViewConfig, dateKey: string): void {
+		if (this.actions.isReadOnly || !this.actions.updateEventDates) return;
+		target.addEventListener("dragover", (event) => {
+			if (!Array.from(event.dataTransfer?.types || []).includes(UNSCHEDULED_MIME)) return;
+			event.preventDefault();
+			target.addClass("is-backlog-drop-target");
+		});
+		target.addEventListener("dragleave", () => target.removeClass("is-backlog-drop-target"));
+		target.addEventListener("drop", (event) => {
+			const path = event.dataTransfer?.getData(UNSCHEDULED_MIME);
+			const row = path ? this.rowByPath.get(path) : undefined;
+			if (!row) return;
+			event.preventDefault();
+			event.stopPropagation();
+			target.removeClass("is-backlog-drop-target");
+			this.actions.updateEventDates?.(row, { startField: config.calendarStartDateField || getDefaultEventDateField(config) || "", startDateKey: dateKey, endField: config.calendarEndDateField, endDateKey: dateKey, changedEdge: "both" });
+		});
+	}
+
 	private renderMonth(container: HTMLElement, config: ViewConfig, rows: RowData[]): void {
 		const startField = config.calendarStartDateField || getDefaultEventDateField(config);
 		if (!startField) {
-			this.renderEmpty(container, "calendar.noDateField");
+			this.renderEmpty(container, "no-date-field");
 			return;
 		}
 
@@ -133,7 +195,7 @@ export class CalendarRenderer {
 		this.currentVisibleRange = this.getDaysVisibleRange(model.days);
 		const hasEvents = model.days.some((day) => day.events.length > 0);
 		if (!hasEvents && !config.calendarMonth) {
-			this.renderEmpty(container, "calendar.noEvents");
+			this.renderEmpty(container, "no-events");
 			return;
 		}
 
@@ -141,6 +203,7 @@ export class CalendarRenderer {
 		this.calendarRoot = wrap;
 		this.applyMonthSizingVars(wrap, config);
 		this.renderMonthHeader(wrap, config, model);
+		this.renderUnscheduledBacklog(wrap, config, rows, startField);
 		this.renderWeekdayLabels(wrap, config, weekStartsOn);
 
 		const grid = wrap.createDiv({ cls: "db-calendar-grid db-calendar-month-grid" });
@@ -186,6 +249,8 @@ export class CalendarRenderer {
 			// Explicit grid placement: column index + span all rows as background
 			cell.style.gridColumn = String(dayIndex + 1);
 			this.renderDayHeading(cell, config, day.dateKey);
+			this.setupBacklogDropTarget(cell, config, day.dateKey);
+			this.setupMonthCreateDrag(cell, config, day.dateKey, weekEl);
 			dayCells.push(cell);
 		}
 
@@ -252,6 +317,43 @@ export class CalendarRenderer {
 		}
 	}
 
+	private setupMonthCreateDrag(cell: HTMLElement, config: ViewConfig, dateKey: string, weekEl: HTMLElement): void {
+		if (this.actions.isReadOnly || !this.actions.createEntryForDate) return;
+		cell.addEventListener("pointerdown", (event) => {
+			if (event.button !== 0 || (event.target as HTMLElement | null)?.closest("button, a, input, .db-calendar-month-segment")) return;
+			let currentDateKey = dateKey;
+			let moved = false;
+			const setPreview = (nextDateKey: string): void => {
+				currentDateKey = nextDateKey;
+				moved = moved || nextDateKey !== dateKey;
+				const min = nextDateKey < dateKey ? nextDateKey : dateKey;
+				const max = nextDateKey < dateKey ? dateKey : nextDateKey;
+				weekEl.querySelectorAll<HTMLElement>(".db-calendar-day").forEach((candidate) => {
+					const candidateKey = candidate.dataset.dateKey || "";
+					candidate.toggleClass("is-create-range", candidateKey >= min && candidateKey <= max);
+				});
+			};
+			const onMove = (moveEvent: PointerEvent): void => {
+				const target = window.activeDocument.elementFromPoint(moveEvent.clientX, moveEvent.clientY)?.closest<HTMLElement>(".db-calendar-day");
+				if (target && target.closest(".db-calendar-month-week") === weekEl && target.dataset.dateKey) setPreview(target.dataset.dateKey);
+			};
+			const cleanup = (): void => {
+				window.activeDocument.removeEventListener("pointermove", onMove);
+				window.activeDocument.removeEventListener("pointerup", onUp);
+				weekEl.querySelectorAll<HTMLElement>(".is-create-range").forEach((candidate) => candidate.removeClass("is-create-range"));
+			};
+			const onUp = (): void => {
+				cleanup();
+				if (!moved) return;
+				const range = resolveCalendarCreateDateRange(dateKey, currentDateKey);
+				this.actions.createEntryForDate?.(config, range.startDateKey, range.endDateKey ? { endDateKey: range.endDateKey } : undefined);
+			};
+			event.preventDefault();
+			window.activeDocument.addEventListener("pointermove", onMove);
+			window.activeDocument.addEventListener("pointerup", onUp, { once: true });
+		});
+	}
+
 	private renderMonthOverflowButtons(weekEl: HTMLElement, config: ViewConfig, layout: CalendarMonthWeekLayout, laneLimit: number, dayCells: HTMLElement[], gridRow: number): void {
 		for (let dayIndex = 0; dayIndex < layout.days.length; dayIndex++) {
 			const day = layout.days[dayIndex];
@@ -260,10 +362,10 @@ export class CalendarRenderer {
 				.map((segment) => segment.event);
 			if (hiddenEvents.length === 0) continue;
 			const dayCell = dayCells[dayIndex];
-			const button = weekEl.createDiv({
+			const button = weekEl.createEl("button", {
 				cls: "db-calendar-more-events",
 				text: t("calendar.moreEvents", { count: hiddenEvents.length }),
-				attr: { title: t("calendar.moreEventsTitle", { count: hiddenEvents.length, date: day.dateKey }) },
+				attr: { type: "button", title: t("calendar.moreEventsTitle", { count: hiddenEvents.length, date: day.dateKey }), "aria-haspopup": "dialog", "aria-expanded": "false", "aria-label": t("calendar.moreEventsTitle", { count: hiddenEvents.length, date: day.dateKey }) },
 			});
 			// Place inside the day cell area, in the reserved last lane row
 			button.style.gridColumn = String(dayIndex + 1);
@@ -287,6 +389,7 @@ export class CalendarRenderer {
 			};
 			const showPopover = () => {
 				cancelHide();
+				button.setAttribute("aria-expanded", "true");
 				if (popover?.isConnected) { popover.removeClass("is-hidden"); return; }
 				popover = this.createDayPopover(dayCell, config, day, layout, cancelHide, scheduleHide);
 			};
@@ -327,7 +430,7 @@ export class CalendarRenderer {
 		// The popover floats over the day cell as an enlarged copy of it
 		const popover = dayCell.createDiv({
 			cls: "db-calendar-day-popover",
-			attr: { "data-date-key": day.dateKey },
+			attr: { "data-date-key": day.dateKey, role: "dialog", "aria-label": day.dateKey },
 		});
 
 		// Day number heading — identical to the real day cell heading
@@ -418,7 +521,7 @@ export class CalendarRenderer {
 	private renderWeek(container: HTMLElement, config: ViewConfig, rows: RowData[]): void {
 		const startField = config.calendarStartDateField || getDefaultEventDateField(config);
 		if (!startField) {
-			this.renderEmpty(container, "calendar.noDateField");
+			this.renderEmpty(container, "no-date-field");
 			return;
 		}
 
@@ -433,7 +536,7 @@ export class CalendarRenderer {
 		const weekDays = model.weeks[weekIndex];
 		this.currentVisibleRange = this.getDaysVisibleRange(weekDays || []);
 		if (!weekDays || weekDays.length === 0) {
-			this.renderEmpty(container, "calendar.noEvents");
+			this.renderEmpty(container, "no-events");
 			return;
 		}
 
@@ -441,18 +544,20 @@ export class CalendarRenderer {
 		this.calendarRoot = wrap;
 		this.applyTimeGridSizingVars(wrap, config, weekDays.length);
 		this.renderWeekHeader(wrap, config, weekDays);
+		this.renderUnscheduledBacklog(wrap, config, rows, startField);
 		// Sticky wrapper keeps the day-name row + all-day strip pinned while the
 		// time grid scrolls beneath it.
 		const sticky = wrap.createDiv({ cls: "db-calendar-week-sticky" });
 		this.renderTimeHeaderRow(sticky, wrap, config, weekDays);
 		this.renderAllDaySection(sticky, config, weekDays);
 		this.renderTimeGrid(wrap, config, weekDays);
+		this.scrollTimeGridToWorkday(wrap, config, weekDays.map((day) => day.dateKey));
 	}
 
 	private renderDay(container: HTMLElement, config: ViewConfig, rows: RowData[]): void {
 		const startField = config.calendarStartDateField || getDefaultEventDateField(config);
 		if (!startField) {
-			this.renderEmpty(container, "calendar.noDateField");
+			this.renderEmpty(container, "no-date-field");
 			return;
 		}
 		const dayKey = config.calendarDay || config.calendarWeekStart || this.getTodayDateKey();
@@ -469,10 +574,12 @@ export class CalendarRenderer {
 		this.calendarRoot = wrap;
 		this.applyTimeGridSizingVars(wrap, config, 1);
 		this.renderDayHeader(wrap, config, day.dateKey);
+		this.renderUnscheduledBacklog(wrap, config, rows, startField);
 		const sticky = wrap.createDiv({ cls: "db-calendar-week-sticky" });
 		this.renderTimeHeaderRow(sticky, wrap, config, [day]);
 		this.renderAllDaySection(sticky, config, [day]);
 		this.renderTimeGrid(wrap, config, [day]);
+		this.scrollTimeGridToWorkday(wrap, config, [day.dateKey]);
 	}
 
 	private renderTimeHeaderRow(parent: HTMLElement, sizingWrap: HTMLElement, config: ViewConfig, days: CalendarDayModel[]): void {
@@ -529,6 +636,7 @@ export class CalendarRenderer {
 			});
 			if (dayIndex === 0) firstAllDayCol = col;
 			col.style.gridColumn = String(dayIndex + 1);
+			this.setupBacklogDropTarget(col, config, day.dateKey);
 			if (!this.actions.isReadOnly && this.actions.createEntryForDate) {
 				col.ondblclick = (event) => {
 					if ((event.target as HTMLElement | null)?.closest(".db-calendar-month-segment")) return;
@@ -606,10 +714,10 @@ export class CalendarRenderer {
 				const hiddenEvents = this.uniqueEventsForDay(hiddenSegments.map((segment) => segment.event))
 					.slice().sort((a, b) => a.order - b.order);
 				const day = days[dayIndex];
-				const button = stage.createDiv({
+				const button = stage.createEl("button", {
 					cls: "db-calendar-week-allday-more",
 					text: t("calendar.moreEvents", { count: hiddenEvents.length }),
-					attr: { title: t("calendar.moreEventsTitle", { count: hiddenEvents.length, date: day.dateKey }) },
+					attr: { type: "button", title: t("calendar.moreEventsTitle", { count: hiddenEvents.length, date: day.dateKey }), "aria-haspopup": "dialog", "aria-expanded": "false", "aria-label": t("calendar.moreEventsTitle", { count: hiddenEvents.length, date: day.dateKey }) },
 				});
 				button.style.gridColumn = String(dayIndex + 1);
 				button.style.gridRow = String(visibleLanes + 2);
@@ -623,6 +731,7 @@ export class CalendarRenderer {
 				};
 				const showPopover = () => {
 					cancelHide();
+					button.setAttribute("aria-expanded", "true");
 					if (popover?.isConnected) { popover.removeClass("is-hidden"); return; }
 					popover = this.createAllDayOverflowPopover(button, hiddenEvents, config, cancelHide, scheduleHide);
 				};
@@ -641,7 +750,7 @@ export class CalendarRenderer {
 		scheduleHide: () => void,
 	): HTMLElement {
 		// The popover floats above the "+N" link as a stacked list of all-day events.
-		const popover = anchor.createDiv({ cls: "db-calendar-week-allday-popover" });
+		const popover = anchor.createDiv({ cls: "db-calendar-week-allday-popover", attr: { role: "dialog", "aria-label": t("calendar.moreEvents") } });
 		const list = popover.createDiv({ cls: "db-calendar-day-popover-events" });
 		for (const event of events) {
 			const eventEl = list.createEl("button", {
@@ -710,6 +819,7 @@ export class CalendarRenderer {
 				cls: `db-calendar-week-day-col${day.dateKey === this.getTodayDateKey() ? " is-today" : ""}`,
 				attr: { "data-date-key": day.dateKey },
 			});
+			this.setupBacklogDropTarget(col, config, day.dateKey);
 			this.setupTimeRangeSelection(col, config, day.dateKey, metrics);
 			for (const layout of timedLayouts.filter((item) => item.dateKey === day.dateKey)) {
 				this.renderWeekTimedEvent(col, config, layout, metrics);
@@ -1209,7 +1319,7 @@ export class CalendarRenderer {
 	private renderCurrentTimeLine(dayCol: HTMLElement, dateKey: string, metrics: TimeGridMetrics): void {
 		const todayKey = this.getTodayDateKey();
 		if (dateKey !== todayKey) return;
-		const line = dayCol.createDiv({ cls: "db-calendar-timed-current-line" });
+		const line = dayCol.createDiv({ cls: "db-calendar-timed-current-line", attr: { "aria-hidden": "true" } });
 		const update = () => {
 			const now = new Date();
 			const minutes = now.getHours() * 60 + now.getMinutes();
@@ -1224,6 +1334,22 @@ export class CalendarRenderer {
 		if (this.currentTimeTimer == null) {
 			this.currentTimeTimer = window.setInterval(update, 60000);
 		}
+	}
+
+	private scrollTimeGridToWorkday(wrap: HTMLElement, config: ViewConfig, dateKeys: string[]): void {
+		window.requestAnimationFrame(() => {
+			const scroller = wrap.closest<HTMLElement>(".note-database-container") || wrap.parentElement;
+			if (!scroller) return;
+			const today = this.getTodayDateKey();
+			const now = new Date();
+			const configuredStart = Number.isFinite(config.calendarStartHour) ? (config.calendarStartHour as number) : 8;
+			const minutes = dateKeys.includes(today)
+				? Math.max(configuredStart * 60, now.getHours() * 60 + now.getMinutes() - 60)
+				: configuredStart * 60;
+			const startHour = Number.isFinite(config.calendarStartHour) ? (config.calendarStartHour as number) : 0;
+			const top = ((minutes / 60) - startHour) * getCalendarHourHeight(config);
+			if (top > 0) scroller.scrollTop = Math.max(0, wrap.offsetTop + top - 72);
+		});
 	}
 
 	private setupTimeRangeSelection(dayCol: HTMLElement, config: ViewConfig, dateKey: string, metrics: TimeGridMetrics): void {
@@ -2213,7 +2339,15 @@ export class CalendarRenderer {
 		return null;
 	}
 
-	private renderEmpty(container: HTMLElement, key: string): void {
-		container.createDiv({ cls: "db-empty", text: t(key) });
+	private renderEmpty(container: HTMLElement, reason: EmptyStateReason): void {
+		this.emptyStateRenderer.renderCard(container, {
+			reason,
+			actions: this.actions.openDateConfig ? [{
+				label: t("emptyState.selectDateProperty"),
+				icon: "settings-2",
+				primary: true,
+				onClick: () => this.actions.openDateConfig?.(),
+			}] : undefined,
+		});
 	}
 }

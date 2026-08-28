@@ -2,7 +2,7 @@ import { Menu, setIcon, setTooltip } from "obsidian";
 import { formatCalendarTime, getCalendarSlotDuration } from "../data/CalendarLayoutModel";
 import { isExplicitlySorted } from "../data/ManualOrder";
 import { CalendarTitleParts, buildTimelineAxisBands, formatCalendarTitleParts } from "../data/CalendarTitleFormatter";
-import { buildCalendarMonthModel, buildTimelineModel, buildTimelineTicks, CalendarTimelineEvent, getDefaultEventDateField, getTimelineAnchor, getTimelineNavigationShiftUnits, getTimelineShortNavigationShiftUnits, getTimelineTitleWindow, getTimelineViewportContentWidth, getTimelineViewportStartAnchor, normalizeTimelineDayScale, resolveEventAbsoluteScale, resolveTimelineJumpAnchor, resolveTimelineReorderNeighbors, resolveTimelineUnitWidth, resolveTimelineViewportUnitCount, resolveTimelineViewportUnitSpan, shiftCalendarMonth, TimelineUnit, UNCATEGORIZED_TIMELINE_LANE } from "../data/CalendarTimelineModel";
+import { buildCalendarMonthModel, buildTimelineModel, buildTimelineTicks, CalendarTimelineEvent, collectUnscheduledTimelineRows, getDefaultEventDateField, getTimelineAnchor, getTimelineNavigationShiftUnits, getTimelineShortNavigationShiftUnits, getTimelineTitleWindow, getTimelineViewportContentWidth, getTimelineViewportStartAnchor, normalizeTimelineDayScale, resolveEventAbsoluteScale, resolveTimelineJumpAnchor, resolveTimelineReorderNeighbors, resolveTimelineUnitWidth, resolveTimelineViewportUnitCount, resolveTimelineViewportUnitSpan, shiftCalendarMonth, TimelineUnit, UNCATEGORIZED_TIMELINE_LANE } from "../data/CalendarTimelineModel";
 import {
   CALENDAR_TIME_SNAP_MINUTES,
   MINUTES_PER_DAY,
@@ -26,6 +26,7 @@ import { buildMiniCalendarEventIndex, MiniCalendarMode, renderMiniCalendar } fro
 import { renderGroupExpandControls } from "./GroupExpandControls";
 import { getGroupVisibleCount } from "../data/GroupVisibility";
 import { markNoteHoverLink } from "./HoverLinkPreview";
+import { EmptyStateReason, EmptyStateRenderer } from "./EmptyStateRenderer";
 
 const TIME_SNAP_MINUTES = CALENDAR_TIME_SNAP_MINUTES;
 
@@ -143,6 +144,7 @@ export interface CalendarTimelineRendererActions {
   getTimelineInvalidEventCount?(): number | Promise<number>;
   /** 打开「无效时间事件」修复弹窗。 */
   openTimelineInvalidEvents?(): void;
+  openDateConfig?(): void;
 }
 
 export type CalendarTimelineDateChange = CalendarEventDateChange;
@@ -185,6 +187,8 @@ export class CalendarTimelineRenderer {
   private activeTimelineDragCleanup: (() => void) | null = null;
   /** 上一次解析到的无效事件计数；cache miss（Promise）时沿用它做即时显示，避免每次刷新 hide→show 闪现。 */
   private timelineInvalidWarningCount: number | null = null;
+  private backlogCollapsed = false;
+  private emptyStateRenderer = new EmptyStateRenderer();
 
   constructor(private actions: CalendarTimelineRendererActions) {}
 
@@ -229,7 +233,7 @@ export class CalendarTimelineRenderer {
     this.rowByPath = new Map(rows.map((row) => [row.file.path, row]));
     const startField = config.timelineStartDateField || config.calendarStartDateField || getDefaultEventDateField(config);
     if (!startField) {
-      this.renderEmpty(container, "timeline.noDateField");
+      this.renderEmpty(container, "no-date-field");
       return;
     }
 
@@ -244,7 +248,8 @@ export class CalendarTimelineRenderer {
     });
     this.currentVisibleRange = this.getModelVisibleRange(model);
     if ((model.eventCount === 0 && model.lanes.length === 0) || !model.startDateKey || !model.endDateKey) {
-      this.renderEmpty(container, "timeline.noEvents");
+      this.renderEmpty(container, "no-events");
+      this.renderUnscheduledBacklog(container, config, rows, startField);
       return;
     }
 
@@ -269,12 +274,14 @@ export class CalendarTimelineRenderer {
     };
 
     this.renderTimelineHeader(wrap, config, model);
+    this.renderUnscheduledBacklog(wrap, config, rows, startField);
     if (model.visibleEventCount === 0 && model.lanes.length === 0) {
       this.renderTimelineEmptyRange(wrap);
       return;
     }
 
     const scroll = wrap.createDiv({ cls: "db-timeline-scroll" });
+    this.setupTimelineZoomGesture(scroll, config);
     const axis = scroll.createDiv({ cls: "db-timeline-axis" });
     const allTicks = buildTimelineTicks(
       { startDateKey: model.startDateKey, endDateKey: model.endDateKey, totalUnits: model.totalUnits, unit: model.unit, startMinutes: model.startMinutes },
@@ -329,6 +336,7 @@ export class CalendarTimelineRenderer {
       }
       const events = groupEl.createDiv({ cls: "db-timeline-events" });
       events.setAttribute("data-timeline-lane-key", lane.key);
+      this.setupTimelineBacklogDropTarget(events, config, model.startDateKey);
       // day scale：可见小时范围（绝对分钟，可跨午夜）；week/month/quarter：整个多天窗口（0 → totalUnits 天）。
       const visible = model.scale === "day"
         ? this.getTimelineVisibleMinutes(config, { ...model, totalUnits: Math.max(1, visibleUnitSpan ?? model.totalUnits) })
@@ -382,6 +390,91 @@ export class CalendarTimelineRenderer {
         this.flashTimelineDate(key);
       });
     }
+  }
+
+  private renderUnscheduledBacklog(parent: HTMLElement, config: ViewConfig, rows: RowData[], startField: string): void {
+    const unscheduled = collectUnscheduledTimelineRows(rows, config, startField);
+    if (unscheduled.length === 0) return;
+    const drawer = parent.createDiv({ cls: `db-timeline-backlog${this.backlogCollapsed ? " is-collapsed" : ""}` });
+    const toggle = drawer.createEl("button", {
+      cls: "db-timeline-backlog-toggle",
+      text: `${t("calendar.unscheduled")} (${unscheduled.length})`,
+      attr: { type: "button", "aria-expanded": this.backlogCollapsed ? "false" : "true" },
+    });
+    const list = drawer.createDiv({ cls: "db-timeline-backlog-list" });
+    toggle.onclick = () => {
+      this.backlogCollapsed = !this.backlogCollapsed;
+      drawer.toggleClass("is-collapsed", this.backlogCollapsed);
+      toggle.setAttribute("aria-expanded", this.backlogCollapsed ? "false" : "true");
+    };
+    for (const row of unscheduled) {
+      const item = list.createEl("button", { cls: "db-timeline-backlog-item", text: row.file.basename || row.file.name, attr: { type: "button", title: row.file.path } });
+      item.onclick = (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        if (this.actions.openRecordDetail) this.actions.openRecordDetail(item, row);
+        else this.actions.openRow(row);
+      };
+      if (!this.actions.isReadOnly && this.actions.updateEventDates) {
+        item.draggable = true;
+        item.addEventListener("dragstart", (event) => {
+          event.dataTransfer?.setData("application/x-note-database-unscheduled", row.file.path);
+          event.dataTransfer?.setData("text/plain", row.file.path);
+        });
+      }
+    }
+  }
+
+  private setupTimelineBacklogDropTarget(target: HTMLElement, config: ViewConfig, fallbackDateKey?: string): void {
+    if (this.actions.isReadOnly || !this.actions.updateEventDates) return;
+    target.addEventListener("dragover", (event) => {
+      if (!Array.from(event.dataTransfer?.types || []).includes("application/x-note-database-unscheduled")) return;
+      event.preventDefault();
+      target.addClass("is-backlog-drop-target");
+    });
+    target.addEventListener("dragleave", () => target.removeClass("is-backlog-drop-target"));
+    target.addEventListener("drop", (event) => {
+      const path = event.dataTransfer?.getData("application/x-note-database-unscheduled");
+      const row = path ? this.rowByPath.get(path) : undefined;
+      if (!row || !fallbackDateKey) return;
+      event.preventDefault();
+      event.stopPropagation();
+      target.removeClass("is-backlog-drop-target");
+      const dateKey = this.getTimelineDateFromPoint(target, event.clientX, fallbackDateKey, 1, fallbackDateKey, config.timelineScale);
+      this.actions.updateEventDates?.(row, {
+        startField: config.timelineStartDateField || config.calendarStartDateField || getDefaultEventDateField(config) || "",
+        startDateKey: dateKey,
+        endField: config.timelineEndDateField || config.calendarEndDateField,
+        endDateKey: dateKey,
+        changedEdge: "both",
+      });
+    });
+  }
+
+  private setupTimelineZoomGesture(scroll: HTMLElement, config: ViewConfig): void {
+    const scales: TimelineScale[] = ["day", "week", "month", "quarter", "year"];
+    const changeScale = (direction: number): void => {
+      const current = scales.indexOf(config.timelineScale || "week");
+      const next = scales[Math.max(0, Math.min(scales.length - 1, current + direction))];
+      if (next && next !== (config.timelineScale || "week")) void this.setTimelineScale(config, next);
+    };
+    scroll.addEventListener("wheel", (event) => {
+      if (!event.ctrlKey && !event.metaKey) return;
+      event.preventDefault();
+      changeScale(event.deltaY > 0 ? 1 : -1);
+    }, { passive: false });
+    let pinchDistance: number | null = null;
+    scroll.addEventListener("touchstart", (event) => {
+      if (event.touches.length === 2) pinchDistance = Math.hypot(event.touches[0].clientX - event.touches[1].clientX, event.touches[0].clientY - event.touches[1].clientY);
+    }, { passive: true });
+    scroll.addEventListener("touchmove", (event) => {
+      if (event.touches.length !== 2 || pinchDistance == null) return;
+      const nextDistance = Math.hypot(event.touches[0].clientX - event.touches[1].clientX, event.touches[0].clientY - event.touches[1].clientY);
+      if (Math.abs(nextDistance - pinchDistance) < 24) return;
+      changeScale(nextDistance < pinchDistance ? 1 : -1);
+      pinchDistance = nextDistance;
+    }, { passive: true });
+    scroll.addEventListener("touchend", () => { pinchDistance = null; }, { passive: true });
   }
 
   private fitTimelineGroupHeaderWidth(wrap: HTMLElement, container: HTMLElement): void {
@@ -704,6 +797,7 @@ export class CalendarTimelineRenderer {
       { value: "week", text: t("timeline.scaleWeek") },
       { value: "month", text: t("timeline.scaleMonth") },
       { value: "quarter", text: t("timeline.scaleQuarter") },
+      { value: "year", text: t("timeline.scaleYear") },
     ];
     const activeScale = config.timelineScale || currentScale;
     const control = parent.createDiv({
@@ -769,7 +863,7 @@ export class CalendarTimelineRenderer {
   }
 
   private normalizeTimelineScale(value: string): TimelineScale {
-    return value === "day" || value === "month" || value === "quarter" ? value : "week";
+    return value === "day" || value === "month" || value === "quarter" || value === "year" ? value : "week";
   }
 
   private renderTimelineNavButton(parent: HTMLElement, labelKey: string, onClick: () => void, icon?: string): void {
@@ -1892,6 +1986,7 @@ export class CalendarTimelineRenderer {
 
   private getTimelineCreateSpanUnits(model: { totalUnits: number; scale: TimelineScale }): number {
     if (model.scale === "quarter") return Math.min(7, Math.max(1, model.totalUnits));
+    if (model.scale === "year") return Math.min(30, Math.max(1, model.totalUnits));
     return 1;
   }
 
@@ -2144,12 +2239,29 @@ export class CalendarTimelineRenderer {
     return window.activeDocument.body.classList.contains("is-phone");
   }
 
-  private renderEmpty(container: HTMLElement, key: string): void {
-    container.createDiv({ cls: "db-empty", text: t(key) });
+  private renderEmpty(container: HTMLElement, reason: EmptyStateReason): void {
+    this.emptyStateRenderer.renderCard(container, {
+      reason,
+      actions: this.actions.openDateConfig ? [{
+        label: t("emptyState.selectDateProperty"),
+        icon: "settings-2",
+        primary: true,
+        onClick: () => this.actions.openDateConfig?.(),
+      }] : undefined,
+    });
   }
 
   private renderTimelineEmptyRange(container: HTMLElement): void {
-    container.createDiv({ cls: "db-empty db-timeline-empty-range", text: t("timeline.noEventsInRange") });
+    this.emptyStateRenderer.renderCard(container, {
+      reason: "no-events-in-range",
+      className: "db-timeline-empty-range",
+      actions: this.actions.openDateConfig ? [{
+        label: t("emptyState.selectDateProperty"),
+        icon: "settings-2",
+        primary: true,
+        onClick: () => this.actions.openDateConfig?.(),
+      }] : undefined,
+    });
   }
 
   private formatDateRange(start: string, end: string): string {

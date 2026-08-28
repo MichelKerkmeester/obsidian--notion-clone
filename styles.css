@@ -27,7 +27,7 @@
  *    background: var(--xxx)                 — 背景色（用 Obsidian CSS 变量）
  *    color: var(--xxx)                      — 文字颜色
  *    border: 1px solid var(--xxx)           — 边框（宽度 样式 颜色）
- *    border-radius: 8px                     — 圆角
+ *    border-radius: var(--db-radius-md)     — 圆角
  *    box-shadow: 0 2px 4px rgba(...)        — 阴影
  *    opacity: 0.5                           — 透明度（0=全透明, 1=不透明）
  *    font-size / font-weight               — 字号 / 字重
@@ -60,6 +60,372 @@
  *  .note-database-container 是最外层容器，Dashboard 独立视图和内嵌视图共用
  * ============================================================================ */
 
+.note-database-container,
+.note-database-modal,
+.note-database-settings,
+.db-color-picker-popup,
+.db-icon-picker-popover,
+.db-dropdown-popover,
+.db-cell-option-popover,
+.formula-workbench-modal,
+.db-chart-drilldown-modal {
+  color-scheme: light dark;
+  --db-space-1: 2px;
+  --db-space-2: 4px;
+  --db-space-3: 6px;
+  --db-space-4: 8px;
+  --db-space-5: 12px;
+  --db-space-6: 16px;
+  --db-space-7: 20px;
+  --db-space-8: 24px;
+  --db-font-xs: 11px;
+  --db-font-xs-line-height: 1.3;
+  --db-font-xs-weight: 500;
+  --db-font-sm: 12px;
+  --db-font-sm-line-height: 1.4;
+  --db-font-md: 13px;
+  --db-font-md-line-height: 1.45;
+  --db-font-lg: 16px;
+  --db-font-lg-line-height: 1.35;
+  --db-font-lg-weight: 600;
+  --db-font-title: 22px;
+  --db-font-title-line-height: 1.25;
+  --db-font-title-weight: 700;
+  --db-radius-xs: 3px;
+  --db-radius-sm: 4px;
+  --db-radius-md: 6px;
+  --db-radius-lg: 8px;
+  --db-radius-full: 9999px;
+  --db-border-subtle: color-mix(in srgb, var(--background-modifier-border) 40%, transparent);
+  --db-border-regular: color-mix(in srgb, var(--background-modifier-border) 70%, transparent);
+  --db-border-emphasis: var(--background-modifier-border);
+  --db-surface-canvas: var(--background-primary);
+  --db-surface-raised: color-mix(in srgb, var(--background-primary) 97%, white);
+  --db-surface-overlay: color-mix(in srgb, var(--background-primary) 93%, white);
+  --db-surface-modal: color-mix(in srgb, var(--background-primary) 88%, white);
+  --db-surface-modal-border: var(--background-modifier-border);
+  --db-elevation-1: 0 1px 3px color-mix(in srgb, black 12%, transparent), 0 1px 2px color-mix(in srgb, black 8%, transparent);
+  --db-elevation-2: 0 10px 28px rgba(0, 0, 0, 0.24), 0 3px 8px rgba(0, 0, 0, 0.16);
+  --db-elevation-3: 0 18px 50px rgba(0, 0, 0, 0.22), 0 6px 18px rgba(0, 0, 0, 0.14);
+  --db-layer-panel: 50;
+  --db-layer-popover: 100;
+  --db-layer-submenu: 110;
+  --db-layer-modal: 1000;
+  --db-overlay-blur: 12px;
+  --db-accent-primary: var(--interactive-accent);
+  --db-accent-hover: var(--interactive-accent-hover, var(--interactive-accent));
+  --db-accent-subtle: color-mix(in srgb, var(--interactive-accent) 14%, transparent);
+  --db-accent-focus-ring: 0 0 0 2px var(--background-primary), 0 0 0 4px var(--interactive-accent);
+  --db-hover-bg: var(--background-modifier-hover);
+  --db-active-bg: var(--background-modifier-active-hover, var(--background-modifier-hover));
+  --db-transition-fast: 120ms ease;
+  --db-disabled-opacity: 0.40;
+  --db-disabled-cursor: not-allowed;
+  --db-scrollbar-thumb: color-mix(in srgb, var(--text-muted) 48%, transparent);
+  --db-scrollbar-thumb-hover: color-mix(in srgb, var(--text-muted) 70%, transparent);
+  --db-row-height-compact: 28px;
+  --db-row-height-default: 34px;
+  --db-row-height-comfortable: 40px;
+  --db-row-height: var(--db-row-height-default);
+  --db-row-cell-padding: var(--db-space-4);
+  --db-row-font-size: var(--db-font-md);
+  --status-color-bg-gray: color-mix(in srgb, #64748b 16%, transparent);
+  --status-color-fg-gray: #334155;
+  --status-color-bg-brown: color-mix(in srgb, #9f6b53 16%, transparent);
+  --status-color-fg-brown: #713f12;
+  --status-color-bg-orange: color-mix(in srgb, #d9730d 16%, transparent);
+  --status-color-fg-orange: #9a3412;
+  --status-color-bg-yellow: color-mix(in srgb, #cb912f 16%, transparent);
+  --status-color-fg-yellow: #854d0e;
+  --status-color-bg-green: color-mix(in srgb, #448361 16%, transparent);
+  --status-color-fg-green: #166534;
+  --status-color-bg-blue: color-mix(in srgb, #337ea9 16%, transparent);
+  --status-color-fg-blue: #1e3a8a;
+  --status-color-bg-purple: color-mix(in srgb, #9065b0 16%, transparent);
+  --status-color-fg-purple: #581c87;
+  --status-color-bg-pink: color-mix(in srgb, #c14c8a 16%, transparent);
+  --status-color-fg-pink: #9d174d;
+  --status-color-bg-red: color-mix(in srgb, #d44c47 16%, transparent);
+  --status-color-fg-red: #991b1b;
+  --status-color-bg-slate: color-mix(in srgb, #64748b 16%, transparent);
+  --status-color-fg-slate: #334155;
+  --status-color-bg-cyan: color-mix(in srgb, #0891b2 16%, transparent);
+  --status-color-fg-cyan: #155e75;
+  --status-color-bg-teal: color-mix(in srgb, #0f766e 16%, transparent);
+  --status-color-fg-teal: #134e4a;
+  --status-color-bg-lime: color-mix(in srgb, #65a30d 16%, transparent);
+  --status-color-fg-lime: #365314;
+  --status-color-bg-indigo: color-mix(in srgb, #4f46e5 16%, transparent);
+  --status-color-fg-indigo: #312e81;
+  --status-color-bg-violet: color-mix(in srgb, #7c3aed 16%, transparent);
+  --status-color-fg-violet: #5b21b6;
+  --status-color-bg-rose: color-mix(in srgb, #e11d48 16%, transparent);
+  --status-color-fg-rose: #9f1239;
+}
+
+.db-overlay-enter {
+  opacity: 0;
+  transform: translate3d(0, -4px, 0) scale(0.98);
+  will-change: opacity, transform;
+  transition: opacity 120ms ease-out, transform 120ms ease-out;
+}
+
+.db-overlay-enter.is-visible {
+  opacity: 1;
+  transform: translate3d(0, 0, 0) scale(1);
+}
+
+.db-mobile-bottom-sheet {
+  position: fixed !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: var(--db-mobile-sheet-bottom, 0px) !important;
+  top: auto !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  max-height: calc(100dvh - 20px) !important;
+  padding-bottom: calc(16px + env(safe-area-inset-bottom)) !important;
+  border-right: 0 !important;
+  border-bottom: 0 !important;
+  border-radius: var(--db-radius-lg) var(--db-radius-lg) 0 0;
+  isolation: isolate;
+}
+
+.db-mobile-bottom-sheet::before {
+  position: fixed;
+  z-index: -1;
+  inset: 0;
+  content: "";
+  pointer-events: none;
+  background: rgba(0, 0, 0, 0.42);
+}
+
+.db-mobile-bottom-sheet-handle {
+  width: 36px;
+  height: 4px;
+  flex: 0 0 auto;
+  margin: 8px auto 4px;
+  border-radius: var(--db-radius-full);
+  background: var(--text-faint);
+  opacity: 0.65;
+}
+
+.db-mobile-bottom-sheet.db-overlay-enter {
+  transform: translate3d(0, 8px, 0) scale(0.98);
+}
+
+.db-mobile-bottom-sheet.db-overlay-enter.is-visible {
+  transform: translate3d(0, 0, 0) scale(1);
+}
+
+.db-menu-item {
+  min-height: 30px;
+  border: 0;
+  border-radius: var(--db-radius-sm);
+  transition: background-color 120ms ease-out, color 120ms ease-out;
+}
+
+.db-menu-item:hover,
+.db-menu-item:focus-visible {
+  background: var(--db-hover-bg, var(--background-modifier-hover));
+}
+
+.db-menu-item:focus-visible {
+  outline: none;
+  box-shadow: var(--db-accent-focus-ring);
+}
+
+.db-menu-item-icon,
+.db-menu-item-check {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+}
+
+.db-menu-item-label {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.db-menu-item-current,
+.db-menu-item-shortcut {
+  margin-left: auto;
+  color: var(--text-muted);
+  font-size: var(--font-ui-smaller);
+  white-space: nowrap;
+}
+
+.db-dropdown-empty {
+  padding: 16px 10px;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+.db-date-presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 8px 8px 0;
+}
+
+.db-date-preset {
+  min-height: 28px;
+  padding: 3px 8px;
+  border: 1px solid var(--background-modifier-border);
+  border-radius: var(--db-radius-sm);
+  background: transparent;
+  color: var(--text-muted);
+  font-size: var(--font-ui-smaller);
+}
+
+.db-date-preset:hover,
+.db-date-preset:focus-visible {
+  border-color: var(--interactive-accent);
+  color: var(--text-normal);
+}
+
+.db-calendar-mini-week { display: contents; }
+
+.db-icon-picker-search {
+  min-width: 96px;
+  width: 120px;
+  margin-left: 8px;
+  padding: 4px 7px;
+  border: 1px solid var(--background-modifier-border);
+  border-radius: var(--db-radius-sm);
+  background: var(--background-secondary);
+  font-size: var(--font-ui-smaller);
+}
+
+.db-icon-picker-search:focus,
+.db-icon-picker-search:focus-visible {
+  border-color: var(--interactive-accent);
+  outline: none;
+}
+
+.db-icon-picker-popover .db-icon-picker-tabs button[aria-selected="true"],
+.db-icon-picker-popover .db-icon-picker-nav button[aria-pressed="true"] {
+  color: var(--text-normal);
+  font-weight: 600;
+}
+
+.db-icon-picker-popover button.db-icon-picker-item[aria-pressed="true"] {
+  background: var(--background-modifier-hover);
+}
+
+.db-column-menu-back {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  padding: 6px 8px;
+  color: var(--text-muted);
+  text-align: left;
+}
+
+.db-column-menu-back:hover { color: var(--text-normal); }
+
+.db-relation-list-spacer { flex: 0 0 auto; pointer-events: none; }
+
+.db-relation-empty { min-height: 48px; }
+
+.db-dropdown-popover,
+.db-column-menu-subpopover,
+.db-cell-option-popover,
+.db-relation-popover,
+.db-color-picker-popup,
+.db-icon-picker-popover {
+  z-index: var(--db-layer-popover, 100);
+  box-shadow: var(--db-elevation-2);
+  backdrop-filter: blur(var(--db-overlay-blur, 12px));
+}
+
+.db-column-menu-subpopover { z-index: var(--db-layer-submenu, 110); }
+
+.note-database-container .db-toolbar,
+.note-database-container .db-filter-panel,
+.note-database-container .db-sort-panel,
+.note-database-container .db-view-config-panel,
+.note-database-container .db-column-manager {
+  z-index: var(--db-layer-panel, 50);
+}
+
+.note-database-modal,
+.formula-workbench-modal,
+.db-chart-drilldown-modal {
+  z-index: var(--db-layer-modal, 1000);
+}
+
+.menu .menu-item {
+  min-height: 30px;
+  border-radius: var(--db-radius-sm);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .db-overlay-enter,
+  .db-overlay-enter.is-visible,
+  .db-mobile-bottom-sheet.db-overlay-enter,
+  .db-mobile-bottom-sheet.db-overlay-enter.is-visible,
+  .db-menu-item {
+    transition: none;
+    transform: none;
+  }
+}
+
+.theme-dark :is(
+  .note-database-container,
+  .note-database-modal,
+  .note-database-settings,
+  .db-color-picker-popup,
+  .db-icon-picker-popover,
+  .db-dropdown-popover,
+  .db-cell-option-popover,
+  .formula-workbench-modal,
+  .db-chart-drilldown-modal
+) {
+  --db-surface-raised: color-mix(in srgb, var(--background-primary) 97%, white);
+  --db-surface-overlay: color-mix(in srgb, var(--background-primary) 93%, white);
+  --db-surface-modal: color-mix(in srgb, var(--background-primary) 88%, white);
+  --db-surface-modal-border: rgba(255, 255, 255, 0.12);
+  --db-elevation-1: 0 1px 3px rgba(0, 0, 0, 0.30), 0 1px 2px rgba(255, 255, 255, 0.03);
+  --db-elevation-2: 0 10px 28px rgba(0, 0, 0, 0.45), 0 3px 8px rgba(0, 0, 0, 0.30);
+  --db-elevation-3: 0 18px 50px rgba(0, 0, 0, 0.48), 0 6px 18px rgba(0, 0, 0, 0.32);
+  --status-color-bg-gray: color-mix(in srgb, #94a3b8 24%, transparent);
+  --status-color-fg-gray: #e2e8f0;
+  --status-color-bg-brown: color-mix(in srgb, #d97745 24%, transparent);
+  --status-color-fg-brown: #fed7aa;
+  --status-color-bg-orange: color-mix(in srgb, #f97316 24%, transparent);
+  --status-color-fg-orange: #fed7aa;
+  --status-color-bg-yellow: color-mix(in srgb, #eab308 24%, transparent);
+  --status-color-fg-yellow: #fef08a;
+  --status-color-bg-green: color-mix(in srgb, #22c55e 24%, transparent);
+  --status-color-fg-green: #bbf7d0;
+  --status-color-bg-blue: color-mix(in srgb, #3b82f6 24%, transparent);
+  --status-color-fg-blue: #bfdbfe;
+  --status-color-bg-purple: color-mix(in srgb, #a855f7 24%, transparent);
+  --status-color-fg-purple: #e9d5ff;
+  --status-color-bg-pink: color-mix(in srgb, #ec4899 24%, transparent);
+  --status-color-fg-pink: #fbcfe8;
+  --status-color-bg-red: color-mix(in srgb, #ef4444 24%, transparent);
+  --status-color-fg-red: #fecaca;
+  --status-color-bg-slate: color-mix(in srgb, #94a3b8 24%, transparent);
+  --status-color-fg-slate: #cbd5e1;
+  --status-color-bg-cyan: color-mix(in srgb, #06b6d4 24%, transparent);
+  --status-color-fg-cyan: #cffafe;
+  --status-color-bg-teal: color-mix(in srgb, #14b8a6 24%, transparent);
+  --status-color-fg-teal: #ccfbf1;
+  --status-color-bg-lime: color-mix(in srgb, #84cc16 24%, transparent);
+  --status-color-fg-lime: #ecfccb;
+  --status-color-bg-indigo: color-mix(in srgb, #6366f1 24%, transparent);
+  --status-color-fg-indigo: #c7d2fe;
+  --status-color-bg-violet: color-mix(in srgb, #8b5cf6 24%, transparent);
+  --status-color-fg-violet: #ddd6fe;
+  --status-color-bg-rose: color-mix(in srgb, #f43f5e 24%, transparent);
+  --status-color-fg-rose: #ffe4e6;
+}
+
 .note-database-container {
   /* JS 动态测量工具栏高度后更新此值，用于计算 sticky 表头位置 */
   --db-table-header-top: 96px;
@@ -69,51 +435,14 @@
   --db-board-header-top: calc(var(--db-table-header-top) - 25px);
   --db-selection-status-offset: 0px;
   --db-selection-status-height: 30px;
-  --db-scrollbar-thumb: color-mix(in srgb, var(--text-muted) 36%, transparent);
-  --db-scrollbar-thumb-hover: color-mix(in srgb, var(--text-muted) 56%, transparent);
-  --db-radius-sm: 4px;
-  --db-radius-md: 6px;
-  --db-radius-lg: 8px;
-  --db-title-font-family: "Source Serif 4", "Source Han Serif SC", "Noto Serif CJK SC", "Noto Serif SC", "Songti SC", "STSong", Georgia, "Times New Roman", serif;
+  --db-title-font-family: var(--font-interface);
   --db-heading-vertical-space: 12px;
   --db-heading-row-min-height: 37px;
-  --db-heading-font-size: 28px;
-  --db-heading-line-height: 1.3;
+  --db-heading-font-size: var(--db-font-title);
+  --db-heading-line-height: var(--db-font-title-line-height);
   --db-description-min-height: 20px;
-  --db-table-column-divider: color-mix(in srgb, var(--background-modifier-border) 48%, transparent);
+  --db-table-column-divider: var(--db-border-subtle);
   --db-table-header-background: color-mix(in srgb, var(--background-secondary) 58%, var(--background-primary));
-  --status-color-bg-gray: rgba(120, 119, 116, 0.18);
-  --status-color-fg-gray: #787774;
-  --status-color-bg-brown: rgba(159, 107, 83, 0.18);
-  --status-color-fg-brown: #8f5d45;
-  --status-color-bg-orange: rgba(217, 115, 13, 0.18);
-  --status-color-fg-orange: #b65f00;
-  --status-color-bg-yellow: rgba(203, 145, 47, 0.2);
-  --status-color-fg-yellow: #8f6a00;
-  --status-color-bg-green: rgba(68, 131, 97, 0.18);
-  --status-color-fg-green: #448361;
-  --status-color-bg-blue: rgba(46, 117, 182, 0.18);
-  --status-color-fg-blue: #2f6fad;
-  --status-color-bg-purple: rgba(105, 64, 165, 0.18);
-  --status-color-fg-purple: #6940a5;
-  --status-color-bg-pink: rgba(193, 76, 138, 0.18);
-  --status-color-fg-pink: #a83272;
-  --status-color-bg-red: rgba(212, 76, 71, 0.18);
-  --status-color-fg-red: #d44c47;
-  --status-color-bg-slate: rgba(100, 116, 139, 0.18);
-  --status-color-fg-slate: #64748b;
-  --status-color-bg-cyan: rgba(8, 145, 178, 0.18);
-  --status-color-fg-cyan: #0891b2;
-  --status-color-bg-teal: rgba(15, 118, 110, 0.18);
-  --status-color-fg-teal: #0f766e;
-  --status-color-bg-lime: rgba(101, 163, 13, 0.18);
-  --status-color-fg-lime: #65a30d;
-  --status-color-bg-indigo: rgba(79, 70, 229, 0.18);
-  --status-color-fg-indigo: #4f46e5;
-  --status-color-bg-violet: rgba(124, 58, 237, 0.18);
-  --status-color-fg-violet: #7c3aed;
-  --status-color-bg-rose: rgba(225, 29, 72, 0.18);
-  --status-color-fg-rose: #e11d48;
   --db-current-time-saturation: max(var(--accent-s, 82%), 82%);
   --db-current-time-lightness: clamp(44%, calc(var(--accent-l, 52%) + 4%), 56%);
   --db-current-time-color: hsl(var(--accent-h, 254) var(--db-current-time-saturation) var(--db-current-time-lightness));
@@ -121,40 +450,17 @@
   /* overflow: auto 让容器自身成为滚动容器，表头 sticky 相对于此生效 */
   overflow: auto;
   scrollbar-gutter: stable;
-  padding: 0 24px 32px;
+  padding: 0 var(--db-space-8) var(--db-space-8);
   position: relative;
   color: var(--text-normal);
   font-family: var(--font-interface);
-  font-size: 13px;
-  line-height: 1.4;
+  font-size: var(--db-font-md);
+  line-height: var(--db-font-md-line-height);
 }
 
 .theme-dark .note-database-container {
   --db-current-time-lightness: clamp(58%, calc(var(--accent-l, 56%) + 10%), 70%);
 }
-
-.note-database-modal {
-  --db-radius-sm: 4px;
-  --db-radius-md: 6px;
-  --db-radius-lg: 8px;
-  --status-color-fg-gray: #787774;
-  --status-color-fg-brown: #8f5d45;
-  --status-color-fg-orange: #b65f00;
-  --status-color-fg-yellow: #8f6a00;
-  --status-color-fg-green: #448361;
-  --status-color-fg-blue: #2f6fad;
-  --status-color-fg-purple: #6940a5;
-  --status-color-fg-pink: #a83272;
-  --status-color-fg-red: #d44c47;
-  --status-color-fg-slate: #64748b;
-  --status-color-fg-cyan: #0891b2;
-  --status-color-fg-teal: #0f766e;
-  --status-color-fg-lime: #65a30d;
-  --status-color-fg-indigo: #4f46e5;
-  --status-color-fg-violet: #7c3aed;
-  --status-color-fg-rose: #e11d48;
-}
-
 
 .note-database-container::-webkit-scrollbar,
 .note-database-container *::-webkit-scrollbar {
@@ -174,7 +480,7 @@
 .note-database-container::-webkit-scrollbar-thumb,
 .note-database-container *::-webkit-scrollbar-thumb {
   border: 0;
-  border-radius: 999px;
+  border-radius: var(--db-radius-full);
   background: var(--db-scrollbar-thumb);
   box-shadow: none;
 }
@@ -200,9 +506,9 @@
 }
 
 .note-database-container *:focus-visible {
-  outline: 2px solid var(--interactive-accent);
-  outline-offset: 2px;
-  border-radius: 3px;
+  outline: none;
+  box-shadow: var(--db-accent-focus-ring);
+  border-radius: var(--db-radius-sm);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -455,19 +761,21 @@
 
 .note-database-container .db-group-summary-label {
   color: var(--text-faint);
-  font-size: 11px;
+  font-size: var(--db-font-xs);
   font-weight: 400;
 }
 
 .note-database-container .db-group-summary-value {
   color: var(--text-muted);
-  font-size: 12px;
+  font-size: var(--db-font-sm);
   font-weight: 600;
   font-variant-numeric: tabular-nums;
 }
 
 .note-database-container .db-conditional-format {
-  background-color: var(--db-conditional-format-bg);
+  background-color: var(--db-conditional-format-bg, transparent);
+  color: var(--db-conditional-format-fg, inherit);
+  box-shadow: inset 2px 0 0 var(--db-conditional-format-accent, transparent);
 }
 
 .note-database-container .db-conditional-format-bold {
@@ -483,7 +791,7 @@
 }
 
 .note-database-container tr.db-conditional-format > td:not(.db-conditional-format) {
-  background-color: var(--db-conditional-format-bg);
+  background-color: var(--db-conditional-format-bg, transparent);
 }
 
 .note-database-container td.db-conditional-format,
@@ -492,7 +800,7 @@
 .note-database-container .db-list-field.db-conditional-format,
 .note-database-container .db-record-detail-field.db-conditional-format,
 .note-database-container .db-record-detail-title.db-conditional-format {
-  background-color: var(--db-conditional-format-bg);
+  background-color: var(--db-conditional-format-bg, transparent);
 }
 
 .note-database-container .db-conditional-format-settings {
@@ -637,7 +945,7 @@
   display: block;
   width: 18px;
   height: 18px;
-  border-radius: 4px;
+  border-radius: var(--db-radius-sm);
   box-shadow: none;
 }
 
@@ -715,18 +1023,18 @@
 .note-database-container .db-heading {
   display: inline-flex;
   align-items: center;
-  gap: 7px;
+  gap: var(--db-space-3);
   min-width: 0;
   border: 0;
   border-radius: var(--db-radius-lg);
   background: transparent;
-  font-size: var(--db-heading-font-size);
-  font-family: inherit;
-  font-weight: 700;
+  font-size: var(--db-font-title);
+  font-family: var(--db-title-font-family);
+  font-weight: var(--db-font-title-weight);
   color: var(--text-normal);
-  line-height: var(--db-heading-line-height);
+  line-height: var(--db-font-title-line-height);
   cursor: pointer;
-  padding: 0 4px;
+  padding: 0 var(--db-space-2);
   text-align: left;
   user-select: none;
   box-shadow: none;
@@ -744,7 +1052,7 @@
 
 .note-database-container .db-heading-text {
   overflow: hidden;
-  font-family: var(--db-title-font-family);
+  font-family: var(--font-interface);
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -799,8 +1107,8 @@
   max-height: 30vh;
   min-height: var(--db-description-min-height);
   color: var(--text-muted);
-  font-size: 13px;
-  line-height: 1.5;
+  font-size: var(--db-font-md);
+  line-height: var(--db-font-md-line-height);
   margin-left: 0;
   margin-top: 0;
   overflow-y: auto;
@@ -830,8 +1138,8 @@
   min-height: 12px;
   overflow: hidden;
   color: var(--text-faint);
-  font-size: 12px;
-  line-height: 12px;
+  font-size: var(--db-font-sm);
+  line-height: var(--db-font-sm-line-height);
 }
 
 .note-database-container .db-description.is-empty::before {
@@ -918,11 +1226,11 @@
   overflow: hidden;
   color: var(--text-normal);
   cursor: text;
-  font-family: var(--db-title-font-family);
-  font-size: var(--db-heading-font-size);
-  font-weight: 700;
+  font-family: var(--font-interface);
+  font-size: var(--db-font-title);
+  font-weight: var(--db-font-title-weight);
   letter-spacing: 0;
-  line-height: var(--db-heading-line-height);
+  line-height: var(--db-font-title-line-height);
   text-overflow: ellipsis;
   user-select: text;
   white-space: nowrap;
@@ -936,9 +1244,9 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 8px;
+  gap: var(--db-space-4);
   min-height: 36px;
-  border-bottom: 1px solid var(--background-modifier-border);
+  border-bottom: 1px solid var(--db-border-regular);
   flex-wrap: nowrap;
 }
 
@@ -946,7 +1254,7 @@
 .note-database-container .db-toolbar-right {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: var(--db-space-3);
   min-width: 0;
 }
 
@@ -959,21 +1267,21 @@
   flex-shrink: 0;
   flex-wrap: nowrap;
   justify-content: flex-end;
-  padding-right: 6px;
+  padding-right: var(--db-space-3);
 }
 
 /* 当前视图已启用的筛选与排序：只展示有效规则，共用工具栏的状态与编辑入口。 */
 /* 抵消 header 的 flex gap，使工具栏框线到 chip 始终保持 6px。 */
 .note-database-container .db-active-view-controls {
   min-width: 0;
-  margin-top: calc(6px - var(--db-header-content-gap));
-  padding: 0 0 5px;
+  margin-top: calc(var(--db-space-3) - var(--db-header-content-gap));
+  padding: 0 0 var(--db-space-2);
 }
 
 .note-database-container .db-active-view-controls-scroll {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: var(--db-space-5);
   min-width: 0;
   overflow-x: auto;
   overflow-y: hidden;
@@ -986,7 +1294,7 @@
   display: inline-flex;
   align-items: center;
   flex: 0 0 auto;
-  gap: 6px;
+  gap: var(--db-space-3);
 }
 
 .note-database-container .db-active-control-group.is-sort + .db-active-control-group.is-filter::before {
@@ -994,7 +1302,7 @@
   flex: 0 0 1px;
   width: 1px;
   height: 16px;
-  margin: 0 2px;
+  margin: 0 var(--db-space-2);
   background: var(--background-modifier-border);
 }
 
@@ -1028,16 +1336,16 @@
   background: transparent;
   box-shadow: none;
   color: inherit;
-  font-size: 12px;
+  font-size: var(--db-font-sm);
 }
 
 .note-database-container .db-active-control-edit {
   display: inline-flex;
   align-items: center;
-  gap: 5px;
+  gap: var(--db-space-2);
   height: 24px;
   max-width: min(360px, 52vw);
-  padding: 0 5px 0 7px;
+  padding: 0 var(--db-space-3) 0 var(--db-space-4);
 }
 
 .note-database-container .db-active-control-edit:hover,
@@ -1069,14 +1377,14 @@
   position: absolute;
   right: -4px;
   bottom: -4px;
-  min-width: 9px;
-  height: 9px;
-  border-radius: 5px;
+  min-width: 12px;
+  height: 12px;
+  border-radius: var(--db-radius-sm);
   background: color-mix(in srgb, var(--interactive-accent) 18%, var(--background-primary));
   color: var(--text-accent);
-  font-size: 8px;
+  font-size: var(--db-font-xs);
   font-weight: 600;
-  line-height: 9px;
+  line-height: 12px;
   text-align: center;
 }
 
@@ -1160,7 +1468,7 @@
   display: flex;
   align-items: center;
   height: 30px;
-  border-radius: 999px;
+  border-radius: var(--db-radius-full);
   background: var(--background-secondary);
   padding: 0 8px;
 }
@@ -1172,14 +1480,14 @@
   gap: 2px;
   height: 30px;
   padding: 2px;
-  border-radius: 999px;
+  border-radius: var(--db-radius-full);
   background: var(--background-secondary);
 }
 
 .note-database-container .db-view-type-button {
   height: 26px;
   border: 0;
-  border-radius: 999px;
+  border-radius: var(--db-radius-full);
   background: transparent;
   color: var(--text-muted);
   cursor: pointer;
@@ -1202,13 +1510,13 @@
 .note-database-container .db-view-tabs {
   display: flex;
   align-items: center;
-  gap: 3px;
+  gap: var(--db-space-1);
   flex-shrink: 0;
 }
 .note-database-container .db-view-tab {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
+  gap: var(--db-space-2);
   height: 28px;
   border: 0;
   border-radius: var(--db-radius-md);
@@ -1216,10 +1524,10 @@
   box-shadow: none;
   color: var(--text-muted);
   cursor: pointer;
-  font-size: 12px;
+  font-size: var(--db-font-sm);
   line-height: 28px;
-  padding: 0 8px;
-  transition: background-color 120ms ease, box-shadow 120ms ease, color 120ms ease;
+  padding: 0 var(--db-space-4);
+  transition: background-color var(--db-transition-fast), box-shadow var(--db-transition-fast), color var(--db-transition-fast);
   white-space: nowrap;
 }
 .note-database-container .db-view-tab:hover {
@@ -1281,10 +1589,10 @@
   border-radius: var(--db-radius-sm);
   background: var(--background-primary);
   color: var(--text-normal);
-  font-size: 12px;
+  font-size: var(--db-font-sm);
   line-height: 18px;
   outline: none;
-  padding: 0 4px;
+  padding: 0 var(--db-space-2);
 }
 
 /* 通用工具栏控件（下拉框、输入框） */
@@ -1297,10 +1605,10 @@
   border-radius: var(--db-radius-sm);
   background: transparent;
   color: var(--text-muted);
-  font-size: 13px;
+  font-size: var(--db-font-md);
   line-height: 22px;
-  margin-right: 5px;
-  padding: 0 6px;
+  margin-right: var(--db-space-2);
+  padding: 0 var(--db-space-3);
 }
 
 .note-database-container .db-view-switcher select {
@@ -1327,7 +1635,7 @@
   background: transparent;
   color: var(--text-muted);
   cursor: pointer;
-  font-size: 13px;
+  font-size: var(--db-font-md);
   box-shadow: none;
   white-space: nowrap;
 }
@@ -1375,16 +1683,16 @@
   position: absolute;
   top: -4px;
   right: -5px;
-  min-width: 14px;
-  height: 14px;
+  min-width: 16px;
+  height: 16px;
   padding: 0 3px;
   border: 1px solid var(--background-primary);
-  border-radius: 7px;
+  border-radius: var(--db-radius-full);
   background: var(--color-orange, var(--interactive-accent));
   color: var(--text-on-accent);
-  font-size: 9px;
+  font-size: var(--db-font-xs);
   font-weight: 600;
-  line-height: 12px;
+  line-height: 14px;
   text-align: center;
   pointer-events: none;
 }
@@ -1447,7 +1755,7 @@
   justify-content: center;
   width: var(--db-composite-badge-box-size);
   height: var(--db-composite-badge-box-size);
-  border-radius: 999px;
+  border-radius: var(--db-radius-full);
   background: transparent;
   color: var(--text-muted);
   line-height: 0;
@@ -1469,7 +1777,7 @@
   height: 18px;
   box-sizing: border-box;
   border: 1px solid var(--background-modifier-border-hover);
-  border-radius: 999px;
+  border-radius: var(--db-radius-full);
   background: var(--background-modifier-border);
   background-image: none;
   cursor: pointer;
@@ -1515,13 +1823,13 @@
   max-height: min(360px, calc(100vh - 120px));
   overflow-y: auto;
   border: 1px solid var(--background-modifier-border);
-  border-radius: 10px;
+  border-radius: var(--db-radius-lg);
   padding: 6px;
 }
 
 .menu.note-database-group-menu .menu-item {
   min-height: 28px;
-  border-radius: 7px;
+  border-radius: var(--db-radius-md);
   margin: 1px 0;
 }
 
@@ -1549,14 +1857,14 @@
 }
 
 .note-database-container .db-toolbar-badge {
-  min-width: 15px;
-  height: 15px;
-  border-radius: 999px;
+  min-width: 16px;
+  height: 16px;
+  border-radius: var(--db-radius-full);
   background: var(--interactive-accent);
   color: var(--text-on-accent);
-  font-size: 10px;
+  font-size: var(--db-font-xs);
   font-weight: 700;
-  line-height: 15px;
+  line-height: 16px;
   pointer-events: none;
   position: absolute;
   right: -5px;
@@ -1608,7 +1916,7 @@
   gap: 4px;
   height: 24px;
   padding: 0 8px;
-  border-radius: var(--db-radius-lg, 999px);
+  border-radius: var(--db-radius-lg);
   background: transparent;
   color: var(--text-normal);
   font-size: 12px;
@@ -1885,7 +2193,7 @@
   color: var(--text-normal);
   font-family: var(--font-interface);
   font-size: 12px;
-  z-index: 80;
+  z-index: var(--db-layer-popover, 100);
 }
 
 .note-database-container .db-dropdown-section-title {
@@ -2055,7 +2363,7 @@
 .note-database-container .db-dropdown-option-swatch {
   width: 9px;
   height: 9px;
-  border-radius: 999px;
+  border-radius: var(--db-radius-full);
   box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.12);
 }
 
@@ -2167,7 +2475,7 @@
   color: var(--text-normal);
   font-family: var(--font-interface);
   font-size: 12px;
-  z-index: 1000;
+  z-index: var(--db-layer-popover, 100);
 }
 
 .note-database-modal .db-dropdown-section-title {
@@ -2365,7 +2673,7 @@
   color: var(--text-normal);
   font-family: var(--font-interface);
   font-size: 12px;
-  z-index: 1000;
+  z-index: var(--db-layer-popover, 100);
 }
 
 .db-dropdown-popover.db-dropdown-popover-context-settings,
@@ -2384,7 +2692,7 @@
   color: var(--text-normal);
   font-family: var(--font-interface);
   font-size: 12px;
-  z-index: 1000;
+  z-index: var(--db-layer-popover, 100);
 }
 
 .note-database-settings .db-dropdown-section-title {
@@ -2568,13 +2876,13 @@
   overflow-y: auto;
   padding: 8px;
   border: 1px solid var(--background-modifier-border);
-  border-radius: var(--db-radius-lg, 8px);
+  border-radius: var(--db-radius-lg);
   background: var(--background-primary);
   box-shadow: 0 8px 28px rgba(0, 0, 0, 0.12);
   color: var(--text-normal);
   font-family: var(--font-interface);
   font-size: 13px;
-  z-index: 1000;
+  z-index: var(--db-layer-submenu, 110);
 }
 
 .db-column-menu-subpopover .db-dropdown-section-title {
@@ -2599,7 +2907,7 @@
   box-sizing: border-box;
   padding: 5px 7px;
   border: 0;
-  border-radius: var(--db-radius-sm, 4px);
+  border-radius: var(--db-radius-sm);
   background: transparent;
   box-shadow: none;
   color: var(--text-normal);
@@ -2651,7 +2959,7 @@
   width: 16px;
   height: 6px;
   overflow: hidden;
-  border-radius: 999px;
+  border-radius: var(--db-radius-full);
   background: var(--background-modifier-border);
 }
 
@@ -2755,12 +3063,12 @@
 .db-calendar-search-results-popover {
   box-sizing: border-box;
   position: fixed;
-  z-index: var(--layer-popover);
+  z-index: var(--db-layer-popover, 100);
   width: min(480px, calc(100vw - 16px));
   max-height: min(420px, calc(100vh - 96px));
   overflow: hidden;
   border: 1px solid var(--background-modifier-border);
-  border-radius: var(--db-radius-lg, 8px);
+  border-radius: var(--db-radius-lg);
   background: var(--background-primary);
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
   color: var(--text-normal);
@@ -2807,7 +3115,7 @@
 
 .db-calendar-search-results-list::-webkit-scrollbar-thumb {
   border: 0;
-  border-radius: 999px;
+  border-radius: var(--db-radius-full);
   background: var(--db-scrollbar-thumb, color-mix(in srgb, var(--text-muted) 36%, transparent));
   box-shadow: none;
 }
@@ -2859,16 +3167,16 @@
 }
 
 .db-calendar-search-results-section .db-calendar-search-result:first-of-type {
-  border-radius: var(--db-radius-md, 6px) var(--db-radius-md, 6px) 0 0 !important;
+  border-radius: var(--db-radius-md) var(--db-radius-md) 0 0 !important;
 }
 
 .db-calendar-search-results-section .db-calendar-search-result:last-of-type {
   border-bottom: 0 !important;
-  border-radius: 0 0 var(--db-radius-md, 6px) var(--db-radius-md, 6px) !important;
+  border-radius: 0 0 var(--db-radius-md) var(--db-radius-md) !important;
 }
 
 .db-calendar-search-results-section .db-calendar-search-result:first-of-type:last-of-type {
-  border-radius: var(--db-radius-md, 6px) !important;
+  border-radius: var(--db-radius-md) !important;
 }
 
 .db-calendar-search-result-title,
@@ -2926,42 +3234,35 @@
   color: var(--text-on-accent);
 }
 
-/* 设置页 CSS 变量（设置页不在 .note-database-container 内，需单独定义） */
-.note-database-settings {
-  --db-radius-sm: 4px;
-  --db-radius-md: 6px;
-  --db-radius-lg: 8px;
-}
-
 /* 设置页分组卡片 */
 .note-database-settings .setting-group {
   background: var(--background-primary-alt);
   border-radius: var(--db-radius-lg);
-  padding: 16px 20px;
-  margin-bottom: 16px;
+  padding: var(--db-space-6) var(--db-space-8);
+  margin-bottom: var(--db-space-6);
   border: 1px solid var(--background-modifier-border);
 }
 .note-database-settings .setting-group-title {
-  font-size: 15px;
+  font-size: var(--db-font-md);
   font-weight: 600;
   color: var(--text-normal);
-  margin-bottom: 4px;
+  margin-bottom: var(--db-space-2);
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--db-space-2);
 }
 .note-database-settings .setting-group-desc {
   color: var(--text-muted);
-  font-size: 13px;
-  margin-bottom: 12px;
+  font-size: var(--db-font-sm);
+  margin-bottom: var(--db-space-5);
 }
 .note-database-settings .setting-group-body .setting-item {
   display: grid;
   grid-template-columns: minmax(0, 1fr) max-content;
   align-items: center;
-  column-gap: 16px;
-  padding-top: 8px;
-  padding-bottom: 8px;
+  column-gap: var(--db-space-6);
+  padding-top: var(--db-space-4);
+  padding-bottom: var(--db-space-4);
 }
 .note-database-settings .setting-group-body .setting-item + .setting-item {
   border-top: 1px solid var(--background-modifier-border-hover);
@@ -3332,7 +3633,7 @@
   max-height: 420px;
   overflow: auto;
   margin: 12px 0;
-  scrollbar-color: color-mix(in srgb, var(--text-muted) 70%, transparent) transparent;
+  scrollbar-color: var(--db-scrollbar-thumb) transparent;
   scrollbar-gutter: stable;
   scrollbar-width: thin;
 }
@@ -3466,7 +3767,7 @@
   top: 1px;
   bottom: 1px;
   width: 2px;
-  border-radius: 999px;
+  border-radius: var(--db-radius-full);
   background: var(--interactive-accent);
 }
 
@@ -3726,7 +4027,7 @@
   width: 14px;
   height: 14px;
   color: currentColor;
-  font-size: 8px;
+  font-size: var(--db-font-xs);
   font-weight: 600;
   line-height: 1;
   letter-spacing: 0;
@@ -3751,7 +4052,7 @@
 
 .note-database-container .db-chart-icon-data-labels::before {
   content: "123";
-  font-size: 7px;
+  font-size: var(--db-font-xs);
 }
 
 .note-database-container .db-chart-options-select {
@@ -3847,7 +4148,7 @@
   height: 20px;
   padding: 0;
   border: 2px solid var(--background-primary);
-  border-radius: 999px;
+  border-radius: var(--db-radius-full);
   box-shadow: 0 0 0 1px var(--background-modifier-border);
   cursor: pointer;
 }
@@ -3918,11 +4219,11 @@
 .note-database-container .db-chart-subpopover {
   width: min(420px, calc(100vw - 72px));
   max-height: min(460px, calc(100vh - 140px));
-  z-index: 70;
+  z-index: var(--db-layer-popover, 100);
 }
 
 .note-database-container .db-chart-dropdown-popover {
-  z-index: 90;
+  z-index: var(--db-layer-popover, 100);
 }
 
 .db-chart-drilldown-modal {
@@ -3953,7 +4254,7 @@
   margin: 0 0 12px;
   padding: 4px 9px;
   border: 1px solid var(--db-drilldown-border);
-  border-radius: 999px;
+  border-radius: var(--db-radius-full);
   background: var(--background-secondary);
   color: var(--text-muted);
   font-size: 12px;
@@ -4050,7 +4351,7 @@
   width: 100%;
   border-collapse: separate;
   border-spacing: 0;
-  font-size: 13px;
+  font-size: var(--db-row-font-size);
   table-layout: fixed;
 }
 
@@ -4066,13 +4367,19 @@
   max-width: 28px;
 }
 
+.note-database-container .db-table col.db-add-column-colgroup {
+  width: 42px;
+  min-width: 42px;
+  max-width: 42px;
+}
+
 /* 表头和单元格通用样式 */
 .note-database-container .db-table th,
 .note-database-container .db-table td {
-  height: 34px;                          /* 行高，改大会让每行更高 */
-  border-right: 1px solid var(--db-table-column-divider);      /* 轻量列分隔线 */
-  border-bottom: 1px solid var(--background-modifier-border);  /* 行分隔线 */
-  background: var(--background-primary);
+  height: var(--db-row-height);
+  border-right: 1px solid var(--db-border-subtle);
+  border-bottom: 1px solid var(--db-border-regular);
+  background: var(--db-surface-canvas);
   vertical-align: middle;
 }
 
@@ -4105,16 +4412,16 @@
 /* 列头单元格（属性名、排序指示器、"..."菜单按钮） */
 .note-database-container .db-table th {
   position: relative;
-  border-top: 1px solid var(--background-modifier-border);
-  border-right-color: var(--background-modifier-border);
+  border-top: 1px solid var(--db-border-emphasis);
+  border-right-color: var(--db-border-subtle);
   background: var(--db-table-header-background);
   box-shadow: none;
-  padding: 0 8px;
+  padding: 0 var(--db-row-cell-padding);
   color: color-mix(in srgb, var(--text-normal) 76%, var(--text-muted));
   cursor: pointer;
   font-weight: 500;
   text-align: left;
-  transition: padding-right 120ms ease, background-color 120ms ease, color 120ms ease;
+  transition: background-color var(--db-transition-fast), color var(--db-transition-fast);
   user-select: none;
   white-space: nowrap;
 }
@@ -4165,16 +4472,15 @@
 .note-database-container .db-table th:hover {
   background: var(--background-modifier-hover);
   color: var(--text-normal);
-  padding-right: 32px;
 }
 
 .note-database-container.is-row-dragging .db-table th:hover {
   background: var(--db-table-header-background);
   color: color-mix(in srgb, var(--text-normal) 76%, var(--text-muted));
-  padding-right: 8px;
 }
 
-/* "..." 菜单按钮（悬停时才显示） */
+/* Keep the column action reachable on touch and visible to keyboard users while
+   retaining a low-emphasis resting state. */
 .note-database-container .db-column-menu-trigger {
   position: absolute;
   top: 5px;
@@ -4184,17 +4490,33 @@
   padding: 0;
   border: 0;
   border-radius: var(--db-radius-lg);
-  opacity: 0;
+  opacity: 0.42;
   background: transparent;
   color: var(--text-muted);
   cursor: pointer;
   line-height: 18px;
-  pointer-events: none;
+  pointer-events: auto;
+  touch-action: manipulation;
 }
 
-.note-database-container .db-table th:hover .db-column-menu-trigger {
+.note-database-container .db-column-menu-trigger::before,
+.note-database-container .db-table .db-table-row-drag-handle::before {
+  position: absolute;
+  content: "";
+}
+
+.note-database-container .db-column-menu-trigger::before {
+  inset: -11px;
+}
+
+.note-database-container .db-table .db-table-row-drag-handle::before {
+  inset: -14px;
+}
+
+.note-database-container .db-table th:hover .db-column-menu-trigger,
+.note-database-container .db-table th:focus-within .db-column-menu-trigger,
+.note-database-container .db-column-menu-trigger:focus-visible {
   opacity: 1;
-  pointer-events: auto;
 }
 
 .note-database-container.is-row-dragging .db-table th:hover .db-column-menu-trigger {
@@ -4219,7 +4541,40 @@
 }
 
 .note-database-container .db-table th.is-narrow:not(:hover) .sort-indicator {
-  display: none;
+  display: inline-flex;
+}
+
+.note-database-container .db-add-column-th {
+  width: 42px;
+  min-width: 42px;
+  max-width: 42px;
+  padding: 0;
+  text-align: center;
+}
+
+.note-database-container .db-add-column-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--db-radius-sm);
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+.note-database-container .db-add-column-button:hover,
+.note-database-container .db-add-column-button:focus-visible {
+  background: var(--background-modifier-hover);
+  color: var(--text-normal);
+}
+
+.note-database-container .db-add-column-button svg {
+  width: 16px;
+  height: 16px;
 }
 
 .note-database-container .db-resize-handle {
@@ -4239,22 +4594,43 @@
 /* 普通单元格：溢出省略号 */
 .note-database-container .db-table td {
   overflow: hidden;
-  padding: 0 8px;
+  padding: 0 var(--db-row-cell-padding);
   color: var(--text-normal);
   text-overflow: ellipsis;
   white-space: nowrap;
-  transition: background-color 120ms ease, box-shadow 120ms ease;
+  transition: background-color var(--db-transition-fast), box-shadow var(--db-transition-fast);
 }
 
 /* 开启换行的单元格：允许多行显示 */
 .note-database-container .db-table td.db-cell-wrap {
   min-width: 180px;
   height: auto;
-  padding-top: 6px;
-  padding-bottom: 6px;
+  padding-top: var(--db-row-cell-padding);
+  padding-bottom: var(--db-row-cell-padding);
   text-overflow: clip;
   white-space: normal;
   word-break: break-word;
+}
+
+.note-database-container.is-density-compact,
+.note-database-container[data-row-density="compact"] {
+  --db-row-height: var(--db-row-height-compact);
+  --db-row-cell-padding: var(--db-space-2);
+  --db-row-font-size: var(--db-font-xs);
+}
+
+.note-database-container.is-density-default,
+.note-database-container[data-row-density="default"] {
+  --db-row-height: var(--db-row-height-default);
+  --db-row-cell-padding: var(--db-space-4);
+  --db-row-font-size: var(--db-font-md);
+}
+
+.note-database-container.is-density-comfortable,
+.note-database-container[data-row-density="comfortable"] {
+  --db-row-height: var(--db-row-height-comfortable);
+  --db-row-cell-padding: var(--db-space-5);
+  --db-row-font-size: 14px;
 }
 
 .note-database-container .db-table td.db-cell-wrap * {
@@ -4335,18 +4711,18 @@
 .note-database-container .db-cell-progress-track {
   flex: 1;
   height: 6px;
-  border-radius: 3px;
+  border-radius: var(--db-radius-xs);
   background: var(--background-modifier-border);
   overflow: hidden;
 }
 .note-database-container .db-cell-progress-fill {
   height: 100%;
-  border-radius: 3px;
+  border-radius: var(--db-radius-xs);
   background: var(--db-number-color, var(--text-accent));
   transition: width 120ms ease;
 }
 .note-database-container .db-cell-progress-text {
-  font-size: var(--font-smallest);
+  font-size: var(--db-font-xs);
   color: var(--text-muted);
   white-space: nowrap;
 }
@@ -4368,23 +4744,23 @@
   transition: stroke-dashoffset 120ms ease;
 }
 
-/* number 显示样式颜色板：镜像 .db-option-color-* 同款 hex，设 --db-number-color 供 fill/star/arc 染色 */
-.db-num-color-gray { --db-number-color: #787774; }
-.db-num-color-brown { --db-number-color: #8f5d45; }
-.db-num-color-orange { --db-number-color: #b65f00; }
-.db-num-color-yellow { --db-number-color: #8f6a00; }
-.db-num-color-green { --db-number-color: #448361; }
-.db-num-color-blue { --db-number-color: #2f6fad; }
-.db-num-color-purple { --db-number-color: #6940a5; }
-.db-num-color-pink { --db-number-color: #a83272; }
-.db-num-color-red { --db-number-color: #d44c47; }
-.db-num-color-slate { --db-number-color: #64748b; }
-.db-num-color-cyan { --db-number-color: #0891b2; }
-.db-num-color-teal { --db-number-color: #0f766e; }
-.db-num-color-lime { --db-number-color: #65a30d; }
-.db-num-color-indigo { --db-number-color: #4f46e5; }
-.db-num-color-violet { --db-number-color: #7c3aed; }
-.db-num-color-rose { --db-number-color: #e11d48; }
+/* Number displays use the same semantic foreground ramp as option swatches. */
+.db-num-color-gray { --db-number-color: var(--status-color-fg-gray); }
+.db-num-color-brown { --db-number-color: var(--status-color-fg-brown); }
+.db-num-color-orange { --db-number-color: var(--status-color-fg-orange); }
+.db-num-color-yellow { --db-number-color: var(--status-color-fg-yellow); }
+.db-num-color-green { --db-number-color: var(--status-color-fg-green); }
+.db-num-color-blue { --db-number-color: var(--status-color-fg-blue); }
+.db-num-color-purple { --db-number-color: var(--status-color-fg-purple); }
+.db-num-color-pink { --db-number-color: var(--status-color-fg-pink); }
+.db-num-color-red { --db-number-color: var(--status-color-fg-red); }
+.db-num-color-slate { --db-number-color: var(--status-color-fg-slate); }
+.db-num-color-cyan { --db-number-color: var(--status-color-fg-cyan); }
+.db-num-color-teal { --db-number-color: var(--status-color-fg-teal); }
+.db-num-color-lime { --db-number-color: var(--status-color-fg-lime); }
+.db-num-color-indigo { --db-number-color: var(--status-color-fg-indigo); }
+.db-num-color-violet { --db-number-color: var(--status-color-fg-violet); }
+.db-num-color-rose { --db-number-color: var(--status-color-fg-rose); }
 
 /* 字段显示样式选项面板（列菜单"显示样式"子菜单内的多级选项） */
 .db-column-display-style-popover.db-column-menu-subpopover {
@@ -4424,7 +4800,7 @@
   margin: 0;
   padding: 4px 6px;
   border: 0;
-  border-radius: var(--db-radius-sm, 4px);
+  border-radius: var(--db-radius-sm);
   background: transparent;
   box-shadow: none;
   color: var(--text-normal);
@@ -4491,7 +4867,7 @@
   height: 18px;
   box-sizing: border-box;
   border: 1px solid var(--background-modifier-border-hover);
-  border-radius: 999px;
+  border-radius: var(--db-radius-full);
   background: var(--background-modifier-border);
   background-image: none;
   cursor: pointer;
@@ -4529,7 +4905,7 @@
   min-width: 0;
   padding: 1px 6px;
   border: 1px solid var(--background-modifier-border);
-  border-radius: var(--db-radius-sm, 4px);
+  border-radius: var(--db-radius-sm);
   background: var(--background-primary);
   color: var(--text-normal);
   font-size: 12px;
@@ -4549,7 +4925,7 @@
 .db-column-display-style-popover .db-displayopt-swatch {
   width: 18px;
   height: 18px;
-  border-radius: 2px;
+  border-radius: var(--db-radius-xs);
   border: 0;
   padding: 0;
   box-shadow: 0 0 0 1px var(--background-modifier-border);
@@ -4560,22 +4936,22 @@
     0 0 0 1px var(--background-primary),
     0 0 0 3px #000;
 }
-.db-column-display-style-popover .db-displayopt-swatch.db-option-color-gray { background: #787774; }
-.db-column-display-style-popover .db-displayopt-swatch.db-option-color-brown { background: #8f5d45; }
-.db-column-display-style-popover .db-displayopt-swatch.db-option-color-orange { background: #b65f00; }
-.db-column-display-style-popover .db-displayopt-swatch.db-option-color-yellow { background: #8f6a00; }
-.db-column-display-style-popover .db-displayopt-swatch.db-option-color-green { background: #448361; }
-.db-column-display-style-popover .db-displayopt-swatch.db-option-color-blue { background: #2f6fad; }
-.db-column-display-style-popover .db-displayopt-swatch.db-option-color-purple { background: #6940a5; }
-.db-column-display-style-popover .db-displayopt-swatch.db-option-color-pink { background: #a83272; }
-.db-column-display-style-popover .db-displayopt-swatch.db-option-color-red { background: #d44c47; }
-.db-column-display-style-popover .db-displayopt-swatch.db-option-color-slate { background: #64748b; }
-.db-column-display-style-popover .db-displayopt-swatch.db-option-color-cyan { background: #0891b2; }
-.db-column-display-style-popover .db-displayopt-swatch.db-option-color-teal { background: #0f766e; }
-.db-column-display-style-popover .db-displayopt-swatch.db-option-color-lime { background: #65a30d; }
-.db-column-display-style-popover .db-displayopt-swatch.db-option-color-indigo { background: #4f46e5; }
-.db-column-display-style-popover .db-displayopt-swatch.db-option-color-violet { background: #7c3aed; }
-.db-column-display-style-popover .db-displayopt-swatch.db-option-color-rose { background: #e11d48; }
+.db-column-display-style-popover .db-displayopt-swatch.db-option-color-gray { background: var(--status-color-fg-gray); }
+.db-column-display-style-popover .db-displayopt-swatch.db-option-color-brown { background: var(--status-color-fg-brown); }
+.db-column-display-style-popover .db-displayopt-swatch.db-option-color-orange { background: var(--status-color-fg-orange); }
+.db-column-display-style-popover .db-displayopt-swatch.db-option-color-yellow { background: var(--status-color-fg-yellow); }
+.db-column-display-style-popover .db-displayopt-swatch.db-option-color-green { background: var(--status-color-fg-green); }
+.db-column-display-style-popover .db-displayopt-swatch.db-option-color-blue { background: var(--status-color-fg-blue); }
+.db-column-display-style-popover .db-displayopt-swatch.db-option-color-purple { background: var(--status-color-fg-purple); }
+.db-column-display-style-popover .db-displayopt-swatch.db-option-color-pink { background: var(--status-color-fg-pink); }
+.db-column-display-style-popover .db-displayopt-swatch.db-option-color-red { background: var(--status-color-fg-red); }
+.db-column-display-style-popover .db-displayopt-swatch.db-option-color-slate { background: var(--status-color-fg-slate); }
+.db-column-display-style-popover .db-displayopt-swatch.db-option-color-cyan { background: var(--status-color-fg-cyan); }
+.db-column-display-style-popover .db-displayopt-swatch.db-option-color-teal { background: var(--status-color-fg-teal); }
+.db-column-display-style-popover .db-displayopt-swatch.db-option-color-lime { background: var(--status-color-fg-lime); }
+.db-column-display-style-popover .db-displayopt-swatch.db-option-color-indigo { background: var(--status-color-fg-indigo); }
+.db-column-display-style-popover .db-displayopt-swatch.db-option-color-violet { background: var(--status-color-fg-violet); }
+.db-column-display-style-popover .db-displayopt-swatch.db-option-color-rose { background: var(--status-color-fg-rose); }
 .db-displayopt-dropdown-popover {
   display: flex;
   flex-direction: column;
@@ -4585,13 +4961,13 @@
   overscroll-behavior: contain;
   padding: 8px;
   border: 1px solid var(--background-modifier-border);
-  border-radius: var(--db-radius-lg, 8px);
+  border-radius: var(--db-radius-lg);
   background: var(--background-primary);
   box-shadow: 0 8px 28px rgba(0, 0, 0, 0.12);
   color: var(--text-normal);
   font-family: var(--font-interface);
   font-size: 12px;
-  z-index: 1001;
+  z-index: var(--db-layer-popover, 100);
 }
 .db-displayopt-dropdown-popover .db-dropdown-option {
   display: grid;
@@ -4604,7 +4980,7 @@
   box-sizing: border-box;
   padding: 5px 7px;
   border: 0;
-  border-radius: var(--db-radius-sm, 4px);
+  border-radius: var(--db-radius-sm);
   background: transparent;
   box-shadow: none;
   color: var(--text-normal);
@@ -4651,7 +5027,7 @@
   white-space: nowrap;
 }
 .note-database-container .db-cell-progress-ring .db-progress-ring-text {
-  font-size: var(--font-smallest);
+  font-size: var(--db-font-xs);
   color: var(--text-muted);
   white-space: nowrap;
 }
@@ -4978,7 +5354,7 @@
   width: 7px;
   height: 7px;
   border: 1px solid var(--interactive-accent);
-  border-radius: 2px;
+  border-radius: var(--db-radius-xs);
   background: var(--background-primary);
   cursor: crosshair;
   opacity: 0;
@@ -5041,8 +5417,10 @@
   box-shadow: 0 8px 22px rgba(0, 0, 0, 0.14);
 }
 
-/* 拖拽手柄与列管理面板的 .db-column-drag 保持一致：纯文本点缀、无背景/圆角/边框。 */
+/* Keep the row grip quiet in the resting state so it reads as a handle without
+   competing with the row content; the SVG remains visible on interaction. */
 .note-database-container .db-table .db-table-row-drag-handle {
+  position: relative;
   -webkit-appearance: none;
   appearance: none;
   display: inline-flex;
@@ -5059,14 +5437,19 @@
   background: transparent;
   box-shadow: none;
   color: var(--text-muted);
-  font-size: 13px;
-  font-weight: 700;
   line-height: 1;
   cursor: grab;
   opacity: 0;
   transition: opacity 120ms ease, color 120ms ease;
   user-select: none;
   vertical-align: middle;
+  touch-action: manipulation;
+}
+
+.note-database-container .db-table .db-table-row-drag-handle svg {
+  width: 16px;
+  height: 16px;
+  stroke-width: 2;
 }
 
 .note-database-container .db-table tr:hover .db-table-row-drag-handle,
@@ -5133,13 +5516,17 @@
   box-shadow: inset 0 0 0 2px var(--interactive-accent);
 }
 
-/* 空值占位（透明文字，悬停时变浅灰色提示可编辑） */
+/* Empty values keep the grid quiet while the cell outline still teaches that
+   an editable value can be entered here. */
 .note-database-container .db-empty-value {
+  display: inline-block;
+  width: 100%;
+  min-height: 1em;
   color: transparent;
 }
 
-.note-database-container .db-editable-cell:hover .db-empty-value {
-  color: var(--text-faint);
+.note-database-container .db-editable-cell:hover {
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--text-muted) 24%, transparent);
 }
 
 /* 编辑态输入框 */
@@ -5147,7 +5534,7 @@
   height: 24px;
   width: 100%;
   border: 0;
-  border-radius: 5px;
+  border-radius: var(--db-radius-sm);
   background: transparent;
   color: var(--text-normal);
   font-size: 13px;
@@ -5331,7 +5718,7 @@
 /* 状态、选择、多选的编辑弹窗 */
 .note-database-container .db-cell-option-popover {
   position: absolute;
-  z-index: 1000;
+  z-index: var(--db-layer-popover, 100);
   display: flex;
   flex-direction: column;
   gap: 6px;
@@ -5373,7 +5760,7 @@
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 1000;
+  z-index: var(--db-layer-popover, 100);
   border: 1px solid var(--background-modifier-border);
   border-radius: var(--db-radius-md);
   background: var(--background-primary);
@@ -5441,7 +5828,7 @@
   height: 12px;
   flex: 0 0 auto;
   margin: 0 4px;
-  border-radius: 2px;
+  border-radius: var(--db-radius-xs);
 }
 
 .note-database-container .db-cell-option-item:first-child {
@@ -5476,7 +5863,7 @@
 .note-database-container .db-option-drop-line {
   height: 2px;
   background: var(--interactive-accent);
-  border-radius: 1px;
+  border-radius: var(--db-radius-xs);
   margin: 1px 4px;
   pointer-events: none;
 }
@@ -5493,7 +5880,7 @@
   min-width: 0;
   height: 20px;
   border: 0;
-  border-radius: 3px;
+  border-radius: var(--db-radius-xs);
   padding: 0 4px;
   font-size: 12px;
   box-shadow: none;
@@ -5574,20 +5961,20 @@
   height: 12px;
   flex-shrink: 0;
   margin: 0 4px;
-  border-radius: 2px;
+  border-radius: var(--db-radius-xs);
   cursor: pointer;
 }
 
 .db-color-picker-popup {
   position: fixed;
-  z-index: 1002;
+  z-index: var(--db-layer-popover, 100);
   display: flex;
   flex-wrap: wrap;
   gap: 4px;
   width: 124px;
   padding: 6px;
   border: 1px solid var(--background-modifier-border);
-  border-radius: 6px;
+  border-radius: var(--db-radius-md);
   background: var(--background-primary);
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
 }
@@ -5598,7 +5985,7 @@
   height: 18px;
   margin: 0;
   border: 0;
-  border-radius: 2px;
+  border-radius: var(--db-radius-xs);
   padding: 0;
   cursor: pointer;
 }
@@ -5607,69 +5994,22 @@
   box-shadow: 0 0 0 2px var(--interactive-accent);
 }
 
-.db-option-color-gray {
-  background: #787774;
-}
-
-.db-option-color-brown {
-  background: #8f5d45;
-}
-
-.db-option-color-orange {
-  background: #b65f00;
-}
-
-.db-option-color-yellow {
-  background: #8f6a00;
-}
-
-.db-option-color-green {
-  background: #448361;
-}
-
-.db-option-color-blue {
-  background: #2f6fad;
-}
-
-.db-option-color-purple {
-  background: #6940a5;
-}
-
-.db-option-color-pink {
-  background: #a83272;
-}
-
-.db-option-color-red {
-  background: #d44c47;
-}
-
-.db-option-color-slate {
-  background: #64748b;
-}
-
-.db-option-color-cyan {
-  background: #0891b2;
-}
-
-.db-option-color-teal {
-  background: #0f766e;
-}
-
-.db-option-color-lime {
-  background: #65a30d;
-}
-
-.db-option-color-indigo {
-  background: #4f46e5;
-}
-
-.db-option-color-violet {
-  background: #7c3aed;
-}
-
-.db-option-color-rose {
-  background: #e11d48;
-}
+.db-option-color-gray { background: var(--status-color-fg-gray); }
+.db-option-color-brown { background: var(--status-color-fg-brown); }
+.db-option-color-orange { background: var(--status-color-fg-orange); }
+.db-option-color-yellow { background: var(--status-color-fg-yellow); }
+.db-option-color-green { background: var(--status-color-fg-green); }
+.db-option-color-blue { background: var(--status-color-fg-blue); }
+.db-option-color-purple { background: var(--status-color-fg-purple); }
+.db-option-color-pink { background: var(--status-color-fg-pink); }
+.db-option-color-red { background: var(--status-color-fg-red); }
+.db-option-color-slate { background: var(--status-color-fg-slate); }
+.db-option-color-cyan { background: var(--status-color-fg-cyan); }
+.db-option-color-teal { background: var(--status-color-fg-teal); }
+.db-option-color-lime { background: var(--status-color-fg-lime); }
+.db-option-color-indigo { background: var(--status-color-fg-indigo); }
+.db-option-color-violet { background: var(--status-color-fg-violet); }
+.db-option-color-rose { background: var(--status-color-fg-rose); }
 
 .note-database-container .db-status-delete-btn:hover {
   color: var(--text-error);
@@ -5769,7 +6109,7 @@
 .note-database-container .db-cell-edit-popover,
 .db-cell-edit-popover {
   position: absolute;
-  z-index: 1000;
+  z-index: var(--db-layer-popover, 100);
   max-width: calc(100vw - 16px);
   border-radius: var(--db-radius-lg);
   background: var(--background-primary);
@@ -5829,7 +6169,7 @@
 
 .db-cell-edit-popover.is-mobile {
   position: fixed;
-  z-index: 1002;
+  z-index: var(--db-layer-popover, 100);
   max-width: none;
   border-radius: var(--db-radius-lg) var(--db-radius-lg) 0 0;
   box-shadow: 0 -8px 28px rgba(0, 0, 0, 0.16), 0 0 0 1px rgba(0, 0, 0, 0.04);
@@ -5881,120 +6221,68 @@
   align-items: center;
   max-width: 100%;
   min-height: 20px;
-  padding: 0 7px;
-  border-radius: 999px;
-  font-size: 12px;
+  padding: 0 var(--db-space-3);
+  border: 1px solid transparent;
+  border-radius: var(--db-radius-full);
+  font-size: var(--db-font-sm);
   font-weight: 500;
 }
 
+.note-database-container .status-badge,
+.note-database-modal .status-badge {
+  background: var(--db-status-bg, transparent);
+  color: var(--db-status-fg, var(--text-normal));
+}
+
 .note-database-container .status-color-gray,
-.note-database-modal .status-color-gray {
-  background: rgba(120, 119, 116, 0.18);
-  color: #787774;
-}
-
+.note-database-modal .status-color-gray { --db-status-bg: var(--status-color-bg-gray); --db-status-fg: var(--status-color-fg-gray); }
 .note-database-container .status-color-brown,
-.note-database-modal .status-color-brown {
-  background: rgba(159, 107, 83, 0.18);
-  color: #8f5d45;
-}
-
+.note-database-modal .status-color-brown { --db-status-bg: var(--status-color-bg-brown); --db-status-fg: var(--status-color-fg-brown); }
 .note-database-container .status-color-orange,
-.note-database-modal .status-color-orange {
-  background: rgba(217, 115, 13, 0.18);
-  color: #b65f00;
-}
-
+.note-database-modal .status-color-orange { --db-status-bg: var(--status-color-bg-orange); --db-status-fg: var(--status-color-fg-orange); }
 .note-database-container .status-color-yellow,
-.note-database-modal .status-color-yellow {
-  background: rgba(203, 145, 47, 0.2);
-  color: #8f6a00;
-}
-
+.note-database-modal .status-color-yellow { --db-status-bg: var(--status-color-bg-yellow); --db-status-fg: var(--status-color-fg-yellow); }
 .note-database-container .status-color-green,
-.note-database-modal .status-color-green {
-  background: rgba(68, 131, 97, 0.18);
-  color: #448361;
-}
-
+.note-database-modal .status-color-green { --db-status-bg: var(--status-color-bg-green); --db-status-fg: var(--status-color-fg-green); }
 .note-database-container .status-color-blue,
-.note-database-modal .status-color-blue {
-  background: rgba(46, 117, 182, 0.18);
-  color: #2f6fad;
-}
-
+.note-database-modal .status-color-blue { --db-status-bg: var(--status-color-bg-blue); --db-status-fg: var(--status-color-fg-blue); }
 .note-database-container .status-color-purple,
-.note-database-modal .status-color-purple {
-  background: rgba(105, 64, 165, 0.18);
-  color: #6940a5;
-}
-
+.note-database-modal .status-color-purple { --db-status-bg: var(--status-color-bg-purple); --db-status-fg: var(--status-color-fg-purple); }
 .note-database-container .status-color-pink,
-.note-database-modal .status-color-pink {
-  background: rgba(193, 76, 138, 0.18);
-  color: #a83272;
-}
-
+.note-database-modal .status-color-pink { --db-status-bg: var(--status-color-bg-pink); --db-status-fg: var(--status-color-fg-pink); }
 .note-database-container .status-color-red,
-.note-database-modal .status-color-red {
-  background: rgba(212, 76, 71, 0.18);
-  color: #c23b35;
-}
-
+.note-database-modal .status-color-red { --db-status-bg: var(--status-color-bg-red); --db-status-fg: var(--status-color-fg-red); }
 .note-database-container .status-color-slate,
-.note-database-modal .status-color-slate {
-  background: rgba(100, 116, 139, 0.18);
-  color: #64748b;
-}
-
+.note-database-modal .status-color-slate { --db-status-bg: var(--status-color-bg-slate); --db-status-fg: var(--status-color-fg-slate); }
 .note-database-container .status-color-cyan,
-.note-database-modal .status-color-cyan {
-  background: rgba(8, 145, 178, 0.18);
-  color: #0891b2;
-}
-
+.note-database-modal .status-color-cyan { --db-status-bg: var(--status-color-bg-cyan); --db-status-fg: var(--status-color-fg-cyan); }
 .note-database-container .status-color-teal,
-.note-database-modal .status-color-teal {
-  background: rgba(15, 118, 110, 0.18);
-  color: #0f766e;
-}
-
+.note-database-modal .status-color-teal { --db-status-bg: var(--status-color-bg-teal); --db-status-fg: var(--status-color-fg-teal); }
 .note-database-container .status-color-lime,
-.note-database-modal .status-color-lime {
-  background: rgba(101, 163, 13, 0.18);
-  color: #65a30d;
-}
-
+.note-database-modal .status-color-lime { --db-status-bg: var(--status-color-bg-lime); --db-status-fg: var(--status-color-fg-lime); }
 .note-database-container .status-color-indigo,
-.note-database-modal .status-color-indigo {
-  background: rgba(79, 70, 229, 0.18);
-  color: #4f46e5;
-}
-
+.note-database-modal .status-color-indigo { --db-status-bg: var(--status-color-bg-indigo); --db-status-fg: var(--status-color-fg-indigo); }
 .note-database-container .status-color-violet,
-.note-database-modal .status-color-violet {
-  background: rgba(124, 58, 237, 0.18);
-  color: #7c3aed;
-}
-
+.note-database-modal .status-color-violet { --db-status-bg: var(--status-color-bg-violet); --db-status-fg: var(--status-color-fg-violet); }
 .note-database-container .status-color-rose,
-.note-database-modal .status-color-rose {
-  background: rgba(225, 29, 72, 0.18);
-  color: #e11d48;
+.note-database-modal .status-color-rose { --db-status-bg: var(--status-color-bg-rose); --db-status-fg: var(--status-color-fg-rose); }
+
+.theme-dark :is(.note-database-container, .note-database-modal, .note-database-settings, .db-color-picker-popup, .db-icon-picker-popover, .db-dropdown-popover) .status-badge {
+  border-color: color-mix(in srgb, currentColor 20%, transparent);
 }
 
 /* 日期紧急度颜色标注（条件格式化） */
 .note-database-container .urgency-red {
-  color: #c23b35;
+  color: var(--status-color-fg-red);
   font-weight: 600;
 }
 
 .note-database-container .urgency-orange {
-  color: #b65f00;
+  color: var(--status-color-fg-orange);
 }
 
 .note-database-container .urgency-green {
-  color: #448361;
+  color: var(--status-color-fg-green);
 }
 
 /* ============================================================================
@@ -6151,6 +6439,247 @@
   width: fit-content;
 }
 
+.note-database-container .db-empty-card {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 14px;
+  width: min(100%, 620px);
+  margin: 0 auto;
+  border: 1px solid color-mix(in srgb, var(--interactive-accent) 18%, var(--background-modifier-border));
+  border-radius: var(--db-radius-lg, 12px);
+  background: color-mix(in srgb, var(--interactive-accent) 5%, var(--background-primary));
+  color: var(--text-normal);
+  padding: 20px;
+  text-align: left;
+}
+
+.note-database-container .db-empty-card.is-compact {
+  gap: 10px;
+  padding: 14px;
+}
+
+.note-database-container .db-empty-card-icon,
+.note-database-container .db-empty-hero-icon {
+  display: grid;
+  flex: 0 0 auto;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--interactive-accent) 14%, var(--background-secondary));
+  color: var(--interactive-accent);
+}
+
+.note-database-container .db-empty-card-icon svg,
+.note-database-container .db-empty-hero-icon svg {
+  width: 21px;
+  height: 21px;
+}
+
+.note-database-container .db-empty-card-content {
+  display: flex;
+  min-width: 0;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.note-database-container .db-empty-card-title,
+.note-database-container .db-empty-hero-title {
+  margin: 0;
+  color: var(--text-normal);
+  font-size: var(--font-ui-medium);
+  font-weight: 650;
+}
+
+.note-database-container .db-empty-card-message,
+.note-database-container .db-empty-hero-description {
+  color: var(--text-muted);
+  line-height: 1.45;
+}
+
+.note-database-container .db-empty-card-diagnostics {
+  width: fit-content;
+  max-width: 100%;
+  border-radius: 999px;
+  background: var(--background-modifier-hover);
+  color: var(--text-faint);
+  font-size: var(--font-ui-smaller);
+  padding: 3px 8px;
+}
+
+.note-database-container .db-empty-action-group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.note-database-container .db-empty-action {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  white-space: normal;
+}
+
+.note-database-container .db-empty-action:focus-visible,
+.note-database-container .db-empty-preset-card:focus-visible {
+  outline: 2px solid var(--interactive-accent);
+  outline-offset: 2px;
+}
+
+.note-database-container .db-empty-action-icon,
+.note-database-container .db-empty-preset-icon {
+  display: inline-flex;
+  align-items: center;
+}
+
+.note-database-container .db-empty-action-icon svg {
+  width: 15px;
+  height: 15px;
+}
+
+.note-database-container .db-empty-hero {
+  display: flex;
+  width: min(100%, 780px);
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 20px;
+  border: 1px solid color-mix(in srgb, var(--interactive-accent) 22%, var(--background-modifier-border));
+  border-radius: var(--db-radius-lg, 12px);
+  background: color-mix(in srgb, var(--interactive-accent) 6%, var(--background-primary));
+  padding: 28px;
+  text-align: left;
+}
+
+.note-database-container .db-empty-hero-content {
+  display: flex;
+  min-width: min(260px, 100%);
+  flex: 1 1 300px;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.note-database-container .db-empty-presets {
+  flex: 1 1 100%;
+  min-width: 0;
+  margin-top: 4px;
+}
+
+.note-database-container .db-empty-presets-title {
+  margin-bottom: 10px;
+  color: var(--text-muted);
+  font-size: var(--font-ui-small);
+  font-weight: 600;
+}
+
+.note-database-container .db-empty-preset-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.note-database-container .db-empty-preset-card {
+  display: flex;
+  min-width: 0;
+  min-height: 92px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 5px;
+  border: 1px solid var(--background-modifier-border);
+  border-radius: var(--db-radius-md, 8px);
+  background: var(--background-primary);
+  color: var(--text-normal);
+  padding: 12px;
+  text-align: left;
+}
+
+.note-database-container .db-empty-preset-card:hover,
+.note-database-container .db-empty-preset-card:focus-visible {
+  border-color: color-mix(in srgb, var(--interactive-accent) 60%, var(--background-modifier-border));
+  background: var(--background-modifier-hover);
+}
+
+.note-database-container .db-empty-preset-icon {
+  color: var(--interactive-accent);
+}
+
+.note-database-container .db-empty-preset-title {
+  font-size: var(--font-ui-small);
+}
+
+.note-database-container .db-empty-preset-description {
+  display: -webkit-box;
+  overflow: hidden;
+  color: var(--text-muted);
+  font-size: var(--font-ui-smaller);
+  line-height: 1.35;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.note-database-container .db-empty-table-row > td {
+  height: 150px;
+  border: 0;
+  padding: 20px;
+}
+
+.note-database-container .db-empty-table-row .db-empty-card {
+  width: min(100%, 520px);
+}
+
+.note-database-container .db-board-empty-slot {
+  min-height: 104px;
+  align-items: center;
+  border: 1px dashed color-mix(in srgb, var(--interactive-accent) 45%, var(--background-modifier-border));
+  background: color-mix(in srgb, var(--interactive-accent) 3%, transparent);
+}
+
+.note-database-container .db-gallery-empty-group,
+.note-database-container .db-list-empty-group {
+  width: min(100%, 520px);
+  border-style: dashed;
+  border-color: var(--background-modifier-border);
+  background: transparent;
+}
+
+@media (max-width: 640px) {
+  .note-database-container .db-empty-hero {
+    align-items: stretch;
+    padding: 20px;
+  }
+
+  .note-database-container .db-empty-preset-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .note-database-container .db-empty-card {
+    padding: 16px;
+  }
+}
+
+@media (max-width: 360px) {
+  .note-database-container .db-empty-hero,
+  .note-database-container .db-empty-card {
+    gap: 12px;
+    padding: 14px;
+  }
+
+  .note-database-container .db-empty-preset-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .note-database-container .db-empty-action-group,
+  .note-database-container .db-empty-action {
+    width: 100%;
+  }
+}
+
 .note-database-container .db-error-display {
   white-space: pre-wrap;
   font-family: monospace;
@@ -6287,6 +6816,201 @@
   top: calc(var(--db-group-table-head-top) + 8px + var(--db-selection-status-offset));
 }
 
+/* Grouped tables share one header, body, and footer so horizontal scrolling and
+   column widths remain continuous across every group. */
+.note-database-container .db-grouped-table {
+  display: block;
+  min-width: 0;
+  overflow-x: auto;
+}
+
+.note-database-container .db-grouped-table > .db-table-wrap {
+  width: max-content;
+  min-width: 100%;
+  margin: 0;
+}
+
+.note-database-container .db-grouped-table tr.db-group-divider-row {
+  display: table-row;
+  position: sticky;
+  top: calc(var(--db-group-header-top) + 8px + var(--db-selection-status-offset));
+  z-index: 24;
+  background: var(--background-primary);
+  padding: 0;
+}
+
+.note-database-container .db-grouped-table tr.db-group-divider-row > td {
+  height: var(--db-group-header-height);
+  padding: 0;
+  border-top: 1px solid var(--db-border-emphasis);
+  border-bottom: 1px solid var(--db-border-subtle);
+  background: var(--background-primary);
+  overflow: visible;
+}
+
+.note-database-container .db-group-divider-content {
+  display: flex;
+  align-items: center;
+  min-height: var(--db-group-header-height);
+  gap: 8px;
+  padding: 0 var(--db-row-cell-padding);
+}
+
+.note-database-container .db-group-divider-content .db-group-divider-checkbox {
+  flex: 0 0 auto;
+  margin: 0 2px 0 0;
+}
+
+.note-database-container .db-grouped-table tr.db-group-divider-row .db-group-header-label {
+  position: relative;
+  left: auto;
+  z-index: auto;
+  max-width: min(480px, 55vw);
+  max-height: none;
+  padding: 0;
+  background: transparent;
+}
+
+.note-database-container .db-group-divider-summaries {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  margin-left: auto;
+  overflow: hidden;
+}
+
+.note-database-container .db-grouped-table tr.db-group-expand-row > td {
+  height: 32px;
+  padding: 4px var(--db-row-cell-padding);
+  border-bottom: 1px solid var(--db-border-regular);
+  background: var(--db-surface-canvas);
+  text-align: center;
+}
+
+.note-database-container .db-table tr.db-row-insert-line > td {
+  position: relative;
+  height: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  overflow: visible;
+}
+
+.note-database-container .db-row-insert-button {
+  position: absolute;
+  top: -11px;
+  left: 50%;
+  z-index: 4;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  border: 1px solid var(--background-modifier-border);
+  border-radius: 50%;
+  background: var(--background-primary);
+  color: var(--text-muted);
+  cursor: pointer;
+  opacity: 0;
+  transform: translateX(-50%);
+  transition: opacity 120ms ease, color 120ms ease, border-color 120ms ease;
+}
+
+.note-database-container .db-table tr.db-row-insert-line > td::before {
+  position: absolute;
+  top: -1px;
+  right: 0;
+  left: 0;
+  height: 2px;
+  background: var(--interactive-accent);
+  content: "";
+  opacity: 0;
+}
+
+.note-database-container .db-row-insert-line:hover > td::before,
+.note-database-container .db-row-insert-line:focus-within > td::before,
+.note-database-container .db-row-insert-line:hover .db-row-insert-button,
+.note-database-container .db-row-insert-line:focus-within .db-row-insert-button {
+  opacity: 1;
+}
+
+.note-database-container .db-row-insert-button:hover,
+.note-database-container .db-row-insert-button:focus-visible {
+  border-color: var(--interactive-accent);
+  color: var(--text-normal);
+}
+
+.note-database-container .db-table tfoot.db-table-footer td {
+  height: var(--db-row-height);
+  padding: 4px var(--db-row-cell-padding);
+  border-top: 1px solid var(--db-border-emphasis);
+  border-bottom: 0;
+  background: var(--db-table-header-background);
+  color: var(--text-muted);
+  vertical-align: top;
+}
+
+.note-database-container .db-table-footer-trigger {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  width: 100%;
+  min-height: calc(var(--db-row-height) - 8px);
+  padding: 2px 4px;
+  border: 0;
+  border-radius: var(--db-radius-sm);
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  text-align: left;
+}
+
+.note-database-container .db-table-footer-trigger:not(:disabled):hover,
+.note-database-container .db-table-footer-trigger:not(:disabled):focus-visible {
+  background: var(--background-modifier-hover);
+  color: var(--text-normal);
+}
+
+.note-database-container .db-table-footer-trigger:disabled {
+  cursor: default;
+  opacity: 0.72;
+}
+
+.note-database-container .db-table-footer-calculate-hint {
+  opacity: 0;
+  transition: opacity 120ms ease;
+}
+
+.note-database-container .db-table-footer-trigger:hover .db-table-footer-calculate-hint,
+.note-database-container .db-table-footer-trigger:focus-visible .db-table-footer-calculate-hint {
+  opacity: 0.8;
+}
+
+.note-database-container .db-table-footer-value {
+  display: inline-flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.note-database-container .db-table-footer-kind {
+  font-size: 10px;
+  line-height: 1.1;
+  text-transform: uppercase;
+}
+
+.note-database-container .db-table-footer-result {
+  color: var(--text-normal);
+  font-variant-numeric: tabular-nums;
+}
+
+.note-database-container .db-table-footer-add-column {
+  width: 42px;
+  min-width: 42px;
+  padding: 0;
+}
+
 
 /* ============================================================================
  *  12. 分组排序弹窗（Modal 内的拖拽排序列表）
@@ -6349,8 +7073,8 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-end;
-  gap: 8px;
-  margin-top: 16px;
+  gap: var(--db-space-4);
+  margin-top: var(--db-space-6);
 }
 
 .modal.property-conflict-modal-host {
@@ -6630,7 +7354,7 @@
 /* 1. 外壳：定位由 PopoverPosition 统一计算，避免贴近视口边缘时被裁切 */
 .note-database-container .db-group-order-popover,
 .note-database-modal .db-group-order-popover {
-  z-index: 1000;
+  z-index: var(--db-layer-popover, 100);
   min-width: 260px;
   max-width: min(360px, calc(100vw - 48px));
   max-height: min(480px, calc(100vh - 120px));
@@ -6706,7 +7430,7 @@
 .note-database-modal .db-group-order-popover .db-group-order-drop-line {
   height: 2px;
   margin: -1px 6px 0;
-  border-radius: 999px;
+  border-radius: var(--db-radius-full);
   background: var(--interactive-accent);
   pointer-events: none;
 }
@@ -7062,11 +7786,11 @@
   min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: var(--db-space-4);
   min-height: 260px;
-  border-radius: 10px;
+  border-radius: var(--db-radius-lg);
   background: var(--background-secondary);
-  padding: 8px;
+  padding: var(--db-space-4);
 }
 
 .note-database-container .db-board-column.is-drop-target {
@@ -7093,20 +7817,20 @@
   gap: 8px;
   min-height: 32px;
   max-height: 32px;
-  margin: -8px -8px 0;
+  margin: calc(-1 * var(--db-space-4)) calc(-1 * var(--db-space-4)) 0;
   border: 1px solid transparent;
-  border-radius: 8px 8px 6px 6px;
+  border-radius: var(--db-radius-lg) var(--db-radius-lg) var(--db-radius-md) var(--db-radius-md);
   background: var(--background-secondary);
   box-shadow: 0 2px 0 var(--background-modifier-border);
   cursor: grab;
-  padding: 6px 3px;
+  padding: var(--db-space-3) var(--db-space-2);
 }
 
 .note-database-container .db-board-column-header::before {
   position: absolute;
   inset: -6px -4px 0;
   z-index: -1;
-  border-radius: 10px 10px 8px 8px;
+  border-radius: var(--db-radius-lg);
   background: var(--background-secondary);
   content: "";
   pointer-events: none;
@@ -7120,7 +7844,7 @@
   position: fixed;
   z-index: 2147483646;
   padding: 3px 8px;
-  border-radius: 999px;
+  border-radius: var(--db-radius-full);
   background: var(--interactive-accent);
   color: var(--text-on-accent);
   font-size: 11px;
@@ -7157,7 +7881,7 @@
   right: 4px;
   bottom: 10px;
   width: 2px;
-  border-radius: 2px;
+  border-radius: var(--db-radius-xs);
   background: transparent;
   content: "";
 }
@@ -7242,7 +7966,7 @@
   gap: 8px;
   min-height: 26px;
   margin: -10px -8px 0;
-  /* border-radius: 7px; */
+  border-radius: var(--db-radius-md);
   background: var(--background-primary);
   /* box-shadow: 0 1px 0 var(--background-modifier-border); */
   color: var(--text-muted);
@@ -7253,7 +7977,7 @@
   position: absolute;
   inset: -6px -4px 0;
   z-index: -1;
-  border-radius: 8px 8px 6px 6px;
+  border-radius: var(--db-radius-lg) var(--db-radius-lg) var(--db-radius-md) var(--db-radius-md);
   background: var(--background-primary);
   content: "";
   pointer-events: none;
@@ -7284,15 +8008,16 @@
   position: relative;
   border: 1px solid var(--background-modifier-border);
   border-radius: var(--db-radius-lg);
-  background: var(--background-primary);
+  background: var(--db-surface-raised);
   cursor: pointer;
-  padding: 10px;
-  transition: background-color 120ms ease, box-shadow 120ms ease, transform 120ms ease;
+  padding: var(--db-space-4);
+  box-shadow: var(--db-elevation-1);
+  transition: background-color var(--db-transition-fast), box-shadow var(--db-transition-fast), transform var(--db-transition-fast);
 }
 
 .note-database-container .db-board-card:hover {
-  background: var(--background-modifier-hover);
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+  background: color-mix(in srgb, var(--db-hover-bg) 82%, var(--db-surface-raised));
+  box-shadow: var(--db-elevation-2);
   transform: translateY(-1px);
 }
 
@@ -7700,7 +8425,7 @@ body.is-phone .note-database-container .db-record-detail-panel {
   background: transparent;
   box-shadow: none;
   color: var(--text-muted);
-  border-radius: var(--radius-s);
+  border-radius: var(--db-radius-sm);
 }
 
 .note-database-container .db-board-add-group-confirm:hover {
@@ -7721,7 +8446,7 @@ body.is-phone .note-database-container .db-record-detail-panel {
   margin: 0;
   padding: 0;
   border: 0;
-  border-radius: 2px;
+  border-radius: var(--db-radius-xs);
   cursor: pointer;
 }
 
@@ -7828,7 +8553,7 @@ body.is-phone .note-database-container .db-record-detail-panel {
   right: 3px;
   bottom: 10px;
   width: 2px;
-  border-radius: 2px;
+  border-radius: var(--db-radius-xs);
   background: transparent;
   content: "";
 }
@@ -8149,7 +8874,7 @@ body.is-phone .note-database-container .db-record-detail-panel {
 
 .note-database-container .db-list-group-count {
   min-width: 18px;
-  border-radius: 999px;
+  border-radius: var(--db-radius-full);
   background: var(--background-secondary);
   color: var(--text-faint);
   font-size: 11px;
@@ -8395,7 +9120,7 @@ body.is-phone .note-database-container .db-record-detail-panel {
   /* 顶部位置 = 工具栏高度（JS 动态测量） */
   top: var(--db-table-header-top);
   right: 24px;
-  z-index: 50;
+  z-index: var(--db-layer-panel, 50);
   width: min(520px, calc(100vw - 72px));
   max-height: min(560px, calc(100vh - 140px));
   overflow: auto;
@@ -8820,7 +9545,7 @@ body.is-phone .note-database-container .db-record-detail-panel {
   padding: 1px 8px;
   font-size: 11px;
   height: auto;
-  border-radius: var(--radius-s);
+  border-radius: var(--db-radius-sm);
   background: var(--text-warning);
   color: var(--background-primary);
   font-weight: 600;
@@ -9827,12 +10552,7 @@ body.is-phone .note-database-container .db-record-detail-panel {
 .formula-workbench-modal {
   display: grid;
   grid-template-rows: auto minmax(0, 1fr) auto;
-  --db-radius-sm: 4px;
-  --db-radius-md: 6px;
-  --db-radius-lg: 8px;
   --db-formula-control-radius: var(--db-radius-lg);
-  --db-scrollbar-thumb: color-mix(in srgb, var(--text-muted) 62%, transparent);
-  --db-scrollbar-thumb-hover: color-mix(in srgb, var(--text-muted) 82%, transparent);
   box-sizing: border-box;
   height: 100%;
   max-height: min(780px, calc(100vh - 80px));
@@ -9897,7 +10617,7 @@ body.is-phone .note-database-container .db-record-detail-panel {
 .formula-workbench-modal .db-formula-preview-details::-webkit-scrollbar-thumb,
 .formula-workbench-modal .db-formula-property-suggestions::-webkit-scrollbar-thumb {
   border: 0;
-  border-radius: 999px;
+  border-radius: var(--db-radius-full);
   background-color: var(--db-scrollbar-thumb);
   box-shadow: none;
 }
@@ -10166,7 +10886,7 @@ body.is-phone .note-database-container .db-record-detail-panel {
 }
 
 .note-database-modal .db-formula-token-bracket-match {
-  border-radius: 3px;
+  border-radius: var(--db-radius-xs);
   background: color-mix(in srgb, var(--interactive-accent) 22%, transparent);
   color: var(--text-normal);
 }
@@ -10799,7 +11519,7 @@ body.is-phone .note-database-container .db-record-detail-panel {
   margin: 10px -16px 10px 0;
   overflow: auto;
   padding-right: 16px;
-  scrollbar-color: color-mix(in srgb, var(--text-muted) 70%, transparent) transparent;
+  scrollbar-color: var(--db-scrollbar-thumb) transparent;
   scrollbar-gutter: stable;
   scrollbar-width: thin;
 }
@@ -10817,13 +11537,13 @@ body.is-phone .note-database-container .db-record-detail-panel {
 
 .note-database-modal .db-status-preset-manager-list::-webkit-scrollbar-thumb {
   border: 0;
-  border-radius: 999px;
-  background: color-mix(in srgb, var(--text-muted) 70%, transparent);
+  border-radius: var(--db-radius-full);
+  background: var(--db-scrollbar-thumb);
   box-shadow: none;
 }
 
 .note-database-modal .db-status-preset-manager-list::-webkit-scrollbar-thumb:hover {
-  background: color-mix(in srgb, var(--text-muted) 88%, transparent);
+  background: var(--db-scrollbar-thumb-hover);
 }
 
 .note-database-modal .db-status-preset-manager-row {
@@ -11087,7 +11807,7 @@ body.is-phone .note-database-container .db-record-detail-panel {
   height: 22px;
   margin: 0;
   border: 2px solid transparent;           /* 透明边框占位，避免选中时跳动 */
-  border-radius: 4px;
+  border-radius: var(--db-radius-sm);
   padding: 0;
   cursor: pointer;
   transition: transform 80ms ease, border-color 120ms ease;
@@ -11405,7 +12125,7 @@ body.is-phone .note-database-container .db-record-detail-panel {
   height: auto;
   margin: 0;
   border: 0;
-  border-radius: 999px;
+  border-radius: var(--db-radius-full);
   box-shadow: none;
   cursor: pointer;
   padding: 0 7px;
@@ -11999,7 +12719,7 @@ body.is-phone .note-database-container .db-record-detail-panel {
   padding: 4px 5px 8px;
   white-space: nowrap;
   overscroll-behavior-x: contain;
-  scrollbar-color: color-mix(in srgb, var(--text-muted) 58%, transparent) transparent;
+  scrollbar-color: var(--db-scrollbar-thumb) transparent;
   scrollbar-width: thin;
 }
 
@@ -12012,8 +12732,8 @@ body.is-phone .note-database-container .db-record-detail-panel {
 }
 
 .formula-workbench-modal.is-formula-compact .db-formula-browser-three-col .db-formula-category-list::-webkit-scrollbar-thumb {
-  border-radius: 999px;
-  background: color-mix(in srgb, var(--text-muted) 58%, transparent);
+  border-radius: var(--db-radius-full);
+  background: var(--db-scrollbar-thumb);
 }
 
 .formula-workbench-modal.is-formula-compact .db-formula-browser-three-col .db-formula-category {
@@ -12164,13 +12884,13 @@ body.is-phone .note-database-container .db-record-detail-panel {
 }
 
 .note-database-container .db-table th.db-drop-target {
-  background: var(--background-modifier-hover);
+  background: var(--db-table-header-background);
   box-shadow: inset 2px 0 0 var(--interactive-accent);
 }
 
 .note-database-container.is-row-dragging .db-table th.db-drop-target {
-  background: var(--background-primary);
-  box-shadow: 0 1px 0 var(--background-modifier-border);
+  background: var(--db-table-header-background);
+  box-shadow: inset 2px 0 0 var(--interactive-accent);
 }
 
 /* ============================================================================
@@ -12238,7 +12958,7 @@ body.is-phone .note-database-container .db-record-detail-panel {
 .note-database-embed {
   margin: 12px 0;
   border: 1px solid var(--background-modifier-border);
-  border-radius: 10px;
+  border-radius: var(--db-radius-lg);
   background: var(--background-primary);
 }
 
@@ -12321,7 +13041,7 @@ body.is-phone .note-database-container .db-record-detail-panel {
   border-top: 0;
   border-left: 0;
   border-right: 1px solid var(--db-table-column-divider);
-  border-bottom: 1px solid var(--background-modifier-border);
+  border-bottom: 1px solid var(--db-border-regular);
   background: var(--background-primary);
   color: inherit;
   font-family: var(--font-interface);
@@ -12351,13 +13071,13 @@ body.is-phone .note-database-container .db-record-detail-panel {
 }
 
 .note-database-embed.note-database-container table.db-table th.db-drop-target {
-  background: var(--background-modifier-hover);
-  box-shadow: inset 2px 0 0 var(--interactive-accent), 0 1px 0 var(--background-modifier-border);
+  background: var(--db-table-header-background);
+  box-shadow: inset 2px 0 0 var(--interactive-accent);
 }
 
 .note-database-embed.note-database-container.is-row-dragging table.db-table th.db-drop-target {
-  background: var(--background-primary);
-  box-shadow: 0 1px 0 var(--background-modifier-border);
+  background: var(--db-table-header-background);
+  box-shadow: inset 2px 0 0 var(--interactive-accent);
 }
 
 .note-database-embed.note-database-container table.db-table td {
@@ -12473,7 +13193,7 @@ body.is-phone .note-database-container .db-record-detail-panel {
   height: 30px;
   margin: 6px auto -36px;
   border: 1px solid var(--background-modifier-border);
-  border-radius: 999px;
+  border-radius: var(--db-radius-full);
   background: color-mix(in srgb, var(--background-primary) 92%, transparent);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
   opacity: 0;
@@ -12578,7 +13298,7 @@ body.is-phone .note-database-container .db-record-detail-panel {
   width: 252px;
   background: var(--background-primary);
   border: 1px solid var(--background-modifier-border);
-  border-radius: 8px;
+  border-radius: var(--db-radius-lg);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
 }
 
@@ -12603,7 +13323,7 @@ body.is-phone .note-database-container .db-record-detail-panel {
   overflow: hidden;
   padding: 2px 6px;
   border: 0;
-  border-radius: 5px;
+  border-radius: var(--db-radius-sm);
   background: transparent;
   box-shadow: none;
   cursor: pointer;
@@ -12623,7 +13343,7 @@ body.is-phone .note-database-container .db-record-detail-panel {
   height: 24px;
   padding: 0;
   border: 0;
-  border-radius: 5px;
+  border-radius: var(--db-radius-sm);
   background: transparent;
   color: var(--text-muted);
   cursor: pointer;
@@ -12642,7 +13362,7 @@ body.is-phone .note-database-container .db-record-detail-panel {
 }
 
 .note-database-container .db-calendar-mini-weekday {
-  font-size: 10px;
+  font-size: var(--db-font-xs);
   color: var(--text-normal);
   text-align: center;
   text-transform: uppercase;
@@ -12671,7 +13391,7 @@ body.is-phone .note-database-container .db-record-detail-panel {
   border: 0;
   background: transparent;
   cursor: pointer;
-  border-radius: 5px;
+  border-radius: var(--db-radius-sm);
   box-shadow: none;
 }
 
@@ -12682,7 +13402,7 @@ body.is-phone .note-database-container .db-record-detail-panel {
   min-width: 22px;
   height: 22px;
   padding: 0 4px;
-  border-radius: 5px;
+  border-radius: var(--db-radius-sm);
   font-size: 11px;
   font-weight: 500;
   color: var(--text-normal);
@@ -12733,7 +13453,7 @@ body.is-phone .note-database-container .db-record-detail-panel {
   min-height: 42px;
   padding: 6px 4px;
   border: 0;
-  border-radius: 6px;
+  border-radius: var(--db-radius-md);
   background: transparent;
   color: var(--text-normal);
   cursor: pointer;
@@ -12763,7 +13483,7 @@ body.is-phone .note-database-container .db-record-detail-panel {
   bottom: 5px;
   width: 14px;
   height: 2px;
-  border-radius: 999px;
+  border-radius: var(--db-radius-full);
   transform: translateX(-50%);
 }
 
@@ -12782,7 +13502,7 @@ body.is-phone .note-database-container .db-record-detail-panel {
 .note-database-container .db-calendar-mini-today {
   padding: 3px 8px;
   border: 0;
-  border-radius: 5px;
+  border-radius: var(--db-radius-sm);
   background: transparent;
   color: var(--text-muted);
   cursor: pointer;
@@ -12800,7 +13520,7 @@ body.is-phone .note-database-container .db-record-detail-panel {
 .note-database-container .db-calendar-mini-footer-action {
   padding: 3px 8px;
   border: 0;
-  border-radius: 5px;
+  border-radius: var(--db-radius-sm);
   background: transparent;
   box-shadow: none;
   color: var(--text-accent);
@@ -12881,7 +13601,7 @@ body.is-phone .note-database-container .db-record-detail-panel {
   justify-content: center;
   height: 20px;
   min-width: 20px;
-  border-radius: 6px;
+  border-radius: var(--db-radius-md);
   background: var(--background-primary);
   color: var(--text-muted);
   cursor: pointer;
@@ -12960,7 +13680,7 @@ body.is-phone .note-database-container .db-record-detail-panel {
   height: 22px;
   padding: 1px;
   border: 1px solid var(--background-modifier-border);
-  border-radius: 6px;
+  border-radius: var(--db-radius-md);
   background: var(--background-secondary);
   gap: 1px;
 }
@@ -12974,7 +13694,7 @@ body.is-phone .note-database-container .db-record-detail-panel {
   min-width: 32px;
   padding: 0 7px;
   border: 0;
-  border-radius: 4px;
+  border-radius: var(--db-radius-sm);
   background: transparent;
   color: var(--text-muted);
   cursor: pointer;
@@ -13205,7 +13925,7 @@ body.is-mobile .note-database-container .db-timeline-scale-menu,
   width: 18px;
   height: 18px;
   border: none;
-  border-radius: 3px;
+  border-radius: var(--db-radius-xs);
   background: transparent;
   color: var(--text-normal);
   font-size: 14px;
@@ -13254,7 +13974,7 @@ body.is-mobile .note-database-container .db-timeline-scale-menu,
   z-index: 20;
   background: var(--background-primary);
   border: 1px solid var(--background-modifier-border);
-  border-radius: var(--db-radius-sm, 4px);
+  border-radius: var(--db-radius-sm);
   box-shadow: var(--shadow-s);
   padding: 4px;
   max-height: 300px;
@@ -13312,10 +14032,10 @@ body.is-mobile .note-database-container .db-timeline-scale-menu,
   right: 4px;
   z-index: 5;
   padding: 1px 4px;
-  font-size: 10px;
+  font-size: var(--db-font-xs);
   color: var(--text-on-accent);
   background: var(--interactive-accent);
-  border-radius: 2px;
+  border-radius: var(--db-radius-xs);
   pointer-events: none;
 }
 
@@ -13384,7 +14104,7 @@ body.is-mobile .note-database-container .db-timeline-scale-menu,
   overflow-y: auto;
   background: var(--background-primary);
   border: 1px solid var(--background-modifier-border);
-  border-radius: 4px;
+  border-radius: var(--db-radius-sm);
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.18);
 }
 
@@ -13481,7 +14201,7 @@ body.is-mobile .note-database-container .db-timeline-scale-menu,
   flex: 0 0 auto;
   min-width: 0;
   overflow: hidden;
-  font-size: 10px;
+  font-size: var(--db-font-xs);
   line-height: 1.2;
   color: var(--text-faint);
   text-overflow: ellipsis;
@@ -13513,7 +14233,7 @@ body.is-mobile .note-database-container .db-timeline-scale-menu,
 
 .note-database-container .db-calendar-week-timed-event.is-compact .db-calendar-week-event-title {
   display: block;
-  font-size: 10px;
+  font-size: var(--db-font-xs);
   line-height: 1;
   white-space: nowrap;
 }
@@ -13626,7 +14346,7 @@ body.is-mobile .note-database-container .db-timeline-scale-menu,
   padding: 0 6px;
   border: 0;
   border-left: 3px solid var(--db-calendar-event-accent, var(--interactive-accent));
-  border-radius: 6px;
+  border-radius: var(--db-radius-md);
   /* Solid base first (so the day-cell grid lines never show through), then the
      tint on top — mirrors the week timed-event treatment. */
   background-color: var(--background-primary);
@@ -13839,7 +14559,7 @@ body.is-mobile .note-database-container .db-timeline-scale-menu,
   overflow-y: auto;
   background: var(--background-primary);
   border: 1px solid var(--background-modifier-border);
-  border-radius: 4px;
+  border-radius: var(--db-radius-sm);
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.18);
 }
 
@@ -14016,7 +14736,7 @@ body.is-mobile .note-database-container .db-timeline-scale-menu,
   z-index: 2;
   height: 20px;
   margin: 0 4px;
-  border-radius: 6px;
+  border-radius: var(--db-radius-md);
 }
 
 /* Keep the week all-day card's visible children in one foreground flex layer.
@@ -14063,8 +14783,8 @@ body.is-mobile .note-database-container .db-timeline-scale-menu,
 }
 
 .note-database-container .db-calendar-week-scroll::-webkit-scrollbar-thumb {
-  border-radius: 999px;
-  background: color-mix(in srgb, var(--text-muted) 28%, transparent);
+  border-radius: var(--db-radius-full);
+  background: var(--db-scrollbar-thumb);
 }
 
 .note-database-container .db-calendar-week-scroll::-webkit-scrollbar-track {
@@ -14101,7 +14821,7 @@ body.is-mobile .note-database-container .db-timeline-scale-menu,
   z-index: 3;
   overflow: hidden;
   border-left: 3px solid var(--db-calendar-event-accent, var(--interactive-accent));
-  border-radius: 7px;
+  border-radius: var(--db-radius-md);
   /* Solid base first (so hour lines never show through), then the tint on top. */
   background-color: var(--background-primary);
   background-image: linear-gradient(var(--db-calendar-event-bg, color-mix(in srgb, var(--interactive-accent) 14%, transparent)), var(--db-calendar-event-bg, color-mix(in srgb, var(--interactive-accent) 14%, transparent)));
@@ -14146,7 +14866,7 @@ body.is-mobile .note-database-container .db-timeline-scale-menu,
   align-items: center;
   padding: 0 6px;
   border: 1px dashed var(--interactive-accent);
-  border-radius: 4px;
+  border-radius: var(--db-radius-sm);
   background: color-mix(in srgb, var(--interactive-accent) 14%, transparent);
   color: var(--text-muted);
   font-size: 11px;
@@ -14181,10 +14901,10 @@ body.is-mobile .note-database-container .db-timeline-scale-menu,
   bottom: 4px;
   z-index: 6;
   padding: 2px 4px;
-  border-radius: 3px;
+  border-radius: var(--db-radius-xs);
   background: var(--interactive-accent);
   color: var(--text-on-accent);
-  font-size: 10px;
+  font-size: var(--db-font-xs);
   pointer-events: none;
 }
 
@@ -14206,7 +14926,7 @@ body.is-mobile .note-database-container .db-calendar-month-time {
   border: 0;
   min-height: 20px;
   height: 20px;
-  border-radius: 6px;
+  border-radius: var(--db-radius-md);
   background-color: var(--background-primary);
   background-image: var(--db-timeline-event-background-image);
   color: var(--text-normal);
@@ -14227,7 +14947,7 @@ body.is-mobile .note-database-container .db-calendar-month-time {
   flex: 0 0 auto;
   padding: 0;
   border: 1px solid var(--background-modifier-border);
-  border-radius: 999px;
+  border-radius: var(--db-radius-full);
   background: var(--background-primary);
   color: var(--text-muted);
   cursor: pointer;
@@ -14327,7 +15047,7 @@ body.is-mobile .note-database-container .db-calendar-month-time {
   right: 0;
   top: var(--db-timeline-reorder-line-top, 0);
   height: 2px;
-  border-radius: 2px;
+  border-radius: var(--db-radius-xs);
   background: var(--interactive-accent);
   box-shadow: 0 0 5px color-mix(in srgb, var(--interactive-accent) 40%, transparent);
   pointer-events: none;
@@ -14514,7 +15234,7 @@ body.is-mobile .note-database-container .db-calendar-month-time {
   min-width: 22px;
   height: 22px;
   padding: 0;
-  border-radius: 999px;
+  border-radius: var(--db-radius-full);
   background: var(--db-current-time-color);
   color: var(--text-on-accent);
   font-size: 12px;
@@ -14540,7 +15260,7 @@ body.is-mobile .note-database-container .db-calendar-month-time {
   left: 50%;
   width: 7px;
   height: 7px;
-  border-radius: 999px;
+  border-radius: var(--db-radius-full);
   background: var(--db-current-time-color);
   transform: translate(-50%, -50%);
 }
@@ -14588,7 +15308,7 @@ body.is-mobile .note-database-container .db-calendar-month-time {
   height: 18px;
   padding: 0;
   border: 0;
-  border-radius: 4px;
+  border-radius: var(--db-radius-sm);
   background: transparent;
   color: var(--text-muted);
   cursor: pointer;
@@ -14612,7 +15332,7 @@ body.is-mobile .note-database-container .db-calendar-month-time {
   max-width: none;
   min-width: 0;
   padding: 3px 8px;
-  border-radius: 999px;
+  border-radius: var(--db-radius-full);
   background-color: var(--background-primary);
   background-image: linear-gradient(
     var(--db-timeline-group-tag-bg, color-mix(in srgb, var(--interactive-accent) 14%, transparent)),
@@ -14640,7 +15360,7 @@ body.is-mobile .note-database-container .db-calendar-month-time {
   justify-content: center;
   min-width: 20px;
   padding: 0;
-  border-radius: 999px;
+  border-radius: var(--db-radius-full);
   background: transparent;
   color: inherit;
   font-size: 11px;
@@ -14670,7 +15390,7 @@ body.is-mobile .note-database-container .db-calendar-month-time {
   bottom: 0;
   left: calc(var(--db-timeline-unit-width) * var(--db-timeline-flash-offset, 0));
   width: calc(var(--db-timeline-unit-width) * var(--db-timeline-flash-span, 1));
-  border-radius: 6px;
+  border-radius: var(--db-radius-md);
   /* 静态背景留透明，flash 完全由下方动画承担——否则动画结束（animation-fill-mode
      默认 none）会瞬间回到这里的静态 18%，在 JS（flashTimelineDate 的 1300ms
      setTimeout）移除 overlay 前的约 100ms 形成仅在泳区的「二阶段高光」。
@@ -14700,7 +15420,7 @@ body.is-mobile .note-database-container .db-calendar-month-time {
   min-width: 0;
   padding: 0 6px;
   border: 0;
-  border-radius: 6px;
+  border-radius: var(--db-radius-md);
   background: transparent;
   color: var(--text-faint);
   cursor: pointer;
@@ -14717,7 +15437,7 @@ body.is-mobile .note-database-container .db-calendar-month-time {
   bottom: 0;
   left: var(--db-timeline-create-left, 0px);
   width: var(--db-timeline-create-width, var(--db-timeline-unit-width));
-  border-radius: 6px;
+  border-radius: var(--db-radius-md);
   background: color-mix(in srgb, var(--background-modifier-hover) 72%, transparent);
   opacity: 0;
   pointer-events: none;
@@ -14847,7 +15567,7 @@ body.is-mobile .note-database-container .db-calendar-month-time {
   width: var(--db-timeline-exact-width, 100%);
   min-width: 0;
   border-left: 3px solid var(--db-calendar-event-accent, var(--interactive-accent));
-  border-radius: 6px;
+  border-radius: var(--db-radius-md);
   background-color: var(--background-primary);
   background-image: var(--db-timeline-event-background-image);
   box-shadow: var(--db-timeline-event-shadow);
@@ -15001,10 +15721,10 @@ body.is-mobile .note-database-container .db-calendar-month-time {
   top: 8px;
   z-index: 5;
   padding: 2px 6px;
-  border-radius: 999px;
+  border-radius: var(--db-radius-full);
   background: var(--interactive-accent);
   color: var(--text-on-accent);
-  font-size: 10px;
+  font-size: var(--db-font-xs);
   font-weight: 700;
   pointer-events: none;
 }
@@ -15014,10 +15734,10 @@ body.is-mobile .note-database-container .db-calendar-month-time {
 .note-database-container .db-timeline-event > .db-timeline-snap-marker {
   z-index: 6;
   padding: 2px 4px;
-  border-radius: 3px;
+  border-radius: var(--db-radius-xs);
   background: var(--interactive-accent);
   color: var(--text-on-accent);
-  font-size: 10px;
+  font-size: var(--db-font-xs);
   font-weight: 400;
   line-height: 1.2;
   pointer-events: none;
@@ -15086,7 +15806,7 @@ body.is-mobile .note-database-container .db-calendar-month-time {
   height: 18px;
   padding: 0;
   border: 0;
-  border-radius: 5px;
+  border-radius: var(--db-radius-sm);
   background: var(--text-faint);
   color: var(--text-on-accent);
   cursor: pointer;
@@ -15638,7 +16358,7 @@ body.is-mobile .note-database-container .db-calendar-month-time {
 .db-mobile-column-width-backdrop {
   position: fixed;
   inset: 0;
-  z-index: 1000;
+  z-index: var(--db-layer-modal, 1000);
   background: rgba(0, 0, 0, 0.18);
 }
 
@@ -15647,7 +16367,7 @@ body.is-mobile .note-database-container .db-calendar-month-time {
   left: 0;
   right: 0;
   bottom: 0;
-  z-index: 1001;
+  z-index: var(--db-layer-modal, 1000);
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -15655,7 +16375,7 @@ body.is-mobile .note-database-container .db-calendar-month-time {
   width: 100%;
   padding: 14px 16px calc(16px + var(--safe-area-inset-bottom, 0px));
   border-top: 1px solid var(--background-modifier-border);
-  border-radius: 14px 14px 0 0;
+  border-radius: var(--db-radius-lg) var(--db-radius-lg) 0 0;
   background: var(--background-primary);
   box-shadow: 0 -8px 28px rgba(0, 0, 0, 0.18);
   color: var(--text-normal);
@@ -15737,7 +16457,7 @@ body.is-mobile .note-database-container .db-calendar-month-time {
   right: 0;
   top: auto;                  /* 由 JS 动态计算 */
   bottom: auto;
-  z-index: 1000;
+  z-index: var(--db-layer-popover, 100);
   max-width: none;
   border-radius: var(--db-radius-lg) var(--db-radius-lg) 0 0;
   box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.12);
@@ -15770,7 +16490,7 @@ body.is-mobile .note-database-container .db-calendar-month-time {
 mark.db-search-highlight {
   background: hsla(var(--interactive-accent-hsl), 0.25);
   color: inherit;
-  border-radius: 2px;
+  border-radius: var(--db-radius-xs);
   padding: 0 1px;
 }
 
@@ -15781,7 +16501,7 @@ mark.db-search-highlight {
 mark.db-text-md-highlight {
   background: var(--text-highlight-bg, hsla(var(--interactive-accent-hsl), 0.25));
   color: inherit;
-  border-radius: 2px;
+  border-radius: var(--db-radius-xs);
   padding: 0 1px;
 }
 
@@ -15793,7 +16513,7 @@ code.db-text-md-code {
      text color at low alpha mixes with whatever is behind (card body, hovered
      field/table cell), so the block dims together with its container. */
   background: color-mix(in srgb, var(--text-normal) 8%, transparent);
-  border-radius: 4px;
+  border-radius: var(--db-radius-sm);
   padding: 0.1em 0.35em;
   font-size: 0.88em;
 }
@@ -15873,7 +16593,7 @@ img.db-text-md-image {
   padding: 0;
   border: none;
   outline: none;
-  border-radius: var(--radius-s);
+  border-radius: var(--db-radius-sm);
   background: transparent;
   color: var(--text-muted);
   cursor: pointer;
@@ -15919,26 +16639,26 @@ img.db-text-md-image {
 .db-record-icon.is-editable:hover { background: var(--background-modifier-hover); color: var(--text-normal); }
 .db-record-title-line { display: flex; align-items: flex-start; gap: 6px; min-width: 0; }
 .db-record-title-line > :not(.db-record-icon) { min-width: 0; flex: 1; }
-.db-record-icon-color-gray { color: var(--text-muted); }
-.db-record-icon-color-brown { color: #9f6b53; }
-.db-record-icon-color-orange { color: #d9730d; }
-.db-record-icon-color-yellow { color: #cb912f; }
-.db-record-icon-color-green { color: #448361; }
-.db-record-icon-color-blue { color: #337ea9; }
-.db-record-icon-color-purple { color: #9065b0; }
-.db-record-icon-color-pink { color: #c14c8a; }
-.db-record-icon-color-red { color: #d44c47; }
-.db-record-icon-color-slate { color: #64748b; }
-.db-record-icon-color-cyan { color: #0891b2; }
-.db-record-icon-color-teal { color: #0f766e; }
-.db-record-icon-color-lime { color: #65a30d; }
-.db-record-icon-color-indigo { color: #4f46e5; }
-.db-record-icon-color-violet { color: #7c3aed; }
-.db-record-icon-color-rose { color: #e11d48; }
+.db-record-icon-color-gray { color: var(--status-color-fg-gray, var(--text-muted)); }
+.db-record-icon-color-brown { color: var(--status-color-fg-brown); }
+.db-record-icon-color-orange { color: var(--status-color-fg-orange); }
+.db-record-icon-color-yellow { color: var(--status-color-fg-yellow); }
+.db-record-icon-color-green { color: var(--status-color-fg-green); }
+.db-record-icon-color-blue { color: var(--status-color-fg-blue); }
+.db-record-icon-color-purple { color: var(--status-color-fg-purple); }
+.db-record-icon-color-pink { color: var(--status-color-fg-pink); }
+.db-record-icon-color-red { color: var(--status-color-fg-red); }
+.db-record-icon-color-slate { color: var(--status-color-fg-slate); }
+.db-record-icon-color-cyan { color: var(--status-color-fg-cyan); }
+.db-record-icon-color-teal { color: var(--status-color-fg-teal); }
+.db-record-icon-color-lime { color: var(--status-color-fg-lime); }
+.db-record-icon-color-indigo { color: var(--status-color-fg-indigo); }
+.db-record-icon-color-violet { color: var(--status-color-fg-violet); }
+.db-record-icon-color-rose { color: var(--status-color-fg-rose); }
 
 .db-icon-picker-popover {
   position: fixed;
-  z-index: var(--layer-popover);
+  z-index: var(--db-layer-popover, 100);
   width: min(318px, calc(100vw - 24px));
   height: min(416px, calc(100vh - 48px));
   display: flex;
@@ -15946,7 +16666,7 @@ img.db-text-md-image {
   overflow: hidden;
   padding: 0;
   border: 1px solid var(--background-modifier-border);
-  border-radius: 12px;
+  border-radius: var(--db-radius-lg);
   background: var(--background-primary);
   box-shadow: 0 12px 32px rgba(0, 0, 0, 0.16);
 }
@@ -15968,54 +16688,54 @@ img.db-text-md-image {
   box-shadow: none;
 }
 .db-icon-picker-popover .db-icon-picker-tabs button,
-.db-icon-picker-popover button.db-icon-picker-remove { height: 28px; padding: 0 8px; border-radius: var(--radius-s); line-height: 28px; }
+.db-icon-picker-popover button.db-icon-picker-remove { height: 28px; padding: 0 8px; border-radius: var(--db-radius-sm); line-height: 28px; }
 .db-icon-picker-popover .db-icon-picker-tabs button { position: relative; color: var(--text-muted); font-weight: 400; }
 .db-icon-picker-popover .db-icon-picker-tabs button.is-active { color: var(--text-normal); font-weight: 700; box-shadow: none; }
 .db-icon-picker-popover button.db-icon-picker-remove { margin-left: auto; color: var(--text-muted); font-weight: 400; }
 .db-icon-picker-popover .db-icon-picker-tabs button:hover,
 .db-icon-picker-popover button.db-icon-picker-remove:hover { background: var(--background-modifier-hover); }
 .db-icon-picker-popover button.db-icon-picker-random,
-.db-icon-picker-popover button.db-icon-picker-settings { flex: 0 0 28px; width: 28px; height: 28px; padding: 0; border-radius: var(--radius-s); color: var(--text-muted); }
+.db-icon-picker-popover button.db-icon-picker-settings { flex: 0 0 28px; width: 28px; height: 28px; padding: 0; border-radius: var(--db-radius-sm); color: var(--text-muted); }
 .db-icon-picker-popover button.db-icon-picker-random:hover,
 .db-icon-picker-popover button.db-icon-picker-settings:hover { background: var(--background-modifier-hover); color: var(--text-normal); }
 .db-icon-picker-colors { flex: 0 0 auto; flex-wrap: wrap; gap: 10px; padding: 12px 16px 8px; }
-.db-icon-picker-popover button.db-icon-color { width: 20px; height: 20px; padding: 0; border: 2px solid var(--background-primary); border-radius: var(--radius-s); box-shadow: 0 0 0 1px var(--background-modifier-border); }
+.db-icon-picker-popover button.db-icon-color { width: 20px; height: 20px; padding: 0; border: 2px solid var(--background-primary); border-radius: var(--db-radius-sm); box-shadow: 0 0 0 1px var(--background-modifier-border); }
 .db-icon-picker-popover button.db-icon-color.is-active { outline: 2px solid var(--text-normal); outline-offset: 2px; }
-.db-icon-picker-popover button.db-icon-color-gray { background-color: #787774; }.db-icon-picker-popover button.db-icon-color-brown { background-color: #9f6b53; }.db-icon-picker-popover button.db-icon-color-orange { background-color: #d9730d; }.db-icon-picker-popover button.db-icon-color-yellow { background-color: #cb912f; }.db-icon-picker-popover button.db-icon-color-green { background-color: #448361; }.db-icon-picker-popover button.db-icon-color-blue { background-color: #337ea9; }.db-icon-picker-popover button.db-icon-color-purple { background-color: #9065b0; }.db-icon-picker-popover button.db-icon-color-pink { background-color: #c14c8a; }.db-icon-picker-popover button.db-icon-color-red { background-color: #d44c47; }
-.db-icon-picker-popover button.db-icon-color-slate { background-color: #64748b; }
-.db-icon-picker-popover button.db-icon-color-cyan { background-color: #0891b2; }
-.db-icon-picker-popover button.db-icon-color-teal { background-color: #0f766e; }
-.db-icon-picker-popover button.db-icon-color-lime { background-color: #65a30d; }
-.db-icon-picker-popover button.db-icon-color-indigo { background-color: #4f46e5; }
-.db-icon-picker-popover button.db-icon-color-violet { background-color: #7c3aed; }
-.db-icon-picker-popover button.db-icon-color-rose { background-color: #e11d48; }
+.db-icon-picker-popover button.db-icon-color-gray { background-color: var(--status-color-fg-gray); }.db-icon-picker-popover button.db-icon-color-brown { background-color: var(--status-color-fg-brown); }.db-icon-picker-popover button.db-icon-color-orange { background-color: var(--status-color-fg-orange); }.db-icon-picker-popover button.db-icon-color-yellow { background-color: var(--status-color-fg-yellow); }.db-icon-picker-popover button.db-icon-color-green { background-color: var(--status-color-fg-green); }.db-icon-picker-popover button.db-icon-color-blue { background-color: var(--status-color-fg-blue); }.db-icon-picker-popover button.db-icon-color-purple { background-color: var(--status-color-fg-purple); }.db-icon-picker-popover button.db-icon-color-pink { background-color: var(--status-color-fg-pink); }.db-icon-picker-popover button.db-icon-color-red { background-color: var(--status-color-fg-red); }
+.db-icon-picker-popover button.db-icon-color-slate { background-color: var(--status-color-fg-slate); }
+.db-icon-picker-popover button.db-icon-color-cyan { background-color: var(--status-color-fg-cyan); }
+.db-icon-picker-popover button.db-icon-color-teal { background-color: var(--status-color-fg-teal); }
+.db-icon-picker-popover button.db-icon-color-lime { background-color: var(--status-color-fg-lime); }
+.db-icon-picker-popover button.db-icon-color-indigo { background-color: var(--status-color-fg-indigo); }
+.db-icon-picker-popover button.db-icon-color-violet { background-color: var(--status-color-fg-violet); }
+.db-icon-picker-popover button.db-icon-color-rose { background-color: var(--status-color-fg-rose); }
 .db-icon-picker-scroll { flex: 1 1 auto; min-height: 0; overflow-y: auto; overflow-x: hidden; padding: 0 14px 12px; scrollbar-width: thin; scrollbar-gutter: stable; scrollbar-color: var(--background-modifier-border-hover) transparent; }
 .db-icon-picker-section { margin-top: 12px; }
 .db-icon-picker-label { margin-bottom: 6px; color: var(--text-muted); font-size: var(--font-ui-smaller); font-weight: 600; }
 .db-icon-picker-grid { display: grid; grid-template-columns: repeat(auto-fill, 28px); justify-content: center; gap: 2px; }
-.db-icon-picker-popover button.db-icon-picker-item { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; padding: 0; border-radius: 5px; font-size: 22px; }
+.db-icon-picker-popover button.db-icon-picker-item { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; padding: 0; border-radius: var(--db-radius-sm); font-size: 22px; }
 .db-icon-picker-popover button.db-icon-picker-item:hover, .db-icon-picker-popover button.db-icon-picker-item:focus-visible { background: var(--background-modifier-hover); box-shadow: none; }
 .db-icon-picker-popover button.db-icon-picker-item.is-selected { background: var(--background-modifier-hover); }
 .db-icon-picker-item svg { width: 22px; height: 22px; color: inherit; }
-.db-icon-picker-popover button.db-icon-picker-item.db-record-icon-color-gray { color: var(--text-muted); }
-.db-icon-picker-popover button.db-icon-picker-item.db-record-icon-color-brown { color: #9f6b53; }
-.db-icon-picker-popover button.db-icon-picker-item.db-record-icon-color-orange { color: #d9730d; }
-.db-icon-picker-popover button.db-icon-picker-item.db-record-icon-color-yellow { color: #cb912f; }
-.db-icon-picker-popover button.db-icon-picker-item.db-record-icon-color-green { color: #448361; }
-.db-icon-picker-popover button.db-icon-picker-item.db-record-icon-color-blue { color: #337ea9; }
-.db-icon-picker-popover button.db-icon-picker-item.db-record-icon-color-purple { color: #9065b0; }
-.db-icon-picker-popover button.db-icon-picker-item.db-record-icon-color-pink { color: #c14c8a; }
-.db-icon-picker-popover button.db-icon-picker-item.db-record-icon-color-red { color: #d44c47; }
-.db-icon-picker-popover button.db-icon-picker-item.db-record-icon-color-slate { color: #64748b; }
-.db-icon-picker-popover button.db-icon-picker-item.db-record-icon-color-cyan { color: #0891b2; }
-.db-icon-picker-popover button.db-icon-picker-item.db-record-icon-color-teal { color: #0f766e; }
-.db-icon-picker-popover button.db-icon-picker-item.db-record-icon-color-lime { color: #65a30d; }
-.db-icon-picker-popover button.db-icon-picker-item.db-record-icon-color-indigo { color: #4f46e5; }
-.db-icon-picker-popover button.db-icon-picker-item.db-record-icon-color-violet { color: #7c3aed; }
-.db-icon-picker-popover button.db-icon-picker-item.db-record-icon-color-rose { color: #e11d48; }
+.db-icon-picker-popover button.db-icon-picker-item.db-record-icon-color-gray { color: var(--status-color-fg-gray, var(--text-muted)); }
+.db-icon-picker-popover button.db-icon-picker-item.db-record-icon-color-brown { color: var(--status-color-fg-brown); }
+.db-icon-picker-popover button.db-icon-picker-item.db-record-icon-color-orange { color: var(--status-color-fg-orange); }
+.db-icon-picker-popover button.db-icon-picker-item.db-record-icon-color-yellow { color: var(--status-color-fg-yellow); }
+.db-icon-picker-popover button.db-icon-picker-item.db-record-icon-color-green { color: var(--status-color-fg-green); }
+.db-icon-picker-popover button.db-icon-picker-item.db-record-icon-color-blue { color: var(--status-color-fg-blue); }
+.db-icon-picker-popover button.db-icon-picker-item.db-record-icon-color-purple { color: var(--status-color-fg-purple); }
+.db-icon-picker-popover button.db-icon-picker-item.db-record-icon-color-pink { color: var(--status-color-fg-pink); }
+.db-icon-picker-popover button.db-icon-picker-item.db-record-icon-color-red { color: var(--status-color-fg-red); }
+.db-icon-picker-popover button.db-icon-picker-item.db-record-icon-color-slate { color: var(--status-color-fg-slate); }
+.db-icon-picker-popover button.db-icon-picker-item.db-record-icon-color-cyan { color: var(--status-color-fg-cyan); }
+.db-icon-picker-popover button.db-icon-picker-item.db-record-icon-color-teal { color: var(--status-color-fg-teal); }
+.db-icon-picker-popover button.db-icon-picker-item.db-record-icon-color-lime { color: var(--status-color-fg-lime); }
+.db-icon-picker-popover button.db-icon-picker-item.db-record-icon-color-indigo { color: var(--status-color-fg-indigo); }
+.db-icon-picker-popover button.db-icon-picker-item.db-record-icon-color-violet { color: var(--status-color-fg-violet); }
+.db-icon-picker-popover button.db-icon-picker-item.db-record-icon-color-rose { color: var(--status-color-fg-rose); }
 .db-icon-picker-empty { grid-column: 1 / -1; padding: 28px 8px; color: var(--text-muted); text-align: center; }
 .db-icon-picker-nav { flex: 0 0 37px; height: 37px; justify-content: space-around; gap: 2px; padding: 4px 10px; border-top: 1px solid var(--background-modifier-border); background: var(--background-primary); }
-.db-icon-picker-popover .db-icon-picker-nav button { display: inline-flex; width: 28px; height: 28px; align-items: center; justify-content: center; padding: 0; border-radius: var(--radius-s); color: var(--text-faint); font-size: 16px; }
+.db-icon-picker-popover .db-icon-picker-nav button { display: inline-flex; width: 28px; height: 28px; align-items: center; justify-content: center; padding: 0; border-radius: var(--db-radius-sm); color: var(--text-faint); font-size: 16px; }
 .db-icon-picker-popover .db-icon-picker-nav button:hover, .db-icon-picker-popover .db-icon-picker-nav button.is-active { background: var(--background-modifier-hover); color: var(--text-normal); }
 .db-icon-picker-nav button svg { width: 18px; height: 18px; }
 @media (max-width: 480px) { .db-icon-picker-grid { grid-template-columns: repeat(auto-fill, 28px); } .db-icon-picker-popover { height: min(400px, calc(100vh - 24px)); } }
@@ -16074,7 +16794,7 @@ img.db-text-md-image {
   gap: 4px;
   max-width: 100%;
   padding: 1px 5px;
-  border-radius: var(--radius-s);
+  border-radius: var(--db-radius-sm);
   background: color-mix(in srgb, var(--link-color, var(--text-accent)) 8%, transparent);
   color: var(--text-normal);
   overflow: hidden;
@@ -16250,7 +16970,7 @@ img.db-text-md-image {
   margin: 2px 0 14px;
   padding: 9px 11px;
   border-left: 3px solid var(--color-orange);
-  border-radius: var(--radius-s);
+  border-radius: var(--db-radius-sm);
   background: var(--background-secondary);
   color: var(--text-muted);
   font-size: var(--font-ui-smaller);
@@ -16457,5 +17177,645 @@ body.is-phone .note-database-container .db-record-open-btn {
 .db-calendar-day-popover,
 .db-icon-picker-popover,
 .db-relation-popover {
-  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.40), 0 3px 8px rgba(0, 0, 0, 0.28);
+  background: var(--db-surface-overlay);
+  box-shadow: var(--db-elevation-2);
+  backdrop-filter: blur(var(--db-overlay-blur, 12px));
+}
+
+.note-database-modal {
+  background: var(--db-surface-modal);
+  border: 1px solid var(--db-surface-modal-border);
+  box-shadow: var(--db-elevation-3);
+  backdrop-filter: blur(var(--db-overlay-blur, 12px));
+}
+
+.db-color-picker-popup {
+  background: var(--db-surface-overlay);
+  box-shadow: var(--db-elevation-2);
+  backdrop-filter: blur(var(--db-overlay-blur, 12px));
+}
+
+.note-database-container .db-conditional-format,
+.note-database-modal .db-conditional-format {
+  background-color: var(--db-conditional-format-bg, transparent);
+  color: var(--db-conditional-format-fg, inherit);
+  box-shadow: inset 2px 0 0 var(--db-conditional-format-accent, transparent);
+}
+
+.note-database-container tr.db-conditional-format > td:not(.db-cell-selected):not(.db-cell-range-selected) {
+  background-color: var(--db-conditional-format-bg, transparent);
+}
+
+.note-database-container tr.db-conditional-format > td {
+  color: var(--db-conditional-format-fg, inherit);
+}
+
+.note-database-container tr.db-conditional-format > td:first-child:not(.db-cell-selected):not(.db-cell-range-selected),
+.note-database-container tr.db-conditional-format > td.db-select-col + td:not(.db-cell-selected):not(.db-cell-range-selected) {
+  box-shadow: inset 2px 0 0 var(--db-conditional-format-accent, transparent);
+}
+
+.note-database-container tr.db-conditional-format:hover > td:not(.db-cell-selected):not(.db-cell-range-selected),
+.note-database-container .db-conditional-format:hover {
+  background-color: color-mix(in srgb, var(--db-conditional-format-bg, transparent) 72%, var(--db-hover-bg));
+}
+
+.note-database-container tr.db-conditional-format > td.db-cell-selected,
+.note-database-container tr.db-conditional-format > td.db-cell-range-selected {
+  background-color: color-mix(in srgb, var(--db-conditional-format-bg, transparent) 56%, var(--db-active-bg));
+}
+
+.note-database-container :is(.db-table, .db-summary, .db-group-summary-value, .db-number-value, .db-date-value),
+.note-database-modal :is(.db-summary, .db-number-value, .db-date-value) {
+  font-variant-numeric: tabular-nums;
+}
+
+:is(.note-database-container, .note-database-modal, .note-database-settings, .db-color-picker-popup, .db-icon-picker-popover, .db-dropdown-popover) :is(button, input, select, textarea, [role="button"], [tabindex]):focus-visible {
+  outline: none;
+  box-shadow: var(--db-accent-focus-ring);
+}
+
+.note-database-container .db-table td[tabindex]:focus,
+.note-database-container .db-table td[tabindex]:focus-visible {
+  box-shadow: var(--db-accent-focus-ring), inset 0 0 0 2px var(--interactive-accent);
+}
+
+.note-database-container :is(button, input, select, textarea):disabled,
+.note-database-container .is-disabled,
+.note-database-modal :is(button, input, select, textarea):disabled,
+.note-database-settings :is(button, input, select, textarea):disabled {
+  cursor: var(--db-disabled-cursor);
+  opacity: var(--db-disabled-opacity);
+}
+
+.note-database-container :is(button, input, select, textarea):hover:not(:disabled),
+.note-database-modal :is(button, input, select, textarea):hover:not(:disabled),
+.note-database-settings :is(button, input, select, textarea):hover:not(:disabled) {
+  transition: background-color var(--db-transition-fast), color var(--db-transition-fast), border-color var(--db-transition-fast);
+}
+
+.note-database-container :is(button, input, select, textarea):active:not(:disabled),
+.note-database-modal :is(button, input, select, textarea):active:not(:disabled),
+.note-database-settings :is(button, input, select, textarea):active:not(:disabled) {
+  background-color: var(--db-active-bg);
+}
+
+.db-color-picker-popup,
+.db-icon-picker-popover,
+.db-dropdown-popover {
+  color-scheme: light dark;
+  scrollbar-color: var(--db-scrollbar-thumb) transparent;
+}
+
+.db-color-picker-popup::-webkit-scrollbar-thumb,
+.db-icon-picker-popover::-webkit-scrollbar-thumb,
+.db-dropdown-popover::-webkit-scrollbar-thumb {
+  border-radius: var(--db-radius-full);
+  background: var(--db-scrollbar-thumb);
+}
+
+.db-color-picker-popup::-webkit-scrollbar-thumb:hover,
+.db-icon-picker-popover::-webkit-scrollbar-thumb:hover,
+.db-dropdown-popover::-webkit-scrollbar-thumb:hover {
+  background: var(--db-scrollbar-thumb-hover);
+}
+
+.note-database-container .db-table-wrap,
+.note-database-container .db-active-view-controls-scroll {
+  -webkit-mask-image: linear-gradient(to right, transparent, black var(--db-space-4), black calc(100% - var(--db-space-4)), transparent);
+  mask-image: linear-gradient(to right, transparent, black var(--db-space-4), black calc(100% - var(--db-space-4)), transparent);
+}
+
+.note-database-container .db-toolbar :is(button, select, input):hover,
+.note-database-container .db-cell-option-item:hover,
+.note-database-container .db-calendar-mini-today:hover,
+.note-database-container .db-calendar-mini-footer-action:hover {
+  background-color: var(--db-hover-bg);
+}
+
+.note-database-container .db-toolbar :is(button, select, input).is-active,
+.note-database-container .db-active-control-logic.is-active {
+  background-color: var(--db-active-bg);
+}
+
+.note-database-container :is(.db-filter-panel, .db-sort-panel, .db-view-config-panel, .db-column-manager, .db-database-popover, .db-group-popover, .db-export-popover, .db-view-tab-popover) {
+  z-index: var(--db-layer-panel, 50) !important;
+}
+
+:is(.db-dropdown-popover, .db-cell-option-popover, .db-cell-edit-popover, .db-date-value-popover, .db-date-edit-popover, .db-calendar-mini-popover, .db-calendar-day-popover, .db-relation-popover, .db-color-picker-popup, .db-icon-picker-popover) {
+  z-index: var(--db-layer-popover, 100) !important;
+}
+
+.db-dropdown-popover { box-shadow: var(--db-elevation-1); }
+.db-mobile-bottom-sheet { box-shadow: var(--db-elevation-3); }
+
+.db-column-menu-subpopover { z-index: var(--db-layer-submenu, 110) !important; }
+
+:is(.note-database-modal, .formula-workbench-modal, .db-chart-drilldown-modal) {
+  z-index: var(--db-layer-modal, 1000) !important;
+}
+
+.note-database-container .db-toolbar-right {
+  gap: var(--db-space-2);
+}
+
+.note-database-container .db-toolbar-cluster {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--db-space-1);
+  min-width: 0;
+  flex: 0 0 auto;
+}
+
+.note-database-container .db-toolbar-cluster + .db-toolbar-cluster {
+  margin-left: var(--db-space-2);
+  padding-left: var(--db-space-2);
+  border-left: 1px solid var(--db-border-regular);
+}
+
+.note-database-container .db-toolbar-utilities-cluster {
+  overflow: visible;
+}
+
+.note-database-container .db-toolbar-icon-button,
+.note-database-container .db-toolbar-more-btn,
+.note-database-container .db-heading-chevron-button,
+.note-database-container .db-heading-rename-button,
+.note-database-container .db-full-view-btn {
+  position: relative;
+  overflow: visible;
+}
+
+.note-database-container .db-heading.is-static {
+  cursor: default;
+}
+
+.note-database-container .db-heading.is-static:hover {
+  background: transparent;
+}
+
+.note-database-container .db-heading-button,
+.note-database-container .db-heading-chevron-button,
+.note-database-container .db-heading-rename-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 30px;
+  padding: 0 4px;
+  border: 0;
+  border-radius: var(--db-radius-md);
+  background: transparent;
+  color: inherit;
+}
+
+.note-database-container .db-heading-button {
+  min-width: 0;
+  justify-content: flex-start;
+  padding-inline: 0;
+  font: inherit;
+}
+
+.note-database-container .db-heading-chevron-button,
+.note-database-container .db-heading-rename-button {
+  flex: 0 0 30px;
+  color: var(--text-faint);
+}
+
+.note-database-container .db-heading-rename-button {
+  opacity: 0.6;
+}
+
+.note-database-container .db-heading-row:hover .db-heading-rename-button,
+.note-database-container .db-heading-rename-button:focus-visible {
+  opacity: 1;
+}
+
+.note-database-container .db-heading-chevron-button:hover,
+.note-database-container .db-heading-rename-button:hover {
+  background: var(--background-modifier-hover);
+  color: var(--text-normal);
+}
+
+.note-database-container .db-toolbar-icon-button::before,
+.note-database-container .db-heading-chevron-button::before,
+.note-database-container .db-heading-rename-button::before,
+.note-database-container .db-full-view-btn::before,
+.note-database-container .db-new-button-dropdown::before {
+  content: "";
+  position: absolute;
+  inset: -8px;
+}
+
+.note-database-container :is(.db-toolbar-icon-button, .db-heading-chevron-button, .db-heading-rename-button, .db-full-view-btn, .db-new-button-dropdown):focus-visible,
+.note-database-container :is(.db-view-tab, .db-new-button, .db-search-clear, .db-active-view-controls-clear):focus-visible {
+  outline: 2px solid var(--interactive-accent);
+  outline-offset: 2px;
+  box-shadow: var(--db-accent-focus-ring);
+}
+
+.note-database-container .db-view-tabs {
+  min-width: 0;
+  overflow-x: auto;
+  overflow-y: visible;
+  scrollbar-width: none;
+}
+
+.note-database-container .db-view-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.note-database-container .db-view-tab {
+  position: relative;
+  flex: 0 0 auto;
+}
+
+.note-database-container .db-view-tab.is-drop-target {
+  background: transparent;
+  box-shadow: none;
+}
+
+.note-database-container .db-view-tab.is-drop-target::before {
+  content: "";
+  position: absolute;
+  inset-block: 3px;
+  inset-inline-start: -2px;
+  width: 2px;
+  border-radius: var(--db-radius-full);
+  background: var(--interactive-accent);
+}
+
+.note-database-container .db-view-tab-name {
+  min-width: 0;
+  max-width: 22ch;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.note-database-container .db-view-tab-rename {
+  min-width: 56px;
+  max-width: none;
+}
+
+.note-database-container .db-database-popover-row {
+  display: grid;
+  grid-template-columns: 18px 18px minmax(0, 1fr);
+  align-items: center;
+  gap: var(--db-space-2);
+  padding: 2px var(--db-space-2);
+}
+
+.note-database-container .db-database-popover-select {
+  display: grid;
+  grid-template-columns: 18px minmax(0, 1fr) 18px;
+  align-items: center;
+  min-width: 0;
+  padding: 7px 6px;
+  border: 0;
+  background: transparent;
+  text-align: start;
+}
+
+.note-database-container .db-database-popover-select:hover {
+  background: var(--background-modifier-hover);
+}
+
+.note-database-container .db-mobile-reorder-controls {
+  display: inline-flex;
+  gap: 2px;
+}
+
+.note-database-container .db-mobile-reorder-controls button {
+  position: relative;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+}
+
+.note-database-container .db-search-control {
+  position: relative;
+  width: 150px;
+  min-width: 150px;
+  flex: 0 0 150px;
+  overflow: visible;
+}
+
+.note-database-container .db-search-control .db-search-input {
+  width: 100%;
+  box-sizing: border-box;
+  padding-inline-end: 30px;
+}
+
+.note-database-container .db-search-clear {
+  position: absolute;
+  inset-block: 2px;
+  inset-inline-end: 4px;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--db-radius-sm);
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 18px;
+  line-height: 24px;
+}
+
+.note-database-container .db-search-clear[hidden] {
+  display: none;
+}
+
+.note-database-container .db-new-button-group {
+  display: inline-flex;
+  align-items: stretch;
+  position: relative;
+  flex: 0 0 auto;
+}
+
+.note-database-container .db-new-button-primary {
+  border-start-end-radius: 0;
+  border-end-end-radius: 0;
+}
+
+.note-database-container .db-new-button-dropdown {
+  position: relative;
+  min-width: 32px;
+  padding-inline: 7px;
+  border: 0;
+  border-inline-start: 1px solid color-mix(in srgb, currentColor 28%, transparent);
+  border-radius: 0 var(--db-radius-md) var(--db-radius-md) 0;
+  background: var(--interactive-accent);
+  color: var(--text-on-accent);
+}
+
+.note-database-container .db-new-button-dropdown.is-open {
+  background: var(--interactive-accent-hover);
+}
+
+.note-database-container .db-new-template-popover,
+.note-database-container .db-all-views-popover,
+.note-database-container .db-add-view-popover,
+.note-database-container .db-toolbar-utilities-popover {
+  width: min(360px, calc(100vw - 24px));
+  max-height: min(70vh, 520px);
+  overflow: auto;
+}
+
+.note-database-container .db-all-views-header {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--db-space-2);
+}
+
+.note-database-container .db-all-views-search,
+.note-database-container .db-add-view-form input,
+.note-database-container .db-add-view-form select {
+  width: 100%;
+  min-height: 32px;
+  box-sizing: border-box;
+}
+
+.note-database-container .db-all-view-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--db-space-2);
+}
+
+.note-database-container .db-all-view-select {
+  display: grid;
+  grid-template-columns: 20px minmax(0, 1fr) auto 18px;
+  align-items: center;
+  min-width: 0;
+  gap: var(--db-space-2);
+  padding: 8px;
+  border: 0;
+  background: transparent;
+  text-align: start;
+}
+
+.note-database-container .db-all-view-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.note-database-container .db-all-view-layout {
+  color: var(--text-muted);
+  font-size: var(--db-font-xs);
+  text-transform: capitalize;
+}
+
+.note-database-container .db-all-view-actions {
+  display: inline-flex;
+  gap: 2px;
+}
+
+.note-database-container .db-all-view-action {
+  width: 28px;
+  height: 28px;
+  padding: 0;
+}
+
+.note-database-container .db-add-view-form {
+  display: grid;
+  gap: var(--db-space-2);
+  padding: var(--db-space-2) var(--db-space-3);
+}
+
+.note-database-container .db-add-view-duplicate {
+  display: flex;
+  align-items: center;
+  gap: var(--db-space-2);
+  color: var(--text-muted);
+  font-size: var(--db-font-sm);
+}
+
+.note-database-container .db-add-view-cards {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--db-space-2);
+  padding: var(--db-space-2) var(--db-space-3);
+}
+
+.note-database-container .db-add-view-card {
+  display: grid;
+  gap: var(--db-space-1);
+  min-width: 0;
+  padding: var(--db-space-2);
+  border: 1px solid var(--db-border-regular);
+  border-radius: var(--db-radius-md);
+  background: var(--background-primary);
+  text-align: start;
+}
+
+.note-database-container .db-add-view-card:hover {
+  border-color: var(--interactive-accent);
+}
+
+.note-database-container .db-add-view-preview {
+  display: grid;
+  place-items: center;
+  min-height: 48px;
+  border-radius: var(--db-radius-sm);
+  background: var(--background-secondary);
+  color: var(--text-muted);
+}
+
+.note-database-container .db-add-view-preview-lines {
+  width: 42px;
+  height: 18px;
+  border-block: 2px solid currentColor;
+  opacity: 0.35;
+}
+
+.note-database-container .db-new-placement {
+  display: flex;
+  gap: var(--db-space-2);
+  padding: var(--db-space-2) var(--db-space-3);
+}
+
+.note-database-container .db-new-placement-option {
+  flex: 1 1 0;
+  min-height: 32px;
+}
+
+.note-database-container .db-new-placement-option.is-active {
+  background: var(--db-active-bg);
+  color: var(--text-accent);
+}
+
+.note-database-container .db-toolbar-menu-row,
+.note-database-container .db-new-template-row,
+.note-database-container .db-new-template-default-action,
+.note-database-container .db-add-view-duplicate-action {
+  display: flex;
+  align-items: center;
+  gap: var(--db-space-2);
+  width: 100%;
+  min-height: 36px;
+  box-sizing: border-box;
+  padding: 7px 10px;
+  border: 0;
+  background: transparent;
+  text-align: start;
+}
+
+.note-database-container .db-toolbar-menu-row:hover,
+.note-database-container .db-new-template-row:hover,
+.note-database-container .db-new-template-default-action:hover,
+.note-database-container .db-add-view-duplicate-action:hover {
+  background: var(--background-modifier-hover);
+}
+
+.note-database-container .db-active-view-controls {
+  display: flex;
+  align-items: center;
+  gap: var(--db-space-3);
+}
+
+.note-database-container .db-active-view-controls-clear {
+  flex: 0 0 auto;
+  min-height: 28px;
+  padding-inline: var(--db-space-2);
+  border: 0;
+  border-radius: var(--db-radius-sm);
+  background: transparent;
+  color: var(--text-muted);
+  font-size: var(--db-font-xs);
+}
+
+.note-database-container .db-active-view-controls-scroll {
+  -webkit-mask-image: none;
+  mask-image: none;
+}
+
+.note-database-container .db-active-view-controls-scroll.is-overflowing {
+  -webkit-mask-image: linear-gradient(to right, transparent, black 12px, black calc(100% - 12px), transparent);
+  mask-image: linear-gradient(to right, transparent, black 12px, black calc(100% - 12px), transparent);
+}
+
+.note-database-container .db-toolbar-badge-neutral {
+  background: var(--background-modifier-border);
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.note-database-container .db-view-config-section-title {
+  display: flex;
+  align-items: center;
+  min-height: 28px;
+  margin-top: var(--db-space-3);
+  padding-inline: var(--db-space-3);
+  color: var(--text-muted);
+  font-size: var(--db-font-xs);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+@media (max-width: 700px) {
+  .note-database-container .db-toolbar-right {
+    gap: var(--db-space-1);
+  }
+
+  .note-database-container .db-toolbar-cluster + .db-toolbar-cluster {
+    margin-left: 0;
+    padding-left: var(--db-space-1);
+  }
+
+  .note-database-container .db-toolbar-left,
+  .note-database-container .db-toolbar-right {
+    overflow: visible;
+  }
+
+  .note-database-container .db-new-button-primary.is-mobile-fab {
+    position: fixed;
+    z-index: var(--db-layer-sticky, 40);
+    inset-inline-end: 20px;
+    inset-block-end: calc(20px + env(safe-area-inset-bottom));
+    width: 52px;
+    height: 52px;
+    padding: 0;
+    border-radius: var(--db-radius-full);
+    box-shadow: var(--db-elevation-3);
+  }
+
+  .note-database-container .db-new-button-primary.is-mobile-fab .db-new-button-icon {
+    margin: 0;
+  }
+
+  .note-database-container .db-new-button-primary.is-mobile-fab + .db-new-button-dropdown {
+    display: none;
+  }
+
+  .note-database-container .db-search-control {
+    min-width: 132px;
+    width: 132px;
+    flex-basis: 132px;
+  }
+}
+
+.is-phone .note-database-container .db-view-tabs {
+  overflow-x: auto;
+  overflow-y: visible;
+}
+
+.is-phone .note-database-container .db-toolbar-right {
+  overflow-x: auto;
+  overflow-y: visible;
+  box-shadow: inset 10px 0 12px -14px var(--text-muted), inset -10px 0 12px -14px var(--text-muted);
+}
+
+@media (max-width: 700px) {
+  .is-phone .note-database-container .db-view-tabs {
+    overflow-x: auto;
+    overflow-y: visible;
+  }
+
+  .is-phone .note-database-container .db-toolbar-right {
+    overflow-x: auto;
+    overflow-y: visible;
+    box-shadow: inset 10px 0 12px -14px var(--text-muted), inset -10px 0 12px -14px var(--text-muted);
+  }
 }

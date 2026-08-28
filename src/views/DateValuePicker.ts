@@ -1,5 +1,6 @@
 import { setIcon } from "obsidian";
 import {
+  addDateKeyDays,
   getLocaleWeekStartsOn,
   getLocalDateKey,
   getWeekdayLabels,
@@ -41,6 +42,7 @@ interface ActiveDateValuePicker {
 }
 
 const activePickers = new WeakMap<Document, ActiveDateValuePicker>();
+let nextDatePickerId = 0;
 
 export function closeActiveDateValuePicker(doc: Document = window.activeDocument, commit = false): void {
   activePickers.get(doc)?.close(commit);
@@ -106,7 +108,26 @@ function openDateValuePicker(
     cls: "db-cell-edit-popover db-date-edit-popover db-date-value-popover",
     attr: { role: "dialog", "aria-label": options.placeholder || t("filter.value") },
   });
+  const popoverId = `db-date-picker-${++nextDatePickerId}`;
+  popover.setAttr("id", popoverId);
+  trigger.setAttr("aria-controls", popoverId);
   if (includeTime) popover.addClass("is-datetime");
+  const presets = popover.createDiv({ cls: "db-date-presets", attr: { role: "group", "aria-label": t("datePicker.presets") } });
+  const createPreset = (label: string, onSelect: () => void) => {
+    const button = presets.createEl("button", { cls: "db-date-preset", text: label, attr: { type: "button" } });
+    button.onclick = (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      onSelect();
+    };
+  };
+  createPreset(t("datePicker.today"), () => chooseToday(todayKey));
+  createPreset(t("datePicker.tomorrow"), () => chooseDate(addDateKeyDays(todayKey, 1)));
+  createPreset(t("datePicker.nextWeek"), () => chooseDate(addDateKeyDays(todayKey, 7)));
+  createPreset(t("datePicker.clear"), () => {
+    setInputs("");
+    close(true);
+  });
   const segments = popover.createDiv({ cls: "db-date-segments" });
   const yearInput = segments.createEl("input", {
     cls: "db-date-seg",
@@ -200,18 +221,11 @@ function openDateValuePicker(
     cleanupAutoClose?.();
     popover.remove();
     trigger.setAttribute("aria-expanded", "false");
+    trigger.removeAttribute("aria-controls");
     if (activePickers.get(doc)?.anchor === trigger) activePickers.delete(doc);
   };
   activePickers.set(doc, { anchor: trigger, close });
   trigger.setAttribute("aria-expanded", "true");
-  popover.addEventListener("keydown", (event) => {
-    if (isImeComposing(event)) return;
-    if (event.key !== "Escape") return;
-    event.preventDefault();
-    event.stopPropagation();
-    close(false);
-    trigger.focus();
-  });
 
   const chooseDate = (dateKey: string) => {
     setDateInputs(dateKey);
@@ -301,11 +315,27 @@ function openDateValuePicker(
         pickerMonthKey = monthKey;
         pickerMode = "day";
         renderPicker();
+        ownerWindow.requestAnimationFrame(() => {
+          calendar.querySelector<HTMLButtonElement>(`[data-month-key="${monthKey}"]`)?.focus();
+        });
       },
       onSelectYear: (selectedYear) => {
         pickerMonthKey = `${String(selectedYear).padStart(4, "0")}-01`;
         pickerMode = "month";
         renderPicker();
+        ownerWindow.requestAnimationFrame(() => {
+          calendar.querySelector<HTMLButtonElement>(`[data-year="${selectedYear}"]`)?.focus();
+        });
+      },
+      onNavigateDate: (dateKey) => {
+        pickerMonthKey = dateKey.slice(0, 7);
+        pickerMode = "day";
+        renderPicker();
+        ownerWindow.requestAnimationFrame(() => {
+          const cell = Array.from(calendar.querySelectorAll<HTMLButtonElement>("[data-date-key]"))
+            .find((candidate) => candidate.getAttribute("data-date-key") === dateKey);
+          cell?.focus();
+        });
       },
       onSelectToday: chooseToday,
       footerAction: options.footerAction,
@@ -347,7 +377,6 @@ function openDateValuePicker(
     close: () => close(true),
     closeOnOutsidePointerDown: true,
     closeOnEscape: true,
-    isActiveTarget: (target) => target instanceof ownerWindow.Node && popover.contains(target),
   });
   ownerWindow.requestAnimationFrame(() => {
     yearInput.focus();

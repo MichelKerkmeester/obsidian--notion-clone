@@ -21,6 +21,11 @@ export interface CalendarEventCreateOptions {
   groupKey?: string;
 }
 
+export function resolveCalendarCreateDateRange(startDateKey: string, targetDateKey: string): { startDateKey: string; endDateKey?: string } {
+  if (targetDateKey <= startDateKey) return { startDateKey: targetDateKey };
+  return { startDateKey, endDateKey: targetDateKey };
+}
+
 export interface TimedDragRangeInput {
   mode: CalendarDragMode;
   originalStart: number;

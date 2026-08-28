@@ -28,6 +28,8 @@ import { getGroupVisibleCount } from "../data/GroupVisibility";
 import { DragDropFeedbackState, resolveDropPlacement } from "./DragDropFeedback";
 import { resolveTitleFieldDisplay } from "../data/TitleFieldDisplay";
 import { renderDelayedExternalLink } from "./CellRenderer";
+import { EmptyStateOptions, EmptyStateRenderer } from "./EmptyStateRenderer";
+import { renderCardField, renderCardFieldValue } from "./CardFieldRenderer";
 
 const ROW_MIME = "application/x-note-database-row";
 const ROW_FROM_GROUP_MIME = "application/x-note-database-row-from-group";
@@ -40,6 +42,7 @@ export interface GalleryGroup {
 
 export interface GalleryRendererActions {
   openRow(row: RowData): void;
+  openRecordDetail?(anchorEl: HTMLElement, row: RowData): void;
   createEntry(defaults?: Record<string, unknown>, position?: CreateEntryPosition): void;
   isRowSelected(row: RowData): boolean;
   toggleRowSelected(row: RowData, selected: boolean, event?: MouseEvent): void;
@@ -84,21 +87,31 @@ export class GalleryRenderer {
   private rowByPath = new Map<string, RowData>();
   private draggingPath: string | undefined;
   private rowDropFeedback = new DragDropFeedbackState();
+  private emptyStateRenderer = new EmptyStateRenderer();
 
   constructor(private app: App, private actions: GalleryRendererActions) {}
 
-  render(container: HTMLElement, config: ViewConfig, rows: RowData[]): void {
+  render(container: HTMLElement, config: ViewConfig, rows: RowData[], emptyState?: EmptyStateOptions): void {
     this.clear(container);
     this.container = container;
     container.style.setProperty("--db-gallery-card-width", `${this.getCardSize(config)}px`);
     this.rowByPath = new Map(rows.map((row) => [row.file.path, row]));
-    this.renderTotalHeader(container, rows);
+    if (rows.length > 0) this.renderTotalHeader(container, rows);
     const gallery = this.createGallery(container, config);
+    if (rows.length === 0) {
+      this.emptyStateRenderer.renderCard(gallery, emptyState || { reason: "no-matching-data" });
+    }
     for (const row of rows) this.renderCard(gallery, config, row, undefined, undefined, undefined, rows);
     this.renderNewCard(gallery, undefined, rows);
   }
 
-  renderGrouped(container: HTMLElement, config: ViewConfig, groups: GalleryGroup[], groupField: string): void {
+  renderGrouped(
+    container: HTMLElement,
+    config: ViewConfig,
+    groups: GalleryGroup[],
+    groupField: string,
+    emptyState?: EmptyStateOptions,
+  ): void {
     this.clear(container);
     this.container = container;
     container.style.setProperty("--db-gallery-card-width", `${this.getCardSize(config)}px`);
@@ -124,10 +137,30 @@ export class GalleryRenderer {
       renderGroupLabel(header, config, groupField, group.key, "db-gallery-group-title");
       header.createSpan({ cls: "db-gallery-group-count", text: String(group.count) });
       this.actions.renderGroupSummaries?.(header, group.rows, config);
+      if (!collapsed && !this.actions.isReadOnly && !this.actions.hideCreateEntry) {
+        const newButton = header.createEl("button", {
+          cls: "db-gallery-group-new",
+          text: `+ ${t("toolbar.new")}`,
+          attr: { type: "button" },
+        });
+        newButton.onclick = (event) => {
+          event.preventDefault();
+          event.stopPropagation();
+          if (isComputedGroupField(config, groupField)) return;
+          this.createEntryNearEnd({ [groupField]: group.key || "" }, group.rows);
+        };
+      }
       if (collapsed) continue;
       const gallery = this.createGallery(section, config);
       this.setupGroupDropTarget(gallery, groupField, group.key);
       const visibleCount = getGroupVisibleCount(config, groupField, group.key, group.rows.length);
+      if (visibleCount === 0) {
+        const empty = this.emptyStateRenderer.renderCard(
+          gallery,
+          emptyState || { reason: "empty-group" },
+        );
+        empty.addClass("db-gallery-empty-group");
+      }
       for (const row of group.rows.slice(0, visibleCount)) this.renderCard(gallery, config, row, groupField, group.key, groups, group.rows);
       const footer = gallery.createDiv({ cls: "db-gallery-group-footer" });
       const computedGroup = isComputedGroupField(config, groupField);
@@ -165,6 +198,19 @@ export class GalleryRenderer {
       cls: "db-gallery-card",
       attr: { "data-note-database-row-path": row.file.path, title: row.file.path },
     });
+    if (this.actions.openRecordDetail) {
+      card.tabIndex = 0;
+      card.setAttribute("role", "button");
+      card.addEventListener("click", (event) => {
+        if (isHTMLElement(event.target) && event.target.closest("a, button, input, select, textarea, .db-cell-editing, .db-gallery-cover-button")) return;
+        this.actions.openRecordDetail?.(card, row);
+      });
+      card.addEventListener("keydown", (event) => {
+        if (event.key !== "Enter" && event.key !== " ") return;
+        event.preventDefault();
+        this.actions.openRecordDetail?.(card, row);
+      });
+    }
     this.actions.applyConditionalFormat?.(card, row, config);
     this.attachRowContextMenu(card, row, {
       visibleRows: allRows,
@@ -242,17 +288,7 @@ export class GalleryRenderer {
       const empty = this.isEmptyValue(value) && displayType !== "checkbox";
       if (empty && !this.shouldShowEmptyField(config, col)) continue;
       const displayValue = empty ? this.getEmptyDisplayValue(col, displayType) : value;
-      const item = meta.createDiv({ cls: "db-gallery-field", attr: { "data-note-database-column-key": col.key } });
-      this.actions.applyConditionalFormat?.(item, row, config, col.key);
-      item.style.setProperty("--db-card-field-width", `${this.getCardFieldWidth(config, col)}px`);
-      setFieldTooltip(item, displayValue, col.label);
-      if (empty) item.addClass("is-empty-field");
-      if (displayType === "checkbox") item.addClass("is-checkbox-field");
-      if (col.wrap) item.addClass("db-gallery-field-wrap");
-      const label = item.createSpan({ cls: "db-gallery-field-label", text: col.label });
-      this.attachColumnContextMenu(item, col);
-      this.attachColumnContextMenu(label, col);
-      this.renderValue(item, row, col, displayValue, empty, displayType);
+      meta.appendChild(this.renderCardFieldContent(row, col, config, displayValue, displayType, empty));
     }
   }
 
@@ -632,25 +668,28 @@ export class GalleryRenderer {
     setFieldTooltip(valueEl, valueEl.textContent);
   }
 
-  renderCardFieldContent(row: RowData, col: ColumnDef, config: ViewConfig): HTMLElement {
+  renderCardFieldContent(
+    row: RowData,
+    col: ColumnDef,
+    config: ViewConfig,
+    resolvedValue?: unknown,
+    resolvedDisplayType?: ColumnDef["type"],
+    resolvedEmpty?: boolean,
+  ): HTMLElement {
     const value = this.getCellValue(row, col);
-    const displayType = this.getDisplayType(config, col);
-    const empty = this.isEmptyValue(value) && displayType !== "checkbox";
-    const displayValue = empty ? this.getEmptyDisplayValue(col, displayType) : value;
-    const item = window.activeDocument.createElement("div");
-    item.className = "db-gallery-field";
-    item.setAttribute("data-note-database-column-key", col.key);
-    this.actions.applyConditionalFormat?.(item, row, config, col.key);
-    item.style.setProperty("--db-card-field-width", `${this.getCardFieldWidth(config, col)}px`);
-    setFieldTooltip(item, displayValue, col.label);
-    if (empty) item.classList.add("is-empty-field");
-    if (displayType === "checkbox") item.classList.add("is-checkbox-field");
-    if (col.wrap) item.classList.add("db-gallery-field-wrap");
-    const label = item.createSpan({ cls: "db-gallery-field-label", text: col.label });
-    this.attachColumnContextMenu(item, col);
-    this.attachColumnContextMenu(label, col);
-    this.renderValue(item, row, col, displayValue, empty, displayType);
-    return item;
+    const displayType = resolvedDisplayType || this.getDisplayType(config, col);
+    const empty = resolvedEmpty ?? (this.isEmptyValue(value) && displayType !== "checkbox");
+    const displayValue = resolvedValue ?? (empty ? this.getEmptyDisplayValue(col, displayType) : value);
+    return renderCardField({
+      app: this.app, row, col, config, value: displayValue, displayType, empty,
+      fieldClass: "db-gallery-field", valueClass: "db-gallery-field-value", labelClass: "db-gallery-field-label",
+      badgesClass: "db-gallery-badges", linkClass: "db-gallery-link", fieldWidth: this.getCardFieldWidth(config, col),
+      wrap: col.wrap, readOnly: this.actions.isReadOnly, applyConditionalFormat: this.actions.applyConditionalFormat,
+      onEdit: (target, editRow, editCol, event) => this.actions.editCell(target, editRow, editCol, event),
+      onEditFormula: (editCol) => this.actions.editFormula?.(editCol),
+      onOpenTarget: (targetRow, target, external) => this.openTarget(targetRow, target, external),
+      onShowColumnMenu: this.actions.showColumnMenu,
+    });
   }
 
   private isEmptyValue(value: unknown): boolean {
@@ -695,7 +734,8 @@ export class GalleryRenderer {
   }
 
   private getCardSize(config: ViewConfig): number {
-    return Math.max(160, Math.min(420, Math.round(config.galleryCardSize || 250)));
+    const presetSize = config.galleryCardSizePreset === "small" ? 180 : config.galleryCardSizePreset === "large" ? 360 : config.galleryCardSizePreset === "medium" ? 260 : undefined;
+    return Math.max(160, Math.min(420, Math.round(presetSize || config.galleryCardSize || 250)));
   }
 
   private startCardResize(event: MouseEvent, config: ViewConfig): void {
@@ -734,7 +774,11 @@ export class GalleryRenderer {
   }
 
   private getCoverRatio(config: ViewConfig): number {
-    return Math.max(0.35, Math.min(2.5, config.galleryImageAspectRatio || 0.75));
+    const presetRatio = config.galleryImageAspectRatioPreset === "square" ? 1
+      : config.galleryImageAspectRatioPreset === "banner" ? 1.777
+        : config.galleryImageAspectRatioPreset === "portrait" ? 0.75
+          : config.galleryImageAspectRatioPreset === "landscape" ? 1.333 : undefined;
+    return Math.max(0.35, Math.min(2.5, presetRatio || config.galleryImageAspectRatio || 0.75));
   }
 
   private getCardFieldWidth(config: ViewConfig, col: ColumnDef): number {

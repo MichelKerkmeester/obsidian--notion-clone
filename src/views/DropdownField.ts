@@ -1,6 +1,10 @@
 import { setIcon } from "obsidian";
+import { isImeComposing } from "../data/KeyboardUtils";
+import { t } from "../i18n";
 import { installPopoverAutoClose } from "./PopoverAutoClose";
 import { positionToolbarPopover } from "./PopoverPosition";
+
+let nextDropdownId = 0;
 
 export interface DropdownOption {
   value: string;
@@ -51,6 +55,13 @@ export interface DropdownMenuOptions {
   closeOnSelect?: boolean;
   renderIcon?(parent: HTMLElement, icon: string): void;
   onClose?: () => void;
+}
+
+interface DropdownRow {
+  section?: HTMLElement;
+  row: HTMLButtonElement;
+  value: string;
+  option: DropdownOption;
 }
 
 export function createDropdownField(options: DropdownFieldOptions): DropdownFieldHandle {
@@ -143,12 +154,22 @@ function openDropdownPopover(anchor: HTMLElement, options: DropdownFieldOptions,
   const host = getDropdownPopoverHost(anchor);
   const searchable = options.searchable === true && options.options.length > 8;
   const panel = host.createDiv({ cls: `db-dropdown-popover ${contextClass}${searchable ? " is-searchable" : ""}${options.popoverClassName ? ` ${options.popoverClassName}` : ""}` });
+  const popupId = `db-dropdown-${++nextDropdownId}`;
+  panel.setAttr("id", popupId);
   panel.setAttr("role", "listbox");
+  panel.setAttr("aria-label", options.label);
+  anchor.setAttr("aria-controls", popupId);
   let searchInput: HTMLInputElement | undefined;
   if (searchable) {
     const searchWrap = panel.createDiv({ cls: "db-dropdown-search" });
     searchInput = searchWrap.createEl("input", {
-      attr: { type: "search", placeholder: options.searchPlaceholder || options.label, "aria-label": options.label },
+      attr: {
+        type: "search",
+        placeholder: options.searchPlaceholder || options.label,
+        "aria-label": options.label,
+        "aria-controls": popupId,
+        "aria-autocomplete": "list",
+      },
     });
   }
   // When searchable, options live in their own scroll container so the search box stays
@@ -156,15 +177,51 @@ function openDropdownPopover(anchor: HTMLElement, options: DropdownFieldOptions,
   const optionsHost = searchable ? panel.createDiv({ cls: "db-dropdown-options" }) : panel;
   let currentSection = "";
   let currentSectionEl: HTMLElement | undefined;
-  const sectionRows: Array<{ section?: HTMLElement; row: HTMLButtonElement; value: string }> = [];
+  const sectionRows: DropdownRow[] = [];
+  const emptyRow = optionsHost.createDiv({ cls: "db-dropdown-empty", text: t("dropdown.noResults"), attr: { role: "status", hidden: "true" } });
+  let activeIndex = options.options.findIndex((option) => !option.disabled);
+  if (activeIndex < 0) activeIndex = 0;
+  let typeahead = "";
+  let typeaheadTimer: number | undefined;
+
+  const getVisibleRows = () => sectionRows.filter((item) => !item.row.hasClass("is-hidden") && !item.option.disabled);
+  const syncActiveOption = (focus = false) => {
+    const visibleRows = getVisibleRows();
+    if (!visibleRows.length) {
+      activeIndex = -1;
+      return;
+    }
+    const active = sectionRows[activeIndex];
+    if (!active || active.option.disabled || active.row.hasClass("is-hidden")) {
+      activeIndex = sectionRows.indexOf(visibleRows[0]);
+    }
+    for (const item of sectionRows) item.row.setAttr("tabindex", item === sectionRows[activeIndex] ? "0" : "-1");
+    const row = sectionRows[activeIndex]?.row;
+    if (focus && row) {
+      row.focus();
+      row.scrollIntoView?.({ block: "nearest" });
+    }
+  };
+
+  const selectRow = (item: { row: HTMLButtonElement; value: string; option: DropdownOption }) => {
+    if (item.row.disabled || item.option.disabled) return;
+    activeIndex = sectionRows.findIndex((candidate) => candidate.row === item.row);
+    syncActiveOption();
+    if (!item.option.preserveValueOnSelect) {
+      syncDropdownSelection(sectionRows, item.value);
+      valueEl.setText(item.option.text);
+    }
+    options.onChange(item.value);
+    if (options.closeOnSelect !== false) close();
+  };
   for (const option of options.options) {
     if (option.section && option.section !== currentSection) {
       currentSection = option.section;
       currentSectionEl = optionsHost.createDiv({ cls: "db-dropdown-section-title", text: option.section });
     }
     const row = optionsHost.createEl("button", {
-      cls: `db-dropdown-option${option.icon ? " has-icon" : ""}${option.swatches?.length ? " has-swatches" : ""}${option.value === options.value ? " is-selected" : ""}${option.disabled ? " is-disabled" : ""}`,
-      attr: { type: "button", role: "option", "aria-selected": option.value === options.value ? "true" : "false" },
+      cls: `db-dropdown-option db-menu-item${option.icon ? " has-icon" : ""}${option.swatches?.length ? " has-swatches" : ""}${option.value === options.value ? " is-selected" : ""}${option.disabled ? " is-disabled" : ""}`,
+      attr: { type: "button", role: "option", "aria-selected": option.value === options.value ? "true" : "false", tabindex: "-1" },
     });
     row.setAttr("data-value", option.value);
     row.setAttr("data-search-text", `${option.text} ${option.value} ${option.disabledReason || ""}`.toLowerCase());
@@ -180,14 +237,14 @@ function openDropdownPopover(anchor: HTMLElement, options: DropdownFieldOptions,
       row.setAttr("title", option.disabledReason);
       row.setAttr("aria-label", `${option.text}: ${option.disabledReason}`);
     }
-    const check = row.createSpan({ cls: "db-dropdown-option-check" });
+    const check = row.createSpan({ cls: "db-dropdown-option-check db-menu-item-check" });
     if (option.value === options.value) setIcon(check, "check");
     if (option.icon) {
-      const iconEl = row.createSpan({ cls: "db-dropdown-option-icon" });
+      const iconEl = row.createSpan({ cls: "db-dropdown-option-icon db-menu-item-icon" });
       if (options.renderIcon) options.renderIcon(iconEl, option.icon);
       else setIcon(iconEl, option.icon);
     }
-    const text = row.createSpan({ cls: "db-dropdown-option-text" });
+    const text = row.createSpan({ cls: "db-dropdown-option-text db-menu-item-label" });
     text.createSpan({ cls: "db-dropdown-option-label", text: option.text });
     if (option.swatches?.length) {
       const swatches = row.createSpan({ cls: "db-dropdown-option-swatches", attr: { "aria-hidden": "true" } });
@@ -195,43 +252,81 @@ function openDropdownPopover(anchor: HTMLElement, options: DropdownFieldOptions,
         swatches.createSpan({ cls: "db-dropdown-option-swatch", attr: { style: `background-color: ${color}` } });
       }
     }
-    row.onclick = () => {
-      if (row.disabled || option.disabled) return;
-      if (!option.preserveValueOnSelect) {
-        syncDropdownSelection(sectionRows, option.value);
-        valueEl.setText(option.text);
-      }
-      options.onChange(option.value);
-      if (options.closeOnSelect !== false) close();
-    };
-    sectionRows.push({ section: currentSectionEl, row, value: option.value });
+    const rowData = { section: currentSectionEl, row, value: option.value, option };
+    row.onclick = () => selectRow(rowData);
+    sectionRows.push(rowData);
   }
+  syncActiveOption();
   if (searchInput) {
-    searchInput.oninput = () => filterDropdownOptions(sectionRows, searchInput?.value || "");
+    searchInput.oninput = () => {
+      const visibleRows = filterDropdownOptions(sectionRows, searchInput?.value || "", emptyRow);
+      activeIndex = visibleRows.length ? sectionRows.indexOf(visibleRows[0]) : -1;
+      syncActiveOption();
+    };
+    searchInput.onkeydown = (event) => {
+      if (isImeComposing(event)) return;
+      const visibleRows = getVisibleRows();
+      if (event.key === "ArrowDown") {
+        if (!visibleRows.length) return;
+        event.preventDefault();
+        syncActiveOption(true);
+      } else if (event.key === "ArrowUp") {
+        if (!visibleRows.length) return;
+        event.preventDefault();
+        activeIndex = sectionRows.indexOf(visibleRows[visibleRows.length - 1]);
+        syncActiveOption(true);
+      } else if (event.key === "Enter") {
+        if (!visibleRows.length) return;
+        event.preventDefault();
+        selectRow(visibleRows[0]);
+      }
+    };
     window.setTimeout(() => searchInput?.focus(), 0);
   }
   positionToolbarPopover(panel, anchor, { preferredWidth: 280, maxWidth: 360, minWidth: 180, gap: 6 });
 
-  const onOutside = (event: MouseEvent) => {
-    const target = event.target as Node | null;
-    if (target && (panel.contains(target) || anchor.contains(target))) return;
-    close();
-  };
   const onKeydown = (event: KeyboardEvent) => {
-    if (event.key !== "Escape") return;
-    event.preventDefault();
-    event.stopPropagation();
-    close();
-    anchor.focus();
+    if (isImeComposing(event) || event.target === searchInput) return;
+    const target = event.target as HTMLElement | null;
+    const currentRowIndex = target ? sectionRows.findIndex((item) => item.row === target) : -1;
+    if (!["ArrowDown", "ArrowUp", "Home", "End", "Enter", " "].includes(event.key) && event.key.length !== 1) return;
+    const visibleRows = getVisibleRows();
+    if (!visibleRows.length) return;
+    if (currentRowIndex >= 0) activeIndex = currentRowIndex;
+    const visibleIndex = visibleRows.findIndex((item) => sectionRows.indexOf(item) === activeIndex);
+    if (event.key === "ArrowDown" || event.key === "ArrowUp") {
+      event.preventDefault();
+      const delta = event.key === "ArrowDown" ? 1 : -1;
+      const next = Math.max(0, Math.min(visibleRows.length - 1, (visibleIndex < 0 ? 0 : visibleIndex) + delta));
+      activeIndex = sectionRows.indexOf(visibleRows[next]);
+      syncActiveOption(true);
+    } else if (event.key === "Home" || event.key === "End") {
+      event.preventDefault();
+      activeIndex = sectionRows.indexOf(event.key === "Home" ? visibleRows[0] : visibleRows[visibleRows.length - 1]);
+      syncActiveOption(true);
+    } else if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      const activeRow = sectionRows[activeIndex];
+      if (activeRow) selectRow(activeRow);
+    } else if (/^\S$/u.test(event.key) && !event.ctrlKey && !event.metaKey && !event.altKey) {
+      typeahead += event.key.toLowerCase();
+      if (typeaheadTimer !== undefined) window.clearTimeout(typeaheadTimer);
+      typeaheadTimer = window.setTimeout(() => { typeahead = ""; typeaheadTimer = undefined; }, 500);
+      const match = visibleRows.find((item) => item.option.text.toLowerCase().startsWith(typeahead));
+      if (match) {
+        event.preventDefault();
+        activeIndex = sectionRows.indexOf(match);
+        syncActiveOption(true);
+      }
+    }
   };
-  const outsideTimer = window.setTimeout(() => window.activeDocument.addEventListener("mousedown", onOutside, true), 0);
   panel.addEventListener("keydown", onKeydown);
   const removeAutoClose = installPopoverAutoClose({ panel, anchorEl: anchor, close });
   return () => {
-    window.clearTimeout(outsideTimer);
-    window.activeDocument.removeEventListener("mousedown", onOutside, true);
     panel.removeEventListener("keydown", onKeydown);
+    if (typeaheadTimer !== undefined) window.clearTimeout(typeaheadTimer);
     removeAutoClose();
+    anchor.removeAttribute("aria-controls");
     panel.remove();
   };
 }
@@ -268,15 +363,23 @@ function syncDropdownSelection(rows: Array<{ row: HTMLButtonElement; value: stri
   }
 }
 
-function filterDropdownOptions(rows: Array<{ section?: HTMLElement; row: HTMLButtonElement }>, query: string): void {
+function filterDropdownOptions(
+  rows: DropdownRow[],
+  query: string,
+  emptyRow?: HTMLElement,
+): DropdownRow[] {
   const normalized = query.trim().toLowerCase();
+  const visibleRows: DropdownRow[] = [];
   for (const item of rows) {
     const matches = !normalized || (item.row.getAttribute("data-search-text") || "").includes(normalized);
     item.row.toggleClass("is-hidden", !matches);
+    if (matches && !item.row.disabled) visibleRows.push(item);
   }
   const sections = Array.from(new Set(rows.map((item) => item.section).filter((item): item is HTMLElement => item != null)));
   for (const section of sections) {
     const hasVisibleRow = rows.some((item) => item.section === section && !item.row.hasClass("is-hidden"));
     section.toggleClass("is-hidden", !hasVisibleRow);
   }
+  if (emptyRow) emptyRow.toggleAttribute("hidden", visibleRows.length > 0);
+  return visibleRows;
 }

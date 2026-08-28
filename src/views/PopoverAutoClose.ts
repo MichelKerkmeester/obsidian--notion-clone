@@ -1,7 +1,10 @@
+import { overlayStack } from "./OverlayStack";
+
 export interface PopoverAutoCloseOptions {
   panel: HTMLElement;
   anchorEl?: HTMLElement;
   close: () => void;
+  parentId?: string;
   delayMs?: number;
   closeOnOutsidePointerDown?: boolean;
   closeOnEscape?: boolean;
@@ -9,109 +12,22 @@ export interface PopoverAutoCloseOptions {
 }
 
 export function installPopoverAutoClose(options: PopoverAutoCloseOptions): () => void {
-  const delayMs = options.delayMs ?? 5000;
-  let lastActivity = Date.now();
-  let pointerInsidePanel = false;
-  let pointerInsideLinkedSurface = false;
-  let closed = false;
-
-  const markActivity = () => {
-    lastActivity = Date.now();
+  // Kept for source compatibility with callers that used to pass a timeout.
+  // Dismissal is now owned by the shared stack and never depends on elapsed time.
+  void options.delayMs;
+  void options.isActiveTarget;
+  const registration = overlayStack.register({
+    panel: options.panel,
+    anchor: options.anchorEl,
+    parentId: options.parentId,
+    close: options.close,
+    closeOnOutsidePointerDown: options.closeOnOutsidePointerDown,
+    closeOnEscape: options.closeOnEscape,
+  });
+  let cleaned = false;
+  return () => {
+    if (cleaned) return;
+    cleaned = true;
+    registration.unregister();
   };
-
-  const close = () => {
-    if (closed) return;
-    closed = true;
-    cleanup();
-    options.close();
-  };
-
-  const onPanelEnter = () => {
-    pointerInsidePanel = true;
-    markActivity();
-  };
-  const onPanelLeave = () => {
-    pointerInsidePanel = false;
-    markActivity();
-  };
-  const onDocumentActivity = (event: Event) => {
-    if (options.isActiveTarget?.(event.target)) {
-      pointerInsideLinkedSurface = true;
-      markActivity();
-      return;
-    }
-    const target = event.target;
-    if (target instanceof Node && (
-      options.panel.contains(target) ||
-      options.anchorEl?.contains(target)
-    )) {
-      pointerInsideLinkedSurface = false;
-      return;
-    }
-    pointerInsideLinkedSurface = false;
-    if (options.closeOnOutsidePointerDown && event.type === "mousedown") close();
-  };
-  const onDocumentKeydown = (event: KeyboardEvent) => {
-    if (options.isActiveTarget?.(event.target)) {
-      onDocumentActivity(event);
-      return;
-    }
-    if (options.closeOnEscape && event.key === "Escape") {
-      event.preventDefault();
-      close();
-      return;
-    }
-    onDocumentActivity(event);
-  };
-  const onWindowBlur = () => close();
-  const onVisibilityChange = () => {
-    if (window.activeDocument.visibilityState === "hidden") close();
-  };
-
-  const timer = window.setInterval(() => {
-    if (!options.panel.isConnected) {
-      cleanup();
-      return;
-    }
-    if (!pointerInsidePanel && !pointerInsideLinkedSurface && Date.now() - lastActivity >= delayMs) {
-      close();
-    }
-  }, 500);
-
-  options.panel.addEventListener("pointerenter", onPanelEnter);
-  options.panel.addEventListener("pointerleave", onPanelLeave);
-  options.panel.addEventListener("pointermove", markActivity);
-  options.panel.addEventListener("mousedown", markActivity, true);
-  options.panel.addEventListener("keydown", markActivity, true);
-  options.panel.addEventListener("wheel", markActivity, { passive: true });
-  options.anchorEl?.addEventListener("pointermove", markActivity);
-  options.anchorEl?.addEventListener("mousedown", markActivity, true);
-  window.activeDocument.addEventListener("pointermove", onDocumentActivity, true);
-  window.activeDocument.addEventListener("pointerover", onDocumentActivity, true);
-  window.activeDocument.addEventListener("mousedown", onDocumentActivity, true);
-  window.activeDocument.addEventListener("keydown", onDocumentKeydown, true);
-  window.activeDocument.addEventListener("wheel", onDocumentActivity, { passive: true, capture: true });
-  window.addEventListener("blur", onWindowBlur);
-  window.activeDocument.addEventListener("visibilitychange", onVisibilityChange);
-
-  function cleanup(): void {
-    window.clearInterval(timer);
-    options.panel.removeEventListener("pointerenter", onPanelEnter);
-    options.panel.removeEventListener("pointerleave", onPanelLeave);
-    options.panel.removeEventListener("pointermove", markActivity);
-    options.panel.removeEventListener("mousedown", markActivity, true);
-    options.panel.removeEventListener("keydown", markActivity, true);
-    options.panel.removeEventListener("wheel", markActivity);
-    options.anchorEl?.removeEventListener("pointermove", markActivity);
-    options.anchorEl?.removeEventListener("mousedown", markActivity, true);
-    window.activeDocument.removeEventListener("pointermove", onDocumentActivity, true);
-    window.activeDocument.removeEventListener("pointerover", onDocumentActivity, true);
-    window.activeDocument.removeEventListener("mousedown", onDocumentActivity, true);
-    window.activeDocument.removeEventListener("keydown", onDocumentKeydown, true);
-    window.activeDocument.removeEventListener("wheel", onDocumentActivity, true);
-    window.removeEventListener("blur", onWindowBlur);
-    window.activeDocument.removeEventListener("visibilitychange", onVisibilityChange);
-  }
-
-  return cleanup;
 }

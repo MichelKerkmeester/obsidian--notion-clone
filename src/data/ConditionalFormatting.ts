@@ -143,6 +143,7 @@ export function applyConditionalFormat(
   element.removeClass("db-conditional-format-bold");
   element.style.removeProperty("--db-conditional-format-bg");
   element.style.removeProperty("--db-conditional-format-fg");
+  element.style.removeProperty("--db-conditional-format-accent");
   element.style.removeProperty("--card-bg");
   element.style.removeProperty("--card-accent");
   element.style.removeProperty("--db-calendar-event-bg");
@@ -154,12 +155,15 @@ export function applyConditionalFormat(
   if (!match) return;
   element.addClass("db-conditional-format");
   if (match.color) {
-    element.style.setProperty("--db-conditional-format-bg", `var(--status-color-bg-${match.color})`);
-    element.style.setProperty("--db-conditional-format-fg", `var(--status-color-fg-${match.color})`);
-    element.style.setProperty("--card-bg", `var(--status-color-bg-${match.color})`);
-    element.style.setProperty("--card-accent", `var(--status-color-fg-${match.color})`);
-    element.style.setProperty("--db-calendar-event-bg", `var(--status-color-bg-${match.color})`);
-    element.style.setProperty("--db-calendar-event-accent", `var(--status-color-fg-${match.color})`);
+    const statusBackground = `var(--status-color-bg-${match.color})`;
+    const statusForeground = `var(--status-color-fg-${match.color})`;
+    element.style.setProperty("--db-conditional-format-bg", `color-mix(in srgb, ${statusBackground} 60%, transparent)`);
+    element.style.setProperty("--db-conditional-format-fg", statusForeground);
+    element.style.setProperty("--db-conditional-format-accent", statusForeground);
+    element.style.setProperty("--card-bg", `color-mix(in srgb, ${statusBackground} 60%, transparent)`);
+    element.style.setProperty("--card-accent", statusForeground);
+    element.style.setProperty("--db-calendar-event-bg", `color-mix(in srgb, ${statusBackground} 60%, transparent)`);
+    element.style.setProperty("--db-calendar-event-accent", statusForeground);
   }
   element.setAttribute("data-note-database-conditional-rule", match.ruleId);
   if (match.bold) element.addClass("db-conditional-format-bold");

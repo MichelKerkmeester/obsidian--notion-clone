@@ -50,11 +50,22 @@ export function parseCoverImage(value: unknown, row: RowData, app: App): ParsedI
 /** Read a cover field from a row's frontmatter and return the first parseable image.
  *  Supports array values (e.g. multi-select / tags) by taking the first valid image. */
 export function resolveCoverImage(field: string | undefined, row: RowData, app: App): ParsedImage | null {
-  if (!field) return null;
-  const value = row.frontmatter[field];
-  const values = Array.isArray(value) ? value : [value];
-  for (const entry of values) {
-    const image = parseCoverImage(entry, row, app);
+  if (field) {
+    const value = row.frontmatter[field];
+    const values = Array.isArray(value) ? value : [value];
+    for (const entry of values) {
+      const image = parseCoverImage(entry, row, app);
+      if (image) return image;
+    }
+  }
+
+  // A card may use the first markdown embed as a graceful fallback when no
+  // dedicated cover property is configured. Metadata cache access is read-only
+  // and avoids reading note bodies during rendering.
+  const cache = row.cache || app.metadataCache.getFileCache?.(row.file);
+  for (const embed of cache?.embeds || []) {
+    const target = typeof embed.link === "string" ? embed.link : "";
+    const image = parseCoverImage(target, row, app);
     if (image) return image;
   }
   return null;

@@ -1,0 +1,110 @@
+{
+  "schema_version": 1,
+  "packet_id": "public/003-ui-improvement-build",
+  "spec_folder": "public/003-ui-improvement-build",
+  "parent_id": null,
+  "children_ids": [
+    "public/003-ui-improvement-build/001-empty-and-first-run-states",
+    "public/003-ui-improvement-build/002-table-grid-experience",
+    "public/003-ui-improvement-build/003-popovers-menus-elevation",
+    "public/003-ui-improvement-build/004-toolbar-and-view-controls",
+    "public/003-ui-improvement-build/005-design-tokens-typography",
+    "public/003-ui-improvement-build/006-views-parity-polish",
+    "public/003-ui-improvement-build/007-micro-interactions",
+    "public/003-ui-improvement-build/008-mobile-and-accessibility"
+  ],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "note db ui improvement",
+      "ui improvement build",
+      "plugin ui polish",
+      "table grid experience",
+      "popover elevation",
+      "design tokens typography",
+      "views parity polish",
+      "mobile accessibility ui"
+    ],
+    "key_topics": [
+      "note",
+      "improvement",
+      "plugin",
+      "polish",
+      "table",
+      "grid",
+      "experience",
+      "popover",
+      "elevation",
+      "design",
+      "tokens",
+      "typography"
+    ],
+    "importance_tier": "high",
+    "status": "in_progress",
+    "key_files": [
+      "spec.md"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Improvement Build",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Note Database",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Handoff Criteria",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Problem Statement The",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Flash High",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "The forked Note Database plugin is functionally rich — 12 column types, 7 view types, live relations and rollups — but its interface has not kept pace with that capability",
+    "created_at": "2026-08-27T19:53:21.285Z",
+    "last_save_at": "2026-08-28T00:59:47.121Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md"
+    ],
+    "source_fingerprint": "sha256:5b9d3cf36db685b996f90e025b7911f55c27b7ae3627eed0ff57b414c8bd5703",
+    "source_doc_hashes": {
+      "spec.md": "62263dd5934bb821be23356e9836162a950e0a57d1c8d5549a973a15e06d914a"
+    },
+    "last_active_child_id": "public/003-ui-improvement-build/008-mobile-and-accessibility",
+    "last_active_at": null
+  }
+}

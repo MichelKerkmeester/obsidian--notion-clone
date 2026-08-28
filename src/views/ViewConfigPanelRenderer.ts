@@ -216,6 +216,7 @@ export interface ViewConfigPanelActions {
   app: App;
   onChange(label?: string): void;
   onViewTypeChange?(viewType: DatabaseViewType): void;
+  onOpenLayoutOptions?(anchorEl: HTMLElement): void;
   onDatabaseChange?(label?: string): void;
   createRecordIconField?(target: "database" | "view"): void;
   createProperty?(options?: { applyReference?: (column: ColumnDef) => void; rollbackReference?: () => void }): void;
@@ -250,20 +251,30 @@ export class ViewConfigPanelRenderer {
     containerEl.querySelectorAll(".db-view-config-panel").forEach((el) => el.remove());
     if (!visible || !config) return;
 
-    const panel = containerEl.createDiv({ cls: "db-view-config-panel" });
+    const panel = containerEl.createDiv({ cls: "db-view-config-panel", attr: { id: "db-view-config-panel" } });
     const header = panel.createDiv({ cls: "db-panel-header" });
     header.createDiv({ cls: "db-panel-title", text: t("toolbar.settings") });
 
     if (actions.database) {
-      this.renderSectionTitle(panel, t("viewConfig.databaseSection"));
+      this.renderSectionTitle(panel, t("viewConfig.databaseSection"), "database");
       if (actions.isDatabaseReadOnly) {
         panel.createDiv({ cls: "db-view-config-readonly-note", text: t("viewConfig.databaseReadonly") });
       }
       this.renderDatabaseSettings(panel, actions.database, actions);
     }
 
-    this.renderSectionTitle(panel, t("viewConfig.viewSection"));
+    this.renderSectionTitle(panel, t("viewConfig.viewSection"), "view");
     this.renderViewType(panel, config, actions);
+    if (actions.onOpenLayoutOptions && ["chart", "calendar", "timeline"].includes(config.viewType || "")) {
+      const label = config.viewType === "chart" ? t("chart.options") : config.viewType === "timeline" ? t("timeline.options") : t("calendar.options");
+      const layoutOptions = panel.createEl("button", {
+        cls: "db-view-config-layout-options db-panel-button",
+        attr: { type: "button", "aria-label": label },
+      });
+      setIcon(layoutOptions.createSpan({ cls: "db-panel-button-icon" }), config.viewType === "chart" ? "bar-chart-3" : config.viewType === "timeline" ? "chart-gantt" : "calendar-days");
+      layoutOptions.createSpan({ cls: "db-panel-button-label", text: label });
+      layoutOptions.onclick = () => actions.onOpenLayoutOptions?.(layoutOptions);
+    }
     this.renderViewSourceRulesSection(panel, config, actions);
     if (["table", "board", "gallery", "list", "calendar", "timeline"].includes(config.viewType || "table") && actions.database) {
       this.renderRecordIconSettings(panel, actions.database, config, actions);
@@ -285,6 +296,16 @@ export class ViewConfigPanelRenderer {
     const isCalendarTimelineView = config.viewType === "calendar" || config.viewType === "timeline";
     if (config.viewType !== "chart" && !isCalendarTimelineView) {
       this.renderDefaultColumnWidth(panel, config, actions);
+      if (config.viewType === "table") {
+        this.renderSelect(panel, t("viewConfig.rowDensity"), [
+          { value: "compact", text: t("viewConfig.rowDensity.compact") },
+          { value: "default", text: t("viewConfig.rowDensity.default") },
+          { value: "comfortable", text: t("viewConfig.rowDensity.comfortable") },
+        ], config.rowDensity || "default", (value) => {
+          config.rowDensity = value === "compact" || value === "comfortable" ? value : undefined;
+          actions.onChange(t("undo.rowDensityConfig"));
+        });
+      }
       this.renderSelect(panel, t("viewConfig.yearDisplayMode"), [
         { value: "always", text: t("viewConfig.yearDisplayMode.always") },
         { value: "smart", text: t("viewConfig.yearDisplayMode.smart") },
@@ -333,8 +354,8 @@ export class ViewConfigPanelRenderer {
     if (savedScroll) panel.scrollTop = savedScroll;
   }
 
-  private renderSectionTitle(panel: HTMLElement, text: string): void {
-    panel.createDiv({ cls: "db-view-config-section-title", text });
+  private renderSectionTitle(panel: HTMLElement, text: string, scope: "database" | "view"): void {
+    panel.createDiv({ cls: `db-view-config-section-title db-view-config-section-${scope}`, text, attr: { "data-scope": scope } });
   }
 
   private renderViewType(panel: HTMLElement, config: ViewConfig, actions: ViewConfigPanelActions): void {
@@ -1707,13 +1728,59 @@ export class ViewConfigPanelRenderer {
   private renderGallerySettings(panel: HTMLElement, config: ViewConfig, actions: ViewConfigPanelActions): void {
     this.renderCoverSettings(panel, config, actions, "galleryImageField", "galleryImageFit", "galleryImageAspectRatio", t("undo.galleryCoverFieldConfig"), t("undo.galleryImageFitConfig"), t("undo.galleryCoverRatioConfig"));
 
+    const aspectPresets = panel.createDiv({ cls: "db-gallery-aspect-presets" });
+    aspectPresets.createDiv({ cls: "db-view-config-label", text: t("viewConfig.galleryAspectPresets") });
+    const aspectButtons = aspectPresets.createDiv({ cls: "db-gallery-preset-buttons", attr: { role: "group" } });
+    const aspectOptions: Array<{ value: "square" | "banner" | "portrait" | "landscape"; ratio: number; label: string }> = [
+      { value: "square", ratio: 1, label: t("viewConfig.aspectSquare") },
+      { value: "banner", ratio: 1.777, label: t("viewConfig.aspectBanner") },
+      { value: "portrait", ratio: 0.75, label: t("viewConfig.aspectPortrait") },
+      { value: "landscape", ratio: 1.333, label: t("viewConfig.aspectLandscape") },
+    ];
+    for (const option of aspectOptions) {
+      const button = aspectButtons.createEl("button", {
+        cls: `db-gallery-preset-button${config.galleryImageAspectRatioPreset === option.value ? " is-active" : ""}`,
+        text: option.label,
+        attr: { type: "button", "aria-pressed": config.galleryImageAspectRatioPreset === option.value ? "true" : "false" },
+      });
+      button.onclick = () => {
+        config.galleryImageAspectRatioPreset = option.value;
+        config.galleryImageAspectRatio = option.ratio;
+        actions.onChange(t("undo.galleryCoverRatioConfig"));
+        aspectButtons.querySelectorAll("button").forEach((candidate) => candidate.toggleClass("is-active", candidate === button));
+      };
+    }
+
     const setGalleryCardSize = (value: number) => {
       config.galleryCardSize = value;
     };
     this.renderRange(panel, t("viewConfig.cardSize"), config.galleryCardSize || 250, 160, 420, 10, (value) => {
       setGalleryCardSize(value);
+      config.galleryCardSizePreset = undefined;
       actions.onChange(t("undo.cardSizeConfig"));
     }, setGalleryCardSize);
+
+    const sizePresets = panel.createDiv({ cls: "db-gallery-size-presets" });
+    sizePresets.createDiv({ cls: "db-view-config-label", text: t("viewConfig.gallerySizePresets") });
+    const sizeButtons = sizePresets.createDiv({ cls: "db-gallery-preset-buttons", attr: { role: "group" } });
+    const sizeOptions: Array<{ value: "small" | "medium" | "large"; width: number; label: string }> = [
+      { value: "small", width: 180, label: t("viewConfig.gallerySizeSmall") },
+      { value: "medium", width: 260, label: t("viewConfig.gallerySizeMedium") },
+      { value: "large", width: 360, label: t("viewConfig.gallerySizeLarge") },
+    ];
+    for (const option of sizeOptions) {
+      const button = sizeButtons.createEl("button", {
+        cls: `db-gallery-preset-button${config.galleryCardSizePreset === option.value ? " is-active" : ""}`,
+        text: option.label,
+        attr: { type: "button", "aria-pressed": config.galleryCardSizePreset === option.value ? "true" : "false" },
+      });
+      button.onclick = () => {
+        config.galleryCardSizePreset = option.value;
+        config.galleryCardSize = option.width;
+        actions.onChange(t("undo.cardSizeConfig"));
+        sizeButtons.querySelectorAll("button").forEach((candidate) => candidate.toggleClass("is-active", candidate === button));
+      };
+    }
   }
 
   private renderTitleField(panel: HTMLElement, config: ViewConfig, actions: ViewConfigPanelActions): void {

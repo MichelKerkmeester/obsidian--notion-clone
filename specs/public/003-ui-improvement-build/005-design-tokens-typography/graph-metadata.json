@@ -1,0 +1,219 @@
+{
+  "schema_version": 1,
+  "packet_id": "public/003-ui-improvement-build/005-design-tokens-typography",
+  "spec_folder": "public/003-ui-improvement-build/005-design-tokens-typography",
+  "parent_id": "public/003-ui-improvement-build",
+  "children_ids": [],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "design tokens and typography",
+      "color tokens",
+      "typography scale",
+      "spacing tokens",
+      "radius hierarchy",
+      "dark light theming",
+      "dual theme status colors",
+      "surface elevation",
+      "row density tokens",
+      "theme adaptive chart palette",
+      "focus ring contrast",
+      "border divider tokens"
+    ],
+    "key_topics": [
+      "design",
+      "tokens",
+      "typography",
+      "color",
+      "scale",
+      "spacing",
+      "radius",
+      "hierarchy",
+      "dark",
+      "light",
+      "theming",
+      "dual"
+    ],
+    "importance_tier": "high",
+    "status": "complete",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "checklist.md",
+      "implementation-summary.md"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "checklist.md",
+        "kind": "doc",
+        "path": "checklist.md",
+        "source": "derived"
+      },
+      {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Design Tokens",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Problem Statement The",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Note Database",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Severe Dark",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Mode Contrast Failures Across All",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Plan",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Technical Context",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Custom Properties",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Obsidian Theme Engine",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Native Obsidian",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Notation",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Format",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Task",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Theme Status",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Tag Color Token System",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Verification Checklist",
+        "kind": "proper_noun",
+        "path": "checklist.md",
+        "source": "derived"
+      },
+      {
+        "name": "Verification Protocol",
+        "kind": "proper_noun",
+        "path": "checklist.md",
+        "source": "derived"
+      },
+      {
+        "name": "Completion Impact",
+        "kind": "proper_noun",
+        "path": "checklist.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "The visual design system of the Note Database plugin forms the foundational aesthetic and structural substrate across all 7 view layouts (Table, Board, Gallery, List, Calendar, Timeline, Chart), modals, popovers, and drawers",
+    "created_at": "2026-08-27T19:53:20.152Z",
+    "last_save_at": "2026-08-28T01:12:28.357Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "checklist.md",
+      "implementation-summary.md"
+    ],
+    "source_fingerprint": "sha256:5121f4b55f9e246893f987233a082a6a444f8f1d666993b9849942bbdee28a7b",
+    "source_doc_hashes": {
+      "spec.md": "e89e55070e2e48ebf6b15fa13baa253fa4091689529bb6f3b4887c57349e075a",
+      "plan.md": "00d91b4e901589927f98cda3de6c5f11894d64a0ddc9a11f0fb37dfeeb508d39",
+      "tasks.md": "4ba5ec54feda293e8d7a4701c93353f211ca714eb76400d39c7be9ba0443d72a",
+      "checklist.md": "0b598593e24fde60f846dbd2653f01ab58918b3c7a97bfd331fa6f041de5fcf1",
+      "implementation-summary.md": "0fda05a7c0f53e711ed342b5567935124a7f31ab67b0d5b2f0a53fb3c28becdf"
+    },
+    "last_active_child_id": null,
+    "last_active_at": null
+  }
+}

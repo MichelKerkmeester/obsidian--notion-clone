@@ -125,6 +125,7 @@ export class FilterPanelRenderer {
 
     const panel = containerEl.createDiv({
       cls: "db-filter-panel",
+      attr: { id: "db-filter-panel" },
     });
     const header = containerEl.querySelector(".db-header") || containerEl.querySelector(".db-toolbar");
     if (header?.parentElement) {

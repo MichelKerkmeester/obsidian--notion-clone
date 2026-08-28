@@ -42,6 +42,7 @@ export function renderGroupLabel(
   const { option } = column ? resolveOptionDisplay(column, groupKey) : { option: undefined };
   title.createSpan({
     cls: `status-badge status-color-${option?.color || "gray"}`,
+    attr: { "data-status-color": option?.color || "gray" },
     text: label,
   });
 }

@@ -7,6 +7,19 @@ export interface RangeSelectionOptions {
   range?: boolean;
 }
 
+export interface SelectionState {
+  checked: boolean;
+  indeterminate: boolean;
+}
+
+export function getSelectionState(orderedIds: readonly string[], selectedIds: ReadonlySet<string>): SelectionState {
+  const selectedCount = orderedIds.reduce((count, id) => count + (selectedIds.has(id) ? 1 : 0), 0);
+  return {
+    checked: orderedIds.length > 0 && selectedCount === orderedIds.length,
+    indeterminate: selectedCount > 0 && selectedCount < orderedIds.length,
+  };
+}
+
 export function applyRangeSelection(options: RangeSelectionOptions): string | null {
   const ids = getSelectionTargetIds(options.orderedIds, options.anchorId, options.targetId, Boolean(options.range));
   setIdsSelected(ids, options.selectedIds, options.selected);

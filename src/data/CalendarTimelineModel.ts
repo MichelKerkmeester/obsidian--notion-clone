@@ -153,6 +153,8 @@ export function getTimelineColumnWidthSpec(scale: TimelineScale): TimelineColumn
       return { defaultWidth: 80, min: 48, max: 360 };
     case "quarter":
       return { defaultWidth: 15, min: 15, max: 40 };
+    case "year":
+      return { defaultWidth: 56, min: 32, max: 180 };
     default:
       return assertNever(scale);
   }
@@ -290,6 +292,8 @@ export function shiftTimelineAnchor(anchor: string, scale: TimelineScale, delta:
       return dateKeyFromUtc(makeUtcDate(base.getUTCFullYear(), base.getUTCMonth() + delta, base.getUTCDate()));
     case "quarter":
       return dateKeyFromUtc(makeUtcDate(base.getUTCFullYear(), base.getUTCMonth() + delta * 3, base.getUTCDate()));
+    case "year":
+      return dateKeyFromUtc(makeUtcDate(base.getUTCFullYear() + delta, base.getUTCMonth(), base.getUTCDate()));
     default:
       return assertNever(scale);
   }
@@ -325,6 +329,16 @@ export function getTimelineWindow(config: ViewConfig, anchor: string): TimelineW
         startDateKey: dateKeyFromUtc(gridStart),
         endDateKey: dateKeyFromUtc(last),
         totalUnits: Math.max(1, daysBetweenDate(gridStart, last) + 1),
+        unit: "day",
+      };
+    }
+    case "year": {
+      const first = makeUtcDate(base.getUTCFullYear(), 0, 1);
+      const last = makeUtcDate(base.getUTCFullYear(), 12, 0);
+      return {
+        startDateKey: dateKeyFromUtc(first),
+        endDateKey: dateKeyFromUtc(last),
+        totalUnits: Math.max(1, daysBetweenDate(first, last) + 1),
         unit: "day",
       };
     }
@@ -384,7 +398,7 @@ export function getTimelineNavigationShiftUnits(totalUnits: number): number {
 }
 
 export function getTimelineShortNavigationShiftUnits(scale: TimelineScale): number {
-  return scale === "quarter" ? 7 : 1;
+  return scale === "quarter" ? 7 : scale === "year" ? 30 : 1;
 }
 
 export function resolveTimelineJumpAnchor(input: TimelineJumpAnchorInput): TimelineJumpAnchor {
@@ -631,6 +645,13 @@ export function buildTimelineModel(rows: RowData[], config: ViewConfig, options:
   };
 }
 
+/** Rows without a usable start date stay available to calendar/timeline backlog drawers. */
+export function collectUnscheduledTimelineRows(rows: RowData[], config: ViewConfig, startField?: string): RowData[] {
+  const field = startField || config.timelineStartDateField || config.calendarStartDateField || getDefaultEventDateField(config);
+  if (!field) return rows.slice();
+  return rows.filter((row) => normalizeDateKey(getRowFieldValue(row, field, config)) == null);
+}
+
 function createTimelineLane(key: string, label: string, color?: string): TimelineLaneModel {
   return { key, label, color, events: [], rowCount: 1 };
 }
@@ -745,8 +766,9 @@ export function buildTimelineTicks(window: TimelineWindow, scale: TimelineScale,
   const start = parseDateKey(window.startDateKey);
   const end = parseDateKey(window.endDateKey);
   if (!start || !end || start.getTime() > end.getTime()) return [];
-  // Event layout uses daily columns outside day-scale. Quarter only changes the visible tick step.
-  const stepDays = scale === "quarter" ? 7 : 1;
+  // Event layout uses daily columns outside day-scale. Coarser scales reduce
+  // axis noise while preserving daily placement for event bars.
+  const stepDays = scale === "quarter" ? 7 : scale === "year" ? 30 : 1;
   const ticks: TimelineTickModel[] = [];
   for (let tick = start; tick.getTime() <= end.getTime(); tick = addUtcDays(tick, stepDays)) {
     ticks.push({
@@ -929,6 +951,10 @@ function formatTimelineTickLabel(date: Date, scale: TimelineScale, locale: Effec
       return String(date.getUTCDate());
     case "week":
       return `${formatTimelineWeekday(date, locale)} ${date.getUTCDate()}`;
+    case "year":
+      // Year-scale ticks step roughly a month at a time, so the month reads as a
+      // useful axis label where a day-of-month number would look arbitrary.
+      return String(date.getUTCMonth() + 1);
     default:
       return assertNever(scale);
   }

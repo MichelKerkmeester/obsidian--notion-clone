@@ -1,0 +1,31 @@
+{
+  "specFolder": "public/003-ui-improvement-build/005-design-tokens-typography",
+  "description": "The visual design system of the Note Database plugin forms the foundational aesthetic and structural substrate across all 7 view layouts (Table,",
+  "keywords": [
+    "visual",
+    "design",
+    "system",
+    "note",
+    "database",
+    "plugin",
+    "forms",
+    "foundational",
+    "aesthetic",
+    "structural",
+    "substrate",
+    "across",
+    "view",
+    "layouts",
+    "table"
+  ],
+  "lastUpdated": "2026-08-27T19:53:18.599Z",
+  "specId": "005",
+  "folderSlug": "design-tokens-typography",
+  "parentChain": [
+    "public",
+    "003-ui-improvement-build"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": [],
+  "level": "2"
+}
