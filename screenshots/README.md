@@ -313,6 +313,16 @@ Opened from a calendar or timeline event card. Fields are click-to-edit; an empt
 
 Sources: `src/views/RecordDetailPanel.ts`, `src/views/CardFieldRenderer.ts`
 
+### Record detail — mobile bottom sheet
+
+The phone form of the record detail panel. positionToolbarPopover renders it as a bottom sheet with a grab handle; a permanent close button (reusing db-cell-edit-close) and drag-down on the handle dismiss it where the desktop panel relies on Escape and outside-click. Captured in viewport mode so the fixed sheet docks at the bottom.
+
+| dark | light |
+|---|---|
+| ![panel-record-detail-sheet dark](panels/panel-record-detail-sheet-mobile-dark.png) | ![panel-record-detail-sheet light](panels/panel-record-detail-sheet-mobile-light.png) |
+
+Sources: `src/views/RecordDetailPanel.ts`, `src/views/PopoverPosition.ts`, `src/views/CardFieldRenderer.ts`
+
 ### Table record peek
 
 Docks against the right edge of the table it was opened from. Values are display-only text, and properties hidden from the table sit behind the disclosure.
@@ -364,6 +374,16 @@ Sources: `src/views/ViewConfigPanelRenderer.ts`, `src/views/DropdownField.ts`
 Sources: `src/views/EmptyStateRenderer.ts`
 
 ## views
+
+### Board view — mobile
+
+The board inside the default-width container. On the phone (is-phone) the container no longer centres the grid off-screen, and the sticky group header is taken out of sticky flow so it cannot float down over the cards; columns page horizontally with snap-scroll.
+
+| dark | light |
+|---|---|
+| ![board-mobile dark](views/board-mobile-mobile-dark.png) | ![board-mobile light](views/board-mobile-mobile-light.png) |
+
+Sources: `src/views/BoardRenderer.ts`, `src/views/GroupLabelRenderer.ts`, `src/views/CardFieldRenderer.ts`
 
 ### Board view
 
@@ -421,6 +441,16 @@ Sources: `src/views/CalendarRenderer.ts`
 
 Sources: `src/views/GalleryRenderer.ts`, `src/views/CardFieldRenderer.ts`
 
+### List view — mobile
+
+The list row the renderer builds: controls, a title line and a meta row of fixed-width fields. On desktop the fields sit on one line; on the phone (is-phone) the card fills the viewport and the fields wrap inside its border instead of escaping it.
+
+| dark | light |
+|---|---|
+| ![list-mobile dark](views/list-mobile-mobile-dark.png) | ![list-mobile light](views/list-mobile-mobile-light.png) |
+
+Sources: `src/views/ListRenderer.ts`, `src/views/CardFieldRenderer.ts`
+
 ### List view
 
 | dark | light |
@@ -428,6 +458,16 @@ Sources: `src/views/GalleryRenderer.ts`, `src/views/CardFieldRenderer.ts`
 | ![list-view dark](views/list-view-mobile-dark.png) | ![list-view light](views/list-view-mobile-light.png) |
 
 Sources: `src/views/ListRenderer.ts`, `src/views/CardFieldRenderer.ts`
+
+### Table view — mobile auto-fit
+
+The full table the renderer builds: a select gutter, a record-icon gutter and a runtime <colgroup> of fixed px widths. On desktop those widths hold; on the phone (is-phone) the columns auto-fit to content and the select column is no longer clipped by the scroll-area fade mask.
+
+| dark | light |
+|---|---|
+| ![table-mobile dark](views/table-mobile-mobile-dark.png) | ![table-mobile light](views/table-mobile-mobile-light.png) |
+
+Sources: `src/views/TableRenderer.ts`, `src/views/TableColumnLayoutSync.ts`, `src/views/TableLayout.ts`
 
 ### Table view
 

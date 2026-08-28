@@ -117,6 +117,7 @@ Turn that research into eight independently shippable build phases, each grounde
 | 008 | `008-mobile-and-accessibility/` | Mobile, responsive, contrast, focus, ARIA | Planned |
 | 009 | `009-header-affordance-defects/` | Column header menu placement, truncation, cursors | Complete |
 | 010 | `010-add-view-popover-layout/` | Add-view popover box model and card tiles | Complete |
+| 011 | `011-mobile-table-and-panel-ux/` | Mobile: column auto-fit, record sheet dismissal, touch hover suppression | Complete |
 
 ### Phase Sequencing
 

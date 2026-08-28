@@ -188,6 +188,11 @@
   top: auto !important;
   width: 100% !important;
   max-width: 100% !important;
+  /* The sheet spans the viewport; its own padding must count toward that width
+     rather than adding to it, so the header controls and field values are not
+     pushed past the right edge. positionToolbarPopover also sets this inline,
+     but the class must hold on its own so the sheet is correct without it. */
+  box-sizing: border-box !important;
   max-height: calc(100dvh - 20px) !important;
   padding-bottom: calc(16px + env(safe-area-inset-bottom)) !important;
   border-right: 0 !important;
@@ -5271,14 +5276,16 @@
   white-space: nowrap;
 }
 
-/* 行悬停高亮 */
-.note-database-container .db-table tr:hover td {
-  background: color-mix(in srgb, var(--background-modifier-hover) 68%, transparent);
-}
+/* 行悬停高亮 / 单元格悬停边框 —— 仅在有悬停能力的指针下生效，触摸单击后不残留高亮
+   （沿用仓库既有 @media (hover: hover) 模式）。 */
+@media (hover: hover) {
+  .note-database-container .db-table tr:hover td {
+    background: color-mix(in srgb, var(--background-modifier-hover) 68%, transparent);
+  }
 
-/* 单元格悬停边框 */
-.note-database-container .db-table td:hover {
-  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--text-muted) 22%, transparent);
+  .note-database-container .db-table td:hover {
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--text-muted) 22%, transparent);
+  }
 }
 
 .note-database-container .db-table th.db-select-col,
@@ -8561,10 +8568,13 @@
   transition: background-color var(--db-transition-fast), box-shadow var(--db-transition-fast), transform var(--db-transition-fast);
 }
 
-.note-database-container .db-board-card:hover {
-  background: color-mix(in srgb, var(--db-hover-bg) 82%, var(--db-surface-raised));
-  box-shadow: var(--db-elevation-2);
-  transform: translateY(-1px);
+/* 卡片悬停抬升 —— 悬停指针专用，触摸单击后不残留抬升/阴影。 */
+@media (hover: hover) {
+  .note-database-container .db-board-card:hover {
+    background: color-mix(in srgb, var(--db-hover-bg) 82%, var(--db-surface-raised));
+    box-shadow: var(--db-elevation-2);
+    transform: translateY(-1px);
+  }
 }
 
 .note-database-container .db-board-card.is-dragging {
@@ -8734,8 +8744,10 @@
   padding: 2px;
 }
 
-.note-database-container .db-board-card-field:hover {
-  background: var(--background-modifier-hover);
+@media (hover: hover) {
+  .note-database-container .db-board-card-field:hover {
+    background: var(--background-modifier-hover);
+  }
 }
 
 .note-database-container .db-board-card-field-wrap {
@@ -8935,8 +8947,10 @@
   white-space: nowrap;
 }
 
-.note-database-container .db-record-detail-field:hover {
-  background: var(--background-modifier-hover);
+@media (hover: hover) {
+  .note-database-container .db-record-detail-field:hover {
+    background: var(--background-modifier-hover);
+  }
 }
 
 .note-database-container .db-record-detail-field.is-readonly,
@@ -9496,8 +9510,10 @@ body.is-phone .note-database-container .db-record-detail-panel {
   transition: background-color 120ms ease, border-color 120ms ease, box-shadow 120ms ease, transform 120ms ease;
 }
 
-.note-database-container .db-list-row:hover {
-  background: var(--background-modifier-hover);
+@media (hover: hover) {
+  .note-database-container .db-list-row:hover {
+    background: var(--background-modifier-hover);
+  }
 }
 
 .note-database-container .db-list-row.is-drop-before,
@@ -17633,6 +17649,155 @@ img.db-text-md-image {
   .note-database-container .db-table th {
     min-height: 44px;
   }
+}
+
+/* ============================================================================
+ *  Mobile (is-phone) layout corrections
+ *
+ *  Every database view is authored for a wide, horizontally-scrollable canvas:
+ *  the table uses fixed px column widths, list rows and the board grid grow to
+ *  `width: max-content`, and their children are rigid (`.db-list-field` a fixed
+ *  150px, `.db-board-column` a fixed 280px). On a phone those intrinsic widths
+ *  dwarf the viewport, so content clips at the edges and the desktop
+ *  `db-width-default` centring (max-width + auto side margins) throws the
+ *  overflow off-screen. These rules key strictly off `is-phone` — a merely
+ *  narrow desktop is a different question, handled by @media where pointer
+ *  capability actually matters — and diverge only the phone; desktop is left
+ *  exactly as it was.
+ * ========================================================================== */
+
+/* The default-width container centres its content inside a ~760px column; on a
+   phone that centring pushes any wider child's left edge past the viewport.
+   Let the container fill the phone and scroll normally instead. */
+.is-phone .note-database-container.db-width-default {
+  max-width: none;
+  margin-left: 0;
+  margin-right: 0;
+}
+
+/* Table — unclip the select column and auto-fit columns to their content. */
+
+/* The horizontal fade mask fades the leftmost 8px of the scroll area, which on
+   the table is the row-select column, so its checkbox reads as clipped at the
+   viewport edge. Drop the mask on the phone table. */
+.is-phone .note-database-container .db-table-wrap {
+  -webkit-mask-image: none;
+  mask-image: none;
+}
+
+/* Pin the select checkbox to the right of its column on both header and rows,
+   as on desktop. The coarse-pointer fallback switched it to in-flow, so the
+   header checkbox (no move handle) fell out of line with row checkboxes (each
+   preceded by a 24px move handle) and the pair overflowed the 48px column. */
+.is-phone .note-database-container .db-table .db-select-col .db-select-inner input[type="checkbox"] {
+  position: absolute;
+  right: 6px;
+  min-width: 0;
+  min-height: 0;
+}
+.is-phone .note-database-container .db-table th.db-select-col,
+.is-phone .note-database-container .db-table td.db-select-col {
+  overflow: hidden;
+}
+
+/* Desktop ships fixed px column widths (table-layout: fixed + inline <col>
+   widths set from JS) that truncate mid-word on a narrow screen and let a badge
+   paint over its neighbour. On the phone switch to content-driven auto layout
+   so each column hugs its header + content width. It cannot run away: auto
+   layout is intrinsic-content sized — never a fixed runaway value like the
+   colgroup-less fixed layout that once produced a 1000088px table — and every
+   data cell is capped at 60vw and ellipsised past it. Table and <col> widths
+   are inline (JS-set), so releasing them needs !important. */
+.is-phone .note-database-container .db-table {
+  table-layout: auto;
+  width: auto !important;
+  min-width: 0 !important;
+}
+.is-phone .note-database-container .db-table col[data-note-database-column-key] {
+  width: auto !important;
+}
+.is-phone .note-database-container .db-table td:not(.db-select-col):not(.db-record-icon-col),
+.is-phone .note-database-container .db-table th[data-note-database-column-key] {
+  max-width: 60vw;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* List — full-width cards, wrapped field row, values kept inside the border. */
+
+/* The desktop row grows to max-content so every field sits on one line; on the
+   phone that overflows the card past the viewport and the meta row's visible
+   overflow paints values past the card border. Constrain the row and its parts
+   to the viewport, let the field row wrap, and clip stray overflow. */
+.is-phone .note-database-container .db-list-grouped,
+.is-phone .note-database-container .db-list-group,
+.is-phone .note-database-container .db-list-group > .db-list,
+.is-phone .note-database-container .db-list-group-header,
+.is-phone .note-database-container .db-list-row,
+.is-phone .note-database-container .db-list-row-main,
+.is-phone .note-database-container .db-list-row-meta {
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+}
+.is-phone .note-database-container .db-list-row {
+  grid-template-columns: auto minmax(0, 1fr);
+}
+.is-phone .note-database-container .db-list-row-meta {
+  flex-wrap: wrap;
+  overflow: hidden;
+}
+.is-phone .note-database-container .db-list-field {
+  flex: 1 1 var(--db-card-field-width, 150px);
+  min-width: 0;
+  max-width: 100%;
+}
+
+/* Board — stop the sticky group header floating down over the cards. */
+
+/* On the phone the board becomes an overflow scroller on both axes (mobile
+   overflow-x:auto pairs with the base overflow:visible, which computes to
+   auto), so the board box becomes the containing block for the sticky column
+   header. Its sticky `top` — seeded from the desktop-measured toolbar height —
+   then resolves inside the column and the opaque header floats down over the
+   first cards. Take it out of sticky flow on the phone so it sits at the column
+   top; keep it positioned so its ::before background still anchors to it. */
+.is-phone .note-database-container .db-board-column-header {
+  position: relative;
+  top: auto;
+}
+
+/* Record detail panel — mobile bottom-sheet close affordance. */
+
+/* positionToolbarPopover already renders this panel as a bottom sheet with a
+   grab handle on the phone. The close button (reusing the existing
+   db-cell-edit-close) lives in the header on every platform but is shown only
+   in the sheet; desktop keeps its anchored panel with no visible close. */
+.note-database-container .db-record-detail-panel .db-cell-edit-close {
+  display: none;
+}
+.note-database-container .db-record-detail-panel.db-mobile-bottom-sheet .db-cell-edit-close {
+  position: static;
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--db-radius-md);
+  background: transparent;
+  color: var(--text-muted);
+}
+.note-database-container .db-record-detail-panel.db-mobile-bottom-sheet .db-cell-edit-close:active {
+  background: var(--background-modifier-hover);
+  color: var(--text-normal);
+}
+.note-database-container .db-record-detail-panel.db-mobile-bottom-sheet .db-cell-edit-close svg {
+  width: 20px;
+  height: 20px;
 }
 
 @media (forced-colors: active) {

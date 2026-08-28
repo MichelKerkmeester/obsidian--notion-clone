@@ -404,6 +404,43 @@ export const PANEL_SCENARIOS = [
     },
   },
   {
+    id: "panel-record-detail-sheet",
+    title: "Record detail — mobile bottom sheet",
+    group: "panels",
+    width: 402,
+    capture: "viewport",
+    sources: ["src/views/RecordDetailPanel.ts", "src/views/PopoverPosition.ts", "src/views/CardFieldRenderer.ts"],
+    note: "The phone form of the record detail panel. positionToolbarPopover renders it as a bottom sheet with a grab handle; a permanent close button (reusing db-cell-edit-close) and drag-down on the handle dismiss it where the desktop panel relies on Escape and outside-click. Captured in viewport mode so the fixed sheet docks at the bottom.",
+    html: () => {
+      const row = ROWS[1];
+      const closeGlyph = glyph('<path d="M18 6 6 18M6 6l12 12"/>');
+      const field = (col, value, valueClass = "") => `
+        <div class="db-record-detail-field" data-note-database-column-key="${col.key}" role="gridcell">
+          <span class="db-record-detail-field-label">${col.label}</span>
+          <div class="db-board-card-value${valueClass ? ` ${valueClass}` : ""}">${value}</div>
+        </div>`;
+      const badge = (text, tone) => `<span class="status-badge status-color-${tone}" title="${text}">${text}</span>`;
+      return `
+      <div class="note-database-container db-width-default">
+        <div class="db-record-detail-panel db-anchored-popover db-mobile-bottom-sheet is-visible" role="dialog" aria-modal="true" aria-label="${row.name}">
+          <div class="db-mobile-bottom-sheet-handle" aria-hidden="true"></div>
+          <div class="db-record-detail-header">
+            <div class="db-record-detail-title">${row.name}</div>
+            <button type="button" class="db-board-card-open" aria-label="Open note">${I.maximize2}</button>
+            <button type="button" class="db-cell-edit-close" aria-label="Close">${closeGlyph}</button>
+          </div>
+          <div class="db-record-detail-fields">
+            ${field(COLUMN_DEFS[1], row.cost, "db-card-field-number")}
+            ${field(COLUMN_DEFS[2], badge(row.cycle, "orange"))}
+            ${field(COLUMN_DEFS[3], badge(row.payment, "gray"))}
+            ${field(COLUMN_DEFS[4], row.renew, "db-date-value")}
+            ${field(COLUMN_DEFS[5], badge(row.category, "blue"))}
+          </div>
+        </div>
+      </div>`;
+    },
+  },
+  {
     id: "panel-record-peek",
     title: "Table record peek",
     group: "panels",

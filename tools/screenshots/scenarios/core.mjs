@@ -1,4 +1,4 @@
-import { ROWS, ICONS, dots, glyph, pill, tableHeader, tableRows, boardColumn } from "./_shared.mjs";
+import { ROWS, COLUMNS, ICONS, dots, glyph, pill, tableHeader, tableRows, boardColumn } from "./_shared.mjs";
 
 export const CORE_SCENARIOS = [
   {
@@ -166,6 +166,100 @@ export const CORE_SCENARIOS = [
               <button type="button" class="db-empty-action">Learn more</button>
             </div>
           </div>
+        </div>
+      </div>`,
+  },
+  {
+    id: "table-mobile",
+    title: "Table view — mobile auto-fit",
+    group: "views",
+    width: 402,
+    sources: ["src/views/TableRenderer.ts", "src/views/TableColumnLayoutSync.ts", "src/views/TableLayout.ts"],
+    note: "The full table the renderer builds: a select gutter, a record-icon gutter and a runtime <colgroup> of fixed px widths. On desktop those widths hold; on the phone (is-phone) the columns auto-fit to content and the select column is no longer clipped by the scroll-area fade mask.",
+    html: () => {
+      const rows = [...ROWS.slice(0, 10), ROWS[17]];
+      const move = glyph('<path d="m8 9 4-4 4 4M8 15l4 4 4-4"/>');
+      const icon = glyph('<rect x="3" y="3" width="18" height="18" rx="2"/>');
+      const colWidths = [200, 120, 130, 140, 170, 140];
+      const cols = COLUMNS
+        .map((c, i) => `<col data-note-database-column-key="${c.label.toLowerCase()}" style="width:${colWidths[i]}px">`)
+        .join("");
+      const dataCells = (r) => `
+        <td>${r.name}</td><td>${r.cost}</td><td>${pill(r.cycle, "orange")}</td>
+        <td>${pill(r.payment, "gray")}</td><td>${r.renew}</td>
+        <td>${pill(r.category, r.category === "Business" ? "blue" : "green")}</td>`;
+      const bodyRows = rows.map((r) => `
+        <tr>
+          <td class="db-select-col"><div class="db-select-inner">
+            <button type="button" class="db-table-mobile-move-btn" aria-label="Move row">${move}</button>
+            <input type="checkbox" aria-label="Select row"></div></td>
+          <td class="db-record-icon-col"><span class="db-record-icon">${icon}</span></td>
+          ${dataCells(r)}
+        </tr>`).join("");
+      const total = 40 + 28 + colWidths.reduce((a, b) => a + b, 0);
+      return `
+      <div class="note-database-container db-width-default">
+        <div class="db-table-wrap">
+          <table class="db-table" style="width:${total}px;min-width:${total}px">
+            <colgroup>
+              <col class="db-select-colgroup"><col class="db-record-icon-colgroup">${cols}
+            </colgroup>
+            <thead><tr>
+              <th class="db-select-col"><div class="db-select-inner"><input type="checkbox" aria-label="Select all"></div></th>
+              <th class="db-record-icon-col"></th>
+              ${tableHeader()}
+            </tr></thead>
+            <tbody>${bodyRows}</tbody>
+          </table>
+        </div>
+      </div>`;
+    },
+  },
+  {
+    id: "list-mobile",
+    title: "List view — mobile",
+    group: "views",
+    width: 402,
+    sources: ["src/views/ListRenderer.ts", "src/views/CardFieldRenderer.ts"],
+    note: "The list row the renderer builds: controls, a title line and a meta row of fixed-width fields. On desktop the fields sit on one line; on the phone (is-phone) the card fills the viewport and the fields wrap inside its border instead of escaping it.",
+    html: () => {
+      const open = glyph('<path d="M15 3h6v6"/><path d="m21 3-7 7"/><path d="M9 21H3v-6"/><path d="m3 21 7-7"/>');
+      const move = glyph('<path d="m8 9 4-4 4 4M8 15l4 4 4-4"/>');
+      const fieldPairs = (r) => [
+        ["Cost", r.cost], ["Renews", r.renew], ["Payment", r.payment], ["Billing", r.cycle],
+      ].map(([label, value]) => `
+        <div class="db-list-field"><span class="db-list-field-label">${label}</span><div class="db-list-field-value">${value}</div></div>`).join("");
+      const rows = ROWS.slice(0, 12).map((r) => `
+        <div class="db-list-row" role="row" aria-keyshortcuts="Enter Space F2" tabindex="-1">
+          <div class="db-list-row-controls">
+            <input type="checkbox" class="db-list-row-checkbox" aria-label="Select">
+            <button type="button" class="db-list-row-open" aria-label="Open note">${open}</button>
+            <button type="button" class="db-list-mobile-move-btn" aria-label="Move">${move}</button>
+          </div>
+          <div class="db-list-row-main">
+            <div class="db-record-title-line"><span class="db-list-row-title">${r.name}</span></div>
+            <div class="db-list-row-meta">${fieldPairs(r)}</div>
+          </div>
+        </div>`).join("");
+      return `
+      <div class="note-database-container db-width-default">
+        <div class="db-list" role="grid">${rows}</div>
+      </div>`;
+    },
+  },
+  {
+    id: "board-mobile",
+    title: "Board view — mobile",
+    group: "views",
+    width: 402,
+    sources: ["src/views/BoardRenderer.ts", "src/views/GroupLabelRenderer.ts", "src/views/CardFieldRenderer.ts"],
+    note: "The board inside the default-width container. On the phone (is-phone) the container no longer centres the grid off-screen, and the sticky group header is taken out of sticky flow so it cannot float down over the cards; columns page horizontally with snap-scroll.",
+    html: () => `
+      <div class="note-database-container db-width-default">
+        <div class="db-board" role="grid">
+          ${[...new Set(ROWS.map((r) => r.category))]
+            .map((cat) => boardColumn(cat, ROWS.filter((r) => r.category === cat)))
+            .join("")}
         </div>
       </div>`,
   },
