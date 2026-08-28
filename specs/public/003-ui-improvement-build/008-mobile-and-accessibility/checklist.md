@@ -36,7 +36,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "ui-build-008"
       parent_session_id: null
-    completion_pct: 100
+    completion_pct: 97
     open_questions: []
     answered_questions: []
 ---
@@ -64,7 +64,7 @@ _memory:
 
 - [x] CHK-001 [P0] Verify that environment checks (`isPhoneLayout`), touch targets (`styles.css`), popover positioning (`PopoverPosition.ts`), mobile cell editors (`CellRenderer.ts`), keyboard navigation (`TableKeyboardNavigation.ts`, `DatabaseView.ts`, `EmbeddedDatabaseRenderer.ts`), and group toggles match target `file:line` locations in `spec.md` [EVIDENCE: src/data/TouchEnvironment.ts; src/views/PopoverPosition.ts; src/views/CellRenderer.ts; src/data/TableKeyboardNavigation.ts; src/views/EmbeddedDatabaseRenderer.ts; styles.css:17223-17500]
 - [x] CHK-002 [P0] Confirm that `TableKeyboardNavigation.ts` and `PopoverPosition.ts` are available for extraction and enhancement without breaking existing callers [EVIDENCE: src/data/TableKeyboardNavigation.ts:1-120; src/views/PopoverPosition.ts:1-250]
-- [x] CHK-003 [P0] Baseline test suite passes cleanly before changes: `npx vitest run` [EVIDENCE: `npx vitest run` 355 tests / 45 files]
+- [x] CHK-003 [P0] Baseline test suite passes cleanly before changes: `npx vitest run` [EVIDENCE: `npx vitest run` 362 tests / 46 files]
 - [x] CHK-004 [P0] Baseline TypeScript compilation passes cleanly: `npx tsc --noEmit` [EVIDENCE: `npx tsc --noEmit` exit 0]
 
 <!-- /ANCHOR:pre-impl -->
@@ -86,13 +86,13 @@ _memory:
 <!-- ANCHOR:testing -->
 ## Testing
 
-- [x] CHK-011 [P0] Unit tests in `TouchEnvironment.test.ts` verify accurate detection across desktop mouse, touch phones, tablets, and split panes [EVIDENCE: src/data/TouchEnvironment.test.ts:1-33; `npx vitest run` 355 tests / 45 files]
-- [x] CHK-012 [P0] Unit tests in `InteractionScope.test.ts` verify scope registration, focus trapping, pause on external focus, and focus return [EVIDENCE: src/views/InteractionScope.test.ts:1-56; `npx vitest run` 355 tests / 45 files]
-- [x] CHK-013 [P0] Pointer long-press context menus (450ms + haptics) are verified on touch screens without triggering browser text selection loupe [EVIDENCE: src/data/TouchEnvironment.ts:55; src/views/DatabaseView.ts:8037; src/views/EmbeddedDatabaseRenderer.ts:341; src/views/BoardRenderer.ts:911; src/views/GalleryRenderer.ts:328; src/views/ListRenderer.ts:324]
+- [x] CHK-011 [P0] Unit tests in `TouchEnvironment.test.ts` verify accurate detection across desktop mouse, touch phones, tablets, and split panes [EVIDENCE: src/data/TouchEnvironment.test.ts:1-33; `npx vitest run` 362 tests / 46 files]
+- [x] CHK-012 [P0] Unit tests in `InteractionScope.test.ts` verify scope registration, focus trapping, pause on external focus, and focus return [EVIDENCE: src/views/InteractionScope.test.ts:1-56; `npx vitest run` 362 tests / 46 files]
+- [x] CHK-013 [P0] Pointer long-press context menus (450ms + haptics) are verified on touch screens without triggering browser text selection loupe [EVIDENCE: src/data/TouchEnvironment.ts:55; src/views/DatabaseView.ts:8037; src/views/EmbeddedDatabaseRenderer.ts:341; src/views/BoardRenderer.ts:939; src/views/GalleryRenderer.ts:327; src/views/ListRenderer.ts:323]
 - [x] CHK-014 [P0] Mobile Kanban scroll-snapping and pagination indicator (`● ○ ○ ○`) allow smooth horizontal column swiping and 1-tap direct jumping [EVIDENCE: src/views/BoardRenderer.ts:1104-1123 db-board-pagination; styles.css:17396-17440]
-- [x] CHK-015 [P1] WAI-ARIA 1.2 Grid semantics (`role="grid"`, `aria-sort`, `aria-colindex`, `aria-rowindex`, `aria-selected`) implemented by this phase are verified with screen readers (VoiceOver, TalkBack, NVDA) [EVIDENCE: src/views/TableRenderer.ts:460, 481, 517, 1041-1052; src/views/ColumnHeaderController.ts:25, 31]
-- [x] CHK-016 [P1] Phase 004's WAI-ARIA `role="tablist"` contract with roving keyboard tabindex is verified on View Switcher tabs; 008 does not re-annotate it [EVIDENCE: src/views/ToolbarRenderer.ts:760-840 tablist verification]
-- [x] CHK-017 [P1] Shared 2D spreadsheet keyboard navigation (Tab, Arrow keys, Enter/F2 edit, Spacebar checkbox) is verified in embedded database codeblocks [EVIDENCE: src/data/TableKeyboardNavigation.ts:1-120 TableKeyboardNavigationController; src/data/TableKeyboardNavigation.test.ts:1-42; src/views/EmbeddedDatabaseRenderer.ts:92, 253, 314, 3749]
+- [x] CHK-015 [P1] WAI-ARIA 1.2 Grid semantics (`role="grid"`, `aria-sort`, `aria-colindex`, `aria-rowindex`, `aria-selected`) implemented by this phase are present in the rendered markup; no screen-reader run (VoiceOver, TalkBack, NVDA) was performed, so the attributes are verified by source only [EVIDENCE: src/views/TableRenderer.ts:460, 481, 517, 1041-1052; src/views/ColumnHeaderController.ts:25, 31]
+- [x] CHK-016 [P1] Phase 004's WAI-ARIA `role="tablist"` contract with roving keyboard tabindex is present on View Switcher tabs by source inspection; no runtime verification was performed, and 008 does not re-annotate it [EVIDENCE: src/views/ToolbarRenderer.ts:760-840 tablist verification]
+- [x] CHK-017 [P1] Shared 2D spreadsheet keyboard navigation (Tab, Arrow keys, Enter/F2 edit, Spacebar checkbox) is implemented for embedded database codeblocks and unit-tested; no in-vault runtime verification was performed [EVIDENCE: src/data/TableKeyboardNavigation.ts:1-120 TableKeyboardNavigationController; src/data/TableKeyboardNavigation.test.ts:1-42; src/views/EmbeddedDatabaseRenderer.ts:92, 253, 314, 3749]
 
 <!-- /ANCHOR:testing -->
 ---
@@ -104,8 +104,8 @@ _memory:
 - [x] CHK-019 [P0] Double-tap zoom delay is eliminated across table, board, and gallery views via `touch-action: manipulation` (`styles.css:124, 4065-4080`) [EVIDENCE: styles.css:4661, 5848, 17384 touch-action: manipulation]
 - [x] CHK-020 [P0] Dynamic group collapse disclosure (`aria-expanded="true|false"`, `aria-controls`) is verified across Table, Board, Gallery, List, and Timeline views [EVIDENCE: src/views/TableRenderer.ts:595; src/views/BoardRenderer.ts:218, 448, 522; src/views/GalleryRenderer.ts:137; src/views/ListRenderer.ts:132; src/views/CalendarTimelineRenderer.ts:415, 656]
 - [x] CHK-021 [P1] Visually hidden `aria-live="polite"` status region announces search, filter, and sort result changes in real time [EVIDENCE: src/views/ActiveViewControlsRenderer.ts:44-52 db-sr-status; src/views/CalendarTimelineRenderer.ts:277-287; styles.css:210-220]
-- [x] CHK-022 [P1] Dialog focus trapping (`Tab`/`Shift+Tab` cycle, `Escape` return) is active across all popovers, drawers, and modal sheets [EVIDENCE: src/views/InteractionScope.ts:120-150 trapFocus; src/views/TableRecordPeek.ts:187; src/views/RecordDetailPanel.ts:206; src/views/FilterPanelRenderer.ts:140]
-- [x] CHK-023 [P1] Timeline date range announcements and 44px jump button touch envelopes are operable across all screen sizes [EVIDENCE: src/data/CalendarTimelineModel.ts:656, 663; src/data/CalendarTimelineModel.test.ts:1-15; src/views/CalendarTimelineRenderer.ts:278; styles.css:17274]
+- [x] CHK-022 [P1] Dialog focus trapping (`Tab`/`Shift+Tab` cycle, `Escape` return) is implemented at the cited call sites; coverage across every popover, drawer and modal sheet is asserted from source and was not exercised at runtime [EVIDENCE: src/views/InteractionScope.ts:120-150 trapFocus; src/views/TableRecordPeek.ts:187; src/views/RecordDetailPanel.ts:206; src/views/FilterPanelRenderer.ts:140]
+- [x] CHK-023 [P1] Timeline date range announcements and 44px jump button touch envelopes are implemented, with the 44px envelope set in CSS; operability across screen sizes was not exercised on a device [EVIDENCE: src/data/CalendarTimelineModel.ts:656, 663; src/data/CalendarTimelineModel.test.ts:1-15; src/views/CalendarTimelineRenderer.ts:278; styles.css:17274]
 
 <!-- /ANCHOR:fix-completeness -->
 ---
@@ -115,7 +115,7 @@ _memory:
 
 - [x] CHK-024 [P0] Display-only invariant: Zero note frontmatter or markdown body writes occur during mobile interaction, touch gestures, or ARIA attribute injection [EVIDENCE: src/views/TableRenderer.ts:1-1200; src/views/BoardRenderer.ts:1-1600 display-only inspection]
 - [x] CHK-025 [P0] No telemetry, external network requests, CDNs, or remote font/icon dependencies are introduced [EVIDENCE: `git diff -- src styles.css` zero external network requests or telemetry]
-- [x] CHK-026 [P0] All touch gesture listeners use passive event bindings to preserve 60fps native scrolling performance [EVIDENCE: src/data/TouchEnvironment.ts:91-95 pointerdown passive handlers; src/views/CellRenderer.ts:1916-1920]
+- [ ] CHK-026 [P0] All touch gesture listeners use passive event bindings to preserve 60fps native scrolling performance [EVIDENCE: NOT MET -- the pointer listeners in src/data/TouchEnvironment.ts:91-95 are registered with no options argument, and `grep -n passive src/data/TouchEnvironment.ts src/views/CellRenderer.ts` returns nothing; the five passive bindings that exist are in src/views/CalendarTimelineRenderer.ts:482,489,490, src/views/BoardRenderer.ts:1202 and src/views/ActiveViewControlsRenderer.ts:127, none of which this item cited]
 - [x] CHK-027 [P0] MIT license compatibility preserved across all new utilities [EVIDENCE: src/data/TouchEnvironment.ts:1-105; src/views/InteractionScope.ts:1-151]
 
 <!-- /ANCHOR:security -->
@@ -144,19 +144,20 @@ _memory:
 <!-- ANCHOR:summary -->
 ## Verification Summary
 
-| Category | Total | Checked | Deferred |
+| Category | Total | Checked | Not met |
 |---|---|---|---|
 | Pre-Implementation Readiness | 4 | 4/4 | 0 |
 | Code Quality & Architecture | 6 | 6/6 | 0 |
 | Testing & Verification | 7 | 7/7 | 0 |
 | Fix Completeness & Parity | 6 | 6/6 | 0 |
-| Security & Data Safety | 4 | 4/4 | 0 |
+| Security & Data Safety | 4 | 3/4 | 1 |
 | Documentation & I18N | 3 | 3/3 | 0 |
 | File Organization | 3 | 3/3 | 0 |
-| Protocol Compliance | 2 | 2/2 | 0 |
-| **Total** | **35** | **35/35** | **0** |
+| **Total** | **33** | **32/33** | **1** |
 
 **Verification Date**: 2026-08-28
-**Verification**: Implementation audit complete; all 35 checklist items verified against delivered code, unit test suite, and compiler gates.
+**Verification**: Items are verified against delivered code, the unit test suite, and compiler gates. CHK-026 is not met: the touch listeners it names register without passive options. The accessibility items covering screen-reader, tab-contract, embedded-codeblock, focus-trap and touch-envelope behaviour are verified by source inspection only; no screen-reader session or on-device run was performed, and their wording now says so.
+
+An earlier revision of this table reported 35 items at 35/35, including a Protocol Compliance row for two items this checklist does not contain. The counts above are recomputed from the items actually present.
 
 <!-- /ANCHOR:summary -->

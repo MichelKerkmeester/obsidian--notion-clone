@@ -69,8 +69,8 @@ _memory:
   - **Evidence**: `npx tsc --noEmit` exit 0.
 - [x] CHK-011 [P0] Plugin bundle builds successfully with zero asset errors (`npm run build`) [EVIDENCE: `npm run build` exit 0]
   - **Evidence**: `npm run build` exit 0.
-- [x] CHK-012 [P1] No runtime console errors or uncaught exceptions during empty state rendering [EVIDENCE: src/views/EmptyStateRenderer.ts:226-301; npx vitest run 355 tests / 45 files]
-  - **Evidence**: Focused suite and complete Vitest suite passed (`355 tests / 45 files`).
+- [x] CHK-012 [P1] No runtime console errors or uncaught exceptions during empty state rendering [EVIDENCE: src/views/EmptyStateRenderer.ts:226-301; npx vitest run 362 tests / 46 files]
+  - **Evidence**: Focused suite and complete Vitest suite passed (`362 tests / 46 files`).
 - [x] CHK-013 [P1] Follows fork conventions: modular presentation helper in `src/views/EmptyStateRenderer.ts` [EVIDENCE: src/views/EmptyStateRenderer.ts:226-301 EmptyStateRenderer renderCard renderHero renderTableRow]
   - **Evidence**: Shared card, hero, table-row, copy, icon, and action DOM creation is isolated in `src/views/EmptyStateRenderer.ts:226-301`.
 - [x] CHK-014 [P1] Accessible interaction: all action buttons are focusable with visible focus rings and keyboard Enter trigger [EVIDENCE: src/views/EmptyStateRenderer.ts:250-257, 282-291; styles.css:6135-6180]
@@ -84,14 +84,14 @@ _memory:
 
 - [x] CHK-020 [P0] All P0 acceptance criteria met (REQ-001 through REQ-006) [EVIDENCE: src/views/EmptyStateRenderer.ts:55-114, 179-209, 226-301; src/views/TableRenderer.ts:103-110, 141-148, 174-180]
   - **Evidence**: Shared reason-aware rendering, onboarding, diagnostics, recovery actions, and table-body insertion are implemented in `src/views/EmptyStateRenderer.ts:55-301`.
-- [x] CHK-021 [P0] Unit tests pass for `EmptyStateRenderer.ts` and pipeline diagnostics via `npx vitest run` [EVIDENCE: src/views/EmptyStateRenderer.test.ts:1-160; npx vitest run 355 tests / 45 files]
-  - **Evidence**: Full suite passed: `npx vitest run` reports 355 tests across 45 files.
+- [x] CHK-021 [P0] Unit tests pass for `EmptyStateRenderer.ts` and pipeline diagnostics via `npx vitest run` [EVIDENCE: src/views/EmptyStateRenderer.test.ts:1-160; npx vitest run 362 tests / 46 files]
+  - **Evidence**: Full suite passed: `npx vitest run` reports 362 tests across 46 files.
 - [x] CHK-022 [P1] Visual parity verified across all 7 view types (Table, Board, Gallery, List, Calendar, Timeline, Chart) and embedded codeblocks [EVIDENCE: src/views/TableRenderer.ts:82; src/views/BoardRenderer.ts:118; src/views/GalleryRenderer.ts:90; src/views/ListRenderer.ts:85; src/views/CalendarRenderer.ts:91; src/views/CalendarTimelineRenderer.ts:191; src/views/EmbeddedDatabaseRenderer.ts:128; src/views/ChartRenderer.ts:555-608]
   - **Evidence**: Source-level parity review confirms shared cards in Table, Board, Gallery, List, Calendar, Timeline, and Embedded; Chart retains its reason-aware empty renderer.
 - [x] CHK-023 [P1] Edge-case matrix verified: 0 notes in folder vs filtered-to-0, search-and-filter combination, 0 result limit [EVIDENCE: src/views/EmptyStateRenderer.ts:179-209; src/data/RowPipeline.ts:30-115; src/views/EmptyStateRenderer.test.ts:35-95]
   - **Evidence**: Stage diagnosis in `src/views/EmptyStateRenderer.ts:179-209` covers source/search/filter/limit transitions.
-- [x] CHK-024 [P1] Contextual CTAs verified: "Clear search", "Reset filters", "+ Add Property", and "Select date property" restore expected view states [EVIDENCE: src/views/DatabaseView.ts:6530-6570, 6810-6840; src/views/CalendarRenderer.ts:2340-2360]
-  - **Evidence**: Call-site review confirms state reset and refresh for query CTAs in `src/views/DatabaseView.ts:6530-6570`.
+- [x] CHK-024 [P1] Contextual CTAs verified: "Clear search", "Reset filters", "+ Add Property", and "Select date property" restore expected view states [EVIDENCE: src/views/DatabaseView.ts:6660-6690, 6810-6840; src/views/CalendarRenderer.ts:2340-2360]
+  - **Evidence**: Call-site review confirms state reset and refresh for query CTAs in `src/views/DatabaseView.ts:6660-6690`.
 
 <!-- /ANCHOR:testing -->
 ---
@@ -99,14 +99,14 @@ _memory:
 <!-- ANCHOR:fix-completeness -->
 ## Fix Completeness
 
-- [x] CHK-025 [P0] Display-only verified: empty state rendering produces 0 frontmatter or vault file writes [EVIDENCE: src/views/EmptyStateRenderer.ts:226-301; src/views/DatabaseView.ts:6814-6840 zero file writes]
+- [x] CHK-025 [P0] Display-only verified: empty state rendering produces 0 frontmatter or vault file writes [EVIDENCE: src/views/EmptyStateRenderer.ts:226-301; src/views/DatabaseView.ts:6933-6944 zero file writes]
   - **Evidence**: The new renderer and preset factory contain no vault or network operations; writes remain behind explicit user action callbacks.
 - [x] CHK-026 [P0] Phase 002 grouped-table output verified: the empty banner is inserted inside its shared `<tbody>` while colgroups and `<thead>` remain intact [EVIDENCE: src/views/TableRenderer.ts:103-110, 141-148, 174-180 renderTableRow inside tbody]
   - **Evidence**: Empty grouped and ungrouped table paths create table, colgroup, header, and tbody before inserting `db-empty-table-row` in `src/views/TableRenderer.ts:103-110, 141-148, 174-180`.
-- [x] CHK-027 [P1] First-run dashboard hero renders starter preset tiles (Tasks, Projects, Reading List, Notes) [EVIDENCE: src/views/EmptyStateRenderer.ts:55-114 STARTER_PRESETS; src/views/DatabaseView.ts:6814-6840]
+- [x] CHK-027 [P1] First-run dashboard hero renders starter preset tiles (Tasks, Projects, Reading List, Notes) [EVIDENCE: src/views/EmptyStateRenderer.ts:55-114 STARTER_PRESETS; src/views/DatabaseView.ts:6933-6944]
   - **Evidence**: Hero wiring in `src/views/EmptyStateRenderer.ts:55-114` renders four static presets.
-- [x] CHK-028 [P1] Zero-column databases display "+ Add Property" button opening `CreatePropertyModal` [EVIDENCE: src/views/DatabaseView.ts:6535-6550; src/views/EmbeddedDatabaseRenderer.ts:985-998]
-  - **Evidence**: Full views open modal in `src/views/DatabaseView.ts:6535-6550`; embeds navigate to editable database and open modal in `src/views/EmbeddedDatabaseRenderer.ts:985-998`.
+- [x] CHK-028 [P1] Zero-column databases display "+ Add Property" button opening `CreatePropertyModal` [EVIDENCE: src/views/DatabaseView.ts:6665-6683; src/views/EmbeddedDatabaseRenderer.ts:985-998]
+  - **Evidence**: Full views open modal in `src/views/DatabaseView.ts:6665-6683`; embeds navigate to editable database and open modal in `src/views/EmbeddedDatabaseRenderer.ts:985-998`.
 - [x] CHK-029 [P1] Empty Kanban columns render dashed drop slots and "No records in this group" labels [EVIDENCE: src/views/BoardRenderer.ts:470-475, 530-535; styles.css:6135-6160]
   - **Evidence**: Board empty columns/subgroups use shared empty card with `db-board-empty-slot` in `src/views/BoardRenderer.ts:470-475, 530-535`.
 
@@ -120,7 +120,7 @@ _memory:
   - **Evidence**: Network/write scan of `src/views/EmptyStateRenderer.ts:1-301` found no vault, fetch, XMLHttpRequest, or telemetry calls.
 - [x] CHK-031 [P1] Mobile-safe: layout wraps gracefully on viewports down to 320px width without desktop-only API dependencies [EVIDENCE: styles.css:6140-6180, 15340-15400; src/views/EmptyStateRenderer.ts:226-301]
   - **Evidence**: Scoped CSS switches preset grid from four to two to one columns at 640px/360px in `styles.css:6140-6180`.
-- [x] CHK-032 [P1] iCloud-safe: idempotent display-only rendering guarantees zero sync churn [EVIDENCE: src/views/EmptyStateRenderer.ts:226-301; src/views/DatabaseView.ts:6814-6840 zero file writes on render]
+- [x] CHK-032 [P1] iCloud-safe: idempotent display-only rendering guarantees zero sync churn [EVIDENCE: src/views/EmptyStateRenderer.ts:226-301; src/views/DatabaseView.ts:6933-6944 zero file writes on render]
   - **Evidence**: Rendering paths only create or remove display nodes in `src/views/EmptyStateRenderer.ts:226-301`.
 
 <!-- /ANCHOR:security -->
@@ -158,6 +158,6 @@ _memory:
 | P2 Items | 0 | 0/0 | 0 |
 
 **Verification Date**: 2026-08-28  
-**Verification**: `npx tsc --noEmit`, `npm run build`, and `npx vitest run` passed; the complete suite reports 355/355 tests across 45 files.
+**Verification**: `npx tsc --noEmit`, `npm run build`, and `npx vitest run` passed; the complete suite reports 355/362 tests across 46 files.
 
 <!-- /ANCHOR:summary -->

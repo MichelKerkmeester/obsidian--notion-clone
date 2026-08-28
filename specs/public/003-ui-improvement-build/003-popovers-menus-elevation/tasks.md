@@ -112,7 +112,7 @@ Task order follows the research synthesis RANKED BACKLOG (rank # shown per task)
 ## Completion Criteria
 
 - [x] All implementation tasks marked `[x]` after the build completes (`checklist.md:48-106`).
-- [x] `npx tsc --noEmit`, `npm run build`, and `npx vitest run` pass cleanly with zero regressions (`package.json:1-38`, `355 tests across 45 files`).
+- [x] `npx tsc --noEmit`, `npm run build`, and `npx vitest run` pass cleanly with zero regressions (`package.json:1-38`, `362 tests across 46 files`).
 - [x] `checklist.md` fully verified with P0/P1/P2 counts recorded (`checklist.md:48-106`).
 
 <!-- /ANCHOR:completion -->

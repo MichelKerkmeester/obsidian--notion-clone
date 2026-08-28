@@ -45,7 +45,7 @@
       "plan"
     ],
     "importance_tier": "high",
-    "status": "complete",
+    "status": "in_progress",
     "key_files": [
       "spec.md",
       "plan.md",
@@ -205,7 +205,7 @@
     ],
     "causal_summary": "The fork already matches Notion's core conditional-format contract — per-view rules, first-match, row-or-property color — through one shared helper (`getConditionalFormatMatch` / `applyConditionalFormat` in `src/data/ConditionalFormatting.ts:23-69`) that all ten renderer consumers call",
     "created_at": "2026-08-24T17:58:45.574Z",
-    "last_save_at": "2026-08-27T12:25:54.218Z",
+    "last_save_at": "2026-08-28T10:56:22.363Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -216,13 +216,13 @@
       "implementation-summary.md",
       "research/research.md"
     ],
-    "source_fingerprint": "sha256:6029b21dfbdc4dc63e8eb4dc9282a60b6ff1c1fb56edb87f049b1021642d4438",
+    "source_fingerprint": "sha256:fd00fb500251535a4f1e8369e6051a6295869da02f6f3e5fcde7df9189beb4e9",
     "source_doc_hashes": {
       "spec.md": "e7dd2d9d0f740161d29e5d3102e64d4c96230cff26bddee8eaa4670822d1baa6",
       "plan.md": "3236e050ddc88b781f594b881529a3672dcfa216076d610bacc9d8da8e248701",
       "tasks.md": "bb326adff5c2ec8b4a9652a0db7dd23fe224fd5ed52d3460e7050649fc00d988",
       "checklist.md": "2be300da5467d439c574a08222d195409a7a8ebe48fcc3e55ff465086c71db3e",
-      "implementation-summary.md": "d13a0ede7f82808a07549e24ea387d41731b612bafa6eafe16951093a5900df5",
+      "implementation-summary.md": "5f9c1ae14c713d21340b9052ddc8ee021cc23ea86d6f9f2f5f88931c158cbe48",
       "research/research.md": "a0381849bdf4f821a0e4a4c2fdcc64a51d5516050a46173994e97e9fb09a3c98"
     },
     "last_active_child_id": "public/001-note-db-notion-parity-build/010-conditional-format-icons/005-format-display-proof",

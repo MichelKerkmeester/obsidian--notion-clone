@@ -10,10 +10,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "public/003-ui-improvement-build/003-popovers-menus-elevation"
-    last_updated_at: "2026-08-28T07:15:22.819Z"
+    last_updated_at: "2026-08-28T10:52:07.294Z"
     last_updated_by: "implementation-agent"
-    recent_action: "Repointed stale styles.css citations to verified selector anchors"
-    next_safe_action: "Commit reconciled phase documentation"
+    recent_action: "Corrected unsupported checklist claims against the shipped code"
+    next_safe_action: "Re-run the packet gate after the next code change"
     blockers: []
     key_files:
       - "spec.md"
@@ -113,7 +113,7 @@ Baseline before this phase: TypeScript and production build passed; Vitest repor
 
 | Test Type | Status | Coverage | Notes |
 |-----------|--------|----------|-------|
-| Unit tests (`OverlayStack.test.ts`, `PopoverPosition.test.ts`) | Passed | LIFO stack, Escape dispatch, focus restoration, horizontal collision behavior | 45 test files, 355 tests passed |
+| Unit tests (`OverlayStack.test.ts`, `PopoverPosition.test.ts`) | Passed | LIFO stack, Escape dispatch, focus restoration, horizontal collision behavior | 46 test files, 362 tests passed |
 | TypeScript strict typecheck | Passed | Full repository | `npx tsc --noEmit` exited 0 |
 | Plugin bundle build | Passed | Full bundle compilation | `npm run build` exited 0 |
 | Display-only verification | Passed by source audit | Overlay positioning, dismissal, filtering, and navigation | No note-body or frontmatter writes added to display-only paths |

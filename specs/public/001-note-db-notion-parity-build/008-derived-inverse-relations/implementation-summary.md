@@ -14,10 +14,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "public/001-note-db-notion-parity-build/008-derived-inverse-relations"
-    last_updated_at: "2026-08-27T12:25:50Z"
+    last_updated_at: "2026-08-28T10:54:49.553Z"
     last_updated_by: "swarm"
-    recent_action: "Reconciled shipped artifacts and proof gaps; 13 of 22 task IDs verified"
-    next_safe_action: "None for shipped code"
+    recent_action: "Corrected unsupported checklist claims against the shipped code"
+    next_safe_action: "Re-run the packet gate after the next code change"
     blockers: []
     key_files:
       - "spec.md"

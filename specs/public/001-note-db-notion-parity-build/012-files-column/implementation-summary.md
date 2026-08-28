@@ -12,10 +12,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "public/001-note-db-notion-parity-build/012-files-column"
-    last_updated_at: "2026-08-27T17:09:01Z"
+    last_updated_at: "2026-08-28T10:54:50.251Z"
     last_updated_by: "docs-reconciliation"
-    recent_action: "Reconciled phase 012 docs to shipped state (commits b97ee1e..f84a193); Sonnet-verified PASS"
-    next_safe_action: "None — phase complete"
+    recent_action: "Corrected unsupported checklist claims against the shipped code"
+    next_safe_action: "Re-run the packet gate after the next code change"
     blockers: []
     key_files:
       - "spec.md"

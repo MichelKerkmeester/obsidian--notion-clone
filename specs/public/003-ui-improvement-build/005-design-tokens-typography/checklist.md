@@ -77,7 +77,7 @@ _memory:
   - **Evidence**: `npx tsc --noEmit` passed with exit code 0.
 - [x] CHK-011 [P0] Plugin builds cleanly via `npm run build` [EVIDENCE: `npm run build` exit 0]
   - **Evidence**: `npm run build` passed with exit code 0.
-- [x] CHK-012 [P0] No console errors or unhandled exceptions during theme switching [EVIDENCE: styles.css:63-156; npx vitest run 355 tests / 45 files]
+- [x] CHK-012 [P0] No console errors or unhandled exceptions during theme switching [EVIDENCE: styles.css:63-156; npx vitest run 362 tests / 46 files]
   - **Evidence**: Zero console exceptions during container CSS variable resolution in `styles.css:63-156`.
 - [x] CHK-013 [P1] Dual-theme status colors achieve WCAG AA contrast (>4.5:1) in both Light and Dark modes [EVIDENCE: styles.css:85-156; src/data/StatusColors.ts:1-60]
   - **Evidence**: Verified `--status-color-bg-*` and `--status-color-fg-*` definitions in `styles.css:85-156` (minimum 5.86:1 contrast).
@@ -94,8 +94,8 @@ _memory:
 
 - [x] CHK-020 [P0] All P0 acceptance criteria met (REQ-001 through REQ-006) [EVIDENCE: styles.css:63-206; src/data/ChartPalettes.ts:9-23; src/data/ConditionalFormatting.ts:135-165]
   - **Evidence**: Dual-theme colors, base-4 spacing, interface title font, typography scale, radius hierarchy, and border tokens verified.
-- [x] CHK-021 [P0] Vitest unit test suite passes cleanly via `npx vitest run` [EVIDENCE: src/data/ChartPalettes.test.ts:1-60; src/data/ConditionalFormatting.test.ts:1-150; npx vitest run 355 tests / 45 files]
-  - **Evidence**: Full test suite passes: `npx vitest run` reports 355 tests across 45 files.
+- [x] CHK-021 [P0] Vitest unit test suite passes cleanly via `npx vitest run` [EVIDENCE: src/data/ChartPalettes.test.ts:1-60; src/data/ConditionalFormatting.test.ts:1-150; npx vitest run 362 tests / 46 files]
+  - **Evidence**: Full test suite passes: `npx vitest run` reports 362 tests across 46 files.
 - [x] CHK-022 [P1] Database titles render using native `var(--font-interface)` without serif font clash [EVIDENCE: styles.css:77, 705-750 font-interface title typography]
   - **Evidence**: Title font declaration in `styles.css:77, 705-750`.
 - [x] CHK-023 [P1] Table column and row divider contrast calibrated in dark/OLED themes [EVIDENCE: styles.css:83-84, 4073-4074 border contrast variables]
@@ -180,6 +180,6 @@ _memory:
 | P2 Items | 0 | 0/0 | 0 |
 
 **Verification Date**: 2026-08-28  
-**Verification**: Complete. `npx tsc --noEmit`, `npm run build`, and `npx vitest run` passed; Vitest reported 45 files and 355 tests. The 16 light/dark status pairs measured a minimum 5.86:1 contrast, and stylesheet scans found no sub-11px literals or non-token radius declarations.
+**Verification**: Complete. `npx tsc --noEmit`, `npm run build`, and `npx vitest run` passed; Vitest reported 46 files and 362 tests. The 16 light/dark status pairs measured a minimum 5.86:1 contrast, and stylesheet scans found no sub-11px literals or non-token radius declarations.
 
 <!-- /ANCHOR:summary -->

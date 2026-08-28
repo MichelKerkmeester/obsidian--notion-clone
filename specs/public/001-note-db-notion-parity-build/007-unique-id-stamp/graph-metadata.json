@@ -46,7 +46,7 @@
       "isolated"
     ],
     "importance_tier": "high",
-    "status": "complete",
+    "status": "in_progress",
     "key_files": [
       "spec.md",
       "plan.md",
@@ -206,7 +206,7 @@
     ],
     "causal_summary": "The note-database fork creates rows through `planCreateEntry` in `src/data/CreateEntryPlan.ts` and writes frontmatter, but it never allocates a Notion-style sequential unique ID at create time (`CreateEntryPlan.ts:119-173`)",
     "created_at": "2026-08-24T17:23:16.662Z",
-    "last_save_at": "2026-08-27T12:25:53.355Z",
+    "last_save_at": "2026-08-28T10:56:21.784Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -217,13 +217,13 @@
       "implementation-summary.md",
       "research/research.md"
     ],
-    "source_fingerprint": "sha256:5a495746ce6f676bb23ee804a5599f74b1c086d9a8f8ff838022835b0fdd31b3",
+    "source_fingerprint": "sha256:a262db02ecb0c8a74d50d3c0758371da8f30e43f77f5ea6d9218e33099999891",
     "source_doc_hashes": {
       "spec.md": "4a89a25aa27f3124db1c6a4a410984edd3675790814f2272044f7eb0abaeecf7",
       "plan.md": "01d2f173c811b99fabc563835ffe267434bc3a5cadf65d12b8152cc109ed2a58",
       "tasks.md": "97b21cc03ce0dfb4a4961f9afa5c998162d5f5e30a05c491f7edde2feed63a74",
       "checklist.md": "923db0806b32bf31da0632fe404371eca501255facb089c89ac164c59707d801",
-      "implementation-summary.md": "b242f192ea0d0f6289e9e23f24471db1a1ebe8eaf7fdbea95eb04db74ad915f2",
+      "implementation-summary.md": "3ac376c74036f089c9018ef234d72b0c9797b336a5af4865c69866a476aa04b4",
       "research/research.md": "f20e556ed43c9b9034f788a04e271777c92d1bd84b8731ca9b44bae541e336c2"
     },
     "last_active_child_id": "obsidian/002-note-db-notion-parity-build/007-unique-id-stamp/003-create-entry-stamp",

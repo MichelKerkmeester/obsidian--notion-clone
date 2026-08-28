@@ -14,10 +14,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "public/001-note-db-notion-parity-build/015-two-way-write-back"
-    last_updated_at: "2026-08-24T00:00:00Z"
+    last_updated_at: "2026-08-28T10:54:50.754Z"
     last_updated_by: "swarm"
-    recent_action: "Scaffolded phase 015 docs; status Deferred"
-    next_safe_action: "Revisit only if the recorded trigger fires"
+    recent_action: "Corrected unsupported checklist claims against the shipped code"
+    next_safe_action: "Re-run the packet gate after the next code change"
     blockers: []
     key_files:
       - "spec.md"

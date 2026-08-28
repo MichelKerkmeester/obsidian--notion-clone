@@ -100,7 +100,7 @@ Task order follows the research synthesis RANKED BACKLOG (rank # shown per task)
 
 ### Unit & Integration Tests
 - [x] T050 Run TypeScript compilation and build gate (`npx tsc --noEmit`, `npm run build`) (`package.json:1-38`) [S]
-- [x] T051 Run Vitest test suite (`npx vitest run`, 355 tests across 45 files) (`vitest.config.ts:1-9`) [S]
+- [x] T051 Run Vitest test suite (`npx vitest run`, 362 tests across 46 files) (`vitest.config.ts:1-9`) [S]
 - [x] T052 Verify WCAG AA contrast ratio (>= 4.5:1) across all 16 status colors in Light and Dark modes (`styles.css:85-116`) [S]
 - [x] T053 Verify typography scale, native interface font integration, zero sub-11px micro-text, and tabular numerals (`styles.css:705-750`) [S]
 - [x] T054 Verify 3-tier surface elevation, dark-mode luminance step-ups, and layered conditional formatting tints (`styles.css:2166-2368`) [S]
@@ -116,7 +116,7 @@ Task order follows the research synthesis RANKED BACKLOG (rank # shown per task)
 <!-- ANCHOR:completion -->
 ## Completion Criteria
 
-- [x] All 25 tasks completed and verified with zero compiler or test errors (`tasks.md:66-116`, `355 tests across 45 files`).
+- [x] All 25 tasks completed and verified with zero compiler or test errors (`tasks.md:66-116`, `362 tests across 46 files`).
 - [x] P0 acceptance criteria (REQ-001 through REQ-006) met and verified (`checklist.md:48-75`).
 - [x] P1 acceptance criteria (REQ-007 through REQ-013) met or user-approved (`checklist.md:76-106`).
 - [x] `checklist.md` fully verified with P0/P1 counts recorded (`checklist.md:48-106`).

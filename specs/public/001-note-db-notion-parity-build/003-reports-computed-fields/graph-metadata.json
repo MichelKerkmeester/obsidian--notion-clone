@@ -206,7 +206,7 @@
     ],
     "causal_summary": "The finance Reports view lacks Remaining and Saved as live computed columns",
     "created_at": "2026-08-24T17:58:31.318Z",
-    "last_save_at": "2026-08-27T17:09:01.691Z",
+    "last_save_at": "2026-08-28T10:56:20.871Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -217,13 +217,13 @@
       "implementation-summary.md",
       "research/research.md"
     ],
-    "source_fingerprint": "sha256:17f20e3bc5af99e1219c080346cee17d568dc862188496cfa51b0c609dadcdaa",
+    "source_fingerprint": "sha256:f8dde070a9f851178e28cf67eb62ddb95a7dd3f7bbf69154e360a7f087439661",
     "source_doc_hashes": {
       "spec.md": "c351bbb3f52a6e866721c5191135aeba310ea86b17e43a11844ece82fd783374",
       "plan.md": "035eb06efa65942956d50cf66d61ec80c3aaddfd329d31f03d2dfb800bc31e32",
       "tasks.md": "3057be4f28516780762ad1f57cc3794f76f52b17980cb0d73e243741c486f71f",
       "checklist.md": "e7b38a9845cfcc02539c543b08c7aa332e74c8c0b5621cf072ba1c92c4e4b759",
-      "implementation-summary.md": "8b00e0a1b73c50c5464c5e19560b0b3cf6939f58fc6777e18192a095b908448f",
+      "implementation-summary.md": "383413e9b0260a6b6fe7813cb1ea97550182980aba7f0be8153fecfee7e6eab5",
       "research/research.md": "8729da9b654dc4ba16bf105550b3bdbc51837d64aa7aa9f2e285c43f010d3b39"
     },
     "last_active_child_id": "obsidian/002-note-db-notion-parity-build/003-reports-computed-fields/003-reports-display-proof",

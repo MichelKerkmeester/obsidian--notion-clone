@@ -13,10 +13,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "public/001-note-db-notion-parity-build/009-view-filter-tree"
-    last_updated_at: "2026-08-27T17:09:01Z"
+    last_updated_at: "2026-08-28T10:56:16.086Z"
     last_updated_by: "swarm"
-    recent_action: "Completion docs reconciled to shipped state; gate green; Sonnet-verified"
-    next_safe_action: "None outstanding for the shipped code"
+    recent_action: "Corrected unsupported checklist claims against the shipped code"
+    next_safe_action: "Re-run the packet gate after the next code change"
     blockers: []
     key_files:
       - "spec.md"

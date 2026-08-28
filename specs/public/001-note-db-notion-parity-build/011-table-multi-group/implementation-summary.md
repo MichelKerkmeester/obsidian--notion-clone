@@ -12,10 +12,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "public/001-note-db-notion-parity-build/011-table-multi-group"
-    last_updated_at: "2026-08-27T17:27:13Z"
+    last_updated_at: "2026-08-28T10:54:50.080Z"
     last_updated_by: "docs-reconciliation"
-    recent_action: "Completion docs reconciled to shipped state; gate green; Sonnet-verified"
-    next_safe_action: "None — phase complete"
+    recent_action: "Corrected unsupported checklist claims against the shipped code"
+    next_safe_action: "Re-run the packet gate after the next code change"
     blockers: []
     key_files:
       - "spec.md"

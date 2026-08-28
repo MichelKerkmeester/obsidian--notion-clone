@@ -21,10 +21,10 @@ contextType: "implementation"
 _memory:
   continuity:
     packet_pointer: "public/003-ui-improvement-build/008-mobile-and-accessibility"
-    last_updated_at: "2026-08-28T07:15:23.779Z"
+    last_updated_at: "2026-08-28T10:52:08.207Z"
     last_updated_by: "phase-author"
-    recent_action: "Repointed stale styles.css citations to verified selector anchors"
-    next_safe_action: "Commit reconciled phase documentation"
+    recent_action: "Corrected unsupported checklist claims against the shipped code"
+    next_safe_action: "Re-run the packet gate after the next code change"
     blockers: []
     key_files:
       - "spec.md"
@@ -135,7 +135,7 @@ npx vitest run
 ### Verification Checklist
 - [x] TypeScript compilation passes cleanly without errors (`npx tsc --noEmit` exit code 0).
 - [x] Plugin bundle builds successfully (`npm run build` exit code 0).
-- [x] Unit tests in `TouchEnvironment.test.ts`, `InteractionScope.test.ts`, `TableKeyboardNavigation.test.ts`, and `CalendarTimelineModel.test.ts` pass 100% (`npx vitest run` 355 tests across 45 files).
+- [x] Unit tests in `TouchEnvironment.test.ts`, `InteractionScope.test.ts`, `TableKeyboardNavigation.test.ts`, and `CalendarTimelineModel.test.ts` pass 100% (`npx vitest run` 362 tests across 46 files).
 - [x] `isTouchDevice()` accurately detects coarse pointers and narrow tablet split panes (`TouchEnvironment.ts:1-105`).
 - [x] Touch hit envelopes meet 44×44px minimum sizing without layout overflow (`styles.css:17223-17293`).
 - [x] Mobile bottom sheet architecture opens with proper scrim and safe area padding (`PopoverPosition.ts:29-42`).

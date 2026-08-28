@@ -65,7 +65,7 @@ _memory:
 <!-- ANCHOR:code-quality -->
 ## Code Quality
 
-- [ ] CHK-010 [P0] Code passes lint/format checks [EVIDENCE: DEFERRED -- `npm run lint` reports seven repository errors]
+- [ ] CHK-010 [P0] Code passes lint/format checks [EVIDENCE: DEFERRED -- `npm run lint` reports 115 problems (100 errors, 15 warnings) repository-wide]
 - [x] CHK-011 [P0] No console errors or warnings [EVIDENCE: `npm run build` (exit 0)]
 - [x] CHK-012 [P1] Error handling implemented [EVIDENCE: src/data/textLinkScheme.ts:12-31]
 - [x] CHK-013 [P1] Code follows project patterns [EVIDENCE: `src/data/textLinkScheme.ts`; `src/views/CellRenderer.ts`]

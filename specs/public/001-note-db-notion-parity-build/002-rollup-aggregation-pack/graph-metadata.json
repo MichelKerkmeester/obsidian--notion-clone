@@ -204,7 +204,7 @@
     ],
     "causal_summary": "The fork's rollup columns are stuck on four kinds — `count | sum | avg | list` (`src/data/types.ts:44`) — while Notion exposes ~18 rollup calculations (9 universal + 6 number-only + 3 date-only)",
     "created_at": "2026-08-24T17:58:29.331Z",
-    "last_save_at": "2026-08-27T17:09:01.487Z",
+    "last_save_at": "2026-08-28T10:56:20.662Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -215,13 +215,13 @@
       "implementation-summary.md",
       "research/research.md"
     ],
-    "source_fingerprint": "sha256:4d885746ec2cc1f3d9d72b63dbcebfa744881cabd6ea974c08168c62a88ea8d9",
+    "source_fingerprint": "sha256:da5af1ab168bec1b596a5acc7bb43ebcec0d9851c2ddac887aa60acd1b7e11b5",
     "source_doc_hashes": {
-      "spec.md": "ebc12304cde3ce3f00b9c0abc3ce7f471b96f3d9db73f1a47228e0a56716e05e",
+      "spec.md": "a30f8596ba3e032c8e17eac45f373c25f5a996ec58d9f8703fafb8f71c88e6f2",
       "plan.md": "fc02bbaabac50449ccad3c4f5d54ff2e4e32b7227dbb5ffc19c70d94fe9247e0",
       "tasks.md": "aba6839199dbbbea8d31bbe284b9a0cbc5f179dc8a9de529a42231c2b0a2fbc2",
       "checklist.md": "76f98765f4a80150be2c4b1dca6e8961b454db5bf3783e3b423f79c75fc65a76",
-      "implementation-summary.md": "a4473322d5f6f0cb369bd4fb439129c42e50a0a28b2e87623f130adafa778a1a",
+      "implementation-summary.md": "7c75a4cac862676cb8c981ff71ef3fb8468f3caa11eab7052f256770c9d94eb2",
       "research/research.md": "13f52a74afec75e4276199877df53c2b52e6314e0ad11440d55839a79f49d7b4"
     },
     "last_active_child_id": "obsidian/002-note-db-notion-parity-build/002-rollup-aggregation-pack/003-percent-aggregation-pack",

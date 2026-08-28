@@ -204,7 +204,7 @@
     ],
     "causal_summary": "This is an S-tier polish phase, not a capability project",
     "created_at": "2026-08-24T17:58:55.219Z",
-    "last_save_at": "2026-08-27T17:09:02.705Z",
+    "last_save_at": "2026-08-28T10:56:23.089Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -215,13 +215,13 @@
       "implementation-summary.md",
       "research/research.md"
     ],
-    "source_fingerprint": "sha256:3ac27722cc1a61019ce9b937e80940cf8941607b3aa08e1c77adf420a95fa592",
+    "source_fingerprint": "sha256:b3c4c33f29f14d5e96b28e6e47f1baa6d11ed964c8fe0d3bceaaf0970efce8da",
     "source_doc_hashes": {
-      "spec.md": "eb69eb1cc79ed50bcbf3242daa80621d4d11073700ad309419fcad91f5107be3",
+      "spec.md": "ed7b2bf09a8b4180a03cc540aa36e53a7486757d55cb9194b660813ba17ab796",
       "plan.md": "6c713a7495a8fa3e3435fd4df685fbad459ac12f6770d60186fa0ae50f2bf999",
       "tasks.md": "c1a34c9db58ad7f9b4ff3b3530298eb442628538b49889a4a5ab7b203884d787",
-      "checklist.md": "a23dfeee3a5259365cab5451a1c0e7bc744844ddd8bb38570003016e46f744e8",
-      "implementation-summary.md": "07ea5d6bd62583841e3d80855c476d382829938cc595a2dc61122d6eac2342de",
+      "checklist.md": "5b8ba1460693fe6772f9131d2954ad9cbe56069bb71b9abae84110e34b1caf8e",
+      "implementation-summary.md": "3bc2600e20d915b4be2aff2e3a27e8dc39bcbd8028bb085f413c93dd6fd1d9d2",
       "research/research.md": "7feaab3f84a4bb7b1cb38c91fcffd320bd817f154ae69e22cbe20c6a4744c282"
     },
     "last_active_child_id": "public/001-note-db-notion-parity-build/014-record-detail-panel/005-peek-display-proof",

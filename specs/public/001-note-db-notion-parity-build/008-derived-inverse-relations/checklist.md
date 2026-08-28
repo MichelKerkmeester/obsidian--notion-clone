@@ -70,8 +70,8 @@ _memory:
 <!-- ANCHOR:code-quality -->
 ## Code Quality
 
-- [ ] CHK-010 [P0] Code passes lint/format checks [EVIDENCE: DEFERRED -- npm run lint exits 1 with seven errors, including src/data/RelationInverse.test.ts:79]
-  - **Evidence**: `npm run lint` reported seven errors; the phase test has an unbound-method error at `src/data/RelationInverse.test.ts:79`.
+- [ ] CHK-010 [P0] Code passes lint/format checks [EVIDENCE: DEFERRED -- `npm run lint` exits 1 with 115 problems (100 errors, 15 warnings) repository-wide, including src/data/RelationInverse.test.ts:79]
+  - **Evidence**: `npm run lint` reports 115 problems (100 errors, 15 warnings) repository-wide; the phase test still has an unbound-method error at `src/data/RelationInverse.test.ts:79`. The count is repository-wide and is not confined to files this phase left untouched.
 - [ ] CHK-011 [P0] No console errors or warnings [EVIDENCE: DEFERRED -- no Obsidian runtime console capture was produced]
   - **Evidence**: No runtime render or relation-click console check was recorded.
 - [x] CHK-012 [P1] Error handling implemented [EVIDENCE: src/data/RelationInverse.ts:67-74; src/data/RelationRollup.ts:78-80,225-226]
@@ -168,6 +168,6 @@ _memory:
 | All Items | 27 | 17/27 | 10 |
 
 **Verification Date**: 2026-08-27
-**Verified By**: Source reconciliation plus `npx tsc --noEmit`, `npm run build`, and `npx vitest run` (247/247); `npm run lint` remains deferred with seven errors.
+**Verified By**: Source reconciliation plus `npx tsc --noEmit`, `npm run build`, and `npx vitest run` (247/247); `npm run lint` remains deferred at 115 problems (100 errors, 15 warnings).
 
 <!-- /ANCHOR:summary -->

@@ -46,7 +46,7 @@
       "child"
     ],
     "importance_tier": "high",
-    "status": "complete",
+    "status": "in_progress",
     "key_files": [
       "spec.md",
       "plan.md",
@@ -205,7 +205,7 @@
     ],
     "causal_summary": "Notion formulas support `let()` / `lets()` to bind named intermediate values in a per-row child scope (`let(person, \"Alan\", \"Hello, \" + person + \"!\")` = `\"Hello, Alan!\"`); the fork's native engine (`ComputedField.ts` over the `SafeEval.ts` sandbox) has no binding construct, so long formulas duplicate sub-expressions",
     "created_at": "2026-08-24T17:58:35.358Z",
-    "last_save_at": "2026-08-27T12:25:52.947Z",
+    "last_save_at": "2026-08-28T10:56:21.325Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -216,13 +216,13 @@
       "implementation-summary.md",
       "research/research.md"
     ],
-    "source_fingerprint": "sha256:a263074a940ee7c25356fb400ecfa40cb55cee9b7e4cb8ed0552b488cf6f9365",
+    "source_fingerprint": "sha256:c5c963ff7db9e7e35e1fc9df2b6d195905c578b47c67de56f09afaceef4e05a8",
     "source_doc_hashes": {
       "spec.md": "9490315a48d77a3b135c20159cdc4b62e3b339ea384f0370755bed1daae34690",
       "plan.md": "41ccdfda39166576ddcf599eb58539811f582a90f168c44ed9645d801e1a5202",
       "tasks.md": "cbef854786943fda4d4711438ce66869e2f6bead9e310697073d7194039d4e38",
-      "checklist.md": "8aaa09fbf25e338626427c287a65a0a0fb98ec69ed0926e446284bd259d281ea",
-      "implementation-summary.md": "f23aa3006b94a01ff95e2138bf5a0e68951feb76faa429b76df473074e668cfe",
+      "checklist.md": "602b0078ec6bbf032e6fe0b5e0846fab4eee8b0fed08766ff9aa71f7a7c23a6e",
+      "implementation-summary.md": "98522f3e7d889b1cd211915ac15c8867c587361b2f0b1971f141585824b4e736",
       "research/research.md": "634323b1d235e2b3ffe2ae77aa2b4b0b32b7c7bd88e7a51a7dfdc18efba92893"
     },
     "last_active_child_id": "obsidian/002-note-db-notion-parity-build/005-formula-let-variables/003-formula-modal-let-help",

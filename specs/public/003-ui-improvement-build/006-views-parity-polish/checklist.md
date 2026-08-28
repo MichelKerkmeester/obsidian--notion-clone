@@ -49,8 +49,8 @@ _memory:
   - **Evidence**: Verified existence and structure across `src/views/BoardRenderer.ts`, `src/views/GalleryRenderer.ts`, `src/views/ListRenderer.ts`, `src/views/CalendarRenderer.ts`, and `src/views/CalendarTimelineRenderer.ts`.
 - [x] CHK-002 [P0] Confirm that `RecordDetailPanel.ts` is available and exports `openRecordDetailPanel` without errors (REQ-001, REQ-006, REQ-020) [EVIDENCE: src/views/RecordDetailPanel.ts:1-250 openRecordDetailPanel]
   - **Evidence**: `src/views/RecordDetailPanel.ts:1-250` exports `openRecordDetailPanel` cleanly.
-- [x] CHK-003 [P0] Baseline test suite passes cleanly before changes: `npx vitest run` (REQ-001 through REQ-020) [EVIDENCE: npx vitest run 355 tests / 45 files]
-  - **Evidence**: `npx vitest run` passed with 355 tests across 45 files.
+- [x] CHK-003 [P0] Baseline test suite passes cleanly before changes: `npx vitest run` (REQ-001 through REQ-020) [EVIDENCE: npx vitest run 362 tests / 46 files]
+  - **Evidence**: `npx vitest run` passed with 362 tests across 46 files.
 - [x] CHK-004 [P0] Baseline TypeScript compilation passes cleanly: `npx tsc --noEmit` (REQ-001 through REQ-020) [EVIDENCE: `npx tsc --noEmit` exit 0]
   - **Evidence**: `npx tsc --noEmit` exited with code 0.
 
@@ -83,7 +83,7 @@ _memory:
   - **Evidence**: PARTIAL -- `src/views/CardFieldRenderer.test.ts` covers display-family classification and keyboard/ARIA behaviour; no per-family render assertions for status pills, relation icons or rating stars.
 
 - **Deferral**: Rich target record icons in relation badges remain deferred; `src/views/RelationValueRenderer.ts:32` uses resolved/unresolved default icons only, with no frontmatter-icon resolution.
-- [x] CHK-012 [P0] Unit tests in `CoverImage.test.ts` verify cover resolution order: frontmatter path -> frontmatter URL -> markdown body embed fallback -> empty state (REQ-003) [EVIDENCE: src/data/CoverImage.test.ts:34-45; npx vitest run 355 tests / 45 files]
+- [x] CHK-012 [P0] Unit tests in `CoverImage.test.ts` verify cover resolution order: frontmatter path -> frontmatter URL -> markdown body embed fallback -> empty state (REQ-003) [EVIDENCE: src/data/CoverImage.test.ts:34-45; npx vitest run 362 tests / 46 files]
   - **Evidence**: `src/data/CoverImage.test.ts:34-45` passes via `npx vitest run`.
 - [x] CHK-013 [P0] Universal object peek activation is verified from Board cards, Gallery cards, and List rows (REQ-001, REQ-017) [EVIDENCE: src/views/BoardRenderer.ts:613-625; src/views/GalleryRenderer.ts:201-215; src/views/ListRenderer.ts:191-205]
   - **Evidence**: `src/views/BoardRenderer.ts:613-625`, `src/views/GalleryRenderer.ts:201-215`, `src/views/ListRenderer.ts:191-205`.

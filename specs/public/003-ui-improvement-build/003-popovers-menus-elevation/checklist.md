@@ -70,8 +70,8 @@ _memory:
   - **Evidence**: `npx tsc --noEmit` passed with exit code 0.
 - [x] CHK-011 [P0] Plugin bundle builds successfully with zero errors (`npm run build`) [EVIDENCE: `npm run build` exit 0]
   - **Evidence**: `npm run build` passed with exit code 0.
-- [x] CHK-012 [P1] No runtime console errors or warnings during popover, menu, or picker interaction [EVIDENCE: src/views/OverlayStack.ts:1-120; npx vitest run 355 tests / 45 files]
-  - **Evidence**: `src/views/OverlayStack.ts:1-120` and full Vitest suite passed with 355 tests across 45 files without runtime errors.
+- [x] CHK-012 [P1] No runtime console errors or warnings during popover, menu, or picker interaction [EVIDENCE: src/views/OverlayStack.ts:1-120; npx vitest run 362 tests / 46 files]
+  - **Evidence**: `src/views/OverlayStack.ts:1-120` and full Vitest suite passed with 362 tests across 46 files without runtime errors.
 - [x] CHK-013 [P1] Follows fork patterns: modular presentation helper in `src/views/OverlayStack.ts` [EVIDENCE: src/views/OverlayStack.ts:33-120 OverlayStack register unregister]
   - **Evidence**: Overlay lifecycle and dismissal coordination are isolated in `src/views/OverlayStack.ts:33-120`.
 - [x] CHK-014 [P1] GPU-accelerated micro-transitions with `prefers-reduced-motion` compliance [EVIDENCE: styles.css:171-180 .db-overlay-enter; styles.css:372-380, 516-524 prefers-reduced-motion]
@@ -85,8 +85,8 @@ _memory:
 
 - [x] CHK-020 [P0] All P0 acceptance criteria met (REQ-001 through REQ-006) [EVIDENCE: src/views/OverlayStack.ts:1-120; src/views/PopoverAutoClose.ts:1-34; src/views/PopoverPosition.ts:1-150; styles.css:112-114, 340-349, 398-400]
   - **Evidence**: Explicit dismissal, mobile sheets, listbox behavior, elevation tokens, and collision positioning verified across modules; token definitions and dropdown shadow consumption are in `styles.css:112-114, 340-349, 398-400`.
-- [x] CHK-021 [P0] Unit tests pass for `OverlayStack.ts` via `npx vitest run` [EVIDENCE: src/views/OverlayStack.test.ts:1-180; npx vitest run 355 tests / 45 files]
-  - **Evidence**: `OverlayStack.test.ts:1-180` passes as part of full test suite (`355 tests / 45 files`).
+- [x] CHK-021 [P0] Unit tests pass for `OverlayStack.ts` via `npx vitest run` [EVIDENCE: src/views/OverlayStack.test.ts:1-180; npx vitest run 362 tests / 46 files]
+  - **Evidence**: `OverlayStack.test.ts:1-180` passes as part of full test suite (`362 tests / 46 files`).
 - [x] CHK-022 [P1] WAI-ARIA roving keyboard navigation verified in DropdownField, OptionColorPicker, CalendarMiniCalendar [EVIDENCE: src/views/DropdownField.ts:141-236; src/views/OptionColorPicker.ts:15-47; src/views/CalendarMiniCalendarRenderer.ts:24-95]
   - **Evidence**: Verified roving focus and keyboard handlers in `src/views/DropdownField.ts:141-236`, `src/views/OptionColorPicker.ts:15-47`, and `src/views/CalendarMiniCalendarRenderer.ts:24-95`.
 - [x] CHK-023 [P1] Mobile bottom sheet layout verified on `.is-phone` viewports with safe-area insets [EVIDENCE: src/views/PopoverPosition.ts:24-90, 124-148; styles.css:14260, 199-216, 218-224]
@@ -159,6 +159,6 @@ _memory:
 | P2 Items | 0 | 0/0 | 0 |
 
 **Verification Date**: 2026-08-28  
-**Verification**: Automated gates passed; CHK-024 remains partially verified (`npx vitest run`: 45 files, 355 tests).
+**Verification**: Automated gates passed; CHK-024 remains partially verified (`npx vitest run`: 46 files, 362 tests).
 
 <!-- /ANCHOR:summary -->

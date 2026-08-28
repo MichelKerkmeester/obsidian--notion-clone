@@ -14,10 +14,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "public/001-note-db-notion-parity-build/017-excluded-parity-items"
-    last_updated_at: "2026-08-26T00:00:00Z"
+    last_updated_at: "2026-08-28T10:54:51.091Z"
     last_updated_by: "markdown-agent"
-    recent_action: "Recorded HOLD packet as empty-diff deliverable"
-    next_safe_action: "Keep closed; reopen person/me() only on identity + Wave 6"
+    recent_action: "Corrected unsupported checklist claims against the shipped code"
+    next_safe_action: "Re-run the packet gate after the next code change"
     blockers: []
     key_files:
       - "spec.md"

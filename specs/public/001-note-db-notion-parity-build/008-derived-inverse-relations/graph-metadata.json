@@ -46,7 +46,7 @@
       "module"
     ],
     "importance_tier": "high",
-    "status": "complete",
+    "status": "in_progress",
     "key_files": [
       "spec.md",
       "plan.md",
@@ -206,7 +206,7 @@
     ],
     "causal_summary": "Notion two-way relations store a second property on the target data source and mirror it on write: the relation type object is `{ datasourceid, dualproperty: { syncedpropertyid, syncedpropertyname } }` (Notion API, `developers.notion.com/reference/property-object#relation`), and \"with two-way relations, the edits work both ways\" (`notion.com/help/relations-and-rollups`)",
     "created_at": "2026-08-24T17:58:41.421Z",
-    "last_save_at": "2026-08-27T12:25:53.690Z",
+    "last_save_at": "2026-08-28T10:56:21.985Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -217,13 +217,13 @@
       "implementation-summary.md",
       "research/research.md"
     ],
-    "source_fingerprint": "sha256:b70d228367e32895c410fb5b50bab681aab23b9015bb77f6f58fce01120411da",
+    "source_fingerprint": "sha256:8cf903bfc8cd1f3af09d127c21b4c4813846783b64a943a00aab364831924ab1",
     "source_doc_hashes": {
       "spec.md": "775447115b3b35adfbfae610ee69024b1bbf0d9f726e95867e9b8eddc6b5656e",
       "plan.md": "a779d768573ae49b0c2aee5749fa2521d930792ff283137671b2c69a3463a240",
       "tasks.md": "a48dcaff74633eab7c9d814fea452d51b8724bfb1c068fb97213dee986ae255b",
-      "checklist.md": "8a9fd6a1f8e74ca2c8409e45c419183ef6af39cc60722b4c28650f7914fdf512",
-      "implementation-summary.md": "4ae0a441c8906f35bdf0f610056b412c5ef371f1101f323f36dbafa75a7d97be",
+      "checklist.md": "a59e817bab0f60b0204682d6f7aa599ee680a10aca4ee43a2fb0dea124bf9d78",
+      "implementation-summary.md": "dd22cb005ca82253532073c7be0460e674eb61b5607f2636453022459d60f0d1",
       "research/research.md": "75684800a31f01a5c208c14cbc999b5be8b8cfcf4b182aa97e24774fa1b766be"
     },
     "last_active_child_id": "obsidian/002-note-db-notion-parity-build/008-derived-inverse-relations/003-inverse-refresh-membership",

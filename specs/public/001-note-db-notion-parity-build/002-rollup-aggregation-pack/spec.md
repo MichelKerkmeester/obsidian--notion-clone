@@ -50,7 +50,7 @@ _memory:
 |-------|-------|
 | **Level** | 2 |
 | **Priority** | P1 |
-| **Status** | In Progress |
+| **Status** | In Progress — shipped with documented deferrals; Sonnet 5 verification PASS |
 | **Created** | 2026-08-24 |
 | **Branch** | `002-rollup-aggregation-pack` |
 | **Wave** | 1 |

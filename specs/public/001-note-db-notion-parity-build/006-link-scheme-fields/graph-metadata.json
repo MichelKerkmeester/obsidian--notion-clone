@@ -48,7 +48,7 @@
       "implementation"
     ],
     "importance_tier": "high",
-    "status": "complete",
+    "status": "in_progress",
     "key_files": [
       "spec.md",
       "plan.md",
@@ -208,7 +208,7 @@
     ],
     "causal_summary": "Notion treats URL, email, and phone property values as first-class clickable links: URL opens in a new tab, Email launches the mail client, Phone prompts a call, while the stored value stays an ordinary string",
     "created_at": "2026-08-24T17:23:14.443Z",
-    "last_save_at": "2026-08-27T12:25:53.130Z",
+    "last_save_at": "2026-08-28T10:56:21.570Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -219,13 +219,13 @@
       "implementation-summary.md",
       "research/research.md"
     ],
-    "source_fingerprint": "sha256:8f0cb6a4dc983509a78e4f5c71d8f7a32e0ed5ed6e38d36357bc1237fb82225b",
+    "source_fingerprint": "sha256:ea4bca3267ee7c2f3ed8492182e0c34f955c375fd7cc4f918e6b0143b07ceb57",
     "source_doc_hashes": {
       "spec.md": "64b3052dba3ddfbb60d10b47f9eb01d4f558770360beaf6f27957054b4f3d3e3",
       "plan.md": "d0157ce695330a20e2aac2dde1a2a27e31ccbd40ea2594b7363aa5a5c3b1f72d",
       "tasks.md": "03c97d01063fda7ccb64d3b6a9a02aabbc38df463e3f95a27570ba532b8198dc",
-      "checklist.md": "25999cb5b1f5c91c6cd2452034091a0e1e4c04f334fe069e7381a9941c411658",
-      "implementation-summary.md": "65f21432e2a82045d11edd10fa70d69ca0f74f99905d8aec737fa6ea69b4daee",
+      "checklist.md": "9829b1f59bdb0eb7ce26b15c64f5644f6906f86125612203566ccf958705e27b",
+      "implementation-summary.md": "2ec2e96aaf3c3dc842ae29721e4862734246857c742bc60e160067a5222ac087",
       "research/research.md": "91acebd6d99f67cab4be7b96d36ba5c72b924009e328a247f277340987aac54a"
     },
     "last_active_child_id": "obsidian/002-note-db-notion-parity-build/006-link-scheme-fields/004-scheme-column-width",

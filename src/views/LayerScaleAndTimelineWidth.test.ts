@@ -1,3 +1,6 @@
+/* eslint-disable import/no-nodejs-modules, no-undef --
+   Asserting on the shipped stylesheet means reading it from disk, which needs the node
+   builtins the plugin runtime rule forbids. Scoped to this suite, which never ships. */
 import { readFileSync } from "fs";
 import { resolve } from "path";
 import { describe, expect, it, vi } from "vitest";

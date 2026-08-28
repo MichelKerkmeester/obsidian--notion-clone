@@ -68,7 +68,7 @@ _memory:
 ## Code Quality
 
 - [ ] CHK-010 [P0] Lint passes (`npm run lint`; `src/__tests__/**` is ignored by config) [EVIDENCE: DEFERRED -- npm run lint exits 1 on seven unrelated repository errors]
-  - **Evidence**: Deferred — the current lint run reports seven errors outside the LET implementation files.
+  - **Evidence**: Deferred — the current lint run reports 115 problems (100 errors, 15 warnings) repository-wide; some sit outside the LET implementation files and some do not.
 - [x] CHK-011 [P0] Production build passes (`npm run build`) [EVIDENCE: npm run build: exit 0]
   - **Evidence**: Production build completed with exit code 0.
 - [x] CHK-012 [P0] Transform-side validation implemented AND error i18n in the core commit: odd argc < 3 → `formula.error.letArgCount`; non-identifier name (or SafeEval tokenizer keyword: `true false null undefined typeof if else return`) → `formula.error.letName`; `let("let",5,let+1)` allowed; `formatEvaluationError` maps `let:argCount`/`let:name`; the two `formula.error.let*` keys exist in en / zh-CN / zh-TW next to the existing error-key clusters (NOT in the P2 commit — typed errors are P0) [EVIDENCE: src/data/LetVariables.ts:12-21,61-70; src/data/ComputedField.ts:526-527; src/i18n.ts:1205-1206,2708-2709,4254-4255]

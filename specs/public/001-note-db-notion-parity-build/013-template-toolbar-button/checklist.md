@@ -69,7 +69,7 @@ _memory:
 ## Code Quality
 
 - [ ] CHK-010 [P0] Code passes lint/format checks
-  - **Evidence**: [EVIDENCE: DEFERRED -- npm run lint fails with seven errors outside the changed files]
+  - **Evidence**: [EVIDENCE: DEFERRED -- `npm run lint` fails with 115 problems (100 errors, 15 warnings) repository-wide; some sit in modules added after this phase]
 - [ ] CHK-011 [P0] No console errors or warnings
   - **Evidence**: [EVIDENCE: DEFERRED -- no runtime console check was run]
 - [x] CHK-012 [P1] Error handling implemented

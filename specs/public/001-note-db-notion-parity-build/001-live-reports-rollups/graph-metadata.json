@@ -207,7 +207,7 @@
     ],
     "causal_summary": "The four Reports figures (Income, Expenses, Sales, Saved) are static numbers typed into Report notes to match Notion screenshots during the earlier Bases migration",
     "created_at": "2026-08-24T17:58:27.296Z",
-    "last_save_at": "2026-08-25T20:14:58.025Z",
+    "last_save_at": "2026-08-28T10:56:20.431Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -218,13 +218,13 @@
       "implementation-summary.md",
       "research/research.md"
     ],
-    "source_fingerprint": "sha256:3c59bb1f714801f634795c5ac09e10dc14075389766e7ec5b80376a93e8549e4",
+    "source_fingerprint": "sha256:611142880d0f7f4bdfecfe520fcae3f7cc9e102ee4dd6ca9979040189e6f6119",
     "source_doc_hashes": {
       "spec.md": "b5c65591d04edf1a41ce9223d9c2bb0d5b82a3dad15274bb3bac390a395f4e20",
       "plan.md": "ae53d9614e0f7082be2bc3fbd547e5f46d9c3cb43fc80cb656a976cf707aef94",
       "tasks.md": "9a1876a50790f4c02f5d4fac9d6c4c1aa5bf0995f1287bda0d90ec3915a14bde",
       "checklist.md": "f7b4ccfd3d6c1c017a3434d03d33636e24294e2cef5dd2708052b5950461c23f",
-      "implementation-summary.md": "5acd97103508a6cf4c2c2e081e14a477ffe1f2953b4968812e21a95970fdda86",
+      "implementation-summary.md": "84b003ca498f2ac03e32fdf67a3e8e15d342e5fb0d227539ee67f889339d11f3",
       "research/research.md": "248a4a052dd458be099313a521616296782ed4a3627a40b279471bcf1e8e87b7"
     },
     "last_active_child_id": "obsidian/002-note-db-notion-parity-build/001-live-reports-rollups/006-nowrite-proof-runbook",

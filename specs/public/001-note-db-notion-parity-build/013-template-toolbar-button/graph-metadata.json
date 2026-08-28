@@ -43,7 +43,7 @@
       "modal"
     ],
     "importance_tier": "high",
-    "status": "complete",
+    "status": "in_progress",
     "key_files": [
       "spec.md",
       "plan.md",
@@ -203,7 +203,7 @@
     ],
     "causal_summary": "The note-database fork already implements Notion-style record templates and already wires them to the toolbar New button",
     "created_at": "2026-08-24T17:58:52.659Z",
-    "last_save_at": "2026-08-27T12:25:55.001Z",
+    "last_save_at": "2026-08-28T10:56:22.919Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -214,13 +214,13 @@
       "implementation-summary.md",
       "research/research.md"
     ],
-    "source_fingerprint": "sha256:b2e683e946ecd67e7d792012c11e45ea607f045ae83de8d572038346a6ad9fda",
+    "source_fingerprint": "sha256:dddf878979c69e96a52aeb1c0732d3f1ced208a054a906cb13b6cdabbeecc263",
     "source_doc_hashes": {
       "spec.md": "f89a42b3dc57fce565bcf8d63d4d13160c2b321c31b34107e610123089e37892",
       "plan.md": "d6fbc765bdbb60ef02ca03de0061294cf1e2e30576c172b17fab2ccb8f16643d",
       "tasks.md": "c2bd62e0063dbea3a941cccdd45e862fcfb6a4667605c364a53b850613c062c3",
-      "checklist.md": "a8f4df31a5e33038ba43b9d19e1cdded31a4e5bc7d315abf232f630e81fecb94",
-      "implementation-summary.md": "c73c9de213fe1a091a7fe0466ff3f1ba681a849bb4221a4652a2f95b3356b769",
+      "checklist.md": "929a3177e53fc9c2451007571badc5a264f02849c6fa4d9b120f3e91cbbab58d",
+      "implementation-summary.md": "6443611c464c7e6ea72970a11f0bf8f72db5717be6768019334fd97b268fcf19",
       "research/research.md": "954022523a7f57f1e120bc994203e0efaf68631d5c928efdcf302d06495d0fde"
     },
     "last_active_child_id": "public/001-note-db-notion-parity-build/013-template-toolbar-button/003-create-path-proof",

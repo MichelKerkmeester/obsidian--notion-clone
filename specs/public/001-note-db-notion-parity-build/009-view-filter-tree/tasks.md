@@ -134,7 +134,7 @@ Effort tiers: **S** = ≤30m, **M** = 30m–2h, **L** = 2h+. Tasks are ordered b
 - [x] T032 Verify legacy regression: flat `FilterRule[]` + `filterLogic` views produce identical row subsets before/after [S] -- src/data/RowPipeline.ts:96-104; src/data/__tests__/ViewFilterTree.test.ts:68-75
 
 ### Integration Tests
-- [ ] T033 Run fork lint/build [S] -- DEFERRED: current npm run lint exits on seven errors outside this phase
+- [ ] T033 Run fork lint/build [S] -- DEFERRED: current `npm run lint` exits on 115 problems (100 errors, 15 warnings) repository-wide, not all of which are outside this phase
 - [x] T034 Verify non-panel dual-write: chip mutation, column delete, field rename, chart drilldown keep `state.filters` in sync with `filterTree`; rail AND/OR toggle hidden when nested (or writes tree-root `logic` when flat); new-record defaults use `getRequiredViewFilterLeaves` (OR-group values do not seed frontmatter) [S] -- src/views/ActiveViewControlsRenderer.ts:83-95; src/data/ColumnConfig.test.ts:47-86
 - [x] T039 Verify `DataSource.ts` round-trip: nested tree survives save/reload; flat view does not grow a `filterTree` key (iCloud-quiet) [S] -- src/data/DataSource.test.ts:36-77; src/views/ViewStateStore.test.ts:22-76
 

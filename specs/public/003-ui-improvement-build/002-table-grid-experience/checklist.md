@@ -70,8 +70,8 @@ _memory:
   - **Evidence**: `npx tsc --noEmit` exit 0.
 - [x] CHK-011 [P0] Plugin bundle builds successfully with zero errors (`npm run build`) [EVIDENCE: `npm run build` exit 0]
   - **Evidence**: `npm run build` exit 0.
-- [x] CHK-012 [P1] No runtime console errors or warnings during table rendering or footer calculation [EVIDENCE: src/views/TableRenderer.ts:87-190; src/views/TableFooterRenderer.ts:95-195; npx vitest run 355 tests / 45 files]
-  - **Evidence**: Vitest test suite reports 355 tests across 45 files without runtime errors.
+- [x] CHK-012 [P1] No runtime console errors or warnings during table rendering or footer calculation [EVIDENCE: src/views/TableRenderer.ts:87-190; src/views/TableFooterRenderer.ts:95-195; npx vitest run 362 tests / 46 files]
+  - **Evidence**: Vitest test suite reports 362 tests across 46 files without runtime errors.
 - [x] CHK-013 [P1] Follows fork patterns: modular presentation helper in `src/views/TableFooterRenderer.ts` [EVIDENCE: src/views/TableFooterRenderer.ts:95-195 TableFooterRenderer renderFooter]
   - **Evidence**: Footer aggregation and DOM construction are isolated in `src/views/TableFooterRenderer.ts:95-195`.
 - [x] CHK-014 [P1] Jitter-free CSS: header text labels do not jump or shift horizontally on hover [EVIDENCE: styles.css:4070-4120; src/views/TableRenderer.ts:260-310]
@@ -85,8 +85,8 @@ _memory:
 
 - [x] CHK-020 [P0] All P0 acceptance criteria met (REQ-001 through REQ-006) [EVIDENCE: src/views/TableRenderer.ts:87-190; src/views/TableFooterRenderer.ts:21-93; src/data/ColumnConfig.ts:92-130]
   - **Evidence**: Grouped table, aligned footer, interactive header controls, and display-only rendering verified in `src/views/TableRenderer.ts:87-190`.
-- [x] CHK-021 [P0] Unit tests pass for `TableFooterRenderer.ts` and `ColumnConfig.ts` via `npx vitest run` [EVIDENCE: src/views/TableFooterRenderer.test.ts:1-120; src/data/ColumnConfig.test.ts:117-145; npx vitest run 355 tests / 45 files]
-  - **Evidence**: Full test suite passes: `npx vitest run` reports 355 tests across 45 files.
+- [x] CHK-021 [P0] Unit tests pass for `TableFooterRenderer.ts` and `ColumnConfig.ts` via `npx vitest run` [EVIDENCE: src/views/TableFooterRenderer.test.ts:1-120; src/data/ColumnConfig.test.ts:117-145; npx vitest run 362 tests / 46 files]
+  - **Evidence**: Full test suite passes: `npx vitest run` reports 362 tests across 46 files.
 - [x] CHK-022 [P1] Grouped table single-header sticky scrolling verified across multi-group datasets [EVIDENCE: src/views/TableRenderer.ts:115-180 renderGroupedTable single sticky thead]
   - **Evidence**: Shared table, colgroup, thead, tbody, and sticky group divider rows verified in `src/views/TableRenderer.ts:115-180`.
 - [x] CHK-023 [P1] Column calculations in `<tfoot>` align directly underneath corresponding columns [EVIDENCE: src/views/TableFooterRenderer.ts:95-195 renderFooter cell alignment]
@@ -175,6 +175,6 @@ _memory:
 | P2 Items | 0 | 0/0 | 0 |
 
 **Verification Date**: 2026-08-28  
-**Verification**: Completed by static contract review and automated gates. `npx tsc --noEmit`, `npm run build`, and `npx vitest run` passed; the suite contains 45 files and 355 tests.
+**Verification**: Completed by static contract review and automated gates. `npx tsc --noEmit`, `npm run build`, and `npx vitest run` passed; the suite contains 46 files and 362 tests.
 
 <!-- /ANCHOR:summary -->

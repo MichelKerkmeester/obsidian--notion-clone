@@ -49,7 +49,7 @@ _memory:
 |-------|-------|
 | **Level** | 2 |
 | **Priority** | P1 |
-| **Status** | In Progress |
+| **Status** | In Progress — shipped with deferrals; sub-phase 005 manual proof is Deferred and superseded by independent Sonnet code-level verification. |
 | **Created** | 2026-08-24 |
 | **Branch** | `009-view-filter-tree` |
 

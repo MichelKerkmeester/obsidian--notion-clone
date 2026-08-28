@@ -105,8 +105,8 @@ _memory:
 
 ### Mobile
 
-- [x] CHK-080 [P0] CSS-only persistent OPEN on `body.is-phone` (`body.is-phone .note-database-container .db-record-open-btn { opacity: 1 }`); no `isPhoneLayout()` JS [EVIDENCE: styles.css:16297-16305; src/views/TableRecordPeek.ts:38-57]
-- [x] CHK-081 [P0] No hover-only or `MouseEvent`-only path [EVIDENCE: styles.css:16297-16305; src/views/TableRecordPeek.ts:38-57]
+- [x] CHK-080 [P0] CSS-only persistent OPEN on `body.is-phone` (`body.is-phone .note-database-container .db-record-open-btn { opacity: 1 }`); no `isPhoneLayout()` JS [EVIDENCE: styles.css:17878-17884; src/views/TableRecordPeek.ts:38-57]
+- [x] CHK-081 [P0] No hover-only or `MouseEvent`-only path [EVIDENCE: styles.css:17878-17884; src/views/TableRecordPeek.ts:38-57]
 
 <!-- /ANCHOR:testing -->
 ---

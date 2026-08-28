@@ -16,10 +16,10 @@ contextType: "implementation"
 _memory:
   continuity:
     packet_pointer: "public/003-ui-improvement-build/006-views-parity-polish"
-    last_updated_at: "2026-08-28T07:15:23.341Z"
+    last_updated_at: "2026-08-28T10:52:07.835Z"
     last_updated_by: "phase-author"
-    recent_action: "Repointed stale styles.css citations to verified selector anchors"
-    next_safe_action: "Commit reconciled phase documentation"
+    recent_action: "Corrected unsupported checklist claims against the shipped code"
+    next_safe_action: "Re-run the packet gate after the next code change"
     blockers: []
     key_files:
       - "spec.md"
@@ -144,7 +144,7 @@ npx vitest run
 ### Verification Checklist
 - [x] TypeScript compilation passes cleanly without errors (`npx tsc --noEmit` exit code 0).
 - [x] Plugin bundle builds successfully (`npm run build` exit code 0).
-- [x] Unit tests in `CardFieldRenderer.test.ts` and `CoverImage.test.ts` pass 100% (`npx vitest run` 355 tests across 45 files).
+- [x] Unit tests in `CardFieldRenderer.test.ts` and `CoverImage.test.ts` pass 100% (`npx vitest run` 362 tests across 46 files).
 - [x] Universal object peek opens reliably across Board, Gallery, and List views (`BoardRenderer.ts:613-625`, `GalleryRenderer.ts:201-215`, `ListRenderer.ts:191-205`).
 - [x] Board swimlanes render with aligned columns and sticky headers (`BoardRenderer.ts:140-141, 198-250`).
 - [x] Gallery cards display markdown body image embeds without frontmatter cover properties (`CoverImage.ts:74-120`).

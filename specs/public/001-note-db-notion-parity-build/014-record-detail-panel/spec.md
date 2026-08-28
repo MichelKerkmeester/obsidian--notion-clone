@@ -48,7 +48,7 @@ _memory:
 |-------|-------|
 | **Level** | 2 |
 | **Priority** | P1 |
-| **Status** | In Progress |
+| **Status** | In Progress — shipped with documented deferrals (branch `impl`, commits `c4ceb74..02929b0`; CSS fix `c90aee6`; tests `86eee77`) |
 | **Created** | 2026-08-24 |
 | **Branch** | `014-record-detail-panel` |
 

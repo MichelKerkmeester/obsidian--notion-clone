@@ -15,10 +15,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "public/001-note-db-notion-parity-build/001-live-reports-rollups"
-    last_updated_at: "2026-08-24T00:00:00Z"
+    last_updated_at: "2026-08-28T10:54:48.353Z"
     last_updated_by: "swarm"
-    recent_action: "Scaffolded phase 001 docs; status Planned"
-    next_safe_action: "Build phase 001 per plan.md and tasks.md"
+    recent_action: "Corrected unsupported checklist claims against the shipped code"
+    next_safe_action: "Re-run the packet gate after the next code change"
     blockers: []
     key_files:
       - "spec.md"

@@ -39,7 +39,7 @@
       "file"
     ],
     "importance_tier": "medium",
-    "status": "deferred",
+    "status": "in_progress",
     "key_files": [
       "spec.md",
       "plan.md",
@@ -196,7 +196,7 @@
     ],
     "causal_summary": "The Notion-parity research (10 iterations, evidence in `research/research.md`, decision-ready summary in `research/synthesis.md`) surfaced a long feature list",
     "created_at": "2026-08-24T18:24:24.049Z",
-    "last_save_at": "2026-08-26T01:53:58.493Z",
+    "last_save_at": "2026-08-28T10:56:23.706Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -206,12 +206,12 @@
       "implementation-summary.md",
       "research/research.md"
     ],
-    "source_fingerprint": "sha256:1888149bc4e7d8b28c6be9886eb5b324baee22288b5eabbcb2bef28e07273d1a",
+    "source_fingerprint": "sha256:2ea18936743e29974e2388af2b7e298a979b9c94eaab8d6aec7525bf7b39f626",
     "source_doc_hashes": {
       "spec.md": "877e2df5597027091e7f0a0248ebcf74dd41b88d812f9432fb0187b154b2c3ed",
       "plan.md": "3720e69561f56fcb39f3c9af3d6c69f8faa567b710a8f9f6e1745c9fd1d35a2c",
       "tasks.md": "0fbe8940882bb09be5c9853f3ba459fe3abd0f099e6c37e6ae5ed0689cd812a4",
-      "implementation-summary.md": "f537d2441660896b6510805eba09f7d3c25bee9b63149713946e7f7218dd2b85",
+      "implementation-summary.md": "1b541a3fe5efb815b6c172713b53e23226dbca12fdc7d82b496ee4acf40749c5",
       "research/research.md": "aea2a0efbf596e5980c1f2176cb121492bd6ed335eb08592c8e0d992643821ef"
     },
     "last_active_child_id": null,

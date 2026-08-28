@@ -11,10 +11,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "public/003-ui-improvement-build/002-table-grid-experience"
-    last_updated_at: "2026-08-28T07:15:22.585Z"
+    last_updated_at: "2026-08-28T10:52:07.086Z"
     last_updated_by: "implementation-session"
-    recent_action: "Repointed stale styles.css citations to verified selector anchors"
-    next_safe_action: "Commit reconciled phase documentation"
+    recent_action: "Corrected unsupported checklist claims against the shipped code"
+    next_safe_action: "Re-run the packet gate after the next code change"
     blockers: []
     key_files:
       - "spec.md"
@@ -139,7 +139,7 @@ Verification gates executed after implementation:
 |-------------|------------------|-----------------|
 | Type Check | `npx tsc --noEmit` | Passed (0 errors) |
 | Bundle Build | `npm run build` | Passed (0 errors) |
-| Unit Tests | `npx vitest run` | Passed: 45 files, 355 tests |
+| Unit Tests | `npx vitest run` | Passed: 46 files, 362 tests |
 | Display-Only Proof | Static source review | Rendering and footer paths contain no note frontmatter/body writes |
 | Multi-Sort & Auto-Fit | Static interaction review | Shift appends sort rules; resize double-click invokes visible-row auto-fit |
 | Single-Header Grouping | Static DOM/CSS review | Grouped mode emits exactly one shared table/header and sticky group dividers |

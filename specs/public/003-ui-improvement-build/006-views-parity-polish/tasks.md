@@ -112,7 +112,7 @@ _memory:
 ## Completion Criteria
 
 - [x] T027 [S] Run TypeScript compiler type-check verification `npx tsc --noEmit` (`package.json:1-38`, exit code 0)
-- [x] T028 [S] Run Vitest unit test suite `npx vitest run` (355 tests across 45 files in `src/views/CardFieldRenderer.test.ts`, `src/data/CoverImage.test.ts`)
+- [x] T028 [S] Run Vitest unit test suite `npx vitest run` (362 tests across 46 files in `src/views/CardFieldRenderer.test.ts`, `src/data/CoverImage.test.ts`)
 - [x] T029 [S] Run production bundle build `npm run build` (`package.json:1-38`, exit code 0)
 - [x] T030 [S] Verify zero note frontmatter or body writes during view rendering, cover parsing, and peek inspection (`src/views/RecordDetailPanel.ts:187-215`)
 

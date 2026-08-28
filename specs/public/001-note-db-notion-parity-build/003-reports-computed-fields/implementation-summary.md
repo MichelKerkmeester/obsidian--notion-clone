@@ -15,10 +15,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "public/001-note-db-notion-parity-build/003-reports-computed-fields"
-    last_updated_at: "2026-08-27T17:09:01Z"
+    last_updated_at: "2026-08-28T10:54:48.694Z"
     last_updated_by: "swarm"
-    recent_action: "Completion docs reconciled to shipped state; gate green; Sonnet-verified"
-    next_safe_action: "Operator input needed to classify Saved-field semantics (deferred); no other blocking action"
+    recent_action: "Corrected unsupported checklist claims against the shipped code"
+    next_safe_action: "Re-run the packet gate after the next code change"
     blockers:
       - "Saved-field classification deferred pending operator input (c766117 commit message)"
     key_files:

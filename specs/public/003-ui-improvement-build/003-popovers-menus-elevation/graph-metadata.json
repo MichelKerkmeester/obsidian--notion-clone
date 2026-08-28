@@ -201,7 +201,7 @@
     ],
     "causal_summary": "Popovers, menus, dropdowns, and floating pickers form the interactive overlay layer of the Note Database plugin",
     "created_at": "2026-08-27T19:53:19.572Z",
-    "last_save_at": "2026-08-28T07:16:44.221Z",
+    "last_save_at": "2026-08-28T10:57:10.683Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -211,13 +211,13 @@
       "checklist.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:6b610e30bf1198f448595374ead66e28542b9d268c6a009ee08030be0ebfdc47",
+    "source_fingerprint": "sha256:abdbbad063b6cecc847f00f58d2d943d9f108a95b6f5c392a5f55af4bf8e88dd",
     "source_doc_hashes": {
       "spec.md": "7ee82f83d40b0111343f4853d07f5542fc2e9e32d9a80f8ee82db16e41fd14e1",
       "plan.md": "9e81c56ce6a88d17a038f2fb38a9ec4ae9c2fa510a6a7d7d6ffd6044c4d35f8f",
-      "tasks.md": "67a524a7b130af0998394be982dab08884fe82fe7b62fa7b1fbf6f433215af23",
-      "checklist.md": "68628a360767822e90fef73f12bda8007818c8b288ee3d272741b18fdd1e3883",
-      "implementation-summary.md": "39ef16627edff8a7dfde871413f9a9ec24e965d9b25d6a07bcf54df5e26be721"
+      "tasks.md": "60d6efc2c9a9a0de7d4032876f1bc98ccb8dc3d4deaf29a3feae6d84858739b4",
+      "checklist.md": "f2b52e005b7b5508e0855f2729e289aa21e1dd70ffda505d0dcf952dd8c6167a",
+      "implementation-summary.md": "78f368a4b52c923b26ed7c1f999eb9123ab1a24bce9f02a001d390467ec93054"
     },
     "last_active_child_id": null,
     "last_active_at": null

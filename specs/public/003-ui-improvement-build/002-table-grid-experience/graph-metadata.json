@@ -201,7 +201,7 @@
     ],
     "causal_summary": "The table/grid view is the primary data surface of the Note Database plugin, but its user experience is compromised by structural layout stutter, hidden affordances, and interaction friction:",
     "created_at": "2026-08-27T19:53:19.293Z",
-    "last_save_at": "2026-08-28T07:16:43.952Z",
+    "last_save_at": "2026-08-28T10:57:10.481Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -211,13 +211,13 @@
       "checklist.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:6cba3145efaa477dd4b63754c976474e1c7893fe10fe8e9033b56f265bd6927e",
+    "source_fingerprint": "sha256:49c0bb99b68d1fe295f19e091865a6386d9da403e54ebfbf98dc489a534bcbeb",
     "source_doc_hashes": {
       "spec.md": "95d7aca709aed0f562da5ae02421cceec90b9324930f53460af4bc32109a8e3c",
       "plan.md": "37032ced3ac37602036119eb5f566d819981644e40cfb867bc30a25afcbeec34",
-      "tasks.md": "6ac3dc2b1b758801083ad66395a34e5faa15e316456a01f3ff0673f934701a80",
-      "checklist.md": "86a1de01e73a591f2d4e8154e67f3fc6518f12156278d89db43ae7eefa471ee7",
-      "implementation-summary.md": "c2545cacce622faeadacf6d766d327f50c926eb258606df7ea60634ffa5bf3ba"
+      "tasks.md": "6782f789ee0bd96fa9758e2f1ea5d916515bb6258b045f3c6a2105e6ef7f4743",
+      "checklist.md": "8a5b27a8b7c0034ec6eef27880bb5522866402d27ab27b2dc679fc9fcd924309",
+      "implementation-summary.md": "2a389f5ec61413fe27db9e74928f3e8ad7bf8885616f056a54a35ff847849c67"
     },
     "last_active_child_id": null,
     "last_active_at": null

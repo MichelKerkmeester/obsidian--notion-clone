@@ -203,7 +203,7 @@
     ],
     "causal_summary": "Notion databases natively carry a first-class Files & Media property (images, PDFs, attachments), but the note-database fork's column union is 12 types with no files/media type",
     "created_at": "2026-08-24T18:16:20.278Z",
-    "last_save_at": "2026-08-27T17:09:02.304Z",
+    "last_save_at": "2026-08-28T10:56:22.747Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -214,13 +214,13 @@
       "implementation-summary.md",
       "research/research.md"
     ],
-    "source_fingerprint": "sha256:3d85e8c4447934b4af4b3f015d68e4ca1445950add3a98ae0996ed3c1089b97c",
+    "source_fingerprint": "sha256:a1b41b8463255d593a5f246154078b778d618dedf4c95e7d218985e0039fbb5c",
     "source_doc_hashes": {
       "spec.md": "ed9884f63abee98a5315276e008a57fd2c7725544e254d85413e897d3032d246",
       "plan.md": "7c3f610da20b0fabfa1f709d28de30fbf864235962817ac1acba210c12d158df",
       "tasks.md": "a51fef9da59b66726030ac576f9d363252e582a3b8f5c57204037bdec97dcb71",
       "checklist.md": "99db2aa228b09d114914e1ec317e0ba03e52f81f06c6a5af8835c47c1a623649",
-      "implementation-summary.md": "dbc9cc919b2e5199fdb88faace78da82255ac944c7ec2c33cd0086c411549985",
+      "implementation-summary.md": "1e71e0df6f53e36d86931c9677236185d56443c86c3011f268ac17a5ffe80ad1",
       "research/research.md": "775ebeed7178fb69462fe6d46e343ffd80ffa288e65ab53adb3f76ea10b5c145"
     },
     "last_active_child_id": "public/001-note-db-notion-parity-build/012-files-column/005-files-column-proof",
