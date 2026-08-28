@@ -1,5 +1,20 @@
+// ───────────────────────────────────────────────────────────────────
+// MODULE:    computed-formulas.test
+// COMPONENT: locked-semantics regression suite for the IFS/SWITCH/math formula wrappers
+// ───────────────────────────────────────────────────────────────────
+//
+// These wrappers intentionally diverge from native JS/Math semantics — SWITCH
+// is case-sensitive, LOG defaults to base 10 instead of Math.log's base e,
+// and domain errors (SQRT(-1), LN(0)) resolve quietly to NaN/-Infinity
+// instead of throwing or warning. That divergence is the point (it matches
+// user-facing spreadsheet-formula expectations), so this suite pins it down.
+
+// ───────────────────────────────────────────────────────────────────
+// 1. IMPORTS
+// ───────────────────────────────────────────────────────────────────
+
 import { describe, expect, it, vi } from "vitest";
-import { formulaIfsSwitchMath } from "../FormulaIfsSwitchMath";
+import { formulaIfsSwitchMath } from "../formula-ifs-switch-math";
 
 describe("computed formula logic wrappers", () => {
   it("selects the first matching IFS tax bracket at each boundary", () => {

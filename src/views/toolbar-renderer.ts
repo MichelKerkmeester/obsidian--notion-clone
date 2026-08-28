@@ -1,0 +1,2430 @@
+// ───────────────────────────────────────────────────────────────────
+// MODULE:    toolbar-renderer
+// COMPONENT: Database toolbar chrome — heading, view tabs, query/properties/utilities clusters
+// ───────────────────────────────────────────────────────────────────
+//
+// There is no shared popover manager: each of the toolbar's many independent
+// popovers (database switcher, group options, export, title actions,
+// utilities, all-views hub) tracks its own element and close listener, and
+// every open handler explicitly closes the others first. View-tab overflow
+// collapsing measures real DOM widths through a ResizeObserver and always
+// keeps the active tab visible, filling remaining space left-to-right.
+
+// ───────────────────────────────────────────────────────────────────
+// 1. IMPORTS
+// ───────────────────────────────────────────────────────────────────
+
+import { setIcon, setTooltip } from "obsidian";
+import { ColumnDef, CreateEntryPosition, DatabaseConfig, DatabaseViewType, DateGroupMode, GroupOrderMode, NewRecordTemplateConfig, TimelineScale, ViewConfig } from "../data/types";
+import { normalizeComputedSyncMode } from "../data/computed-sync";
+import { getColumnDisplayType } from "../data/column-display";
+import { t } from "../i18n";
+import { DatabaseViewState } from "./view-state-store";
+import { positionToolbarPopover } from "./popover-position";
+import { renderPropertyTypeIcon } from "./property-type-icon";
+import { getEffectiveFilterRules } from "../data/filter-rules";
+import { isImeComposing } from "../data/keyboard-utils";
+import { installPopoverAutoClose } from "./popover-auto-close";
+import { createDropdownField, DropdownOption, openDropdownMenu } from "./dropdown-field";
+import { CalendarTimelineToolbarRenderer } from "./calendar-timeline-toolbar-renderer";
+import { isDateLikeColumnType } from "../data/date-time-format";
+import { isEmptyGroupVisibilityColumn, shouldShowEmptyGroups } from "../data/group-visibility";
+import { getDateGroupMode } from "../data/group-display";
+import { getTableSubgroupCandidates, getTableSubgroupField } from "../data/table-subgroup-picker";
+import { executeNewFromTemplate, getNewFromTemplateLabel, getNewFromTemplateTooltip, hasRecordTemplate, NewRecordPlacement, TemplateToolbarOption } from "../data/template-toolbar-action";
+import { isHTMLElement } from "./dom-guards";
+import { renderRecordIcon } from "./record-icon-renderer";
+import { isTouchDevice } from "../data/touch-environment";
+
+// ───────────────────────────────────────────────────────────────────
+// 2. HELPERS
+// ───────────────────────────────────────────────────────────────────
+
+/** Safely append an SVG string to an element through parsed DOM nodes. */
+function appendSvg(el: HTMLElement, svgString: string): void {
+  const doc = new DOMParser().parseFromString(svgString, "image/svg+xml");
+  const svg = doc.querySelector("svg");
+  if (svg) el.appendChild(el.ownerDocument.adoptNode(svg));
+}
+
+// ───────────────────────────────────────────────────────────────────
+// 3. TYPES
+// ───────────────────────────────────────────────────────────────────
+
+export interface ToolbarViewEntry {
+  config: DatabaseConfig;
+  sourcePath: string;
+}
+
+export interface AddViewOptions {
+  name?: string;
+  icon?: string;
+  keyField?: string;
+  duplicateCurrent?: boolean;
+}
+
+export interface CreateEntryIntent {
+  allowOverlayTransition?: boolean;
+}
+
+export interface ToolbarActions {
+  selectDatabase(index: number): void;
+  moveDatabase?(fromIndex: number, toIndex: number): void;
+  selectViewInView(dbIndex: number, viewIndex: number, viewId?: string): void;
+  addView(viewType: DatabaseViewType, options?: AddViewOptions): void;
+  deleteView(viewIndex: number): void;
+  renameView(viewIndex: number, name: string): void;
+  setViewIcon?(viewIndex: number, icon: string | null): void;
+  moveView?(fromIndex: number, toIndex: number): void;
+  renameDatabase?(name: string): void;
+  updateDatabaseDescription?(description: string): void;
+  editDatabaseIcon?(anchor: HTMLElement): void;
+  editViewIcon?(viewIndex: number, anchor: HTMLElement): void;
+  showDatabaseIcon?: boolean;
+  toggleDatabaseIcon?(): void;
+  addDatabase(): void;
+  deleteDatabase(): void;
+  copyCurrentDatabase?(): void;
+  copyCurrentView?(viewIndex?: number): void;
+  copyViewCode?(viewIndex?: number): void;
+  openDatabaseFile?(): void;
+  exportData?(format: "csv" | "markdown"): void;
+  exportCsvMarkdownZip?(): void;
+  setViewType(value: DatabaseViewType, viewIndex?: number): void;
+  setDisplayWidth(value: "default" | "wide"): void;
+  setSearchText(value: string): void;
+  onSearchFocus?(): void;
+  setGroupByField(value: string): void;
+  setGroupOrderMode(mode: GroupOrderMode): void;
+  setShowEmptyGroups(field: string, value: boolean): void;
+  setGroupDateMode(field: string, mode: DateGroupMode): void;
+  setGroupRowLimit(limit: number): void;
+  setBoardSubgroupEnabled(enabled: boolean): void;
+  setBoardSubgroupField(value: string): void;
+  setTableSubgroupField?(value: string): void;
+  toggleViewConfig(anchorEl: HTMLElement): void;
+  onOpenLayoutOptions?(anchorEl: HTMLElement): void;
+  configureGroupOrder(): void;
+  toggleSortPanel(anchorEl: HTMLElement): void;
+  toggleChartOptions?(anchorEl: HTMLElement): void;
+  toggleCalendarOptions?(containerEl: HTMLElement, anchor: HTMLElement, config: ViewConfig): void;
+  updateViewConfig?(label?: string): void;
+  updateTimelineScale?(scale: TimelineScale, label?: string): boolean | Promise<boolean> | void;
+  syncComputedFields?(): void;
+  refreshDatabase?(): void;
+  readonly pendingRefreshCount?: number;
+  readonly pendingRefreshUnknown?: boolean;
+  readonly isRefreshingDatabase?: boolean;
+  toggleFilterPanel(anchorEl: HTMLElement): void;
+  toggleColumnManager(anchorEl: HTMLElement): void;
+  closeToolbarPopovers?(): void;
+  openFullView?(): void;
+  toggleHeaderChrome?(hidden: boolean): void;
+  createEntry(defaults?: Record<string, unknown>, position?: CreateEntryPosition, intent?: CreateEntryIntent): void;
+  getCreateEntryPosition?(placement: NewRecordPlacement): CreateEntryPosition | undefined;
+  readonly isReadOnly?: boolean;
+  readonly isReadOnlyViews?: boolean;
+  readonly hideWidthSelect?: boolean;
+  /** When true, show database selector and view tabs (standalone view) */
+  readonly showDatabaseChrome?: boolean;
+  readonly hideDatabaseActions?: boolean;
+  /** When true, render only the database content and skip title, tabs, and toolbar chrome. */
+  readonly hideHeaderChrome?: boolean;
+  readonly showChartOptions?: boolean;
+  /** Async count of hidden negative-interval timeline events (drives the timeline options notice). */
+  getTimelineInvalidEventCount?(): number | Promise<number>;
+  /** Open the modal to review/fix negative-interval timeline events. */
+  openTimelineInvalidEvents?(): void;
+  createRecordIconField?(): void;
+  readonly recordTemplates?: TemplateToolbarOption[];
+  readonly defaultTemplatePath?: string;
+  setDefaultTemplate?(template: NewRecordTemplateConfig | null): void;
+  createEntryFromTemplate?(template: NewRecordTemplateConfig | null, position?: CreateEntryPosition, intent?: CreateEntryIntent): void;
+}
+
+// ───────────────────────────────────────────────────────────────────
+// 4. TOOLBAR RENDERER
+// ───────────────────────────────────────────────────────────────────
+
+export class ToolbarRenderer {
+  private resizeObserver: ResizeObserver | null = null;
+  private draggedViewIndex: number | null = null;
+  private draggedDatabaseIndex: number | null = null;
+  private suppressViewTabClickUntil = 0;
+  private databasePopover?: HTMLElement;
+  private removeDatabasePopoverListener?: () => void;
+  private groupPopover?: HTMLElement;
+  private removeGroupPopoverListener?: () => void;
+  private groupPopoverConfig?: ViewConfig;
+  private groupPopoverViewType?: DatabaseViewType;
+  private groupPopoverActions?: ToolbarActions;
+  private groupPopoverState?: DatabaseViewState;
+  private groupRowLimitEditingCustom = false;
+  private groupRowLimitFocusCustomInput = false;
+  private viewTabPopover?: HTMLElement;
+  private removeViewTabPopoverListener?: () => void;
+  private exportPopover?: HTMLElement;
+  private removeExportPopoverListener?: () => void;
+  private titleActionsPopover?: HTMLElement;
+  private removeTitleActionsPopoverListener?: () => void;
+  private utilitiesPopover?: HTMLElement;
+  private removeUtilitiesPopoverListener?: () => void;
+  private toolbarRoot?: HTMLElement;
+  private descriptionScrollTimers = new WeakMap<HTMLElement, number>();
+  private calendarTimelineToolbarRenderer = new CalendarTimelineToolbarRenderer();
+  private newRecordPlacement: NewRecordPlacement = "bottom";
+
+  render(
+    containerEl: HTMLElement,
+    viewEntries: ToolbarViewEntry[],
+    currentDbIndex: number,
+    currentViewIndex: number,
+    state: DatabaseViewState,
+    actions: ToolbarActions
+  ): void {
+    this.toolbarRoot = containerEl;
+    this.closeDatabasePopover();
+    this.closeGroupPopover();
+    this.closeViewTabPopover();
+    this.closeExportPopover();
+    this.closeTitleActionsPopover();
+    this.closeUtilitiesPopover();
+    this.calendarTimelineToolbarRenderer.closePopover();
+    const currentEntry = viewEntries[currentDbIndex];
+    const currentDb = currentEntry?.config;
+    const currentView = currentDb?.views[currentViewIndex] || currentDb?.views[0];
+    const phoneLayout = isTouchDevice(containerEl);
+    const viewType = currentView?.viewType || "table";
+    const isChartView = viewType === "chart";
+    const isCalendarTimelineView = viewType === "calendar" || viewType === "timeline";
+    const showSortButton = viewType !== "chart";
+    const showGroupButton = viewType !== "chart" && viewType !== "calendar";
+    const showColumnButton = viewType !== "chart";
+
+    if (actions.hideHeaderChrome) return;
+
+    const header = containerEl.createDiv({ cls: "db-header" });
+    containerEl.insertBefore(header, containerEl.firstChild);
+
+    // Row 0: Database name heading
+    if (actions.showDatabaseChrome) {
+      const description = currentDb?.description || "";
+      header.toggleClass("has-empty-description", !description);
+      const headingRow = header.createDiv({ cls: "db-heading-row" });
+      if (currentDb && actions.showDatabaseIcon !== false) {
+        renderRecordIcon(headingRow, currentDb.icon, {
+          editable: actions.editDatabaseIcon != null,
+          defaultIcon: "database",
+          tooltip: currentDb.name,
+          onClick: (anchor) => actions.editDatabaseIcon?.(anchor),
+        }).addClass("db-database-icon");
+      }
+      const heading = headingRow.createDiv({
+        cls: `db-heading${actions.hideDatabaseActions ? " is-static" : ""}`,
+        attr: { title: currentDb?.name || t("common.untitledDatabase") },
+      });
+      const headingTitle = actions.hideDatabaseActions
+        ? heading.createSpan({ cls: "db-heading-text", text: currentDb?.name || t("common.untitledDatabase") })
+        : heading.createEl("button", {
+          cls: "db-heading-button",
+          attr: {
+            type: "button",
+            title: currentDb?.name || t("common.untitledDatabase"),
+            "aria-label": currentDb?.name || t("common.untitledDatabase"),
+          },
+        });
+      if (!actions.hideDatabaseActions) headingTitle.createSpan({ cls: "db-heading-text", text: currentDb?.name || t("common.untitledDatabase") });
+      if (!actions.hideDatabaseActions) {
+        const chevron = heading.createEl("button", {
+          cls: "db-heading-chevron-button",
+          attr: {
+            type: "button",
+            "aria-label": t("toolbar.openDatabaseSwitcher"),
+            "aria-haspopup": "menu",
+            "aria-expanded": "false",
+            "aria-controls": "db-database-selector",
+          },
+        });
+        setIcon(chevron, "chevron-down");
+        setTooltip(chevron, t("toolbar.openDatabaseSwitcher"), { delay: 100 });
+        chevron.onclick = (event) => {
+          event.preventDefault();
+          event.stopPropagation();
+          if (this.databasePopover?.isConnected) {
+            this.closeDatabasePopover();
+            return;
+          }
+          actions.closeToolbarPopovers?.();
+          this.closeGroupPopover();
+          this.closeViewTabPopover();
+          this.closeExportPopover();
+          this.closeTitleActionsPopover();
+          chevron.setAttribute("aria-expanded", String(!this.databasePopover?.isConnected));
+          this.renderDatabasePopover(chevron, viewEntries, currentDbIndex, actions);
+        };
+      }
+      if (actions.renameDatabase) {
+        headingTitle.ondblclick = (event) => {
+          this.closeDatabasePopover();
+          this.startDatabaseTextEdit(event, headingTitle, currentDb?.name || "", false, (name) => actions.renameDatabase?.(name));
+        };
+      }
+      if (!actions.hideDatabaseActions) {
+        if (actions.renameDatabase) {
+          const renameBtn = headingRow.createEl("button", {
+            cls: "db-heading-rename-button",
+            attr: { type: "button", "aria-label": t("toolbar.renameDatabase") },
+          });
+          setIcon(renameBtn, "pencil");
+          setTooltip(renameBtn, t("toolbar.renameDatabase"), { delay: 100 });
+          renameBtn.onclick = (event) => {
+            this.closeDatabasePopover();
+            this.startDatabaseTextEdit(event, headingTitle, currentDb?.name || "", false, (name) => actions.renameDatabase?.(name));
+          };
+        }
+        const moreBtn = headingRow.createEl("button", {
+          cls: "db-heading-more-button",
+          attr: { type: "button", "aria-label": t("common.more"), "aria-haspopup": "menu", "aria-expanded": "false", "aria-controls": "db-title-actions" },
+        });
+        setIcon(moreBtn, "more-horizontal");
+        setTooltip(moreBtn, t("common.more"), { delay: 100 });
+        moreBtn.onclick = (event) => this.showTitleActionsMenu(event, moreBtn, actions, currentDb?.name || "", headingTitle);
+      }
+      if (actions.hideDatabaseActions) this.renderFullViewButton(headingRow, actions);
+      if (currentDb?.description || actions.updateDatabaseDescription) {
+        const placeholder = t("viewConfig.descriptionPlaceholder");
+        const descEl = header.createDiv({
+          cls: `db-description${description ? "" : " is-empty"}`,
+          text: description,
+          attr: {
+            title: description || placeholder,
+            "data-placeholder": placeholder,
+          },
+        });
+        this.attachDescriptionScrollState(descEl);
+        if (actions.updateDatabaseDescription) {
+          descEl.ondblclick = (event) => this.startDatabaseTextEdit(event, descEl, description, true, (value) => actions.updateDatabaseDescription?.(value));
+        }
+      }
+    }
+
+    // Embedded views keep a compact title row; dashboard uses the main heading as database selector.
+    if (!actions.showDatabaseChrome) {
+      const titleRow = header.createDiv({ cls: "db-title-row" });
+      titleRow.createDiv({
+        cls: "db-title",
+        text: currentDb?.name || t("common.untitledDatabase"),
+        attr: { title: currentDb?.name || t("common.untitledDatabase") },
+      });
+
+      const titleActions = titleRow.createDiv({ cls: "db-title-actions" });
+      this.renderFullViewButton(titleActions, actions);
+      if (actions.toggleHeaderChrome && phoneLayout) this.renderHeaderChromeButton(titleActions, actions, false);
+      if (!actions.isReadOnly && !isChartView) this.renderNewButton(titleActions, actions, currentDb);
+      if (currentDb?.description) {
+        header.createDiv({
+          cls: "db-description db-description-embed",
+          text: currentDb.description,
+          attr: { title: currentDb.description },
+        });
+        const descEl = header.querySelector<HTMLElement>(".db-description-embed");
+        if (descEl) this.attachDescriptionScrollState(descEl);
+      }
+    }
+
+    // Row 2: View tabs + toolbar
+    const toolbar = header.createDiv({ cls: "db-toolbar" });
+    const left = toolbar.createDiv({ cls: "db-toolbar-left" });
+    const right = toolbar.createDiv({ cls: "db-toolbar-right" });
+
+    if (actions.showDatabaseChrome && currentDb) {
+      this.renderViewTabs(left, currentDb, currentViewIndex, actions);
+    } else if (currentDb && currentDb.views.length > 0) {
+      // Embedded views still show a single active tab so the toolbar shape stays consistent.
+      this.renderViewTabs(left, currentDb, currentViewIndex, actions);
+    }
+    if (phoneLayout && !isChartView) this.renderSearch(left, state, actions);
+
+    const queryCluster = right.createDiv({ cls: "db-toolbar-cluster db-toolbar-query-cluster", attr: { "aria-label": t("toolbar.queryCluster") } });
+    this.renderFilterButton(queryCluster, state, actions);
+    if (showSortButton) this.renderSortButton(queryCluster, state, actions);
+    if (showGroupButton) this.renderGroupSelect(queryCluster, currentView, state, actions);
+
+    const propertiesCluster = right.createDiv({ cls: "db-toolbar-cluster db-toolbar-properties-cluster", attr: { "aria-label": t("toolbar.properties") } });
+    if (showColumnButton) this.renderColumnButton(propertiesCluster, currentView, state, actions);
+
+    const utilitiesCluster = right.createDiv({ cls: "db-toolbar-cluster db-toolbar-utilities-cluster", attr: { "aria-label": t("toolbar.utilities") } });
+    this.renderUtilitiesOverflowButton(utilitiesCluster, currentEntry, currentView, actions);
+
+    const creationCluster = right.createDiv({ cls: "db-toolbar-cluster db-toolbar-creation-cluster" });
+    if (!phoneLayout && !isChartView) this.renderSearch(utilitiesCluster, state, actions);
+    if (!actions.isReadOnly && !isChartView) this.renderNewButton(creationCluster, actions, currentDb);
+  }
+
+  private renderUtilitiesOverflowButton(
+    toolbar: HTMLElement,
+    entry: ToolbarViewEntry | undefined,
+    config: ViewConfig | undefined,
+    actions: ToolbarActions,
+  ): void {
+    const button = this.createIconButton(toolbar, "more-horizontal", t("toolbar.utilities"), "db-toolbar-more-btn");
+    button.setAttribute("aria-haspopup", "menu");
+    button.setAttribute("aria-expanded", "false");
+    button.setAttribute("aria-controls", "db-toolbar-utilities");
+    button.onclick = (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      if (this.utilitiesPopover?.isConnected && this.utilitiesPopover.hasClass("db-toolbar-utilities-popover")) {
+        this.closeUtilitiesPopover();
+        return;
+      }
+      actions.closeToolbarPopovers?.();
+      this.closeDatabasePopover();
+      this.closeGroupPopover();
+      this.closeViewTabPopover();
+      this.closeExportPopover();
+      this.closeTitleActionsPopover();
+      if (this.utilitiesPopover?.isConnected) {
+        this.closeUtilitiesPopover();
+        return;
+      }
+
+      const root = button.closest(".note-database-container");
+      if (!root) return;
+      const panel = root.createDiv({ cls: "db-view-tab-popover db-toolbar-utilities-popover", attr: { id: "db-toolbar-utilities", role: "menu", "aria-label": t("toolbar.utilities") } });
+      this.utilitiesPopover = panel;
+      const header = panel.createDiv({ cls: "db-panel-header" });
+      header.createDiv({ cls: "db-panel-title", text: t("toolbar.utilities") });
+
+      if (!actions.hideWidthSelect) {
+        const width = config?.displayWidth === "wide" ? "default" : "wide";
+        this.renderToolbarMenuRow(panel, t("toolbar.displayWidth"), "arrows-left-right", () => actions.setDisplayWidth(width));
+      }
+      if (!actions.isReadOnly && normalizeComputedSyncMode(entry?.config.computedSyncMode) === "manual" && actions.syncComputedFields) {
+        this.renderToolbarMenuRow(panel, t("viewConfig.saveComputedResults"), "refresh-cw", () => actions.syncComputedFields?.());
+      }
+      if (actions.refreshDatabase) {
+        const refreshLabel = actions.isRefreshingDatabase
+          ? t("toolbar.refreshingDatabase")
+          : t("toolbar.refreshDatabase");
+        this.renderToolbarMenuRow(panel, refreshLabel, "refresh-cw", () => actions.refreshDatabase?.());
+      }
+      if (actions.exportData || actions.copyViewCode || actions.exportCsvMarkdownZip) {
+        this.renderToolbarMenuRow(panel, t("toolbar.copyFormats"), "clipboard-copy", () => {
+          this.closeUtilitiesPopover();
+          this.renderExportPopover(button, actions);
+        });
+      }
+      if (actions.showDatabaseChrome && !actions.hideDatabaseActions && actions.openDatabaseFile) {
+        this.renderToolbarMenuRow(panel, t("toolbar.openDatabaseFile"), "file-output", () => actions.openDatabaseFile?.());
+      }
+      if (actions.toggleViewConfig) {
+        this.renderToolbarMenuRow(panel, t("toolbar.viewSettings"), "settings-2", () => {
+          this.closeUtilitiesPopover();
+          actions.toggleViewConfig?.(button);
+          button.setAttribute("aria-expanded", "true");
+        });
+      }
+      this.setPopoverTriggerState(button, true);
+      positionToolbarPopover(panel, button);
+      this.installMenuKeyboardNavigation(panel);
+      this.removeUtilitiesPopoverListener = installPopoverAutoClose({ panel, anchorEl: button, close: () => this.closeUtilitiesPopover() });
+    };
+  }
+
+  private renderToolbarMenuRow(panel: HTMLElement, label: string, icon: string, onClick: () => void, extraClass = ""): HTMLButtonElement {
+    const row = panel.createEl("button", {
+      cls: `db-toolbar-menu-row db-menu-item ${extraClass}`.trim(),
+      attr: { type: "button", role: "menuitem", "aria-label": label },
+    });
+    setIcon(row.createSpan({ cls: "db-toolbar-menu-icon db-menu-item-icon" }), icon);
+    row.createSpan({ cls: "db-toolbar-menu-label db-menu-item-label", text: label });
+    row.onclick = () => {
+      this.closeUtilitiesPopover();
+      onClick();
+    };
+    return row;
+  }
+
+  private renderComputedSyncButton(toolbar: HTMLElement, actions: ToolbarActions): void {
+    if (!actions.syncComputedFields) return;
+    const btn = this.createIconButton(toolbar, "", t("viewConfig.saveComputedResults"));
+    appendSvg(btn, ToolbarRenderer.ICONS.refresh_fx);
+    btn.onclick = () => actions.syncComputedFields?.();
+  }
+
+  private renderDatabaseRefreshButton(toolbar: HTMLElement, actions: ToolbarActions): void {
+    if (!actions.refreshDatabase) return;
+    const btn = this.createIconButton(toolbar, "", t("toolbar.refreshDatabase"), "db-database-refresh-button");
+    setIcon(btn, "refresh-cw");
+    btn.onclick = () => actions.refreshDatabase?.();
+    this.updateDatabaseRefreshButton(btn, actions);
+  }
+
+  updateDatabaseRefreshButton(button: HTMLElement, state: Pick<ToolbarActions,
+    "pendingRefreshCount" | "pendingRefreshUnknown" | "isRefreshingDatabase">): void {
+    const pending = state.pendingRefreshCount || 0;
+    const unknown = state.pendingRefreshUnknown === true;
+    const refreshing = state.isRefreshingDatabase === true;
+    button.toggleClass("is-refreshing", refreshing);
+    button.querySelector(".db-database-refresh-badge")?.remove();
+    if (pending > 0 || unknown) {
+      button.createSpan({
+        cls: "db-database-refresh-badge",
+        text: pending > 99 ? "99+" : pending > 0 ? String(pending) : "!",
+      });
+    }
+    const label = refreshing
+      ? t("toolbar.refreshingDatabase")
+      : pending > 0
+        ? t("toolbar.pendingRefreshFiles", { count: pending })
+        : unknown
+          ? t("toolbar.pendingRefreshUnknown")
+          : t("toolbar.refreshDatabase");
+    button.setAttribute("aria-label", label);
+    button.setAttribute("title", label);
+  }
+
+  private renderCalendarTimelineOptionsButton(toolbar: HTMLElement, config: ViewConfig, database: DatabaseConfig, actions: ToolbarActions): void {
+    const label = config.viewType === "timeline" ? t("timeline.options") : t("calendar.options");
+    const btn = this.createIconButton(toolbar, "", label);
+    btn.addClass("db-calendar-timeline-options-toolbar-btn");
+    this.appendViewSettingsIcon(btn, this.getViewTypeIcon(config.viewType || "calendar"));
+    btn.onclick = (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      actions.closeToolbarPopovers?.();
+      this.closeDatabasePopover();
+      this.closeGroupPopover();
+      this.closeViewTabPopover();
+      this.closeExportPopover();
+      this.closeTitleActionsPopover();
+      if (config.viewType === "calendar" && actions.toggleCalendarOptions) {
+        const container = toolbar.closest(".note-database-container") as HTMLElement || toolbar;
+        actions.toggleCalendarOptions(container, btn, config);
+      } else {
+        this.toggleCalendarTimelineOptions(toolbar, btn, config, database, actions);
+      }
+    };
+  }
+
+  private toggleCalendarTimelineOptions(toolbar: HTMLElement, anchor: HTMLElement, config: ViewConfig, database: DatabaseConfig, actions: ToolbarActions): void {
+    this.calendarTimelineToolbarRenderer.togglePopover(toolbar.closest(".note-database-container") as HTMLElement || toolbar, anchor, config, {
+      onChange: (label) => actions.updateViewConfig?.(label),
+      database,
+      createRecordIconField: actions.createRecordIconField ? () => actions.createRecordIconField?.() : undefined,
+      updateTimelineScale: (scale, label) => actions.updateTimelineScale?.(scale, label),
+      getInvalidEventCount: actions.getTimelineInvalidEventCount
+        ? () => actions.getTimelineInvalidEventCount?.() ?? 0
+        : undefined,
+      openInvalidEvents: () => actions.openTimelineInvalidEvents?.(),
+    });
+  }
+
+  // ── Database selector popover ──
+
+  private renderDatabasePopover(
+    anchorEl: HTMLElement,
+    viewEntries: ToolbarViewEntry[],
+    currentDbIndex: number,
+    actions: ToolbarActions
+  ): void {
+    const root = anchorEl.closest(".note-database-container");
+    if (!root) return;
+    if (this.databasePopover?.isConnected) {
+      this.closeDatabasePopover();
+      return;
+    }
+
+    const entries = [...viewEntries];
+    let activeIndex = currentDbIndex;
+    const panel = root.createDiv({ cls: "db-database-popover", attr: { id: "db-database-selector", role: "menu", "aria-label": t("settings.databaseList.title") } });
+    this.databasePopover = panel;
+    this.populateDatabasePopover(panel, anchorEl, entries, activeIndex, actions, (nextEntries, nextActiveIndex) => {
+      entries.splice(0, entries.length, ...nextEntries);
+      activeIndex = nextActiveIndex;
+    });
+
+    positionToolbarPopover(panel, anchorEl);
+    this.installMenuKeyboardNavigation(panel);
+    const removeAutoClose = installPopoverAutoClose({ panel, anchorEl, close: () => this.closeDatabasePopover() });
+    this.removeDatabasePopoverListener = removeAutoClose;
+  }
+
+  private populateDatabasePopover(
+    panel: HTMLElement,
+    anchorEl: HTMLElement,
+    viewEntries: ToolbarViewEntry[],
+    currentDbIndex: number,
+    actions: ToolbarActions,
+    updateState: (entries: ToolbarViewEntry[], currentIndex: number) => void,
+    focusIndex?: number,
+  ): void {
+    panel.empty();
+    const header = panel.createDiv({ cls: "db-panel-header" });
+    header.createDiv({ cls: "db-panel-title", text: t("settings.databaseList.title") });
+
+    viewEntries.forEach((entry, i) => {
+      this.renderDatabasePopoverRow(panel, anchorEl, viewEntries, entry, i, currentDbIndex, actions, true, updateState);
+    });
+    const firstItem = panel.querySelector<HTMLElement>("button[role=menuitem]:not(:disabled)");
+    panel.querySelectorAll<HTMLElement>("button[role=menuitem]").forEach((item) => item.setAttribute("tabindex", item === firstItem ? "0" : "-1"));
+    if (focusIndex != null) {
+      panel.querySelectorAll<HTMLElement>(".db-database-popover-row")[focusIndex]
+        ?.querySelector<HTMLElement>(".db-database-popover-select")
+        ?.focus();
+    }
+
+    positionToolbarPopover(panel, anchorEl);
+  }
+
+  private renderDatabasePopoverRow(
+    panel: HTMLElement,
+    anchorEl: HTMLElement,
+    viewEntries: ToolbarViewEntry[],
+    entry: ToolbarViewEntry,
+    index: number,
+    currentDbIndex: number,
+    actions: ToolbarActions,
+    canMove: boolean,
+    updateState: (entries: ToolbarViewEntry[], currentIndex: number) => void
+  ): void {
+    const row = panel.createDiv({
+      cls: `db-database-popover-row db-menu-item${index === currentDbIndex ? " is-active" : ""}${canMove && actions.moveDatabase ? " is-draggable" : ""}`,
+      attr: { role: "presentation" },
+    });
+    row.createSpan({ cls: "db-database-popover-drag db-menu-item-icon", text: canMove && actions.moveDatabase ? "⋮⋮" : "" });
+    const moveControls = row.createSpan({ cls: "db-mobile-reorder-controls" });
+    if (canMove && actions.moveDatabase) {
+      const sameSourceIndexes = viewEntries
+        .map((candidate, candidateIndex) => ({ candidate, candidateIndex }))
+        .map(({ candidateIndex }) => candidateIndex);
+      const sourcePosition = sameSourceIndexes.indexOf(index);
+      const upBtn = moveControls.createEl("button", {
+        attr: { type: "button", role: "menuitem", "aria-label": t("menu.moveUp") },
+      });
+      setIcon(upBtn, "arrow-up");
+      setTooltip(upBtn, t("menu.moveUp"), { delay: 100 });
+      upBtn.disabled = sourcePosition <= 0;
+      upBtn.onclick = (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        this.moveDatabasePopoverEntry(panel, anchorEl, viewEntries, currentDbIndex, actions, updateState, index, sameSourceIndexes[sourcePosition - 1]);
+      };
+      const downBtn = moveControls.createEl("button", {
+        attr: { type: "button", role: "menuitem", "aria-label": t("menu.moveDown") },
+      });
+      setIcon(downBtn, "arrow-down");
+      setTooltip(downBtn, t("menu.moveDown"), { delay: 100 });
+      downBtn.disabled = sourcePosition < 0 || sourcePosition >= sameSourceIndexes.length - 1;
+      downBtn.onclick = (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        this.moveDatabasePopoverEntry(panel, anchorEl, viewEntries, currentDbIndex, actions, updateState, index, sameSourceIndexes[sourcePosition + 1]);
+      };
+    }
+    const label = entry.config.name || t("common.untitled");
+    const selectBtn = row.createEl("button", {
+      cls: "db-database-popover-select",
+      attr: { type: "button", role: "menuitem", "aria-label": label, "aria-current": index === currentDbIndex ? "true" : "false" },
+    });
+    if (actions.showDatabaseIcon !== false) {
+      renderRecordIcon(selectBtn, entry.config.icon, { compact: true, defaultIcon: "database" })
+        .addClass("db-database-popover-icon");
+    }
+    selectBtn.createSpan({ cls: "db-database-popover-label db-menu-item-label", text: label });
+    if (index === currentDbIndex) setIcon(selectBtn.createSpan({ cls: "db-database-popover-check" }), "check");
+    selectBtn.onclick = () => {
+      actions.selectDatabase(index);
+      this.closeDatabasePopover();
+    };
+    if (!canMove || !actions.moveDatabase) return;
+    row.draggable = true;
+    row.ondragstart = (event) => {
+      this.draggedDatabaseIndex = index;
+      event.dataTransfer?.setData("text/plain", String(index));
+      if (event.dataTransfer) event.dataTransfer.effectAllowed = "move";
+      row.addClass("is-dragging");
+    };
+    row.ondragover = (event) => {
+      if (this.draggedDatabaseIndex == null || this.draggedDatabaseIndex === index) return;
+      event.preventDefault();
+      row.addClass("is-drop-target");
+    };
+    row.ondragleave = () => row.removeClass("is-drop-target");
+    row.ondrop = (event) => {
+      if (this.draggedDatabaseIndex == null || this.draggedDatabaseIndex === index) return;
+      event.preventDefault();
+      const from = this.draggedDatabaseIndex;
+      const fromEntry = viewEntries[from];
+      if (!fromEntry) {
+        this.clearDatabaseDragState(panel);
+        return;
+      }
+      this.clearDatabaseDragState(panel);
+      const activeEntry = viewEntries[currentDbIndex];
+      const nextEntries = [...viewEntries];
+      const [moved] = nextEntries.splice(from, 1);
+      nextEntries.splice(index, 0, moved);
+      const nextActiveIndex = Math.max(0, nextEntries.indexOf(activeEntry));
+      actions.moveDatabase?.(from, index);
+      updateState(nextEntries, nextActiveIndex);
+      this.populateDatabasePopover(panel, anchorEl, nextEntries, nextActiveIndex, actions, updateState);
+    };
+    row.ondragend = () => this.clearDatabaseDragState(panel);
+  }
+
+  private moveDatabasePopoverEntry(
+    panel: HTMLElement,
+    anchorEl: HTMLElement,
+    viewEntries: ToolbarViewEntry[],
+    currentDbIndex: number,
+    actions: ToolbarActions,
+    updateState: (entries: ToolbarViewEntry[], currentIndex: number) => void,
+    from: number,
+    to: number | undefined
+  ): void {
+    if (to == null || from === to || from < 0 || to < 0) return;
+    const fromEntry = viewEntries[from];
+    const toEntry = viewEntries[to];
+    if (!fromEntry || !toEntry) return;
+    const activeEntry = viewEntries[currentDbIndex];
+    const nextEntries = [...viewEntries];
+    const [moved] = nextEntries.splice(from, 1);
+    nextEntries.splice(to, 0, moved);
+    const nextActiveIndex = Math.max(0, nextEntries.indexOf(activeEntry));
+    actions.moveDatabase?.(from, to);
+    updateState(nextEntries, nextActiveIndex);
+    this.populateDatabasePopover(panel, anchorEl, nextEntries, nextActiveIndex, actions, updateState, to);
+  }
+
+  private clearDatabaseDragState(panel: HTMLElement): void {
+    this.draggedDatabaseIndex = null;
+    panel.querySelectorAll(".db-database-popover-row.is-drop-target, .db-database-popover-row.is-dragging")
+      .forEach((el) => el.removeClass("is-drop-target", "is-dragging"));
+  }
+
+  private showTitleActionsMenu(
+    event: MouseEvent,
+    anchorEl: HTMLElement,
+    actions: ToolbarActions,
+    currentName: string,
+    headingEl: HTMLElement
+  ): void {
+    event.preventDefault();
+    event.stopPropagation();
+    const root = anchorEl.closest(".note-database-container");
+    if (!root) return;
+    if (this.titleActionsPopover?.isConnected) {
+      this.closeTitleActionsPopover();
+      return;
+    }
+
+    this.closeTitleActionsPopover();
+    this.closeDatabasePopover();
+    this.closeGroupPopover();
+    this.closeViewTabPopover();
+    this.closeExportPopover();
+    actions.closeToolbarPopovers?.();
+
+    const panel = root.createDiv({ cls: "db-view-tab-popover db-title-actions-popover", attr: { id: "db-title-actions", role: "menu", "aria-label": t("common.database") } });
+    this.titleActionsPopover = panel;
+    const header = panel.createDiv({ cls: "db-panel-header" });
+    header.createDiv({ cls: "db-panel-title", text: t("common.database") });
+
+    if (actions.renameDatabase) {
+      this.renderTitleActionsPopoverRow(panel, t("toolbar.renameDatabase"), "pencil", (rowEvent) => {
+        this.startDatabaseTextEdit(rowEvent, headingEl, currentName, false, (name) => actions.renameDatabase?.(name));
+      });
+    }
+    if (actions.copyCurrentDatabase) {
+      this.renderTitleActionsPopoverRow(panel, t("toolbar.copyCurrentDatabase"), "copy", () => actions.copyCurrentDatabase?.());
+    }
+    this.renderTitleActionsPopoverRow(panel, t("toolbar.addDatabase"), "plus", () => actions.addDatabase());
+    if (actions.toggleDatabaseIcon) {
+      this.renderTitleActionsPopoverRow(panel, t("toolbar.toggleDatabaseIcon"), actions.showDatabaseIcon === false ? "circle-off" : "circle-check", () => actions.toggleDatabaseIcon?.());
+    }
+    this.renderTitleActionsPopoverRow(panel, t("toolbar.deleteDatabase"), "trash", () => actions.deleteDatabase(), "is-danger");
+
+    positionToolbarPopover(panel, anchorEl);
+    this.setPopoverTriggerState(anchorEl, true);
+    const removeAutoClose = installPopoverAutoClose({ panel, anchorEl, close: () => this.closeTitleActionsPopover() });
+    this.removeTitleActionsPopoverListener = removeAutoClose;
+    this.installMenuKeyboardNavigation(panel);
+  }
+
+  private renderTitleActionsPopoverRow(
+    panel: HTMLElement,
+    label: string,
+    icon: string,
+    onClick: (event: MouseEvent) => void,
+    extraClass = ""
+  ): void {
+    const row = panel.createEl("button", {
+      cls: `db-view-tab-popover-row db-menu-item ${extraClass}`.trim(),
+      attr: { type: "button", role: "menuitem", "aria-label": label },
+    });
+    setIcon(row.createSpan({ cls: "db-view-tab-popover-marker db-menu-item-icon" }), icon);
+    row.createSpan({ cls: "db-view-tab-popover-label db-menu-item-label", text: label });
+    row.onclick = (event) => {
+      this.closeTitleActionsPopover();
+      onClick(event);
+    };
+  }
+
+  // ── Row 2: View tabs ──
+
+  private renderViewTabs(
+    left: HTMLElement,
+    db: DatabaseConfig,
+    currentViewIndex: number,
+    actions: ToolbarActions
+  ): void {
+    const tabs = left.createDiv({
+      cls: "db-view-tabs",
+      attr: { role: "tablist", "aria-label": t("toolbar.viewSwitcher") },
+    });
+    const readOnly = actions.isReadOnlyViews;
+    const canReorder = Boolean(!readOnly && actions.moveView && db.views.length > 1 && !isTouchDevice(this.toolbarRoot));
+    const tabEls: { el: HTMLElement; index: number }[] = [];
+
+    db.views.forEach((view, i) => {
+      const viewId = this.getViewIdentity(view, i);
+      const tabId = this.getViewTabId(db, view, i);
+      const tab = tabs.createEl("button", {
+        cls: `db-view-tab${i === currentViewIndex ? " is-active" : ""}`,
+        attr: {
+          type: "button",
+          id: tabId,
+          role: "tab",
+          "aria-selected": i === currentViewIndex ? "true" : "false",
+          "aria-controls": `${tabId}-panel`,
+          "data-view-id": viewId,
+          tabindex: i === currentViewIndex ? "0" : "-1",
+        },
+      });
+      this.renderViewIcon(tab.createSpan({ cls: "db-view-tab-icon" }), view.icon, this.getViewTypeIcon(view.viewType || "table"));
+      tab.createSpan({ cls: "db-view-tab-name", text: view.name || t("common.untitled") });
+      tab.onclick = () => {
+        if (Date.now() < this.suppressViewTabClickUntil) return;
+        this.setRovingTab(tabEls, tab);
+        actions.selectViewInView(0, i, viewId);
+      };
+      if (canReorder) this.setupViewTabDrag(tab, i, actions);
+      if (!readOnly) {
+        tab.oncontextmenu = (e) => this.showViewTabMenu(e, i, db.views.length, actions, tab, view.viewType || "table");
+        tab.ondblclick = () => this.startRenameView(tab, i, actions);
+      }
+      tabEls.push({ el: tab, index: i });
+    });
+
+    // "+" add view button (only in non-readonly mode)
+    if (!readOnly) {
+      const addBtn = tabs.createEl("button", {
+        cls: "db-view-tab db-view-tab-add",
+        attr: {
+          type: "button",
+          "aria-label": db.views.length >= 15 ? t("toolbar.maxViews") : t("toolbar.addView"),
+          "aria-haspopup": "dialog",
+          "aria-expanded": "false",
+          "aria-controls": "db-add-view-popover",
+        },
+      });
+      if (db.views.length >= 15) addBtn.disabled = true;
+      setIcon(addBtn, "plus");
+      setTooltip(addBtn, db.views.length >= 15 ? t("toolbar.maxViews") : t("toolbar.addView"), { delay: 100 });
+      if (db.views.length < 15) addBtn.onclick = (event) => this.showAddViewMenu(event, actions, addBtn, db, currentViewIndex);
+    }
+
+    // Set up resize observer on the toolbar for dynamic overflow detection
+    const toolbar = tabs.closest(".db-toolbar");
+    this.resizeObserver?.disconnect();
+    if (toolbar) {
+      let collapsing = false;
+      const checkOverflow = () => {
+        if (collapsing) return;
+        collapsing = true;
+        for (const t of tabEls) t.el.setCssProps({ display: "" });
+        const oldBtn = tabs.querySelector(".db-view-tab-more");
+        if (oldBtn) oldBtn.remove();
+        this.collapseOverflowTabs(tabs, tabEls, db, currentViewIndex, actions);
+        collapsing = false;
+      };
+      if (typeof ResizeObserver !== "undefined") {
+        this.resizeObserver = new ResizeObserver(() => checkOverflow());
+        this.resizeObserver.observe(toolbar);
+        // Initial run after layout
+        window.requestAnimationFrame(() => window.requestAnimationFrame(() => checkOverflow()));
+      } else {
+        window.requestAnimationFrame(checkOverflow);
+      }
+    }
+    tabs.addEventListener("keydown", (event) => this.handleTabKeydown(event, tabs, tabEls));
+  }
+
+  private getViewIdentity(view: ViewConfig, index: number): string {
+    return view.id || `view-${index}`;
+  }
+
+  private getViewTabId(db: DatabaseConfig, view: ViewConfig, index: number): string {
+    const raw = `${db.id}-${this.getViewIdentity(view, index)}`;
+    return `db-view-tab-${raw.replace(/[^a-zA-Z0-9_-]/g, "-")}`;
+  }
+
+  private renderViewIcon(parent: HTMLElement, token: string | undefined, fallback: string): void {
+    if (token && !token.startsWith("lucide:") && token.length <= 8) {
+      parent.createSpan({ cls: "db-view-tab-custom-icon", text: token });
+      return;
+    }
+    const lucideMatch = token?.match(/^lucide:([^@]+)(?:@(.+))?$/);
+    if (lucideMatch?.[1]) {
+      const color = lucideMatch[2]?.trim();
+      if (color) parent.style.color = color;
+      setIcon(parent, lucideMatch[1]);
+      return;
+    }
+    setIcon(parent, fallback);
+  }
+
+  private setRovingTab(tabEls: { el: HTMLElement; index: number }[], active: HTMLElement): void {
+    for (const entry of tabEls) entry.el.setAttribute("tabindex", entry.el === active ? "0" : "-1");
+  }
+
+  private handleTabKeydown(event: KeyboardEvent, tabs: HTMLElement, tabEls: { el: HTMLElement; index: number }[]): void {
+    if (isImeComposing(event) || !tabEls.length) return;
+    const current = event.target instanceof HTMLElement ? tabEls.findIndex((entry) => entry.el === event.target) : -1;
+    if (current < 0) return;
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      tabEls[current].el.click();
+      return;
+    }
+    let next = current;
+    if (event.key === "ArrowRight") next = (current + 1) % tabEls.length;
+    else if (event.key === "ArrowLeft") next = (current - 1 + tabEls.length) % tabEls.length;
+    else if (event.key === "Home") next = 0;
+    else if (event.key === "End") next = tabEls.length - 1;
+    else return;
+    event.preventDefault();
+    const target = tabEls[next].el;
+    this.setRovingTab(tabEls, target);
+    target.focus();
+    void tabs;
+  }
+
+  private setupViewTabDrag(tab: HTMLElement, index: number, actions: ToolbarActions): void {
+    tab.draggable = true;
+    tab.ondragstart = (event) => {
+      this.draggedViewIndex = index;
+      tab.addClass("is-dragging");
+      event.dataTransfer?.setData("text/plain", String(index));
+      if (event.dataTransfer) event.dataTransfer.effectAllowed = "move";
+    };
+    tab.ondragover = (event) => {
+      if (this.draggedViewIndex == null || this.draggedViewIndex === index) return;
+      event.preventDefault();
+      this.scrollViewTabsNearEdge(tab.parentElement, event.clientX);
+      tab.addClass("is-drop-target");
+    };
+    tab.ondragleave = () => tab.removeClass("is-drop-target");
+    tab.ondrop = (event) => {
+      if (this.draggedViewIndex == null || this.draggedViewIndex === index) return;
+      event.preventDefault();
+      const from = this.draggedViewIndex;
+      this.clearViewTabDragState(tab);
+      this.suppressViewTabClickUntil = Date.now() + 250;
+      actions.moveView?.(from, index);
+    };
+    tab.ondragend = () => {
+      this.suppressViewTabClickUntil = Date.now() + 250;
+      this.clearViewTabDragState(tab);
+    };
+  }
+
+  private clearViewTabDragState(tab: HTMLElement): void {
+    this.draggedViewIndex = null;
+    tab.removeClass("is-dragging", "is-drop-target");
+    tab.parentElement?.querySelectorAll(".db-view-tab.is-drop-target, .db-view-tab.is-dragging")
+      .forEach((el) => el.removeClass("is-drop-target", "is-dragging"));
+  }
+
+  private scrollViewTabsNearEdge(tabs: HTMLElement | null, clientX: number): void {
+    if (!tabs) return;
+    const rect = tabs.getBoundingClientRect();
+    const edge = 32;
+    if (clientX < rect.left + edge) tabs.scrollLeft = Math.max(0, tabs.scrollLeft - 24);
+    else if (clientX > rect.right - edge) tabs.scrollLeft = Math.min(tabs.scrollWidth, tabs.scrollLeft + 24);
+  }
+
+  private collapseOverflowTabs(
+    tabs: HTMLElement,
+    tabEls: { el: HTMLElement; index: number }[],
+    db: DatabaseConfig,
+    currentViewIndex: number,
+    actions: ToolbarActions
+  ): void {
+    const toolbar = tabs.closest(".db-toolbar");
+    const right = toolbar?.querySelector(".db-toolbar-right") as HTMLElement | null;
+    const phoneSearch = toolbar?.querySelector(".db-toolbar-left .db-search-control") as HTMLElement | null;
+    const boundary = isTouchDevice(this.toolbarRoot)
+      ? (phoneSearch ? phoneSearch.getBoundingClientRect().left - 4 : toolbar?.getBoundingClientRect().right || tabs.getBoundingClientRect().right)
+      : right ? right.getBoundingClientRect().left - 6 : tabs.getBoundingClientRect().right;
+    const containerWidth = boundary - tabs.getBoundingClientRect().left;
+    const gap = parseFloat(getComputedStyle(tabs).columnGap || getComputedStyle(tabs).gap || "3") || 3;
+
+    const addBtn: HTMLElement | null = tabs.querySelector(".db-view-tab-add");
+    const addBtnWidth = addBtn ? addBtn.offsetWidth + gap : 0;
+    const moreBtnWidth = 24 + gap;
+
+    // Calculate total width of all tabs
+    let totalWidth = addBtnWidth;
+    for (const t of tabEls) totalWidth += t.el.offsetWidth + gap;
+
+    if (totalWidth <= containerWidth) return; // No overflow
+
+    // Always keep active tab visible; fill remaining space from left to right
+    const availableSpace = containerWidth - addBtnWidth - moreBtnWidth;
+    const visibleSet = new Set<number>();
+    visibleSet.add(currentViewIndex);
+
+    // Measure active tab
+    const activeEl = tabEls.find(t => t.index === currentViewIndex);
+    let usedWidth = activeEl ? activeEl.el.offsetWidth + gap : 0;
+
+    // Add remaining tabs from left to right until out of space
+    for (const t of tabEls) {
+      if (visibleSet.has(t.index)) continue;
+      if (usedWidth + t.el.offsetWidth + gap > availableSpace) break;
+      visibleSet.add(t.index);
+      usedWidth += t.el.offsetWidth + gap;
+    }
+
+    // Hide non-visible tabs
+    const hiddenTabs = tabEls.filter(t => !visibleSet.has(t.index));
+    if (hiddenTabs.length === 0) return;
+
+    for (const t of hiddenTabs) t.el.setCssProps({ display: "none" });
+
+    // Create "⋯" overflow dropdown
+    const moreBtn = tabs.createEl("button", {
+      cls: "db-view-tab db-view-tab-more",
+      attr: {
+        type: "button",
+        "aria-label": t("toolbar.moreViewsCount", { count: hiddenTabs.length }),
+        "aria-haspopup": "dialog",
+        "aria-expanded": "false",
+        "aria-controls": "db-all-views-popover",
+      },
+    });
+    moreBtn.createSpan({ text: "⋯" });
+    setTooltip(moreBtn, t("toolbar.moreViewsCount", { count: hiddenTabs.length }), { delay: 100 });
+    moreBtn.onclick = () => this.showAllViewsHub(moreBtn, db, currentViewIndex, actions);
+  }
+
+  private showAllViewsHub(anchor: HTMLElement, db: DatabaseConfig, currentViewIndex: number, actions: ToolbarActions): void {
+    const root = anchor.closest(".note-database-container");
+    if (!root) return;
+    if (this.viewTabPopover?.isConnected && this.viewTabPopover.hasClass("db-all-views-popover")) {
+      this.closeViewTabPopover();
+      return;
+    }
+    this.closeViewTabPopover();
+    const panel = root.createDiv({ cls: "db-view-tab-popover db-all-views-popover", attr: { id: "db-all-views-popover", role: "dialog", "aria-label": t("toolbar.allViews") } });
+    this.viewTabPopover = panel;
+    const header = panel.createDiv({ cls: "db-panel-header db-all-views-header" });
+    header.createDiv({ cls: "db-panel-title", text: t("toolbar.allViews") });
+    const search = header.createEl("input", {
+      cls: "db-all-views-search",
+      attr: { type: "search", placeholder: t("toolbar.searchViews"), "aria-label": t("toolbar.searchViews") },
+    });
+    const list = panel.createDiv({ cls: "db-all-views-list", attr: { role: "listbox", "aria-label": t("toolbar.allViews") } });
+    const renderList = () => {
+      list.empty();
+      const query = search.value.trim().toLocaleLowerCase();
+      const visible = db.views
+        .map((view, index) => ({ view, index }))
+        .filter(({ view }) => `${view.name || t("common.untitled")} ${view.viewType || "table"}`.toLocaleLowerCase().includes(query));
+      if (!visible.length) {
+        list.createDiv({ cls: "db-all-views-empty", text: t("common.noResults") });
+        return;
+      }
+      for (const { view, index } of visible) {
+        const viewId = this.getViewIdentity(view, index);
+        const row = list.createDiv({ cls: `db-all-view-row${index === currentViewIndex ? " is-active" : ""}` });
+        const select = row.createEl("button", {
+          cls: "db-all-view-select",
+          attr: { type: "button", role: "option", "aria-selected": index === currentViewIndex ? "true" : "false", "aria-label": view.name || t("common.untitled") },
+        });
+        this.renderViewIcon(select.createSpan({ cls: "db-all-view-icon" }), view.icon, this.getViewTypeIcon(view.viewType || "table"));
+        const label = select.createSpan({ cls: "db-all-view-label", text: view.name || t("common.untitled") });
+        select.createSpan({ cls: "db-all-view-layout", text: view.viewType || "table" });
+        if (index === currentViewIndex) setIcon(select.createSpan({ cls: "db-all-view-active" }), "check");
+        select.onclick = () => actions.selectViewInView(0, index, viewId);
+
+        if (!actions.isReadOnlyViews) {
+          const controls = row.createDiv({ cls: "db-all-view-actions" });
+          this.renderInlineViewAction(controls, t("toolbar.rename"), "pencil", () => this.renameAllView(row, label, index, actions));
+          if (actions.copyCurrentView) this.renderInlineViewAction(controls, t("toolbar.copyCurrentView"), "copy", () => actions.copyCurrentView?.(index));
+          this.renderInlineViewAction(controls, t("toolbar.changeLayout"), "replace", () => {
+            this.closeViewTabPopover();
+            this.showViewTypeChangeMenu(anchor, index, view.viewType || "table", actions);
+          });
+          if (db.views.length > 1) this.renderInlineViewAction(controls, t("toolbar.deleteView"), "trash", () => actions.deleteView(index), "is-danger");
+          if (actions.editViewIcon) this.renderInlineViewAction(controls, t("toolbar.setViewIcon"), "smile", () => actions.editViewIcon?.(index, controls));
+        }
+      }
+      const firstOption = list.querySelector<HTMLElement>("button[role=option]");
+      list.querySelectorAll<HTMLElement>("button[role=option]").forEach((option) => option.setAttribute("tabindex", option === firstOption ? "0" : "-1"));
+    };
+    search.oninput = renderList;
+    renderList();
+    positionToolbarPopover(panel, anchor);
+    this.setPopoverTriggerState(anchor, true);
+    this.installMenuKeyboardNavigation(panel);
+    this.removeViewTabPopoverListener = installPopoverAutoClose({ panel, anchorEl: anchor, close: () => this.closeViewTabPopover() });
+  }
+
+  private renderInlineViewAction(parent: HTMLElement, label: string, icon: string, onClick: () => void, extraClass = ""): void {
+    const button = parent.createEl("button", {
+      cls: `db-all-view-action ${extraClass}`.trim(),
+      attr: { type: "button", "aria-label": label, title: label },
+    });
+    setIcon(button, icon);
+    button.onclick = (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      onClick();
+    };
+  }
+
+  private renameAllView(row: HTMLElement, label: HTMLElement, viewIndex: number, actions: ToolbarActions): void {
+    const input = row.ownerDocument.createElement("input");
+    input.type = "text";
+    input.className = "db-all-view-rename";
+    input.value = label.textContent || "";
+    label.replaceWith(input);
+    input.focus();
+    input.select();
+    let done = false;
+    const finish = (commit: boolean) => {
+      if (done) return;
+      done = true;
+      if (commit) actions.renameView(viewIndex, input.value.trim() || label.textContent || "");
+      else actions.renameView(viewIndex, label.textContent || "");
+      this.closeViewTabPopover();
+    };
+    input.onblur = () => finish(true);
+    input.onkeydown = (event) => {
+      if (event.key === "Enter") finish(true);
+      if (event.key === "Escape") finish(false);
+    };
+  }
+
+  private showViewTabMenu(
+    event: MouseEvent,
+    viewIndex: number,
+    totalViews: number,
+    actions: ToolbarActions,
+    tab: HTMLElement,
+    viewType: DatabaseViewType
+  ): void {
+    event.preventDefault();
+    event.stopPropagation();
+    const root = tab.closest(".note-database-container");
+    if (!root) return;
+    this.closeViewTabPopover();
+    this.closeDatabasePopover();
+    this.closeGroupPopover();
+    this.closeExportPopover();
+    this.closeTitleActionsPopover();
+    actions.closeToolbarPopovers?.();
+
+    const panel = root.createDiv({ cls: "db-view-tab-popover", attr: { role: "menu", "aria-label": t("viewConfig.viewSection") } });
+    this.viewTabPopover = panel;
+    const header = panel.createDiv({ cls: "db-panel-header" });
+    header.createDiv({ cls: "db-panel-title", text: t("viewConfig.viewSection") });
+
+    this.renderViewTabPopoverRow(panel, t("toolbar.rename"), "pencil", () => {
+      this.startRenameView(tab, viewIndex, actions);
+    });
+    if (actions.copyCurrentView) {
+      this.renderViewTabPopoverRow(panel, t("toolbar.copyCurrentView"), "copy", () => actions.copyCurrentView?.(viewIndex));
+    }
+    if (actions.copyViewCode) {
+      this.renderViewTabPopoverRow(panel, t("toolbar.copyViewCode"), "code-xml", () => actions.copyViewCode?.(viewIndex));
+    }
+    this.renderViewTypeChangeRow(panel, viewIndex, viewType, actions);
+    if (isTouchDevice(this.toolbarRoot) && actions.moveView && totalViews > 1) {
+      if (viewIndex > 0) {
+        this.renderViewTabPopoverRow(panel, t("toolbar.moveViewFirst"), "chevrons-left", () => actions.moveView?.(viewIndex, 0));
+        this.renderViewTabPopoverRow(panel, t("menu.moveUp"), "arrow-left", () => actions.moveView?.(viewIndex, viewIndex - 1));
+      }
+      if (viewIndex < totalViews - 1) {
+        this.renderViewTabPopoverRow(panel, t("menu.moveDown"), "arrow-right", () => actions.moveView?.(viewIndex, viewIndex + 1));
+        this.renderViewTabPopoverRow(panel, t("toolbar.moveViewLast"), "chevrons-right", () => actions.moveView?.(viewIndex, totalViews - 1));
+      }
+    }
+    if (totalViews > 1) {
+      this.renderViewTabPopoverRow(panel, t("toolbar.deleteView"), "trash", () => {
+        actions.deleteView(viewIndex);
+      }, "is-danger");
+    }
+
+    positionToolbarPopover(panel, tab);
+    this.setPopoverTriggerState(tab, true);
+    this.installMenuKeyboardNavigation(panel);
+    const removeAutoClose = installPopoverAutoClose({ panel, anchorEl: tab, close: () => this.closeViewTabPopover() });
+    this.removeViewTabPopoverListener = removeAutoClose;
+  }
+
+  private renderViewTypeChangeRow(panel: HTMLElement, viewIndex: number, viewType: DatabaseViewType, actions: ToolbarActions): void {
+    const row = panel.createEl("button", {
+      cls: "db-view-tab-popover-row db-menu-item",
+      attr: { type: "button", role: "menuitem", "aria-label": t("toolbar.changeViewType") },
+    });
+    setIcon(row.createSpan({ cls: "db-view-tab-popover-marker db-menu-item-icon" }), "replace");
+    row.createSpan({ cls: "db-view-tab-popover-label db-menu-item-label", text: t("toolbar.changeViewType") });
+    setIcon(row.createSpan({ cls: "db-view-tab-popover-chevron" }), "chevron-right");
+    row.onclick = (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      this.showViewTypeChangeMenu(row, viewIndex, viewType, actions);
+    };
+  }
+
+  private showViewTypeChangeMenu(anchor: HTMLElement, viewIndex: number, viewType: DatabaseViewType, actions: ToolbarActions): void {
+    openDropdownMenu({
+      anchor,
+      label: t("toolbar.changeViewType"),
+      value: viewType,
+      popoverClassName: "db-view-tabs-dropdown-popover",
+      options: this.getViewTypeOptions(),
+      onChange: (value) => {
+        this.closeViewTabPopover();
+        actions.setViewType(value as DatabaseViewType, viewIndex);
+      },
+    });
+  }
+
+  private getViewTypeOptions(): Array<{ value: DatabaseViewType; text: string; icon: string }> {
+    return [
+      { value: "table", text: t("common.tableView"), icon: this.getViewTypeIcon("table") },
+      { value: "board", text: t("common.boardView"), icon: this.getViewTypeIcon("board") },
+      { value: "gallery", text: t("common.galleryView"), icon: this.getViewTypeIcon("gallery") },
+      { value: "list", text: t("common.listView"), icon: this.getViewTypeIcon("list") },
+      { value: "chart", text: t("common.chartView"), icon: this.getViewTypeIcon("chart") },
+      { value: "calendar", text: t("common.calendarView"), icon: this.getViewTypeIcon("calendar") },
+      { value: "timeline", text: t("common.timelineView"), icon: this.getViewTypeIcon("timeline") },
+    ];
+  }
+
+  private renderViewTabPopoverRow(
+    panel: HTMLElement,
+    label: string,
+    icon: string,
+    onClick: () => void,
+    extraClass = ""
+  ): void {
+    const row = panel.createEl("button", {
+      cls: `db-view-tab-popover-row db-menu-item ${extraClass}`.trim(),
+      attr: { type: "button", role: "menuitem", "aria-label": label },
+    });
+    setIcon(row.createSpan({ cls: "db-view-tab-popover-marker db-menu-item-icon" }), icon);
+    row.createSpan({ cls: "db-view-tab-popover-label db-menu-item-label", text: label });
+    row.onclick = () => {
+      this.closeViewTabPopover();
+      onClick();
+    };
+  }
+
+  private showAddViewMenu(
+    event: MouseEvent,
+    actions: ToolbarActions,
+    anchorEl: HTMLElement,
+    db: DatabaseConfig,
+    currentViewIndex: number,
+  ): void {
+    event.preventDefault();
+    event.stopPropagation();
+    const root = anchorEl.closest(".note-database-container");
+    if (!root) return;
+    if (this.viewTabPopover?.isConnected && this.viewTabPopover.hasClass("db-add-view-popover")) {
+      this.closeViewTabPopover();
+      return;
+    }
+    this.closeViewTabPopover();
+    this.closeDatabasePopover();
+    this.closeGroupPopover();
+    this.closeExportPopover();
+    this.closeTitleActionsPopover();
+    actions.closeToolbarPopovers?.();
+
+    const panel = root.createDiv({ cls: "db-view-tab-popover db-add-view-popover", attr: { id: "db-add-view-popover", role: "dialog", "aria-label": t("toolbar.addView") } });
+    this.viewTabPopover = panel;
+    const header = panel.createDiv({ cls: "db-panel-header" });
+    header.createDiv({ cls: "db-panel-title", text: t("toolbar.addView") });
+
+    const form = panel.createDiv({ cls: "db-add-view-form" });
+    const nameInput = form.createEl("input", {
+      cls: "db-add-view-name",
+      attr: { type: "text", placeholder: t("toolbar.newViewName"), "aria-label": t("toolbar.newViewName") },
+    });
+    const keyField = form.createEl("select", {
+      cls: "db-add-view-key-field",
+      attr: { "aria-label": t("toolbar.viewKeyField") },
+    });
+    for (const column of db.schema.columns.filter((candidate) => candidate.key !== "file.name")) {
+      keyField.createEl("option", { value: column.key, text: column.label });
+    }
+    const duplicate = form.createEl("label", { cls: "db-add-view-duplicate" });
+    const duplicateInput = duplicate.createEl("input", { attr: { type: "checkbox" } });
+    duplicate.createSpan({ text: t("toolbar.duplicateCurrentView") });
+    const iconInput = form.createEl("input", {
+      cls: "db-add-view-icon",
+      attr: { type: "text", maxlength: "8", placeholder: t("toolbar.viewIcon"), "aria-label": t("toolbar.viewIcon") },
+    });
+    const cards = panel.createDiv({ cls: "db-add-view-cards" });
+    for (const { value, text, icon } of this.getViewTypeOptions()) {
+      // Deliberately not a db-menu-item: that class describes a single-line menu row (row
+      // min-height, row hover, row radius), which is the wrong contract for a tile stacking
+      // a preview over a caption and would collapse it again if the row rule ever changes.
+      // Keyboard navigation keys off role=menuitem, not the class, so it still works.
+      const card = cards.createEl("button", {
+        cls: "db-add-view-card",
+        attr: { type: "button", role: "menuitem", "aria-label": text },
+      });
+      const preview = card.createDiv({ cls: `db-add-view-preview is-${value}` });
+      setIcon(preview.createSpan({ cls: "db-add-view-preview-icon" }), icon);
+      preview.createSpan({ cls: "db-add-view-preview-lines" });
+      card.createSpan({ cls: "db-add-view-card-label", text });
+      card.onclick = () => {
+        actions.addView(value, {
+          name: nameInput.value.trim() || undefined,
+          icon: iconInput.value.trim() || undefined,
+          keyField: keyField.value || undefined,
+          duplicateCurrent: duplicateInput.checked,
+        });
+        this.closeViewTabPopover();
+      };
+    }
+    const current = db.views[currentViewIndex];
+    if (current) {
+      const duplicateCurrent = panel.createEl("button", {
+        cls: "db-add-view-duplicate-action db-menu-item",
+        attr: { type: "button", role: "menuitem", "aria-label": t("toolbar.duplicateCurrentView") },
+      });
+      setIcon(duplicateCurrent.createSpan({ cls: "db-menu-item-icon" }), "copy");
+      duplicateCurrent.createSpan({ cls: "db-menu-item-label", text: t("toolbar.duplicateCurrentView") });
+      duplicateCurrent.onclick = () => {
+        actions.addView(current.viewType || "table", { duplicateCurrent: true, name: nameInput.value.trim() || undefined });
+        this.closeViewTabPopover();
+      };
+    }
+    positionToolbarPopover(panel, anchorEl);
+    this.setPopoverTriggerState(anchorEl, true);
+    this.installMenuKeyboardNavigation(panel);
+    const removeAutoClose = installPopoverAutoClose({ panel, anchorEl, close: () => this.closeViewTabPopover() });
+    this.removeViewTabPopoverListener = removeAutoClose;
+  }
+
+  private getViewTypeIcon(viewType: DatabaseViewType): string {
+    if (viewType === "board") return "layout-grid";
+    if (viewType === "gallery") return "image";
+    if (viewType === "list") return "list";
+    if (viewType === "chart") return "bar-chart";
+    if (viewType === "calendar") return "calendar-days";
+    if (viewType === "timeline") return "chart-gantt";
+    return "table";
+  }
+
+  private startRenameView(tab: HTMLElement, viewIndex: number, actions: ToolbarActions): void {
+    const nameEl = tab.querySelector(".db-view-tab-name") as HTMLElement;
+    if (!nameEl) return;
+    const input = tab.ownerDocument.createElement("input");
+    input.type = "text";
+    input.value = nameEl.textContent || "";
+    input.className = "db-view-tab-rename";
+    const resize = () => {
+      input.style.width = `${Math.max(56, (input.value.length + 2) * 8)}px`;
+    };
+    resize();
+    input.oninput = resize;
+    nameEl.replaceWith(input);
+    input.focus();
+    input.select();
+    // Dedupe submit: Enter triggers finish(), and the toolbar rerender that
+    // follows may detach the focused input and fire blur -> finish() again.
+    // Whether blur actually fires depends on the DOM detach path; guard either way.
+    let done = false;
+    const finish = () => {
+      if (done) return;
+      done = true;
+      const newName = input.value.trim();
+      // Empty name = cancel: restore the original name (rerender replaces input),
+      // so the input never gets stuck after an empty Enter.
+      actions.renameView(viewIndex, newName || nameEl.textContent || "");
+    };
+    input.onblur = finish;
+    input.onkeydown = (e) => {
+      if (isImeComposing(e)) return;
+      if (e.key === "Enter") finish();
+      if (e.key === "Escape") {
+        done = true; // cancel: prevent a later blur from re-submitting
+        actions.renameView(viewIndex, nameEl.textContent || ""); // cancel
+      }
+    };
+  }
+
+  private startDatabaseTextEdit(
+    event: MouseEvent,
+    el: HTMLElement,
+    value: string,
+    multiline: boolean,
+    save: (value: string) => void
+  ): void {
+    event.preventDefault();
+    event.stopPropagation();
+    const initialHeight = Math.ceil(el.getBoundingClientRect().height);
+    const input = multiline ? window.activeDocument.createElement("textarea") : window.activeDocument.createElement("input");
+    input.className = multiline ? "db-heading-edit db-heading-edit-description" : "db-heading-edit";
+    if (!multiline) (input as HTMLInputElement).type = "text";
+    if (multiline && input instanceof HTMLTextAreaElement) input.rows = 1;
+    input.value = value;
+    el.replaceWith(input);
+    if (multiline && input instanceof HTMLTextAreaElement) {
+      this.syncDatabaseDescriptionEditHeight(input, initialHeight);
+      const maxHeight = this.getDatabaseDescriptionEditMaxHeight(input, initialHeight);
+      input.addEventListener("input", () => this.autoGrowTextarea(input, maxHeight, initialHeight));
+    }
+    input.focus();
+    input.select();
+    let done = false;
+    const finish = (commit: boolean) => {
+      if (done) return;
+      done = true;
+      const next = input.value.trim();
+      if (commit) save(next);
+      else save(value);
+    };
+    input.onblur = () => finish(true);
+    input.onkeydown = (keyboardEvent) => {
+      if (isImeComposing(keyboardEvent)) return;
+      if (keyboardEvent.key === "Escape") finish(false);
+      if (keyboardEvent.key === "Enter" && (!multiline || keyboardEvent.metaKey || keyboardEvent.ctrlKey)) {
+        keyboardEvent.preventDefault();
+        finish(true);
+      }
+    };
+  }
+
+  private autoGrowTextarea(textarea: HTMLTextAreaElement, maxHeight: number, minHeight = 0): void {
+    textarea.setCssProps({ height: "auto" });
+    const nextHeight = Math.min(Math.max(textarea.scrollHeight, minHeight), maxHeight);
+    textarea.setCssProps({ height: `${nextHeight}px` });
+    textarea.style.overflowY = textarea.scrollHeight > maxHeight ? "auto" : "hidden";
+  }
+
+  private syncDatabaseDescriptionEditHeight(textarea: HTMLTextAreaElement, height: number): void {
+    const nextHeight = Math.max(0, height);
+    if (nextHeight > 0) textarea.setCssProps({ height: `${nextHeight}px` });
+    textarea.style.overflowY = textarea.scrollHeight > nextHeight ? "auto" : "hidden";
+  }
+
+  private getDatabaseDescriptionEditMaxHeight(textarea: HTMLTextAreaElement, initialHeight: number): number {
+    const view = textarea.ownerDocument.defaultView || window;
+    const rawMaxHeight = view.getComputedStyle(textarea).maxHeight;
+    const parsedMaxHeight = Number.parseFloat(rawMaxHeight);
+    const cssMaxHeight = Number.isFinite(parsedMaxHeight) ? parsedMaxHeight : 200;
+    return Math.max(initialHeight || 0, cssMaxHeight);
+  }
+
+  // ── Row 2: Toolbar buttons ──
+
+  private renderWidthSelect(
+    toolbar: HTMLElement,
+    entry: ToolbarViewEntry | undefined,
+    config: ViewConfig | undefined,
+    actions: ToolbarActions
+  ): void {
+    const current = config?.displayWidth || "default";
+    const next = current === "wide" ? "default" : "wide";
+    const btn = this.createIconButton(toolbar, "", current === "wide" ? t("toolbar.defaultWidth") : t("toolbar.wide"), "db-width-toggle-btn");
+    appendSvg(btn, current === "wide" ? ToolbarRenderer.ICONS.widthIn : ToolbarRenderer.ICONS.widthOut);
+    btn.addClass(current === "wide" ? "is-active" : "is-inactive");
+    btn.onclick = () => actions.setDisplayWidth(next);
+  }
+
+  private renderSearch(toolbar: HTMLElement, state: DatabaseViewState, actions: ToolbarActions): void {
+    const wrap = toolbar.createDiv({ cls: `db-search-control${state.searchText ? " is-active" : ""}` });
+    const button = wrap.createEl("button", {
+      cls: "db-search-button",
+      attr: { type: "button", "aria-label": t("common.search") },
+    });
+    setIcon(button, "search");
+    setTooltip(button, t("toolbar.searchShortcut"), { delay: 100 });
+    const inputWrap = wrap.createDiv({ cls: "db-search-input-wrap" });
+    const searchInput = inputWrap.createEl("input", {
+      cls: "db-search-input",
+      attr: { type: "text", placeholder: t("common.search"), "aria-label": t("common.search") },
+    });
+    const searchPulse = inputWrap.createSpan({ cls: "db-search-activity-pulse", attr: { "aria-hidden": "true" } });
+    searchInput.value = state.searchText;
+    const clear = wrap.createEl("button", {
+      cls: "db-search-clear",
+      text: "×",
+      attr: { type: "button", "aria-label": t("toolbar.clearSearch") },
+    });
+    setTooltip(clear, t("toolbar.clearSearch"), { delay: 100 });
+    clear.toggleAttribute("hidden", !state.searchText);
+    button.onclick = () => {
+      wrap.addClass("is-active");
+      window.requestAnimationFrame(() => {
+        window.requestAnimationFrame(() => {
+          searchInput.focus();
+          searchInput.setSelectionRange(searchInput.value.length, searchInput.value.length);
+        });
+      });
+    };
+    button.onmousedown = (event) => {
+      event.preventDefault();
+    };
+    searchInput.addEventListener("focus", () => {
+      wrap.addClass("is-active");
+      actions.onSearchFocus?.();
+    });
+    let searchTimer: number | null = null;
+    const stopSearchPulse = () => {
+      if (searchTimer !== null) window.clearTimeout(searchTimer);
+      searchTimer = window.setTimeout(() => {
+        searchPulse.removeClass("is-active");
+        searchTimer = null;
+      }, 180);
+    };
+    searchInput.addEventListener("input", () => {
+      wrap.toggleClass("is-active", searchInput.value.length > 0 || window.activeDocument.activeElement === searchInput);
+      clear.toggleAttribute("hidden", !searchInput.value);
+      searchPulse.addClass("is-active");
+      stopSearchPulse();
+      actions.setSearchText(searchInput.value);
+    });
+    clear.onclick = (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      searchInput.value = "";
+      clear.setAttribute("hidden", "true");
+      actions.setSearchText("");
+      searchInput.blur();
+    };
+    searchInput.addEventListener("keydown", (event) => {
+      if (isImeComposing(event)) return;
+      if (event.key !== "Escape") return;
+      event.preventDefault();
+      searchInput.value = "";
+      clear.setAttribute("hidden", "true");
+      actions.setSearchText("");
+      searchInput.blur();
+    });
+    searchInput.addEventListener("blur", () => {
+      if (!searchInput.value) wrap.removeClass("is-active");
+    });
+  }
+
+  private attachDescriptionScrollState(descEl: HTMLElement): void {
+    descEl.addEventListener("scroll", () => {
+      descEl.addClass("is-scrolling");
+      const existing = this.descriptionScrollTimers.get(descEl);
+      if (existing != null) window.clearTimeout(existing);
+      const timer = window.setTimeout(() => {
+        descEl.removeClass("is-scrolling");
+        this.descriptionScrollTimers.delete(descEl);
+      }, 900);
+      this.descriptionScrollTimers.set(descEl, timer);
+    });
+  }
+
+  private renderGroupSelect(
+    toolbar: HTMLElement,
+    config: ViewConfig | undefined,
+    state: DatabaseViewState,
+    actions: ToolbarActions
+  ): string {
+    const currentViewType = config?.viewType || "table";
+    const groupValue = config ? this.resolveGroupValue(config, currentViewType, state) : state.groupByField;
+    const btn = this.createIconButton(toolbar, "", t("toolbar.group"), "db-group-btn");
+    btn.setAttribute("aria-haspopup", "dialog");
+    btn.setAttribute("aria-expanded", "false");
+    btn.setAttribute("aria-controls", "db-group-popover");
+    appendSvg(btn, ToolbarRenderer.ICONS.group);
+    if (groupValue) btn.addClass("is-active");
+    btn.onclick = (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      if (!config) return;
+      if (this.groupPopover?.isConnected) {
+        this.closeGroupPopover();
+        return;
+      }
+      actions.closeToolbarPopovers?.();
+      this.closeDatabasePopover();
+      this.closeViewTabPopover();
+      this.closeExportPopover();
+      this.closeTitleActionsPopover();
+      this.setPopoverTriggerState(btn, !this.groupPopover?.isConnected);
+      this.renderGroupPopover(btn, config, currentViewType, actions, state);
+    };
+    return groupValue || "";
+  }
+
+  private resolveGroupValue(
+    config: ViewConfig,
+    viewType: DatabaseViewType,
+    state: DatabaseViewState
+  ): string {
+    return viewType === "board"
+      ? config.boardGroupField || ""
+      : state.groupByField || "";
+  }
+
+  private renderGroupPopover(
+    anchorEl: HTMLElement,
+    config: ViewConfig,
+    currentViewType: DatabaseViewType,
+    actions: ToolbarActions,
+    state: DatabaseViewState
+  ): void {
+    const root = anchorEl.closest(".note-database-container");
+    if (!root) return;
+    if (this.groupPopover?.isConnected) {
+      this.closeGroupPopover();
+      return;
+    }
+
+    const panel = root.createDiv({ cls: "db-group-popover", attr: { id: "db-group-popover", role: "menu", "aria-label": t("toolbar.group") } });
+    this.groupPopover = panel;
+    this.groupPopoverConfig = config;
+    this.groupPopoverViewType = currentViewType;
+    this.groupPopoverActions = actions;
+    this.groupPopoverState = state;
+
+    const groupValue = this.resolveGroupValue(config, currentViewType, state);
+    this.populateGroupPopover(panel, config, currentViewType, groupValue, actions);
+
+    positionToolbarPopover(panel, anchorEl);
+    const removeAutoClose = installPopoverAutoClose({
+      panel,
+      anchorEl,
+      close: () => this.closeGroupPopover(),
+      isActiveTarget: (target) => this.isGroupPopoverActiveTarget(target, panel, anchorEl),
+    });
+    this.removeGroupPopoverListener = removeAutoClose;
+  }
+
+  private isGroupPopoverActiveTarget(target: EventTarget | null, panel: HTMLElement, anchorEl: HTMLElement): boolean {
+    if (!(target instanceof Node)) return false;
+    if (panel.contains(target) || anchorEl.contains(target)) return true;
+    const element = isHTMLElement(target) ? target : target.parentElement;
+    return element?.closest(".db-group-row-limit-dropdown-popover") != null;
+  }
+
+  private populateGroupPopover(
+    panel: HTMLElement,
+    config: ViewConfig,
+    currentViewType: DatabaseViewType,
+    groupValue: string,
+    actions: ToolbarActions
+  ): void {
+    const header = panel.createDiv({ cls: "db-panel-header" });
+    header.createDiv({ cls: "db-panel-title", text: t("toolbar.group") });
+
+    const groupColumn = config.schema.columns.find((col) => col.key === groupValue);
+    if (groupValue && groupColumn) {
+      this.renderGroupPopoverSection(panel, t("toolbar.groupOptions"));
+      if (isEmptyGroupVisibilityColumn(config, groupColumn)) {
+        this.renderGroupVisibilitySwitch(panel, config, groupValue, actions);
+      }
+      if (groupColumn.type === "datetime") {
+        this.renderGroupDateModeSwitch(panel, config, groupValue, actions);
+      }
+      if (currentViewType === "board") {
+        this.renderBoardSubgroupSwitch(panel, config, actions);
+      }
+      this.renderGroupRowLimitRow(panel, config, actions);
+      this.addGroupOrderRows(panel, config, groupColumn, actions);
+    }
+
+    this.renderGroupPopoverSection(panel, t("toolbar.groupBy"));
+    if (currentViewType !== "board") {
+      this.renderGroupPopoverRow(panel, {
+        label: t("common.noGroup"),
+        token: "–",
+        active: !groupValue,
+        onClick: () => actions.setGroupByField(""),
+      });
+    }
+    for (const col of config.schema.columns) {
+      this.renderGroupPopoverRow(panel, {
+        label: col.label,
+        column: col,
+        active: groupValue === col.key,
+        onClick: () => actions.setGroupByField(col.key),
+      });
+    }
+    if (currentViewType === "board" && this.isBoardSubgroupEnabled(config)) {
+      this.renderBoardSubgroupSection(panel, config, groupValue, actions);
+    }
+    if (currentViewType === "table" && groupValue) {
+      this.renderTableSubgroupSection(panel, config, groupValue, actions);
+    }
+  }
+
+  private rebuildGroupPopover(): void {
+    const panel = this.groupPopover;
+    if (!panel?.isConnected) return;
+    const config = this.groupPopoverConfig;
+    const viewType = this.groupPopoverViewType;
+    const actions = this.groupPopoverActions;
+    const state = this.groupPopoverState;
+    if (!config || !viewType || !actions || !state) return;
+
+    const scrollTop = panel.scrollTop;
+    panel.empty();
+
+    const groupValue = this.resolveGroupValue(config, viewType, state);
+
+    this.populateGroupPopover(panel, config, viewType, groupValue, actions);
+    panel.scrollTop = scrollTop;
+  }
+
+  private renderGroupPopoverSection(panel: HTMLElement, title: string): void {
+    panel.createDiv({ cls: "db-group-popover-section-title", text: title });
+  }
+
+  private renderGroupPopoverRow(
+    panel: HTMLElement,
+    options: { label: string; token?: string; icon?: string; column?: ColumnDef; active?: boolean; onClick(): void }
+  ): void {
+    const row = panel.createEl("button", {
+      cls: `db-group-popover-row db-menu-item${options.active ? " is-active" : ""}`,
+      attr: { type: "button" },
+    });
+    const marker = row.createSpan({ cls: "db-group-popover-marker db-menu-item-icon" });
+    if (options.icon) setIcon(marker, options.icon);
+    else if (options.column) renderPropertyTypeIcon(marker, options.column);
+    else marker.createSpan({ cls: "db-property-icon db-property-icon-text", text: options.token || "" });
+    row.createSpan({ cls: "db-group-popover-label db-menu-item-label", text: options.label });
+    if (options.active) setIcon(row.createSpan({ cls: "db-group-popover-check db-menu-item-check" }), "check");
+    row.onclick = () => {
+      options.onClick();
+      this.rebuildGroupPopover();
+    };
+  }
+
+  private renderGroupVisibilitySwitch(
+    panel: HTMLElement,
+    config: ViewConfig,
+    field: string,
+    actions: ToolbarActions
+  ): void {
+    const row = panel.createEl("label", { cls: "db-group-popover-row db-menu-item db-group-popover-switch-row" });
+    const marker = row.createSpan({ cls: "db-group-popover-marker db-menu-item-icon" });
+    setIcon(marker, "eye");
+    row.createSpan({ cls: "db-group-popover-label db-menu-item-label", text: t("toolbar.showEmptyGroup") });
+    const input = row.createEl("input", { cls: "db-toggle-switch", attr: { type: "checkbox", role: "switch" } });
+    input.checked = shouldShowEmptyGroups(config, field);
+    input.onchange = (event) => {
+      event.stopPropagation();
+      actions.setShowEmptyGroups(field, input.checked);
+      this.rebuildGroupPopover();
+    };
+    input.onclick = (event) => event.stopPropagation();
+  }
+
+  private renderGroupDateModeSwitch(
+    panel: HTMLElement,
+    config: ViewConfig,
+    field: string,
+    actions: ToolbarActions
+  ): void {
+    const row = panel.createEl("label", { cls: "db-group-popover-row db-menu-item db-group-popover-switch-row" });
+    const marker = row.createSpan({ cls: "db-group-popover-marker db-menu-item-icon" });
+    setIcon(marker, "clock");
+    row.createSpan({ cls: "db-group-popover-label db-menu-item-label", text: t("viewConfig.dateGroupIgnoreTime") });
+    const input = row.createEl("input", { cls: "db-toggle-switch", attr: { type: "checkbox", role: "switch" } });
+    input.checked = getDateGroupMode(config, field) === "date";
+    input.onchange = (event) => {
+      event.stopPropagation();
+      actions.setGroupDateMode(field, input.checked ? "date" : "exact");
+      this.rebuildGroupPopover();
+    };
+    input.onclick = (event) => event.stopPropagation();
+  }
+
+  private renderGroupRowLimitRow(panel: HTMLElement, config: ViewConfig, actions: ToolbarActions): void {
+    const current = config.groupRowLimit || 0;
+    const presets = [10, 25, 50, 100];
+    const isPreset = presets.includes(current);
+    const customActive = this.groupRowLimitEditingCustom || (!isPreset && current > 0);
+    const options: DropdownOption[] = [
+      { value: "0", text: t("viewConfig.groupRowLimitUnlimited") },
+      ...presets.map((value) => ({ value: String(value), text: String(value) })),
+      { value: "custom", text: t("viewConfig.groupRowLimitCustom") },
+    ];
+    const value = customActive ? "custom" : String(current);
+    createDropdownField({
+      parent: panel,
+      label: t("viewConfig.groupRowLimit"),
+      options,
+      value,
+      onChange: (value) => {
+        const custom = value === "custom";
+        this.groupRowLimitEditingCustom = custom;
+        this.groupRowLimitFocusCustomInput = custom;
+        actions.setGroupRowLimit(custom ? (current > 0 ? current : 25) : Number(value) || 0);
+        this.rebuildGroupPopover();
+      },
+      icon: "list-filter",
+      className: "db-group-popover-row db-menu-item db-group-row-limit-select-row",
+      popoverClassName: "db-group-row-limit-dropdown-popover",
+    });
+    if (customActive) {
+      const row = panel.createDiv({ cls: "db-group-popover-row db-menu-item db-group-row-limit-custom-row" });
+      row.createSpan({ cls: "db-group-popover-marker db-menu-item-icon" });
+      row.createSpan({ cls: "db-group-popover-label db-menu-item-label", text: t("viewConfig.groupRowLimitCustom") });
+      const input = row.createEl("input", {
+        cls: "db-view-config-number db-group-row-limit-input",
+        attr: { type: "number", min: "1", max: "500" },
+      });
+      input.value = String(current);
+      input.onclick = (event) => event.stopPropagation();
+      input.onchange = () => {
+        const n = Math.max(1, Math.round(Number(input.value) || 0));
+        this.groupRowLimitEditingCustom = true;
+        actions.setGroupRowLimit(n);
+        this.rebuildGroupPopover();
+      };
+      if (this.groupRowLimitFocusCustomInput) {
+        this.groupRowLimitFocusCustomInput = false;
+        window.setTimeout(() => {
+          input.focus();
+          input.select();
+        }, 0);
+      }
+    }
+  }
+
+  private renderBoardSubgroupSwitch(
+    panel: HTMLElement,
+    config: ViewConfig,
+    actions: ToolbarActions
+  ): void {
+    const row = panel.createEl("label", { cls: "db-group-popover-row db-menu-item db-group-popover-switch-row" });
+    const marker = row.createSpan({ cls: "db-group-popover-marker db-menu-item-icon" });
+    setIcon(marker, "layout-list");
+    row.createSpan({ cls: "db-group-popover-label db-menu-item-label", text: t("toolbar.enableBoardSubgroups") });
+    const input = row.createEl("input", { cls: "db-toggle-switch", attr: { type: "checkbox", role: "switch" } });
+    input.checked = this.isBoardSubgroupEnabled(config);
+    input.onchange = (event) => {
+      event.stopPropagation();
+      actions.setBoardSubgroupEnabled(input.checked);
+      this.rebuildGroupPopover();
+    };
+    input.onclick = (event) => event.stopPropagation();
+  }
+
+  private renderBoardSubgroupSection(
+    panel: HTMLElement,
+    config: ViewConfig,
+    groupValue: string,
+    actions: ToolbarActions
+  ): void {
+    this.renderGroupPopoverSection(panel, t("toolbar.subgroupBy"));
+    const candidates = this.getBoardSubgroupCandidates(config, groupValue);
+    const subgroupField = config.boardSubgroupField || "";
+    const hasActiveSubgroup = candidates.some((col) => col.key === subgroupField);
+    if (candidates.length === 0) {
+      this.renderGroupPopoverNotice(panel, t("toolbar.noAvailableBoardSubgroupFields"), "info");
+      return;
+    }
+    if (!hasActiveSubgroup) {
+      this.renderGroupPopoverNotice(panel, t("toolbar.selectBoardSubgroupField"), "info");
+    }
+    for (const col of candidates) {
+      this.renderGroupPopoverRow(panel, {
+        label: col.label,
+        column: col,
+        active: subgroupField === col.key,
+        onClick: () => actions.setBoardSubgroupField(col.key),
+      });
+    }
+  }
+
+  private renderTableSubgroupSection(
+    panel: HTMLElement,
+    config: ViewConfig,
+    groupValue: string,
+    actions: ToolbarActions
+  ): void {
+    this.renderGroupPopoverSection(panel, t("toolbar.subgroupBy"));
+    const candidates = getTableSubgroupCandidates(config, groupValue);
+    const subgroupField = getTableSubgroupField(config);
+    const hasActiveSubgroup = candidates.some((col) => col.key === subgroupField);
+    if (candidates.length === 0) {
+      this.renderGroupPopoverNotice(panel, t("toolbar.noAvailableBoardSubgroupFields"), "info");
+      return;
+    }
+    if (!hasActiveSubgroup) {
+      this.renderGroupPopoverNotice(panel, t("toolbar.selectBoardSubgroupField"), "info");
+    }
+    for (const col of candidates) {
+      this.renderGroupPopoverRow(panel, {
+        label: col.label,
+        column: col,
+        active: subgroupField === col.key,
+        onClick: () => actions.setTableSubgroupField?.(col.key),
+      });
+    }
+  }
+
+  private renderGroupPopoverNotice(panel: HTMLElement, label: string, icon: string): void {
+    const row = panel.createDiv({ cls: "db-group-popover-row db-menu-item is-disabled" });
+    const marker = row.createSpan({ cls: "db-group-popover-marker db-menu-item-icon" });
+    setIcon(marker, icon);
+    row.createSpan({ cls: "db-group-popover-label db-menu-item-label", text: label });
+  }
+
+  private isBoardSubgroupEnabled(config: ViewConfig): boolean {
+    return config.boardSubgroupEnabled === true || Boolean(config.boardSubgroupField);
+  }
+
+  private getBoardSubgroupCandidates(config: ViewConfig, groupValue: string): ColumnDef[] {
+    return config.schema.columns.filter((col) => col.key !== "file.name" && col.key !== groupValue);
+  }
+
+  private addGroupOrderRows(panel: HTMLElement, config: ViewConfig, col: ColumnDef, actions: ToolbarActions): void {
+    const add = (title: string, mode: GroupOrderMode, icon: string) => {
+      this.renderGroupPopoverRow(panel, { label: title, icon, onClick: () => actions.setGroupOrderMode(mode) });
+    };
+    const type = this.getEffectiveGroupOrderType(config, col);
+    if (type === "number") {
+      add(t("groupOrder.numberAsc"), "number-asc", "arrow-up-0-1");
+      add(t("groupOrder.numberDesc"), "number-desc", "arrow-down-1-0");
+    } else if (type === "currency") {
+      add(t("groupOrder.currencyAsc"), "number-asc", "arrow-up-0-1");
+      add(t("groupOrder.currencyDesc"), "number-desc", "arrow-down-1-0");
+    } else if (isDateLikeColumnType(type)) {
+      add(t("groupOrder.dateAsc"), "date-asc", "calendar-arrow-up");
+      add(t("groupOrder.dateDesc"), "date-desc", "calendar-arrow-down");
+    } else if (type === "checkbox") {
+      add(t("groupOrder.checkboxFalseFirst"), "checkbox-false-first", "square");
+      add(t("groupOrder.checkboxTrueFirst"), "checkbox-true-first", "check-square");
+    } else if (type === "select" || type === "status") {
+      add(t("groupOrder.optionAsc"), "option-asc", "list-ordered");
+      add(t("groupOrder.optionDesc"), "option-desc", "list-end");
+      this.renderGroupPopoverRow(panel, { label: t("groupOrder.custom"), icon: "arrow-up-down", onClick: () => actions.configureGroupOrder() });
+    } else if (type === "multi-select") {
+      add(t("groupOrder.multiSelectPriority"), "multi-select-priority", "list-tree");
+      this.renderGroupPopoverRow(panel, { label: t("groupOrder.custom"), icon: "arrow-up-down", onClick: () => actions.configureGroupOrder() });
+    } else {
+      add(t("groupOrder.textAsc"), "text-asc", "arrow-up-a-z");
+      add(t("groupOrder.textDesc"), "text-desc", "arrow-down-z-a");
+      this.renderGroupPopoverRow(panel, { label: t("groupOrder.custom"), icon: "arrow-up-down", onClick: () => actions.configureGroupOrder() });
+    }
+  }
+
+  private getEffectiveGroupOrderType(config: ViewConfig, col: ColumnDef): ColumnDef["type"] {
+    if (col.type === "rollup") return getColumnDisplayType(col, config.schema.computedFields);
+    if (col.type !== "computed") return col.type;
+    const computedKey = col.computedKey || col.key;
+    const computedDef = config.schema.computedFields.find((field) => field.key === computedKey);
+    return computedDef?.type || "text";
+  }
+
+  private closeGroupPopover(): void {
+    const root = this.groupPopover?.closest(".note-database-container");
+    this.removeGroupPopoverListener?.();
+    this.removeGroupPopoverListener = undefined;
+    this.groupRowLimitEditingCustom = false;
+    this.groupRowLimitFocusCustomInput = false;
+    this.groupPopover?.remove();
+    this.groupPopover = undefined;
+    root?.querySelectorAll<HTMLElement>(".db-group-btn").forEach((button) => this.setPopoverTriggerState(button, false));
+  }
+
+  private closeViewTabPopover(): void {
+    const root = this.viewTabPopover?.closest(".note-database-container");
+    this.removeViewTabPopoverListener?.();
+    this.removeViewTabPopoverListener = undefined;
+    this.viewTabPopover?.remove();
+    this.viewTabPopover = undefined;
+    root?.querySelectorAll<HTMLElement>(".db-view-tab-add, .db-view-tab-more").forEach((button) => this.setPopoverTriggerState(button, false));
+  }
+
+  private closeExportPopover(): void {
+    this.removeExportPopoverListener?.();
+    this.removeExportPopoverListener = undefined;
+    this.exportPopover?.remove();
+    this.exportPopover = undefined;
+  }
+
+  private closeTitleActionsPopover(): void {
+    const root = this.titleActionsPopover?.closest(".note-database-container");
+    this.removeTitleActionsPopoverListener?.();
+    this.removeTitleActionsPopoverListener = undefined;
+    this.titleActionsPopover?.remove();
+    this.titleActionsPopover = undefined;
+    root?.querySelectorAll<HTMLElement>(".db-heading-more-button").forEach((button) => this.setPopoverTriggerState(button, false));
+  }
+
+  private closeUtilitiesPopover(): void {
+    this.removeUtilitiesPopoverListener?.();
+    this.removeUtilitiesPopoverListener = undefined;
+    this.utilitiesPopover?.remove();
+    this.utilitiesPopover = undefined;
+    (this.toolbarRoot || window.activeDocument).querySelectorAll<HTMLElement>(".db-toolbar-more-btn, .db-new-button-dropdown").forEach((button) => {
+      this.setPopoverTriggerState(button, false);
+    });
+  }
+
+  private closeDatabasePopover(): void {
+    const root = this.databasePopover?.closest(".note-database-container");
+    this.removeDatabasePopoverListener?.();
+    this.removeDatabasePopoverListener = undefined;
+    this.databasePopover?.remove();
+    this.databasePopover = undefined;
+    this.draggedDatabaseIndex = null;
+    root?.querySelectorAll<HTMLElement>(".db-heading-chevron-button").forEach((button) => this.setPopoverTriggerState(button, false));
+  }
+
+  private setPopoverTriggerState(button: HTMLElement, expanded: boolean): void {
+    button.setAttribute("aria-expanded", String(expanded));
+    button.toggleClass("is-open", expanded);
+  }
+
+  private installMenuKeyboardNavigation(panel: HTMLElement): void {
+    const items = () => Array.from(panel.querySelectorAll<HTMLElement>(
+      "button[role=menuitem]:not(:disabled), button[role=option]:not(:disabled), button[role=radio]:not(:disabled)",
+    ));
+    const update = (active?: HTMLElement) => {
+      const currentItems = items();
+      const selected = active || currentItems[0];
+      currentItems.forEach((item) => item.setAttribute("tabindex", item === selected ? "0" : "-1"));
+    };
+    update();
+    panel.addEventListener("focusin", (event) => {
+      const target = event.target instanceof HTMLElement && items().includes(event.target) ? event.target : undefined;
+      if (target) update(target);
+    });
+    panel.addEventListener("keydown", (event) => {
+      if (!(event.target instanceof HTMLElement)) return;
+      const currentItems = items();
+      const currentIndex = currentItems.indexOf(event.target);
+      if (currentIndex < 0) return;
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        event.target.click();
+        return;
+      }
+      let nextIndex = currentIndex;
+      if (event.key === "ArrowDown") nextIndex = (currentIndex + 1) % currentItems.length;
+      else if (event.key === "ArrowUp") nextIndex = (currentIndex - 1 + currentItems.length) % currentItems.length;
+      else if (event.key === "Home") nextIndex = 0;
+      else if (event.key === "End") nextIndex = currentItems.length - 1;
+      else return;
+      event.preventDefault();
+      const next = currentItems[nextIndex];
+      update(next);
+      next.focus();
+    });
+  }
+
+  private renderFilterButton(toolbar: HTMLElement, state: DatabaseViewState, actions: ToolbarActions): void {
+    const count = getEffectiveFilterRules(state.filters).length;
+    const filterBtn = this.createIconButton(toolbar, "list-filter", t("toolbar.filter"), "db-filter-btn db-toolbar-badge-button");
+    filterBtn.setAttribute("aria-haspopup", "dialog");
+    filterBtn.setAttribute("aria-expanded", "false");
+    filterBtn.setAttribute("aria-controls", "db-filter-panel");
+    this.setBadge(filterBtn, count);
+    filterBtn.onclick = () => {
+      this.closeDatabasePopover();
+      this.closeGroupPopover();
+      this.closeViewTabPopover();
+      this.closeExportPopover();
+      this.closeTitleActionsPopover();
+      this.setPopoverTriggerState(filterBtn, filterBtn.getAttribute("aria-expanded") !== "true");
+      actions.toggleFilterPanel(filterBtn);
+    };
+  }
+
+  private renderSortButton(toolbar: HTMLElement, state: DatabaseViewState, actions: ToolbarActions): void {
+    const count = this.getSortRuleCount(state);
+    const sortBtn = this.createIconButton(toolbar, "arrow-up-down", t("toolbar.sort"), "db-sort-btn db-toolbar-badge-button");
+    sortBtn.setAttribute("aria-haspopup", "dialog");
+    sortBtn.setAttribute("aria-expanded", "false");
+    sortBtn.setAttribute("aria-controls", "db-sort-panel");
+    this.setBadge(sortBtn, count);
+    sortBtn.onclick = () => {
+      this.closeDatabasePopover();
+      this.closeGroupPopover();
+      this.closeViewTabPopover();
+      this.closeExportPopover();
+      this.closeTitleActionsPopover();
+      this.setPopoverTriggerState(sortBtn, sortBtn.getAttribute("aria-expanded") !== "true");
+      actions.toggleSortPanel(sortBtn);
+    };
+  }
+
+  private renderViewConfigButton(toolbar: HTMLElement, actions: ToolbarActions): void {
+    const btn = this.createIconButton(toolbar, "", t("toolbar.settings"), "db-view-config-btn");
+    appendSvg(btn, ToolbarRenderer.ICONS.settings);
+    btn.onclick = () => {
+      this.closeDatabasePopover();
+      this.closeGroupPopover();
+      this.closeViewTabPopover();
+      this.closeExportPopover();
+      this.closeTitleActionsPopover();
+      actions.toggleViewConfig(btn);
+    };
+  }
+
+  private renderChartOptionsButton(toolbar: HTMLElement, actions: ToolbarActions): void {
+    const btn = this.createIconButton(toolbar, "", t("chart.options"), "db-chart-options-toolbar-btn");
+    this.appendViewSettingsIcon(btn, this.getViewTypeIcon("chart"));
+
+    btn.onclick = (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      this.closeDatabasePopover();
+      this.closeGroupPopover();
+      this.closeViewTabPopover();
+      this.closeExportPopover();
+      this.closeTitleActionsPopover();
+      actions.toggleChartOptions?.(btn);
+    };
+  }
+
+  private getSortRuleCount(state: DatabaseViewState): number {
+    return state.sortRules.filter((rule) => rule.field && rule.direction).length ||
+    (state.sortColumn ? 1 : 0);
+  }
+
+  private renderColumnButton(toolbar: HTMLElement, config: ViewConfig | undefined, state: DatabaseViewState, actions: ToolbarActions): void {
+    const colBtn = this.createIconButton(toolbar, "columns-3", t("toolbar.properties"), "db-col-manager-btn db-toolbar-badge-button");
+    colBtn.setAttribute("aria-haspopup", "dialog");
+    colBtn.setAttribute("aria-expanded", "false");
+    colBtn.setAttribute("aria-controls", "db-column-manager");
+    this.setHiddenBadge(colBtn, state.hiddenColumns.size);
+    colBtn.onclick = () => {
+      this.closeDatabasePopover();
+      this.closeGroupPopover();
+      this.closeViewTabPopover();
+      this.closeExportPopover();
+      this.closeTitleActionsPopover();
+      this.setPopoverTriggerState(colBtn, colBtn.getAttribute("aria-expanded") !== "true");
+      actions.toggleColumnManager(colBtn);
+    };
+  }
+
+  private renderExportButton(toolbar: HTMLElement, actions: ToolbarActions): void {
+    if (!actions.exportData && !actions.copyViewCode && !actions.exportCsvMarkdownZip) return;
+    const btn = this.createIconButton(toolbar, "", t("toolbar.copyFormats"), "db-export-btn");
+    appendSvg(btn, ToolbarRenderer.ICONS.copy);
+    btn.onclick = (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      this.closeDatabasePopover();
+      this.closeGroupPopover();
+      this.closeViewTabPopover();
+      this.closeTitleActionsPopover();
+      actions.closeToolbarPopovers?.();
+      this.renderExportPopover(btn, actions);
+    };
+  }
+
+  private renderExportPopover(anchorEl: HTMLElement, actions: ToolbarActions): void {
+    const root = anchorEl.closest(".note-database-container");
+    if (!root) return;
+    if (this.exportPopover?.isConnected) {
+      this.closeExportPopover();
+      return;
+    }
+    const panel = root.createDiv({ cls: "db-export-popover" });
+    this.exportPopover = panel;
+    const header = panel.createDiv({ cls: "db-panel-header" });
+    header.createDiv({ cls: "db-panel-title", text: t("toolbar.copyFormats") });
+    if (actions.copyViewCode) {
+      this.renderExportPopoverRow(panel, t("toolbar.copyViewCode"), "code-xml", () => actions.copyViewCode?.());
+    }
+    if (actions.exportData) {
+      this.renderExportPopoverRow(panel, t("toolbar.copyCsv"), "table", () => actions.exportData?.("csv"));
+      this.renderExportPopoverRow(panel, t("toolbar.copyMarkdown"), "file-text", () => actions.exportData?.("markdown"));
+    }
+    if (actions.exportCsvMarkdownZip) {
+      this.renderExportPopoverRow(panel, t("toolbar.exportCsvMarkdownZip"), "archive", () => actions.exportCsvMarkdownZip?.());
+    }
+    positionToolbarPopover(panel, anchorEl);
+    this.installMenuKeyboardNavigation(panel);
+    const removeAutoClose = installPopoverAutoClose({ panel, anchorEl, close: () => this.closeExportPopover() });
+    this.removeExportPopoverListener = removeAutoClose;
+  }
+
+  private renderExportPopoverRow(panel: HTMLElement, label: string, icon: string, onClick: () => void): void {
+    const row = panel.createEl("button", {
+      cls: "db-export-popover-row db-menu-item",
+      attr: { type: "button", role: "menuitem", "aria-label": label },
+    });
+    setIcon(row.createSpan({ cls: "db-export-popover-marker db-menu-item-icon" }), icon);
+    row.createSpan({ cls: "db-export-popover-label db-menu-item-label", text: label });
+    row.onclick = () => {
+      this.closeExportPopover();
+      onClick();
+    };
+  }
+
+  private renderNewButton(toolbar: HTMLElement, actions: ToolbarActions, currentDb?: DatabaseConfig): void {
+    const hasTemplate = hasRecordTemplate(currentDb);
+    const label = hasTemplate ? getNewFromTemplateLabel() : t("toolbar.new");
+    const tooltip = hasTemplate ? getNewFromTemplateTooltip(currentDb) : label;
+    const group = toolbar.createDiv({ cls: "db-new-button-group" });
+    const newBtn = group.createEl("button", {
+      cls: `db-new-button db-new-button-primary${isTouchDevice(this.toolbarRoot) ? " is-mobile-fab" : ""}`,
+      attr: { type: "button", "aria-label": hasTemplate ? tooltip : label },
+    });
+    setIcon(newBtn.createSpan({ cls: "db-new-button-icon" }), hasTemplate ? "file-plus-2" : "plus");
+    if (!hasTemplate || !isTouchDevice(this.toolbarRoot)) newBtn.createSpan({ text: label });
+    setTooltip(newBtn, tooltip, { delay: 100 });
+    const create = (template: NewRecordTemplateConfig | null | undefined) => {
+      const position = actions.getCreateEntryPosition?.(this.newRecordPlacement);
+      const intent: CreateEntryIntent = { allowOverlayTransition: true };
+      actions.closeToolbarPopovers?.();
+      if (template !== undefined && actions.createEntryFromTemplate) {
+        actions.createEntryFromTemplate(template, position, intent);
+        return;
+      }
+      actions.createEntry(undefined, position, intent);
+    };
+    newBtn.onclick = () => {
+      void executeNewFromTemplate({
+        config: currentDb,
+        confirmEnabled: false,
+        confirm: async () => true,
+        position: actions.getCreateEntryPosition?.(this.newRecordPlacement),
+        createEntry: () => create(hasTemplate ? currentDb?.newRecordTemplate : undefined),
+      });
+    };
+    const dropdown = group.createEl("button", {
+      cls: "db-new-button-dropdown",
+      attr: {
+        type: "button",
+        "aria-label": t("toolbar.chooseTemplate"),
+        "aria-haspopup": "menu",
+        "aria-expanded": "false",
+        "aria-controls": "db-new-template-menu",
+      },
+    });
+    setIcon(dropdown, "chevron-down");
+    setTooltip(dropdown, t("toolbar.chooseTemplate"), { delay: 100 });
+    dropdown.onclick = (event) => this.showNewTemplateMenu(event, dropdown, actions, currentDb);
+  }
+
+  private showNewTemplateMenu(
+    event: MouseEvent,
+    anchor: HTMLElement,
+    actions: ToolbarActions,
+    currentDb?: DatabaseConfig,
+  ): void {
+    event.preventDefault();
+    event.stopPropagation();
+    const root = anchor.closest(".note-database-container");
+    if (!root) return;
+    if (this.utilitiesPopover?.isConnected && this.utilitiesPopover.hasClass("db-new-template-popover")) {
+      this.closeUtilitiesPopover();
+      return;
+    }
+    this.closeUtilitiesPopover();
+    actions.closeToolbarPopovers?.();
+    const panel = root.createDiv({
+      cls: "db-view-tab-popover db-new-template-popover",
+      attr: { id: "db-new-template-menu", role: "menu", "aria-label": t("toolbar.chooseTemplate") },
+    });
+    this.utilitiesPopover = panel;
+    const header = panel.createDiv({ cls: "db-panel-header" });
+    header.createDiv({ cls: "db-panel-title", text: t("toolbar.chooseTemplate") });
+    const placement = panel.createDiv({ cls: "db-new-placement", attr: { role: "group", "aria-label": t("toolbar.insertPlacement") } });
+    for (const option of [{ value: "top" as const, label: t("toolbar.insertAtTop") }, { value: "bottom" as const, label: t("toolbar.insertAtBottom") }]) {
+      const button = placement.createEl("button", {
+        cls: `db-new-placement-option${this.newRecordPlacement === option.value ? " is-active" : ""}`,
+        text: option.label,
+        attr: { type: "button", role: "radio", "aria-checked": this.newRecordPlacement === option.value ? "true" : "false" },
+      });
+      button.onclick = () => {
+        this.newRecordPlacement = option.value;
+        placement.querySelectorAll<HTMLElement>("[role=radio]").forEach((el) => {
+          const selected = el === button;
+          el.setAttribute("aria-checked", String(selected));
+          el.toggleClass("is-active", selected);
+        });
+      };
+    }
+    const position = () => actions.getCreateEntryPosition?.(this.newRecordPlacement);
+    const choose = (template: NewRecordTemplateConfig | null) => {
+      actions.closeToolbarPopovers?.();
+      if (actions.createEntryFromTemplate) actions.createEntryFromTemplate(template, position(), { allowOverlayTransition: true });
+      else actions.createEntry(undefined, position(), { allowOverlayTransition: true });
+      this.closeUtilitiesPopover();
+    };
+    const templates = actions.recordTemplates || [];
+    for (const template of templates) {
+      const row = panel.createEl("button", {
+        cls: "db-new-template-row db-menu-item",
+        attr: { type: "button", role: "menuitem", "aria-label": template.label },
+      });
+      setIcon(row.createSpan({ cls: "db-menu-item-icon" }), "file-text");
+      row.createSpan({ cls: "db-menu-item-label", text: template.label });
+      if (template.path === actions.defaultTemplatePath) setIcon(row.createSpan({ cls: "db-new-template-default" }), "star");
+      row.onclick = () => choose(template);
+    }
+    const blank = panel.createEl("button", {
+      cls: "db-new-template-row db-menu-item",
+      attr: { type: "button", role: "menuitem", "aria-label": t("toolbar.createBlankNote") },
+    });
+    setIcon(blank.createSpan({ cls: "db-menu-item-icon" }), "file-plus-2");
+    blank.createSpan({ cls: "db-menu-item-label", text: t("toolbar.createBlankNote") });
+    blank.onclick = () => choose(null);
+    if (templates.length > 0 && actions.setDefaultTemplate) {
+      const defaultTemplate = templates.find((template) => template.path === actions.defaultTemplatePath) || templates[0];
+      const setDefault = panel.createEl("button", {
+        cls: "db-new-template-default-action db-menu-item",
+        attr: { type: "button", role: "menuitem", "aria-label": t("toolbar.setDefaultTemplate") },
+      });
+      setIcon(setDefault.createSpan({ cls: "db-menu-item-icon" }), "star");
+      setDefault.createSpan({ cls: "db-menu-item-label", text: t("toolbar.setDefaultTemplate") });
+      setDefault.onclick = () => {
+        actions.setDefaultTemplate?.(defaultTemplate);
+        this.closeUtilitiesPopover();
+      };
+    } else {
+      const configure = panel.createEl("div", {
+        cls: "db-new-template-configure db-menu-item is-disabled",
+        text: t("toolbar.configureTemplates"),
+        attr: { role: "note" },
+      });
+      configure.setAttribute("aria-disabled", "true");
+    }
+    positionToolbarPopover(panel, anchor);
+    this.setPopoverTriggerState(anchor, true);
+    this.installMenuKeyboardNavigation(panel);
+    this.removeUtilitiesPopoverListener = installPopoverAutoClose({ panel, anchorEl: anchor, close: () => this.closeUtilitiesPopover() });
+  }
+
+  private renderFullViewButton(toolbar: HTMLElement, actions: ToolbarActions): void {
+    if (!actions.openFullView) return;
+    const fullBtn = toolbar.createEl("button", {
+      cls: "db-toolbar-icon-button db-full-view-btn",
+      attr: { type: "button", "aria-label": t("toolbar.openFullView") },
+    });
+    setIcon(fullBtn, "maximize-2");
+    setTooltip(fullBtn, t("toolbar.openFullView"), { delay: 100 });
+    fullBtn.onclick = () => actions.openFullView?.();
+  }
+
+  private renderHeaderChromeButton(toolbar: HTMLElement, actions: ToolbarActions, hidden: boolean): void {
+    const label = hidden ? t("toolbar.showEmbedHeader") : t("toolbar.hideEmbedHeader");
+    const btn = this.createIconButton(toolbar, hidden ? "chevron-down" : "chevron-up", label, "db-embed-header-inline-toggle");
+    btn.onclick = () => actions.toggleHeaderChrome?.(!hidden);
+  }
+
+  private renderDatabaseFileButton(toolbar: HTMLElement, actions: ToolbarActions): void {
+    const btn = toolbar.createEl("button", {
+      cls: "db-toolbar-icon-button",
+      attr: { type: "button", "aria-label": t("toolbar.openDatabaseFile") },
+    });
+    setIcon(btn, "file-output");
+    setTooltip(btn, t("toolbar.openDatabaseFile"), { delay: 100 });
+    btn.onclick = () => actions.openDatabaseFile?.();
+  }
+
+  private createIconButton(toolbar: HTMLElement, icon: string, label: string, extraClass = ""): HTMLButtonElement {
+    const btn = toolbar.createEl("button", {
+      cls: `db-toolbar-icon-button ${extraClass}`.trim(),
+      attr: { type: "button", "aria-label": label },
+    });
+    if (icon) setIcon(btn, icon);
+    setTooltip(btn, label, { delay: 100 });
+    return btn;
+  }
+
+  private appendCompositeIcon(
+    button: HTMLElement,
+    mainIcon: string,
+    badgeSvg: string,
+    extraClass = ""
+  ): void {
+    const wrap = button.createSpan({
+      cls: `db-composite-icon ${extraClass}`.trim(),
+    });
+
+    setIcon(wrap.createSpan({ cls: "db-composite-icon-main" }), mainIcon);
+    appendSvg(wrap.createSpan({ cls: "db-composite-icon-badge" }), badgeSvg);
+  }
+
+  private appendViewSettingsIcon(button: HTMLElement, viewIcon: string): void {
+    this.appendCompositeIcon(
+      button,
+      viewIcon,
+      ToolbarRenderer.ICONS.settingsBadge,
+      "db-view-settings-icon"
+    );
+  }
+
+  private setBadge(button: HTMLElement, count: number): void {
+    button.querySelector(".db-toolbar-badge")?.remove();
+    if (count <= 0) return;
+    button.createSpan({ cls: "db-toolbar-badge", text: String(count) });
+  }
+
+  private setHiddenBadge(button: HTMLElement, count: number): void {
+    button.querySelector(".db-toolbar-badge")?.remove();
+    button.setAttribute("aria-label", count > 0 ? t("toolbar.propertiesHidden", { count }) : t("toolbar.properties"));
+    if (count > 0) button.createSpan({ cls: "db-toolbar-badge db-toolbar-badge-neutral", text: t("toolbar.hiddenCount", { count }) });
+  }
+
+  private markLatestMenu(className: string, icons?: string[]): void {
+    window.requestAnimationFrame(() => {
+      const menus = Array.from(window.activeDocument.querySelectorAll(".menu"));
+      const menu = menus[menus.length - 1];
+      if (!menu) return;
+      menu.addClass(className);
+      if (!icons?.length) return;
+      const iconEls = Array.from(menu.querySelectorAll<HTMLElement>(".menu-item-icon"));
+      iconEls.forEach((el, index) => {
+        if (icons[index]) appendSvg(el, icons[index]);
+      });
+    });
+  }
+
+  closePopovers(): void {
+    this.closeDatabasePopover();
+    this.closeGroupPopover();
+    this.closeViewTabPopover();
+    this.closeExportPopover();
+    this.closeTitleActionsPopover();
+    this.closeUtilitiesPopover();
+    this.calendarTimelineToolbarRenderer.closePopover();
+    (this.toolbarRoot || window.activeDocument).querySelectorAll<HTMLElement>(".db-filter-btn, .db-sort-btn, .db-col-manager-btn, .db-group-btn").forEach((button) => {
+      this.setPopoverTriggerState(button, false);
+    });
+  }
+
+  private static readonly ICONS = {
+    widthIn: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-arrows-move-horizontal"><path d="M3 5v14" /><path d="M21 5v14" /><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M17 9l-3 3l3 3" /><path d="M21 12h-7" /><path d="M7 9l3 3l-3 3" /><path d="M3 12h7" /></svg>`,
+    widthOut: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-arrows-move-horizontal"><path d="M3 5v14" /><path d="M21 5v14" /><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M18 9l3 3l-3 3" /><path d="M14 12h7" /><path d="M6 9l-3 3l3 3" /><path d="M3 12h7" /></svg>`,
+    copy: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-clipboard-copy"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h3m9 -9v-5a2 2 0 0 0 -2 -2h-2" /><path d="M13 17v-1a1 1 0 0 1 1 -1h1m3 0h1a1 1 0 0 1 1 1v1m0 3v1a1 1 0 0 1 -1 1h-1m-3 0h-1a1 1 0 0 1 -1 -1v-1" /><path d="M9 5a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2" /></svg>',
+    code: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-code"><path d="M7 8l-4 4l4 4"/><path d="M17 8l4 4l-4 4"/><path d="M14 4l-4 16"/></svg>`,
+    csv: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-table"><rect x="4" y="5" width="16" height="14" rx="2"/><path d="M4 10h16"/><path d="M9 5v14"/><path d="M15 5v14"/></svg>`,
+    markdown: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-markdown"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M7 15v-6l3 4l3-4v6"/><path d="M16 9v6"/><path d="M14 13l2 2l2-2"/></svg>`,
+    settings: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-settings-cog"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M12.003 21c-.732 .001 -1.465 -.438 -1.678 -1.317a1.724 1.724 0 0 0 -2.573 -1.066c-1.543 .94 -3.31 -.826 -2.37 -2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756 -.426 -1.756 -2.924 0 -3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94 -1.543 .826 -3.31 2.37 -2.37c1 .608 2.296 .07 2.572 -1.065c.426 -1.756 2.924 -1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543 -.94 3.31 .826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c.886 .215 1.325 .957 1.318 1.694" /><path d="M9 12a3 3 0 1 0 6 0a3 3 0 0 0 -6 0" /><path d="M17.001 19a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" /><path d="M19.001 15.5v1.5" /><path d="M19.001 21v1.5" /><path d="M22.032 17.25l-1.299 .75" /><path d="M17.27 20l-1.3 .75" /><path d="M15.97 17.25l1.3 .75" /><path d="M20.733 20l1.3 .75" /></svg>',
+    settingsBadge: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-gear"> <path d="M3.001 5a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" /> <path d="M5.001 1.5v1.5" /> <path d="M5.001 7v1.5" /> <path d="M8.032 3.25l-1.299 .75" /> <path d="M3.27 6l-1.3 .75" /> <path d="M1.97 3.25l1.3 .75" /> <path d="M6.733 6l1.3 .75" /></svg>',
+    group: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-custom-group-fields"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M5 6v12" /><path d="M5 9h3" /><path d="M5 15h3" /><rect x="9" y="5" width="10" height="5" rx="1.5" /><rect x="9" y="14" width="10" height="5" rx="1.5" /></svg>',
+    refresh_fx: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" class="icon icon-custom-recalculate-badge"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M15 7a7 7 0 1 0 2 5"/><path d="M15 4v4h-4"/><g transform="translate(12 10)"><g transform="scale(0.6)" stroke-width="4"><path d="M6.5 5.5h10.5l-5.5 6.5l5.5 6.5h-10.5"/></g></g></svg>',
+  };
+}

@@ -1,3 +1,8 @@
+// ───────────────────────────────────────────────────────────────────
+// MODULE:    temporal
+// COMPONENT: screenshot scenarios for the calendar month/week/mini grids and the timeline, pinned to one fictional "now"
+// ───────────────────────────────────────────────────────────────────
+
 /**
  * Temporal surfaces: the calendar month grid, the week time grid, the mini calendar
  * picker, the timeline, and the two settings popovers that configure them.
@@ -20,7 +25,15 @@
  * captures still read as the same dataset as the table and board shots.
  */
 
-import { glyph } from "./_shared.mjs";
+// ───────────────────────────────────────────────────────────────────
+// 1. IMPORTS
+// ───────────────────────────────────────────────────────────────────
+
+import { glyph } from "./shared.mjs";
+
+// ───────────────────────────────────────────────────────────────────
+// 2. ICONS
+// ───────────────────────────────────────────────────────────────────
 
 /* Lucide path data for the icons the plugin injects with setIcon() at runtime. */
 const ICON = {
@@ -54,7 +67,10 @@ const ICON = {
 const eventColor = (tone) =>
   `--db-calendar-event-accent: var(--status-color-fg-${tone}); --db-calendar-event-bg: var(--status-color-bg-${tone});`;
 
-// ── Shared toolbar-popover rows ───────────────────────────────────────────────────────
+// ───────────────────────────────────────────────────────────────────
+// 3. SHARED TOOLBAR-POPOVER ROWS
+// ───────────────────────────────────────────────────────────────────
+
 // The calendar and timeline settings popovers are built by the same three helpers in both
 // renderers (createDropdownField, renderSwitch, renderRange), so the fixtures share them too.
 
@@ -101,7 +117,9 @@ const section = (title, body) => `
 const STATIC_POPOVER = `position: static !important; top: auto !important; right: auto !important;
   left: auto !important; max-height: none !important;`;
 
-// ── Calendar header ───────────────────────────────────────────────────────────────────
+// ───────────────────────────────────────────────────────────────────
+// 4. CALENDAR HEADER
+// ───────────────────────────────────────────────────────────────────
 
 const navButton = (icon, label) =>
   icon
@@ -139,7 +157,9 @@ const calendarHeader = (main, year, activeScale, prev, next) => `
     </div>
   </div>`;
 
-// ── Month grid ────────────────────────────────────────────────────────────────────────
+// ───────────────────────────────────────────────────────────────────
+// 5. MONTH GRID
+// ───────────────────────────────────────────────────────────────────
 
 const WEEKDAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
@@ -248,7 +268,9 @@ const MARCH_WEEKS = [
   },
 ];
 
-// ── Week time grid ────────────────────────────────────────────────────────────────────
+// ───────────────────────────────────────────────────────────────────
+// 6. WEEK TIME GRID
+// ───────────────────────────────────────────────────────────────────
 
 const WEEK_START_HOUR = 8;
 const WEEK_END_HOUR = 16;
@@ -318,7 +340,9 @@ const slotLines = () => {
   return out.join("");
 };
 
-// ── Mini calendar ─────────────────────────────────────────────────────────────────────
+// ───────────────────────────────────────────────────────────────────
+// 7. MINI CALENDAR
+// ───────────────────────────────────────────────────────────────────
 
 const MINI_WEEKS = [
   [1, 2, 3, 4, 5, 6, 7],
@@ -348,7 +372,9 @@ const miniDay = (n, weekIndex) => {
     </button>`;
 };
 
-// ── Timeline ──────────────────────────────────────────────────────────────────────────
+// ───────────────────────────────────────────────────────────────────
+// 8. TIMELINE
+// ───────────────────────────────────────────────────────────────────
 
 /* A two-week window, 23 March – 5 April 2026, one column per day. The renderer measures the
    unit width from the viewport; 72px is what a full-width desktop pane resolves to. */
@@ -439,13 +465,17 @@ const timelineNav = (icon, label) =>
         <span class="db-timeline-nav-icon">${glyph(icon)}</span></button>`
     : `<button type="button" class="db-timeline-nav-button is-text" aria-label="${label}">${label}</button>`;
 
+// ───────────────────────────────────────────────────────────────────
+// 9. SCENARIOS
+// ───────────────────────────────────────────────────────────────────
+
 export const TEMPORAL_SCENARIOS = [
   {
     id: "calendar-month-view",
     title: "Calendar month view",
     group: "views",
     width: 1100,
-    sources: ["src/views/CalendarRenderer.ts"],
+    sources: ["src/views/calendar-renderer.ts"],
     note: "Multi-day all-day bars, timed events, an overflow week and one event carried across the week boundary.",
     html: () => `
       <div class="note-database-container">
@@ -466,7 +496,7 @@ export const TEMPORAL_SCENARIOS = [
     title: "Calendar week time grid",
     group: "views",
     width: 1100,
-    sources: ["src/views/CalendarRenderer.ts"],
+    sources: ["src/views/calendar-renderer.ts"],
     note: "Sticky day header and all-day strip over the 08–16 time grid; the current-time ruler sits on Wednesday at 13:45.",
     html: () => `
       <div class="note-database-container">
@@ -529,7 +559,7 @@ export const TEMPORAL_SCENARIOS = [
     title: "Mini calendar date picker",
     group: "views",
     width: 340,
-    sources: ["src/views/CalendarMiniCalendarRenderer.ts", "src/views/CalendarRenderer.ts"],
+    sources: ["src/views/calendar-mini-calendar-renderer.ts", "src/views/calendar-renderer.ts"],
     note: "Days with events carry a short accent underline; the visible week reads as the selected pill run.",
     // Anchored absolutely under the calendar header, so with no header to hang from it leaves
     // the flow and the capture box collapses. Put back in flow to photograph it.
@@ -565,7 +595,7 @@ export const TEMPORAL_SCENARIOS = [
     title: "Calendar settings popover",
     group: "views",
     width: 640,
-    sources: ["src/views/CalendarToolbarRenderer.ts", "src/views/DropdownField.ts"],
+    sources: ["src/views/calendar-toolbar-renderer.ts", "src/views/dropdown-field.ts"],
     note: "The Time section only exists in week and day scale; the setup preview card below Data carries no stylesheet rules.",
     captureCss: `.note-database-container .db-calendar-options-popover { ${STATIC_POPOVER} }`,
     html: () => `
@@ -607,7 +637,7 @@ export const TEMPORAL_SCENARIOS = [
     title: "Timeline view",
     group: "views",
     width: 1100,
-    sources: ["src/views/CalendarTimelineRenderer.ts"],
+    sources: ["src/views/calendar-timeline-renderer.ts"],
     note: "Two weeks at one column per day; the April band marks the month boundary and the today line sits at 25 March 13:45.",
     html: () => `
       <div class="note-database-container db-view-timeline">
@@ -669,7 +699,7 @@ export const TEMPORAL_SCENARIOS = [
     title: "Timeline settings popover",
     group: "views",
     width: 640,
-    sources: ["src/views/CalendarTimelineToolbarRenderer.ts", "src/views/DropdownField.ts"],
+    sources: ["src/views/calendar-timeline-toolbar-renderer.ts", "src/views/dropdown-field.ts"],
     note: "Column width is a switch plus a slider here, not the calendar's mode dropdown; the slider only appears once the switch is on.",
     captureCss: `.note-database-container .db-calendar-timeline-options-popover { ${STATIC_POPOVER} }`,
     html: () => `

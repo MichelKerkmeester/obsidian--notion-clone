@@ -1,0 +1,51 @@
+// ───────────────────────────────────────────────────────────────────
+// MODULE:    text-link-scheme
+// COMPONENT: validate + assemble https/mailto/tel targets for scheme-typed text columns
+// ───────────────────────────────────────────────────────────────────
+//
+// A value that already carries a scheme prefix is accepted only when it is
+// in the same "family" as the configured scheme — https also accepts a
+// pre-existing http:// prefix (legacy links), but a mailto/tel column must
+// reject a value typed with the other's prefix rather than silently
+// double-prefixing it.
+
+// ───────────────────────────────────────────────────────────────────
+// 1. TYPES & CONSTANTS
+// ───────────────────────────────────────────────────────────────────
+
+export type TextLinkScheme = "https" | "mailto" | "tel";
+
+export const TEXT_LINK_SCHEMES = ["https", "mailto", "tel"] as const;
+
+const URL_SCHEME_RE = /^[a-z][a-z0-9+.-]*:/i;
+const TEL_SEPARATOR_RE = /[\s()-]/g;
+
+// ───────────────────────────────────────────────────────────────────
+// 2. SCHEME TARGET ASSEMBLY
+// ───────────────────────────────────────────────────────────────────
+
+export function isTextLinkScheme(value: unknown): value is TextLinkScheme {
+  return typeof value === "string" && (TEXT_LINK_SCHEMES as readonly string[]).includes(value);
+}
+
+export function assembleSchemeLinkTarget(scheme: unknown, value: unknown): string | null {
+  if (!isTextLinkScheme(scheme) || typeof value !== "string") return null;
+
+  const text = value.trim();
+  if (!text || text.length > 2048 || /[\r\n\t]/.test(text)) return null;
+
+  const existingScheme = text.match(URL_SCHEME_RE)?.[0].slice(0, -1).toLowerCase();
+  if (existingScheme) {
+    const inFamily = scheme === "https"
+      ? existingScheme === "http" || existingScheme === "https"
+      : existingScheme === scheme;
+    if (!inFamily) return null;
+  }
+
+  const target = existingScheme
+    ? text
+    : scheme === "https"
+      ? `https://${text}`
+      : `${scheme}:${text}`;
+  return scheme === "tel" ? target.replace(TEL_SEPARATOR_RE, "") : target;
+}

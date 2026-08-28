@@ -17,7 +17,7 @@ Tiles keep icon and caption inside their own bounds; the duplicate checkbox is n
 |---|---|
 | ![add-view-popover dark](components/add-view-popover-mobile-dark.png) | ![add-view-popover light](components/add-view-popover-mobile-light.png) |
 
-Sources: `src/views/ToolbarRenderer.ts`
+Sources: `src/views/toolbar-renderer.ts`
 
 ### Active rule popover — filter
 
@@ -27,7 +27,7 @@ Editing one chip opens the filter panel's single-rule editor: field, operator an
 |---|---|
 | ![chrome-active-rule-popover-filter dark](components/chrome-active-rule-popover-filter-mobile-dark.png) | ![chrome-active-rule-popover-filter light](components/chrome-active-rule-popover-filter-mobile-light.png) |
 
-Sources: `src/views/ActiveRulePopoverRenderer.ts`, `src/views/FilterPanelRenderer.ts`
+Sources: `src/views/active-rule-popover-renderer.ts`, `src/views/filter-panel-renderer.ts`
 
 ### Active rule popover — sort
 
@@ -37,7 +37,7 @@ The sort variant adds db-sort-panel and drops the drag handle and reorder button
 |---|---|
 | ![chrome-active-rule-popover-sort dark](components/chrome-active-rule-popover-sort-mobile-dark.png) | ![chrome-active-rule-popover-sort light](components/chrome-active-rule-popover-sort-mobile-light.png) |
 
-Sources: `src/views/ActiveRulePopoverRenderer.ts`, `src/views/SortPanelRenderer.ts`
+Sources: `src/views/active-rule-popover-renderer.ts`, `src/views/sort-panel-renderer.ts`
 
 ### Active filter and sort chips
 
@@ -47,7 +47,7 @@ The rail lives in the header below the toolbar. Sort chips come first and carry 
 |---|---|
 | ![chrome-active-view-controls dark](components/chrome-active-view-controls-mobile-dark.png) | ![chrome-active-view-controls light](components/chrome-active-view-controls-mobile-light.png) |
 
-Sources: `src/views/ActiveViewControlsRenderer.ts`
+Sources: `src/views/active-view-controls-renderer.ts`
 
 ### Chart view — empty state
 
@@ -57,7 +57,7 @@ Every other chart type is a Chart.js canvas painted at runtime, so this recovery
 |---|---|
 | ![chrome-chart-empty dark](components/chrome-chart-empty-mobile-dark.png) | ![chrome-chart-empty light](components/chrome-chart-empty-mobile-light.png) |
 
-Sources: `src/views/ChartRenderer.ts`
+Sources: `src/views/chart-renderer.ts`
 
 ### Chart view — single number
 
@@ -67,7 +67,7 @@ The one chart type the stylesheet draws in full: renderNumber writes three divs 
 |---|---|
 | ![chrome-chart-number dark](components/chrome-chart-number-mobile-dark.png) | ![chrome-chart-number light](components/chrome-chart-number-mobile-light.png) |
 
-Sources: `src/views/ChartRenderer.ts`
+Sources: `src/views/chart-renderer.ts`
 
 ### Chart options popover
 
@@ -77,7 +77,7 @@ What the chart view uses instead of a toolbar of its own: the chart-options butt
 |---|---|
 | ![chrome-chart-options-popover dark](components/chrome-chart-options-popover-mobile-dark.png) | ![chrome-chart-options-popover light](components/chrome-chart-options-popover-mobile-light.png) |
 
-Sources: `src/views/ChartToolbarRenderer.ts`
+Sources: `src/views/chart-toolbar-renderer.ts`
 
 ### Grouped table header rows
 
@@ -87,7 +87,7 @@ An option-typed group field renders its key as a colored status badge; a field w
 |---|---|
 | ![chrome-group-header-row dark](components/chrome-group-header-row-mobile-dark.png) | ![chrome-group-header-row light](components/chrome-group-header-row-mobile-light.png) |
 
-Sources: `src/views/GroupLabelRenderer.ts`, `src/views/TableRenderer.ts`, `src/views/SummaryRenderer.ts`
+Sources: `src/views/group-label-renderer.ts`, `src/views/table-renderer.ts`, `src/views/summary-renderer.ts`
 
 ### Summary row
 
@@ -97,7 +97,7 @@ Total is always present; each configured summary rule is a draggable, clickable 
 |---|---|
 | ![chrome-summary-row dark](components/chrome-summary-row-mobile-dark.png) | ![chrome-summary-row light](components/chrome-summary-row-mobile-light.png) |
 
-Sources: `src/views/SummaryRenderer.ts`
+Sources: `src/views/summary-renderer.ts`
 
 ### Table footer aggregates
 
@@ -107,7 +107,7 @@ A column with summary rules stacks each kind over its result; a column without o
 |---|---|
 | ![chrome-table-footer dark](components/chrome-table-footer-mobile-dark.png) | ![chrome-table-footer light](components/chrome-table-footer-mobile-light.png) |
 
-Sources: `src/views/TableFooterRenderer.ts`, `src/views/TableRenderer.ts`
+Sources: `src/views/table-footer-renderer.ts`, `src/views/table-renderer.ts`
 
 ### Main toolbar
 
@@ -117,7 +117,7 @@ View switcher on the left; query, properties, utilities and creation clusters on
 |---|---|
 | ![chrome-toolbar dark](components/chrome-toolbar-mobile-dark.png) | ![chrome-toolbar light](components/chrome-toolbar-mobile-light.png) |
 
-Sources: `src/views/ToolbarRenderer.ts`
+Sources: `src/views/toolbar-renderer.ts`
 
 ### Toolbar search, collapsed and expanded
 
@@ -127,7 +127,7 @@ The wrap is 28px wide at rest and widens to 150px under is-active; the clear but
 |---|---|
 | ![chrome-toolbar-search dark](components/chrome-toolbar-search-mobile-dark.png) | ![chrome-toolbar-search light](components/chrome-toolbar-search-mobile-light.png) |
 
-Sources: `src/views/ToolbarRenderer.ts`
+Sources: `src/views/toolbar-renderer.ts`
 
 ### View switcher tablist
 
@@ -137,7 +137,7 @@ The active tab carries is-active; the ⋯ tab appears only once the toolbar has 
 |---|---|
 | ![chrome-view-switcher dark](components/chrome-view-switcher-mobile-dark.png) | ![chrome-view-switcher light](components/chrome-view-switcher-mobile-light.png) |
 
-Sources: `src/views/ToolbarRenderer.ts`
+Sources: `src/views/toolbar-renderer.ts`
 
 ### Dropdown with disabled option
 
@@ -147,7 +147,7 @@ A disabled option is dimmed and carries a tooltip rather than inline explanatory
 |---|---|
 | ![dropdown-field dark](components/dropdown-field-mobile-dark.png) | ![dropdown-field light](components/dropdown-field-mobile-light.png) |
 
-Sources: `src/views/DropdownField.ts`
+Sources: `src/views/dropdown-field.ts`
 
 ### Column header affordances
 
@@ -157,7 +157,7 @@ The menu trigger sits inline after the label and the label truncates before it m
 |---|---|
 | ![table-column-header dark](components/table-column-header-mobile-dark.png) | ![table-column-header light](components/table-column-header-mobile-light.png) |
 
-Sources: `src/views/ColumnHeaderController.ts`
+Sources: `src/views/column-header-controller.ts`
 
 ## fields
 
@@ -169,7 +169,7 @@ Each row carries a drag handle, a colour dot that opens the colour picker, the c
 |---|---|
 | ![field-cell-edit-select dark](fields/field-cell-edit-select-mobile-dark.png) | ![field-cell-edit-select light](fields/field-cell-edit-select-mobile-light.png) |
 
-Sources: `src/views/CellRenderer.ts`, `src/data/ColumnTypes.ts`
+Sources: `src/views/cell-renderer.ts`, `src/data/column-types.ts`
 
 ### Text cell in edit state
 
@@ -179,7 +179,7 @@ Both editors keep the cell's rendered value visible underneath. The multi-line e
 |---|---|
 | ![field-cell-edit-text dark](fields/field-cell-edit-text-mobile-dark.png) | ![field-cell-edit-text light](fields/field-cell-edit-text-mobile-light.png) |
 
-Sources: `src/views/CellRenderer.ts`
+Sources: `src/views/cell-renderer.ts`
 
 ### Date value picker
 
@@ -189,7 +189,7 @@ The trigger shows the committed value; the popover stacks quick dates, the three
 |---|---|
 | ![field-date-value-picker dark](fields/field-date-value-picker-mobile-dark.png) | ![field-date-value-picker light](fields/field-date-value-picker-mobile-light.png) |
 
-Sources: `src/views/DateValuePicker.ts`, `src/views/CalendarMiniCalendarRenderer.ts`
+Sources: `src/views/date-value-picker.ts`, `src/views/calendar-mini-calendar-renderer.ts`
 
 ### Date value picker with time
 
@@ -199,7 +199,7 @@ A datetime column adds hour and minute segments after the date, and the trigger 
 |---|---|
 | ![field-date-value-picker-datetime dark](fields/field-date-value-picker-datetime-mobile-dark.png) | ![field-date-value-picker-datetime light](fields/field-date-value-picker-datetime-mobile-light.png) |
 
-Sources: `src/views/DateValuePicker.ts`, `src/views/CalendarMiniCalendarRenderer.ts`
+Sources: `src/views/date-value-picker.ts`, `src/views/calendar-mini-calendar-renderer.ts`
 
 ### File fields
 
@@ -209,7 +209,7 @@ file.tags render as status badges, link-list fields as compact chips, and file.f
 |---|---|
 | ![field-file-fields dark](fields/field-file-fields-mobile-dark.png) | ![field-file-fields light](fields/field-file-fields-mobile-light.png) |
 
-Sources: `src/views/FileFieldRenderer.ts`
+Sources: `src/views/file-field-renderer.ts`
 
 ### Icon picker popover
 
@@ -219,7 +219,7 @@ The Icons tab adds the colour strip; the picker is created on document.body, so 
 |---|---|
 | ![field-icon-picker dark](fields/field-icon-picker-mobile-dark.png) | ![field-icon-picker light](fields/field-icon-picker-mobile-light.png) |
 
-Sources: `src/views/IconPickerPopover.ts`, `src/views/RecordIconRenderer.ts`
+Sources: `src/views/icon-picker-popover.ts`, `src/views/record-icon-renderer.ts`
 
 ### Number display styles
 
@@ -229,7 +229,7 @@ Rating, progress bar and progress ring all tint through db-num-color-*, which se
 |---|---|
 | ![field-number-displays dark](fields/field-number-displays-mobile-dark.png) | ![field-number-displays light](fields/field-number-displays-mobile-light.png) |
 
-Sources: `src/views/NumberDisplayRenderer.ts`, `src/data/NumberDisplay.ts`
+Sources: `src/views/number-display-renderer.ts`, `src/data/number-display.ts`
 
 ### Option colour picker
 
@@ -239,7 +239,7 @@ Sixteen swatches in the persisted order, the current colour ringed. Opened from 
 |---|---|
 | ![field-option-color-picker dark](fields/field-option-color-picker-mobile-dark.png) | ![field-option-color-picker light](fields/field-option-color-picker-mobile-light.png) |
 
-Sources: `src/views/OptionColorPicker.ts`, `src/data/StatusColors.ts`
+Sources: `src/views/option-color-picker.ts`, `src/data/status-colors.ts`
 
 ### Record icon
 
@@ -249,7 +249,7 @@ The table puts record icons in a 28px gutter column of their own, whose header i
 |---|---|
 | ![field-record-icon dark](fields/field-record-icon-mobile-dark.png) | ![field-record-icon light](fields/field-record-icon-mobile-light.png) |
 
-Sources: `src/views/RecordIconRenderer.ts`, `src/views/TableRenderer.ts`, `src/data/RecordIcon.ts`
+Sources: `src/views/record-icon-renderer.ts`, `src/views/table-renderer.ts`, `src/data/record-icon.ts`
 
 ### Relation values, resolved and broken
 
@@ -259,7 +259,7 @@ A resolved target renders file-text on a tinted chip; a target the metadata cach
 |---|---|
 | ![field-relation-values dark](fields/field-relation-values-mobile-dark.png) | ![field-relation-values light](fields/field-relation-values-mobile-light.png) |
 
-Sources: `src/views/RelationValueRenderer.ts`
+Sources: `src/views/relation-value-renderer.ts`
 
 ### Status colour range
 
@@ -269,7 +269,7 @@ Every select, status, multi-select and tag value in the plugin is a status-badge
 |---|---|
 | ![field-status-colors dark](fields/field-status-colors-mobile-dark.png) | ![field-status-colors light](fields/field-status-colors-mobile-light.png) |
 
-Sources: `src/data/StatusColors.ts`, `src/views/CellRenderer.ts`
+Sources: `src/data/status-colors.ts`, `src/views/cell-renderer.ts`
 
 ## panels
 
@@ -281,7 +281,7 @@ One row per property: drag handle, visibility checkbox, type icon, name with its
 |---|---|
 | ![panel-column-manager dark](panels/panel-column-manager-mobile-dark.png) | ![panel-column-manager light](panels/panel-column-manager-mobile-light.png) |
 
-Sources: `src/views/ColumnManagerRenderer.ts`, `src/views/PropertyTypeIcon.ts`
+Sources: `src/views/column-manager-renderer.ts`, `src/views/property-type-icon.ts`
 
 ### Filter panel with active conditions
 
@@ -291,7 +291,7 @@ Three conditions build a group node, so the panel header drops its AND/OR button
 |---|---|
 | ![panel-filter-conditions dark](panels/panel-filter-conditions-mobile-dark.png) | ![panel-filter-conditions light](panels/panel-filter-conditions-mobile-light.png) |
 
-Sources: `src/views/FilterPanelRenderer.ts`, `src/views/DropdownField.ts`
+Sources: `src/views/filter-panel-renderer.ts`, `src/views/dropdown-field.ts`
 
 ### Filter panel with a nested group and a NOT
 
@@ -301,7 +301,7 @@ Nesting stops at three levels: the innermost rows lose their add-group button be
 |---|---|
 | ![panel-filter-nested-group dark](panels/panel-filter-nested-group-mobile-dark.png) | ![panel-filter-nested-group light](panels/panel-filter-nested-group-mobile-light.png) |
 
-Sources: `src/views/FilterPanelRenderer.ts`, `src/data/ViewFilterTree.ts`
+Sources: `src/views/filter-panel-renderer.ts`, `src/data/view-filter-tree.ts`
 
 ### Record detail panel
 
@@ -311,7 +311,7 @@ Opened from a calendar or timeline event card. Fields are click-to-edit; an empt
 |---|---|
 | ![panel-record-detail dark](panels/panel-record-detail-mobile-dark.png) | ![panel-record-detail light](panels/panel-record-detail-mobile-light.png) |
 
-Sources: `src/views/RecordDetailPanel.ts`, `src/views/CardFieldRenderer.ts`
+Sources: `src/views/record-detail-panel.ts`, `src/views/card-field-renderer.ts`
 
 ### Record detail — mobile bottom sheet
 
@@ -331,7 +331,7 @@ Docks against the right edge of the table it was opened from. Values are display
 |---|---|
 | ![panel-record-peek dark](panels/panel-record-peek-mobile-dark.png) | ![panel-record-peek light](panels/panel-record-peek-mobile-light.png) |
 
-Sources: `src/views/TableRecordPeek.ts`, `src/views/TableRenderer.ts`
+Sources: `src/views/table-record-peek.ts`, `src/views/table-renderer.ts`
 
 ### Sort panel with no rules, calendar hint
 
@@ -341,7 +341,7 @@ Calendar views add a hint above the empty state because layout order wins over u
 |---|---|
 | ![panel-sort-calendar-empty dark](panels/panel-sort-calendar-empty-mobile-dark.png) | ![panel-sort-calendar-empty light](panels/panel-sort-calendar-empty-mobile-light.png) |
 
-Sources: `src/views/SortPanelRenderer.ts`
+Sources: `src/views/sort-panel-renderer.ts`
 
 ### Sort panel with two rules
 
@@ -351,7 +351,7 @@ Rows are draggable; the first rule's move-up and the last rule's move-down are d
 |---|---|
 | ![panel-sort-rules dark](panels/panel-sort-rules-mobile-dark.png) | ![panel-sort-rules light](panels/panel-sort-rules-mobile-light.png) |
 
-Sources: `src/views/SortPanelRenderer.ts`, `src/views/DropdownField.ts`
+Sources: `src/views/sort-panel-renderer.ts`, `src/views/dropdown-field.ts`
 
 ### View configuration panel
 
@@ -361,7 +361,7 @@ The top of the panel for a table view: database-scoped rows above the section di
 |---|---|
 | ![panel-view-config dark](panels/panel-view-config-mobile-dark.png) | ![panel-view-config light](panels/panel-view-config-mobile-light.png) |
 
-Sources: `src/views/ViewConfigPanelRenderer.ts`, `src/views/DropdownField.ts`
+Sources: `src/views/view-config-panel-renderer.ts`, `src/views/dropdown-field.ts`
 
 ## states
 
@@ -371,7 +371,7 @@ Sources: `src/views/ViewConfigPanelRenderer.ts`, `src/views/DropdownField.ts`
 |---|---|
 | ![empty-state dark](states/empty-state-mobile-dark.png) | ![empty-state light](states/empty-state-mobile-light.png) |
 
-Sources: `src/views/EmptyStateRenderer.ts`
+Sources: `src/views/empty-state-renderer.ts`
 
 ## views
 
@@ -391,7 +391,7 @@ Sources: `src/views/BoardRenderer.ts`, `src/views/GroupLabelRenderer.ts`, `src/v
 |---|---|
 | ![board-view dark](views/board-view-mobile-dark.png) | ![board-view light](views/board-view-mobile-light.png) |
 
-Sources: `src/views/BoardRenderer.ts`, `src/views/CardFieldRenderer.ts`
+Sources: `src/views/board-renderer.ts`, `src/views/card-field-renderer.ts`
 
 ### Mini calendar date picker
 
@@ -401,7 +401,7 @@ Days with events carry a short accent underline; the visible week reads as the s
 |---|---|
 | ![calendar-mini-calendar dark](views/calendar-mini-calendar-mobile-dark.png) | ![calendar-mini-calendar light](views/calendar-mini-calendar-mobile-light.png) |
 
-Sources: `src/views/CalendarMiniCalendarRenderer.ts`, `src/views/CalendarRenderer.ts`
+Sources: `src/views/calendar-mini-calendar-renderer.ts`, `src/views/calendar-renderer.ts`
 
 ### Calendar month view
 
@@ -411,7 +411,7 @@ Multi-day all-day bars, timed events, an overflow week and one event carried acr
 |---|---|
 | ![calendar-month-view dark](views/calendar-month-view-mobile-dark.png) | ![calendar-month-view light](views/calendar-month-view-mobile-light.png) |
 
-Sources: `src/views/CalendarRenderer.ts`
+Sources: `src/views/calendar-renderer.ts`
 
 ### Calendar settings popover
 
@@ -421,7 +421,7 @@ The Time section only exists in week and day scale; the setup preview card below
 |---|---|
 | ![calendar-toolbar-options dark](views/calendar-toolbar-options-mobile-dark.png) | ![calendar-toolbar-options light](views/calendar-toolbar-options-mobile-light.png) |
 
-Sources: `src/views/CalendarToolbarRenderer.ts`, `src/views/DropdownField.ts`
+Sources: `src/views/calendar-toolbar-renderer.ts`, `src/views/dropdown-field.ts`
 
 ### Calendar week time grid
 
@@ -431,7 +431,7 @@ Sticky day header and all-day strip over the 08–16 time grid; the current-time
 |---|---|
 | ![calendar-week-time-grid dark](views/calendar-week-time-grid-mobile-dark.png) | ![calendar-week-time-grid light](views/calendar-week-time-grid-mobile-light.png) |
 
-Sources: `src/views/CalendarRenderer.ts`
+Sources: `src/views/calendar-renderer.ts`
 
 ### Gallery view
 
@@ -439,7 +439,7 @@ Sources: `src/views/CalendarRenderer.ts`
 |---|---|
 | ![gallery-view dark](views/gallery-view-mobile-dark.png) | ![gallery-view light](views/gallery-view-mobile-light.png) |
 
-Sources: `src/views/GalleryRenderer.ts`, `src/views/CardFieldRenderer.ts`
+Sources: `src/views/gallery-renderer.ts`, `src/views/card-field-renderer.ts`
 
 ### List view — mobile
 
@@ -457,7 +457,7 @@ Sources: `src/views/ListRenderer.ts`, `src/views/CardFieldRenderer.ts`
 |---|---|
 | ![list-view dark](views/list-view-mobile-dark.png) | ![list-view light](views/list-view-mobile-light.png) |
 
-Sources: `src/views/ListRenderer.ts`, `src/views/CardFieldRenderer.ts`
+Sources: `src/views/list-renderer.ts`, `src/views/card-field-renderer.ts`
 
 ### Table view — mobile auto-fit
 
@@ -475,7 +475,7 @@ Sources: `src/views/TableRenderer.ts`, `src/views/TableColumnLayoutSync.ts`, `sr
 |---|---|
 | ![table-view dark](views/table-view-mobile-dark.png) | ![table-view light](views/table-view-mobile-light.png) |
 
-Sources: `src/views/TableRenderer.ts`, `src/views/ColumnHeaderController.ts`, `src/views/CellRenderer.ts`
+Sources: `src/views/table-renderer.ts`, `src/views/column-header-controller.ts`, `src/views/cell-renderer.ts`
 
 ### Timeline settings popover
 
@@ -485,7 +485,7 @@ Column width is a switch plus a slider here, not the calendar's mode dropdown; t
 |---|---|
 | ![timeline-toolbar-options dark](views/timeline-toolbar-options-mobile-dark.png) | ![timeline-toolbar-options light](views/timeline-toolbar-options-mobile-light.png) |
 
-Sources: `src/views/CalendarTimelineToolbarRenderer.ts`, `src/views/DropdownField.ts`
+Sources: `src/views/calendar-timeline-toolbar-renderer.ts`, `src/views/dropdown-field.ts`
 
 ### Timeline view
 
@@ -495,4 +495,4 @@ Two weeks at one column per day; the April band marks the month boundary and the
 |---|---|
 | ![timeline-view dark](views/timeline-view-mobile-dark.png) | ![timeline-view light](views/timeline-view-mobile-light.png) |
 
-Sources: `src/views/CalendarTimelineRenderer.ts`
+Sources: `src/views/calendar-timeline-renderer.ts`

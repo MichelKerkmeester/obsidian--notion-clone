@@ -1,6 +1,6 @@
 {
   "generatedFrom": {
-    "stylesheet": "styles.css@375296038107"
+    "stylesheet": "styles.css@b6dfd2044a17"
   },
   "scenarios": [
     {
@@ -11,11 +11,11 @@
       "device": "desktop",
       "file": "screenshots/components/add-view-popover-desktop-dark.png",
       "sources": [
-        "src/views/ToolbarRenderer.ts"
+        "src/views/toolbar-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/ToolbarRenderer.ts": "1025d976121a",
-        "styles.css": "375296038107"
+        "src/views/toolbar-renderer.ts": "6e686fffefaf",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "Tiles keep icon and caption inside their own bounds; the duplicate checkbox is not stretched.",
       "capture": "element",
@@ -29,11 +29,11 @@
       "device": "desktop",
       "file": "screenshots/components/add-view-popover-desktop-light.png",
       "sources": [
-        "src/views/ToolbarRenderer.ts"
+        "src/views/toolbar-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/ToolbarRenderer.ts": "1025d976121a",
-        "styles.css": "375296038107"
+        "src/views/toolbar-renderer.ts": "6e686fffefaf",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "Tiles keep icon and caption inside their own bounds; the duplicate checkbox is not stretched.",
       "capture": "element",
@@ -47,11 +47,11 @@
       "device": "mobile",
       "file": "screenshots/components/add-view-popover-mobile-dark.png",
       "sources": [
-        "src/views/ToolbarRenderer.ts"
+        "src/views/toolbar-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/ToolbarRenderer.ts": "1025d976121a",
-        "styles.css": "375296038107"
+        "src/views/toolbar-renderer.ts": "6e686fffefaf",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "Tiles keep icon and caption inside their own bounds; the duplicate checkbox is not stretched.",
       "capture": "element",
@@ -65,11 +65,11 @@
       "device": "mobile",
       "file": "screenshots/components/add-view-popover-mobile-light.png",
       "sources": [
-        "src/views/ToolbarRenderer.ts"
+        "src/views/toolbar-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/ToolbarRenderer.ts": "1025d976121a",
-        "styles.css": "375296038107"
+        "src/views/toolbar-renderer.ts": "6e686fffefaf",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "Tiles keep icon and caption inside their own bounds; the duplicate checkbox is not stretched.",
       "capture": "element",
@@ -83,13 +83,13 @@
       "device": "desktop",
       "file": "screenshots/components/chrome-active-rule-popover-filter-desktop-dark.png",
       "sources": [
-        "src/views/ActiveRulePopoverRenderer.ts",
-        "src/views/FilterPanelRenderer.ts"
+        "src/views/active-rule-popover-renderer.ts",
+        "src/views/filter-panel-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/ActiveRulePopoverRenderer.ts": "cf1f8318b497",
-        "src/views/FilterPanelRenderer.ts": "fef01cd8f3f5",
-        "styles.css": "375296038107"
+        "src/views/active-rule-popover-renderer.ts": "d9143edf30ba",
+        "src/views/filter-panel-renderer.ts": "deabe2ecc320",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "Editing one chip opens the filter panel's single-rule editor: field, operator and value, with no remove button.",
       "capture": "element",
@@ -103,13 +103,13 @@
       "device": "desktop",
       "file": "screenshots/components/chrome-active-rule-popover-filter-desktop-light.png",
       "sources": [
-        "src/views/ActiveRulePopoverRenderer.ts",
-        "src/views/FilterPanelRenderer.ts"
+        "src/views/active-rule-popover-renderer.ts",
+        "src/views/filter-panel-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/ActiveRulePopoverRenderer.ts": "cf1f8318b497",
-        "src/views/FilterPanelRenderer.ts": "fef01cd8f3f5",
-        "styles.css": "375296038107"
+        "src/views/active-rule-popover-renderer.ts": "d9143edf30ba",
+        "src/views/filter-panel-renderer.ts": "deabe2ecc320",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "Editing one chip opens the filter panel's single-rule editor: field, operator and value, with no remove button.",
       "capture": "element",
@@ -123,13 +123,13 @@
       "device": "mobile",
       "file": "screenshots/components/chrome-active-rule-popover-filter-mobile-dark.png",
       "sources": [
-        "src/views/ActiveRulePopoverRenderer.ts",
-        "src/views/FilterPanelRenderer.ts"
+        "src/views/active-rule-popover-renderer.ts",
+        "src/views/filter-panel-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/ActiveRulePopoverRenderer.ts": "cf1f8318b497",
-        "src/views/FilterPanelRenderer.ts": "fef01cd8f3f5",
-        "styles.css": "375296038107"
+        "src/views/active-rule-popover-renderer.ts": "d9143edf30ba",
+        "src/views/filter-panel-renderer.ts": "deabe2ecc320",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "Editing one chip opens the filter panel's single-rule editor: field, operator and value, with no remove button.",
       "capture": "element",
@@ -143,13 +143,13 @@
       "device": "mobile",
       "file": "screenshots/components/chrome-active-rule-popover-filter-mobile-light.png",
       "sources": [
-        "src/views/ActiveRulePopoverRenderer.ts",
-        "src/views/FilterPanelRenderer.ts"
+        "src/views/active-rule-popover-renderer.ts",
+        "src/views/filter-panel-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/ActiveRulePopoverRenderer.ts": "cf1f8318b497",
-        "src/views/FilterPanelRenderer.ts": "fef01cd8f3f5",
-        "styles.css": "375296038107"
+        "src/views/active-rule-popover-renderer.ts": "d9143edf30ba",
+        "src/views/filter-panel-renderer.ts": "deabe2ecc320",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "Editing one chip opens the filter panel's single-rule editor: field, operator and value, with no remove button.",
       "capture": "element",
@@ -163,13 +163,13 @@
       "device": "desktop",
       "file": "screenshots/components/chrome-active-rule-popover-sort-desktop-dark.png",
       "sources": [
-        "src/views/ActiveRulePopoverRenderer.ts",
-        "src/views/SortPanelRenderer.ts"
+        "src/views/active-rule-popover-renderer.ts",
+        "src/views/sort-panel-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/ActiveRulePopoverRenderer.ts": "cf1f8318b497",
-        "src/views/SortPanelRenderer.ts": "bef6bb96d504",
-        "styles.css": "375296038107"
+        "src/views/active-rule-popover-renderer.ts": "d9143edf30ba",
+        "src/views/sort-panel-renderer.ts": "19109d09b2d5",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "The sort variant adds db-sort-panel and drops the drag handle and reorder buttons the full panel shows.",
       "capture": "element",
@@ -183,13 +183,13 @@
       "device": "desktop",
       "file": "screenshots/components/chrome-active-rule-popover-sort-desktop-light.png",
       "sources": [
-        "src/views/ActiveRulePopoverRenderer.ts",
-        "src/views/SortPanelRenderer.ts"
+        "src/views/active-rule-popover-renderer.ts",
+        "src/views/sort-panel-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/ActiveRulePopoverRenderer.ts": "cf1f8318b497",
-        "src/views/SortPanelRenderer.ts": "bef6bb96d504",
-        "styles.css": "375296038107"
+        "src/views/active-rule-popover-renderer.ts": "d9143edf30ba",
+        "src/views/sort-panel-renderer.ts": "19109d09b2d5",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "The sort variant adds db-sort-panel and drops the drag handle and reorder buttons the full panel shows.",
       "capture": "element",
@@ -203,13 +203,13 @@
       "device": "mobile",
       "file": "screenshots/components/chrome-active-rule-popover-sort-mobile-dark.png",
       "sources": [
-        "src/views/ActiveRulePopoverRenderer.ts",
-        "src/views/SortPanelRenderer.ts"
+        "src/views/active-rule-popover-renderer.ts",
+        "src/views/sort-panel-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/ActiveRulePopoverRenderer.ts": "cf1f8318b497",
-        "src/views/SortPanelRenderer.ts": "bef6bb96d504",
-        "styles.css": "375296038107"
+        "src/views/active-rule-popover-renderer.ts": "d9143edf30ba",
+        "src/views/sort-panel-renderer.ts": "19109d09b2d5",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "The sort variant adds db-sort-panel and drops the drag handle and reorder buttons the full panel shows.",
       "capture": "element",
@@ -223,13 +223,13 @@
       "device": "mobile",
       "file": "screenshots/components/chrome-active-rule-popover-sort-mobile-light.png",
       "sources": [
-        "src/views/ActiveRulePopoverRenderer.ts",
-        "src/views/SortPanelRenderer.ts"
+        "src/views/active-rule-popover-renderer.ts",
+        "src/views/sort-panel-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/ActiveRulePopoverRenderer.ts": "cf1f8318b497",
-        "src/views/SortPanelRenderer.ts": "bef6bb96d504",
-        "styles.css": "375296038107"
+        "src/views/active-rule-popover-renderer.ts": "d9143edf30ba",
+        "src/views/sort-panel-renderer.ts": "19109d09b2d5",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "The sort variant adds db-sort-panel and drops the drag handle and reorder buttons the full panel shows.",
       "capture": "element",
@@ -243,11 +243,11 @@
       "device": "desktop",
       "file": "screenshots/components/chrome-active-view-controls-desktop-dark.png",
       "sources": [
-        "src/views/ActiveViewControlsRenderer.ts"
+        "src/views/active-view-controls-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/ActiveViewControlsRenderer.ts": "d6fc65cd5ade",
-        "styles.css": "375296038107"
+        "src/views/active-view-controls-renderer.ts": "28f8d85134ed",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "The rail lives in the header below the toolbar. Sort chips come first and carry their position as a superscript; the AND button between the groups toggles filter logic.",
       "capture": "element",
@@ -261,11 +261,11 @@
       "device": "desktop",
       "file": "screenshots/components/chrome-active-view-controls-desktop-light.png",
       "sources": [
-        "src/views/ActiveViewControlsRenderer.ts"
+        "src/views/active-view-controls-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/ActiveViewControlsRenderer.ts": "d6fc65cd5ade",
-        "styles.css": "375296038107"
+        "src/views/active-view-controls-renderer.ts": "28f8d85134ed",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "The rail lives in the header below the toolbar. Sort chips come first and carry their position as a superscript; the AND button between the groups toggles filter logic.",
       "capture": "element",
@@ -279,11 +279,11 @@
       "device": "mobile",
       "file": "screenshots/components/chrome-active-view-controls-mobile-dark.png",
       "sources": [
-        "src/views/ActiveViewControlsRenderer.ts"
+        "src/views/active-view-controls-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/ActiveViewControlsRenderer.ts": "d6fc65cd5ade",
-        "styles.css": "375296038107"
+        "src/views/active-view-controls-renderer.ts": "28f8d85134ed",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "The rail lives in the header below the toolbar. Sort chips come first and carry their position as a superscript; the AND button between the groups toggles filter logic.",
       "capture": "element",
@@ -297,11 +297,11 @@
       "device": "mobile",
       "file": "screenshots/components/chrome-active-view-controls-mobile-light.png",
       "sources": [
-        "src/views/ActiveViewControlsRenderer.ts"
+        "src/views/active-view-controls-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/ActiveViewControlsRenderer.ts": "d6fc65cd5ade",
-        "styles.css": "375296038107"
+        "src/views/active-view-controls-renderer.ts": "28f8d85134ed",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "The rail lives in the header below the toolbar. Sort chips come first and carry their position as a superscript; the AND button between the groups toggles filter logic.",
       "capture": "element",
@@ -315,11 +315,11 @@
       "device": "desktop",
       "file": "screenshots/components/chrome-chart-empty-desktop-dark.png",
       "sources": [
-        "src/views/ChartRenderer.ts"
+        "src/views/chart-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/ChartRenderer.ts": "ae1db5bf2723",
-        "styles.css": "375296038107"
+        "src/views/chart-renderer.ts": "b365bc3437fb",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "Every other chart type is a Chart.js canvas painted at runtime, so this recovery state and the single-number chart are what a capture can show of the chart body.",
       "capture": "element",
@@ -333,11 +333,11 @@
       "device": "desktop",
       "file": "screenshots/components/chrome-chart-empty-desktop-light.png",
       "sources": [
-        "src/views/ChartRenderer.ts"
+        "src/views/chart-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/ChartRenderer.ts": "ae1db5bf2723",
-        "styles.css": "375296038107"
+        "src/views/chart-renderer.ts": "b365bc3437fb",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "Every other chart type is a Chart.js canvas painted at runtime, so this recovery state and the single-number chart are what a capture can show of the chart body.",
       "capture": "element",
@@ -351,11 +351,11 @@
       "device": "mobile",
       "file": "screenshots/components/chrome-chart-empty-mobile-dark.png",
       "sources": [
-        "src/views/ChartRenderer.ts"
+        "src/views/chart-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/ChartRenderer.ts": "ae1db5bf2723",
-        "styles.css": "375296038107"
+        "src/views/chart-renderer.ts": "b365bc3437fb",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "Every other chart type is a Chart.js canvas painted at runtime, so this recovery state and the single-number chart are what a capture can show of the chart body.",
       "capture": "element",
@@ -369,11 +369,11 @@
       "device": "mobile",
       "file": "screenshots/components/chrome-chart-empty-mobile-light.png",
       "sources": [
-        "src/views/ChartRenderer.ts"
+        "src/views/chart-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/ChartRenderer.ts": "ae1db5bf2723",
-        "styles.css": "375296038107"
+        "src/views/chart-renderer.ts": "b365bc3437fb",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "Every other chart type is a Chart.js canvas painted at runtime, so this recovery state and the single-number chart are what a capture can show of the chart body.",
       "capture": "element",
@@ -387,11 +387,11 @@
       "device": "desktop",
       "file": "screenshots/components/chrome-chart-number-desktop-dark.png",
       "sources": [
-        "src/views/ChartRenderer.ts"
+        "src/views/chart-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/ChartRenderer.ts": "ae1db5bf2723",
-        "styles.css": "375296038107"
+        "src/views/chart-renderer.ts": "b365bc3437fb",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "The one chart type the stylesheet draws in full: renderNumber writes three divs and no canvas, so this is the only plotted chart a screenshot can show. The height class is what sizes it.",
       "capture": "element",
@@ -405,11 +405,11 @@
       "device": "desktop",
       "file": "screenshots/components/chrome-chart-number-desktop-light.png",
       "sources": [
-        "src/views/ChartRenderer.ts"
+        "src/views/chart-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/ChartRenderer.ts": "ae1db5bf2723",
-        "styles.css": "375296038107"
+        "src/views/chart-renderer.ts": "b365bc3437fb",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "The one chart type the stylesheet draws in full: renderNumber writes three divs and no canvas, so this is the only plotted chart a screenshot can show. The height class is what sizes it.",
       "capture": "element",
@@ -423,11 +423,11 @@
       "device": "mobile",
       "file": "screenshots/components/chrome-chart-number-mobile-dark.png",
       "sources": [
-        "src/views/ChartRenderer.ts"
+        "src/views/chart-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/ChartRenderer.ts": "ae1db5bf2723",
-        "styles.css": "375296038107"
+        "src/views/chart-renderer.ts": "b365bc3437fb",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "The one chart type the stylesheet draws in full: renderNumber writes three divs and no canvas, so this is the only plotted chart a screenshot can show. The height class is what sizes it.",
       "capture": "element",
@@ -441,11 +441,11 @@
       "device": "mobile",
       "file": "screenshots/components/chrome-chart-number-mobile-light.png",
       "sources": [
-        "src/views/ChartRenderer.ts"
+        "src/views/chart-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/ChartRenderer.ts": "ae1db5bf2723",
-        "styles.css": "375296038107"
+        "src/views/chart-renderer.ts": "b365bc3437fb",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "The one chart type the stylesheet draws in full: renderNumber writes three divs and no canvas, so this is the only plotted chart a screenshot can show. The height class is what sizes it.",
       "capture": "element",
@@ -459,11 +459,11 @@
       "device": "desktop",
       "file": "screenshots/components/chrome-chart-options-popover-desktop-dark.png",
       "sources": [
-        "src/views/ChartToolbarRenderer.ts"
+        "src/views/chart-toolbar-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/ChartToolbarRenderer.ts": "d4bfa471c477",
-        "styles.css": "375296038107"
+        "src/views/chart-toolbar-renderer.ts": "bee386af7e07",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "What the chart view uses instead of a toolbar of its own: the chart-options button in the toolbar opens this panel. Every row is a 18px/1fr/16px grid, so selects, switches, drill-in entries and export buttons line up on one set of columns.",
       "capture": "element",
@@ -477,11 +477,11 @@
       "device": "desktop",
       "file": "screenshots/components/chrome-chart-options-popover-desktop-light.png",
       "sources": [
-        "src/views/ChartToolbarRenderer.ts"
+        "src/views/chart-toolbar-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/ChartToolbarRenderer.ts": "d4bfa471c477",
-        "styles.css": "375296038107"
+        "src/views/chart-toolbar-renderer.ts": "bee386af7e07",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "What the chart view uses instead of a toolbar of its own: the chart-options button in the toolbar opens this panel. Every row is a 18px/1fr/16px grid, so selects, switches, drill-in entries and export buttons line up on one set of columns.",
       "capture": "element",
@@ -495,11 +495,11 @@
       "device": "mobile",
       "file": "screenshots/components/chrome-chart-options-popover-mobile-dark.png",
       "sources": [
-        "src/views/ChartToolbarRenderer.ts"
+        "src/views/chart-toolbar-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/ChartToolbarRenderer.ts": "d4bfa471c477",
-        "styles.css": "375296038107"
+        "src/views/chart-toolbar-renderer.ts": "bee386af7e07",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "What the chart view uses instead of a toolbar of its own: the chart-options button in the toolbar opens this panel. Every row is a 18px/1fr/16px grid, so selects, switches, drill-in entries and export buttons line up on one set of columns.",
       "capture": "element",
@@ -513,11 +513,11 @@
       "device": "mobile",
       "file": "screenshots/components/chrome-chart-options-popover-mobile-light.png",
       "sources": [
-        "src/views/ChartToolbarRenderer.ts"
+        "src/views/chart-toolbar-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/ChartToolbarRenderer.ts": "d4bfa471c477",
-        "styles.css": "375296038107"
+        "src/views/chart-toolbar-renderer.ts": "bee386af7e07",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "What the chart view uses instead of a toolbar of its own: the chart-options button in the toolbar opens this panel. Every row is a 18px/1fr/16px grid, so selects, switches, drill-in entries and export buttons line up on one set of columns.",
       "capture": "element",
@@ -531,15 +531,15 @@
       "device": "desktop",
       "file": "screenshots/components/chrome-group-header-row-desktop-dark.png",
       "sources": [
-        "src/views/GroupLabelRenderer.ts",
-        "src/views/TableRenderer.ts",
-        "src/views/SummaryRenderer.ts"
+        "src/views/group-label-renderer.ts",
+        "src/views/table-renderer.ts",
+        "src/views/summary-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/GroupLabelRenderer.ts": "b38adf0523c1",
-        "src/views/TableRenderer.ts": "ce0dc80023d8",
-        "src/views/SummaryRenderer.ts": "1d693b089de6",
-        "styles.css": "375296038107"
+        "src/views/group-label-renderer.ts": "3fee8449607c",
+        "src/views/table-renderer.ts": "4ecaa2cb2295",
+        "src/views/summary-renderer.ts": "c6752fec0dfe",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "An option-typed group field renders its key as a colored status badge; a field with no options renders plain text, as the nested Revolut subgroup does. Per-group summaries sit at the right of each divider.",
       "capture": "element",
@@ -553,15 +553,15 @@
       "device": "desktop",
       "file": "screenshots/components/chrome-group-header-row-desktop-light.png",
       "sources": [
-        "src/views/GroupLabelRenderer.ts",
-        "src/views/TableRenderer.ts",
-        "src/views/SummaryRenderer.ts"
+        "src/views/group-label-renderer.ts",
+        "src/views/table-renderer.ts",
+        "src/views/summary-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/GroupLabelRenderer.ts": "b38adf0523c1",
-        "src/views/TableRenderer.ts": "ce0dc80023d8",
-        "src/views/SummaryRenderer.ts": "1d693b089de6",
-        "styles.css": "375296038107"
+        "src/views/group-label-renderer.ts": "3fee8449607c",
+        "src/views/table-renderer.ts": "4ecaa2cb2295",
+        "src/views/summary-renderer.ts": "c6752fec0dfe",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "An option-typed group field renders its key as a colored status badge; a field with no options renders plain text, as the nested Revolut subgroup does. Per-group summaries sit at the right of each divider.",
       "capture": "element",
@@ -575,15 +575,15 @@
       "device": "mobile",
       "file": "screenshots/components/chrome-group-header-row-mobile-dark.png",
       "sources": [
-        "src/views/GroupLabelRenderer.ts",
-        "src/views/TableRenderer.ts",
-        "src/views/SummaryRenderer.ts"
+        "src/views/group-label-renderer.ts",
+        "src/views/table-renderer.ts",
+        "src/views/summary-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/GroupLabelRenderer.ts": "b38adf0523c1",
-        "src/views/TableRenderer.ts": "ce0dc80023d8",
-        "src/views/SummaryRenderer.ts": "1d693b089de6",
-        "styles.css": "375296038107"
+        "src/views/group-label-renderer.ts": "3fee8449607c",
+        "src/views/table-renderer.ts": "4ecaa2cb2295",
+        "src/views/summary-renderer.ts": "c6752fec0dfe",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "An option-typed group field renders its key as a colored status badge; a field with no options renders plain text, as the nested Revolut subgroup does. Per-group summaries sit at the right of each divider.",
       "capture": "element",
@@ -597,15 +597,15 @@
       "device": "mobile",
       "file": "screenshots/components/chrome-group-header-row-mobile-light.png",
       "sources": [
-        "src/views/GroupLabelRenderer.ts",
-        "src/views/TableRenderer.ts",
-        "src/views/SummaryRenderer.ts"
+        "src/views/group-label-renderer.ts",
+        "src/views/table-renderer.ts",
+        "src/views/summary-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/GroupLabelRenderer.ts": "b38adf0523c1",
-        "src/views/TableRenderer.ts": "ce0dc80023d8",
-        "src/views/SummaryRenderer.ts": "1d693b089de6",
-        "styles.css": "375296038107"
+        "src/views/group-label-renderer.ts": "3fee8449607c",
+        "src/views/table-renderer.ts": "4ecaa2cb2295",
+        "src/views/summary-renderer.ts": "c6752fec0dfe",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "An option-typed group field renders its key as a colored status badge; a field with no options renders plain text, as the nested Revolut subgroup does. Per-group summaries sit at the right of each divider.",
       "capture": "element",
@@ -619,11 +619,11 @@
       "device": "desktop",
       "file": "screenshots/components/chrome-summary-row-desktop-dark.png",
       "sources": [
-        "src/views/SummaryRenderer.ts"
+        "src/views/summary-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/SummaryRenderer.ts": "1d693b089de6",
-        "styles.css": "375296038107"
+        "src/views/summary-renderer.ts": "c6752fec0dfe",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "Total is always present; each configured summary rule is a draggable, clickable item, and the faint + Summary entry adds another.",
       "capture": "element",
@@ -637,11 +637,11 @@
       "device": "desktop",
       "file": "screenshots/components/chrome-summary-row-desktop-light.png",
       "sources": [
-        "src/views/SummaryRenderer.ts"
+        "src/views/summary-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/SummaryRenderer.ts": "1d693b089de6",
-        "styles.css": "375296038107"
+        "src/views/summary-renderer.ts": "c6752fec0dfe",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "Total is always present; each configured summary rule is a draggable, clickable item, and the faint + Summary entry adds another.",
       "capture": "element",
@@ -655,11 +655,11 @@
       "device": "mobile",
       "file": "screenshots/components/chrome-summary-row-mobile-dark.png",
       "sources": [
-        "src/views/SummaryRenderer.ts"
+        "src/views/summary-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/SummaryRenderer.ts": "1d693b089de6",
-        "styles.css": "375296038107"
+        "src/views/summary-renderer.ts": "c6752fec0dfe",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "Total is always present; each configured summary rule is a draggable, clickable item, and the faint + Summary entry adds another.",
       "capture": "element",
@@ -673,11 +673,11 @@
       "device": "mobile",
       "file": "screenshots/components/chrome-summary-row-mobile-light.png",
       "sources": [
-        "src/views/SummaryRenderer.ts"
+        "src/views/summary-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/SummaryRenderer.ts": "1d693b089de6",
-        "styles.css": "375296038107"
+        "src/views/summary-renderer.ts": "c6752fec0dfe",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "Total is always present; each configured summary rule is a draggable, clickable item, and the faint + Summary entry adds another.",
       "capture": "element",
@@ -691,13 +691,13 @@
       "device": "desktop",
       "file": "screenshots/components/chrome-table-footer-desktop-dark.png",
       "sources": [
-        "src/views/TableFooterRenderer.ts",
-        "src/views/TableRenderer.ts"
+        "src/views/table-footer-renderer.ts",
+        "src/views/table-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/TableFooterRenderer.ts": "b3e0eff153d0",
-        "src/views/TableRenderer.ts": "ce0dc80023d8",
-        "styles.css": "375296038107"
+        "src/views/table-footer-renderer.ts": "2a076187efd5",
+        "src/views/table-renderer.ts": "4ecaa2cb2295",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "A column with summary rules stacks each kind over its result; a column without one shows a + Calculate hint that the stylesheet keeps at zero opacity until the trigger is hovered, so it is invisible here by design.",
       "capture": "element",
@@ -711,13 +711,13 @@
       "device": "desktop",
       "file": "screenshots/components/chrome-table-footer-desktop-light.png",
       "sources": [
-        "src/views/TableFooterRenderer.ts",
-        "src/views/TableRenderer.ts"
+        "src/views/table-footer-renderer.ts",
+        "src/views/table-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/TableFooterRenderer.ts": "b3e0eff153d0",
-        "src/views/TableRenderer.ts": "ce0dc80023d8",
-        "styles.css": "375296038107"
+        "src/views/table-footer-renderer.ts": "2a076187efd5",
+        "src/views/table-renderer.ts": "4ecaa2cb2295",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "A column with summary rules stacks each kind over its result; a column without one shows a + Calculate hint that the stylesheet keeps at zero opacity until the trigger is hovered, so it is invisible here by design.",
       "capture": "element",
@@ -731,13 +731,13 @@
       "device": "mobile",
       "file": "screenshots/components/chrome-table-footer-mobile-dark.png",
       "sources": [
-        "src/views/TableFooterRenderer.ts",
-        "src/views/TableRenderer.ts"
+        "src/views/table-footer-renderer.ts",
+        "src/views/table-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/TableFooterRenderer.ts": "b3e0eff153d0",
-        "src/views/TableRenderer.ts": "ce0dc80023d8",
-        "styles.css": "375296038107"
+        "src/views/table-footer-renderer.ts": "2a076187efd5",
+        "src/views/table-renderer.ts": "4ecaa2cb2295",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "A column with summary rules stacks each kind over its result; a column without one shows a + Calculate hint that the stylesheet keeps at zero opacity until the trigger is hovered, so it is invisible here by design.",
       "capture": "element",
@@ -751,13 +751,13 @@
       "device": "mobile",
       "file": "screenshots/components/chrome-table-footer-mobile-light.png",
       "sources": [
-        "src/views/TableFooterRenderer.ts",
-        "src/views/TableRenderer.ts"
+        "src/views/table-footer-renderer.ts",
+        "src/views/table-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/TableFooterRenderer.ts": "b3e0eff153d0",
-        "src/views/TableRenderer.ts": "ce0dc80023d8",
-        "styles.css": "375296038107"
+        "src/views/table-footer-renderer.ts": "2a076187efd5",
+        "src/views/table-renderer.ts": "4ecaa2cb2295",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "A column with summary rules stacks each kind over its result; a column without one shows a + Calculate hint that the stylesheet keeps at zero opacity until the trigger is hovered, so it is invisible here by design.",
       "capture": "element",
@@ -771,11 +771,11 @@
       "device": "desktop",
       "file": "screenshots/components/chrome-toolbar-desktop-dark.png",
       "sources": [
-        "src/views/ToolbarRenderer.ts"
+        "src/views/toolbar-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/ToolbarRenderer.ts": "1025d976121a",
-        "styles.css": "375296038107"
+        "src/views/toolbar-renderer.ts": "6e686fffefaf",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "View switcher on the left; query, properties, utilities and creation clusters on the right. The search control sits collapsed in the utilities cluster until it has text or focus.",
       "capture": "element",
@@ -789,11 +789,11 @@
       "device": "desktop",
       "file": "screenshots/components/chrome-toolbar-desktop-light.png",
       "sources": [
-        "src/views/ToolbarRenderer.ts"
+        "src/views/toolbar-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/ToolbarRenderer.ts": "1025d976121a",
-        "styles.css": "375296038107"
+        "src/views/toolbar-renderer.ts": "6e686fffefaf",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "View switcher on the left; query, properties, utilities and creation clusters on the right. The search control sits collapsed in the utilities cluster until it has text or focus.",
       "capture": "element",
@@ -807,11 +807,11 @@
       "device": "mobile",
       "file": "screenshots/components/chrome-toolbar-mobile-dark.png",
       "sources": [
-        "src/views/ToolbarRenderer.ts"
+        "src/views/toolbar-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/ToolbarRenderer.ts": "1025d976121a",
-        "styles.css": "375296038107"
+        "src/views/toolbar-renderer.ts": "6e686fffefaf",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "View switcher on the left; query, properties, utilities and creation clusters on the right. The search control sits collapsed in the utilities cluster until it has text or focus.",
       "capture": "element",
@@ -825,11 +825,11 @@
       "device": "mobile",
       "file": "screenshots/components/chrome-toolbar-mobile-light.png",
       "sources": [
-        "src/views/ToolbarRenderer.ts"
+        "src/views/toolbar-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/ToolbarRenderer.ts": "1025d976121a",
-        "styles.css": "375296038107"
+        "src/views/toolbar-renderer.ts": "6e686fffefaf",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "View switcher on the left; query, properties, utilities and creation clusters on the right. The search control sits collapsed in the utilities cluster until it has text or focus.",
       "capture": "element",
@@ -843,11 +843,11 @@
       "device": "desktop",
       "file": "screenshots/components/chrome-toolbar-search-desktop-dark.png",
       "sources": [
-        "src/views/ToolbarRenderer.ts"
+        "src/views/toolbar-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/ToolbarRenderer.ts": "1025d976121a",
-        "styles.css": "375296038107"
+        "src/views/toolbar-renderer.ts": "6e686fffefaf",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "The wrap is 28px wide at rest and widens to 150px under is-active; the clear button is hidden until the input has text.",
       "capture": "element",
@@ -861,11 +861,11 @@
       "device": "desktop",
       "file": "screenshots/components/chrome-toolbar-search-desktop-light.png",
       "sources": [
-        "src/views/ToolbarRenderer.ts"
+        "src/views/toolbar-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/ToolbarRenderer.ts": "1025d976121a",
-        "styles.css": "375296038107"
+        "src/views/toolbar-renderer.ts": "6e686fffefaf",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "The wrap is 28px wide at rest and widens to 150px under is-active; the clear button is hidden until the input has text.",
       "capture": "element",
@@ -879,11 +879,11 @@
       "device": "mobile",
       "file": "screenshots/components/chrome-toolbar-search-mobile-dark.png",
       "sources": [
-        "src/views/ToolbarRenderer.ts"
+        "src/views/toolbar-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/ToolbarRenderer.ts": "1025d976121a",
-        "styles.css": "375296038107"
+        "src/views/toolbar-renderer.ts": "6e686fffefaf",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "The wrap is 28px wide at rest and widens to 150px under is-active; the clear button is hidden until the input has text.",
       "capture": "element",
@@ -897,11 +897,11 @@
       "device": "mobile",
       "file": "screenshots/components/chrome-toolbar-search-mobile-light.png",
       "sources": [
-        "src/views/ToolbarRenderer.ts"
+        "src/views/toolbar-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/ToolbarRenderer.ts": "1025d976121a",
-        "styles.css": "375296038107"
+        "src/views/toolbar-renderer.ts": "6e686fffefaf",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "The wrap is 28px wide at rest and widens to 150px under is-active; the clear button is hidden until the input has text.",
       "capture": "element",
@@ -915,11 +915,11 @@
       "device": "desktop",
       "file": "screenshots/components/chrome-view-switcher-desktop-dark.png",
       "sources": [
-        "src/views/ToolbarRenderer.ts"
+        "src/views/toolbar-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/ToolbarRenderer.ts": "1025d976121a",
-        "styles.css": "375296038107"
+        "src/views/toolbar-renderer.ts": "6e686fffefaf",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "The active tab carries is-active; the ⋯ tab appears only once the toolbar has measured tabs out of view, and opens the all-views hub.",
       "capture": "element",
@@ -933,11 +933,11 @@
       "device": "desktop",
       "file": "screenshots/components/chrome-view-switcher-desktop-light.png",
       "sources": [
-        "src/views/ToolbarRenderer.ts"
+        "src/views/toolbar-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/ToolbarRenderer.ts": "1025d976121a",
-        "styles.css": "375296038107"
+        "src/views/toolbar-renderer.ts": "6e686fffefaf",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "The active tab carries is-active; the ⋯ tab appears only once the toolbar has measured tabs out of view, and opens the all-views hub.",
       "capture": "element",
@@ -951,11 +951,11 @@
       "device": "mobile",
       "file": "screenshots/components/chrome-view-switcher-mobile-dark.png",
       "sources": [
-        "src/views/ToolbarRenderer.ts"
+        "src/views/toolbar-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/ToolbarRenderer.ts": "1025d976121a",
-        "styles.css": "375296038107"
+        "src/views/toolbar-renderer.ts": "6e686fffefaf",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "The active tab carries is-active; the ⋯ tab appears only once the toolbar has measured tabs out of view, and opens the all-views hub.",
       "capture": "element",
@@ -969,11 +969,11 @@
       "device": "mobile",
       "file": "screenshots/components/chrome-view-switcher-mobile-light.png",
       "sources": [
-        "src/views/ToolbarRenderer.ts"
+        "src/views/toolbar-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/ToolbarRenderer.ts": "1025d976121a",
-        "styles.css": "375296038107"
+        "src/views/toolbar-renderer.ts": "6e686fffefaf",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "The active tab carries is-active; the ⋯ tab appears only once the toolbar has measured tabs out of view, and opens the all-views hub.",
       "capture": "element",
@@ -987,11 +987,11 @@
       "device": "desktop",
       "file": "screenshots/components/dropdown-field-desktop-dark.png",
       "sources": [
-        "src/views/DropdownField.ts"
+        "src/views/dropdown-field.ts"
       ],
       "sourceHashes": {
-        "src/views/DropdownField.ts": "67d71b55a26d",
-        "styles.css": "375296038107"
+        "src/views/dropdown-field.ts": "1a4c6e81f793",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "A disabled option is dimmed and carries a tooltip rather than inline explanatory text.",
       "capture": "element",
@@ -1005,11 +1005,11 @@
       "device": "desktop",
       "file": "screenshots/components/dropdown-field-desktop-light.png",
       "sources": [
-        "src/views/DropdownField.ts"
+        "src/views/dropdown-field.ts"
       ],
       "sourceHashes": {
-        "src/views/DropdownField.ts": "67d71b55a26d",
-        "styles.css": "375296038107"
+        "src/views/dropdown-field.ts": "1a4c6e81f793",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "A disabled option is dimmed and carries a tooltip rather than inline explanatory text.",
       "capture": "element",
@@ -1023,11 +1023,11 @@
       "device": "mobile",
       "file": "screenshots/components/dropdown-field-mobile-dark.png",
       "sources": [
-        "src/views/DropdownField.ts"
+        "src/views/dropdown-field.ts"
       ],
       "sourceHashes": {
-        "src/views/DropdownField.ts": "67d71b55a26d",
-        "styles.css": "375296038107"
+        "src/views/dropdown-field.ts": "1a4c6e81f793",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "A disabled option is dimmed and carries a tooltip rather than inline explanatory text.",
       "capture": "element",
@@ -1041,11 +1041,11 @@
       "device": "mobile",
       "file": "screenshots/components/dropdown-field-mobile-light.png",
       "sources": [
-        "src/views/DropdownField.ts"
+        "src/views/dropdown-field.ts"
       ],
       "sourceHashes": {
-        "src/views/DropdownField.ts": "67d71b55a26d",
-        "styles.css": "375296038107"
+        "src/views/dropdown-field.ts": "1a4c6e81f793",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "A disabled option is dimmed and carries a tooltip rather than inline explanatory text.",
       "capture": "element",
@@ -1059,11 +1059,11 @@
       "device": "desktop",
       "file": "screenshots/components/table-column-header-desktop-dark.png",
       "sources": [
-        "src/views/ColumnHeaderController.ts"
+        "src/views/column-header-controller.ts"
       ],
       "sourceHashes": {
-        "src/views/ColumnHeaderController.ts": "7c1fbf20fd07",
-        "styles.css": "375296038107"
+        "src/views/column-header-controller.ts": "7714b894b5b0",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "The menu trigger sits inline after the label and the label truncates before it moves.",
       "capture": "element",
@@ -1077,11 +1077,11 @@
       "device": "desktop",
       "file": "screenshots/components/table-column-header-desktop-light.png",
       "sources": [
-        "src/views/ColumnHeaderController.ts"
+        "src/views/column-header-controller.ts"
       ],
       "sourceHashes": {
-        "src/views/ColumnHeaderController.ts": "7c1fbf20fd07",
-        "styles.css": "375296038107"
+        "src/views/column-header-controller.ts": "7714b894b5b0",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "The menu trigger sits inline after the label and the label truncates before it moves.",
       "capture": "element",
@@ -1095,11 +1095,11 @@
       "device": "mobile",
       "file": "screenshots/components/table-column-header-mobile-dark.png",
       "sources": [
-        "src/views/ColumnHeaderController.ts"
+        "src/views/column-header-controller.ts"
       ],
       "sourceHashes": {
-        "src/views/ColumnHeaderController.ts": "7c1fbf20fd07",
-        "styles.css": "375296038107"
+        "src/views/column-header-controller.ts": "7714b894b5b0",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "The menu trigger sits inline after the label and the label truncates before it moves.",
       "capture": "element",
@@ -1113,11 +1113,11 @@
       "device": "mobile",
       "file": "screenshots/components/table-column-header-mobile-light.png",
       "sources": [
-        "src/views/ColumnHeaderController.ts"
+        "src/views/column-header-controller.ts"
       ],
       "sourceHashes": {
-        "src/views/ColumnHeaderController.ts": "7c1fbf20fd07",
-        "styles.css": "375296038107"
+        "src/views/column-header-controller.ts": "7714b894b5b0",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "The menu trigger sits inline after the label and the label truncates before it moves.",
       "capture": "element",
@@ -1131,13 +1131,13 @@
       "device": "desktop",
       "file": "screenshots/fields/field-cell-edit-select-desktop-dark.png",
       "sources": [
-        "src/views/CellRenderer.ts",
-        "src/data/ColumnTypes.ts"
+        "src/views/cell-renderer.ts",
+        "src/data/column-types.ts"
       ],
       "sourceHashes": {
-        "src/views/CellRenderer.ts": "a66834f860b4",
-        "src/data/ColumnTypes.ts": "b030406d54f1",
-        "styles.css": "375296038107"
+        "src/views/cell-renderer.ts": "e041f712f0b8",
+        "src/data/column-types.ts": "c48057b05309",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "Each row carries a drag handle, a colour dot that opens the colour picker, the check mark and a delete button. An unregistered value offers a plus instead of a trash icon.",
       "capture": "element",
@@ -1151,13 +1151,13 @@
       "device": "desktop",
       "file": "screenshots/fields/field-cell-edit-select-desktop-light.png",
       "sources": [
-        "src/views/CellRenderer.ts",
-        "src/data/ColumnTypes.ts"
+        "src/views/cell-renderer.ts",
+        "src/data/column-types.ts"
       ],
       "sourceHashes": {
-        "src/views/CellRenderer.ts": "a66834f860b4",
-        "src/data/ColumnTypes.ts": "b030406d54f1",
-        "styles.css": "375296038107"
+        "src/views/cell-renderer.ts": "e041f712f0b8",
+        "src/data/column-types.ts": "c48057b05309",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "Each row carries a drag handle, a colour dot that opens the colour picker, the check mark and a delete button. An unregistered value offers a plus instead of a trash icon.",
       "capture": "element",
@@ -1171,13 +1171,13 @@
       "device": "mobile",
       "file": "screenshots/fields/field-cell-edit-select-mobile-dark.png",
       "sources": [
-        "src/views/CellRenderer.ts",
-        "src/data/ColumnTypes.ts"
+        "src/views/cell-renderer.ts",
+        "src/data/column-types.ts"
       ],
       "sourceHashes": {
-        "src/views/CellRenderer.ts": "a66834f860b4",
-        "src/data/ColumnTypes.ts": "b030406d54f1",
-        "styles.css": "375296038107"
+        "src/views/cell-renderer.ts": "e041f712f0b8",
+        "src/data/column-types.ts": "c48057b05309",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "Each row carries a drag handle, a colour dot that opens the colour picker, the check mark and a delete button. An unregistered value offers a plus instead of a trash icon.",
       "capture": "element",
@@ -1191,13 +1191,13 @@
       "device": "mobile",
       "file": "screenshots/fields/field-cell-edit-select-mobile-light.png",
       "sources": [
-        "src/views/CellRenderer.ts",
-        "src/data/ColumnTypes.ts"
+        "src/views/cell-renderer.ts",
+        "src/data/column-types.ts"
       ],
       "sourceHashes": {
-        "src/views/CellRenderer.ts": "a66834f860b4",
-        "src/data/ColumnTypes.ts": "b030406d54f1",
-        "styles.css": "375296038107"
+        "src/views/cell-renderer.ts": "e041f712f0b8",
+        "src/data/column-types.ts": "c48057b05309",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "Each row carries a drag handle, a colour dot that opens the colour picker, the check mark and a delete button. An unregistered value offers a plus instead of a trash icon.",
       "capture": "element",
@@ -1211,11 +1211,11 @@
       "device": "desktop",
       "file": "screenshots/fields/field-cell-edit-text-desktop-dark.png",
       "sources": [
-        "src/views/CellRenderer.ts"
+        "src/views/cell-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/CellRenderer.ts": "a66834f860b4",
-        "styles.css": "375296038107"
+        "src/views/cell-renderer.ts": "e041f712f0b8",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "Both editors keep the cell's rendered value visible underneath. The multi-line editor marks its cell with db-cell-editing (the accent inset); the single-line one marks its cell with db-cell-popover-editing, which the stylesheet declares no rule for, so that cell shows no edit affordance. Markdown columns gain the format toolbar.",
       "capture": "element",
@@ -1229,11 +1229,11 @@
       "device": "desktop",
       "file": "screenshots/fields/field-cell-edit-text-desktop-light.png",
       "sources": [
-        "src/views/CellRenderer.ts"
+        "src/views/cell-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/CellRenderer.ts": "a66834f860b4",
-        "styles.css": "375296038107"
+        "src/views/cell-renderer.ts": "e041f712f0b8",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "Both editors keep the cell's rendered value visible underneath. The multi-line editor marks its cell with db-cell-editing (the accent inset); the single-line one marks its cell with db-cell-popover-editing, which the stylesheet declares no rule for, so that cell shows no edit affordance. Markdown columns gain the format toolbar.",
       "capture": "element",
@@ -1247,11 +1247,11 @@
       "device": "mobile",
       "file": "screenshots/fields/field-cell-edit-text-mobile-dark.png",
       "sources": [
-        "src/views/CellRenderer.ts"
+        "src/views/cell-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/CellRenderer.ts": "a66834f860b4",
-        "styles.css": "375296038107"
+        "src/views/cell-renderer.ts": "e041f712f0b8",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "Both editors keep the cell's rendered value visible underneath. The multi-line editor marks its cell with db-cell-editing (the accent inset); the single-line one marks its cell with db-cell-popover-editing, which the stylesheet declares no rule for, so that cell shows no edit affordance. Markdown columns gain the format toolbar.",
       "capture": "element",
@@ -1265,11 +1265,11 @@
       "device": "mobile",
       "file": "screenshots/fields/field-cell-edit-text-mobile-light.png",
       "sources": [
-        "src/views/CellRenderer.ts"
+        "src/views/cell-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/CellRenderer.ts": "a66834f860b4",
-        "styles.css": "375296038107"
+        "src/views/cell-renderer.ts": "e041f712f0b8",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "Both editors keep the cell's rendered value visible underneath. The multi-line editor marks its cell with db-cell-editing (the accent inset); the single-line one marks its cell with db-cell-popover-editing, which the stylesheet declares no rule for, so that cell shows no edit affordance. Markdown columns gain the format toolbar.",
       "capture": "element",
@@ -1283,13 +1283,13 @@
       "device": "desktop",
       "file": "screenshots/fields/field-date-value-picker-datetime-desktop-dark.png",
       "sources": [
-        "src/views/DateValuePicker.ts",
-        "src/views/CalendarMiniCalendarRenderer.ts"
+        "src/views/date-value-picker.ts",
+        "src/views/calendar-mini-calendar-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/DateValuePicker.ts": "ecee73da0447",
-        "src/views/CalendarMiniCalendarRenderer.ts": "23763eabe2b0",
-        "styles.css": "375296038107"
+        "src/views/date-value-picker.ts": "1f7347ded726",
+        "src/views/calendar-mini-calendar-renderer.ts": "14853dcd3917",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "A datetime column adds hour and minute segments after the date, and the trigger swaps calendar-days for calendar-clock.",
       "capture": "element",
@@ -1303,13 +1303,13 @@
       "device": "desktop",
       "file": "screenshots/fields/field-date-value-picker-datetime-desktop-light.png",
       "sources": [
-        "src/views/DateValuePicker.ts",
-        "src/views/CalendarMiniCalendarRenderer.ts"
+        "src/views/date-value-picker.ts",
+        "src/views/calendar-mini-calendar-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/DateValuePicker.ts": "ecee73da0447",
-        "src/views/CalendarMiniCalendarRenderer.ts": "23763eabe2b0",
-        "styles.css": "375296038107"
+        "src/views/date-value-picker.ts": "1f7347ded726",
+        "src/views/calendar-mini-calendar-renderer.ts": "14853dcd3917",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "A datetime column adds hour and minute segments after the date, and the trigger swaps calendar-days for calendar-clock.",
       "capture": "element",
@@ -1323,13 +1323,13 @@
       "device": "mobile",
       "file": "screenshots/fields/field-date-value-picker-datetime-mobile-dark.png",
       "sources": [
-        "src/views/DateValuePicker.ts",
-        "src/views/CalendarMiniCalendarRenderer.ts"
+        "src/views/date-value-picker.ts",
+        "src/views/calendar-mini-calendar-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/DateValuePicker.ts": "ecee73da0447",
-        "src/views/CalendarMiniCalendarRenderer.ts": "23763eabe2b0",
-        "styles.css": "375296038107"
+        "src/views/date-value-picker.ts": "1f7347ded726",
+        "src/views/calendar-mini-calendar-renderer.ts": "14853dcd3917",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "A datetime column adds hour and minute segments after the date, and the trigger swaps calendar-days for calendar-clock.",
       "capture": "element",
@@ -1343,13 +1343,13 @@
       "device": "mobile",
       "file": "screenshots/fields/field-date-value-picker-datetime-mobile-light.png",
       "sources": [
-        "src/views/DateValuePicker.ts",
-        "src/views/CalendarMiniCalendarRenderer.ts"
+        "src/views/date-value-picker.ts",
+        "src/views/calendar-mini-calendar-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/DateValuePicker.ts": "ecee73da0447",
-        "src/views/CalendarMiniCalendarRenderer.ts": "23763eabe2b0",
-        "styles.css": "375296038107"
+        "src/views/date-value-picker.ts": "1f7347ded726",
+        "src/views/calendar-mini-calendar-renderer.ts": "14853dcd3917",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "A datetime column adds hour and minute segments after the date, and the trigger swaps calendar-days for calendar-clock.",
       "capture": "element",
@@ -1363,13 +1363,13 @@
       "device": "desktop",
       "file": "screenshots/fields/field-date-value-picker-desktop-dark.png",
       "sources": [
-        "src/views/DateValuePicker.ts",
-        "src/views/CalendarMiniCalendarRenderer.ts"
+        "src/views/date-value-picker.ts",
+        "src/views/calendar-mini-calendar-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/DateValuePicker.ts": "ecee73da0447",
-        "src/views/CalendarMiniCalendarRenderer.ts": "23763eabe2b0",
-        "styles.css": "375296038107"
+        "src/views/date-value-picker.ts": "1f7347ded726",
+        "src/views/calendar-mini-calendar-renderer.ts": "14853dcd3917",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "The trigger shows the committed value; the popover stacks quick dates, the three segment inputs and the mini calendar, which renders flat inside the date popover rather than as its own floating surface.",
       "capture": "element",
@@ -1383,13 +1383,13 @@
       "device": "desktop",
       "file": "screenshots/fields/field-date-value-picker-desktop-light.png",
       "sources": [
-        "src/views/DateValuePicker.ts",
-        "src/views/CalendarMiniCalendarRenderer.ts"
+        "src/views/date-value-picker.ts",
+        "src/views/calendar-mini-calendar-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/DateValuePicker.ts": "ecee73da0447",
-        "src/views/CalendarMiniCalendarRenderer.ts": "23763eabe2b0",
-        "styles.css": "375296038107"
+        "src/views/date-value-picker.ts": "1f7347ded726",
+        "src/views/calendar-mini-calendar-renderer.ts": "14853dcd3917",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "The trigger shows the committed value; the popover stacks quick dates, the three segment inputs and the mini calendar, which renders flat inside the date popover rather than as its own floating surface.",
       "capture": "element",
@@ -1403,13 +1403,13 @@
       "device": "mobile",
       "file": "screenshots/fields/field-date-value-picker-mobile-dark.png",
       "sources": [
-        "src/views/DateValuePicker.ts",
-        "src/views/CalendarMiniCalendarRenderer.ts"
+        "src/views/date-value-picker.ts",
+        "src/views/calendar-mini-calendar-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/DateValuePicker.ts": "ecee73da0447",
-        "src/views/CalendarMiniCalendarRenderer.ts": "23763eabe2b0",
-        "styles.css": "375296038107"
+        "src/views/date-value-picker.ts": "1f7347ded726",
+        "src/views/calendar-mini-calendar-renderer.ts": "14853dcd3917",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "The trigger shows the committed value; the popover stacks quick dates, the three segment inputs and the mini calendar, which renders flat inside the date popover rather than as its own floating surface.",
       "capture": "element",
@@ -1423,13 +1423,13 @@
       "device": "mobile",
       "file": "screenshots/fields/field-date-value-picker-mobile-light.png",
       "sources": [
-        "src/views/DateValuePicker.ts",
-        "src/views/CalendarMiniCalendarRenderer.ts"
+        "src/views/date-value-picker.ts",
+        "src/views/calendar-mini-calendar-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/DateValuePicker.ts": "ecee73da0447",
-        "src/views/CalendarMiniCalendarRenderer.ts": "23763eabe2b0",
-        "styles.css": "375296038107"
+        "src/views/date-value-picker.ts": "1f7347ded726",
+        "src/views/calendar-mini-calendar-renderer.ts": "14853dcd3917",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "The trigger shows the committed value; the popover stacks quick dates, the three segment inputs and the mini calendar, which renders flat inside the date popover rather than as its own floating surface.",
       "capture": "element",
@@ -1443,11 +1443,11 @@
       "device": "desktop",
       "file": "screenshots/fields/field-file-fields-desktop-dark.png",
       "sources": [
-        "src/views/FileFieldRenderer.ts"
+        "src/views/file-field-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/FileFieldRenderer.ts": "dc39449ed5fe",
-        "styles.css": "375296038107"
+        "src/views/file-field-renderer.ts": "4a6891fdd59e",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "file.tags render as status badges, link-list fields as compact chips, and file.file as a link back to the row's own note. The per-tag remove buttons are in the DOM of a writable cell but sit at opacity 0 until the badge is hovered, so they do not appear here.",
       "capture": "element",
@@ -1461,11 +1461,11 @@
       "device": "desktop",
       "file": "screenshots/fields/field-file-fields-desktop-light.png",
       "sources": [
-        "src/views/FileFieldRenderer.ts"
+        "src/views/file-field-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/FileFieldRenderer.ts": "dc39449ed5fe",
-        "styles.css": "375296038107"
+        "src/views/file-field-renderer.ts": "4a6891fdd59e",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "file.tags render as status badges, link-list fields as compact chips, and file.file as a link back to the row's own note. The per-tag remove buttons are in the DOM of a writable cell but sit at opacity 0 until the badge is hovered, so they do not appear here.",
       "capture": "element",
@@ -1479,11 +1479,11 @@
       "device": "mobile",
       "file": "screenshots/fields/field-file-fields-mobile-dark.png",
       "sources": [
-        "src/views/FileFieldRenderer.ts"
+        "src/views/file-field-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/FileFieldRenderer.ts": "dc39449ed5fe",
-        "styles.css": "375296038107"
+        "src/views/file-field-renderer.ts": "4a6891fdd59e",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "file.tags render as status badges, link-list fields as compact chips, and file.file as a link back to the row's own note. The per-tag remove buttons are in the DOM of a writable cell but sit at opacity 0 until the badge is hovered, so they do not appear here.",
       "capture": "element",
@@ -1497,11 +1497,11 @@
       "device": "mobile",
       "file": "screenshots/fields/field-file-fields-mobile-light.png",
       "sources": [
-        "src/views/FileFieldRenderer.ts"
+        "src/views/file-field-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/FileFieldRenderer.ts": "dc39449ed5fe",
-        "styles.css": "375296038107"
+        "src/views/file-field-renderer.ts": "4a6891fdd59e",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "file.tags render as status badges, link-list fields as compact chips, and file.file as a link back to the row's own note. The per-tag remove buttons are in the DOM of a writable cell but sit at opacity 0 until the badge is hovered, so they do not appear here.",
       "capture": "element",
@@ -1515,13 +1515,13 @@
       "device": "desktop",
       "file": "screenshots/fields/field-icon-picker-desktop-dark.png",
       "sources": [
-        "src/views/IconPickerPopover.ts",
-        "src/views/RecordIconRenderer.ts"
+        "src/views/icon-picker-popover.ts",
+        "src/views/record-icon-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/IconPickerPopover.ts": "cd1d1c049a51",
-        "src/views/RecordIconRenderer.ts": "a5e0e82bc300",
-        "styles.css": "375296038107"
+        "src/views/icon-picker-popover.ts": "ef97335f5ff2",
+        "src/views/record-icon-renderer.ts": "3d90a87b2a0b",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "The Icons tab adds the colour strip; the picker is created on document.body, so it is a top-level element here rather than a child of the container.",
       "capture": "element",
@@ -1535,13 +1535,13 @@
       "device": "desktop",
       "file": "screenshots/fields/field-icon-picker-desktop-light.png",
       "sources": [
-        "src/views/IconPickerPopover.ts",
-        "src/views/RecordIconRenderer.ts"
+        "src/views/icon-picker-popover.ts",
+        "src/views/record-icon-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/IconPickerPopover.ts": "cd1d1c049a51",
-        "src/views/RecordIconRenderer.ts": "a5e0e82bc300",
-        "styles.css": "375296038107"
+        "src/views/icon-picker-popover.ts": "ef97335f5ff2",
+        "src/views/record-icon-renderer.ts": "3d90a87b2a0b",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "The Icons tab adds the colour strip; the picker is created on document.body, so it is a top-level element here rather than a child of the container.",
       "capture": "element",
@@ -1555,13 +1555,13 @@
       "device": "mobile",
       "file": "screenshots/fields/field-icon-picker-mobile-dark.png",
       "sources": [
-        "src/views/IconPickerPopover.ts",
-        "src/views/RecordIconRenderer.ts"
+        "src/views/icon-picker-popover.ts",
+        "src/views/record-icon-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/IconPickerPopover.ts": "cd1d1c049a51",
-        "src/views/RecordIconRenderer.ts": "a5e0e82bc300",
-        "styles.css": "375296038107"
+        "src/views/icon-picker-popover.ts": "ef97335f5ff2",
+        "src/views/record-icon-renderer.ts": "3d90a87b2a0b",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "The Icons tab adds the colour strip; the picker is created on document.body, so it is a top-level element here rather than a child of the container.",
       "capture": "element",
@@ -1575,13 +1575,13 @@
       "device": "mobile",
       "file": "screenshots/fields/field-icon-picker-mobile-light.png",
       "sources": [
-        "src/views/IconPickerPopover.ts",
-        "src/views/RecordIconRenderer.ts"
+        "src/views/icon-picker-popover.ts",
+        "src/views/record-icon-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/IconPickerPopover.ts": "cd1d1c049a51",
-        "src/views/RecordIconRenderer.ts": "a5e0e82bc300",
-        "styles.css": "375296038107"
+        "src/views/icon-picker-popover.ts": "ef97335f5ff2",
+        "src/views/record-icon-renderer.ts": "3d90a87b2a0b",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "The Icons tab adds the colour strip; the picker is created on document.body, so it is a top-level element here rather than a child of the container.",
       "capture": "element",
@@ -1595,13 +1595,13 @@
       "device": "desktop",
       "file": "screenshots/fields/field-number-displays-desktop-dark.png",
       "sources": [
-        "src/views/NumberDisplayRenderer.ts",
-        "src/data/NumberDisplay.ts"
+        "src/views/number-display-renderer.ts",
+        "src/data/number-display.ts"
       ],
       "sourceHashes": {
-        "src/views/NumberDisplayRenderer.ts": "fcc80ee8ccf3",
-        "src/data/NumberDisplay.ts": "dd8b61aab3be",
-        "styles.css": "375296038107"
+        "src/views/number-display-renderer.ts": "626e6b487cf1",
+        "src/data/number-display.ts": "b0967db0f269",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "Rating, progress bar and progress ring all tint through db-num-color-*, which sets --db-number-color. Half slots are the accent overlay clipped to 50%.",
       "capture": "element",
@@ -1615,13 +1615,13 @@
       "device": "desktop",
       "file": "screenshots/fields/field-number-displays-desktop-light.png",
       "sources": [
-        "src/views/NumberDisplayRenderer.ts",
-        "src/data/NumberDisplay.ts"
+        "src/views/number-display-renderer.ts",
+        "src/data/number-display.ts"
       ],
       "sourceHashes": {
-        "src/views/NumberDisplayRenderer.ts": "fcc80ee8ccf3",
-        "src/data/NumberDisplay.ts": "dd8b61aab3be",
-        "styles.css": "375296038107"
+        "src/views/number-display-renderer.ts": "626e6b487cf1",
+        "src/data/number-display.ts": "b0967db0f269",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "Rating, progress bar and progress ring all tint through db-num-color-*, which sets --db-number-color. Half slots are the accent overlay clipped to 50%.",
       "capture": "element",
@@ -1635,13 +1635,13 @@
       "device": "mobile",
       "file": "screenshots/fields/field-number-displays-mobile-dark.png",
       "sources": [
-        "src/views/NumberDisplayRenderer.ts",
-        "src/data/NumberDisplay.ts"
+        "src/views/number-display-renderer.ts",
+        "src/data/number-display.ts"
       ],
       "sourceHashes": {
-        "src/views/NumberDisplayRenderer.ts": "fcc80ee8ccf3",
-        "src/data/NumberDisplay.ts": "dd8b61aab3be",
-        "styles.css": "375296038107"
+        "src/views/number-display-renderer.ts": "626e6b487cf1",
+        "src/data/number-display.ts": "b0967db0f269",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "Rating, progress bar and progress ring all tint through db-num-color-*, which sets --db-number-color. Half slots are the accent overlay clipped to 50%.",
       "capture": "element",
@@ -1655,13 +1655,13 @@
       "device": "mobile",
       "file": "screenshots/fields/field-number-displays-mobile-light.png",
       "sources": [
-        "src/views/NumberDisplayRenderer.ts",
-        "src/data/NumberDisplay.ts"
+        "src/views/number-display-renderer.ts",
+        "src/data/number-display.ts"
       ],
       "sourceHashes": {
-        "src/views/NumberDisplayRenderer.ts": "fcc80ee8ccf3",
-        "src/data/NumberDisplay.ts": "dd8b61aab3be",
-        "styles.css": "375296038107"
+        "src/views/number-display-renderer.ts": "626e6b487cf1",
+        "src/data/number-display.ts": "b0967db0f269",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "Rating, progress bar and progress ring all tint through db-num-color-*, which sets --db-number-color. Half slots are the accent overlay clipped to 50%.",
       "capture": "element",
@@ -1675,13 +1675,13 @@
       "device": "desktop",
       "file": "screenshots/fields/field-option-color-picker-desktop-dark.png",
       "sources": [
-        "src/views/OptionColorPicker.ts",
-        "src/data/StatusColors.ts"
+        "src/views/option-color-picker.ts",
+        "src/data/status-colors.ts"
       ],
       "sourceHashes": {
-        "src/views/OptionColorPicker.ts": "49a75b18da90",
-        "src/data/StatusColors.ts": "40cccdce6e5c",
-        "styles.css": "375296038107"
+        "src/views/option-color-picker.ts": "7f69a2433a4f",
+        "src/data/status-colors.ts": "954425583842",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "Sixteen swatches in the persisted order, the current colour ringed. Opened from the colour dot in the select editor and created on document.body.",
       "capture": "element",
@@ -1695,13 +1695,13 @@
       "device": "desktop",
       "file": "screenshots/fields/field-option-color-picker-desktop-light.png",
       "sources": [
-        "src/views/OptionColorPicker.ts",
-        "src/data/StatusColors.ts"
+        "src/views/option-color-picker.ts",
+        "src/data/status-colors.ts"
       ],
       "sourceHashes": {
-        "src/views/OptionColorPicker.ts": "49a75b18da90",
-        "src/data/StatusColors.ts": "40cccdce6e5c",
-        "styles.css": "375296038107"
+        "src/views/option-color-picker.ts": "7f69a2433a4f",
+        "src/data/status-colors.ts": "954425583842",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "Sixteen swatches in the persisted order, the current colour ringed. Opened from the colour dot in the select editor and created on document.body.",
       "capture": "element",
@@ -1715,13 +1715,13 @@
       "device": "mobile",
       "file": "screenshots/fields/field-option-color-picker-mobile-dark.png",
       "sources": [
-        "src/views/OptionColorPicker.ts",
-        "src/data/StatusColors.ts"
+        "src/views/option-color-picker.ts",
+        "src/data/status-colors.ts"
       ],
       "sourceHashes": {
-        "src/views/OptionColorPicker.ts": "49a75b18da90",
-        "src/data/StatusColors.ts": "40cccdce6e5c",
-        "styles.css": "375296038107"
+        "src/views/option-color-picker.ts": "7f69a2433a4f",
+        "src/data/status-colors.ts": "954425583842",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "Sixteen swatches in the persisted order, the current colour ringed. Opened from the colour dot in the select editor and created on document.body.",
       "capture": "element",
@@ -1735,13 +1735,13 @@
       "device": "mobile",
       "file": "screenshots/fields/field-option-color-picker-mobile-light.png",
       "sources": [
-        "src/views/OptionColorPicker.ts",
-        "src/data/StatusColors.ts"
+        "src/views/option-color-picker.ts",
+        "src/data/status-colors.ts"
       ],
       "sourceHashes": {
-        "src/views/OptionColorPicker.ts": "49a75b18da90",
-        "src/data/StatusColors.ts": "40cccdce6e5c",
-        "styles.css": "375296038107"
+        "src/views/option-color-picker.ts": "7f69a2433a4f",
+        "src/data/status-colors.ts": "954425583842",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "Sixteen swatches in the persisted order, the current colour ringed. Opened from the colour dot in the select editor and created on document.body.",
       "capture": "element",
@@ -1755,15 +1755,15 @@
       "device": "desktop",
       "file": "screenshots/fields/field-record-icon-desktop-dark.png",
       "sources": [
-        "src/views/RecordIconRenderer.ts",
-        "src/views/TableRenderer.ts",
-        "src/data/RecordIcon.ts"
+        "src/views/record-icon-renderer.ts",
+        "src/views/table-renderer.ts",
+        "src/data/record-icon.ts"
       ],
       "sourceHashes": {
-        "src/views/RecordIconRenderer.ts": "a5e0e82bc300",
-        "src/views/TableRenderer.ts": "ce0dc80023d8",
-        "src/data/RecordIcon.ts": "53ce191a6b37",
-        "styles.css": "375296038107"
+        "src/views/record-icon-renderer.ts": "3d90a87b2a0b",
+        "src/views/table-renderer.ts": "4ecaa2cb2295",
+        "src/data/record-icon.ts": "dd6940af82f2",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "The table puts record icons in a 28px gutter column of their own, whose header is blank so the first property header can borrow the width. An unparsed token falls back to file-text and is-default; a lucide token carries db-record-icon-color-*; an emoji token renders through db-record-icon-emoji.",
       "capture": "element",
@@ -1777,15 +1777,15 @@
       "device": "desktop",
       "file": "screenshots/fields/field-record-icon-desktop-light.png",
       "sources": [
-        "src/views/RecordIconRenderer.ts",
-        "src/views/TableRenderer.ts",
-        "src/data/RecordIcon.ts"
+        "src/views/record-icon-renderer.ts",
+        "src/views/table-renderer.ts",
+        "src/data/record-icon.ts"
       ],
       "sourceHashes": {
-        "src/views/RecordIconRenderer.ts": "a5e0e82bc300",
-        "src/views/TableRenderer.ts": "ce0dc80023d8",
-        "src/data/RecordIcon.ts": "53ce191a6b37",
-        "styles.css": "375296038107"
+        "src/views/record-icon-renderer.ts": "3d90a87b2a0b",
+        "src/views/table-renderer.ts": "4ecaa2cb2295",
+        "src/data/record-icon.ts": "dd6940af82f2",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "The table puts record icons in a 28px gutter column of their own, whose header is blank so the first property header can borrow the width. An unparsed token falls back to file-text and is-default; a lucide token carries db-record-icon-color-*; an emoji token renders through db-record-icon-emoji.",
       "capture": "element",
@@ -1799,15 +1799,15 @@
       "device": "mobile",
       "file": "screenshots/fields/field-record-icon-mobile-dark.png",
       "sources": [
-        "src/views/RecordIconRenderer.ts",
-        "src/views/TableRenderer.ts",
-        "src/data/RecordIcon.ts"
+        "src/views/record-icon-renderer.ts",
+        "src/views/table-renderer.ts",
+        "src/data/record-icon.ts"
       ],
       "sourceHashes": {
-        "src/views/RecordIconRenderer.ts": "a5e0e82bc300",
-        "src/views/TableRenderer.ts": "ce0dc80023d8",
-        "src/data/RecordIcon.ts": "53ce191a6b37",
-        "styles.css": "375296038107"
+        "src/views/record-icon-renderer.ts": "3d90a87b2a0b",
+        "src/views/table-renderer.ts": "4ecaa2cb2295",
+        "src/data/record-icon.ts": "dd6940af82f2",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "The table puts record icons in a 28px gutter column of their own, whose header is blank so the first property header can borrow the width. An unparsed token falls back to file-text and is-default; a lucide token carries db-record-icon-color-*; an emoji token renders through db-record-icon-emoji.",
       "capture": "element",
@@ -1821,15 +1821,15 @@
       "device": "mobile",
       "file": "screenshots/fields/field-record-icon-mobile-light.png",
       "sources": [
-        "src/views/RecordIconRenderer.ts",
-        "src/views/TableRenderer.ts",
-        "src/data/RecordIcon.ts"
+        "src/views/record-icon-renderer.ts",
+        "src/views/table-renderer.ts",
+        "src/data/record-icon.ts"
       ],
       "sourceHashes": {
-        "src/views/RecordIconRenderer.ts": "a5e0e82bc300",
-        "src/views/TableRenderer.ts": "ce0dc80023d8",
-        "src/data/RecordIcon.ts": "53ce191a6b37",
-        "styles.css": "375296038107"
+        "src/views/record-icon-renderer.ts": "3d90a87b2a0b",
+        "src/views/table-renderer.ts": "4ecaa2cb2295",
+        "src/data/record-icon.ts": "dd6940af82f2",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "The table puts record icons in a 28px gutter column of their own, whose header is blank so the first property header can borrow the width. An unparsed token falls back to file-text and is-default; a lucide token carries db-record-icon-color-*; an emoji token renders through db-record-icon-emoji.",
       "capture": "element",
@@ -1843,11 +1843,11 @@
       "device": "desktop",
       "file": "screenshots/fields/field-relation-values-desktop-dark.png",
       "sources": [
-        "src/views/RelationValueRenderer.ts"
+        "src/views/relation-value-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/RelationValueRenderer.ts": "b58d77a32663",
-        "styles.css": "375296038107"
+        "src/views/relation-value-renderer.ts": "8eb0d49c5c0a",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "A resolved target renders file-text on a tinted chip; a target the metadata cache cannot find renders alert-triangle inside a dashed warning outline.",
       "capture": "element",
@@ -1861,11 +1861,11 @@
       "device": "desktop",
       "file": "screenshots/fields/field-relation-values-desktop-light.png",
       "sources": [
-        "src/views/RelationValueRenderer.ts"
+        "src/views/relation-value-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/RelationValueRenderer.ts": "b58d77a32663",
-        "styles.css": "375296038107"
+        "src/views/relation-value-renderer.ts": "8eb0d49c5c0a",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "A resolved target renders file-text on a tinted chip; a target the metadata cache cannot find renders alert-triangle inside a dashed warning outline.",
       "capture": "element",
@@ -1879,11 +1879,11 @@
       "device": "mobile",
       "file": "screenshots/fields/field-relation-values-mobile-dark.png",
       "sources": [
-        "src/views/RelationValueRenderer.ts"
+        "src/views/relation-value-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/RelationValueRenderer.ts": "b58d77a32663",
-        "styles.css": "375296038107"
+        "src/views/relation-value-renderer.ts": "8eb0d49c5c0a",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "A resolved target renders file-text on a tinted chip; a target the metadata cache cannot find renders alert-triangle inside a dashed warning outline.",
       "capture": "element",
@@ -1897,11 +1897,11 @@
       "device": "mobile",
       "file": "screenshots/fields/field-relation-values-mobile-light.png",
       "sources": [
-        "src/views/RelationValueRenderer.ts"
+        "src/views/relation-value-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/RelationValueRenderer.ts": "b58d77a32663",
-        "styles.css": "375296038107"
+        "src/views/relation-value-renderer.ts": "8eb0d49c5c0a",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "A resolved target renders file-text on a tinted chip; a target the metadata cache cannot find renders alert-triangle inside a dashed warning outline.",
       "capture": "element",
@@ -1915,13 +1915,13 @@
       "device": "desktop",
       "file": "screenshots/fields/field-status-colors-desktop-dark.png",
       "sources": [
-        "src/data/StatusColors.ts",
-        "src/views/CellRenderer.ts"
+        "src/data/status-colors.ts",
+        "src/views/cell-renderer.ts"
       ],
       "sourceHashes": {
-        "src/data/StatusColors.ts": "40cccdce6e5c",
-        "src/views/CellRenderer.ts": "a66834f860b4",
-        "styles.css": "375296038107"
+        "src/data/status-colors.ts": "954425583842",
+        "src/views/cell-renderer.ts": "e041f712f0b8",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "Every select, status, multi-select and tag value in the plugin is a status-badge in one of these sixteen status-color-* variants, so this is the whole colour vocabulary in one shot. The multi-select remove buttons only become visible on hover.",
       "capture": "element",
@@ -1935,13 +1935,13 @@
       "device": "desktop",
       "file": "screenshots/fields/field-status-colors-desktop-light.png",
       "sources": [
-        "src/data/StatusColors.ts",
-        "src/views/CellRenderer.ts"
+        "src/data/status-colors.ts",
+        "src/views/cell-renderer.ts"
       ],
       "sourceHashes": {
-        "src/data/StatusColors.ts": "40cccdce6e5c",
-        "src/views/CellRenderer.ts": "a66834f860b4",
-        "styles.css": "375296038107"
+        "src/data/status-colors.ts": "954425583842",
+        "src/views/cell-renderer.ts": "e041f712f0b8",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "Every select, status, multi-select and tag value in the plugin is a status-badge in one of these sixteen status-color-* variants, so this is the whole colour vocabulary in one shot. The multi-select remove buttons only become visible on hover.",
       "capture": "element",
@@ -1955,13 +1955,13 @@
       "device": "mobile",
       "file": "screenshots/fields/field-status-colors-mobile-dark.png",
       "sources": [
-        "src/data/StatusColors.ts",
-        "src/views/CellRenderer.ts"
+        "src/data/status-colors.ts",
+        "src/views/cell-renderer.ts"
       ],
       "sourceHashes": {
-        "src/data/StatusColors.ts": "40cccdce6e5c",
-        "src/views/CellRenderer.ts": "a66834f860b4",
-        "styles.css": "375296038107"
+        "src/data/status-colors.ts": "954425583842",
+        "src/views/cell-renderer.ts": "e041f712f0b8",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "Every select, status, multi-select and tag value in the plugin is a status-badge in one of these sixteen status-color-* variants, so this is the whole colour vocabulary in one shot. The multi-select remove buttons only become visible on hover.",
       "capture": "element",
@@ -1975,13 +1975,13 @@
       "device": "mobile",
       "file": "screenshots/fields/field-status-colors-mobile-light.png",
       "sources": [
-        "src/data/StatusColors.ts",
-        "src/views/CellRenderer.ts"
+        "src/data/status-colors.ts",
+        "src/views/cell-renderer.ts"
       ],
       "sourceHashes": {
-        "src/data/StatusColors.ts": "40cccdce6e5c",
-        "src/views/CellRenderer.ts": "a66834f860b4",
-        "styles.css": "375296038107"
+        "src/data/status-colors.ts": "954425583842",
+        "src/views/cell-renderer.ts": "e041f712f0b8",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "Every select, status, multi-select and tag value in the plugin is a status-badge in one of these sixteen status-color-* variants, so this is the whole colour vocabulary in one shot. The multi-select remove buttons only become visible on hover.",
       "capture": "element",
@@ -1995,13 +1995,13 @@
       "device": "desktop",
       "file": "screenshots/panels/panel-column-manager-desktop-dark.png",
       "sources": [
-        "src/views/ColumnManagerRenderer.ts",
-        "src/views/PropertyTypeIcon.ts"
+        "src/views/column-manager-renderer.ts",
+        "src/views/property-type-icon.ts"
       ],
       "sourceHashes": {
-        "src/views/ColumnManagerRenderer.ts": "974a55c82710",
-        "src/views/PropertyTypeIcon.ts": "4ecb49e532fc",
-        "styles.css": "375296038107"
+        "src/views/column-manager-renderer.ts": "216e0a41ddef",
+        "src/views/property-type-icon.ts": "046f0b24b104",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "One row per property: drag handle, visibility checkbox, type icon, name with its frontmatter key, then wrap, edit and delete.",
       "capture": "element",
@@ -2015,13 +2015,13 @@
       "device": "desktop",
       "file": "screenshots/panels/panel-column-manager-desktop-light.png",
       "sources": [
-        "src/views/ColumnManagerRenderer.ts",
-        "src/views/PropertyTypeIcon.ts"
+        "src/views/column-manager-renderer.ts",
+        "src/views/property-type-icon.ts"
       ],
       "sourceHashes": {
-        "src/views/ColumnManagerRenderer.ts": "974a55c82710",
-        "src/views/PropertyTypeIcon.ts": "4ecb49e532fc",
-        "styles.css": "375296038107"
+        "src/views/column-manager-renderer.ts": "216e0a41ddef",
+        "src/views/property-type-icon.ts": "046f0b24b104",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "One row per property: drag handle, visibility checkbox, type icon, name with its frontmatter key, then wrap, edit and delete.",
       "capture": "element",
@@ -2035,13 +2035,13 @@
       "device": "mobile",
       "file": "screenshots/panels/panel-column-manager-mobile-dark.png",
       "sources": [
-        "src/views/ColumnManagerRenderer.ts",
-        "src/views/PropertyTypeIcon.ts"
+        "src/views/column-manager-renderer.ts",
+        "src/views/property-type-icon.ts"
       ],
       "sourceHashes": {
-        "src/views/ColumnManagerRenderer.ts": "974a55c82710",
-        "src/views/PropertyTypeIcon.ts": "4ecb49e532fc",
-        "styles.css": "375296038107"
+        "src/views/column-manager-renderer.ts": "216e0a41ddef",
+        "src/views/property-type-icon.ts": "046f0b24b104",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "One row per property: drag handle, visibility checkbox, type icon, name with its frontmatter key, then wrap, edit and delete.",
       "capture": "element",
@@ -2055,13 +2055,13 @@
       "device": "mobile",
       "file": "screenshots/panels/panel-column-manager-mobile-light.png",
       "sources": [
-        "src/views/ColumnManagerRenderer.ts",
-        "src/views/PropertyTypeIcon.ts"
+        "src/views/column-manager-renderer.ts",
+        "src/views/property-type-icon.ts"
       ],
       "sourceHashes": {
-        "src/views/ColumnManagerRenderer.ts": "974a55c82710",
-        "src/views/PropertyTypeIcon.ts": "4ecb49e532fc",
-        "styles.css": "375296038107"
+        "src/views/column-manager-renderer.ts": "216e0a41ddef",
+        "src/views/property-type-icon.ts": "046f0b24b104",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "One row per property: drag handle, visibility checkbox, type icon, name with its frontmatter key, then wrap, edit and delete.",
       "capture": "element",
@@ -2075,13 +2075,13 @@
       "device": "desktop",
       "file": "screenshots/panels/panel-filter-conditions-desktop-dark.png",
       "sources": [
-        "src/views/FilterPanelRenderer.ts",
-        "src/views/DropdownField.ts"
+        "src/views/filter-panel-renderer.ts",
+        "src/views/dropdown-field.ts"
       ],
       "sourceHashes": {
-        "src/views/FilterPanelRenderer.ts": "fef01cd8f3f5",
-        "src/views/DropdownField.ts": "67d71b55a26d",
-        "styles.css": "375296038107"
+        "src/views/filter-panel-renderer.ts": "deabe2ecc320",
+        "src/views/dropdown-field.ts": "1a4c6e81f793",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "Three conditions build a group node, so the panel header drops its AND/OR button and the group's own logic dropdown carries it instead.",
       "capture": "element",
@@ -2095,13 +2095,13 @@
       "device": "desktop",
       "file": "screenshots/panels/panel-filter-conditions-desktop-light.png",
       "sources": [
-        "src/views/FilterPanelRenderer.ts",
-        "src/views/DropdownField.ts"
+        "src/views/filter-panel-renderer.ts",
+        "src/views/dropdown-field.ts"
       ],
       "sourceHashes": {
-        "src/views/FilterPanelRenderer.ts": "fef01cd8f3f5",
-        "src/views/DropdownField.ts": "67d71b55a26d",
-        "styles.css": "375296038107"
+        "src/views/filter-panel-renderer.ts": "deabe2ecc320",
+        "src/views/dropdown-field.ts": "1a4c6e81f793",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "Three conditions build a group node, so the panel header drops its AND/OR button and the group's own logic dropdown carries it instead.",
       "capture": "element",
@@ -2115,13 +2115,13 @@
       "device": "mobile",
       "file": "screenshots/panels/panel-filter-conditions-mobile-dark.png",
       "sources": [
-        "src/views/FilterPanelRenderer.ts",
-        "src/views/DropdownField.ts"
+        "src/views/filter-panel-renderer.ts",
+        "src/views/dropdown-field.ts"
       ],
       "sourceHashes": {
-        "src/views/FilterPanelRenderer.ts": "fef01cd8f3f5",
-        "src/views/DropdownField.ts": "67d71b55a26d",
-        "styles.css": "375296038107"
+        "src/views/filter-panel-renderer.ts": "deabe2ecc320",
+        "src/views/dropdown-field.ts": "1a4c6e81f793",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "Three conditions build a group node, so the panel header drops its AND/OR button and the group's own logic dropdown carries it instead.",
       "capture": "element",
@@ -2135,13 +2135,13 @@
       "device": "mobile",
       "file": "screenshots/panels/panel-filter-conditions-mobile-light.png",
       "sources": [
-        "src/views/FilterPanelRenderer.ts",
-        "src/views/DropdownField.ts"
+        "src/views/filter-panel-renderer.ts",
+        "src/views/dropdown-field.ts"
       ],
       "sourceHashes": {
-        "src/views/FilterPanelRenderer.ts": "fef01cd8f3f5",
-        "src/views/DropdownField.ts": "67d71b55a26d",
-        "styles.css": "375296038107"
+        "src/views/filter-panel-renderer.ts": "deabe2ecc320",
+        "src/views/dropdown-field.ts": "1a4c6e81f793",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "Three conditions build a group node, so the panel header drops its AND/OR button and the group's own logic dropdown carries it instead.",
       "capture": "element",
@@ -2155,13 +2155,13 @@
       "device": "desktop",
       "file": "screenshots/panels/panel-filter-nested-group-desktop-dark.png",
       "sources": [
-        "src/views/FilterPanelRenderer.ts",
-        "src/data/ViewFilterTree.ts"
+        "src/views/filter-panel-renderer.ts",
+        "src/data/view-filter-tree.ts"
       ],
       "sourceHashes": {
-        "src/views/FilterPanelRenderer.ts": "fef01cd8f3f5",
-        "src/data/ViewFilterTree.ts": "57dab6da82d5",
-        "styles.css": "375296038107"
+        "src/views/filter-panel-renderer.ts": "deabe2ecc320",
+        "src/data/view-filter-tree.ts": "1efdb923d4bb",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "Nesting stops at three levels: the innermost rows lose their add-group button because the tree can go no deeper.",
       "capture": "element",
@@ -2175,13 +2175,13 @@
       "device": "desktop",
       "file": "screenshots/panels/panel-filter-nested-group-desktop-light.png",
       "sources": [
-        "src/views/FilterPanelRenderer.ts",
-        "src/data/ViewFilterTree.ts"
+        "src/views/filter-panel-renderer.ts",
+        "src/data/view-filter-tree.ts"
       ],
       "sourceHashes": {
-        "src/views/FilterPanelRenderer.ts": "fef01cd8f3f5",
-        "src/data/ViewFilterTree.ts": "57dab6da82d5",
-        "styles.css": "375296038107"
+        "src/views/filter-panel-renderer.ts": "deabe2ecc320",
+        "src/data/view-filter-tree.ts": "1efdb923d4bb",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "Nesting stops at three levels: the innermost rows lose their add-group button because the tree can go no deeper.",
       "capture": "element",
@@ -2195,13 +2195,13 @@
       "device": "mobile",
       "file": "screenshots/panels/panel-filter-nested-group-mobile-dark.png",
       "sources": [
-        "src/views/FilterPanelRenderer.ts",
-        "src/data/ViewFilterTree.ts"
+        "src/views/filter-panel-renderer.ts",
+        "src/data/view-filter-tree.ts"
       ],
       "sourceHashes": {
-        "src/views/FilterPanelRenderer.ts": "fef01cd8f3f5",
-        "src/data/ViewFilterTree.ts": "57dab6da82d5",
-        "styles.css": "375296038107"
+        "src/views/filter-panel-renderer.ts": "deabe2ecc320",
+        "src/data/view-filter-tree.ts": "1efdb923d4bb",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "Nesting stops at three levels: the innermost rows lose their add-group button because the tree can go no deeper.",
       "capture": "element",
@@ -2215,13 +2215,13 @@
       "device": "mobile",
       "file": "screenshots/panels/panel-filter-nested-group-mobile-light.png",
       "sources": [
-        "src/views/FilterPanelRenderer.ts",
-        "src/data/ViewFilterTree.ts"
+        "src/views/filter-panel-renderer.ts",
+        "src/data/view-filter-tree.ts"
       ],
       "sourceHashes": {
-        "src/views/FilterPanelRenderer.ts": "fef01cd8f3f5",
-        "src/data/ViewFilterTree.ts": "57dab6da82d5",
-        "styles.css": "375296038107"
+        "src/views/filter-panel-renderer.ts": "deabe2ecc320",
+        "src/data/view-filter-tree.ts": "1efdb923d4bb",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "Nesting stops at three levels: the innermost rows lose their add-group button because the tree can go no deeper.",
       "capture": "element",
@@ -2235,13 +2235,13 @@
       "device": "desktop",
       "file": "screenshots/panels/panel-record-detail-desktop-dark.png",
       "sources": [
-        "src/views/RecordDetailPanel.ts",
-        "src/views/CardFieldRenderer.ts"
+        "src/views/record-detail-panel.ts",
+        "src/views/card-field-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/RecordDetailPanel.ts": "41381251ed34",
-        "src/views/CardFieldRenderer.ts": "8a9c8a80cbfd",
-        "styles.css": "375296038107"
+        "src/views/record-detail-panel.ts": "4c818dfb16b2",
+        "src/views/card-field-renderer.ts": "9966f9cf54ed",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "Opened from a calendar or timeline event card. Fields are click-to-edit; an empty field only appears when the view asks for empty properties.",
       "capture": "element",
@@ -2255,13 +2255,13 @@
       "device": "desktop",
       "file": "screenshots/panels/panel-record-detail-desktop-light.png",
       "sources": [
-        "src/views/RecordDetailPanel.ts",
-        "src/views/CardFieldRenderer.ts"
+        "src/views/record-detail-panel.ts",
+        "src/views/card-field-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/RecordDetailPanel.ts": "41381251ed34",
-        "src/views/CardFieldRenderer.ts": "8a9c8a80cbfd",
-        "styles.css": "375296038107"
+        "src/views/record-detail-panel.ts": "4c818dfb16b2",
+        "src/views/card-field-renderer.ts": "9966f9cf54ed",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "Opened from a calendar or timeline event card. Fields are click-to-edit; an empty field only appears when the view asks for empty properties.",
       "capture": "element",
@@ -2275,13 +2275,13 @@
       "device": "mobile",
       "file": "screenshots/panels/panel-record-detail-mobile-dark.png",
       "sources": [
-        "src/views/RecordDetailPanel.ts",
-        "src/views/CardFieldRenderer.ts"
+        "src/views/record-detail-panel.ts",
+        "src/views/card-field-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/RecordDetailPanel.ts": "41381251ed34",
-        "src/views/CardFieldRenderer.ts": "8a9c8a80cbfd",
-        "styles.css": "375296038107"
+        "src/views/record-detail-panel.ts": "4c818dfb16b2",
+        "src/views/card-field-renderer.ts": "9966f9cf54ed",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "Opened from a calendar or timeline event card. Fields are click-to-edit; an empty field only appears when the view asks for empty properties.",
       "capture": "element",
@@ -2295,13 +2295,13 @@
       "device": "mobile",
       "file": "screenshots/panels/panel-record-detail-mobile-light.png",
       "sources": [
-        "src/views/RecordDetailPanel.ts",
-        "src/views/CardFieldRenderer.ts"
+        "src/views/record-detail-panel.ts",
+        "src/views/card-field-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/RecordDetailPanel.ts": "41381251ed34",
-        "src/views/CardFieldRenderer.ts": "8a9c8a80cbfd",
-        "styles.css": "375296038107"
+        "src/views/record-detail-panel.ts": "4c818dfb16b2",
+        "src/views/card-field-renderer.ts": "9966f9cf54ed",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "Opened from a calendar or timeline event card. Fields are click-to-edit; an empty field only appears when the view asks for empty properties.",
       "capture": "element",
@@ -2320,10 +2320,10 @@
         "src/views/CardFieldRenderer.ts"
       ],
       "sourceHashes": {
-        "src/views/RecordDetailPanel.ts": "41381251ed34",
-        "src/views/PopoverPosition.ts": "a3836bfe1118",
-        "src/views/CardFieldRenderer.ts": "8a9c8a80cbfd",
-        "styles.css": "375296038107"
+        "src/views/RecordDetailPanel.ts": null,
+        "src/views/PopoverPosition.ts": null,
+        "src/views/CardFieldRenderer.ts": null,
+        "styles.css": "b6dfd2044a17"
       },
       "note": "The phone form of the record detail panel. positionToolbarPopover renders it as a bottom sheet with a grab handle; a permanent close button (reusing db-cell-edit-close) and drag-down on the handle dismiss it where the desktop panel relies on Escape and outside-click. Captured in viewport mode so the fixed sheet docks at the bottom.",
       "capture": "viewport",
@@ -2342,14 +2342,14 @@
         "src/views/CardFieldRenderer.ts"
       ],
       "sourceHashes": {
-        "src/views/RecordDetailPanel.ts": "41381251ed34",
-        "src/views/PopoverPosition.ts": "a3836bfe1118",
-        "src/views/CardFieldRenderer.ts": "8a9c8a80cbfd",
-        "styles.css": "375296038107"
+        "src/views/RecordDetailPanel.ts": null,
+        "src/views/PopoverPosition.ts": null,
+        "src/views/CardFieldRenderer.ts": null,
+        "styles.css": "b6dfd2044a17"
       },
       "note": "The phone form of the record detail panel. positionToolbarPopover renders it as a bottom sheet with a grab handle; a permanent close button (reusing db-cell-edit-close) and drag-down on the handle dismiss it where the desktop panel relies on Escape and outside-click. Captured in viewport mode so the fixed sheet docks at the bottom.",
       "capture": "viewport",
-      "bytes": 52101
+      "bytes": 52143
     },
     {
       "id": "panel-record-detail-sheet",
@@ -2364,14 +2364,14 @@
         "src/views/CardFieldRenderer.ts"
       ],
       "sourceHashes": {
-        "src/views/RecordDetailPanel.ts": "41381251ed34",
-        "src/views/PopoverPosition.ts": "a3836bfe1118",
-        "src/views/CardFieldRenderer.ts": "8a9c8a80cbfd",
-        "styles.css": "375296038107"
+        "src/views/RecordDetailPanel.ts": null,
+        "src/views/PopoverPosition.ts": null,
+        "src/views/CardFieldRenderer.ts": null,
+        "styles.css": "b6dfd2044a17"
       },
       "note": "The phone form of the record detail panel. positionToolbarPopover renders it as a bottom sheet with a grab handle; a permanent close button (reusing db-cell-edit-close) and drag-down on the handle dismiss it where the desktop panel relies on Escape and outside-click. Captured in viewport mode so the fixed sheet docks at the bottom.",
       "capture": "viewport",
-      "bytes": 20505
+      "bytes": 20520
     },
     {
       "id": "panel-record-detail-sheet",
@@ -2386,10 +2386,10 @@
         "src/views/CardFieldRenderer.ts"
       ],
       "sourceHashes": {
-        "src/views/RecordDetailPanel.ts": "41381251ed34",
-        "src/views/PopoverPosition.ts": "a3836bfe1118",
-        "src/views/CardFieldRenderer.ts": "8a9c8a80cbfd",
-        "styles.css": "375296038107"
+        "src/views/RecordDetailPanel.ts": null,
+        "src/views/PopoverPosition.ts": null,
+        "src/views/CardFieldRenderer.ts": null,
+        "styles.css": "b6dfd2044a17"
       },
       "note": "The phone form of the record detail panel. positionToolbarPopover renders it as a bottom sheet with a grab handle; a permanent close button (reusing db-cell-edit-close) and drag-down on the handle dismiss it where the desktop panel relies on Escape and outside-click. Captured in viewport mode so the fixed sheet docks at the bottom.",
       "capture": "viewport",
@@ -2403,13 +2403,13 @@
       "device": "desktop",
       "file": "screenshots/panels/panel-record-peek-desktop-dark.png",
       "sources": [
-        "src/views/TableRecordPeek.ts",
-        "src/views/TableRenderer.ts"
+        "src/views/table-record-peek.ts",
+        "src/views/table-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/TableRecordPeek.ts": "f634f3a8b5b0",
-        "src/views/TableRenderer.ts": "ce0dc80023d8",
-        "styles.css": "375296038107"
+        "src/views/table-record-peek.ts": "c5edea37c637",
+        "src/views/table-renderer.ts": "4ecaa2cb2295",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "Docks against the right edge of the table it was opened from. Values are display-only text, and properties hidden from the table sit behind the disclosure.",
       "capture": "element",
@@ -2423,13 +2423,13 @@
       "device": "desktop",
       "file": "screenshots/panels/panel-record-peek-desktop-light.png",
       "sources": [
-        "src/views/TableRecordPeek.ts",
-        "src/views/TableRenderer.ts"
+        "src/views/table-record-peek.ts",
+        "src/views/table-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/TableRecordPeek.ts": "f634f3a8b5b0",
-        "src/views/TableRenderer.ts": "ce0dc80023d8",
-        "styles.css": "375296038107"
+        "src/views/table-record-peek.ts": "c5edea37c637",
+        "src/views/table-renderer.ts": "4ecaa2cb2295",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "Docks against the right edge of the table it was opened from. Values are display-only text, and properties hidden from the table sit behind the disclosure.",
       "capture": "element",
@@ -2443,13 +2443,13 @@
       "device": "mobile",
       "file": "screenshots/panels/panel-record-peek-mobile-dark.png",
       "sources": [
-        "src/views/TableRecordPeek.ts",
-        "src/views/TableRenderer.ts"
+        "src/views/table-record-peek.ts",
+        "src/views/table-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/TableRecordPeek.ts": "f634f3a8b5b0",
-        "src/views/TableRenderer.ts": "ce0dc80023d8",
-        "styles.css": "375296038107"
+        "src/views/table-record-peek.ts": "c5edea37c637",
+        "src/views/table-renderer.ts": "4ecaa2cb2295",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "Docks against the right edge of the table it was opened from. Values are display-only text, and properties hidden from the table sit behind the disclosure.",
       "capture": "element",
@@ -2463,13 +2463,13 @@
       "device": "mobile",
       "file": "screenshots/panels/panel-record-peek-mobile-light.png",
       "sources": [
-        "src/views/TableRecordPeek.ts",
-        "src/views/TableRenderer.ts"
+        "src/views/table-record-peek.ts",
+        "src/views/table-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/TableRecordPeek.ts": "f634f3a8b5b0",
-        "src/views/TableRenderer.ts": "ce0dc80023d8",
-        "styles.css": "375296038107"
+        "src/views/table-record-peek.ts": "c5edea37c637",
+        "src/views/table-renderer.ts": "4ecaa2cb2295",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "Docks against the right edge of the table it was opened from. Values are display-only text, and properties hidden from the table sit behind the disclosure.",
       "capture": "element",
@@ -2483,11 +2483,11 @@
       "device": "desktop",
       "file": "screenshots/panels/panel-sort-calendar-empty-desktop-dark.png",
       "sources": [
-        "src/views/SortPanelRenderer.ts"
+        "src/views/sort-panel-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/SortPanelRenderer.ts": "bef6bb96d504",
-        "styles.css": "375296038107"
+        "src/views/sort-panel-renderer.ts": "19109d09b2d5",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "Calendar views add a hint above the empty state because layout order wins over user sort.",
       "capture": "element",
@@ -2501,11 +2501,11 @@
       "device": "desktop",
       "file": "screenshots/panels/panel-sort-calendar-empty-desktop-light.png",
       "sources": [
-        "src/views/SortPanelRenderer.ts"
+        "src/views/sort-panel-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/SortPanelRenderer.ts": "bef6bb96d504",
-        "styles.css": "375296038107"
+        "src/views/sort-panel-renderer.ts": "19109d09b2d5",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "Calendar views add a hint above the empty state because layout order wins over user sort.",
       "capture": "element",
@@ -2519,11 +2519,11 @@
       "device": "mobile",
       "file": "screenshots/panels/panel-sort-calendar-empty-mobile-dark.png",
       "sources": [
-        "src/views/SortPanelRenderer.ts"
+        "src/views/sort-panel-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/SortPanelRenderer.ts": "bef6bb96d504",
-        "styles.css": "375296038107"
+        "src/views/sort-panel-renderer.ts": "19109d09b2d5",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "Calendar views add a hint above the empty state because layout order wins over user sort.",
       "capture": "element",
@@ -2537,11 +2537,11 @@
       "device": "mobile",
       "file": "screenshots/panels/panel-sort-calendar-empty-mobile-light.png",
       "sources": [
-        "src/views/SortPanelRenderer.ts"
+        "src/views/sort-panel-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/SortPanelRenderer.ts": "bef6bb96d504",
-        "styles.css": "375296038107"
+        "src/views/sort-panel-renderer.ts": "19109d09b2d5",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "Calendar views add a hint above the empty state because layout order wins over user sort.",
       "capture": "element",
@@ -2555,13 +2555,13 @@
       "device": "desktop",
       "file": "screenshots/panels/panel-sort-rules-desktop-dark.png",
       "sources": [
-        "src/views/SortPanelRenderer.ts",
-        "src/views/DropdownField.ts"
+        "src/views/sort-panel-renderer.ts",
+        "src/views/dropdown-field.ts"
       ],
       "sourceHashes": {
-        "src/views/SortPanelRenderer.ts": "bef6bb96d504",
-        "src/views/DropdownField.ts": "67d71b55a26d",
-        "styles.css": "375296038107"
+        "src/views/sort-panel-renderer.ts": "19109d09b2d5",
+        "src/views/dropdown-field.ts": "1a4c6e81f793",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "Rows are draggable; the first rule's move-up and the last rule's move-down are disabled.",
       "capture": "element",
@@ -2575,13 +2575,13 @@
       "device": "desktop",
       "file": "screenshots/panels/panel-sort-rules-desktop-light.png",
       "sources": [
-        "src/views/SortPanelRenderer.ts",
-        "src/views/DropdownField.ts"
+        "src/views/sort-panel-renderer.ts",
+        "src/views/dropdown-field.ts"
       ],
       "sourceHashes": {
-        "src/views/SortPanelRenderer.ts": "bef6bb96d504",
-        "src/views/DropdownField.ts": "67d71b55a26d",
-        "styles.css": "375296038107"
+        "src/views/sort-panel-renderer.ts": "19109d09b2d5",
+        "src/views/dropdown-field.ts": "1a4c6e81f793",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "Rows are draggable; the first rule's move-up and the last rule's move-down are disabled.",
       "capture": "element",
@@ -2595,13 +2595,13 @@
       "device": "mobile",
       "file": "screenshots/panels/panel-sort-rules-mobile-dark.png",
       "sources": [
-        "src/views/SortPanelRenderer.ts",
-        "src/views/DropdownField.ts"
+        "src/views/sort-panel-renderer.ts",
+        "src/views/dropdown-field.ts"
       ],
       "sourceHashes": {
-        "src/views/SortPanelRenderer.ts": "bef6bb96d504",
-        "src/views/DropdownField.ts": "67d71b55a26d",
-        "styles.css": "375296038107"
+        "src/views/sort-panel-renderer.ts": "19109d09b2d5",
+        "src/views/dropdown-field.ts": "1a4c6e81f793",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "Rows are draggable; the first rule's move-up and the last rule's move-down are disabled.",
       "capture": "element",
@@ -2615,13 +2615,13 @@
       "device": "mobile",
       "file": "screenshots/panels/panel-sort-rules-mobile-light.png",
       "sources": [
-        "src/views/SortPanelRenderer.ts",
-        "src/views/DropdownField.ts"
+        "src/views/sort-panel-renderer.ts",
+        "src/views/dropdown-field.ts"
       ],
       "sourceHashes": {
-        "src/views/SortPanelRenderer.ts": "bef6bb96d504",
-        "src/views/DropdownField.ts": "67d71b55a26d",
-        "styles.css": "375296038107"
+        "src/views/sort-panel-renderer.ts": "19109d09b2d5",
+        "src/views/dropdown-field.ts": "1a4c6e81f793",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "Rows are draggable; the first rule's move-up and the last rule's move-down are disabled.",
       "capture": "element",
@@ -2635,13 +2635,13 @@
       "device": "desktop",
       "file": "screenshots/panels/panel-view-config-desktop-dark.png",
       "sources": [
-        "src/views/ViewConfigPanelRenderer.ts",
-        "src/views/DropdownField.ts"
+        "src/views/view-config-panel-renderer.ts",
+        "src/views/dropdown-field.ts"
       ],
       "sourceHashes": {
-        "src/views/ViewConfigPanelRenderer.ts": "d045a67b865f",
-        "src/views/DropdownField.ts": "67d71b55a26d",
-        "styles.css": "375296038107"
+        "src/views/view-config-panel-renderer.ts": "19c84f701c56",
+        "src/views/dropdown-field.ts": "1a4c6e81f793",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "The top of the panel for a table view: database-scoped rows above the section divider, view-scoped rows below. Conditional formatting and status presets sit further down and are not in frame.",
       "capture": "element",
@@ -2655,13 +2655,13 @@
       "device": "desktop",
       "file": "screenshots/panels/panel-view-config-desktop-light.png",
       "sources": [
-        "src/views/ViewConfigPanelRenderer.ts",
-        "src/views/DropdownField.ts"
+        "src/views/view-config-panel-renderer.ts",
+        "src/views/dropdown-field.ts"
       ],
       "sourceHashes": {
-        "src/views/ViewConfigPanelRenderer.ts": "d045a67b865f",
-        "src/views/DropdownField.ts": "67d71b55a26d",
-        "styles.css": "375296038107"
+        "src/views/view-config-panel-renderer.ts": "19c84f701c56",
+        "src/views/dropdown-field.ts": "1a4c6e81f793",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "The top of the panel for a table view: database-scoped rows above the section divider, view-scoped rows below. Conditional formatting and status presets sit further down and are not in frame.",
       "capture": "element",
@@ -2675,13 +2675,13 @@
       "device": "mobile",
       "file": "screenshots/panels/panel-view-config-mobile-dark.png",
       "sources": [
-        "src/views/ViewConfigPanelRenderer.ts",
-        "src/views/DropdownField.ts"
+        "src/views/view-config-panel-renderer.ts",
+        "src/views/dropdown-field.ts"
       ],
       "sourceHashes": {
-        "src/views/ViewConfigPanelRenderer.ts": "d045a67b865f",
-        "src/views/DropdownField.ts": "67d71b55a26d",
-        "styles.css": "375296038107"
+        "src/views/view-config-panel-renderer.ts": "19c84f701c56",
+        "src/views/dropdown-field.ts": "1a4c6e81f793",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "The top of the panel for a table view: database-scoped rows above the section divider, view-scoped rows below. Conditional formatting and status presets sit further down and are not in frame.",
       "capture": "element",
@@ -2695,13 +2695,13 @@
       "device": "mobile",
       "file": "screenshots/panels/panel-view-config-mobile-light.png",
       "sources": [
-        "src/views/ViewConfigPanelRenderer.ts",
-        "src/views/DropdownField.ts"
+        "src/views/view-config-panel-renderer.ts",
+        "src/views/dropdown-field.ts"
       ],
       "sourceHashes": {
-        "src/views/ViewConfigPanelRenderer.ts": "d045a67b865f",
-        "src/views/DropdownField.ts": "67d71b55a26d",
-        "styles.css": "375296038107"
+        "src/views/view-config-panel-renderer.ts": "19c84f701c56",
+        "src/views/dropdown-field.ts": "1a4c6e81f793",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "The top of the panel for a table view: database-scoped rows above the section divider, view-scoped rows below. Conditional formatting and status presets sit further down and are not in frame.",
       "capture": "element",
@@ -2715,11 +2715,11 @@
       "device": "desktop",
       "file": "screenshots/states/empty-state-desktop-dark.png",
       "sources": [
-        "src/views/EmptyStateRenderer.ts"
+        "src/views/empty-state-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/EmptyStateRenderer.ts": "e678079ac33b",
-        "styles.css": "375296038107"
+        "src/views/empty-state-renderer.ts": "0b9797e5bfdb",
+        "styles.css": "b6dfd2044a17"
       },
       "note": null,
       "capture": "element",
@@ -2733,11 +2733,11 @@
       "device": "desktop",
       "file": "screenshots/states/empty-state-desktop-light.png",
       "sources": [
-        "src/views/EmptyStateRenderer.ts"
+        "src/views/empty-state-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/EmptyStateRenderer.ts": "e678079ac33b",
-        "styles.css": "375296038107"
+        "src/views/empty-state-renderer.ts": "0b9797e5bfdb",
+        "styles.css": "b6dfd2044a17"
       },
       "note": null,
       "capture": "element",
@@ -2751,11 +2751,11 @@
       "device": "mobile",
       "file": "screenshots/states/empty-state-mobile-dark.png",
       "sources": [
-        "src/views/EmptyStateRenderer.ts"
+        "src/views/empty-state-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/EmptyStateRenderer.ts": "e678079ac33b",
-        "styles.css": "375296038107"
+        "src/views/empty-state-renderer.ts": "0b9797e5bfdb",
+        "styles.css": "b6dfd2044a17"
       },
       "note": null,
       "capture": "element",
@@ -2769,11 +2769,11 @@
       "device": "mobile",
       "file": "screenshots/states/empty-state-mobile-light.png",
       "sources": [
-        "src/views/EmptyStateRenderer.ts"
+        "src/views/empty-state-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/EmptyStateRenderer.ts": "e678079ac33b",
-        "styles.css": "375296038107"
+        "src/views/empty-state-renderer.ts": "0b9797e5bfdb",
+        "styles.css": "b6dfd2044a17"
       },
       "note": null,
       "capture": "element",
@@ -2792,10 +2792,10 @@
         "src/views/CardFieldRenderer.ts"
       ],
       "sourceHashes": {
-        "src/views/BoardRenderer.ts": "5f7ea5f7e794",
-        "src/views/GroupLabelRenderer.ts": "b38adf0523c1",
-        "src/views/CardFieldRenderer.ts": "8a9c8a80cbfd",
-        "styles.css": "375296038107"
+        "src/views/BoardRenderer.ts": null,
+        "src/views/GroupLabelRenderer.ts": null,
+        "src/views/CardFieldRenderer.ts": null,
+        "styles.css": "b6dfd2044a17"
       },
       "note": "The board inside the default-width container. On the phone (is-phone) the container no longer centres the grid off-screen, and the sticky group header is taken out of sticky flow so it cannot float down over the cards; columns page horizontally with snap-scroll.",
       "capture": "viewport",
@@ -2814,10 +2814,10 @@
         "src/views/CardFieldRenderer.ts"
       ],
       "sourceHashes": {
-        "src/views/BoardRenderer.ts": "5f7ea5f7e794",
-        "src/views/GroupLabelRenderer.ts": "b38adf0523c1",
-        "src/views/CardFieldRenderer.ts": "8a9c8a80cbfd",
-        "styles.css": "375296038107"
+        "src/views/BoardRenderer.ts": null,
+        "src/views/GroupLabelRenderer.ts": null,
+        "src/views/CardFieldRenderer.ts": null,
+        "styles.css": "b6dfd2044a17"
       },
       "note": "The board inside the default-width container. On the phone (is-phone) the container no longer centres the grid off-screen, and the sticky group header is taken out of sticky flow so it cannot float down over the cards; columns page horizontally with snap-scroll.",
       "capture": "viewport",
@@ -2836,14 +2836,14 @@
         "src/views/CardFieldRenderer.ts"
       ],
       "sourceHashes": {
-        "src/views/BoardRenderer.ts": "5f7ea5f7e794",
-        "src/views/GroupLabelRenderer.ts": "b38adf0523c1",
-        "src/views/CardFieldRenderer.ts": "8a9c8a80cbfd",
-        "styles.css": "375296038107"
+        "src/views/BoardRenderer.ts": null,
+        "src/views/GroupLabelRenderer.ts": null,
+        "src/views/CardFieldRenderer.ts": null,
+        "styles.css": "b6dfd2044a17"
       },
       "note": "The board inside the default-width container. On the phone (is-phone) the container no longer centres the grid off-screen, and the sticky group header is taken out of sticky flow so it cannot float down over the cards; columns page horizontally with snap-scroll.",
       "capture": "viewport",
-      "bytes": 81507
+      "bytes": 81488
     },
     {
       "id": "board-mobile",
@@ -2858,10 +2858,10 @@
         "src/views/CardFieldRenderer.ts"
       ],
       "sourceHashes": {
-        "src/views/BoardRenderer.ts": "5f7ea5f7e794",
-        "src/views/GroupLabelRenderer.ts": "b38adf0523c1",
-        "src/views/CardFieldRenderer.ts": "8a9c8a80cbfd",
-        "styles.css": "375296038107"
+        "src/views/BoardRenderer.ts": null,
+        "src/views/GroupLabelRenderer.ts": null,
+        "src/views/CardFieldRenderer.ts": null,
+        "styles.css": "b6dfd2044a17"
       },
       "note": "The board inside the default-width container. On the phone (is-phone) the container no longer centres the grid off-screen, and the sticky group header is taken out of sticky flow so it cannot float down over the cards; columns page horizontally with snap-scroll.",
       "capture": "viewport",
@@ -2875,13 +2875,13 @@
       "device": "desktop",
       "file": "screenshots/views/board-view-desktop-dark.png",
       "sources": [
-        "src/views/BoardRenderer.ts",
-        "src/views/CardFieldRenderer.ts"
+        "src/views/board-renderer.ts",
+        "src/views/card-field-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/BoardRenderer.ts": "5f7ea5f7e794",
-        "src/views/CardFieldRenderer.ts": "8a9c8a80cbfd",
-        "styles.css": "375296038107"
+        "src/views/board-renderer.ts": "a60c3565b692",
+        "src/views/card-field-renderer.ts": "9966f9cf54ed",
+        "styles.css": "b6dfd2044a17"
       },
       "note": null,
       "capture": "viewport",
@@ -2895,13 +2895,13 @@
       "device": "desktop",
       "file": "screenshots/views/board-view-desktop-light.png",
       "sources": [
-        "src/views/BoardRenderer.ts",
-        "src/views/CardFieldRenderer.ts"
+        "src/views/board-renderer.ts",
+        "src/views/card-field-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/BoardRenderer.ts": "5f7ea5f7e794",
-        "src/views/CardFieldRenderer.ts": "8a9c8a80cbfd",
-        "styles.css": "375296038107"
+        "src/views/board-renderer.ts": "a60c3565b692",
+        "src/views/card-field-renderer.ts": "9966f9cf54ed",
+        "styles.css": "b6dfd2044a17"
       },
       "note": null,
       "capture": "viewport",
@@ -2915,13 +2915,13 @@
       "device": "mobile",
       "file": "screenshots/views/board-view-mobile-dark.png",
       "sources": [
-        "src/views/BoardRenderer.ts",
-        "src/views/CardFieldRenderer.ts"
+        "src/views/board-renderer.ts",
+        "src/views/card-field-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/BoardRenderer.ts": "5f7ea5f7e794",
-        "src/views/CardFieldRenderer.ts": "8a9c8a80cbfd",
-        "styles.css": "375296038107"
+        "src/views/board-renderer.ts": "a60c3565b692",
+        "src/views/card-field-renderer.ts": "9966f9cf54ed",
+        "styles.css": "b6dfd2044a17"
       },
       "note": null,
       "capture": "viewport",
@@ -2935,17 +2935,17 @@
       "device": "mobile",
       "file": "screenshots/views/board-view-mobile-light.png",
       "sources": [
-        "src/views/BoardRenderer.ts",
-        "src/views/CardFieldRenderer.ts"
+        "src/views/board-renderer.ts",
+        "src/views/card-field-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/BoardRenderer.ts": "5f7ea5f7e794",
-        "src/views/CardFieldRenderer.ts": "8a9c8a80cbfd",
-        "styles.css": "375296038107"
+        "src/views/board-renderer.ts": "a60c3565b692",
+        "src/views/card-field-renderer.ts": "9966f9cf54ed",
+        "styles.css": "b6dfd2044a17"
       },
       "note": null,
       "capture": "viewport",
-      "bytes": 85252
+      "bytes": 85246
     },
     {
       "id": "calendar-mini-calendar",
@@ -2955,13 +2955,13 @@
       "device": "desktop",
       "file": "screenshots/views/calendar-mini-calendar-desktop-dark.png",
       "sources": [
-        "src/views/CalendarMiniCalendarRenderer.ts",
-        "src/views/CalendarRenderer.ts"
+        "src/views/calendar-mini-calendar-renderer.ts",
+        "src/views/calendar-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/CalendarMiniCalendarRenderer.ts": "23763eabe2b0",
-        "src/views/CalendarRenderer.ts": "feb592ba2e4b",
-        "styles.css": "375296038107"
+        "src/views/calendar-mini-calendar-renderer.ts": "14853dcd3917",
+        "src/views/calendar-renderer.ts": "8630b4e6fa98",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "Days with events carry a short accent underline; the visible week reads as the selected pill run.",
       "capture": "viewport",
@@ -2975,17 +2975,17 @@
       "device": "desktop",
       "file": "screenshots/views/calendar-mini-calendar-desktop-light.png",
       "sources": [
-        "src/views/CalendarMiniCalendarRenderer.ts",
-        "src/views/CalendarRenderer.ts"
+        "src/views/calendar-mini-calendar-renderer.ts",
+        "src/views/calendar-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/CalendarMiniCalendarRenderer.ts": "23763eabe2b0",
-        "src/views/CalendarRenderer.ts": "feb592ba2e4b",
-        "styles.css": "375296038107"
+        "src/views/calendar-mini-calendar-renderer.ts": "14853dcd3917",
+        "src/views/calendar-renderer.ts": "8630b4e6fa98",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "Days with events carry a short accent underline; the visible week reads as the selected pill run.",
       "capture": "viewport",
-      "bytes": 61305
+      "bytes": 61342
     },
     {
       "id": "calendar-mini-calendar",
@@ -2995,13 +2995,13 @@
       "device": "mobile",
       "file": "screenshots/views/calendar-mini-calendar-mobile-dark.png",
       "sources": [
-        "src/views/CalendarMiniCalendarRenderer.ts",
-        "src/views/CalendarRenderer.ts"
+        "src/views/calendar-mini-calendar-renderer.ts",
+        "src/views/calendar-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/CalendarMiniCalendarRenderer.ts": "23763eabe2b0",
-        "src/views/CalendarRenderer.ts": "feb592ba2e4b",
-        "styles.css": "375296038107"
+        "src/views/calendar-mini-calendar-renderer.ts": "14853dcd3917",
+        "src/views/calendar-renderer.ts": "8630b4e6fa98",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "Days with events carry a short accent underline; the visible week reads as the selected pill run.",
       "capture": "viewport",
@@ -3015,17 +3015,17 @@
       "device": "mobile",
       "file": "screenshots/views/calendar-mini-calendar-mobile-light.png",
       "sources": [
-        "src/views/CalendarMiniCalendarRenderer.ts",
-        "src/views/CalendarRenderer.ts"
+        "src/views/calendar-mini-calendar-renderer.ts",
+        "src/views/calendar-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/CalendarMiniCalendarRenderer.ts": "23763eabe2b0",
-        "src/views/CalendarRenderer.ts": "feb592ba2e4b",
-        "styles.css": "375296038107"
+        "src/views/calendar-mini-calendar-renderer.ts": "14853dcd3917",
+        "src/views/calendar-renderer.ts": "8630b4e6fa98",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "Days with events carry a short accent underline; the visible week reads as the selected pill run.",
       "capture": "viewport",
-      "bytes": 23719
+      "bytes": 23723
     },
     {
       "id": "calendar-month-view",
@@ -3035,15 +3035,15 @@
       "device": "desktop",
       "file": "screenshots/views/calendar-month-view-desktop-dark.png",
       "sources": [
-        "src/views/CalendarRenderer.ts"
+        "src/views/calendar-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/CalendarRenderer.ts": "feb592ba2e4b",
-        "styles.css": "375296038107"
+        "src/views/calendar-renderer.ts": "8630b4e6fa98",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "Multi-day all-day bars, timed events, an overflow week and one event carried across the week boundary.",
       "capture": "viewport",
-      "bytes": 129143
+      "bytes": 130108
     },
     {
       "id": "calendar-month-view",
@@ -3053,11 +3053,11 @@
       "device": "desktop",
       "file": "screenshots/views/calendar-month-view-desktop-light.png",
       "sources": [
-        "src/views/CalendarRenderer.ts"
+        "src/views/calendar-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/CalendarRenderer.ts": "feb592ba2e4b",
-        "styles.css": "375296038107"
+        "src/views/calendar-renderer.ts": "8630b4e6fa98",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "Multi-day all-day bars, timed events, an overflow week and one event carried across the week boundary.",
       "capture": "viewport",
@@ -3071,15 +3071,15 @@
       "device": "mobile",
       "file": "screenshots/views/calendar-month-view-mobile-dark.png",
       "sources": [
-        "src/views/CalendarRenderer.ts"
+        "src/views/calendar-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/CalendarRenderer.ts": "feb592ba2e4b",
-        "styles.css": "375296038107"
+        "src/views/calendar-renderer.ts": "8630b4e6fa98",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "Multi-day all-day bars, timed events, an overflow week and one event carried across the week boundary.",
       "capture": "viewport",
-      "bytes": 46602
+      "bytes": 46844
     },
     {
       "id": "calendar-month-view",
@@ -3089,15 +3089,15 @@
       "device": "mobile",
       "file": "screenshots/views/calendar-month-view-mobile-light.png",
       "sources": [
-        "src/views/CalendarRenderer.ts"
+        "src/views/calendar-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/CalendarRenderer.ts": "feb592ba2e4b",
-        "styles.css": "375296038107"
+        "src/views/calendar-renderer.ts": "8630b4e6fa98",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "Multi-day all-day bars, timed events, an overflow week and one event carried across the week boundary.",
       "capture": "viewport",
-      "bytes": 47309
+      "bytes": 47108
     },
     {
       "id": "calendar-toolbar-options",
@@ -3107,13 +3107,13 @@
       "device": "desktop",
       "file": "screenshots/views/calendar-toolbar-options-desktop-dark.png",
       "sources": [
-        "src/views/CalendarToolbarRenderer.ts",
-        "src/views/DropdownField.ts"
+        "src/views/calendar-toolbar-renderer.ts",
+        "src/views/dropdown-field.ts"
       ],
       "sourceHashes": {
-        "src/views/CalendarToolbarRenderer.ts": "916ba7b53fbc",
-        "src/views/DropdownField.ts": "67d71b55a26d",
-        "styles.css": "375296038107"
+        "src/views/calendar-toolbar-renderer.ts": "58cefc5cab49",
+        "src/views/dropdown-field.ts": "1a4c6e81f793",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "The Time section only exists in week and day scale; the setup preview card below Data carries no stylesheet rules.",
       "capture": "viewport",
@@ -3127,13 +3127,13 @@
       "device": "desktop",
       "file": "screenshots/views/calendar-toolbar-options-desktop-light.png",
       "sources": [
-        "src/views/CalendarToolbarRenderer.ts",
-        "src/views/DropdownField.ts"
+        "src/views/calendar-toolbar-renderer.ts",
+        "src/views/dropdown-field.ts"
       ],
       "sourceHashes": {
-        "src/views/CalendarToolbarRenderer.ts": "916ba7b53fbc",
-        "src/views/DropdownField.ts": "67d71b55a26d",
-        "styles.css": "375296038107"
+        "src/views/calendar-toolbar-renderer.ts": "58cefc5cab49",
+        "src/views/dropdown-field.ts": "1a4c6e81f793",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "The Time section only exists in week and day scale; the setup preview card below Data carries no stylesheet rules.",
       "capture": "viewport",
@@ -3147,13 +3147,13 @@
       "device": "mobile",
       "file": "screenshots/views/calendar-toolbar-options-mobile-dark.png",
       "sources": [
-        "src/views/CalendarToolbarRenderer.ts",
-        "src/views/DropdownField.ts"
+        "src/views/calendar-toolbar-renderer.ts",
+        "src/views/dropdown-field.ts"
       ],
       "sourceHashes": {
-        "src/views/CalendarToolbarRenderer.ts": "916ba7b53fbc",
-        "src/views/DropdownField.ts": "67d71b55a26d",
-        "styles.css": "375296038107"
+        "src/views/calendar-toolbar-renderer.ts": "58cefc5cab49",
+        "src/views/dropdown-field.ts": "1a4c6e81f793",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "The Time section only exists in week and day scale; the setup preview card below Data carries no stylesheet rules.",
       "capture": "viewport",
@@ -3167,13 +3167,13 @@
       "device": "mobile",
       "file": "screenshots/views/calendar-toolbar-options-mobile-light.png",
       "sources": [
-        "src/views/CalendarToolbarRenderer.ts",
-        "src/views/DropdownField.ts"
+        "src/views/calendar-toolbar-renderer.ts",
+        "src/views/dropdown-field.ts"
       ],
       "sourceHashes": {
-        "src/views/CalendarToolbarRenderer.ts": "916ba7b53fbc",
-        "src/views/DropdownField.ts": "67d71b55a26d",
-        "styles.css": "375296038107"
+        "src/views/calendar-toolbar-renderer.ts": "58cefc5cab49",
+        "src/views/dropdown-field.ts": "1a4c6e81f793",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "The Time section only exists in week and day scale; the setup preview card below Data carries no stylesheet rules.",
       "capture": "viewport",
@@ -3187,11 +3187,11 @@
       "device": "desktop",
       "file": "screenshots/views/calendar-week-time-grid-desktop-dark.png",
       "sources": [
-        "src/views/CalendarRenderer.ts"
+        "src/views/calendar-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/CalendarRenderer.ts": "feb592ba2e4b",
-        "styles.css": "375296038107"
+        "src/views/calendar-renderer.ts": "8630b4e6fa98",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "Sticky day header and all-day strip over the 08–16 time grid; the current-time ruler sits on Wednesday at 13:45.",
       "capture": "viewport",
@@ -3205,11 +3205,11 @@
       "device": "desktop",
       "file": "screenshots/views/calendar-week-time-grid-desktop-light.png",
       "sources": [
-        "src/views/CalendarRenderer.ts"
+        "src/views/calendar-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/CalendarRenderer.ts": "feb592ba2e4b",
-        "styles.css": "375296038107"
+        "src/views/calendar-renderer.ts": "8630b4e6fa98",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "Sticky day header and all-day strip over the 08–16 time grid; the current-time ruler sits on Wednesday at 13:45.",
       "capture": "viewport",
@@ -3223,15 +3223,15 @@
       "device": "mobile",
       "file": "screenshots/views/calendar-week-time-grid-mobile-dark.png",
       "sources": [
-        "src/views/CalendarRenderer.ts"
+        "src/views/calendar-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/CalendarRenderer.ts": "feb592ba2e4b",
-        "styles.css": "375296038107"
+        "src/views/calendar-renderer.ts": "8630b4e6fa98",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "Sticky day header and all-day strip over the 08–16 time grid; the current-time ruler sits on Wednesday at 13:45.",
       "capture": "viewport",
-      "bytes": 38501
+      "bytes": 38201
     },
     {
       "id": "calendar-week-time-grid",
@@ -3241,11 +3241,11 @@
       "device": "mobile",
       "file": "screenshots/views/calendar-week-time-grid-mobile-light.png",
       "sources": [
-        "src/views/CalendarRenderer.ts"
+        "src/views/calendar-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/CalendarRenderer.ts": "feb592ba2e4b",
-        "styles.css": "375296038107"
+        "src/views/calendar-renderer.ts": "8630b4e6fa98",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "Sticky day header and all-day strip over the 08–16 time grid; the current-time ruler sits on Wednesday at 13:45.",
       "capture": "viewport",
@@ -3259,13 +3259,13 @@
       "device": "desktop",
       "file": "screenshots/views/gallery-view-desktop-dark.png",
       "sources": [
-        "src/views/GalleryRenderer.ts",
-        "src/views/CardFieldRenderer.ts"
+        "src/views/gallery-renderer.ts",
+        "src/views/card-field-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/GalleryRenderer.ts": "9ab5982a3086",
-        "src/views/CardFieldRenderer.ts": "8a9c8a80cbfd",
-        "styles.css": "375296038107"
+        "src/views/gallery-renderer.ts": "1019d687b05c",
+        "src/views/card-field-renderer.ts": "9966f9cf54ed",
+        "styles.css": "b6dfd2044a17"
       },
       "note": null,
       "capture": "viewport",
@@ -3279,13 +3279,13 @@
       "device": "desktop",
       "file": "screenshots/views/gallery-view-desktop-light.png",
       "sources": [
-        "src/views/GalleryRenderer.ts",
-        "src/views/CardFieldRenderer.ts"
+        "src/views/gallery-renderer.ts",
+        "src/views/card-field-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/GalleryRenderer.ts": "9ab5982a3086",
-        "src/views/CardFieldRenderer.ts": "8a9c8a80cbfd",
-        "styles.css": "375296038107"
+        "src/views/gallery-renderer.ts": "1019d687b05c",
+        "src/views/card-field-renderer.ts": "9966f9cf54ed",
+        "styles.css": "b6dfd2044a17"
       },
       "note": null,
       "capture": "viewport",
@@ -3299,13 +3299,13 @@
       "device": "mobile",
       "file": "screenshots/views/gallery-view-mobile-dark.png",
       "sources": [
-        "src/views/GalleryRenderer.ts",
-        "src/views/CardFieldRenderer.ts"
+        "src/views/gallery-renderer.ts",
+        "src/views/card-field-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/GalleryRenderer.ts": "9ab5982a3086",
-        "src/views/CardFieldRenderer.ts": "8a9c8a80cbfd",
-        "styles.css": "375296038107"
+        "src/views/gallery-renderer.ts": "1019d687b05c",
+        "src/views/card-field-renderer.ts": "9966f9cf54ed",
+        "styles.css": "b6dfd2044a17"
       },
       "note": null,
       "capture": "viewport",
@@ -3319,17 +3319,17 @@
       "device": "mobile",
       "file": "screenshots/views/gallery-view-mobile-light.png",
       "sources": [
-        "src/views/GalleryRenderer.ts",
-        "src/views/CardFieldRenderer.ts"
+        "src/views/gallery-renderer.ts",
+        "src/views/card-field-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/GalleryRenderer.ts": "9ab5982a3086",
-        "src/views/CardFieldRenderer.ts": "8a9c8a80cbfd",
-        "styles.css": "375296038107"
+        "src/views/gallery-renderer.ts": "1019d687b05c",
+        "src/views/card-field-renderer.ts": "9966f9cf54ed",
+        "styles.css": "b6dfd2044a17"
       },
       "note": null,
       "capture": "viewport",
-      "bytes": 17383
+      "bytes": 17389
     },
     {
       "id": "list-mobile",
@@ -3343,9 +3343,9 @@
         "src/views/CardFieldRenderer.ts"
       ],
       "sourceHashes": {
-        "src/views/ListRenderer.ts": "8b6b4a37bd3b",
-        "src/views/CardFieldRenderer.ts": "8a9c8a80cbfd",
-        "styles.css": "375296038107"
+        "src/views/ListRenderer.ts": null,
+        "src/views/CardFieldRenderer.ts": null,
+        "styles.css": "b6dfd2044a17"
       },
       "note": "The list row the renderer builds: controls, a title line and a meta row of fixed-width fields. On desktop the fields sit on one line; on the phone (is-phone) the card fills the viewport and the fields wrap inside its border instead of escaping it.",
       "capture": "viewport",
@@ -3363,9 +3363,9 @@
         "src/views/CardFieldRenderer.ts"
       ],
       "sourceHashes": {
-        "src/views/ListRenderer.ts": "8b6b4a37bd3b",
-        "src/views/CardFieldRenderer.ts": "8a9c8a80cbfd",
-        "styles.css": "375296038107"
+        "src/views/ListRenderer.ts": null,
+        "src/views/CardFieldRenderer.ts": null,
+        "styles.css": "b6dfd2044a17"
       },
       "note": "The list row the renderer builds: controls, a title line and a meta row of fixed-width fields. On desktop the fields sit on one line; on the phone (is-phone) the card fills the viewport and the fields wrap inside its border instead of escaping it.",
       "capture": "viewport",
@@ -3383,9 +3383,9 @@
         "src/views/CardFieldRenderer.ts"
       ],
       "sourceHashes": {
-        "src/views/ListRenderer.ts": "8b6b4a37bd3b",
-        "src/views/CardFieldRenderer.ts": "8a9c8a80cbfd",
-        "styles.css": "375296038107"
+        "src/views/ListRenderer.ts": null,
+        "src/views/CardFieldRenderer.ts": null,
+        "styles.css": "b6dfd2044a17"
       },
       "note": "The list row the renderer builds: controls, a title line and a meta row of fixed-width fields. On desktop the fields sit on one line; on the phone (is-phone) the card fills the viewport and the fields wrap inside its border instead of escaping it.",
       "capture": "viewport",
@@ -3403,9 +3403,9 @@
         "src/views/CardFieldRenderer.ts"
       ],
       "sourceHashes": {
-        "src/views/ListRenderer.ts": "8b6b4a37bd3b",
-        "src/views/CardFieldRenderer.ts": "8a9c8a80cbfd",
-        "styles.css": "375296038107"
+        "src/views/ListRenderer.ts": null,
+        "src/views/CardFieldRenderer.ts": null,
+        "styles.css": "b6dfd2044a17"
       },
       "note": "The list row the renderer builds: controls, a title line and a meta row of fixed-width fields. On desktop the fields sit on one line; on the phone (is-phone) the card fills the viewport and the fields wrap inside its border instead of escaping it.",
       "capture": "viewport",
@@ -3419,13 +3419,13 @@
       "device": "desktop",
       "file": "screenshots/views/list-view-desktop-dark.png",
       "sources": [
-        "src/views/ListRenderer.ts",
-        "src/views/CardFieldRenderer.ts"
+        "src/views/list-renderer.ts",
+        "src/views/card-field-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/ListRenderer.ts": "8b6b4a37bd3b",
-        "src/views/CardFieldRenderer.ts": "8a9c8a80cbfd",
-        "styles.css": "375296038107"
+        "src/views/list-renderer.ts": "854763eba780",
+        "src/views/card-field-renderer.ts": "9966f9cf54ed",
+        "styles.css": "b6dfd2044a17"
       },
       "note": null,
       "capture": "viewport",
@@ -3439,13 +3439,13 @@
       "device": "desktop",
       "file": "screenshots/views/list-view-desktop-light.png",
       "sources": [
-        "src/views/ListRenderer.ts",
-        "src/views/CardFieldRenderer.ts"
+        "src/views/list-renderer.ts",
+        "src/views/card-field-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/ListRenderer.ts": "8b6b4a37bd3b",
-        "src/views/CardFieldRenderer.ts": "8a9c8a80cbfd",
-        "styles.css": "375296038107"
+        "src/views/list-renderer.ts": "854763eba780",
+        "src/views/card-field-renderer.ts": "9966f9cf54ed",
+        "styles.css": "b6dfd2044a17"
       },
       "note": null,
       "capture": "viewport",
@@ -3459,17 +3459,17 @@
       "device": "mobile",
       "file": "screenshots/views/list-view-mobile-dark.png",
       "sources": [
-        "src/views/ListRenderer.ts",
-        "src/views/CardFieldRenderer.ts"
+        "src/views/list-renderer.ts",
+        "src/views/card-field-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/ListRenderer.ts": "8b6b4a37bd3b",
-        "src/views/CardFieldRenderer.ts": "8a9c8a80cbfd",
-        "styles.css": "375296038107"
+        "src/views/list-renderer.ts": "854763eba780",
+        "src/views/card-field-renderer.ts": "9966f9cf54ed",
+        "styles.css": "b6dfd2044a17"
       },
       "note": null,
       "capture": "viewport",
-      "bytes": 87312
+      "bytes": 87237
     },
     {
       "id": "list-view",
@@ -3479,13 +3479,13 @@
       "device": "mobile",
       "file": "screenshots/views/list-view-mobile-light.png",
       "sources": [
-        "src/views/ListRenderer.ts",
-        "src/views/CardFieldRenderer.ts"
+        "src/views/list-renderer.ts",
+        "src/views/card-field-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/ListRenderer.ts": "8b6b4a37bd3b",
-        "src/views/CardFieldRenderer.ts": "8a9c8a80cbfd",
-        "styles.css": "375296038107"
+        "src/views/list-renderer.ts": "854763eba780",
+        "src/views/card-field-renderer.ts": "9966f9cf54ed",
+        "styles.css": "b6dfd2044a17"
       },
       "note": null,
       "capture": "viewport",
@@ -3504,10 +3504,10 @@
         "src/views/TableLayout.ts"
       ],
       "sourceHashes": {
-        "src/views/TableRenderer.ts": "ce0dc80023d8",
-        "src/views/TableColumnLayoutSync.ts": "022722c3d575",
-        "src/views/TableLayout.ts": "00e05184d780",
-        "styles.css": "375296038107"
+        "src/views/TableRenderer.ts": null,
+        "src/views/TableColumnLayoutSync.ts": null,
+        "src/views/TableLayout.ts": null,
+        "styles.css": "b6dfd2044a17"
       },
       "note": "The full table the renderer builds: a select gutter, a record-icon gutter and a runtime <colgroup> of fixed px widths. On desktop those widths hold; on the phone (is-phone) the columns auto-fit to content and the select column is no longer clipped by the scroll-area fade mask.",
       "capture": "viewport",
@@ -3526,10 +3526,10 @@
         "src/views/TableLayout.ts"
       ],
       "sourceHashes": {
-        "src/views/TableRenderer.ts": "ce0dc80023d8",
-        "src/views/TableColumnLayoutSync.ts": "022722c3d575",
-        "src/views/TableLayout.ts": "00e05184d780",
-        "styles.css": "375296038107"
+        "src/views/TableRenderer.ts": null,
+        "src/views/TableColumnLayoutSync.ts": null,
+        "src/views/TableLayout.ts": null,
+        "styles.css": "b6dfd2044a17"
       },
       "note": "The full table the renderer builds: a select gutter, a record-icon gutter and a runtime <colgroup> of fixed px widths. On desktop those widths hold; on the phone (is-phone) the columns auto-fit to content and the select column is no longer clipped by the scroll-area fade mask.",
       "capture": "viewport",
@@ -3548,10 +3548,10 @@
         "src/views/TableLayout.ts"
       ],
       "sourceHashes": {
-        "src/views/TableRenderer.ts": "ce0dc80023d8",
-        "src/views/TableColumnLayoutSync.ts": "022722c3d575",
-        "src/views/TableLayout.ts": "00e05184d780",
-        "styles.css": "375296038107"
+        "src/views/TableRenderer.ts": null,
+        "src/views/TableColumnLayoutSync.ts": null,
+        "src/views/TableLayout.ts": null,
+        "styles.css": "b6dfd2044a17"
       },
       "note": "The full table the renderer builds: a select gutter, a record-icon gutter and a runtime <colgroup> of fixed px widths. On desktop those widths hold; on the phone (is-phone) the columns auto-fit to content and the select column is no longer clipped by the scroll-area fade mask.",
       "capture": "viewport",
@@ -3570,10 +3570,10 @@
         "src/views/TableLayout.ts"
       ],
       "sourceHashes": {
-        "src/views/TableRenderer.ts": "ce0dc80023d8",
-        "src/views/TableColumnLayoutSync.ts": "022722c3d575",
-        "src/views/TableLayout.ts": "00e05184d780",
-        "styles.css": "375296038107"
+        "src/views/TableRenderer.ts": null,
+        "src/views/TableColumnLayoutSync.ts": null,
+        "src/views/TableLayout.ts": null,
+        "styles.css": "b6dfd2044a17"
       },
       "note": "The full table the renderer builds: a select gutter, a record-icon gutter and a runtime <colgroup> of fixed px widths. On desktop those widths hold; on the phone (is-phone) the columns auto-fit to content and the select column is no longer clipped by the scroll-area fade mask.",
       "capture": "viewport",
@@ -3587,19 +3587,19 @@
       "device": "desktop",
       "file": "screenshots/views/table-view-desktop-dark.png",
       "sources": [
-        "src/views/TableRenderer.ts",
-        "src/views/ColumnHeaderController.ts",
-        "src/views/CellRenderer.ts"
+        "src/views/table-renderer.ts",
+        "src/views/column-header-controller.ts",
+        "src/views/cell-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/TableRenderer.ts": "ce0dc80023d8",
-        "src/views/ColumnHeaderController.ts": "7c1fbf20fd07",
-        "src/views/CellRenderer.ts": "a66834f860b4",
-        "styles.css": "375296038107"
+        "src/views/table-renderer.ts": "4ecaa2cb2295",
+        "src/views/column-header-controller.ts": "7714b894b5b0",
+        "src/views/cell-renderer.ts": "e041f712f0b8",
+        "styles.css": "b6dfd2044a17"
       },
       "note": null,
       "capture": "viewport",
-      "bytes": 473873
+      "bytes": 473860
     },
     {
       "id": "table-view",
@@ -3609,19 +3609,19 @@
       "device": "desktop",
       "file": "screenshots/views/table-view-desktop-light.png",
       "sources": [
-        "src/views/TableRenderer.ts",
-        "src/views/ColumnHeaderController.ts",
-        "src/views/CellRenderer.ts"
+        "src/views/table-renderer.ts",
+        "src/views/column-header-controller.ts",
+        "src/views/cell-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/TableRenderer.ts": "ce0dc80023d8",
-        "src/views/ColumnHeaderController.ts": "7c1fbf20fd07",
-        "src/views/CellRenderer.ts": "a66834f860b4",
-        "styles.css": "375296038107"
+        "src/views/table-renderer.ts": "4ecaa2cb2295",
+        "src/views/column-header-controller.ts": "7714b894b5b0",
+        "src/views/cell-renderer.ts": "e041f712f0b8",
+        "styles.css": "b6dfd2044a17"
       },
       "note": null,
       "capture": "viewport",
-      "bytes": 446755
+      "bytes": 446749
     },
     {
       "id": "table-view",
@@ -3631,19 +3631,19 @@
       "device": "mobile",
       "file": "screenshots/views/table-view-mobile-dark.png",
       "sources": [
-        "src/views/TableRenderer.ts",
-        "src/views/ColumnHeaderController.ts",
-        "src/views/CellRenderer.ts"
+        "src/views/table-renderer.ts",
+        "src/views/column-header-controller.ts",
+        "src/views/cell-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/TableRenderer.ts": "ce0dc80023d8",
-        "src/views/ColumnHeaderController.ts": "7c1fbf20fd07",
-        "src/views/CellRenderer.ts": "a66834f860b4",
-        "styles.css": "375296038107"
+        "src/views/table-renderer.ts": "4ecaa2cb2295",
+        "src/views/column-header-controller.ts": "7714b894b5b0",
+        "src/views/cell-renderer.ts": "e041f712f0b8",
+        "styles.css": "b6dfd2044a17"
       },
       "note": null,
       "capture": "viewport",
-      "bytes": 156633
+      "bytes": 156685
     },
     {
       "id": "table-view",
@@ -3653,15 +3653,15 @@
       "device": "mobile",
       "file": "screenshots/views/table-view-mobile-light.png",
       "sources": [
-        "src/views/TableRenderer.ts",
-        "src/views/ColumnHeaderController.ts",
-        "src/views/CellRenderer.ts"
+        "src/views/table-renderer.ts",
+        "src/views/column-header-controller.ts",
+        "src/views/cell-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/TableRenderer.ts": "ce0dc80023d8",
-        "src/views/ColumnHeaderController.ts": "7c1fbf20fd07",
-        "src/views/CellRenderer.ts": "a66834f860b4",
-        "styles.css": "375296038107"
+        "src/views/table-renderer.ts": "4ecaa2cb2295",
+        "src/views/column-header-controller.ts": "7714b894b5b0",
+        "src/views/cell-renderer.ts": "e041f712f0b8",
+        "styles.css": "b6dfd2044a17"
       },
       "note": null,
       "capture": "viewport",
@@ -3675,13 +3675,13 @@
       "device": "desktop",
       "file": "screenshots/views/timeline-toolbar-options-desktop-dark.png",
       "sources": [
-        "src/views/CalendarTimelineToolbarRenderer.ts",
-        "src/views/DropdownField.ts"
+        "src/views/calendar-timeline-toolbar-renderer.ts",
+        "src/views/dropdown-field.ts"
       ],
       "sourceHashes": {
-        "src/views/CalendarTimelineToolbarRenderer.ts": "d4925541a82d",
-        "src/views/DropdownField.ts": "67d71b55a26d",
-        "styles.css": "375296038107"
+        "src/views/calendar-timeline-toolbar-renderer.ts": "f32a3186bb24",
+        "src/views/dropdown-field.ts": "1a4c6e81f793",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "Column width is a switch plus a slider here, not the calendar's mode dropdown; the slider only appears once the switch is on.",
       "capture": "viewport",
@@ -3695,13 +3695,13 @@
       "device": "desktop",
       "file": "screenshots/views/timeline-toolbar-options-desktop-light.png",
       "sources": [
-        "src/views/CalendarTimelineToolbarRenderer.ts",
-        "src/views/DropdownField.ts"
+        "src/views/calendar-timeline-toolbar-renderer.ts",
+        "src/views/dropdown-field.ts"
       ],
       "sourceHashes": {
-        "src/views/CalendarTimelineToolbarRenderer.ts": "d4925541a82d",
-        "src/views/DropdownField.ts": "67d71b55a26d",
-        "styles.css": "375296038107"
+        "src/views/calendar-timeline-toolbar-renderer.ts": "f32a3186bb24",
+        "src/views/dropdown-field.ts": "1a4c6e81f793",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "Column width is a switch plus a slider here, not the calendar's mode dropdown; the slider only appears once the switch is on.",
       "capture": "viewport",
@@ -3715,13 +3715,13 @@
       "device": "mobile",
       "file": "screenshots/views/timeline-toolbar-options-mobile-dark.png",
       "sources": [
-        "src/views/CalendarTimelineToolbarRenderer.ts",
-        "src/views/DropdownField.ts"
+        "src/views/calendar-timeline-toolbar-renderer.ts",
+        "src/views/dropdown-field.ts"
       ],
       "sourceHashes": {
-        "src/views/CalendarTimelineToolbarRenderer.ts": "d4925541a82d",
-        "src/views/DropdownField.ts": "67d71b55a26d",
-        "styles.css": "375296038107"
+        "src/views/calendar-timeline-toolbar-renderer.ts": "f32a3186bb24",
+        "src/views/dropdown-field.ts": "1a4c6e81f793",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "Column width is a switch plus a slider here, not the calendar's mode dropdown; the slider only appears once the switch is on.",
       "capture": "viewport",
@@ -3735,17 +3735,17 @@
       "device": "mobile",
       "file": "screenshots/views/timeline-toolbar-options-mobile-light.png",
       "sources": [
-        "src/views/CalendarTimelineToolbarRenderer.ts",
-        "src/views/DropdownField.ts"
+        "src/views/calendar-timeline-toolbar-renderer.ts",
+        "src/views/dropdown-field.ts"
       ],
       "sourceHashes": {
-        "src/views/CalendarTimelineToolbarRenderer.ts": "d4925541a82d",
-        "src/views/DropdownField.ts": "67d71b55a26d",
-        "styles.css": "375296038107"
+        "src/views/calendar-timeline-toolbar-renderer.ts": "f32a3186bb24",
+        "src/views/dropdown-field.ts": "1a4c6e81f793",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "Column width is a switch plus a slider here, not the calendar's mode dropdown; the slider only appears once the switch is on.",
       "capture": "viewport",
-      "bytes": 36470
+      "bytes": 36477
     },
     {
       "id": "timeline-view",
@@ -3755,15 +3755,15 @@
       "device": "desktop",
       "file": "screenshots/views/timeline-view-desktop-dark.png",
       "sources": [
-        "src/views/CalendarTimelineRenderer.ts"
+        "src/views/calendar-timeline-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/CalendarTimelineRenderer.ts": "1fed53695a0d",
-        "styles.css": "375296038107"
+        "src/views/calendar-timeline-renderer.ts": "7d7dcaad858a",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "Two weeks at one column per day; the April band marks the month boundary and the today line sits at 25 March 13:45.",
       "capture": "viewport",
-      "bytes": 147239
+      "bytes": 146959
     },
     {
       "id": "timeline-view",
@@ -3773,11 +3773,11 @@
       "device": "desktop",
       "file": "screenshots/views/timeline-view-desktop-light.png",
       "sources": [
-        "src/views/CalendarTimelineRenderer.ts"
+        "src/views/calendar-timeline-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/CalendarTimelineRenderer.ts": "1fed53695a0d",
-        "styles.css": "375296038107"
+        "src/views/calendar-timeline-renderer.ts": "7d7dcaad858a",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "Two weeks at one column per day; the April band marks the month boundary and the today line sits at 25 March 13:45.",
       "capture": "viewport",
@@ -3791,15 +3791,15 @@
       "device": "mobile",
       "file": "screenshots/views/timeline-view-mobile-dark.png",
       "sources": [
-        "src/views/CalendarTimelineRenderer.ts"
+        "src/views/calendar-timeline-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/CalendarTimelineRenderer.ts": "1fed53695a0d",
-        "styles.css": "375296038107"
+        "src/views/calendar-timeline-renderer.ts": "7d7dcaad858a",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "Two weeks at one column per day; the April band marks the month boundary and the today line sits at 25 March 13:45.",
       "capture": "viewport",
-      "bytes": 41990
+      "bytes": 41700
     },
     {
       "id": "timeline-view",
@@ -3809,11 +3809,11 @@
       "device": "mobile",
       "file": "screenshots/views/timeline-view-mobile-light.png",
       "sources": [
-        "src/views/CalendarTimelineRenderer.ts"
+        "src/views/calendar-timeline-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/CalendarTimelineRenderer.ts": "1fed53695a0d",
-        "styles.css": "375296038107"
+        "src/views/calendar-timeline-renderer.ts": "7d7dcaad858a",
+        "styles.css": "b6dfd2044a17"
       },
       "note": "Two weeks at one column per day; the April band marks the month boundary and the today line sits at 25 March 13:45.",
       "capture": "viewport",

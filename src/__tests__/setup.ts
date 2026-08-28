@@ -1,7 +1,24 @@
+// ───────────────────────────────────────────────────────────────────
+// MODULE:    setup
+// COMPONENT: vitest global setup — stubs the `moment` global Obsidian normally injects at runtime
+// ───────────────────────────────────────────────────────────────────
+//
+// `fixedNow` pins "today" for every test run so date-relative assertions
+// (e.g. computed-field formulas using TODAY()) are deterministic instead
+// of flaking on whichever real date the suite happens to run.
+
+// ───────────────────────────────────────────────────────────────────
+// 1. TYPES
+// ───────────────────────────────────────────────────────────────────
+
 type MomentStubValue = {
   format: (format: string) => string;
   isValid: () => boolean;
 };
+
+// ───────────────────────────────────────────────────────────────────
+// 2. STUB
+// ───────────────────────────────────────────────────────────────────
 
 const fixedNow = new Date("2026-08-26T00:00:00Z");
 

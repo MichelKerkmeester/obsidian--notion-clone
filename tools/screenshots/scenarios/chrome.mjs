@@ -1,3 +1,8 @@
+// ───────────────────────────────────────────────────────────────────
+// MODULE:    chrome
+// COMPONENT: screenshot scenarios for application chrome (toolbar, footer, group/summary rows, chart popover)
+// ───────────────────────────────────────────────────────────────────
+
 /**
  * Application chrome: the toolbar and everything the toolbar hangs off.
  *
@@ -14,7 +19,15 @@
  * See `chrome-chart-empty` for what is captured instead of a fabricated chart body.
  */
 
-import { ROWS, ICONS, dots, glyph, pill } from "./_shared.mjs";
+// ───────────────────────────────────────────────────────────────────
+// 1. IMPORTS
+// ───────────────────────────────────────────────────────────────────
+
+import { ROWS, ICONS, dots, glyph, pill } from "./shared.mjs";
+
+// ───────────────────────────────────────────────────────────────────
+// 2. ICONS
+// ───────────────────────────────────────────────────────────────────
 
 /* Stand-ins for the Lucide icons `setIcon` injects at runtime, named after the icon each
    renderer actually asks for so a drifting call site is easy to spot. The stylesheet sizes
@@ -265,13 +278,17 @@ const chartOptionsRow = {
     </button>`,
 };
 
+// ───────────────────────────────────────────────────────────────────
+// 3. SCENARIOS
+// ───────────────────────────────────────────────────────────────────
+
 export const CHROME_SCENARIOS = [
   {
     id: "chrome-toolbar",
     title: "Main toolbar",
     group: "components",
     width: 1100,
-    sources: ["src/views/ToolbarRenderer.ts"],
+    sources: ["src/views/toolbar-renderer.ts"],
     note: "View switcher on the left; query, properties, utilities and creation clusters on the right. The search control sits collapsed in the utilities cluster until it has text or focus.",
     html: () => `
       <div class="note-database-container">
@@ -296,7 +313,7 @@ export const CHROME_SCENARIOS = [
     title: "View switcher tablist",
     group: "components",
     width: 760,
-    sources: ["src/views/ToolbarRenderer.ts"],
+    sources: ["src/views/toolbar-renderer.ts"],
     note: "The active tab carries is-active; the ⋯ tab appears only once the toolbar has measured tabs out of view, and opens the all-views hub.",
     html: () => `
       <div class="note-database-container">
@@ -323,7 +340,7 @@ export const CHROME_SCENARIOS = [
     title: "Toolbar search, collapsed and expanded",
     group: "components",
     width: 340,
-    sources: ["src/views/ToolbarRenderer.ts"],
+    sources: ["src/views/toolbar-renderer.ts"],
     note: "The wrap is 28px wide at rest and widens to 150px under is-active; the clear button is hidden until the input has text.",
     html: () => `
       <div class="note-database-container">
@@ -342,7 +359,7 @@ export const CHROME_SCENARIOS = [
     title: "Active filter and sort chips",
     group: "components",
     width: 900,
-    sources: ["src/views/ActiveViewControlsRenderer.ts"],
+    sources: ["src/views/active-view-controls-renderer.ts"],
     note: "The rail lives in the header below the toolbar. Sort chips come first and carry their position as a superscript; the AND button between the groups toggles filter logic.",
     html: () => {
       const chip = (kind, icon, field, detail, order) => `
@@ -380,7 +397,7 @@ export const CHROME_SCENARIOS = [
     title: "Active rule popover — filter",
     group: "components",
     width: 620,
-    sources: ["src/views/ActiveRulePopoverRenderer.ts", "src/views/FilterPanelRenderer.ts"],
+    sources: ["src/views/active-rule-popover-renderer.ts", "src/views/filter-panel-renderer.ts"],
     note: "Editing one chip opens the filter panel's single-rule editor: field, operator and value, with no remove button.",
     // Anchored to the chip that opened it, so it leaves the flow and the capture box collapses.
     captureCss: `.note-database-container .db-active-rule-popover { ${IN_FLOW_PANEL} }`,
@@ -400,7 +417,7 @@ export const CHROME_SCENARIOS = [
     title: "Active rule popover — sort",
     group: "components",
     width: 480,
-    sources: ["src/views/ActiveRulePopoverRenderer.ts", "src/views/SortPanelRenderer.ts"],
+    sources: ["src/views/active-rule-popover-renderer.ts", "src/views/sort-panel-renderer.ts"],
     note: "The sort variant adds db-sort-panel and drops the drag handle and reorder buttons the full panel shows.",
     captureCss: `.note-database-container .db-active-rule-popover { ${IN_FLOW_PANEL} }`,
     html: () => `
@@ -418,7 +435,7 @@ export const CHROME_SCENARIOS = [
     title: "Table footer aggregates",
     group: "components",
     width: 1100,
-    sources: ["src/views/TableFooterRenderer.ts", "src/views/TableRenderer.ts"],
+    sources: ["src/views/table-footer-renderer.ts", "src/views/table-renderer.ts"],
     note: "A column with summary rules stacks each kind over its result; a column without one shows a + Calculate hint that the stylesheet keeps at zero opacity until the trigger is hovered, so it is invisible here by design.",
     html: () => `
       <div class="note-database-container">
@@ -446,7 +463,7 @@ export const CHROME_SCENARIOS = [
     title: "Grouped table header rows",
     group: "components",
     width: 1100,
-    sources: ["src/views/GroupLabelRenderer.ts", "src/views/TableRenderer.ts", "src/views/SummaryRenderer.ts"],
+    sources: ["src/views/group-label-renderer.ts", "src/views/table-renderer.ts", "src/views/summary-renderer.ts"],
     note: "An option-typed group field renders its key as a colored status badge; a field with no options renders plain text, as the nested Revolut subgroup does. Per-group summaries sit at the right of each divider.",
     html: () => {
       const business = ROWS.filter((r) => r.category === "Business");
@@ -475,7 +492,7 @@ export const CHROME_SCENARIOS = [
     title: "Summary row",
     group: "components",
     width: 760,
-    sources: ["src/views/SummaryRenderer.ts"],
+    sources: ["src/views/summary-renderer.ts"],
     note: "Total is always present; each configured summary rule is a draggable, clickable item, and the faint + Summary entry adds another.",
     html: () => `
       <div class="note-database-container">
@@ -499,7 +516,7 @@ export const CHROME_SCENARIOS = [
     title: "Chart options popover",
     group: "components",
     width: 620,
-    sources: ["src/views/ChartToolbarRenderer.ts"],
+    sources: ["src/views/chart-toolbar-renderer.ts"],
     note: "What the chart view uses instead of a toolbar of its own: the chart-options button in the toolbar opens this panel. Every row is a 18px/1fr/16px grid, so selects, switches, drill-in entries and export buttons line up on one set of columns.",
     captureCss: `.note-database-container .db-chart-options-popover { ${IN_FLOW_PANEL} }`,
     html: () => `
@@ -540,7 +557,7 @@ export const CHROME_SCENARIOS = [
     title: "Chart view — single number",
     group: "components",
     width: 900,
-    sources: ["src/views/ChartRenderer.ts"],
+    sources: ["src/views/chart-renderer.ts"],
     note: "The one chart type the stylesheet draws in full: renderNumber writes three divs and no canvas, so this is the only plotted chart a screenshot can show. The height class is what sizes it.",
     html: () => `
       <div class="note-database-container">
@@ -556,7 +573,7 @@ export const CHROME_SCENARIOS = [
     title: "Chart view — empty state",
     group: "components",
     width: 900,
-    sources: ["src/views/ChartRenderer.ts"],
+    sources: ["src/views/chart-renderer.ts"],
     note: "Every other chart type is a Chart.js canvas painted at runtime, so this recovery state and the single-number chart are what a capture can show of the chart body.",
     html: () => `
       <div class="note-database-container">

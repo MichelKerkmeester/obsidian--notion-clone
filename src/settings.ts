@@ -1,16 +1,33 @@
+// ───────────────────────────────────────────────────────────────────
+// MODULE:    settings
+// COMPONENT: plugin settings tab — database list management, global defaults, and the trash manager
+// ───────────────────────────────────────────────────────────────────
+//
+// `DEFAULT_VIEWS` is kept as an alias of `DEFAULT_DATABASES` purely so
+// settings persisted under the old key name still deserialize; remove
+// only once that migration path is confirmed dead.
+
+// ───────────────────────────────────────────────────────────────────
+// 1. IMPORTS
+// ───────────────────────────────────────────────────────────────────
+
 import { App, Modal, Notice, PluginSettingTab, Setting, setIcon, setTooltip } from "obsidian";
 import NoteDatabasePlugin from "./main";
 import { DatabaseConfig, PluginSettings, TrashedDatabase } from "./data/types";
 import { LocaleCode, setLocale, t } from "./i18n";
-import { DeleteDatabaseModal } from "./views/modals/DeleteDatabaseModal";
-import { DEFAULT_STATUS_PRESET_ID, getBuiltinStatusPresets, normalizeStatusPresets, resolveDefaultStatusPresetId } from "./data/ColumnTypes";
-import { StatusPresetManagerModal } from "./views/modals/StatusPresetManagerModal";
-import { AddDatabaseModal } from "./views/modals/AddDatabaseModal";
-import { buildDatabaseWithInferredColumns } from "./views/modals/AddDatabaseFlow";
-import { DatabaseFileEntry, moveDatabaseFilePath, sortDatabaseFileEntries } from "./data/DatabaseFileOrder";
-import { confirmWithModal } from "./views/modals/ConfirmModal";
-import { createDropdownField, DropdownOption } from "./views/DropdownField";
-import { isHTMLElement } from "./views/DomGuards";
+import { DeleteDatabaseModal } from "./views/modals/delete-database-modal";
+import { DEFAULT_STATUS_PRESET_ID, getBuiltinStatusPresets, normalizeStatusPresets, resolveDefaultStatusPresetId } from "./data/column-types";
+import { StatusPresetManagerModal } from "./views/modals/status-preset-manager-modal";
+import { AddDatabaseModal } from "./views/modals/add-database-modal";
+import { buildDatabaseWithInferredColumns } from "./views/modals/add-database-flow";
+import { DatabaseFileEntry, moveDatabaseFilePath, sortDatabaseFileEntries } from "./data/database-file-order";
+import { confirmWithModal } from "./views/modals/confirm-modal";
+import { createDropdownField, DropdownOption } from "./views/dropdown-field";
+import { isHTMLElement } from "./views/dom-guards";
+
+// ───────────────────────────────────────────────────────────────────
+// 2. DEFAULTS
+// ───────────────────────────────────────────────────────────────────
 
 /** Default databases shipped with the plugin. Keep empty for a neutral marketplace first run. */
 export const DEFAULT_DATABASES: DatabaseConfig[] = [];
@@ -47,6 +64,10 @@ export function createDefaultSettings(): PluginSettings {
     language: DEFAULT_SETTINGS.language,
   };
 }
+
+// ───────────────────────────────────────────────────────────────────
+// 3. SETTINGS TAB
+// ───────────────────────────────────────────────────────────────────
 
 export class SettingsTab extends PluginSettingTab {
   private plugin: NoteDatabasePlugin;
@@ -482,6 +503,10 @@ export class SettingsTab extends PluginSettingTab {
   }
 
 }
+
+// ───────────────────────────────────────────────────────────────────
+// 4. TRASH MANAGER MODAL
+// ───────────────────────────────────────────────────────────────────
 
 /** 回收站管理弹窗 */
 class TrashManagerModal extends Modal {

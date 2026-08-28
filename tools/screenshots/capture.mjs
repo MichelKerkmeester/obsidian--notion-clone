@@ -1,4 +1,9 @@
 #!/usr/bin/env node
+// ───────────────────────────────────────────────────────────────────
+// MODULE:    capture
+// COMPONENT: headless-Chrome screenshot capture — renders each scenario, writes PNGs + manifest + README
+// ───────────────────────────────────────────────────────────────────
+
 /**
  * Captures one PNG per scenario per theme into screenshots/.
  *
@@ -10,12 +15,20 @@
  * Usage: node tools/screenshots/capture.mjs [--only <id>] [--theme dark|light|both]
  */
 
+// ───────────────────────────────────────────────────────────────────
+// 1. IMPORTS
+// ───────────────────────────────────────────────────────────────────
+
 import { chromium } from "playwright-core";
 import { mkdirSync, writeFileSync, readFileSync, existsSync, rmSync } from "node:fs";
 import { createHash } from "node:crypto";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { SCENARIOS } from "./scenarios.mjs";
+
+// ───────────────────────────────────────────────────────────────────
+// 2. CONFIGURATION
+// ───────────────────────────────────────────────────────────────────
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const REPO = resolve(HERE, "..", "..");
@@ -29,6 +42,10 @@ const CHROME_CANDIDATES = [
   "/usr/bin/google-chrome",
   "/usr/bin/chromium",
 ];
+
+// ───────────────────────────────────────────────────────────────────
+// 3. HELPERS
+// ───────────────────────────────────────────────────────────────────
 
 function findChrome() {
   const explicit = process.env.SCREENSHOT_CHROME;
@@ -78,6 +95,10 @@ ${overrides}
 </head>
 <body class="${device.bodyClass}"><div id="shot">${scenario.html()}</div></body></html>`;
 }
+
+// ───────────────────────────────────────────────────────────────────
+// 4. MAIN
+// ───────────────────────────────────────────────────────────────────
 
 async function main() {
   const only = arg("--only", null);

@@ -1,3 +1,8 @@
+// ───────────────────────────────────────────────────────────────────
+// MODULE:    fields
+// COMPONENT: screenshot scenarios for in-cell field editors, pickers, and value renderers
+// ───────────────────────────────────────────────────────────────────
+
 /**
  * Field and cell surfaces: the editors, pickers and value renderers that live inside a
  * single cell rather than around the grid.
@@ -13,7 +18,15 @@
  * faithful fixture is a top-level element rather than a nested one.
  */
 
-import { ROWS, ICONS, dots, glyph, pill } from "./_shared.mjs";
+// ───────────────────────────────────────────────────────────────────
+// 1. IMPORTS
+// ───────────────────────────────────────────────────────────────────
+
+import { ROWS, ICONS, dots, glyph, pill } from "./shared.mjs";
+
+// ───────────────────────────────────────────────────────────────────
+// 2. ICONS
+// ───────────────────────────────────────────────────────────────────
 
 /* Icons the plugin injects through Obsidian's `setIcon`, which is not available here.
    Only the path data is invented; every class around them comes from a renderer. */
@@ -62,6 +75,10 @@ const I = {
   badge: '<path d="m12 2 2.4 2.1 3.1-.4 1 3 2.8 1.4-1 3 1 3-2.8 1.4-1 3-3.1-.4L12 22l-2.4-2.1-3.1.4-1-3L2.7 16l1-3-1-3 2.8-1.4 1-3 3.1.4Z"/><path d="m9 12 2 2 4-4"/>',
 };
 
+// ───────────────────────────────────────────────────────────────────
+// 3. CONSTANTS
+// ───────────────────────────────────────────────────────────────────
+
 /** The persisted colour vocabulary, in the order `STATUS_COLORS` declares it. */
 const COLORS = [
   "gray", "brown", "orange", "yellow", "green", "blue", "purple", "pink",
@@ -82,6 +99,10 @@ const STATIC_DATE_POPOVER = `.note-database-container .db-cell-edit-popover {
   position: static !important; top: auto !important; left: auto !important;
   margin-top: 12px !important;
 }`;
+
+// ───────────────────────────────────────────────────────────────────
+// 4. HELPERS
+// ───────────────────────────────────────────────────────────────────
 
 /** A `<th>` built the way ColumnHeaderController builds one. */
 const th = (label, icon) => `
@@ -183,13 +204,17 @@ function miniCalendarDays() {
 
 const WEEKDAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
+// ───────────────────────────────────────────────────────────────────
+// 5. SCENARIOS
+// ───────────────────────────────────────────────────────────────────
+
 export const FIELDS_SCENARIOS = [
   {
     id: "field-cell-edit-text",
     title: "Text cell in edit state",
     group: "fields",
     width: 560,
-    sources: ["src/views/CellRenderer.ts"],
+    sources: ["src/views/cell-renderer.ts"],
     note: "Both editors keep the cell's rendered value visible underneath. The multi-line editor marks its cell with db-cell-editing (the accent inset); the single-line one marks its cell with db-cell-popover-editing, which the stylesheet declares no rule for, so that cell shows no edit affordance. Markdown columns gain the format toolbar.",
     captureCss: STATIC_POPOVERS,
     html: () => `
@@ -222,7 +247,7 @@ export const FIELDS_SCENARIOS = [
     title: "Select cell in edit state",
     group: "fields",
     width: 460,
-    sources: ["src/views/CellRenderer.ts", "src/data/ColumnTypes.ts"],
+    sources: ["src/views/cell-renderer.ts", "src/data/column-types.ts"],
     note: "Each row carries a drag handle, a colour dot that opens the colour picker, the check mark and a delete button. An unregistered value offers a plus instead of a trash icon.",
     captureCss: STATIC_POPOVERS,
     html: () => `
@@ -250,7 +275,7 @@ export const FIELDS_SCENARIOS = [
     title: "Date value picker",
     group: "fields",
     width: 320,
-    sources: ["src/views/DateValuePicker.ts", "src/views/CalendarMiniCalendarRenderer.ts"],
+    sources: ["src/views/date-value-picker.ts", "src/views/calendar-mini-calendar-renderer.ts"],
     note: "The trigger shows the committed value; the popover stacks quick dates, the three segment inputs and the mini calendar, which renders flat inside the date popover rather than as its own floating surface.",
     captureCss: STATIC_DATE_POPOVER,
     html: () => `
@@ -296,7 +321,7 @@ export const FIELDS_SCENARIOS = [
     title: "Date value picker with time",
     group: "fields",
     width: 320,
-    sources: ["src/views/DateValuePicker.ts", "src/views/CalendarMiniCalendarRenderer.ts"],
+    sources: ["src/views/date-value-picker.ts", "src/views/calendar-mini-calendar-renderer.ts"],
     note: "A datetime column adds hour and minute segments after the date, and the trigger swaps calendar-days for calendar-clock.",
     captureCss: STATIC_DATE_POPOVER,
     html: () => `
@@ -346,7 +371,7 @@ export const FIELDS_SCENARIOS = [
     title: "Icon picker popover",
     group: "fields",
     width: 350,
-    sources: ["src/views/IconPickerPopover.ts", "src/views/RecordIconRenderer.ts"],
+    sources: ["src/views/icon-picker-popover.ts", "src/views/record-icon-renderer.ts"],
     note: "The Icons tab adds the colour strip; the picker is created on document.body, so it is a top-level element here rather than a child of the container.",
     // Fixed to the viewport and anchored to the icon it was opened from. Nothing anchors
     // it here, so it leaves the flow and the capture box collapses.
@@ -405,7 +430,7 @@ export const FIELDS_SCENARIOS = [
     title: "Option colour picker",
     group: "fields",
     width: 156,
-    sources: ["src/views/OptionColorPicker.ts", "src/data/StatusColors.ts"],
+    sources: ["src/views/option-color-picker.ts", "src/data/status-colors.ts"],
     note: "Sixteen swatches in the persisted order, the current colour ringed. Opened from the colour dot in the select editor and created on document.body.",
     captureCss: `.db-color-picker-popup { position: static !important; top: auto !important; left: auto !important; }`,
     html: () => `
@@ -420,7 +445,7 @@ export const FIELDS_SCENARIOS = [
     title: "Relation values, resolved and broken",
     group: "fields",
     width: 640,
-    sources: ["src/views/RelationValueRenderer.ts"],
+    sources: ["src/views/relation-value-renderer.ts"],
     note: "A resolved target renders file-text on a tinted chip; a target the metadata cache cannot find renders alert-triangle inside a dashed warning outline.",
     html: () => `
       <div class="note-database-container">
@@ -454,7 +479,7 @@ export const FIELDS_SCENARIOS = [
     title: "File fields",
     group: "fields",
     width: 640,
-    sources: ["src/views/FileFieldRenderer.ts"],
+    sources: ["src/views/file-field-renderer.ts"],
     note: "file.tags render as status badges, link-list fields as compact chips, and file.file as a link back to the row's own note. The per-tag remove buttons are in the DOM of a writable cell but sit at opacity 0 until the badge is hovered, so they do not appear here.",
     html: () => `
       <div class="note-database-container">
@@ -490,7 +515,7 @@ export const FIELDS_SCENARIOS = [
     title: "Number display styles",
     group: "fields",
     width: 560,
-    sources: ["src/views/NumberDisplayRenderer.ts", "src/data/NumberDisplay.ts"],
+    sources: ["src/views/number-display-renderer.ts", "src/data/number-display.ts"],
     note: "Rating, progress bar and progress ring all tint through db-num-color-*, which sets --db-number-color. Half slots are the accent overlay clipped to 50%.",
     html: () => `
       <div class="note-database-container">
@@ -516,7 +541,7 @@ export const FIELDS_SCENARIOS = [
     title: "Record icon",
     group: "fields",
     width: 560,
-    sources: ["src/views/RecordIconRenderer.ts", "src/views/TableRenderer.ts", "src/data/RecordIcon.ts"],
+    sources: ["src/views/record-icon-renderer.ts", "src/views/table-renderer.ts", "src/data/record-icon.ts"],
     note: "The table puts record icons in a 28px gutter column of their own, whose header is blank so the first property header can borrow the width. An unparsed token falls back to file-text and is-default; a lucide token carries db-record-icon-color-*; an emoji token renders through db-record-icon-emoji.",
     html: () => {
       const icon = (body, extra = "") => `
@@ -558,7 +583,7 @@ export const FIELDS_SCENARIOS = [
     title: "Status colour range",
     group: "fields",
     width: 820,
-    sources: ["src/data/StatusColors.ts", "src/views/CellRenderer.ts"],
+    sources: ["src/data/status-colors.ts", "src/views/cell-renderer.ts"],
     note: "Every select, status, multi-select and tag value in the plugin is a status-badge in one of these sixteen status-color-* variants, so this is the whole colour vocabulary in one shot. The multi-select remove buttons only become visible on hover.",
     html: () => `
       <div class="note-database-container">
