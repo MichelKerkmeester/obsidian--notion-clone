@@ -2315,14 +2315,14 @@
       "device": "desktop",
       "file": "screenshots/panels/panel-record-detail-sheet-desktop-dark.png",
       "sources": [
-        "src/views/RecordDetailPanel.ts",
-        "src/views/PopoverPosition.ts",
-        "src/views/CardFieldRenderer.ts"
+        "src/views/record-detail-panel.ts",
+        "src/views/popover-position.ts",
+        "src/views/card-field-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/RecordDetailPanel.ts": null,
-        "src/views/PopoverPosition.ts": null,
-        "src/views/CardFieldRenderer.ts": null,
+        "src/views/record-detail-panel.ts": "4c818dfb16b2",
+        "src/views/popover-position.ts": "d78b9571f63c",
+        "src/views/card-field-renderer.ts": "9966f9cf54ed",
         "styles.css": "b6dfd2044a17"
       },
       "note": "The phone form of the record detail panel. positionToolbarPopover renders it as a bottom sheet with a grab handle; a permanent close button (reusing db-cell-edit-close) and drag-down on the handle dismiss it where the desktop panel relies on Escape and outside-click. Captured in viewport mode so the fixed sheet docks at the bottom.",
@@ -2337,19 +2337,19 @@
       "device": "desktop",
       "file": "screenshots/panels/panel-record-detail-sheet-desktop-light.png",
       "sources": [
-        "src/views/RecordDetailPanel.ts",
-        "src/views/PopoverPosition.ts",
-        "src/views/CardFieldRenderer.ts"
+        "src/views/record-detail-panel.ts",
+        "src/views/popover-position.ts",
+        "src/views/card-field-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/RecordDetailPanel.ts": null,
-        "src/views/PopoverPosition.ts": null,
-        "src/views/CardFieldRenderer.ts": null,
+        "src/views/record-detail-panel.ts": "4c818dfb16b2",
+        "src/views/popover-position.ts": "d78b9571f63c",
+        "src/views/card-field-renderer.ts": "9966f9cf54ed",
         "styles.css": "b6dfd2044a17"
       },
       "note": "The phone form of the record detail panel. positionToolbarPopover renders it as a bottom sheet with a grab handle; a permanent close button (reusing db-cell-edit-close) and drag-down on the handle dismiss it where the desktop panel relies on Escape and outside-click. Captured in viewport mode so the fixed sheet docks at the bottom.",
       "capture": "viewport",
-      "bytes": 52143
+      "bytes": 52101
     },
     {
       "id": "panel-record-detail-sheet",
@@ -2359,14 +2359,14 @@
       "device": "mobile",
       "file": "screenshots/panels/panel-record-detail-sheet-mobile-dark.png",
       "sources": [
-        "src/views/RecordDetailPanel.ts",
-        "src/views/PopoverPosition.ts",
-        "src/views/CardFieldRenderer.ts"
+        "src/views/record-detail-panel.ts",
+        "src/views/popover-position.ts",
+        "src/views/card-field-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/RecordDetailPanel.ts": null,
-        "src/views/PopoverPosition.ts": null,
-        "src/views/CardFieldRenderer.ts": null,
+        "src/views/record-detail-panel.ts": "4c818dfb16b2",
+        "src/views/popover-position.ts": "d78b9571f63c",
+        "src/views/card-field-renderer.ts": "9966f9cf54ed",
         "styles.css": "b6dfd2044a17"
       },
       "note": "The phone form of the record detail panel. positionToolbarPopover renders it as a bottom sheet with a grab handle; a permanent close button (reusing db-cell-edit-close) and drag-down on the handle dismiss it where the desktop panel relies on Escape and outside-click. Captured in viewport mode so the fixed sheet docks at the bottom.",
@@ -2381,14 +2381,14 @@
       "device": "mobile",
       "file": "screenshots/panels/panel-record-detail-sheet-mobile-light.png",
       "sources": [
-        "src/views/RecordDetailPanel.ts",
-        "src/views/PopoverPosition.ts",
-        "src/views/CardFieldRenderer.ts"
+        "src/views/record-detail-panel.ts",
+        "src/views/popover-position.ts",
+        "src/views/card-field-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/RecordDetailPanel.ts": null,
-        "src/views/PopoverPosition.ts": null,
-        "src/views/CardFieldRenderer.ts": null,
+        "src/views/record-detail-panel.ts": "4c818dfb16b2",
+        "src/views/popover-position.ts": "d78b9571f63c",
+        "src/views/card-field-renderer.ts": "9966f9cf54ed",
         "styles.css": "b6dfd2044a17"
       },
       "note": "The phone form of the record detail panel. positionToolbarPopover renders it as a bottom sheet with a grab handle; a permanent close button (reusing db-cell-edit-close) and drag-down on the handle dismiss it where the desktop panel relies on Escape and outside-click. Captured in viewport mode so the fixed sheet docks at the bottom.",
@@ -2787,14 +2787,14 @@
       "device": "desktop",
       "file": "screenshots/views/board-mobile-desktop-dark.png",
       "sources": [
-        "src/views/BoardRenderer.ts",
-        "src/views/GroupLabelRenderer.ts",
-        "src/views/CardFieldRenderer.ts"
+        "src/views/board-renderer.ts",
+        "src/views/group-label-renderer.ts",
+        "src/views/card-field-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/BoardRenderer.ts": null,
-        "src/views/GroupLabelRenderer.ts": null,
-        "src/views/CardFieldRenderer.ts": null,
+        "src/views/board-renderer.ts": "a60c3565b692",
+        "src/views/group-label-renderer.ts": "3fee8449607c",
+        "src/views/card-field-renderer.ts": "9966f9cf54ed",
         "styles.css": "b6dfd2044a17"
       },
       "note": "The board inside the default-width container. On the phone (is-phone) the container no longer centres the grid off-screen, and the sticky group header is taken out of sticky flow so it cannot float down over the cards; columns page horizontally with snap-scroll.",
@@ -2809,14 +2809,14 @@
       "device": "desktop",
       "file": "screenshots/views/board-mobile-desktop-light.png",
       "sources": [
-        "src/views/BoardRenderer.ts",
-        "src/views/GroupLabelRenderer.ts",
-        "src/views/CardFieldRenderer.ts"
+        "src/views/board-renderer.ts",
+        "src/views/group-label-renderer.ts",
+        "src/views/card-field-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/BoardRenderer.ts": null,
-        "src/views/GroupLabelRenderer.ts": null,
-        "src/views/CardFieldRenderer.ts": null,
+        "src/views/board-renderer.ts": "a60c3565b692",
+        "src/views/group-label-renderer.ts": "3fee8449607c",
+        "src/views/card-field-renderer.ts": "9966f9cf54ed",
         "styles.css": "b6dfd2044a17"
       },
       "note": "The board inside the default-width container. On the phone (is-phone) the container no longer centres the grid off-screen, and the sticky group header is taken out of sticky flow so it cannot float down over the cards; columns page horizontally with snap-scroll.",
@@ -2831,19 +2831,19 @@
       "device": "mobile",
       "file": "screenshots/views/board-mobile-mobile-dark.png",
       "sources": [
-        "src/views/BoardRenderer.ts",
-        "src/views/GroupLabelRenderer.ts",
-        "src/views/CardFieldRenderer.ts"
+        "src/views/board-renderer.ts",
+        "src/views/group-label-renderer.ts",
+        "src/views/card-field-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/BoardRenderer.ts": null,
-        "src/views/GroupLabelRenderer.ts": null,
-        "src/views/CardFieldRenderer.ts": null,
+        "src/views/board-renderer.ts": "a60c3565b692",
+        "src/views/group-label-renderer.ts": "3fee8449607c",
+        "src/views/card-field-renderer.ts": "9966f9cf54ed",
         "styles.css": "b6dfd2044a17"
       },
       "note": "The board inside the default-width container. On the phone (is-phone) the container no longer centres the grid off-screen, and the sticky group header is taken out of sticky flow so it cannot float down over the cards; columns page horizontally with snap-scroll.",
       "capture": "viewport",
-      "bytes": 81488
+      "bytes": 81507
     },
     {
       "id": "board-mobile",
@@ -2853,19 +2853,19 @@
       "device": "mobile",
       "file": "screenshots/views/board-mobile-mobile-light.png",
       "sources": [
-        "src/views/BoardRenderer.ts",
-        "src/views/GroupLabelRenderer.ts",
-        "src/views/CardFieldRenderer.ts"
+        "src/views/board-renderer.ts",
+        "src/views/group-label-renderer.ts",
+        "src/views/card-field-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/BoardRenderer.ts": null,
-        "src/views/GroupLabelRenderer.ts": null,
-        "src/views/CardFieldRenderer.ts": null,
+        "src/views/board-renderer.ts": "a60c3565b692",
+        "src/views/group-label-renderer.ts": "3fee8449607c",
+        "src/views/card-field-renderer.ts": "9966f9cf54ed",
         "styles.css": "b6dfd2044a17"
       },
       "note": "The board inside the default-width container. On the phone (is-phone) the container no longer centres the grid off-screen, and the sticky group header is taken out of sticky flow so it cannot float down over the cards; columns page horizontally with snap-scroll.",
       "capture": "viewport",
-      "bytes": 85246
+      "bytes": 85252
     },
     {
       "id": "board-view",
@@ -2905,7 +2905,7 @@
       },
       "note": null,
       "capture": "viewport",
-      "bytes": 248016
+      "bytes": 247999
     },
     {
       "id": "board-view",
@@ -2925,7 +2925,7 @@
       },
       "note": null,
       "capture": "viewport",
-      "bytes": 81507
+      "bytes": 81488
     },
     {
       "id": "board-view",
@@ -2945,7 +2945,7 @@
       },
       "note": null,
       "capture": "viewport",
-      "bytes": 85246
+      "bytes": 85252
     },
     {
       "id": "calendar-mini-calendar",
@@ -3025,7 +3025,7 @@
       },
       "note": "Days with events carry a short accent underline; the visible week reads as the selected pill run.",
       "capture": "viewport",
-      "bytes": 23723
+      "bytes": 23719
     },
     {
       "id": "calendar-month-view",
@@ -3043,7 +3043,7 @@
       },
       "note": "Multi-day all-day bars, timed events, an overflow week and one event carried across the week boundary.",
       "capture": "viewport",
-      "bytes": 130108
+      "bytes": 129143
     },
     {
       "id": "calendar-month-view",
@@ -3097,7 +3097,7 @@
       },
       "note": "Multi-day all-day bars, timed events, an overflow week and one event carried across the week boundary.",
       "capture": "viewport",
-      "bytes": 47108
+      "bytes": 47309
     },
     {
       "id": "calendar-toolbar-options",
@@ -3339,12 +3339,12 @@
       "device": "desktop",
       "file": "screenshots/views/list-mobile-desktop-dark.png",
       "sources": [
-        "src/views/ListRenderer.ts",
-        "src/views/CardFieldRenderer.ts"
+        "src/views/list-renderer.ts",
+        "src/views/card-field-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/ListRenderer.ts": null,
-        "src/views/CardFieldRenderer.ts": null,
+        "src/views/list-renderer.ts": "854763eba780",
+        "src/views/card-field-renderer.ts": "9966f9cf54ed",
         "styles.css": "b6dfd2044a17"
       },
       "note": "The list row the renderer builds: controls, a title line and a meta row of fixed-width fields. On desktop the fields sit on one line; on the phone (is-phone) the card fills the viewport and the fields wrap inside its border instead of escaping it.",
@@ -3359,12 +3359,12 @@
       "device": "desktop",
       "file": "screenshots/views/list-mobile-desktop-light.png",
       "sources": [
-        "src/views/ListRenderer.ts",
-        "src/views/CardFieldRenderer.ts"
+        "src/views/list-renderer.ts",
+        "src/views/card-field-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/ListRenderer.ts": null,
-        "src/views/CardFieldRenderer.ts": null,
+        "src/views/list-renderer.ts": "854763eba780",
+        "src/views/card-field-renderer.ts": "9966f9cf54ed",
         "styles.css": "b6dfd2044a17"
       },
       "note": "The list row the renderer builds: controls, a title line and a meta row of fixed-width fields. On desktop the fields sit on one line; on the phone (is-phone) the card fills the viewport and the fields wrap inside its border instead of escaping it.",
@@ -3379,12 +3379,12 @@
       "device": "mobile",
       "file": "screenshots/views/list-mobile-mobile-dark.png",
       "sources": [
-        "src/views/ListRenderer.ts",
-        "src/views/CardFieldRenderer.ts"
+        "src/views/list-renderer.ts",
+        "src/views/card-field-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/ListRenderer.ts": null,
-        "src/views/CardFieldRenderer.ts": null,
+        "src/views/list-renderer.ts": "854763eba780",
+        "src/views/card-field-renderer.ts": "9966f9cf54ed",
         "styles.css": "b6dfd2044a17"
       },
       "note": "The list row the renderer builds: controls, a title line and a meta row of fixed-width fields. On desktop the fields sit on one line; on the phone (is-phone) the card fills the viewport and the fields wrap inside its border instead of escaping it.",
@@ -3399,12 +3399,12 @@
       "device": "mobile",
       "file": "screenshots/views/list-mobile-mobile-light.png",
       "sources": [
-        "src/views/ListRenderer.ts",
-        "src/views/CardFieldRenderer.ts"
+        "src/views/list-renderer.ts",
+        "src/views/card-field-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/ListRenderer.ts": null,
-        "src/views/CardFieldRenderer.ts": null,
+        "src/views/list-renderer.ts": "854763eba780",
+        "src/views/card-field-renderer.ts": "9966f9cf54ed",
         "styles.css": "b6dfd2044a17"
       },
       "note": "The list row the renderer builds: controls, a title line and a meta row of fixed-width fields. On desktop the fields sit on one line; on the phone (is-phone) the card fills the viewport and the fields wrap inside its border instead of escaping it.",
@@ -3499,14 +3499,14 @@
       "device": "desktop",
       "file": "screenshots/views/table-mobile-desktop-dark.png",
       "sources": [
-        "src/views/TableRenderer.ts",
-        "src/views/TableColumnLayoutSync.ts",
-        "src/views/TableLayout.ts"
+        "src/views/table-renderer.ts",
+        "src/views/table-column-layout-sync.ts",
+        "src/views/table-layout.ts"
       ],
       "sourceHashes": {
-        "src/views/TableRenderer.ts": null,
-        "src/views/TableColumnLayoutSync.ts": null,
-        "src/views/TableLayout.ts": null,
+        "src/views/table-renderer.ts": "4ecaa2cb2295",
+        "src/views/table-column-layout-sync.ts": "a678b28c2bf2",
+        "src/views/table-layout.ts": "a39067d21b59",
         "styles.css": "b6dfd2044a17"
       },
       "note": "The full table the renderer builds: a select gutter, a record-icon gutter and a runtime <colgroup> of fixed px widths. On desktop those widths hold; on the phone (is-phone) the columns auto-fit to content and the select column is no longer clipped by the scroll-area fade mask.",
@@ -3521,14 +3521,14 @@
       "device": "desktop",
       "file": "screenshots/views/table-mobile-desktop-light.png",
       "sources": [
-        "src/views/TableRenderer.ts",
-        "src/views/TableColumnLayoutSync.ts",
-        "src/views/TableLayout.ts"
+        "src/views/table-renderer.ts",
+        "src/views/table-column-layout-sync.ts",
+        "src/views/table-layout.ts"
       ],
       "sourceHashes": {
-        "src/views/TableRenderer.ts": null,
-        "src/views/TableColumnLayoutSync.ts": null,
-        "src/views/TableLayout.ts": null,
+        "src/views/table-renderer.ts": "4ecaa2cb2295",
+        "src/views/table-column-layout-sync.ts": "a678b28c2bf2",
+        "src/views/table-layout.ts": "a39067d21b59",
         "styles.css": "b6dfd2044a17"
       },
       "note": "The full table the renderer builds: a select gutter, a record-icon gutter and a runtime <colgroup> of fixed px widths. On desktop those widths hold; on the phone (is-phone) the columns auto-fit to content and the select column is no longer clipped by the scroll-area fade mask.",
@@ -3543,14 +3543,14 @@
       "device": "mobile",
       "file": "screenshots/views/table-mobile-mobile-dark.png",
       "sources": [
-        "src/views/TableRenderer.ts",
-        "src/views/TableColumnLayoutSync.ts",
-        "src/views/TableLayout.ts"
+        "src/views/table-renderer.ts",
+        "src/views/table-column-layout-sync.ts",
+        "src/views/table-layout.ts"
       ],
       "sourceHashes": {
-        "src/views/TableRenderer.ts": null,
-        "src/views/TableColumnLayoutSync.ts": null,
-        "src/views/TableLayout.ts": null,
+        "src/views/table-renderer.ts": "4ecaa2cb2295",
+        "src/views/table-column-layout-sync.ts": "a678b28c2bf2",
+        "src/views/table-layout.ts": "a39067d21b59",
         "styles.css": "b6dfd2044a17"
       },
       "note": "The full table the renderer builds: a select gutter, a record-icon gutter and a runtime <colgroup> of fixed px widths. On desktop those widths hold; on the phone (is-phone) the columns auto-fit to content and the select column is no longer clipped by the scroll-area fade mask.",
@@ -3565,14 +3565,14 @@
       "device": "mobile",
       "file": "screenshots/views/table-mobile-mobile-light.png",
       "sources": [
-        "src/views/TableRenderer.ts",
-        "src/views/TableColumnLayoutSync.ts",
-        "src/views/TableLayout.ts"
+        "src/views/table-renderer.ts",
+        "src/views/table-column-layout-sync.ts",
+        "src/views/table-layout.ts"
       ],
       "sourceHashes": {
-        "src/views/TableRenderer.ts": null,
-        "src/views/TableColumnLayoutSync.ts": null,
-        "src/views/TableLayout.ts": null,
+        "src/views/table-renderer.ts": "4ecaa2cb2295",
+        "src/views/table-column-layout-sync.ts": "a678b28c2bf2",
+        "src/views/table-layout.ts": "a39067d21b59",
         "styles.css": "b6dfd2044a17"
       },
       "note": "The full table the renderer builds: a select gutter, a record-icon gutter and a runtime <colgroup> of fixed px widths. On desktop those widths hold; on the phone (is-phone) the columns auto-fit to content and the select column is no longer clipped by the scroll-area fade mask.",
@@ -3599,7 +3599,7 @@
       },
       "note": null,
       "capture": "viewport",
-      "bytes": 473860
+      "bytes": 473873
     },
     {
       "id": "table-view",
@@ -3621,7 +3621,7 @@
       },
       "note": null,
       "capture": "viewport",
-      "bytes": 446749
+      "bytes": 446755
     },
     {
       "id": "table-view",
@@ -3745,7 +3745,7 @@
       },
       "note": "Column width is a switch plus a slider here, not the calendar's mode dropdown; the slider only appears once the switch is on.",
       "capture": "viewport",
-      "bytes": 36477
+      "bytes": 36470
     },
     {
       "id": "timeline-view",
@@ -3763,7 +3763,7 @@
       },
       "note": "Two weeks at one column per day; the April band marks the month boundary and the today line sits at 25 March 13:45.",
       "capture": "viewport",
-      "bytes": 146959
+      "bytes": 147239
     },
     {
       "id": "timeline-view",
@@ -3781,7 +3781,7 @@
       },
       "note": "Two weeks at one column per day; the April band marks the month boundary and the today line sits at 25 March 13:45.",
       "capture": "viewport",
-      "bytes": 152396
+      "bytes": 151947
     },
     {
       "id": "timeline-view",
@@ -3799,7 +3799,7 @@
       },
       "note": "Two weeks at one column per day; the April band marks the month boundary and the today line sits at 25 March 13:45.",
       "capture": "viewport",
-      "bytes": 41700
+      "bytes": 41990
     },
     {
       "id": "timeline-view",
@@ -3817,7 +3817,7 @@
       },
       "note": "Two weeks at one column per day; the April band marks the month boundary and the today line sits at 25 March 13:45.",
       "capture": "viewport",
-      "bytes": 55729
+      "bytes": 54772
     }
   ]
 }

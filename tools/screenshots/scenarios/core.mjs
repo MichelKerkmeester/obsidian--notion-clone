@@ -187,7 +187,7 @@ export const CORE_SCENARIOS = [
     title: "Table view — mobile auto-fit",
     group: "views",
     width: 402,
-    sources: ["src/views/TableRenderer.ts", "src/views/TableColumnLayoutSync.ts", "src/views/TableLayout.ts"],
+    sources: ["src/views/table-renderer.ts", "src/views/table-column-layout-sync.ts", "src/views/table-layout.ts"],
     note: "The full table the renderer builds: a select gutter, a record-icon gutter and a runtime <colgroup> of fixed px widths. On desktop those widths hold; on the phone (is-phone) the columns auto-fit to content and the select column is no longer clipped by the scroll-area fade mask.",
     html: () => {
       const rows = [...ROWS.slice(0, 10), ROWS[17]];
@@ -233,7 +233,7 @@ export const CORE_SCENARIOS = [
     title: "List view — mobile",
     group: "views",
     width: 402,
-    sources: ["src/views/ListRenderer.ts", "src/views/CardFieldRenderer.ts"],
+    sources: ["src/views/list-renderer.ts", "src/views/card-field-renderer.ts"],
     note: "The list row the renderer builds: controls, a title line and a meta row of fixed-width fields. On desktop the fields sit on one line; on the phone (is-phone) the card fills the viewport and the fields wrap inside its border instead of escaping it.",
     html: () => {
       const open = glyph('<path d="M15 3h6v6"/><path d="m21 3-7 7"/><path d="M9 21H3v-6"/><path d="m3 21 7-7"/>');
@@ -265,7 +265,7 @@ export const CORE_SCENARIOS = [
     title: "Board view — mobile",
     group: "views",
     width: 402,
-    sources: ["src/views/BoardRenderer.ts", "src/views/GroupLabelRenderer.ts", "src/views/CardFieldRenderer.ts"],
+    sources: ["src/views/board-renderer.ts", "src/views/group-label-renderer.ts", "src/views/card-field-renderer.ts"],
     note: "The board inside the default-width container. On the phone (is-phone) the container no longer centres the grid off-screen, and the sticky group header is taken out of sticky flow so it cannot float down over the cards; columns page horizontally with snap-scroll.",
     html: () => `
       <div class="note-database-container db-width-default">

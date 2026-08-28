@@ -321,7 +321,7 @@ The phone form of the record detail panel. positionToolbarPopover renders it as 
 |---|---|
 | ![panel-record-detail-sheet dark](panels/panel-record-detail-sheet-mobile-dark.png) | ![panel-record-detail-sheet light](panels/panel-record-detail-sheet-mobile-light.png) |
 
-Sources: `src/views/RecordDetailPanel.ts`, `src/views/PopoverPosition.ts`, `src/views/CardFieldRenderer.ts`
+Sources: `src/views/record-detail-panel.ts`, `src/views/popover-position.ts`, `src/views/card-field-renderer.ts`
 
 ### Table record peek
 
@@ -383,7 +383,7 @@ The board inside the default-width container. On the phone (is-phone) the contai
 |---|---|
 | ![board-mobile dark](views/board-mobile-mobile-dark.png) | ![board-mobile light](views/board-mobile-mobile-light.png) |
 
-Sources: `src/views/BoardRenderer.ts`, `src/views/GroupLabelRenderer.ts`, `src/views/CardFieldRenderer.ts`
+Sources: `src/views/board-renderer.ts`, `src/views/group-label-renderer.ts`, `src/views/card-field-renderer.ts`
 
 ### Board view
 
@@ -449,7 +449,7 @@ The list row the renderer builds: controls, a title line and a meta row of fixed
 |---|---|
 | ![list-mobile dark](views/list-mobile-mobile-dark.png) | ![list-mobile light](views/list-mobile-mobile-light.png) |
 
-Sources: `src/views/ListRenderer.ts`, `src/views/CardFieldRenderer.ts`
+Sources: `src/views/list-renderer.ts`, `src/views/card-field-renderer.ts`
 
 ### List view
 
@@ -467,7 +467,7 @@ The full table the renderer builds: a select gutter, a record-icon gutter and a 
 |---|---|
 | ![table-mobile dark](views/table-mobile-mobile-dark.png) | ![table-mobile light](views/table-mobile-mobile-light.png) |
 
-Sources: `src/views/TableRenderer.ts`, `src/views/TableColumnLayoutSync.ts`, `src/views/TableLayout.ts`
+Sources: `src/views/table-renderer.ts`, `src/views/table-column-layout-sync.ts`, `src/views/table-layout.ts`
 
 ### Table view
 

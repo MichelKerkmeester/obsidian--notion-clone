@@ -430,7 +430,7 @@ export const PANEL_SCENARIOS = [
     group: "panels",
     width: 402,
     capture: "viewport",
-    sources: ["src/views/RecordDetailPanel.ts", "src/views/PopoverPosition.ts", "src/views/CardFieldRenderer.ts"],
+    sources: ["src/views/record-detail-panel.ts", "src/views/popover-position.ts", "src/views/card-field-renderer.ts"],
     note: "The phone form of the record detail panel. positionToolbarPopover renders it as a bottom sheet with a grab handle; a permanent close button (reusing db-cell-edit-close) and drag-down on the handle dismiss it where the desktop panel relies on Escape and outside-click. Captured in viewport mode so the fixed sheet docks at the bottom.",
     html: () => {
       const row = ROWS[1];

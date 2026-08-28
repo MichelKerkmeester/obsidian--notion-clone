@@ -1,3 +1,17 @@
+// ───────────────────────────────────────────────────────────────────
+// MODULE:    mobile-table-and-panel-ux.test
+// COMPONENT: source assertions for the phone-layout repairs
+// ───────────────────────────────────────────────────────────────────
+//
+// These assert against source text rather than a rendered DOM because the
+// real renderers need a live Obsidian App, vault and metadata cache. That
+// buys a cheap regression guard and nothing more: a rule can satisfy every
+// check here and still look wrong on a device.
+
+// ───────────────────────────────────────────────────────────────────
+// 1. IMPORTS
+// ───────────────────────────────────────────────────────────────────
+
 /* eslint-disable import/no-nodejs-modules, no-undef --
    Asserting on the shipped stylesheet means reading it from disk, which needs the node
    builtins the plugin runtime rule forbids. Scoped to this suite, which never ships. */
