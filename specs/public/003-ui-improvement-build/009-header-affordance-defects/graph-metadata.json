@@ -195,7 +195,7 @@
     ],
     "causal_summary": "A user reported that on table column headers — and in the same shape on board column headers — the three-dots menu button renders on its own line underneath the column name, left-aligned, instead of sitting beside it",
     "created_at": "2026-08-28T12:21:51.178Z",
-    "last_save_at": "2026-08-28T12:48:51.200Z",
+    "last_save_at": "2026-08-28T16:54:47.516Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -205,13 +205,13 @@
       "checklist.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:2fa2f3282c44c6230b261cf6870ec9a3483d42ff858870d6fad2968f25117b56",
+    "source_fingerprint": "sha256:5be9fd47003681dfaa873da2fc738b25975bdb8d38997ac9853176966a83747f",
     "source_doc_hashes": {
       "spec.md": "06c0956ce5938e24ba0427ea984985e929d29ff70856456eceb5a161499ca5b3",
       "plan.md": "866f68fb119987a329eb205a8ea3b3e61b4b860bdb12ca474203e35b1d985f1e",
       "tasks.md": "6248c8b944f1341cb62d5995a33202d8deeced9abf5166c23ddf67e6d1f12f34",
-      "checklist.md": "428a46972c22ed8a9404882771915488064f297f1b0f6e8d32bcaf50cbcd8515",
-      "implementation-summary.md": "b73833f061e9d3a8c8e8fbac7ecf8609b36e991a801b6760cf4153292cf431c3"
+      "checklist.md": "76114e7752d80130a632630b60de8dec167b4177bfbf6e8eb07f341accfa1844",
+      "implementation-summary.md": "db39087540e80cc5b4f60594429308e4c06891f0660a2347b916c8100b8ea1e3"
     },
     "last_active_child_id": null,
     "last_active_at": null

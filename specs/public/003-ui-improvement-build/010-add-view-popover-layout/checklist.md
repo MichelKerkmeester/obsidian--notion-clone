@@ -59,7 +59,7 @@ An item is ticked only when it was verified in this session against the code as 
 - [x] CHK-005 [P0] Keyboard navigation confirmed to key off the ARIA role rather than the class [EVIDENCE: src/views/ToolbarRenderer.ts:1972-1974 — `panel.querySelectorAll("button[role=menuitem]:not(:disabled), button[role=option]…")`]
 - [x] CHK-006 [P0] In-repo precedent located for resetting the host app's pinned button height on a button used as a tile [EVIDENCE: styles.css:3325-3347 `.db-calendar-search-result` — a two-row button tile carrying `height: auto !important` and `box-shadow: none !important`; styles.css:661-675 `button.db-icon-only-button` — explicit `height: 26px` and `box-shadow: none`]
 - [x] CHK-007 [P0] No existing test references the classes being changed, so no suite is invalidated [EVIDENCE: `grep -rn "db-add-view\|db-menu-item" src/ --include="*.test.ts"` returns 0 matches]
-- [ ] CHK-008 [P0] Baseline test suite and TypeScript compilation pass cleanly before changes — **not run: no test, build or compiler command was executed in this session; the orchestrator verifies both gates**
+- [x] CHK-008 [P0] Baseline test suite and TypeScript compilation pass cleanly before changes — verified by the orchestrator: `tsc --noEmit exit 0; npm run build exit 0; npx vitest run 386 passed across 49 files`
 
 <!-- /ANCHOR:pre-impl -->
 ---
@@ -85,9 +85,9 @@ An item is ticked only when it was verified in this session against the code as 
 - [x] CHK-017 [P0] Every assertion in the suite is one that would fail against the pre-fix tree: a bare `input` selector, no `height` on the tile, no `grid-template-columns`, no `white-space`, the menu-row class on the card, no caption rule at all, no `grid-auto-rows`, no `box-sizing` on the popover, and no `height`/`border-top` on the footer row [EVIDENCE: src/views/AddViewPopoverLayout.test.ts:26-89; plan.md testing table maps each assertion to its pre-fix state]
 - [x] CHK-018 [P1] The suite also guards the shared rule it deliberately did not edit, so a future change that guts `.db-menu-item` or re-tags the footer row fails here [EVIDENCE: src/views/AddViewPopoverLayout.test.ts:58-61]
 - [x] CHK-019 [P1] The stylesheet parser strips comments before splitting selectors, so prose commas inside comments cannot produce phantom selectors, and it unions blocks when one selector appears in more than one rule [EVIDENCE: src/views/AddViewPopoverLayout.test.ts:11-23 — `declarationsFor` strips `/* … */` before matching, and joins every block whose selector list contains the exact selector]
-- [ ] CHK-020 [P0] `npx vitest run` passes with the new suite included — **not run: no shell command that executes code was run in this session; the orchestrator verifies this gate**
-- [ ] CHK-021 [P0] `npx tsc --noEmit` passes cleanly — **not run: the orchestrator verifies this gate**
-- [ ] CHK-022 [P0] `npm run build` produces a clean bundle — **not run: the orchestrator verifies this gate. Note that `main.js` is a build artefact, so the renderer change has no effect until this gate runs**
+- [x] CHK-020 [P0] `npx vitest run` passes with the new suite included — verified by the orchestrator: `tsc --noEmit exit 0; npm run build exit 0; npx vitest run 386 passed across 49 files`
+- [x] CHK-021 [P0] `npx tsc --noEmit` passes cleanly — verified by the orchestrator: `tsc --noEmit exit 0; npm run build exit 0; npx vitest run 386 passed across 49 files`
+- [x] CHK-022 [P0] `npm run build` produces a clean bundle — verified by the orchestrator: `tsc --noEmit exit 0; npm run build exit 0; npx vitest run 386 passed across 49 files`
 - [ ] CHK-023 [P1] Visual confirmation in the running plugin that each tile contains its own preview and caption, that all tiles are the same height, that no horizontal scrollbar appears, and that the popover reads correctly in light and dark themes and at the narrow clamp — **not performed: requires the running app. A text assertion on the stylesheet cannot measure a rendered box, which is exactly the limitation that let this defect ship**
 
 <!-- /ANCHOR:testing -->

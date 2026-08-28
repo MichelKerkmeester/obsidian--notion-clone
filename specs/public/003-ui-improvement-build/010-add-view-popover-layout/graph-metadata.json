@@ -195,7 +195,7 @@
     ],
     "causal_summary": "A user reported that \"the view selector is completely broken ui wise\"",
     "created_at": "2026-08-28T12:45:09.189Z",
-    "last_save_at": "2026-08-28T12:48:51.360Z",
+    "last_save_at": "2026-08-28T16:54:48.875Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -205,13 +205,13 @@
       "checklist.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:5bb1b3d26bac9bb462c0e551269c13d2266bd1a913f733b6f044bfd677442ad3",
+    "source_fingerprint": "sha256:84d369ebd9c4044d6080ef01399309b3906e7b4246551083d29f7819cc2f3be8",
     "source_doc_hashes": {
       "spec.md": "4074b0c3b96bd958d9f91db63f6f785b1d579a8368b2f75f34b49c3e2f85a31b",
       "plan.md": "f45b34ba2391165cbc3a6b1a6a61f228317f2bc02770b3f627ded28adcd09a40",
       "tasks.md": "e104744cf891bd00d5563c848448ef35d3cdd2317a62e5f3923e4fc483082c8a",
-      "checklist.md": "bba09092be2c19e50896f7f7aa80d06f4c82d2facd5527cbf317cacaf6c7d793",
-      "implementation-summary.md": "ab2d5384da788ce64a9464789ffc5e42523cc52c91e277400657a7b6638ee38e"
+      "checklist.md": "7da6e6c668142769170275a6da376146b930e8dbedf815a76562873d7e6da715",
+      "implementation-summary.md": "11103e2c480e8a7adc90c7db8cfeed6a6e2b02ad08f63fe6d6e07d46ccb0e55d"
     },
     "last_active_child_id": null,
     "last_active_at": null
