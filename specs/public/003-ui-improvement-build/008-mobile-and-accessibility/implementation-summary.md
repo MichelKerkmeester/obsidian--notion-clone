@@ -21,10 +21,10 @@ contextType: "implementation"
 _memory:
   continuity:
     packet_pointer: "public/003-ui-improvement-build/008-mobile-and-accessibility"
-    last_updated_at: "2026-08-28T04:30:57Z"
+    last_updated_at: "2026-08-28T07:15:23.779Z"
     last_updated_by: "phase-author"
-    recent_action: "Reconciled mobile and accessibility implementation documentation"
-    next_safe_action: "Run overall build suite verification across all phases"
+    recent_action: "Repointed stale styles.css citations to verified selector anchors"
+    next_safe_action: "Commit reconciled phase documentation"
     blockers: []
     key_files:
       - "spec.md"
@@ -68,9 +68,9 @@ _memory:
 
 1. **Universal Touch & Tablet Detection (`isTouchDevice`)**: Create `src/data/TouchEnvironment.ts` and test suite `TouchEnvironment.test.ts` combining `Platform.isMobile`, `Platform.isTablet`, `(pointer: coarse)`, and container `ResizeObserver` width to reliably classify touch viewports across all 8 view controllers (`TableRenderer.ts:420, 734`, `BoardRenderer.ts:437, 471`, `GalleryRenderer.ts:232`, `ListRenderer.ts:244`, `DatabaseView.ts:4394`, `EmbeddedDatabaseRenderer.ts:3104`, `CalendarRenderer.ts:664`, `CalendarTimelineRenderer.ts:582`).
 2. **44×44px Touch Target Hit Envelopes**: Expand hit envelopes via pseudo-elements (`::before { inset: -8px; }`) on toolbar icons, filter remove chips, column menu triggers, selection checkboxes, mobile move buttons, and jump controls (`styles.css:17223-17293, 17316-17324`).
-3. **Mobile Bottom Sheet Consumption**: Consume and verify Phase 003's native mobile bottom sheet output (`.db-mobile-bottom-sheet`) in `PopoverPosition.ts:29-42` and `styles.css:17295-17304`, ensuring `isTouchDevice()` routing and 44×44px touch targets without modifying sheet geometry.
+3. **Mobile Bottom Sheet Consumption**: Consume and verify Phase 003's native mobile bottom sheet output (`.db-mobile-bottom-sheet`) in `PopoverPosition.ts:29-42` and `styles.css:183`, ensuring `isTouchDevice()` routing and 44×44px touch targets without modifying sheet geometry.
 4. **Keyboard-Safe Mobile Cell Editing with `visualViewport` Tracking**: Listen to `window.visualViewport` resize/scroll events during mobile cell editing, automatically centering the active cell (`scrollIntoView({ block: 'center' })`) above the software keyboard and docking action buttons to the top (`CellRenderer.ts:1903-1920, 2422-2439`, `styles.css:17326-17360`).
-5. **Pointer-Based Long-Press Context Menus & Double-Tap Zoom Elimination**: Implement 450ms long-press listeners with `navigator.vibrate?.(20)` haptic feedback across records (`DatabaseView.ts:8036`, `TableRenderer.ts:718-724`, `BoardRenderer.ts:860`, `ListRenderer.ts:305`, `GalleryRenderer.ts:309`, `EmbeddedDatabaseRenderer.ts:341`); apply `touch-action: manipulation` across container surfaces (`styles.css:4661, 5848, 17384`).
+5. **Pointer-Based Long-Press Context Menus & Double-Tap Zoom Elimination**: Implement 450ms long-press listeners with `navigator.vibrate?.(20)` haptic feedback across records (`DatabaseView.ts:8036`, `DatabaseView.ts:8037`, `EmbeddedDatabaseRenderer.ts:341`, `BoardRenderer.ts:939`, `GalleryRenderer.ts:327`, `ListRenderer.ts:323`, `BoardRenderer.ts:860`, `ListRenderer.ts:305`, `GalleryRenderer.ts:309`, `EmbeddedDatabaseRenderer.ts:341`); apply `touch-action: manipulation` across container surfaces (`styles.css:4661, 5848, 17384`).
 6. **Mobile Kanban Swipe-Snapping & Pagination Indicator**: Deliver CSS scroll snapping (`scroll-snap-type: x mandatory`) and dynamic column pagination dots (`● ○ ○ ○`) with 1-tap direct jumping (`BoardRenderer.ts:1104-1123`, `styles.css:17396-17440`).
 7. **WAI-ARIA 1.2 Grid Semantics & Dynamic Sorting Annotations**: Inject `role="grid"`, `aria-rowcount`, `aria-colcount`, `aria-colindex`, `aria-rowindex`, `aria-selected`, `role="columnheader"`, and `aria-sort="ascending|descending|none"` in `TableRenderer.ts:460, 481, 489, 498, 517, 1041-1052` and `ColumnHeaderController.ts:25, 31`.
 8. **View Switcher WAI-ARIA Tablist Contract Verification**: Verify Phase 004's `role="tablist"` implementation, roving keyboard tabindex, `aria-selected`, and `role="tabpanel"` on the active view container (`ToolbarRenderer.ts:760-840`).
@@ -135,7 +135,7 @@ npx vitest run
 ### Verification Checklist
 - [x] TypeScript compilation passes cleanly without errors (`npx tsc --noEmit` exit code 0).
 - [x] Plugin bundle builds successfully (`npm run build` exit code 0).
-- [x] Unit tests in `TouchEnvironment.test.ts`, `InteractionScope.test.ts`, `TableKeyboardNavigation.test.ts`, and `CalendarTimelineModel.test.ts` pass 100% (`npx vitest run` 315 tests across 41 files).
+- [x] Unit tests in `TouchEnvironment.test.ts`, `InteractionScope.test.ts`, `TableKeyboardNavigation.test.ts`, and `CalendarTimelineModel.test.ts` pass 100% (`npx vitest run` 355 tests across 45 files).
 - [x] `isTouchDevice()` accurately detects coarse pointers and narrow tablet split panes (`TouchEnvironment.ts:1-105`).
 - [x] Touch hit envelopes meet 44×44px minimum sizing without layout overflow (`styles.css:17223-17293`).
 - [x] Mobile bottom sheet architecture opens with proper scrim and safe area padding (`PopoverPosition.ts:29-42`).

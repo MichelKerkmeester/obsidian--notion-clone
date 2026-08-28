@@ -59,7 +59,7 @@ _memory:
 
 ### Overview
 This plan implements the UI research synthesis's Quick Wins #8 (Formula Runtime `#ERROR!` Badges) & #9 (Direct Tag Dismissal on Hover), and Themed Backlog #6 (Micro-Interactions & Sensory Feedback). It transforms the Note Database plugin's tactile layer across 6 core areas:
-1. **Contiguous Selection Perimeter & Floating Action Dock**: Computes rectangular selection boundary edges (`.is-top-edge`, `.is-bottom-edge`, `.is-left-edge`, `.is-right-edge`), mounts a single corner fill handle (`DatabaseView.ts:4361-4381, 7971-7984`), and redesigns the selection status bar as a floating glassmorphic capsule dock (`styles.css:1697-1718`).
+1. **Contiguous Selection Perimeter & Floating Action Dock**: Computes rectangular selection boundary edges (`.is-top-edge`, `.is-bottom-edge`, `.is-left-edge`, `.is-right-edge`), mounts a single corner fill handle (`DatabaseView.ts:4361-4381, 7971-7984`), and redesigns the selection status bar as a floating glassmorphic capsule dock (`styles.css:5582`).
 2. **Multi-Item Batch Drag & EdgeAutoScroller**: Consumes and verifies Phase 002's owned table `setupRowDrag()` contract (`TableRenderer.ts:632-713`), implements batch drag in Board and Gallery, and creates `src/views/EdgeAutoScroller.ts` for fluid auto-scrolling near container boundaries.
 3. **Formula Error Diagnostics & Inline Validation Shake**: Captures runtime evaluation errors in `ComputedEvaluator.ts:68-72`, renders cell `#ERROR!` badges with diagnostic tooltips, and adds `@keyframes db-shake` validation shake animations with in-situ tooltips (`CellRenderer.ts:1338-1341, 2577-2580`).
 4. **Tactile Field Manipulations**: Adds broken relation warning pills (`RelationValueRenderer.ts:18-35`), 1-click hover tag dismissal in `renderMultiSelect` (`CellRenderer.ts:348-355`), and live hover star fills / progress track manipulation (`CellRenderer.ts:300-309`).
@@ -162,7 +162,7 @@ The micro-interaction layer follows the **Lifecycle-Owned Sensory Feedback Archi
 ### Phase 2: Selection Perimeter & Floating Glassmorphic Action Dock
 - [ ] Implement contiguous selection bounding perimeter algorithm in `DatabaseView.ts:4361-4381` and `styles.css:5004-5020`.
 - [ ] Mount exactly one fill handle at the bottom-right corner of the selection matrix (`DatabaseView.ts:7971-7984`, `styles.css:4977-4993`).
-- [ ] Redesign `.db-selection-status-bar` in `DatabaseView.ts:7010-7125` and `styles.css:1697-1718` into fixed bottom floating glassmorphic dock updating in place.
+- [ ] Redesign `.db-selection-status-bar` in `DatabaseView.ts:7010-7125` and `styles.css:2007` into fixed bottom floating glassmorphic dock updating in place.
 - [ ] Eliminate timer-based selection clearing (`CellRenderer.ts:823-828`), deriving selection strictly from `DatabaseView.cellSelection`.
 
 ### Phase 3: Batch Drag-and-Drop & Container Auto-Scrolling
@@ -181,7 +181,7 @@ The micro-interaction layer follows the **Lifecycle-Owned Sensory Feedback Archi
 - [ ] Implement persistence-aware inline editor draft lifecycles with saving indicators in `CellRenderer.ts:1950-2156`.
 
 ### Phase 5: Query Loading Transitions & Interaction Snapshots
-- [ ] Render shimmering skeleton placeholders (`.db-skeleton-loader`) around the refresh teardown in `DatabaseView.ts:10631-10646` and `styles.css:6130-6160`.
+- [ ] Render shimmering skeleton placeholders (`.db-skeleton-loader`) around the refresh teardown in `DatabaseView.ts:10631-10646` and `styles.css:2119`.
 - [ ] Implement stale-while-refreshing state holding previous rows with `aria-busy="true"` in `DatabaseView.ts:10631-10646` and `RefreshCoordinator.ts:47-84`.
 - [ ] Implement debounced search activity pulse indicator in `ToolbarRenderer.ts:1087-1123`.
 - [ ] Implement `InteractionSnapshot` capturing focus, selection, and drafts before row patch or full refresh (`TableRenderer.ts:194-239`, `DatabaseView.ts:10631-10646`).

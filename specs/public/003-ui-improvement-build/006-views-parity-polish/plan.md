@@ -124,7 +124,7 @@ The non-table view layer follows the **Projection & Presentation Engine Pattern*
                                                ▼
 +----------------------------------------------------------------------------------------------------+
 |  SHARED CARD FIELD RENDERER (CardFieldRenderer.ts)                                                 |
-|  ├── Status & Select Pills (WCAG AA Tokens)       ├── Relation Badges + Target Icons               |
+|  ├── Status & Select Pills (WCAG AA Tokens)       ├── Relation Badges + Resolution-State Icons     |
 |  ├── Tabular Numbers & Currency                   ├── Rating Stars, Progress Tracks, Checkboxes    |
 +----------------------------------------------------------------------------------------------------+
 ```
@@ -160,7 +160,7 @@ The non-table view layer follows the **Projection & Presentation Engine Pattern*
 - [ ] Record baseline build, lint, and test state (`npx tsc --noEmit`, `npm run build`, `npx vitest run`).
 
 ### Phase 2: CardFieldRenderer & Universal Object Peek Parity
-- [ ] Create `src/views/CardFieldRenderer.ts` consolidating field value rendering (select tags, status colors, relation badges with target icons, tabular numbers, rating stars, progress tracks, and checkboxes).
+- [ ] Create `src/views/CardFieldRenderer.ts` consolidating field value rendering (select tags, status colors, relation badges with resolved/unresolved default icons, tabular numbers, rating stars, progress tracks, and checkboxes); rich target record icons from frontmatter metadata are deferred.
 - [ ] Write unit tests in `src/views/CardFieldRenderer.test.ts`.
 - [ ] Wire `openRecordDetail` to card/row clicks in Board (`BoardRenderer.ts:598-607`), Gallery (`GalleryRenderer.ts:197-205, 453-470`), and List (`ListRenderer.ts:176-185`) views via `DatabaseView.ts:614-674`.
 - [ ] Replace duplicate field rendering in `BoardRenderer.ts:983-1120`, `GalleryRenderer.ts:510-630`, `ListRenderer.ts:290-410`, and `RecordDetailPanel.ts:272-350` with `CardFieldRenderer`.

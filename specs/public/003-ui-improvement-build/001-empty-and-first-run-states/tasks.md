@@ -78,7 +78,7 @@ Task order follows the research synthesis RANKED BACKLOG (rank # shown per task)
 - [x] T016 **Empty group & drop slot affordances**: Phase 006 owns the Board column-header surface at `src/views/BoardRenderer.ts:311-351`; Phase 001 consumes and verifies that surface only. This task owns the Board drop/create surface at `src/views/BoardRenderer.ts:361-374, 432-471`, plus empty-group styling in `GalleryRenderer.ts:101-137` and `ListRenderer.ts:94-128`, with a dashed drop slot affordance indicating a valid destination for card dragging (`styles.css:6175-6229, 7043-7070`) [S]
 - [x] T017 **Calendar & timeline date configuration empty states**: replace plain `.db-empty` strings in Calendar and Timeline with `EmptyStateRenderer` cards offering a "Select date property" button when unconfigured (`src/views/CalendarRenderer.ts:118-124, 2216-2218`, `src/views/CalendarTimelineRenderer.ts:230-248, 2148-2153`) [S]
 - [x] T018 **Embedded database codeblock empty parity**: update `EmbeddedDatabaseRenderer.ts` to use compact `EmptyStateRenderer` cards for missing views (`:539`), missing columns (`:945-949`), read errors (`:950-957`), and zero filter matches (`src/views/EmbeddedDatabaseRenderer.ts:539, 940-960`) [S]
-- [x] T019 **Empty state CSS styling & token integration**: add responsive flex styles for `.db-empty-hero`, `.db-empty-presets`, `.db-empty-preset-card`, `.db-empty-action-group`, `.db-empty-table-row`, and `.db-board-empty-slot` in `styles.css`, supporting both light and dark theme contrast (`styles.css:6129-6158`) [S]
+- [x] T019 **Empty state CSS styling & token integration**: add responsive flex styles for `.db-empty-hero`, `.db-empty-presets`, `.db-empty-preset-card`, `.db-empty-action-group`, `.db-empty-table-row`, and `.db-board-empty-slot` in `styles.css`, supporting both light and dark theme contrast (`styles.css:7065`) [S]
 
 ### Deferred (out of this phase — parent roadmap)
 
@@ -112,7 +112,7 @@ Task order follows the research synthesis RANKED BACKLOG (rank # shown per task)
 
 - [x] All non-deferred tasks marked `[x]` after the build completes (`checklist.md:48-96`).
 - [x] `[B]` tasks remain deferred roadmap items, not blockers of this phase (`tasks.md:1-10`).
-- [x] Fork test suite, typecheck, and build pass with zero errors vs baseline (`package.json:1-38`, `296 tests across 33 files`).
+- [x] Fork test suite, typecheck, and build pass with zero errors vs baseline (`package.json:1-38`, `355 tests across 45 files`).
 - [x] `checklist.md` fully verified with P0/P1 counts recorded (`checklist.md:48-96`).
 
 <!-- /ANCHOR:completion -->

@@ -69,8 +69,8 @@ _memory:
   - **Evidence**: `npx tsc --noEmit` exit 0.
 - [x] CHK-011 [P0] Plugin bundle builds successfully with zero asset errors (`npm run build`) [EVIDENCE: `npm run build` exit 0]
   - **Evidence**: `npm run build` exit 0.
-- [x] CHK-012 [P1] No runtime console errors or uncaught exceptions during empty state rendering [EVIDENCE: src/views/EmptyStateRenderer.ts:226-301; npx vitest run 296 tests / 33 files]
-  - **Evidence**: Focused suite and complete Vitest suite passed (`296 tests / 33 files`).
+- [x] CHK-012 [P1] No runtime console errors or uncaught exceptions during empty state rendering [EVIDENCE: src/views/EmptyStateRenderer.ts:226-301; npx vitest run 355 tests / 45 files]
+  - **Evidence**: Focused suite and complete Vitest suite passed (`355 tests / 45 files`).
 - [x] CHK-013 [P1] Follows fork conventions: modular presentation helper in `src/views/EmptyStateRenderer.ts` [EVIDENCE: src/views/EmptyStateRenderer.ts:226-301 EmptyStateRenderer renderCard renderHero renderTableRow]
   - **Evidence**: Shared card, hero, table-row, copy, icon, and action DOM creation is isolated in `src/views/EmptyStateRenderer.ts:226-301`.
 - [x] CHK-014 [P1] Accessible interaction: all action buttons are focusable with visible focus rings and keyboard Enter trigger [EVIDENCE: src/views/EmptyStateRenderer.ts:250-257, 282-291; styles.css:6135-6180]
@@ -84,8 +84,8 @@ _memory:
 
 - [x] CHK-020 [P0] All P0 acceptance criteria met (REQ-001 through REQ-006) [EVIDENCE: src/views/EmptyStateRenderer.ts:55-114, 179-209, 226-301; src/views/TableRenderer.ts:103-110, 141-148, 174-180]
   - **Evidence**: Shared reason-aware rendering, onboarding, diagnostics, recovery actions, and table-body insertion are implemented in `src/views/EmptyStateRenderer.ts:55-301`.
-- [x] CHK-021 [P0] Unit tests pass for `EmptyStateRenderer.ts` and pipeline diagnostics via `npx vitest run` [EVIDENCE: src/views/EmptyStateRenderer.test.ts:1-160; npx vitest run 296 tests / 33 files]
-  - **Evidence**: Full suite passed: `npx vitest run` reports 296 tests across 33 files.
+- [x] CHK-021 [P0] Unit tests pass for `EmptyStateRenderer.ts` and pipeline diagnostics via `npx vitest run` [EVIDENCE: src/views/EmptyStateRenderer.test.ts:1-160; npx vitest run 355 tests / 45 files]
+  - **Evidence**: Full suite passed: `npx vitest run` reports 355 tests across 45 files.
 - [x] CHK-022 [P1] Visual parity verified across all 7 view types (Table, Board, Gallery, List, Calendar, Timeline, Chart) and embedded codeblocks [EVIDENCE: src/views/TableRenderer.ts:82; src/views/BoardRenderer.ts:118; src/views/GalleryRenderer.ts:90; src/views/ListRenderer.ts:85; src/views/CalendarRenderer.ts:91; src/views/CalendarTimelineRenderer.ts:191; src/views/EmbeddedDatabaseRenderer.ts:128; src/views/ChartRenderer.ts:555-608]
   - **Evidence**: Source-level parity review confirms shared cards in Table, Board, Gallery, List, Calendar, Timeline, and Embedded; Chart retains its reason-aware empty renderer.
 - [x] CHK-023 [P1] Edge-case matrix verified: 0 notes in folder vs filtered-to-0, search-and-filter combination, 0 result limit [EVIDENCE: src/views/EmptyStateRenderer.ts:179-209; src/data/RowPipeline.ts:30-115; src/views/EmptyStateRenderer.test.ts:35-95]
@@ -158,6 +158,6 @@ _memory:
 | P2 Items | 0 | 0/0 | 0 |
 
 **Verification Date**: 2026-08-28  
-**Verification**: `npx tsc --noEmit`, `npm run build`, and `npx vitest run` passed; the complete suite reports 296/296 tests across 33 files.
+**Verification**: `npx tsc --noEmit`, `npm run build`, and `npx vitest run` passed; the complete suite reports 355/355 tests across 45 files.
 
 <!-- /ANCHOR:summary -->

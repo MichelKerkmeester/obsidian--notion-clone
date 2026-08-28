@@ -122,7 +122,7 @@ Task order follows the research synthesis RANKED BACKLOG (rank # shown per task)
 
 - [x] All non-deferred tasks marked `[x]` after the build completes (`checklist.md:48-104`).
 - [x] `[B]` tasks remain deferred roadmap items, not blockers of this phase (`tasks.md:1-10`).
-- [x] Fork test suite, typecheck, and build pass with zero errors vs baseline (`package.json:1-38`, `296 tests across 33 files`).
+- [x] Fork test suite, typecheck, and build pass with zero errors vs baseline (`package.json:1-38`, `355 tests across 45 files`).
 - [x] `checklist.md` fully verified with P0/P1 counts recorded (`checklist.md:48-104`).
 
 <!-- /ANCHOR:completion -->

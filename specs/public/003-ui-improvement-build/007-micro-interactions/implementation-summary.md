@@ -19,10 +19,10 @@ contextType: "implementation"
 _memory:
   continuity:
     packet_pointer: "public/003-ui-improvement-build/007-micro-interactions"
-    last_updated_at: "2026-08-28T04:30:57Z"
+    last_updated_at: "2026-08-28T07:15:23.542Z"
     last_updated_by: "phase-author"
-    recent_action: "Reconciled micro-interactions implementation documentation"
-    next_safe_action: "Proceed to mobile and accessibility phase reconciliation"
+    recent_action: "Repointed stale styles.css citations to verified selector anchors"
+    next_safe_action: "Commit reconciled phase documentation"
     blockers: []
     key_files:
       - "spec.md"
@@ -64,13 +64,13 @@ _memory:
 <!-- ANCHOR:what-built -->
 ## What Was Built
 
-1. **Contiguous Selection Perimeter & Single Fill Handle**: Compute outer selection boundary edges (`.is-top-edge`, `.is-bottom-edge`, `.is-left-edge`, `.is-right-edge`) with clean interior translucent tint and exactly one bottom-right corner fill handle (`DatabaseView.ts:4693-4696, 8390-8416`, `styles.css:5542-5588`).
-2. **Floating Glassmorphic Selection Action Dock**: Redesign `.db-selection-status-bar` as a fixed bottom floating capsule dock with backdrop blur, count badge, semantic actions, and `[✕ Esc]` clear pill, updating in-place without layout shifts (`DatabaseView.ts:7330-7450`, `styles.css:1995-2045`).
+1. **Contiguous Selection Perimeter & Single Fill Handle**: Compute outer selection boundary edges (`.is-top-edge`, `.is-bottom-edge`, `.is-left-edge`, `.is-right-edge`) with clean interior translucent tint and exactly one bottom-right corner fill handle (`DatabaseView.ts:4693-4696, 8390-8416`, `styles.css:5582`).
+2. **Floating Glassmorphic Selection Action Dock**: Redesign `.db-selection-status-bar` as a fixed bottom floating capsule dock with backdrop blur, count badge, semantic actions, and `[✕ Esc]` clear pill, updating in-place without layout shifts (`DatabaseView.ts:7330-7450`, `styles.css:2007`).
 3. **Multi-Item Batch Drag with Stacked Thumbnail & Count Badge**: Consume and verify Phase 002's owned table `setupRowDrag()` contract (`TableRenderer.ts:880-940`) and bundle selected row paths for Board and Gallery batch drag, rendering a compact stacked card thumbnail with count badge pill (`"Moving N items"`) at `BoardRenderer.ts:666-679, 1577-1600` and `GalleryRenderer.ts:391-393, 420-423, 520-535`.
 4. **Container Boundary Proximity Auto-Scroller (`EdgeAutoScroller`)**: Create `src/views/EdgeAutoScroller.ts` and test suite `src/views/EdgeAutoScroller.test.ts` to smoothly auto-scroll containers via `requestAnimationFrame` when dragging within 40px of container edges (`TableRenderer.ts:892`, `BoardRenderer.ts:680`, `DatabaseView.ts:8658`).
 5. **Formula Runtime Calculation Error Diagnostic Badges**: Capture evaluation errors in `ComputedEvaluator.ts:76-94`, consume and verify Phase 002's owned clean empty-cell surface at `CellRenderer.ts:233-239`, and render `#ERROR!` badges from the dedicated error branch and badge surface (`CellRenderer.ts:217-227`, `styles.css:5600-5612`, `ComputedDiagnostic.ts:1-11`).
 6. **Inline Input Error Shake Animation & Tooltips**: Replace silent input reversion with `@keyframes db-shake` horizontal shake animations, red focus rings, and in-situ speech bubble validation tooltips (`CellRenderer.ts:2770-2777`, `styles.css:5668-5700`).
-7. **Broken Relation Pill Warning State**: Detect unresolved wikilinks via `app.metadataCache.getFirstLinkpathDest` and render with `.is-unresolved` dashed warning outlines (`RelationValueRenderer.ts:20-29`, `styles.css:5613-5628`).
+7. **Broken Relation Pill Warning State**: Detect unresolved wikilinks via `app.metadataCache.getFirstLinkpathDest` and render with `.is-unresolved` dashed warning outlines (`RelationValueRenderer.ts:20-29`, `styles.css:5625`).
 8. **Direct Inline Tag and Link Micro-Actions**: Render micro `✕` dismiss buttons on multi-select/tag pills and URL/Email/Phone open-and-copy affordances with optimistic feedback (`CellRenderer.ts:421-438`, `FileFieldRenderer.ts:45-56`, `styles.css:4800-4850`).
 9. **Shimmering Skeleton Loader & Stale-While-Refreshing State**: Render lightweight shimmering CSS/SVG skeleton placeholders around the refresh teardown during view transitions > 60ms (`DatabaseView.ts:11425-11446`, `styles.css:2107-2135`); hold previous rows with `aria-busy="true"` during query refresh (`DatabaseView.ts:2537-2540`, `RefreshCoordinator.ts:5, 85`).
 10. **Interactive Rating Stars & Progress Tracks**: Enable live star hover fill highlights (stars 1..k), single-click rating assignment, and click/drag progress track adjustments (`NumberDisplayRenderer.ts:21-68, 72-122`, `CellRenderer.ts:367`, `CardFieldRenderer.ts:190`).
@@ -135,7 +135,7 @@ npx vitest run
 ### Verification Checklist
 - [x] TypeScript compilation passes cleanly without errors (`npx tsc --noEmit` exit code 0).
 - [x] Plugin bundle builds successfully (`npm run build` exit code 0).
-- [x] Unit tests in `EdgeAutoScroller.test.ts`, `DragDropFeedback.test.ts`, `InteractionSnapshot.test.ts`, and `ComputedDiagnostic.test.ts` pass 100% (`npx vitest run` 315 tests across 41 files).
+- [x] Unit tests in `EdgeAutoScroller.test.ts`, `DragDropFeedback.test.ts`, `InteractionSnapshot.test.ts`, and `ComputedDiagnostic.test.ts` pass 100% (`npx vitest run` 355 tests across 45 files).
 - [x] Contiguous selection perimeter renders clean outer borders with single corner fill handle (`DatabaseView.ts:4693-4696, 8390-8416`).
 - [x] Floating selection action dock transitions smoothly without table layout shifts (`DatabaseView.ts:7330-7450`).
 - [x] Multi-item batch drag moves all selected records atomically with stacked count badge (`BoardRenderer.ts:666-679`, `GalleryRenderer.ts:391-393`).

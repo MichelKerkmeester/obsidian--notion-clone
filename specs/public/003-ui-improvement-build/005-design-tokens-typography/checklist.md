@@ -77,7 +77,7 @@ _memory:
   - **Evidence**: `npx tsc --noEmit` passed with exit code 0.
 - [x] CHK-011 [P0] Plugin builds cleanly via `npm run build` [EVIDENCE: `npm run build` exit 0]
   - **Evidence**: `npm run build` passed with exit code 0.
-- [x] CHK-012 [P0] No console errors or unhandled exceptions during theme switching [EVIDENCE: styles.css:63-156; npx vitest run 296 tests / 33 files]
+- [x] CHK-012 [P0] No console errors or unhandled exceptions during theme switching [EVIDENCE: styles.css:63-156; npx vitest run 355 tests / 45 files]
   - **Evidence**: Zero console exceptions during container CSS variable resolution in `styles.css:63-156`.
 - [x] CHK-013 [P1] Dual-theme status colors achieve WCAG AA contrast (>4.5:1) in both Light and Dark modes [EVIDENCE: styles.css:85-156; src/data/StatusColors.ts:1-60]
   - **Evidence**: Verified `--status-color-bg-*` and `--status-color-fg-*` definitions in `styles.css:85-156` (minimum 5.86:1 contrast).
@@ -94,8 +94,8 @@ _memory:
 
 - [x] CHK-020 [P0] All P0 acceptance criteria met (REQ-001 through REQ-006) [EVIDENCE: styles.css:63-206; src/data/ChartPalettes.ts:9-23; src/data/ConditionalFormatting.ts:135-165]
   - **Evidence**: Dual-theme colors, base-4 spacing, interface title font, typography scale, radius hierarchy, and border tokens verified.
-- [x] CHK-021 [P0] Vitest unit test suite passes cleanly via `npx vitest run` [EVIDENCE: src/data/ChartPalettes.test.ts:1-60; src/data/ConditionalFormatting.test.ts:1-150; npx vitest run 296 tests / 33 files]
-  - **Evidence**: Full test suite passes: `npx vitest run` reports 296 tests across 33 files.
+- [x] CHK-021 [P0] Vitest unit test suite passes cleanly via `npx vitest run` [EVIDENCE: src/data/ChartPalettes.test.ts:1-60; src/data/ConditionalFormatting.test.ts:1-150; npx vitest run 355 tests / 45 files]
+  - **Evidence**: Full test suite passes: `npx vitest run` reports 355 tests across 45 files.
 - [x] CHK-022 [P1] Database titles render using native `var(--font-interface)` without serif font clash [EVIDENCE: styles.css:77, 705-750 font-interface title typography]
   - **Evidence**: Title font declaration in `styles.css:77, 705-750`.
 - [x] CHK-023 [P1] Table column and row divider contrast calibrated in dark/OLED themes [EVIDENCE: styles.css:83-84, 4073-4074 border contrast variables]
@@ -110,7 +110,7 @@ _memory:
   - **Evidence**: Row density variables in `styles.css:4070-4077`.
 - [x] CHK-028 [P1] Scoped `color-scheme` policy prevents light native controls in dark modals and body portals [EVIDENCE: styles.css:63-156, 2936-2992 scoped color-scheme rules]
   - **Evidence**: Scoped `color-scheme` on containers, modals, and portals in `styles.css:63-156, 2936-2992`.
-- [x] CHK-029 [P1] Standardized Obsidian dynamic accent focus rings (`--db-accent-focus-ring`) render on `:focus-visible` [EVIDENCE: styles.css:117-119, 189-206 --db-accent-focus-ring on :focus-visible]
+- [x] CHK-029 [P1] Standardized Obsidian dynamic accent focus rings (`--db-accent-focus-ring`) render on `:focus-visible` [EVIDENCE: styles.css:123, 189-206 --db-accent-focus-ring on :focus-visible]
   - **Evidence**: Dynamic accent focus rings in `styles.css:117-119, 189-206`.
 - [x] CHK-030 [P1] Scrollbar tokens consolidated and horizontal edge fade masks render on overflowing rails [EVIDENCE: styles.css:72-73, 159-188, 9834-9835 scrollbar tokens and fade masks]
   - **Evidence**: Custom scrollbar and edge fade styles in `styles.css:72-73, 159-188, 9834-9835`.
@@ -123,7 +123,7 @@ _memory:
 
 - [x] CHK-031 [P0] Display-only verified: zero writes to note frontmatter or bodies occur during theme or token interactions (iCloud-safe) [EVIDENCE: styles.css:1-500 zero file writes during token evaluation]
   - **Evidence**: CSS variable evaluation and DOM updates perform zero file mutations in `styles.css:1-500`.
-- [x] CHK-032 [P1] Option color palette declarations deduplicated across `.status-badge`, `.db-option-color-*`, `.db-num-color-*`, and record icons [EVIDENCE: styles.css:4371-4387, 5606-5671, 5890-5998 deduplicated color rules]
+- [x] CHK-032 [P1] Option color palette declarations deduplicated across `.status-badge`, `.db-option-color-*`, `.db-num-color-*`, and record icons [EVIDENCE: styles.css:6632, 5606-5671, 5890-5998 deduplicated color rules]
   - **Evidence**: Centralized palette consumption in `styles.css:4371-4387, 5606-5671, 5890-5998`.
 - [x] CHK-033 [P1] Single source of truth in CSS properties consumed across all 7 views, modals, and popovers [EVIDENCE: styles.css:63-206 CSS custom properties single source of truth]
   - **Evidence**: Token consumption verified across all view container scopes in `styles.css:63-206`.
@@ -180,6 +180,6 @@ _memory:
 | P2 Items | 0 | 0/0 | 0 |
 
 **Verification Date**: 2026-08-28  
-**Verification**: Complete. `npx tsc --noEmit`, `npm run build`, and `npx vitest run` passed; Vitest reported 33 files and 296 tests. The 16 light/dark status pairs measured a minimum 5.86:1 contrast, and stylesheet scans found no sub-11px literals or non-token radius declarations.
+**Verification**: Complete. `npx tsc --noEmit`, `npm run build`, and `npx vitest run` passed; Vitest reported 45 files and 355 tests. The 16 light/dark status pairs measured a minimum 5.86:1 contrast, and stylesheet scans found no sub-11px literals or non-token radius declarations.
 
 <!-- /ANCHOR:summary -->

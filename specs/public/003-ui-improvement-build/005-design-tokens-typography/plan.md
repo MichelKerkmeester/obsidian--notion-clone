@@ -82,7 +82,7 @@ This plan implements the UI research synthesis's Top 10 recommendations #1 (Dual
 - [ ] Theme-adaptive chart color palette generator implemented in `src/data/ChartPalettes.ts:9-23` and container-scoped `ThemeColors` wired in `src/views/ChartRenderer.ts:75-93, 1565-1594`.
 - [ ] Row density tokens (Compact 28px, Default 34px, Comfortable 40px) defined in `styles.css:4070-4077` and consumed by Phase 002 in `src/views/TableRenderer.ts:74-86`.
 - [ ] Scoped `color-scheme` policy and portal token propagation applied to container, modal, and body pickers (`src/views/OptionColorPicker.ts:15-16, src/views/IconPickerPopover.ts:23-27`).
-- [ ] Standardized Obsidian dynamic accent focus rings (`--db-accent-focus-ring`) and interactive state physics established (`styles.css:117-119, 189-206, 5607, 5750`).
+- [ ] Standardized Obsidian dynamic accent focus rings (`--db-accent-focus-ring`) and interactive state physics established (`styles.css:123, 189-206, 5607, 5750`).
 - [ ] Scrollbar tokens consolidated and horizontal edge fade masks applied to table containers and active filter rails (`styles.css:72-73, 159-188, 813-825, 9834-9835`).
 - [ ] Full quality gate passed cleanly: `npx tsc --noEmit`, `npm run build`, and `npx vitest run`.
 
@@ -152,21 +152,21 @@ The visual design system follows the **Semantic Multi-Tier Token Architecture** 
 
 ### Phase 2: Dual-Theme Color Tokens, Spatial Scale & Typography
 - [ ] Implement dual-theme status and tag color token system with `.theme-dark` overrides in `styles.css:85-116, 132-156` guaranteeing WCAG AA (>4.5:1 contrast) across all 16 colors.
-- [ ] Deduplicate and unify option color declarations across `.status-badge`, `.db-option-color-*`, `.db-num-color-*`, and record icons (`styles.css:4371-4387, 4563-4578, 5606-5671, 5890-5998, 15922-16015`).
+- [ ] Deduplicate and unify option color declarations across `.status-badge`, `.db-option-color-*`, `.db-num-color-*`, and record icons (`styles.css:6632, 4563-4578, 5606-5671, 5890-5998, 15922-16015`).
 - [ ] Declare base-4 spatial scale tokens (`--db-space-1` to `--db-space-8`) and replace arbitrary pixel padding/margin magic numbers in `styles.css:63-130, 945-964, 4070-4077, 7289-7291`.
 - [ ] Harmonize 5-tier typography scale (`--db-font-xs` to `--db-font-title`), integrate native `var(--font-interface)` for database titles, eliminate sub-11px micro-text (`:1077, 1385, 3729, 3754, 12645`), and apply `tabular-nums` (`styles.css:77-81, 120-130, 705-750, 900-929`).
 
 ### Phase 3: Radius, Borders, Surface Elevation & Layered Emphasis
 - [ ] Standardize 4-tier border radius hierarchy (`--db-radius-xs` to `--db-radius-lg`, `--db-radius-full`) across container, modal, and portal scopes (`styles.css:74-76, 136-139, 1074, 1382, 1518, 2931-2933, 4338, 7098, 9830-9833, 15949`).
 - [ ] Calibrate border divider tokens (`--db-border-subtle`, `--db-border-regular`, `--db-border-emphasis`) in `styles.css:83-84, 3929, 4073-4074, 4108-4110, 14258-14259` to equalize vertical/horizontal grid contrast on dark/OLED themes.
-- [ ] Define `--db-elevation-1`, `--db-elevation-2`, and `--db-elevation-3` with adaptive surface elevation and dark-mode background luminance step-ups (+3% cards, +7% popovers with the shared 12px blur contract, +12% modals with luminous borders) in `styles.css:2166, 2364, 4075, 5591-5592, 7287-7295, 16429-16460`.
+- [ ] Define `--db-elevation-1`, `--db-elevation-2`, and `--db-elevation-3` with adaptive surface elevation and dark-mode background luminance step-ups (+3% cards, +7% popovers with the shared 12px blur contract, +12% modals with luminous borders) in `styles.css:114, 2364, 4075, 5591-5592, 7287-7295, 16429-16460`.
 - [ ] Refactor conditional formatting to layered emphasis tints with explicit foreground contrast and accent borders in `src/data/ConditionalFormatting.ts:135-165` and `styles.css:469-496`.
 
 ### Phase 4: Chart Palettes, Row Density, Accent Focus Rings & Scrollbars
 - [ ] Implement theme-adaptive chart color palette generator in `src/data/ChartPalettes.ts:9-23` and container-scoped `ThemeColors` resolution in `src/views/ChartRenderer.ts:75-93, 1565-1594` and `src/views/ChartToolbarRenderer.ts:46-55`.
 - [ ] Define configurable row density tokens (Compact 28px, Default 34px, Comfortable 40px) in `styles.css:4070-4077`; Phase 002 consumes them in `src/views/TableRenderer.ts:74-86`.
 - [ ] Enforce scoped `color-scheme: light dark` policy on container, modal, and body pickers (`styles.css:63-156, 2936-2992`, `src/views/OptionColorPicker.ts:15-16`, `src/views/IconPickerPopover.ts:23-27`).
-- [ ] Standardize Obsidian dynamic accent tokens and unified `:focus-visible` focus rings (`--db-accent-focus-ring`) in `styles.css:117-119, 189-206, 5607, 5750, 14204`.
+- [ ] Standardize Obsidian dynamic accent tokens and unified `:focus-visible` focus rings (`--db-accent-focus-ring`) in `styles.css:123, 189-206, 5607, 5750, 14204`.
 - [ ] Consolidate scrollbar tokens and apply horizontal CSS gradient edge fade masks in `styles.css:72-73, 159-188, 813-825, 9834-9835, 10807-10825`.
 - [ ] Declare unified interactive state physics and disabled state tokens (`styles.css:364-375, 1312-1315, 1346-1350, 5456-5457, 7290-7296`).
 

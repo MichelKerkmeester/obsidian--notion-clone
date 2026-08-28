@@ -62,7 +62,7 @@ _memory:
 
 - [x] CHK-001 [P0] Verify that selection controllers (`DatabaseView.ts`), drag handlers (`TableRenderer.ts`, `BoardRenderer.ts`, `GalleryRenderer.ts`, `ListRenderer.ts`, `SortPanelRenderer.ts`), and cell renderers (`CellRenderer.ts`) exist and match target `file:line` locations in `spec.md` [EVIDENCE: src/views/DatabaseView.ts; src/views/TableRenderer.ts; src/views/BoardRenderer.ts; src/views/GalleryRenderer.ts; src/views/ListRenderer.ts; src/views/SortPanelRenderer.ts; src/views/CellRenderer.ts]
 - [x] CHK-002 [P0] Confirm that `DragDropFeedback.ts` and `ComputedEvaluator.ts` are available for enhancement without breaking existing callers [EVIDENCE: src/views/DragDropFeedback.ts:1-124; src/data/ComputedEvaluator.ts:1-102]
-- [x] CHK-003 [P0] Baseline test suite passes cleanly before changes: `npx vitest run` [EVIDENCE: `npx vitest run` 315 tests / 41 files]
+- [x] CHK-003 [P0] Baseline test suite passes cleanly before changes: `npx vitest run` [EVIDENCE: `npx vitest run` 355 tests / 45 files]
 - [x] CHK-004 [P0] Baseline TypeScript compilation passes cleanly: `npx tsc --noEmit` [EVIDENCE: `npx tsc --noEmit` exit 0]
 
 <!-- /ANCHOR:pre-impl -->
@@ -71,8 +71,8 @@ _memory:
 <!-- ANCHOR:code-quality -->
 ## Code Quality
 
-- [x] CHK-005 [P0] Contiguous selection perimeter computes rectangular outer boundary classes (`.is-top-edge`, `.is-bottom-edge`, `.is-left-edge`, `.is-right-edge`), rendering clean outer borders with zero internal border doubling (`styles.css:5004-5020`) [EVIDENCE: src/views/DatabaseView.ts:4693-4696; styles.css:5567-5588]
-- [x] CHK-006 [P0] Exactly one fill handle `.db-cell-fill-handle` is mounted at the bottom-right corner of the entire active selection matrix (`DatabaseView.ts:7971-7984`) [EVIDENCE: src/views/DatabaseView.ts:8390-8416 syncTableFillHandle; styles.css:5542-5561]
+- [x] CHK-005 [P0] Contiguous selection perimeter computes rectangular outer boundary classes (`.is-top-edge`, `.is-bottom-edge`, `.is-left-edge`, `.is-right-edge`), rendering clean outer borders with zero internal border doubling (`styles.css:5582`) [EVIDENCE: src/views/DatabaseView.ts:4693-4696; styles.css:5582]
+- [x] CHK-006 [P0] Exactly one fill handle `.db-cell-fill-handle` is mounted at the bottom-right corner of the entire active selection matrix (`DatabaseView.ts:7971-7984`) [EVIDENCE: src/views/DatabaseView.ts:8390-8416 syncTableFillHandle; styles.css:5537]
 - [x] CHK-007 [P0] Floating glassmorphic selection action dock (`DatabaseView.ts:7010-7125`, `styles.css:1697-1718`) updates in-place without causing table layout shifts or horizontal scroll drift [EVIDENCE: src/views/DatabaseView.ts:7330-7450; styles.css:1995-2045]
 - [x] CHK-008 [P0] `EdgeAutoScroller.ts` runs on `requestAnimationFrame` and cleans up animation loops on `dragend`, `drop`, `dragleave`, `pointerup`, and window blur [EVIDENCE: src/views/EdgeAutoScroller.ts:1-180 EdgeAutoScroller; src/views/EdgeAutoScroller.test.ts:1-47]
 - [x] CHK-009 [P1] Formula runtime errors are captured in `ComputedEvaluator.ts:68-75`; Phase 002's owned empty-cell surface at `CellRenderer.ts:183-204` and `styles.css:4240-4247` is consumed and verified, while the dedicated error branch and badge surface use `CellRenderer.ts:177-183` and `styles.css:5878-5888` [EVIDENCE: src/data/ComputedEvaluator.ts:76-94; src/views/CellRenderer.ts:217-227 db-formula-error-badge; styles.css:5600-5612]
@@ -84,10 +84,10 @@ _memory:
 <!-- ANCHOR:testing -->
 ## Testing
 
-- [x] CHK-011 [P0] Unit tests in `EdgeAutoScroller.test.ts` verify proximity threshold calculations, velocity scaling curves, and scroll boundary clamps [EVIDENCE: src/views/EdgeAutoScroller.test.ts:1-47; `npx vitest run` 315 tests / 41 files]
-- [x] CHK-012 [P0] Unit tests in `DragDropFeedback.test.ts` verify transactional phase transitions (`over` → `pending` → `committed` | `failed`) and drop placement calculations [EVIDENCE: src/views/DragDropFeedback.test.ts:1-51; `npx vitest run` 315 tests / 41 files]
+- [x] CHK-011 [P0] Unit tests in `EdgeAutoScroller.test.ts` verify proximity threshold calculations, velocity scaling curves, and scroll boundary clamps [EVIDENCE: src/views/EdgeAutoScroller.test.ts:1-47; `npx vitest run` 355 tests / 45 files]
+- [x] CHK-012 [P0] Unit tests in `DragDropFeedback.test.ts` verify transactional phase transitions (`over` → `pending` → `committed` | `failed`) and drop placement calculations [EVIDENCE: src/views/DragDropFeedback.test.ts:1-51; `npx vitest run` 355 tests / 45 files]
 - [x] CHK-013 [P0] Multi-item batch drag is verified: dragging multiple selected rows/cards transfers all paths in MIME payload and reorders records atomically [EVIDENCE: src/views/BoardRenderer.ts:666-679 ROW_BATCH_MIME; src/views/GalleryRenderer.ts:391-393, 420-423; src/views/ListRenderer.ts:396-410]
-- [x] CHK-014 [P0] Broken relation link detection is verified: unresolved wikilinks render `.is-unresolved` dashed warning pills with tooltips [EVIDENCE: src/views/RelationValueRenderer.ts:20-29; styles.css:5613-5628]
+- [x] CHK-014 [P0] Broken relation link detection is verified: unresolved wikilinks render `.is-unresolved` dashed warning pills with tooltips [EVIDENCE: src/views/RelationValueRenderer.ts:20-29; styles.css:5625]
 - [x] CHK-015 [P1] Direct inline tag dismissal (`✕`) and URL/Email/Phone micro-actions provide their owned inline remove/open/copy affordances without opening the secondary popover [EVIDENCE: src/views/CellRenderer.ts:421-438 db-multi-select-remove; src/views/FileFieldRenderer.ts:45-56; styles.css:4800-4850]
 - [x] CHK-016 [P1] Rating stars show live hover fill highlights (stars 1..k) and commit on single click; progress bars allow click/drag adjustments [EVIDENCE: src/views/NumberDisplayRenderer.ts:21-68, 72-122 renderRating, renderProgress; src/views/CellRenderer.ts:367; src/views/CardFieldRenderer.ts:190]
 - [x] CHK-017 [P1] Shimmering skeleton loader mounts during view switches > 60ms and transitions smoothly to loaded records without canvas flash [EVIDENCE: src/views/DatabaseView.ts:11425-11446 db-skeleton-loader; styles.css:2107-2135]
@@ -133,7 +133,7 @@ _memory:
 ## File Organization
 
 - [x] CHK-031 [P0] `EdgeAutoScroller.ts` is placed in `src/views/` alongside other view controllers [EVIDENCE: src/views/EdgeAutoScroller.ts:1-180 in src/views/]
-- [x] CHK-032 [P0] Styles are scoped to `.note-database-container`, `.db-selection-status-bar`, `.db-cell-range-selected`, and `.db-skeleton-loader` in `styles.css` [EVIDENCE: styles.css:1995-2045, 2060-2135, 5567-5595 scoped container selectors]
+- [x] CHK-032 [P0] Styles are scoped to `.note-database-container`, `.db-selection-status-bar`, `.db-cell-range-selected`, and `.db-skeleton-loader` in `styles.css` [EVIDENCE: styles.css:63, 2060-2135, 5567-5595 scoped container selectors]
 - [x] CHK-033 [P0] Isolated rebase-clean diff with no unintentional changes to core query or formula parsing modules [EVIDENCE: `git diff --stat -- src styles.css` scoped to view layer, data helpers, and styles.css]
 
 <!-- /ANCHOR:file-org -->

@@ -195,7 +195,7 @@
     ],
     "causal_summary": "While the Note Database plugin provides rich underlying database calculation and querying capabilities, its mobile ergonomics, touch responsiveness, keyboard ownership, and accessibility semantics suffer from severe structural shortcomings:",
     "created_at": "2026-08-27T19:53:20.990Z",
-    "last_save_at": "2026-08-28T04:30:59.469Z",
+    "last_save_at": "2026-08-28T07:16:45.709Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -205,13 +205,13 @@
       "checklist.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:7ef67566d7bf61475f13ddc894c1a72f886f65b151936c47554a1c76b0548992",
+    "source_fingerprint": "sha256:504b7916988381b2edaf7e94c2df10442f2359f0d4da04a2b8779f47c9c34b13",
     "source_doc_hashes": {
-      "spec.md": "b7d6bd01fa834152ca8fb7a0976dc109a976383abed054ff8fa75dcb0deae95a",
-      "plan.md": "dec01c8606759074715f95df1a242ee4f28a469db54a368760b38c9d8d2fa97d",
-      "tasks.md": "952dd1bd947aaaed14ab9082d00e515681d3ace6f35d38bb81c972207675859b",
-      "checklist.md": "8f80a9245e7cee54db65c3c74e7b43da547cd5e9dbc94004f283f585b7fe984a",
-      "implementation-summary.md": "409cd4c509aa60337f8cf3901097bd9dfdb7be8da2caf2eff6598cd6c8da05e0"
+      "spec.md": "7df659f7f31077d208ed43dfe666d66d1bcd069a650342f73f0b945a025d386c",
+      "plan.md": "47142a840ffc254e506d57f677b15d393238f6f656ae707c29d66f1c54ac16ee",
+      "tasks.md": "1270a02ef1c8b195889f7b4756d3e94ba81512a70fff40ad35d5ff677eb442c1",
+      "checklist.md": "f42a0db42700bc12fd3f7d3572560d744e9251314b844c47adfe134fc5f7936a",
+      "implementation-summary.md": "8df81bc25ebf5d683fde12820abcb5e19fd83b6b01ec43ed9ad1d327a0c88377"
     },
     "last_active_child_id": null,
     "last_active_at": null

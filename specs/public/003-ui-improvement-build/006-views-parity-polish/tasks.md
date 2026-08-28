@@ -61,7 +61,7 @@ _memory:
 ## Phase 1: Setup
 
 - [x] T001 [M] Create `src/views/CardFieldRenderer.ts` consolidating field value rendering across cards, tiles, and rows (`src/views/CardFieldRenderer.ts:69`, `renderCardField`) (REQ-006)
-- [x] T002 [S] Add unit test suite `src/views/CardFieldRenderer.test.ts` validating select tags, status pills, relation target icons, tabular numbers, rating stars, and checkboxes (`src/views/CardFieldRenderer.test.ts:28-55`) (REQ-006)
+- [x] T002 [S] Add unit test suite `src/views/CardFieldRenderer.test.ts` covering display-family classification, value normalization, rating clamping, and keyboard/ARIA behavior (`src/views/CardFieldRenderer.test.ts`) (REQ-006)
 - [x] T003 [M] Wire universal peek detail handler (`actions.openRecordDetail`) to Board card click events in `src/views/BoardRenderer.ts:613-625` (REQ-001)
 - [x] T004 [M] Wire universal peek detail handler to Gallery tile click events in `src/views/GalleryRenderer.ts:201-215` (REQ-001)
 - [x] T005 [M] Wire universal peek detail handler to List row click events in `src/views/ListRenderer.ts:191-205` (REQ-001)
@@ -69,7 +69,10 @@ _memory:
 - [x] T007 [M] Replace duplicate field preview logic in `src/views/BoardRenderer.ts:774,1240` and `src/views/GalleryRenderer.ts:291,683` with `CardFieldRenderer` (REQ-006)
 - [x] T008 [M] Replace duplicate field preview logic in `src/views/ListRenderer.ts:639` and `src/views/RecordDetailPanel.ts:237` with `CardFieldRenderer` (REQ-006)
 
+- **Deferral**: Rich target record icons in relation badges remain deferred; `src/views/RelationValueRenderer.ts:32` uses resolved/unresolved default icons only, with no frontmatter-icon resolution.
+
 <!-- /ANCHOR:phase-1 -->
+
 ---
 
 <!-- ANCHOR:phase-2 -->
@@ -109,7 +112,7 @@ _memory:
 ## Completion Criteria
 
 - [x] T027 [S] Run TypeScript compiler type-check verification `npx tsc --noEmit` (`package.json:1-38`, exit code 0)
-- [x] T028 [S] Run Vitest unit test suite `npx vitest run` (296 tests across 33 files in `src/views/CardFieldRenderer.test.ts`, `src/data/CoverImage.test.ts`)
+- [x] T028 [S] Run Vitest unit test suite `npx vitest run` (355 tests across 45 files in `src/views/CardFieldRenderer.test.ts`, `src/data/CoverImage.test.ts`)
 - [x] T029 [S] Run production bundle build `npm run build` (`package.json:1-38`, exit code 0)
 - [x] T030 [S] Verify zero note frontmatter or body writes during view rendering, cover parsing, and peek inspection (`src/views/RecordDetailPanel.ts:187-215`)
 

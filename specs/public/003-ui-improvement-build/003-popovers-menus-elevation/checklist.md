@@ -27,7 +27,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "ui-build-003"
       parent_session_id: null
-    completion_pct: 100
+    completion_pct: 96
     open_questions: []
     answered_questions: []
 ---
@@ -57,8 +57,8 @@ _memory:
   - **Evidence**: Requirements and acceptance criteria documented in `spec.md:50-250`.
 - [x] CHK-002 [P0] Technical architecture defined in plan.md with verified call-site citations [EVIDENCE: specs/public/003-ui-improvement-build/003-popovers-menus-elevation/plan.md:50-200 technical architecture and call-site citations]
   - **Evidence**: `plan.md:50-200` defines OverlayStack, positioning, keyboard, and CSS sequencing.
-- [x] CHK-003 [P1] Dependencies identified and available in codebase (`KeyboardUtils.ts`, `OverlayStack.ts`) [EVIDENCE: src/views/KeyboardUtils.ts:1-35; src/views/OverlayStack.ts:1-120]
-  - **Evidence**: Existing `isImeComposing` helper and `src/views/OverlayStack.ts:1-120` are available.
+- [x] CHK-003 [P1] Dependencies identified and available in codebase (`KeyboardUtils.ts`, `OverlayStack.ts`) [EVIDENCE: src/data/KeyboardUtils.ts:1-16; src/views/OverlayStack.ts:1-120]
+  - **Evidence**: Existing `isImeComposing` helper in `src/data/KeyboardUtils.ts:1-16` and `src/views/OverlayStack.ts:1-120` are available.
 
 <!-- /ANCHOR:pre-impl -->
 ---
@@ -70,12 +70,12 @@ _memory:
   - **Evidence**: `npx tsc --noEmit` passed with exit code 0.
 - [x] CHK-011 [P0] Plugin bundle builds successfully with zero errors (`npm run build`) [EVIDENCE: `npm run build` exit 0]
   - **Evidence**: `npm run build` passed with exit code 0.
-- [x] CHK-012 [P1] No runtime console errors or warnings during popover, menu, or picker interaction [EVIDENCE: src/views/OverlayStack.ts:1-120; npx vitest run 296 tests / 33 files]
-  - **Evidence**: `src/views/OverlayStack.ts:1-120` and full Vitest suite passed with 296 tests across 33 files without runtime errors.
+- [x] CHK-012 [P1] No runtime console errors or warnings during popover, menu, or picker interaction [EVIDENCE: src/views/OverlayStack.ts:1-120; npx vitest run 355 tests / 45 files]
+  - **Evidence**: `src/views/OverlayStack.ts:1-120` and full Vitest suite passed with 355 tests across 45 files without runtime errors.
 - [x] CHK-013 [P1] Follows fork patterns: modular presentation helper in `src/views/OverlayStack.ts` [EVIDENCE: src/views/OverlayStack.ts:33-120 OverlayStack register unregister]
   - **Evidence**: Overlay lifecycle and dismissal coordination are isolated in `src/views/OverlayStack.ts:33-120`.
-- [x] CHK-014 [P1] GPU-accelerated micro-transitions with `prefers-reduced-motion` compliance [EVIDENCE: styles.css:15710-15745 .db-overlay-enter prefers-reduced-motion]
-  - **Evidence**: Scoped `.db-overlay-enter` rules use transform/opacity transitions and disable motion under `prefers-reduced-motion: reduce` in `styles.css:15710-15745`.
+- [x] CHK-014 [P1] GPU-accelerated micro-transitions with `prefers-reduced-motion` compliance [EVIDENCE: styles.css:171-180 .db-overlay-enter; styles.css:372-380, 516-524 prefers-reduced-motion]
+  - **Evidence**: Scoped `.db-overlay-enter` rules use transform/opacity transitions and disable motion under `prefers-reduced-motion: reduce` in `styles.css:171, 372-380, 516-524`.
 
 <!-- /ANCHOR:code-quality -->
 ---
@@ -83,16 +83,16 @@ _memory:
 <!-- ANCHOR:testing -->
 ## Testing
 
-- [x] CHK-020 [P0] All P0 acceptance criteria met (REQ-001 through REQ-006) [EVIDENCE: src/views/OverlayStack.ts:1-120; src/views/PopoverAutoClose.ts:1-34; src/views/PopoverPosition.ts:1-150]
-  - **Evidence**: Explicit dismissal, mobile sheets, listbox behavior, elevation tokens, and collision positioning verified across modules.
-- [x] CHK-021 [P0] Unit tests pass for `OverlayStack.ts` via `npx vitest run` [EVIDENCE: src/views/OverlayStack.test.ts:1-180; npx vitest run 296 tests / 33 files]
-  - **Evidence**: `OverlayStack.test.ts:1-180` passes as part of full test suite (`296 tests / 33 files`).
+- [x] CHK-020 [P0] All P0 acceptance criteria met (REQ-001 through REQ-006) [EVIDENCE: src/views/OverlayStack.ts:1-120; src/views/PopoverAutoClose.ts:1-34; src/views/PopoverPosition.ts:1-150; styles.css:112-114, 340-349, 398-400]
+  - **Evidence**: Explicit dismissal, mobile sheets, listbox behavior, elevation tokens, and collision positioning verified across modules; token definitions and dropdown shadow consumption are in `styles.css:112-114, 340-349, 398-400`.
+- [x] CHK-021 [P0] Unit tests pass for `OverlayStack.ts` via `npx vitest run` [EVIDENCE: src/views/OverlayStack.test.ts:1-180; npx vitest run 355 tests / 45 files]
+  - **Evidence**: `OverlayStack.test.ts:1-180` passes as part of full test suite (`355 tests / 45 files`).
 - [x] CHK-022 [P1] WAI-ARIA roving keyboard navigation verified in DropdownField, OptionColorPicker, CalendarMiniCalendar [EVIDENCE: src/views/DropdownField.ts:141-236; src/views/OptionColorPicker.ts:15-47; src/views/CalendarMiniCalendarRenderer.ts:24-95]
   - **Evidence**: Verified roving focus and keyboard handlers in `src/views/DropdownField.ts:141-236`, `src/views/OptionColorPicker.ts:15-47`, and `src/views/CalendarMiniCalendarRenderer.ts:24-95`.
-- [x] CHK-023 [P1] Mobile bottom sheet layout verified on `.is-phone` viewports with safe-area insets [EVIDENCE: src/views/PopoverPosition.ts:24-90, 124-148; styles.css:15722-15731]
-  - **Evidence**: Verified mobile sheet layout and safe-area variables in `src/views/PopoverPosition.ts:24-90, 124-148` and `styles.css:15722-15731`.
-- [x] CHK-024 [P1] Edge-case matrix verified (nested dismissal, zero-result search, boundary flips, IME composition, and Phase 005 elevation-token consumption) [EVIDENCE: src/views/OverlayStack.test.ts:1-180; src/views/PopoverPosition.test.ts:1-120]
-  - **Evidence**: Overlay and positioning unit tests cover nested LIFO dismissal, empty states, horizontal clamping/flips, IME guards, and token consumption.
+- [x] CHK-023 [P1] Mobile bottom sheet layout verified on `.is-phone` viewports with safe-area insets [EVIDENCE: src/views/PopoverPosition.ts:24-90, 124-148; styles.css:14260, 199-216, 218-224]
+  - **Evidence**: Verified mobile sheet layout and safe-area variables in `src/views/PopoverPosition.ts:24-90, 124-148` and `styles.css:183-197, 199-216, 218-224`.
+- [ ] CHK-024 [P1] Edge-case matrix verified (nested dismissal, zero-result search, boundary flips, IME composition, and Phase 005 elevation-token consumption) [EVIDENCE: PARTIAL -- OverlayStack.test.ts and PopoverPosition.test.ts cover LIFO dismissal and boundary flips; zero-result search, IME composition and elevation-token consumption untested]
+  - **Evidence**: PARTIAL -- `OverlayStack.test.ts` and `PopoverPosition.test.ts` cover LIFO dismissal and boundary flips; zero-result search, IME composition, and elevation-token consumption remain untested.
 
 <!-- /ANCHOR:testing -->
 ---
@@ -106,8 +106,8 @@ _memory:
   - **Evidence**: `OverlayStack.test.ts:40-90` passes nested Escape and outside-pointer coordination cases.
 - [x] CHK-027 [P1] Focus restoration verified: closing overlay returns focus to triggering DOM element [EVIDENCE: src/views/OverlayStack.ts:60-80 restoreFocus; src/views/OverlayStack.test.ts:90-130]
   - **Evidence**: OverlayStack tests in `src/views/OverlayStack.test.ts:90-130` cover focus restoration.
-- [x] CHK-028 [P1] Standardized menu item anatomy (`.db-menu-item`) applied across all menu renderers [EVIDENCE: src/views/DropdownField.ts:80-120; src/views/ColumnMenu.ts:50-100; styles.css:15700-15740]
-  - **Evidence**: Dropdown, column, row, toolbar, relation, and picker rows use shared menu-item class in `styles.css:15700-15740`.
+- [x] CHK-028 [P1] Standardized menu item anatomy (`.db-menu-item`) applied across all menu renderers [EVIDENCE: src/views/DropdownField.ts:80-120; src/views/ColumnMenu.ts:50-100; styles.css:226, 340-349, 367-370]
+  - **Evidence**: Dropdown, column, row, toolbar, relation, and picker rows use shared menu-item and popover styling in `styles.css:226-264, 340-349, 367-370`.
 
 <!-- /ANCHOR:fix-completeness -->
 ---
@@ -119,8 +119,8 @@ _memory:
   - **Evidence**: Implementation adds no credentials, tokens, or secret-bearing configuration in `src/views/OverlayStack.ts:1-120`.
 - [x] CHK-031 [P0] No telemetry or external network calls added [EVIDENCE: `git diff -- src styles.css` added 0 matches for fetch/XMLHttpRequest/sendBeacon/axios]
   - **Evidence**: Changes are local DOM, CSS, and presentation logic without network or telemetry paths.
-- [x] CHK-032 [P1] Mobile-safe: bottom sheets and touch gestures work across iOS and Android [EVIDENCE: src/views/PopoverPosition.ts:124-148; styles.css:15722-15731]
-  - **Evidence**: Verified touch-action manipulation and mobile sheet wrappers in `src/views/PopoverPosition.ts:124-148` and `styles.css:15722-15731`.
+- [x] CHK-032 [P1] Mobile-safe: bottom sheets and touch gestures work across iOS and Android [EVIDENCE: src/views/PopoverPosition.ts:124-148; styles.css:183-197, 4673, 5860, 17473]
+  - **Evidence**: Verified mobile sheet wrappers and touch-action manipulation in `src/views/PopoverPosition.ts:124-148` and `styles.css:183-197, 4673, 5860, 17473`.
 - [x] CHK-033 [P1] iCloud-safe: display-only overlays produce 0 writes to note frontmatter or bodies [EVIDENCE: src/views/OverlayStack.ts:1-120 zero frontmatter writes]
   - **Evidence**: Overlay positioning and dismissal paths are display-only in `src/views/OverlayStack.ts:1-120`.
 
@@ -155,10 +155,10 @@ _memory:
 | Category | Total | Checked | Deferred |
 |----------|-------|---------|----------|
 | P0 Items | 10 | 10/10 | 0 |
-| P1 Items | 15 | 15/15 | 0 |
+| P1 Items | 15 | 14/15 | 1 |
 | P2 Items | 0 | 0/0 | 0 |
 
 **Verification Date**: 2026-08-28  
-**Verification**: Automated verification passed: `npx tsc --noEmit`, `npm run build`, and `npx vitest run` (33 files, 296 tests).
+**Verification**: Automated gates passed; CHK-024 remains partially verified (`npx vitest run`: 45 files, 355 tests).
 
 <!-- /ANCHOR:summary -->

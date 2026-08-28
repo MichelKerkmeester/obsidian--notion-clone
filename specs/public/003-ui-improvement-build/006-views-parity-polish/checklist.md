@@ -31,7 +31,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "ui-build-006"
       parent_session_id: null
-    completion_pct: 97
+    completion_pct: 94
     open_questions: []
     answered_questions: []
 ---
@@ -49,8 +49,8 @@ _memory:
   - **Evidence**: Verified existence and structure across `src/views/BoardRenderer.ts`, `src/views/GalleryRenderer.ts`, `src/views/ListRenderer.ts`, `src/views/CalendarRenderer.ts`, and `src/views/CalendarTimelineRenderer.ts`.
 - [x] CHK-002 [P0] Confirm that `RecordDetailPanel.ts` is available and exports `openRecordDetailPanel` without errors (REQ-001, REQ-006, REQ-020) [EVIDENCE: src/views/RecordDetailPanel.ts:1-250 openRecordDetailPanel]
   - **Evidence**: `src/views/RecordDetailPanel.ts:1-250` exports `openRecordDetailPanel` cleanly.
-- [x] CHK-003 [P0] Baseline test suite passes cleanly before changes: `npx vitest run` (REQ-001 through REQ-020) [EVIDENCE: npx vitest run 296 tests / 33 files]
-  - **Evidence**: `npx vitest run` passed with 296 tests across 33 files.
+- [x] CHK-003 [P0] Baseline test suite passes cleanly before changes: `npx vitest run` (REQ-001 through REQ-020) [EVIDENCE: npx vitest run 355 tests / 45 files]
+  - **Evidence**: `npx vitest run` passed with 355 tests across 45 files.
 - [x] CHK-004 [P0] Baseline TypeScript compilation passes cleanly: `npx tsc --noEmit` (REQ-001 through REQ-020) [EVIDENCE: `npx tsc --noEmit` exit 0]
   - **Evidence**: `npx tsc --noEmit` exited with code 0.
 
@@ -79,9 +79,11 @@ _memory:
 <!-- ANCHOR:testing -->
 ## Code Quality
 
-- [x] CHK-011 [P0] Unit tests in `CardFieldRenderer.test.ts` cover select tags, status pills, relation target icons, tabular numbers, rating stars, and checkboxes (REQ-006) [EVIDENCE: src/views/CardFieldRenderer.test.ts:28-55; npx vitest run 296 tests / 33 files]
-  - **Evidence**: `src/views/CardFieldRenderer.test.ts:28-55` passes via `npx vitest run`.
-- [x] CHK-012 [P0] Unit tests in `CoverImage.test.ts` verify cover resolution order: frontmatter path -> frontmatter URL -> markdown body embed fallback -> empty state (REQ-003) [EVIDENCE: src/data/CoverImage.test.ts:34-45; npx vitest run 296 tests / 33 files]
+- [ ] CHK-011 [P0] Unit tests in `CardFieldRenderer.test.ts` provide helper classification and keyboard/ARIA coverage; per-display-family render assertions remain outstanding (REQ-006) [EVIDENCE: PARTIAL -- src/views/CardFieldRenderer.test.ts covers display-family classification and keyboard/ARIA behaviour; no per-family render assertions for status pills, relation icons or rating stars]
+  - **Evidence**: PARTIAL -- `src/views/CardFieldRenderer.test.ts` covers display-family classification and keyboard/ARIA behaviour; no per-family render assertions for status pills, relation icons or rating stars.
+
+- **Deferral**: Rich target record icons in relation badges remain deferred; `src/views/RelationValueRenderer.ts:32` uses resolved/unresolved default icons only, with no frontmatter-icon resolution.
+- [x] CHK-012 [P0] Unit tests in `CoverImage.test.ts` verify cover resolution order: frontmatter path -> frontmatter URL -> markdown body embed fallback -> empty state (REQ-003) [EVIDENCE: src/data/CoverImage.test.ts:34-45; npx vitest run 355 tests / 45 files]
   - **Evidence**: `src/data/CoverImage.test.ts:34-45` passes via `npx vitest run`.
 - [x] CHK-013 [P0] Universal object peek activation is verified from Board cards, Gallery cards, and List rows (REQ-001, REQ-017) [EVIDENCE: src/views/BoardRenderer.ts:613-625; src/views/GalleryRenderer.ts:201-215; src/views/ListRenderer.ts:191-205]
   - **Evidence**: `src/views/BoardRenderer.ts:613-625`, `src/views/GalleryRenderer.ts:201-215`, `src/views/ListRenderer.ts:191-205`.
@@ -115,8 +117,8 @@ _memory:
 
 - [x] CHK-021 [P1] All UI strings (swimlane headers, unscheduled drawer title, column options menu, aspect ratio buttons) use the `t()` helper in `src/i18n.ts` (REQ-002, REQ-011, REQ-016, REQ-019) [EVIDENCE: src/i18n.ts:1-300; src/views/BoardRenderer.ts:140-150; src/views/CalendarRenderer.ts:123-145]
   - **Evidence**: Localization keys in `src/i18n.ts` consumed across renderers.
-- [x] CHK-022 [P1] Keyboard shortcuts for roving card focus (Arrow keys, Enter, Space, Escape) are documented in tooltips / ARIA descriptions (REQ-019) [EVIDENCE: src/views/BoardRenderer.ts:620; src/views/GalleryRenderer.ts:208; src/views/ListRenderer.ts:198; src/views/CalendarRenderer.ts:1681]
-  - **Evidence**: Roving focus handlers in `BoardRenderer.ts:620`, `GalleryRenderer.ts:208`, `ListRenderer.ts:198`, `CalendarRenderer.ts:1681`.
+- [x] CHK-022 [P1] Two-level roving card focus supports Arrow keys, Enter, Space, Escape, and F2 with ARIA shortcut metadata (REQ-019) [EVIDENCE: src/views/CardRovingTabindex.ts:246,254; src/views/CardRovingTabindex.test.ts:242-367; src/views/BoardRenderer.ts:133, 643, 704-710; src/views/GalleryRenderer.ts:206, 215-220; src/views/ListRenderer.ts:201, 208-213; src/views/CardFieldRenderer.ts:75-79]
+  - **Evidence**: `CardRovingTabindex.ts:189-278` handles nested navigation and `CardRovingTabindex.test.ts:242-367` covers two-level roving and focus restoration. Cards are `role="row"` inside `role="grid"` containers, with Board cards additionally inside `role="rowgroup"`; card fields use `role="gridcell"`, with no card `role="group"` and no card field `role="button"`. `aria-keyshortcuts="Enter Space F2"` is exposed at `BoardRenderer.ts:709`, `GalleryRenderer.ts:220`, and `ListRenderer.ts:213`.
 - [x] CHK-023 [P1] Code comments explain non-obvious layout mechanics (e.g., swimlane column synchronization and cover embed extraction) (REQ-002, REQ-003) [EVIDENCE: src/views/BoardRenderer.ts:140-155; src/data/CoverImage.ts:70-80]
   - **Evidence**: Intent comments documented in `BoardRenderer.ts` and `CoverImage.ts`.
 
@@ -128,8 +130,8 @@ _memory:
 
 - [x] CHK-024 [P0] `CardFieldRenderer.ts` is placed in `src/views/` alongside other view components (REQ-006) [EVIDENCE: src/views/CardFieldRenderer.ts:1-120 in src/views/]
   - **Evidence**: `src/views/CardFieldRenderer.ts` verified in views folder.
-- [x] CHK-025 [P0] Styles are scoped to `.db-board-container`, `.db-gallery-container`, `.db-list-container`, `.db-calendar-container`, and `.db-timeline-container` in `styles.css` (REQ-002, REQ-004, REQ-009, REQ-010, REQ-011, REQ-012, REQ-015, REQ-016, REQ-018) [EVIDENCE: styles.css:7800-8200 scoped view container selectors]
-  - **Evidence**: Scoped selector prefixes verified throughout `styles.css`.
+- [x] CHK-025 [P0] Styles are scoped to `.note-database-container` plus the per-view `.db-board`, `.db-gallery`, `.db-list`, `.db-calendar`, and `.db-timeline` prefixes in `styles.css` (REQ-002, REQ-004, REQ-009, REQ-010, REQ-011, REQ-012, REQ-015, REQ-016, REQ-018) [EVIDENCE: `grep -c note-database-container styles.css` = 1989; per-view prefixes .db-calendar 331, .db-board 153, .db-timeline 144, .db-gallery 82, .db-list 77]
+  - **Evidence**: Scoping is carried by `.note-database-container` and the per-view class prefixes; the previously cited `*-container` selector names do not exist in `styles.css` or `src/`.
 - [x] CHK-026 [P0] Isolated rebase-clean diff with no unintentional changes to table or formula calculation engines (REQ-001 through REQ-020) [EVIDENCE: `git diff --stat -- src styles.css` = 55 files, scoped to src/ and styles.css only]
   - **Evidence**: Git diff confirms isolated changes to view renderers and helper modules.
 
@@ -177,12 +179,12 @@ _memory:
 |---|---|---|
 | Pre-Implementation Readiness | 4 | Complete (4/4) |
 | Code Quality & Architecture | 6 | Complete (6/6) |
-| Testing & Verification | 6 | Complete (6/6) |
+| Testing & Verification | 6 | Partial (5/6, 1 partial) |
 | Security & Data Safety | 4 | Complete (4/4) |
 | Documentation & I18N | 3 | Complete (3/3) |
 | File Organization | 3 | Complete (3/3) |
 | Fix Completeness & Parity | 7 | Complete (6/7, 1 deferred) |
 | Protocol Compliance | 3 | Complete (3/3) |
-| **Total** | **36** | **Complete (35/36, 1 deferred)** |
+| **Total** | **36** | Partial (34/36, 1 deferred, 1 partial) |
 
 <!-- /ANCHOR:summary -->

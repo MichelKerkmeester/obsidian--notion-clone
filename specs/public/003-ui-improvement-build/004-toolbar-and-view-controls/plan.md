@@ -129,9 +129,9 @@ The toolbar architecture follows the **Semantic Command Deck** pattern inspired 
 - [ ] Confirm i18n keys and CSS token hooks for toolbar clusters, split buttons, and All Views hub.
 
 ### Phase 2: Toolbar Clustering, WAI-ARIA Tablist & Split Creation Button
-- [ ] Reorganize `.db-toolbar-right` into 4 functional clusters (Query, Properties, Overflow Utilities, Primary Creation) in `ToolbarRenderer.ts:252-286` and `styles.css:945-964`.
+- [ ] Reorganize `.db-toolbar-right` into 4 functional clusters (Query, Properties, Overflow Utilities, Primary Creation) in `ToolbarRenderer.ts:252-286` and `styles.css:1256`.
 - [ ] Upgrade view tabs to a WAI-ARIA tablist with `role="tablist"`/`role="tab"`, `aria-selected`, roving keyboard focus (`ArrowLeft`/`ArrowRight`, `Home`/`End`), and stable view ID resolution via `ViewSelection.ts:16-43`.
-- [ ] Convert `.db-new-button` to a multi-template split button with a `▼` template selection menu in `ToolbarRenderer.ts:1716-1739`, `TemplateToolbarAction.ts:6-32`, and `styles.css:2904-2928`.
+- [ ] Convert `.db-new-button` to a multi-template split button with a `▼` template selection menu in `ToolbarRenderer.ts:1716-1739`, `TemplateToolbarAction.ts:6-32`, and `styles.css:1633`.
 - [ ] Unswallow primary New button clicks in `DatabaseView.ts:562-565,839-872` so intentional taps execute in a single interaction.
 
 ### Phase 3: Overflow Hub, Database Selector & Add View Presets
@@ -148,7 +148,7 @@ The toolbar architecture follows the **Semantic Command Deck** pattern inspired 
 - [ ] Add 2px drag insertion line and edge auto-scroll to view tabs (`ToolbarRenderer.ts:686-720`, `styles.css:1241-1249`).
 - [ ] Remove 140px max-width cap on inline tab rename and support custom view icons (`ToolbarRenderer.ts:636-642,974-1006`, `styles.css:1275-1288`).
 - [ ] Add "Clear all" action and horizontal scroll fade masks to `ActiveViewControlsRenderer.ts:54-100` and `styles.css:967-1014`.
-- [ ] Apply 44×44px touch envelopes (`::before { inset: -8px; }`) and mobile bottom-right FAB placement on `.is-phone` viewports in `ToolbarRenderer.ts:262,1729` and `styles.css:15345-15400`.
+- [ ] Apply 44×44px touch envelopes (`::before { inset: -8px; }`) and mobile bottom-right FAB placement on `.is-phone` viewports in `ToolbarRenderer.ts:262,1729` and `styles.css:14260`.
 
 ### Phase 5: Verification & Quality Gate
 - [ ] Run full test suite (`npx vitest run`), TypeScript compilation (`npx tsc --noEmit`), and plugin build (`npm run build`).

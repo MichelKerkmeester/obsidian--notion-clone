@@ -73,10 +73,10 @@ _memory:
   - **Evidence**: `npx tsc --noEmit` passed with exit code 0.
 - [x] CHK-011 [P0] Plugin builds cleanly via `npm run build` [EVIDENCE: `npm run build` exit 0]
   - **Evidence**: `npm run build` passed with exit code 0.
-- [x] CHK-012 [P0] No console errors or unhandled exceptions during toolbar interactions [EVIDENCE: src/views/ToolbarRenderer.ts:156-286; npx vitest run 296 tests / 33 files]
+- [x] CHK-012 [P0] No console errors or unhandled exceptions during toolbar interactions [EVIDENCE: src/views/ToolbarRenderer.ts:156-286; npx vitest run 355 tests / 45 files]
   - **Evidence**: Verified clean execution in `src/views/ToolbarRenderer.ts:156-286` with zero uncaught runtime errors.
-- [x] CHK-013 [P1] 4-cluster toolbar layout renders cleanly without element wrapping in narrow split panes [EVIDENCE: src/views/ToolbarRenderer.ts:252-286; styles.css:945-964]
-  - **Evidence**: Verified flex layout in `src/views/ToolbarRenderer.ts:252-286` and `styles.css:945-964`.
+- [x] CHK-013 [P1] 4-cluster toolbar layout renders cleanly without element wrapping in narrow split panes [EVIDENCE: src/views/ToolbarRenderer.ts:320-331; styles.css:945-964]
+  - **Evidence**: Verified flex layout in `src/views/ToolbarRenderer.ts:320-331` and `styles.css:945-964`.
 - [x] CHK-014 [P1] Database selector popover contains no invalid nested `<button>` elements [EVIDENCE: src/views/ToolbarRenderer.ts:425-477 non-interactive container rows]
   - **Evidence**: Non-interactive row container verified in `src/views/ToolbarRenderer.ts:425-477`.
 - [x] CHK-015 [P1] Standardized icon button factory sets `type="button"`, `aria-label`, and open trigger state [EVIDENCE: src/views/ToolbarRenderer.ts:1071-1085, 1575-1649 createIconButton]
@@ -90,10 +90,10 @@ _memory:
 
 - [x] CHK-020 [P0] All P0 acceptance criteria met (REQ-001 through REQ-006) [EVIDENCE: src/views/ToolbarRenderer.ts:156-286, 625-794, 1716-1739; src/data/ViewSelection.ts:16-43]
   - **Evidence**: Verified 4-cluster layout, stable view ID tabs, split new button, unswallowed lifecycle, All Views hub, and non-nested rows.
-- [x] CHK-021 [P0] Vitest unit test suite passes cleanly via `npx vitest run` [EVIDENCE: src/data/ViewSelection.test.ts:1-50; src/data/TemplateToolbarAction.test.ts:1-50; npx vitest run 296 tests / 33 files]
-  - **Evidence**: Full test suite passes: `npx vitest run` reports 296 tests across 33 files.
-- [x] CHK-022 [P1] WAI-ARIA tablist implements roving `ArrowLeft`/`ArrowRight`/`Home`/`End` focus and `aria-selected` [EVIDENCE: src/views/ToolbarRenderer.ts:625-683; styles.css:1201-1274]
-  - **Evidence**: Tablist keyboard event listener in `src/views/ToolbarRenderer.ts:625-683` and `styles.css:1201-1274`.
+- [x] CHK-021 [P0] Vitest unit test suite passes cleanly via `npx vitest run` [EVIDENCE: src/data/ViewSelection.test.ts:1-50; src/data/TemplateToolbarAction.test.ts:1-50; npx vitest run 355 tests / 45 files]
+  - **Evidence**: Full test suite passes: `npx vitest run` reports 355 tests across 45 files.
+- [x] CHK-022 [P1] WAI-ARIA tablist implements roving `ArrowLeft`/`ArrowRight`/`Home`/`End` focus and `aria-selected` [EVIDENCE: src/views/ToolbarRenderer.ts:757; styles.css:1201-1274]
+  - **Evidence**: Tablist root is rendered with `role="tablist"` in `src/views/ToolbarRenderer.ts:757`; keyboard and selected-state styling remains in `styles.css:1201-1274`.
 - [x] CHK-023 [P1] Stable view ID resolution preserves active tab selection across reorders and refreshes [EVIDENCE: src/data/ViewSelection.ts:16-43; src/data/ViewSelection.test.ts:1-50]
   - **Evidence**: `src/data/ViewSelection.ts:16-43` and `src/data/ViewSelection.test.ts:1-50`.
 - [x] CHK-024 [P1] Split `+ New` button executes default creation on main tap and opens template picker on `▼` [EVIDENCE: src/views/ToolbarRenderer.ts:1716-1739; src/data/TemplateToolbarAction.ts:6-32]
@@ -178,6 +178,6 @@ _memory:
 | P2 Items | 0 | 0/0 | 0 |
 
 **Verification Date**: 2026-08-28  
-**Verification**: `npx tsc --noEmit` passed; `npm run build` passed; `npx vitest run` passed (33 files, 296 tests).
+**Verification**: `npx tsc --noEmit` passed; `npm run build` passed; `npx vitest run` passed (45 files, 355 tests).
 
 <!-- /ANCHOR:summary -->

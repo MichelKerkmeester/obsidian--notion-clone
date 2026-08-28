@@ -10,10 +10,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "public/003-ui-improvement-build/003-popovers-menus-elevation"
-    last_updated_at: "2026-08-28T04:30:57Z"
+    last_updated_at: "2026-08-28T07:15:22.819Z"
     last_updated_by: "implementation-agent"
-    recent_action: "Reconciled popovers and menus implementation documentation"
-    next_safe_action: "Proceed to next implementation phase"
+    recent_action: "Repointed stale styles.css citations to verified selector anchors"
+    next_safe_action: "Commit reconciled phase documentation"
     blockers: []
     key_files:
       - "spec.md"
@@ -73,7 +73,7 @@ The phase implementation is complete for the source and CSS surfaces. A shared `
 | `src/views/RowMenu.ts` | Edit | Standardized `.db-menu-item` anatomy, section groupings, and keyboard navigation (`:30-48, 55-137`) |
 | `src/views/ToolbarRenderer.ts` | Edit | Standardized dropdown row styling, stack-managed popover dismissal (`:391-403, 436-476, 862-870`) |
 | `src/i18n.ts` | Edit | Localized strings for date presets (`Today`, `Tomorrow`, `Next Week`, `Clear`), icon search placeholder, and no results |
-| `styles.css` | Edit | Consume Phase 005's 3-tier elevation tokens (`--db-elevation-1/2/3`) and shared glassmorphism blur, plus mobile bottom sheets (`.db-mobile-bottom-sheet`), menu item anatomy, and smooth entry transitions (`:1873-2055, 2166-2170, 2364-2368, 2561-2684, 5218-5325, 5332-5347, 5581-5608, 15722-15731, 15939-16021, 16429-16460`) |
+| `styles.css` | Edit | Consume Phase 005's 3-tier elevation tokens (`--db-elevation-1/2/3`) and shared glassmorphism blur, plus mobile bottom sheets (`.db-mobile-bottom-sheet`), menu item anatomy, and smooth entry transitions (`selectors `--db-elevation-1/2/3`, `.db-dropdown-popover`, `.db-mobile-bottom-sheet`, `.db-overlay-enter`, `.menu .menu-item``) |
 
 <!-- /ANCHOR:what-built -->
 ---
@@ -113,7 +113,7 @@ Baseline before this phase: TypeScript and production build passed; Vitest repor
 
 | Test Type | Status | Coverage | Notes |
 |-----------|--------|----------|-------|
-| Unit tests (`OverlayStack.test.ts`, `PopoverPosition.test.ts`) | Passed | LIFO stack, Escape dispatch, focus restoration, horizontal collision behavior | 33 test files, 296 tests passed |
+| Unit tests (`OverlayStack.test.ts`, `PopoverPosition.test.ts`) | Passed | LIFO stack, Escape dispatch, focus restoration, horizontal collision behavior | 45 test files, 355 tests passed |
 | TypeScript strict typecheck | Passed | Full repository | `npx tsc --noEmit` exited 0 |
 | Plugin bundle build | Passed | Full bundle compilation | `npm run build` exited 0 |
 | Display-only verification | Passed by source audit | Overlay positioning, dismissal, filtering, and navigation | No note-body or frontmatter writes added to display-only paths |

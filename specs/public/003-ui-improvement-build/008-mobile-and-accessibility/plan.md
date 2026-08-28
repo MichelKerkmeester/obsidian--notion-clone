@@ -82,7 +82,7 @@ This plan implements the UI research synthesis's Ranked Recommendations #2 (Mobi
 ### Definition of Done
 - [ ] `TouchEnvironment.ts` created with `isTouchDevice()` and unit-tested in `TouchEnvironment.test.ts`, replacing fragile `isPhoneLayout()` across 8 view controllers.
 - [ ] 44×44px touch hit target pseudo-elements implemented across toolbar buttons, filter removal chips, column menu triggers, checkboxes, move buttons, and jump controls (`styles.css:1024-1041, 1324, 4178-4188, 5090-5110, 15560-15636, 15996-16020`).
-- [ ] Phase 003's mobile bottom sheet architecture (`.db-mobile-bottom-sheet`) consumed and verified with grab handles, backdrop scrim, and safe-area padding (`PopoverPosition.ts:24-90, 124-147`, `styles.css:15721-15731`); this phase does not implement its geometry.
+- [ ] Phase 003's mobile bottom sheet architecture (`.db-mobile-bottom-sheet`) consumed and verified with grab handles, backdrop scrim, and safe-area padding (`PopoverPosition.ts:24-90, 124-147`, `styles.css:183`); this phase does not implement its geometry.
 - [ ] `visualViewport` virtual keyboard tracking implemented in `CellRenderer.ts:1539-1558, 2024-2059` and `styles.css:15734-15760` with smooth centering and top-docked toolbar.
 - [ ] Pointer-based long-press context menus (450ms + haptics) and `touch-action: manipulation` implemented across `DatabaseView.ts`, `TableRenderer.ts`, `BoardRenderer.ts`, and `CellRenderer.ts`.
 - [ ] Mobile Kanban scroll-snapping and pagination indicator (`● ○ ○ ○`) implemented in `BoardRenderer.ts:280-350` and `styles.css:7050-7120`.
@@ -167,7 +167,7 @@ The mobile and accessibility architecture follows the **Universal Multi-Modal In
 
 ### Phase 2: Touch Targets, Bottom Sheets & Keyboard-Safe Editing
 - [ ] Expand 44×44px touch hit target envelopes via `::before { inset: -8px; }` in `styles.css:1024-1041, 1324, 4178-4188, 5090-5110, 15560-15636, 15996-16020`.
-- [ ] Consume and verify Phase 003's mobile bottom sheet drawer architecture (`.db-mobile-bottom-sheet`) in `PopoverPosition.ts:24-90, 124-147` and `styles.css:15721-15731`; limit this phase to `isTouchDevice()` routing and 44×44px target envelopes.
+- [ ] Consume and verify Phase 003's mobile bottom sheet drawer architecture (`.db-mobile-bottom-sheet`) in `PopoverPosition.ts:24-90, 124-147` and `styles.css:183`; limit this phase to `isTouchDevice()` routing and 44×44px target envelopes.
 - [ ] Implement `visualViewport` virtual keyboard tracking, smooth scroll centering, and top "Done / Cancel" toolbar in `CellRenderer.ts:1539-1558, 2024-2059` and `styles.css:15734-15760`.
 - [ ] Replace `isPhoneLayout()` across all 8 view controllers with `isTouchDevice()` from `TouchEnvironment.ts`.
 

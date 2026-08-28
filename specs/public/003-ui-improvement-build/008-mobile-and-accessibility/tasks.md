@@ -81,9 +81,9 @@ _memory:
 <!-- ANCHOR:phase-2 -->
 ## Phase 2: Implementation
 
-- [x] T010 [S] Consume and verify Phase 003's native mobile bottom sheet output (`.db-mobile-bottom-sheet`) at `src/views/PopoverPosition.ts:24-90, 124-147` and `styles.css:15721-15731`; verify `isTouchDevice()` routing and 44×44px targets without changing sheet geometry or styles (`src/views/PopoverPosition.ts:29-42`, `styles.css:17295-17304`) (REQ-003)
+- [x] T010 [S] Consume and verify Phase 003's native mobile bottom sheet output (`.db-mobile-bottom-sheet`) at `src/views/PopoverPosition.ts:24-90, 124-147` and `styles.css:183`; verify `isTouchDevice()` routing and 44×44px targets without changing sheet geometry or styles (`src/views/PopoverPosition.ts:29-42`, `styles.css:183`) (REQ-003)
 - [x] T013 [M] Implement `window.visualViewport` tracking during mobile cell editing in `src/views/CellRenderer.ts:1539-1558, 2024-2059` and `styles.css:15734-15760` with smooth `scrollIntoView({ block: 'center' })` and top-docked toolbar (`src/views/CellRenderer.ts:1903-1920, 2422-2439`, `styles.css:17326-17360`) (REQ-004)
-- [x] T014 [M] Implement pointer-based long-press context menus (450ms threshold + `navigator.vibrate?.(20)` haptics) through the existing row-menu wiring in `src/views/DatabaseView.ts:7626-7628`, `src/views/TableRenderer.ts:510-530`, `src/views/BoardRenderer.ts:590-620`, and `src/views/CellRenderer.ts:418-430` (`src/views/DatabaseView.ts:8036`, `src/views/TableRenderer.ts:718-724`, `src/views/BoardRenderer.ts:860`, `src/views/ListRenderer.ts:305`, `src/views/GalleryRenderer.ts:309`, `src/views/EmbeddedDatabaseRenderer.ts:341`) (REQ-007)
+- [x] T014 [M] Implement pointer-based long-press context menus (450ms threshold + `navigator.vibrate?.(20)` haptics) through the existing row-menu wiring in `src/views/DatabaseView.ts:7626-7628`, `src/views/TableRenderer.ts:510-530`, `src/views/BoardRenderer.ts:590-620`, and `src/views/CellRenderer.ts:418-430` (`src/views/DatabaseView.ts:8036`, `src/views/DatabaseView.ts:8037, EmbeddedDatabaseRenderer.ts:341, BoardRenderer.ts:939, GalleryRenderer.ts:327, ListRenderer.ts:323`, `src/views/BoardRenderer.ts:860`, `src/views/ListRenderer.ts:305`, `src/views/GalleryRenderer.ts:309`, `src/views/EmbeddedDatabaseRenderer.ts:341`) (REQ-007)
 - [x] T015 [S] Add `touch-action: manipulation` across table, board, and gallery container elements in `styles.css:124, 4065-4080` to eliminate 300ms double-tap zoom delay (`styles.css:4661, 5848, 17384`) (REQ-007)
 - [x] T016 [M] Implement CSS scroll snapping (`scroll-snap-type: x mandatory; scroll-snap-align: center;`) for mobile Kanban boards in `styles.css:7050-7120` (`styles.css:17396-17401`) (REQ-008)
 - [x] T017 [M] Render mobile Kanban column pagination indicator pill bar (`● ○ ○ ○`) with 1-tap column jumping in `src/views/BoardRenderer.ts:280-350` (`src/views/BoardRenderer.ts:1104-1123`, `styles.css:17405-17440`) (REQ-008)
@@ -112,7 +112,7 @@ _memory:
 ## Completion Criteria
 
 - [x] T028 [S] Run TypeScript compiler type-check verification `npx tsc --noEmit` (`package.json:1-38`, exit code 0)
-- [x] T029 [S] Run Vitest unit test suite `npx vitest run` (`src/views/DatabaseView.ts:1206-1229`, 315 tests across 41 files)
+- [x] T029 [S] Run Vitest unit test suite `npx vitest run` (`src/views/DatabaseView.ts:1206-1229`, 355 tests across 45 files)
 - [x] T030 [S] Run production bundle build `npm run build` (`package.json:1-38`, exit code 0)
 
 <!-- /ANCHOR:completion -->
