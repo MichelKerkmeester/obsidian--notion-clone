@@ -33,8 +33,11 @@ import { trapFocus } from "./InteractionScope";
  *
  * 设计要点：
  * - 定位复用 positionToolbarPopover（视口夹取 / 翻转 / 容器内随滚动）。
- * - 关闭采用轻量模式（仿 CellRenderer.editOptionPopover）：延后注册的 outside-mousedown +
- *   Esc + 容器滚动/视口 resize 即关。不用 installPopoverAutoClose（其为「空闲超时关」语义）。
+ * - 关闭采用轻量模式（仿 CellRenderer.editOptionPopover）：延后注册的 outside-pointerdown +
+ *   Esc + 容器滚动/视口 resize 即关。pointerdown 同时覆盖鼠标与触摸，手机端点击外部才能关闭
+ *   （mousedown 在触摸屏不触发）。不用 installPopoverAutoClose（其为「空闲超时关」语义）。
+ * - 移动端（is-phone）由 positionToolbarPopover 转为底部抽屉：抓手可向下拖拽关闭，标题栏常驻
+ *   关闭按钮（复用 db-cell-edit-close）。桌面端保持锚定面板不变。
  * - 面板挂在 .note-database-container 内且不加 transform/filter，确保字段编辑时子气泡
  *   （db-cell-option-popover 等）相对同一容器 absolute 定位正确。
  * - z-index 999：低于子编辑气泡（1000–1002），子气泡浮在面板之上。
@@ -125,18 +128,20 @@ export function openRecordDetailPanel(opts: OpenRecordDetailOptions): void {
   // 关闭逻辑（先定义，renderContent 的「打开笔记」按钮复用 close）
   let closed = false;
   let removeFocusTrap: () => void = () => undefined;
+  let removeSheetDrag: () => void = () => undefined;
   const close = (): void => {
     if (closed) return;
     closed = true;
     removeFocusTrap();
+    removeSheetDrag();
     panel.remove();
-    window.activeDocument.removeEventListener("mousedown", onOutside, true);
+    window.activeDocument.removeEventListener("pointerdown", onOutside, true);
     window.activeDocument.removeEventListener("keydown", onKeydown, true);
     window.removeEventListener("resize", onResize);
     if (currentPanel?.close === close) currentPanel = null;
     if (anchorEl.isConnected) anchorEl.focus({ preventScroll: true });
   };
-  const onOutside = (event: MouseEvent): void => {
+  const onOutside = (event: PointerEvent): void => {
     const target = event.target as Node | null;
     if (target && (panel.contains(target) || anchorEl.contains(target))) return;
     // 字段编辑器挂在 host/body，而不是详情 panel 内；它们属于详情面板的子交互，
@@ -194,6 +199,17 @@ export function openRecordDetailPanel(opts: OpenRecordDetailOptions): void {
       actions.openRow(r);
       close();
     });
+    // 常驻关闭按钮：桌面端 CSS 隐藏（保持锚定面板原貌），移动端底部抽屉显示，触摸可点关闭。
+    const closeBtn = header.createEl("button", {
+      cls: "db-cell-edit-close",
+      attr: { type: "button", "aria-label": t("common.close") },
+    });
+    setIcon(closeBtn, "x");
+    setTooltip(closeBtn, t("common.close"), { delay: 100 });
+    closeBtn.addEventListener("click", (event) => {
+      event.stopPropagation();
+      close();
+    });
     // 字段列表（跳过 titleField；空字段按 showEmptyFields 过滤，对齐看板卡片）
     const fieldsEl = panel.createDiv({ cls: "db-record-detail-fields" });
     for (const col of columns) {
@@ -211,6 +227,11 @@ export function openRecordDetailPanel(opts: OpenRecordDetailOptions): void {
   panel.focus?.({ preventScroll: true });
   // 定位（复用 positionToolbarPopover：挂载点选择 / 视口夹取 / 翻转 / 移动端留白）
   positionToolbarPopover(panel, anchorEl, { minWidth: 240, preferredWidth: 360, maxWidth: 420, align: "center" });
+  // 移动端底部抽屉：positionToolbarPopover 已加 .db-mobile-bottom-sheet 与抓手；接上向下拖拽关闭手势。
+  if (panel.hasClass("db-mobile-bottom-sheet")) {
+    const handle = panel.querySelector<HTMLElement>(".db-mobile-bottom-sheet-handle");
+    if (handle) removeSheetDrag = attachSheetDragToDismiss(panel, handle, close);
+  }
   // positionToolbarPopover 会在下一帧复测一次；按注册顺序在其复测之后隐藏来源
   // overflow，既保留正确锚点位置，也避免详情面板与事件列表继续层叠显示。
   window.requestAnimationFrame(() => {
@@ -219,8 +240,8 @@ export function openRecordDetailPanel(opts: OpenRecordDetailOptions): void {
     });
   });
 
-  // 延后注册 mousedown，避免触发打开的那次点击冒泡立即关闭面板
-  window.setTimeout(() => window.activeDocument.addEventListener("mousedown", onOutside, true), 0);
+  // 延后注册 pointerdown，避免触发打开的那次点击冒泡立即关闭面板。pointerdown 覆盖鼠标与触摸。
+  window.setTimeout(() => window.activeDocument.addEventListener("pointerdown", onOutside, true), 0);
   window.activeDocument.addEventListener("keydown", onKeydown, true);
   // 不监听滚动：面板 fixed，滚动视图不关闭；仅 resize 关闭（视口变化重定位不划算）
   window.addEventListener("resize", onResize);
@@ -229,6 +250,56 @@ export function openRecordDetailPanel(opts: OpenRecordDetailOptions): void {
     filePath: row.file.path,
     close,
     refreshFields: (newRow: RowData) => renderContent(newRow),
+  };
+}
+
+/**
+ * 移动端底部抽屉「向下拖拽关闭」手势，绑定在抓手上。指针模型对齐 attachLongPress
+ * （pointerdown → move → up/cancel）：拖动时抽屉随指位下移，松手位移 ≥ 阈值即关闭，
+ * 否则回弹。仅在 positionToolbarPopover 已渲染抓手（手机端）时接入，桌面永不触及。
+ */
+function attachSheetDragToDismiss(panel: HTMLElement, handle: HTMLElement, close: () => void): () => void {
+  const DISMISS_PX = 96;
+  let startY = 0;
+  let pointerId: number | undefined;
+
+  const reset = (): void => {
+    panel.setCssProps({ transition: "", transform: "" });
+  };
+  const distance = (event: PointerEvent): number => Math.max(0, event.clientY - startY);
+  const onDown = (event: PointerEvent): void => {
+    if (event.button !== 0 || pointerId !== undefined) return;
+    pointerId = event.pointerId;
+    startY = event.clientY;
+    panel.setCssProps({ transition: "none" });
+    handle.setPointerCapture?.(event.pointerId);
+  };
+  const onMove = (event: PointerEvent): void => {
+    if (event.pointerId !== pointerId) return;
+    const dy = distance(event);
+    panel.setCssProps({ transform: dy > 0 ? `translateY(${dy}px)` : "" });
+  };
+  const onUp = (event: PointerEvent): void => {
+    if (event.pointerId !== pointerId) return;
+    const dy = distance(event);
+    pointerId = undefined;
+    if (dy >= DISMISS_PX) {
+      close();
+      return;
+    }
+    reset();
+  };
+
+  handle.addEventListener("pointerdown", onDown);
+  handle.addEventListener("pointermove", onMove);
+  handle.addEventListener("pointerup", onUp);
+  handle.addEventListener("pointercancel", onUp);
+  return () => {
+    handle.removeEventListener("pointerdown", onDown);
+    handle.removeEventListener("pointermove", onMove);
+    handle.removeEventListener("pointerup", onUp);
+    handle.removeEventListener("pointercancel", onUp);
+    reset();
   };
 }
 
