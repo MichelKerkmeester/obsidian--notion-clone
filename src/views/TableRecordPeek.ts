@@ -4,6 +4,7 @@ import { isImeComposing } from "../data/KeyboardUtils";
 import type { ColumnDef, RowData, ViewConfig } from "../data/types";
 import { stringifyValue } from "../data/Stringify";
 import { t } from "../i18n";
+import { trapFocus } from "./InteractionScope";
 
 export interface TitleOpenAffordanceDeps {
   open: (row: RowData) => void;
@@ -85,6 +86,7 @@ export function openTableRecordPeek(options: OpenTableRecordPeekOptions): void {
   const ownerWindow = ownerDocument.defaultView || window;
   const panel = ownerDocument.createElement("div");
   panel.className = "db-record-peek-panel";
+  panel.tabIndex = -1;
   panel.setAttribute("role", "dialog");
   panel.setAttribute("aria-modal", "false");
   panel.setAttribute("data-note-database-row-path", row.file.path);
@@ -92,10 +94,12 @@ export function openTableRecordPeek(options: OpenTableRecordPeekOptions): void {
 
   let closed = false;
   let outsideClickTimer: number | undefined;
+  let removeFocusTrap: () => void = () => undefined;
 
   function closePanel(): void {
     if (closed) return;
     closed = true;
+    removeFocusTrap();
     if (outsideClickTimer !== undefined) {
       ownerWindow.clearTimeout(outsideClickTimer);
       outsideClickTimer = undefined;
@@ -180,6 +184,8 @@ export function openTableRecordPeek(options: OpenTableRecordPeekOptions): void {
   };
 
   renderContent(row);
+  removeFocusTrap = trapFocus(panel);
+  panel.focus?.({ preventScroll: true });
   ownerDocument.addEventListener("keydown", onKeydown, true);
   container.addEventListener("scroll", onDismiss);
   ownerWindow.addEventListener("resize", onDismiss);

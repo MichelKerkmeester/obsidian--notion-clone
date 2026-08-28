@@ -120,8 +120,15 @@ export interface TimelineModel {
   eventCount: number;
   /** Number of date records that intersect the current visible window. */
   visibleEventCount: number;
+  /** Number of dated records rendered as jump indicators outside the visible window. */
+  offWindowEventCount: number;
+  /** Number of records before and after the visible window, respectively. */
+  eventsBeforeWindow: number;
+  eventsAfterWindow: number;
   /** Number of negative-interval (start > end) events hidden from the timeline. */
   invalidEventCount: number;
+  /** Plain-text summary consumed by the timeline's live region. */
+  accessibilityLabel: string;
   /** Number of column units in the visible window. */
   totalUnits: number;
   unit: TimelineUnit;
@@ -594,6 +601,10 @@ export function buildTimelineModel(rows: RowData[], config: ViewConfig, options:
     }
   }
 
+  const eventsBeforeWindow = events.filter((event) => event.windowPosition === "before").length;
+  const eventsAfterWindow = events.filter((event) => event.windowPosition === "after").length;
+  const offWindowEventCount = eventsBeforeWindow + eventsAfterWindow;
+
   const visibleGroupKeys = getVisibleTimelineGroupKeys(events, config, options.uncategorizedLabel || "Uncategorized");
   const lanes = new Map<string, TimelineLaneModel>();
   for (const seed of getTimelineSeedLanes(config, options.uncategorizedLabel || "Uncategorized", visibleGroupKeys)) {
@@ -638,11 +649,26 @@ export function buildTimelineModel(rows: RowData[], config: ViewConfig, options:
     startMinutes: window.startMinutes,
     eventCount: events.length,
     visibleEventCount,
+    offWindowEventCount,
+    eventsBeforeWindow,
+    eventsAfterWindow,
     invalidEventCount: events.filter((event) => event.isInvalid).length,
+    accessibilityLabel: formatTimelineAccessibilityLabel(window.startDateKey, window.endDateKey, visibleEventCount, offWindowEventCount, eventsBeforeWindow, eventsAfterWindow),
     totalUnits: window.totalUnits,
     unit: window.unit,
     scale,
   };
+}
+
+export function formatTimelineAccessibilityLabel(
+  startDateKey: string,
+  endDateKey: string,
+  visibleEventCount: number,
+  offWindowEventCount: number,
+  eventsBeforeWindow: number,
+  eventsAfterWindow: number,
+): string {
+  return `Timeline ${startDateKey} to ${endDateKey}. ${visibleEventCount} events in the visible range; ${offWindowEventCount} outside the range (${eventsBeforeWindow} before and ${eventsAfterWindow} after).`;
 }
 
 /** Rows without a usable start date stay available to calendar/timeline backlog drawers. */

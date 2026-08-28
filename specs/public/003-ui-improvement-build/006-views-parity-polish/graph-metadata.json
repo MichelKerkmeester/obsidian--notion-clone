@@ -195,7 +195,7 @@
     ],
     "causal_summary": "While the Table view provides the tabular foundation for high-density record management, the Note Database plugin's non-table views (Board, Gallery, Calendar, Timeline, and List) suffer from acute cross-view feature disparities, layout fragmentation, duplicated rendering logic, and missing per-view affordances:",
     "created_at": "2026-08-27T19:53:20.436Z",
-    "last_save_at": "2026-08-28T01:12:28.540Z",
+    "last_save_at": "2026-08-28T04:30:59.100Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -207,11 +207,11 @@
     ],
     "source_fingerprint": "sha256:7d527582b792e0d11203bbbc3aef4a9aee39cb8c971579953fc0bad6b9932f7b",
     "source_doc_hashes": {
-      "spec.md": "c7d651a87eb53efe1e00756373de79921404560259fc2718cf8866f9c793a3e9",
-      "plan.md": "5ef603111b93a417c0fb07663daf7203f20ddbde9a56274bbeefe763171f24dd",
-      "tasks.md": "ae9a2a82584a4218a0ddafa6ba1aa35fd2ac7ded3c9a72cbc095b0659dd67802",
-      "checklist.md": "3354a74bb3c7e756733679d1cde81f10e2b8d2e81ca0af5f72fdb19cacb0300f",
-      "implementation-summary.md": "72efc6e3adc7a98d7593c49f4d035acb599a7473054ff684e947cc41d63a0e09"
+      "spec.md": "96a5296458128165587544044948eec8d9b500729cf176f564254aed8e8a9b70",
+      "plan.md": "3b4b952541dbe5f784041761b296208b4f2f33fad75e133c7c808f2a4e605946",
+      "tasks.md": "056fc4cba48ad51c3ddb393ebf76f3076d13b86c102b07203d618bfbb34491ce",
+      "checklist.md": "a16fccfc68e205ff73bde7a0d38652d4fdb7c18b3eb36f55de0009f526fb2e10",
+      "implementation-summary.md": "69359999a6c99f1a45f679e91a1230ff575f3e361d9d70cee1517836b47ba63d"
     },
     "last_active_child_id": null,
     "last_active_at": null

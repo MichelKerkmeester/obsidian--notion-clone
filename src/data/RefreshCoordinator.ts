@@ -2,6 +2,7 @@ export interface RefreshState {
   pendingCount: number;
   pendingUnknown: boolean;
   refreshing: boolean;
+  staleWhileRefreshing: boolean;
 }
 
 export interface RefreshRequest {
@@ -81,6 +82,7 @@ export class RefreshCoordinator {
       pendingCount: this.paths.size,
       pendingUnknown: this.unknown,
       refreshing: this.refreshing,
+      staleWhileRefreshing: this.refreshing,
     };
   }
 

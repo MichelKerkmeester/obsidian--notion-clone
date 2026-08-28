@@ -28,9 +28,11 @@ import { resolveTitleFieldDisplay } from "../data/TitleFieldDisplay";
 import { renderDelayedExternalLink } from "./CellRenderer";
 import { EmptyStateOptions, EmptyStateRenderer } from "./EmptyStateRenderer";
 import { renderCardField, renderCardFieldValue } from "./CardFieldRenderer";
+import { attachLongPress, isTouchDevice } from "../data/TouchEnvironment";
 
 const ROW_MIME = "application/x-note-database-row";
 const ROW_FROM_GROUP_MIME = "application/x-note-database-row-from-group";
+const ROW_BATCH_MIME = "application/x-note-database-row-batch";
 
 export interface ListGroup {
   key: string;
@@ -47,6 +49,7 @@ export interface ListRendererActions {
   areAllRowsSelected(rows: RowData[]): boolean;
   toggleRowsSelected(rows: RowData[], selected: boolean): void;
   editCell(target: HTMLElement, row: RowData, col: ColumnDef, event?: MouseEvent): void;
+  saveCellValue?(row: RowData, col: ColumnDef, value: number): void | Promise<void | boolean>;
   editFileName?(target: HTMLElement, row: RowData, currentName: string): void;
   getColumns(config: ViewConfig): ColumnDef[];
   moveRowToPosition(movedPath: string, beforePath?: string, afterPath?: string): void;
@@ -57,8 +60,11 @@ export interface ListRendererActions {
     fromGroupKey: string,
     toGroupKey: string,
     beforePath?: string,
-    afterPath?: string
+    afterPath?: string,
+    movedPaths?: string[],
   ): void | Promise<void>;
+  moveRowsToPosition?(movedPaths: string[], beforePath?: string, afterPath?: string): void;
+  getSelectedRows?(): RowData[];
   isGroupCollapsed?(field: string, key: string): boolean;
   toggleGroupCollapsed?(field: string, key: string): void;
   expandGroup?(field: string, key: string, count: number): void;
@@ -79,8 +85,10 @@ interface ParsedLink {
 }
 
 export class ListRenderer {
+  private container: HTMLElement | null = null;
   private rowByPath = new Map<string, RowData>();
   private draggingPath: string | undefined;
+  private draggingPaths: string[] = [];
   private rowDropFeedback = new DragDropFeedbackState();
   private emptyStateRenderer = new EmptyStateRenderer();
 
@@ -88,6 +96,7 @@ export class ListRenderer {
 
   render(container: HTMLElement, config: ViewConfig, rows: RowData[], emptyState?: EmptyStateOptions): void {
     this.clear(container);
+    this.container = container;
     this.rowByPath = new Map(rows.map((row) => [row.file.path, row]));
     if (rows.length > 0) this.renderTotalHeader(container, rows);
     const list = this.createList(container, config);
@@ -106,10 +115,13 @@ export class ListRenderer {
     emptyState?: EmptyStateOptions,
   ): void {
     this.clear(container);
+    this.container = container;
     this.rowByPath = new Map(groups.flatMap((group) => group.rows.map((row) => [row.file.path, row] as const)));
     const grouped = container.createDiv({ cls: "db-list-grouped" });
     for (const group of groups) {
       const section = grouped.createDiv({ cls: "db-list-group" });
+      const sectionId = `group-section-${encodeURIComponent(`${groupField}:${group.key}`)}`;
+      section.setAttr("id", sectionId);
       const header = section.createDiv({ cls: "db-list-group-header" });
       this.setupGroupDropTarget(header, groupField, group.key);
       const collapsed = Boolean(this.actions.isGroupCollapsed?.(groupField, group.key));
@@ -117,7 +129,7 @@ export class ListRenderer {
       const label = header.createSpan({ cls: "db-list-group-header-label" });
       const toggle = label.createEl("button", {
         cls: `db-list-group-toggle${collapsed ? " is-collapsed" : ""}`,
-        attr: { type: "button", "aria-label": collapsed ? t("group.expand") : t("group.collapse") },
+        attr: { type: "button", "aria-label": collapsed ? t("group.expand") : t("group.collapse"), "aria-expanded": String(!collapsed), "aria-controls": sectionId },
       });
       toggle.createSpan({ cls: "db-collapse-triangle" });
       toggle.onclick = (event) => {
@@ -229,7 +241,7 @@ export class ListRenderer {
       event.stopPropagation();
       this.actions.openRow(row);
     };
-    if (!this.actions.isReadOnly && this.isPhoneLayout() && (this.canManualReorder(config) || Boolean(groupField && groups?.length))) {
+    if (!this.actions.isReadOnly && isTouchDevice(this.container) && (this.canManualReorder(config) || Boolean(groupField && groups?.length))) {
       this.renderMobileMoveButton(controls, config, row, allRows || [], groupField, groupKey, groups);
     }
 
@@ -289,6 +301,10 @@ export class ListRenderer {
     el.addEventListener("contextmenu", (event) => {
       if (isHTMLElement(event.target) && event.target.closest("input, select, textarea, button")) return;
       this.actions.showRowMenu?.(event, row, context);
+    });
+    attachLongPress(el, {
+      ignoreTarget: (event) => isHTMLElement(event.target) && Boolean(event.target.closest("input, select, textarea, button, a")),
+      onLongPress: (event) => this.actions.showRowMenu?.(event as unknown as MouseEvent, row, context),
     });
   }
 
@@ -361,39 +377,51 @@ export class ListRenderer {
 
   private setupGroupedRowDrag(item: HTMLElement, row: RowData, groupField?: string, groupKey?: string): void {
     if (!groupField || groupKey == null || this.actions.isReadOnly || !this.actions.moveRowsToGroup) return;
-    if (this.isPhoneLayout()) return;
+    if (isTouchDevice(this.container)) return;
     item.draggable = true;
     item.addEventListener("dragstart", (event) => {
       if (isHTMLElement(event.target) && event.target.closest("input, select, textarea, button")) {
         event.preventDefault();
         return;
       }
+      const dragPaths = this.getDragPaths(row);
       event.dataTransfer?.setData(ROW_MIME, row.file.path);
+      event.dataTransfer?.setData(ROW_BATCH_MIME, JSON.stringify(dragPaths));
       event.dataTransfer?.setData("text/plain", row.file.path);
       event.dataTransfer?.setData(ROW_FROM_GROUP_MIME, groupKey);
+      this.draggingPaths = dragPaths;
+      this.rowDropFeedback.begin(row.file.path, dragPaths);
       item.addClass("is-dragging");
     });
-    item.addEventListener("dragend", () => item.removeClass("is-dragging"));
+    item.addEventListener("dragend", () => {
+      item.removeClass("is-dragging");
+      this.draggingPaths = [];
+    });
   }
 
   private setupReorderDrag(item: HTMLElement, config: ViewConfig, row: RowData, rows: RowData[], groupField?: string, groupKey?: string): void {
-    if (this.actions.isReadOnly || this.isPhoneLayout() || !this.canManualReorder(config)) return;
+    if (this.actions.isReadOnly || isTouchDevice(this.container) || !this.canManualReorder(config)) return;
     item.draggable = true;
     item.addEventListener("dragstart", (event) => {
       if (isHTMLElement(event.target) && event.target.closest("input, select, textarea, button")) {
         event.preventDefault();
         return;
       }
+      const dragPaths = this.getDragPaths(row);
       event.dataTransfer?.setData(ROW_MIME, row.file.path);
+      event.dataTransfer?.setData(ROW_BATCH_MIME, JSON.stringify(dragPaths));
       event.dataTransfer?.setData("text/plain", row.file.path);
       if (groupKey != null) event.dataTransfer?.setData(ROW_FROM_GROUP_MIME, groupKey);
       this.draggingPath = row.file.path;
+      this.draggingPaths = dragPaths;
+      this.rowDropFeedback.begin(row.file.path, dragPaths);
       item.addClass("is-dragging");
     });
     item.addEventListener("dragend", () => {
       this.draggingPath = undefined;
+      this.draggingPaths = [];
       item.removeClass("is-dragging");
-      this.rowDropFeedback.clear();
+      if (this.rowDropFeedback.getPhase() !== "pending") this.rowDropFeedback.clear();
     });
     item.addEventListener("dragover", (event) => {
       const dragPath = this.draggingPath;
@@ -407,16 +435,18 @@ export class ListRenderer {
     });
     item.addEventListener("drop", (event) => {
       if (!this.isRowDrag(event)) return;
-      const dragPath = this.draggingPath || event.dataTransfer?.getData(ROW_MIME);
+      const dragPaths = this.getDraggedPaths(event);
+      const dragPath = this.draggingPath || dragPaths[0];
       if (!dragPath || dragPath === row.file.path) return;
       if (!this.rowByPath.has(dragPath)) return;
       event.preventDefault();
       event.stopPropagation();
       this.draggingPath = undefined;
       const placement = this.rowDropFeedback.getPlacement(item) || resolveDropPlacement(item, event, "vertical");
-      this.rowDropFeedback.clear();
+      this.rowDropFeedback.setPending();
       const isAfter = placement === "after";
-      const currentPaths = rows.map((r) => r.file.path).filter((path) => path !== dragPath);
+      const moving = new Set(dragPaths);
+      const currentPaths = rows.map((r) => r.file.path).filter((path) => !moving.has(path));
       const targetIndex = currentPaths.indexOf(row.file.path);
       const beforePath = isAfter ? row.file.path : (targetIndex > 0 ? currentPaths[targetIndex - 1] : undefined);
       const afterPath = isAfter ? (targetIndex < currentPaths.length - 1 ? currentPaths[targetIndex + 1] : undefined) : row.file.path;
@@ -424,13 +454,25 @@ export class ListRenderer {
       const draggedRow = this.rowByPath.get(dragPath);
       if (groupField && groupKey != null && fromGroupKey !== groupKey && draggedRow) {
         if (this.actions.moveRowToGroupAndPosition) {
-          void this.actions.moveRowToGroupAndPosition(draggedRow, groupField, fromGroupKey, groupKey, beforePath, afterPath);
+          void Promise.resolve(this.actions.moveRowToGroupAndPosition(draggedRow, groupField, fromGroupKey, groupKey, beforePath, afterPath, dragPaths))
+            .then(() => this.rowDropFeedback.commit())
+            .catch((error) => this.rowDropFeedback.fail(error));
         } else {
           void Promise.resolve(this.actions.moveRowsToGroup?.(draggedRow, groupField, fromGroupKey, groupKey))
-            .then(() => this.actions.moveRowToPosition(dragPath, beforePath, afterPath));
+            .then(() => this.actions.moveRowToPosition(dragPath, beforePath, afterPath))
+            .then(() => this.rowDropFeedback.commit())
+            .catch((error) => this.rowDropFeedback.fail(error));
         }
       } else {
-        this.actions.moveRowToPosition(dragPath, beforePath, afterPath);
+        if (dragPaths.length > 1 && this.actions.moveRowsToPosition) {
+          void Promise.resolve(this.actions.moveRowsToPosition(dragPaths, beforePath, afterPath))
+            .then(() => this.rowDropFeedback.commit())
+            .catch((error) => this.rowDropFeedback.fail(error));
+        } else {
+          void Promise.resolve(this.actions.moveRowToPosition(dragPath, beforePath, afterPath))
+            .then(() => this.rowDropFeedback.commit())
+            .catch((error) => this.rowDropFeedback.fail(error));
+        }
       }
     });
   }
@@ -445,7 +487,8 @@ export class ListRenderer {
     target.addEventListener("dragleave", () => target.removeClass("is-drop-target"));
     target.addEventListener("drop", (event) => {
       if (!this.isRowDrag(event)) return;
-      const path = event.dataTransfer?.getData(ROW_MIME) || event.dataTransfer?.getData("text/plain");
+      const paths = this.getDraggedPaths(event);
+      const path = paths[0];
       const row = path ? this.rowByPath.get(path) : undefined;
       if (!row) return;
       event.preventDefault();
@@ -460,12 +503,33 @@ export class ListRenderer {
     return Boolean(this.draggingPath) || Array.from(event.dataTransfer?.types || []).includes(ROW_MIME);
   }
 
-  private canManualReorder(config: ViewConfig): boolean {
-    return !isExplicitlySorted(config);
+  private getDragPaths(row: RowData): string[] {
+    const selected = this.actions.getSelectedRows?.()
+      ?.map((candidate) => candidate.file.path)
+      .filter((path) => this.rowByPath.has(path)) || [];
+    return selected.includes(row.file.path) ? selected : [row.file.path];
   }
 
-  private isPhoneLayout(): boolean {
-    return window.activeDocument.body.classList.contains("is-phone");
+  private getDraggedPaths(event: DragEvent): string[] {
+    if (this.draggingPaths.length) return this.draggingPaths;
+    const raw = event.dataTransfer?.getData(ROW_BATCH_MIME);
+    if (raw) {
+      try {
+        const parsed = JSON.parse(raw);
+        if (Array.isArray(parsed)) {
+          const paths = parsed.filter((path): path is string => typeof path === "string" && this.rowByPath.has(path));
+          if (paths.length) return paths;
+        }
+      } catch {
+        // Optional metadata is ignored when a different drag source supplies invalid data.
+      }
+    }
+    const path = event.dataTransfer?.getData(ROW_MIME) || event.dataTransfer?.getData("text/plain");
+    return path ? [path] : [];
+  }
+
+  private canManualReorder(config: ViewConfig): boolean {
+    return !isExplicitlySorted(config);
   }
 
   private renderNewRow(list: HTMLElement, defaults?: Record<string, unknown>, rows: RowData[] = [], computedGroup = false): void {
@@ -644,6 +708,7 @@ export class ListRenderer {
       onEdit: (target, editRow, editCol, event) => this.actions.editCell(target, editRow, editCol, event),
       onEditFormula: (editCol) => this.actions.editFormula?.(editCol),
       onOpenTarget: (targetRow, target, external) => this.openTarget(targetRow, target, external),
+      onNumberChange: (targetRow, targetCol, next) => this.actions.saveCellValue?.(targetRow, targetCol, next),
       onShowColumnMenu: this.actions.showColumnMenu,
     });
   }

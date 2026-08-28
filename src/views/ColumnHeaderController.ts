@@ -3,6 +3,7 @@ import { t } from "../i18n";
 import { isHTMLElement } from "./DomGuards";
 import { syncTableColumnLayouts } from "./TableColumnLayoutSync";
 import { setIcon } from "obsidian";
+import { isTouchDevice } from "../data/TouchEnvironment";
 
 export interface ColumnHeaderActions {
   getConfig(): ViewConfig | undefined;
@@ -21,6 +22,13 @@ export class ColumnHeaderController {
   constructor(private actions: ColumnHeaderActions) {}
 
   setup(th: HTMLElement, col: ColumnDef): void {
+    th.setAttr("role", "columnheader");
+    th.setAttr("aria-colindex", String(Array.from(th.parentElement?.children || []).indexOf(th) + 1));
+    const config = this.actions.getConfig();
+    const sortRules = (config?.sortRules || []).filter((rule) => rule.field && rule.direction);
+    const sort = sortRules.find((rule) => rule.field === col.key)
+      || (sortRules.length === 0 && config?.sortColumn === col.key ? { direction: config.sortDirection || "asc" } : undefined);
+    th.setAttr("aria-sort", sort ? sort.direction === "asc" ? "ascending" : "descending" : "none");
     th.addEventListener("click", (event) => {
       if (Date.now() < this.suppressSortUntil) return;
       const target = event.target;
@@ -29,7 +37,7 @@ export class ColumnHeaderController {
     });
     th.addEventListener("contextmenu", (e) => this.actions.showContextMenu(e, col, th));
     this.setupMenuTrigger(th, col);
-    if (!this.isPhoneLayout()) {
+    if (!isTouchDevice(th.closest<HTMLElement>(".note-database-container") || th)) {
       this.setupResizeHandle(th, col);
       this.setupDragToReorder(th, col);
     }
@@ -144,7 +152,4 @@ export class ColumnHeaderController {
     });
   }
 
-  private isPhoneLayout(): boolean {
-    return window.activeDocument.body.classList.contains("is-phone");
-  }
 }

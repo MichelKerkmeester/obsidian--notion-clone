@@ -9,6 +9,7 @@ import { createDropdownField, DropdownOption } from "./DropdownField";
 import { installPopoverAutoClose } from "./PopoverAutoClose";
 import { positionToolbarPopover } from "./PopoverPosition";
 import { getTextLinkSchemeChoice, TEXT_LINK_SCHEME_MENU_OPTIONS, TextLinkSchemeChoice } from "../data/TextLinkSchemeMenu";
+import { isTouchDevice } from "../data/TouchEnvironment";
 
 export interface ColumnMenuActions {
   editColumn(col: ColumnDef): void;
@@ -234,7 +235,7 @@ export class ColumnMenu {
         .onClick(() => this.actions.filterByColumn?.(col))
       );
     }
-    if (this.isPhoneLayout() && includeWidthActions && !readonly && this.actions.openColumnWidthPanel) {
+    if (isTouchDevice(anchorEl) && includeWidthActions && !readonly && this.actions.openColumnWidthPanel) {
       this.addMenuItem(menu, (item) => item
         .setTitle(t("menu.adjustColumnWidth"))
         .setIcon("ruler-dimension-line")
@@ -694,7 +695,4 @@ export class ColumnMenu {
     this.activeSubmenuCleanup = undefined;
   }
 
-  private isPhoneLayout(): boolean {
-    return window.activeDocument.body.classList.contains("is-phone");
-  }
 }

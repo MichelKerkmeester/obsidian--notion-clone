@@ -15,6 +15,7 @@ export interface FileFieldRenderContext {
   tagsContainerClass?: string;
   linkContainerClass?: string;
   linkItemClass?: string;
+  onRemoveTag?: (tag: string) => void;
 }
 
 export function shouldRenderSpecialFileField(col: ColumnDef): boolean {
@@ -54,6 +55,18 @@ export function renderFileTags(parent: HTMLElement, value: unknown, col: ColumnD
     if (option?.color && option.color !== "gray") badge.addClass(`status-color-${option.color}`);
     badge.addClass("db-file-tag-badge");
     badge.title = item;
+    if (context.onRemoveTag) {
+      const remove = badge.createEl("button", {
+        cls: "db-file-tag-remove",
+        text: "×",
+        attr: { type: "button", "aria-label": `Remove ${item}` },
+      });
+      remove.onclick = (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        context.onRemoveTag?.(item);
+      };
+    }
   }
 }
 

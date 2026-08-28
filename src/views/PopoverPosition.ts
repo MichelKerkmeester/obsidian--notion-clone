@@ -246,7 +246,8 @@ function isMobileBottomSheet(doc: Document): boolean {
   if (doc.body.classList.contains("is-phone")) return true;
   const view = doc.defaultView;
   const touchPoints = typeof navigator !== "undefined" ? navigator.maxTouchPoints : 0;
-  return Boolean(view && view.innerWidth <= 600 && touchPoints > 0);
+  const coarsePointer = Boolean(view?.matchMedia?.("(pointer: coarse)").matches);
+  return Boolean(view && view.innerWidth <= 600 && (touchPoints > 0 || coarsePointer));
 }
 
 function getVisualViewportBounds(view: Window): DOMRect {

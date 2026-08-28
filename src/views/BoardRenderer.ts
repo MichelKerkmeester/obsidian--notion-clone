@@ -33,11 +33,15 @@ import { openOptionColorPicker } from "./OptionColorPicker";
 import { renderDelayedExternalLink } from "./CellRenderer";
 import { EmptyStateOptions, EmptyStateRenderer } from "./EmptyStateRenderer";
 import { renderCardField, renderCardFieldValue } from "./CardFieldRenderer";
+import { EdgeAutoScroller } from "./EdgeAutoScroller";
+import { DragDropFeedbackState, resolveDropPlacement } from "./DragDropFeedback";
+import { attachLongPress, isTouchDevice } from "../data/TouchEnvironment";
 
 const CARD_MIME = "application/x-note-database-card";
 const CARD_FROM_GROUP_MIME = "application/x-note-database-card-from-group";
 const CARD_FROM_SUBGROUP_MIME = "application/x-note-database-card-from-subgroup";
 const GROUP_MIME = "application/x-note-database-group";
+const ROW_BATCH_MIME = "application/x-note-database-row-batch";
 
 export interface BoardGroup {
   key: string;
@@ -67,14 +71,18 @@ export interface BoardRendererActions {
     row: RowData,
     updates: Array<{ field: string; fromGroupKey: string; toGroupKey: string }>,
     beforePath?: string,
-    afterPath?: string
+    afterPath?: string,
+    movedPaths?: string[],
   ): void | Promise<void>;
+  moveRowsToPosition?(movedPaths: string[], beforePath?: string, afterPath?: string): void;
+  getSelectedRows?(): RowData[];
   updateColumnWidth(width: number): void;
   isRowSelected(row: RowData): boolean;
   toggleRowSelected(row: RowData, selected: boolean, event?: MouseEvent): void;
   areAllRowsSelected(rows: RowData[]): boolean;
   toggleRowsSelected(rows: RowData[], selected: boolean): void;
   editCell(target: HTMLElement, row: RowData, col: ColumnDef, event?: MouseEvent): void;
+  saveCellValue?(row: RowData, col: ColumnDef, value: number): void | Promise<void | boolean>;
   editFileName?(target: HTMLElement, row: RowData, currentName: string): void;
   getColumns(config: ViewConfig): ColumnDef[];
   isGroupCollapsed?(field: string, key: string): boolean;
@@ -99,13 +107,14 @@ interface ParsedLink {
 
 export class BoardRenderer {
   private rowByPath = new Map<string, RowData>();
-  private transientTimers = new WeakMap<HTMLElement, Map<string, number>>();
   private dragEnterCount = new WeakMap<HTMLElement, number>();
-  // .db-board 兜底拖拽落点：当前高亮的列/子分组 + preview 占位 + 兜底淡出 timer。
+  // .db-board 兜底拖拽落点: the highlighted zone is owned by the current gesture.
   private currentBoardDropZone: HTMLElement | null = null;
-  private boardDropFadeTimer: number | null = null;
   private resizeState?: { startX: number; startWidth: number; board: HTMLElement };
   private draggingCardPath?: string;
+  private draggingCardPaths: string[] = [];
+  private cardAutoScroller?: EdgeAutoScroller;
+  private rowDropFeedback = new DragDropFeedbackState();
   // 当前渲染的看板与分组元数据，供拖拽期间实时列命中（方案 A/B）复用。
   private boardEl: HTMLElement | null = null;
   private boardGroups: BoardGroup[] = [];
@@ -113,6 +122,7 @@ export class BoardRenderer {
   private boardSubgroupField?: string;
   // 方案 B：鼠标附近浮动列名 preview（单例，dragstart 建 / dragend 删）。
   private boardDragPreview: HTMLElement | null = null;
+  private boardDragCount = 1;
   private boardDragLabelByKey = new Map<string, string>();
   private boundBoardDragOver?: (event: DragEvent) => void;
   private emptyStateRenderer = new EmptyStateRenderer();
@@ -141,6 +151,7 @@ export class BoardRenderer {
       this.renderSwimlaneBoard(board, config, groups, groupField, this.boardSubgroupField, emptyState);
     } else {
       for (const group of groups) this.renderColumn(board, config, groups, group, groupField, emptyState);
+      this.renderBoardPagination(board);
     }
     if (groups.length === 0) {
       const empty = this.emptyStateRenderer.renderCard(board, emptyState || { reason: "no-matching-data" });
@@ -202,7 +213,9 @@ export class BoardRenderer {
     for (const group of groups) {
       const header = headers.createDiv({ cls: "db-board-column-header db-board-swimlane-primary-header" });
       const collapsed = Boolean(this.actions.isGroupCollapsed?.(groupField, group.key));
-      const toggle = header.createEl("button", { cls: `db-board-group-toggle${collapsed ? " is-collapsed" : ""}`, attr: { type: "button", "aria-label": collapsed ? t("group.expand") : t("group.collapse") } });
+      const groupId = this.getGroupSectionId(groupField, group.key);
+      header.setAttr("id", groupId);
+      const toggle = header.createEl("button", { cls: `db-board-group-toggle${collapsed ? " is-collapsed" : ""}`, attr: { type: "button", "aria-label": collapsed ? t("group.expand") : t("group.collapse"), "aria-expanded": String(!collapsed), "aria-controls": groupId } });
       toggle.createSpan({ cls: "db-collapse-triangle" });
       toggle.onclick = (event) => { event.preventDefault(); event.stopPropagation(); this.actions.toggleGroupCollapsed?.(groupField, group.key); };
       if (!this.actions.isReadOnly) {
@@ -358,6 +371,7 @@ export class BoardRenderer {
     emptyState?: EmptyStateOptions,
   ): void {
     const column = board.createDiv({ cls: "db-board-column" });
+    column.setAttr("id", this.getGroupSectionId(groupField, group.key));
     const subgroupField = config.boardSubgroupEnabled !== false && config.boardSubgroupField && config.boardSubgroupField !== groupField
       ? config.boardSubgroupField
       : undefined;
@@ -372,7 +386,7 @@ export class BoardRenderer {
         return;
       }
       event.preventDefault();
-      this.addTransientClass(column, "is-drop-target", 900);
+      column.addClass("is-drop-target");
     });
     column.addEventListener("dragleave", () => this.clearTransientClass(column, "is-drop-target"));
     column.addEventListener("drop", (event) => {
@@ -385,7 +399,8 @@ export class BoardRenderer {
         return;
       }
       if (this.actions.isReadOnly) return;
-      const path = event.dataTransfer?.getData(CARD_MIME) || event.dataTransfer?.getData("text/plain");
+      const paths = this.getDraggedPaths(event);
+      const path = paths[0];
       const row = path ? this.rowByPath.get(path) : undefined;
       const fromGroup = event.dataTransfer?.getData(CARD_FROM_GROUP_MIME) || undefined;
       if (row) {
@@ -399,6 +414,8 @@ export class BoardRenderer {
           subgroupKey: undefined,
         });
         if (drop.keepInPlace) return;
+        this.rowDropFeedback.begin(row.file.path, paths, group.key);
+        this.rowDropFeedback.setPending();
         void this.moveCardAndOrder(
           row,
           groupField,
@@ -408,26 +425,27 @@ export class BoardRenderer {
           drop.order,
           undefined,
           undefined,
-          undefined
-        );
+          undefined,
+          paths
+        ).then(() => this.rowDropFeedback.commit()).catch((error) => this.rowDropFeedback.fail(error));
       }
     });
 
     const header = column.createDiv({ cls: "db-board-column-header" });
     const columnCollapsed = Boolean(this.actions.isGroupCollapsed?.(groupField, group.key));
     column.toggleClass("is-collapsed", columnCollapsed);
-    if (this.canReorderGroups() && !this.isPhoneLayout()) {
+    if (this.canReorderGroups() && !isTouchDevice(board)) {
       header.draggable = true;
       header.addEventListener("dragstart", (event) => {
         event.dataTransfer?.setData(GROUP_MIME, group.key);
         event.dataTransfer?.setData("text/plain", group.key);
-        this.addTransientClass(column, "is-dragging", 2400);
+        column.addClass("is-dragging");
       });
       header.addEventListener("dragend", () => this.clearTransientClass(column, "is-dragging"));
     }
     const toggle = header.createEl("button", {
       cls: `db-board-group-toggle${columnCollapsed ? " is-collapsed" : ""}`,
-      attr: { type: "button", "aria-label": columnCollapsed ? t("group.expand") : t("group.collapse") },
+      attr: { type: "button", "aria-label": columnCollapsed ? t("group.expand") : t("group.collapse"), "aria-expanded": String(!columnCollapsed), "aria-controls": column.id || this.getGroupSectionId(groupField, group.key) },
     });
     toggle.createSpan({ cls: "db-collapse-triangle" });
     toggle.onclick = (event) => {
@@ -450,7 +468,7 @@ export class BoardRenderer {
       this.actions.renderGroupSummaries?.(summaries, group.rows, config);
     }
     this.renderBoardGroupOptions(header, config, groupField, group);
-    if (!this.isPhoneLayout()) {
+    if (!isTouchDevice(board)) {
       const resizeHandle = column.createDiv({ cls: "db-board-column-resize-handle" });
       resizeHandle.addEventListener("mousedown", (event) => this.startColumnResize(event, board, config));
     }
@@ -495,12 +513,13 @@ export class BoardRenderer {
     emptyState?: EmptyStateOptions,
   ): void {
     const section = parent.createDiv({ cls: "db-board-subgroup" });
+    section.setAttr("id", this.getGroupSectionId(subgroupField, subgroup.key));
     const header = section.createDiv({ cls: "db-board-subgroup-header" });
     const collapsed = Boolean(this.actions.isGroupCollapsed?.(subgroupField, subgroup.key));
     section.toggleClass("is-collapsed", collapsed);
     const toggle = header.createEl("button", {
       cls: `db-board-subgroup-toggle${collapsed ? " is-collapsed" : ""}`,
-      attr: { type: "button", "aria-label": collapsed ? t("group.expand") : t("group.collapse") },
+      attr: { type: "button", "aria-label": collapsed ? t("group.expand") : t("group.collapse"), "aria-expanded": String(!collapsed), "aria-controls": section.id || this.getGroupSectionId(subgroupField, subgroup.key) },
     });
     toggle.createSpan({ cls: "db-collapse-triangle" });
     toggle.onclick = (event) => {
@@ -558,11 +577,13 @@ export class BoardRenderer {
       if (!this.isCardDrag(event)) return;
       // 跨组移动不受排序约束：非只读一律允许 drop，落点由 resolveBoardContainerDropOrder 决定。
       event.preventDefault();
+      this.cardAutoScroller?.update(event);
       this.highlightCardDropZone(cards);
     });
     cards.addEventListener("drop", (event) => {
       if (this.actions.isReadOnly) return;
-      const path = event.dataTransfer?.getData(CARD_MIME);
+      const paths = this.getDraggedPaths(event);
+      const path = paths[0];
       if (!path) return;
       const row = this.rowByPath.get(path);
       if (!row) return;
@@ -581,7 +602,11 @@ export class BoardRenderer {
         subgroupKey: subgroup?.key,
       });
       if (drop.keepInPlace) return;
-      void this.moveCardAndOrder(row, groupField, group.key, fromGroup, path, drop.order, subgroupField, subgroup?.key, fromSubgroup);
+      this.rowDropFeedback.begin(path, paths, group.key);
+      this.rowDropFeedback.setPending();
+      void this.moveCardAndOrder(row, groupField, group.key, fromGroup, path, drop.order, subgroupField, subgroup?.key, fromSubgroup, paths)
+        .then(() => this.rowDropFeedback.commit())
+        .catch((error) => this.rowDropFeedback.fail(error));
     });
     return cards;
   }
@@ -631,40 +656,44 @@ export class BoardRenderer {
         ...(subgroupField && subgroupKey != null ? [{ field: subgroupField, key: subgroupKey }] : []),
       ],
     });
-    if (!this.actions.isReadOnly && !this.isPhoneLayout()) {
+    if (!this.actions.isReadOnly && !isTouchDevice(this.boardEl)) {
       card.draggable = true;
       card.addEventListener("dragstart", (event) => {
         if (isHTMLElement(event.target) && event.target.closest("input, select, textarea, button")) {
           event.preventDefault();
           return;
         }
+        const dragPaths = this.getDragPaths(row);
         event.dataTransfer?.setData(CARD_MIME, row.file.path);
+        event.dataTransfer?.setData(ROW_BATCH_MIME, JSON.stringify(dragPaths));
         event.dataTransfer?.setData("text/plain", row.file.path);
         event.dataTransfer?.setData(CARD_FROM_GROUP_MIME, group.key);
         if (subgroupKey != null) event.dataTransfer?.setData(CARD_FROM_SUBGROUP_MIME, subgroupKey);
         this.draggingCardPath = row.file.path;
-        this.addTransientClass(card, "is-dragging", 2400);
+        this.draggingCardPaths = dragPaths;
+        this.rowDropFeedback.begin(row.file.path, dragPaths);
+        card.addClass("is-dragging");
         // 方案 A：拖拽期间让列等高（align-items: stretch），使每个列标题的 sticky 失效点推迟到看板底部；
         // 方案 B：启动鼠标附近浮动列名 preview。
         this.boardEl?.addClass("is-card-dragging");
-        this.beginBoardDragPreview(config);
+        this.beginBoardDragPreview(config, dragPaths.length);
+        this.cardAutoScroller = new EdgeAutoScroller(this.boardEl || card);
       });
       card.addEventListener("dragover", (event) => {
         if (!this.isCardDrag(event)) return;
         const path = this.draggingCardPath || event.dataTransfer?.getData(CARD_MIME);
         if (!path || path === row.file.path || !this.rowByPath.has(path)) return;
         event.preventDefault();
+        this.cardAutoScroller?.update(event);
         // before/after 精确插入指示线在未显式排序时显示（同组重排或跨组移动到目标卡片位置
         // 都按鼠标位置精确插入）；显式排序下位置由排序规则决定、精确插入无意义，故不显示，
         // 但 drop 仍被允许以支持跨组移动。
         if (this.canReorderCards(config)) {
-          const rect = card.getBoundingClientRect();
-          card.toggleClass("is-drop-before", event.clientY <= rect.top + rect.height / 2);
-          card.toggleClass("is-drop-after", event.clientY > rect.top + rect.height / 2);
+          this.updateCardDropIndicator(card, resolveDropPlacement(card, event, "vertical"));
         } else {
-          card.removeClass("is-drop-before", "is-drop-after");
+          this.clearCardDropIndicator(card);
         }
-        this.addTransientClass(card, "is-drop-target", 900);
+        card.addClass("is-drop-target");
         this.highlightCardDropZone(card);
       });
       card.addEventListener("dragenter", (event) => {
@@ -682,7 +711,8 @@ export class BoardRenderer {
         }, 0);
       });
       card.addEventListener("drop", (event) => {
-        const path = event.dataTransfer?.getData(CARD_MIME);
+        const paths = this.getDraggedPaths(event);
+        const path = paths[0];
         const dragged = path ? this.rowByPath.get(path) : undefined;
         if (!path || !dragged) return;
         if (path === row.file.path) return;
@@ -700,15 +730,22 @@ export class BoardRenderer {
           explicitlySorted: isExplicitlySorted(config),
         });
         if (intent === "ignore") return;
-        void this.moveCardAndOrder(dragged, groupField, group.key, fromGroup, path, this.getCardDropOrder(visibleRows, path, row.file.path, event, card), subgroupField, subgroupKey, fromSubgroup);
+        this.rowDropFeedback.setPending();
+        void this.moveCardAndOrder(dragged, groupField, group.key, fromGroup, path, this.getCardDropOrder(visibleRows, paths, row.file.path, event, card), subgroupField, subgroupKey, fromSubgroup, paths)
+          .then(() => this.rowDropFeedback.commit())
+          .catch((error) => this.rowDropFeedback.fail(error));
       });
       card.addEventListener("dragend", () => {
         this.clearTransientClass(card, "is-dragging");
+        this.cardAutoScroller?.destroy();
+        this.cardAutoScroller = undefined;
         this.clearCardDropTarget(card);
         this.draggingCardPath = undefined;
+        this.draggingCardPaths = [];
         // 方案 A/B 收尾：恢复列等高状态，移除浮动列名 preview。
         this.boardEl?.removeClass("is-card-dragging");
         this.endBoardDragPreview();
+        if (this.rowDropFeedback.getPhase() !== "pending") this.rowDropFeedback.clear();
       });
     }
 
@@ -733,7 +770,7 @@ export class BoardRenderer {
       event.stopPropagation();
       this.actions.openRow(row);
     };
-    if (!this.actions.isReadOnly && this.isPhoneLayout()) {
+    if (!this.actions.isReadOnly && isTouchDevice(this.boardEl)) {
       this.renderMobileMoveButton(controls, config, groups, group, row, groupField, subgroupField, subgroupKey);
     }
     const columns = this.actions.getColumns(config);
@@ -819,6 +856,10 @@ export class BoardRenderer {
     el.addEventListener("contextmenu", (event) => {
       if (isHTMLElement(event.target) && event.target.closest("input, select, textarea, button")) return;
       this.actions.showRowMenu?.(event, row, context);
+    });
+    attachLongPress(el, {
+      ignoreTarget: (event) => isHTMLElement(event.target) && Boolean(event.target.closest("input, select, textarea, button, a")),
+      onLongPress: (event) => this.actions.showRowMenu?.(event as unknown as MouseEvent, row, context),
     });
   }
 
@@ -968,17 +1009,18 @@ export class BoardRenderer {
 
   private getCardDropOrder(
     rows: RowData[],
-    draggedPath: string,
+    draggedPaths: string[],
     targetPath: string,
     event: DragEvent,
     card: HTMLElement
   ): string[] {
-    const order = rows.map((row) => row.file.path).filter((path) => path !== draggedPath);
+    const moving = new Set(draggedPaths);
+    const order = rows.map((row) => row.file.path).filter((path) => !moving.has(path));
     const target = order.indexOf(targetPath);
-    if (draggedPath === targetPath || target < 0) return order;
+    if (moving.has(targetPath) || target < 0) return order;
     const rect = card.getBoundingClientRect();
     let insertIndex = event.clientY > rect.top + rect.height / 2 ? target + 1 : target;
-    order.splice(insertIndex, 0, draggedPath);
+    order.splice(insertIndex, 0, ...rows.map((row) => row.file.path).filter((path) => moving.has(path)));
     return order;
   }
 
@@ -991,10 +1033,14 @@ export class BoardRenderer {
     order: string[],
     subgroupField?: string,
     subgroupKey?: string,
-    fromSubgroup?: string
+    fromSubgroup?: string,
+    draggedPaths: string[] = [draggedPath],
   ): Promise<void> {
-    if (!order.includes(draggedPath)) order = [...order, draggedPath];
-    const position = this.getDropPositionFromOrder(order, draggedPath);
+    const movingPaths = Array.from(new Set(draggedPaths.filter((path) => this.rowByPath.has(path))));
+    if (!movingPaths.length) movingPaths.push(draggedPath);
+    const missingPaths = movingPaths.filter((path) => !order.includes(path));
+    if (missingPaths.length) order = [...order, ...missingPaths];
+    const position = this.getDropPositionFromOrder(order, movingPaths);
     const groupUpdates: Array<{ field: string; fromGroupKey: string; toGroupKey: string }> = [];
     if (fromGroup != null && !isSameBoardGroup(fromGroup, groupKey)) {
       groupUpdates.push({ field: groupField, fromGroupKey: fromGroup, toGroupKey: groupKey });
@@ -1003,7 +1049,11 @@ export class BoardRenderer {
       groupUpdates.push({ field: subgroupField, fromGroupKey: fromSubgroup, toGroupKey: subgroupKey });
     }
     if (groupUpdates.length > 0 && this.actions.moveRowWithGroupUpdatesAndPosition) {
-      await this.actions.moveRowWithGroupUpdatesAndPosition(row, groupUpdates, position.before, position.after);
+      await this.actions.moveRowWithGroupUpdatesAndPosition(row, groupUpdates, position.before, position.after, movingPaths);
+      return;
+    }
+    if (movingPaths.length > 1 && this.actions.moveRowsToPosition) {
+      this.actions.moveRowsToPosition(movingPaths, position.before, position.after);
       return;
     }
     for (const update of groupUpdates) {
@@ -1016,12 +1066,15 @@ export class BoardRenderer {
     this.actions.updateCardOrder(groupField, groupKey, paths);
   }
 
-  private getDropPositionFromOrder(order: string[], movedPath: string): { before?: string; after?: string } {
-    const index = order.indexOf(movedPath);
-    if (index < 0) return {};
+  private getDropPositionFromOrder(order: string[], movedPaths: string[]): { before?: string; after?: string } {
+    const moving = new Set(movedPaths);
+    const indexes = movedPaths.map((path) => order.indexOf(path)).filter((index) => index >= 0);
+    if (indexes.length === 0) return {};
+    const first = Math.min(...indexes);
+    const last = Math.max(...indexes);
     return {
-      before: index > 0 ? order[index - 1] : undefined,
-      after: index < order.length - 1 ? order[index + 1] : undefined,
+      before: first > 0 && !moving.has(order[first - 1]) ? order[first - 1] : undefined,
+      after: last < order.length - 1 && !moving.has(order[last + 1]) ? order[last + 1] : undefined,
     };
   }
 
@@ -1041,13 +1094,48 @@ export class BoardRenderer {
     return Array.from(event.dataTransfer?.types || []).includes(GROUP_MIME);
   }
 
-  private isPhoneLayout(): boolean {
-    return window.activeDocument.body.classList.contains("is-phone");
+  private getGroupSectionId(field: string, key: string): string {
+    return `group-section-${encodeURIComponent(`${field}:${key}`)}`;
+  }
+
+  private renderBoardPagination(board: HTMLElement): void {
+    const columns = Array.from(board.querySelectorAll<HTMLElement>(":scope > .db-board-column"));
+    if (columns.length < 2) return;
+    const pagination = board.createDiv({
+      cls: "db-board-pagination",
+      attr: { role: "tablist", "aria-label": t("common.boardView") },
+    });
+    const setActive = (activeIndex: number) => {
+      pagination.querySelectorAll<HTMLElement>("button").forEach((button, index) => {
+        button.setAttr("aria-selected", String(index === activeIndex));
+      });
+    };
+    columns.forEach((column, index) => {
+      const button = pagination.createEl("button", {
+        cls: `db-board-pagination-dot${index === 0 ? " is-active" : ""}`,
+        attr: { type: "button", role: "tab", "aria-selected": String(index === 0), "aria-label": `${index + 1} / ${columns.length}` },
+      });
+      button.onclick = () => {
+        column.scrollIntoView?.({ behavior: "smooth", block: "nearest", inline: "center" });
+        setActive(index);
+      };
+    });
+    board.insertBefore(pagination, board.firstChild);
+    board.addEventListener("scroll", () => {
+      const left = board.getBoundingClientRect().left;
+      let closest = 0;
+      let distance = Number.POSITIVE_INFINITY;
+      columns.forEach((column, index) => {
+        const nextDistance = Math.abs(column.getBoundingClientRect().left - left);
+        if (nextDistance < distance) { distance = nextDistance; closest = index; }
+      });
+      setActive(closest);
+    }, { passive: true });
   }
 
   private highlightCardDropZone(source: HTMLElement): void {
     const zone = source.closest<HTMLElement>(".db-board-subgroup") || source.closest<HTMLElement>(".db-board-column");
-    if (zone) this.addTransientClass(zone, "is-drop-target", 900);
+    if (zone) zone.addClass("is-drop-target");
   }
 
   private clearCardDropZone(source: HTMLElement): void {
@@ -1055,33 +1143,49 @@ export class BoardRenderer {
     if (zone) this.clearTransientClass(zone, "is-drop-target");
   }
 
-  private addTransientClass(el: HTMLElement, className: string, timeoutMs: number): void {
-    let timers = this.transientTimers.get(el);
-    if (!timers) {
-      timers = new Map();
-      this.transientTimers.set(el, timers);
-    }
-    const existing = timers.get(className);
-    if (existing) window.clearTimeout(existing);
-    el.addClass(className);
-    const timer = window.setTimeout(() => {
-      el.removeClass(className);
-      timers?.delete(className);
-    }, timeoutMs);
-    timers.set(className, timer);
-  }
-
   private clearTransientClass(el: HTMLElement, className: string): void {
-    const timers = this.transientTimers.get(el);
-    const existing = timers?.get(className);
-    if (existing) window.clearTimeout(existing);
-    timers?.delete(className);
     el.removeClass(className);
   }
 
   private clearCardDropTarget(card: HTMLElement): void {
     this.clearTransientClass(card, "is-drop-target");
-    card.removeClass("is-drop-before", "is-drop-after");
+    this.clearCardDropIndicator(card);
+  }
+
+  private updateCardDropIndicator(card: HTMLElement, placement: "before" | "after"): void {
+    const indicator = card.querySelector<HTMLElement>(".db-board-drop-indicator")
+      || card.createSpan({ cls: "db-board-drop-indicator" });
+    indicator.toggleClass("is-before", placement === "before");
+    indicator.toggleClass("is-after", placement === "after");
+  }
+
+  private clearCardDropIndicator(card: HTMLElement): void {
+    card.querySelector<HTMLElement>(".db-board-drop-indicator")?.remove();
+  }
+
+  private getDragPaths(row: RowData): string[] {
+    const selected = this.actions.getSelectedRows?.()
+      ?.map((candidate) => candidate.file.path)
+      .filter((path) => this.rowByPath.has(path)) || [];
+    return selected.includes(row.file.path) ? selected : [row.file.path];
+  }
+
+  private getDraggedPaths(event: DragEvent): string[] {
+    if (this.draggingCardPaths.length) return this.draggingCardPaths;
+    const raw = event.dataTransfer?.getData(ROW_BATCH_MIME);
+    if (raw) {
+      try {
+        const paths = JSON.parse(raw);
+        if (Array.isArray(paths)) {
+          const valid = paths.filter((path): path is string => typeof path === "string" && this.rowByPath.has(path));
+          if (valid.length) return valid;
+        }
+      } catch {
+        // A foreign drag source may provide malformed optional batch data.
+      }
+    }
+    const path = event.dataTransfer?.getData(CARD_MIME) || event.dataTransfer?.getData("text/plain");
+    return path ? [path] : [];
   }
 
   private getCellValue(row: RowData, col: ColumnDef): unknown {
@@ -1245,6 +1349,7 @@ export class BoardRenderer {
       onEdit: (target, editRow, editCol, event) => this.actions.editCell(target, editRow, editCol, event),
       onEditFormula: (editCol) => this.actions.editFormula?.(editCol),
       onOpenTarget: (targetRow, target, external) => this.openTarget(targetRow, target, external),
+      onNumberChange: (targetRow, targetCol, next) => this.actions.saveCellValue?.(targetRow, targetCol, next),
       onShowColumnMenu: this.actions.showColumnMenu,
     });
   }
@@ -1451,39 +1556,25 @@ export class BoardRenderer {
     });
   }
 
-  // 显示目标列整列高亮 + cards 末尾 preview 占位。zone 变化才切换 DOM，避免高频抖动；
-  // 持续拖动刷新兜底淡出 timer，停顿 900ms 自动清除。
+  // Display the current target zone while the drag gesture is active.
   private showBoardDropHighlight(zone: { cardsEl: HTMLElement }): void {
     const highlightEl = zone.cardsEl.closest<HTMLElement>(".db-board-subgroup")
       || zone.cardsEl.closest<HTMLElement>(".db-board-column");
     // 同一 zone：仅刷新淡出 timer，不动 DOM。
-    if (this.currentBoardDropZone === highlightEl) {
-      this.refreshBoardDropFadeTimer();
-      return;
-    }
+    if (this.currentBoardDropZone === highlightEl) return;
     this.detachBoardDropHighlight();
     if (highlightEl) highlightEl.addClass("is-drop-target");
     this.currentBoardDropZone = highlightEl;
-    this.refreshBoardDropFadeTimer();
-  }
-
-  private refreshBoardDropFadeTimer(): void {
-    if (this.boardDropFadeTimer != null) window.clearTimeout(this.boardDropFadeTimer);
-    this.boardDropFadeTimer = window.setTimeout(() => this.detachBoardDropHighlight(), 900);
   }
 
   private detachBoardDropHighlight(): void {
-    if (this.boardDropFadeTimer != null) {
-      window.clearTimeout(this.boardDropFadeTimer);
-      this.boardDropFadeTimer = null;
-    }
     this.currentBoardDropZone?.removeClass("is-drop-target");
     this.currentBoardDropZone = null;
   }
 
   // 方案 B：拖拽开始时构建列名映射并创建跟随鼠标的浮动 preview。preview 与 dragover 监听
   // 全部走 window.activeDocument 以兼容 popout window；preview 是 renderer 级单例。
-  private beginBoardDragPreview(config: ViewConfig): void {
+  private beginBoardDragPreview(config: ViewConfig, count = 1): void {
     // 兜底：若上一次拖拽异常残留（如 re-render 中途未触发 dragend），先清理。
     this.endBoardDragPreview();
     // 列名映射：key（group.key 或 group::subgroup）→ 该列显示名；子分组也映射到所属列名。
@@ -1498,8 +1589,15 @@ export class BoardRenderer {
       }
     }
     this.boardDragLabelByKey = labels;
-    // 挂 activeDocument.body（body 级、position:fixed），初始隐藏避免空标签闪烁。
-    this.boardDragPreview = window.activeDocument.body.createDiv({ cls: "db-board-drag-group-preview is-hidden" });
+    this.boardDragCount = Math.max(1, count);
+    // Keep the preview in the database container so its styles and lifecycle stay scoped to this view.
+    const previewHost = this.boardEl?.closest<HTMLElement>(".note-database-container") || window.activeDocument.body;
+    this.boardDragPreview = previewHost.createDiv({ cls: "db-board-drag-group-preview is-hidden" });
+    const stack = this.boardDragPreview.createSpan({ cls: "db-board-drag-stack", attr: { "aria-hidden": "true" } });
+    for (let index = 0; index < Math.min(3, this.boardDragCount); index++) {
+      stack.createSpan({ cls: "db-board-drag-stack-card" });
+    }
+    this.boardDragPreview.createSpan({ cls: "db-board-drag-count", text: t("drag.movingItems", { count }) });
     this.boundBoardDragOver = (event) => this.onBoardCardDragOver(event);
     window.activeDocument.addEventListener("dragover", this.boundBoardDragOver);
   }
@@ -1517,7 +1615,13 @@ export class BoardRenderer {
       return;
     }
     preview.removeClass("is-hidden");
-    preview.setText(label);
+    preview.empty();
+    const stack = preview.createSpan({ cls: "db-board-drag-stack", attr: { "aria-hidden": "true" } });
+    for (let index = 0; index < Math.min(3, this.boardDragCount); index++) {
+      stack.createSpan({ cls: "db-board-drag-stack-card" });
+    }
+    preview.createSpan({ cls: "db-board-drag-label", text: label });
+    preview.createSpan({ cls: "db-board-drag-count", text: t("drag.movingItems", { count: this.boardDragCount }) });
     // 跟随鼠标并偏移避开浏览器原生 drag ghost，夹取到视口内避免越界裁切。
     const offset = 16;
     const doc = window.activeDocument.documentElement;

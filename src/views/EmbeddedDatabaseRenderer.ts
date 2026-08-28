@@ -87,6 +87,9 @@ import { appendLeaf, buildViewFilterTree } from "../data/ViewFilterTree";
 import { getRowFileFieldValue, isFileFieldKey } from "../data/FileFields";
 import { applyRangeSelection } from "../data/RangeSelection";
 import { installNoteHoverPreview } from "./HoverLinkPreview";
+import { attachLongPress, isTouchDevice, observeTouchEnvironment } from "../data/TouchEnvironment";
+import { InteractionScopeRegistry } from "./InteractionScope";
+import { moveTableCellByRowOffset, resolveTableCellNavigation, TableKeyboardNavigationController, type TableCellNavigationIntent } from "../data/TableKeyboardNavigation";
 import {
   EmptyStateOptions,
   EmptyStateRenderer,
@@ -241,6 +244,13 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
   private selectedRows = new Set<string>();
   private lastSelectedRowPath: string | null = null;
   private cellSelection: { anchor: CellAddress; focus: CellAddress } | null = null;
+  private embedReturnFocus: HTMLElement | null = null;
+  private readonly interactionScopes = new InteractionScopeRegistry();
+  private readonly interactionScopeId = `embedded-database-${generateId()}`;
+  private removeTouchEnvironmentObserver?: () => void;
+  private touchLayoutState: boolean | undefined;
+  private readonly isCodeBlock: boolean;
+  private keyboardNavigation!: TableKeyboardNavigationController;
   private isSelectingCells = false;
   private syncingComputed = false;
   private computedSyncTimer: number | null = null;
@@ -276,6 +286,7 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
   ) {
     super(containerEl);
     const isCodeBlock = persistMode === "codeblock";
+    this.isCodeBlock = isCodeBlock;
     const shouldHideResultCreateEntryButtons = () =>
       isCodeBlock || (this.config ? this.vs(this.config).searchText.trim().length > 0 : false);
     this.cellRenderer = new CellRenderer(
@@ -300,6 +311,14 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
       deleteRow: (row) => this.deleteRow(row),
       isReadOnly: isCodeBlock,
     });
+    this.keyboardNavigation = new TableKeyboardNavigationController({
+      hasSelection: () => Boolean(this.cellSelection),
+      move: (intent, extend) => this.moveEmbedCellFocus(intent, extend),
+      moveByPage: (direction, extend) => this.moveEmbedCellByPage(direction, extend),
+      edit: () => this.editFocusedEmbedCell(),
+      toggle: () => this.toggleFocusedEmbedCell(),
+      escape: () => this.clearEmbedCellSelection(),
+    });
     this.columnHeaderController = new ColumnHeaderController({
       getConfig: () => this.config,
       ensureColumnOrder: (config) => ensureColumnOrder(config),
@@ -317,7 +336,16 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
       areAllRowsSelected: (rows) => rows.length > 0 && rows.every((row) => this.selectedRows.has(row.file.path)),
       toggleRowsSelected: (rows, selected) => this.toggleRowsSelected(rows, selected),
       setupColumnHeader: (th, col) => this.columnHeaderController.setup(th, col),
-      setupRow: (tr, row, context) => this.rowMenu.attachToRow(tr, row, context),
+      setupRow: (tr, row, context) => {
+        this.rowMenu.attachToRow(tr, row, context);
+        attachLongPress(tr, {
+          onLongPress: (event) => {
+            const target = event.target as HTMLElement | null;
+            if (target?.closest("button, input, a, select, textarea, [contenteditable='true']")) return;
+            this.rowMenu.show(event as unknown as MouseEvent, row, context, tr);
+          },
+        });
+      },
       renderCell: (td, row, col) => {
         if (isCodeBlock) this.renderReadOnlyCell(td, row, col);
         else this.cellRenderer.renderCell(td, row, col);
@@ -449,6 +477,19 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
   onload(): void {
     this.containerEl.addClass("note-database-container");
     this.containerEl.addClass("note-database-embed");
+    this.interactionScopes.register(this.interactionScopeId, this.containerEl, {
+      portalSelectors: [".db-column-menu-subpopover", ".db-icon-picker-popover", ".db-color-picker-popup", ".db-calendar-search-results-popover", ".db-cell-edit-popover", ".db-cell-option-popover", ".db-cell-date-popover"],
+    });
+    this.touchLayoutState = undefined;
+    this.removeTouchEnvironmentObserver = observeTouchEnvironment(this.containerEl, (touch) => {
+      if (this.touchLayoutState === undefined) {
+        this.touchLayoutState = touch;
+        return;
+      }
+      if (this.touchLayoutState === touch) return;
+      this.touchLayoutState = touch;
+      this.render();
+    });
     installNoteHoverPreview(this, this.containerEl, this.app, this);
     this.markEmbedCodeBlockHost();
     this.unsubscribe = this.dataSource.onDataChanged((batch) => this.handleDataChanged(batch));
@@ -463,6 +504,10 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
   }
 
   onunload(): void {
+    this.removeTouchEnvironmentObserver?.();
+    this.removeTouchEnvironmentObserver = undefined;
+    this.touchLayoutState = undefined;
+    this.interactionScopes.release(this.interactionScopeId);
     this.refreshCoordinator.destroy();
     this.chartRenderer.destroy();
     this.closeCalendarTimelineSearchResultsPanel();
@@ -1496,8 +1541,22 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
       removeSort: (index) => this.removeActiveSortRule(config, index),
       toggleFilterLogic: () => this.toggleActiveFilterLogic(config),
       clearAll: () => this.clearActiveViewControls(config),
+      getStatusMessage: () => this.getAccessibilityStatusMessage(),
     });
     this.updateStickyOffsets();
+  }
+
+  private getAccessibilityStatusMessage(): string {
+    const diagnostics = this.pipelineDiagnostics;
+    const qualifiers = [
+      diagnostics.hasActiveSearch ? t("accessibility.searchApplied") : "",
+      diagnostics.hasActiveFilters ? t("accessibility.filtersApplied") : "",
+      diagnostics.hasActiveLimit ? t("accessibility.limitApplied") : "",
+    ].filter(Boolean);
+    return t("accessibility.queryStatus", {
+      visible: diagnostics.visibleCount,
+      qualifiers: qualifiers.length ? `; ${qualifiers.join(", ")}` : "",
+    });
   }
 
   private openActiveRulePopover(config: ViewConfig, kind: "filter" | "sort", index: number, anchorEl: HTMLElement): void {
@@ -3042,7 +3101,7 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
       anchorId: this.lastSelectedRowPath,
       targetId: row.file.path,
       selected,
-      range: Boolean(event?.shiftKey || this.isPhoneLayout()),
+      range: Boolean(event?.shiftKey || isTouchDevice(this.containerEl)),
     });
     if (this.config) this.renderResults(this.config);
   }
@@ -3677,6 +3736,7 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
 
   private handleEmbedKeydown(event: KeyboardEvent): void {
     if (!this.containerEl.isConnected) return;
+    if (!this.interactionScopes.isActive(this.interactionScopeId, event)) return;
     const target = event.target;
     const eventTarget = isHTMLElement(target) ? target : null;
     const isEditing = eventTarget?.closest("input, textarea, select, .db-cell-editing, .modal") != null;
@@ -3686,10 +3746,7 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
       void this.copySelectedEmbedCells("tsv");
       return;
     }
-    if (event.key === "Escape" && this.cellSelection) {
-      event.preventDefault();
-      this.clearEmbedCellSelection();
-    }
+    this.keyboardNavigation.handleKeydown(event);
   }
 
   private async copySelectedEmbedCells(format: "tsv" | "markdown" | "csv" = "tsv"): Promise<void> {
@@ -3738,12 +3795,23 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
   }
 
   private setupEmbedCellSelection(td: HTMLElement, row: RowData, col: ColumnDef): void {
+    td.setAttr("role", "gridcell");
+    td.tabIndex = this.cellSelection ? -1 : 0;
+    td.addEventListener("focus", () => {
+      if (this.isEmbedCellSelected(row.file.path, col.key)) return;
+      this.captureEmbedReturnFocus();
+      const addr: CellAddress = { rowPath: row.file.path, colKey: col.key };
+      this.cellSelection = { anchor: addr, focus: addr };
+      this.renderEmbedCellSelectionClasses();
+      this.renderEmbedSelectionStatusBar();
+    });
     const handleMouseDown = (event: MouseEvent) => {
       if (event.button !== 0) return;
       if (!this.config) return;
+      this.captureEmbedReturnFocus();
       event.preventDefault(); // prevent browser text selection during drag
       const addr: CellAddress = { rowPath: row.file.path, colKey: col.key };
-      if (this.isPhoneLayout()) {
+      if (isTouchDevice(this.containerEl)) {
         if (this.cellSelection) {
           this.cellSelection = { anchor: this.cellSelection.anchor, focus: addr };
         } else {
@@ -3752,6 +3820,7 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
         this.isSelectingCells = false;
         this.renderEmbedSelectionStatusBar();
         this.renderEmbedCellSelectionClasses();
+        this.focusEmbedCell(addr);
         return;
       }
       if (event.shiftKey && this.cellSelection) {
@@ -3762,6 +3831,7 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
       this.isSelectingCells = true;
       this.renderEmbedSelectionStatusBar();
       this.renderEmbedCellSelectionClasses();
+      this.focusEmbedCell(addr);
     };
 
     const handleMouseEnter = () => {
@@ -3774,10 +3844,6 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
 
     td.addEventListener("mousedown", handleMouseDown);
     td.addEventListener("mouseenter", handleMouseEnter);
-  }
-
-  private isPhoneLayout(): boolean {
-    return window.activeDocument.body.classList.contains("is-phone");
   }
 
   private getSelectedEmbedCellAddresses(): CellAddress[] {
@@ -3803,6 +3869,84 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
     return addrs;
   }
 
+  private captureEmbedReturnFocus(): void {
+    if (this.embedReturnFocus?.isConnected) return;
+    const active = this.containerEl.ownerDocument.activeElement;
+    this.embedReturnFocus = isHTMLElement(active) && !this.containerEl.contains(active) ? active : null;
+  }
+
+  private getEmbedFocusedAddress(): CellAddress | null {
+    return this.cellSelection?.focus || null;
+  }
+
+  private moveEmbedCellFocus(intent: TableCellNavigationIntent, extend: boolean): void {
+    const current = this.getEmbedFocusedAddress();
+    if (!current) return;
+    const next = resolveTableCellNavigation(this.getEmbedTableRowPaths(), this.getEmbedTableColKeys(), current, intent);
+    if (!next) return;
+    this.cellSelection = extend
+      ? { anchor: this.cellSelection?.anchor || current, focus: next }
+      : { anchor: next, focus: next };
+    this.renderEmbedCellSelectionClasses();
+    this.renderEmbedSelectionStatusBar();
+    this.focusEmbedCell(next);
+  }
+
+  private moveEmbedCellByPage(direction: "up" | "down", extend: boolean): void {
+    const current = this.getEmbedFocusedAddress();
+    if (!current) return;
+    const rows = this.getEmbedTableRowPaths();
+    const columns = this.getEmbedTableColKeys();
+    const cell = this.findEmbedCell(current);
+    const rowHeight = cell?.getBoundingClientRect().height || 32;
+    const viewportHeight = this.containerEl.getBoundingClientRect().height || 320;
+    const offset = Math.max(1, Math.floor(viewportHeight / rowHeight)) * (direction === "up" ? -1 : 1);
+    const next = moveTableCellByRowOffset(rows, columns, current, offset);
+    if (!next) return;
+    this.cellSelection = extend
+      ? { anchor: this.cellSelection?.anchor || current, focus: next }
+      : { anchor: next, focus: next };
+    this.renderEmbedCellSelectionClasses();
+    this.renderEmbedSelectionStatusBar();
+    this.focusEmbedCell(next);
+  }
+
+  private findEmbedCell(address: CellAddress): HTMLElement | null {
+    return Array.from(this.containerEl.querySelectorAll<HTMLElement>("td[data-note-database-row-path][data-note-database-column-key]")).find((cell) =>
+      cell.dataset.noteDatabaseRowPath === address.rowPath && cell.dataset.noteDatabaseColumnKey === address.colKey
+    ) || null;
+  }
+
+  private focusEmbedCell(address: CellAddress): void {
+    const cell = this.findEmbedCell(address);
+    if (!cell) return;
+    this.containerEl.querySelectorAll<HTMLElement>("td[data-note-database-row-path][data-note-database-column-key]").forEach((candidate) => {
+      candidate.tabIndex = candidate === cell ? 0 : -1;
+    });
+    cell.focus({ preventScroll: true });
+    cell.scrollIntoView?.({ block: "nearest", behavior: "smooth" });
+  }
+
+  private editFocusedEmbedCell(): void {
+    if (this.isCodeBlock || !this.config) return;
+    const address = this.getEmbedFocusedAddress();
+    const cell = address ? this.findEmbedCell(address) : null;
+    const row = address ? this.rows.find((candidate) => candidate.file.path === address.rowPath) : undefined;
+    const col = address ? this.config.schema.columns.find((candidate) => candidate.key === address.colKey) : undefined;
+    if (!cell || !row || !col) return;
+    this.cellRenderer.startEdit(cell, row, col);
+  }
+
+  private toggleFocusedEmbedCell(): void {
+    if (this.isCodeBlock || !this.config) return;
+    const address = this.getEmbedFocusedAddress();
+    const cell = address ? this.findEmbedCell(address) : null;
+    const row = address ? this.rows.find((candidate) => candidate.file.path === address.rowPath) : undefined;
+    const col = address ? this.config.schema.columns.find((candidate) => candidate.key === address.colKey) : undefined;
+    if (!cell || !row || !col || col.type !== "checkbox") return;
+    this.cellRenderer.startEdit(cell, row, col);
+  }
+
   private isEmbedCellSelected(rowPath: string, colKey: string): boolean {
     if (!this.cellSelection) return false;
     const addrs = this.getSelectedEmbedCellAddresses();
@@ -3810,10 +3954,14 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
   }
 
   private clearEmbedCellSelection(): void {
+    const returnFocus = this.embedReturnFocus;
     this.cellSelection = null;
     this.isSelectingCells = false;
     this.renderEmbedCellSelectionClasses();
     this.renderEmbedSelectionStatusBar();
+    this.embedReturnFocus = null;
+    if (returnFocus?.isConnected) returnFocus.focus({ preventScroll: true });
+    else if (this.containerEl.isConnected) this.containerEl.focus({ preventScroll: true });
   }
 
   private renderEmbedCellSelectionClasses(): void {
@@ -3821,8 +3969,14 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
     this.containerEl.querySelectorAll<HTMLElement>("td[data-note-database-row-path][data-note-database-column-key]").forEach((cell) => {
       const rowPath = cell.dataset.noteDatabaseRowPath;
       const colKey = cell.dataset.noteDatabaseColumnKey;
-      cell.toggleClass("db-cell-range-selected", Boolean(rowPath && colKey && selected.has(`${rowPath}\u0000${colKey}`)));
+      const selectedCell = Boolean(rowPath && colKey && selected.has(`${rowPath}\u0000${colKey}`));
+      cell.toggleClass("db-cell-range-selected", selectedCell);
+      cell.toggleClass("db-cell-focus", Boolean(this.cellSelection?.focus && rowPath === this.cellSelection.focus.rowPath && colKey === this.cellSelection.focus.colKey));
+      cell.tabIndex = this.cellSelection?.focus && rowPath === this.cellSelection.focus.rowPath && colKey === this.cellSelection.focus.colKey ? 0 : -1;
     });
+    if (!this.cellSelection) {
+      this.containerEl.querySelector<HTMLElement>("td[data-note-database-row-path][data-note-database-column-key]")?.setAttr("tabindex", "0");
+    }
   }
 
   /** Render a full Dashboard-style selection status bar.

@@ -2,7 +2,7 @@ import { Menu, setIcon, setTooltip } from "obsidian";
 import { formatCalendarTime, getCalendarSlotDuration } from "../data/CalendarLayoutModel";
 import { isExplicitlySorted } from "../data/ManualOrder";
 import { CalendarTitleParts, buildTimelineAxisBands, formatCalendarTitleParts } from "../data/CalendarTitleFormatter";
-import { buildCalendarMonthModel, buildTimelineModel, buildTimelineTicks, CalendarTimelineEvent, collectUnscheduledTimelineRows, getDefaultEventDateField, getTimelineAnchor, getTimelineNavigationShiftUnits, getTimelineShortNavigationShiftUnits, getTimelineTitleWindow, getTimelineViewportContentWidth, getTimelineViewportStartAnchor, normalizeTimelineDayScale, resolveEventAbsoluteScale, resolveTimelineJumpAnchor, resolveTimelineReorderNeighbors, resolveTimelineUnitWidth, resolveTimelineViewportUnitCount, resolveTimelineViewportUnitSpan, shiftCalendarMonth, TimelineUnit, UNCATEGORIZED_TIMELINE_LANE } from "../data/CalendarTimelineModel";
+import { buildCalendarMonthModel, buildTimelineModel, buildTimelineTicks, CalendarTimelineEvent, collectUnscheduledTimelineRows, getDefaultEventDateField, getTimelineAnchor, getTimelineNavigationShiftUnits, getTimelineShortNavigationShiftUnits, getTimelineTitleWindow, getTimelineViewportContentWidth, getTimelineViewportStartAnchor, normalizeTimelineDayScale, resolveEventAbsoluteScale, resolveTimelineJumpAnchor, resolveTimelineReorderNeighbors, resolveTimelineUnitWidth, resolveTimelineViewportUnitCount, resolveTimelineViewportUnitSpan, shiftCalendarMonth, TimelineUnit, UNCATEGORIZED_TIMELINE_LANE, TimelineModel } from "../data/CalendarTimelineModel";
 import {
   CALENDAR_TIME_SNAP_MINUTES,
   MINUTES_PER_DAY,
@@ -27,6 +27,7 @@ import { renderGroupExpandControls } from "./GroupExpandControls";
 import { getGroupVisibleCount } from "../data/GroupVisibility";
 import { markNoteHoverLink } from "./HoverLinkPreview";
 import { EmptyStateReason, EmptyStateRenderer } from "./EmptyStateRenderer";
+import { isTouchDevice } from "../data/TouchEnvironment";
 
 const TIME_SNAP_MINUTES = CALENDAR_TIME_SNAP_MINUTES;
 
@@ -272,6 +273,18 @@ export class CalendarTimelineRenderer {
       scale: model.scale,
       startMinutes: model.startMinutes,
     };
+    wrap.createDiv({
+      cls: "db-sr-status",
+      text: t("timeline.accessibilityLabel", {
+        start: model.startDateKey || "",
+        end: model.endDateKey || model.startDateKey || "",
+        visible: model.visibleEventCount,
+        off: model.offWindowEventCount,
+        before: model.eventsBeforeWindow,
+        after: model.eventsAfterWindow,
+      }),
+      attr: { role: "status", "aria-live": "polite", "aria-atomic": "true" },
+    });
 
     this.renderTimelineHeader(wrap, config, model);
     this.renderUnscheduledBacklog(wrap, config, rows, startField);
@@ -566,7 +579,7 @@ export class CalendarTimelineRenderer {
       if (!range.isClippedStart) this.renderTimelineResizeHandle(button, eventsEl, config, event, model, "start", groupKey);
       if (!range.isClippedEnd) this.renderTimelineResizeHandle(button, eventsEl, config, event, model, "end", groupKey);
     }
-    if (this.isPhoneLayout() && !this.actions.isReadOnly) {
+    if (isTouchDevice(this.timelineRoot) && !this.actions.isReadOnly) {
       this.renderTimelineMobileMenuButton(button, config, event, groupKey, laneEvents, lanes);
     }
   }
@@ -602,6 +615,7 @@ export class CalendarTimelineRenderer {
       cls: `db-timeline-window-jump is-${direction}${isOverEvent ? " is-over-event" : ""}`,
       attr: {
         type: "button",
+        "aria-label": t("timeline.jumpToEvent", { title: event.title, date: dateKey }),
         "data-note-database-row-path": event.row.file.path,
       },
     });
@@ -633,11 +647,13 @@ export class CalendarTimelineRenderer {
   private renderTimelineGroupHeader(parent: HTMLElement, config: ViewConfig, lane: { key: string; label: string; color?: string; events: CalendarTimelineEvent[] }): boolean {
     const collapseField = this.getTimelineCollapseField(config);
     const collapsed = this.isTimelineGroupCollapsed(config, collapseField, lane.key);
+    const sectionId = `group-section-${encodeURIComponent(`${collapseField}:${lane.key}`)}`;
+    parent.setAttr("id", sectionId);
     const header = parent.createDiv({ cls: "db-timeline-group-header" });
     const headerLabel = header.createDiv({ cls: "db-timeline-group-header-label" });
     const toggle = headerLabel.createEl("button", {
       cls: `db-timeline-group-toggle${collapsed ? " is-collapsed" : ""}`,
-      attr: { type: "button", "aria-label": collapsed ? t("group.expand") : t("group.collapse") },
+      attr: { type: "button", "aria-label": collapsed ? t("group.expand") : t("group.collapse"), "aria-expanded": String(!collapsed), "aria-controls": sectionId },
     });
     toggle.createSpan({ cls: "db-collapse-triangle" });
     toggle.onclick = (event) => {
@@ -2233,10 +2249,6 @@ export class CalendarTimelineRenderer {
     input.focus();
     if (typeof input.showPicker === "function") input.showPicker();
     else input.click();
-  }
-
-  private isPhoneLayout(): boolean {
-    return window.activeDocument.body.classList.contains("is-phone");
   }
 
   private renderEmpty(container: HTMLElement, reason: EmptyStateReason): void {

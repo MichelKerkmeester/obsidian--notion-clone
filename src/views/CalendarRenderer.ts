@@ -38,6 +38,7 @@ import { openDropdownMenu } from "./DropdownField";
 import { buildMiniCalendarEventIndex, MiniCalendarMode, renderMiniCalendar } from "./CalendarMiniCalendarRenderer";
 import { markNoteHoverLink } from "./HoverLinkPreview";
 import { EmptyStateReason, EmptyStateRenderer } from "./EmptyStateRenderer";
+import { isTouchDevice } from "../data/TouchEnvironment";
 
 const TIME_SNAP_MINUTES = CALENDAR_TIME_SNAP_MINUTES;
 const TIMED_EVENT_TIME_VISIBILITY_HEIGHT = 42;
@@ -97,6 +98,7 @@ export class CalendarRenderer {
 		this.closeMiniCalendar();
 		this.closeCalendarScaleMenu();
 		this.calendarRoot = null;
+		this.calendarRoot = container;
 		this.currentVisibleRange = null;
 		this.currentRows = rows;
 		this.rowByPath = new Map(rows.map((row) => [row.file.path, row]));
@@ -659,7 +661,7 @@ export class CalendarRenderer {
 				this.openDayFromTimeHeader(config, day.dateKey);
 			};
 			dateButton.oncontextmenu = (event) => {
-				if (!this.isPhoneLayout()) return;
+					if (!isTouchDevice(this.calendarRoot)) return;
 				event.preventDefault();
 				event.stopPropagation();
 				this.showDayViewNavigationMenu(event, config, day.dateKey);
@@ -2188,7 +2190,7 @@ export class CalendarRenderer {
 		};
 		button.oncontextmenu = (event) => {
 			if (this.isColumnResizeHandleEvent(event)) return;
-			if (!this.isPhoneLayout()) return;
+			if (!isTouchDevice(this.calendarRoot)) return;
 			event.preventDefault();
 			event.stopPropagation();
 			this.showDayViewNavigationMenu(event, config, dateKey);
@@ -2206,10 +2208,6 @@ export class CalendarRenderer {
 			.setIcon("calendar-days")
 			.onClick(() => this.openDayFromTimeHeader(config, dateKey)));
 		menu.showAtMouseEvent(event);
-	}
-
-	private isPhoneLayout(): boolean {
-		return window.activeDocument.body.classList.contains("is-phone");
 	}
 
 	private openDayFromTimeHeader(config: ViewConfig, dateKey: string): void {

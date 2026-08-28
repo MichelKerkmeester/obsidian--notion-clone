@@ -13,6 +13,7 @@ export interface ActiveViewControlsActions {
   removeSort(index: number): void;
   toggleFilterLogic(): void;
   clearAll(): void;
+  getStatusMessage?(): string;
 }
 
 interface EffectiveFilterEntry {
@@ -27,6 +28,8 @@ function isNestedFilterTree(tree: SourceRuleNode | undefined): boolean {
 }
 
 export class ActiveViewControlsRenderer {
+  private statusUpdateTimer: number | null = null;
+
   render(
     containerEl: HTMLElement,
     config: ViewConfig,
@@ -38,6 +41,20 @@ export class ActiveViewControlsRenderer {
     existing?.remove();
     const header = containerEl.querySelector<HTMLElement>(":scope > .db-header");
     if (!header) return;
+    header.querySelector<HTMLElement>(":scope > .db-sr-status")?.remove();
+    if (this.statusUpdateTimer !== null) window.clearTimeout(this.statusUpdateTimer);
+    this.statusUpdateTimer = null;
+    const status = header.createDiv({
+      cls: "db-sr-status",
+      attr: { role: "status", "aria-live": "polite", "aria-atomic": "true" },
+    });
+    const statusMessage = actions.getStatusMessage?.();
+    if (statusMessage) {
+      this.statusUpdateTimer = window.setTimeout(() => {
+        this.statusUpdateTimer = null;
+        if (status.isConnected) status.textContent = statusMessage;
+      }, 300);
+    }
 
     const columns = getViewRuleColumns(config);
     const validFields = new Set(columns.map((column) => column.key));

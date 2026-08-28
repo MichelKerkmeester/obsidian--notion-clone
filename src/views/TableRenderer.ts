@@ -14,6 +14,9 @@ import { getGroupHeaderClassName, getGroupHeaderDepthValue } from "../data/Multi
 import { EmptyStateOptions, EmptyStateRenderer } from "./EmptyStateRenderer";
 import { getSelectionState } from "../data/RangeSelection";
 import { TableFooterRenderer } from "./TableFooterRenderer";
+import { EdgeAutoScroller } from "./EdgeAutoScroller";
+import { InteractionSnapshot } from "./InteractionSnapshot";
+import { isTouchDevice } from "../data/TouchEnvironment";
 
 const ROW_MIME = "application/x-note-database-row";
 const ROW_FROM_GROUP_MIME = "application/x-note-database-row-from-group";
@@ -73,19 +76,24 @@ export interface TableRendererActions {
   readonly hideCreateEntry?: boolean;
   /** When true, row-level data mutation controls are not rendered */
   readonly isReadOnly?: boolean;
+  captureInteractionSnapshot?(): InteractionSnapshot;
+  restoreInteractionSnapshot?(snapshot: InteractionSnapshot): void;
 }
 
 export class TableRenderer {
   private rowByPath = new Map<string, RowData>();
   private draggingPath: string | undefined;
   private rowDropFeedback = new DragDropFeedbackState();
+  private rowAutoScroller?: EdgeAutoScroller;
   private emptyStateRenderer = new EmptyStateRenderer();
   private footerRenderer = new TableFooterRenderer();
+  private renderContainer: HTMLElement | null = null;
 
   constructor(private actions: TableRendererActions) {}
 
   renderTable(container: HTMLElement, config: ViewConfig, rows: RowData[], emptyState?: EmptyStateOptions): void {
     this.clearTable(container);
+    this.renderContainer = container;
     this.rowByPath = new Map(rows.map((row) => [row.file.path, row]));
     this.applyDensity(container, config);
 
@@ -110,6 +118,7 @@ export class TableRenderer {
       this.renderNewRow(tbody, visibleColumns.length + this.getUtilityColumnCount(config), undefined, rows);
     }
     this.renderFooter(table, config, visibleColumns, rows);
+    this.applyGridSemantics(table, config, visibleColumns, rows);
   }
 
   renderGroupedTable(
@@ -121,6 +130,7 @@ export class TableRenderer {
     emptyState?: EmptyStateOptions,
   ): void {
     this.clearTable(containerEl);
+    this.renderContainer = containerEl;
     this.rowByPath = new Map(rows.map((row) => [row.file.path, row]));
     this.applyDensity(containerEl, config);
 
@@ -190,6 +200,7 @@ export class TableRenderer {
       );
     }
     this.renderFooter(table, config, visibleColumns, rows);
+    this.applyGridSemantics(table, config, visibleColumns, rows);
   }
 
   /**
@@ -227,6 +238,7 @@ export class TableRenderer {
     }
 
     this.rowByPath = new Map(rows.map((row) => [row.file.path, row]));
+    const interaction = this.actions.captureInteractionSnapshot?.();
     const rowByPath = this.rowByPath;
     for (const oldRow of renderedRows) {
       const path = oldRow.getAttribute("data-note-database-row-path") || "";
@@ -236,6 +248,8 @@ export class TableRenderer {
       const replacement = this.renderRow(tbody, config, row, rows, visibleColumns);
       oldRow.replaceWith(replacement);
     }
+    if (interaction) this.actions.restoreInteractionSnapshot?.(interaction);
+    this.applyGridSemantics(table, config, visibleColumns, rows);
     return true;
   }
 
@@ -307,6 +321,7 @@ export class TableRenderer {
     }
 
     this.rowByPath = new Map(rows.map((row) => [row.file.path, row]));
+    const interaction = this.actions.captureInteractionSnapshot?.();
     for (const { tbody, renderedRows, renderable, visibleRows } of renderedRowsByGroup) {
       const { group } = renderable;
       for (const oldRow of renderedRows) {
@@ -329,6 +344,8 @@ export class TableRenderer {
         oldRow.replaceWith(replacement);
       }
     }
+    if (interaction) this.actions.restoreInteractionSnapshot?.(interaction);
+    this.applyGridSemantics(table, config, visibleColumns, rows);
     return true;
   }
 
@@ -400,7 +417,7 @@ export class TableRenderer {
   }
 
   private getSelectionColumnWidth(): number {
-    return this.isPhoneLayout() ? 48 : 40;
+    return isTouchDevice(this.renderContainer) ? 48 : 40;
   }
 
   private getRecordIconColumnWidth(): number {
@@ -440,9 +457,11 @@ export class TableRenderer {
 
   private renderHeader(table: HTMLElement, config: ViewConfig, columns: ColumnDef[], rows: RowData[]): void {
     const thead = table.createEl("thead");
-    const headerRow = thead.createEl("tr");
+    const headerRow = thead.createEl("tr", { attr: { role: "row", "aria-rowindex": "1" } });
+    table.setAttr("role", "grid");
+    table.setAttr("aria-label", t("table.ariaLabel"));
     if (!this.actions.isReadOnly) {
-      const selectTh = headerRow.createEl("th", { cls: "db-select-col" });
+      const selectTh = headerRow.createEl("th", { cls: "db-select-col", attr: { role: "columnheader" } });
       const selectInner = selectTh.createDiv({ cls: "db-select-inner" });
       const selectAll = selectInner.createEl("input", { attr: { type: "checkbox" } });
       selectAll.checked = this.actions.areAllRowsSelected(rows);
@@ -453,11 +472,13 @@ export class TableRenderer {
     if (this.shouldRenderRecordIcon(config)) {
       headerRow.createEl("th", {
         cls: "db-record-icon-col",
-        attr: { "aria-label": t("recordIcon.icons"), title: t("recordIcon.icons") },
+        attr: { role: "columnheader", "aria-label": t("recordIcon.icons"), title: t("recordIcon.icons") },
       });
     }
     for (const col of columns) {
       const th = headerRow.createEl("th");
+      th.setAttr("role", "columnheader");
+      th.setAttr("aria-colindex", String(Array.from(headerRow.children).indexOf(th) + 1));
       th.setAttr("data-note-database-column-key", col.key);
       th.toggleClass("is-narrow", this.isHeaderNarrow(config, col));
       const content = th.createDiv({ cls: "db-th-content" });
@@ -465,6 +486,7 @@ export class TableRenderer {
       content.createSpan({ cls: "db-th-label", text: col.label || col.key, attr: { title: col.label || col.key } });
       const sort = this.getColumnSortState(config, col);
       if (sort) {
+        th.setAttr("aria-sort", sort.direction === "asc" ? "ascending" : "descending");
         const arrow = sort.direction === "asc" ? "▲" : "▼";
         const suffix = sort.total > 1 ? String(sort.index + 1) : "";
         content.createSpan({
@@ -473,9 +495,10 @@ export class TableRenderer {
           attr: { title: sort.total > 1 ? `${sort.index + 1}. ${sort.direction}` : sort.direction },
         });
       }
+      if (!sort) th.setAttr("aria-sort", "none");
       this.actions.setupColumnHeader(th, col);
     }
-    const addTh = headerRow.createEl("th", { cls: "db-add-column-th" });
+    const addTh = headerRow.createEl("th", { cls: "db-add-column-th", attr: { role: "columnheader" } });
     const addButton = addTh.createEl("button", {
       cls: "db-add-column-button",
       attr: { type: "button", "aria-label": t("table.addColumn"), title: t("table.addColumn") },
@@ -490,6 +513,9 @@ export class TableRenderer {
         void this.actions.addColumn?.();
       };
     }
+    Array.from(headerRow.children).forEach((header, index) => {
+      (header as HTMLElement).setAttr("aria-colindex", String(index + 1));
+    });
   }
 
   private getRenderableGroups(config: ViewConfig, groups: TableGroup[], groupField?: string): RenderableTableGroup[] {
@@ -541,6 +567,8 @@ export class TableRenderer {
         "data-note-database-group-paths": JSON.stringify(selectionRows.map((row) => row.file.path)),
       },
     });
+    const sectionId = this.getGroupSectionId(displayField || "group", collapseKey);
+    divider.setAttr("id", sectionId);
     const depthValue = getGroupHeaderDepthValue(depth);
     if (depthValue !== undefined) divider.style.setProperty("--db-group-depth", depthValue);
     const cell = divider.createEl("td", { attr: { colspan: String(Math.max(1, colspan)) } });
@@ -561,7 +589,12 @@ export class TableRenderer {
     if (displayField) {
       const toggle = label.createEl("button", {
         cls: `db-group-collapse-toggle${collapsed ? " is-collapsed" : ""}`,
-        attr: { type: "button", "aria-label": collapsed ? t("group.expand") : t("group.collapse") },
+        attr: {
+          type: "button",
+          "aria-label": collapsed ? t("group.expand") : t("group.collapse"),
+          "aria-expanded": String(!collapsed),
+          "aria-controls": sectionId,
+        },
       });
       toggle.createSpan({ cls: "db-collapse-triangle" });
       toggle.onclick = (event) => {
@@ -676,7 +709,7 @@ export class TableRenderer {
     allowGroupMove = true,
   ): HTMLElement {
     const tr = tbody.createEl("tr", {
-      attr: { "data-note-database-row-path": row.file.path },
+      attr: { "data-note-database-row-path": row.file.path, role: "row" },
     });
     this.actions.applyConditionalFormat?.(tr, row, config);
     if (groupField && groupKey != null) {
@@ -698,7 +731,7 @@ export class TableRenderer {
         visibleRows: rows,
         groups: groupPath ?? (groupField && groupKey != null ? [{ field: groupField, key: groupKey }] : undefined),
       });
-      if (this.isPhoneLayout() && (this.canManualReorder(config) || Boolean(rowMoveField && groups?.length))) {
+      if (isTouchDevice(this.renderContainer) && (this.canManualReorder(config) || Boolean(rowMoveField && groups?.length))) {
         this.renderMobileMoveButton(selectInner, config, row, rows, rowMoveField, rowMoveKey, groups);
       }
       const cb = selectInner.createEl("input", { attr: { type: "checkbox" } });
@@ -823,7 +856,7 @@ export class TableRenderer {
     const canMoveGroup = Boolean(groupField && groupKey != null && typeof this.actions.moveRowsToGroup === "function");
     const canReorder = this.canManualReorder(config);
     if (this.actions.isReadOnly) return;
-    if (this.isPhoneLayout()) return;
+    if (isTouchDevice(this.renderContainer)) return;
     if (!handleParent) return;
 
     const handle = handleParent.createEl("button", {
@@ -855,15 +888,19 @@ export class TableRenderer {
         event.dataTransfer.setDragImage(tr, event.clientX - rect.left, event.clientY - rect.top);
       }
       this.draggingPath = row.file.path;
+      this.rowDropFeedback.begin(row.file.path, [row.file.path]);
+      this.rowAutoScroller = new EdgeAutoScroller(tr.closest<HTMLElement>(".db-table-wrap") || tr);
       this.setRowDraggingMode(tr, true);
       tr.addClass("is-dragging");
     });
 
     handle.addEventListener("dragend", () => {
       this.draggingPath = undefined;
+      this.rowAutoScroller?.destroy();
+      this.rowAutoScroller = undefined;
       this.setRowDraggingMode(tr, false);
       tr.removeClass("is-dragging");
-      this.rowDropFeedback.clear();
+      if (this.rowDropFeedback.getPhase() !== "pending") this.rowDropFeedback.clear();
     });
 
     if (!canReorder) return;
@@ -874,6 +911,7 @@ export class TableRenderer {
       if (!this.isRowDrag(event)) return;
       event.preventDefault();
       event.stopPropagation();
+      this.rowAutoScroller?.update(event);
       this.rowDropFeedback.update(tr, resolveDropPlacement(tr, event, "vertical"));
     });
 
@@ -889,13 +927,17 @@ export class TableRenderer {
       event.preventDefault();
       event.stopPropagation();
       this.draggingPath = undefined;
+      this.rowAutoScroller?.destroy();
+      this.rowAutoScroller = undefined;
       this.setRowDraggingMode(tr, false);
 
       const placement = this.rowDropFeedback.getPlacement(tr) || resolveDropPlacement(tr, event, "vertical");
-      this.rowDropFeedback.clear();
+      this.rowDropFeedback.setPending();
       const isAfter = placement === "after";
       const position = this.getDropPosition(rows, dragPath, row.file.path, isAfter);
-      void this.moveRowToDropPosition(draggedRow, dragPath, groupField, groupKey, event, position.beforePath, position.afterPath);
+      void this.moveRowToDropPosition(draggedRow, dragPath, groupField, groupKey, event, position.beforePath, position.afterPath)
+        .then(() => this.rowDropFeedback.commit())
+        .catch((error) => this.rowDropFeedback.fail(error));
     });
   }
 
@@ -911,12 +953,16 @@ export class TableRenderer {
       if (!this.isRowDrag(event)) return;
       const path = event.dataTransfer?.getData(ROW_MIME) || event.dataTransfer?.getData("text/plain");
       const row = path ? this.rowByPath.get(path) : undefined;
-      if (!row) return;
+      if (!row || !path) return;
       event.preventDefault();
       event.stopPropagation();
       this.setGroupDropTarget(target, false);
       const fromGroupKey = event.dataTransfer?.getData(ROW_FROM_GROUP_MIME) || "";
-      void this.actions.moveRowsToGroup?.(row, groupField, fromGroupKey, groupKey);
+      this.rowDropFeedback.begin(path, [path], groupKey);
+      this.rowDropFeedback.setPending();
+      void Promise.resolve(this.actions.moveRowsToGroup?.(row, groupField, fromGroupKey, groupKey))
+        .then(() => this.rowDropFeedback.commit())
+        .catch((error) => this.rowDropFeedback.fail(error));
     });
   }
 
@@ -986,8 +1032,27 @@ export class TableRenderer {
     }
   }
 
-  private isPhoneLayout(): boolean {
-    return window.activeDocument.body.classList.contains("is-phone");
+  private getGroupSectionId(field: string, key: string): string {
+    return `group-section-${encodeURIComponent(`${field}:${key}`)}`;
+  }
+
+  private applyGridSemantics(table: HTMLElement, config: ViewConfig, columns: ColumnDef[], rows: RowData[]): void {
+    const rowCount = table.querySelectorAll<HTMLElement>("tbody > tr[data-note-database-row-path]").length;
+    table.setAttr("aria-rowcount", String(Math.max(1, rowCount + 1)));
+    table.setAttr("aria-colcount", String(columns.length + this.getUtilityColumnCount(config)));
+    table.querySelectorAll<HTMLElement>("tbody > tr[data-note-database-row-path]").forEach((row, index) => {
+      row.setAttr("role", "row");
+      row.setAttr("aria-rowindex", String(index + 2));
+      const dataRow = rows.find((candidate) => candidate.file.path === row.dataset.noteDatabaseRowPath);
+      const selected = dataRow ? this.actions.isRowSelected(dataRow) : false;
+      row.setAttr("aria-selected", String(Boolean(selected)));
+      Array.from(row.children).forEach((cell) => {
+        const element = cell as HTMLElement;
+        element.setAttr("role", "gridcell");
+        element.setAttr("aria-colindex", String(Array.from(row.children).indexOf(cell) + 1));
+        element.setAttr("aria-selected", String(Boolean(selected) || element.hasClass("db-cell-range-selected")));
+      });
+    });
   }
 
   private getGroupPath(

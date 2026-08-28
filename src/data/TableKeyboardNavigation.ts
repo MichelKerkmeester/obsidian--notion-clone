@@ -23,6 +23,54 @@ export type TableCellNavigationIntent =
   | "grid-start"
   | "grid-end";
 
+export function getTableKeyboardNavigationIntent(event: KeyboardEvent): TableCellNavigationIntent | "edit" | "toggle" | "escape" | "page-up" | "page-down" | null {
+  if (event.key === "Escape") return "escape";
+  if (event.key === "Enter" || event.key === "F2") return "edit";
+  if (event.key === " ") return "toggle";
+  if (event.key === "ArrowUp") return "up";
+  if (event.key === "ArrowDown") return "down";
+  if (event.key === "ArrowLeft") return "left";
+  if (event.key === "ArrowRight") return "right";
+  if (event.key === "Tab") return event.shiftKey ? "previous" : "next";
+  if (event.key === "Home") return event.ctrlKey || event.metaKey ? "grid-start" : "row-start";
+  if (event.key === "End") return event.ctrlKey || event.metaKey ? "grid-end" : "row-end";
+  if (event.key === "PageUp") return "page-up";
+  if (event.key === "PageDown") return "page-down";
+  return null;
+}
+
+export interface TableKeyboardNavigationCallbacks {
+  hasSelection(): boolean;
+  move(intent: TableCellNavigationIntent, extend: boolean): void;
+  moveByPage?(direction: "up" | "down", extend: boolean): void;
+  edit(): void;
+  toggle(): void;
+  escape(): void;
+}
+
+/** Keeps keyboard intent handling identical for full and embedded tables. */
+export class TableKeyboardNavigationController {
+  constructor(private readonly callbacks: TableKeyboardNavigationCallbacks) {}
+
+  handleKeydown(event: KeyboardEvent): boolean {
+    if (!this.callbacks.hasSelection()) return false;
+    const target = event.target as HTMLElement | null;
+    if (target?.closest?.("input, textarea, select, [contenteditable='true'], .db-cell-editing, .modal")) return false;
+    const intent = getTableKeyboardNavigationIntent(event);
+    if (!intent) return false;
+    event.preventDefault();
+    if (intent === "escape") this.callbacks.escape();
+    else if (intent === "edit") this.callbacks.edit();
+    else if (intent === "toggle") this.callbacks.toggle();
+    else if (intent === "page-up" || intent === "page-down") {
+      this.callbacks.moveByPage?.(intent === "page-up" ? "up" : "down", event.shiftKey);
+    } else {
+      this.callbacks.move(intent, event.shiftKey);
+    }
+    return true;
+  }
+}
+
 const clampIndex = (index: number, length: number): number =>
   Math.min(Math.max(index, 0), Math.max(0, length - 1));
 

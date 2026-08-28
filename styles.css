@@ -501,16 +501,6 @@
   outline-offset: 2px;
 }
 
-.note-database-container *:focus {
-  outline: none;
-}
-
-.note-database-container *:focus-visible {
-  outline: none;
-  box-shadow: var(--db-accent-focus-ring);
-  border-radius: var(--db-radius-sm);
-}
-
 @media (prefers-reduced-motion: reduce) {
   .note-database-container *,
   .note-database-container *::before,
@@ -2012,18 +2002,156 @@
   border-radius: var(--db-radius-lg);
   background: var(--background-primary);
   color: var(--text-muted);
-  position: sticky;
-  top: calc(var(--db-table-header-top) - 20px);
-  left: 0px;
-  z-index: 29;
+  position: fixed;
+  left: 50%;
+  bottom: max(16px, env(safe-area-inset-bottom));
+  transform: translateX(-50%);
+  z-index: 100;
   margin: 0;
   padding: 0 7px;
   width: max-content;
+  max-width: min(94vw, 760px);
+  overflow-x: auto;
+  backdrop-filter: blur(12px);
+  animation: db-selection-dock-in 160ms ease-out;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
 }
 
 .note-database-container .db-selection-status-bar.is-summary-overlay {
-  margin-bottom: calc(-1 * var(--db-selection-status-height));
+  margin-bottom: 0;
+}
+
+@keyframes db-selection-dock-in {
+  from { opacity: 0; transform: translate(-50%, 8px); }
+  to { opacity: 1; transform: translate(-50%, 0); }
+}
+
+.note-database-container .db-selection-clear-pill,
+.note-database-container .db-selection-count-badge {
+  flex: 0 0 auto;
+}
+
+.note-database-container .db-selection-clear-pill {
+  border: 0;
+  border-radius: 999px;
+  padding: 3px 7px;
+  background: var(--background-modifier-hover);
+  color: var(--text-muted);
+  font-size: var(--db-font-xs);
+  cursor: pointer;
+}
+
+.note-database-container .db-selection-clear-pill:hover,
+.note-database-container .db-selection-clear-pill:focus-visible {
+  background: var(--background-modifier-border);
+  color: var(--text-normal);
+}
+
+.note-database-container .db-selection-count-badge {
+  border-radius: 999px;
+  padding: 3px 8px;
+  background: color-mix(in srgb, var(--interactive-accent) 14%, var(--background-primary));
+  color: var(--text-normal);
+  font-size: var(--db-font-xs);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.note-database-container .db-operation-result-rail {
+  position: fixed;
+  right: 16px;
+  bottom: max(16px, env(safe-area-inset-bottom));
+  z-index: 101;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid color-mix(in srgb, var(--text-success, var(--interactive-accent)) 55%, var(--background-modifier-border));
+  border-radius: 999px;
+  padding: 6px 10px;
+  background: var(--background-primary);
+  color: var(--text-normal);
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.14);
+  animation: db-operation-rail-in 160ms ease-out;
+}
+
+.note-database-container .db-operation-result-rail.is-error {
+  border-color: var(--text-error);
+  color: var(--text-error);
+}
+
+.note-database-container .db-operation-result-icon svg {
+  width: 14px;
+  height: 14px;
+}
+
+.note-database-container .db-operation-result-action {
+  border: 0;
+  padding: 2px 4px;
+  background: transparent;
+  color: inherit;
+  font-size: var(--db-font-xs);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.note-database-container .db-operation-result-action:hover,
+.note-database-container .db-operation-result-action:focus-visible {
+  text-decoration: underline;
+}
+
+@keyframes db-operation-rail-in {
+  from { opacity: 0; transform: translateY(5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.note-database-container .db-skeleton-loader {
+  position: absolute;
+  inset: 112px 16px 16px;
+  z-index: 6;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px;
+  border: 1px solid var(--background-modifier-border);
+  border-radius: var(--db-radius-lg);
+  background: color-mix(in srgb, var(--background-primary) 92%, transparent);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 100ms ease;
+}
+
+.note-database-container .db-skeleton-loader.is-visible { opacity: 1; }
+
+.note-database-container .db-skeleton-row {
+  display: grid;
+  grid-template-columns: minmax(120px, 2fr) minmax(80px, 1fr) minmax(48px, .6fr);
+  gap: 10px;
+  min-height: 34px;
+}
+
+.note-database-container .db-skeleton-cell {
+  position: relative;
+  overflow: hidden;
+  min-height: 14px;
+  align-self: center;
+  border-radius: var(--db-radius-sm);
+  background: var(--background-modifier-border);
+}
+
+.note-database-container .db-skeleton-cell::after {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(100deg, transparent 20%, color-mix(in srgb, var(--background-primary) 65%, transparent) 50%, transparent 80%);
+  content: "";
+  transform: translateX(-100%);
+  animation: db-skeleton-shimmer 1.1s ease-in-out infinite;
+}
+
+.note-database-container .db-skeleton-cell.is-wide { min-height: 18px; }
+.note-database-container .db-skeleton-cell.is-short { max-width: 72px; }
+
+@keyframes db-skeleton-shimmer {
+  to { transform: translateX(100%); }
 }
 
 .note-database-container .db-selection-fill-form {
@@ -3040,6 +3168,40 @@
   pointer-events: none;
   padding: 0;
   transition: opacity 120ms ease, width 120ms ease;
+}
+
+.note-database-container .db-search-input-wrap {
+  flex: 1 1 auto;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  width: 0;
+  min-width: 0;
+}
+
+.note-database-container .db-search-input-wrap .db-search-input {
+  padding-right: 24px;
+}
+
+.note-database-container .db-search-activity-pulse {
+  position: absolute;
+  right: 7px;
+  width: 10px;
+  height: 10px;
+  border: 2px solid color-mix(in srgb, var(--interactive-accent) 28%, transparent);
+  border-top-color: var(--interactive-accent);
+  border-radius: 50%;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.note-database-container .db-search-activity-pulse.is-active {
+  opacity: 1;
+  animation: db-search-pulse 700ms linear infinite;
+}
+
+@keyframes db-search-pulse {
+  to { transform: rotate(360deg); }
 }
 
 .note-database-container .db-search-input:focus {
@@ -4744,23 +4906,36 @@
   transition: stroke-dashoffset 120ms ease;
 }
 
+.note-database-container .db-cell-rating [role="button"],
+.note-database-container .db-cell-progress-track[role="slider"],
+.note-database-container .db-cell-progress-ring[role="slider"] {
+  cursor: pointer;
+}
+
+.note-database-container .db-cell-rating [role="button"]:focus-visible,
+.note-database-container .db-cell-progress-track[role="slider"]:focus-visible,
+.note-database-container .db-cell-progress-ring[role="slider"]:focus-visible {
+  outline: 2px solid var(--interactive-accent);
+  outline-offset: 2px;
+}
+
 /* Number displays use the same semantic foreground ramp as option swatches. */
-.db-num-color-gray { --db-number-color: var(--status-color-fg-gray); }
-.db-num-color-brown { --db-number-color: var(--status-color-fg-brown); }
-.db-num-color-orange { --db-number-color: var(--status-color-fg-orange); }
-.db-num-color-yellow { --db-number-color: var(--status-color-fg-yellow); }
-.db-num-color-green { --db-number-color: var(--status-color-fg-green); }
-.db-num-color-blue { --db-number-color: var(--status-color-fg-blue); }
-.db-num-color-purple { --db-number-color: var(--status-color-fg-purple); }
-.db-num-color-pink { --db-number-color: var(--status-color-fg-pink); }
-.db-num-color-red { --db-number-color: var(--status-color-fg-red); }
-.db-num-color-slate { --db-number-color: var(--status-color-fg-slate); }
-.db-num-color-cyan { --db-number-color: var(--status-color-fg-cyan); }
-.db-num-color-teal { --db-number-color: var(--status-color-fg-teal); }
-.db-num-color-lime { --db-number-color: var(--status-color-fg-lime); }
-.db-num-color-indigo { --db-number-color: var(--status-color-fg-indigo); }
-.db-num-color-violet { --db-number-color: var(--status-color-fg-violet); }
-.db-num-color-rose { --db-number-color: var(--status-color-fg-rose); }
+.note-database-container .db-num-color-gray { --db-number-color: var(--status-color-fg-gray); }
+.note-database-container .db-num-color-brown { --db-number-color: var(--status-color-fg-brown); }
+.note-database-container .db-num-color-orange { --db-number-color: var(--status-color-fg-orange); }
+.note-database-container .db-num-color-yellow { --db-number-color: var(--status-color-fg-yellow); }
+.note-database-container .db-num-color-green { --db-number-color: var(--status-color-fg-green); }
+.note-database-container .db-num-color-blue { --db-number-color: var(--status-color-fg-blue); }
+.note-database-container .db-num-color-purple { --db-number-color: var(--status-color-fg-purple); }
+.note-database-container .db-num-color-pink { --db-number-color: var(--status-color-fg-pink); }
+.note-database-container .db-num-color-red { --db-number-color: var(--status-color-fg-red); }
+.note-database-container .db-num-color-slate { --db-number-color: var(--status-color-fg-slate); }
+.note-database-container .db-num-color-cyan { --db-number-color: var(--status-color-fg-cyan); }
+.note-database-container .db-num-color-teal { --db-number-color: var(--status-color-fg-teal); }
+.note-database-container .db-num-color-lime { --db-number-color: var(--status-color-fg-lime); }
+.note-database-container .db-num-color-indigo { --db-number-color: var(--status-color-fg-indigo); }
+.note-database-container .db-num-color-violet { --db-number-color: var(--status-color-fg-violet); }
+.note-database-container .db-num-color-rose { --db-number-color: var(--status-color-fg-rose); }
 
 /* 字段显示样式选项面板（列菜单"显示样式"子菜单内的多级选项） */
 .db-column-display-style-popover.db-column-menu-subpopover {
@@ -5380,13 +5555,36 @@
 .note-database-container .db-table td.db-cell-range-selected,
 .note-database-container .db-grouped-table .db-table td.db-cell-range-selected {
   background: color-mix(in srgb, var(--interactive-accent) 12%, var(--background-primary));
-  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--interactive-accent) 58%, transparent);
+  box-shadow: none;
   user-select: none;
   -webkit-user-select: none;
 }
 
 .note-database-container .db-table td.db-cell-range-selected:first-of-type {
-  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--interactive-accent) 58%, transparent);
+  box-shadow: none;
+}
+
+.note-database-container .db-table td.is-top-edge,
+.note-database-container .db-table td.is-bottom-edge,
+.note-database-container .db-table td.is-left-edge,
+.note-database-container .db-table td.is-right-edge {
+  position: relative;
+}
+
+.note-database-container .db-table td.is-top-edge {
+  border-top: 2px solid var(--interactive-accent);
+}
+
+.note-database-container .db-table td.is-bottom-edge {
+  border-bottom: 2px solid var(--interactive-accent);
+}
+
+.note-database-container .db-table td.is-left-edge {
+  border-left: 2px solid var(--interactive-accent);
+}
+
+.note-database-container .db-table td.is-right-edge {
+  border-right: 2px solid var(--interactive-accent);
 }
 
 .note-database-container .db-table td.db-cell-focus {
@@ -5399,10 +5597,214 @@
   outline-offset: -2px;
 }
 
-.note-database-container .db-table td[tabindex]:focus,
-.note-database-container .db-table td[tabindex]:focus-visible {
-  outline: none;
-  outline-offset: 0;
+.note-database-container .db-formula-error-badge {
+  display: inline-flex;
+  align-items: center;
+  border-radius: var(--db-radius-xs);
+  padding: 2px 5px;
+  background: color-mix(in srgb, var(--text-error) 14%, var(--background-primary));
+  color: var(--text-error);
+  font-family: var(--font-monospace);
+  font-size: var(--db-font-xs);
+  font-weight: 700;
+  opacity: 1;
+}
+
+.note-database-container .db-relation-link.is-unresolved {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  border: 1px dashed color-mix(in srgb, var(--text-warning) 68%, transparent);
+  border-radius: var(--db-radius-sm);
+  padding: 1px 4px;
+  color: var(--text-warning);
+  text-decoration-style: dashed;
+}
+
+.note-database-container .db-relation-link.is-unresolved .db-relation-link-icon {
+  color: var(--text-warning);
+}
+
+.note-database-container .db-inline-link-actions {
+  display: inline-flex;
+  gap: 2px;
+  margin-left: 4px;
+  opacity: 0;
+  transition: opacity 120ms ease;
+  vertical-align: middle;
+}
+
+.note-database-container td:hover .db-inline-link-actions,
+.note-database-container .db-text-link:hover + .db-inline-link-actions,
+.note-database-container .db-inline-link-actions:focus-within {
+  opacity: 1;
+}
+
+.note-database-container .db-inline-link-action,
+.note-database-container .db-file-tag-remove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  padding: 1px;
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+.note-database-container .db-inline-link-action:hover,
+.note-database-container .db-inline-link-action:focus-visible,
+.note-database-container .db-file-tag-remove:hover,
+.note-database-container .db-file-tag-remove:focus-visible {
+  color: var(--text-accent);
+}
+
+.note-database-container .db-inline-link-action svg {
+  width: 13px;
+  height: 13px;
+}
+
+.note-database-container .db-validation-error {
+  animation: db-shake 220ms ease-in-out;
+}
+
+.note-database-container [aria-invalid="true"] {
+  border-color: var(--text-error);
+}
+
+@keyframes db-shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-3px); }
+  75% { transform: translateX(3px); }
+}
+
+.note-database-container .db-draft-failure {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 6px;
+  border-top: 1px solid color-mix(in srgb, var(--text-error) 35%, transparent);
+  padding-top: 5px;
+  color: var(--text-error);
+  font-size: var(--db-font-xs);
+}
+
+.note-database-container .db-draft-failure-text {
+  flex: 1 1 auto;
+}
+
+.note-database-container .db-draft-action {
+  border: 1px solid var(--background-modifier-border);
+  border-radius: var(--db-radius-xs);
+  padding: 2px 6px;
+  background: var(--background-secondary);
+  color: var(--text-normal);
+  font-size: var(--db-font-xs);
+  cursor: pointer;
+}
+
+.note-database-container .db-draft-action:hover,
+.note-database-container .db-draft-action:focus-visible {
+  border-color: var(--interactive-accent);
+}
+
+.note-database-container .db-editor-saving {
+  position: relative;
+}
+
+.note-database-container .db-editor-saving::after {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 10px;
+  height: 10px;
+  border: 2px solid color-mix(in srgb, var(--interactive-accent) 30%, transparent);
+  border-top-color: var(--interactive-accent);
+  border-radius: 50%;
+  content: "";
+  animation: db-editor-spin 650ms linear infinite;
+}
+
+@keyframes db-editor-spin {
+  to { transform: rotate(360deg); }
+}
+
+.note-database-container .db-file-tag-remove {
+  margin-left: 3px;
+  color: inherit;
+  font-size: 12px;
+  line-height: 1;
+  opacity: 0;
+  transition: opacity 120ms ease, background-color 120ms ease;
+}
+
+.note-database-container .db-file-tag-badge:hover .db-file-tag-remove,
+.note-database-container .db-file-tag-remove:focus-visible {
+  opacity: 1;
+}
+
+.note-database-container .db-multi-select-badge {
+  display: inline-flex;
+  align-items: center;
+}
+
+.note-database-container .db-multi-select-remove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 14px;
+  height: 14px;
+  margin-left: 3px;
+  border: 0;
+  padding: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 120ms ease, background-color 120ms ease;
+}
+
+.note-database-container .db-multi-select-badge:hover .db-multi-select-remove,
+.note-database-container .db-multi-select-remove:focus-visible {
+  opacity: 1;
+}
+
+.note-database-container .db-multi-select-remove:hover {
+  background: color-mix(in srgb, currentColor 16%, transparent);
+}
+
+.note-database-container .db-multi-select-badge.is-removing {
+  opacity: .45;
+  pointer-events: none;
+}
+
+.note-database-container .db-board-card {
+  position: relative;
+}
+
+.note-database-container .db-board-card.is-drop-target {
+  background: color-mix(in srgb, var(--interactive-accent) 7%, var(--background-primary));
+}
+
+.note-database-container .db-board-drop-indicator {
+  position: absolute;
+  right: 8px;
+  left: 8px;
+  height: 2px;
+  border-radius: 999px;
+  background: var(--interactive-accent);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--interactive-accent) 18%, transparent);
+  pointer-events: none;
+  z-index: 4;
+}
+
+.note-database-container .db-board-drop-indicator.is-before {
+  top: -6px;
+}
+
+.note-database-container .db-board-drop-indicator.is-after {
+  bottom: -6px;
 }
 
 /* Embedded view: hide edit-only buttons in selection status bar */
@@ -7840,7 +8242,7 @@
   align-items: stretch;
 }
 
-.db-board-drag-group-preview {
+.note-database-container .db-board-drag-group-preview {
   position: fixed;
   z-index: 2147483646;
   padding: 3px 8px;
@@ -7855,7 +8257,7 @@
   transition: opacity 120ms ease;
 }
 
-.db-board-drag-group-preview.is-hidden {
+.note-database-container .db-board-drag-group-preview.is-hidden {
   opacity: 0;
 }
 
@@ -8030,16 +8432,56 @@
 }
 
 .note-database-container .db-board-card.is-drop-before {
-  box-shadow: inset 0 4px 0 -2px var(--interactive-accent),
-    inset 0 20px 14px -18px var(--interactive-accent);
+  box-shadow: none;
   transition: none;
 }
 
 .note-database-container .db-board-card.is-drop-after {
-  box-shadow: inset 0 -4px 0 -2px var(--interactive-accent),
-    inset 0 -20px 14px -18px var(--interactive-accent);
+  box-shadow: none;
   transition: none;
 }
+
+.note-database-container .db-drag-count-badge {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  z-index: 5;
+  border: 1px solid color-mix(in srgb, var(--interactive-accent) 40%, transparent);
+  border-radius: 999px;
+  padding: 2px 6px;
+  background: var(--interactive-accent);
+  color: var(--text-on-accent);
+  font-size: var(--db-font-xs);
+  font-weight: 700;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.note-database-container .db-board-drag-group-preview .db-board-drag-count {
+  margin-left: 5px;
+  opacity: .9;
+}
+
+.note-database-container .db-board-drag-group-preview .db-board-drag-stack {
+  position: relative;
+  display: inline-block;
+  width: 17px;
+  height: 13px;
+  vertical-align: -2px;
+}
+
+.note-database-container .db-board-drag-group-preview .db-board-drag-stack-card {
+  position: absolute;
+  width: 11px;
+  height: 9px;
+  border: 1px solid color-mix(in srgb, var(--text-on-accent) 70%, transparent);
+  border-radius: 2px;
+  background: color-mix(in srgb, var(--text-on-accent) 22%, var(--interactive-accent));
+}
+
+.note-database-container .db-board-drag-group-preview .db-board-drag-stack-card:nth-child(1) { left: 0; top: 0; }
+.note-database-container .db-board-drag-group-preview .db-board-drag-stack-card:nth-child(2) { left: 3px; top: 2px; }
+.note-database-container .db-board-drag-group-preview .db-board-drag-stack-card:nth-child(3) { left: 6px; top: 4px; }
 
 /* 卡片顶部：复选框 + 打开按钮 */
 .note-database-container .db-board-card-controls {
@@ -10168,7 +10610,27 @@ body.is-phone .note-database-container .db-record-detail-panel {
 
 .note-database-container .db-sort-rule-row.is-drop-target {
   background: var(--background-modifier-hover);
-  box-shadow: inset 0 0 0 1px var(--interactive-accent);
+  box-shadow: none;
+  position: relative;
+}
+
+.note-database-container .db-sort-drop-indicator {
+  position: absolute;
+  right: 4px;
+  left: 4px;
+  height: 2px;
+  border-radius: 999px;
+  background: var(--interactive-accent);
+  pointer-events: none;
+  z-index: 2;
+}
+
+.note-database-container .db-sort-drop-indicator.is-before {
+  top: -4px;
+}
+
+.note-database-container .db-sort-drop-indicator.is-after {
+  bottom: -4px;
 }
 
 /* 拖拽手柄（⋮⋮） */
@@ -15995,7 +16457,7 @@ body.is-mobile .note-database-container .db-calendar-month-time {
 
 /* 内嵌轻量状态栏的 sticky 位置 */
 .note-database-embed.note-database-container .db-selection-status-bar {
-  top: var(--db-table-header-top);
+  bottom: max(16px, env(safe-area-inset-bottom));
 }
 
 
@@ -16739,6 +17201,303 @@ img.db-text-md-image {
 .db-icon-picker-popover .db-icon-picker-nav button:hover, .db-icon-picker-popover .db-icon-picker-nav button.is-active { background: var(--background-modifier-hover); color: var(--text-normal); }
 .db-icon-picker-nav button svg { width: 18px; height: 18px; }
 @media (max-width: 480px) { .db-icon-picker-grid { grid-template-columns: repeat(auto-fill, 28px); } .db-icon-picker-popover { height: min(400px, calc(100vh - 24px)); } }
+
+/* Touch targets stay large without changing the compact desktop rhythm. */
+.note-database-container .db-toolbar-icon-button,
+.note-database-container .db-toolbar-button,
+.note-database-container .db-active-control-edit,
+.note-database-container .db-active-control-remove,
+.note-database-container .db-column-menu-trigger,
+.note-database-container .db-group-collapse-toggle,
+.note-database-container .db-gallery-group-toggle,
+.note-database-container .db-list-group-toggle,
+.note-database-container .db-board-group-toggle,
+.note-database-container .db-board-subgroup-toggle,
+.note-database-container .db-table-mobile-move-btn,
+.note-database-container .db-card-mobile-move-btn,
+.note-database-container .db-list-mobile-move-btn,
+.note-database-container .db-timeline-window-jump {
+  position: relative;
+}
+
+@media (pointer: coarse), (max-width: 760px) {
+  .note-database-container :is(
+    .db-toolbar-icon-button,
+    .db-toolbar-button,
+    .db-active-control-edit,
+    .db-column-menu-trigger,
+    .db-group-collapse-toggle,
+    .db-gallery-group-toggle,
+    .db-list-group-toggle,
+    .db-board-group-toggle,
+    .db-board-subgroup-toggle,
+    .db-timeline-window-jump
+  ) {
+    min-width: 28px;
+    min-height: 28px;
+  }
+
+  .note-database-container .db-table .db-select-col .db-select-inner input[type="checkbox"],
+  .note-database-container .db-group-divider-checkbox,
+  .note-database-container .db-selection-clear-checkbox {
+    position: relative;
+    min-width: 28px;
+    min-height: 28px;
+  }
+
+  .note-database-container .db-table .db-select-col .db-select-inner input[type="checkbox"]::before,
+  .note-database-container .db-group-divider-checkbox::before,
+  .note-database-container .db-selection-clear-checkbox::before {
+    position: absolute;
+    inset: -8px;
+    content: "";
+    pointer-events: auto;
+  }
+
+  .note-database-container .db-table th.db-select-col,
+  .note-database-container .db-table td.db-select-col {
+    overflow: visible;
+  }
+
+  .note-database-container .db-toolbar-icon-button::before,
+  .note-database-container .db-toolbar-button::before,
+  .note-database-container .db-active-control-edit::before,
+  .note-database-container .db-column-menu-trigger::before,
+  .note-database-container .db-group-collapse-toggle::before,
+  .note-database-container .db-gallery-group-toggle::before,
+  .note-database-container .db-list-group-toggle::before,
+  .note-database-container .db-board-group-toggle::before,
+  .note-database-container .db-board-subgroup-toggle::before,
+  .note-database-container .db-table-mobile-move-btn::before,
+  .note-database-container .db-card-mobile-move-btn::before,
+  .note-database-container .db-list-mobile-move-btn::before,
+  .note-database-container .db-timeline-window-jump::before {
+    position: absolute;
+    inset: -8px;
+    content: "";
+    pointer-events: auto;
+  }
+
+  .note-database-container .db-active-control-remove {
+    position: relative;
+    min-width: 36px;
+    min-height: 36px;
+  }
+
+  .note-database-container .db-active-control-remove::before {
+    position: absolute;
+    inset: -4px;
+    content: "";
+    pointer-events: auto;
+  }
+}
+
+.note-database-container .db-column-menu-subpopover .db-dropdown-option {
+  min-height: 44px;
+  padding-block: 9px;
+}
+
+.note-database-container .db-column-menu-subpopover input[type="checkbox"],
+.note-database-container .db-column-menu-subpopover input[type="radio"] {
+  min-width: 18px;
+  min-height: 18px;
+}
+
+.note-database-container .db-card-mobile-move-btn,
+.note-database-container .db-list-mobile-move-btn,
+.note-database-container .db-table-mobile-move-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 28px;
+  min-height: 28px;
+}
+
+.db-icon-picker-popover button.db-icon-color,
+.db-icon-picker-popover button.db-icon-picker-item,
+.db-icon-picker-popover .db-icon-picker-tabs button,
+.db-icon-picker-popover button.db-icon-picker-remove,
+.db-icon-picker-popover button.db-icon-picker-random,
+.db-icon-picker-popover button.db-icon-picker-settings {
+  min-width: 44px;
+  min-height: 44px;
+}
+
+.db-cell-edit-popover.is-mobile .db-cell-edit-mobile-actions {
+  position: sticky;
+  z-index: 2;
+  top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  min-height: 44px;
+  margin: -8px -44px 8px -8px;
+  padding: 4px 8px;
+  border-bottom: 1px solid var(--background-modifier-border);
+  background: var(--background-primary);
+}
+
+.db-cell-edit-popover.is-mobile .db-cell-edit-mobile-actions button {
+  min-height: 44px;
+  padding: 0 12px;
+}
+
+.db-cell-edit-popover.is-mobile {
+  max-height: min(70dvh, calc(100dvh - 16px));
+  padding-bottom: calc(8px + env(safe-area-inset-bottom, 0px));
+}
+
+.note-database-container .db-sr-status {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.note-database-container .db-table td[data-note-database-column-key],
+.note-database-container .db-board-card,
+.note-database-container .db-list-row,
+.note-database-container .db-gallery-card {
+  scroll-margin-top: calc(var(--db-header-height, 34px) + 8px);
+  scroll-margin-bottom: calc(var(--db-mobile-bar-height, 48px) + 8px);
+}
+
+.note-database-container :is(button, input, select, textarea, [role="button"], [tabindex]):focus-visible,
+.db-column-menu-subpopover :is(button, input, select, textarea, [role="button"], [tabindex]):focus-visible,
+.db-icon-picker-popover :is(button, input, select, textarea, [role="button"], [tabindex]):focus-visible,
+.db-color-picker-popup :is(button, input, select, textarea, [role="button"], [tabindex]):focus-visible,
+.db-mobile-column-width-panel :is(button, input, select, textarea, [role="button"], [tabindex]):focus-visible,
+.db-cell-edit-popover :is(button, input, select, textarea, [role="button"], [tabindex]):focus-visible {
+  outline: 2px solid var(--interactive-accent);
+  outline-offset: 2px;
+  box-shadow: var(--db-accent-focus-ring);
+}
+
+.note-database-container .db-table,
+.note-database-container .db-board,
+.note-database-container .db-gallery,
+.note-database-container .db-list {
+  touch-action: manipulation;
+}
+
+.note-database-container .db-board-pagination {
+  display: none;
+}
+
+@media (pointer: coarse), (max-width: 760px) {
+  .note-database-container .db-board {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: 12px;
+  }
+
+  .note-database-container .db-board-column {
+    scroll-snap-align: center;
+  }
+
+  .note-database-container .db-board-pagination {
+    position: sticky;
+    left: 12px;
+    z-index: 30;
+    bottom: 8px;
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    width: max-content;
+    margin: 0 auto;
+    padding: 6px 10px;
+    border-radius: 999px;
+    background: var(--background-primary-alt);
+  }
+
+  .note-database-container .db-board-pagination button {
+    position: relative;
+    width: 12px;
+    height: 12px;
+    min-width: 12px;
+    min-height: 12px;
+    padding: 0;
+    border: 1px solid var(--text-muted);
+    border-radius: 50%;
+    background: transparent;
+  }
+
+  .note-database-container .db-board-pagination button::before {
+    position: absolute;
+    inset: -16px;
+    content: "";
+  }
+
+  .note-database-container .db-board-pagination button[aria-selected="true"] {
+    border-color: var(--interactive-accent);
+    background: var(--interactive-accent);
+  }
+
+  .note-database-container .db-table td[data-note-database-column-key],
+  .note-database-container .db-table th {
+    min-height: 44px;
+  }
+}
+
+@media (forced-colors: active) {
+  .note-database-container :is(.db-cell-selected, .db-cell-range-selected, .db-cell-focus),
+  .note-database-container .db-board-card:focus-visible,
+  .note-database-container .db-list-row:focus-visible,
+  .note-database-container .db-gallery-card:focus-visible {
+    outline: 2px solid Highlight;
+    outline-offset: -2px;
+    border-color: Highlight;
+    background: Canvas;
+    color: CanvasText;
+    forced-color-adjust: none;
+  }
+
+  .note-database-container :is(.db-group-collapse-toggle, .db-gallery-group-toggle, .db-list-group-toggle, .db-board-group-toggle, .db-board-subgroup-toggle):focus-visible,
+  .db-column-menu-subpopover :is(button, input, select, textarea):focus-visible,
+  .db-icon-picker-popover :is(button, input, select, textarea):focus-visible,
+  .db-color-picker-popup :is(button, input, select, textarea):focus-visible,
+  .db-mobile-column-width-panel :is(button, input, select, textarea):focus-visible {
+    outline: 2px solid Highlight;
+    box-shadow: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .note-database-container *,
+  .note-database-container *::before,
+  .note-database-container *::after,
+  .db-column-menu-subpopover *,
+  .db-icon-picker-popover *,
+  .db-color-picker-popup *,
+  .db-mobile-column-width-panel *,
+  .db-dropdown-popover *,
+  .db-calendar-search-results-popover *,
+  .db-cell-edit-popover * {
+    animation: none !important;
+    scroll-behavior: auto !important;
+    transition: none !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .note-database-container *,
+  .note-database-container *::before,
+  .note-database-container *::after,
+  .db-column-menu-subpopover *,
+  .db-icon-picker-popover *,
+  .db-cell-edit-popover * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}
 .db-relation-values {
   display: flex;
   flex-wrap: wrap;
@@ -17796,6 +18555,61 @@ body.is-phone .note-database-container .db-record-open-btn {
   }
 }
 
+@media (prefers-reduced-motion: reduce) {
+  .note-database-container *,
+  .note-database-container *::before,
+  .note-database-container *::after,
+  .db-column-menu-subpopover *,
+  .db-icon-picker-popover *,
+  .db-cell-edit-popover * {
+    animation: none !important;
+    scroll-behavior: auto !important;
+    transition: none !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .db-color-picker-popup *,
+  .db-mobile-column-width-panel *,
+  .db-dropdown-popover *,
+  .db-calendar-search-results-popover * {
+    animation: none !important;
+    scroll-behavior: auto !important;
+    transition: none !important;
+  }
+}
+
+/* Keep focus indicators visible after Obsidian's component-level resets. */
+.note-database-container :is(button, input, select, textarea, [role="button"], [tabindex]):focus-visible,
+.db-column-menu-subpopover :is(button, input, select, textarea, [role="button"], [tabindex]):focus-visible,
+.db-icon-picker-popover :is(button, input, select, textarea, [role="button"], [tabindex]):focus-visible,
+.db-color-picker-popup :is(button, input, select, textarea, [role="button"], [tabindex]):focus-visible,
+.db-mobile-column-width-panel :is(button, input, select, textarea, [role="button"], [tabindex]):focus-visible,
+.db-cell-edit-popover :is(button, input, select, textarea, [role="button"], [tabindex]):focus-visible {
+  outline: 2px solid var(--interactive-accent);
+  outline-offset: 2px;
+  box-shadow: var(--db-accent-focus-ring);
+}
+
+.note-database-container .db-table td[tabindex]:focus-visible {
+  outline: 2px solid var(--interactive-accent);
+  outline-offset: -2px;
+  box-shadow: var(--db-accent-focus-ring), inset 0 0 0 2px var(--interactive-accent);
+}
+
+@media (forced-colors: active) {
+  .note-database-container :is(button, input, select, textarea, [role="button"], [tabindex]):focus-visible,
+  .db-column-menu-subpopover :is(button, input, select, textarea, [role="button"], [tabindex]):focus-visible,
+  .db-icon-picker-popover :is(button, input, select, textarea, [role="button"], [tabindex]):focus-visible,
+  .db-color-picker-popup :is(button, input, select, textarea, [role="button"], [tabindex]):focus-visible,
+  .db-mobile-column-width-panel :is(button, input, select, textarea, [role="button"], [tabindex]):focus-visible,
+  .db-cell-edit-popover :is(button, input, select, textarea, [role="button"], [tabindex]):focus-visible {
+    outline: 2px solid Highlight;
+    outline-offset: 2px;
+    box-shadow: none;
+  }
+}
+
 .is-phone .note-database-container .db-view-tabs {
   overflow-x: auto;
   overflow-y: visible;
@@ -17817,5 +18631,18 @@ body.is-phone .note-database-container .db-record-open-btn {
     overflow-x: auto;
     overflow-y: visible;
     box-shadow: inset 10px 0 12px -14px var(--text-muted), inset -10px 0 12px -14px var(--text-muted);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .note-database-container *,
+  .note-database-container *::before,
+  .note-database-container *::after,
+  .db-column-menu-subpopover *,
+  .db-icon-picker-popover *,
+  .db-cell-edit-popover * {
+    animation: none !important;
+    scroll-behavior: auto !important;
+    transition: none !important;
   }
 }

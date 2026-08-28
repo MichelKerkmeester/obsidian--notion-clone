@@ -30,9 +30,11 @@ import { resolveTitleFieldDisplay } from "../data/TitleFieldDisplay";
 import { renderDelayedExternalLink } from "./CellRenderer";
 import { EmptyStateOptions, EmptyStateRenderer } from "./EmptyStateRenderer";
 import { renderCardField, renderCardFieldValue } from "./CardFieldRenderer";
+import { attachLongPress, isTouchDevice } from "../data/TouchEnvironment";
 
 const ROW_MIME = "application/x-note-database-row";
 const ROW_FROM_GROUP_MIME = "application/x-note-database-row-from-group";
+const ROW_BATCH_MIME = "application/x-note-database-row-batch";
 
 export interface GalleryGroup {
   key: string;
@@ -49,6 +51,7 @@ export interface GalleryRendererActions {
   areAllRowsSelected(rows: RowData[]): boolean;
   toggleRowsSelected(rows: RowData[], selected: boolean): void;
   editCell(target: HTMLElement, row: RowData, col: ColumnDef, event?: MouseEvent): void;
+  saveCellValue?(row: RowData, col: ColumnDef, value: number): void | Promise<void | boolean>;
   editFileName?(target: HTMLElement, row: RowData, currentName: string): void;
   getColumns(config: ViewConfig): ColumnDef[];
   updateCardSize(width: number): void;
@@ -60,8 +63,11 @@ export interface GalleryRendererActions {
     fromGroupKey: string,
     toGroupKey: string,
     beforePath?: string,
-    afterPath?: string
+    afterPath?: string,
+    movedPaths?: string[],
   ): void | Promise<void>;
+  moveRowsToPosition?(movedPaths: string[], beforePath?: string, afterPath?: string): void;
+  getSelectedRows?(): RowData[];
   isGroupCollapsed?(field: string, key: string): boolean;
   toggleGroupCollapsed?(field: string, key: string): void;
   expandGroup?(field: string, key: string, count: number): void;
@@ -87,6 +93,7 @@ export class GalleryRenderer {
   private rowByPath = new Map<string, RowData>();
   private draggingPath: string | undefined;
   private rowDropFeedback = new DragDropFeedbackState();
+  private draggingPaths: string[] = [];
   private emptyStateRenderer = new EmptyStateRenderer();
 
   constructor(private app: App, private actions: GalleryRendererActions) {}
@@ -119,13 +126,15 @@ export class GalleryRenderer {
     const grouped = container.createDiv({ cls: "db-gallery-grouped" });
     for (const group of groups) {
       const section = grouped.createDiv({ cls: "db-gallery-group" });
+      const sectionId = `group-section-${encodeURIComponent(`${groupField}:${group.key}`)}`;
+      section.setAttr("id", sectionId);
       const header = section.createDiv({ cls: "db-gallery-group-header" });
       this.setupGroupDropTarget(header, groupField, group.key);
       const collapsed = Boolean(this.actions.isGroupCollapsed?.(groupField, group.key));
       section.toggleClass("is-collapsed", collapsed);
       const toggle = header.createEl("button", {
         cls: `db-gallery-group-toggle${collapsed ? " is-collapsed" : ""}`,
-        attr: { type: "button", "aria-label": collapsed ? t("group.expand") : t("group.collapse") },
+        attr: { type: "button", "aria-label": collapsed ? t("group.expand") : t("group.collapse"), "aria-expanded": String(!collapsed), "aria-controls": sectionId },
       });
       toggle.createSpan({ cls: "db-collapse-triangle" });
       toggle.onclick = (event) => {
@@ -220,7 +229,7 @@ export class GalleryRenderer {
       if (this.canManualReorder(config)) this.setupReorderDrag(card, config, row, allRows, groupField, groupKey);
       else this.setupGroupedCardDrag(card, row, groupField, groupKey);
     }
-    if (!this.isPhoneLayout()) {
+    if (!isTouchDevice(this.container)) {
       const resizeHandle = card.createDiv({ cls: "db-gallery-card-resize-handle" });
       resizeHandle.addEventListener("mousedown", (event) => this.startCardResize(event, config));
       resizeHandle.addEventListener("click", (event) => {
@@ -250,7 +259,7 @@ export class GalleryRenderer {
       event.stopPropagation();
       this.actions.openRow(row);
     };
-    if (!this.actions.isReadOnly && this.isPhoneLayout() && (this.canManualReorder(config) || Boolean(groupField && groups?.length))) {
+    if (!this.actions.isReadOnly && isTouchDevice(this.container) && (this.canManualReorder(config) || Boolean(groupField && groups?.length))) {
       this.renderMobileMoveButton(controls, config, row, allRows || [], groupField, groupKey, groups);
     }
 
@@ -296,6 +305,10 @@ export class GalleryRenderer {
     el.addEventListener("contextmenu", (event) => {
       if (isHTMLElement(event.target) && event.target.closest("input, select, textarea, button")) return;
       this.actions.showRowMenu?.(event, row, context);
+    });
+    attachLongPress(el, {
+      ignoreTarget: (event) => isHTMLElement(event.target) && Boolean(event.target.closest("input, select, textarea, button, a")),
+      onLongPress: (event) => this.actions.showRowMenu?.(event as unknown as MouseEvent, row, context),
     });
   }
 
@@ -368,23 +381,32 @@ export class GalleryRenderer {
 
   private setupGroupedCardDrag(card: HTMLElement, row: RowData, groupField?: string, groupKey?: string): void {
     if (!groupField || groupKey == null || this.actions.isReadOnly || !this.actions.moveRowsToGroup) return;
-    if (this.isPhoneLayout()) return;
+    if (isTouchDevice(this.container)) return;
     card.draggable = true;
     card.addEventListener("dragstart", (event) => {
       if (isHTMLElement(event.target) && event.target.closest("input, select, textarea, button, .db-gallery-card-resize-handle")) {
         event.preventDefault();
         return;
       }
+      const dragPaths = this.getDragPaths(row);
       event.dataTransfer?.setData(ROW_MIME, row.file.path);
+      event.dataTransfer?.setData(ROW_BATCH_MIME, JSON.stringify(dragPaths));
       event.dataTransfer?.setData("text/plain", row.file.path);
       event.dataTransfer?.setData(ROW_FROM_GROUP_MIME, groupKey);
+      this.draggingPaths = dragPaths;
+      this.rowDropFeedback.begin(row.file.path, dragPaths);
       card.addClass("is-dragging");
+      this.showDragCountBadge(card, dragPaths.length);
     });
-    card.addEventListener("dragend", () => card.removeClass("is-dragging"));
+    card.addEventListener("dragend", () => {
+      card.removeClass("is-dragging");
+      card.querySelector<HTMLElement>(".db-drag-count-badge")?.remove();
+      this.draggingPaths = [];
+    });
   }
 
   private setupReorderDrag(card: HTMLElement, config: ViewConfig, row: RowData, rows: RowData[], groupField?: string, groupKey?: string): void {
-    if (this.actions.isReadOnly || this.isPhoneLayout() || !this.canManualReorder(config)) return;
+    if (this.actions.isReadOnly || isTouchDevice(this.container) || !this.canManualReorder(config)) return;
     card.draggable = true;
     card.addEventListener("dragstart", (event) => {
       if (isHTMLElement(event.target) && event.target.closest("input, select, textarea, button, .db-gallery-card-resize-handle")) {
@@ -395,12 +417,19 @@ export class GalleryRenderer {
       event.dataTransfer?.setData("text/plain", row.file.path);
       if (groupKey != null) event.dataTransfer?.setData(ROW_FROM_GROUP_MIME, groupKey);
       this.draggingPath = row.file.path;
+      const dragPaths = this.getDragPaths(row);
+      this.draggingPaths = dragPaths;
+      this.rowDropFeedback.begin(row.file.path, dragPaths);
+      event.dataTransfer?.setData(ROW_BATCH_MIME, JSON.stringify(dragPaths));
       card.addClass("is-dragging");
+      this.showDragCountBadge(card, dragPaths.length);
     });
     card.addEventListener("dragend", () => {
       this.draggingPath = undefined;
+      this.draggingPaths = [];
       card.removeClass("is-dragging");
-      this.rowDropFeedback.clear();
+      card.querySelector<HTMLElement>(".db-drag-count-badge")?.remove();
+      if (this.rowDropFeedback.getPhase() !== "pending") this.rowDropFeedback.clear();
     });
     card.addEventListener("dragover", (event) => {
       const dragPath = this.draggingPath;
@@ -414,16 +443,18 @@ export class GalleryRenderer {
     });
     card.addEventListener("drop", (event) => {
       if (!this.isRowDrag(event)) return;
-      const dragPath = this.draggingPath || event.dataTransfer?.getData(ROW_MIME);
+      const dragPaths = this.getDraggedPaths(event);
+      const dragPath = this.draggingPath || dragPaths[0];
       if (!dragPath || dragPath === row.file.path) return;
       if (!this.rowByPath.has(dragPath)) return;
       event.preventDefault();
       event.stopPropagation();
       this.draggingPath = undefined;
       const placement = this.rowDropFeedback.getPlacement(card) || resolveDropPlacement(card, event, "horizontal");
-      this.rowDropFeedback.clear();
+      this.rowDropFeedback.setPending();
       const isAfter = placement === "after";
-      const currentPaths = rows.map((r) => r.file.path).filter((path) => path !== dragPath);
+      const moving = new Set(dragPaths);
+      const currentPaths = rows.map((r) => r.file.path).filter((path) => !moving.has(path));
       const targetIndex = currentPaths.indexOf(row.file.path);
       const beforePath = isAfter ? row.file.path : (targetIndex > 0 ? currentPaths[targetIndex - 1] : undefined);
       const afterPath = isAfter ? (targetIndex < currentPaths.length - 1 ? currentPaths[targetIndex + 1] : undefined) : row.file.path;
@@ -431,13 +462,25 @@ export class GalleryRenderer {
       const draggedRow = this.rowByPath.get(dragPath);
       if (groupField && groupKey != null && fromGroupKey !== groupKey && draggedRow) {
         if (this.actions.moveRowToGroupAndPosition) {
-          void this.actions.moveRowToGroupAndPosition(draggedRow, groupField, fromGroupKey, groupKey, beforePath, afterPath);
+          void Promise.resolve(this.actions.moveRowToGroupAndPosition(draggedRow, groupField, fromGroupKey, groupKey, beforePath, afterPath, dragPaths))
+            .then(() => this.rowDropFeedback.commit())
+            .catch((error) => this.rowDropFeedback.fail(error));
         } else {
           void Promise.resolve(this.actions.moveRowsToGroup?.(draggedRow, groupField, fromGroupKey, groupKey))
-            .then(() => this.actions.moveRowToPosition(dragPath, beforePath, afterPath));
+            .then(() => this.actions.moveRowToPosition(dragPath, beforePath, afterPath))
+            .then(() => this.rowDropFeedback.commit())
+            .catch((error) => this.rowDropFeedback.fail(error));
         }
       } else {
-        this.actions.moveRowToPosition(dragPath, beforePath, afterPath);
+        if (dragPaths.length > 1 && this.actions.moveRowsToPosition) {
+          void Promise.resolve(this.actions.moveRowsToPosition(dragPaths, beforePath, afterPath))
+            .then(() => this.rowDropFeedback.commit())
+            .catch((error) => this.rowDropFeedback.fail(error));
+        } else {
+          void Promise.resolve(this.actions.moveRowToPosition(dragPath, beforePath, afterPath))
+            .then(() => this.rowDropFeedback.commit())
+            .catch((error) => this.rowDropFeedback.fail(error));
+        }
       }
     });
   }
@@ -452,14 +495,21 @@ export class GalleryRenderer {
     target.addEventListener("dragleave", () => target.removeClass("is-drop-target"));
     target.addEventListener("drop", (event) => {
       if (!this.isRowDrag(event)) return;
-      const path = event.dataTransfer?.getData(ROW_MIME) || event.dataTransfer?.getData("text/plain");
+      const paths = this.getDraggedPaths(event);
+      const path = paths[0];
       const row = path ? this.rowByPath.get(path) : undefined;
       if (!row) return;
       event.preventDefault();
       event.stopPropagation();
       target.removeClass("is-drop-target");
       const fromGroupKey = event.dataTransfer?.getData(ROW_FROM_GROUP_MIME) || "";
-      void this.actions.moveRowsToGroup?.(row, groupField, fromGroupKey, groupKey);
+      this.rowDropFeedback.begin(path, paths, groupKey);
+      this.rowDropFeedback.setPending();
+      void Promise.resolve(this.actions.moveRowToGroupAndPosition
+        ? this.actions.moveRowToGroupAndPosition(row, groupField, fromGroupKey, groupKey, undefined, undefined, paths)
+        : this.actions.moveRowsToGroup?.(row, groupField, fromGroupKey, groupKey))
+        .then(() => this.rowDropFeedback.commit())
+        .catch((error) => this.rowDropFeedback.fail(error));
     });
   }
 
@@ -467,12 +517,39 @@ export class GalleryRenderer {
     return Boolean(this.draggingPath) || Array.from(event.dataTransfer?.types || []).includes(ROW_MIME);
   }
 
-  private canManualReorder(config: ViewConfig): boolean {
-    return !isExplicitlySorted(config);
+  private getDragPaths(row: RowData): string[] {
+    const selected = this.actions.getSelectedRows?.()
+      ?.map((candidate) => candidate.file.path)
+      .filter((path) => this.rowByPath.has(path)) || [];
+    return selected.includes(row.file.path) ? selected : [row.file.path];
   }
 
-  private isPhoneLayout(): boolean {
-    return window.activeDocument.body.classList.contains("is-phone");
+  private getDraggedPaths(event: DragEvent): string[] {
+    if (this.draggingPaths.length) return this.draggingPaths;
+    const raw = event.dataTransfer?.getData(ROW_BATCH_MIME);
+    if (raw) {
+      try {
+        const parsed = JSON.parse(raw);
+        if (Array.isArray(parsed)) {
+          const paths = parsed.filter((path): path is string => typeof path === "string" && this.rowByPath.has(path));
+          if (paths.length) return paths;
+        }
+      } catch {
+        // Optional metadata is ignored when a different drag source supplies invalid data.
+      }
+    }
+    const path = event.dataTransfer?.getData(ROW_MIME) || event.dataTransfer?.getData("text/plain");
+    return path ? [path] : [];
+  }
+
+  private showDragCountBadge(card: HTMLElement, count: number): void {
+    card.querySelector<HTMLElement>(".db-drag-count-badge")?.remove();
+    if (count < 2) return;
+    card.createSpan({ cls: "db-drag-count-badge", text: t("drag.movingItems", { count }) });
+  }
+
+  private canManualReorder(config: ViewConfig): boolean {
+    return !isExplicitlySorted(config);
   }
 
   private renderCover(card: HTMLElement, config: ViewConfig, row: RowData): void {
@@ -688,6 +765,7 @@ export class GalleryRenderer {
       onEdit: (target, editRow, editCol, event) => this.actions.editCell(target, editRow, editCol, event),
       onEditFormula: (editCol) => this.actions.editFormula?.(editCol),
       onOpenTarget: (targetRow, target, external) => this.openTarget(targetRow, target, external),
+      onNumberChange: (targetRow, targetCol, next) => this.actions.saveCellValue?.(targetRow, targetCol, next),
       onShowColumnMenu: this.actions.showColumnMenu,
     });
   }

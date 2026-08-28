@@ -18,6 +18,7 @@ import { getTableSubgroupCandidates, getTableSubgroupField } from "../data/Table
 import { executeNewFromTemplate, getNewFromTemplateLabel, getNewFromTemplateTooltip, hasRecordTemplate, NewRecordPlacement, TemplateToolbarOption } from "../data/TemplateToolbarAction";
 import { isHTMLElement } from "./DomGuards";
 import { renderRecordIcon } from "./RecordIconRenderer";
+import { isTouchDevice } from "../data/TouchEnvironment";
 
 /** Safely append an SVG string to an element through parsed DOM nodes. */
 function appendSvg(el: HTMLElement, svgString: string): void {
@@ -164,7 +165,7 @@ export class ToolbarRenderer {
     const currentEntry = viewEntries[currentDbIndex];
     const currentDb = currentEntry?.config;
     const currentView = currentDb?.views[currentViewIndex] || currentDb?.views[0];
-    const phoneLayout = this.isPhoneLayout();
+    const phoneLayout = isTouchDevice(containerEl);
     const viewType = currentView?.viewType || "table";
     const isChartView = viewType === "chart";
     const isCalendarTimelineView = viewType === "calendar" || viewType === "timeline";
@@ -330,10 +331,6 @@ export class ToolbarRenderer {
     const creationCluster = right.createDiv({ cls: "db-toolbar-cluster db-toolbar-creation-cluster" });
     if (!phoneLayout && !isChartView) this.renderSearch(utilitiesCluster, state, actions);
     if (!actions.isReadOnly && !isChartView) this.renderNewButton(creationCluster, actions, currentDb);
-  }
-
-  private isPhoneLayout(): boolean {
-    return window.activeDocument.body.classList.contains("is-phone");
   }
 
   private renderUtilitiesOverflowButton(
@@ -761,7 +758,7 @@ export class ToolbarRenderer {
       attr: { role: "tablist", "aria-label": t("toolbar.viewSwitcher") },
     });
     const readOnly = actions.isReadOnlyViews;
-    const canReorder = Boolean(!readOnly && actions.moveView && db.views.length > 1 && !this.isPhoneLayout());
+    const canReorder = Boolean(!readOnly && actions.moveView && db.views.length > 1 && !isTouchDevice(this.toolbarRoot));
     const tabEls: { el: HTMLElement; index: number }[] = [];
 
     db.views.forEach((view, i) => {
@@ -938,7 +935,7 @@ export class ToolbarRenderer {
     const toolbar = tabs.closest(".db-toolbar");
     const right = toolbar?.querySelector(".db-toolbar-right") as HTMLElement | null;
     const phoneSearch = toolbar?.querySelector(".db-toolbar-left .db-search-control") as HTMLElement | null;
-    const boundary = this.isPhoneLayout()
+    const boundary = isTouchDevice(this.toolbarRoot)
       ? (phoneSearch ? phoneSearch.getBoundingClientRect().left - 4 : toolbar?.getBoundingClientRect().right || tabs.getBoundingClientRect().right)
       : right ? right.getBoundingClientRect().left - 6 : tabs.getBoundingClientRect().right;
     const containerWidth = boundary - tabs.getBoundingClientRect().left;
@@ -1126,7 +1123,7 @@ export class ToolbarRenderer {
       this.renderViewTabPopoverRow(panel, t("toolbar.copyViewCode"), "code-xml", () => actions.copyViewCode?.(viewIndex));
     }
     this.renderViewTypeChangeRow(panel, viewIndex, viewType, actions);
-    if (this.isPhoneLayout() && actions.moveView && totalViews > 1) {
+    if (isTouchDevice(this.toolbarRoot) && actions.moveView && totalViews > 1) {
       if (viewIndex > 0) {
         this.renderViewTabPopoverRow(panel, t("toolbar.moveViewFirst"), "chevrons-left", () => actions.moveView?.(viewIndex, 0));
         this.renderViewTabPopoverRow(panel, t("menu.moveUp"), "arrow-left", () => actions.moveView?.(viewIndex, viewIndex - 1));
@@ -1430,10 +1427,12 @@ export class ToolbarRenderer {
     });
     setIcon(button, "search");
     setTooltip(button, t("toolbar.searchShortcut"), { delay: 100 });
-    const searchInput = wrap.createEl("input", {
+    const inputWrap = wrap.createDiv({ cls: "db-search-input-wrap" });
+    const searchInput = inputWrap.createEl("input", {
       cls: "db-search-input",
       attr: { type: "text", placeholder: t("common.search"), "aria-label": t("common.search") },
     });
+    const searchPulse = inputWrap.createSpan({ cls: "db-search-activity-pulse", attr: { "aria-hidden": "true" } });
     searchInput.value = state.searchText;
     const clear = wrap.createEl("button", {
       cls: "db-search-clear",
@@ -1458,9 +1457,19 @@ export class ToolbarRenderer {
       wrap.addClass("is-active");
       actions.onSearchFocus?.();
     });
+    let searchTimer: number | null = null;
+    const stopSearchPulse = () => {
+      if (searchTimer !== null) window.clearTimeout(searchTimer);
+      searchTimer = window.setTimeout(() => {
+        searchPulse.removeClass("is-active");
+        searchTimer = null;
+      }, 180);
+    };
     searchInput.addEventListener("input", () => {
       wrap.toggleClass("is-active", searchInput.value.length > 0 || window.activeDocument.activeElement === searchInput);
       clear.toggleAttribute("hidden", !searchInput.value);
+      searchPulse.addClass("is-active");
+      stopSearchPulse();
       actions.setSearchText(searchInput.value);
     });
     clear.onclick = (event) => {
@@ -2143,11 +2152,11 @@ export class ToolbarRenderer {
     const tooltip = hasTemplate ? getNewFromTemplateTooltip(currentDb) : label;
     const group = toolbar.createDiv({ cls: "db-new-button-group" });
     const newBtn = group.createEl("button", {
-      cls: `db-new-button db-new-button-primary${this.isPhoneLayout() ? " is-mobile-fab" : ""}`,
+      cls: `db-new-button db-new-button-primary${isTouchDevice(this.toolbarRoot) ? " is-mobile-fab" : ""}`,
       attr: { type: "button", "aria-label": hasTemplate ? tooltip : label },
     });
     setIcon(newBtn.createSpan({ cls: "db-new-button-icon" }), hasTemplate ? "file-plus-2" : "plus");
-    if (!hasTemplate || !this.isPhoneLayout()) newBtn.createSpan({ text: label });
+    if (!hasTemplate || !isTouchDevice(this.toolbarRoot)) newBtn.createSpan({ text: label });
     setTooltip(newBtn, tooltip, { delay: 100 });
     const create = (template: NewRecordTemplateConfig | null | undefined) => {
       const position = actions.getCreateEntryPosition?.(this.newRecordPlacement);

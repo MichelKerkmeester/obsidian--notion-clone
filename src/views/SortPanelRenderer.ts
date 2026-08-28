@@ -105,8 +105,9 @@ export class SortPanelRenderer {
       row.ondragover = (event) => {
         event.preventDefault();
         row.addClass("is-drop-target");
+        this.updateDropIndicator(row, event.clientY <= row.getBoundingClientRect().top + row.getBoundingClientRect().height / 2 ? "before" : "after");
       };
-      row.ondragleave = () => row.removeClass("is-drop-target");
+      row.ondragleave = () => this.clearDropIndicator(row);
       row.ondrop = (event) => this.dropRuleOn(event, index, row, panel, config, state, actions);
       row.ondragend = () => this.finishDrag();
 
@@ -202,7 +203,7 @@ export class SortPanelRenderer {
     actions: SortPanelActions
   ): void {
     event.preventDefault();
-    row.removeClass("is-drop-target");
+    this.clearDropIndicator(row);
     const from = this.draggedRuleIndex;
     if (from === null || from === targetIndex) {
       this.finishDrag();
@@ -237,8 +238,23 @@ export class SortPanelRenderer {
   private finishDrag(): void {
     this.draggedRuleIndex = null;
     this.panelEl?.querySelectorAll(".db-sort-rule-row").forEach((row) => {
-      row.removeClass("is-dragging", "is-drop-target");
+      row.removeClass("is-dragging", "is-drop-target", "is-drop-before", "is-drop-after");
+      row.querySelector<HTMLElement>(".db-sort-drop-indicator")?.remove();
     });
+  }
+
+  private updateDropIndicator(row: HTMLElement, placement: "before" | "after"): void {
+    row.addClass(placement === "before" ? "is-drop-before" : "is-drop-after");
+    row.removeClass(placement === "before" ? "is-drop-after" : "is-drop-before");
+    const indicator = row.querySelector<HTMLElement>(".db-sort-drop-indicator")
+      || row.createSpan({ cls: "db-sort-drop-indicator" });
+    indicator.toggleClass("is-before", placement === "before");
+    indicator.toggleClass("is-after", placement === "after");
+  }
+
+  private clearDropIndicator(row: HTMLElement): void {
+    row.removeClass("is-drop-target", "is-drop-before", "is-drop-after");
+    row.querySelector<HTMLElement>(".db-sort-drop-indicator")?.remove();
   }
 
   private shouldIgnoreRuleDrag(event: DragEvent): boolean {

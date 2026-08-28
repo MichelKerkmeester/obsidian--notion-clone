@@ -3,6 +3,7 @@ import { evaluateBaseComputedFields } from "./BaseExpression";
 import { getFileFieldValue } from "./FileFields";
 import { ComputedFieldEngine } from "./ComputedField";
 import { ColumnDef, ComputedFieldDef } from "./types";
+import { extractComputedDiagnosticSymbol } from "./ComputedDiagnostic";
 
 export interface ComputedEvaluationContext {
   app?: App;
@@ -11,6 +12,14 @@ export interface ComputedEvaluationContext {
   thisFrontmatter?: Record<string, unknown>;
   /** Read-only derived values (for example Rollups) available to formulas. */
   derivedValues?: Record<string, unknown>;
+  diagnostics?: Record<string, ComputedEvaluationDiagnostic>;
+}
+
+export interface ComputedEvaluationDiagnostic {
+  fieldKey: string;
+  expression: string;
+  message: string;
+  symbol?: string;
 }
 
 export function hasRollupComputedDependency(
@@ -66,11 +75,21 @@ export function evaluateComputedFields(
       } else {
         const evaluated = engine.evaluateSingleDetailed(def.expression, enrichedFrontmatter, result);
         if (evaluated.error) {
+          if (context.diagnostics) {
+            const symbol = extractComputedDiagnosticSymbol(evaluated.error);
+            context.diagnostics[def.key] = {
+              fieldKey: def.key,
+              expression: def.expression,
+              message: evaluated.error,
+              symbol,
+            };
+          }
           if (pass === defs.length - 1) {
             console.warn(`ComputedField "${def.key}" evaluation failed:`, evaluated.error, `expression:`, def.expression);
           }
           result[def.key] = null;
         } else {
+          delete context.diagnostics?.[def.key];
           result[def.key] = evaluated.value;
         }
       }

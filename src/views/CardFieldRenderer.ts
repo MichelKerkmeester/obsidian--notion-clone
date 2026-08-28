@@ -36,6 +36,7 @@ export interface CardFieldRendererOptions {
   onEdit?: (target: HTMLElement, row: RowData, col: ColumnDef, event?: MouseEvent) => void;
   onEditFormula?: (col: ColumnDef) => void;
   onOpenTarget?: (row: RowData, target: string, external: boolean) => void | Promise<void>;
+  onNumberChange?: (row: RowData, col: ColumnDef, value: number) => void | Promise<void | boolean>;
   onShowColumnMenu?: (event: MouseEvent, col: ColumnDef, anchorEl?: HTMLElement) => void;
 }
 
@@ -91,6 +92,7 @@ export function renderCardField(options: CardFieldRendererOptions): HTMLElement 
     onEdit: options.onEdit,
     onEditFormula: options.onEditFormula,
     onOpenTarget: options.onOpenTarget,
+    onNumberChange: options.onNumberChange,
   });
   setFieldTooltip(valueEl, value);
 
@@ -111,6 +113,7 @@ interface CardFieldValueOptions {
   onEdit?: (target: HTMLElement, row: RowData, col: ColumnDef, event?: MouseEvent) => void;
   onEditFormula?: (col: ColumnDef) => void;
   onOpenTarget?: (row: RowData, target: string, external: boolean) => void | Promise<void>;
+  onNumberChange?: (row: RowData, col: ColumnDef, value: number) => void | Promise<void | boolean>;
 }
 
 export function renderCardFieldValue(
@@ -181,9 +184,12 @@ export function renderCardFieldValue(
     const numeric = typeof value === "number" ? value : Number(value);
     if (Number.isFinite(numeric) && displayType === "number") {
       const style = getNumberDisplayStyle(col);
-      if (style === "rating") { renderRating(valueEl, numeric, col.numberDisplayConfig); return; }
-      if (style === "progress") { renderProgress(valueEl, numeric, col.numberDisplayConfig); return; }
-      if (style === "ring") { renderProgressRing(valueEl, numeric, col.numberDisplayConfig); return; }
+      const interaction = !options.readOnly && options.onNumberChange
+        ? { onChange: (next: number) => options.onNumberChange?.(row, col, next) }
+        : undefined;
+      if (style === "rating") { renderRating(valueEl, numeric, col.numberDisplayConfig, interaction); return; }
+      if (style === "progress") { renderProgress(valueEl, numeric, col.numberDisplayConfig, interaction); return; }
+      if (style === "ring") { renderProgressRing(valueEl, numeric, col.numberDisplayConfig, interaction); return; }
     }
     valueEl.addClass("db-card-field-number");
   }

@@ -129,6 +129,12 @@ export interface RowData {
   frontmatter: Record<string, unknown>;
   cache?: CachedMetadata | null;
   computed: Record<string, unknown>;
+  computedErrors?: Record<string, {
+    fieldKey: string;
+    expression: string;
+    message: string;
+    symbol?: string;
+  }>;
 }
 
 export interface CreateEntryPosition {

@@ -22,6 +22,7 @@ import { markNoteHoverLink } from "./HoverLinkPreview";
 import { positionToolbarPopover } from "./PopoverPosition";
 import { renderDelayedExternalLink } from "./CellRenderer";
 import { renderCardField } from "./CardFieldRenderer";
+import { trapFocus } from "./InteractionScope";
 
 /**
  * 日历 / 时间线事件卡片「展开为可编辑浮动面板」。
@@ -41,6 +42,7 @@ import { renderCardField } from "./CardFieldRenderer";
 
 export interface RecordDetailActions {
   editCell: (target: HTMLElement, row: RowData, col: ColumnDef, event?: MouseEvent) => void;
+  saveCellValue?: (row: RowData, col: ColumnDef, value: number) => void | Promise<void | boolean>;
   editFileName?: (target: HTMLElement, row: RowData, currentName: string) => void;
   showColumnMenu?: (event: MouseEvent, col: ColumnDef, anchorEl: HTMLElement) => void;
   openRow: (row: RowData) => void;
@@ -116,17 +118,21 @@ export function openRecordDetailPanel(opts: OpenRecordDetailOptions): void {
   );
 
   const panel = host.createDiv({ cls: "db-record-detail-panel" });
+  panel.tabIndex = -1;
 
   // 关闭逻辑（先定义，renderContent 的「打开笔记」按钮复用 close）
   let closed = false;
+  let removeFocusTrap: () => void = () => undefined;
   const close = (): void => {
     if (closed) return;
     closed = true;
+    removeFocusTrap();
     panel.remove();
     window.activeDocument.removeEventListener("mousedown", onOutside, true);
     window.activeDocument.removeEventListener("keydown", onKeydown, true);
     window.removeEventListener("resize", onResize);
     if (currentPanel?.close === close) currentPanel = null;
+    if (anchorEl.isConnected) anchorEl.focus({ preventScroll: true });
   };
   const onOutside = (event: MouseEvent): void => {
     const target = event.target as Node | null;
@@ -197,6 +203,8 @@ export function openRecordDetailPanel(opts: OpenRecordDetailOptions): void {
   };
 
   renderContent(row);
+  removeFocusTrap = trapFocus(panel);
+  panel.focus?.({ preventScroll: true });
   // 定位（复用 positionToolbarPopover：挂载点选择 / 视口夹取 / 翻转 / 移动端留白）
   positionToolbarPopover(panel, anchorEl, { minWidth: 240, preferredWidth: 360, maxWidth: 420, align: "center" });
   // positionToolbarPopover 会在下一帧复测一次；按注册顺序在其复测之后隐藏来源
@@ -241,6 +249,7 @@ function renderRecordField(
     wrap: col.wrap, readOnly: actions.isReadOnly || isReadonlyFileField(col.key),
     applyConditionalFormat: actions.applyConditionalFormat,
     onEdit: (target, editRow, editCol, event) => actions.editCell(target, editRow, editCol, event),
+    onNumberChange: (targetRow, targetCol, next) => actions.saveCellValue?.(targetRow, targetCol, next),
     onOpenTarget: (targetRow, target, external) => openTarget(app, targetRow, target, external),
     onShowColumnMenu: actions.showColumnMenu
       ? (event, menuCol, anchorEl) => actions.showColumnMenu?.(event, menuCol, anchorEl || fieldPlaceholder())

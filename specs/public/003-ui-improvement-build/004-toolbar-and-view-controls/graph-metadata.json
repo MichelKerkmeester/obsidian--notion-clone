@@ -195,7 +195,7 @@
     ],
     "causal_summary": "The toolbar and view controls form the primary operational command deck of the Note Database plugin",
     "created_at": "2026-08-27T19:53:19.853Z",
-    "last_save_at": "2026-08-28T01:12:28.176Z",
+    "last_save_at": "2026-08-28T04:30:58.730Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -207,11 +207,11 @@
     ],
     "source_fingerprint": "sha256:8777db4b611c95838c84d6ee16a4e2287e2193cbc1eee19b1a097b517d9563af",
     "source_doc_hashes": {
-      "spec.md": "3869bed1427d091f3a2d62120caaefd7ff76fb4338e3d7e1b0c361e710fb1d67",
-      "plan.md": "ec62d100379d242fbb7194a61a661c78997920b9934f9c6cd21f6f5ce76adb73",
-      "tasks.md": "9a2f87fe86e1e94d9037b8b742dc351b65dbd90ae14bb39d490426072f0866da",
-      "checklist.md": "c6a0789d96bdc534fdf67dc112c384afe9d9e795e1721b223432984e1bb32619",
-      "implementation-summary.md": "26e24f6007173751f322ac5c7dad35c6513d1cad26549bd4eec2375c0b02db9f"
+      "spec.md": "512cde9badab42202f8ab39cb38bebddce3d5aedddb2f1a1cf5497467a9bc9c1",
+      "plan.md": "e76a0c8951e37d77dace6c5cfc1c5cc0501dbba2a9e669ce0cf000c0e8f05817",
+      "tasks.md": "59ebafe4ff85aaeadb611168f4324a93afa350712ff6c3ca1b6107147d224453",
+      "checklist.md": "167179b089879a5b434e52cd1b38680b4c98c9f6c91cbd73952e205587b069d4",
+      "implementation-summary.md": "991a01bc080c8cb32f2f71e17efee179c7f3c23692930bd958a98051a86c9dde"
     },
     "last_active_child_id": null,
     "last_active_at": null

@@ -176,6 +176,7 @@ export class RowPipeline {
       : undefined;
     return records.map((record) => {
       const derived = derivedValues?.get(record.file.path) || {};
+      const computedErrors: NonNullable<RowData["computedErrors"]> = {};
       return {
         app,
         file: record.file,
@@ -188,10 +189,12 @@ export class RowPipeline {
             thisFile: thisFile instanceof TFile ? thisFile : undefined,
             thisFrontmatter,
             derivedValues: derived,
+            diagnostics: computedErrors,
           }),
           // Rollup columns stay authoritative if a malformed schema reuses a key.
           ...derived,
         },
+        computedErrors,
       };
     });
   }

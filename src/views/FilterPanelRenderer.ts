@@ -11,6 +11,7 @@ import { renderDropdownPropertyTypeIcon, toPropertyDropdownOption } from "./Prop
 import { DatabaseViewState } from "./ViewStateStore";
 import { getViewRuleColumns, removeFilterRuleAt } from "./ViewRuleOperations";
 import { closeActiveDateValuePicker, renderDateValuePicker } from "./DateValuePicker";
+import { trapFocus } from "./InteractionScope";
 
 const MAX_FILTER_GROUP_DEPTH = 3;
 
@@ -101,6 +102,7 @@ export class FilterPanelRenderer {
   private panelEl: HTMLElement | null = null;
   private anchorEl: HTMLElement | null = null;
   private refreshTimer: number | null = null;
+  private removeFocusTrap: (() => void) | null = null;
 
   render(
     containerEl: HTMLElement,
@@ -113,6 +115,8 @@ export class FilterPanelRenderer {
     const savedScroll = this.panelEl?.scrollTop ?? 0;
     closeActiveDateValuePicker(containerEl.ownerDocument);
     if (this.panelEl) {
+      this.removeFocusTrap?.();
+      this.removeFocusTrap = null;
       this.panelEl.remove();
       this.panelEl = null;
     }
@@ -125,13 +129,21 @@ export class FilterPanelRenderer {
 
     const panel = containerEl.createDiv({
       cls: "db-filter-panel",
-      attr: { id: "db-filter-panel" },
+      attr: { id: "db-filter-panel", role: "dialog", "aria-label": t("toolbar.filter") },
     });
+    panel.tabIndex = -1;
     const header = containerEl.querySelector(".db-header") || containerEl.querySelector(".db-toolbar");
     if (header?.parentElement) {
       header.parentElement.insertBefore(panel, header.nextSibling);
     }
     this.panelEl = panel;
+    this.removeFocusTrap = trapFocus(panel, {
+      onEscape: () => {
+        actions.close();
+        this.anchorEl?.focus({ preventScroll: true });
+      },
+    });
+    panel.focus?.({ preventScroll: true });
 
     const tree = this.ensureFilterTree(state);
     this.renderHeader(panel, containerEl, state, config, actions, tree);
