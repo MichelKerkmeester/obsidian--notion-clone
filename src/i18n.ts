@@ -1,6 +1,23 @@
+// ───────────────────────────────────────────────────────────────────
+// MODULE:    i18n
+// COMPONENT: flat key/value translation dictionaries (en, zh-CN, zh-TW) plus the `t()` lookup
+// ───────────────────────────────────────────────────────────────────
+//
+// `t()` falls back to the English string (and then the raw key) rather
+// than throwing, so a key missing from a non-English dictionary degrades
+// to readable English instead of crashing the view that calls it.
+
+// ───────────────────────────────────────────────────────────────────
+// 1. TYPES
+// ───────────────────────────────────────────────────────────────────
+
 export type LocaleCode = "system" | "en" | "zh-CN" | "zh-TW";
 
 type Dictionary = Record<string, string>;
+
+// ───────────────────────────────────────────────────────────────────
+// 2. EN
+// ───────────────────────────────────────────────────────────────────
 
 const en: Dictionary = {
   "app.name": "Note Database",
@@ -1639,6 +1656,10 @@ const en: Dictionary = {
   "viewConfig.calendarScale": "Calendar scale",
 };
 
+// ───────────────────────────────────────────────────────────────────
+// 3. ZH-CN
+// ───────────────────────────────────────────────────────────────────
+
 const zhCN: Dictionary = {
   "app.name": "Note Database",
   "common.add": "添加",
@@ -3202,6 +3223,10 @@ const zhCN: Dictionary = {
   "common.open": "打开",
 };
 
+// ───────────────────────────────────────────────────────────────────
+// 4. ZH-TW
+// ───────────────────────────────────────────────────────────────────
+
 const zhTW: Dictionary = {
   ...zhCN,
   "common.add": "新增",
@@ -4728,6 +4753,10 @@ const zhTW: Dictionary = {
   "viewConfig.ratioSquare": "正方形 1:1",
   "viewConfig.ratioWide": "寬屏 16:9",
 };
+
+// ───────────────────────────────────────────────────────────────────
+// 5. LOCALE STATE & LOOKUP
+// ───────────────────────────────────────────────────────────────────
 
 const dictionaries: Record<Exclude<LocaleCode, "system">, Dictionary> = {
   en,

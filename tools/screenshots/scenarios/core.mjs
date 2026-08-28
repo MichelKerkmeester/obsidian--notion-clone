@@ -1,4 +1,17 @@
-import { ROWS, ICONS, dots, glyph, pill, tableHeader, tableRows, boardColumn } from "./_shared.mjs";
+// ───────────────────────────────────────────────────────────────────
+// MODULE:    core
+// COMPONENT: screenshot scenarios for the primary view types (table, board, gallery, list) and their shared chrome
+// ───────────────────────────────────────────────────────────────────
+
+// ───────────────────────────────────────────────────────────────────
+// 1. IMPORTS
+// ───────────────────────────────────────────────────────────────────
+
+import { ROWS, ICONS, dots, glyph, pill, tableHeader, tableRows, boardColumn } from "./shared.mjs";
+
+// ───────────────────────────────────────────────────────────────────
+// 2. SCENARIOS
+// ───────────────────────────────────────────────────────────────────
 
 export const CORE_SCENARIOS = [
   {
@@ -6,7 +19,7 @@ export const CORE_SCENARIOS = [
     title: "Table view",
     group: "views",
     width: 1100,
-    sources: ["src/views/TableRenderer.ts", "src/views/ColumnHeaderController.ts", "src/views/CellRenderer.ts"],
+    sources: ["src/views/table-renderer.ts", "src/views/column-header-controller.ts", "src/views/cell-renderer.ts"],
     html: () => `
       <div class="note-database-container">
         <table class="db-table"><thead><tr>${tableHeader()}</tr></thead><tbody>${tableRows()}</tbody></table>
@@ -17,7 +30,7 @@ export const CORE_SCENARIOS = [
     title: "Column header affordances",
     group: "components",
     width: 620,
-    sources: ["src/views/ColumnHeaderController.ts"],
+    sources: ["src/views/column-header-controller.ts"],
     note: "The menu trigger sits inline after the label and the label truncates before it moves.",
     html: () => `
       <div class="note-database-container">
@@ -40,7 +53,7 @@ export const CORE_SCENARIOS = [
     title: "Board view",
     group: "views",
     width: 1100,
-    sources: ["src/views/BoardRenderer.ts", "src/views/CardFieldRenderer.ts"],
+    sources: ["src/views/board-renderer.ts", "src/views/card-field-renderer.ts"],
     html: () => `
       <div class="note-database-container">
         <div class="db-board" role="grid">
@@ -55,7 +68,7 @@ export const CORE_SCENARIOS = [
     title: "Gallery view",
     group: "views",
     width: 900,
-    sources: ["src/views/GalleryRenderer.ts", "src/views/CardFieldRenderer.ts"],
+    sources: ["src/views/gallery-renderer.ts", "src/views/card-field-renderer.ts"],
     html: () => `
       <div class="note-database-container">
         <div class="db-gallery" role="grid">
@@ -73,7 +86,7 @@ export const CORE_SCENARIOS = [
     title: "List view",
     group: "views",
     width: 900,
-    sources: ["src/views/ListRenderer.ts", "src/views/CardFieldRenderer.ts"],
+    sources: ["src/views/list-renderer.ts", "src/views/card-field-renderer.ts"],
     html: () => `
       <div class="note-database-container">
         <div class="db-list" role="grid">
@@ -91,7 +104,7 @@ export const CORE_SCENARIOS = [
     title: "Add view popover",
     group: "components",
     width: 460,
-    sources: ["src/views/ToolbarRenderer.ts"],
+    sources: ["src/views/toolbar-renderer.ts"],
     note: "Tiles keep icon and caption inside their own bounds; the duplicate checkbox is not stretched.",
     // The popover anchors itself absolutely to the toolbar. With no toolbar to anchor to it
     // leaves the flow and the capture box collapses, so it is placed back in flow here.
@@ -135,7 +148,7 @@ export const CORE_SCENARIOS = [
     title: "Dropdown with disabled option",
     group: "components",
     width: 380,
-    sources: ["src/views/DropdownField.ts"],
+    sources: ["src/views/dropdown-field.ts"],
     note: "A disabled option is dimmed and carries a tooltip rather than inline explanatory text.",
     html: () => `
       <div class="note-database-container">
@@ -153,7 +166,7 @@ export const CORE_SCENARIOS = [
     title: "Empty state",
     group: "states",
     width: 720,
-    sources: ["src/views/EmptyStateRenderer.ts"],
+    sources: ["src/views/empty-state-renderer.ts"],
     html: () => `
       <div class="note-database-container">
         <div class="db-empty-hero">

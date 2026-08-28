@@ -1,3 +1,8 @@
+// ───────────────────────────────────────────────────────────────────
+// MODULE:    scenarios
+// COMPONENT: screenshot scenario registry — aggregates per-surface scenario modules
+// ───────────────────────────────────────────────────────────────────
+
 /**
  * Screenshot scenario registry.
  *
@@ -8,7 +13,7 @@
  * shipped stylesheet is what gets photographed. Markup is hand-written rather than driven
  * through the real renderers because those need a live Obsidian App, a vault and a metadata
  * cache. The cost is that markup drift shows up as a screenshot that stops matching the
- * code; the fixture-class guard in `src/views/ScreenshotFixtures.test.ts` catches the
+ * code; the fixture-class guard in `src/views/screenshot-fixtures.test.ts` catches the
  * sharper failure, a class the plugin never emits and no rule ever styles.
  *
  * `sources` lists the files a scenario depicts. The staleness checker uses it to decide
@@ -16,11 +21,19 @@
  * it should not.
  */
 
+// ───────────────────────────────────────────────────────────────────
+// 1. IMPORTS
+// ───────────────────────────────────────────────────────────────────
+
 import { CORE_SCENARIOS } from "./scenarios/core.mjs";
 import { TEMPORAL_SCENARIOS } from "./scenarios/temporal.mjs";
 import { PANEL_SCENARIOS } from "./scenarios/panels.mjs";
 import { CHROME_SCENARIOS } from "./scenarios/chrome.mjs";
 import { FIELDS_SCENARIOS } from "./scenarios/fields.mjs";
+
+// ───────────────────────────────────────────────────────────────────
+// 2. REGISTRY
+// ───────────────────────────────────────────────────────────────────
 
 export const SCENARIOS = [
   ...CORE_SCENARIOS,
@@ -30,6 +43,10 @@ export const SCENARIOS = [
   ...FIELDS_SCENARIOS,
 ];
 
+// ───────────────────────────────────────────────────────────────────
+// 3. VALIDATION
+// ───────────────────────────────────────────────────────────────────
+
 // Two scenarios sharing an id would silently overwrite one another's PNG and leave the
 // manifest describing whichever ran last.
 const seen = new Set();
@@ -38,4 +55,4 @@ for (const scenario of SCENARIOS) {
   seen.add(scenario.id);
 }
 
-export { ROWS } from "./scenarios/_shared.mjs";
+export { ROWS } from "./scenarios/shared.mjs";

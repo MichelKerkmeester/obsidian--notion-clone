@@ -1,0 +1,180 @@
+// ───────────────────────────────────────────────────────────────────
+// MODULE:    export-save-target
+// COMPONENT: desktop save-dialog export with vault-write fallback
+// ───────────────────────────────────────────────────────────────────
+//
+// Electron's dialog/fs modules only exist behind window.require on desktop;
+// mobile Obsidian has neither, so every desktop-only step must fail closed
+// rather than throw. chooseExternalSavePath encodes that with a three-way
+// result instead of a boolean: `undefined` means no desktop save capability
+// (fall back to the vault), `null` means the user opened the dialog and
+// canceled (stop, do not fall back), and a string is the chosen path. Losing
+// that distinction would make a canceled save silently write into the vault.
+
+// ───────────────────────────────────────────────────────────────────
+// 1. IMPORTS
+// ───────────────────────────────────────────────────────────────────
+
+import { App, FileSystemAdapter, Notice, TFile, normalizePath } from "obsidian";
+import { t } from "../i18n";
+
+// ───────────────────────────────────────────────────────────────────
+// 2. TYPES
+// ───────────────────────────────────────────────────────────────────
+
+export interface SavedZipResult {
+  path: string;
+  file: TFile | null;
+  external: boolean;
+}
+
+type RequireFn = (id: string) => unknown;
+interface FileSystemModule {
+  promises: {
+    writeFile(path: string, data: Uint8Array): Promise<void>;
+  };
+}
+
+interface SaveDialogResult {
+  canceled?: boolean;
+  filePath?: string;
+}
+
+/** Shape of the Electron remote / main process module exposed by require('electron') */
+interface ElectronModule {
+  remote?: { dialog?: ElectronDialogApi };
+  dialog?: ElectronDialogApi;
+}
+
+interface ElectronDialogApi {
+  showSaveDialog?(options: { title: string; defaultPath: string; filters: { name: string; extensions: string[] }[] }): Promise<SaveDialogResult>;
+}
+
+/** Minimal shape of Node.js path module */
+interface PathModule {
+  join(...paths: string[]): string;
+}
+
+// ───────────────────────────────────────────────────────────────────
+// 3. SAVE ZIP
+// ───────────────────────────────────────────────────────────────────
+
+/**
+ * Save a generated ZIP with a desktop save dialog when available.
+ * Falls back to writing inside the vault so mobile or restricted environments still work.
+ */
+export async function saveZipWithPicker(
+  app: App,
+  zip: ArrayBuffer,
+  defaultFilename: string,
+  fallbackVaultFolder: string
+): Promise<SavedZipResult | null> {
+  const targetPath = await chooseExternalSavePath(app, defaultFilename);
+  if (targetPath === null) return null;
+  if (targetPath) {
+    await writeExternalBinary(targetPath, zip);
+    new Notice(t("notice.exportedCsvMarkdownZipExternal", { path: targetPath }));
+    return { path: targetPath, file: null, external: true };
+  }
+
+  const path = await writeVaultBinary(app, zip, fallbackVaultFolder, defaultFilename);
+  const file = app.vault.getAbstractFileByPath(path);
+  new Notice(t("notice.exportedCsvMarkdownZip", { path }));
+  return { path, file: file instanceof TFile ? file : null, external: false };
+}
+
+// ───────────────────────────────────────────────────────────────────
+// 4. DESKTOP EXPORT PATH
+// ───────────────────────────────────────────────────────────────────
+
+async function chooseExternalSavePath(app: App, defaultFilename: string): Promise<string | null | undefined> {
+  const requireFn = getRequire();
+  if (!requireFn) return undefined;
+  try {
+    const electron = requireFn("electron") as ElectronModule | undefined;
+    if (!electron) return undefined;
+    const dialog = electron.remote?.dialog || electron.dialog;
+    if (!dialog?.showSaveDialog) return undefined;
+    const defaultPath = getDesktopDefaultPath(app, defaultFilename, requireFn);
+    const result = await dialog.showSaveDialog({
+      title: t("csvMarkdownExport.chooseLocation"),
+      defaultPath,
+      filters: [{ name: "ZIP", extensions: ["zip"] }],
+    });
+    if (result?.canceled || !result?.filePath) return null;
+    return result.filePath;
+  } catch (err) {
+    console.warn("Note Database: save dialog unavailable, falling back to vault export", err);
+    return undefined;
+  }
+}
+
+async function writeExternalBinary(path: string, zip: ArrayBuffer): Promise<void> {
+  const requireFn = getRequire();
+  if (!requireFn) throw new Error("File system access is unavailable");
+  const fs = requireFn("fs") as FileSystemModule;
+  await fs.promises.writeFile(path, new Uint8Array(zip));
+}
+
+// ───────────────────────────────────────────────────────────────────
+// 5. VAULT EXPORT FALLBACK
+// ───────────────────────────────────────────────────────────────────
+
+async function writeVaultBinary(
+  app: App,
+  zip: ArrayBuffer,
+  folder: string,
+  filename: string
+): Promise<string> {
+  const path = getAvailableVaultPath(app, folder, filename);
+  const parent = path.includes("/") ? path.slice(0, path.lastIndexOf("/")) : "";
+  if (parent) await ensureFolder(app, parent);
+  await app.vault.adapter.writeBinary(path, zip);
+  return path;
+}
+
+function getDesktopDefaultPath(app: App, filename: string, requireFn: RequireFn): string {
+  const adapter = app.vault.adapter;
+  const basePath = adapter instanceof FileSystemAdapter ? adapter.getBasePath() : "";
+  if (!basePath) return filename;
+  try {
+    const path = requireFn("path") as PathModule | undefined;
+    return path?.join(basePath, filename) ?? `${basePath}/${filename}`;
+  } catch {
+    return `${basePath}/${filename}`;
+  }
+}
+
+function getAvailableVaultPath(app: App, folder: string, filename: string): string {
+  const safeFolder = normalizePath(folder || "").replace(/^\/+|\/+$/g, "");
+  const dot = filename.lastIndexOf(".");
+  const name = dot >= 0 ? filename.slice(0, dot) : filename;
+  const ext = dot >= 0 ? filename.slice(dot) : "";
+  let candidate = normalizePath(safeFolder ? `${safeFolder}/${filename}` : filename);
+  let index = 1;
+  while (app.vault.getAbstractFileByPath(candidate)) {
+    candidate = normalizePath(safeFolder ? `${safeFolder}/${name} ${index}${ext}` : `${name} ${index}${ext}`);
+    index++;
+  }
+  return candidate;
+}
+
+async function ensureFolder(app: App, folderPath: string): Promise<void> {
+  const parts = normalizePath(folderPath || "").split("/").filter(Boolean);
+  let current = "";
+  for (const part of parts) {
+    current = current ? `${current}/${part}` : part;
+    if (!app.vault.getAbstractFileByPath(current)) {
+      await app.vault.createFolder(current);
+    }
+  }
+}
+
+// ───────────────────────────────────────────────────────────────────
+// 6. HELPERS
+// ───────────────────────────────────────────────────────────────────
+
+function getRequire(): RequireFn | null {
+  return (window as Window & { require?: RequireFn }).require ||
+    null;
+}

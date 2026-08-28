@@ -1,7 +1,27 @@
+// ───────────────────────────────────────────────────────────────────
+// MODULE:    types
+// COMPONENT: shared plugin data model — schema, rows, filters, DatabaseConfig, ViewConfig, settings
+// ───────────────────────────────────────────────────────────────────
+//
+// This is the single persisted shape every renderer, editor and migration
+// reads and writes, so a field can't be renamed or removed here without a
+// migration — additive optional fields are the safe default, and several
+// fields are explicitly kept only for legacy reads (see the @deprecated
+// tags below). Fields still carrying inline Chinese comments are original
+// author notes that predate this file's other JSDoc and are left as-is.
+
+// ───────────────────────────────────────────────────────────────────
+// 1. IMPORTS
+// ───────────────────────────────────────────────────────────────────
+
 import { App, CachedMetadata, TFile } from "obsidian";
 import { LocaleCode } from "../i18n";
-import type { TextLinkScheme } from "./textLinkScheme";
-import type { UniqueIdConfig } from "./UniqueIdStamp";
+import type { TextLinkScheme } from "./text-link-scheme";
+import type { UniqueIdConfig } from "./unique-id-stamp";
+
+// ───────────────────────────────────────────────────────────────────
+// 2. SCHEMA & COLUMNS
+// ───────────────────────────────────────────────────────────────────
 
 export interface RecordSchema {
   columns: ColumnDef[];
@@ -83,6 +103,10 @@ export interface ColumnDef {
   rollupConfig?: RollupConfig;
 }
 
+// ───────────────────────────────────────────────────────────────────
+// 3. STATUS
+// ───────────────────────────────────────────────────────────────────
+
 export type StatusColor =
   | "gray"
   | "brown"
@@ -112,6 +136,10 @@ export interface StatusPresetDef {
   options: StatusOptionDef[];
 }
 
+// ───────────────────────────────────────────────────────────────────
+// 4. COMPUTED FIELDS
+// ───────────────────────────────────────────────────────────────────
+
 export interface ComputedFieldDef {
   key: string;
   label: string;
@@ -122,6 +150,10 @@ export interface ComputedFieldDef {
 }
 
 export type ComputedSyncMode = "automatic" | "display-only" | "manual";
+
+// ───────────────────────────────────────────────────────────────────
+// 5. ROW DATA
+// ───────────────────────────────────────────────────────────────────
 
 export interface RowData {
   app?: App;
@@ -137,6 +169,10 @@ export interface RowData {
   }>;
 }
 
+// ───────────────────────────────────────────────────────────────────
+// 6. ROW CREATION
+// ───────────────────────────────────────────────────────────────────
+
 export interface CreateEntryPosition {
   /** Insert before this rendered record when manual order is active. */
   beforePath?: string;
@@ -150,6 +186,10 @@ export interface RowCreateContext {
   /** Explicit group/subgroup keys for the rendered occurrence of the record. */
   groups?: Array<{ field: string; key: string }>;
 }
+
+// ───────────────────────────────────────────────────────────────────
+// 7. FILTERS & SOURCE RULES
+// ───────────────────────────────────────────────────────────────────
 
 export type FilterOperator = "eq" | "neq" | "contains" | "hasTag" | "gt" | "lt" | "gte" | "lte" | "empty" | "notempty";
 
@@ -272,6 +312,10 @@ export interface SourceRuleExpression {
 
 export type SourceRuleNode = SourceRule | SourceRuleGroup | SourceRuleNot | SourceRuleExpression;
 
+// ───────────────────────────────────────────────────────────────────
+// 8. DATABASE CONFIG
+// ───────────────────────────────────────────────────────────────────
+
 /**
  * 数据库配置：包含数据来源定义 + 属性定义 + 多个视图。
  * 对应一个数据库配置。
@@ -313,6 +357,10 @@ export interface DatabaseConfig {
   /** 1~15 个视图，每个有独立的排序/筛选/显示配置 */
   views: ViewConfig[];
 }
+
+// ───────────────────────────────────────────────────────────────────
+// 9. VIEW CONFIG
+// ───────────────────────────────────────────────────────────────────
 
 /**
  * 视图配置：一种观察数据库的方式。
@@ -576,6 +624,10 @@ export interface ViewConfig {
   viewStates?: Partial<Record<DatabaseViewType, ViewModeStateDef>>;
 }
 
+// ───────────────────────────────────────────────────────────────────
+// 10. SETTINGS
+// ───────────────────────────────────────────────────────────────────
+
 export interface SummaryRuleDef {
   field: string;
   summary: string;
@@ -608,6 +660,10 @@ export interface TrashedDatabase {
   database: DatabaseConfig;
   deletedAt: number;
 }
+
+// ───────────────────────────────────────────────────────────────────
+// 11. HELPERS
+// ───────────────────────────────────────────────────────────────────
 
 /** Generate a unique ID for database/view entities */
 export function generateId(): string {

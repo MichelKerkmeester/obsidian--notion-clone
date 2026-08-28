@@ -1,4 +1,9 @@
 #!/usr/bin/env node
+// ───────────────────────────────────────────────────────────────────
+// MODULE:    verify
+// COMPONENT: screenshot staleness gate — compares recorded source fingerprints to current ones
+// ───────────────────────────────────────────────────────────────────
+
 /**
  * Reports screenshots whose source files have changed since they were captured.
  *
@@ -15,21 +20,37 @@
  * can gate a commit. Add --json for machine-readable output.
  */
 
+// ───────────────────────────────────────────────────────────────────
+// 1. IMPORTS
+// ───────────────────────────────────────────────────────────────────
+
 import { readFileSync, existsSync } from "node:fs";
 import { createHash } from "node:crypto";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { SCENARIOS } from "./scenarios.mjs";
 
+// ───────────────────────────────────────────────────────────────────
+// 2. CONFIGURATION
+// ───────────────────────────────────────────────────────────────────
+
 const HERE = dirname(fileURLToPath(import.meta.url));
 const REPO = resolve(HERE, "..", "..");
 const MANIFEST = join(REPO, "screenshots", "manifest.json");
+
+// ───────────────────────────────────────────────────────────────────
+// 3. HELPERS
+// ───────────────────────────────────────────────────────────────────
 
 const hash = (rel) => {
   const abs = join(REPO, rel);
   if (!existsSync(abs)) return null;
   return createHash("sha256").update(readFileSync(abs)).digest("hex").slice(0, 12);
 };
+
+// ───────────────────────────────────────────────────────────────────
+// 4. MAIN
+// ───────────────────────────────────────────────────────────────────
 
 function main() {
   const json = process.argv.includes("--json");

@@ -1,0 +1,105 @@
+// ───────────────────────────────────────────────────────────────────
+// MODULE:    title-field-display
+// COMPONENT: resolve a view's configured title field into display text for card/list titles
+// ───────────────────────────────────────────────────────────────────
+//
+// titleField may point at a real column, a synthetic file.* pseudo-field
+// (name/basename/path/tags/...), or NO_TITLE_FIELD to hide the title
+// entirely — this is the one place that reconciles those three cases so
+// renderers don't each re-implement the file.* lookup table.
+
+// ───────────────────────────────────────────────────────────────────
+// 1. IMPORTS
+// ───────────────────────────────────────────────────────────────────
+
+import { stringifyValue } from "./stringify";
+import { ColumnDef, NO_TITLE_FIELD, RowData, ViewConfig } from "./types";
+
+// ───────────────────────────────────────────────────────────────────
+// 2. TYPES
+// ───────────────────────────────────────────────────────────────────
+
+export const EMPTY_TITLE_PLACEHOLDER = "—";
+
+export interface TitleFieldDisplay {
+  field: string | undefined;
+  text: string;
+  isEmpty: boolean;
+  isFileTitle: boolean;
+  isHidden: boolean;
+}
+
+// ───────────────────────────────────────────────────────────────────
+// 3. RESOLVE TITLE FIELD DISPLAY
+// ───────────────────────────────────────────────────────────────────
+
+export function resolveTitleFieldDisplay(row: RowData, config: ViewConfig, titleField: string | undefined): TitleFieldDisplay {
+  if (titleField === NO_TITLE_FIELD) {
+    return { field: titleField, text: "", isEmpty: false, isFileTitle: false, isHidden: true };
+  }
+
+  const field = titleField || "file.name";
+  if (field === "file.name" || field === "file.basename") {
+    return {
+      field,
+      text: getFileTitleText(row),
+      isEmpty: false,
+      isFileTitle: true,
+      isHidden: false,
+    };
+  }
+
+  const value = getTitleFieldValue(row, config, field);
+  const text = stringifyValue(value).trim();
+  return {
+    field,
+    text: text || EMPTY_TITLE_PLACEHOLDER,
+    isEmpty: !text,
+    isFileTitle: false,
+    isHidden: false,
+  };
+}
+
+function getFileTitleText(row: RowData): string {
+  return row.file.basename || row.file.name.replace(/\.md$/i, "");
+}
+
+function getTitleFieldValue(row: RowData, config: ViewConfig, field: string): unknown {
+  if (isTitleFileFieldKey(field)) return getTitleFileFieldValue(row, field);
+  const col = config.schema.columns.find((candidate) => candidate.key === field);
+  if (!col) return undefined;
+  return getColumnValue(row, col);
+}
+
+function getColumnValue(row: RowData, col: ColumnDef): unknown {
+  if (isTitleFileFieldKey(col.key)) return getTitleFileFieldValue(row, col.key);
+  if (col.type === "computed" || col.type === "rollup") {
+    return row.computed[col.type === "computed" ? col.computedKey || col.key : col.key];
+  }
+  return row.frontmatter[col.key];
+}
+
+function isTitleFileFieldKey(key: string): boolean {
+  return key.startsWith("file.");
+}
+
+// ───────────────────────────────────────────────────────────────────
+// 4. FILE PSEUDO-FIELD LOOKUP
+// ───────────────────────────────────────────────────────────────────
+
+function getTitleFileFieldValue(row: RowData, key: string): unknown {
+  if (key === "file.name") return row.file.name;
+  if (key === "file.file") return row.file.path;
+  if (key === "file.basename") return row.file.basename || row.file.name.replace(/\.md$/i, "");
+  if (key === "file.path") return row.file.path;
+  if (key === "file.folder") return row.file.parent?.path || "";
+  if (key === "file.ext" || key === "file.extension") return row.file.extension;
+  if (key === "file.ctime" || key === "file.created") return row.file.stat.ctime;
+  if (key === "file.mtime" || key === "file.modified") return row.file.stat.mtime;
+  if (key === "file.size") return row.file.stat.size;
+  if (key === "file.tags") return row.frontmatter.tags;
+  if (key === "file.links") return row.cache?.links?.map((link) => link.link) || [];
+  if (key === "file.embeds") return row.cache?.embeds?.map((link) => link.link) || [];
+  if (key === "file.properties") return row.frontmatter;
+  return undefined;
+}

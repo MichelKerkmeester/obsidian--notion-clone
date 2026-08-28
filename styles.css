@@ -1,64 +1,20 @@
-/*
- * ============================================================================
- *  Note Database — 样式表
- * ============================================================================
- *
- *  CSS 属性速查（修改样式时参考）：
- *
- *  布局类：
- *    display: flex / grid / block / none    — 元素排列方式
- *    flex-direction: column / row           — flex 主轴方向
- *    gap: 8px                               — 子元素间距
- *    align-items: center / start / stretch  — 交叉轴对齐
- *    justify-content: space-between / center — 主轴对齐
- *    position: sticky / absolute / relative — 定位方式
- *    top / left / right / bottom            — 定位偏移量
- *    z-index: 25                            — 层叠顺序（越大越在上层）
- *    overflow: auto / hidden / visible      — 内容溢出处理
- *
- *  尺寸类：
- *    width / height                         — 固定宽高
- *    min-width / max-width                  — 宽度范围限制
- *    min-height / max-height                — 高度范围限制
- *    padding: 8px 12px                      — 内边距（上右下左 或 上下 左右）
- *    margin: 8px                            — 外边距
- *
- *  视觉类：
- *    background: var(--xxx)                 — 背景色（用 Obsidian CSS 变量）
- *    color: var(--xxx)                      — 文字颜色
- *    border: 1px solid var(--xxx)           — 边框（宽度 样式 颜色）
- *    border-radius: var(--db-radius-md)     — 圆角
- *    box-shadow: 0 2px 4px rgba(...)        — 阴影
- *    opacity: 0.5                           — 透明度（0=全透明, 1=不透明）
- *    font-size / font-weight               — 字号 / 字重
- *
- *  Obsidian 常用 CSS 变量（自动适配主题）：
- *    var(--background-primary)              — 主背景色
- *    var(--background-secondary)            — 次背景色（卡片、工具栏）
- *    var(--background-modifier-border)      — 边框颜色
- *    var(--background-modifier-hover)       — 悬停高亮色
- *    var(--text-normal)                     — 正文文字色
- *    var(--text-muted)                      — 次要文字色
- *    var(--text-faint)                      — 最浅文字色
- *    var(--text-accent)                     — 强调色文字
- *    var(--interactive-accent)              — 交互强调色（按钮等）
- *    var(--file-line-width, 760px)          — 编辑器行宽
- *
- *  Sticky 表头原理：
- *    position: sticky 会让元素在滚动到指定位置时"粘住"。
- *    top 值决定粘在哪里（相对于滚动容器的可见区域顶部）。
- *    --db-table-header-top 由 JS 动态测量工具栏高度后设置。
- *    注意：sticky 元素的任何祖先不能有 overflow: hidden/auto，
- *    除非那个祖先就是滚动容器本身。
- *
- * ============================================================================
- */
+/* ───────────────────────────────────────────────────────────────
+   NOTE DATABASE — STYLESHEET
+   Every rule the plugin ships, in one file by design: the test suite and
+   the screenshot capture harness both load it in source order, so the
+   sections below group rules by purpose without splitting the file.
+   Rules target Obsidian theme variables such as var(--background-primary),
+   var(--text-normal) and var(--interactive-accent), so light and dark
+   themes adapt on their own. Sticky table headers read --db-table-header-top,
+   measured from the toolbar height at runtime.
+─────────────────────────────────────────────────────────────── */
 
 
-/* ============================================================================
- *  1. 容器基础样式
- *  .note-database-container 是最外层容器，Dashboard 独立视图和内嵌视图共用
- * ============================================================================ */
+/* ───────────────────────────────────────────────────────────────
+   1. CONTAINER BASE
+   The .note-database-container is the outermost wrapper, shared by the
+   standalone dashboard view and embedded views.
+─────────────────────────────────────────────────────────────── */
 
 .note-database-container,
 .note-database-modal,
@@ -559,11 +515,11 @@
   margin-right: 0;
 }
 
-/* ============================================================================
- *  2. 工具栏 Header（标题行 + 工具按钮行）
- *  包含视图名称、筛选/排序/分组按钮等
- *  sticky: 滚动时固定在顶部，left:0 防止水平滚动时被带走
- * ============================================================================ */
+/* ───────────────────────────────────────────────────────────────
+   2. TOOLBAR HEADER
+   Title row plus the filter, sort and group buttons.
+   Sticky to the top on scroll. left:0 keeps it from drifting sideways.
+─────────────────────────────────────────────────────────────── */
 
 .note-database-container .db-header {
   --db-header-content-gap: var(--db-heading-vertical-space);
@@ -1251,9 +1207,10 @@
   white-space: nowrap;
 }
 
-/* ============================================================================
- *  3. 工具栏（第二行：视图切换、筛选、排序、搜索等）
- * ============================================================================ */
+/* ───────────────────────────────────────────────────────────────
+   3. TOOLBAR CONTROLS
+   Second row: view switch, filter, sort and search controls.
+─────────────────────────────────────────────────────────────── */
 
 .note-database-container .db-toolbar {
   display: flex;
@@ -3906,9 +3863,10 @@
   color: var(--text-error);
 }
 
-/* ============================================================================
- *  4. 汇总统计栏（总数）
- * ============================================================================ */
+/* ───────────────────────────────────────────────────────────────
+   4. SUMMARY BAR
+   Aggregate strip showing the record total.
+─────────────────────────────────────────────────────────────── */
 
 .note-database-container .db-summary {
   display: flex;
@@ -4524,10 +4482,11 @@
   border-top: 1px solid var(--db-drilldown-border);
 }
 
-/* ============================================================================
- *  5. 表格基础样式
- *  min-width:100% 允许列宽拖拽超出容器宽度，产生水平滚动
- * ============================================================================ */
+/* ───────────────────────────────────────────────────────────────
+   5. TABLE BASE
+   min-width:100% lets a dragged column exceed the container width and
+   scroll horizontally.
+─────────────────────────────────────────────────────────────── */
 
 .note-database-container .db-table-wrap {
   min-width: 100%;
@@ -4813,9 +4772,10 @@
   z-index: 1;
 }
 
-/* ============================================================================
- *  6. 单元格样式（文本、编辑态、选择态）
- * ============================================================================ */
+/* ───────────────────────────────────────────────────────────────
+   6. CELL EDITING AND SELECTION
+   Text, edit-state and selection-state cell styling.
+─────────────────────────────────────────────────────────────── */
 
 /* 普通单元格：溢出省略号 */
 .note-database-container .db-table td {
@@ -5445,7 +5405,10 @@
   transition: opacity 0.2s ease, max-width 0.2s ease;
 }
 
-/* ========== 自动换行模式下的表格视图（零抖动方案） ========== */
+/* ───────────────────────────────────────────────────────────────
+   7. TABLE WRAP MODE
+   Wrap-mode table view, tuned to avoid row-height jitter.
+─────────────────────────────────────────────────────────────── */
 
 /* 1. 容器允许换行 */
 .note-database-container .db-table td.db-cell-wrap .db-file-title-inline {
@@ -5531,7 +5494,11 @@
 .note-database-container .db-gallery-card:hover .db-file-title-prefix {
   opacity: 0.6;
 }
-/* ========== 列表视图：路径前缀放在文件名前面，hover 滑入展开 ========== */
+/* ───────────────────────────────────────────────────────────────
+   8. FILENAME PATH PREFIX
+   List view: the path prefix sits before the file name and slides open
+   on hover.
+─────────────────────────────────────────────────────────────── */
 
 /* 1. 强制列表行的标题变为 flex 行内布局 */
 .note-database-container .db-list-row .db-file-title-stacked,
@@ -6009,9 +5976,10 @@
   padding: 0 6px;
 }
 
-/* ============================================================================
- *  6b. 分段日期输入（YYYY-MM-DD）
- * ============================================================================ */
+/* ───────────────────────────────────────────────────────────────
+   9. SEGMENTED DATE INPUT
+   Segmented YYYY-MM-DD date entry.
+─────────────────────────────────────────────────────────────── */
 
 .note-database-container .db-date-segments {
   display: flex;
@@ -6177,9 +6145,10 @@
   border-top: 1px solid var(--background-modifier-border);
 }
 
-/* ============================================================================
- *  7. 下拉选项弹出框（状态/选择类型单元格的选项列表）
- * ============================================================================ */
+/* ───────────────────────────────────────────────────────────────
+   10. OPTION DROPDOWN POPOVER
+   Option-list popover for status and select cells.
+─────────────────────────────────────────────────────────────── */
 
 /* 状态、选择、多选的编辑弹窗 */
 .note-database-container .db-cell-option-popover {
@@ -6676,10 +6645,10 @@
   height: 18px;
 }
 
-/* ============================================================================
- *  8. 状态标签（带颜色的圆角胶囊）
- *  颜色使用低饱和度的 16 色调色板
- * ============================================================================ */
+/* ───────────────────────────────────────────────────────────────
+   11. STATUS BADGES
+   Colored rounded pills drawn from a low-saturation 16-color palette.
+─────────────────────────────────────────────────────────────── */
 
 .note-database-container .status-badge,
 .note-database-modal .status-badge {
@@ -6766,9 +6735,10 @@
   margin-right: 2px;
 }
 
-/* ============================================================================
- *  10. 底部"+ 新建"行
- * ============================================================================ */
+/* ───────────────────────────────────────────────────────────────
+   12. NEW RECORD ROW
+   The + New row pinned at the bottom of the table.
+─────────────────────────────────────────────────────────────── */
 
 .note-database-container .db-new-row td {
   height: 30px;
@@ -7167,20 +7137,11 @@
   font-size: 12px;
 }
 
-/* ============================================================================
- *  11. 分组模式（Sticky 分组标题 + 表头层级）
- *
- *  滚动时的层级（从上到下）：
- *  ┌─ db-header (z-index:30) — 工具栏，固定在最顶部
- *  ├─ db-group-header (z-index:26) — "分组A (3)" 这样的标题
- *  ├─ thead (z-index:25) — 列属性名行
- *  └─ tbody — 数据行（正常滚动）
- *
- *  top 值说明：
- *    group-header: header高度 - 30px
- *    thead(分组):  header高度 - 2px
- *    thead(未分组): header高度 - 25px
- * ============================================================================ */
+/* ───────────────────────────────────────────────────────────────
+   13. GROUPING AND STICKY HEADERS
+   Sticky group titles and header tiers.
+   Grouped thead sits 2px below the header, ungrouped 25px below.
+─────────────────────────────────────────────────────────────── */
 
 /* 分组容器：纵向排列 */
 .note-database-container .db-grouped-table {
@@ -7504,9 +7465,10 @@
 }
 
 
-/* ============================================================================
- *  12. 分组排序弹窗（Modal 内的拖拽排序列表）
- * ============================================================================ */
+/* ───────────────────────────────────────────────────────────────
+   14. GROUP ORDER MODAL
+   Drag-to-reorder group list inside a modal.
+─────────────────────────────────────────────────────────────── */
 
 .note-database-modal .db-modal-help {
   margin-bottom: 12px;
@@ -7839,9 +7801,10 @@
     max-width: none;
   }
 }
-/* ============================================================
- *  分组排序 Popover — 与筛选/排序面板风格统一
- * ============================================================ */
+/* ───────────────────────────────────────────────────────────────
+   15. GROUP ORDER POPOVER
+   Popover variant sharing the filter and sort panel styling.
+─────────────────────────────────────────────────────────────── */
 
 /* 1. 外壳：定位由 PopoverPosition 统一计算，避免贴近视口边缘时被裁切 */
 .note-database-container .db-group-order-popover,
@@ -8008,9 +7971,10 @@
   flex: 0 0 auto;
   margin-left: auto;
 }
-/* ============================================================
- *  Base Import Confirm Modal — 确认导入属性
- * ============================================================ */
+/* ───────────────────────────────────────────────────────────────
+   16. BASE IMPORT CONFIRM MODAL
+   Confirms the properties pulled from an imported Base file.
+─────────────────────────────────────────────────────────────── */
 
 /* 1. 表格整体：用 separate + 固定表头，增加纵向间距 */
 .note-database-modal .base-import-table {
@@ -8250,10 +8214,10 @@
   background: var(--interactive-accent-hover);
 }
 
-/* ============================================================================
- *  13. 看板视图（Board / Kanban）
- *  水平排列的分组列，支持拖拽排序
- * ============================================================================ */
+/* ───────────────────────────────────────────────────────────────
+   17. BOARD VIEW
+   Horizontally arranged group columns with drag-and-drop.
+─────────────────────────────────────────────────────────────── */
 
 /* 看板整体：横向排列，水平滚动 */
 .note-database-container .db-board {
@@ -9049,10 +9013,10 @@ body.is-phone .note-database-container .db-record-detail-panel {
   height: 15px;
 }
 
-/* ============================================================================
- *  13b. 画廊视图（Gallery）
- *  响应式卡片网格，适配卡片式图库展示方式
- * ============================================================================ */
+/* ───────────────────────────────────────────────────────────────
+   18. GALLERY VIEW
+   Responsive card grid for a gallery-style layout.
+─────────────────────────────────────────────────────────────── */
 
 .note-database-container .db-gallery {
   display: grid;
@@ -9396,9 +9360,10 @@ body.is-phone .note-database-container .db-record-detail-panel {
   color: var(--text-normal);
 }
 
-/* ============================================================================
- *  13b. 列表视图
- * ============================================================================ */
+/* ───────────────────────────────────────────────────────────────
+   19. LIST VIEW
+   Compact single-column record list.
+─────────────────────────────────────────────────────────────── */
 
 .note-database-container .db-list,
 .note-database-container .db-list-grouped {
@@ -9698,10 +9663,11 @@ body.is-phone .note-database-container .db-record-detail-panel {
   color: var(--text-normal);
 }
 
-/* ============================================================================
- *  14. 浮动面板（筛选、排序、列管理）
- *  position: absolute 相对于容器定位，z-index:50 确保在表格之上
- * ============================================================================ */
+/* ───────────────────────────────────────────────────────────────
+   20. FLOATING PANELS
+   Filter, sort and column-manager panels.
+   Absolutely positioned to the container. z-index 50 keeps them above the table.
+─────────────────────────────────────────────────────────────── */
 
 .note-database-container .db-filter-panel,
 .note-database-container .db-view-config-panel,
@@ -10740,9 +10706,10 @@ body.is-phone .note-database-container .db-record-detail-panel {
   margin: 0;
 }
 
-/* ============================================================================
- *  15. 面板通用行样式（筛选条件行、排序规则行）
- * ============================================================================ */
+/* ───────────────────────────────────────────────────────────────
+   21. PANEL ROWS
+   Shared row styling for filter conditions and sort rules.
+─────────────────────────────────────────────────────────────── */
 
 .note-database-container .db-panel-row {
   display: flex;
@@ -11026,10 +10993,10 @@ body.is-phone .note-database-container .db-record-detail-panel {
   text-align: left;
 }
 
-/* ============================================================================
- *  16. 列管理面板的行（拖拽排序 + 可见性 + 换行 + 上移下移 + 编辑 + 隐藏）
- *  grid-template-columns: 拖拽 | 图标 | 名称 | 换行 | 上移 | 下移 | 编辑 | 隐藏
- * ============================================================================ */
+/* ───────────────────────────────────────────────────────────────
+   22. COLUMN MANAGER PANEL
+   One row per property: drag, icon, name, wrap, move up, move down, edit, hide.
+─────────────────────────────────────────────────────────────── */
 
 .note-database-container .db-column-manager-row {
   display: grid;
@@ -11119,9 +11086,10 @@ body.is-phone .note-database-container .db-record-detail-panel {
   box-shadow: inset 0 0 0 1px var(--interactive-accent);
 }
 
-/* ============================================================================
- *  17. Modal 弹窗通用样式（列编辑、公式编辑、状态选项编辑等）
- * ============================================================================ */
+/* ───────────────────────────────────────────────────────────────
+   23. MODAL BASE
+   Shared modal styling for the column, formula and status-option editors.
+─────────────────────────────────────────────────────────────── */
 
 .note-database-modal label {
   display: block;
@@ -11152,11 +11120,11 @@ body.is-phone .note-database-container .db-record-detail-panel {
   resize: vertical;
 }
 
-/* ============================================================================
- *  18. 公式编辑器 Modal
- *  左侧：公式编辑 + 实时预览
- *  右侧：字段 / 函数 / 示例帮助
- * ============================================================================ */
+/* ───────────────────────────────────────────────────────────────
+   24. FORMULA EDITOR MODAL
+   Left: formula editor with live preview.
+   Right: field, function and example help.
+─────────────────────────────────────────────────────────────── */
 
 .modal.formula-workbench-modal-host {
   width: min(1240px, 96vw);
@@ -12074,9 +12042,10 @@ body.is-phone .note-database-container .db-record-detail-panel {
   }
 }
 
-/* ============================================================================
- *  19. 状态选项编辑器（颜色 + 名称 + 拖拽排序）
- * ============================================================================ */
+/* ───────────────────────────────────────────────────────────────
+   25. STATUS OPTIONS EDITOR
+   Color swatch, name and drag reordering for status options.
+─────────────────────────────────────────────────────────────── */
 
 /* ── 预设标签区 ── */
 .note-database-modal .db-status-preset-list {
@@ -12470,9 +12439,10 @@ body.is-phone .note-database-container .db-record-detail-panel {
   color: var(--text-error);
 }
 
-/* ============================================================================
- *  20. 公式帮助浏览器（分类 | 条目列表 | 详情）
- * ============================================================================ */
+/* ───────────────────────────────────────────────────────────────
+   26. FORMULA HELP BROWSER
+   Three panes: category, entry list and detail.
+─────────────────────────────────────────────────────────────── */
 
 .note-database-modal .db-formula-browser {
   display: grid;
@@ -13483,9 +13453,10 @@ body.is-phone .note-database-container .db-record-detail-panel {
   max-height: 104px;
 }
 
-/* ============================================================================
- *  21. 列头拖拽排序（drag & drop 视觉反馈）
- * ============================================================================ */
+/* ───────────────────────────────────────────────────────────────
+   27. COLUMN HEADER DRAG AND DROP
+   Drag-and-drop visual feedback for reordering column headers.
+─────────────────────────────────────────────────────────────── */
 
 .note-database-container .db-table th[draggable] {
   cursor: grab;
@@ -13509,9 +13480,10 @@ body.is-phone .note-database-container .db-record-detail-panel {
   box-shadow: inset 2px 0 0 var(--interactive-accent);
 }
 
-/* ============================================================================
- *  23. 数据库文件列表 Modal（查看/打开/删除数据库文件）
- * ============================================================================ */
+/* ───────────────────────────────────────────────────────────────
+   28. DATABASE FILE LIST MODAL
+   View, open and delete database files.
+─────────────────────────────────────────────────────────────── */
 
 .note-database-modal .db-file-list {
   display: flex;
@@ -13559,17 +13531,11 @@ body.is-phone .note-database-container .db-record-detail-panel {
   white-space: nowrap;
 }
 
-/* ============================================================================
- *  24. 内嵌视图（代码块 / frontmatter 渲染）
- *
- *  内嵌容器自身是滚动容器（overflow:auto + max-height:80vh），
- *  所以 sticky 表头相对于此容器生效，而非外部页面。
- *
- *  Sticky 层级（容器内）：
- *    top:0    → db-header（工具栏）
- *    top:header高度    → group-header（分组标题）
- *    top:header高度+30 → thead（列属性行）
- * ============================================================================ */
+/* ───────────────────────────────────────────────────────────────
+   29. EMBEDDED VIEW
+   Code-block and frontmatter rendering.
+   Group header sticks at header height, thead at header height plus 30px.
+─────────────────────────────────────────────────────────────── */
 
 .note-database-embed {
   margin: 12px 0;
@@ -13880,7 +13846,10 @@ body.is-phone .note-database-container .db-record-detail-panel {
   margin-right: 0;
 }
 
-/* ========== Calendar View ========== */
+/* ───────────────────────────────────────────────────────────────
+   30. CALENDAR VIEW
+   Month grid, event bars and the calendar surface.
+─────────────────────────────────────────────────────────────── */
 
 /* Main container */
 .note-database-container .db-calendar {
@@ -14664,7 +14633,10 @@ body.is-mobile .note-database-container .db-timeline-scale-menu,
   pointer-events: none;
 }
 
-/* ========== Week View ========== */
+/* ───────────────────────────────────────────────────────────────
+   31. CALENDAR WEEK AND DAY GRID
+   Week and day time grids with the all-day strip and current-time ruler.
+─────────────────────────────────────────────────────────────── */
 
 /* Sticky wrapper: pins the day-name row + all-day strip above the scrolling time grid */
 .note-database-container .db-calendar-week-sticky {
@@ -16621,10 +16593,10 @@ body.is-mobile .note-database-container .db-calendar-month-time {
 }
 
 
-/* ============================================================================
- *  25. 响应式适配（窄屏/移动端）
- *  减小 padding，工具栏纵向排列，搜索框全宽
- * ============================================================================ */
+/* ───────────────────────────────────────────────────────────────
+   32. RESPONSIVE AND MOBILE
+   Narrow screens: reduced padding, stacked toolbar and full-width search.
+─────────────────────────────────────────────────────────────── */
 
 @media (max-width: 760px) {
   .note-database-container {
@@ -17934,9 +17906,10 @@ img.db-text-md-image {
   margin-top: 4px;
 }
 
-/* ============================================================================
- * Table record peek
- * ============================================================================ */
+/* ───────────────────────────────────────────────────────────────
+   33. TABLE RECORD PEEK
+   Docked record-peek panel opened from a table row.
+─────────────────────────────────────────────────────────────── */
 .note-database-container td.db-title-cell {
   position: relative;
 }

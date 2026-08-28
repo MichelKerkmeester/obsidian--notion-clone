@@ -1,0 +1,802 @@
+// ───────────────────────────────────────────────────────────────────
+// MODULE:    computed-field
+// COMPONENT: Sandboxed expression engine that evaluates user-authored formula computed fields
+// ───────────────────────────────────────────────────────────────────
+//
+// Formulas run through safeEval inside the app's own JS context, not a real
+// sandbox, so validateFormulaSecurity exists to deny prototype/global escape
+// vectors (constructor, __proto__, Function, eval, fetch, ...) and
+// control-flow keywords (while, for, class, new, this) that a hostile or
+// buggy formula could use to hang the render loop or reach outside the
+// evaluator. Lowercase built-ins (round, sum, ...) and uppercase Excel-style
+// aliases (ROUND, SUM, ...) both resolve to the same functions so spreadsheet-
+// style and JS-style formula authors are served by one engine. extractDependencies
+// re-derives which columns a formula reads (bracket refs, field("x") calls,
+// bare identifiers, and Bases formula.* member refs) so the caller can decide
+// which computed fields need recomputing without re-running the formula.
+
+// ───────────────────────────────────────────────────────────────────
+// 1. IMPORTS
+// ───────────────────────────────────────────────────────────────────
+import { FORMULA_BUILTIN_CONSTANTS, scanFormulaSegments } from "./formula-tokenizer";
+import { FORMULA_FILE_FIELDS } from "./formula-fields";
+import { formulaIfsSwitchMath } from "./formula-ifs-switch-math";
+import { ColumnDef, ComputedFieldDef } from "./types";
+import { safeEval } from "./safe-eval";
+import { safeString } from "./safe-string";
+import { hasDateTimeValue } from "./date-time-format";
+import type { MomentConstructor, MomentLike } from "./moment-types";
+import { registerLetHelper, transformLetCalls } from "./let-variables";
+import { t } from "../i18n";
+
+declare const moment: MomentConstructor;
+
+// ───────────────────────────────────────────────────────────────────
+// 2. TYPES
+// ───────────────────────────────────────────────────────────────────
+export interface ComputedFieldEvaluationResult {
+  value: unknown;
+  error?: string;
+}
+
+// ───────────────────────────────────────────────────────────────────
+// 3. HELPERS
+// ───────────────────────────────────────────────────────────────────
+/**
+ * Parse a date string with strict ISO_8601 first, then fallback formats.
+ * This allows frontmatter dates in YYYY-MM-DD, YYYY/MM/DD, or YYYY年M月D日.
+ */
+function parseMoment(value: string): MomentLike | null {
+  if (value == null) return null;
+  const m = moment(value, moment.ISO_8601, true);
+  if (m.isValid()) return m;
+  // Fallback: try common formats
+  const m2 = moment(value, ["YYYY-MM-DD", "YYYY/MM/DD", "YYYY年M月D日"]);
+  return m2.isValid() ? m2 : null;
+}
+
+/**
+ * Simple expression evaluator for computed fields.
+ *
+ * Available in expressions:
+ *   today            - current date as ISO string
+ *   now()            - current datetime string
+ *   round(n, d)      - round number to d decimals
+ *   floor(n)         - round down
+ *   ceil(n)          - round up
+ *   abs(n)           - absolute value
+ *   max(a, b, ...)   - maximum of values
+ *   min(a, b, ...)   - minimum of values
+ *   sum(a, b, ...)   - sum all arguments
+ *   avg(a, b, ...)   - average of all arguments
+ *   days(a, b)       - signed days between date a and b (b - a)
+ *   daysFromNow(d)   - days from now to date d (d - today)
+ *   addMonths(d, n)  - add n months to date d
+ *   addYears(d, n)   - add n years to date d
+ *   year(d)          - extract year from date
+ *   month(d)         - extract month (1-12)
+ *   day(d)           - extract day of month
+ *   if(cond, t, f)   - conditional (cond ? t : f)
+ *   concat(a, b, ...)- string concatenation
+ *   trim(s)          - trim whitespace from string
+ *   upper(s)         - convert string to uppercase
+ *   lower(s)         - convert string to lowercase
+ *   proper(s)        - capitalize first letter of each word
+ *   len(s)           - string length
+ *   contains(s, sub) - check if string contains substring
+ *   startsWith(s, p) - check if string starts with prefix
+ *   endsWith(s, p)   - check if string ends with suffix
+ *   replace(s, f, r) - replace all occurrences in string
+ *   eomonth(d, n)    - end of month, n months from date d
+ *   weekday(d[,t])   - day of week; optional return_type t (Excel 1/2/3/11-17),
+ *                     default 0=Sun, 1=Mon, ..., 6=Sat
+ *   quarter(d)       - quarter of year (1-4)
+ *   weeknum(d)       - ISO week number
+ *   iferror(v, fb)   - return v if valid, else fallback
+ *   rand()          - random number between 0 and 1
+ *   randBetween(m,n)- random integer between m and n inclusive
+ *   mod(a, b)       - modulo (a % b, handles negatives properly)
+ *   pow(a, b)       - a raised to power b
+ *   sign(n)         - sign of number: -1, 0, or 1
+ *   pi              - π constant
+ *   e               - Euler's number
+ *
+ * Field values from the note are available as variables.
+ */
+
+// ───────────────────────────────────────────────────────────────────
+// 4. COMPUTED FIELD ENGINE
+// ───────────────────────────────────────────────────────────────────
+export class ComputedFieldEngine {
+  private defs: ComputedFieldDef[];
+
+  constructor(defs: ComputedFieldDef[], private columns: ColumnDef[] = []) {
+    this.defs = defs;
+  }
+
+  setDefinitions(defs: ComputedFieldDef[]): void {
+    this.defs = defs;
+  }
+
+  /**
+   * Evaluate all computed fields for a given record's frontmatter.
+   */
+  /** Reserved words that can't be used as variable names */
+  private static RESERVED = new Set([
+    "this", "true", "false", "null", "undefined", "if", "else", "for", "while",
+    "do", "switch", "case", "break", "continue", "return", "throw", "try",
+    "catch", "finally", "new", "delete", "typeof", "instanceof", "void",
+    "class", "function", "var", "let", "const", "import", "export", "default",
+  ]);
+
+  evaluate(frontmatter: Record<string, unknown>): Record<string, unknown> {
+    const result: Record<string, unknown> = {};
+    const context = this.createContext(frontmatter);
+
+    for (const def of this.defs) {
+      const evaluated = this.evaluateExpressionDetailed(def.expression, context);
+      if (evaluated.error) {
+        console.warn(`ComputedField "${def.key}" evaluation failed:`, evaluated.error, `expression:`, def.expression);
+        result[def.key] = null;
+      } else {
+        result[def.key] = evaluated.value;
+        context[def.key] = evaluated.value;
+      }
+    }
+
+    return result;
+  }
+
+  evaluateSingle(
+    expression: string,
+    frontmatter: Record<string, unknown>,
+    computed: Record<string, unknown> = {}
+  ): unknown {
+    return this.evaluateSingleDetailed(expression, frontmatter, computed).value;
+  }
+
+  evaluateSingleDetailed(
+    expression: string,
+    frontmatter: Record<string, unknown>,
+    computed: Record<string, unknown> = {}
+  ): ComputedFieldEvaluationResult {
+    const context = this.createContext(frontmatter, computed);
+    return this.evaluateExpressionDetailed(expression, context);
+  }
+
+  // ─────────────────────────────────────────────────────────────────
+  // 5. BUILTIN CONTEXT
+  // ─────────────────────────────────────────────────────────────────
+  private createContext(
+    frontmatter: Record<string, unknown>,
+    computed: Record<string, unknown> = {}
+  ): Record<string, unknown> {
+    const context: Record<string, unknown> = {
+      // Spread frontmatter fields first (lower priority — built-ins override them)
+      ...Object.fromEntries(
+        Object.entries(frontmatter)
+          .filter(([k]) => !ComputedFieldEngine.RESERVED.has(k))
+          .map(([k, v]) => [k, this.coerceValue(v)])
+      ),
+      // Built-in functions (higher priority)
+      today: moment().format("YYYY-MM-DD"),
+      pi: Math.PI,
+      e: Math.E,
+      field: (name: string) => this.getFieldValue(context, frontmatter, computed, name),
+      now: () => moment().format("YYYY-MM-DD HH:mm:ss"),
+      round: (n: number, d: number) => Math.round(n * Math.pow(10, d)) / Math.pow(10, d),
+      floor: Math.floor,
+      ceil: Math.ceil,
+      abs: Math.abs,
+      max: Math.max,
+      min: Math.min,
+      sum: (...args: number[]) => args.reduce((a, b) => a + (Number(b) || 0), 0),
+      avg: (...args: number[]) => {
+        const nums = args.map(Number).filter(n => !isNaN(n));
+        return nums.length ? nums.reduce((a, b) => a + b, 0) / nums.length : 0;
+      },
+      rand: () => Math.random(),
+      randBetween: (min: number, max: number) => Math.floor(Math.random() * (max - min + 1)) + min,
+      mod: (a: number, b: number) => ((a % b) + b) % b,
+      pow: (a: number, b: number) => Math.pow(a, b),
+      sign: (n: number) => n > 0 ? 1 : n < 0 ? -1 : 0,
+      days: (a: string, b: string) => {
+        if (a == null || b == null) return null;
+        const mda = parseMoment(a);
+        const mdb = parseMoment(b);
+        if (!mda || !mdb) return null;
+        // Signed difference: positive when b is after a
+        return mdb.diff(mda, "days");
+      },
+      daysFromNow: (d: string) => {
+        if (d == null) return null;
+        const md = parseMoment(d);
+        if (!md) return null;
+        return Math.round(md.diff(moment(), "days", true));
+      },
+      addMonths: (d: string, n: number) => {
+        if (d == null) return "";
+        const md = parseMoment(d);
+        if (!md) return "";
+        return md.add(n, "months").format("YYYY-MM-DD");
+      },
+      addYears: (d: string, n: number) => {
+        if (d == null) return "";
+        const md = parseMoment(d);
+        if (!md) return "";
+        return md.add(n, "years").format("YYYY-MM-DD");
+      },
+      addDays: (d: string, n: number) => this.addDays(d, n),
+      adddays: (d: string, n: number) => this.addDays(d, n),
+      dateAdd: (date: string, amount: number, unit = "days") => this.dateAdd(date, amount, unit),
+      dateadd: (date: string, amount: number, unit = "days") => this.dateAdd(date, amount, unit),
+      year: (d: string) => {
+        if (d == null) return null;
+        const md = parseMoment(d);
+        return md ? md.year() : null;
+      },
+      month: (d: string) => {
+        if (d == null) return null;
+        const md = parseMoment(d);
+        return md ? md.month() + 1 : null;
+      },
+      day: (d: string) => {
+        if (d == null) return null;
+        const md = parseMoment(d);
+        return md ? md.date() : null;
+      },
+      hour: (d: string) => {
+        if (d == null) return null;
+        const md = parseMoment(d);
+        return md ? md.hour() : null;
+      },
+      minute: (d: string) => {
+        if (d == null) return null;
+        const md = parseMoment(d);
+        return md ? md.minute() : null;
+      },
+      second: (d: string) => {
+        if (d == null) return null;
+        const md = parseMoment(d);
+        return md ? md.second() : null;
+      },
+      time: (h: number, m: number, s = 0) => {
+        const pad = (n: number) => String(Number(n) || 0).padStart(2, "0");
+        return `${pad(h)}:${pad(m)}:${pad(s)}`;
+      },
+      concat: (...args: string[]) => args.filter(a => a != null).join(""),
+      // String functions
+      trim: (s: unknown) => (s != null ? safeString(s).trim() : ""),
+      upper: (s: unknown) => (s != null ? safeString(s).toUpperCase() : ""),
+      lower: (s: unknown) => (s != null ? safeString(s).toLowerCase() : ""),
+      proper: (s: unknown) => {
+        if (s == null) return "";
+        return safeString(s).replace(/\b\w/g, (c) => c.toUpperCase());
+      },
+      // Text length for scalar values; item count for list-valued fields such as file.tags.
+      len: (s: unknown) => Array.isArray(s) ? s.length : (s != null ? safeString(s).length : 0),
+      contains: (s: unknown, sub: unknown) => {
+        if (s == null || sub == null) return false;
+        return safeString(s).includes(safeString(sub));
+      },
+      startsWith: (s: unknown, prefix: unknown) => {
+        if (s == null || prefix == null) return false;
+        return safeString(s).startsWith(safeString(prefix));
+      },
+      endsWith: (s: unknown, suffix: unknown) => {
+        if (s == null || suffix == null) return false;
+        return safeString(s).endsWith(safeString(suffix));
+      },
+      replace: (s: unknown, find: unknown, repl: unknown) => {
+        if (s == null) return "";
+        if (find == null) return safeString(s);
+        return safeString(s).split(safeString(find)).join(safeString(repl));
+      },
+      // Date functions
+      eomonth: (d: string, n: number) => {
+        if (d == null) return "";
+        const md = parseMoment(d);
+        if (!md) return "";
+        return md.add(n || 0, "months").endOf("month").format("YYYY-MM-DD");
+      },
+      weekday: (d: string, returnType?: unknown) => {
+        if (d == null) return null;
+        const md = parseMoment(d);
+        if (!md) return null;
+        const day = md.day(); // 0=Sun..6=Sat
+        // No second arg ⇒ unchanged legacy behavior (0-6).
+        if (returnType == null) return day;
+        const rt = Math.floor(Number(returnType));
+        if (rt === 3) return (day + 6) % 7; // 0=Mon..6=Sun
+        // Excel return-type: which weekday is "1".
+        const startDay: Record<number, number> = { 1: 0, 17: 0, 2: 1, 11: 1, 12: 2, 13: 3, 14: 4, 15: 5, 16: 6 };
+        const start = startDay[rt];
+        if (start === undefined) return day + 1; // unknown type ⇒ behave as type 1 (1=Sun..7=Sat)
+        return ((day - start + 7) % 7) + 1;
+      },
+      quarter: (d: string) => {
+        if (d == null) return null;
+        const md = parseMoment(d);
+        return md ? md.quarter() : null;
+      },
+      weeknum: (d: string) => {
+        if (d == null) return null;
+        const md = parseMoment(d);
+        return md ? md.isoWeek() : null;
+      },
+      networkdays: (start: string, end: string, ...holidays: unknown[]) => this.networkdays(start, end, holidays),
+      // Error handling
+      iferror: (value: unknown, fallback: unknown) => {
+        try {
+          // If the value is an Error or null/undefined from a failed computation
+          if (value instanceof Error) return fallback;
+          if (value === null || value === undefined) return fallback;
+          if (typeof value === "number" && !Number.isFinite(value)) return fallback;
+          return value;
+        } catch {
+          return fallback;
+        }
+      },
+    };
+    registerLetHelper(context);
+    for (const [key, value] of Object.entries(computed)) {
+      if (context[key] === undefined) context[key] = this.coerceValue(value);
+    }
+
+    Object.assign(context, {
+      TODAY: () => context.today,
+      NOW: context.now,
+      ROUND: context.round,
+      ROUNDUP: (n: number, d = 0) => Math.ceil(Number(n) * Math.pow(10, d)) / Math.pow(10, d),
+      ROUNDDOWN: (n: number, d = 0) => Math.floor(Number(n) * Math.pow(10, d)) / Math.pow(10, d),
+      INT: context.floor,
+      FLOOR: context.floor,
+      CEILING: context.ceil,
+      ABS: context.abs,
+      MAX: context.max,
+      MIN: context.min,
+      SUM: context.sum,
+      AVERAGE: context.avg,
+      AVG: context.avg,
+      IF: (cond: unknown, t: unknown, f: unknown) => cond ? t : f,
+      IFERROR: context.iferror,
+      AND: (...args: unknown[]) => args.every(Boolean),
+      OR: (...args: unknown[]) => args.some(Boolean),
+      NOT: (value: unknown) => !value,
+      CONCAT: context.concat,
+      CONCATENATE: context.concat,
+      TEXTJOIN: (delimiter: string, ignoreEmpty: boolean, ...args: unknown[]) =>
+        args.filter((arg) => !ignoreEmpty || (arg != null && arg !== "")).join(delimiter),
+      TEXT: (value: unknown, format: string) => this.formatText(value, format),
+      VALUE: (value: unknown) => Number(value),
+      LEN: context.len,
+      TRIM: context.trim,
+      UPPER: context.upper,
+      LOWER: context.lower,
+      PROPER: context.proper,
+      LEFT: (value: unknown, count = 1) => safeString(value).slice(0, Number(count)),
+      RIGHT: (value: unknown, count = 1) => safeString(value).slice(-Number(count)),
+      MID: (value: unknown, start = 1, count = 1) =>
+        safeString(value).slice(Number(start) - 1, Number(start) - 1 + Number(count)),
+      FIND: (find: unknown, value: unknown) => safeString(value).indexOf(safeString(find)) + 1,
+      SEARCH: (find: unknown, value: unknown) =>
+        safeString(value).toLowerCase().indexOf(safeString(find).toLowerCase()) + 1,
+      SUBSTITUTE: context.replace,
+      CONTAINS: context.contains,
+      STARTSWITH: context.startsWith,
+      ENDSWITH: context.endsWith,
+      REPLACE: context.replace,
+      DATE: (year: number, month: number, day: number) =>
+        moment({ year: Number(year), month: Number(month) - 1, day: Number(day) }).format("YYYY-MM-DD"),
+      DATEADD: (date: string, amount: number, unit = "days") => this.dateAdd(date, amount, unit),
+      ADDDAYS: (date: string, days: number) => this.addDays(date, days),
+      ADD_DAYS: (date: string, days: number) => this.addDays(date, days),
+      YEAR: context.year,
+      MONTH: context.month,
+      DAY: context.day,
+      HOUR: context.hour,
+      MINUTE: context.minute,
+      SECOND: context.second,
+      TIME: context.time,
+      EOMONTH: context.eomonth,
+      WEEKDAY: context.weekday,
+      WEEKNUM: context.weeknum,
+      NETWORKDAYS: context.networkdays,
+      DAYS: context.days,
+      DAYSFROMNOW: context.daysFromNow,
+      MOD: context.mod,
+      POWER: context.pow,
+      POW: context.pow,
+      SIGN: context.sign,
+      COUNT: (...args: unknown[]) => args.filter((arg) => typeof Number(arg) === "number" && !isNaN(Number(arg))).length,
+      COUNTA: (...args: unknown[]) => args.filter((arg) => arg != null && arg !== "").length,
+      COUNTIF: (values: unknown, criterion: unknown) => this.countIf(values, criterion),
+      ...formulaIfsSwitchMath,
+    });
+    return context;
+  }
+
+  // ─────────────────────────────────────────────────────────────────
+  // 6. DEPENDENCY EXTRACTION
+  // ─────────────────────────────────────────────────────────────────
+  /**
+   * Extract field dependencies from a formula expression.
+   * 支持 [field]、[label]→key、field("x")、裸标识符四种引用形式；排除函数调用（后跟 `(`）、
+   * 无关成员访问（前跟 `.`）与字符串字面量内的内容；Bases 的 `formula.*` 是派生字段引用，
+   * 需映射回 schema 中的 computed/Rollup 列。只在 schema 列集合内的标识符才计入依赖
+   * （内置 pi/today/note 等不计）。修复 Bug Z：原先只匹配 field("...")，漏掉默认形式 [field]
+   * 与裸标识符，导致 automatic 模式增量保存漏算依赖列、computed 存储值停留旧值。
+   */
+  static extractDependencies(expression: string, columns: ColumnDef[] = []): string[] {
+    const allColumns = [...columns, ...FORMULA_FILE_FIELDS];
+    const byKey = new Map(allColumns.map((c) => [c.key, c]));
+    const byLabel = new Map(allColumns.map((c) => [c.label, c]));
+    const deps: string[] = [];
+    const add = (name: string): void => {
+      const col = byKey.get(name) || byLabel.get(name);
+      if (col && !deps.includes(col.key)) deps.push(col.key);
+    };
+    for (const seg of scanFormulaSegments(expression)) {
+      if (seg.kind === "bracket-ref" || seg.kind === "field-call") add(seg.name);
+      else if (seg.kind === "member-ref" && seg.object === "formula") {
+        // Bases formulas address derived fields as formula.<key>. Resolve only
+        // known computed/Rollup columns so arbitrary object members stay out
+        // of the dependency graph.
+        const col = allColumns.find((candidate) =>
+          (candidate.type === "computed" || candidate.type === "rollup") &&
+          (candidate.computedKey === seg.name || candidate.key === seg.name || candidate.key === `formula.${seg.name}`)
+        );
+        if (col && !deps.includes(col.key)) deps.push(col.key);
+      }
+      else if (seg.kind === "identifier" && !seg.isCall && !seg.isMember && !FORMULA_BUILTIN_CONSTANTS.has(seg.text)) add(seg.text);
+    }
+    return deps;
+  }
+
+  // ─────────────────────────────────────────────────────────────────
+  // 7. EXPRESSION EVALUATION
+  // ─────────────────────────────────────────────────────────────────
+  private isIdentifierSafe(name: string): boolean {
+    return /^[a-zA-Z_$][a-zA-Z0-9_$]*$/.test(name) &&
+           !ComputedFieldEngine.RESERVED.has(name);
+  }
+
+  private evaluateExpressionDetailed(
+    expr: string,
+    context: Record<string, unknown>
+  ): ComputedFieldEvaluationResult {
+    const normalizedExpr = this.normalizeFormula(expr);
+    if (!normalizedExpr) return { value: null, error: t("formula.error.empty") };
+
+    // Block dangerous patterns before evaluation
+    const securityError = this.validateFormulaSecurity(normalizedExpr);
+    if (securityError) return { value: null, error: securityError };
+
+    // Build scope from context with common globals
+    const scope: Record<string, unknown> = {
+      Math, Number, String, Boolean, Array, Object, JSON, Date,
+      isNaN, isFinite, parseFloat, parseInt,
+      ...context,
+    };
+
+    let expressionError: unknown;
+    let transformedExpr = normalizedExpr;
+    try {
+      try {
+        transformedExpr = transformLetCalls(normalizedExpr);
+      } catch (transformError) {
+        return { value: null, error: this.formatEvaluationError(transformError) };
+      }
+
+      const result = safeEval(transformedExpr, scope);
+      return { value: result };
+    } catch (err) {
+      expressionError = err;
+      // Try as statement (for expressions like `if(...) return val;`)
+      try {
+        const result = safeEval(transformedExpr, scope, { allowStatements: true });
+        return { value: result };
+      } catch (statementErr) {
+        return { value: null, error: this.formatEvaluationError(statementErr || expressionError) };
+      }
+    }
+  }
+
+  /**
+   * Validate that the formula expression does not contain patterns
+   * that could cause harm or infinite recursion.
+   * Returns an error message string if unsafe, null if safe.
+   */
+  private validateFormulaSecurity(normalizedExpr: string): string | null {
+    // Block escape vectors through prototype chain / global access
+    const dangerousTokens: Array<{ pattern: RegExp; label: string }> = [
+      { pattern: /\bconstructor\b/, label: "constructor" },
+      { pattern: /\b__proto__\b/, label: "__proto__" },
+      { pattern: /\bprototype\b/, label: "prototype" },
+      { pattern: /\bFunction\b/, label: "Function" },
+      { pattern: /\beval\b/, label: "eval" },
+      { pattern: /\bimport\b/, label: "import" },
+      { pattern: /\brequire\b/, label: "require" },
+      { pattern: /\bsetTimeout\b/, label: "setTimeout" },
+      { pattern: /\bsetInterval\b/, label: "setInterval" },
+      { pattern: /\bsetImmediate\b/, label: "setImmediate" },
+      { pattern: /\bfetch\b/, label: "fetch" },
+      { pattern: /\bXMLHttpRequest\b/, label: "XMLHttpRequest" },
+      { pattern: /\bWorker\b/, label: "Worker" },
+      { pattern: /\bprocess\b/, label: "process" },
+      { pattern: /\bglobal\b/, label: "global" },
+      { pattern: /\bglobalThis\b/, label: "globalThis" },
+      // Loop / control-flow keywords (prevent infinite loops via statement mode)
+      { pattern: /\bwhile\b/, label: "while" },
+      { pattern: /\bfor\b/, label: "for" },
+      { pattern: /\bdo\b/, label: "do" },
+      { pattern: /\bclass\b/, label: "class" },
+      { pattern: /\bnew\b/, label: "new" },
+      { pattern: /\bthis\b/, label: "this" },
+      { pattern: /\bdebugger\b/, label: "debugger" },
+      { pattern: /\bthrow\b/, label: "throw" },
+      { pattern: /\bdelete\b/, label: "delete" },
+      { pattern: /\byield\b/, label: "yield" },
+      { pattern: /\basync\b/, label: "async" },
+      { pattern: /\bawait\b/, label: "await" },
+    ];
+
+    for (const { pattern, label } of dangerousTokens) {
+      if (pattern.test(normalizedExpr)) {
+        return t("formula.error.dangerousToken", { token: label });
+      }
+    }
+
+    // Block function declarations and arrow functions to prevent recursive self-calling
+    if (/\bfunction\b/.test(normalizedExpr)) {
+      return t("formula.error.noFunction");
+    }
+    if (/=>/.test(normalizedExpr)) {
+      return t("formula.error.noArrowFunction");
+    }
+
+    return null;
+  }
+
+  private formatEvaluationError(error: unknown): string {
+    const message = error instanceof Error ? error.message : safeString(error);
+    const errorName = error instanceof Error ? error.constructor.name : "";
+
+    if (message.startsWith("let:argCount")) return t("formula.error.letArgCount");
+    if (message.startsWith("let:name")) return t("formula.error.letName");
+
+    // Undefined variable/field
+    const ref = message.match(/^([A-Za-z_$][A-Za-z0-9_$]*) is not defined$/);
+    if (ref) return t("formula.error.undefinedVar", { name: ref[1] });
+
+    // Syntax errors
+    if (error instanceof SyntaxError || errorName === "SyntaxError") {
+      if (message.includes("Unexpected end")) return t("formula.error.unexpectedEnd");
+      if (message.includes("Unexpected token")) return t("formula.error.unexpectedToken", { message });
+      return t("formula.error.incomplete");
+    }
+
+    // Type errors (e.g. calling non-function, wrong operand type)
+    if (errorName === "TypeError") {
+      if (message.includes("is not a function")) {
+        const fnMatch = message.match(/([A-Za-z_$][A-Za-z0-9_$]*) is not a function/);
+        if (fnMatch) return t("formula.error.notFunction", { name: fnMatch[1] });
+      }
+      if (message.includes("Cannot read propert")) {
+        return t("formula.error.nullProperty");
+      }
+      if (message.includes("is not iterable")) return t("formula.error.notIterable");
+      return t("formula.error.typeError", { message });
+    }
+
+    // Range errors
+    if (errorName === "RangeError") {
+      if (message.includes("Invalid date")) return t("formula.error.invalidDate");
+      return t("formula.error.rangeError", { message });
+    }
+
+    if (message) return t("formula.error.generic", { message });
+    return t("formula.error.genericShort");
+  }
+
+  private normalizeFormula(expr: string): string {
+    let formula = expr.trim();
+    if (formula.startsWith("=")) formula = formula.slice(1).trim();
+    return formula.replace(/\[([^\]]+)\]/g, (_match, name: string) =>
+      `field(${JSON.stringify(String(name).trim())})`
+    );
+  }
+
+  // ─────────────────────────────────────────────────────────────────
+  // 8. FIELD & VALUE HELPERS
+  // ─────────────────────────────────────────────────────────────────
+  private getFieldValue(
+    context: Record<string, unknown>,
+    frontmatter: Record<string, unknown>,
+    computed: Record<string, unknown>,
+    name: string
+  ): unknown {
+    const key = String(name).trim();
+    const column = this.columns.find((col) => col.label === key || col.key === key);
+    if (column) {
+      // Rollups are virtual, authoritative row values. A stale or legacy
+      // frontmatter property with the same key must never shadow them.
+      if (column.type === "rollup") {
+        return Object.prototype.hasOwnProperty.call(computed, column.key)
+          ? this.coerceValue(computed[column.key])
+          : undefined;
+      }
+      if (Object.prototype.hasOwnProperty.call(frontmatter, column.key)) {
+        return this.coerceValue(frontmatter[column.key]);
+      }
+      if (column.computedKey && Object.prototype.hasOwnProperty.call(computed, column.computedKey)) {
+        return this.coerceValue(computed[column.computedKey]);
+      }
+      if (Object.prototype.hasOwnProperty.call(computed, column.key)) {
+        return this.coerceValue(computed[column.key]);
+      }
+    }
+    if (Object.prototype.hasOwnProperty.call(frontmatter, key)) return this.coerceValue(frontmatter[key]);
+    if (Object.prototype.hasOwnProperty.call(computed, key)) return this.coerceValue(computed[key]);
+    const direct = context[key];
+    if (direct !== undefined) return this.coerceValue(direct);
+    return undefined;
+  }
+
+  private coerceValue(value: unknown): unknown {
+    if (typeof value !== "string") return value;
+    const text = value.trim();
+    if (!text) return "";
+    const numeric = text.replace(/[,¥￥$\s]/g, "");
+    if (/^[+-]?\d+(?:\.\d+)?$/.test(numeric)) return Number(numeric);
+    return value;
+  }
+
+  // ─────────────────────────────────────────────────────────────────
+  // 9. DATE & TEXT FORMATTING
+  // ─────────────────────────────────────────────────────────────────
+  /** 原值带时间时保留时间精度（产出 datetime），否则纯日期。 */
+  private formatMoment(md: MomentLike, originalDate: string): string {
+    return hasDateTimeValue(originalDate) ? md.format("YYYY-MM-DD HH:mm:ss") : md.format("YYYY-MM-DD");
+  }
+
+  private addDays(date: string, days: number): string {
+    if (date == null) return "";
+    const md = parseMoment(date);
+    if (!md) return "";
+    return this.formatMoment(md.add(Number(days) || 0, "days"), date);
+  }
+
+  private dateAdd(date: string, amount: number, unit: unknown): string {
+    if (date == null) return "";
+    const md = parseMoment(date);
+    if (!md) return "";
+    const normalizedUnit = safeString(unit, "days").toLowerCase();
+    const safeUnit = normalizedUnit.startsWith("month")
+      ? "months"
+      : normalizedUnit.startsWith("year")
+        ? "years"
+        : normalizedUnit.startsWith("week")
+          ? "weeks"
+          : normalizedUnit.startsWith("hour")
+            ? "hours"
+            : normalizedUnit.startsWith("minute")
+              ? "minutes"
+              : normalizedUnit.startsWith("second")
+                ? "seconds"
+                : "days";
+    return this.formatMoment(md.add(Number(amount) || 0, safeUnit), date);
+  }
+
+  private formatText(value: unknown, format: string): string {
+    if (value == null) return "";
+    const md = typeof value === "string" ? parseMoment(value) : null;
+    if (md && /[YMDHms]/.test(format)) return md.format(format);
+    const num = Number(value);
+    if (!isNaN(num) && typeof format === "string" && /^[0#,.\s%]+$/.test(format) && format.includes("0")) {
+      return this.formatExcelNumber(num, format);
+    }
+    return safeString(value);
+  }
+
+  /** Format a number with an Excel-style numeric format string.
+   *  Supports: 0 / 0.00 (fixed), 00 / 000 (zero-padded integer width),
+   *  #,##0 / #,##0.00 (thousands separators), 0% / 0.00% (percent). */
+  private formatExcelNumber(num: number, format: string): string {
+    const isPercent = format.includes("%");
+    let value = isPercent ? num * 100 : num;
+    const negative = value < 0;
+    value = Math.abs(value);
+
+    const core = format.replace(/%/g, "");
+    const [intFmt = "", decFmt = ""] = core.split(".");
+    const decimals = (decFmt.match(/0/g) || []).length;
+    const minIntDigits = (intFmt.match(/0/g) || []).length;
+    const useThousands = intFmt.includes(",");
+
+    const fixed = value.toFixed(decimals);
+    let [intPart, decPart] = fixed.split(".");
+
+    if (useThousands) {
+      intPart = intPart.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+    if (minIntDigits > 1) {
+      const digitsOnly = intPart.replace(/,/g, "");
+      if (digitsOnly.length < minIntDigits) {
+        const pad = "0".repeat(minIntDigits - digitsOnly.length);
+        intPart = useThousands ? pad + intPart : pad + digitsOnly;
+      }
+    }
+
+    let result = decimals > 0 && decPart ? `${intPart}.${decPart}` : intPart;
+    if (negative) result = "-" + result;
+    if (isPercent) result += "%";
+    return result;
+  }
+
+  // ─────────────────────────────────────────────────────────────────
+  // 10. AGGREGATE HELPERS
+  // ─────────────────────────────────────────────────────────────────
+  /** Count working days (Mon–Fri) between two dates, inclusive, optionally
+   *  excluding a list of holidays. Uses native Date to walk day by day
+   *  (MomentLike has no clone()). Order of start/end does not matter. */
+  private networkdays(start: string, end: string, holidays: unknown[]): number | null {
+    if (start == null || end == null) return null;
+    const ms = parseMoment(start);
+    const me = parseMoment(end);
+    if (!ms || !me) return null;
+
+    const holidaySet = new Set<string>();
+    for (const h of holidays) {
+      const list = Array.isArray(h) ? h : [h];
+      for (const hh of list) {
+        if (hh == null || hh === "") continue;
+        const mh = parseMoment(safeString(hh));
+        if (mh) holidaySet.add(mh.format("YYYY-MM-DD"));
+      }
+    }
+
+    const fromDate = ms.toDate();
+    const toDate = me.toDate();
+    const from = new Date(fromDate.getFullYear(), fromDate.getMonth(), fromDate.getDate());
+    const to = new Date(toDate.getFullYear(), toDate.getMonth(), toDate.getDate());
+    const lo = from <= to ? from : to;
+    const hi = from <= to ? to : from;
+
+    let count = 0;
+    const cur = new Date(lo);
+    for (; cur <= hi; cur.setDate(cur.getDate() + 1)) {
+      const dow = cur.getDay(); // 0=Sun, 6=Sat
+      if (dow === 0 || dow === 6) continue;
+      const iso = `${cur.getFullYear()}-${String(cur.getMonth() + 1).padStart(2, "0")}-${String(cur.getDate()).padStart(2, "0")}`;
+      if (holidaySet.has(iso)) continue;
+      count += 1;
+    }
+    return count;
+  }
+
+  private countIf(values: unknown, criterion: unknown): number {
+    const items = Array.isArray(values) ? values : [values];
+    const rule = safeString(criterion);
+    return items.filter((item) => this.matchesCriterion(item, rule)).length;
+  }
+
+  private matchesCriterion(value: unknown, criterion: string): boolean {
+    const text = safeString(value);
+    const num = Number(value);
+    const match = criterion.match(/^(>=|<=|<>|>|<|=)(.*)$/);
+    if (!match) return text === criterion;
+    const [, op, raw] = match;
+    const compareText = raw.trim();
+    const compareNum = Number(compareText);
+    const useNumber = !isNaN(num) && !isNaN(compareNum);
+    const left = useNumber ? num : text;
+    const right = useNumber ? compareNum : compareText;
+    if (op === ">") return left > right;
+    if (op === "<") return left < right;
+    if (op === ">=") return left >= right;
+    if (op === "<=") return left <= right;
+    if (op === "<>") return left !== right;
+    return left === right;
+  }
+}

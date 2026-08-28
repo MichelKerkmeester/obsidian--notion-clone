@@ -1,3 +1,8 @@
+// ───────────────────────────────────────────────────────────────────
+// MODULE:    panels
+// COMPONENT: screenshot scenarios for toolbar-anchored panels and overlays (filter, sort, view config, record detail/peek)
+// ───────────────────────────────────────────────────────────────────
+
 /**
  * Panels and overlays: the surfaces the toolbar opens on top of a view.
  *
@@ -15,7 +20,15 @@
  * unconditionally.
  */
 
-import { ROWS, glyph, pill, tableHeader } from "./_shared.mjs";
+// ───────────────────────────────────────────────────────────────────
+// 1. IMPORTS
+// ───────────────────────────────────────────────────────────────────
+
+import { ROWS, glyph, pill, tableHeader } from "./shared.mjs";
+
+// ───────────────────────────────────────────────────────────────────
+// 2. ICONS
+// ───────────────────────────────────────────────────────────────────
 
 /* Lucide glyphs standing in for the icons `setIcon()` injects at runtime. Named for the
    icon the renderer asks for so a reader can match them back to the call site. */
@@ -54,6 +67,10 @@ const COLUMN_DEFS = [
   { key: "renew", label: "Next Renewal", type: "date" },
   { key: "category", label: "Category", type: "select" },
 ];
+
+// ───────────────────────────────────────────────────────────────────
+// 3. HELPERS
+// ───────────────────────────────────────────────────────────────────
 
 /**
  * The button `createDropdownField` builds. `hideLabel` is set at every call site in these
@@ -132,13 +149,17 @@ const ANCHORED_PANEL_CSS = `.note-database-container :is(.db-filter-panel, .db-s
   max-height: none !important;
 }`;
 
+// ───────────────────────────────────────────────────────────────────
+// 4. SCENARIOS
+// ───────────────────────────────────────────────────────────────────
+
 export const PANEL_SCENARIOS = [
   {
     id: "panel-filter-conditions",
     title: "Filter panel with active conditions",
     group: "panels",
     width: 600,
-    sources: ["src/views/FilterPanelRenderer.ts", "src/views/DropdownField.ts"],
+    sources: ["src/views/filter-panel-renderer.ts", "src/views/dropdown-field.ts"],
     note: "Three conditions build a group node, so the panel header drops its AND/OR button and the group's own logic dropdown carries it instead.",
     captureCss: ANCHORED_PANEL_CSS,
     html: () => `
@@ -162,7 +183,7 @@ export const PANEL_SCENARIOS = [
     title: "Filter panel with a nested group and a NOT",
     group: "panels",
     width: 640,
-    sources: ["src/views/FilterPanelRenderer.ts", "src/data/ViewFilterTree.ts"],
+    sources: ["src/views/filter-panel-renderer.ts", "src/data/view-filter-tree.ts"],
     note: "Nesting stops at three levels: the innermost rows lose their add-group button because the tree can go no deeper.",
     captureCss: ANCHORED_PANEL_CSS,
     html: () => `
@@ -203,7 +224,7 @@ export const PANEL_SCENARIOS = [
     title: "Sort panel with two rules",
     group: "panels",
     width: 560,
-    sources: ["src/views/SortPanelRenderer.ts", "src/views/DropdownField.ts"],
+    sources: ["src/views/sort-panel-renderer.ts", "src/views/dropdown-field.ts"],
     note: "Rows are draggable; the first rule's move-up and the last rule's move-down are disabled.",
     captureCss: ANCHORED_PANEL_CSS,
     html: () => {
@@ -231,7 +252,7 @@ export const PANEL_SCENARIOS = [
     title: "Sort panel with no rules, calendar hint",
     group: "panels",
     width: 560,
-    sources: ["src/views/SortPanelRenderer.ts"],
+    sources: ["src/views/sort-panel-renderer.ts"],
     note: "Calendar views add a hint above the empty state because layout order wins over user sort.",
     captureCss: ANCHORED_PANEL_CSS,
     html: () => `
@@ -249,7 +270,7 @@ export const PANEL_SCENARIOS = [
     title: "View configuration panel",
     group: "panels",
     width: 520,
-    sources: ["src/views/ViewConfigPanelRenderer.ts", "src/views/DropdownField.ts"],
+    sources: ["src/views/view-config-panel-renderer.ts", "src/views/dropdown-field.ts"],
     note: "The top of the panel for a table view: database-scoped rows above the section divider, view-scoped rows below. Conditional formatting and status presets sit further down and are not in frame.",
     captureCss: ANCHORED_PANEL_CSS,
     html: () => `
@@ -315,7 +336,7 @@ export const PANEL_SCENARIOS = [
     title: "Column manager",
     group: "panels",
     width: 600,
-    sources: ["src/views/ColumnManagerRenderer.ts", "src/views/PropertyTypeIcon.ts"],
+    sources: ["src/views/column-manager-renderer.ts", "src/views/property-type-icon.ts"],
     note: "One row per property: drag handle, visibility checkbox, type icon, name with its frontmatter key, then wrap, edit and delete.",
     captureCss: ANCHORED_PANEL_CSS,
     html: () => {
@@ -366,7 +387,7 @@ export const PANEL_SCENARIOS = [
     title: "Record detail panel",
     group: "panels",
     width: 392,
-    sources: ["src/views/RecordDetailPanel.ts", "src/views/CardFieldRenderer.ts"],
+    sources: ["src/views/record-detail-panel.ts", "src/views/card-field-renderer.ts"],
     note: "Opened from a calendar or timeline event card. Fields are click-to-edit; an empty field only appears when the view asks for empty properties.",
     // This panel is the exception in this family: nothing in the stylesheet positions it, so
     // it is already in flow here — `positionToolbarPopover` is what makes it fixed at
@@ -408,7 +429,7 @@ export const PANEL_SCENARIOS = [
     title: "Table record peek",
     group: "panels",
     width: 1100,
-    sources: ["src/views/TableRecordPeek.ts", "src/views/TableRenderer.ts"],
+    sources: ["src/views/table-record-peek.ts", "src/views/table-renderer.ts"],
     note: "Docks against the right edge of the table it was opened from. Values are display-only text, and properties hidden from the table sit behind the disclosure.",
     // No captureCss: the peek is absolute against .note-database-container, which is
     // position: relative, so the table below gives it something real to dock against — the

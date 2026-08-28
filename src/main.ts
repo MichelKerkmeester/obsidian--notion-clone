@@ -1,8 +1,23 @@
+// ───────────────────────────────────────────────────────────────────
+// MODULE:    main
+// COMPONENT: plugin entrypoint — lifecycle, view/command registration, and .base/CSV import-export
+// ───────────────────────────────────────────────────────────────────
+//
+// `NoteDatabasePlugin` is the single class Obsidian instantiates, so
+// every cross-cutting concern that needs `this.app`/`this.registerEvent`
+// (vault-property cache scheduling, .base-file conversion, CSV/Markdown
+// zip import) lives here rather than in `data/` — those modules aren't
+// wired into the plugin lifecycle.
+
+// ───────────────────────────────────────────────────────────────────
+// 1. IMPORTS
+// ───────────────────────────────────────────────────────────────────
+
 import { App, Component, FuzzySuggestModal, loadMathJax, MarkdownRenderer, MarkdownView, Modal, Plugin, WorkspaceLeaf, Notice, TFile, normalizePath, parseYaml, stringifyYaml } from "obsidian";
-import { DataSource } from "./data/DataSource";
-import { sortDatabaseFileEntries } from "./data/DatabaseFileOrder";
-import { DatabaseView, DATABASE_VIEW_TYPE } from "./views/DatabaseView";
-import { DatabaseFileDashboardView, DATABASE_FILE_VIEW_TYPE } from "./views/DatabaseFileView";
+import { DataSource } from "./data/data-source";
+import { sortDatabaseFileEntries } from "./data/database-file-order";
+import { DatabaseView, DATABASE_VIEW_TYPE } from "./views/database-view";
+import { DatabaseFileDashboardView, DATABASE_FILE_VIEW_TYPE } from "./views/database-file-view";
 import { SettingsTab, DEFAULT_SETTINGS, createDefaultSettings } from "./settings";
 import { ColumnDef, ComputedFieldDef, DatabaseConfig, PluginSettings, SortRule, SourceRuleNode, StatusOptionDef, ViewConfig, generateId } from "./data/types";
 import {
@@ -13,23 +28,27 @@ import {
   resolveDefaultStatusPresetId,
   toMultiSelectValuesForKey,
   toValidObsidianTagValues,
-} from "./data/ColumnTypes";
-import { EmbeddedDatabaseEntry, EmbeddedDatabaseRenderer } from "./views/EmbeddedDatabaseRenderer";
-import { BaseImportColumn, BaseImportConfirmModal } from "./views/modals/BaseImportConfirmModal";
+} from "./data/column-types";
+import { EmbeddedDatabaseEntry, EmbeddedDatabaseRenderer } from "./views/embedded-database-renderer";
+import { BaseImportColumn, BaseImportConfirmModal } from "./views/modals/base-import-confirm-modal";
 import {
   confirmNewDatabasePropertyTypeConflicts,
   MutablePropertyTypeConflictEntry,
-} from "./views/PropertyTypeConflictWorkflow";
-import { collectComputedFieldSamples, collectFileFrontmatterKeys, inferColumnType, getVaultTags, collectUniqueListValues, collectUniqueStringValues } from "./data/FrontmatterScanner";
+} from "./views/property-type-conflict-workflow";
+import { collectComputedFieldSamples, collectFileFrontmatterKeys, inferColumnType, getVaultTags, collectUniqueListValues, collectUniqueStringValues } from "./data/frontmatter-scanner";
 import { setLocale, t } from "./i18n";
-import { absorbTypeFilterIntoRules, combineSourceRuleTrees, getPositiveSourceRules, getRequiredSourceRules, isSourceRuleGroup } from "./data/SourceRules";
-import { refreshVaultPropertyCache } from "./data/VaultProperties";
-import { BASE_FILE_FIELD_KEYS, getFileFieldFixedType, getFileFieldValue, isBaseFileField, isFileFieldKey, isReadonlyFileField } from "./data/FileFields";
-import { hasDateTimeValue, parseDateTimeParts } from "./data/DateTimeFormat";
-import { linkDatabaseSchemas } from "./data/ColumnConfig";
-import { safeString, isRecord } from "./data/SafeString";
-import { isElement } from "./views/DomGuards";
-import { NOTE_DATABASE_HOVER_LINK_SOURCE } from "./views/HoverLinkPreview";
+import { absorbTypeFilterIntoRules, combineSourceRuleTrees, getPositiveSourceRules, getRequiredSourceRules, isSourceRuleGroup } from "./data/source-rules";
+import { refreshVaultPropertyCache } from "./data/vault-properties";
+import { BASE_FILE_FIELD_KEYS, getFileFieldFixedType, getFileFieldValue, isBaseFileField, isFileFieldKey, isReadonlyFileField } from "./data/file-fields";
+import { hasDateTimeValue, parseDateTimeParts } from "./data/date-time-format";
+import { linkDatabaseSchemas } from "./data/column-config";
+import { safeString, isRecord } from "./data/safe-string";
+import { isElement } from "./views/dom-guards";
+import { NOTE_DATABASE_HOVER_LINK_SOURCE } from "./views/hover-link-preview";
+
+// ───────────────────────────────────────────────────────────────────
+// 2. TYPES
+// ───────────────────────────────────────────────────────────────────
 
 /** Parsed view data from a .base file */
 interface BaseFileViewData {
@@ -54,6 +73,10 @@ interface BaseFileViewData {
   markerColor?: string;
   [key: string]: unknown;
 }
+
+// ───────────────────────────────────────────────────────────────────
+// 3. PLUGIN
+// ───────────────────────────────────────────────────────────────────
 
 export default class NoteDatabasePlugin extends Plugin {
   settings!: PluginSettings;
@@ -2751,6 +2774,10 @@ export default class NoteDatabasePlugin extends Plugin {
   }
 }
 
+// ───────────────────────────────────────────────────────────────────
+// 4. CSV/MARKDOWN IMPORT TYPES
+// ───────────────────────────────────────────────────────────────────
+
 interface ImportedMarkdownPage {
   frontmatter: Record<string, unknown>;
   body: string;
@@ -2771,6 +2798,10 @@ interface CsvMarkdownImportResult {
   markdownFiles: File[];
   metadataFile: File | null;
 }
+
+// ───────────────────────────────────────────────────────────────────
+// 5. CSV/MARKDOWN IMPORT MODAL
+// ───────────────────────────────────────────────────────────────────
 
 class CsvMarkdownImportModal extends Modal {
   private resolve?: (result: CsvMarkdownImportResult | null) => void;
@@ -2903,6 +2934,10 @@ class CsvMarkdownImportModal extends Modal {
     return normalizePath(`${folder}/${name}`);
   }
 }
+
+// ───────────────────────────────────────────────────────────────────
+// 6. BASE FILE SUGGEST MODAL
+// ───────────────────────────────────────────────────────────────────
 
 class BaseFileSuggestModal extends FuzzySuggestModal<TFile> {
   constructor(
