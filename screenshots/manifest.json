@@ -1,0 +1,283 @@
+{
+  "generatedFrom": {
+    "stylesheet": "styles.css@6db886bc1374"
+  },
+  "scenarios": [
+    {
+      "id": "add-view-popover",
+      "title": "Add view popover",
+      "group": "components",
+      "theme": "dark",
+      "file": "screenshots/components/add-view-popover-dark.png",
+      "sources": [
+        "src/views/ToolbarRenderer.ts"
+      ],
+      "sourceHashes": {
+        "src/views/ToolbarRenderer.ts": "1025d976121a",
+        "styles.css": "6db886bc1374"
+      },
+      "note": "Tiles keep icon and caption inside their own bounds; the duplicate checkbox is not stretched.",
+      "bytes": 44823
+    },
+    {
+      "id": "add-view-popover",
+      "title": "Add view popover",
+      "group": "components",
+      "theme": "light",
+      "file": "screenshots/components/add-view-popover-light.png",
+      "sources": [
+        "src/views/ToolbarRenderer.ts"
+      ],
+      "sourceHashes": {
+        "src/views/ToolbarRenderer.ts": "1025d976121a",
+        "styles.css": "6db886bc1374"
+      },
+      "note": "Tiles keep icon and caption inside their own bounds; the duplicate checkbox is not stretched.",
+      "bytes": 48295
+    },
+    {
+      "id": "dropdown-field",
+      "title": "Dropdown with disabled option",
+      "group": "components",
+      "theme": "dark",
+      "file": "screenshots/components/dropdown-field-dark.png",
+      "sources": [
+        "src/views/DropdownField.ts"
+      ],
+      "sourceHashes": {
+        "src/views/DropdownField.ts": "67d71b55a26d",
+        "styles.css": "6db886bc1374"
+      },
+      "note": "A disabled option is dimmed and carries a tooltip rather than inline explanatory text.",
+      "bytes": 10479
+    },
+    {
+      "id": "dropdown-field",
+      "title": "Dropdown with disabled option",
+      "group": "components",
+      "theme": "light",
+      "file": "screenshots/components/dropdown-field-light.png",
+      "sources": [
+        "src/views/DropdownField.ts"
+      ],
+      "sourceHashes": {
+        "src/views/DropdownField.ts": "67d71b55a26d",
+        "styles.css": "6db886bc1374"
+      },
+      "note": "A disabled option is dimmed and carries a tooltip rather than inline explanatory text.",
+      "bytes": 12924
+    },
+    {
+      "id": "table-column-header",
+      "title": "Column header affordances",
+      "group": "components",
+      "theme": "dark",
+      "file": "screenshots/components/table-column-header-dark.png",
+      "sources": [
+        "src/views/ColumnHeaderController.ts"
+      ],
+      "sourceHashes": {
+        "src/views/ColumnHeaderController.ts": "7c1fbf20fd07",
+        "styles.css": "6db886bc1374"
+      },
+      "note": "The menu trigger sits inline after the label and the label truncates before it moves.",
+      "bytes": 17192
+    },
+    {
+      "id": "table-column-header",
+      "title": "Column header affordances",
+      "group": "components",
+      "theme": "light",
+      "file": "screenshots/components/table-column-header-light.png",
+      "sources": [
+        "src/views/ColumnHeaderController.ts"
+      ],
+      "sourceHashes": {
+        "src/views/ColumnHeaderController.ts": "7c1fbf20fd07",
+        "styles.css": "6db886bc1374"
+      },
+      "note": "The menu trigger sits inline after the label and the label truncates before it moves.",
+      "bytes": 17459
+    },
+    {
+      "id": "empty-state",
+      "title": "Empty state",
+      "group": "states",
+      "theme": "dark",
+      "file": "screenshots/states/empty-state-dark.png",
+      "sources": [
+        "src/views/EmptyStateRenderer.ts"
+      ],
+      "sourceHashes": {
+        "src/views/EmptyStateRenderer.ts": "e678079ac33b",
+        "styles.css": "6db886bc1374"
+      },
+      "note": null,
+      "bytes": 20657
+    },
+    {
+      "id": "empty-state",
+      "title": "Empty state",
+      "group": "states",
+      "theme": "light",
+      "file": "screenshots/states/empty-state-light.png",
+      "sources": [
+        "src/views/EmptyStateRenderer.ts"
+      ],
+      "sourceHashes": {
+        "src/views/EmptyStateRenderer.ts": "e678079ac33b",
+        "styles.css": "6db886bc1374"
+      },
+      "note": null,
+      "bytes": 20816
+    },
+    {
+      "id": "board-view",
+      "title": "Board view",
+      "group": "views",
+      "theme": "dark",
+      "file": "screenshots/views/board-view-dark.png",
+      "sources": [
+        "src/views/BoardRenderer.ts",
+        "src/views/CardFieldRenderer.ts"
+      ],
+      "sourceHashes": {
+        "src/views/BoardRenderer.ts": "5f7ea5f7e794",
+        "src/views/CardFieldRenderer.ts": "8a9c8a80cbfd",
+        "styles.css": "6db886bc1374"
+      },
+      "note": null,
+      "bytes": 71909
+    },
+    {
+      "id": "board-view",
+      "title": "Board view",
+      "group": "views",
+      "theme": "light",
+      "file": "screenshots/views/board-view-light.png",
+      "sources": [
+        "src/views/BoardRenderer.ts",
+        "src/views/CardFieldRenderer.ts"
+      ],
+      "sourceHashes": {
+        "src/views/BoardRenderer.ts": "5f7ea5f7e794",
+        "src/views/CardFieldRenderer.ts": "8a9c8a80cbfd",
+        "styles.css": "6db886bc1374"
+      },
+      "note": null,
+      "bytes": 74307
+    },
+    {
+      "id": "gallery-view",
+      "title": "Gallery view",
+      "group": "views",
+      "theme": "dark",
+      "file": "screenshots/views/gallery-view-dark.png",
+      "sources": [
+        "src/views/GalleryRenderer.ts",
+        "src/views/CardFieldRenderer.ts"
+      ],
+      "sourceHashes": {
+        "src/views/GalleryRenderer.ts": "9ab5982a3086",
+        "src/views/CardFieldRenderer.ts": "8a9c8a80cbfd",
+        "styles.css": "6db886bc1374"
+      },
+      "note": null,
+      "bytes": 34590
+    },
+    {
+      "id": "gallery-view",
+      "title": "Gallery view",
+      "group": "views",
+      "theme": "light",
+      "file": "screenshots/views/gallery-view-light.png",
+      "sources": [
+        "src/views/GalleryRenderer.ts",
+        "src/views/CardFieldRenderer.ts"
+      ],
+      "sourceHashes": {
+        "src/views/GalleryRenderer.ts": "9ab5982a3086",
+        "src/views/CardFieldRenderer.ts": "8a9c8a80cbfd",
+        "styles.css": "6db886bc1374"
+      },
+      "note": null,
+      "bytes": 34486
+    },
+    {
+      "id": "list-view",
+      "title": "List view",
+      "group": "views",
+      "theme": "dark",
+      "file": "screenshots/views/list-view-dark.png",
+      "sources": [
+        "src/views/ListRenderer.ts",
+        "src/views/CardFieldRenderer.ts"
+      ],
+      "sourceHashes": {
+        "src/views/ListRenderer.ts": "8b6b4a37bd3b",
+        "src/views/CardFieldRenderer.ts": "8a9c8a80cbfd",
+        "styles.css": "6db886bc1374"
+      },
+      "note": null,
+      "bytes": 54860
+    },
+    {
+      "id": "list-view",
+      "title": "List view",
+      "group": "views",
+      "theme": "light",
+      "file": "screenshots/views/list-view-light.png",
+      "sources": [
+        "src/views/ListRenderer.ts",
+        "src/views/CardFieldRenderer.ts"
+      ],
+      "sourceHashes": {
+        "src/views/ListRenderer.ts": "8b6b4a37bd3b",
+        "src/views/CardFieldRenderer.ts": "8a9c8a80cbfd",
+        "styles.css": "6db886bc1374"
+      },
+      "note": null,
+      "bytes": 54619
+    },
+    {
+      "id": "table-view",
+      "title": "Table view",
+      "group": "views",
+      "theme": "dark",
+      "file": "screenshots/views/table-view-dark.png",
+      "sources": [
+        "src/views/TableRenderer.ts",
+        "src/views/ColumnHeaderController.ts",
+        "src/views/CellRenderer.ts"
+      ],
+      "sourceHashes": {
+        "src/views/TableRenderer.ts": "ce0dc80023d8",
+        "src/views/ColumnHeaderController.ts": "7c1fbf20fd07",
+        "src/views/CellRenderer.ts": "a66834f860b4",
+        "styles.css": "6db886bc1374"
+      },
+      "note": null,
+      "bytes": 81859
+    },
+    {
+      "id": "table-view",
+      "title": "Table view",
+      "group": "views",
+      "theme": "light",
+      "file": "screenshots/views/table-view-light.png",
+      "sources": [
+        "src/views/TableRenderer.ts",
+        "src/views/ColumnHeaderController.ts",
+        "src/views/CellRenderer.ts"
+      ],
+      "sourceHashes": {
+        "src/views/TableRenderer.ts": "ce0dc80023d8",
+        "src/views/ColumnHeaderController.ts": "7c1fbf20fd07",
+        "src/views/CellRenderer.ts": "a66834f860b4",
+        "styles.css": "6db886bc1374"
+      },
+      "note": null,
+      "bytes": 82127
+    }
+  ]
+}

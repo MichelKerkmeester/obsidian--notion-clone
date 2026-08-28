@@ -1,0 +1,82 @@
+/* Loaded AFTER the plugin stylesheet so these win the cascade. The plugin declares its
+   own :root defaults for several of these and sets the real values from JavaScript at
+   runtime; a screenshot has no running plugin, so the stylesheet default would stand and
+   mis-render the surface. The sticky table header is the clearest case: its declared
+   default offsets it by a toolbar height that does not exist here, and it lands on top of
+   the first data row.
+
+   Targets .note-database-container as well as :root because the plugin declares several of
+   these on that container; a custom property inherits from the nearest ancestor that sets
+   it, so a :root-only override never reaches the element. */
+
+/* ── Values the plugin sets from JavaScript at runtime ───────────────────────────────
+   These are measured from the live layout (toolbar height, column widths, timeline
+   geometry) and so are absent when the stylesheet is loaded on its own. Without them the
+   var() calls fall back and surfaces mis-render: the sticky header, for instance, offsets
+   itself by a toolbar that does not exist in a screenshot and covers the first data row.
+   The capture supplies the value a screenshot implies — no toolbar above the table, one
+   column of default width, a timeline scrolled to its origin. */
+:root,
+.note-database-container {
+  --db-table-header-top: 22px;      /* sticky offset resolves to 0 with no toolbar above */
+  --db-selection-status-offset: 0px;
+  --db-group-table-head-top: 0px;
+  --db-header-height: 40px;
+  --db-layer-sticky: 25;
+
+  --db-board-column-width: 280px;
+  --db-board-image-fit: cover;
+  --db-card-field-width: 120px;
+  --db-gallery-card-width: 220px;
+  --db-gallery-cover-ratio: 0.6;
+  --db-gallery-image-fit: cover;
+  --db-group-depth: 0;
+
+  --db-status-bg: var(--background-modifier-hover);
+  --db-status-fg: var(--text-normal);
+  --db-number-color: var(--text-normal);
+  --db-conditional-format-accent: var(--interactive-accent);
+  --db-conditional-format-bg: transparent;
+  --db-conditional-format-fg: var(--text-normal);
+
+  --db-mobile-bar-height: 48px;
+  --db-mobile-sheet-bottom: 0px;
+
+  --db-calendar-col-width: 140px;
+  --db-calendar-row-height: 44px;
+  --db-calendar-day-min-height: 96px;
+  --db-calendar-month-week-min-height: 110px;
+  --db-calendar-allday-rows: 1;
+  --db-calendar-time-day-count: 7;
+  --db-calendar-event-bg: var(--interactive-accent);
+  --db-calendar-segment-lane: 0;
+  --db-calendar-segment-span: 1;
+  --db-calendar-segment-start: 0;
+  --db-calendar-month-flash-column: 0;
+  --db-week-grid-height: 640px;
+
+  --db-timeline-units: 30;
+  --db-timeline-unit-width: 48px;
+  --db-timeline-row: 34px;
+  --db-timeline-group-width: 180px;
+  --db-timeline-event-rows: 1;
+  --db-timeline-band-start: 0;
+  --db-timeline-band-span: 1;
+  --db-timeline-tick-offset: 0;
+  --db-timeline-today-offset-px: 0px;
+  --db-timeline-today-offset-units: 0;
+  --db-timeline-exact-offset: 0px;
+  --db-timeline-exact-width: 0px;
+  --db-timeline-flash-offset: 0px;
+  --db-timeline-flash-span: 0;
+  --db-timeline-snap-left: 0px;
+  --db-timeline-snap-top: 0px;
+  --db-timeline-snap-width: 0px;
+  --db-timeline-create-left: 0px;
+  --db-timeline-create-width: 0px;
+  --db-timeline-reorder-line-top: 0px;
+  --db-timeline-group-tag-bg: var(--background-secondary);
+  --db-timeline-group-tag-fg: var(--text-muted);
+  --db-timeline-event-shadow: 0 2px 7px rgba(0, 0, 0, 0.09);
+}
+

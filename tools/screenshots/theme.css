@@ -1,0 +1,135 @@
+/* Obsidian supplies these variables at runtime; the plugin stylesheet reads them but never
+   declares them. The harness therefore has to stand in for the host theme, or every rule
+   that resolves through var() falls back to an unstyled default and the capture stops
+   resembling the real surface. Values track Obsidian's default dark and light themes. */
+
+:root {
+  --font-interface: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-text: var(--font-interface);
+  --font-monospace: "SFMono-Regular", Menlo, Consolas, monospace;
+
+  --background-primary: #ffffff;
+  --background-primary-alt: #f5f6f8;
+  --background-secondary: #f2f3f5;
+  --background-secondary-alt: #e3e5e8;
+  --background-modifier-border: #ddd;
+  --background-modifier-border-hover: #c9c9c9;
+  --background-modifier-hover: rgba(0, 0, 0, 0.045);
+  --background-modifier-active-hover: rgba(0, 0, 0, 0.08);
+  --background-modifier-error: #e35d5d;
+  --background-modifier-success: #46b17b;
+
+  --text-normal: #2e3338;
+  --text-muted: #6e7681;
+  --text-faint: #999da3;
+  --text-on-accent: #ffffff;
+  --text-error: #c0392b;
+  --text-accent: #5a67d8;
+  --text-selection: rgba(90, 103, 216, 0.18);
+
+  --interactive-normal: #f2f3f5;
+  --interactive-hover: #e9e9e9;
+  --interactive-accent: #5a67d8;
+  --interactive-accent-hover: #4c56c0;
+
+  --radius-s: 4px;
+  --radius-m: 6px;
+  --radius-l: 10px;
+
+  --scrollbar-thumb-bg: rgba(0, 0, 0, 0.18);
+  --divider-color: #e0e0e0;
+}
+
+.theme-dark {
+  --background-primary: #1e1e1e;
+  --background-primary-alt: #262626;
+  --background-secondary: #252525;
+  --background-secondary-alt: #1a1a1a;
+  --background-modifier-border: #3a3a3a;
+  --background-modifier-border-hover: #4a4a4a;
+  --background-modifier-hover: rgba(255, 255, 255, 0.055);
+  --background-modifier-active-hover: rgba(255, 255, 255, 0.09);
+
+  --text-normal: #dcddde;
+  --text-muted: #9a9b9e;
+  --text-faint: #6c6f74;
+  --text-accent: #a5b4fc;
+  --text-selection: rgba(130, 145, 255, 0.22);
+
+  --interactive-normal: #2a2a2a;
+  --interactive-hover: #333333;
+  --interactive-accent: #6b74e0;
+  --interactive-accent-hover: #7b84f0;
+
+  --scrollbar-thumb-bg: rgba(255, 255, 255, 0.16);
+  --divider-color: #333333;
+}
+
+/* Page chrome for the capture itself, kept out of the plugin's own selectors so it can
+   never leak into what is being photographed. */
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--background-primary);
+  color: var(--text-normal);
+  font-family: var(--font-interface);
+  font-size: 14px;
+}
+
+#shot {
+  padding: 16px;
+  display: inline-block;
+  min-width: 100%;
+  box-sizing: border-box;
+}
+
+/* ── Host form-control baseline ──────────────────────────────────────────────────────
+   The plugin declares no rules for bare input, select, button or textarea; it inherits
+   Obsidian's. Without a stand-in, every captured control falls back to the browser default
+   and photographs as a white box on a dark surface, which misrepresents the UI rather than
+   documenting it. These mirror Obsidian's default control styling. */
+input[type="text"],
+input[type="search"],
+input[type="number"],
+select,
+textarea {
+  background: var(--background-modifier-form-field, var(--background-primary-alt));
+  color: var(--text-normal);
+  border: 1px solid var(--background-modifier-border);
+  border-radius: var(--radius-s);
+  padding: 5px 8px;
+  font-family: inherit;
+  font-size: 14px;
+  outline: none;
+}
+
+input[type="text"]::placeholder,
+input[type="search"]::placeholder,
+textarea::placeholder {
+  color: var(--text-faint);
+}
+
+input[type="checkbox"] {
+  accent-color: var(--interactive-accent);
+  width: 16px;
+  height: 16px;
+}
+
+button {
+  background: var(--interactive-normal);
+  color: var(--text-normal);
+  border: none;
+  border-radius: var(--radius-s);
+  padding: 5px 10px;
+  font-family: inherit;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+:root {
+  --background-modifier-form-field: #ffffff;
+}
+
+.theme-dark {
+  --background-modifier-form-field: #1a1a1a;
+}
