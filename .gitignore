@@ -7,3 +7,4 @@ specs/**/scratch/
 specs/**/research/**/lineages/
 .DS_Store
 node_modules/
+.worktrees/
