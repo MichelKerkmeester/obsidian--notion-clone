@@ -13,9 +13,11 @@
 // 1. IMPORTS
 // ───────────────────────────────────────────────────────────────────
 
+import { setIcon } from "obsidian";
 import { getColumnValue, isDerivedColumn } from "../data/column-display";
 import { isReadonlyFileField } from "../data/file-fields";
 import { isImeComposing } from "../data/keyboard-utils";
+import { isTouchDevice } from "../data/touch-environment";
 import type { ColumnDef, RowData, ViewConfig } from "../data/types";
 import { stringifyValue } from "../data/stringify";
 import { t } from "../i18n";
@@ -75,7 +77,16 @@ export function attachTitleOpenAffordance(
   button.type = "button";
   button.className = "db-record-open-btn";
   button.setAttribute("aria-label", t("panel.open"));
-  button.textContent = t("panel.open");
+  // On touch the affordance is always visible and shares the title cell, where a text
+  // label steals width the note name needs; a compact icon carries the same meaning and
+  // stays announced through the aria-label. On desktop it only appears on hover, so the
+  // clearer text label is kept.
+  if (isTouchDevice(td)) {
+    button.classList.add("db-record-open-btn-icon");
+    setIcon(button, "maximize-2");
+  } else {
+    button.textContent = t("panel.open");
+  }
   button.addEventListener("click", (event) => {
     event.preventDefault();
     event.stopPropagation();

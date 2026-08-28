@@ -118,6 +118,7 @@ Turn that research into eight independently shippable build phases, each grounde
 | 009 | `009-header-affordance-defects/` | Column header menu placement, truncation, cursors | Complete |
 | 010 | `010-add-view-popover-layout/` | Add-view popover box model and card tiles | Complete |
 | 011 | `011-mobile-table-and-panel-ux/` | Mobile: column auto-fit, record sheet dismissal, touch hover suppression | Complete |
+| 012 | `012-mobile-name-column-and-fab/` | Mobile: name-column content sizing, icon open affordance, New button nav-bar clearance | Complete |
 
 ### Phase Sequencing
 

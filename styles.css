@@ -18132,6 +18132,36 @@ body.is-tablet .note-database-container .db-record-open-btn {
   pointer-events: auto;
 }
 
+/* Icon form of the open affordance (touch): a square button carrying only the maximize glyph,
+   so it does not eat the note-name column the way the text label does. */
+.note-database-container .db-record-open-btn.db-record-open-btn-icon {
+  width: 24px;
+  padding: 0;
+}
+
+.note-database-container .db-record-open-btn.db-record-open-btn-icon .svg-icon {
+  width: 16px;
+  height: 16px;
+}
+
+/* On the phone the table switches to table-layout:auto and sizes columns to their content.
+   The title link is width:100% inside an overflow:hidden wrapper, so it contributes no
+   intrinsic width and the name column collapses to a minimum while every content-sized value
+   column keeps its width. Give the link an intrinsic content width with a mobile floor and a
+   viewport-relative cap, so the name column sizes like the others instead of shrinking to
+   nothing. */
+.is-phone .note-database-container td.db-title-cell a {
+  width: max-content;
+  min-width: 128px;
+  max-width: 60vw;
+}
+
+/* The touch open affordance is always visible and absolutely positioned at the cell's right
+   edge; reserve that width so the note name is not clipped underneath it. */
+.is-phone .note-database-container td.db-record-open-host {
+  padding-right: 32px;
+}
+
 .note-database-container .db-record-peek-panel {
   position: absolute;
   top: 0;
@@ -18952,7 +18982,10 @@ body.is-tablet .note-database-container .db-record-open-btn {
     position: fixed;
     z-index: var(--db-layer-sticky, 40);
     inset-inline-end: 20px;
-    inset-block-end: calc(20px + env(safe-area-inset-bottom));
+    /* Clear both the home-indicator safe area and Obsidian's phone footer nav bar
+       (its measured height, published from JS); without the bar's height the FAB
+       renders underneath it and cannot be tapped. */
+    inset-block-end: calc(20px + env(safe-area-inset-bottom) + var(--db-mobile-navbar-height, 0px));
     width: 52px;
     height: 52px;
     padding: 0;

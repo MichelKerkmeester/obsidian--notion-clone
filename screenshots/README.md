@@ -461,13 +461,13 @@ Sources: `src/views/list-renderer.ts`, `src/views/card-field-renderer.ts`
 
 ### Table view — mobile auto-fit
 
-The full table the renderer builds: a select gutter, a record-icon gutter and a runtime <colgroup> of fixed px widths. On desktop those widths hold; on the phone (is-phone) the columns auto-fit to content and the select column is no longer clipped by the scroll-area fade mask.
+The full table the renderer builds: a select gutter, a record-icon gutter and a runtime <colgroup> of fixed px widths. On desktop those widths hold; on the phone (is-phone) the columns auto-fit to content and the select column is no longer clipped by the scroll-area fade mask. The name column is the title cell — a content-sized link plus the always-visible open affordance, rendered on touch as a compact maximize icon so its width goes to the note name instead of a text label.
 
 | dark | light |
 |---|---|
 | ![table-mobile dark](views/table-mobile-mobile-dark.png) | ![table-mobile light](views/table-mobile-mobile-light.png) |
 
-Sources: `src/views/table-renderer.ts`, `src/views/table-column-layout-sync.ts`, `src/views/table-layout.ts`
+Sources: `src/views/table-renderer.ts`, `src/views/table-column-layout-sync.ts`, `src/views/table-layout.ts`, `src/views/cell-renderer.ts`, `src/views/file-title-display.ts`, `src/views/table-record-peek.ts`, `styles.css`
 
 ### Table view
 

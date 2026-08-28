@@ -25,9 +25,20 @@ import {
 // ───────────────────────────────────────────────────────────────────
 
 // TableRecordPeek imports FileFields, which imports obsidian for types only,
-// but the real module is still resolved at runtime.
+// but the real module is still resolved at runtime. Platform drives touch
+// detection (isTouchDevice) and is mutable so a test can flip the affordance
+// between its desktop text label and its touch icon; setIcon records the glyph
+// it was asked to render.
+const { platform, setIconMock } = vi.hoisted(() => ({
+  platform: { isMobile: false, isTablet: false },
+  setIconMock: vi.fn((el: { setAttribute(name: string, value: string): void }, icon: string) => {
+    el.setAttribute("data-icon", icon);
+  }),
+}));
 vi.mock("obsidian", () => ({
   TFile: class {},
+  Platform: platform,
+  setIcon: setIconMock,
 }));
 
 // i18n's t() resolves the active locale through `window`, which does not
@@ -430,5 +441,23 @@ describe("attachTitleOpenAffordance", () => {
 
     buttons[0].dispatch("click", { preventDefault: vi.fn(), stopPropagation: vi.fn() });
     expect(open).toHaveBeenCalledWith(testRow);
+  });
+
+  it("renders the open affordance as a compact icon on touch, keeping the aria-label", () => {
+    const { document } = makeContainer();
+    const td = document.createElement("td");
+    platform.isMobile = true;
+    try {
+      attachTitleOpenAffordance(td as unknown as HTMLElement, row(), { open: vi.fn() });
+    } finally {
+      platform.isMobile = false;
+    }
+
+    const button = findByClass(td, "db-record-open-btn")[0];
+    expect(button.classList.contains("db-record-open-btn-icon")).toBe(true);
+    expect(button.getAttribute("data-icon")).toBe("maximize-2");
+    expect(button.getAttribute("aria-label")).toBe("panel.open");
+    // The text label is what stole the column width on the phone; the icon must not carry it.
+    expect(button.textContent).toBe("");
   });
 });

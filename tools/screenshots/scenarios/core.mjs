@@ -187,18 +187,24 @@ export const CORE_SCENARIOS = [
     title: "Table view — mobile auto-fit",
     group: "views",
     width: 402,
-    sources: ["src/views/table-renderer.ts", "src/views/table-column-layout-sync.ts", "src/views/table-layout.ts"],
-    note: "The full table the renderer builds: a select gutter, a record-icon gutter and a runtime <colgroup> of fixed px widths. On desktop those widths hold; on the phone (is-phone) the columns auto-fit to content and the select column is no longer clipped by the scroll-area fade mask.",
+    sources: ["src/views/table-renderer.ts", "src/views/table-column-layout-sync.ts", "src/views/table-layout.ts", "src/views/cell-renderer.ts", "src/views/file-title-display.ts", "src/views/table-record-peek.ts", "styles.css"],
+    note: "The full table the renderer builds: a select gutter, a record-icon gutter and a runtime <colgroup> of fixed px widths. On desktop those widths hold; on the phone (is-phone) the columns auto-fit to content and the select column is no longer clipped by the scroll-area fade mask. The name column is the title cell — a content-sized link plus the always-visible open affordance, rendered on touch as a compact maximize icon so its width goes to the note name instead of a text label.",
     html: () => {
       const rows = [...ROWS.slice(0, 10), ROWS[17]];
       const move = glyph('<path d="m8 9 4-4 4 4M8 15l4 4 4-4"/>');
       const icon = glyph('<rect x="3" y="3" width="18" height="18" rx="2"/>');
+      const openIcon = glyph('<path d="M15 3h6v6"/><path d="m21 3-7 7"/><path d="M9 21H3v-6"/><path d="m3 21 7-7"/>');
       const colWidths = [200, 120, 130, 140, 170, 140];
       const cols = COLUMNS
         .map((c, i) => `<col data-note-database-column-key="${c.label.toLowerCase()}" style="width:${colWidths[i]}px">`)
         .join("");
+      const titleCell = (r) => `
+        <td class="db-cell db-title-cell db-editable-cell db-record-open-host">
+          <a class="internal-link"><span class="db-file-title-inline has-folder-prefix"><span class="db-file-title-name">${r.name}</span></span></a>
+          <button type="button" class="db-record-open-btn db-record-open-btn-icon" aria-label="Open">${openIcon}</button>
+        </td>`;
       const dataCells = (r) => `
-        <td>${r.name}</td><td>${r.cost}</td><td>${pill(r.cycle, "orange")}</td>
+        ${titleCell(r)}<td>${r.cost}</td><td>${pill(r.cycle, "orange")}</td>
         <td>${pill(r.payment, "gray")}</td><td>${r.renew}</td>
         <td>${pill(r.category, r.category === "Business" ? "blue" : "green")}</td>`;
       const bodyRows = rows.map((r) => `

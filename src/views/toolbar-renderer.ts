@@ -2189,6 +2189,7 @@ export class ToolbarRenderer {
       cls: `db-new-button db-new-button-primary${isTouchDevice(this.toolbarRoot) ? " is-mobile-fab" : ""}`,
       attr: { type: "button", "aria-label": hasTemplate ? tooltip : label },
     });
+    if (isTouchDevice(this.toolbarRoot)) this.reserveMobileFabInset();
     setIcon(newBtn.createSpan({ cls: "db-new-button-icon" }), hasTemplate ? "file-plus-2" : "plus");
     if (!hasTemplate || !isTouchDevice(this.toolbarRoot)) newBtn.createSpan({ text: label });
     setTooltip(newBtn, tooltip, { delay: 100 });
@@ -2224,6 +2225,27 @@ export class ToolbarRenderer {
     setIcon(dropdown, "chevron-down");
     setTooltip(dropdown, t("toolbar.chooseTemplate"), { delay: 100 });
     dropdown.onclick = (event) => this.showNewTemplateMenu(event, dropdown, actions, currentDb);
+  }
+
+  /**
+   * Lift the floating New button clear of Obsidian's phone footer nav bar.
+   *
+   * On a phone Obsidian overlays a fixed navigation bar across the viewport bottom, so a
+   * fixed FAB anchored to the safe-area inset alone lands beneath it and cannot be tapped.
+   * Publish the bar's measured height — its default 50px when it cannot be measured, 0 off
+   * the phone where the bar does not exist — as a custom property the FAB's bottom offset
+   * adds on top of the safe-area inset.
+   */
+  private reserveMobileFabInset(): void {
+    const container = this.toolbarRoot;
+    if (!container) return;
+    const doc = container.ownerDocument;
+    const isPhone = doc.body.classList.contains("is-phone");
+    const navbar = isPhone ? doc.querySelector(".mobile-navbar") : null;
+    const navbarHeight = navbar instanceof HTMLElement
+      ? navbar.getBoundingClientRect().height
+      : isPhone ? 50 : 0;
+    container.setCssProps({ "--db-mobile-navbar-height": `${navbarHeight}px` });
   }
 
   private showNewTemplateMenu(
