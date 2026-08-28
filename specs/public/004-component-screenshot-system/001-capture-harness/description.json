@@ -1,0 +1,31 @@
+{
+  "level": "1",
+  "specFolder": "public/004-component-screenshot-system/001-capture-harness",
+  "description": "Photographing the plugin's surfaces means putting the shipped stylesheet in front of a browser, and four things stand in the way of doing that naively",
+  "keywords": [
+    "photographing",
+    "plugin",
+    "surfaces",
+    "means",
+    "putting",
+    "shipped",
+    "stylesheet",
+    "front",
+    "browser",
+    "four",
+    "things",
+    "stand",
+    "way",
+    "doing",
+    "naively"
+  ],
+  "lastUpdated": "2026-08-28T13:51:35.942Z",
+  "specId": "001",
+  "folderSlug": "capture-harness",
+  "parentChain": [
+    "public",
+    "004-component-screenshot-system"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": []
+}

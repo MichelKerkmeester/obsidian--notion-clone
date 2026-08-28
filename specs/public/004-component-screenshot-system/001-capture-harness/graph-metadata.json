@@ -1,0 +1,221 @@
+{
+  "schema_version": 1,
+  "packet_id": "public/004-component-screenshot-system/001-capture-harness",
+  "spec_folder": "public/004-component-screenshot-system/001-capture-harness",
+  "parent_id": "public/004-component-screenshot-system",
+  "children_ids": [],
+  "migrated": true,
+  "migration_source": "legacy",
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "screenshot capture harness",
+      "capture.mjs chrome",
+      "playwright-core system chrome",
+      "SCREENSHOT_CHROME",
+      "runtime-vars.css",
+      "screenshot theme.css",
+      "db-table-header-top screenshot",
+      "partial run manifest left unchanged",
+      "capture harness plan",
+      "capture.mjs page composition",
+      "screenshot runtime stand-in plan",
+      "system chrome playwright-core plan"
+    ],
+    "key_topics": [
+      "screenshot",
+      "capture",
+      "harness",
+      "mjs",
+      "chrome",
+      "playwright-core",
+      "system",
+      "runtime-vars",
+      "css",
+      "theme",
+      "db-table-header-top",
+      "partial"
+    ],
+    "importance_tier": "high",
+    "status": "in_progress",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "checklist.md",
+      "implementation-summary.md"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "checklist.md",
+        "kind": "doc",
+        "path": "checklist.md",
+        "source": "derived"
+      },
+      {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Screenshot Capture Harness",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Problem Statement Photographing",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Purpose Build",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "In Scope",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "File Path",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Plan",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Technical Context",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Key Components",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Data Flow",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Safety Notes The",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Breakdown",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Notation",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Time Estimate",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Completion Criteria",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Run Vitest",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Quality Checklist",
+        "kind": "proper_noun",
+        "path": "checklist.md",
+        "source": "derived"
+      },
+      {
+        "name": "Verification Protocol",
+        "kind": "proper_noun",
+        "path": "checklist.md",
+        "source": "derived"
+      },
+      {
+        "name": "Completion Impact",
+        "kind": "proper_noun",
+        "path": "checklist.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "Photographing the plugin's surfaces means putting the shipped stylesheet in front of a browser, and four things stand in the way of doing that naively",
+    "created_at": "2026-08-28T00:00:00.000Z",
+    "last_save_at": "2026-08-28T13:52:14.056Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "checklist.md",
+      "implementation-summary.md"
+    ],
+    "source_fingerprint": "sha256:68e031f3fc521156823687fe9e2df20fc2d67eb10ad21858175ea0861116043c",
+    "source_doc_hashes": {
+      "spec.md": "a1899e71bf31a27bd84c4d4aa87678b592816bd674d6c0ef9aaf911a6379d7da",
+      "plan.md": "13bbe05ea5907c57f98f1f40e29c841d0232eb83ac25628590b0488150dd17ea",
+      "tasks.md": "c33a474d202258287bdb5d22a681c0bd89928014e1609384e5b1917a98ff8e70",
+      "checklist.md": "1b8e37f5d8f525508493bb859ba2ad5bc86ebcc07e76537794ececa0cc9d25f3",
+      "implementation-summary.md": "df96a6a7b29dde3609a1d3d1ae557d57cda63e91e2f11e3f4078805c451905f3"
+    },
+    "last_active_child_id": null,
+    "last_active_at": null
+  }
+}

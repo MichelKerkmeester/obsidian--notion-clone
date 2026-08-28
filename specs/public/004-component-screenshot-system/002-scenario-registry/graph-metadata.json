@@ -1,0 +1,221 @@
+{
+  "schema_version": 1,
+  "packet_id": "public/004-component-screenshot-system/002-scenario-registry",
+  "spec_folder": "public/004-component-screenshot-system/002-scenario-registry",
+  "parent_id": "public/004-component-screenshot-system",
+  "children_ids": [],
+  "migrated": true,
+  "migration_source": "legacy",
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "screenshot scenario registry",
+      "scenarios.mjs",
+      "add a screenshot scenario",
+      "screenshot sources list",
+      "captureCss override",
+      "screenshot fixture markup",
+      "table-view board-view gallery-view",
+      "screenshot groups views components states",
+      "scenario registry plan",
+      "scenarios.mjs contract",
+      "fixture markup plan",
+      "screenshot sources contract"
+    ],
+    "key_topics": [
+      "screenshot",
+      "scenario",
+      "registry",
+      "scenarios",
+      "mjs",
+      "sources",
+      "list",
+      "capturecss",
+      "override",
+      "fixture",
+      "markup",
+      "table-view"
+    ],
+    "importance_tier": "high",
+    "status": "in_progress",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "checklist.md",
+      "implementation-summary.md"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "checklist.md",
+        "kind": "doc",
+        "path": "checklist.md",
+        "source": "derived"
+      },
+      {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Screenshot Scenario Registry",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Problem Statement",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Purpose Give",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "In Scope",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "File Path",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Plan",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Technical Context",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Overview The",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Key Components",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Data Flow",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Breakdown",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Notation",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Time Estimate",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Completion Criteria",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Run Vitest",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Quality Checklist",
+        "kind": "proper_noun",
+        "path": "checklist.md",
+        "source": "derived"
+      },
+      {
+        "name": "Verification Protocol",
+        "kind": "proper_noun",
+        "path": "checklist.md",
+        "source": "derived"
+      },
+      {
+        "name": "Completion Impact",
+        "kind": "proper_noun",
+        "path": "checklist.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "A harness that can photograph a page still needs to be told what to photograph, and three constraints shape the answer",
+    "created_at": "2026-08-28T00:00:00.000Z",
+    "last_save_at": "2026-08-28T13:52:14.719Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "checklist.md",
+      "implementation-summary.md"
+    ],
+    "source_fingerprint": "sha256:33f45a31ef62be09b592aef97ffa06c636ad1a238f6027a4dbf93bf63a5f5130",
+    "source_doc_hashes": {
+      "spec.md": "e6c8e12bfd6139e6b2bd5932bb568c1dc97f3a642a7c7cc6a32e971cd598c8a4",
+      "plan.md": "516d36935e1a564b047e8c723e9a6174477b79802c4d93c4b78b3c5da8ac1d99",
+      "tasks.md": "7dc15898e9dc15d02463ca3a264de6b7b7eb9357fa566716f69758075eadd561",
+      "checklist.md": "1ee66ad268c1aaeb61c9fc91684966281357168642a334b80c37fe8f6be8284d",
+      "implementation-summary.md": "80c38d15be3ea39f59fc94dc51594b8aaa743c3892067f9e2a3e17cffba56b49"
+    },
+    "last_active_child_id": null,
+    "last_active_at": null
+  }
+}

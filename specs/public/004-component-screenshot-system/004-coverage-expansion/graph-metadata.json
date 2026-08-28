@@ -1,0 +1,221 @@
+{
+  "schema_version": 1,
+  "packet_id": "public/004-component-screenshot-system/004-coverage-expansion",
+  "spec_folder": "public/004-component-screenshot-system/004-coverage-expansion",
+  "parent_id": "public/004-component-screenshot-system",
+  "children_ids": [],
+  "migrated": true,
+  "migration_source": "legacy",
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "screenshot coverage expansion",
+      "calendar screenshot scenario",
+      "timeline screenshot scenario",
+      "record detail panel screenshot",
+      "filter sort panel screenshot",
+      "mobile bottom sheet screenshot",
+      "drag selection state screenshot",
+      "conditional formatting screenshot",
+      "swimlane board screenshot",
+      "coverage expansion plan",
+      "calendar timeline stand-in plan",
+      "interaction state fixture plan"
+    ],
+    "key_topics": [
+      "screenshot",
+      "coverage",
+      "expansion",
+      "calendar",
+      "scenario",
+      "timeline",
+      "record",
+      "detail",
+      "panel",
+      "filter",
+      "sort",
+      "mobile"
+    ],
+    "importance_tier": "high",
+    "status": "planned",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "checklist.md",
+      "implementation-summary.md"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "checklist.md",
+        "kind": "doc",
+        "path": "checklist.md",
+        "source": "derived"
+      },
+      {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Screenshot Coverage Expansion",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Problem Statement The",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Purpose Close",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "In Scope",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "File Path",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Plan",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Technical Context",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Overview Coverage",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Effort Tiers",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Why Tier",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Breakdown",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Notation",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Time Estimate",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Completion Criteria",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Run Vitest",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Quality Checklist",
+        "kind": "proper_noun",
+        "path": "checklist.md",
+        "source": "derived"
+      },
+      {
+        "name": "Verification Protocol",
+        "kind": "proper_noun",
+        "path": "checklist.md",
+        "source": "derived"
+      },
+      {
+        "name": "Completion Impact",
+        "kind": "proper_noun",
+        "path": "checklist.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "The screenshot system works and its coverage is partial",
+    "created_at": "2026-08-28T00:00:00.000Z",
+    "last_save_at": "2026-08-28T13:53:19.516Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "checklist.md",
+      "implementation-summary.md"
+    ],
+    "source_fingerprint": "sha256:1b622f66c9c005d431a38acbbc873b7a29df83c97a7c62c201e1225301973feb",
+    "source_doc_hashes": {
+      "spec.md": "b88d598d875168cefe7182b75327baa60a3b9143a735988f0b49b6fb6646ab05",
+      "plan.md": "335aca9d3ef4fb09b2fe7a993ce783b03c931220c5a25d696b4bc9997d8c65e8",
+      "tasks.md": "d6583c8e6606069b121274817d5b5d8d3f6b0c21d20ce5781b56447279acebff",
+      "checklist.md": "7badc9aedf49677d0408dba72d398bcf3534923e9ee6f2e688ba426f1a6f5017",
+      "implementation-summary.md": "3bdf899b2ca2a488d2c360b7589c7a71d556dbd1f0feb2e9f2104b8744d544de"
+    },
+    "last_active_child_id": null,
+    "last_active_at": null
+  }
+}

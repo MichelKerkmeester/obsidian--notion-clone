@@ -1,0 +1,26 @@
+{
+  "level": "1",
+  "specFolder": "public/004-component-screenshot-system/002-scenario-registry",
+  "description": "A harness that can photograph a page still needs to be told what to photograph, and three constraints shape the answer",
+  "keywords": [
+    "harness",
+    "photograph",
+    "page",
+    "still",
+    "needs",
+    "told",
+    "three",
+    "constraints",
+    "shape",
+    "answer"
+  ],
+  "lastUpdated": "2026-08-28T13:51:35.942Z",
+  "specId": "002",
+  "folderSlug": "scenario-registry",
+  "parentChain": [
+    "public",
+    "004-component-screenshot-system"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": []
+}

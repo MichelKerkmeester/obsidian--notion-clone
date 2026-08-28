@@ -41,7 +41,10 @@ const ICONS = {
   calendar: glyph('<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>'),
 };
 
-const pill = (text, tone) => `<span class="db-badge db-badge-${tone}">${text}</span>`;
+/* Selects and statuses render through `status-badge` plus a `status-color-*` modifier.
+   Those are the real class names, so the fixture uses them rather than a badge class of
+   its own that no shipped rule would ever match. */
+const pill = (text, tone) => `<span class="status-badge status-color-${tone}">${text}</span>`;
 
 function tableHeader() {
   return COLUMNS.map((c) => `
@@ -58,9 +61,9 @@ function tableRows() {
   return ROWS.map((r) => `
     <tr>
       <td>${r.name}</td>
-      <td class="db-cell-number">${r.cost}</td>
-      <td>${pill(r.cycle, "amber")}</td>
-      <td>${pill(r.payment, "slate")}</td>
+      <td>${r.cost}</td>
+      <td>${pill(r.cycle, "orange")}</td>
+      <td>${pill(r.payment, "gray")}</td>
       <td>${r.renew}</td>
       <td>${pill(r.category, r.category === "Business" ? "blue" : "green")}</td>
     </tr>`).join("");
@@ -68,7 +71,7 @@ function tableRows() {
 
 const boardCard = (r) => `
   <div class="db-board-card" role="row" aria-keyshortcuts="Enter Space F2" tabindex="-1">
-    <div class="db-card-title">${r.name}</div>
+    <div class="db-board-card-title">${r.name}</div>
     <div class="db-card-field"><span class="db-card-label">Cost</span><span class="db-card-value">${r.cost}</span></div>
     <div class="db-card-field"><span class="db-card-label">Renews</span><span class="db-card-value">${r.renew}</span></div>
   </div>`;
@@ -148,8 +151,8 @@ export const SCENARIOS = [
         <div class="db-gallery" role="grid">
           ${ROWS.slice(0, 4).map((r) => `
             <div class="db-gallery-card" role="row" aria-keyshortcuts="Enter Space F2" tabindex="-1">
-              <div class="db-gallery-cover"></div>
-              <div class="db-card-title">${r.name}</div>
+              <div class="db-board-card-cover-placeholder"></div>
+              <div class="db-gallery-card-title">${r.name}</div>
               <div class="db-card-field"><span class="db-card-label">Cost</span><span class="db-card-value">${r.cost}</span></div>
             </div>`).join("")}
         </div>
@@ -166,7 +169,7 @@ export const SCENARIOS = [
         <div class="db-list" role="grid">
           ${ROWS.map((r) => `
             <div class="db-list-row" role="row" aria-keyshortcuts="Enter Space F2" tabindex="-1">
-              <span class="db-card-title">${r.name}</span>
+              <span class="db-list-row-title">${r.name}</span>
               <span class="db-card-value">${r.cost}</span>
               <span class="db-card-value">${r.renew}</span>
             </div>`).join("")}
@@ -243,12 +246,15 @@ export const SCENARIOS = [
     sources: ["src/views/EmptyStateRenderer.ts"],
     html: () => `
       <div class="note-database-container">
-        <div class="db-empty-state">
-          <div class="db-empty-state-title">No properties yet</div>
-          <div class="db-empty-state-desc">Add a property to start describing these notes.</div>
-          <div class="db-empty-state-actions">
-            <button type="button" class="db-empty-state-action is-primary">Add property</button>
-            <button type="button" class="db-empty-state-action">Learn more</button>
+        <div class="db-empty-hero">
+          <div class="db-empty-hero-content">
+            <div class="db-empty-hero-icon">${glyph('<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 3v18"/>')}</div>
+            <div class="db-empty-card-title">No properties yet</div>
+            <div class="db-empty-hero-description">Add a property to start describing these notes.</div>
+            <div class="db-empty-action-group">
+              <button type="button" class="db-empty-action mod-cta">Add property</button>
+              <button type="button" class="db-empty-action">Learn more</button>
+            </div>
           </div>
         </div>
       </div>`,

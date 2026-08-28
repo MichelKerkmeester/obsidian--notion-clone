@@ -113,7 +113,7 @@
         "styles.css": "6db886bc1374"
       },
       "note": null,
-      "bytes": 20657
+      "bytes": 24483
     },
     {
       "id": "empty-state",
@@ -129,7 +129,7 @@
         "styles.css": "6db886bc1374"
       },
       "note": null,
-      "bytes": 20816
+      "bytes": 24620
     },
     {
       "id": "board-view",
@@ -147,7 +147,7 @@
         "styles.css": "6db886bc1374"
       },
       "note": null,
-      "bytes": 71909
+      "bytes": 71997
     },
     {
       "id": "board-view",
@@ -165,7 +165,7 @@
         "styles.css": "6db886bc1374"
       },
       "note": null,
-      "bytes": 74307
+      "bytes": 74355
     },
     {
       "id": "gallery-view",
@@ -183,7 +183,7 @@
         "styles.css": "6db886bc1374"
       },
       "note": null,
-      "bytes": 34590
+      "bytes": 22390
     },
     {
       "id": "gallery-view",
@@ -201,7 +201,7 @@
         "styles.css": "6db886bc1374"
       },
       "note": null,
-      "bytes": 34486
+      "bytes": 22181
     },
     {
       "id": "list-view",
@@ -219,7 +219,7 @@
         "styles.css": "6db886bc1374"
       },
       "note": null,
-      "bytes": 54860
+      "bytes": 54853
     },
     {
       "id": "list-view",
@@ -237,7 +237,7 @@
         "styles.css": "6db886bc1374"
       },
       "note": null,
-      "bytes": 54619
+      "bytes": 54793
     },
     {
       "id": "table-view",
@@ -257,7 +257,7 @@
         "styles.css": "6db886bc1374"
       },
       "note": null,
-      "bytes": 81859
+      "bytes": 104948
     },
     {
       "id": "table-view",
@@ -277,7 +277,7 @@
         "styles.css": "6db886bc1374"
       },
       "note": null,
-      "bytes": 82127
+      "bytes": 99867
     }
   ]
 }

@@ -1,0 +1,21 @@
+{
+  "level": "2",
+  "specFolder": "public/004-component-screenshot-system",
+  "description": "The fork's interface work produced no visual record",
+  "keywords": [
+    "fork",
+    "interface",
+    "work",
+    "produced",
+    "visual",
+    "record"
+  ],
+  "lastUpdated": "2026-08-28T13:45:42.178Z",
+  "specId": "004",
+  "folderSlug": "component-screenshot-system",
+  "parentChain": [
+    "public"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": []
+}

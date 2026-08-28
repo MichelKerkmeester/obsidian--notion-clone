@@ -1,0 +1,20 @@
+{
+  "level": "1",
+  "specFolder": "public/004-component-screenshot-system/003-freshness-enforcement",
+  "description": "A folder of screenshots decays quietly",
+  "keywords": [
+    "folder",
+    "screenshots",
+    "decays",
+    "quietly"
+  ],
+  "lastUpdated": "2026-08-28T13:51:35.943Z",
+  "specId": "003",
+  "folderSlug": "freshness-enforcement",
+  "parentChain": [
+    "public",
+    "004-component-screenshot-system"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": []
+}
