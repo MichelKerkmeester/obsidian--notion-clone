@@ -37,9 +37,12 @@ describe("stacking order between the record detail panel and its editors", () =>
   it("keeps the detail panel on the panel tier so its sibling editors paint above it", () => {
     // The editors are appended to the container rather than to the panel, so ordering is
     // decided by the layer scale rather than by nesting.
-    const panelRule = /\.db-record-detail-panel\s*\{[^}]*z-index:\s*var\(--db-layer-panel[^)]*\)/;
+    // The selector may be a list — the sheet presentation adds a second, surface-rooted alternative
+    // so the panel keeps its rules when it is not inside the plugin container. What must not change
+    // is which tier it lands on.
+    const panelRule = /\.db-record-detail-panel[^{]*\{[^}]*z-index:\s*var\(--db-layer-panel[^)]*\)/;
     expect(stylesContent).toMatch(panelRule);
-    expect(stylesContent).not.toMatch(/\.db-record-detail-panel\s*\{[^}]*z-index:\s*99\d/);
+    expect(stylesContent).not.toMatch(/\.db-record-detail-panel[^{]*\{[^}]*z-index:\s*99\d/);
   });
 
   it("orders the layer tokens so panels sit below popovers and popovers below modals", () => {

@@ -843,8 +843,10 @@
 .note-database-container .db-board-card-field.db-conditional-format,
 .note-database-container .db-gallery-field.db-conditional-format,
 .note-database-container .db-list-field.db-conditional-format,
+.db-mobile-bottom-sheet .db-record-detail-field.db-conditional-format,
 .note-database-container .db-record-detail-field.db-conditional-format,
-.note-database-container .db-record-detail-title.db-conditional-format {
+.note-database-container .db-record-detail-title.db-conditional-format,
+.db-mobile-bottom-sheet .db-record-detail-title.db-conditional-format {
   background-color: var(--db-conditional-format-bg, transparent);
 }
 
@@ -9003,7 +9005,8 @@
    scale. The panel therefore has to sit on the panel tier, below the popover tier, or it
    paints over its own editors. 不得加 transform / filter / will-change，否则会建立新的
    containing block 破坏子气泡相对 .note-database-container 的 absolute 定位。 */
-.note-database-container .db-record-detail-panel {
+.note-database-container .db-record-detail-panel,
+.db-record-detail-panel.db-mobile-bottom-sheet {
   z-index: var(--db-layer-panel, 50);
   max-height: 60vh;
   overflow-y: auto;
@@ -9014,31 +9017,36 @@
   padding: var(--db-space-6) var(--db-space-5);
 }
 
-.note-database-container .db-record-detail-header {
+.note-database-container .db-record-detail-header,
+.db-mobile-bottom-sheet .db-record-detail-header {
   display: flex;
   align-items: flex-start;
   gap: 4px;
   margin-bottom: 8px;
 }
 
-.note-database-container .db-record-detail-header .db-record-detail-title {
+.note-database-container .db-record-detail-header .db-record-detail-title,
+.db-mobile-bottom-sheet .db-record-detail-header .db-record-detail-title {
   flex: 1;
   min-width: 0;
 }
 
-.note-database-container .db-record-detail-title {
+.note-database-container .db-record-detail-title,
+.db-mobile-bottom-sheet .db-record-detail-title {
   font-weight: 600;
   font-size: var(--font-ui-medium);
   word-break: break-all;
 }
 
-.note-database-container .db-record-detail-fields {
+.note-database-container .db-record-detail-fields,
+.db-mobile-bottom-sheet .db-record-detail-fields {
   display: flex;
   flex-direction: column;
   gap: 2px;
 }
 
-.note-database-container .db-record-detail-field {
+.note-database-container .db-record-detail-field,
+.db-mobile-bottom-sheet .db-record-detail-field {
   display: flex;
   align-items: baseline;
   gap: 8px;
@@ -9047,31 +9055,37 @@
   cursor: pointer;
 }
 
-.note-database-container .db-record-detail-field .db-board-card-value {
+.note-database-container .db-record-detail-field .db-board-card-value,
+.db-mobile-bottom-sheet .db-record-detail-field .db-board-card-value {
   flex: 1;
   min-width: 0;
 }
 
 /* 非 wrap：值单行截断（对齐看板卡片）；wrap 由 db-board-card-field-wrap 覆盖为正常换行 */
-.note-database-container .db-record-detail-field:not(.db-board-card-field-wrap) .db-board-card-value:not(.has-badges):not(.db-checkbox-cell) {
+.note-database-container .db-record-detail-field:not(.db-board-card-field-wrap) .db-board-card-value:not(.has-badges):not(.db-checkbox-cell),
+.db-mobile-bottom-sheet .db-record-detail-field:not(.db-board-card-field-wrap) .db-board-card-value:not(.has-badges):not(.db-checkbox-cell) {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 @media (hover: hover) {
-  .note-database-container .db-record-detail-field:hover {
+  .note-database-container .db-record-detail-field:hover,
+  .db-mobile-bottom-sheet .db-record-detail-field:hover {
     background: var(--background-modifier-hover);
   }
 }
 
+.db-mobile-bottom-sheet .db-record-detail-field.is-readonly,
 .note-database-container .db-record-detail-field.is-readonly,
-.note-database-container .db-record-detail-field.is-readonly:hover {
+.note-database-container .db-record-detail-field.is-readonly:hover,
+.db-mobile-bottom-sheet .db-record-detail-field.is-readonly:hover {
   cursor: default;
   background: transparent;
 }
 
-.note-database-container .db-record-detail-field-label {
+.note-database-container .db-record-detail-field-label,
+.db-mobile-bottom-sheet .db-record-detail-field-label {
   color: var(--text-muted);
   font-size: var(--font-smaller);
   min-width: 72px;
@@ -17921,6 +17935,36 @@ img.db-text-md-image {
    content — 558px inside a 338px container — so the fields never ran out of room and never
    wrapped. The container scrolled horizontally instead, which is why the renewal and billing
    columns sat off the right edge of the screen with no indication they were there. */
+/* A filter or sort condition is a two-line grid on a phone, not a crushed single row.
+
+   Three dropdowns and three buttons do not fit 311px. Unwrapped, the row spent its width on a
+   fixed-basis operator, left the property name 84px — one character and an ellipsis — and squeezed
+   the value to 18px. Letting it wrap fixed the names and produced three conditions with three
+   different shapes, which reads worse than the truncation did.
+
+   The structure is stable — property, operator, value, then three buttons, in that order, always —
+   so it is placed rather than flowed. Property and operator take the first line, the value and its
+   actions take the second, and every condition is the same shape whatever kind of value control it
+   carries. Where :has() is unsupported the whole block is dropped and the desktop row stands. */
+.is-phone .note-database-container .db-panel-row:has(.db-filter-field-dropdown) {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto auto auto;
+  align-items: center;
+  column-gap: var(--db-space-4);
+  row-gap: var(--db-space-4);
+}
+
+.is-phone .note-database-container .db-panel-row:has(.db-filter-field-dropdown) > :nth-child(1),
+.is-phone .note-database-container .db-panel-row:has(.db-filter-field-dropdown) > :nth-child(3) {
+  grid-column: 1 / 3;
+  min-width: 0;
+}
+
+.is-phone .note-database-container .db-panel-row:has(.db-filter-field-dropdown) > :nth-child(2) {
+  grid-column: 3 / -1;
+  min-width: 0;
+}
+
 .is-phone .note-database-container .db-list {
   width: 100%;
   max-width: 100%;
@@ -17932,6 +17976,9 @@ img.db-text-md-image {
   max-width: 100%;
 }
 .is-phone .note-database-container .db-list-row {
+  /* The row fills the list, and the list fills the screen. Stated on both, because a row that
+     only inherits its width silently follows a list that sized itself to its widest content. */
+  width: 100%;
   grid-template-columns: auto minmax(0, 1fr);
 }
 .is-phone .note-database-container .db-list-row-meta {
@@ -17964,10 +18011,12 @@ img.db-text-md-image {
    grab handle on the phone. The close button (reusing the existing
    db-cell-edit-close) lives in the header on every platform but is shown only
    in the sheet; desktop keeps its anchored panel with no visible close. */
-.note-database-container .db-record-detail-panel .db-cell-edit-close {
+.note-database-container .db-record-detail-panel .db-cell-edit-close,
+.db-record-detail-panel.db-mobile-bottom-sheet .db-cell-edit-close {
   display: none;
 }
-.note-database-container .db-record-detail-panel.db-mobile-bottom-sheet .db-cell-edit-close {
+.note-database-container .db-record-detail-panel.db-mobile-bottom-sheet .db-cell-edit-close,
+.db-record-detail-panel.db-mobile-bottom-sheet.db-mobile-bottom-sheet .db-cell-edit-close {
   position: static;
   display: inline-flex;
   flex: 0 0 auto;
@@ -17981,11 +18030,13 @@ img.db-text-md-image {
   background: transparent;
   color: var(--text-muted);
 }
-.note-database-container .db-record-detail-panel.db-mobile-bottom-sheet .db-cell-edit-close:active {
+.note-database-container .db-record-detail-panel.db-mobile-bottom-sheet .db-cell-edit-close:active,
+.db-record-detail-panel.db-mobile-bottom-sheet.db-mobile-bottom-sheet .db-cell-edit-close:active {
   background: var(--background-modifier-hover);
   color: var(--text-normal);
 }
-.note-database-container .db-record-detail-panel.db-mobile-bottom-sheet .db-cell-edit-close svg {
+.note-database-container .db-record-detail-panel.db-mobile-bottom-sheet .db-cell-edit-close svg,
+.db-record-detail-panel.db-mobile-bottom-sheet.db-mobile-bottom-sheet .db-cell-edit-close svg {
   width: 20px;
   height: 20px;
 }

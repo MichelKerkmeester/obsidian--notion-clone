@@ -1,7 +1,7 @@
 {
   "holder": "002-properties-panel",
   "acquiredAt": "2026-08-29T19:34:47.628Z",
-  "baselineHash": "10204a7e5f18",
+  "baselineHash": "39967f03be37",
   "baselineCommit": "f4319e3e768a",
   "history": [
     {
@@ -89,6 +89,13 @@
       "at": "2026-08-29T20:19:50.048Z",
       "hash": "10204a7e5f18",
       "note": "phone list constrained to the screen so its fields wrap instead of scrolling off the right edge"
+    },
+    {
+      "event": "edit",
+      "phase": "002-properties-panel",
+      "at": "2026-08-29T20:29:34.302Z",
+      "hash": "39967f03be37",
+      "note": "record-detail rules re-keyed to the sheet root; phone list constrained; filter conditions placed on a two-line grid"
     }
   ],
   "outstanding": [
