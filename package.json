@@ -1,6 +1,6 @@
 {
   "name": "obsidian-note-database",
-  "version": "1.2.9",
+  "version": "1.3.0",
   "description": "Database views for notes with table, board, gallery, list, chart, calendar, timeline, inline markdown, formulas, and source rules.",
   "main": "main.js",
   "scripts": {
@@ -10,7 +10,10 @@
     "lint": "eslint \"src/**/*.ts\" --ignore-pattern \"src/__tests__/**\"",
     "lint:all": "eslint src/",
     "screenshots": "node tools/screenshots/capture.mjs",
-    "screenshots:verify": "node tools/screenshots/verify.mjs"
+    "screenshots:verify": "node tools/screenshots/verify.mjs",
+    "storybook:verify": "node tools/storybook/verify-shim.mjs",
+    "storybook": "node tools/storybook/build.mjs",
+    "bench": "node tools/bench/run.mjs"
   },
   "keywords": [
     "obsidian",
