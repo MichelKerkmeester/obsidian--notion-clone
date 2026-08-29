@@ -9602,6 +9602,12 @@ body.is-phone .note-database-container .db-record-detail-panel {
 }
 
 .note-database-container .db-list-row {
+  /* Count this row's own padding and border toward its width rather than adding to them.
+     Without it, `min-width: 100%` sizes the content box to the full width of the list and the
+     12px padding and 1px border on each side then push the row 26px past its container — at
+     every viewport width, on every row, which is the content that appears outside the frame.
+     Every other component in this file declares this individually; this one never did. */
+  box-sizing: border-box;
   display: grid;
   grid-template-columns: auto max-content;
   align-items: center;

@@ -1,7 +1,7 @@
 {
-  "holder": "004-checkbox-ownership",
-  "acquiredAt": "2026-08-29T18:12:04.502Z",
-  "baselineHash": "c4906525fe85",
+  "holder": "005-content-row-rhythm",
+  "acquiredAt": "2026-08-29T19:20:02.253Z",
+  "baselineHash": "46054fb94260",
   "baselineCommit": "f4319e3e768a",
   "history": [
     {
@@ -29,6 +29,19 @@
       "phase": "004-checkbox-ownership",
       "at": "2026-08-29T18:12:04.502Z",
       "hash": "c4906525fe85"
+    },
+    {
+      "event": "release",
+      "phase": "004-checkbox-ownership",
+      "at": "2026-08-29T19:20:02.252Z",
+      "hash": "46054fb94260",
+      "note": "checkbox ownership landed; recapture done, per-image sign-off still owed by the operator"
+    },
+    {
+      "event": "acquire",
+      "phase": "005-content-row-rhythm",
+      "at": "2026-08-29T19:20:02.253Z",
+      "hash": "46054fb94260"
     }
   ],
   "outstanding": [
