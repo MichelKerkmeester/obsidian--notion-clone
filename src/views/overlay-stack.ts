@@ -26,6 +26,7 @@ export interface OverlaySurfaceOptions {
   id?: string;
   panel: HTMLElement;
   anchor?: HTMLElement;
+  getAnchor?: () => HTMLElement | null;
   parentId?: string;
   close(reason: OverlayCloseReason): void;
   closeOnOutsidePointerDown?: boolean;
@@ -35,6 +36,7 @@ export interface OverlaySurfaceOptions {
 interface OverlaySurface extends Required<Pick<OverlaySurfaceOptions, "panel" | "close">> {
   id: string;
   anchor?: HTMLElement;
+  getAnchor?: () => HTMLElement | null;
   parentId?: string;
   closeOnOutsidePointerDown: boolean;
   closeOnEscape: boolean;
@@ -60,7 +62,7 @@ export class OverlayStack {
   private readonly surfaces: OverlaySurface[] = [];
   private readonly listeners = new WeakMap<Document, DocumentListeners>();
 
-  register(options: OverlaySurfaceOptions): { id: string; unregister(): void } {
+  register(options: OverlaySurfaceOptions): { id: string; unregister(restoreFocus?: boolean): void } {
     const doc = options.panel.ownerDocument;
     const id = options.id || `db-overlay-${++nextOverlayId}`;
     this.unregister(id, false);
@@ -69,8 +71,9 @@ export class OverlayStack {
       id,
       panel: options.panel,
       anchor: options.anchor,
+      getAnchor: options.getAnchor,
       parentId: options.parentId,
-      close: options.close,
+      close: (reason) => options.close(reason),
       closeOnOutsidePointerDown: options.closeOnOutsidePointerDown !== false,
       closeOnEscape: options.closeOnEscape !== false,
     };
@@ -79,7 +82,7 @@ export class OverlayStack {
 
     return {
       id,
-      unregister: () => this.unregister(id),
+      unregister: (restoreFocus = true) => this.unregister(id, restoreFocus),
     };
   }
 
@@ -153,7 +156,8 @@ export class OverlayStack {
     const target = event.target;
     const NodeConstructor = doc.defaultView?.Node;
     const isNode = typeof NodeConstructor === "function" && target instanceof NodeConstructor;
-    if (isNode && (surface.panel.contains(target) || surface.anchor?.contains(target))) return;
+    const anchor = surface.getAnchor?.() || surface.anchor;
+    if (isNode && (surface.panel.contains(target) || anchor?.contains(target))) return;
     this.dismissSurface(surface, "outside-pointerdown");
   }
 
@@ -180,8 +184,9 @@ export class OverlayStack {
   }
 
   private restoreFocus(surface: OverlaySurface): void {
-    if (!surface.anchor?.isConnected || typeof surface.anchor.focus !== "function") return;
-    surface.anchor.focus({ preventScroll: true });
+    const anchor = surface.getAnchor?.() || surface.anchor;
+    if (!anchor?.isConnected || typeof anchor.focus !== "function") return;
+    anchor.focus({ preventScroll: true });
   }
 
   private removeDocumentListenersIfIdle(doc: Document): void {

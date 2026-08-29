@@ -70,6 +70,10 @@ export class InteractionScopeRegistry {
     this.scopes.get(id)?.portals.add(portal);
   }
 
+  removePortal(id: string, portal: HTMLElement): void {
+    this.scopes.get(id)?.portals.delete(portal);
+  }
+
   setPaused(id: string, paused: boolean): void {
     const scope = this.scopes.get(id);
     if (!scope || scope.paused === paused) return;
