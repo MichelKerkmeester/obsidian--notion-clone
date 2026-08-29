@@ -1,0 +1,1403 @@
+{
+  "measuredAt": "2026-08-29T17:23:45.586Z",
+  "tokenRoots": [
+    ".note-database-container",
+    ".note-database-modal",
+    ".note-database-settings",
+    ".db-color-picker-popup",
+    ".db-icon-picker-popover",
+    ".db-dropdown-popover",
+    ".db-cell-option-popover",
+    ".formula-workbench-modal",
+    ".db-chart-drilldown-modal"
+  ],
+  "totals": {
+    "classes": 73,
+    "differOnBody": 73,
+    "tokenlessOnBody": 70
+  },
+  "rows": [
+    {
+      "cls": "db-active-rule-popover",
+      "differing": [
+        "padding",
+        "fontSize"
+      ],
+      "tokensInside": true,
+      "tokensOnBody": false,
+      "inside": {
+        "radius": "0px",
+        "font": "13px",
+        "token": "8px"
+      },
+      "onBody": {
+        "radius": "0px",
+        "font": "16px",
+        "token": ""
+      }
+    },
+    {
+      "cls": "db-add-view-popover",
+      "differing": [
+        "fontSize"
+      ],
+      "tokensInside": true,
+      "tokensOnBody": false,
+      "inside": {
+        "radius": "0px",
+        "font": "13px",
+        "token": "8px"
+      },
+      "onBody": {
+        "radius": "0px",
+        "font": "16px",
+        "token": ""
+      }
+    },
+    {
+      "cls": "db-all-views-popover",
+      "differing": [
+        "fontSize"
+      ],
+      "tokensInside": true,
+      "tokensOnBody": false,
+      "inside": {
+        "radius": "0px",
+        "font": "13px",
+        "token": "8px"
+      },
+      "onBody": {
+        "radius": "0px",
+        "font": "16px",
+        "token": ""
+      }
+    },
+    {
+      "cls": "db-base-import-type-dropdown",
+      "differing": [
+        "fontSize"
+      ],
+      "tokensInside": true,
+      "tokensOnBody": false,
+      "inside": {
+        "radius": "0px",
+        "font": "13px",
+        "token": "8px"
+      },
+      "onBody": {
+        "radius": "0px",
+        "font": "16px",
+        "token": ""
+      }
+    },
+    {
+      "cls": "db-calendar-day-popover",
+      "differing": [
+        "fontSize",
+        "boxShadow"
+      ],
+      "tokensInside": true,
+      "tokensOnBody": false,
+      "inside": {
+        "radius": "0px",
+        "font": "13px",
+        "token": "8px"
+      },
+      "onBody": {
+        "radius": "0px",
+        "font": "16px",
+        "token": ""
+      }
+    },
+    {
+      "cls": "db-calendar-mini-popover",
+      "differing": [
+        "borderRadius",
+        "padding",
+        "fontSize",
+        "boxShadow"
+      ],
+      "tokensInside": true,
+      "tokensOnBody": false,
+      "inside": {
+        "radius": "8px",
+        "font": "13px",
+        "token": "8px"
+      },
+      "onBody": {
+        "radius": "0px",
+        "font": "16px",
+        "token": ""
+      }
+    },
+    {
+      "cls": "db-calendar-options-popover",
+      "differing": [
+        "fontSize"
+      ],
+      "tokensInside": true,
+      "tokensOnBody": false,
+      "inside": {
+        "radius": "0px",
+        "font": "13px",
+        "token": "8px"
+      },
+      "onBody": {
+        "radius": "0px",
+        "font": "16px",
+        "token": ""
+      }
+    },
+    {
+      "cls": "db-calendar-scale-menu",
+      "differing": [
+        "padding",
+        "fontSize"
+      ],
+      "tokensInside": true,
+      "tokensOnBody": false,
+      "inside": {
+        "radius": "0px",
+        "font": "13px",
+        "token": "8px"
+      },
+      "onBody": {
+        "radius": "0px",
+        "font": "16px",
+        "token": ""
+      }
+    },
+    {
+      "cls": "db-calendar-search-results-popover",
+      "differing": [
+        "borderRadius",
+        "fontSize",
+        "boxShadow"
+      ],
+      "tokensInside": true,
+      "tokensOnBody": false,
+      "inside": {
+        "radius": "8px",
+        "font": "13px",
+        "token": "8px"
+      },
+      "onBody": {
+        "radius": "0px",
+        "font": "16px",
+        "token": ""
+      }
+    },
+    {
+      "cls": "db-calendar-week-allday-popover",
+      "differing": [
+        "borderRadius",
+        "fontSize",
+        "boxShadow"
+      ],
+      "tokensInside": true,
+      "tokensOnBody": false,
+      "inside": {
+        "radius": "4px",
+        "font": "13px",
+        "token": "8px"
+      },
+      "onBody": {
+        "radius": "0px",
+        "font": "16px",
+        "token": ""
+      }
+    },
+    {
+      "cls": "db-cell-date-picker",
+      "differing": [
+        "fontSize"
+      ],
+      "tokensInside": true,
+      "tokensOnBody": false,
+      "inside": {
+        "radius": "0px",
+        "font": "13px",
+        "token": "8px"
+      },
+      "onBody": {
+        "radius": "0px",
+        "font": "16px",
+        "token": ""
+      }
+    },
+    {
+      "cls": "db-cell-edit-popover",
+      "differing": [
+        "borderRadius",
+        "fontSize",
+        "boxShadow"
+      ],
+      "tokensInside": true,
+      "tokensOnBody": false,
+      "inside": {
+        "radius": "8px",
+        "font": "13px",
+        "token": "8px"
+      },
+      "onBody": {
+        "radius": "0px",
+        "font": "16px",
+        "token": ""
+      }
+    },
+    {
+      "cls": "db-cell-line-edit-popover",
+      "differing": [
+        "fontSize",
+        "boxShadow"
+      ],
+      "tokensInside": true,
+      "tokensOnBody": false,
+      "inside": {
+        "radius": "0px",
+        "font": "13px",
+        "token": "8px"
+      },
+      "onBody": {
+        "radius": "0px",
+        "font": "16px",
+        "token": ""
+      }
+    },
+    {
+      "cls": "db-cell-option-popover",
+      "differing": [
+        "borderRadius",
+        "padding",
+        "fontSize"
+      ],
+      "tokensInside": true,
+      "tokensOnBody": true,
+      "inside": {
+        "radius": "8px",
+        "font": "13px",
+        "token": "8px"
+      },
+      "onBody": {
+        "radius": "0px",
+        "font": "16px",
+        "token": "8px"
+      }
+    },
+    {
+      "cls": "db-chart-dropdown-popover",
+      "differing": [
+        "fontSize",
+        "boxShadow"
+      ],
+      "tokensInside": true,
+      "tokensOnBody": false,
+      "inside": {
+        "radius": "0px",
+        "font": "13px",
+        "token": "8px"
+      },
+      "onBody": {
+        "radius": "0px",
+        "font": "16px",
+        "token": ""
+      }
+    },
+    {
+      "cls": "db-chart-options-popover",
+      "differing": [
+        "borderRadius",
+        "padding",
+        "fontSize",
+        "boxShadow"
+      ],
+      "tokensInside": true,
+      "tokensOnBody": false,
+      "inside": {
+        "radius": "8px",
+        "font": "13px",
+        "token": "8px"
+      },
+      "onBody": {
+        "radius": "0px",
+        "font": "16px",
+        "token": ""
+      }
+    },
+    {
+      "cls": "db-chart-subpopover",
+      "differing": [
+        "fontSize"
+      ],
+      "tokensInside": true,
+      "tokensOnBody": false,
+      "inside": {
+        "radius": "0px",
+        "font": "13px",
+        "token": "8px"
+      },
+      "onBody": {
+        "radius": "0px",
+        "font": "16px",
+        "token": ""
+      }
+    },
+    {
+      "cls": "db-color-picker",
+      "differing": [
+        "fontSize"
+      ],
+      "tokensInside": true,
+      "tokensOnBody": false,
+      "inside": {
+        "radius": "0px",
+        "font": "13px",
+        "token": "8px"
+      },
+      "onBody": {
+        "radius": "0px",
+        "font": "16px",
+        "token": ""
+      }
+    },
+    {
+      "cls": "db-column-display-style-popover",
+      "differing": [
+        "fontSize"
+      ],
+      "tokensInside": true,
+      "tokensOnBody": false,
+      "inside": {
+        "radius": "0px",
+        "font": "13px",
+        "token": "8px"
+      },
+      "onBody": {
+        "radius": "0px",
+        "font": "16px",
+        "token": ""
+      }
+    },
+    {
+      "cls": "db-column-manager-file-property-dropdown",
+      "differing": [
+        "fontSize"
+      ],
+      "tokensInside": true,
+      "tokensOnBody": false,
+      "inside": {
+        "radius": "0px",
+        "font": "13px",
+        "token": "8px"
+      },
+      "onBody": {
+        "radius": "0px",
+        "font": "16px",
+        "token": ""
+      }
+    },
+    {
+      "cls": "db-column-menu",
+      "differing": [
+        "fontSize"
+      ],
+      "tokensInside": true,
+      "tokensOnBody": false,
+      "inside": {
+        "radius": "0px",
+        "font": "13px",
+        "token": "8px"
+      },
+      "onBody": {
+        "radius": "0px",
+        "font": "16px",
+        "token": ""
+      }
+    },
+    {
+      "cls": "db-column-menu-subpopover",
+      "differing": [
+        "borderRadius",
+        "boxShadow"
+      ],
+      "tokensInside": true,
+      "tokensOnBody": false,
+      "inside": {
+        "radius": "8px",
+        "font": "13px",
+        "token": "8px"
+      },
+      "onBody": {
+        "radius": "0px",
+        "font": "13px",
+        "token": ""
+      }
+    },
+    {
+      "cls": "db-column-type-popover",
+      "differing": [
+        "fontSize"
+      ],
+      "tokensInside": true,
+      "tokensOnBody": false,
+      "inside": {
+        "radius": "0px",
+        "font": "13px",
+        "token": "8px"
+      },
+      "onBody": {
+        "radius": "0px",
+        "font": "16px",
+        "token": ""
+      }
+    },
+    {
+      "cls": "db-conditional-format-dropdown",
+      "differing": [
+        "borderRadius",
+        "padding",
+        "fontSize",
+        "boxShadow"
+      ],
+      "tokensInside": true,
+      "tokensOnBody": false,
+      "inside": {
+        "radius": "6px",
+        "font": "13px",
+        "token": "8px"
+      },
+      "onBody": {
+        "radius": "0px",
+        "font": "16px",
+        "token": ""
+      }
+    },
+    {
+      "cls": "db-database-dropdown",
+      "differing": [
+        "fontSize"
+      ],
+      "tokensInside": true,
+      "tokensOnBody": false,
+      "inside": {
+        "radius": "0px",
+        "font": "13px",
+        "token": "8px"
+      },
+      "onBody": {
+        "radius": "0px",
+        "font": "16px",
+        "token": ""
+      }
+    },
+    {
+      "cls": "db-database-popover",
+      "differing": [
+        "borderRadius",
+        "padding",
+        "fontSize",
+        "boxShadow"
+      ],
+      "tokensInside": true,
+      "tokensOnBody": false,
+      "inside": {
+        "radius": "8px",
+        "font": "13px",
+        "token": "8px"
+      },
+      "onBody": {
+        "radius": "0px",
+        "font": "16px",
+        "token": ""
+      }
+    },
+    {
+      "cls": "db-date-edit-popover",
+      "differing": [
+        "fontSize",
+        "boxShadow"
+      ],
+      "tokensInside": true,
+      "tokensOnBody": false,
+      "inside": {
+        "radius": "0px",
+        "font": "13px",
+        "token": "8px"
+      },
+      "onBody": {
+        "radius": "0px",
+        "font": "16px",
+        "token": ""
+      }
+    },
+    {
+      "cls": "db-date-value-popover",
+      "differing": [
+        "fontSize",
+        "boxShadow"
+      ],
+      "tokensInside": true,
+      "tokensOnBody": false,
+      "inside": {
+        "radius": "0px",
+        "font": "13px",
+        "token": "8px"
+      },
+      "onBody": {
+        "radius": "0px",
+        "font": "16px",
+        "token": ""
+      }
+    },
+    {
+      "cls": "db-displayopt-dropdown-popover",
+      "differing": [
+        "borderRadius",
+        "boxShadow"
+      ],
+      "tokensInside": true,
+      "tokensOnBody": false,
+      "inside": {
+        "radius": "8px",
+        "font": "12px",
+        "token": "8px"
+      },
+      "onBody": {
+        "radius": "0px",
+        "font": "12px",
+        "token": ""
+      }
+    },
+    {
+      "cls": "db-dropdown",
+      "differing": [
+        "fontSize"
+      ],
+      "tokensInside": true,
+      "tokensOnBody": false,
+      "inside": {
+        "radius": "0px",
+        "font": "13px",
+        "token": "8px"
+      },
+      "onBody": {
+        "radius": "0px",
+        "font": "16px",
+        "token": ""
+      }
+    },
+    {
+      "cls": "db-dropdown-popover",
+      "differing": [
+        "borderRadius",
+        "padding",
+        "fontSize"
+      ],
+      "tokensInside": true,
+      "tokensOnBody": true,
+      "inside": {
+        "radius": "8px",
+        "font": "12px",
+        "token": "8px"
+      },
+      "onBody": {
+        "radius": "0px",
+        "font": "16px",
+        "token": "8px"
+      }
+    },
+    {
+      "cls": "db-export-popover",
+      "differing": [
+        "borderRadius",
+        "padding",
+        "fontSize",
+        "boxShadow"
+      ],
+      "tokensInside": true,
+      "tokensOnBody": false,
+      "inside": {
+        "radius": "8px",
+        "font": "13px",
+        "token": "8px"
+      },
+      "onBody": {
+        "radius": "0px",
+        "font": "16px",
+        "token": ""
+      }
+    },
+    {
+      "cls": "db-file-picker",
+      "differing": [
+        "fontSize"
+      ],
+      "tokensInside": true,
+      "tokensOnBody": false,
+      "inside": {
+        "radius": "0px",
+        "font": "13px",
+        "token": "8px"
+      },
+      "onBody": {
+        "radius": "0px",
+        "font": "16px",
+        "token": ""
+      }
+    },
+    {
+      "cls": "db-filter-field-dropdown",
+      "differing": [
+        "fontSize"
+      ],
+      "tokensInside": true,
+      "tokensOnBody": false,
+      "inside": {
+        "radius": "0px",
+        "font": "13px",
+        "token": "8px"
+      },
+      "onBody": {
+        "radius": "0px",
+        "font": "16px",
+        "token": ""
+      }
+    },
+    {
+      "cls": "db-filter-operator-dropdown",
+      "differing": [
+        "fontSize"
+      ],
+      "tokensInside": true,
+      "tokensOnBody": false,
+      "inside": {
+        "radius": "0px",
+        "font": "13px",
+        "token": "8px"
+      },
+      "onBody": {
+        "radius": "0px",
+        "font": "16px",
+        "token": ""
+      }
+    },
+    {
+      "cls": "db-filter-panel",
+      "differing": [
+        "borderRadius",
+        "padding",
+        "fontSize",
+        "boxShadow"
+      ],
+      "tokensInside": true,
+      "tokensOnBody": false,
+      "inside": {
+        "radius": "8px",
+        "font": "13px",
+        "token": "8px"
+      },
+      "onBody": {
+        "radius": "0px",
+        "font": "16px",
+        "token": ""
+      }
+    },
+    {
+      "cls": "db-filter-value-dropdown",
+      "differing": [
+        "fontSize"
+      ],
+      "tokensInside": true,
+      "tokensOnBody": false,
+      "inside": {
+        "radius": "0px",
+        "font": "13px",
+        "token": "8px"
+      },
+      "onBody": {
+        "radius": "0px",
+        "font": "16px",
+        "token": ""
+      }
+    },
+    {
+      "cls": "db-formula-result-type-dropdown",
+      "differing": [
+        "fontSize"
+      ],
+      "tokensInside": true,
+      "tokensOnBody": false,
+      "inside": {
+        "radius": "0px",
+        "font": "13px",
+        "token": "8px"
+      },
+      "onBody": {
+        "radius": "0px",
+        "font": "16px",
+        "token": ""
+      }
+    },
+    {
+      "cls": "db-group-order-popover",
+      "differing": [
+        "borderRadius",
+        "padding",
+        "fontSize",
+        "boxShadow"
+      ],
+      "tokensInside": true,
+      "tokensOnBody": false,
+      "inside": {
+        "radius": "8px",
+        "font": "13px",
+        "token": "8px"
+      },
+      "onBody": {
+        "radius": "0px",
+        "font": "16px",
+        "token": ""
+      }
+    },
+    {
+      "cls": "db-group-popover",
+      "differing": [
+        "borderRadius",
+        "padding",
+        "fontSize",
+        "boxShadow"
+      ],
+      "tokensInside": true,
+      "tokensOnBody": false,
+      "inside": {
+        "radius": "8px",
+        "font": "13px",
+        "token": "8px"
+      },
+      "onBody": {
+        "radius": "0px",
+        "font": "16px",
+        "token": ""
+      }
+    },
+    {
+      "cls": "db-icon-picker",
+      "differing": [
+        "fontSize"
+      ],
+      "tokensInside": true,
+      "tokensOnBody": false,
+      "inside": {
+        "radius": "0px",
+        "font": "13px",
+        "token": "8px"
+      },
+      "onBody": {
+        "radius": "0px",
+        "font": "16px",
+        "token": ""
+      }
+    },
+    {
+      "cls": "db-icon-picker-popover",
+      "differing": [
+        "fontSize"
+      ],
+      "tokensInside": true,
+      "tokensOnBody": true,
+      "inside": {
+        "radius": "8px",
+        "font": "13px",
+        "token": "8px"
+      },
+      "onBody": {
+        "radius": "8px",
+        "font": "16px",
+        "token": "8px"
+      }
+    },
+    {
+      "cls": "db-menu",
+      "differing": [
+        "fontSize"
+      ],
+      "tokensInside": true,
+      "tokensOnBody": false,
+      "inside": {
+        "radius": "0px",
+        "font": "13px",
+        "token": "8px"
+      },
+      "onBody": {
+        "radius": "0px",
+        "font": "16px",
+        "token": ""
+      }
+    },
+    {
+      "cls": "db-mobile-bottom-sheet",
+      "differing": [
+        "borderRadius",
+        "fontSize",
+        "boxShadow"
+      ],
+      "tokensInside": true,
+      "tokensOnBody": false,
+      "inside": {
+        "radius": "8px 8px 0px 0px",
+        "font": "13px",
+        "token": "8px"
+      },
+      "onBody": {
+        "radius": "0px",
+        "font": "16px",
+        "token": ""
+      }
+    },
+    {
+      "cls": "db-mobile-column-width-panel",
+      "differing": [
+        "borderRadius",
+        "padding",
+        "fontSize",
+        "boxShadow"
+      ],
+      "tokensInside": true,
+      "tokensOnBody": false,
+      "inside": {
+        "radius": "8px 8px 0px 0px",
+        "font": "13px",
+        "token": "8px"
+      },
+      "onBody": {
+        "radius": "0px",
+        "font": "16px",
+        "token": ""
+      }
+    },
+    {
+      "cls": "db-modal-dropdown",
+      "differing": [
+        "fontSize"
+      ],
+      "tokensInside": true,
+      "tokensOnBody": false,
+      "inside": {
+        "radius": "0px",
+        "font": "13px",
+        "token": "8px"
+      },
+      "onBody": {
+        "radius": "0px",
+        "font": "16px",
+        "token": ""
+      }
+    },
+    {
+      "cls": "db-new-button-dropdown",
+      "differing": [
+        "borderRadius",
+        "padding",
+        "fontSize"
+      ],
+      "tokensInside": true,
+      "tokensOnBody": false,
+      "inside": {
+        "radius": "0px 6px 6px 0px",
+        "font": "13px",
+        "token": "8px"
+      },
+      "onBody": {
+        "radius": "0px",
+        "font": "16px",
+        "token": ""
+      }
+    },
+    {
+      "cls": "db-new-template-popover",
+      "differing": [
+        "fontSize"
+      ],
+      "tokensInside": true,
+      "tokensOnBody": false,
+      "inside": {
+        "radius": "0px",
+        "font": "13px",
+        "token": "8px"
+      },
+      "onBody": {
+        "radius": "0px",
+        "font": "16px",
+        "token": ""
+      }
+    },
+    {
+      "cls": "db-number-style-menu",
+      "differing": [
+        "fontSize"
+      ],
+      "tokensInside": true,
+      "tokensOnBody": false,
+      "inside": {
+        "radius": "0px",
+        "font": "13px",
+        "token": "8px"
+      },
+      "onBody": {
+        "radius": "0px",
+        "font": "16px",
+        "token": ""
+      }
+    },
+    {
+      "cls": "db-owned-menu",
+      "differing": [
+        "borderRadius",
+        "fontSize"
+      ],
+      "tokensInside": true,
+      "tokensOnBody": false,
+      "inside": {
+        "radius": "8px",
+        "font": "13px",
+        "token": "8px"
+      },
+      "onBody": {
+        "radius": "0px",
+        "font": "16px",
+        "token": ""
+      }
+    },
+    {
+      "cls": "db-panel",
+      "differing": [
+        "fontSize"
+      ],
+      "tokensInside": true,
+      "tokensOnBody": false,
+      "inside": {
+        "radius": "0px",
+        "font": "13px",
+        "token": "8px"
+      },
+      "onBody": {
+        "radius": "0px",
+        "font": "16px",
+        "token": ""
+      }
+    },
+    {
+      "cls": "db-panel-dropdown",
+      "differing": [
+        "fontSize"
+      ],
+      "tokensInside": true,
+      "tokensOnBody": false,
+      "inside": {
+        "radius": "0px",
+        "font": "13px",
+        "token": "8px"
+      },
+      "onBody": {
+        "radius": "0px",
+        "font": "16px",
+        "token": ""
+      }
+    },
+    {
+      "cls": "db-property-conflict-type-dropdown",
+      "differing": [
+        "fontSize"
+      ],
+      "tokensInside": true,
+      "tokensOnBody": false,
+      "inside": {
+        "radius": "0px",
+        "font": "13px",
+        "token": "8px"
+      },
+      "onBody": {
+        "radius": "0px",
+        "font": "16px",
+        "token": ""
+      }
+    },
+    {
+      "cls": "db-record-detail-panel",
+      "differing": [
+        "borderRadius",
+        "padding",
+        "fontSize",
+        "boxShadow"
+      ],
+      "tokensInside": true,
+      "tokensOnBody": false,
+      "inside": {
+        "radius": "8px",
+        "font": "13px",
+        "token": "8px"
+      },
+      "onBody": {
+        "radius": "0px",
+        "font": "16px",
+        "token": ""
+      }
+    },
+    {
+      "cls": "db-record-peek-panel",
+      "differing": [
+        "padding",
+        "fontSize"
+      ],
+      "tokensInside": true,
+      "tokensOnBody": false,
+      "inside": {
+        "radius": "0px",
+        "font": "13px",
+        "token": "8px"
+      },
+      "onBody": {
+        "radius": "0px",
+        "font": "16px",
+        "token": ""
+      }
+    },
+    {
+      "cls": "db-relation-popover",
+      "differing": [
+        "fontSize",
+        "boxShadow"
+      ],
+      "tokensInside": true,
+      "tokensOnBody": false,
+      "inside": {
+        "radius": "0px",
+        "font": "13px",
+        "token": "8px"
+      },
+      "onBody": {
+        "radius": "0px",
+        "font": "16px",
+        "token": ""
+      }
+    },
+    {
+      "cls": "db-relation-rollup-config-dropdown",
+      "differing": [
+        "fontSize"
+      ],
+      "tokensInside": true,
+      "tokensOnBody": false,
+      "inside": {
+        "radius": "0px",
+        "font": "13px",
+        "token": "8px"
+      },
+      "onBody": {
+        "radius": "0px",
+        "font": "16px",
+        "token": ""
+      }
+    },
+    {
+      "cls": "db-settings-dropdown",
+      "differing": [
+        "fontSize"
+      ],
+      "tokensInside": true,
+      "tokensOnBody": false,
+      "inside": {
+        "radius": "0px",
+        "font": "13px",
+        "token": "8px"
+      },
+      "onBody": {
+        "radius": "0px",
+        "font": "16px",
+        "token": ""
+      }
+    },
+    {
+      "cls": "db-sort-direction-dropdown",
+      "differing": [
+        "fontSize"
+      ],
+      "tokensInside": true,
+      "tokensOnBody": false,
+      "inside": {
+        "radius": "0px",
+        "font": "13px",
+        "token": "8px"
+      },
+      "onBody": {
+        "radius": "0px",
+        "font": "16px",
+        "token": ""
+      }
+    },
+    {
+      "cls": "db-sort-field-dropdown",
+      "differing": [
+        "fontSize"
+      ],
+      "tokensInside": true,
+      "tokensOnBody": false,
+      "inside": {
+        "radius": "0px",
+        "font": "13px",
+        "token": "8px"
+      },
+      "onBody": {
+        "radius": "0px",
+        "font": "16px",
+        "token": ""
+      }
+    },
+    {
+      "cls": "db-sort-panel",
+      "differing": [
+        "fontSize",
+        "boxShadow"
+      ],
+      "tokensInside": true,
+      "tokensOnBody": false,
+      "inside": {
+        "radius": "0px",
+        "font": "13px",
+        "token": "8px"
+      },
+      "onBody": {
+        "radius": "0px",
+        "font": "16px",
+        "token": ""
+      }
+    },
+    {
+      "cls": "db-source-rule-dropdown",
+      "differing": [
+        "borderRadius",
+        "padding",
+        "fontSize"
+      ],
+      "tokensInside": true,
+      "tokensOnBody": false,
+      "inside": {
+        "radius": "6px",
+        "font": "13px",
+        "token": "8px"
+      },
+      "onBody": {
+        "radius": "0px",
+        "font": "16px",
+        "token": ""
+      }
+    },
+    {
+      "cls": "db-source-rule-property-picker",
+      "differing": [
+        "fontSize"
+      ],
+      "tokensInside": true,
+      "tokensOnBody": false,
+      "inside": {
+        "radius": "0px",
+        "font": "13px",
+        "token": "8px"
+      },
+      "onBody": {
+        "radius": "0px",
+        "font": "16px",
+        "token": ""
+      }
+    },
+    {
+      "cls": "db-status-preset-default-dropdown",
+      "differing": [
+        "fontSize"
+      ],
+      "tokensInside": true,
+      "tokensOnBody": false,
+      "inside": {
+        "radius": "0px",
+        "font": "13px",
+        "token": "8px"
+      },
+      "onBody": {
+        "radius": "0px",
+        "font": "16px",
+        "token": ""
+      }
+    },
+    {
+      "cls": "db-status-preset-setting-dropdown",
+      "differing": [
+        "fontSize"
+      ],
+      "tokensInside": true,
+      "tokensOnBody": false,
+      "inside": {
+        "radius": "0px",
+        "font": "13px",
+        "token": "8px"
+      },
+      "onBody": {
+        "radius": "0px",
+        "font": "16px",
+        "token": ""
+      }
+    },
+    {
+      "cls": "db-timeline-mobile-menu",
+      "differing": [
+        "fontSize"
+      ],
+      "tokensInside": true,
+      "tokensOnBody": false,
+      "inside": {
+        "radius": "0px",
+        "font": "13px",
+        "token": "8px"
+      },
+      "onBody": {
+        "radius": "0px",
+        "font": "16px",
+        "token": ""
+      }
+    },
+    {
+      "cls": "db-timeline-scale-menu",
+      "differing": [
+        "padding",
+        "fontSize"
+      ],
+      "tokensInside": true,
+      "tokensOnBody": false,
+      "inside": {
+        "radius": "0px",
+        "font": "13px",
+        "token": "8px"
+      },
+      "onBody": {
+        "radius": "0px",
+        "font": "16px",
+        "token": ""
+      }
+    },
+    {
+      "cls": "db-toolbar-menu",
+      "differing": [
+        "fontSize"
+      ],
+      "tokensInside": true,
+      "tokensOnBody": false,
+      "inside": {
+        "radius": "0px",
+        "font": "13px",
+        "token": "8px"
+      },
+      "onBody": {
+        "radius": "0px",
+        "font": "16px",
+        "token": ""
+      }
+    },
+    {
+      "cls": "db-toolbar-utilities-popover",
+      "differing": [
+        "fontSize"
+      ],
+      "tokensInside": true,
+      "tokensOnBody": false,
+      "inside": {
+        "radius": "0px",
+        "font": "13px",
+        "token": "8px"
+      },
+      "onBody": {
+        "radius": "0px",
+        "font": "16px",
+        "token": ""
+      }
+    },
+    {
+      "cls": "db-view-config-dropdown",
+      "differing": [
+        "borderRadius",
+        "padding",
+        "fontSize"
+      ],
+      "tokensInside": true,
+      "tokensOnBody": false,
+      "inside": {
+        "radius": "6px",
+        "font": "13px",
+        "token": "8px"
+      },
+      "onBody": {
+        "radius": "0px",
+        "font": "16px",
+        "token": ""
+      }
+    },
+    {
+      "cls": "db-view-config-field-dropdown",
+      "differing": [
+        "fontSize"
+      ],
+      "tokensInside": true,
+      "tokensOnBody": false,
+      "inside": {
+        "radius": "0px",
+        "font": "13px",
+        "token": "8px"
+      },
+      "onBody": {
+        "radius": "0px",
+        "font": "16px",
+        "token": ""
+      }
+    },
+    {
+      "cls": "db-view-config-panel",
+      "differing": [
+        "borderRadius",
+        "padding",
+        "fontSize",
+        "boxShadow"
+      ],
+      "tokensInside": true,
+      "tokensOnBody": false,
+      "inside": {
+        "radius": "8px",
+        "font": "13px",
+        "token": "8px"
+      },
+      "onBody": {
+        "radius": "0px",
+        "font": "16px",
+        "token": ""
+      }
+    },
+    {
+      "cls": "db-view-tab-popover",
+      "differing": [
+        "borderRadius",
+        "padding",
+        "fontSize",
+        "boxShadow"
+      ],
+      "tokensInside": true,
+      "tokensOnBody": false,
+      "inside": {
+        "radius": "8px",
+        "font": "13px",
+        "token": "8px"
+      },
+      "onBody": {
+        "radius": "0px",
+        "font": "16px",
+        "token": ""
+      }
+    }
+  ]
+}
