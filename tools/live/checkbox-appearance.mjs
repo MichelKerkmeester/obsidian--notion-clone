@@ -32,6 +32,7 @@ import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { chromium } from "playwright-core";
+import { SCENARIOS } from "../screenshots/scenarios.mjs";
 import { stamp } from "./evidence.mjs";
 
 // ───────────────────────────────────────────────────────────────────
@@ -47,58 +48,59 @@ const CHROME = [
   "/usr/bin/chromium",
 ].find(existsSync) || process.env.SCREENSHOT_CHROME;
 
-const INVENTORY = join(REPO, "tools/live/checkbox-inventory.json");
-
 // ───────────────────────────────────────────────────────────────────
-// 3. CASES
+// 3. THE TREES TO MEASURE IN
 // ───────────────────────────────────────────────────────────────────
 
-if (!existsSync(INVENTORY)) {
-  console.error("checkbox-appearance: no inventory. Run tools/live/checkbox-inventory.mjs first.");
-  process.exit(2);
-}
+// Measure inside the capture fixtures rather than a tree rebuilt from source.
+//
+// Three attempts were made at reconstructing each checkbox's ancestry by parsing the code, and each
+// was approximately wrong: a line window credited a neighbour's class, the parser read the nested
+// `attr` literal instead of the element's own, and following receiver variables collided on names
+// reused across an eight-thousand-line file. The last of those rendered the table's select-all
+// checkbox two ancestors short of the four its rule needs, so the rule never matched, stripping the
+// parent changed nothing, and the site read as safe when it had simply been measured wrong.
+//
+// The fixtures already contain the real ancestry, written out and reviewed, and every screenshot in
+// the repository is taken from them. Reading the chain off a rendered DOM is exact where inferring
+// it from source was not.
+//
+// What this is NOT: the running app. These are a faithful reproduction, and the live probe remains
+// the instrument that decides whether the reproduction is faithful.
 
-const inventory = JSON.parse(readFileSync(INVENTORY, "utf8"));
-
-/**
- * One case per creation site.
- *
- * `wrapper` is the class the input is styled through when it declares none of its own. Rendering it
- * is the difference between measuring the checkbox as it ships and measuring a bare input — and the
- * bare input would compute the platform default for every site, reporting uniform breakage that
- * tells nobody anything.
- */
-const cases = inventory.sites.map((site) => ({
-  id: `${site.file.replace(/^src\/views\//, "")}:${site.line}`,
-  classes: site.classes,
-  wrapper: site.classes.length === 0 ? site.borrowed?.cls ?? null : null,
-}));
-
-// The modal root is a second token root in this codebase, and two of the four rules that remove the
-// native appearance live under it rather than under the container. Measuring everything under one
-// root would report those as broken when they are merely elsewhere.
-const ROOTS = [
-  { id: "container", cls: "note-database-container" },
-  { id: "modal", cls: "note-database-modal" },
-  { id: "body", cls: null },
-];
-
-// ───────────────────────────────────────────────────────────────────
-// 4. MEASURE
-// ───────────────────────────────────────────────────────────────────
+const scenarios = SCENARIOS.filter((s) => typeof s.html === "function");
 
 if (!CHROME) {
   console.error("checkbox-appearance: no Chrome found. Set SCREENSHOT_CHROME.");
   process.exit(2);
 }
 
+// ───────────────────────────────────────────────────────────────────
+// 4. MEASURE
+// ───────────────────────────────────────────────────────────────────
+
 const browser = await chromium.launch({ executablePath: CHROME });
 const page = await browser.newPage({ viewport: { width: 1200, height: 900 } });
-await page.setContent("<body></body>");
-await page.addStyleTag({ content: readFileSync(join(REPO, "styles.css"), "utf8") });
+const styles = readFileSync(join(REPO, "styles.css"), "utf8");
+const theme = readFileSync(join(REPO, "tools/screenshots/theme.css"), "utf8");
+const runtime = readFileSync(join(REPO, "tools/screenshots/runtime-vars.css"), "utf8");
 
-const rows = await page.evaluate(
-  ({ cases, roots }) => {
+const rows = [];
+for (const scenario of scenarios) {
+  let html;
+  try {
+    html = scenario.html();
+  } catch {
+    // A fixture that cannot render is a gap in coverage, not a checkbox result. Record it as such.
+    rows.push({ scenario: scenario.id, error: "fixture did not render" });
+    continue;
+  }
+  await page.setContent(`<body><div id="shot">${html}</div></body>`);
+  await page.addStyleTag({ content: styles });
+  await page.addStyleTag({ content: theme });
+  await page.addStyleTag({ content: runtime });
+
+  const found = await page.evaluate((scenarioId) => {
     const read = (el) => {
       const style = getComputedStyle(el);
       const rect = el.getBoundingClientRect();
@@ -110,35 +112,47 @@ const rows = await page.evaluate(
       };
     };
 
-    const out = [];
-    for (const c of cases) {
-      const measured = {};
-      for (const root of roots) {
-        const host = document.createElement("div");
-        if (root.cls) host.className = root.cls;
-        document.body.appendChild(host);
-
-        let parent = host;
-        if (c.wrapper) {
-          const wrap = document.createElement("div");
-          wrap.className = c.wrapper;
-          host.appendChild(wrap);
-          parent = wrap;
-        }
-        const input = document.createElement("input");
-        input.type = "checkbox";
-        if (c.classes.length) input.className = c.classes.join(" ");
-        parent.appendChild(input);
-
-        measured[root.id] = read(input);
-        host.remove();
+    /** The chain as the browser has it — no inference, and therefore no chance of being short. */
+    const chainOf = (el) => {
+      const out = [];
+      for (let node = el.parentElement; node && node.id !== "shot"; node = node.parentElement) {
+        if (node.className && typeof node.className === "string") out.unshift(node.className.trim());
       }
-      out.push({ ...c, measured });
-    }
-    return out;
-  },
-  { cases, roots: ROOTS }
-);
+      return out;
+    };
+
+    return Array.from(document.querySelectorAll('input[type="checkbox"]')).map((input, index) => {
+      const before = read(input);
+
+      // The two-sided control, on the real chain. Strip each ancestor's classes in turn; the one
+      // that moves a computed value is the ancestor this checkbox is actually styled through.
+      let ownedBy = null;
+      for (let node = input.parentElement; node && node.id !== "shot"; node = node.parentElement) {
+        const saved = node.className;
+        if (!saved) continue;
+        node.className = "";
+        const after = read(input);
+        node.className = saved;
+        if (after.appearance !== before.appearance || after.radius !== before.radius ||
+            after.width !== before.width || after.height !== before.height) {
+          ownedBy = saved;
+          break;
+        }
+      }
+
+      return {
+        scenario: scenarioId,
+        index,
+        classes: (input.className || "").split(/\s+/).filter(Boolean),
+        chain: chainOf(input),
+        measured: before,
+        ownedBy,
+      };
+    });
+  }, scenario.id);
+
+  rows.push(...found);
+}
 
 await browser.close();
 
@@ -146,52 +160,55 @@ await browser.close();
 // 5. REPORT
 // ───────────────────────────────────────────────────────────────────
 
-const owned = (row, root) => row.measured[root].appearance === "none";
-const ownedAnywhere = rows.filter((r) => ROOTS.some((root) => owned(r, root.id)));
-const ownedInContainer = rows.filter((r) => owned(r, "container"));
-const platformBox = rows.filter((r) => !ROOTS.some((root) => owned(r, root.id)));
+const boxes = rows.filter((r) => r.measured);
+const owned = boxes.filter((r) => r.measured.appearance === "none");
+const platform = boxes.filter((r) => r.measured.appearance !== "none");
+const ancestorOwned = owned.filter((r) => r.ownedBy && !r.classes.includes(r.ownedBy.split(/\s+/)[0]));
+const selfOwned = owned.filter((r) => !ancestorOwned.includes(r));
 
-const radii = new Set();
-const sizes = new Set();
-for (const r of ownedAnywhere) {
-  const root = ROOTS.find((x) => owned(r, x.id)).id;
-  radii.add(r.measured[root].radius);
-  sizes.add(`${r.measured[root].width}x${r.measured[root].height}`);
+const shapes = new Map();
+for (const r of owned) {
+  const key = `${r.measured.width}x${r.measured.height} r=${r.measured.radius}`;
+  shapes.set(key, (shapes.get(key) || 0) + 1);
 }
 
-console.log(`checkbox-appearance: ${rows.length} sites measured at ${ROOTS.length} mount points\n`);
-console.log(`  compute appearance:none somewhere      ${ownedAnywhere.length}/${rows.length}`);
-console.log(`  compute appearance:none in container   ${ownedInContainer.length}/${rows.length}`);
-console.log(`  fall back to the platform box          ${platformBox.length}/${rows.length}`);
-console.log(`  distinct radii among the owned         ${radii.size}  [${[...radii].join(", ")}]`);
-console.log(`  distinct box sizes among the owned     ${sizes.size}  [${[...sizes].join(", ")}]\n`);
+console.log(`checkbox-appearance: ${boxes.length} checkboxes across ${scenarios.length} fixtures\n`);
+console.log(`  own their appearance                   ${owned.length}/${boxes.length}`);
+console.log(`    of those, styled through an ancestor ${ancestorOwned.length}`);
+console.log(`    styled through their own class       ${selfOwned.length}`);
+console.log(`  fall back to the platform box          ${platform.length}/${boxes.length}\n`);
+console.log("  shapes among the owned:");
+for (const [shape, count] of [...shapes].sort((a, b) => b[1] - a[1])) {
+  console.log(`    ${shape.padEnd(28)} ${count}`);
+}
+console.log("");
 
-if (platformBox.length) {
-  console.log("PLATFORM BOX — round on iOS, at every mount point tried:");
-  for (const r of platformBox) {
-    const m = r.measured.container;
-    console.log(`  ${r.id.padEnd(46)} ${m.width}x${m.height} r=${m.radius} .${r.classes.join(".") || "(classless)"}`);
+if (platform.length) {
+  console.log("PLATFORM BOX — round on iOS:");
+  for (const r of platform) {
+    console.log(`  ${r.scenario.padEnd(24)} .${r.classes.join(".") || "(classless)"}`);
+    console.log(`    in: ${r.chain.join(" > ") || "(no classed ancestor)"}`);
+  }
+  console.log("");
+}
+if (ancestorOwned.length) {
+  console.log("ANCESTOR-OWNED — correct now, reverts if the named ancestor changes:");
+  for (const r of ancestorOwned) {
+    console.log(`  ${r.scenario.padEnd(24)} .${r.classes.join(".") || "(classless)"}  <- .${r.ownedBy}`);
   }
   console.log("");
 }
 
-// A site whose appearance depends on where it is mounted is the ancestor-scoped defect, measured.
-const mountDependent = rows.filter(
-  (r) => new Set(ROOTS.map((root) => r.measured[root.id].appearance)).size > 1
-);
-console.log(`  appearance changes with mount point     ${mountDependent.length}/${rows.length}`);
-console.log("  (a checkbox whose look depends on where it sits is styled through an ancestor)\n");
-
 stamp("tools/live/checkbox-appearance.json", {
-  roots: ROOTS.map((r) => r.id),
   totals: {
-    sites: rows.length,
-    ownedAnywhere: ownedAnywhere.length,
-    ownedInContainer: ownedInContainer.length,
-    platformBox: platformBox.length,
-    distinctRadii: radii.size,
-    distinctSizes: sizes.size,
-    mountDependent: mountDependent.length,
+    checkboxes: boxes.length,
+    fixtures: scenarios.length,
+    owned: owned.length,
+    ancestorOwned: ancestorOwned.length,
+    selfOwned: selfOwned.length,
+    platformBox: platform.length,
+    distinctShapes: shapes.size,
   },
+  shapes: Object.fromEntries(shapes),
   rows,
-}, ["styles.css", "tools/live/checkbox-appearance.mjs", "tools/live/checkbox-inventory.json"]);
+}, ["styles.css", "tools/live/checkbox-appearance.mjs", "tools/screenshots/scenarios.mjs"]);

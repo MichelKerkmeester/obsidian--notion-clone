@@ -1,999 +1,1656 @@
 {
-  "measuredAt": "2026-08-29T18:05:09.622Z",
+  "measuredAt": "2026-08-29T18:10:04.866Z",
   "inputs": {
     "styles.css": "c4906525fe85",
-    "tools/live/checkbox-appearance.mjs": "78c7f4b67e36",
-    "tools/live/checkbox-inventory.json": "2dd0360185ca"
+    "tools/live/checkbox-appearance.mjs": "a7e61519fdc5",
+    "tools/screenshots/scenarios.mjs": "1395f2dacbfd"
   },
-  "roots": [
-    "container",
-    "modal",
-    "body"
-  ],
   "totals": {
-    "sites": 37,
-    "ownedAnywhere": 17,
-    "ownedInContainer": 11,
-    "platformBox": 20,
-    "distinctRadii": 2,
-    "distinctSizes": 4,
-    "mountDependent": 17
+    "checkboxes": 84,
+    "fixtures": 49,
+    "owned": 61,
+    "ancestorOwned": 61,
+    "selfOwned": 0,
+    "platformBox": 23,
+    "distinctShapes": 2
+  },
+  "shapes": {
+    "16x16 r=4px": 51,
+    "34x18 r=9999px": 10
   },
   "rows": [
     {
-      "id": "board-renderer.ts:282",
-      "classes": [
-        "db-board-column-checkbox"
-      ],
-      "wrapper": null,
-      "measured": {
-        "container": {
-          "appearance": "auto",
-          "radius": "0px",
-          "width": 13,
-          "height": 13
-        },
-        "modal": {
-          "appearance": "auto",
-          "radius": "0px",
-          "width": 13,
-          "height": 13
-        },
-        "body": {
-          "appearance": "auto",
-          "radius": "0px",
-          "width": 13,
-          "height": 13
-        }
-      }
-    },
-    {
-      "id": "board-renderer.ts:534",
-      "classes": [
-        "db-board-column-checkbox"
-      ],
-      "wrapper": null,
-      "measured": {
-        "container": {
-          "appearance": "auto",
-          "radius": "0px",
-          "width": 13,
-          "height": 13
-        },
-        "modal": {
-          "appearance": "auto",
-          "radius": "0px",
-          "width": 13,
-          "height": 13
-        },
-        "body": {
-          "appearance": "auto",
-          "radius": "0px",
-          "width": 13,
-          "height": 13
-        }
-      }
-    },
-    {
-      "id": "board-renderer.ts:620",
-      "classes": [
-        "db-board-subgroup-checkbox"
-      ],
-      "wrapper": null,
-      "measured": {
-        "container": {
-          "appearance": "auto",
-          "radius": "0px",
-          "width": 13,
-          "height": 13
-        },
-        "modal": {
-          "appearance": "auto",
-          "radius": "0px",
-          "width": 13,
-          "height": 13
-        },
-        "body": {
-          "appearance": "auto",
-          "radius": "0px",
-          "width": 13,
-          "height": 13
-        }
-      }
-    },
-    {
-      "id": "board-renderer.ts:863",
-      "classes": [
-        "db-board-card-checkbox"
-      ],
-      "wrapper": null,
-      "measured": {
-        "container": {
-          "appearance": "auto",
-          "radius": "0px",
-          "width": 13,
-          "height": 13
-        },
-        "modal": {
-          "appearance": "auto",
-          "radius": "0px",
-          "width": 13,
-          "height": 13
-        },
-        "body": {
-          "appearance": "auto",
-          "radius": "0px",
-          "width": 13,
-          "height": 13
-        }
-      }
-    },
-    {
-      "id": "calendar-timeline-toolbar-renderer.ts:311",
-      "classes": [
-        "db-toggle-switch"
-      ],
-      "wrapper": null,
-      "measured": {
-        "container": {
-          "appearance": "none",
-          "radius": "9999px",
-          "width": 34,
-          "height": 18
-        },
-        "modal": {
-          "appearance": "auto",
-          "radius": "0px",
-          "width": 13,
-          "height": 13
-        },
-        "body": {
-          "appearance": "auto",
-          "radius": "0px",
-          "width": 13,
-          "height": 13
-        }
-      }
-    },
-    {
-      "id": "calendar-toolbar-renderer.ts:484",
-      "classes": [
-        "db-toggle-switch"
-      ],
-      "wrapper": null,
-      "measured": {
-        "container": {
-          "appearance": "none",
-          "radius": "9999px",
-          "width": 34,
-          "height": 18
-        },
-        "modal": {
-          "appearance": "auto",
-          "radius": "0px",
-          "width": 13,
-          "height": 13
-        },
-        "body": {
-          "appearance": "auto",
-          "radius": "0px",
-          "width": 13,
-          "height": 13
-        }
-      }
-    },
-    {
-      "id": "card-field-renderer.stories.ts:34",
+      "scenario": "add-view-popover",
+      "index": 0,
       "classes": [],
-      "wrapper": null,
+      "chain": [
+        "note-database-container",
+        "db-view-tab-popover db-add-view-popover",
+        "db-add-view-form",
+        "db-add-view-duplicate"
+      ],
       "measured": {
-        "container": {
-          "appearance": "auto",
-          "radius": "0px",
-          "width": 13,
-          "height": 13
-        },
-        "modal": {
-          "appearance": "auto",
-          "radius": "0px",
-          "width": 13,
-          "height": 13
-        },
-        "body": {
-          "appearance": "auto",
-          "radius": "0px",
-          "width": 13,
-          "height": 13
-        }
-      }
+        "appearance": "auto",
+        "radius": "0px",
+        "width": 16,
+        "height": 16
+      },
+      "ownedBy": null
     },
     {
-      "id": "card-field-renderer.ts:184",
+      "scenario": "table-mobile",
+      "index": 0,
       "classes": [],
-      "wrapper": "db-checkbox-cell",
+      "chain": [
+        "note-database-container db-width-default",
+        "db-table-wrap",
+        "db-table",
+        "db-select-col",
+        "db-select-inner"
+      ],
       "measured": {
-        "container": {
-          "appearance": "none",
-          "radius": "4px",
-          "width": 16,
-          "height": 16
-        },
-        "modal": {
-          "appearance": "auto",
-          "radius": "0px",
-          "width": 13,
-          "height": 13
-        },
-        "body": {
-          "appearance": "auto",
-          "radius": "0px",
-          "width": 13,
-          "height": 13
-        }
-      }
+        "appearance": "none",
+        "radius": "4px",
+        "width": 16,
+        "height": 16
+      },
+      "ownedBy": "db-select-inner"
     },
     {
-      "id": "cell-renderer.ts:489",
+      "scenario": "table-mobile",
+      "index": 1,
       "classes": [],
-      "wrapper": "db-checkbox-cell",
-      "measured": {
-        "container": {
-          "appearance": "none",
-          "radius": "4px",
-          "width": 16,
-          "height": 16
-        },
-        "modal": {
-          "appearance": "auto",
-          "radius": "0px",
-          "width": 13,
-          "height": 13
-        },
-        "body": {
-          "appearance": "auto",
-          "radius": "0px",
-          "width": 13,
-          "height": 13
-        }
-      }
-    },
-    {
-      "id": "chart-toolbar-renderer.ts:976",
-      "classes": [
-        "db-toggle-switch"
+      "chain": [
+        "note-database-container db-width-default",
+        "db-table-wrap",
+        "db-table",
+        "db-select-col",
+        "db-select-inner"
       ],
-      "wrapper": null,
       "measured": {
-        "container": {
-          "appearance": "none",
-          "radius": "9999px",
-          "width": 34,
-          "height": 18
-        },
-        "modal": {
-          "appearance": "auto",
-          "radius": "0px",
-          "width": 13,
-          "height": 13
-        },
-        "body": {
-          "appearance": "auto",
-          "radius": "0px",
-          "width": 13,
-          "height": 13
-        }
-      }
+        "appearance": "none",
+        "radius": "4px",
+        "width": 16,
+        "height": 16
+      },
+      "ownedBy": "db-select-inner"
     },
     {
-      "id": "chart-toolbar-renderer.ts:985",
+      "scenario": "table-mobile",
+      "index": 2,
       "classes": [],
-      "wrapper": "db-chart-visible-group-row",
+      "chain": [
+        "note-database-container db-width-default",
+        "db-table-wrap",
+        "db-table",
+        "db-select-col",
+        "db-select-inner"
+      ],
       "measured": {
-        "container": {
-          "appearance": "auto",
-          "radius": "0px",
-          "width": 11,
-          "height": 13
-        },
-        "modal": {
-          "appearance": "auto",
-          "radius": "0px",
-          "width": 13,
-          "height": 13
-        },
-        "body": {
-          "appearance": "auto",
-          "radius": "0px",
-          "width": 13,
-          "height": 13
-        }
-      }
+        "appearance": "none",
+        "radius": "4px",
+        "width": 16,
+        "height": 16
+      },
+      "ownedBy": "db-select-inner"
     },
     {
-      "id": "column-manager-renderer.ts:150",
+      "scenario": "table-mobile",
+      "index": 3,
       "classes": [],
-      "wrapper": "db-column-manager-toggle-all",
+      "chain": [
+        "note-database-container db-width-default",
+        "db-table-wrap",
+        "db-table",
+        "db-select-col",
+        "db-select-inner"
+      ],
       "measured": {
-        "container": {
-          "appearance": "auto",
-          "radius": "0px",
-          "width": 13,
-          "height": 13
-        },
-        "modal": {
-          "appearance": "auto",
-          "radius": "0px",
-          "width": 13,
-          "height": 13
-        },
-        "body": {
-          "appearance": "auto",
-          "radius": "0px",
-          "width": 13,
-          "height": 13
-        }
-      }
+        "appearance": "none",
+        "radius": "4px",
+        "width": 16,
+        "height": 16
+      },
+      "ownedBy": "db-select-inner"
     },
     {
-      "id": "column-manager-renderer.ts:237",
+      "scenario": "table-mobile",
+      "index": 4,
       "classes": [],
-      "wrapper": "db-mobile-reorder-controls",
-      "measured": {
-        "container": {
-          "appearance": "auto",
-          "radius": "0px",
-          "width": 13,
-          "height": 13
-        },
-        "modal": {
-          "appearance": "auto",
-          "radius": "0px",
-          "width": 0,
-          "height": 0
-        },
-        "body": {
-          "appearance": "auto",
-          "radius": "0px",
-          "width": 13,
-          "height": 13
-        }
-      }
-    },
-    {
-      "id": "column-menu.ts:462",
-      "classes": [
-        "db-toggle-switch"
+      "chain": [
+        "note-database-container db-width-default",
+        "db-table-wrap",
+        "db-table",
+        "db-select-col",
+        "db-select-inner"
       ],
-      "wrapper": null,
       "measured": {
-        "container": {
-          "appearance": "none",
-          "radius": "9999px",
-          "width": 34,
-          "height": 18
-        },
-        "modal": {
-          "appearance": "auto",
-          "radius": "0px",
-          "width": 13,
-          "height": 13
-        },
-        "body": {
-          "appearance": "auto",
-          "radius": "0px",
-          "width": 13,
-          "height": 13
-        }
-      }
+        "appearance": "none",
+        "radius": "4px",
+        "width": 16,
+        "height": 16
+      },
+      "ownedBy": "db-select-inner"
     },
     {
-      "id": "embedded-database-renderer.ts:3996",
-      "classes": [
-        "db-selection-clear-checkbox"
+      "scenario": "table-mobile",
+      "index": 5,
+      "classes": [],
+      "chain": [
+        "note-database-container db-width-default",
+        "db-table-wrap",
+        "db-table",
+        "db-select-col",
+        "db-select-inner"
       ],
-      "wrapper": null,
       "measured": {
-        "container": {
-          "appearance": "auto",
-          "radius": "0px",
-          "width": 13,
-          "height": 13
-        },
-        "modal": {
-          "appearance": "auto",
-          "radius": "0px",
-          "width": 13,
-          "height": 13
-        },
-        "body": {
-          "appearance": "auto",
-          "radius": "0px",
-          "width": 13,
-          "height": 13
-        }
-      }
+        "appearance": "none",
+        "radius": "4px",
+        "width": 16,
+        "height": 16
+      },
+      "ownedBy": "db-select-inner"
     },
     {
-      "id": "gallery-renderer.ts:226",
-      "classes": [
-        "db-gallery-group-checkbox"
+      "scenario": "table-mobile",
+      "index": 6,
+      "classes": [],
+      "chain": [
+        "note-database-container db-width-default",
+        "db-table-wrap",
+        "db-table",
+        "db-select-col",
+        "db-select-inner"
       ],
-      "wrapper": null,
       "measured": {
-        "container": {
-          "appearance": "auto",
-          "radius": "0px",
-          "width": 13,
-          "height": 13
-        },
-        "modal": {
-          "appearance": "auto",
-          "radius": "0px",
-          "width": 13,
-          "height": 13
-        },
-        "body": {
-          "appearance": "auto",
-          "radius": "0px",
-          "width": 13,
-          "height": 13
-        }
-      }
+        "appearance": "none",
+        "radius": "4px",
+        "width": 16,
+        "height": 16
+      },
+      "ownedBy": "db-select-inner"
     },
     {
-      "id": "gallery-renderer.ts:288",
-      "classes": [
-        "db-gallery-card-checkbox"
+      "scenario": "table-mobile",
+      "index": 7,
+      "classes": [],
+      "chain": [
+        "note-database-container db-width-default",
+        "db-table-wrap",
+        "db-table",
+        "db-select-col",
+        "db-select-inner"
       ],
-      "wrapper": null,
       "measured": {
-        "container": {
-          "appearance": "auto",
-          "radius": "0px",
-          "width": 13,
-          "height": 13
-        },
-        "modal": {
-          "appearance": "auto",
-          "radius": "0px",
-          "width": 13,
-          "height": 13
-        },
-        "body": {
-          "appearance": "auto",
-          "radius": "0px",
-          "width": 13,
-          "height": 13
-        }
-      }
+        "appearance": "none",
+        "radius": "4px",
+        "width": 16,
+        "height": 16
+      },
+      "ownedBy": "db-select-inner"
     },
     {
-      "id": "list-renderer.ts:220",
-      "classes": [
-        "db-list-group-checkbox"
+      "scenario": "table-mobile",
+      "index": 8,
+      "classes": [],
+      "chain": [
+        "note-database-container db-width-default",
+        "db-table-wrap",
+        "db-table",
+        "db-select-col",
+        "db-select-inner"
       ],
-      "wrapper": null,
       "measured": {
-        "container": {
-          "appearance": "auto",
-          "radius": "0px",
-          "width": 13,
-          "height": 13
-        },
-        "modal": {
-          "appearance": "auto",
-          "radius": "0px",
-          "width": 13,
-          "height": 13
-        },
-        "body": {
-          "appearance": "auto",
-          "radius": "0px",
-          "width": 13,
-          "height": 13
-        }
-      }
+        "appearance": "none",
+        "radius": "4px",
+        "width": 16,
+        "height": 16
+      },
+      "ownedBy": "db-select-inner"
     },
     {
-      "id": "list-renderer.ts:269",
+      "scenario": "table-mobile",
+      "index": 9,
+      "classes": [],
+      "chain": [
+        "note-database-container db-width-default",
+        "db-table-wrap",
+        "db-table",
+        "db-select-col",
+        "db-select-inner"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 16,
+        "height": 16
+      },
+      "ownedBy": "db-select-inner"
+    },
+    {
+      "scenario": "table-mobile",
+      "index": 10,
+      "classes": [],
+      "chain": [
+        "note-database-container db-width-default",
+        "db-table-wrap",
+        "db-table",
+        "db-select-col",
+        "db-select-inner"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 16,
+        "height": 16
+      },
+      "ownedBy": "db-select-inner"
+    },
+    {
+      "scenario": "table-mobile",
+      "index": 11,
+      "classes": [],
+      "chain": [
+        "note-database-container db-width-default",
+        "db-table-wrap",
+        "db-table",
+        "db-select-col",
+        "db-select-inner"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 16,
+        "height": 16
+      },
+      "ownedBy": "db-select-inner"
+    },
+    {
+      "scenario": "list-mobile",
+      "index": 0,
       "classes": [
         "db-list-row-checkbox"
       ],
-      "wrapper": null,
-      "measured": {
-        "container": {
-          "appearance": "auto",
-          "radius": "0px",
-          "width": 13,
-          "height": 13
-        },
-        "modal": {
-          "appearance": "auto",
-          "radius": "0px",
-          "width": 13,
-          "height": 13
-        },
-        "body": {
-          "appearance": "auto",
-          "radius": "0px",
-          "width": 13,
-          "height": 13
-        }
-      }
-    },
-    {
-      "id": "modals/base-import-confirm-modal.ts:134",
-      "classes": [
-        "db-modal-checkbox",
-        "base-import-include-checkbox"
+      "chain": [
+        "note-database-container db-width-default",
+        "db-list",
+        "db-list-row",
+        "db-list-row-controls"
       ],
-      "wrapper": null,
       "measured": {
-        "container": {
-          "appearance": "auto",
-          "radius": "0px",
-          "width": 13,
-          "height": 13
-        },
-        "modal": {
-          "appearance": "none",
-          "radius": "4px",
-          "width": 18,
-          "height": 18
-        },
-        "body": {
-          "appearance": "auto",
-          "radius": "0px",
-          "width": 13,
-          "height": 13
-        }
-      }
+        "appearance": "auto",
+        "radius": "0px",
+        "width": 16,
+        "height": 16
+      },
+      "ownedBy": null
     },
     {
-      "id": "modals/base-import-confirm-modal.ts:179",
+      "scenario": "list-mobile",
+      "index": 1,
       "classes": [
-        "db-modal-checkbox",
-        "base-import-include-checkbox"
+        "db-list-row-checkbox"
       ],
-      "wrapper": null,
+      "chain": [
+        "note-database-container db-width-default",
+        "db-list",
+        "db-list-row",
+        "db-list-row-controls"
+      ],
       "measured": {
-        "container": {
-          "appearance": "auto",
-          "radius": "0px",
-          "width": 13,
-          "height": 13
-        },
-        "modal": {
-          "appearance": "none",
-          "radius": "4px",
-          "width": 18,
-          "height": 18
-        },
-        "body": {
-          "appearance": "auto",
-          "radius": "0px",
-          "width": 13,
-          "height": 13
-        }
-      }
+        "appearance": "auto",
+        "radius": "0px",
+        "width": 16,
+        "height": 16
+      },
+      "ownedBy": null
     },
     {
-      "id": "modals/column-rename-modal.ts:74",
-      "classes": [],
-      "wrapper": null,
-      "measured": {
-        "container": {
-          "appearance": "auto",
-          "radius": "0px",
-          "width": 13,
-          "height": 13
-        },
-        "modal": {
-          "appearance": "auto",
-          "radius": "0px",
-          "width": 13,
-          "height": 13
-        },
-        "body": {
-          "appearance": "auto",
-          "radius": "0px",
-          "width": 13,
-          "height": 13
-        }
-      }
-    },
-    {
-      "id": "modals/column-rename-modal.ts:87",
-      "classes": [],
-      "wrapper": null,
-      "measured": {
-        "container": {
-          "appearance": "auto",
-          "radius": "0px",
-          "width": 13,
-          "height": 13
-        },
-        "modal": {
-          "appearance": "auto",
-          "radius": "0px",
-          "width": 13,
-          "height": 13
-        },
-        "body": {
-          "appearance": "auto",
-          "radius": "0px",
-          "width": 13,
-          "height": 13
-        }
-      }
-    },
-    {
-      "id": "modals/computed-frontmatter-cleanup-modal.ts:51",
+      "scenario": "list-mobile",
+      "index": 2,
       "classes": [
-        "db-modal-checkbox"
+        "db-list-row-checkbox"
       ],
-      "wrapper": null,
+      "chain": [
+        "note-database-container db-width-default",
+        "db-list",
+        "db-list-row",
+        "db-list-row-controls"
+      ],
       "measured": {
-        "container": {
-          "appearance": "auto",
-          "radius": "0px",
-          "width": 13,
-          "height": 13
-        },
-        "modal": {
-          "appearance": "none",
-          "radius": "4px",
-          "width": 18,
-          "height": 18
-        },
-        "body": {
-          "appearance": "auto",
-          "radius": "0px",
-          "width": 13,
-          "height": 13
-        }
-      }
+        "appearance": "auto",
+        "radius": "0px",
+        "width": 16,
+        "height": 16
+      },
+      "ownedBy": null
     },
     {
-      "id": "modals/csv-markdown-export-modal.ts:61",
-      "classes": [],
-      "wrapper": "db-csv-markdown-option-label",
-      "measured": {
-        "container": {
-          "appearance": "auto",
-          "radius": "0px",
-          "width": 13,
-          "height": 13
-        },
-        "modal": {
-          "appearance": "none",
-          "radius": "4px",
-          "width": 20,
-          "height": 20
-        },
-        "body": {
-          "appearance": "auto",
-          "radius": "0px",
-          "width": 13,
-          "height": 13
-        }
-      }
-    },
-    {
-      "id": "modals/invalid-time-events-modal.ts:90",
+      "scenario": "list-mobile",
+      "index": 3,
       "classes": [
-        "db-modal-checkbox",
-        "db-invalid-event-select"
+        "db-list-row-checkbox"
       ],
-      "wrapper": null,
+      "chain": [
+        "note-database-container db-width-default",
+        "db-list",
+        "db-list-row",
+        "db-list-row-controls"
+      ],
       "measured": {
-        "container": {
-          "appearance": "auto",
-          "radius": "0px",
-          "width": 13,
-          "height": 13
-        },
-        "modal": {
-          "appearance": "none",
-          "radius": "4px",
-          "width": 18,
-          "height": 18
-        },
-        "body": {
-          "appearance": "auto",
-          "radius": "0px",
-          "width": 13,
-          "height": 13
-        }
-      }
+        "appearance": "auto",
+        "radius": "0px",
+        "width": 16,
+        "height": 16
+      },
+      "ownedBy": null
     },
     {
-      "id": "modals/invalid-time-events-modal.ts:119",
+      "scenario": "list-mobile",
+      "index": 4,
       "classes": [
-        "db-modal-checkbox",
-        "db-invalid-event-select"
+        "db-list-row-checkbox"
       ],
-      "wrapper": null,
+      "chain": [
+        "note-database-container db-width-default",
+        "db-list",
+        "db-list-row",
+        "db-list-row-controls"
+      ],
       "measured": {
-        "container": {
-          "appearance": "auto",
-          "radius": "0px",
-          "width": 13,
-          "height": 13
-        },
-        "modal": {
-          "appearance": "none",
-          "radius": "4px",
-          "width": 18,
-          "height": 18
-        },
-        "body": {
-          "appearance": "auto",
-          "radius": "0px",
-          "width": 13,
-          "height": 13
-        }
-      }
+        "appearance": "auto",
+        "radius": "0px",
+        "width": 16,
+        "height": 16
+      },
+      "ownedBy": null
     },
     {
-      "id": "record-detail-panel.ts:339",
+      "scenario": "list-mobile",
+      "index": 5,
+      "classes": [
+        "db-list-row-checkbox"
+      ],
+      "chain": [
+        "note-database-container db-width-default",
+        "db-list",
+        "db-list-row",
+        "db-list-row-controls"
+      ],
+      "measured": {
+        "appearance": "auto",
+        "radius": "0px",
+        "width": 16,
+        "height": 16
+      },
+      "ownedBy": null
+    },
+    {
+      "scenario": "list-mobile",
+      "index": 6,
+      "classes": [
+        "db-list-row-checkbox"
+      ],
+      "chain": [
+        "note-database-container db-width-default",
+        "db-list",
+        "db-list-row",
+        "db-list-row-controls"
+      ],
+      "measured": {
+        "appearance": "auto",
+        "radius": "0px",
+        "width": 16,
+        "height": 16
+      },
+      "ownedBy": null
+    },
+    {
+      "scenario": "list-mobile",
+      "index": 7,
+      "classes": [
+        "db-list-row-checkbox"
+      ],
+      "chain": [
+        "note-database-container db-width-default",
+        "db-list",
+        "db-list-row",
+        "db-list-row-controls"
+      ],
+      "measured": {
+        "appearance": "auto",
+        "radius": "0px",
+        "width": 16,
+        "height": 16
+      },
+      "ownedBy": null
+    },
+    {
+      "scenario": "list-mobile",
+      "index": 8,
+      "classes": [
+        "db-list-row-checkbox"
+      ],
+      "chain": [
+        "note-database-container db-width-default",
+        "db-list",
+        "db-list-row",
+        "db-list-row-controls"
+      ],
+      "measured": {
+        "appearance": "auto",
+        "radius": "0px",
+        "width": 16,
+        "height": 16
+      },
+      "ownedBy": null
+    },
+    {
+      "scenario": "list-mobile",
+      "index": 9,
+      "classes": [
+        "db-list-row-checkbox"
+      ],
+      "chain": [
+        "note-database-container db-width-default",
+        "db-list",
+        "db-list-row",
+        "db-list-row-controls"
+      ],
+      "measured": {
+        "appearance": "auto",
+        "radius": "0px",
+        "width": 16,
+        "height": 16
+      },
+      "ownedBy": null
+    },
+    {
+      "scenario": "list-mobile",
+      "index": 10,
+      "classes": [
+        "db-list-row-checkbox"
+      ],
+      "chain": [
+        "note-database-container db-width-default",
+        "db-list",
+        "db-list-row",
+        "db-list-row-controls"
+      ],
+      "measured": {
+        "appearance": "auto",
+        "radius": "0px",
+        "width": 16,
+        "height": 16
+      },
+      "ownedBy": null
+    },
+    {
+      "scenario": "list-mobile",
+      "index": 11,
+      "classes": [
+        "db-list-row-checkbox"
+      ],
+      "chain": [
+        "note-database-container db-width-default",
+        "db-list",
+        "db-list-row",
+        "db-list-row-controls"
+      ],
+      "measured": {
+        "appearance": "auto",
+        "radius": "0px",
+        "width": 16,
+        "height": 16
+      },
+      "ownedBy": null
+    },
+    {
+      "scenario": "calendar-toolbar-options",
+      "index": 0,
+      "classes": [
+        "db-toggle-switch"
+      ],
+      "chain": [
+        "note-database-container",
+        "db-calendar-options-popover db-chart-options-popover",
+        "db-calendar-options-content",
+        "db-chart-options-section",
+        "db-chart-options-row db-chart-options-switch-row"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "9999px",
+        "width": 34,
+        "height": 18
+      },
+      "ownedBy": "note-database-container"
+    },
+    {
+      "scenario": "calendar-toolbar-options",
+      "index": 1,
+      "classes": [
+        "db-toggle-switch"
+      ],
+      "chain": [
+        "note-database-container",
+        "db-calendar-options-popover db-chart-options-popover",
+        "db-calendar-options-content",
+        "db-chart-options-section",
+        "db-chart-options-row db-chart-options-switch-row"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "9999px",
+        "width": 34,
+        "height": 18
+      },
+      "ownedBy": "note-database-container"
+    },
+    {
+      "scenario": "timeline-toolbar-options",
+      "index": 0,
+      "classes": [
+        "db-toggle-switch"
+      ],
+      "chain": [
+        "note-database-container",
+        "db-calendar-timeline-options-popover db-chart-options-popover",
+        "db-calendar-timeline-options-content",
+        "db-chart-options-section",
+        "db-chart-options-row db-chart-options-switch-row"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "9999px",
+        "width": 34,
+        "height": 18
+      },
+      "ownedBy": "note-database-container"
+    },
+    {
+      "scenario": "timeline-toolbar-options",
+      "index": 1,
+      "classes": [
+        "db-toggle-switch"
+      ],
+      "chain": [
+        "note-database-container",
+        "db-calendar-timeline-options-popover db-chart-options-popover",
+        "db-calendar-timeline-options-content",
+        "db-chart-options-section",
+        "db-chart-options-row db-chart-options-switch-row"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "9999px",
+        "width": 34,
+        "height": 18
+      },
+      "ownedBy": "note-database-container"
+    },
+    {
+      "scenario": "timeline-toolbar-options",
+      "index": 2,
+      "classes": [
+        "db-toggle-switch"
+      ],
+      "chain": [
+        "note-database-container",
+        "db-calendar-timeline-options-popover db-chart-options-popover",
+        "db-calendar-timeline-options-content",
+        "db-chart-options-section",
+        "db-chart-options-row db-chart-options-switch-row"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "9999px",
+        "width": 34,
+        "height": 18
+      },
+      "ownedBy": "note-database-container"
+    },
+    {
+      "scenario": "panel-view-config",
+      "index": 0,
+      "classes": [
+        "db-toggle-switch"
+      ],
+      "chain": [
+        "note-database-container",
+        "db-view-config-panel",
+        "db-view-config-row",
+        "db-view-config-field"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "9999px",
+        "width": 34,
+        "height": 18
+      },
+      "ownedBy": "note-database-container"
+    },
+    {
+      "scenario": "panel-view-config",
+      "index": 1,
+      "classes": [
+        "db-toggle-switch"
+      ],
+      "chain": [
+        "note-database-container",
+        "db-view-config-panel",
+        "db-view-config-row",
+        "db-view-config-field"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "9999px",
+        "width": 34,
+        "height": 18
+      },
+      "ownedBy": "note-database-container"
+    },
+    {
+      "scenario": "panel-column-manager",
+      "index": 0,
       "classes": [],
-      "wrapper": "db-checkbox-cell",
+      "chain": [
+        "note-database-container",
+        "db-column-manager",
+        "db-panel-header",
+        "db-panel-header-actions",
+        "db-column-manager-toggle-all"
+      ],
       "measured": {
-        "container": {
-          "appearance": "none",
-          "radius": "4px",
-          "width": 16,
-          "height": 16
-        },
-        "modal": {
-          "appearance": "auto",
-          "radius": "0px",
-          "width": 13,
-          "height": 13
-        },
-        "body": {
-          "appearance": "auto",
-          "radius": "0px",
-          "width": 13,
-          "height": 13
-        }
-      }
+        "appearance": "auto",
+        "radius": "0px",
+        "width": 16,
+        "height": 16
+      },
+      "ownedBy": null
     },
     {
-      "id": "table-renderer.ts:514",
+      "scenario": "panel-column-manager",
+      "index": 1,
       "classes": [],
-      "wrapper": "db-select-inner",
+      "chain": [
+        "note-database-container",
+        "db-column-manager",
+        "db-column-manager-row"
+      ],
       "measured": {
-        "container": {
-          "appearance": "auto",
-          "radius": "0px",
-          "width": 13,
-          "height": 13
-        },
-        "modal": {
-          "appearance": "auto",
-          "radius": "0px",
-          "width": 13,
-          "height": 13
-        },
-        "body": {
-          "appearance": "auto",
-          "radius": "0px",
-          "width": 13,
-          "height": 13
-        }
-      }
+        "appearance": "auto",
+        "radius": "0px",
+        "width": 16,
+        "height": 16
+      },
+      "ownedBy": null
     },
     {
-      "id": "table-renderer.ts:627",
+      "scenario": "panel-column-manager",
+      "index": 2,
+      "classes": [],
+      "chain": [
+        "note-database-container",
+        "db-column-manager",
+        "db-column-manager-row"
+      ],
+      "measured": {
+        "appearance": "auto",
+        "radius": "0px",
+        "width": 16,
+        "height": 16
+      },
+      "ownedBy": null
+    },
+    {
+      "scenario": "panel-column-manager",
+      "index": 3,
+      "classes": [],
+      "chain": [
+        "note-database-container",
+        "db-column-manager",
+        "db-column-manager-row"
+      ],
+      "measured": {
+        "appearance": "auto",
+        "radius": "0px",
+        "width": 16,
+        "height": 16
+      },
+      "ownedBy": null
+    },
+    {
+      "scenario": "panel-column-manager",
+      "index": 4,
+      "classes": [],
+      "chain": [
+        "note-database-container",
+        "db-column-manager",
+        "db-column-manager-row"
+      ],
+      "measured": {
+        "appearance": "auto",
+        "radius": "0px",
+        "width": 16,
+        "height": 16
+      },
+      "ownedBy": null
+    },
+    {
+      "scenario": "panel-column-manager",
+      "index": 5,
+      "classes": [],
+      "chain": [
+        "note-database-container",
+        "db-column-manager",
+        "db-column-manager-row"
+      ],
+      "measured": {
+        "appearance": "auto",
+        "radius": "0px",
+        "width": 16,
+        "height": 16
+      },
+      "ownedBy": null
+    },
+    {
+      "scenario": "panel-column-manager",
+      "index": 6,
+      "classes": [],
+      "chain": [
+        "note-database-container",
+        "db-column-manager",
+        "db-column-manager-row"
+      ],
+      "measured": {
+        "appearance": "auto",
+        "radius": "0px",
+        "width": 16,
+        "height": 16
+      },
+      "ownedBy": null
+    },
+    {
+      "scenario": "chrome-table-footer",
+      "index": 0,
+      "classes": [],
+      "chain": [
+        "note-database-container",
+        "db-table-wrap",
+        "db-table",
+        "db-select-col",
+        "db-select-inner"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 16,
+        "height": 16
+      },
+      "ownedBy": "db-select-inner"
+    },
+    {
+      "scenario": "chrome-table-footer",
+      "index": 1,
+      "classes": [],
+      "chain": [
+        "note-database-container",
+        "db-table-wrap",
+        "db-table",
+        "db-select-col",
+        "db-select-inner"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 16,
+        "height": 16
+      },
+      "ownedBy": "db-select-inner"
+    },
+    {
+      "scenario": "chrome-table-footer",
+      "index": 2,
+      "classes": [],
+      "chain": [
+        "note-database-container",
+        "db-table-wrap",
+        "db-table",
+        "db-select-col",
+        "db-select-inner"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 16,
+        "height": 16
+      },
+      "ownedBy": "db-select-inner"
+    },
+    {
+      "scenario": "chrome-table-footer",
+      "index": 3,
+      "classes": [],
+      "chain": [
+        "note-database-container",
+        "db-table-wrap",
+        "db-table",
+        "db-select-col",
+        "db-select-inner"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 16,
+        "height": 16
+      },
+      "ownedBy": "db-select-inner"
+    },
+    {
+      "scenario": "chrome-table-footer",
+      "index": 4,
+      "classes": [],
+      "chain": [
+        "note-database-container",
+        "db-table-wrap",
+        "db-table",
+        "db-select-col",
+        "db-select-inner"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 16,
+        "height": 16
+      },
+      "ownedBy": "db-select-inner"
+    },
+    {
+      "scenario": "chrome-table-footer",
+      "index": 5,
+      "classes": [],
+      "chain": [
+        "note-database-container",
+        "db-table-wrap",
+        "db-table",
+        "db-select-col",
+        "db-select-inner"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 16,
+        "height": 16
+      },
+      "ownedBy": "db-select-inner"
+    },
+    {
+      "scenario": "chrome-table-footer",
+      "index": 6,
+      "classes": [],
+      "chain": [
+        "note-database-container",
+        "db-table-wrap",
+        "db-table",
+        "db-select-col",
+        "db-select-inner"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 16,
+        "height": 16
+      },
+      "ownedBy": "db-select-inner"
+    },
+    {
+      "scenario": "chrome-table-footer",
+      "index": 7,
+      "classes": [],
+      "chain": [
+        "note-database-container",
+        "db-table-wrap",
+        "db-table",
+        "db-select-col",
+        "db-select-inner"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 16,
+        "height": 16
+      },
+      "ownedBy": "db-select-inner"
+    },
+    {
+      "scenario": "chrome-table-footer",
+      "index": 8,
+      "classes": [],
+      "chain": [
+        "note-database-container",
+        "db-table-wrap",
+        "db-table",
+        "db-select-col",
+        "db-select-inner"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 16,
+        "height": 16
+      },
+      "ownedBy": "db-select-inner"
+    },
+    {
+      "scenario": "chrome-table-footer",
+      "index": 9,
+      "classes": [],
+      "chain": [
+        "note-database-container",
+        "db-table-wrap",
+        "db-table",
+        "db-select-col",
+        "db-select-inner"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 16,
+        "height": 16
+      },
+      "ownedBy": "db-select-inner"
+    },
+    {
+      "scenario": "chrome-table-footer",
+      "index": 10,
+      "classes": [],
+      "chain": [
+        "note-database-container",
+        "db-table-wrap",
+        "db-table",
+        "db-select-col",
+        "db-select-inner"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 16,
+        "height": 16
+      },
+      "ownedBy": "db-select-inner"
+    },
+    {
+      "scenario": "chrome-table-footer",
+      "index": 11,
+      "classes": [],
+      "chain": [
+        "note-database-container",
+        "db-table-wrap",
+        "db-table",
+        "db-select-col",
+        "db-select-inner"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 16,
+        "height": 16
+      },
+      "ownedBy": "db-select-inner"
+    },
+    {
+      "scenario": "chrome-table-footer",
+      "index": 12,
+      "classes": [],
+      "chain": [
+        "note-database-container",
+        "db-table-wrap",
+        "db-table",
+        "db-select-col",
+        "db-select-inner"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 16,
+        "height": 16
+      },
+      "ownedBy": "db-select-inner"
+    },
+    {
+      "scenario": "chrome-table-footer",
+      "index": 13,
+      "classes": [],
+      "chain": [
+        "note-database-container",
+        "db-table-wrap",
+        "db-table",
+        "db-select-col",
+        "db-select-inner"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 16,
+        "height": 16
+      },
+      "ownedBy": "db-select-inner"
+    },
+    {
+      "scenario": "chrome-table-footer",
+      "index": 14,
+      "classes": [],
+      "chain": [
+        "note-database-container",
+        "db-table-wrap",
+        "db-table",
+        "db-select-col",
+        "db-select-inner"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 16,
+        "height": 16
+      },
+      "ownedBy": "db-select-inner"
+    },
+    {
+      "scenario": "chrome-table-footer",
+      "index": 15,
+      "classes": [],
+      "chain": [
+        "note-database-container",
+        "db-table-wrap",
+        "db-table",
+        "db-select-col",
+        "db-select-inner"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 16,
+        "height": 16
+      },
+      "ownedBy": "db-select-inner"
+    },
+    {
+      "scenario": "chrome-table-footer",
+      "index": 16,
+      "classes": [],
+      "chain": [
+        "note-database-container",
+        "db-table-wrap",
+        "db-table",
+        "db-select-col",
+        "db-select-inner"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 16,
+        "height": 16
+      },
+      "ownedBy": "db-select-inner"
+    },
+    {
+      "scenario": "chrome-table-footer",
+      "index": 17,
+      "classes": [],
+      "chain": [
+        "note-database-container",
+        "db-table-wrap",
+        "db-table",
+        "db-select-col",
+        "db-select-inner"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 16,
+        "height": 16
+      },
+      "ownedBy": "db-select-inner"
+    },
+    {
+      "scenario": "chrome-table-footer",
+      "index": 18,
+      "classes": [],
+      "chain": [
+        "note-database-container",
+        "db-table-wrap",
+        "db-table",
+        "db-select-col",
+        "db-select-inner"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 16,
+        "height": 16
+      },
+      "ownedBy": "db-select-inner"
+    },
+    {
+      "scenario": "chrome-table-footer",
+      "index": 19,
+      "classes": [],
+      "chain": [
+        "note-database-container",
+        "db-table-wrap",
+        "db-table",
+        "db-select-col",
+        "db-select-inner"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 16,
+        "height": 16
+      },
+      "ownedBy": "db-select-inner"
+    },
+    {
+      "scenario": "chrome-table-footer",
+      "index": 20,
+      "classes": [],
+      "chain": [
+        "note-database-container",
+        "db-table-wrap",
+        "db-table",
+        "db-select-col",
+        "db-select-inner"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 16,
+        "height": 16
+      },
+      "ownedBy": "db-select-inner"
+    },
+    {
+      "scenario": "chrome-table-footer",
+      "index": 21,
+      "classes": [],
+      "chain": [
+        "note-database-container",
+        "db-table-wrap",
+        "db-table",
+        "db-select-col",
+        "db-select-inner"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 16,
+        "height": 16
+      },
+      "ownedBy": "db-select-inner"
+    },
+    {
+      "scenario": "chrome-table-footer",
+      "index": 22,
+      "classes": [],
+      "chain": [
+        "note-database-container",
+        "db-table-wrap",
+        "db-table",
+        "db-select-col",
+        "db-select-inner"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 16,
+        "height": 16
+      },
+      "ownedBy": "db-select-inner"
+    },
+    {
+      "scenario": "chrome-table-footer",
+      "index": 23,
+      "classes": [],
+      "chain": [
+        "note-database-container",
+        "db-table-wrap",
+        "db-table",
+        "db-select-col",
+        "db-select-inner"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 16,
+        "height": 16
+      },
+      "ownedBy": "db-select-inner"
+    },
+    {
+      "scenario": "chrome-table-footer",
+      "index": 24,
+      "classes": [],
+      "chain": [
+        "note-database-container",
+        "db-table-wrap",
+        "db-table",
+        "db-select-col",
+        "db-select-inner"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 16,
+        "height": 16
+      },
+      "ownedBy": "db-select-inner"
+    },
+    {
+      "scenario": "chrome-group-header-row",
+      "index": 0,
+      "classes": [],
+      "chain": [
+        "note-database-container",
+        "db-grouped-table",
+        "db-table-wrap",
+        "db-table",
+        "db-select-col",
+        "db-select-inner"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 16,
+        "height": 16
+      },
+      "ownedBy": "db-select-inner"
+    },
+    {
+      "scenario": "chrome-group-header-row",
+      "index": 1,
       "classes": [
         "db-group-divider-checkbox"
       ],
-      "wrapper": null,
+      "chain": [
+        "note-database-container",
+        "db-grouped-table",
+        "db-table-wrap",
+        "db-table",
+        "db-group-divider-row db-group-header",
+        "db-group-divider-content"
+      ],
       "measured": {
-        "container": {
-          "appearance": "auto",
-          "radius": "0px",
-          "width": 13,
-          "height": 13
-        },
-        "modal": {
-          "appearance": "auto",
-          "radius": "0px",
-          "width": 13,
-          "height": 13
-        },
-        "body": {
-          "appearance": "auto",
-          "radius": "0px",
-          "width": 13,
-          "height": 13
-        }
-      }
+        "appearance": "auto",
+        "radius": "0px",
+        "width": 16,
+        "height": 16
+      },
+      "ownedBy": null
     },
     {
-      "id": "table-renderer.ts:785",
+      "scenario": "chrome-group-header-row",
+      "index": 2,
+      "classes": [
+        "db-group-divider-checkbox"
+      ],
+      "chain": [
+        "note-database-container",
+        "db-grouped-table",
+        "db-table-wrap",
+        "db-table",
+        "db-group-divider-row db-group-header db-group-header--depth-1",
+        "db-group-divider-content"
+      ],
+      "measured": {
+        "appearance": "auto",
+        "radius": "0px",
+        "width": 16,
+        "height": 16
+      },
+      "ownedBy": null
+    },
+    {
+      "scenario": "chrome-group-header-row",
+      "index": 3,
       "classes": [],
-      "wrapper": "db-select-inner",
+      "chain": [
+        "note-database-container",
+        "db-grouped-table",
+        "db-table-wrap",
+        "db-table",
+        "db-select-col",
+        "db-select-inner"
+      ],
       "measured": {
-        "container": {
-          "appearance": "auto",
-          "radius": "0px",
-          "width": 13,
-          "height": 13
-        },
-        "modal": {
-          "appearance": "auto",
-          "radius": "0px",
-          "width": 13,
-          "height": 13
-        },
-        "body": {
-          "appearance": "auto",
-          "radius": "0px",
-          "width": 13,
-          "height": 13
-        }
-      }
+        "appearance": "none",
+        "radius": "4px",
+        "width": 16,
+        "height": 16
+      },
+      "ownedBy": "db-select-inner"
     },
     {
-      "id": "toolbar-renderer.ts:1280",
+      "scenario": "chrome-group-header-row",
+      "index": 4,
       "classes": [],
-      "wrapper": "db-add-view-duplicate",
-      "measured": {
-        "container": {
-          "appearance": "auto",
-          "radius": "0px",
-          "width": 13,
-          "height": 13
-        },
-        "modal": {
-          "appearance": "auto",
-          "radius": "0px",
-          "width": 13,
-          "height": 13
-        },
-        "body": {
-          "appearance": "auto",
-          "radius": "0px",
-          "width": 13,
-          "height": 13
-        }
-      }
-    },
-    {
-      "id": "toolbar-renderer.ts:1732",
-      "classes": [
-        "db-toggle-switch"
+      "chain": [
+        "note-database-container",
+        "db-grouped-table",
+        "db-table-wrap",
+        "db-table",
+        "db-select-col",
+        "db-select-inner"
       ],
-      "wrapper": null,
       "measured": {
-        "container": {
-          "appearance": "none",
-          "radius": "9999px",
-          "width": 34,
-          "height": 18
-        },
-        "modal": {
-          "appearance": "auto",
-          "radius": "0px",
-          "width": 13,
-          "height": 13
-        },
-        "body": {
-          "appearance": "auto",
-          "radius": "0px",
-          "width": 13,
-          "height": 13
-        }
-      }
+        "appearance": "none",
+        "radius": "4px",
+        "width": 16,
+        "height": 16
+      },
+      "ownedBy": "db-select-inner"
     },
     {
-      "id": "toolbar-renderer.ts:1752",
-      "classes": [
-        "db-toggle-switch"
-      ],
-      "wrapper": null,
-      "measured": {
-        "container": {
-          "appearance": "none",
-          "radius": "9999px",
-          "width": 34,
-          "height": 18
-        },
-        "modal": {
-          "appearance": "auto",
-          "radius": "0px",
-          "width": 13,
-          "height": 13
-        },
-        "body": {
-          "appearance": "auto",
-          "radius": "0px",
-          "width": 13,
-          "height": 13
-        }
-      }
-    },
-    {
-      "id": "toolbar-renderer.ts:1824",
-      "classes": [
-        "db-toggle-switch"
-      ],
-      "wrapper": null,
-      "measured": {
-        "container": {
-          "appearance": "none",
-          "radius": "9999px",
-          "width": 34,
-          "height": 18
-        },
-        "modal": {
-          "appearance": "auto",
-          "radius": "0px",
-          "width": 13,
-          "height": 13
-        },
-        "body": {
-          "appearance": "auto",
-          "radius": "0px",
-          "width": 13,
-          "height": 13
-        }
-      }
-    },
-    {
-      "id": "view-config-panel-renderer.ts:2032",
+      "scenario": "chrome-group-header-row",
+      "index": 5,
       "classes": [],
-      "wrapper": "db-view-config-help",
+      "chain": [
+        "note-database-container",
+        "db-grouped-table",
+        "db-table-wrap",
+        "db-table",
+        "db-select-col",
+        "db-select-inner"
+      ],
       "measured": {
-        "container": {
-          "appearance": "auto",
-          "radius": "0px",
-          "width": 13,
-          "height": 13
-        },
-        "modal": {
-          "appearance": "auto",
-          "radius": "0px",
-          "width": 13,
-          "height": 13
-        },
-        "body": {
-          "appearance": "auto",
-          "radius": "0px",
-          "width": 13,
-          "height": 13
-        }
-      }
+        "appearance": "none",
+        "radius": "4px",
+        "width": 16,
+        "height": 16
+      },
+      "ownedBy": "db-select-inner"
     },
     {
-      "id": "view-config-panel-renderer.ts:2054",
+      "scenario": "chrome-group-header-row",
+      "index": 6,
+      "classes": [],
+      "chain": [
+        "note-database-container",
+        "db-grouped-table",
+        "db-table-wrap",
+        "db-table",
+        "db-select-col",
+        "db-select-inner"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 16,
+        "height": 16
+      },
+      "ownedBy": "db-select-inner"
+    },
+    {
+      "scenario": "chrome-group-header-row",
+      "index": 7,
+      "classes": [],
+      "chain": [
+        "note-database-container",
+        "db-grouped-table",
+        "db-table-wrap",
+        "db-table",
+        "db-select-col",
+        "db-select-inner"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 16,
+        "height": 16
+      },
+      "ownedBy": "db-select-inner"
+    },
+    {
+      "scenario": "chrome-group-header-row",
+      "index": 8,
+      "classes": [],
+      "chain": [
+        "note-database-container",
+        "db-grouped-table",
+        "db-table-wrap",
+        "db-table",
+        "db-select-col",
+        "db-select-inner"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 16,
+        "height": 16
+      },
+      "ownedBy": "db-select-inner"
+    },
+    {
+      "scenario": "chrome-group-header-row",
+      "index": 9,
+      "classes": [],
+      "chain": [
+        "note-database-container",
+        "db-grouped-table",
+        "db-table-wrap",
+        "db-table",
+        "db-select-col",
+        "db-select-inner"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 16,
+        "height": 16
+      },
+      "ownedBy": "db-select-inner"
+    },
+    {
+      "scenario": "chrome-group-header-row",
+      "index": 10,
+      "classes": [
+        "db-group-divider-checkbox"
+      ],
+      "chain": [
+        "note-database-container",
+        "db-grouped-table",
+        "db-table-wrap",
+        "db-table",
+        "db-group-divider-row db-group-header",
+        "db-group-divider-content"
+      ],
+      "measured": {
+        "appearance": "auto",
+        "radius": "0px",
+        "width": 16,
+        "height": 16
+      },
+      "ownedBy": null
+    },
+    {
+      "scenario": "chrome-group-header-row",
+      "index": 11,
+      "classes": [],
+      "chain": [
+        "note-database-container",
+        "db-grouped-table",
+        "db-table-wrap",
+        "db-table",
+        "db-select-col",
+        "db-select-inner"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 16,
+        "height": 16
+      },
+      "ownedBy": "db-select-inner"
+    },
+    {
+      "scenario": "chrome-group-header-row",
+      "index": 12,
+      "classes": [],
+      "chain": [
+        "note-database-container",
+        "db-grouped-table",
+        "db-table-wrap",
+        "db-table",
+        "db-select-col",
+        "db-select-inner"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 16,
+        "height": 16
+      },
+      "ownedBy": "db-select-inner"
+    },
+    {
+      "scenario": "chrome-group-header-row",
+      "index": 13,
+      "classes": [],
+      "chain": [
+        "note-database-container",
+        "db-grouped-table",
+        "db-table-wrap",
+        "db-table",
+        "db-select-col",
+        "db-select-inner"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 16,
+        "height": 16
+      },
+      "ownedBy": "db-select-inner"
+    },
+    {
+      "scenario": "chrome-group-header-row",
+      "index": 14,
+      "classes": [],
+      "chain": [
+        "note-database-container",
+        "db-grouped-table",
+        "db-table-wrap",
+        "db-table",
+        "db-select-col",
+        "db-select-inner"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 16,
+        "height": 16
+      },
+      "ownedBy": "db-select-inner"
+    },
+    {
+      "scenario": "chrome-group-header-row",
+      "index": 15,
+      "classes": [],
+      "chain": [
+        "note-database-container",
+        "db-grouped-table",
+        "db-table-wrap",
+        "db-table",
+        "db-select-col",
+        "db-select-inner"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 16,
+        "height": 16
+      },
+      "ownedBy": "db-select-inner"
+    },
+    {
+      "scenario": "chrome-group-header-row",
+      "index": 16,
+      "classes": [],
+      "chain": [
+        "note-database-container",
+        "db-grouped-table",
+        "db-table-wrap",
+        "db-table",
+        "db-select-col",
+        "db-select-inner"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 16,
+        "height": 16
+      },
+      "ownedBy": "db-select-inner"
+    },
+    {
+      "scenario": "chrome-chart-options-popover",
+      "index": 0,
       "classes": [
         "db-toggle-switch"
       ],
-      "wrapper": null,
+      "chain": [
+        "note-database-container",
+        "db-chart-options-popover",
+        "db-chart-options-section",
+        "db-chart-options-row db-chart-options-switch"
+      ],
       "measured": {
-        "container": {
-          "appearance": "none",
-          "radius": "9999px",
-          "width": 34,
-          "height": 18
-        },
-        "modal": {
-          "appearance": "auto",
-          "radius": "0px",
-          "width": 13,
-          "height": 13
-        },
-        "body": {
-          "appearance": "auto",
-          "radius": "0px",
-          "width": 13,
-          "height": 13
-        }
-      }
+        "appearance": "none",
+        "radius": "9999px",
+        "width": 34,
+        "height": 18
+      },
+      "ownedBy": "note-database-container"
+    },
+    {
+      "scenario": "chrome-chart-options-popover",
+      "index": 1,
+      "classes": [
+        "db-toggle-switch"
+      ],
+      "chain": [
+        "note-database-container",
+        "db-chart-options-popover",
+        "db-chart-options-section",
+        "db-chart-options-row db-chart-options-switch"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "9999px",
+        "width": 34,
+        "height": 18
+      },
+      "ownedBy": "note-database-container"
+    },
+    {
+      "scenario": "chrome-chart-options-popover",
+      "index": 2,
+      "classes": [
+        "db-toggle-switch"
+      ],
+      "chain": [
+        "note-database-container",
+        "db-chart-options-popover",
+        "db-chart-options-section",
+        "db-chart-options-row db-chart-options-switch"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "9999px",
+        "width": 34,
+        "height": 18
+      },
+      "ownedBy": "note-database-container"
     }
   ]
 }

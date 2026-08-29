@@ -116,6 +116,55 @@ function creationSites() {
     };
 
     /**
+     * Map each element variable to the class it was created with and the variable it was created
+     * from, so an input's full ancestor chain can be rebuilt.
+     *
+     * The immediate parent is not enough. The table's select-all checkbox is reached by
+     * `.db-table .db-select-col .db-select-inner input`, four levels deep, and a harness that
+     * renders only the nearest parent never matches the rule — the input shows the platform box,
+     * stripping the parent changes nothing, and the site reads as safe when it was measured wrong.
+     */
+    const elementVars = new Map();
+    const collectVars = (node) => {
+      if (
+        ts.isVariableDeclaration(node) &&
+        node.name &&
+        ts.isIdentifier(node.name) &&
+        node.initializer &&
+        ts.isCallExpression(node.initializer) &&
+        ts.isPropertyAccessExpression(node.initializer.expression)
+      ) {
+        const call = node.initializer;
+        const method = call.expression.name.getText(source);
+        if (/^create(El|Div|Span)$/.test(method)) {
+          const receiver = call.expression.expression;
+          const args = call.arguments.filter((a) => ts.isObjectLiteralExpression(a));
+          const cls = args.length ? classOf(args[args.length - 1]) : null;
+          elementVars.set(node.name.getText(source), {
+            cls,
+            from: ts.isIdentifier(receiver) ? receiver.getText(source) : null,
+          });
+        }
+      }
+      ts.forEachChild(node, collectVars);
+    };
+    collectVars(source);
+
+    /** Walk receiver to receiver, outermost first, stopping on a cycle or an unknown variable. */
+    const chainFor = (varName) => {
+      const chain = [];
+      const seen = new Set();
+      let current = varName;
+      while (current && elementVars.has(current) && !seen.has(current)) {
+        seen.add(current);
+        const entry = elementVars.get(current);
+        if (entry.cls && entry.cls !== "(computed)") chain.unshift(entry.cls);
+        current = entry.from;
+      }
+      return chain;
+    };
+
+    /**
      * Every place in the file, in source order, that puts a class on an element.
      *
      * Two forms, and both matter. `createEl("div", { cls: "x" })` names it at construction, and
@@ -164,9 +213,19 @@ function creationSites() {
         }
       }
 
+      // The receiver of the createEl call is the input's parent; its chain is the input's ancestry.
+      let receiverName = null;
+      let walk = entry.node.parent;
+      while (walk && !ts.isCallExpression(walk)) walk = walk.parent;
+      if (walk && ts.isPropertyAccessExpression(walk.expression) && ts.isIdentifier(walk.expression.expression)) {
+        receiverName = walk.expression.expression.getText(source);
+      }
+      const chain = receiverName ? chainFor(receiverName) : [];
+
       sites.push({
         file: rel,
         line: line + 1,
+        chain,
         classes: ownClass && ownClass !== "(computed)" ? ownClass.split(/\s+/).filter(Boolean) : [],
         computedClass: ownClass === "(computed)",
         borrowed,
