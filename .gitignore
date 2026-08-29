@@ -1,13 +1,16 @@
 # Override the operator's global /specs ignore so the plugin specs live in this repo.
 !/specs/
 # Keep real finance-data packet + heavy working dirs OUT of the public repo.
-specs/personal/
+specs/public/000-personal/
 specs/**/context/
 specs/**/scratch/
 specs/**/research/**/lineages/
 .DS_Store
 node_modules/
 .worktrees/
+
+# Upstream's Chinese README is not carried in this fork.
+README.zh-CN.md
 
 # Shared AI-tooling symlinks into the Public code environment.
 .opencode
