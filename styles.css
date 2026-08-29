@@ -24,7 +24,8 @@
 .db-dropdown-popover,
 .db-cell-option-popover,
 .formula-workbench-modal,
-.db-chart-drilldown-modal {
+.db-chart-drilldown-modal,
+.db-surface {
   color-scheme: light dark;
   -webkit-tap-highlight-color: transparent;
   -webkit-font-smoothing: antialiased;
@@ -430,7 +431,8 @@
   .db-dropdown-popover,
   .db-cell-option-popover,
   .formula-workbench-modal,
-  .db-chart-drilldown-modal
+  .db-chart-drilldown-modal,
+  .db-surface
 ) {
   --db-surface-raised: color-mix(in srgb, var(--background-primary) 97%, white);
   --db-surface-overlay: color-mix(in srgb, var(--background-primary) 93%, white);

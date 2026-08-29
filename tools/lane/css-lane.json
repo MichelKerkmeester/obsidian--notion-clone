@@ -1,0 +1,14 @@
+{
+  "holder": "000-surface-contract-and-truthful-harness",
+  "acquiredAt": "2026-08-29T17:27:00.333Z",
+  "baselineHash": "9732449e4746",
+  "baselineCommit": "f4319e3e768a",
+  "history": [
+    {
+      "event": "acquire",
+      "phase": "000-surface-contract-and-truthful-harness",
+      "at": "2026-08-29T17:27:00.360Z",
+      "hash": "9732449e4746"
+    }
+  ]
+}

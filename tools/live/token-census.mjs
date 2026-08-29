@@ -104,14 +104,19 @@ const rows = await page.evaluate(({ classes, props }) => {
   return classes.map((cls) => {
     const inside = read(host, cls);
     const onBody = read(document.body, cls);
+    // What the class computes once it also carries the surface marker — the state a migrated
+    // call site reaches. Recording it beside the other two is what makes the delta legible.
+    const marked = read(document.body, `db-surface ${cls}`);
     const differing = props.filter((p) => inside[p] !== onBody[p]);
     return {
       cls,
       differing,
       tokensInside: Boolean(inside.__radiusToken),
       tokensOnBody: Boolean(onBody.__radiusToken),
+      tokensWhenMarked: Boolean(marked.__radiusToken),
       inside: { radius: inside.borderRadius, font: inside.fontSize, token: inside.__radiusToken },
       onBody: { radius: onBody.borderRadius, font: onBody.fontSize, token: onBody.__radiusToken },
+      marked: { radius: marked.borderRadius, font: marked.fontSize, token: marked.__radiusToken },
     };
   });
 }, { classes, props: PROPS });
@@ -134,7 +139,9 @@ if (process.argv.includes("--json")) {
   console.log(`  token-root selectors           ${tokenRoots.length}`);
   console.log(`  compute differently on body    ${differ.length}/${rows.length}`);
   console.log(`  carry NO tokens on body        ${tokenless.length}/${rows.length}`);
-  console.log(`  not in the root, tokenless     ${bodyMountedMissing.length}\n`);
+  console.log(`  not in the root, tokenless     ${bodyMountedMissing.length}`);
+  console.log(`  regain tokens when marked      ${rows.filter((r) => !r.tokensOnBody && r.tokensWhenMarked).length}/${tokenless.length}`);
+  console.log(`  STILL wrong when marked        ${rows.filter((r) => r.tokensWhenMarked && r.marked.radius !== r.inside.radius).length} (the rule is ancestor-scoped, not a token problem)\n`);
   console.log("  worst offenders (radius inside -> on body):");
   for (const r of differ.filter((x) => x.inside.radius !== x.onBody.radius).slice(0, 8)) {
     console.log(`    ${r.cls.padEnd(34)} ${r.inside.radius} -> ${r.onBody.radius}`);

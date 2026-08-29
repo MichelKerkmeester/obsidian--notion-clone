@@ -53,7 +53,12 @@ export function createOwnedMenu(
   doc: Document,
   options: { returnFocus?: HTMLElement | null; onClose?: () => void } = {},
 ): OwnedMenuHandle {
-  const el = doc.body.createDiv({ cls: "db-menu db-owned-menu" });
+  // `db-surface` is what carries the design tokens to a surface mounted outside the plugin's
+  // container. Without it a menu on the body inherits none of the scale and silently falls back to
+  // whatever the browser and the host theme supply — measured across every overlay class, seventy
+  // of seventy-three lose their tokens at the place they actually mount, and a menu ships
+  // square-cornered a size too large.
+  const el = doc.body.createDiv({ cls: "db-surface db-menu db-owned-menu" });
   el.setAttr("role", "menu");
   el.setAttr("tabindex", "-1");
 
