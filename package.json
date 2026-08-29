@@ -25,7 +25,8 @@
     "census:cascade": "node tools/live/cascade-audit.mjs",
     "lint:tools": "eslint \"tools/**/*.mjs\"",
     "screenshots:scan-pinned": "node tools/screenshots/scan-pinned-values.mjs",
-    "gate": "node tools/gate.mjs"
+    "gate": "node tools/gate.mjs",
+    "lane:check": "node tools/lane/check-lane.mjs"
   },
   "keywords": [
     "obsidian",

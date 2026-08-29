@@ -1,7 +1,7 @@
 {
   "holder": "000-surface-contract-and-truthful-harness",
   "acquiredAt": "2026-08-29T17:27:00.333Z",
-  "baselineHash": "9732449e4746",
+  "baselineHash": "c4906525fe85",
   "baselineCommit": "f4319e3e768a",
   "history": [
     {
@@ -9,6 +9,13 @@
       "phase": "000-surface-contract-and-truthful-harness",
       "at": "2026-08-29T17:27:00.360Z",
       "hash": "9732449e4746"
+    },
+    {
+      "event": "edit",
+      "phase": "000-surface-contract-and-truthful-harness",
+      "at": "2026-08-29T18:11:10.694Z",
+      "hash": "c4906525fe85",
+      "note": "added .db-surface to the light and dark token roots so a body-mounted surface inherits the scale"
     }
   ]
 }
