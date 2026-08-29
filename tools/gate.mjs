@@ -45,6 +45,9 @@ const CHECKS = [
   { name: "naming", cmd: ["node", "tools/naming/scan-naming.mjs"] },
   { name: "pinned-values", cmd: ["node", "tools/screenshots/scan-pinned-values.mjs"] },
   { name: "css-lane", cmd: ["node", "tools/lane/check-lane.mjs"] },
+  // Runs here, not only at release. Every phase edits the same stylesheet in turn, so a result
+  // measured green three phases ago describes a tree that no longer exists unless something checks.
+  { name: "replay", cmd: ["node", "tools/live/replay.mjs"] },
   { name: "inverted-assertions", cmd: ["node", "tools/live/guard-inverted-assertions.mjs"] },
   { name: "screenshots-fresh", cmd: ["npm", "run", "screenshots:verify"] },
   { name: "story-coverage", cmd: ["npm", "run", "storybook:coverage"] },
