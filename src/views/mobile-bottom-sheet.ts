@@ -30,6 +30,7 @@
  */
 export function applySheetChrome(panel: HTMLElement, isSheet: boolean): void {
   panel.toggleClass("db-mobile-bottom-sheet", isSheet);
+  setSheetMount(panel, isSheet);
   const existingHandle = panel.querySelector<HTMLElement>(".db-mobile-bottom-sheet-handle");
   if (isSheet && !existingHandle) {
     const handle = panel.ownerDocument.createElement("div");
@@ -39,6 +40,62 @@ export function applySheetChrome(panel: HTMLElement, isSheet: boolean): void {
     return;
   }
   if (!isSheet) existingHandle?.remove();
+}
+
+// ───────────────────────────────────────────────────────────────────
+// 1b. THE MOUNT POINT
+// ───────────────────────────────────────────────────────────────────
+
+/** Where a panel lived before it became a sheet, so it can be put back. */
+const originalMount = new WeakMap<HTMLElement, { parent: HTMLElement; before: ChildNode | null }>();
+
+/**
+ * Move a sheet to the document body, and put it back when it stops being one.
+ *
+ * A sheet must cover Obsidian's bottom navigation bar, and no z-index achieves that. The navbar is
+ * a fixed child of the app container; a panel inside the plugin's own container is in a different
+ * part of the tree, and hit-testing a point over the navbar returns the navbar even at z-index
+ * 9999. Move the same node to the body and the point returns the sheet. It is a question of where
+ * the node is, not what number it carries.
+ *
+ * The panel is marked as a surface on the way out, because leaving the container also leaves the
+ * subtree where the design tokens are declared — without that mark a sheet inherits none of the
+ * scale and silently falls back to whatever the host theme supplies.
+ *
+ * The original position is remembered rather than assumed. Appending it back to the container on
+ * close would reorder it against its siblings, and the sheet's owner may well be relying on that
+ * order for anything from focus sequence to a nth-child rule.
+ */
+function setSheetMount(panel: HTMLElement, isSheet: boolean): void {
+  const doc = panel.ownerDocument;
+  const remembered = originalMount.get(panel);
+
+  if (isSheet) {
+    if (panel.parentElement === doc.body) return;
+    if (panel.parentElement) {
+      originalMount.set(panel, { parent: panel.parentElement, before: panel.nextSibling });
+    }
+    panel.addClass("db-surface");
+    // The sheet covers the navbar rather than sitting above it. The positioner writes this variable
+    // in its anchored branch to hold a popover clear of the navbar, which is right for a popover
+    // and wrong for a sheet, so the sheet states its own value rather than inheriting that one.
+    panel.setCssProps({ "--db-mobile-sheet-bottom": "0px" });
+    doc.body.appendChild(panel);
+    return;
+  }
+
+  if (!remembered) return;
+  originalMount.delete(panel);
+  panel.removeClass("db-surface");
+  panel.style.removeProperty("--db-mobile-sheet-bottom");
+  // A view rebuild can destroy the parent while the sheet is open. Putting the node back into a
+  // detached tree would hide it with no way to reach it, so it is removed instead — a closed
+  // surface is recoverable, an invisible one is not.
+  if (!remembered.parent.isConnected) {
+    panel.remove();
+    return;
+  }
+  remembered.parent.insertBefore(panel, remembered.before);
 }
 
 // ───────────────────────────────────────────────────────────────────

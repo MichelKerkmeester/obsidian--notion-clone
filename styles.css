@@ -155,6 +155,12 @@
 
 .db-mobile-bottom-sheet {
   position: fixed !important;
+  /* Above the host's bottom navigation bar, which the sheet is meant to cover.
+     The portal is what makes this number mean anything — inside the plugin container the sheet is
+     in a different part of the tree and hit-testing a point over the navbar returns the navbar at
+     any z-index. Moved to the body it becomes a stacking peer, and then it needs to say where it
+     sits. Modal layer, because a sheet covers the app chrome the way a modal does. */
+  z-index: var(--db-layer-modal, 1000) !important;
   left: 0 !important;
   right: 0 !important;
   bottom: var(--db-mobile-sheet-bottom, 0px) !important;

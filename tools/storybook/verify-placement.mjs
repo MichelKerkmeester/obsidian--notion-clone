@@ -327,6 +327,64 @@ const phoneResults = await phone.evaluate(() => {
     pass: after.position !== "fixed" || after.bottom === "auto",
     detail: `position=${after.position} bottom=${after.bottom}`,
   });
+
+  // The requirement this whole sheet effort is judged on: a sheet covers the host's bottom
+  // navigation bar. It is a hit test rather than a rectangle comparison, because overlapping the
+  // navbar's coordinates while being painted underneath it is exactly the state the user reports —
+  // the sheet looks like it starts above the bar. What matters is which element the point belongs
+  // to, and only elementFromPoint answers that.
+  // Built inside the page's own plugin container, not a fresh one on the body.
+  //
+  // A first version created the host as a direct child of the body, after the navbar. The sheet
+  // then won the hit test on DOM order alone, with or without the portal — the check passed for a
+  // reason that had nothing to do with what it claimed to test, which the negative control caught
+  // by leaving it green while the portal was disabled.
+  //
+  // The container is isolated because the app's is: the finding this phase rests on is that a
+  // sheet inside it loses the hit test even at z-index 9999, which only happens inside a stacking
+  // context. Reproducing that trap is what makes the portal necessary here rather than incidental.
+  const sheetHost = document.querySelector(".note-database-container");
+  sheetHost.setCssProps({ isolation: "isolate" });
+  const sheetPanel = sheetHost.createDiv({ cls: "db-record-detail-panel" });
+  sheetPanel.setCssProps({ height: "300px" });
+  const navBox = document.querySelector(".mobile-navbar").getBoundingClientRect();
+  const px = window.innerWidth / 2;
+  const py = navBox.top + navBox.height / 2;
+
+  const hitBefore = document.elementFromPoint(px, py);
+  applySheetChrome(sheetPanel, true);
+  const hitAfter = document.elementFromPoint(px, py);
+  const mountedOnBody = sheetPanel.parentElement === document.body;
+  // Captured now, not read at report time. The restore below moves the node back, so a detail that
+  // re-reads the parent describes a different moment than the assertion it accompanies.
+  const parentWhileSheet = sheetPanel.parentElement?.tagName;
+  const carriesTokens = sheetPanel.classList.contains("db-surface");
+  applySheetChrome(sheetPanel, false);
+  const restoredToContainer = sheetPanel.parentElement === sheetHost;
+
+  out.push({
+    name: "a sheet covers the host navigation bar (hit test over the navbar)",
+    pass: hitAfter === sheetPanel || sheetPanel.contains(hitAfter),
+    detail: `before=${hitBefore?.className || "none"} after=${hitAfter?.className || "none"}`,
+  });
+  out.push({
+    name: "the sheet is mounted on the body, not inside the plugin container",
+    pass: mountedOnBody,
+    detail: `parent while presenting as a sheet=${parentWhileSheet}`,
+  });
+  out.push({
+    name: "a portalled sheet still carries the token boundary",
+    pass: carriesTokens,
+    detail: "leaving the container leaves the subtree where --db-* is declared",
+  });
+  out.push({
+    name: "the sheet returns to its original parent when it stops being one",
+    pass: restoredToContainer,
+    detail: `parent after restore=${sheetPanel.parentElement?.className || "none"}`,
+  });
+  sheetPanel.remove();
+  sheetHost.style.removeProperty("isolation");
+
   return out;
 });
 

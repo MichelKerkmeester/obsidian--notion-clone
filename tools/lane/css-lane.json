@@ -1,7 +1,7 @@
 {
-  "holder": "005-content-row-rhythm",
-  "acquiredAt": "2026-08-29T19:20:02.253Z",
-  "baselineHash": "46054fb94260",
+  "holder": "003-mobile-sheet-presentation",
+  "acquiredAt": "2026-08-29T19:29:13.243Z",
+  "baselineHash": "a535fa1bf6fd",
   "baselineCommit": "f4319e3e768a",
   "history": [
     {
@@ -42,6 +42,19 @@
       "phase": "005-content-row-rhythm",
       "at": "2026-08-29T19:20:02.253Z",
       "hash": "46054fb94260"
+    },
+    {
+      "event": "release",
+      "phase": "005-content-row-rhythm",
+      "at": "2026-08-29T19:29:13.242Z",
+      "hash": "a535fa1bf6fd",
+      "note": "list-row border-box landed and recaptured"
+    },
+    {
+      "event": "acquire",
+      "phase": "003-mobile-sheet-presentation",
+      "at": "2026-08-29T19:29:13.243Z",
+      "hash": "a535fa1bf6fd"
     }
   ],
   "outstanding": [

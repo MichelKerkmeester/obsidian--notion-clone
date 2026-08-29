@@ -29,6 +29,7 @@
 //
 // Usage:
 //   node tools/live/probe.mjs --check transport
+//   node tools/live/probe.mjs --check navbar
 //   node tools/live/probe.mjs --eval '<js returning a JSON-serialisable value>'
 
 // ───────────────────────────────────────────────────────────────────
@@ -154,6 +155,66 @@ const arg = (name) => {
   return i > -1 ? process.argv[i + 1] : null;
 };
 
+/**
+ * Read the host navigation bar's stacking order from the running app.
+ *
+ * A phone sheet has to cover this bar, and covering it is settled by two things: the sheet must be
+ * a child of the body, and it must then declare a layer above the bar's. The first is structural
+ * and testable anywhere. The second needs a number that only the real app has — a headless fixture
+ * can invent any value and prove nothing about the one that ships.
+ *
+ * Measured in a fixture, the sheet wins at a navbar z-index of 100 and 1000 and loses at 5000. This
+ * is what turns that range into a fact.
+ */
+async function checkNavbar() {
+  const result = await evaluate(`(() => {
+    const nav = document.querySelector(".mobile-navbar");
+    if (!nav) return { present: false };
+    const s = getComputedStyle(nav);
+    const r = nav.getBoundingClientRect();
+    return {
+      present: true,
+      zIndex: s.zIndex,
+      position: s.position,
+      height: Math.round(r.height),
+      top: Math.round(r.top),
+      parent: nav.parentElement ? nav.parentElement.className : null,
+      safeAreaInset: getComputedStyle(document.body).getPropertyValue("--safe-area-inset-bottom").trim(),
+    };
+  })()`);
+
+  if (!result.ok) {
+    console.error(`probe: ${result.reason}`);
+    return EXIT_INFRASTRUCTURE;
+  }
+  const nav = result.value;
+  if (!nav.present) {
+    console.log("probe: no .mobile-navbar in the running app — this is not a phone layout.");
+    console.log("       Run this from Obsidian on a phone, or with the phone emulation enabled.");
+    return EXIT_INFRASTRUCTURE;
+  }
+
+  console.log(`navbar z-index   ${nav.zIndex}`);
+  console.log(`navbar position  ${nav.position}  height ${nav.height}px  top ${nav.top}px`);
+  console.log(`navbar parent    .${nav.parent}`);
+  console.log(`safe-area inset  ${nav.safeAreaInset || "(unset)"}`);
+
+  const sheetLayer = 1000;
+  const navLayer = nav.zIndex === "auto" ? 0 : Number(nav.zIndex);
+  if (Number.isNaN(navLayer)) {
+    console.error(`\nprobe: could not read the navbar's z-index as a number (${nav.zIndex}).`);
+    return EXIT_ASSERTION;
+  }
+  if (navLayer > sheetLayer) {
+    console.error(`\nprobe: FAIL — the navbar sits at ${navLayer}, above the sheet's ${sheetLayer}.`);
+    console.error("A sheet portalled to the body would still be painted under it. Raise the sheet's");
+    console.error("layer to clear this value, and record the number that made it necessary.");
+    return EXIT_ASSERTION;
+  }
+  console.log(`\nprobe: PASS — the sheet's layer (${sheetLayer}) clears the navbar's (${navLayer}).`);
+  return EXIT_PASS;
+}
+
 async function main() {
   const check = arg("--check");
   const expression = arg("--eval");
@@ -169,6 +230,7 @@ async function main() {
   }
 
   if (check === "transport") return checkTransport();
+  if (check === "navbar") return checkNavbar();
 
   console.error("usage: node tools/live/probe.mjs --check transport | --eval '<expression>'");
   return EXIT_INFRASTRUCTURE;
