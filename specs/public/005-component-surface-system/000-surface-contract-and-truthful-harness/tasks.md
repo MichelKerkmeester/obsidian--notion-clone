@@ -226,19 +226,36 @@ this stage confirms the rewrite against one this phase cannot edit.
 
 ### Stage 4 — the handle, the ownership seam, the token boundary (migration step 1, step 6 body-portal half)
 
-- [ ] **T12** Implement `openSurface()` and `SurfaceHandle` as an **adapter over**
+- [~] **T12** Implement `openSurface()` and `SurfaceHandle` as an **adapter over**
       `positionToolbarPopover` and `OwnedMenuHandle` — REQ-001, REQ-011.
       *Evidence to close:* a surface created through it carries `data-db-surface`, its placement is
       byte-identical to the legacy path, and legacy classes and selectors still resolve.
-- [ ] **T13** Register the handle through `overlayStack` and `InteractionScopeRegistry`; retire
+      *Code landed, one claim unproven.* `openSurface()` and `SurfaceHandle` exist as an adapter over
+      the existing positioner rather than a replacement for it, and a surface created through it
+      carries `data-db-surface` and its producer. **"Placement is byte-identical to the legacy path"
+      is not shown** — that is a browser comparison of the two paths against the same anchor, and it
+      has not been run. Until it is, this is an assertion.
+- [~] **T13** Register the handle through `overlayStack` and `InteractionScopeRegistry`; retire
       `owned-menu.ts:138-139`'s private capture-phase pair onto the shared owner — REQ-008.
       *Evidence to close:* exactly one dismissal, scroll, keyboard and focus owner per open surface;
       Escape over a menu-above-a-popover closes the innermost only; net listener count not above the
       pre-migration count.
-- [ ] **T14** Implement the mount adapters `local` and `bodyPortal`; declare `shadowRoot` and
+      *Half done.* Dismissal, Escape, outside-pointerdown, focus return and portal ownership all go
+      through the shared `overlayStack` and `InteractionScopeRegistry`; the stack gained a dynamic
+      anchor and the scope registry gained portal removal, both additively, so existing callers are
+      untouched. **The owned menu still installs its own capture-phase pair** — retiring it means
+      changing a call site, which this stage deliberately does not do. The listener-count evidence
+      cannot be taken until it is retired.
+- [x] **T14** Implement the mount adapters `local` and `bodyPortal`; declare `shadowRoot` and
       `topLayer` as capability-gated and unimplemented — REQ-009.
       *Evidence to close:* a surface's mount is read from its declaration, never inferred; selecting
       `topLayer` without its per-role proof is a build error.
+      *Closed.* `local` and `bodyPortal` are implemented; `shadowRoot` and `topLayer` are declared
+      and rejected by the type system. Control run: a file selecting `mount: "topLayer"` makes
+      `tsc --noEmit` exit 2 with `Type '"topLayer"' is not assignable to type 'ImplementedMount'`,
+      and the error names the probe file, so the compiler genuinely read it. Removing the file
+      returns exit 0. The mount is read from the declaration and inferred from nothing — not the
+      anchor, not the viewport, not platform detection.
 - [x] **T15** Add `.db-surface` to the token-root selector list at `styles.css:19-27` — REQ-002.
       *Evidence to close:* `--db-radius-lg` resolves non-empty on a body-mounted surface.
       *Closed:* added to both the light root and the dark `:is()` root — the dark block is a separate
@@ -259,17 +276,32 @@ this stage confirms the rewrite against one this phase cannot edit.
 
 ### Stage 5 — the anchor lease
 
-- [ ] **T18** Implement `AnchorRef` — logical scope, row path / cell key / event key, role, stable
+- [x] **T18** Implement `AnchorRef` — logical scope, row path / cell key / event key, role, stable
       record identity — with the node as a render-epoch cache — REQ-010.
       *Evidence to close:* the handle's `AnchorRef` is unchanged across a wholesale `refresh()` while
       the resolved node is a different object.
-- [ ] **T19** Implement the four-state machine and its bounded pending window — REQ-010, REQ-018.
+      *Closed.* `AnchorRef` carries the logical scope, the row/cell/event key, the role and the
+      record identity, and treats the node as a render-epoch cache re-resolved through a callback.
+      The lease survives its element being replaced: logical identity and record identity are
+      unchanged while `resolve()` returns a different object, with the transition sequence observed
+      in order. Proven against a resolver that swaps the element, **not** against a real
+      `refresh()` — that is T19's evidence and it has not been taken.
+- [~] **T19** Implement the four-state machine and its bounded pending window — REQ-010, REQ-018.
       *Evidence to close:* `open → anchored(A) → anchor-missing(pending) → anchored(B) → close`
       observed in order; the pending window expires into a close or a declared fallback, never into a
       retained rectangle. **This is an exit criterion of this phase and `003` is its named consumer.**
       It closes on the lease being *proven* — a surface survives its anchor being destroyed by a
       wholesale `refresh()` and still repositions on the next resize — not on the state machine
       existing.
+      *Machine built; the evidence this task actually asks for is NOT taken.* The four states and
+      the bounded pending window exist and are tested: on expiry the lease closes or takes its
+      declared fallback, and the test is proven able to fail — stopping the expiry from closing
+      reports `expected 'anchor-missing' to be 'closed'`.
+      But this task says plainly that it closes on the lease being **proven** — a surface surviving
+      its anchor being destroyed by a wholesale `refresh()` and still repositioning on the next
+      resize — **not on the state machine existing**. A fake resolver swapping an element is not a
+      real refresh. Marking this closed on the tests above would be exactly the substitution the
+      task was written to forbid, so it stays open. `003` is its named consumer.
 - [ ] **T20** Release the lease on owner teardown — listeners, scroll and keyboard suppression, token
       resources, portal nodes — REQ-010.
       *Evidence to close:* listener count, node count, scroll position and focus return to the
