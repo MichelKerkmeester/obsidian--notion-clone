@@ -9,6 +9,13 @@
 # Lint is deliberately report-only. The repository carries a known baseline rather than zero, so
 # failing the build on it would mean either a permanently red pipeline or a rush of unrelated
 # changes to clear it. The count is printed so a regression is still visible in the log.
+#
+# On why the release workflow beside this one had never run: two release tags were pushed and
+# produced nothing, while the first push that carried this file triggered immediately. Actions was
+# enabled the whole time, so the fork's status was not the cause. The likeliest explanation is that
+# the repository had never activated Actions at all and the first branch push did it — but that is
+# a guess, and the honest test is whether the next release tag produces a run. If it does not, add
+# workflow_dispatch to the release workflow rather than assuming the trigger is sound.
 
 name: Gates
 
