@@ -21,7 +21,8 @@
     "storybook:coverage": "node tools/storybook/verify-coverage.mjs",
     "storybook:placement": "node tools/storybook/verify-placement.mjs",
     "guard:assertions": "node tools/live/guard-inverted-assertions.mjs",
-    "census:tokens": "node tools/live/token-census.mjs"
+    "census:tokens": "node tools/live/token-census.mjs",
+    "census:cascade": "node tools/live/cascade-audit.mjs"
   },
   "keywords": [
     "obsidian",

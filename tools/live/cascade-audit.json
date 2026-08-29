@@ -1,0 +1,3454 @@
+{
+  "measuredAt": "2026-08-29T17:25:58.582Z",
+  "sheetLines": 19262,
+  "totals": {
+    "rules": 2642,
+    "duplicatedSelectors": 245,
+    "conflicts": 117
+  },
+  "duplicated": [
+    {
+      "selector": ".note-database-container",
+      "context": "",
+      "count": 3,
+      "lines": [
+        27,
+        476,
+        17250
+      ]
+    },
+    {
+      "selector": ".note-database-modal",
+      "context": "",
+      "count": 3,
+      "lines": [
+        27,
+        404,
+        18467
+      ]
+    },
+    {
+      "selector": ".db-color-picker-popup",
+      "context": "",
+      "count": 5,
+      "lines": [
+        27,
+        386,
+        6510,
+        18474,
+        18558
+      ]
+    },
+    {
+      "selector": ".db-icon-picker-popover",
+      "context": "",
+      "count": 5,
+      "lines": [
+        27,
+        386,
+        17423,
+        18461,
+        18558
+      ]
+    },
+    {
+      "selector": ".db-dropdown-popover",
+      "context": "",
+      "count": 4,
+      "lines": [
+        27,
+        386,
+        18461,
+        18558
+      ]
+    },
+    {
+      "selector": ".db-cell-option-popover",
+      "context": "",
+      "count": 2,
+      "lines": [
+        27,
+        386
+      ]
+    },
+    {
+      "selector": ".formula-workbench-modal",
+      "context": "",
+      "count": 4,
+      "lines": [
+        27,
+        404,
+        11293,
+        11311
+      ]
+    },
+    {
+      "selector": ".db-chart-drilldown-modal",
+      "context": "",
+      "count": 3,
+      "lines": [
+        27,
+        404,
+        4479
+      ]
+    },
+    {
+      "selector": ".db-mobile-bottom-sheet",
+      "context": "",
+      "count": 2,
+      "lines": [
+        155,
+        18604
+      ]
+    },
+    {
+      "selector": ".db-menu-item:focus-visible",
+      "context": "",
+      "count": 2,
+      "lines": [
+        219,
+        223
+      ]
+    },
+    {
+      "selector": ".db-column-menu-subpopover",
+      "context": "",
+      "count": 4,
+      "lines": [
+        386,
+        392,
+        3084,
+        18606
+      ]
+    },
+    {
+      "selector": ".db-relation-popover",
+      "context": "",
+      "count": 3,
+      "lines": [
+        386,
+        18071,
+        18461
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-toolbar",
+      "context": "",
+      "count": 2,
+      "lines": [
+        398,
+        1300
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-filter-panel",
+      "context": "",
+      "count": 3,
+      "lines": [
+        398,
+        9836,
+        18461
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-sort-panel",
+      "context": "",
+      "count": 2,
+      "lines": [
+        398,
+        18461
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-view-config-panel",
+      "context": "",
+      "count": 4,
+      "lines": [
+        398,
+        9836,
+        9854,
+        18461
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-column-manager",
+      "context": "",
+      "count": 3,
+      "lines": [
+        398,
+        9836,
+        18461
+      ]
+    },
+    {
+      "selector": ".note-database-container *",
+      "context": "@media (prefers-reduced-motion: reduce)",
+      "count": 5,
+      "lines": [
+        560,
+        17962,
+        17975,
+        19176,
+        19256
+      ]
+    },
+    {
+      "selector": ".note-database-container *::before",
+      "context": "@media (prefers-reduced-motion: reduce)",
+      "count": 5,
+      "lines": [
+        560,
+        17962,
+        17975,
+        19176,
+        19256
+      ]
+    },
+    {
+      "selector": ".note-database-container *::after",
+      "context": "@media (prefers-reduced-motion: reduce)",
+      "count": 5,
+      "lines": [
+        560,
+        17962,
+        17975,
+        19176,
+        19256
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-conditional-format",
+      "context": "",
+      "count": 2,
+      "lines": [
+        818,
+        18481
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-conditional-format-dropdown",
+      "context": "",
+      "count": 2,
+      "lines": [
+        884,
+        18461
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-heading-button",
+      "context": "",
+      "count": 3,
+      "lines": [
+        1099,
+        18653,
+        18665
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-toolbar-left",
+      "context": "",
+      "count": 2,
+      "lines": [
+        1311,
+        1318
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-toolbar-right",
+      "context": "",
+      "count": 3,
+      "lines": [
+        1311,
+        1323,
+        18612
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-active-view-controls",
+      "context": "",
+      "count": 2,
+      "lines": [
+        1332,
+        19079
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-active-view-controls-scroll",
+      "context": "",
+      "count": 3,
+      "lines": [
+        1338,
+        18577,
+        19096
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-active-control-edit",
+      "context": "",
+      "count": 3,
+      "lines": [
+        1390,
+        1399,
+        17522
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-active-control-remove",
+      "context": "",
+      "count": 3,
+      "lines": [
+        1390,
+        1463,
+        17522
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-active-control-edit:hover",
+      "context": "",
+      "count": 2,
+      "lines": [
+        1409,
+        1413
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-active-control-remove:hover",
+      "context": "",
+      "count": 2,
+      "lines": [
+        1409,
+        1476
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-view-tabs",
+      "context": "",
+      "count": 2,
+      "lines": [
+        1567,
+        18709
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-view-tab",
+      "context": "",
+      "count": 2,
+      "lines": [
+        1573,
+        18720
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-view-tab.is-drop-target",
+      "context": "",
+      "count": 2,
+      "lines": [
+        1610,
+        18725
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-view-tab-rename",
+      "context": "",
+      "count": 2,
+      "lines": [
+        1640,
+        18748
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-view-switcher select",
+      "context": "",
+      "count": 2,
+      "lines": [
+        1658,
+        1671
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-toolbar-button",
+      "context": "",
+      "count": 2,
+      "lines": [
+        1688,
+        17522
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-toolbar-icon-button",
+      "context": "",
+      "count": 4,
+      "lines": [
+        1688,
+        1700,
+        17522,
+        18638
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-new-button",
+      "context": "",
+      "count": 2,
+      "lines": [
+        1688,
+        3461
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-selection-count-badge",
+      "context": "",
+      "count": 3,
+      "lines": [
+        1954,
+        2117,
+        2137
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-mobile-reorder-controls",
+      "context": "",
+      "count": 2,
+      "lines": [
+        2038,
+        18776
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-mobile-reorder-controls button",
+      "context": "",
+      "count": 2,
+      "lines": [
+        2046,
+        18781
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-selection-clear-pill",
+      "context": "",
+      "count": 2,
+      "lines": [
+        2117,
+        2121
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-search-control",
+      "context": "",
+      "count": 3,
+      "lines": [
+        2267,
+        3210,
+        18788
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-search-control:hover",
+      "context": "",
+      "count": 2,
+      "lines": [
+        2279,
+        3217
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-search-control:focus-within",
+      "context": "",
+      "count": 2,
+      "lines": [
+        2279,
+        3223
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-search-button",
+      "context": "",
+      "count": 2,
+      "lines": [
+        2284,
+        3229
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-dropdown-popover",
+      "context": "",
+      "count": 2,
+      "lines": [
+        2396,
+        18461
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-dropdown-option-check",
+      "context": "",
+      "count": 2,
+      "lines": [
+        2513,
+        2533
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-dropdown-option-icon",
+      "context": "",
+      "count": 2,
+      "lines": [
+        2522,
+        2533
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-dropdown-option-swatches",
+      "context": "",
+      "count": 2,
+      "lines": [
+        2533,
+        2569
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-dropdown-option-label",
+      "context": "",
+      "count": 2,
+      "lines": [
+        2557,
+        2590
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-dropdown-option-reason",
+      "context": "",
+      "count": 2,
+      "lines": [
+        2557,
+        2563
+      ]
+    },
+    {
+      "selector": ".db-column-menu-subpopover .db-dropdown-option-check",
+      "context": "",
+      "count": 2,
+      "lines": [
+        3140,
+        3148
+      ]
+    },
+    {
+      "selector": ".db-column-menu-subpopover .db-dropdown-option-icon",
+      "context": "",
+      "count": 2,
+      "lines": [
+        3140,
+        3152
+      ]
+    },
+    {
+      "selector": ".db-calendar-search-result-title",
+      "context": "",
+      "count": 2,
+      "lines": [
+        3432,
+        3440
+      ]
+    },
+    {
+      "selector": ".db-calendar-search-result-date",
+      "context": "",
+      "count": 2,
+      "lines": [
+        3432,
+        3446
+      ]
+    },
+    {
+      "selector": ".note-database-settings .db-settings-database-meta",
+      "context": "",
+      "count": 2,
+      "lines": [
+        3545,
+        3709
+      ]
+    },
+    {
+      "selector": ".note-database-settings .db-settings-database-path",
+      "context": "",
+      "count": 2,
+      "lines": [
+        3553,
+        3696
+      ]
+    },
+    {
+      "selector": ".note-database-settings .db-settings-open-button",
+      "context": "",
+      "count": 2,
+      "lines": [
+        3725,
+        3745
+      ]
+    },
+    {
+      "selector": ".note-database-settings .db-settings-delete-button",
+      "context": "",
+      "count": 2,
+      "lines": [
+        3725,
+        3748
+      ]
+    },
+    {
+      "selector": ".note-database-settings .db-settings-file-database-name",
+      "context": "",
+      "count": 2,
+      "lines": [
+        3792,
+        3799
+      ]
+    },
+    {
+      "selector": ".note-database-settings .db-settings-file-database-path",
+      "context": "",
+      "count": 2,
+      "lines": [
+        3792,
+        3804
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-summary-draggable.is-dragging",
+      "context": "",
+      "count": 2,
+      "lines": [
+        4005,
+        4009
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-summary-draggable.is-drop-before::before",
+      "context": "",
+      "count": 2,
+      "lines": [
+        4014,
+        4024
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-summary-draggable.is-drop-after::after",
+      "context": "",
+      "count": 2,
+      "lines": [
+        4014,
+        4028
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-chart-options-export",
+      "context": "",
+      "count": 2,
+      "lines": [
+        4070,
+        4338
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-chart-options-popover",
+      "context": "",
+      "count": 3,
+      "lines": [
+        4091,
+        9836,
+        18461
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-chart-dropdown-popover",
+      "context": "",
+      "count": 2,
+      "lines": [
+        4475,
+        18461
+      ]
+    },
+    {
+      "selector": ".db-chart-drilldown-modal .db-chart-drilldown-table th",
+      "context": "",
+      "count": 2,
+      "lines": [
+        4530,
+        4538
+      ]
+    },
+    {
+      "selector": ".db-chart-drilldown-modal .db-chart-drilldown-more",
+      "context": "",
+      "count": 2,
+      "lines": [
+        4569,
+        4577
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-table-wrap",
+      "context": "",
+      "count": 2,
+      "lines": [
+        4596,
+        18577
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-table",
+      "context": "",
+      "count": 2,
+      "lines": [
+        4601,
+        17715
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-table th",
+      "context": "",
+      "count": 2,
+      "lines": [
+        4629,
+        4664
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-table td",
+      "context": "",
+      "count": 2,
+      "lines": [
+        4629,
+        4886
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-table th .db-property-icon",
+      "context": "",
+      "count": 2,
+      "lines": [
+        4689,
+        4719
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-table th .sort-indicator",
+      "context": "",
+      "count": 2,
+      "lines": [
+        4689,
+        4822
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-column-menu-trigger::before",
+      "context": "",
+      "count": 2,
+      "lines": [
+        4790,
+        4797
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-table .db-table-row-drag-handle::before",
+      "context": "",
+      "count": 2,
+      "lines": [
+        4790,
+        4801
+      ]
+    },
+    {
+      "selector": ".db-displayopt-dropdown-popover .db-dropdown-option-check",
+      "context": "",
+      "count": 2,
+      "lines": [
+        5303,
+        5310
+      ]
+    },
+    {
+      "selector": ".db-displayopt-dropdown-popover .db-dropdown-option-icon",
+      "context": "",
+      "count": 2,
+      "lines": [
+        5303,
+        5313
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-table th.db-record-icon-col",
+      "context": "",
+      "count": 2,
+      "lines": [
+        5375,
+        5386
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-table .db-select-col .db-select-inner input[type=\"checkbox\"]:checked",
+      "context": "",
+      "count": 2,
+      "lines": [
+        5451,
+        5458
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-table .db-select-col .db-select-inner input[type=\"checkbox\"]:indeterminate",
+      "context": "",
+      "count": 2,
+      "lines": [
+        5451,
+        5463
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-table td.is-top-edge",
+      "context": "",
+      "count": 2,
+      "lines": [
+        5708,
+        5712
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-table td.is-bottom-edge",
+      "context": "",
+      "count": 2,
+      "lines": [
+        5708,
+        5716
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-table td.is-left-edge",
+      "context": "",
+      "count": 2,
+      "lines": [
+        5708,
+        5720
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-table td.is-right-edge",
+      "context": "",
+      "count": 2,
+      "lines": [
+        5708,
+        5724
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-file-tag-remove",
+      "context": "",
+      "count": 2,
+      "lines": [
+        5782,
+        5870
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-file-tag-remove:focus-visible",
+      "context": "",
+      "count": 2,
+      "lines": [
+        5796,
+        5880
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-board-card",
+      "context": "",
+      "count": 3,
+      "lines": [
+        5920,
+        8665,
+        17697
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-board-card.is-drop-target",
+      "context": "",
+      "count": 2,
+      "lines": [
+        5924,
+        8689
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-table tr.is-drop-before td",
+      "context": "",
+      "count": 2,
+      "lines": [
+        6010,
+        6015
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-table tr.is-drop-after td",
+      "context": "",
+      "count": 2,
+      "lines": [
+        6010,
+        6020
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-cell-option-popover",
+      "context": "",
+      "count": 2,
+      "lines": [
+        6261,
+        18461
+      ]
+    },
+    {
+      "selector": ".db-cell-option-drag-preview.db-cell-option-item",
+      "context": "",
+      "count": 2,
+      "lines": [
+        6279,
+        6301
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-cell-option-item:hover",
+      "context": "",
+      "count": 2,
+      "lines": [
+        6386,
+        18585
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-cell-edit-popover",
+      "context": "",
+      "count": 2,
+      "lines": [
+        6693,
+        18461
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-cell-line-edit-popover",
+      "context": "",
+      "count": 2,
+      "lines": [
+        6723,
+        18461
+      ]
+    },
+    {
+      "selector": ".db-cell-edit-popover.is-mobile",
+      "context": "",
+      "count": 2,
+      "lines": [
+        6753,
+        17679
+      ]
+    },
+    {
+      "selector": ".note-database-container .status-badge",
+      "context": "",
+      "count": 2,
+      "lines": [
+        6802,
+        6815
+      ]
+    },
+    {
+      "selector": ".note-database-modal .status-badge",
+      "context": "",
+      "count": 2,
+      "lines": [
+        6802,
+        6815
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-empty-action",
+      "context": "",
+      "count": 2,
+      "lines": [
+        7037,
+        7119
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-empty-preset-card:focus-visible",
+      "context": "",
+      "count": 2,
+      "lines": [
+        7129,
+        7202
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-empty-preset-icon",
+      "context": "",
+      "count": 2,
+      "lines": [
+        7135,
+        7207
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-grouped-table",
+      "context": "",
+      "count": 2,
+      "lines": [
+        7295,
+        7411
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-gallery-group-toggle",
+      "context": "",
+      "count": 2,
+      "lines": [
+        7355,
+        17522
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-list-group-toggle",
+      "context": "",
+      "count": 2,
+      "lines": [
+        7355,
+        17522
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-group-collapse-toggle",
+      "context": "",
+      "count": 2,
+      "lines": [
+        7355,
+        17522
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-board-group-toggle",
+      "context": "",
+      "count": 2,
+      "lines": [
+        7355,
+        17522
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-board-subgroup-toggle",
+      "context": "",
+      "count": 2,
+      "lines": [
+        7355,
+        17522
+      ]
+    },
+    {
+      "selector": ".note-database-modal .db-modal-help",
+      "context": "",
+      "count": 2,
+      "lines": [
+        7621,
+        12026
+      ]
+    },
+    {
+      "selector": ".note-database-modal .db-property-conflict-writers-title",
+      "context": "",
+      "count": 2,
+      "lines": [
+        7811,
+        7816
+      ]
+    },
+    {
+      "selector": ".note-database-modal .db-property-conflict-path",
+      "context": "",
+      "count": 2,
+      "lines": [
+        7868,
+        7873
+      ]
+    },
+    {
+      "selector": ".note-database-modal .db-property-conflict-note",
+      "context": "",
+      "count": 2,
+      "lines": [
+        7868,
+        7898
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-group-order-popover",
+      "context": "",
+      "count": 2,
+      "lines": [
+        7959,
+        18461
+      ]
+    },
+    {
+      "selector": ".note-database-modal .db-modal-checkbox:checked",
+      "context": "",
+      "count": 2,
+      "lines": [
+        8269,
+        8276
+      ]
+    },
+    {
+      "selector": ".note-database-modal .db-modal-checkbox:indeterminate",
+      "context": "",
+      "count": 2,
+      "lines": [
+        8269,
+        8281
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-board",
+      "context": "",
+      "count": 2,
+      "lines": [
+        8371,
+        17715
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-gallery-group-title",
+      "context": "",
+      "count": 2,
+      "lines": [
+        8559,
+        9221
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-board-card-field-wrap .db-board-card-link",
+      "context": "",
+      "count": 2,
+      "lines": [
+        8873,
+        8982
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-gallery",
+      "context": "",
+      "count": 2,
+      "lines": [
+        9176,
+        17715
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-gallery-group-header",
+      "context": "",
+      "count": 2,
+      "lines": [
+        9198,
+        9212
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-gallery-card",
+      "context": "",
+      "count": 2,
+      "lines": [
+        9236,
+        17697
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-gallery-card.is-drop-before",
+      "context": "",
+      "count": 2,
+      "lines": [
+        9288,
+        9294
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-gallery-card.is-drop-after",
+      "context": "",
+      "count": 2,
+      "lines": [
+        9288,
+        9300
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-list",
+      "context": "",
+      "count": 2,
+      "lines": [
+        9524,
+        17715
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-list-group-header",
+      "context": "",
+      "count": 2,
+      "lines": [
+        9547,
+        9565
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-list-row",
+      "context": "",
+      "count": 2,
+      "lines": [
+        9602,
+        17697
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-list-row.is-drop-before",
+      "context": "",
+      "count": 2,
+      "lines": [
+        9626,
+        9632
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-list-row.is-drop-after",
+      "context": "",
+      "count": 2,
+      "lines": [
+        9626,
+        9638
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-database-popover",
+      "context": "",
+      "count": 3,
+      "lines": [
+        9836,
+        9869,
+        18461
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-group-popover",
+      "context": "",
+      "count": 3,
+      "lines": [
+        9836,
+        9858,
+        18461
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-export-popover",
+      "context": "",
+      "count": 2,
+      "lines": [
+        9836,
+        9864
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-view-tab-popover",
+      "context": "",
+      "count": 3,
+      "lines": [
+        9836,
+        9864,
+        18461
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-database-popover-row",
+      "context": "",
+      "count": 2,
+      "lines": [
+        9874,
+        18753
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-export-popover-row",
+      "context": "",
+      "count": 2,
+      "lines": [
+        10023,
+        10041
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-view-tab-popover-row",
+      "context": "",
+      "count": 2,
+      "lines": [
+        10023,
+        10045
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-view-config-section-title",
+      "context": "",
+      "count": 2,
+      "lines": [
+        10101,
+        19112
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-view-config-textarea",
+      "context": "",
+      "count": 2,
+      "lines": [
+        10140,
+        10626
+      ]
+    },
+    {
+      "selector": ".note-database-modal .db-invalid-event-grid-header",
+      "context": "",
+      "count": 2,
+      "lines": [
+        10303,
+        10312
+      ]
+    },
+    {
+      "selector": ".note-database-modal .db-invalid-event-row",
+      "context": "",
+      "count": 2,
+      "lines": [
+        10303,
+        10323
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-source-rule-children",
+      "context": "",
+      "count": 2,
+      "lines": [
+        10656,
+        10680
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-source-rule-header",
+      "context": "",
+      "count": 2,
+      "lines": [
+        10670,
+        10676
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-source-rule-leaf-controls",
+      "context": "",
+      "count": 2,
+      "lines": [
+        10670,
+        10684
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-panel-row input",
+      "context": "",
+      "count": 2,
+      "lines": [
+        10925,
+        10988
+      ]
+    },
+    {
+      "selector": ".note-database-modal textarea",
+      "context": "",
+      "count": 2,
+      "lines": [
+        11261,
+        11273
+      ]
+    },
+    {
+      "selector": ".note-database-modal .db-formula-editor-pane",
+      "context": "",
+      "count": 2,
+      "lines": [
+        11457,
+        11461
+      ]
+    },
+    {
+      "selector": ".note-database-modal .db-formula-help-pane",
+      "context": "",
+      "count": 2,
+      "lines": [
+        11457,
+        11469
+      ]
+    },
+    {
+      "selector": ".note-database-modal .db-formula-highlight",
+      "context": "",
+      "count": 2,
+      "lines": [
+        11548,
+        11565
+      ]
+    },
+    {
+      "selector": ".note-database-modal .db-formula-textarea",
+      "context": "",
+      "count": 2,
+      "lines": [
+        11548,
+        11577
+      ]
+    },
+    {
+      "selector": ".note-database-modal .db-formula-preview-status.is-error",
+      "context": "",
+      "count": 2,
+      "lines": [
+        11733,
+        11759
+      ]
+    },
+    {
+      "selector": ".note-database-modal .db-formula-preview-status.is-warning",
+      "context": "",
+      "count": 2,
+      "lines": [
+        11738,
+        11759
+      ]
+    },
+    {
+      "selector": ".modal.formula-workbench-modal-host",
+      "context": "@media (max-width: 1100px)",
+      "count": 2,
+      "lines": [
+        12067,
+        13023
+      ]
+    },
+    {
+      "selector": ".formula-workbench-modal",
+      "context": "@media (max-width: 1100px)",
+      "count": 2,
+      "lines": [
+        12074,
+        13030
+      ]
+    },
+    {
+      "selector": ".note-database-modal .db-formula-header",
+      "context": "@media (max-width: 1100px)",
+      "count": 3,
+      "lines": [
+        12079,
+        12083,
+        13041
+      ]
+    },
+    {
+      "selector": ".note-database-modal .db-formula-result-type",
+      "context": "@media (max-width: 1100px)",
+      "count": 2,
+      "lines": [
+        12079,
+        13059
+      ]
+    },
+    {
+      "selector": ".note-database-modal .db-formula-workbench",
+      "context": "@media (max-width: 1100px)",
+      "count": 2,
+      "lines": [
+        12087,
+        13076
+      ]
+    },
+    {
+      "selector": ".note-database-modal .db-formula-editor-pane",
+      "context": "@media (max-width: 1100px)",
+      "count": 2,
+      "lines": [
+        12095,
+        13086
+      ]
+    },
+    {
+      "selector": ".note-database-modal .db-formula-help-pane",
+      "context": "@media (max-width: 1100px)",
+      "count": 2,
+      "lines": [
+        12095,
+        13093
+      ]
+    },
+    {
+      "selector": ".note-database-modal .db-formula-editor-shell",
+      "context": "@media (max-width: 1100px)",
+      "count": 2,
+      "lines": [
+        12099,
+        13098
+      ]
+    },
+    {
+      "selector": ".note-database-modal .db-formula-preview",
+      "context": "@media (max-width: 1100px)",
+      "count": 2,
+      "lines": [
+        12105,
+        13109
+      ]
+    },
+    {
+      "selector": ".note-database-modal .db-formula-preview-details",
+      "context": "@media (max-width: 1100px)",
+      "count": 2,
+      "lines": [
+        12111,
+        13116
+      ]
+    },
+    {
+      "selector": ".note-database-modal .db-formula-browser",
+      "context": "@media (max-width: 1100px)",
+      "count": 2,
+      "lines": [
+        12115,
+        13144
+      ]
+    },
+    {
+      "selector": ".note-database-modal .db-formula-browser-three-col",
+      "context": "@media (max-width: 1100px)",
+      "count": 2,
+      "lines": [
+        12119,
+        13150
+      ]
+    },
+    {
+      "selector": ".note-database-modal .db-formula-browser-three-col .db-formula-category-list",
+      "context": "@media (max-width: 1100px)",
+      "count": 2,
+      "lines": [
+        12126,
+        13158
+      ]
+    },
+    {
+      "selector": ".note-database-modal .db-formula-browser-three-col .db-formula-category",
+      "context": "@media (max-width: 1100px)",
+      "count": 2,
+      "lines": [
+        12137,
+        13170
+      ]
+    },
+    {
+      "selector": ".note-database-modal .db-formula-browser-three-col .db-formula-function-list-compact",
+      "context": "@media (max-width: 1100px)",
+      "count": 2,
+      "lines": [
+        12145,
+        13178
+      ]
+    },
+    {
+      "selector": ".note-database-modal .db-formula-browser-three-col .db-formula-function-detail",
+      "context": "@media (max-width: 1100px)",
+      "count": 2,
+      "lines": [
+        12150,
+        13185
+      ]
+    },
+    {
+      "selector": ".note-database-modal .db-formula-category-list",
+      "context": "",
+      "count": 2,
+      "lines": [
+        12629,
+        12635
+      ]
+    },
+    {
+      "selector": ".note-database-modal .db-formula-function-list-compact",
+      "context": "",
+      "count": 2,
+      "lines": [
+        12629,
+        12641
+      ]
+    },
+    {
+      "selector": ".note-database-modal .db-formula-function-detail",
+      "context": "",
+      "count": 2,
+      "lines": [
+        12629,
+        12647
+      ]
+    },
+    {
+      "selector": ".note-database-modal .db-formula-category",
+      "context": "",
+      "count": 2,
+      "lines": [
+        12656,
+        12669
+      ]
+    },
+    {
+      "selector": ".note-database-modal .db-formula-function-row",
+      "context": "",
+      "count": 2,
+      "lines": [
+        12656,
+        12683
+      ]
+    },
+    {
+      "selector": ".note-database-modal .db-formula-function-desc",
+      "context": "",
+      "count": 2,
+      "lines": [
+        12838,
+        13007
+      ]
+    },
+    {
+      "selector": ".formula-workbench-modal.is-formula-compact .db-formula-preview-row",
+      "context": "",
+      "count": 2,
+      "lines": [
+        13378,
+        13411
+      ]
+    },
+    {
+      "selector": ".note-database-embed.note-database-container table.db-table th",
+      "context": "",
+      "count": 2,
+      "lines": [
+        13776,
+        13793
+      ]
+    },
+    {
+      "selector": ".note-database-embed.note-database-container table.db-table td",
+      "context": "",
+      "count": 2,
+      "lines": [
+        13776,
+        13822
+      ]
+    },
+    {
+      "selector": ".note-database-embed.note-database-container .db-group-header",
+      "context": "",
+      "count": 2,
+      "lines": [
+        13875,
+        13980
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-calendar-mini-today:hover",
+      "context": "",
+      "count": 2,
+      "lines": [
+        14257,
+        18585
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-calendar-mini-footer-action:hover",
+      "context": "",
+      "count": 2,
+      "lines": [
+        14275,
+        18585
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-calendar-nav-button",
+      "context": "",
+      "count": 2,
+      "lines": [
+        14340,
+        17522
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-calendar[style*=\"--db-calendar-col-width\"] .db-calendar-weekdays",
+      "context": "",
+      "count": 2,
+      "lines": [
+        14539,
+        14577
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-calendar[style*=\"--db-calendar-col-width\"] .db-calendar-month-week",
+      "context": "",
+      "count": 2,
+      "lines": [
+        14543,
+        14577
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-calendar[style*=\"--db-calendar-col-width\"] .db-calendar-time-header-days",
+      "context": "",
+      "count": 2,
+      "lines": [
+        14552,
+        14590
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-calendar[style*=\"--db-calendar-col-width\"] .db-calendar-week-allday-cols",
+      "context": "",
+      "count": 2,
+      "lines": [
+        14552,
+        14590
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-calendar[style*=\"--db-calendar-col-width\"] .db-calendar-week-body",
+      "context": "",
+      "count": 2,
+      "lines": [
+        14561,
+        14596
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-calendar[style*=\"--db-calendar-col-width\"] .db-calendar-week-sticky",
+      "context": "",
+      "count": 2,
+      "lines": [
+        14569,
+        14601
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-calendar-add-button",
+      "context": "",
+      "count": 2,
+      "lines": [
+        14665,
+        17522
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-calendar-week-allday",
+      "context": "",
+      "count": 2,
+      "lines": [
+        14813,
+        15407
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-calendar-week-allday-gutter",
+      "context": "",
+      "count": 2,
+      "lines": [
+        14818,
+        15412
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-calendar-week-body",
+      "context": "",
+      "count": 2,
+      "lines": [
+        14894,
+        15540
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-calendar-week-day-num.is-today",
+      "context": "",
+      "count": 2,
+      "lines": [
+        14930,
+        15979
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-calendar-week-timed-event",
+      "context": "",
+      "count": 2,
+      "lines": [
+        14993,
+        15565
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-calendar-week-allday-date.is-today",
+      "context": "",
+      "count": 2,
+      "lines": [
+        15470,
+        15979
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-calendar-timed-drag-preview",
+      "context": "",
+      "count": 2,
+      "lines": [
+        15648,
+        16485
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-timeline-event",
+      "context": "",
+      "count": 2,
+      "lines": [
+        15674,
+        16303
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-timeline-mobile-menu-button",
+      "context": "",
+      "count": 2,
+      "lines": [
+        15692,
+        16462
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-timeline-event.is-all-day",
+      "context": "",
+      "count": 2,
+      "lines": [
+        15782,
+        16333
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-timeline-snap-marker.is-timed-range",
+      "context": "",
+      "count": 2,
+      "lines": [
+        16485,
+        16497
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-timeline-event > .db-timeline-snap-marker",
+      "context": "",
+      "count": 2,
+      "lines": [
+        16485,
+        16512
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-timeline-window-jump",
+      "context": "",
+      "count": 2,
+      "lines": [
+        16548,
+        17522
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-chart-number",
+      "context": "",
+      "count": 2,
+      "lines": [
+        16667,
+        16684
+      ]
+    },
+    {
+      "selector": ".is-phone .note-database-container .db-toolbar-left",
+      "context": "",
+      "count": 2,
+      "lines": [
+        16828,
+        16832
+      ]
+    },
+    {
+      "selector": ".is-phone .note-database-container .db-toolbar-right",
+      "context": "",
+      "count": 3,
+      "lines": [
+        16828,
+        16856,
+        19231
+      ]
+    },
+    {
+      "selector": ".is-phone .note-database-container .db-view-tabs",
+      "context": "",
+      "count": 2,
+      "lines": [
+        16837,
+        19226
+      ]
+    },
+    {
+      "selector": ".is-phone .note-database-container .db-column-manager-row",
+      "context": "",
+      "count": 2,
+      "lines": [
+        16879,
+        16995
+      ]
+    },
+    {
+      "selector": ".is-phone .note-database-settings .setting-group-body .setting-item .setting-item-control",
+      "context": "",
+      "count": 2,
+      "lines": [
+        16896,
+        16901
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-card-mobile-move-btn",
+      "context": "",
+      "count": 3,
+      "lines": [
+        17027,
+        17522,
+        17641
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-list-mobile-move-btn",
+      "context": "",
+      "count": 3,
+      "lines": [
+        17027,
+        17522,
+        17641
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-table-mobile-move-btn",
+      "context": "",
+      "count": 3,
+      "lines": [
+        17027,
+        17522,
+        17641
+      ]
+    },
+    {
+      "selector": ".is-phone .note-database-container .db-table th.db-select-col",
+      "context": "",
+      "count": 2,
+      "lines": [
+        17069,
+        17825
+      ]
+    },
+    {
+      "selector": ".is-phone .note-database-container .db-table td.db-select-col",
+      "context": "",
+      "count": 2,
+      "lines": [
+        17069,
+        17825
+      ]
+    },
+    {
+      "selector": ".is-phone .note-database-container .db-list-row",
+      "context": "",
+      "count": 3,
+      "lines": [
+        17201,
+        17865,
+        17870
+      ]
+    },
+    {
+      "selector": ".db-icon-picker-header",
+      "context": "",
+      "count": 2,
+      "lines": [
+        17437,
+        17438
+      ]
+    },
+    {
+      "selector": ".db-icon-picker-colors",
+      "context": "",
+      "count": 2,
+      "lines": [
+        17437,
+        17465
+      ]
+    },
+    {
+      "selector": ".db-icon-picker-nav",
+      "context": "",
+      "count": 2,
+      "lines": [
+        17437,
+        17501
+      ]
+    },
+    {
+      "selector": ".db-icon-picker-popover .db-icon-picker-tabs button",
+      "context": "",
+      "count": 4,
+      "lines": [
+        17446,
+        17455,
+        17456,
+        17654
+      ]
+    },
+    {
+      "selector": ".db-icon-picker-popover button.db-icon-picker-remove",
+      "context": "",
+      "count": 4,
+      "lines": [
+        17446,
+        17455,
+        17458,
+        17654
+      ]
+    },
+    {
+      "selector": ".db-icon-picker-popover button.db-icon-picker-random",
+      "context": "",
+      "count": 3,
+      "lines": [
+        17446,
+        17462,
+        17654
+      ]
+    },
+    {
+      "selector": ".db-icon-picker-popover button.db-icon-picker-settings",
+      "context": "",
+      "count": 3,
+      "lines": [
+        17446,
+        17462,
+        17654
+      ]
+    },
+    {
+      "selector": ".db-icon-picker-popover button.db-icon-picker-item",
+      "context": "",
+      "count": 3,
+      "lines": [
+        17446,
+        17480,
+        17654
+      ]
+    },
+    {
+      "selector": ".db-icon-picker-popover .db-icon-picker-nav button",
+      "context": "",
+      "count": 2,
+      "lines": [
+        17446,
+        17502
+      ]
+    },
+    {
+      "selector": ".db-icon-picker-popover button.db-icon-color",
+      "context": "",
+      "count": 3,
+      "lines": [
+        17446,
+        17466,
+        17654
+      ]
+    },
+    {
+      "selector": ".note-database-container :is(button, input, select, textarea, [role=\"button\"], [tabindex]):focus-visible",
+      "context": "",
+      "count": 2,
+      "lines": [
+        17707,
+        19202
+      ]
+    },
+    {
+      "selector": ".db-column-menu-subpopover :is(button, input, select, textarea, [role=\"button\"], [tabindex]):focus-visible",
+      "context": "",
+      "count": 2,
+      "lines": [
+        17707,
+        19202
+      ]
+    },
+    {
+      "selector": ".db-icon-picker-popover :is(button, input, select, textarea, [role=\"button\"], [tabindex]):focus-visible",
+      "context": "",
+      "count": 2,
+      "lines": [
+        17707,
+        19202
+      ]
+    },
+    {
+      "selector": ".db-color-picker-popup :is(button, input, select, textarea, [role=\"button\"], [tabindex]):focus-visible",
+      "context": "",
+      "count": 2,
+      "lines": [
+        17707,
+        19202
+      ]
+    },
+    {
+      "selector": ".db-mobile-column-width-panel :is(button, input, select, textarea, [role=\"button\"], [tabindex]):focus-visible",
+      "context": "",
+      "count": 2,
+      "lines": [
+        17707,
+        19202
+      ]
+    },
+    {
+      "selector": ".db-cell-edit-popover :is(button, input, select, textarea, [role=\"button\"], [tabindex]):focus-visible",
+      "context": "",
+      "count": 2,
+      "lines": [
+        17707,
+        19202
+      ]
+    },
+    {
+      "selector": ".is-phone .note-database-container .db-list-row-meta",
+      "context": "",
+      "count": 2,
+      "lines": [
+        17865,
+        17873
+      ]
+    },
+    {
+      "selector": ".db-column-menu-subpopover *",
+      "context": "@media (prefers-reduced-motion: reduce)",
+      "count": 4,
+      "lines": [
+        17962,
+        17975,
+        19176,
+        19256
+      ]
+    },
+    {
+      "selector": ".db-icon-picker-popover *",
+      "context": "@media (prefers-reduced-motion: reduce)",
+      "count": 4,
+      "lines": [
+        17962,
+        17975,
+        19176,
+        19256
+      ]
+    },
+    {
+      "selector": ".db-color-picker-popup *",
+      "context": "@media (prefers-reduced-motion: reduce)",
+      "count": 2,
+      "lines": [
+        17962,
+        19188
+      ]
+    },
+    {
+      "selector": ".db-mobile-column-width-panel *",
+      "context": "@media (prefers-reduced-motion: reduce)",
+      "count": 2,
+      "lines": [
+        17962,
+        19188
+      ]
+    },
+    {
+      "selector": ".db-dropdown-popover *",
+      "context": "@media (prefers-reduced-motion: reduce)",
+      "count": 2,
+      "lines": [
+        17962,
+        19188
+      ]
+    },
+    {
+      "selector": ".db-calendar-search-results-popover *",
+      "context": "@media (prefers-reduced-motion: reduce)",
+      "count": 2,
+      "lines": [
+        17962,
+        19188
+      ]
+    },
+    {
+      "selector": ".db-cell-edit-popover *",
+      "context": "@media (prefers-reduced-motion: reduce)",
+      "count": 4,
+      "lines": [
+        17962,
+        17975,
+        19176,
+        19256
+      ]
+    },
+    {
+      "selector": ".db-relation-clear",
+      "context": "",
+      "count": 2,
+      "lines": [
+        18174,
+        18184
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-table td[tabindex]:focus-visible",
+      "context": "",
+      "count": 2,
+      "lines": [
+        18531,
+        19207
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-heading-chevron-button",
+      "context": "",
+      "count": 3,
+      "lines": [
+        18638,
+        18653,
+        18673
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-heading-rename-button",
+      "context": "",
+      "count": 4,
+      "lines": [
+        18638,
+        18653,
+        18673,
+        18678
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-add-view-popover",
+      "context": "",
+      "count": 2,
+      "lines": [
+        18856,
+        18865
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-add-view-duplicate-action",
+      "context": "",
+      "count": 2,
+      "lines": [
+        19049,
+        19071
+      ]
+    },
+    {
+      "selector": ".note-database-container .db-toolbar-right",
+      "context": "@media (max-width: 700px)",
+      "count": 2,
+      "lines": [
+        19126,
+        19136
+      ]
+    }
+  ],
+  "conflicts": [
+    {
+      "selector": ".db-color-picker-popup",
+      "context": "",
+      "prop": "background",
+      "from": "var(--background-primary)",
+      "fromLine": 6510,
+      "to": "var(--db-surface-overlay)",
+      "toLine": 18474,
+      "classification": "unknown"
+    },
+    {
+      "selector": ".db-icon-picker-popover",
+      "context": "",
+      "prop": "box-shadow",
+      "from": "var(--db-elevation-2)",
+      "fromLine": 386,
+      "to": "var(--db-elevation-3)",
+      "toLine": 17423,
+      "classification": "unknown"
+    },
+    {
+      "selector": ".db-icon-picker-popover",
+      "context": "",
+      "prop": "background",
+      "from": "var(--background-primary)",
+      "fromLine": 17423,
+      "to": "var(--db-surface-overlay)",
+      "toLine": 18461,
+      "classification": "unknown"
+    },
+    {
+      "selector": ".db-icon-picker-popover",
+      "context": "",
+      "prop": "box-shadow",
+      "from": "var(--db-elevation-3)",
+      "fromLine": 17423,
+      "to": "var(--db-elevation-2)",
+      "toLine": 18461,
+      "classification": "unknown"
+    },
+    {
+      "selector": ".db-column-menu-subpopover",
+      "context": "",
+      "prop": "z-index",
+      "from": "var(--db-layer-popover, 100)",
+      "fromLine": 386,
+      "to": "var(--db-layer-submenu, 110)",
+      "toLine": 392,
+      "classification": "unknown"
+    },
+    {
+      "selector": ".db-column-menu-subpopover",
+      "context": "",
+      "prop": "z-index",
+      "from": "var(--db-layer-submenu, 110)",
+      "fromLine": 3084,
+      "to": "var(--db-layer-submenu, 110) !important",
+      "toLine": 18606,
+      "classification": "unknown"
+    },
+    {
+      "selector": ".note-database-container .db-filter-panel",
+      "context": "",
+      "prop": "background",
+      "from": "var(--background-primary)",
+      "fromLine": 9836,
+      "to": "var(--db-surface-overlay)",
+      "toLine": 18461,
+      "classification": "unknown"
+    },
+    {
+      "selector": ".note-database-container .db-view-config-panel",
+      "context": "",
+      "prop": "width",
+      "from": "min(520px, calc(100vw - 72px))",
+      "fromLine": 9836,
+      "to": "min(440px, calc(100vw - 72px))",
+      "toLine": 9854,
+      "classification": "unknown"
+    },
+    {
+      "selector": ".note-database-container .db-view-config-panel",
+      "context": "",
+      "prop": "background",
+      "from": "var(--background-primary)",
+      "fromLine": 9836,
+      "to": "var(--db-surface-overlay)",
+      "toLine": 18461,
+      "classification": "unknown"
+    },
+    {
+      "selector": ".note-database-container .db-column-manager",
+      "context": "",
+      "prop": "background",
+      "from": "var(--background-primary)",
+      "fromLine": 9836,
+      "to": "var(--db-surface-overlay)",
+      "toLine": 18461,
+      "classification": "unknown"
+    },
+    {
+      "selector": ".note-database-container *",
+      "context": "@media (prefers-reduced-motion: reduce)",
+      "prop": "scroll-behavior",
+      "from": "auto",
+      "fromLine": 560,
+      "to": "auto !important",
+      "toLine": 17962,
+      "classification": "unknown"
+    },
+    {
+      "selector": ".note-database-container *",
+      "context": "@media (prefers-reduced-motion: reduce)",
+      "prop": "animation-duration",
+      "from": "0.01ms",
+      "fromLine": 560,
+      "to": "0.01ms !important",
+      "toLine": 17975,
+      "classification": "unknown"
+    },
+    {
+      "selector": ".note-database-container *",
+      "context": "@media (prefers-reduced-motion: reduce)",
+      "prop": "animation-iteration-count",
+      "from": "1",
+      "fromLine": 560,
+      "to": "1 !important",
+      "toLine": 17975,
+      "classification": "unknown"
+    },
+    {
+      "selector": ".note-database-container *",
+      "context": "@media (prefers-reduced-motion: reduce)",
+      "prop": "transition-duration",
+      "from": "0.01ms",
+      "fromLine": 560,
+      "to": "0.01ms !important",
+      "toLine": 17975,
+      "classification": "unknown"
+    },
+    {
+      "selector": ".note-database-container *::before",
+      "context": "@media (prefers-reduced-motion: reduce)",
+      "prop": "scroll-behavior",
+      "from": "auto",
+      "fromLine": 560,
+      "to": "auto !important",
+      "toLine": 17962,
+      "classification": "unknown"
+    },
+    {
+      "selector": ".note-database-container *::before",
+      "context": "@media (prefers-reduced-motion: reduce)",
+      "prop": "animation-duration",
+      "from": "0.01ms",
+      "fromLine": 560,
+      "to": "0.01ms !important",
+      "toLine": 17975,
+      "classification": "unknown"
+    },
+    {
+      "selector": ".note-database-container *::before",
+      "context": "@media (prefers-reduced-motion: reduce)",
+      "prop": "animation-iteration-count",
+      "from": "1",
+      "fromLine": 560,
+      "to": "1 !important",
+      "toLine": 17975,
+      "classification": "unknown"
+    },
+    {
+      "selector": ".note-database-container *::before",
+      "context": "@media (prefers-reduced-motion: reduce)",
+      "prop": "transition-duration",
+      "from": "0.01ms",
+      "fromLine": 560,
+      "to": "0.01ms !important",
+      "toLine": 17975,
+      "classification": "unknown"
+    },
+    {
+      "selector": ".note-database-container *::after",
+      "context": "@media (prefers-reduced-motion: reduce)",
+      "prop": "scroll-behavior",
+      "from": "auto",
+      "fromLine": 560,
+      "to": "auto !important",
+      "toLine": 17962,
+      "classification": "unknown"
+    },
+    {
+      "selector": ".note-database-container *::after",
+      "context": "@media (prefers-reduced-motion: reduce)",
+      "prop": "animation-duration",
+      "from": "0.01ms",
+      "fromLine": 560,
+      "to": "0.01ms !important",
+      "toLine": 17975,
+      "classification": "unknown"
+    },
+    {
+      "selector": ".note-database-container *::after",
+      "context": "@media (prefers-reduced-motion: reduce)",
+      "prop": "animation-iteration-count",
+      "from": "1",
+      "fromLine": 560,
+      "to": "1 !important",
+      "toLine": 17975,
+      "classification": "unknown"
+    },
+    {
+      "selector": ".note-database-container *::after",
+      "context": "@media (prefers-reduced-motion: reduce)",
+      "prop": "transition-duration",
+      "from": "0.01ms",
+      "fromLine": 560,
+      "to": "0.01ms !important",
+      "toLine": 17975,
+      "classification": "unknown"
+    },
+    {
+      "selector": ".note-database-container .db-conditional-format-dropdown",
+      "context": "",
+      "prop": "background",
+      "from": "var(--background-primary)",
+      "fromLine": 884,
+      "to": "var(--db-surface-overlay)",
+      "toLine": 18461,
+      "classification": "unknown"
+    },
+    {
+      "selector": ".note-database-container .db-heading-button",
+      "context": "",
+      "prop": "min-height",
+      "from": "0",
+      "fromLine": 1099,
+      "to": "30px",
+      "toLine": 18653,
+      "classification": "unknown"
+    },
+    {
+      "selector": ".note-database-container .db-heading-button",
+      "context": "",
+      "prop": "justify-content",
+      "from": "center",
+      "fromLine": 18653,
+      "to": "flex-start",
+      "toLine": 18665,
+      "classification": "unknown"
+    },
+    {
+      "selector": ".note-database-container .db-toolbar-right",
+      "context": "",
+      "prop": "gap",
+      "from": "var(--db-space-3)",
+      "fromLine": 1311,
+      "to": "var(--db-space-2)",
+      "toLine": 18612,
+      "classification": "unknown"
+    },
+    {
+      "selector": ".note-database-container .db-active-view-controls-scroll",
+      "context": "",
+      "prop": "-webkit-mask-image",
+      "from": "linear-gradient(to right, transparent, black var(--db-space-4), black calc(100% - var(--db-space-4)), transparent)",
+      "fromLine": 18577,
+      "to": "none",
+      "toLine": 19096,
+      "classification": "unknown"
+    },
+    {
+      "selector": ".note-database-container .db-active-view-controls-scroll",
+      "context": "",
+      "prop": "mask-image",
+      "from": "linear-gradient(to right, transparent, black var(--db-space-4), black calc(100% - var(--db-space-4)), transparent)",
+      "fromLine": 18577,
+      "to": "none",
+      "toLine": 19096,
+      "classification": "unknown"
+    },
+    {
+      "selector": ".note-database-container .db-active-control-remove",
+      "context": "",
+      "prop": "color",
+      "from": "inherit",
+      "fromLine": 1390,
+      "to": "color-mix(in srgb, var(--text-accent) 58%, var(--text-faint))",
+      "toLine": 1463,
+      "classification": "unknown"
+    },
+    {
+      "selector": ".note-database-container .db-view-tab.is-drop-target",
+      "context": "",
+      "prop": "background",
+      "from": "var(--background-modifier-hover)",
+      "fromLine": 1610,
+      "to": "transparent",
+      "toLine": 18725,
+      "classification": "unknown"
+    },
+    {
+      "selector": ".note-database-container .db-view-tab.is-drop-target",
+      "context": "",
+      "prop": "box-shadow",
+      "from": "inset 0 0 0 1px color-mix(in srgb, var(--interactive-accent) 65%, transparent)",
+      "fromLine": 1610,
+      "to": "none",
+      "toLine": 18725,
+      "classification": "unknown"
+    },
+    {
+      "selector": ".note-database-container .db-view-switcher select",
+      "context": "",
+      "prop": "max-width",
+      "from": "none",
+      "fromLine": 1658,
+      "to": "240px",
+      "toLine": 1671,
+      "classification": "unknown"
+    },
+    {
+      "selector": ".note-database-container .db-view-switcher select",
+      "context": "",
+      "prop": "color",
+      "from": "var(--text-muted)",
+      "fromLine": 1658,
+      "to": "var(--text-normal)",
+      "toLine": 1671,
+      "classification": "unknown"
+    },
+    {
+      "selector": ".note-database-container .db-new-button",
+      "context": "",
+      "prop": "background",
+      "from": "transparent",
+      "fromLine": 1688,
+      "to": "var(--interactive-accent)",
+      "toLine": 3461,
+      "classification": "unknown"
+    },
+    {
+      "selector": ".note-database-container .db-new-button",
+      "context": "",
+      "prop": "color",
+      "from": "var(--text-muted)",
+      "fromLine": 1688,
+      "to": "var(--text-on-accent)",
+      "toLine": 3461,
+      "classification": "unknown"
+    },
+    {
+      "selector": ".note-database-container .db-selection-count-badge",
+      "context": "",
+      "prop": "color",
+      "from": "var(--interactive-accent)",
+      "fromLine": 1954,
+      "to": "var(--text-normal)",
+      "toLine": 2137,
+      "classification": "unknown"
+    },
+    {
+      "selector": ".note-database-container .db-mobile-reorder-controls",
+      "context": "",
+      "prop": "display",
+      "from": "none",
+      "fromLine": 2038,
+      "to": "inline-flex",
+      "toLine": 18776,
+      "classification": "unknown"
+    },
+    {
+      "selector": ".note-database-container .db-mobile-reorder-controls button",
+      "context": "",
+      "prop": "width",
+      "from": "20px",
+      "fromLine": 2046,
+      "to": "24px",
+      "toLine": 18781,
+      "classification": "unknown"
+    },
+    {
+      "selector": ".note-database-container .db-mobile-reorder-controls button",
+      "context": "",
+      "prop": "height",
+      "from": "20px",
+      "fromLine": 2046,
+      "to": "24px",
+      "toLine": 18781,
+      "classification": "unknown"
+    },
+    {
+      "selector": ".note-database-container .db-search-control",
+      "context": "",
+      "prop": "padding",
+      "from": "0 6px",
+      "fromLine": 2267,
+      "to": "0",
+      "toLine": 3210,
+      "classification": "unknown"
+    },
+    {
+      "selector": ".note-database-container .db-search-control",
+      "context": "",
+      "prop": "width",
+      "from": "28px",
+      "fromLine": 3210,
+      "to": "150px",
+      "toLine": 18788,
+      "classification": "unknown"
+    },
+    {
+      "selector": ".note-database-container .db-search-control",
+      "context": "",
+      "prop": "overflow",
+      "from": "hidden",
+      "fromLine": 3210,
+      "to": "visible",
+      "toLine": 18788,
+      "classification": "unknown"
+    },
+    {
+      "selector": ".note-database-container .db-search-button",
+      "context": "",
+      "prop": "color",
+      "from": "inherit",
+      "fromLine": 2284,
+      "to": "var(--text-muted)",
+      "toLine": 3229,
+      "classification": "unknown"
+    },
+    {
+      "selector": ".note-database-container .db-dropdown-popover",
+      "context": "",
+      "prop": "background",
+      "from": "var(--background-primary)",
+      "fromLine": 2396,
+      "to": "var(--db-surface-overlay)",
+      "toLine": 18461,
+      "classification": "unknown"
+    },
+    {
+      "selector": ".note-database-container .db-dropdown-option-swatches",
+      "context": "",
+      "prop": "min-width",
+      "from": "0",
+      "fromLine": 2533,
+      "to": "40px",
+      "toLine": 2569,
+      "classification": "unknown"
+    },
+    {
+      "selector": ".note-database-container .db-chart-options-popover",
+      "context": "",
+      "prop": "width",
+      "from": "min(560px, calc(100vw - 72px))",
+      "fromLine": 4091,
+      "to": "min(520px, calc(100vw - 72px))",
+      "toLine": 9836,
+      "classification": "unknown"
+    },
+    {
+      "selector": ".note-database-container .db-chart-options-popover",
+      "context": "",
+      "prop": "max-height",
+      "from": "min(620px, calc(100vh - 140px))",
+      "fromLine": 4091,
+      "to": "min(560px, calc(100vh - 140px))",
+      "toLine": 9836,
+      "classification": "unknown"
+    },
+    {
+      "selector": ".note-database-container .db-chart-options-popover",
+      "context": "",
+      "prop": "background",
+      "from": "var(--background-primary)",
+      "fromLine": 9836,
+      "to": "var(--db-surface-overlay)",
+      "toLine": 18461,
+      "classification": "unknown"
+    },
+    {
+      "selector": ".note-database-container .db-table th",
+      "context": "",
+      "prop": "background",
+      "from": "var(--db-surface-canvas)",
+      "fromLine": 4629,
+      "to": "var(--db-table-header-background)",
+      "toLine": 4664,
+      "classification": "unknown"
+    },
+    {
+      "selector": ".note-database-container .db-file-tag-remove",
+      "context": "",
+      "prop": "color",
+      "from": "var(--text-muted)",
+      "fromLine": 5782,
+      "to": "inherit",
+      "toLine": 5870,
+      "classification": "unknown"
+    },
+    {
+      "selector": ".note-database-container .db-board-card.is-drop-target",
+      "context": "",
+      "prop": "background",
+      "from": "color-mix(in srgb, var(--interactive-accent) 7%, var(--background-primary))",
+      "fromLine": 5924,
+      "to": "var(--background-interactive-hover)",
+      "toLine": 8689,
+      "classification": "unknown"
+    },
+    {
+      "selector": ".note-database-container .db-cell-option-popover",
+      "context": "",
+      "prop": "background",
+      "from": "var(--background-primary)",
+      "fromLine": 6261,
+      "to": "var(--db-surface-overlay)",
+      "toLine": 18461,
+      "classification": "unknown"
+    },
+    {
+      "selector": ".db-cell-option-drag-preview.db-cell-option-item",
+      "context": "",
+      "prop": "border",
+      "from": "0",
+      "fromLine": 6279,
+      "to": "1px solid var(--background-modifier-border)",
+      "toLine": 6301,
+      "classification": "unknown"
+    },
+    {
+      "selector": ".db-cell-option-drag-preview.db-cell-option-item",
+      "context": "",
+      "prop": "border-radius",
+      "from": "0",
+      "fromLine": 6279,
+      "to": "var(--db-radius-md)",
+      "toLine": 6301,
+      "classification": "unknown"
+    },
+    {
+      "selector": ".db-cell-option-drag-preview.db-cell-option-item",
+      "context": "",
+      "prop": "background",
+      "from": "transparent",
+      "fromLine": 6279,
+      "to": "var(--background-primary)",
+      "toLine": 6301,
+      "classification": "unknown"
+    },
+    {
+      "selector": ".db-cell-option-drag-preview.db-cell-option-item",
+      "context": "",
+      "prop": "box-shadow",
+      "from": "none",
+      "fromLine": 6279,
+      "to": "var(--db-elevation-2)",
+      "toLine": 6301,
+      "classification": "unknown"
+    },
+    {
+      "selector": ".note-database-container .db-cell-edit-popover",
+      "context": "",
+      "prop": "background",
+      "from": "var(--background-primary)",
+      "fromLine": 6693,
+      "to": "var(--db-surface-overlay)",
+      "toLine": 18461,
+      "classification": "unknown"
+    },
+    {
+      "selector": ".note-database-container .db-grouped-table",
+      "context": "",
+      "prop": "display",
+      "from": "flex",
+      "fromLine": 7295,
+      "to": "block",
+      "toLine": 7411,
+      "classification": "unknown"
+    },
+    {
+      "selector": ".note-database-modal .db-modal-help",
+      "context": "",
+      "prop": "font-size",
+      "from": "13px",
+      "fromLine": 7621,
+      "to": "11px",
+      "toLine": 12026,
+      "classification": "unknown"
+    },
+    {
+      "selector": ".note-database-modal .db-property-conflict-writers-title",
+      "context": "",
+      "prop": "color",
+      "from": "var(--text-muted)",
+      "fromLine": 7811,
+      "to": "var(--text-normal)",
+      "toLine": 7816,
+      "classification": "unknown"
+    },
+    {
+      "selector": ".note-database-container .db-group-order-popover",
+      "context": "",
+      "prop": "background",
+      "from": "var(--background-primary)",
+      "fromLine": 7959,
+      "to": "var(--db-surface-overlay)",
+      "toLine": 18461,
+      "classification": "unknown"
+    },
+    {
+      "selector": ".note-database-container .db-gallery-group-header",
+      "context": "",
+      "prop": "border-bottom",
+      "from": "1px solid var(--background-modifier-border)",
+      "fromLine": 9198,
+      "to": "0",
+      "toLine": 9212,
+      "classification": "unknown"
+    },
+    {
+      "selector": ".note-database-container .db-list-group-header",
+      "context": "",
+      "prop": "box-shadow",
+      "from": "inset 0 -1px 0 var(--background-modifier-border)",
+      "fromLine": 9547,
+      "to": "none",
+      "toLine": 9565,
+      "classification": "unknown"
+    },
+    {
+      "selector": ".note-database-container .db-database-popover",
+      "context": "",
+      "prop": "width",
+      "from": "min(520px, calc(100vw - 72px))",
+      "fromLine": 9836,
+      "to": "min(420px, calc(100vw - 72px))",
+      "toLine": 9869,
+      "classification": "unknown"
+    },
+    {
+      "selector": ".note-database-container .db-database-popover",
+      "context": "",
+      "prop": "max-height",
+      "from": "min(560px, calc(100vh - 140px))",
+      "fromLine": 9836,
+      "to": "min(520px, calc(100vh - 140px))",
+      "toLine": 9869,
+      "classification": "unknown"
+    },
+    {
+      "selector": ".note-database-container .db-database-popover",
+      "context": "",
+      "prop": "background",
+      "from": "var(--background-primary)",
+      "fromLine": 9836,
+      "to": "var(--db-surface-overlay)",
+      "toLine": 18461,
+      "classification": "unknown"
+    },
+    {
+      "selector": ".note-database-container .db-group-popover",
+      "context": "",
+      "prop": "width",
+      "from": "min(520px, calc(100vw - 72px))",
+      "fromLine": 9836,
+      "to": "min(380px, calc(100vw - 72px))",
+      "toLine": 9858,
+      "classification": "unknown"
+    },
+    {
+      "selector": ".note-database-container .db-group-popover",
+      "context": "",
+      "prop": "max-height",
+      "from": "min(560px, calc(100vh - 140px))",
+      "fromLine": 9836,
+      "to": "min(520px, calc(100vh - 140px))",
+      "toLine": 9858,
+      "classification": "unknown"
+    },
+    {
+      "selector": ".note-database-container .db-group-popover",
+      "context": "",
+      "prop": "background",
+      "from": "var(--background-primary)",
+      "fromLine": 9836,
+      "to": "var(--db-surface-overlay)",
+      "toLine": 18461,
+      "classification": "unknown"
+    },
+    {
+      "selector": ".note-database-container .db-export-popover",
+      "context": "",
+      "prop": "width",
+      "from": "min(520px, calc(100vw - 72px))",
+      "fromLine": 9836,
+      "to": "min(320px, calc(100vw - 72px))",
+      "toLine": 9864,
+      "classification": "unknown"
+    },
+    {
+      "selector": ".note-database-container .db-export-popover",
+      "context": "",
+      "prop": "max-height",
+      "from": "min(560px, calc(100vh - 140px))",
+      "fromLine": 9836,
+      "to": "min(420px, calc(100vh - 140px))",
+      "toLine": 9864,
+      "classification": "unknown"
+    },
+    {
+      "selector": ".note-database-container .db-view-tab-popover",
+      "context": "",
+      "prop": "width",
+      "from": "min(520px, calc(100vw - 72px))",
+      "fromLine": 9836,
+      "to": "min(320px, calc(100vw - 72px))",
+      "toLine": 9864,
+      "classification": "unknown"
+    },
+    {
+      "selector": ".note-database-container .db-view-tab-popover",
+      "context": "",
+      "prop": "max-height",
+      "from": "min(560px, calc(100vh - 140px))",
+      "fromLine": 9836,
+      "to": "min(420px, calc(100vh - 140px))",
+      "toLine": 9864,
+      "classification": "unknown"
+    },
+    {
+      "selector": ".note-database-container .db-view-tab-popover",
+      "context": "",
+      "prop": "background",
+      "from": "var(--background-primary)",
+      "fromLine": 9836,
+      "to": "var(--db-surface-overlay)",
+      "toLine": 18461,
+      "classification": "unknown"
+    },
+    {
+      "selector": ".note-database-container .db-database-popover-row",
+      "context": "",
+      "prop": "grid-template-columns",
+      "from": "18px 18px minmax(0, 1fr) 16px",
+      "fromLine": 9874,
+      "to": "18px 18px minmax(0, 1fr)",
+      "toLine": 18753,
+      "classification": "unknown"
+    },
+    {
+      "selector": ".note-database-container .db-database-popover-row",
+      "context": "",
+      "prop": "gap",
+      "from": "var(--db-space-3)",
+      "fromLine": 9874,
+      "to": "var(--db-space-2)",
+      "toLine": 18753,
+      "classification": "unknown"
+    },
+    {
+      "selector": ".note-database-container .db-database-popover-row",
+      "context": "",
+      "prop": "padding",
+      "from": "4px 6px",
+      "fromLine": 9874,
+      "to": "2px var(--db-space-2)",
+      "toLine": 18753,
+      "classification": "unknown"
+    },
+    {
+      "selector": ".note-database-container .db-export-popover-row",
+      "context": "",
+      "prop": "grid-template-columns",
+      "from": "22px minmax(0, 1fr) 16px",
+      "fromLine": 10023,
+      "to": "22px minmax(0, 1fr)",
+      "toLine": 10041,
+      "classification": "unknown"
+    },
+    {
+      "selector": ".note-database-container .db-view-config-section-title",
+      "context": "",
+      "prop": "color",
+      "from": "var(--text-normal)",
+      "fromLine": 10101,
+      "to": "var(--text-muted)",
+      "toLine": 19112,
+      "classification": "unknown"
+    },
+    {
+      "selector": ".note-database-container .db-view-config-section-title",
+      "context": "",
+      "prop": "font-size",
+      "from": "12px",
+      "fromLine": 10101,
+      "to": "var(--db-font-xs)",
+      "toLine": 19112,
+      "classification": "unknown"
+    },
+    {
+      "selector": ".note-database-container .db-source-rule-leaf-controls",
+      "context": "",
+      "prop": "align-items",
+      "from": "center",
+      "fromLine": 10670,
+      "to": "stretch",
+      "toLine": 10684,
+      "classification": "unknown"
+    },
+    {
+      "selector": ".modal.formula-workbench-modal-host",
+      "context": "@media (max-width: 1100px)",
+      "prop": "width",
+      "from": "min(760px, calc(100vw - 24px))",
+      "fromLine": 12067,
+      "to": "min(780px, calc(100vw - 24px))",
+      "toLine": 13023,
+      "classification": "unknown"
+    },
+    {
+      "selector": ".note-database-modal .db-formula-header",
+      "context": "@media (max-width: 1100px)",
+      "prop": "align-items",
+      "from": "stretch",
+      "fromLine": 12079,
+      "to": "center",
+      "toLine": 13041,
+      "classification": "unknown"
+    },
+    {
+      "selector": ".note-database-modal .db-formula-result-type",
+      "context": "@media (max-width: 1100px)",
+      "prop": "align-items",
+      "from": "stretch",
+      "fromLine": 12079,
+      "to": "center",
+      "toLine": 13059,
+      "classification": "unknown"
+    },
+    {
+      "selector": ".note-database-modal .db-formula-preview",
+      "context": "@media (max-width: 1100px)",
+      "prop": "max-height",
+      "from": "360px",
+      "fromLine": 12105,
+      "to": "none",
+      "toLine": 13109,
+      "classification": "unknown"
+    },
+    {
+      "selector": ".note-database-modal .db-formula-preview-details",
+      "context": "@media (max-width: 1100px)",
+      "prop": "max-height",
+      "from": "190px",
+      "fromLine": 12111,
+      "to": "220px",
+      "toLine": 13116,
+      "classification": "unknown"
+    },
+    {
+      "selector": ".note-database-modal .db-formula-browser",
+      "context": "@media (max-width: 1100px)",
+      "prop": "max-height",
+      "from": "420px",
+      "fromLine": 12115,
+      "to": "none",
+      "toLine": 13144,
+      "classification": "unknown"
+    },
+    {
+      "selector": ".note-database-modal .db-formula-browser-three-col",
+      "context": "@media (max-width: 1100px)",
+      "prop": "grid-template-columns",
+      "from": "minmax(0, 1fr)",
+      "fromLine": 12119,
+      "to": "1fr",
+      "toLine": 13150,
+      "classification": "unknown"
+    },
+    {
+      "selector": ".note-database-modal .db-formula-browser-three-col",
+      "context": "@media (max-width: 1100px)",
+      "prop": "grid-template-rows",
+      "from": "auto minmax(120px, 1fr) minmax(120px, auto)",
+      "fromLine": 12119,
+      "to": "auto minmax(0, 1fr) minmax(116px, auto)",
+      "toLine": 13150,
+      "classification": "unknown"
+    },
+    {
+      "selector": ".note-database-modal .db-formula-browser-three-col",
+      "context": "@media (max-width: 1100px)",
+      "prop": "min-height",
+      "from": "320px",
+      "fromLine": 12119,
+      "to": "0",
+      "toLine": 13150,
+      "classification": "unknown"
+    },
+    {
+      "selector": ".note-database-modal .db-formula-browser-three-col",
+      "context": "@media (max-width: 1100px)",
+      "prop": "max-height",
+      "from": "420px",
+      "fromLine": 12119,
+      "to": "none",
+      "toLine": 13150,
+      "classification": "unknown"
+    },
+    {
+      "selector": ".note-database-modal .db-formula-browser-three-col .db-formula-category",
+      "context": "@media (max-width: 1100px)",
+      "prop": "padding",
+      "from": "var(--db-space-3) var(--db-space-4)",
+      "fromLine": 12137,
+      "to": "var(--db-space-3) var(--db-space-5)",
+      "toLine": 13170,
+      "classification": "unknown"
+    },
+    {
+      "selector": ".note-database-modal .db-formula-function-desc",
+      "context": "",
+      "prop": "font-size",
+      "from": "12px",
+      "fromLine": 12838,
+      "to": "11px",
+      "toLine": 13007,
+      "classification": "unknown"
+    },
+    {
+      "selector": ".note-database-embed.note-database-container table.db-table th",
+      "context": "",
+      "prop": "background",
+      "from": "var(--background-primary)",
+      "fromLine": 13776,
+      "to": "var(--db-table-header-background)",
+      "toLine": 13793,
+      "classification": "unknown"
+    },
+    {
+      "selector": ".note-database-embed.note-database-container table.db-table th",
+      "context": "",
+      "prop": "color",
+      "from": "inherit",
+      "fromLine": 13776,
+      "to": "color-mix(in srgb, var(--text-normal) 76%, var(--text-muted))",
+      "toLine": 13793,
+      "classification": "unknown"
+    },
+    {
+      "selector": ".note-database-embed.note-database-container table.db-table td",
+      "context": "",
+      "prop": "color",
+      "from": "inherit",
+      "fromLine": 13776,
+      "to": "var(--text-normal)",
+      "toLine": 13822,
+      "classification": "unknown"
+    },
+    {
+      "selector": ".note-database-container .db-calendar-week-allday-gutter",
+      "context": "",
+      "prop": "padding",
+      "from": "4px",
+      "fromLine": 14818,
+      "to": "34px 8px 6px 4px",
+      "toLine": 15412,
+      "classification": "unknown"
+    },
+    {
+      "selector": ".note-database-container .db-calendar-week-body",
+      "context": "",
+      "prop": "height",
+      "from": "var(--db-week-grid-height, 1152px)",
+      "fromLine": 14894,
+      "to": "auto",
+      "toLine": 15540,
+      "classification": "unknown"
+    },
+    {
+      "selector": ".note-database-container .db-timeline-window-jump",
+      "context": "",
+      "prop": "position",
+      "from": "sticky",
+      "fromLine": 16548,
+      "to": "relative",
+      "toLine": 17522,
+      "classification": "unknown"
+    },
+    {
+      "selector": ".note-database-container .db-chart-number",
+      "context": "",
+      "prop": "padding",
+      "from": "20px",
+      "fromLine": 16667,
+      "to": "8px 12px",
+      "toLine": 16684,
+      "classification": "unknown"
+    },
+    {
+      "selector": ".note-database-container .db-chart-number",
+      "context": "",
+      "prop": "border",
+      "from": "1px dashed var(--background-modifier-border)",
+      "fromLine": 16667,
+      "to": "0",
+      "toLine": 16684,
+      "classification": "unknown"
+    },
+    {
+      "selector": ".note-database-container .db-chart-number",
+      "context": "",
+      "prop": "border-radius",
+      "from": "var(--db-radius-md)",
+      "fromLine": 16667,
+      "to": "0",
+      "toLine": 16684,
+      "classification": "unknown"
+    },
+    {
+      "selector": ".is-phone .note-database-container .db-toolbar-right",
+      "context": "",
+      "prop": "overflow-y",
+      "from": "hidden",
+      "fromLine": 16856,
+      "to": "visible",
+      "toLine": 19231,
+      "classification": "unknown"
+    },
+    {
+      "selector": ".is-phone .note-database-container .db-column-manager-row",
+      "context": "",
+      "prop": "grid-template-columns",
+      "from": "18px auto 20px 18px minmax(120px, 1fr) auto auto auto",
+      "fromLine": 16879,
+      "to": "auto 20px minmax(96px, 1fr) auto auto auto auto auto",
+      "toLine": 16995,
+      "classification": "unknown"
+    },
+    {
+      "selector": ".note-database-container .db-card-mobile-move-btn",
+      "context": "",
+      "prop": "display",
+      "from": "none",
+      "fromLine": 17027,
+      "to": "inline-flex",
+      "toLine": 17641,
+      "classification": "unknown"
+    },
+    {
+      "selector": ".note-database-container .db-list-mobile-move-btn",
+      "context": "",
+      "prop": "display",
+      "from": "none",
+      "fromLine": 17027,
+      "to": "inline-flex",
+      "toLine": 17641,
+      "classification": "unknown"
+    },
+    {
+      "selector": ".note-database-container .db-table-mobile-move-btn",
+      "context": "",
+      "prop": "display",
+      "from": "none",
+      "fromLine": 17027,
+      "to": "inline-flex",
+      "toLine": 17641,
+      "classification": "unknown"
+    },
+    {
+      "selector": ".db-icon-picker-popover .db-icon-picker-tabs button",
+      "context": "",
+      "prop": "min-width",
+      "from": "0",
+      "fromLine": 17446,
+      "to": "44px",
+      "toLine": 17654,
+      "classification": "unknown"
+    },
+    {
+      "selector": ".db-icon-picker-popover button.db-icon-picker-remove",
+      "context": "",
+      "prop": "min-width",
+      "from": "0",
+      "fromLine": 17446,
+      "to": "44px",
+      "toLine": 17654,
+      "classification": "unknown"
+    },
+    {
+      "selector": ".db-icon-picker-popover button.db-icon-picker-random",
+      "context": "",
+      "prop": "min-width",
+      "from": "0",
+      "fromLine": 17446,
+      "to": "44px",
+      "toLine": 17654,
+      "classification": "unknown"
+    },
+    {
+      "selector": ".db-icon-picker-popover button.db-icon-picker-settings",
+      "context": "",
+      "prop": "min-width",
+      "from": "0",
+      "fromLine": 17446,
+      "to": "44px",
+      "toLine": 17654,
+      "classification": "unknown"
+    },
+    {
+      "selector": ".db-icon-picker-popover button.db-icon-picker-item",
+      "context": "",
+      "prop": "min-width",
+      "from": "0",
+      "fromLine": 17446,
+      "to": "44px",
+      "toLine": 17654,
+      "classification": "unknown"
+    },
+    {
+      "selector": ".db-icon-picker-popover button.db-icon-color",
+      "context": "",
+      "prop": "border",
+      "from": "0",
+      "fromLine": 17446,
+      "to": "2px solid var(--background-primary)",
+      "toLine": 17466,
+      "classification": "unknown"
+    },
+    {
+      "selector": ".db-icon-picker-popover button.db-icon-color",
+      "context": "",
+      "prop": "box-shadow",
+      "from": "none",
+      "fromLine": 17446,
+      "to": "0 0 0 1px var(--background-modifier-border)",
+      "toLine": 17466,
+      "classification": "unknown"
+    },
+    {
+      "selector": ".db-icon-picker-popover button.db-icon-color",
+      "context": "",
+      "prop": "min-width",
+      "from": "0",
+      "fromLine": 17446,
+      "to": "44px",
+      "toLine": 17654,
+      "classification": "unknown"
+    },
+    {
+      "selector": ".note-database-container .db-heading-chevron-button",
+      "context": "",
+      "prop": "color",
+      "from": "inherit",
+      "fromLine": 18653,
+      "to": "var(--text-faint)",
+      "toLine": 18673,
+      "classification": "unknown"
+    },
+    {
+      "selector": ".note-database-container .db-heading-rename-button",
+      "context": "",
+      "prop": "color",
+      "from": "inherit",
+      "fromLine": 18653,
+      "to": "var(--text-faint)",
+      "toLine": 18673,
+      "classification": "unknown"
+    }
+  ]
+}
