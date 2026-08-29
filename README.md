@@ -1,10 +1,6 @@
 # Note Database
 
 <p align="center">
-  <a href="README.zh-CN.md">简体中文</a>
-</p>
-
-<p align="center">
   <strong>Turn Markdown notes into editable, visual databases inside Obsidian.</strong><br>
   Same notes. Seven views. Still plain Markdown.
 </p>
