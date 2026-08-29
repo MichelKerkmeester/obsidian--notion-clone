@@ -16,3 +16,6 @@ README.zh-CN.md
 .opencode
 .pi
 .pi-subagents
+
+# Storybook catalogue build output
+tools/storybook/dist/

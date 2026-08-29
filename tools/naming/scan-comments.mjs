@@ -30,7 +30,9 @@ import { fileURLToPath } from "node:url";
 const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..", "..");
 const SCAN_ROOTS = ["src", "tools"];
 const SOURCE_EXTENSIONS = new Set([".ts", ".mjs", ".js"]);
-const SKIP_DIR_NAMES = new Set(["node_modules", ".git"]);
+// `dist` holds generated build output. The comment grammar is a source-authoring standard, so
+// scanning emitted bundles reports violations nobody can fix in the file that has them.
+const SKIP_DIR_NAMES = new Set(["node_modules", ".git", "dist"]);
 
 // A MODULE banner is a `//` line comment naming the module, checked in the
 // first BANNER_WINDOW lines so it reads as the file's opening, not a

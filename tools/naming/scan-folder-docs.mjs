@@ -33,7 +33,9 @@ import { fileURLToPath } from "node:url";
 const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..", "..");
 const SCAN_ROOTS = ["src", "tools"];
 const SOURCE_EXTENSIONS = new Set([".ts", ".mjs", ".js"]);
-const SKIP_DIR_NAMES = new Set(["node_modules", ".git"]);
+// `dist` holds generated build output. Folder docs describe authored code, so demanding a README
+// beside an emitted bundle asks for documentation of something nobody wrote.
+const SKIP_DIR_NAMES = new Set(["node_modules", ".git", "dist"]);
 const THRESHOLD = 3;
 
 // ───────────────────────────────────────────────────────────────────

@@ -1,0 +1,14 @@
+/* Catalogue chrome only. Components are styled by the shipped stylesheet, never from here —
+   a story that needs its own styling is documenting something the plugin does not ship. */
+body { margin: 0; padding: 24px; background: #1e1e1e; color: #dcddde;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+.db-story { margin-bottom: 32px; padding-bottom: 24px; border-bottom: 1px solid #333; }
+.db-story-title { margin: 0 0 4px; font-size: 15px; font-weight: 600; }
+.db-story-note { margin-bottom: 12px; max-width: 60ch; color: #888; font-size: 12px; line-height: 1.5; }
+.db-story-stage { padding: 16px; border: 1px dashed #3a3a3a; border-radius: 6px; }
+.db-story-icon { display: inline-block; width: 16px; text-align: center; opacity: 0.6; }
+.db-story-swatch { padding: 8px 12px; border: 1px solid #3a3a3a; border-radius: 6px;
+  background: #262626; font-size: 12px; }
+
+.db-story-row { display: flex; gap: 20px; align-items: center; }
+.db-story-row .db-checkbox-cell { display: flex; gap: 6px; align-items: center; }
