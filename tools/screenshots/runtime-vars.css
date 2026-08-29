@@ -9,6 +9,24 @@
    these on that container; a custom property inherits from the nearest ancestor that sets
    it, so a :root-only override never reaches the element. */
 
+/* ── Five values removed, because nothing assigns them ───────────────────────────────
+   Each of these was read by the stylesheet as var(--x, FALLBACK) and set by nothing —
+   not the plugin, not the stylesheet. So production always resolves the fallback, and
+   there is no runtime value for this file to stand in for. Supplying a different one
+   did not approximate the product, it contradicted it:
+
+     --db-layer-sticky         production 40,          pinned 25
+     --db-status-bg            production transparent, pinned a hover background
+     --db-number-color         production text-accent, pinned text-normal
+     --db-calendar-row-height  production auto,        pinned 44px
+     --db-week-grid-height     production 1152px,      pinned calc(100vh - 150px)
+
+   Status chips and numbers were therefore the wrong colour in every screenshot ever
+   taken, and the calendar showed a row height no user gets. Found by
+   scan-pinned-values.mjs, which is the general form of the rule that caught
+   --db-header-height by hand. Removing them lets the fallback apply, which is what
+   ships. */
+
 /* ── Values the plugin sets from JavaScript at runtime ───────────────────────────────
    These are measured from the live layout (toolbar height, column widths, timeline
    geometry) and so are absent when the stylesheet is loaded on its own. Without them the
@@ -21,7 +39,6 @@
   --db-table-header-top: 22px;      /* sticky offset resolves to 0 with no toolbar above */
   --db-selection-status-offset: 0px;
   --db-group-table-head-top: 0px;
-  --db-layer-sticky: 25;
 
   --db-board-column-width: 280px;
   --db-board-image-fit: cover;
@@ -30,9 +47,7 @@
   --db-gallery-image-fit: cover;
   --db-group-depth: 0;
 
-  --db-status-bg: var(--background-modifier-hover);
   --db-status-fg: var(--text-normal);
-  --db-number-color: var(--text-normal);
   --db-conditional-format-accent: var(--interactive-accent);
   --db-conditional-format-bg: transparent;
   --db-conditional-format-fg: var(--text-normal);
@@ -40,7 +55,6 @@
   --db-mobile-bar-height: 48px;
 
   --db-calendar-col-width: 140px;
-  --db-calendar-row-height: 44px;
   /* The plugin measures these from the pane it is given, so a fixed stub leaves the
      grid floating in dead space. Deriving them from the viewport reproduces the
      stretch-to-fit the runtime performs. */
@@ -53,7 +67,6 @@
   --db-calendar-segment-span: 1;
   --db-calendar-segment-start: 0;
   --db-calendar-month-flash-column: 0;
-  --db-week-grid-height: calc(100vh - 150px);
 
   --db-timeline-units: 30;
   --db-timeline-unit-width: 48px;

@@ -23,7 +23,8 @@
     "guard:assertions": "node tools/live/guard-inverted-assertions.mjs",
     "census:tokens": "node tools/live/token-census.mjs",
     "census:cascade": "node tools/live/cascade-audit.mjs",
-    "lint:tools": "eslint \"tools/**/*.mjs\""
+    "lint:tools": "eslint \"tools/**/*.mjs\"",
+    "screenshots:scan-pinned": "node tools/screenshots/scan-pinned-values.mjs"
   },
   "keywords": [
     "obsidian",
