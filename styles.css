@@ -5356,9 +5356,20 @@
 
 /* 行悬停高亮 / 单元格悬停边框 —— 仅在有悬停能力的指针下生效，触摸单击后不残留高亮
    （沿用仓库既有 @media (hover: hover) 模式）。 */
+/* A selected row looks selected.
+   The renderer has always set aria-selected on the row and no rule painted it, so selecting rows
+   changed nothing but the checkbox — a user could not see what they had chosen. The accessible
+   state already exists; this gives it a visual one. */
+.note-database-container .db-table tbody tr[aria-selected="true"] td {
+  background: color-mix(in srgb, var(--interactive-accent) 10%, transparent);
+}
+
 @media (hover: hover) {
+  /* Hover was a 68% mix of an already-subtle token, resolving to 3% alpha — 1.07:1 against white,
+     which is not a state a person can see. 5% is the opacity scale's first step and the smallest
+     value that reads. */
   .note-database-container .db-table tr:hover td {
-    background: color-mix(in srgb, var(--background-modifier-hover) 68%, transparent);
+    background: color-mix(in srgb, var(--background-modifier-hover) 100%, transparent);
   }
 
   .note-database-container .db-table td:hover {
@@ -19421,7 +19432,10 @@ input[type="checkbox"].db-checkbox {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  border: 1px solid var(--checkbox-border-color, var(--background-modifier-border));
+  /* The border is the only thing identifying this control, so it needs 3:1 against its
+     background, not the hairline used for dividing content. The inherited token measured 1.36:1
+     in light and 1.47:1 in dark — a checkbox a person has to look for. */
+  border: 1px solid var(--checkbox-border-color, var(--db-checkbox-border-strong, #8a9099));
   border-radius: var(--db-radius-sm);
   background: var(--background-primary);
   box-shadow: none;

@@ -1,7 +1,7 @@
 {
   "holder": "002-properties-panel",
   "acquiredAt": "2026-08-29T19:34:47.628Z",
-  "baselineHash": "63d5071ada8f",
+  "baselineHash": "c3129f384a68",
   "baselineCommit": "f4319e3e768a",
   "history": [
     {
@@ -117,6 +117,13 @@
       "at": "2026-08-29T21:15:30.382Z",
       "hash": "63d5071ada8f",
       "note": "sheet portal restored with modal layer, height guard, and a sibling scrim"
+    },
+    {
+      "event": "edit",
+      "phase": "002-properties-panel",
+      "at": "2026-08-29T21:20:02.940Z",
+      "hash": "c3129f384a68",
+      "note": "selected rows painted, hover strengthened, checkbox border raised to 3:1"
     }
   ],
   "outstanding": [
