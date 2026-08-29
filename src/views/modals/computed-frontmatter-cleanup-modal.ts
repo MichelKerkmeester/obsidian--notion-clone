@@ -16,6 +16,7 @@ import { ComputedFrontmatterCleanupOption } from "../../data/computed-cleanup";
 import { applyRangeSelection } from "../../data/range-selection";
 import { t } from "../../i18n";
 import { DbModal } from "./db-modal";
+import { createCheckbox } from "../checkbox";
 
 // ───────────────────────────────────────────────────────────────────
 // 2. MODAL
@@ -48,9 +49,10 @@ export class ComputedFrontmatterCleanupModal extends DbModal {
     };
     for (const option of this.options) {
       const row = list.createEl("label", { cls: "db-computed-cleanup-option" });
-      const checkbox = row.createEl("input", {
+      const checkbox = createCheckbox(row, {
+        role: "field",
         cls: "db-modal-checkbox",
-        attr: { type: "checkbox", value: option.key },
+        attr: { value: option.key },
       });
       checkbox.checked = this.selectedKeys.has(option.key);
       checkbox.onclick = (event) => {

@@ -43,6 +43,7 @@ import { isImeComposing } from "../data/keyboard-utils";
 import { openOptionColorPicker } from "./option-color-picker";
 import { EmptyStateOptions, EmptyStateRenderer } from "./empty-state-renderer";
 import { renderCardField } from "./card-field-renderer";
+import { createCheckbox } from "./checkbox";
 import { EdgeAutoScroller } from "./edge-auto-scroller";
 import { DragDropFeedbackState, resolveDropPlacement } from "./drag-drop-feedback";
 import { attachLongPress, isTouchDevice } from "../data/touch-environment";
@@ -279,9 +280,10 @@ export class BoardRenderer {
       toggle.createSpan({ cls: "db-collapse-triangle" });
       toggle.onclick = (event) => { event.preventDefault(); event.stopPropagation(); this.actions.toggleGroupCollapsed?.(groupField, group.key); };
       if (!this.actions.isReadOnly) {
-        const checkbox = header.createEl("input", {
+        const checkbox = createCheckbox(header, {
+          role: "row",
           cls: "db-board-column-checkbox",
-          attr: { type: "checkbox", "aria-label": group.key || t("common.noGroup") },
+          attr: { "aria-label": group.key || t("common.noGroup") },
         });
         checkbox.checked = this.actions.areAllRowsSelected(group.rows);
         checkbox.indeterminate = group.rows.some((row) => this.actions.isRowSelected(row)) && !checkbox.checked;
@@ -531,9 +533,10 @@ export class BoardRenderer {
       this.actions.toggleGroupCollapsed?.(groupField, group.key);
     };
     if (!this.actions.isReadOnly) {
-      const checkbox = header.createEl("input", {
+      const checkbox = createCheckbox(header, {
+        role: "row",
         cls: "db-board-column-checkbox",
-        attr: { type: "checkbox", "aria-label": group.key || t("common.noGroup") },
+        attr: { "aria-label": group.key || t("common.noGroup") },
       });
       checkbox.checked = this.actions.areAllRowsSelected(group.rows);
       checkbox.indeterminate = group.rows.some((row) => this.actions.isRowSelected(row)) && !checkbox.checked;
@@ -617,9 +620,10 @@ export class BoardRenderer {
       this.actions.toggleGroupCollapsed?.(subgroupField, subgroup.key);
     };
     if (!this.actions.isReadOnly) {
-      const checkbox = header.createEl("input", {
+      const checkbox = createCheckbox(header, {
+        role: "row",
         cls: "db-board-subgroup-checkbox",
-        attr: { type: "checkbox", "aria-label": subgroup.key || t("common.noGroup") },
+        attr: { "aria-label": subgroup.key || t("common.noGroup") },
       });
       checkbox.checked = this.actions.areAllRowsSelected(subgroup.rows);
       checkbox.indeterminate = subgroup.rows.some((row) => this.actions.isRowSelected(row)) && !checkbox.checked;
@@ -860,9 +864,10 @@ export class BoardRenderer {
 
     const controls = card.createDiv({ cls: "db-board-card-controls" });
     if (!this.actions.isReadOnly) {
-      const checkbox = controls.createEl("input", {
+      const checkbox = createCheckbox(controls, {
+        role: "row",
         cls: "db-board-card-checkbox",
-        attr: { type: "checkbox", "aria-label": row.file.basename || row.file.path },
+        attr: { "aria-label": row.file.basename || row.file.path },
       });
       checkbox.checked = this.actions.isRowSelected(row);
       checkbox.onclick = (event) => {

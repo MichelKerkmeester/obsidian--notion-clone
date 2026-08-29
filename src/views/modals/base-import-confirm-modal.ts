@@ -19,6 +19,7 @@ import { ColumnDef } from "../../data/types";
 import { t } from "../../i18n";
 import { createDropdownField } from "../dropdown-field";
 import { getPropertyDropdownIcon, renderDropdownPropertyTypeIcon } from "../property-type-icon";
+import { createCheckbox } from "../checkbox";
 import { DbModal } from "./db-modal";
 
 // ───────────────────────────────────────────────────────────────────
@@ -131,9 +132,10 @@ export class BaseImportConfirmModal extends DbModal {
       tr.createEl("td", { text: col.fileCount > 0 ? String(col.fileCount) : "-" });
       const checkTd = tr.createEl("td");
       checkTd.addClass("base-import-check-cell");
-      const checkbox = checkTd.createEl("input", {
+      const checkbox = createCheckbox(checkTd, {
+        role: "field",
         cls: "db-modal-checkbox base-import-include-checkbox",
-        attr: { type: "checkbox", "aria-label": t("baseImport.include") },
+        attr: { "aria-label": t("baseImport.include") },
       });
       checkbox.checked = this.selectedColumnKeys.has(col.key);
       this.columnSelectionRows.push({ key: col.key, row: tr, checkbox });
@@ -176,9 +178,10 @@ export class BaseImportConfirmModal extends DbModal {
   }
 
   private renderHeaderSelectionCheckbox(parent: HTMLElement): void {
-    const checkbox = parent.createEl("input", {
+    const checkbox = createCheckbox(parent, {
+      role: "field",
       cls: "db-modal-checkbox base-import-include-checkbox",
-      attr: { type: "checkbox", "aria-label": t("baseImport.include") },
+      attr: { "aria-label": t("baseImport.include") },
     });
     this.headerSelectionCheckbox = checkbox;
     this.syncHeaderSelectionCheckbox();

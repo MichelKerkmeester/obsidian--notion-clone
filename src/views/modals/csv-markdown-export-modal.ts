@@ -13,6 +13,7 @@
 import { t } from "../../i18n";
 import { CsvMarkdownExportOptions } from "../../data/csv-markdown-zip-export";
 import { DbModal } from "./db-modal";
+import { createCheckbox } from "../checkbox";
 
 // ───────────────────────────────────────────────────────────────────
 // 2. MODAL
@@ -58,7 +59,7 @@ export class CsvMarkdownExportModal extends DbModal {
   private renderCheckboxOption(text: string, checked: boolean, onChange: (value: boolean) => void): void {
     const row = this.contentEl.createDiv({ cls: "db-csv-markdown-option-row" });
     const label = row.createEl("label", { cls: "db-csv-markdown-option-label" });
-    const checkbox = label.createEl("input", { attr: { type: "checkbox" } });
+    const checkbox = createCheckbox(label, { role: "field" });
     checkbox.checked = checked;
     checkbox.onchange = () => onChange(checkbox.checked);
     label.createSpan({ text });

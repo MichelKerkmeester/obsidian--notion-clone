@@ -344,7 +344,7 @@ export const PANEL_SCENARIOS = [
         <div class="db-column-manager-row" draggable="true">
           <span class="db-column-drag" title="Drag to reorder">⋮⋮</span>
           ${reorderControls(isFirst, isLast)}
-          <input type="checkbox"${visible ? " checked" : ""}>
+          <input type="checkbox" class="db-checkbox db-checkbox-field"${visible ? " checked" : ""}>
           <span class="db-column-type" title="${col.type}">
             <span class="db-column-type-icon">${TYPE_ICON[col.type]}</span>
           </span>
@@ -361,7 +361,7 @@ export const PANEL_SCENARIOS = [
           <div class="db-panel-header">
             <span class="db-panel-title">Properties</span>
             <div class="db-panel-header-actions">
-              <label class="db-column-manager-toggle-all"><input type="checkbox"><span>All</span></label>
+              <label class="db-column-manager-toggle-all"><input type="checkbox" class="db-checkbox db-checkbox-field"><span>All</span></label>
             </div>
           </div>
           ${COLUMN_DEFS.map((col, i) => row(col, {

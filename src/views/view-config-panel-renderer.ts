@@ -30,6 +30,7 @@ import { t } from "../i18n";
 import { COMPACT_MENU_POPOVER, positionToolbarPopover } from "./popover-position";
 import { confirmWithModal } from "./modals/confirm-modal";
 import { createDropdownField, DropdownOption, openDropdownMenu } from "./dropdown-field";
+import { createCheckbox } from "./checkbox";
 import { getPropertyDropdownIcon, isPropertyDropdownIcon, renderDropdownPropertyTypeIcon, renderPropertyTypeIcon } from "./property-type-icon";
 import { getOrderedRecordIconColumns, getRecordIconFieldLabel, parseRecordIconToken, resolveRecordIconField } from "../data/record-icon";
 import { getValidRecordIconIds, renderRecordIcon } from "./record-icon-renderer";
@@ -2029,7 +2030,7 @@ export class ViewConfigPanelRenderer {
       if (helpText) field.createDiv({ cls: "db-view-config-help", text: helpText });
       return;
     }
-    const input = field.createEl("input", { attr: { type: "checkbox" } });
+    const input = createCheckbox(field, { role: "field" });
     input.checked = value;
     input.onchange = () => onChange(input.checked);
     if (helpText) field.createDiv({ cls: "db-view-config-help", text: helpText });

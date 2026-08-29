@@ -30,6 +30,7 @@ import { getGroupHeaderClassName, getGroupHeaderDepthValue } from "../data/multi
 import { EmptyStateOptions, EmptyStateRenderer } from "./empty-state-renderer";
 import { getSelectionState } from "../data/range-selection";
 import { TableFooterRenderer } from "./table-footer-renderer";
+import { createCheckbox } from "./checkbox";
 import { EdgeAutoScroller } from "./edge-auto-scroller";
 import { InteractionSnapshot } from "./interaction-snapshot";
 import { isTouchDevice } from "../data/touch-environment";
@@ -511,7 +512,7 @@ export class TableRenderer {
     if (!this.actions.isReadOnly) {
       const selectTh = headerRow.createEl("th", { cls: "db-select-col", attr: { role: "columnheader" } });
       const selectInner = selectTh.createDiv({ cls: "db-select-inner" });
-      const selectAll = selectInner.createEl("input", { attr: { type: "checkbox" } });
+      const selectAll = createCheckbox(selectInner, { role: "row" });
       selectAll.checked = this.actions.areAllRowsSelected(rows);
       selectAll.onchange = () => {
         this.actions.toggleRowsSelected(rows, selectAll.checked);
@@ -624,9 +625,10 @@ export class TableRenderer {
     if (!this.actions.isReadOnly) {
       const selectedIds = new Set(selectionRows.filter((row) => this.actions.isRowSelected(row)).map((row) => row.file.path));
       const selection = getSelectionState(selectionRows.map((row) => row.file.path), selectedIds);
-      const checkbox = content.createEl("input", {
+      const checkbox = createCheckbox(content, {
+        role: "row",
         cls: "db-group-divider-checkbox",
-        attr: { type: "checkbox", "aria-label": t("group.selectRows") },
+        attr: { "aria-label": t("group.selectRows") },
       });
       checkbox.checked = selection.checked;
       checkbox.indeterminate = selection.indeterminate;
@@ -782,7 +784,7 @@ export class TableRenderer {
       if (isTouchDevice(this.renderContainer) && (this.canManualReorder(config) || Boolean(rowMoveField && groups?.length))) {
         this.renderMobileMoveButton(selectInner, config, row, rows, rowMoveField, rowMoveKey, groups);
       }
-      const cb = selectInner.createEl("input", { attr: { type: "checkbox" } });
+      const cb = createCheckbox(selectInner, { role: "row" });
       cb.checked = this.actions.isRowSelected(row);
       cb.onclick = (event) => {
         event.stopPropagation();

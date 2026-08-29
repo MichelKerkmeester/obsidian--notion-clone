@@ -23,6 +23,7 @@ import { applyRangeSelection, clearSelection, selectAll } from "../../data/range
 import { RowData } from "../../data/types";
 import { t } from "../../i18n";
 import { DbModal } from "./db-modal";
+import { createCheckbox } from "../checkbox";
 
 // ───────────────────────────────────────────────────────────────────
 // 2. TYPES
@@ -87,9 +88,10 @@ export class InvalidTimeEventsModal extends DbModal {
 
     const grid = contentEl.createDiv({ cls: "db-invalid-event-grid" });
     const header = grid.createDiv({ cls: "db-invalid-event-grid-header" });
-    const selectAll = header.createEl("input", {
+    const selectAll = createCheckbox(header, {
+      role: "field",
       cls: "db-modal-checkbox db-invalid-event-select",
-      attr: { type: "checkbox", "aria-label": t("timeline.invalidEventsSelectAll") },
+      attr: { "aria-label": t("timeline.invalidEventsSelectAll") },
     });
     this.selectAllInput = selectAll;
     selectAll.checked = true;
@@ -116,9 +118,10 @@ export class InvalidTimeEventsModal extends DbModal {
         dirty: false,
         rowEl: row,
       };
-      const checkbox = row.createEl("input", {
+      const checkbox = createCheckbox(row, {
+        role: "field",
         cls: "db-modal-checkbox db-invalid-event-select",
-        attr: { type: "checkbox", "aria-label": t("timeline.invalidEventsSelectRow", { name: option.fileName }) },
+        attr: { "aria-label": t("timeline.invalidEventsSelectRow", { name: option.fileName }) },
       });
       checkbox.checked = true;
       checkbox.onclick = (event) => {

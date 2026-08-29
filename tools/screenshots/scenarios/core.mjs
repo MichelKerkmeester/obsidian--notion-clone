@@ -126,7 +126,7 @@ export const CORE_SCENARIOS = [
           <div class="db-add-view-form">
             <input type="text" class="db-add-view-name" placeholder="View name (optional)">
             <select class="db-add-view-key-field"><option>Cost</option></select>
-            <label class="db-add-view-duplicate"><input type="checkbox"><span>Duplicate current view</span></label>
+            <label class="db-add-view-duplicate"><input type="checkbox" class="db-checkbox db-checkbox-field"><span>Duplicate current view</span></label>
             <input type="text" class="db-add-view-icon" placeholder="Icon (optional)">
           </div>
           <div class="db-add-view-cards">
@@ -211,7 +211,7 @@ export const CORE_SCENARIOS = [
         <tr>
           <td class="db-select-col"><div class="db-select-inner">
             <button type="button" class="db-table-mobile-move-btn" aria-label="Move row">${move}</button>
-            <input type="checkbox" aria-label="Select row"></div></td>
+            <input type="checkbox" class="db-checkbox db-checkbox-row" aria-label="Select row"></div></td>
           <td class="db-record-icon-col"><span class="db-record-icon">${icon}</span></td>
           ${dataCells(r)}
         </tr>`).join("");
@@ -224,7 +224,7 @@ export const CORE_SCENARIOS = [
               <col class="db-select-colgroup"><col class="db-record-icon-colgroup">${cols}
             </colgroup>
             <thead><tr>
-              <th class="db-select-col"><div class="db-select-inner"><input type="checkbox" aria-label="Select all"></div></th>
+              <th class="db-select-col"><div class="db-select-inner"><input type="checkbox" class="db-checkbox db-checkbox-row" aria-label="Select all"></div></th>
               <th class="db-record-icon-col"></th>
               ${tableHeader()}
             </tr></thead>
@@ -251,7 +251,7 @@ export const CORE_SCENARIOS = [
       const rows = ROWS.slice(0, 12).map((r) => `
         <div class="db-list-row" role="row" aria-keyshortcuts="Enter Space F2" tabindex="-1">
           <div class="db-list-row-controls">
-            <input type="checkbox" class="db-list-row-checkbox" aria-label="Select">
+            <input type="checkbox" class="db-checkbox db-checkbox-row db-list-row-checkbox" aria-label="Select">
             <button type="button" class="db-list-row-open" aria-label="Open note">${open}</button>
             <button type="button" class="db-list-mobile-move-btn" aria-label="Move">${move}</button>
           </div>

@@ -34,6 +34,7 @@ import { getTableSubgroupCandidates, getTableSubgroupField } from "../data/table
 import { executeNewFromTemplate, getNewFromTemplateLabel, getNewFromTemplateTooltip, hasRecordTemplate, NewRecordPlacement, TemplateToolbarOption } from "../data/template-toolbar-action";
 import { isHTMLElement } from "./dom-guards";
 import { renderRecordIcon } from "./record-icon-renderer";
+import { createCheckbox } from "./checkbox";
 import { isTouchDevice } from "../data/touch-environment";
 
 // ───────────────────────────────────────────────────────────────────
@@ -1277,7 +1278,7 @@ export class ToolbarRenderer {
       keyField.createEl("option", { value: column.key, text: column.label });
     }
     const duplicate = form.createEl("label", { cls: "db-add-view-duplicate" });
-    const duplicateInput = duplicate.createEl("input", { attr: { type: "checkbox" } });
+    const duplicateInput = createCheckbox(duplicate, { role: "field" });
     duplicate.createSpan({ text: t("toolbar.duplicateCurrentView") });
     const iconInput = form.createEl("input", {
       cls: "db-add-view-icon",

@@ -124,20 +124,27 @@ for (const scenario of scenarios) {
     return Array.from(document.querySelectorAll('input[type="checkbox"]')).map((input, index) => {
       const before = read(input);
 
-      // The two-sided control, on the real chain. Strip each ancestor's classes in turn; the one
-      // that moves a computed value is the ancestor this checkbox is actually styled through.
-      let ownedBy = null;
+      // The two-sided control, on the real chain — but asking two different questions, because
+      // conflating them once reported a correct fix as still broken.
+      //
+      // `appearanceOwnedBy` is the defect: an ancestor whose removal makes the checkbox fall back to
+      // the platform box. That is the fragility this phase exists to remove.
+      //
+      // `tokensFrom` is not a defect. Design tokens are declared on a root and inherit, so a
+      // checkbox lifted out of every plugin ancestor loses its radius by design — and regains it
+      // when the surface it is mounted in is marked as a token root. Reporting that as
+      // ancestor-styling condemns the intended architecture.
+      let appearanceOwnedBy = null;
+      let tokensFrom = null;
       for (let node = input.parentElement; node && node.id !== "shot"; node = node.parentElement) {
         const saved = node.className;
         if (!saved) continue;
         node.className = "";
         const after = read(input);
         node.className = saved;
-        if (after.appearance !== before.appearance || after.radius !== before.radius ||
-            after.width !== before.width || after.height !== before.height) {
-          ownedBy = saved;
-          break;
-        }
+        if (!appearanceOwnedBy && after.appearance !== before.appearance) appearanceOwnedBy = saved;
+        if (!tokensFrom && (after.radius !== before.radius || after.width !== before.width ||
+            after.height !== before.height)) tokensFrom = saved;
       }
 
       return {
@@ -146,7 +153,8 @@ for (const scenario of scenarios) {
         classes: (input.className || "").split(/\s+/).filter(Boolean),
         chain: chainOf(input),
         measured: before,
-        ownedBy,
+        appearanceOwnedBy,
+        tokensFrom,
       };
     });
   }, scenario.id);
@@ -163,8 +171,9 @@ await browser.close();
 const boxes = rows.filter((r) => r.measured);
 const owned = boxes.filter((r) => r.measured.appearance === "none");
 const platform = boxes.filter((r) => r.measured.appearance !== "none");
-const ancestorOwned = owned.filter((r) => r.ownedBy && !r.classes.includes(r.ownedBy.split(/\s+/)[0]));
-const selfOwned = owned.filter((r) => !ancestorOwned.includes(r));
+const ancestorOwned = owned.filter((r) => r.appearanceOwnedBy);
+const selfOwned = owned.filter((r) => !r.appearanceOwnedBy);
+const tokenDependent = owned.filter((r) => r.tokensFrom);
 
 const shapes = new Map();
 for (const r of owned) {
@@ -174,9 +183,11 @@ for (const r of owned) {
 
 console.log(`checkbox-appearance: ${boxes.length} checkboxes across ${scenarios.length} fixtures\n`);
 console.log(`  own their appearance                   ${owned.length}/${boxes.length}`);
-console.log(`    of those, styled through an ancestor ${ancestorOwned.length}`);
-console.log(`    styled through their own class       ${selfOwned.length}`);
-console.log(`  fall back to the platform box          ${platform.length}/${boxes.length}\n`);
+console.log(`    lose it if an ancestor class goes    ${ancestorOwned.length}`);
+console.log(`    keep it wherever they are mounted    ${selfOwned.length}`);
+console.log(`  fall back to the platform box          ${platform.length}/${boxes.length}`);
+console.log(`  take geometry from a token root        ${tokenDependent.length}  (by design — a`);
+console.log(`                                          portalled surface marked .db-surface keeps it)\n`);
 console.log("  shapes among the owned:");
 for (const [shape, count] of [...shapes].sort((a, b) => b[1] - a[1])) {
   console.log(`    ${shape.padEnd(28)} ${count}`);
@@ -192,9 +203,9 @@ if (platform.length) {
   console.log("");
 }
 if (ancestorOwned.length) {
-  console.log("ANCESTOR-OWNED — correct now, reverts if the named ancestor changes:");
+  console.log("APPEARANCE OWNED BY AN ANCESTOR — reverts to the platform box if that class goes:");
   for (const r of ancestorOwned) {
-    console.log(`  ${r.scenario.padEnd(24)} .${r.classes.join(".") || "(classless)"}  <- .${r.ownedBy}`);
+    console.log(`  ${r.scenario.padEnd(24)} .${r.classes.join(".") || "(classless)"}  <- .${r.appearanceOwnedBy}`);
   }
   console.log("");
 }
@@ -204,8 +215,9 @@ stamp("tools/live/checkbox-appearance.json", {
     checkboxes: boxes.length,
     fixtures: scenarios.length,
     owned: owned.length,
-    ancestorOwned: ancestorOwned.length,
-    selfOwned: selfOwned.length,
+    appearanceOwnedByAncestor: ancestorOwned.length,
+    appearanceSelfOwned: selfOwned.length,
+    tokenDependent: tokenDependent.length,
     platformBox: platform.length,
     distinctShapes: shapes.size,
   },

@@ -39,6 +39,7 @@ import { DragDropFeedbackState, resolveDropPlacement } from "./drag-drop-feedbac
 import { resolveTitleFieldDisplay } from "../data/title-field-display";
 import { EmptyStateOptions, EmptyStateRenderer } from "./empty-state-renderer";
 import { renderCardField } from "./card-field-renderer";
+import { createCheckbox } from "./checkbox";
 import { attachLongPress, isTouchDevice } from "../data/touch-environment";
 import { CardRovingController, syncCardRoving, wireCardKeyboard } from "./card-roving-tabindex";
 import { isImeComposing } from "../data/keyboard-utils";
@@ -223,9 +224,10 @@ export class GalleryRenderer {
 
   private renderGroupCheckbox(parent: HTMLElement, rows: RowData[], label?: string): void {
     if (this.actions.isReadOnly) return;
-    const checkbox = parent.createEl("input", {
+    const checkbox = createCheckbox(parent, {
+      role: "row",
       cls: "db-gallery-group-checkbox",
-      attr: { type: "checkbox", "aria-label": label || t("common.total") },
+      attr: { "aria-label": label || t("common.total") },
     });
     checkbox.checked = this.actions.areAllRowsSelected(rows);
     checkbox.indeterminate = rows.some((row) => this.actions.isRowSelected(row)) && !checkbox.checked;
@@ -285,9 +287,10 @@ export class GalleryRenderer {
     const body = card.createDiv({ cls: "db-gallery-card-body" });
     const controls = body.createDiv({ cls: "db-gallery-card-controls" });
     if (!this.actions.isReadOnly) {
-      const checkbox = controls.createEl("input", {
+      const checkbox = createCheckbox(controls, {
+        role: "row",
         cls: "db-gallery-card-checkbox",
-        attr: { type: "checkbox", "aria-label": row.file.basename || row.file.path },
+        attr: { "aria-label": row.file.basename || row.file.path },
       });
       checkbox.checked = this.actions.isRowSelected(row);
       checkbox.onclick = (event) => {

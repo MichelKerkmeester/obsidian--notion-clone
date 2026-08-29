@@ -56,6 +56,7 @@ import { isHTMLElement } from "./dom-guards";
 import { safeString } from "../data/safe-string";
 import { confirmWithModal } from "./modals/confirm-modal";
 import { renderSpecialFileFieldValue, shouldRenderSpecialFileField } from "./file-field-renderer";
+import { createCheckbox } from "./checkbox";
 import { renderRating, renderProgress, renderProgressRing } from "./number-display-renderer";
 import { renderInlineMarkdown, resolveInlineImageSrc } from "./inline-markdown-renderer";
 import { getLocaleWeekStartsOn, getLocalDateKey, getWeekdayLabels, parseDateKeyToUtc } from "../data/calendar-date-time";
@@ -486,7 +487,7 @@ export class CellRenderer {
   private renderCheckbox(td: HTMLElement, row: RowData, col: ColumnDef, value: unknown): void {
     td.addClass("db-checkbox-cell");
     setFieldTooltip(td, toBooleanValue(value) ? t("common.true") : t("common.false"));
-    const checkbox = td.createEl("input", { attr: { type: "checkbox" } });
+    const checkbox = createCheckbox(td, { role: "field" });
     checkbox.checked = toBooleanValue(value);
     if (this.isReadOnly) {
       checkbox.disabled = true;

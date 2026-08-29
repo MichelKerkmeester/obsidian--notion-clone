@@ -16,6 +16,7 @@ import { isFileFieldKey } from "../../data/file-fields";
 import { ColumnDef } from "../../data/types";
 import { t } from "../../i18n";
 import { DbModal } from "./db-modal";
+import { createCheckbox } from "../checkbox";
 
 // ───────────────────────────────────────────────────────────────────
 // 2. TYPES
@@ -71,7 +72,7 @@ export class ColumnRenameModal extends DbModal {
     const wrapRow = contentEl.createEl("label", {
       attr: { style: "display: flex; gap: 8px; align-items: center; margin-top: 10px; font-size: 12px;" },
     });
-    const wrapCheckbox = wrapRow.createEl("input", { attr: { type: "checkbox" } });
+    const wrapCheckbox = createCheckbox(wrapRow, { role: "field" });
     wrapCheckbox.checked = !!this.col.wrap;
     wrapRow.createSpan({ text: t("modal.wrapContent") });
 
@@ -84,7 +85,7 @@ export class ColumnRenameModal extends DbModal {
       const migrateLabel = migrateRow.createEl("label", {
         attr: { style: "display: flex; gap: 8px; align-items: center; flex: 1; min-width: 0;" },
       });
-      migrateCheckbox = migrateLabel.createEl("input", { attr: { type: "checkbox" } });
+      migrateCheckbox = createCheckbox(migrateLabel, { role: "field" });
       migrateCheckbox.checked = !canMigrate;
       migrateCheckbox.disabled = !canMigrate;
       if (this.col.type === "computed" || this.col.type === "rollup") {

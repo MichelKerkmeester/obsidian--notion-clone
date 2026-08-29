@@ -36,6 +36,7 @@ import { isHTMLElement } from "./dom-guards";
 import { installPopoverAutoClose } from "./popover-auto-close";
 import { clamp, getVisiblePopoverBounds, positionToolbarPopover, setPosition } from "./popover-position";
 import { createDropdownField, DropdownOption } from "./dropdown-field";
+import { createCheckbox } from "./checkbox";
 import { getPropertyDropdownIcon, renderDropdownPropertyTypeIcon } from "./property-type-icon";
 
 // ───────────────────────────────────────────────────────────────────
@@ -982,7 +983,7 @@ export class ChartToolbarRenderer {
 
   private renderCheckbox(parent: HTMLElement, label: string, checked: boolean, onChange: (checked: boolean) => void): void {
     const row = parent.createEl("label", { cls: "db-chart-visible-group-row" });
-    const input = row.createEl("input", { attr: { type: "checkbox" } });
+    const input = createCheckbox(row, { role: "field" });
     input.checked = checked;
     input.onchange = () => onChange(input.checked);
     row.createSpan({ cls: "db-chart-visible-group-label", text: label });

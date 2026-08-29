@@ -26,6 +26,7 @@ import { getPropertyDropdownIcon, renderPropertyTypeIcon } from "./property-type
 import { DatabaseViewState } from "./view-state-store";
 import { isHTMLElement } from "./dom-guards";
 import { openDropdownMenu } from "./dropdown-field";
+import { createCheckbox } from "./checkbox";
 
 // ───────────────────────────────────────────────────────────────────
 // 2. TYPES
@@ -147,7 +148,7 @@ export class ColumnManagerRenderer {
     header.createSpan({ text: t("toolbar.properties"), cls: "db-panel-title" });
     const right = header.createDiv({ cls: "db-panel-header-actions" });
     const toggleLabel = right.createEl("label", { cls: "db-column-manager-toggle-all" });
-    const toggleAll = toggleLabel.createEl("input", { attr: { type: "checkbox" } });
+    const toggleAll = createCheckbox(toggleLabel, { role: "field" });
     const visibleCount = columns.filter((col) => !state.hiddenColumns.has(col.key)).length;
     toggleAll.checked = visibleCount === columns.length;
     toggleAll.indeterminate = visibleCount > 0 && visibleCount < columns.length;
@@ -234,7 +235,7 @@ export class ColumnManagerRenderer {
     };
 
     const requiredReason = this.getRequiredColumnReason(config, state, col);
-    const cb = row.createEl("input", { attr: { type: "checkbox" } });
+    const cb = createCheckbox(row, { role: "field" });
     cb.checked = !state.hiddenColumns.has(col.key);
     if (requiredReason) {
       cb.checked = true;

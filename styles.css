@@ -5427,7 +5427,7 @@
   height: 100%;
 }
 
-.note-database-container .db-table .db-select-col .db-select-inner input[type="checkbox"] {
+.note-database-container .db-table .db-select-col .db-select-inner input[type="checkbox"]:not(.db-checkbox) {
   position: absolute;
   right: 6px;
   top: 50%;
@@ -5449,26 +5449,26 @@
   cursor: pointer;
 }
 
-.note-database-container .db-table .db-select-col .db-select-inner input[type="checkbox"]:checked,
-.note-database-container .db-table .db-select-col .db-select-inner input[type="checkbox"]:indeterminate {
+.note-database-container .db-table .db-select-col .db-select-inner input[type="checkbox"]:not(.db-checkbox):checked,
+.note-database-container .db-table .db-select-col .db-select-inner input[type="checkbox"]:not(.db-checkbox):indeterminate {
   border-color: var(--interactive-accent);
   background-color: var(--interactive-accent);
   background-position: center;
   background-repeat: no-repeat;
 }
 
-.note-database-container .db-table .db-select-col .db-select-inner input[type="checkbox"]:checked {
+.note-database-container .db-table .db-select-col .db-select-inner input[type="checkbox"]:not(.db-checkbox):checked {
   background-image: url("data:image/svg+xml,%3Csvg width='14' height='14' viewBox='0 0 14 14' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M3.1 7.2L5.7 9.8L10.9 4.2' stroke='white' stroke-width='2.1' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
   background-size: 12px 12px;
 }
 
-.note-database-container .db-table .db-select-col .db-select-inner input[type="checkbox"]:indeterminate {
+.note-database-container .db-table .db-select-col .db-select-inner input[type="checkbox"]:not(.db-checkbox):indeterminate {
   background-image: url("data:image/svg+xml,%3Csvg width='14' height='14' viewBox='0 0 14 14' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M3 7H11' stroke='white' stroke-width='2.1' stroke-linecap='round'/%3E%3C/svg%3E");
   background-size: 12px 12px;
 }
 
-.note-database-container .db-table .db-select-col .db-select-inner input[type="checkbox"]:checked::after,
-.note-database-container .db-table .db-select-col .db-select-inner input[type="checkbox"]:indeterminate::after {
+.note-database-container .db-table .db-select-col .db-select-inner input[type="checkbox"]:not(.db-checkbox):checked::after,
+.note-database-container .db-table .db-select-col .db-select-inner input[type="checkbox"]:not(.db-checkbox):indeterminate::after {
   /* The core checkbox theme paints its own checkmark via input:checked::after,
      sized to --checkbox-size and pinned to the box's top-left corner
      (top/left: -1px). This box is a fixed 16px, so that native glyph lands
@@ -6627,7 +6627,7 @@
    — which is why boolean cells rendered as circles while the row-select boxes were square in the
    same table. `appearance: none` takes the native widget out of the picture so both agree, and the
    square reads as "value" rather than "pick one of these", which is what a radio implies. */
-.note-database-container .db-checkbox-cell input[type="checkbox"] {
+.note-database-container .db-checkbox-cell input[type="checkbox"]:not(.db-checkbox) {
   appearance: none;
   -webkit-appearance: none;
   width: 16px;
@@ -6642,13 +6642,13 @@
   transition: background-color 120ms ease-out, border-color 120ms ease-out;
 }
 
-.note-database-container .db-checkbox-cell input[type="checkbox"]:checked {
+.note-database-container .db-checkbox-cell input[type="checkbox"]:not(.db-checkbox):checked {
   border-color: var(--interactive-accent);
   background: var(--interactive-accent);
 }
 
 /* The tick is drawn rather than a glyph so it scales with the box and needs no icon font. */
-.note-database-container .db-checkbox-cell input[type="checkbox"]:checked::after {
+.note-database-container .db-checkbox-cell input[type="checkbox"]:not(.db-checkbox):checked::after {
   content: "";
   display: block;
   width: 4px;
@@ -6659,12 +6659,12 @@
   transform: rotate(45deg);
 }
 
-.note-database-container .db-checkbox-cell input[type="checkbox"]:focus-visible {
+.note-database-container .db-checkbox-cell input[type="checkbox"]:not(.db-checkbox):focus-visible {
   outline: 2px solid var(--interactive-accent);
   outline-offset: 1px;
 }
 
-.note-database-container .db-checkbox-cell input[type="checkbox"]:disabled {
+.note-database-container .db-checkbox-cell input[type="checkbox"]:not(.db-checkbox):disabled {
   cursor: default;
   opacity: 0.5;
 }
@@ -8251,7 +8251,7 @@
   text-align: center;
 }
 
-.note-database-modal .db-modal-checkbox {
+.note-database-modal .db-modal-checkbox:not(.db-checkbox) {
   position: relative;
   width: 18px;
   height: 18px;
@@ -8267,30 +8267,30 @@
   vertical-align: middle;
 }
 
-.note-database-modal .db-modal-checkbox:checked,
-.note-database-modal .db-modal-checkbox:indeterminate {
+.note-database-modal .db-modal-checkbox:not(.db-checkbox):checked,
+.note-database-modal .db-modal-checkbox:not(.db-checkbox):indeterminate {
   border-color: var(--interactive-accent);
   background-color: var(--interactive-accent);
   background-position: center;
   background-repeat: no-repeat;
 }
 
-.note-database-modal .db-modal-checkbox:checked {
+.note-database-modal .db-modal-checkbox:not(.db-checkbox):checked {
   background-image: url("data:image/svg+xml,%3Csvg width='14' height='14' viewBox='0 0 14 14' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M3.1 7.2L5.7 9.8L10.9 4.2' stroke='white' stroke-width='2.1' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
   background-size: 14px 14px;
 }
 
-.note-database-modal .db-modal-checkbox:indeterminate {
+.note-database-modal .db-modal-checkbox:not(.db-checkbox):indeterminate {
   background-image: url("data:image/svg+xml,%3Csvg width='14' height='14' viewBox='0 0 14 14' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M3 7H11' stroke='white' stroke-width='2.1' stroke-linecap='round'/%3E%3C/svg%3E");
   background-size: 14px 14px;
 }
 
-.note-database-modal .db-modal-checkbox:focus-visible {
+.note-database-modal .db-modal-checkbox:not(.db-checkbox):focus-visible {
   box-shadow: 0 0 0 2px color-mix(in srgb, var(--interactive-accent) 20%, transparent);
 }
 
-.note-database-modal .db-modal-checkbox:checked::after,
-.note-database-modal .db-modal-checkbox:indeterminate::after {
+.note-database-modal .db-modal-checkbox:not(.db-checkbox):checked::after,
+.note-database-modal .db-modal-checkbox:not(.db-checkbox):indeterminate::after {
   display: none;
   content: "";
 }
@@ -11038,7 +11038,7 @@ body.is-phone .note-database-container .db-record-detail-panel {
   line-height: 1.4;
 }
 
-.note-database-modal .db-csv-markdown-option-label input[type="checkbox"] {
+.note-database-modal .db-csv-markdown-option-label input[type="checkbox"]:not(.db-checkbox) {
   position: relative;
   flex: 0 0 auto;
   width: 20px;
@@ -11054,7 +11054,7 @@ body.is-phone .note-database-container .db-record-detail-panel {
   cursor: pointer;
 }
 
-.note-database-modal .db-csv-markdown-option-label input[type="checkbox"]:checked {
+.note-database-modal .db-csv-markdown-option-label input[type="checkbox"]:not(.db-checkbox):checked {
   border-color: var(--interactive-accent);
   background: var(--interactive-accent);
   background-image: url("data:image/svg+xml,%3Csvg width='14' height='14' viewBox='0 0 14 14' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M3.1 7.2L5.7 9.8L10.9 4.2' stroke='white' stroke-width='2.1' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
@@ -11063,7 +11063,7 @@ body.is-phone .note-database-container .db-record-detail-panel {
   background-size: 14px 14px;
 }
 
-.note-database-modal .db-csv-markdown-option-label input[type="checkbox"]:checked::after {
+.note-database-modal .db-csv-markdown-option-label input[type="checkbox"]:not(.db-checkbox):checked::after {
   display: none;
   content: "";
 }
@@ -19260,4 +19260,86 @@ body.is-tablet .note-database-container .db-record-open-btn {
     scroll-behavior: auto !important;
     transition: none !important;
   }
+}
+
+/* Own the checkbox widget at the input so mounting it under a different wrapper cannot restore the
+   platform control. The role changes only the painted box size; the expanded pseudo-element keeps
+   the coarse-pointer target larger than the visible square. */
+input[type="checkbox"].db-checkbox {
+  position: relative;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  border: 1px solid var(--checkbox-border-color, var(--background-modifier-border));
+  border-radius: var(--db-radius-sm);
+  background: var(--background-primary);
+  box-shadow: none;
+  outline: none;
+  appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+  transition: background-color 120ms ease-out, border-color 120ms ease-out, box-shadow 120ms ease-out;
+}
+
+input[type="checkbox"].db-checkbox.db-checkbox-row {
+  width: 16px;
+  height: 16px;
+  flex: 0 0 16px;
+}
+
+input[type="checkbox"].db-checkbox.db-checkbox-field {
+  width: 18px;
+  height: 18px;
+  flex: 0 0 18px;
+}
+
+@media (pointer: coarse) {
+  input[type="checkbox"].db-checkbox {
+    min-width: 28px;
+    min-height: 28px;
+  }
+}
+
+input[type="checkbox"].db-checkbox::before {
+  position: absolute;
+  inset: -6px;
+  content: "";
+  pointer-events: auto;
+}
+
+input[type="checkbox"].db-checkbox:checked,
+input[type="checkbox"].db-checkbox:indeterminate {
+  border-color: var(--interactive-accent);
+  background-color: var(--interactive-accent);
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+input[type="checkbox"].db-checkbox:checked {
+  background-image: url("data:image/svg+xml,%3Csvg width='14' height='14' viewBox='0 0 14 14' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M3.1 7.2L5.7 9.8L10.9 4.2' stroke='white' stroke-width='2.1' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-size: 12px 12px;
+}
+
+input[type="checkbox"].db-checkbox:indeterminate {
+  background-image: url("data:image/svg+xml,%3Csvg width='14' height='14' viewBox='0 0 14 14' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M3 7H11' stroke='white' stroke-width='2.1' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-size: 12px 12px;
+}
+
+input[type="checkbox"].db-checkbox:checked::after,
+input[type="checkbox"].db-checkbox:indeterminate::after {
+  display: none;
+  content: "";
+}
+
+input[type="checkbox"].db-checkbox:focus-visible {
+  outline: 2px solid var(--interactive-accent);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--interactive-accent) 20%, transparent);
+}
+
+input[type="checkbox"].db-checkbox:disabled {
+  border-color: var(--background-modifier-border);
+  background-color: var(--background-secondary);
+  cursor: default;
+  opacity: 0.5;
 }

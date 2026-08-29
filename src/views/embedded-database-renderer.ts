@@ -46,6 +46,7 @@ import { CellAddress, serializeSelectedCells, getCellDisplayText } from "../data
 import { createCsvMarkdownZip } from "../data/csv-markdown-zip-export";
 import { generateRanks, rankBetween, rebalanceRanks } from "../data/manual-order";
 import { safeString } from "../data/safe-string";
+import { createCheckbox } from "./checkbox";
 import { CsvMarkdownExportModal } from "./modals/csv-markdown-export-modal";
 import { BoardGroup, BoardRenderer } from "./board-renderer";
 import { CellRenderer } from "./cell-renderer";
@@ -3993,9 +3994,10 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
     const bar = this.containerEl.createDiv({ cls: "db-selection-status-bar" });
 
     // Clear selection checkbox (matches Dashboard)
-    const checkbox = bar.createEl("input", {
+    const checkbox = createCheckbox(bar, {
+      role: "row",
       cls: "db-selection-clear-checkbox",
-      attr: { type: "checkbox", title: t("toolbar.selectedCells", { count: cellCount }) },
+      attr: { title: t("toolbar.selectedCells", { count: cellCount }) },
     });
     checkbox.checked = true;
     checkbox.onchange = () => { if (!checkbox.checked) this.clearEmbedCellSelection(); };

@@ -130,12 +130,12 @@ const FOOTER_COLUMNS = [
 ];
 
 const utilityHeader = () => `
-  <th class="db-select-col" role="columnheader"><div class="db-select-inner"><input type="checkbox"></div></th>`;
+  <th class="db-select-col" role="columnheader"><div class="db-select-inner"><input type="checkbox" class="db-checkbox db-checkbox-row"></div></th>`;
 
 const utilityCell = () => `
   <td class="db-select-col"><div class="db-select-inner">
     <button type="button" class="db-table-row-drag-handle" aria-label="Drag to sort">${I.grip}</button>
-    <input type="checkbox">
+    <input type="checkbox" class="db-checkbox db-checkbox-row">
   </div></td>`;
 
 /* The table is `table-layout: fixed`, and the plugin sizes its columns through a colgroup
@@ -198,7 +198,7 @@ const groupDividerRow = (title, field, count, badgeTone, summaries, depth = 0) =
     ${depth ? `style="--db-group-depth:${depth}"` : ""}>
     <td colspan="7">
       <div class="db-group-divider-content">
-        <input type="checkbox" class="db-group-divider-checkbox" aria-label="Select rows">
+        <input type="checkbox" class="db-checkbox db-checkbox-row db-group-divider-checkbox" aria-label="Select rows">
         <span class="db-group-header-label">
           <button type="button" class="db-group-collapse-toggle" aria-label="Collapse" aria-expanded="true">
             <span class="db-collapse-triangle"></span>

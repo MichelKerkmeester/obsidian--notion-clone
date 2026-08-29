@@ -40,6 +40,7 @@ import { markNoteHoverLink } from "./hover-link-preview";
 import { positionToolbarPopover } from "./popover-position";
 import { renderDelayedExternalLink } from "./cell-renderer";
 import { renderCardField } from "./card-field-renderer";
+import { createCheckbox } from "./checkbox";
 import { attachSheetDragToDismiss } from "./mobile-bottom-sheet";
 import { trapFocus } from "./interaction-scope";
 
@@ -336,7 +337,7 @@ function renderRecordValue(
   // checkbox
   if (displayType === "checkbox") {
     valueEl.addClass("db-checkbox-cell");
-    const cb = valueEl.createEl("input", { attr: { type: "checkbox" } });
+    const cb = createCheckbox(valueEl, { role: "field" });
     cb.checked = toBooleanValue(value);
     cb.onclick = (event) => event.stopPropagation();
     cb.disabled = !!actions.isReadOnly;

@@ -31,6 +31,7 @@ import { renderSpecialFileFieldValue, shouldRenderSpecialFileField } from "./fil
 import { renderInlineMarkdown, resolveInlineImageSrc, valueToTooltip } from "./inline-markdown-renderer";
 import { renderDelayedExternalLink } from "./cell-renderer";
 import { renderProgress, renderProgressRing, renderRating } from "./number-display-renderer";
+import { createCheckbox } from "./checkbox";
 import { renderRelationValue } from "./relation-value-renderer";
 
 // ───────────────────────────────────────────────────────────────────
@@ -181,7 +182,7 @@ export function renderCardFieldValue(
 ): void {
   if (displayType === "checkbox") {
     valueEl.addClass("db-checkbox-cell");
-    const checkbox = valueEl.createEl("input", { attr: { type: "checkbox" } });
+    const checkbox = createCheckbox(valueEl, { role: "field" });
     checkbox.checked = toBooleanValue(value);
     checkbox.disabled = !!options.readOnly;
     checkbox.onclick = (event) => {
