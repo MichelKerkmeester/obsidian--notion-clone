@@ -13,7 +13,7 @@
 // 1. IMPORTS
 // ───────────────────────────────────────────────────────────────────
 
-import { App, Modal, Notice, setIcon } from "obsidian";
+import { App, Notice, setIcon } from "obsidian";
 import type { ChartDataset, ChartType as ChartJsType, Plugin } from "chart.js";
 import { Chart } from "../data/chart-js-setup";
 import {
@@ -39,6 +39,7 @@ import { ChartColorPalette, ChartReferenceLine, ChartType, ColumnDef, FilterRule
 import { STATUS_COLORS } from "../data/status-colors";
 import { t } from "../i18n";
 import { isHTMLElement } from "./dom-guards";
+import { DbModal } from "./modals/db-modal";
 
 // ───────────────────────────────────────────────────────────────────
 // 2. TYPES
@@ -966,9 +967,9 @@ interface ChartDrilldownOptions {
   applyFilter(): void;
 }
 
-class ChartDrilldownModal extends Modal {
+class ChartDrilldownModal extends DbModal {
   constructor(app: App, private readonly options: ChartDrilldownOptions) {
-    super(app);
+    super(app, "fullscreen");
   }
 
   onOpen(): void {

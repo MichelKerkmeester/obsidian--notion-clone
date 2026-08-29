@@ -12,13 +12,14 @@
 // 1. IMPORTS
 // ───────────────────────────────────────────────────────────────────
 
-import { App, Modal } from "obsidian";
+import { App } from "obsidian";
 import { COLUMN_TYPE_LABELS } from "../../data/column-types";
 import { applyRangeSelection, clearSelection, selectAll } from "../../data/range-selection";
 import { ColumnDef } from "../../data/types";
 import { t } from "../../i18n";
 import { createDropdownField } from "../dropdown-field";
 import { getPropertyDropdownIcon, renderDropdownPropertyTypeIcon } from "../property-type-icon";
+import { DbModal } from "./db-modal";
 
 // ───────────────────────────────────────────────────────────────────
 // 2. TYPES
@@ -42,7 +43,7 @@ export interface BaseImportModalOptions {
 // 3. MODAL
 // ───────────────────────────────────────────────────────────────────
 
-export class BaseImportConfirmModal extends Modal {
+export class BaseImportConfirmModal extends DbModal {
   private resolve?: (columns: BaseImportColumn[] | null) => void;
   private columns: BaseImportColumn[];
   private titleText: string;
@@ -62,7 +63,7 @@ export class BaseImportConfirmModal extends Modal {
     columns: BaseImportColumn[],
     options?: BaseImportModalOptions,
   ) {
-    super(app);
+    super(app, "sheet");
     this.columns = columns.map((c) => ({ ...c }));
     this.titleText = options?.titleText ?? t("baseImport.title");
     this.descText = options?.descText ?? t("baseImport.desc");

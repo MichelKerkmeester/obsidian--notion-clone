@@ -11,7 +11,7 @@
 // 1. IMPORTS
 // ───────────────────────────────────────────────────────────────────
 
-import { App, Modal, Notice, PluginSettingTab, Setting, setIcon, setTooltip } from "obsidian";
+import { App, Notice, PluginSettingTab, Setting, setIcon, setTooltip } from "obsidian";
 import NoteDatabasePlugin from "./main";
 import { DatabaseConfig, PluginSettings, TrashedDatabase } from "./data/types";
 import { LocaleCode, setLocale, t } from "./i18n";
@@ -24,6 +24,7 @@ import { DatabaseFileEntry, moveDatabaseFilePath, sortDatabaseFileEntries } from
 import { confirmWithModal } from "./views/modals/confirm-modal";
 import { createDropdownField, DropdownOption } from "./views/dropdown-field";
 import { isHTMLElement } from "./views/dom-guards";
+import { DbModal } from "./views/modals/db-modal";
 
 // ───────────────────────────────────────────────────────────────────
 // 2. DEFAULTS
@@ -509,13 +510,13 @@ export class SettingsTab extends PluginSettingTab {
 // ───────────────────────────────────────────────────────────────────
 
 /** 回收站管理弹窗 */
-class TrashManagerModal extends Modal {
+class TrashManagerModal extends DbModal {
   constructor(
     app: App,
     private plugin: NoteDatabasePlugin,
     private onRefresh: () => void,
   ) {
-    super(app);
+    super(app, "sheet");
   }
 
   onOpen(): void {
@@ -597,7 +598,7 @@ class TrashManagerModal extends Modal {
       this.onRefresh();
       this.onOpen();
     };
-    const restoreModal = new class extends Modal {
+    const restoreModal = new class extends DbModal {
       onOpen(): void {
         this.contentEl.empty();
         this.contentEl.addClass("note-database-modal");

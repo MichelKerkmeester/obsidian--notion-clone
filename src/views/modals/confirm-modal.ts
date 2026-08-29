@@ -11,8 +11,9 @@
 // 1. IMPORTS
 // ───────────────────────────────────────────────────────────────────
 
-import { App, Modal } from "obsidian";
+import { App } from "obsidian";
 import { t } from "../../i18n";
+import { DbModal } from "./db-modal";
 
 // ───────────────────────────────────────────────────────────────────
 // 2. TYPES
@@ -31,14 +32,14 @@ export interface ConfirmModalOptions {
 // 3. MODAL
 // ───────────────────────────────────────────────────────────────────
 
-class ConfirmModal extends Modal {
+class ConfirmModal extends DbModal {
   private resolve?: (result: boolean | string) => void;
 
   constructor(
     app: App,
     private options: ConfirmModalOptions
   ) {
-    super(app);
+    super(app, "sheet");
   }
 
   openAndWait(): Promise<boolean | string> {

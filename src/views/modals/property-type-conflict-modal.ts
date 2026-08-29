@@ -12,7 +12,7 @@
 // 1. IMPORTS
 // ───────────────────────────────────────────────────────────────────
 
-import { App, Modal } from "obsidian";
+import { App } from "obsidian";
 import {
   filterDraftChangesToResolvedConflicts,
   getDraftObservableType,
@@ -28,6 +28,7 @@ import { ColumnDef, ComputedFieldDef } from "../../data/types";
 import { t } from "../../i18n";
 import { createDropdownField, DropdownOption } from "../dropdown-field";
 import { getPropertyDropdownIcon, renderDropdownPropertyTypeIcon } from "../property-type-icon";
+import { DbModal } from "./db-modal";
 
 // ───────────────────────────────────────────────────────────────────
 // 2. TYPES
@@ -74,7 +75,7 @@ interface PropertyTypeConflictModalCallbacks {
 // 3. MODAL
 // ───────────────────────────────────────────────────────────────────
 
-export class PropertyTypeConflictModal extends Modal {
+export class PropertyTypeConflictModal extends DbModal {
   private closed = false;
   private readonly writerStates: EditableWriterState[] = [];
   private readonly cardStates = new Map<string, ConflictCardState>();
@@ -86,7 +87,7 @@ export class PropertyTypeConflictModal extends Modal {
     private options: PropertyTypeConflictModalOptions,
     private callbacks: PropertyTypeConflictModalCallbacks = {}
   ) {
-    super(app);
+    super(app, "fullscreen");
     for (const conflict of options.conflicts) {
       for (const writer of conflict.writers) {
         if (this.writerStates.some((state) => sameWriter(state.writer, writer))) continue;

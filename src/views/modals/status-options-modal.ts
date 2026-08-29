@@ -12,12 +12,13 @@
 // 1. IMPORTS
 // ───────────────────────────────────────────────────────────────────
 
-import { App, Modal, Notice, setIcon } from "obsidian";
+import { App, Notice, setIcon } from "obsidian";
 import { COLUMN_TYPE_LABELS, DEFAULT_STATUS_OPTIONS, getBuiltinStatusPresets } from "../../data/column-types";
 import { ColumnDef, StatusColor, StatusOptionDef, StatusPresetDef } from "../../data/types";
 import { t } from "../../i18n";
 import { confirmWithModal } from "./confirm-modal";
 import { isHTMLElement } from "../dom-guards";
+import { DbModal } from "./db-modal";
 
 // ───────────────────────────────────────────────────────────────────
 // 2. TYPES
@@ -105,7 +106,7 @@ export function selectStatusOptionsPreset(
 // 5. MODAL
 // ───────────────────────────────────────────────────────────────────
 
-export class StatusOptionsModal extends Modal {
+export class StatusOptionsModal extends DbModal {
   private options: StatusOptionDef[];
   private customOptions: StatusOptionDef[];
   private listEl?: HTMLElement;
@@ -121,7 +122,7 @@ export class StatusOptionsModal extends Modal {
     private showPresets = true,
     private defaultOptions: StatusOptionDef[] = DEFAULT_STATUS_OPTIONS
   ) {
-    super(app);
+    super(app, "sheet");
     const defaults = col.type === "status" ? this.defaultOptions : [];
     this.options = cloneStatusOptionDraft(col.statusOptions?.length ? col.statusOptions : defaults);
     this.customOptions = cloneStatusOptionDraft(this.options);

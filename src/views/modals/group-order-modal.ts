@@ -12,15 +12,16 @@
 // 1. IMPORTS
 // ───────────────────────────────────────────────────────────────────
 
-import { App, Modal, setIcon } from "obsidian";
+import { App, setIcon } from "obsidian";
 import { mergeGroupOrder } from "../../data/group-order";
 import { t } from "../../i18n";
+import { DbModal } from "./db-modal";
 
 // ───────────────────────────────────────────────────────────────────
 // 2. MODAL
 // ───────────────────────────────────────────────────────────────────
 
-export class GroupOrderModal extends Modal {
+export class GroupOrderModal extends DbModal {
   private order: string[];
   private draggedIndex: number | null = null;
 
@@ -32,7 +33,7 @@ export class GroupOrderModal extends Modal {
     private defaultOrder: string[],
     private onSave: (order: string[]) => void | Promise<void>
   ) {
-    super(app);
+    super(app, "sheet");
     const knownKeys = new Set([...defaultOrder, ...groupKeys]);
     this.order = mergeGroupOrder(
       currentOrder.filter((key) => knownKeys.has(key)),

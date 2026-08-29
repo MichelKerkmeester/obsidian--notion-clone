@@ -11,16 +11,17 @@
 // 1. IMPORTS
 // ───────────────────────────────────────────────────────────────────
 
-import { App, Modal } from "obsidian";
+import { App } from "obsidian";
 import { ComputedFrontmatterCleanupOption } from "../../data/computed-cleanup";
 import { applyRangeSelection } from "../../data/range-selection";
 import { t } from "../../i18n";
+import { DbModal } from "./db-modal";
 
 // ───────────────────────────────────────────────────────────────────
 // 2. MODAL
 // ───────────────────────────────────────────────────────────────────
 
-export class ComputedFrontmatterCleanupModal extends Modal {
+export class ComputedFrontmatterCleanupModal extends DbModal {
   private selectedKeys: Set<string>;
   private lastSelectedKey: string | null = null;
 
@@ -29,7 +30,7 @@ export class ComputedFrontmatterCleanupModal extends Modal {
     private options: ComputedFrontmatterCleanupOption[],
     private onConfirm: (keys: string[]) => Promise<void>
   ) {
-    super(app);
+    super(app, "sheet");
     this.selectedKeys = new Set(options.map((option) => option.key));
   }
 

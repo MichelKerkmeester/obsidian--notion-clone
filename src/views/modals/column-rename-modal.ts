@@ -11,10 +11,11 @@
 // 1. IMPORTS
 // ───────────────────────────────────────────────────────────────────
 
-import { App, Modal, Notice } from "obsidian";
+import { App, Notice } from "obsidian";
 import { isFileFieldKey } from "../../data/file-fields";
 import { ColumnDef } from "../../data/types";
 import { t } from "../../i18n";
+import { DbModal } from "./db-modal";
 
 // ───────────────────────────────────────────────────────────────────
 // 2. TYPES
@@ -31,14 +32,14 @@ export interface ColumnRenameResult {
 // 3. MODAL
 // ───────────────────────────────────────────────────────────────────
 
-export class ColumnRenameModal extends Modal {
+export class ColumnRenameModal extends DbModal {
   constructor(
     app: App,
     private col: ColumnDef,
     private allColumns: ColumnDef[],
     private onSave: (result: ColumnRenameResult) => Promise<void | boolean>,
   ) {
-    super(app);
+    super(app, "sheet");
   }
 
   onOpen(): void {

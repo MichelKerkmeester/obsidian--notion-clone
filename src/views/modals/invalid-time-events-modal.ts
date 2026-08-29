@@ -12,7 +12,7 @@
 // 1. IMPORTS
 // ───────────────────────────────────────────────────────────────────
 
-import { App, Modal } from "obsidian";
+import { App } from "obsidian";
 import {
   getInvalidTimeEventQuickFix,
   getTimelineDateTimeSpanMinutes,
@@ -22,6 +22,7 @@ import {
 import { applyRangeSelection, clearSelection, selectAll } from "../../data/range-selection";
 import { RowData } from "../../data/types";
 import { t } from "../../i18n";
+import { DbModal } from "./db-modal";
 
 // ───────────────────────────────────────────────────────────────────
 // 2. TYPES
@@ -59,9 +60,9 @@ interface InvalidTimeEventDraft {
 
 /**
  * 列出开始 datetime >= 结束 datetime 的无效事件，让用户逐条修改开始/结束时间，确认后写回。
- * 骨架参照 ComputedFrontmatterCleanupModal（extends Modal + onConfirm 回调）。
+ * 骨架参照 ComputedFrontmatterCleanupModal 的 onConfirm 回调形态；两者现均继承 DbModal。
  */
-export class InvalidTimeEventsModal extends Modal {
+export class InvalidTimeEventsModal extends DbModal {
   private readonly edits = new Map<string, InvalidTimeEventDraft>();
   private selectAllInput?: HTMLInputElement;
   private selectedCountEl?: HTMLElement;
@@ -73,7 +74,7 @@ export class InvalidTimeEventsModal extends Modal {
     private options: InvalidTimeEventOption[],
     private onConfirm: (edits: InvalidTimeEventEdit[]) => Promise<void>
   ) {
-    super(app);
+    super(app, "fullscreen");
   }
 
   onOpen(): void {

@@ -13,19 +13,20 @@
 // 1. IMPORTS
 // ───────────────────────────────────────────────────────────────────
 
-import { App, Modal } from "obsidian";
+import { App } from "obsidian";
 import { t } from "../../i18n";
 import { ColumnDef, DatabaseConfig, StatusPresetDef, ViewConfig, generateId } from "../../data/types";
 import { normalizeStatusPresets } from "../../data/column-types";
 import { AddDatabaseModalResult } from "../../data/add-database-result";
 import { ViewConfigPanelActions, ViewConfigPanelRenderer } from "../view-config-panel-renderer";
 import { StatusPresetManagerModal } from "./status-preset-manager-modal";
+import { DbModal } from "./db-modal";
 
 // ───────────────────────────────────────────────────────────────────
 // 2. MODAL
 // ───────────────────────────────────────────────────────────────────
 
-export class AddDatabaseModal extends Modal {
+export class AddDatabaseModal extends DbModal {
   private resolve?: (result: AddDatabaseModalResult | null) => void;
   private readonly globalStatusPresets: StatusPresetDef[];
   private readonly globalDefaultStatusPresetId?: string;
@@ -37,7 +38,7 @@ export class AddDatabaseModal extends Modal {
     globalStatusPresets: StatusPresetDef[] = [],
     globalDefaultStatusPresetId?: string,
   ) {
-    super(app);
+    super(app, "sheet");
     this.globalStatusPresets = normalizeStatusPresets(globalStatusPresets);
     this.globalDefaultStatusPresetId = globalDefaultStatusPresetId;
     this.tempDb = this.createTempDatabase();

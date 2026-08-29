@@ -12,8 +12,9 @@
 // 1. IMPORTS
 // ───────────────────────────────────────────────────────────────────
 
-import { App, Modal, Setting } from "obsidian";
+import { App, Setting } from "obsidian";
 import { t } from "../../i18n";
+import { DbModal } from "./db-modal";
 
 // ───────────────────────────────────────────────────────────────────
 // 2. TYPES
@@ -29,7 +30,7 @@ export interface DeleteDatabaseModalResult {
 // 3. MODAL
 // ───────────────────────────────────────────────────────────────────
 
-export class DeleteDatabaseModal extends Modal {
+export class DeleteDatabaseModal extends DbModal {
   private resolve?: (result: DeleteDatabaseModalResult | null) => void;
   private deleteFiles = false;
 
@@ -38,7 +39,7 @@ export class DeleteDatabaseModal extends Modal {
     private dbName: string,
     private fileCount: number
   ) {
-    super(app);
+    super(app, "sheet");
   }
 
   openAndWait(): Promise<DeleteDatabaseModalResult | null> {

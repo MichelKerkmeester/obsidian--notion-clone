@@ -11,20 +11,21 @@
 // 1. IMPORTS
 // ───────────────────────────────────────────────────────────────────
 
-import { App, Modal, Notice } from "obsidian";
+import { App, Notice } from "obsidian";
 import { ColumnDef } from "../../data/types";
 import { t } from "../../i18n";
+import { DbModal } from "./db-modal";
 
 // ───────────────────────────────────────────────────────────────────
 // 2. MODAL
 // ───────────────────────────────────────────────────────────────────
 
-export class CreateRecordIconFieldModal extends Modal {
+export class CreateRecordIconFieldModal extends DbModal {
   constructor(
     app: App,
     private columns: ColumnDef[],
     private onCreate: (key: string, label: string) => Promise<boolean>,
-  ) { super(app); }
+  ) { super(app, "sheet"); }
 
   onOpen(): void {
     const conflict = this.columns.some((column) => column.key === "icon");

@@ -15,7 +15,7 @@
 // 1. IMPORTS
 // ───────────────────────────────────────────────────────────────────
 
-import { App, Modal, Notice } from "obsidian";
+import { App, Notice } from "obsidian";
 import { getColumnDisplayType, isRollupNumericTarget } from "../../data/column-display";
 import { isDateLikeColumnType } from "../../data/date-time-format";
 import { ColumnDef, DatabaseConfig } from "../../data/types";
@@ -23,12 +23,13 @@ import { t } from "../../i18n";
 import { createDropdownField, DropdownOption } from "../dropdown-field";
 import { getPropertyDropdownIcon, renderDropdownPropertyTypeIcon } from "../property-type-icon";
 import { getDatabaseDropdownIcon, renderDatabaseDropdownIcon } from "../record-icon-renderer";
+import { DbModal } from "./db-modal";
 
 // ───────────────────────────────────────────────────────────────────
 // 2. MODAL
 // ───────────────────────────────────────────────────────────────────
 
-export class RelationRollupConfigModal extends Modal {
+export class RelationRollupConfigModal extends DbModal {
   constructor(
     app: App,
     private column: ColumnDef,
@@ -39,7 +40,7 @@ export class RelationRollupConfigModal extends Modal {
     private getRelationImpact?: (targetDatabaseId: string) => RelationTargetChangeImpact,
     private onClosed?: () => void,
   ) {
-    super(app);
+    super(app, "sheet");
   }
 
   onOpen(): void {

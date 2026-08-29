@@ -15,7 +15,7 @@
 // 1. IMPORTS
 // ───────────────────────────────────────────────────────────────────
 
-import { App, Modal, Notice, setIcon } from "obsidian";
+import { App, Notice, setIcon } from "obsidian";
 import { evaluateBaseExpression } from "../../data/base-expression";
 import { isImeComposing } from "../../data/keyboard-utils";
 import { COLUMN_TYPE_LABELS, getColumnOptions, isOptionColumnType, toMultiSelectValuesForKey } from "../../data/column-types";
@@ -32,6 +32,7 @@ import { confirmWithModal } from "./confirm-modal";
 import { safeString } from "../../data/safe-string";
 import { isDateLikeColumnType } from "../../data/date-time-format";
 import { scanFormulaSegments, type FormulaSegment } from "../../data/formula-tokenizer";
+import { DbModal } from "./db-modal";
 
 // ───────────────────────────────────────────────────────────────────
 // 2. TYPES
@@ -142,7 +143,7 @@ const FUNCTION_NAMES = new Set(FUNCTIONS.flatMap((fn) => [fn.name, fn.name.toLow
 // 4. MODAL
 // ───────────────────────────────────────────────────────────────────
 
-export class FormulaModal extends Modal {
+export class FormulaModal extends DbModal {
   private selectedCategoryKey = "formula.catFields";
   private selectedHelpItem: FormulaHelpItem | null = null;
   private searchQuery = "";
@@ -183,7 +184,7 @@ export class FormulaModal extends Modal {
     private initialPreviewRowPath?: string,
     private onClosed?: () => void
   ) {
-    super(app);
+    super(app, "fullscreen");
   }
 
   onOpen(): void {

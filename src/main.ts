@@ -45,6 +45,7 @@ import { linkDatabaseSchemas } from "./data/column-config";
 import { safeString, isRecord } from "./data/safe-string";
 import { isElement } from "./views/dom-guards";
 import { NOTE_DATABASE_HOVER_LINK_SOURCE } from "./views/hover-link-preview";
+import { DbModal } from "./views/modals/db-modal";
 
 // ───────────────────────────────────────────────────────────────────
 // 2. TYPES
@@ -2803,7 +2804,7 @@ interface CsvMarkdownImportResult {
 // 5. CSV/MARKDOWN IMPORT MODAL
 // ───────────────────────────────────────────────────────────────────
 
-class CsvMarkdownImportModal extends Modal {
+class CsvMarkdownImportModal extends DbModal {
   private resolve?: (result: CsvMarkdownImportResult | null) => void;
   private csvFiles: File[] = [];
   private markdownFiles: File[] = [];

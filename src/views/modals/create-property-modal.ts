@@ -11,7 +11,7 @@
 // 1. IMPORTS
 // ───────────────────────────────────────────────────────────────────
 
-import { App, Modal, Notice } from "obsidian";
+import { App, Notice } from "obsidian";
 import { t } from "../../i18n";
 import { ColumnDef, ViewConfig } from "../../data/types";
 import { COLUMN_TYPE_LABELS, isColumnType } from "../../data/column-types";
@@ -19,6 +19,7 @@ import { isFileFieldKey } from "../../data/file-fields";
 import { createUniqueColumnKey } from "../../data/column-config";
 import { createDropdownField } from "../dropdown-field";
 import { getPropertyDropdownIcon, renderDropdownPropertyTypeIcon } from "../property-type-icon";
+import { DbModal } from "./db-modal";
 
 // ───────────────────────────────────────────────────────────────────
 // 2. TYPES
@@ -60,7 +61,7 @@ const PROPERTY_TYPES: ColumnDef["type"][] = [
  * compact `.note-database-modal` / `db-modal-*` styles like other editor modals,
  * NOT the wide settings-popover layout. Escape cancels (Modal default → onClose).
  */
-export class CreatePropertyModal extends Modal {
+export class CreatePropertyModal extends DbModal {
   private resolve?: (result: CreatePropertyResult | null) => void;
   private readonly config: ViewConfig;
   private readonly options: CreatePropertyModalOptions;
@@ -72,7 +73,7 @@ export class CreatePropertyModal extends Modal {
   private keyInput?: HTMLInputElement;
 
   constructor(app: App, config: ViewConfig, options: CreatePropertyModalOptions = {}) {
-    super(app);
+    super(app, "sheet");
     this.config = config;
     this.options = options;
     this.typeValue = options.initialType ?? "text";

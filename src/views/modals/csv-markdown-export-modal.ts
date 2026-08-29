@@ -10,15 +10,15 @@
 // 1. IMPORTS
 // ───────────────────────────────────────────────────────────────────
 
-import { Modal } from "obsidian";
 import { t } from "../../i18n";
 import { CsvMarkdownExportOptions } from "../../data/csv-markdown-zip-export";
+import { DbModal } from "./db-modal";
 
 // ───────────────────────────────────────────────────────────────────
 // 2. MODAL
 // ───────────────────────────────────────────────────────────────────
 
-export class CsvMarkdownExportModal extends Modal {
+export class CsvMarkdownExportModal extends DbModal {
   private resolve?: (options: CsvMarkdownExportOptions | null) => void;
   private includeFrontmatter = true;
 

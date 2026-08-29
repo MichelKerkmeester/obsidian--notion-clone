@@ -12,7 +12,7 @@
 // 1. IMPORTS
 // ───────────────────────────────────────────────────────────────────
 
-import { App, Modal, Notice, setIcon, setTooltip } from "obsidian";
+import { App, Notice, setIcon, setTooltip } from "obsidian";
 import {
   cloneStatusPreset,
   getBuiltinStatusPresets,
@@ -23,12 +23,13 @@ import { ColumnDef, StatusPresetDef, generateId } from "../../data/types";
 import { t } from "../../i18n";
 import { createDropdownField } from "../dropdown-field";
 import { StatusOptionsModal } from "./status-options-modal";
+import { DbModal } from "./db-modal";
 
 // ───────────────────────────────────────────────────────────────────
 // 2. MODAL
 // ───────────────────────────────────────────────────────────────────
 
-export class StatusPresetManagerModal extends Modal {
+export class StatusPresetManagerModal extends DbModal {
   private presets: StatusPresetDef[];
   private defaultPresetId: string;
   private listEl?: HTMLElement;
@@ -40,7 +41,7 @@ export class StatusPresetManagerModal extends Modal {
     defaultPresetId: string | undefined,
     private onSave: (presets: StatusPresetDef[], defaultPresetId: string) => Promise<void>
   ) {
-    super(app);
+    super(app, "sheet");
     this.presets = normalizeStatusPresets(presets, getBuiltinStatusPresets()).map((preset) => cloneStatusPreset(preset));
     this.defaultPresetId = resolveDefaultStatusPresetId(this.presets, defaultPresetId);
   }

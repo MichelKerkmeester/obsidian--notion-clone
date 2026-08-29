@@ -40,6 +40,7 @@ import { markNoteHoverLink } from "./hover-link-preview";
 import { positionToolbarPopover } from "./popover-position";
 import { renderDelayedExternalLink } from "./cell-renderer";
 import { renderCardField } from "./card-field-renderer";
+import { attachSheetDragToDismiss } from "./mobile-bottom-sheet";
 import { trapFocus } from "./interaction-scope";
 
 /**
@@ -280,56 +281,6 @@ export function openRecordDetailPanel(opts: OpenRecordDetailOptions): void {
     filePath: row.file.path,
     close,
     refreshFields: (newRow: RowData) => renderContent(newRow),
-  };
-}
-
-/**
- * 移动端底部抽屉「向下拖拽关闭」手势，绑定在抓手上。指针模型对齐 attachLongPress
- * （pointerdown → move → up/cancel）：拖动时抽屉随指位下移，松手位移 ≥ 阈值即关闭，
- * 否则回弹。仅在 positionToolbarPopover 已渲染抓手（手机端）时接入，桌面永不触及。
- */
-function attachSheetDragToDismiss(panel: HTMLElement, handle: HTMLElement, close: () => void): () => void {
-  const DISMISS_PX = 96;
-  let startY = 0;
-  let pointerId: number | undefined;
-
-  const reset = (): void => {
-    panel.setCssProps({ transition: "", transform: "" });
-  };
-  const distance = (event: PointerEvent): number => Math.max(0, event.clientY - startY);
-  const onDown = (event: PointerEvent): void => {
-    if (event.button !== 0 || pointerId !== undefined) return;
-    pointerId = event.pointerId;
-    startY = event.clientY;
-    panel.setCssProps({ transition: "none" });
-    handle.setPointerCapture?.(event.pointerId);
-  };
-  const onMove = (event: PointerEvent): void => {
-    if (event.pointerId !== pointerId) return;
-    const dy = distance(event);
-    panel.setCssProps({ transform: dy > 0 ? `translateY(${dy}px)` : "" });
-  };
-  const onUp = (event: PointerEvent): void => {
-    if (event.pointerId !== pointerId) return;
-    const dy = distance(event);
-    pointerId = undefined;
-    if (dy >= DISMISS_PX) {
-      close();
-      return;
-    }
-    reset();
-  };
-
-  handle.addEventListener("pointerdown", onDown);
-  handle.addEventListener("pointermove", onMove);
-  handle.addEventListener("pointerup", onUp);
-  handle.addEventListener("pointercancel", onUp);
-  return () => {
-    handle.removeEventListener("pointerdown", onDown);
-    handle.removeEventListener("pointermove", onMove);
-    handle.removeEventListener("pointerup", onUp);
-    handle.removeEventListener("pointercancel", onUp);
-    reset();
   };
 }
 

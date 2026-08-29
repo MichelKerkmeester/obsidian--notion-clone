@@ -13,7 +13,36 @@
 // springs back.
 
 // ───────────────────────────────────────────────────────────────────
-// 1. BOTTOM SHEET GESTURE
+// 1. SHEET CHROME
+// ───────────────────────────────────────────────────────────────────
+
+/**
+ * Apply or remove the phone bottom-sheet chrome: the sheet class and the grab handle.
+ *
+ * This is presentation, deliberately separated from placement. The anchored positioner used to own
+ * both, which is why no modal could ever present as a sheet: a modal has no anchor element, so it
+ * could not call the positioner at all, and the chrome was only reachable through it. Splitting the
+ * two means a caller declares "this is a sheet" and supplies its own placement — or lets Obsidian
+ * place it, as a modal does.
+ *
+ * Idempotent: re-applying will not stack handles, and turning the sheet off removes the handle it
+ * added rather than leaving an orphan behind.
+ */
+export function applySheetChrome(panel: HTMLElement, isSheet: boolean): void {
+  panel.toggleClass("db-mobile-bottom-sheet", isSheet);
+  const existingHandle = panel.querySelector<HTMLElement>(".db-mobile-bottom-sheet-handle");
+  if (isSheet && !existingHandle) {
+    const handle = panel.ownerDocument.createElement("div");
+    handle.className = "db-mobile-bottom-sheet-handle";
+    handle.setAttribute("aria-hidden", "true");
+    panel.prepend(handle);
+    return;
+  }
+  if (!isSheet) existingHandle?.remove();
+}
+
+// ───────────────────────────────────────────────────────────────────
+// 2. BOTTOM SHEET GESTURE
 // ───────────────────────────────────────────────────────────────────
 
 /**
