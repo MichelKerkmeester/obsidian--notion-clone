@@ -86,13 +86,29 @@ const page_html = `<!doctype html><html><head>
   .workspace-split.mod-root { flex: 1 1 auto; position: relative; overflow: hidden; }
   .workspace-split.mod-right-split { width: ${SIDEBAR}px; flex: 0 0 ${SIDEBAR}px; background: #eee; }
   .note-database-container { position: relative; height: 100%; padding: 40px; }
+  /* Reproduced from the shipped Obsidian stylesheet, because it changes what is even possible.
+     contain:strict includes paint containment, which makes the leaf the containing block for
+     fixed-position descendants AND clips them; isolation:isolate traps every descendant z-index
+     inside it. Without these the harness certifies a viewport-relative mechanism the app does not
+     provide — a sheet measured here reaches the screen bottom while on a phone it stops at the
+     leaf's edge. Every earlier sheet check passed against a page that lacked them. */
+  .workspace-leaf { position: relative; contain: strict !important; overflow: hidden; isolation: isolate; }
+  .workspace-leaf, .workspace-leaf-content, .view-content { height: 100%; }
+  /* The workspace stops above the navigation bar when that bar is not floating, which is the
+     configuration the reported defect lives in. Combined with the containment above, a fixed
+     descendant is then clipped to the leaf and cannot reach the screen bottom however it is
+     positioned. A harness whose leaf fills the viewport cannot show this: containment is real but
+     invisible, because the leaf and the viewport share an edge. */
+  .app-container.mod-static-nav .workspace { height: calc(100% - 80px); }
   .anchor { width: 120px; height: 28px; background: #ccd; }
   .panel { position: absolute; background: #fff; border: 1px solid #999; }
   .panel .row { height: 30px; }
 </style></head><body>
   <div class="app-container"><div class="workspace">
     <div class="workspace-split mod-root">
+      <div class="workspace-leaf"><div class="workspace-leaf-content"><div class="view-content">
       <div class="note-database-container"><div class="anchor" id="anchor"></div></div>
+      </div></div></div>
     </div>
     <div class="workspace-split mod-right-split"></div>
   </div></div>
@@ -359,6 +375,19 @@ const phoneResults = await phone.evaluate(() => {
     pass: sheetStyle.bottom === "0px",
     detail: `computed bottom=${sheetStyle.bottom}`,
   });
+  // The same sheet, in the arrangement where the workspace stops above the bar.
+  document.querySelector(".app-container").classList.add("mod-static-nav");
+  positionToolbarPopover(sheetPanel, sheetAnchor, {});
+  const staticRect = sheetPanel.getBoundingClientRect();
+  const leafRect = document.querySelector(".workspace-leaf").getBoundingClientRect();
+  document.querySelector(".app-container").classList.remove("mod-static-nav");
+
+  out.push({
+    name: "a sheet reaches the screen bottom even when the workspace does not",
+    pass: Math.abs(staticRect.bottom - window.innerHeight) <= 1,
+    detail: `sheet bottom=${Math.round(staticRect.bottom)} leaf bottom=${Math.round(leafRect.bottom)} viewport=${window.innerHeight}`,
+  });
+
   out.push({
     name: "the sheet's rectangle covers the navigation bar's band",
     pass: sheetRect.bottom >= navBox.bottom - 1 && sheetRect.top <= navBox.top,
