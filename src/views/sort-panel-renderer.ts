@@ -16,7 +16,7 @@ import { setIcon } from "obsidian";
 import { SortRule, ViewConfig } from "../data/types";
 import { t } from "../i18n";
 import { DatabaseViewState } from "./view-state-store";
-import { positionToolbarPopover } from "./popover-position";
+import { PANEL_POPOVER, positionToolbarPopover } from "./popover-position";
 import { createDropdownField } from "./dropdown-field";
 import { isHTMLElement } from "./dom-guards";
 import { renderDropdownPropertyTypeIcon, toPropertyDropdownOption } from "./property-type-icon";
@@ -87,7 +87,7 @@ export class SortPanelRenderer {
       this.render(containerEl, true, config, state, actions, this.anchorEl || undefined);
       actions.refresh();
     };
-    positionToolbarPopover(panel, this.anchorEl || undefined);
+    positionToolbarPopover(panel, this.anchorEl || undefined, PANEL_POPOVER);
     if (savedScroll) panel.scrollTop = savedScroll;
   }
 

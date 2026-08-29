@@ -38,16 +38,29 @@ export interface ToolbarPopoverPositionOptions {
 /**
  * Sizing for menu-shaped popovers: one compact column of rows.
  *
- * Callers that pass no width fall back to the 520px default below, which suits a wide editor and
- * makes a four-item menu absurd — the stylesheet only caps these panels with a max-width, so it
- * cannot rescue them. 292px is the width the column menu already asks for explicitly, and that is
- * the one menu surface in the plugin that reads correctly today. Editors that genuinely need room
- * — relation pickers, chart toolbars — keep passing their own numbers.
+ * 292px is the width the column menu asks for explicitly, and that is the one menu surface in the
+ * plugin that reads correctly today. Editors that genuinely need room — relation pickers, chart
+ * toolbars — keep passing their own numbers.
  */
 export const COMPACT_MENU_POPOVER: ToolbarPopoverPositionOptions = {
   minWidth: 220,
   preferredWidth: 292,
   maxWidth: 320,
+};
+
+/**
+ * Sizing for panel-shaped popovers: a working surface the user adjusts before closing.
+ *
+ * Filter, Sort and Column Manager are these. All three passed no options at all and were handed
+ * the raw default, so three panels that sit next to each other in the same toolbar arrived at their
+ * width by accident rather than by asking for one — which is most of why they look unrelated.
+ *
+ * Wider than a menu because these hold labelled controls in rows, not a single column of items.
+ */
+export const PANEL_POPOVER: ToolbarPopoverPositionOptions = {
+  minWidth: 260,
+  preferredWidth: 320,
+  maxWidth: 360,
 };
 
 // ───────────────────────────────────────────────────────────────────
@@ -70,7 +83,13 @@ export function positionToolbarPopover(
   const margin = options.margin ?? 12;
   const gap = options.gap ?? 6;
   const minWidth = options.minWidth ?? 160;
-  const preferredWidth = options.preferredWidth ?? 520;
+  // A caller that states no width gets the compact width, not a wide one.
+  //
+  // The old default was 520px, which suits a wide editor and makes a four-item menu absurd — and
+  // the stylesheet caps these only with a max-width, so it cannot rescue one. Three panels reached
+  // production on it. Defaulting narrow means an undeclared caller is merely plain rather than
+  // broken, and anything that genuinely needs room asks for it.
+  const preferredWidth = options.preferredWidth ?? COMPACT_MENU_POPOVER.preferredWidth ?? 292;
   const maxPreferredWidth = options.maxWidth ?? preferredWidth;
   const ownerDocument = panel.ownerDocument;
   const view = ownerDocument.defaultView || window;

@@ -21,7 +21,7 @@ import { applyRangeSelection } from "../data/range-selection";
 import { ColumnDef, ViewConfig } from "../data/types";
 import { t } from "../i18n";
 import { getFileFieldFixedType, QUICK_ADD_FILE_FIELDS } from "../data/file-fields";
-import { positionToolbarPopover } from "./popover-position";
+import { PANEL_POPOVER, positionToolbarPopover } from "./popover-position";
 import { getPropertyDropdownIcon, renderPropertyTypeIcon } from "./property-type-icon";
 import { DatabaseViewState } from "./view-state-store";
 import { isHTMLElement } from "./dom-guards";
@@ -132,7 +132,7 @@ export class ColumnManagerRenderer {
         }
       }
     }
-    positionToolbarPopover(panel, anchorEl);
+    positionToolbarPopover(panel, anchorEl, PANEL_POPOVER);
     if (savedScroll) panel.scrollTop = savedScroll;
     this.updateToolbarButton(containerEl, state, columns);
   }

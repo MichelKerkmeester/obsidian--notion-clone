@@ -109,7 +109,7 @@
       "layoutHash": "7363964f9c49",
       "sourceHashes": {
         "src/views/active-rule-popover-renderer.ts": "d9143edf30ba",
-        "src/views/filter-panel-renderer.ts": "deabe2ecc320",
+        "src/views/filter-panel-renderer.ts": "6b4543ceb6d9",
         "styles.css": "a535fa1bf6fd",
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -134,7 +134,7 @@
       "layoutHash": "7363964f9c49",
       "sourceHashes": {
         "src/views/active-rule-popover-renderer.ts": "d9143edf30ba",
-        "src/views/filter-panel-renderer.ts": "deabe2ecc320",
+        "src/views/filter-panel-renderer.ts": "6b4543ceb6d9",
         "styles.css": "a535fa1bf6fd",
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -159,7 +159,7 @@
       "layoutHash": "7363964f9c49",
       "sourceHashes": {
         "src/views/active-rule-popover-renderer.ts": "d9143edf30ba",
-        "src/views/filter-panel-renderer.ts": "deabe2ecc320",
+        "src/views/filter-panel-renderer.ts": "6b4543ceb6d9",
         "styles.css": "a535fa1bf6fd",
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -184,7 +184,7 @@
       "layoutHash": "7363964f9c49",
       "sourceHashes": {
         "src/views/active-rule-popover-renderer.ts": "d9143edf30ba",
-        "src/views/filter-panel-renderer.ts": "deabe2ecc320",
+        "src/views/filter-panel-renderer.ts": "6b4543ceb6d9",
         "styles.css": "a535fa1bf6fd",
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -209,7 +209,7 @@
       "layoutHash": "5707bce8b00b",
       "sourceHashes": {
         "src/views/active-rule-popover-renderer.ts": "d9143edf30ba",
-        "src/views/sort-panel-renderer.ts": "19109d09b2d5",
+        "src/views/sort-panel-renderer.ts": "2689215615eb",
         "styles.css": "a535fa1bf6fd",
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -234,7 +234,7 @@
       "layoutHash": "5707bce8b00b",
       "sourceHashes": {
         "src/views/active-rule-popover-renderer.ts": "d9143edf30ba",
-        "src/views/sort-panel-renderer.ts": "19109d09b2d5",
+        "src/views/sort-panel-renderer.ts": "2689215615eb",
         "styles.css": "a535fa1bf6fd",
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -259,7 +259,7 @@
       "layoutHash": "5707bce8b00b",
       "sourceHashes": {
         "src/views/active-rule-popover-renderer.ts": "d9143edf30ba",
-        "src/views/sort-panel-renderer.ts": "19109d09b2d5",
+        "src/views/sort-panel-renderer.ts": "2689215615eb",
         "styles.css": "a535fa1bf6fd",
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -284,7 +284,7 @@
       "layoutHash": "5707bce8b00b",
       "sourceHashes": {
         "src/views/active-rule-popover-renderer.ts": "d9143edf30ba",
-        "src/views/sort-panel-renderer.ts": "19109d09b2d5",
+        "src/views/sort-panel-renderer.ts": "2689215615eb",
         "styles.css": "a535fa1bf6fd",
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -2520,7 +2520,7 @@
       ],
       "layoutHash": "1622889edcaf",
       "sourceHashes": {
-        "src/views/column-manager-renderer.ts": "69ada433f599",
+        "src/views/column-manager-renderer.ts": "088c4f9c718c",
         "src/views/property-type-icon.ts": "ae5fe0065e84",
         "styles.css": "a535fa1bf6fd",
         "tools/screenshots/theme.css": "dd06feeedc73",
@@ -2545,7 +2545,7 @@
       ],
       "layoutHash": "1622889edcaf",
       "sourceHashes": {
-        "src/views/column-manager-renderer.ts": "69ada433f599",
+        "src/views/column-manager-renderer.ts": "088c4f9c718c",
         "src/views/property-type-icon.ts": "ae5fe0065e84",
         "styles.css": "a535fa1bf6fd",
         "tools/screenshots/theme.css": "dd06feeedc73",
@@ -2570,7 +2570,7 @@
       ],
       "layoutHash": "f1b53e901cb0",
       "sourceHashes": {
-        "src/views/column-manager-renderer.ts": "69ada433f599",
+        "src/views/column-manager-renderer.ts": "088c4f9c718c",
         "src/views/property-type-icon.ts": "ae5fe0065e84",
         "styles.css": "a535fa1bf6fd",
         "tools/screenshots/theme.css": "dd06feeedc73",
@@ -2595,7 +2595,7 @@
       ],
       "layoutHash": "f1b53e901cb0",
       "sourceHashes": {
-        "src/views/column-manager-renderer.ts": "69ada433f599",
+        "src/views/column-manager-renderer.ts": "088c4f9c718c",
         "src/views/property-type-icon.ts": "ae5fe0065e84",
         "styles.css": "a535fa1bf6fd",
         "tools/screenshots/theme.css": "dd06feeedc73",
@@ -2620,7 +2620,7 @@
       ],
       "layoutHash": "b1a296e0a894",
       "sourceHashes": {
-        "src/views/filter-panel-renderer.ts": "deabe2ecc320",
+        "src/views/filter-panel-renderer.ts": "6b4543ceb6d9",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
         "styles.css": "a535fa1bf6fd",
         "tools/screenshots/theme.css": "dd06feeedc73",
@@ -2645,7 +2645,7 @@
       ],
       "layoutHash": "b1a296e0a894",
       "sourceHashes": {
-        "src/views/filter-panel-renderer.ts": "deabe2ecc320",
+        "src/views/filter-panel-renderer.ts": "6b4543ceb6d9",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
         "styles.css": "a535fa1bf6fd",
         "tools/screenshots/theme.css": "dd06feeedc73",
@@ -2670,7 +2670,7 @@
       ],
       "layoutHash": "b1a296e0a894",
       "sourceHashes": {
-        "src/views/filter-panel-renderer.ts": "deabe2ecc320",
+        "src/views/filter-panel-renderer.ts": "6b4543ceb6d9",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
         "styles.css": "a535fa1bf6fd",
         "tools/screenshots/theme.css": "dd06feeedc73",
@@ -2695,7 +2695,7 @@
       ],
       "layoutHash": "b1a296e0a894",
       "sourceHashes": {
-        "src/views/filter-panel-renderer.ts": "deabe2ecc320",
+        "src/views/filter-panel-renderer.ts": "6b4543ceb6d9",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
         "styles.css": "a535fa1bf6fd",
         "tools/screenshots/theme.css": "dd06feeedc73",
@@ -2720,7 +2720,7 @@
       ],
       "layoutHash": "a9fd632b2da8",
       "sourceHashes": {
-        "src/views/filter-panel-renderer.ts": "deabe2ecc320",
+        "src/views/filter-panel-renderer.ts": "6b4543ceb6d9",
         "src/data/view-filter-tree.ts": "1efdb923d4bb",
         "styles.css": "a535fa1bf6fd",
         "tools/screenshots/theme.css": "dd06feeedc73",
@@ -2745,7 +2745,7 @@
       ],
       "layoutHash": "a9fd632b2da8",
       "sourceHashes": {
-        "src/views/filter-panel-renderer.ts": "deabe2ecc320",
+        "src/views/filter-panel-renderer.ts": "6b4543ceb6d9",
         "src/data/view-filter-tree.ts": "1efdb923d4bb",
         "styles.css": "a535fa1bf6fd",
         "tools/screenshots/theme.css": "dd06feeedc73",
@@ -2770,7 +2770,7 @@
       ],
       "layoutHash": "a9fd632b2da8",
       "sourceHashes": {
-        "src/views/filter-panel-renderer.ts": "deabe2ecc320",
+        "src/views/filter-panel-renderer.ts": "6b4543ceb6d9",
         "src/data/view-filter-tree.ts": "1efdb923d4bb",
         "styles.css": "a535fa1bf6fd",
         "tools/screenshots/theme.css": "dd06feeedc73",
@@ -2795,7 +2795,7 @@
       ],
       "layoutHash": "a9fd632b2da8",
       "sourceHashes": {
-        "src/views/filter-panel-renderer.ts": "deabe2ecc320",
+        "src/views/filter-panel-renderer.ts": "6b4543ceb6d9",
         "src/data/view-filter-tree.ts": "1efdb923d4bb",
         "styles.css": "a535fa1bf6fd",
         "tools/screenshots/theme.css": "dd06feeedc73",
@@ -2922,7 +2922,7 @@
       "layoutHash": "dd09fd4200ba",
       "sourceHashes": {
         "src/views/record-detail-panel.ts": "b603e1ead3e5",
-        "src/views/popover-position.ts": "262e3fb0669c",
+        "src/views/popover-position.ts": "017e8c4a6502",
         "src/views/card-field-renderer.ts": "d4cd0466d2e3",
         "styles.css": "a535fa1bf6fd",
         "tools/screenshots/theme.css": "dd06feeedc73",
@@ -2932,7 +2932,7 @@
       },
       "note": "The phone form of the record detail panel. positionToolbarPopover renders it as a bottom sheet with a grab handle; a permanent close button (reusing db-cell-edit-close) and drag-down on the handle dismiss it where the desktop panel relies on Escape and outside-click. Captured in viewport mode so the fixed sheet docks at the bottom.",
       "capture": "viewport",
-      "bytes": 57176
+      "bytes": 57178
     },
     {
       "id": "panel-record-detail-sheet",
@@ -2949,7 +2949,7 @@
       "layoutHash": "dd09fd4200ba",
       "sourceHashes": {
         "src/views/record-detail-panel.ts": "b603e1ead3e5",
-        "src/views/popover-position.ts": "262e3fb0669c",
+        "src/views/popover-position.ts": "017e8c4a6502",
         "src/views/card-field-renderer.ts": "d4cd0466d2e3",
         "styles.css": "a535fa1bf6fd",
         "tools/screenshots/theme.css": "dd06feeedc73",
@@ -2976,7 +2976,7 @@
       "layoutHash": "d0a7b27540ed",
       "sourceHashes": {
         "src/views/record-detail-panel.ts": "b603e1ead3e5",
-        "src/views/popover-position.ts": "262e3fb0669c",
+        "src/views/popover-position.ts": "017e8c4a6502",
         "src/views/card-field-renderer.ts": "d4cd0466d2e3",
         "styles.css": "a535fa1bf6fd",
         "tools/screenshots/theme.css": "dd06feeedc73",
@@ -3003,7 +3003,7 @@
       "layoutHash": "d0a7b27540ed",
       "sourceHashes": {
         "src/views/record-detail-panel.ts": "b603e1ead3e5",
-        "src/views/popover-position.ts": "262e3fb0669c",
+        "src/views/popover-position.ts": "017e8c4a6502",
         "src/views/card-field-renderer.ts": "d4cd0466d2e3",
         "styles.css": "a535fa1bf6fd",
         "tools/screenshots/theme.css": "dd06feeedc73",
@@ -3013,7 +3013,7 @@
       },
       "note": "The phone form of the record detail panel. positionToolbarPopover renders it as a bottom sheet with a grab handle; a permanent close button (reusing db-cell-edit-close) and drag-down on the handle dismiss it where the desktop panel relies on Escape and outside-click. Captured in viewport mode so the fixed sheet docks at the bottom.",
       "capture": "viewport",
-      "bytes": 18994
+      "bytes": 18988
     },
     {
       "id": "panel-record-peek",
@@ -3127,7 +3127,7 @@
       ],
       "layoutHash": "6d599788ac66",
       "sourceHashes": {
-        "src/views/sort-panel-renderer.ts": "19109d09b2d5",
+        "src/views/sort-panel-renderer.ts": "2689215615eb",
         "styles.css": "a535fa1bf6fd",
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -3150,7 +3150,7 @@
       ],
       "layoutHash": "6d599788ac66",
       "sourceHashes": {
-        "src/views/sort-panel-renderer.ts": "19109d09b2d5",
+        "src/views/sort-panel-renderer.ts": "2689215615eb",
         "styles.css": "a535fa1bf6fd",
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -3173,7 +3173,7 @@
       ],
       "layoutHash": "6d599788ac66",
       "sourceHashes": {
-        "src/views/sort-panel-renderer.ts": "19109d09b2d5",
+        "src/views/sort-panel-renderer.ts": "2689215615eb",
         "styles.css": "a535fa1bf6fd",
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -3196,7 +3196,7 @@
       ],
       "layoutHash": "6d599788ac66",
       "sourceHashes": {
-        "src/views/sort-panel-renderer.ts": "19109d09b2d5",
+        "src/views/sort-panel-renderer.ts": "2689215615eb",
         "styles.css": "a535fa1bf6fd",
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -3220,7 +3220,7 @@
       ],
       "layoutHash": "999ed69aab69",
       "sourceHashes": {
-        "src/views/sort-panel-renderer.ts": "19109d09b2d5",
+        "src/views/sort-panel-renderer.ts": "2689215615eb",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
         "styles.css": "a535fa1bf6fd",
         "tools/screenshots/theme.css": "dd06feeedc73",
@@ -3245,7 +3245,7 @@
       ],
       "layoutHash": "999ed69aab69",
       "sourceHashes": {
-        "src/views/sort-panel-renderer.ts": "19109d09b2d5",
+        "src/views/sort-panel-renderer.ts": "2689215615eb",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
         "styles.css": "a535fa1bf6fd",
         "tools/screenshots/theme.css": "dd06feeedc73",
@@ -3270,7 +3270,7 @@
       ],
       "layoutHash": "dee904bb7c71",
       "sourceHashes": {
-        "src/views/sort-panel-renderer.ts": "19109d09b2d5",
+        "src/views/sort-panel-renderer.ts": "2689215615eb",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
         "styles.css": "a535fa1bf6fd",
         "tools/screenshots/theme.css": "dd06feeedc73",
@@ -3295,7 +3295,7 @@
       ],
       "layoutHash": "dee904bb7c71",
       "sourceHashes": {
-        "src/views/sort-panel-renderer.ts": "19109d09b2d5",
+        "src/views/sort-panel-renderer.ts": "2689215615eb",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
         "styles.css": "a535fa1bf6fd",
         "tools/screenshots/theme.css": "dd06feeedc73",
@@ -3605,7 +3605,7 @@
       },
       "note": "The board inside the default-width container. On the phone (is-phone) the container no longer centres the grid off-screen, and the sticky group header is taken out of sticky flow so it cannot float down over the cards; columns page horizontally with snap-scroll.",
       "capture": "viewport",
-      "bytes": 85239
+      "bytes": 85234
     },
     {
       "id": "board-view",
@@ -4089,7 +4089,7 @@
       },
       "note": "Sticky day header and all-day strip over the 08–16 time grid; the current-time ruler sits on Wednesday at 13:45.",
       "capture": "viewport",
-      "bytes": 39817
+      "bytes": 40362
     },
     {
       "id": "gallery-view",
@@ -4364,7 +4364,7 @@
       },
       "note": null,
       "capture": "viewport",
-      "bytes": 87093
+      "bytes": 87189
     },
     {
       "id": "list-view",
@@ -4389,7 +4389,7 @@
       },
       "note": null,
       "capture": "viewport",
-      "bytes": 86978
+      "bytes": 87283
     },
     {
       "id": "table-mobile",
@@ -4606,7 +4606,7 @@
       },
       "note": null,
       "capture": "viewport",
-      "bytes": 156633
+      "bytes": 156685
     },
     {
       "id": "table-view",
@@ -4708,7 +4708,7 @@
       },
       "note": "Column width is a switch plus a slider here, not the calendar's mode dropdown; the slider only appears once the switch is on.",
       "capture": "viewport",
-      "bytes": 35403
+      "bytes": 35363
     },
     {
       "id": "timeline-toolbar-options",
@@ -4802,7 +4802,7 @@
       },
       "note": "Two weeks at one column per day; the April band marks the month boundary and the today line sits at 25 March 13:45.",
       "capture": "viewport",
-      "bytes": 41984
+      "bytes": 42262
     },
     {
       "id": "timeline-view",

@@ -48,14 +48,9 @@ const CHECKS = [
   { name: "inverted-assertions", cmd: ["node", "tools/live/guard-inverted-assertions.mjs"] },
   { name: "screenshots-fresh", cmd: ["npm", "run", "screenshots:verify"] },
   { name: "story-coverage", cmd: ["npm", "run", "storybook:coverage"] },
-  {
-    name: "placement",
-    cmd: ["npm", "run", "storybook:placement"],
-    expectFail: {
-      reason: "a widthless caller is still handed a 520px default; the assertion was inverted to say so",
-      owner: "001-overlay-placement-and-menu-language",
-    },
-  },
+  // This carried an expectFail until the width policy landed. The declaration is gone rather than
+  // updated, because the debt is discharged: a red here now means a regression, not a known defect.
+  { name: "placement", cmd: ["npm", "run", "storybook:placement"] },
 ];
 
 // ───────────────────────────────────────────────────────────────────

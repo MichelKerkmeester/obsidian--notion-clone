@@ -21,7 +21,7 @@ import type { ColumnDef, FilterRule, SourceRuleNode, ViewConfig } from "../data/
 import { appendLeaf, buildViewFilterTree, flattenLeaves, removeLeafAt } from "../data/view-filter-tree";
 import { t } from "../i18n";
 import { createDropdownField } from "./dropdown-field";
-import { positionToolbarPopover } from "./popover-position";
+import { PANEL_POPOVER, positionToolbarPopover } from "./popover-position";
 import { renderDropdownPropertyTypeIcon, toPropertyDropdownOption } from "./property-type-icon";
 import { DatabaseViewState } from "./view-state-store";
 import { getViewRuleColumns, removeFilterRuleAt } from "./view-rule-operations";
@@ -210,7 +210,7 @@ export class FilterPanelRenderer {
       this.render(containerEl, true, state, config, actions, this.anchorEl || undefined);
       actions.refresh();
     };
-    positionToolbarPopover(panel, this.anchorEl || undefined);
+    positionToolbarPopover(panel, this.anchorEl || undefined, PANEL_POPOVER);
     if (savedScroll) panel.scrollTop = savedScroll;
   }
 
