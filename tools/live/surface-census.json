@@ -1,0 +1,1368 @@
+{
+  "measuredAt": "2026-08-29T19:43:56.417Z",
+  "inputs": {
+    "styles.css": "4e309eb720cf",
+    "tools/live/surface-census.mjs": "09663f4f354e",
+    "src/views/surface-contract.ts": "d1182f2a693e"
+  },
+  "totals": {
+    "rendered": 73,
+    "buildable": 207,
+    "declared": 5,
+    "renderedOnly": 6,
+    "buildableNotRendered": 140,
+    "untokened": 0,
+    "unroled": 73
+  },
+  "rendered": {
+    "db-column-menu-trigger": {
+      "cls": "db-column-menu-trigger",
+      "mountParent": "db-th-content",
+      "tokens": true,
+      "role": null,
+      "rect": "22x22",
+      "scenarios": [
+        "table-view",
+        "table-view",
+        "table-view",
+        "table-view",
+        "table-view",
+        "table-view",
+        "table-column-header",
+        "table-column-header",
+        "table-mobile",
+        "table-mobile",
+        "table-mobile",
+        "table-mobile",
+        "table-mobile",
+        "table-mobile",
+        "panel-record-peek",
+        "panel-record-peek",
+        "panel-record-peek",
+        "panel-record-peek",
+        "panel-record-peek",
+        "panel-record-peek",
+        "chrome-table-footer",
+        "chrome-table-footer",
+        "chrome-table-footer",
+        "chrome-table-footer",
+        "chrome-table-footer",
+        "chrome-group-header-row",
+        "chrome-group-header-row",
+        "chrome-group-header-row",
+        "chrome-group-header-row",
+        "chrome-group-header-row",
+        "field-cell-edit-text",
+        "field-cell-edit-text",
+        "field-cell-edit-text",
+        "field-cell-edit-select",
+        "field-cell-edit-select",
+        "field-relation-values",
+        "field-relation-values",
+        "field-file-fields",
+        "field-file-fields",
+        "field-file-fields",
+        "field-number-displays",
+        "field-number-displays",
+        "field-record-icon",
+        "field-record-icon",
+        "field-record-icon",
+        "field-status-colors",
+        "field-status-colors",
+        "field-status-colors",
+        "field-status-colors"
+      ]
+    },
+    "db-view-tab-popover": {
+      "cls": "db-view-tab-popover",
+      "mountParent": "note-database-container",
+      "tokens": true,
+      "role": null,
+      "rect": "360x379",
+      "scenarios": [
+        "add-view-popover"
+      ]
+    },
+    "db-panel-header": {
+      "cls": "db-panel-header",
+      "mountParent": "db-view-tab-popover",
+      "tokens": true,
+      "role": null,
+      "rect": "342x19",
+      "scenarios": [
+        "add-view-popover",
+        "calendar-toolbar-options",
+        "timeline-toolbar-options",
+        "panel-filter-conditions",
+        "panel-filter-nested-group",
+        "panel-sort-rules",
+        "panel-sort-calendar-empty",
+        "panel-view-config",
+        "panel-column-manager",
+        "chrome-chart-options-popover"
+      ]
+    },
+    "db-panel-title": {
+      "cls": "db-panel-title",
+      "mountParent": "db-panel-header",
+      "tokens": true,
+      "role": null,
+      "rect": "58x19",
+      "scenarios": [
+        "add-view-popover",
+        "calendar-toolbar-options",
+        "timeline-toolbar-options",
+        "panel-filter-conditions",
+        "panel-filter-nested-group",
+        "panel-sort-rules",
+        "panel-sort-calendar-empty",
+        "panel-view-config",
+        "panel-column-manager",
+        "chrome-chart-options-popover"
+      ]
+    },
+    "db-menu-item": {
+      "cls": "db-menu-item",
+      "mountParent": "db-view-tab-popover",
+      "tokens": true,
+      "role": null,
+      "rect": "342x36",
+      "scenarios": [
+        "add-view-popover"
+      ]
+    },
+    "db-menu-item-icon": {
+      "cls": "db-menu-item-icon",
+      "mountParent": "db-add-view-duplicate-action",
+      "tokens": true,
+      "role": null,
+      "rect": "14x14",
+      "scenarios": [
+        "add-view-popover"
+      ]
+    },
+    "db-menu-item-label": {
+      "cls": "db-menu-item-label",
+      "mountParent": "db-add-view-duplicate-action",
+      "tokens": true,
+      "role": null,
+      "rect": "145x17",
+      "scenarios": [
+        "add-view-popover"
+      ]
+    },
+    "db-dropdown-popover": {
+      "cls": "db-dropdown-popover",
+      "mountParent": "note-database-container",
+      "tokens": true,
+      "role": null,
+      "rect": "1352x140",
+      "scenarios": [
+        "dropdown-field"
+      ]
+    },
+    "db-dropdown-section-title": {
+      "cls": "db-dropdown-section-title",
+      "mountParent": "db-dropdown-popover",
+      "tokens": true,
+      "role": null,
+      "rect": "1334x29",
+      "scenarios": [
+        "dropdown-field"
+      ]
+    },
+    "db-dropdown-option": {
+      "cls": "db-dropdown-option",
+      "mountParent": "db-dropdown-popover",
+      "tokens": true,
+      "role": null,
+      "rect": "1334x30",
+      "scenarios": [
+        "dropdown-field",
+        "dropdown-field",
+        "dropdown-field"
+      ]
+    },
+    "db-dropdown-option-label": {
+      "cls": "db-dropdown-option-label",
+      "mountParent": "db-dropdown-option",
+      "tokens": true,
+      "role": null,
+      "rect": "16x17",
+      "scenarios": [
+        "dropdown-field",
+        "dropdown-field",
+        "dropdown-field"
+      ]
+    },
+    "db-calendar-scale-menu": {
+      "cls": "db-calendar-scale-menu",
+      "mountParent": "db-calendar-scale-control",
+      "tokens": true,
+      "role": null,
+      "rect": "0x0",
+      "scenarios": [
+        "calendar-month-view",
+        "calendar-week-time-grid"
+      ]
+    },
+    "db-calendar-scale-menu-label": {
+      "cls": "db-calendar-scale-menu-label",
+      "mountParent": "db-calendar-scale-menu",
+      "tokens": true,
+      "role": null,
+      "rect": "0x0",
+      "scenarios": [
+        "calendar-month-view",
+        "calendar-week-time-grid"
+      ]
+    },
+    "db-calendar-scale-menu-chevron": {
+      "cls": "db-calendar-scale-menu-chevron",
+      "mountParent": "db-calendar-scale-menu",
+      "tokens": true,
+      "role": null,
+      "rect": "0x0",
+      "scenarios": [
+        "calendar-month-view",
+        "calendar-week-time-grid"
+      ]
+    },
+    "db-calendar-mini-popover": {
+      "cls": "db-calendar-mini-popover",
+      "mountParent": "note-database-container",
+      "tokens": true,
+      "role": null,
+      "rect": "278x289",
+      "scenarios": [
+        "calendar-mini-calendar",
+        "field-date-value-picker",
+        "field-date-value-picker-datetime"
+      ]
+    },
+    "db-calendar-options-popover": {
+      "cls": "db-calendar-options-popover",
+      "mountParent": "note-database-container",
+      "tokens": true,
+      "role": null,
+      "rect": "538x638",
+      "scenarios": [
+        "calendar-toolbar-options"
+      ]
+    },
+    "db-dropdown-field": {
+      "cls": "db-dropdown-field",
+      "mountParent": "db-chart-options-section",
+      "tokens": true,
+      "role": null,
+      "rect": "520x30",
+      "scenarios": [
+        "calendar-toolbar-options",
+        "calendar-toolbar-options",
+        "calendar-toolbar-options",
+        "calendar-toolbar-options",
+        "calendar-toolbar-options",
+        "calendar-toolbar-options",
+        "calendar-toolbar-options",
+        "calendar-toolbar-options",
+        "timeline-toolbar-options",
+        "timeline-toolbar-options",
+        "timeline-toolbar-options",
+        "timeline-toolbar-options",
+        "timeline-toolbar-options",
+        "timeline-toolbar-options",
+        "timeline-toolbar-options",
+        "panel-filter-conditions",
+        "panel-filter-conditions",
+        "panel-filter-conditions",
+        "panel-filter-conditions",
+        "panel-filter-conditions",
+        "panel-filter-conditions",
+        "panel-filter-conditions",
+        "panel-filter-conditions",
+        "panel-filter-nested-group",
+        "panel-filter-nested-group",
+        "panel-filter-nested-group",
+        "panel-filter-nested-group",
+        "panel-filter-nested-group",
+        "panel-filter-nested-group",
+        "panel-filter-nested-group",
+        "panel-filter-nested-group",
+        "panel-filter-nested-group",
+        "panel-filter-nested-group",
+        "panel-filter-nested-group",
+        "panel-filter-nested-group",
+        "panel-filter-nested-group",
+        "panel-sort-rules",
+        "panel-sort-rules",
+        "panel-sort-rules",
+        "panel-sort-rules",
+        "panel-view-config",
+        "panel-view-config",
+        "panel-view-config",
+        "chrome-active-rule-popover-filter",
+        "chrome-active-rule-popover-filter",
+        "chrome-active-rule-popover-filter",
+        "chrome-active-rule-popover-sort",
+        "chrome-active-rule-popover-sort",
+        "chrome-chart-options-popover",
+        "chrome-chart-options-popover",
+        "chrome-chart-options-popover",
+        "chrome-chart-options-popover",
+        "chrome-chart-options-popover"
+      ]
+    },
+    "db-dropdown-field-icon": {
+      "cls": "db-dropdown-field-icon",
+      "mountParent": "db-dropdown-field",
+      "tokens": true,
+      "role": null,
+      "rect": "18x14",
+      "scenarios": [
+        "calendar-toolbar-options",
+        "calendar-toolbar-options",
+        "calendar-toolbar-options",
+        "calendar-toolbar-options",
+        "calendar-toolbar-options",
+        "calendar-toolbar-options",
+        "calendar-toolbar-options",
+        "calendar-toolbar-options",
+        "timeline-toolbar-options",
+        "timeline-toolbar-options",
+        "timeline-toolbar-options",
+        "timeline-toolbar-options",
+        "timeline-toolbar-options",
+        "timeline-toolbar-options",
+        "timeline-toolbar-options",
+        "panel-filter-conditions",
+        "panel-filter-conditions",
+        "panel-filter-conditions",
+        "panel-filter-conditions",
+        "panel-filter-conditions",
+        "panel-filter-conditions",
+        "panel-filter-conditions",
+        "panel-filter-conditions",
+        "panel-filter-nested-group",
+        "panel-filter-nested-group",
+        "panel-filter-nested-group",
+        "panel-filter-nested-group",
+        "panel-filter-nested-group",
+        "panel-filter-nested-group",
+        "panel-filter-nested-group",
+        "panel-filter-nested-group",
+        "panel-filter-nested-group",
+        "panel-filter-nested-group",
+        "panel-filter-nested-group",
+        "panel-filter-nested-group",
+        "panel-filter-nested-group",
+        "panel-sort-rules",
+        "panel-sort-rules",
+        "panel-sort-rules",
+        "panel-sort-rules",
+        "panel-view-config",
+        "panel-view-config",
+        "panel-view-config",
+        "chrome-active-rule-popover-filter",
+        "chrome-active-rule-popover-filter",
+        "chrome-active-rule-popover-filter",
+        "chrome-active-rule-popover-sort",
+        "chrome-active-rule-popover-sort",
+        "chrome-chart-options-popover",
+        "chrome-chart-options-popover",
+        "chrome-chart-options-popover",
+        "chrome-chart-options-popover",
+        "chrome-chart-options-popover"
+      ]
+    },
+    "db-dropdown-field-text": {
+      "cls": "db-dropdown-field-text",
+      "mountParent": "db-dropdown-field",
+      "tokens": true,
+      "role": null,
+      "rect": "458x17",
+      "scenarios": [
+        "calendar-toolbar-options",
+        "calendar-toolbar-options",
+        "calendar-toolbar-options",
+        "calendar-toolbar-options",
+        "calendar-toolbar-options",
+        "calendar-toolbar-options",
+        "calendar-toolbar-options",
+        "calendar-toolbar-options",
+        "timeline-toolbar-options",
+        "timeline-toolbar-options",
+        "timeline-toolbar-options",
+        "timeline-toolbar-options",
+        "timeline-toolbar-options",
+        "timeline-toolbar-options",
+        "timeline-toolbar-options",
+        "panel-filter-conditions",
+        "panel-filter-conditions",
+        "panel-filter-conditions",
+        "panel-filter-conditions",
+        "panel-filter-conditions",
+        "panel-filter-conditions",
+        "panel-filter-conditions",
+        "panel-filter-conditions",
+        "panel-filter-nested-group",
+        "panel-filter-nested-group",
+        "panel-filter-nested-group",
+        "panel-filter-nested-group",
+        "panel-filter-nested-group",
+        "panel-filter-nested-group",
+        "panel-filter-nested-group",
+        "panel-filter-nested-group",
+        "panel-filter-nested-group",
+        "panel-filter-nested-group",
+        "panel-filter-nested-group",
+        "panel-filter-nested-group",
+        "panel-filter-nested-group",
+        "panel-sort-rules",
+        "panel-sort-rules",
+        "panel-sort-rules",
+        "panel-sort-rules",
+        "panel-view-config",
+        "panel-view-config",
+        "panel-view-config",
+        "chrome-active-rule-popover-filter",
+        "chrome-active-rule-popover-filter",
+        "chrome-active-rule-popover-filter",
+        "chrome-active-rule-popover-sort",
+        "chrome-active-rule-popover-sort",
+        "chrome-chart-options-popover",
+        "chrome-chart-options-popover",
+        "chrome-chart-options-popover",
+        "chrome-chart-options-popover",
+        "chrome-chart-options-popover"
+      ]
+    },
+    "db-dropdown-field-label": {
+      "cls": "db-dropdown-field-label",
+      "mountParent": "db-dropdown-field-text",
+      "tokens": true,
+      "role": null,
+      "rect": "90x17",
+      "scenarios": [
+        "calendar-toolbar-options",
+        "calendar-toolbar-options",
+        "calendar-toolbar-options",
+        "calendar-toolbar-options",
+        "calendar-toolbar-options",
+        "calendar-toolbar-options",
+        "calendar-toolbar-options",
+        "calendar-toolbar-options",
+        "timeline-toolbar-options",
+        "timeline-toolbar-options",
+        "timeline-toolbar-options",
+        "timeline-toolbar-options",
+        "timeline-toolbar-options",
+        "timeline-toolbar-options",
+        "timeline-toolbar-options",
+        "chrome-chart-options-popover",
+        "chrome-chart-options-popover",
+        "chrome-chart-options-popover",
+        "chrome-chart-options-popover",
+        "chrome-chart-options-popover"
+      ]
+    },
+    "db-dropdown-field-value": {
+      "cls": "db-dropdown-field-value",
+      "mountParent": "db-dropdown-field-text",
+      "tokens": true,
+      "role": null,
+      "rect": "77x17",
+      "scenarios": [
+        "calendar-toolbar-options",
+        "calendar-toolbar-options",
+        "calendar-toolbar-options",
+        "calendar-toolbar-options",
+        "calendar-toolbar-options",
+        "calendar-toolbar-options",
+        "calendar-toolbar-options",
+        "calendar-toolbar-options",
+        "timeline-toolbar-options",
+        "timeline-toolbar-options",
+        "timeline-toolbar-options",
+        "timeline-toolbar-options",
+        "timeline-toolbar-options",
+        "timeline-toolbar-options",
+        "timeline-toolbar-options",
+        "panel-filter-conditions",
+        "panel-filter-conditions",
+        "panel-filter-conditions",
+        "panel-filter-conditions",
+        "panel-filter-conditions",
+        "panel-filter-conditions",
+        "panel-filter-conditions",
+        "panel-filter-conditions",
+        "panel-filter-nested-group",
+        "panel-filter-nested-group",
+        "panel-filter-nested-group",
+        "panel-filter-nested-group",
+        "panel-filter-nested-group",
+        "panel-filter-nested-group",
+        "panel-filter-nested-group",
+        "panel-filter-nested-group",
+        "panel-filter-nested-group",
+        "panel-filter-nested-group",
+        "panel-filter-nested-group",
+        "panel-filter-nested-group",
+        "panel-filter-nested-group",
+        "panel-sort-rules",
+        "panel-sort-rules",
+        "panel-sort-rules",
+        "panel-sort-rules",
+        "panel-view-config",
+        "panel-view-config",
+        "panel-view-config",
+        "chrome-active-rule-popover-filter",
+        "chrome-active-rule-popover-filter",
+        "chrome-active-rule-popover-filter",
+        "chrome-active-rule-popover-sort",
+        "chrome-active-rule-popover-sort",
+        "chrome-chart-options-popover",
+        "chrome-chart-options-popover",
+        "chrome-chart-options-popover",
+        "chrome-chart-options-popover",
+        "chrome-chart-options-popover"
+      ]
+    },
+    "db-dropdown-field-chevron": {
+      "cls": "db-dropdown-field-chevron",
+      "mountParent": "db-dropdown-field",
+      "tokens": true,
+      "role": null,
+      "rect": "16x14",
+      "scenarios": [
+        "calendar-toolbar-options",
+        "calendar-toolbar-options",
+        "calendar-toolbar-options",
+        "calendar-toolbar-options",
+        "calendar-toolbar-options",
+        "calendar-toolbar-options",
+        "calendar-toolbar-options",
+        "calendar-toolbar-options",
+        "timeline-toolbar-options",
+        "timeline-toolbar-options",
+        "timeline-toolbar-options",
+        "timeline-toolbar-options",
+        "timeline-toolbar-options",
+        "timeline-toolbar-options",
+        "timeline-toolbar-options",
+        "panel-filter-conditions",
+        "panel-filter-conditions",
+        "panel-filter-conditions",
+        "panel-filter-conditions",
+        "panel-filter-conditions",
+        "panel-filter-conditions",
+        "panel-filter-conditions",
+        "panel-filter-conditions",
+        "panel-filter-nested-group",
+        "panel-filter-nested-group",
+        "panel-filter-nested-group",
+        "panel-filter-nested-group",
+        "panel-filter-nested-group",
+        "panel-filter-nested-group",
+        "panel-filter-nested-group",
+        "panel-filter-nested-group",
+        "panel-filter-nested-group",
+        "panel-filter-nested-group",
+        "panel-filter-nested-group",
+        "panel-filter-nested-group",
+        "panel-filter-nested-group",
+        "panel-sort-rules",
+        "panel-sort-rules",
+        "panel-sort-rules",
+        "panel-sort-rules",
+        "panel-view-config",
+        "panel-view-config",
+        "panel-view-config",
+        "chrome-active-rule-popover-filter",
+        "chrome-active-rule-popover-filter",
+        "chrome-active-rule-popover-filter",
+        "chrome-active-rule-popover-sort",
+        "chrome-active-rule-popover-sort",
+        "chrome-chart-options-popover",
+        "chrome-chart-options-popover",
+        "chrome-chart-options-popover",
+        "chrome-chart-options-popover",
+        "chrome-chart-options-popover"
+      ]
+    },
+    "db-timeline-scale-menu": {
+      "cls": "db-timeline-scale-menu",
+      "mountParent": "db-timeline-scale-control",
+      "tokens": true,
+      "role": null,
+      "rect": "0x0",
+      "scenarios": [
+        "timeline-view"
+      ]
+    },
+    "db-timeline-scale-menu-label": {
+      "cls": "db-timeline-scale-menu-label",
+      "mountParent": "db-timeline-scale-menu",
+      "tokens": true,
+      "role": null,
+      "rect": "0x0",
+      "scenarios": [
+        "timeline-view"
+      ]
+    },
+    "db-timeline-scale-menu-chevron": {
+      "cls": "db-timeline-scale-menu-chevron",
+      "mountParent": "db-timeline-scale-menu",
+      "tokens": true,
+      "role": null,
+      "rect": "0x0",
+      "scenarios": [
+        "timeline-view"
+      ]
+    },
+    "db-calendar-timeline-options-popover": {
+      "cls": "db-calendar-timeline-options-popover",
+      "mountParent": "note-database-container",
+      "tokens": true,
+      "role": null,
+      "rect": "538x514",
+      "scenarios": [
+        "timeline-toolbar-options"
+      ]
+    },
+    "db-filter-panel": {
+      "cls": "db-filter-panel",
+      "mountParent": "note-database-container",
+      "tokens": true,
+      "role": null,
+      "rect": "538x234",
+      "scenarios": [
+        "panel-filter-conditions",
+        "panel-filter-nested-group"
+      ]
+    },
+    "db-panel-row": {
+      "cls": "db-panel-row",
+      "mountParent": "db-source-rule-children",
+      "tokens": true,
+      "role": null,
+      "rect": "511x32",
+      "scenarios": [
+        "panel-filter-conditions",
+        "panel-filter-conditions",
+        "panel-filter-conditions",
+        "panel-filter-nested-group",
+        "panel-filter-nested-group",
+        "panel-filter-nested-group",
+        "panel-filter-nested-group",
+        "panel-sort-rules",
+        "panel-sort-rules",
+        "chrome-active-rule-popover-filter",
+        "chrome-active-rule-popover-sort"
+      ]
+    },
+    "db-dropdown-option-type-icon": {
+      "cls": "db-dropdown-option-type-icon",
+      "mountParent": "db-dropdown-field-icon",
+      "tokens": true,
+      "role": null,
+      "rect": "14x14",
+      "scenarios": [
+        "panel-filter-conditions",
+        "panel-filter-conditions",
+        "panel-filter-conditions",
+        "panel-filter-nested-group",
+        "panel-filter-nested-group",
+        "panel-filter-nested-group",
+        "panel-filter-nested-group",
+        "panel-sort-rules",
+        "panel-sort-rules",
+        "panel-view-config",
+        "chrome-active-rule-popover-filter",
+        "chrome-active-rule-popover-sort"
+      ]
+    },
+    "db-panel-button": {
+      "cls": "db-panel-button",
+      "mountParent": "db-panel-row",
+      "tokens": true,
+      "role": null,
+      "rect": "28x28",
+      "scenarios": [
+        "panel-filter-conditions",
+        "panel-filter-conditions",
+        "panel-filter-conditions",
+        "panel-filter-conditions",
+        "panel-filter-nested-group",
+        "panel-filter-nested-group",
+        "panel-filter-nested-group",
+        "panel-filter-nested-group",
+        "panel-filter-nested-group",
+        "panel-sort-rules",
+        "panel-sort-rules",
+        "panel-sort-rules",
+        "panel-sort-calendar-empty",
+        "panel-column-manager",
+        "panel-column-manager",
+        "field-cell-edit-select"
+      ]
+    },
+    "db-panel-empty-value": {
+      "cls": "db-panel-empty-value",
+      "mountParent": "db-panel-row",
+      "tokens": true,
+      "role": null,
+      "rect": "134x19",
+      "scenarios": [
+        "panel-filter-conditions"
+      ]
+    },
+    "db-sort-panel": {
+      "cls": "db-sort-panel",
+      "mountParent": "note-database-container",
+      "tokens": true,
+      "role": null,
+      "rect": "538x149",
+      "scenarios": [
+        "panel-sort-rules",
+        "panel-sort-calendar-empty"
+      ]
+    },
+    "db-panel-drag": {
+      "cls": "db-panel-drag",
+      "mountParent": "db-panel-row",
+      "tokens": true,
+      "role": null,
+      "rect": "18x19",
+      "scenarios": [
+        "panel-sort-rules",
+        "panel-sort-rules"
+      ]
+    },
+    "db-panel-hint": {
+      "cls": "db-panel-hint",
+      "mountParent": "db-sort-panel",
+      "tokens": true,
+      "role": null,
+      "rect": "520x42",
+      "scenarios": [
+        "panel-sort-calendar-empty"
+      ]
+    },
+    "db-panel-empty": {
+      "cls": "db-panel-empty",
+      "mountParent": "db-sort-panel",
+      "tokens": true,
+      "role": null,
+      "rect": "520x41",
+      "scenarios": [
+        "panel-sort-calendar-empty"
+      ]
+    },
+    "db-view-config-panel": {
+      "cls": "db-view-config-panel",
+      "mountParent": "note-database-container",
+      "tokens": true,
+      "role": null,
+      "rect": "458x538",
+      "scenarios": [
+        "panel-view-config"
+      ]
+    },
+    "db-panel-header-actions": {
+      "cls": "db-panel-header-actions",
+      "mountParent": "db-panel-header",
+      "tokens": true,
+      "role": null,
+      "rect": "37x18",
+      "scenarios": [
+        "panel-column-manager",
+        "field-cell-edit-select"
+      ]
+    },
+    "db-panel-button-label": {
+      "cls": "db-panel-button-label",
+      "mountParent": "db-panel-button",
+      "tokens": true,
+      "role": null,
+      "rect": "85x12",
+      "scenarios": [
+        "panel-column-manager",
+        "panel-column-manager"
+      ]
+    },
+    "db-record-detail-panel": {
+      "cls": "db-record-detail-panel",
+      "mountParent": "note-database-container",
+      "tokens": true,
+      "role": null,
+      "rect": "1352x247",
+      "scenarios": [
+        "panel-record-detail",
+        "panel-record-detail-sheet"
+      ]
+    },
+    "db-mobile-bottom-sheet-handle": {
+      "cls": "db-mobile-bottom-sheet-handle",
+      "mountParent": "db-record-detail-panel",
+      "tokens": true,
+      "role": null,
+      "rect": "36x4",
+      "scenarios": [
+        "panel-record-detail-sheet"
+      ]
+    },
+    "db-record-peek-panel": {
+      "cls": "db-record-peek-panel",
+      "mountParent": "note-database-container",
+      "tokens": true,
+      "role": null,
+      "rect": "360x892",
+      "scenarios": [
+        "panel-record-peek"
+      ]
+    },
+    "db-record-peek-header": {
+      "cls": "db-record-peek-header",
+      "mountParent": "db-record-peek-panel",
+      "tokens": true,
+      "role": null,
+      "rect": "335x19",
+      "scenarios": [
+        "panel-record-peek"
+      ]
+    },
+    "db-record-peek-title": {
+      "cls": "db-record-peek-title",
+      "mountParent": "db-record-peek-header",
+      "tokens": true,
+      "role": null,
+      "rect": "335x19",
+      "scenarios": [
+        "panel-record-peek"
+      ]
+    },
+    "db-record-peek-properties": {
+      "cls": "db-record-peek-properties",
+      "mountParent": "db-record-peek-panel",
+      "tokens": true,
+      "role": null,
+      "rect": "335x142",
+      "scenarios": [
+        "panel-record-peek"
+      ]
+    },
+    "db-record-peek-field": {
+      "cls": "db-record-peek-field",
+      "mountParent": "db-record-peek-properties",
+      "tokens": true,
+      "role": null,
+      "rect": "335x27",
+      "scenarios": [
+        "panel-record-peek",
+        "panel-record-peek",
+        "panel-record-peek",
+        "panel-record-peek",
+        "panel-record-peek",
+        "panel-record-peek",
+        "panel-record-peek"
+      ]
+    },
+    "db-record-peek-field-label": {
+      "cls": "db-record-peek-field-label",
+      "mountParent": "db-record-peek-field",
+      "tokens": true,
+      "role": null,
+      "rect": "72x19",
+      "scenarios": [
+        "panel-record-peek",
+        "panel-record-peek",
+        "panel-record-peek",
+        "panel-record-peek",
+        "panel-record-peek",
+        "panel-record-peek",
+        "panel-record-peek"
+      ]
+    },
+    "db-record-peek-field-value": {
+      "cls": "db-record-peek-field-value",
+      "mountParent": "db-record-peek-field",
+      "tokens": true,
+      "role": null,
+      "rect": "243x19",
+      "scenarios": [
+        "panel-record-peek",
+        "panel-record-peek",
+        "panel-record-peek",
+        "panel-record-peek",
+        "panel-record-peek",
+        "panel-record-peek",
+        "panel-record-peek"
+      ]
+    },
+    "db-record-peek-hidden-group": {
+      "cls": "db-record-peek-hidden-group",
+      "mountParent": "db-record-peek-panel",
+      "tokens": true,
+      "role": null,
+      "rect": "335x24",
+      "scenarios": [
+        "panel-record-peek"
+      ]
+    },
+    "db-record-peek-hidden-toggle": {
+      "cls": "db-record-peek-hidden-toggle",
+      "mountParent": "db-record-peek-hidden-group",
+      "tokens": true,
+      "role": null,
+      "rect": "121x24",
+      "scenarios": [
+        "panel-record-peek"
+      ]
+    },
+    "db-record-peek-hidden-fields": {
+      "cls": "db-record-peek-hidden-fields",
+      "mountParent": "db-record-peek-hidden-group",
+      "tokens": true,
+      "role": null,
+      "rect": "0x0",
+      "scenarios": [
+        "panel-record-peek"
+      ]
+    },
+    "db-new-button-dropdown": {
+      "cls": "db-new-button-dropdown",
+      "mountParent": "db-new-button-group",
+      "tokens": true,
+      "role": null,
+      "rect": "32x28",
+      "scenarios": [
+        "chrome-toolbar"
+      ]
+    },
+    "db-active-rule-popover": {
+      "cls": "db-active-rule-popover",
+      "mountParent": "note-database-container",
+      "tokens": true,
+      "role": null,
+      "rect": "538x46",
+      "scenarios": [
+        "chrome-active-rule-popover-filter",
+        "chrome-active-rule-popover-sort"
+      ]
+    },
+    "db-chart-options-popover": {
+      "cls": "db-chart-options-popover",
+      "mountParent": "note-database-container",
+      "tokens": true,
+      "role": null,
+      "rect": "538x578",
+      "scenarios": [
+        "chrome-chart-options-popover"
+      ]
+    },
+    "db-chart-options-popover-entry": {
+      "cls": "db-chart-options-popover-entry",
+      "mountParent": "db-chart-options-section",
+      "tokens": true,
+      "role": null,
+      "rect": "520x34",
+      "scenarios": [
+        "chrome-chart-options-popover",
+        "chrome-chart-options-popover",
+        "chrome-chart-options-popover"
+      ]
+    },
+    "db-cell-popover-editing": {
+      "cls": "db-cell-popover-editing",
+      "mountParent": "(body)",
+      "tokens": true,
+      "role": null,
+      "rect": "451x34",
+      "scenarios": [
+        "field-cell-edit-text"
+      ]
+    },
+    "db-cell-edit-popover": {
+      "cls": "db-cell-edit-popover",
+      "mountParent": "note-database-container",
+      "tokens": true,
+      "role": null,
+      "rect": "258x96",
+      "scenarios": [
+        "field-cell-edit-text",
+        "field-cell-edit-text",
+        "field-date-value-picker",
+        "field-date-value-picker-datetime"
+      ]
+    },
+    "db-cell-option-popover": {
+      "cls": "db-cell-option-popover",
+      "mountParent": "note-database-container",
+      "tokens": true,
+      "role": null,
+      "rect": "184x252",
+      "scenarios": [
+        "field-cell-edit-select"
+      ]
+    },
+    "db-icon-picker-popover": {
+      "cls": "db-icon-picker-popover",
+      "mountParent": "(body)",
+      "tokens": true,
+      "role": null,
+      "rect": "320x418",
+      "scenarios": [
+        "field-icon-picker"
+      ]
+    },
+    "db-icon-picker-header": {
+      "cls": "db-icon-picker-header",
+      "mountParent": "db-icon-picker-popover",
+      "tokens": true,
+      "role": null,
+      "rect": "318x38",
+      "scenarios": [
+        "field-icon-picker"
+      ]
+    },
+    "db-icon-picker-tabs": {
+      "cls": "db-icon-picker-tabs",
+      "mountParent": "db-icon-picker-header",
+      "tokens": true,
+      "role": null,
+      "rect": "126x37",
+      "scenarios": [
+        "field-icon-picker"
+      ]
+    },
+    "db-icon-picker-search": {
+      "cls": "db-icon-picker-search",
+      "mountParent": "db-icon-picker-header",
+      "tokens": true,
+      "role": null,
+      "rect": "96x29",
+      "scenarios": [
+        "field-icon-picker"
+      ]
+    },
+    "db-icon-picker-remove": {
+      "cls": "db-icon-picker-remove",
+      "mountParent": "db-icon-picker-header",
+      "tokens": true,
+      "role": null,
+      "rect": "44x44",
+      "scenarios": [
+        "field-icon-picker"
+      ]
+    },
+    "db-icon-picker-random": {
+      "cls": "db-icon-picker-random",
+      "mountParent": "db-icon-picker-header",
+      "tokens": true,
+      "role": null,
+      "rect": "44x44",
+      "scenarios": [
+        "field-icon-picker"
+      ]
+    },
+    "db-icon-picker-settings": {
+      "cls": "db-icon-picker-settings",
+      "mountParent": "db-icon-picker-header",
+      "tokens": true,
+      "role": null,
+      "rect": "44x44",
+      "scenarios": [
+        "field-icon-picker"
+      ]
+    },
+    "db-icon-picker-colors": {
+      "cls": "db-icon-picker-colors",
+      "mountParent": "db-icon-picker-popover",
+      "tokens": true,
+      "role": null,
+      "rect": "318x220",
+      "scenarios": [
+        "field-icon-picker"
+      ]
+    },
+    "db-icon-picker-scroll": {
+      "cls": "db-icon-picker-scroll",
+      "mountParent": "db-icon-picker-popover",
+      "tokens": true,
+      "role": null,
+      "rect": "318x112",
+      "scenarios": [
+        "field-icon-picker"
+      ]
+    },
+    "db-icon-picker-section": {
+      "cls": "db-icon-picker-section",
+      "mountParent": "db-icon-picker-scroll",
+      "tokens": true,
+      "role": null,
+      "rect": "275x67",
+      "scenarios": [
+        "field-icon-picker",
+        "field-icon-picker"
+      ]
+    },
+    "db-icon-picker-label": {
+      "cls": "db-icon-picker-label",
+      "mountParent": "db-icon-picker-section",
+      "tokens": true,
+      "role": null,
+      "rect": "275x17",
+      "scenarios": [
+        "field-icon-picker",
+        "field-icon-picker"
+      ]
+    },
+    "db-icon-picker-grid": {
+      "cls": "db-icon-picker-grid",
+      "mountParent": "db-icon-picker-section",
+      "tokens": true,
+      "role": null,
+      "rect": "275x44",
+      "scenarios": [
+        "field-icon-picker",
+        "field-icon-picker"
+      ]
+    },
+    "db-icon-picker-item": {
+      "cls": "db-icon-picker-item",
+      "mountParent": "db-icon-picker-grid",
+      "tokens": true,
+      "role": null,
+      "rect": "44x44",
+      "scenarios": [
+        "field-icon-picker",
+        "field-icon-picker",
+        "field-icon-picker",
+        "field-icon-picker",
+        "field-icon-picker",
+        "field-icon-picker",
+        "field-icon-picker",
+        "field-icon-picker",
+        "field-icon-picker",
+        "field-icon-picker",
+        "field-icon-picker",
+        "field-icon-picker",
+        "field-icon-picker",
+        "field-icon-picker",
+        "field-icon-picker",
+        "field-icon-picker",
+        "field-icon-picker",
+        "field-icon-picker",
+        "field-icon-picker",
+        "field-icon-picker",
+        "field-icon-picker",
+        "field-icon-picker",
+        "field-icon-picker",
+        "field-icon-picker",
+        "field-icon-picker",
+        "field-icon-picker",
+        "field-icon-picker",
+        "field-icon-picker",
+        "field-icon-picker",
+        "field-icon-picker",
+        "field-icon-picker",
+        "field-icon-picker",
+        "field-icon-picker"
+      ]
+    },
+    "db-icon-picker-nav": {
+      "cls": "db-icon-picker-nav",
+      "mountParent": "db-icon-picker-popover",
+      "tokens": true,
+      "role": null,
+      "rect": "318x46",
+      "scenarios": [
+        "field-icon-picker"
+      ]
+    },
+    "db-color-picker-popup": {
+      "cls": "db-color-picker-popup",
+      "mountParent": "(body)",
+      "tokens": true,
+      "role": null,
+      "rect": "138x98",
+      "scenarios": [
+        "field-option-color-picker"
+      ]
+    },
+    "db-color-picker-swatch": {
+      "cls": "db-color-picker-swatch",
+      "mountParent": "db-color-picker-popup",
+      "tokens": true,
+      "role": null,
+      "rect": "18x18",
+      "scenarios": [
+        "field-option-color-picker",
+        "field-option-color-picker",
+        "field-option-color-picker",
+        "field-option-color-picker",
+        "field-option-color-picker",
+        "field-option-color-picker",
+        "field-option-color-picker",
+        "field-option-color-picker",
+        "field-option-color-picker",
+        "field-option-color-picker",
+        "field-option-color-picker",
+        "field-option-color-picker",
+        "field-option-color-picker",
+        "field-option-color-picker",
+        "field-option-color-picker",
+        "field-option-color-picker"
+      ]
+    }
+  },
+  "buildableNotRendered": [
+    "db-file-picker",
+    "db-file-picker-label",
+    "db-modal-actions",
+    "db-settings-dropdown",
+    "db-delete-modal-info",
+    "db-delete-modal-buttons",
+    "db-bulk-edit-field-menu",
+    "db-calendar-day-popover",
+    "db-calendar-day-popover-events",
+    "db-calendar-week-allday-popover",
+    "db-calendar-scale-popover",
+    "db-timeline-scale-popover",
+    "db-timeline-mini-popover",
+    "db-timeline-mobile-menu-button",
+    "db-chart-options-dropdown",
+    "db-calendar-timeline-options-dropdown",
+    "db-calendar-options-dropdown",
+    "db-relation-popover",
+    "db-relation-popover-header",
+    "db-relation-popover-title",
+    "db-relation-popover-footer",
+    "db-dropdown-empty",
+    "db-menu-item-check",
+    "db-date-edit-popover",
+    "db-cell-date-picker",
+    "db-cell-line-edit-popover",
+    "db-chart-drilldown-modal",
+    "db-chart-value-aggregation-popover",
+    "db-chart-style-popover",
+    "db-chart-visible-groups-popover",
+    "db-chart-dropdown-popover",
+    "db-anchored-popover",
+    "db-column-manager-file-property-dropdown",
+    "db-column-type-popover",
+    "db-dropdown-option-check",
+    "db-dropdown-option-icon",
+    "db-column-display-style-popover",
+    "db-column-number-style-popover",
+    "db-number-style-menu-icon",
+    "db-menu-item-current",
+    "db-column-menu-back",
+    "db-column-text-style-popover",
+    "db-displayopt-dropdown-popover",
+    "db-number-style-menu-progress",
+    "db-number-style-menu-progress-fill",
+    "db-number-style-menu-ring-track",
+    "db-number-style-menu-ring-arc",
+    "db-group-order-popover",
+    "db-calendar-search-results-popover",
+    "db-mobile-column-width-panel",
+    "db-date-value-popover",
+    "db-dropdown-field-disabled-reason",
+    "db-dropdown-search",
+    "db-dropdown-options",
+    "db-dropdown-option-text",
+    "db-dropdown-option-swatches",
+    "db-dropdown-option-swatch",
+    "db-dropdown-popover-context-settings",
+    "db-dropdown-popover-context-modal",
+    "db-dropdown-popover-context-container",
+    "db-source-rule-dropdown",
+    "db-panel-dropdown",
+    "db-filter-field-dropdown",
+    "db-filter-operator-dropdown",
+    "db-panel-date-value",
+    "db-filter-value-dropdown",
+    "db-icon-picker-empty",
+    "db-menu-section",
+    "db-menu-separator",
+    "db-mobile-bottom-sheet",
+    "db-modal-help",
+    "db-modal-dropdown",
+    "db-base-import-type-dropdown",
+    "db-modal-checkbox",
+    "db-modal-button-row",
+    "db-modal-row",
+    "db-modal-label",
+    "db-modal-row-with-help",
+    "db-modal-control-stack",
+    "db-modal-input",
+    "db-modal-fullscreen",
+    "db-delete-database-modal",
+    "db-delete-modal-danger-row",
+    "db-delete-modal-primary-actions",
+    "db-formula-result-type-dropdown",
+    "db-formula-preview-dropdown",
+    "db-invalid-events-modal",
+    "db-property-conflict-modal",
+    "db-property-conflict-type-dropdown",
+    "db-relation-rollup-config-modal",
+    "db-relation-rollup-config-dropdown",
+    "db-status-preset-default-dropdown",
+    "db-menu",
+    "db-owned-menu",
+    "db-database-dropdown-icon",
+    "db-sort-field-dropdown",
+    "db-sort-direction-dropdown",
+    "db-summary-dropdown-popover",
+    "db-panel",
+    "db-sheet",
+    "db-table-calculation-popover",
+    "db-record-peek-empty",
+    "db-toolbar-utilities-popover",
+    "db-toolbar-menu-icon",
+    "db-toolbar-menu-label",
+    "db-database-popover",
+    "db-database-popover-drag",
+    "db-database-popover-select",
+    "db-database-popover-icon",
+    "db-database-popover-label",
+    "db-database-popover-check",
+    "db-title-actions-popover",
+    "db-view-tab-popover-marker",
+    "db-view-tab-popover-label",
+    "db-add-view-popover",
+    "db-all-views-popover",
+    "db-view-tab-popover-row",
+    "db-view-tab-popover-chevron",
+    "db-view-tabs-dropdown-popover",
+    "db-group-popover",
+    "db-group-popover-section-title",
+    "db-group-popover-marker",
+    "db-group-popover-label",
+    "db-group-popover-check",
+    "db-group-popover-row",
+    "db-group-popover-switch-row",
+    "db-group-row-limit-dropdown-popover",
+    "db-export-popover",
+    "db-export-popover-row",
+    "db-export-popover-marker",
+    "db-export-popover-label",
+    "db-new-template-menu",
+    "db-new-template-popover",
+    "db-panel-button-icon",
+    "db-conditional-format-dropdown",
+    "db-source-rule-property-picker",
+    "db-view-config-dropdown",
+    "db-status-preset-setting-dropdown",
+    "db-view-config-field-dropdown",
+    "db-view-config-dropdown-popover"
+  ],
+  "declared": [
+    "column-menu",
+    "owned-menu",
+    "record-detail-panel",
+    "filter-panel",
+    "date-value-picker"
+  ]
+}
