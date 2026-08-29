@@ -701,7 +701,7 @@
       },
       "note": "A column with summary rules stacks each kind over its result; a column without one shows a + Calculate hint that the stylesheet keeps at zero opacity until the trigger is hovered, so it is invisible here by design.",
       "capture": "element",
-      "bytes": 432963
+      "bytes": 432916
     },
     {
       "id": "chrome-table-footer",
@@ -2000,7 +2000,7 @@
       ],
       "sourceHashes": {
         "src/views/column-manager-renderer.ts": "216e0a41ddef",
-        "src/views/property-type-icon.ts": "046f0b24b104",
+        "src/views/property-type-icon.ts": "ae5fe0065e84",
         "styles.css": "9732449e4746"
       },
       "note": "One row per property: drag handle, visibility checkbox, type icon, name with its frontmatter key, then wrap, edit and delete.",
@@ -2020,7 +2020,7 @@
       ],
       "sourceHashes": {
         "src/views/column-manager-renderer.ts": "216e0a41ddef",
-        "src/views/property-type-icon.ts": "046f0b24b104",
+        "src/views/property-type-icon.ts": "ae5fe0065e84",
         "styles.css": "9732449e4746"
       },
       "note": "One row per property: drag handle, visibility checkbox, type icon, name with its frontmatter key, then wrap, edit and delete.",
@@ -2040,7 +2040,7 @@
       ],
       "sourceHashes": {
         "src/views/column-manager-renderer.ts": "216e0a41ddef",
-        "src/views/property-type-icon.ts": "046f0b24b104",
+        "src/views/property-type-icon.ts": "ae5fe0065e84",
         "styles.css": "9732449e4746"
       },
       "note": "One row per property: drag handle, visibility checkbox, type icon, name with its frontmatter key, then wrap, edit and delete.",
@@ -2060,7 +2060,7 @@
       ],
       "sourceHashes": {
         "src/views/column-manager-renderer.ts": "216e0a41ddef",
-        "src/views/property-type-icon.ts": "046f0b24b104",
+        "src/views/property-type-icon.ts": "ae5fe0065e84",
         "styles.css": "9732449e4746"
       },
       "note": "One row per property: drag handle, visibility checkbox, type icon, name with its frontmatter key, then wrap, edit and delete.",
@@ -2327,7 +2327,7 @@
       },
       "note": "The phone form of the record detail panel. positionToolbarPopover renders it as a bottom sheet with a grab handle; a permanent close button (reusing db-cell-edit-close) and drag-down on the handle dismiss it where the desktop panel relies on Escape and outside-click. Captured in viewport mode so the fixed sheet docks at the bottom.",
       "capture": "viewport",
-      "bytes": 57176
+      "bytes": 57178
     },
     {
       "id": "panel-record-detail-sheet",
@@ -2349,7 +2349,7 @@
       },
       "note": "The phone form of the record detail panel. positionToolbarPopover renders it as a bottom sheet with a grab handle; a permanent close button (reusing db-cell-edit-close) and drag-down on the handle dismiss it where the desktop panel relies on Escape and outside-click. Captured in viewport mode so the fixed sheet docks at the bottom.",
       "capture": "viewport",
-      "bytes": 52101
+      "bytes": 52143
     },
     {
       "id": "panel-record-detail-sheet",
@@ -2393,7 +2393,7 @@
       },
       "note": "The phone form of the record detail panel. positionToolbarPopover renders it as a bottom sheet with a grab handle; a permanent close button (reusing db-cell-edit-close) and drag-down on the handle dismiss it where the desktop panel relies on Escape and outside-click. Captured in viewport mode so the fixed sheet docks at the bottom.",
       "capture": "viewport",
-      "bytes": 18994
+      "bytes": 18988
     },
     {
       "id": "panel-record-peek",
@@ -2865,7 +2865,7 @@
       },
       "note": "The board inside the default-width container. On the phone (is-phone) the container no longer centres the grid off-screen, and the sticky group header is taken out of sticky flow so it cannot float down over the cards; columns page horizontally with snap-scroll.",
       "capture": "viewport",
-      "bytes": 85252
+      "bytes": 85246
     },
     {
       "id": "board-view",
@@ -2905,7 +2905,7 @@
       },
       "note": null,
       "capture": "viewport",
-      "bytes": 247999
+      "bytes": 248016
     },
     {
       "id": "board-view",
@@ -3025,7 +3025,7 @@
       },
       "note": "Days with events carry a short accent underline; the visible week reads as the selected pill run.",
       "capture": "viewport",
-      "bytes": 23719
+      "bytes": 23723
     },
     {
       "id": "calendar-month-view",
@@ -3097,7 +3097,7 @@
       },
       "note": "Multi-day all-day bars, timed events, an overflow week and one event carried across the week boundary.",
       "capture": "viewport",
-      "bytes": 47108
+      "bytes": 47309
     },
     {
       "id": "calendar-toolbar-options",
@@ -3249,7 +3249,7 @@
       },
       "note": "Sticky day header and all-day strip over the 08–16 time grid; the current-time ruler sits on Wednesday at 13:45.",
       "capture": "viewport",
-      "bytes": 40376
+      "bytes": 39820
     },
     {
       "id": "gallery-view",
@@ -3329,7 +3329,7 @@
       },
       "note": null,
       "capture": "viewport",
-      "bytes": 17383
+      "bytes": 17389
     },
     {
       "id": "list-mobile",
@@ -3469,7 +3469,7 @@
       },
       "note": null,
       "capture": "viewport",
-      "bytes": 87312
+      "bytes": 87237
     },
     {
       "id": "list-view",
@@ -3671,7 +3671,7 @@
       },
       "note": null,
       "capture": "viewport",
-      "bytes": 156633
+      "bytes": 156685
     },
     {
       "id": "table-view",
@@ -3791,7 +3791,7 @@
       },
       "note": "Two weeks at one column per day; the April band marks the month boundary and the today line sits at 25 March 13:45.",
       "capture": "viewport",
-      "bytes": 146959
+      "bytes": 147239
     },
     {
       "id": "timeline-view",
@@ -3827,7 +3827,7 @@
       },
       "note": "Two weeks at one column per day; the April band marks the month boundary and the today line sits at 25 March 13:45.",
       "capture": "viewport",
-      "bytes": 41990
+      "bytes": 41700
     },
     {
       "id": "timeline-view",

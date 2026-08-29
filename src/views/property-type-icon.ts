@@ -42,7 +42,7 @@ export const PROPERTY_TYPE_ICON_NAMES: Record<ColumnDef["type"], string> = {
   computed: "math-function",
   relation: "link",
   rollup: "sum",
-  files: "link",
+  files: "paperclip",
 };
 
 // ───────────────────────────────────────────────────────────────────
@@ -151,6 +151,15 @@ export const PROPERTY_TYPE_ICON_DEFS: Record<string, PropertyTypeIconDef> = {
   sum: {
     paths: [
       { d: "M18 4h-10l6 8l-6 8h10" },
+    ],
+  },
+  // `files` shared the chain link with `relation` until a catalogue story put all thirteen type
+  // icons in one row and showed them as the same glyph. They mean different things — a relation
+  // points at rows, a files column holds attachments — and at 16px the only thing distinguishing
+  // them was position in a list.
+  paperclip: {
+    paths: [
+      { d: "M15 7l-6.5 6.5a1.5 1.5 0 0 0 3 3l6.5 -6.5a3 3 0 0 0 -6 -6l-6.5 6.5a4.5 4.5 0 0 0 9 9l6.5 -6.5" },
     ],
   },
 };
