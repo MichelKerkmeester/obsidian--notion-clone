@@ -8417,23 +8417,20 @@ export class DatabaseView extends FileView {
         (col.key === "file.name" || (!titleVisible && col.key === visible[0]?.key))
       ) {
         attachTitleOpenAffordance(td, row, {
-          // The peek panel is a display-only side rail, which is the wrong surface on a phone:
-          // it cannot be edited and its dismiss lifecycle assumes a pointer. Every other view
-          // already opens the editable detail panel, which is sheet-aware, so the table stops
-          // being the odd one out. Desktop keeps the rail, where a side-by-side read is useful.
+          // Open means open the note.
+          //
+          // Four affordances across the plugin share this icon and this label — the table's, the
+          // list row's, the board card's and the gallery card's. Three of them opened the actual
+          // page and this one opened a display-only side rail listing properties, so the same
+          // control did two different things depending on which view you were looking at. The rail
+          // is a useful side-by-side read, but it is not what "Open" says, and a control that lies
+          // about its own label is worse than a missing feature.
+          //
+          // Touch keeps the editable detail panel, which is sheet-aware and reachable with a
+          // thumb; the rail's dismiss lifecycle assumes a pointer.
           open: () => (isTouchDevice(td)
             ? this.openRecordDetailPanel(td, row)
-            : openTableRecordPeek({
-              anchor: td,
-              row,
-              config,
-              visibleColumns: visible,
-              allColumns: getColumnsInOrder(config),
-              container,
-              returnFocus: () => td.focus(),
-              renderRecordIcon: (parent, currentRow, currentConfig) =>
-                this.renderRowRecordIcon(parent, currentRow, currentConfig),
-            })),
+            : this.openRow(row)),
         });
       }
     }

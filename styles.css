@@ -18359,7 +18359,12 @@ body.is-tablet .note-database-container .db-record-open-btn {
   top: 0;
   right: 0;
   bottom: 0;
-  z-index: 998;
+  /* Panel layer, not a hand-picked literal.
+     This was 998, which sits above the popover tier at 100 and the submenu tier at 110 — so a
+     dropdown opened inside the peek painted underneath the panel containing it. The number was
+     outside the scale entirely, which is how it beat two tiers without anyone choosing that. The
+     sibling detail panel already documents having fixed the same thing. */
+  z-index: var(--db-layer-panel, 50);
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
