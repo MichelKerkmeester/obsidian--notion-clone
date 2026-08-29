@@ -1,6 +1,6 @@
 {
-  "holder": "000-surface-contract-and-truthful-harness",
-  "acquiredAt": "2026-08-29T17:27:00.333Z",
+  "holder": "004-checkbox-ownership",
+  "acquiredAt": "2026-08-29T18:12:04.502Z",
   "baselineHash": "c4906525fe85",
   "baselineCommit": "f4319e3e768a",
   "history": [
@@ -16,6 +16,22 @@
       "at": "2026-08-29T18:11:10.694Z",
       "hash": "c4906525fe85",
       "note": "added .db-surface to the light and dark token roots so a body-mounted surface inherits the scale"
+    },
+    {
+      "event": "release",
+      "phase": "000-surface-contract-and-truthful-harness",
+      "at": "2026-08-29T18:12:04.501Z",
+      "hash": "c4906525fe85",
+      "note": "Released with a debt: the .db-surface edit has NOT been recaptured and no PNG has been signed off. The screenshots on disk predate it. 000 owes that recapture and it is not discharged by this handover."
+    },
+    {
+      "event": "acquire",
+      "phase": "004-checkbox-ownership",
+      "at": "2026-08-29T18:12:04.502Z",
+      "hash": "c4906525fe85"
     }
+  ],
+  "outstanding": [
+    "000-surface-contract-and-truthful-harness owes a recapture and per-PNG sign-off for the .db-surface token-root edit"
   ]
 }
