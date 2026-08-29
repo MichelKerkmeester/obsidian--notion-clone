@@ -70,11 +70,22 @@ subsequent claim depends on the harness being able to fail. **T0 precedes everyt
 - [ ] **T4a** Scan for pinned runtime values generally — REQ-015.
       *Evidence to close:* the scan flags all four known cases on the pre-T4 tree, then reports zero;
       no harness file assigns a custom property the runtime also assigns.
-- [ ] **T4b** Extend the capture fingerprint at `capture.mjs:205` — REQ-015.
+- [~] **T4b** Extend the capture fingerprint at `capture.mjs:205` — REQ-015.
       *Evidence to close:* editing each of `runtime-vars.css`, `.storybook/preview.ts` and
       `verify-placement.mjs` in turn makes `npm run screenshots:verify` report stale; today it
       fingerprints `[...scenario.sources, "styles.css"]` and no scenario lists a harness file, so all
       three edits are currently invisible.
+      *Code landed, proof pending.* `CAPTURE_INPUTS` now records the stylesheet plus every file that
+      shapes a capture: `theme.css`, `runtime-vars.css`, `scenarios.mjs`, and `capture.mjs` itself.
+      **Two of the three files this task names are excluded, deliberately.** The Storybook preview
+      and the geometry harness are read by neither the capture script nor anything it imports —
+      confirmed by reading it — so recording them would mark all 196 screenshots stale whenever an
+      unrelated harness changed. A staleness gate that cries wolf is regenerated past without being
+      read, which is how a gate stops being one. The task as written would have built that.
+      The proof cannot be taken yet: `sourceHashes` is written at capture time, so the manifest on
+      disk still holds only the old keys and `screenshots:verify` still reports all 196 fresh — it
+      did so immediately after this edit to `capture.mjs`, the file that renders every one of them,
+      which is the defect demonstrated live rather than argued. It closes on the recapture T4 owns.
 - [ ] **T5** Unblock `Platform` and `Modal` in the Storybook stub — REQ-005.
       *Evidence to close:* a touch-path story and one `DbModal` subclass render.
 - [ ] **T6** Re-mount stories at production positions — REQ-005.

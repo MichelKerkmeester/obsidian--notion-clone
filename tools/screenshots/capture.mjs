@@ -26,6 +26,15 @@ import { dirname, join, resolve } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { SCENARIOS } from "./scenarios.mjs";
 
+// Paths are repo-relative because that is what `fingerprint` and the freshness check both expect.
+const CAPTURE_INPUTS = [
+  "styles.css",
+  "tools/screenshots/theme.css",
+  "tools/screenshots/runtime-vars.css",
+  "tools/screenshots/scenarios.mjs",
+  "tools/screenshots/capture.mjs",
+];
+
 // ───────────────────────────────────────────────────────────────────
 // 2. CONFIGURATION
 // ───────────────────────────────────────────────────────────────────
@@ -124,6 +133,16 @@ async function main() {
     return createHash("sha256").update(readFileSync(abs)).digest("hex").slice(0, 12);
   };
 
+  // Every file that shapes what a capture looks like, so that changing one of them marks the
+  // screenshots stale. Before this list existed only `styles.css` was recorded, which meant the
+  // harness could be rewritten — a pinned custom property, a different device metric, a changed
+  // scenario — and every screenshot still reported fresh while depicting a rendering that no
+  // longer existed.
+  //
+  // Deliberately NOT here: the Storybook preview and the geometry harness. Neither is read by this
+  // file, so listing them would invalidate 196 screenshots whenever an unrelated harness changed,
+  // and a staleness gate that cries wolf gets regenerated past without being read.
+
   const styles = readFileSync(join(REPO, "styles.css"), "utf8");
   const themeCss = readFileSync(join(HERE, "theme.css"), "utf8");
   const runtimeCss = readFileSync(join(HERE, "runtime-vars.css"), "utf8");
@@ -202,7 +221,7 @@ async function main() {
           file: `screenshots/${rel}`,
           sources: scenario.sources,
           sourceHashes: Object.fromEntries(
-            [...scenario.sources, "styles.css"].map((s) => [s, fingerprint(s)])
+            [...scenario.sources, ...CAPTURE_INPUTS].map((s) => [s, fingerprint(s)])
           ),
           note: scenario.note || null,
           capture: captureMode(scenario),
