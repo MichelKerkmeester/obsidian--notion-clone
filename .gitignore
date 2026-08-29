@@ -8,3 +8,8 @@ specs/**/research/**/lineages/
 .DS_Store
 node_modules/
 .worktrees/
+
+# Shared AI-tooling symlinks into the Public code environment.
+.opencode
+.pi
+.pi-subagents
