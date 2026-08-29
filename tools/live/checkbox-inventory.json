@@ -1,14 +1,14 @@
 {
-  "measuredAt": "2026-08-29T18:07:42.917Z",
+  "measuredAt": "2026-08-29T20:32:07.740Z",
   "inputs": {
-    "styles.css": "c4906525fe85",
+    "styles.css": "39967f03be37",
     "tools/live/checkbox-inventory.mjs": "e869ed91680a"
   },
   "totals": {
-    "sites": 37,
-    "classless": 14,
-    "unmentioned": 1,
-    "noAppearanceRule": 9
+    "sites": 10,
+    "classless": 2,
+    "unmentioned": 0,
+    "noAppearanceRule": 0
   },
   "classless": [
     {
@@ -20,366 +20,17 @@
       "borrowed": null
     },
     {
-      "file": "src/views/card-field-renderer.ts",
-      "line": 184,
+      "file": "src/views/checkbox.ts",
+      "line": 34,
       "chain": [],
       "classes": [],
-      "computedClass": false,
-      "borrowed": {
-        "cls": "db-checkbox-cell",
-        "line": 183,
-        "viaAddClass": true
-      }
-    },
-    {
-      "file": "src/views/cell-renderer.ts",
-      "line": 489,
-      "chain": [],
-      "classes": [],
-      "computedClass": false,
-      "borrowed": {
-        "cls": "db-checkbox-cell",
-        "line": 487,
-        "viaAddClass": true
-      }
-    },
-    {
-      "file": "src/views/chart-toolbar-renderer.ts",
-      "line": 985,
-      "chain": [],
-      "classes": [],
-      "computedClass": false,
-      "borrowed": {
-        "cls": "db-chart-visible-group-row",
-        "line": 984,
-        "viaAddClass": false
-      }
-    },
-    {
-      "file": "src/views/column-manager-renderer.ts",
-      "line": 150,
-      "chain": [
-        "db-column-manager",
-        "db-panel-header",
-        "db-panel-header-actions",
-        "db-column-manager-toggle-all"
-      ],
-      "classes": [],
-      "computedClass": false,
-      "borrowed": {
-        "cls": "db-column-manager-toggle-all",
-        "line": 149,
-        "viaAddClass": false
-      }
-    },
-    {
-      "file": "src/views/column-manager-renderer.ts",
-      "line": 237,
-      "chain": [
-        "db-column-manager",
-        "db-column-manager-row"
-      ],
-      "classes": [],
-      "computedClass": false,
-      "borrowed": {
-        "cls": "db-mobile-reorder-controls",
-        "line": 212,
-        "viaAddClass": false
-      }
-    },
-    {
-      "file": "src/views/modals/column-rename-modal.ts",
-      "line": 74,
-      "chain": [],
-      "classes": [],
-      "computedClass": false,
-      "borrowed": null
-    },
-    {
-      "file": "src/views/modals/column-rename-modal.ts",
-      "line": 87,
-      "chain": [],
-      "classes": [],
-      "computedClass": false,
-      "borrowed": null
-    },
-    {
-      "file": "src/views/modals/csv-markdown-export-modal.ts",
-      "line": 61,
-      "chain": [
-        "db-csv-markdown-option-row",
-        "db-csv-markdown-option-label"
-      ],
-      "classes": [],
-      "computedClass": false,
-      "borrowed": {
-        "cls": "db-csv-markdown-option-label",
-        "line": 60,
-        "viaAddClass": false
-      }
-    },
-    {
-      "file": "src/views/record-detail-panel.ts",
-      "line": 339,
-      "chain": [],
-      "classes": [],
-      "computedClass": false,
-      "borrowed": {
-        "cls": "db-checkbox-cell",
-        "line": 338,
-        "viaAddClass": true
-      }
-    },
-    {
-      "file": "src/views/table-renderer.ts",
-      "line": 514,
-      "chain": [
-        "db-new-row",
-        "db-select-col",
-        "db-select-inner"
-      ],
-      "classes": [],
-      "computedClass": false,
-      "borrowed": {
-        "cls": "db-select-inner",
-        "line": 513,
-        "viaAddClass": false
-      }
-    },
-    {
-      "file": "src/views/table-renderer.ts",
-      "line": 785,
-      "chain": [
-        "db-new-row",
-        "db-select-col",
-        "db-select-inner"
-      ],
-      "classes": [],
-      "computedClass": false,
-      "borrowed": {
-        "cls": "db-select-inner",
-        "line": 773,
-        "viaAddClass": false
-      }
-    },
-    {
-      "file": "src/views/toolbar-renderer.ts",
-      "line": 1280,
-      "chain": [
-        "db-view-tab-popover db-new-template-popover",
-        "db-add-view-form",
-        "db-add-view-duplicate"
-      ],
-      "classes": [],
-      "computedClass": false,
-      "borrowed": {
-        "cls": "db-add-view-duplicate",
-        "line": 1279,
-        "viaAddClass": false
-      }
-    },
-    {
-      "file": "src/views/view-config-panel-renderer.ts",
-      "line": 2032,
-      "chain": [
-        "db-view-config-panel",
-        "db-view-config-row",
-        "db-view-config-field"
-      ],
-      "classes": [],
-      "computedClass": false,
-      "borrowed": {
-        "cls": "db-view-config-help",
-        "line": 2029,
-        "viaAddClass": false
-      }
-    }
-  ],
-  "unmentioned": [
-    {
-      "file": "src/views/list-renderer.ts",
-      "line": 269,
-      "chain": [
-        "db-list",
-        "db-list-row",
-        "db-list-row-controls"
-      ],
-      "classes": [
-        "db-list-row-checkbox"
-      ],
-      "computedClass": false,
+      "computedClass": true,
       "borrowed": null
     }
   ],
-  "noAppearanceRule": [
-    {
-      "file": "src/views/board-renderer.ts",
-      "line": 282,
-      "chain": [
-        "db-board-subgroup",
-        "db-board-subgroup-header"
-      ],
-      "classes": [
-        "db-board-column-checkbox"
-      ],
-      "computedClass": false,
-      "borrowed": null
-    },
-    {
-      "file": "src/views/board-renderer.ts",
-      "line": 534,
-      "chain": [
-        "db-board-subgroup",
-        "db-board-subgroup-header"
-      ],
-      "classes": [
-        "db-board-column-checkbox"
-      ],
-      "computedClass": false,
-      "borrowed": null
-    },
-    {
-      "file": "src/views/board-renderer.ts",
-      "line": 620,
-      "chain": [
-        "db-board-subgroup",
-        "db-board-subgroup-header"
-      ],
-      "classes": [
-        "db-board-subgroup-checkbox"
-      ],
-      "computedClass": false,
-      "borrowed": null
-    },
-    {
-      "file": "src/views/board-renderer.ts",
-      "line": 863,
-      "chain": [
-        "db-board-cards",
-        "db-board-card",
-        "db-board-card-controls"
-      ],
-      "classes": [
-        "db-board-card-checkbox"
-      ],
-      "computedClass": false,
-      "borrowed": null
-    },
-    {
-      "file": "src/views/embedded-database-renderer.ts",
-      "line": 3996,
-      "chain": [
-        "db-selection-status-bar"
-      ],
-      "classes": [
-        "db-selection-clear-checkbox"
-      ],
-      "computedClass": false,
-      "borrowed": null
-    },
-    {
-      "file": "src/views/gallery-renderer.ts",
-      "line": 226,
-      "chain": [],
-      "classes": [
-        "db-gallery-group-checkbox"
-      ],
-      "computedClass": false,
-      "borrowed": null
-    },
-    {
-      "file": "src/views/gallery-renderer.ts",
-      "line": 288,
-      "chain": [
-        "db-gallery",
-        "db-gallery-card",
-        "db-gallery-card-body",
-        "db-gallery-card-controls"
-      ],
-      "classes": [
-        "db-gallery-card-checkbox"
-      ],
-      "computedClass": false,
-      "borrowed": null
-    },
-    {
-      "file": "src/views/list-renderer.ts",
-      "line": 220,
-      "chain": [],
-      "classes": [
-        "db-list-group-checkbox"
-      ],
-      "computedClass": false,
-      "borrowed": null
-    },
-    {
-      "file": "src/views/table-renderer.ts",
-      "line": 627,
-      "chain": [
-        "db-row-insert-line",
-        "db-group-divider-content"
-      ],
-      "classes": [
-        "db-group-divider-checkbox"
-      ],
-      "computedClass": false,
-      "borrowed": null
-    }
-  ],
+  "unmentioned": [],
+  "noAppearanceRule": [],
   "sites": [
-    {
-      "file": "src/views/board-renderer.ts",
-      "line": 282,
-      "chain": [
-        "db-board-subgroup",
-        "db-board-subgroup-header"
-      ],
-      "classes": [
-        "db-board-column-checkbox"
-      ],
-      "computedClass": false,
-      "borrowed": null
-    },
-    {
-      "file": "src/views/board-renderer.ts",
-      "line": 534,
-      "chain": [
-        "db-board-subgroup",
-        "db-board-subgroup-header"
-      ],
-      "classes": [
-        "db-board-column-checkbox"
-      ],
-      "computedClass": false,
-      "borrowed": null
-    },
-    {
-      "file": "src/views/board-renderer.ts",
-      "line": 620,
-      "chain": [
-        "db-board-subgroup",
-        "db-board-subgroup-header"
-      ],
-      "classes": [
-        "db-board-subgroup-checkbox"
-      ],
-      "computedClass": false,
-      "borrowed": null
-    },
-    {
-      "file": "src/views/board-renderer.ts",
-      "line": 863,
-      "chain": [
-        "db-board-cards",
-        "db-board-card",
-        "db-board-card-controls"
-      ],
-      "classes": [
-        "db-board-card-checkbox"
-      ],
-      "computedClass": false,
-      "borrowed": null
-    },
     {
       "file": "src/views/calendar-timeline-toolbar-renderer.ts",
       "line": 311,
@@ -413,32 +64,8 @@
       "borrowed": null
     },
     {
-      "file": "src/views/card-field-renderer.ts",
-      "line": 184,
-      "chain": [],
-      "classes": [],
-      "computedClass": false,
-      "borrowed": {
-        "cls": "db-checkbox-cell",
-        "line": 183,
-        "viaAddClass": true
-      }
-    },
-    {
-      "file": "src/views/cell-renderer.ts",
-      "line": 489,
-      "chain": [],
-      "classes": [],
-      "computedClass": false,
-      "borrowed": {
-        "cls": "db-checkbox-cell",
-        "line": 487,
-        "viaAddClass": true
-      }
-    },
-    {
       "file": "src/views/chart-toolbar-renderer.ts",
-      "line": 976,
+      "line": 978,
       "chain": [],
       "classes": [
         "db-toggle-switch"
@@ -447,48 +74,12 @@
       "borrowed": null
     },
     {
-      "file": "src/views/chart-toolbar-renderer.ts",
-      "line": 985,
+      "file": "src/views/checkbox.ts",
+      "line": 34,
       "chain": [],
       "classes": [],
-      "computedClass": false,
-      "borrowed": {
-        "cls": "db-chart-visible-group-row",
-        "line": 984,
-        "viaAddClass": false
-      }
-    },
-    {
-      "file": "src/views/column-manager-renderer.ts",
-      "line": 150,
-      "chain": [
-        "db-column-manager",
-        "db-panel-header",
-        "db-panel-header-actions",
-        "db-column-manager-toggle-all"
-      ],
-      "classes": [],
-      "computedClass": false,
-      "borrowed": {
-        "cls": "db-column-manager-toggle-all",
-        "line": 149,
-        "viaAddClass": false
-      }
-    },
-    {
-      "file": "src/views/column-manager-renderer.ts",
-      "line": 237,
-      "chain": [
-        "db-column-manager",
-        "db-column-manager-row"
-      ],
-      "classes": [],
-      "computedClass": false,
-      "borrowed": {
-        "cls": "db-mobile-reorder-controls",
-        "line": 212,
-        "viaAddClass": false
-      }
+      "computedClass": true,
+      "borrowed": null
     },
     {
       "file": "src/views/column-menu.ts",
@@ -503,238 +94,8 @@
       "borrowed": null
     },
     {
-      "file": "src/views/embedded-database-renderer.ts",
-      "line": 3996,
-      "chain": [
-        "db-selection-status-bar"
-      ],
-      "classes": [
-        "db-selection-clear-checkbox"
-      ],
-      "computedClass": false,
-      "borrowed": null
-    },
-    {
-      "file": "src/views/gallery-renderer.ts",
-      "line": 226,
-      "chain": [],
-      "classes": [
-        "db-gallery-group-checkbox"
-      ],
-      "computedClass": false,
-      "borrowed": null
-    },
-    {
-      "file": "src/views/gallery-renderer.ts",
-      "line": 288,
-      "chain": [
-        "db-gallery",
-        "db-gallery-card",
-        "db-gallery-card-body",
-        "db-gallery-card-controls"
-      ],
-      "classes": [
-        "db-gallery-card-checkbox"
-      ],
-      "computedClass": false,
-      "borrowed": null
-    },
-    {
-      "file": "src/views/list-renderer.ts",
-      "line": 220,
-      "chain": [],
-      "classes": [
-        "db-list-group-checkbox"
-      ],
-      "computedClass": false,
-      "borrowed": null
-    },
-    {
-      "file": "src/views/list-renderer.ts",
-      "line": 269,
-      "chain": [
-        "db-list",
-        "db-list-row",
-        "db-list-row-controls"
-      ],
-      "classes": [
-        "db-list-row-checkbox"
-      ],
-      "computedClass": false,
-      "borrowed": null
-    },
-    {
-      "file": "src/views/modals/base-import-confirm-modal.ts",
-      "line": 134,
-      "chain": [
-        "base-import-table"
-      ],
-      "classes": [
-        "db-modal-checkbox",
-        "base-import-include-checkbox"
-      ],
-      "computedClass": false,
-      "borrowed": null
-    },
-    {
-      "file": "src/views/modals/base-import-confirm-modal.ts",
-      "line": 179,
-      "chain": [],
-      "classes": [
-        "db-modal-checkbox",
-        "base-import-include-checkbox"
-      ],
-      "computedClass": false,
-      "borrowed": null
-    },
-    {
-      "file": "src/views/modals/column-rename-modal.ts",
-      "line": 74,
-      "chain": [],
-      "classes": [],
-      "computedClass": false,
-      "borrowed": null
-    },
-    {
-      "file": "src/views/modals/column-rename-modal.ts",
-      "line": 87,
-      "chain": [],
-      "classes": [],
-      "computedClass": false,
-      "borrowed": null
-    },
-    {
-      "file": "src/views/modals/computed-frontmatter-cleanup-modal.ts",
-      "line": 51,
-      "chain": [
-        "db-computed-cleanup-list",
-        "db-computed-cleanup-option"
-      ],
-      "classes": [
-        "db-modal-checkbox"
-      ],
-      "computedClass": false,
-      "borrowed": null
-    },
-    {
-      "file": "src/views/modals/csv-markdown-export-modal.ts",
-      "line": 61,
-      "chain": [
-        "db-csv-markdown-option-row",
-        "db-csv-markdown-option-label"
-      ],
-      "classes": [],
-      "computedClass": false,
-      "borrowed": {
-        "cls": "db-csv-markdown-option-label",
-        "line": 60,
-        "viaAddClass": false
-      }
-    },
-    {
-      "file": "src/views/modals/invalid-time-events-modal.ts",
-      "line": 90,
-      "chain": [
-        "db-invalid-event-grid",
-        "db-invalid-event-grid-header"
-      ],
-      "classes": [
-        "db-modal-checkbox",
-        "db-invalid-event-select"
-      ],
-      "computedClass": false,
-      "borrowed": null
-    },
-    {
-      "file": "src/views/modals/invalid-time-events-modal.ts",
-      "line": 119,
-      "chain": [
-        "db-invalid-event-grid",
-        "db-invalid-event-row"
-      ],
-      "classes": [
-        "db-modal-checkbox",
-        "db-invalid-event-select"
-      ],
-      "computedClass": false,
-      "borrowed": null
-    },
-    {
-      "file": "src/views/record-detail-panel.ts",
-      "line": 339,
-      "chain": [],
-      "classes": [],
-      "computedClass": false,
-      "borrowed": {
-        "cls": "db-checkbox-cell",
-        "line": 338,
-        "viaAddClass": true
-      }
-    },
-    {
-      "file": "src/views/table-renderer.ts",
-      "line": 514,
-      "chain": [
-        "db-new-row",
-        "db-select-col",
-        "db-select-inner"
-      ],
-      "classes": [],
-      "computedClass": false,
-      "borrowed": {
-        "cls": "db-select-inner",
-        "line": 513,
-        "viaAddClass": false
-      }
-    },
-    {
-      "file": "src/views/table-renderer.ts",
-      "line": 627,
-      "chain": [
-        "db-row-insert-line",
-        "db-group-divider-content"
-      ],
-      "classes": [
-        "db-group-divider-checkbox"
-      ],
-      "computedClass": false,
-      "borrowed": null
-    },
-    {
-      "file": "src/views/table-renderer.ts",
-      "line": 785,
-      "chain": [
-        "db-new-row",
-        "db-select-col",
-        "db-select-inner"
-      ],
-      "classes": [],
-      "computedClass": false,
-      "borrowed": {
-        "cls": "db-select-inner",
-        "line": 773,
-        "viaAddClass": false
-      }
-    },
-    {
       "file": "src/views/toolbar-renderer.ts",
-      "line": 1280,
-      "chain": [
-        "db-view-tab-popover db-new-template-popover",
-        "db-add-view-form",
-        "db-add-view-duplicate"
-      ],
-      "classes": [],
-      "computedClass": false,
-      "borrowed": {
-        "cls": "db-add-view-duplicate",
-        "line": 1279,
-        "viaAddClass": false
-      }
-    },
-    {
-      "file": "src/views/toolbar-renderer.ts",
-      "line": 1732,
+      "line": 1733,
       "chain": [
         "db-view-tab-popover db-new-template-popover",
         "db-new-template-row db-menu-item"
@@ -747,7 +108,7 @@
     },
     {
       "file": "src/views/toolbar-renderer.ts",
-      "line": 1752,
+      "line": 1753,
       "chain": [
         "db-view-tab-popover db-new-template-popover",
         "db-new-template-row db-menu-item"
@@ -760,7 +121,7 @@
     },
     {
       "file": "src/views/toolbar-renderer.ts",
-      "line": 1824,
+      "line": 1825,
       "chain": [
         "db-view-tab-popover db-new-template-popover",
         "db-new-template-row db-menu-item"
@@ -773,23 +134,7 @@
     },
     {
       "file": "src/views/view-config-panel-renderer.ts",
-      "line": 2032,
-      "chain": [
-        "db-view-config-panel",
-        "db-view-config-row",
-        "db-view-config-field"
-      ],
-      "classes": [],
-      "computedClass": false,
-      "borrowed": {
-        "cls": "db-view-config-help",
-        "line": 2029,
-        "viaAddClass": false
-      }
-    },
-    {
-      "file": "src/views/view-config-panel-renderer.ts",
-      "line": 2054,
+      "line": 2055,
       "chain": [
         "db-view-config-panel",
         "db-view-config-row",

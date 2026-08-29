@@ -2986,7 +2986,7 @@
       },
       "note": "The phone form of the record detail panel. positionToolbarPopover renders it as a bottom sheet with a grab handle; a permanent close button (reusing db-cell-edit-close) and drag-down on the handle dismiss it where the desktop panel relies on Escape and outside-click. Captured in viewport mode so the fixed sheet docks at the bottom.",
       "capture": "viewport",
-      "bytes": 42956
+      "bytes": 42966
     },
     {
       "id": "panel-record-detail-sheet",
@@ -3013,7 +3013,7 @@
       },
       "note": "The phone form of the record detail panel. positionToolbarPopover renders it as a bottom sheet with a grab handle; a permanent close button (reusing db-cell-edit-close) and drag-down on the handle dismiss it where the desktop panel relies on Escape and outside-click. Captured in viewport mode so the fixed sheet docks at the bottom.",
       "capture": "viewport",
-      "bytes": 38602
+      "bytes": 38597
     },
     {
       "id": "panel-record-peek",
@@ -3026,7 +3026,7 @@
         "src/views/table-record-peek.ts",
         "src/views/table-renderer.ts"
       ],
-      "layoutHash": "f25b43e58ab1",
+      "layoutHash": "36efe372dd0f",
       "sourceHashes": {
         "src/views/table-record-peek.ts": "14f5844dab51",
         "src/views/table-renderer.ts": "a73c171f9285",
@@ -3038,7 +3038,7 @@
       },
       "note": "Docks against the right edge of the table it was opened from. Values are display-only text, and properties hidden from the table sit behind the disclosure.",
       "capture": "element",
-      "bytes": 491826
+      "bytes": 536856
     },
     {
       "id": "panel-record-peek",
@@ -3051,7 +3051,7 @@
         "src/views/table-record-peek.ts",
         "src/views/table-renderer.ts"
       ],
-      "layoutHash": "f25b43e58ab1",
+      "layoutHash": "36efe372dd0f",
       "sourceHashes": {
         "src/views/table-record-peek.ts": "14f5844dab51",
         "src/views/table-renderer.ts": "a73c171f9285",
@@ -3063,7 +3063,7 @@
       },
       "note": "Docks against the right edge of the table it was opened from. Values are display-only text, and properties hidden from the table sit behind the disclosure.",
       "capture": "element",
-      "bytes": 477991
+      "bytes": 514291
     },
     {
       "id": "panel-record-peek",
@@ -3076,7 +3076,7 @@
         "src/views/table-record-peek.ts",
         "src/views/table-renderer.ts"
       ],
-      "layoutHash": "8fa8e643ab6d",
+      "layoutHash": "89b02e263a46",
       "sourceHashes": {
         "src/views/table-record-peek.ts": "14f5844dab51",
         "src/views/table-renderer.ts": "a73c171f9285",
@@ -3088,7 +3088,7 @@
       },
       "note": "Docks against the right edge of the table it was opened from. Values are display-only text, and properties hidden from the table sit behind the disclosure.",
       "capture": "element",
-      "bytes": 53762
+      "bytes": 42777
     },
     {
       "id": "panel-record-peek",
@@ -3101,7 +3101,7 @@
         "src/views/table-record-peek.ts",
         "src/views/table-renderer.ts"
       ],
-      "layoutHash": "8fa8e643ab6d",
+      "layoutHash": "89b02e263a46",
       "sourceHashes": {
         "src/views/table-record-peek.ts": "14f5844dab51",
         "src/views/table-renderer.ts": "a73c171f9285",
@@ -3113,7 +3113,7 @@
       },
       "note": "Docks against the right edge of the table it was opened from. Values are display-only text, and properties hidden from the table sit behind the disclosure.",
       "capture": "element",
-      "bytes": 50701
+      "bytes": 43217
     },
     {
       "id": "panel-sort-calendar-empty",
@@ -3511,7 +3511,7 @@
         "src/views/group-label-renderer.ts",
         "src/views/card-field-renderer.ts"
       ],
-      "layoutHash": "8739f3371d61",
+      "layoutHash": "32fe07083cf4",
       "sourceHashes": {
         "src/views/board-renderer.ts": "c039027f0184",
         "src/views/group-label-renderer.ts": "3fee8449607c",
@@ -3524,7 +3524,7 @@
       },
       "note": "The board inside the default-width container. On the phone (is-phone) the container no longer centres the grid off-screen, and the sticky group header is taken out of sticky flow so it cannot float down over the cards; columns page horizontally with snap-scroll.",
       "capture": "viewport",
-      "bytes": 181991
+      "bytes": 186944
     },
     {
       "id": "board-mobile",
@@ -3538,7 +3538,7 @@
         "src/views/group-label-renderer.ts",
         "src/views/card-field-renderer.ts"
       ],
-      "layoutHash": "8739f3371d61",
+      "layoutHash": "32fe07083cf4",
       "sourceHashes": {
         "src/views/board-renderer.ts": "c039027f0184",
         "src/views/group-label-renderer.ts": "3fee8449607c",
@@ -3551,7 +3551,7 @@
       },
       "note": "The board inside the default-width container. On the phone (is-phone) the container no longer centres the grid off-screen, and the sticky group header is taken out of sticky flow so it cannot float down over the cards; columns page horizontally with snap-scroll.",
       "capture": "viewport",
-      "bytes": 186589
+      "bytes": 191774
     },
     {
       "id": "board-mobile",
@@ -3565,7 +3565,7 @@
         "src/views/group-label-renderer.ts",
         "src/views/card-field-renderer.ts"
       ],
-      "layoutHash": "a4eb5da5a220",
+      "layoutHash": "b55cd9bb5fed",
       "sourceHashes": {
         "src/views/board-renderer.ts": "c039027f0184",
         "src/views/group-label-renderer.ts": "3fee8449607c",
@@ -3578,7 +3578,7 @@
       },
       "note": "The board inside the default-width container. On the phone (is-phone) the container no longer centres the grid off-screen, and the sticky group header is taken out of sticky flow so it cannot float down over the cards; columns page horizontally with snap-scroll.",
       "capture": "viewport",
-      "bytes": 75768
+      "bytes": 77657
     },
     {
       "id": "board-mobile",
@@ -3592,7 +3592,7 @@
         "src/views/group-label-renderer.ts",
         "src/views/card-field-renderer.ts"
       ],
-      "layoutHash": "a4eb5da5a220",
+      "layoutHash": "b55cd9bb5fed",
       "sourceHashes": {
         "src/views/board-renderer.ts": "c039027f0184",
         "src/views/group-label-renderer.ts": "3fee8449607c",
@@ -3605,7 +3605,7 @@
       },
       "note": "The board inside the default-width container. On the phone (is-phone) the container no longer centres the grid off-screen, and the sticky group header is taken out of sticky flow so it cannot float down over the cards; columns page horizontally with snap-scroll.",
       "capture": "viewport",
-      "bytes": 78833
+      "bytes": 80594
     },
     {
       "id": "board-view",
@@ -3618,7 +3618,7 @@
         "src/views/board-renderer.ts",
         "src/views/card-field-renderer.ts"
       ],
-      "layoutHash": "4bc0dc4a32a2",
+      "layoutHash": "63bbf854fb23",
       "sourceHashes": {
         "src/views/board-renderer.ts": "c039027f0184",
         "src/views/card-field-renderer.ts": "d4cd0466d2e3",
@@ -3630,7 +3630,7 @@
       },
       "note": null,
       "capture": "viewport",
-      "bytes": 241856
+      "bytes": 247035
     },
     {
       "id": "board-view",
@@ -3643,7 +3643,7 @@
         "src/views/board-renderer.ts",
         "src/views/card-field-renderer.ts"
       ],
-      "layoutHash": "4bc0dc4a32a2",
+      "layoutHash": "63bbf854fb23",
       "sourceHashes": {
         "src/views/board-renderer.ts": "c039027f0184",
         "src/views/card-field-renderer.ts": "d4cd0466d2e3",
@@ -3655,7 +3655,7 @@
       },
       "note": null,
       "capture": "viewport",
-      "bytes": 247998
+      "bytes": 253341
     },
     {
       "id": "board-view",
@@ -3668,7 +3668,7 @@
         "src/views/board-renderer.ts",
         "src/views/card-field-renderer.ts"
       ],
-      "layoutHash": "fb9ce8f9c9a3",
+      "layoutHash": "7d7a2ec1deab",
       "sourceHashes": {
         "src/views/board-renderer.ts": "c039027f0184",
         "src/views/card-field-renderer.ts": "d4cd0466d2e3",
@@ -3680,7 +3680,7 @@
       },
       "note": null,
       "capture": "viewport",
-      "bytes": 75768
+      "bytes": 77657
     },
     {
       "id": "board-view",
@@ -3693,7 +3693,7 @@
         "src/views/board-renderer.ts",
         "src/views/card-field-renderer.ts"
       ],
-      "layoutHash": "fb9ce8f9c9a3",
+      "layoutHash": "7d7a2ec1deab",
       "sourceHashes": {
         "src/views/board-renderer.ts": "c039027f0184",
         "src/views/card-field-renderer.ts": "d4cd0466d2e3",
@@ -3705,7 +3705,7 @@
       },
       "note": null,
       "capture": "viewport",
-      "bytes": 78833
+      "bytes": 80594
     },
     {
       "id": "calendar-mini-calendar",
@@ -3730,7 +3730,7 @@
       },
       "note": "Days with events carry a short accent underline; the visible week reads as the selected pill run.",
       "capture": "viewport",
-      "bytes": 57127
+      "bytes": 57193
     },
     {
       "id": "calendar-mini-calendar",
@@ -3897,7 +3897,7 @@
       },
       "note": "Multi-day all-day bars, timed events, an overflow week and one event carried across the week boundary.",
       "capture": "viewport",
-      "bytes": 89647
+      "bytes": 89301
     },
     {
       "id": "calendar-toolbar-options",
@@ -3947,7 +3947,7 @@
       },
       "note": "The Time section only exists in week and day scale; the setup preview card below Data carries no stylesheet rules.",
       "capture": "viewport",
-      "bytes": 129541
+      "bytes": 129516
     },
     {
       "id": "calendar-toolbar-options",
@@ -4066,7 +4066,7 @@
       },
       "note": "Sticky day header and all-day strip over the 08–16 time grid; the current-time ruler sits on Wednesday at 13:45.",
       "capture": "viewport",
-      "bytes": 57335
+      "bytes": 57644
     },
     {
       "id": "calendar-week-time-grid",
@@ -4102,7 +4102,7 @@
         "src/views/gallery-renderer.ts",
         "src/views/card-field-renderer.ts"
       ],
-      "layoutHash": "2811382797ca",
+      "layoutHash": "1dc1be3c5a76",
       "sourceHashes": {
         "src/views/gallery-renderer.ts": "63d110082ea9",
         "src/views/card-field-renderer.ts": "d4cd0466d2e3",
@@ -4114,7 +4114,7 @@
       },
       "note": null,
       "capture": "viewport",
-      "bytes": 39549
+      "bytes": 40023
     },
     {
       "id": "gallery-view",
@@ -4127,7 +4127,7 @@
         "src/views/gallery-renderer.ts",
         "src/views/card-field-renderer.ts"
       ],
-      "layoutHash": "2811382797ca",
+      "layoutHash": "1dc1be3c5a76",
       "sourceHashes": {
         "src/views/gallery-renderer.ts": "63d110082ea9",
         "src/views/card-field-renderer.ts": "d4cd0466d2e3",
@@ -4139,7 +4139,7 @@
       },
       "note": null,
       "capture": "viewport",
-      "bytes": 39581
+      "bytes": 40033
     },
     {
       "id": "gallery-view",
@@ -4152,7 +4152,7 @@
         "src/views/gallery-renderer.ts",
         "src/views/card-field-renderer.ts"
       ],
-      "layoutHash": "b498f5dcaab1",
+      "layoutHash": "c456d41aa4a2",
       "sourceHashes": {
         "src/views/gallery-renderer.ts": "63d110082ea9",
         "src/views/card-field-renderer.ts": "d4cd0466d2e3",
@@ -4164,7 +4164,7 @@
       },
       "note": null,
       "capture": "viewport",
-      "bytes": 37125
+      "bytes": 38093
     },
     {
       "id": "gallery-view",
@@ -4177,7 +4177,7 @@
         "src/views/gallery-renderer.ts",
         "src/views/card-field-renderer.ts"
       ],
-      "layoutHash": "b498f5dcaab1",
+      "layoutHash": "c456d41aa4a2",
       "sourceHashes": {
         "src/views/gallery-renderer.ts": "63d110082ea9",
         "src/views/card-field-renderer.ts": "d4cd0466d2e3",
@@ -4189,7 +4189,7 @@
       },
       "note": null,
       "capture": "viewport",
-      "bytes": 37137
+      "bytes": 38114
     },
     {
       "id": "list-mobile",
@@ -4407,7 +4407,7 @@
         "src/views/table-record-peek.ts",
         "styles.css"
       ],
-      "layoutHash": "c3c5bec52d83",
+      "layoutHash": "b178ee05409e",
       "sourceHashes": {
         "src/views/table-renderer.ts": "a73c171f9285",
         "src/views/table-column-layout-sync.ts": "a678b28c2bf2",
@@ -4423,7 +4423,7 @@
       },
       "note": "The full table the renderer builds: a select gutter, a record-icon gutter and a runtime <colgroup> of fixed px widths. On desktop those widths hold; on the phone (is-phone) the columns auto-fit to content and the select column is no longer clipped by the scroll-area fade mask. The name column is the title cell — a content-sized link plus the always-visible open affordance, rendered on touch as a compact maximize icon so its width goes to the note name instead of a text label.",
       "capture": "viewport",
-      "bytes": 207547
+      "bytes": 205021
     },
     {
       "id": "table-mobile",
@@ -4441,7 +4441,7 @@
         "src/views/table-record-peek.ts",
         "styles.css"
       ],
-      "layoutHash": "c3c5bec52d83",
+      "layoutHash": "b178ee05409e",
       "sourceHashes": {
         "src/views/table-renderer.ts": "a73c171f9285",
         "src/views/table-column-layout-sync.ts": "a678b28c2bf2",
@@ -4457,7 +4457,7 @@
       },
       "note": "The full table the renderer builds: a select gutter, a record-icon gutter and a runtime <colgroup> of fixed px widths. On desktop those widths hold; on the phone (is-phone) the columns auto-fit to content and the select column is no longer clipped by the scroll-area fade mask. The name column is the title cell — a content-sized link plus the always-visible open affordance, rendered on touch as a compact maximize icon so its width goes to the note name instead of a text label.",
       "capture": "viewport",
-      "bytes": 201683
+      "bytes": 198588
     },
     {
       "id": "table-mobile",
@@ -4475,7 +4475,7 @@
         "src/views/table-record-peek.ts",
         "styles.css"
       ],
-      "layoutHash": "be032b4aa56f",
+      "layoutHash": "1ddcf70856b1",
       "sourceHashes": {
         "src/views/table-renderer.ts": "a73c171f9285",
         "src/views/table-column-layout-sync.ts": "a678b28c2bf2",
@@ -4491,7 +4491,7 @@
       },
       "note": "The full table the renderer builds: a select gutter, a record-icon gutter and a runtime <colgroup> of fixed px widths. On desktop those widths hold; on the phone (is-phone) the columns auto-fit to content and the select column is no longer clipped by the scroll-area fade mask. The name column is the title cell — a content-sized link plus the always-visible open affordance, rendered on touch as a compact maximize icon so its width goes to the note name instead of a text label.",
       "capture": "viewport",
-      "bytes": 61235
+      "bytes": 59392
     },
     {
       "id": "table-mobile",
@@ -4509,7 +4509,7 @@
         "src/views/table-record-peek.ts",
         "styles.css"
       ],
-      "layoutHash": "be032b4aa56f",
+      "layoutHash": "1ddcf70856b1",
       "sourceHashes": {
         "src/views/table-renderer.ts": "a73c171f9285",
         "src/views/table-column-layout-sync.ts": "a678b28c2bf2",
@@ -4525,7 +4525,7 @@
       },
       "note": "The full table the renderer builds: a select gutter, a record-icon gutter and a runtime <colgroup> of fixed px widths. On desktop those widths hold; on the phone (is-phone) the columns auto-fit to content and the select column is no longer clipped by the scroll-area fade mask. The name column is the title cell — a content-sized link plus the always-visible open affordance, rendered on touch as a compact maximize icon so its width goes to the note name instead of a text label.",
       "capture": "viewport",
-      "bytes": 60777
+      "bytes": 58928
     },
     {
       "id": "table-view",
@@ -4539,7 +4539,7 @@
         "src/views/column-header-controller.ts",
         "src/views/cell-renderer.ts"
       ],
-      "layoutHash": "18887403a536",
+      "layoutHash": "337be00cf1ff",
       "sourceHashes": {
         "src/views/table-renderer.ts": "a73c171f9285",
         "src/views/column-header-controller.ts": "7714b894b5b0",
@@ -4552,7 +4552,7 @@
       },
       "note": null,
       "capture": "viewport",
-      "bytes": 468145
+      "bytes": 473112
     },
     {
       "id": "table-view",
@@ -4566,7 +4566,7 @@
         "src/views/column-header-controller.ts",
         "src/views/cell-renderer.ts"
       ],
-      "layoutHash": "18887403a536",
+      "layoutHash": "337be00cf1ff",
       "sourceHashes": {
         "src/views/table-renderer.ts": "a73c171f9285",
         "src/views/column-header-controller.ts": "7714b894b5b0",
@@ -4579,7 +4579,7 @@
       },
       "note": null,
       "capture": "viewport",
-      "bytes": 443341
+      "bytes": 451559
     },
     {
       "id": "table-view",
@@ -4593,7 +4593,7 @@
         "src/views/column-header-controller.ts",
         "src/views/cell-renderer.ts"
       ],
-      "layoutHash": "11b57930bed4",
+      "layoutHash": "a1818ff1fe35",
       "sourceHashes": {
         "src/views/table-renderer.ts": "a73c171f9285",
         "src/views/column-header-controller.ts": "7714b894b5b0",
@@ -4606,7 +4606,7 @@
       },
       "note": null,
       "capture": "viewport",
-      "bytes": 126915
+      "bytes": 131449
     },
     {
       "id": "table-view",
@@ -4620,7 +4620,7 @@
         "src/views/column-header-controller.ts",
         "src/views/cell-renderer.ts"
       ],
-      "layoutHash": "11b57930bed4",
+      "layoutHash": "a1818ff1fe35",
       "sourceHashes": {
         "src/views/table-renderer.ts": "a73c171f9285",
         "src/views/column-header-controller.ts": "7714b894b5b0",
@@ -4633,7 +4633,7 @@
       },
       "note": null,
       "capture": "viewport",
-      "bytes": 126677
+      "bytes": 131674
     },
     {
       "id": "timeline-toolbar-options",
@@ -4802,7 +4802,7 @@
       },
       "note": "Two weeks at one column per day; the April band marks the month boundary and the today line sits at 25 March 13:45.",
       "capture": "viewport",
-      "bytes": 69163
+      "bytes": 69457
     },
     {
       "id": "timeline-view",

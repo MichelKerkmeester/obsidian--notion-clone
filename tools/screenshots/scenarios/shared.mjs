@@ -86,8 +86,23 @@ export const ICONS = {
    its own that no shipped rule would ever match. */
 export const pill = (text, tone) => `<span class="status-badge status-color-${tone}">${text}</span>`;
 
+
+/**
+ * The checkbox markup the renderer actually produces.
+ *
+ * Every one of these families was absent from every fixture, so nothing photographed or measured
+ * the board, gallery and table selection controls — the exact families originally reported as
+ * rendering wrong. A fixture that omits a control cannot show it is broken.
+ *
+ * The class list mirrors what createCheckbox emits for the row role; the family class is what each
+ * call site passes. Kept in one place so a change to the factory has one fixture to update.
+ */
+export const rowCheckbox = (family) =>
+  `<input type="checkbox" class="db-checkbox db-checkbox-row${family ? ` ${family}` : ""}" aria-label="Select">`;
+
 export function tableHeader() {
-  return COLUMNS.map((c) => `
+  return `<th class="db-select-col"><div class="db-select-inner">${rowCheckbox()}</div></th>` +
+    COLUMNS.map((c) => `
     <th data-note-database-column-key="${c.label.toLowerCase()}">
       <div class="db-th-content">
         <span class="db-property-icon">${ICONS[c.icon] || ""}</span>
@@ -100,6 +115,7 @@ export function tableHeader() {
 export function tableRows() {
   return ROWS.map((r) => `
     <tr>
+      <td class="db-select-col"><div class="db-select-inner">${rowCheckbox()}</div></td>
       <td>${r.name}</td>
       <td>${r.cost}</td>
       <td>${pill(r.cycle, "orange")}</td>
@@ -111,6 +127,7 @@ export function tableRows() {
 
 export const boardCard = (r) => `
   <div class="db-board-card" role="row" aria-keyshortcuts="Enter Space F2" tabindex="-1">
+    <div class="db-board-card-controls">${rowCheckbox("db-board-card-checkbox")}</div>
     <div class="db-board-card-title">${r.name}</div>
     <div class="db-board-card-field"><span class="db-board-card-field-label">Cost</span><span class="db-board-card-value">${r.cost}</span></div>
     <div class="db-board-card-field"><span class="db-board-card-field-label">Renews</span><span class="db-board-card-value">${r.renew}</span></div>
@@ -121,6 +138,7 @@ export function boardColumn(title, rows) {
   <div class="db-board-column">
     <div class="db-board-column-header">
       <button type="button" class="db-board-group-toggle"><span class="db-collapse-triangle"></span></button>
+      ${rowCheckbox("db-board-column-checkbox")}
       <div class="db-board-header-text">
         <span class="db-board-column-title">${title}</span>
         <span class="db-board-count">${rows.length}</span>

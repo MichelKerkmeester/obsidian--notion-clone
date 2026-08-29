@@ -7,7 +7,7 @@
 // 1. IMPORTS
 // ───────────────────────────────────────────────────────────────────
 
-import { ROWS, COLUMNS, ICONS, dots, glyph, pill, tableHeader, tableRows, boardColumn } from "./shared.mjs";
+import { COLUMNS, ICONS, ROWS, boardColumn, dots, glyph, pill, rowCheckbox, tableHeader, tableRows } from "./shared.mjs";
 
 // ───────────────────────────────────────────────────────────────────
 // 2. SCENARIOS
@@ -74,6 +74,7 @@ export const CORE_SCENARIOS = [
         <div class="db-gallery" role="grid">
           ${ROWS.slice(0, 4).map((r) => `
             <div class="db-gallery-card" role="row" aria-keyshortcuts="Enter Space F2" tabindex="-1">
+              <div class="db-gallery-card-controls">${rowCheckbox("db-gallery-card-checkbox")}</div>
               <div class="db-board-card-cover-placeholder"></div>
               <div class="db-gallery-card-title">${r.name}</div>
               <div class="db-gallery-field"><span class="db-gallery-field-label">Cost</span><span class="db-gallery-field-value">${r.cost}</span></div>
