@@ -14,7 +14,7 @@
 // 1. IMPORTS
 // ───────────────────────────────────────────────────────────────────
 
-import { Menu, setIcon } from "obsidian";
+import { setIcon } from "obsidian";
 import { ColumnDef, CreateEntryPosition, RowCreateContext, RowData, ViewConfig } from "../data/types";
 import { isExplicitlySorted } from "../data/manual-order";
 import { formatGroupKeyDisplay, isComputedGroupField, resolveGroupCreateDefaults } from "../data/group-display";
@@ -33,6 +33,7 @@ import { TableFooterRenderer } from "./table-footer-renderer";
 import { EdgeAutoScroller } from "./edge-auto-scroller";
 import { InteractionSnapshot } from "./interaction-snapshot";
 import { isTouchDevice } from "../data/touch-environment";
+import { createOwnedMenuForEvent, OwnedMenuHandle } from "./owned-menu";
 
 // ───────────────────────────────────────────────────────────────────
 // 2. CONSTANTS
@@ -133,7 +134,12 @@ export class TableRenderer {
     this.applyTableWidth(table, config, visibleColumns, availableWidth);
     this.renderColgroup(table, config, visibleColumns, availableWidth);
     this.renderHeader(table, config, visibleColumns, rows);
-    const tbody = table.createEl("tbody");
+    // Build the body off-document and attach it once. Appending rows to a table that is already in
+    // the document makes each insertion pay style and layout work, which turns the row loop
+    // quadratic: measured at 2,000 rows this costs seconds rather than milliseconds, and the gap
+    // widens with row count. Column widths are measured from `tableWrap` above, so they are already
+    // resolved before the body exists and nothing here depends on being attached.
+    const tbody = table.ownerDocument.createElement("tbody");
     this.renderRows(tbody, config, rows, visibleColumns);
     if (rows.length === 0) {
       this.emptyStateRenderer.renderTableRow(
@@ -145,6 +151,7 @@ export class TableRenderer {
     if (!this.actions.hideCreateEntry) {
       this.renderNewRow(tbody, visibleColumns.length + this.getUtilityColumnCount(config), undefined, rows);
     }
+    table.appendChild(tbody);
     this.renderFooter(table, config, visibleColumns, rows);
     this.applyGridSemantics(table, config, visibleColumns, rows);
   }
@@ -173,7 +180,10 @@ export class TableRenderer {
     this.applyTableWidth(table, config, visibleColumns, availableWidth);
     this.renderColgroup(table, config, visibleColumns, availableWidth);
     this.renderHeader(table, config, visibleColumns, rows);
-    const tbody = table.createEl("tbody");
+    // Detached for the same reason as the ungrouped path: rows appended to an attached table pay
+    // per-insertion layout, and a grouped table adds divider and expand rows on top of the row
+    // count. Attached below, after the body is fully built.
+    const tbody = table.ownerDocument.createElement("tbody");
     const renderableGroups = this.getRenderableGroups(config, groups, groupField);
     if (renderableGroups.length === 0) {
       this.emptyStateRenderer.renderTableRow(
@@ -236,6 +246,7 @@ export class TableRenderer {
         visibleColumns.length + this.getUtilityColumnCount(config),
       );
     }
+    table.appendChild(tbody);
     this.renderFooter(table, config, visibleColumns, rows);
     this.applyGridSemantics(table, config, visibleColumns, rows);
   }
@@ -818,17 +829,14 @@ export class TableRenderer {
     button.onclick = (event) => {
       event.preventDefault();
       event.stopPropagation();
-      const menu = new Menu();
+      const menu = createOwnedMenuForEvent(event);
       if (this.canManualReorder(config)) this.addMobilePositionItems(menu, row, rows);
       if (groupField && groupKey != null && groups?.length && this.actions.moveRowToGroupAndPosition) {
         if (this.canManualReorder(config)) menu.addSeparator();
         for (const group of groups) {
           if (group.key === groupKey) continue;
           const groupLabel = formatGroupKeyDisplay(config, groupField, group.key);
-          menu.addItem((item) => item
-            .setTitle(`${t("mobile.moveTo")} ${groupLabel}`)
-            .setIcon("folder-input")
-            .onClick(() => {
+          menu.addRow({ icon: "folder-input", label: `${t("mobile.moveTo")} ${groupLabel}`, onClick: () => {
               const paths = group.rows.map((candidate) => candidate.file.path).filter((path) => path !== row.file.path);
               void this.actions.moveRowToGroupAndPosition?.(
                 row,
@@ -838,15 +846,15 @@ export class TableRenderer {
                 paths[paths.length - 1],
                 undefined
               );
-            }));
+            } });
         }
       }
-      menu.showAtMouseEvent(event);
+      menu.showAt({ x: event.clientX, y: event.clientY });
     };
   }
 
   /** Add local rank movement actions shared by grouped and ungrouped table rows. */
-  private addMobilePositionItems(menu: Menu, row: RowData, rows: RowData[]): void {
+  private addMobilePositionItems(menu: OwnedMenuHandle, row: RowData, rows: RowData[]): void {
     const paths = rows.map((candidate) => candidate.file.path);
     const index = paths.indexOf(row.file.path);
     const move = (targetIndex: number) => {
@@ -854,10 +862,10 @@ export class TableRenderer {
       const boundedIndex = Math.max(0, Math.min(targetIndex, remaining.length));
       this.actions.moveRowToPosition?.(row.file.path, remaining[boundedIndex - 1], remaining[boundedIndex]);
     };
-    menu.addItem((item) => item.setTitle(t("menu.moveUp")).setIcon("chevron-up").setDisabled(index <= 0).onClick(() => move(index - 1)));
-    menu.addItem((item) => item.setTitle(t("menu.moveDown")).setIcon("chevron-down").setDisabled(index < 0 || index >= paths.length - 1).onClick(() => move(index + 1)));
-    menu.addItem((item) => item.setTitle(t("mobile.moveTop")).setIcon("chevrons-up").setDisabled(index <= 0).onClick(() => move(0)));
-    menu.addItem((item) => item.setTitle(t("mobile.moveBottom")).setIcon("chevrons-down").setDisabled(index < 0 || index >= paths.length - 1).onClick(() => move(paths.length - 1)));
+    menu.addRow({ icon: "chevron-up", label: t("menu.moveUp"), disabled: index <= 0, onClick: () => move(index - 1) });
+    menu.addRow({ icon: "chevron-down", label: t("menu.moveDown"), disabled: index < 0 || index >= paths.length - 1, onClick: () => move(index + 1) });
+    menu.addRow({ icon: "chevrons-up", label: t("mobile.moveTop"), disabled: index <= 0, onClick: () => move(0) });
+    menu.addRow({ icon: "chevrons-down", label: t("mobile.moveBottom"), disabled: index < 0 || index >= paths.length - 1, onClick: () => move(paths.length - 1) });
   }
 
   private renderNewRow(tbody: HTMLElement, colspan: number, defaults?: Record<string, unknown>, rows: RowData[] = [], computedGroup = false): void {
