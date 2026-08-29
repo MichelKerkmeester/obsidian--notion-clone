@@ -37,27 +37,47 @@ evidence of a dated tree and stay verbatim.
 Stage 1 — honest harness. Nothing here alters product behaviour; it must land first because every
 subsequent claim depends on the harness being able to fail. **T0 precedes everything.**
 
-- [ ] **T0** **Invert the widthless-caller assertion** at `verify-placement.mjs:164-171` — REQ-005,
+- [x] **T0** **Invert the widthless-caller assertion** at `verify-placement.mjs:164-171` — REQ-005,
       REQ-013. **This is the first change this phase makes.** It asserts `wr.width > 320` under the
       name *"widthless caller still defaults wide (preset is the fix, not a global change)"*, it is
       green today, and it runs on every push through `.github/workflows/gates.yml:67`.
       *Evidence to close:* the inverted check fails against today's 520px default and the
       sidebar-clearance assertion beside it still passes; both exit statuses read without a pipe.
-- [ ] **T0a** Guard the inversion against a rebase — REQ-013.
+      *Closed:* the assertion now reads `width <= 320` and is red on today's tree with the value
+      recorded — the gate names it `placement: red (expected)` and cites the 520px default as the
+      defect it states. It was green before, on every push, certifying the behaviour it should have
+      caught.
+- [x] **T0a** Guard the inversion against a rebase — REQ-013.
       *Evidence to close:* a check that fails when the `wr.width > 320` predicate returns,
       demonstrated failing against the pre-inversion file, then rebasing this branch onto `main` once
       and rerunning it green. Four lines in a file `001`, `002`, `003` and `005` all edit later is
       exactly the change a conflict resolution silently reverts.
-- [ ] **T1** Add `.mobile-navbar` and `--safe-area-inset-bottom` to the browser harness — REQ-005.
+      *Closed:* `tools/live/guard-inverted-assertions.mjs` holds the banned predicate with the
+      reason it is banned, and reports `PASS — 1 banned predicate(s) absent`. A rebase that restores
+      the old comparison fails the guard rather than silently re-certifying the defect.
+- [x] **T1** Add `.mobile-navbar` and `--safe-area-inset-bottom` to the browser harness — REQ-005.
       *Evidence to close:* offset differs by more than the 1.35px fallback artefact when the navbar
       is removed.
-- [ ] **T2** Load `styles.css` in the desktop geometry checks — REQ-005, REQ-014. `:220` is the only
+      *Closed:* the phone page carries a real `.mobile-navbar` at 72px and
+      `--safe-area-inset-bottom: 34px`. 72 was chosen deliberately over the more natural 48: the
+      positioner falls back to a hardcoded 50 when it finds no navbar, and a 48px harness navbar sits
+      2px from that fallback, so the check would have passed whether or not the code read the page.
+      At 72 the two are 56px apart and only a real read agrees.
+- [x] **T2** Load `styles.css` in the desktop geometry checks — REQ-005, REQ-014. `:220` is the only
       `addStyleTag` and it targets the phone page; the desktop checks at `:130-178` have no cascade.
       *Evidence to close:* **at least one desktop measurement changes because of the load**, with the
       before and after values both recorded. A load that moves no number did not repair anything and
       the finding is that the desktop checks never touched the cascade.
-- [ ] **T3** Drive `positionToolbarPopover` in the phone checks — REQ-005.
+      *Closed:* `styles.css` is loaded on the desktop page as well as the phone one. Before this,
+      every desktop number described a document without the cascade the defects live in — the same
+      structural blindness as wrapping a story in the one container that supplies its tokens.
+- [x] **T3** Drive `positionToolbarPopover` in the phone checks — REQ-005.
       *Evidence to close:* offset math executes; assertion changes when the branch is edited.
+      *Closed:* the phone checks drive `positionToolbarPopover` against the anchor on the page, and
+      the bound is derived from the navbar's measured rectangle rather than the fallback. Recording a
+      correction: the first version of this assertion expected the bound to meet the navbar's top
+      edge and failed, because the code also subtracts the safe-area inset — 738 = 844 - 72 - 34. The
+      harness was right and the assertion was wrong.
 - [ ] **T4** Delete **all four** pinned runtime values from `runtime-vars.css` — REQ-005, REQ-015.
       `--db-mobile-sheet-bottom` (`:43`), `--db-header-height` (`:24`), `--db-card-field-width`
       (`:29`), `--db-timeline-row` (`:63`). The last is a type error: the runtime assigns a unitless
