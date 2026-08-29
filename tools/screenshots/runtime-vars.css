@@ -21,12 +21,10 @@
   --db-table-header-top: 22px;      /* sticky offset resolves to 0 with no toolbar above */
   --db-selection-status-offset: 0px;
   --db-group-table-head-top: 0px;
-  --db-header-height: 40px;
   --db-layer-sticky: 25;
 
   --db-board-column-width: 280px;
   --db-board-image-fit: cover;
-  --db-card-field-width: 120px;
   --db-gallery-card-width: 220px;
   --db-gallery-cover-ratio: 0.6;
   --db-gallery-image-fit: cover;
@@ -40,7 +38,6 @@
   --db-conditional-format-fg: var(--text-normal);
 
   --db-mobile-bar-height: 48px;
-  --db-mobile-sheet-bottom: 0px;
 
   --db-calendar-col-width: 140px;
   --db-calendar-row-height: 44px;
@@ -60,7 +57,6 @@
 
   --db-timeline-units: 30;
   --db-timeline-unit-width: 48px;
-  --db-timeline-row: 34px;
   --db-timeline-group-width: 180px;
   --db-timeline-event-rows: 1;
   --db-timeline-band-start: 0;
@@ -83,3 +79,14 @@
   --db-timeline-event-shadow: 0 2px 7px rgba(0, 0, 0, 0.09);
 }
 
+/* Four variables were removed from this file rather than corrected.
+   Each pinned a value the runtime computes or falls back to differently, which meant the captures
+   showed the harness's answer instead of the product's -- and a defect living in that exact value
+   could never appear in a screenshot:
+     --db-header-height      never assigned in src/; production resolves 34px, this pinned 40px
+     --db-card-field-width   production falls back to 150px, this pinned 120px
+     --db-mobile-sheet-bottom computed from the visible bounds; pinning 0px forced the right answer
+     --db-timeline-row       a grid line INDEX, not a length; 34px made grid-row invalid, so every
+                             timeline band in every capture collapsed to auto
+   The rule this file now follows: never assign a property the runtime also assigns. A harness that
+   supplies the answer cannot detect a wrong one. */

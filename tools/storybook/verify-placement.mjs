@@ -161,14 +161,22 @@ const results = await page.evaluate(({ sidebar }) => {
   });
   compact.remove();
 
-  // 4. A widthless caller gets the wide default — the documented behaviour the preset exists to fix.
+  // 4. A caller that states no width must not be handed an absurd one.
+  //
+  // This assertion used to require the opposite — that a widthless caller render WIDER than 320px —
+  // and it was green, and it ran on every push. It certified the defect: a four-item menu rendered
+  // at the 520px default, and any fix would have turned the pipeline red. The cheapest response to
+  // a red pipeline is to revert the fix, which is how a check like this quietly defends a bug.
+  //
+  // It now asserts the behaviour we want, so it is EXPECTED TO FAIL until the width policy lands.
+  // A red result here is the check working. Do not "fix" it by widening the threshold.
   const wide = build(5);
   positionToolbarPopover(wide, document.getElementById("anchor"), {});
   const wr = wide.getBoundingClientRect();
   out.push({
-    name: "widthless caller still defaults wide (preset is the fix, not a global change)",
-    pass: wr.width > 320,
-    detail: `width=${Math.round(wr.width)}px`,
+    name: "widthless caller is not handed an absurd default width",
+    pass: wr.width <= 320,
+    detail: `width=${Math.round(wr.width)}px (want <=320; the 520 default is the defect)`,
   });
   out.push({
     name: "even the wide default clears the sidebar",

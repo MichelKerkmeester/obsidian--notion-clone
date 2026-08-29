@@ -2327,7 +2327,7 @@
       },
       "note": "The phone form of the record detail panel. positionToolbarPopover renders it as a bottom sheet with a grab handle; a permanent close button (reusing db-cell-edit-close) and drag-down on the handle dismiss it where the desktop panel relies on Escape and outside-click. Captured in viewport mode so the fixed sheet docks at the bottom.",
       "capture": "viewport",
-      "bytes": 57178
+      "bytes": 57176
     },
     {
       "id": "panel-record-detail-sheet",
@@ -2371,7 +2371,7 @@
       },
       "note": "The phone form of the record detail panel. positionToolbarPopover renders it as a bottom sheet with a grab handle; a permanent close button (reusing db-cell-edit-close) and drag-down on the handle dismiss it where the desktop panel relies on Escape and outside-click. Captured in viewport mode so the fixed sheet docks at the bottom.",
       "capture": "viewport",
-      "bytes": 20520
+      "bytes": 20505
     },
     {
       "id": "panel-record-detail-sheet",
@@ -2393,7 +2393,7 @@
       },
       "note": "The phone form of the record detail panel. positionToolbarPopover renders it as a bottom sheet with a grab handle; a permanent close button (reusing db-cell-edit-close) and drag-down on the handle dismiss it where the desktop panel relies on Escape and outside-click. Captured in viewport mode so the fixed sheet docks at the bottom.",
       "capture": "viewport",
-      "bytes": 18988
+      "bytes": 18994
     },
     {
       "id": "panel-record-peek",
@@ -2843,7 +2843,7 @@
       },
       "note": "The board inside the default-width container. On the phone (is-phone) the container no longer centres the grid off-screen, and the sticky group header is taken out of sticky flow so it cannot float down over the cards; columns page horizontally with snap-scroll.",
       "capture": "viewport",
-      "bytes": 81488
+      "bytes": 81507
     },
     {
       "id": "board-mobile",
@@ -2865,7 +2865,7 @@
       },
       "note": "The board inside the default-width container. On the phone (is-phone) the container no longer centres the grid off-screen, and the sticky group header is taken out of sticky flow so it cannot float down over the cards; columns page horizontally with snap-scroll.",
       "capture": "viewport",
-      "bytes": 85246
+      "bytes": 85252
     },
     {
       "id": "board-view",
@@ -2905,7 +2905,7 @@
       },
       "note": null,
       "capture": "viewport",
-      "bytes": 248016
+      "bytes": 247999
     },
     {
       "id": "board-view",
@@ -2925,7 +2925,7 @@
       },
       "note": null,
       "capture": "viewport",
-      "bytes": 81488
+      "bytes": 81507
     },
     {
       "id": "board-view",
@@ -2945,7 +2945,7 @@
       },
       "note": null,
       "capture": "viewport",
-      "bytes": 85252
+      "bytes": 85246
     },
     {
       "id": "calendar-mini-calendar",
@@ -3005,7 +3005,7 @@
       },
       "note": "Days with events carry a short accent underline; the visible week reads as the selected pill run.",
       "capture": "viewport",
-      "bytes": 22794
+      "bytes": 22791
     },
     {
       "id": "calendar-mini-calendar",
@@ -3025,7 +3025,7 @@
       },
       "note": "Days with events carry a short accent underline; the visible week reads as the selected pill run.",
       "capture": "viewport",
-      "bytes": 23723
+      "bytes": 23719
     },
     {
       "id": "calendar-month-view",
@@ -3079,7 +3079,7 @@
       },
       "note": "Multi-day all-day bars, timed events, an overflow week and one event carried across the week boundary.",
       "capture": "viewport",
-      "bytes": 46844
+      "bytes": 46602
     },
     {
       "id": "calendar-month-view",
@@ -3097,7 +3097,7 @@
       },
       "note": "Multi-day all-day bars, timed events, an overflow week and one event carried across the week boundary.",
       "capture": "viewport",
-      "bytes": 47309
+      "bytes": 47108
     },
     {
       "id": "calendar-toolbar-options",
@@ -3195,7 +3195,7 @@
       },
       "note": "Sticky day header and all-day strip over the 08–16 time grid; the current-time ruler sits on Wednesday at 13:45.",
       "capture": "viewport",
-      "bytes": 113210
+      "bytes": 114040
     },
     {
       "id": "calendar-week-time-grid",
@@ -3329,7 +3329,7 @@
       },
       "note": null,
       "capture": "viewport",
-      "bytes": 17389
+      "bytes": 17383
     },
     {
       "id": "list-mobile",
@@ -3349,7 +3349,7 @@
       },
       "note": "The list row the renderer builds: controls, a title line and a meta row of fixed-width fields. On desktop the fields sit on one line; on the phone (is-phone) the card fills the viewport and the fields wrap inside its border instead of escaping it.",
       "capture": "viewport",
-      "bytes": 236631
+      "bytes": 249276
     },
     {
       "id": "list-mobile",
@@ -3369,7 +3369,7 @@
       },
       "note": "The list row the renderer builds: controls, a title line and a meta row of fixed-width fields. On desktop the fields sit on one line; on the phone (is-phone) the card fills the viewport and the fields wrap inside its border instead of escaping it.",
       "capture": "viewport",
-      "bytes": 238119
+      "bytes": 250616
     },
     {
       "id": "list-mobile",
@@ -3409,7 +3409,7 @@
       },
       "note": "The list row the renderer builds: controls, a title line and a meta row of fixed-width fields. On desktop the fields sit on one line; on the phone (is-phone) the card fills the viewport and the fields wrap inside its border instead of escaping it.",
       "capture": "viewport",
-      "bytes": 81424
+      "bytes": 81521
     },
     {
       "id": "list-view",
@@ -3469,7 +3469,7 @@
       },
       "note": null,
       "capture": "viewport",
-      "bytes": 87237
+      "bytes": 87312
     },
     {
       "id": "list-view",
@@ -3693,7 +3693,7 @@
       },
       "note": null,
       "capture": "viewport",
-      "bytes": 151445
+      "bytes": 151344
     },
     {
       "id": "timeline-toolbar-options",
@@ -3791,7 +3791,7 @@
       },
       "note": "Two weeks at one column per day; the April band marks the month boundary and the today line sits at 25 March 13:45.",
       "capture": "viewport",
-      "bytes": 147239
+      "bytes": 146959
     },
     {
       "id": "timeline-view",
@@ -3809,7 +3809,7 @@
       },
       "note": "Two weeks at one column per day; the April band marks the month boundary and the today line sits at 25 March 13:45.",
       "capture": "viewport",
-      "bytes": 151947
+      "bytes": 152396
     },
     {
       "id": "timeline-view",

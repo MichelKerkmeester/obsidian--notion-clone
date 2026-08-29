@@ -19,7 +19,8 @@
     "story:coverage": "node tools/storybook/story-coverage.mjs",
     "story:new": "node tools/storybook/new-story.mjs",
     "storybook:coverage": "node tools/storybook/verify-coverage.mjs",
-    "storybook:placement": "node tools/storybook/verify-placement.mjs"
+    "storybook:placement": "node tools/storybook/verify-placement.mjs",
+    "guard:assertions": "node tools/live/guard-inverted-assertions.mjs"
   },
   "keywords": [
     "obsidian",
