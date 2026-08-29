@@ -1,0 +1,25 @@
+{
+  "level": "3",
+  "specFolder": "public/005-component-surface-system/006-record-open-target",
+  "description": "On desktop, clicking Open in the table shows a small card listing properties",
+  "keywords": [
+    "desktop",
+    "clicking",
+    "open",
+    "table",
+    "shows",
+    "small",
+    "card",
+    "listing",
+    "properties"
+  ],
+  "lastUpdated": "2026-08-29T12:57:16.908Z",
+  "specId": "006",
+  "folderSlug": "record-open-target",
+  "parentChain": [
+    "public",
+    "005-component-surface-system"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": []
+}

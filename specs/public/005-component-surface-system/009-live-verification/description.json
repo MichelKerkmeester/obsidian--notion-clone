@@ -1,0 +1,26 @@
+{
+  "specFolder": "public/005-component-surface-system/009-live-verification",
+  "description": "The program's founding fact is that a release passed every gate and changed nothing on device",
+  "keywords": [
+    "program",
+    "founding",
+    "fact",
+    "release",
+    "passed",
+    "every",
+    "gate",
+    "changed",
+    "nothing",
+    "device"
+  ],
+  "lastUpdated": "2026-08-29T14:30:02.119Z",
+  "specId": "009",
+  "folderSlug": "live-verification",
+  "parentChain": [
+    "public",
+    "005-component-surface-system"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": [],
+  "level": "3"
+}

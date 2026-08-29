@@ -1,0 +1,213 @@
+{
+  "schema_version": 1,
+  "packet_id": "public/005-component-surface-system/003-mobile-sheet-presentation",
+  "spec_folder": "public/005-component-surface-system/003-mobile-sheet-presentation",
+  "parent_id": "public/005-component-surface-system",
+  "children_ids": [],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "mobile sheet presentation",
+      "sheet overlay navbar",
+      "sheet portal",
+      "phone predicate",
+      "anchor lifetime",
+      "003 mobile sheet",
+      "003 mobile sheet plan",
+      "003 mobile sheet tasks",
+      "003 mobile sheet checklist"
+    ],
+    "key_topics": [
+      "mobile",
+      "sheet",
+      "presentation",
+      "overlay",
+      "navbar",
+      "portal",
+      "phone",
+      "predicate",
+      "anchor",
+      "lifetime",
+      "plan",
+      "tasks"
+    ],
+    "importance_tier": "critical",
+    "status": "planned",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "checklist.md"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "checklist.md",
+        "kind": "doc",
+        "path": "checklist.md",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Mobile Sheet Presentation",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Key Decisions",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Critical Dependencies",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Spec Folder",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Parent Spec",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Plan",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Dependency Matrix",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Depends On",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Total Critical Path",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Parallel Opportunities",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Breakdown",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "evidence",
+        "kind": "key_phrase",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "a",
+        "kind": "key_phrase",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "one",
+        "kind": "key_phrase",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "the",
+        "kind": "key_phrase",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Verification Checklist",
+        "kind": "proper_noun",
+        "path": "checklist.md",
+        "source": "derived"
+      },
+      {
+        "name": "Criteria Each",
+        "kind": "proper_noun",
+        "path": "checklist.md",
+        "source": "derived"
+      },
+      {
+        "name": "Negative Controls",
+        "kind": "proper_noun",
+        "path": "checklist.md",
+        "source": "derived"
+      },
+      {
+        "name": "an",
+        "kind": "key_phrase",
+        "path": "checklist.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "The sheet starts above the Obsidian bottom navigation bar instead of covering it",
+    "created_at": "2026-08-29T12:41:53.187Z",
+    "last_save_at": "2026-08-29T12:57:22.505Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "checklist.md"
+    ],
+    "source_fingerprint": "sha256:40d3d6908a32ad6255442cb53ceb8f12a49d7f3e9b5daf23e978f192e5610fd2",
+    "source_doc_hashes": {
+      "spec.md": "8a6e852f9adedb42a406b464e5c374d437879362eb6269b2583c15119c79f703",
+      "plan.md": "0ef850a840ccabeab5fa2f1318ec826096a89f85123882e01a2ee03461e0b1f2",
+      "tasks.md": "cba391fa41445013c4db9856026b63561e2c04607c1732227e53070cd9eca38c",
+      "checklist.md": "5e864f32522fb1514d083ba7d21436cb74d0369a743e8de0965f6327826f726c"
+    },
+    "last_active_child_id": null,
+    "last_active_at": null
+  }
+}

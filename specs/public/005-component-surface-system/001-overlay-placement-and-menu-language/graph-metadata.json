@@ -1,0 +1,197 @@
+{
+  "schema_version": 1,
+  "packet_id": "public/005-component-surface-system/001-overlay-placement-and-menu-language",
+  "spec_folder": "public/005-component-surface-system/001-overlay-placement-and-menu-language",
+  "parent_id": "public/005-component-surface-system",
+  "children_ids": [],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "overlay placement contract",
+      "menu language",
+      "row grammar",
+      "positionToolbarPopover",
+      "panel parity",
+      "001 overlay placement",
+      "001 overlay placement plan",
+      "overlay placement approach",
+      "001 overlay placement tasks",
+      "001 overlay placement checklist",
+      "placement verification"
+    ],
+    "key_topics": [
+      "overlay",
+      "placement",
+      "contract",
+      "menu",
+      "language",
+      "row",
+      "grammar",
+      "positiontoolbarpopover",
+      "panel",
+      "parity",
+      "plan",
+      "approach"
+    ],
+    "importance_tier": "critical",
+    "status": "planned",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "checklist.md"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "checklist.md",
+        "kind": "doc",
+        "path": "checklist.md",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Overlay Placement",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Menu Language",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Key Decisions",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Critical Dependencies",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Spec Folder",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Plan",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Column Manager",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Checklist",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Execution Rules",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Breakdown",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Give Filter",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Resolve Sort",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Verification Checklist",
+        "kind": "proper_noun",
+        "path": "checklist.md",
+        "source": "derived"
+      },
+      {
+        "name": "Verification Protocol",
+        "kind": "proper_noun",
+        "path": "checklist.md",
+        "source": "derived"
+      },
+      {
+        "name": "Completion Impact",
+        "kind": "proper_noun",
+        "path": "checklist.md",
+        "source": "derived"
+      },
+      {
+        "name": "Acceptance Criteria Each",
+        "kind": "proper_noun",
+        "path": "checklist.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "Placement has no authority and menus have no shared grammar",
+    "created_at": "2026-08-29T12:35:11.814Z",
+    "last_save_at": "2026-08-29T12:35:11.814Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "checklist.md"
+    ],
+    "source_fingerprint": "sha256:a8a9dc9f61f5ce8c17b90b63fe2acbbd4df1f5b52939f3c9a0477c3a43598b55",
+    "source_doc_hashes": {
+      "spec.md": "2389a6ee99e49d450a001f89ccfc865074666a244e7f4431dfa8f3ea56a8f7cd",
+      "plan.md": "b98a78e625093aa2a211eddf0ead78cd9b04c902e8ddf6f5b19848c43269d6de",
+      "tasks.md": "0ce46b748f354659d4aac99863218e1cbf676698b749ff66533c8c670e029394",
+      "checklist.md": "eff684745b6d19989e55ccffd375487145d2d925ad1fac8781d957d4c5d33a0b"
+    },
+    "last_active_child_id": null,
+    "last_active_at": null
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "specFolder": "public/005-component-surface-system",
+  "description": "Phase parent for the program that gives floating surfaces, sheets, checkboxes and content rows one architecture, one placement authority, and",
+  "keywords": [
+    "phase",
+    "parent",
+    "program",
+    "gives",
+    "floating",
+    "surfaces",
+    "sheets",
+    "checkboxes",
+    "content",
+    "rows",
+    "one",
+    "architecture",
+    "placement",
+    "authority"
+  ],
+  "lastUpdated": "2026-08-29T12:53:43.259Z",
+  "specId": "005",
+  "folderSlug": "component-surface-system",
+  "parentChain": [
+    "public"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": [],
+  "level": "2"
+}

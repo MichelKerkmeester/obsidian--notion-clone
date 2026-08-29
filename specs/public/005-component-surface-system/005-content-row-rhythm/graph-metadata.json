@@ -1,0 +1,201 @@
+{
+  "schema_version": 1,
+  "packet_id": "public/005-component-surface-system/005-content-row-rhythm",
+  "spec_folder": "public/005-component-surface-system/005-content-row-rhythm",
+  "parent_id": "public/005-component-surface-system",
+  "children_ids": [],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "content row rhythm",
+      "ragged list rows",
+      "calendar filter bubbles overflow",
+      "intrinsic sizing contract",
+      "header rail scroller",
+      "005 row rhythm",
+      "005 row rhythm plan",
+      "005 row rhythm tasks",
+      "005 row rhythm checklist"
+    ],
+    "key_topics": [
+      "content",
+      "row",
+      "rhythm",
+      "ragged",
+      "list",
+      "rows",
+      "calendar",
+      "filter",
+      "bubbles",
+      "overflow",
+      "intrinsic",
+      "sizing"
+    ],
+    "importance_tier": "critical",
+    "status": "planned",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "checklist.md"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "checklist.md",
+        "kind": "doc",
+        "path": "checklist.md",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Content Row Rhythm",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Header Rail",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Key Decisions",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Critical Dependencies",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Spec Folder",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Plan",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Dependency Matrix",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Depends On",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Total Critical Path",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Breakdown",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "evidence",
+        "kind": "key_phrase",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "no",
+        "kind": "key_phrase",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "the",
+        "kind": "key_phrase",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Verification Checklist",
+        "kind": "proper_noun",
+        "path": "checklist.md",
+        "source": "derived"
+      },
+      {
+        "name": "Criteria Each",
+        "kind": "proper_noun",
+        "path": "checklist.md",
+        "source": "derived"
+      },
+      {
+        "name": "Negative Controls",
+        "kind": "proper_noun",
+        "path": "checklist.md",
+        "source": "derived"
+      },
+      {
+        "name": "The Stage",
+        "kind": "proper_noun",
+        "path": "checklist.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "Two operator defects, one question",
+    "created_at": "2026-08-29T12:48:53.568Z",
+    "last_save_at": "2026-08-29T12:57:24.486Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "checklist.md"
+    ],
+    "source_fingerprint": "sha256:6b25f25de878dd1f6a33f117275b8a63919f58fc9e209ff0f16a322d015bf77f",
+    "source_doc_hashes": {
+      "spec.md": "68fd4ec5034997bcb79367b7c1340103ff913bcd0f9c136589434d708329a986",
+      "plan.md": "beb128acf893029dc9b273ad85092a97ec424b2a64240f7f124d0a326a0bac6e",
+      "tasks.md": "ed6f83db9d8d29121c5eee74c00f45ff6f13321deaea555346e91e1599fe6665",
+      "checklist.md": "bdaa450722cf3e083ce68b1e5643dcea5b605ca42403b9e7e8c305e632cb2cbd"
+    },
+    "last_active_child_id": null,
+    "last_active_at": null
+  }
+}

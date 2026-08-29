@@ -1,0 +1,331 @@
+---
+title: "Acceptance Criteria: Mobile Sheet Presentation"
+description: "The criteria this packet must satisfy before it may be closed, each carrying its exact measurement, its threshold, the failing value measured on the current tree, and the negative control that proves the check can fail."
+trigger_phrases:
+  - "acceptance criteria"
+  - "closure gate"
+  - "ac traceability"
+  - "003 mobile sheet criteria"
+  - "anchor lease"
+  - "proof tuple"
+importance_tier: "critical"
+contextType: "implementation"
+_memory:
+  continuity:
+    packet_pointer: "public/005-component-surface-system/003-mobile-sheet-presentation"
+    last_updated_at: "2026-08-29T18:00:00Z"
+    last_updated_by: "phase-architect"
+    recent_action: "Applied review findings F3, F8, F11 and F16"
+    next_safe_action: "Land Stage 1 so the harness can distinguish a navbar from no navbar"
+    blockers:
+      - "000-surface-contract-and-truthful-harness must land first"
+    key_files:
+      - "acceptance-criteria.md"
+    session_dedup:
+      fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+      session_id: "surface-system-003"
+      parent_session_id: null
+    completion_pct: 0
+    open_questions: []
+    answered_questions: []
+---
+# Acceptance Criteria: Mobile Sheet Presentation
+
+<!-- SPECKIT_TEMPLATE_SOURCE: acceptance-criteria | v2.2 -->
+
+> This document decides whether the packet may close. A packet is closeable when
+> every row below is `Met`, `Waived` or `Superseded`. A `Waived` or `Superseded`
+> row MUST name an ADR that exists in `decision-record.md`.
+>
+> Each is measured on the real renderer at the production mount point on a phone profile, with a
+> navbar present, and each currently fails. **A criterion is not accepted until its failing number
+> has been recorded here from the current tree.** Class names and call counts are not criteria.
+
+---
+
+<!-- ANCHOR:metadata -->
+## 1. METADATA
+
+**Packet:** 003-mobile-sheet-presentation
+**Level:** 3
+**Status:** Draft
+**Date:** 2026-08-29
+<!-- /ANCHOR:metadata -->
+
+---
+
+<!-- ANCHOR:criteria -->
+## 2. CRITERIA
+
+One row per criterion. `AC-ID` is stable once written: supersede a criterion, never renumber it.
+
+### The nine dimensions
+
+This packet is where the temporally stale surface is not a hypothetical: it is the reported glitch.
+The sheet's node survives a field commit, its geometry still measures, its rectangle still looks
+right — and from the first commit onward it is anchored to a node that no longer exists, so
+`place()` (`popover-position.ts:100`) no-ops permanently. A harness that measured the sheet once,
+found the number correct, and stopped would have reported the defect fixed.
+
+The four original conditions cannot see that. Five dimensions can:
+
+| Dimension | What this packet must pin down |
+|---|---|
+| Semantic identity | The sheet is anchored to a **logical** `AnchorRef` — scope plus row path / cell key / event key plus stable record identity — and the DOM node is only a render-epoch cache |
+| Transition trace | `open → anchored(A) → anchor-missing(pending) → anchored(B) → close`, driven by renderer commit, not by a MutationObserver |
+| Action outcome | The tap that lands on the sheet edits the field it claims to edit, and the tap that lands on the navbar band lands on the sheet |
+| Resource ownership | One scoped lease owns scrim, drag handle, scroll and keyboard suppression, Escape/back dismissal and restoration — and the host's own variables and class list are unchanged |
+| Negative-control mutation | Removing the navbar, restoring the `is-phone` branch, skipping the commit transition or aliasing the anchor each fail a value assertion |
+
+The proof tuple is `producer x runtime branch x mount/host x environment x transition x semantic
+outcome x negative control`.
+
+### Criteria table
+
+| AC-ID | REQ | Measurement — producer → mount → transition → observation | Threshold | Measured today | NC | Status | Waiver |
+|---|---|---|---|---|---|---|---|
+| AC-001 (C1) | REQ-001 | Open a sheet through its production producer on a phone profile with a real `.mobile-navbar`; call `document.elementFromPoint(centreX, navbarCentreY)` | the returned node is the sheet or a descendant of it, across the navbar's full band | returns `.mobile-navbar` — **even at `z-index: 9999`** | N1 | Unmet | - |
+| AC-002 (C2) | REQ-004 | Measure `sheet.getBoundingClientRect().bottom` against the visual viewport bottom, for a positioner sheet **and** a `DbModal` sheet, in one check | bottom edge equals viewport bottom, offset `0px`, for **both** mechanisms | **49px** anchored, **0px** modal — they disagree | N2 | Unmet | - |
+| AC-003 (C3) | REQ-005 | Open a sheet, commit a field, commit a second field, then resize; compare node identity, top edge, and whether the resize repositioned it | node identity unchanged, top edge moved `0px`, and a subsequent viewport resize still repositions it | node survives; repositioning is **dead from the first commit** because `anchorEl.isConnected` is false | N4 | Unmet | - |
+| AC-004 (C4) | REQ-004 | Reduce `visualViewport` to simulate the keyboard; read the focused field's rect against the visible rect | the focused field's rect is fully inside the reduced visible rect | not asserted anywhere; the phone checks never call the positioner | N7 | Unmet | - |
+| AC-005 (C5) | REQ-006 | Open a sheet; measure the scrim's `getBoundingClientRect()` against the full viewport including the navbar band | scrim covers the full viewport including the navbar band | **no sheet scrim exists** | N8 | Unmet | - |
+| AC-006 (C6) | REQ-008 | Remove `.mobile-navbar` from the harness DOM; rerun every phone assertion and diff | at least one asserted number moves by `> 1.35px`; C1's hit result changes as well as C6's number | moves **1.35px** — the `50` fallback at `popover-position.ts:291`, i.e. nothing | N5 | Unmet | - |
+| AC-007 | REQ-002 | **Rewritten under review finding F8 — it closed on two code fragments being gone, not on an outcome.** For every anchored popover the phone census reaches — sheets and non-sheets alike — open it on a phone profile with a real `.mobile-navbar` and read `getBoundingClientRect()` against the visual viewport, before and after the branch is deleted | after the deletion: **0 popovers have any edge outside the visual viewport**, and **0 non-sheet popovers are wholly or partly obscured by the navbar band** (`elementFromPoint` at each one's centre returns that popover). The per-popover bottom-bound delta across the deletion is recorded for every popover, and any delta that pushes a non-sheet popover under the navbar rejects the deletion for that popover and forces a per-role bound instead | *blank — see the F16 provenance table below.* No single runtime number covers "every anchored popover on a phone", and the census has not run. `getVisiblePopoverBounds` is shared by every anchored popover, not only sheets, so the blast radius must be measured before the deletion rather than discovered after it | N2 | Unmet | - |
+| AC-008 | REQ-003 | **Rewritten under review finding F8 — "both old symbols reach zero callers" is a call count, which the doctrine bans.** Sweep the disagreement band at 600, 620, 660, 700, 720 and 760 CSS px. At each width open one `DbModal`-presented surface and one positioner-presented surface and measure both: computed bottom offset, width as a fraction of the viewport, and whether `elementFromPoint` over the navbar band returns the surface | at every one of the six widths the two mechanisms return the **same** presentation — identical bottom offset, identical width fraction, identical hit result. **0 widths where the modal path and the anchored path disagree**, against a band that is 160px wide today | *blank — see the F16 provenance table below.* Two predicates disagree in the 601-760px band today (`isTouchDevice()` at 760px container width, `isMobileBottomSheet()` at 600px window width, the latter module-private so no caller can ask); `Platform.isPhone` is used **zero times** in the repository. No width in the band has ever been measured | N3 | Unmet | - |
+| AC-009 | REQ-007 | **Rewritten under review finding F8 — an inventory is a classification, not an outcome.** Open every sheet-capable surface the runtime census reaches on a phone profile with a navbar — every positioner sheet, all 20 `DbModal` subclasses — the **2** that inherit `"sheet"` from the constructor default named explicitly alongside the **18** that pass one — and all 3 `FuzzySuggestModal` subclasses — and for each measure its computed bottom offset, its portal parent, and whether `elementFromPoint` over the navbar band returns it | **0 surfaces whose measured presentation differs from the presentation its role declares**, and for every surface that declares `sheet`: bottom offset `0px` and the navbar-band hit returning that surface. The inventory is the *input* that makes this exhaustive; the closing evidence is the measured presentation of each row | *blank — see the F16 provenance table below.* The 3 `FuzzySuggestModal` subclasses (`src/main.ts:2947`, `src/views/image-file-suggest-modal.ts:22`, `src/views/markdown-file-suggest-modal.ts:16`) bypass `DbModal`'s presentation entirely and are invisible to static analysis, so no measured presentation exists for them at all | N9 | Unmet | - |
+| AC-010 | REQ-005 | **Semantic identity — the anchor lease.** With a sheet open, assert the handle holds a logical `AnchorRef` (scope + row path / cell key / event key + stable record identity) and that its DOM node reference is re-resolved at every renderer commit, never retained across one | the handle's `AnchorRef` is unchanged across a wholesale `refresh()`; the resolved node after the refresh is a different object; the sheet's declared state is `anchored(B)`, not `anchored(A)` | *census* — no logical anchor exists on the current tree. The handle holds a raw `HTMLElement`, which is why `anchorEl.isConnected` goes false and `place()` (`popover-position.ts:100`) no-ops. The lease design is the Stage-2 deliverable | N10 | Unmet | - |
+| AC-011 | REQ-005 | **Transition trace.** Drive the full lifecycle: `open → anchored(A) → force renderer commit → anchor-missing(pending) → anchored(B) → close`. Assert each state is entered, and that the pending window is bounded rather than indefinite | every state observed in order; the pending window expires into an explicit close or fallback rather than retaining the last rectangle; after `anchored(B)` a viewport resize still repositions | *trace* — the surgical cases in `updateCellDOM` (`src/views/database-view.ts:8597-8619`) cover table, board, gallery and list only. Calendar and timeline — the only two views that can have the record-detail sheet open — fall through to `default: this.refresh()` (`:8615-8616`) | N11 | Unmet | - |
+| AC-012 | REQ-001, REQ-004 | **Action outcome.** Tap at the navbar band and assert the sheet's own handler ran and the field it claims to edit changed; tap the scrim and assert the sheet closed and the model did not change | the navbar-band tap produces the sheet's model delta; the scrim tap produces a close with a zero model delta; 0 outcomes asserted by node presence alone | *trace* — recorded in `../architecture-findings.md` §3: **nothing drives a click, drag or commit** in any current harness, and the phone checks call only `applySheetChrome`, never the positioner | N12 | Unmet | - |
+| AC-013 | REQ-004, REQ-006 | **Resource ownership and host isolation.** While a sheet is open, count owners of scrim, drag handle, scroll suppression, keyboard suppression, Escape/back dismissal; read the host's computed custom properties and `documentElement`/`body` class lists before open and while open; after close, re-read them and re-count listeners and nodes | exactly 1 owner of each kind; host computed custom properties and class lists **byte-identical** before and during open; after close, listener count, node count, scroll position and focus all return to the pre-open baseline, **and a tap at the coordinates the sheet occupied reaches the element underneath while the page scrolls again — 0 sheets leave an inert or scroll-locked region behind** | *census* — `applySheetChrome` (`src/views/mobile-bottom-sheet.ts`) handles only the sheet class and the grab handle; the plugin's sole backdrop anywhere is `db-mobile-column-width-backdrop` (`src/views/database-view.ts:10983`), for the column-width drag. No lease, no restoration and no host-isolation assertion exist | N13 | Unmet | - |
+| AC-014 | REQ-008 | **Negative-control mutation.** Substitute exactly one tuple coordinate — remove the navbar, restore the `is-phone` branch, run the modal branch instead of the anchored branch, skip the commit transition, alias the anchor to a stale node, or pin `--db-mobile-sheet-bottom` again — and rerun | each single substitution fails at least one **value** assertion; a failure caused only by a missing node does not count | no such control exists. The existing suite already demonstrates the gap: with a navbar the sheet bottom offset is 49px, without it 50.35px, so **harness and device agree and both are wrong** | N14 | Unmet | - |
+
+**C1 and C2 are the operator's defect.** C3 is the glitch. C6 is the check that the other five are
+not theatre. **AC-010 and AC-011 are the ones C3 cannot replace**: C3 proves the sheet stops
+repositioning, and only the anchor lease proves the fix survives the *next* view that falls through
+to `default`.
+
+### Proof-tuple coverage
+
+A blank cell is a coverage gap and blocks closure, even when the criterion's number is valid.
+
+| AC-ID | Producer | Runtime branch | Mount / host | Environment | Transition | Semantic outcome | Negative control |
+|---|---|---|---|---|---|---|---|
+| AC-001 | production | anchored sheet | body portal, navbar present | phone, safe area | open | sheet wins the hit test | N1 |
+| AC-002 | production | anchored **and** modal | body portal | phone, safe area | open | one offset, both mechanisms | N2 |
+| AC-003 | production | anchored sheet | body portal | phone | commit, commit, resize | still repositions | N4 |
+| AC-004 | production | anchored sheet | body portal | phone, keyboard | visual viewport reduced | field stays visible | N7 |
+| AC-005 | production | both | body portal | phone, safe area | open | scrim covers navbar band | N8 |
+| AC-006 | harness | anchored sheet | body portal | phone | navbar removed | C1 and C6 both move | N5 |
+| AC-007 | production | every anchored popover | declared mount | phone | open | blast radius recorded | N2 |
+| AC-008 | production | modal + anchored | declared mount | 601-760px band | open | one predicate | N3 |
+| AC-009 | production | positioner, `DbModal`, `FuzzySuggestModal` | declared mount | phone | open | every surface routed | N9 |
+| AC-010 | production | calendar + timeline | body portal | phone | wholesale refresh | logical anchor survives | N10 |
+| AC-011 | production | calendar + timeline | body portal | phone | full state sequence | bounded pending window | N11 |
+| AC-012 | production | anchored sheet | body portal, navbar present | phone | open → tap → close | model delta / clean close | N12 |
+| AC-013 | production | both | body portal | phone, both themes | open → close → teardown | one lease, host untouched | N13 |
+| AC-014 | substituted | substituted | substituted | substituted | substituted | assertion fails | N14 |
+
+### Negative controls
+
+`N1`-`N6` are the controls already registered in `checklist.md`. `N7`-`N14` are added by this
+hardening; register them in `checklist.md` when its verification protocol is next revised.
+
+| # | Control | What it proves |
+|---|---|---|
+| N1 | Reverting the portal reproduces `DIV.mobile-navbar` as the C1 hit result | AC-001 measures the portal, not the z-index |
+| N2 | Restoring the `is-phone` bounds branch reproduces the 49px anchored offset | AC-002 and AC-007 measure the branch |
+| N3 | Restoring the second phone predicate reproduces a disagreement in the 601-760px band | AC-008 measures the predicate |
+| N4 | Reverting the anchor-lifetime fix reproduces a dead `place()` after the first field commit | AC-003 measures repositioning |
+| N5 | Deleting the navbar from the harness moves C1 and C6, not merely C6 | AC-006 is connected to the navbar |
+| N6 | Re-pinning `--db-mobile-sheet-bottom` in `runtime-vars.css` changes a capture | Captures read the computed value |
+| N7 | Restoring the layout-viewport read in place of `visualViewport` reproduces a field under the keyboard | AC-004 reads the right viewport |
+| N8 | Clamping the scrim to the container reproduces a navbar band the scrim does not cover | AC-005 measures the scrim, not its class |
+| N9 | Adding a `FuzzySuggestModal` subclass without routing it fails the inventory equality | AC-009 is an equality, not a count |
+| N10 | Replacing the logical `AnchorRef` with the raw node reproduces the dead `place()` after refresh | AC-010 measures the lease |
+| N11 | Removing the bounded pending window leaves an actionable sheet attached to a stale rectangle | AC-011 measures the state machine |
+| N12 | Stubbing the field write makes the navbar-band tap's assertion fail | AC-012 asserts an outcome |
+| N13 | Writing one plugin variable to `documentElement` fails the host-isolation read | AC-013 asserts isolation |
+| N14 | Each single-coordinate substitution fails a value assertion | The suite is connected to every coordinate |
+
+### F8 audit — every criterion re-tested for the "passes on today's broken tree" shape
+
+Review finding F8 named `001/AC-008` and `005/AC-006`; the audit below re-reads every row here for
+the same four shapes — closing on a **thing existing**, on a **deletion**, on a **classification**,
+or on a **count**. Three rows here were of that shape and all three are rewritten.
+
+| AC-ID | Shape found | Disposition |
+|---|---|---|
+| AC-001 | Outcome. A hit test with a declared pass condition | Kept unchanged |
+| AC-002 | Outcome. A measured offset against the viewport, for both mechanisms | Kept unchanged |
+| AC-003 | Outcome. Node identity, a measured edge and whether repositioning still happens | Kept unchanged |
+| AC-004 | Outcome. A rect inside the reduced visible rect | Kept unchanged |
+| AC-005 | Outcome. A measured scrim rect against the full viewport | Kept unchanged |
+| AC-006 | Outcome. A deletion test whose pass condition is that a number **moves by more than 1.35px** | Kept unchanged |
+| AC-007 | **Deletion.** Closed on a branch and a fallback being gone, with the blast radius merely "known" | **Rewritten.** Now closes on every anchored popover measured against the visual viewport before and after the deletion: 0 edges outside it, 0 non-sheet popovers obscured by the navbar, per-popover deltas recorded |
+| AC-008 | **Count.** "Both old symbols reach zero callers" is a call count, banned outright by `../architecture-findings.md` §9 | **Rewritten.** Now closes on a six-width sweep of the 601-760px band: the modal path and the anchored path must return an identical presentation at every width, 0 disagreements |
+| AC-009 | **Classification.** An inventory in which every surface "carries a row" | **Rewritten.** Now closes on the measured presentation of every row: 0 surfaces whose measured presentation differs from its declared role. The inventory makes the sweep exhaustive; it does not close the criterion |
+| AC-010 | Outcome. A logical anchor surviving a wholesale refresh, with a different resolved node afterwards | Kept unchanged |
+| AC-011 | Outcome. Observed states in order, and a bounded pending window that expires into a close | Kept unchanged |
+| AC-012 | Outcome. A model delta from a navbar-band tap, and a clean close from a scrim tap | Kept unchanged |
+| AC-013 | **Count**, in part — owner counts are countable mechanism, though the host-isolation half is a byte comparison | **Threshold extended.** Adds the user-visible consequence: the vacated region is tappable and the page scrolls again after close |
+| AC-014 | Substitution control. Outcome-shaped by construction — each substitution must fail a **value** assertion | Kept unchanged |
+
+**Rule going forward.** No row here may be marked `Met` because a branch was deleted, a symbol
+reached zero callers, or a surface was added to an inventory. Those are inputs. The closing evidence
+is a measured presentation, a hit test that returned the right node, or a driven action that landed.
+
+### Failing-number provenance — the blank cells (review finding F16)
+
+`../architecture-findings.md` §9 condition 3 makes a criterion invalid until it has been
+**demonstrated to fail on the current tree, with the failing number recorded**. The rows below hold
+a source fact rather than a number. Until the number is there they are unenforceable prose: a
+passing measurement would prove only that a value sits inside a threshold, never that it moved.
+
+**No number below may be invented, estimated, or carried across from another packet.** The cell is
+filled by running the named producer and pasting what it printed.
+
+| AC-ID | What produces the failing number | Stage of this phase that produces it | State until the cell is filled |
+|---|---|---|---|
+| AC-007 | The phone census opening **every** anchored popover, sheet and non-sheet, and recording each one's rect against the visual viewport and its navbar-band hit result — the *before* half of the deletion diff | Phase 2 (runtime census), recorded per surface by T9 | **Blocked.** Phase 4 may not delete the `is-phone` bounds branch until every affected popover has a recorded *before* bound. `getVisiblePopoverBounds` is shared, so an unmeasured deletion moves non-sheet popovers on a phone too |
+| AC-008 | The six-width band sweep at 600, 620, 660, 700, 720 and 760 CSS px, measuring the modal path and the anchored path side by side at each | Phase 3 (collapse the two predicates), *before* the collapse | **Blocked.** Phase 3 may not collapse the predicates before the disagreement it is collapsing has been measured — otherwise the fix is unfalsifiable |
+| AC-009 | The runtime census opening every sheet-capable surface on a phone profile with a navbar and recording portal parent, computed bottom, rect and navbar-band hit result | Phase 2, driven at runtime because static grep provably misses the 3 `FuzzySuggestModal` subclasses | **Blocked.** A surface with no measured presentation cannot be shown to have been routed |
+| AC-010 | Holding a sheet open across a wholesale `refresh()` and recording whether the handle's anchor survives, what the resolved node is afterwards, and the declared state | Phase 5 (anchor lifetime), on the harness Phase 1 gave a navbar | **Blocked.** No logical anchor exists today; the handle holds a raw `HTMLElement`, which is the defect |
+| AC-011 | Driving the full lifecycle and recording which states were entered, in what order, and what the pending window did when it expired | Phase 5 | **Blocked.** No harness drives a renderer commit while a sheet is open |
+| AC-012 | Driving a navbar-band tap and a scrim tap and recording the model delta each produced | Phase 6 | **Blocked.** Nothing drives a click, drag or commit in any current harness, and the phone checks call only `applySheetChrome`, never the positioner (`../architecture-findings.md` §3) |
+| AC-013 | Counting owners while a sheet is open; reading the host's computed custom properties and class lists before, during and after; re-counting listeners, nodes, scroll position and focus after close | Phase 4 for the owner counts, Phase 6 for the post-close baseline | **Blocked.** No lease, no restoration and no host-isolation assertion exists to count |
+| AC-014 | Running each single-coordinate substitution against the finished suite and recording which value assertion each one broke | Phase 6, after AC-001 to AC-013 have their numbers | **Blocked.** A substitution control has nothing to break until the assertions it substitutes into exist |
+
+**Enforcement.** A blank cell is not a `Waived` row and not a soft warning. This phase may not move
+`Planned → In Progress` while a cell above is blank for a stage that has already run — that gate is
+`000`'s blank-cell checker, and this table is what it reads. A row whose cell is still blank at
+closure blocks closure exactly as an `Unmet` row does.
+
+### Citations are selectors, not line numbers (review finding F11)
+
+`styles.css` is 19,261 lines and three phases edit it before this one starts. **Every
+`styles.css:NNNN` and every `src/**/*.ts:NNNN` here is a hint with a date on it, not an address.**
+All were confirmed correct on 2026-08-29 and are kept because a number that was true on a known date
+is evidence about the tree on that date. The durable anchor is the selector or the symbol.
+
+**Resolve, never trust.** If the command and the line number disagree, the command is right.
+
+| Cited as | Durable anchor | Command that finds it |
+|---|---|---|
+| `styles.css:159` | `bottom: var(--db-mobile-sheet-bottom, 0px) !important` inside `.db-mobile-bottom-sheet` — the only reader of the variable | `rg -n 'db-mobile-sheet-bottom' styles.css` |
+| `runtime-vars.css:43` | the capture harness pinning `--db-mobile-sheet-bottom: 0px` — the exact value the defect lives in | `rg -n 'db-mobile-sheet-bottom' tools/screenshots/runtime-vars.css` |
+| `popover-position.ts:289-294`, `:291` | the `is-phone` bounds branch and its hardcoded `50` navbar fallback | `rg -n 'mobile-navbar' src/views/popover-position.ts` |
+| `popover-position.ts:299-305` | `isMobileBottomSheet()` — module-private, 600px window threshold | `rg -n 'isMobileBottomSheet' src/` |
+| `popover-position.ts:115` | the sole writer of `--db-mobile-sheet-bottom`, inside the `mobileSheet` branch | `rg -n 'db-mobile-sheet-bottom' src/` |
+| `popover-position.ts:100`, `:68` | `place()`'s early return on a disconnected anchor | `rg -n 'isConnected' src/views/popover-position.ts` |
+| `touch-environment.ts:46-55`, `:22` | `isTouchDevice()` and `TOUCH_LAYOUT_MAX_WIDTH = 760` | `rg -n -e TOUCH_LAYOUT_MAX_WIDTH -e isTouchDevice src/data/touch-environment.ts` |
+| `database-view.ts:8597-8619`, `:8615-8616` | `updateCellDOM`'s switch and its `default: this.refresh()` fall-through | `rg -n 'updateCellDOM' src/views/database-view.ts` then read to the switch default |
+| `database-view.ts:10983` | `db-mobile-column-width-backdrop`, the plugin's only backdrop anywhere | `rg -n 'db-mobile-column-width-backdrop' src/ styles.css` |
+| `mobile-bottom-sheet.ts:31` | `applySheetChrome` — sheet class and grab handle only, no scrim | `rg -n 'applySheetChrome' src/` |
+| `main.ts:2947`, `image-file-suggest-modal.ts:22`, `markdown-file-suggest-modal.ts:16` | the 3 `FuzzySuggestModal` subclasses that bypass `DbModal` presentation | `rg -n 'FuzzySuggestModal' src/` |
+| `obsidian-stub.mjs:52-57`, `:80`, `:90` | the stub hardcoding `Platform` to desktop and throwing on `Modal` / `FuzzySuggestModal` | `rg -n -e Platform -e Modal tools/storybook/obsidian-stub.mjs` |
+
+**When a number moves, do not silently correct it.** Record the old number, the new number and the
+edit that moved it.
+
+### No criterion rests on a pre-repair harness measurement (review finding F3)
+
+`tools/storybook/verify-placement.mjs:220` is the only `addStyleTag` call for `styles.css` and it
+targets the **phone** page. That is the half this packet needs, so the desktop blindness bites less
+here than elsewhere — but two consequences still apply.
+
+**First, the desktop half of AC-007 and AC-008.** Both sweep behaviour across a width band, and the
+upper end of the 601-760px band and the non-sheet popover census reach desktop-shaped layouts. Any
+number this packet records from the **desktop** harness page before `000` repairs its stylesheet
+load is discarded rather than re-used.
+
+**Second, the phone page is loaded but not driven.** The phone checks call only `applySheetChrome`
+and never the positioner, so the offset math the whole packet is about has never been exercised even
+on the page that does have the cascade. Phase 1 fixing this is a gate, not a task: if the harness
+cannot distinguish a navbar from no navbar, work stops there.
+
+`009`'s live probe is the only instrument outside this program's own reach. A harness number and a
+`009` number that disagree is a blocking failure for this packet, not a curiosity — and this packet
+is the one where that matters most, because a phone harness and a real phone differ by exactly the
+`.mobile-navbar` the defect is about.
+
+### The `styles.css` lane — when this packet takes it and what it must run to release it
+
+`styles.css` is a single serialized lane (parent `spec.md` §4). This packet is sixth in the
+execution order, after `000`, `004`, `005`, `001` and `002`, and it is the riskiest change in the
+program: it moves surfaces to a different place in the document.
+
+**Takes the lane** at the start of Phase 4 (*Presentation contract, then the portal*), which builds
+the scrim and the sheet's own rules. Not earlier: Phases 1 to 3 are harness, census and predicate
+work and must run against an unedited stylesheet.
+
+**Holds it** through Phases 4 and 5. No other phase may edit `styles.css` in that window.
+
+**Releases the lane** only when all four of these have happened, in order:
+
+1. **Full recapture, with a navbar present** — a condition no capture has ever had — then
+   `npm run screenshots:verify` exit 0.
+2. **Human capture review, signed off by name in `checklist.md`.** `screenshots:verify` proves a
+   capture was regenerated after its hand-maintained source list changed and **never opens an
+   image**, so it cannot be this step. It matters more here: `runtime-vars.css:43` pinned
+   `--db-mobile-sheet-bottom` to `0px` for every capture ever taken, so the captures could never
+   have shown this defect and a reviewer has no prior mental image to compare against.
+3. **`008`'s early replay re-asserts every previously-closed phase** — `000`, `004`, `005`, `001`
+   and `002` — against the released tree. They closed against a snapshot this packet has just
+   edited, and a portal changes stacking and containment for everything mounted near it.
+4. **Cascade re-confirmation** — every duplicated selector this packet touched has its computed
+   winner recorded; a changed winner carries a written disposition.
+
+### Status values
+
+| Value | Meaning |
+|---|---|
+| `Met` | Verified. The evidence named was actually observed. |
+| `Unmet` | Not yet satisfied. Blocks closure. |
+| `Waived` | Deliberately not pursued. Requires an ADR in the Waiver cell. |
+| `Superseded` | Replaced by a different criterion or decision. Requires an ADR in the Waiver cell. |
+
+### Waiver cell
+
+Write `-` when the row is `Met` or `Unmet`. Write `ADR-NNN` when the row is `Waived` or
+`Superseded`, naming a decision record that exists in `decision-record.md`. A waiver naming an ADR
+that is not there fails validation.
+
+<!-- /ANCHOR:criteria -->
+
+---
+
+<!-- ANCHOR:closure -->
+## 3. CLOSURE STATEMENT
+
+**Closeable:** No
+
+Work has not started. Every row is `Unmet`. AC-001 to AC-006 carry the failing number measured on
+the current tree.
+
+**AC-007, AC-008 and AC-009 were rewritten under review finding F8.** They closed on a branch being
+deleted, on two symbols reaching zero callers, and on an inventory being complete — a deletion, a
+call count and a classification, none of which is an outcome and the second of which
+`../architecture-findings.md` §9 bans outright. They now close on measurements: every anchored
+popover inside the visual viewport and clear of the navbar across the deletion; the modal and
+anchored paths returning an identical presentation at all six widths of the disagreement band; and
+0 surfaces whose measured presentation differs from its declared role.
+
+**AC-007 through AC-014 have no recorded failing number and are `Blocked`, not merely `Unmet`**
+(review finding F16). Each is listed in the provenance table above with the artefact that produces
+its number and the stage that produces it. A criterion with a blank cell can be satisfied without
+proving anything moved, so it blocks closure the same way an unmet one does. Two of them gate
+irreversible work: Phase 4 may not delete the shared `is-phone` bounds branch until every affected
+popover has a recorded *before* bound, and Phase 3 may not collapse the two predicates until the
+disagreement it is collapsing has been measured across the band.
+
+Every line number here is a dated hint; the selector or symbol plus the command in the citation table
+is the address (review finding F11). The phone harness page loads `styles.css` but has never driven
+the positioner, and no desktop number recorded before `000`'s repair is admissible (review finding
+F3).
+
+This spec does not close on gate passage alone — that is precisely what 1.3.1 did. It closes when
+the measurements above have moved from their recorded failing values, every proof-tuple cell is
+filled, negative controls N1-N14 hold, the anchor lease in REQ-005 has landed with its bounded
+pending window, and **the operator has confirmed on a phone that the sheet covers the bottom
+navigation bar.**
+<!-- /ANCHOR:closure -->

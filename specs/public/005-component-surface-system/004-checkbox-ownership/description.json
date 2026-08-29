@@ -1,0 +1,23 @@
+{
+  "level": "2",
+  "specFolder": "public/005-component-surface-system/004-checkbox-ownership",
+  "description": "The operator sees round checkboxes everywhere, and the previous fix was real",
+  "keywords": [
+    "operator",
+    "sees",
+    "round",
+    "checkboxes",
+    "everywhere",
+    "previous",
+    "real"
+  ],
+  "lastUpdated": "2026-08-29T12:57:16.875Z",
+  "specId": "004",
+  "folderSlug": "checkbox-ownership",
+  "parentChain": [
+    "public",
+    "005-component-surface-system"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": []
+}

@@ -1,0 +1,204 @@
+{
+  "schema_version": 1,
+  "packet_id": "public/005-component-surface-system/008-integration-and-release-observability",
+  "spec_folder": "public/005-component-surface-system/008-integration-and-release-observability",
+  "parent_id": "public/005-component-surface-system",
+  "children_ids": [],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "integration and release observability",
+      "cross-phase replay",
+      "handoff replay",
+      "css lane ownership",
+      "capture review sign-off",
+      "release decision matrix",
+      "compatibility retirement",
+      "008 integration",
+      "008 integration plan",
+      "replay matrix",
+      "css lane ledger",
+      "retirement order"
+    ],
+    "key_topics": [
+      "integration",
+      "release",
+      "observability",
+      "handoff",
+      "replay",
+      "lane",
+      "ownership",
+      "capture",
+      "review",
+      "sign-off",
+      "cascade",
+      "retirement"
+    ],
+    "importance_tier": "critical",
+    "status": "planned",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "checklist.md"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "checklist.md",
+        "kind": "doc",
+        "path": "checklist.md",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Production Surface Integration",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Release Observability",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Key Decisions",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Critical Dependencies",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Spec Folder",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Plan",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Dependency Matrix",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Depends On",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Total Critical Path",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Breakdown",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "evidence",
+        "kind": "key_phrase",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "the",
+        "kind": "key_phrase",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "a",
+        "kind": "key_phrase",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Verification Checklist",
+        "kind": "proper_noun",
+        "path": "checklist.md",
+        "source": "derived"
+      },
+      {
+        "name": "Negative Controls",
+        "kind": "proper_noun",
+        "path": "checklist.md",
+        "source": "derived"
+      },
+      {
+        "name": "an",
+        "kind": "key_phrase",
+        "path": "checklist.md",
+        "source": "derived"
+      },
+      {
+        "name": "named",
+        "kind": "key_phrase",
+        "path": "checklist.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "Release 1.3.1 passed every gate and changed nothing",
+    "created_at": "2026-08-29T14:23:23.345Z",
+    "last_save_at": "2026-08-29T16:11:37.514Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "checklist.md"
+    ],
+    "source_fingerprint": "sha256:03cbdcc0f9aebc9cc458a5e166357409a2a5c360f7a7005842549dde35394b78",
+    "source_doc_hashes": {
+      "spec.md": "80a69e4939cc8ccc96ae4f7b986447385181c8fbe9e720a0bb84bebe81f42c7d",
+      "plan.md": "fb4021ce452cd5ecf6c04d2145a0647fd3ad6f21b1bf7b1d098184e021f60383",
+      "tasks.md": "e13bc750959333a5ab81a822aac3965fb7c63c1e1c63be47c06556ff83c200ff",
+      "checklist.md": "9ef52b07faadfd2bf7349082e39431bdef177a737ad558f36ccb1aefa5ddad57"
+    },
+    "last_active_child_id": null,
+    "last_active_at": null
+  }
+}

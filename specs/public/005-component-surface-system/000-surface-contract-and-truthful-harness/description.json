@@ -1,0 +1,26 @@
+{
+  "level": "3",
+  "specFolder": "public/005-component-surface-system/000-surface-contract-and-truthful-harness",
+  "description": "Four of the program's defects are one bug wearing different clothes: a surface's appearance is",
+  "keywords": [
+    "four",
+    "program",
+    "defects",
+    "one",
+    "bug",
+    "wearing",
+    "different",
+    "clothes",
+    "surface",
+    "appearance"
+  ],
+  "lastUpdated": "2026-08-29T13:00:43.878Z",
+  "specId": "000",
+  "folderSlug": "surface-contract-and-truthful-harness",
+  "parentChain": [
+    "public",
+    "005-component-surface-system"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": []
+}

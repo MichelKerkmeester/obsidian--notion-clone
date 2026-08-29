@@ -1,0 +1,21 @@
+{
+  "level": "3",
+  "specFolder": "public/005-component-surface-system/005-content-row-rhythm",
+  "description": "Two operator defects, one question",
+  "keywords": [
+    "two",
+    "operator",
+    "defects",
+    "one",
+    "question"
+  ],
+  "lastUpdated": "2026-08-29T12:57:16.882Z",
+  "specId": "005",
+  "folderSlug": "content-row-rhythm",
+  "parentChain": [
+    "public",
+    "005-component-surface-system"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": []
+}

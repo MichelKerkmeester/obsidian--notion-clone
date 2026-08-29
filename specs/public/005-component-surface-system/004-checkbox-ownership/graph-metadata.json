@@ -1,0 +1,212 @@
+{
+  "schema_version": 1,
+  "packet_id": "public/005-component-surface-system/004-checkbox-ownership",
+  "spec_folder": "public/005-component-surface-system/004-checkbox-ownership",
+  "parent_id": "public/005-component-surface-system",
+  "children_ids": [],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "checkbox ownership",
+      "round checkboxes",
+      "createCheckbox",
+      "checkbox census",
+      "004 checkbox",
+      "004 checkbox ownership plan",
+      "004 checkbox ownership tasks",
+      "004 checkbox ownership checklist"
+    ],
+    "key_topics": [
+      "checkbox",
+      "ownership",
+      "round",
+      "checkboxes",
+      "createcheckbox",
+      "census",
+      "plan",
+      "tasks",
+      "checklist",
+      "operator",
+      "sees",
+      "everywhere"
+    ],
+    "importance_tier": "critical",
+    "status": "planned",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "checklist.md"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "checklist.md",
+        "kind": "doc",
+        "path": "checklist.md",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Checkbox Ownership",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Spec Folder",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Parent Spec",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Problem Statement",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Purpose One",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Plan",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Checklist",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "The Stage",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Execution Rules",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Status Reporting Format Report",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Breakdown",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "evidence",
+        "kind": "key_phrase",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "file",
+        "kind": "key_phrase",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "its",
+        "kind": "key_phrase",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "no",
+        "kind": "key_phrase",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Verification Checklist",
+        "kind": "proper_noun",
+        "path": "checklist.md",
+        "source": "derived"
+      },
+      {
+        "name": "Criteria Each",
+        "kind": "proper_noun",
+        "path": "checklist.md",
+        "source": "derived"
+      },
+      {
+        "name": "Negative Controls",
+        "kind": "proper_noun",
+        "path": "checklist.md",
+        "source": "derived"
+      },
+      {
+        "name": "the",
+        "kind": "key_phrase",
+        "path": "checklist.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "The operator sees round checkboxes everywhere, and the previous fix was real",
+    "created_at": "2026-08-29T12:45:04.669Z",
+    "last_save_at": "2026-08-29T12:57:23.448Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "checklist.md"
+    ],
+    "source_fingerprint": "sha256:adf0abb98c5dc62016f5f7415b8a27adc9ada10fcd7d8a90f8fd061f91de0c34",
+    "source_doc_hashes": {
+      "spec.md": "34eb0d44caeb5170818a6fea1a4057f2bcb93cf05a5fec4ed6a3526950a017c7",
+      "plan.md": "80c573fa940c99fecd7c0572f9a96a1039302d82eca13f4d378af8efe63facb3",
+      "tasks.md": "b2a4927e073ff8e2750218a6a6a1b1c35d01fdfa9ab6b59fdee33a79aed39bbe",
+      "checklist.md": "8441474e544f80e891a2e30ac674684e2a86b89ce1d2483272e1dfd631438713"
+    },
+    "last_active_child_id": null,
+    "last_active_at": null
+  }
+}

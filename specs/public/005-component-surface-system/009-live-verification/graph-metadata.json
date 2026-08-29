@@ -1,0 +1,196 @@
+{
+  "schema_version": 1,
+  "packet_id": "public/005-component-surface-system/009-live-verification",
+  "spec_folder": "public/005-component-surface-system/009-live-verification",
+  "parent_id": "public/005-component-surface-system",
+  "children_ids": [],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "live verification",
+      "obsidian cli eval",
+      "device probe",
+      "mobile emulation",
+      "009 live verification",
+      "009 live verification plan",
+      "probe transport",
+      "dev mobile emulation",
+      "009 live verification tasks",
+      "009 live verification checklist"
+    ],
+    "key_topics": [
+      "live",
+      "verification",
+      "obsidian",
+      "cli",
+      "eval",
+      "device",
+      "probe",
+      "mobile",
+      "emulation",
+      "plan",
+      "transport",
+      "dev"
+    ],
+    "importance_tier": "critical",
+    "status": "planned",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "checklist.md"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "checklist.md",
+        "kind": "doc",
+        "path": "checklist.md",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Live Verification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Running Obsidian",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Does Obsidian",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Key Decisions",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Critical Dependencies",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Plan",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "With Obsidian",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Dependency Matrix",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Depends On",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Breakdown",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "evidence",
+        "kind": "key_phrase",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Obsidian",
+        "kind": "key_phrase",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "the",
+        "kind": "key_phrase",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Verification Checklist",
+        "kind": "proper_noun",
+        "path": "checklist.md",
+        "source": "derived"
+      },
+      {
+        "name": "Negative Controls",
+        "kind": "proper_noun",
+        "path": "checklist.md",
+        "source": "derived"
+      },
+      {
+        "name": "Stopping Obsidian",
+        "kind": "proper_noun",
+        "path": "checklist.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "The program's founding fact is that a release passed every gate and changed nothing on device",
+    "created_at": "2026-08-29T14:34:47.371Z",
+    "last_save_at": "2026-08-29T14:37:08.141Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "checklist.md"
+    ],
+    "source_fingerprint": "sha256:ae4d24d9b062a75fc302151a1e40f624818030ccfa0d87f380826ffde01640a8",
+    "source_doc_hashes": {
+      "spec.md": "021e9d33d3d1f1af440a05afe96ca9146d1aef7930022c6f2488d408e288a53a",
+      "plan.md": "0044c4a7928f6a75918bbfe4f117d51cf53fa693b9b43178b14b361c411b51d9",
+      "tasks.md": "47597199b9adec69ea13b969610d5a08fe31e00562f242ffc244653889be8d51",
+      "checklist.md": "215be25fc27d4c6716ec435680c956e440c9eb8a1ddd97ea7f3644de748af717"
+    },
+    "last_active_child_id": null,
+    "last_active_at": null
+  }
+}

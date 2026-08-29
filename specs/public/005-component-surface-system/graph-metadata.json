@@ -1,0 +1,111 @@
+{
+  "schema_version": 1,
+  "packet_id": "public/005-component-surface-system",
+  "spec_folder": "public/005-component-surface-system",
+  "parent_id": null,
+  "children_ids": [
+    "public/005-component-surface-system/000-surface-contract-and-truthful-harness",
+    "public/005-component-surface-system/001-overlay-placement-and-menu-language",
+    "public/005-component-surface-system/002-properties-panel",
+    "public/005-component-surface-system/003-mobile-sheet-presentation",
+    "public/005-component-surface-system/004-checkbox-ownership",
+    "public/005-component-surface-system/005-content-row-rhythm",
+    "public/005-component-surface-system/006-record-open-target",
+    "public/005-component-surface-system/007-architecture-research",
+    "public/005-component-surface-system/008-integration-and-release-observability",
+    "public/005-component-surface-system/009-live-verification"
+  ],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "component surface system",
+      "surface contract",
+      "dropdown design system",
+      "sheet overlay navbar",
+      "checkbox ownership",
+      "openSurface factory",
+      "005 component surface"
+    ],
+    "key_topics": [
+      "component",
+      "surface",
+      "system",
+      "contract",
+      "dropdown",
+      "design",
+      "sheet",
+      "overlay",
+      "navbar",
+      "checkbox",
+      "ownership",
+      "opensurface"
+    ],
+    "importance_tier": "critical",
+    "status": "planned",
+    "key_files": [
+      "spec.md"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Component Surface System",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Phase Transition Rules",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Phase Handoff Criteria",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "one",
+        "kind": "key_phrase",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "measurements",
+        "kind": "key_phrase",
+        "path": "spec.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "Phase parent for the program that gives floating surfaces, sheets, checkboxes and content rows one architecture, one placement authority, and acceptance criteria measured where users actually see them.",
+    "created_at": "2026-08-29T12:53:52.104Z",
+    "last_save_at": "2026-08-29T14:34:47.562Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md"
+    ],
+    "source_fingerprint": "sha256:f9590513e608e4511611cea121c2aeb41a792482b99cb45c3f5db22a5394e22a",
+    "source_doc_hashes": {
+      "spec.md": "fa30ed02f7016675cbb22155035f76ab7a67d1df5f251e1dd943cb3487ba27b0"
+    },
+    "last_active_child_id": "public/005-component-surface-system/006-record-open-target",
+    "last_active_at": null
+  }
+}

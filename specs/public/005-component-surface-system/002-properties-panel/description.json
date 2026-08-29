@@ -1,0 +1,27 @@
+{
+  "specFolder": "public/005-component-surface-system/002-properties-panel",
+  "description": "The properties panel's row is a positional grid contract: it says \"the third track is 96px wide\"",
+  "keywords": [
+    "properties",
+    "panel",
+    "row",
+    "positional",
+    "grid",
+    "contract",
+    "says",
+    "third",
+    "track",
+    "96px",
+    "wide"
+  ],
+  "lastUpdated": "2026-08-29T12:36:45.998Z",
+  "specId": "002",
+  "folderSlug": "properties-panel",
+  "parentChain": [
+    "public",
+    "005-component-surface-system"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": [],
+  "level": "2"
+}
