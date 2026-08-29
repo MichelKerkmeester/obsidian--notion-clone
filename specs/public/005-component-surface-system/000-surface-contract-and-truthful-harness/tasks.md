@@ -67,9 +67,31 @@ subsequent claim depends on the harness being able to fail. **T0 precedes everyt
       appears in a capture or the declared fallback does; the timeline recapture shows bands on
       integer grid rows. **This lands before any baseline is recorded** — every later phase measures
       against the baseline this stage produces.
-- [ ] **T4a** Scan for pinned runtime values generally — REQ-015.
+- [x] **T4a** Scan for pinned runtime values generally — REQ-015.
       *Evidence to close:* the scan flags all four known cases on the pre-T4 tree, then reports zero;
       no harness file assigns a custom property the runtime also assigns.
+      *Closed, with the rule changed.* The stated rule — "no harness file assigns a property the
+      runtime also assigns" — was implemented first and flagged **41** declarations. It was wrong:
+      standing in for the plugin's computed values is this harness's entire purpose, since a
+      screenshot runs no plugin, and a checker demanding those 41 deletions would have been deleted
+      itself within a week.
+      The rule that holds: when the stylesheet reads a property as `var(--x, FALLBACK)` and nothing
+      ever assigns it, production always resolves the fallback, so a harness value that differs is a
+      contradiction rather than a stand-in. Fully decidable, no false positives.
+      It found **five** live contradictions, none previously known: status chips carried a hover
+      background against a transparent production value and numbers were `text-normal` against
+      `text-accent` — the wrong colours in all 196 screenshots — plus a 44px calendar row against
+      `auto`, a viewport-calc week grid against 1152px, and sticky stacking at 25 against 40. All
+      five removed; the scan now reports zero.
+      Negative control: re-adding `--db-header-height: 40px` makes it report the 34px production
+      resolves — the same two numbers recorded by hand when that one was found. Mutation confirmed
+      landed by hash before the scan ran, and the file restored to its original hash after.
+      **Coverage it does not have:** the type mismatch (`--db-timeline-row`, a length where the
+      runtime assigns a grid line index). Deciding that from source needs the type of a TypeScript
+      expression; inferring it from text produced 20 false positives when attempted. That defect is
+      observable in the browser as a property that did not take effect, and belongs to the geometry
+      harness. Two of the four original cases are covered by construction, one by the browser, and
+      one — a well-formed value that forced the right answer — by reading.
 - [~] **T4b** Extend the capture fingerprint at `capture.mjs:205` — REQ-015.
       *Evidence to close:* editing each of `runtime-vars.css`, `.storybook/preview.ts` and
       `verify-placement.mjs` in turn makes `npm run screenshots:verify` report stale; today it
