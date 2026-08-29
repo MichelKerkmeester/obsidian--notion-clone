@@ -1,8 +1,8 @@
 {
-  "measuredAt": "2026-08-29T17:56:15.055Z",
+  "measuredAt": "2026-08-29T17:56:50.995Z",
   "inputs": {
     "styles.css": "c4906525fe85",
-    "tools/live/checkbox-inventory.mjs": "25aeda28975b"
+    "tools/live/checkbox-inventory.mjs": "5202c61e1c4d"
   },
   "totals": {
     "sites": 37,
