@@ -19,7 +19,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "Tiles keep icon and caption inside their own bounds; the duplicate checkbox is not stretched.",
       "capture": "element",
@@ -41,7 +41,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "Tiles keep icon and caption inside their own bounds; the duplicate checkbox is not stretched.",
       "capture": "element",
@@ -63,7 +63,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "Tiles keep icon and caption inside their own bounds; the duplicate checkbox is not stretched.",
       "capture": "element",
@@ -85,7 +85,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "Tiles keep icon and caption inside their own bounds; the duplicate checkbox is not stretched.",
       "capture": "element",
@@ -109,7 +109,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "Editing one chip opens the filter panel's single-rule editor: field, operator and value, with no remove button.",
       "capture": "element",
@@ -133,7 +133,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "Editing one chip opens the filter panel's single-rule editor: field, operator and value, with no remove button.",
       "capture": "element",
@@ -157,7 +157,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "Editing one chip opens the filter panel's single-rule editor: field, operator and value, with no remove button.",
       "capture": "element",
@@ -181,7 +181,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "Editing one chip opens the filter panel's single-rule editor: field, operator and value, with no remove button.",
       "capture": "element",
@@ -205,7 +205,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "The sort variant adds db-sort-panel and drops the drag handle and reorder buttons the full panel shows.",
       "capture": "element",
@@ -229,7 +229,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "The sort variant adds db-sort-panel and drops the drag handle and reorder buttons the full panel shows.",
       "capture": "element",
@@ -253,7 +253,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "The sort variant adds db-sort-panel and drops the drag handle and reorder buttons the full panel shows.",
       "capture": "element",
@@ -277,7 +277,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "The sort variant adds db-sort-panel and drops the drag handle and reorder buttons the full panel shows.",
       "capture": "element",
@@ -299,7 +299,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "The rail lives in the header below the toolbar. Sort chips come first and carry their position as a superscript; the AND button between the groups toggles filter logic.",
       "capture": "element",
@@ -321,7 +321,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "The rail lives in the header below the toolbar. Sort chips come first and carry their position as a superscript; the AND button between the groups toggles filter logic.",
       "capture": "element",
@@ -343,7 +343,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "The rail lives in the header below the toolbar. Sort chips come first and carry their position as a superscript; the AND button between the groups toggles filter logic.",
       "capture": "element",
@@ -365,7 +365,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "The rail lives in the header below the toolbar. Sort chips come first and carry their position as a superscript; the AND button between the groups toggles filter logic.",
       "capture": "element",
@@ -387,7 +387,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "Every other chart type is a Chart.js canvas painted at runtime, so this recovery state and the single-number chart are what a capture can show of the chart body.",
       "capture": "element",
@@ -409,7 +409,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "Every other chart type is a Chart.js canvas painted at runtime, so this recovery state and the single-number chart are what a capture can show of the chart body.",
       "capture": "element",
@@ -431,7 +431,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "Every other chart type is a Chart.js canvas painted at runtime, so this recovery state and the single-number chart are what a capture can show of the chart body.",
       "capture": "element",
@@ -453,7 +453,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "Every other chart type is a Chart.js canvas painted at runtime, so this recovery state and the single-number chart are what a capture can show of the chart body.",
       "capture": "element",
@@ -475,7 +475,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "The one chart type the stylesheet draws in full: renderNumber writes three divs and no canvas, so this is the only plotted chart a screenshot can show. The height class is what sizes it.",
       "capture": "element",
@@ -497,7 +497,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "The one chart type the stylesheet draws in full: renderNumber writes three divs and no canvas, so this is the only plotted chart a screenshot can show. The height class is what sizes it.",
       "capture": "element",
@@ -519,7 +519,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "The one chart type the stylesheet draws in full: renderNumber writes three divs and no canvas, so this is the only plotted chart a screenshot can show. The height class is what sizes it.",
       "capture": "element",
@@ -541,7 +541,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "The one chart type the stylesheet draws in full: renderNumber writes three divs and no canvas, so this is the only plotted chart a screenshot can show. The height class is what sizes it.",
       "capture": "element",
@@ -563,11 +563,11 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "What the chart view uses instead of a toolbar of its own: the chart-options button in the toolbar opens this panel. Every row is a 18px/1fr/16px grid, so selects, switches, drill-in entries and export buttons line up on one set of columns.",
       "capture": "element",
-      "bytes": 69619
+      "bytes": 69598
     },
     {
       "id": "chrome-chart-options-popover",
@@ -585,11 +585,11 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "What the chart view uses instead of a toolbar of its own: the chart-options button in the toolbar opens this panel. Every row is a 18px/1fr/16px grid, so selects, switches, drill-in entries and export buttons line up on one set of columns.",
       "capture": "element",
-      "bytes": 70458
+      "bytes": 70443
     },
     {
       "id": "chrome-chart-options-popover",
@@ -607,11 +607,11 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "What the chart view uses instead of a toolbar of its own: the chart-options button in the toolbar opens this panel. Every row is a 18px/1fr/16px grid, so selects, switches, drill-in entries and export buttons line up on one set of columns.",
       "capture": "element",
-      "bytes": 69619
+      "bytes": 69598
     },
     {
       "id": "chrome-chart-options-popover",
@@ -629,11 +629,11 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "What the chart view uses instead of a toolbar of its own: the chart-options button in the toolbar opens this panel. Every row is a 18px/1fr/16px grid, so selects, switches, drill-in entries and export buttons line up on one set of columns.",
       "capture": "element",
-      "bytes": 70458
+      "bytes": 70443
     },
     {
       "id": "chrome-group-header-row",
@@ -655,11 +655,11 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "An option-typed group field renders its key as a colored status badge; a field with no options renders plain text, as the nested Revolut subgroup does. Per-group summaries sit at the right of each divider.",
       "capture": "element",
-      "bytes": 35328
+      "bytes": 35200
     },
     {
       "id": "chrome-group-header-row",
@@ -681,11 +681,11 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "An option-typed group field renders its key as a colored status badge; a field with no options renders plain text, as the nested Revolut subgroup does. Per-group summaries sit at the right of each divider.",
       "capture": "element",
-      "bytes": 34576
+      "bytes": 34532
     },
     {
       "id": "chrome-group-header-row",
@@ -707,11 +707,11 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "An option-typed group field renders its key as a colored status badge; a field with no options renders plain text, as the nested Revolut subgroup does. Per-group summaries sit at the right of each divider.",
       "capture": "element",
-      "bytes": 246279
+      "bytes": 246282
     },
     {
       "id": "chrome-group-header-row",
@@ -733,11 +733,11 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "An option-typed group field renders its key as a colored status badge; a field with no options renders plain text, as the nested Revolut subgroup does. Per-group summaries sit at the right of each divider.",
       "capture": "element",
-      "bytes": 240108
+      "bytes": 240097
     },
     {
       "id": "chrome-summary-row",
@@ -755,7 +755,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "Total is always present; each configured summary rule is a draggable, clickable item, and the faint + Summary entry adds another.",
       "capture": "element",
@@ -777,7 +777,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "Total is always present; each configured summary rule is a draggable, clickable item, and the faint + Summary entry adds another.",
       "capture": "element",
@@ -799,7 +799,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "Total is always present; each configured summary rule is a draggable, clickable item, and the faint + Summary entry adds another.",
       "capture": "element",
@@ -821,7 +821,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "Total is always present; each configured summary rule is a draggable, clickable item, and the faint + Summary entry adds another.",
       "capture": "element",
@@ -845,7 +845,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "A column with summary rules stacks each kind over its result; a column without one shows a + Calculate hint that the stylesheet keeps at zero opacity until the trigger is hovered, so it is invisible here by design.",
       "capture": "element",
@@ -869,7 +869,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "A column with summary rules stacks each kind over its result; a column without one shows a + Calculate hint that the stylesheet keeps at zero opacity until the trigger is hovered, so it is invisible here by design.",
       "capture": "element",
@@ -893,7 +893,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "A column with summary rules stacks each kind over its result; a column without one shows a + Calculate hint that the stylesheet keeps at zero opacity until the trigger is hovered, so it is invisible here by design.",
       "capture": "element",
@@ -917,7 +917,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "A column with summary rules stacks each kind over its result; a column without one shows a + Calculate hint that the stylesheet keeps at zero opacity until the trigger is hovered, so it is invisible here by design.",
       "capture": "element",
@@ -939,7 +939,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "View switcher on the left; query, properties, utilities and creation clusters on the right. The search control sits collapsed in the utilities cluster until it has text or focus.",
       "capture": "element",
@@ -961,7 +961,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "View switcher on the left; query, properties, utilities and creation clusters on the right. The search control sits collapsed in the utilities cluster until it has text or focus.",
       "capture": "element",
@@ -983,7 +983,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "View switcher on the left; query, properties, utilities and creation clusters on the right. The search control sits collapsed in the utilities cluster until it has text or focus.",
       "capture": "element",
@@ -1005,7 +1005,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "View switcher on the left; query, properties, utilities and creation clusters on the right. The search control sits collapsed in the utilities cluster until it has text or focus.",
       "capture": "element",
@@ -1027,7 +1027,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "The wrap is 28px wide at rest and widens to 150px under is-active; the clear button is hidden until the input has text.",
       "capture": "element",
@@ -1049,7 +1049,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "The wrap is 28px wide at rest and widens to 150px under is-active; the clear button is hidden until the input has text.",
       "capture": "element",
@@ -1071,7 +1071,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "The wrap is 28px wide at rest and widens to 150px under is-active; the clear button is hidden until the input has text.",
       "capture": "element",
@@ -1093,7 +1093,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "The wrap is 28px wide at rest and widens to 150px under is-active; the clear button is hidden until the input has text.",
       "capture": "element",
@@ -1115,7 +1115,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "The active tab carries is-active; the ⋯ tab appears only once the toolbar has measured tabs out of view, and opens the all-views hub.",
       "capture": "element",
@@ -1137,7 +1137,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "The active tab carries is-active; the ⋯ tab appears only once the toolbar has measured tabs out of view, and opens the all-views hub.",
       "capture": "element",
@@ -1159,7 +1159,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "The active tab carries is-active; the ⋯ tab appears only once the toolbar has measured tabs out of view, and opens the all-views hub.",
       "capture": "element",
@@ -1181,7 +1181,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "The active tab carries is-active; the ⋯ tab appears only once the toolbar has measured tabs out of view, and opens the all-views hub.",
       "capture": "element",
@@ -1203,7 +1203,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "A disabled option is dimmed and carries a tooltip rather than inline explanatory text.",
       "capture": "element",
@@ -1225,7 +1225,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "A disabled option is dimmed and carries a tooltip rather than inline explanatory text.",
       "capture": "element",
@@ -1247,7 +1247,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "A disabled option is dimmed and carries a tooltip rather than inline explanatory text.",
       "capture": "element",
@@ -1269,7 +1269,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "A disabled option is dimmed and carries a tooltip rather than inline explanatory text.",
       "capture": "element",
@@ -1291,7 +1291,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "The menu trigger sits inline after the label and the label truncates before it moves.",
       "capture": "element",
@@ -1313,7 +1313,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "The menu trigger sits inline after the label and the label truncates before it moves.",
       "capture": "element",
@@ -1335,7 +1335,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "The menu trigger sits inline after the label and the label truncates before it moves.",
       "capture": "element",
@@ -1357,7 +1357,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "The menu trigger sits inline after the label and the label truncates before it moves.",
       "capture": "element",
@@ -1381,7 +1381,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "Each row carries a drag handle, a colour dot that opens the colour picker, the check mark and a delete button. An unregistered value offers a plus instead of a trash icon.",
       "capture": "element",
@@ -1405,7 +1405,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "Each row carries a drag handle, a colour dot that opens the colour picker, the check mark and a delete button. An unregistered value offers a plus instead of a trash icon.",
       "capture": "element",
@@ -1429,7 +1429,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "Each row carries a drag handle, a colour dot that opens the colour picker, the check mark and a delete button. An unregistered value offers a plus instead of a trash icon.",
       "capture": "element",
@@ -1453,7 +1453,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "Each row carries a drag handle, a colour dot that opens the colour picker, the check mark and a delete button. An unregistered value offers a plus instead of a trash icon.",
       "capture": "element",
@@ -1475,7 +1475,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "Both editors keep the cell's rendered value visible underneath. The multi-line editor marks its cell with db-cell-editing (the accent inset); the single-line one marks its cell with db-cell-popover-editing, which the stylesheet declares no rule for, so that cell shows no edit affordance. Markdown columns gain the format toolbar.",
       "capture": "element",
@@ -1497,7 +1497,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "Both editors keep the cell's rendered value visible underneath. The multi-line editor marks its cell with db-cell-editing (the accent inset); the single-line one marks its cell with db-cell-popover-editing, which the stylesheet declares no rule for, so that cell shows no edit affordance. Markdown columns gain the format toolbar.",
       "capture": "element",
@@ -1519,7 +1519,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "Both editors keep the cell's rendered value visible underneath. The multi-line editor marks its cell with db-cell-editing (the accent inset); the single-line one marks its cell with db-cell-popover-editing, which the stylesheet declares no rule for, so that cell shows no edit affordance. Markdown columns gain the format toolbar.",
       "capture": "element",
@@ -1541,7 +1541,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "Both editors keep the cell's rendered value visible underneath. The multi-line editor marks its cell with db-cell-editing (the accent inset); the single-line one marks its cell with db-cell-popover-editing, which the stylesheet declares no rule for, so that cell shows no edit affordance. Markdown columns gain the format toolbar.",
       "capture": "element",
@@ -1565,7 +1565,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "A datetime column adds hour and minute segments after the date, and the trigger swaps calendar-days for calendar-clock.",
       "capture": "element",
@@ -1589,7 +1589,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "A datetime column adds hour and minute segments after the date, and the trigger swaps calendar-days for calendar-clock.",
       "capture": "element",
@@ -1613,7 +1613,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "A datetime column adds hour and minute segments after the date, and the trigger swaps calendar-days for calendar-clock.",
       "capture": "element",
@@ -1637,7 +1637,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "A datetime column adds hour and minute segments after the date, and the trigger swaps calendar-days for calendar-clock.",
       "capture": "element",
@@ -1661,7 +1661,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "The trigger shows the committed value; the popover stacks quick dates, the three segment inputs and the mini calendar, which renders flat inside the date popover rather than as its own floating surface.",
       "capture": "element",
@@ -1685,7 +1685,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "The trigger shows the committed value; the popover stacks quick dates, the three segment inputs and the mini calendar, which renders flat inside the date popover rather than as its own floating surface.",
       "capture": "element",
@@ -1709,7 +1709,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "The trigger shows the committed value; the popover stacks quick dates, the three segment inputs and the mini calendar, which renders flat inside the date popover rather than as its own floating surface.",
       "capture": "element",
@@ -1733,7 +1733,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "The trigger shows the committed value; the popover stacks quick dates, the three segment inputs and the mini calendar, which renders flat inside the date popover rather than as its own floating surface.",
       "capture": "element",
@@ -1755,7 +1755,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "file.tags render as status badges, link-list fields as compact chips, and file.file as a link back to the row's own note. The per-tag remove buttons are in the DOM of a writable cell but sit at opacity 0 until the badge is hovered, so they do not appear here.",
       "capture": "element",
@@ -1777,7 +1777,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "file.tags render as status badges, link-list fields as compact chips, and file.file as a link back to the row's own note. The per-tag remove buttons are in the DOM of a writable cell but sit at opacity 0 until the badge is hovered, so they do not appear here.",
       "capture": "element",
@@ -1799,7 +1799,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "file.tags render as status badges, link-list fields as compact chips, and file.file as a link back to the row's own note. The per-tag remove buttons are in the DOM of a writable cell but sit at opacity 0 until the badge is hovered, so they do not appear here.",
       "capture": "element",
@@ -1821,7 +1821,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "file.tags render as status badges, link-list fields as compact chips, and file.file as a link back to the row's own note. The per-tag remove buttons are in the DOM of a writable cell but sit at opacity 0 until the badge is hovered, so they do not appear here.",
       "capture": "element",
@@ -1845,7 +1845,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "The Icons tab adds the colour strip; the picker is created on document.body, so it is a top-level element here rather than a child of the container.",
       "capture": "element",
@@ -1869,7 +1869,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "The Icons tab adds the colour strip; the picker is created on document.body, so it is a top-level element here rather than a child of the container.",
       "capture": "element",
@@ -1893,7 +1893,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "The Icons tab adds the colour strip; the picker is created on document.body, so it is a top-level element here rather than a child of the container.",
       "capture": "element",
@@ -1917,7 +1917,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "The Icons tab adds the colour strip; the picker is created on document.body, so it is a top-level element here rather than a child of the container.",
       "capture": "element",
@@ -1941,11 +1941,11 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "Rating, progress bar and progress ring all tint through db-num-color-*, which sets --db-number-color. Half slots are the accent overlay clipped to 50%.",
       "capture": "element",
-      "bytes": 54308
+      "bytes": 54267
     },
     {
       "id": "field-number-displays",
@@ -1965,11 +1965,11 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "Rating, progress bar and progress ring all tint through db-num-color-*, which sets --db-number-color. Half slots are the accent overlay clipped to 50%.",
       "capture": "element",
-      "bytes": 54387
+      "bytes": 54327
     },
     {
       "id": "field-number-displays",
@@ -1989,11 +1989,11 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "Rating, progress bar and progress ring all tint through db-num-color-*, which sets --db-number-color. Half slots are the accent overlay clipped to 50%.",
       "capture": "element",
-      "bytes": 41752
+      "bytes": 41722
     },
     {
       "id": "field-number-displays",
@@ -2013,11 +2013,11 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "Rating, progress bar and progress ring all tint through db-num-color-*, which sets --db-number-color. Half slots are the accent overlay clipped to 50%.",
       "capture": "element",
-      "bytes": 42029
+      "bytes": 41986
     },
     {
       "id": "field-option-color-picker",
@@ -2037,7 +2037,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "Sixteen swatches in the persisted order, the current colour ringed. Opened from the colour dot in the select editor and created on document.body.",
       "capture": "element",
@@ -2061,7 +2061,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "Sixteen swatches in the persisted order, the current colour ringed. Opened from the colour dot in the select editor and created on document.body.",
       "capture": "element",
@@ -2085,7 +2085,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "Sixteen swatches in the persisted order, the current colour ringed. Opened from the colour dot in the select editor and created on document.body.",
       "capture": "element",
@@ -2109,7 +2109,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "Sixteen swatches in the persisted order, the current colour ringed. Opened from the colour dot in the select editor and created on document.body.",
       "capture": "element",
@@ -2135,7 +2135,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "The table puts record icons in a 28px gutter column of their own, whose header is blank so the first property header can borrow the width. An unparsed token falls back to file-text and is-default; a lucide token carries db-record-icon-color-*; an emoji token renders through db-record-icon-emoji.",
       "capture": "element",
@@ -2161,7 +2161,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "The table puts record icons in a 28px gutter column of their own, whose header is blank so the first property header can borrow the width. An unparsed token falls back to file-text and is-default; a lucide token carries db-record-icon-color-*; an emoji token renders through db-record-icon-emoji.",
       "capture": "element",
@@ -2187,7 +2187,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "The table puts record icons in a 28px gutter column of their own, whose header is blank so the first property header can borrow the width. An unparsed token falls back to file-text and is-default; a lucide token carries db-record-icon-color-*; an emoji token renders through db-record-icon-emoji.",
       "capture": "element",
@@ -2213,7 +2213,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "The table puts record icons in a 28px gutter column of their own, whose header is blank so the first property header can borrow the width. An unparsed token falls back to file-text and is-default; a lucide token carries db-record-icon-color-*; an emoji token renders through db-record-icon-emoji.",
       "capture": "element",
@@ -2235,7 +2235,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "A resolved target renders file-text on a tinted chip; a target the metadata cache cannot find renders alert-triangle inside a dashed warning outline.",
       "capture": "element",
@@ -2257,7 +2257,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "A resolved target renders file-text on a tinted chip; a target the metadata cache cannot find renders alert-triangle inside a dashed warning outline.",
       "capture": "element",
@@ -2279,7 +2279,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "A resolved target renders file-text on a tinted chip; a target the metadata cache cannot find renders alert-triangle inside a dashed warning outline.",
       "capture": "element",
@@ -2301,7 +2301,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "A resolved target renders file-text on a tinted chip; a target the metadata cache cannot find renders alert-triangle inside a dashed warning outline.",
       "capture": "element",
@@ -2325,7 +2325,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "Every select, status, multi-select and tag value in the plugin is a status-badge in one of these sixteen status-color-* variants, so this is the whole colour vocabulary in one shot. The multi-select remove buttons only become visible on hover.",
       "capture": "element",
@@ -2349,7 +2349,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "Every select, status, multi-select and tag value in the plugin is a status-badge in one of these sixteen status-color-* variants, so this is the whole colour vocabulary in one shot. The multi-select remove buttons only become visible on hover.",
       "capture": "element",
@@ -2373,7 +2373,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "Every select, status, multi-select and tag value in the plugin is a status-badge in one of these sixteen status-color-* variants, so this is the whole colour vocabulary in one shot. The multi-select remove buttons only become visible on hover.",
       "capture": "element",
@@ -2397,7 +2397,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "Every select, status, multi-select and tag value in the plugin is a status-badge in one of these sixteen status-color-* variants, so this is the whole colour vocabulary in one shot. The multi-select remove buttons only become visible on hover.",
       "capture": "element",
@@ -2421,7 +2421,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "One row per property: drag handle, visibility checkbox, type icon, name with its frontmatter key, then wrap, edit and delete.",
       "capture": "element",
@@ -2445,7 +2445,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "One row per property: drag handle, visibility checkbox, type icon, name with its frontmatter key, then wrap, edit and delete.",
       "capture": "element",
@@ -2469,7 +2469,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "One row per property: drag handle, visibility checkbox, type icon, name with its frontmatter key, then wrap, edit and delete.",
       "capture": "element",
@@ -2493,7 +2493,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "One row per property: drag handle, visibility checkbox, type icon, name with its frontmatter key, then wrap, edit and delete.",
       "capture": "element",
@@ -2517,7 +2517,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "Three conditions build a group node, so the panel header drops its AND/OR button and the group's own logic dropdown carries it instead.",
       "capture": "element",
@@ -2541,7 +2541,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "Three conditions build a group node, so the panel header drops its AND/OR button and the group's own logic dropdown carries it instead.",
       "capture": "element",
@@ -2565,7 +2565,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "Three conditions build a group node, so the panel header drops its AND/OR button and the group's own logic dropdown carries it instead.",
       "capture": "element",
@@ -2589,7 +2589,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "Three conditions build a group node, so the panel header drops its AND/OR button and the group's own logic dropdown carries it instead.",
       "capture": "element",
@@ -2613,7 +2613,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "Nesting stops at three levels: the innermost rows lose their add-group button because the tree can go no deeper.",
       "capture": "element",
@@ -2637,7 +2637,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "Nesting stops at three levels: the innermost rows lose their add-group button because the tree can go no deeper.",
       "capture": "element",
@@ -2661,7 +2661,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "Nesting stops at three levels: the innermost rows lose their add-group button because the tree can go no deeper.",
       "capture": "element",
@@ -2685,7 +2685,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "Nesting stops at three levels: the innermost rows lose their add-group button because the tree can go no deeper.",
       "capture": "element",
@@ -2709,7 +2709,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "Opened from a calendar or timeline event card. Fields are click-to-edit; an empty field only appears when the view asks for empty properties.",
       "capture": "element",
@@ -2733,7 +2733,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "Opened from a calendar or timeline event card. Fields are click-to-edit; an empty field only appears when the view asks for empty properties.",
       "capture": "element",
@@ -2757,7 +2757,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "Opened from a calendar or timeline event card. Fields are click-to-edit; an empty field only appears when the view asks for empty properties.",
       "capture": "element",
@@ -2781,7 +2781,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "Opened from a calendar or timeline event card. Fields are click-to-edit; an empty field only appears when the view asks for empty properties.",
       "capture": "element",
@@ -2807,7 +2807,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "The phone form of the record detail panel. positionToolbarPopover renders it as a bottom sheet with a grab handle; a permanent close button (reusing db-cell-edit-close) and drag-down on the handle dismiss it where the desktop panel relies on Escape and outside-click. Captured in viewport mode so the fixed sheet docks at the bottom.",
       "capture": "viewport",
@@ -2833,7 +2833,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "The phone form of the record detail panel. positionToolbarPopover renders it as a bottom sheet with a grab handle; a permanent close button (reusing db-cell-edit-close) and drag-down on the handle dismiss it where the desktop panel relies on Escape and outside-click. Captured in viewport mode so the fixed sheet docks at the bottom.",
       "capture": "viewport",
@@ -2859,7 +2859,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "The phone form of the record detail panel. positionToolbarPopover renders it as a bottom sheet with a grab handle; a permanent close button (reusing db-cell-edit-close) and drag-down on the handle dismiss it where the desktop panel relies on Escape and outside-click. Captured in viewport mode so the fixed sheet docks at the bottom.",
       "capture": "viewport",
@@ -2885,7 +2885,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "The phone form of the record detail panel. positionToolbarPopover renders it as a bottom sheet with a grab handle; a permanent close button (reusing db-cell-edit-close) and drag-down on the handle dismiss it where the desktop panel relies on Escape and outside-click. Captured in viewport mode so the fixed sheet docks at the bottom.",
       "capture": "viewport",
@@ -2909,7 +2909,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "Docks against the right edge of the table it was opened from. Values are display-only text, and properties hidden from the table sit behind the disclosure.",
       "capture": "element",
@@ -2933,7 +2933,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "Docks against the right edge of the table it was opened from. Values are display-only text, and properties hidden from the table sit behind the disclosure.",
       "capture": "element",
@@ -2957,7 +2957,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "Docks against the right edge of the table it was opened from. Values are display-only text, and properties hidden from the table sit behind the disclosure.",
       "capture": "element",
@@ -2981,7 +2981,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "Docks against the right edge of the table it was opened from. Values are display-only text, and properties hidden from the table sit behind the disclosure.",
       "capture": "element",
@@ -3003,7 +3003,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "Calendar views add a hint above the empty state because layout order wins over user sort.",
       "capture": "element",
@@ -3025,7 +3025,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "Calendar views add a hint above the empty state because layout order wins over user sort.",
       "capture": "element",
@@ -3047,7 +3047,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "Calendar views add a hint above the empty state because layout order wins over user sort.",
       "capture": "element",
@@ -3069,7 +3069,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "Calendar views add a hint above the empty state because layout order wins over user sort.",
       "capture": "element",
@@ -3093,7 +3093,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "Rows are draggable; the first rule's move-up and the last rule's move-down are disabled.",
       "capture": "element",
@@ -3117,7 +3117,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "Rows are draggable; the first rule's move-up and the last rule's move-down are disabled.",
       "capture": "element",
@@ -3141,7 +3141,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "Rows are draggable; the first rule's move-up and the last rule's move-down are disabled.",
       "capture": "element",
@@ -3165,7 +3165,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "Rows are draggable; the first rule's move-up and the last rule's move-down are disabled.",
       "capture": "element",
@@ -3189,11 +3189,11 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "The top of the panel for a table view: database-scoped rows above the section divider, view-scoped rows below. Conditional formatting and status presets sit further down and are not in frame.",
       "capture": "element",
-      "bytes": 85835
+      "bytes": 85809
     },
     {
       "id": "panel-view-config",
@@ -3213,11 +3213,11 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "The top of the panel for a table view: database-scoped rows above the section divider, view-scoped rows below. Conditional formatting and status presets sit further down and are not in frame.",
       "capture": "element",
-      "bytes": 87304
+      "bytes": 87269
     },
     {
       "id": "panel-view-config",
@@ -3237,11 +3237,11 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "The top of the panel for a table view: database-scoped rows above the section divider, view-scoped rows below. Conditional formatting and status presets sit further down and are not in frame.",
       "capture": "element",
-      "bytes": 85701
+      "bytes": 85673
     },
     {
       "id": "panel-view-config",
@@ -3261,11 +3261,11 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "The top of the panel for a table view: database-scoped rows above the section divider, view-scoped rows below. Conditional formatting and status presets sit further down and are not in frame.",
       "capture": "element",
-      "bytes": 87193
+      "bytes": 87158
     },
     {
       "id": "empty-state",
@@ -3283,7 +3283,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": null,
       "capture": "element",
@@ -3305,7 +3305,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": null,
       "capture": "element",
@@ -3327,7 +3327,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": null,
       "capture": "element",
@@ -3349,7 +3349,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": null,
       "capture": "element",
@@ -3375,11 +3375,11 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "The board inside the default-width container. On the phone (is-phone) the container no longer centres the grid off-screen, and the sticky group header is taken out of sticky flow so it cannot float down over the cards; columns page horizontally with snap-scroll.",
       "capture": "viewport",
-      "bytes": 182023
+      "bytes": 181991
     },
     {
       "id": "board-mobile",
@@ -3401,11 +3401,11 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "The board inside the default-width container. On the phone (is-phone) the container no longer centres the grid off-screen, and the sticky group header is taken out of sticky flow so it cannot float down over the cards; columns page horizontally with snap-scroll.",
       "capture": "viewport",
-      "bytes": 186602
+      "bytes": 186589
     },
     {
       "id": "board-mobile",
@@ -3427,11 +3427,11 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "The board inside the default-width container. On the phone (is-phone) the container no longer centres the grid off-screen, and the sticky group header is taken out of sticky flow so it cannot float down over the cards; columns page horizontally with snap-scroll.",
       "capture": "viewport",
-      "bytes": 81488
+      "bytes": 81466
     },
     {
       "id": "board-mobile",
@@ -3453,11 +3453,11 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "The board inside the default-width container. On the phone (is-phone) the container no longer centres the grid off-screen, and the sticky group header is taken out of sticky flow so it cannot float down over the cards; columns page horizontally with snap-scroll.",
       "capture": "viewport",
-      "bytes": 85252
+      "bytes": 85239
     },
     {
       "id": "board-view",
@@ -3477,11 +3477,11 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": null,
       "capture": "viewport",
-      "bytes": 241890
+      "bytes": 241856
     },
     {
       "id": "board-view",
@@ -3501,11 +3501,11 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": null,
       "capture": "viewport",
-      "bytes": 248016
+      "bytes": 247998
     },
     {
       "id": "board-view",
@@ -3525,11 +3525,11 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": null,
       "capture": "viewport",
-      "bytes": 81507
+      "bytes": 81466
     },
     {
       "id": "board-view",
@@ -3549,11 +3549,11 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": null,
       "capture": "viewport",
-      "bytes": 85252
+      "bytes": 85239
     },
     {
       "id": "calendar-mini-calendar",
@@ -3573,11 +3573,11 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "Days with events carry a short accent underline; the visible week reads as the selected pill run.",
       "capture": "viewport",
-      "bytes": 57127
+      "bytes": 57193
     },
     {
       "id": "calendar-mini-calendar",
@@ -3597,11 +3597,11 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "Days with events carry a short accent underline; the visible week reads as the selected pill run.",
       "capture": "viewport",
-      "bytes": 61305
+      "bytes": 61342
     },
     {
       "id": "calendar-mini-calendar",
@@ -3621,11 +3621,11 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "Days with events carry a short accent underline; the visible week reads as the selected pill run.",
       "capture": "viewport",
-      "bytes": 22791
+      "bytes": 22794
     },
     {
       "id": "calendar-mini-calendar",
@@ -3645,7 +3645,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "Days with events carry a short accent underline; the visible week reads as the selected pill run.",
       "capture": "viewport",
@@ -3667,7 +3667,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "Multi-day all-day bars, timed events, an overflow week and one event carried across the week boundary.",
       "capture": "viewport",
@@ -3689,11 +3689,11 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "Multi-day all-day bars, timed events, an overflow week and one event carried across the week boundary.",
       "capture": "viewport",
-      "bytes": 132656
+      "bytes": 132404
     },
     {
       "id": "calendar-month-view",
@@ -3711,7 +3711,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "Multi-day all-day bars, timed events, an overflow week and one event carried across the week boundary.",
       "capture": "viewport",
@@ -3733,11 +3733,11 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "Multi-day all-day bars, timed events, an overflow week and one event carried across the week boundary.",
       "capture": "viewport",
-      "bytes": 47108
+      "bytes": 47309
     },
     {
       "id": "calendar-toolbar-options",
@@ -3757,11 +3757,11 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "The Time section only exists in week and day scale; the setup preview card below Data carries no stylesheet rules.",
       "capture": "viewport",
-      "bytes": 124368
+      "bytes": 124365
     },
     {
       "id": "calendar-toolbar-options",
@@ -3781,11 +3781,11 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "The Time section only exists in week and day scale; the setup preview card below Data carries no stylesheet rules.",
       "capture": "viewport",
-      "bytes": 129545
+      "bytes": 129541
     },
     {
       "id": "calendar-toolbar-options",
@@ -3805,11 +3805,11 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "The Time section only exists in week and day scale; the setup preview card below Data carries no stylesheet rules.",
       "capture": "viewport",
-      "bytes": 42987
+      "bytes": 42997
     },
     {
       "id": "calendar-toolbar-options",
@@ -3829,11 +3829,11 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "The Time section only exists in week and day scale; the setup preview card below Data carries no stylesheet rules.",
       "capture": "viewport",
-      "bytes": 44287
+      "bytes": 44291
     },
     {
       "id": "calendar-week-time-grid",
@@ -3851,11 +3851,11 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "Sticky day header and all-day strip over the 08–16 time grid; the current-time ruler sits on Wednesday at 13:45.",
       "capture": "viewport",
-      "bytes": 113210
+      "bytes": 113124
     },
     {
       "id": "calendar-week-time-grid",
@@ -3873,11 +3873,11 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "Sticky day header and all-day strip over the 08–16 time grid; the current-time ruler sits on Wednesday at 13:45.",
       "capture": "viewport",
-      "bytes": 119776
+      "bytes": 119551
     },
     {
       "id": "calendar-week-time-grid",
@@ -3895,11 +3895,11 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "Sticky day header and all-day strip over the 08–16 time grid; the current-time ruler sits on Wednesday at 13:45.",
       "capture": "viewport",
-      "bytes": 38201
+      "bytes": 38480
     },
     {
       "id": "calendar-week-time-grid",
@@ -3917,11 +3917,11 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "Sticky day header and all-day strip over the 08–16 time grid; the current-time ruler sits on Wednesday at 13:45.",
       "capture": "viewport",
-      "bytes": 40376
+      "bytes": 39817
     },
     {
       "id": "gallery-view",
@@ -3941,7 +3941,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": null,
       "capture": "viewport",
@@ -3965,7 +3965,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": null,
       "capture": "viewport",
@@ -3989,7 +3989,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": null,
       "capture": "viewport",
@@ -4013,7 +4013,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": null,
       "capture": "viewport",
@@ -4037,7 +4037,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "The list row the renderer builds: controls, a title line and a meta row of fixed-width fields. On desktop the fields sit on one line; on the phone (is-phone) the card fills the viewport and the fields wrap inside its border instead of escaping it.",
       "capture": "viewport",
@@ -4061,7 +4061,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "The list row the renderer builds: controls, a title line and a meta row of fixed-width fields. On desktop the fields sit on one line; on the phone (is-phone) the card fills the viewport and the fields wrap inside its border instead of escaping it.",
       "capture": "viewport",
@@ -4085,7 +4085,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "The list row the renderer builds: controls, a title line and a meta row of fixed-width fields. On desktop the fields sit on one line; on the phone (is-phone) the card fills the viewport and the fields wrap inside its border instead of escaping it.",
       "capture": "viewport",
@@ -4109,7 +4109,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "The list row the renderer builds: controls, a title line and a meta row of fixed-width fields. On desktop the fields sit on one line; on the phone (is-phone) the card fills the viewport and the fields wrap inside its border instead of escaping it.",
       "capture": "viewport",
@@ -4133,7 +4133,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": null,
       "capture": "viewport",
@@ -4157,7 +4157,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": null,
       "capture": "viewport",
@@ -4181,7 +4181,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": null,
       "capture": "viewport",
@@ -4205,11 +4205,11 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": null,
       "capture": "viewport",
-      "bytes": 86779
+      "bytes": 87047
     },
     {
       "id": "table-mobile",
@@ -4238,7 +4238,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "The full table the renderer builds: a select gutter, a record-icon gutter and a runtime <colgroup> of fixed px widths. On desktop those widths hold; on the phone (is-phone) the columns auto-fit to content and the select column is no longer clipped by the scroll-area fade mask. The name column is the title cell — a content-sized link plus the always-visible open affordance, rendered on touch as a compact maximize icon so its width goes to the note name instead of a text label.",
       "capture": "viewport",
@@ -4271,7 +4271,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "The full table the renderer builds: a select gutter, a record-icon gutter and a runtime <colgroup> of fixed px widths. On desktop those widths hold; on the phone (is-phone) the columns auto-fit to content and the select column is no longer clipped by the scroll-area fade mask. The name column is the title cell — a content-sized link plus the always-visible open affordance, rendered on touch as a compact maximize icon so its width goes to the note name instead of a text label.",
       "capture": "viewport",
@@ -4304,11 +4304,11 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "The full table the renderer builds: a select gutter, a record-icon gutter and a runtime <colgroup> of fixed px widths. On desktop those widths hold; on the phone (is-phone) the columns auto-fit to content and the select column is no longer clipped by the scroll-area fade mask. The name column is the title cell — a content-sized link plus the always-visible open affordance, rendered on touch as a compact maximize icon so its width goes to the note name instead of a text label.",
       "capture": "viewport",
-      "bytes": 75732
+      "bytes": 75168
     },
     {
       "id": "table-mobile",
@@ -4337,11 +4337,11 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "The full table the renderer builds: a select gutter, a record-icon gutter and a runtime <colgroup> of fixed px widths. On desktop those widths hold; on the phone (is-phone) the columns auto-fit to content and the select column is no longer clipped by the scroll-area fade mask. The name column is the title cell — a content-sized link plus the always-visible open affordance, rendered on touch as a compact maximize icon so its width goes to the note name instead of a text label.",
       "capture": "viewport",
-      "bytes": 74902
+      "bytes": 74195
     },
     {
       "id": "table-view",
@@ -4363,7 +4363,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": null,
       "capture": "viewport",
@@ -4389,7 +4389,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": null,
       "capture": "viewport",
@@ -4415,7 +4415,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": null,
       "capture": "viewport",
@@ -4441,7 +4441,7 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": null,
       "capture": "viewport",
@@ -4465,11 +4465,11 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "Column width is a switch plus a slider here, not the calendar's mode dropdown; the slider only appears once the switch is on.",
       "capture": "viewport",
-      "bytes": 99912
+      "bytes": 99917
     },
     {
       "id": "timeline-toolbar-options",
@@ -4489,11 +4489,11 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "Column width is a switch plus a slider here, not the calendar's mode dropdown; the slider only appears once the switch is on.",
       "capture": "viewport",
-      "bytes": 104356
+      "bytes": 104321
     },
     {
       "id": "timeline-toolbar-options",
@@ -4513,11 +4513,11 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "Column width is a switch plus a slider here, not the calendar's mode dropdown; the slider only appears once the switch is on.",
       "capture": "viewport",
-      "bytes": 35315
+      "bytes": 35363
     },
     {
       "id": "timeline-toolbar-options",
@@ -4537,11 +4537,11 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "Column width is a switch plus a slider here, not the calendar's mode dropdown; the slider only appears once the switch is on.",
       "capture": "viewport",
-      "bytes": 36470
+      "bytes": 36494
     },
     {
       "id": "timeline-view",
@@ -4559,11 +4559,11 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "Two weeks at one column per day; the April band marks the month boundary and the today line sits at 25 March 13:45.",
       "capture": "viewport",
-      "bytes": 146959
+      "bytes": 145806
     },
     {
       "id": "timeline-view",
@@ -4581,11 +4581,11 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "Two weeks at one column per day; the April band marks the month boundary and the today line sits at 25 March 13:45.",
       "capture": "viewport",
-      "bytes": 151947
+      "bytes": 150760
     },
     {
       "id": "timeline-view",
@@ -4603,11 +4603,11 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "Two weeks at one column per day; the April band marks the month boundary and the today line sits at 25 March 13:45.",
       "capture": "viewport",
-      "bytes": 41700
+      "bytes": 41984
     },
     {
       "id": "timeline-view",
@@ -4625,11 +4625,11 @@
         "tools/screenshots/theme.css": "dd06feeedc73",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "4588093f4aa7"
+        "tools/screenshots/capture.mjs": "c6ed74441cd6"
       },
       "note": "Two weeks at one column per day; the April band marks the month boundary and the today line sits at 25 March 13:45.",
       "capture": "viewport",
-      "bytes": 55729
+      "bytes": 55898
     }
   ]
 }
