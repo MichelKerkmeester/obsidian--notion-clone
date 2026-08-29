@@ -17,5 +17,7 @@ README.zh-CN.md
 .pi
 .pi-subagents
 
-# Storybook catalogue build output
+# Generated harness output: the catalogue bundle and the bench's raw samples,
+# which are rewritten on every run and would keep the tree perpetually dirty.
 tools/storybook/dist/
+tools/bench/dist/
