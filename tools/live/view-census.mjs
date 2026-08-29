@@ -249,6 +249,61 @@ for (const width of WIDTHS) {
 await rowMatrixPage.close();
 
 // ───────────────────────────────────────────────────────────────────
+// 3c. THE RAIL
+// ───────────────────────────────────────────────────────────────────
+
+// The view-controls rail is a child of the header and renders in every view, not just the calendar.
+// Two things about it were never asserted.
+//
+// It must scroll rather than grow: its own width stays inside the container while its scrollWidth
+// exceeds its clientWidth. A rail that grows pushes the whole header wider and the controls end up
+// off-screen, which is what an overflowing row of filter bubbles looks like.
+//
+// And its fade is a three-act cascade — a gradient, then `none`, then the gradient again under
+// `.is-overflowing`. The renderer computes that class from scrollWidth against clientWidth, so in a
+// static fixture it is never present and the third act never runs. Applying it by hand is the only
+// way to assert that the act which the renderer depends on still wins.
+
+const rail = [];
+const railPage = await browser.newPage({ viewport: { width: 402, height: 900 }, reducedMotion: "reduce" });
+for (const width of WIDTHS) {
+  await railPage.setViewportSize({ width, height: 900 });
+  for (const fixture of fixtures) {
+    let html;
+    try { html = fixture.html(); } catch { continue; }
+    if (!html.includes("db-active-view-controls-scroll")) continue;
+    await railPage.setContent(`<body><div id="shot">${html}</div></body>`);
+    await railPage.addStyleTag({ content: css });
+    await railPage.addStyleTag({ content: theme });
+    await railPage.addStyleTag({ content: runtime });
+    await railPage.evaluate(() => document.fonts.ready);
+    rail.push({
+      width,
+      fixture: fixture.id,
+      ...(await railPage.evaluate(() => {
+        const el = document.querySelector(".db-active-view-controls-scroll");
+        const container = document.querySelector(".note-database-container");
+        const mask = (n) => {
+          const s = getComputedStyle(n);
+          return (s.maskImage && s.maskImage !== "none" ? s.maskImage : s.webkitMaskImage) || "none";
+        };
+        const before = mask(el);
+        el.classList.add("is-overflowing");
+        const after = mask(el);
+        el.classList.remove("is-overflowing");
+        return {
+          scrolls: getComputedStyle(el).overflowX === "auto" || getComputedStyle(el).overflowX === "scroll",
+          overflowing: el.scrollWidth > el.clientWidth + 1,
+          growsContainer: el.getBoundingClientRect().width > container.getBoundingClientRect().width + 1,
+          fadeAppears: after !== before && after !== "none",
+        };
+      })),
+    });
+  }
+}
+await railPage.close();
+
+// ───────────────────────────────────────────────────────────────────
 // 4. THE PROBE GATE
 // ───────────────────────────────────────────────────────────────────
 
@@ -306,8 +361,16 @@ for (const m of matrix) {
 }
 console.log("");
 
+const railGrows = rail.filter((r) => r.growsContainer);
+const railNoFade = rail.filter((r) => r.overflowing && !r.fadeAppears);
+console.log("RAIL — scroll-versus-grow, and the fade the renderer depends on:");
+console.log(`  measured                              ${rail.length}`);
+console.log(`  growing their container (the defect)  ${railGrows.length}`);
+console.log(`  overflowing without a working fade    ${railNoFade.length}\n`);
+
 stamp("tools/live/view-census.json", {
   widths: WIDTHS,
+  rail,
   rowMatrix: matrix,
   totals: {
     fixtures: fixtures.length,

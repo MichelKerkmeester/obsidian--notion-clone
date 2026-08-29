@@ -1,8 +1,8 @@
 {
-  "measuredAt": "2026-08-29T19:20:11.723Z",
+  "measuredAt": "2026-08-29T19:22:11.300Z",
   "inputs": {
     "styles.css": "a535fa1bf6fd",
-    "tools/live/view-census.mjs": "74e114d11b35",
+    "tools/live/view-census.mjs": "f8d04abfcd34",
     "tools/screenshots/scenarios.mjs": "1395f2dacbfd"
   },
   "widths": [
@@ -10,6 +10,40 @@
     402,
     768,
     1440
+  ],
+  "rail": [
+    {
+      "width": 320,
+      "fixture": "chrome-active-view-controls",
+      "scrolls": true,
+      "overflowing": true,
+      "growsContainer": false,
+      "fadeAppears": true
+    },
+    {
+      "width": 402,
+      "fixture": "chrome-active-view-controls",
+      "scrolls": true,
+      "overflowing": true,
+      "growsContainer": false,
+      "fadeAppears": true
+    },
+    {
+      "width": 768,
+      "fixture": "chrome-active-view-controls",
+      "scrolls": true,
+      "overflowing": true,
+      "growsContainer": false,
+      "fadeAppears": true
+    },
+    {
+      "width": 1440,
+      "fixture": "chrome-active-view-controls",
+      "scrolls": true,
+      "overflowing": false,
+      "growsContainer": false,
+      "fadeAppears": true
+    }
   ],
   "rowMatrix": [
     {
