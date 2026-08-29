@@ -1,6 +1,6 @@
 {
   "generatedFrom": {
-    "stylesheet": "styles.css@651ec7410315"
+    "stylesheet": "styles.css@9732449e4746"
   },
   "scenarios": [
     {
@@ -14,8 +14,8 @@
         "src/views/toolbar-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/toolbar-renderer.ts": "7e263f6ef163",
-        "styles.css": "651ec7410315"
+        "src/views/toolbar-renderer.ts": "0e3f76e3ca85",
+        "styles.css": "9732449e4746"
       },
       "note": "Tiles keep icon and caption inside their own bounds; the duplicate checkbox is not stretched.",
       "capture": "element",
@@ -32,8 +32,8 @@
         "src/views/toolbar-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/toolbar-renderer.ts": "7e263f6ef163",
-        "styles.css": "651ec7410315"
+        "src/views/toolbar-renderer.ts": "0e3f76e3ca85",
+        "styles.css": "9732449e4746"
       },
       "note": "Tiles keep icon and caption inside their own bounds; the duplicate checkbox is not stretched.",
       "capture": "element",
@@ -50,8 +50,8 @@
         "src/views/toolbar-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/toolbar-renderer.ts": "7e263f6ef163",
-        "styles.css": "651ec7410315"
+        "src/views/toolbar-renderer.ts": "0e3f76e3ca85",
+        "styles.css": "9732449e4746"
       },
       "note": "Tiles keep icon and caption inside their own bounds; the duplicate checkbox is not stretched.",
       "capture": "element",
@@ -68,8 +68,8 @@
         "src/views/toolbar-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/toolbar-renderer.ts": "7e263f6ef163",
-        "styles.css": "651ec7410315"
+        "src/views/toolbar-renderer.ts": "0e3f76e3ca85",
+        "styles.css": "9732449e4746"
       },
       "note": "Tiles keep icon and caption inside their own bounds; the duplicate checkbox is not stretched.",
       "capture": "element",
@@ -89,7 +89,7 @@
       "sourceHashes": {
         "src/views/active-rule-popover-renderer.ts": "d9143edf30ba",
         "src/views/filter-panel-renderer.ts": "deabe2ecc320",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": "Editing one chip opens the filter panel's single-rule editor: field, operator and value, with no remove button.",
       "capture": "element",
@@ -109,7 +109,7 @@
       "sourceHashes": {
         "src/views/active-rule-popover-renderer.ts": "d9143edf30ba",
         "src/views/filter-panel-renderer.ts": "deabe2ecc320",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": "Editing one chip opens the filter panel's single-rule editor: field, operator and value, with no remove button.",
       "capture": "element",
@@ -129,7 +129,7 @@
       "sourceHashes": {
         "src/views/active-rule-popover-renderer.ts": "d9143edf30ba",
         "src/views/filter-panel-renderer.ts": "deabe2ecc320",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": "Editing one chip opens the filter panel's single-rule editor: field, operator and value, with no remove button.",
       "capture": "element",
@@ -149,7 +149,7 @@
       "sourceHashes": {
         "src/views/active-rule-popover-renderer.ts": "d9143edf30ba",
         "src/views/filter-panel-renderer.ts": "deabe2ecc320",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": "Editing one chip opens the filter panel's single-rule editor: field, operator and value, with no remove button.",
       "capture": "element",
@@ -169,7 +169,7 @@
       "sourceHashes": {
         "src/views/active-rule-popover-renderer.ts": "d9143edf30ba",
         "src/views/sort-panel-renderer.ts": "19109d09b2d5",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": "The sort variant adds db-sort-panel and drops the drag handle and reorder buttons the full panel shows.",
       "capture": "element",
@@ -189,7 +189,7 @@
       "sourceHashes": {
         "src/views/active-rule-popover-renderer.ts": "d9143edf30ba",
         "src/views/sort-panel-renderer.ts": "19109d09b2d5",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": "The sort variant adds db-sort-panel and drops the drag handle and reorder buttons the full panel shows.",
       "capture": "element",
@@ -209,7 +209,7 @@
       "sourceHashes": {
         "src/views/active-rule-popover-renderer.ts": "d9143edf30ba",
         "src/views/sort-panel-renderer.ts": "19109d09b2d5",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": "The sort variant adds db-sort-panel and drops the drag handle and reorder buttons the full panel shows.",
       "capture": "element",
@@ -229,7 +229,7 @@
       "sourceHashes": {
         "src/views/active-rule-popover-renderer.ts": "d9143edf30ba",
         "src/views/sort-panel-renderer.ts": "19109d09b2d5",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": "The sort variant adds db-sort-panel and drops the drag handle and reorder buttons the full panel shows.",
       "capture": "element",
@@ -247,7 +247,7 @@
       ],
       "sourceHashes": {
         "src/views/active-view-controls-renderer.ts": "28f8d85134ed",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": "The rail lives in the header below the toolbar. Sort chips come first and carry their position as a superscript; the AND button between the groups toggles filter logic.",
       "capture": "element",
@@ -265,7 +265,7 @@
       ],
       "sourceHashes": {
         "src/views/active-view-controls-renderer.ts": "28f8d85134ed",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": "The rail lives in the header below the toolbar. Sort chips come first and carry their position as a superscript; the AND button between the groups toggles filter logic.",
       "capture": "element",
@@ -283,7 +283,7 @@
       ],
       "sourceHashes": {
         "src/views/active-view-controls-renderer.ts": "28f8d85134ed",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": "The rail lives in the header below the toolbar. Sort chips come first and carry their position as a superscript; the AND button between the groups toggles filter logic.",
       "capture": "element",
@@ -301,7 +301,7 @@
       ],
       "sourceHashes": {
         "src/views/active-view-controls-renderer.ts": "28f8d85134ed",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": "The rail lives in the header below the toolbar. Sort chips come first and carry their position as a superscript; the AND button between the groups toggles filter logic.",
       "capture": "element",
@@ -318,8 +318,8 @@
         "src/views/chart-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/chart-renderer.ts": "b365bc3437fb",
-        "styles.css": "651ec7410315"
+        "src/views/chart-renderer.ts": "41670dc89146",
+        "styles.css": "9732449e4746"
       },
       "note": "Every other chart type is a Chart.js canvas painted at runtime, so this recovery state and the single-number chart are what a capture can show of the chart body.",
       "capture": "element",
@@ -336,8 +336,8 @@
         "src/views/chart-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/chart-renderer.ts": "b365bc3437fb",
-        "styles.css": "651ec7410315"
+        "src/views/chart-renderer.ts": "41670dc89146",
+        "styles.css": "9732449e4746"
       },
       "note": "Every other chart type is a Chart.js canvas painted at runtime, so this recovery state and the single-number chart are what a capture can show of the chart body.",
       "capture": "element",
@@ -354,8 +354,8 @@
         "src/views/chart-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/chart-renderer.ts": "b365bc3437fb",
-        "styles.css": "651ec7410315"
+        "src/views/chart-renderer.ts": "41670dc89146",
+        "styles.css": "9732449e4746"
       },
       "note": "Every other chart type is a Chart.js canvas painted at runtime, so this recovery state and the single-number chart are what a capture can show of the chart body.",
       "capture": "element",
@@ -372,8 +372,8 @@
         "src/views/chart-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/chart-renderer.ts": "b365bc3437fb",
-        "styles.css": "651ec7410315"
+        "src/views/chart-renderer.ts": "41670dc89146",
+        "styles.css": "9732449e4746"
       },
       "note": "Every other chart type is a Chart.js canvas painted at runtime, so this recovery state and the single-number chart are what a capture can show of the chart body.",
       "capture": "element",
@@ -390,8 +390,8 @@
         "src/views/chart-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/chart-renderer.ts": "b365bc3437fb",
-        "styles.css": "651ec7410315"
+        "src/views/chart-renderer.ts": "41670dc89146",
+        "styles.css": "9732449e4746"
       },
       "note": "The one chart type the stylesheet draws in full: renderNumber writes three divs and no canvas, so this is the only plotted chart a screenshot can show. The height class is what sizes it.",
       "capture": "element",
@@ -408,8 +408,8 @@
         "src/views/chart-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/chart-renderer.ts": "b365bc3437fb",
-        "styles.css": "651ec7410315"
+        "src/views/chart-renderer.ts": "41670dc89146",
+        "styles.css": "9732449e4746"
       },
       "note": "The one chart type the stylesheet draws in full: renderNumber writes three divs and no canvas, so this is the only plotted chart a screenshot can show. The height class is what sizes it.",
       "capture": "element",
@@ -426,8 +426,8 @@
         "src/views/chart-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/chart-renderer.ts": "b365bc3437fb",
-        "styles.css": "651ec7410315"
+        "src/views/chart-renderer.ts": "41670dc89146",
+        "styles.css": "9732449e4746"
       },
       "note": "The one chart type the stylesheet draws in full: renderNumber writes three divs and no canvas, so this is the only plotted chart a screenshot can show. The height class is what sizes it.",
       "capture": "element",
@@ -444,8 +444,8 @@
         "src/views/chart-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/chart-renderer.ts": "b365bc3437fb",
-        "styles.css": "651ec7410315"
+        "src/views/chart-renderer.ts": "41670dc89146",
+        "styles.css": "9732449e4746"
       },
       "note": "The one chart type the stylesheet draws in full: renderNumber writes three divs and no canvas, so this is the only plotted chart a screenshot can show. The height class is what sizes it.",
       "capture": "element",
@@ -463,7 +463,7 @@
       ],
       "sourceHashes": {
         "src/views/chart-toolbar-renderer.ts": "bee386af7e07",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": "What the chart view uses instead of a toolbar of its own: the chart-options button in the toolbar opens this panel. Every row is a 18px/1fr/16px grid, so selects, switches, drill-in entries and export buttons line up on one set of columns.",
       "capture": "element",
@@ -481,7 +481,7 @@
       ],
       "sourceHashes": {
         "src/views/chart-toolbar-renderer.ts": "bee386af7e07",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": "What the chart view uses instead of a toolbar of its own: the chart-options button in the toolbar opens this panel. Every row is a 18px/1fr/16px grid, so selects, switches, drill-in entries and export buttons line up on one set of columns.",
       "capture": "element",
@@ -499,7 +499,7 @@
       ],
       "sourceHashes": {
         "src/views/chart-toolbar-renderer.ts": "bee386af7e07",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": "What the chart view uses instead of a toolbar of its own: the chart-options button in the toolbar opens this panel. Every row is a 18px/1fr/16px grid, so selects, switches, drill-in entries and export buttons line up on one set of columns.",
       "capture": "element",
@@ -517,7 +517,7 @@
       ],
       "sourceHashes": {
         "src/views/chart-toolbar-renderer.ts": "bee386af7e07",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": "What the chart view uses instead of a toolbar of its own: the chart-options button in the toolbar opens this panel. Every row is a 18px/1fr/16px grid, so selects, switches, drill-in entries and export buttons line up on one set of columns.",
       "capture": "element",
@@ -537,9 +537,9 @@
       ],
       "sourceHashes": {
         "src/views/group-label-renderer.ts": "3fee8449607c",
-        "src/views/table-renderer.ts": "4ecaa2cb2295",
+        "src/views/table-renderer.ts": "c64795ff0f7d",
         "src/views/summary-renderer.ts": "c6752fec0dfe",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": "An option-typed group field renders its key as a colored status badge; a field with no options renders plain text, as the nested Revolut subgroup does. Per-group summaries sit at the right of each divider.",
       "capture": "element",
@@ -559,9 +559,9 @@
       ],
       "sourceHashes": {
         "src/views/group-label-renderer.ts": "3fee8449607c",
-        "src/views/table-renderer.ts": "4ecaa2cb2295",
+        "src/views/table-renderer.ts": "c64795ff0f7d",
         "src/views/summary-renderer.ts": "c6752fec0dfe",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": "An option-typed group field renders its key as a colored status badge; a field with no options renders plain text, as the nested Revolut subgroup does. Per-group summaries sit at the right of each divider.",
       "capture": "element",
@@ -581,9 +581,9 @@
       ],
       "sourceHashes": {
         "src/views/group-label-renderer.ts": "3fee8449607c",
-        "src/views/table-renderer.ts": "4ecaa2cb2295",
+        "src/views/table-renderer.ts": "c64795ff0f7d",
         "src/views/summary-renderer.ts": "c6752fec0dfe",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": "An option-typed group field renders its key as a colored status badge; a field with no options renders plain text, as the nested Revolut subgroup does. Per-group summaries sit at the right of each divider.",
       "capture": "element",
@@ -603,9 +603,9 @@
       ],
       "sourceHashes": {
         "src/views/group-label-renderer.ts": "3fee8449607c",
-        "src/views/table-renderer.ts": "4ecaa2cb2295",
+        "src/views/table-renderer.ts": "c64795ff0f7d",
         "src/views/summary-renderer.ts": "c6752fec0dfe",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": "An option-typed group field renders its key as a colored status badge; a field with no options renders plain text, as the nested Revolut subgroup does. Per-group summaries sit at the right of each divider.",
       "capture": "element",
@@ -623,7 +623,7 @@
       ],
       "sourceHashes": {
         "src/views/summary-renderer.ts": "c6752fec0dfe",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": "Total is always present; each configured summary rule is a draggable, clickable item, and the faint + Summary entry adds another.",
       "capture": "element",
@@ -641,7 +641,7 @@
       ],
       "sourceHashes": {
         "src/views/summary-renderer.ts": "c6752fec0dfe",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": "Total is always present; each configured summary rule is a draggable, clickable item, and the faint + Summary entry adds another.",
       "capture": "element",
@@ -659,7 +659,7 @@
       ],
       "sourceHashes": {
         "src/views/summary-renderer.ts": "c6752fec0dfe",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": "Total is always present; each configured summary rule is a draggable, clickable item, and the faint + Summary entry adds another.",
       "capture": "element",
@@ -677,7 +677,7 @@
       ],
       "sourceHashes": {
         "src/views/summary-renderer.ts": "c6752fec0dfe",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": "Total is always present; each configured summary rule is a draggable, clickable item, and the faint + Summary entry adds another.",
       "capture": "element",
@@ -696,12 +696,12 @@
       ],
       "sourceHashes": {
         "src/views/table-footer-renderer.ts": "2a076187efd5",
-        "src/views/table-renderer.ts": "4ecaa2cb2295",
-        "styles.css": "651ec7410315"
+        "src/views/table-renderer.ts": "c64795ff0f7d",
+        "styles.css": "9732449e4746"
       },
       "note": "A column with summary rules stacks each kind over its result; a column without one shows a + Calculate hint that the stylesheet keeps at zero opacity until the trigger is hovered, so it is invisible here by design.",
       "capture": "element",
-      "bytes": 432916
+      "bytes": 432963
     },
     {
       "id": "chrome-table-footer",
@@ -716,8 +716,8 @@
       ],
       "sourceHashes": {
         "src/views/table-footer-renderer.ts": "2a076187efd5",
-        "src/views/table-renderer.ts": "4ecaa2cb2295",
-        "styles.css": "651ec7410315"
+        "src/views/table-renderer.ts": "c64795ff0f7d",
+        "styles.css": "9732449e4746"
       },
       "note": "A column with summary rules stacks each kind over its result; a column without one shows a + Calculate hint that the stylesheet keeps at zero opacity until the trigger is hovered, so it is invisible here by design.",
       "capture": "element",
@@ -736,8 +736,8 @@
       ],
       "sourceHashes": {
         "src/views/table-footer-renderer.ts": "2a076187efd5",
-        "src/views/table-renderer.ts": "4ecaa2cb2295",
-        "styles.css": "651ec7410315"
+        "src/views/table-renderer.ts": "c64795ff0f7d",
+        "styles.css": "9732449e4746"
       },
       "note": "A column with summary rules stacks each kind over its result; a column without one shows a + Calculate hint that the stylesheet keeps at zero opacity until the trigger is hovered, so it is invisible here by design.",
       "capture": "element",
@@ -756,8 +756,8 @@
       ],
       "sourceHashes": {
         "src/views/table-footer-renderer.ts": "2a076187efd5",
-        "src/views/table-renderer.ts": "4ecaa2cb2295",
-        "styles.css": "651ec7410315"
+        "src/views/table-renderer.ts": "c64795ff0f7d",
+        "styles.css": "9732449e4746"
       },
       "note": "A column with summary rules stacks each kind over its result; a column without one shows a + Calculate hint that the stylesheet keeps at zero opacity until the trigger is hovered, so it is invisible here by design.",
       "capture": "element",
@@ -774,12 +774,12 @@
         "src/views/toolbar-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/toolbar-renderer.ts": "7e263f6ef163",
-        "styles.css": "651ec7410315"
+        "src/views/toolbar-renderer.ts": "0e3f76e3ca85",
+        "styles.css": "9732449e4746"
       },
       "note": "View switcher on the left; query, properties, utilities and creation clusters on the right. The search control sits collapsed in the utilities cluster until it has text or focus.",
       "capture": "element",
-      "bytes": 21256
+      "bytes": 21143
     },
     {
       "id": "chrome-toolbar",
@@ -792,12 +792,12 @@
         "src/views/toolbar-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/toolbar-renderer.ts": "7e263f6ef163",
-        "styles.css": "651ec7410315"
+        "src/views/toolbar-renderer.ts": "0e3f76e3ca85",
+        "styles.css": "9732449e4746"
       },
       "note": "View switcher on the left; query, properties, utilities and creation clusters on the right. The search control sits collapsed in the utilities cluster until it has text or focus.",
       "capture": "element",
-      "bytes": 21936
+      "bytes": 21830
     },
     {
       "id": "chrome-toolbar",
@@ -810,12 +810,12 @@
         "src/views/toolbar-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/toolbar-renderer.ts": "7e263f6ef163",
-        "styles.css": "651ec7410315"
+        "src/views/toolbar-renderer.ts": "0e3f76e3ca85",
+        "styles.css": "9732449e4746"
       },
       "note": "View switcher on the left; query, properties, utilities and creation clusters on the right. The search control sits collapsed in the utilities cluster until it has text or focus.",
       "capture": "element",
-      "bytes": 21159
+      "bytes": 21131
     },
     {
       "id": "chrome-toolbar",
@@ -828,12 +828,12 @@
         "src/views/toolbar-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/toolbar-renderer.ts": "7e263f6ef163",
-        "styles.css": "651ec7410315"
+        "src/views/toolbar-renderer.ts": "0e3f76e3ca85",
+        "styles.css": "9732449e4746"
       },
       "note": "View switcher on the left; query, properties, utilities and creation clusters on the right. The search control sits collapsed in the utilities cluster until it has text or focus.",
       "capture": "element",
-      "bytes": 21887
+      "bytes": 21877
     },
     {
       "id": "chrome-toolbar-search",
@@ -846,8 +846,8 @@
         "src/views/toolbar-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/toolbar-renderer.ts": "7e263f6ef163",
-        "styles.css": "651ec7410315"
+        "src/views/toolbar-renderer.ts": "0e3f76e3ca85",
+        "styles.css": "9732449e4746"
       },
       "note": "The wrap is 28px wide at rest and widens to 150px under is-active; the clear button is hidden until the input has text.",
       "capture": "element",
@@ -864,8 +864,8 @@
         "src/views/toolbar-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/toolbar-renderer.ts": "7e263f6ef163",
-        "styles.css": "651ec7410315"
+        "src/views/toolbar-renderer.ts": "0e3f76e3ca85",
+        "styles.css": "9732449e4746"
       },
       "note": "The wrap is 28px wide at rest and widens to 150px under is-active; the clear button is hidden until the input has text.",
       "capture": "element",
@@ -882,8 +882,8 @@
         "src/views/toolbar-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/toolbar-renderer.ts": "7e263f6ef163",
-        "styles.css": "651ec7410315"
+        "src/views/toolbar-renderer.ts": "0e3f76e3ca85",
+        "styles.css": "9732449e4746"
       },
       "note": "The wrap is 28px wide at rest and widens to 150px under is-active; the clear button is hidden until the input has text.",
       "capture": "element",
@@ -900,8 +900,8 @@
         "src/views/toolbar-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/toolbar-renderer.ts": "7e263f6ef163",
-        "styles.css": "651ec7410315"
+        "src/views/toolbar-renderer.ts": "0e3f76e3ca85",
+        "styles.css": "9732449e4746"
       },
       "note": "The wrap is 28px wide at rest and widens to 150px under is-active; the clear button is hidden until the input has text.",
       "capture": "element",
@@ -918,8 +918,8 @@
         "src/views/toolbar-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/toolbar-renderer.ts": "7e263f6ef163",
-        "styles.css": "651ec7410315"
+        "src/views/toolbar-renderer.ts": "0e3f76e3ca85",
+        "styles.css": "9732449e4746"
       },
       "note": "The active tab carries is-active; the ⋯ tab appears only once the toolbar has measured tabs out of view, and opens the all-views hub.",
       "capture": "element",
@@ -936,8 +936,8 @@
         "src/views/toolbar-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/toolbar-renderer.ts": "7e263f6ef163",
-        "styles.css": "651ec7410315"
+        "src/views/toolbar-renderer.ts": "0e3f76e3ca85",
+        "styles.css": "9732449e4746"
       },
       "note": "The active tab carries is-active; the ⋯ tab appears only once the toolbar has measured tabs out of view, and opens the all-views hub.",
       "capture": "element",
@@ -954,8 +954,8 @@
         "src/views/toolbar-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/toolbar-renderer.ts": "7e263f6ef163",
-        "styles.css": "651ec7410315"
+        "src/views/toolbar-renderer.ts": "0e3f76e3ca85",
+        "styles.css": "9732449e4746"
       },
       "note": "The active tab carries is-active; the ⋯ tab appears only once the toolbar has measured tabs out of view, and opens the all-views hub.",
       "capture": "element",
@@ -972,8 +972,8 @@
         "src/views/toolbar-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/toolbar-renderer.ts": "7e263f6ef163",
-        "styles.css": "651ec7410315"
+        "src/views/toolbar-renderer.ts": "0e3f76e3ca85",
+        "styles.css": "9732449e4746"
       },
       "note": "The active tab carries is-active; the ⋯ tab appears only once the toolbar has measured tabs out of view, and opens the all-views hub.",
       "capture": "element",
@@ -991,7 +991,7 @@
       ],
       "sourceHashes": {
         "src/views/dropdown-field.ts": "1a4c6e81f793",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": "A disabled option is dimmed and carries a tooltip rather than inline explanatory text.",
       "capture": "element",
@@ -1009,7 +1009,7 @@
       ],
       "sourceHashes": {
         "src/views/dropdown-field.ts": "1a4c6e81f793",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": "A disabled option is dimmed and carries a tooltip rather than inline explanatory text.",
       "capture": "element",
@@ -1027,7 +1027,7 @@
       ],
       "sourceHashes": {
         "src/views/dropdown-field.ts": "1a4c6e81f793",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": "A disabled option is dimmed and carries a tooltip rather than inline explanatory text.",
       "capture": "element",
@@ -1045,7 +1045,7 @@
       ],
       "sourceHashes": {
         "src/views/dropdown-field.ts": "1a4c6e81f793",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": "A disabled option is dimmed and carries a tooltip rather than inline explanatory text.",
       "capture": "element",
@@ -1063,7 +1063,7 @@
       ],
       "sourceHashes": {
         "src/views/column-header-controller.ts": "7714b894b5b0",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": "The menu trigger sits inline after the label and the label truncates before it moves.",
       "capture": "element",
@@ -1081,7 +1081,7 @@
       ],
       "sourceHashes": {
         "src/views/column-header-controller.ts": "7714b894b5b0",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": "The menu trigger sits inline after the label and the label truncates before it moves.",
       "capture": "element",
@@ -1099,7 +1099,7 @@
       ],
       "sourceHashes": {
         "src/views/column-header-controller.ts": "7714b894b5b0",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": "The menu trigger sits inline after the label and the label truncates before it moves.",
       "capture": "element",
@@ -1117,7 +1117,7 @@
       ],
       "sourceHashes": {
         "src/views/column-header-controller.ts": "7714b894b5b0",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": "The menu trigger sits inline after the label and the label truncates before it moves.",
       "capture": "element",
@@ -1135,9 +1135,9 @@
         "src/data/column-types.ts"
       ],
       "sourceHashes": {
-        "src/views/cell-renderer.ts": "e041f712f0b8",
+        "src/views/cell-renderer.ts": "e2259fa7a8c7",
         "src/data/column-types.ts": "c48057b05309",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": "Each row carries a drag handle, a colour dot that opens the colour picker, the check mark and a delete button. An unregistered value offers a plus instead of a trash icon.",
       "capture": "element",
@@ -1155,9 +1155,9 @@
         "src/data/column-types.ts"
       ],
       "sourceHashes": {
-        "src/views/cell-renderer.ts": "e041f712f0b8",
+        "src/views/cell-renderer.ts": "e2259fa7a8c7",
         "src/data/column-types.ts": "c48057b05309",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": "Each row carries a drag handle, a colour dot that opens the colour picker, the check mark and a delete button. An unregistered value offers a plus instead of a trash icon.",
       "capture": "element",
@@ -1175,9 +1175,9 @@
         "src/data/column-types.ts"
       ],
       "sourceHashes": {
-        "src/views/cell-renderer.ts": "e041f712f0b8",
+        "src/views/cell-renderer.ts": "e2259fa7a8c7",
         "src/data/column-types.ts": "c48057b05309",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": "Each row carries a drag handle, a colour dot that opens the colour picker, the check mark and a delete button. An unregistered value offers a plus instead of a trash icon.",
       "capture": "element",
@@ -1195,9 +1195,9 @@
         "src/data/column-types.ts"
       ],
       "sourceHashes": {
-        "src/views/cell-renderer.ts": "e041f712f0b8",
+        "src/views/cell-renderer.ts": "e2259fa7a8c7",
         "src/data/column-types.ts": "c48057b05309",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": "Each row carries a drag handle, a colour dot that opens the colour picker, the check mark and a delete button. An unregistered value offers a plus instead of a trash icon.",
       "capture": "element",
@@ -1214,8 +1214,8 @@
         "src/views/cell-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/cell-renderer.ts": "e041f712f0b8",
-        "styles.css": "651ec7410315"
+        "src/views/cell-renderer.ts": "e2259fa7a8c7",
+        "styles.css": "9732449e4746"
       },
       "note": "Both editors keep the cell's rendered value visible underneath. The multi-line editor marks its cell with db-cell-editing (the accent inset); the single-line one marks its cell with db-cell-popover-editing, which the stylesheet declares no rule for, so that cell shows no edit affordance. Markdown columns gain the format toolbar.",
       "capture": "element",
@@ -1232,8 +1232,8 @@
         "src/views/cell-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/cell-renderer.ts": "e041f712f0b8",
-        "styles.css": "651ec7410315"
+        "src/views/cell-renderer.ts": "e2259fa7a8c7",
+        "styles.css": "9732449e4746"
       },
       "note": "Both editors keep the cell's rendered value visible underneath. The multi-line editor marks its cell with db-cell-editing (the accent inset); the single-line one marks its cell with db-cell-popover-editing, which the stylesheet declares no rule for, so that cell shows no edit affordance. Markdown columns gain the format toolbar.",
       "capture": "element",
@@ -1250,8 +1250,8 @@
         "src/views/cell-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/cell-renderer.ts": "e041f712f0b8",
-        "styles.css": "651ec7410315"
+        "src/views/cell-renderer.ts": "e2259fa7a8c7",
+        "styles.css": "9732449e4746"
       },
       "note": "Both editors keep the cell's rendered value visible underneath. The multi-line editor marks its cell with db-cell-editing (the accent inset); the single-line one marks its cell with db-cell-popover-editing, which the stylesheet declares no rule for, so that cell shows no edit affordance. Markdown columns gain the format toolbar.",
       "capture": "element",
@@ -1268,8 +1268,8 @@
         "src/views/cell-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/cell-renderer.ts": "e041f712f0b8",
-        "styles.css": "651ec7410315"
+        "src/views/cell-renderer.ts": "e2259fa7a8c7",
+        "styles.css": "9732449e4746"
       },
       "note": "Both editors keep the cell's rendered value visible underneath. The multi-line editor marks its cell with db-cell-editing (the accent inset); the single-line one marks its cell with db-cell-popover-editing, which the stylesheet declares no rule for, so that cell shows no edit affordance. Markdown columns gain the format toolbar.",
       "capture": "element",
@@ -1289,7 +1289,7 @@
       "sourceHashes": {
         "src/views/date-value-picker.ts": "1f7347ded726",
         "src/views/calendar-mini-calendar-renderer.ts": "14853dcd3917",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": "A datetime column adds hour and minute segments after the date, and the trigger swaps calendar-days for calendar-clock.",
       "capture": "element",
@@ -1309,7 +1309,7 @@
       "sourceHashes": {
         "src/views/date-value-picker.ts": "1f7347ded726",
         "src/views/calendar-mini-calendar-renderer.ts": "14853dcd3917",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": "A datetime column adds hour and minute segments after the date, and the trigger swaps calendar-days for calendar-clock.",
       "capture": "element",
@@ -1329,7 +1329,7 @@
       "sourceHashes": {
         "src/views/date-value-picker.ts": "1f7347ded726",
         "src/views/calendar-mini-calendar-renderer.ts": "14853dcd3917",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": "A datetime column adds hour and minute segments after the date, and the trigger swaps calendar-days for calendar-clock.",
       "capture": "element",
@@ -1349,7 +1349,7 @@
       "sourceHashes": {
         "src/views/date-value-picker.ts": "1f7347ded726",
         "src/views/calendar-mini-calendar-renderer.ts": "14853dcd3917",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": "A datetime column adds hour and minute segments after the date, and the trigger swaps calendar-days for calendar-clock.",
       "capture": "element",
@@ -1369,7 +1369,7 @@
       "sourceHashes": {
         "src/views/date-value-picker.ts": "1f7347ded726",
         "src/views/calendar-mini-calendar-renderer.ts": "14853dcd3917",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": "The trigger shows the committed value; the popover stacks quick dates, the three segment inputs and the mini calendar, which renders flat inside the date popover rather than as its own floating surface.",
       "capture": "element",
@@ -1389,7 +1389,7 @@
       "sourceHashes": {
         "src/views/date-value-picker.ts": "1f7347ded726",
         "src/views/calendar-mini-calendar-renderer.ts": "14853dcd3917",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": "The trigger shows the committed value; the popover stacks quick dates, the three segment inputs and the mini calendar, which renders flat inside the date popover rather than as its own floating surface.",
       "capture": "element",
@@ -1409,7 +1409,7 @@
       "sourceHashes": {
         "src/views/date-value-picker.ts": "1f7347ded726",
         "src/views/calendar-mini-calendar-renderer.ts": "14853dcd3917",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": "The trigger shows the committed value; the popover stacks quick dates, the three segment inputs and the mini calendar, which renders flat inside the date popover rather than as its own floating surface.",
       "capture": "element",
@@ -1429,7 +1429,7 @@
       "sourceHashes": {
         "src/views/date-value-picker.ts": "1f7347ded726",
         "src/views/calendar-mini-calendar-renderer.ts": "14853dcd3917",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": "The trigger shows the committed value; the popover stacks quick dates, the three segment inputs and the mini calendar, which renders flat inside the date popover rather than as its own floating surface.",
       "capture": "element",
@@ -1447,7 +1447,7 @@
       ],
       "sourceHashes": {
         "src/views/file-field-renderer.ts": "4a6891fdd59e",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": "file.tags render as status badges, link-list fields as compact chips, and file.file as a link back to the row's own note. The per-tag remove buttons are in the DOM of a writable cell but sit at opacity 0 until the badge is hovered, so they do not appear here.",
       "capture": "element",
@@ -1465,7 +1465,7 @@
       ],
       "sourceHashes": {
         "src/views/file-field-renderer.ts": "4a6891fdd59e",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": "file.tags render as status badges, link-list fields as compact chips, and file.file as a link back to the row's own note. The per-tag remove buttons are in the DOM of a writable cell but sit at opacity 0 until the badge is hovered, so they do not appear here.",
       "capture": "element",
@@ -1483,7 +1483,7 @@
       ],
       "sourceHashes": {
         "src/views/file-field-renderer.ts": "4a6891fdd59e",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": "file.tags render as status badges, link-list fields as compact chips, and file.file as a link back to the row's own note. The per-tag remove buttons are in the DOM of a writable cell but sit at opacity 0 until the badge is hovered, so they do not appear here.",
       "capture": "element",
@@ -1501,7 +1501,7 @@
       ],
       "sourceHashes": {
         "src/views/file-field-renderer.ts": "4a6891fdd59e",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": "file.tags render as status badges, link-list fields as compact chips, and file.file as a link back to the row's own note. The per-tag remove buttons are in the DOM of a writable cell but sit at opacity 0 until the badge is hovered, so they do not appear here.",
       "capture": "element",
@@ -1521,7 +1521,7 @@
       "sourceHashes": {
         "src/views/icon-picker-popover.ts": "ef97335f5ff2",
         "src/views/record-icon-renderer.ts": "3d90a87b2a0b",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": "The Icons tab adds the colour strip; the picker is created on document.body, so it is a top-level element here rather than a child of the container.",
       "capture": "element",
@@ -1541,7 +1541,7 @@
       "sourceHashes": {
         "src/views/icon-picker-popover.ts": "ef97335f5ff2",
         "src/views/record-icon-renderer.ts": "3d90a87b2a0b",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": "The Icons tab adds the colour strip; the picker is created on document.body, so it is a top-level element here rather than a child of the container.",
       "capture": "element",
@@ -1561,7 +1561,7 @@
       "sourceHashes": {
         "src/views/icon-picker-popover.ts": "ef97335f5ff2",
         "src/views/record-icon-renderer.ts": "3d90a87b2a0b",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": "The Icons tab adds the colour strip; the picker is created on document.body, so it is a top-level element here rather than a child of the container.",
       "capture": "element",
@@ -1581,7 +1581,7 @@
       "sourceHashes": {
         "src/views/icon-picker-popover.ts": "ef97335f5ff2",
         "src/views/record-icon-renderer.ts": "3d90a87b2a0b",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": "The Icons tab adds the colour strip; the picker is created on document.body, so it is a top-level element here rather than a child of the container.",
       "capture": "element",
@@ -1601,7 +1601,7 @@
       "sourceHashes": {
         "src/views/number-display-renderer.ts": "626e6b487cf1",
         "src/data/number-display.ts": "b0967db0f269",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": "Rating, progress bar and progress ring all tint through db-num-color-*, which sets --db-number-color. Half slots are the accent overlay clipped to 50%.",
       "capture": "element",
@@ -1621,7 +1621,7 @@
       "sourceHashes": {
         "src/views/number-display-renderer.ts": "626e6b487cf1",
         "src/data/number-display.ts": "b0967db0f269",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": "Rating, progress bar and progress ring all tint through db-num-color-*, which sets --db-number-color. Half slots are the accent overlay clipped to 50%.",
       "capture": "element",
@@ -1641,7 +1641,7 @@
       "sourceHashes": {
         "src/views/number-display-renderer.ts": "626e6b487cf1",
         "src/data/number-display.ts": "b0967db0f269",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": "Rating, progress bar and progress ring all tint through db-num-color-*, which sets --db-number-color. Half slots are the accent overlay clipped to 50%.",
       "capture": "element",
@@ -1661,7 +1661,7 @@
       "sourceHashes": {
         "src/views/number-display-renderer.ts": "626e6b487cf1",
         "src/data/number-display.ts": "b0967db0f269",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": "Rating, progress bar and progress ring all tint through db-num-color-*, which sets --db-number-color. Half slots are the accent overlay clipped to 50%.",
       "capture": "element",
@@ -1681,7 +1681,7 @@
       "sourceHashes": {
         "src/views/option-color-picker.ts": "7f69a2433a4f",
         "src/data/status-colors.ts": "954425583842",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": "Sixteen swatches in the persisted order, the current colour ringed. Opened from the colour dot in the select editor and created on document.body.",
       "capture": "element",
@@ -1701,7 +1701,7 @@
       "sourceHashes": {
         "src/views/option-color-picker.ts": "7f69a2433a4f",
         "src/data/status-colors.ts": "954425583842",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": "Sixteen swatches in the persisted order, the current colour ringed. Opened from the colour dot in the select editor and created on document.body.",
       "capture": "element",
@@ -1721,7 +1721,7 @@
       "sourceHashes": {
         "src/views/option-color-picker.ts": "7f69a2433a4f",
         "src/data/status-colors.ts": "954425583842",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": "Sixteen swatches in the persisted order, the current colour ringed. Opened from the colour dot in the select editor and created on document.body.",
       "capture": "element",
@@ -1741,7 +1741,7 @@
       "sourceHashes": {
         "src/views/option-color-picker.ts": "7f69a2433a4f",
         "src/data/status-colors.ts": "954425583842",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": "Sixteen swatches in the persisted order, the current colour ringed. Opened from the colour dot in the select editor and created on document.body.",
       "capture": "element",
@@ -1761,9 +1761,9 @@
       ],
       "sourceHashes": {
         "src/views/record-icon-renderer.ts": "3d90a87b2a0b",
-        "src/views/table-renderer.ts": "4ecaa2cb2295",
+        "src/views/table-renderer.ts": "c64795ff0f7d",
         "src/data/record-icon.ts": "dd6940af82f2",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": "The table puts record icons in a 28px gutter column of their own, whose header is blank so the first property header can borrow the width. An unparsed token falls back to file-text and is-default; a lucide token carries db-record-icon-color-*; an emoji token renders through db-record-icon-emoji.",
       "capture": "element",
@@ -1783,9 +1783,9 @@
       ],
       "sourceHashes": {
         "src/views/record-icon-renderer.ts": "3d90a87b2a0b",
-        "src/views/table-renderer.ts": "4ecaa2cb2295",
+        "src/views/table-renderer.ts": "c64795ff0f7d",
         "src/data/record-icon.ts": "dd6940af82f2",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": "The table puts record icons in a 28px gutter column of their own, whose header is blank so the first property header can borrow the width. An unparsed token falls back to file-text and is-default; a lucide token carries db-record-icon-color-*; an emoji token renders through db-record-icon-emoji.",
       "capture": "element",
@@ -1805,9 +1805,9 @@
       ],
       "sourceHashes": {
         "src/views/record-icon-renderer.ts": "3d90a87b2a0b",
-        "src/views/table-renderer.ts": "4ecaa2cb2295",
+        "src/views/table-renderer.ts": "c64795ff0f7d",
         "src/data/record-icon.ts": "dd6940af82f2",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": "The table puts record icons in a 28px gutter column of their own, whose header is blank so the first property header can borrow the width. An unparsed token falls back to file-text and is-default; a lucide token carries db-record-icon-color-*; an emoji token renders through db-record-icon-emoji.",
       "capture": "element",
@@ -1827,9 +1827,9 @@
       ],
       "sourceHashes": {
         "src/views/record-icon-renderer.ts": "3d90a87b2a0b",
-        "src/views/table-renderer.ts": "4ecaa2cb2295",
+        "src/views/table-renderer.ts": "c64795ff0f7d",
         "src/data/record-icon.ts": "dd6940af82f2",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": "The table puts record icons in a 28px gutter column of their own, whose header is blank so the first property header can borrow the width. An unparsed token falls back to file-text and is-default; a lucide token carries db-record-icon-color-*; an emoji token renders through db-record-icon-emoji.",
       "capture": "element",
@@ -1847,7 +1847,7 @@
       ],
       "sourceHashes": {
         "src/views/relation-value-renderer.ts": "8eb0d49c5c0a",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": "A resolved target renders file-text on a tinted chip; a target the metadata cache cannot find renders alert-triangle inside a dashed warning outline.",
       "capture": "element",
@@ -1865,7 +1865,7 @@
       ],
       "sourceHashes": {
         "src/views/relation-value-renderer.ts": "8eb0d49c5c0a",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": "A resolved target renders file-text on a tinted chip; a target the metadata cache cannot find renders alert-triangle inside a dashed warning outline.",
       "capture": "element",
@@ -1883,7 +1883,7 @@
       ],
       "sourceHashes": {
         "src/views/relation-value-renderer.ts": "8eb0d49c5c0a",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": "A resolved target renders file-text on a tinted chip; a target the metadata cache cannot find renders alert-triangle inside a dashed warning outline.",
       "capture": "element",
@@ -1901,7 +1901,7 @@
       ],
       "sourceHashes": {
         "src/views/relation-value-renderer.ts": "8eb0d49c5c0a",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": "A resolved target renders file-text on a tinted chip; a target the metadata cache cannot find renders alert-triangle inside a dashed warning outline.",
       "capture": "element",
@@ -1920,8 +1920,8 @@
       ],
       "sourceHashes": {
         "src/data/status-colors.ts": "954425583842",
-        "src/views/cell-renderer.ts": "e041f712f0b8",
-        "styles.css": "651ec7410315"
+        "src/views/cell-renderer.ts": "e2259fa7a8c7",
+        "styles.css": "9732449e4746"
       },
       "note": "Every select, status, multi-select and tag value in the plugin is a status-badge in one of these sixteen status-color-* variants, so this is the whole colour vocabulary in one shot. The multi-select remove buttons only become visible on hover.",
       "capture": "element",
@@ -1940,8 +1940,8 @@
       ],
       "sourceHashes": {
         "src/data/status-colors.ts": "954425583842",
-        "src/views/cell-renderer.ts": "e041f712f0b8",
-        "styles.css": "651ec7410315"
+        "src/views/cell-renderer.ts": "e2259fa7a8c7",
+        "styles.css": "9732449e4746"
       },
       "note": "Every select, status, multi-select and tag value in the plugin is a status-badge in one of these sixteen status-color-* variants, so this is the whole colour vocabulary in one shot. The multi-select remove buttons only become visible on hover.",
       "capture": "element",
@@ -1960,8 +1960,8 @@
       ],
       "sourceHashes": {
         "src/data/status-colors.ts": "954425583842",
-        "src/views/cell-renderer.ts": "e041f712f0b8",
-        "styles.css": "651ec7410315"
+        "src/views/cell-renderer.ts": "e2259fa7a8c7",
+        "styles.css": "9732449e4746"
       },
       "note": "Every select, status, multi-select and tag value in the plugin is a status-badge in one of these sixteen status-color-* variants, so this is the whole colour vocabulary in one shot. The multi-select remove buttons only become visible on hover.",
       "capture": "element",
@@ -1980,8 +1980,8 @@
       ],
       "sourceHashes": {
         "src/data/status-colors.ts": "954425583842",
-        "src/views/cell-renderer.ts": "e041f712f0b8",
-        "styles.css": "651ec7410315"
+        "src/views/cell-renderer.ts": "e2259fa7a8c7",
+        "styles.css": "9732449e4746"
       },
       "note": "Every select, status, multi-select and tag value in the plugin is a status-badge in one of these sixteen status-color-* variants, so this is the whole colour vocabulary in one shot. The multi-select remove buttons only become visible on hover.",
       "capture": "element",
@@ -2001,7 +2001,7 @@
       "sourceHashes": {
         "src/views/column-manager-renderer.ts": "216e0a41ddef",
         "src/views/property-type-icon.ts": "046f0b24b104",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": "One row per property: drag handle, visibility checkbox, type icon, name with its frontmatter key, then wrap, edit and delete.",
       "capture": "element",
@@ -2021,7 +2021,7 @@
       "sourceHashes": {
         "src/views/column-manager-renderer.ts": "216e0a41ddef",
         "src/views/property-type-icon.ts": "046f0b24b104",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": "One row per property: drag handle, visibility checkbox, type icon, name with its frontmatter key, then wrap, edit and delete.",
       "capture": "element",
@@ -2041,7 +2041,7 @@
       "sourceHashes": {
         "src/views/column-manager-renderer.ts": "216e0a41ddef",
         "src/views/property-type-icon.ts": "046f0b24b104",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": "One row per property: drag handle, visibility checkbox, type icon, name with its frontmatter key, then wrap, edit and delete.",
       "capture": "element",
@@ -2061,7 +2061,7 @@
       "sourceHashes": {
         "src/views/column-manager-renderer.ts": "216e0a41ddef",
         "src/views/property-type-icon.ts": "046f0b24b104",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": "One row per property: drag handle, visibility checkbox, type icon, name with its frontmatter key, then wrap, edit and delete.",
       "capture": "element",
@@ -2081,7 +2081,7 @@
       "sourceHashes": {
         "src/views/filter-panel-renderer.ts": "deabe2ecc320",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": "Three conditions build a group node, so the panel header drops its AND/OR button and the group's own logic dropdown carries it instead.",
       "capture": "element",
@@ -2101,7 +2101,7 @@
       "sourceHashes": {
         "src/views/filter-panel-renderer.ts": "deabe2ecc320",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": "Three conditions build a group node, so the panel header drops its AND/OR button and the group's own logic dropdown carries it instead.",
       "capture": "element",
@@ -2121,7 +2121,7 @@
       "sourceHashes": {
         "src/views/filter-panel-renderer.ts": "deabe2ecc320",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": "Three conditions build a group node, so the panel header drops its AND/OR button and the group's own logic dropdown carries it instead.",
       "capture": "element",
@@ -2141,7 +2141,7 @@
       "sourceHashes": {
         "src/views/filter-panel-renderer.ts": "deabe2ecc320",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": "Three conditions build a group node, so the panel header drops its AND/OR button and the group's own logic dropdown carries it instead.",
       "capture": "element",
@@ -2161,7 +2161,7 @@
       "sourceHashes": {
         "src/views/filter-panel-renderer.ts": "deabe2ecc320",
         "src/data/view-filter-tree.ts": "1efdb923d4bb",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": "Nesting stops at three levels: the innermost rows lose their add-group button because the tree can go no deeper.",
       "capture": "element",
@@ -2181,7 +2181,7 @@
       "sourceHashes": {
         "src/views/filter-panel-renderer.ts": "deabe2ecc320",
         "src/data/view-filter-tree.ts": "1efdb923d4bb",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": "Nesting stops at three levels: the innermost rows lose their add-group button because the tree can go no deeper.",
       "capture": "element",
@@ -2201,7 +2201,7 @@
       "sourceHashes": {
         "src/views/filter-panel-renderer.ts": "deabe2ecc320",
         "src/data/view-filter-tree.ts": "1efdb923d4bb",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": "Nesting stops at three levels: the innermost rows lose their add-group button because the tree can go no deeper.",
       "capture": "element",
@@ -2221,7 +2221,7 @@
       "sourceHashes": {
         "src/views/filter-panel-renderer.ts": "deabe2ecc320",
         "src/data/view-filter-tree.ts": "1efdb923d4bb",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": "Nesting stops at three levels: the innermost rows lose their add-group button because the tree can go no deeper.",
       "capture": "element",
@@ -2239,9 +2239,9 @@
         "src/views/card-field-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/record-detail-panel.ts": "4c818dfb16b2",
+        "src/views/record-detail-panel.ts": "94213ad99a71",
         "src/views/card-field-renderer.ts": "9966f9cf54ed",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": "Opened from a calendar or timeline event card. Fields are click-to-edit; an empty field only appears when the view asks for empty properties.",
       "capture": "element",
@@ -2259,9 +2259,9 @@
         "src/views/card-field-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/record-detail-panel.ts": "4c818dfb16b2",
+        "src/views/record-detail-panel.ts": "94213ad99a71",
         "src/views/card-field-renderer.ts": "9966f9cf54ed",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": "Opened from a calendar or timeline event card. Fields are click-to-edit; an empty field only appears when the view asks for empty properties.",
       "capture": "element",
@@ -2279,9 +2279,9 @@
         "src/views/card-field-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/record-detail-panel.ts": "4c818dfb16b2",
+        "src/views/record-detail-panel.ts": "94213ad99a71",
         "src/views/card-field-renderer.ts": "9966f9cf54ed",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": "Opened from a calendar or timeline event card. Fields are click-to-edit; an empty field only appears when the view asks for empty properties.",
       "capture": "element",
@@ -2299,9 +2299,9 @@
         "src/views/card-field-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/record-detail-panel.ts": "4c818dfb16b2",
+        "src/views/record-detail-panel.ts": "94213ad99a71",
         "src/views/card-field-renderer.ts": "9966f9cf54ed",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": "Opened from a calendar or timeline event card. Fields are click-to-edit; an empty field only appears when the view asks for empty properties.",
       "capture": "element",
@@ -2320,14 +2320,14 @@
         "src/views/card-field-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/record-detail-panel.ts": "4c818dfb16b2",
-        "src/views/popover-position.ts": "d78b9571f63c",
+        "src/views/record-detail-panel.ts": "94213ad99a71",
+        "src/views/popover-position.ts": "262e3fb0669c",
         "src/views/card-field-renderer.ts": "9966f9cf54ed",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": "The phone form of the record detail panel. positionToolbarPopover renders it as a bottom sheet with a grab handle; a permanent close button (reusing db-cell-edit-close) and drag-down on the handle dismiss it where the desktop panel relies on Escape and outside-click. Captured in viewport mode so the fixed sheet docks at the bottom.",
       "capture": "viewport",
-      "bytes": 57178
+      "bytes": 57176
     },
     {
       "id": "panel-record-detail-sheet",
@@ -2342,10 +2342,10 @@
         "src/views/card-field-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/record-detail-panel.ts": "4c818dfb16b2",
-        "src/views/popover-position.ts": "d78b9571f63c",
+        "src/views/record-detail-panel.ts": "94213ad99a71",
+        "src/views/popover-position.ts": "262e3fb0669c",
         "src/views/card-field-renderer.ts": "9966f9cf54ed",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": "The phone form of the record detail panel. positionToolbarPopover renders it as a bottom sheet with a grab handle; a permanent close button (reusing db-cell-edit-close) and drag-down on the handle dismiss it where the desktop panel relies on Escape and outside-click. Captured in viewport mode so the fixed sheet docks at the bottom.",
       "capture": "viewport",
@@ -2364,14 +2364,14 @@
         "src/views/card-field-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/record-detail-panel.ts": "4c818dfb16b2",
-        "src/views/popover-position.ts": "d78b9571f63c",
+        "src/views/record-detail-panel.ts": "94213ad99a71",
+        "src/views/popover-position.ts": "262e3fb0669c",
         "src/views/card-field-renderer.ts": "9966f9cf54ed",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": "The phone form of the record detail panel. positionToolbarPopover renders it as a bottom sheet with a grab handle; a permanent close button (reusing db-cell-edit-close) and drag-down on the handle dismiss it where the desktop panel relies on Escape and outside-click. Captured in viewport mode so the fixed sheet docks at the bottom.",
       "capture": "viewport",
-      "bytes": 20505
+      "bytes": 20520
     },
     {
       "id": "panel-record-detail-sheet",
@@ -2386,10 +2386,10 @@
         "src/views/card-field-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/record-detail-panel.ts": "4c818dfb16b2",
-        "src/views/popover-position.ts": "d78b9571f63c",
+        "src/views/record-detail-panel.ts": "94213ad99a71",
+        "src/views/popover-position.ts": "262e3fb0669c",
         "src/views/card-field-renderer.ts": "9966f9cf54ed",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": "The phone form of the record detail panel. positionToolbarPopover renders it as a bottom sheet with a grab handle; a permanent close button (reusing db-cell-edit-close) and drag-down on the handle dismiss it where the desktop panel relies on Escape and outside-click. Captured in viewport mode so the fixed sheet docks at the bottom.",
       "capture": "viewport",
@@ -2408,8 +2408,8 @@
       ],
       "sourceHashes": {
         "src/views/table-record-peek.ts": "14f5844dab51",
-        "src/views/table-renderer.ts": "4ecaa2cb2295",
-        "styles.css": "651ec7410315"
+        "src/views/table-renderer.ts": "c64795ff0f7d",
+        "styles.css": "9732449e4746"
       },
       "note": "Docks against the right edge of the table it was opened from. Values are display-only text, and properties hidden from the table sit behind the disclosure.",
       "capture": "element",
@@ -2428,8 +2428,8 @@
       ],
       "sourceHashes": {
         "src/views/table-record-peek.ts": "14f5844dab51",
-        "src/views/table-renderer.ts": "4ecaa2cb2295",
-        "styles.css": "651ec7410315"
+        "src/views/table-renderer.ts": "c64795ff0f7d",
+        "styles.css": "9732449e4746"
       },
       "note": "Docks against the right edge of the table it was opened from. Values are display-only text, and properties hidden from the table sit behind the disclosure.",
       "capture": "element",
@@ -2448,8 +2448,8 @@
       ],
       "sourceHashes": {
         "src/views/table-record-peek.ts": "14f5844dab51",
-        "src/views/table-renderer.ts": "4ecaa2cb2295",
-        "styles.css": "651ec7410315"
+        "src/views/table-renderer.ts": "c64795ff0f7d",
+        "styles.css": "9732449e4746"
       },
       "note": "Docks against the right edge of the table it was opened from. Values are display-only text, and properties hidden from the table sit behind the disclosure.",
       "capture": "element",
@@ -2468,8 +2468,8 @@
       ],
       "sourceHashes": {
         "src/views/table-record-peek.ts": "14f5844dab51",
-        "src/views/table-renderer.ts": "4ecaa2cb2295",
-        "styles.css": "651ec7410315"
+        "src/views/table-renderer.ts": "c64795ff0f7d",
+        "styles.css": "9732449e4746"
       },
       "note": "Docks against the right edge of the table it was opened from. Values are display-only text, and properties hidden from the table sit behind the disclosure.",
       "capture": "element",
@@ -2487,7 +2487,7 @@
       ],
       "sourceHashes": {
         "src/views/sort-panel-renderer.ts": "19109d09b2d5",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": "Calendar views add a hint above the empty state because layout order wins over user sort.",
       "capture": "element",
@@ -2505,7 +2505,7 @@
       ],
       "sourceHashes": {
         "src/views/sort-panel-renderer.ts": "19109d09b2d5",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": "Calendar views add a hint above the empty state because layout order wins over user sort.",
       "capture": "element",
@@ -2523,7 +2523,7 @@
       ],
       "sourceHashes": {
         "src/views/sort-panel-renderer.ts": "19109d09b2d5",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": "Calendar views add a hint above the empty state because layout order wins over user sort.",
       "capture": "element",
@@ -2541,7 +2541,7 @@
       ],
       "sourceHashes": {
         "src/views/sort-panel-renderer.ts": "19109d09b2d5",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": "Calendar views add a hint above the empty state because layout order wins over user sort.",
       "capture": "element",
@@ -2561,7 +2561,7 @@
       "sourceHashes": {
         "src/views/sort-panel-renderer.ts": "19109d09b2d5",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": "Rows are draggable; the first rule's move-up and the last rule's move-down are disabled.",
       "capture": "element",
@@ -2581,7 +2581,7 @@
       "sourceHashes": {
         "src/views/sort-panel-renderer.ts": "19109d09b2d5",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": "Rows are draggable; the first rule's move-up and the last rule's move-down are disabled.",
       "capture": "element",
@@ -2601,7 +2601,7 @@
       "sourceHashes": {
         "src/views/sort-panel-renderer.ts": "19109d09b2d5",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": "Rows are draggable; the first rule's move-up and the last rule's move-down are disabled.",
       "capture": "element",
@@ -2621,7 +2621,7 @@
       "sourceHashes": {
         "src/views/sort-panel-renderer.ts": "19109d09b2d5",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": "Rows are draggable; the first rule's move-up and the last rule's move-down are disabled.",
       "capture": "element",
@@ -2639,9 +2639,9 @@
         "src/views/dropdown-field.ts"
       ],
       "sourceHashes": {
-        "src/views/view-config-panel-renderer.ts": "19c84f701c56",
+        "src/views/view-config-panel-renderer.ts": "d6a387eb9056",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": "The top of the panel for a table view: database-scoped rows above the section divider, view-scoped rows below. Conditional formatting and status presets sit further down and are not in frame.",
       "capture": "element",
@@ -2659,9 +2659,9 @@
         "src/views/dropdown-field.ts"
       ],
       "sourceHashes": {
-        "src/views/view-config-panel-renderer.ts": "19c84f701c56",
+        "src/views/view-config-panel-renderer.ts": "d6a387eb9056",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": "The top of the panel for a table view: database-scoped rows above the section divider, view-scoped rows below. Conditional formatting and status presets sit further down and are not in frame.",
       "capture": "element",
@@ -2679,9 +2679,9 @@
         "src/views/dropdown-field.ts"
       ],
       "sourceHashes": {
-        "src/views/view-config-panel-renderer.ts": "19c84f701c56",
+        "src/views/view-config-panel-renderer.ts": "d6a387eb9056",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": "The top of the panel for a table view: database-scoped rows above the section divider, view-scoped rows below. Conditional formatting and status presets sit further down and are not in frame.",
       "capture": "element",
@@ -2699,9 +2699,9 @@
         "src/views/dropdown-field.ts"
       ],
       "sourceHashes": {
-        "src/views/view-config-panel-renderer.ts": "19c84f701c56",
+        "src/views/view-config-panel-renderer.ts": "d6a387eb9056",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": "The top of the panel for a table view: database-scoped rows above the section divider, view-scoped rows below. Conditional formatting and status presets sit further down and are not in frame.",
       "capture": "element",
@@ -2719,7 +2719,7 @@
       ],
       "sourceHashes": {
         "src/views/empty-state-renderer.ts": "0b9797e5bfdb",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": null,
       "capture": "element",
@@ -2737,7 +2737,7 @@
       ],
       "sourceHashes": {
         "src/views/empty-state-renderer.ts": "0b9797e5bfdb",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": null,
       "capture": "element",
@@ -2755,7 +2755,7 @@
       ],
       "sourceHashes": {
         "src/views/empty-state-renderer.ts": "0b9797e5bfdb",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": null,
       "capture": "element",
@@ -2773,7 +2773,7 @@
       ],
       "sourceHashes": {
         "src/views/empty-state-renderer.ts": "0b9797e5bfdb",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": null,
       "capture": "element",
@@ -2792,10 +2792,10 @@
         "src/views/card-field-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/board-renderer.ts": "a60c3565b692",
+        "src/views/board-renderer.ts": "8c05697f348c",
         "src/views/group-label-renderer.ts": "3fee8449607c",
         "src/views/card-field-renderer.ts": "9966f9cf54ed",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": "The board inside the default-width container. On the phone (is-phone) the container no longer centres the grid off-screen, and the sticky group header is taken out of sticky flow so it cannot float down over the cards; columns page horizontally with snap-scroll.",
       "capture": "viewport",
@@ -2814,10 +2814,10 @@
         "src/views/card-field-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/board-renderer.ts": "a60c3565b692",
+        "src/views/board-renderer.ts": "8c05697f348c",
         "src/views/group-label-renderer.ts": "3fee8449607c",
         "src/views/card-field-renderer.ts": "9966f9cf54ed",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": "The board inside the default-width container. On the phone (is-phone) the container no longer centres the grid off-screen, and the sticky group header is taken out of sticky flow so it cannot float down over the cards; columns page horizontally with snap-scroll.",
       "capture": "viewport",
@@ -2836,10 +2836,10 @@
         "src/views/card-field-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/board-renderer.ts": "a60c3565b692",
+        "src/views/board-renderer.ts": "8c05697f348c",
         "src/views/group-label-renderer.ts": "3fee8449607c",
         "src/views/card-field-renderer.ts": "9966f9cf54ed",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": "The board inside the default-width container. On the phone (is-phone) the container no longer centres the grid off-screen, and the sticky group header is taken out of sticky flow so it cannot float down over the cards; columns page horizontally with snap-scroll.",
       "capture": "viewport",
@@ -2858,14 +2858,14 @@
         "src/views/card-field-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/board-renderer.ts": "a60c3565b692",
+        "src/views/board-renderer.ts": "8c05697f348c",
         "src/views/group-label-renderer.ts": "3fee8449607c",
         "src/views/card-field-renderer.ts": "9966f9cf54ed",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": "The board inside the default-width container. On the phone (is-phone) the container no longer centres the grid off-screen, and the sticky group header is taken out of sticky flow so it cannot float down over the cards; columns page horizontally with snap-scroll.",
       "capture": "viewport",
-      "bytes": 85246
+      "bytes": 85252
     },
     {
       "id": "board-view",
@@ -2879,9 +2879,9 @@
         "src/views/card-field-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/board-renderer.ts": "a60c3565b692",
+        "src/views/board-renderer.ts": "8c05697f348c",
         "src/views/card-field-renderer.ts": "9966f9cf54ed",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": null,
       "capture": "viewport",
@@ -2899,13 +2899,13 @@
         "src/views/card-field-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/board-renderer.ts": "a60c3565b692",
+        "src/views/board-renderer.ts": "8c05697f348c",
         "src/views/card-field-renderer.ts": "9966f9cf54ed",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": null,
       "capture": "viewport",
-      "bytes": 248016
+      "bytes": 247999
     },
     {
       "id": "board-view",
@@ -2919,13 +2919,13 @@
         "src/views/card-field-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/board-renderer.ts": "a60c3565b692",
+        "src/views/board-renderer.ts": "8c05697f348c",
         "src/views/card-field-renderer.ts": "9966f9cf54ed",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": null,
       "capture": "viewport",
-      "bytes": 81507
+      "bytes": 81488
     },
     {
       "id": "board-view",
@@ -2939,13 +2939,13 @@
         "src/views/card-field-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/board-renderer.ts": "a60c3565b692",
+        "src/views/board-renderer.ts": "8c05697f348c",
         "src/views/card-field-renderer.ts": "9966f9cf54ed",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": null,
       "capture": "viewport",
-      "bytes": 85246
+      "bytes": 85252
     },
     {
       "id": "calendar-mini-calendar",
@@ -2960,8 +2960,8 @@
       ],
       "sourceHashes": {
         "src/views/calendar-mini-calendar-renderer.ts": "14853dcd3917",
-        "src/views/calendar-renderer.ts": "8630b4e6fa98",
-        "styles.css": "651ec7410315"
+        "src/views/calendar-renderer.ts": "a33613b98f90",
+        "styles.css": "9732449e4746"
       },
       "note": "Days with events carry a short accent underline; the visible week reads as the selected pill run.",
       "capture": "viewport",
@@ -2980,12 +2980,12 @@
       ],
       "sourceHashes": {
         "src/views/calendar-mini-calendar-renderer.ts": "14853dcd3917",
-        "src/views/calendar-renderer.ts": "8630b4e6fa98",
-        "styles.css": "651ec7410315"
+        "src/views/calendar-renderer.ts": "a33613b98f90",
+        "styles.css": "9732449e4746"
       },
       "note": "Days with events carry a short accent underline; the visible week reads as the selected pill run.",
       "capture": "viewport",
-      "bytes": 61305
+      "bytes": 61342
     },
     {
       "id": "calendar-mini-calendar",
@@ -3000,12 +3000,12 @@
       ],
       "sourceHashes": {
         "src/views/calendar-mini-calendar-renderer.ts": "14853dcd3917",
-        "src/views/calendar-renderer.ts": "8630b4e6fa98",
-        "styles.css": "651ec7410315"
+        "src/views/calendar-renderer.ts": "a33613b98f90",
+        "styles.css": "9732449e4746"
       },
       "note": "Days with events carry a short accent underline; the visible week reads as the selected pill run.",
       "capture": "viewport",
-      "bytes": 22791
+      "bytes": 22794
     },
     {
       "id": "calendar-mini-calendar",
@@ -3020,12 +3020,12 @@
       ],
       "sourceHashes": {
         "src/views/calendar-mini-calendar-renderer.ts": "14853dcd3917",
-        "src/views/calendar-renderer.ts": "8630b4e6fa98",
-        "styles.css": "651ec7410315"
+        "src/views/calendar-renderer.ts": "a33613b98f90",
+        "styles.css": "9732449e4746"
       },
       "note": "Days with events carry a short accent underline; the visible week reads as the selected pill run.",
       "capture": "viewport",
-      "bytes": 23723
+      "bytes": 23719
     },
     {
       "id": "calendar-month-view",
@@ -3038,8 +3038,8 @@
         "src/views/calendar-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/calendar-renderer.ts": "8630b4e6fa98",
-        "styles.css": "651ec7410315"
+        "src/views/calendar-renderer.ts": "a33613b98f90",
+        "styles.css": "9732449e4746"
       },
       "note": "Multi-day all-day bars, timed events, an overflow week and one event carried across the week boundary.",
       "capture": "viewport",
@@ -3056,8 +3056,8 @@
         "src/views/calendar-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/calendar-renderer.ts": "8630b4e6fa98",
-        "styles.css": "651ec7410315"
+        "src/views/calendar-renderer.ts": "a33613b98f90",
+        "styles.css": "9732449e4746"
       },
       "note": "Multi-day all-day bars, timed events, an overflow week and one event carried across the week boundary.",
       "capture": "viewport",
@@ -3074,12 +3074,12 @@
         "src/views/calendar-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/calendar-renderer.ts": "8630b4e6fa98",
-        "styles.css": "651ec7410315"
+        "src/views/calendar-renderer.ts": "a33613b98f90",
+        "styles.css": "9732449e4746"
       },
       "note": "Multi-day all-day bars, timed events, an overflow week and one event carried across the week boundary.",
       "capture": "viewport",
-      "bytes": 46602
+      "bytes": 46844
     },
     {
       "id": "calendar-month-view",
@@ -3092,8 +3092,8 @@
         "src/views/calendar-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/calendar-renderer.ts": "8630b4e6fa98",
-        "styles.css": "651ec7410315"
+        "src/views/calendar-renderer.ts": "a33613b98f90",
+        "styles.css": "9732449e4746"
       },
       "note": "Multi-day all-day bars, timed events, an overflow week and one event carried across the week boundary.",
       "capture": "viewport",
@@ -3113,7 +3113,7 @@
       "sourceHashes": {
         "src/views/calendar-toolbar-renderer.ts": "58cefc5cab49",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": "The Time section only exists in week and day scale; the setup preview card below Data carries no stylesheet rules.",
       "capture": "viewport",
@@ -3133,7 +3133,7 @@
       "sourceHashes": {
         "src/views/calendar-toolbar-renderer.ts": "58cefc5cab49",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": "The Time section only exists in week and day scale; the setup preview card below Data carries no stylesheet rules.",
       "capture": "viewport",
@@ -3153,7 +3153,7 @@
       "sourceHashes": {
         "src/views/calendar-toolbar-renderer.ts": "58cefc5cab49",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": "The Time section only exists in week and day scale; the setup preview card below Data carries no stylesheet rules.",
       "capture": "viewport",
@@ -3173,7 +3173,7 @@
       "sourceHashes": {
         "src/views/calendar-toolbar-renderer.ts": "58cefc5cab49",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": "The Time section only exists in week and day scale; the setup preview card below Data carries no stylesheet rules.",
       "capture": "viewport",
@@ -3190,8 +3190,8 @@
         "src/views/calendar-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/calendar-renderer.ts": "8630b4e6fa98",
-        "styles.css": "651ec7410315"
+        "src/views/calendar-renderer.ts": "a33613b98f90",
+        "styles.css": "9732449e4746"
       },
       "note": "Sticky day header and all-day strip over the 08–16 time grid; the current-time ruler sits on Wednesday at 13:45.",
       "capture": "viewport",
@@ -3208,8 +3208,8 @@
         "src/views/calendar-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/calendar-renderer.ts": "8630b4e6fa98",
-        "styles.css": "651ec7410315"
+        "src/views/calendar-renderer.ts": "a33613b98f90",
+        "styles.css": "9732449e4746"
       },
       "note": "Sticky day header and all-day strip over the 08–16 time grid; the current-time ruler sits on Wednesday at 13:45.",
       "capture": "viewport",
@@ -3226,12 +3226,12 @@
         "src/views/calendar-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/calendar-renderer.ts": "8630b4e6fa98",
-        "styles.css": "651ec7410315"
+        "src/views/calendar-renderer.ts": "a33613b98f90",
+        "styles.css": "9732449e4746"
       },
       "note": "Sticky day header and all-day strip over the 08–16 time grid; the current-time ruler sits on Wednesday at 13:45.",
       "capture": "viewport",
-      "bytes": 38201
+      "bytes": 38501
     },
     {
       "id": "calendar-week-time-grid",
@@ -3244,8 +3244,8 @@
         "src/views/calendar-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/calendar-renderer.ts": "8630b4e6fa98",
-        "styles.css": "651ec7410315"
+        "src/views/calendar-renderer.ts": "a33613b98f90",
+        "styles.css": "9732449e4746"
       },
       "note": "Sticky day header and all-day strip over the 08–16 time grid; the current-time ruler sits on Wednesday at 13:45.",
       "capture": "viewport",
@@ -3263,9 +3263,9 @@
         "src/views/card-field-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/gallery-renderer.ts": "1019d687b05c",
+        "src/views/gallery-renderer.ts": "c686ce011d5f",
         "src/views/card-field-renderer.ts": "9966f9cf54ed",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": null,
       "capture": "viewport",
@@ -3283,9 +3283,9 @@
         "src/views/card-field-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/gallery-renderer.ts": "1019d687b05c",
+        "src/views/gallery-renderer.ts": "c686ce011d5f",
         "src/views/card-field-renderer.ts": "9966f9cf54ed",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": null,
       "capture": "viewport",
@@ -3303,9 +3303,9 @@
         "src/views/card-field-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/gallery-renderer.ts": "1019d687b05c",
+        "src/views/gallery-renderer.ts": "c686ce011d5f",
         "src/views/card-field-renderer.ts": "9966f9cf54ed",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": null,
       "capture": "viewport",
@@ -3323,9 +3323,9 @@
         "src/views/card-field-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/gallery-renderer.ts": "1019d687b05c",
+        "src/views/gallery-renderer.ts": "c686ce011d5f",
         "src/views/card-field-renderer.ts": "9966f9cf54ed",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": null,
       "capture": "viewport",
@@ -3343,9 +3343,9 @@
         "src/views/card-field-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/list-renderer.ts": "854763eba780",
+        "src/views/list-renderer.ts": "80737f228cba",
         "src/views/card-field-renderer.ts": "9966f9cf54ed",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": "The list row the renderer builds: controls, a title line and a meta row of fixed-width fields. On desktop the fields sit on one line; on the phone (is-phone) the card fills the viewport and the fields wrap inside its border instead of escaping it.",
       "capture": "viewport",
@@ -3363,9 +3363,9 @@
         "src/views/card-field-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/list-renderer.ts": "854763eba780",
+        "src/views/list-renderer.ts": "80737f228cba",
         "src/views/card-field-renderer.ts": "9966f9cf54ed",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": "The list row the renderer builds: controls, a title line and a meta row of fixed-width fields. On desktop the fields sit on one line; on the phone (is-phone) the card fills the viewport and the fields wrap inside its border instead of escaping it.",
       "capture": "viewport",
@@ -3383,9 +3383,9 @@
         "src/views/card-field-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/list-renderer.ts": "854763eba780",
+        "src/views/list-renderer.ts": "80737f228cba",
         "src/views/card-field-renderer.ts": "9966f9cf54ed",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": "The list row the renderer builds: controls, a title line and a meta row of fixed-width fields. On desktop the fields sit on one line; on the phone (is-phone) the card fills the viewport and the fields wrap inside its border instead of escaping it.",
       "capture": "viewport",
@@ -3403,9 +3403,9 @@
         "src/views/card-field-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/list-renderer.ts": "854763eba780",
+        "src/views/list-renderer.ts": "80737f228cba",
         "src/views/card-field-renderer.ts": "9966f9cf54ed",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": "The list row the renderer builds: controls, a title line and a meta row of fixed-width fields. On desktop the fields sit on one line; on the phone (is-phone) the card fills the viewport and the fields wrap inside its border instead of escaping it.",
       "capture": "viewport",
@@ -3423,9 +3423,9 @@
         "src/views/card-field-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/list-renderer.ts": "854763eba780",
+        "src/views/list-renderer.ts": "80737f228cba",
         "src/views/card-field-renderer.ts": "9966f9cf54ed",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": null,
       "capture": "viewport",
@@ -3443,9 +3443,9 @@
         "src/views/card-field-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/list-renderer.ts": "854763eba780",
+        "src/views/list-renderer.ts": "80737f228cba",
         "src/views/card-field-renderer.ts": "9966f9cf54ed",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": null,
       "capture": "viewport",
@@ -3463,9 +3463,9 @@
         "src/views/card-field-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/list-renderer.ts": "854763eba780",
+        "src/views/list-renderer.ts": "80737f228cba",
         "src/views/card-field-renderer.ts": "9966f9cf54ed",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": null,
       "capture": "viewport",
@@ -3483,13 +3483,13 @@
         "src/views/card-field-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/list-renderer.ts": "854763eba780",
+        "src/views/list-renderer.ts": "80737f228cba",
         "src/views/card-field-renderer.ts": "9966f9cf54ed",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": null,
       "capture": "viewport",
-      "bytes": 86779
+      "bytes": 87047
     },
     {
       "id": "table-mobile",
@@ -3508,13 +3508,13 @@
         "styles.css"
       ],
       "sourceHashes": {
-        "src/views/table-renderer.ts": "4ecaa2cb2295",
+        "src/views/table-renderer.ts": "c64795ff0f7d",
         "src/views/table-column-layout-sync.ts": "a678b28c2bf2",
         "src/views/table-layout.ts": "a39067d21b59",
-        "src/views/cell-renderer.ts": "e041f712f0b8",
+        "src/views/cell-renderer.ts": "e2259fa7a8c7",
         "src/views/file-title-display.ts": "62da9ee863b6",
         "src/views/table-record-peek.ts": "14f5844dab51",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": "The full table the renderer builds: a select gutter, a record-icon gutter and a runtime <colgroup> of fixed px widths. On desktop those widths hold; on the phone (is-phone) the columns auto-fit to content and the select column is no longer clipped by the scroll-area fade mask. The name column is the title cell — a content-sized link plus the always-visible open affordance, rendered on touch as a compact maximize icon so its width goes to the note name instead of a text label.",
       "capture": "viewport",
@@ -3537,13 +3537,13 @@
         "styles.css"
       ],
       "sourceHashes": {
-        "src/views/table-renderer.ts": "4ecaa2cb2295",
+        "src/views/table-renderer.ts": "c64795ff0f7d",
         "src/views/table-column-layout-sync.ts": "a678b28c2bf2",
         "src/views/table-layout.ts": "a39067d21b59",
-        "src/views/cell-renderer.ts": "e041f712f0b8",
+        "src/views/cell-renderer.ts": "e2259fa7a8c7",
         "src/views/file-title-display.ts": "62da9ee863b6",
         "src/views/table-record-peek.ts": "14f5844dab51",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": "The full table the renderer builds: a select gutter, a record-icon gutter and a runtime <colgroup> of fixed px widths. On desktop those widths hold; on the phone (is-phone) the columns auto-fit to content and the select column is no longer clipped by the scroll-area fade mask. The name column is the title cell — a content-sized link plus the always-visible open affordance, rendered on touch as a compact maximize icon so its width goes to the note name instead of a text label.",
       "capture": "viewport",
@@ -3566,13 +3566,13 @@
         "styles.css"
       ],
       "sourceHashes": {
-        "src/views/table-renderer.ts": "4ecaa2cb2295",
+        "src/views/table-renderer.ts": "c64795ff0f7d",
         "src/views/table-column-layout-sync.ts": "a678b28c2bf2",
         "src/views/table-layout.ts": "a39067d21b59",
-        "src/views/cell-renderer.ts": "e041f712f0b8",
+        "src/views/cell-renderer.ts": "e2259fa7a8c7",
         "src/views/file-title-display.ts": "62da9ee863b6",
         "src/views/table-record-peek.ts": "14f5844dab51",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": "The full table the renderer builds: a select gutter, a record-icon gutter and a runtime <colgroup> of fixed px widths. On desktop those widths hold; on the phone (is-phone) the columns auto-fit to content and the select column is no longer clipped by the scroll-area fade mask. The name column is the title cell — a content-sized link plus the always-visible open affordance, rendered on touch as a compact maximize icon so its width goes to the note name instead of a text label.",
       "capture": "viewport",
@@ -3595,13 +3595,13 @@
         "styles.css"
       ],
       "sourceHashes": {
-        "src/views/table-renderer.ts": "4ecaa2cb2295",
+        "src/views/table-renderer.ts": "c64795ff0f7d",
         "src/views/table-column-layout-sync.ts": "a678b28c2bf2",
         "src/views/table-layout.ts": "a39067d21b59",
-        "src/views/cell-renderer.ts": "e041f712f0b8",
+        "src/views/cell-renderer.ts": "e2259fa7a8c7",
         "src/views/file-title-display.ts": "62da9ee863b6",
         "src/views/table-record-peek.ts": "14f5844dab51",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": "The full table the renderer builds: a select gutter, a record-icon gutter and a runtime <colgroup> of fixed px widths. On desktop those widths hold; on the phone (is-phone) the columns auto-fit to content and the select column is no longer clipped by the scroll-area fade mask. The name column is the title cell — a content-sized link plus the always-visible open affordance, rendered on touch as a compact maximize icon so its width goes to the note name instead of a text label.",
       "capture": "viewport",
@@ -3620,10 +3620,10 @@
         "src/views/cell-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/table-renderer.ts": "4ecaa2cb2295",
+        "src/views/table-renderer.ts": "c64795ff0f7d",
         "src/views/column-header-controller.ts": "7714b894b5b0",
-        "src/views/cell-renderer.ts": "e041f712f0b8",
-        "styles.css": "651ec7410315"
+        "src/views/cell-renderer.ts": "e2259fa7a8c7",
+        "styles.css": "9732449e4746"
       },
       "note": null,
       "capture": "viewport",
@@ -3642,10 +3642,10 @@
         "src/views/cell-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/table-renderer.ts": "4ecaa2cb2295",
+        "src/views/table-renderer.ts": "c64795ff0f7d",
         "src/views/column-header-controller.ts": "7714b894b5b0",
-        "src/views/cell-renderer.ts": "e041f712f0b8",
-        "styles.css": "651ec7410315"
+        "src/views/cell-renderer.ts": "e2259fa7a8c7",
+        "styles.css": "9732449e4746"
       },
       "note": null,
       "capture": "viewport",
@@ -3664,10 +3664,10 @@
         "src/views/cell-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/table-renderer.ts": "4ecaa2cb2295",
+        "src/views/table-renderer.ts": "c64795ff0f7d",
         "src/views/column-header-controller.ts": "7714b894b5b0",
-        "src/views/cell-renderer.ts": "e041f712f0b8",
-        "styles.css": "651ec7410315"
+        "src/views/cell-renderer.ts": "e2259fa7a8c7",
+        "styles.css": "9732449e4746"
       },
       "note": null,
       "capture": "viewport",
@@ -3686,10 +3686,10 @@
         "src/views/cell-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/table-renderer.ts": "4ecaa2cb2295",
+        "src/views/table-renderer.ts": "c64795ff0f7d",
         "src/views/column-header-controller.ts": "7714b894b5b0",
-        "src/views/cell-renderer.ts": "e041f712f0b8",
-        "styles.css": "651ec7410315"
+        "src/views/cell-renderer.ts": "e2259fa7a8c7",
+        "styles.css": "9732449e4746"
       },
       "note": null,
       "capture": "viewport",
@@ -3709,7 +3709,7 @@
       "sourceHashes": {
         "src/views/calendar-timeline-toolbar-renderer.ts": "f32a3186bb24",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": "Column width is a switch plus a slider here, not the calendar's mode dropdown; the slider only appears once the switch is on.",
       "capture": "viewport",
@@ -3729,7 +3729,7 @@
       "sourceHashes": {
         "src/views/calendar-timeline-toolbar-renderer.ts": "f32a3186bb24",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": "Column width is a switch plus a slider here, not the calendar's mode dropdown; the slider only appears once the switch is on.",
       "capture": "viewport",
@@ -3749,7 +3749,7 @@
       "sourceHashes": {
         "src/views/calendar-timeline-toolbar-renderer.ts": "f32a3186bb24",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": "Column width is a switch plus a slider here, not the calendar's mode dropdown; the slider only appears once the switch is on.",
       "capture": "viewport",
@@ -3769,7 +3769,7 @@
       "sourceHashes": {
         "src/views/calendar-timeline-toolbar-renderer.ts": "f32a3186bb24",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
-        "styles.css": "651ec7410315"
+        "styles.css": "9732449e4746"
       },
       "note": "Column width is a switch plus a slider here, not the calendar's mode dropdown; the slider only appears once the switch is on.",
       "capture": "viewport",
@@ -3786,12 +3786,12 @@
         "src/views/calendar-timeline-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/calendar-timeline-renderer.ts": "7d7dcaad858a",
-        "styles.css": "651ec7410315"
+        "src/views/calendar-timeline-renderer.ts": "37e6e3a20901",
+        "styles.css": "9732449e4746"
       },
       "note": "Two weeks at one column per day; the April band marks the month boundary and the today line sits at 25 March 13:45.",
       "capture": "viewport",
-      "bytes": 147239
+      "bytes": 146959
     },
     {
       "id": "timeline-view",
@@ -3804,12 +3804,12 @@
         "src/views/calendar-timeline-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/calendar-timeline-renderer.ts": "7d7dcaad858a",
-        "styles.css": "651ec7410315"
+        "src/views/calendar-timeline-renderer.ts": "37e6e3a20901",
+        "styles.css": "9732449e4746"
       },
       "note": "Two weeks at one column per day; the April band marks the month boundary and the today line sits at 25 March 13:45.",
       "capture": "viewport",
-      "bytes": 152396
+      "bytes": 151947
     },
     {
       "id": "timeline-view",
@@ -3822,12 +3822,12 @@
         "src/views/calendar-timeline-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/calendar-timeline-renderer.ts": "7d7dcaad858a",
-        "styles.css": "651ec7410315"
+        "src/views/calendar-timeline-renderer.ts": "37e6e3a20901",
+        "styles.css": "9732449e4746"
       },
       "note": "Two weeks at one column per day; the April band marks the month boundary and the today line sits at 25 March 13:45.",
       "capture": "viewport",
-      "bytes": 41700
+      "bytes": 41990
     },
     {
       "id": "timeline-view",
@@ -3840,12 +3840,12 @@
         "src/views/calendar-timeline-renderer.ts"
       ],
       "sourceHashes": {
-        "src/views/calendar-timeline-renderer.ts": "7d7dcaad858a",
-        "styles.css": "651ec7410315"
+        "src/views/calendar-timeline-renderer.ts": "37e6e3a20901",
+        "styles.css": "9732449e4746"
       },
       "note": "Two weeks at one column per day; the April band marks the month boundary and the today line sits at 25 March 13:45.",
       "capture": "viewport",
-      "bytes": 54772
+      "bytes": 55729
     }
   ]
 }
