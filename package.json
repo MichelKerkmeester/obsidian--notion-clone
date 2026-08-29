@@ -24,7 +24,8 @@
     "census:tokens": "node tools/live/token-census.mjs",
     "census:cascade": "node tools/live/cascade-audit.mjs",
     "lint:tools": "eslint \"tools/**/*.mjs\"",
-    "screenshots:scan-pinned": "node tools/screenshots/scan-pinned-values.mjs"
+    "screenshots:scan-pinned": "node tools/screenshots/scan-pinned-values.mjs",
+    "gate": "node tools/gate.mjs"
   },
   "keywords": [
     "obsidian",
