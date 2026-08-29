@@ -30,16 +30,17 @@
  */
 export function applySheetChrome(panel: HTMLElement, isSheet: boolean): void {
   panel.toggleClass("db-mobile-bottom-sheet", isSheet);
-  // The portal is OFF.
+  // The portal is back on, and it is the only mechanism that works.
   //
-  // Moving the sheet to the body was shipped and broke it on device: most of this plugin's rules
-  // are written `.note-database-container .db-thing`, so a surface that leaves the container stops
-  // matching them and renders as unstyled text over the view. Marking the portalled root as a
-  // container root looked like it recovered that in a fixture and did not on the phone.
+  // Obsidian's workspace leaf carries `contain: strict`, which makes it the containing block for
+  // fixed-position descendants and clips them. A sheet inside it resolves `bottom: 0` against the
+  // leaf, not the screen, and lands 72 to 80px short of the bottom depending on whether the host's
+  // navigation bar is floating. No z-index escapes that; two independent reviews measured a sheet
+  // losing the hit test at the maximum integer.
   //
-  // Covering the host navigation bar still requires this move. It cannot be re-enabled until the
-  // rules a sheet depends on are keyed to the surface rather than to its ancestor, and until the
-  // result has been seen on a real phone rather than in a headless page.
+  // The first attempt at this shipped broken because the sheet left the subtree its rules are
+  // written against. It now carries that root with it, so the rules still match.
+  setSheetMount(panel, isSheet);
   const existingHandle = panel.querySelector<HTMLElement>(".db-mobile-bottom-sheet-handle");
   if (isSheet && !existingHandle) {
     const handle = panel.ownerDocument.createElement("div");
@@ -96,6 +97,19 @@ function setSheetMount(panel: HTMLElement, isSheet: boolean): void {
     // needed. Until that lands, this keeps the portal from costing the sheet its appearance.
     panel.addClass("db-surface");
     panel.addClass("note-database-container");
+    // The dimmed backdrop is a sibling, not a pseudo-element on the sheet.
+    //
+    // It used to be `::before` with `z-index: -1`, which cannot paint behind its own host once that
+    // host establishes a stacking context — and this one does, twice over, from an isolation
+    // property and from the transform its entrance animation applies. The result was a sheet
+    // rendered at 58% grey instead of a white sheet over a dimmed app: the scrim tinted the surface
+    // it was supposed to sit behind.
+    if (!doc.body.querySelector(".db-mobile-sheet-scrim")) {
+      const scrim = doc.createElement("div");
+      scrim.className = "db-mobile-sheet-scrim";
+      scrim.setAttribute("aria-hidden", "true");
+      doc.body.appendChild(scrim);
+    }
     // The sheet covers the navbar rather than sitting above it. The positioner writes this variable
     // in its anchored branch to hold a popover clear of the navbar, which is right for a popover
     // and wrong for a sheet, so the sheet states its own value rather than inheriting that one.
@@ -108,6 +122,7 @@ function setSheetMount(panel: HTMLElement, isSheet: boolean): void {
   originalMount.delete(panel);
   panel.removeClass("db-surface");
   panel.removeClass("note-database-container");
+  doc.body.querySelector(".db-mobile-sheet-scrim")?.remove();
   panel.style.removeProperty("--db-mobile-sheet-bottom");
   // A view rebuild can destroy the parent while the sheet is open. Putting the node back into a
   // detached tree would hide it with no way to reach it, so it is removed instead — a closed

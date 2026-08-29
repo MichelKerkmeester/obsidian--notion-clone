@@ -155,6 +155,10 @@
 
 .db-mobile-bottom-sheet {
   position: fixed !important;
+  /* Above the host's navigation bar, which the sheet is meant to cover. The portal is what makes
+     this number reachable at all — inside the leaf no value wins — and the bar sits on the popover
+     tier, so the sheet takes the modal one. */
+  z-index: var(--db-layer-modal, 1000) !important;
   left: 0 !important;
   right: 0 !important;
   bottom: var(--db-mobile-sheet-bottom, 0px) !important;
@@ -174,13 +178,23 @@
   isolation: isolate;
 }
 
-.db-mobile-bottom-sheet::before {
+/* The backdrop behind a phone sheet. A sibling of the sheet on the body, so it can actually sit
+   behind it — as a pseudo-element it was trapped inside the sheet's own stacking context and
+   painted the surface grey instead of dimming the app. 0.4 is the opacity scale's step; the 0.42
+   it replaced was not on it. */
+.db-mobile-sheet-scrim {
   position: fixed;
-  z-index: -1;
+  z-index: calc(var(--db-layer-modal, 1000) - 1);
   inset: 0;
-  content: "";
+  background: rgba(0, 0, 0, 0.4);
   pointer-events: none;
-  background: rgba(0, 0, 0, 0.42);
+}
+
+/* The portalled sheet wears the container class so its rules keep matching, but it must not also
+   inherit the container's full-height sizing — a sheet is as tall as its content, capped. Without
+   this the marker that preserves the styling stretches the sheet over the whole screen. */
+.db-mobile-bottom-sheet.note-database-container {
+  height: auto !important;
 }
 
 .db-mobile-bottom-sheet-handle {

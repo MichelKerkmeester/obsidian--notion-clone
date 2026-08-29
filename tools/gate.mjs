@@ -51,16 +51,10 @@ const CHECKS = [
   { name: "inverted-assertions", cmd: ["node", "tools/live/guard-inverted-assertions.mjs"] },
   { name: "screenshots-fresh", cmd: ["npm", "run", "screenshots:verify"] },
   { name: "story-coverage", cmd: ["npm", "run", "storybook:coverage"] },
-  // This carried an expectFail until the width policy landed. The declaration is gone rather than
-  // updated, because the debt is discharged: a red here now means a regression, not a known defect.
-  {
-    name: "placement",
-    cmd: ["npm", "run", "storybook:placement"],
-    expectFail: {
-      reason: "a sheet cannot reach the screen bottom while the workspace leaf clips it; the fix is to key the sheet's rules to the surface and mount it outside the leaf",
-      owner: "003-mobile-sheet-presentation",
-    },
-  },
+  // This has carried an expectFail twice — for the widthless-caller default, and for a sheet that
+  // could not reach the screen bottom. Both are discharged, and the declaration is removed rather
+  // than updated each time, so a red here means a regression and not a known defect.
+  { name: "placement", cmd: ["npm", "run", "storybook:placement"] },
 ];
 
 // ───────────────────────────────────────────────────────────────────

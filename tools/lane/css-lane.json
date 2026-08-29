@@ -1,7 +1,7 @@
 {
   "holder": "002-properties-panel",
   "acquiredAt": "2026-08-29T19:34:47.628Z",
-  "baselineHash": "8b4ad093a8bd",
+  "baselineHash": "63d5071ada8f",
   "baselineCommit": "f4319e3e768a",
   "history": [
     {
@@ -110,6 +110,13 @@
       "at": "2026-08-29T21:02:39.657Z",
       "hash": "8b4ad093a8bd",
       "note": "reduced-motion blocks no longer null every transform; layout centring survives the preference"
+    },
+    {
+      "event": "edit",
+      "phase": "002-properties-panel",
+      "at": "2026-08-29T21:15:30.382Z",
+      "hash": "63d5071ada8f",
+      "note": "sheet portal restored with modal layer, height guard, and a sibling scrim"
     }
   ],
   "outstanding": [

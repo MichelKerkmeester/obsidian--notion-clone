@@ -358,7 +358,14 @@ const phoneResults = await phone.evaluate(() => {
   const sheetHost = document.querySelector(".note-database-container");
   const sheetAnchor = sheetHost.createDiv({ cls: "anchor" });
   const sheetPanel = sheetHost.createDiv({ cls: "db-record-detail-panel" });
-  sheetPanel.setCssProps({ height: "300px" });
+  // Real content, not a fixed height. The sheet sizes to what it holds, so an empty panel measures
+  // 48px and passes the floor checks while covering almost none of the navigation band — a check
+  // that would report success on a sheet no user could see.
+  for (let i = 0; i < 6; i += 1) {
+    const field = sheetPanel.createDiv({ cls: "db-record-detail-field" });
+    field.createDiv({ cls: "db-record-detail-label", text: `Field ${i}` });
+    field.createDiv({ cls: "db-record-detail-value", text: `Value ${i}` });
+  }
   positionToolbarPopover(sheetPanel, sheetAnchor, {});
 
   const sheetStyle = getComputedStyle(sheetPanel);
