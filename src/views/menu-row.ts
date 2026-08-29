@@ -19,6 +19,16 @@
 // menu already renders, adds the two pieces that had no home — a submenu
 // chevron and a section header — and gives every caller one way to ask for a
 // row. The column menu's 292px sizing and appearance are untouched.
+//
+// One dependency worth knowing before calling this with an arbitrary parent:
+// a row does NOT lay itself out. `display: flex` is declared on
+// `.db-owned-menu .db-menu-item`, and the trailing value is pushed right by a
+// `margin-left: auto` that only does anything inside a flex container. Build
+// rows inside the container `owned-menu` creates, or they render inline with
+// the value jammed against the label. Every caller today goes through
+// `createOwnedMenu`, so this is a trap for the next one rather than a live
+// defect — it surfaced when a catalogue story took the `parent` argument at
+// face value and passed a plain div.
 
 // ───────────────────────────────────────────────────────────────────
 // 1. IMPORTS

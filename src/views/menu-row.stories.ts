@@ -29,8 +29,11 @@ type Story = StoryObj;
 /** Every row state at once, so drift between them is visible rather than inferred. */
 export const Grammar: Story = {
   render: () => {
+    // `db-owned-menu` is not decoration: the row's flex layout is declared there, not on the row.
+    // Building a bare `db-menu` container instead lays every row out inline with its trailing value
+    // jammed against the label — which is exactly what this story showed before it was corrected.
     const menu = document.createElement("div");
-    menu.className = "db-menu";
+    menu.className = "db-menu db-owned-menu";
     createMenuSection(menu, "Property");
     createMenuRow(menu, { icon: "edit", label: "Edit property" });
     createMenuRow(menu, { icon: "layers", label: "Change type", submenu: true });
@@ -54,7 +57,7 @@ export const Grammar: Story = {
 export const Warning: Story = {
   render: () => {
     const menu = document.createElement("div");
-    menu.className = "db-menu";
+    menu.className = "db-menu db-owned-menu";
     createMenuRow(menu, { icon: "eraser", label: "Clear all values", warning: true });
     createMenuRow(menu, { icon: "trash-2", label: "Delete rows", warning: true });
     return menu;
