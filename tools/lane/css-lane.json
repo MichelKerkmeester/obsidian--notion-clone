@@ -1,7 +1,7 @@
 {
   "holder": "002-properties-panel",
   "acquiredAt": "2026-08-29T19:34:47.628Z",
-  "baselineHash": "09c8bb30075c",
+  "baselineHash": "74f9ab739235",
   "baselineCommit": "f4319e3e768a",
   "history": [
     {
@@ -68,6 +68,13 @@
       "phase": "002-properties-panel",
       "at": "2026-08-29T19:34:47.628Z",
       "hash": "09c8bb30075c"
+    },
+    {
+      "event": "edit",
+      "phase": "002-properties-panel",
+      "at": "2026-08-29T20:02:27.044Z",
+      "hash": "74f9ab739235",
+      "note": "sheet z-index reverted with its portal; status-badge given box-sizing (same content-box defect as the list row, 138 instances); properties row columns 6-8 claimed explicitly"
     }
   ],
   "outstanding": [
