@@ -105,6 +105,11 @@ const page_html = `<!doctype html><html><head>
 const browser = await chromium.launch({ executablePath: CHROME });
 const page = await browser.newPage({ viewport: VIEWPORT });
 await page.setContent(page_html);
+// The desktop checks used to run against a page with no stylesheet, so they measured a document
+// that does not contain the cascade the defects live in — the same structural blindness as
+// wrapping a story in the one container that supplies its tokens. Every desktop number taken
+// before this line was loaded described a rendering nobody ships.
+await page.addStyleTag({ content: readFileSync(join(REPO, "styles.css"), "utf8") });
 await page.addScriptTag({ content: shimJs + "\ninstallObsidianDomShim(globalThis);" });
 await page.addScriptTag({ content: positionerJs });
 
@@ -224,14 +229,62 @@ const phone = await browser.newPage({
   hasTouch: true,
   isMobile: true,
 });
-await phone.setContent(page_html.replace("<body>", '<body class="is-phone">'));
+// Obsidian draws a fixed bottom navigation bar on a phone. No harness contained one, so the
+// positioner's phone branch always fell back to a hardcoded 50px and the harness agreed with the
+// device for the wrong reason. A safe-area inset is supplied for the same reason.
+const phoneBody = '<body class="is-phone" style="--safe-area-inset-bottom: 34px">'
+  + '<div class="mobile-navbar" style="position:fixed;left:0;right:0;bottom:0;height:72px;'
+  + 'background:#222;z-index:100"></div>';
+await phone.setContent(page_html.replace("<body>", phoneBody));
 await phone.addStyleTag({ content: readFileSync(join(REPO, "styles.css"), "utf8") });
 await phone.addScriptTag({ content: shimJs + "\ninstallObsidianDomShim(globalThis);" });
 await phone.addScriptTag({ content: positionerJs });
 
 const phoneResults = await phone.evaluate(() => {
   const out = [];
-  const { applySheetChrome } = globalThis.__place;
+  const { applySheetChrome, positionToolbarPopover, getVisiblePopoverBounds } = globalThis.__place;
+
+  // Drive the positioner, not only the chrome helper.
+  //
+  // The phone checks used to call applySheetChrome alone, which toggles a class and adds a grab
+  // handle. The offset arithmetic that reads the navbar lives in the positioner, so it was never
+  // executed here — which is why adding a navbar to the page changed no asserted number and the
+  // harness agreed with the device for the wrong reason.
+  const anchoredHost = document.body.createDiv({ cls: "note-database-container" });
+  const anchor = anchoredHost.createDiv({ cls: "anchor" });
+  const anchored = anchoredHost.createDiv({ cls: "panel" });
+  for (let i = 0; i < 6; i += 1) anchored.createDiv({ cls: "row", text: `Row ${i}` });
+  positionToolbarPopover(anchored, anchor, {});
+  const bounds = getVisiblePopoverBounds(null);
+  const navbar = document.querySelector(".mobile-navbar");
+  const navRect = navbar ? navbar.getBoundingClientRect() : null;
+
+  // The bound must be derived from the navbar that is actually on the page, not from the
+  // positioner's hardcoded fallback. The harness navbar is deliberately 72px: a height close to
+  // that fallback makes present and absent produce nearly the same number, which is a check that
+  // cannot tell the two apart while appearing to pass.
+  // The current branch subtracts BOTH the navbar height and the safe-area inset, so the expected
+  // bound is viewport - navbar - inset. Asserting the navbar alone was wrong about the code, which
+  // is worth recording: the harness caught a naive assertion before it could certify anything.
+  //
+  // This measures the behaviour as it stands today. A later phase deletes this subtraction outright,
+  // because the sheet is supposed to COVER the navbar rather than avoid it; when that lands, this
+  // expectation changes with it and the change should be deliberate and visible here.
+  const inset = parseFloat(
+    getComputedStyle(document.body).getPropertyValue("--safe-area-inset-bottom") || "0",
+  ) || 0;
+  const expected = navRect ? window.innerHeight - navRect.height - inset : null;
+  const fallbackBound = window.innerHeight - 50;
+  out.push({
+    name: "phone bounds are derived from the navbar on the page, not the hardcoded fallback",
+    pass: expected !== null && Math.abs(bounds.bottom - expected) <= 1,
+    detail: navRect
+      ? `bounds.bottom=${Math.round(bounds.bottom)} expected=${Math.round(expected)} `
+        + `(viewport ${window.innerHeight} - navbar ${Math.round(navRect.height)} - inset ${inset}); `
+        + `a fallback-derived bound would sit near ${fallbackBound}`
+      : "no .mobile-navbar in the page — the harness cannot observe this at all",
+  });
+  anchoredHost.remove();
   const panel = document.body.createDiv({ cls: "note-database-container" });
   for (let i = 0; i < 40; i += 1) panel.createDiv({ text: `Row ${i}` });
 
