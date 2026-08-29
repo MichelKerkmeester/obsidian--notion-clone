@@ -328,62 +328,44 @@ const phoneResults = await phone.evaluate(() => {
     detail: `position=${after.position} bottom=${after.bottom}`,
   });
 
-  // The requirement this whole sheet effort is judged on: a sheet covers the host's bottom
-  // navigation bar. It is a hit test rather than a rectangle comparison, because overlapping the
-  // navbar's coordinates while being painted underneath it is exactly the state the user reports —
-  // the sheet looks like it starts above the bar. What matters is which element the point belongs
-  // to, and only elementFromPoint answers that.
-  // Built inside the page's own plugin container, not a fresh one on the body.
+  // The requirement this whole sheet effort is judged on: a sheet sits on the viewport floor,
+  // over the host's bottom navigation bar.
   //
-  // A first version created the host as a direct child of the body, after the navbar. The sheet
-  // then won the hit test on DOM order alone, with or without the portal — the check passed for a
-  // reason that had nothing to do with what it claimed to test, which the negative control caught
-  // by leaving it green while the portal was disabled.
+  // These checks previously asserted a portal — that the sheet had been moved to the body. That was
+  // the wrong mechanism, and asserting it hid the real one: the positioner writes the sheet's
+  // bottom offset from bounds that deliberately subtract the navigation bar and the safe-area
+  // inset, so the sheet was parked 106px above the floor no matter where it was mounted. The
+  // portal checks were green while the operator's phone showed the defect.
   //
-  // The container is isolated because the app's is: the finding this phase rests on is that a
-  // sheet inside it loses the hit test even at z-index 9999, which only happens inside a stacking
-  // context. Reproducing that trap is what makes the portal necessary here rather than incidental.
+  // What is asserted now is the outcome. `position: fixed` resolves against the viewport, so a
+  // sheet whose bottom is 0 reaches the floor from inside the container.
   const sheetHost = document.querySelector(".note-database-container");
-  sheetHost.setCssProps({ isolation: "isolate" });
+  const sheetAnchor = sheetHost.createDiv({ cls: "anchor" });
   const sheetPanel = sheetHost.createDiv({ cls: "db-record-detail-panel" });
   sheetPanel.setCssProps({ height: "300px" });
+  positionToolbarPopover(sheetPanel, sheetAnchor, {});
+
+  const sheetStyle = getComputedStyle(sheetPanel);
+  const sheetRect = sheetPanel.getBoundingClientRect();
   const navBox = document.querySelector(".mobile-navbar").getBoundingClientRect();
-  const px = window.innerWidth / 2;
-  const py = navBox.top + navBox.height / 2;
-
-  const hitBefore = document.elementFromPoint(px, py);
-  applySheetChrome(sheetPanel, true);
-  const hitAfter = document.elementFromPoint(px, py);
-  const mountedOnBody = sheetPanel.parentElement === document.body;
-  // Captured now, not read at report time. The restore below moves the node back, so a detail that
-  // re-reads the parent describes a different moment than the assertion it accompanies.
-  const parentWhileSheet = sheetPanel.parentElement?.tagName;
-  const carriesTokens = sheetPanel.classList.contains("db-surface");
-  applySheetChrome(sheetPanel, false);
-  const restoredToContainer = sheetPanel.parentElement === sheetHost;
 
   out.push({
-    name: "a sheet covers the host navigation bar (hit test over the navbar)",
-    pass: hitAfter === sheetPanel || sheetPanel.contains(hitAfter),
-    detail: `before=${hitBefore?.className || "none"} after=${hitAfter?.className || "none"}`,
+    name: "a sheet is placed on the viewport floor, not above the navigation bar",
+    pass: Math.abs(sheetRect.bottom - window.innerHeight) <= 1,
+    detail: `sheet bottom=${Math.round(sheetRect.bottom)} viewport=${window.innerHeight} (gap ${Math.round(window.innerHeight - sheetRect.bottom)}px)`,
   });
   out.push({
-    name: "the sheet is mounted on the body, not inside the plugin container",
-    pass: mountedOnBody,
-    detail: `parent while presenting as a sheet=${parentWhileSheet}`,
+    name: "the sheet's bottom offset is zero, not the navbar-avoiding inset",
+    pass: sheetStyle.bottom === "0px",
+    detail: `computed bottom=${sheetStyle.bottom}`,
   });
   out.push({
-    name: "a portalled sheet still carries the token boundary",
-    pass: carriesTokens,
-    detail: "leaving the container leaves the subtree where --db-* is declared",
+    name: "the sheet's rectangle covers the navigation bar's band",
+    pass: sheetRect.bottom >= navBox.bottom - 1 && sheetRect.top <= navBox.top,
+    detail: `sheet ${Math.round(sheetRect.top)}-${Math.round(sheetRect.bottom)} navbar ${Math.round(navBox.top)}-${Math.round(navBox.bottom)}`,
   });
-  out.push({
-    name: "the sheet returns to its original parent when it stops being one",
-    pass: restoredToContainer,
-    detail: `parent after restore=${sheetPanel.parentElement?.className || "none"}`,
-  });
+  sheetAnchor.remove();
   sheetPanel.remove();
-  sheetHost.style.removeProperty("isolation");
 
   return out;
 });

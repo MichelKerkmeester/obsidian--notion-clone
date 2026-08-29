@@ -155,12 +155,6 @@
 
 .db-mobile-bottom-sheet {
   position: fixed !important;
-  /* Above the host's bottom navigation bar, which the sheet is meant to cover.
-     The portal is what makes this number mean anything — inside the plugin container the sheet is
-     in a different part of the tree and hit-testing a point over the navbar returns the navbar at
-     any z-index. Moved to the body it becomes a stacking peer, and then it needs to say where it
-     sits. Modal layer, because a sheet covers the app chrome the way a modal does. */
-  z-index: var(--db-layer-modal, 1000) !important;
   left: 0 !important;
   right: 0 !important;
   bottom: var(--db-mobile-sheet-bottom, 0px) !important;
@@ -6808,6 +6802,11 @@
 
 .note-database-container .status-badge,
 .note-database-modal .status-badge {
+  /* Same defect as the list row, and it was missed because the claim that the row was the only
+     class carrying content-box with padding and a percentage width was wrong. `max-width: 100%`
+     bounds the CONTENT box, so 6px of padding and 1px of border on each side are added on top and
+     the badge paints 14px past whatever contains it. */
+  box-sizing: border-box;
   display: inline-flex;
   align-items: center;
   max-width: 100%;
@@ -11169,7 +11168,7 @@ body.is-phone .note-database-container .db-record-detail-panel {
    One row per property: drag, icon, name, wrap, move up, move down, edit, hide.
 ─────────────────────────────────────────────────────────────── */
 
-/* Eight columns, each claimed by name, so hiding a child leaves its column empty instead of
+/* Eight columns, each claimed explicitly, so hiding a child leaves its column empty instead of
    shifting every child after it one position left.
 
    The row emits eight children, and which of them are visible depends on two independent things:
@@ -11196,6 +11195,14 @@ body.is-phone .note-database-container .db-record-detail-panel {
 .note-database-container .db-column-manager-row > .db-checkbox { grid-column: 3; }
 .note-database-container .db-column-manager-row > .db-column-type { grid-column: 4; }
 .note-database-container .db-column-manager-row > .db-column-name-wrap { grid-column: 5; }
+
+/* The three trailing actions, claimed rather than auto-placed.
+   They were left to fill forward from column 6, which works only while all three render — hide the
+   wrap toggle and the other two shift left, which is the exact failure this frame exists to stop.
+   Naming them costs three lines and removes the caveat. */
+.note-database-container .db-column-manager-row > .clickable-icon:nth-of-type(1) { grid-column: 6; }
+.note-database-container .db-column-manager-row > .clickable-icon:nth-of-type(2) { grid-column: 7; }
+.note-database-container .db-column-manager-row > .clickable-icon:nth-of-type(3) { grid-column: 8; }
 
 .note-database-container .db-column-manager-row:hover {
   background: var(--background-modifier-hover);

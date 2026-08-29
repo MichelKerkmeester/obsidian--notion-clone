@@ -194,6 +194,12 @@ this stage confirms the rewrite against one this phase cannot edit.
 <!-- ANCHOR:phase-2 -->
 ## PHASE 2: IMPLEMENTATION
 
+> **REOPENED 2026-08-29.** T12, T13, T14 and T18 were closed on measurements taken in a harness that
+> never runs the plugin's presentation code. The sheet packet proved what that is worth: four green
+> checks and a surface destroyed on device. Each needs re-closing against a render through the
+> production path, with an image opened by a person.
+
+
 ### Stage 2 — declare the registry, then observe it (migration step 0)
 
 - [ ] **T8** Declare every production affordance in the typed registry — role, producer, host, mount,
@@ -226,7 +232,7 @@ this stage confirms the rewrite against one this phase cannot edit.
 
 ### Stage 4 — the handle, the ownership seam, the token boundary (migration step 1, step 6 body-portal half)
 
-- [~] **T12** Implement `openSurface()` and `SurfaceHandle` as an **adapter over**
+- [ ] **T12** Implement `openSurface()` and `SurfaceHandle` as an **adapter over**
       `positionToolbarPopover` and `OwnedMenuHandle` — REQ-001, REQ-011.
       *Evidence to close:* a surface created through it carries `data-db-surface`, its placement is
       byte-identical to the legacy path, and legacy classes and selectors still resolve.
@@ -235,7 +241,7 @@ this stage confirms the rewrite against one this phase cannot edit.
       carries `data-db-surface` and its producer. **"Placement is byte-identical to the legacy path"
       is not shown** — that is a browser comparison of the two paths against the same anchor, and it
       has not been run. Until it is, this is an assertion.
-- [~] **T13** Register the handle through `overlayStack` and `InteractionScopeRegistry`; retire
+- [ ] **T13** Register the handle through `overlayStack` and `InteractionScopeRegistry`; retire
       `owned-menu.ts:138-139`'s private capture-phase pair onto the shared owner — REQ-008.
       *Evidence to close:* exactly one dismissal, scroll, keyboard and focus owner per open surface;
       Escape over a menu-above-a-popover closes the innermost only; net listener count not above the
@@ -246,7 +252,7 @@ this stage confirms the rewrite against one this phase cannot edit.
       untouched. **The owned menu still installs its own capture-phase pair** — retiring it means
       changing a call site, which this stage deliberately does not do. The listener-count evidence
       cannot be taken until it is retired.
-- [x] **T14** Implement the mount adapters `local` and `bodyPortal`; declare `shadowRoot` and
+- [ ] **T14** Implement the mount adapters `local` and `bodyPortal`; declare `shadowRoot` and
       `topLayer` as capability-gated and unimplemented — REQ-009.
       *Evidence to close:* a surface's mount is read from its declaration, never inferred; selecting
       `topLayer` without its per-role proof is a build error.
@@ -276,7 +282,7 @@ this stage confirms the rewrite against one this phase cannot edit.
 
 ### Stage 5 — the anchor lease
 
-- [x] **T18** Implement `AnchorRef` — logical scope, row path / cell key / event key, role, stable
+- [ ] **T18** Implement `AnchorRef` — logical scope, row path / cell key / event key, role, stable
       record identity — with the node as a render-epoch cache — REQ-010.
       *Evidence to close:* the handle's `AnchorRef` is unchanged across a wholesale `refresh()` while
       the resolved node is a different object.

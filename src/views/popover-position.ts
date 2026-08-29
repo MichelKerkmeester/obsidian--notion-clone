@@ -56,10 +56,15 @@ export const COMPACT_MENU_POPOVER: ToolbarPopoverPositionOptions = {
  * width by accident rather than by asking for one — which is most of why they look unrelated.
  *
  * Wider than a menu because these hold labelled controls in rows, not a single column of items.
+ *
+ * The numbers are not chosen here. They are the panel role's declared width, and a first version
+ * of this preset invented its own — below the role's floor and disagreeing with the contract that
+ * names it. Two definitions of "how wide is a panel" in one repository is how thirteen call sites
+ * came to hold nine different answers.
  */
 export const PANEL_POPOVER: ToolbarPopoverPositionOptions = {
-  minWidth: 260,
-  preferredWidth: 320,
+  minWidth: 292,
+  preferredWidth: 360,
   maxWidth: 360,
 };
 
@@ -97,6 +102,7 @@ export function positionToolbarPopover(
   positionCleanups.get(panel)?.();
 
   panel.addClass("db-anchored-popover");
+
   // Presentation now lives in the sheet module so surfaces without an anchor — modals — can reach
   // it too. This function keeps placement, which is the part that genuinely needs an anchor.
   applySheetChrome(panel, mobileSheet);
@@ -131,12 +137,22 @@ export function positionToolbarPopover(
       maxHeight: "",
     });
     if (mobileSheet) {
-      panel.style.setProperty("--db-mobile-sheet-bottom", `${Math.max(0, view.innerHeight - bounds.bottom)}px`);
+      // A sheet sits on the viewport floor, covering the host's bottom navigation bar.
+      //
+      // These two lines used to be `innerHeight - bounds.bottom`, and the bounds this reads
+      // deliberately subtract the navigation bar and the safe-area inset — right for an anchored
+      // popover, which must stay clear of both, and wrong for a sheet, whose whole purpose is to
+      // cover them. On a phone that arithmetic came to 106px, so the sheet was parked that far
+      // above the bottom edge and appeared to start above the bar.
+      //
+      // No portal and no z-index is involved: `position: fixed` is resolved against the viewport,
+      // and the host bar declares no stacking order of its own.
+      panel.style.setProperty("--db-mobile-sheet-bottom", "0px");
       panel.setCssProps({
         left: "0px",
         right: "0px",
         top: "auto",
-        bottom: `${Math.max(0, view.innerHeight - bounds.bottom)}px`,
+        bottom: "0px",
         width: "100%",
         maxWidth: "100%",
         // Cap at 90% of the small viewport. The stylesheet asks for 90svh, but this inline value

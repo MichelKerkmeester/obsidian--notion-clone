@@ -30,7 +30,16 @@
  */
 export function applySheetChrome(panel: HTMLElement, isSheet: boolean): void {
   panel.toggleClass("db-mobile-bottom-sheet", isSheet);
-  setSheetMount(panel, isSheet);
+  // The portal is OFF.
+  //
+  // Moving the sheet to the body was shipped and broke it on device: most of this plugin's rules
+  // are written `.note-database-container .db-thing`, so a surface that leaves the container stops
+  // matching them and renders as unstyled text over the view. Marking the portalled root as a
+  // container root looked like it recovered that in a fixture and did not on the phone.
+  //
+  // Covering the host navigation bar still requires this move. It cannot be re-enabled until the
+  // rules a sheet depends on are keyed to the surface rather than to its ancestor, and until the
+  // result has been seen on a real phone rather than in a headless page.
   const existingHandle = panel.querySelector<HTMLElement>(".db-mobile-bottom-sheet-handle");
   if (isSheet && !existingHandle) {
     const handle = panel.ownerDocument.createElement("div");
@@ -75,7 +84,18 @@ function setSheetMount(panel: HTMLElement, isSheet: boolean): void {
     if (panel.parentElement) {
       originalMount.set(panel, { parent: panel.parentElement, before: panel.nextSibling });
     }
+    // Carry the plugin's own scope with it, not just the tokens.
+    //
+    // Most of this plugin's rules are written `.note-database-container .db-thing`, so a surface
+    // that leaves the container stops matching them and renders as unstyled text on top of the
+    // view — which is exactly what shipped when this portal was added with only the token class.
+    // Marking the portalled root as a container root as well means every ancestor-scoped rule
+    // still applies, because the sheet now IS the ancestor those rules name.
+    //
+    // The right long-term answer is to re-key those rules to the surface itself so no stand-in is
+    // needed. Until that lands, this keeps the portal from costing the sheet its appearance.
     panel.addClass("db-surface");
+    panel.addClass("note-database-container");
     // The sheet covers the navbar rather than sitting above it. The positioner writes this variable
     // in its anchored branch to hold a popover clear of the navbar, which is right for a popover
     // and wrong for a sheet, so the sheet states its own value rather than inheriting that one.
@@ -87,6 +107,7 @@ function setSheetMount(panel: HTMLElement, isSheet: boolean): void {
   if (!remembered) return;
   originalMount.delete(panel);
   panel.removeClass("db-surface");
+  panel.removeClass("note-database-container");
   panel.style.removeProperty("--db-mobile-sheet-bottom");
   // A view rebuild can destroy the parent while the sheet is open. Putting the node back into a
   // detached tree would hide it with no way to reach it, so it is removed instead — a closed

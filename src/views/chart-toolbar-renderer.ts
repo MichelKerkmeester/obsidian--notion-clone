@@ -343,6 +343,7 @@ export class ChartToolbarRenderer {
     const header = panel.createDiv({ cls: "db-panel-header" });
     header.createDiv({ cls: "db-panel-title", text: t("chart.options") });
     this.renderPopoverContent(panel, containerEl, config, actions);
+    panel.addClass("db-anchored-popover");
     positionToolbarPopover(panel, anchor, { preferredWidth: 520, maxWidth: 560 });
     const onOutside = (event: MouseEvent) => {
       const target = event.target as Node | null;
@@ -1064,7 +1065,6 @@ export class ChartToolbarRenderer {
   }
 
   private positionChildPopover(panel: HTMLElement, anchor: HTMLElement, containerEl: HTMLElement, size: ChildPopoverSizeOptions = {}): void {
-    panel.addClass("db-anchored-popover");
     panel.setCssProps({
       position: "absolute",
       right: "auto",

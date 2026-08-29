@@ -8428,9 +8428,17 @@ export class DatabaseView extends FileView {
           //
           // Touch keeps the editable detail panel, which is sheet-aware and reachable with a
           // thumb; the rail's dismiss lifecycle assumes a pointer.
+          // `dataSource.openNote`, not `openRow`.
+          //
+          // The three sibling affordances bind `openNote` directly. `openRow` first runs a computed
+          // -field sync that writes frontmatter across the whole database, so routing the table
+          // through it made one of the four do a vault-wide write the others do not — two
+          // behaviours where the point was to have one. It is also an async call whose promise had
+          // no rejection handler here, so a failing sync would have left Open doing nothing at all
+          // while the other three still opened.
           open: () => (isTouchDevice(td)
             ? this.openRecordDetailPanel(td, row)
-            : this.openRow(row)),
+            : this.dataSource.openNote(row.file)),
         });
       }
     }

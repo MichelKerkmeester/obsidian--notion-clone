@@ -95,7 +95,7 @@ function buildPage(scenario, theme, styles, themeCss, runtimeCss, device) {
   // It must never restyle what is being photographed, only make it visible.
   const overrides = scenario.captureCss ? `<style>${scenario.captureCss}</style>` : "";
   return `<!doctype html>
-<html class="${[theme === "dark" ? "theme-dark" : "theme-light", captureMode(scenario) === "element" ? "capture-element" : ""].filter(Boolean).join(" ")}">
+<html class="${[theme === "dark" ? "theme-dark" : "theme-light", captureMode(scenario) === "element" ? "capture-element" : ""].filter(Boolean).join(" ")}" style="--capture-max-width: ${device.width}px">
 <head><meta charset="utf-8">
 <style>${themeCss}</style>
 <style>${styles}</style>

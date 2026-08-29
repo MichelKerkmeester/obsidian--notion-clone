@@ -127,8 +127,13 @@ html.capture-element #shot {
   /* Bounded rather than unlimited: a fixture containing a table resolves to a runaway
      width when nothing constrains the columns, and max-content would faithfully honour it
      all the way to a browser crash. A component that legitimately needs more than this is
-     a full view and belongs in viewport mode. */
-  max-width: 1440px;
+     a full view and belongs in viewport mode.
+
+     Bounded by the DEVICE, not by a constant. This was a flat 1440px for every capture, so a
+     component photographed "on mobile" shrink-wrapped to whatever its content wanted and came out
+     the same width as its desktop shot — the panel captures were byte-identical at 1156px in both.
+     A person signing off a mobile image was signing off a desktop one. */
+  max-width: var(--capture-max-width, 1440px);
   overflow: hidden;
   background: transparent;
 }

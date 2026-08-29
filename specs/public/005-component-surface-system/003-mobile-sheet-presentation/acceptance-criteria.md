@@ -31,6 +31,24 @@ _memory:
 ---
 # Acceptance Criteria: Mobile Sheet Presentation
 
+> **ALL CRITERIA IN THIS PACKET ARE REOPENED — 2026-08-29.**
+>
+> A portal was implemented, asserted green by four harness checks, committed, and shipped to the
+> operator's phone, where the sheet rendered as unstyled text over the view AND still sat above the
+> navigation bar. Both halves of the claim were false on device.
+>
+> The four checks passed because every one of them measured a mechanism — mount point, token class,
+> hit test, restore — and not one asked whether the surface still looked like a sheet.
+>
+> **The root cause is bigger than this packet.** All 196 captures render static markup; none of them
+> calls the plugin's presentation code. `applySheetChrome` is invoked by no capture, so a change to
+> it is invisible to every screenshot in the repository.
+>
+> No criterion here may be marked met again without: a render through the production code path, an
+> image a person has opened, and confirmation on the operator's device.
+
+
+
 <!-- SPECKIT_TEMPLATE_SOURCE: acceptance-criteria | v2.2 -->
 
 > This document decides whether the packet may close. A packet is closeable when

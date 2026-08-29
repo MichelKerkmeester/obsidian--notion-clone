@@ -431,7 +431,11 @@ export default class NoteDatabasePlugin extends Plugin {
       attr: { href: "obsidian://show-plugin?id=note-database" },
     });
     modal.open();
-    void MarkdownRenderer.render(this.app, t("changelog.releaseNotes"), notesEl, "", component);
+    // The heading takes the version rather than carrying it in the string. It used to be baked
+    // into all three locale entries, so the modal announced its own version in the title and a
+    // stale one three releases behind in the body.
+    const notes = t("changelog.releaseNotes", { version: this.manifest.version });
+    void MarkdownRenderer.render(this.app, notes, notesEl, "", component);
   }
 
   /**
