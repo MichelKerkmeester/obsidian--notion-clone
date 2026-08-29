@@ -17916,6 +17916,16 @@ img.db-text-md-image {
 .is-phone .note-database-container .db-list-group-header,
 .is-phone .note-database-container .db-list-row,
 .is-phone .note-database-container .db-list-row-main,
+/* On a phone the list fits the screen and its fields wrap; it does not scroll sideways.
+   The rows already ask their fields to wrap, but the list sized itself to its widest intrinsic
+   content — 558px inside a 338px container — so the fields never ran out of room and never
+   wrapped. The container scrolled horizontally instead, which is why the renewal and billing
+   columns sat off the right edge of the screen with no indication they were there. */
+.is-phone .note-database-container .db-list {
+  width: 100%;
+  max-width: 100%;
+}
+
 .is-phone .note-database-container .db-list-row-meta {
   width: 100%;
   min-width: 0;

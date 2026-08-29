@@ -97,6 +97,12 @@ function buildPage(scenario, theme, styles, themeCss, runtimeCss, device) {
   return `<!doctype html>
 <html class="${[theme === "dark" ? "theme-dark" : "theme-light", captureMode(scenario) === "element" ? "capture-element" : ""].filter(Boolean).join(" ")}" style="--capture-max-width: ${device.width}px">
 <head><meta charset="utf-8">
+<!-- Without this the layout viewport is 980px whatever device is emulated, and the page is then
+     zoomed down to fit the frame. Every "mobile" capture ever taken was a desktop layout at 0.41
+     scale, and \`@media (max-width: 760px)\` — the only responsive breakpoint this plugin has, and
+     where its entire mobile panel behaviour lives — never matched in a single screenshot. The
+     is-phone class applied, so class-based rules fired and the images looked plausible. -->
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <style>${themeCss}</style>
 <style>${styles}</style>
 <style>${runtimeCss}</style>

@@ -1,6 +1,6 @@
 {
   "generatedFrom": {
-    "stylesheet": "styles.css@0eaba176b232"
+    "stylesheet": "styles.css@10204a7e5f18"
   },
   "scenarios": [
     {
@@ -16,11 +16,11 @@
       "layoutHash": "2a467e0c9263",
       "sourceHashes": {
         "src/views/toolbar-renderer.ts": "f11efbbdc98e",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "Tiles keep icon and caption inside their own bounds; the duplicate checkbox is not stretched.",
       "capture": "element",
@@ -39,11 +39,11 @@
       "layoutHash": "2a467e0c9263",
       "sourceHashes": {
         "src/views/toolbar-renderer.ts": "f11efbbdc98e",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "Tiles keep icon and caption inside their own bounds; the duplicate checkbox is not stretched.",
       "capture": "element",
@@ -62,11 +62,11 @@
       "layoutHash": "44b0a19eaae3",
       "sourceHashes": {
         "src/views/toolbar-renderer.ts": "f11efbbdc98e",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "Tiles keep icon and caption inside their own bounds; the duplicate checkbox is not stretched.",
       "capture": "element",
@@ -85,11 +85,11 @@
       "layoutHash": "44b0a19eaae3",
       "sourceHashes": {
         "src/views/toolbar-renderer.ts": "f11efbbdc98e",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "Tiles keep icon and caption inside their own bounds; the duplicate checkbox is not stretched.",
       "capture": "element",
@@ -110,11 +110,11 @@
       "sourceHashes": {
         "src/views/active-rule-popover-renderer.ts": "d9143edf30ba",
         "src/views/filter-panel-renderer.ts": "6b4543ceb6d9",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "Editing one chip opens the filter panel's single-rule editor: field, operator and value, with no remove button.",
       "capture": "element",
@@ -135,11 +135,11 @@
       "sourceHashes": {
         "src/views/active-rule-popover-renderer.ts": "d9143edf30ba",
         "src/views/filter-panel-renderer.ts": "6b4543ceb6d9",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "Editing one chip opens the filter panel's single-rule editor: field, operator and value, with no remove button.",
       "capture": "element",
@@ -156,19 +156,19 @@
         "src/views/active-rule-popover-renderer.ts",
         "src/views/filter-panel-renderer.ts"
       ],
-      "layoutHash": "3b43acc6a844",
+      "layoutHash": "cfcb09ed040f",
       "sourceHashes": {
         "src/views/active-rule-popover-renderer.ts": "d9143edf30ba",
         "src/views/filter-panel-renderer.ts": "6b4543ceb6d9",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "Editing one chip opens the filter panel's single-rule editor: field, operator and value, with no remove button.",
       "capture": "element",
-      "bytes": 8423
+      "bytes": 10064
     },
     {
       "id": "chrome-active-rule-popover-filter",
@@ -181,19 +181,19 @@
         "src/views/active-rule-popover-renderer.ts",
         "src/views/filter-panel-renderer.ts"
       ],
-      "layoutHash": "3b43acc6a844",
+      "layoutHash": "cfcb09ed040f",
       "sourceHashes": {
         "src/views/active-rule-popover-renderer.ts": "d9143edf30ba",
         "src/views/filter-panel-renderer.ts": "6b4543ceb6d9",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "Editing one chip opens the filter panel's single-rule editor: field, operator and value, with no remove button.",
       "capture": "element",
-      "bytes": 8533
+      "bytes": 9907
     },
     {
       "id": "chrome-active-rule-popover-sort",
@@ -210,11 +210,11 @@
       "sourceHashes": {
         "src/views/active-rule-popover-renderer.ts": "d9143edf30ba",
         "src/views/sort-panel-renderer.ts": "2689215615eb",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "The sort variant adds db-sort-panel and drops the drag handle and reorder buttons the full panel shows.",
       "capture": "element",
@@ -235,11 +235,11 @@
       "sourceHashes": {
         "src/views/active-rule-popover-renderer.ts": "d9143edf30ba",
         "src/views/sort-panel-renderer.ts": "2689215615eb",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "The sort variant adds db-sort-panel and drops the drag handle and reorder buttons the full panel shows.",
       "capture": "element",
@@ -256,19 +256,19 @@
         "src/views/active-rule-popover-renderer.ts",
         "src/views/sort-panel-renderer.ts"
       ],
-      "layoutHash": "4f3ca4fb72dc",
+      "layoutHash": "00e103558920",
       "sourceHashes": {
         "src/views/active-rule-popover-renderer.ts": "d9143edf30ba",
         "src/views/sort-panel-renderer.ts": "2689215615eb",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "The sort variant adds db-sort-panel and drops the drag handle and reorder buttons the full panel shows.",
       "capture": "element",
-      "bytes": 4069
+      "bytes": 7596
     },
     {
       "id": "chrome-active-rule-popover-sort",
@@ -281,19 +281,19 @@
         "src/views/active-rule-popover-renderer.ts",
         "src/views/sort-panel-renderer.ts"
       ],
-      "layoutHash": "4f3ca4fb72dc",
+      "layoutHash": "00e103558920",
       "sourceHashes": {
         "src/views/active-rule-popover-renderer.ts": "d9143edf30ba",
         "src/views/sort-panel-renderer.ts": "2689215615eb",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "The sort variant adds db-sort-panel and drops the drag handle and reorder buttons the full panel shows.",
       "capture": "element",
-      "bytes": 4073
+      "bytes": 7579
     },
     {
       "id": "chrome-active-view-controls",
@@ -308,11 +308,11 @@
       "layoutHash": "e7c70d9c8e78",
       "sourceHashes": {
         "src/views/active-view-controls-renderer.ts": "28f8d85134ed",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "The rail lives in the header below the toolbar. Sort chips come first and carry their position as a superscript; the AND button between the groups toggles filter logic.",
       "capture": "element",
@@ -331,11 +331,11 @@
       "layoutHash": "e7c70d9c8e78",
       "sourceHashes": {
         "src/views/active-view-controls-renderer.ts": "28f8d85134ed",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "The rail lives in the header below the toolbar. Sort chips come first and carry their position as a superscript; the AND button between the groups toggles filter logic.",
       "capture": "element",
@@ -354,11 +354,11 @@
       "layoutHash": "a3e88e554ebf",
       "sourceHashes": {
         "src/views/active-view-controls-renderer.ts": "28f8d85134ed",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "The rail lives in the header below the toolbar. Sort chips come first and carry their position as a superscript; the AND button between the groups toggles filter logic.",
       "capture": "element",
@@ -377,11 +377,11 @@
       "layoutHash": "a3e88e554ebf",
       "sourceHashes": {
         "src/views/active-view-controls-renderer.ts": "28f8d85134ed",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "The rail lives in the header below the toolbar. Sort chips come first and carry their position as a superscript; the AND button between the groups toggles filter logic.",
       "capture": "element",
@@ -400,11 +400,11 @@
       "layoutHash": "59a5c5cb481f",
       "sourceHashes": {
         "src/views/chart-renderer.ts": "41670dc89146",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "Every other chart type is a Chart.js canvas painted at runtime, so this recovery state and the single-number chart are what a capture can show of the chart body.",
       "capture": "element",
@@ -423,11 +423,11 @@
       "layoutHash": "59a5c5cb481f",
       "sourceHashes": {
         "src/views/chart-renderer.ts": "41670dc89146",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "Every other chart type is a Chart.js canvas painted at runtime, so this recovery state and the single-number chart are what a capture can show of the chart body.",
       "capture": "element",
@@ -443,18 +443,18 @@
       "sources": [
         "src/views/chart-renderer.ts"
       ],
-      "layoutHash": "59a5c5cb481f",
+      "layoutHash": "a85af89cea2c",
       "sourceHashes": {
         "src/views/chart-renderer.ts": "41670dc89146",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "Every other chart type is a Chart.js canvas painted at runtime, so this recovery state and the single-number chart are what a capture can show of the chart body.",
       "capture": "element",
-      "bytes": 27645
+      "bytes": 27290
     },
     {
       "id": "chrome-chart-empty",
@@ -466,18 +466,18 @@
       "sources": [
         "src/views/chart-renderer.ts"
       ],
-      "layoutHash": "59a5c5cb481f",
+      "layoutHash": "a85af89cea2c",
       "sourceHashes": {
         "src/views/chart-renderer.ts": "41670dc89146",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "Every other chart type is a Chart.js canvas painted at runtime, so this recovery state and the single-number chart are what a capture can show of the chart body.",
       "capture": "element",
-      "bytes": 27566
+      "bytes": 27302
     },
     {
       "id": "chrome-chart-number",
@@ -492,11 +492,11 @@
       "layoutHash": "37f4b0680593",
       "sourceHashes": {
         "src/views/chart-renderer.ts": "41670dc89146",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "The one chart type the stylesheet draws in full: renderNumber writes three divs and no canvas, so this is the only plotted chart a screenshot can show. The height class is what sizes it.",
       "capture": "element",
@@ -515,11 +515,11 @@
       "layoutHash": "37f4b0680593",
       "sourceHashes": {
         "src/views/chart-renderer.ts": "41670dc89146",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "The one chart type the stylesheet draws in full: renderNumber writes three divs and no canvas, so this is the only plotted chart a screenshot can show. The height class is what sizes it.",
       "capture": "element",
@@ -535,18 +535,18 @@
       "sources": [
         "src/views/chart-renderer.ts"
       ],
-      "layoutHash": "37f4b0680593",
+      "layoutHash": "7625c38a86e6",
       "sourceHashes": {
         "src/views/chart-renderer.ts": "41670dc89146",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "The one chart type the stylesheet draws in full: renderNumber writes three divs and no canvas, so this is the only plotted chart a screenshot can show. The height class is what sizes it.",
       "capture": "element",
-      "bytes": 21084
+      "bytes": 15206
     },
     {
       "id": "chrome-chart-number",
@@ -558,18 +558,18 @@
       "sources": [
         "src/views/chart-renderer.ts"
       ],
-      "layoutHash": "37f4b0680593",
+      "layoutHash": "7625c38a86e6",
       "sourceHashes": {
         "src/views/chart-renderer.ts": "41670dc89146",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "The one chart type the stylesheet draws in full: renderNumber writes three divs and no canvas, so this is the only plotted chart a screenshot can show. The height class is what sizes it.",
       "capture": "element",
-      "bytes": 21127
+      "bytes": 15312
     },
     {
       "id": "chrome-chart-options-popover",
@@ -584,11 +584,11 @@
       "layoutHash": "5fc4ac8b29e8",
       "sourceHashes": {
         "src/views/chart-toolbar-renderer.ts": "80a914f2b271",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "What the chart view uses instead of a toolbar of its own: the chart-options button in the toolbar opens this panel. Every row is a 18px/1fr/16px grid, so selects, switches, drill-in entries and export buttons line up on one set of columns.",
       "capture": "element",
@@ -607,11 +607,11 @@
       "layoutHash": "5fc4ac8b29e8",
       "sourceHashes": {
         "src/views/chart-toolbar-renderer.ts": "80a914f2b271",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "What the chart view uses instead of a toolbar of its own: the chart-options button in the toolbar opens this panel. Every row is a 18px/1fr/16px grid, so selects, switches, drill-in entries and export buttons line up on one set of columns.",
       "capture": "element",
@@ -627,18 +627,18 @@
       "sources": [
         "src/views/chart-toolbar-renderer.ts"
       ],
-      "layoutHash": "2b84727938cc",
+      "layoutHash": "30ed67541f94",
       "sourceHashes": {
         "src/views/chart-toolbar-renderer.ts": "80a914f2b271",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "What the chart view uses instead of a toolbar of its own: the chart-options button in the toolbar opens this panel. Every row is a 18px/1fr/16px grid, so selects, switches, drill-in entries and export buttons line up on one set of columns.",
       "capture": "element",
-      "bytes": 58951
+      "bytes": 63157
     },
     {
       "id": "chrome-chart-options-popover",
@@ -650,18 +650,18 @@
       "sources": [
         "src/views/chart-toolbar-renderer.ts"
       ],
-      "layoutHash": "2b84727938cc",
+      "layoutHash": "30ed67541f94",
       "sourceHashes": {
         "src/views/chart-toolbar-renderer.ts": "80a914f2b271",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "What the chart view uses instead of a toolbar of its own: the chart-options button in the toolbar opens this panel. Every row is a 18px/1fr/16px grid, so selects, switches, drill-in entries and export buttons line up on one set of columns.",
       "capture": "element",
-      "bytes": 59688
+      "bytes": 63921
     },
     {
       "id": "chrome-group-header-row",
@@ -680,11 +680,11 @@
         "src/views/group-label-renderer.ts": "3fee8449607c",
         "src/views/table-renderer.ts": "a73c171f9285",
         "src/views/summary-renderer.ts": "c6752fec0dfe",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "An option-typed group field renders its key as a colored status badge; a field with no options renders plain text, as the nested Revolut subgroup does. Per-group summaries sit at the right of each divider.",
       "capture": "element",
@@ -707,11 +707,11 @@
         "src/views/group-label-renderer.ts": "3fee8449607c",
         "src/views/table-renderer.ts": "a73c171f9285",
         "src/views/summary-renderer.ts": "c6752fec0dfe",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "An option-typed group field renders its key as a colored status badge; a field with no options renders plain text, as the nested Revolut subgroup does. Per-group summaries sit at the right of each divider.",
       "capture": "element",
@@ -734,11 +734,11 @@
         "src/views/group-label-renderer.ts": "3fee8449607c",
         "src/views/table-renderer.ts": "a73c171f9285",
         "src/views/summary-renderer.ts": "c6752fec0dfe",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "An option-typed group field renders its key as a colored status badge; a field with no options renders plain text, as the nested Revolut subgroup does. Per-group summaries sit at the right of each divider.",
       "capture": "element",
@@ -761,11 +761,11 @@
         "src/views/group-label-renderer.ts": "3fee8449607c",
         "src/views/table-renderer.ts": "a73c171f9285",
         "src/views/summary-renderer.ts": "c6752fec0dfe",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "An option-typed group field renders its key as a colored status badge; a field with no options renders plain text, as the nested Revolut subgroup does. Per-group summaries sit at the right of each divider.",
       "capture": "element",
@@ -784,11 +784,11 @@
       "layoutHash": "306bac521073",
       "sourceHashes": {
         "src/views/summary-renderer.ts": "c6752fec0dfe",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "Total is always present; each configured summary rule is a draggable, clickable item, and the faint + Summary entry adds another.",
       "capture": "element",
@@ -807,11 +807,11 @@
       "layoutHash": "306bac521073",
       "sourceHashes": {
         "src/views/summary-renderer.ts": "c6752fec0dfe",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "Total is always present; each configured summary rule is a draggable, clickable item, and the faint + Summary entry adds another.",
       "capture": "element",
@@ -830,11 +830,11 @@
       "layoutHash": "2a35afe97b79",
       "sourceHashes": {
         "src/views/summary-renderer.ts": "c6752fec0dfe",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "Total is always present; each configured summary rule is a draggable, clickable item, and the faint + Summary entry adds another.",
       "capture": "element",
@@ -853,11 +853,11 @@
       "layoutHash": "2a35afe97b79",
       "sourceHashes": {
         "src/views/summary-renderer.ts": "c6752fec0dfe",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "Total is always present; each configured summary rule is a draggable, clickable item, and the faint + Summary entry adds another.",
       "capture": "element",
@@ -878,11 +878,11 @@
       "sourceHashes": {
         "src/views/table-footer-renderer.ts": "2a076187efd5",
         "src/views/table-renderer.ts": "a73c171f9285",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "A column with summary rules stacks each kind over its result; a column without one shows a + Calculate hint that the stylesheet keeps at zero opacity until the trigger is hovered, so it is invisible here by design.",
       "capture": "element",
@@ -903,11 +903,11 @@
       "sourceHashes": {
         "src/views/table-footer-renderer.ts": "2a076187efd5",
         "src/views/table-renderer.ts": "a73c171f9285",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "A column with summary rules stacks each kind over its result; a column without one shows a + Calculate hint that the stylesheet keeps at zero opacity until the trigger is hovered, so it is invisible here by design.",
       "capture": "element",
@@ -924,19 +924,19 @@
         "src/views/table-footer-renderer.ts",
         "src/views/table-renderer.ts"
       ],
-      "layoutHash": "ac8b6e702644",
+      "layoutHash": "a9afbf9ecaf6",
       "sourceHashes": {
         "src/views/table-footer-renderer.ts": "2a076187efd5",
         "src/views/table-renderer.ts": "a73c171f9285",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "A column with summary rules stacks each kind over its result; a column without one shows a + Calculate hint that the stylesheet keeps at zero opacity until the trigger is hovered, so it is invisible here by design.",
       "capture": "element",
-      "bytes": 96031
+      "bytes": 148936
     },
     {
       "id": "chrome-table-footer",
@@ -949,19 +949,19 @@
         "src/views/table-footer-renderer.ts",
         "src/views/table-renderer.ts"
       ],
-      "layoutHash": "ac8b6e702644",
+      "layoutHash": "a9afbf9ecaf6",
       "sourceHashes": {
         "src/views/table-footer-renderer.ts": "2a076187efd5",
         "src/views/table-renderer.ts": "a73c171f9285",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "A column with summary rules stacks each kind over its result; a column without one shows a + Calculate hint that the stylesheet keeps at zero opacity until the trigger is hovered, so it is invisible here by design.",
       "capture": "element",
-      "bytes": 96101
+      "bytes": 148984
     },
     {
       "id": "chrome-toolbar",
@@ -976,11 +976,11 @@
       "layoutHash": "09b4c18a8d8b",
       "sourceHashes": {
         "src/views/toolbar-renderer.ts": "f11efbbdc98e",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "View switcher on the left; query, properties, utilities and creation clusters on the right. The search control sits collapsed in the utilities cluster until it has text or focus.",
       "capture": "element",
@@ -999,11 +999,11 @@
       "layoutHash": "09b4c18a8d8b",
       "sourceHashes": {
         "src/views/toolbar-renderer.ts": "f11efbbdc98e",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "View switcher on the left; query, properties, utilities and creation clusters on the right. The search control sits collapsed in the utilities cluster until it has text or focus.",
       "capture": "element",
@@ -1019,18 +1019,18 @@
       "sources": [
         "src/views/toolbar-renderer.ts"
       ],
-      "layoutHash": "4289341213c3",
+      "layoutHash": "63543946cbb9",
       "sourceHashes": {
         "src/views/toolbar-renderer.ts": "f11efbbdc98e",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "View switcher on the left; query, properties, utilities and creation clusters on the right. The search control sits collapsed in the utilities cluster until it has text or focus.",
       "capture": "element",
-      "bytes": 18966
+      "bytes": 20273
     },
     {
       "id": "chrome-toolbar",
@@ -1042,18 +1042,18 @@
       "sources": [
         "src/views/toolbar-renderer.ts"
       ],
-      "layoutHash": "4289341213c3",
+      "layoutHash": "63543946cbb9",
       "sourceHashes": {
         "src/views/toolbar-renderer.ts": "f11efbbdc98e",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "View switcher on the left; query, properties, utilities and creation clusters on the right. The search control sits collapsed in the utilities cluster until it has text or focus.",
       "capture": "element",
-      "bytes": 19600
+      "bytes": 20920
     },
     {
       "id": "chrome-toolbar-search",
@@ -1068,11 +1068,11 @@
       "layoutHash": "a5bc6b18803f",
       "sourceHashes": {
         "src/views/toolbar-renderer.ts": "f11efbbdc98e",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "The wrap is 28px wide at rest and widens to 150px under is-active; the clear button is hidden until the input has text.",
       "capture": "element",
@@ -1091,11 +1091,11 @@
       "layoutHash": "a5bc6b18803f",
       "sourceHashes": {
         "src/views/toolbar-renderer.ts": "f11efbbdc98e",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "The wrap is 28px wide at rest and widens to 150px under is-active; the clear button is hidden until the input has text.",
       "capture": "element",
@@ -1111,18 +1111,18 @@
       "sources": [
         "src/views/toolbar-renderer.ts"
       ],
-      "layoutHash": "a98723ac12fe",
+      "layoutHash": "b252703f1475",
       "sourceHashes": {
         "src/views/toolbar-renderer.ts": "f11efbbdc98e",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "The wrap is 28px wide at rest and widens to 150px under is-active; the clear button is hidden until the input has text.",
       "capture": "element",
-      "bytes": 6359
+      "bytes": 6242
     },
     {
       "id": "chrome-toolbar-search",
@@ -1134,18 +1134,18 @@
       "sources": [
         "src/views/toolbar-renderer.ts"
       ],
-      "layoutHash": "a98723ac12fe",
+      "layoutHash": "b252703f1475",
       "sourceHashes": {
         "src/views/toolbar-renderer.ts": "f11efbbdc98e",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "The wrap is 28px wide at rest and widens to 150px under is-active; the clear button is hidden until the input has text.",
       "capture": "element",
-      "bytes": 6468
+      "bytes": 6370
     },
     {
       "id": "chrome-view-switcher",
@@ -1160,11 +1160,11 @@
       "layoutHash": "697c8d866e6b",
       "sourceHashes": {
         "src/views/toolbar-renderer.ts": "f11efbbdc98e",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "The active tab carries is-active; the ⋯ tab appears only once the toolbar has measured tabs out of view, and opens the all-views hub.",
       "capture": "element",
@@ -1183,11 +1183,11 @@
       "layoutHash": "697c8d866e6b",
       "sourceHashes": {
         "src/views/toolbar-renderer.ts": "f11efbbdc98e",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "The active tab carries is-active; the ⋯ tab appears only once the toolbar has measured tabs out of view, and opens the all-views hub.",
       "capture": "element",
@@ -1206,11 +1206,11 @@
       "layoutHash": "9c9324a36cd6",
       "sourceHashes": {
         "src/views/toolbar-renderer.ts": "f11efbbdc98e",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "The active tab carries is-active; the ⋯ tab appears only once the toolbar has measured tabs out of view, and opens the all-views hub.",
       "capture": "element",
@@ -1229,11 +1229,11 @@
       "layoutHash": "9c9324a36cd6",
       "sourceHashes": {
         "src/views/toolbar-renderer.ts": "f11efbbdc98e",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "The active tab carries is-active; the ⋯ tab appears only once the toolbar has measured tabs out of view, and opens the all-views hub.",
       "capture": "element",
@@ -1252,11 +1252,11 @@
       "layoutHash": "103949991955",
       "sourceHashes": {
         "src/views/dropdown-field.ts": "1a4c6e81f793",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "A disabled option is dimmed and carries a tooltip rather than inline explanatory text.",
       "capture": "element",
@@ -1275,11 +1275,11 @@
       "layoutHash": "103949991955",
       "sourceHashes": {
         "src/views/dropdown-field.ts": "1a4c6e81f793",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "A disabled option is dimmed and carries a tooltip rather than inline explanatory text.",
       "capture": "element",
@@ -1298,11 +1298,11 @@
       "layoutHash": "103949991955",
       "sourceHashes": {
         "src/views/dropdown-field.ts": "1a4c6e81f793",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "A disabled option is dimmed and carries a tooltip rather than inline explanatory text.",
       "capture": "element",
@@ -1321,11 +1321,11 @@
       "layoutHash": "103949991955",
       "sourceHashes": {
         "src/views/dropdown-field.ts": "1a4c6e81f793",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "A disabled option is dimmed and carries a tooltip rather than inline explanatory text.",
       "capture": "element",
@@ -1344,11 +1344,11 @@
       "layoutHash": "74acbf6357de",
       "sourceHashes": {
         "src/views/column-header-controller.ts": "7714b894b5b0",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "The menu trigger sits inline after the label and the label truncates before it moves.",
       "capture": "element",
@@ -1367,11 +1367,11 @@
       "layoutHash": "74acbf6357de",
       "sourceHashes": {
         "src/views/column-header-controller.ts": "7714b894b5b0",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "The menu trigger sits inline after the label and the label truncates before it moves.",
       "capture": "element",
@@ -1390,11 +1390,11 @@
       "layoutHash": "e32867528bc1",
       "sourceHashes": {
         "src/views/column-header-controller.ts": "7714b894b5b0",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "The menu trigger sits inline after the label and the label truncates before it moves.",
       "capture": "element",
@@ -1413,11 +1413,11 @@
       "layoutHash": "e32867528bc1",
       "sourceHashes": {
         "src/views/column-header-controller.ts": "7714b894b5b0",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "The menu trigger sits inline after the label and the label truncates before it moves.",
       "capture": "element",
@@ -1438,11 +1438,11 @@
       "sourceHashes": {
         "src/views/cell-renderer.ts": "402b6558c032",
         "src/data/column-types.ts": "c48057b05309",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "Each row carries a drag handle, a colour dot that opens the colour picker, the check mark and a delete button. An unregistered value offers a plus instead of a trash icon.",
       "capture": "element",
@@ -1463,11 +1463,11 @@
       "sourceHashes": {
         "src/views/cell-renderer.ts": "402b6558c032",
         "src/data/column-types.ts": "c48057b05309",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "Each row carries a drag handle, a colour dot that opens the colour picker, the check mark and a delete button. An unregistered value offers a plus instead of a trash icon.",
       "capture": "element",
@@ -1488,11 +1488,11 @@
       "sourceHashes": {
         "src/views/cell-renderer.ts": "402b6558c032",
         "src/data/column-types.ts": "c48057b05309",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "Each row carries a drag handle, a colour dot that opens the colour picker, the check mark and a delete button. An unregistered value offers a plus instead of a trash icon.",
       "capture": "element",
@@ -1513,11 +1513,11 @@
       "sourceHashes": {
         "src/views/cell-renderer.ts": "402b6558c032",
         "src/data/column-types.ts": "c48057b05309",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "Each row carries a drag handle, a colour dot that opens the colour picker, the check mark and a delete button. An unregistered value offers a plus instead of a trash icon.",
       "capture": "element",
@@ -1536,11 +1536,11 @@
       "layoutHash": "505d8e1a1950",
       "sourceHashes": {
         "src/views/cell-renderer.ts": "402b6558c032",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "Both editors keep the cell's rendered value visible underneath. The multi-line editor marks its cell with db-cell-editing (the accent inset); the single-line one marks its cell with db-cell-popover-editing, which the stylesheet declares no rule for, so that cell shows no edit affordance. Markdown columns gain the format toolbar.",
       "capture": "element",
@@ -1559,11 +1559,11 @@
       "layoutHash": "505d8e1a1950",
       "sourceHashes": {
         "src/views/cell-renderer.ts": "402b6558c032",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "Both editors keep the cell's rendered value visible underneath. The multi-line editor marks its cell with db-cell-editing (the accent inset); the single-line one marks its cell with db-cell-popover-editing, which the stylesheet declares no rule for, so that cell shows no edit affordance. Markdown columns gain the format toolbar.",
       "capture": "element",
@@ -1582,11 +1582,11 @@
       "layoutHash": "e028e449ac94",
       "sourceHashes": {
         "src/views/cell-renderer.ts": "402b6558c032",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "Both editors keep the cell's rendered value visible underneath. The multi-line editor marks its cell with db-cell-editing (the accent inset); the single-line one marks its cell with db-cell-popover-editing, which the stylesheet declares no rule for, so that cell shows no edit affordance. Markdown columns gain the format toolbar.",
       "capture": "element",
@@ -1605,11 +1605,11 @@
       "layoutHash": "e028e449ac94",
       "sourceHashes": {
         "src/views/cell-renderer.ts": "402b6558c032",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "Both editors keep the cell's rendered value visible underneath. The multi-line editor marks its cell with db-cell-editing (the accent inset); the single-line one marks its cell with db-cell-popover-editing, which the stylesheet declares no rule for, so that cell shows no edit affordance. Markdown columns gain the format toolbar.",
       "capture": "element",
@@ -1630,11 +1630,11 @@
       "sourceHashes": {
         "src/views/date-value-picker.ts": "1f7347ded726",
         "src/views/calendar-mini-calendar-renderer.ts": "14853dcd3917",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "A datetime column adds hour and minute segments after the date, and the trigger swaps calendar-days for calendar-clock.",
       "capture": "element",
@@ -1655,11 +1655,11 @@
       "sourceHashes": {
         "src/views/date-value-picker.ts": "1f7347ded726",
         "src/views/calendar-mini-calendar-renderer.ts": "14853dcd3917",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "A datetime column adds hour and minute segments after the date, and the trigger swaps calendar-days for calendar-clock.",
       "capture": "element",
@@ -1680,11 +1680,11 @@
       "sourceHashes": {
         "src/views/date-value-picker.ts": "1f7347ded726",
         "src/views/calendar-mini-calendar-renderer.ts": "14853dcd3917",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "A datetime column adds hour and minute segments after the date, and the trigger swaps calendar-days for calendar-clock.",
       "capture": "element",
@@ -1705,11 +1705,11 @@
       "sourceHashes": {
         "src/views/date-value-picker.ts": "1f7347ded726",
         "src/views/calendar-mini-calendar-renderer.ts": "14853dcd3917",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "A datetime column adds hour and minute segments after the date, and the trigger swaps calendar-days for calendar-clock.",
       "capture": "element",
@@ -1730,11 +1730,11 @@
       "sourceHashes": {
         "src/views/date-value-picker.ts": "1f7347ded726",
         "src/views/calendar-mini-calendar-renderer.ts": "14853dcd3917",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "The trigger shows the committed value; the popover stacks quick dates, the three segment inputs and the mini calendar, which renders flat inside the date popover rather than as its own floating surface.",
       "capture": "element",
@@ -1755,11 +1755,11 @@
       "sourceHashes": {
         "src/views/date-value-picker.ts": "1f7347ded726",
         "src/views/calendar-mini-calendar-renderer.ts": "14853dcd3917",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "The trigger shows the committed value; the popover stacks quick dates, the three segment inputs and the mini calendar, which renders flat inside the date popover rather than as its own floating surface.",
       "capture": "element",
@@ -1780,11 +1780,11 @@
       "sourceHashes": {
         "src/views/date-value-picker.ts": "1f7347ded726",
         "src/views/calendar-mini-calendar-renderer.ts": "14853dcd3917",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "The trigger shows the committed value; the popover stacks quick dates, the three segment inputs and the mini calendar, which renders flat inside the date popover rather than as its own floating surface.",
       "capture": "element",
@@ -1805,11 +1805,11 @@
       "sourceHashes": {
         "src/views/date-value-picker.ts": "1f7347ded726",
         "src/views/calendar-mini-calendar-renderer.ts": "14853dcd3917",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "The trigger shows the committed value; the popover stacks quick dates, the three segment inputs and the mini calendar, which renders flat inside the date popover rather than as its own floating surface.",
       "capture": "element",
@@ -1828,11 +1828,11 @@
       "layoutHash": "f11d6b2cccd7",
       "sourceHashes": {
         "src/views/file-field-renderer.ts": "4a6891fdd59e",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "file.tags render as status badges, link-list fields as compact chips, and file.file as a link back to the row's own note. The per-tag remove buttons are in the DOM of a writable cell but sit at opacity 0 until the badge is hovered, so they do not appear here.",
       "capture": "element",
@@ -1851,11 +1851,11 @@
       "layoutHash": "f11d6b2cccd7",
       "sourceHashes": {
         "src/views/file-field-renderer.ts": "4a6891fdd59e",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "file.tags render as status badges, link-list fields as compact chips, and file.file as a link back to the row's own note. The per-tag remove buttons are in the DOM of a writable cell but sit at opacity 0 until the badge is hovered, so they do not appear here.",
       "capture": "element",
@@ -1874,11 +1874,11 @@
       "layoutHash": "c775d126efd9",
       "sourceHashes": {
         "src/views/file-field-renderer.ts": "4a6891fdd59e",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "file.tags render as status badges, link-list fields as compact chips, and file.file as a link back to the row's own note. The per-tag remove buttons are in the DOM of a writable cell but sit at opacity 0 until the badge is hovered, so they do not appear here.",
       "capture": "element",
@@ -1897,11 +1897,11 @@
       "layoutHash": "c775d126efd9",
       "sourceHashes": {
         "src/views/file-field-renderer.ts": "4a6891fdd59e",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "file.tags render as status badges, link-list fields as compact chips, and file.file as a link back to the row's own note. The per-tag remove buttons are in the DOM of a writable cell but sit at opacity 0 until the badge is hovered, so they do not appear here.",
       "capture": "element",
@@ -1922,11 +1922,11 @@
       "sourceHashes": {
         "src/views/icon-picker-popover.ts": "ef97335f5ff2",
         "src/views/record-icon-renderer.ts": "3d90a87b2a0b",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "The Icons tab adds the colour strip; the picker is created on document.body, so it is a top-level element here rather than a child of the container.",
       "capture": "element",
@@ -1947,11 +1947,11 @@
       "sourceHashes": {
         "src/views/icon-picker-popover.ts": "ef97335f5ff2",
         "src/views/record-icon-renderer.ts": "3d90a87b2a0b",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "The Icons tab adds the colour strip; the picker is created on document.body, so it is a top-level element here rather than a child of the container.",
       "capture": "element",
@@ -1968,19 +1968,19 @@
         "src/views/icon-picker-popover.ts",
         "src/views/record-icon-renderer.ts"
       ],
-      "layoutHash": "8a42e6b89d55",
+      "layoutHash": "e25e2b6fec0d",
       "sourceHashes": {
         "src/views/icon-picker-popover.ts": "ef97335f5ff2",
         "src/views/record-icon-renderer.ts": "3d90a87b2a0b",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "The Icons tab adds the colour strip; the picker is created on document.body, so it is a top-level element here rather than a child of the container.",
       "capture": "element",
-      "bytes": 39272
+      "bytes": 36865
     },
     {
       "id": "field-icon-picker",
@@ -1993,19 +1993,19 @@
         "src/views/icon-picker-popover.ts",
         "src/views/record-icon-renderer.ts"
       ],
-      "layoutHash": "8a42e6b89d55",
+      "layoutHash": "e25e2b6fec0d",
       "sourceHashes": {
         "src/views/icon-picker-popover.ts": "ef97335f5ff2",
         "src/views/record-icon-renderer.ts": "3d90a87b2a0b",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "The Icons tab adds the colour strip; the picker is created on document.body, so it is a top-level element here rather than a child of the container.",
       "capture": "element",
-      "bytes": 37590
+      "bytes": 35077
     },
     {
       "id": "field-number-displays",
@@ -2022,11 +2022,11 @@
       "sourceHashes": {
         "src/views/number-display-renderer.ts": "626e6b487cf1",
         "src/data/number-display.ts": "b0967db0f269",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "Rating, progress bar and progress ring all tint through db-num-color-*, which sets --db-number-color. Half slots are the accent overlay clipped to 50%.",
       "capture": "element",
@@ -2047,11 +2047,11 @@
       "sourceHashes": {
         "src/views/number-display-renderer.ts": "626e6b487cf1",
         "src/data/number-display.ts": "b0967db0f269",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "Rating, progress bar and progress ring all tint through db-num-color-*, which sets --db-number-color. Half slots are the accent overlay clipped to 50%.",
       "capture": "element",
@@ -2072,11 +2072,11 @@
       "sourceHashes": {
         "src/views/number-display-renderer.ts": "626e6b487cf1",
         "src/data/number-display.ts": "b0967db0f269",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "Rating, progress bar and progress ring all tint through db-num-color-*, which sets --db-number-color. Half slots are the accent overlay clipped to 50%.",
       "capture": "element",
@@ -2097,11 +2097,11 @@
       "sourceHashes": {
         "src/views/number-display-renderer.ts": "626e6b487cf1",
         "src/data/number-display.ts": "b0967db0f269",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "Rating, progress bar and progress ring all tint through db-num-color-*, which sets --db-number-color. Half slots are the accent overlay clipped to 50%.",
       "capture": "element",
@@ -2122,11 +2122,11 @@
       "sourceHashes": {
         "src/views/option-color-picker.ts": "7f69a2433a4f",
         "src/data/status-colors.ts": "954425583842",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "Sixteen swatches in the persisted order, the current colour ringed. Opened from the colour dot in the select editor and created on document.body.",
       "capture": "element",
@@ -2147,11 +2147,11 @@
       "sourceHashes": {
         "src/views/option-color-picker.ts": "7f69a2433a4f",
         "src/data/status-colors.ts": "954425583842",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "Sixteen swatches in the persisted order, the current colour ringed. Opened from the colour dot in the select editor and created on document.body.",
       "capture": "element",
@@ -2172,11 +2172,11 @@
       "sourceHashes": {
         "src/views/option-color-picker.ts": "7f69a2433a4f",
         "src/data/status-colors.ts": "954425583842",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "Sixteen swatches in the persisted order, the current colour ringed. Opened from the colour dot in the select editor and created on document.body.",
       "capture": "element",
@@ -2197,11 +2197,11 @@
       "sourceHashes": {
         "src/views/option-color-picker.ts": "7f69a2433a4f",
         "src/data/status-colors.ts": "954425583842",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "Sixteen swatches in the persisted order, the current colour ringed. Opened from the colour dot in the select editor and created on document.body.",
       "capture": "element",
@@ -2224,11 +2224,11 @@
         "src/views/record-icon-renderer.ts": "3d90a87b2a0b",
         "src/views/table-renderer.ts": "a73c171f9285",
         "src/data/record-icon.ts": "dd6940af82f2",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "The table puts record icons in a 28px gutter column of their own, whose header is blank so the first property header can borrow the width. An unparsed token falls back to file-text and is-default; a lucide token carries db-record-icon-color-*; an emoji token renders through db-record-icon-emoji.",
       "capture": "element",
@@ -2251,15 +2251,15 @@
         "src/views/record-icon-renderer.ts": "3d90a87b2a0b",
         "src/views/table-renderer.ts": "a73c171f9285",
         "src/data/record-icon.ts": "dd6940af82f2",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "The table puts record icons in a 28px gutter column of their own, whose header is blank so the first property header can borrow the width. An unparsed token falls back to file-text and is-default; a lucide token carries db-record-icon-color-*; an emoji token renders through db-record-icon-emoji.",
       "capture": "element",
-      "bytes": 60664
+      "bytes": 60546
     },
     {
       "id": "field-record-icon",
@@ -2278,11 +2278,11 @@
         "src/views/record-icon-renderer.ts": "3d90a87b2a0b",
         "src/views/table-renderer.ts": "a73c171f9285",
         "src/data/record-icon.ts": "dd6940af82f2",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "The table puts record icons in a 28px gutter column of their own, whose header is blank so the first property header can borrow the width. An unparsed token falls back to file-text and is-default; a lucide token carries db-record-icon-color-*; an emoji token renders through db-record-icon-emoji.",
       "capture": "element",
@@ -2305,11 +2305,11 @@
         "src/views/record-icon-renderer.ts": "3d90a87b2a0b",
         "src/views/table-renderer.ts": "a73c171f9285",
         "src/data/record-icon.ts": "dd6940af82f2",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "The table puts record icons in a 28px gutter column of their own, whose header is blank so the first property header can borrow the width. An unparsed token falls back to file-text and is-default; a lucide token carries db-record-icon-color-*; an emoji token renders through db-record-icon-emoji.",
       "capture": "element",
@@ -2328,11 +2328,11 @@
       "layoutHash": "71c4e1c98e2f",
       "sourceHashes": {
         "src/views/relation-value-renderer.ts": "8eb0d49c5c0a",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "A resolved target renders file-text on a tinted chip; a target the metadata cache cannot find renders alert-triangle inside a dashed warning outline.",
       "capture": "element",
@@ -2351,11 +2351,11 @@
       "layoutHash": "71c4e1c98e2f",
       "sourceHashes": {
         "src/views/relation-value-renderer.ts": "8eb0d49c5c0a",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "A resolved target renders file-text on a tinted chip; a target the metadata cache cannot find renders alert-triangle inside a dashed warning outline.",
       "capture": "element",
@@ -2374,15 +2374,15 @@
       "layoutHash": "1d56a86a0a8e",
       "sourceHashes": {
         "src/views/relation-value-renderer.ts": "8eb0d49c5c0a",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "A resolved target renders file-text on a tinted chip; a target the metadata cache cannot find renders alert-triangle inside a dashed warning outline.",
       "capture": "element",
-      "bytes": 38315
+      "bytes": 38254
     },
     {
       "id": "field-relation-values",
@@ -2397,15 +2397,15 @@
       "layoutHash": "1d56a86a0a8e",
       "sourceHashes": {
         "src/views/relation-value-renderer.ts": "8eb0d49c5c0a",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "A resolved target renders file-text on a tinted chip; a target the metadata cache cannot find renders alert-triangle inside a dashed warning outline.",
       "capture": "element",
-      "bytes": 38234
+      "bytes": 38223
     },
     {
       "id": "field-status-colors",
@@ -2422,11 +2422,11 @@
       "sourceHashes": {
         "src/data/status-colors.ts": "954425583842",
         "src/views/cell-renderer.ts": "402b6558c032",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "Every select, status, multi-select and tag value in the plugin is a status-badge in one of these sixteen status-color-* variants, so this is the whole colour vocabulary in one shot. The multi-select remove buttons only become visible on hover.",
       "capture": "element",
@@ -2447,11 +2447,11 @@
       "sourceHashes": {
         "src/data/status-colors.ts": "954425583842",
         "src/views/cell-renderer.ts": "402b6558c032",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "Every select, status, multi-select and tag value in the plugin is a status-badge in one of these sixteen status-color-* variants, so this is the whole colour vocabulary in one shot. The multi-select remove buttons only become visible on hover.",
       "capture": "element",
@@ -2468,19 +2468,19 @@
         "src/data/status-colors.ts",
         "src/views/cell-renderer.ts"
       ],
-      "layoutHash": "dc1d6dff9039",
+      "layoutHash": "6899c37c1a11",
       "sourceHashes": {
         "src/data/status-colors.ts": "954425583842",
         "src/views/cell-renderer.ts": "402b6558c032",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "Every select, status, multi-select and tag value in the plugin is a status-badge in one of these sixteen status-color-* variants, so this is the whole colour vocabulary in one shot. The multi-select remove buttons only become visible on hover.",
       "capture": "element",
-      "bytes": 149907
+      "bytes": 190253
     },
     {
       "id": "field-status-colors",
@@ -2493,19 +2493,19 @@
         "src/data/status-colors.ts",
         "src/views/cell-renderer.ts"
       ],
-      "layoutHash": "dc1d6dff9039",
+      "layoutHash": "6899c37c1a11",
       "sourceHashes": {
         "src/data/status-colors.ts": "954425583842",
         "src/views/cell-renderer.ts": "402b6558c032",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "Every select, status, multi-select and tag value in the plugin is a status-badge in one of these sixteen status-color-* variants, so this is the whole colour vocabulary in one shot. The multi-select remove buttons only become visible on hover.",
       "capture": "element",
-      "bytes": 141215
+      "bytes": 181766
     },
     {
       "id": "panel-column-manager",
@@ -2522,11 +2522,11 @@
       "sourceHashes": {
         "src/views/column-manager-renderer.ts": "088c4f9c718c",
         "src/views/property-type-icon.ts": "ae5fe0065e84",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "One row per property: drag handle, visibility checkbox, type icon, name with its frontmatter key, then wrap, edit and delete.",
       "capture": "element",
@@ -2547,11 +2547,11 @@
       "sourceHashes": {
         "src/views/column-manager-renderer.ts": "088c4f9c718c",
         "src/views/property-type-icon.ts": "ae5fe0065e84",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "One row per property: drag handle, visibility checkbox, type icon, name with its frontmatter key, then wrap, edit and delete.",
       "capture": "element",
@@ -2568,19 +2568,19 @@
         "src/views/column-manager-renderer.ts",
         "src/views/property-type-icon.ts"
       ],
-      "layoutHash": "89f6f619d258",
+      "layoutHash": "1a92e3083ac6",
       "sourceHashes": {
         "src/views/column-manager-renderer.ts": "088c4f9c718c",
         "src/views/property-type-icon.ts": "ae5fe0065e84",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "One row per property: drag handle, visibility checkbox, type icon, name with its frontmatter key, then wrap, edit and delete.",
       "capture": "element",
-      "bytes": 43529
+      "bytes": 52274
     },
     {
       "id": "panel-column-manager",
@@ -2593,19 +2593,19 @@
         "src/views/column-manager-renderer.ts",
         "src/views/property-type-icon.ts"
       ],
-      "layoutHash": "89f6f619d258",
+      "layoutHash": "1a92e3083ac6",
       "sourceHashes": {
         "src/views/column-manager-renderer.ts": "088c4f9c718c",
         "src/views/property-type-icon.ts": "ae5fe0065e84",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "One row per property: drag handle, visibility checkbox, type icon, name with its frontmatter key, then wrap, edit and delete.",
       "capture": "element",
-      "bytes": 44196
+      "bytes": 52563
     },
     {
       "id": "panel-filter-conditions",
@@ -2622,11 +2622,11 @@
       "sourceHashes": {
         "src/views/filter-panel-renderer.ts": "6b4543ceb6d9",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "Three conditions build a group node, so the panel header drops its AND/OR button and the group's own logic dropdown carries it instead.",
       "capture": "element",
@@ -2647,11 +2647,11 @@
       "sourceHashes": {
         "src/views/filter-panel-renderer.ts": "6b4543ceb6d9",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "Three conditions build a group node, so the panel header drops its AND/OR button and the group's own logic dropdown carries it instead.",
       "capture": "element",
@@ -2668,19 +2668,19 @@
         "src/views/filter-panel-renderer.ts",
         "src/views/dropdown-field.ts"
       ],
-      "layoutHash": "a564991a5ad9",
+      "layoutHash": "022bf5b7a539",
       "sourceHashes": {
         "src/views/filter-panel-renderer.ts": "6b4543ceb6d9",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "Three conditions build a group node, so the panel header drops its AND/OR button and the group's own logic dropdown carries it instead.",
       "capture": "element",
-      "bytes": 33008
+      "bytes": 33687
     },
     {
       "id": "panel-filter-conditions",
@@ -2693,19 +2693,19 @@
         "src/views/filter-panel-renderer.ts",
         "src/views/dropdown-field.ts"
       ],
-      "layoutHash": "a564991a5ad9",
+      "layoutHash": "022bf5b7a539",
       "sourceHashes": {
         "src/views/filter-panel-renderer.ts": "6b4543ceb6d9",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "Three conditions build a group node, so the panel header drops its AND/OR button and the group's own logic dropdown carries it instead.",
       "capture": "element",
-      "bytes": 33183
+      "bytes": 34147
     },
     {
       "id": "panel-filter-nested-group",
@@ -2722,11 +2722,11 @@
       "sourceHashes": {
         "src/views/filter-panel-renderer.ts": "6b4543ceb6d9",
         "src/data/view-filter-tree.ts": "1efdb923d4bb",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "Nesting stops at three levels: the innermost rows lose their add-group button because the tree can go no deeper.",
       "capture": "element",
@@ -2747,11 +2747,11 @@
       "sourceHashes": {
         "src/views/filter-panel-renderer.ts": "6b4543ceb6d9",
         "src/data/view-filter-tree.ts": "1efdb923d4bb",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "Nesting stops at three levels: the innermost rows lose their add-group button because the tree can go no deeper.",
       "capture": "element",
@@ -2768,19 +2768,19 @@
         "src/views/filter-panel-renderer.ts",
         "src/data/view-filter-tree.ts"
       ],
-      "layoutHash": "f7c5d38820ac",
+      "layoutHash": "aa43345f5656",
       "sourceHashes": {
         "src/views/filter-panel-renderer.ts": "6b4543ceb6d9",
         "src/data/view-filter-tree.ts": "1efdb923d4bb",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "Nesting stops at three levels: the innermost rows lose their add-group button because the tree can go no deeper.",
       "capture": "element",
-      "bytes": 43865
+      "bytes": 46554
     },
     {
       "id": "panel-filter-nested-group",
@@ -2793,19 +2793,19 @@
         "src/views/filter-panel-renderer.ts",
         "src/data/view-filter-tree.ts"
       ],
-      "layoutHash": "f7c5d38820ac",
+      "layoutHash": "aa43345f5656",
       "sourceHashes": {
         "src/views/filter-panel-renderer.ts": "6b4543ceb6d9",
         "src/data/view-filter-tree.ts": "1efdb923d4bb",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "Nesting stops at three levels: the innermost rows lose their add-group button because the tree can go no deeper.",
       "capture": "element",
-      "bytes": 44112
+      "bytes": 47186
     },
     {
       "id": "panel-record-detail",
@@ -2822,11 +2822,11 @@
       "sourceHashes": {
         "src/views/record-detail-panel.ts": "b603e1ead3e5",
         "src/views/card-field-renderer.ts": "d4cd0466d2e3",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "Opened from a calendar or timeline event card. Fields are click-to-edit; an empty field only appears when the view asks for empty properties.",
       "capture": "element",
@@ -2847,11 +2847,11 @@
       "sourceHashes": {
         "src/views/record-detail-panel.ts": "b603e1ead3e5",
         "src/views/card-field-renderer.ts": "d4cd0466d2e3",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "Opened from a calendar or timeline event card. Fields are click-to-edit; an empty field only appears when the view asks for empty properties.",
       "capture": "element",
@@ -2872,11 +2872,11 @@
       "sourceHashes": {
         "src/views/record-detail-panel.ts": "b603e1ead3e5",
         "src/views/card-field-renderer.ts": "d4cd0466d2e3",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "Opened from a calendar or timeline event card. Fields are click-to-edit; an empty field only appears when the view asks for empty properties.",
       "capture": "element",
@@ -2897,11 +2897,11 @@
       "sourceHashes": {
         "src/views/record-detail-panel.ts": "b603e1ead3e5",
         "src/views/card-field-renderer.ts": "d4cd0466d2e3",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "Opened from a calendar or timeline event card. Fields are click-to-edit; an empty field only appears when the view asks for empty properties.",
       "capture": "element",
@@ -2924,11 +2924,11 @@
         "src/views/record-detail-panel.ts": "b603e1ead3e5",
         "src/views/popover-position.ts": "f203a188d0b5",
         "src/views/card-field-renderer.ts": "d4cd0466d2e3",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "The phone form of the record detail panel. positionToolbarPopover renders it as a bottom sheet with a grab handle; a permanent close button (reusing db-cell-edit-close) and drag-down on the handle dismiss it where the desktop panel relies on Escape and outside-click. Captured in viewport mode so the fixed sheet docks at the bottom.",
       "capture": "viewport",
@@ -2951,11 +2951,11 @@
         "src/views/record-detail-panel.ts": "b603e1ead3e5",
         "src/views/popover-position.ts": "f203a188d0b5",
         "src/views/card-field-renderer.ts": "d4cd0466d2e3",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "The phone form of the record detail panel. positionToolbarPopover renders it as a bottom sheet with a grab handle; a permanent close button (reusing db-cell-edit-close) and drag-down on the handle dismiss it where the desktop panel relies on Escape and outside-click. Captured in viewport mode so the fixed sheet docks at the bottom.",
       "capture": "viewport",
@@ -2973,20 +2973,20 @@
         "src/views/popover-position.ts",
         "src/views/card-field-renderer.ts"
       ],
-      "layoutHash": "b2ebaa7f8d8c",
+      "layoutHash": "0e512d0fe8a5",
       "sourceHashes": {
         "src/views/record-detail-panel.ts": "b603e1ead3e5",
         "src/views/popover-position.ts": "f203a188d0b5",
         "src/views/card-field-renderer.ts": "d4cd0466d2e3",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "The phone form of the record detail panel. positionToolbarPopover renders it as a bottom sheet with a grab handle; a permanent close button (reusing db-cell-edit-close) and drag-down on the handle dismiss it where the desktop panel relies on Escape and outside-click. Captured in viewport mode so the fixed sheet docks at the bottom.",
       "capture": "viewport",
-      "bytes": 20442
+      "bytes": 42966
     },
     {
       "id": "panel-record-detail-sheet",
@@ -3000,20 +3000,20 @@
         "src/views/popover-position.ts",
         "src/views/card-field-renderer.ts"
       ],
-      "layoutHash": "b2ebaa7f8d8c",
+      "layoutHash": "0e512d0fe8a5",
       "sourceHashes": {
         "src/views/record-detail-panel.ts": "b603e1ead3e5",
         "src/views/popover-position.ts": "f203a188d0b5",
         "src/views/card-field-renderer.ts": "d4cd0466d2e3",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "The phone form of the record detail panel. positionToolbarPopover renders it as a bottom sheet with a grab handle; a permanent close button (reusing db-cell-edit-close) and drag-down on the handle dismiss it where the desktop panel relies on Escape and outside-click. Captured in viewport mode so the fixed sheet docks at the bottom.",
       "capture": "viewport",
-      "bytes": 18891
+      "bytes": 38597
     },
     {
       "id": "panel-record-peek",
@@ -3030,11 +3030,11 @@
       "sourceHashes": {
         "src/views/table-record-peek.ts": "14f5844dab51",
         "src/views/table-renderer.ts": "a73c171f9285",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "Docks against the right edge of the table it was opened from. Values are display-only text, and properties hidden from the table sit behind the disclosure.",
       "capture": "element",
@@ -3055,11 +3055,11 @@
       "sourceHashes": {
         "src/views/table-record-peek.ts": "14f5844dab51",
         "src/views/table-renderer.ts": "a73c171f9285",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "Docks against the right edge of the table it was opened from. Values are display-only text, and properties hidden from the table sit behind the disclosure.",
       "capture": "element",
@@ -3076,19 +3076,19 @@
         "src/views/table-record-peek.ts",
         "src/views/table-renderer.ts"
       ],
-      "layoutHash": "ed378369d66a",
+      "layoutHash": "8fa8e643ab6d",
       "sourceHashes": {
         "src/views/table-record-peek.ts": "14f5844dab51",
         "src/views/table-renderer.ts": "a73c171f9285",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "Docks against the right edge of the table it was opened from. Values are display-only text, and properties hidden from the table sit behind the disclosure.",
       "capture": "element",
-      "bytes": 55000
+      "bytes": 53762
     },
     {
       "id": "panel-record-peek",
@@ -3101,19 +3101,19 @@
         "src/views/table-record-peek.ts",
         "src/views/table-renderer.ts"
       ],
-      "layoutHash": "ed378369d66a",
+      "layoutHash": "8fa8e643ab6d",
       "sourceHashes": {
         "src/views/table-record-peek.ts": "14f5844dab51",
         "src/views/table-renderer.ts": "a73c171f9285",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "Docks against the right edge of the table it was opened from. Values are display-only text, and properties hidden from the table sit behind the disclosure.",
       "capture": "element",
-      "bytes": 55351
+      "bytes": 50701
     },
     {
       "id": "panel-sort-calendar-empty",
@@ -3128,11 +3128,11 @@
       "layoutHash": "6d599788ac66",
       "sourceHashes": {
         "src/views/sort-panel-renderer.ts": "2689215615eb",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "Calendar views add a hint above the empty state because layout order wins over user sort.",
       "capture": "element",
@@ -3151,11 +3151,11 @@
       "layoutHash": "6d599788ac66",
       "sourceHashes": {
         "src/views/sort-panel-renderer.ts": "2689215615eb",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "Calendar views add a hint above the empty state because layout order wins over user sort.",
       "capture": "element",
@@ -3171,18 +3171,18 @@
       "sources": [
         "src/views/sort-panel-renderer.ts"
       ],
-      "layoutHash": "004bacb097fe",
+      "layoutHash": "fcfd2cde39f9",
       "sourceHashes": {
         "src/views/sort-panel-renderer.ts": "2689215615eb",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "Calendar views add a hint above the empty state because layout order wins over user sort.",
       "capture": "element",
-      "bytes": 27365
+      "bytes": 31993
     },
     {
       "id": "panel-sort-calendar-empty",
@@ -3194,18 +3194,18 @@
       "sources": [
         "src/views/sort-panel-renderer.ts"
       ],
-      "layoutHash": "004bacb097fe",
+      "layoutHash": "fcfd2cde39f9",
       "sourceHashes": {
         "src/views/sort-panel-renderer.ts": "2689215615eb",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "Calendar views add a hint above the empty state because layout order wins over user sort.",
       "capture": "element",
-      "bytes": 28072
+      "bytes": 32642
     },
     {
       "id": "panel-sort-rules",
@@ -3222,11 +3222,11 @@
       "sourceHashes": {
         "src/views/sort-panel-renderer.ts": "2689215615eb",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "Rows are draggable; the first rule's move-up and the last rule's move-down are disabled.",
       "capture": "element",
@@ -3247,11 +3247,11 @@
       "sourceHashes": {
         "src/views/sort-panel-renderer.ts": "2689215615eb",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "Rows are draggable; the first rule's move-up and the last rule's move-down are disabled.",
       "capture": "element",
@@ -3268,19 +3268,19 @@
         "src/views/sort-panel-renderer.ts",
         "src/views/dropdown-field.ts"
       ],
-      "layoutHash": "aeaaaafe9985",
+      "layoutHash": "17ee8bccb55b",
       "sourceHashes": {
         "src/views/sort-panel-renderer.ts": "2689215615eb",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "Rows are draggable; the first rule's move-up and the last rule's move-down are disabled.",
       "capture": "element",
-      "bytes": 14587
+      "bytes": 21930
     },
     {
       "id": "panel-sort-rules",
@@ -3293,19 +3293,19 @@
         "src/views/sort-panel-renderer.ts",
         "src/views/dropdown-field.ts"
       ],
-      "layoutHash": "aeaaaafe9985",
+      "layoutHash": "17ee8bccb55b",
       "sourceHashes": {
         "src/views/sort-panel-renderer.ts": "2689215615eb",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "Rows are draggable; the first rule's move-up and the last rule's move-down are disabled.",
       "capture": "element",
-      "bytes": 14469
+      "bytes": 21983
     },
     {
       "id": "panel-view-config",
@@ -3322,11 +3322,11 @@
       "sourceHashes": {
         "src/views/view-config-panel-renderer.ts": "cfb850bd683d",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "The top of the panel for a table view: database-scoped rows above the section divider, view-scoped rows below. Conditional formatting and status presets sit further down and are not in frame.",
       "capture": "element",
@@ -3347,11 +3347,11 @@
       "sourceHashes": {
         "src/views/view-config-panel-renderer.ts": "cfb850bd683d",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "The top of the panel for a table view: database-scoped rows above the section divider, view-scoped rows below. Conditional formatting and status presets sit further down and are not in frame.",
       "capture": "element",
@@ -3368,19 +3368,19 @@
         "src/views/view-config-panel-renderer.ts",
         "src/views/dropdown-field.ts"
       ],
-      "layoutHash": "9aaa5ae85ced",
+      "layoutHash": "9cc3b3afdac6",
       "sourceHashes": {
         "src/views/view-config-panel-renderer.ts": "cfb850bd683d",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "The top of the panel for a table view: database-scoped rows above the section divider, view-scoped rows below. Conditional formatting and status presets sit further down and are not in frame.",
       "capture": "element",
-      "bytes": 73949
+      "bytes": 85395
     },
     {
       "id": "panel-view-config",
@@ -3393,19 +3393,19 @@
         "src/views/view-config-panel-renderer.ts",
         "src/views/dropdown-field.ts"
       ],
-      "layoutHash": "9aaa5ae85ced",
+      "layoutHash": "9cc3b3afdac6",
       "sourceHashes": {
         "src/views/view-config-panel-renderer.ts": "cfb850bd683d",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "The top of the panel for a table view: database-scoped rows above the section divider, view-scoped rows below. Conditional formatting and status presets sit further down and are not in frame.",
       "capture": "element",
-      "bytes": 75380
+      "bytes": 86998
     },
     {
       "id": "empty-state",
@@ -3420,11 +3420,11 @@
       "layoutHash": "bf59dfd9ef47",
       "sourceHashes": {
         "src/views/empty-state-renderer.ts": "0b9797e5bfdb",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": null,
       "capture": "element",
@@ -3443,11 +3443,11 @@
       "layoutHash": "bf59dfd9ef47",
       "sourceHashes": {
         "src/views/empty-state-renderer.ts": "0b9797e5bfdb",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": null,
       "capture": "element",
@@ -3463,18 +3463,18 @@
       "sources": [
         "src/views/empty-state-renderer.ts"
       ],
-      "layoutHash": "bf59dfd9ef47",
+      "layoutHash": "683d66d2918b",
       "sourceHashes": {
         "src/views/empty-state-renderer.ts": "0b9797e5bfdb",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": null,
       "capture": "element",
-      "bytes": 22699
+      "bytes": 22317
     },
     {
       "id": "empty-state",
@@ -3486,18 +3486,18 @@
       "sources": [
         "src/views/empty-state-renderer.ts"
       ],
-      "layoutHash": "bf59dfd9ef47",
+      "layoutHash": "683d66d2918b",
       "sourceHashes": {
         "src/views/empty-state-renderer.ts": "0b9797e5bfdb",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": null,
       "capture": "element",
-      "bytes": 22928
+      "bytes": 22567
     },
     {
       "id": "board-mobile",
@@ -3516,11 +3516,11 @@
         "src/views/board-renderer.ts": "c039027f0184",
         "src/views/group-label-renderer.ts": "3fee8449607c",
         "src/views/card-field-renderer.ts": "d4cd0466d2e3",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "The board inside the default-width container. On the phone (is-phone) the container no longer centres the grid off-screen, and the sticky group header is taken out of sticky flow so it cannot float down over the cards; columns page horizontally with snap-scroll.",
       "capture": "viewport",
@@ -3543,11 +3543,11 @@
         "src/views/board-renderer.ts": "c039027f0184",
         "src/views/group-label-renderer.ts": "3fee8449607c",
         "src/views/card-field-renderer.ts": "d4cd0466d2e3",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "The board inside the default-width container. On the phone (is-phone) the container no longer centres the grid off-screen, and the sticky group header is taken out of sticky flow so it cannot float down over the cards; columns page horizontally with snap-scroll.",
       "capture": "viewport",
@@ -3565,20 +3565,20 @@
         "src/views/group-label-renderer.ts",
         "src/views/card-field-renderer.ts"
       ],
-      "layoutHash": "0a7ca08ba441",
+      "layoutHash": "a4eb5da5a220",
       "sourceHashes": {
         "src/views/board-renderer.ts": "c039027f0184",
         "src/views/group-label-renderer.ts": "3fee8449607c",
         "src/views/card-field-renderer.ts": "d4cd0466d2e3",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "The board inside the default-width container. On the phone (is-phone) the container no longer centres the grid off-screen, and the sticky group header is taken out of sticky flow so it cannot float down over the cards; columns page horizontally with snap-scroll.",
       "capture": "viewport",
-      "bytes": 81466
+      "bytes": 75768
     },
     {
       "id": "board-mobile",
@@ -3592,20 +3592,20 @@
         "src/views/group-label-renderer.ts",
         "src/views/card-field-renderer.ts"
       ],
-      "layoutHash": "0a7ca08ba441",
+      "layoutHash": "a4eb5da5a220",
       "sourceHashes": {
         "src/views/board-renderer.ts": "c039027f0184",
         "src/views/group-label-renderer.ts": "3fee8449607c",
         "src/views/card-field-renderer.ts": "d4cd0466d2e3",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "The board inside the default-width container. On the phone (is-phone) the container no longer centres the grid off-screen, and the sticky group header is taken out of sticky flow so it cannot float down over the cards; columns page horizontally with snap-scroll.",
       "capture": "viewport",
-      "bytes": 85239
+      "bytes": 78833
     },
     {
       "id": "board-view",
@@ -3622,11 +3622,11 @@
       "sourceHashes": {
         "src/views/board-renderer.ts": "c039027f0184",
         "src/views/card-field-renderer.ts": "d4cd0466d2e3",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": null,
       "capture": "viewport",
@@ -3647,15 +3647,15 @@
       "sourceHashes": {
         "src/views/board-renderer.ts": "c039027f0184",
         "src/views/card-field-renderer.ts": "d4cd0466d2e3",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": null,
       "capture": "viewport",
-      "bytes": 247998
+      "bytes": 247980
     },
     {
       "id": "board-view",
@@ -3668,19 +3668,19 @@
         "src/views/board-renderer.ts",
         "src/views/card-field-renderer.ts"
       ],
-      "layoutHash": "f08a7983a7aa",
+      "layoutHash": "fb9ce8f9c9a3",
       "sourceHashes": {
         "src/views/board-renderer.ts": "c039027f0184",
         "src/views/card-field-renderer.ts": "d4cd0466d2e3",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": null,
       "capture": "viewport",
-      "bytes": 81466
+      "bytes": 75768
     },
     {
       "id": "board-view",
@@ -3693,19 +3693,19 @@
         "src/views/board-renderer.ts",
         "src/views/card-field-renderer.ts"
       ],
-      "layoutHash": "f08a7983a7aa",
+      "layoutHash": "fb9ce8f9c9a3",
       "sourceHashes": {
         "src/views/board-renderer.ts": "c039027f0184",
         "src/views/card-field-renderer.ts": "d4cd0466d2e3",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": null,
       "capture": "viewport",
-      "bytes": 85234
+      "bytes": 78833
     },
     {
       "id": "calendar-mini-calendar",
@@ -3722,15 +3722,15 @@
       "sourceHashes": {
         "src/views/calendar-mini-calendar-renderer.ts": "14853dcd3917",
         "src/views/calendar-renderer.ts": "a33613b98f90",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "Days with events carry a short accent underline; the visible week reads as the selected pill run.",
       "capture": "viewport",
-      "bytes": 57193
+      "bytes": 57127
     },
     {
       "id": "calendar-mini-calendar",
@@ -3747,11 +3747,11 @@
       "sourceHashes": {
         "src/views/calendar-mini-calendar-renderer.ts": "14853dcd3917",
         "src/views/calendar-renderer.ts": "a33613b98f90",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "Days with events carry a short accent underline; the visible week reads as the selected pill run.",
       "capture": "viewport",
@@ -3768,19 +3768,19 @@
         "src/views/calendar-mini-calendar-renderer.ts",
         "src/views/calendar-renderer.ts"
       ],
-      "layoutHash": "23e9f0e04ca0",
+      "layoutHash": "99171d68710c",
       "sourceHashes": {
         "src/views/calendar-mini-calendar-renderer.ts": "14853dcd3917",
         "src/views/calendar-renderer.ts": "a33613b98f90",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "Days with events carry a short accent underline; the visible week reads as the selected pill run.",
       "capture": "viewport",
-      "bytes": 22791
+      "bytes": 42768
     },
     {
       "id": "calendar-mini-calendar",
@@ -3793,19 +3793,19 @@
         "src/views/calendar-mini-calendar-renderer.ts",
         "src/views/calendar-renderer.ts"
       ],
-      "layoutHash": "23e9f0e04ca0",
+      "layoutHash": "99171d68710c",
       "sourceHashes": {
         "src/views/calendar-mini-calendar-renderer.ts": "14853dcd3917",
         "src/views/calendar-renderer.ts": "a33613b98f90",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "Days with events carry a short accent underline; the visible week reads as the selected pill run.",
       "capture": "viewport",
-      "bytes": 23723
+      "bytes": 45917
     },
     {
       "id": "calendar-month-view",
@@ -3820,11 +3820,11 @@
       "layoutHash": "913ca45b27bf",
       "sourceHashes": {
         "src/views/calendar-renderer.ts": "a33613b98f90",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "Multi-day all-day bars, timed events, an overflow week and one event carried across the week boundary.",
       "capture": "viewport",
@@ -3843,11 +3843,11 @@
       "layoutHash": "913ca45b27bf",
       "sourceHashes": {
         "src/views/calendar-renderer.ts": "a33613b98f90",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "Multi-day all-day bars, timed events, an overflow week and one event carried across the week boundary.",
       "capture": "viewport",
@@ -3863,18 +3863,18 @@
       "sources": [
         "src/views/calendar-renderer.ts"
       ],
-      "layoutHash": "2aa805605361",
+      "layoutHash": "bfb3cd489559",
       "sourceHashes": {
         "src/views/calendar-renderer.ts": "a33613b98f90",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "Multi-day all-day bars, timed events, an overflow week and one event carried across the week boundary.",
       "capture": "viewport",
-      "bytes": 46844
+      "bytes": 88259
     },
     {
       "id": "calendar-month-view",
@@ -3886,18 +3886,18 @@
       "sources": [
         "src/views/calendar-renderer.ts"
       ],
-      "layoutHash": "2aa805605361",
+      "layoutHash": "bfb3cd489559",
       "sourceHashes": {
         "src/views/calendar-renderer.ts": "a33613b98f90",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "Multi-day all-day bars, timed events, an overflow week and one event carried across the week boundary.",
       "capture": "viewport",
-      "bytes": 47309
+      "bytes": 89647
     },
     {
       "id": "calendar-toolbar-options",
@@ -3914,11 +3914,11 @@
       "sourceHashes": {
         "src/views/calendar-toolbar-renderer.ts": "58cefc5cab49",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "The Time section only exists in week and day scale; the setup preview card below Data carries no stylesheet rules.",
       "capture": "viewport",
@@ -3939,11 +3939,11 @@
       "sourceHashes": {
         "src/views/calendar-toolbar-renderer.ts": "58cefc5cab49",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "The Time section only exists in week and day scale; the setup preview card below Data carries no stylesheet rules.",
       "capture": "viewport",
@@ -3960,19 +3960,19 @@
         "src/views/calendar-toolbar-renderer.ts",
         "src/views/dropdown-field.ts"
       ],
-      "layoutHash": "cc6910308b39",
+      "layoutHash": "0da70e9553fb",
       "sourceHashes": {
         "src/views/calendar-toolbar-renderer.ts": "58cefc5cab49",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "The Time section only exists in week and day scale; the setup preview card below Data carries no stylesheet rules.",
       "capture": "viewport",
-      "bytes": 42997
+      "bytes": 102710
     },
     {
       "id": "calendar-toolbar-options",
@@ -3985,19 +3985,19 @@
         "src/views/calendar-toolbar-renderer.ts",
         "src/views/dropdown-field.ts"
       ],
-      "layoutHash": "cc6910308b39",
+      "layoutHash": "0da70e9553fb",
       "sourceHashes": {
         "src/views/calendar-toolbar-renderer.ts": "58cefc5cab49",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "The Time section only exists in week and day scale; the setup preview card below Data carries no stylesheet rules.",
       "capture": "viewport",
-      "bytes": 44291
+      "bytes": 107288
     },
     {
       "id": "calendar-week-time-grid",
@@ -4012,15 +4012,15 @@
       "layoutHash": "e4f02160f0ea",
       "sourceHashes": {
         "src/views/calendar-renderer.ts": "a33613b98f90",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "Sticky day header and all-day strip over the 08–16 time grid; the current-time ruler sits on Wednesday at 13:45.",
       "capture": "viewport",
-      "bytes": 113124
+      "bytes": 113978
     },
     {
       "id": "calendar-week-time-grid",
@@ -4035,11 +4035,11 @@
       "layoutHash": "e4f02160f0ea",
       "sourceHashes": {
         "src/views/calendar-renderer.ts": "a33613b98f90",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "Sticky day header and all-day strip over the 08–16 time grid; the current-time ruler sits on Wednesday at 13:45.",
       "capture": "viewport",
@@ -4055,18 +4055,18 @@
       "sources": [
         "src/views/calendar-renderer.ts"
       ],
-      "layoutHash": "1d4442b1a0f6",
+      "layoutHash": "36b69ebbc499",
       "sourceHashes": {
         "src/views/calendar-renderer.ts": "a33613b98f90",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "Sticky day header and all-day strip over the 08–16 time grid; the current-time ruler sits on Wednesday at 13:45.",
       "capture": "viewport",
-      "bytes": 38189
+      "bytes": 57644
     },
     {
       "id": "calendar-week-time-grid",
@@ -4078,18 +4078,18 @@
       "sources": [
         "src/views/calendar-renderer.ts"
       ],
-      "layoutHash": "1d4442b1a0f6",
+      "layoutHash": "36b69ebbc499",
       "sourceHashes": {
         "src/views/calendar-renderer.ts": "a33613b98f90",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "Sticky day header and all-day strip over the 08–16 time grid; the current-time ruler sits on Wednesday at 13:45.",
       "capture": "viewport",
-      "bytes": 40362
+      "bytes": 61659
     },
     {
       "id": "gallery-view",
@@ -4106,11 +4106,11 @@
       "sourceHashes": {
         "src/views/gallery-renderer.ts": "63d110082ea9",
         "src/views/card-field-renderer.ts": "d4cd0466d2e3",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": null,
       "capture": "viewport",
@@ -4131,11 +4131,11 @@
       "sourceHashes": {
         "src/views/gallery-renderer.ts": "63d110082ea9",
         "src/views/card-field-renderer.ts": "d4cd0466d2e3",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": null,
       "capture": "viewport",
@@ -4152,19 +4152,19 @@
         "src/views/gallery-renderer.ts",
         "src/views/card-field-renderer.ts"
       ],
-      "layoutHash": "5836a88d4018",
+      "layoutHash": "b498f5dcaab1",
       "sourceHashes": {
         "src/views/gallery-renderer.ts": "63d110082ea9",
         "src/views/card-field-renderer.ts": "d4cd0466d2e3",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": null,
       "capture": "viewport",
-      "bytes": 17365
+      "bytes": 37125
     },
     {
       "id": "gallery-view",
@@ -4177,19 +4177,19 @@
         "src/views/gallery-renderer.ts",
         "src/views/card-field-renderer.ts"
       ],
-      "layoutHash": "5836a88d4018",
+      "layoutHash": "b498f5dcaab1",
       "sourceHashes": {
         "src/views/gallery-renderer.ts": "63d110082ea9",
         "src/views/card-field-renderer.ts": "d4cd0466d2e3",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": null,
       "capture": "viewport",
-      "bytes": 17389
+      "bytes": 37137
     },
     {
       "id": "list-mobile",
@@ -4206,11 +4206,11 @@
       "sourceHashes": {
         "src/views/list-renderer.ts": "2b909e42a989",
         "src/views/card-field-renderer.ts": "d4cd0466d2e3",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "The list row the renderer builds: controls, a title line and a meta row of fixed-width fields. On desktop the fields sit on one line; on the phone (is-phone) the card fills the viewport and the fields wrap inside its border instead of escaping it.",
       "capture": "viewport",
@@ -4231,11 +4231,11 @@
       "sourceHashes": {
         "src/views/list-renderer.ts": "2b909e42a989",
         "src/views/card-field-renderer.ts": "d4cd0466d2e3",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "The list row the renderer builds: controls, a title line and a meta row of fixed-width fields. On desktop the fields sit on one line; on the phone (is-phone) the card fills the viewport and the fields wrap inside its border instead of escaping it.",
       "capture": "viewport",
@@ -4252,19 +4252,19 @@
         "src/views/list-renderer.ts",
         "src/views/card-field-renderer.ts"
       ],
-      "layoutHash": "5073b1ee6e23",
+      "layoutHash": "a6463bb7f439",
       "sourceHashes": {
         "src/views/list-renderer.ts": "2b909e42a989",
         "src/views/card-field-renderer.ts": "d4cd0466d2e3",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "The list row the renderer builds: controls, a title line and a meta row of fixed-width fields. On desktop the fields sit on one line; on the phone (is-phone) the card fills the viewport and the fields wrap inside its border instead of escaping it.",
       "capture": "viewport",
-      "bytes": 79433
+      "bytes": 136695
     },
     {
       "id": "list-mobile",
@@ -4277,19 +4277,19 @@
         "src/views/list-renderer.ts",
         "src/views/card-field-renderer.ts"
       ],
-      "layoutHash": "5073b1ee6e23",
+      "layoutHash": "a6463bb7f439",
       "sourceHashes": {
         "src/views/list-renderer.ts": "2b909e42a989",
         "src/views/card-field-renderer.ts": "d4cd0466d2e3",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "The list row the renderer builds: controls, a title line and a meta row of fixed-width fields. On desktop the fields sit on one line; on the phone (is-phone) the card fills the viewport and the fields wrap inside its border instead of escaping it.",
       "capture": "viewport",
-      "bytes": 80335
+      "bytes": 137236
     },
     {
       "id": "list-view",
@@ -4306,11 +4306,11 @@
       "sourceHashes": {
         "src/views/list-renderer.ts": "2b909e42a989",
         "src/views/card-field-renderer.ts": "d4cd0466d2e3",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": null,
       "capture": "viewport",
@@ -4331,11 +4331,11 @@
       "sourceHashes": {
         "src/views/list-renderer.ts": "2b909e42a989",
         "src/views/card-field-renderer.ts": "d4cd0466d2e3",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": null,
       "capture": "viewport",
@@ -4352,19 +4352,19 @@
         "src/views/list-renderer.ts",
         "src/views/card-field-renderer.ts"
       ],
-      "layoutHash": "b1e2e8511c17",
+      "layoutHash": "2631515b1c1f",
       "sourceHashes": {
         "src/views/list-renderer.ts": "2b909e42a989",
         "src/views/card-field-renderer.ts": "d4cd0466d2e3",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": null,
       "capture": "viewport",
-      "bytes": 87189
+      "bytes": 130973
     },
     {
       "id": "list-view",
@@ -4377,19 +4377,19 @@
         "src/views/list-renderer.ts",
         "src/views/card-field-renderer.ts"
       ],
-      "layoutHash": "b1e2e8511c17",
+      "layoutHash": "2631515b1c1f",
       "sourceHashes": {
         "src/views/list-renderer.ts": "2b909e42a989",
         "src/views/card-field-renderer.ts": "d4cd0466d2e3",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": null,
       "capture": "viewport",
-      "bytes": 87283
+      "bytes": 130018
     },
     {
       "id": "table-mobile",
@@ -4415,11 +4415,11 @@
         "src/views/cell-renderer.ts": "402b6558c032",
         "src/views/file-title-display.ts": "62da9ee863b6",
         "src/views/table-record-peek.ts": "14f5844dab51",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "The full table the renderer builds: a select gutter, a record-icon gutter and a runtime <colgroup> of fixed px widths. On desktop those widths hold; on the phone (is-phone) the columns auto-fit to content and the select column is no longer clipped by the scroll-area fade mask. The name column is the title cell — a content-sized link plus the always-visible open affordance, rendered on touch as a compact maximize icon so its width goes to the note name instead of a text label.",
       "capture": "viewport",
@@ -4449,15 +4449,15 @@
         "src/views/cell-renderer.ts": "402b6558c032",
         "src/views/file-title-display.ts": "62da9ee863b6",
         "src/views/table-record-peek.ts": "14f5844dab51",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "The full table the renderer builds: a select gutter, a record-icon gutter and a runtime <colgroup> of fixed px widths. On desktop those widths hold; on the phone (is-phone) the columns auto-fit to content and the select column is no longer clipped by the scroll-area fade mask. The name column is the title cell — a content-sized link plus the always-visible open affordance, rendered on touch as a compact maximize icon so its width goes to the note name instead of a text label.",
       "capture": "viewport",
-      "bytes": 201581
+      "bytes": 201683
     },
     {
       "id": "table-mobile",
@@ -4475,7 +4475,7 @@
         "src/views/table-record-peek.ts",
         "styles.css"
       ],
-      "layoutHash": "a84465dc7306",
+      "layoutHash": "be032b4aa56f",
       "sourceHashes": {
         "src/views/table-renderer.ts": "a73c171f9285",
         "src/views/table-column-layout-sync.ts": "a678b28c2bf2",
@@ -4483,15 +4483,15 @@
         "src/views/cell-renderer.ts": "402b6558c032",
         "src/views/file-title-display.ts": "62da9ee863b6",
         "src/views/table-record-peek.ts": "14f5844dab51",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "The full table the renderer builds: a select gutter, a record-icon gutter and a runtime <colgroup> of fixed px widths. On desktop those widths hold; on the phone (is-phone) the columns auto-fit to content and the select column is no longer clipped by the scroll-area fade mask. The name column is the title cell — a content-sized link plus the always-visible open affordance, rendered on touch as a compact maximize icon so its width goes to the note name instead of a text label.",
       "capture": "viewport",
-      "bytes": 74917
+      "bytes": 61235
     },
     {
       "id": "table-mobile",
@@ -4509,7 +4509,7 @@
         "src/views/table-record-peek.ts",
         "styles.css"
       ],
-      "layoutHash": "a84465dc7306",
+      "layoutHash": "be032b4aa56f",
       "sourceHashes": {
         "src/views/table-renderer.ts": "a73c171f9285",
         "src/views/table-column-layout-sync.ts": "a678b28c2bf2",
@@ -4517,15 +4517,15 @@
         "src/views/cell-renderer.ts": "402b6558c032",
         "src/views/file-title-display.ts": "62da9ee863b6",
         "src/views/table-record-peek.ts": "14f5844dab51",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "The full table the renderer builds: a select gutter, a record-icon gutter and a runtime <colgroup> of fixed px widths. On desktop those widths hold; on the phone (is-phone) the columns auto-fit to content and the select column is no longer clipped by the scroll-area fade mask. The name column is the title cell — a content-sized link plus the always-visible open affordance, rendered on touch as a compact maximize icon so its width goes to the note name instead of a text label.",
       "capture": "viewport",
-      "bytes": 73421
+      "bytes": 60777
     },
     {
       "id": "table-view",
@@ -4544,11 +4544,11 @@
         "src/views/table-renderer.ts": "a73c171f9285",
         "src/views/column-header-controller.ts": "7714b894b5b0",
         "src/views/cell-renderer.ts": "402b6558c032",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": null,
       "capture": "viewport",
@@ -4571,11 +4571,11 @@
         "src/views/table-renderer.ts": "a73c171f9285",
         "src/views/column-header-controller.ts": "7714b894b5b0",
         "src/views/cell-renderer.ts": "402b6558c032",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": null,
       "capture": "viewport",
@@ -4593,20 +4593,20 @@
         "src/views/column-header-controller.ts",
         "src/views/cell-renderer.ts"
       ],
-      "layoutHash": "4ddd4e504802",
+      "layoutHash": "11b57930bed4",
       "sourceHashes": {
         "src/views/table-renderer.ts": "a73c171f9285",
         "src/views/column-header-controller.ts": "7714b894b5b0",
         "src/views/cell-renderer.ts": "402b6558c032",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": null,
       "capture": "viewport",
-      "bytes": 154866
+      "bytes": 126915
     },
     {
       "id": "table-view",
@@ -4620,20 +4620,20 @@
         "src/views/column-header-controller.ts",
         "src/views/cell-renderer.ts"
       ],
-      "layoutHash": "4ddd4e504802",
+      "layoutHash": "11b57930bed4",
       "sourceHashes": {
         "src/views/table-renderer.ts": "a73c171f9285",
         "src/views/column-header-controller.ts": "7714b894b5b0",
         "src/views/cell-renderer.ts": "402b6558c032",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": null,
       "capture": "viewport",
-      "bytes": 149456
+      "bytes": 126677
     },
     {
       "id": "timeline-toolbar-options",
@@ -4650,11 +4650,11 @@
       "sourceHashes": {
         "src/views/calendar-timeline-toolbar-renderer.ts": "f32a3186bb24",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "Column width is a switch plus a slider here, not the calendar's mode dropdown; the slider only appears once the switch is on.",
       "capture": "viewport",
@@ -4675,11 +4675,11 @@
       "sourceHashes": {
         "src/views/calendar-timeline-toolbar-renderer.ts": "f32a3186bb24",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "Column width is a switch plus a slider here, not the calendar's mode dropdown; the slider only appears once the switch is on.",
       "capture": "viewport",
@@ -4696,19 +4696,19 @@
         "src/views/calendar-timeline-toolbar-renderer.ts",
         "src/views/dropdown-field.ts"
       ],
-      "layoutHash": "f806707ffe7f",
+      "layoutHash": "dcd3710528c4",
       "sourceHashes": {
         "src/views/calendar-timeline-toolbar-renderer.ts": "f32a3186bb24",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "Column width is a switch plus a slider here, not the calendar's mode dropdown; the slider only appears once the switch is on.",
       "capture": "viewport",
-      "bytes": 35363
+      "bytes": 81370
     },
     {
       "id": "timeline-toolbar-options",
@@ -4721,19 +4721,19 @@
         "src/views/calendar-timeline-toolbar-renderer.ts",
         "src/views/dropdown-field.ts"
       ],
-      "layoutHash": "f806707ffe7f",
+      "layoutHash": "dcd3710528c4",
       "sourceHashes": {
         "src/views/calendar-timeline-toolbar-renderer.ts": "f32a3186bb24",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "Column width is a switch plus a slider here, not the calendar's mode dropdown; the slider only appears once the switch is on.",
       "capture": "viewport",
-      "bytes": 36494
+      "bytes": 85259
     },
     {
       "id": "timeline-view",
@@ -4748,15 +4748,15 @@
       "layoutHash": "a574d1c815fb",
       "sourceHashes": {
         "src/views/calendar-timeline-renderer.ts": "37e6e3a20901",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "Two weeks at one column per day; the April band marks the month boundary and the today line sits at 25 March 13:45.",
       "capture": "viewport",
-      "bytes": 146083
+      "bytes": 145806
     },
     {
       "id": "timeline-view",
@@ -4771,15 +4771,15 @@
       "layoutHash": "a574d1c815fb",
       "sourceHashes": {
         "src/views/calendar-timeline-renderer.ts": "37e6e3a20901",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "Two weeks at one column per day; the April band marks the month boundary and the today line sits at 25 March 13:45.",
       "capture": "viewport",
-      "bytes": 151208
+      "bytes": 150760
     },
     {
       "id": "timeline-view",
@@ -4791,18 +4791,18 @@
       "sources": [
         "src/views/calendar-timeline-renderer.ts"
       ],
-      "layoutHash": "fea2ccde0432",
+      "layoutHash": "1a72a926ce1b",
       "sourceHashes": {
         "src/views/calendar-timeline-renderer.ts": "37e6e3a20901",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "Two weeks at one column per day; the April band marks the month boundary and the today line sits at 25 March 13:45.",
       "capture": "viewport",
-      "bytes": 42262
+      "bytes": 69163
     },
     {
       "id": "timeline-view",
@@ -4814,18 +4814,18 @@
       "sources": [
         "src/views/calendar-timeline-renderer.ts"
       ],
-      "layoutHash": "fea2ccde0432",
+      "layoutHash": "1a72a926ce1b",
       "sourceHashes": {
         "src/views/calendar-timeline-renderer.ts": "37e6e3a20901",
-        "styles.css": "0eaba176b232",
+        "styles.css": "10204a7e5f18",
         "tools/screenshots/theme.css": "f4cd5bc6bf47",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-        "tools/screenshots/capture.mjs": "7719b527504f"
+        "tools/screenshots/capture.mjs": "8a7f894bf0a0"
       },
       "note": "Two weeks at one column per day; the April band marks the month boundary and the today line sits at 25 March 13:45.",
       "capture": "viewport",
-      "bytes": 55898
+      "bytes": 71753
     }
   ]
 }
