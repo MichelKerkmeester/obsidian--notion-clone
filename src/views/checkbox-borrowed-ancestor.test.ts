@@ -71,8 +71,21 @@ describe("checkboxes migrated off borrowed ancestor appearance", () => {
     });
   }
 
-  it("keeps the former borrowed-ancestor population explicit", () => {
-    const FORMER_BORROWED_SITES = MIGRATED.length;
-    expect(FORMER_BORROWED_SITES).toBe(5);
+  // The assertion here used to read expect(MIGRATED.length).toBe(5) against a literal in this same
+  // file — expect(5).toBe(5), which cannot fail whatever the source does. A first replacement was
+  // no better: it looked for the factory within two lines of a raw creation, and a bare checkbox
+  // inserted directly above a real factory call sat inside that window and passed.
+  //
+  // The factory supplies the type itself, so a migrated file has no reason to name it. Any
+  // occurrence of the raw attribute in these files is a creation that bypassed the factory, and
+  // the assertion is exact rather than proximate.
+  it("leaves no checkbox creation site relying on a parent for its appearance", () => {
+    const bare: string[] = [];
+    for (const site of MIGRATED) {
+      source(site.file).forEach((line, index) => {
+        if (/type:\s*"checkbox"/.test(line)) bare.push(`${site.file}:${index + 1}`);
+      });
+    }
+    expect(bare, `these name the checkbox type directly instead of using the factory: ${bare.join(", ")}`).toEqual([]);
   });
 });
