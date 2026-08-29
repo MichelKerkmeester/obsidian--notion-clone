@@ -1,7 +1,7 @@
 {
   "holder": "002-properties-panel",
   "acquiredAt": "2026-08-29T19:34:47.628Z",
-  "baselineHash": "a4e185cb9e2c",
+  "baselineHash": "8b4ad093a8bd",
   "baselineCommit": "f4319e3e768a",
   "history": [
     {
@@ -103,6 +103,13 @@
       "at": "2026-08-29T20:43:04.781Z",
       "hash": "a4e185cb9e2c",
       "note": "phone list card stacks title above fields; row-main takes its track instead of sizing to content"
+    },
+    {
+      "event": "edit",
+      "phase": "002-properties-panel",
+      "at": "2026-08-29T21:02:39.657Z",
+      "hash": "8b4ad093a8bd",
+      "note": "reduced-motion blocks no longer null every transform; layout centring survives the preference"
     }
   ],
   "outstanding": [

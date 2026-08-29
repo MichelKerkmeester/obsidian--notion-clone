@@ -19318,7 +19318,6 @@ body.is-tablet .note-database-container .db-record-open-btn {
     animation: none !important;
     scroll-behavior: auto !important;
     transition: none !important;
-    transform: none !important;
   }
 }
 
@@ -19330,7 +19329,6 @@ body.is-tablet .note-database-container .db-record-open-btn {
     animation: none !important;
     scroll-behavior: auto !important;
     transition: none !important;
-    transform: none !important;
   }
 }
 
