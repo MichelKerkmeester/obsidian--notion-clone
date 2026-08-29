@@ -17965,6 +17965,22 @@ img.db-text-md-image {
   min-width: 0;
 }
 
+/* The row's content column fits the card on a phone rather than sizing to its content.
+   `.db-list-row-main` is `width: max-content` so the title and the field block sit side by side on
+   a desktop. On a phone that resolved to 877px inside a 216px track: the fields were laid out off
+   the right of the screen, all 48 of them, and the card showed a title and nothing else. Letting
+   it take the track lets the field block wrap underneath, which is what the phone rules already
+   ask for and could not achieve while the container refused to shrink. */
+.is-phone .note-database-container .db-list-row-main {
+  /* Title above its fields, not beside them.
+     Side by side, a 402px card gave the title 92px and the field block the rest, so three titles
+     and nineteen values truncated in a twelve-row list. Stacked, the title gets the full 216px
+     track and nothing truncates. The row grows from 106px to 123px, which is the correct trade on
+     a phone: a taller card that can be read against a shorter one that cannot. */
+  display: block;
+  width: auto;
+}
+
 .is-phone .note-database-container .db-list {
   width: 100%;
   max-width: 100%;

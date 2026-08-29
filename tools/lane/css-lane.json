@@ -1,7 +1,7 @@
 {
   "holder": "002-properties-panel",
   "acquiredAt": "2026-08-29T19:34:47.628Z",
-  "baselineHash": "39967f03be37",
+  "baselineHash": "a4e185cb9e2c",
   "baselineCommit": "f4319e3e768a",
   "history": [
     {
@@ -96,6 +96,13 @@
       "at": "2026-08-29T20:29:34.302Z",
       "hash": "39967f03be37",
       "note": "record-detail rules re-keyed to the sheet root; phone list constrained; filter conditions placed on a two-line grid"
+    },
+    {
+      "event": "edit",
+      "phase": "002-properties-panel",
+      "at": "2026-08-29T20:43:04.781Z",
+      "hash": "a4e185cb9e2c",
+      "note": "phone list card stacks title above fields; row-main takes its track instead of sizing to content"
     }
   ],
   "outstanding": [
