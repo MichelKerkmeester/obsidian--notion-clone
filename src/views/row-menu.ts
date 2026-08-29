@@ -14,7 +14,7 @@
 // 1. IMPORTS
 // ───────────────────────────────────────────────────────────────────
 
-import { App, Menu, MenuItem } from "obsidian";
+import { App } from "obsidian";
 import { CreateEntryPosition, DatabaseConfig, RowCreateContext, RowData, ViewConfig } from "../data/types";
 import { isExplicitlySorted } from "../data/manual-order";
 import {
@@ -26,6 +26,7 @@ import {
 import { t } from "../i18n";
 import { isHTMLElement } from "./dom-guards";
 import { confirmWithModal } from "./modals/confirm-modal";
+import { createOwnedMenu } from "./owned-menu";
 
 // ───────────────────────────────────────────────────────────────────
 // 2. TYPES
@@ -73,19 +74,16 @@ export class RowMenu {
   ): void {
     event.preventDefault();
     const displayName = row.file.name.replace(/\.md$/, "");
-    const menu = new Menu().setUseNativeMenu(false);
-    if (onClose || anchorEl) {
-      menu.onHide(() => {
-        onClose?.();
-        anchorEl?.focus({ preventScroll: true });
-      });
-    }
+    const menu = createOwnedMenu(this.actions.app.workspace.containerEl.ownerDocument, {
+      returnFocus: anchorEl ?? null,
+      onClose,
+    });
 
-    this.addItem(menu, (item) => item
-      .setTitle(t("menu.openNote"))
-      .setIcon("file-text")
-      .onClick(() => this.actions.openRow(row))
-    );
+    menu.addRow({
+      icon: "file-text",
+      label: t("menu.openNote"),
+      onClick: () => this.actions.openRow(row),
+    });
 
     if (!this.actions.isReadOnly) {
       const config = this.actions.getConfig?.();
@@ -96,64 +94,61 @@ export class RowMenu {
         const paths = visibleRows.map((r) => r.file.path);
         const index = paths.indexOf(row.file.path);
         const sorted = isExplicitlySorted(config);
-        this.addItem(menu, (item) => item
-          .setTitle(t("menu.insertAbove"))
-          .setIcon("chevron-up")
-          .setDisabled(sorted)
-          .onClick(() => this.actions.createEntry?.(defaults, { afterPath: index > 0 ? paths[index - 1] : undefined, beforePath: row.file.path }))
-        );
-        this.addItem(menu, (item) => item
-          .setTitle(t("menu.insertBelow"))
-          .setIcon("chevron-down")
-          .setDisabled(sorted)
-          .onClick(() => this.actions.createEntry?.(defaults, { afterPath: row.file.path, beforePath: index < paths.length - 1 ? paths[index + 1] : undefined }))
-        );
+        menu.addRow({
+          icon: "chevron-up",
+          label: t("menu.insertAbove"),
+          disabled: sorted,
+          onClick: () => this.actions.createEntry?.(defaults, { afterPath: index > 0 ? paths[index - 1] : undefined, beforePath: row.file.path }),
+        });
+        menu.addRow({
+          icon: "chevron-down",
+          label: t("menu.insertBelow"),
+          disabled: sorted,
+          onClick: () => this.actions.createEntry?.(defaults, { afterPath: row.file.path, beforePath: index < paths.length - 1 ? paths[index + 1] : undefined }),
+        });
         menu.addSeparator();
         const databaseConfig = this.actions.getDatabaseConfig?.();
         if (hasRecordTemplate(databaseConfig)) {
-          this.addItem(menu, (item) => {
-            item
-              .setTitle(getNewFromTemplateLabel())
-              .setIcon("file-plus-2")
-              .onClick(() => {
-                void executeNewFromTemplate({
-                  config: databaseConfig,
-                  confirmEnabled: false,
-                  confirm: async () => true,
-                  createEntry: () => this.actions.createEntry?.(),
-                });
+          menu.addRow({
+            icon: "file-plus-2",
+            label: getNewFromTemplateLabel(),
+            tooltip: getNewFromTemplateTooltip(databaseConfig),
+            onClick: () => {
+              void executeNewFromTemplate({
+                config: databaseConfig,
+                confirmEnabled: false,
+                confirm: async () => true,
+                createEntry: () => this.actions.createEntry?.(),
               });
-            const menuItem = item as unknown as { dom?: HTMLElement };
-            menuItem.dom?.setAttribute("title", getNewFromTemplateTooltip(databaseConfig));
-            return item;
+            },
           });
         }
       }
       if (this.actions.toggleRecordIcon && this.actions.canToggleRecordIcon?.() === true) {
-        this.addItem(menu, (item) => item
-          .setTitle(t("recordIcon.show"))
-          .setIcon("smile-plus")
-          .setChecked(this.actions.isRecordIconShown?.() === true)
-          .onClick((clickEvent) => {
+        menu.addRow({
+          icon: "smile-plus",
+          label: t("recordIcon.show"),
+          selected: this.actions.isRecordIconShown?.() === true,
+          onClick: (clickEvent) => {
             const anchor = isHTMLElement(clickEvent.currentTarget) ? clickEvent.currentTarget : isHTMLElement(clickEvent.target) ? clickEvent.target : null;
             if (anchor) this.actions.toggleRecordIcon?.(anchor, row);
-          })
-        );
+          },
+        });
         menu.addSeparator();
       }
-      this.addItem(menu, (item) => item
-        .setTitle(t("menu.duplicateRecord"))
-        .setIcon("copy")
-        .onClick(() => { void this.actions.duplicateRow?.(row); })
-      );
+      menu.addRow({
+        icon: "copy",
+        label: t("menu.duplicateRecord"),
+        onClick: () => { void this.actions.duplicateRow?.(row); },
+      });
 
       menu.addSeparator();
 
-      this.addItem(menu, (item) => item
-        .setTitle(t("menu.deleteRow", { name: displayName }))
-        .setIcon("trash")
-        .setWarning(true)
-        .onClick(async () => {
+      menu.addRow({
+        icon: "trash",
+        label: t("menu.deleteRow", { name: displayName }),
+        warning: true,
+        onClick: () => { void (async () => {
           const ok = await confirmWithModal(this.actions.app, {
             title: t("common.delete"),
             message: t("menu.confirmDeleteRow", { name: displayName }),
@@ -162,26 +157,15 @@ export class RowMenu {
           });
           if (!ok) return;
           void this.actions.deleteRow(row);
-        })
-      );
+        })(); },
+      });
     }
 
     if (anchorEl?.isConnected) {
       const rect = anchorEl.getBoundingClientRect();
-      menu.showAtPosition({ x: rect.left, y: rect.bottom + 4 });
+      menu.showAt({ x: rect.left, y: rect.bottom + 4 });
     } else {
-      menu.showAtMouseEvent(event);
+      menu.showAt({ x: event.clientX, y: event.clientY });
     }
-  }
-
-  private addItem(menu: Menu, configure: (item: MenuItem) => void): void {
-    menu.addItem((item) => {
-      configure(item);
-      const dom = (item as unknown as { dom?: HTMLElement }).dom;
-      dom?.addClass("db-menu-item");
-      dom?.querySelector<HTMLElement>(".menu-item-icon")?.addClass("db-menu-item-icon");
-      dom?.querySelector<HTMLElement>(".menu-item-title")?.addClass("db-menu-item-label");
-      return item;
-    });
   }
 }

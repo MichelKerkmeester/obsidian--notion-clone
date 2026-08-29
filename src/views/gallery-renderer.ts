@@ -16,7 +16,7 @@
 // 1. IMPORTS
 // ───────────────────────────────────────────────────────────────────
 
-import { App, Menu, setIcon, setTooltip } from "obsidian";
+import { App, setIcon, setTooltip } from "obsidian";
 import { isObsidianTagsKey, toMultiSelectValuesForKey } from "../data/column-types";
 import { isExplicitlySorted } from "../data/manual-order";
 import { getColumnDisplayType } from "../data/column-display";
@@ -42,6 +42,7 @@ import { renderCardField } from "./card-field-renderer";
 import { attachLongPress, isTouchDevice } from "../data/touch-environment";
 import { CardRovingController, syncCardRoving, wireCardKeyboard } from "./card-roving-tabindex";
 import { isImeComposing } from "../data/keyboard-utils";
+import { createOwnedMenuForEvent, OwnedMenuHandle } from "./owned-menu";
 
 // ───────────────────────────────────────────────────────────────────
 // 2. CONSTANTS
@@ -378,32 +379,29 @@ export class GalleryRenderer {
     button.onclick = (event) => {
       event.preventDefault();
       event.stopPropagation();
-      const menu = new Menu();
+      const menu = createOwnedMenuForEvent(event);
       if (this.canManualReorder(config)) this.addMobilePositionItems(menu, row, rows);
       if (groupField && groupKey != null && groups?.length) {
         if (this.canManualReorder(config)) menu.addSeparator();
         for (const group of groups) {
           if (group.key === groupKey) continue;
           const groupLabel = formatGroupKeyDisplay(config, groupField, group.key);
-          menu.addItem((item) => item
-            .setTitle(`${t("mobile.moveTo")} ${groupLabel}`)
-            .setIcon("folder-input")
-            .onClick(() => {
+          menu.addRow({ icon: "folder-input", label: `${t("mobile.moveTo")} ${groupLabel}`, onClick: () => {
               const paths = group.rows.map((candidate) => candidate.file.path).filter((path) => path !== row.file.path);
               if (this.actions.moveRowToGroupAndPosition) {
                 void this.actions.moveRowToGroupAndPosition(row, groupField, groupKey, group.key, paths[paths.length - 1], undefined);
               } else {
                 void this.actions.moveRowsToGroup?.(row, groupField, groupKey, group.key);
               }
-            }));
+            } });
         }
       }
-      menu.showAtMouseEvent(event);
+      menu.showAt({ x: event.clientX, y: event.clientY });
     };
   }
 
   /** Add local rank movement actions shared by grouped and ungrouped cards. */
-  private addMobilePositionItems(menu: Menu, row: RowData, rows: RowData[]): void {
+  private addMobilePositionItems(menu: OwnedMenuHandle, row: RowData, rows: RowData[]): void {
     const paths = rows.map((candidate) => candidate.file.path);
     const index = paths.indexOf(row.file.path);
     const move = (targetIndex: number) => {
@@ -411,10 +409,10 @@ export class GalleryRenderer {
       const boundedIndex = Math.max(0, Math.min(targetIndex, remaining.length));
       this.actions.moveRowToPosition(row.file.path, remaining[boundedIndex - 1], remaining[boundedIndex]);
     };
-    menu.addItem((item) => item.setTitle(t("menu.moveUp")).setIcon("chevron-up").setDisabled(index <= 0).onClick(() => move(index - 1)));
-    menu.addItem((item) => item.setTitle(t("menu.moveDown")).setIcon("chevron-down").setDisabled(index < 0 || index >= paths.length - 1).onClick(() => move(index + 1)));
-    menu.addItem((item) => item.setTitle(t("mobile.moveTop")).setIcon("chevrons-up").setDisabled(index <= 0).onClick(() => move(0)));
-    menu.addItem((item) => item.setTitle(t("mobile.moveBottom")).setIcon("chevrons-down").setDisabled(index < 0 || index >= paths.length - 1).onClick(() => move(paths.length - 1)));
+    menu.addRow({ icon: "chevron-up", label: t("menu.moveUp"), disabled: index <= 0, onClick: () => move(index - 1) });
+    menu.addRow({ icon: "chevron-down", label: t("menu.moveDown"), disabled: index < 0 || index >= paths.length - 1, onClick: () => move(index + 1) });
+    menu.addRow({ icon: "chevrons-up", label: t("mobile.moveTop"), disabled: index <= 0, onClick: () => move(0) });
+    menu.addRow({ icon: "chevrons-down", label: t("mobile.moveBottom"), disabled: index < 0 || index >= paths.length - 1, onClick: () => move(paths.length - 1) });
   }
 
   private setupGroupedCardDrag(card: HTMLElement, row: RowData, groupField?: string, groupKey?: string): void {

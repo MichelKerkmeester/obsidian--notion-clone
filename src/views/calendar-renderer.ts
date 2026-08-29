@@ -15,7 +15,7 @@
 // 1. IMPORTS
 // ───────────────────────────────────────────────────────────────────
 
-import { Menu, setIcon } from "obsidian";
+import { setIcon } from "obsidian";
 import {
 	buildCalendarMonthWeekLayouts,
 	buildCalendarTimedEventLayouts,
@@ -58,6 +58,7 @@ import { EmptyStateReason, EmptyStateRenderer } from "./empty-state-renderer";
 import { isTouchDevice } from "../data/touch-environment";
 import { isImeComposing } from "../data/keyboard-utils";
 import { attachCalendarGridKeyboard, focusCalendarCell } from "./calendar-keyboard-navigation";
+import { createOwnedMenuForEvent } from "./owned-menu";
 
 // ───────────────────────────────────────────────────────────────────
 // 2. CONSTANTS
@@ -2339,12 +2340,13 @@ export class CalendarRenderer {
 	}
 
 	private showDayViewNavigationMenu(event: MouseEvent, config: ViewConfig, dateKey: string): void {
-		const menu = new Menu();
-		menu.addItem((item) => item
-			.setTitle(t("calendar.openDayView"))
-			.setIcon("calendar-days")
-			.onClick(() => this.openDayFromTimeHeader(config, dateKey)));
-		menu.showAtMouseEvent(event);
+		const menu = createOwnedMenuForEvent(event);
+		menu.addRow({
+			icon: "calendar-days",
+			label: t("calendar.openDayView"),
+			onClick: () => this.openDayFromTimeHeader(config, dateKey),
+		});
+		menu.showAt({ x: event.clientX, y: event.clientY });
 	}
 
 	private openDayFromTimeHeader(config: ViewConfig, dateKey: string): void {

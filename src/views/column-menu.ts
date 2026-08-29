@@ -17,7 +17,7 @@
 // 1. IMPORTS
 // ───────────────────────────────────────────────────────────────────
 
-import { Menu, MenuItem, setIcon } from "obsidian";
+import { setIcon } from "obsidian";
 import { COLUMN_TYPE_LABELS, isOptionColumnType, OPTION_COLORS } from "../data/column-types";
 import { isFileFieldKey } from "../data/file-fields";
 import { ColumnDef, ComputedFieldDef, NumberDisplayStyle, NumberDisplayConfig, StatusColor } from "../data/types";
@@ -28,7 +28,7 @@ import { createDropdownField, DropdownOption } from "./dropdown-field";
 import { installPopoverAutoClose } from "./popover-auto-close";
 import { positionToolbarPopover } from "./popover-position";
 import { getTextLinkSchemeChoice, TEXT_LINK_SCHEME_MENU_OPTIONS, TextLinkSchemeChoice } from "../data/text-link-scheme-menu";
-import { isTouchDevice } from "../data/touch-environment";
+import { createOwnedMenuForEvent, OwnedMenuHandle } from "./owned-menu";
 
 // ───────────────────────────────────────────────────────────────────
 // 2. TYPES
@@ -70,8 +70,6 @@ export interface ColumnMenuOptions {
   onClose?: () => void;
 }
 
-type MenuItemWithDom = { dom?: HTMLElement };
-
 // ───────────────────────────────────────────────────────────────────
 // 3. MAIN CONTEXT MENU
 // ───────────────────────────────────────────────────────────────────
@@ -94,237 +92,128 @@ export class ColumnMenu {
     const readonly = options.readonly === true;
     const includeLayoutActions = options.includeLayoutActions !== false;
     const includeWidthActions = options.includeWidthActions !== false;
-    const menu = new Menu().setUseNativeMenu(false);
-    if (options.onClose || anchorEl) {
-      menu.onHide(() => {
-        options.onClose?.();
-        anchorEl?.focus({ preventScroll: true });
-      });
-    }
+    const menu = createOwnedMenuForEvent(event, {
+      returnFocus: anchorEl ?? null,
+      onClose: options.onClose,
+    });
 
     if (!readonly) {
-      this.addMenuItem(menu, (item) => item
-        .setTitle(t("menu.editProperty", { name: col.label }))
-        .setIcon("edit")
-        .onClick(() => this.actions.editColumn(col))
-      );
+      menu.addRow({ icon: "edit", label: t("menu.editProperty", { name: col.label }), onClick: () => this.actions.editColumn(col) });
 
       if (isOptionColumnType(col.type) && !isFileFieldKey(col.key)) {
-        this.addMenuItem(menu, (item) => item
-          .setTitle(t("menu.editOptions"))
-          .setIcon("palette")
-          .onClick(() => this.actions.editStatusOptions(col))
-        );
+        menu.addRow({ icon: "palette", label: t("menu.editOptions"), onClick: () => this.actions.editStatusOptions(col) });
       }
 
       if (col.type === "computed") {
-        this.addMenuItem(menu, (item) => item
-          .setTitle(t("menu.openFormula"))
-          .setIcon("sigma")
-          .onClick(() => this.actions.editFormula(col))
-        );
+        menu.addRow({ icon: "sigma", label: t("menu.openFormula"), onClick: () => this.actions.editFormula(col) });
       }
       if ((col.type === "relation" || col.type === "rollup") && this.actions.editRelationRollup) {
-        this.addMenuItem(menu, (item) => item
-          .setTitle(col.type === "relation" ? t("relation.configure") : t("rollup.configure"))
-          .setIcon(col.type === "relation" ? "link" : "sigma")
-          .onClick(() => this.actions.editRelationRollup?.(col))
-        );
+        menu.addRow({ icon: col.type === "relation" ? "link" : "sigma", label: col.type === "relation" ? t("relation.configure") : t("rollup.configure"), onClick: () => this.actions.editRelationRollup?.(col) });
       }
 
-      this.addMenuItem(menu, (item) => {
-        const isFileField = isFileFieldKey(col.key);
-        item.setTitle(t("menu.changeType")).setIcon("layers");
-        item.setDisabled(isFileField);
-        if (isFileField) return item;
-        const menuItem = item as unknown as MenuItemWithDom;
-        this.decorateMenuItem(menuItem.dom);
-        menuItem.dom?.setAttr("aria-haspopup", "listbox");
-        menuItem.dom?.setAttr("aria-expanded", "false");
+      {
+        const row = menu.addRow({ icon: "layers", label: t("menu.changeType"), submenu: true });
+        row.setAttr("aria-haspopup", "listbox");
         const open = (evt: MouseEvent | KeyboardEvent) => {
           if (evt instanceof KeyboardEvent && !["ArrowRight", "Enter", " "].includes(evt.key)) return;
           evt.preventDefault();
           evt.stopPropagation();
           evt.stopImmediatePropagation();
-          menuItem.dom?.setAttr("aria-expanded", "true");
-          this.showColumnTypePopover(evt, col, menu, menuItem.dom);
+          row?.setAttr("aria-expanded", "true");
+          this.showColumnTypePopover(evt, col, menu, row);
         };
-        menuItem.dom?.addEventListener("click", open, true);
-        menuItem.dom?.addEventListener("keydown", open);
-        return item;
-      });
+        row.addEventListener("click", open, true);
+        row.addEventListener("keydown", open);
+      }
 
       if (isNumberDisplayColumn(col, options.computedFields)) {
-        this.addMenuItem(menu, (item) => {
-          item.setTitle(t("menu.numberDisplayStyle")).setIcon("paintbrush");
-          const menuItem = item as unknown as MenuItemWithDom;
-          this.decorateMenuItem(menuItem.dom);
-          menuItem.dom?.setAttr("aria-haspopup", "listbox");
-          menuItem.dom?.setAttr("aria-expanded", "false");
+        {
+          const row = menu.addRow({ icon: "paintbrush", label: t("menu.numberDisplayStyle"), submenu: true });
+          row.setAttr("aria-haspopup", "listbox");
           const open = (evt: MouseEvent | KeyboardEvent) => {
             if (evt instanceof KeyboardEvent && !["ArrowRight", "Enter", " "].includes(evt.key)) return;
             evt.preventDefault();
             evt.stopPropagation();
             evt.stopImmediatePropagation();
-            menuItem.dom?.setAttr("aria-expanded", "true");
-            this.showNumberDisplayStylePopover(evt, col, menu, menuItem.dom);
+            row?.setAttr("aria-expanded", "true");
+            this.showNumberDisplayStylePopover(evt, col, menu, row);
           };
-          menuItem.dom?.addEventListener("click", open, true);
-          menuItem.dom?.addEventListener("keydown", open);
-          const numberStyleKey = col.numberDisplayStyle === "rating" ? "menu.numberStyleRating"
-            : col.numberDisplayStyle === "progress" ? "menu.numberStyleProgress"
-            : col.numberDisplayStyle === "ring" ? "menu.numberStyleRing"
-            : "menu.numberStylePlain";
-          this.appendItemHint(menuItem.dom, t(numberStyleKey));
-          return item;
-        });
+          row.addEventListener("click", open, true);
+          row.addEventListener("keydown", open);
+        }
       }
       if (col.type === "text" && !isFileFieldKey(col.key)) {
-        this.addMenuItem(menu, (item) => {
-          item.setTitle(t("menu.numberDisplayStyle")).setIcon("paintbrush");
-          const menuItem = item as unknown as MenuItemWithDom;
-          this.decorateMenuItem(menuItem.dom);
-          menuItem.dom?.setAttr("aria-haspopup", "listbox");
-          menuItem.dom?.setAttr("aria-expanded", "false");
+        {
+          const row = menu.addRow({ icon: "paintbrush", label: t("menu.numberDisplayStyle"), submenu: true });
+          row.setAttr("aria-haspopup", "listbox");
           const open = (evt: MouseEvent | KeyboardEvent) => {
             if (evt instanceof KeyboardEvent && !["ArrowRight", "Enter", " "].includes(evt.key)) return;
             evt.preventDefault();
             evt.stopPropagation();
             evt.stopImmediatePropagation();
-            menuItem.dom?.setAttr("aria-expanded", "true");
-            this.showTextRenderModePopover(evt, col, menu, menuItem.dom);
+            row?.setAttr("aria-expanded", "true");
+            this.showTextRenderModePopover(evt, col, menu, row);
           };
-          menuItem.dom?.addEventListener("click", open, true);
-          menuItem.dom?.addEventListener("keydown", open);
-          const textMode = col.textRenderMode ?? "plain";
-          this.appendItemHint(menuItem.dom, t(
-            textMode === "link" ? "menu.textRenderLink"
-            : textMode === "markdown" ? "menu.textRenderMarkdown"
-            : "menu.textRenderPlain",
-          ));
-          return item;
-        });
+          row.addEventListener("click", open, true);
+          row.addEventListener("keydown", open);
+        }
       }
     }
 
     if (!readonly && includeLayoutActions) {
       menu.addSeparator();
 
-      this.addMenuItem(menu, (item) => item
-        .setTitle(t("menu.insertLeft"))
-        .setIcon("arrow-left-to-line")
-        .onClick(() => this.actions.insertColumn(col, "left"))
-      );
-      this.addMenuItem(menu, (item) => item
-        .setTitle(t("menu.insertRight"))
-        .setIcon("arrow-right-to-line")
-        .onClick(() => this.actions.insertColumn(col, "right"))
-      );
-      this.addMenuItem(menu, (item) => item
-        .setTitle(t("menu.duplicateColumn"))
-        .setIcon("copy")
-        .onClick(() => this.actions.duplicateColumn(col))
-        .setDisabled(isFileFieldKey(col.key))
-      );
+      menu.addRow({ icon: "arrow-left-to-line", label: t("menu.insertLeft"), onClick: () => this.actions.insertColumn(col, "left") });
+      menu.addRow({ icon: "arrow-right-to-line", label: t("menu.insertRight"), onClick: () => this.actions.insertColumn(col, "right") });
+      menu.addRow({ icon: "copy", label: t("menu.duplicateColumn"), disabled: isFileFieldKey(col.key), onClick: () => this.actions.duplicateColumn(col) });
     }
 
     if (!readonly && includeLayoutActions) {
       menu.addSeparator();
 
-      this.addMenuItem(menu, (item) => item
-        .setTitle(t("menu.moveUp"))
-        .setIcon("arrow-up")
-        .onClick(() => this.actions.moveColumn(col.key, -1))
-      );
-      this.addMenuItem(menu, (item) => item
-        .setTitle(t("menu.moveDown"))
-        .setIcon("arrow-down")
-        .onClick(() => this.actions.moveColumn(col.key, 1))
-      );
+      menu.addRow({ icon: "arrow-up", label: t("menu.moveUp"), onClick: () => this.actions.moveColumn(col.key, -1) });
+      menu.addRow({ icon: "arrow-down", label: t("menu.moveDown"), onClick: () => this.actions.moveColumn(col.key, 1) });
     }
 
     menu.addSeparator();
 
-    this.addMenuItem(menu, (item) => item
-      .setTitle(t("menu.hideProperty", { name: col.label }))
-      .setIcon("eye-off")
-      .onClick(() => this.actions.hideColumn(col))
-    );
-    this.addMenuItem(menu, (item) => item
-      .setTitle(col.wrap ? t("menu.disableWrap") : t("menu.enableWrap"))
-      .setIcon("wrap-text")
-      .onClick(() => this.actions.toggleColumnWrap(col))
-    );
+    menu.addRow({ icon: "eye-off", label: t("menu.hideProperty", { name: col.label }), onClick: () => this.actions.hideColumn(col) });
+    menu.addRow({ icon: "wrap-text", label: col.wrap ? t("menu.disableWrap") : t("menu.enableWrap"), onClick: () => this.actions.toggleColumnWrap(col) });
     if (this.actions.filterByColumn) {
-      this.addMenuItem(menu, (item) => item
-        .setTitle(t("menu.filterByValue", { name: col.label }))
-        .setIcon("filter")
-        .onClick(() => this.actions.filterByColumn?.(col))
-      );
+      menu.addRow({ icon: "filter", label: t("menu.filterByValue", { name: col.label }), onClick: () => this.actions.filterByColumn?.(col) });
     }
-    if (isTouchDevice(anchorEl) && includeWidthActions && !readonly && this.actions.openColumnWidthPanel) {
-      this.addMenuItem(menu, (item) => item
-        .setTitle(t("menu.adjustColumnWidth"))
-        .setIcon("ruler-dimension-line")
-        .onClick(() => this.actions.openColumnWidthPanel?.(col))
-      );
+    // Not touch-only: dragging a resize handle cannot land on an exact pixel value, so the panel
+    // is the only way to set a precise width on either surface.
+    if (includeWidthActions && !readonly && this.actions.openColumnWidthPanel) {
+      menu.addRow({ icon: "ruler-dimension-line", label: t("menu.adjustColumnWidth"), onClick: () => this.actions.openColumnWidthPanel?.(col) });
     }
     if (includeWidthActions && this.actions.autoFitColumn) {
-      this.addMenuItem(menu, (item) => item
-        .setTitle(t("menu.autoFitColumn"))
-        .setIcon("ruler-dimension-line")
-        .onClick(() => this.actions.autoFitColumn?.(col))
-      );
+      menu.addRow({ icon: "ruler-dimension-line", label: t("menu.autoFitColumn"), onClick: () => this.actions.autoFitColumn?.(col) });
     }
     if (includeWidthActions && this.actions.autoFitAllColumns) {
-      this.addMenuItem(menu, (item) => item
-        .setTitle(t("menu.autoFitAllColumns"))
-        .setIcon("scan-line")
-        .onClick(() => this.actions.autoFitAllColumns?.())
-      );
+      menu.addRow({ icon: "scan-line", label: t("menu.autoFitAllColumns"), onClick: () => this.actions.autoFitAllColumns?.() });
     }
     if (this.actions.sortColumnDirection) {
-      this.addMenuItem(menu, (item) => item
-        .setTitle(t("menu.sortAscending"))
-        .setIcon("arrow-up")
-        .onClick(() => this.actions.sortColumnDirection?.(col, "asc"))
-      );
-      this.addMenuItem(menu, (item) => item
-        .setTitle(t("menu.sortDescending"))
-        .setIcon("arrow-down")
-        .onClick(() => this.actions.sortColumnDirection?.(col, "desc"))
-      );
+      menu.addRow({ icon: "arrow-up", label: t("menu.sortAscending"), onClick: () => this.actions.sortColumnDirection?.(col, "asc") });
+      menu.addRow({ icon: "arrow-down", label: t("menu.sortDescending"), onClick: () => this.actions.sortColumnDirection?.(col, "desc") });
     } else {
-      this.addMenuItem(menu, (item) => item
-        .setTitle(t("menu.sortBy", { name: col.label }))
-        .setIcon("arrow-up-down")
-        .onClick(() => this.actions.sortByColumn(col))
-      );
+      menu.addRow({ icon: "arrow-up-down", label: t("menu.sortBy", { name: col.label }), onClick: () => this.actions.sortByColumn(col) });
     }
     if (this.actions.getColumnSortDirection?.(col)) {
-      this.addMenuItem(menu, (item) => item
-        .setTitle(t("menu.clearSort"))
-        .setIcon("x")
-        .onClick(() => this.actions.clearColumnSort?.(col))
-      );
+      menu.addRow({ icon: "x", label: t("menu.clearSort"), onClick: () => this.actions.clearColumnSort?.(col) });
     }
 
     if (!readonly && includeLayoutActions) {
       menu.addSeparator();
 
-      this.addMenuItem(menu, (item) => item
-        .setTitle(t("menu.deleteColumn"))
-        .setIcon("trash")
-        .setDisabled(col.key === "file.name")
-        .onClick(() => this.actions.deleteColumn(col))
-      );
+      menu.addRow({ icon: "trash", label: t("menu.deleteColumn"), disabled: col.key === "file.name", onClick: () => this.actions.deleteColumn(col) });
     }
 
     if (anchorEl?.isConnected) {
       const rect = anchorEl.getBoundingClientRect();
-      menu.showAtPosition({ x: rect.left, y: rect.bottom + 4 });
+      menu.showAt({ x: rect.left, y: rect.bottom + 4 });
     } else {
-      menu.showAtMouseEvent(event);
+      menu.showAt({ x: event.clientX, y: event.clientY });
     }
   }
 
@@ -332,7 +221,7 @@ export class ColumnMenu {
   // 4. TYPE-CHANGE & NUMBER-STYLE POPOVERS
   // ───────────────────────────────────────────────────────────────────
 
-  private showColumnTypePopover(evt: MouseEvent | KeyboardEvent, col: ColumnDef, menu: Menu, anchorEl?: HTMLElement): void {
+  private showColumnTypePopover(evt: MouseEvent | KeyboardEvent, col: ColumnDef, menu: OwnedMenuHandle, anchorEl?: HTMLElement): void {
     const { panel, cleanup } = this.createColumnMenuSubpopover(evt, "db-column-type-popover", anchorEl);
     panel.setAttr("role", "listbox");
     const labels = COLUMN_TYPE_LABELS();
@@ -358,14 +247,14 @@ export class ColumnMenu {
         row.createSpan({ cls: "db-dropdown-option-label db-menu-item-label", text: labels[type] });
         row.onclick = () => {
           cleanup();
-          menu.hide();
+          menu.close();
           if (type !== col.type) this.actions.changeColumnType(col, type);
         };
       }
     });
   }
 
-  private showNumberDisplayStylePopover(evt: MouseEvent | KeyboardEvent, col: ColumnDef, _menu: Menu, anchorEl?: HTMLElement): void {
+  private showNumberDisplayStylePopover(evt: MouseEvent | KeyboardEvent, col: ColumnDef, _menu: OwnedMenuHandle, anchorEl?: HTMLElement): void {
     const { panel, cleanup } = this.createColumnMenuSubpopover(evt, "db-column-display-style-popover db-column-number-style-popover", anchorEl);
     const RATING_ICONS = ["star", "flame", "heart", "thumbs-up", "gem"];
     const DIVISOR_PRESETS = ["100", "10"];
@@ -476,20 +365,6 @@ export class ColumnMenu {
     dom.createSpan({ cls: "db-menu-item-current", text });
   }
 
-  private addMenuItem(menu: Menu, configure: (item: MenuItem) => unknown): void {
-    menu.addItem((item) => {
-      configure(item);
-      this.decorateMenuItem((item as unknown as MenuItemWithDom).dom);
-      return item;
-    });
-  }
-
-  private decorateMenuItem(dom: HTMLElement | undefined): void {
-    dom?.addClass("db-menu-item");
-    dom?.querySelector<HTMLElement>(".menu-item-icon")?.addClass("db-menu-item-icon");
-    dom?.querySelector<HTMLElement>(".menu-item-title")?.addClass("db-menu-item-label");
-  }
-
   private addSubmenuBackButton(panel: HTMLElement, cleanup: () => void, anchorEl?: HTMLElement): void {
     const back = panel.createEl("button", {
       cls: "db-column-menu-back db-menu-item",
@@ -508,7 +383,7 @@ export class ColumnMenu {
   // 6. TEXT-RENDER-MODE POPOVER
   // ───────────────────────────────────────────────────────────────────
 
-  private showTextRenderModePopover(evt: MouseEvent | KeyboardEvent, col: ColumnDef, _menu: Menu, anchorEl?: HTMLElement): void {
+  private showTextRenderModePopover(evt: MouseEvent | KeyboardEvent, col: ColumnDef, _menu: OwnedMenuHandle, anchorEl?: HTMLElement): void {
     const { panel, cleanup } = this.createColumnMenuSubpopover(evt, "db-column-display-style-popover db-column-text-style-popover", anchorEl);
     const render = (): void => {
       panel.empty();

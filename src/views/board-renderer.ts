@@ -17,7 +17,7 @@
 // 1. IMPORTS
 // ───────────────────────────────────────────────────────────────────
 
-import { App, Menu, setIcon, setTooltip } from "obsidian";
+import { App, setIcon, setTooltip } from "obsidian";
 import { isObsidianTagsKey, toMultiSelectValuesForKey } from "../data/column-types";
 import { OPTION_REGISTRATION_COLORS } from "../data/option-registration";
 import { isExplicitlySorted } from "../data/manual-order";
@@ -47,6 +47,7 @@ import { EdgeAutoScroller } from "./edge-auto-scroller";
 import { DragDropFeedbackState, resolveDropPlacement } from "./drag-drop-feedback";
 import { attachLongPress, isTouchDevice } from "../data/touch-environment";
 import { CardRovingController, syncCardRoving, wireCardKeyboard } from "./card-roving-tabindex";
+import { createOwnedMenuForEvent } from "./owned-menu";
 
 // ───────────────────────────────────────────────────────────────────
 // 2. CONSTANTS
@@ -241,18 +242,18 @@ export class BoardRenderer {
     button.onclick = (event) => {
       event.preventDefault();
       event.stopPropagation();
-      const menu = new Menu();
-      menu.addItem((item) => item.setTitle(t("board.sortAscending")).setIcon("arrow-up-a-z").onClick(() => {
+      const menu = createOwnedMenuForEvent(event);
+      menu.addRow({ icon: "arrow-up-a-z", label: t("board.sortAscending"), onClick: () => {
         this.actions.updateCardOrder(field, group.key, group.rows.map((row) => row.file.path).slice().sort());
-      }));
-      menu.addItem((item) => item.setTitle(t("board.sortDescending")).setIcon("arrow-down-a-z").onClick(() => {
+      } });
+      menu.addRow({ icon: "arrow-down-a-z", label: t("board.sortDescending"), onClick: () => {
         this.actions.updateCardOrder(field, group.key, group.rows.map((row) => row.file.path).slice().sort().reverse());
-      }));
+      } });
       menu.addSeparator();
-      menu.addItem((item) => item.setTitle(t("board.collapseGroup")).setIcon("fold-vertical").onClick(() => this.actions.toggleGroupCollapsed?.(field, group.key)));
-      if (this.actions.hideGroup) menu.addItem((item) => item.setTitle(t("board.hideColumn")).setIcon("eye-off").onClick(() => this.actions.hideGroup?.(field, group.key)));
-      if (this.actions.deleteGroup) menu.addItem((item) => item.setTitle(t("board.deleteGroup")).setIcon("trash-2").onClick(() => this.actions.deleteGroup?.(field, group.key)));
-      menu.showAtMouseEvent(event);
+      menu.addRow({ icon: "fold-vertical", label: t("board.collapseGroup"), onClick: () => this.actions.toggleGroupCollapsed?.(field, group.key) });
+      if (this.actions.hideGroup) menu.addRow({ icon: "eye-off", label: t("board.hideColumn"), onClick: () => this.actions.hideGroup?.(field, group.key) });
+      if (this.actions.deleteGroup) menu.addRow({ icon: "trash-2", label: t("board.deleteGroup"), onClick: () => this.actions.deleteGroup?.(field, group.key) });
+      menu.showAt({ x: event.clientX, y: event.clientY });
     };
   }
 
@@ -1008,7 +1009,7 @@ export class BoardRenderer {
     subgroupField?: string,
     subgroupKey?: string
   ): void {
-    const menu = new Menu();
+    const menu = createOwnedMenuForEvent(event);
     const currentRows = subgroupField
       ? currentGroup.subgroups?.find((subgroup) => subgroup.key === subgroupKey)?.rows || []
       : currentGroup.rows;
@@ -1026,18 +1027,12 @@ export class BoardRenderer {
       );
     };
 
-    menu.addItem((item) => item.setTitle(t("mobile.moveTop")).setIcon("chevrons-up").onClick(() => applyOrder(currentGroup, subgroupKey, "top")));
-    menu.addItem((item) => item.setTitle(t("mobile.moveBottom")).setIcon("chevrons-down").onClick(() => applyOrder(currentGroup, subgroupKey, "bottom")));
+    menu.addRow({ icon: "chevrons-up", label: t("mobile.moveTop"), onClick: () => applyOrder(currentGroup, subgroupKey, "top") });
+    menu.addRow({ icon: "chevrons-down", label: t("mobile.moveBottom"), onClick: () => applyOrder(currentGroup, subgroupKey, "bottom") });
     for (const target of currentRows.filter((candidate) => candidate.file.path !== row.file.path)) {
       const label = this.getMobileRowLabel(config, target);
-      menu.addItem((item) => item
-        .setTitle(`${t("mobile.moveBefore")} ${label}`)
-        .setIcon("corner-up-left")
-        .onClick(() => applyOrder(currentGroup, subgroupKey, "before", target.file.path)));
-      menu.addItem((item) => item
-        .setTitle(`${t("mobile.moveAfter")} ${label}`)
-        .setIcon("corner-down-left")
-        .onClick(() => applyOrder(currentGroup, subgroupKey, "after", target.file.path)));
+      menu.addRow({ icon: "corner-up-left", label: `${t("mobile.moveBefore")} ${label}`, onClick: () => applyOrder(currentGroup, subgroupKey, "before", target.file.path) });
+      menu.addRow({ icon: "corner-down-left", label: `${t("mobile.moveAfter")} ${label}`, onClick: () => applyOrder(currentGroup, subgroupKey, "after", target.file.path) });
     }
 
     const targetGroups = subgroupField
@@ -1054,12 +1049,9 @@ export class BoardRenderer {
       const label = subgroupField
         ? `${groupLabel} / ${subgroupLabel || t("common.uncategorized")}`
         : groupLabel;
-      menu.addItem((item) => item
-        .setTitle(`${t("mobile.moveTo")} ${label}`)
-        .setIcon("folder-input")
-        .onClick(() => applyOrder(target.group, target.subgroupKey, "bottom")));
+      menu.addRow({ icon: "folder-input", label: `${t("mobile.moveTo")} ${label}`, onClick: () => applyOrder(target.group, target.subgroupKey, "bottom") });
     }
-    menu.showAtMouseEvent(event);
+    menu.showAt({ x: event.clientX, y: event.clientY });
   }
 
   private getMobileTargetOrder(

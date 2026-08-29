@@ -16,7 +16,7 @@
 // 1. IMPORTS
 // ───────────────────────────────────────────────────────────────────
 
-import { App, HoverPopover, MarkdownRenderChild, MarkdownSectionInformation, Menu, normalizePath, Notice, setIcon, setTooltip, TFile } from "obsidian";
+import { App, HoverPopover, MarkdownRenderChild, MarkdownSectionInformation, normalizePath, Notice, setIcon, setTooltip, TFile } from "obsidian";
 import { t } from "../i18n";
 import { DataChangeBatch, DataSource, NoteRecord, ViewConfigMutation } from "../data/data-source";
 import { RefreshCoordinator } from "../data/refresh-coordinator";
@@ -108,6 +108,7 @@ import { installNoteHoverPreview } from "./hover-link-preview";
 import { attachLongPress, isTouchDevice, observeTouchEnvironment } from "../data/touch-environment";
 import { InteractionScopeRegistry } from "./interaction-scope";
 import { moveTableCellByRowOffset, resolveTableCellNavigation, TableKeyboardNavigationController, type TableCellNavigationIntent } from "../data/table-keyboard-navigation";
+import { createOwnedMenuForEvent } from "./owned-menu";
 import {
   EmptyStateOptions,
   EmptyStateRenderer,
@@ -2362,29 +2363,21 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
     event.stopPropagation();
     const config = this.config;
     if (!config) return;
-    const menu = new Menu().setUseNativeMenu(false);
+    const menu = createOwnedMenuForEvent(event);
 
-    menu.addItem((item) => item
-      .setTitle(t("menu.hideProperty", { name: col.label }))
-      .setIcon("eye-off")
-      .onClick(() => {
+    menu.addRow({ icon: "eye-off", label: t("menu.hideProperty", { name: col.label }), onClick: () => {
         this.vs(config).hiddenColumns.add(col.key);
         this.persistEmbeddedConfigLocally(config);
         this.updateToolbarIndicators(config);
         this.renderResults(config);
         this.saveEmbeddedConfigInBackground();
-      })
-    );
-    menu.addItem((item) => item
-      .setTitle(col.wrap ? t("menu.disableWrap") : t("menu.enableWrap"))
-      .setIcon("wrap-text")
-      .onClick(() => {
+      } });
+    menu.addRow({ icon: "wrap-text", label: col.wrap ? t("menu.disableWrap") : t("menu.enableWrap"), onClick: () => {
         col.wrap = !col.wrap || undefined;
         this.persistEmbeddedConfigLocally(config);
         this.renderResults(config);
         this.saveEmbeddedConfigInBackground();
-      })
-    );
+      } });
     if (isNumberDisplayColumn(col, config.schema.computedFields)) {
       const currentStyle = col.numberDisplayStyle ?? "plain";
       const numberStyles: { value: NumberDisplayStyle; key: string }[] = [
@@ -2394,48 +2387,28 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
         { value: "ring", key: "menu.numberStyleRing" },
       ];
       for (const { value, key } of numberStyles) {
-        menu.addItem((item) => item
-          .setTitle(t(key))
-          .setChecked(currentStyle === value)
-          .onClick(() => {
+        menu.addRow({ label: t(key), selected: currentStyle === value, onClick: () => {
             col.numberDisplayStyle = value === "plain" ? undefined : value;
             this.persistEmbeddedConfigLocally(config);
             this.renderResults(config);
             this.saveEmbeddedConfigInBackground();
-          })
-        );
+          } });
       }
     }
     if (includeWidthActions) {
-      menu.addItem((item) => item
-        .setTitle(t("menu.autoFitColumn"))
-        .setIcon("ruler-dimension-line")
-        .onClick(() => this.autoFitColumn(config, col))
-      );
-      menu.addItem((item) => item
-        .setTitle(t("menu.autoFitAllColumns"))
-        .setIcon("scan-line")
-        .onClick(() => this.autoFitAllColumns(config))
-      );
+      menu.addRow({ icon: "ruler-dimension-line", label: t("menu.autoFitColumn"), onClick: () => this.autoFitColumn(config, col) });
+      menu.addRow({ icon: "scan-line", label: t("menu.autoFitAllColumns"), onClick: () => this.autoFitAllColumns(config) });
     }
-    menu.addItem((item) => item
-      .setTitle(t("menu.sortBy", { name: col.label }))
-      .setIcon("arrow-up-down")
-      .onClick(() => this.sortByColumn(col))
-    );
+    menu.addRow({ icon: "arrow-up-down", label: t("menu.sortBy", { name: col.label }), onClick: () => this.sortByColumn(col) });
     if (this.getColumnSortDirection(config, col)) {
-      menu.addItem((item) => item
-        .setTitle(t("menu.clearSort"))
-        .setIcon("x")
-        .onClick(() => this.clearColumnSort(config, col))
-      );
+      menu.addRow({ icon: "x", label: t("menu.clearSort"), onClick: () => this.clearColumnSort(config, col) });
     }
 
     if (anchorEl?.isConnected) {
       const rect = anchorEl.getBoundingClientRect();
-      menu.showAtPosition({ x: rect.left, y: rect.bottom + 4 });
+      menu.showAt({ x: rect.left, y: rect.bottom + 4 });
     } else {
-      menu.showAtMouseEvent(event);
+      menu.showAt({ x: event.clientX, y: event.clientY });
     }
   }
 

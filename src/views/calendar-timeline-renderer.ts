@@ -15,7 +15,7 @@
 // 1. IMPORTS
 // ───────────────────────────────────────────────────────────────────
 
-import { Menu, setIcon, setTooltip } from "obsidian";
+import { setIcon, setTooltip } from "obsidian";
 import { formatCalendarTime, getCalendarSlotDuration } from "../data/calendar-layout-model";
 import { isExplicitlySorted } from "../data/manual-order";
 import { CalendarTitleParts, buildTimelineAxisBands, formatCalendarTitleParts } from "../data/calendar-title-formatter";
@@ -45,6 +45,7 @@ import { getGroupVisibleCount } from "../data/group-visibility";
 import { markNoteHoverLink } from "./hover-link-preview";
 import { EmptyStateReason, EmptyStateRenderer } from "./empty-state-renderer";
 import { isTouchDevice } from "../data/touch-environment";
+import { createOwnedMenuForEvent } from "./owned-menu";
 
 // ───────────────────────────────────────────────────────────────────
 // 2. CONSTANTS
@@ -1924,52 +1925,52 @@ export class CalendarTimelineRenderer {
     const startField = config.timelineStartDateField || config.calendarStartDateField || getDefaultEventDateField(config);
     if (!startField) return;
     const endField = config.timelineEndDateField || config.calendarEndDateField;
-    const menu = new Menu();
-    menu.addItem((item) => item.setTitle(t("common.open")).setIcon("file-text").onClick(() => this.actions.openRow(event.row)));
+    const menu = createOwnedMenuForEvent(mouseEvent);
+    menu.addRow({ icon: "file-text", label: t("common.open"), onClick: () => this.actions.openRow(event.row) });
     menu.addSeparator();
-    menu.addItem((item) => item.setTitle(t("calendar.moveToday")).setIcon("calendar-days").onClick(() => {
+    menu.addRow({ icon: "calendar-days", label: t("calendar.moveToday"), onClick: () => {
       this.updateEventDateRange(event.row, startField, endField, this.getTodayDateKey(), event.durationDays);
-    }));
-    menu.addItem((item) => item.setTitle(t("calendar.movePrevDay")).setIcon("arrow-left").onClick(() => {
+    } });
+    menu.addRow({ icon: "arrow-left", label: t("calendar.movePrevDay"), onClick: () => {
       this.updateEventDateRange(event.row, startField, endField, addDateKeyDays(event.startDateKey, -1), event.durationDays);
-    }));
-    menu.addItem((item) => item.setTitle(t("calendar.moveNextDay")).setIcon("arrow-right").onClick(() => {
+    } });
+    menu.addRow({ icon: "arrow-right", label: t("calendar.moveNextDay"), onClick: () => {
       this.updateEventDateRange(event.row, startField, endField, addDateKeyDays(event.startDateKey, 1), event.durationDays);
-    }));
-    menu.addItem((item) => item.setTitle(t("calendar.moveToDate")).setIcon("calendar-plus").onClick(() => {
+    } });
+    menu.addRow({ icon: "calendar-plus", label: t("calendar.moveToDate"), onClick: () => {
       this.requestDateKey(event.startDateKey, (dateKey) => {
         this.updateEventDateRange(event.row, startField, endField, dateKey, event.durationDays);
       });
-    }));
+    } });
     if (endField) {
-      menu.addItem((item) => item.setTitle(t("calendar.extendOneDay")).setIcon("plus").onClick(() => {
+      menu.addRow({ icon: "plus", label: t("calendar.extendOneDay"), onClick: () => {
         void this.actions.updateEventDates?.(event.row, { startField, startDateKey: event.startDateKey, endField, endDateKey: addDateKeyDays(event.endDateKey, 1), changedEdge: "end" });
-      }));
-      menu.addItem((item) => item.setTitle(t("calendar.shortenOneDay")).setIcon("minus").setDisabled(event.durationDays <= 1).onClick(() => {
+      } });
+      menu.addRow({ icon: "minus", label: t("calendar.shortenOneDay"), disabled: event.durationDays <= 1, onClick: () => {
         void this.actions.updateEventDates?.(event.row, { startField, startDateKey: event.startDateKey, endField, endDateKey: addDateKeyDays(event.endDateKey, -1), changedEdge: "end" });
-      }));
+      } });
     }
     if (this.canTimelineReorder(config)) {
       const paths: string[] = laneEvents.map((candidate) => candidate.row.file.path).filter((path) => path !== event.row.file.path);
       menu.addSeparator();
-      menu.addItem((item) => item.setTitle(t("mobile.moveTop")).setIcon("chevrons-up").setDisabled(paths.length === 0).onClick(() => {
+      menu.addRow({ icon: "chevrons-up", label: t("mobile.moveTop"), disabled: paths.length === 0, onClick: () => {
         this.actions.reorderTimelineEvent?.(event.row, undefined, paths[0]);
-      }));
-      menu.addItem((item) => item.setTitle(t("mobile.moveBottom")).setIcon("chevrons-down").setDisabled(paths.length === 0).onClick(() => {
+      } });
+      menu.addRow({ icon: "chevrons-down", label: t("mobile.moveBottom"), disabled: paths.length === 0, onClick: () => {
         this.actions.reorderTimelineEvent?.(event.row, paths[paths.length - 1], undefined);
-      }));
+      } });
     }
     if (this.canMoveTimelineAcrossLane(config) && config.timelineGroupField) {
       menu.addSeparator();
       for (const lane of lanes) {
         if (lane.key === groupKey) continue;
-        menu.addItem((item) => item.setTitle(`${t("mobile.moveTo")} ${lane.label}`).setIcon("move-right").onClick(() => {
+        menu.addRow({ icon: "move-right", label: `${t("mobile.moveTo")} ${lane.label}`, onClick: () => {
           const beforePath: string | undefined = lane.events[lane.events.length - 1]?.row.file.path;
           void this.actions.moveTimelineEventToGroup?.(event.row, config.timelineGroupField!, groupKey, lane.key, beforePath, undefined);
-        }));
+        } });
       }
     }
-    menu.showAtMouseEvent(mouseEvent);
+    menu.showAt({ x: mouseEvent.clientX, y: mouseEvent.clientY });
   }
 
   private getTimelineDateFromPoint(eventsEl: HTMLElement, clientX: number, startDateKey: string, totalUnits: number, endDateKey?: string, scale?: TimelineScale): string {
