@@ -38,7 +38,7 @@ const STUB = join(REPO, "tools", "storybook", "obsidian-stub.mjs");
 const ELEMENT_EXTENSIONS = [
   "createDiv", "createEl", "createSpan", "createSvg", "setText", "addClass", "removeClass",
   "toggleClass", "hasClass", "setAttr", "setAttrs", "getAttr", "setCssProps", "setCssStyles",
-  "empty", "detach", "insertAfter", "appendText", "addClasses", "removeClasses",
+  "empty", "detach", "insertAfter", "appendText", "addClasses", "removeClasses", "instanceOf",
 ];
 
 // ───────────────────────────────────────────────────────────────────

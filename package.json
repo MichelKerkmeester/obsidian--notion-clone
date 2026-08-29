@@ -18,7 +18,8 @@
     "story:smoke": "node tools/storybook/smoke.mjs",
     "story:coverage": "node tools/storybook/story-coverage.mjs",
     "story:new": "node tools/storybook/new-story.mjs",
-    "storybook:coverage": "node tools/storybook/verify-coverage.mjs"
+    "storybook:coverage": "node tools/storybook/verify-coverage.mjs",
+    "storybook:placement": "node tools/storybook/verify-placement.mjs"
   },
   "keywords": [
     "obsidian",

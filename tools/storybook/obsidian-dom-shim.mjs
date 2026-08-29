@@ -91,6 +91,13 @@ const extensions = {
     this.appendChild(this.ownerDocument.createTextNode(val));
     return this;
   },
+  // Obsidian adds this so a node can be type-checked across window boundaries, where a plain
+  // `instanceof` fails because the popped-out window has its own HTMLElement. The plugin's own
+  // dom-guards route every element check through it, so without it those guards throw rather
+  // than returning false — which is how a missing shim method takes down a whole positioner.
+  instanceOf(type) {
+    return this instanceof type;
+  },
   setText(val) {
     if (typeof val === "string") this.textContent = val;
     else {

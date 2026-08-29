@@ -69,6 +69,25 @@ npm run storybook:coverage # the shim and stub still cover what the source uses
 `story:smoke` fails on a thrown error, a console error, **or a story that renders nothing** — the
 last one matters most, because a silently empty story passes any check that only looks for errors.
 
+### Measuring placement, not just markup
+
+```bash
+npm run storybook:placement
+```
+
+Everything else here checks structure. This one checks **geometry**: it builds the workspace
+Obsidian builds — a root split holding the editor with a right sidebar beside it — puts the
+plugin's container inside, runs the shipped positioner, and measures the rectangle that comes out.
+On a phone viewport it does the same for the bottom sheet.
+
+It answers the questions a string match cannot: does the popover slide under the sidebar, is a
+four-item menu rendered 520px wide, does the sheet dock to the bottom and stop at 90svh. Each check
+was confirmed to fail before it was trusted — reverting the clamp target moves the bound from
+1140px back to the full 1440px window, and that is the defect it exists to catch.
+
+It does not replace opening Obsidian. The real app has its own CSS and a workspace this only
+approximates.
+
 ### How it runs outside Obsidian
 
 The plugin builds nearly all its DOM through Obsidian's `HTMLElement` extensions — `createDiv`,
