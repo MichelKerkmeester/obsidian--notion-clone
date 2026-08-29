@@ -193,6 +193,7 @@ async function main() {
         const rel = `${scenario.group}/${scenario.id}-${device.id}-${theme}.png`;
         const dest = join(OUT, rel);
         mkdirSync(dirname(dest), { recursive: true });
+        let layout = null;
         try {
           // A scenario whose markup never settles - a running animation, a zero-size box -
           // would otherwise wait forever and take the whole run down with it, leaving the
@@ -202,6 +203,31 @@ async function main() {
           // so a wide table photographed on a phone viewport comes back full desktop width
           // and the responsive layout never appears. A viewport shot is exactly the device
           // frame the surface would occupy, and content wider than it scrolls as it would.
+          // A fingerprint of the layout, not the pixels.
+          //
+          // These captures are not byte-reproducible and cannot be made so: the same fixture, with
+          // identical geometry to the hundredth of a pixel, rasterises differently between runs.
+          // So a byte diff cannot distinguish a surface that changed from one the GPU drew
+          // slightly differently, and a review that asks a person to open every changed image
+          // spends most of its attention on noise.
+          //
+          // The geometry is stable. Recording it means "which surfaces actually moved" is
+          // answerable, and the sign-off list can be the short one.
+          layout = await page.evaluate(() => {
+            const shot = document.getElementById("shot");
+            if (!shot) return null;
+            const parts = [];
+            shot.querySelectorAll("*").forEach((el) => {
+              const r = el.getBoundingClientRect();
+              parts.push(
+                `${el.tagName}.${el.className}` +
+                `:${Math.round(r.x * 10)},${Math.round(r.y * 10)},` +
+                `${Math.round(r.width * 10)},${Math.round(r.height * 10)}`
+              );
+            });
+            return parts.join("|");
+          });
+
           // Wait for fonts before painting. Without this the same fixture photographed twice comes
           // back with two different byte streams, because a shot taken before the face resolves
           // measures fallback metrics and one taken after measures the real ones. It alternated
@@ -230,6 +256,9 @@ async function main() {
           device: device.id,
           file: `screenshots/${rel}`,
           sources: scenario.sources,
+          layoutHash: layout
+            ? createHash("sha256").update(layout).digest("hex").slice(0, 12)
+            : null,
           sourceHashes: Object.fromEntries(
             [...scenario.sources, ...CAPTURE_INPUTS].map((s) => [s, fingerprint(s)])
           ),
