@@ -1,36 +1,30 @@
-**Note Database: build the component surface system, autonomously, all phases**
+**Note Database: finish the component surface system — verified, not asserted**
 
-Repo `~/MEGA/Development/Obsidian Plugin`, `main`. Program: `specs/public/005-component-surface-system/`. **Uncommitted.**
+Repo `~/MEGA/Development/Obsidian Plugin`, `main`. Program `specs/public/005-component-surface-system/`.
 
-**WHY.** 1.3.1 passed every gate — tsc, build, 410 tests, 196 captures, Storybook, 13 geometry checks — and the operator saw **no change on device**, code confirmed present. The gates measured mechanisms, not outcomes.
+**WHY.** 1.3.1 passed every gate and changed nothing on device. Then this program shipped a **broken sheet to the operator's phone twice** — unstyled text over the view, still above the navbar — while three purpose-built checks stayed green. Do not trust a green check here.
 
-**ROOT CAUSE.** Tokens sit on nine selectors (`styles.css:19-27`). `.db-owned-menu` is the only body-portal surface missing, and `createOwnedMenu` mounts on `document.body`: **29/29 probed overlay classes compute differently there; 25/29 carry no tokens.** Storybook wraps every story in the container supplying them, so no gate could fail.
+**THE FOUR RULES THAT CAUSED EVERY FAILURE SO FAR.**
+1. **A check that does not drive the production path proves nothing.** The sheet checks called `applySheetChrome` directly and never ran `positionToolbarPopover` — the line that actually decides placement. All 196 captures render static markup and import nothing from `src/`.
+2. **Verify on device before claiming.** Fixtures showed a clean Sort panel while the phone showed it destroyed.
+3. **A fresh Opus verifies; never self-certify.** Six verifiers found: a vault-wide write added to Open with no `.catch`, 5-of-8 grid columns claimed while the comment said 8, a preset contradicting its own role contract, mobile captures identical in width to desktop, a post-fix number that was the pre-fix number, and a negative control that reads `expect(5).toBe(5)`.
+4. **Read the rule before theorising.** The sheet defect was `innerHeight - bounds.bottom` = 106px. Not z-index (Obsidian's navbar declares none — verified in `obsidian.asar`), not the portal.
 
-**READ FIRST.** `roadmap.md` → `architecture-findings.md` → `adversarial-review.md` (**17 findings on how this could still fail; fixed, but read why**) → `design-system.md`.
+**STATE — verifier-confirmed, not self-reported.**
+- `004` checkboxes — **FAIL.** 84/84 own appearance, but 10 toggles still ancestor-owned; board/gallery/table/list fixtures contain **zero checkboxes**, so the families the operator reported are measured by nothing; one hit target 37×24 (<28). Phone size split fixed (28×28 both).
+- `005` rows — 26px overflow fixed and causally isolated. **Raggedness is horizontal, not vertical** — values start at up to 13 x-positions because empty fields are skipped. Row-matrix emits classes the renderer never builds.
+- `001` — width policy only, ~15% of the phase. `openSurface` has **zero callers**; no production node carries `data-db-surface`. 15 bespoke widths remain. The three panels share an outer box and nothing else.
+- `002` — row 52px→34px, one line, all regimes hold. The removal credited for it was **not** load-bearing; the 8-column frame was.
+- `003` — sheet now `bottom: 0`, driven through the real positioner. **Unverified on device.**
+- `006` — all four affordances bind `openNote`. Peek is now undiscoverable (Cmd+Enter only).
+- `000` — 0/73 rendered surfaces lack tokens (was 70/73). **140 buildable surfaces no fixture renders.**
 
-**ORDER** — folder numbers are identifiers, not sequence; `007` is off-path research, complete. **Read `<folder>/goal.md` before starting a phase; its spec/plan/tasks/checklist/acceptance-criteria hold the detail:**
+**DO NEXT.** Fix what verifiers found, in this order: fixtures for the five unmeasured checkbox families → make `checkbox-borrowed-ancestor.test.ts` an actual control → horizontal field alignment in list rows → wire `openSurface` or delete it → 008 Part B release.
 
-1. `009-live-verification` — **the independent instrument.** `000` would otherwise measure its own harness repair; harness and live numbers that disagree block the handoff.
-2. `000-surface-contract-and-truthful-harness` — contract + honest harness. **Blocks all.**
-3. `004-checkbox-ownership` — small and visible, **tests the doctrine cheaply**
-4. `005-content-row-rhythm` — seven view types; no overlay dependency
-5. `001-overlay-placement-and-menu-language` — 33 sites, 14 row grammars
-6. `002-properties-panel` — 8 children into 7 grid tracks
-7. `003-mobile-sheet-presentation` — **navbar overlay needs a portal, not a z-index**
-8. `006-record-open-target` — 20 affordances, 6 paths, 4 surfaces
-9. `008-integration-and-release-observability` — replay harness **before `001`**, at every lane handoff; release last; only phase that may delete compat paths
+**EVERY CLAIM NEEDS.** A check that drives the production code path; a number with a threshold, shown failing first; an image a person opened; a fresh-Opus verdict; operator confirmation on device. Missing any one → the criterion stays open.
 
-**ACCEPTANCE DOCTRINE — the whole point.** A criterion is invalid unless measured **at the production mount point**, a number or hit test with a threshold, **proven to fail on today's tree with the value recorded**, and asserted by a harness that can distinguish — plus the five stateful dimensions in parent §6. Class names, call counts and existence checks are **banned**: every 1.3.1 criterion was that shape and passed. **A blank "today" cell blocks a phase from starting.** `vitest` has no jsdom — its 410 tests evidence **no** criterion.
+**GATE.** `SURFACE_PHASE=<phase> npm run gate` (13 checks). `npm run replay` re-asserts landed results. Lane: `tools/lane/css-lane.json`, one phase at a time, record every edit.
 
-**CSS LANE — ENFORCED, NOT ASSUMED.** `styles.css` 19,261 lines, never split, fingerprinted by all 196 captures. **One phase holds it at a time**, with a recorded owner and a check that fails when a phase without the lane edits it — `004` and `005` both unblock after `000`, so convention alone permits concurrent edits. Release needs a full recapture **and a per-PNG sign-off**; `screenshots:verify` never opens an image.
+**TRAPS.** A pipe makes `$?` the pipe's status. A changed file hash proves *a* change, not the intended one — target by rule, then assert the property is gone. `git checkout --` silently does nothing for untracked files. Captures are not byte-reproducible; compare `layoutHash`.
 
-**MODELS.** Implementation → GPT-5.6 LUNA xhigh fast (`cli-codex`/`cli-pi`). Visual → GLM-5.3 Flash highest thinking via `cli-pi` + OpenRouter. Verification → fresh Opus, **claude2** first (`CLAUDE_CONFIG_DIR=~/.claude-account2`), then the current account. Read `cli-<x>/SKILL.md` **before** any dispatch — codex has **no `--reasoning-effort` flag**, use `-c model_reasoning_effort=`.
-
-**TRAPS.**
-- A pipe makes `$?` the pipe's status — it hid three failures. Use `cmd >log 2>&1; echo $?`.
-- `validate.sh` needs the hub cwd and a fresh `dist`, else it prints ERROR and exits 0.
-- Deep-loop runs **from the plugin worktree**, never while an agent edits that tree.
-- **A CI check asserts the defect** (`verify-placement.mjs`, widthless caller > 320px). `000` inverts it first; assume others exist.
-- AnyType/AppFlowy in `external/`: behaviour only, never copy code, CSS or tokens.
-
-**DONE MEANS** the operator confirms on device. Gates have proven insufficient.
+**DONE MEANS** the operator confirms on device.

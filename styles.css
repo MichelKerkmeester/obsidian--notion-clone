@@ -17860,9 +17860,18 @@ img.db-text-md-image {
    as on desktop. The coarse-pointer fallback switched it to in-flow, so the
    header checkbox (no move handle) fell out of line with row checkboxes (each
    preceded by a 24px move handle) and the pair overflowed the 48px column. */
+/* Pinning the select checkbox to the right on a phone keeps the header and the rows aligned, and
+   applies to every checkbox in this cell. */
 .is-phone .note-database-container .db-table .db-select-col .db-select-inner input[type="checkbox"] {
   position: absolute;
   right: 6px;
+}
+
+/* The size override does NOT apply to an owned checkbox.
+   This block used to carry both, and its six-level specificity beat the unconditional
+   coarse-pointer minimum — so the table's checkbox painted 16px while the list's painted 28px, one
+   declared role at two sizes on the same phone. The pin is still wanted; the shrink is not. */
+.is-phone .note-database-container .db-table .db-select-col .db-select-inner input[type="checkbox"]:not(.db-checkbox) {
   min-width: 0;
   min-height: 0;
 }
