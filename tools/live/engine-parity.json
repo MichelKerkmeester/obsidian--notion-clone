@@ -1,0 +1,264 @@
+{
+  "measuredAt": "2026-08-29T19:05:53.893Z",
+  "inputs": {
+    "styles.css": "46054fb94260",
+    "tools/live/engine-parity.mjs": "0264fc2e3d90",
+    "tools/screenshots/scenarios.mjs": "1395f2dacbfd"
+  },
+  "totals": {
+    "fixtures": 49,
+    "differences": 31
+  },
+  "differences": [
+    {
+      "scenarioId": "add-view-popover",
+      "selector": "select",
+      "index": 0,
+      "notes": [
+        "radius 4px vs 5px",
+        "height 32 vs 22"
+      ]
+    },
+    {
+      "scenarioId": "dropdown-field",
+      "selector": "button",
+      "index": 0,
+      "notes": [
+        "background color(srgb 0 0 0 / 0.0310588) vs color(srgb 0 0 0 / 0.0324)",
+        "width 1094 vs 1102"
+      ]
+    },
+    {
+      "scenarioId": "dropdown-field",
+      "selector": "button",
+      "index": 1,
+      "notes": [
+        "width 1094 vs 1102"
+      ]
+    },
+    {
+      "scenarioId": "dropdown-field",
+      "selector": "button",
+      "index": 2,
+      "notes": [
+        "width 1094 vs 1102"
+      ]
+    },
+    {
+      "scenarioId": "calendar-month-view",
+      "selector": "button",
+      "index": 16,
+      "notes": [
+        "width 472.58 vs 476"
+      ]
+    },
+    {
+      "scenarioId": "calendar-month-view",
+      "selector": "button",
+      "index": 25,
+      "notes": [
+        "width 790.3 vs 796"
+      ]
+    },
+    {
+      "scenarioId": "calendar-month-view",
+      "selector": "button",
+      "index": 36,
+      "notes": [
+        "width 790.3 vs 796"
+      ]
+    },
+    {
+      "scenarioId": "calendar-month-view",
+      "selector": "button",
+      "index": 46,
+      "notes": [
+        "width 472.58 vs 476"
+      ]
+    },
+    {
+      "scenarioId": "calendar-month-view",
+      "selector": "button",
+      "index": 54,
+      "notes": [
+        "width 631.42 vs 636"
+      ]
+    },
+    {
+      "scenarioId": "calendar-week-time-grid",
+      "selector": "button",
+      "index": 22,
+      "notes": [
+        "width 446.3 vs 449.7"
+      ]
+    },
+    {
+      "scenarioId": "calendar-toolbar-options",
+      "selector": "button",
+      "index": 0,
+      "notes": [
+        "width 520 vs 512"
+      ]
+    },
+    {
+      "scenarioId": "calendar-toolbar-options",
+      "selector": "button",
+      "index": 1,
+      "notes": [
+        "width 520 vs 512"
+      ]
+    },
+    {
+      "scenarioId": "calendar-toolbar-options",
+      "selector": "button",
+      "index": 2,
+      "notes": [
+        "width 520 vs 512"
+      ]
+    },
+    {
+      "scenarioId": "calendar-toolbar-options",
+      "selector": "button",
+      "index": 3,
+      "notes": [
+        "width 520 vs 512"
+      ]
+    },
+    {
+      "scenarioId": "calendar-toolbar-options",
+      "selector": "button",
+      "index": 4,
+      "notes": [
+        "width 520 vs 512"
+      ]
+    },
+    {
+      "scenarioId": "calendar-toolbar-options",
+      "selector": "button",
+      "index": 5,
+      "notes": [
+        "width 520 vs 512"
+      ]
+    },
+    {
+      "scenarioId": "calendar-toolbar-options",
+      "selector": "button",
+      "index": 6,
+      "notes": [
+        "width 520 vs 512"
+      ]
+    },
+    {
+      "scenarioId": "calendar-toolbar-options",
+      "selector": "button",
+      "index": 7,
+      "notes": [
+        "width 520 vs 512"
+      ]
+    },
+    {
+      "scenarioId": "chrome-chart-options-popover",
+      "selector": "input[type=\"text\"]",
+      "index": 0,
+      "notes": [
+        "width 421.3 vs 413.3"
+      ]
+    },
+    {
+      "scenarioId": "chrome-chart-options-popover",
+      "selector": "button",
+      "index": 0,
+      "notes": [
+        "width 520 vs 512"
+      ]
+    },
+    {
+      "scenarioId": "chrome-chart-options-popover",
+      "selector": "button",
+      "index": 1,
+      "notes": [
+        "width 520 vs 512"
+      ]
+    },
+    {
+      "scenarioId": "chrome-chart-options-popover",
+      "selector": "button",
+      "index": 2,
+      "notes": [
+        "width 520 vs 512"
+      ]
+    },
+    {
+      "scenarioId": "chrome-chart-options-popover",
+      "selector": "button",
+      "index": 3,
+      "notes": [
+        "width 520 vs 512"
+      ]
+    },
+    {
+      "scenarioId": "chrome-chart-options-popover",
+      "selector": "button",
+      "index": 4,
+      "notes": [
+        "width 520 vs 512"
+      ]
+    },
+    {
+      "scenarioId": "chrome-chart-options-popover",
+      "selector": "button",
+      "index": 5,
+      "notes": [
+        "width 520 vs 512"
+      ]
+    },
+    {
+      "scenarioId": "chrome-chart-options-popover",
+      "selector": "button",
+      "index": 6,
+      "notes": [
+        "width 520 vs 512"
+      ]
+    },
+    {
+      "scenarioId": "chrome-chart-options-popover",
+      "selector": "button",
+      "index": 7,
+      "notes": [
+        "width 520 vs 512"
+      ]
+    },
+    {
+      "scenarioId": "chrome-chart-options-popover",
+      "selector": "button",
+      "index": 8,
+      "notes": [
+        "width 520 vs 512"
+      ]
+    },
+    {
+      "scenarioId": "chrome-chart-options-popover",
+      "selector": "button",
+      "index": 9,
+      "notes": [
+        "width 520 vs 512"
+      ]
+    },
+    {
+      "scenarioId": "field-date-value-picker",
+      "selector": "button",
+      "index": 0,
+      "notes": [
+        "width 1112 vs 1120"
+      ]
+    },
+    {
+      "scenarioId": "field-date-value-picker-datetime",
+      "selector": "button",
+      "index": 0,
+      "notes": [
+        "width 1112 vs 1120"
+      ]
+    }
+  ]
+}

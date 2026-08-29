@@ -26,7 +26,8 @@
     "lint:tools": "eslint \"tools/**/*.mjs\"",
     "screenshots:scan-pinned": "node tools/screenshots/scan-pinned-values.mjs",
     "gate": "node tools/gate.mjs",
-    "lane:check": "node tools/lane/check-lane.mjs"
+    "lane:check": "node tools/lane/check-lane.mjs",
+    "engine:parity": "node tools/live/engine-parity.mjs"
   },
   "keywords": [
     "obsidian",

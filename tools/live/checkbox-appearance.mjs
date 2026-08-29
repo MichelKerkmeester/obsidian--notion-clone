@@ -80,7 +80,9 @@ if (!CHROME) {
 // ───────────────────────────────────────────────────────────────────
 
 const browser = await chromium.launch({ executablePath: CHROME });
-const page = await browser.newPage({ viewport: { width: 1200, height: 900 } });
+// Without this, a checked checkbox read during its 120ms transition reports a background that is
+// almost transparent — which looks exactly like a control that never got its style.
+const page = await browser.newPage({ viewport: { width: 1200, height: 900 }, reducedMotion: "reduce" });
 const styles = readFileSync(join(REPO, "styles.css"), "utf8");
 const theme = readFileSync(join(REPO, "tools/screenshots/theme.css"), "utf8");
 const runtime = readFileSync(join(REPO, "tools/screenshots/runtime-vars.css"), "utf8");

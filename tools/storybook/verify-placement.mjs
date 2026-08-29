@@ -103,7 +103,9 @@ const page_html = `<!doctype html><html><head>
 // ───────────────────────────────────────────────────────────────────
 
 const browser = await chromium.launch({ executablePath: CHROME });
-const page = await browser.newPage({ viewport: VIEWPORT });
+// Transitions are disabled the same way the capture harness does it: a geometry number read
+// mid-transition is an animation frame, not a layout.
+const page = await browser.newPage({ viewport: VIEWPORT, reducedMotion: "reduce" });
 await page.setContent(page_html);
 // The desktop checks used to run against a page with no stylesheet, so they measured a document
 // that does not contain the cascade the defects live in — the same structural blindness as
@@ -228,6 +230,7 @@ await page.close();
 // ───────────────────────────────────────────────────────────────────
 
 const phone = await browser.newPage({
+  reducedMotion: "reduce",
   viewport: { width: 390, height: 844 },
   hasTouch: true,
   isMobile: true,

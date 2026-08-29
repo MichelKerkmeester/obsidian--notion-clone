@@ -160,7 +160,12 @@ async function main() {
     for (const scenario of list) {
       for (const device of devices) {
       for (const theme of themes) {
+        // Reduced motion is emulated, not incidental. Several plugin properties are transitioned,
+        // so a capture taken before they settle records an animation frame — and the same page
+        // captured twice then produces two different images. The stylesheet already disables
+        // transitions under prefers-reduced-motion, so asking for it makes every shot deterministic.
         const page = await browser.newPage({
+          reducedMotion: "reduce",
           viewport: { width: device.width, height: device.height },
           deviceScaleFactor: 2,
           isMobile: device.id === "mobile",
@@ -197,6 +202,11 @@ async function main() {
           // so a wide table photographed on a phone viewport comes back full desktop width
           // and the responsive layout never appears. A viewport shot is exactly the device
           // frame the surface would occupy, and content wider than it scrolls as it would.
+          // Wait for fonts before painting. Without this the same fixture photographed twice comes
+          // back with two different byte streams, because a shot taken before the face resolves
+          // measures fallback metrics and one taken after measures the real ones. It alternated
+          // run to run, which is worse than being wrong consistently: a diff then means nothing.
+          await page.evaluate(() => document.fonts.ready);
           if (captureMode(scenario) === "element") {
             await target.screenshot({
               path: dest, timeout: 15000, animations: "disabled", omitBackground: true,
