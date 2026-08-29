@@ -60,7 +60,33 @@ tools/screenshots/
 
 ---
 
-## 4. RELATED
+## 4. WHAT THESE CAPTURES CANNOT SHOW
+
+Every shot is rendered by Chrome. Obsidian on iOS and iPadOS renders with WebKit, and the two
+disagree about what an unstyled control looks like — most sharply for form controls.
+
+The case that proved it: a checkbox with no `appearance` rule renders as a **square** box in Chrome
+(measured, `border-radius: 0px`) and a **round** one in WebKit. So when every checkbox in this
+plugin was falling back to the platform box, these captures showed neat square boxes and the user
+saw circles on their phone. The harness was not wrong about what it rendered. It was rendering a
+different engine's idea of the same markup.
+
+That makes a whole class of defect invisible here by construction: **anything whose symptom is a
+platform default differing between engines.** Native form controls, focus rings, scrollbars, date
+inputs, and `-webkit-` prefixed behaviour all sit in that class.
+
+A capture is therefore evidence about layout, spacing, colour and composition. It is not evidence
+that a control looks right on the device. For that, either the value is asserted directly — an
+unconditional `appearance: none` measured at the mount point, which is engine-independent — or a
+person opens the app on the hardware.
+
+`playwright-core` exposes a `webkit` engine and no WebKit build is installed. Installing one would
+close this gap and is the obvious next step; it is a dependency acquisition and needs a decision
+rather than a drive-by.
+
+---
+
+## 5. RELATED
 
 - [`CODE.md`](./CODE.md) — the code map for this folder.
 - [`scenarios/README.md`](./scenarios/README.md) — the scenario modules.
