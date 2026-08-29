@@ -1,7 +1,7 @@
 {
-  "holder": "003-mobile-sheet-presentation",
-  "acquiredAt": "2026-08-29T19:29:13.243Z",
-  "baselineHash": "a535fa1bf6fd",
+  "holder": "002-properties-panel",
+  "acquiredAt": "2026-08-29T19:34:47.628Z",
+  "baselineHash": "09c8bb30075c",
   "baselineCommit": "f4319e3e768a",
   "history": [
     {
@@ -55,6 +55,19 @@
       "phase": "003-mobile-sheet-presentation",
       "at": "2026-08-29T19:29:13.243Z",
       "hash": "a535fa1bf6fd"
+    },
+    {
+      "event": "release",
+      "phase": "003-mobile-sheet-presentation",
+      "at": "2026-08-29T19:34:47.628Z",
+      "hash": "09c8bb30075c",
+      "note": "sheet layer landed; hit test asserted in the gate"
+    },
+    {
+      "event": "acquire",
+      "phase": "002-properties-panel",
+      "at": "2026-08-29T19:34:47.628Z",
+      "hash": "09c8bb30075c"
     }
   ],
   "outstanding": [

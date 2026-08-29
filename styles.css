@@ -11169,15 +11169,33 @@ body.is-phone .note-database-container .db-record-detail-panel {
    One row per property: drag, icon, name, wrap, move up, move down, edit, hide.
 ─────────────────────────────────────────────────────────────── */
 
+/* Eight columns, each claimed by name, so hiding a child leaves its column empty instead of
+   shifting every child after it one position left.
+
+   The row emits eight children, and which of them are visible depends on two independent things:
+   the drag handle is desktop-only, the reorder arrows are phone-only, and read-only mode drops the
+   edit and delete buttons entirely. With a positional track list every one of those combinations
+   lands the children somewhere different, which is how the property name ended up on an `auto`
+   track while the type icon took the `minmax(96px, 1fr)` intended for the name — the name then had
+   only its content width and clipped.
+
+   The columns for the two platform-specific children collapse to zero where they do not apply, so
+   the same eight-column frame describes every regime. */
 .note-database-container .db-column-manager-row {
   display: grid;
-  grid-template-columns: 18px 20px 18px minmax(120px, 1fr) auto auto auto;
+  grid-template-columns: 18px 0 20px 18px minmax(120px, 1fr) auto auto auto;
   align-items: center;
   gap: 6px;
   min-height: 30px;
   border-radius: var(--db-radius-lg);
   padding: 2px 4px;
 }
+
+.note-database-container .db-column-manager-row > .db-column-drag { grid-column: 1; }
+.note-database-container .db-column-manager-row > .db-mobile-reorder-controls { grid-column: 2; }
+.note-database-container .db-column-manager-row > .db-checkbox { grid-column: 3; }
+.note-database-container .db-column-manager-row > .db-column-type { grid-column: 4; }
+.note-database-container .db-column-manager-row > .db-column-name-wrap { grid-column: 5; }
 
 .note-database-container .db-column-manager-row:hover {
   background: var(--background-modifier-hover);
@@ -16890,8 +16908,10 @@ body.is-mobile .note-database-container .db-calendar-month-time {
   display: inline-flex;
 }
 
+/* The drag handle is hidden on a phone and the reorder arrows take its place, so column 1
+   collapses and column 2 opens. Same frame, same order, one swap. */
 .is-phone .note-database-container .db-column-manager-row {
-  grid-template-columns: 18px auto 20px 18px minmax(120px, 1fr) auto auto auto;
+  grid-template-columns: 0 auto 20px 18px minmax(120px, 1fr) auto auto auto;
 }
 
 .is-phone .note-database-settings .setting-group {
@@ -17006,8 +17026,12 @@ body.is-mobile .note-database-container .db-calendar-month-time {
   grid-template-columns: auto auto minmax(0, 1fr) 16px;
 }
 
+/* This block used to declare a different track ORDER from the one above it, and being later it
+   won — putting minmax(96px, 1fr) on whatever child happened to land third. With the drag handle
+   hidden that was the type icon, and the property name fell onto an auto track and clipped. The
+   order now matches the frame; the phone difference is which column is collapsed, nothing else. */
 .is-phone .note-database-container .db-column-manager-row {
-  grid-template-columns: auto 20px minmax(96px, 1fr) auto auto auto auto auto;
+  grid-template-columns: 0 auto 20px 18px minmax(96px, 1fr) auto auto auto;
 }
 
 .is-phone .note-database-modal .db-status-option-row {
@@ -18787,8 +18811,13 @@ body.is-tablet .note-database-container .db-record-open-btn {
   background: var(--background-modifier-hover);
 }
 
+/* Mobile reorder arrows are for phones, and this block is not phone-guarded.
+   An earlier rule hides them; the phone rule shows them under `.is-phone`, which is right. This
+   one showed them again for everyone, later in the file and at the same specificity, so it won on
+   desktop and put an eighth child into a seven-track row — 52px tall against a declared 30px
+   minimum, with the delete button wrapped onto an implicit second row. The gap survives because
+   the phone rule needs it; the display does not. */
 .note-database-container .db-mobile-reorder-controls {
-  display: inline-flex;
   gap: 2px;
 }
 
