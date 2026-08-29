@@ -7,8 +7,16 @@
 // duplicate name: the folder prefix only appears to disambiguate, so a title
 // that is unique renders differently from one that is not.
 
+// ───────────────────────────────────────────────────────────────────
+// 1. IMPORTS
+// ───────────────────────────────────────────────────────────────────
+
 import type { Meta, StoryObj } from "@storybook/html-vite";
 import { renderInlineFileTitle, renderStackedFileTitle, type FileTitleDisplay } from "./file-title-display";
+
+// ───────────────────────────────────────────────────────────────────
+// 2. CATALOGUE ENTRY
+// ───────────────────────────────────────────────────────────────────
 
 const meta: Meta = { title: "Fields/File title" };
 export default meta;
@@ -54,6 +62,10 @@ function variants(render: (p: HTMLElement, i: FileTitleDisplay, always?: boolean
   }
   return col;
 }
+
+// ───────────────────────────────────────────────────────────────────
+// 3. STORIES
+// ───────────────────────────────────────────────────────────────────
 
 export const Inline: Story = { render: () => variants(renderInlineFileTitle) };
 export const Stacked: Story = { render: () => variants(renderStackedFileTitle) };

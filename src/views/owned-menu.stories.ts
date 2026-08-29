@@ -7,13 +7,25 @@
 // ours, which retires the accesses to MenuItem's undocumented .dom field that
 // would have broken silently had Obsidian renamed it.
 
+// ───────────────────────────────────────────────────────────────────
+// 1. IMPORTS
+// ───────────────────────────────────────────────────────────────────
+
 import type { Meta, StoryObj } from "@storybook/html-vite";
 import { createOwnedMenu } from "./owned-menu";
+
+// ───────────────────────────────────────────────────────────────────
+// 2. CATALOGUE ENTRY
+// ───────────────────────────────────────────────────────────────────
 
 const meta: Meta = { title: "Menus/Owned menu" };
 export default meta;
 
 type Story = StoryObj;
+
+// ───────────────────────────────────────────────────────────────────
+// 3. STORIES
+// ───────────────────────────────────────────────────────────────────
 
 /**
  * Rendered in place rather than at a pointer position.

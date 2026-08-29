@@ -7,8 +7,16 @@
 // filled must occupy the same height, or a column of them ripples as values
 // are entered — which is the defect this surface has had before.
 
+// ───────────────────────────────────────────────────────────────────
+// 1. IMPORTS
+// ───────────────────────────────────────────────────────────────────
+
 import type { Meta, StoryObj } from "@storybook/html-vite";
 import { renderDateValuePicker } from "./date-value-picker";
+
+// ───────────────────────────────────────────────────────────────────
+// 2. CATALOGUE ENTRY
+// ───────────────────────────────────────────────────────────────────
 
 const meta: Meta = { title: "Fields/Date value picker" };
 export default meta;
@@ -31,6 +39,10 @@ function pick(caption: string, options: Record<string, unknown>): HTMLElement {
   cell.append(host, note);
   return cell;
 }
+
+// ───────────────────────────────────────────────────────────────────
+// 3. STORIES
+// ───────────────────────────────────────────────────────────────────
 
 /** Empty, dated, timed and disabled — all four should share a baseline. */
 export const States: Story = {

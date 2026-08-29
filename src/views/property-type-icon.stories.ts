@@ -8,9 +8,17 @@
 // only way to catch two types sharing a glyph, or one drawn at a different
 // optical weight — neither is visible when they appear one at a time.
 
+// ───────────────────────────────────────────────────────────────────
+// 1. IMPORTS
+// ───────────────────────────────────────────────────────────────────
+
 import type { Meta, StoryObj } from "@storybook/html-vite";
 import type { ColumnDef } from "../data/types";
 import { renderPropertyTypeIcon } from "./property-type-icon";
+
+// ───────────────────────────────────────────────────────────────────
+// 2. CATALOGUE ENTRY
+// ───────────────────────────────────────────────────────────────────
 
 const meta: Meta = { title: "Fields/Property type icons" };
 export default meta;
@@ -21,6 +29,10 @@ const TYPES: ColumnDef["type"][] = [
   "text", "number", "date", "datetime", "currency", "select", "multi-select",
   "status", "checkbox", "computed", "relation", "rollup", "files",
 ];
+
+// ───────────────────────────────────────────────────────────────────
+// 3. STORIES
+// ───────────────────────────────────────────────────────────────────
 
 /** The full vocabulary, labelled, so a duplicate or an odd weight is obvious. */
 export const AllTypes: Story = {

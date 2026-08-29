@@ -7,13 +7,25 @@
 // drifted apart — different alignment, inconsistent icons, no shared trailing
 // treatment — and this is where that is visible without launching a vault.
 
+// ───────────────────────────────────────────────────────────────────
+// 1. IMPORTS
+// ───────────────────────────────────────────────────────────────────
+
 import type { Meta, StoryObj } from "@storybook/html-vite";
 import { createDropdownField } from "./dropdown-field";
+
+// ───────────────────────────────────────────────────────────────────
+// 2. CATALOGUE ENTRY
+// ───────────────────────────────────────────────────────────────────
 
 const meta: Meta = { title: "Fields/Dropdown field" };
 export default meta;
 
 type Story = StoryObj;
+
+// ───────────────────────────────────────────────────────────────────
+// 3. STORIES
+// ───────────────────────────────────────────────────────────────────
 
 /** Row anatomy: leading icon, label, trailing state. */
 export const Default: Story = {

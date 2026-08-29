@@ -7,8 +7,16 @@
 // surrounding text. The dark-theme contrast is the case worth looking at, and
 // the theme switch here is the fastest way to check it.
 
+// ───────────────────────────────────────────────────────────────────
+// 1. IMPORTS
+// ───────────────────────────────────────────────────────────────────
+
 import type { Meta, StoryObj } from "@storybook/html-vite";
 import { renderSearchHighlightedText } from "./search-highlight";
+
+// ───────────────────────────────────────────────────────────────────
+// 2. CATALOGUE ENTRY
+// ───────────────────────────────────────────────────────────────────
 
 const meta: Meta = { title: "Chrome/Search highlight" };
 export default meta;
@@ -26,6 +34,10 @@ function line(text: string, query: string, caption: string): HTMLElement {
   wrap.append(host, note);
   return wrap;
 }
+
+// ───────────────────────────────────────────────────────────────────
+// 3. STORIES
+// ───────────────────────────────────────────────────────────────────
 
 /** Single term, several terms, and a query matching nothing. */
 export const Matches: Story = {

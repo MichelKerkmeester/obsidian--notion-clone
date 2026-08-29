@@ -7,8 +7,16 @@
 // together is the only practical way to check they share a baseline and a
 // vertical rhythm — in a real table they never appear side by side.
 
+// ───────────────────────────────────────────────────────────────────
+// 1. IMPORTS
+// ───────────────────────────────────────────────────────────────────
+
 import type { Meta, StoryObj } from "@storybook/html-vite";
 import { renderProgress, renderProgressRing, renderRating } from "./number-display-renderer";
+
+// ───────────────────────────────────────────────────────────────────
+// 2. CATALOGUE ENTRY
+// ───────────────────────────────────────────────────────────────────
 
 const meta: Meta = { title: "Fields/Number display" };
 export default meta;
@@ -26,6 +34,10 @@ function strip(label: string, build: (host: HTMLElement) => void): HTMLElement {
   wrap.append(host, caption);
   return wrap;
 }
+
+// ───────────────────────────────────────────────────────────────────
+// 3. STORIES
+// ───────────────────────────────────────────────────────────────────
 
 /** Star, outline and emoji variants at the same value, so weight differences show. */
 export const Rating: Story = {

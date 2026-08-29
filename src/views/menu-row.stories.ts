@@ -7,8 +7,16 @@
 // that already read correctly. Put it beside the dropdown story: they should
 // look like the same family, which was the original complaint.
 
+// ───────────────────────────────────────────────────────────────────
+// 1. IMPORTS
+// ───────────────────────────────────────────────────────────────────
+
 import type { Meta, StoryObj } from "@storybook/html-vite";
 import { createMenuRow, createMenuSection, createMenuSeparator } from "./menu-row";
+
+// ───────────────────────────────────────────────────────────────────
+// 2. CATALOGUE ENTRY
+// ───────────────────────────────────────────────────────────────────
 
 const meta: Meta = {
   title: "Menus/Menu row",
@@ -25,6 +33,10 @@ const meta: Meta = {
 export default meta;
 
 type Story = StoryObj;
+
+// ───────────────────────────────────────────────────────────────────
+// 3. STORIES
+// ───────────────────────────────────────────────────────────────────
 
 /** Every row state at once, so drift between them is visible rather than inferred. */
 export const Grammar: Story = {

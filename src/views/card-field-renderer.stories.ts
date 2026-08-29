@@ -13,10 +13,18 @@
 // They are supplied as inert placeholders, so if that branch ever starts
 // reading them the story fails loudly instead of quietly rendering a fiction.
 
+// ───────────────────────────────────────────────────────────────────
+// 1. IMPORTS
+// ───────────────────────────────────────────────────────────────────
+
 import type { App } from "obsidian";
 import type { Meta, StoryObj } from "@storybook/html-vite";
 import type { ColumnDef, RowData } from "../data/types";
 import { renderCardFieldValue } from "./card-field-renderer";
+
+// ───────────────────────────────────────────────────────────────────
+// 2. CATALOGUE ENTRY
+// ───────────────────────────────────────────────────────────────────
 
 const meta: Meta = { title: "Fields/Checkbox" };
 export default meta;
@@ -42,6 +50,10 @@ function cell(value: boolean, readOnly: boolean, caption: string): HTMLElement {
   wrap.append(valueEl, label);
   return wrap;
 }
+
+// ───────────────────────────────────────────────────────────────────
+// 3. STORIES
+// ───────────────────────────────────────────────────────────────────
 
 /**
  * Square, never a radio.

@@ -55,22 +55,38 @@ if (exports.length === 0) {
 const title = stem.replace(/-/g, " ").replace(/^./, (c) => c.toUpperCase());
 const primary = exports[0];
 
-const template = `// ───────────────────────────────────────────────────────────────────
+// The numbered box-drawing sections are not decoration: the comment scanner requires them on every
+// file under src and tools, so a template without them emits code that fails the gate on arrival.
+const RULE = "// " + "\u2500".repeat(67);
+
+const template = `${RULE}
 // MODULE:    ${stem}.stories
 // COMPONENT: catalogue entries for ${title.toLowerCase()}
-// ───────────────────────────────────────────────────────────────────
+${RULE}
 //
 // TODO: say what a reviewer should be checking here, not what the code does.
 // The useful stories are the ones showing states that never appear together
 // in the app — empty beside full, enabled beside disabled.
 
+${RULE}
+// 1. IMPORTS
+${RULE}
+
 import type { Meta, StoryObj } from "@storybook/html-vite";
 import { ${exports.join(", ")} } from "./${stem}";
+
+${RULE}
+// 2. CATALOGUE ENTRY
+${RULE}
 
 const meta: Meta = { title: "TODO-section/${title}" };
 export default meta;
 
 type Story = StoryObj;
+
+${RULE}
+// 3. STORIES
+${RULE}
 
 export const Default: Story = {
   render: () => {
