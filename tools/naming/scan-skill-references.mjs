@@ -22,7 +22,7 @@
 // 1. IMPORTS
 // ───────────────────────────────────────────────────────────────────
 
-import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 

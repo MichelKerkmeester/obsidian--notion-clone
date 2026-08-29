@@ -26,7 +26,8 @@
 // 1. IMPORTS
 // ───────────────────────────────────────────────────────────────────
 
-import { readFileSync, writeFileSync } from "node:fs";
+import { readFileSync } from "node:fs";
+import { stamp } from "./evidence.mjs";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -217,11 +218,12 @@ if (process.argv.includes("--json")) {
   if (shown.length > 12) console.log(`\n    ... and ${shown.length - 12} more`);
 }
 
-writeFileSync(OUT, JSON.stringify({
-  measuredAt: new Date().toISOString(),
+// See token-census for why: a conflict list is only true of the stylesheet it was read from, and
+// this program has several phases editing that one file in turn.
+stamp("tools/live/cascade-audit.json", {
   sheetLines: css.split("\n").length,
   totals: { rules: rules.length, duplicatedSelectors: duplicated.length, conflicts: conflicts.length },
   duplicated,
   conflicts,
-}, null, 2));
+}, ["styles.css", "tools/live/cascade-audit.mjs"]);
 console.log(`\nrecorded: ${OUT.replace(REPO + "/", "")}`);

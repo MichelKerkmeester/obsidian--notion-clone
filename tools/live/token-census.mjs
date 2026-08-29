@@ -23,7 +23,8 @@
 // 1. IMPORTS
 // ───────────────────────────────────────────────────────────────────
 
-import { existsSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
+import { stamp } from "./evidence.mjs";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { chromium } from "playwright-core";
@@ -148,8 +149,9 @@ if (process.argv.includes("--json")) {
   }
 }
 
-writeFileSync(OUT, JSON.stringify({
-  measuredAt: new Date().toISOString(),
+// Stamped with the fingerprints of what it was measured from. A later phase editing the stylesheet
+// falsifies these numbers, and a stale census is worse than none: it looks like evidence.
+stamp("tools/live/token-census.json", {
   tokenRoots,
   totals: {
     classes: rows.length,
@@ -157,5 +159,5 @@ writeFileSync(OUT, JSON.stringify({
     tokenlessOnBody: tokenless.length,
   },
   rows,
-}, null, 2));
+}, ["styles.css", "tools/live/token-census.mjs"]);
 console.log(`\nrecorded: ${OUT.replace(REPO + "/", "")}`);

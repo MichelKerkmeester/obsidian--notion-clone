@@ -1,5 +1,9 @@
 {
-  "measuredAt": "2026-08-29T17:27:40.351Z",
+  "measuredAt": "2026-08-29T17:36:31.288Z",
+  "inputs": {
+    "styles.css": "c4906525fe85",
+    "tools/live/token-census.mjs": "f20e5a646c11"
+  },
   "tokenRoots": [
     ".note-database-container",
     ".note-database-modal",

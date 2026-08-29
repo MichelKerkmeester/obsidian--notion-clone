@@ -113,7 +113,10 @@ await page.addStyleTag({ content: readFileSync(join(REPO, "styles.css"), "utf8")
 await page.addScriptTag({ content: shimJs + "\ninstallObsidianDomShim(globalThis);" });
 await page.addScriptTag({ content: positionerJs });
 
-const results = await page.evaluate(({ sidebar }) => {
+// No arguments: every number below is measured off the rendered page. Passing the sidebar width in
+// as a constant would let a check agree with the harness's own idea of the layout rather than with
+// what the browser actually laid out.
+const results = await page.evaluate(() => {
   const out = [];
   const { positionToolbarPopover, getVisiblePopoverBounds, COMPACT_MENU_POPOVER } = globalThis.__place;
   const container = document.querySelector(".note-database-container");
@@ -216,7 +219,7 @@ const results = await page.evaluate(({ sidebar }) => {
   tall.remove();
 
   return out;
-}, { sidebar: SIDEBAR });
+});
 
 await page.close();
 
