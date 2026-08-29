@@ -1,0 +1,32 @@
+{
+  "allow": [
+    {
+      "path": "cell-renderer.ts",
+      "reason": "Its only parent-taking export resolves an external link through the vault and the metadata cache, which the catalogue stub deliberately refuses. Cell appearance is covered by card-field-renderer and number-display-renderer instead."
+    },
+    {
+      "path": "file-field-renderer.ts",
+      "reason": "Every export resolves notes, tags or links through the vault. A fixture deep enough to render one would be a second implementation of file resolution, which is how the screenshot harness already went wrong."
+    },
+    {
+      "path": "inline-markdown-renderer.ts",
+      "reason": "Delegates to Obsidian's MarkdownRenderer, which has no standalone build. A story could only demonstrate the stub, not the rendering anyone cares about."
+    },
+    {
+      "path": "record-icon-renderer.ts",
+      "reason": "Icons may be backed by vault files, so rendering one outside Obsidian shows the fallback path rather than what ships."
+    },
+    {
+      "path": "relation-value-renderer.ts",
+      "reason": "A relation value is defined by the notes it points at; without the vault there is nothing to render but an empty shell."
+    },
+    {
+      "path": "group-label-renderer.ts",
+      "reason": "Needs a full ViewConfig including schema, computed fields and grouping state. The fixture would be larger than the component and would drift from the real config shape, which makes it worse than no story."
+    },
+    {
+      "path": "group-expand-controls.ts",
+      "reason": "Same ViewConfig dependency as the group label, plus per-group visible-count state that only the row pipeline produces."
+    }
+  ]
+}

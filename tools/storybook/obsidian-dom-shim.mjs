@@ -78,6 +78,19 @@ const extensions = {
   createSpan(info, callback) {
     return createEl.call(this, "span", info, callback);
   },
+  // SVG needs the namespaced constructor: createElement("circle") yields an unknown HTML element
+  // that renders as nothing, which is a silent failure rather than a loud one.
+  createSvg(tag, info, callback) {
+    const el = this.ownerDocument.createElementNS("http://www.w3.org/2000/svg", tag);
+    applyInfo(el, info);
+    attach(this, el, info);
+    if (callback) callback(el);
+    return el;
+  },
+  appendText(val) {
+    this.appendChild(this.ownerDocument.createTextNode(val));
+    return this;
+  },
   setText(val) {
     if (typeof val === "string") this.textContent = val;
     else {
@@ -125,8 +138,28 @@ const extensions = {
  * inside Obsidian itself would be a no-op rather than a silent behaviour swap.
  */
 export function installObsidianDomShim(target = globalThis) {
-  const prototypes = [target.HTMLElement?.prototype, target.DocumentFragment?.prototype];
+  // SVGElement is patched too, not only HTMLElement: Obsidian's extensions live on the shared
+  // element prototype, so nested SVG construction — an <svg> creating its own <circle> — calls
+  // them on an SVGElement. Omitting it fails only on the few surfaces that draw their own graphics,
+  // which is exactly the kind of gap that hides until someone opens that one story.
+  const prototypes = [
+    target.HTMLElement?.prototype,
+    target.SVGElement?.prototype,
+    target.DocumentFragment?.prototype,
+  ];
   let installed = 0;
+
+  // Obsidian defines `activeDocument` as a global so a plugin can address the right document when
+  // the workspace has been popped out into a second window. There are 244 references across 30
+  // source files, and without it roughly a third of the view layer throws on first render rather
+  // than displaying anything. Outside Obsidian there is only ever one document.
+  if (!("activeDocument" in target) && target.document) {
+    Object.defineProperty(target, "activeDocument", {
+      get: () => target.document,
+      configurable: true,
+    });
+    installed += 1;
+  }
   for (const proto of prototypes) {
     if (!proto) continue;
     for (const [name, fn] of Object.entries(extensions)) {
