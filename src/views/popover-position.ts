@@ -19,6 +19,7 @@
 // ───────────────────────────────────────────────────────────────────
 
 import { isHTMLElement } from "./dom-guards";
+import { applySheetChrome } from "./mobile-bottom-sheet";
 
 // ───────────────────────────────────────────────────────────────────
 // 2. TYPES
@@ -33,6 +34,21 @@ export interface ToolbarPopoverPositionOptions {
   align?: "left" | "center" | "right";
   preferredSide?: "left" | "right";
 }
+
+/**
+ * Sizing for menu-shaped popovers: one compact column of rows.
+ *
+ * Callers that pass no width fall back to the 520px default below, which suits a wide editor and
+ * makes a four-item menu absurd — the stylesheet only caps these panels with a max-width, so it
+ * cannot rescue them. 292px is the width the column menu already asks for explicitly, and that is
+ * the one menu surface in the plugin that reads correctly today. Editors that genuinely need room
+ * — relation pickers, chart toolbars — keep passing their own numbers.
+ */
+export const COMPACT_MENU_POPOVER: ToolbarPopoverPositionOptions = {
+  minWidth: 220,
+  preferredWidth: 292,
+  maxWidth: 320,
+};
 
 // ───────────────────────────────────────────────────────────────────
 // 3. STATE
@@ -62,16 +78,9 @@ export function positionToolbarPopover(
   positionCleanups.get(panel)?.();
 
   panel.addClass("db-anchored-popover");
-  panel.toggleClass("db-mobile-bottom-sheet", mobileSheet);
-  const existingHandle = panel.querySelector<HTMLElement>(".db-mobile-bottom-sheet-handle");
-  if (mobileSheet && !existingHandle) {
-    const handle = ownerDocument.createElement("div");
-    handle.className = "db-mobile-bottom-sheet-handle";
-    handle.setAttribute("aria-hidden", "true");
-    panel.prepend(handle);
-  } else if (!mobileSheet) {
-    existingHandle?.remove();
-  }
+  // Presentation now lives in the sheet module so surfaces without an anchor — modals — can reach
+  // it too. This function keeps placement, which is the part that genuinely needs an anchor.
+  applySheetChrome(panel, mobileSheet);
   if (!panel.hasClass("is-visible")) {
     panel.addClass("db-overlay-enter");
     view.requestAnimationFrame(() => {
@@ -111,7 +120,10 @@ export function positionToolbarPopover(
         bottom: `${Math.max(0, view.innerHeight - bounds.bottom)}px`,
         width: "100%",
         maxWidth: "100%",
-        maxHeight: `${Math.max(160, bounds.height - margin * 2)}px`,
+        // Cap at 90% of the small viewport. The stylesheet asks for 90svh, but this inline value
+        // wins, so the ceiling has to be applied here too or the rule never takes effect. `svh`
+        // is the viewport with the browser chrome shown, which is the height a sheet actually gets.
+        maxHeight: `${Math.min(Math.max(160, bounds.height - margin * 2), view.innerHeight * 0.9)}px`,
       });
       panel.scrollTop = savedPanelScroll;
       return;
@@ -260,7 +272,13 @@ export function getVisiblePopoverBounds(container: HTMLElement | null): DOMRect 
   const doc = container?.ownerDocument || window.activeDocument;
   const view = doc.defaultView || window;
   const viewport = getVisualViewportBounds(view);
-  const app = doc.querySelector(".app-container") || doc.querySelector(".workspace");
+  // Prefer the root split — the editing area between the sidebars. `.workspace` and
+  // `.app-container` both span the sidebars too, so clamping to either lets a popover slide
+  // underneath an open right sidebar and still be "in bounds". Both remain as fallbacks for
+  // layouts where the root split is absent, such as a popped-out window.
+  const app = doc.querySelector(".workspace-split.mod-root")
+    || doc.querySelector(".app-container")
+    || doc.querySelector(".workspace");
   const appRect = isHTMLElement(app) ? app.getBoundingClientRect() : viewport;
   const containerRect = container?.getBoundingClientRect() || viewport;
   const left = Math.max(viewport.left, appRect.left, containerRect.left);

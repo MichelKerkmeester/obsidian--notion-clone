@@ -3020,10 +3020,23 @@ export class CellRenderer {
     return el?.isConnected ? el.getBoundingClientRect() : null;
   }
 
+  // Coordinates are container-relative, matching the CSS. The popover mounts inside
+  // `.note-database-container` (`position: relative`), and the stylesheet positions it `absolute`
+  // there, so the numbers written here must be measured from that container — which is what
+  // passing its rect and scroll offsets to `setPosition` does. This is the same convention the
+  // date and text edit popovers use for the same host.
+  //
+  // The earlier version computed viewport coordinates and forced `position: fixed` inline to make
+  // them land. That only worked because an inline declaration outranks the stylesheet rule, an
+  // unstated coupling in a file that already re-declares these very selectors in an `!important`
+  // tail. It also meant any ancestor gaining a containing block — including from Obsidian's own
+  // CSS, which is not visible from this repo — would silently reinterpret those coordinates as
+  // container-relative and shift the popover by the container's offset, which on a scrolled note
+  // is hundreds of pixels. Agreeing with the CSS removes both failure modes.
   private positionOptionPopover(
     popover: HTMLElement,
     td: HTMLElement,
-    _container: HTMLElement | null,
+    container: HTMLElement | null,
     anchorPoint?: { x: number; y: number },
     session?: CellEditSession,
   ): void {
@@ -3032,7 +3045,7 @@ export class CellRenderer {
     const anchorRect = this.bulkAnchorRect(session);
     const rect = anchorRect ?? td.getBoundingClientRect();
     const popoverRect = popover.getBoundingClientRect();
-    const bounds = getVisiblePopoverBounds(null);
+    const bounds = getVisiblePopoverBounds(container);
 
     const relationPopover = popover.hasClass("db-relation-popover");
     const minWidth = relationPopover ? 360 : 160;
@@ -3061,7 +3074,20 @@ export class CellRenderer {
     const globalTop = useAbove ? anchorY - gap - height : anchorY + gap;
     const globalClampedTop = clamp(globalTop, bounds.top + margin, bounds.bottom - height - margin);
 
-    popover.setCssProps({ position: "fixed", width: `${width}px`, maxHeight: `${Math.min(availableHeight, maxHeight)}px` });
-    setPosition(popover, left, globalClampedTop, undefined, 0, 0);
+    // Without a container there is no positioned ancestor to measure from, so the viewport is the
+    // only frame left and the coordinates below are already global.
+    popover.setCssProps({
+      width: `${width}px`,
+      maxHeight: `${Math.min(availableHeight, maxHeight)}px`,
+      ...(container ? {} : { position: "fixed" as const }),
+    });
+    setPosition(
+      popover,
+      left,
+      globalClampedTop,
+      container?.getBoundingClientRect(),
+      container?.scrollLeft || 0,
+      container?.scrollTop || 0
+    );
   }
 }

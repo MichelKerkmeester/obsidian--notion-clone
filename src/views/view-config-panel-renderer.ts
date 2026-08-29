@@ -27,7 +27,7 @@ import { getSourceRuleTree, isSourceRuleExpression, isSourceRuleGroup, isSourceR
 import { getVaultProperties, VaultProperty } from "../data/vault-properties";
 import { createConditionalFormatLeaf, getConditionalFormatCondition, isConditionalFormatOperator } from "../data/conditional-format-editor";
 import { t } from "../i18n";
-import { positionToolbarPopover } from "./popover-position";
+import { COMPACT_MENU_POPOVER, positionToolbarPopover } from "./popover-position";
 import { confirmWithModal } from "./modals/confirm-modal";
 import { createDropdownField, DropdownOption, openDropdownMenu } from "./dropdown-field";
 import { getPropertyDropdownIcon, isPropertyDropdownIcon, renderDropdownPropertyTypeIcon, renderPropertyTypeIcon } from "./property-type-icon";
@@ -360,27 +360,27 @@ export class ViewConfigPanelRenderer {
     }
     if (config.viewType === "gallery") {
       this.renderGallerySettings(panel, config, actions);
-      positionToolbarPopover(panel, anchorEl);
+      positionToolbarPopover(panel, anchorEl, COMPACT_MENU_POPOVER);
       if (savedScroll) panel.scrollTop = savedScroll;
       return;
     }
     if (config.viewType === "board") {
       this.renderBoardSettings(panel, config, actions);
-      positionToolbarPopover(panel, anchorEl);
+      positionToolbarPopover(panel, anchorEl, COMPACT_MENU_POPOVER);
       if (savedScroll) panel.scrollTop = savedScroll;
       return;
     }
     if (config.viewType === "calendar") {
-      positionToolbarPopover(panel, anchorEl);
+      positionToolbarPopover(panel, anchorEl, COMPACT_MENU_POPOVER);
       if (savedScroll) panel.scrollTop = savedScroll;
       return;
     }
     if (config.viewType === "timeline") {
-      positionToolbarPopover(panel, anchorEl);
+      positionToolbarPopover(panel, anchorEl, COMPACT_MENU_POPOVER);
       if (savedScroll) panel.scrollTop = savedScroll;
       return;
     }
-    positionToolbarPopover(panel, anchorEl);
+    positionToolbarPopover(panel, anchorEl, COMPACT_MENU_POPOVER);
     if (savedScroll) panel.scrollTop = savedScroll;
   }
 

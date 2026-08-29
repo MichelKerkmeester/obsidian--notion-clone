@@ -20,7 +20,7 @@ import { normalizeComputedSyncMode } from "../data/computed-sync";
 import { getColumnDisplayType } from "../data/column-display";
 import { t } from "../i18n";
 import { DatabaseViewState } from "./view-state-store";
-import { positionToolbarPopover } from "./popover-position";
+import { COMPACT_MENU_POPOVER, positionToolbarPopover } from "./popover-position";
 import { renderPropertyTypeIcon } from "./property-type-icon";
 import { getEffectiveFilterRules } from "../data/filter-rules";
 import { isImeComposing } from "../data/keyboard-utils";
@@ -426,7 +426,7 @@ export class ToolbarRenderer {
         });
       }
       this.setPopoverTriggerState(button, true);
-      positionToolbarPopover(panel, button);
+      positionToolbarPopover(panel, button, COMPACT_MENU_POPOVER);
       this.installMenuKeyboardNavigation(panel);
       this.removeUtilitiesPopoverListener = installPopoverAutoClose({ panel, anchorEl: button, close: () => this.closeUtilitiesPopover() });
     };
@@ -545,7 +545,7 @@ export class ToolbarRenderer {
       activeIndex = nextActiveIndex;
     });
 
-    positionToolbarPopover(panel, anchorEl);
+    positionToolbarPopover(panel, anchorEl, COMPACT_MENU_POPOVER);
     this.installMenuKeyboardNavigation(panel);
     const removeAutoClose = installPopoverAutoClose({ panel, anchorEl, close: () => this.closeDatabasePopover() });
     this.removeDatabasePopoverListener = removeAutoClose;
@@ -575,7 +575,7 @@ export class ToolbarRenderer {
         ?.focus();
     }
 
-    positionToolbarPopover(panel, anchorEl);
+    positionToolbarPopover(panel, anchorEl, COMPACT_MENU_POPOVER);
   }
 
   private renderDatabasePopoverRow(
@@ -746,7 +746,7 @@ export class ToolbarRenderer {
     }
     this.renderTitleActionsPopoverRow(panel, t("toolbar.deleteDatabase"), "trash", () => actions.deleteDatabase(), "is-danger");
 
-    positionToolbarPopover(panel, anchorEl);
+    positionToolbarPopover(panel, anchorEl, COMPACT_MENU_POPOVER);
     this.setPopoverTriggerState(anchorEl, true);
     const removeAutoClose = installPopoverAutoClose({ panel, anchorEl, close: () => this.closeTitleActionsPopover() });
     this.removeTitleActionsPopoverListener = removeAutoClose;
@@ -1078,7 +1078,7 @@ export class ToolbarRenderer {
     };
     search.oninput = renderList;
     renderList();
-    positionToolbarPopover(panel, anchor);
+    positionToolbarPopover(panel, anchor, COMPACT_MENU_POPOVER);
     this.setPopoverTriggerState(anchor, true);
     this.installMenuKeyboardNavigation(panel);
     this.removeViewTabPopoverListener = installPopoverAutoClose({ panel, anchorEl: anchor, close: () => this.closeViewTabPopover() });
@@ -1170,7 +1170,7 @@ export class ToolbarRenderer {
       }, "is-danger");
     }
 
-    positionToolbarPopover(panel, tab);
+    positionToolbarPopover(panel, tab, COMPACT_MENU_POPOVER);
     this.setPopoverTriggerState(tab, true);
     this.installMenuKeyboardNavigation(panel);
     const removeAutoClose = installPopoverAutoClose({ panel, anchorEl: tab, close: () => this.closeViewTabPopover() });
@@ -1320,7 +1320,7 @@ export class ToolbarRenderer {
         this.closeViewTabPopover();
       };
     }
-    positionToolbarPopover(panel, anchorEl);
+    positionToolbarPopover(panel, anchorEl, COMPACT_MENU_POPOVER);
     this.setPopoverTriggerState(anchorEl, true);
     this.installMenuKeyboardNavigation(panel);
     const removeAutoClose = installPopoverAutoClose({ panel, anchorEl, close: () => this.closeViewTabPopover() });
@@ -1609,7 +1609,7 @@ export class ToolbarRenderer {
     const groupValue = this.resolveGroupValue(config, currentViewType, state);
     this.populateGroupPopover(panel, config, currentViewType, groupValue, actions);
 
-    positionToolbarPopover(panel, anchorEl);
+    positionToolbarPopover(panel, anchorEl, COMPACT_MENU_POPOVER);
     const removeAutoClose = installPopoverAutoClose({
       panel,
       anchorEl,
@@ -2161,7 +2161,7 @@ export class ToolbarRenderer {
     if (actions.exportCsvMarkdownZip) {
       this.renderExportPopoverRow(panel, t("toolbar.exportCsvMarkdownZip"), "archive", () => actions.exportCsvMarkdownZip?.());
     }
-    positionToolbarPopover(panel, anchorEl);
+    positionToolbarPopover(panel, anchorEl, COMPACT_MENU_POPOVER);
     this.installMenuKeyboardNavigation(panel);
     const removeAutoClose = installPopoverAutoClose({ panel, anchorEl, close: () => this.closeExportPopover() });
     this.removeExportPopoverListener = removeAutoClose;
@@ -2191,7 +2191,10 @@ export class ToolbarRenderer {
     });
     if (isTouchDevice(this.toolbarRoot)) this.reserveMobileFabInset();
     setIcon(newBtn.createSpan({ cls: "db-new-button-icon" }), hasTemplate ? "file-plus-2" : "plus");
-    if (!hasTemplate || !isTouchDevice(this.toolbarRoot)) newBtn.createSpan({ text: label });
+    // Touch surfaces get the icon alone: the button is a floating action button there, and a
+    // text label makes it wide enough to cover the rows it floats over. The accessible name
+    // is already on the button itself, so dropping the visible span costs nothing to a reader.
+    if (!isTouchDevice(this.toolbarRoot)) newBtn.createSpan({ text: label });
     setTooltip(newBtn, tooltip, { delay: 100 });
     const create = (template: NewRecordTemplateConfig | null | undefined) => {
       const position = actions.getCreateEntryPosition?.(this.newRecordPlacement);
@@ -2332,7 +2335,7 @@ export class ToolbarRenderer {
       });
       configure.setAttribute("aria-disabled", "true");
     }
-    positionToolbarPopover(panel, anchor);
+    positionToolbarPopover(panel, anchor, COMPACT_MENU_POPOVER);
     this.setPopoverTriggerState(anchor, true);
     this.installMenuKeyboardNavigation(panel);
     this.removeUtilitiesPopoverListener = installPopoverAutoClose({ panel, anchorEl: anchor, close: () => this.closeUtilitiesPopover() });
