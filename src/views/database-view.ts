@@ -13,7 +13,7 @@
 // 1. IMPORTS
 // ───────────────────────────────────────────────────────────────────
 
-import { App, FileView, Menu, Scope, WorkspaceLeaf, Notice, Platform, TFile, normalizePath, stringifyYaml, setIcon } from "obsidian";
+import { App, FileView, Scope, WorkspaceLeaf, Notice, Platform, TFile, normalizePath, stringifyYaml, setIcon } from "obsidian";
 import { DataChangeBatch, DataSource, NoteRecord, ViewConfigMutation } from "../data/data-source";
 import { RefreshCoordinator } from "../data/refresh-coordinator";
 import { isRefreshBlockedByDrag } from "../data/refresh-blockers";
@@ -198,6 +198,7 @@ import {
   type TableGridPosition,
 } from "../data/table-keyboard-navigation";
 import { getTablePasteValue, planTablePasteLayout, TablePasteLayout } from "../data/table-paste-plan";
+import { createOwnedMenuForEvent } from "./owned-menu";
 import {
   FileRenameChange,
   FileRenameRequest,
@@ -5155,21 +5156,24 @@ export class DatabaseView extends FileView {
   private openRecordIconContextMenu(event: MouseEvent, anchor: HTMLElement, row: RowData, config: ViewConfig): void {
     event.preventDefault();
     event.stopPropagation();
-    const menu = new Menu();
-    menu.addItem((item) => item
-      .setTitle(t("recordIcon.changeRecord"))
-      .setIcon("smile-plus")
-      .onClick(() => this.openRecordIconPicker(anchor, row, config)));
-    menu.addItem((item) => item
-      .setTitle(t("recordIcon.configureField"))
-      .setIcon("settings-2")
-      .onClick(() => this.openRecordIconFieldMenu(anchor, row, config, false)));
+    const menu = createOwnedMenuForEvent(event, { returnFocus: anchor });
+    menu.addRow({
+      icon: "smile-plus",
+      label: t("recordIcon.changeRecord"),
+      onClick: () => this.openRecordIconPicker(anchor, row, config),
+    });
+    menu.addRow({
+      icon: "settings-2",
+      label: t("recordIcon.configureField"),
+      onClick: () => this.openRecordIconFieldMenu(anchor, row, config, false),
+    });
     menu.addSeparator();
-    menu.addItem((item) => item
-      .setTitle(t("recordIcon.hideInView"))
-      .setIcon("eye-off")
-      .onClick(() => this.toggleCurrentViewRecordIcon()));
-    menu.showAtMouseEvent(event);
+    menu.addRow({
+      icon: "eye-off",
+      label: t("recordIcon.hideInView"),
+      onClick: () => this.toggleCurrentViewRecordIcon(),
+    });
+    menu.showAt({ x: event.clientX, y: event.clientY });
   }
 
   private orderRecordIconColumns(columns: ColumnDef[], current?: string): ColumnDef[] {
@@ -7464,11 +7468,14 @@ export class DatabaseView extends FileView {
         text: t("toolbar.selectedCount", { count: rowCount }),
         attr: { "aria-live": "polite" },
       });
+      // Icon-led actions, matching the reference: an icon carries the action faster than a word,
+      // and it lets the bar stay compact as more bulk actions arrive.
       const editBtn = bar.createEl("button", {
         cls: "db-selection-action",
-        text: t("bulkEdit.editField"),
         attr: { type: "button" },
       });
+      setIcon(editBtn.createSpan({ cls: "db-selection-action-icon" }), "sliders-horizontal");
+      editBtn.createSpan({ text: t("bulkEdit.editField") });
       editBtn.onclick = () => this.openBulkEditForRows(editBtn);
       const editingCol = this.bulkEditingColumnKey ? config?.schema.columns.find((candidate) => candidate.key === this.bulkEditingColumnKey) : undefined;
       if (editingCol) {
@@ -7476,17 +7483,19 @@ export class DatabaseView extends FileView {
       }
       const deleteBtn = bar.createEl("button", {
         cls: "db-selection-delete",
-        text: t("common.delete"),
         attr: { type: "button" },
       });
+      setIcon(deleteBtn.createSpan({ cls: "db-selection-action-icon" }), "trash-2");
+      deleteBtn.createSpan({ text: t("common.delete") });
       deleteBtn.onclick = () => { void this.deleteSelectedRows(); };
     }
     if (this.historyStack.length > 0) {
       const undoBtn = bar.createEl("button", {
         cls: "db-selection-action db-selection-undo",
-        text: t("toolbar.undo"),
         attr: { type: "button" },
       });
+      setIcon(undoBtn.createSpan({ cls: "db-selection-action-icon" }), "undo-2");
+      undoBtn.createSpan({ text: t("toolbar.undo") });
       undoBtn.onclick = () => { void this.undoLastEdit(); };
     }
     bar.removeClass("is-summary-overlay");
@@ -8408,17 +8417,23 @@ export class DatabaseView extends FileView {
         (col.key === "file.name" || (!titleVisible && col.key === visible[0]?.key))
       ) {
         attachTitleOpenAffordance(td, row, {
-          open: () => openTableRecordPeek({
-            anchor: td,
-            row,
-            config,
-            visibleColumns: visible,
-            allColumns: getColumnsInOrder(config),
-            container,
-            returnFocus: () => td.focus(),
-            renderRecordIcon: (parent, currentRow, currentConfig) =>
-              this.renderRowRecordIcon(parent, currentRow, currentConfig),
-          }),
+          // The peek panel is a display-only side rail, which is the wrong surface on a phone:
+          // it cannot be edited and its dismiss lifecycle assumes a pointer. Every other view
+          // already opens the editable detail panel, which is sheet-aware, so the table stops
+          // being the odd one out. Desktop keeps the rail, where a side-by-side read is useful.
+          open: () => (isTouchDevice(td)
+            ? this.openRecordDetailPanel(td, row)
+            : openTableRecordPeek({
+              anchor: td,
+              row,
+              config,
+              visibleColumns: visible,
+              allColumns: getColumnsInOrder(config),
+              container,
+              returnFocus: () => td.focus(),
+              renderRecordIcon: (parent, currentRow, currentConfig) =>
+                this.renderRowRecordIcon(parent, currentRow, currentConfig),
+            })),
         });
       }
     }
@@ -10984,7 +10999,18 @@ export class DatabaseView extends FileView {
         "aria-label": t("menu.adjustColumnWidth"),
       },
     });
-    const valueEl = valueRow.createSpan({ cls: "db-mobile-column-width-value" });
+    // A typed pixel value, not just a slider: dragging cannot hit an exact number, and matching a
+    // column to a known width is the whole reason someone opens this panel.
+    const valueEl = valueRow.createEl("input", {
+      cls: "db-mobile-column-width-value",
+      attr: {
+        type: "number",
+        inputmode: "numeric",
+        min: String(MOBILE_COLUMN_WIDTH_MIN),
+        step: "1",
+        "aria-label": t("menu.adjustColumnWidth"),
+      },
+    });
 
     const presets = panel.createDiv({ cls: "db-mobile-column-width-presets" });
     const autoButton = presets.createEl("button", {
@@ -11009,7 +11035,11 @@ export class DatabaseView extends FileView {
       const max = Math.max(MOBILE_COLUMN_WIDTH_MAX, Math.ceil(width));
       slider.max = String(max);
       slider.value = String(clampColumnWidth(width, MOBILE_COLUMN_WIDTH_MIN, max));
-      valueEl.setText(String(Math.round(width)));
+      // Never rewrite the field the user is typing into. Half-entered values are below the
+      // minimum by definition, so echoing the clamped result back would eat their keystrokes.
+      if (valueEl.ownerDocument.activeElement !== valueEl) {
+        valueEl.value = String(Math.round(width));
+      }
     };
     const applyWidth = (width: number) => {
       if (!Number.isFinite(width)) return;
@@ -11045,6 +11075,19 @@ export class DatabaseView extends FileView {
 
     slider.oninput = () => applyWidth(Number(slider.value));
     slider.onchange = () => persist();
+    valueEl.oninput = () => {
+      const typed = Number(valueEl.value);
+      // An empty or part-typed field is not a width yet; wait rather than snapping to the minimum.
+      if (valueEl.value.trim() === "" || !Number.isFinite(typed)) return;
+      applyWidth(typed);
+    };
+    valueEl.onchange = () => {
+      applyWidth(Number(valueEl.value));
+      // Commit echoes the clamped result back, which is the point at which the user should see
+      // the value their input actually resolved to.
+      valueEl.value = String(config.columnWidths?.[col.key] ?? MOBILE_COLUMN_WIDTH_MIN);
+      persist();
+    };
     autoButton.onclick = () => {
       applyWidth(this.calculateAutoColumnWidth(col, this.rows));
       persist();

@@ -136,6 +136,22 @@
   transform: translate3d(0, 0, 0) scale(1);
 }
 
+/* Workbench modals on a phone: full screen rather than a bottom sheet. The formula editor and the
+   two conflict surfaces are 860-1240px wide on desktop and carry their own responsive ladders;
+   compressed into a sheet they lose the two-pane layout that makes them usable at all. Applied by
+   the modal base class on touch only, so desktop is untouched. */
+.db-modal-fullscreen {
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  height: 100% !important;
+  max-height: 100% !important;
+  margin: 0 !important;
+  border-radius: 0 !important;
+  padding-bottom: env(safe-area-inset-bottom) !important;
+}
+
 .db-mobile-bottom-sheet {
   position: fixed !important;
   left: 0 !important;
@@ -149,7 +165,7 @@
      pushed past the right edge. positionToolbarPopover also sets this inline,
      but the class must hold on its own so the sheet is correct without it. */
   box-sizing: border-box !important;
-  max-height: calc(100dvh - 20px) !important;
+  max-height: 90svh !important;
   padding-bottom: calc(16px + env(safe-area-inset-bottom)) !important;
   border-right: 0 !important;
   border-bottom: 0 !important;
@@ -184,11 +200,19 @@
   transform: translate3d(0, 0, 0) scale(1);
 }
 
+/* A menu row is a click target, so it has to say so under the pointer. These rows are divs rather
+   than buttons in several of the popovers, and a div does not get the pointer cursor for free. */
 .db-menu-item {
   min-height: 30px;
   border: 0;
   border-radius: var(--db-radius-sm);
+  cursor: pointer;
   transition: background-color 120ms ease-out, color 120ms ease-out;
+}
+
+.db-menu-item:disabled,
+.db-menu-item[aria-disabled="true"] {
+  cursor: default;
 }
 
 .db-menu-item:hover,
@@ -214,6 +238,62 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+/* The plugin-owned menu shell. Replaces Obsidian's Menu so the rows inside can be styled without
+   reaching into MenuItem's undocumented `.dom`. Sized to the compact preset the column menu already
+   asks for, which is the width this family reads correctly at. */
+.db-owned-menu {
+  z-index: var(--db-layer-popover, 100);
+  width: max-content;
+  min-width: 220px;
+  max-width: 320px;
+  padding: 4px;
+  border: 1px solid var(--background-modifier-border);
+  border-radius: var(--db-radius-lg);
+  background: var(--background-secondary);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.28);
+}
+
+.db-owned-menu .db-menu-item {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  width: 100%;
+  padding: 0 8px;
+  background: transparent;
+  color: var(--text-normal);
+  font-size: var(--db-font-md);
+  text-align: left;
+}
+
+/* Destructive rows read in the error colour, matching what the native menu's setWarning did. */
+.db-menu-item.is-warning {
+  color: var(--text-error);
+}
+
+/* Submenu affordance. Without a trailing value the chevron also carries the trailing class, so it
+   is what pushes itself to the end of the row. */
+.db-menu-item-chevron {
+  display: inline-flex;
+  align-items: center;
+  flex: 0 0 auto;
+  opacity: 0.55;
+}
+
+/* Group heading. Notion labels menu groups rather than relying on separators alone, and the
+   dropdown popover already does this with its own class; menus now match. */
+.db-menu-section {
+  padding: 6px 8px 2px;
+  color: var(--text-muted);
+  font-size: var(--font-ui-smaller);
+  font-weight: 500;
+}
+
+.db-menu-separator {
+  height: 1px;
+  margin: 4px 8px;
+  background: var(--background-modifier-border);
 }
 
 .db-menu-item-current,
@@ -1867,6 +1947,26 @@
   font-size: 12px;
   font-weight: 600;
   padding: 0;
+}
+
+/* The selected count is the bar's subject, so it reads as the accent the way the reference does,
+   rather than as one more muted label among the actions. */
+.note-database-container .db-selection-count-badge {
+  color: var(--interactive-accent);
+  font-weight: 600;
+}
+
+/* Icon slot for the bar's actions. Sized down from the menu icon so the bar stays compact. */
+.note-database-container .db-selection-action-icon {
+  display: inline-flex;
+  align-items: center;
+  flex: 0 0 auto;
+  margin-inline-end: 4px;
+}
+
+.note-database-container .db-selection-action-icon svg {
+  width: 14px;
+  height: 14px;
 }
 
 .note-database-container .db-selection-action {
@@ -6520,10 +6620,51 @@
   text-align: center;
 }
 
-.note-database-container .db-checkbox-cell input {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
+/* Own the checkbox shape rather than inheriting it.
+   The plugin previously set no radius anywhere, so the box came from whatever the active theme drew
+   — which is why boolean cells rendered as circles while the row-select boxes were square in the
+   same table. `appearance: none` takes the native widget out of the picture so both agree, and the
+   square reads as "value" rather than "pick one of these", which is what a radio implies. */
+.note-database-container .db-checkbox-cell input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  flex: 0 0 auto;
+  margin: 0;
+  padding: 0;
+  border: 1px solid var(--background-modifier-border-hover);
+  border-radius: var(--db-radius-sm);
+  background: var(--background-primary);
+  cursor: pointer;
+  transition: background-color 120ms ease-out, border-color 120ms ease-out;
+}
+
+.note-database-container .db-checkbox-cell input[type="checkbox"]:checked {
+  border-color: var(--interactive-accent);
+  background: var(--interactive-accent);
+}
+
+/* The tick is drawn rather than a glyph so it scales with the box and needs no icon font. */
+.note-database-container .db-checkbox-cell input[type="checkbox"]:checked::after {
+  content: "";
+  display: block;
+  width: 4px;
+  height: 8px;
+  margin: 1px 0 0 5px;
+  border: solid var(--text-on-accent);
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.note-database-container .db-checkbox-cell input[type="checkbox"]:focus-visible {
+  outline: 2px solid var(--interactive-accent);
+  outline-offset: 1px;
+}
+
+.note-database-container .db-checkbox-cell input[type="checkbox"]:disabled {
+  cursor: default;
+  opacity: 0.5;
 }
 
 /* 编辑态单元格：蓝色内边框 */
@@ -17004,7 +17145,7 @@ body.is-mobile .note-database-container .db-calendar-month-time {
 
 .db-mobile-column-width-value-row {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 44px;
+  grid-template-columns: minmax(0, 1fr) 72px;
   align-items: center;
   gap: var(--db-space-4);
 }
@@ -17014,11 +17155,24 @@ body.is-mobile .note-database-container .db-calendar-month-time {
   min-width: 0;
 }
 
+/* A typed field rather than a readout, so it needs a real input's affordances while staying as
+   quiet as the label it replaced. */
 .db-mobile-column-width-value {
-  color: var(--text-muted);
+  width: 100%;
+  min-width: 0;
+  padding: 4px 6px;
+  border: 1px solid var(--background-modifier-border);
+  border-radius: var(--db-radius-sm);
+  background: var(--background-primary);
+  color: var(--text-normal);
   font-size: 13px;
   font-variant-numeric: tabular-nums;
   text-align: right;
+}
+
+.db-mobile-column-width-value:focus-visible {
+  outline: none;
+  border-color: var(--interactive-accent);
 }
 
 .db-mobile-column-width-presets {
@@ -18671,7 +18825,12 @@ body.is-tablet .note-database-container .db-record-open-btn {
   flex: 0 0 auto;
 }
 
+/* The two halves of the split button have to agree on their outer radius, or the group reads as
+   two mismatched shapes rather than one control. The shared toolbar rule gives this button the
+   large radius; the dropdown half opposite uses the medium one, so pin both ends to medium here. */
 .note-database-container .db-new-button-primary {
+  border-start-start-radius: var(--db-radius-md);
+  border-end-start-radius: var(--db-radius-md);
   border-start-end-radius: 0;
   border-end-end-radius: 0;
 }
