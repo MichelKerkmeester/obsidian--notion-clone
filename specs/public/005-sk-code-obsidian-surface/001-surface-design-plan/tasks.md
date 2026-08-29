@@ -134,10 +134,10 @@ _memory:
 <!-- ANCHOR:code-quality -->
 ## Code Quality
 
-- [ ] CHK-010 [P0] Every section header is upper-case and numbered, matching the sk-code-mobile-cli grammar
-- [ ] CHK-011 [P0] No spec path, requirement id, task id, or phase number appears in any code block destined for source
-- [ ] CHK-012 [P1] Every cited hub path resolves against the live repository
-- [ ] CHK-013 [P1] Prose distinguishes what was read from what was inferred
+- [x] CHK-010 [P0] Every section header is upper-case and numbered, matching the sk-code-mobile-cli grammar — verified 2026-08-29: SKILL.md's eight numbered H2s are identical to `sk-code-mobile-cli/SKILL.md`'s, parentheticals included
+- [x] CHK-011 [P0] No spec path, requirement id, task id, or phase number appears in any code block destined for source — verified 2026-08-29: `scan-comments.mjs` PASS across 255 files — this is exactly the ephemeral-label check
+- [x] CHK-012 [P1] Every cited hub path resolves against the live repository — verified 2026-08-29: `scan-skill-references.mjs` PASS: 35 documents, 214 cited paths, 0 broken, sentinel counter-example rejected
+- [x] CHK-013 [P1] Prose distinguishes what was read from what was inferred — verified 2026-08-29: prose carries read-vs-inferred markers; thin but present
 <!-- /ANCHOR:code-quality -->
 
 ---
@@ -145,10 +145,10 @@ _memory:
 <!-- ANCHOR:testing -->
 ## Testing Checklist
 
-- [ ] CHK-020 [P0] The proposed registry entry parses as valid JSON against the live schema
-- [ ] CHK-021 [P0] Proposed aliases are lowercase and disjoint from every existing sk-code mode alias
-- [ ] CHK-022 [P1] The detection precedence is stated with the symlink guard and worked test rows
-- [ ] CHK-023 [P1] The reference map describes this plugin's real stack, not the template's Svelte stack
+- [x] CHK-020 [P0] The proposed registry entry parses as valid JSON against the live schema — verified 2026-08-29: `mode-registry.json` parses; exactly one `sk-code-obsidian` entry
+- [x] CHK-021 [P0] Proposed aliases are lowercase and disjoint from every existing sk-code mode alias — verified 2026-08-29: 5 aliases, 0 non-lowercase, 0 overlap against the 34 aliases of the other five modes
+- [x] CHK-022 [P1] The detection precedence is stated with the symlink guard and worked test rows — verified 2026-08-29: `stack-detection.md` carries 9 OBSIDIAN mentions, 8 symlink/realpath guard lines, and the `OPENCODE >` precedence line
+- [x] CHK-023 [P1] The reference map describes this plugin's real stack, not the template's Svelte stack — verified 2026-08-29: both `svelte` hits are contrastive ("Unlike a scoped-style stack…", "no React, no Svelte"); 17 reference files describe the Obsidian stack
 <!-- /ANCHOR:testing -->
 
 ---
@@ -156,9 +156,9 @@ _memory:
 <!-- ANCHOR:fix-completeness -->
 ## Fix Completeness
 
-- [ ] CHK-FIX-001 [P0] Each hub file the build packet must touch is named with the exact edit it needs
-- [ ] CHK-FIX-002 [P0] Consumer inventory covers mode-registry.json, hub-router.json, ROUTER.md, and stack-detection.md
-- [ ] CHK-FIX-003 [P1] The compiled-routing re-mint and the fleet metadata gate are listed as in-phase work, not follow-up
+- [x] CHK-FIX-001 [P0] Each hub file the build packet must touch is named with the exact edit it needs — verified 2026-08-29: the consumer table names each hub file with its exact edit and owning phase
+- [x] CHK-FIX-002 [P0] Consumer inventory covers mode-registry.json, hub-router.json, ROUTER.md, and stack-detection.md — verified 2026-08-29: mode-registry.json 6, hub-router.json 4, ROUTER.md 2, stack-detection.md 7 mentions
+- [x] CHK-FIX-003 [P1] The compiled-routing re-mint and the fleet metadata gate are listed as in-phase work, not follow-up — verified 2026-08-29: compiled-routing refresh is listed in-phase against 003, not deferred
 <!-- /ANCHOR:fix-completeness -->
 
 ---
@@ -166,8 +166,8 @@ _memory:
 <!-- ANCHOR:security -->
 ## Security
 
-- [ ] CHK-030 [P0] No secret, token, or absolute personal path is embedded in any proposed artifact
-- [ ] CHK-031 [P1] The packet's declared tool surface stays read-only, mutating nothing
+- [x] CHK-030 [P0] No secret, token, or absolute personal path is embedded in any proposed artifact — verified 2026-08-29: 0 files under the packet contain `/Users/...` or token patterns
+- [x] CHK-031 [P1] The packet's declared tool surface stays read-only, mutating nothing — verified 2026-08-29: toolSurface allowed [Read, Bash, Grep, Glob], forbidden [Write, Edit, Task], mutatesWorkspace false
 <!-- /ANCHOR:security -->
 
 ---

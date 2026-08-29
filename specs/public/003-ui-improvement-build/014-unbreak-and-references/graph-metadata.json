@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "packet_id": "/Users/michelkerkmeester/MEGA/Development/Obsidian Plugin/specs/public/003-ui-improvement-build/014-unbreak-and-references",
+  "spec_folder": "/Users/michelkerkmeester/MEGA/Development/Obsidian Plugin/specs/public/003-ui-improvement-build/014-unbreak-and-references",
+  "parent_id": null,
+  "children_ids": [],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "unbreak the tree and acquire references"
+    ],
+    "key_topics": [],
+    "importance_tier": "important",
+    "status": "planned",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md"
+    ],
+    "entities": [],
+    "causal_summary": "Phase 014: Unbreak the Tree and Acquire References",
+    "created_at": "2026-08-29T07:00:00Z",
+    "last_save_at": "2026-08-29T07:00:00Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md"
+    ]
+  }
+}

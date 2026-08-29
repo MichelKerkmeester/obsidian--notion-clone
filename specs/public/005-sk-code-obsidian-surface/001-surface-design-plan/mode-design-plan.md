@@ -250,7 +250,7 @@ What a follow-on build packet (`roadmap.md` phases 003-011) creates or edits, an
 | Path | Change | Phase | Gate |
 | --- | --- | --- | --- |
 | `sk-code/mode-registry.json` | Modify — §3 entry + `surfaces[]` | 003 | `ci-skill-root-metadata.cjs` exit 0 |
-| `sk-code/hub-router.json` | Modify — §4 signals, vocab, tie-break | 003 | `compiled-route-manifest.cjs mint` + `freshness`, re-minted |
+| `sk-code/hub-router.json` | Modify — §4 signals, vocab, tie-break | 003 | `compiled-route-manifest.cjs refresh` + `freshness` (003 found `mint` returns `already-exists` against an existing manifest and updates nothing) |
 | `sk-code/shared/references/stack-detection.md` | Modify — §5 OBSIDIAN branch | 003 | `compiled-route.cjs --hub sk-code` bundles `sk-code-obsidian`, not defer |
 | `sk-code/ROUTER.md` | Modify, only if leaves are exposed | 003 | root-router two-state contract validator |
 | `sk-code/sk-code-obsidian/SKILL.md` | Create | 004 | `ci-skill-root-metadata.cjs` (no `NESTED_IDENTITY`) |

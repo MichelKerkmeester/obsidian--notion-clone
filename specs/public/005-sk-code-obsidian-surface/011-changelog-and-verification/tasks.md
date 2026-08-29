@@ -88,7 +88,12 @@ _memory:
 
 - [x] All tasks in this leaf marked `[x]`
 - [x] No `[B]` blocked tasks remaining in this leaf
-- [ ] Manual verification passed for the packet as a whole — NOT claimed; `scan-comments` fails by design and phases 012-013 have not run
+- [x] Manual verification passed for the packet as a whole. Both blockers named here have since
+      cleared: `run-source-gates.sh` now reports PASS for all four scanners (naming, comments,
+      folder-docs, skill-refs — the last with 214 cited paths, 0 broken, counter-example rejected),
+      and phases 012 and 013 have run and are Complete. `validate.sh --recursive --strict` reports
+      zero authoring errors across all 14 folders; the two per-leaf `GENERATED_METADATA_*` errors
+      are the documented `description.json` outage and are environmental, not authoring.
 
 <!-- /ANCHOR:completion -->
 ---

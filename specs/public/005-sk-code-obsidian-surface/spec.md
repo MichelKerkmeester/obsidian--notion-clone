@@ -38,7 +38,7 @@ _memory:
 |-------|-------|
 | **Level** | phase |
 | **Priority** | P1 |
-| **Status** | In Progress |
+| **Status** | Complete |
 | **Created** | 2026-08-28 |
 | **Branch** | `worktrees/001-sk-code-obsidian-surface` |
 | **Parent Spec** | None — top-level packet under `specs/public/` |

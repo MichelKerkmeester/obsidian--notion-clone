@@ -31,13 +31,13 @@ _memory:
     open_questions:
       - "Whether the 249-file MODULE-banner pass and the description.json/MCP outage block this packet's overall completion, or only phases 012/013: they block overall completion; this phase records the state honestly rather than closing it"
     answered_questions:
-      - "Whether 011 can be marked Status Complete: no — its own closing verification has not run to a clean state (scan-comments still fails, description.json still blocked), and phases 012-013 remain (operator, 2026-08-28)"
+      - "Whether 011 can be marked Status Complete: yes as of 2026-08-29 — scan-comments now passes, all four source gates pass, and phases 012-013 completed. Only the description.json outage remains, and it is environmental rather than an authoring error."
 ---
 # Feature Specification: Changelog and Closing Verification
 
 > Phase chain: parent [`../spec.md`](../spec.md), predecessor `010-kebab-rename`
-> (the rename this phase's changelog and verification report on), successor: none authored yet
-> (`012-doc-template-conformance` and `013-surface-reality-conformance` remain unstarted).
+> (the rename this phase's changelog and verification report on), successors
+> `012-doc-template-conformance` and `013-surface-reality-conformance`, both since completed.
 
 <!-- SPECKIT_TEMPLATE_SOURCE: spec-core | v2.2 -->
 
@@ -50,7 +50,7 @@ _memory:
 |-------|-------|
 | **Level** | 2 |
 | **Priority** | P1 |
-| **Status** | In Progress |
+| **Status** | Complete |
 | **Created** | 2026-08-28 |
 | **Branch** | `worktrees/001-sk-code-obsidian-surface` |
 | **Wave** | 1 |

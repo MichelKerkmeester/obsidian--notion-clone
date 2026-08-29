@@ -1,0 +1,11 @@
+{
+  "owner_pid": 66571,
+  "started_at_iso": "2026-08-29T05:43:35.256Z",
+  "ttl_ms": 300000,
+  "last_heartbeat_iso": "2026-08-29T05:43:35.256Z",
+  "packet_id": "specs/public/003-ui-improvement-build/013-mobile-ux-research",
+  "runtime_kind": "main",
+  "phase": "running",
+  "last_activity_iso": "2026-08-29T05:43:35.256Z",
+  "acquire_nonce": "66571-1787982215257-317f2d4d-bb58-42fa-a5ab-580d1587cb20"
+}
