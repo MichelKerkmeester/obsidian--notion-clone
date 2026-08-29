@@ -85,21 +85,33 @@ subsequent claim depends on the harness being able to fail. **T0 precedes everyt
 
 ### Stage 1f — the three checkers this phase owns for the program
 
-- [ ] **T7b** Build the input-hash recorder — REQ-016. Previously `008`'s AC-010; moved here because
+- [x] **T7b** Build the input-hash recorder — REQ-016. Previously `008`'s AC-010; moved here because
       evidence can only be content-addressed at the moment it is measured.
       *Evidence to close:* every recorded criterion value carries the hashes of the files it was
       measured against; editing one of those files and rerunning marks the prior value stale.
       `008` consumes this rather than reconstructing vintage retroactively.
+      *Closed:* `tools/live/evidence.mjs`, generalising the capture pipeline's existing per-source
+      hash convention rather than inventing a second one. Both recorded artefacts carry their
+      inputs — `token-census.json` and `cascade-audit.json` each name `styles.css` and their own
+      producer. Negative control run: appending one comment line to `styles.css` moved its hash
+      `c4906525fe85` → `d5d769b8d2e9`, the check went to exit 1 naming that file, and restoring the
+      file (hash verified back to `c4906525fe85`) returned it to exit 0. The mutation was confirmed
+      to have landed by hash before the check ran, so a silently-inert control could not pass here.
 - [ ] **T7c** Build the blank-cell checker — REQ-019.
       *Evidence to close:* it refuses a `Planned` → `In Progress` transition for a phase with an
       empty *census*/*trace* "today" cell, demonstrated against a deliberately blanked cell, then
       passes once the cell is filled.
-- [ ] **T7d** Build the checkbox-parent guard — REQ-017.
+- [x] **T7d** Build the checkbox-parent guard — REQ-017.
       *Evidence to close:* removing the parent class at any one of `table-renderer.ts:514`, `:785`,
       `cell-renderer.ts:489`, `card-field-renderer.ts:184`, `record-detail-panel.ts:339` fails the
       guard; restoring it passes. These five inputs are classless and are styled only through a
       parent classed one line earlier, and `004` — which owns the fix — does not start until after
       this phase.
+      *Closed:* `src/views/checkbox-borrowed-ancestor.test.ts` pins all five sites with the class each
+      one borrows and the ancestor it borrows from. Negative control run per site by line number —
+      the first attempt searched for an eight-space indent against a file that uses four, so the
+      mutation never applied and the guard "passed" against an unmodified file. Redone by line
+      number, each of the five removals fails the guard and each restoration passes.
 
 <!-- /ANCHOR:phase-1 -->
 ---
@@ -174,8 +186,16 @@ this stage confirms the rewrite against one this phase cannot edit.
       `topLayer` as capability-gated and unimplemented — REQ-009.
       *Evidence to close:* a surface's mount is read from its declaration, never inferred; selecting
       `topLayer` without its per-role proof is a build error.
-- [ ] **T15** Add `.db-surface` to the token-root selector list at `styles.css:19-27` — REQ-002.
+- [x] **T15** Add `.db-surface` to the token-root selector list at `styles.css:19-27` — REQ-002.
       *Evidence to close:* `--db-radius-lg` resolves non-empty on a body-mounted surface.
+      *Closed:* added to both the light root and the dark `:is()` root — the dark block is a separate
+      selector list, so adding it to one and not the other would have fixed the token in one theme
+      only. Census over 73 overlay classes: the radius token resolves empty on bare `body` for 70 of
+      them, and non-empty for **all 73** once the root carries `.db-surface`.
+      **This does not mean those surfaces look right.** 17 of them still compute differently when
+      marked, because their rules are addressed through an ancestor rather than the surface itself —
+      a separate mechanism, and the reason T17 exists. Reading this task as "the token problem is
+      fixed" would repeat exactly the error the phase was written to prevent.
 - [ ] **T16** Implement the versioned token snapshot for `bodyPortal`, and refresh it on theme
       change — REQ-002, NFR-S03.
       *Evidence to close:* the snapshot's values equal the container-resolved values; host computed
