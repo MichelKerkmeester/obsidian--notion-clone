@@ -44,8 +44,8 @@ function walk(dir, out = []) {
 }
 
 const checks = [];
-const record = (name, enforced, value, target, note) =>
-  checks.push({ name, enforced, value, target, note, conforms: value === target });
+const record = (name, enforced, value, target, note, gated = false) =>
+  checks.push({ name, enforced, value, target, note, gated, conforms: value === target });
 
 // ───────────────────────────────────────────────────────────────────
 // 3. CONTRACT SCAN — a floating surface created without a declared role
@@ -243,7 +243,9 @@ const gatedResults = [
   gated("story coverage", "npm", ["run", "story:coverage"]),
   gated("handoff replay", "node", ["tools/live/replay.mjs"]),
 ];
-for (const g of gatedResults) record(`gated — ${g.name}`, true, g.ok ? 0 : 1, 0, g.ok ? "passing" : "FAILING");
+for (const g of gatedResults) {
+  record(`gated — ${g.name}`, true, g.ok ? 0 : 1, 0, g.ok ? "passing" : "FAILING", true);
+}
 
 // ───────────────────────────────────────────────────────────────────
 // 11. REPORT
@@ -275,7 +277,15 @@ if (rawSites.length) {
   console.log(`  ... ${rawSites.length} in total\n`);
 }
 
-stamp("tools/live/design-conformance.json", { checks, rawSites }, [
+// The gated results are printed but never stamped. Each is the verdict of a whole other gate,
+// reached by shelling out, so its real inputs are everything those commands read -- fifteen
+// bundled modules in the placement harness alone. No inputs list here can cover that, and
+// stamping one anyway produced a file that recorded placement as FAILING for the rest of a
+// session after the harness was repaired, while the freshness checker went on calling it fresh
+// because the file it actually depended on was not named. A result nobody can date does not
+// belong in a dated artefact. The console still shows them, live, from the run that just
+// produced them, and a gated failure still decides the exit code.
+stamp("tools/live/design-conformance.json", { checks: checks.filter((c) => !c.gated), rawSites }, [
   "styles.css",
   "tools/live/design-conformance.mjs",
   "src/views/popover-position.ts",

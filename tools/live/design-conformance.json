@@ -1,8 +1,8 @@
 {
-  "measuredAt": "2026-08-30T16:13:08.726Z",
+  "measuredAt": "2026-08-30T16:55:13.865Z",
   "inputs": {
     "styles.css": "e5ada7e445ce",
-    "tools/live/design-conformance.mjs": "cf38f906d933",
+    "tools/live/design-conformance.mjs": "ca98bf93ea28",
     "src/views/popover-position.ts": "0ad4c36947c4"
   },
   "checks": [
@@ -12,6 +12,7 @@
       "value": 193,
       "target": 0,
       "note": "counted, not gated: gating today would fail on known debt",
+      "gated": false,
       "conforms": false
     },
     {
@@ -20,6 +21,7 @@
       "value": 82,
       "target": 0,
       "note": "the registry holds five producers; the rest are unmigrated",
+      "gated": false,
       "conforms": false
     },
     {
@@ -28,6 +30,7 @@
       "value": 129,
       "target": 0,
       "note": "nothing photographs or measures these, so nothing would notice if they broke",
+      "gated": false,
       "conforms": false
     },
     {
@@ -36,6 +39,7 @@
       "value": 0,
       "target": 0,
       "note": "enforced by the token root; held through five later phases",
+      "gated": false,
       "conforms": true
     },
     {
@@ -44,6 +48,7 @@
       "value": 13,
       "target": 0,
       "note": "the design system says a role owns its width",
+      "gated": false,
       "conforms": false
     },
     {
@@ -52,6 +57,7 @@
       "value": 0,
       "target": 0,
       "note": "a caller stating nothing gets the compact role width",
+      "gated": false,
       "conforms": true
     },
     {
@@ -60,6 +66,7 @@
       "value": 1,
       "target": 0,
       "note": "db-anchored-popover",
+      "gated": false,
       "conforms": false
     },
     {
@@ -68,6 +75,7 @@
       "value": 1,
       "target": 0,
       "note": "highest 2147483646",
+      "gated": false,
       "conforms": false
     },
     {
@@ -76,6 +84,7 @@
       "value": 124,
       "target": 0,
       "note": "each needs a disposition: intended, or a defect",
+      "gated": false,
       "conforms": false
     },
     {
@@ -84,31 +93,8 @@
       "value": 2,
       "target": 0,
       "note": "src/views/modals/create-record-icon-field-modal.ts, src/views/modals/group-order-modal.ts",
+      "gated": false,
       "conforms": false
-    },
-    {
-      "name": "gated — placement geometry",
-      "enforced": true,
-      "value": 1,
-      "target": 0,
-      "note": "FAILING",
-      "conforms": false
-    },
-    {
-      "name": "gated — story coverage",
-      "enforced": true,
-      "value": 0,
-      "target": 0,
-      "note": "passing",
-      "conforms": true
-    },
-    {
-      "name": "gated — handoff replay",
-      "enforced": true,
-      "value": 0,
-      "target": 0,
-      "note": "passing",
-      "conforms": true
     }
   ],
   "rawSites": [
