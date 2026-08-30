@@ -60,7 +60,13 @@ describe("surface contract", () => {
     expect(SURFACE_REGISTRY["owned-menu"]).toEqual({ role: "menu", mount: "bodyPortal", host: "body" });
     expect(SURFACE_REGISTRY["record-detail-panel"]).toEqual({ role: "panel", mount: "local", host: "container" });
     expect(SURFACE_REGISTRY["filter-panel"]).toEqual({ role: "panel", mount: "local", host: "container" });
-    expect(SURFACE_REGISTRY["date-value-picker"]).toEqual({ role: "menu", mount: "bodyPortal", host: "body" });
+    // Local, and correct rather than merely unmeasured. A container-mounted popover used to be
+    // displaced by the leaf's own origin, because `.workspace-leaf` has `contain: strict` and paint
+    // containment makes it the containing block for the fixed position the toolbar positioner
+    // applies. The positioner now resolves that block and offsets against it, so placement no longer
+    // depends on where a surface is mounted. Any measurement rerun on this has to put the leaf away
+    // from the viewport origin, or the offset it is testing for is zero by construction.
+    expect(SURFACE_REGISTRY["date-value-picker"]).toEqual({ role: "menu", mount: "local", host: "container" });
   });
 
   it("defines a versioned plugin token key list", () => {

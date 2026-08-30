@@ -199,12 +199,34 @@ export const TOKEN_SNAPSHOT_KEYS = SURFACE_TOKEN_KEYS;
 // 4. PRODUCER REGISTRY
 // ───────────────────────────────────────────────────────────────────
 
+/**
+ * Where each producer mounts its surface.
+ *
+ * The date-picker row took three attempts and the sequence is worth keeping, because two of the
+ * three were defensible and wrong. It said `bodyPortal` while `date-value-picker.ts` mounts on the
+ * container. Portalling was assumed to free the surface from the leaf, and a first measurement said
+ * the two mounts were identical — but that harness put the leaf at the viewport origin, where the
+ * offset being tested for is zero by construction. Rerun with a sidebar, a container-mounted
+ * popover landed 244px outside the editing area, because `.workspace-leaf` carries `contain: strict`
+ * and paint containment makes the leaf the containing block for the `position: fixed` the toolbar
+ * positioner applies.
+ *
+ * That was a real defect in every locally mounted popover, not an argument about this row.
+ * `positionToolbarPopover` now resolves its own containing block and offsets against it, so a
+ * viewport coordinate lands where it was computed to land whatever the surface is mounted in. The
+ * row is `local` because that is what the producer does, and it is now correct rather than merely
+ * unmeasured.
+ *
+ * `record-detail-panel` is `local` at construction and becomes a body portal on a phone, where
+ * `setSheetMount` moves it to clear the navigation bar. One row cannot say both; it says what the
+ * producer does when it is built, and the sheet path is the documented exception.
+ */
 export const SURFACE_REGISTRY = {
   "column-menu": { role: "menu", mount: "bodyPortal", host: "body" },
   "owned-menu": { role: "menu", mount: "bodyPortal", host: "body" },
   "record-detail-panel": { role: "panel", mount: "local", host: "container" },
   "filter-panel": { role: "panel", mount: "local", host: "container" },
-  "date-value-picker": { role: "menu", mount: "bodyPortal", host: "body" },
+  "date-value-picker": { role: "menu", mount: "local", host: "container" },
 } as const satisfies Record<SurfaceProducerId, SurfaceProducerDefinition>;
 
 export function getSurfaceProducerDefinition(producer: SurfaceProducerId): SurfaceProducerDefinition {

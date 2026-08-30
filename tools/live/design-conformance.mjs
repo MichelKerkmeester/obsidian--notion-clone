@@ -22,7 +22,7 @@
 
 import { execFileSync } from "node:child_process";
 import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
-import { join, relative } from "node:path";
+import { dirname, join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import ts from "typescript";
 import { stamp } from "./evidence.mjs";
@@ -48,12 +48,13 @@ const record = (name, enforced, value, target, note) =>
   checks.push({ name, enforced, value, target, note, conforms: value === target });
 
 // ───────────────────────────────────────────────────────────────────
-// 3. CONTRACT SCAN — a floating surface created outside openSurface()
+// 3. CONTRACT SCAN — a floating surface created without a declared role
 // ───────────────────────────────────────────────────────────────────
 
-// Counted by finding element creations whose class is surface-shaped, then subtracting the ones
-// that reach the factory. It is a count and not yet a gate: making it a gate means migrating every
-// site, and a gate that fails on day one from known debt is one people learn to disable.
+// Counted by finding element creations whose class is surface-shaped. Not one of them names a
+// role from the contract, so each is a surface the census cannot reconcile and no shared dismissal
+// or focus policy reaches. It is a count and not yet a gate: making it a gate means giving every
+// site a role, and a gate that fails on day one from known debt is one people learn to disable.
 let rawSurfaceMounts = 0;
 const rawSites = [];
 for (const file of walk(join(REPO, "src"))) {
@@ -84,7 +85,7 @@ for (const file of walk(join(REPO, "src"))) {
   };
   visit(source);
 }
-record("contract scan — surfaces created outside openSurface()", false, rawSurfaceMounts, 0,
+record("contract scan — surfaces created without a declared role", false, rawSurfaceMounts, 0,
   "counted, not gated: gating today would fail on known debt");
 
 // ───────────────────────────────────────────────────────────────────
@@ -174,7 +175,59 @@ if (existsSync(cascadePath)) {
 }
 
 // ───────────────────────────────────────────────────────────────────
-// 9. GATED CHECKS — the ones that already fail the build
+// 9. ORPHAN MODULES — source no entry point and no test can reach
+// ───────────────────────────────────────────────────────────────────
+
+// A module nothing imports is invisible to every other check here. The bundler drops it, so it
+// never reaches a device; the suites never load it, so nothing contradicts whatever its comments
+// claim about itself. It reads as designed code and behaves as no code at all, and the longer it
+// sits the more authoritative it looks — which is how a factory can be cited as a foundation by
+// four later plans while shipping to nobody.
+//
+// Reachability is walked from the same roots the real builds use: the plugin entry point, the
+// suite setup file the test runner loads by configuration rather than by import, and every test
+// and story. Anything left over is reachable by nothing at all.
+const moduleFor = (from, spec) => {
+  const base = resolve(dirname(from), spec);
+  for (const candidate of [`${base}.ts`, join(base, "index.ts"), base]) {
+    if (/\.ts$/.test(candidate) && existsSync(candidate)) return candidate;
+  }
+  return undefined;
+};
+
+const allModules = [];
+const walkAll = (dir) => {
+  for (const entry of readdirSync(dir)) {
+    const abs = join(dir, entry);
+    if (statSync(abs).isDirectory()) walkAll(abs);
+    else if (/\.ts$/.test(entry)) allModules.push(abs);
+  }
+};
+walkAll(join(REPO, "src"));
+
+const reachable = new Set();
+const pending = [join(REPO, "src/main.ts"), join(REPO, "src/__tests__/setup.ts")]
+  .filter((f) => existsSync(f))
+  .concat(allModules.filter((f) => /\.(test|stories)\.ts$/.test(f)));
+while (pending.length) {
+  const file = pending.pop();
+  if (reachable.has(file)) continue;
+  reachable.add(file);
+  for (const m of readFileSync(file, "utf8").matchAll(/(?:from|import)\s*\(?\s*["'](\.[^"']+)["']/g)) {
+    const dep = moduleFor(file, m[1]);
+    if (dep && !reachable.has(dep)) pending.push(dep);
+  }
+}
+const orphanModules = allModules
+  .filter((f) => !reachable.has(f))
+  .map((f) => relative(REPO, f))
+  .sort();
+record("reachability — source modules no entry point and no test reaches", false,
+  orphanModules.length, 0,
+  orphanModules.length ? orphanModules.join(", ") : "every module is reached by a build or a suite");
+
+// ───────────────────────────────────────────────────────────────────
+// 10. GATED CHECKS — the ones that already fail the build
 // ───────────────────────────────────────────────────────────────────
 
 const gated = (name, cmd, args) => {
@@ -193,7 +246,7 @@ const gatedResults = [
 for (const g of gatedResults) record(`gated — ${g.name}`, true, g.ok ? 0 : 1, 0, g.ok ? "passing" : "FAILING");
 
 // ───────────────────────────────────────────────────────────────────
-// 10. REPORT
+// 11. REPORT
 // ───────────────────────────────────────────────────────────────────
 
 const width = Math.max(...checks.map((c) => c.name.length));
@@ -217,7 +270,7 @@ console.log(`\n  ${enforced.filter((c) => c.conforms).length}/${enforced.length}
 console.log(`  ${gaps.length} of ${counted.length} counted checks are gaps\n`);
 
 if (rawSites.length) {
-  console.log("Surfaces created without the factory, first ten:");
+  console.log("Surfaces created without a declared role, first ten:");
   for (const s of rawSites.slice(0, 10)) console.log(`  ${s}`);
   console.log(`  ... ${rawSites.length} in total\n`);
 }
