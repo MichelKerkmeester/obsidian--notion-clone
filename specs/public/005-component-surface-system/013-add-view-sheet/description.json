@@ -1,4 +1,5 @@
 {
+  "level": "1",
   "specFolder": "public/005-component-surface-system/013-add-view-sheet",
   "description": "Rebuild the Add View surface against the design system: one control idiom per job, one affordance per action, a real grouping, and sheet presentation",
   "keywords": [
@@ -20,7 +21,7 @@
     "sheet",
     "presentation"
   ],
-  "lastUpdated": "2026-08-30T16:45:48.488Z",
+  "lastUpdated": "2026-08-30T19:12:38.042Z",
   "specId": "013",
   "folderSlug": "add-view-sheet",
   "parentChain": [
@@ -28,6 +29,5 @@
     "005-component-surface-system"
   ],
   "memorySequence": 0,
-  "memoryNameHistory": [],
-  "level": "1"
+  "memoryNameHistory": []
 }

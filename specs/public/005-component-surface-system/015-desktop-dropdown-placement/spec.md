@@ -13,10 +13,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "public/005-component-surface-system/015-desktop-dropdown-placement"
-    last_updated_at: "2026-08-30T09:45:00Z"
-    last_updated_by: "design-specialist"
-    recent_action: "Five paths inventoried by closure proof; six defects measured, five fixed at two seams"
-    next_safe_action: "Merge probe-desktop-placement.mjs into verify-placement.mjs once free"
+    last_updated_at: "2026-08-30T21:15:00Z"
+    last_updated_by: "criteria-adjudication"
+    recent_action: "Criteria adjudicated against the captured run; 5 ticked, the sixth stays red"
+    next_safe_action: "Fix the clamp in both host files; add a phone arm to the lifetime check"
     blockers:
       - "Calendar/timeline search panel: 240-292px under the sidebar, declared red (plan.md 7)"
       - "Third copy of the anchor idiom in embedded-database-renderer.ts, same file lock"
@@ -37,9 +37,9 @@ _memory:
     open_questions:
       - "Anchorless open: entry guard returns and the panel renders unplaced, binds 34 call sites"
       - "getPlacementOptions drops align, gap and preferredSide into dead code (plan.md 7)"
+      - "The dead-anchor guard runs on a phone too; what a scrimmed sheet should do is undecided"
     answered_questions:
       - "getPlacementOptions is not a root cause; its only consumer has zero callers"
-      - "The phone does not move; every change sits in a desktop-only branch"
 ---
 # Feature Specification: Desktop Dropdown Placement
 
