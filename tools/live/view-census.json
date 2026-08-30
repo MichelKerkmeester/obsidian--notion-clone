@@ -1,7 +1,7 @@
 {
-  "measuredAt": "2026-08-30T10:38:42.587Z",
+  "measuredAt": "2026-08-30T13:40:47.867Z",
   "inputs": {
-    "styles.css": "bdaff6ffb928",
+    "styles.css": "e92c9f98803f",
     "tools/live/view-census.mjs": "f911f2e4a8cb",
     "tools/screenshots/scenarios.mjs": "1395f2dacbfd"
   },
@@ -2044,7 +2044,7 @@
       "fixture": "panel-invalid-events-modal",
       "kind": "escaping",
       "tag": "div",
-      "cls": "db-invalid-event-time",
+      "cls": "db-invalid-event-time-field.is-start",
       "parentCls": "db-invalid-event-row",
       "by": 110,
       "scrolls": true
@@ -2054,7 +2054,7 @@
       "fixture": "panel-invalid-events-modal",
       "kind": "escaping",
       "tag": "div",
-      "cls": "db-invalid-event-time",
+      "cls": "db-invalid-event-time-field.is-end",
       "parentCls": "db-invalid-event-row",
       "by": 286,
       "scrolls": true
@@ -2064,7 +2064,7 @@
       "fixture": "panel-invalid-events-modal",
       "kind": "escaping",
       "tag": "div",
-      "cls": "db-invalid-event-span",
+      "cls": "db-invalid-event-span-cell",
       "parentCls": "db-invalid-event-row",
       "by": 410,
       "scrolls": true
@@ -2074,7 +2074,7 @@
       "fixture": "panel-invalid-events-modal",
       "kind": "escaping",
       "tag": "div",
-      "cls": "db-invalid-event-time",
+      "cls": "db-invalid-event-time-field.is-start",
       "parentCls": "db-invalid-event-row",
       "by": 110,
       "scrolls": true
@@ -2084,7 +2084,7 @@
       "fixture": "panel-invalid-events-modal",
       "kind": "escaping",
       "tag": "div",
-      "cls": "db-invalid-event-time",
+      "cls": "db-invalid-event-time-field.is-end",
       "parentCls": "db-invalid-event-row",
       "by": 286,
       "scrolls": true
@@ -2094,7 +2094,7 @@
       "fixture": "panel-invalid-events-modal",
       "kind": "escaping",
       "tag": "div",
-      "cls": "db-invalid-event-span",
+      "cls": "db-invalid-event-span-cell",
       "parentCls": "db-invalid-event-row",
       "by": 410,
       "scrolls": true
@@ -2104,7 +2104,7 @@
       "fixture": "panel-invalid-events-modal",
       "kind": "escaping",
       "tag": "div",
-      "cls": "db-invalid-event-time",
+      "cls": "db-invalid-event-time-field.is-start",
       "parentCls": "db-invalid-event-row",
       "by": 110,
       "scrolls": true
@@ -2114,7 +2114,7 @@
       "fixture": "panel-invalid-events-modal",
       "kind": "escaping",
       "tag": "div",
-      "cls": "db-invalid-event-time",
+      "cls": "db-invalid-event-time-field.is-end",
       "parentCls": "db-invalid-event-row",
       "by": 286,
       "scrolls": true
@@ -2124,7 +2124,7 @@
       "fixture": "panel-invalid-events-modal",
       "kind": "escaping",
       "tag": "div",
-      "cls": "db-invalid-event-span",
+      "cls": "db-invalid-event-span-cell",
       "parentCls": "db-invalid-event-row",
       "by": 410,
       "scrolls": true
@@ -4214,7 +4214,7 @@
       "fixture": "panel-invalid-events-modal",
       "kind": "escaping",
       "tag": "div",
-      "cls": "db-invalid-event-time",
+      "cls": "db-invalid-event-time-field.is-start",
       "parentCls": "db-invalid-event-row",
       "by": 28,
       "scrolls": true
@@ -4224,7 +4224,7 @@
       "fixture": "panel-invalid-events-modal",
       "kind": "escaping",
       "tag": "div",
-      "cls": "db-invalid-event-time",
+      "cls": "db-invalid-event-time-field.is-end",
       "parentCls": "db-invalid-event-row",
       "by": 204,
       "scrolls": true
@@ -4234,7 +4234,7 @@
       "fixture": "panel-invalid-events-modal",
       "kind": "escaping",
       "tag": "div",
-      "cls": "db-invalid-event-span",
+      "cls": "db-invalid-event-span-cell",
       "parentCls": "db-invalid-event-row",
       "by": 328,
       "scrolls": true
@@ -4244,7 +4244,7 @@
       "fixture": "panel-invalid-events-modal",
       "kind": "escaping",
       "tag": "div",
-      "cls": "db-invalid-event-time",
+      "cls": "db-invalid-event-time-field.is-start",
       "parentCls": "db-invalid-event-row",
       "by": 28,
       "scrolls": true
@@ -4254,7 +4254,7 @@
       "fixture": "panel-invalid-events-modal",
       "kind": "escaping",
       "tag": "div",
-      "cls": "db-invalid-event-time",
+      "cls": "db-invalid-event-time-field.is-end",
       "parentCls": "db-invalid-event-row",
       "by": 204,
       "scrolls": true
@@ -4264,7 +4264,7 @@
       "fixture": "panel-invalid-events-modal",
       "kind": "escaping",
       "tag": "div",
-      "cls": "db-invalid-event-span",
+      "cls": "db-invalid-event-span-cell",
       "parentCls": "db-invalid-event-row",
       "by": 328,
       "scrolls": true
@@ -4274,7 +4274,7 @@
       "fixture": "panel-invalid-events-modal",
       "kind": "escaping",
       "tag": "div",
-      "cls": "db-invalid-event-time",
+      "cls": "db-invalid-event-time-field.is-start",
       "parentCls": "db-invalid-event-row",
       "by": 28,
       "scrolls": true
@@ -4284,7 +4284,7 @@
       "fixture": "panel-invalid-events-modal",
       "kind": "escaping",
       "tag": "div",
-      "cls": "db-invalid-event-time",
+      "cls": "db-invalid-event-time-field.is-end",
       "parentCls": "db-invalid-event-row",
       "by": 204,
       "scrolls": true
@@ -4294,7 +4294,7 @@
       "fixture": "panel-invalid-events-modal",
       "kind": "escaping",
       "tag": "div",
-      "cls": "db-invalid-event-span",
+      "cls": "db-invalid-event-span-cell",
       "parentCls": "db-invalid-event-row",
       "by": 328,
       "scrolls": true

@@ -1,19 +1,164 @@
 {
-  "sessionId": "fanout-luna-xhigh-fast-review-1788084859228-njjkg2",
+  "sessionId": "fanout-luna-xhigh-fast-review-1788091935413-ke2m8r",
+  "parentSessionId": null,
   "generation": 1,
   "lineageMode": "new",
+  "continuedFromRun": null,
+  "terminalStop": {
+    "stopReason": "maxIterationsReached",
+    "totalIterations": 10,
+    "timestamp": "2026-08-30T12:44:32.435Z"
+  },
+  "status": "COMPLETE",
   "openFindings": [],
   "resolvedFindings": [],
   "blockedStopHistory": [],
   "persistentSameSeverity": [],
   "severityChanged": [],
   "repeatedFindings": [],
-  "dimensionCoverage": {"correctness": false, "security": false, "traceability": false, "maintainability": false},
-  "findingsBySeverity": {"P0": 0, "P1": 0, "P2": 0},
+  "dimensionCoverage": {
+    "correctness": true,
+    "security": true,
+    "traceability": true,
+    "maintainability": true
+  },
+  "findingsBySeverity": {
+    "P0": 0,
+    "P1": 0,
+    "P2": 0
+  },
   "openFindingsCount": 0,
   "resolvedFindingsCount": 0,
-  "convergenceScore": 0,
-  "searchCoverage": {"requiredBugClasses": [], "covered": [], "ruledOut": [], "deferred": [], "blocked": [], "graphCoverageMode": "graphless_fallback"},
-  "searchDebt": [],
-  "divergence": {"saturatedDirections": [], "completed": [], "failed": [], "overrides": []}
+  "convergenceScore": 1,
+  "graphConvergenceScore": 0,
+  "graphDecision": null,
+  "graphBlockers": [],
+  "graphSignals": {},
+  "candidateCoverage": {
+    "covered": [],
+    "ruledOut": [],
+    "deferred": [],
+    "blocked": [
+      "executor_availability"
+    ],
+    "byBugClass": {
+      "executor_availability": {
+        "covered": false,
+        "ruledOut": false,
+        "deferred": false,
+        "blocked": true,
+        "iterations": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ]
+      },
+      "correctness": {
+        "covered": false,
+        "ruledOut": false,
+        "deferred": false,
+        "blocked": false,
+        "iterations": [
+          10
+        ]
+      },
+      "security": {
+        "covered": false,
+        "ruledOut": false,
+        "deferred": false,
+        "blocked": false,
+        "iterations": [
+          10
+        ]
+      },
+      "traceability": {
+        "covered": false,
+        "ruledOut": false,
+        "deferred": false,
+        "blocked": false,
+        "iterations": [
+          10
+        ]
+      },
+      "maintainability": {
+        "covered": false,
+        "ruledOut": false,
+        "deferred": false,
+        "blocked": false,
+        "iterations": [
+          10
+        ]
+      }
+    }
+  },
+  "searchDebt": [
+    {
+      "iteration": 1,
+      "id": "SL-001",
+      "dimension": "correctness",
+      "targetRefs": [
+        "specs/public/005-component-surface-system"
+      ],
+      "bugClass": "executor_availability",
+      "disposition": "blocked",
+      "rationale": "No source review was possible.",
+      "evidenceRefs": [
+        "dispatch-receipts/dispatch-review-i1-g1-retry.completion.json"
+      ],
+      "reason": "cli-codex network transport unavailable"
+    }
+  ],
+  "ruledOutCandidates": [],
+  "cleanSearchProof": [],
+  "searchCoverage": {
+    "requiredBugClasses": [
+      "executor_availability",
+      "correctness",
+      "security",
+      "traceability",
+      "maintainability"
+    ],
+    "covered": [],
+    "ruledOut": [],
+    "deferred": [],
+    "blocked": [
+      "executor_availability",
+      "correctness",
+      "security",
+      "traceability",
+      "maintainability"
+    ],
+    "graphCoverageMode": "graphless_fallback"
+  },
+  "traceability": {
+    "summary": {
+      "required": 0,
+      "executed": 0,
+      "pass": 0,
+      "partial": 0,
+      "fail": 0,
+      "blocked": 0,
+      "notApplicable": 0,
+      "gatingFailures": 0
+    },
+    "results": []
+  },
+  "divergence": {
+    "started": [],
+    "completed": [],
+    "failed": [],
+    "overrides": [],
+    "saturatedDirections": [],
+    "remainingFrontier": [],
+    "currentFocus": ""
+  },
+  "fieldWarnings": [],
+  "corruptionWarnings": []
 }

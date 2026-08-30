@@ -1,0 +1,33 @@
+{
+  "stem": "deep_review.run_completed",
+  "scope": {
+    "runId": "fanout-luna-xhigh-fast-review-1788091935413-ke2m8r",
+    "sessionId": "fanout-luna-xhigh-fast-review-1788091935413-ke2m8r"
+  },
+  "data": {
+    "terminalStatus": "incomplete",
+    "convergenceEventId": "convergence-010-fanout-luna-xhigh-fast-review",
+    "synthesisEventId": "synthesis-started-fanout-luna-xhigh-fast-review",
+    "reportEventId": "report-committed-fanout-luna-xhigh-fast-review",
+    "continuityEventId": "continuity-not-requested",
+    "finalLedgerTailHash": "05766fe05fbf0252ee83eb7f3c35c1bddb86a027ceeebb626c44407db6a4aeed",
+    "counts": {
+      "dimensions": 4,
+      "iterations": 10,
+      "candidates": 0,
+      "findings": 0,
+      "evidence": 0
+    },
+    "verdict": "incomplete",
+    "completionReason": null,
+    "incompleteReason": "executor-unavailable"
+  },
+  "eventId": "run-completed-fanout-luna-xhigh-fast-review",
+  "streamId": "deep-review-ledger",
+  "producer": {
+    "name": "deep-review-fanout",
+    "version": "1"
+  },
+  "correlationId": "fanout-luna-xhigh-fast-review-1788091935413-ke2m8r",
+  "idempotencyKey": "run-initialized-fanout-luna-xhigh-fast-review"
+}

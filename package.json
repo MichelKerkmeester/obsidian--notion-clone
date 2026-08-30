@@ -1,6 +1,6 @@
 {
   "name": "obsidian-note-database",
-  "version": "1.3.5",
+  "version": "1.3.6",
   "description": "Database views for notes with table, board, gallery, list, chart, calendar, timeline, inline markdown, formulas, and source rules.",
   "main": "main.js",
   "scripts": {
@@ -14,6 +14,7 @@
     "storybook:verify": "node tools/storybook/verify-shim.mjs",
     "storybook": "storybook dev -p 6006 --no-open",
     "bench": "node tools/bench/run.mjs",
+    "bench:list": "node tools/bench/run-list.mjs",
     "build-storybook": "storybook build",
     "story:smoke": "node tools/storybook/smoke.mjs",
     "story:coverage": "node tools/storybook/story-coverage.mjs",

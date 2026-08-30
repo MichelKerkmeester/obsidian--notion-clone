@@ -26,3 +26,9 @@ tools/bench/dist/
 # and this plugin is MIT, so they are never vendored, copied from, or shipped — cloned locally to
 # study interaction semantics and deliberately kept out of the repository.
 external/
+
+# Deep-loop lineage runtime state. A dispatched CLI writes its own home here —
+# sqlite databases, downloaded system skills, lock files, and on some runtimes a
+# linked credential. It is regenerable, it is large, and a credential must never
+# reach history. The artifacts worth keeping (state, prompts, reports) sit beside it.
+specs/**/lineages/*/.codex-home/

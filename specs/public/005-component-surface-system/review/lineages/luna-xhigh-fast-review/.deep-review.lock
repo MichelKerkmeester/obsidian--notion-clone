@@ -1,11 +1,11 @@
 {
-  "owner_pid": 51621,
-  "started_at_iso": "2026-08-30T10:15:51.707Z",
-  "ttl_ms": 300000,
-  "last_heartbeat_iso": "2026-08-30T10:15:51.707Z",
+  "owner_pid": 36491,
+  "started_at_iso": "2026-08-30T12:34:40.813Z",
+  "ttl_ms": 900000,
+  "last_heartbeat_iso": "2026-08-30T12:34:40.813Z",
   "packet_id": "specs/public/005-component-surface-system",
-  "runtime_kind": "main",
+  "runtime_kind": "child",
   "phase": "running",
-  "last_activity_iso": "2026-08-30T10:15:51.707Z",
-  "acquire_nonce": "51621-1788084951708-cb7ac497-afa3-4b32-bbca-b7cfbdc7bdac"
+  "last_activity_iso": "2026-08-30T12:34:40.813Z",
+  "acquire_nonce": "36491-1788093280814-0b042ac7-d482-4a8c-a21d-5d82e9b6bbf6"
 }

@@ -1,7 +1,7 @@
 {
-  "measuredAt": "2026-08-30T10:38:09.783Z",
+  "measuredAt": "2026-08-30T13:40:39.610Z",
   "inputs": {
-    "styles.css": "bdaff6ffb928",
+    "styles.css": "e92c9f98803f",
     "tools/live/surface-census.mjs": "09663f4f354e",
     "src/views/surface-contract.ts": "ff7e6bafd3c8"
   },
@@ -1035,7 +1035,7 @@
       "mountParent": "(body)",
       "tokens": true,
       "role": null,
-      "rect": "1410x222",
+      "rect": "1410x225",
       "scenarios": [
         "panel-invalid-events-modal"
       ]
