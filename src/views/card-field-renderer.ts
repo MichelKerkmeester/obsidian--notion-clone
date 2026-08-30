@@ -19,6 +19,7 @@ import { isObsidianTagsKey, resolveOptionDisplay, toBooleanValue, toMultiSelectV
 import { formatDateTimeValueDisplay, formatDateValueDisplay } from "../data/date-time-format";
 import { getFileFieldFixedType, isFileFieldKey, isReadonlyFileField } from "../data/file-fields";
 import { getNumberDisplayStyle } from "../data/column-display";
+import { formatEuroCurrency, formatEuroNumber } from "../data/euro-format";
 import { parseInlineMarkdown } from "../data/inline-markdown";
 import { isImeComposing } from "../data/keyboard-utils";
 import { assembleSchemeLinkTarget, isTextLinkScheme } from "../data/text-link-scheme";
@@ -247,6 +248,16 @@ export function renderCardFieldValue(
       if (style === "ring") { renderProgressRing(valueEl, numeric, col.numberDisplayConfig, interaction); return; }
     }
     valueEl.addClass("db-card-field-number");
+    // Format the way the table formats. A card and a cell showing the same column were rendering
+    // the same figure two different ways — the table grouped it and gave a currency column its
+    // symbol, the card printed the raw JavaScript number — so the sheet read as unformatted data
+    // next to a table that looked right.
+    if (Number.isFinite(numeric)) {
+      valueEl.textContent = displayType === "currency"
+        ? formatEuroCurrency(numeric)
+        : formatEuroNumber(numeric);
+      return;
+    }
   }
 
   const schemeTarget = col.type === "text" && !isFileFieldKey(col.key) && isTextLinkScheme(col.textLinkScheme)

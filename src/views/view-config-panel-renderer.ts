@@ -804,6 +804,7 @@ export class ViewConfigPanelRenderer {
             attr: {
               type: currentColumn?.type === "number" || currentColumn?.type === "currency" ? "number" : "text",
               placeholder: t("filter.value"),
+              "aria-label": t("filter.value"),
             },
           });
           value.value = leaf.value || "";
@@ -1220,7 +1221,7 @@ export class ViewConfigPanelRenderer {
         })
       : controls.createEl("input", {
           cls: "db-view-config-text db-source-rule-custom-field",
-          attr: { type: "text", placeholder: t("viewConfig.sourceRules.fieldPlaceholder") },
+          attr: { type: "text", placeholder: t("viewConfig.sourceRules.fieldPlaceholder"), "aria-label": t("viewConfig.sourceRules.fieldPlaceholder") },
         });
     if (!usePicker) {
       const customInput = customField as HTMLInputElement;
@@ -1230,7 +1231,7 @@ export class ViewConfigPanelRenderer {
     customField.style.display = isKnownField ? "none" : "";
     const value = controls.createEl("input", {
       cls: "db-view-config-text db-source-rule-value",
-      attr: { type: "text", placeholder: t("viewConfig.sourceRules.valuePlaceholder") },
+      attr: { type: "text", placeholder: t("viewConfig.sourceRules.valuePlaceholder"), "aria-label": t("viewConfig.sourceRules.valuePlaceholder") },
     });
     value.value = rule.value || "";
     let selectedOperator: SourceRuleOperator = rule.op;
@@ -1673,7 +1674,7 @@ export class ViewConfigPanelRenderer {
     }
     const input = field.createEl("input", {
       cls: "db-view-config-text",
-      attr: { type: "text", placeholder: t("settings.sourceFolder.placeholder") },
+      attr: { type: "text", placeholder: t("settings.sourceFolder.placeholder"), "aria-label": t("settings.sourceFolder.placeholder") },
     });
     input.value = database.newRecordFolder || "";
     input.oninput = () => {
@@ -1982,7 +1983,8 @@ export class ViewConfigPanelRenderer {
     }
     const input = field.createEl("input", {
       cls: "db-view-config-text",
-      attr: { type: "text", placeholder },
+      // The row's own label, which is a div beside the field and names nothing on its own.
+      attr: { type: "text", placeholder, "aria-label": label },
     });
     input.value = value;
     input.oninput = () => onInput?.(input.value.trim());
@@ -2052,7 +2054,10 @@ export class ViewConfigPanelRenderer {
       if (helpText) field.createDiv({ cls: "db-view-config-help", text: helpText });
       return;
     }
-    const input = field.createEl("input", { cls: "db-toggle-switch", attr: { type: "checkbox", role: "switch" } });
+    // The visible text is a div beside the control, not a label element, so it names nothing to a
+    // screen reader. Carried explicitly rather than restructured: the class sets no display, so
+    // turning that div into a label would flip it from block to inline and move the row.
+    const input = field.createEl("input", { cls: "db-toggle-switch", attr: { type: "checkbox", role: "switch", "aria-label": label } });
     input.checked = value;
     input.onchange = () => onChange(input.checked);
     if (helpText) field.createDiv({ cls: "db-view-config-help", text: helpText });
@@ -2071,12 +2076,15 @@ export class ViewConfigPanelRenderer {
     const row = panel.createDiv({ cls: "db-view-config-row" });
     row.createDiv({ cls: "db-view-config-label", text: label });
     const controls = row.createDiv({ cls: "db-view-config-range" });
+    // Named from the row's own label. The visible text is a div beside them, so without this a
+    // screen reader announces "slider" and "spin button" with nothing to say which setting they are
+    // — and this row emits two controls, so it announces it twice.
     const range = controls.createEl("input", {
-      attr: { type: "range", min: String(min), max: String(max), step: String(step) },
+      attr: { type: "range", min: String(min), max: String(max), step: String(step), "aria-label": label },
     });
     const number = controls.createEl("input", {
       cls: "db-view-config-number",
-      attr: { type: "number", min: String(min), max: String(max), step: String(step) },
+      attr: { type: "number", min: String(min), max: String(max), step: String(step), "aria-label": label },
     });
     const clamped = Math.max(min, Math.min(max, Math.round(value)));
     range.value = String(clamped);

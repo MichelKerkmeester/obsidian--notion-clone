@@ -31,6 +31,30 @@ export function getFieldWidth(config: ViewConfig, col: ColumnDef, fallback = 150
   return config.columnWidths?.[col.key] || col.width || config.defaultColumnWidth || fallback;
 }
 
+/**
+ * The grid tracks a list row's field area needs, one per column in declaration order.
+ *
+ * Lives here rather than inline in the renderer so it can be asserted directly: the renderer omits
+ * a field whose value is empty, and the whole point of the track list is that it is built from
+ * every column rather than from the survivors. A version built from the survivors looks identical
+ * on complete data and silently misaligns everything else.
+ */
+export function listFieldTrackTemplate(config: ViewConfig, fields: ColumnDef[]): string {
+  const compact = config.listCompactFields === true;
+  return fields
+    .map((col) => {
+      // A wrapping column is sized by its content and declares no width, so a fixed track would
+      // either cut it off or let it paint across its neighbour.
+      if (col.wrap) return "max-content";
+      const width = getFieldWidth(config, col);
+      // Compact means "as wide as the value needs, never wider than the column". Expressed on the
+      // field it was a flex rule, which a grid item ignores — the setting stopped doing anything
+      // the moment these rows stopped being a flex line.
+      return compact ? `fit-content(${width}px)` : `${width}px`;
+    })
+    .join(" ");
+}
+
 /** Clamp a card field width so it stays strictly below the card width (value column must not fill the card). */
 export function clampCardFieldWidth(fieldWidth: number, cardWidth: number): number {
   return Math.min(fieldWidth, Math.max(0, cardWidth - 1));

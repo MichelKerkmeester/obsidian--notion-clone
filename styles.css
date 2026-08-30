@@ -30,6 +30,13 @@
   -webkit-tap-highlight-color: transparent;
   -webkit-font-smoothing: antialiased;
   -webkit-text-size-adjust: 100%;
+  /* Functional non-text contrast for the unchecked controls. The host's border tokens are drawn
+     for dividers, where being barely there is the point; on a switch or a box they leave the whole
+     off state below 1.5:1 against the panel, so a user can see which switches are on and not which
+     are off. WCAG 1.4.11 wants 3:1 for the control's own boundary. Overridable by a theme that has
+     its own opinion. */
+  --db-control-border-strong: #82878e;
+
   --db-space-1: 2px;
   --db-space-2: 4px;
   --db-space-3: 6px;
@@ -170,7 +177,11 @@
      pushed past the right edge. positionToolbarPopover also sets this inline,
      but the class must hold on its own so the sheet is correct without it. */
   box-sizing: border-box !important;
-  max-height: 90svh !important;
+  /* The cap has to come down by however far the bottom edge went up, or lifting the sheet clear of
+     the software keyboard pushes its top off the screen instead. The variable is the same one the
+     bottom offset reads, and it is 0px whenever no keyboard is open — so with no keyboard this is
+     exactly `90svh` and the sheet's existing ceiling is unchanged. */
+  max-height: calc(90svh - var(--db-mobile-sheet-bottom, 0px)) !important;
   padding-bottom: calc(16px + env(safe-area-inset-bottom)) !important;
   border-right: 0 !important;
   border-bottom: 0 !important;
@@ -182,12 +193,16 @@
    behind it — as a pseudo-element it was trapped inside the sheet's own stacking context and
    painted the surface grey instead of dimming the app. 0.4 is the opacity scale's step; the 0.42
    it replaced was not on it. */
+/* The layer that makes a sheet modal: it dims what is behind and swallows every press aimed at it.
+   Default is capturing, because a sheet that lets taps through is not a sheet — the surface behind
+   stays live under a dimmed overlay, which reads as the app ignoring you. A producer that genuinely
+   wants a non-blocking backdrop opts out at the call site. */
 .db-mobile-sheet-scrim {
   position: fixed;
   z-index: calc(var(--db-layer-modal, 1000) - 1);
   inset: 0;
-  background: rgba(0, 0, 0, 0.4);
-  pointer-events: none;
+  background: rgba(0, 0, 0, 0.25);
+  pointer-events: auto;
 }
 
 /* The portalled sheet wears the container class so its rules keep matching, but it must not also
@@ -197,7 +212,17 @@
   height: auto !important;
 }
 
+/* The grab bar, and the reason dragging the sheet did nothing on a phone.
+
+   `touch-action` decides who owns a vertical drag. Left at the default the browser claims it for
+   scrolling and cancels the pointer stream on the first move, so the handler never sees the
+   gesture — the drag code was correct the whole time and simply unreachable.
+
+   The second half is the target. The bar is 4px tall because that is what reads well; a thumb
+   cannot land on 4px. The pseudo-element widens the hit area to a thumb-sized band without
+   touching layout, because a pseudo-element hit-tests as the element that owns it. */
 .db-mobile-bottom-sheet-handle {
+  position: relative;
   width: 36px;
   height: 4px;
   flex: 0 0 auto;
@@ -205,6 +230,40 @@
   border-radius: var(--db-radius-full);
   background: var(--text-faint);
   opacity: 0.65;
+  touch-action: none;
+}
+
+.db-mobile-bottom-sheet-handle::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  /* The grab area spans the header, not the bar. A 36px-wide target asks the thumb to find a
+     specific spot on a sheet the user is already touching somewhere near the top; a full-width band
+     lets the gesture start anywhere along it. Sized past the sheet and clipped by it, because the
+     bar itself is only 36px so a percentage here would measure the wrong box. */
+  width: 100vw;
+  height: 48px;
+  transform: translate(-50%, -50%);
+}
+
+/* The record sheet pads its top by --db-space-6, four times what the menu sheets use, so its bar
+   sits 24px down and a band centred on that bar reaches 50px — past the sheet's own header.
+   Measured on that surface: the band covered the title outright, so the double-tap that renames a
+   note never reached it, and it covered the top 18px of both 44px header actions, leaving 26px of
+   each. A drag target that swallows a rename and two buttons is not a bigger target, it is a wrong
+   one.
+
+   Here the band runs from the sheet's top edge to the bottom of the handle's own margin box, which
+   is exactly the chrome and none of the content. Both ends are derived — the top from the padding
+   token plus the handle's own margin, the bottom from that margin — so the band tracks the sheet
+   instead of being pinned to a number that was true once. The menu sheets keep the shared rule:
+   their content starts below where their band already ends, measured, so they steal nothing. */
+.db-record-detail-panel .db-mobile-bottom-sheet-handle::before {
+  top: calc(-1 * (var(--db-space-6) + 8px));
+  bottom: -4px;
+  height: auto;
+  transform: translateX(-50%);
 }
 
 .db-mobile-bottom-sheet.db-overlay-enter {
@@ -225,9 +284,21 @@
   transition: background-color 120ms ease-out, color 120ms ease-out;
 }
 
+/* A disabled row was distinguishable only by its cursor, which is invisible until the pointer is
+   already on it. The host fades its own disabled rows to the faint text colour rather than dimming
+   the whole row, so the label stays legible while reading clearly as unavailable; matching that
+   keeps the two menus consistent when they open side by side. */
 .db-menu-item:disabled,
-.db-menu-item[aria-disabled="true"] {
+.db-menu-item[aria-disabled="true"],
+.db-menu-item.is-disabled {
   cursor: default;
+  color: var(--text-faint);
+}
+
+.db-menu-item:disabled .db-menu-item-icon,
+.db-menu-item[aria-disabled="true"] .db-menu-item-icon,
+.db-menu-item.is-disabled .db-menu-item-icon {
+  color: var(--text-faint);
 }
 
 .db-menu-item:hover,
@@ -240,12 +311,33 @@
   box-shadow: var(--db-accent-focus-ring);
 }
 
+/* Sized here rather than left to whatever SVG arrives. `setIcon` injects the host's icon element,
+   which reads --icon-size; without a value the slot is as wide as the glyph, so the label's left
+   edge moved with the icon. The host gives its own menu icons the small step, and this menu sits
+   next to those. */
 .db-menu-item-icon,
 .db-menu-item-check {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   flex: 0 0 auto;
+}
+
+.db-menu-item-icon.db-menu-item-icon,
+.db-menu-item-check.db-menu-item-check {
+  color: var(--text-muted);
+  flex: 0 0 var(--icon-s, 16px);
+  width: var(--icon-s, 16px);
+  height: var(--icon-s, 16px);
+  --icon-size: var(--icon-s, 16px);
+}
+
+/* A row carrying neither still holds the slot open, so one icon-less row in a menu of icons does
+   not pull its label 22px left of every sibling. An empty flex item rather than a margin: the row's
+   own gap then spaces it exactly as a real icon would, and stays correct if that gap changes. */
+.db-menu-item.db-menu-item:not(:has(.db-menu-item-icon)):not(:has(.db-menu-item-check))::before {
+  content: "";
+  flex: 0 0 var(--icon-s, 16px);
 }
 
 .db-menu-item-label {
@@ -257,33 +349,73 @@
 
 /* The plugin-owned menu shell. Replaces Obsidian's Menu so the rows inside can be styled without
    reaching into MenuItem's undocumented `.dom`. Sized to the compact preset the column menu already
-   asks for, which is the width this family reads correctly at. */
+   asks for, which is the width this family reads correctly at.
+
+   Chromed from the host's own menu variables, with the plugin's values as fallbacks. This menu
+   opens beside Obsidian's real ones, so anything it decides for itself is a difference the user
+   sees between two menus that should look identical — and a theme that restyles menus restyles
+   this one too. The shadow is why: a hand-rolled single layer at 28% black sat next to the app's
+   three graduated layers topping out at 7%, which is what made this menu read as another product.
+   Padding stays the plugin's own: these rows are 30px with a rounded highlight, and the host's
+   value is cut for its own row metrics — and resolves to a safe-area triple on a phone, where
+   this menu is not presented as a sheet. */
 .db-owned-menu {
   z-index: var(--db-layer-popover, 100);
   width: max-content;
   min-width: 220px;
   max-width: 320px;
   padding: 4px;
-  border: 1px solid var(--background-modifier-border);
-  border-radius: var(--db-radius-lg);
-  background: var(--background-secondary);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.28);
+  border: var(--menu-border-width, 1px) solid var(--menu-border-color, var(--background-modifier-border));
+  border-radius: var(--menu-radius, var(--db-radius-lg));
+  background: var(--menu-background, var(--background-secondary));
+  box-shadow: var(--menu-shadow, var(--db-elevation-2));
 }
 
-.db-owned-menu .db-menu-item {
+/* Guarded so that exactly one rule sets a row's colour, whatever order the blocks sit in. Each
+   :not() adds specificity, so this selector outranks the state rules rather than merely following
+   them — every state that owns a colour has to be named here or it is silently overruled, which is
+   what happened to the class-marked disabled rows. */
+.db-owned-menu .db-menu-item:not(:disabled):not([aria-disabled="true"]):not(.is-disabled):not(.is-warning) {
+  color: var(--text-normal);
+}
+
+/* Keyed to the row, not to the menu that usually holds it. A `db-menu-item` is a <button>, and a
+   host stylesheet gives every bare button a fill; scoped to the owned menu, this reset only reached
+   the rows that happened to be inside one, so the first surface to build rows anywhere else got the
+   host's button fill as a band behind them. Same computed value inside the owned menu as before —
+   the selector is the same weight and still resolves to transparent. */
+.db-menu-item.db-menu-item:not(:hover):not(:focus-visible) {
+  background: transparent;
+}
+
+/* A thumb needs more than the 30px a mouse is happy with. The host grows its own menu rows on a
+   phone for exactly this reason; the shell padding stays the plugin's because these rows keep their
+   rounded highlight, which the host's rows do not have. */
+.is-phone .db-menu-item.db-menu-item {
+  min-height: 44px;
+  padding: var(--size-4-2, 8px) var(--size-4-4, 16px);
+}
+
+/* The heading shares the rows' inset so it keeps sitting on the icon column. Growing the rows for a
+   thumb without this leaves the heading eight pixels adrift of everything under it. */
+.is-phone .db-menu-section.db-menu-section {
+  padding-inline: var(--size-4-4, 16px);
+}
+
+.db-menu-item.db-menu-item {
   display: flex;
   gap: 8px;
   align-items: center;
   width: 100%;
   padding: 0 8px;
-  background: transparent;
-  color: var(--text-normal);
   font-size: var(--db-font-md);
   text-align: left;
 }
 
-/* Destructive rows read in the error colour, matching what the native menu's setWarning did. */
-.db-menu-item.is-warning {
+/* Destructive rows read in the error colour, matching what the native menu's setWarning did.
+   Not while disabled: an unavailable row should read unavailable rather than dangerous, and
+   without the guard the later of the two colour rules would decide that by position alone. */
+.db-menu-item.is-warning:not(:disabled):not([aria-disabled="true"]) {
   color: var(--text-error);
 }
 
@@ -448,6 +580,7 @@
   .db-chart-drilldown-modal,
   .db-surface
 ) {
+  --db-control-border-strong: #7c8288;
   --db-surface-raised: color-mix(in srgb, var(--background-primary) 97%, white);
   --db-surface-overlay: color-mix(in srgb, var(--background-primary) 93%, white);
   --db-surface-modal: color-mix(in srgb, var(--background-primary) 88%, white);
@@ -521,6 +654,7 @@
   line-height: var(--db-font-md-line-height);
 }
 
+
 .theme-dark .note-database-container {
   --db-current-time-lightness: clamp(58%, calc(var(--accent-l, 56%) + 10%), 70%);
 }
@@ -571,6 +705,10 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  /* The container itself, not only its descendants. A surface portalled to the body carries
+     the container marker, so this list reaches everything inside it and skips the surface —
+     which then keeps its own transitions for a reader who asked for none. */
+  .note-database-container,
   .note-database-container *,
   .note-database-container *::before,
   .note-database-container *::after {
@@ -1516,11 +1654,14 @@
   color: var(--text-accent-hover, var(--text-accent));
 }
 
-.note-database-container .db-active-rule-popover {
+/* This popover IS the filter panel, so once it is portalled and marked, a rule naming the container
+   as its ancestor is asking one element to be its own parent. `:is()` takes the specificity of its
+   most specific arm — both are (0,2,0) — so the scoped rendering is untouched. */
+:is(.note-database-container .db-active-rule-popover, .db-active-rule-popover.db-surface) {
   padding: 8px;
 }
 
-.note-database-container .db-active-rule-popover .db-active-rule-editor-row {
+:is(.note-database-container .db-active-rule-popover, .db-active-rule-popover.db-surface) .db-active-rule-editor-row {
   flex-wrap: wrap;
   margin: 0;
   border-radius: var(--db-radius-lg);
@@ -1528,13 +1669,13 @@
   padding: 0;
 }
 
-.note-database-container .db-active-rule-popover .db-active-rule-editor-row > input,
-.note-database-container .db-active-rule-popover .db-active-rule-editor-row > .db-filter-value-dropdown,
-.note-database-container .db-active-rule-popover .db-active-rule-editor-row > .db-panel-date-value {
+:is(.note-database-container .db-active-rule-popover, .db-active-rule-popover.db-surface) .db-active-rule-editor-row > input,
+:is(.note-database-container .db-active-rule-popover, .db-active-rule-popover.db-surface) .db-active-rule-editor-row > .db-filter-value-dropdown,
+:is(.note-database-container .db-active-rule-popover, .db-active-rule-popover.db-surface) .db-active-rule-editor-row > .db-panel-date-value {
   min-width: 120px;
 }
 
-.note-database-container .db-active-rule-popover .db-active-rule-editor-row:hover {
+:is(.note-database-container .db-active-rule-popover, .db-active-rule-popover.db-surface) .db-active-rule-editor-row:hover {
   background: transparent;
 }
 
@@ -1842,7 +1983,7 @@
 }
 
 
-.note-database-container .db-toggle-switch {
+input[type="checkbox"].db-toggle-switch {
   appearance: none;
   -webkit-appearance: none;
   position: relative;
@@ -1851,15 +1992,19 @@
   min-width: 34px;
   height: 18px;
   box-sizing: border-box;
-  border: 1px solid var(--background-modifier-border-hover);
-  border-radius: var(--db-radius-full);
+  border: 1px solid var(--db-control-border-strong, #82878e);
+  /* The literal matters. Radius tokens are declared on the plugin's token roots, so a switch
+     portalled anywhere else resolved this to nothing and computed 0px — a pill silently became a
+     square, which is a different control rather than an unstyled one. Measured 9999px inside the
+     container and 0px outside it; the fallback makes the shape the control's own. */
+  border-radius: var(--db-radius-full, 9999px);
   background: var(--background-modifier-border);
   background-image: none;
   cursor: pointer;
   transition: background-color 0.15s ease, border-color 0.15s ease;
 }
 
-.note-database-container .db-toggle-switch::before {
+input[type="checkbox"].db-toggle-switch::before {
   content: "";
   position: absolute;
   top: 2px;
@@ -1867,30 +2012,53 @@
   width: 12px;
   height: 12px;
   border-radius: 50%;
-  background: var(--background-primary);
+  /* White in both themes, like the host's own thumb. Taking this from --background-primary made the
+     dark knob darker than the track it slides in, so it read as a recess and the only cue left for
+     on-versus-off was a track shift the eye could not resolve. */
+  background: var(--toggle-thumb-color, #ffffff);
   box-shadow: var(--db-elevation-1);
   transition: transform 0.15s ease;
 }
 
-.note-database-container .db-toggle-switch:checked {
+input[type="checkbox"].db-toggle-switch:checked {
   border-color: var(--interactive-accent);
   background: var(--interactive-accent);
   background-image: none;
 }
 
-.note-database-container .db-toggle-switch:checked::before {
+input[type="checkbox"].db-toggle-switch:checked::before {
   transform: translateX(16px);
 }
 
-.note-database-container .db-toggle-switch::after,
-.note-database-container .db-toggle-switch:checked::after {
+input[type="checkbox"].db-toggle-switch::after,
+input[type="checkbox"].db-toggle-switch:checked::after {
   content: none;
   display: none;
 }
 
-.note-database-container .db-toggle-switch:disabled {
+input[type="checkbox"].db-toggle-switch:disabled {
   cursor: default;
   opacity: 0.5;
+}
+
+/* The switch paints 34x18 and was reachable at exactly 34x18, under a 28px floor this surface
+   sets for every other control. The box itself cannot grow — 18px is the switch's proportion, and
+   a taller track stops reading as a switch — so the target grows instead, the same way the
+   checkbox's does. ::after is free here: the rule above declares it away, and the knob is ::before. */
+@media (pointer: coarse) {
+  /* The checked arm is named too. `:checked::after` outranks the bare one, so a rule written only
+     for the resting state would hand back the target the moment the switch was turned on. */
+  input[type="checkbox"].db-toggle-switch::after,
+  input[type="checkbox"].db-toggle-switch:checked::after {
+    display: block;
+    position: absolute;
+    /* -6, not -5. An absolutely positioned pseudo-element offsets from its containing block's
+       padding box, and the switch's 1px border is outside that — so -5 reached 26px, two short of
+       the floor, and the arithmetic that predicted 28 was measuring the wrong box. */
+    inset: -6px 0;
+    content: "";
+    pointer-events: auto;
+  }
 }
 
 .menu.note-database-group-menu {
@@ -2411,7 +2579,11 @@
   white-space: nowrap;
 }
 
-.note-database-container .db-dropdown-popover {
+/* Named twice for the same reason the panel chrome is: this rule's subject is the popover itself,
+   so a portalled one keeps everything aimed at its rows and loses its own border, radius, padding
+   and type. `column-menu.ts` already mounts sub-popovers of this family on the body. */
+.note-database-container .db-dropdown-popover,
+.db-dropdown-popover.db-surface {
   display: flex;
   flex-direction: column;
   gap: 1px;
@@ -4340,11 +4512,16 @@
   grid-template-columns: 18px minmax(0, 1fr) auto;
 }
 
-.note-database-container .db-chart-options-switch-row .db-toggle-switch {
+/* Alignment keyed to the switch's own row rather than to the view container. Each of these three
+   rows travels with the switch when its surface is portalled; the container does not, and a
+   switch that arrived on the body lost its end-alignment along with it. Nothing else declares
+   justify-self on this control, so dropping one level wins the same fights it won before —
+   measured identical inside the container, before and after. */
+.db-chart-options-switch-row .db-toggle-switch {
   justify-self: end;
 }
 
-.note-database-container .db-chart-options-switch .db-toggle-switch {
+.db-chart-options-switch .db-toggle-switch {
   justify-self: end;
 }
 
@@ -5179,47 +5356,12 @@
 .db-column-display-style-popover .db-displayopt-switch .db-toggle-switch {
   justify-self: end;
 }
-.db-column-display-style-popover .db-toggle-switch {
-  appearance: none;
-  -webkit-appearance: none;
-  position: relative;
-  flex: 0 0 34px;
-  width: 34px;
-  min-width: 34px;
-  height: 18px;
-  box-sizing: border-box;
-  border: 1px solid var(--background-modifier-border-hover);
-  border-radius: var(--db-radius-full);
-  background: var(--background-modifier-border);
-  background-image: none;
-  cursor: pointer;
-  transition: background-color 0.15s ease, border-color 0.15s ease;
-}
-.db-column-display-style-popover .db-toggle-switch::before {
-  content: "";
-  position: absolute;
-  top: 2px;
-  left: 2px;
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background: var(--background-primary);
-  box-shadow: var(--db-elevation-1);
-  transition: transform 0.15s ease;
-}
-.db-column-display-style-popover .db-toggle-switch:checked {
-  border-color: var(--interactive-accent);
-  background: var(--interactive-accent);
-  background-image: none;
-}
-.db-column-display-style-popover .db-toggle-switch:checked::before {
-  transform: translateX(16px);
-}
-.db-column-display-style-popover .db-toggle-switch::after,
-.db-column-display-style-popover .db-toggle-switch:checked::after {
-  content: none;
-  display: none;
-}
+/* This popover used to redeclare the whole switch — box, border, track, knob and both checked
+   states — under its own ancestor. It was the only rule left in the stylesheet that gave a checkbox
+   its appearance from where it was mounted, and the copy had drifted: a weaker border colour that
+   missed the 3:1 a control boundary needs, and a knob taken from the surface fill, which turns the
+   dark-theme knob darker than the track it slides in. The switch's own rule already declares all of
+   it, correctly, so the copy is gone and this popover inherits the one definition. */
 .db-column-display-style-popover .db-displayopt-input {
   justify-self: end;
   width: 72px;
@@ -5256,7 +5398,7 @@
 .db-column-display-style-popover .db-displayopt-swatch.is-selected {
   box-shadow:
     0 0 0 1px var(--background-primary),
-    0 0 0 3px #000;
+    0 0 0 3px var(--text-normal);
 }
 .db-column-display-style-popover .db-displayopt-swatch.db-option-color-gray { background: var(--status-color-fg-gray); }
 .db-column-display-style-popover .db-displayopt-swatch.db-option-color-brown { background: var(--status-color-fg-brown); }
@@ -5439,19 +5581,34 @@
   margin: 0 auto;
 }
 
-/* 选择列内部容器：手柄（左）走文档流垂直居中；checkbox 用绝对定位钉在距右
-   边缘固定 6px 处。checkbox 不参与 flex 计算，位置与「手柄有无」完全解耦——
-   表头、可拖拽行、有排序规则(无手柄)行三种状态下 checkbox 精确重合，切换
-   排序状态时零抖动。
-   必须用绝对定位：列宽 40px 含 td 右边框 1px，db-select-inner 实际 content
-   宽只有 39px；若用 margin-left:auto，无手柄行算出 17px、有手柄行被手柄
-   (margin 2 + width 16 = 18)挤到 18px，切换排序状态即出现 1px 错位。 */
+/* Select column interior: the drag handle sits in flow and centres itself; the checkbox is pinned
+   out of flow at a fixed distance from the right edge.
+
+   The pin has to be absolute rather than margin-left:auto. The column is 40px including the cell's
+   1px right border, so this container's content box is 39px. With margin-left:auto a row without a
+   handle resolves to 17px and a row with one is pushed to 18px by the handle (2px margin + 16px
+   box), so the checkbox jumped by a pixel whenever sorting removed the handle. Taking it out of
+   flow decouples its position from whether the handle exists, and the header, a draggable row and a
+   sorted row then land on exactly the same spot. */
 .note-database-container .db-table .db-select-col .db-select-inner {
   position: relative;
   display: flex;
   align-items: center;
   width: 100%;
   height: 100%;
+}
+
+/* The pin applies to every checkbox in this cell, owned or not.
+
+   Appearance moved to the shared checkbox component, which stamps its own class on the input; the
+   block below is the fallback for controls that have not migrated, and its guard correctly switches
+   it off for one that has. Placement did not move with it — the component deliberately leaves
+   position to the wrapper — so the guard silently took the pin away too and the box fell back into
+   flow at the left wall of a cell that clips its overflow. The phone arm was repaired on its own;
+   this is the same repair for every other width. */
+.note-database-container .db-table .db-select-col .db-select-inner input[type="checkbox"] {
+  position: absolute;
+  right: 6px;
 }
 
 .note-database-container .db-table .db-select-col .db-select-inner input[type="checkbox"]:not(.db-checkbox) {
@@ -9030,8 +9187,13 @@
    scale. The panel therefore has to sit on the panel tier, below the popover tier, or it
    paints over its own editors. 不得加 transform / filter / will-change，否则会建立新的
    containing block 破坏子气泡相对 .note-database-container 的 absolute 定位。 */
+/* Three arms, and the third is the one the earlier attempts were missing. Scoped covers the panel
+   in place; `.db-mobile-bottom-sheet` covers it once the phone portals it to the body; `.db-surface`
+   covers it portalled without becoming a sheet, which is the desktop case the Live Preview fix
+   needs and the only one nothing named. */
 .note-database-container .db-record-detail-panel,
-.db-record-detail-panel.db-mobile-bottom-sheet {
+.db-record-detail-panel.db-mobile-bottom-sheet,
+.db-record-detail-panel.db-surface {
   z-index: var(--db-layer-panel, 50);
   max-height: 60vh;
   overflow-y: auto;
@@ -9115,6 +9277,73 @@
   font-size: var(--font-smaller);
   min-width: 72px;
   flex-shrink: 0;
+}
+
+/* The phone sheet reads as a record rather than as a ledger.
+
+   The same markup is an anchored two-column panel on desktop and is deliberately left alone there.
+   On a phone it was a label pinned left and a value pinned to the far right edge, with most of the
+   screen width empty between them — so the eye paired each value with the value above it instead of
+   with its own label. Two mechanisms produce that, and both are addressed below.
+
+   The first is the value inheriting `text-align: right` from the board-card rule. That rule reaches
+   the sheet because the portal marks the sheet as a container root so its own scoped rules keep
+   matching; the alignment comes along with it. It is overridden here and nowhere else, so board
+   cards keep the right-aligned column they were designed for.
+
+   The second is spacing that grouped the wrong way: the gap BETWEEN two rows was 2px while the gap
+   WITHIN a row was 8px, so the columns bound more tightly than the pairs did. Rows now sit flush
+   with a hairline between them, which also means every pixel between two targets belongs to one of
+   them rather than being dead space.
+
+   The label column is a fixed basis rather than a floor. A floor still lets a long label shove the
+   value sideways, and once one value moves there is no column left to scan. */
+.db-record-detail-panel.db-mobile-bottom-sheet .db-record-detail-fields {
+  gap: 0;
+}
+
+.db-record-detail-panel.db-mobile-bottom-sheet .db-record-detail-field {
+  /* Baseline alignment suits a box that hugs its text. This box is taller than its text, so
+     baseline would strand both against the top edge. */
+  align-items: center;
+  gap: var(--db-space-4);
+  padding: var(--db-space-4) var(--db-space-5);
+  /* WCAG 2.5.5 target size, and the only value here that is not a step on the spacing scale. The
+     neighbouring steps miss it in both directions: 32px is under the standard, 48px costs a row of
+     content on every screen. */
+  min-height: 44px;
+}
+
+.db-record-detail-panel.db-mobile-bottom-sheet .db-record-detail-field:not(:last-child) {
+  /* A line that only separates content owes no contrast minimum; the 3:1 floor is for a border that
+     identifies a control. This one is deliberately at the faintest step so it reads as rhythm
+     rather than as a table rule, which would return the compartmentalised look. */
+  border-bottom: 1px solid var(--db-border-subtle);
+}
+
+/* A finger never produces hover, so without this a tap on a row has no feedback at all. */
+.db-record-detail-panel.db-mobile-bottom-sheet .db-record-detail-field:not(.is-readonly):active {
+  background: var(--background-modifier-hover);
+}
+
+.db-record-detail-panel.db-mobile-bottom-sheet .db-record-detail-field-label {
+  flex: 0 0 96px;
+  min-width: 0;
+  /* Same rendered size as the token it replaces, but stated in px. The previous one was `0.875em`,
+     and an em-relative size compounds through nesting and drifts with the reader's text-size
+     setting, so the type scale quietly stops applying. */
+  font-size: var(--db-font-md);
+  line-height: var(--db-font-md-line-height);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.db-record-detail-panel.db-mobile-bottom-sheet .db-record-detail-field .db-board-card-value {
+  text-align: left;
+  /* Also the size below which iOS zooms the whole page when this cell becomes an input on tap. */
+  font-size: var(--db-font-lg);
+  line-height: var(--db-font-lg-line-height);
 }
 
 body.is-phone .note-database-container .db-record-detail-panel {
@@ -9717,9 +9946,23 @@ body.is-phone .note-database-container .db-record-detail-panel {
   white-space: nowrap;
 }
 
+/* A property with no value holds its place instead of leaving the row.
+   The renderer used to drop it, and every field after it moved up one slot, so the first column
+   held Cost on one card and Payment on the next and no column could be read down. Claiming the
+   column by index fixed that on the desktop grid — and not on the phone, where this same element
+   is a wrapping flex line that ignores grid-column entirely: four properties measured across
+   fourteen x-positions on twelve cards. The field is now rendered either way and hidden when
+   empty, so the column is an index rather than a count in whichever layout the surface is in. */
+.note-database-container .db-list-field.is-placeholder {
+  visibility: hidden;
+  pointer-events: none;
+}
+
+/* A grid, not a flex line, on the desktop: each field claims the column its property owns. */
 .note-database-container .db-list-row-meta {
-  display: flex;
-  flex-wrap: nowrap;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 150px;
   gap: 6px 12px;
   width: max-content;
   min-width: 0;
@@ -9878,6 +10121,13 @@ body.is-phone .note-database-container .db-record-detail-panel {
    Absolutely positioned to the container. z-index 50 keeps them above the table.
 ─────────────────────────────────────────────────────────────── */
 
+/* Each panel is named twice: once inside the container, once carrying the surface marker itself.
+   A descendant combinator cannot match the element holding the class, so a panel moved to the body
+   keeps every rule aimed at its children and loses every rule aimed at itself — which is this
+   block, its whole chrome. Measured at 39 properties per panel by `tools/live/portal-safety.mjs`,
+   and it is why the two earlier portal attempts shipped surfaces with no border and no radius.
+   The `.db-x.db-surface` form has the same specificity as the scoped one, so nothing about the
+   in-container rendering moves; it only starts matching once a surface is actually portalled. */
 .note-database-container .db-filter-panel,
 .note-database-container .db-view-config-panel,
 .note-database-container .db-column-manager,
@@ -9885,7 +10135,15 @@ body.is-phone .note-database-container .db-record-detail-panel {
 .note-database-container .db-group-popover,
 .note-database-container .db-export-popover,
 .note-database-container .db-chart-options-popover,
-.note-database-container .db-view-tab-popover {
+.note-database-container .db-view-tab-popover,
+.db-filter-panel.db-surface,
+.db-view-config-panel.db-surface,
+.db-column-manager.db-surface,
+.db-database-popover.db-surface,
+.db-group-popover.db-surface,
+.db-export-popover.db-surface,
+.db-chart-options-popover.db-surface,
+.db-view-tab-popover.db-surface {
   max-width: min(760px, calc(100vw - 72px));
   position: absolute;
   /* 顶部位置 = 工具栏高度（JS 动态测量） */
@@ -10014,6 +10272,9 @@ body.is-phone .note-database-container .db-record-detail-panel {
   background: var(--background-modifier-hover);
 }
 
+/* Muted, not faint. This class also marks the group popover's informational notice, which is
+   ordinary text a reader has to read — the contrast allowance for an inactive control does not
+   reach it, and the faint token leaves it at 2.73:1 against the panel. */
 .note-database-container .db-group-popover-row.is-disabled {
   color: var(--text-muted);
   cursor: default;
@@ -10027,7 +10288,7 @@ body.is-phone .note-database-container .db-record-detail-panel {
   grid-template-columns: 22px minmax(0, 1fr) auto;
 }
 
-.note-database-container .db-group-popover-switch-row .db-toggle-switch {
+.db-group-popover-switch-row .db-toggle-switch {
   justify-self: end;
 }
 
@@ -17151,20 +17412,30 @@ body.is-mobile .note-database-container .db-calendar-month-time {
 .is-phone .note-database-container .db-table col.db-select-colgroup,
 .is-phone .note-database-container .db-table th.db-select-col,
 .is-phone .note-database-container .db-table td.db-select-col {
-  /* 48px = move button 24 + checkbox 16 + 右间距 8；与桌面同走「左侧控件文档流 +
-     checkbox 绝对定位 right:6」布局，避开 td 右边框 1px 的 content 误差。 */
-  width: 48px;
-  min-width: 48px;
-  max-width: 48px;
+  /* Re-derived from the controls this cell actually holds.
+     The old arithmetic was "move button 24 + checkbox 16 + gap 8 = 48", and both controls have
+     since grown to 28 to clear the touch floor while the column stayed at 48. Measured result:
+     the button's right edge sat 14px past the checkbox's left edge — two targets drawn on top of
+     one another, which is what the reorder button having no room looks like.
+     4 pad + 28 button + 4 gap + 28 checkbox = 64, and 64 is the next step on the spacing scale.
+     Layout is unchanged otherwise: the left control stays in flow and the checkbox stays pinned
+     right, so the header and every row still land on one column. */
+  width: 64px;
+  min-width: 64px;
+  max-width: 64px;
 }
 
 .is-phone .note-database-container .db-table-mobile-move-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  flex: 0 0 24px;
-  width: 24px;
-  height: 24px;
+  /* 28, not 24. The touch floor's min-width has beaten this declaration since it was written —
+     min-width always beats width — so the button painted 28 while the stylesheet said 24, and the
+     column was sized from the 24. Declaring what it paints is what makes the column's arithmetic
+     checkable. */
+  flex: 0 0 28px;
+  width: 28px;
+  height: 28px;
   margin: 0;
   padding: 0;
   border: 0;
@@ -17720,12 +17991,16 @@ img.db-text-md-image {
   min-height: 18px;
 }
 
+/* A touch-target floor, and only that.
+   This block used to open with `display: inline-flex`, which carries the same weight as the
+   `display: none` written for these three buttons off a phone and sits later in the file — so a
+   rule whose job was a minimum size decided instead that a phone-only control renders on the
+   desktop, unstyled, in every list and gallery row. The whole of each button's appearance is
+   declared inside `.is-phone`, which is what says where it belongs. The floor stays; display is
+   not the floor's business. */
 .note-database-container .db-card-mobile-move-btn,
 .note-database-container .db-list-mobile-move-btn,
 .note-database-container .db-table-mobile-move-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
   min-width: 28px;
   min-height: 28px;
 }
@@ -17903,7 +18178,9 @@ img.db-text-md-image {
    applies to every checkbox in this cell. */
 .is-phone .note-database-container .db-table .db-select-col .db-select-inner input[type="checkbox"] {
   position: absolute;
-  right: 6px;
+  /* 4px rather than 6px: with a 64px column and a 28px button in flow at the left, this is what
+     leaves a 4px gap between the two controls instead of a 2px seam. */
+  right: 4px;
 }
 
 /* The size override does NOT apply to an owned checkbox.
@@ -18023,6 +18300,7 @@ img.db-text-md-image {
   grid-template-columns: auto minmax(0, 1fr);
 }
 .is-phone .note-database-container .db-list-row-meta {
+  display: flex;
   flex-wrap: wrap;
   overflow: hidden;
 }
@@ -18056,6 +18334,12 @@ img.db-text-md-image {
 .db-record-detail-panel.db-mobile-bottom-sheet .db-cell-edit-close {
   display: none;
 }
+/* Both header actions, one box. They were 44x44 and 24x24 in a `flex-start` row, so their centres
+   sat exactly half the height difference apart — a 10px stagger a reader sees as sloppiness. Sizing
+   them together also gives the expand action a thumb-sized target next to the close button that
+   already had one; on a phone a 24px control is not reliably hittable. */
+.note-database-container .db-record-detail-panel.db-mobile-bottom-sheet .db-board-card-open,
+.db-record-detail-panel.db-mobile-bottom-sheet.db-mobile-bottom-sheet .db-board-card-open,
 .note-database-container .db-record-detail-panel.db-mobile-bottom-sheet .db-cell-edit-close,
 .db-record-detail-panel.db-mobile-bottom-sheet.db-mobile-bottom-sheet .db-cell-edit-close {
   position: static;
@@ -18106,6 +18390,7 @@ img.db-text-md-image {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .note-database-container,
   .note-database-container *,
   .note-database-container *::before,
   .note-database-container *::after,
@@ -18123,6 +18408,7 @@ img.db-text-md-image {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .note-database-container,
   .note-database-container *,
   .note-database-container *::before,
   .note-database-container *::after,
@@ -18619,7 +18905,24 @@ body.is-tablet .note-database-container .db-record-open-btn {
 .db-calendar-mini-popover,
 .db-calendar-day-popover,
 .db-icon-picker-popover,
-.db-relation-popover {
+.db-relation-popover,
+/* The surfaces above are already self-owned; these were named only through the container, so a
+   portalled one arrived with the page's background and no blur behind it. */
+.db-view-config-panel.db-surface,
+.db-column-manager.db-surface,
+.db-group-popover.db-surface,
+.db-group-order-popover.db-surface,
+.db-view-tab-popover.db-surface,
+.db-database-popover.db-surface,
+.db-chart-options-popover.db-surface,
+.db-chart-dropdown-popover.db-surface,
+.db-conditional-format-dropdown.db-surface,
+.db-displayopt-dropdown-popover.db-surface,
+.db-column-menu-subpopover.db-surface,
+.db-cell-option-popover.db-surface,
+.db-cell-edit-popover.db-surface,
+.db-cell-line-edit-popover.db-surface,
+.db-date-value-popover.db-surface {
   background: var(--db-surface-overlay);
   box-shadow: var(--db-elevation-2);
   backdrop-filter: blur(var(--db-overlay-blur, 12px));
@@ -19091,10 +19394,47 @@ body.is-tablet .note-database-container .db-record-open-btn {
   padding: 0;
 }
 
+/* Group spacing has to beat item spacing or the groups are not groups. The settings sat 0px from
+   the tile grid while their own fields sat 4px apart, so everything read as one flat stack — the
+   form's own bottom padding was the only separation and it was doing nothing. Items keep the small
+   step; the gap below the group is four steps up, and the separator lands inside it. */
 .note-database-container .db-add-view-form {
   display: grid;
-  gap: var(--db-space-2);
-  padding: var(--db-space-2) var(--db-space-3);
+  gap: var(--db-space-4);
+  padding: var(--db-space-2) var(--db-space-4) var(--db-space-6);
+}
+
+/* The settings sit on the same left edge as the group headings and the action rows below them.
+   Without this the surface had three insets — heading, field, row — and on a phone, where the rows
+   take a wider thumb inset, they diverged further rather than staying in step. */
+.is-phone .note-database-container .db-add-view-form {
+  padding-inline: var(--db-space-6);
+}
+
+/* Caption above its control rather than beside it: at 292px a side-by-side label leaves the select
+   too narrow to show a property name, and the two text fields would then wrap differently from it. */
+.note-database-container .db-add-view-field {
+  display: grid;
+  gap: var(--db-space-1);
+}
+
+/* The form's controls, which the host was chroming for us.
+   Three of these four are empty when the surface opens, so the border is the only thing saying a
+   control is there — and the host's default measures 1.21:1 against this panel, which WCAG 1.4.11
+   asks to be 3:1 for exactly that reason. The control token this stylesheet already declares
+   reaches 3.2:1. The size is the other half: below 16px iOS zooms the whole page when a field takes
+   focus, which is why the same value is pinned on the cell editor. */
+.note-database-container .db-add-view-field input,
+.note-database-container .db-add-view-field select {
+  border: 1px solid var(--db-control-border-strong, #82878e);
+  border-radius: var(--db-radius-sm);
+  font-size: var(--db-font-lg);
+}
+
+.note-database-container .db-add-view-field-label {
+  color: var(--text-muted);
+  font-size: var(--db-font-sm);
+  line-height: var(--db-font-sm-line-height);
 }
 
 .note-database-container .db-add-view-duplicate {
@@ -19112,85 +19452,16 @@ body.is-tablet .note-database-container .db-record-open-btn {
   margin: 0;
 }
 
-.note-database-container .db-add-view-cards {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  /* Equal rows keep the tiles a uniform size when one caption wraps and its neighbours don't. */
-  grid-auto-rows: 1fr;
-  gap: var(--db-space-2);
-  padding: var(--db-space-2) var(--db-space-3);
-}
-
-/* A bare <button> is pinned to the app's single-line input height, which is shorter than
-   the preview and caption stacked inside it. Without the height reset the tile stays one
-   line tall and its own contents paint outside it, over the neighbouring tiles. The
-   inherited nowrap comes from the same place and has to be released for captions to wrap. */
-.note-database-container .db-add-view-card {
+/* The list of things this surface can create. One vocabulary: these are `db-menu-item` rows built
+   by the shared builder, so they inherit the row box, hover, focus ring and the phone thumb height
+   from the same rules every other menu uses. The container only stacks them. */
+.note-database-container .db-add-view-choices {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  grid-template-rows: auto auto;
-  align-content: start;
-  gap: var(--db-space-1);
-  width: 100%;
-  height: auto;
-  min-width: 0;
-  box-sizing: border-box;
-  padding: var(--db-space-2);
-  border: 1px solid var(--db-border-regular);
-  border-radius: var(--db-radius-md);
-  background: var(--background-primary);
-  box-shadow: none;
-  text-align: center;
-  white-space: normal;
-  transition: background-color 120ms ease-out, border-color 120ms ease-out;
-}
-
-.note-database-container .db-add-view-card:hover {
-  border-color: var(--interactive-accent);
-  background: var(--db-hover-bg, var(--background-modifier-hover));
-}
-
-.note-database-container .db-add-view-card:focus-visible {
-  border-color: var(--interactive-accent);
-  outline: none;
-  box-shadow: var(--db-accent-focus-ring);
-}
-
-.note-database-container .db-add-view-card-label {
-  min-width: 0;
-  color: var(--text-normal);
-  font-size: var(--db-font-xs);
-  line-height: var(--db-font-xs-line-height);
-  overflow-wrap: anywhere;
-}
-
-.note-database-container .db-add-view-preview {
-  display: grid;
-  place-items: center;
-  min-width: 0;
-  min-height: 48px;
-  border-radius: var(--db-radius-sm);
-  background: var(--background-secondary);
-  color: var(--text-muted);
-}
-
-.note-database-container .db-add-view-preview-icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.note-database-container .db-add-view-preview-icon svg {
-  width: 18px;
-  height: 18px;
-}
-
-.note-database-container .db-add-view-preview-lines {
-  width: 42px;
-  max-width: 100%;
-  height: 18px;
-  border-block: 2px solid currentColor;
-  opacity: 0.35;
+  gap: 0;
+  /* No inline padding: each row already carries its own, and doubling the two put the rows on a
+     different left edge from the headings above them. */
+  padding: 0 0 var(--db-space-2);
 }
 
 .note-database-container .db-new-placement {
@@ -19211,8 +19482,7 @@ body.is-tablet .note-database-container .db-record-open-btn {
 
 .note-database-container .db-toolbar-menu-row,
 .note-database-container .db-new-template-row,
-.note-database-container .db-new-template-default-action,
-.note-database-container .db-add-view-duplicate-action {
+.note-database-container .db-new-template-default-action {
   display: flex;
   align-items: center;
   gap: var(--db-space-2);
@@ -19227,19 +19497,8 @@ body.is-tablet .note-database-container .db-record-open-btn {
 
 .note-database-container .db-toolbar-menu-row:hover,
 .note-database-container .db-new-template-row:hover,
-.note-database-container .db-new-template-default-action:hover,
-.note-database-container .db-add-view-duplicate-action:hover {
+.note-database-container .db-new-template-default-action:hover {
   background: var(--background-modifier-hover);
-}
-
-/* Closing action for the add-view popover: a row of its own under the tile grid, with a
-   rule separating it from the tiles so it does not read as a stray card caption. */
-.note-database-container .db-add-view-duplicate-action {
-  height: auto;
-  margin-top: var(--db-space-2);
-  border-top: 1px solid var(--db-border-subtle);
-  border-radius: 0;
-  box-shadow: none;
 }
 
 .note-database-container .db-active-view-controls {
@@ -19334,6 +19593,7 @@ body.is-tablet .note-database-container .db-record-open-btn {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .note-database-container,
   .note-database-container *,
   .note-database-container *::before,
   .note-database-container *::after,
@@ -19357,7 +19617,13 @@ body.is-tablet .note-database-container .db-record-open-btn {
   }
 }
 
-/* Keep focus indicators visible after Obsidian's component-level resets. */
+/* Keep focus indicators visible after Obsidian's component-level resets.
+
+   `.db-surface` leads the list because it is the marker every surface mounted outside the plugin's
+   container carries. The five popover classes after it are the hand-kept enumeration that predates
+   it, and a hand-kept list is how a portalled surface ends up with tokens, radius and no focus ring
+   — the escape hatch handed over everything except the one thing a keyboard user needs. */
+.db-surface :is(button, input, select, textarea, [role="button"], [tabindex]):focus-visible,
 .note-database-container :is(button, input, select, textarea, [role="button"], [tabindex]):focus-visible,
 .db-column-menu-subpopover :is(button, input, select, textarea, [role="button"], [tabindex]):focus-visible,
 .db-icon-picker-popover :is(button, input, select, textarea, [role="button"], [tabindex]):focus-visible,
@@ -19375,6 +19641,7 @@ body.is-tablet .note-database-container .db-record-open-btn {
 }
 
 @media (forced-colors: active) {
+  .db-surface :is(button, input, select, textarea, [role="button"], [tabindex]):focus-visible,
   .note-database-container :is(button, input, select, textarea, [role="button"], [tabindex]):focus-visible,
   .db-column-menu-subpopover :is(button, input, select, textarea, [role="button"], [tabindex]):focus-visible,
   .db-icon-picker-popover :is(button, input, select, textarea, [role="button"], [tabindex]):focus-visible,
@@ -19412,6 +19679,7 @@ body.is-tablet .note-database-container .db-record-open-btn {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .note-database-container,
   .note-database-container *,
   .note-database-container *::before,
   .note-database-container *::after,
@@ -19507,4 +19775,13 @@ input[type="checkbox"].db-checkbox:disabled {
   background-color: var(--background-secondary);
   cursor: default;
   opacity: 0.5;
+}
+
+/* One fill for every sheet. Seven surfaces become a sheet on a phone and they were arriving in
+   three different colours, because each carries the background of whatever it is on a desktop — a
+   panel, a popover, a menu. A sheet is one component wherever it came from, and a user swiping
+   between them sees the difference immediately. `--db-surface-overlay` is this stylesheet's own
+   token for a surface floating above the page, which is what all seven now are. */
+.db-mobile-bottom-sheet.db-mobile-bottom-sheet {
+  background: var(--db-surface-overlay);
 }

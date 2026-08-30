@@ -29,7 +29,7 @@ import { setFieldTooltip } from "./field-tooltip";
 import { getFileTitleDisplay, renderStackedFileTitle } from "./file-title-display";
 import { isHTMLElement } from "./dom-guards";
 import { renderMobileMoveIcon } from "./mobile-move-icon";
-import { getFieldWidth } from "./column-width";
+import { getFieldWidth, listFieldTrackTemplate } from "./column-width";
 import { renderGroupExpandControls } from "./group-expand-controls";
 import { getGroupVisibleCount } from "../data/group-visibility";
 import { DragDropFeedbackState, resolveDropPlacement } from "./drag-drop-feedback";
@@ -338,13 +338,33 @@ export class ListRenderer {
 
     const meta = main.createDiv({ cls: "db-list-row-meta" });
     const fields = columns.filter((col) => col.key !== titleField);
-    for (const col of fields) {
+    // Declared here because the per-column width lives on the field element, where a track sizing
+    // rule on the container cannot read it. Without this every track takes the 150px default and a
+    // resized column overflows the slot it was given.
+    meta.style.gridTemplateColumns = listFieldTrackTemplate(config, fields);
+    for (const [index, col] of fields.entries()) {
       const value = this.getCellValue(row, col);
       const displayType = this.getDisplayType(config, col);
       const empty = this.isEmptyValue(value) && displayType !== "checkbox";
-      if (empty && config.showEmptyFields !== true) continue;
+      const hidden = empty && config.showEmptyFields !== true;
       const displayValue = empty ? this.getEmptyDisplayValue(col, displayType) : value;
-      meta.appendChild(this.renderRowFieldContent(row, col, config, displayValue, displayType, empty));
+      const field = this.renderRowFieldContent(row, col, config, displayValue, displayType, empty);
+      // The column this property owns, not the slot left by whichever siblings survived.
+      field.style.gridColumn = String(index + 1);
+      if (hidden) {
+        // A property with no value keeps its place rather than leaving the row.
+        //
+        // Skipping it outright works on a grid, where the column is claimed by index and an absent
+        // field leaves its column empty. It does not work anywhere the row is laid out in flow: on
+        // a phone this same element is a wrapping flex line, where the nth surviving field takes
+        // the nth slot, and four properties were measured landing across fourteen different
+        // x-positions on twelve cards — Billing alone in six of them. Holding the place with a
+        // hidden field makes the column an index rather than a count, so it survives whichever
+        // layout the surface is in instead of only the one it was fixed for.
+        field.addClass("is-placeholder");
+        field.setAttr("aria-hidden", "true");
+      }
+      meta.appendChild(field);
     }
   }
 

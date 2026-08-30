@@ -465,8 +465,14 @@ export class TableRenderer {
     return config.columnWidths?.[col.key] || col.width || config.defaultColumnWidth || 150;
   }
 
+  /**
+   * On touch this cell holds two controls, not one: the reorder button in flow and the selection
+   * checkbox pinned right. Both are 28px wide because that is the target floor a finger needs, so
+   * 48 could never fit them and they were drawn overlapping. 4 + 28 + 4 + 28 = 64.
+   * Off touch the reorder button is never created, so the checkbox alone keeps the narrower column.
+   */
   private getSelectionColumnWidth(): number {
-    return isTouchDevice(this.renderContainer) ? 48 : 40;
+    return isTouchDevice(this.renderContainer) ? 64 : 40;
   }
 
   private getRecordIconColumnWidth(): number {

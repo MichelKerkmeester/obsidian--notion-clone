@@ -41,6 +41,14 @@ import { setIcon } from "obsidian";
 // ───────────────────────────────────────────────────────────────────
 
 export interface MenuRowOptions {
+  /**
+   * Extra classes for the row, on top of `db-menu-item`.
+   *
+   * For a caller whose container styles its rows through a class of its own. Without this the only
+   * way to keep such a class was to hand-build the row, which is how a second row implementation
+   * appeared next to this one and drifted from it.
+   */
+  cls?: string;
   /** Lucide icon id for the leading slot. Omit for a row that carries no icon. */
   icon?: string;
   label: string;
@@ -82,7 +90,7 @@ export interface MenuRowHandle {
  */
 export function createMenuRow(parent: HTMLElement, options: MenuRowOptions): MenuRowHandle {
   const row = parent.createEl("button", {
-    cls: "db-menu-item",
+    cls: options.cls ? `db-menu-item ${options.cls}` : "db-menu-item",
     attr: { type: "button", role: "menuitem" },
   });
 
@@ -122,7 +130,13 @@ export function createMenuRow(parent: HTMLElement, options: MenuRowOptions): Men
   row.toggleClass("is-warning", Boolean(options.warning));
   if (options.tooltip) row.setAttr("title", options.tooltip);
   row.toggleClass("is-selected", Boolean(options.selected));
-  row.setAttr("aria-checked", options.selected ? "true" : "false");
+  // Only a checkable row gets the checked state, and it has to take the role that allows it.
+  // `aria-checked` on a plain `menuitem` is invalid, and it was being set on every row — so a
+  // one-shot action announced itself as an unchecked option.
+  if (options.selected !== undefined) {
+    row.setAttr("role", "menuitemcheckbox");
+    row.setAttr("aria-checked", options.selected ? "true" : "false");
+  }
 
   if (options.onClick && !options.disabled) {
     row.onclick = (event) => options.onClick?.(event);
@@ -140,6 +154,7 @@ export function createMenuRow(parent: HTMLElement, options: MenuRowOptions): Men
     },
     setSelected(selected) {
       row.toggleClass("is-selected", selected);
+      row.setAttr("role", "menuitemcheckbox");
       row.setAttr("aria-checked", selected ? "true" : "false");
     },
   };
