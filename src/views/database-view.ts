@@ -177,7 +177,7 @@ import { InteractionScopeRegistry } from "./interaction-scope";
 import { safeString } from "../data/safe-string";
 import { parseClipboardTable, serializeSelectedCells as serializeClipboardSelectedCells } from "../data/clipboard-serializer";
 import { openBulkEditFieldMenu } from "./bulk-edit-field-menu";
-import { positionToolbarPopover } from "./popover-position";
+import { getVisiblePopoverBounds, positionToolbarPopover } from "./popover-position";
 import { closeRecordDetailPanel, getOpenRecordDetailPath, openRecordDetailPanel, refreshRecordDetailPanel } from "./record-detail-panel";
 import {
   attachTitleOpenAffordance,
@@ -6952,9 +6952,15 @@ export class DatabaseView extends FileView {
 
   private positionCalendarTimelineSearchResultsPanel(panel: HTMLElement, anchor: HTMLElement): void {
     const rect = anchor.getBoundingClientRect();
-    const width = Math.max(320, Math.min(480, window.innerWidth - 16));
-    const left = Math.max(8, Math.min(rect.left, window.innerWidth - width - 8));
-    const top = Math.min(rect.bottom + 6, window.innerHeight - 80);
+    // The editing area, not the window. `innerWidth`/`innerHeight` span the sidebars and the mobile
+    // navigation bar, so a panel clamped to them slides underneath an open right sidebar and is still
+    // "in bounds" by the arithmetic while being entirely off screen. Null asks for the active
+    // document's bounds rather than a container's, which is what this panel wants: it is created on
+    // `window.activeDocument.body` to escape the view, so no container should narrow it.
+    const bounds = getVisiblePopoverBounds(null);
+    const width = Math.max(320, Math.min(480, bounds.width - 16));
+    const left = Math.max(bounds.left + 8, Math.min(rect.left, bounds.right - width - 8));
+    const top = Math.min(rect.bottom + 6, bounds.bottom - 80);
     panel.setCssProps({
       left: `${left}px`,
       top: `${top}px`,

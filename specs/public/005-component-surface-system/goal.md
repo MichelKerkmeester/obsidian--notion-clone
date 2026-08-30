@@ -102,6 +102,25 @@ resolve them silently.
 
 <!-- ANCHOR:log -->
 
+### Queued: a 20-iteration deep review, two lanes, no early convergence
+
+Ordered by the operator once the build work lands. Ten iterations on
+`cursor-grok-4.6-xhigh` through cli-cursor, ten on `gpt-5.6-luna` at
+`model_reasoning_effort=xhigh` with `service_tier=fast` through cli-codex, stop policy
+max-iterations so neither lane stops early, spread across every phase this session touched.
+
+The split across two transports is not arbitrary. Cursor's enforced allowlist has no xhigh
+tier for Luna — it carries `gpt-5.6-luna-max` and its fast variant and nothing between — and
+the contract forbids substituting the closest-sounding id, so the operator chose the effort
+over the transport.
+
+**One limit to hold the codex lane to.** Its sandbox is `[workdir, /tmp, $TMPDIR]` and Chrome
+lives outside it, so that lane cannot run the placement harness or any browser-driven check.
+It reported the gate as 13 green earlier today where the gate is 16. A review is reading
+rather than measuring, so this is survivable — but any number that lane produces about a
+browser is not evidence, and a finding of the shape "the gate is red" from it should be
+checked here before it is believed.
+
 ## 4. LOG
 
 Volatile. Not part of the directive and not copied into an objective.

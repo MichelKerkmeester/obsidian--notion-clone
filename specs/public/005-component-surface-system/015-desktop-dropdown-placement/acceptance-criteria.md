@@ -4,8 +4,10 @@ Each criterion carries a number with a threshold, was demonstrated failing on th
 the failing number recorded, and is measured in a real browser against the shipped modules and the
 shipped stylesheet, with the leaf deliberately off the viewport origin.
 
-**Harness.** `probe-desktop-placement.mjs` in this folder. 31 checks, 30 pass, 1 declared red.
-`node probe-desktop-placement.mjs` exits 0; an undeclared failure exits 1.
+**Harness.** `probe-desktop-placement.mjs` in this folder. 31 checks, **31 pass, none declared
+red** — `DECLARED_RED` is now empty. `node probe-desktop-placement.mjs` exits 0; an undeclared
+failure exits 1. The same two checks also live in `tools/storybook/verify-placement.mjs`, which the
+gate runs.
 
 **The guard that makes every other number mean something.** A probe whose leaf sits at the viewport
 origin measures nothing: leaf-relative and viewport-relative coordinates coincide there, so the
@@ -69,7 +71,7 @@ test never executed and the check reported a failure the running app does not ha
 sequence is: place against a live anchor (installing the loop), destroy the anchor, let the loop
 tick. Only the loop can observe this.
 
-**Live path.** `filter-panel-renderer.ts:532` — the filter panel's date value picker commits a draft
+**Live path.** `filter-panel-renderer.ts:624` — the filter panel's date value picker commits a draft
 on every segment edit; the commit calls `actions.refresh()`, which rebuilds the panel and destroys
 the trigger button, while the picker is mounted on the container and survives.
 
@@ -111,18 +113,52 @@ Identical before and after. Every change is inside a desktop-only branch — the
 
 ---
 
-## DECLARED RED — calendar/timeline search results
+## AC-7 — the calendar/timeline search results clear the right sidebar
 
-**Threshold.** `panel.right <= editing area right`.
+**Threshold.** `panel.right <= editing area right`, **at two anchor positions**. One cannot tell a
+clamp from a coincidence: the overhang grew with the anchor, so a panel that happens to fit at one x
+can still run under the sidebar at another, and a single-position check would report that as fixed.
 
-**Measured, unfixed.** Right edge **1380** against an editing area ending at **1140** — **240px
-under the sidebar**, growing to **292px** as the anchor moves right. The control confirms the clamp
-is the cause: the overhang tracks the anchor.
+**Failing first.** Right edge **1380** against an editing area ending at **1140** — **240px under
+the sidebar** with the anchor at x=600, and **1432, a 292px overhang**, at x=1000. Clamped against
+`window.innerWidth=1440`, which spans both sidebars.
 
-**Why not fixed.** The method is duplicated verbatim in `database-view.ts:6890` and
-`embedded-database-renderer.ts:1305`. Both files were held by another session for this phase's whole
-duration. The probe declares this red by name so the exit status stays meaningful and the next real
-regression still fails the run.
+**After.** `[652..1132]` at x=600 and `[652..1132]` at x=1000 — **0px past** an editing area ending
+at 1140, clamped against `bounds.right=1140`. Both anchors land identically because the clamp, not
+the anchor, is now what decides the right edge.
+
+**Control.** The statement this replaced, re-run in place, still puts the right edge at **1380 (240px
+past)** at x=600 and **1432 (292px)** at x=1000. It is kept as a permanent negative control rather
+than a one-off, so the check cannot quietly become decoration.
+
+**The repair.** `window.innerWidth`/`innerHeight` span the sidebars, so a panel clamped to them
+slides underneath an open right sidebar and is still "in bounds" by the arithmetic while being
+entirely off screen. All four terms moved to `getVisiblePopoverBounds(null)` — the width cap, the
+left floor `8` (which is a *window*-relative margin and would have permitted x=8, under the **left**
+sidebar), the right clamp, and the vertical `innerHeight - 80`. Fixing only the right clamp would
+have left three window-relative terms in a method whose defect is that it measures the window.
+
+`null` rather than a container is deliberate and was measured, not assumed. `getVisiblePopoverBounds`
+intersects the container's own rect into the result, and this panel is created on
+`window.activeDocument.body` precisely to escape the view — so a container would narrow it, and on a
+narrow embedded database it would narrow it a lot. Measured on the harness page: `bounds(null)` and
+`bounds(container)` are both `[300..1140]`; `bounds(anchor)` collapses to the anchor at
+`[900..1100]`; and `bounds(panel)` returns the **whole viewport, `[0..1440]`**, because a rect
+intersected with itself trips the degenerate guard. Passing `null` loses nothing, because the caller
+already sources its document from `window.activeDocument`.
+
+**Both copies moved together.** The method is duplicated verbatim in `database-view.ts:6953` and
+`embedded-database-renderer.ts:1323` — both later in their files than the `:6890`/`:1305` this
+folder used to record. They were byte-identical before the edit and are byte-identical after it;
+repairing one would have left the other reporting the same 1380. The declaration was removed from
+both harnesses, because a declared red that has been fixed is a check that can no longer fail.
+
+**What this check still cannot do.** Both harnesses *transcribe* the arithmetic rather than calling
+the method, which needs a live Obsidian `App`. Verified in both directions: reverting the
+transcription to `window.innerWidth` turns the check red and the run to **exit 1**, so it is not
+decoration — but reverting the **source** while leaving the transcription fixed leaves the run at
+**exit 0**. A source-only regression here is invisible to the gate. That is the standing cost of a
+transcribed probe, and it is the reason the transcription carries its file and line.
 
 ---
 
@@ -131,20 +167,50 @@ regression still fails the run.
 | Check | Baseline | After |
 |---|---|---|
 | `npx tsc --noEmit` | exit 0 | **exit 0** |
-| `npx vitest run` | 434 passed | **434 passed, exit 0** |
+| `npx vitest run` | 434 passed | **450 passed across 59 files, exit 0** |
 | `npm run build` | — | **exit 0** |
-| `node tools/storybook/verify-placement.mjs` | 79/80, 1 declared red, exit 0 | **81/82, 1 declared red, exit 0** |
-| `node probe-desktop-placement.mjs` | 23/29 at first run | **30/31, 1 declared red, exit 0** |
+| `node tools/storybook/verify-placement.mjs` | 220/224, 4 declared red, exit 0 | **221/224, 3 declared red, exit 0** |
+| `node probe-desktop-placement.mjs` | 30/31, 1 declared red | **31/31, none declared, exit 0** |
 | `node probe-inventory.mjs` | 16 writes outside a primitive, unclassified | **16 writes across 7 files, all classified, baseline holds, exit 0** |
+| `npm run gate` | 16 green, exit 0 | **15 green, `screenshots-fresh` red, exit 1 — see below** |
+
+The vitest baseline moved 434 → 450 under other sessions, not this work. The `verify-placement`
+baseline is quoted at its current size; it was 82 checks when this folder first recorded it and is
+224 now, having grown under other sessions throughout.
+
+**`evidence` is red on the first gate run after any source edit, and green on the second.**
+`tools/live/renderer-coverage.json` pins a hash of `database-view.ts` and
+`embedded-database-renderer.ts`; the `evidence` lane checks that stamp, and the `render-assertions`
+lane — which runs *after* it — rewrites it. Observed both ways here: red on run 1, green on run 2
+with no source change between them. Worth knowing before reading a single run as a regression.
 
 `verify-placement.mjs` grew from 80 to 82 checks *during* this phase, under another session's
 edits. Both new checks pass. It was not touched here.
 
-## SCREENSHOTS — not recaptured, and not this phase's debt
+## SCREENSHOTS — four are now this phase's debt, and the rest are not
 
-`npm run screenshots:verify` exits 1 with **276 stale captures across 10 sources**. Eight name a
-file this phase edited (`owned-menu.ts`, `popover-position.ts`). None are attributable to this work,
-for two independently sufficient reasons:
+**Four captures are stale because of this repair, and saying otherwise would be false.** The clamp
+fix edited `embedded-database-renderer.ts`, and `tools/screenshots/scenarios/chrome.mjs:697` declares
+that file as a `source` of the `chrome-selection-status-bar` scenario. So its four captures —
+desktop/mobile × dark/light — now fail the freshness gate, and `npm run gate` is **15 green with
+`screenshots-fresh` red, exit 1**:
+
+    screenshots/components/chrome-selection-status-bar-desktop-dark.png
+    screenshots/components/chrome-selection-status-bar-desktop-light.png
+    screenshots/components/chrome-selection-status-bar-mobile-dark.png
+    screenshots/components/chrome-selection-status-bar-mobile-light.png
+
+The pixels cannot have moved — the capture is hand-written fixture markup and this change is
+placement arithmetic in a calendar/timeline search panel, which that scenario does not render — so
+this is a **source-hash bookkeeping** red rather than a visual one. It is still a real red, and it is
+this phase's. Clearing it means `npm run screenshots` plus a person opening the four PNGs, which the
+repository rule requires and a non-interactive run cannot do; `screenshots/` was also outside this
+work's write scope. Recorded as owed rather than argued away.
+
+The **other** stale captures, and the earlier 276, remain not attributable to this work. When this
+folder first recorded it, `npm run screenshots:verify` exited 1 with **276 stale captures across 10
+sources**, eight naming a file this phase edited (`owned-menu.ts`, `popover-position.ts`). Those were
+not attributable, for two independently sufficient reasons:
 
 1. **The screenshot harness executes no `src/` code.** Every capture scenario is hand-written fixture
    markup rendered against the stylesheet; the `sources:` array is declared bookkeeping, not an

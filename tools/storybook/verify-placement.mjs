@@ -3833,35 +3833,55 @@ await section("lifted probes: desktop placement", async () => {
     const bounds = P.getVisiblePopoverBounds(null);
     const view = window;
 
-    // database-view.ts:6890 / embedded-database-renderer.ts:1305, verbatim.
+    // database-view.ts:6953 / embedded-database-renderer.ts:1323, verbatim.
     // The anchor is a toolbar search control near the right of the editing area.
     const searchControl = document.querySelector(".note-database-container").createDiv({ cls: "anchor" });
-    searchControl.setCssProps({ position: "absolute", left: "600px", top: "20px", width: "200px" });
-    const rect = searchControl.getBoundingClientRect();
+    searchControl.setCssProps({ position: "absolute", top: "20px", width: "200px" });
     const panel = document.body.createDiv({ cls: "db-calendar-search-results-popover" });
-    const width = Math.max(320, Math.min(480, window.innerWidth - 16));
-    const left = Math.max(8, Math.min(rect.left, window.innerWidth - width - 8));
-    const top = Math.min(rect.bottom + 6, window.innerHeight - 80);
-    panel.setCssProps({ left: `${left}px`, top: `${top}px`, width: `${width}px` });
-    const pr = panel.getBoundingClientRect();
+    const placeSearchPanel = (anchorX) => {
+      searchControl.setCssProps({ left: `${anchorX}px` });
+      const rect = searchControl.getBoundingClientRect();
+      const b = P.getVisiblePopoverBounds(null);
+      const width = Math.max(320, Math.min(480, b.width - 16));
+      const left = Math.max(b.left + 8, Math.min(rect.left, b.right - width - 8));
+      const top = Math.min(rect.bottom + 6, b.bottom - 80);
+      panel.setCssProps({ left: `${left}px`, top: `${top}px`, width: `${width}px` });
+      return panel.getBoundingClientRect();
+    };
+    // Two anchor positions, because one cannot tell a clamp from a coincidence. The overhang used to
+    // grow with the anchor, so a panel that happens to fit at one x can still run under the sidebar
+    // at another, and a single-position check would report that as fixed.
+    const near = placeSearchPanel(600);
+    const far = placeSearchPanel(1000);
     out.push({
       name: "HAND calendar/timeline search results clear the right sidebar",
-      pass: Math.round(pr.right) <= Math.round(split.right) + 1,
-      detail: `panel=[${Math.round(pr.left)}..${Math.round(pr.right)}] editing area right=${Math.round(split.right)} `
-        + `window.innerWidth=${window.innerWidth}. The clamp is written against window.innerWidth, not against `
-        + `getVisiblePopoverBounds, so it permits ${Math.round(window.innerWidth - split.right)}px of travel under the sidebar.`,
+      pass: Math.round(near.right) <= Math.round(split.right) + 1
+        && Math.round(far.right) <= Math.round(split.right) + 1,
+      detail: `anchor x=600 panel=[${Math.round(near.left)}..${Math.round(near.right)}], `
+        + `anchor x=1000 panel=[${Math.round(far.left)}..${Math.round(far.right)}], `
+        + `editing area right=${Math.round(split.right)}, window.innerWidth=${window.innerWidth}. Clamped `
+        + `against bounds.right=${Math.round(bounds.right)} rather than the window, which is what used to `
+        + `place it ${Math.round(window.innerWidth - split.right)}px under the sidebar.`,
     });
-    // Prove the clamp is what permits it: an anchor further right should slide further under.
-    searchControl.setCssProps({ left: "1000px" });
-    const rect2 = searchControl.getBoundingClientRect();
-    const left2 = Math.max(8, Math.min(rect2.left, window.innerWidth - width - 8));
-    panel.setCssProps({ left: `${left2}px` });
-    const pr2 = panel.getBoundingClientRect();
+    // The negative control: the statement this replaced, re-run in place. It still overhangs and the
+    // overhang still grows with the anchor, so the check above can distinguish a clamp from a
+    // coincidence rather than passing on a panel that was never going to reach the sidebar.
+    const unclampedRight = (anchorX) => {
+      searchControl.setCssProps({ left: `${anchorX}px` });
+      const rect = searchControl.getBoundingClientRect();
+      const width = Math.max(320, Math.min(480, window.innerWidth - 16));
+      return Math.max(8, Math.min(rect.left, window.innerWidth - width - 8)) + width;
+    };
+    const unclampedNear = unclampedRight(600);
+    const unclampedFar = unclampedRight(1000);
     out.push({
       name: "HAND CONTROL the search-results overhang grows with the anchor, so the clamp is the cause",
-      pass: Math.round(pr2.right - split.right) > Math.round(pr.right - split.right),
-      detail: `anchor at x=600 overhangs ${Math.round(pr.right - split.right)}px; `
-        + `anchor at x=1000 overhangs ${Math.round(pr2.right - split.right)}px`,
+      pass: Math.round(unclampedFar - split.right) > Math.round(unclampedNear - split.right)
+        && Math.round(unclampedNear) > Math.round(split.right),
+      detail: `against window.innerWidth the right edge is ${Math.round(unclampedNear)} at anchor x=600 `
+        + `(${Math.round(unclampedNear - split.right)}px past the editing area) and ${Math.round(unclampedFar)} `
+        + `at x=1000 (${Math.round(unclampedFar - split.right)}px); clamped against the editing area the same `
+        + `two anchors give ${Math.round(near.right)} and ${Math.round(far.right)}.`,
     });
     panel.remove();
 
@@ -5165,17 +5185,14 @@ const KNOWN = new Map([
       + "`contain: paint !important`. Placement is correct; the surface is cut off at the widget's own "
       + "edge, which no coordinate can fix. The remedy is the body portal the mobile sheet already uses.",
   ],
-  // The three below arrived with the lifted probes. Each was already red where it was written, and
+  // The two below arrived with the lifted probes. Each was already red where it was written, and
   // each is a defect in the plugin rather than in the check — so they are declared rather than
-  // repaired, and the run reports an unexpected pass the moment any of them is fixed. Lifting a
+  // repaired, and the run reports an unexpected pass the moment either of them is fixed. Lifting a
   // check and quietly loosening it would have been the one outcome worse than leaving it orphaned.
-  [
-    "HAND calendar/timeline search results clear the right sidebar",
-    "The clamp lives in database-view.ts and embedded-database-renderer.ts, duplicated verbatim, and "
-      + "is written against `window.innerWidth` rather than `getVisiblePopoverBounds`, so it permits "
-      + "300px of travel under the sidebar. Both files were held by another session when this was "
-      + "measured, so the defect is reported rather than fixed.",
-  ],
+  //
+  // A third, the calendar/timeline search-results clamp, was declared here and has since been
+  // repaired in both of its duplicated copies, so its entry is gone rather than left standing: a
+  // declared red that has been fixed is a check that can no longer fail.
   [
     "the row's label size is on the type scale",
     "A sheet row's label computes to 13px, between the 12px and 14px steps the rest of the surface "

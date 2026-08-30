@@ -1004,7 +1004,7 @@
       },
       "note": "The phone form of the owned menu. Rows share one left edge with the icon in a fixed leading column, hairlines divide neighbours but not the last row of a group, and a row that opens a submenu carries a trailing chevron. Captured in viewport mode so the fixed sheet docks at the bottom.",
       "capture": "viewport",
-      "bytes": 49273
+      "bytes": 49261
     },
     {
       "id": "chrome-owned-menu-sheet",
@@ -1031,7 +1031,7 @@
       },
       "note": "The phone form of the owned menu. Rows share one left edge with the icon in a fixed leading column, hairlines divide neighbours but not the last row of a group, and a row that opens a submenu carries a trailing chevron. Captured in viewport mode so the fixed sheet docks at the bottom.",
       "capture": "viewport",
-      "bytes": 51712
+      "bytes": 51714
     },
     {
       "id": "chrome-owned-menu-sheet",
@@ -1058,7 +1058,7 @@
       },
       "note": "The phone form of the owned menu. Rows share one left edge with the icon in a fixed leading column, hairlines divide neighbours but not the last row of a group, and a row that opens a submenu carries a trailing chevron. Captured in viewport mode so the fixed sheet docks at the bottom.",
       "capture": "viewport",
-      "bytes": 36591
+      "bytes": 36596
     },
     {
       "id": "chrome-owned-menu-sheet",
@@ -1099,7 +1099,7 @@
       ],
       "layoutHash": "13af8008d02e",
       "sourceHashes": {
-        "src/views/embedded-database-renderer.ts": "930476615194",
+        "src/views/embedded-database-renderer.ts": "d4a765acb2d3",
         "styles.css": "e5ada7e445ce",
         "tools/screenshots/theme.css": "8239cc22cceb",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -1122,7 +1122,7 @@
       ],
       "layoutHash": "13af8008d02e",
       "sourceHashes": {
-        "src/views/embedded-database-renderer.ts": "930476615194",
+        "src/views/embedded-database-renderer.ts": "d4a765acb2d3",
         "styles.css": "e5ada7e445ce",
         "tools/screenshots/theme.css": "8239cc22cceb",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -1145,7 +1145,7 @@
       ],
       "layoutHash": "fa689a16d602",
       "sourceHashes": {
-        "src/views/embedded-database-renderer.ts": "930476615194",
+        "src/views/embedded-database-renderer.ts": "d4a765acb2d3",
         "styles.css": "e5ada7e445ce",
         "tools/screenshots/theme.css": "8239cc22cceb",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -1168,7 +1168,7 @@
       ],
       "layoutHash": "fa689a16d602",
       "sourceHashes": {
-        "src/views/embedded-database-renderer.ts": "930476615194",
+        "src/views/embedded-database-renderer.ts": "d4a765acb2d3",
         "styles.css": "e5ada7e445ce",
         "tools/screenshots/theme.css": "8239cc22cceb",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -4535,7 +4535,7 @@
       },
       "note": "Multi-day all-day bars, timed events, an overflow week and one event carried across the week boundary.",
       "capture": "viewport",
-      "bytes": 132656
+      "bytes": 132404
     },
     {
       "id": "calendar-month-view",
@@ -4581,7 +4581,7 @@
       },
       "note": "Multi-day all-day bars, timed events, an overflow week and one event carried across the week boundary.",
       "capture": "viewport",
-      "bytes": 87551
+      "bytes": 87204
     },
     {
       "id": "calendar-toolbar-options",
@@ -4727,7 +4727,7 @@
       },
       "note": "Sticky day header and all-day strip over the 08–16 time grid; the current-time ruler sits on Wednesday at 13:45.",
       "capture": "viewport",
-      "bytes": 119776
+      "bytes": 119833
     },
     {
       "id": "calendar-week-time-grid",
@@ -4773,7 +4773,7 @@
       },
       "note": "Sticky day header and all-day strip over the 08–16 time grid; the current-time ruler sits on Wednesday at 13:45.",
       "capture": "viewport",
-      "bytes": 61971
+      "bytes": 61744
     },
     {
       "id": "gallery-view",
@@ -5532,7 +5532,7 @@
       },
       "note": "Two weeks at one column per day; the April band marks the month boundary and the today line sits at 25 March 13:45.",
       "capture": "viewport",
-      "bytes": 147239
+      "bytes": 146959
     },
     {
       "id": "timeline-view",
@@ -5601,7 +5601,7 @@
       },
       "note": "Two weeks at one column per day; the April band marks the month boundary and the today line sits at 25 March 13:45.",
       "capture": "viewport",
-      "bytes": 73062
+      "bytes": 72679
     }
   ]
 }

@@ -9,12 +9,12 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "public/005-component-surface-system/015-desktop-dropdown-placement"
-    last_updated_at: "2026-08-30T21:15:00Z"
-    last_updated_by: "criteria-adjudication"
-    recent_action: "Criteria adjudicated against the captured run; 5 ticked, the sixth stays red"
-    next_safe_action: "Fix the clamp in both host files; add a phone arm to the lifetime check"
+    last_updated_at: "2026-08-30T22:00:00Z"
+    last_updated_by: "search-results-clamp-repair"
+    recent_action: "The sixth defect is fixed in both copies; declaration dropped from both harnesses"
+    next_safe_action: "Recapture the four chrome-selection-status-bar PNGs and look at them"
     blockers:
-      - "The sixth defect is duplicated in two files held by another session"
+      - "npm run gate is 15 green, screenshots-fresh red, from four captures this repair staled"
       - "The dead-anchor guard is not desktop-only; no phone arm covers it"
     key_files:
       - "spec.md"
@@ -25,11 +25,13 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-015-goal"
       parent_session_id: null
-    completion_pct: 80
+    completion_pct: 90
     open_questions:
       - "What an anchorless open should do; the decision binds all 34 call sites"
+      - "column-menu.ts:616 passes the panel to getVisiblePopoverBounds and gets the whole viewport"
     answered_questions:
       - "getPlacementOptions is not a root cause; its only consumer has zero callers"
+      - "The clamp takes null, not a container: a container narrows a panel portalled to escape it"
 ---
 # Goal: Desktop Dropdown Placement
 
@@ -49,7 +51,8 @@ anchor-derived menu covered its trigger entirely, and a panel whose anchor had b
 painting at the dead anchor's last coordinate, still focusable and still accepting input.
 
 **The finding is that this is not one mechanism with bugs in it.** It is **five independent placement
-paths**, and the defects cluster on the four that are not the maintained one. A fix aimed at
+paths**, and the defects cluster on the four that are not the maintained one. All six defects are now
+repaired. A fix aimed at
 `positionToolbarPopover` would have found nothing: path A is correct on every check.
 
 ### Decisions
@@ -136,30 +139,34 @@ the sentence alone.
       scrim taking every tap with nothing visible above it. Assert either that the scrim goes with
       the sheet or that the surface closes outright, and assert the paired live-anchor control on
       the same page, or the check is satisfied by a positioner that hides every sheet.
-- [ ] The declared red is closed: the search-results panel clamps against the editing area rather
-      than `window.innerWidth`. Measured unfixed at 1380 against 1140, growing to 292px as the anchor
-      moves right.
+- [x] The declared red is closed: the search-results panel clamps against the editing area rather
+      than `window.innerWidth`. Was **panel [900..1380] against an editing area ending at 1140,
+      window.innerWidth 1440** — 240px under the sidebar at anchor x=600, and **1432, a 292px
+      overhang**, at x=1000.
+      `HAND calendar/timeline search results clear the right sidebar` — **[652..1132] at x=600 and
+      [652..1132] at x=1000, against an editing area ending at 1140**, clamped against
+      `bounds.right=1140`. Both anchors now land identically, which is the point: the clamp decides
+      the right edge, not the anchor. `HAND CONTROL the search-results overhang grows with the
+      anchor, so the clamp is the cause` — the replaced statement, re-run in place, still puts the
+      right edge at **1380 (240px past)** at x=600 and **1432 (292px)** at x=1000.
 
-      **Still declared, and it is one of the captured run's four.** `RED (declared) HAND
-      calendar/timeline search results clear the right sidebar` — **panel [900..1380] against an
-      editing area ending at 1140, window.innerWidth 1440**. Its cause is confirmed by its own
-      control, `HAND CONTROL the search-results overhang grows with the anchor, so the clamp is the
-      cause` — **240px of overhang with the anchor at x=600, 292px at x=1000**.
+      **Two anchor positions, because one cannot distinguish a clamp from a coincidence.** The
+      overhang grew with the anchor, so a panel that happens to fit at one x could still run under
+      the sidebar at another and pass a single-position check.
 
-      **This is a declared red, not a failing check.** The check exists, reports by name, and is why
-      the run's exit status is still 0 and still meaningful. Counting it as a failure misreads the
-      run; ticking it claims a repair nobody has made.
+      **Both copies moved together**, in `src/views/database-view.ts:6953` and
+      `src/views/embedded-database-renderer.ts:1323` — byte-identical before the edit and after it.
+      All four window-relative terms moved to `getVisiblePopoverBounds(null)`: the width cap, the
+      left floor `8` (a *window*-relative margin that would have permitted x=8, under the **left**
+      sidebar), the right clamp, and the vertical `innerHeight - 80`. `null` rather than a
+      container was measured, not assumed — `bounds(null)` and `bounds(container)` are both
+      `[300..1140]`, `bounds(anchor)` collapses to `[900..1100]`, and `bounds(panel)` returns the
+      **whole viewport** because a rect intersected with itself trips the degenerate guard. The panel
+      is created on `window.activeDocument.body` to escape the view, so a container would narrow it.
 
-      **What is missing is the repair, not a check.** The clamp is duplicated verbatim in
-      `src/views/database-view.ts:6955-6957` and `src/views/embedded-database-renderer.ts:1325-1327`
-      — both in `positionCalendarTimelineSearchResultsPanel`, and both later in their files than the
-      `:6890` / `:1305` this folder records. Replace `window.innerWidth` with
-      `getVisiblePopoverBounds` in both copies; the vertical term `window.innerHeight - 80` on the
-      next line has the same defect and should move with it. Then require **`panel.right ≤ 1140`
-      with the anchor at x=600 and again at x=1000**, since a single anchor position cannot
-      distinguish a clamp from a coincidence, and drop the declaration so the next regression fails
-      the run instead of being expected. The two copies must move together: repairing one leaves the
-      other reporting the same 1380.
+      **The declaration is gone from both harnesses**, since a declared red that has been fixed is a
+      check that can no longer fail. `verify-placement` is **221/224, 3 declared red, exit 0**, down
+      from four; `probe-desktop-placement` is **31/31 with `DECLARED_RED` empty, exit 0**.
 - [ ] The operator opens any desktop dropdown and it is where they expected it.
 
       Operator-confirmed is the only state that closes this, per D3. No harness can answer it, and
@@ -169,12 +176,37 @@ the sentence alone.
 ---
 
 <!-- ANCHOR:log -->
+
+### A shipped fix in a sibling phase may not work, and its check cannot tell
+
+Found while repairing this phase's sixth defect, in code this phase does not own.
+
+The anchorless-submenu repair calls `getVisiblePopoverBounds(panel)` — passing the surface
+being positioned, with a comment justifying it as deriving the document for a popped-out
+window. That reason is sound. The side effect is not: the function intersects the container's
+own rect into its result, and ends with `if (right <= left || bottom <= top) return viewport`.
+
+A panel that has not been laid out has a zero-width rect. `right` collapses toward 0 while
+`left` is held at the editing area's left edge, the guard trips, and the function returns the
+**whole viewport** — precisely the bound that repair existed to remove. The line immediately
+after the call reads `panel.getBoundingClientRect().height || 320`, and that fallback is there
+because the author knew the panel may not have laid out yet. If the height can be zero, so can
+the width.
+
+**Its check cannot see this.** Both harnesses transcribe the arithmetic with `null` rather than
+calling the method, which is private and needs a live host object. `null` yields the editing
+area, so the check passes on a transcription the shipped code does not perform.
+
+Recorded rather than fixed: it is outside this phase, and the same transcription limit means a
+fix here could not be proven either. What is owed is a check that drives the real method, and
+before that a shimmed probe measuring the bounds for a freshly created panel — an unshimmed one
+throws in the element guard, which is its own finding about that guard.
 ## 3. LOG
 
 Volatile. Not part of the directive.
 
-**Five of six defects fixed; the sixth measured and declared. 30 of 31 probe checks pass.** Took no
-stylesheet lane — every repair is JavaScript.
+**All six defects fixed. 31 of 31 probe checks pass, none declared red.** Took no stylesheet lane —
+every repair is JavaScript.
 
 ### The guard that makes every other number mean something
 
@@ -200,7 +232,8 @@ anchor, destroy the anchor, let the loop tick. Only the loop can observe it.
 | Item | State | Evidence |
 |------|-------|----------|
 | Five defects | Shipped, verified | AC-1 to AC-5, each with a failing number and a control |
-| The sixth | Measured, declared red | Duplicated in two files held by another session |
+| The sixth | Shipped, verified | AC-7. 1380/1432 → 1132 at both anchors; both copies moved together |
+| Four captures | Owed | `chrome-selection-status-bar` names `embedded-database-renderer.ts` as a source |
 | Inventory closure assertion | Built | 16 coordinate writes across 7 files, all classified |
 | Recapture | Declined with reasons, not deferred | 276 captures were already stale at HEAD |
 
@@ -211,4 +244,8 @@ anchor, destroy the anchor, let the loop tick. Only the loop can observe it.
 | `showAt` passes `undefined` for the fixed containing block | A numeric no-op today because body sits at the origin. Recorded because it stops being one the day body gains a margin |
 | The recapture reason was over-broad | It read "the harness executes no `src/` code"; scoped to the screenshot harness, since `verify-placement` bundles fifteen shipped modules including the two this phase edited |
 | "Every change sits in a desktop-only branch" was over-broad too | True of `owned-menu.ts:168`, false of the dead-anchor guard at `popover-position.ts:182`, which precedes the `mobileSheet` branch and so reaches a phone sheet |
+| The clamp repair is phone-visible too, and was measured | `getVisiblePopoverBounds` subtracts the mobile navbar and safe-area inset from `bottom`, and nothing gates this panel to desktop — `isDesktopOnly` is false and the render path has no `is-phone` branch. On a 390×844 phone with a 72px navbar and a 34px inset, `bounds` ends at 738 rather than 844, so the vertical cap moves **up 76px** — but only when the anchor sits low enough to bind: with `anchor.bottom=728` the top goes 734 → 658, while a high anchor at `bottom=128` is unchanged at 134. Width and left are identical on a phone, since there are no sidebars and `bounds.left + 8` is the old literal `8`. The direction is right — it stops the panel being placed under the navbar — but it is a phone-visible change out of a desktop phase, and no phone check covers it |
+| The line numbers this folder recorded were stale in three places | `database-view.ts:6890` and `embedded-database-renderer.ts:1305` named the **callers**, not the method, and were ~60 lines out; the method is at `:6953` and `:1323`. `filter-panel-renderer.ts:532` named nothing — the draft commit that destroys the trigger is `commitDraftValue` at `:624`, refreshing at `:637`. All three corrected. `owned-menu.ts:168` and `popover-position.ts:182`/`:200`/`:491` were checked and are right |
+| `column-menu.ts:616` passes the panel and gets the whole viewport | Out of this work's scope, reported not fixed. The AC-4 repair calls `getVisiblePopoverBounds(panel)`, but that function intersects the container's own rect into its result, so a body-portalled fixed panel trips the degenerate guard and gets `[0..1440]` — the full viewport, the very bound the repair was removing. Measured on the harness page: `bounds(sub)` for a 292px submenu with five rows returns `[0..1440]`. AC-4 reads green only because **both harnesses transcribe it with `null`**, which the source does not do. So the anchorless-submenu fix may not work in the shipped build, and its check cannot see that |
+| Both harnesses transcribe rather than call | Verified in both directions. Reverting the transcription to `window.innerWidth` turns the check red and the run to exit 1, so it is not decoration. Reverting the **source** while leaving the transcription fixed leaves the run at exit 0 — a source-only regression is invisible to the gate. The transcription carries its file and line for exactly this reason |
 <!-- /ANCHOR:log -->
