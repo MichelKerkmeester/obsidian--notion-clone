@@ -1031,7 +1031,7 @@
       },
       "note": "The phone form of the owned menu. Rows share one left edge with the icon in a fixed leading column, hairlines divide neighbours but not the last row of a group, and a row that opens a submenu carries a trailing chevron. Captured in viewport mode so the fixed sheet docks at the bottom.",
       "capture": "viewport",
-      "bytes": 51714
+      "bytes": 51712
     },
     {
       "id": "chrome-owned-menu-sheet",
@@ -1058,7 +1058,7 @@
       },
       "note": "The phone form of the owned menu. Rows share one left edge with the icon in a fixed leading column, hairlines divide neighbours but not the last row of a group, and a row that opens a submenu carries a trailing chevron. Captured in viewport mode so the fixed sheet docks at the bottom.",
       "capture": "viewport",
-      "bytes": 36596
+      "bytes": 36591
     },
     {
       "id": "chrome-owned-menu-sheet",
@@ -1085,7 +1085,7 @@
       },
       "note": "The phone form of the owned menu. Rows share one left edge with the icon in a fixed leading column, hairlines divide neighbours but not the last row of a group, and a row that opens a submenu carries a trailing chevron. Captured in viewport mode so the fixed sheet docks at the bottom.",
       "capture": "viewport",
-      "bytes": 38739
+      "bytes": 38727
     },
     {
       "id": "chrome-selection-status-bar",
@@ -2120,7 +2120,7 @@
       ],
       "layoutHash": "1fbc59be4b04",
       "sourceHashes": {
-        "src/views/cell-renderer.ts": "5442e72215a1",
+        "src/views/cell-renderer.ts": "e5bc1bdd603b",
         "src/data/column-types.ts": "c48057b05309",
         "styles.css": "e5ada7e445ce",
         "tools/screenshots/theme.css": "8239cc22cceb",
@@ -2145,7 +2145,7 @@
       ],
       "layoutHash": "1fbc59be4b04",
       "sourceHashes": {
-        "src/views/cell-renderer.ts": "5442e72215a1",
+        "src/views/cell-renderer.ts": "e5bc1bdd603b",
         "src/data/column-types.ts": "c48057b05309",
         "styles.css": "e5ada7e445ce",
         "tools/screenshots/theme.css": "8239cc22cceb",
@@ -2170,7 +2170,7 @@
       ],
       "layoutHash": "d1892cba659a",
       "sourceHashes": {
-        "src/views/cell-renderer.ts": "5442e72215a1",
+        "src/views/cell-renderer.ts": "e5bc1bdd603b",
         "src/data/column-types.ts": "c48057b05309",
         "styles.css": "e5ada7e445ce",
         "tools/screenshots/theme.css": "8239cc22cceb",
@@ -2195,7 +2195,7 @@
       ],
       "layoutHash": "d1892cba659a",
       "sourceHashes": {
-        "src/views/cell-renderer.ts": "5442e72215a1",
+        "src/views/cell-renderer.ts": "e5bc1bdd603b",
         "src/data/column-types.ts": "c48057b05309",
         "styles.css": "e5ada7e445ce",
         "tools/screenshots/theme.css": "8239cc22cceb",
@@ -2219,7 +2219,7 @@
       ],
       "layoutHash": "505d8e1a1950",
       "sourceHashes": {
-        "src/views/cell-renderer.ts": "5442e72215a1",
+        "src/views/cell-renderer.ts": "e5bc1bdd603b",
         "styles.css": "e5ada7e445ce",
         "tools/screenshots/theme.css": "8239cc22cceb",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -2242,7 +2242,7 @@
       ],
       "layoutHash": "505d8e1a1950",
       "sourceHashes": {
-        "src/views/cell-renderer.ts": "5442e72215a1",
+        "src/views/cell-renderer.ts": "e5bc1bdd603b",
         "styles.css": "e5ada7e445ce",
         "tools/screenshots/theme.css": "8239cc22cceb",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -2265,7 +2265,7 @@
       ],
       "layoutHash": "e028e449ac94",
       "sourceHashes": {
-        "src/views/cell-renderer.ts": "5442e72215a1",
+        "src/views/cell-renderer.ts": "e5bc1bdd603b",
         "styles.css": "e5ada7e445ce",
         "tools/screenshots/theme.css": "8239cc22cceb",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -2288,7 +2288,7 @@
       ],
       "layoutHash": "e028e449ac94",
       "sourceHashes": {
-        "src/views/cell-renderer.ts": "5442e72215a1",
+        "src/views/cell-renderer.ts": "e5bc1bdd603b",
         "styles.css": "e5ada7e445ce",
         "tools/screenshots/theme.css": "8239cc22cceb",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -3105,7 +3105,7 @@
       "layoutHash": "9abdbf72489d",
       "sourceHashes": {
         "src/data/status-colors.ts": "954425583842",
-        "src/views/cell-renderer.ts": "5442e72215a1",
+        "src/views/cell-renderer.ts": "e5bc1bdd603b",
         "styles.css": "e5ada7e445ce",
         "tools/screenshots/theme.css": "8239cc22cceb",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -3130,7 +3130,7 @@
       "layoutHash": "9abdbf72489d",
       "sourceHashes": {
         "src/data/status-colors.ts": "954425583842",
-        "src/views/cell-renderer.ts": "5442e72215a1",
+        "src/views/cell-renderer.ts": "e5bc1bdd603b",
         "styles.css": "e5ada7e445ce",
         "tools/screenshots/theme.css": "8239cc22cceb",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -3155,7 +3155,7 @@
       "layoutHash": "6899c37c1a11",
       "sourceHashes": {
         "src/data/status-colors.ts": "954425583842",
-        "src/views/cell-renderer.ts": "5442e72215a1",
+        "src/views/cell-renderer.ts": "e5bc1bdd603b",
         "styles.css": "e5ada7e445ce",
         "tools/screenshots/theme.css": "8239cc22cceb",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -3180,7 +3180,7 @@
       "layoutHash": "6899c37c1a11",
       "sourceHashes": {
         "src/data/status-colors.ts": "954425583842",
-        "src/views/cell-renderer.ts": "5442e72215a1",
+        "src/views/cell-renderer.ts": "e5bc1bdd603b",
         "styles.css": "e5ada7e445ce",
         "tools/screenshots/theme.css": "8239cc22cceb",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -3439,7 +3439,7 @@
       },
       "note": "Nesting stops at three levels: the innermost rows lose their add-group button because the tree can go no deeper.",
       "capture": "element",
-      "bytes": 58169
+      "bytes": 58305
     },
     {
       "id": "panel-filter-nested-group",
@@ -4489,7 +4489,7 @@
       },
       "note": "Days with events carry a short accent underline; the visible week reads as the selected pill run.",
       "capture": "viewport",
-      "bytes": 45911
+      "bytes": 45917
     },
     {
       "id": "calendar-month-view",
@@ -4512,7 +4512,7 @@
       },
       "note": "Multi-day all-day bars, timed events, an overflow week and one event carried across the week boundary.",
       "capture": "viewport",
-      "bytes": 130108
+      "bytes": 129143
     },
     {
       "id": "calendar-month-view",
@@ -4558,7 +4558,7 @@
       },
       "note": "Multi-day all-day bars, timed events, an overflow week and one event carried across the week boundary.",
       "capture": "viewport",
-      "bytes": 86403
+      "bytes": 85997
     },
     {
       "id": "calendar-month-view",
@@ -4606,7 +4606,7 @@
       },
       "note": "The Time section only exists in week and day scale; the setup preview card below Data carries no stylesheet rules.",
       "capture": "viewport",
-      "bytes": 124644
+      "bytes": 124663
     },
     {
       "id": "calendar-toolbar-options",
@@ -4631,7 +4631,7 @@
       },
       "note": "The Time section only exists in week and day scale; the setup preview card below Data carries no stylesheet rules.",
       "capture": "viewport",
-      "bytes": 129679
+      "bytes": 129708
     },
     {
       "id": "calendar-toolbar-options",
@@ -4773,7 +4773,7 @@
       },
       "note": "Sticky day header and all-day strip over the 08–16 time grid; the current-time ruler sits on Wednesday at 13:45.",
       "capture": "viewport",
-      "bytes": 61744
+      "bytes": 61971
     },
     {
       "id": "gallery-view",
@@ -5188,7 +5188,7 @@
         "src/views/table-renderer.ts": "4da7fde17e18",
         "src/views/table-column-layout-sync.ts": "a678b28c2bf2",
         "src/views/table-layout.ts": "a39067d21b59",
-        "src/views/cell-renderer.ts": "5442e72215a1",
+        "src/views/cell-renderer.ts": "e5bc1bdd603b",
         "src/views/file-title-display.ts": "62da9ee863b6",
         "src/views/table-record-peek.ts": "ca49c8ce6aab",
         "styles.css": "e5ada7e445ce",
@@ -5222,7 +5222,7 @@
         "src/views/table-renderer.ts": "4da7fde17e18",
         "src/views/table-column-layout-sync.ts": "a678b28c2bf2",
         "src/views/table-layout.ts": "a39067d21b59",
-        "src/views/cell-renderer.ts": "5442e72215a1",
+        "src/views/cell-renderer.ts": "e5bc1bdd603b",
         "src/views/file-title-display.ts": "62da9ee863b6",
         "src/views/table-record-peek.ts": "ca49c8ce6aab",
         "styles.css": "e5ada7e445ce",
@@ -5256,7 +5256,7 @@
         "src/views/table-renderer.ts": "4da7fde17e18",
         "src/views/table-column-layout-sync.ts": "a678b28c2bf2",
         "src/views/table-layout.ts": "a39067d21b59",
-        "src/views/cell-renderer.ts": "5442e72215a1",
+        "src/views/cell-renderer.ts": "e5bc1bdd603b",
         "src/views/file-title-display.ts": "62da9ee863b6",
         "src/views/table-record-peek.ts": "ca49c8ce6aab",
         "styles.css": "e5ada7e445ce",
@@ -5290,7 +5290,7 @@
         "src/views/table-renderer.ts": "4da7fde17e18",
         "src/views/table-column-layout-sync.ts": "a678b28c2bf2",
         "src/views/table-layout.ts": "a39067d21b59",
-        "src/views/cell-renderer.ts": "5442e72215a1",
+        "src/views/cell-renderer.ts": "e5bc1bdd603b",
         "src/views/file-title-display.ts": "62da9ee863b6",
         "src/views/table-record-peek.ts": "ca49c8ce6aab",
         "styles.css": "e5ada7e445ce",
@@ -5319,7 +5319,7 @@
       "sourceHashes": {
         "src/views/table-renderer.ts": "4da7fde17e18",
         "src/views/column-header-controller.ts": "7714b894b5b0",
-        "src/views/cell-renderer.ts": "5442e72215a1",
+        "src/views/cell-renderer.ts": "e5bc1bdd603b",
         "styles.css": "e5ada7e445ce",
         "tools/screenshots/theme.css": "8239cc22cceb",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -5346,7 +5346,7 @@
       "sourceHashes": {
         "src/views/table-renderer.ts": "4da7fde17e18",
         "src/views/column-header-controller.ts": "7714b894b5b0",
-        "src/views/cell-renderer.ts": "5442e72215a1",
+        "src/views/cell-renderer.ts": "e5bc1bdd603b",
         "styles.css": "e5ada7e445ce",
         "tools/screenshots/theme.css": "8239cc22cceb",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -5373,7 +5373,7 @@
       "sourceHashes": {
         "src/views/table-renderer.ts": "4da7fde17e18",
         "src/views/column-header-controller.ts": "7714b894b5b0",
-        "src/views/cell-renderer.ts": "5442e72215a1",
+        "src/views/cell-renderer.ts": "e5bc1bdd603b",
         "styles.css": "e5ada7e445ce",
         "tools/screenshots/theme.css": "8239cc22cceb",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -5400,7 +5400,7 @@
       "sourceHashes": {
         "src/views/table-renderer.ts": "4da7fde17e18",
         "src/views/column-header-controller.ts": "7714b894b5b0",
-        "src/views/cell-renderer.ts": "5442e72215a1",
+        "src/views/cell-renderer.ts": "e5bc1bdd603b",
         "styles.css": "e5ada7e445ce",
         "tools/screenshots/theme.css": "8239cc22cceb",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -5509,7 +5509,7 @@
       },
       "note": "Column width is a switch plus a slider here, not the calendar's mode dropdown; the slider only appears once the switch is on.",
       "capture": "viewport",
-      "bytes": 85562
+      "bytes": 85566
     },
     {
       "id": "timeline-view",
@@ -5532,7 +5532,7 @@
       },
       "note": "Two weeks at one column per day; the April band marks the month boundary and the today line sits at 25 March 13:45.",
       "capture": "viewport",
-      "bytes": 146959
+      "bytes": 147239
     },
     {
       "id": "timeline-view",
@@ -5578,7 +5578,7 @@
       },
       "note": "Two weeks at one column per day; the April band marks the month boundary and the today line sits at 25 March 13:45.",
       "capture": "viewport",
-      "bytes": 70278
+      "bytes": 69974
     },
     {
       "id": "timeline-view",
