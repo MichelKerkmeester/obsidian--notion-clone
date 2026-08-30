@@ -1,34 +1,35 @@
 // ───────────────────────────────────────────────────────────────────
-// MODULE:    list-render-bench
-// COMPONENT: measures list render cost against column count and how full the data is
+// MODULE:    board-render-bench
+// COMPONENT: measures board render cost against card count, column count and how full the data is
 // ───────────────────────────────────────────────────────────────────
 //
-// The list row renderer used to skip a property with no value and now builds
-// every property, hiding the empty ones. That trade was made to fix alignment:
-// a hidden field holds its column, so the column is an index rather than a
-// count. What nothing measured is what it costs, and the answer depends on two
-// numbers that no existing check varies — how many columns a database has, and
-// how much of it is filled in.
+// The board builds one card per row across a handful of group columns, and each
+// card is appended to the same cards container its predecessors were appended
+// to. Anything inside that loop which reads layout — an element's box, its
+// width, its offset — forces the browser to flush the tree built so far before
+// it can answer. Do that once per card and the work the browser does is the sum
+// of every prefix, which is quadratic in card count rather than linear.
 //
-// So this varies both. Fill rate is the axis that matters: at 100% both the old
-// and new renderers build the same number of fields and look identical, which
-// is exactly the shape every fixture and story already uses. The cost only
-// appears as the data gets sparser, and it grows with column count.
-//
-// WHAT THIS MEASURES: the real ListRenderer's row loop and field loop, the DOM
-// it produces, and the browser layout that follows.
+// WHAT THIS MEASURES: the real BoardRenderer's group loop and card loop, the
+// DOM it produces, and the browser layout that follows.
 //
 // WHAT IT DOES NOT: row preparation, the metadata cache, computed fields,
-// relation rollups. Those need a live vault. Field values here are plain text
-// and constant-time, which isolates structural cost — and means a real database
-// with relation or markdown columns pays more per field than this reports,
-// never less.
+// relation rollups, cover images. Those need a live vault. Field values here
+// are plain text and constant-time, which isolates structural cost — and means
+// a real database with relation or markdown columns pays more per field than
+// this reports, never less.
+//
+// The fixture deliberately leaves `isReadOnly` unset rather than false. The
+// shipped board is constructed without that key at all, so it is `undefined`
+// there, and every guard written as `!isReadOnly` takes its expensive arm. A
+// fixture that passed `false` would measure the same path; one that passed
+// `true` would measure a board no user of the main view has.
 
 // ───────────────────────────────────────────────────────────────────
 // 1. IMPORTS
 // ───────────────────────────────────────────────────────────────────
 
-import { ListRenderer, type ListRendererActions } from "../../src/views/list-renderer";
+import { BoardRenderer, type BoardGroup, type BoardRendererActions } from "../../src/views/board-renderer";
 import type { App } from "obsidian";
 import type { ColumnDef, RowData, ViewConfig } from "../../src/data/types";
 
@@ -44,42 +45,56 @@ const REPORTED_COLUMNS = [
   "cleared", "transfer", "tag", "amount", "currency", "source",
 ];
 
-/** Fraction of cells that hold a value. A personal database is mostly gaps, not mostly values. */
+/** The column the board groups by. Present in the schema so the renderer excludes it from cards. */
+const GROUP_FIELD = "board_status";
+
+/** A kanban is a few columns wide, not a few hundred. Five is a normal working board. */
+const GROUP_KEYS = ["backlog", "todo", "doing", "review", "done"];
+
+/**
+ * Row counts start where the earlier list ceiling stopped and go two doublings past it.
+ *
+ * A quadratic term is invisible until the linear term stops dominating. Sampling 50–400, as the
+ * first harness did, measures entirely below that crossover and reports a clean straight line —
+ * which is exactly why every earlier reading missed this. The bend sits between 1,600 and 3,200,
+ * so the ladder has to bracket it on both sides to show a slope at all.
+ */
 const DEFAULTS = {
   fillRates: [1, 0.3],
   columnCounts: [4, 21],
-  rowCounts: [50, 100, 200, 400],
-  repeats: 5,
+  rowCounts: [400, 1600, 3200, 6400],
+  groupCount: GROUP_KEYS.length,
+  repeats: 3,
   /** "text" isolates structural cost; "mixed" adds the types whose renderers do real work. */
   columnKind: "text" as "text" | "mixed",
 };
 
-export type BenchOptions = Partial<typeof DEFAULTS>;
+export type BoardBenchOptions = Partial<typeof DEFAULTS>;
 
 /**
- * The types a real database actually holds. An empty value used to skip the renderer entirely, so
- * whatever these cost per field was previously never paid on a gap and is now paid on every one.
+ * The types a real database actually holds. Structural cost is the subject here, so the default
+ * stays "text"; "mixed" is available for a run that wants per-type renderer cost in the number.
  */
 const MIXED_TYPES: ColumnDef["type"][] = [
   "text", "number", "date", "select", "multi-select", "checkbox", "relation", "currency",
 ];
 
-/** Exported for the assertion harness, which must render the same measured shape the bench times. */
-export function makeColumns(count: number, kind: "text" | "mixed"): ColumnDef[] {
-  return Array.from({ length: count }, (_unused, i) => {
+function makeColumns(count: number, kind: "text" | "mixed"): ColumnDef[] {
+  const columns = Array.from({ length: count }, (_unused, i) => {
     const base = {
       key: i === 0 ? "file.name" : REPORTED_COLUMNS[i % REPORTED_COLUMNS.length] + (i >= REPORTED_COLUMNS.length ? String(i) : ""),
       label: i === 0 ? "Name" : REPORTED_COLUMNS[i % REPORTED_COLUMNS.length],
       type: kind === "mixed" && i > 0 ? MIXED_TYPES[i % MIXED_TYPES.length] : "text",
     } as ColumnDef;
-    // Markdown is the costliest text mode because it runs a parser per value, so a fifth of the
-    // text columns use it rather than none of them.
     if (kind === "mixed" && base.type === "text" && i % 5 === 0) base.textRenderMode = "markdown";
     return base;
   });
+  // The grouping column has to exist in the schema, or the renderer cannot resolve group display
+  // and the cards keep a field the real board would have consumed into the column header.
+  columns.push({ key: GROUP_FIELD, label: "Status", type: "select" } as ColumnDef);
+  return columns;
 }
 
-/** A value each column type will actually accept, so no type falls back to an empty render. */
 function valueForType(col: ColumnDef, i: number): unknown {
   switch (col.type) {
     case "number": case "currency": return i * 37 + 0.5;
@@ -93,16 +108,17 @@ function valueForType(col: ColumnDef, i: number): unknown {
 
 /**
  * Rows whose gaps are spread rather than clustered, and deterministic rather than random, so a
- * rerun measures the same shape. A row that is empty in the same columns every time would let a
- * per-column cost hide behind a cache that a real database would never hit.
+ * rerun measures the same shape.
  */
-export function makeRows(count: number, columns: ColumnDef[], fillRate: number): RowData[] {
+function makeRows(count: number, columns: ColumnDef[], fillRate: number, groupCount: number): RowData[] {
   return Array.from({ length: count }, (_unused, i) => {
     const frontmatter: Record<string, unknown> = {};
     columns.forEach((col, colIndex) => {
+      if (col.key === GROUP_FIELD) return;
       const filled = fillRate >= 1 || ((i * 7 + colIndex * 3) % 10) < fillRate * 10;
       if (filled) frontmatter[col.key] = valueForType(col, i);
     });
+    frontmatter[GROUP_FIELD] = GROUP_KEYS[i % groupCount];
     return {
       file: { path: `notes/row-${i}.md`, basename: `row-${i}`, name: `row-${i}.md` },
       frontmatter,
@@ -111,29 +127,48 @@ export function makeRows(count: number, columns: ColumnDef[], fillRate: number):
   });
 }
 
-export function makeConfig(columns: ColumnDef[]): ViewConfig {
+/** Rows dealt round-robin across the board's columns, so no single column carries the whole load. */
+function makeGroups(rows: RowData[], groupCount: number): BoardGroup[] {
+  const keys = GROUP_KEYS.slice(0, groupCount);
+  return keys.map((key) => {
+    const groupRows = rows.filter((row) => (row as unknown as { frontmatter: Record<string, unknown> }).frontmatter[GROUP_FIELD] === key);
+    return { key, rows: groupRows, count: groupRows.length };
+  });
+}
+
+function makeConfig(columns: ColumnDef[]): ViewConfig {
   return {
     name: "Bench",
     sourceFolder: "notes",
+    viewType: "board",
+    boardGroupField: GROUP_FIELD,
+    // Absent group row limit means every card renders. A limit would cap the card count and
+    // measure a board that stops before the size under investigation.
     schema: { columns, computedFields: [] },
   } as unknown as ViewConfig;
 }
 
-/** Every required action present, none of them doing work worth measuring. */
-function makeActions(columns: ColumnDef[]): ListRendererActions {
+/**
+ * Every required action present, none of them doing work worth measuring.
+ *
+ * `isReadOnly` is omitted rather than set, because the shipped board omits it. See the module
+ * header: setting it either way would measure a board the main view does not construct.
+ */
+function makeActions(columns: ColumnDef[]): BoardRendererActions {
   return {
     openRow: () => undefined,
     createEntry: () => undefined,
+    updateGroup: async () => undefined,
+    updateGroupOrder: () => undefined,
+    updateCardOrder: () => undefined,
+    moveRowToPosition: () => undefined,
+    updateColumnWidth: () => undefined,
     isRowSelected: () => false,
     toggleRowSelected: () => undefined,
     areAllRowsSelected: () => false,
     toggleRowsSelected: () => undefined,
     editCell: () => undefined,
     getColumns: () => columns,
-    moveRowToPosition: () => undefined,
-    // Left editable on purpose. Read-only short-circuits the drag setup that reads layout, and
-    // measuring the cheaper path would report a cost the operator's database never pays.
-    isReadOnly: false,
   };
 }
 
@@ -141,9 +176,10 @@ function makeActions(columns: ColumnDef[]): ListRendererActions {
 // 3. MEASUREMENT
 // ───────────────────────────────────────────────────────────────────
 
-export interface ListBenchSample {
+export interface BoardBenchSample {
   columns: number;
   rows: number;
+  groups: number;
   fillRate: number;
   /** Median across repeats, in milliseconds. */
   renderMs: number;
@@ -156,8 +192,8 @@ export interface ListBenchSample {
    */
   layoutMs: number;
   domNodes: number;
+  cardNodes: number;
   fieldNodes: number;
-  placeholderNodes: number;
   msPerRow: number;
 }
 
@@ -166,11 +202,10 @@ function percentile(values: number[], p: number): number {
   return sorted[Math.min(sorted.length - 1, Math.floor(sorted.length * p))];
 }
 
-export function runListBench(host: HTMLElement, options: BenchOptions = {}): ListBenchSample[] {
-  const { fillRates, columnCounts, rowCounts, repeats: REPEATS, columnKind } = { ...DEFAULTS, ...options };
-  const samples: ListBenchSample[] = [];
-  // No metadata cache: the relation renderer treats a missing app as "resolve nothing" rather than
-  // throwing, so a relation column still renders here, just without vault resolution.
+export function runBoardBench(host: HTMLElement, options: BoardBenchOptions = {}): BoardBenchSample[] {
+  const { fillRates, columnCounts, rowCounts, groupCount, repeats: REPEATS, columnKind } = { ...DEFAULTS, ...options };
+  const samples: BoardBenchSample[] = [];
+  // No metadata cache: the renderers treat a missing app as "resolve nothing" rather than throwing.
   const app = undefined as unknown as App;
 
   for (const fillRate of fillRates) {
@@ -180,20 +215,21 @@ export function runListBench(host: HTMLElement, options: BenchOptions = {}): Lis
       const actions = makeActions(columns);
 
       for (const rowCount of rowCounts) {
-        const rows = makeRows(rowCount, columns, fillRate);
+        const rows = makeRows(rowCount, columns, fillRate, groupCount);
+        const groups = makeGroups(rows, groupCount);
         const renderTimes: number[] = [];
         const layoutTimes: number[] = [];
         let domNodes = 0;
+        let cardNodes = 0;
         let fieldNodes = 0;
-        let placeholderNodes = 0;
 
         // One discarded warm-up: the first run pays for lazily-compiled paths.
         for (let run = 0; run <= REPEATS; run += 1) {
           const container = host.createDiv({ cls: "note-database-container" });
-          const renderer = new ListRenderer(app, actions);
+          const renderer = new BoardRenderer(app, actions);
 
           const start = performance.now();
-          renderer.render(container, config, rows);
+          renderer.render(container, config, groups, GROUP_FIELD);
           const rendered = performance.now();
 
           // Reading offsetHeight forces the layout the render deferred, so its cost lands here
@@ -206,8 +242,8 @@ export function runListBench(host: HTMLElement, options: BenchOptions = {}): Lis
             renderTimes.push(rendered - start);
             layoutTimes.push(layoutEnd - layoutStart);
             domNodes = container.querySelectorAll("*").length;
-            fieldNodes = container.querySelectorAll(".db-list-field").length;
-            placeholderNodes = container.querySelectorAll(".db-list-field.is-placeholder").length;
+            cardNodes = container.querySelectorAll(".db-board-card").length;
+            fieldNodes = container.querySelectorAll(".db-board-card-meta > *").length;
           }
           container.remove();
         }
@@ -216,13 +252,14 @@ export function runListBench(host: HTMLElement, options: BenchOptions = {}): Lis
         samples.push({
           columns: columnCount,
           rows: rowCount,
+          groups: groups.length,
           fillRate,
           renderMs: Number(median.toFixed(2)),
           p95Ms: Number(percentile(renderTimes, 0.95).toFixed(2)),
           layoutMs: Number(percentile(layoutTimes, 0.5).toFixed(2)),
           domNodes,
+          cardNodes,
           fieldNodes,
-          placeholderNodes,
           msPerRow: Number((median / rowCount).toFixed(4)),
         });
       }

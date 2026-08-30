@@ -38,7 +38,8 @@ const COLUMN_COUNTS = [4, 16];
 const ROW_COUNTS = [100, 500, 1000, 2000];
 const REPEATS = 5;
 
-function makeColumns(count: number): ColumnDef[] {
+/** Exported for the assertion harness, which must render the same measured shape the bench times. */
+export function makeColumns(count: number): ColumnDef[] {
   return Array.from({ length: count }, (_unused, i) => ({
     key: i === 0 ? "file.name" : `field${i}`,
     label: i === 0 ? "Name" : `Field ${i}`,
@@ -46,7 +47,7 @@ function makeColumns(count: number): ColumnDef[] {
   })) as ColumnDef[];
 }
 
-function makeRows(count: number, columns: ColumnDef[]): RowData[] {
+export function makeRows(count: number, columns: ColumnDef[]): RowData[] {
   return Array.from({ length: count }, (_unused, i) => {
     const frontmatter: Record<string, unknown> = {};
     for (const col of columns) frontmatter[col.key] = `${col.key}-${i}`;
@@ -58,7 +59,7 @@ function makeRows(count: number, columns: ColumnDef[]): RowData[] {
   });
 }
 
-function makeConfig(columns: ColumnDef[]): ViewConfig {
+export function makeConfig(columns: ColumnDef[]): ViewConfig {
   return { name: "Bench", sourceFolder: "notes", columns } as unknown as ViewConfig;
 }
 

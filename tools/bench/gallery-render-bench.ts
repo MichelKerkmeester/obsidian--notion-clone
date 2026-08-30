@@ -1,34 +1,32 @@
 // ───────────────────────────────────────────────────────────────────
-// MODULE:    list-render-bench
-// COMPONENT: measures list render cost against column count and how full the data is
+// MODULE:    gallery-render-bench
+// COMPONENT: measures gallery render cost against card count, column count and how full the data is
 // ───────────────────────────────────────────────────────────────────
 //
-// The list row renderer used to skip a property with no value and now builds
-// every property, hiding the empty ones. That trade was made to fix alignment:
-// a hidden field holds its column, so the column is an index rather than a
-// count. What nothing measured is what it costs, and the answer depends on two
-// numbers that no existing check varies — how many columns a database has, and
-// how much of it is filled in.
+// The gallery is the board's structural twin: one card per row, appended in a
+// loop to a single container. Three separate per-card decisions asked whether
+// the surface takes touch input — the resize handle, the grouped drag setup and
+// the reorder drag setup — and each answer read the container's box, forcing the
+// browser to lay out every card appended so far.
 //
-// So this varies both. Fill rate is the axis that matters: at 100% both the old
-// and new renderers build the same number of fields and look identical, which
-// is exactly the shape every fixture and story already uses. The cost only
-// appears as the data gets sparser, and it grows with column count.
-//
-// WHAT THIS MEASURES: the real ListRenderer's row loop and field loop, the DOM
-// it produces, and the browser layout that follows.
+// WHAT THIS MEASURES: the real GalleryRenderer's card loop and field loop, the
+// DOM it produces, and the browser layout that follows.
 //
 // WHAT IT DOES NOT: row preparation, the metadata cache, computed fields,
-// relation rollups. Those need a live vault. Field values here are plain text
-// and constant-time, which isolates structural cost — and means a real database
-// with relation or markdown columns pays more per field than this reports,
-// never less.
+// relation rollups, cover images. Those need a live vault. Field values here
+// are plain text and constant-time, which isolates structural cost — and means
+// a real database with relation or markdown columns pays more per field than
+// this reports, never less.
+//
+// The fixture leaves `isReadOnly` unset rather than false, because the shipped
+// gallery is constructed without that key. One of the three per-card calls sat
+// outside the read-only guard entirely, so it ran on every card regardless.
 
 // ───────────────────────────────────────────────────────────────────
 // 1. IMPORTS
 // ───────────────────────────────────────────────────────────────────
 
-import { ListRenderer, type ListRendererActions } from "../../src/views/list-renderer";
+import { GalleryRenderer, type GalleryRendererActions } from "../../src/views/gallery-renderer";
 import type { App } from "obsidian";
 import type { ColumnDef, RowData, ViewConfig } from "../../src/data/types";
 
@@ -44,42 +42,37 @@ const REPORTED_COLUMNS = [
   "cleared", "transfer", "tag", "amount", "currency", "source",
 ];
 
-/** Fraction of cells that hold a value. A personal database is mostly gaps, not mostly values. */
+/**
+ * Row counts start where the earlier ceiling stopped and go two doublings past it, because a
+ * quadratic term is invisible until the linear term stops dominating.
+ */
 const DEFAULTS = {
   fillRates: [1, 0.3],
   columnCounts: [4, 21],
-  rowCounts: [50, 100, 200, 400],
-  repeats: 5,
+  rowCounts: [400, 1600, 3200, 6400],
+  repeats: 3,
   /** "text" isolates structural cost; "mixed" adds the types whose renderers do real work. */
   columnKind: "text" as "text" | "mixed",
 };
 
-export type BenchOptions = Partial<typeof DEFAULTS>;
+export type GalleryBenchOptions = Partial<typeof DEFAULTS>;
 
-/**
- * The types a real database actually holds. An empty value used to skip the renderer entirely, so
- * whatever these cost per field was previously never paid on a gap and is now paid on every one.
- */
 const MIXED_TYPES: ColumnDef["type"][] = [
   "text", "number", "date", "select", "multi-select", "checkbox", "relation", "currency",
 ];
 
-/** Exported for the assertion harness, which must render the same measured shape the bench times. */
-export function makeColumns(count: number, kind: "text" | "mixed"): ColumnDef[] {
+function makeColumns(count: number, kind: "text" | "mixed"): ColumnDef[] {
   return Array.from({ length: count }, (_unused, i) => {
     const base = {
       key: i === 0 ? "file.name" : REPORTED_COLUMNS[i % REPORTED_COLUMNS.length] + (i >= REPORTED_COLUMNS.length ? String(i) : ""),
       label: i === 0 ? "Name" : REPORTED_COLUMNS[i % REPORTED_COLUMNS.length],
       type: kind === "mixed" && i > 0 ? MIXED_TYPES[i % MIXED_TYPES.length] : "text",
     } as ColumnDef;
-    // Markdown is the costliest text mode because it runs a parser per value, so a fifth of the
-    // text columns use it rather than none of them.
     if (kind === "mixed" && base.type === "text" && i % 5 === 0) base.textRenderMode = "markdown";
     return base;
   });
 }
 
-/** A value each column type will actually accept, so no type falls back to an empty render. */
 function valueForType(col: ColumnDef, i: number): unknown {
   switch (col.type) {
     case "number": case "currency": return i * 37 + 0.5;
@@ -93,10 +86,9 @@ function valueForType(col: ColumnDef, i: number): unknown {
 
 /**
  * Rows whose gaps are spread rather than clustered, and deterministic rather than random, so a
- * rerun measures the same shape. A row that is empty in the same columns every time would let a
- * per-column cost hide behind a cache that a real database would never hit.
+ * rerun measures the same shape.
  */
-export function makeRows(count: number, columns: ColumnDef[], fillRate: number): RowData[] {
+function makeRows(count: number, columns: ColumnDef[], fillRate: number): RowData[] {
   return Array.from({ length: count }, (_unused, i) => {
     const frontmatter: Record<string, unknown> = {};
     columns.forEach((col, colIndex) => {
@@ -111,16 +103,21 @@ export function makeRows(count: number, columns: ColumnDef[], fillRate: number):
   });
 }
 
-export function makeConfig(columns: ColumnDef[]): ViewConfig {
+function makeConfig(columns: ColumnDef[]): ViewConfig {
   return {
     name: "Bench",
     sourceFolder: "notes",
+    viewType: "gallery",
     schema: { columns, computedFields: [] },
   } as unknown as ViewConfig;
 }
 
-/** Every required action present, none of them doing work worth measuring. */
-function makeActions(columns: ColumnDef[]): ListRendererActions {
+/**
+ * Every required action present, none of them doing work worth measuring.
+ *
+ * `isReadOnly` is omitted rather than set, because the shipped gallery omits it.
+ */
+function makeActions(columns: ColumnDef[]): GalleryRendererActions {
   return {
     openRow: () => undefined,
     createEntry: () => undefined,
@@ -130,10 +127,8 @@ function makeActions(columns: ColumnDef[]): ListRendererActions {
     toggleRowsSelected: () => undefined,
     editCell: () => undefined,
     getColumns: () => columns,
+    updateCardSize: () => undefined,
     moveRowToPosition: () => undefined,
-    // Left editable on purpose. Read-only short-circuits the drag setup that reads layout, and
-    // measuring the cheaper path would report a cost the operator's database never pays.
-    isReadOnly: false,
   };
 }
 
@@ -141,7 +136,7 @@ function makeActions(columns: ColumnDef[]): ListRendererActions {
 // 3. MEASUREMENT
 // ───────────────────────────────────────────────────────────────────
 
-export interface ListBenchSample {
+export interface GalleryBenchSample {
   columns: number;
   rows: number;
   fillRate: number;
@@ -150,14 +145,12 @@ export interface ListBenchSample {
   p95Ms: number;
   /**
    * Forced layout after render, kept separate so a layout cost cannot hide inside render time.
-   *
-   * Median across repeats like `renderMs`, because the budget asserts the two added together and
-   * a median plus a mean is a statistic of nothing.
+   * Median across repeats like `renderMs`, because the budget asserts the two added together.
    */
   layoutMs: number;
   domNodes: number;
+  cardNodes: number;
   fieldNodes: number;
-  placeholderNodes: number;
   msPerRow: number;
 }
 
@@ -166,11 +159,10 @@ function percentile(values: number[], p: number): number {
   return sorted[Math.min(sorted.length - 1, Math.floor(sorted.length * p))];
 }
 
-export function runListBench(host: HTMLElement, options: BenchOptions = {}): ListBenchSample[] {
+export function runGalleryBench(host: HTMLElement, options: GalleryBenchOptions = {}): GalleryBenchSample[] {
   const { fillRates, columnCounts, rowCounts, repeats: REPEATS, columnKind } = { ...DEFAULTS, ...options };
-  const samples: ListBenchSample[] = [];
-  // No metadata cache: the relation renderer treats a missing app as "resolve nothing" rather than
-  // throwing, so a relation column still renders here, just without vault resolution.
+  const samples: GalleryBenchSample[] = [];
+  // No metadata cache: the renderers treat a missing app as "resolve nothing" rather than throwing.
   const app = undefined as unknown as App;
 
   for (const fillRate of fillRates) {
@@ -184,13 +176,13 @@ export function runListBench(host: HTMLElement, options: BenchOptions = {}): Lis
         const renderTimes: number[] = [];
         const layoutTimes: number[] = [];
         let domNodes = 0;
+        let cardNodes = 0;
         let fieldNodes = 0;
-        let placeholderNodes = 0;
 
         // One discarded warm-up: the first run pays for lazily-compiled paths.
         for (let run = 0; run <= REPEATS; run += 1) {
           const container = host.createDiv({ cls: "note-database-container" });
-          const renderer = new ListRenderer(app, actions);
+          const renderer = new GalleryRenderer(app, actions);
 
           const start = performance.now();
           renderer.render(container, config, rows);
@@ -206,8 +198,8 @@ export function runListBench(host: HTMLElement, options: BenchOptions = {}): Lis
             renderTimes.push(rendered - start);
             layoutTimes.push(layoutEnd - layoutStart);
             domNodes = container.querySelectorAll("*").length;
-            fieldNodes = container.querySelectorAll(".db-list-field").length;
-            placeholderNodes = container.querySelectorAll(".db-list-field.is-placeholder").length;
+            cardNodes = container.querySelectorAll(".db-gallery-card").length;
+            fieldNodes = container.querySelectorAll(".db-gallery-meta > *").length;
           }
           container.remove();
         }
@@ -221,8 +213,8 @@ export function runListBench(host: HTMLElement, options: BenchOptions = {}): Lis
           p95Ms: Number(percentile(renderTimes, 0.95).toFixed(2)),
           layoutMs: Number(percentile(layoutTimes, 0.5).toFixed(2)),
           domNodes,
+          cardNodes,
           fieldNodes,
-          placeholderNodes,
           msPerRow: Number((median / rowCount).toFixed(4)),
         });
       }
