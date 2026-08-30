@@ -9,10 +9,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "public/005-component-surface-system/017-touch-row-range-selection"
-    last_updated_at: "2026-08-30T17:45:00Z"
-    last_updated_by: "goal-authoring"
-    recent_action: "Goal authored; 12 checks added, six negative controls run and restored by hash"
-    next_safe_action: "Decide whether the hold gesture announces itself in the status bar"
+    last_updated_at: "2026-08-30T19:10:41Z"
+    last_updated_by: "criteria-reconciliation"
+    recent_action: "Completion anchor reconciled: AC-1 to AC-9 all green in the captured run"
+    next_safe_action: "Operator answers the status-bar announcement, then taps a checkbox on device"
     blockers: []
     key_files:
       - "spec.md"
@@ -21,7 +21,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-017-goal"
       parent_session_id: null
-    completion_pct: 95
+    completion_pct: 96
     open_questions:
       - "Does the hold gesture get an announcement in the selection status bar"
     answered_questions:
@@ -63,28 +63,75 @@ click extended a range on a machine with no touchscreen at all.
 <!-- ANCHOR:completion -->
 ## 2. COMPLETION CRITERIA
 
-- [ ] A tap on a row checkbox leaves exactly 2 rows selected after two presses. Was 7.
-- [ ] A mouse click leaves 2, in a narrow pane where the predicate still reads `true`. Was 7 at
+Evidence below is the `verify-placement` run captured on a clean tree at `f64dd87`: **220/224
+geometry checks passed, 4 red for a declared reason**, exit 0. Every criterion that names a
+measurement is green there; the two that remain are not measurements. Each check reports
+`isTouchDevice(row)=true` alongside its result, per D2, so the guard is exercised rather than
+sidestepped.
+
+- [x] A tap on a row checkbox leaves exactly 2 rows selected after two presses. Was 7.
+      **Met.** `a tap on a row checkbox selects only that row` — pressing rows 2 and 8 selected
+      2 row(s): note-2.md,note-8.md (want 2). pointerType=touch isTouchDevice(row)=true
+      innerWidth=390.
+- [x] A mouse click leaves 2, in a narrow pane where the predicate still reads `true`. Was 7 at
       `innerWidth=1440`.
-- [ ] A held press extends: 7 rows, exactly 1 extension, exactly 1 haptic. Was 1 row, 0, 0.
-- [ ] The click a completed hold releases does **not** undo the range it painted. Was 6 rows — the
+      **Met.** `a mouse click on a row checkbox selects only that row, however narrow the pane` —
+      pressing rows 2 and 8 selected 2 row(s): note-2.md,note-8.md (want 2). pointerType=mouse
+      isTouchDevice(row)=true innerWidth=1440 — the check requires the predicate to be true, or it
+      would pass on a wide pane for a reason it is not testing.
+- [x] A held press extends: 7 rows, exactly 1 extension, exactly 1 haptic. Was 1 row, 0, 0.
+      **Met.** `a held press on a second row checkbox extends the selection to it` — holding row 8
+      for 520ms after tapping row 2 selected 7 row(s) and fired 1 extension(s) and 1 haptic(s)
+      (want 7 rows, 1 extension, 1 haptic). pointerType=touch isTouchDevice(row)=true
+      innerWidth=390.
+- [x] The click a completed hold releases does **not** undo the range it painted. Was 6 rows — the
       range painted and then lost its own last row, which is the difference between a gesture and a
       flicker and is invisible to any check that stops measuring when the timer fires.
-- [ ] A slow **mouse** click still toggles, because no hold completed to swallow it. This and the
+      **Met.** `the click a completed hold releases does not undo the range it painted` — lifting
+      after a 520ms press left 7 row(s) selected: note-2.md through note-8.md.
+      pointerType=touch isTouchDevice(row)=true innerWidth=390.
+- [x] A slow **mouse** click still toggles, because no hold completed to swallow it. This and the
       criterion above have opposite right answers for the same release, and **neither is safe
       alone**: a swallow keyed to "a long press happened" rather than "a hold fired" satisfies one and
       silently breaks every slow mouse click on desktop.
-- [ ] A 300ms press fires 0 extensions against the shipped 450ms threshold. Without a real threshold,
+      **Met.** `a slow mouse click still toggles, because no hold completed to swallow it` — lifting
+      after a 520ms press left 2 row(s) selected: note-2.md,note-8.md. pointerType=mouse
+      isTouchDevice(row)=true innerWidth=1440. The opposite answer for the same release is the row
+      above, and both are in the one run.
+- [x] A 300ms press fires 0 extensions against the shipped 450ms threshold. Without a real threshold,
       "held" is just another word for "touch" — the defect wearing a new name.
-- [ ] A held mouse press never extends, however the pane measures. Was 7 rows, 1 extension, 1 haptic.
-- [ ] Shift-click still extends, asserted on the **phone** page too: a rule keyed to the pointer could
+      **Met.** `a press released before the hold threshold selects one row, not a range` — a 300ms
+      press fired 0 extension(s) against the shipped 450ms threshold, and released to 2 row(s):
+      note-2.md,note-8.md. Asserted on both pages: touch at innerWidth=390 and mouse at
+      innerWidth=1440.
+- [x] A held mouse press never extends, however the pane measures. Was 7 rows, 1 extension, 1 haptic.
+      **Met.** `a held mouse press never extends, however the pane measures` — holding row 8 for
+      520ms after tapping row 2 selected 1 row(s) (note-2.md) and fired 0 extension(s) and
+      0 haptic(s) (want 1 row, 0, 0). pointerType=mouse isTouchDevice(row)=true innerWidth=1440.
+- [x] Shift-click still extends, asserted on the **phone** page too: a rule keyed to the pointer could
       have taken shift-click from a device that reports touch, and no desktop check would have
       noticed.
-- [ ] A hold on the checkbox and a hold on the row body are one gesture with two answers: 1/0/1 and
+      **Met.** `a shift-click on a row checkbox still extends the selection`, run twice —
+      shift-clicking row 8 after row 2 selected 7 row(s) (want 7, rows 2 through 8) at
+      pointerType=touch isTouchDevice(row)=true innerWidth=390, and again at pointerType=mouse
+      isTouchDevice(row)=true innerWidth=1440.
+- [x] A hold on the checkbox and a hold on the row body are one gesture with two answers: 1/0/1 and
       0/1/1. Was **2 haptics for one hold** — the row menu's own hold buzzing and swallowing the press
       before declining to open anything.
+      **Met.** `a hold on the checkbox and a hold on the row body are one gesture with two answers` —
+      on the checkbox: 1 extension(s), 0 row menu(s), 1 haptic(s); on the row body: 0 extension(s),
+      1 row menu(s), 1 haptic(s). Want 1/0/1 and 0/1/1. pointerType=touch isTouchDevice(row)=true
+      innerWidth=390. The mouse page reads 0/0/0 and 0/0/0 on the same pair, which is the other half.
 - [ ] The status-bar announcement decision is answered.
+      **Operator.** Not a measurement: whether the hold should announce itself is a design decision
+      and no check can take it. If the answer is yes, the check that would then settle the
+      implementation is — on the touch page at 390px, hold a second row checkbox for 520ms after
+      tapping one, and assert the selection bar's own count text equals the number of rows the
+      extension painted (7) within one animation frame of the extension firing, with the hold that
+      fires no extension leaving the text unchanged.
 - [ ] The operator taps a row checkbox on their phone and one row is selected.
+      **Operator.** `Input.dispatchTouchEvent` enters where a thumb enters and respects hit-testing
+      and `touch-action`, but it is one clean finger. Only the device closes this.
 <!-- /ANCHOR:completion -->
 
 ---
@@ -124,5 +171,6 @@ connected to its own rule.
 | Item | Note |
 |------|------|
 | Three reds in the harness are not this phase's | They arrived mid-session with arrays added by the concurrent stylesheet lane and measure painted CSS geometry only. They fail identically with this phase's code fully restored, which is the measurement that separates them. Two are `018`'s subject |
+| Those three reds have since closed | The captured `f64dd87` run measures all three green: `the switch control gives a finger at least 28px` (painted 34x18, reachable 34x28), and both `reorder button and the row checkbox do not overlap` arms — no reorder button in 11 desktop select cells, narrowest gap 4px in a 65px cell on the phone. The disclaimer was right about ownership and is now also spent |
 | `017` has a numeric successor it does not reference | Adding `018` took `PHASE_LINKS` from 14 issues to 17. The fix is a line in this phase's chain blockquote |
 <!-- /ANCHOR:log -->

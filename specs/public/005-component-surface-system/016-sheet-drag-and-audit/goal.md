@@ -9,12 +9,13 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "public/005-component-surface-system/016-sheet-drag-and-audit"
-    last_updated_at: "2026-08-30T17:45:00Z"
-    last_updated_by: "goal-authoring"
-    recent_action: "Goal authored; report 1 root-caused, 19 of 22 checks pass, 3 declared"
-    next_safe_action: "Operator drags a sheet down after editing a field"
+    last_updated_at: "2026-08-30T19:10:41Z"
+    last_updated_by: "criteria-reconciliation"
+    recent_action: "Completion anchor reconciled to the captured run: 7 of 10 criteria evidenced"
+    next_safe_action: "Add the two-revert ablation check; operator answers the label and resize"
     blockers:
       - "Two operator decisions open: the 13px row label and the window-resize close"
+      - "No ablation check: the two-revert necessity claim rests on prose"
     key_files:
       - "spec.md"
       - "acceptance-criteria.md"
@@ -23,7 +24,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-016-goal"
       parent_session_id: null
-    completion_pct: 90
+    completion_pct: 92
     open_questions:
       - "Row label 13px is off the type scale; move to 14px or accept"
       - "Should the record sheet survive a window resize instead of closing"
@@ -72,25 +73,73 @@ on **every view re-render** — every metadata resolve, every computed sync, eve
 <!-- ANCHOR:completion -->
 ## 2. COMPLETION CRITERIA
 
-- [ ] A 60px drag moves the sheet 60.0px both on a fresh sheet and **after a view re-render**. Was
+Evidence below is the `verify-placement` run captured on a clean tree at `f64dd87`: **220/224
+geometry checks passed, 4 red for a declared reason**, exit 0. A met criterion carries the check's
+own name and its measured number. An operator criterion is never ticked here, however green the
+measurement around it reads.
+
+- [x] A 60px drag moves the sheet 60.0px both on a fresh sheet and **after a view re-render**. Was
       60.0px fresh and **0.0px** after a re-render, with the grab bar absent from the DOM.
+      **Met.** `a fresh sheet follows the finger 1:1` — 60px drag on a just-opened sheet moved it
+      60.0px. `a re-rendered sheet still follows the finger 1:1` — 60px drag after a re-render moved
+      it 60.0px. `the grab bar survives a view re-render` — after one refresh the sheet's first
+      child is `db-mobile-bottom-sheet-handle`; grab bar present=true.
 - [ ] Both halves of the fix are shown necessary by reverting each on its own. With the chrome
       re-assert reverted: no bar, 0.0px. With the panel binding reverted: **bar present, still
       0.0px**. That third row is the important one — restoring the bar alone leaves the drag dead
       while making the sheet look repaired.
-- [ ] Header actions both 44×44 with centre lines 0.00px apart.
-- [ ] Row gap 0px, divider 1px at 40% alpha, value text 16px.
-- [ ] The keyboard inset moves the sheet's bottom 844 → 508 on an 844px screen, keeps its top on
+      **No check exists.** Neither `verify-placement.mjs` nor `probe/sheet-audit.mjs` carries an
+      ablation arm; both measure the shipped tree only, so the necessity claim rests on prose.
+      **The check:** on the record sheet at 390×844, open through `openRecordDetailPanel`, call
+      `refreshRecordDetailPanel` once, then drive a 60px drag on the handle with real touch events
+      through the browser's input pipeline — three times, over three trees. Tree 1, shipped. Tree 2,
+      the chrome re-assert removed from the panel's `renderContent`. Tree 3, the re-assert kept and
+      `attachSheetDragToDismiss` bound to the bar node captured at attach time instead of to the
+      panel. Assert translateY 60.0 ±1px with the handle present, 0.0 ±1px with the handle absent,
+      and 0.0 ±1px with the handle **present**. The third row is the whole claim: a run reporting
+      only the first two has shown that the bar matters and nothing about the binding.
+- [x] Header actions both 44×44 with centre lines 0.00px apart.
+      **Met.** `expand and close are both 44x44 on the record sheet` — expand 44x44, close 44x44.
+      `expand and close share one centre line` — centres differ by 0.00px (expand cy=666, close
+      cy=666).
+- [x] Row gap 0px, divider 1px at 40% alpha, value text 16px.
+      **Met.** `no gap between rows` — measured gap between adjacent rows = 0px (row-gap token 0px).
+      `a light divider separates each row` — border-bottom 1px color(srgb 0.2 0.2 0.2 / 0.4).
+      `the row's value text is larger than the caption default` — value 16px, row height 44px.
+- [x] The keyboard inset moves the sheet's bottom 844 → 508 on an 844px screen, keeps its top on
       screen at y=275, and returns it to 844.
-- [ ] All 9 sheet-capable surfaces at the identical fill. **No before-number was ever recorded for
+      **Met.** `a declared keyboard height lifts the sheet clear of it` — `--keyboard-height:336px`
+      moved the sheet's bottom edge 844 → 508 on an 844px screen (clearance 336px); lever var=336px.
+      `lifting the sheet does not push its top off the screen` — top edge at y=275, max-height
+      423.6px. `the sheet returns to the floor when the keyboard closes` — bottom edge back at 844
+      of 844.
+- [x] All 9 sheet-capable surfaces at the identical fill. **No before-number was ever recorded for
       this ask**, so what is evidenced is that they agree today, not that they used to disagree.
-- [ ] The scrim is `rgba(0,0,0,0.25)` and captures; a press 120px above the sheet resolves to it and
+      **Met.** `every sheet surface paints the same fill` — all 9 surfaces measure
+      color(srgb 0.95 0.95 0.95).
+- [x] The scrim is `rgba(0,0,0,0.25)` and captures; a press 120px above the sheet resolves to it and
       a press on the band resolves to the grab handle.
-- [ ] A `createMenuRow` row measures min-height 44px and padding 8px 16px identically in an
+      **Met.** `the scrim is a 25% black modal layer` — background rgba(0, 0, 0, 0.25),
+      pointer-events auto. `the scrim blocks the app behind the sheet` — a press 120px above the
+      sheet lands on `db-mobile-sheet-scrim`. `the scrim does not steal the grab band` — a press on
+      the band lands on the grab handle; sheet z=1000, scrim z=999.
+- [x] A `createMenuRow` row measures min-height 44px and padding 8px 16px identically in an
       owned-menu sheet and a panel sheet.
+      **Met.** `a menu row lays out identically in any sheet` — owned-menu sheet: min-height 44px,
+      padding 8px 16px 8px 16px, height 44px | panel sheet: min-height 44px, padding
+      8px 16px 8px 16px, height 44px.
 - [ ] The two open operator decisions are answered: the 13px row label, and whether the sheet should
       survive a window resize instead of closing.
+      **Operator.** Both are measured, and both stand red by declaration in the captured run:
+      `the row's label size is on the type scale` — label 13px, nearest scale steps 12px and 14px;
+      `the sheet survives the window resize a keyboard causes` — one window resize closed the record
+      sheet outright. The measuring is finished. Neither is a defect a check can close: one is a
+      one-token type-scale decision, the other decides whether ask 4 is finished or blocked on the
+      handset the operator holds.
 - [ ] The operator opens a sheet, edits a field, drags down, and it follows their thumb.
+      **Operator.** Step 2 of the five-step list in `acceptance-criteria.md` §4, and the case that
+      was broken. The harness drives one clean synthetic finger through the real input pipeline;
+      only a thumb on the device closes this.
 <!-- /ANCHOR:completion -->
 
 ---
@@ -123,6 +172,15 @@ keyboard announces itself, so which handset the operator holds decides whether t
 finished or blocked. And `placeSheet` writes five camelCase declarations the phone discards;
 correcting the names would activate `overscroll-behavior: contain` for the first time on every sheet,
 which needs a recapture — **deferred with a reason, not forgotten.**
+
+**One of the three has since closed, and the record has not caught up.** `placeSheet` writes
+hyphenated names today — `box-sizing`, `overflow-y`, `overscroll-behavior`, `max-width`,
+`max-height` at `src/views/popover-position.ts:336-350` — and the captured run measures them
+arriving: `every declaration placeSheet writes reaches the sheet` and `every declaration the
+positioner writes actually lands on the sheet` both pass, the second through a shim that now carries
+the device's `setProperty` semantics, so a camelCase key there would read `(unset)`. The rename
+happened; whether the screenshot capture was refreshed beside it is not visible from the harness.
+`acceptance-criteria.md` §2 still lists this as an open declared failure and wants correcting.
 
 ### The grab band: closed, and the record is what needs correcting
 

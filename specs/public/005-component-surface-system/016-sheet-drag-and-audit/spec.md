@@ -12,10 +12,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "public/005-component-surface-system/016-sheet-drag-and-audit"
-    last_updated_at: "2026-08-30T10:30:00Z"
-    last_updated_by: "sk-design"
-    recent_action: "Third drag report root-caused and fixed; eight asks measured, 19 of 22 pass"
-    next_safe_action: "Operator decides the 13px row label and the sheet resize behaviour"
+    last_updated_at: "2026-08-30T19:10:41Z"
+    last_updated_by: "criteria-reconciliation"
+    recent_action: "Completion anchor reconciled to the captured run: 7 of 10 criteria evidenced"
+    next_safe_action: "Add the two-revert ablation check; operator answers the label and resize"
     blockers: []
     key_files:
       - "spec.md"
@@ -28,7 +28,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-016"
       parent_session_id: null
-    completion_pct: 90
+    completion_pct: 92
     open_questions:
       - "Row label 13px is off the 12/14/16/18/20/24 scale. Move to 14px or accept?"
       - "Should the record sheet survive a window resize and re-place instead of closing?"

@@ -12,10 +12,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "public/005-component-surface-system/024-list-view-freeze"
-    last_updated_at: "2026-08-30T18:45:00Z"
-    last_updated_by: "docs-remediation"
-    recent_action: "Reservation now surface-conditional; budget asserts blocked main thread, not render alone"
-    next_safe_action: "Operator confirms on device that the list view opens"
+    last_updated_at: "2026-08-30T19:10:41Z"
+    last_updated_by: "criteria-reconciliation"
+    recent_action: "Completion anchor reconciled: 4 of 6 criteria evidenced, bench and 5k apart"
+    next_safe_action: "Add the is-phone width-sweep reservation check; device stays blocked"
     blockers:
       - "css-lane held by 021-sheet-inline-edit-alignment; this phase needs no CSS"
     key_files:
@@ -29,7 +29,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-024"
       parent_session_id: null
-    completion_pct: 95
+    completion_pct: 92
     open_questions:
       - "Operator's actual row count — freeze threshold sits between 400 and 1600, never captured"
       - "Is the desktop reservation worth keeping? Measures redundant when forced off — see spec.md §8"

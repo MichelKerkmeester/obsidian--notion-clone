@@ -12,10 +12,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "public/005-component-surface-system/017-touch-row-range-selection"
-    last_updated_at: "2026-08-30T10:20:00Z"
-    last_updated_by: "design-specialist"
-    recent_action: "Predicate removed from both views; hold gesture added; 12 checks, 6 controls"
-    next_safe_action: "Decide whether the hold gesture gets an affordance"
+    last_updated_at: "2026-08-30T19:10:41Z"
+    last_updated_by: "criteria-reconciliation"
+    recent_action: "Completion anchor reconciled: AC-1 to AC-9 all green in the captured run"
+    next_safe_action: "Operator answers the status-bar announcement, then taps a checkbox on device"
     blockers:
       - "Placement exits 1 on three stylesheet-lane checks, shown independent of this phase (plan.md 7)"
     key_files:
@@ -28,7 +28,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-017"
       parent_session_id: null
-    completion_pct: 95
+    completion_pct: 96
     open_questions:
       - "The hold gesture has no affordance anywhere. Should the selection status bar carry a one-line hint the first time a row is selected on touch?"
     answered_questions:
