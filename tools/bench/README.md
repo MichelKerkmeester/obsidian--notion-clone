@@ -23,8 +23,8 @@ npm run bench        # TableRenderer, by row and column count
 npm run bench:list   # ListRenderer, also by fill rate and column type
 ```
 
-Prints medians, p95, forced layout, DOM node counts and milliseconds per row. Raw samples land in
-`dist/samples.json` and `dist/list-samples.json`.
+Prints medians, p95, forced layout, the two added together as `blocked`, DOM node counts and
+milliseconds per row. Raw samples land in `dist/samples.json` and `dist/list-samples.json`.
 
 `bench:list` takes shape overrides, because the defect that motivated it only appears at scale:
 
@@ -33,9 +33,16 @@ node tools/bench/run-list.mjs --cols=21 --fill=0.3 --rows=400,800,1600 --repeats
 node tools/bench/run-list.mjs --kind=mixed
 ```
 
-It exits non-zero when the worst single render exceeds its budget. Fill rate is the axis nothing
-else varies: at 100% every fixture in the repository looks the same whether the renderer skips an
-empty property or reserves its column, which is why the regression shipped.
+It exits non-zero when the worst blocked main thread — render plus the layout that render forced —
+exceeds its budget. Both halves count because the user cannot tell them apart, and because a repair
+that defers a forced layout out of a loop moves cost from one to the other rather than removing it.
+
+It also refuses to print a `LINEAR` / `SUPERLINEAR` verdict from a single row count, since the drift
+is last-over-first and one sample divides a number by itself.
+
+Fill rate is the axis nothing else varies: at 100% every fixture in the repository looks the same
+whether the renderer skips an empty property or reserves its column, which is why the regression
+shipped.
 
 ## 2. WHAT THE TABLE BENCH FOUND
 

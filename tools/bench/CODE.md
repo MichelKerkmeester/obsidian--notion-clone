@@ -79,13 +79,22 @@ different layouts with different costs and only one of them was ever the reporte
 
 Per-row cost is the number that matters. Flat means row count multiplies a constant and a large list
 is merely slower; rising means something in the loop scales with what is already on screen, and no
-amount of tuning the constant will save it. `run-list.mjs` fails when the worst single render
-exceeds its budget, because a render that blocks the main thread for seconds is not slow, it is the
-app hanging.
+amount of tuning the constant will save it. It is a slope, so it needs two row counts: given one,
+`run-list.mjs` prints `NO VERDICT` rather than dividing a sample by itself and reporting `LINEAR
+×1.00` beside a seven-second render, which is what it used to do.
+
+`run-list.mjs` fails on the `blocked` column — render plus the layout that render forced — not on
+render alone. Blocking the main thread for seconds is not slow, it is the app hanging, and the two
+halves block it identically. Splitting them also matters in one specific direction: the repair this
+harness was built to verify works by moving a forced layout out of the row loop, so its cost leaves
+`median` and arrives in `layout`. A budget on render alone would have scored that move as far larger
+than it was, and would have passed a tree that renders in 100ms and then lays out for five seconds.
 
 The `blanks` column counts reserved columns, and `nodes` counts everything. A change that holds a
 column with a whole hidden field rather than an empty box shows up here as a node count that grew
-without a field count that did.
+without a field count that did. `blanks` is also surface-dependent by design: the desktop grid
+reserves a column per empty property and the phone's wrapping line reserves none, so the phone rows
+of a run carry fewer nodes than the desktop rows of the same shape.
 
 ---
 

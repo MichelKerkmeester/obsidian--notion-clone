@@ -11,10 +11,19 @@
 // flex line where a hidden field still takes a full slot and still wraps.
 //
 // A threshold is declared rather than eyeballed. The operator's report is a
-// freeze, and a freeze is a budget question — a render that blocks the main
-// thread past a couple of hundred milliseconds is a stutter, past a few seconds
-// it is the app hanging. So the bench fails when the reported shape exceeds the
-// budget, and the number that matters is per-row cost: flat means row count
+// freeze, and a freeze is a budget question — blocking the main thread past a
+// couple of hundred milliseconds is a stutter, past a few seconds it is the app
+// hanging.
+//
+// The budget is on render plus forced layout, not on render alone. Nothing the
+// user experiences distinguishes the two: both are synchronous work in the same
+// task, and the app is equally unusable for the sum of them. Budgeting render
+// alone would also have rewarded the exact repair this harness was built to
+// verify, which works by moving a forced layout out of the row loop — cost that
+// leaves `render` and arrives in `layout`. A tree that renders in 100ms and then
+// lays out for five seconds is the freeze, and would have passed.
+//
+// Beside the budget, per-row cost carries the shape: flat means row count
 // multiplies known work, rising means something superlinear is in the loop.
 
 // ───────────────────────────────────────────────────────────────────
@@ -33,6 +42,9 @@ const OUT = resolve(HERE, "dist");
 
 // A single render that blocks this long is not slow, it is the freeze the operator reported.
 const BUDGET_MS = 2000;
+
+/** What the operator's main thread actually loses: the render, plus the layout it forced. */
+const blockedMs = (sample) => Number((sample.renderMs + sample.layoutMs).toFixed(1));
 
 /** Shape overrides, so row counts and column types can be pushed without editing the bench. */
 const OPTIONS = {};
@@ -107,7 +119,7 @@ const SURFACES = [
 
 const browser = await chromium.launch({ executablePath: findChrome() });
 const collected = {};
-let worst = { renderMs: 0 };
+let worst = { renderMs: 0, layoutMs: 0 };
 try {
   for (const surface of SURFACES) {
     const page = await browser.newPage({ viewport: surface.viewport });
@@ -125,13 +137,14 @@ try {
     collected[surface.name] = samples;
 
     console.log(`\n${surface.name} (${surface.viewport.width}px): real ListRenderer, text fields only\n`);
-    console.log("  fill  cols  rows   median   p95   layout   nodes  fields  blanks   ms/row");
+    console.log("  fill  cols  rows   median   p95   layout  blocked   nodes  fields  blanks   ms/row");
     for (const s of samples) {
-      if (s.renderMs > worst.renderMs) worst = { ...s, surface: surface.name };
+      if (blockedMs(s) > blockedMs(worst)) worst = { ...s, surface: surface.name };
       console.log(
         `  ${`${Math.round(s.fillRate * 100)}%`.padStart(4)}  ${String(s.columns).padStart(4)}  ${String(s.rows).padStart(4)}`
         + `  ${s.renderMs.toFixed(1).padStart(7)}  ${s.p95Ms.toFixed(1).padStart(5)}`
-        + `  ${s.layoutMs.toFixed(1).padStart(6)}  ${String(s.domNodes).padStart(6)}`
+        + `  ${s.layoutMs.toFixed(1).padStart(6)}  ${blockedMs(s).toFixed(1).padStart(7)}`
+        + `  ${String(s.domNodes).padStart(6)}`
         + `  ${String(s.fieldNodes).padStart(6)}  ${String(s.placeholderNodes).padStart(6)}`
         + `  ${s.msPerRow.toFixed(4).padStart(7)}`,
       );
@@ -142,6 +155,14 @@ try {
     for (const fillRate of [...new Set(samples.map((s) => s.fillRate))]) {
       for (const cols of [...new Set(samples.map((s) => s.columns))]) {
         const forShape = samples.filter((s) => s.columns === cols && s.fillRate === fillRate);
+        // Two row counts or no verdict. The drift is last-over-first, so a single sample divides a
+        // number by itself and reports LINEAR ×1.00 — printed next to a seven-second render, which
+        // is what it did. A green that arithmetic guarantees is worse than no line at all.
+        if (forShape.length < 2) {
+          console.log(`  ${Math.round(fillRate * 100)}% fill, ${cols} cols: NO VERDICT`
+            + ` — a slope needs two row counts and this run measured ${forShape.length}`);
+          continue;
+        }
         const drift = forShape[forShape.length - 1].msPerRow / forShape[0].msPerRow;
         const shape = drift > 1.5 ? "SUPERLINEAR" : drift < 0.67 ? "SUBLINEAR" : "LINEAR";
         console.log(`  ${Math.round(fillRate * 100)}% fill, ${cols} cols: ${shape} (per-row ×${drift.toFixed(2)})`);
@@ -160,9 +181,13 @@ writeFileSync(resolve(OUT, "list-samples.json"), `${JSON.stringify(collected, nu
 // ───────────────────────────────────────────────────────────────────
 
 console.log(`\nraw samples at ${resolve(OUT, "list-samples.json")}`);
-console.log(`worst: ${worst.surface} ${worst.columns} cols x ${worst.rows} rows at ${Math.round(worst.fillRate * 100)}% fill = ${worst.renderMs}ms`);
-if (worst.renderMs > BUDGET_MS) {
-  console.log(`list-bench: FAIL — ${worst.renderMs}ms exceeds the ${BUDGET_MS}ms budget for a single render`);
+const blocked = blockedMs(worst);
+console.log(`worst: ${worst.surface} ${worst.columns} cols x ${worst.rows} rows at ${Math.round(worst.fillRate * 100)}% fill`
+  + ` = ${blocked}ms blocked (${worst.renderMs}ms render + ${worst.layoutMs}ms layout)`);
+if (blocked > BUDGET_MS) {
+  console.log(`list-bench: FAIL — ${blocked}ms of blocked main thread`
+    + ` (${worst.renderMs}ms render + ${worst.layoutMs}ms layout) exceeds the ${BUDGET_MS}ms budget`);
   process.exit(1);
 }
-console.log(`list-bench: PASS — worst render ${worst.renderMs}ms is within the ${BUDGET_MS}ms budget`);
+console.log(`list-bench: PASS — worst blocked main thread ${blocked}ms`
+  + ` (${worst.renderMs}ms render + ${worst.layoutMs}ms layout) is within the ${BUDGET_MS}ms budget`);

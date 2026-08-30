@@ -129,6 +129,29 @@ export class ListRenderer {
    * can change while a synchronous render is running.
    */
   private touchMode = false;
+  /**
+   * Whether a property with no value reserves its slot, decided once for the whole render.
+   *
+   * A reservation makes a slot an index rather than a count, which is what stops the first column
+   * holding Cost on one card and Payment on the next. It is worth its cost on every surface that
+   * puts two properties side by side — the desktop grid, and a wrapping line wide enough to fit a
+   * pair. It is worth nothing on a surface that fits one property per line, because there every
+   * property sits at x=0 whether the renderer claims its slot by index or by count.
+   *
+   * On that last surface it is not merely useless, it is expensive: a reserved box on a wrapping
+   * line takes a whole wrapped line plus the row gap under it. Measured on a twenty-one property
+   * database at thirty percent fill, that is 84px of dead height per card — a twelve-card list of
+   * 3,131px where the same data without reservations measures 2,123px.
+   *
+   * `touchMode` is not this question. It answers whether the surface takes touch input, and is
+   * true for a tablet, a touchscreen laptop and any pane under 760px, all of which still put
+   * properties side by side. Neither is the phone class: the same phone rotated to landscape fits
+   * two per line, and dropping reservations there was measured putting one property in three
+   * different columns across twelve cards.
+   */
+  private reservesColumns = true;
+  /** Cleared at the top of each render, set the first time a row asks. */
+  private reservationDecided = false;
 
   constructor(private app: App, private actions: ListRendererActions) {}
 
@@ -136,6 +159,8 @@ export class ListRenderer {
     this.clear(container);
     this.container = container;
     this.touchMode = isTouchDevice(container);
+    this.reservesColumns = true;
+    this.reservationDecided = false;
     this.rowByPath = new Map(rows.map((row) => [row.file.path, row]));
     if (rows.length > 0) this.renderTotalHeader(container, rows);
     const list = this.createList(container, config);
@@ -157,6 +182,8 @@ export class ListRenderer {
     this.clear(container);
     this.container = container;
     this.touchMode = isTouchDevice(container);
+    this.reservesColumns = true;
+    this.reservationDecided = false;
     this.rowByPath = new Map(groups.flatMap((group) => group.rows.map((row) => [row.file.path, row] as const)));
     const grouped = container.createDiv({ cls: "db-list-grouped" });
     let actionsRendered = false;
@@ -362,6 +389,9 @@ export class ListRenderer {
       const displayType = this.getDisplayType(config, col);
       const empty = this.isEmptyValue(value) && displayType !== "checkbox";
       const hidden = empty && config.showEmptyFields !== true;
+      // Nothing to hold where one property fills a line on its own: the reservation would buy a
+      // blank line and the gap under it, and the survivors already start where they should.
+      if (hidden && !this.reservesColumns) continue;
       const field = hidden
         ? this.renderRowFieldPlaceholder(col, config)
         : this.renderRowFieldContent(row, col, config, empty ? this.getEmptyDisplayValue(col, displayType) : value, displayType, empty);
@@ -369,16 +399,65 @@ export class ListRenderer {
       field.style.gridColumn = String(index + 1);
       meta.appendChild(field);
     }
+    // Decided on the first row and reused by every row after it. It has to be the first *built*
+    // row rather than an empty one: an unpopulated field area measures 37.9px whatever the screen
+    // is, because its ancestors are still sizing to content that has not arrived. So the first row
+    // is built reserving, measured once, and stripped if the reservation turned out to buy nothing
+    // — a fixup bounded by the column count, not by the row count.
+    if (!this.reservationDecided) {
+      this.reservationDecided = true;
+      this.reservesColumns = this.shouldReserveColumns(meta, fields, config);
+      if (!this.reservesColumns) {
+        for (const spacer of Array.from(meta.querySelectorAll(".db-list-field.is-placeholder"))) spacer.remove();
+      }
+    }
+  }
+
+  /**
+   * Whether reserving an empty property's slot buys anything on this surface.
+   *
+   * Asked of the layout rather than of the device, because the device is not what decides it. The
+   * stylesheet lays the field area out as a grid on one surface and a wrapping flex line on
+   * another, and the same phone answers differently in portrait and landscape — so this reads the
+   * computed layout and the measured width of the field area instead of inferring them from a
+   * platform flag, a viewport threshold or a body class. Any of those would be a second definition
+   * of a question the stylesheet already answers, drifting from it on exactly the devices nobody
+   * tests.
+   *
+   * On a grid every property has a column by index, so a reservation always holds something.
+   *
+   * On a wrapping line it holds something only if two properties can share a line at all. The test
+   * is the two narrowest declared widths plus one column gap: if even that pair overflows the
+   * field area then nothing can pair, every property is alone on its line at x=0, and a reservation
+   * buys a blank line rather than a slot. The test is deliberately the *narrowest* pair, so the
+   * uncertain cases resolve toward reserving — a needless reservation costs height, while a
+   * needless skip costs the alignment this exists to hold.
+   *
+   * Called once per render, from the first row that asks. It reads layout, which is the thing that
+   * must never happen per row: this one is O(1) in the row count and sits behind `reservationDecided`
+   * for exactly that reason.
+   */
+  private shouldReserveColumns(meta: HTMLElement, fields: ColumnDef[], config: ViewConfig): boolean {
+    const view = meta.ownerDocument?.defaultView;
+    if (!view?.getComputedStyle) return true;
+    const style = view.getComputedStyle(meta);
+    if (style.display !== "flex") return true;
+    // A wrapping column takes its width from its content, so it can always share a line and can
+    // never be the proof that nothing fits beside it.
+    if (fields.some((col) => col.wrap)) return true;
+    const widths = fields.map((col) => getFieldWidth(config, col)).sort((a, b) => a - b);
+    if (widths.length < 2) return true;
+    const gap = Number.parseFloat(style.columnGap) || 0;
+    return widths[0] + gap + widths[1] <= meta.getBoundingClientRect().width;
   }
 
   /**
    * The box an empty property leaves behind, holding its place without being rendered into.
    *
-   * A property with no value has to keep its slot. Dropping it works on a grid, where the column
-   * is claimed by index and an absent field leaves its column empty, and fails anywhere the row is
-   * laid out in flow: on a phone this same element is a wrapping flex line, where the nth
-   * surviving field takes the nth slot, and four properties were measured landing across fourteen
-   * different x-positions on twelve cards — Billing alone in six of them.
+   * A property with no value has to keep its slot wherever two properties share a line, or the
+   * first column holds Cost on one card and Payment on the next and no column can be read down.
+   * Built only there: the caller skips this entirely where one property fills a line on its own,
+   * which has no slot to hold and would pay a blank line per gap for the privilege.
    *
    * Holding the place with a whole hidden field also worked, and cost three nodes and a full value
    * render for something nobody can see. On a database of twenty-one mostly-empty properties that

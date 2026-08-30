@@ -2590,6 +2590,18 @@ const rhythmResults = [];
 // whole hidden field per empty property — three nodes and a value render for something invisible —
 // cannot pass this quietly. That shape is what took a 1,600-row list to seven seconds of blocked
 // main thread.
+//
+// The third assertion is therefore surface-shaped, like the reservation it watches, and it keys on
+// the same thing the renderer does: whether two properties share a line. Where they do — a grid, or
+// a wrapping line wide enough for a pair — it asks that a reserved slot exist and hold nothing.
+// Where one property fills a line on its own it asks the opposite, that nothing be reserved at all,
+// because there a reservation buys no slot at all, only a blank line and the row gap under it, and
+// a card carrying fourteen of those is 84px of scrolling for boxes nobody can see.
+//
+// Keying it on the device instead would have been the trap: the same phone rotated to landscape
+// fits two properties per line and needs its reservations back, so a check that assumed "phone
+// means reserve nothing" would go red on a correct renderer. One assertion covering every surface
+// could only ever have been the weakest of the three.
 
 const rendererRhythmResults = [];
 {
@@ -2684,6 +2696,31 @@ const rendererRhythmResults = [];
       const placeholders = document.querySelectorAll(".db-list-field.is-placeholder").length;
       const nodesInPlaceholders = [...document.querySelectorAll(".db-list-field.is-placeholder")]
         .reduce((total, el) => total + el.querySelectorAll("*").length, 0);
+      // Which layout this surface is actually in, read off the element rather than assumed from the
+      // device name, and whether a reservation is worth anything in it. A grid always has a column
+      // to hold. A wrapping line has a slot to hold only when two properties share a line; when one
+      // fills a line on its own, a reservation holds nothing and costs a blank line. The arm has to
+      // be selected the same way the renderer selects it, or the check goes red on a correct
+      // renderer at the first width nobody tested.
+      const isGrid = metas.length > 0 && metas.every((m) => getComputedStyle(m).display === "grid");
+      const reservationHoldsSomething = isGrid || perLine >= 2;
+      // A field line carrying nothing but reserved boxes: zero height nobody sees, plus the row gap
+      // beneath it. A grid has none by construction. A wrapping line grows one per gap in the data.
+      let deadLines = 0;
+      let totalLines = 0;
+      let metaHeight = 0;
+      for (const meta of metas) {
+        const shownByTop = new Map();
+        for (const field of meta.querySelectorAll(".db-list-field")) {
+          const top = Math.round(field.getBoundingClientRect().top);
+          const shown = (shownByTop.get(top) || 0) + (field.classList.contains("is-placeholder") ? 0 : 1);
+          shownByTop.set(top, shown);
+        }
+        totalLines += shownByTop.size;
+        for (const shown of shownByTop.values()) if (shown === 0) deadLines += 1;
+        metaHeight += meta.getBoundingClientRect().height;
+      }
+      metaHeight = Math.round((metaHeight / Math.max(1, metas.length)) * 10) / 10;
       return [
         {
           name: `on ${id} the renderer gives every list card the same field-area width`,
@@ -2698,12 +2735,23 @@ const rendererRhythmResults = [];
           detail: `${spread.length} properties across ${metas.length} cards; worst lands in ${worst}`
             + ` column(s). Skip the empty ones and the survivors shuffle up one slot each. ${askable}`,
         },
-        {
+        reservationHoldsSomething ? {
           name: `on ${id} a reserved column costs one element and no rendered content`,
           pass: placeholders > 0 && nodesInPlaceholders === 0,
           detail: `${placeholders} reserved columns hold ${nodesInPlaceholders} child element(s)`
-            + " — a full hidden field would carry a label and a value nobody can see, on every"
+            + ` — this surface puts ${perLine} propert${perLine === 1 ? "y" : "ies"} on a line in a`
+            + ` ${isGrid ? "grid" : "wrapping line"}, so a reservation holds a real slot here.`
+            + " A full hidden field would carry a label and a value nobody can see, on every"
             + " empty property of every row",
+        } : {
+          name: `on ${id} the wrapping card spends no line on a property it does not show`,
+          pass: metas.length > 0 && deadLines === 0 && placeholders === 0,
+          detail: `${metas.length} cards over ${totalLines} field line(s), ${deadLines} of them`
+            + ` carrying only reserved boxes; ${placeholders} boxes reserved; the field area`
+            + ` averages ${metaHeight}px per card. grid-column means nothing on a wrapping line and`
+            + ` only ${perLine} property fits per line here, so every property sits at x=0 either`
+            + " way and a reservation buys a blank line and the row gap under it rather than a slot"
+            + " — measured at 84px per card on the reported database",
         },
       ];
     }, { id: device.id, built }));

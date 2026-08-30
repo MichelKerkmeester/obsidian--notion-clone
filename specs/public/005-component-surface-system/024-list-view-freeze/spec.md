@@ -12,10 +12,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "public/005-component-surface-system/024-list-view-freeze"
-    last_updated_at: "2026-08-30T15:40:00Z"
-    last_updated_by: "fresh-perspective-debug"
-    recent_action: "Root cause measured and fixed; the suspected commit was verified as an amplifier, not the cause"
-    next_safe_action: "Operator confirms on device that the list view opens"
+    last_updated_at: "2026-08-30T17:05:00Z"
+    last_updated_by: "review-remediation"
+    recent_action: "Two defects the fix introduced or left are closed: the reservation is surface-conditional, and the budget asserts blocked main thread rather than render alone"
+    next_safe_action: "Operator confirms on device that the list view opens, and decides whether the desktop reservation is worth keeping now that it measures as redundant"
     blockers:
       - "The stylesheet lane is held by 021-sheet-inline-edit-alignment and its uncommitted edit leaves css-lane red; this phase took no CSS and needs none"
     key_files:
@@ -23,17 +23,22 @@ _memory:
       - "acceptance-criteria.md"
       - "../../../../src/views/list-renderer.ts"
       - "../../../../tools/bench/list-render-bench.ts"
+      - "../../../../tools/bench/run-list.mjs"
       - "../../../../tools/storybook/verify-placement.mjs"
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-024"
       parent_session_id: null
-    completion_pct: 90
+    completion_pct: 95
     open_questions:
       - "How many rows does the operator's database actually hold — the freeze threshold sits between 400 and 1600 and the exact count was never captured"
+      - "Is the desktop reservation worth keeping at all? With it forced off, both desktop alignment checks stay green: the track template and the explicit grid-column carry the alignment, and the reservation carries nothing measurable"
     answered_questions:
       - "Was c31acf5 the cause? No. The same 1,600-row list took 6,777ms on the commit before it. c31acf5 added 6% on the desktop and 28% on the phone"
       - "Is it volume or cost-per-field? Neither. Both are linear multipliers; the freeze is a forced layout inside the row loop"
+      - "Is touchMode the right predicate for whether to reserve a column? No, and neither is the phone class. touchMode answers whether the surface takes touch input. The phone class looked right and was measured wrong: the same phone in landscape fits two properties per line and needs its reservations back. The predicate is the property itself — can two properties share a line — read off the field area's computed display and measured width"
+      - "Does that predicate reintroduce a layout read? One per render, taken on the first row after it is built, because an empty field area measures 37.9px at every screen width. It is O(1) in the row count; the 1,600-row phone render moved 71.5ms to 68.6ms"
+      - "How big is the fix really? 33.7x on the blocked main thread, not the 84.9x reported. The 84.9x compared render to render, and the repair works by moving cost from render into layout"
 ---
 # Feature Specification: List View Freeze
 
@@ -124,8 +129,10 @@ and the column alignment `c31acf5` bought survives.
 ### In Scope
 
 - The per-row layout measurement in `ListRenderer`.
-- What an empty property builds to reserve its column.
-- A benchmark that varies fill rate and column count, which nothing did.
+- What an empty property builds to reserve its column, and **on which surfaces it builds anything at
+  all**.
+- A benchmark that varies fill rate and column count, which nothing did, and **what its budget
+  asserts**.
 - A geometry check that drives the real renderer rather than a fixture.
 
 ### Out of Scope
@@ -141,14 +148,15 @@ and the column alignment `c31acf5` bought survives.
 
 | File Path | Change Type | Description |
 |-----------|-------------|-------------|
-| `src/views/list-renderer.ts` | Modify | Decide touch mode once per render; reserve a column with an empty box rather than a hidden field |
+| `src/views/list-renderer.ts` | Modify | Decide touch mode once per render; reserve a column with an empty box rather than a hidden field; reserve only where a column exists to reserve |
 | `src/views/column-width.test.ts` | Modify | Stop pinning an exact call expression; point at the check that measures the property |
 | `tools/bench/list-render-bench.ts` | Add | The list benchmark, varied by fill rate, column count and column type |
-| `tools/bench/run-list.mjs` | Add | Drives it at both widths against a declared budget |
+| `tools/bench/run-list.mjs` | Add | Drives it at both widths against a declared budget on the blocked main thread; refuses a slope verdict from one row count |
 | `tools/bench/CODE.md` | Add | Owed once the folder crossed the source-file threshold |
-| `tools/bench/README.md` | Modify | Now describes two benchmarks |
-| `tools/storybook/verify-placement.mjs` | Modify | Section 5k: the alignment property, measured on the renderer's own output |
+| `tools/bench/README.md` | Modify | Now describes two benchmarks and what the budget covers |
+| `tools/storybook/verify-placement.mjs` | Modify | Section 5k: the alignment property, measured on the renderer's own output, with a surface-shaped third assertion |
 | `package.json` | Modify | `bench:list` |
+| `screenshots/**` | Modify | Recapture, because the renderer's source hash is a declared dependency of sixteen shots |
 <!-- /ANCHOR:scope -->
 
 ---
@@ -171,6 +179,9 @@ and the column alignment `c31acf5` bought survives.
 | REQ-004 | Reserving a column costs one element, not a rendered field | AC-4 |
 | REQ-005 | A check exists that measures the renderer's own output, and has been observed red | AC-5 |
 | REQ-006 | The operator confirms on device that the list view opens | AC-6 |
+| REQ-007 | A slot is reserved only where a slot exists to reserve, on every surface and at every width | AC-7 |
+| REQ-008 | The performance budget asserts the whole blocked main thread, not the half of it the fix moves work out of | AC-8 |
+| REQ-009 | The scaling verdict is not printed from a single sample | AC-9 |
 <!-- /ANCHOR:requirements -->
 
 ---
@@ -185,6 +196,12 @@ and the column alignment `c31acf5` bought survives.
   renderer that skipped empty properties.
 - **SC-004**: The operator confirms on device. This program's closing condition is operator
   confirmation, never a green check.
+- **SC-005**: A card whose field area fits one property per line carries no field line that shows
+  nothing; every wider surface keeps its alignment, and the desktop card's column alignment and
+  field-area width are unchanged to the pixel.
+- **SC-006**: A render that blocks the main thread past the budget fails it, whichever of render or
+  forced layout the time was spent in.
+- **SC-007**: A run with one row count prints no scaling verdict.
 <!-- /ANCHOR:success-criteria -->
 
 ---
@@ -237,10 +254,61 @@ widths are identical at 240px. **The column alignment `c31acf5` was written to b
 on a phone at that width.** The "fourteen x-positions on twelve cards" that justified it was measured
 on a fixture whose field area is roughly twice the real one.
 
-The placeholders are kept anyway. They are load-bearing on the desktop grid — the check fails without
-them, observed — and on any surface wide enough to put two properties on a line. At one empty div
-each they now cost little enough that keeping them is cheaper than proving exactly which widths need
-them. What is not kept is the claim that they were free.
+The placeholders were kept anyway, on the argument that at one empty div each they cost little
+enough that keeping them everywhere was cheaper than proving which widths need them. That argument
+was wrong, and a later review priced it: on a phone an empty div is not free, because the row is a
+wrapping flex line and the div takes a whole wrapped line plus the 6px row gap under it. On the
+reported database that is **84px of dead height per card** — a twelve-card list measuring 3,131px
+where the same data on the pre-reservation renderer measures 2,123px. Half the scrolling was boxes
+nobody can see.
+
+They are now built only where two properties can share a line — a grid always, a wrapping line only
+when the field area is wide enough for a pair. Where one property fills a line on its own there is
+nothing to hold, and that is the only case where they are dropped. The first attempt keyed this on
+the phone class instead and was measured breaking alignment the moment the phone was turned
+sideways; the sweep that caught it is in `acceptance-criteria.md` AC-7.
+
+See §8 for a second measurement that landed at the same time and is not yet acted on.
+
+---
+
+## 8. THE DESKTOP RESERVATION MAY ALSO BE REDUNDANT — MEASURED, NOT ACTED ON
+
+This is a finding, not a change. It is recorded because the next person to touch this code will
+otherwise re-derive it, and because it contradicts something this document previously asserted.
+
+Making the reservation surface-conditional needed a control in both directions: the phone must lose
+its reserved boxes, and the desktop must keep its alignment. The second control forced
+`reservesColumns` to `false` on every surface and re-ran section 5k. The expected result was two red
+desktop alignment checks. The actual result:
+
+```
+PASS  on desktop the renderer gives every list card the same field-area width
+        12 rendered cards ... take 1 distinct meta width(s): 616px
+PASS  on desktop the renderer starts a property in the same column on every card
+        4 properties across 12 cards; worst lands in 1 column(s)
+FAIL  on desktop a reserved column costs one element and no rendered content
+        0 reserved columns hold 0 child element(s)
+```
+
+The alignment held with nothing reserved. Only the assertion that *counts* reservations went red,
+and that one goes red by construction when there are none.
+
+The reason is in the commit. `c31acf5` introduced three things at once: `gridTemplateColumns` from
+`listFieldTrackTemplate`, an explicit `gridColumn: index + 1` on every field, and the hidden-field
+placeholder. A track exists whether or not anything sits in it, and each field is placed in its own
+track by index, so the placement is already fully determined without the placeholder. This phase's
+own "observed red" control ran `c31acf5^`, which removed **all three** — so it proved that the
+commit as a whole buys the alignment, never which part of it does.
+
+What that would be worth: 22,400 empty divs at 1,600 rows, and 75,207 DOM nodes against 52,807.
+
+Why it is not done here. The brief for this remediation states the desktop reservation as
+load-bearing and asks for a surface-conditional fix, and scope is frozen. The measurement above is
+narrow besides — four non-wrapping columns, twelve cards, default field mode. A `wrap` column
+declares a `max-content` track that collapses to zero when empty, and compact mode declares
+`fit-content`; neither was measured here, and both are shapes where "the track exists regardless"
+needs re-testing before anyone removes anything. That is a phase, not an aside.
 
 ---
 

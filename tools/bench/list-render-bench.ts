@@ -147,7 +147,12 @@ export interface ListBenchSample {
   /** Median across repeats, in milliseconds. */
   renderMs: number;
   p95Ms: number;
-  /** Forced layout after render, kept separate so a layout cost cannot hide inside render time. */
+  /**
+   * Forced layout after render, kept separate so a layout cost cannot hide inside render time.
+   *
+   * Median across repeats like `renderMs`, because the budget asserts the two added together and
+   * a median plus a mean is a statistic of nothing.
+   */
   layoutMs: number;
   domNodes: number;
   fieldNodes: number;
@@ -176,7 +181,7 @@ export function runListBench(host: HTMLElement, options: BenchOptions = {}): Lis
       for (const rowCount of rowCounts) {
         const rows = makeRows(rowCount, columns, fillRate);
         const renderTimes: number[] = [];
-        let layoutMs = 0;
+        const layoutTimes: number[] = [];
         let domNodes = 0;
         let fieldNodes = 0;
         let placeholderNodes = 0;
@@ -198,7 +203,7 @@ export function runListBench(host: HTMLElement, options: BenchOptions = {}): Lis
 
           if (run > 0) {
             renderTimes.push(rendered - start);
-            layoutMs += layoutEnd - layoutStart;
+            layoutTimes.push(layoutEnd - layoutStart);
             domNodes = container.querySelectorAll("*").length;
             fieldNodes = container.querySelectorAll(".db-list-field").length;
             placeholderNodes = container.querySelectorAll(".db-list-field.is-placeholder").length;
@@ -213,7 +218,7 @@ export function runListBench(host: HTMLElement, options: BenchOptions = {}): Lis
           fillRate,
           renderMs: Number(median.toFixed(2)),
           p95Ms: Number(percentile(renderTimes, 0.95).toFixed(2)),
-          layoutMs: Number((layoutMs / REPEATS).toFixed(2)),
+          layoutMs: Number(percentile(layoutTimes, 0.5).toFixed(2)),
           domNodes,
           fieldNodes,
           placeholderNodes,
