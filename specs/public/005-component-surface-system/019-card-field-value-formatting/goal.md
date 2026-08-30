@@ -70,11 +70,16 @@ enough for the operator to find it, and that absence is the criterion's own reas
 - [ ] Bar and ring display styles are unaffected: 1 bar/ring element present and 0 text nodes
       carrying a formatted numeric string, per style. The second count is the one that goes red if a
       formatted string ever appears **beside** the bar rather than instead of it.
-- [ ] A non-finite value renders the placeholder, never a formatted `NaN`. Two guards, neither
-      exercised.
-- [ ] `formatEuroNumber`, `formatEuroNumber2` and `formatEuroCurrency` each have a grouped value, a
+- [x] A non-finite value renders the placeholder, never a formatted `NaN`. **Now exercised for all
+      three formatters against `NaN`, `+Infinity` and `-Infinity`.** Observed red first: removing the
+      guard from `formatEuroCurrency` fails with `expected '€ NaN' to be '-'`. Restored, green.
+- [x] `formatEuroNumber`, `formatEuroNumber2` and `formatEuroCurrency` each have a grouped value, a
       decimal value and a non-finite value asserted. Before: **zero tests**, grepped repository-wide,
-      against five calling surfaces.
+      against five calling surfaces. Now `src/data/euro-format.test.ts`, 6 tests, exit 0, with the
+      six-digit cell ceiling separated from the two-digit summary one so a swapped import fails in
+      the suite rather than as a footer disagreeing with its own column. Negative control: swapping
+      the locale to `en-US` fails 4 assertions on the separator reversal — `'1,000,000'` against
+      `'1.000.000'`, `'1.234567'` against `'1,234567'`.
 - [ ] The scope exclusion is settled in writing, either way.
 - [ ] The operator sees the same euro figure on a card and in the table row behind it.
 <!-- /ANCHOR:completion -->

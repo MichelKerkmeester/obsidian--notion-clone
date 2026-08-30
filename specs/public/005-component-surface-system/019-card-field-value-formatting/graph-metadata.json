@@ -1,0 +1,225 @@
+{
+  "schema_version": 1,
+  "packet_id": "public/005-component-surface-system/019-card-field-value-formatting",
+  "spec_folder": "public/005-component-surface-system/019-card-field-value-formatting",
+  "parent_id": "public/005-component-surface-system",
+  "children_ids": [],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "card field formatting",
+      "missing euro sign sheet",
+      "decimals not formatted",
+      "number format card",
+      "019 value formatting",
+      "019 plan",
+      "card field formatting plan",
+      "019 tasks",
+      "card field formatting tasks",
+      "019 acceptance criteria",
+      "card cell format parity",
+      "euro format criteria"
+    ],
+    "key_topics": [
+      "card",
+      "field",
+      "formatting",
+      "missing",
+      "euro",
+      "sign",
+      "sheet",
+      "decimals",
+      "formatted",
+      "number",
+      "format",
+      "value"
+    ],
+    "importance_tier": "normal",
+    "status": "in_progress",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "acceptance-criteria.md",
+      "goal.md",
+      "implementation-summary.md",
+      "src/views/card-field-renderer.ts",
+      "src/data/euro-format.ts",
+      "src/data/euro-format.test.ts",
+      "tools/storybook/verify-placement.mjs"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "acceptance-criteria.md",
+        "kind": "doc",
+        "path": "acceptance-criteria.md",
+        "source": "derived"
+      },
+      {
+        "name": "goal.md",
+        "kind": "doc",
+        "path": "goal.md",
+        "source": "derived"
+      },
+      {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "card-field-renderer.ts",
+        "kind": "code",
+        "path": "src/views/card-field-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "euro-format.ts",
+        "kind": "code",
+        "path": "src/data/euro-format.ts",
+        "source": "derived"
+      },
+      {
+        "name": "euro-format.test.ts",
+        "kind": "test",
+        "path": "src/data/euro-format.test.ts",
+        "source": "derived"
+      },
+      {
+        "name": "verify-placement.mjs",
+        "kind": "file",
+        "path": "tools/storybook/verify-placement.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Card Field Value Formatting",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "In Progress",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Problem Statement The",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Purpose One",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "In Scope",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Plan",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "step",
+        "kind": "key_phrase",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "1. SUMMARY",
+        "kind": "heading",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "2. QUALITY GATES",
+        "kind": "heading",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "3. ARCHITECTURE",
+        "kind": "heading",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Notation",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Completion Criteria Closes",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "evidence",
+        "kind": "key_phrase",
+        "path": "tasks.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "The operator, looking at the record sheet: \"the data doesnt use proper formatting here like in",
+    "created_at": "2026-08-30T17:52:46.407Z",
+    "last_save_at": "2026-08-30T17:52:46.407Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "acceptance-criteria.md",
+      "goal.md",
+      "implementation-summary.md"
+    ],
+    "source_fingerprint": "sha256:3c07d24da96b90b956f89573a713d02f8892fcbebaf0cf4cfb15cc349a86f80e",
+    "source_fingerprint_docset": 3,
+    "source_doc_hashes": {
+      "spec.md": "e71b13339e25783262be245619ac56be6cea70546f08c0f0266bd57252c866c7",
+      "plan.md": "105818edf9645cd3bd0356310ff1ddbb433524bd80a176dbee52c586ec35870f",
+      "tasks.md": "8d64f31585cc52284e445ee5384df902810d3cae70cabcdc111496f0e28ff1b0",
+      "implementation-summary.md": "ec6431c5826befff595e66b0d82c7573dc23e8138f28496d0d264ee54c996777"
+    },
+    "last_active_child_id": null,
+    "last_active_at": null
+  }
+}

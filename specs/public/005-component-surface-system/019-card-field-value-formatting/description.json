@@ -1,0 +1,25 @@
+{
+  "specFolder": "public/005-component-surface-system/019-card-field-value-formatting",
+  "description": "The operator, looking at the record sheet: \"the data doesnt use proper formatting here like in",
+  "keywords": [
+    "operator",
+    "looking",
+    "record",
+    "sheet",
+    "data",
+    "doesnt",
+    "proper",
+    "formatting",
+    "like"
+  ],
+  "lastUpdated": "2026-08-30T08:39:54.808Z",
+  "specId": "019",
+  "folderSlug": "card-field-value-formatting",
+  "parentChain": [
+    "public",
+    "005-component-surface-system"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": [],
+  "level": "1"
+}
