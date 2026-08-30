@@ -68,6 +68,7 @@ import { SerialTaskQueue } from "../data/serial-task-queue";
 import type { TableCellNavigationIntent } from "../data/table-keyboard-navigation";
 import { markNoteHoverLink } from "./hover-link-preview";
 import { isTouchDevice } from "../data/touch-environment";
+import { resolveCellTapAction, trackCellGesture } from "./table-cell-gesture";
 
 // ───────────────────────────────────────────────────────────────────
 // 2. TYPES
@@ -197,6 +198,9 @@ export class CellRenderer {
     private renameFile?: (row: RowData, newName: string) => Promise<boolean | string>,
     private sourceInstanceId?: string,
     private editRelationRollup?: (col: ColumnDef, row: RowData) => void,
+    /** Whether a column carries the row's main item. Absent means "this host has no main item
+     *  concept", which is the honest answer for a surface that renders cells outside a table. */
+    private isMainItemColumn?: (col: ColumnDef) => boolean,
   ) {}
 
   private finishInlineEdit(
@@ -535,10 +539,30 @@ export class CellRenderer {
       this.startEdit(td, row, col, event, currentValue);
     };
 
+    // A tap opens the editor for every editable type, not only the four that already open on a
+    // click. The rest were reachable through `dblclick` alone, and a phone has no second click to
+    // give — which left a tap on most of the table doing nothing a user could name.
+    //
+    // Routed through the shared resolver rather than a device check, so a mouse in a narrow split
+    // pane keeps the click-selects, double-click-edits grammar it has on any other desktop window.
+    const cellGesture = trackCellGesture(td);
     td.addEventListener("click", (event) => {
       event.stopPropagation();
       if (this.focusExistingEditor(td, event, false)) return;
-      if (opensOnClick) {
+      const tapAction = resolveCellTapAction({
+        gesture: cellGesture(),
+        // Asked, not assumed. This read `false` unconditionally, which is only true while the note
+        // name is visible — hide that column and the first visible one becomes the row's main item,
+        // so a tap on it opened this editor while the cell's own handler opened the record sheet.
+        // One press, two surfaces.
+        isTitleCell: this.isMainItemColumn?.(col) ?? false,
+        // True by construction: this path only runs for a cell that has an editor to open.
+        isEditable: true,
+      });
+      // The main item opens the record, and exactly one handler does that — the capture-phase one
+      // the host binds on this same cell. Deferring here is what keeps the sheet's single path.
+      if (tapAction === "open-record") return;
+      if (opensOnClick || tapAction === "edit-cell") {
         this.selectCell(td);
         startEdit(event);
         return;

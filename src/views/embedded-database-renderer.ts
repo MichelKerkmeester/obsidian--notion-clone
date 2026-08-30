@@ -103,10 +103,15 @@ import { normalizeComputedSyncMode } from "../data/computed-sync";
 import { getComputedStorageKey, isNumberDisplayColumn } from "../data/column-display";
 import { getRequiredSourceRules, getSourceRuleTree, getSourceRuleTypedValue, mergeDbAndViewSourceRuleTrees } from "../data/source-rules";
 import { appendLeaf, buildViewFilterTree } from "../data/view-filter-tree";
-import { getRowFileFieldValue, isFileFieldKey } from "../data/file-fields";
-import { applyRangeSelection } from "../data/range-selection";
+import { getRowFileFieldValue, isFileFieldKey, isReadonlyFileField } from "../data/file-fields";
 import { installNoteHoverPreview } from "./hover-link-preview";
-import { attachLongPress, isTouchDevice, observeTouchEnvironment } from "../data/touch-environment";
+import { attachLongPress, observeTouchEnvironment } from "../data/touch-environment";
+import {
+  applyRowSelectionPress, attachRowRangeGesture, isMainItemColumn, nextCellRange,
+  resolveCellTapAction, trackCellGesture,
+} from "./table-cell-gesture";
+import type { RowRangeInput } from "./table-cell-gesture";
+import { setupTitleCellTap } from "./table-record-peek";
 import { InteractionScopeRegistry } from "./interaction-scope";
 import { moveTableCellByRowOffset, resolveTableCellNavigation, TableKeyboardNavigationController, type TableCellNavigationIntent } from "../data/table-keyboard-navigation";
 import { createOwnedMenuForEvent } from "./owned-menu";
@@ -331,7 +336,9 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
       this.app,
       undefined,
       undefined,
-      this.instanceId
+      this.instanceId,
+      undefined,
+      (col) => this.isRowMainItem(col),
     );
     this.rowMenu = new RowMenu({
       app: this.app,
@@ -366,18 +373,30 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
       setupColumnHeader: (th, col) => this.columnHeaderController.setup(th, col),
       setupRow: (tr, row, context) => {
         this.rowMenu.attachToRow(tr, row, context);
+        // The same control list the full table view screens on, moved to `ignoreTarget` so the
+        // decision happens before the timer instead of after it. Deciding after meant a hold on a
+        // control still buzzed and still swallowed the press, then declined to open anything —
+        // and once the checkbox has a hold gesture of its own, that is a second buzz for it.
         attachLongPress(tr, {
-          onLongPress: (event) => {
-            const target = event.target as HTMLElement | null;
-            if (target?.closest("button, input, a, select, textarea, [contenteditable='true']")) return;
-            this.rowMenu.show(event as unknown as MouseEvent, row, context, tr);
-          },
+          ignoreTarget: (event) => isHTMLElement(event.target)
+            && Boolean(event.target.closest("button, input, a, select, textarea, [contenteditable='true']")),
+          onLongPress: (event) => this.rowMenu.show(event as unknown as MouseEvent, row, context, tr),
+        });
+        attachRowRangeGesture(tr, {
+          onExtendRange: () => this.setRowSelection(row, true, { shiftKey: false, heldPress: true }),
         });
       },
       renderCell: (td, row, col) => {
         if (isCodeBlock) this.renderReadOnlyCell(td, row, col);
         else this.cellRenderer.renderCell(td, row, col);
         td.toggleClass("db-cell-range-selected", this.isEmbedCellSelected(row.file.path, col.key));
+        // The same tap the full table view gives its main-item cell. Without it an embedded table
+        // looked identical and answered differently: a thumb on the note name followed the link
+        // and navigated away from the page the table is embedded in. Bound in both persistence
+        // modes because the panel it opens is read-only either way.
+        if (this.isRowMainItem(col)) {
+          setupTitleCellTap(td, row, { openRecord: (anchorEl, target) => this.openRecordDetailPanel(anchorEl, target) });
+        }
         this.setupEmbedCellSelection(td, row, col);
       },
       renderRecordIcon: (parent, row, config, compact) => this.renderEmbeddedRecordIcon(parent, row, config, compact),
@@ -3096,13 +3115,18 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
   }
 
   private toggleRowSelected(row: RowData, selected: boolean, event?: MouseEvent): void {
-    this.lastSelectedRowPath = applyRangeSelection({
+    this.setRowSelection(row, selected, { shiftKey: Boolean(event?.shiftKey), heldPress: false });
+  }
+
+  private setRowSelection(row: RowData, selected: boolean, press: RowRangeInput): void {
+    this.lastSelectedRowPath = applyRowSelectionPress({
       orderedIds: this.getOrderedSelectionRowPaths(),
       selectedIds: this.selectedRows,
       anchorId: this.lastSelectedRowPath,
       targetId: row.file.path,
       selected,
-      range: Boolean(event?.shiftKey || isTouchDevice(this.containerEl)),
+      shiftKey: press.shiftKey,
+      heldPress: press.heldPress,
     });
     if (this.config) this.renderResults(this.config);
   }
@@ -3717,7 +3741,7 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
     origView.sourceLogic = this.config.sourceLogic;
     origView.sourceRuleTree = this.config.sourceRuleTree;
     origView.viewSourceRulesEnabled = this.config.viewSourceRulesEnabled;
-    // Bug 2: 整体覆盖所有持久化视图配置，修复手抄白名单漏字段（图标/dateGroupModes/
+    // 整体覆盖所有持久化视图配置，修复手抄白名单漏字段（图标/dateGroupModes/
     // conditionalFormats/summaryRules/chart 显示设置等）。排除稳定身份字段（id/name）、
     // 运行时字段（baseThisFilePath）、共享 schema（view.schema === database.schema 契约，
     // 不能被独立副本覆盖——见 ColumnConfig.linkDatabaseSchema）。
@@ -3795,6 +3819,21 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
     return getVisibleColumns(this.config, this.rows, this.vs(this.config), this.pendingShowColumns).map((col) => col.key);
   }
 
+  /** Whether this column carries the row's main item, by the rule both table hosts share. */
+  private isRowMainItem(col: ColumnDef): boolean {
+    const config = this.config;
+    if (!config) return isMainItemColumn(col.key, []);
+    const visible = getVisibleColumns(config, this.rows, this.vs(config), this.pendingShowColumns);
+    return isMainItemColumn(col.key, visible.map((column) => column.key));
+  }
+
+  /** Whether a column has an editor a press could open. Computed, rollup and the read-only file
+   *  fields have none, which is what the press router means by an uneditable cell. */
+  private isColumnEditable(col: ColumnDef): boolean {
+    if (this.isCodeBlock) return false;
+    return col.type !== "computed" && col.type !== "rollup" && !isReadonlyFileField(col.key);
+  }
+
   private setupEmbedCellSelection(td: HTMLElement, row: RowData, col: ColumnDef): void {
     td.setAttr("role", "gridcell");
     td.tabIndex = this.cellSelection ? -1 : 0;
@@ -3806,30 +3845,29 @@ export class EmbeddedDatabaseRenderer extends MarkdownRenderChild {
       this.renderEmbedCellSelectionClasses();
       this.renderEmbedSelectionStatusBar();
     });
+    // Shares the host view's press rule rather than restating it. These two files each grew their
+    // own copy of the branch and each independently decided that touch means "shift is held", so a
+    // repair to one of them would have left the other still painting the block that was reported.
+    const cellGesture = trackCellGesture(td);
     const handleMouseDown = (event: MouseEvent) => {
       if (event.button !== 0) return;
       if (!this.config) return;
       this.captureEmbedReturnFocus();
       event.preventDefault(); // prevent browser text selection during drag
       const addr: CellAddress = { rowPath: row.file.path, colKey: col.key };
-      if (isTouchDevice(this.containerEl)) {
-        if (this.cellSelection) {
-          this.cellSelection = { anchor: this.cellSelection.anchor, focus: addr };
-        } else {
-          this.cellSelection = { anchor: addr, focus: addr };
-        }
-        this.isSelectingCells = false;
-        this.renderEmbedSelectionStatusBar();
-        this.renderEmbedCellSelectionClasses();
-        this.focusEmbedCell(addr);
-        return;
-      }
-      if (event.shiftKey && this.cellSelection) {
-        this.cellSelection = { anchor: this.cellSelection.anchor, focus: addr };
-      } else {
-        this.cellSelection = { anchor: addr, focus: addr };
-      }
-      this.isSelectingCells = true;
+      const gesture = cellGesture();
+      // A tap on the row's main item opens the record. Painting a selection first leaves the cell
+      // outlined behind the sheet, and still outlined after it is dismissed, with nothing to
+      // explain it. Asked through the shared router so this cannot drift from the tap it defers to.
+      const tapAction = resolveCellTapAction({
+        gesture,
+        isTitleCell: this.isRowMainItem(col),
+        isEditable: this.isColumnEditable(col),
+      });
+      if (tapAction === "open-record") return;
+      const next = nextCellRange(this.cellSelection, addr, { gesture, shiftKey: event.shiftKey });
+      this.cellSelection = { anchor: next.anchor, focus: next.focus };
+      this.isSelectingCells = gesture !== "touch";
       this.renderEmbedSelectionStatusBar();
       this.renderEmbedCellSelectionClasses();
       this.focusEmbedCell(addr);

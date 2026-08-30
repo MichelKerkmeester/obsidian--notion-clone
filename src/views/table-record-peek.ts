@@ -21,7 +21,9 @@ import { isTouchDevice } from "../data/touch-environment";
 import type { ColumnDef, RowData, ViewConfig } from "../data/types";
 import { stringifyValue } from "../data/stringify";
 import { t } from "../i18n";
+import { isHTMLElement } from "./dom-guards";
 import { trapFocus } from "./interaction-scope";
+import { resolveCellTapAction, trackCellGesture } from "./table-cell-gesture";
 
 // ───────────────────────────────────────────────────────────────────
 // 2. TYPES
@@ -29,6 +31,10 @@ import { trapFocus } from "./interaction-scope";
 
 export interface TitleOpenAffordanceDeps {
   open: (row: RowData) => void;
+}
+
+export interface TitleCellTapDeps {
+  openRecord: (anchorEl: HTMLElement, row: RowData) => void;
 }
 
 export interface OpenTableRecordPeekOptions {
@@ -93,6 +99,40 @@ export function attachTitleOpenAffordance(
     deps.open(row);
   });
   td.appendChild(button);
+}
+
+/**
+ * Give the whole main-item cell the meaning its 24px icon carried alone.
+ *
+ * A thumb aiming at a 24 by 24 button inside a 34px row is asking for a miss, and the rest of the
+ * cell did something else again — the note link navigated away, the empty space painted a range.
+ * One cell, one meaning.
+ *
+ * Bound in the capture phase because the note link's handler sits on a descendant: capture reaches
+ * this cell first, so stopping here is what keeps a tap from both opening the sheet and navigating
+ * away from it. A mouse falls straight through and the link keeps opening the note.
+ *
+ * Shared rather than owned by one view. The full table view bound this and the embedded renderer
+ * did not, so the same table in a note and in its own tab answered the same tap differently: one
+ * opened the record, the other followed the link. A behaviour two hosts must agree on belongs to
+ * neither of them.
+ */
+export function setupTitleCellTap(td: HTMLElement, row: RowData, deps: TitleCellTapDeps): void {
+  // Bind once per cell, the way the affordance beside it does. A re-render that reuses the node
+  // would otherwise stack a second reader and a second handler on it.
+  if (td.dataset.noteDatabaseTitleTap === "1") return;
+  td.dataset.noteDatabaseTitleTap = "1";
+  const cellGesture = trackCellGesture(td);
+  td.addEventListener("click", (event) => {
+    const action = resolveCellTapAction({ gesture: cellGesture(), isTitleCell: true, isEditable: true });
+    if (action !== "open-record") return;
+    // The affordance button opens the record already. Letting it through keeps one path to the
+    // sheet instead of two that can drift apart.
+    if (isHTMLElement(event.target) && event.target.closest(".db-record-open-btn")) return;
+    event.preventDefault();
+    event.stopPropagation();
+    deps.openRecord(td, row);
+  }, true);
 }
 
 /** Close the one active table record peek, if any. */

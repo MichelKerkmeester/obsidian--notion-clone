@@ -23,7 +23,6 @@ import { QueryEngine } from "../data/query-engine";
 import { PropertyService } from "../data/property-service";
 import { ComputedFieldEngine } from "../data/computed-field";
 import { evaluateComputedFields, hasRollupComputedDependency } from "../data/computed-evaluator";
-import { applyRangeSelection } from "../data/range-selection";
 import { installNoteHoverPreview } from "./hover-link-preview";
 import { getRowPipelineDiagnostics, RowPipeline, RowPipelineDiagnostics } from "../data/row-pipeline";
 import {
@@ -169,6 +168,11 @@ import { estimateAutoColumnWidth } from "./column-width";
 import { createRenderedTextWidthMeasurer } from "./inline-markdown-renderer";
 import { isHTMLElement } from "./dom-guards";
 import { attachLongPress, isTouchDevice, observeTouchEnvironment } from "../data/touch-environment";
+import {
+  applyRowSelectionPress, attachRowRangeGesture, isMainItemColumn, nextCellRange,
+  resolveCellTapAction, trackCellGesture,
+} from "./table-cell-gesture";
+import type { RowRangeInput } from "./table-cell-gesture";
 import { InteractionScopeRegistry } from "./interaction-scope";
 import { safeString } from "../data/safe-string";
 import { parseClipboardTable, serializeSelectedCells as serializeClipboardSelectedCells } from "../data/clipboard-serializer";
@@ -179,6 +183,7 @@ import {
   attachTitleOpenAffordance,
   closeTableRecordPeek,
   openTableRecordPeek,
+  setupTitleCellTap,
   syncTableRecordPeek,
 } from "./table-record-peek";
 import { syncTableColumnLayouts } from "./table-column-layout-sync";
@@ -621,6 +626,7 @@ export class DatabaseView extends FileView {
       (row, newName) => this.renameFileWithHistory(row, newName),
       this.instanceId,
       (col, row) => this.showRelationRollupConfigModal(col, row),
+      (col) => this.isRowMainItem(col),
     );
     this.columnOperations = new ColumnOperations({
       app: this.app,
@@ -659,6 +665,7 @@ export class DatabaseView extends FileView {
       openRow: (row) => { void this.openRow(row); },
       deleteRow: (row) => this.deleteRow(row),
       duplicateRow: (row) => this.duplicateRow(row),
+      renameRow: (row, anchorEl) => this.renameRowFromMenu(row, anchorEl),
       isRecordIconShown: () => this.getConfig()?.showRecordIcon === true,
       canToggleRecordIcon: () => ["table", "board", "gallery", "list", "calendar", "timeline"].includes(this.getConfig()?.viewType || "table"),
       toggleRecordIcon: (anchor, row) => this.toggleCurrentViewRecordIcon(anchor, row),
@@ -2878,7 +2885,7 @@ export class DatabaseView extends FileView {
     // 容器外的点击：菜单项点击不清选区——菜单项操作（排序/清除排序等）会触发 refresh()
     // 重建 DOM，焦点恢复由菜单 onHide → restoreCellFocusAfterKeyboardMenu 负责。
     // 若此处清选区，菜单关闭后 restoreCellFocusAfterKeyboardMenu 因 cellSelection 已
-    // 清空而直接 return，导致排序后方向键导航失效（Bug AC）。
+    // 清空而直接 return，导致排序后方向键导航失效。
     if (!this.containerEl_?.contains(target)) return !target.closest(".modal, .menu");
     return !target.closest(
       "td[data-note-database-row-path][data-note-database-column-key], " +
@@ -3340,7 +3347,7 @@ export class DatabaseView extends FileView {
     this.clearViewStateCache();
     // Don't rerenderToolbar here: the database popover is updated in place by
     // ToolbarRenderer.moveDatabasePopoverEntry (populate + updateState), and a
-    // full toolbar rerender would close it (Bug E). refresh() only redraws the
+    // full toolbar rerender would close it. refresh() only redraws the
     // active view, not the toolbar/popover.
     this.refresh({ viewport: "reset-top" });
   }
@@ -4426,16 +4433,20 @@ export class DatabaseView extends FileView {
   }
 
   private toggleRowSelected(row: RowData, selected: boolean, event?: MouseEvent): void {
+    this.setRowSelection(row, selected, { shiftKey: Boolean(event?.shiftKey), heldPress: false });
+  }
+
+  private setRowSelection(row: RowData, selected: boolean, press: RowRangeInput): void {
     this.invalidateActiveBulkEditor();
     if (this.cellSelection) this.clearCellSelection();
-    const path = row.file.path;
-    this.lastSelectedRowPath = applyRangeSelection({
+    this.lastSelectedRowPath = applyRowSelectionPress({
       orderedIds: this.getOrderedSelectionRowPaths(),
       selectedIds: this.selectedRows,
       anchorId: this.lastSelectedRowPath,
-      targetId: path,
+      targetId: row.file.path,
       selected,
-      range: Boolean(event?.shiftKey || isTouchDevice(this.containerEl_)),
+      shiftKey: press.shiftKey,
+      heldPress: press.heldPress,
     });
     this.renderSelectionStatusBar();
     this.syncSelectionControls();
@@ -4569,33 +4580,38 @@ export class DatabaseView extends FileView {
       this.renderCellSelectionClasses();
       this.renderSelectionStatusBar();
     });
+    const cellGesture = trackCellGesture(td);
     td.addEventListener("mousedown", (event) => {
       if (event.button !== 0) return;
       if (this.isInteractiveCellTarget(event.target)) return;
       this.invalidateActiveBulkEditor();
       event.preventDefault();
       event.stopPropagation();
-      if (isTouchDevice(this.containerEl_)) {
-        if (this.cellSelection) {
-          this.cellSelection = { anchor: this.cellSelection.anchor, focus: address, active: address };
-        } else {
-          this.clearSelection();
-          this.cellSelection = { anchor: address, focus: address };
-        }
-        this.isSelectingCells = false;
-        this.renderCellSelectionClasses();
-        this.renderSelectionStatusBar();
-        return;
-      }
-      if (event.shiftKey && this.cellSelection) {
-        this.cellSelection = { anchor: this.cellSelection.anchor, focus: address, active: address };
-      } else {
-        this.clearSelection();
-        this.cellSelection = { anchor: address, focus: address };
-      }
-      this.isSelectingCells = true;
+      const gesture = cellGesture();
+      // One press, one outcome. A tap on the row's main item means "open this record", and
+      // collapsing the selection onto the cell on the way there paints an outline the sheet then
+      // covers — dismiss the sheet and the cell is still outlined with nothing to explain it.
+      // Asked through the shared router rather than re-deciding here, so the selection and the tap
+      // cannot disagree about which cell opens a record. A mouse resolves to select-cell in every
+      // cell, main item or not, so the pointer grammar is untouched.
+      const tapAction = resolveCellTapAction({
+        gesture,
+        isTitleCell: this.isRowMainItem(col),
+        isEditable: this.isColumnEditable(col),
+      });
+      if (tapAction === "open-record") return;
+      const current = this.cellSelection;
+      const extending = gesture === "mouse" && event.shiftKey && Boolean(current);
+      if (!extending) this.clearSelection();
+      this.cellSelection = nextCellRange(current, address, { gesture, shiftKey: event.shiftKey });
+      // A finger never leaves a drag armed. Drag-to-extend needs a range grammar to be worth
+      // anything — shift, a fill handle, a status bar wide enough to act on the block — and none of
+      // it is reachable with a thumb, so a press that armed it would only paint a state the user
+      // could neither see the extent of nor clear.
+      this.isSelectingCells = gesture !== "touch";
       this.renderCellSelectionClasses();
       this.renderSelectionStatusBar();
+      if (gesture === "touch") return;
       td.focus({ preventScroll: true });
       const onMouseUp = () => {
         this.isSelectingCells = false;
@@ -8090,6 +8106,9 @@ export class DatabaseView extends FileView {
       ignoreTarget: (event) => isHTMLElement(event.target) && Boolean(event.target.closest("input, select, textarea, button, a")),
       onLongPress: (event) => this.rowMenu.show(event as unknown as MouseEvent, row, context, tr),
     });
+    attachRowRangeGesture(tr, {
+      onExtendRange: () => this.setRowSelection(row, true, { shiftKey: false, heldPress: true }),
+    });
   }
 
   private async deleteRow(row: RowData): Promise<void> {
@@ -8378,7 +8397,7 @@ export class DatabaseView extends FileView {
     }
     this.selectedRows = new Set(Array.from(this.selectedRows, remap));
     if (this.lastSelectedRowPath) this.lastSelectedRowPath = remap(this.lastSelectedRowPath);
-    // Bug 5: 迁移创建期 pending 状态（pendingNewFilePath / pendingNewRecords key + file 引用）。
+    // 迁移创建期 pending 状态（pendingNewFilePath / pendingNewRecords key + file 引用）。
     // 重命名后 pendingNewRecords 的 key 仍是 oldPath，includePendingNewRecords 查不到 →
     // 行回落到未就绪的 metadataCache → 属性空 → 分组消失。
     if (this.pendingNewFilePath) this.pendingNewFilePath = remap(this.pendingNewFilePath);
@@ -8386,7 +8405,7 @@ export class DatabaseView extends FileView {
       const remapped = new Map<string, NoteRecord & { expiresAt: number }>();
       for (const [path, record] of this.pendingNewRecords) {
         const newPath = remap(path);
-        // Bug 5: 不 spread TFile（丢失原型/instanceof/name/basename/parent）。用 vault 中
+        // 不 spread TFile（丢失原型/instanceof/name/basename/parent）。用 vault 中
         // 真实的新路径 TFile；若 vault 未就绪则保留原 TFile（Obsidian 重命名时更新原实例 path）。
         const resolvedFile = newPath === path
           ? record.file
@@ -8409,13 +8428,8 @@ export class DatabaseView extends FileView {
     const config = this.getConfig();
     if (config) {
       applyConditionalFormat(td, row, config, this.getActiveDb(), col.key);
-      const visible = getVisibleColumns(config, this.rows, this.vs(), this.pendingShowColumns);
-      const titleVisible = visible.some((column) => column.key === "file.name");
       const container = this.containerEl_;
-      if (
-        container &&
-        (col.key === "file.name" || (!titleVisible && col.key === visible[0]?.key))
-      ) {
+      if (container && this.isRowMainItem(col)) {
         attachTitleOpenAffordance(td, row, {
           // Open means open the note.
           //
@@ -8440,9 +8454,41 @@ export class DatabaseView extends FileView {
             ? this.openRecordDetailPanel(td, row)
             : this.dataSource.openNote(row.file)),
         });
+        setupTitleCellTap(td, row, { openRecord: (anchorEl, target) => this.openRecordDetailPanel(anchorEl, target) });
       }
     }
     this.setupTableCellSelection(td, row, col);
+  }
+
+  /**
+   * Rename a row's note from the row menu.
+   *
+   * Anchored on the row's own main-item cell so the editor opens over the name it is editing. The
+   * menu's anchor is the whole row, which is the right thing to return focus to and the wrong place
+   * to put a field, so the cell is looked up first and the row is only the fallback.
+   */
+  private renameRowFromMenu(row: RowData, anchorEl?: HTMLElement): void {
+    const container = this.containerEl_;
+    const cell = container?.querySelector<HTMLElement>(
+      `td.db-title-cell[data-note-database-row-path="${CSS.escape(row.file.path)}"]`
+    );
+    const target = cell ?? anchorEl ?? container;
+    if (!target) return;
+    this.cellRenderer.editFileName(target, row, row.file.basename);
+  }
+
+  /** Whether this column carries the row's main item, by the rule both table hosts share. */
+  private isRowMainItem(col: ColumnDef): boolean {
+    const config = this.getConfig();
+    if (!config) return isMainItemColumn(col.key, []);
+    const visible = getVisibleColumns(config, this.rows, this.vs(), this.pendingShowColumns);
+    return isMainItemColumn(col.key, visible.map((column) => column.key));
+  }
+
+  /** Whether a column has an editor a press could open. Computed, rollup and the read-only file
+   *  fields have none, which is what the press router means by an uneditable cell. */
+  private isColumnEditable(col: ColumnDef): boolean {
+    return col.type !== "computed" && col.type !== "rollup" && !isReadonlyFileField(col.key);
   }
 
   private setupTableFillHandle(td: HTMLElement, row: RowData, col: ColumnDef): void {

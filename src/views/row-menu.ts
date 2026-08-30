@@ -37,6 +37,9 @@ export interface RowMenuActions {
   openRow(row: RowData): void;
   deleteRow(row: RowData): Promise<void>;
   duplicateRow?(row: RowData): Promise<void>;
+  /** Open the note-name editor for a row. Absent on hosts that cannot rename, such as the
+   *  embedded renderer, where the entry then does not appear rather than appearing dead. */
+  renameRow?(row: RowData, anchorEl?: HTMLElement): void;
   isRecordIconShown?(): boolean;
   canToggleRecordIcon?(): boolean;
   toggleRecordIcon?(anchor: HTMLElement, row: RowData): void;
@@ -136,6 +139,19 @@ export class RowMenu {
         });
         menu.addSeparator();
       }
+      // The only rename affordance a thumb can find. Every other entry point in the plugin — the
+      // table cell, the list, board and gallery titles, the record sheet's own title — opens on a
+      // double-click, and the tooltip that says so is a hover surface a phone never shows. The
+      // gesture does exist on touch, but naming the action in a menu the user opened on purpose is
+      // what makes it findable rather than guessable.
+      if (this.actions.renameRow) {
+        menu.addRow({
+          icon: "pencil",
+          label: t("menu.renameNote"),
+          onClick: () => this.actions.renameRow?.(row, anchorEl),
+        });
+      }
+
       menu.addRow({
         icon: "copy",
         label: t("menu.duplicateRecord"),
@@ -162,8 +178,7 @@ export class RowMenu {
     }
 
     if (anchorEl?.isConnected) {
-      const rect = anchorEl.getBoundingClientRect();
-      menu.showAt({ x: rect.left, y: rect.bottom + 4 });
+      menu.showAt({ anchor: anchorEl });
     } else {
       menu.showAt({ x: event.clientX, y: event.clientY });
     }
