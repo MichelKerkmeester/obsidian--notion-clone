@@ -164,6 +164,26 @@ editor taller and interacts with everything above, and because it is not what wa
 
 The working tree was not clean and `tools/storybook/verify-placement.mjs` was not free. A second
 session was editing `src/views/list-renderer.ts` and adding its own checks to the same harness file
-throughout this phase; edits to it were overwritten twice and had to be re-applied. Six of the 190
-placement checks are theirs. The 443/444 vitest reading taken mid-phase was their in-flight
-`list-renderer` edit and resolved on its own.
+throughout this phase, and later ran `git checkout` and `git stash` against it. Edits to it were
+overwritten three times and re-applied. Six of the 190 placement checks are theirs; the 267-line
+section carrying these seven is this phase's. The 443/444 vitest reading taken mid-phase was their
+in-flight `list-renderer` edit and resolved on its own.
+
+Because a reconciling check count can sit on top of a wrong body, the section was re-verified by
+content rather than by arithmetic after that episode: the bundle export, the driving path, every
+derived field, the Escape teardown and all seven assertion bodies with their thresholds were read
+back, and the run re-measured the same numbers.
+
+Their fixture finding — that the list fixture omits row controls the renderer always builds, so its
+field area is roughly twice the real one — does not reach these checks. This section renders no
+fixture; it drives `openRecordDetailPanel` with `editCell` wired to the shipped `CellRenderer` and
+measures what that produces. It also asserts no width: every threshold here is vertical.
+
+This phase was not committed by its author. Another party committed it as `0ff9f9a fix(ui): centre
+the sheet's inline editor on the row it replaces`, with the harness section arriving earlier inside
+`173819e` and the captures in `3b22924`.
+
+`REPO RULES.md` was a four-line stub for the duration of the work and was restored afterwards in
+`308f0c0`. Its verification clause was then run in full against the committed result: `npx tsc
+--noEmit` exit 0, `npm run build` clean with `main.js` byte-identical, `npx vitest run` 444 passed,
+`npm run screenshots:verify` current.
