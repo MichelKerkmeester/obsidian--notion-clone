@@ -15,7 +15,7 @@ _memory:
     packet_pointer: "public/005-component-surface-system/001-overlay-placement-and-menu-language"
     last_updated_at: "2026-08-30T00:00:00Z"
     last_updated_by: "surface-factory-decision"
-    recent_action: "Decided the unwired surface factory (section 13): src/views/surface.ts deleted, src/views/surface-contract.ts kept. Added a module-reachability count to design-conformance, which read 3 with the factory and 2 without. Gate 13 green exit 0, vitest 434 passing, verify-placement 87/88 with its one declared red — all three equal to the pre-change baseline"
+    recent_action: "Deleted the unwired surface factory; kept the contract. See section 13"
     next_safe_action: "Run the overlay census by user-reachable trigger; no code edits until the census is complete"
     blockers:
       - "styles.css and the capture manifest are held by another lane; this phase must not edit either, and a comment in popover-position.ts naming the deleted factory is left for that lane to correct alongside a recapture"

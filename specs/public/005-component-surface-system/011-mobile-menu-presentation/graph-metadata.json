@@ -1,0 +1,227 @@
+{
+  "schema_version": 1,
+  "packet_id": "public/005-component-surface-system/011-mobile-menu-presentation",
+  "spec_folder": "public/005-component-surface-system/011-mobile-menu-presentation",
+  "parent_id": "public/005-component-surface-system",
+  "children_ids": [],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "mobile menu presentation",
+      "column menu sheet",
+      "owned menu phone",
+      "menu runs off screen",
+      "showAt point",
+      "011 mobile menu",
+      "011 mobile menu plan",
+      "phone menu sheet approach",
+      "shared menu row",
+      "011 mobile menu tasks",
+      "menu sheet evidence",
+      "011 goal"
+    ],
+    "key_topics": [
+      "mobile",
+      "menu",
+      "presentation",
+      "column",
+      "sheet",
+      "owned",
+      "phone",
+      "runs",
+      "screen",
+      "showat",
+      "point",
+      "plan"
+    ],
+    "importance_tier": "critical",
+    "status": "in_progress",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "acceptance-criteria.md",
+      "goal.md",
+      "implementation-summary.md",
+      "device-column-menu.png",
+      "reference-sheet-in-this-plugin.png",
+      "src/views/owned-menu.ts",
+      "src/views/menu-row.ts",
+      "tools/storybook/verify-placement.mjs",
+      "src/views/popover-position.ts"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "acceptance-criteria.md",
+        "kind": "doc",
+        "path": "acceptance-criteria.md",
+        "source": "derived"
+      },
+      {
+        "name": "goal.md",
+        "kind": "doc",
+        "path": "goal.md",
+        "source": "derived"
+      },
+      {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "device-column-menu.png",
+        "kind": "file",
+        "path": "device-column-menu.png",
+        "source": "derived"
+      },
+      {
+        "name": "reference-sheet-in-this-plugin.png",
+        "kind": "file",
+        "path": "reference-sheet-in-this-plugin.png",
+        "source": "derived"
+      },
+      {
+        "name": "owned-menu.ts",
+        "kind": "code",
+        "path": "src/views/owned-menu.ts",
+        "source": "derived"
+      },
+      {
+        "name": "menu-row.ts",
+        "kind": "code",
+        "path": "src/views/menu-row.ts",
+        "source": "derived"
+      },
+      {
+        "name": "verify-placement.mjs",
+        "kind": "file",
+        "path": "tools/storybook/verify-placement.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "popover-position.ts",
+        "kind": "code",
+        "path": "src/views/popover-position.ts",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Mobile Menu Presentation",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "a",
+        "kind": "key_phrase",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "other",
+        "kind": "key_phrase",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "1. THE REPORT",
+        "kind": "heading",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "2. THE STRUCTURAL CAUSE, to confirm before designing",
+        "kind": "heading",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Plan",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "one",
+        "kind": "key_phrase",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "exactly",
+        "kind": "key_phrase",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "it",
+        "kind": "key_phrase",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Breakdown",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "the",
+        "kind": "key_phrase",
+        "path": "tasks.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "Present the plugin's owned menus as bottom sheets on a phone instead of desktop dropdowns that run off both edges of the screen.",
+    "created_at": "2026-08-30T16:47:04.999Z",
+    "last_save_at": "2026-08-30T16:47:04.999Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "acceptance-criteria.md",
+      "goal.md",
+      "implementation-summary.md"
+    ],
+    "source_fingerprint": "sha256:098a673c57e7ef72a9ec424cf05bf3d0ddeef0cceb3868c6716d41d6f940e83e",
+    "source_fingerprint_docset": 3,
+    "source_doc_hashes": {
+      "spec.md": "33749996638c6b8127df3bc358c9746ea39ce56ce130c8aab88ed4e98dff2a3c",
+      "plan.md": "e7f660a8f746c8fbb23cbc0e9c5265b670989f78fad5b614be4bee99985683a7",
+      "tasks.md": "1d1aca3f985f3c84a045e3edec0f77098359d3f74fd66c18a5453126d2d5d9fc",
+      "implementation-summary.md": "cfb641d0dbf221f0f8b330e1fa918133dd68c899419dcf6c4deb3286a8316a18"
+    },
+    "last_active_child_id": null,
+    "last_active_at": null
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "level": "1",
+  "specFolder": "public/005-component-surface-system/014-desktop-select-checkbox",
+  "description": "Restore the select-column checkbox pin on desktop, lost when the shared checkbox component took ownership of appearance and the fallback guard",
+  "keywords": [
+    "restore",
+    "select-column",
+    "checkbox",
+    "pin",
+    "desktop",
+    "lost",
+    "shared",
+    "component",
+    "took",
+    "ownership",
+    "appearance",
+    "fallback",
+    "guard"
+  ],
+  "lastUpdated": "2026-08-30T16:50:17.665Z",
+  "specId": "014",
+  "folderSlug": "desktop-select-checkbox",
+  "parentChain": [
+    "public",
+    "005-component-surface-system"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": []
+}

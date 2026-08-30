@@ -37,10 +37,14 @@ _memory:
 ---
 # Feature Specification: Touch Row Range Selection
 
+<!-- SPECKIT_LEVEL: 1 -->
+<!-- SPECKIT_TEMPLATE_SOURCE: spec-core | v2.2 -->
+
 > Phase chain: parent [`../spec.md`](../spec.md). Related: `012-mobile-touch-semantics`, which
 > repaired the identical defect for *cell* selection and created the shared module this phase
 > extends. Until now the two halves of the same table disagreed.
 
+<!-- ANCHOR:problem -->
 ## 1. THE REPORT
 
 The operator: a tap on a row checkbox does not select that row. It selects everything between that
@@ -71,6 +75,7 @@ disagreement, because each rule was correct on its own terms in its own file.
 
 That is the argument for where the fix goes, not just what it is. The defect is not the predicate;
 the defect is that one decision had two homes.
+<!-- /ANCHOR:problem -->
 
 ## 3. THE FIX
 
@@ -123,6 +128,7 @@ swallowed the press before declining to open anything. Left alone, adding a seco
 checkbox would have produced two haptics for one hold. That screening moved to `ignoreTarget`, where
 the full table view already had it. The selector list is unchanged, so the menu's behaviour is not.
 
+<!-- ANCHOR:scope -->
 ## 4. SCOPE
 
 **In.** `src/views/table-cell-gesture.ts`, `src/views/database-view.ts`,
@@ -130,7 +136,9 @@ the full table view already had it. The selector list is unchanged, so the menu'
 
 **Out.** `styles.css` and the card renderers are held by another lane and were not edited. No CSS was
 needed: the gesture adds no painted affordance, which is the open question in §6.
+<!-- /ANCHOR:scope -->
 
+<!-- ANCHOR:success-criteria -->
 ## 5. VERIFICATION
 
 Twelve checks in `tools/storybook/verify-placement.mjs`, section 5f, six on each of two pages. They
@@ -144,7 +152,9 @@ predicate is true before trusting its own result, or it would be passing on a wi
 it is not testing.
 
 Numbers, thresholds and the six negative controls: [`acceptance-criteria.md`](acceptance-criteria.md).
+<!-- /ANCHOR:success-criteria -->
 
+<!-- ANCHOR:questions -->
 ## 6. OPEN QUESTION — the gesture cannot be discovered
 
 There is no affordance for it. Nothing on screen says a checkbox can be held, the checkbox looks
@@ -161,3 +171,4 @@ selection status bar renders as soon as one row is selected, which is exactly wh
 worth wanting, and it is on screen next to the checkboxes rather than in a settings page — feedback
 next to its trigger. A single line there, on touch, while the selection is one row, would carry it.
 That needs an i18n string and a style rule, so it belongs to the lane that holds the stylesheet.
+<!-- /ANCHOR:questions -->

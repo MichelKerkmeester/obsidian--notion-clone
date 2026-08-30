@@ -25,13 +25,24 @@ contextType: "planning"
 **Subject:** Note Database plugin, `specs/public/005-component-surface-system/`
 **Status:** Active
 **Horizon:** Open. The program closes on operator confirmation, not on a date.
-**Owner:** Operator, with four agents holding phase folders concurrently.
+**Owner:** Operator, with several agents holding phase folders concurrently — the four
+flagged live in §5 this morning, plus `027` and `028`, opened today to investigate the reports
+below.
 **Last updated:** 2026-08-30
 
 **Reconciliation note.** Sections 2, 5 and 6 were rewritten on 2026-08-30 against the working tree,
 `tools/lane/css-lane.json` and each phase's continuity block. The previous version listed nine
 phases, all Planned, and predated every phase cut from an operator report. Sixteen operator reports
 and eight phase folders were missing from it.
+
+**Second reconciliation note, later the same day.** Eight further operator reports arrived, and
+seven further phases (`020` through `026`) existed without a row in §5.1. Two more phases, `027`
+and `028`, were opened today to investigate the new reports. §4, §5, §5.1, §8 and the report
+count in §9 are what changed; §6, §6A, §7, §10 and §12 were not re-audited and may carry their
+own drift. `027` and `028` were being authored by other agents at the time of this pass, so
+their §5.1 state is UNKNOWN rather than assumed; `022`, `023`, `025` and `026` are Planned on
+their own explicit "Status" field, cross-checked against a git log and lane journal both
+silent on them.
 
 **What this file does not do.** It does not resolve disagreements between a phase's own documents.
 Where they disagree, §7 names both readings and leaves the decision to the operator.
@@ -59,7 +70,7 @@ Every row in §4 and §5 uses one of these. Collapsing them is how 1.3.1 happene
 | **Verified** | A check drives the production path, has a threshold, and has been observed red before it went green | That the operator can see the difference |
 | **Operator-confirmed** | The operator looked at the device and said so | — |
 
-**The program's closing condition is the third** (`spec.md` §7). Of the sixteen reports below,
+**The program's closing condition is the third** (`spec.md` §7). Of the twenty-four reports below,
 **one** has reached it, and it reached it as an accepted shortfall rather than a fix.
 
 **One further caveat that applies to every row.** All of today's work is uncommitted. `HEAD` is at
@@ -70,9 +81,9 @@ survives a `git checkout`.
 
 ## 4. OPERATOR REPORT TRACEABILITY
 
-Sixteen reports, each resolved to a named phase. A seventeenth — refactoring the list view to look
-like ClickUp — is its own packet at `specs/public/006-list-view-clickup/` and is not part of this
-program.
+Twenty-four reports, each resolved to a named phase. A seventeenth — refactoring the list view to
+look like ClickUp — is its own packet at `specs/public/006-list-view-clickup/`, is not part of
+this program, and does not occupy a row here; the table below runs 1-16 then 18-25 because of it.
 
 | # | The report, shortened | Phase | State | Evidence |
 |---|---|---|---|---|
@@ -92,11 +103,23 @@ program.
 | 14 | *"checkbox is being cut off on desktop"* | `014` | **Shipped + verified**, recapture owed | `014/acceptance-criteria.md` AC-1: narrowest left clearance **0px across 25 cells, all clipping → 18px across 25**. Negative control run **both ways** — re-guarding takes it to exit 1 at 78/80, restoring returns 79/80 exit 0. AC-2 guards the guard: 25/25 carry the shared component's class, so the fixture cannot go green by drifting |
 | 15 | *"fresh pass on dropdown placement in the desktop version"* | `015` | **5 of 6 fixed, the 6th measured and declared** | `015/spec.md`: desktop placement is **five independent paths**, and the defects cluster on the four that are not maintained. The unfixed one — the calendar/timeline search-results panel clamping to `window.innerWidth` and travelling **240-292px under an open right sidebar** — is duplicated verbatim in two files held by another session for the whole phase, so it is measured and declared rather than fixed. Probe 30/31, one declared red |
 | 16 | *"to the left of checkbox that little button doesnt have enough space"* | **`018-select-column-affordance-fit`, opened by this pass** | **Shipped under another phase's lane, unverified** | Lane entry 64: gap **−14px in a 49px cell on a phone, −17px on desktop** → **+4px in a 65px cell**, and no desktop button at all, which is what production builds. **Was an orphan** — see §6 |
+| 18 | *"List view still bugged and freezes"* | `028-remaining-freezes` | **A prior fix (`024`) shipped and verified; operator confirmation now answered, negatively** | `024/acceptance-criteria.md` AC-1: observed red before green on the render-time budget (`list-bench: FAIL — 7173.5ms exceeds the 2000ms budget` → `PASS — worst render 85.2ms`); re-derived once the budget was corrected to count blocked main thread rather than render alone: **8,646.0ms → 246.6ms, 35.1× less, at 1,600 rows**. AC-2 through AC-5 and AC-7 pass with their own controls. AC-6, operator confirmation, was already on record as **"NOT MET — the only criterion that matters and it is not mine to close."** This report is that criterion closing, negatively. `028` was opened today to find out why; not read for this pass — see row 19 |
+| 19 | *"Board view is also completely bugged and freezes"* | `028-remaining-freezes` | **New; phase opened today, not read** | Operator report, this pass. No board-view fix or investigation found in the git log or `tools/lane/css-lane.json` as of this evidence pass. `028`'s own files were not read — another agent is authoring them concurrently — so what, if anything, it has already found is UNKNOWN here |
+| 20 | *"Same for calendar and other non table views"* — **the table view works; every non-table view freezes** | `028-remaining-freezes` | **New; phase opened today, not read** | Operator report, this pass, and the sharpest fact in this batch: it draws the boundary at table-versus-everything-else rather than at any one view. Same evidence gap as row 19 |
+| 21 | *"Sort sheet bugs out if you press add sort it disappears and app freezes"* | `028-remaining-freezes` | **New; phase opened today, not read** | Operator report, this pass. Same evidence gap as row 19 |
+| 22 | *"Closing sort sheet also bugs things out"* | `028-remaining-freezes` | **New; phase opened today, not read** | Operator report, this pass. Same evidence gap as row 19 |
+| 23 | *"Same problem with filter sheet"* | `028-remaining-freezes` | **New; phase opened today, not read** | Operator report, this pass. Same evidence gap as row 19 |
+| 24 | *"Column setting sheet also bugged you cant click change type doesnt do anything"* | `027-sheet-menu-grammar-and-motion` | **New; phase opened today, not read** | Operator report, this pass. No matching fix found in the git log or the lane journal as of this evidence pass; `027`'s contents were not read — another agent is authoring them concurrently |
+| 25 | *"sheet buttons shouldnt be centered text… Aligned left. Dividers between. More like normal sheet buttons"*, plus *"view sheet doesnt work you cant drag it down and has bad layout"*, *"sheet shouldnt instantly appear but smoothly and fastly move in view from bottom like you see on ios"*, and *"sheets have horizontal overflow which shouldnt happen only vertical"* against a 90vh cap | `027-sheet-menu-grammar-and-motion` | **New; phase opened today, not read** | Five distinct asks bundled as one report, in the pattern of row 3. Operator report, this pass; same evidence gap as row 24 |
 
 ### What the table says as a whole
 
-**All sixteen reports now have a named phase**, and fifteen have shipped code. Report 13 is the
-sixteenth and is deliberately not a phase.
+**All twenty-four reports now have a named phase**, and fifteen of the original sixteen have
+shipped code — report 13 remains the exception, deliberately not a phase. None of the eight rows
+added today (18-25) have shipped code under the phase each now names, `027` or `028`, both opened
+today and still being investigated. Row 18 is the one worth naming apart from the rest: the phase
+it succeeds, `024`, did ship and rigorously verify a fix for the same symptom, and this report is
+that fix not holding on the operator's device.
 
 **Only report 10 is operator-confirmed,** and it is confirmed as a shortfall the operator agreed to
 live with. Everything else sits at shipped or verified. Under `spec.md` §7 that means **no report in
@@ -104,8 +127,8 @@ this program is closed**, and the count of green checks does not change that.
 
 **Three rows are not simply green.** Report 3's third ask is an open type-scale decision. Report 4
 works on a host that shrinks the visual viewport and is destroyed on a host that resizes the window —
-which of those the operator holds decides the row. Reports 7, 16, 18 and 19 shipped without a check
-of any kind until today.
+which of those the operator holds decides the row. Reports 7 and 16 — phases `019` and `018` —
+shipped without a check of any kind until today.
 
 **Report 1 deserves separate mention.** It was fixed three times and re-reported three times, and the
 reason has now been measured: the fixes were correct and bound to a node the panel's own render
@@ -113,23 +136,72 @@ destroys. Nothing in the harness could see it, because no check had ever moved a
 grab bar. The next re-report, if there is one, would be the fourth — which is why `016`'s operator
 list asks specifically to drag *after editing a field*, the case that was broken.
 
+**Row 18 deserves the same separate mention, for the opposite reason.** `024-list-view-freeze`
+measured its fix against the real renderer, not a fixture, and was observed red before green on
+the render-time budget (`FAIL — 7173.5ms exceeds the 2000ms budget` → `PASS — worst render
+85.2ms`); re-derived once the budget was corrected to count blocked main thread rather than
+render alone, the honest multiplier is **35.1×** (8,646.0ms → 246.6ms at 1,600 rows) — and it
+named the one criterion it could not close: `024/acceptance-criteria.md` AC-6, **"NOT MET — this
+is the only criterion that matters and it is not mine to close."** This report is that criterion
+closing, negatively. Whether the operator's build already carried 1.3.7 — the only release with
+both halves of the fix — is not established here, and neither is the operator's actual row count
+against the 400-1,600 range the benchmark covered; `024`'s own open questions name both gaps.
+**A pattern worth naming rather than concluding:** rows 19-23 report the same symptom — freeze,
+on interaction — on the board view, the calendar view, and both the sort and filter sheets, none
+of which shares `024`'s renderer. If those turn out to be one mechanism, it is not the one `024`
+fixed.
+
+**Rows 19 and 20 sharpen the boundary the operator drew.** The report places table views on one
+side and names board, calendar and "other non table views" on the other — the table works,
+nothing else does. That line, not any single view, is `028-remaining-freezes`'s clearest lead.
+
+**Rows 21-23 name a second cluster inside the same phase:** the sort sheet freezes on adding a
+condition and again on closing, and the filter sheet fails the same way. `028` carries all six
+rows; its own documents were not read for this pass, per this update's own scope — see §5.1.
+
+**Rows 24-25, filed against `027-sheet-menu-grammar-and-motion`,** are grammar and motion
+complaints rather than freezes: a column-setting sheet whose type control does not respond, and
+five separate asks about sheet button alignment, dividers, drag affordance, entry motion and
+horizontal overflow. `027`'s own documents were likewise not read for this pass.
+
 ---
 
 <!-- ANCHOR:now-next-later -->
 ## 5. PHASES: NOW / NEXT / LATER
 
-Status per phase, measured against the working tree rather than against the plan. Four phases are
+Status per phase, measured against the working tree rather than against the plan. Six phases are
 held by live agents and are marked ⚠ — their state is read-only here and may have moved since.
 
-**Now:** In Progress. Four concurrent lanes.
+**Now:** In Progress. Six phases held by other agents — four unaudited since this morning's
+snapshot, two opened today.
 
 - ⚠ `004-checkbox-ownership` — **state UNKNOWN, see §7.1.** Holds the `styles.css` lane.
 - ⚠ `005-content-row-rhythm` — shipped: list-row border-box, list meta ruled into columns, renderer-declared tracks. Continuity still reads "not started".
 - ⚠ `016-sheet-drag-and-audit` — 90%. **Root-caused report 1** and re-measured all eight sheet asks together on the shipped build: 19 of 22 checks pass, 3 declared. Exit signal: two operator decisions (the 13px row label, and whether the sheet should survive a window resize instead of closing).
 - ⚠ `017-touch-row-range-selection` — 95%. Predicate removed from both views, hold gesture added, 12 checks added, six negative controls run and restored by hash. Exit signal: a decision on whether the gesture gets an announcement in the selection status bar.
+- ⚠ `027-sheet-menu-grammar-and-motion` — opened today for rows 24-25 (a non-responsive
+  column-type control, and five sheet button/motion/overflow asks). Held by another agent at
+  the time of this pass; state UNKNOWN, not read.
+- ⚠ `028-remaining-freezes` — opened today for rows 18-23 (list, board, calendar and other
+  non-table views; the sort and filter sheets). Held by another agent at the time of this pass;
+  state UNKNOWN, not read.
 
 **Next:** Planned. The verification debt the shipping created.
 
+- `020-harness-fidelity-repair` — shipped and self-verified: the grab band's arithmetic
+  corrected (add-view 42px → 48px, owned-menu 38px → 44px, both over the 44px thumb floor), a
+  test shim that was more permissive than the device, an evidence-freshness check, and checks
+  that lived outside the harness re-asserted inside it. Exit signal: the operator installs a
+  build carrying it.
+- `021-sheet-inline-edit-alignment` — shipped for the sheet's number/currency inline editor
+  (7.6px → 1.0px off-centre, claimed). A fresh review found the same fix also reaches a fifth,
+  previously uncounted editor — the title's inline rename popover — which improves 9.0px →
+  2.4px and **is still wrong**, left open rather than quietly claimed. Exit signal: the title
+  editor's residual offset, closed or accepted.
+- `024-list-view-freeze` — shipped and rigorously verified against the real renderer (35.1×
+  less blocked main thread at 1,600 rows); its own AC-6 already read **NOT MET**, and row 18
+  today answers it — the freeze persists on the operator's device. Exit signal is no longer
+  "the operator installs and reports"; it is `028-remaining-freezes`.
 - `018-select-column-affordance-fit` — opened today. Code landed, nothing measured. Exit signal: the two after-numbers re-run and both negative controls observed red.
 - `019-card-field-value-formatting` — opened today. Code landed, no test exists for the formatters at all. Exit signal: tests written, parity check added and observed red, and the scope question in §7.4 answered.
 - `010`, `011`, `013` — shipped and self-verified, none operator-confirmed. Exit signal: the operator installs 1.3.3 and reports per surface.
@@ -146,6 +218,18 @@ held by live agents and are marked ⚠ — their state is read-only here and may
 - `006-record-open-target` — genuinely not started. Blocked on `003`, and its one open question (side panel, full-page modal, or both behind a setting) is an operator decision.
 - `008-integration-and-release-observability` — **Deliverable A shipped**: `tools/live/replay.mjs` exists and `npm run replay` re-asserts 8 results against recorded pre-fix numbers. The release decision stays last.
 - `007-architecture-research` — Complete. 10 iterations plus synthesis; not a phase.
+- `022-selection-bar-keyboard-docking` — Planned. Needs the bar measured against an open
+  keyboard before a docking mechanism is chosen; depends on the keyboard-inset mechanism `010`
+  built.
+- `023-record-note-body` — Planned, and **deliberately not startable**: the operator has not
+  yet picked display-only or editable, which the phase's own spec says decides its size by
+  roughly an order of magnitude.
+- `025-story-coverage-blindness` — Planned. Not a product defect: the gate lane named
+  `story-coverage` runs the DOM-shim checker instead of the real story checker, which exits 1
+  today unread.
+- `026-production-render-assertions` — Planned, evidence-gathering stage. Opened from `007`'s
+  harvest to generalize `024`'s real-renderer bench into a gate-wide assertion harness; its own
+  `next_safe_action` still names running the census commands its criteria depend on.
 <!-- /ANCHOR:now-next-later -->
 
 ### 5.1 Status table
@@ -172,6 +256,15 @@ held by live agents and are marked ⚠ — their state is read-only here and may
 | `017` ⚠ | absent | **95%** | 12 checks, six negative controls |
 | `018` | absent | **Opened today** | Code shipped under `004`'s lane hold; unverified |
 | `019` | absent | **Opened today** | Code shipped; no test exists |
+| `020` | absent | **Shipped + verified** | Grab-band arithmetic corrected (42→48px add-view, 38→44px owned-menu, both over the 44px floor); test shim, evidence-freshness and in-harness checks repaired alongside it. Lane journal acquire→edit→release 12:05-12:53; commits `9d4f569`, `780a736`, `0a38723`, `1e6397d`, `56ba94e` |
+| `021` | absent | **Shipped; 4 of 5 editors verified, 1 still off** | Lane journal, two full acquire→release cycles, 13:19-13:42, "Not committed" at release. Commit `0ff9f9a` centres the number/currency inline editor on its row (7.6px→1.0px claimed). A fresh review, commit `3d4d2f2`, found the fix also reaches a fifth, previously uncounted editor sharing the same popover class — the title's inline rename editor — which improves 9.0px→2.4px off-centre and is still wrong: "left open rather than quietly claimed" |
+| `022` | absent | **Planned** | Own `spec.md` declares itself Planned. Level-3 spec, plan, tasks and two reference images authored; no matching commit found; `next_safe_action` is to measure against an open keyboard before choosing a mechanism |
+| `023` | absent | **Planned, not startable** | Own `spec.md` declares itself Planned and "deliberately not startable" pending an operator choice between a display-only and an editable note body |
+| `024` | absent | **Shipped + verified; operator confirmation now answered, negatively** | `acceptance-criteria.md` AC-1 through AC-5 and AC-7 pass with real red-before-green controls on the actual renderer; AC-6 (operator confirmation) reads **NOT MET** in the phase's own words. Row 18 is that criterion closing |
+| `025` | absent | **Planned** | Own `spec.md` declares itself Planned. A harness-diagnostic phase — the gate's `story-coverage` lane runs the DOM-shim checker, not the story checker — not a product fix; no matching commit found |
+| `026` | absent | **Implemented; gate check landed, controls N1-N6 observed failing** | `tools/live/render-assertions.mjs` + harness; one `CHECKS` entry (`render-assertions`). Bundles the shipped renderers in headless Chrome and asserts structure: red at `173819e^` (1,600 layout reads in the row loop) and green at `845a27c` (2). Coverage 2 of 22 stamped at `tools/live/renderer-coverage.json`. No commit — the operator's working tree holds it |
+| `027` | absent | **UNKNOWN** | Folder absent from the working tree as of this pass; opened by another agent to investigate rows 24-25; not read per this update's own scope |
+| `028` | absent | **UNKNOWN** | Folder absent from the working tree as of this pass; opened by another agent to investigate rows 18-23; not read per this update's own scope |
 
 ---
 
@@ -302,8 +395,15 @@ matches — but the census number is quoted in three documents and only one of t
 **Declared:** `009 → 000 → 004 → 005 → 001 → 002 → 003 → 006 → 008`, with `007` off-path.
 
 **As run:** `000` (partial) → `004` → `005` → `002` → `001` → `003` → `010` → `003` → `013` → `014`
-→ `012` → `004`, read from the lane journal's acquire order, with `009` never gating a handoff and
-`006` never started.
+→ `012` → `004` → `005` → `020` → `021`, read from the lane journal's acquire order, with `009`
+never gating a handoff and `006` never started.
+
+**Not in this order at all:** `022`, `023`, `025` and `026` have never acquired the lane — no
+code yet, for any of them. `024` shipped a real, measured fix without ever acquiring it either:
+its edit is TypeScript only, in `src/views/list-renderer.ts`, and `styles.css` is untouched. A
+lane-journal reading of "as run" is therefore a partial order, not a full one — it says nothing
+about a phase whose work never touches the stylesheet. `027` and `028` postdate this reading
+entirely: neither had a folder on disk when this pass gathered its evidence.
 
 The declared order was an argument about circularity: `000` repairs the harness and would otherwise
 measure its own work through it, so `009` — the running app — had to come first. **That argument was
@@ -344,8 +444,8 @@ reason. Evidence: `016` §2 — `placeSheet` writes five camelCase declarations 
 `setCssProps` discards, and correcting the names would activate `overscroll-behavior: contain` for
 the first time on every sheet, which needs a recapture.
 
-**Sixteen operator confirmations:** phase Later, target: the operator installs 1.3.3 and reports per
-surface. Status: 1 of 16, and that one is an accepted shortfall. Evidence: §4.
+**Twenty-four operator confirmations:** phase Later, target: the operator installs 1.3.3 and
+reports per surface. Status: 1 of 24, and that one is an accepted shortfall. Evidence: §4.
 
 **Program closed:** phase Later. Status: Blocked on all of the above plus `008`'s release gate.
 Evidence: `spec.md` §7.

@@ -34,10 +34,14 @@ _memory:
 ---
 # Feature Specification: Sheet Reading Rhythm and Keyboard Avoidance
 
+<!-- SPECKIT_LEVEL: 1 -->
+<!-- SPECKIT_TEMPLATE_SOURCE: spec-core | v2.2 -->
+
 > Phase chain: parent [`../spec.md`](../spec.md), predecessor `003-mobile-sheet-presentation`, which
 > made the sheet reach the floor and clear the navigation bar. This phase is about what the sheet
 > looks like once it is there, and what happens when the keyboard opens.
 
+<!-- ANCHOR:problem -->
 ## 1. WHY THIS EXISTS
 
 Both problems were reported from a phone, with screenshots, after `003` landed. Neither is
@@ -80,7 +84,9 @@ the thing that reports it, and it is the only mechanism that observes the keyboa
 whether `visualViewport` resize or scroll events fire, whether Obsidian sets any safe-area or
 keyboard inset variable of its own, and whether the WebView is already resizing. A fix built on the
 wrong one of those is the shape of defect this program keeps producing.
+<!-- /ANCHOR:problem -->
 
+<!-- ANCHOR:scope -->
 ## 4. WHAT THIS PHASE MUST NOT DO
 
 - Must not regress `003`. The sheet still reaches the viewport floor and still covers the navigation
@@ -88,9 +94,12 @@ wrong one of those is the shape of defect this program keeps producing.
 - Must not change desktop. The anchored panel shares this markup and is not in scope.
 - Must not be verified by a fixture alone. No harness in this repo contains a software keyboard, so
   the keyboard half is honest only with a stated limit or an operator check.
+<!-- /ANCHOR:scope -->
 
+<!-- ANCHOR:success-criteria -->
 ## 5. ACCEPTANCE CRITERIA
 
 Written by the phase, not here. Each criterion needs a number with a threshold shown failing first,
 a check that drives the production path, and an image a person opened. See
 [`acceptance-criteria.md`](acceptance-criteria.md).
+<!-- /ANCHOR:success-criteria -->

@@ -1,0 +1,31 @@
+{
+  "level": "1",
+  "specFolder": "public/005-component-surface-system/015-desktop-dropdown-placement",
+  "description": "Measure where every desktop dropdown, popover and menu actually lands, against where it should land, and repair the two seams that explain five of the",
+  "keywords": [
+    "measure",
+    "every",
+    "desktop",
+    "dropdown",
+    "popover",
+    "menu",
+    "actually",
+    "lands",
+    "against",
+    "land",
+    "repair",
+    "two",
+    "seams",
+    "explain",
+    "five"
+  ],
+  "lastUpdated": "2026-08-30T16:50:17.703Z",
+  "specId": "015",
+  "folderSlug": "desktop-dropdown-placement",
+  "parentChain": [
+    "public",
+    "005-component-surface-system"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": []
+}

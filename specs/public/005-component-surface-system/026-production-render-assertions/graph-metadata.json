@@ -1,0 +1,232 @@
+{
+  "schema_version": 1,
+  "packet_id": "public/005-component-surface-system/026-production-render-assertions",
+  "spec_folder": "public/005-component-surface-system/026-production-render-assertions",
+  "parent_id": "public/005-component-surface-system",
+  "children_ids": [],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "production render assertions",
+      "renderer harness gate",
+      "026 production render",
+      "gate drives a production renderer",
+      "bench to assertion harness",
+      "026 plan",
+      "render assertion harness plan",
+      "026 tasks",
+      "render assertion tasks",
+      "026 acceptance criteria",
+      "production render assertion criteria",
+      "renderer coverage ratchet"
+    ],
+    "key_topics": [
+      "production",
+      "render",
+      "assertions",
+      "renderer",
+      "harness",
+      "gate",
+      "drives",
+      "bench",
+      "assertion",
+      "plan",
+      "tasks",
+      "acceptance"
+    ],
+    "importance_tier": "critical",
+    "status": "in_progress",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "acceptance-criteria.md",
+      "goal.md",
+      "implementation-summary.md",
+      "tools/bench/run-list.mjs",
+      "tools/gate.mjs",
+      "tools/live/render-assertions.mjs",
+      "tools/live/render-assertion-harness.ts",
+      "tools/live/renderer-coverage.json",
+      "tools/bench/list-render-bench.ts",
+      "src/views/database-view.ts",
+      "src/views/embedded-database-renderer.ts",
+      "tools/live/design-conformance.json",
+      "src/views/list-renderer.ts",
+      "src/views/table-renderer.ts"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "acceptance-criteria.md",
+        "kind": "doc",
+        "path": "acceptance-criteria.md",
+        "source": "derived"
+      },
+      {
+        "name": "goal.md",
+        "kind": "doc",
+        "path": "goal.md",
+        "source": "derived"
+      },
+      {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "run-list.mjs",
+        "kind": "file",
+        "path": "tools/bench/run-list.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "gate.mjs",
+        "kind": "file",
+        "path": "tools/gate.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "render-assertions.mjs",
+        "kind": "file",
+        "path": "tools/live/render-assertions.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "render-assertion-harness.ts",
+        "kind": "code",
+        "path": "tools/live/render-assertion-harness.ts",
+        "source": "derived"
+      },
+      {
+        "name": "renderer-coverage.json",
+        "kind": "config",
+        "path": "tools/live/renderer-coverage.json",
+        "source": "derived"
+      },
+      {
+        "name": "list-render-bench.ts",
+        "kind": "code",
+        "path": "tools/bench/list-render-bench.ts",
+        "source": "derived"
+      },
+      {
+        "name": "database-view.ts",
+        "kind": "code",
+        "path": "src/views/database-view.ts",
+        "source": "derived"
+      },
+      {
+        "name": "embedded-database-renderer.ts",
+        "kind": "code",
+        "path": "src/views/embedded-database-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "design-conformance.json",
+        "kind": "config",
+        "path": "tools/live/design-conformance.json",
+        "source": "derived"
+      },
+      {
+        "name": "list-renderer.ts",
+        "kind": "code",
+        "path": "src/views/list-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "table-renderer.ts",
+        "kind": "code",
+        "path": "src/views/table-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Production Render Assertions",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Obsidian App",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Headless Chrome",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "the",
+        "kind": "key_phrase",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "the Obsidian",
+        "kind": "key_phrase",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Plan",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "Fourteen gate checks and none of them constructs a renderer the plugin ships, so a quadratic freeze reached a user through every one. This phase turns the existing production-renderer bench mechanism into a gated assertion harness covering both hosts' action bags.",
+    "created_at": "2026-08-30T16:49:40.898Z",
+    "last_save_at": "2026-08-30T17:06:10.420Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "acceptance-criteria.md",
+      "goal.md",
+      "implementation-summary.md"
+    ],
+    "source_fingerprint": "sha256:248b7a57bafa1d4a7cd59514a7d9252a2bcf845e224d7e178e27729d0e1a7ab4",
+    "source_fingerprint_docset": 3,
+    "source_doc_hashes": {
+      "spec.md": "933f69e554836dc9b201e5261e185e84bc5e02077c9bd54650996c3d36be39d9",
+      "plan.md": "ff2e2cfd09c5ea8dada800b64cd5c91648e561b5a27a4b90e0f62877a2823d27",
+      "tasks.md": "7c78348d6a4441c340d1c13472cab235bb0e76df4084811f3272e5a52126a3e9",
+      "implementation-summary.md": "de228a3bcd19e49fa05e3383397754c28372e0658524257553a877fe13fcc53a"
+    },
+    "last_active_child_id": null,
+    "last_active_at": null
+  }
+}

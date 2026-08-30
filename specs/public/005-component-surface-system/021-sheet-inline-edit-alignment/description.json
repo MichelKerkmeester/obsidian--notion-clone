@@ -1,0 +1,26 @@
+{
+  "specFolder": "public/005-component-surface-system/021-sheet-inline-edit-alignment",
+  "description": "Tapping a value in the phone record sheet opens an editor 6.6px below the line the value sat on, and",
+  "keywords": [
+    "tapping",
+    "value",
+    "phone",
+    "record",
+    "sheet",
+    "opens",
+    "editor",
+    "6px",
+    "line",
+    "sat"
+  ],
+  "lastUpdated": "2026-08-30T15:20:50.217Z",
+  "specId": "021",
+  "folderSlug": "sheet-inline-edit-alignment",
+  "parentChain": [
+    "public",
+    "005-component-surface-system"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": [],
+  "level": "3"
+}

@@ -1,0 +1,204 @@
+{
+  "schema_version": 1,
+  "packet_id": "public/005-component-surface-system/025-story-coverage-blindness",
+  "spec_folder": "public/005-component-surface-system/025-story-coverage-blindness",
+  "parent_id": "public/005-component-surface-system",
+  "children_ids": [],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "story coverage blindness",
+      "story-coverage lane",
+      "storybook:coverage versus story:coverage",
+      "coverage matcher create render",
+      "025 story coverage",
+      "025 story coverage plan",
+      "gate lane rename",
+      "coverage matcher widening",
+      "025 story coverage tasks"
+    ],
+    "key_topics": [
+      "story",
+      "coverage",
+      "blindness",
+      "story-coverage",
+      "lane",
+      "storybook",
+      "versus",
+      "matcher",
+      "render",
+      "plan",
+      "gate",
+      "rename"
+    ],
+    "importance_tier": "critical",
+    "status": "planned",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "tools/gate.mjs",
+      "tools/storybook/verify-coverage.mjs",
+      "tools/storybook/story-coverage.mjs",
+      "src/views/checkbox.ts",
+      "tools/storybook/story-coverage-allowlist.json"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "gate.mjs",
+        "kind": "file",
+        "path": "tools/gate.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "verify-coverage.mjs",
+        "kind": "file",
+        "path": "tools/storybook/verify-coverage.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "story-coverage.mjs",
+        "kind": "file",
+        "path": "tools/storybook/story-coverage.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "checkbox.ts",
+        "kind": "code",
+        "path": "src/views/checkbox.ts",
+        "source": "derived"
+      },
+      {
+        "name": "story-coverage-allowlist.json",
+        "kind": "config",
+        "path": "tools/storybook/story-coverage-allowlist.json",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "The Story Coverage Gate Runs",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Different Script",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Spec Folder",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Parent Spec",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Problem Statement",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Plan",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Test Type",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Keep Phase",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Dependency Matrix",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Breakdown",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Discharge Each",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "a",
+        "kind": "key_phrase",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "every",
+        "kind": "key_phrase",
+        "path": "tasks.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "A gate lane's name is the only thing most readers ever check",
+    "created_at": "2026-08-30T15:00:28.772Z",
+    "last_save_at": "2026-08-30T15:22:51.934Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md"
+    ],
+    "source_fingerprint": "sha256:3f7a9dda90012ce27d28f70cf0b39f35084302a15f0aee0486b68a14f66c96ca",
+    "source_fingerprint_docset": 3,
+    "source_doc_hashes": {
+      "spec.md": "5e93cd48764cb06df67a3cc0decabf9dec359142a3437551b604583531db3d25",
+      "plan.md": "0c8658cd69033439ed1084720d77659118c2cecfc47d1a190e7b0be8237bac6c",
+      "tasks.md": "20c6826b7d00b7f1bb11ff38c46a03cffde7eba01c4bb6a9b66dd5b46cb48a64"
+    },
+    "last_active_child_id": null,
+    "last_active_at": null
+  }
+}

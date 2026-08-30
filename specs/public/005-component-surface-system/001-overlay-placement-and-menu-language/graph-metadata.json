@@ -20,8 +20,9 @@
       "001 overlay placement plan",
       "overlay placement approach",
       "001 overlay placement tasks",
-      "001 overlay placement checklist",
-      "placement verification"
+      "acceptance criteria",
+      "closure gate",
+      "ac traceability"
     ],
     "key_topics": [
       "overlay",
@@ -43,7 +44,11 @@
       "spec.md",
       "plan.md",
       "tasks.md",
-      "checklist.md"
+      "acceptance-criteria.md",
+      "goal.md",
+      "checklist.md",
+      "tools/storybook/verify-placement.mjs",
+      "src/views/surface-contract.ts"
     ],
     "entities": [
       {
@@ -65,9 +70,33 @@
         "source": "derived"
       },
       {
+        "name": "acceptance-criteria.md",
+        "kind": "doc",
+        "path": "acceptance-criteria.md",
+        "source": "derived"
+      },
+      {
+        "name": "goal.md",
+        "kind": "doc",
+        "path": "goal.md",
+        "source": "derived"
+      },
+      {
         "name": "checklist.md",
         "kind": "doc",
         "path": "checklist.md",
+        "source": "derived"
+      },
+      {
+        "name": "verify-placement.mjs",
+        "kind": "file",
+        "path": "tools/storybook/verify-placement.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "surface-contract.ts",
+        "kind": "code",
+        "path": "src/views/surface-contract.ts",
         "source": "derived"
       },
       {
@@ -149,47 +178,42 @@
         "source": "derived"
       },
       {
-        "name": "Verification Checklist",
+        "name": "Acceptance Criteria",
         "kind": "proper_noun",
-        "path": "checklist.md",
+        "path": "acceptance-criteria.md",
         "source": "derived"
       },
       {
-        "name": "Verification Protocol",
+        "name": "Open Filter",
         "kind": "proper_noun",
-        "path": "checklist.md",
+        "path": "acceptance-criteria.md",
         "source": "derived"
       },
       {
-        "name": "Completion Impact",
+        "name": "Removing Filter",
         "kind": "proper_noun",
-        "path": "checklist.md",
-        "source": "derived"
-      },
-      {
-        "name": "Acceptance Criteria Each",
-        "kind": "proper_noun",
-        "path": "checklist.md",
+        "path": "acceptance-criteria.md",
         "source": "derived"
       }
     ],
     "causal_summary": "Placement has no authority and menus have no shared grammar",
     "created_at": "2026-08-29T12:35:11.814Z",
-    "last_save_at": "2026-08-29T12:35:11.814Z",
+    "last_save_at": "2026-08-30T16:54:05.488Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
       "spec.md",
       "plan.md",
       "tasks.md",
-      "checklist.md"
+      "acceptance-criteria.md",
+      "goal.md"
     ],
-    "source_fingerprint": "sha256:a8a9dc9f61f5ce8c17b90b63fe2acbbd4df1f5b52939f3c9a0477c3a43598b55",
+    "source_fingerprint": "sha256:bc3142b1cde564d64d0a2df8d4620403805ab50e73fd3d3b0fb92a0e3e612043",
+    "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "2389a6ee99e49d450a001f89ccfc865074666a244e7f4431dfa8f3ea56a8f7cd",
+      "spec.md": "0437c7bfab60efd5d9654ebc780f11feb108df153de3c504ede82015a46211f4",
       "plan.md": "b98a78e625093aa2a211eddf0ead78cd9b04c902e8ddf6f5b19848c43269d6de",
-      "tasks.md": "0ce46b748f354659d4aac99863218e1cbf676698b749ff66533c8c670e029394",
-      "checklist.md": "eff684745b6d19989e55ccffd375487145d2d925ad1fac8781d957d4c5d33a0b"
+      "tasks.md": "0ce46b748f354659d4aac99863218e1cbf676698b749ff66533c8c670e029394"
     },
     "last_active_child_id": null,
     "last_active_at": null

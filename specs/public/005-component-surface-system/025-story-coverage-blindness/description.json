@@ -1,0 +1,24 @@
+{
+  "level": "3",
+  "specFolder": "public/005-component-surface-system/025-story-coverage-blindness",
+  "description": "A gate lane's name is the only thing most readers ever check",
+  "keywords": [
+    "gate",
+    "lane",
+    "name",
+    "only",
+    "thing",
+    "readers",
+    "ever",
+    "check"
+  ],
+  "lastUpdated": "2026-08-30T15:21:50.683Z",
+  "specId": "025",
+  "folderSlug": "story-coverage-blindness",
+  "parentChain": [
+    "public",
+    "005-component-surface-system"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": []
+}

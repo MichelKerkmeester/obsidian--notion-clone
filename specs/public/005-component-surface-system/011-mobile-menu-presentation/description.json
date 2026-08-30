@@ -1,0 +1,29 @@
+{
+  "specFolder": "public/005-component-surface-system/011-mobile-menu-presentation",
+  "description": "Present the plugin's owned menus as bottom sheets on a phone instead of desktop dropdowns that run off both edges of the screen.",
+  "keywords": [
+    "present",
+    "plugin",
+    "owned",
+    "menus",
+    "bottom",
+    "sheets",
+    "phone",
+    "instead",
+    "desktop",
+    "dropdowns",
+    "run",
+    "edges",
+    "screen"
+  ],
+  "lastUpdated": "2026-08-30T16:45:48.487Z",
+  "specId": "011",
+  "folderSlug": "mobile-menu-presentation",
+  "parentChain": [
+    "public",
+    "005-component-surface-system"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": [],
+  "level": "1"
+}

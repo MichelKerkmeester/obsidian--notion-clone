@@ -1,0 +1,31 @@
+{
+  "specFolder": "public/005-component-surface-system/023-record-note-body",
+  "description": "Every row is a markdown note whose frontmatter the plugin renders as properties, while the note's actual body is never surfaced anywhere in the",
+  "keywords": [
+    "every",
+    "row",
+    "markdown",
+    "note",
+    "whose",
+    "frontmatter",
+    "plugin",
+    "renders",
+    "properties",
+    "while",
+    "actual",
+    "body",
+    "never",
+    "surfaced",
+    "anywhere"
+  ],
+  "lastUpdated": "2026-08-30T15:07:22.864Z",
+  "specId": "023",
+  "folderSlug": "record-note-body",
+  "parentChain": [
+    "public",
+    "005-component-surface-system"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": [],
+  "level": "3"
+}

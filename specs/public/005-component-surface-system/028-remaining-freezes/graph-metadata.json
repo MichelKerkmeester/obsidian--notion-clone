@@ -1,0 +1,233 @@
+{
+  "schema_version": 1,
+  "packet_id": "public/005-component-surface-system/028-remaining-freezes",
+  "spec_folder": "public/005-component-surface-system/028-remaining-freezes",
+  "parent_id": "public/005-component-surface-system",
+  "children_ids": [],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "board view freezes",
+      "sort sheet freezes obsidian",
+      "filter sheet freeze",
+      "non table views freeze",
+      "full view refresh on sheet close",
+      "028 remaining freezes",
+      "remaining freezes plan",
+      "028 plan",
+      "remaining freezes tasks",
+      "028 tasks",
+      "remaining freezes acceptance criteria",
+      "board renderer forced layout threshold"
+    ],
+    "key_topics": [
+      "board",
+      "view",
+      "freezes",
+      "sort",
+      "sheet",
+      "obsidian",
+      "filter",
+      "freeze",
+      "non",
+      "table",
+      "views",
+      "full"
+    ],
+    "importance_tier": "high",
+    "status": "planned",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "acceptance-criteria.md",
+      "goal.md",
+      "implementation-summary.md",
+      "src/views/board-renderer.ts",
+      "src/views/gallery-renderer.ts",
+      "tools/bench/board-render-bench.ts",
+      "tools/bench/gallery-render-bench.ts",
+      "tools/bench/card-bench-driver.mjs",
+      "tools/bench/run-board.mjs",
+      "tools/bench/run-gallery.mjs",
+      "tools/live/design-conformance.json",
+      "tools/live/design-conformance.mjs",
+      "screenshots/manifest.json",
+      "tools/bench/panel-refresh-bench.ts",
+      "tools/bench/run-panel-refresh.mjs"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "acceptance-criteria.md",
+        "kind": "doc",
+        "path": "acceptance-criteria.md",
+        "source": "derived"
+      },
+      {
+        "name": "goal.md",
+        "kind": "doc",
+        "path": "goal.md",
+        "source": "derived"
+      },
+      {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "board-renderer.ts",
+        "kind": "code",
+        "path": "src/views/board-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "gallery-renderer.ts",
+        "kind": "code",
+        "path": "src/views/gallery-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "board-render-bench.ts",
+        "kind": "code",
+        "path": "tools/bench/board-render-bench.ts",
+        "source": "derived"
+      },
+      {
+        "name": "gallery-render-bench.ts",
+        "kind": "code",
+        "path": "tools/bench/gallery-render-bench.ts",
+        "source": "derived"
+      },
+      {
+        "name": "card-bench-driver.mjs",
+        "kind": "file",
+        "path": "tools/bench/card-bench-driver.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "run-board.mjs",
+        "kind": "file",
+        "path": "tools/bench/run-board.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "run-gallery.mjs",
+        "kind": "file",
+        "path": "tools/bench/run-gallery.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "design-conformance.json",
+        "kind": "config",
+        "path": "tools/live/design-conformance.json",
+        "source": "derived"
+      },
+      {
+        "name": "design-conformance.mjs",
+        "kind": "file",
+        "path": "tools/live/design-conformance.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "manifest.json",
+        "kind": "config",
+        "path": "screenshots/manifest.json",
+        "source": "derived"
+      },
+      {
+        "name": "panel-refresh-bench.ts",
+        "kind": "code",
+        "path": "tools/bench/panel-refresh-bench.ts",
+        "source": "derived"
+      },
+      {
+        "name": "run-panel-refresh.mjs",
+        "kind": "file",
+        "path": "tools/bench/run-panel-refresh.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Remaining Freezes",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "filter",
+        "kind": "key_phrase",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "a",
+        "kind": "key_phrase",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "no",
+        "kind": "key_phrase",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "evidence",
+        "kind": "key_phrase",
+        "path": "spec.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "Six freeze reports across five surfaces resolve to one shared trigger and one unbounded render; the previous fix closed one of three instances of the same forced-layout defect, and the card-pipeline hypothesis is refuted by measurement.",
+    "created_at": "2026-08-30T16:59:04.977Z",
+    "last_save_at": "2026-08-30T16:59:39.841Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "acceptance-criteria.md",
+      "goal.md",
+      "implementation-summary.md"
+    ],
+    "source_fingerprint": "sha256:adeaf59ff22a19e7d0af61c60018c8cb6f78cddcd157fe50503bc442eb66c94e",
+    "source_fingerprint_docset": 3,
+    "source_doc_hashes": {
+      "spec.md": "1ece62668cdf5e25c3694b811152e8898fb03018cbdc128ed26cf4bc30e94686",
+      "plan.md": "5b1d5be648fc56130d7fb428929e657c58438cb24fb36ab2f0449e7441a8301d",
+      "tasks.md": "f74f1714d5688d45a80898fc079066f93eabc3cda1e1017a709bc6c1ba8a33b5",
+      "implementation-summary.md": "e2c3507de21f2e5c894920ef193f33f7f5a4e188f782d387796ef8c6c18fcc1c"
+    },
+    "last_active_child_id": null,
+    "last_active_at": null
+  }
+}

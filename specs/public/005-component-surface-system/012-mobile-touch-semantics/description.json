@@ -1,0 +1,29 @@
+{
+  "specFolder": "public/005-component-surface-system/012-mobile-touch-semantics",
+  "description": "Give a touch in the table the meaning a touch has, rather than replaying the desktop pointer grammar: a tap edits the cell it lands on, a tap on the",
+  "keywords": [
+    "give",
+    "touch",
+    "table",
+    "meaning",
+    "rather",
+    "replaying",
+    "desktop",
+    "pointer",
+    "grammar",
+    "tap",
+    "edits",
+    "cell",
+    "lands"
+  ],
+  "lastUpdated": "2026-08-30T16:45:48.487Z",
+  "specId": "012",
+  "folderSlug": "mobile-touch-semantics",
+  "parentChain": [
+    "public",
+    "005-component-surface-system"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": [],
+  "level": "1"
+}

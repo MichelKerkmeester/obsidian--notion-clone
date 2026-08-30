@@ -19,7 +19,10 @@
       "006 record open",
       "006 record open target plan",
       "006 record open target tasks",
-      "006 record open target checklist"
+      "acceptance criteria",
+      "closure gate",
+      "ac traceability",
+      "006 record open criteria"
     ],
     "key_topics": [
       "record",
@@ -41,7 +44,15 @@
       "spec.md",
       "plan.md",
       "tasks.md",
-      "checklist.md"
+      "acceptance-criteria.md",
+      "goal.md",
+      "checklist.md",
+      "src/views/table-record-peek.ts",
+      "src/data/types.ts",
+      "src/settings.ts",
+      "src/data/data-source.ts",
+      "src/views/database-view.ts",
+      "tools/storybook/verify-placement.mjs"
     ],
     "entities": [
       {
@@ -63,9 +74,57 @@
         "source": "derived"
       },
       {
+        "name": "acceptance-criteria.md",
+        "kind": "doc",
+        "path": "acceptance-criteria.md",
+        "source": "derived"
+      },
+      {
+        "name": "goal.md",
+        "kind": "doc",
+        "path": "goal.md",
+        "source": "derived"
+      },
+      {
         "name": "checklist.md",
         "kind": "doc",
         "path": "checklist.md",
+        "source": "derived"
+      },
+      {
+        "name": "table-record-peek.ts",
+        "kind": "code",
+        "path": "src/views/table-record-peek.ts",
+        "source": "derived"
+      },
+      {
+        "name": "types.ts",
+        "kind": "code",
+        "path": "src/data/types.ts",
+        "source": "derived"
+      },
+      {
+        "name": "settings.ts",
+        "kind": "code",
+        "path": "src/settings.ts",
+        "source": "derived"
+      },
+      {
+        "name": "data-source.ts",
+        "kind": "code",
+        "path": "src/data/data-source.ts",
+        "source": "derived"
+      },
+      {
+        "name": "database-view.ts",
+        "kind": "code",
+        "path": "src/views/database-view.ts",
+        "source": "derived"
+      },
+      {
+        "name": "verify-placement.mjs",
+        "kind": "file",
+        "path": "tools/storybook/verify-placement.mjs",
         "source": "derived"
       },
       {
@@ -139,73 +198,26 @@
         "kind": "proper_noun",
         "path": "tasks.md",
         "source": "derived"
-      },
-      {
-        "name": "evidence",
-        "kind": "key_phrase",
-        "path": "tasks.md",
-        "source": "derived"
-      },
-      {
-        "name": "no",
-        "kind": "key_phrase",
-        "path": "tasks.md",
-        "source": "derived"
-      },
-      {
-        "name": "observations",
-        "kind": "key_phrase",
-        "path": "tasks.md",
-        "source": "derived"
-      },
-      {
-        "name": "the",
-        "kind": "key_phrase",
-        "path": "tasks.md",
-        "source": "derived"
-      },
-      {
-        "name": "Verification Checklist",
-        "kind": "proper_noun",
-        "path": "checklist.md",
-        "source": "derived"
-      },
-      {
-        "name": "Criteria Each",
-        "kind": "proper_noun",
-        "path": "checklist.md",
-        "source": "derived"
-      },
-      {
-        "name": "Negative Controls",
-        "kind": "proper_noun",
-        "path": "checklist.md",
-        "source": "derived"
-      },
-      {
-        "name": "The Stage",
-        "kind": "proper_noun",
-        "path": "checklist.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "On desktop, clicking Open in the table shows a small card listing properties",
     "created_at": "2026-08-29T12:52:42.102Z",
-    "last_save_at": "2026-08-29T12:57:25.472Z",
+    "last_save_at": "2026-08-30T16:54:06.943Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
       "spec.md",
       "plan.md",
       "tasks.md",
-      "checklist.md"
+      "acceptance-criteria.md",
+      "goal.md"
     ],
-    "source_fingerprint": "sha256:cefac71c8e88bb1516bb9ce1c3d3523b317181c06a70ee4bcc60faa6e9fa5185",
+    "source_fingerprint": "sha256:497297f24b2b2a3bf6bd9b9d29b3f5d7c990c57c25d65a551a7f6c58d96cfcc3",
+    "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "6b4f340928d9f3dade42ba4bc2d57164bb1e6aa5c41a451af15c0677033c2e1e",
       "plan.md": "f8632745f580cd1359b7b6c3b70117ffaa16d2b828572c19f14ba237c287ba13",
-      "tasks.md": "4207d3b5d3cb9eb211997f31594f23ab4fe71405b2ba8f0792ac5cd226034d06",
-      "checklist.md": "1079807d2fe53bcdd3356156387a4eafeeac8ec7a2b4360e348b148316724181"
+      "tasks.md": "4207d3b5d3cb9eb211997f31594f23ab4fe71405b2ba8f0792ac5cd226034d06"
     },
     "last_active_child_id": null,
     "last_active_at": null

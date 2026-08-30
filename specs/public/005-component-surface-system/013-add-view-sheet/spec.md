@@ -30,9 +30,13 @@ _memory:
 ---
 # Feature Specification: Add View Surface Redesign
 
+<!-- SPECKIT_LEVEL: 1 -->
+<!-- SPECKIT_TEMPLATE_SOURCE: spec-core | v2.2 -->
+
 > Phase chain: parent [`../spec.md`](../spec.md). Depends on `011-mobile-menu-presentation` for
 > sheet presentation on a phone, and shares the row grammar that phase unified.
 
+<!-- ANCHOR:problem -->
 ## 1. THE REPORT
 
 The operator: *"Add view sheet is real bad for example, def needs fresh design agent review and
@@ -71,7 +75,9 @@ a phone presentation that matches every other sheet.
 The stylesheet's own scales outrank the skill's defaults where they exist: `--db-space-*`,
 `--db-font-*`, the three-step elevation at `styles.css:69-71`, and the sheet fill token every sheet
 now shares.
+<!-- /ANCHOR:problem -->
 
+<!-- ANCHOR:scope -->
 ## 4. CONSTRAINTS
 
 - **Desktop is in scope too** — the same surface is a popover there and has the same idiom problem.
@@ -80,9 +86,12 @@ now shares.
 - The row grammar is now keyed to the row rather than to the owned menu's shell. Reuse it; do not
   author a seventh idiom.
 - Comment hygiene: no spec paths, phase numbers or task ids in code comments.
+<!-- /ANCHOR:scope -->
 
+<!-- ANCHOR:success-criteria -->
 ## 5. ACCEPTANCE CRITERIA
 
 Written by the phase. Each needs a number with a threshold shown failing first, a check that drives
 the production path, and an image a person opened.
 See [`acceptance-criteria.md`](acceptance-criteria.md).
+<!-- /ANCHOR:success-criteria -->

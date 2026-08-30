@@ -1,4 +1,5 @@
 {
+  "level": "3",
   "specFolder": "public/005-component-surface-system/008-integration-and-release-observability",
   "description": "Release 1.3.1 passed every gate and changed nothing",
   "keywords": [
@@ -9,7 +10,7 @@
     "changed",
     "nothing"
   ],
-  "lastUpdated": "2026-08-29T16:11:37.515Z",
+  "lastUpdated": "2026-08-29T16:11:37.403Z",
   "specId": "008",
   "folderSlug": "integration-and-release-observability",
   "parentChain": [
@@ -17,6 +18,5 @@
     "005-component-surface-system"
   ],
   "memorySequence": 0,
-  "memoryNameHistory": [],
-  "level": "3"
+  "memoryNameHistory": []
 }

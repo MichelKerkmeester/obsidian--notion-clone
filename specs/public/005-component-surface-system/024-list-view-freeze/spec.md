@@ -12,12 +12,12 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "public/005-component-surface-system/024-list-view-freeze"
-    last_updated_at: "2026-08-30T17:05:00Z"
-    last_updated_by: "review-remediation"
-    recent_action: "Two defects the fix introduced or left are closed: the reservation is surface-conditional, and the budget asserts blocked main thread rather than render alone"
-    next_safe_action: "Operator confirms on device that the list view opens, and decides whether the desktop reservation is worth keeping now that it measures as redundant"
+    last_updated_at: "2026-08-30T18:45:00Z"
+    last_updated_by: "docs-remediation"
+    recent_action: "Reservation now surface-conditional; budget asserts blocked main thread, not render alone"
+    next_safe_action: "Operator confirms on device that the list view opens"
     blockers:
-      - "The stylesheet lane is held by 021-sheet-inline-edit-alignment and its uncommitted edit leaves css-lane red; this phase took no CSS and needs none"
+      - "css-lane held by 021-sheet-inline-edit-alignment; this phase needs no CSS"
     key_files:
       - "spec.md"
       - "acceptance-criteria.md"
@@ -31,14 +31,11 @@ _memory:
       parent_session_id: null
     completion_pct: 95
     open_questions:
-      - "How many rows does the operator's database actually hold — the freeze threshold sits between 400 and 1600 and the exact count was never captured"
-      - "Is the desktop reservation worth keeping at all? With it forced off, both desktop alignment checks stay green: the track template and the explicit grid-column carry the alignment, and the reservation carries nothing measurable"
+      - "Operator's actual row count — freeze threshold sits between 400 and 1600, never captured"
+      - "Is the desktop reservation worth keeping? Measures redundant when forced off — see spec.md §8"
     answered_questions:
-      - "Was c31acf5 the cause? No. The same 1,600-row list took 6,777ms on the commit before it. c31acf5 added 6% on the desktop and 28% on the phone"
-      - "Is it volume or cost-per-field? Neither. Both are linear multipliers; the freeze is a forced layout inside the row loop"
-      - "Is touchMode the right predicate for whether to reserve a column? No, and neither is the phone class. touchMode answers whether the surface takes touch input. The phone class looked right and was measured wrong: the same phone in landscape fits two properties per line and needs its reservations back. The predicate is the property itself — can two properties share a line — read off the field area's computed display and measured width"
-      - "Does that predicate reintroduce a layout read? One per render, taken on the first row after it is built, because an empty field area measures 37.9px at every screen width. It is O(1) in the row count; the 1,600-row phone render moved 71.5ms to 68.6ms"
-      - "How big is the fix really? 33.7x on the blocked main thread, not the 84.9x reported. The 84.9x compared render to render, and the repair works by moving cost from render into layout"
+      - "Was c31acf5 the cause? No — exonerated by measurement; see spec.md §2"
+      - "Correct predicate for reserving a column? Element width, not touchMode/phone-class; see spec.md §7"
 ---
 # Feature Specification: List View Freeze
 
@@ -189,8 +186,14 @@ and the column alignment `c31acf5` bought survives.
 <!-- ANCHOR:success-criteria -->
 ## 5. SUCCESS CRITERIA
 
-- **SC-001**: The 1,600-row desktop render falls from 7,174ms to under 200ms, and the phone render
-  from 821ms to under 200ms.
+- **SC-001**: Opening a list view stays inside the 2,000ms budget on the **blocked main thread** —
+  render plus forced layout — at the reported shape. Measured 8,646.0ms before and 246.6ms after on
+  desktop, 1,027.7ms before and 189.2ms after on the phone. This criterion previously read "render
+  falls from 7,174ms to under 200ms", which is the wrong half **for this repair specifically**: the
+  fix works by moving a forced layout out of the row loop, so it moves cost from the term that was
+  under budget into the term that was not, and the excluded term is consistently the larger of the
+  two. Stated on render alone the criterion credits the fix with work it relocated, and its 200ms
+  threshold is one a correct implementation fails at 246.6ms. AC-8 is where that was caught.
 - **SC-002**: Per-row cost reports LINEAR at every measured shape, replacing SUPERLINEAR.
 - **SC-003**: The alignment check passes on the renderer's output, and was observed failing on the
   renderer that skipped empty properties.

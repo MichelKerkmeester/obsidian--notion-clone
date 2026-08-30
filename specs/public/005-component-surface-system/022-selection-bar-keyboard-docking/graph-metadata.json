@@ -1,0 +1,195 @@
+{
+  "schema_version": 1,
+  "packet_id": "public/005-component-surface-system/022-selection-bar-keyboard-docking",
+  "spec_folder": "public/005-component-surface-system/022-selection-bar-keyboard-docking",
+  "parent_id": "public/005-component-surface-system",
+  "children_ids": [],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "selection bar floating",
+      "selection status bar keyboard",
+      "copy tsv bar mobile",
+      "accessory bar above keyboard",
+      "022 selection bar",
+      "022 selection bar plan",
+      "keyboard docking approach",
+      "selection bar fit",
+      "022 selection bar tasks"
+    ],
+    "key_topics": [
+      "selection",
+      "bar",
+      "floating",
+      "status",
+      "keyboard",
+      "copy",
+      "tsv",
+      "mobile",
+      "accessory",
+      "plan",
+      "docking",
+      "approach"
+    ],
+    "importance_tier": "critical",
+    "status": "planned",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "device-bar-floating.png",
+      "reference-notion-accessory-bar.jpg"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "device-bar-floating.png",
+        "kind": "file",
+        "path": "device-bar-floating.png",
+        "source": "derived"
+      },
+      {
+        "name": "reference-notion-accessory-bar.jpg",
+        "kind": "file",
+        "path": "reference-notion-accessory-bar.jpg",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Selection Bar",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Spec Folder",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Parent Spec",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "The Report",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Copy Markdown",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Plan",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Test Type",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Dependency Matrix",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Depends On",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Total Critical Path",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Breakdown",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "this",
+        "kind": "key_phrase",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "C1",
+        "kind": "key_phrase",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "a",
+        "kind": "key_phrase",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "the",
+        "kind": "key_phrase",
+        "path": "tasks.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "The cell-selection action bar floats over the table at a fixed offset from the viewport floor, so an open keyboard covers or crowds it, and its own content is taller than the box that holds it.",
+    "created_at": "2026-08-30T15:07:29.327Z",
+    "last_save_at": "2026-08-30T15:07:29.327Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md"
+    ],
+    "source_fingerprint": "sha256:63d7f3be3b46e724c3def46885f8544c7088a5d7e97e265121e977e2bcf7dd6f",
+    "source_fingerprint_docset": 3,
+    "source_doc_hashes": {
+      "spec.md": "42b7940da7c6a367365d365b388402041fd41589d81131b2d2a0c6ce4b995786",
+      "plan.md": "6d6a41a091dcf7f2022ec99cf778a0bea3eee0b96c332c1df8b27600033a5261",
+      "tasks.md": "ac392b5bf71f6a67028bc055c29a446510c6a36b1840f1e969d8218f0125ec6b"
+    },
+    "last_active_child_id": null,
+    "last_active_at": null
+  }
+}

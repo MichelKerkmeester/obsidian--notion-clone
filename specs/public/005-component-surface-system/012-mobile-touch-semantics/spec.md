@@ -42,10 +42,14 @@ _memory:
 ---
 # Feature Specification: Mobile Touch Semantics in the Table
 
+<!-- SPECKIT_LEVEL: 1 -->
+<!-- SPECKIT_TEMPLATE_SOURCE: spec-core | v2.2 -->
+
 > Phase chain: parent [`../spec.md`](../spec.md). Sibling `011-mobile-menu-presentation` established
 > that a phone needs its own presentation for menus; this is the same argument one layer down, for
 > input rather than for surfaces.
 
+<!-- ANCHOR:problem -->
 ## 1. THE REPORT
 
 `device-range-select-on-touch.png` shows the table on a phone with a **selection range painted
@@ -67,6 +71,7 @@ What the operator asked for instead, in their words:
 
 So: **a tap edits the cell it lands on. A tap on the row's title cell opens the record sheet.**
 `device-sheet-from-row.png` is that sheet.
+<!-- /ANCHOR:problem -->
 
 ## 2. WHAT TO ESTABLISH BEFORE CHANGING ANYTHING
 
@@ -84,6 +89,7 @@ is binding a new meaning on top of an old one rather than instead of it.
 - **Establish what a tap currently does**, per column type, before deciding what it should do. Some
   cells already open an editor on tap; the defect may be narrower than "touch does the wrong thing".
 
+<!-- ANCHOR:scope -->
 ## 3. CONSTRAINTS
 
 - **Desktop must not change.** Range selection, shift-click and drag-to-extend are correct there and
@@ -93,6 +99,7 @@ is binding a new meaning on top of an old one rather than instead of it.
   dismissal once one is open.
 - Whatever is bound must be measurable without a device: the check has to drive the production
   handler, not a reproduction of it.
+<!-- /ANCHOR:scope -->
 
 ## 4. WHY THIS IS NOT COSMETIC
 
@@ -100,12 +107,15 @@ A painted range on a phone is not merely useless — it is a state the user cann
 cannot clear except by tapping elsewhere, and which changes what the next tap does. That is the
 shape of a defect that produces "the app did something I did not ask for and I cannot undo it".
 
+<!-- ANCHOR:success-criteria -->
 ## 5. ACCEPTANCE CRITERIA
 
 Written by the phase. Each needs a number or a hit test with a threshold, shown failing first, a
 check that drives the production path, and an image a person opened.
 See [`acceptance-criteria.md`](acceptance-criteria.md).
+<!-- /ANCHOR:success-criteria -->
 
+<!-- ANCHOR:risks -->
 ## 6. WHAT THIS REMOVES
 
 Giving the whole title cell one meaning takes two behaviours away from a phone. Both follow from the
@@ -144,3 +154,4 @@ the sheet's title is bound to `dblclick` too, and the long-press row menu has no
 
 So on a phone the rename editor now has **no reachable entry point at all**. Whether that is
 acceptable is an open question, not a decision this phase took.
+<!-- /ANCHOR:risks -->

@@ -1,0 +1,226 @@
+{
+  "schema_version": 1,
+  "packet_id": "public/005-component-surface-system/017-touch-row-range-selection",
+  "spec_folder": "public/005-component-surface-system/017-touch-row-range-selection",
+  "parent_id": "public/005-component-surface-system",
+  "children_ids": [],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "row checkbox selects too many",
+      "touch range selection",
+      "long press checkbox",
+      "shift is permanently held",
+      "017 row range",
+      "017 row range plan",
+      "hold gesture row checkbox",
+      "two grammars not a predicate",
+      "017 row range tasks",
+      "row range negative controls",
+      "017 goal",
+      "touch row range selection goal"
+    ],
+    "key_topics": [
+      "row",
+      "checkbox",
+      "selects",
+      "too",
+      "many",
+      "touch",
+      "range",
+      "selection",
+      "long",
+      "press",
+      "shift",
+      "permanently"
+    ],
+    "importance_tier": "critical",
+    "status": "in_progress",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "acceptance-criteria.md",
+      "goal.md",
+      "implementation-summary.md",
+      "src/views/table-cell-gesture.ts",
+      "src/views/database-view.ts",
+      "src/views/embedded-database-renderer.ts",
+      "tools/storybook/verify-placement.mjs",
+      "src/data/touch-environment.ts"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "acceptance-criteria.md",
+        "kind": "doc",
+        "path": "acceptance-criteria.md",
+        "source": "derived"
+      },
+      {
+        "name": "goal.md",
+        "kind": "doc",
+        "path": "goal.md",
+        "source": "derived"
+      },
+      {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "table-cell-gesture.ts",
+        "kind": "code",
+        "path": "src/views/table-cell-gesture.ts",
+        "source": "derived"
+      },
+      {
+        "name": "database-view.ts",
+        "kind": "code",
+        "path": "src/views/database-view.ts",
+        "source": "derived"
+      },
+      {
+        "name": "embedded-database-renderer.ts",
+        "kind": "code",
+        "path": "src/views/embedded-database-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "verify-placement.mjs",
+        "kind": "file",
+        "path": "tools/storybook/verify-placement.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "touch-environment.ts",
+        "kind": "code",
+        "path": "src/data/touch-environment.ts",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Touch Row Range Selection",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "ts",
+        "kind": "technology",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "no",
+        "kind": "key_phrase",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "a",
+        "kind": "key_phrase",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "it",
+        "kind": "key_phrase",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Plan",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "two",
+        "kind": "key_phrase",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Breakdown",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "nothing",
+        "kind": "key_phrase",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Acceptance Criteria",
+        "kind": "proper_noun",
+        "path": "acceptance-criteria.md",
+        "source": "derived"
+      },
+      {
+        "name": "Touch Row Range Selection Each",
+        "kind": "proper_noun",
+        "path": "acceptance-criteria.md",
+        "source": "derived"
+      },
+      {
+        "name": "the",
+        "kind": "key_phrase",
+        "path": "acceptance-criteria.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "Remove the device predicate that made every touch press on a row checkbox extend a range, and give touch a real gesture for the range it lost — a held press on the checkbox.",
+    "created_at": "2026-08-30T16:46:52.479Z",
+    "last_save_at": "2026-08-30T16:50:23.252Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "acceptance-criteria.md",
+      "goal.md",
+      "implementation-summary.md"
+    ],
+    "source_fingerprint": "sha256:f2fd3734cacf951758697dec5ce474b0835c1f04cfc49ece528aae52a72f4423",
+    "source_fingerprint_docset": 3,
+    "source_doc_hashes": {
+      "spec.md": "5e973dbc14b557a78f425d29e6ef449ea7074e9660b9ad7f6178805a12dcef0e",
+      "plan.md": "2afb9d83b791174589710a119d0fef38a0861d8bbd8720d6e92c876438576373",
+      "tasks.md": "7f83a27eae0b61bade335b27a873c709a9dab823bffdab5965a412a5c9248212",
+      "implementation-summary.md": "0321cdec328480f945a3d47a6601b8fca17fd11ce8097ede8459be269c7530e9"
+    },
+    "last_active_child_id": null,
+    "last_active_at": null
+  }
+}

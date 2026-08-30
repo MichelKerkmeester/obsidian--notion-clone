@@ -1,0 +1,30 @@
+{
+  "specFolder": "public/005-component-surface-system/010-sheet-reading-and-keyboard",
+  "description": "Make the phone record sheet read like a record rather than a two-column ledger, and keep the field being edited visible when the software keyboard",
+  "keywords": [
+    "phone",
+    "record",
+    "sheet",
+    "read",
+    "like",
+    "rather",
+    "two-column",
+    "ledger",
+    "keep",
+    "field",
+    "edited",
+    "visible",
+    "software",
+    "keyboard"
+  ],
+  "lastUpdated": "2026-08-30T16:45:48.487Z",
+  "specId": "010",
+  "folderSlug": "sheet-reading-and-keyboard",
+  "parentChain": [
+    "public",
+    "005-component-surface-system"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": [],
+  "level": "1"
+}

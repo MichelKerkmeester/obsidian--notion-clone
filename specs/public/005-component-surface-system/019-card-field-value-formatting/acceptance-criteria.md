@@ -51,8 +51,9 @@ failure is disagreement, so disagreement is what gets measured.
 
 ## AC-3 — the progress and ring display styles are unaffected
 
-**Threshold.** A number column configured as a bar or a ring renders its bar or ring, not formatted
-text.
+**Threshold.** For a number column configured as a bar, and again as a ring: **1** bar/ring element
+present and **0** text nodes carrying a formatted numeric string, on the rendered card field. Both
+counts, per style.
 
 **Before.** Both styles return before the numeric text branch.
 
@@ -60,6 +61,12 @@ text.
 it.
 
 **State.** Unmet — asserted from reading the control flow, not from a run.
+
+**Why counts rather than "renders its bar".** Reading a control flow proves the branch is not
+*reached*; it cannot fail when a future edit reorders the returns, which is precisely the change that
+would break this. Two counts on the rendered output can, and the second count is the one that goes
+red if a formatted string ever appears **beside** the bar rather than instead of it — a shape the
+first count alone would report green.
 
 ## AC-4 — a non-finite value still renders the placeholder
 

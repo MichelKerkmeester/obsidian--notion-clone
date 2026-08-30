@@ -1,22 +1,50 @@
 **Phase 008 — Integration and release observability**
 
-Repo `~/MEGA/Development/Obsidian Plugin`. **Ships in two parts on two schedules.** Part A lands early, before `001` starts, and gates every lane handoff from `000`'s release onward. Part B runs last and is the only phase permitted to delete a compatibility path.
+<!-- SPECKIT_TEMPLATE_SOURCE: goal | v2.2 -->
 
-**READ FIRST:** `../architecture-findings.md`, `../adversarial-review.md`, `../roadmap.md`, `../design-system.md`, then this folder's `spec.md` (§3 for the split, §4B and §4C for the two mechanisms) and `acceptance-criteria.md`.
+---
+
+<!-- ANCHOR:directive -->
+Repo `~/MEGA/Development/Obsidian Plugin`. **Ships in two parts on two schedules.** Part A lands early, before `001` starts, and gates every lane handoff from `000`'s release onward. Part B runs last and is the only phase permitted to delete a compatibility path.
 
 **WHY THIS PHASE EXISTS.** **No child phase can know that a later stylesheet edit preserved its result.** `styles.css` is one serialized lane, 19,261 lines (`wc -l styles.css`), fingerprinted by all 196 captures, and every phase holds it in turn. A phase that measures its surfaces green, releases the lane, and then watches three more phases edit the same file has proven something about a tree that no longer exists. This file already contains **87 duplicated selectors and 124 silently overridden values** — reversal is not hypothetical here, it is the documented norm.
 
 **WHY IT SPLIT IN TWO.** As first written, this replay was the program's only cross-phase gate **and it did not exist until the very end**. `000` could close, `002` could reverse its token root four weeks later, and nothing would fire until release (`../adversarial-review.md` F7). A gate delivered after the work it guards is a report, not a gate.
+<!-- /ANCHOR:directive -->
 
 ---
 
+<!-- ANCHOR:binding -->
+**READ FIRST:** `../architecture-findings.md`, `../adversarial-review.md`, `../roadmap.md`, `../design-system.md`, then this folder's `spec.md` (§3 for the split, §4B and §4C for the two mechanisms) and `acceptance-criteria.md`.
+
+**Blocks:** every lane release by `004`, `005`, `001`, `002`, `003`, `006` and by `008` itself. **Does not block `000`** — it cannot exist before `000`'s registry does; that window is carried by `000`'s own controls and the `009` live cross-check.
+<!-- /ANCHOR:binding -->
+
+---
+
+<!-- ANCHOR:completion -->
+**ACCEPTANCE.**
+- Every earlier phase's criteria re-pass **from the current tree at every handoff**, and from the final tree at release — not from the tree they were written against.
+- A seeded reversal is demonstrated to fail the handoff replay, and only in its own cells.
+- A non-holder `styles.css` edit is demonstrated to be refused.
+- A lane release with an unreviewed changed PNG is demonstrated to be refused.
+- A stale replay result is demonstrated to be rejected.
+- Every registered surface family appears in the replay; registry equality between source census and runtime census.
+- Each negative control fails when its dimension is substituted.
+- No compatibility path removed without its agreements recorded.
+- **A red operator device review is demonstrated to block a release with the pipeline green** — the rehearsal, not just the rule.
+
+**DONE MEANS** the operator confirms on device that each original defect is gone. That is the only closing condition for the program.
+<!-- /ANCHOR:completion -->
+
+---
+
+<!-- ANCHOR:log -->
 **PART A — THE HANDOFF REPLAY. Lands before `001` starts. Runs at EVERY lane handoff.**
 
 It re-asserts **every previously-closed phase's criteria against the CURRENT tree**. Minimal by construction — recorded criteria, registry equality and cascade winners, not the full grid — because a handoff gate that takes an hour is a handoff gate that gets skipped, and this repo already has that scar.
 
 **Exit criterion:** a **deliberately reintroduced cascade reversal** in an already-closed phase's surface **fails** the handoff replay, reddening only that phase's cells and going green again when removed (AC-011 / N12). A run that reddens everything is as useless as one that reddens nothing.
-
-**Blocks:** every lane release by `004`, `005`, `001`, `002`, `003`, `006` and by `008` itself. **Does not block `000`** — it cannot exist before `000`'s registry does; that window is carried by `000`'s own controls and the `009` live cross-check.
 
 Part A also ships the two mechanisms the program was leaving to convention:
 
@@ -32,8 +60,6 @@ Part A also ships the two mechanisms the program was leaving to convention:
 - **Contents:** Reviewer, Date, the current `styles.css` hash, and one row per changed PNG — before hash, after hash, verdict, note. Verdicts are a closed set: `correct`, `expected-change`, `regression`, `pre-existing-defect (<finding id>)`.
 - **Enforces it:** `node tools/lane/check-capture-review.mjs --phase <folder> --release <n>` → `npm run lane:capture-review`, shelled by `lane:release`. The changed-PNG set is derived from **image byte hashes** against a baseline snapshot taken at `acquire`, not from the hand-maintained scenario source list — otherwise it would reproduce the hole it exists to close.
 - **Fails when:** a changed PNG has no row; a row names a PNG that did not change; a verdict is outside the vocabulary; any verdict is `regression`; Reviewer or Date is empty; the recorded stylesheet hash is not current; a `pre-existing-defect` names no finding. **A lane release without a complete sign-off fails, and the lane stays held.**
-
----
 
 **PART B — THE RELEASE GATE. Runs last.**
 
@@ -52,8 +78,6 @@ Part A also ships the two mechanisms the program was leaving to convention:
 
 **THE PROOF TUPLE.** Every invariant observed through the same **producer × runtime branch × mount/host × environment × transition × semantic outcome**, paired with a **negative control that fails if any one dimension is substituted**. A missing coordinate is a coverage gap even when the number is technically valid.
 
----
-
 **WHAT IS NOT BUILT HERE.**
 - **The input-hash recorder.** `000` builds it once, cheaply, for the whole program (F17). This phase **consumes** it: every result carries the hashes it was produced against, and one whose recorded hashes differ from the current tree is rejected as stale — demonstrated, not asserted (AC-010 / N11). Two vintage systems in a repo whose whole problem is two systems disagreeing would be the same mistake again.
 - **Any sibling's `capture-review.md`.** This phase owns the schema and the checker.
@@ -62,16 +86,4 @@ Part A also ships the two mechanisms the program was leaving to convention:
 **VITEST IS NOT EVIDENCE HERE.** It runs `environment: "node"` with no jsdom (`vitest.config.ts:16`), so the 410-test suite exercises pure logic only and asserts nothing about a rendered surface. Every phase in this program lists it as a quality gate, and the listing invites exactly the mistake 1.3.1 made. It is a **regression guard** — a broken import or a changed pure function should still go red — and a green suite is evidence for **no criterion in this program** (`../adversarial-review.md` O3).
 
 **EVERY NUMBER NAMES ITS PRODUCER.** Each *census* / *trace* cell in `acceptance-criteria.md` states the command that yields the number and the stage at which it is yielded. `000` is building a checker that blocks a phase moving to In Progress with blank cells; this packet is subject to it, and no row may be worked before its named producer has run (F16).
-
-**ACCEPTANCE.**
-- Every earlier phase's criteria re-pass **from the current tree at every handoff**, and from the final tree at release — not from the tree they were written against.
-- A seeded reversal is demonstrated to fail the handoff replay, and only in its own cells.
-- A non-holder `styles.css` edit is demonstrated to be refused.
-- A lane release with an unreviewed changed PNG is demonstrated to be refused.
-- A stale replay result is demonstrated to be rejected.
-- Every registered surface family appears in the replay; registry equality between source census and runtime census.
-- Each negative control fails when its dimension is substituted.
-- No compatibility path removed without its agreements recorded.
-- **A red operator device review is demonstrated to block a release with the pipeline green** — the rehearsal, not just the rule.
-
-**DONE MEANS** the operator confirms on device that each original defect is gone. That is the only closing condition for the program.
+<!-- /ANCHOR:log -->

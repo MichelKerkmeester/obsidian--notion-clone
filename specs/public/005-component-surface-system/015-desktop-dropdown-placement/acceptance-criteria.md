@@ -146,9 +146,16 @@ edits. Both new checks pass. It was not touched here.
 file this phase edited (`owned-menu.ts`, `popover-position.ts`). None are attributable to this work,
 for two independently sufficient reasons:
 
-1. **The harness executes no `src/` code.** Every scenario is hand-written fixture markup rendered
-   against the stylesheet; the `sources:` array is declared bookkeeping, not an execution
-   dependency. These changes are pure JavaScript placement logic and cannot move a pixel.
+1. **The screenshot harness executes no `src/` code.** Every capture scenario is hand-written fixture
+   markup rendered against the stylesheet; the `sources:` array is declared bookkeeping, not an
+   execution dependency. These changes are pure JavaScript placement logic and cannot move a pixel.
+
+   **Scoped deliberately, because the unscoped form of this sentence is wrong.** It is true of
+   `tools/screenshots/` and of nothing else. `tools/storybook/verify-placement.mjs` esbuilds fifteen
+   shipped `src/views` modules — including the two this phase edited — and is the harness every
+   criterion above runs in; `tools/bench/` imports the real `TableRenderer` and `ListRenderer`. Read
+   as a property of "the harness", this reason would also excuse the placement checks from noticing
+   a placement change, which is the opposite of what they exist for.
 2. **The captures were already stale at HEAD.** Staleness is a sha256 of the working-tree file
    against `manifest.json`. For `owned-menu.ts` the manifest records `fc6cc3fbce07` while the
    *committed* HEAD version hashes to `616176134d75` — they disagree before any edit in this

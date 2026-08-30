@@ -145,11 +145,22 @@ value cannot satisfy it.
 
 ### AC-6 — The groups are named
 
-**Threshold:** >= 2 group headings, each a `db-menu-section` — the vocabulary the owned menu already
-uses and the reference capture shows.
+**Threshold:** >= 2 group headings, each carrying **non-empty text**, and each being the element that
+produces AC-5's between-group gap — deleting one must collapse that gap to the within-group value.
+The heading uses `db-menu-section`, the vocabulary the owned menu already uses.
 **Before:** 0 sections, 0 separators, 0 fieldsets.
 
-**Check:** `verify-placement` element count.
+**Why the threshold is not the element count.** An element count over a class name is satisfiable by
+two empty divs, and this program bans class-name criteria for exactly that reason — every 1.3.1
+criterion had that shape and every one passed. Counting headings that carry text and that are
+load-bearing for a gap AC-5 already measures makes the criterion fail when the grouping stops
+working, rather than when the markup stops being spelled a particular way.
+
+**Check:** `verify-placement` element count, plus each heading's text length and the rectangle gap
+either side of it.
+
+**Negative control.** Not yet run. Emptying one heading's text, and separately removing one heading,
+must each take this check red — the first on the text clause, the second on AC-5's gap.
 
 ### AC-7 — Phone presentation does not regress
 

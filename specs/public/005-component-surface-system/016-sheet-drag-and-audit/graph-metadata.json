@@ -1,0 +1,224 @@
+{
+  "schema_version": 1,
+  "packet_id": "public/005-component-surface-system/016-sheet-drag-and-audit",
+  "spec_folder": "public/005-component-surface-system/016-sheet-drag-and-audit",
+  "parent_id": "public/005-component-surface-system",
+  "children_ids": [],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "sheet drag barely works",
+      "drag to dismiss dead",
+      "grab handle destroyed",
+      "bottom sheet audit",
+      "016 sheet drag",
+      "016 sheet drag plan",
+      "grab bar destroyed by render",
+      "eight sheet asks audited",
+      "016 sheet drag tasks",
+      "sheet audit evidence",
+      "016 goal",
+      "sheet drag goal"
+    ],
+    "key_topics": [
+      "sheet",
+      "drag",
+      "barely",
+      "works",
+      "dismiss",
+      "dead",
+      "grab",
+      "handle",
+      "destroyed",
+      "bottom",
+      "audit",
+      "plan"
+    ],
+    "importance_tier": "critical",
+    "status": "in_progress",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "acceptance-criteria.md",
+      "goal.md",
+      "implementation-summary.md",
+      "probe/sheet-audit.mjs",
+      "src/views/record-detail-panel.ts",
+      "src/views/mobile-bottom-sheet.ts"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "acceptance-criteria.md",
+        "kind": "doc",
+        "path": "acceptance-criteria.md",
+        "source": "derived"
+      },
+      {
+        "name": "goal.md",
+        "kind": "doc",
+        "path": "goal.md",
+        "source": "derived"
+      },
+      {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "sheet-audit.mjs",
+        "kind": "file",
+        "path": "probe/sheet-audit.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "record-detail-panel.ts",
+        "kind": "code",
+        "path": "src/views/record-detail-panel.ts",
+        "source": "derived"
+      },
+      {
+        "name": "mobile-bottom-sheet.ts",
+        "kind": "code",
+        "path": "src/views/mobile-bottom-sheet.ts",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "The Sheet Drag",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Whole Feedback Set Audited Together",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "a",
+        "kind": "key_phrase",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "the",
+        "kind": "key_phrase",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "1. WHY THIS EXISTS",
+        "kind": "heading",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Plan",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "real",
+        "kind": "key_phrase",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Breakdown",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "their",
+        "kind": "key_phrase",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "T5",
+        "kind": "key_phrase",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Acceptance Criteria",
+        "kind": "proper_noun",
+        "path": "acceptance-criteria.md",
+        "source": "derived"
+      },
+      {
+        "name": "Eight Operator Asks",
+        "kind": "proper_noun",
+        "path": "acceptance-criteria.md",
+        "source": "derived"
+      },
+      {
+        "name": "Acceptance Criteria Every",
+        "kind": "proper_noun",
+        "path": "acceptance-criteria.md",
+        "source": "derived"
+      },
+      {
+        "name": "D1",
+        "kind": "key_phrase",
+        "path": "goal.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "Find why the phone sheet's drag-to-dismiss kept dying after it had been fixed twice, and settle every one of the operator's bottom-sheet asks against the shipped build with a measured number rather than a reading of the source.",
+    "created_at": "2026-08-30T16:46:51.404Z",
+    "last_save_at": "2026-08-30T16:50:21.488Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "acceptance-criteria.md",
+      "goal.md",
+      "implementation-summary.md"
+    ],
+    "source_fingerprint": "sha256:30cb38934e0ed68cfc5133183a3c6d16364bbe43c61359fe7091e3d32cf2d315",
+    "source_fingerprint_docset": 3,
+    "source_doc_hashes": {
+      "spec.md": "8ed3dedccdeef3e5f0c9dcffa920fc0b726cff99e4b58d35bb8d86560df7d1d9",
+      "plan.md": "63e1896d8a7dcd209bb355587a9d320a20db9b047cfc2521fd97b408bf860e0a",
+      "tasks.md": "1585169c418176058b23b38a095cfcac45c9dd064b3716ebef09ec05b40d7a3c",
+      "implementation-summary.md": "ce92c63170341efb4492c251c666a6eb12493d5d827a1fc9e0e069b38373c26c"
+    },
+    "last_active_child_id": null,
+    "last_active_at": null
+  }
+}

@@ -1,0 +1,228 @@
+{
+  "schema_version": 1,
+  "packet_id": "public/005-component-surface-system/012-mobile-touch-semantics",
+  "spec_folder": "public/005-component-surface-system/012-mobile-touch-semantics",
+  "parent_id": "public/005-component-surface-system",
+  "children_ids": [],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "mobile touch semantics",
+      "tap to edit cell",
+      "range select on touch",
+      "drag selection phone",
+      "012 touch",
+      "012 touch semantics plan",
+      "pointerType not device predicate",
+      "row height escalated",
+      "012 touch semantics tasks",
+      "tap to edit evidence",
+      "012 goal",
+      "mobile touch semantics goal"
+    ],
+    "key_topics": [
+      "mobile",
+      "touch",
+      "semantics",
+      "tap",
+      "edit",
+      "cell",
+      "range",
+      "select",
+      "drag",
+      "selection",
+      "phone",
+      "plan"
+    ],
+    "importance_tier": "critical",
+    "status": "in_progress",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "acceptance-criteria.md",
+      "goal.md",
+      "implementation-summary.md",
+      "device-range-select-on-touch.png",
+      "src/views/table-cell-gesture.ts",
+      "src/views/table-record-peek.ts",
+      "src/views/database-view.ts",
+      "src/views/embedded-database-renderer.ts",
+      "tools/storybook/verify-placement.mjs",
+      "src/views/cell-renderer.ts"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "acceptance-criteria.md",
+        "kind": "doc",
+        "path": "acceptance-criteria.md",
+        "source": "derived"
+      },
+      {
+        "name": "goal.md",
+        "kind": "doc",
+        "path": "goal.md",
+        "source": "derived"
+      },
+      {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "device-range-select-on-touch.png",
+        "kind": "file",
+        "path": "device-range-select-on-touch.png",
+        "source": "derived"
+      },
+      {
+        "name": "table-cell-gesture.ts",
+        "kind": "code",
+        "path": "src/views/table-cell-gesture.ts",
+        "source": "derived"
+      },
+      {
+        "name": "table-record-peek.ts",
+        "kind": "code",
+        "path": "src/views/table-record-peek.ts",
+        "source": "derived"
+      },
+      {
+        "name": "database-view.ts",
+        "kind": "code",
+        "path": "src/views/database-view.ts",
+        "source": "derived"
+      },
+      {
+        "name": "embedded-database-renderer.ts",
+        "kind": "code",
+        "path": "src/views/embedded-database-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "verify-placement.mjs",
+        "kind": "file",
+        "path": "tools/storybook/verify-placement.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "cell-renderer.ts",
+        "kind": "code",
+        "path": "src/views/cell-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Mobile Touch Semantics",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "shared",
+        "kind": "key_phrase",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "a",
+        "kind": "key_phrase",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "no",
+        "kind": "key_phrase",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "several",
+        "kind": "key_phrase",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Plan",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "its",
+        "kind": "key_phrase",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "the",
+        "kind": "key_phrase",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Breakdown",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "every",
+        "kind": "key_phrase",
+        "path": "tasks.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "Give a touch in the table the meaning a touch has, rather than replaying the desktop pointer grammar: a tap edits the cell it lands on, a tap on the row's main item opens the record sheet, and dragging does not paint a selection range.",
+    "created_at": "2026-08-30T16:47:05.145Z",
+    "last_save_at": "2026-08-30T16:47:05.145Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "acceptance-criteria.md",
+      "goal.md",
+      "implementation-summary.md"
+    ],
+    "source_fingerprint": "sha256:e73e28a4a15507d6274fbd537836f82cb15f34ebe8639793b9da8cec0bc9327a",
+    "source_fingerprint_docset": 3,
+    "source_doc_hashes": {
+      "spec.md": "0b6c90e513f412f48c0b808c38b8c48f28d934810c1305f0b172475073f8d761",
+      "plan.md": "69c662f64daf24c3989f128686f846b459ae52777a083ebd7cbc5e7b0e629d68",
+      "tasks.md": "fc29fd1b6d58f3d3f65b45cfc29a53b4934e97345b12da1fa071b6c5c0824414",
+      "implementation-summary.md": "d0f6c78a058823c4302e4498d5e0bf6aa47805931e83af1604a1b30e13e7ab14"
+    },
+    "last_active_child_id": null,
+    "last_active_at": null
+  }
+}

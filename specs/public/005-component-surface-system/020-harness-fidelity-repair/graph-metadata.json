@@ -1,0 +1,224 @@
+{
+  "schema_version": 1,
+  "packet_id": "public/005-component-surface-system/020-harness-fidelity-repair",
+  "spec_folder": "public/005-component-surface-system/020-harness-fidelity-repair",
+  "parent_id": "public/005-component-surface-system",
+  "children_ids": [],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "harness fidelity repair",
+      "grab band double count",
+      "evidence freshness lane",
+      "blank capture rejection",
+      "dom shim setCssProps",
+      "020 harness fidelity",
+      "020 harness fidelity plan",
+      "instrument repair order",
+      "negative control before fix",
+      "020 harness fidelity tasks",
+      "020 acceptance criteria",
+      "harness fidelity closure"
+    ],
+    "key_topics": [
+      "harness",
+      "fidelity",
+      "repair",
+      "grab",
+      "band",
+      "double",
+      "count",
+      "evidence",
+      "freshness",
+      "lane",
+      "blank",
+      "capture"
+    ],
+    "importance_tier": "critical",
+    "status": "complete",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "acceptance-criteria.md",
+      "implementation-summary.md",
+      "tools/storybook/verify-placement.mjs",
+      "tools/live/evidence.mjs",
+      "tools/gate.mjs",
+      "tools/screenshots/verify.mjs",
+      "tools/storybook/obsidian-dom-shim.mjs"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "acceptance-criteria.md",
+        "kind": "doc",
+        "path": "acceptance-criteria.md",
+        "source": "derived"
+      },
+      {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "verify-placement.mjs",
+        "kind": "file",
+        "path": "tools/storybook/verify-placement.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "evidence.mjs",
+        "kind": "file",
+        "path": "tools/live/evidence.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "gate.mjs",
+        "kind": "file",
+        "path": "tools/gate.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "verify.mjs",
+        "kind": "file",
+        "path": "tools/screenshots/verify.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "obsidian-dom-shim.mjs",
+        "kind": "file",
+        "path": "tools/storybook/obsidian-dom-shim.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Harness Fidelity Repair",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Spec Folder",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Parent Spec",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Problem Statement Six",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Why It Matters This",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Plan",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Test Type",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Dependency Matrix",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Depends On",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Total Critical Path",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Breakdown",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "itself",
+        "kind": "key_phrase",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "the",
+        "kind": "key_phrase",
+        "path": "tasks.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "Six of seven verifier findings were instruments that could not fail for the reason they claimed to",
+    "created_at": "2026-08-30T15:15:27.011Z",
+    "last_save_at": "2026-08-30T15:15:27.011Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "acceptance-criteria.md",
+      "implementation-summary.md"
+    ],
+    "source_fingerprint": "sha256:bd4a0db86440d78357d0f9a46e26f744696302f80eeda492bfe72628163524a8",
+    "source_fingerprint_docset": 3,
+    "source_doc_hashes": {
+      "spec.md": "52d8063b71127e433cb3fa4cb6ae31aa6db5fd6de8561637d54db350764cd3a7",
+      "plan.md": "d6b90a6afcec22af0807cd83b07ee4864fc942c3769c3218fdfadd71a42fa741",
+      "tasks.md": "bce05c66f57d8a60a9995713e589e2a5356dbc8a3b2acd89b15bf81b54564927",
+      "implementation-summary.md": "6600ca66011d0c29ff48abf25026a505e0329ad6815f021f8123eadecc8cd11d"
+    },
+    "last_active_child_id": null,
+    "last_active_at": null
+  }
+}

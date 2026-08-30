@@ -1,0 +1,30 @@
+{
+  "level": "1",
+  "specFolder": "public/005-component-surface-system/016-sheet-drag-and-audit",
+  "description": "Find why the phone sheet's drag-to-dismiss kept dying after it had been fixed twice, and settle every one of the operator's bottom-sheet asks against",
+  "keywords": [
+    "find",
+    "phone",
+    "sheet",
+    "drag-to-dismiss",
+    "kept",
+    "dying",
+    "twice",
+    "settle",
+    "every",
+    "one",
+    "operator",
+    "bottom-sheet",
+    "asks",
+    "against"
+  ],
+  "lastUpdated": "2026-08-30T16:50:17.744Z",
+  "specId": "016",
+  "folderSlug": "sheet-drag-and-audit",
+  "parentChain": [
+    "public",
+    "005-component-surface-system"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": []
+}

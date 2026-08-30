@@ -1,0 +1,176 @@
+{
+  "schema_version": 1,
+  "packet_id": "public/005-component-surface-system/023-record-note-body",
+  "spec_folder": "public/005-component-surface-system/023-record-note-body",
+  "parent_id": "public/005-component-surface-system",
+  "children_ids": [],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "record note body",
+      "markdown notes on an item",
+      "note content in record panel",
+      "properties and text",
+      "023 note body",
+      "023 note body plan",
+      "display only versus editable",
+      "frontmatter round trip",
+      "023 note body tasks"
+    ],
+    "key_topics": [
+      "record",
+      "note",
+      "body",
+      "markdown",
+      "notes",
+      "item",
+      "content",
+      "panel",
+      "properties",
+      "text",
+      "plan",
+      "display"
+    ],
+    "importance_tier": "critical",
+    "status": "planned",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "device-note-body-in-obsidian.png"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "device-note-body-in-obsidian.png",
+        "kind": "file",
+        "path": "device-note-body-in-obsidian.png",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Markdown Note Body",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Record View",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Spec Folder",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Parent Spec",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "The Request The",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Plan",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Test Type",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Dependency Matrix",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Depends On",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Breakdown",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "comments",
+        "kind": "key_phrase",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "frontmatter",
+        "kind": "key_phrase",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "only",
+        "kind": "key_phrase",
+        "path": "tasks.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "Every row is a markdown note whose frontmatter the plugin renders as properties, while the note's actual body is never surfaced anywhere in the plugin.",
+    "created_at": "2026-08-30T15:07:29.613Z",
+    "last_save_at": "2026-08-30T15:07:29.613Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md"
+    ],
+    "source_fingerprint": "sha256:b6127a80c638705a3c605c249cc76df54c969395b65cd0c60df3c7dc572947db",
+    "source_fingerprint_docset": 3,
+    "source_doc_hashes": {
+      "spec.md": "f22e83b9f18a4e7ea3d54b5c7c91a3596f4d6b675bf8d04caf152a2aa4c18f15",
+      "plan.md": "33c796d934285a7235531e6329ade64f92ae9750902a0a8ed8cbd690f7823d61",
+      "tasks.md": "d1f498434db331044ad554f598e748f0ba220c6653b02823e369e95d2656373e"
+    },
+    "last_active_child_id": null,
+    "last_active_at": null
+  }
+}

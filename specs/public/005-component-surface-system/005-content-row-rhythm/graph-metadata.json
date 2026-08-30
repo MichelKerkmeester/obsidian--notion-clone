@@ -19,7 +19,10 @@
       "005 row rhythm",
       "005 row rhythm plan",
       "005 row rhythm tasks",
-      "005 row rhythm checklist"
+      "acceptance criteria",
+      "closure gate",
+      "ac traceability",
+      "005 row rhythm criteria"
     ],
     "key_topics": [
       "content",
@@ -41,7 +44,13 @@
       "spec.md",
       "plan.md",
       "tasks.md",
-      "checklist.md"
+      "acceptance-criteria.md",
+      "goal.md",
+      "checklist.md",
+      "tools/screenshots/capture.mjs",
+      "tools/screenshots/runtime-vars.css",
+      "tools/storybook/verify-placement.mjs",
+      "tools/live/view-census.mjs"
     ],
     "entities": [
       {
@@ -63,9 +72,45 @@
         "source": "derived"
       },
       {
+        "name": "acceptance-criteria.md",
+        "kind": "doc",
+        "path": "acceptance-criteria.md",
+        "source": "derived"
+      },
+      {
+        "name": "goal.md",
+        "kind": "doc",
+        "path": "goal.md",
+        "source": "derived"
+      },
+      {
         "name": "checklist.md",
         "kind": "doc",
         "path": "checklist.md",
+        "source": "derived"
+      },
+      {
+        "name": "capture.mjs",
+        "kind": "file",
+        "path": "tools/screenshots/capture.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "runtime-vars.css",
+        "kind": "file",
+        "path": "tools/screenshots/runtime-vars.css",
+        "source": "derived"
+      },
+      {
+        "name": "verify-placement.mjs",
+        "kind": "file",
+        "path": "tools/storybook/verify-placement.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "view-census.mjs",
+        "kind": "file",
+        "path": "tools/live/view-census.mjs",
         "source": "derived"
       },
       {
@@ -151,49 +196,26 @@
         "kind": "key_phrase",
         "path": "tasks.md",
         "source": "derived"
-      },
-      {
-        "name": "Verification Checklist",
-        "kind": "proper_noun",
-        "path": "checklist.md",
-        "source": "derived"
-      },
-      {
-        "name": "Criteria Each",
-        "kind": "proper_noun",
-        "path": "checklist.md",
-        "source": "derived"
-      },
-      {
-        "name": "Negative Controls",
-        "kind": "proper_noun",
-        "path": "checklist.md",
-        "source": "derived"
-      },
-      {
-        "name": "The Stage",
-        "kind": "proper_noun",
-        "path": "checklist.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "Two operator defects, one question",
     "created_at": "2026-08-29T12:48:53.568Z",
-    "last_save_at": "2026-08-29T12:57:24.486Z",
+    "last_save_at": "2026-08-30T16:54:06.650Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
       "spec.md",
       "plan.md",
       "tasks.md",
-      "checklist.md"
+      "acceptance-criteria.md",
+      "goal.md"
     ],
-    "source_fingerprint": "sha256:6b25f25de878dd1f6a33f117275b8a63919f58fc9e209ff0f16a322d015bf77f",
+    "source_fingerprint": "sha256:d41db11cd7d0594fefc3e544464fea5eee4953182d536951d284dad386d8baf6",
+    "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "68fd4ec5034997bcb79367b7c1340103ff913bcd0f9c136589434d708329a986",
+      "spec.md": "0f5d6325d7f02f1ac86f1645657fc8334362db604a49b78668f1b96b63ce7e30",
       "plan.md": "beb128acf893029dc9b273ad85092a97ec424b2a64240f7f124d0a326a0bac6e",
-      "tasks.md": "ed6f83db9d8d29121c5eee74c00f45ff6f13321deaea555346e91e1599fe6665",
-      "checklist.md": "bdaa450722cf3e083ce68b1e5643dcea5b605ca42403b9e7e8c305e632cb2cbd"
+      "tasks.md": "ed6f83db9d8d29121c5eee74c00f45ff6f13321deaea555346e91e1599fe6665"
     },
     "last_active_child_id": null,
     "last_active_at": null

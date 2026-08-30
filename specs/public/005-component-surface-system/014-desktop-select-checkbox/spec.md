@@ -36,9 +36,13 @@ _memory:
 ---
 # Feature Specification: Desktop Select Checkbox Placement
 
+<!-- SPECKIT_LEVEL: 1 -->
+<!-- SPECKIT_TEMPLATE_SOURCE: spec-core | v2.2 -->
+
 > Phase chain: parent [`../spec.md`](../spec.md). Related: `004-checkbox-ownership`, which moved
 > checkbox appearance onto a shared component. This phase repairs what that move left behind.
 
+<!-- ANCHOR:problem -->
 ## 1. THE REPORT
 
 The operator, with a desktop screenshot: *"checkbox is being cut off on desktop."*
@@ -69,6 +73,7 @@ Measured on the real renderer at 1440x900, all 25 cells including the header:
 | header vs row box | inner heights 32 / 33 | exactly coincident |
 
 Zero clearance inside a clipping box is the shear in the screenshot.
+<!-- /ANCHOR:problem -->
 
 ## 3. WHY THE FIX IS THE ONE ALREADY IN THE FILE
 
@@ -77,6 +82,7 @@ the size guarded. Its comment states the rule directly: the pin applies to every
 cell. That repair was never mirrored to desktop. This phase mirrors it, unguarded, so it holds at
 every width — the phone arm then merely restates it and nothing there moves.
 
+<!-- ANCHOR:scope -->
 ## 4. CONSTRAINTS
 
 - **Appearance stays with the shared component.** Only placement is restored. Re-introducing border,
@@ -85,7 +91,10 @@ every width — the phone arm then merely restates it and nothing there moves.
 - **Do not delete the dead blocks in this phase.** They are inert, but removing them changes captures
   and is a separate, reviewable change. Recorded in the lane's outstanding list.
 - Comment hygiene: no spec paths, phase numbers or task ids in the stylesheet.
+<!-- /ANCHOR:scope -->
 
+<!-- ANCHOR:success-criteria -->
 ## 5. ACCEPTANCE CRITERIA
 
 See [`acceptance-criteria.md`](acceptance-criteria.md).
+<!-- /ANCHOR:success-criteria -->

@@ -1,0 +1,229 @@
+{
+  "schema_version": 1,
+  "packet_id": "public/005-component-surface-system/015-desktop-dropdown-placement",
+  "spec_folder": "public/005-component-surface-system/015-desktop-dropdown-placement",
+  "parent_id": "public/005-component-surface-system",
+  "children_ids": [],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "desktop dropdown placement",
+      "dropdown in the wrong place",
+      "menu runs off the screen",
+      "menu covers the button",
+      "popover under the sidebar",
+      "015 dropdown placement",
+      "015 dropdown placement plan",
+      "placement closure assertion",
+      "anchor not point",
+      "015 dropdown placement tasks",
+      "placement probe evidence",
+      "015 goal"
+    ],
+    "key_topics": [
+      "desktop",
+      "dropdown",
+      "placement",
+      "wrong",
+      "place",
+      "menu",
+      "runs",
+      "screen",
+      "covers",
+      "button",
+      "popover",
+      "sidebar"
+    ],
+    "importance_tier": "critical",
+    "status": "in_progress",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "acceptance-criteria.md",
+      "goal.md",
+      "implementation-summary.md",
+      "probe-inventory.mjs",
+      "probe-desktop-placement.mjs",
+      "src/views/owned-menu.ts",
+      "src/views/popover-position.ts",
+      "src/views/column-menu.ts",
+      "src/views/row-menu.ts",
+      "src/views/modals/formula-modal.ts",
+      "tools/storybook/verify-placement.mjs"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "acceptance-criteria.md",
+        "kind": "doc",
+        "path": "acceptance-criteria.md",
+        "source": "derived"
+      },
+      {
+        "name": "goal.md",
+        "kind": "doc",
+        "path": "goal.md",
+        "source": "derived"
+      },
+      {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "probe-inventory.mjs",
+        "kind": "file",
+        "path": "probe-inventory.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "probe-desktop-placement.mjs",
+        "kind": "file",
+        "path": "probe-desktop-placement.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "owned-menu.ts",
+        "kind": "code",
+        "path": "src/views/owned-menu.ts",
+        "source": "derived"
+      },
+      {
+        "name": "popover-position.ts",
+        "kind": "code",
+        "path": "src/views/popover-position.ts",
+        "source": "derived"
+      },
+      {
+        "name": "column-menu.ts",
+        "kind": "code",
+        "path": "src/views/column-menu.ts",
+        "source": "derived"
+      },
+      {
+        "name": "row-menu.ts",
+        "kind": "code",
+        "path": "src/views/row-menu.ts",
+        "source": "derived"
+      },
+      {
+        "name": "formula-modal.ts",
+        "kind": "code",
+        "path": "src/views/modals/formula-modal.ts",
+        "source": "derived"
+      },
+      {
+        "name": "verify-placement.mjs",
+        "kind": "file",
+        "path": "tools/storybook/verify-placement.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Desktop Dropdown Placement",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "bugs",
+        "kind": "key_phrase",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "its",
+        "kind": "key_phrase",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "an",
+        "kind": "key_phrase",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "1. WHAT THIS PHASE FOUND",
+        "kind": "heading",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Plan",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "a",
+        "kind": "key_phrase",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "reach",
+        "kind": "key_phrase",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Breakdown",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "Measure where every desktop dropdown, popover and menu actually lands, against where it should land, and repair the two seams that explain five of the six defects found.",
+    "created_at": "2026-08-30T16:46:50.351Z",
+    "last_save_at": "2026-08-30T16:50:19.785Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "acceptance-criteria.md",
+      "goal.md",
+      "implementation-summary.md"
+    ],
+    "source_fingerprint": "sha256:07da916057bbf81de9c8bb6a4edc75d7da2317604467938053e2803e7728e57d",
+    "source_fingerprint_docset": 3,
+    "source_doc_hashes": {
+      "spec.md": "c7d721011cd47ecab54e173399b8329d179b8fed14e994644c33e6d6d013fbb8",
+      "plan.md": "3077a030820f6dd48a5ba05d9116563c0e9ae58c8796927eefeb67941b59c642",
+      "tasks.md": "71293bcc99a0d6e27024bada5453f548b6d91adaa1064621eaf49da7f3c81197",
+      "implementation-summary.md": "22029ad84ba62ca4818abc493e4b21adc9b96973a069dd3b6d837b2f60f95537"
+    },
+    "last_active_child_id": null,
+    "last_active_at": null
+  }
+}

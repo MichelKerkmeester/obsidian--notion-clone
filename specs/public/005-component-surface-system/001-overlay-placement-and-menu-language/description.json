@@ -1,4 +1,5 @@
 {
+  "level": "3",
   "specFolder": "public/005-component-surface-system/001-overlay-placement-and-menu-language",
   "description": "Placement has no authority and menus have no shared grammar",
   "keywords": [
@@ -8,7 +9,7 @@
     "shared",
     "grammar"
   ],
-  "lastUpdated": "2026-08-29T12:34:18.566Z",
+  "lastUpdated": "2026-08-30T15:22:46.308Z",
   "specId": "001",
   "folderSlug": "overlay-placement-and-menu-language",
   "parentChain": [
@@ -16,6 +17,5 @@
     "005-component-surface-system"
   ],
   "memorySequence": 0,
-  "memoryNameHistory": [],
-  "level": "3"
+  "memoryNameHistory": []
 }

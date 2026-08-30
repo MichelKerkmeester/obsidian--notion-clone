@@ -7,11 +7,46 @@ trigger_phrases:
   - "024 implementation summary"
 importance_tier: "critical"
 contextType: "implementation"
+_memory:
+  continuity:
+    packet_pointer: "public/005-component-surface-system/024-list-view-freeze"
+    last_updated_at: "2026-08-30T18:45:00Z"
+    last_updated_by: "docs-remediation"
+    recent_action: "Added template marker, six anchors and continuity block; wrapped existing prose"
+    next_safe_action: "Operator confirms on device that the list view opens"
+    blockers: []
+    key_files:
+      - "implementation-summary.md"
+      - "../../../../src/views/list-renderer.ts"
+    session_dedup:
+      fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+      session_id: "surface-system-024-impl"
+      parent_session_id: null
+    completion_pct: 95
+    open_questions: []
+    answered_questions: []
 ---
 # Implementation Summary: List View Freeze
 
+<!-- SPECKIT_LEVEL: 1 -->
+<!-- SPECKIT_TEMPLATE_SOURCE: impl-summary-core | v2.2 -->
+
 ---
 
+<!-- ANCHOR:metadata -->
+## Metadata
+
+| Field | Value |
+|---|---|
+| **Spec Folder** | 024-list-view-freeze |
+| **Level** | 1 |
+| **Status** | In Progress — AC-6 (operator device confirmation) not met |
+| **State** | Shipped and measured (commit `31dce9aa`); non-table views besides this fix still freeze on device per 028 |
+<!-- /ANCHOR:metadata -->
+
+---
+
+<!-- ANCHOR:what-built -->
 ## 1. THE TWO CHANGES
 
 Both in `src/views/list-renderer.ts`. Nothing else in `src/` was touched.
@@ -49,7 +84,11 @@ No CSS was needed and none was written. The existing `.db-list-field.is-placehol
 `.db-list-field` box model already do the work.
 
 ---
+<!-- /ANCHOR:what-built -->
 
+---
+
+<!-- ANCHOR:decisions -->
 ## 2. WHAT WAS DELIBERATELY NOT CHANGED
 
 - **`listFieldTrackTemplate` still runs per row**, building the same 21-track string for every row of
@@ -66,7 +105,11 @@ No CSS was needed and none was written. The existing `.db-list-field.is-placehol
   concurrently by another phase.
 
 ---
+<!-- /ANCHOR:decisions -->
 
+---
+
+<!-- ANCHOR:verification -->
 ## 3. THE CHECKS
 
 **`tools/bench/list-render-bench.ts` + `run-list.mjs`** — the real `ListRenderer`, varied by row
@@ -86,7 +129,11 @@ already proves the same thing properly, and a weak duplicate of a strong check i
 maintenance.
 
 ---
+<!-- /ANCHOR:verification -->
 
+---
+
+<!-- ANCHOR:how-delivered -->
 ## 4. TWO FINDINGS THAT OUTLIVED THE FIX
 
 ### The suspected commit was not the cause
@@ -165,7 +212,11 @@ pre-fix tree at `--rows=1600`: `LINEAR (per-row ×1.00)` printed directly beneat
 It now prints `NO VERDICT — a slope needs two row counts and this run measured 1`.
 
 ---
+<!-- /ANCHOR:how-delivered -->
 
+---
+
+<!-- ANCHOR:limitations -->
 ## 6. THE HEADLINE NUMBER WAS WRONG
 
 84.9× is a render-to-render ratio for a change whose mechanism is moving work out of render. Both
@@ -184,10 +235,16 @@ Smaller and true. Eight and a half seconds of frozen application became a quarte
 way, and the number now describes what the operator would actually have felt.
 
 ---
+<!-- /ANCHOR:limitations -->
+
+---
 
 ## 7. STATE AT HANDOVER
 
-Not committed, as instructed.
+Committed after the fact as `31dce9a`, `fix(views): stop reserving a column where no column
+exists`. That is a later decision than this document, which was written while the tree was still
+uncommitted; the sentence it replaces was true when written and stopped being true four minutes
+afterwards.
 
 | | |
 |---|---|

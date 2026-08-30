@@ -1,0 +1,24 @@
+{
+  "specFolder": "public/005-component-surface-system/020-harness-fidelity-repair",
+  "description": "Six of seven verifier findings were instruments that could not fail for the reason they claimed to",
+  "keywords": [
+    "six",
+    "seven",
+    "verifier",
+    "findings",
+    "instruments",
+    "fail",
+    "reason",
+    "claimed"
+  ],
+  "lastUpdated": "2026-08-30T15:15:21.328Z",
+  "specId": "020",
+  "folderSlug": "harness-fidelity-repair",
+  "parentChain": [
+    "public",
+    "005-component-surface-system"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": [],
+  "level": "3"
+}

@@ -1,0 +1,221 @@
+{
+  "schema_version": 1,
+  "packet_id": "public/005-component-surface-system/021-sheet-inline-edit-alignment",
+  "spec_folder": "public/005-component-surface-system/021-sheet-inline-edit-alignment",
+  "parent_id": "public/005-component-surface-system",
+  "children_ids": [],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "sheet inline edit alignment",
+      "cell line edit popover",
+      "record sheet editor centre line",
+      "title rename editor offset",
+      "021 inline edit",
+      "021 inline edit plan",
+      "overlay versus flex child",
+      "sheet row min height token",
+      "021 inline edit tasks",
+      "021 acceptance criteria",
+      "inline editor centre line closure",
+      "title editor open criterion"
+    ],
+    "key_topics": [
+      "sheet",
+      "inline",
+      "edit",
+      "alignment",
+      "cell",
+      "line",
+      "popover",
+      "record",
+      "editor",
+      "centre",
+      "title",
+      "rename"
+    ],
+    "importance_tier": "critical",
+    "status": "in_progress",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "acceptance-criteria.md",
+      "implementation-summary.md",
+      "tools/storybook/verify-placement.mjs",
+      "src/views/list-renderer.ts"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "acceptance-criteria.md",
+        "kind": "doc",
+        "path": "acceptance-criteria.md",
+        "source": "derived"
+      },
+      {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "verify-placement.mjs",
+        "kind": "file",
+        "path": "tools/storybook/verify-placement.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "list-renderer.ts",
+        "kind": "code",
+        "path": "src/views/list-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Sheet Inline Edit Alignment",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Spec Folder",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Parent Spec",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Problem Statement Tapping",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Why It Matters The",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Plan",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Test Type",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Dependency Matrix",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Depends On",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Total Critical Path",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Breakdown",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "its",
+        "kind": "key_phrase",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "their",
+        "kind": "key_phrase",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "recapture",
+        "kind": "key_phrase",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "one",
+        "kind": "key_phrase",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Acceptance Criteria",
+        "kind": "proper_noun",
+        "path": "acceptance-criteria.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "Tapping a value in the phone record sheet opens an editor 6.6px below the line the value sat on, and",
+    "created_at": "2026-08-30T15:21:37.027Z",
+    "last_save_at": "2026-08-30T15:21:37.027Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "acceptance-criteria.md",
+      "implementation-summary.md"
+    ],
+    "source_fingerprint": "sha256:36c007bf31c6f18d5bb614143f3fe9c666e4fc8b0df1b4285b385d1512d3dafa",
+    "source_fingerprint_docset": 3,
+    "source_doc_hashes": {
+      "spec.md": "7dadc8fcfbd5095c19bf69383e94c6e3c6ec5b29f2f3c7f9a6ab3d402e1241ad",
+      "plan.md": "2fdc280a724aebd1f4ef290f8d8bfe92275abd98c58dde512ce7fad9ee78e563",
+      "tasks.md": "ba53b91765f39b1420918d3ffcdee44f8ab559d3bc27ef9674f343a4d07e79ab",
+      "implementation-summary.md": "190388dbdbe0b87184a646e995c1e43699962471f607220a7506c09c3fcc1d66"
+    },
+    "last_active_child_id": null,
+    "last_active_at": null
+  }
+}

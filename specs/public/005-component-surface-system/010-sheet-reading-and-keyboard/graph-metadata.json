@@ -1,0 +1,227 @@
+{
+  "schema_version": 1,
+  "packet_id": "public/005-component-surface-system/010-sheet-reading-and-keyboard",
+  "spec_folder": "public/005-component-surface-system/010-sheet-reading-and-keyboard",
+  "parent_id": "public/005-component-surface-system",
+  "children_ids": [],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "sheet reading rhythm",
+      "record sheet alignment",
+      "sheet dividers",
+      "keyboard avoidance",
+      "keyboard overlap sheet",
+      "visualViewport",
+      "010 sheet reading",
+      "010 sheet reading plan",
+      "keyboard avoidance approach",
+      "record sheet rhythm",
+      "010 sheet reading tasks",
+      "keyboard inset evidence"
+    ],
+    "key_topics": [
+      "sheet",
+      "reading",
+      "rhythm",
+      "record",
+      "alignment",
+      "dividers",
+      "keyboard",
+      "avoidance",
+      "overlap",
+      "visualviewport",
+      "plan",
+      "approach"
+    ],
+    "importance_tier": "critical",
+    "status": "in_progress",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "acceptance-criteria.md",
+      "goal.md",
+      "implementation-summary.md",
+      "device-sheet-at-rest.png",
+      "device-sheet-keyboard-overlap.png",
+      "reference-notion-record.png",
+      "src/views/popover-position.ts",
+      "tools/storybook/verify-placement.mjs",
+      "src/views/card-field-renderer.ts"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "acceptance-criteria.md",
+        "kind": "doc",
+        "path": "acceptance-criteria.md",
+        "source": "derived"
+      },
+      {
+        "name": "goal.md",
+        "kind": "doc",
+        "path": "goal.md",
+        "source": "derived"
+      },
+      {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "device-sheet-at-rest.png",
+        "kind": "file",
+        "path": "device-sheet-at-rest.png",
+        "source": "derived"
+      },
+      {
+        "name": "device-sheet-keyboard-overlap.png",
+        "kind": "file",
+        "path": "device-sheet-keyboard-overlap.png",
+        "source": "derived"
+      },
+      {
+        "name": "reference-notion-record.png",
+        "kind": "file",
+        "path": "reference-notion-record.png",
+        "source": "derived"
+      },
+      {
+        "name": "popover-position.ts",
+        "kind": "code",
+        "path": "src/views/popover-position.ts",
+        "source": "derived"
+      },
+      {
+        "name": "verify-placement.mjs",
+        "kind": "file",
+        "path": "tools/storybook/verify-placement.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "card-field-renderer.ts",
+        "kind": "code",
+        "path": "src/views/card-field-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Sheet Reading Rhythm",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Keyboard Avoidance",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "screenshots",
+        "kind": "key_phrase",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "the",
+        "kind": "key_phrase",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "nothing",
+        "kind": "key_phrase",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Plan",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "If Obsidian",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "a",
+        "kind": "key_phrase",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Breakdown",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "ellipsis",
+        "kind": "key_phrase",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "no",
+        "kind": "key_phrase",
+        "path": "tasks.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "Make the phone record sheet read like a record rather than a two-column ledger, and keep the field being edited visible when the software keyboard opens.",
+    "created_at": "2026-08-30T16:47:04.848Z",
+    "last_save_at": "2026-08-30T16:47:04.848Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "acceptance-criteria.md",
+      "goal.md",
+      "implementation-summary.md"
+    ],
+    "source_fingerprint": "sha256:315c7945ce191ec478cbac4ac48fc34389a0daf85393e8833ef2756dec0164da",
+    "source_fingerprint_docset": 3,
+    "source_doc_hashes": {
+      "spec.md": "0beef50b0ef20961be735a2010659fe0daea1e0704825cd90421f4288d6daeb6",
+      "plan.md": "1b064a259bd0fcdbe57b5c882d05539d1a4c70a6cb911659c2cb19177d8f89ed",
+      "tasks.md": "c4537b17516d3dcdf8437e2f38d79efba1c7416a360f993b611ab3f819deaca2",
+      "implementation-summary.md": "c8e8c128f5f5fb88e738172fbf90ad8791799f095e7beef9f008b637fce2a89f"
+    },
+    "last_active_child_id": null,
+    "last_active_at": null
+  }
+}

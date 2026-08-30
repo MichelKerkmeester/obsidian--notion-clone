@@ -32,10 +32,14 @@ _memory:
 ---
 # Feature Specification: Mobile Menu Presentation
 
+<!-- SPECKIT_LEVEL: 1 -->
+<!-- SPECKIT_TEMPLATE_SOURCE: spec-core | v2.2 -->
+
 > Phase chain: parent [`../spec.md`](../spec.md). Related: `003-mobile-sheet-presentation` built the
 > sheet presentation this phase needs to reach, and `010-sheet-reading-and-keyboard` is refining how
 > that sheet reads. This phase is about a family of surfaces that never reaches it at all.
 
+<!-- ANCHOR:problem -->
 ## 1. THE REPORT
 
 `device-column-menu.png` is the table's column menu on a phone. It is presented as a desktop
@@ -94,7 +98,9 @@ dragging the handle down. Desktop is unchanged.
 
 Rows are already 44px on a phone and the heading already takes the row inset — see the phone arms
 near `styles.css:337-346`. Check what else the sheet presentation needs that the menu does not have.
+<!-- /ANCHOR:problem -->
 
+<!-- ANCHOR:scope -->
 ## 4. CONSTRAINTS
 
 - **Do not regress the record sheet.** `verify-placement` asserts it reaches the viewport floor and
@@ -104,8 +110,11 @@ near `styles.css:337-346`. Check what else the sheet presentation needs that the
   pointerdown and Escape handling (`owned-menu.ts:70-109`), and the sheet has a scrim of its own.
   Two dismissal owners on one surface is a defect, not a detail.
 - A tall menu that becomes a sheet needs to scroll inside the sheet rather than grow past it.
+<!-- /ANCHOR:scope -->
 
+<!-- ANCHOR:success-criteria -->
 ## 5. ACCEPTANCE CRITERIA
 
 Written by the phase. Each needs a number with a threshold shown failing first, a check that drives
 the production path, and an image a person opened. See [`acceptance-criteria.md`](acceptance-criteria.md).
+<!-- /ANCHOR:success-criteria -->

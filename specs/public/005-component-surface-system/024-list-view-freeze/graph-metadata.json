@@ -1,0 +1,230 @@
+{
+  "schema_version": 1,
+  "packet_id": "public/005-component-surface-system/024-list-view-freeze",
+  "spec_folder": "public/005-component-surface-system/024-list-view-freeze",
+  "parent_id": "public/005-component-surface-system",
+  "children_ids": [],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "list view freezes obsidian",
+      "opening list view hangs",
+      "list render quadratic layout thrash",
+      "empty field placeholder cost",
+      "024 list view freeze",
+      "024 plan",
+      "list view freeze plan",
+      "touch mode hoist plan",
+      "024 tasks",
+      "list view freeze tasks",
+      "list view freeze acceptance criteria",
+      "list render benchmark numbers"
+    ],
+    "key_topics": [
+      "list",
+      "view",
+      "freezes",
+      "obsidian",
+      "opening",
+      "hangs",
+      "render",
+      "quadratic",
+      "layout",
+      "thrash",
+      "empty",
+      "field"
+    ],
+    "importance_tier": "critical",
+    "status": "in_progress",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "acceptance-criteria.md",
+      "goal.md",
+      "implementation-summary.md",
+      "src/views/list-renderer.ts",
+      "tools/bench/list-render-bench.ts",
+      "src/views/column-width.test.ts",
+      "tools/bench/run-list.mjs",
+      "tools/bench/CODE.md",
+      "tools/bench/README.md",
+      "tools/storybook/verify-placement.mjs",
+      "tools/screenshots/scenarios/core.mjs",
+      "tools/gate.mjs"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "acceptance-criteria.md",
+        "kind": "doc",
+        "path": "acceptance-criteria.md",
+        "source": "derived"
+      },
+      {
+        "name": "goal.md",
+        "kind": "doc",
+        "path": "goal.md",
+        "source": "derived"
+      },
+      {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "list-renderer.ts",
+        "kind": "code",
+        "path": "src/views/list-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "list-render-bench.ts",
+        "kind": "code",
+        "path": "tools/bench/list-render-bench.ts",
+        "source": "derived"
+      },
+      {
+        "name": "column-width.test.ts",
+        "kind": "test",
+        "path": "src/views/column-width.test.ts",
+        "source": "derived"
+      },
+      {
+        "name": "run-list.mjs",
+        "kind": "file",
+        "path": "tools/bench/run-list.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "CODE.md",
+        "kind": "doc",
+        "path": "tools/bench/CODE.md",
+        "source": "derived"
+      },
+      {
+        "name": "README.md",
+        "kind": "doc",
+        "path": "tools/bench/README.md",
+        "source": "derived"
+      },
+      {
+        "name": "verify-placement.mjs",
+        "kind": "file",
+        "path": "tools/storybook/verify-placement.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "core.mjs",
+        "kind": "file",
+        "path": "tools/screenshots/scenarios/core.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "gate.mjs",
+        "kind": "file",
+        "path": "tools/gate.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "List View Freeze",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "In Progress",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Problem Statement The",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Root Cause",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "What The Suspected Commit Actually Did",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Plan",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "the",
+        "kind": "key_phrase",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "a",
+        "kind": "key_phrase",
+        "path": "plan.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "The operator, on a shipped build: \"opening list view bugs out obsidian freezes and you cant do",
+    "created_at": "2026-08-30T16:53:58.480Z",
+    "last_save_at": "2026-08-30T16:56:33.847Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "acceptance-criteria.md",
+      "goal.md",
+      "implementation-summary.md"
+    ],
+    "source_fingerprint": "sha256:c88d5c75a704c6db4916d324e997acddb7d16d73b702a06f34714a45e50617f4",
+    "source_fingerprint_docset": 3,
+    "source_doc_hashes": {
+      "spec.md": "8047615e02c0101d7ff4d31c3464297c683d18a975736a277b7c92c81c4a4ebd",
+      "plan.md": "7146fd468cda55d18e502293ae8ec0fd1184929ce418da07dbca7b765d3af925",
+      "tasks.md": "d23d9e307cc7470f5d7f6e2de833e6639ca6387017f772143f85074650d0feab",
+      "implementation-summary.md": "174520f0fbc524f9c69b90e8869729bddb229abd74ca08f3147c59b621816607"
+    },
+    "last_active_child_id": null,
+    "last_active_at": null
+  }
+}

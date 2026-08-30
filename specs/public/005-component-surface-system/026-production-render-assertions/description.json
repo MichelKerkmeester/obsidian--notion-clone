@@ -1,0 +1,31 @@
+{
+  "level": "2",
+  "specFolder": "public/005-component-surface-system/026-production-render-assertions",
+  "description": "Fourteen gate checks and none of them constructs a renderer the plugin ships, so a quadratic freeze reached a user through every one.",
+  "keywords": [
+    "fourteen",
+    "gate",
+    "checks",
+    "none",
+    "them",
+    "constructs",
+    "renderer",
+    "plugin",
+    "ships",
+    "quadratic",
+    "freeze",
+    "reached",
+    "user",
+    "every",
+    "one"
+  ],
+  "lastUpdated": "2026-08-30T17:06:10.094Z",
+  "specId": "026",
+  "folderSlug": "production-render-assertions",
+  "parentChain": [
+    "public",
+    "005-component-surface-system"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": []
+}

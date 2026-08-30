@@ -59,14 +59,23 @@ shorter menu fits the screen by accident and can show neither the overflow nor t
 
 Check: *a 19-row phone menu is capped at the sheet ceiling and scrolls inside it*.
 
-### AC-4 — a phone menu carries the sheet's grab handle
+### AC-4 — a phone menu carries the sheet's grab handle, and it answers a press
 
-Threshold: `.db-mobile-bottom-sheet-handle` is present in the menu.
+Threshold, both required: `.db-mobile-bottom-sheet-handle` is present in the menu, **and**
+`document.elementFromPoint` at the top of the sheet resolves to it over a band at least as tall as
+the record sheet's own — measured 32px there.
 
 | | value |
 |---|---|
 | before | `handle=absent`, classes `db-surface db-menu db-owned-menu` |
 | after | `handle=present`, classes `… db-mobile-bottom-sheet db-overlay-enter` |
+| hit band | **not yet measured on this surface** |
+
+The presence clause on its own is a class-name assertion, which this program bans as a criterion: an
+element with the right class and no hit area satisfies it while the operator's thumb finds nothing.
+AC-7 does drive the real handle with a pointer stream, so the *gesture* is evidenced; what is not
+evidenced is that the visible band a person aims at is the same size as the one they have learned on
+the record sheet. The hit-band clause is owed.
 
 Check: *a phone menu carries the sheet's grab handle*.
 

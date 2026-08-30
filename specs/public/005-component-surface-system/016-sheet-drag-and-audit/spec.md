@@ -41,6 +41,10 @@ _memory:
 
 # The Sheet Drag, and the Whole Feedback Set Audited Together
 
+<!-- SPECKIT_LEVEL: 1 -->
+<!-- SPECKIT_TEMPLATE_SOURCE: spec-core | v2.2 -->
+
+<!-- ANCHOR:problem -->
 ## 1. WHY THIS EXISTS
 
 The operator reported the same gesture broken three times. The first two reports were that
@@ -90,6 +94,7 @@ gesture is intermittent, and intermittent is what a race looks like.
 | --- | --- | --- |
 | just opened | yes | 60.0px |
 | after one refresh | **no** | **0.0px** |
+<!-- /ANCHOR:problem -->
 
 ## 3. THE FIX
 
@@ -153,6 +158,7 @@ panel's computed `transition-duration` is `0s` and a 60px move lands at 60.00px 
 An early reading that looked like lag was the probe's own CDP round trip, and is recorded here so it
 is not rediscovered as a defect.
 
+<!-- ANCHOR:success-criteria -->
 ## 5. THE OTHER SEVEN ASKS
 
 Settled in [`acceptance-criteria.md`](acceptance-criteria.md) with a number each. In summary: the
@@ -160,7 +166,9 @@ header actions, the row rhythm, the grab band, the single sheet fill, the scrim 
 grammar all hold. Two things do not, and both are decisions rather than defects — the 13px row
 label is off the type scale, and the record sheet closes on a window resize, which is one of the two
 ways a software keyboard announces itself.
+<!-- /ANCHOR:success-criteria -->
 
+<!-- ANCHOR:scope -->
 ## 6. SCOPE
 
 Changed: `src/views/mobile-bottom-sheet.ts`, `src/views/record-detail-panel.ts`. No stylesheet edit,
@@ -170,3 +178,4 @@ and is unmodified; it benefits from the same repair.
 Not changed, and owed to a later phase: the camelCase declarations in `placeSheet`, the permissive
 `setCssProps` in `obsidian-dom-shim.mjs`, and merging these checks into `verify-placement.mjs`,
 which was being edited concurrently.
+<!-- /ANCHOR:scope -->

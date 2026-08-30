@@ -162,4 +162,11 @@ observes the keyboard first wins.
 
 | # | Criterion | Threshold | Red baseline |
 |---|---|---|---|
-| 16 | The desktop anchored panel keeps its existing geometry. | desktop row height, label size and value alignment unchanged from baseline | n/a — asserted as a non-regression |
+| 16 | The desktop anchored panel keeps its existing geometry. | four measured values identical before and after: row height **26.84px**, value `text-align: right`, field-list gap **2px**, `border-bottom` **`0px none`** | n/a — a non-regression, and the reason it carries four numbers rather than the word "unchanged" is below |
+
+Criterion 16 originally read "unchanged from baseline" with no values. That is not a criterion: a
+later reader has nothing to compare against, so the check silently becomes "somebody looked once".
+The four numbers above are the ones the run produced, and they are deliberately the **inverse** of
+what the phone criteria assert — the phone moved to a 44px row, left-aligned values, a 0px gap and a
+1px divider, so if a phone rule ever leaks to desktop, all four move at once and this row goes red
+for the exact reason it exists. A single value would not have that property.

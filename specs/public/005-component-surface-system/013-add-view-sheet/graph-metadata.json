@@ -1,0 +1,225 @@
+{
+  "schema_version": 1,
+  "packet_id": "public/005-component-surface-system/013-add-view-sheet",
+  "spec_folder": "public/005-component-surface-system/013-add-view-sheet",
+  "parent_id": "public/005-component-surface-system",
+  "children_ids": [],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "add view sheet",
+      "add view popover",
+      "duplicate current view",
+      "view type picker",
+      "013 add view",
+      "013 add view plan",
+      "add view row grammar",
+      "fixture artifact adjudication",
+      "013 add view tasks",
+      "add view adjudication evidence",
+      "add view acceptance criteria",
+      "013 acceptance"
+    ],
+    "key_topics": [
+      "view",
+      "sheet",
+      "popover",
+      "duplicate",
+      "current",
+      "type",
+      "picker",
+      "plan",
+      "row",
+      "grammar",
+      "fixture",
+      "artifact"
+    ],
+    "importance_tier": "critical",
+    "status": "in_progress",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "acceptance-criteria.md",
+      "goal.md",
+      "implementation-summary.md",
+      "src/views/toolbar-renderer.ts",
+      "tools/screenshots/scenarios/core.mjs",
+      "src/views/add-view-popover-layout.test.ts",
+      "tools/storybook/verify-placement.mjs"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "acceptance-criteria.md",
+        "kind": "doc",
+        "path": "acceptance-criteria.md",
+        "source": "derived"
+      },
+      {
+        "name": "goal.md",
+        "kind": "doc",
+        "path": "goal.md",
+        "source": "derived"
+      },
+      {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "toolbar-renderer.ts",
+        "kind": "code",
+        "path": "src/views/toolbar-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "core.mjs",
+        "kind": "file",
+        "path": "tools/screenshots/scenarios/core.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "add-view-popover-layout.test.ts",
+        "kind": "test",
+        "path": "src/views/add-view-popover-layout.test.ts",
+        "source": "derived"
+      },
+      {
+        "name": "verify-placement.mjs",
+        "kind": "file",
+        "path": "tools/storybook/verify-placement.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Add View Surface Redesign",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Add View",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "design",
+        "kind": "key_phrase",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "no",
+        "kind": "key_phrase",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "its",
+        "kind": "key_phrase",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Plan",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "an",
+        "kind": "key_phrase",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "a",
+        "kind": "key_phrase",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "esbuild",
+        "kind": "key_phrase",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "1. SUMMARY",
+        "kind": "heading",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Breakdown",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "only",
+        "kind": "key_phrase",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Acceptance Criteria",
+        "kind": "proper_noun",
+        "path": "acceptance-criteria.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "Rebuild the Add View surface against the design system: one control idiom per job, one affordance per action, a real grouping, and sheet presentation on a phone.",
+    "created_at": "2026-08-30T16:47:05.287Z",
+    "last_save_at": "2026-08-30T16:47:05.287Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "acceptance-criteria.md",
+      "goal.md",
+      "implementation-summary.md"
+    ],
+    "source_fingerprint": "sha256:63ef002361efbd9b681dd7a0f80ffca292aadae4d3becf1d6f3d56fe7f26394e",
+    "source_fingerprint_docset": 3,
+    "source_doc_hashes": {
+      "spec.md": "10093eaea00c5ce5bbd38d53823cb25ed8bedee3f75164636f4f206abfc7a136",
+      "plan.md": "ca3345b39491355fd62a6d32845223c782614d95f89521360fca66c3392739db",
+      "tasks.md": "227e25af8de655e4c3746f76794512ff956dd35826567d49e10a03b7830c61db",
+      "implementation-summary.md": "70be13139f9234676e1857b434522549440b5dd5feada73338d05599f7d5836c"
+    },
+    "last_active_child_id": null,
+    "last_active_at": null
+  }
+}

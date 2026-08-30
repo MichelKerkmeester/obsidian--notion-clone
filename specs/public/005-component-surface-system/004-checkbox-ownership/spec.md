@@ -14,8 +14,8 @@ _memory:
     packet_pointer: "public/005-component-surface-system/004-checkbox-ownership"
     last_updated_at: "2026-08-30T11:30:00Z"
     last_updated_by: "design-agent"
-    recent_action: "Four verifier findings closed with a failing number, a fix and a negative control each: five families with no fixture, the borrowed-ancestor guard that passed on a broken tree, ten switches that lost their shape when moved, and a switch below the 28px target floor. The reorder button overlapping the row checkbox closed with them."
-    next_safe_action: "Open the sixteen changed PNGs and sign them off — the operator's defect is visible shape, and no machine in this repo has looked at an image"
+    recent_action: "4 verifier findings closed with fix + negative control; reorder-button overlap closed too"
+    next_safe_action: "Open the 16 changed PNGs and sign them off in checklist.md"
     blockers: []
     key_files:
       - "spec.md"

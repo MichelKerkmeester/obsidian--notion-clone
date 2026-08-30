@@ -1,37 +1,159 @@
-# 021 — Sheet inline edit alignment
+---
+title: "Feature Specification: Sheet Inline Edit Alignment"
+description: "Tapping a value in the phone record sheet opened an editor below its label's line and overhanging the row beneath. One mechanism, both defects. A fresh review then corrected three claims, one of which leaves a second inline editor still off-centre."
+trigger_phrases:
+  - "sheet inline edit alignment"
+  - "cell line edit popover"
+  - "record sheet editor centre line"
+  - "title rename editor offset"
+  - "021 inline edit"
+importance_tier: "critical"
+contextType: "planning"
+_memory:
+  continuity:
+    packet_pointer: "public/005-component-surface-system/021-sheet-inline-edit-alignment"
+    last_updated_at: "2026-08-30T16:30:00Z"
+    last_updated_by: "phase-author"
+    recent_action: "Shipped; a fresh review corrected three claims and left the title editor open"
+    next_safe_action: "Derive the title editor's offset from its own line box, not the value's"
+    blockers: []
+    key_files:
+      - "spec.md"
+      - "plan.md"
+      - "tasks.md"
+      - "implementation-summary.md"
+      - "acceptance-criteria.md"
+    session_dedup:
+      fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+      session_id: "surface-system-021"
+      parent_session_id: null
+    completion_pct: 85
+    open_questions:
+      - "Does the title editor get its own offset, or does the correction become per-anchor?"
+    answered_questions:
+      - "The sheet opens five editors, not four, and two of them are inline"
+      - "The 1px residue is sheet-only; desktop measures 0.00 displacement in both axes"
+---
+# Feature Specification: Sheet Inline Edit Alignment
 
-## WHY
+> Phase chain: parent [`../spec.md`](../spec.md). **Shipped, with one measured residue still open.**
+> The `setPosition` box-conversion defect this phase isolated lives in `popover-position.ts`, one of
+> the modules [`../025-story-coverage-blindness/spec.md`](../025-story-coverage-blindness/spec.md)
+> shows the story catalogue cannot see.
+
+<!-- SPECKIT_LEVEL: 3 -->
+<!-- SPECKIT_TEMPLATE_SOURCE: spec-core + level2-verify + level3-arch | v2.2 -->
+
+---
+
+## EXECUTIVE SUMMARY
 
 Reported from a phone: tapping a value in the record sheet leaves the edit input sitting below the
-line its label is on. The screenshot carries a second defect the report does not mention and which
-is the worse of the two — the input is taller than the row it belongs to, so its bottom edge lies
-over the row beneath it.
+line its label is on. The screenshot carries a second defect the report does not mention and which is
+the worse of the two — the input is taller than the row it belongs to, so its bottom edge lies over
+the row beneath it.
 
 Both come from one mechanism, so both are one fix.
 
-## WHAT THE EDITOR ACTUALLY IS
+**A fresh review after shipping corrected three claims.** Every measured number in this phase
+reproduced exactly under an independent probe, including the negative control. Three claims *around*
+those numbers did not, and the most consequential is that the sheet opens **five** editors rather
+than four — **two of them inline**. The second inline editor is the title's rename popover. It
+receives both new declarations and gets a correction derived from the wrong line box, which leaves it
+2.4px off centre instead of centred. That is an improvement on the 9.0px it started at, and it is
+still wrong, and it is **open**.
+
+---
+
+<!-- ANCHOR:metadata -->
+## 1. METADATA
+
+| Field | Value |
+|---|---|
+| **Spec Folder** | 021-sheet-inline-edit-alignment |
+| **Level** | 3 |
+| **Priority** | P1 |
+| **Status** | Partial |
+| **Created** | 2026-08-30 |
+| **Shipped** | 2026-08-30 (`0ff9f9a`) |
+| **Branch** | `main` |
+| **Parent Spec** | `../spec.md` |
+| **Open** | The title rename editor is 2.4px off its own centre line |
+| **CSS lane** | **Held and released twice.** Three declarations plus one token swap, all under `.db-record-detail-panel.db-mobile-bottom-sheet` |
+
+<!-- /ANCHOR:metadata -->
+---
+
+<!-- ANCHOR:problem -->
+## 2. PROBLEM & PURPOSE
+
+### Problem Statement
+
+Tapping a value in the phone record sheet opens an editor 6.6px below the line the value sat on, and
+2.5px past the bottom of the row that contains it. The second defect was not reported and is worse:
+an editor overhanging the next row is ambiguous about what it is editing.
+
+### Why It Matters
+
+The record sheet is the phone's primary editing surface. An editor that does not sit where the value
+was is a surface that reads as broken on first contact, and the overhang means a mis-tap is a
+plausible reading of what the user sees.
+
+### Goals
+
+- The inline editor shares its label's centre line.
+- The inline editor stays inside its row.
+- The inline editor meets the 44px thumb floor the sheet's other editor already holds.
+- Desktop is unchanged, and frozen so a leak fails rather than being discovered later.
+
+<!-- /ANCHOR:problem -->
+---
+
+<!-- ANCHOR:scope -->
+## 3. SCOPE
+
+### In Scope
+
+- The number and currency editor, `.db-cell-edit-popover.db-cell-line-edit-popover`, on the phone
+  record sheet.
+- Three declarations plus one token swap under `.db-record-detail-panel.db-mobile-bottom-sheet`.
+- A harness section that opens the sheet and taps each editable value through the shipped renderer.
+
+### Out of Scope
+
+- The desktop record panel, which has the same defect. Excluded deliberately, and criterion 5 freezes
+  its numbers so a later phase must update them.
+- The three non-inline editors, which are deliberately different affordances.
+- The `setPosition` box-conversion defect. Isolated here, named, not fixed.
+
+### What The Editor Actually Is
 
 The first job was deciding whether the editor is an ordinary flex child of the row or an overlay,
 because the two want opposite fixes and the row already declares `align-items: center`. It is an
-overlay, and the sheet does not open one editor but four:
+overlay.
 
-| field type | editor | shape |
-| --- | --- | --- |
-| number, currency | `.db-cell-edit-popover.db-cell-line-edit-popover` | absolutely positioned, sized to the value it replaces, placed on it |
-| text, files | `.db-cell-edit-popover.is-mobile.is-inline-overlay` | full sheet width, docked below the row |
-| date, datetime | the same, plus `.db-date-edit-popover` | full width, docked below the row |
-| select, status, multi-select | `.db-cell-option-popover` | a list popover |
+**The sheet opens five editors, and two of them are inline.** This corrects an earlier count of four
+that appeared in the original write-up of this phase; that claim is withdrawn.
 
-Only the first pretends to be the value. The other three are deliberately different affordances and
-have no business on the value's centre line, so the reported defect is the number and currency
-editor and this phase changes nothing else.
+| field type | editor | shape | inline? |
+| --- | --- | --- | --- |
+| number, currency | `.db-cell-edit-popover.db-cell-line-edit-popover` | absolutely positioned, sized to the value it replaces, placed on it | **yes** |
+| the record's title | the same single-line popover class, hosted inside the panel | absolutely positioned, placed on the title | **yes** |
+| text, files | `.db-cell-edit-popover.is-mobile.is-inline-overlay` | full sheet width, docked below the row | no |
+| date, datetime | the same, plus `.db-date-edit-popover` | full width, docked below the row | no |
+| select, status, multi-select | `.db-cell-option-popover` | a list popover | no |
 
-Measured, on the phone sheet, through the shipped `CellRenderer`: `position: absolute`, parent is
-the sheet panel, and not a flex child of the row. That decides the fix. An out-of-flow box cannot
-make its row grow, so "the row contains the editor" has to be bought by sizing the editor to the
-row rather than by letting the row stretch.
+The three docked and list editors are deliberately different affordances and have no business on the
+value's centre line. The two inline editors do. This phase measured and fixed the first; **the second
+was not measured and its scoping argument explicitly excluded it**, while the declarations reached it
+anyway.
 
-## THE MECHANISM
+Measured, on the phone sheet, through the shipped `CellRenderer`: `position: absolute`, parent is the
+sheet panel, and not a flex child of the row. That decides the fix. An out-of-flow box cannot make its
+row grow, so "the row contains the editor" has to be bought by sizing the editor to the row rather
+than by letting the row stretch.
+
+### The Mechanism
 
 `CellRenderer.editSingleLinePopover` builds the editor and hands it to `positionTextEditPopover`,
 which puts the popover's **top** edge on the anchor's **top** edge. In a table that reads correctly,
@@ -44,184 +166,189 @@ sheet's own 1px border. That predicts the defect grows with the editor, which is
 screenshot shows a far larger overlap than a harness loading only `styles.css` does — Obsidian's
 `app.css` gives every input a box of its own and is not present here.
 
-## ACCEPTANCE CRITERIA
+**And it predicts the open residue.** The correction is derived from the value's line box at 21.6px.
+The title's line box is 18.85px, so the correct offset there is −12.6px rather than the −11.2px it
+inherits. Measured on the title: 9.0px off-centre before, **2.4px after**.
+
+<!-- /ANCHOR:scope -->
+---
+
+<!-- ANCHOR:requirements -->
+## 4. REQUIREMENTS
+
+| ID | Requirement | Priority | State |
+|---|---|---|---|
+| REQ-001 | The inline editor sits on its label's centre line. | P0 | Met for the value editor |
+| REQ-002 | The inline editor stays inside its row. | P0 | Met for the value editor |
+| REQ-003 | The inline editor meets the 44px thumb floor. | P0 | Met |
+| REQ-004 | The fix holds when a host stylesheet inflates every input. | P0 | Met |
+| REQ-005 | Desktop editor geometry is frozen and asserted against a leak. | P0 | Met |
+| REQ-006 | Every check drives the shipped open-and-edit path; nothing builds an editor by hand. | P0 | Met |
+| REQ-007 | **Both** inline editors sit on their own centre line, each derived from its own anchor's line box. | P0 | **Open** — the title editor is 2.4px off |
+
+<!-- /ANCHOR:requirements -->
+---
+
+<!-- ANCHOR:success-criteria -->
+## 5. SUCCESS CRITERIA
 
 Each measured through the real open-and-edit path — the shipped `openRecordDetailPanel` with its
-`editCell` wired to the shipped `CellRenderer`, and a click on the value element. Failing numbers
-are from the tree as received.
+`editCell` wired to the shipped `CellRenderer`, and a click on the value element. Failing numbers are
+from the tree as received. Full traceability in [`acceptance-criteria.md`](acceptance-criteria.md).
 
 | # | criterion | threshold | before | after |
 | --- | --- | --- | --- | --- |
-| 1 | the inline editor sits on its label's centre line | ≤ 1px | **7.6px** | 1.0px |
-| 2 | the inline editor stays inside its row | ≤ 1px overhang | **2.5px** below the row | 0.5px |
-| 3 | the inline editor meets the 44px thumb floor | ≥ 44px | **34.8px** | 44px |
-| 4 | criteria 1 and 2 hold when the host stylesheet inflates every input | ≤ 1px each | **15.2px / 17.7px** | 1.0px / 0.5px |
+| 1 | the inline editor sits on its label's centre line | <= 1px | **7.6px** | 1.0px |
+| 2 | the inline editor stays inside its row | <= 1px overhang | **2.5px** below the row | 0.5px |
+| 3 | the inline editor meets the 44px thumb floor | >= 44px | **34.8px** | 44px |
+| 4 | criteria 1 and 2 hold when the host stylesheet inflates every input | <= 1px each | **15.2px / 17.7px** | 1.0px / 0.5px |
 | 5 | the desktop panel's editor geometry is unchanged | exact, ±0.5px | 34.8px / 8px / 12px | 34.8px / 8px / 12px |
+| 6 | **the title's rename editor sits on its own centre line** | <= 1px | **9.0px** | **2.4px — open** |
 
 The residue in 1 and 2 is the sheet's own `border-top`, and is not sub-pixel noise. `setPosition`
 writes a child's `top` as an offset from the container's **border** box while `position: absolute`
-resolves it against the **padding** box, so every popover the sheet hosts lands one border-width low
-and one right. That is a positioner defect with desktop blast radius; it is named below rather than
-fixed here.
+resolves it against the **padding** box, so a popover the sheet hosts lands one border-width low and
+one right. That is named in §12 rather than fixed here.
 
-Criterion 4 is a stress test, not a claim about what Obsidian sets. Its point is that the fix holds
-as the input grows rather than only at the height this harness happens to build.
+Criterion 4 is a stress test, not a claim about what Obsidian sets. Its point is that the fix holds as
+the input grows rather than only at the height this harness happens to build.
 
-## WHAT CHANGED
+Criterion 6 is the one a fresh review added. It was not a criterion of the shipped work and the
+surface was explicitly excluded from it, which is precisely why it went unmeasured.
 
-`styles.css`, three declarations plus one token swap, all under `.db-record-detail-panel.db-mobile-bottom-sheet`:
+<!-- /ANCHOR:success-criteria -->
+---
 
-- `--db-sheet-row-min-height: 44px` declared on the sheet, and the field row's `min-height` now
-  reads it. The literal moved rather than multiplied: three declarations have to agree on this
-  number, and two of them are a negative margin computed from it, so a drifting literal would
-  decentre the editor silently instead of failing.
-- The inline editor takes the row's height. At exactly that height the two boxes coincide, which
-  makes both the shared centre line and the containment exact rather than approximate, and it holds
-  the same 44px floor the sheet's textarea editor already holds — a focused field still has to be
-  re-tappable to move the caret.
-- The inline editor is lifted by half the difference between the value's line box and the row, which
-  is the correction for `top` having been set to the value's top. Both terms are the tokens that
-  produce those two heights, so the correction follows them.
-- The input carries the popover's height rather than setting its own, so a host stylesheet that
-  gives every input a height cannot push the box back out of the row.
+<!-- ANCHOR:risks -->
+## 6. RISKS & DEPENDENCIES
 
-`tools/storybook/verify-placement.mjs` gains a section that opens the sheet and taps each editable
-value through the shipped renderer. Nothing in it builds an editor by hand.
+| Risk ID | Description | Impact | Likelihood | Mitigation | Outcome |
+|---|---|---|---|---|---|
+| R-001 | A sheet-scoped rule leaks to desktop | H | M | Criterion 5 freezes the desktop rectangle | **Fired.** The input rule did leak; the first version of criterion 5 could not see it. See §8 |
+| R-002 | A literal repeated across three declarations drifts | M | M | `--db-sheet-row-min-height` declared once on the sheet | Held |
+| R-003 | A host stylesheet inflates the input and pushes it back out of the row | M | H | The input carries the popover's height rather than setting its own; criterion 4 | Held |
+| R-004 | An inline editor the phase did not enumerate receives the declarations | **H** | M | none at the time — the count was wrong | **Fired.** The title editor is 2.4px off; REQ-007 open |
+| R-005 | A concurrent session's edits to the shared harness file are lost or mixed in | M | H | Re-verification by content rather than by check count | Held. See `implementation-summary.md` |
 
-## VERIFICATION
+**Dependencies.** The css lane, acquired and released twice. `verify-placement.mjs`, which a
+concurrent session was editing throughout.
 
-- gate: **14 green, exit 0**
-- vitest: **444 passed**
-- placement: **186/190, 4 red for a declared reason, exit 0** (7 checks added; 6 of the 190 arrived
-  from a concurrent session, see below)
-- screenshots: 224 entries current, none blank, none identical across themes
-- evidence: 8 of 8 artefacts describe this tree
+**Dependents.** None. `025` cites this phase's `setPosition` finding as an example of a defect living
+in a module the story catalogue cannot see.
 
-### The negative controls
+<!-- /ANCHOR:risks -->
+---
 
-Criteria 1–4 were red before the change, with the numbers in the table.
+## 7. NON-FUNCTIONAL REQUIREMENTS
 
-Criterion 5 needed its own control, and the first version of it did not survive one. That check
-originally asserted the desktop editor's `margin-top` was still `0px`. Unscoping both new selectors
-— the mistake it exists to catch — left `margin-top` reading `0px` anyway, because
-`--db-sheet-row-min-height` is declared only on the sheet, so off it the declaration is invalid at
-computed-value time and falls back to the initial value. Meanwhile the input rule did leak and shrank
-the desktop editor from 34.8px to 31px. The check now measures the rectangle, and under the same
-control it reports `31/6.1/8.2` against the frozen `34.8/8/12` and the run exits 1.
+| ID | Requirement |
+|---|---|
+| NFR-R01 | Every check drives the shipped path. Nothing in the new harness section builds an editor by hand. |
+| NFR-R02 | A negative control that survives unscoping is not a control. Criterion 5's first version did not survive one. |
+| NFR-M01 | One literal, one declaration. Three rules have to agree on the row height and two of them derive a negative margin from it. |
+| NFR-M02 | Comment hygiene: no spec paths, phase numbers or task ids in `styles.css`. |
 
-### Screenshots
+---
 
-Recaptured, 224 entries, `screenshots:verify` green. Eight images differ from the previous commit
-and every one of them is a calendar, timeline or date-picker fixture:
+## 8. EDGE CASES
 
-```
-field-date-value-picker-datetime-mobile-light   calendar-week-time-grid-desktop-dark
-calendar-mini-calendar-desktop-dark             calendar-week-time-grid-mobile-dark
-calendar-month-view-mobile-dark                 timeline-toolbar-options-mobile-dark
-calendar-month-view-mobile-light                timeline-view-desktop-dark
-```
+- **The harness cannot see the title editor**, for two independent reasons: it stubs the rename entry
+  point as a no-op, and the trigger is a double-click rather than a click. **Either alone would have
+  hidden it.** That is why criterion 6 could not have failed here, and why it took an independent
+  probe to find.
+- **A negative control that passes for the wrong reason.** Criterion 5 originally asserted the desktop
+  editor's `margin-top` was still `0px`. Unscoping both new selectors — the mistake it exists to catch
+  — left `margin-top` reading `0px` anyway: `--db-sheet-row-min-height` is declared only on the sheet,
+  so off it the declaration is invalid at computed-value time and falls back to the initial value.
+  Meanwhile the input rule **did** leak and shrank the desktop editor from 34.8px to 31px. The check
+  now measures the rectangle and under the same control reports `31/6.1/8.2` against the frozen
+  `34.8/8/12`, and the run exits 1.
+- **The two bottom-docked overlays are anchored by their bottom edge**, so the border-width
+  displacement pushes them in the opposite vertical direction. "Low and right" describes the
+  top-positioned editors only.
+- **No screenshot shows an open editor**, so no capture could have moved. The capture named for the
+  desktop panel renders the sheet presentation at desktop width, so the surface criterion 5 freezes
+  has no capture at all.
 
-None is attributable, on two independent grounds.
+---
 
-Reachability: every rule added here is under `.db-record-detail-panel.db-mobile-bottom-sheet`, and
-none of these fixtures contains a `.db-record-detail-panel` at all. No record-sheet capture differs
-from the previous commit.
+## 9. COMPLEXITY ASSESSMENT
 
-Churn: the floor was re-measured rather than assumed. Three identical capture runs with no code
-change moved `panel-record-detail-sheet-mobile-light`, `calendar-mini-calendar-desktop-light`,
-`calendar-month-view-mobile-light`, `calendar-month-view-mobile-dark`,
-`calendar-week-time-grid-mobile-light` and `calendar-toolbar-options-desktop-dark` — the same
-families, and the record-sheet fixture among them.
+| Dimension | Score | Triggers |
+|---|---|---|
+| Scope | 12/25 | Three declarations and one token swap, plus a 267-line harness section |
+| Risk | 16/25 | A shared placement helper with desktop callers; a shared harness file under concurrent edit |
+| Research | 15/20 | The overlay-versus-flex-child question and the offset arithmetic both had to be derived |
+| Multi-Agent | 9/15 | A second session held the same harness file throughout |
+| Coordination | 10/15 | Holds the css lane; hands a finding to `025` |
+| **Total** | **62/100** | **Level 3** |
 
-One earlier capture did put `panel-record-detail-sheet-desktop-light` in the diff. It was decoded
-and compared: **6 pixels of 5,184,000 at a maximum delta of 1/255**, on six non-adjacent rows. A row
-whose height had moved would have shifted hundreds of thousands. It settled back out on the next
-run.
+---
 
-## OUT OF SCOPE, MEASURED AND NOT FIXED
+## 10. RISK MATRIX
 
-**The desktop record panel has the same defect.** Its editor is 34.8px top-aligned onto an 18.8px
-value inside a 26.8px row: 8px below the label's centre line and 12px past the row. It was excluded
-deliberately, so criterion 5 freezes those numbers; a phase that fixes desktop has to update them.
+See §6, which carries outcomes. Two risks fired and both are recorded rather than smoothed: the
+desktop leak that the first negative control could not see, and the fifth editor nobody counted.
 
-**`setPosition` converts to the wrong box.** It offsets from the container's border box while
-`absolute` resolves against the padding box, so every popover the sheet hosts is displaced by the
-sheet's border width in both axes. That is the 1px residue in criteria 1 and 2. `fixedContainingBlock`
-in the same file already compensates for exactly this on the leaf, with a comment describing it as
-"a silent offset of exactly the border width" — the sheet path never got the same treatment.
+---
 
-**The sheet's date editor runs off the screen.** On a 390×844 phone the date popover opens 438.9px
-tall below its row and reaches y=1001, with the sheet's own bottom at 848.8. The text editor is
-193px and lands at y=844.3 on the same viewport — inside, but with nothing to spare.
+## 11. USER STORIES
 
-**The inline editor's font is 13px, and 16px is the iOS zoom floor.** The value it replaces is 16px,
-and the comment on that rule gives the reason: it "is also the size below which iOS zooms the whole
-page when this cell becomes an input on tap". The input that appears on that tap is `--db-font-md`,
-13px, so the protection the comment claims is not delivered. Left alone because raising it makes the
-editor taller and interacts with everything above, and because it is not what was reported.
+### US-001: Edit the value where the value is (Priority: P0)
 
-## A NOTE ON THE TREE
+**As an** operator tapping a number on the phone sheet, **I want** the editor to appear on the line the
+value was on and inside its row, **so that** it is unambiguous which field I am editing.
 
-The working tree was not clean and `tools/storybook/verify-placement.mjs` was not free. A second
-session was editing `src/views/list-renderer.ts` and adding its own checks to the same harness file
-throughout this phase, and later ran `git checkout` and `git stash` against it. Edits to it were
-overwritten three times and re-applied. Six of the 190 placement checks are theirs; the 267-line
-section carrying these seven is this phase's. The 443/444 vitest reading taken mid-phase was their
-in-flight `list-renderer` edit and resolved on its own.
+**Acceptance:** criteria 1, 2, 3, 4.
 
-Because a reconciling check count can sit on top of a wrong body, the section was re-verified by
-content rather than by arithmetic after that episode: the bundle export, the driving path, every
-derived field, the Escape teardown and all seven assertion bodies with their thresholds were read
-back, and the run re-measured the same numbers.
+### US-002: Desktop is not collateral (Priority: P0)
 
-Their fixture finding — that the list fixture omits row controls the renderer always builds, so its
-field area is roughly twice the real one — does not reach these checks. This section renders no
-fixture; it drives `openRecordDetailPanel` with `editCell` wired to the shipped `CellRenderer` and
-measures what that produces. It also asserts no width: every threshold here is vertical.
+**As a** desktop user, **I want** the phone fix to leave my panel alone, **so that** a mobile repair
+is not a desktop regression.
 
-This phase was not committed by its author. Another party committed it as `0ff9f9a fix(ui): centre
-the sheet's inline editor on the row it replaces`, with the harness section arriving earlier inside
-`173819e` and the captures in `3b22924`.
+**Acceptance:** criterion 5.
 
-`REPO RULES.md` was a four-line stub for the duration of the work and was restored afterwards in
-`308f0c0`. Its verification clause was then run in full against the committed result: `npx tsc
---noEmit` exit 0, `npm run build` clean with `main.js` byte-identical, `npx vitest run` 444 passed,
-`npm run screenshots:verify` current.
+---
 
-## CORRECTIONS FROM A FRESH REVIEW
+<!-- ANCHOR:questions -->
+## 12. OPEN QUESTIONS
 
-Every measured number in this phase reproduced exactly under an independent probe, including the
-negative control. Three claims around them did not.
+- **Does the title editor get its own offset, or does the correction become per-anchor?** The
+  vertical correction is currently one value derived from the value's 21.6px line box. The title's is
+  18.85px and needs −12.6px rather than −11.2px. A second literal is the small answer; deriving the
+  offset from whichever anchor the popover was placed on is the general one. **REQ-007, open.**
 
-**There are five editors, not four, and two of them are inline.** The title's rename editor is the
-same single-line popover class as the number editor, hosted inside the panel, so it receives both
-new declarations. This phase did not measure it and its scoping argument explicitly excluded it.
+### Named, measured, and not this phase's to fix
 
-The harness cannot see it, for two independent reasons: it stubs the rename entry point as a no-op,
-and the trigger is a double-click rather than a click. Either alone would have hidden it.
+- **`setPosition` converts to the wrong box.** It offsets from the container's border box while
+  `absolute` resolves against the padding box. `fixedContainingBlock` in the same file already
+  compensates for exactly this on the leaf, with a comment describing it as "a silent offset of
+  exactly the border width" — the sheet path never got the same treatment. **This is sheet-only, not
+  desktop-wide**: the sheet chrome stamps the container class onto the panel itself, so the nearest
+  matching ancestor *is* the panel and that panel has a border. On desktop the same lookup finds the
+  real container, which has none, and displacement measures **0.00 in both axes**. What survives is
+  that repairing the shared helper would touch desktop callers — a different claim from desktop being
+  affected today.
+- **The desktop record panel has the same alignment defect.** Its editor is 34.8px top-aligned onto an
+  18.8px value inside a 26.8px row: 8px below the label's centre line and 12px past the row.
+  Criterion 5 freezes those numbers, so a phase that fixes desktop has to update them.
+- **The sheet's date editor runs off the screen.** On a 390x844 phone the date popover opens 438.9px
+  tall below its row and reaches y=1001, with the sheet's own bottom at 848.8. The text editor is
+  193px and lands at y=844.3 on the same viewport — inside, but with nothing to spare.
+- **The type shrinks at the moment of tap.** The resting value renders at the large step and the input
+  that replaces it at the medium one, two steps down, while the box simultaneously grows from 21.6px
+  to 44px. This phase enlarged the box and left the type, **widening the mismatch it inherited**.
+- **The inline editor's font is 13px, and 16px is the iOS zoom floor.** The value it replaces is 16px,
+  and the comment on that rule says it "is also the size below which iOS zooms the whole page when
+  this cell becomes an input on tap". The input that appears on that tap is `--db-font-md`, 13px, so
+  the protection the comment claims is not delivered. Left alone: raising it makes the editor taller
+  and interacts with everything above, and it is not what was reported.
 
-The consequence is arithmetic, not cosmetic. The vertical correction is derived from the **value's**
-line box at 21.6px, but the title's line box is 18.85px, so the correct offset there is −12.6px
-rather than the −11.2px it inherits. Measured on the title: 9.0px off-centre before, 2.4px after —
-an improvement, and still wrong by 1.4px plus the border. **Open.**
+<!-- /ANCHOR:questions -->
+---
 
-**The residue is sheet-only, not desktop-wide.** The 1px displacement is confirmed, but its cause is
-narrower than recorded here: the sheet chrome stamps the container class onto the panel itself, so
-the nearest matching ancestor *is* the panel, and that panel has a border. On desktop the same
-lookup finds the real container, which has none — measured displacement 0.00 in both axes. The
-sentence that survives is that repairing the shared placement helper would touch desktop callers,
-which is a different claim from desktop being affected today.
+## RELATED DOCUMENTS
 
-Two smaller corrections. The helper cited by name as already compensating does not exist under that
-name; the real one is `fixedContainingBlock`, and the quoted comment is genuine. And the two
-bottom-docked overlays are anchored by their bottom edge, so they are displaced in the opposite
-vertical direction — "low and right" describes the top-positioned ones only.
-
-**Also found, and not this phase's to fix.** The type shrinks at the moment of tap: the resting
-value renders at the large step and the input that replaces it at the medium one, two steps down,
-while the box simultaneously grows from 21.6px to 44px. This phase enlarged the box and left the
-type, widening the mismatch it inherited.
-
-No screenshot in the set shows an open editor, so none could have moved. The capture named for the
-desktop panel renders the sheet presentation at desktop width, so the surface this phase freezes has
-no capture at all.
+- [`plan.md`](plan.md) · [`tasks.md`](tasks.md) · [`implementation-summary.md`](implementation-summary.md) · [`acceptance-criteria.md`](acceptance-criteria.md)
+- [`../spec.md`](../spec.md) · [`../roadmap.md`](../roadmap.md)
+- [`../025-story-coverage-blindness/spec.md`](../025-story-coverage-blindness/spec.md) — `popover-position.ts` is one of the thirteen modules the story gate cannot see

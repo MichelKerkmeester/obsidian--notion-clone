@@ -15,8 +15,8 @@ _memory:
     packet_pointer: "public/005-component-surface-system/005-content-row-rhythm"
     last_updated_at: "2026-08-30T11:30:00Z"
     last_updated_by: "design-agent"
-    recent_action: "Raggedness closed on the phone, where it still was: a property with no value now holds its column instead of leaving the row, so the column is an index rather than a count in either layout regime. The row matrix stopped measuring three classes nothing builds."
-    next_safe_action: "Decide the header rail — this phase's second half, the seven declaration blocks and the mask reversal, is untouched"
+    recent_action: "Raggedness closed on phone: an empty property now holds its column, not the row"
+    next_safe_action: "Decide the header rail: seven declaration blocks + mask reversal, untouched"
     blockers: []
     key_files:
       - "spec.md"

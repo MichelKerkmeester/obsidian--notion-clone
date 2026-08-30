@@ -43,9 +43,13 @@ _memory:
 ---
 # Feature Specification: Desktop Dropdown Placement
 
+<!-- SPECKIT_LEVEL: 1 -->
+<!-- SPECKIT_TEMPLATE_SOURCE: spec-core | v2.2 -->
+
 > Phase chain: parent [`../spec.md`](../spec.md). Related: `001-overlay-placement-and-menu-language`,
 > which built the anchored positioner this phase found a second, impoverished copy of.
 
+<!-- ANCHOR:problem -->
 ## 1. WHAT THIS PHASE FOUND
 
 Desktop dropdown placement is not one mechanism with bugs in it. It is **five independent
@@ -93,7 +97,9 @@ makes it a seam rather than three bugs.
 
 The fix gives `showAt` a target that can carry an anchor. The cursor form is unchanged and still
 correct; the anchor form clears its trigger on both sides.
+<!-- /ANCHOR:problem -->
 
+<!-- ANCHOR:scope -->
 ## 4. WHAT WAS NOT FIXED, AND WHY
 
 - **The calendar/timeline search-results panel** clamps `left` against `window.innerWidth`, which
@@ -120,3 +126,4 @@ correct; the anchor form clears its trigger on both sides.
 **Out.** `cell-renderer.ts`, `database-view.ts`, `embedded-database-renderer.ts`,
 `eslint.config.mjs` (held by another session). `styles.css` (lane). 
 `tools/storybook/verify-placement.mjs` (open elsewhere; the merge is owed).
+<!-- /ANCHOR:scope -->

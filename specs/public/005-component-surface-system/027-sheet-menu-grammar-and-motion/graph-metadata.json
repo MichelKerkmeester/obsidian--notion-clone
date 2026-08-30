@@ -1,0 +1,229 @@
+{
+  "schema_version": 1,
+  "packet_id": "public/005-component-surface-system/027-sheet-menu-grammar-and-motion",
+  "spec_folder": "public/005-component-surface-system/027-sheet-menu-grammar-and-motion",
+  "parent_id": "public/005-component-surface-system",
+  "status_review_required": true,
+  "children_ids": [],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "sheet menu grammar",
+      "menu row centred on phone",
+      "change type does nothing",
+      "sheet horizontal overflow",
+      "sheet entrance motion",
+      "027 sheet menu",
+      "027 sheet menu grammar plan",
+      "sheet row grammar implementation plan",
+      "sheet entrance motion plan",
+      "027 sheet menu grammar tasks",
+      "sheet row grammar task breakdown",
+      "027 acceptance criteria"
+    ],
+    "key_topics": [
+      "sheet",
+      "menu",
+      "grammar",
+      "row",
+      "centred",
+      "phone",
+      "change",
+      "type",
+      "nothing",
+      "horizontal",
+      "overflow",
+      "entrance"
+    ],
+    "importance_tier": "critical",
+    "status": "planned",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "acceptance-criteria.md",
+      "goal.md",
+      "implementation-summary.md",
+      "src/views/mobile-bottom-sheet.ts",
+      "src/views/owned-menu.ts",
+      "src/views/popover-position.ts",
+      "tools/storybook/verify-placement.mjs",
+      "tools/screenshots/scenarios/chrome.mjs",
+      "tools/bench/run-board.mjs",
+      "tools/lane/css-lane.json"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "acceptance-criteria.md",
+        "kind": "doc",
+        "path": "acceptance-criteria.md",
+        "source": "derived"
+      },
+      {
+        "name": "goal.md",
+        "kind": "doc",
+        "path": "goal.md",
+        "source": "derived"
+      },
+      {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "mobile-bottom-sheet.ts",
+        "kind": "code",
+        "path": "src/views/mobile-bottom-sheet.ts",
+        "source": "derived"
+      },
+      {
+        "name": "owned-menu.ts",
+        "kind": "code",
+        "path": "src/views/owned-menu.ts",
+        "source": "derived"
+      },
+      {
+        "name": "popover-position.ts",
+        "kind": "code",
+        "path": "src/views/popover-position.ts",
+        "source": "derived"
+      },
+      {
+        "name": "verify-placement.mjs",
+        "kind": "file",
+        "path": "tools/storybook/verify-placement.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "chrome.mjs",
+        "kind": "file",
+        "path": "tools/screenshots/scenarios/chrome.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "run-board.mjs",
+        "kind": "file",
+        "path": "tools/bench/run-board.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "css-lane.json",
+        "kind": "config",
+        "path": "tools/lane/css-lane.json",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Sheet Menu Grammar",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "The Change",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "The Add",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "css",
+        "kind": "technology",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "each",
+        "kind": "key_phrase",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Plan",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Overflow Declare",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Test Type",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "one",
+        "kind": "key_phrase",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Breakdown",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "Six operator reports against one surface. The shared menu row reached every one of them and was still centred on a device, because it never declared the one property the host's button rule supplies.",
+    "created_at": "2026-08-30T16:52:15.458Z",
+    "last_save_at": "2026-08-30T16:52:15.458Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "acceptance-criteria.md",
+      "goal.md",
+      "implementation-summary.md"
+    ],
+    "source_fingerprint": "sha256:1592868e8ffecfd232b4ed887e181229715300692946fb0b10bb153bdbd68109",
+    "source_fingerprint_docset": 3,
+    "source_doc_hashes": {
+      "spec.md": "d6a6709e0241fc2469d3afdd1a0fcc1b2fe0c803f5c262eb943f6056913be1d2",
+      "plan.md": "d87eb7c560cd9a7d8e92ee6449b4fc8d372be5b54fc00582d2e63acba6d3edaf",
+      "tasks.md": "608c88c6b192d8e7f2c44f8326e8555d533e23ffca991a0bffe3a1b9e2d9179b",
+      "implementation-summary.md": "f07c13a74ae28b553a086cfb57652e1e5f22b082e323ce0cc71fae47aa555ece"
+    },
+    "last_active_child_id": null,
+    "last_active_at": null
+  }
+}

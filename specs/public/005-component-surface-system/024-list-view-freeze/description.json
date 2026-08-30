@@ -1,0 +1,25 @@
+{
+  "level": "1",
+  "specFolder": "public/005-component-surface-system/024-list-view-freeze",
+  "description": "The operator, on a shipped build: \"opening list view bugs out obsidian freezes and you cant do",
+  "keywords": [
+    "operator",
+    "shipped",
+    "opening",
+    "list",
+    "view",
+    "bugs",
+    "obsidian",
+    "freezes",
+    "cant"
+  ],
+  "lastUpdated": "2026-08-30T16:56:33.528Z",
+  "specId": "024",
+  "folderSlug": "list-view-freeze",
+  "parentChain": [
+    "public",
+    "005-component-surface-system"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": []
+}

@@ -13,6 +13,12 @@ browser's input pipeline. Run: `node specs/public/005-component-surface-system/0
 
 Result at the time of writing: **19 of 22 pass**, and the three that do not are each declared below.
 
+**How to read the verdict column.** *Fixed here* and *Holds* mean a measured threshold is met.
+*Declined* means the operator accepted a shortfall against a number — it is closed and must not be
+reopened as a defect, and it is kept visibly distinct from a pass so that a later count of green rows
+does not absorb it. Ask 5 is the only declined row; ask 10 in the parent roadmap is the same
+decision seen from the program level.
+
 ## 1. THE EIGHT ASKS
 
 | # | The ask, in the operator's words | Verdict | The number |
@@ -21,8 +27,8 @@ Result at the time of writing: **19 of 22 pass**, and the three that do not are 
 | 2 | *"Close and expand button top right not aligned"* | **Holds** | On the record sheet both measure 44x44, and their centre lines differ by **0.00px**. |
 | 3 | *"closer to notion … no space between, text is a bit bigger, light transparent divider"* | **2 of 3 hold** | Gap between adjacent rows **0px** (row-gap token `0px`). Divider **1px** at **40% alpha**. Value text **16px**, up from an em-derived caption size. Label text is **13px**, which is *not* on the type scale — see §2. |
 | 4 | *"sheet content should move upwards with kb so keyboard doesn't overlap"* | **Mechanism proven; one host shape unreachable** | With `--keyboard-height: 336px` the sheet's bottom edge moves 844 → **508** on an 844px screen (clearance **336px**), its top stays on screen at y=**275**, and it returns to 844 when the keyboard closes. But a **window resize closes the sheet outright** — see §2 and §3. |
-| 5 | *"drag handler tap area … at least 48px high and as wide as whole sheet header"* — closed, not reopened | **Holds, with the record corrected** | The band answers presses over y=**1..32** of the sheet, i.e. **32px**, full width at **386px of 390** (the remainder is the sheet's own border and scroll gutter). The written record says 35px; the stylesheet's arithmetic is `--db-space-6` (16) + 8 + 4 + 4 = **32**. Clears WCAG 2.5.8's 24px AA target; short of 2.5.5's 44px, knowingly. |
-| 6 | *"make sure each sheet has same bg color"* | **Holds** | All **9** sheet-capable surfaces measure the identical fill `color(srgb 0.95 0.95 0.95)`. |
+| 5 | *"drag handler tap area … at least 48px high and as wide as whole sheet header"* — closed, not reopened | **Declined with a number, and the record corrected** | The band answers presses over y=**1..32** of the sheet, i.e. **32px**, full width at **386px of 390** (the remainder is the sheet's own border and scroll gutter). The written record says 35px; the stylesheet's arithmetic is `--db-space-6` (16) + 8 + 4 + 4 = **32**. **The 48px ask is not met and never will be from this sheet header** — it was accepted as a shortfall by the operator, so this row is closed, not passing. Clears WCAG 2.5.8's 24px AA target; short of 2.5.5's 44px, knowingly. |
+| 6 | *"make sure each sheet has same bg color"* | **Holds, with no before-number** | All **9** sheet-capable surfaces measure the identical fill `color(srgb 0.95 0.95 0.95)`. **No pre-fix value was ever recorded for this ask**, by any phase, so what is evidenced is that the surfaces agree today and not that they used to disagree — a distinction the doctrine treats as the difference between a criterion and a reading. Two other documents put the count at seven; only this one counted. |
 | 7 | *"block all interaction … black 25% transparent … that way drag handler works better"* | **Holds; the last clause is a non-issue** | Scrim is `rgba(0, 0, 0, 0.25)`, `pointer-events: auto`. A press 120px above the sheet resolves to the scrim, not the table. A press on the grab band resolves to **the grab handle**, not the scrim (sheet z=1000, scrim z=999). The scrim neither helps nor hinders the drag. |
 | 8 | *"proper reusable sheet menu item components"* | **Holds** | A row built by `createMenuRow` measures `min-height 44px`, `padding 8px 16px`, height **44px** in the owned-menu sheet and **identically** in a panel sheet. |
 

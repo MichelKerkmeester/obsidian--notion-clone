@@ -32,16 +32,24 @@ makes the other one honest.
 
 **Check.** `the select column's checkbox is the shared owned control`.
 
+**Negative control.** Not yet run. Replacing one of the 25 factory calls with a bare
+`input[type=checkbox]` in the harness must take the count to 24/25 and this check red. Until it has
+been observed red, the check that makes AC-1 honest has not itself been shown to be connected —
+which is the same argument AC-2 makes about AC-1, one level up.
+
 ## AC-3 — the header and the rows land on the same column
 
-**Threshold.** Right clearance takes exactly one distinct value across the header cell and every row
-cell.
+**Threshold.** Two clauses, both required. Right clearance takes exactly one distinct value across
+the header cell and every row cell, **and** the header's inner container and a row's are coincident —
+height delta 0px.
 
-**Failing first.** Before the fix the value was uniform at 25px but the boxes were flush left; the
-inner containers measured 32px in the header against 33px in the rows, so the two were not
-coincident.
+**Failing first.** The first clause **was already satisfied on the unfixed tree**: the value was
+uniform at 25px with every box flush left. Only the second failed, at 32px in the header against
+33px in the rows. The single-value clause alone is therefore a criterion that passes before a line is
+written, and it is recorded here as one — it is kept because it is what regresses if the pin is ever
+re-guarded, and it is paired because on its own it certifies the defect.
 
-**After.** One value, 7px, header and all 24 rows.
+**After.** One value, 7px, across the header and all 24 rows, with the inner containers coincident.
 
 **Why.** The original rationale for pinning out of flow was that a row with a drag handle and a row
 without one otherwise resolve a pixel apart, so the checkbox jumps when sorting removes the handle.
@@ -60,11 +68,24 @@ the new unguarded rule merely restates it, and the phone arm still wins on speci
 
 ## AC-5 — appearance keeps exactly one owner
 
-**Threshold.** No border, fill, or checkmark declaration is reintroduced into the select-column
-block.
+**Threshold.** Two clauses. In the source, no border, fill or checkmark declaration is reintroduced
+into the select-column block. In the browser, a select checkbox's computed `appearance`,
+`border-width`, `border-radius` and `background-color` are identical to a role-mate the same factory
+builds elsewhere — set equality, 0 differing properties.
+
+**Why the second clause.** The first is an absence in a file, and an absence passes before anything
+is written. It cannot distinguish a repair that respected the boundary from a repair that never
+approached it, and it goes stale the moment appearance is reintroduced from a *different* block. The
+computed comparison is the one that can fail.
 
 **Result.** The edit adds `position` and `right` only. Appearance stays with the shared component,
-which is what the checkbox-ownership work established and what this repair must not undo.
+which is what the checkbox-ownership work established and what this repair must not undo. The
+computed set-equality clause is **not yet measured**.
+
+**Negative control.** Not yet run. Stripping the shared component's class from the select checkbox in
+the harness must move at least one of the four computed properties — that is what proves the
+component is the sole owner rather than one of two agreeing owners. A control that moves nothing
+means the site was measured wrong, not that it is safe.
 
 ## AC-6 — the lane records the edit
 

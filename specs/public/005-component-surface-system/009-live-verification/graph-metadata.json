@@ -20,7 +20,9 @@
       "probe transport",
       "dev mobile emulation",
       "009 live verification tasks",
-      "009 live verification checklist"
+      "acceptance criteria",
+      "closure gate",
+      "ac traceability"
     ],
     "key_topics": [
       "live",
@@ -42,7 +44,11 @@
       "spec.md",
       "plan.md",
       "tasks.md",
-      "checklist.md"
+      "acceptance-criteria.md",
+      "goal.md",
+      "checklist.md",
+      "tools/live/probe.mjs",
+      "src/main.ts"
     ],
     "entities": [
       {
@@ -64,9 +70,33 @@
         "source": "derived"
       },
       {
+        "name": "acceptance-criteria.md",
+        "kind": "doc",
+        "path": "acceptance-criteria.md",
+        "source": "derived"
+      },
+      {
+        "name": "goal.md",
+        "kind": "doc",
+        "path": "goal.md",
+        "source": "derived"
+      },
+      {
         "name": "checklist.md",
         "kind": "doc",
         "path": "checklist.md",
+        "source": "derived"
+      },
+      {
+        "name": "probe.mjs",
+        "kind": "file",
+        "path": "tools/live/probe.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "main.ts",
+        "kind": "code",
+        "path": "src/main.ts",
         "source": "derived"
       },
       {
@@ -118,13 +148,13 @@
         "source": "derived"
       },
       {
-        "name": "Dependency Matrix",
+        "name": "Inventory Method",
         "kind": "proper_noun",
         "path": "plan.md",
         "source": "derived"
       },
       {
-        "name": "Depends On",
+        "name": "Its Stage",
         "kind": "proper_noun",
         "path": "plan.md",
         "source": "derived"
@@ -142,53 +172,48 @@
         "source": "derived"
       },
       {
+        "name": "what",
+        "kind": "key_phrase",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
         "name": "Obsidian",
         "kind": "key_phrase",
         "path": "tasks.md",
         "source": "derived"
       },
       {
-        "name": "the",
-        "kind": "key_phrase",
-        "path": "tasks.md",
-        "source": "derived"
-      },
-      {
-        "name": "Verification Checklist",
+        "name": "Acceptance Criteria",
         "kind": "proper_noun",
-        "path": "checklist.md",
-        "source": "derived"
-      },
-      {
-        "name": "Negative Controls",
-        "kind": "proper_noun",
-        "path": "checklist.md",
+        "path": "acceptance-criteria.md",
         "source": "derived"
       },
       {
         "name": "Stopping Obsidian",
         "kind": "proper_noun",
-        "path": "checklist.md",
+        "path": "acceptance-criteria.md",
         "source": "derived"
       }
     ],
     "causal_summary": "The program's founding fact is that a release passed every gate and changed nothing on device",
     "created_at": "2026-08-29T14:34:47.371Z",
-    "last_save_at": "2026-08-29T14:37:08.141Z",
+    "last_save_at": "2026-08-30T16:54:07.791Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
       "spec.md",
       "plan.md",
       "tasks.md",
-      "checklist.md"
+      "acceptance-criteria.md",
+      "goal.md"
     ],
-    "source_fingerprint": "sha256:ae4d24d9b062a75fc302151a1e40f624818030ccfa0d87f380826ffde01640a8",
+    "source_fingerprint": "sha256:9f8d89df37a55909e7ce83384b3332a2b1e404facdbe73dc2c5ce134b0d1b135",
+    "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "021e9d33d3d1f1af440a05afe96ca9146d1aef7930022c6f2488d408e288a53a",
-      "plan.md": "0044c4a7928f6a75918bbfe4f117d51cf53fa693b9b43178b14b361c411b51d9",
-      "tasks.md": "47597199b9adec69ea13b969610d5a08fe31e00562f242ffc244653889be8d51",
-      "checklist.md": "215be25fc27d4c6716ec435680c956e440c9eb8a1ddd97ea7f3644de748af717"
+      "spec.md": "1ca2bfb1eb518a8476938f30377896ca6398f563d96bb255a9856f07292ed388",
+      "plan.md": "1c6dcf824de8a59d2f89ff36f7d49b59643e58687beab07d557868e9cf8cb4f7",
+      "tasks.md": "549ec01df71beff6e4b1dd253613b0135b938604637c78ff55a17016fdcf7ca2"
     },
     "last_active_child_id": null,
     "last_active_at": null
