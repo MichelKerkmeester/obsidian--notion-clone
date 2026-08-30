@@ -347,8 +347,8 @@ function appendChipContent(
         thumbnail.setCssProps({
           width: "18px",
           height: "18px",
-          objectFit: "cover",
-          marginRight: "4px",
+          "object-fit": "cover",
+          "margin-right": "4px",
         });
       }
     } catch {

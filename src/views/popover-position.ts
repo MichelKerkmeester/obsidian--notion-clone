@@ -116,9 +116,9 @@ export function positionToolbarPopover(
     position: "fixed",
     right: "auto",
     bottom: "auto",
-    boxSizing: "border-box",
-    overflowY: "auto",
-    overscrollBehavior: "contain",
+    "box-sizing": "border-box",
+    "overflow-y": "auto",
+    "overscroll-behavior": "contain",
     // Cleared on every open, because a surface hidden for a dead anchor (see `place`) is reopened
     // against a live one and must come back. This is the setup path, so it runs once per open
     // rather than once per animation frame.
@@ -163,8 +163,8 @@ export function positionToolbarPopover(
 
     panel.setCssProps({
       width: `${width}px`,
-      maxWidth: `${maxWidth}px`,
-      maxHeight: "",
+      "max-width": `${maxWidth}px`,
+      "max-height": "",
     });
     if (mobileSheet) {
       placeSheet(panel, { margin, bounds });
@@ -307,13 +307,13 @@ export function placeSheet(
     top: "auto",
     bottom: `${keyboard}px`,
     width: "100%",
-    maxWidth: "100%",
-    boxSizing: "border-box",
-    overflowY: "auto",
-    overscrollBehavior: "contain",
+    "max-width": "100%",
+    "box-sizing": "border-box",
+    "overflow-y": "auto",
+    "overscroll-behavior": "contain",
     // Less whatever the keyboard covers: raising the bottom edge without lowering the cap pushes a
     // tall sheet off the top of the screen instead of clearing the keyboard.
-    maxHeight: `${Math.min(Math.max(160, bounds.height - margin * 2), (view.innerHeight - keyboard) * 0.9)}px`,
+    "max-height": `${Math.min(Math.max(160, bounds.height - margin * 2), (view.innerHeight - keyboard) * 0.9)}px`,
   });
 }
 

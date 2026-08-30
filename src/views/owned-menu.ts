@@ -203,9 +203,9 @@ export function createOwnedMenu(
         // two families disagreed about what happens to a long list.
         el.setCssProps({
           position: "fixed",
-          maxHeight: `${Math.max(120, bounds.height - margin * 2)}px`,
-          overflowY: "auto",
-          overscrollBehavior: "contain",
+          "max-height": `${Math.max(120, bounds.height - margin * 2)}px`,
+          "overflow-y": "auto",
+          "overscroll-behavior": "contain",
         });
 
         const rect = el.getBoundingClientRect();
