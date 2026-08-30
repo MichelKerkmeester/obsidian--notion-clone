@@ -78,7 +78,11 @@ describe("mobile table and panel UX", () => {
       '.is-phone .note-database-container .db-table .db-select-col .db-select-inner input[type="checkbox"]'
     );
     expect(checkbox).toMatch(/position:\s*absolute/);
-    expect(checkbox).toMatch(/right:\s*6px/);
+    // 4px, not the 6px this pinned when the cell held one control. The cell also holds a 28px
+    // reorder button in flow, and in a 64px column 6px left a 2px seam between the two targets
+    // where 4px leaves a 4px gap. The pin itself is what this test is for; the inset is the part
+    // the column's arithmetic decides.
+    expect(checkbox).toMatch(/right:\s*4px/);
   });
 
   it("auto-fits phone table columns to content and bounds them so they cannot run away", () => {

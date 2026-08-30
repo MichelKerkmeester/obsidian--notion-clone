@@ -1,16 +1,16 @@
 {
-  "measuredAt": "2026-08-29T20:32:10.321Z",
+  "measuredAt": "2026-08-30T07:41:23.354Z",
   "inputs": {
-    "styles.css": "39967f03be37",
+    "styles.css": "d1c0cd5f207e",
     "tools/live/checkbox-appearance.mjs": "0e7e253916cf",
     "tools/screenshots/scenarios.mjs": "1395f2dacbfd"
   },
   "totals": {
     "checkboxes": 171,
-    "fixtures": 49,
+    "fixtures": 51,
     "owned": 171,
-    "appearanceOwnedByAncestor": 10,
-    "appearanceSelfOwned": 161,
+    "appearanceOwnedByAncestor": 0,
+    "appearanceSelfOwned": 171,
     "tokenDependent": 171,
     "platformBox": 0,
     "distinctShapes": 3
@@ -2663,7 +2663,7 @@
         "width": 34,
         "height": 18
       },
-      "appearanceOwnedBy": "note-database-container",
+      "appearanceOwnedBy": null,
       "tokensFrom": "note-database-container"
     },
     {
@@ -2685,7 +2685,7 @@
         "width": 34,
         "height": 18
       },
-      "appearanceOwnedBy": "note-database-container",
+      "appearanceOwnedBy": null,
       "tokensFrom": "note-database-container"
     },
     {
@@ -2707,7 +2707,7 @@
         "width": 34,
         "height": 18
       },
-      "appearanceOwnedBy": "note-database-container",
+      "appearanceOwnedBy": null,
       "tokensFrom": "note-database-container"
     },
     {
@@ -2729,7 +2729,7 @@
         "width": 34,
         "height": 18
       },
-      "appearanceOwnedBy": "note-database-container",
+      "appearanceOwnedBy": null,
       "tokensFrom": "note-database-container"
     },
     {
@@ -2751,7 +2751,7 @@
         "width": 34,
         "height": 18
       },
-      "appearanceOwnedBy": "note-database-container",
+      "appearanceOwnedBy": null,
       "tokensFrom": "note-database-container"
     },
     {
@@ -2772,7 +2772,7 @@
         "width": 34,
         "height": 18
       },
-      "appearanceOwnedBy": "note-database-container",
+      "appearanceOwnedBy": null,
       "tokensFrom": "note-database-container"
     },
     {
@@ -2793,7 +2793,7 @@
         "width": 34,
         "height": 18
       },
-      "appearanceOwnedBy": "note-database-container",
+      "appearanceOwnedBy": null,
       "tokensFrom": "note-database-container"
     },
     {
@@ -3971,7 +3971,7 @@
         "width": 34,
         "height": 18
       },
-      "appearanceOwnedBy": "note-database-container",
+      "appearanceOwnedBy": null,
       "tokensFrom": "note-database-container"
     },
     {
@@ -3992,7 +3992,7 @@
         "width": 34,
         "height": 18
       },
-      "appearanceOwnedBy": "note-database-container",
+      "appearanceOwnedBy": null,
       "tokensFrom": "note-database-container"
     },
     {
@@ -4013,7 +4013,7 @@
         "width": 34,
         "height": 18
       },
-      "appearanceOwnedBy": "note-database-container",
+      "appearanceOwnedBy": null,
       "tokensFrom": "note-database-container"
     }
   ]

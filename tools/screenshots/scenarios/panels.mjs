@@ -24,7 +24,7 @@
 // 1. IMPORTS
 // ───────────────────────────────────────────────────────────────────
 
-import { ROWS, glyph, pill, tableHeader } from "./shared.mjs";
+import { ROWS, fieldCheckbox, glyph, pill, tableHeader } from "./shared.mjs";
 
 // ───────────────────────────────────────────────────────────────────
 // 2. ICONS
@@ -307,13 +307,13 @@ export const PANEL_SCENARIOS = [
           <div class="db-view-config-row">
             <div class="db-view-config-label">Enable this view's source rules</div>
             <div class="db-view-config-field">
-              <input class="db-toggle-switch" type="checkbox" role="switch">
+              <input class="db-toggle-switch" type="checkbox" role="switch" aria-label="Enable this view's source rules">
             </div>
           </div>
           <div class="db-view-config-row">
             <div class="db-view-config-label">Show icon</div>
             <div class="db-view-config-field">
-              <input class="db-toggle-switch" type="checkbox" role="switch" checked>
+              <input class="db-toggle-switch" type="checkbox" role="switch" aria-label="Show icon" checked>
             </div>
           </div>
           <div class="db-view-config-row">
@@ -516,6 +516,42 @@ export const PANEL_SCENARIOS = [
               ${peekField("owner", "Owner", "Michel")}
             </div>
           </div>
+        </div>
+      </div>`;
+    },
+  },
+  {
+    id: "panel-computed-cleanup-modal",
+    title: "Computed field cleanup modal",
+    group: "components",
+    width: 520,
+    sources: ["src/views/modals/computed-frontmatter-cleanup-modal.ts"],
+    // db-modal-checkbox is a factory family with a call site and a stylesheet rule and no fixture,
+    // so its box was the one field-role box nothing measured. It is also the only family mounted
+    // under .note-database-modal rather than .note-database-container, which is the mount point a
+    // container-scoped rule cannot reach — the exact shape of the original defect.
+    note: "The one checkbox family that mounts under the modal root instead of the view container. Its box must match every other field-role box.",
+    html: () => {
+      const option = (label, key, count, checked) => `
+        <label class="db-computed-cleanup-option">
+          ${checked ? fieldCheckbox("db-modal-checkbox").replace(" aria-label=", " checked aria-label=") : fieldCheckbox("db-modal-checkbox")}
+          <div class="db-computed-cleanup-option-text">
+            <div class="db-computed-cleanup-option-label">Field: ${label}</div>
+            <div class="db-computed-cleanup-option-key">${key} — ${count} records</div>
+          </div>
+        </label>`;
+      return `
+      <div class="note-database-modal">
+        <h3>Remove computed values from frontmatter</h3>
+        <div class="db-modal-help">These properties are computed at render time. Their stored values can be removed.</div>
+        <div class="db-computed-cleanup-list">
+          ${option("Total cost", "total_cost", 24, true)}
+          ${option("Days until renewal", "days_until_renewal", 24, false)}
+          ${option("Monthly equivalent", "monthly_equivalent", 18, false)}
+        </div>
+        <div class="db-modal-actions">
+          <button type="button">Cancel</button>
+          <button type="button" class="mod-warning">Remove</button>
         </div>
       </div>`;
     },

@@ -1,7 +1,7 @@
 {
-  "measuredAt": "2026-08-29T20:32:07.740Z",
+  "measuredAt": "2026-08-29T22:18:09.600Z",
   "inputs": {
-    "styles.css": "39967f03be37",
+    "styles.css": "7065789ec983",
     "tools/live/checkbox-inventory.mjs": "e869ed91680a"
   },
   "totals": {
@@ -65,7 +65,7 @@
     },
     {
       "file": "src/views/chart-toolbar-renderer.ts",
-      "line": 978,
+      "line": 980,
       "chain": [],
       "classes": [
         "db-toggle-switch"
@@ -134,7 +134,7 @@
     },
     {
       "file": "src/views/view-config-panel-renderer.ts",
-      "line": 2055,
+      "line": 2058,
       "chain": [
         "db-view-config-panel",
         "db-view-config-row",

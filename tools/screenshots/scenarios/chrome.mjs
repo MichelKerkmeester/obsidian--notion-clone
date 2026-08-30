@@ -23,7 +23,8 @@
 // 1. IMPORTS
 // ───────────────────────────────────────────────────────────────────
 
-import { ROWS, ICONS, dots, glyph, pill } from "./shared.mjs";
+import { ROWS, ICONS, boardSubgroupHeader, dots, galleryGroupHeader, glyph, listGroupHeader,
+  pill, rowCheckbox } from "./shared.mjs";
 
 // ───────────────────────────────────────────────────────────────────
 // 2. ICONS
@@ -259,7 +260,7 @@ const chartOptionsRow = {
     <div class="db-chart-options-row db-chart-options-switch">
       <span class="db-chart-options-row-icon">${icon}</span>
       <div class="db-chart-options-row-text"><span class="db-chart-options-label">${label}</span></div>
-      <input type="checkbox" class="db-toggle-switch" role="switch"${checked ? " checked" : ""}>
+      <input type="checkbox" class="db-toggle-switch" role="switch" aria-label="${label}"${checked ? " checked" : ""}>
     </div>`,
   text: (label, placeholder, icon) => `
     <div class="db-chart-options-row db-chart-options-title-row">
@@ -581,6 +582,82 @@ export const CHROME_SCENARIOS = [
           <div class="db-chart-empty-icon">${I.barChart}</div>
           <div class="db-chart-empty-text">All chart groups are hidden. Show at least one group in Chart options.</div>
           <button type="button" class="db-chart-empty-action">Show all groups</button>
+        </div>
+      </div>`,
+  },
+  {
+    id: "chrome-owned-menu",
+    title: "Owned menu — the shell every context menu uses",
+    group: "components",
+    width: 420,
+    sources: ["src/views/owned-menu.ts", "src/views/menu-row.ts"],
+    note: "Deliberately not wrapped in note-database-container: this menu mounts on document.body, so a fixture that wrapped it would photograph a surface the plugin never ships. Chromed from Obsidian's own menu variables so it matches the app's real menus and follows a theme that restyles them.",
+    html: () => `
+      <div class="db-surface db-menu db-owned-menu" role="menu" tabindex="-1">
+        <div class="db-menu-section">Column</div>
+        <button type="button" class="db-menu-item" aria-checked="false">
+          <span class="db-menu-item-icon">${I.arrowUpDown}</span>
+          <span class="db-menu-item-label">Sort ascending</span>
+        </button>
+        <button type="button" class="db-menu-item" aria-checked="true">
+          <span class="db-menu-item-icon">${I.listFilter}</span>
+          <span class="db-menu-item-label">Filter on this column</span>
+        </button>
+        <button type="button" class="db-menu-item" aria-checked="false" aria-haspopup="true" aria-expanded="false">
+          <span class="db-menu-item-icon">${I.columns3}</span>
+          <span class="db-menu-item-label">Property type</span>
+          <span class="db-menu-item-current">Select</span>
+          <span class="db-menu-item-chevron">${I.chevronRight}</span>
+        </button>
+        <div class="db-menu-separator" role="separator"></div>
+        <button type="button" class="db-menu-item" aria-checked="false" disabled aria-disabled="true">
+          <span class="db-menu-item-icon">${I.group}</span>
+          <span class="db-menu-item-label">Group by this column</span>
+        </button>
+        <button type="button" class="db-menu-item is-warning" aria-checked="false">
+          <span class="db-menu-item-label">Delete property</span>
+        </button>
+      </div>`,
+  },
+  {
+    id: "chrome-group-selection-controls",
+    title: "Group selection controls",
+    group: "components",
+    width: 620,
+    sources: ["src/views/list-renderer.ts", "src/views/gallery-renderer.ts", "src/views/board-renderer.ts"],
+    // Three families that existed in source and in no fixture: renderGroupCheckbox in the list and
+    // the gallery, and renderSubgroup in the board. Nothing photographed them and no check could
+    // reach them, which is the same hole that let a row checkbox family ship unstyled.
+    //
+    // They are captured together on purpose. The criterion these controls have to meet is that one
+    // role paints one box, so three headers side by side is the picture that shows a divergence at
+    // a glance; three separate captures would not.
+    note: "The whole-group selection box from the list, the gallery and a board subgroup. One role, so all three boxes must be the same size and radius.",
+    html: () => `
+      <div class="note-database-container">
+        ${listGroupHeader("Design", 4)}
+        ${galleryGroupHeader("Business", 7)}
+        ${boardSubgroupHeader("Monthly", 3)}
+      </div>`,
+  },
+  {
+    id: "chrome-selection-status-bar",
+    title: "Cell selection status bar",
+    group: "components",
+    width: 720,
+    sources: ["src/views/embedded-database-renderer.ts"],
+    // The clear-selection checkbox is checked by construction — the bar only exists while a
+    // selection does — so this is also the only fixture that photographs a row-role box in its
+    // checked state at the size the bar gives it.
+    note: "The bar that appears while table cells are selected. Its checkbox clears the selection, so it is always rendered checked.",
+    html: () => `
+      <div class="note-database-container">
+        <div class="db-selection-status-bar">
+          ${rowCheckbox("db-selection-clear-checkbox").replace(" aria-label=", " checked aria-label=")}
+          <span class="db-selection-count">6 cells selected</span>
+          <button type="button" class="db-selection-action">Copy TSV</button>
+          <button type="button" class="db-selection-action">Copy Markdown</button>
+          <button type="button" class="db-selection-action">Copy CSV</button>
         </div>
       </div>`,
   },

@@ -88,11 +88,21 @@ export const CORE_SCENARIOS = [
     group: "views",
     width: 900,
     sources: ["src/views/list-renderer.ts", "src/views/card-field-renderer.ts"],
+    // renderRow builds `db-list-row-controls` — checkbox, open button, move button — with no
+    // device test around it, so a desktop row has all three. This fixture used to render a bare
+    // title and two values, which meant the desktop list's own selection checkbox appeared in no
+    // capture at all and no check could reach it.
+    note: "The desktop list row, controls included. The row checkbox is not a phone-only control; the renderer builds it at every width.",
     html: () => `
       <div class="note-database-container">
         <div class="db-list" role="grid">
           ${ROWS.map((r) => `
             <div class="db-list-row" role="row" aria-keyshortcuts="Enter Space F2" tabindex="-1">
+              <div class="db-list-row-controls">
+                ${rowCheckbox("db-list-row-checkbox")}
+                <button type="button" class="db-list-row-open" aria-label="Open note">${ICONS.maximize}</button>
+                <button type="button" class="db-list-mobile-move-btn" aria-label="Move">${ICONS.move}</button>
+              </div>
               <span class="db-list-row-title">${r.name}</span>
               <span class="db-list-field-value">${r.cost}</span>
               <span class="db-list-field-value">${r.renew}</span>
@@ -104,42 +114,65 @@ export const CORE_SCENARIOS = [
     id: "add-view-popover",
     title: "Add view popover",
     group: "components",
-    width: 460,
+    // The width the positioner actually gives this panel. At 460 the capture was 1.6x the
+    // surface, so every judgement made from it — spacing, wrapping, how crowded a row looks —
+    // was made about a picture the product never draws.
+    width: 292,
     sources: ["src/views/toolbar-renderer.ts"],
-    note: "Tiles keep icon and caption inside their own bounds; the duplicate checkbox is not stretched.",
+    note: "Settings above, actions below, one row grammar for both the seven types and the duplicate.",
     // The popover anchors itself absolutely to the toolbar. With no toolbar to anchor to it
     // leaves the flow and the capture box collapses, so it is placed back in flow here.
+    //
+    // That override is also why NO capture of this scenario can answer a placement question. On a
+    // phone the shipped positioner makes this surface a bottom sheet; pinned static, it photographs
+    // as a popover in both devices. A defect was once read off this image that the image was
+    // structurally incapable of showing. Placement is measured in verify-placement, never here.
     captureCss: `.note-database-container .db-view-tab-popover {
       position: static !important; top: auto !important; left: auto !important;
       max-height: none !important;
     }`,
+    // Seven types, because getViewTypeOptions() returns seven. This markup is hand-written and
+    // cannot import the renderer, so add-view-popover-layout.test.ts holds the two in step instead.
     html: () => {
-      const tile = (label, d) => `
-        <button type="button" class="db-add-view-card" role="menuitem" aria-label="${label}">
-          <div class="db-add-view-preview"><span class="db-add-view-preview-icon">${glyph(d)}</span>
-            <span class="db-add-view-preview-lines"></span></div>
-          <span class="db-add-view-card-label">${label}</span>
+      const row = (label, d) => `
+        <button type="button" class="db-menu-item" role="menuitem" aria-checked="false">
+          <span class="db-menu-item-icon">${glyph(d)}</span>
+          <span class="db-menu-item-label">${label}</span>
         </button>`;
+      const field = (id, label, control) => `
+        <div class="db-add-view-field">
+          <label class="db-add-view-field-label" for="${id}">${label}</label>
+          ${control}
+        </div>`;
       return `
       <div class="note-database-container">
         <div class="db-view-tab-popover db-add-view-popover" role="dialog" aria-label="Add view">
           <div class="db-panel-header"><div class="db-panel-title">Add view</div></div>
+          <div class="db-menu-section">Options</div>
           <div class="db-add-view-form">
-            <input type="text" class="db-add-view-name" placeholder="View name (optional)">
-            <select class="db-add-view-key-field"><option>Cost</option></select>
-            <label class="db-add-view-duplicate"><input type="checkbox" class="db-checkbox db-checkbox-field"><span>Duplicate current view</span></label>
-            <input type="text" class="db-add-view-icon" placeholder="Icon (optional)">
+            ${field("db-add-view-field-1", "View name (optional)",
+              '<input type="text" class="db-add-view-name" id="db-add-view-field-1">')}
+            ${field("db-add-view-field-2", "Title property",
+              '<select class="db-add-view-key-field" id="db-add-view-field-2"><option>Cost</option></select>')}
+            ${field("db-add-view-field-3", "Icon (optional)",
+              '<input type="text" class="db-add-view-icon" maxlength="8" id="db-add-view-field-3">')}
+            <label class="db-add-view-duplicate"><input type="checkbox" class="db-checkbox db-checkbox-field"><span>Copy settings from current view</span></label>
           </div>
-          <div class="db-add-view-cards">
-            ${tile("Table view", '<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18"/>')}
-            ${tile("Board view", '<rect x="3" y="3" width="7" height="18" rx="1"/><rect x="14" y="3" width="7" height="11" rx="1"/>')}
-            ${tile("Gallery view", '<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-5-5L5 21"/>')}
-            ${tile("Calendar view", '<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>')}
+          <div class="db-menu-separator" role="separator"></div>
+          <div class="db-menu-section">Create</div>
+          <div class="db-add-view-choices">
+            ${row("Table view", '<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18"/>')}
+            ${row("Board view", '<rect x="3" y="3" width="7" height="18" rx="1"/><rect x="14" y="3" width="7" height="11" rx="1"/>')}
+            ${row("Gallery view", '<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-5-5L5 21"/>')}
+            ${row("List view", '<path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/>')}
+            ${row("Chart view", '<path d="M3 3v18h18"/><rect x="7" y="10" width="3" height="7"/><rect x="13" y="6" width="3" height="11"/>')}
+            ${row("Calendar view", '<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>')}
+            ${row("Timeline view", '<path d="M3 6h11M3 12h7M3 18h14"/>')}
+            <button type="button" class="db-menu-item db-add-view-duplicate-action" role="menuitem" aria-checked="false">
+              <span class="db-menu-item-icon">${glyph('<rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>')}</span>
+              <span class="db-menu-item-label">Duplicate current view</span>
+            </button>
           </div>
-          <button type="button" class="db-add-view-duplicate-action db-menu-item" role="menuitem">
-            <span class="db-menu-item-icon">${glyph('<rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>')}</span>
-            <span class="db-menu-item-label">Duplicate current view</span>
-          </button>
         </div>
       </div>`;
     },
@@ -212,7 +245,7 @@ export const CORE_SCENARIOS = [
         <tr>
           <td class="db-select-col"><div class="db-select-inner">
             <button type="button" class="db-table-mobile-move-btn" aria-label="Move row">${move}</button>
-            <input type="checkbox" class="db-checkbox db-checkbox-row" aria-label="Select row"></div></td>
+            ${rowCheckbox()}</div></td>
           <td class="db-record-icon-col"><span class="db-record-icon">${icon}</span></td>
           ${dataCells(r)}
         </tr>`).join("");
@@ -225,7 +258,7 @@ export const CORE_SCENARIOS = [
               <col class="db-select-colgroup"><col class="db-record-icon-colgroup">${cols}
             </colgroup>
             <thead><tr>
-              <th class="db-select-col"><div class="db-select-inner"><input type="checkbox" class="db-checkbox db-checkbox-row" aria-label="Select all"></div></th>
+              <th class="db-select-col"><div class="db-select-inner">${rowCheckbox()}</div></th>
               <th class="db-record-icon-col"></th>
               ${tableHeader()}
             </tr></thead>
@@ -282,5 +315,50 @@ export const CORE_SCENARIOS = [
             .join("")}
         </div>
       </div>`,
+  },
+  {
+    id: "list-sparse-fields",
+    title: "List rows with fields missing",
+    group: "views",
+    width: 1100,
+    sources: ["src/views/list-renderer.ts"],
+    note: "The shape every other list fixture cannot produce: each row missing a different subset of its properties. A fixture that gives every row every field shows a tidy grid whichever way the row is laid out, so it cannot tell a column claimed by index from a slot taken by count.",
+    html: () => {
+      // Which fields each row is missing. Fixed rather than random so the capture is reproducible,
+      // and spread so no two adjacent rows share a subset.
+      const MISSING = [[], ["payment"], ["cost", "cycle"], ["renew"], ["cost"], ["cycle", "payment"],
+                       [], ["cost", "renew", "cycle"], ["payment"], ["renew"], ["cost"], []];
+      // Deliberately not all equal: with four identical widths a container-level track rule and a
+      // per-column one produce the same picture, and the fixture cannot tell them apart.
+      const WIDTHS = { cost: 110, renew: 190, payment: 150, cycle: 130 };
+      const template = ["cost", "renew", "payment", "cycle"].map((k) => `${WIDTHS[k]}px`).join(" ");
+      const rows = ROWS.slice(0, 12).map((r, i) => {
+        const gone = new Set(MISSING[i] || []);
+        const pairs = [["Cost", "cost"], ["Renews", "renew"], ["Payment", "payment"], ["Billing", "cycle"]]
+          // The column each property owns, assigned before the skip — the renderer sets the same
+          // value from the unfiltered field list, so a fixture that numbered the survivors instead
+          // would photograph an alignment the renderer never produces.
+          .map(([label, key], column) => [label, key, column + 1])
+          // The renderer's own treatment of an empty value, reproduced: the field is still built
+          // and still claims its column, and `is-placeholder` hides it. Reproducing the older
+          // behaviour — dropping the element — would photograph a row the renderer no longer
+          // builds, and would hide the phone defect this fixture exists to show, because a
+          // wrapping flex line has no grid column to fall back on.
+          .map(([label, key, column]) => `
+            <div class="db-list-field${gone.has(key) ? " is-placeholder" : ""}"${gone.has(key) ? ' aria-hidden="true"' : ""} style="grid-column: ${column}; --db-card-field-width: ${WIDTHS[key]}px"><span class="db-list-field-label">${label}</span><div class="db-list-field-value">${r[key]}</div></div>`)
+          .join("");
+        return `
+        <div class="db-list-row" role="row" tabindex="-1">
+          <div class="db-list-row-main">
+            <div class="db-record-title-line"><span class="db-list-row-title">${r.name}</span></div>
+            <div class="db-list-row-meta" style="grid-template-columns: ${template}">${pairs}</div>
+          </div>
+        </div>`;
+      }).join("");
+      return `
+      <div class="note-database-container db-width-default">
+        <div class="db-list" role="grid">${rows}</div>
+      </div>`;
+    },
   },
 ];

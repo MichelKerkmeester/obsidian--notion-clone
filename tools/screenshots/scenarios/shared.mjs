@@ -75,6 +75,10 @@ export const ICONS = {
   hash: glyph('<path d="M4 9h16M4 15h16M10 3 8 21M16 3l-2 18"/>'),
   "circle-dot": glyph('<circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="1"/>'),
   calendar: glyph('<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>'),
+  // The row-control glyphs. Identical path data to the copies table-mobile and list-mobile
+  // declare inline, so a fixture built from either source draws the same button.
+  move: glyph('<path d="m8 9 4-4 4 4M8 15l4 4 4-4"/>'),
+  maximize: glyph('<path d="M15 3h6v6"/><path d="m21 3-7 7"/><path d="M9 21H3v-6"/><path d="m3 21 7-7"/>'),
 };
 
 // ───────────────────────────────────────────────────────────────────
@@ -99,6 +103,25 @@ export const pill = (text, tone) => `<span class="status-badge status-color-${to
  */
 export const rowCheckbox = (family) =>
   `<input type="checkbox" class="db-checkbox db-checkbox-row${family ? ` ${family}` : ""}" aria-label="Select">`;
+
+/** The field role, for a boolean value rather than a row selection. */
+export const fieldCheckbox = (family) =>
+  `<input type="checkbox" class="db-checkbox db-checkbox-field${family ? ` ${family}` : ""}" aria-label="Toggle">`;
+
+/**
+ * The switch is a checkbox too, and it does not come from the factory.
+ *
+ * Eight call sites build it with a raw `createEl`, so it carries `db-toggle-switch` alone and
+ * shares none of the checkbox component's contract. It is included here because it is an
+ * `input[type="checkbox"]` in the shipped DOM: any census that walks checkboxes finds it, and a
+ * fixture that leaves it out makes that census silently partial.
+ */
+export const toggleSwitch = ({ checked = false, disabled = false } = {}) =>
+  `<input type="checkbox" role="switch" class="db-toggle-switch"${checked ? " checked" : ""}${disabled ? " disabled" : ""} aria-label="Toggle">`;
+
+/** The collapse chevron every group header opens with. */
+export const collapseToggle = (cls) =>
+  `<button type="button" class="${cls}"><span class="db-collapse-triangle"></span></button>`;
 
 export function tableHeader() {
   return `<th class="db-select-col"><div class="db-select-inner">${rowCheckbox()}</div></th>` +
@@ -148,4 +171,53 @@ export function boardColumn(title, rows) {
     <div class="db-board-cards" role="rowgroup">${rows.map(boardCard).join("")}</div>
   </div>`;
 }
+
+/**
+ * Group-level selection headers.
+ *
+ * These are the controls that select a whole group at once, and they are a different family from
+ * the per-row box beside them: board subgroup, gallery group and list group each pass their own
+ * class to the factory. All three were absent from every fixture, so nothing photographed them and
+ * no check could reach them — the same hole that let eleven of twelve row families ship round.
+ *
+ * The nesting mirrors each renderer: the list wraps toggle, checkbox, title and count in
+ * `db-list-group-header-label`, the gallery puts them straight on the header, and the board's
+ * subgroup keeps its title and count in `db-board-header-text`.
+ */
+export const listGroupHeader = (title, count) => `
+  <div class="db-list-group">
+    <div class="db-list-group-header">
+      <span class="db-list-group-header-label">
+        ${collapseToggle("db-list-group-toggle")}
+        ${rowCheckbox("db-list-group-checkbox")}
+        <span class="db-list-group-title">${title}</span>
+        <span class="db-list-group-count">${count}</span>
+      </span>
+      <button type="button" class="db-list-group-new">+ New</button>
+    </div>
+  </div>`;
+
+export const galleryGroupHeader = (title, count) => `
+  <div class="db-gallery-group">
+    <div class="db-gallery-group-header">
+      ${collapseToggle("db-gallery-group-toggle")}
+      ${rowCheckbox("db-gallery-group-checkbox")}
+      <span class="db-gallery-group-title">${title}</span>
+      <span class="db-gallery-group-count">${count}</span>
+      <button type="button" class="db-gallery-group-new">+ New</button>
+    </div>
+  </div>`;
+
+export const boardSubgroupHeader = (title, count) => `
+  <div class="db-board-subgroup">
+    <div class="db-board-subgroup-header">
+      ${collapseToggle("db-board-subgroup-toggle")}
+      ${rowCheckbox("db-board-subgroup-checkbox")}
+      <div class="db-board-header-text">
+        <span class="db-board-subgroup-title">${title}</span>
+        <span class="db-board-subgroup-count">${count}</span>
+      </div>
+    </div>
+    <div class="db-board-cards" role="rowgroup"></div>
+  </div>`;
 

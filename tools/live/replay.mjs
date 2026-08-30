@@ -70,6 +70,76 @@ const CLAIMS = [
     },
   },
   {
+    phase: "004-checkbox-ownership",
+    claim: "no checkbox or switch borrows its appearance from an ancestor",
+    was: 10,
+    recorded: 0,
+    async measure(page) {
+      let borrowed = 0;
+      for (const s of SCENARIOS.filter((x) => typeof x.html === "function")) {
+        let html;
+        try { html = s.html(); } catch { continue; }
+        await load(page, html);
+        // Strip each ancestor's classes in turn and re-read. A box whose `appearance` moves is one
+        // an ancestor was styling, which is the same box that reverts to the platform control the
+        // moment the surface is portalled to the body.
+        borrowed += await page.evaluate(() =>
+          [...document.querySelectorAll('input[type="checkbox"]')].filter((el) => {
+            const before = getComputedStyle(el).appearance;
+            for (let n = el.parentElement; n && n !== document.body; n = n.parentElement) {
+              const saved = n.className;
+              if (!saved) continue;
+              n.className = "";
+              const after = getComputedStyle(el).appearance;
+              n.className = saved;
+              if (after !== before) return true;
+            }
+            return false;
+          }).length);
+      }
+      return borrowed;
+    },
+  },
+  {
+    phase: "001-overlay-width-and-chrome",
+    claim: "every surface marker grants a focus ring to a control mounted outside the container",
+    was: 1,
+    recorded: 0,
+    async measure(page) {
+      // `.db-surface` is the marker the surface contract puts on anything mounted on the body, and
+      // it was the one marker the focus-indicator list did not name — so the architecture's own
+      // escape hatch handed over tokens and radius and dropped the one thing a keyboard user needs.
+      const MARKERS = [
+        "db-surface",
+        "db-column-menu-subpopover",
+        "db-icon-picker-popover",
+        "db-color-picker-popup",
+        "db-mobile-column-width-panel",
+        "db-cell-edit-popover",
+      ];
+      await load(page, "");
+      return page.evaluate((markers) => {
+        let missing = 0;
+        for (const marker of markers) {
+          const host = document.body.appendChild(document.createElement("div"));
+          host.className = marker;
+          const button = host.appendChild(document.createElement("button"));
+          button.textContent = "x";
+          // :focus-visible needs a keyboard-shaped focus; a scripted .focus() does not always set it,
+          // so the ring is read from the rule that matches rather than from the focused element.
+          const ring = [...document.styleSheets].flatMap((sheet) => {
+            try { return [...sheet.cssRules]; } catch { return []; }
+          }).some((rule) => rule.selectorText?.includes(`.${marker} :is(`)
+            && rule.selectorText.includes(":focus-visible")
+            && rule.style?.boxShadow);
+          if (!ring) missing += 1;
+          host.remove();
+        }
+        return missing;
+      }, MARKERS);
+    },
+  },
+  {
     phase: "005-content-row-rhythm",
     claim: "no list row paints outside its container",
     was: 26,
@@ -88,6 +158,31 @@ const CLAIMS = [
         }));
       }
       return worst;
+    },
+  },
+  {
+    phase: "005-content-row-rhythm",
+    claim: "no list column holds more than one property",
+    was: 3,
+    recorded: 0,
+    async measure(page) {
+      // The renderer omits a field whose value is empty, so this only shows up on rows with gaps.
+      // Every other list fixture gives every row every field and reports zero however broken it is.
+      const sparse = SCENARIOS.find((x) => x.id === "list-sparse-fields");
+      if (!sparse) return -1;
+      await load(page, sparse.html());
+      return page.evaluate(() => {
+        const byColumn = new Map();
+        for (const meta of document.querySelectorAll(".db-list-row-meta")) {
+          for (const field of meta.querySelectorAll(".db-list-field")) {
+            const x = Math.round(field.getBoundingClientRect().left);
+            const label = field.querySelector(".db-list-field-label")?.textContent ?? "";
+            if (!byColumn.has(x)) byColumn.set(x, new Set());
+            byColumn.get(x).add(label);
+          }
+        }
+        return [...byColumn.values()].filter((labels) => labels.size > 1).length;
+      });
     },
   },
   {

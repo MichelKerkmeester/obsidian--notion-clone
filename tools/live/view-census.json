@@ -1,8 +1,8 @@
 {
-  "measuredAt": "2026-08-29T19:22:11.300Z",
+  "measuredAt": "2026-08-30T08:23:18.409Z",
   "inputs": {
-    "styles.css": "a535fa1bf6fd",
-    "tools/live/view-census.mjs": "f8d04abfcd34",
+    "styles.css": "aec8873ba9c5",
+    "tools/live/view-census.mjs": "f911f2e4a8cb",
     "tools/screenshots/scenarios.mjs": "1395f2dacbfd"
   },
   "widths": [
@@ -49,322 +49,322 @@
     {
       "width": 320,
       "fields": 1,
-      "wrap": false,
+      "phone": false,
       "spilling": 0,
       "worstSpill": 0,
-      "mean": 54.4,
+      "mean": 52.9,
       "sd": 0,
       "distinct": 1,
-      "min": 54.4,
-      "max": 54.4,
+      "min": 52.9,
+      "max": 52.9,
       "lineBox": 18.9
     },
     {
       "width": 320,
       "fields": 1,
-      "wrap": true,
+      "phone": true,
       "spilling": 0,
       "worstSpill": 0,
-      "mean": 54.4,
+      "mean": 52.9,
       "sd": 0,
       "distinct": 1,
-      "min": 54.4,
-      "max": 54.4,
+      "min": 52.9,
+      "max": 52.9,
       "lineBox": 18.9
     },
     {
       "width": 320,
       "fields": 6,
-      "wrap": false,
+      "phone": false,
       "spilling": 0,
       "worstSpill": 0,
-      "mean": 54.4,
+      "mean": 52.9,
       "sd": 0,
       "distinct": 1,
-      "min": 54.4,
-      "max": 54.4,
+      "min": 52.9,
+      "max": 52.9,
       "lineBox": 18.9
     },
     {
       "width": 320,
       "fields": 6,
-      "wrap": true,
+      "phone": true,
       "spilling": 0,
       "worstSpill": 0,
-      "mean": 54.4,
+      "mean": 169.9,
       "sd": 0,
       "distinct": 1,
-      "min": 54.4,
-      "max": 54.4,
+      "min": 169.9,
+      "max": 169.9,
       "lineBox": 18.9
     },
     {
       "width": 320,
       "fields": 20,
-      "wrap": false,
+      "phone": false,
       "spilling": 0,
       "worstSpill": 0,
-      "mean": 54.4,
+      "mean": 52.9,
       "sd": 0,
       "distinct": 1,
-      "min": 54.4,
-      "max": 54.4,
+      "min": 52.9,
+      "max": 52.9,
       "lineBox": 18.9
     },
     {
       "width": 320,
       "fields": 20,
-      "wrap": true,
+      "phone": true,
       "spilling": 0,
       "worstSpill": 0,
-      "mean": 54.4,
+      "mean": 497.4,
       "sd": 0,
       "distinct": 1,
-      "min": 54.4,
-      "max": 54.4,
+      "min": 497.4,
+      "max": 497.4,
       "lineBox": 18.9
     },
     {
       "width": 402,
       "fields": 1,
-      "wrap": false,
+      "phone": false,
       "spilling": 0,
       "worstSpill": 0,
-      "mean": 54.4,
+      "mean": 52.9,
       "sd": 0,
       "distinct": 1,
-      "min": 54.4,
-      "max": 54.4,
+      "min": 52.9,
+      "max": 52.9,
       "lineBox": 18.9
     },
     {
       "width": 402,
       "fields": 1,
-      "wrap": true,
+      "phone": true,
       "spilling": 0,
       "worstSpill": 0,
-      "mean": 54.4,
+      "mean": 52.9,
       "sd": 0,
       "distinct": 1,
-      "min": 54.4,
-      "max": 54.4,
+      "min": 52.9,
+      "max": 52.9,
       "lineBox": 18.9
     },
     {
       "width": 402,
       "fields": 6,
-      "wrap": false,
+      "phone": false,
       "spilling": 0,
       "worstSpill": 0,
-      "mean": 54.4,
+      "mean": 52.9,
       "sd": 0,
       "distinct": 1,
-      "min": 54.4,
-      "max": 54.4,
+      "min": 52.9,
+      "max": 52.9,
       "lineBox": 18.9
     },
     {
       "width": 402,
       "fields": 6,
-      "wrap": true,
+      "phone": true,
       "spilling": 0,
       "worstSpill": 0,
-      "mean": 54.4,
+      "mean": 169.9,
       "sd": 0,
       "distinct": 1,
-      "min": 54.4,
-      "max": 54.4,
+      "min": 169.9,
+      "max": 169.9,
       "lineBox": 18.9
     },
     {
       "width": 402,
       "fields": 20,
-      "wrap": false,
+      "phone": false,
       "spilling": 0,
       "worstSpill": 0,
-      "mean": 54.4,
+      "mean": 52.9,
       "sd": 0,
       "distinct": 1,
-      "min": 54.4,
-      "max": 54.4,
+      "min": 52.9,
+      "max": 52.9,
       "lineBox": 18.9
     },
     {
       "width": 402,
       "fields": 20,
-      "wrap": true,
+      "phone": true,
       "spilling": 0,
       "worstSpill": 0,
-      "mean": 54.4,
+      "mean": 497.4,
       "sd": 0,
       "distinct": 1,
-      "min": 54.4,
-      "max": 54.4,
+      "min": 497.4,
+      "max": 497.4,
       "lineBox": 18.9
     },
     {
       "width": 768,
       "fields": 1,
-      "wrap": false,
+      "phone": false,
       "spilling": 0,
       "worstSpill": 0,
-      "mean": 54.4,
+      "mean": 52.9,
       "sd": 0,
       "distinct": 1,
-      "min": 54.4,
-      "max": 54.4,
+      "min": 52.9,
+      "max": 52.9,
       "lineBox": 18.9
     },
     {
       "width": 768,
       "fields": 1,
-      "wrap": true,
+      "phone": true,
       "spilling": 0,
       "worstSpill": 0,
-      "mean": 54.4,
+      "mean": 52.9,
       "sd": 0,
       "distinct": 1,
-      "min": 54.4,
-      "max": 54.4,
+      "min": 52.9,
+      "max": 52.9,
       "lineBox": 18.9
     },
     {
       "width": 768,
       "fields": 6,
-      "wrap": false,
+      "phone": false,
       "spilling": 0,
       "worstSpill": 0,
-      "mean": 54.4,
+      "mean": 52.9,
       "sd": 0,
       "distinct": 1,
-      "min": 54.4,
-      "max": 54.4,
+      "min": 52.9,
+      "max": 52.9,
       "lineBox": 18.9
     },
     {
       "width": 768,
       "fields": 6,
-      "wrap": true,
+      "phone": true,
       "spilling": 0,
       "worstSpill": 0,
-      "mean": 54.4,
+      "mean": 76.3,
       "sd": 0,
       "distinct": 1,
-      "min": 54.4,
-      "max": 54.4,
+      "min": 76.3,
+      "max": 76.3,
       "lineBox": 18.9
     },
     {
       "width": 768,
       "fields": 20,
-      "wrap": false,
+      "phone": false,
       "spilling": 0,
       "worstSpill": 0,
-      "mean": 54.4,
+      "mean": 52.9,
       "sd": 0,
       "distinct": 1,
-      "min": 54.4,
-      "max": 54.4,
+      "min": 52.9,
+      "max": 52.9,
       "lineBox": 18.9
     },
     {
       "width": 768,
       "fields": 20,
-      "wrap": true,
+      "phone": true,
       "spilling": 0,
       "worstSpill": 0,
-      "mean": 54.4,
+      "mean": 146.5,
       "sd": 0,
       "distinct": 1,
-      "min": 54.4,
-      "max": 54.4,
+      "min": 146.5,
+      "max": 146.5,
       "lineBox": 18.9
     },
     {
       "width": 1440,
       "fields": 1,
-      "wrap": false,
+      "phone": false,
       "spilling": 0,
       "worstSpill": 0,
-      "mean": 54.4,
+      "mean": 52.9,
       "sd": 0,
       "distinct": 1,
-      "min": 54.4,
-      "max": 54.4,
+      "min": 52.9,
+      "max": 52.9,
       "lineBox": 18.9
     },
     {
       "width": 1440,
       "fields": 1,
-      "wrap": true,
+      "phone": true,
       "spilling": 0,
       "worstSpill": 0,
-      "mean": 54.4,
+      "mean": 52.9,
       "sd": 0,
       "distinct": 1,
-      "min": 54.4,
-      "max": 54.4,
+      "min": 52.9,
+      "max": 52.9,
       "lineBox": 18.9
     },
     {
       "width": 1440,
       "fields": 6,
-      "wrap": false,
+      "phone": false,
       "spilling": 0,
       "worstSpill": 0,
-      "mean": 54.4,
+      "mean": 52.9,
       "sd": 0,
       "distinct": 1,
-      "min": 54.4,
-      "max": 54.4,
+      "min": 52.9,
+      "max": 52.9,
       "lineBox": 18.9
     },
     {
       "width": 1440,
       "fields": 6,
-      "wrap": true,
+      "phone": true,
       "spilling": 0,
       "worstSpill": 0,
-      "mean": 54.4,
+      "mean": 52.9,
       "sd": 0,
       "distinct": 1,
-      "min": 54.4,
-      "max": 54.4,
+      "min": 52.9,
+      "max": 52.9,
       "lineBox": 18.9
     },
     {
       "width": 1440,
       "fields": 20,
-      "wrap": false,
+      "phone": false,
       "spilling": 0,
       "worstSpill": 0,
-      "mean": 54.4,
+      "mean": 52.9,
       "sd": 0,
       "distinct": 1,
-      "min": 54.4,
-      "max": 54.4,
+      "min": 52.9,
+      "max": 52.9,
       "lineBox": 18.9
     },
     {
       "width": 1440,
       "fields": 20,
-      "wrap": true,
+      "phone": true,
       "spilling": 0,
       "worstSpill": 0,
-      "mean": 54.4,
+      "mean": 99.7,
       "sd": 0,
       "distinct": 1,
-      "min": 54.4,
-      "max": 54.4,
+      "min": 99.7,
+      "max": 99.7,
       "lineBox": 18.9
     }
   ],
   "totals": {
-    "fixtures": 49,
-    "escaping": 995,
-    "growing": 479,
-    "scrolling": 516,
-    "rhythmGroups": 16,
+    "fixtures": 54,
+    "escaping": 535,
+    "growing": 255,
+    "scrolling": 280,
+    "rhythmGroups": 20,
     "ragged": 0,
     "probeBlind": 0
   },
@@ -376,7 +376,7 @@
       "tag": "button",
       "cls": "db-column-menu-trigger",
       "parentCls": "db-th-content",
-      "by": 26.3,
+      "by": 33.2,
       "scrolls": true
     },
     {
@@ -386,7 +386,7 @@
       "tag": "button",
       "cls": "db-column-menu-trigger",
       "parentCls": "db-th-content",
-      "by": 26.3,
+      "by": 33.2,
       "scrolls": true
     },
     {
@@ -396,7 +396,7 @@
       "tag": "button",
       "cls": "db-column-menu-trigger",
       "parentCls": "db-th-content",
-      "by": 26.3,
+      "by": 33.2,
       "scrolls": true
     },
     {
@@ -406,7 +406,7 @@
       "tag": "button",
       "cls": "db-column-menu-trigger",
       "parentCls": "db-th-content",
-      "by": 26.3,
+      "by": 33.2,
       "scrolls": true
     },
     {
@@ -416,7 +416,7 @@
       "tag": "button",
       "cls": "db-column-menu-trigger",
       "parentCls": "db-th-content",
-      "by": 26.3,
+      "by": 33.2,
       "scrolls": true
     },
     {
@@ -426,727 +426,7 @@
       "tag": "button",
       "cls": "db-column-menu-trigger",
       "parentCls": "db-th-content",
-      "by": 25.3,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-orange",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-gray",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-green",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-orange",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-gray",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-green",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-orange",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-gray",
-      "parentCls": "",
-      "by": 9.8,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-green",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-orange",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-gray",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-green",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-orange",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-gray",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-blue",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-orange",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-gray",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-blue",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-orange",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-gray",
-      "parentCls": "",
-      "by": 9.8,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-blue",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-orange",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-gray",
-      "parentCls": "",
-      "by": 9.8,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-blue",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-orange",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-gray",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-blue",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-orange",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-gray",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-blue",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-orange",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-gray",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-blue",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-orange",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-gray",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-green",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-orange",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-gray",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-green",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-orange",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-gray",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-green",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-orange",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-gray",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-green",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-orange",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-gray",
-      "parentCls": "",
-      "by": 9.8,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-green",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-orange",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-gray",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-green",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-orange",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-gray",
-      "parentCls": "",
-      "by": 9.8,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-green",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-orange",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-gray",
-      "parentCls": "",
-      "by": 9.8,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-green",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-orange",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-gray",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-green",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-orange",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-gray",
-      "parentCls": "",
-      "by": 9.8,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-green",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-orange",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-gray",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-green",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-orange",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-gray",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-green",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-orange",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-gray",
-      "parentCls": "",
-      "by": 9.8,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-green",
-      "parentCls": "",
-      "by": 14,
+      "by": 32.1,
       "scrolls": true
     },
     {
@@ -1236,7 +516,7 @@
       "tag": "div",
       "cls": "db-list",
       "parentCls": "note-database-container",
-      "by": 140.8,
+      "by": 146,
       "scrolls": true
     },
     {
@@ -1245,7 +525,7 @@
       "kind": "rhythm",
       "cls": "db-list-row",
       "count": 24,
-      "mean": 63.7,
+      "mean": 70.8,
       "sd": 0,
       "distinct": 1
     },
@@ -1283,10 +563,10 @@
       "width": 320,
       "fixture": "table-mobile",
       "kind": "escaping",
-      "tag": "input",
-      "cls": "db-checkbox.db-checkbox-row",
-      "parentCls": "db-select-inner",
-      "by": 17,
+      "tag": "button",
+      "cls": "db-record-open-btn.db-record-open-btn-icon",
+      "parentCls": "db-cell.db-title-cell",
+      "by": 4,
       "scrolls": true
     },
     {
@@ -1303,10 +583,10 @@
       "width": 320,
       "fixture": "table-mobile",
       "kind": "escaping",
-      "tag": "input",
-      "cls": "db-checkbox.db-checkbox-row",
-      "parentCls": "db-select-inner",
-      "by": 17,
+      "tag": "button",
+      "cls": "db-record-open-btn.db-record-open-btn-icon",
+      "parentCls": "db-cell.db-title-cell",
+      "by": 4,
       "scrolls": true
     },
     {
@@ -1323,10 +603,10 @@
       "width": 320,
       "fixture": "table-mobile",
       "kind": "escaping",
-      "tag": "input",
-      "cls": "db-checkbox.db-checkbox-row",
-      "parentCls": "db-select-inner",
-      "by": 17,
+      "tag": "button",
+      "cls": "db-record-open-btn.db-record-open-btn-icon",
+      "parentCls": "db-cell.db-title-cell",
+      "by": 4,
       "scrolls": true
     },
     {
@@ -1343,10 +623,10 @@
       "width": 320,
       "fixture": "table-mobile",
       "kind": "escaping",
-      "tag": "input",
-      "cls": "db-checkbox.db-checkbox-row",
-      "parentCls": "db-select-inner",
-      "by": 17,
+      "tag": "button",
+      "cls": "db-record-open-btn.db-record-open-btn-icon",
+      "parentCls": "db-cell.db-title-cell",
+      "by": 4,
       "scrolls": true
     },
     {
@@ -1363,16 +643,6 @@
       "width": 320,
       "fixture": "table-mobile",
       "kind": "escaping",
-      "tag": "input",
-      "cls": "db-checkbox.db-checkbox-row",
-      "parentCls": "db-select-inner",
-      "by": 17,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "table-mobile",
-      "kind": "escaping",
       "tag": "button",
       "cls": "db-record-open-btn.db-record-open-btn-icon",
       "parentCls": "db-cell.db-title-cell",
@@ -1383,110 +653,10 @@
       "width": 320,
       "fixture": "table-mobile",
       "kind": "escaping",
-      "tag": "input",
-      "cls": "db-checkbox.db-checkbox-row",
-      "parentCls": "db-select-inner",
-      "by": 17,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "table-mobile",
-      "kind": "escaping",
       "tag": "button",
       "cls": "db-record-open-btn.db-record-open-btn-icon",
       "parentCls": "db-cell.db-title-cell",
       "by": 4,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "table-mobile",
-      "kind": "escaping",
-      "tag": "input",
-      "cls": "db-checkbox.db-checkbox-row",
-      "parentCls": "db-select-inner",
-      "by": 17,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "table-mobile",
-      "kind": "escaping",
-      "tag": "button",
-      "cls": "db-record-open-btn.db-record-open-btn-icon",
-      "parentCls": "db-cell.db-title-cell",
-      "by": 4,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "table-mobile",
-      "kind": "escaping",
-      "tag": "input",
-      "cls": "db-checkbox.db-checkbox-row",
-      "parentCls": "db-select-inner",
-      "by": 17,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "table-mobile",
-      "kind": "escaping",
-      "tag": "button",
-      "cls": "db-record-open-btn.db-record-open-btn-icon",
-      "parentCls": "db-cell.db-title-cell",
-      "by": 4,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "table-mobile",
-      "kind": "escaping",
-      "tag": "input",
-      "cls": "db-checkbox.db-checkbox-row",
-      "parentCls": "db-select-inner",
-      "by": 17,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "table-mobile",
-      "kind": "escaping",
-      "tag": "button",
-      "cls": "db-record-open-btn.db-record-open-btn-icon",
-      "parentCls": "db-cell.db-title-cell",
-      "by": 4,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "table-mobile",
-      "kind": "escaping",
-      "tag": "input",
-      "cls": "db-checkbox.db-checkbox-row",
-      "parentCls": "db-select-inner",
-      "by": 17,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "table-mobile",
-      "kind": "escaping",
-      "tag": "button",
-      "cls": "db-record-open-btn.db-record-open-btn-icon",
-      "parentCls": "db-cell.db-title-cell",
-      "by": 4,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "table-mobile",
-      "kind": "escaping",
-      "tag": "input",
-      "cls": "db-checkbox.db-checkbox-row",
-      "parentCls": "db-select-inner",
-      "by": 17,
       "scrolls": true
     },
     {
@@ -1506,7 +676,7 @@
       "tag": "div",
       "cls": "db-list",
       "parentCls": "note-database-container.db-width-default",
-      "by": 488,
+      "by": 448,
       "scrolls": true
     },
     {
@@ -1598,6 +768,26 @@
       "parentCls": "db-board-column",
       "by": 8,
       "scrolls": true
+    },
+    {
+      "width": 320,
+      "fixture": "list-sparse-fields",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-list",
+      "parentCls": "note-database-container.db-width-default",
+      "by": 386,
+      "scrolls": true
+    },
+    {
+      "width": 320,
+      "fixture": "list-sparse-fields",
+      "kind": "rhythm",
+      "cls": "db-list-row",
+      "count": 12,
+      "mean": 52.9,
+      "sd": 0,
+      "distinct": 1
     },
     {
       "width": 320,
@@ -2604,10 +1794,10 @@
       "fixture": "panel-sort-rules",
       "kind": "escaping",
       "tag": "button",
-      "cls": "db-dropdown-field.db-panel-dropdown",
+      "cls": "db-panel-button",
       "parentCls": "db-panel-row.db-sort-rule-row",
-      "by": 28,
-      "scrolls": true
+      "by": 5.6,
+      "scrolls": false
     },
     {
       "width": 320,
@@ -2616,27 +1806,17 @@
       "tag": "button",
       "cls": "db-panel-button",
       "parentCls": "db-panel-row.db-sort-rule-row",
-      "by": 61.6,
-      "scrolls": true
+      "by": 5.6,
+      "scrolls": false
     },
     {
       "width": 320,
-      "fixture": "panel-sort-rules",
+      "fixture": "panel-column-manager",
       "kind": "escaping",
       "tag": "button",
-      "cls": "db-dropdown-field.db-panel-dropdown",
-      "parentCls": "db-panel-row.db-sort-rule-row",
-      "by": 28,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "panel-sort-rules",
-      "kind": "escaping",
-      "tag": "button",
-      "cls": "db-panel-button",
-      "parentCls": "db-panel-row.db-sort-rule-row",
-      "by": 61.6,
+      "cls": "clickable-icon",
+      "parentCls": "db-column-manager-row",
+      "by": 18,
       "scrolls": true
     },
     {
@@ -2644,9 +1824,9 @@
       "fixture": "panel-column-manager",
       "kind": "escaping",
       "tag": "button",
-      "cls": "",
-      "parentCls": "db-mobile-reorder-controls",
-      "by": 10,
+      "cls": "clickable-icon.db-column-delete-btn",
+      "parentCls": "db-column-manager-row",
+      "by": 42,
       "scrolls": true
     },
     {
@@ -2664,9 +1844,9 @@
       "fixture": "panel-column-manager",
       "kind": "escaping",
       "tag": "button",
-      "cls": "",
-      "parentCls": "db-mobile-reorder-controls",
-      "by": 10,
+      "cls": "clickable-icon.db-column-delete-btn",
+      "parentCls": "db-column-manager-row",
+      "by": 42,
       "scrolls": true
     },
     {
@@ -2684,9 +1864,9 @@
       "fixture": "panel-column-manager",
       "kind": "escaping",
       "tag": "button",
-      "cls": "",
-      "parentCls": "db-mobile-reorder-controls",
-      "by": 10,
+      "cls": "clickable-icon.db-column-delete-btn",
+      "parentCls": "db-column-manager-row",
+      "by": 42,
       "scrolls": true
     },
     {
@@ -2704,9 +1884,9 @@
       "fixture": "panel-column-manager",
       "kind": "escaping",
       "tag": "button",
-      "cls": "",
-      "parentCls": "db-mobile-reorder-controls",
-      "by": 10,
+      "cls": "clickable-icon.db-column-delete-btn",
+      "parentCls": "db-column-manager-row",
+      "by": 42,
       "scrolls": true
     },
     {
@@ -2724,9 +1904,9 @@
       "fixture": "panel-column-manager",
       "kind": "escaping",
       "tag": "button",
-      "cls": "",
-      "parentCls": "db-mobile-reorder-controls",
-      "by": 10,
+      "cls": "clickable-icon.db-column-delete-btn",
+      "parentCls": "db-column-manager-row",
+      "by": 42,
       "scrolls": true
     },
     {
@@ -2744,19 +1924,9 @@
       "fixture": "panel-column-manager",
       "kind": "escaping",
       "tag": "button",
-      "cls": "",
-      "parentCls": "db-mobile-reorder-controls",
-      "by": 10,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "panel-column-manager",
-      "kind": "escaping",
-      "tag": "button",
-      "cls": "clickable-icon",
+      "cls": "clickable-icon.db-column-delete-btn",
       "parentCls": "db-column-manager-row",
-      "by": 18,
+      "by": 42,
       "scrolls": true
     },
     {
@@ -2776,7 +1946,7 @@
       "tag": "button",
       "cls": "db-column-menu-trigger",
       "parentCls": "db-th-content",
-      "by": 26.3,
+      "by": 33.2,
       "scrolls": true
     },
     {
@@ -2786,7 +1956,7 @@
       "tag": "button",
       "cls": "db-column-menu-trigger",
       "parentCls": "db-th-content",
-      "by": 26.3,
+      "by": 33.2,
       "scrolls": true
     },
     {
@@ -2796,7 +1966,7 @@
       "tag": "button",
       "cls": "db-column-menu-trigger",
       "parentCls": "db-th-content",
-      "by": 26.3,
+      "by": 33.2,
       "scrolls": true
     },
     {
@@ -2806,7 +1976,7 @@
       "tag": "button",
       "cls": "db-column-menu-trigger",
       "parentCls": "db-th-content",
-      "by": 26.3,
+      "by": 33.2,
       "scrolls": true
     },
     {
@@ -2816,7 +1986,7 @@
       "tag": "button",
       "cls": "db-column-menu-trigger",
       "parentCls": "db-th-content",
-      "by": 26.3,
+      "by": 33.2,
       "scrolls": true
     },
     {
@@ -2826,847 +1996,7 @@
       "tag": "button",
       "cls": "db-column-menu-trigger",
       "parentCls": "db-th-content",
-      "by": 25.3,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-orange",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-gray",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-green",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-orange",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-gray",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-green",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-orange",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-gray",
-      "parentCls": "",
-      "by": 9.8,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-green",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-orange",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-gray",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-green",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-orange",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-gray",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-blue",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-orange",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-gray",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-blue",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-orange",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-gray",
-      "parentCls": "",
-      "by": 9.8,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-blue",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-orange",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-gray",
-      "parentCls": "",
-      "by": 9.8,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-blue",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-orange",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-gray",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-blue",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-orange",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-gray",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-blue",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-orange",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-gray",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-blue",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-orange",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-gray",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-green",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-orange",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-gray",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-green",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-orange",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-gray",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-green",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-orange",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-gray",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-green",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-orange",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-gray",
-      "parentCls": "",
-      "by": 9.8,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-green",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-orange",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-gray",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-green",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-orange",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-gray",
-      "parentCls": "",
-      "by": 9.8,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-green",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-orange",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-gray",
-      "parentCls": "",
-      "by": 9.8,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-green",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-orange",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-gray",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-green",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-orange",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-gray",
-      "parentCls": "",
-      "by": 9.8,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-green",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-orange",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-gray",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-green",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-orange",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-gray",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-green",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-orange",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-gray",
-      "parentCls": "",
-      "by": 9.8,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-green",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-orange",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-gray",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-blue",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-orange",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-gray",
-      "parentCls": "",
-      "by": 9.8,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-green",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-orange",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-gray",
-      "parentCls": "",
-      "by": 9.8,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-green",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-orange",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-gray",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-blue",
-      "parentCls": "",
-      "by": 14,
+      "by": 32.1,
       "scrolls": true
     },
     {
@@ -3851,252 +2181,52 @@
     },
     {
       "width": 320,
-      "fixture": "chrome-table-footer",
-      "kind": "escaping",
-      "tag": "input",
-      "cls": "db-checkbox.db-checkbox-row",
-      "parentCls": "db-select-inner",
-      "by": 7,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "chrome-table-footer",
-      "kind": "escaping",
-      "tag": "input",
-      "cls": "db-checkbox.db-checkbox-row",
-      "parentCls": "db-select-inner",
-      "by": 7,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "chrome-table-footer",
-      "kind": "escaping",
-      "tag": "input",
-      "cls": "db-checkbox.db-checkbox-row",
-      "parentCls": "db-select-inner",
-      "by": 7,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "chrome-table-footer",
-      "kind": "escaping",
-      "tag": "input",
-      "cls": "db-checkbox.db-checkbox-row",
-      "parentCls": "db-select-inner",
-      "by": 7,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "chrome-table-footer",
-      "kind": "escaping",
-      "tag": "input",
-      "cls": "db-checkbox.db-checkbox-row",
-      "parentCls": "db-select-inner",
-      "by": 7,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "chrome-table-footer",
-      "kind": "escaping",
-      "tag": "input",
-      "cls": "db-checkbox.db-checkbox-row",
-      "parentCls": "db-select-inner",
-      "by": 7,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "chrome-table-footer",
-      "kind": "escaping",
-      "tag": "input",
-      "cls": "db-checkbox.db-checkbox-row",
-      "parentCls": "db-select-inner",
-      "by": 7,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "chrome-table-footer",
-      "kind": "escaping",
-      "tag": "input",
-      "cls": "db-checkbox.db-checkbox-row",
-      "parentCls": "db-select-inner",
-      "by": 7,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "chrome-table-footer",
-      "kind": "escaping",
-      "tag": "input",
-      "cls": "db-checkbox.db-checkbox-row",
-      "parentCls": "db-select-inner",
-      "by": 7,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "chrome-table-footer",
-      "kind": "escaping",
-      "tag": "input",
-      "cls": "db-checkbox.db-checkbox-row",
-      "parentCls": "db-select-inner",
-      "by": 7,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "chrome-table-footer",
-      "kind": "escaping",
-      "tag": "input",
-      "cls": "db-checkbox.db-checkbox-row",
-      "parentCls": "db-select-inner",
-      "by": 7,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "chrome-table-footer",
-      "kind": "escaping",
-      "tag": "input",
-      "cls": "db-checkbox.db-checkbox-row",
-      "parentCls": "db-select-inner",
-      "by": 7,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "chrome-table-footer",
-      "kind": "escaping",
-      "tag": "input",
-      "cls": "db-checkbox.db-checkbox-row",
-      "parentCls": "db-select-inner",
-      "by": 7,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "chrome-table-footer",
-      "kind": "escaping",
-      "tag": "input",
-      "cls": "db-checkbox.db-checkbox-row",
-      "parentCls": "db-select-inner",
-      "by": 7,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "chrome-table-footer",
-      "kind": "escaping",
-      "tag": "input",
-      "cls": "db-checkbox.db-checkbox-row",
-      "parentCls": "db-select-inner",
-      "by": 7,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "chrome-table-footer",
-      "kind": "escaping",
-      "tag": "input",
-      "cls": "db-checkbox.db-checkbox-row",
-      "parentCls": "db-select-inner",
-      "by": 7,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "chrome-table-footer",
-      "kind": "escaping",
-      "tag": "input",
-      "cls": "db-checkbox.db-checkbox-row",
-      "parentCls": "db-select-inner",
-      "by": 7,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "chrome-table-footer",
-      "kind": "escaping",
-      "tag": "input",
-      "cls": "db-checkbox.db-checkbox-row",
-      "parentCls": "db-select-inner",
-      "by": 7,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "chrome-table-footer",
-      "kind": "escaping",
-      "tag": "input",
-      "cls": "db-checkbox.db-checkbox-row",
-      "parentCls": "db-select-inner",
-      "by": 7,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "chrome-table-footer",
-      "kind": "escaping",
-      "tag": "input",
-      "cls": "db-checkbox.db-checkbox-row",
-      "parentCls": "db-select-inner",
-      "by": 7,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "chrome-table-footer",
-      "kind": "escaping",
-      "tag": "input",
-      "cls": "db-checkbox.db-checkbox-row",
-      "parentCls": "db-select-inner",
-      "by": 7,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "chrome-table-footer",
-      "kind": "escaping",
-      "tag": "input",
-      "cls": "db-checkbox.db-checkbox-row",
-      "parentCls": "db-select-inner",
-      "by": 7,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "chrome-table-footer",
-      "kind": "escaping",
-      "tag": "input",
-      "cls": "db-checkbox.db-checkbox-row",
-      "parentCls": "db-select-inner",
-      "by": 7,
-      "scrolls": true
-    },
-    {
-      "width": 320,
-      "fixture": "chrome-table-footer",
-      "kind": "escaping",
-      "tag": "input",
-      "cls": "db-checkbox.db-checkbox-row",
-      "parentCls": "db-select-inner",
-      "by": 7,
-      "scrolls": true
-    },
-    {
-      "width": 320,
       "fixture": "chrome-group-header-row",
       "kind": "escaping",
       "tag": "div",
       "cls": "db-table-wrap",
       "parentCls": "db-grouped-table",
       "by": 999744,
+      "scrolls": true
+    },
+    {
+      "width": 320,
+      "fixture": "chrome-group-selection-controls",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-list-group-header",
+      "parentCls": "db-list-group",
+      "by": 8,
+      "scrolls": false
+    },
+    {
+      "width": 320,
+      "fixture": "chrome-group-selection-controls",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-board-subgroup-header",
+      "parentCls": "db-board-subgroup",
+      "by": 8,
+      "scrolls": false
+    },
+    {
+      "width": 320,
+      "fixture": "chrome-selection-status-bar",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-selection-status-bar",
+      "parentCls": "note-database-container",
+      "by": 18.4,
+      "scrolls": false
+    },
+    {
+      "width": 320,
+      "fixture": "chrome-selection-status-bar",
+      "kind": "escaping",
+      "tag": "button",
+      "cls": "db-selection-action",
+      "parentCls": "db-selection-status-bar",
+      "by": 27.8,
       "scrolls": true
     },
     {
@@ -4193,9 +2323,9 @@
       "width": 320,
       "fixture": "field-file-fields",
       "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.db-file-tag-badge",
-      "parentCls": "db-file-tags.db-multi-select-values",
+      "tag": "button",
+      "cls": "db-file-tag-remove",
+      "parentCls": "status-badge.db-file-tag-badge",
       "by": 8.2,
       "scrolls": false
     },
@@ -4217,16 +2347,6 @@
       "cls": "[object.SVGAnimatedString]",
       "parentCls": "db-rating-star-fg",
       "by": 7,
-      "scrolls": false
-    },
-    {
-      "width": 320,
-      "fixture": "field-record-icon",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-blue",
-      "parentCls": "db-cell.db-editable-cell",
-      "by": 5.7,
       "scrolls": false
     },
     {
@@ -4274,29 +2394,9 @@
       "fixture": "field-status-colors",
       "kind": "escaping",
       "tag": "span",
-      "cls": "status-badge.status-color-indigo",
-      "parentCls": "db-cell",
-      "by": 2.5,
-      "scrolls": false
-    },
-    {
-      "width": 320,
-      "fixture": "field-status-colors",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-blue",
-      "parentCls": "db-cell",
-      "by": 10.2,
-      "scrolls": false
-    },
-    {
-      "width": 320,
-      "fixture": "field-status-colors",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.db-multi-select-badge",
-      "parentCls": "db-multi-select-values",
-      "by": 14,
+      "cls": "db-multi-select-label",
+      "parentCls": "status-badge.db-multi-select-badge",
+      "by": 6,
       "scrolls": false
     },
     {
@@ -4306,147 +2406,7 @@
       "tag": "button",
       "cls": "db-multi-select-remove",
       "parentCls": "status-badge.db-multi-select-badge",
-      "by": 3.7,
-      "scrolls": false
-    },
-    {
-      "width": 320,
-      "fixture": "field-status-colors",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-indigo",
-      "parentCls": "db-cell",
-      "by": 2.5,
-      "scrolls": false
-    },
-    {
-      "width": 320,
-      "fixture": "field-status-colors",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-red",
-      "parentCls": "db-cell",
-      "by": 10.2,
-      "scrolls": false
-    },
-    {
-      "width": 320,
-      "fixture": "field-status-colors",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.db-multi-select-badge",
-      "parentCls": "db-multi-select-values",
-      "by": 14,
-      "scrolls": false
-    },
-    {
-      "width": 320,
-      "fixture": "field-status-colors",
-      "kind": "escaping",
-      "tag": "button",
-      "cls": "db-multi-select-remove",
-      "parentCls": "status-badge.db-multi-select-badge",
-      "by": 3.7,
-      "scrolls": false
-    },
-    {
-      "width": 320,
-      "fixture": "field-status-colors",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-cyan",
-      "parentCls": "db-cell",
-      "by": 13.7,
-      "scrolls": false
-    },
-    {
-      "width": 320,
-      "fixture": "field-status-colors",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.db-multi-select-badge",
-      "parentCls": "db-multi-select-values",
-      "by": 14,
-      "scrolls": false
-    },
-    {
-      "width": 320,
-      "fixture": "field-status-colors",
-      "kind": "escaping",
-      "tag": "button",
-      "cls": "db-multi-select-remove",
-      "parentCls": "status-badge.db-multi-select-badge",
-      "by": 3.7,
-      "scrolls": false
-    },
-    {
-      "width": 320,
-      "fixture": "field-status-colors",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-cyan",
-      "parentCls": "db-cell",
-      "by": 13.7,
-      "scrolls": false
-    },
-    {
-      "width": 320,
-      "fixture": "field-status-colors",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-violet",
-      "parentCls": "db-cell",
-      "by": 10.2,
-      "scrolls": false
-    },
-    {
-      "width": 320,
-      "fixture": "field-status-colors",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.db-multi-select-badge",
-      "parentCls": "db-multi-select-values",
-      "by": 14,
-      "scrolls": false
-    },
-    {
-      "width": 320,
-      "fixture": "field-status-colors",
-      "kind": "escaping",
-      "tag": "button",
-      "cls": "db-multi-select-remove",
-      "parentCls": "status-badge.db-multi-select-badge",
-      "by": 3.7,
-      "scrolls": false
-    },
-    {
-      "width": 320,
-      "fixture": "field-status-colors",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-indigo",
-      "parentCls": "db-cell",
-      "by": 2.5,
-      "scrolls": false
-    },
-    {
-      "width": 320,
-      "fixture": "field-status-colors",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-brown",
-      "parentCls": "db-cell",
-      "by": 10.2,
-      "scrolls": false
-    },
-    {
-      "width": 320,
-      "fixture": "field-status-colors",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.db-multi-select-badge",
-      "parentCls": "db-multi-select-values",
-      "by": 14,
+      "by": 17.7,
       "scrolls": false
     },
     {
@@ -4456,7 +2416,7 @@
       "tag": "span",
       "cls": "db-multi-select-label",
       "parentCls": "status-badge.db-multi-select-badge",
-      "by": 3.7,
+      "by": 6,
       "scrolls": false
     },
     {
@@ -4466,37 +2426,7 @@
       "tag": "button",
       "cls": "db-multi-select-remove",
       "parentCls": "status-badge.db-multi-select-badge",
-      "by": 15.4,
-      "scrolls": false
-    },
-    {
-      "width": 320,
-      "fixture": "field-status-colors",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-cyan",
-      "parentCls": "db-cell",
-      "by": 13.7,
-      "scrolls": false
-    },
-    {
-      "width": 320,
-      "fixture": "field-status-colors",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-green",
-      "parentCls": "db-cell",
-      "by": 10.2,
-      "scrolls": false
-    },
-    {
-      "width": 320,
-      "fixture": "field-status-colors",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.db-multi-select-badge",
-      "parentCls": "db-multi-select-values",
-      "by": 14,
+      "by": 17.7,
       "scrolls": false
     },
     {
@@ -4506,7 +2436,7 @@
       "tag": "span",
       "cls": "db-multi-select-label",
       "parentCls": "status-badge.db-multi-select-badge",
-      "by": 3.7,
+      "by": 6,
       "scrolls": false
     },
     {
@@ -4516,27 +2446,7 @@
       "tag": "button",
       "cls": "db-multi-select-remove",
       "parentCls": "status-badge.db-multi-select-badge",
-      "by": 15.4,
-      "scrolls": false
-    },
-    {
-      "width": 320,
-      "fixture": "field-status-colors",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-cyan",
-      "parentCls": "db-cell",
-      "by": 13.7,
-      "scrolls": false
-    },
-    {
-      "width": 320,
-      "fixture": "field-status-colors",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.db-multi-select-badge",
-      "parentCls": "db-multi-select-values",
-      "by": 14,
+      "by": 17.7,
       "scrolls": false
     },
     {
@@ -4546,7 +2456,7 @@
       "tag": "span",
       "cls": "db-multi-select-label",
       "parentCls": "status-badge.db-multi-select-badge",
-      "by": 3.7,
+      "by": 6,
       "scrolls": false
     },
     {
@@ -4556,27 +2466,7 @@
       "tag": "button",
       "cls": "db-multi-select-remove",
       "parentCls": "status-badge.db-multi-select-badge",
-      "by": 15.4,
-      "scrolls": false
-    },
-    {
-      "width": 320,
-      "fixture": "field-status-colors",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-cyan",
-      "parentCls": "db-cell",
-      "by": 13.7,
-      "scrolls": false
-    },
-    {
-      "width": 320,
-      "fixture": "field-status-colors",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.db-multi-select-badge",
-      "parentCls": "db-multi-select-values",
-      "by": 14,
+      "by": 17.7,
       "scrolls": false
     },
     {
@@ -4586,7 +2476,7 @@
       "tag": "span",
       "cls": "db-multi-select-label",
       "parentCls": "status-badge.db-multi-select-badge",
-      "by": 3.7,
+      "by": 17.7,
       "scrolls": false
     },
     {
@@ -4596,27 +2486,7 @@
       "tag": "button",
       "cls": "db-multi-select-remove",
       "parentCls": "status-badge.db-multi-select-badge",
-      "by": 15.4,
-      "scrolls": false
-    },
-    {
-      "width": 320,
-      "fixture": "field-status-colors",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-cyan",
-      "parentCls": "db-cell",
-      "by": 13.7,
-      "scrolls": false
-    },
-    {
-      "width": 320,
-      "fixture": "field-status-colors",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.db-multi-select-badge",
-      "parentCls": "db-multi-select-values",
-      "by": 14,
+      "by": 29.4,
       "scrolls": false
     },
     {
@@ -4626,7 +2496,7 @@
       "tag": "span",
       "cls": "db-multi-select-label",
       "parentCls": "status-badge.db-multi-select-badge",
-      "by": 3.7,
+      "by": 17.7,
       "scrolls": false
     },
     {
@@ -4636,27 +2506,7 @@
       "tag": "button",
       "cls": "db-multi-select-remove",
       "parentCls": "status-badge.db-multi-select-badge",
-      "by": 15.4,
-      "scrolls": false
-    },
-    {
-      "width": 320,
-      "fixture": "field-status-colors",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-cyan",
-      "parentCls": "db-cell",
-      "by": 13.7,
-      "scrolls": false
-    },
-    {
-      "width": 320,
-      "fixture": "field-status-colors",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.db-multi-select-badge",
-      "parentCls": "db-multi-select-values",
-      "by": 14,
+      "by": 29.4,
       "scrolls": false
     },
     {
@@ -4666,7 +2516,7 @@
       "tag": "span",
       "cls": "db-multi-select-label",
       "parentCls": "status-badge.db-multi-select-badge",
-      "by": 3.7,
+      "by": 17.7,
       "scrolls": false
     },
     {
@@ -4676,37 +2526,7 @@
       "tag": "button",
       "cls": "db-multi-select-remove",
       "parentCls": "status-badge.db-multi-select-badge",
-      "by": 15.4,
-      "scrolls": false
-    },
-    {
-      "width": 320,
-      "fixture": "field-status-colors",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-cyan",
-      "parentCls": "db-cell",
-      "by": 13.7,
-      "scrolls": false
-    },
-    {
-      "width": 320,
-      "fixture": "field-status-colors",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-yellow",
-      "parentCls": "db-cell",
-      "by": 10.2,
-      "scrolls": false
-    },
-    {
-      "width": 320,
-      "fixture": "field-status-colors",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.db-multi-select-badge",
-      "parentCls": "db-multi-select-values",
-      "by": 14,
+      "by": 29.4,
       "scrolls": false
     },
     {
@@ -4716,7 +2536,7 @@
       "tag": "span",
       "cls": "db-multi-select-label",
       "parentCls": "status-badge.db-multi-select-badge",
-      "by": 3.7,
+      "by": 17.7,
       "scrolls": false
     },
     {
@@ -4726,37 +2546,7 @@
       "tag": "button",
       "cls": "db-multi-select-remove",
       "parentCls": "status-badge.db-multi-select-badge",
-      "by": 15.4,
-      "scrolls": false
-    },
-    {
-      "width": 320,
-      "fixture": "field-status-colors",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-cyan",
-      "parentCls": "db-cell",
-      "by": 13.7,
-      "scrolls": false
-    },
-    {
-      "width": 320,
-      "fixture": "field-status-colors",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-purple",
-      "parentCls": "db-cell",
-      "by": 10.2,
-      "scrolls": false
-    },
-    {
-      "width": 320,
-      "fixture": "field-status-colors",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.db-multi-select-badge",
-      "parentCls": "db-multi-select-values",
-      "by": 14,
+      "by": 29.4,
       "scrolls": false
     },
     {
@@ -4766,7 +2556,7 @@
       "tag": "span",
       "cls": "db-multi-select-label",
       "parentCls": "status-badge.db-multi-select-badge",
-      "by": 31.8,
+      "by": 17.7,
       "scrolls": false
     },
     {
@@ -4776,37 +2566,7 @@
       "tag": "button",
       "cls": "db-multi-select-remove",
       "parentCls": "status-badge.db-multi-select-badge",
-      "by": 43.5,
-      "scrolls": false
-    },
-    {
-      "width": 320,
-      "fixture": "field-status-colors",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-cyan",
-      "parentCls": "db-cell",
-      "by": 13.7,
-      "scrolls": false
-    },
-    {
-      "width": 320,
-      "fixture": "field-status-colors",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-slate",
-      "parentCls": "db-cell",
-      "by": 10.2,
-      "scrolls": false
-    },
-    {
-      "width": 320,
-      "fixture": "field-status-colors",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.db-multi-select-badge",
-      "parentCls": "db-multi-select-values",
-      "by": 14,
+      "by": 29.4,
       "scrolls": false
     },
     {
@@ -4816,7 +2576,7 @@
       "tag": "span",
       "cls": "db-multi-select-label",
       "parentCls": "status-badge.db-multi-select-badge",
-      "by": 31.8,
+      "by": 17.7,
       "scrolls": false
     },
     {
@@ -4826,37 +2586,7 @@
       "tag": "button",
       "cls": "db-multi-select-remove",
       "parentCls": "status-badge.db-multi-select-badge",
-      "by": 43.5,
-      "scrolls": false
-    },
-    {
-      "width": 320,
-      "fixture": "field-status-colors",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-cyan",
-      "parentCls": "db-cell",
-      "by": 13.7,
-      "scrolls": false
-    },
-    {
-      "width": 320,
-      "fixture": "field-status-colors",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-lime",
-      "parentCls": "db-cell",
-      "by": 10.2,
-      "scrolls": false
-    },
-    {
-      "width": 320,
-      "fixture": "field-status-colors",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.db-multi-select-badge",
-      "parentCls": "db-multi-select-values",
-      "by": 14,
+      "by": 29.4,
       "scrolls": false
     },
     {
@@ -4866,7 +2596,7 @@
       "tag": "span",
       "cls": "db-multi-select-label",
       "parentCls": "status-badge.db-multi-select-badge",
-      "by": 31.8,
+      "by": 17.7,
       "scrolls": false
     },
     {
@@ -4876,37 +2606,7 @@
       "tag": "button",
       "cls": "db-multi-select-remove",
       "parentCls": "status-badge.db-multi-select-badge",
-      "by": 43.5,
-      "scrolls": false
-    },
-    {
-      "width": 320,
-      "fixture": "field-status-colors",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-cyan",
-      "parentCls": "db-cell",
-      "by": 13.7,
-      "scrolls": false
-    },
-    {
-      "width": 320,
-      "fixture": "field-status-colors",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-rose",
-      "parentCls": "db-cell",
-      "by": 10.2,
-      "scrolls": false
-    },
-    {
-      "width": 320,
-      "fixture": "field-status-colors",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.db-multi-select-badge",
-      "parentCls": "db-multi-select-values",
-      "by": 14,
+      "by": 29.4,
       "scrolls": false
     },
     {
@@ -4916,7 +2616,7 @@
       "tag": "span",
       "cls": "db-multi-select-label",
       "parentCls": "status-badge.db-multi-select-badge",
-      "by": 31.8,
+      "by": 45.8,
       "scrolls": false
     },
     {
@@ -4926,27 +2626,7 @@
       "tag": "button",
       "cls": "db-multi-select-remove",
       "parentCls": "status-badge.db-multi-select-badge",
-      "by": 43.5,
-      "scrolls": false
-    },
-    {
-      "width": 320,
-      "fixture": "field-status-colors",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-cyan",
-      "parentCls": "db-cell",
-      "by": 13.7,
-      "scrolls": false
-    },
-    {
-      "width": 320,
-      "fixture": "field-status-colors",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.db-multi-select-badge",
-      "parentCls": "db-multi-select-values",
-      "by": 14,
+      "by": 57.5,
       "scrolls": false
     },
     {
@@ -4956,7 +2636,7 @@
       "tag": "span",
       "cls": "db-multi-select-label",
       "parentCls": "status-badge.db-multi-select-badge",
-      "by": 31.8,
+      "by": 45.8,
       "scrolls": false
     },
     {
@@ -4966,37 +2646,7 @@
       "tag": "button",
       "cls": "db-multi-select-remove",
       "parentCls": "status-badge.db-multi-select-badge",
-      "by": 43.5,
-      "scrolls": false
-    },
-    {
-      "width": 320,
-      "fixture": "field-status-colors",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-cyan",
-      "parentCls": "db-cell",
-      "by": 13.7,
-      "scrolls": false
-    },
-    {
-      "width": 320,
-      "fixture": "field-status-colors",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-blue",
-      "parentCls": "db-cell",
-      "by": 10.2,
-      "scrolls": false
-    },
-    {
-      "width": 320,
-      "fixture": "field-status-colors",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.db-multi-select-badge",
-      "parentCls": "db-multi-select-values",
-      "by": 14,
+      "by": 57.5,
       "scrolls": false
     },
     {
@@ -5006,7 +2656,7 @@
       "tag": "span",
       "cls": "db-multi-select-label",
       "parentCls": "status-badge.db-multi-select-badge",
-      "by": 31.8,
+      "by": 45.8,
       "scrolls": false
     },
     {
@@ -5016,27 +2666,7 @@
       "tag": "button",
       "cls": "db-multi-select-remove",
       "parentCls": "status-badge.db-multi-select-badge",
-      "by": 43.5,
-      "scrolls": false
-    },
-    {
-      "width": 320,
-      "fixture": "field-status-colors",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-indigo",
-      "parentCls": "db-cell",
-      "by": 2.5,
-      "scrolls": false
-    },
-    {
-      "width": 320,
-      "fixture": "field-status-colors",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.db-multi-select-badge",
-      "parentCls": "db-multi-select-values",
-      "by": 14,
+      "by": 57.5,
       "scrolls": false
     },
     {
@@ -5046,7 +2676,7 @@
       "tag": "span",
       "cls": "db-multi-select-label",
       "parentCls": "status-badge.db-multi-select-badge",
-      "by": 31.8,
+      "by": 45.8,
       "scrolls": false
     },
     {
@@ -5056,27 +2686,7 @@
       "tag": "button",
       "cls": "db-multi-select-remove",
       "parentCls": "status-badge.db-multi-select-badge",
-      "by": 43.5,
-      "scrolls": false
-    },
-    {
-      "width": 320,
-      "fixture": "field-status-colors",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-cyan",
-      "parentCls": "db-cell",
-      "by": 13.7,
-      "scrolls": false
-    },
-    {
-      "width": 320,
-      "fixture": "field-status-colors",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.db-multi-select-badge",
-      "parentCls": "db-multi-select-values",
-      "by": 14,
+      "by": 57.5,
       "scrolls": false
     },
     {
@@ -5086,7 +2696,7 @@
       "tag": "span",
       "cls": "db-multi-select-label",
       "parentCls": "status-badge.db-multi-select-badge",
-      "by": 2,
+      "by": 45.8,
       "scrolls": false
     },
     {
@@ -5096,27 +2706,7 @@
       "tag": "button",
       "cls": "db-multi-select-remove",
       "parentCls": "status-badge.db-multi-select-badge",
-      "by": 13.7,
-      "scrolls": false
-    },
-    {
-      "width": 320,
-      "fixture": "field-status-colors",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-cyan",
-      "parentCls": "db-cell",
-      "by": 13.7,
-      "scrolls": false
-    },
-    {
-      "width": 320,
-      "fixture": "field-status-colors",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.db-multi-select-badge",
-      "parentCls": "db-multi-select-values",
-      "by": 14,
+      "by": 57.5,
       "scrolls": false
     },
     {
@@ -5126,7 +2716,7 @@
       "tag": "span",
       "cls": "db-multi-select-label",
       "parentCls": "status-badge.db-multi-select-badge",
-      "by": 2,
+      "by": 45.8,
       "scrolls": false
     },
     {
@@ -5136,27 +2726,7 @@
       "tag": "button",
       "cls": "db-multi-select-remove",
       "parentCls": "status-badge.db-multi-select-badge",
-      "by": 13.7,
-      "scrolls": false
-    },
-    {
-      "width": 320,
-      "fixture": "field-status-colors",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-cyan",
-      "parentCls": "db-cell",
-      "by": 13.7,
-      "scrolls": false
-    },
-    {
-      "width": 320,
-      "fixture": "field-status-colors",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.db-multi-select-badge",
-      "parentCls": "db-multi-select-values",
-      "by": 14,
+      "by": 57.5,
       "scrolls": false
     },
     {
@@ -5166,7 +2736,7 @@
       "tag": "span",
       "cls": "db-multi-select-label",
       "parentCls": "status-badge.db-multi-select-badge",
-      "by": 2,
+      "by": 45.8,
       "scrolls": false
     },
     {
@@ -5176,27 +2746,7 @@
       "tag": "button",
       "cls": "db-multi-select-remove",
       "parentCls": "status-badge.db-multi-select-badge",
-      "by": 13.7,
-      "scrolls": false
-    },
-    {
-      "width": 320,
-      "fixture": "field-status-colors",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-indigo",
-      "parentCls": "db-cell",
-      "by": 2.5,
-      "scrolls": false
-    },
-    {
-      "width": 320,
-      "fixture": "field-status-colors",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.db-multi-select-badge",
-      "parentCls": "db-multi-select-values",
-      "by": 14,
+      "by": 57.5,
       "scrolls": false
     },
     {
@@ -5206,7 +2756,7 @@
       "tag": "span",
       "cls": "db-multi-select-label",
       "parentCls": "status-badge.db-multi-select-badge",
-      "by": 2,
+      "by": 16,
       "scrolls": false
     },
     {
@@ -5216,27 +2766,7 @@
       "tag": "button",
       "cls": "db-multi-select-remove",
       "parentCls": "status-badge.db-multi-select-badge",
-      "by": 13.7,
-      "scrolls": false
-    },
-    {
-      "width": 320,
-      "fixture": "field-status-colors",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-cyan",
-      "parentCls": "db-cell",
-      "by": 13.7,
-      "scrolls": false
-    },
-    {
-      "width": 320,
-      "fixture": "field-status-colors",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.db-multi-select-badge",
-      "parentCls": "db-multi-select-values",
-      "by": 14,
+      "by": 27.7,
       "scrolls": false
     },
     {
@@ -5246,7 +2776,7 @@
       "tag": "span",
       "cls": "db-multi-select-label",
       "parentCls": "status-badge.db-multi-select-badge",
-      "by": 2,
+      "by": 16,
       "scrolls": false
     },
     {
@@ -5256,27 +2786,7 @@
       "tag": "button",
       "cls": "db-multi-select-remove",
       "parentCls": "status-badge.db-multi-select-badge",
-      "by": 13.7,
-      "scrolls": false
-    },
-    {
-      "width": 320,
-      "fixture": "field-status-colors",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-cyan",
-      "parentCls": "db-cell",
-      "by": 13.7,
-      "scrolls": false
-    },
-    {
-      "width": 320,
-      "fixture": "field-status-colors",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.db-multi-select-badge",
-      "parentCls": "db-multi-select-values",
-      "by": 14,
+      "by": 27.7,
       "scrolls": false
     },
     {
@@ -5286,7 +2796,7 @@
       "tag": "span",
       "cls": "db-multi-select-label",
       "parentCls": "status-badge.db-multi-select-badge",
-      "by": 2,
+      "by": 16,
       "scrolls": false
     },
     {
@@ -5296,7 +2806,67 @@
       "tag": "button",
       "cls": "db-multi-select-remove",
       "parentCls": "status-badge.db-multi-select-badge",
-      "by": 13.7,
+      "by": 27.7,
+      "scrolls": false
+    },
+    {
+      "width": 320,
+      "fixture": "field-status-colors",
+      "kind": "escaping",
+      "tag": "span",
+      "cls": "db-multi-select-label",
+      "parentCls": "status-badge.db-multi-select-badge",
+      "by": 16,
+      "scrolls": false
+    },
+    {
+      "width": 320,
+      "fixture": "field-status-colors",
+      "kind": "escaping",
+      "tag": "button",
+      "cls": "db-multi-select-remove",
+      "parentCls": "status-badge.db-multi-select-badge",
+      "by": 27.7,
+      "scrolls": false
+    },
+    {
+      "width": 320,
+      "fixture": "field-status-colors",
+      "kind": "escaping",
+      "tag": "span",
+      "cls": "db-multi-select-label",
+      "parentCls": "status-badge.db-multi-select-badge",
+      "by": 16,
+      "scrolls": false
+    },
+    {
+      "width": 320,
+      "fixture": "field-status-colors",
+      "kind": "escaping",
+      "tag": "button",
+      "cls": "db-multi-select-remove",
+      "parentCls": "status-badge.db-multi-select-badge",
+      "by": 27.7,
+      "scrolls": false
+    },
+    {
+      "width": 320,
+      "fixture": "field-status-colors",
+      "kind": "escaping",
+      "tag": "span",
+      "cls": "db-multi-select-label",
+      "parentCls": "status-badge.db-multi-select-badge",
+      "by": 16,
+      "scrolls": false
+    },
+    {
+      "width": 320,
+      "fixture": "field-status-colors",
+      "kind": "escaping",
+      "tag": "button",
+      "cls": "db-multi-select-remove",
+      "parentCls": "status-badge.db-multi-select-badge",
+      "by": 27.7,
       "scrolls": false
     },
     {
@@ -5306,8 +2876,8 @@
       "tag": "button",
       "cls": "db-column-menu-trigger",
       "parentCls": "db-th-content",
-      "by": 12.7,
-      "scrolls": false
+      "by": 19.5,
+      "scrolls": true
     },
     {
       "width": 402,
@@ -5316,8 +2886,8 @@
       "tag": "button",
       "cls": "db-column-menu-trigger",
       "parentCls": "db-th-content",
-      "by": 12.7,
-      "scrolls": false
+      "by": 19.5,
+      "scrolls": true
     },
     {
       "width": 402,
@@ -5326,8 +2896,8 @@
       "tag": "button",
       "cls": "db-column-menu-trigger",
       "parentCls": "db-th-content",
-      "by": 12.7,
-      "scrolls": false
+      "by": 19.5,
+      "scrolls": true
     },
     {
       "width": 402,
@@ -5336,8 +2906,8 @@
       "tag": "button",
       "cls": "db-column-menu-trigger",
       "parentCls": "db-th-content",
-      "by": 12.7,
-      "scrolls": false
+      "by": 19.5,
+      "scrolls": true
     },
     {
       "width": 402,
@@ -5346,8 +2916,8 @@
       "tag": "button",
       "cls": "db-column-menu-trigger",
       "parentCls": "db-th-content",
-      "by": 12.7,
-      "scrolls": false
+      "by": 19.5,
+      "scrolls": true
     },
     {
       "width": 402,
@@ -5356,648 +2926,8 @@
       "tag": "button",
       "cls": "db-column-menu-trigger",
       "parentCls": "db-th-content",
-      "by": 11.6,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-orange",
-      "parentCls": "",
-      "by": 10.2,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-gray",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-green",
-      "parentCls": "",
-      "by": 13.6,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-orange",
-      "parentCls": "",
-      "by": 10.2,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-gray",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-green",
-      "parentCls": "",
-      "by": 13.6,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-orange",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-green",
-      "parentCls": "",
-      "by": 13.6,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-orange",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-gray",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-green",
-      "parentCls": "",
-      "by": 13.6,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-orange",
-      "parentCls": "",
-      "by": 10.2,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-gray",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-blue",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-orange",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-gray",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-blue",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-orange",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-blue",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-orange",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-blue",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-orange",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-gray",
-      "parentCls": "",
-      "by": 8.1,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-blue",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-orange",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-gray",
-      "parentCls": "",
-      "by": 8.1,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-blue",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-orange",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-gray",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-blue",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-orange",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-gray",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-green",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-orange",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-gray",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-green",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-orange",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-gray",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-green",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-orange",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-gray",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-green",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-orange",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-green",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-orange",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-gray",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-green",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-orange",
-      "parentCls": "",
-      "by": 10.2,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-green",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-orange",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-green",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-orange",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-gray",
-      "parentCls": "",
-      "by": 8.1,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-green",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-orange",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-green",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-orange",
-      "parentCls": "",
-      "by": 10.2,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-gray",
-      "parentCls": "",
-      "by": 8.1,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-green",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-orange",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-gray",
-      "parentCls": "",
-      "by": 8.1,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-green",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-orange",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "table-view",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-green",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": false
+      "by": 18.5,
+      "scrolls": true
     },
     {
       "width": 402,
@@ -6076,7 +3006,7 @@
       "tag": "div",
       "cls": "db-list",
       "parentCls": "note-database-container",
-      "by": 58.8,
+      "by": 64,
       "scrolls": true
     },
     {
@@ -6085,7 +3015,7 @@
       "kind": "rhythm",
       "cls": "db-list-row",
       "count": 24,
-      "mean": 63.7,
+      "mean": 70.8,
       "sd": 0,
       "distinct": 1
     },
@@ -6123,10 +3053,10 @@
       "width": 402,
       "fixture": "table-mobile",
       "kind": "escaping",
-      "tag": "input",
-      "cls": "db-checkbox.db-checkbox-row",
-      "parentCls": "db-select-inner",
-      "by": 17,
+      "tag": "button",
+      "cls": "db-record-open-btn.db-record-open-btn-icon",
+      "parentCls": "db-cell.db-title-cell",
+      "by": 4,
       "scrolls": true
     },
     {
@@ -6143,10 +3073,10 @@
       "width": 402,
       "fixture": "table-mobile",
       "kind": "escaping",
-      "tag": "input",
-      "cls": "db-checkbox.db-checkbox-row",
-      "parentCls": "db-select-inner",
-      "by": 17,
+      "tag": "button",
+      "cls": "db-record-open-btn.db-record-open-btn-icon",
+      "parentCls": "db-cell.db-title-cell",
+      "by": 4,
       "scrolls": true
     },
     {
@@ -6163,10 +3093,10 @@
       "width": 402,
       "fixture": "table-mobile",
       "kind": "escaping",
-      "tag": "input",
-      "cls": "db-checkbox.db-checkbox-row",
-      "parentCls": "db-select-inner",
-      "by": 17,
+      "tag": "button",
+      "cls": "db-record-open-btn.db-record-open-btn-icon",
+      "parentCls": "db-cell.db-title-cell",
+      "by": 4,
       "scrolls": true
     },
     {
@@ -6183,10 +3113,10 @@
       "width": 402,
       "fixture": "table-mobile",
       "kind": "escaping",
-      "tag": "input",
-      "cls": "db-checkbox.db-checkbox-row",
-      "parentCls": "db-select-inner",
-      "by": 17,
+      "tag": "button",
+      "cls": "db-record-open-btn.db-record-open-btn-icon",
+      "parentCls": "db-cell.db-title-cell",
+      "by": 4,
       "scrolls": true
     },
     {
@@ -6203,16 +3133,6 @@
       "width": 402,
       "fixture": "table-mobile",
       "kind": "escaping",
-      "tag": "input",
-      "cls": "db-checkbox.db-checkbox-row",
-      "parentCls": "db-select-inner",
-      "by": 17,
-      "scrolls": true
-    },
-    {
-      "width": 402,
-      "fixture": "table-mobile",
-      "kind": "escaping",
       "tag": "button",
       "cls": "db-record-open-btn.db-record-open-btn-icon",
       "parentCls": "db-cell.db-title-cell",
@@ -6223,110 +3143,10 @@
       "width": 402,
       "fixture": "table-mobile",
       "kind": "escaping",
-      "tag": "input",
-      "cls": "db-checkbox.db-checkbox-row",
-      "parentCls": "db-select-inner",
-      "by": 17,
-      "scrolls": true
-    },
-    {
-      "width": 402,
-      "fixture": "table-mobile",
-      "kind": "escaping",
       "tag": "button",
       "cls": "db-record-open-btn.db-record-open-btn-icon",
       "parentCls": "db-cell.db-title-cell",
       "by": 4,
-      "scrolls": true
-    },
-    {
-      "width": 402,
-      "fixture": "table-mobile",
-      "kind": "escaping",
-      "tag": "input",
-      "cls": "db-checkbox.db-checkbox-row",
-      "parentCls": "db-select-inner",
-      "by": 17,
-      "scrolls": true
-    },
-    {
-      "width": 402,
-      "fixture": "table-mobile",
-      "kind": "escaping",
-      "tag": "button",
-      "cls": "db-record-open-btn.db-record-open-btn-icon",
-      "parentCls": "db-cell.db-title-cell",
-      "by": 4,
-      "scrolls": true
-    },
-    {
-      "width": 402,
-      "fixture": "table-mobile",
-      "kind": "escaping",
-      "tag": "input",
-      "cls": "db-checkbox.db-checkbox-row",
-      "parentCls": "db-select-inner",
-      "by": 17,
-      "scrolls": true
-    },
-    {
-      "width": 402,
-      "fixture": "table-mobile",
-      "kind": "escaping",
-      "tag": "button",
-      "cls": "db-record-open-btn.db-record-open-btn-icon",
-      "parentCls": "db-cell.db-title-cell",
-      "by": 4,
-      "scrolls": true
-    },
-    {
-      "width": 402,
-      "fixture": "table-mobile",
-      "kind": "escaping",
-      "tag": "input",
-      "cls": "db-checkbox.db-checkbox-row",
-      "parentCls": "db-select-inner",
-      "by": 17,
-      "scrolls": true
-    },
-    {
-      "width": 402,
-      "fixture": "table-mobile",
-      "kind": "escaping",
-      "tag": "button",
-      "cls": "db-record-open-btn.db-record-open-btn-icon",
-      "parentCls": "db-cell.db-title-cell",
-      "by": 4,
-      "scrolls": true
-    },
-    {
-      "width": 402,
-      "fixture": "table-mobile",
-      "kind": "escaping",
-      "tag": "input",
-      "cls": "db-checkbox.db-checkbox-row",
-      "parentCls": "db-select-inner",
-      "by": 17,
-      "scrolls": true
-    },
-    {
-      "width": 402,
-      "fixture": "table-mobile",
-      "kind": "escaping",
-      "tag": "button",
-      "cls": "db-record-open-btn.db-record-open-btn-icon",
-      "parentCls": "db-cell.db-title-cell",
-      "by": 4,
-      "scrolls": true
-    },
-    {
-      "width": 402,
-      "fixture": "table-mobile",
-      "kind": "escaping",
-      "tag": "input",
-      "cls": "db-checkbox.db-checkbox-row",
-      "parentCls": "db-select-inner",
-      "by": 17,
       "scrolls": true
     },
     {
@@ -6346,7 +3166,7 @@
       "tag": "div",
       "cls": "db-list",
       "parentCls": "note-database-container.db-width-default",
-      "by": 406,
+      "by": 366,
       "scrolls": true
     },
     {
@@ -6428,6 +3248,26 @@
       "parentCls": "db-board-column",
       "by": 8,
       "scrolls": true
+    },
+    {
+      "width": 402,
+      "fixture": "list-sparse-fields",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-list",
+      "parentCls": "note-database-container.db-width-default",
+      "by": 304,
+      "scrolls": true
+    },
+    {
+      "width": 402,
+      "fixture": "list-sparse-fields",
+      "kind": "rhythm",
+      "cls": "db-list-row",
+      "count": 12,
+      "mean": 52.9,
+      "sd": 0,
+      "distinct": 1
     },
     {
       "width": 402,
@@ -7131,66 +3971,6 @@
     },
     {
       "width": 402,
-      "fixture": "panel-column-manager",
-      "kind": "escaping",
-      "tag": "button",
-      "cls": "",
-      "parentCls": "db-mobile-reorder-controls",
-      "by": 10,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "panel-column-manager",
-      "kind": "escaping",
-      "tag": "button",
-      "cls": "",
-      "parentCls": "db-mobile-reorder-controls",
-      "by": 10,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "panel-column-manager",
-      "kind": "escaping",
-      "tag": "button",
-      "cls": "",
-      "parentCls": "db-mobile-reorder-controls",
-      "by": 10,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "panel-column-manager",
-      "kind": "escaping",
-      "tag": "button",
-      "cls": "",
-      "parentCls": "db-mobile-reorder-controls",
-      "by": 10,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "panel-column-manager",
-      "kind": "escaping",
-      "tag": "button",
-      "cls": "",
-      "parentCls": "db-mobile-reorder-controls",
-      "by": 10,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "panel-column-manager",
-      "kind": "escaping",
-      "tag": "button",
-      "cls": "",
-      "parentCls": "db-mobile-reorder-controls",
-      "by": 10,
-      "scrolls": false
-    },
-    {
-      "width": 402,
       "fixture": "panel-record-detail-sheet",
       "kind": "escaping",
       "tag": "div",
@@ -7206,8 +3986,8 @@
       "tag": "button",
       "cls": "db-column-menu-trigger",
       "parentCls": "db-th-content",
-      "by": 12.7,
-      "scrolls": false
+      "by": 19.5,
+      "scrolls": true
     },
     {
       "width": 402,
@@ -7216,8 +3996,8 @@
       "tag": "button",
       "cls": "db-column-menu-trigger",
       "parentCls": "db-th-content",
-      "by": 12.7,
-      "scrolls": false
+      "by": 19.5,
+      "scrolls": true
     },
     {
       "width": 402,
@@ -7226,8 +4006,8 @@
       "tag": "button",
       "cls": "db-column-menu-trigger",
       "parentCls": "db-th-content",
-      "by": 12.7,
-      "scrolls": false
+      "by": 19.5,
+      "scrolls": true
     },
     {
       "width": 402,
@@ -7236,8 +4016,8 @@
       "tag": "button",
       "cls": "db-column-menu-trigger",
       "parentCls": "db-th-content",
-      "by": 12.7,
-      "scrolls": false
+      "by": 19.5,
+      "scrolls": true
     },
     {
       "width": 402,
@@ -7246,8 +4026,8 @@
       "tag": "button",
       "cls": "db-column-menu-trigger",
       "parentCls": "db-th-content",
-      "by": 12.7,
-      "scrolls": false
+      "by": 19.5,
+      "scrolls": true
     },
     {
       "width": 402,
@@ -7256,748 +4036,8 @@
       "tag": "button",
       "cls": "db-column-menu-trigger",
       "parentCls": "db-th-content",
-      "by": 11.6,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-orange",
-      "parentCls": "",
-      "by": 10.2,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-gray",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-green",
-      "parentCls": "",
-      "by": 13.6,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-orange",
-      "parentCls": "",
-      "by": 10.2,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-gray",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-green",
-      "parentCls": "",
-      "by": 13.6,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-orange",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-green",
-      "parentCls": "",
-      "by": 13.6,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-orange",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-gray",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-green",
-      "parentCls": "",
-      "by": 13.6,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-orange",
-      "parentCls": "",
-      "by": 10.2,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-gray",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-blue",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-orange",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-gray",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-blue",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-orange",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-blue",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-orange",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-blue",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-orange",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-gray",
-      "parentCls": "",
-      "by": 8.1,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-blue",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-orange",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-gray",
-      "parentCls": "",
-      "by": 8.1,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-blue",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-orange",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-gray",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-blue",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-orange",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-gray",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-green",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-orange",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-gray",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-green",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-orange",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-gray",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-green",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-orange",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-gray",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-green",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-orange",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-green",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-orange",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-gray",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-green",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-orange",
-      "parentCls": "",
-      "by": 10.2,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-green",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-orange",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-green",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-orange",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-gray",
-      "parentCls": "",
-      "by": 8.1,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-green",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-orange",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-green",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-orange",
-      "parentCls": "",
-      "by": 10.2,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-gray",
-      "parentCls": "",
-      "by": 8.1,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-green",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-orange",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-gray",
-      "parentCls": "",
-      "by": 8.1,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-green",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-orange",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-green",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-orange",
-      "parentCls": "",
-      "by": 10.2,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-gray",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-blue",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-orange",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-green",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-orange",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-green",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-orange",
-      "parentCls": "",
-      "by": 10.2,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-gray",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "panel-record-peek",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.status-color-blue",
-      "parentCls": "",
-      "by": 14,
-      "scrolls": false
+      "by": 18.5,
+      "scrolls": true
     },
     {
       "width": 402,
@@ -8007,7 +4047,7 @@
       "cls": "db-record-peek-panel",
       "parentCls": "note-database-container",
       "by": 4,
-      "scrolls": false
+      "scrolls": true
     },
     {
       "width": 402,
@@ -8151,246 +4191,6 @@
     },
     {
       "width": 402,
-      "fixture": "chrome-table-footer",
-      "kind": "escaping",
-      "tag": "input",
-      "cls": "db-checkbox.db-checkbox-row",
-      "parentCls": "db-select-inner",
-      "by": 7,
-      "scrolls": true
-    },
-    {
-      "width": 402,
-      "fixture": "chrome-table-footer",
-      "kind": "escaping",
-      "tag": "input",
-      "cls": "db-checkbox.db-checkbox-row",
-      "parentCls": "db-select-inner",
-      "by": 7,
-      "scrolls": true
-    },
-    {
-      "width": 402,
-      "fixture": "chrome-table-footer",
-      "kind": "escaping",
-      "tag": "input",
-      "cls": "db-checkbox.db-checkbox-row",
-      "parentCls": "db-select-inner",
-      "by": 7,
-      "scrolls": true
-    },
-    {
-      "width": 402,
-      "fixture": "chrome-table-footer",
-      "kind": "escaping",
-      "tag": "input",
-      "cls": "db-checkbox.db-checkbox-row",
-      "parentCls": "db-select-inner",
-      "by": 7,
-      "scrolls": true
-    },
-    {
-      "width": 402,
-      "fixture": "chrome-table-footer",
-      "kind": "escaping",
-      "tag": "input",
-      "cls": "db-checkbox.db-checkbox-row",
-      "parentCls": "db-select-inner",
-      "by": 7,
-      "scrolls": true
-    },
-    {
-      "width": 402,
-      "fixture": "chrome-table-footer",
-      "kind": "escaping",
-      "tag": "input",
-      "cls": "db-checkbox.db-checkbox-row",
-      "parentCls": "db-select-inner",
-      "by": 7,
-      "scrolls": true
-    },
-    {
-      "width": 402,
-      "fixture": "chrome-table-footer",
-      "kind": "escaping",
-      "tag": "input",
-      "cls": "db-checkbox.db-checkbox-row",
-      "parentCls": "db-select-inner",
-      "by": 7,
-      "scrolls": true
-    },
-    {
-      "width": 402,
-      "fixture": "chrome-table-footer",
-      "kind": "escaping",
-      "tag": "input",
-      "cls": "db-checkbox.db-checkbox-row",
-      "parentCls": "db-select-inner",
-      "by": 7,
-      "scrolls": true
-    },
-    {
-      "width": 402,
-      "fixture": "chrome-table-footer",
-      "kind": "escaping",
-      "tag": "input",
-      "cls": "db-checkbox.db-checkbox-row",
-      "parentCls": "db-select-inner",
-      "by": 7,
-      "scrolls": true
-    },
-    {
-      "width": 402,
-      "fixture": "chrome-table-footer",
-      "kind": "escaping",
-      "tag": "input",
-      "cls": "db-checkbox.db-checkbox-row",
-      "parentCls": "db-select-inner",
-      "by": 7,
-      "scrolls": true
-    },
-    {
-      "width": 402,
-      "fixture": "chrome-table-footer",
-      "kind": "escaping",
-      "tag": "input",
-      "cls": "db-checkbox.db-checkbox-row",
-      "parentCls": "db-select-inner",
-      "by": 7,
-      "scrolls": true
-    },
-    {
-      "width": 402,
-      "fixture": "chrome-table-footer",
-      "kind": "escaping",
-      "tag": "input",
-      "cls": "db-checkbox.db-checkbox-row",
-      "parentCls": "db-select-inner",
-      "by": 7,
-      "scrolls": true
-    },
-    {
-      "width": 402,
-      "fixture": "chrome-table-footer",
-      "kind": "escaping",
-      "tag": "input",
-      "cls": "db-checkbox.db-checkbox-row",
-      "parentCls": "db-select-inner",
-      "by": 7,
-      "scrolls": true
-    },
-    {
-      "width": 402,
-      "fixture": "chrome-table-footer",
-      "kind": "escaping",
-      "tag": "input",
-      "cls": "db-checkbox.db-checkbox-row",
-      "parentCls": "db-select-inner",
-      "by": 7,
-      "scrolls": true
-    },
-    {
-      "width": 402,
-      "fixture": "chrome-table-footer",
-      "kind": "escaping",
-      "tag": "input",
-      "cls": "db-checkbox.db-checkbox-row",
-      "parentCls": "db-select-inner",
-      "by": 7,
-      "scrolls": true
-    },
-    {
-      "width": 402,
-      "fixture": "chrome-table-footer",
-      "kind": "escaping",
-      "tag": "input",
-      "cls": "db-checkbox.db-checkbox-row",
-      "parentCls": "db-select-inner",
-      "by": 7,
-      "scrolls": true
-    },
-    {
-      "width": 402,
-      "fixture": "chrome-table-footer",
-      "kind": "escaping",
-      "tag": "input",
-      "cls": "db-checkbox.db-checkbox-row",
-      "parentCls": "db-select-inner",
-      "by": 7,
-      "scrolls": true
-    },
-    {
-      "width": 402,
-      "fixture": "chrome-table-footer",
-      "kind": "escaping",
-      "tag": "input",
-      "cls": "db-checkbox.db-checkbox-row",
-      "parentCls": "db-select-inner",
-      "by": 7,
-      "scrolls": true
-    },
-    {
-      "width": 402,
-      "fixture": "chrome-table-footer",
-      "kind": "escaping",
-      "tag": "input",
-      "cls": "db-checkbox.db-checkbox-row",
-      "parentCls": "db-select-inner",
-      "by": 7,
-      "scrolls": true
-    },
-    {
-      "width": 402,
-      "fixture": "chrome-table-footer",
-      "kind": "escaping",
-      "tag": "input",
-      "cls": "db-checkbox.db-checkbox-row",
-      "parentCls": "db-select-inner",
-      "by": 7,
-      "scrolls": true
-    },
-    {
-      "width": 402,
-      "fixture": "chrome-table-footer",
-      "kind": "escaping",
-      "tag": "input",
-      "cls": "db-checkbox.db-checkbox-row",
-      "parentCls": "db-select-inner",
-      "by": 7,
-      "scrolls": true
-    },
-    {
-      "width": 402,
-      "fixture": "chrome-table-footer",
-      "kind": "escaping",
-      "tag": "input",
-      "cls": "db-checkbox.db-checkbox-row",
-      "parentCls": "db-select-inner",
-      "by": 7,
-      "scrolls": true
-    },
-    {
-      "width": 402,
-      "fixture": "chrome-table-footer",
-      "kind": "escaping",
-      "tag": "input",
-      "cls": "db-checkbox.db-checkbox-row",
-      "parentCls": "db-select-inner",
-      "by": 7,
-      "scrolls": true
-    },
-    {
-      "width": 402,
-      "fixture": "chrome-table-footer",
-      "kind": "escaping",
-      "tag": "input",
-      "cls": "db-checkbox.db-checkbox-row",
-      "parentCls": "db-select-inner",
-      "by": 7,
-      "scrolls": true
-    },
-    {
-      "width": 402,
       "fixture": "chrome-group-header-row",
       "kind": "escaping",
       "tag": "div",
@@ -8398,6 +4198,36 @@
       "parentCls": "db-grouped-table",
       "by": 999662,
       "scrolls": true
+    },
+    {
+      "width": 402,
+      "fixture": "chrome-group-selection-controls",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-list-group-header",
+      "parentCls": "db-list-group",
+      "by": 8,
+      "scrolls": false
+    },
+    {
+      "width": 402,
+      "fixture": "chrome-group-selection-controls",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-board-subgroup-header",
+      "parentCls": "db-board-subgroup",
+      "by": 8,
+      "scrolls": false
+    },
+    {
+      "width": 402,
+      "fixture": "chrome-selection-status-bar",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-selection-status-bar",
+      "parentCls": "note-database-container",
+      "by": 15.9,
+      "scrolls": false
     },
     {
       "width": 402,
@@ -8483,130 +4313,10 @@
       "width": 402,
       "fixture": "field-status-colors",
       "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.db-multi-select-badge",
-      "parentCls": "db-multi-select-values",
-      "by": 2.5,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "field-status-colors",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.db-multi-select-badge",
-      "parentCls": "db-multi-select-values",
-      "by": 2.5,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "field-status-colors",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.db-multi-select-badge",
-      "parentCls": "db-multi-select-values",
-      "by": 2.5,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "field-status-colors",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.db-multi-select-badge",
-      "parentCls": "db-multi-select-values",
-      "by": 2.5,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "field-status-colors",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.db-multi-select-badge",
-      "parentCls": "db-multi-select-values",
-      "by": 14,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "field-status-colors",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.db-multi-select-badge",
-      "parentCls": "db-multi-select-values",
-      "by": 14,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "field-status-colors",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.db-multi-select-badge",
-      "parentCls": "db-multi-select-values",
-      "by": 14,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "field-status-colors",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.db-multi-select-badge",
-      "parentCls": "db-multi-select-values",
-      "by": 14,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "field-status-colors",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.db-multi-select-badge",
-      "parentCls": "db-multi-select-values",
-      "by": 14,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "field-status-colors",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.db-multi-select-badge",
-      "parentCls": "db-multi-select-values",
-      "by": 14,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "field-status-colors",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.db-multi-select-badge",
-      "parentCls": "db-multi-select-values",
-      "by": 14,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "field-status-colors",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.db-multi-select-badge",
-      "parentCls": "db-multi-select-values",
-      "by": 14,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "field-status-colors",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "db-multi-select-label",
+      "tag": "button",
+      "cls": "db-multi-select-remove",
       "parentCls": "status-badge.db-multi-select-badge",
-      "by": 11.3,
+      "by": 8.9,
       "scrolls": false
     },
     {
@@ -8616,27 +4326,7 @@
       "tag": "button",
       "cls": "db-multi-select-remove",
       "parentCls": "status-badge.db-multi-select-badge",
-      "by": 23,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "field-status-colors",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.db-multi-select-badge",
-      "parentCls": "db-multi-select-values",
-      "by": 14,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "field-status-colors",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "db-multi-select-label",
-      "parentCls": "status-badge.db-multi-select-badge",
-      "by": 11.3,
+      "by": 8.9,
       "scrolls": false
     },
     {
@@ -8646,27 +4336,7 @@
       "tag": "button",
       "cls": "db-multi-select-remove",
       "parentCls": "status-badge.db-multi-select-badge",
-      "by": 23,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "field-status-colors",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.db-multi-select-badge",
-      "parentCls": "db-multi-select-values",
-      "by": 14,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "field-status-colors",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "db-multi-select-label",
-      "parentCls": "status-badge.db-multi-select-badge",
-      "by": 11.3,
+      "by": 8.9,
       "scrolls": false
     },
     {
@@ -8676,27 +4346,7 @@
       "tag": "button",
       "cls": "db-multi-select-remove",
       "parentCls": "status-badge.db-multi-select-badge",
-      "by": 23,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "field-status-colors",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.db-multi-select-badge",
-      "parentCls": "db-multi-select-values",
-      "by": 14,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "field-status-colors",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "db-multi-select-label",
-      "parentCls": "status-badge.db-multi-select-badge",
-      "by": 11.3,
+      "by": 8.9,
       "scrolls": false
     },
     {
@@ -8706,27 +4356,7 @@
       "tag": "button",
       "cls": "db-multi-select-remove",
       "parentCls": "status-badge.db-multi-select-badge",
-      "by": 23,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "field-status-colors",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.db-multi-select-badge",
-      "parentCls": "db-multi-select-values",
-      "by": 14,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "field-status-colors",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "db-multi-select-label",
-      "parentCls": "status-badge.db-multi-select-badge",
-      "by": 11.3,
+      "by": 8.9,
       "scrolls": false
     },
     {
@@ -8736,27 +4366,7 @@
       "tag": "button",
       "cls": "db-multi-select-remove",
       "parentCls": "status-badge.db-multi-select-badge",
-      "by": 23,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "field-status-colors",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.db-multi-select-badge",
-      "parentCls": "db-multi-select-values",
-      "by": 14,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "field-status-colors",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "db-multi-select-label",
-      "parentCls": "status-badge.db-multi-select-badge",
-      "by": 11.3,
+      "by": 8.9,
       "scrolls": false
     },
     {
@@ -8766,17 +4376,7 @@
       "tag": "button",
       "cls": "db-multi-select-remove",
       "parentCls": "status-badge.db-multi-select-badge",
-      "by": 23,
-      "scrolls": false
-    },
-    {
-      "width": 402,
-      "fixture": "field-status-colors",
-      "kind": "escaping",
-      "tag": "span",
-      "cls": "status-badge.db-multi-select-badge",
-      "parentCls": "db-multi-select-values",
-      "by": 14,
+      "by": 8.9,
       "scrolls": false
     },
     {
@@ -8786,7 +4386,7 @@
       "tag": "span",
       "cls": "db-multi-select-label",
       "parentCls": "status-badge.db-multi-select-badge",
-      "by": 11.3,
+      "by": 25.3,
       "scrolls": false
     },
     {
@@ -8796,7 +4396,7 @@
       "tag": "button",
       "cls": "db-multi-select-remove",
       "parentCls": "status-badge.db-multi-select-badge",
-      "by": 23,
+      "by": 37,
       "scrolls": false
     },
     {
@@ -8804,9 +4404,19 @@
       "fixture": "field-status-colors",
       "kind": "escaping",
       "tag": "span",
-      "cls": "status-badge.db-multi-select-badge",
-      "parentCls": "db-multi-select-values",
-      "by": 12.5,
+      "cls": "db-multi-select-label",
+      "parentCls": "status-badge.db-multi-select-badge",
+      "by": 25.3,
+      "scrolls": false
+    },
+    {
+      "width": 402,
+      "fixture": "field-status-colors",
+      "kind": "escaping",
+      "tag": "button",
+      "cls": "db-multi-select-remove",
+      "parentCls": "status-badge.db-multi-select-badge",
+      "by": 37,
       "scrolls": false
     },
     {
@@ -8814,9 +4424,19 @@
       "fixture": "field-status-colors",
       "kind": "escaping",
       "tag": "span",
-      "cls": "status-badge.db-multi-select-badge",
-      "parentCls": "db-multi-select-values",
-      "by": 12.5,
+      "cls": "db-multi-select-label",
+      "parentCls": "status-badge.db-multi-select-badge",
+      "by": 25.3,
+      "scrolls": false
+    },
+    {
+      "width": 402,
+      "fixture": "field-status-colors",
+      "kind": "escaping",
+      "tag": "button",
+      "cls": "db-multi-select-remove",
+      "parentCls": "status-badge.db-multi-select-badge",
+      "by": 37,
       "scrolls": false
     },
     {
@@ -8824,9 +4444,19 @@
       "fixture": "field-status-colors",
       "kind": "escaping",
       "tag": "span",
-      "cls": "status-badge.db-multi-select-badge",
-      "parentCls": "db-multi-select-values",
-      "by": 12.5,
+      "cls": "db-multi-select-label",
+      "parentCls": "status-badge.db-multi-select-badge",
+      "by": 25.3,
+      "scrolls": false
+    },
+    {
+      "width": 402,
+      "fixture": "field-status-colors",
+      "kind": "escaping",
+      "tag": "button",
+      "cls": "db-multi-select-remove",
+      "parentCls": "status-badge.db-multi-select-badge",
+      "by": 37,
       "scrolls": false
     },
     {
@@ -8834,9 +4464,19 @@
       "fixture": "field-status-colors",
       "kind": "escaping",
       "tag": "span",
-      "cls": "status-badge.db-multi-select-badge",
-      "parentCls": "db-multi-select-values",
-      "by": 12.5,
+      "cls": "db-multi-select-label",
+      "parentCls": "status-badge.db-multi-select-badge",
+      "by": 25.3,
+      "scrolls": false
+    },
+    {
+      "width": 402,
+      "fixture": "field-status-colors",
+      "kind": "escaping",
+      "tag": "button",
+      "cls": "db-multi-select-remove",
+      "parentCls": "status-badge.db-multi-select-badge",
+      "by": 37,
       "scrolls": false
     },
     {
@@ -8844,9 +4484,19 @@
       "fixture": "field-status-colors",
       "kind": "escaping",
       "tag": "span",
-      "cls": "status-badge.db-multi-select-badge",
-      "parentCls": "db-multi-select-values",
-      "by": 12.5,
+      "cls": "db-multi-select-label",
+      "parentCls": "status-badge.db-multi-select-badge",
+      "by": 25.3,
+      "scrolls": false
+    },
+    {
+      "width": 402,
+      "fixture": "field-status-colors",
+      "kind": "escaping",
+      "tag": "button",
+      "cls": "db-multi-select-remove",
+      "parentCls": "status-badge.db-multi-select-badge",
+      "by": 37,
       "scrolls": false
     },
     {
@@ -8854,9 +4504,79 @@
       "fixture": "field-status-colors",
       "kind": "escaping",
       "tag": "span",
-      "cls": "status-badge.db-multi-select-badge",
-      "parentCls": "db-multi-select-values",
-      "by": 12.5,
+      "cls": "db-multi-select-label",
+      "parentCls": "status-badge.db-multi-select-badge",
+      "by": 25.3,
+      "scrolls": false
+    },
+    {
+      "width": 402,
+      "fixture": "field-status-colors",
+      "kind": "escaping",
+      "tag": "button",
+      "cls": "db-multi-select-remove",
+      "parentCls": "status-badge.db-multi-select-badge",
+      "by": 37,
+      "scrolls": false
+    },
+    {
+      "width": 402,
+      "fixture": "field-status-colors",
+      "kind": "escaping",
+      "tag": "button",
+      "cls": "db-multi-select-remove",
+      "parentCls": "status-badge.db-multi-select-badge",
+      "by": 7.2,
+      "scrolls": false
+    },
+    {
+      "width": 402,
+      "fixture": "field-status-colors",
+      "kind": "escaping",
+      "tag": "button",
+      "cls": "db-multi-select-remove",
+      "parentCls": "status-badge.db-multi-select-badge",
+      "by": 7.2,
+      "scrolls": false
+    },
+    {
+      "width": 402,
+      "fixture": "field-status-colors",
+      "kind": "escaping",
+      "tag": "button",
+      "cls": "db-multi-select-remove",
+      "parentCls": "status-badge.db-multi-select-badge",
+      "by": 7.2,
+      "scrolls": false
+    },
+    {
+      "width": 402,
+      "fixture": "field-status-colors",
+      "kind": "escaping",
+      "tag": "button",
+      "cls": "db-multi-select-remove",
+      "parentCls": "status-badge.db-multi-select-badge",
+      "by": 7.2,
+      "scrolls": false
+    },
+    {
+      "width": 402,
+      "fixture": "field-status-colors",
+      "kind": "escaping",
+      "tag": "button",
+      "cls": "db-multi-select-remove",
+      "parentCls": "status-badge.db-multi-select-badge",
+      "by": 7.2,
+      "scrolls": false
+    },
+    {
+      "width": 402,
+      "fixture": "field-status-colors",
+      "kind": "escaping",
+      "tag": "button",
+      "cls": "db-multi-select-remove",
+      "parentCls": "status-badge.db-multi-select-badge",
+      "by": 7.2,
       "scrolls": false
     },
     {
@@ -8915,7 +4635,7 @@
       "kind": "rhythm",
       "cls": "db-list-row",
       "count": 24,
-      "mean": 63.7,
+      "mean": 70.8,
       "sd": 0,
       "distinct": 1
     },
@@ -8943,10 +4663,10 @@
       "width": 768,
       "fixture": "table-mobile",
       "kind": "escaping",
-      "tag": "input",
-      "cls": "db-checkbox.db-checkbox-row",
-      "parentCls": "db-select-inner",
-      "by": 5,
+      "tag": "button",
+      "cls": "db-record-open-btn.db-record-open-btn-icon",
+      "parentCls": "db-cell.db-title-cell",
+      "by": 4,
       "scrolls": true
     },
     {
@@ -8963,10 +4683,10 @@
       "width": 768,
       "fixture": "table-mobile",
       "kind": "escaping",
-      "tag": "input",
-      "cls": "db-checkbox.db-checkbox-row",
-      "parentCls": "db-select-inner",
-      "by": 5,
+      "tag": "button",
+      "cls": "db-record-open-btn.db-record-open-btn-icon",
+      "parentCls": "db-cell.db-title-cell",
+      "by": 4,
       "scrolls": true
     },
     {
@@ -8983,10 +4703,10 @@
       "width": 768,
       "fixture": "table-mobile",
       "kind": "escaping",
-      "tag": "input",
-      "cls": "db-checkbox.db-checkbox-row",
-      "parentCls": "db-select-inner",
-      "by": 5,
+      "tag": "button",
+      "cls": "db-record-open-btn.db-record-open-btn-icon",
+      "parentCls": "db-cell.db-title-cell",
+      "by": 4,
       "scrolls": true
     },
     {
@@ -9003,10 +4723,10 @@
       "width": 768,
       "fixture": "table-mobile",
       "kind": "escaping",
-      "tag": "input",
-      "cls": "db-checkbox.db-checkbox-row",
-      "parentCls": "db-select-inner",
-      "by": 5,
+      "tag": "button",
+      "cls": "db-record-open-btn.db-record-open-btn-icon",
+      "parentCls": "db-cell.db-title-cell",
+      "by": 4,
       "scrolls": true
     },
     {
@@ -9023,16 +4743,6 @@
       "width": 768,
       "fixture": "table-mobile",
       "kind": "escaping",
-      "tag": "input",
-      "cls": "db-checkbox.db-checkbox-row",
-      "parentCls": "db-select-inner",
-      "by": 5,
-      "scrolls": true
-    },
-    {
-      "width": 768,
-      "fixture": "table-mobile",
-      "kind": "escaping",
       "tag": "button",
       "cls": "db-record-open-btn.db-record-open-btn-icon",
       "parentCls": "db-cell.db-title-cell",
@@ -9043,110 +4753,10 @@
       "width": 768,
       "fixture": "table-mobile",
       "kind": "escaping",
-      "tag": "input",
-      "cls": "db-checkbox.db-checkbox-row",
-      "parentCls": "db-select-inner",
-      "by": 5,
-      "scrolls": true
-    },
-    {
-      "width": 768,
-      "fixture": "table-mobile",
-      "kind": "escaping",
       "tag": "button",
       "cls": "db-record-open-btn.db-record-open-btn-icon",
       "parentCls": "db-cell.db-title-cell",
       "by": 4,
-      "scrolls": true
-    },
-    {
-      "width": 768,
-      "fixture": "table-mobile",
-      "kind": "escaping",
-      "tag": "input",
-      "cls": "db-checkbox.db-checkbox-row",
-      "parentCls": "db-select-inner",
-      "by": 5,
-      "scrolls": true
-    },
-    {
-      "width": 768,
-      "fixture": "table-mobile",
-      "kind": "escaping",
-      "tag": "button",
-      "cls": "db-record-open-btn.db-record-open-btn-icon",
-      "parentCls": "db-cell.db-title-cell",
-      "by": 4,
-      "scrolls": true
-    },
-    {
-      "width": 768,
-      "fixture": "table-mobile",
-      "kind": "escaping",
-      "tag": "input",
-      "cls": "db-checkbox.db-checkbox-row",
-      "parentCls": "db-select-inner",
-      "by": 5,
-      "scrolls": true
-    },
-    {
-      "width": 768,
-      "fixture": "table-mobile",
-      "kind": "escaping",
-      "tag": "button",
-      "cls": "db-record-open-btn.db-record-open-btn-icon",
-      "parentCls": "db-cell.db-title-cell",
-      "by": 4,
-      "scrolls": true
-    },
-    {
-      "width": 768,
-      "fixture": "table-mobile",
-      "kind": "escaping",
-      "tag": "input",
-      "cls": "db-checkbox.db-checkbox-row",
-      "parentCls": "db-select-inner",
-      "by": 5,
-      "scrolls": true
-    },
-    {
-      "width": 768,
-      "fixture": "table-mobile",
-      "kind": "escaping",
-      "tag": "button",
-      "cls": "db-record-open-btn.db-record-open-btn-icon",
-      "parentCls": "db-cell.db-title-cell",
-      "by": 4,
-      "scrolls": true
-    },
-    {
-      "width": 768,
-      "fixture": "table-mobile",
-      "kind": "escaping",
-      "tag": "input",
-      "cls": "db-checkbox.db-checkbox-row",
-      "parentCls": "db-select-inner",
-      "by": 5,
-      "scrolls": true
-    },
-    {
-      "width": 768,
-      "fixture": "table-mobile",
-      "kind": "escaping",
-      "tag": "button",
-      "cls": "db-record-open-btn.db-record-open-btn-icon",
-      "parentCls": "db-cell.db-title-cell",
-      "by": 4,
-      "scrolls": true
-    },
-    {
-      "width": 768,
-      "fixture": "table-mobile",
-      "kind": "escaping",
-      "tag": "input",
-      "cls": "db-checkbox.db-checkbox-row",
-      "parentCls": "db-select-inner",
-      "by": 5,
       "scrolls": true
     },
     {
@@ -9166,7 +4776,7 @@
       "tag": "div",
       "cls": "db-list",
       "parentCls": "note-database-container.db-width-default",
-      "by": 64,
+      "by": 24,
       "scrolls": true
     },
     {
@@ -9228,6 +4838,16 @@
       "parentCls": "db-board-column",
       "by": 8,
       "scrolls": true
+    },
+    {
+      "width": 768,
+      "fixture": "list-sparse-fields",
+      "kind": "rhythm",
+      "cls": "db-list-row",
+      "count": 12,
+      "mean": 52.9,
+      "sd": 0,
+      "distinct": 1
     },
     {
       "width": 768,
@@ -9431,66 +5051,6 @@
     },
     {
       "width": 768,
-      "fixture": "panel-column-manager",
-      "kind": "escaping",
-      "tag": "button",
-      "cls": "",
-      "parentCls": "db-mobile-reorder-controls",
-      "by": 10,
-      "scrolls": false
-    },
-    {
-      "width": 768,
-      "fixture": "panel-column-manager",
-      "kind": "escaping",
-      "tag": "button",
-      "cls": "",
-      "parentCls": "db-mobile-reorder-controls",
-      "by": 10,
-      "scrolls": false
-    },
-    {
-      "width": 768,
-      "fixture": "panel-column-manager",
-      "kind": "escaping",
-      "tag": "button",
-      "cls": "",
-      "parentCls": "db-mobile-reorder-controls",
-      "by": 10,
-      "scrolls": false
-    },
-    {
-      "width": 768,
-      "fixture": "panel-column-manager",
-      "kind": "escaping",
-      "tag": "button",
-      "cls": "",
-      "parentCls": "db-mobile-reorder-controls",
-      "by": 10,
-      "scrolls": false
-    },
-    {
-      "width": 768,
-      "fixture": "panel-column-manager",
-      "kind": "escaping",
-      "tag": "button",
-      "cls": "",
-      "parentCls": "db-mobile-reorder-controls",
-      "by": 10,
-      "scrolls": false
-    },
-    {
-      "width": 768,
-      "fixture": "panel-column-manager",
-      "kind": "escaping",
-      "tag": "button",
-      "cls": "",
-      "parentCls": "db-mobile-reorder-controls",
-      "by": 10,
-      "scrolls": false
-    },
-    {
-      "width": 768,
       "fixture": "panel-record-detail-sheet",
       "kind": "escaping",
       "tag": "div",
@@ -9641,6 +5201,26 @@
     },
     {
       "width": 768,
+      "fixture": "chrome-group-selection-controls",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-list-group-header",
+      "parentCls": "db-list-group",
+      "by": 8,
+      "scrolls": false
+    },
+    {
+      "width": 768,
+      "fixture": "chrome-group-selection-controls",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-board-subgroup-header",
+      "parentCls": "db-board-subgroup",
+      "by": 8,
+      "scrolls": false
+    },
+    {
+      "width": 768,
       "fixture": "field-icon-picker",
       "kind": "escaping",
       "tag": "button",
@@ -9755,7 +5335,7 @@
       "kind": "rhythm",
       "cls": "db-list-row",
       "count": 24,
-      "mean": 63.7,
+      "mean": 70.8,
       "sd": 0,
       "distinct": 1
     },
@@ -9773,10 +5353,10 @@
       "width": 1440,
       "fixture": "table-mobile",
       "kind": "escaping",
-      "tag": "input",
-      "cls": "db-checkbox.db-checkbox-row",
-      "parentCls": "db-select-inner",
-      "by": 5,
+      "tag": "button",
+      "cls": "db-record-open-btn.db-record-open-btn-icon",
+      "parentCls": "db-cell.db-title-cell",
+      "by": 4,
       "scrolls": true
     },
     {
@@ -9793,10 +5373,10 @@
       "width": 1440,
       "fixture": "table-mobile",
       "kind": "escaping",
-      "tag": "input",
-      "cls": "db-checkbox.db-checkbox-row",
-      "parentCls": "db-select-inner",
-      "by": 5,
+      "tag": "button",
+      "cls": "db-record-open-btn.db-record-open-btn-icon",
+      "parentCls": "db-cell.db-title-cell",
+      "by": 4,
       "scrolls": true
     },
     {
@@ -9813,10 +5393,10 @@
       "width": 1440,
       "fixture": "table-mobile",
       "kind": "escaping",
-      "tag": "input",
-      "cls": "db-checkbox.db-checkbox-row",
-      "parentCls": "db-select-inner",
-      "by": 5,
+      "tag": "button",
+      "cls": "db-record-open-btn.db-record-open-btn-icon",
+      "parentCls": "db-cell.db-title-cell",
+      "by": 4,
       "scrolls": true
     },
     {
@@ -9833,10 +5413,10 @@
       "width": 1440,
       "fixture": "table-mobile",
       "kind": "escaping",
-      "tag": "input",
-      "cls": "db-checkbox.db-checkbox-row",
-      "parentCls": "db-select-inner",
-      "by": 5,
+      "tag": "button",
+      "cls": "db-record-open-btn.db-record-open-btn-icon",
+      "parentCls": "db-cell.db-title-cell",
+      "by": 4,
       "scrolls": true
     },
     {
@@ -9853,16 +5433,6 @@
       "width": 1440,
       "fixture": "table-mobile",
       "kind": "escaping",
-      "tag": "input",
-      "cls": "db-checkbox.db-checkbox-row",
-      "parentCls": "db-select-inner",
-      "by": 5,
-      "scrolls": true
-    },
-    {
-      "width": 1440,
-      "fixture": "table-mobile",
-      "kind": "escaping",
       "tag": "button",
       "cls": "db-record-open-btn.db-record-open-btn-icon",
       "parentCls": "db-cell.db-title-cell",
@@ -9873,110 +5443,10 @@
       "width": 1440,
       "fixture": "table-mobile",
       "kind": "escaping",
-      "tag": "input",
-      "cls": "db-checkbox.db-checkbox-row",
-      "parentCls": "db-select-inner",
-      "by": 5,
-      "scrolls": true
-    },
-    {
-      "width": 1440,
-      "fixture": "table-mobile",
-      "kind": "escaping",
       "tag": "button",
       "cls": "db-record-open-btn.db-record-open-btn-icon",
       "parentCls": "db-cell.db-title-cell",
       "by": 4,
-      "scrolls": true
-    },
-    {
-      "width": 1440,
-      "fixture": "table-mobile",
-      "kind": "escaping",
-      "tag": "input",
-      "cls": "db-checkbox.db-checkbox-row",
-      "parentCls": "db-select-inner",
-      "by": 5,
-      "scrolls": true
-    },
-    {
-      "width": 1440,
-      "fixture": "table-mobile",
-      "kind": "escaping",
-      "tag": "button",
-      "cls": "db-record-open-btn.db-record-open-btn-icon",
-      "parentCls": "db-cell.db-title-cell",
-      "by": 4,
-      "scrolls": true
-    },
-    {
-      "width": 1440,
-      "fixture": "table-mobile",
-      "kind": "escaping",
-      "tag": "input",
-      "cls": "db-checkbox.db-checkbox-row",
-      "parentCls": "db-select-inner",
-      "by": 5,
-      "scrolls": true
-    },
-    {
-      "width": 1440,
-      "fixture": "table-mobile",
-      "kind": "escaping",
-      "tag": "button",
-      "cls": "db-record-open-btn.db-record-open-btn-icon",
-      "parentCls": "db-cell.db-title-cell",
-      "by": 4,
-      "scrolls": true
-    },
-    {
-      "width": 1440,
-      "fixture": "table-mobile",
-      "kind": "escaping",
-      "tag": "input",
-      "cls": "db-checkbox.db-checkbox-row",
-      "parentCls": "db-select-inner",
-      "by": 5,
-      "scrolls": true
-    },
-    {
-      "width": 1440,
-      "fixture": "table-mobile",
-      "kind": "escaping",
-      "tag": "button",
-      "cls": "db-record-open-btn.db-record-open-btn-icon",
-      "parentCls": "db-cell.db-title-cell",
-      "by": 4,
-      "scrolls": true
-    },
-    {
-      "width": 1440,
-      "fixture": "table-mobile",
-      "kind": "escaping",
-      "tag": "input",
-      "cls": "db-checkbox.db-checkbox-row",
-      "parentCls": "db-select-inner",
-      "by": 5,
-      "scrolls": true
-    },
-    {
-      "width": 1440,
-      "fixture": "table-mobile",
-      "kind": "escaping",
-      "tag": "button",
-      "cls": "db-record-open-btn.db-record-open-btn-icon",
-      "parentCls": "db-cell.db-title-cell",
-      "by": 4,
-      "scrolls": true
-    },
-    {
-      "width": 1440,
-      "fixture": "table-mobile",
-      "kind": "escaping",
-      "tag": "input",
-      "cls": "db-checkbox.db-checkbox-row",
-      "parentCls": "db-select-inner",
-      "by": 5,
       "scrolls": true
     },
     {
@@ -10048,6 +5518,16 @@
       "parentCls": "db-board-column",
       "by": 8,
       "scrolls": true
+    },
+    {
+      "width": 1440,
+      "fixture": "list-sparse-fields",
+      "kind": "rhythm",
+      "cls": "db-list-row",
+      "count": 12,
+      "mean": 52.9,
+      "sd": 0,
+      "distinct": 1
     },
     {
       "width": 1440,
@@ -10231,66 +5711,6 @@
     },
     {
       "width": 1440,
-      "fixture": "panel-column-manager",
-      "kind": "escaping",
-      "tag": "button",
-      "cls": "",
-      "parentCls": "db-mobile-reorder-controls",
-      "by": 10,
-      "scrolls": false
-    },
-    {
-      "width": 1440,
-      "fixture": "panel-column-manager",
-      "kind": "escaping",
-      "tag": "button",
-      "cls": "",
-      "parentCls": "db-mobile-reorder-controls",
-      "by": 10,
-      "scrolls": false
-    },
-    {
-      "width": 1440,
-      "fixture": "panel-column-manager",
-      "kind": "escaping",
-      "tag": "button",
-      "cls": "",
-      "parentCls": "db-mobile-reorder-controls",
-      "by": 10,
-      "scrolls": false
-    },
-    {
-      "width": 1440,
-      "fixture": "panel-column-manager",
-      "kind": "escaping",
-      "tag": "button",
-      "cls": "",
-      "parentCls": "db-mobile-reorder-controls",
-      "by": 10,
-      "scrolls": false
-    },
-    {
-      "width": 1440,
-      "fixture": "panel-column-manager",
-      "kind": "escaping",
-      "tag": "button",
-      "cls": "",
-      "parentCls": "db-mobile-reorder-controls",
-      "by": 10,
-      "scrolls": false
-    },
-    {
-      "width": 1440,
-      "fixture": "panel-column-manager",
-      "kind": "escaping",
-      "tag": "button",
-      "cls": "",
-      "parentCls": "db-mobile-reorder-controls",
-      "by": 10,
-      "scrolls": false
-    },
-    {
-      "width": 1440,
       "fixture": "panel-record-detail-sheet",
       "kind": "escaping",
       "tag": "div",
@@ -10408,6 +5828,26 @@
       "parentCls": "db-grouped-table",
       "by": 998648,
       "scrolls": true
+    },
+    {
+      "width": 1440,
+      "fixture": "chrome-group-selection-controls",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-list-group-header",
+      "parentCls": "db-list-group",
+      "by": 8,
+      "scrolls": false
+    },
+    {
+      "width": 1440,
+      "fixture": "chrome-group-selection-controls",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-board-subgroup-header",
+      "parentCls": "db-board-subgroup",
+      "by": 8,
+      "scrolls": false
     },
     {
       "width": 1440,
@@ -10538,6 +5978,11 @@
     },
     {
       "width": 320,
+      "fixture": "list-sparse-fields",
+      "probe": "4px"
+    },
+    {
+      "width": 320,
       "fixture": "calendar-month-view",
       "probe": "4px"
     },
@@ -10613,6 +6058,11 @@
     },
     {
       "width": 320,
+      "fixture": "panel-computed-cleanup-modal",
+      "probe": "4px"
+    },
+    {
+      "width": 320,
       "fixture": "chrome-toolbar",
       "probe": "4px"
     },
@@ -10669,6 +6119,21 @@
     {
       "width": 320,
       "fixture": "chrome-chart-empty",
+      "probe": "4px"
+    },
+    {
+      "width": 320,
+      "fixture": "chrome-owned-menu",
+      "probe": "4px"
+    },
+    {
+      "width": 320,
+      "fixture": "chrome-group-selection-controls",
+      "probe": "4px"
+    },
+    {
+      "width": 320,
+      "fixture": "chrome-selection-status-bar",
       "probe": "4px"
     },
     {
@@ -10783,6 +6248,11 @@
     },
     {
       "width": 402,
+      "fixture": "list-sparse-fields",
+      "probe": "4px"
+    },
+    {
+      "width": 402,
       "fixture": "calendar-month-view",
       "probe": "4px"
     },
@@ -10858,6 +6328,11 @@
     },
     {
       "width": 402,
+      "fixture": "panel-computed-cleanup-modal",
+      "probe": "4px"
+    },
+    {
+      "width": 402,
       "fixture": "chrome-toolbar",
       "probe": "4px"
     },
@@ -10914,6 +6389,21 @@
     {
       "width": 402,
       "fixture": "chrome-chart-empty",
+      "probe": "4px"
+    },
+    {
+      "width": 402,
+      "fixture": "chrome-owned-menu",
+      "probe": "4px"
+    },
+    {
+      "width": 402,
+      "fixture": "chrome-group-selection-controls",
+      "probe": "4px"
+    },
+    {
+      "width": 402,
+      "fixture": "chrome-selection-status-bar",
       "probe": "4px"
     },
     {
@@ -11028,6 +6518,11 @@
     },
     {
       "width": 768,
+      "fixture": "list-sparse-fields",
+      "probe": "4px"
+    },
+    {
+      "width": 768,
       "fixture": "calendar-month-view",
       "probe": "4px"
     },
@@ -11103,6 +6598,11 @@
     },
     {
       "width": 768,
+      "fixture": "panel-computed-cleanup-modal",
+      "probe": "4px"
+    },
+    {
+      "width": 768,
       "fixture": "chrome-toolbar",
       "probe": "4px"
     },
@@ -11159,6 +6659,21 @@
     {
       "width": 768,
       "fixture": "chrome-chart-empty",
+      "probe": "4px"
+    },
+    {
+      "width": 768,
+      "fixture": "chrome-owned-menu",
+      "probe": "4px"
+    },
+    {
+      "width": 768,
+      "fixture": "chrome-group-selection-controls",
+      "probe": "4px"
+    },
+    {
+      "width": 768,
+      "fixture": "chrome-selection-status-bar",
       "probe": "4px"
     },
     {
@@ -11273,6 +6788,11 @@
     },
     {
       "width": 1440,
+      "fixture": "list-sparse-fields",
+      "probe": "4px"
+    },
+    {
+      "width": 1440,
       "fixture": "calendar-month-view",
       "probe": "4px"
     },
@@ -11348,6 +6868,11 @@
     },
     {
       "width": 1440,
+      "fixture": "panel-computed-cleanup-modal",
+      "probe": "4px"
+    },
+    {
+      "width": 1440,
       "fixture": "chrome-toolbar",
       "probe": "4px"
     },
@@ -11404,6 +6929,21 @@
     {
       "width": 1440,
       "fixture": "chrome-chart-empty",
+      "probe": "4px"
+    },
+    {
+      "width": 1440,
+      "fixture": "chrome-owned-menu",
+      "probe": "4px"
+    },
+    {
+      "width": 1440,
+      "fixture": "chrome-group-selection-controls",
+      "probe": "4px"
+    },
+    {
+      "width": 1440,
+      "fixture": "chrome-selection-status-bar",
       "probe": "4px"
     },
     {

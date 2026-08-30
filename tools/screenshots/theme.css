@@ -33,8 +33,25 @@
   --interactive-accent-hover: #4c56c0;
 
   --radius-s: 4px;
-  --radius-m: 6px;
-  --radius-l: 10px;
+  --radius-m: 8px;
+  --radius-l: 12px;
+
+  /* Menu chrome. Obsidian gives menus their own variables, and the plugin's owned menu now reads
+     them so it matches the app's real menus and follows a theme that restyles them. Without these
+     here the harness measures the plugin's fallbacks instead of what ships — the same blindness as
+     a story wrapped in the container that supplies its tokens. Values are Obsidian's defaults. */
+  --border-width: 1px;
+  --icon-s: 16px;
+  --icon-size: var(--icon-s);
+  --font-ui-smaller: 12px;
+  --font-ui-small: 13px;
+  --font-ui-medium: 15px;
+  --shadow-s: 0px 1px 2px rgba(0, 0, 0, 0.028), 0px 3.4px 6.7px rgba(0, 0, 0, 0.042), 0px 15px 30px rgba(0, 0, 0, 0.07);
+  --menu-background: var(--background-secondary);
+  --menu-border-color: var(--background-modifier-border-hover);
+  --menu-border-width: var(--border-width);
+  --menu-radius: var(--radius-m);
+  --menu-shadow: var(--shadow-s);
 
   --scrollbar-thumb-bg: rgba(0, 0, 0, 0.18);
   --divider-color: #e0e0e0;
@@ -63,6 +80,26 @@
 
   --scrollbar-thumb-bg: rgba(255, 255, 255, 0.16);
   --divider-color: #333333;
+  --shadow-s: 0px 1px 2px rgba(0, 0, 0, 0.121), 0px 3.4px 6.7px rgba(0, 0, 0, 0.179), 0px 15px 30px rgba(0, 0, 0, 0.3);
+}
+
+/* Phone scopes. Obsidian sets `is-mobile` and `is-phone` together on a real phone; the capture
+   harness now does the same, so these fire where they ship. Without them a mobile capture is the
+   desktop capture with a narrower viewport, which is how four owned-menu images came out as two. */
+.is-mobile {
+  --icon-s: 18px;
+}
+
+.is-phone {
+  --border-width: 0.5px;
+}
+
+/* `setIcon` injects this element and the host sizes it from the token. Nothing in the harness did,
+   so an --icon-size declaration measured as having no effect and every captured glyph stayed at its
+   authored width regardless of the slot it sat in. */
+svg.svg-icon {
+  width: var(--icon-size);
+  height: var(--icon-size);
 }
 
 /* Page chrome for the capture itself, kept out of the plugin's own selectors so it can

@@ -177,11 +177,24 @@ for (const width of WIDTHS) {
 
 // The fixtures carry one field count each, and the reported defect is about rows that disagree in
 // height — which is a function of how much each row has to fit. So rows are synthesised at the
-// field counts the criteria name, with wrapping both on and off, because the report says the
-// raggedness appears in one of those states and not the other.
+// field counts the criteria name.
 //
 // The markup mirrors what the list renderer builds. It is a reproduction and is labelled as one;
 // if it disagrees with the running app, the app wins.
+//
+// It did disagree, silently, for as long as this matrix has existed. It emitted
+// `db-list-row-field`, `db-list-row-field-label` and `db-list-row-field-value`, and each of those
+// three has zero rules in the stylesheet and zero creation sites in the source. Every row it
+// measured was a stack of unstyled divs: no track width, no grid column, no padding. The heights,
+// the standard deviations and the spill counts were all real measurements of markup the plugin does
+// not build, which is a check that cannot fail whatever the product does. The names below are the
+// ones list-renderer.ts actually creates, and the title sits inside the line wrapper it is built in.
+//
+// The second axis was inert for the same reason. It toggled an inline `flex-wrap` on the meta row,
+// which has been a grid since the column fix landed and ignores the property outright. The axis
+// that does change the layout regime is the device: the desktop lays these rows out on a grid and
+// the phone on a wrapping flex line, and the phone is where a column claimed by index has nothing
+// to claim it with.
 
 const FIELD_COUNTS = [1, 6, 20];
 const matrix = [];
@@ -190,19 +203,25 @@ const rowMatrixPage = await browser.newPage({ viewport: { width: 1440, height: 9
 for (const width of WIDTHS) {
   await rowMatrixPage.setViewportSize({ width, height: 900 });
   for (const fields of FIELD_COUNTS) {
-    for (const wrap of [false, true]) {
+    for (const phone of [false, true]) {
+      const template = Array.from({ length: fields }, () => "150px").join(" ");
       const html = Array.from({ length: 20 }, (_, r) => {
         const cells = Array.from({ length: fields }, (_, f) =>
-          `<div class="db-list-row-field"><span class="db-list-row-field-label">Field ${f}</span>` +
-          `<span class="db-list-row-field-value">Value ${r}-${f} some longer text</span></div>`
+          `<div class="db-list-field" style="grid-column: ${f + 1}"><span class="db-list-field-label">Field ${f}</span>` +
+          `<div class="db-list-field-value">Value ${r}-${f} some longer text</div></div>`
         ).join("");
-        return `<div class="db-list-row"><div class="db-list-row-controls">` +
-          `<input type="checkbox" class="db-checkbox db-checkbox-row"></div>` +
-          `<div class="db-list-row-main"><div class="db-list-row-title">Row ${r}</div>` +
-          `<div class="db-list-row-meta"${wrap ? ' style="flex-wrap: wrap"' : ""}>${cells}</div></div></div>`;
+        return `<div class="db-list-row" role="row"><div class="db-list-row-controls">` +
+          `<input type="checkbox" class="db-checkbox db-checkbox-row db-list-row-checkbox"></div>` +
+          `<div class="db-list-row-main"><div class="db-record-title-line">` +
+          `<span class="db-list-row-title">Row ${r}</span></div>` +
+          `<div class="db-list-row-meta" style="grid-template-columns: ${template}">${cells}</div></div></div>`;
       }).join("");
+      // --capture-max-width bounds the container the way the capture harness does. Without it the
+      // container sized itself to content and measured 948px inside a 402px viewport, so every
+      // phone number taken from this page described a width no phone has.
       await rowMatrixPage.setContent(
-        `<body><div id="shot"><div class="note-database-container"><div class="db-list">${html}</div></div></div></body>`
+        `<html style="--capture-max-width: ${width}px"><body class="${phone ? "is-mobile is-phone" : ""}">`
+        + `<div id="shot"><div class="note-database-container"><div class="db-list">${html}</div></div></div></body></html>`
       );
       await rowMatrixPage.addStyleTag({ content: css });
       await rowMatrixPage.addStyleTag({ content: theme });
@@ -242,7 +261,7 @@ for (const width of WIDTHS) {
           lineBox: Math.round(line * 10) / 10,
         };
       });
-      matrix.push({ width, fields, wrap, ...r });
+      matrix.push({ width, fields, phone, ...r });
     }
   }
 }
@@ -354,10 +373,10 @@ if (worstRagged.length) {
 await browser.close();
 
 console.log("ROW RHYTHM — 20 synthesised rows, height spread:");
-console.log("  width  fields  wrap   mean     sd   content escaping the row");
+console.log("  width  fields  device   mean     sd   content escaping the row");
 for (const m of matrix) {
   const flag = m.spilling > 0 ? `  ${m.spilling} spilling, worst ${m.worstSpill}px` : "";
-  console.log(`  ${String(m.width).padStart(5)}  ${String(m.fields).padStart(6)}  ${m.wrap ? "on " : "off"}  ${String(m.mean).padStart(6)}  ${String(m.sd).padStart(5)}${flag}`);
+  console.log(`  ${String(m.width).padStart(5)}  ${String(m.fields).padStart(6)}  ${m.phone ? "phone  " : "desktop"}  ${String(m.mean).padStart(6)}  ${String(m.sd).padStart(5)}${flag}`);
 }
 console.log("");
 

@@ -8,16 +8,25 @@
 // ───────────────────────────────────────────────────────────────────
 //
 // Five checkbox sites previously looked correct only because a parent happened
-// to carry a class that supplied their appearance. The source guard now pins
-// each one to the shared factory, while the browser harness owns computed-style
-// proof.
+// to carry a class that supplied their appearance.
+//
+// The call-site half of this guard, below, watches how a checkbox is created. That is not the
+// property the defect was about. Re-keying the whole base rule from `input[type="checkbox"].db-checkbox`
+// back to `.note-database-container .db-checkbox-cell input[type="checkbox"]` — the exact pre-fix
+// stylesheet, every checkbox outside a boolean cell falling back to the platform box — left this
+// suite reporting six passes. It passed on the broken tree and the fixed tree alike, because the
+// property it claimed to protect lives in CSS and nothing here read any CSS.
+//
+// Section 4 reads it. A control owns its appearance when the rule that declares `appearance: none`
+// has the control itself as its subject; the moment that rule acquires an ancestor, the control
+// goes back to depending on where it is mounted and this suite goes red.
 
 // ───────────────────────────────────────────────────────────────────
 // 1. IMPORTS
 // ───────────────────────────────────────────────────────────────────
 
 import { readFileSync } from "fs";
-import { resolve } from "path";
+import { join, resolve } from "path";
 import { describe, expect, it } from "vitest";
 
 // ───────────────────────────────────────────────────────────────────
@@ -88,4 +97,76 @@ describe("checkboxes migrated off borrowed ancestor appearance", () => {
     }
     expect(bare, `these name the checkbox type directly instead of using the factory: ${bare.join(", ")}`).toEqual([]);
   });
+});
+
+// ───────────────────────────────────────────────────────────────────
+// 4. THE PROPERTY ITSELF
+// ───────────────────────────────────────────────────────────────────
+
+/** The two controls the plugin renders as an `input[type="checkbox"]`, and the class each owns. */
+const OWNED_CONTROLS = [
+  { control: "db-checkbox", note: "every selection and boolean box" },
+  { control: "db-toggle-switch", note: "the switch" },
+] as const;
+
+interface AppearanceRule {
+  selector: string;
+  ancestorScoped: boolean;
+  /** A fallback for controls that never migrated cannot reach one that did. */
+  guardedAgainstOwned: boolean;
+}
+
+/**
+ * Every rule in the stylesheet that hands a checkbox its non-platform appearance.
+ *
+ * Selector text is read rather than computed style, because the question is where the rule is
+ * anchored and a computed value cannot answer that: an ancestor-scoped rule and a self-owned one
+ * compute identically as long as the ancestor happens to be present, which is the whole reason
+ * eleven families were missed the first time.
+ */
+function appearanceRules(control: string): AppearanceRule[] {
+  const css = readFileSync(join(resolve(__dirname, "..", ".."), "styles.css"), "utf8")
+    .replace(/\/\*[\s\S]*?\*\//g, "");
+  const rules: AppearanceRule[] = [];
+  for (const block of css.matchAll(/([^{}]+)\{([^{}]*)\}/g)) {
+    if (!/appearance:\s*none/.test(block[2])) continue;
+    for (const selector of block[1].split(",").map((part) => part.trim().replace(/\s+/g, " "))) {
+      if (!selector.includes(control)) continue;
+      // Attribute selectors carry spaces of their own; strip them before looking for a combinator.
+      const skeleton = selector.replace(/\[[^\]]*\]/g, "");
+      rules.push({
+        selector,
+        ancestorScoped: /[ >+~]/.test(skeleton),
+        guardedAgainstOwned: /:not\(\.db-checkbox\)/.test(selector),
+      });
+    }
+  }
+  return rules;
+}
+
+describe("a checkbox's appearance is anchored on the control, not on where it is mounted", () => {
+  for (const { control, note } of OWNED_CONTROLS) {
+    it(`${control} — ${note} — has a rule whose subject is the control itself`, () => {
+      const selfOwned = appearanceRules(control).filter((rule) => !rule.ancestorScoped);
+      expect(
+        selfOwned.map((rule) => rule.selector),
+        `no rule gives .${control} appearance without an ancestor in the selector, so a control `
+          + `mounted anywhere else falls back to the platform box`
+      ).not.toEqual([]);
+    });
+
+    it(`${control} takes appearance from no ancestor`, () => {
+      // A guarded fallback is exempt and only because the guard is what makes it unreachable:
+      // `:not(.db-checkbox)` cannot match a control the factory built. Delete the guard and this
+      // fails, which is the intent — an unguarded ancestor rule is the defect coming back.
+      const borrowed = appearanceRules(control)
+        .filter((rule) => rule.ancestorScoped && !rule.guardedAgainstOwned)
+        .map((rule) => rule.selector);
+      expect(
+        borrowed,
+        `these hand .${control} its appearance from an ancestor, so the control loses it the moment `
+          + `it is mounted anywhere else: ${borrowed.join(" | ")}`
+      ).toEqual([]);
+    });
+  }
 });

@@ -26,6 +26,15 @@ import { dirname, join, resolve } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { SCENARIOS } from "./scenarios.mjs";
 
+// This page does not reproduce the workspace leaf, and unlike the placement harness it does not
+// need to. The leaf's `contain: strict` matters to anything positioned against the viewport, and
+// only three of these scenarios contain a `position: fixed` element at all: the record-detail
+// sheet, the icon picker and the colour picker. Measured inside a contained leaf offset from the
+// origin, all three shift by that offset and all three stay painted — and every shot is cropped to
+// its subject, so the shift does not reach the image. Adding containment here would rewrite the
+// corpus to show the same pictures. If a scenario ever renders a surface whose placement is the
+// subject, that stops being true and this page needs the leaf.
+//
 // Paths are repo-relative because that is what `fingerprint` and the freshness check both expect.
 const CAPTURE_INPUTS = [
   "styles.css",
@@ -78,7 +87,7 @@ function arg(flag, fallback) {
    cramped desktop, so the mobile capture would not show the mobile design at all. */
 const DEVICES = [
   { id: "desktop", width: 1440, height: 900, bodyClass: "" },
-  { id: "mobile", width: 402, height: 874, bodyClass: "is-phone" },
+  { id: "mobile", width: 402, height: 874, bodyClass: "is-mobile is-phone" },
 ];
 
 /* A full view is documented inside a device frame; a component is documented on its own,
