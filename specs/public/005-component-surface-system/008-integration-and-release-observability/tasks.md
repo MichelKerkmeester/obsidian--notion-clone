@@ -44,11 +44,15 @@ folder numbers: `000`, `001`, `004`.
 **Deliverable A · Phase 1 — the handoff replay, and proof that it can fail.** No real handoff result
 may be recorded until T3 and T4 have each been demonstrated failing.
 
-- [ ] **T1** Build `tools/integration/handoff-replay.mjs`: read every closed phase's recorded
+- [~] **T1** Build `tools/integration/handoff-replay.mjs`: read every closed phase's recorded
       criteria, re-assert them against the current tree, and call the cascade replay — REQ-010.
       *Evidence to close:* the set of re-asserted criteria is derived from the phases'
       `acceptance-criteria.md` rows and `000`'s registry alone; adding a criterion to a closed phase
       adds a re-assertion without editing the runner.
+      *Status 2026-08-30:* shipped as `tools/live/replay.mjs` (`4ccfed4`, 187 lines), `npm run replay`,
+      gate lane `replay`: 8 results across 5 phases, PASS, exit 0, 4,267 ms. **Not closed** — the claim
+      list is hand-written at `replay.mjs:53`, not derived, so adding a criterion to a closed phase adds
+      no re-assertion. The outcome landed; the specified mechanism did not.
 - [ ] **T2** Consume `000`'s input-hash recorder for admissibility — REQ-009.
       *Evidence to close:* every result the replay reads or writes carries recorded input hashes; the
       command name and output shape of `000`'s recorder are cited, and no second recorder exists in

@@ -195,7 +195,11 @@ that is not there fails validation.
 
 **Closeable:** No
 
-Work has not started. Every row is `Unmet`. **This packet closes twice.** Deliverable A closes when
+**Deliverable A's runner is built, green and gated; Deliverable B is unbuilt.** `npm run replay`
+re-asserts 8 landed results across 5 phases and exits 0 in 4,267 ms. Every row is nonetheless still
+`Unmet`, because every threshold includes a negative control and **not one of N1-N14 has ever been
+observed**. See `implementation-summary.md` for the four rows whose green half is recorded.
+**This packet closes twice.** Deliverable A closes when
 AC-002, AC-009, AC-010, AC-011, AC-012 and AC-013 are `Met` — before `001` starts, and before any
 phase after `000` releases the CSS lane. Deliverable B closes when the remaining rows are `Met`, and
 it closes the program.

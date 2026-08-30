@@ -39,15 +39,18 @@
       "dev"
     ],
     "importance_tier": "critical",
-    "status": "planned",
+    "status": "in_progress",
     "key_files": [
       "spec.md",
       "plan.md",
       "tasks.md",
       "acceptance-criteria.md",
       "goal.md",
+      "implementation-summary.md",
       "checklist.md",
       "tools/live/probe.mjs",
+      "tools/live/README.md",
+      "tools/lane/css-lane.json",
       "src/main.ts"
     ],
     "entities": [
@@ -82,6 +85,12 @@
         "source": "derived"
       },
       {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
         "name": "checklist.md",
         "kind": "doc",
         "path": "checklist.md",
@@ -91,6 +100,18 @@
         "name": "probe.mjs",
         "kind": "file",
         "path": "tools/live/probe.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "README.md",
+        "kind": "doc",
+        "path": "tools/live/README.md",
+        "source": "derived"
+      },
+      {
+        "name": "css-lane.json",
+        "kind": "config",
+        "path": "tools/lane/css-lane.json",
         "source": "derived"
       },
       {
@@ -118,6 +139,12 @@
         "source": "derived"
       },
       {
+        "name": "Open Obsidian",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
         "name": "Does Obsidian",
         "kind": "proper_noun",
         "path": "spec.md",
@@ -125,12 +152,6 @@
       },
       {
         "name": "Key Decisions",
-        "kind": "proper_noun",
-        "path": "spec.md",
-        "source": "derived"
-      },
-      {
-        "name": "Critical Dependencies",
         "kind": "proper_noun",
         "path": "spec.md",
         "source": "derived"
@@ -176,29 +197,11 @@
         "kind": "key_phrase",
         "path": "tasks.md",
         "source": "derived"
-      },
-      {
-        "name": "Obsidian",
-        "kind": "key_phrase",
-        "path": "tasks.md",
-        "source": "derived"
-      },
-      {
-        "name": "Acceptance Criteria",
-        "kind": "proper_noun",
-        "path": "acceptance-criteria.md",
-        "source": "derived"
-      },
-      {
-        "name": "Stopping Obsidian",
-        "kind": "proper_noun",
-        "path": "acceptance-criteria.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "The program's founding fact is that a release passed every gate and changed nothing on device",
     "created_at": "2026-08-29T14:34:47.371Z",
-    "last_save_at": "2026-08-30T16:54:07.791Z",
+    "last_save_at": "2026-08-30T18:32:31.584Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -206,14 +209,16 @@
       "plan.md",
       "tasks.md",
       "acceptance-criteria.md",
-      "goal.md"
+      "goal.md",
+      "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:9f8d89df37a55909e7ce83384b3332a2b1e404facdbe73dc2c5ce134b0d1b135",
+    "source_fingerprint": "sha256:220e234a1c177f3146435b9c2804bf9e3cc044f2fe44b57a450b17a6819484ad",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "1ca2bfb1eb518a8476938f30377896ca6398f563d96bb255a9856f07292ed388",
+      "spec.md": "3b7855f9ea727c9d647decffe68790da6f986795293b0984000aac8f3a6517a5",
       "plan.md": "1c6dcf824de8a59d2f89ff36f7d49b59643e58687beab07d557868e9cf8cb4f7",
-      "tasks.md": "549ec01df71beff6e4b1dd253613b0135b938604637c78ff55a17016fdcf7ca2"
+      "tasks.md": "250d6a2d48b1f123f93c4bd97955654275b5a9c4c051b0a0d3ed87d2dc171003",
+      "implementation-summary.md": "938be65abd9f7d39e53e4eca4520b63a9134a235a287902fa7bd7f9ce15e25eb"
     },
     "last_active_child_id": null,
     "last_active_at": null

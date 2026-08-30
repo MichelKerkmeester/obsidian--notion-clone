@@ -68,7 +68,7 @@ VERIFIED. These three tasks close the other two, or leave them honestly labelled
       *Evidence to close:* the action names read out of the app bundle's
       `registerObsidianProtocolHandler` call sites, listed; the claim then restated as VERIFIED or
       corrected. If the enumeration cannot be completed, the block stays PARTLY VERIFIED and says so.
-- [ ] **T2b** Record block 4 as **UNVERIFIED** and name what would settle it — REQ-011.
+- [x] **T2b** Record block 4 as **UNVERIFIED** and name what would settle it — REQ-011.
       *Evidence to close:* the claim "no remote debugging port on mobile" carries an UNVERIFIED label
       in `spec.md` §3B. Only the desktop bundle exists on this machine — `grep -c remote-debugging`
       over `obsidian.asar` returns 0, which says nothing about a different binary on a device this Mac
@@ -101,15 +101,21 @@ VERIFIED. These three tasks close the other two, or leave them honestly labelled
 
 ### Driver and probe API
 
-- [ ] **T5** Build `tools/live/probe.mjs` with three exit codes — REQ-004, NFR-R01.
+- [~] **T5** Build `tools/live/probe.mjs` with three exit codes — REQ-004, NFR-R01.
       *Evidence to close:* 0 pass, 1 assertion failure, 2 infrastructure; each demonstrated
       separately, each exit status read without a pipe.
+      *Status 2026-08-30:* built at `14fc433` (180 lines), constants at `probe.mjs:49-51`. **1 of 3
+      demonstrated** — `--check transport` with Obsidian closed exits **2**. The 0 and 1 legs need the
+      app open and have never been run.
 - [ ] **T6** Build `src/dev/surface-probe.ts` behind a build flag and register the dev command beside
       the seven existing commands at `src/main.ts:339-385` — REQ-002, REQ-006.
       *Evidence to close:* `obsidian command id=note-database:surface-probe` opens the testbed view in
       the running app.
-- [ ] **T7** Prove the probe API is absent from production — REQ-006.
+- [~] **T7** Prove the probe API is absent from production — REQ-006.
       *Evidence to close:* after `npm run build`, `grep -c __ndProbe main.js` returns 0.
+      *Status 2026-08-30:* the count is **0** against the committed bundle, but `npm run build` was not
+      re-run and **T6 was never built**, so nothing ever inserted the symbol. Left open rather than
+      closed: a check that cannot fail proves nothing about a hook that does not exist.
 - [ ] **T8** Probe: a dropdown's computed style at its real mount — REQ-003.
       *Evidence to close:* `border-radius`, `padding`, `font-size` and `box-shadow` read from the real
       renderer, recorded beside the harness's values for the same class.

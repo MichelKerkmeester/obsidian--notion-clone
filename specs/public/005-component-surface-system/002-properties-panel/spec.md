@@ -12,10 +12,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "public/005-component-surface-system/002-properties-panel"
-    last_updated_at: "2026-08-29T14:00:00Z"
-    last_updated_by: "phase-author"
-    recent_action: "Phase cut from measured architecture findings; not started"
-    next_safe_action: "Run the row-grid audit matrix"
+    last_updated_at: "2026-08-30T20:30:00Z"
+    last_updated_by: "phase-reconciliation"
+    recent_action: "Row grid fixed: desktop 52px to 34px on one line, name takes the 1fr track; replay holds"
+    next_safe_action: "Run the section 4A condition census; AC-004, AC-005 and AC-007 have no measurement"
     blockers:
       - "001-overlay-placement-and-menu-language must land first — until it does this panel is still fighting placement as well as its row grid"
     key_files:
@@ -27,9 +27,11 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-002"
       parent_session_id: null
-    completion_pct: 0
-    open_questions: []
-    answered_questions: []
+    completion_pct: 40
+    open_questions:
+      - "Does the duplicate phone rule at styles.css:17413 get collapsed, or declared as intentional"
+    answered_questions:
+      - "Measurement or static trace on the 96px track? The trace was right — it was never on the checkbox"
 ---
 # Feature Specification: Properties Panel
 
@@ -51,7 +53,7 @@ _memory:
 | **Spec Folder** | 002-properties-panel |
 | **Level** | 2 |
 | **Priority** | P0 |
-| **Status** | Planned |
+| **Status** | In Progress |
 | **Created** | 2026-08-29 |
 | **Blocked by** | `001-overlay-placement-and-menu-language` |
 | **Blocks** | `003-mobile-sheet-presentation` |

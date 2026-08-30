@@ -15,12 +15,13 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "public/005-component-surface-system/008-integration-and-release-observability"
-    last_updated_at: "2026-08-29T18:10:00Z"
-    last_updated_by: "phase-architect"
-    recent_action: "Split into two deliverables; lane and capture-review mechanisms specified"
-    next_safe_action: "Build Deliverable A once 000 registry lands, before 001 starts"
+    last_updated_at: "2026-08-30T18:30:00Z"
+    last_updated_by: "phase-author"
+    recent_action: "Deliverable A replay re-verified green; 0 of 13 criteria Met"
+    next_safe_action: "Seed a cascade reversal and observe N12 redden only its own phase"
     blockers:
-      - "000 must land its registry, input-hash recorder and cascade audit first"
+      - "Every negative control N1-N14 is unrun; each needs a seeded input mutation"
+      - "Deliverable B has no mechanism: no tools/integration/ and no integration:* command"
     key_files:
       - "spec.md"
       - "plan.md"
@@ -30,8 +31,9 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-008"
       parent_session_id: null
-    completion_pct: 0
-    open_questions: []
+    completion_pct: 20
+    open_questions:
+      - "Does the replay stay trustworthy while its claim list is hand-written"
     answered_questions: []
 ---
 # Feature Specification: Production Surface Integration and Release Observability
@@ -87,7 +89,7 @@ sibling phase's local evidence. `009`'s live-verification transport for the devi
 | **Spec Folder** | 008-integration-and-release-observability |
 | **Level** | 3 |
 | **Priority** | P0 |
-| **Status** | Planned |
+| **Status** | In Progress |
 | **Created** | 2026-08-29 |
 | **Branch** | `main` |
 | **Parent Spec** | `../spec.md` |

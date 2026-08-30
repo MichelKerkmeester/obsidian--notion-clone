@@ -13,10 +13,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "public/005-component-surface-system/001-overlay-placement-and-menu-language"
-    last_updated_at: "2026-08-30T00:00:00Z"
-    last_updated_by: "surface-factory-decision"
-    recent_action: "Deleted the unwired surface factory; kept the contract. See section 13"
-    next_safe_action: "Run the overlay census by user-reachable trigger; no code edits until the census is complete"
+    last_updated_at: "2026-08-30T20:30:00Z"
+    last_updated_by: "phase-reconciliation"
+    recent_action: "Factory deleted; portal chrome self-owned; 292px default. Census and 33 call sites not run"
+    next_safe_action: "Run the overlay trigger census; it gates AC-008 to AC-013 and every remaining task"
     blockers:
       - "styles.css and the capture manifest are held by another lane; this phase must not edit either, and a comment in popover-position.ts naming the deleted factory is left for that lane to correct alongside a recapture"
     key_files:
@@ -28,8 +28,9 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-001"
       parent_session_id: null
-    completion_pct: 0
-    open_questions: []
+    completion_pct: 25
+    open_questions:
+      - "Does AC-008 survive its own phase editing the block it was written to delete"
     answered_questions:
       - "Wire openSurface or delete it? Deleted, on nine measurements recorded in section 13. It had zero importers, zero tests, was absent from the shipped bundle, and could not express the cursor placement 12 of 14 menu openings use nor the non-width axes 10 of 34 placement call sites pass. The contract it sat on is live and was kept."
 ---
@@ -70,7 +71,7 @@ duration, and blocks `002-properties-panel` and through it `003` and `006`.
 | **Spec Folder** | 001-overlay-placement-and-menu-language |
 | **Level** | 3 |
 | **Priority** | P0 |
-| **Status** | Planned |
+| **Status** | In Progress |
 | **Created** | 2026-08-29 |
 | **Blocked by** | `000-surface-contract-and-truthful-harness` |
 | **Blocks** | `002-properties-panel`, and through it `003` and `006` |

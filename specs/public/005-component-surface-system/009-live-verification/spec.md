@@ -12,11 +12,12 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "public/005-component-surface-system/009-live-verification"
-    last_updated_at: "2026-08-29T18:00:00Z"
-    last_updated_by: "phase-architect"
-    recent_action: "Repositioned as phase 1; mobile blocks re-verified by hand"
-    next_safe_action: "Prove the probe transport round-trips, then reproduce a known defect live"
-    blockers: []
+    last_updated_at: "2026-08-30T18:30:00Z"
+    last_updated_by: "phase-author"
+    recent_action: "Transport built; exit 2 confirmed with app closed, app never driven"
+    next_safe_action: "Open Obsidian, run probe.mjs --check transport, record the exit 0 leg"
+    blockers:
+      - "Eleven of thirteen criteria need Obsidian running; no recorded run has had it open"
     key_files:
       - "spec.md"
       - "plan.md"
@@ -26,13 +27,14 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-009"
       parent_session_id: null
-    completion_pct: 0
+    completion_pct: 15
     open_questions:
       - "Does Obsidian's own mobile emulation insert a real .mobile-navbar, or only resize"
       - "Does Obsidian on iOS expose any remote debugging port — unverifiable from a Mac"
       - "Does Obsidian on iOS run a system WebView rather than Chromium"
     answered_questions:
       - "Are the CLI dev handlers and eval behind an isDesktopApp && window.electron guard — yes, brace-matched by hand in obsidian.asar; eval is the last of ten handlers inside the block"
+      - "Is the CLI present on this machine - yes, /usr/local/bin/obsidian symlinks into the bundle"
 ---
 # Feature Specification: Live Verification in the Running Obsidian
 
@@ -110,7 +112,7 @@ accident.
 | **Spec Folder** | 009-live-verification |
 | **Level** | 3 |
 | **Priority** | P0 |
-| **Status** | Planned |
+| **Status** | In Progress |
 | **Created** | 2026-08-29 |
 | **Branch** | `main` |
 | **Parent Spec** | `../spec.md` |
