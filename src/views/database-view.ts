@@ -532,6 +532,23 @@ export class DatabaseView extends FileView {
   private pendingRevealColumnScrolled = false;
   private pendingRevealColumnTimer: number | null = null;
   private showColumnManager = false;
+  /**
+   * Whether a change made through a header panel is still waiting to be painted.
+   *
+   * Opening a panel sets it and every full render clears it, so a dismissal can
+   * tell a view that is already showing the user's change from one that is not.
+   * The sort and filter panels re-render the view as they mutate it, which left
+   * their dismissal rebuilding every row a second time to produce an identical
+   * result — the expensive half of a two-rebuild round trip that shows up as an
+   * unresponsive app on large databases.
+   *
+   * Opening is what sets it, rather than the individual mutations, so a panel
+   * that changes something without painting it still gets that change on screen
+   * when it closes. Being wrong in that direction costs a redundant rebuild;
+   * being wrong in the other direction leaves the view showing something the
+   * user already changed, which is the worse failure of the two.
+   */
+  private headerPanelChangeUnpainted = false;
   private activeHeaderPopover?: HeaderPopoverKind;
   private headerPopoverAnchorEl?: HTMLElement;
   private removeHeaderPopoverAutoClose?: () => void;
@@ -2788,6 +2805,9 @@ export class DatabaseView extends FileView {
     this.chartToolbarRenderer.closePopover();
     this.calendarToolbarRenderer.closePopover();
     const wasClosingActivePopover = this.activeHeaderPopover != null && this.isHeaderPopoverVisible(this.activeHeaderPopover);
+    // Read before the panel flags are reset below, so the dismissal decision
+    // knows which panel it is dismissing rather than which one is opening.
+    const closingKind = wasClosingActivePopover ? this.activeHeaderPopover : undefined;
     if (wasClosingActivePopover) this.persistVisibleHeaderPopoverState();
     const shouldOpen = this.activeHeaderPopover !== kind || !this.isHeaderPopoverVisible(kind);
     this.showFilterPanel = shouldOpen && kind === "filter";
@@ -2807,9 +2827,24 @@ export class DatabaseView extends FileView {
     }
     if (wasClosingActivePopover) {
       this.updateToolbarIndicators();
-      this.refresh();
+      if (this.dismissalNeedsRebuild(closingKind)) this.refresh();
       if (this.configSaveTimer !== null) this.saveConfigImmediatelyInBackground();
     }
+    if (shouldOpen) this.headerPanelChangeUnpainted = true;
+  }
+
+  /**
+   * Does closing this panel still owe the view a rebuild?
+   *
+   * Only the sort and filter panels re-render as they mutate, so only they can
+   * be trusted to have already painted what the user did. The column manager and
+   * view config panel rebuild on the way out exactly as before, because their
+   * mutations are not all self-painting and a skipped rebuild there would leave
+   * the view showing columns the user just hid.
+   */
+  private dismissalNeedsRebuild(kind: HeaderPopoverKind | undefined): boolean {
+    if (kind !== "sort" && kind !== "filter") return true;
+    return this.headerPanelChangeUnpainted;
   }
 
   private toggleChartOptions(anchorEl: HTMLElement): void {
@@ -2901,6 +2936,10 @@ export class DatabaseView extends FileView {
     this.calendarToolbarRenderer.closePopover();
     this.closeGroupOrderPopover();
     if (!this.showFilterPanel && !this.showSortPanel && !this.showColumnManager && !this.showViewConfigPanel) return;
+    // This closes whatever is open, so it can only skip the rebuild when every
+    // panel it is closing repaints its own changes. A column manager open
+    // alongside a sort panel keeps the rebuild.
+    const closingSelfPaintingOnly = !this.showColumnManager && !this.showViewConfigPanel;
     this.persistVisibleHeaderPopoverState();
     this.removeHeaderPopoverAutoClose?.();
     this.removeHeaderPopoverAutoClose = undefined;
@@ -2914,7 +2953,7 @@ export class DatabaseView extends FileView {
     this.renderColumnManager();
     this.renderViewConfigPanel();
     this.updateToolbarIndicators();
-    this.refresh();
+    if (this.headerPanelChangeUnpainted || !closingSelfPaintingOnly) this.refresh();
     if (this.configSaveTimer !== null) {
       this.saveConfigImmediatelyInBackground();
     }
@@ -4805,9 +4844,11 @@ export class DatabaseView extends FileView {
         this.pendingUndoLabel = t("undo.filterConfig");
         this.showFilterPanel = false;
         this.clearHeaderPopover();
+        // Hiding the panel flushes any refresh a keystroke still had pending,
+        // so this runs after it and only rebuilds if nothing else already did.
         this.renderFilterPanel();
         this.updateToolbarIndicators();
-        this.refresh();
+        if (this.headerPanelChangeUnpainted) this.refresh();
         this.saveConfigImmediatelyInBackground();
       },
     }, this.getHeaderPopoverAnchor("filter"));
@@ -4833,7 +4874,7 @@ export class DatabaseView extends FileView {
         this.clearHeaderPopover();
         this.renderSortPanel();
         this.updateToolbarIndicators();
-        this.refresh();
+        if (this.headerPanelChangeUnpainted) this.refresh();
         this.saveConfigImmediatelyInBackground();
       },
     }, this.getHeaderPopoverAnchor("sort"));
@@ -11474,6 +11515,8 @@ export class DatabaseView extends FileView {
       if (newRow) refreshRecordDetailPanel(newRow);
       else closeRecordDetailPanel();
     }
+    // The view now shows current state, so nothing is owed to a panel dismissal.
+    this.headerPanelChangeUnpainted = false;
   }
 
   private captureInteractionSnapshot(): InteractionSnapshot {

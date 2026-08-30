@@ -153,7 +153,7 @@ export class FilterPanelRenderer {
     }
     if (!visible) {
       this.anchorEl = null;
-      this.clearPendingRefresh();
+      this.flushPendingRefresh(actions);
       return;
     }
     if (anchorEl?.isConnected) this.anchorEl = anchorEl;
@@ -643,6 +643,21 @@ export class FilterPanelRenderer {
       this.refreshTimer = null;
       actions.refresh();
     }, 220);
+  }
+
+  /**
+   * Run a refresh the panel still owes, instead of losing it when the panel goes.
+   *
+   * A keystroke schedules its refresh 220ms out so typing does not rebuild the
+   * view once per character. Hiding the panel cancels that timer, which means a
+   * value typed and then dismissed inside the window would never reach the view.
+   * The timer is cleared before the refresh runs so a re-entrant render cannot
+   * find it still pending and fire it twice.
+   */
+  private flushPendingRefresh(actions: FilterPanelActions): void {
+    if (this.refreshTimer === null) return;
+    this.clearPendingRefresh();
+    actions.refresh();
   }
 
   private clearPendingRefresh(): void {
