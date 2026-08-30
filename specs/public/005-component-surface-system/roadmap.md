@@ -216,7 +216,7 @@ snapshot, two opened today.
 - `000-surface-contract-and-truthful-harness` — its census instruments exist and one edit shipped with a recapture debt. Continuity reads 0%.
 - `001` — the overlay census has not run; the factory question was settled by deleting it (§7.2).
 - `002-properties-panel` — held the lane nine times with substantial edits; continuity reads "not started".
-- `006-record-open-target` — genuinely not started. Blocked on `003`, and its one open question (side panel, full-page modal, or both behind a setting) is an operator decision.
+- `006-record-open-target` — **partly shipped, and this entry said otherwise.** Commit `2babab2`, "make Open open the note", routes desktop Open through `openNote` instead of the peek and replaces the peek's hardcoded `z-index: 998` with a layer token. It landed under `002`'s lane hold, and none of that hold's nine notes mentions it. Still open: the setting, the touch branch, and retiring the peek. Its one operator question — side panel, full-page modal, or both behind a setting — stands.
 - `008-integration-and-release-observability` — **Deliverable A shipped**: `tools/live/replay.mjs` exists and `npm run replay` re-asserts 8 results against recorded pre-fix numbers. The release decision stays last.
 - `007-architecture-research` — Complete. 10 iterations plus synthesis; not a phase.
 - `022-selection-bar-keyboard-docking` — Planned. Needs the bar measured against an open
@@ -243,7 +243,7 @@ snapshot, two opened today.
 | `003` | Planned | **Shipped; report 1 still open** | Sheet layer, header actions, scrim, single fill, grab band. The drag is reported broken on the shipped build |
 | `004` ⚠ | Planned | **UNKNOWN — §7.1** | Three sources disagree |
 | `005` ⚠ | Planned | **Shipped** | List-row border-box, meta ruled into columns, renderer-declared tracks, portal-safety instrument built |
-| `006` | Planned | **Planned** — accurate | No lane activity; blocked on `003` |
+| `006` | Planned | **In progress** — the earlier "accurate" was wrong | 2 of 5 acceptance items shipped in `2babab2` under another phase's lane hold. Two of its criteria now cite a tree that no longer exists |
 | `007` | Complete | **Complete** — accurate | Research plus synthesis, folded into `000`, `008`, `009` |
 | `008` | Planned | **Deliverable A shipped** | `tools/live/replay.mjs`, `npm run replay` |
 | `009` | Planned | **Instrument built, nothing gated** | `tools/live/probe.mjs` exists. It was declared phase 1 and gated no handoff |
@@ -358,6 +358,22 @@ against the folder until it is settled.
 output number format inside this program. Either the exclusion means the *formula editor's* number
 format and the parent spec should say so, or the work was out of scope and belongs elsewhere.
 Recorded in `019/spec.md` §7.
+
+### 7.4b "No lane activity" is not evidence of no work
+
+This section graded a phase "not started, accurate" on the evidence that the CSS lane recorded
+nothing for it. The lane was telling the truth and the conclusion was still wrong: that phase's
+delivery was TypeScript, which the lane cannot see, and its one stylesheet edit rode another phase's
+hold, which the lane records under the holder's name.
+
+That is now three phases in this packet whose work was hidden by a lane hold, and one whose work the
+lane could not have seen at all. **The lane journal is evidence of stylesheet custody, not of
+whether a phase has started.** Establishing that needs `git log -S` against the phase's named
+symbols and files, and a read of the tree.
+
+The failure mode is worth naming precisely, because it is the documentary twin of the one this
+packet was opened to fix: a method that produces a confident wrong answer is worse than one that
+produces no answer, and it is harder to notice because the answer looks like a finding.
 
 ### 7.5 The grab band has four recorded heights
 
