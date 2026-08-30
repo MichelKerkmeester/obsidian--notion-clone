@@ -316,7 +316,7 @@ closing — which decides whether report 4 is finished or blocked on the operato
 
 Reported, not resolved. Each names what would settle it.
 
-### 7.1 `004` — three sources, three answers
+### 7.1 `004` — three sources, resolved
 
 | Source | Says |
 |---|---|
@@ -325,14 +325,25 @@ Reported, not resolved. Each names what would settle it.
 | Lane entry 63 (08:05 today) | "Unguarded ancestor-keyed appearance rules 1 → 0"; toggles losing a property outside the container "10/10 → 0/10"; the switch taken from 34×18 to 34×28 |
 | Verifier (reported to this pass) | **FAIL** — 10 toggles still ancestor-owned; a hit target at 37×24 against a 28px floor; the board, gallery, table and list fixtures contain **zero checkboxes**, so those families are measured by nothing |
 
-The lane journal and the verifier disagree on the same two numbers in opposite directions (0/10
-versus 10; 34×28 versus 37×24). **UNKNOWN.** Settled by running `SURFACE_PHASE=004 npm run gate`
-from a quiet tree and reading the checkbox and toggle arms. Not run here: `004` is live, and running
-the shared harness against a moving tree produces a number that describes neither state.
+**Settled.** The gate was run from a quiet tree — `npm run gate` 16 green exit 0,
+`verify-placement` exit 0, the two checkbox test files 13 passed exit 0 — and the four sources
+resolve into two facts and one misreading.
 
-The fixture finding is the more serious half and is independent of the other two: a family with no
-checkbox in its fixture cannot be measured by any criterion, so a green count across five families
-is a count across however many families actually contain one.
+**The lane entry is corroborated on both its numbers.** `appearanceOwnedByAncestor: 0` of 211
+controls across 57 fixtures, and the switch reaches 34×28.
+
+**The verifier is refuted on all three of its claims and is stale.** Zero toggles are
+ancestor-owned, not ten. The reach is 34×28, not 37×24. And the fixtures are not empty: board-view
+28 checkboxes, board-mobile 28, gallery-view 4, list-view 24, list-mobile 12, table-view 25,
+table-mobile 13, chrome-table-footer 25. The fixture finding was the more serious half precisely
+because a family with no checkbox is measured by nothing — and it is the half that turned out not
+to be true.
+
+**The "all Unmet" reading is not a contradiction.** Every "Measured today" cell in that document is
+dated 2026-08-29 and describes the pre-fix tree. It is the failing baseline this packet requires and
+nobody advanced it after the fix landed. Its evidence cells are also not blank: they carry the
+literal word *"blank"* pointing at a provenance table, which is why a grep for adjacent pipes scored
+this phase — the one with a real gap — at zero, while flagging five phases that had none.
 
 ### 7.2 `001` — 0% against a decision taken
 
