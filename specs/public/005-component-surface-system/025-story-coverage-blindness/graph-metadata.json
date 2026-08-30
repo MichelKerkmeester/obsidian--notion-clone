@@ -183,7 +183,7 @@
     ],
     "causal_summary": "A gate lane's name is the only thing most readers ever check",
     "created_at": "2026-08-30T15:00:28.772Z",
-    "last_save_at": "2026-08-30T18:07:40.683Z",
+    "last_save_at": "2026-08-30T18:44:08.445Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -191,10 +191,10 @@
       "plan.md",
       "tasks.md"
     ],
-    "source_fingerprint": "sha256:140a32e492af222f176033d75225ea375540f1d85b0cd17045b4a28a41afe404",
+    "source_fingerprint": "sha256:301ca933309cba1de3d41b4c5f147ef48d6296c32bf03506fdc4b49ca505f85f",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "813511ff34d81528627c6fc56598a094ad3d4763ab4c850fafb4df3fa6d8d268",
+      "spec.md": "375c7afd798883d8ba384eee882783a620e549da700cdd82bb835676defd97f0",
       "plan.md": "0c8658cd69033439ed1084720d77659118c2cecfc47d1a190e7b0be8237bac6c",
       "tasks.md": "20c6826b7d00b7f1bb11ff38c46a03cffde7eba01c4bb6a9b66dd5b46cb48a64"
     },

@@ -27,7 +27,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-018"
       parent_session_id: null
-    completion_pct: 60
+    completion_pct: 85
     open_questions:
       - "Does a 64px select column survive the operator's density setting, or does it need the touch branch only"
     answered_questions:

@@ -77,7 +77,8 @@ this phase consumes it. Desktop is out of scope: it has room and no keyboard.
 - [x] With no keyboard, the bar rests where it always did. Measured: **828px**, and 828px again
       after a keyboard opens and closes.
 - [x] The bar's content fits its own box at phone width. Was **36px inside 28px**; now **46px inside
-      46px** — passing with no headroom, which is recorded rather than smoothed over.
+      46px**. Equal numbers are what `scrollHeight` prints when content fits, not a pass on the
+      edge: shrinking the box shows 47px and 45px still passing and 30px failing.
 - [x] Every action stays reachable, and an overflowing bar says so. Measured: **scrollWidth 558px
       against clientWidth 356px**, `overflow-x: auto`, visible thin scrollbar, **44px** minimum
       action height.

@@ -59,7 +59,7 @@ recomputed.
 |---|---|---|---|---|---|---|
 | AC-1 | REQ-002 | The bar's bottom edge against the keyboard's top edge, with the host reporting a keyboard | above it | under the keyboard: the rule read the viewport floor, which a keyboard does not move | **bar bottom 513px, keyboard covers 513..844** | Met |
 | AC-2 | REQ-003 | The bar's resting bottom with no keyboard | unchanged from today | 828px | **828px, and 828px again after a keyboard opens and closes** | Met |
-| AC-3 | REQ-004 | The bar's content width against its own border box at phone width | content <= box | **36px inside a 28px box** — labels wrapped and clipped | **46px inside 46px** | Met, with no headroom |
+| AC-3 | REQ-004 | The bar's content width against its own border box at phone width | content <= box | **36px inside a 28px box** — labels wrapped and clipped | **46px inside 46px** | Met |
 | AC-4 | REQ-005 | Whether every action is reachable, and whether an overflowing bar says so | reachable, and visibly scrollable | actions ran off the screen edge silently | **scrollWidth 558px against clientWidth 356px, `overflow-x: auto`, `scrollbar-width: thin`** | Met |
 | AC-5 | REQ-005 | Action hit height at phone width | >= 44px | not asserted | **44px minimum** | Met |
 | AC-6 | REQ-006 | The bar's box against the available floor with a keyboard open | fully visible | not asserted | **bar occupies 465..513px, floor 513px** | Met |
@@ -67,12 +67,15 @@ recomputed.
 | AC-8 | REQ-009 | A fixture that photographs the bar rather than an empty region | non-blank capture | the fixture photographed a blank region | `chrome-selection-status-bar-mobile-{light,dark}.png`, regenerated | Met |
 | AC-9 | REQ-001 | Which host shape the operator's phone is: `visualViewport` shrink or window resize | established | unknown | **UNKNOWN** — the harness confirms `visualViewport` exists in the WebView, which is not the same question | Open |
 
-### Why AC-3 is marked "Met, with no headroom"
+### AC-3 reads `content == box`, and that is not zero headroom
 
-46px of content in a 46px box passes inside a 1px tolerance and has nothing to spare. Any padding,
-font or label change tips it red. That is not a defect and it is not a reason to widen the tolerance
-— it is a fact about how close this criterion sits to its threshold, recorded so the next person to
-touch the bar knows the check will tell them immediately.
+It looks like a coin flip and is not one. `scrollHeight` returns the box height whenever the content
+fits, so equal numbers are what a comfortable pass prints — the two values do not drift apart as
+margin grows. Measured by shrinking the box: 47px passes, 45px still passes on the tolerance, 30px
+fails. The real margin is 2px plus the 1px tolerance.
+
+Recorded because the opposite was written here first, and "passes with nothing to spare" is the kind
+of claim that sounds appropriately cautious while being false.
 
 ### Why AC-9 does not block the rest
 

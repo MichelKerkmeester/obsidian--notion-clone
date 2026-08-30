@@ -93,9 +93,9 @@ necessary and never sufficient. Operator confirmation is the program's closing c
 
 | Criterion | Producer | Mount | Environment | Negative control | State |
 |---|---|---|---|---|---|
-| AC-1 | `verify-placement.mjs` overlap check | production select cell | desktop + phone | **Both observed red.** Control A (touch-floor block re-declares `display: inline-flex`) takes desktop to `-17px in a 40px cell`; control B (phone column back to 48px) takes phone to `-12px in a 49px cell`. Restored: desktop green, phone `+4px in a 65px cell`, harness exit 0 | Met |
+| AC-1 | `verify-placement.mjs` overlap check | production select cell | desktop + phone | **Both observed red.** Control A (touch-floor block re-declares `display: inline-flex`) takes desktop to `-17px in a 40px cell`; control B (phone column back to 48px **and** the pin back to `right: 6px`) takes phone to `-14px`. Restored: desktop green, phone `+4px in a 65px cell`, harness exit 0 | Met |
 | AC-2 | the same check, presence arm | desktop list and gallery rows | desktop | **Observed red.** Under control A the desktop reports `11 cells show both`, where production renders none — the button is built only on touch. Restored, it reports `no reorder button is shown in 11 select cells, so nothing can collide` | Met |
-| AC-3 | column width read from the computed style | production select column | phone touch branch | **Observed red.** At 48px the phone cell measures 49px and the gap is `-12px`. At 64px it measures 65px and the gap is `+4px` | Met |
+| AC-3 | column width read from the computed style | production select column | phone touch branch | **Observed red.** Reverting both of this phase's phone edits — the column to 48px and the checkbox pin to `right: 6px` — gives `-14px`, the recorded figure. At 64px with the 4px pin the cell measures 65px and the gap is `+4px` | Met |
 | AC-4 | the operator | the operator's phone | device | n/a | Not requested |
 
 Three of the four controls have now been run and observed red, each isolated to the surface it
@@ -103,11 +103,14 @@ belongs to: control A moves only the desktop number, control B only the phone on
 stylesheet returns the harness to exit 0 at 210 of 214 checks, and `shasum -a 256 styles.css` is
 byte-identical to the pre-control baseline.
 
-**One number in the record did not reproduce.** This phase recorded the 48px failure as `-14px`; the
-control measures `-12px` in a 49px cell. The desktop figure reproduced exactly at `-17px`. The
-difference is not explained here, and the reproduced number is the one to trust — it came from a run
-whose output is above, while `-14` came from a run nobody can re-execute. Recorded rather than
-reconciled.
+**The number that "did not reproduce" was an incomplete control, and the record was right.** This
+phase made two phone edits: the column 48px to 64px, and the checkbox pin `right: 6px` to `4px`. A
+control reverting only the column leaves the pin's 2px in place and measures `-12px` — a
+configuration that never shipped in either direction. Reverting both gives the recorded `-14px`.
+
+Worth keeping as a caution rather than deleting: a negative control has to restore *the whole* prior
+state. Reverting one of two edits produces a real number for a tree that never existed, and it is
+indistinguishable from a reproduction unless someone counts the edits.
 
 **AC-4 remains open and is not closeable here.** It is the operator opening the table on their phone.
 A positive gap in a headless browser is necessary and never sufficient, which is the whole reason

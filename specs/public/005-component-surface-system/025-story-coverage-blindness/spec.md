@@ -276,7 +276,19 @@ Each is a command whose output and exit status were read, not a claim about the 
 | C4 | `npm run gate` is green with both lanes present | exit 0 | 14 green, one of them mislabelled | 16 green, exit 0, read unpiped. Both lanes present and distinct. **Met** |
 | C5 | Modules the matcher considers renderable | >= 31 | **18** | 31. **Met** |
 | C6 | Blind modules exporting a parent-taking function with neither a story nor an exemption | 0 | **13** | 0 — every one of the 31 is covered or carries a written reason. **Met** |
-| C7 | The widened matcher, run against the tree as received, names all 13 | 13 named | n/a — the negative control | **Run.** Restoring the name test to the live matcher drops it 31 → 18 and names exactly 13: `bulk-edit-field-menu`, `calendar-keyboard-navigation`, `card-roving-tabindex`, `database-viewport`, `drag-drop-feedback`, `field-tooltip`, `hover-link-preview`, `interaction-scope`, `mobile-bottom-sheet`, `option-color-picker`, `popover-position`, `table-cell-gesture`, `table-record-peek`. **Met** |
+| C7 | The widened matcher, run against the tree as received, names all 13 | 13 named | n/a — the negative control | **Run, on the current tree rather than the one the requirement names.** Restoring the name test to the live matcher drops it 31 → 18 and names exactly 13: `bulk-edit-field-menu`, `calendar-keyboard-navigation`, `card-roving-tabindex`, `database-viewport`, `drag-drop-feedback`, `field-tooltip`, `hover-link-preview`, `interaction-scope`, `mobile-bottom-sheet`, `option-color-picker`, `popover-position`, `table-cell-gesture`, `table-record-peek`. **Met** |
+
+**The control that ran is not the run the requirement specifies, and that is worth stating.** The
+requirement says the matcher must report *the thirteen* blind modules against the tree **as
+received**. Executed literally — shipped matcher, the allowlist as it then stood, `src/views` at the
+commit before this phase opened — it reports **fourteen**. The extra is the checkbox module, which
+the narrow matcher could already see and which another requirement owns.
+
+Both numbers are defensible about different sets: thirteen is what the widening reveals on today's
+tree, fourteen is what was blind on the tree the requirement points at. The control above is the
+first. It was run because it answers the question the phase cares about — does dropping the name
+test actually widen the matcher — but it discharges a substitute experiment, and a control that
+quietly stands in for the one a requirement names is how a criterion drifts away from its own text.
 
 **What the control shows beyond its number.** Four of the thirteen — `mobile-bottom-sheet`,
 `popover-position`, `table-cell-gesture` and `table-record-peek` — are the modules the sheet and

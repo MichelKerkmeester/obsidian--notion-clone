@@ -21,7 +21,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-018"
       parent_session_id: null
-    completion_pct: 60
+    completion_pct: 85
     open_questions: []
     answered_questions: []
 ---
@@ -88,11 +88,18 @@ afterwards to give the work an owner. `004`'s lane acquire note names the task, 
 <!-- ANCHOR:verification -->
 ## Verification
 
-**None performed by this phase.** The numbers in `acceptance-criteria.md` are copied from the lane
-journal, marked recorded-not-reproduced, and no negative control has been run for either edit.
+**Both controls have now been run**, after this document first recorded that none had. The desktop
+check goes red at `-17px in a 40px cell` when the touch-floor block re-declares `display:
+inline-flex`, and green again at `no reorder button is shown in 11 select cells`. The phone check
+goes red at the recorded `-14px` when both of this phase's phone edits are reverted, and reads
+`+4px in a 65px cell` restored. Each control moves only its own surface. `styles.css` hashes
+byte-identical to the pre-control baseline.
 
-Outstanding: re-run `npm run storybook:placement`; observe the check red with each edit reverted in
-turn; recapture once the lane frees; ask the operator.
+The phone control is worth reading before trusting any number from it: reverting only the column
+gives `-12px`, a tree that never shipped, because this phase also moved the checkbox pin. A control
+that restores half a change produces a real measurement of a state nobody ever had.
+
+Outstanding: recapture once the lane frees, and the operator.
 <!-- /ANCHOR:verification -->
 
 ---

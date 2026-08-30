@@ -11,10 +11,10 @@ _memory:
     packet_pointer: "public/005-component-surface-system/018-select-column-affordance-fit"
     last_updated_at: "2026-08-30T17:45:00Z"
     last_updated_by: "goal-authoring"
-    recent_action: "Goal authored after the fact; before-numbers are recorded, not reproduced"
-    next_safe_action: "Re-run the overlap check and observe both negative controls red"
+    recent_action: "Both controls run and observed red; phone control needed both edits reverted"
+    next_safe_action: "Operator opens the table on a phone and reports the button has room"
     blockers:
-      - "No negative control has been run; the check is not yet shown to be connected"
+      - "Not operator-confirmed on device; every other criterion is measured"
     key_files:
       - "spec.md"
       - "acceptance-criteria.md"
@@ -22,7 +22,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-018-goal"
       parent_session_id: null
-    completion_pct: 40
+    completion_pct: 85
     open_questions: []
     answered_questions: []
 ---
@@ -74,12 +74,17 @@ nothing owned it.
       when written, untrue from the moment a different phase raised both controls to 28px. Two 28px
       controls do not fit in 48px at any gap, and a criterion that read the comment would still pass
       today. Now `4 + 28 + 4 + 28 = 64`.
-- [x] Both negative controls observed red: restoring the `display` declaration takes the check red on
-      desktop at **-17px in a 40px cell** while the phone stays green, and restoring the 48px column
-      takes it red on the phone at **-12px in a 49px cell** while the desktop stays green. Each moves
-      only its own surface. Restored, the harness is exit 0 at 210 of 214 and `styles.css` hashes
-      byte-identical to the baseline. The phone figure was recorded as -14px and measures -12px;
-      the reproduced number is the one with a run behind it.
+- [x] Both negative controls observed red, each moving only its own surface. Restoring the `display`
+      declaration takes the desktop check red at **-17px in a 40px cell** while the phone stays
+      green. The phone control takes it red while the desktop stays green. Restored, the harness
+      returns to exit 0 and `styles.css` hashes byte-identical to the baseline.
+
+      **The phone control has to revert two edits, not one, and the first attempt reverted one.**
+      This phase widened the column 48px to 64px *and* moved the phone checkbox pin from `right: 6px`
+      to `4px`. Reverting only the column leaves the pin's 2px in place and measures **-12px**, a
+      state that never shipped. Reverting both reproduces the recorded **-14px** exactly. The record
+      was right; the incomplete control was not, and the conclusion drawn from it — that the
+      reproduced number should be trusted over the recorded one — was backwards.
 - [ ] The operator opens the table on the phone and reports that the button has room. A positive gap
       in a headless browser is necessary and never sufficient.
 <!-- /ANCHOR:completion -->
@@ -101,7 +106,7 @@ when the number in it would have been valid, so **this phase may not close today
 |------|-------|----------|
 | Code | Shipped | Lane journal entry 64, under `004`'s hold |
 | Numbers | Recorded, not reproduced | `acceptance-criteria.md` provenance note |
-| Negative controls | Not run | Both named, neither observed |
+| Negative controls | Run, both red | Desktop -17px; phone -14px with both of its edits reverted |
 | Operator confirmation | Not requested | — |
 
 ### Deviations and findings
