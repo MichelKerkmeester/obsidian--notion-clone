@@ -19,7 +19,8 @@
 // ───────────────────────────────────────────────────────────────────
 
 import { isHTMLElement } from "./dom-guards";
-import { applySheetChrome } from "./mobile-bottom-sheet";
+import { applySheetChrome, attachSheetDragToDismiss, playSheetEntrance } from "./mobile-bottom-sheet";
+import { overlayStack } from "./overlay-stack";
 
 // ───────────────────────────────────────────────────────────────────
 // 2. TYPES
@@ -106,11 +107,41 @@ export function positionToolbarPopover(
   // Presentation now lives in the sheet module so surfaces without an anchor — modals — can reach
   // it too. This function keeps placement, which is the part that genuinely needs an anchor.
   applySheetChrome(panel, mobileSheet);
-  if (!panel.hasClass("is-visible")) {
+  if (mobileSheet) {
+    // The sheet commits its start state before flipping, so the rise actually runs. The anchored
+    // branch keeps the frame-scheduled flip it has always had: on that path the entrance has never
+    // run either, but a desktop popover that starts animating for the first time is a change to a
+    // surface nobody reported, and this phase is not the place to make it.
+    playSheetEntrance(panel);
+  } else if (!panel.hasClass("is-visible")) {
     panel.addClass("db-overlay-enter");
     view.requestAnimationFrame(() => {
       if (panel.isConnected) panel.addClass("is-visible");
     });
+  }
+
+  // Drag-to-dismiss belongs to the sheet, not to the caller.
+  //
+  // `applySheetChrome` gives every phone surface a grab bar, and until now only two of them — the
+  // owned menu and the record panel — ever wired a gesture to it. Every one of the thirty-odd
+  // surfaces that reach a sheet through this function drew a handle that advertised a drag nothing
+  // implemented, which is worse than drawing none: a sheet that says it can be dragged down and
+  // cannot is a surface with no visible way out.
+  //
+  // The overlay stack is what makes this reachable from here. This function has no close callback
+  // and adding one would mean editing every call site; the stack already knows who owns each
+  // panel's dismissal because they all register with it, so asking it to dismiss this panel is the
+  // same close the backdrop and Escape already run through. A surface that never registered gets a
+  // spring-back instead of being left parked below the screen with the gesture half-finished.
+  let releaseSheetDrag: (() => void) | undefined;
+  if (mobileSheet) {
+    const handle = panel.querySelector<HTMLElement>(".db-mobile-bottom-sheet-handle");
+    if (handle) {
+      releaseSheetDrag = attachSheetDragToDismiss(panel, handle, () => {
+        if (overlayStack.dismissPanel(panel, "programmatic")) return;
+        panel.setCssProps({ transition: "", transform: "" });
+      });
+    }
   }
   panel.setCssProps({
     position: "fixed",
@@ -238,6 +269,8 @@ export function positionToolbarPopover(
   };
   const visualViewport = view.visualViewport;
   const cleanup = () => {
+    releaseSheetDrag?.();
+    releaseSheetDrag = undefined;
     if (frame !== undefined) view.cancelAnimationFrame(frame);
     view.removeEventListener("resize", schedule);
     ownerDocument.removeEventListener("scroll", schedule, true);

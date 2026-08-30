@@ -23,7 +23,7 @@
 // ───────────────────────────────────────────────────────────────────
 
 import { createMenuRow, createMenuSection, createMenuSeparator, MenuRowOptions } from "./menu-row";
-import { applySheetChrome, attachSheetDragToDismiss } from "./mobile-bottom-sheet";
+import { applySheetChrome, attachSheetDragToDismiss, playSheetEntrance } from "./mobile-bottom-sheet";
 import {
   clamp,
   getVisiblePopoverBounds,
@@ -85,11 +85,6 @@ export function createOwnedMenu(
   const el = doc.body.createDiv({ cls: "db-surface db-menu db-owned-menu" });
   el.setAttr("role", "menu");
   el.setAttr("tabindex", "-1");
-
-  // The menu's own window, not the global one: Obsidian can host this plugin in a popped-out
-  // window, where `window` belongs to the main one and an animation frame scheduled against it
-  // fires against a document this menu is not in.
-  const view = doc.defaultView || window;
 
   let open = true;
   let releaseDrag: (() => void) | undefined;
@@ -176,12 +171,7 @@ export function createOwnedMenu(
         // and starts editing a cell on the way out.
         applySheetChrome(el, true, { scrimCapturesPointer: true });
         placeSheet(el);
-        if (!el.hasClass("is-visible")) {
-          el.addClass("db-overlay-enter");
-          view.requestAnimationFrame(() => {
-            if (el.isConnected) el.addClass("is-visible");
-          });
-        }
+        playSheetEntrance(el);
         const handle = el.querySelector<HTMLElement>(".db-mobile-bottom-sheet-handle");
         if (handle) releaseDrag = attachSheetDragToDismiss(el, handle, close);
       } else {

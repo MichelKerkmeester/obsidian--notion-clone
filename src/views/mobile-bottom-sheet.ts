@@ -69,6 +69,34 @@ export function applySheetChrome(
 }
 
 // ───────────────────────────────────────────────────────────────────
+// 1a. THE ENTRANCE
+// ───────────────────────────────────────────────────────────────────
+
+/**
+ * Start the sheet's rise from the bottom edge.
+ *
+ * Both callers used to add the start class and then flip to the end class inside a single
+ * `requestAnimationFrame`, and on that path the entrance never ran at all — measured, across the
+ * whole window: identity transform at 12ms and no running animation at any point. A rAF callback
+ * fires BEFORE the frame's style recalculation, so a node created, inserted and flipped within it
+ * gets exactly one style resolution, already carrying the end state. A transition needs two
+ * different computed values across two resolutions; with only one there is nothing to interpolate
+ * and the surface simply appears. That is the whole of "the sheet appears instantly" — not the
+ * duration, and not the distance. Retuning either without this would have changed nothing.
+ *
+ * Reading a layout property commits the start state synchronously, so the flip that follows is the
+ * second resolution. A second animation frame would also work and is the more familiar idiom, but
+ * it postpones the sheet by a frame — and the drag gesture binds on this same surface, so a frame
+ * spent waiting is a frame in which a thumb already on the glass is being ignored.
+ */
+export function playSheetEntrance(panel: HTMLElement): void {
+  if (panel.hasClass("is-visible")) return;
+  panel.addClass("db-overlay-enter");
+  panel.getBoundingClientRect();
+  panel.addClass("is-visible");
+}
+
+// ───────────────────────────────────────────────────────────────────
 // 1b. THE MOUNT POINT
 // ───────────────────────────────────────────────────────────────────
 
@@ -208,8 +236,19 @@ function setScrim(doc: Document, wanted: boolean, capturesPointer: boolean | und
  * the current handle, which is what the full-width band hit-tests as. That is
  * resolved at pointerdown rather than captured here, because after a rebuild the
  * handle passed in is a detached node that no press can ever match again.
+ *
+ * One gesture per panel, and the last caller wins. The positioner now wires a
+ * generic dismissal onto every sheet it presents, so a surface that also wires
+ * its own — the record panel does, because its close does more than take the
+ * overlay down — would otherwise carry two, and one drag would answer with two
+ * closes. Last wins rather than first because the specific close is always the
+ * one registered after the generic one, and it is the one that should run.
  */
+const activeSheetDrag = new WeakMap<HTMLElement, () => void>();
+
 export function attachSheetDragToDismiss(panel: HTMLElement, handle: HTMLElement, close: () => void): () => void {
+  activeSheetDrag.get(panel)?.();
+
   const DISMISS_PX = 96;
   let startY = 0;
   let pointerId: number | undefined;
@@ -248,11 +287,14 @@ export function attachSheetDragToDismiss(panel: HTMLElement, handle: HTMLElement
   panel.addEventListener("pointermove", onMove);
   panel.addEventListener("pointerup", onUp);
   panel.addEventListener("pointercancel", onUp);
-  return () => {
+  const release = () => {
     panel.removeEventListener("pointerdown", onDown);
     panel.removeEventListener("pointermove", onMove);
     panel.removeEventListener("pointerup", onUp);
     panel.removeEventListener("pointercancel", onUp);
+    if (activeSheetDrag.get(panel) === release) activeSheetDrag.delete(panel);
     reset();
   };
+  activeSheetDrag.set(panel, release);
+  return release;
 }
