@@ -1,18 +1,18 @@
 {
-  "measuredAt": "2026-08-29T19:43:56.417Z",
+  "measuredAt": "2026-08-30T10:38:09.783Z",
   "inputs": {
-    "styles.css": "4e309eb720cf",
+    "styles.css": "bdaff6ffb928",
     "tools/live/surface-census.mjs": "09663f4f354e",
-    "src/views/surface-contract.ts": "d1182f2a693e"
+    "src/views/surface-contract.ts": "ff7e6bafd3c8"
   },
   "totals": {
-    "rendered": 73,
-    "buildable": 207,
+    "rendered": 82,
+    "buildable": 204,
     "declared": 5,
-    "renderedOnly": 6,
-    "buildableNotRendered": 140,
+    "renderedOnly": 7,
+    "buildableNotRendered": 129,
     "untokened": 0,
-    "unroled": 73
+    "unroled": 82
   },
   "rendered": {
     "db-column-menu-trigger": {
@@ -78,7 +78,7 @@
       "mountParent": "note-database-container",
       "tokens": true,
       "role": null,
-      "rect": "360x379",
+      "rect": "360x520",
       "scenarios": [
         "add-view-popover"
       ]
@@ -121,34 +121,92 @@
         "chrome-chart-options-popover"
       ]
     },
-    "db-menu-item": {
-      "cls": "db-menu-item",
+    "db-menu-section": {
+      "cls": "db-menu-section",
       "mountParent": "db-view-tab-popover",
       "tokens": true,
       "role": null,
-      "rect": "342x36",
+      "rect": "342x25",
       "scenarios": [
-        "add-view-popover"
+        "add-view-popover",
+        "add-view-popover",
+        "chrome-owned-menu"
+      ]
+    },
+    "db-menu-separator": {
+      "cls": "db-menu-separator",
+      "mountParent": "db-view-tab-popover",
+      "tokens": true,
+      "role": null,
+      "rect": "326x1",
+      "scenarios": [
+        "add-view-popover",
+        "chrome-owned-menu"
+      ]
+    },
+    "db-menu-item": {
+      "cls": "db-menu-item",
+      "mountParent": "db-add-view-choices",
+      "tokens": true,
+      "role": null,
+      "rect": "342x30",
+      "scenarios": [
+        "add-view-popover",
+        "add-view-popover",
+        "add-view-popover",
+        "add-view-popover",
+        "add-view-popover",
+        "add-view-popover",
+        "add-view-popover",
+        "add-view-popover",
+        "chrome-owned-menu",
+        "chrome-owned-menu",
+        "chrome-owned-menu",
+        "chrome-owned-menu",
+        "chrome-owned-menu"
       ]
     },
     "db-menu-item-icon": {
       "cls": "db-menu-item-icon",
-      "mountParent": "db-add-view-duplicate-action",
+      "mountParent": "db-menu-item",
       "tokens": true,
       "role": null,
-      "rect": "14x14",
+      "rect": "16x16",
       "scenarios": [
-        "add-view-popover"
+        "add-view-popover",
+        "add-view-popover",
+        "add-view-popover",
+        "add-view-popover",
+        "add-view-popover",
+        "add-view-popover",
+        "add-view-popover",
+        "add-view-popover",
+        "chrome-owned-menu",
+        "chrome-owned-menu",
+        "chrome-owned-menu",
+        "chrome-owned-menu"
       ]
     },
     "db-menu-item-label": {
       "cls": "db-menu-item-label",
-      "mountParent": "db-add-view-duplicate-action",
+      "mountParent": "db-menu-item",
       "tokens": true,
       "role": null,
-      "rect": "145x17",
+      "rect": "63x16",
       "scenarios": [
-        "add-view-popover"
+        "add-view-popover",
+        "add-view-popover",
+        "add-view-popover",
+        "add-view-popover",
+        "add-view-popover",
+        "add-view-popover",
+        "add-view-popover",
+        "add-view-popover",
+        "chrome-owned-menu",
+        "chrome-owned-menu",
+        "chrome-owned-menu",
+        "chrome-owned-menu",
+        "chrome-owned-menu"
       ]
     },
     "db-dropdown-popover": {
@@ -795,7 +853,7 @@
       "mountParent": "note-database-container",
       "tokens": true,
       "role": null,
-      "rect": "1352x247",
+      "rect": "1352x241",
       "scenarios": [
         "panel-record-detail",
         "panel-record-detail-sheet"
@@ -826,7 +884,7 @@
       "mountParent": "db-record-peek-panel",
       "tokens": true,
       "role": null,
-      "rect": "335x19",
+      "rect": "335x22",
       "scenarios": [
         "panel-record-peek"
       ]
@@ -836,7 +894,7 @@
       "mountParent": "db-record-peek-header",
       "tokens": true,
       "role": null,
-      "rect": "335x19",
+      "rect": "335x22",
       "scenarios": [
         "panel-record-peek"
       ]
@@ -929,6 +987,59 @@
         "panel-record-peek"
       ]
     },
+    "db-modal-help": {
+      "cls": "db-modal-help",
+      "mountParent": "note-database-modal",
+      "tokens": true,
+      "role": null,
+      "rect": "1406x15",
+      "scenarios": [
+        "panel-computed-cleanup-modal",
+        "panel-invalid-events-modal",
+        "panel-base-import-modal"
+      ]
+    },
+    "db-modal-checkbox": {
+      "cls": "db-modal-checkbox",
+      "mountParent": "db-computed-cleanup-option",
+      "tokens": true,
+      "role": null,
+      "rect": "18x18",
+      "scenarios": [
+        "panel-computed-cleanup-modal",
+        "panel-computed-cleanup-modal",
+        "panel-computed-cleanup-modal",
+        "panel-invalid-events-modal",
+        "panel-invalid-events-modal",
+        "panel-invalid-events-modal",
+        "panel-invalid-events-modal",
+        "panel-base-import-modal",
+        "panel-base-import-modal",
+        "panel-base-import-modal",
+        "panel-base-import-modal",
+        "panel-base-import-modal"
+      ]
+    },
+    "db-modal-actions": {
+      "cls": "db-modal-actions",
+      "mountParent": "note-database-modal",
+      "tokens": true,
+      "role": null,
+      "rect": "1406x27",
+      "scenarios": [
+        "panel-computed-cleanup-modal"
+      ]
+    },
+    "db-invalid-events-modal": {
+      "cls": "db-invalid-events-modal",
+      "mountParent": "(body)",
+      "tokens": true,
+      "role": null,
+      "rect": "1410x222",
+      "scenarios": [
+        "panel-invalid-events-modal"
+      ]
+    },
     "db-new-button-dropdown": {
       "cls": "db-new-button-dropdown",
       "mountParent": "db-new-button-group",
@@ -970,6 +1081,36 @@
         "chrome-chart-options-popover",
         "chrome-chart-options-popover",
         "chrome-chart-options-popover"
+      ]
+    },
+    "db-menu": {
+      "cls": "db-menu",
+      "mountParent": "(body)",
+      "tokens": true,
+      "role": null,
+      "rect": "230x192",
+      "scenarios": [
+        "chrome-owned-menu"
+      ]
+    },
+    "db-menu-item-current": {
+      "cls": "db-menu-item-current",
+      "mountParent": "db-menu-item",
+      "tokens": true,
+      "role": null,
+      "rect": "36x15",
+      "scenarios": [
+        "chrome-owned-menu"
+      ]
+    },
+    "db-menu-item-chevron": {
+      "cls": "db-menu-item-chevron",
+      "mountParent": "db-menu-item",
+      "tokens": true,
+      "role": null,
+      "rect": "14x14",
+      "scenarios": [
+        "chrome-owned-menu"
       ]
     },
     "db-cell-popover-editing": {
@@ -1100,7 +1241,7 @@
       "mountParent": "db-icon-picker-scroll",
       "tokens": true,
       "role": null,
-      "rect": "275x67",
+      "rect": "275x65",
       "scenarios": [
         "field-icon-picker",
         "field-icon-picker"
@@ -1111,7 +1252,7 @@
       "mountParent": "db-icon-picker-section",
       "tokens": true,
       "role": null,
-      "rect": "275x17",
+      "rect": "275x15",
       "scenarios": [
         "field-icon-picker",
         "field-icon-picker"
@@ -1219,7 +1360,6 @@
   "buildableNotRendered": [
     "db-file-picker",
     "db-file-picker-label",
-    "db-modal-actions",
     "db-settings-dropdown",
     "db-delete-modal-info",
     "db-delete-modal-buttons",
@@ -1244,11 +1384,11 @@
     "db-cell-date-picker",
     "db-cell-line-edit-popover",
     "db-chart-drilldown-modal",
+    "db-anchored-popover",
     "db-chart-value-aggregation-popover",
     "db-chart-style-popover",
     "db-chart-visible-groups-popover",
     "db-chart-dropdown-popover",
-    "db-anchored-popover",
     "db-column-manager-file-property-dropdown",
     "db-column-type-popover",
     "db-dropdown-option-check",
@@ -1256,7 +1396,6 @@
     "db-column-display-style-popover",
     "db-column-number-style-popover",
     "db-number-style-menu-icon",
-    "db-menu-item-current",
     "db-column-menu-back",
     "db-column-text-style-popover",
     "db-displayopt-dropdown-popover",
@@ -1284,13 +1423,10 @@
     "db-panel-date-value",
     "db-filter-value-dropdown",
     "db-icon-picker-empty",
-    "db-menu-section",
-    "db-menu-separator",
     "db-mobile-bottom-sheet",
-    "db-modal-help",
+    "db-mobile-sheet-scrim",
     "db-modal-dropdown",
     "db-base-import-type-dropdown",
-    "db-modal-checkbox",
     "db-modal-button-row",
     "db-modal-row",
     "db-modal-label",
@@ -1303,25 +1439,19 @@
     "db-delete-modal-primary-actions",
     "db-formula-result-type-dropdown",
     "db-formula-preview-dropdown",
-    "db-invalid-events-modal",
     "db-property-conflict-modal",
     "db-property-conflict-type-dropdown",
     "db-relation-rollup-config-modal",
     "db-relation-rollup-config-dropdown",
     "db-status-preset-default-dropdown",
-    "db-menu",
     "db-owned-menu",
     "db-database-dropdown-icon",
     "db-sort-field-dropdown",
     "db-sort-direction-dropdown",
     "db-summary-dropdown-popover",
-    "db-panel",
-    "db-sheet",
     "db-table-calculation-popover",
     "db-record-peek-empty",
     "db-toolbar-utilities-popover",
-    "db-toolbar-menu-icon",
-    "db-toolbar-menu-label",
     "db-database-popover",
     "db-database-popover-drag",
     "db-database-popover-select",

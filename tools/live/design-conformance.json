@@ -1,9 +1,9 @@
 {
-  "measuredAt": "2026-08-30T07:52:29.641Z",
+  "measuredAt": "2026-08-30T10:38:34.941Z",
   "inputs": {
-    "styles.css": "d1c0cd5f207e",
+    "styles.css": "bdaff6ffb928",
     "tools/live/design-conformance.mjs": "d7140f7c0ae5",
-    "src/views/popover-position.ts": "5c14fa27bd71"
+    "src/views/popover-position.ts": "ed3a75d6b03a"
   },
   "checks": [
     {
@@ -17,7 +17,7 @@
     {
       "name": "registry equality — rendered surfaces with no declared role",
       "enforced": false,
-      "value": 73,
+      "value": 82,
       "target": 0,
       "note": "the registry holds five producers; the rest are unmigrated",
       "conforms": false
@@ -25,7 +25,7 @@
     {
       "name": "reachability — buildable surfaces no fixture renders",
       "enforced": false,
-      "value": 140,
+      "value": 129,
       "target": 0,
       "note": "nothing photographs or measures these, so nothing would notice if they broke",
       "conforms": false
@@ -73,7 +73,7 @@
     {
       "name": "cascade — property values overridden by a later duplicate block",
       "enforced": false,
-      "value": 116,
+      "value": 124,
       "target": 0,
       "note": "each needs a disposition: intended, or a defect",
       "conforms": false
@@ -174,10 +174,10 @@
     "src/views/column-manager-renderer.ts:149  .db-panel-header-actions",
     "src/views/column-menu.ts:233  .db-dropdown-section-title",
     "src/views/column-menu.ts:368  .db-column-menu-back",
-    "src/views/database-view.ts:2990  .db-group-order-popover",
-    "src/views/database-view.ts:3104  .db-panel-button",
-    "src/views/database-view.ts:6837  .db-calendar-search-results-popover",
-    "src/views/database-view.ts:11025  .db-mobile-column-width-panel",
+    "src/views/database-view.ts:2993  .db-group-order-popover",
+    "src/views/database-view.ts:3107  .db-panel-button",
+    "src/views/database-view.ts:6844  .db-calendar-search-results-popover",
+    "src/views/database-view.ts:11035  .db-mobile-column-width-panel",
     "src/views/date-value-picker.ts:139  .db-cell-edit-popover",
     "src/views/date-value-picker.ts:206  .db-calendar-mini-popover",
     "src/views/dropdown-field.ts:115  .db-dropdown-field-text",
@@ -185,9 +185,9 @@
     "src/views/dropdown-field.ts:212  .db-dropdown-options",
     "src/views/dropdown-field.ts:216  .db-dropdown-empty",
     "src/views/dropdown-field.ts:258  .db-dropdown-section-title",
-    "src/views/embedded-database-renderer.ts:1247  .db-calendar-search-results-popover",
-    "src/views/embedded-database-renderer.ts:2792  .db-group-order-popover",
-    "src/views/embedded-database-renderer.ts:2908  .db-panel-button",
+    "src/views/embedded-database-renderer.ts:1255  .db-calendar-search-results-popover",
+    "src/views/embedded-database-renderer.ts:2800  .db-group-order-popover",
+    "src/views/embedded-database-renderer.ts:2916  .db-panel-button",
     "src/views/filter-panel-renderer.ts:161  .db-filter-panel",
     "src/views/filter-panel-renderer.ts:182  .db-panel-empty",
     "src/views/filter-panel-renderer.ts:202  .db-panel-button",

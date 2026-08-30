@@ -1,7 +1,7 @@
 {
-  "measuredAt": "2026-08-30T08:23:18.409Z",
+  "measuredAt": "2026-08-30T10:38:42.587Z",
   "inputs": {
-    "styles.css": "aec8873ba9c5",
+    "styles.css": "bdaff6ffb928",
     "tools/live/view-census.mjs": "f911f2e4a8cb",
     "tools/screenshots/scenarios.mjs": "1395f2dacbfd"
   },
@@ -360,10 +360,10 @@
     }
   ],
   "totals": {
-    "fixtures": 54,
-    "escaping": 535,
-    "growing": 255,
-    "scrolling": 280,
+    "fixtures": 56,
+    "escaping": 560,
+    "growing": 256,
+    "scrolling": 304,
     "rhythmGroups": 20,
     "ragged": 0,
     "probeBlind": 0
@@ -2008,6 +2008,136 @@
       "parentCls": "note-database-container",
       "by": 4,
       "scrolls": true
+    },
+    {
+      "width": 320,
+      "fixture": "panel-invalid-events-modal",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-invalid-event-col-time",
+      "parentCls": "db-invalid-event-grid-header",
+      "by": 110,
+      "scrolls": true
+    },
+    {
+      "width": 320,
+      "fixture": "panel-invalid-events-modal",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-invalid-event-col-time",
+      "parentCls": "db-invalid-event-grid-header",
+      "by": 286,
+      "scrolls": true
+    },
+    {
+      "width": 320,
+      "fixture": "panel-invalid-events-modal",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-invalid-event-col-span",
+      "parentCls": "db-invalid-event-grid-header",
+      "by": 410,
+      "scrolls": true
+    },
+    {
+      "width": 320,
+      "fixture": "panel-invalid-events-modal",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-invalid-event-time",
+      "parentCls": "db-invalid-event-row",
+      "by": 110,
+      "scrolls": true
+    },
+    {
+      "width": 320,
+      "fixture": "panel-invalid-events-modal",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-invalid-event-time",
+      "parentCls": "db-invalid-event-row",
+      "by": 286,
+      "scrolls": true
+    },
+    {
+      "width": 320,
+      "fixture": "panel-invalid-events-modal",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-invalid-event-span",
+      "parentCls": "db-invalid-event-row",
+      "by": 410,
+      "scrolls": true
+    },
+    {
+      "width": 320,
+      "fixture": "panel-invalid-events-modal",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-invalid-event-time",
+      "parentCls": "db-invalid-event-row",
+      "by": 110,
+      "scrolls": true
+    },
+    {
+      "width": 320,
+      "fixture": "panel-invalid-events-modal",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-invalid-event-time",
+      "parentCls": "db-invalid-event-row",
+      "by": 286,
+      "scrolls": true
+    },
+    {
+      "width": 320,
+      "fixture": "panel-invalid-events-modal",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-invalid-event-span",
+      "parentCls": "db-invalid-event-row",
+      "by": 410,
+      "scrolls": true
+    },
+    {
+      "width": 320,
+      "fixture": "panel-invalid-events-modal",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-invalid-event-time",
+      "parentCls": "db-invalid-event-row",
+      "by": 110,
+      "scrolls": true
+    },
+    {
+      "width": 320,
+      "fixture": "panel-invalid-events-modal",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-invalid-event-time",
+      "parentCls": "db-invalid-event-row",
+      "by": 286,
+      "scrolls": true
+    },
+    {
+      "width": 320,
+      "fixture": "panel-invalid-events-modal",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-invalid-event-span",
+      "parentCls": "db-invalid-event-row",
+      "by": 410,
+      "scrolls": true
+    },
+    {
+      "width": 320,
+      "fixture": "panel-base-import-modal",
+      "kind": "escaping",
+      "tag": "table",
+      "cls": "base-import-table",
+      "parentCls": "note-database-modal",
+      "by": 27.7,
+      "scrolls": false
     },
     {
       "width": 320,
@@ -4051,6 +4181,126 @@
     },
     {
       "width": 402,
+      "fixture": "panel-invalid-events-modal",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-invalid-event-col-time",
+      "parentCls": "db-invalid-event-grid-header",
+      "by": 28,
+      "scrolls": true
+    },
+    {
+      "width": 402,
+      "fixture": "panel-invalid-events-modal",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-invalid-event-col-time",
+      "parentCls": "db-invalid-event-grid-header",
+      "by": 204,
+      "scrolls": true
+    },
+    {
+      "width": 402,
+      "fixture": "panel-invalid-events-modal",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-invalid-event-col-span",
+      "parentCls": "db-invalid-event-grid-header",
+      "by": 328,
+      "scrolls": true
+    },
+    {
+      "width": 402,
+      "fixture": "panel-invalid-events-modal",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-invalid-event-time",
+      "parentCls": "db-invalid-event-row",
+      "by": 28,
+      "scrolls": true
+    },
+    {
+      "width": 402,
+      "fixture": "panel-invalid-events-modal",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-invalid-event-time",
+      "parentCls": "db-invalid-event-row",
+      "by": 204,
+      "scrolls": true
+    },
+    {
+      "width": 402,
+      "fixture": "panel-invalid-events-modal",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-invalid-event-span",
+      "parentCls": "db-invalid-event-row",
+      "by": 328,
+      "scrolls": true
+    },
+    {
+      "width": 402,
+      "fixture": "panel-invalid-events-modal",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-invalid-event-time",
+      "parentCls": "db-invalid-event-row",
+      "by": 28,
+      "scrolls": true
+    },
+    {
+      "width": 402,
+      "fixture": "panel-invalid-events-modal",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-invalid-event-time",
+      "parentCls": "db-invalid-event-row",
+      "by": 204,
+      "scrolls": true
+    },
+    {
+      "width": 402,
+      "fixture": "panel-invalid-events-modal",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-invalid-event-span",
+      "parentCls": "db-invalid-event-row",
+      "by": 328,
+      "scrolls": true
+    },
+    {
+      "width": 402,
+      "fixture": "panel-invalid-events-modal",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-invalid-event-time",
+      "parentCls": "db-invalid-event-row",
+      "by": 28,
+      "scrolls": true
+    },
+    {
+      "width": 402,
+      "fixture": "panel-invalid-events-modal",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-invalid-event-time",
+      "parentCls": "db-invalid-event-row",
+      "by": 204,
+      "scrolls": true
+    },
+    {
+      "width": 402,
+      "fixture": "panel-invalid-events-modal",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-invalid-event-span",
+      "parentCls": "db-invalid-event-row",
+      "by": 328,
+      "scrolls": true
+    },
+    {
+      "width": 402,
       "fixture": "chrome-toolbar",
       "kind": "escaping",
       "tag": "div",
@@ -6063,6 +6313,16 @@
     },
     {
       "width": 320,
+      "fixture": "panel-invalid-events-modal",
+      "probe": "4px"
+    },
+    {
+      "width": 320,
+      "fixture": "panel-base-import-modal",
+      "probe": "4px"
+    },
+    {
+      "width": 320,
       "fixture": "chrome-toolbar",
       "probe": "4px"
     },
@@ -6333,6 +6593,16 @@
     },
     {
       "width": 402,
+      "fixture": "panel-invalid-events-modal",
+      "probe": "4px"
+    },
+    {
+      "width": 402,
+      "fixture": "panel-base-import-modal",
+      "probe": "4px"
+    },
+    {
+      "width": 402,
       "fixture": "chrome-toolbar",
       "probe": "4px"
     },
@@ -6603,6 +6873,16 @@
     },
     {
       "width": 768,
+      "fixture": "panel-invalid-events-modal",
+      "probe": "4px"
+    },
+    {
+      "width": 768,
+      "fixture": "panel-base-import-modal",
+      "probe": "4px"
+    },
+    {
+      "width": 768,
       "fixture": "chrome-toolbar",
       "probe": "4px"
     },
@@ -6869,6 +7149,16 @@
     {
       "width": 1440,
       "fixture": "panel-computed-cleanup-modal",
+      "probe": "4px"
+    },
+    {
+      "width": 1440,
+      "fixture": "panel-invalid-events-modal",
+      "probe": "4px"
+    },
+    {
+      "width": 1440,
+      "fixture": "panel-base-import-modal",
       "probe": "4px"
     },
     {

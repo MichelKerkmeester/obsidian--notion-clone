@@ -1,23 +1,23 @@
 {
-  "measuredAt": "2026-08-30T07:41:23.354Z",
+  "measuredAt": "2026-08-30T10:38:02.324Z",
   "inputs": {
-    "styles.css": "d1c0cd5f207e",
+    "styles.css": "bdaff6ffb928",
     "tools/live/checkbox-appearance.mjs": "0e7e253916cf",
     "tools/screenshots/scenarios.mjs": "1395f2dacbfd"
   },
   "totals": {
-    "checkboxes": 171,
-    "fixtures": 51,
-    "owned": 171,
+    "checkboxes": 211,
+    "fixtures": 56,
+    "owned": 211,
     "appearanceOwnedByAncestor": 0,
-    "appearanceSelfOwned": 171,
-    "tokenDependent": 171,
+    "appearanceSelfOwned": 211,
+    "tokenDependent": 201,
     "platformBox": 0,
     "distinctShapes": 3
   },
   "shapes": {
-    "16x16 r=4px": 153,
-    "18x18 r=4px": 8,
+    "16x16 r=4px": 181,
+    "18x18 r=4px": 20,
     "34x18 r=9999px": 10
   },
   "rows": [
@@ -1356,6 +1356,558 @@
       "tokensFrom": "note-database-container"
     },
     {
+      "scenario": "list-view",
+      "index": 0,
+      "classes": [
+        "db-checkbox",
+        "db-checkbox-row",
+        "db-list-row-checkbox"
+      ],
+      "chain": [
+        "note-database-container",
+        "db-list",
+        "db-list-row",
+        "db-list-row-controls"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 16,
+        "height": 16
+      },
+      "appearanceOwnedBy": null,
+      "tokensFrom": "note-database-container"
+    },
+    {
+      "scenario": "list-view",
+      "index": 1,
+      "classes": [
+        "db-checkbox",
+        "db-checkbox-row",
+        "db-list-row-checkbox"
+      ],
+      "chain": [
+        "note-database-container",
+        "db-list",
+        "db-list-row",
+        "db-list-row-controls"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 16,
+        "height": 16
+      },
+      "appearanceOwnedBy": null,
+      "tokensFrom": "note-database-container"
+    },
+    {
+      "scenario": "list-view",
+      "index": 2,
+      "classes": [
+        "db-checkbox",
+        "db-checkbox-row",
+        "db-list-row-checkbox"
+      ],
+      "chain": [
+        "note-database-container",
+        "db-list",
+        "db-list-row",
+        "db-list-row-controls"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 16,
+        "height": 16
+      },
+      "appearanceOwnedBy": null,
+      "tokensFrom": "note-database-container"
+    },
+    {
+      "scenario": "list-view",
+      "index": 3,
+      "classes": [
+        "db-checkbox",
+        "db-checkbox-row",
+        "db-list-row-checkbox"
+      ],
+      "chain": [
+        "note-database-container",
+        "db-list",
+        "db-list-row",
+        "db-list-row-controls"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 16,
+        "height": 16
+      },
+      "appearanceOwnedBy": null,
+      "tokensFrom": "note-database-container"
+    },
+    {
+      "scenario": "list-view",
+      "index": 4,
+      "classes": [
+        "db-checkbox",
+        "db-checkbox-row",
+        "db-list-row-checkbox"
+      ],
+      "chain": [
+        "note-database-container",
+        "db-list",
+        "db-list-row",
+        "db-list-row-controls"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 16,
+        "height": 16
+      },
+      "appearanceOwnedBy": null,
+      "tokensFrom": "note-database-container"
+    },
+    {
+      "scenario": "list-view",
+      "index": 5,
+      "classes": [
+        "db-checkbox",
+        "db-checkbox-row",
+        "db-list-row-checkbox"
+      ],
+      "chain": [
+        "note-database-container",
+        "db-list",
+        "db-list-row",
+        "db-list-row-controls"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 16,
+        "height": 16
+      },
+      "appearanceOwnedBy": null,
+      "tokensFrom": "note-database-container"
+    },
+    {
+      "scenario": "list-view",
+      "index": 6,
+      "classes": [
+        "db-checkbox",
+        "db-checkbox-row",
+        "db-list-row-checkbox"
+      ],
+      "chain": [
+        "note-database-container",
+        "db-list",
+        "db-list-row",
+        "db-list-row-controls"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 16,
+        "height": 16
+      },
+      "appearanceOwnedBy": null,
+      "tokensFrom": "note-database-container"
+    },
+    {
+      "scenario": "list-view",
+      "index": 7,
+      "classes": [
+        "db-checkbox",
+        "db-checkbox-row",
+        "db-list-row-checkbox"
+      ],
+      "chain": [
+        "note-database-container",
+        "db-list",
+        "db-list-row",
+        "db-list-row-controls"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 16,
+        "height": 16
+      },
+      "appearanceOwnedBy": null,
+      "tokensFrom": "note-database-container"
+    },
+    {
+      "scenario": "list-view",
+      "index": 8,
+      "classes": [
+        "db-checkbox",
+        "db-checkbox-row",
+        "db-list-row-checkbox"
+      ],
+      "chain": [
+        "note-database-container",
+        "db-list",
+        "db-list-row",
+        "db-list-row-controls"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 16,
+        "height": 16
+      },
+      "appearanceOwnedBy": null,
+      "tokensFrom": "note-database-container"
+    },
+    {
+      "scenario": "list-view",
+      "index": 9,
+      "classes": [
+        "db-checkbox",
+        "db-checkbox-row",
+        "db-list-row-checkbox"
+      ],
+      "chain": [
+        "note-database-container",
+        "db-list",
+        "db-list-row",
+        "db-list-row-controls"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 16,
+        "height": 16
+      },
+      "appearanceOwnedBy": null,
+      "tokensFrom": "note-database-container"
+    },
+    {
+      "scenario": "list-view",
+      "index": 10,
+      "classes": [
+        "db-checkbox",
+        "db-checkbox-row",
+        "db-list-row-checkbox"
+      ],
+      "chain": [
+        "note-database-container",
+        "db-list",
+        "db-list-row",
+        "db-list-row-controls"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 16,
+        "height": 16
+      },
+      "appearanceOwnedBy": null,
+      "tokensFrom": "note-database-container"
+    },
+    {
+      "scenario": "list-view",
+      "index": 11,
+      "classes": [
+        "db-checkbox",
+        "db-checkbox-row",
+        "db-list-row-checkbox"
+      ],
+      "chain": [
+        "note-database-container",
+        "db-list",
+        "db-list-row",
+        "db-list-row-controls"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 16,
+        "height": 16
+      },
+      "appearanceOwnedBy": null,
+      "tokensFrom": "note-database-container"
+    },
+    {
+      "scenario": "list-view",
+      "index": 12,
+      "classes": [
+        "db-checkbox",
+        "db-checkbox-row",
+        "db-list-row-checkbox"
+      ],
+      "chain": [
+        "note-database-container",
+        "db-list",
+        "db-list-row",
+        "db-list-row-controls"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 16,
+        "height": 16
+      },
+      "appearanceOwnedBy": null,
+      "tokensFrom": "note-database-container"
+    },
+    {
+      "scenario": "list-view",
+      "index": 13,
+      "classes": [
+        "db-checkbox",
+        "db-checkbox-row",
+        "db-list-row-checkbox"
+      ],
+      "chain": [
+        "note-database-container",
+        "db-list",
+        "db-list-row",
+        "db-list-row-controls"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 16,
+        "height": 16
+      },
+      "appearanceOwnedBy": null,
+      "tokensFrom": "note-database-container"
+    },
+    {
+      "scenario": "list-view",
+      "index": 14,
+      "classes": [
+        "db-checkbox",
+        "db-checkbox-row",
+        "db-list-row-checkbox"
+      ],
+      "chain": [
+        "note-database-container",
+        "db-list",
+        "db-list-row",
+        "db-list-row-controls"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 16,
+        "height": 16
+      },
+      "appearanceOwnedBy": null,
+      "tokensFrom": "note-database-container"
+    },
+    {
+      "scenario": "list-view",
+      "index": 15,
+      "classes": [
+        "db-checkbox",
+        "db-checkbox-row",
+        "db-list-row-checkbox"
+      ],
+      "chain": [
+        "note-database-container",
+        "db-list",
+        "db-list-row",
+        "db-list-row-controls"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 16,
+        "height": 16
+      },
+      "appearanceOwnedBy": null,
+      "tokensFrom": "note-database-container"
+    },
+    {
+      "scenario": "list-view",
+      "index": 16,
+      "classes": [
+        "db-checkbox",
+        "db-checkbox-row",
+        "db-list-row-checkbox"
+      ],
+      "chain": [
+        "note-database-container",
+        "db-list",
+        "db-list-row",
+        "db-list-row-controls"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 16,
+        "height": 16
+      },
+      "appearanceOwnedBy": null,
+      "tokensFrom": "note-database-container"
+    },
+    {
+      "scenario": "list-view",
+      "index": 17,
+      "classes": [
+        "db-checkbox",
+        "db-checkbox-row",
+        "db-list-row-checkbox"
+      ],
+      "chain": [
+        "note-database-container",
+        "db-list",
+        "db-list-row",
+        "db-list-row-controls"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 16,
+        "height": 16
+      },
+      "appearanceOwnedBy": null,
+      "tokensFrom": "note-database-container"
+    },
+    {
+      "scenario": "list-view",
+      "index": 18,
+      "classes": [
+        "db-checkbox",
+        "db-checkbox-row",
+        "db-list-row-checkbox"
+      ],
+      "chain": [
+        "note-database-container",
+        "db-list",
+        "db-list-row",
+        "db-list-row-controls"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 16,
+        "height": 16
+      },
+      "appearanceOwnedBy": null,
+      "tokensFrom": "note-database-container"
+    },
+    {
+      "scenario": "list-view",
+      "index": 19,
+      "classes": [
+        "db-checkbox",
+        "db-checkbox-row",
+        "db-list-row-checkbox"
+      ],
+      "chain": [
+        "note-database-container",
+        "db-list",
+        "db-list-row",
+        "db-list-row-controls"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 16,
+        "height": 16
+      },
+      "appearanceOwnedBy": null,
+      "tokensFrom": "note-database-container"
+    },
+    {
+      "scenario": "list-view",
+      "index": 20,
+      "classes": [
+        "db-checkbox",
+        "db-checkbox-row",
+        "db-list-row-checkbox"
+      ],
+      "chain": [
+        "note-database-container",
+        "db-list",
+        "db-list-row",
+        "db-list-row-controls"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 16,
+        "height": 16
+      },
+      "appearanceOwnedBy": null,
+      "tokensFrom": "note-database-container"
+    },
+    {
+      "scenario": "list-view",
+      "index": 21,
+      "classes": [
+        "db-checkbox",
+        "db-checkbox-row",
+        "db-list-row-checkbox"
+      ],
+      "chain": [
+        "note-database-container",
+        "db-list",
+        "db-list-row",
+        "db-list-row-controls"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 16,
+        "height": 16
+      },
+      "appearanceOwnedBy": null,
+      "tokensFrom": "note-database-container"
+    },
+    {
+      "scenario": "list-view",
+      "index": 22,
+      "classes": [
+        "db-checkbox",
+        "db-checkbox-row",
+        "db-list-row-checkbox"
+      ],
+      "chain": [
+        "note-database-container",
+        "db-list",
+        "db-list-row",
+        "db-list-row-controls"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 16,
+        "height": 16
+      },
+      "appearanceOwnedBy": null,
+      "tokensFrom": "note-database-container"
+    },
+    {
+      "scenario": "list-view",
+      "index": 23,
+      "classes": [
+        "db-checkbox",
+        "db-checkbox-row",
+        "db-list-row-checkbox"
+      ],
+      "chain": [
+        "note-database-container",
+        "db-list",
+        "db-list-row",
+        "db-list-row-controls"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 16,
+        "height": 16
+      },
+      "appearanceOwnedBy": null,
+      "tokensFrom": "note-database-container"
+    },
+    {
       "scenario": "add-view-popover",
       "index": 0,
       "classes": [
@@ -2664,7 +3216,7 @@
         "height": 18
       },
       "appearanceOwnedBy": null,
-      "tokensFrom": "note-database-container"
+      "tokensFrom": null
     },
     {
       "scenario": "calendar-toolbar-options",
@@ -2686,7 +3238,7 @@
         "height": 18
       },
       "appearanceOwnedBy": null,
-      "tokensFrom": "note-database-container"
+      "tokensFrom": null
     },
     {
       "scenario": "timeline-toolbar-options",
@@ -2708,7 +3260,7 @@
         "height": 18
       },
       "appearanceOwnedBy": null,
-      "tokensFrom": "note-database-container"
+      "tokensFrom": null
     },
     {
       "scenario": "timeline-toolbar-options",
@@ -2730,7 +3282,7 @@
         "height": 18
       },
       "appearanceOwnedBy": null,
-      "tokensFrom": "note-database-container"
+      "tokensFrom": null
     },
     {
       "scenario": "timeline-toolbar-options",
@@ -2752,7 +3304,7 @@
         "height": 18
       },
       "appearanceOwnedBy": null,
-      "tokensFrom": "note-database-container"
+      "tokensFrom": null
     },
     {
       "scenario": "panel-view-config",
@@ -2773,7 +3325,7 @@
         "height": 18
       },
       "appearanceOwnedBy": null,
-      "tokensFrom": "note-database-container"
+      "tokensFrom": null
     },
     {
       "scenario": "panel-view-config",
@@ -2794,7 +3346,7 @@
         "height": 18
       },
       "appearanceOwnedBy": null,
-      "tokensFrom": "note-database-container"
+      "tokensFrom": null
     },
     {
       "scenario": "panel-column-manager",
@@ -2966,6 +3518,280 @@
       },
       "appearanceOwnedBy": null,
       "tokensFrom": "note-database-container"
+    },
+    {
+      "scenario": "panel-computed-cleanup-modal",
+      "index": 0,
+      "classes": [
+        "db-checkbox",
+        "db-checkbox-field",
+        "db-modal-checkbox"
+      ],
+      "chain": [
+        "note-database-modal",
+        "db-computed-cleanup-list",
+        "db-computed-cleanup-option"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 18,
+        "height": 18
+      },
+      "appearanceOwnedBy": null,
+      "tokensFrom": "note-database-modal"
+    },
+    {
+      "scenario": "panel-computed-cleanup-modal",
+      "index": 1,
+      "classes": [
+        "db-checkbox",
+        "db-checkbox-field",
+        "db-modal-checkbox"
+      ],
+      "chain": [
+        "note-database-modal",
+        "db-computed-cleanup-list",
+        "db-computed-cleanup-option"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 18,
+        "height": 18
+      },
+      "appearanceOwnedBy": null,
+      "tokensFrom": "note-database-modal"
+    },
+    {
+      "scenario": "panel-computed-cleanup-modal",
+      "index": 2,
+      "classes": [
+        "db-checkbox",
+        "db-checkbox-field",
+        "db-modal-checkbox"
+      ],
+      "chain": [
+        "note-database-modal",
+        "db-computed-cleanup-list",
+        "db-computed-cleanup-option"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 18,
+        "height": 18
+      },
+      "appearanceOwnedBy": null,
+      "tokensFrom": "note-database-modal"
+    },
+    {
+      "scenario": "panel-invalid-events-modal",
+      "index": 0,
+      "classes": [
+        "db-checkbox",
+        "db-checkbox-field",
+        "db-modal-checkbox",
+        "db-invalid-event-select"
+      ],
+      "chain": [
+        "note-database-modal db-invalid-events-modal",
+        "db-invalid-event-grid",
+        "db-invalid-event-grid-header"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 18,
+        "height": 18
+      },
+      "appearanceOwnedBy": null,
+      "tokensFrom": "note-database-modal db-invalid-events-modal"
+    },
+    {
+      "scenario": "panel-invalid-events-modal",
+      "index": 1,
+      "classes": [
+        "db-checkbox",
+        "db-checkbox-field",
+        "db-modal-checkbox",
+        "db-invalid-event-select"
+      ],
+      "chain": [
+        "note-database-modal db-invalid-events-modal",
+        "db-invalid-event-grid",
+        "db-invalid-event-row"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 18,
+        "height": 18
+      },
+      "appearanceOwnedBy": null,
+      "tokensFrom": "note-database-modal db-invalid-events-modal"
+    },
+    {
+      "scenario": "panel-invalid-events-modal",
+      "index": 2,
+      "classes": [
+        "db-checkbox",
+        "db-checkbox-field",
+        "db-modal-checkbox",
+        "db-invalid-event-select"
+      ],
+      "chain": [
+        "note-database-modal db-invalid-events-modal",
+        "db-invalid-event-grid",
+        "db-invalid-event-row"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 18,
+        "height": 18
+      },
+      "appearanceOwnedBy": null,
+      "tokensFrom": "note-database-modal db-invalid-events-modal"
+    },
+    {
+      "scenario": "panel-invalid-events-modal",
+      "index": 3,
+      "classes": [
+        "db-checkbox",
+        "db-checkbox-field",
+        "db-modal-checkbox",
+        "db-invalid-event-select"
+      ],
+      "chain": [
+        "note-database-modal db-invalid-events-modal",
+        "db-invalid-event-grid",
+        "db-invalid-event-row"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 18,
+        "height": 18
+      },
+      "appearanceOwnedBy": null,
+      "tokensFrom": "note-database-modal db-invalid-events-modal"
+    },
+    {
+      "scenario": "panel-base-import-modal",
+      "index": 0,
+      "classes": [
+        "db-checkbox",
+        "db-checkbox-field",
+        "db-modal-checkbox",
+        "base-import-include-checkbox"
+      ],
+      "chain": [
+        "note-database-modal",
+        "base-import-table",
+        "base-import-check-cell"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 18,
+        "height": 18
+      },
+      "appearanceOwnedBy": null,
+      "tokensFrom": "note-database-modal"
+    },
+    {
+      "scenario": "panel-base-import-modal",
+      "index": 1,
+      "classes": [
+        "db-checkbox",
+        "db-checkbox-field",
+        "db-modal-checkbox",
+        "base-import-include-checkbox"
+      ],
+      "chain": [
+        "note-database-modal",
+        "base-import-table",
+        "base-import-check-cell"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 18,
+        "height": 18
+      },
+      "appearanceOwnedBy": null,
+      "tokensFrom": "note-database-modal"
+    },
+    {
+      "scenario": "panel-base-import-modal",
+      "index": 2,
+      "classes": [
+        "db-checkbox",
+        "db-checkbox-field",
+        "db-modal-checkbox",
+        "base-import-include-checkbox"
+      ],
+      "chain": [
+        "note-database-modal",
+        "base-import-table",
+        "base-import-check-cell"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 18,
+        "height": 18
+      },
+      "appearanceOwnedBy": null,
+      "tokensFrom": "note-database-modal"
+    },
+    {
+      "scenario": "panel-base-import-modal",
+      "index": 3,
+      "classes": [
+        "db-checkbox",
+        "db-checkbox-field",
+        "db-modal-checkbox",
+        "base-import-include-checkbox"
+      ],
+      "chain": [
+        "note-database-modal",
+        "base-import-table",
+        "base-import-excluded",
+        "base-import-check-cell"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 18,
+        "height": 18
+      },
+      "appearanceOwnedBy": null,
+      "tokensFrom": "note-database-modal"
+    },
+    {
+      "scenario": "panel-base-import-modal",
+      "index": 4,
+      "classes": [
+        "db-checkbox",
+        "db-checkbox-field",
+        "db-modal-checkbox",
+        "base-import-include-checkbox"
+      ],
+      "chain": [
+        "note-database-modal",
+        "base-import-table",
+        "base-import-check-cell"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 18,
+        "height": 18
+      },
+      "appearanceOwnedBy": null,
+      "tokensFrom": "note-database-modal"
     },
     {
       "scenario": "chrome-table-footer",
@@ -3972,7 +4798,7 @@
         "height": 18
       },
       "appearanceOwnedBy": null,
-      "tokensFrom": "note-database-container"
+      "tokensFrom": null
     },
     {
       "scenario": "chrome-chart-options-popover",
@@ -3993,7 +4819,7 @@
         "height": 18
       },
       "appearanceOwnedBy": null,
-      "tokensFrom": "note-database-container"
+      "tokensFrom": null
     },
     {
       "scenario": "chrome-chart-options-popover",
@@ -4012,6 +4838,94 @@
         "radius": "9999px",
         "width": 34,
         "height": 18
+      },
+      "appearanceOwnedBy": null,
+      "tokensFrom": null
+    },
+    {
+      "scenario": "chrome-group-selection-controls",
+      "index": 0,
+      "classes": [
+        "db-checkbox",
+        "db-checkbox-row",
+        "db-list-group-checkbox"
+      ],
+      "chain": [
+        "note-database-container",
+        "db-list-group",
+        "db-list-group-header",
+        "db-list-group-header-label"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 16,
+        "height": 16
+      },
+      "appearanceOwnedBy": null,
+      "tokensFrom": "note-database-container"
+    },
+    {
+      "scenario": "chrome-group-selection-controls",
+      "index": 1,
+      "classes": [
+        "db-checkbox",
+        "db-checkbox-row",
+        "db-gallery-group-checkbox"
+      ],
+      "chain": [
+        "note-database-container",
+        "db-gallery-group",
+        "db-gallery-group-header"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 16,
+        "height": 16
+      },
+      "appearanceOwnedBy": null,
+      "tokensFrom": "note-database-container"
+    },
+    {
+      "scenario": "chrome-group-selection-controls",
+      "index": 2,
+      "classes": [
+        "db-checkbox",
+        "db-checkbox-row",
+        "db-board-subgroup-checkbox"
+      ],
+      "chain": [
+        "note-database-container",
+        "db-board-subgroup",
+        "db-board-subgroup-header"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 16,
+        "height": 16
+      },
+      "appearanceOwnedBy": null,
+      "tokensFrom": "note-database-container"
+    },
+    {
+      "scenario": "chrome-selection-status-bar",
+      "index": 0,
+      "classes": [
+        "db-checkbox",
+        "db-checkbox-row",
+        "db-selection-clear-checkbox"
+      ],
+      "chain": [
+        "note-database-container",
+        "db-selection-status-bar"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 16,
+        "height": 16
       },
       "appearanceOwnedBy": null,
       "tokensFrom": "note-database-container"

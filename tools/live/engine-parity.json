@@ -1,22 +1,103 @@
 {
-  "measuredAt": "2026-08-29T19:05:53.893Z",
+  "measuredAt": "2026-08-30T10:38:07.477Z",
   "inputs": {
-    "styles.css": "46054fb94260",
+    "styles.css": "bdaff6ffb928",
     "tools/live/engine-parity.mjs": "0264fc2e3d90",
     "tools/screenshots/scenarios.mjs": "1395f2dacbfd"
   },
   "totals": {
-    "fixtures": 49,
-    "differences": 31
+    "fixtures": 56,
+    "differences": 50
   },
   "differences": [
+    {
+      "scenarioId": "add-view-popover",
+      "selector": "input[type=\"text\"]",
+      "index": 0,
+      "notes": [
+        "width 326 vs 318"
+      ]
+    },
+    {
+      "scenarioId": "add-view-popover",
+      "selector": "input[type=\"text\"]",
+      "index": 1,
+      "notes": [
+        "width 326 vs 318"
+      ]
+    },
     {
       "scenarioId": "add-view-popover",
       "selector": "select",
       "index": 0,
       "notes": [
         "radius 4px vs 5px",
-        "height 32 vs 22"
+        "width 326 vs 318",
+        "height 32 vs 23"
+      ]
+    },
+    {
+      "scenarioId": "add-view-popover",
+      "selector": "button",
+      "index": 0,
+      "notes": [
+        "width 342 vs 334"
+      ]
+    },
+    {
+      "scenarioId": "add-view-popover",
+      "selector": "button",
+      "index": 1,
+      "notes": [
+        "width 342 vs 334"
+      ]
+    },
+    {
+      "scenarioId": "add-view-popover",
+      "selector": "button",
+      "index": 2,
+      "notes": [
+        "width 342 vs 334"
+      ]
+    },
+    {
+      "scenarioId": "add-view-popover",
+      "selector": "button",
+      "index": 3,
+      "notes": [
+        "width 342 vs 334"
+      ]
+    },
+    {
+      "scenarioId": "add-view-popover",
+      "selector": "button",
+      "index": 4,
+      "notes": [
+        "width 342 vs 334"
+      ]
+    },
+    {
+      "scenarioId": "add-view-popover",
+      "selector": "button",
+      "index": 5,
+      "notes": [
+        "width 342 vs 334"
+      ]
+    },
+    {
+      "scenarioId": "add-view-popover",
+      "selector": "button",
+      "index": 6,
+      "notes": [
+        "width 342 vs 334"
+      ]
+    },
+    {
+      "scenarioId": "add-view-popover",
+      "selector": "button",
+      "index": 7,
+      "notes": [
+        "width 342 vs 334"
       ]
     },
     {
@@ -157,6 +238,38 @@
       ]
     },
     {
+      "scenarioId": "panel-base-import-modal",
+      "selector": "input[type=\"text\"]",
+      "index": 0,
+      "notes": [
+        "width 521.03 vs 539.91"
+      ]
+    },
+    {
+      "scenarioId": "panel-base-import-modal",
+      "selector": "input[type=\"text\"]",
+      "index": 1,
+      "notes": [
+        "width 521.03 vs 539.91"
+      ]
+    },
+    {
+      "scenarioId": "panel-base-import-modal",
+      "selector": "input[type=\"text\"]",
+      "index": 2,
+      "notes": [
+        "width 521.03 vs 539.91"
+      ]
+    },
+    {
+      "scenarioId": "panel-base-import-modal",
+      "selector": "input[type=\"text\"]",
+      "index": 3,
+      "notes": [
+        "width 521.03 vs 539.91"
+      ]
+    },
+    {
       "scenarioId": "chrome-chart-options-popover",
       "selector": "input[type=\"text\"]",
       "index": 0,
@@ -242,6 +355,46 @@
       "index": 9,
       "notes": [
         "width 520 vs 512"
+      ]
+    },
+    {
+      "scenarioId": "field-cell-edit-select",
+      "selector": "input[type=\"text\"]",
+      "index": 0,
+      "notes": [
+        "width 146 vs 164.25"
+      ]
+    },
+    {
+      "scenarioId": "field-cell-edit-select",
+      "selector": "button",
+      "index": 2,
+      "notes": [
+        "width 170 vs 188.25"
+      ]
+    },
+    {
+      "scenarioId": "field-cell-edit-select",
+      "selector": "button",
+      "index": 3,
+      "notes": [
+        "width 170 vs 188.25"
+      ]
+    },
+    {
+      "scenarioId": "field-cell-edit-select",
+      "selector": "button",
+      "index": 4,
+      "notes": [
+        "width 170 vs 188.25"
+      ]
+    },
+    {
+      "scenarioId": "field-cell-edit-select",
+      "selector": "button",
+      "index": 5,
+      "notes": [
+        "width 170 vs 188.25"
       ]
     },
     {
