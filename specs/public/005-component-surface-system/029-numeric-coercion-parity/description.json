@@ -1,0 +1,27 @@
+{
+  "level": "1",
+  "specFolder": "public/005-component-surface-system/029-numeric-coercion-parity",
+  "description": "Two renderers read the same stored value differently, and the table row is the wrong one",
+  "keywords": [
+    "two",
+    "renderers",
+    "read",
+    "same",
+    "stored",
+    "value",
+    "differently",
+    "table",
+    "row",
+    "wrong",
+    "one"
+  ],
+  "lastUpdated": "2026-08-30T18:49:20.309Z",
+  "specId": "029",
+  "folderSlug": "numeric-coercion-parity",
+  "parentChain": [
+    "public",
+    "005-component-surface-system"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": []
+}

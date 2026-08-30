@@ -5109,6 +5109,18 @@ await section("a number reads the same on a card and in the row behind it", asyn
       + (disagreements(measured.coerced).length ? `: ${listing(disagreements(measured.coerced))}` : "")
       + `. A clean numeric string agrees; one the card's whole-string coercion rejects does not`);
 
+  // The comparison above measures disagreement, so it reports green if both sides ever drift the
+  // same way. This one names the string, and it names the value that made the drift dangerous: a
+  // leading-digits parse reads 1.000,24 as 1 and prints a figure that looks correct and is short by
+  // three digits. Asserting the text is unchanged is the difference between the two renderers
+  // matching and the row telling the truth about the note.
+  const truncated = measured.coerced.find((row) => row.type === "number" && row.value === "1.000,24");
+  record("a row prints a value it cannot read as a number rather than a truncation of it",
+    truncated.cell === "1.000,24",
+    `cell renders ${show(truncated.cell)} for the stored text "1.000,24", want ${show("1.000,24")}. `
+      + `A numeric-prefix parse renders "1" here, and "1.000" for "1000,24" — both plausible, both `
+      + `wrong. The card renders ${show(truncated.card)}`);
+
   // Two counts per style, kept apart on purpose. The element count alone reports green on the shape
   // that actually breaks this — a formatted string appearing beside the bar rather than instead of
   // it — so the count that catches that has to be able to go red while the other stays green.
@@ -5169,20 +5181,6 @@ const KNOWN = new Map([
     "A sheet row's label computes to 13px, between the 12px and 14px steps the rest of the surface "
       + "uses. It is one declaration, but it sits under the shared row grammar, so moving it changes "
       + "every menu and every sheet at once and wants its own measured pass rather than a drive-by.",
-  ],
-  // Found by the parity check the moment it existed, which is the check's whole point: the card and
-  // the cell had never been rendered side by side, so nothing could report that they diverge. The
-  // card is not in this phase's scope, so the number is declared rather than repaired.
-  [
-    "a card and a cell agree when the column holds text or a non-finite number",
-    "The two sides coerce a stored value differently and then fall back differently. The card reads "
-      + "the whole string and treats a partial number as text, so it prints the text unchanged. The "
-      + "cell reads the numeric prefix, so it formats whatever prefix it found and shows the "
-      + "placeholder only when there is none. A field holding the Dutch text 1.000,24 therefore "
-      + "renders as that text on the card and as 1 in the row behind it, which is worse than the "
-      + "reported defect: the row silently drops three digits rather than merely looking unformatted. "
-      + "One coercion has to win, and choosing which is a data decision about what a numeric column "
-      + "may hold, not a formatting one.",
   ],
   [
     "the sheet survives the window resize a keyboard causes",

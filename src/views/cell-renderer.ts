@@ -322,9 +322,9 @@ export class CellRenderer {
         FilesColumn.renderChips(td, this.app, row, FilesColumn.parseEdit(value));
         break;
       case "currency": {
-        const num = typeof value === "number" ? value : parseFloat(String(value));
+        const num = this.toDisplayNumber(value);
         td.addClass("db-numeric-value");
-        td.textContent = isNaN(num) ? "-" : formatEuroCurrency(num);
+        td.textContent = isNaN(num) ? this.nonNumericText(value) : formatEuroCurrency(num);
         break;
       }
       case "number": {
@@ -391,11 +391,34 @@ export class CellRenderer {
     }
   }
 
+  /** Read a stored value as a number for display, taking the whole value or none of it.
+   *  Parsing only the leading digits turns the Dutch text 1.000,24 into 1 and 1000,24 into
+   *  1.000 — figures that look right and are not what the note holds — so a value the column
+   *  cannot read whole stays text rather than becoming a plausible wrong number. A value with
+   *  nothing to print stays non-numeric, which is what keeps a formula with no result on its
+   *  placeholder instead of on a zero. */
+  private toDisplayNumber(value: unknown): number {
+    if (typeof value === "number") return value;
+    return this.hasNothingToPrint(value) ? Number.NaN : Number(value);
+  }
+
+  /** What a numeric cell prints when the value is not a number: the value itself, so a row
+   *  reads the same as the card over the same record, and the placeholder only when there is
+   *  genuinely nothing to read. */
+  private nonNumericText(value: unknown): string {
+    if (this.hasNothingToPrint(value)) return "-";
+    return Array.isArray(value) ? value.join(", ") : String(value);
+  }
+
+  private hasNothingToPrint(value: unknown): boolean {
+    return isEmptyValue(value) || String(value).trim() === "";
+  }
+
   /** Render a number cell value, honoring the column's numberDisplayStyle (plain/rating/progress). */
   private renderNumberValue(td: HTMLElement, row: RowData | undefined, col: ColumnDef, value: unknown): void {
     td.addClass("db-numeric-value");
-    const num = typeof value === "number" ? value : parseFloat(String(value));
-    if (isNaN(num)) { td.textContent = "-"; return; }
+    const num = this.toDisplayNumber(value);
+    if (isNaN(num)) { td.textContent = this.nonNumericText(value); return; }
     const style = getNumberDisplayStyle(col);
     const interaction = row && !this.isReadOnly && this.isEditableCellColumn(col)
       ? { onChange: (next: number) => this.saveValue(row, col, next) }

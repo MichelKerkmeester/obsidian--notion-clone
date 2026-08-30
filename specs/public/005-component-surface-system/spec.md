@@ -144,6 +144,11 @@ are counted separately.
 | report-driven | `017-touch-row-range-selection` | Row range selection on touch | 95% |
 | report-driven | `018-select-column-affordance-fit` | Room for the reorder button beside the row checkbox | Shipped, unverified |
 | report-driven | `019-card-field-value-formatting` | A number rendering the same in a card as in a cell | Shipped, unverified |
+| report-driven | `029-numeric-coercion-parity` | A row reading a numeric column whole rather than parsing its leading digits | Shipped, unverified; captures owed |
+
+**Rows for `020`-`028` are missing from this table.** Those folders exist and this map stops at
+`019`. The gap is recorded rather than filled by whoever noticed it, since each row carries a status
+claim its own phase owns.
 
 ### Phase Transition Rules
 
