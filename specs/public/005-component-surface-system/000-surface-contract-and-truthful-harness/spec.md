@@ -86,7 +86,7 @@ deletions.
 | **Spec Folder** | 000-surface-contract-and-truthful-harness |
 | **Level** | 3 |
 | **Priority** | P0 |
-| **Status** | Planned |
+| **Status** | In progress — 9 of 41 tasks complete, 2 in progress; see implementation-summary.md |
 | **Created** | 2026-08-29 |
 | **Branch** | `main` |
 | **Parent Spec** | `../spec.md` |

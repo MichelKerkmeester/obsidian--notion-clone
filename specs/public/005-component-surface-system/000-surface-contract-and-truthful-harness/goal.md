@@ -1,22 +1,41 @@
 **Phase 000 — Surface contract and truthful harness**
 
-Repo `~/MEGA/Development/Obsidian Plugin`, branch `main`. **This phase blocks the other seven — and it now runs AFTER `009`.** Holds the `styles.css` lane.
+<!-- SPECKIT_TEMPLATE_SOURCE: goal | v2.2 -->
 
-**READ FIRST:** `../adversarial-review.md`, `../architecture-findings.md`, `../design-system.md`, `../roadmap.md`, then this folder's `spec.md` and `acceptance-criteria.md`. Cite them; never restate them.
+---
+
+<!-- ANCHOR:directive -->
+Repo `~/MEGA/Development/Obsidian Plugin`, branch `main`. **This phase blocks the other seven — and it now runs AFTER `009`.** Holds the `styles.css` lane.
 
 **WHY.** A surface's appearance is decided by where it was mounted. Tokens are declared on nine selectors (`styles.css:19-27`); `.db-owned-menu` is the **only** body-portal surface missing from that list. Measured: **29/29 probed overlay classes compute differently on `document.body` vs inside `.note-database-container`; 25/29 carry no tokens there.** Menus ship square-cornered at 14px where the design says 8px and 13px. Five `var(--db-*)` uses on that subtree have no fallback.
 
 **AND NO HARNESS CAN SEE IT.** `.storybook/preview.ts` wraps every story in the container that supplies the tokens. The screenshot fixtures do the same. No harness contains a `.mobile-navbar`.
+<!-- /ANCHOR:directive -->
 
 ---
 
+<!-- ANCHOR:binding -->
+**READ FIRST:** `../adversarial-review.md`, `../architecture-findings.md`, `../design-system.md`, `../roadmap.md`, then this folder's `spec.md` and `acceptance-criteria.md`. Cite them; never restate them.
+
+**LANE.** One phase holds `styles.css`. Release only after full recapture **and a human looking at the PNGs**.
+<!-- /ANCHOR:binding -->
+
+---
+
+<!-- ANCHOR:completion -->
+**ACCEPTANCE.** Every criterion measured at the production mount point, a number or hit test with a threshold, **proven to fail on today's tree with the number recorded**, and paired with a negative control. Plus the five stateful dimensions: semantic identity, transition trace, action outcome, resource ownership, negative-control mutation. **Plus the tenth condition: an instrument this phase did not repair.** Class names and call counts are **banned** — every 1.3.1 criterion was that shape and every one passed.
+
+**DONE MEANS** the numbers moved from their recorded failing values, the negative controls hold, **every harness number agrees with `009`'s live number or is listed uncorroborated with a reason**, both named exit criteria are recorded for `001` and `003`, and the operator confirms on device.
+<!-- /ANCHOR:completion -->
+
+---
+
+<!-- ANCHOR:log -->
 **THE THING THAT CHANGED: YOU CANNOT BE YOUR OWN INSTRUMENT.**
 
 This phase repairs the harness in Stage 1 and then asserts its own criteria through that repaired harness. Every negative control runs inside the instrument this phase just rewrote. A repair that is subtly wrong in a way that makes all the checks pass is indistinguishable from a correct one — **1.3.1's failure mode with a different wrapper supplying the illusion.**
 
 `009` now runs first and stands up the live probe against the running Obsidian: the one measurement surface this phase cannot edit. **Stage 1.5 pairs every harness number with the live number for the same surface, and a disagreement BLOCKS this phase.** Not adjudicated by preference — the harness can be blind and the probe can be measuring the wrong node, and the point is to find out which. Surfaces the probe cannot reach go on an **uncorroborated list with reasons**; a surface absent from both the pairs and that list means the cross-check was incomplete, not that the surface was fine.
-
----
 
 **T0 — DO THIS BEFORE ANYTHING ELSE.** `tools/storybook/verify-placement.mjs:164-171` asserts a widthless caller renders **wider than 320px**, labelled as intentional, and runs on every push via `.github/workflows/gates.yml:67`. **It asserts the defect.** Invert it before the census, before the cascade audit, before any product code — or phase 001 turns CI red and the cheapest reading of a red pipeline is to revert the fix.
 
@@ -42,8 +61,6 @@ This phase repairs the harness in Stage 1 and then asserts its own criteria thro
 - **Blank-cell checker.** No phase moves `Planned` → `In Progress` while a *census*/*trace* "today" cell is empty. The doctrine already said a blank cell blocks acceptance; prose is not a gate. Every such row must also name **what produces its number and at which stage**.
 - **Checkbox-parent guard.** Five checkbox inputs are created classless and styled only because the call site classes their parent one line earlier: `table-renderer.ts:514`, `:785`, `cell-renderer.ts:489`, `card-field-renderer.ts:184`, `record-detail-panel.ts:339`. `004` owns the fix and starts after this phase, while `004` and `005` both unblock here — so a wrapper change in either breaks them with no failing test. Fail when any of the five parents stops being classed.
 
----
-
 **BUILD.**
 - `openSurface()` returning a typed `SurfaceHandle` **registered through the existing `overlayStack` + interaction scope**, not beside them. `overlay-stack.ts` has exactly one importer; `owned-menu.ts` uses neither and hand-rolls capture-phase document listeners for ten caller files.
 - Explicit mount adapter: local | body portal | shadow root | top layer. Never auto-select top layer.
@@ -63,10 +80,5 @@ This phase repairs the harness in Stage 1 and then asserts its own criteria thro
 
 **CITE BY SYMBOL, NOT BY LINE.** This phase's cascade audit invalidates every `styles.css` line number cited anywhere in the program. From here on, a citation to a file this program edits names the selector or symbol **plus the grep that finds it** — `styles.css § .db-owned-menu .db-menu-item` (`rg -n '\.db-owned-menu \.db-menu-item' styles.css`). A human greps; an autonomous agent may trust the number and edit the wrong line. Numbers already recorded as *measurements* stay verbatim — they are evidence of a dated tree, not navigation.
 
-**ACCEPTANCE.** Every criterion measured at the production mount point, a number or hit test with a threshold, **proven to fail on today's tree with the number recorded**, and paired with a negative control. Plus the five stateful dimensions: semantic identity, transition trace, action outcome, resource ownership, negative-control mutation. **Plus the tenth condition: an instrument this phase did not repair.** Class names and call counts are **banned** — every 1.3.1 criterion was that shape and every one passed.
-
-**LANE.** One phase holds `styles.css`. Release only after full recapture **and a human looking at the PNGs**.
-
 **TRAPS.** A pipe makes `$?` the pipe's status — this hid three failures in one session; use `cmd >log 2>&1; echo $?`. `validate.sh` needs the hub cwd and a fresh `dist`.
-
-**DONE MEANS** the numbers moved from their recorded failing values, the negative controls hold, **every harness number agrees with `009`'s live number or is listed uncorroborated with a reason**, both named exit criteria are recorded for `001` and `003`, and the operator confirms on device.
+<!-- /ANCHOR:log -->

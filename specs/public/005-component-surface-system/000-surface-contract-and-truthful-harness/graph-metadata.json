@@ -21,7 +21,8 @@
       "migration order",
       "compatibility gate",
       "000 surface contract tasks",
-      "000 surface contract checklist"
+      "acceptance criteria",
+      "closure gate"
     ],
     "key_topics": [
       "surface",
@@ -38,12 +39,28 @@
       "order"
     ],
     "importance_tier": "critical",
-    "status": "planned",
+    "status": "in_progress",
     "key_files": [
       "spec.md",
       "plan.md",
       "tasks.md",
-      "checklist.md"
+      "acceptance-criteria.md",
+      "goal.md",
+      "implementation-summary.md",
+      "checklist.md",
+      "tools/live/guard-inverted-assertions.mjs",
+      "tools/screenshots/scan-pinned-values.mjs",
+      "tools/live/evidence.mjs",
+      "screenshots/manifest.json",
+      "tools/lane/css-lane.json",
+      "src/views/overlay-stack.ts",
+      "tools/screenshots/runtime-vars.css",
+      ".storybook/preview.ts",
+      "tools/storybook/verify-placement.mjs",
+      "src/views/interaction-scope.ts",
+      "src/views/popover-auto-close.ts",
+      "src/views/owned-menu.ts",
+      "src/views/popover-position.ts"
     ],
     "entities": [
       {
@@ -65,9 +82,105 @@
         "source": "derived"
       },
       {
+        "name": "acceptance-criteria.md",
+        "kind": "doc",
+        "path": "acceptance-criteria.md",
+        "source": "derived"
+      },
+      {
+        "name": "goal.md",
+        "kind": "doc",
+        "path": "goal.md",
+        "source": "derived"
+      },
+      {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
         "name": "checklist.md",
         "kind": "doc",
         "path": "checklist.md",
+        "source": "derived"
+      },
+      {
+        "name": "guard-inverted-assertions.mjs",
+        "kind": "file",
+        "path": "tools/live/guard-inverted-assertions.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "scan-pinned-values.mjs",
+        "kind": "file",
+        "path": "tools/screenshots/scan-pinned-values.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "evidence.mjs",
+        "kind": "file",
+        "path": "tools/live/evidence.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "manifest.json",
+        "kind": "config",
+        "path": "screenshots/manifest.json",
+        "source": "derived"
+      },
+      {
+        "name": "css-lane.json",
+        "kind": "config",
+        "path": "tools/lane/css-lane.json",
+        "source": "derived"
+      },
+      {
+        "name": "overlay-stack.ts",
+        "kind": "code",
+        "path": "src/views/overlay-stack.ts",
+        "source": "derived"
+      },
+      {
+        "name": "runtime-vars.css",
+        "kind": "file",
+        "path": "tools/screenshots/runtime-vars.css",
+        "source": "derived"
+      },
+      {
+        "name": "preview.ts",
+        "kind": "code",
+        "path": ".storybook/preview.ts",
+        "source": "derived"
+      },
+      {
+        "name": "verify-placement.mjs",
+        "kind": "file",
+        "path": "tools/storybook/verify-placement.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "interaction-scope.ts",
+        "kind": "code",
+        "path": "src/views/interaction-scope.ts",
+        "source": "derived"
+      },
+      {
+        "name": "popover-auto-close.ts",
+        "kind": "code",
+        "path": "src/views/popover-auto-close.ts",
+        "source": "derived"
+      },
+      {
+        "name": "owned-menu.ts",
+        "kind": "code",
+        "path": "src/views/owned-menu.ts",
+        "source": "derived"
+      },
+      {
+        "name": "popover-position.ts",
+        "kind": "code",
+        "path": "src/views/popover-position.ts",
         "source": "derived"
       },
       {
@@ -93,109 +206,28 @@
         "kind": "proper_noun",
         "path": "spec.md",
         "source": "derived"
-      },
-      {
-        "name": "Critical Dependencies",
-        "kind": "proper_noun",
-        "path": "spec.md",
-        "source": "derived"
-      },
-      {
-        "name": "Spec Folder",
-        "kind": "proper_noun",
-        "path": "spec.md",
-        "source": "derived"
-      },
-      {
-        "name": "Implementation Plan",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
-      },
-      {
-        "name": "Dependency Matrix",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
-      },
-      {
-        "name": "Depends On",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
-      },
-      {
-        "name": "Total Critical Path",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
-      },
-      {
-        "name": "Task Breakdown",
-        "kind": "proper_noun",
-        "path": "tasks.md",
-        "source": "derived"
-      },
-      {
-        "name": "evidence",
-        "kind": "key_phrase",
-        "path": "tasks.md",
-        "source": "derived"
-      },
-      {
-        "name": "a",
-        "kind": "key_phrase",
-        "path": "tasks.md",
-        "source": "derived"
-      },
-      {
-        "name": "class",
-        "kind": "key_phrase",
-        "path": "tasks.md",
-        "source": "derived"
-      },
-      {
-        "name": "Verification Checklist",
-        "kind": "proper_noun",
-        "path": "checklist.md",
-        "source": "derived"
-      },
-      {
-        "name": "Negative Controls",
-        "kind": "proper_noun",
-        "path": "checklist.md",
-        "source": "derived"
-      },
-      {
-        "name": "the",
-        "kind": "key_phrase",
-        "path": "checklist.md",
-        "source": "derived"
-      },
-      {
-        "name": "an",
-        "kind": "key_phrase",
-        "path": "checklist.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "Four of the program's defects are one bug wearing different clothes: a surface's appearance is",
     "created_at": "2026-08-29T12:29:43.455Z",
-    "last_save_at": "2026-08-29T14:37:07.699Z",
+    "last_save_at": "2026-08-30T17:16:03.762Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
       "spec.md",
       "plan.md",
       "tasks.md",
-      "checklist.md"
+      "acceptance-criteria.md",
+      "goal.md",
+      "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:ee5883381ab3b42d1d88d83eb418f84d2b3a71b4100e6f440b5ae06dd9ed8e3f",
+    "source_fingerprint": "sha256:b1e746da0d9f88181c3dd5b5e6abe249151c44cc16634763739f612975d27843",
+    "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "fc10348686ccfcf34d44f3ca1f7e466a23e221a353c6b6a63c80d2072973828d",
-      "plan.md": "593cee0b9efbd1ef7cb58cfb5636510cb905a898c4effea28410c09bd4337417",
-      "tasks.md": "da9429c3eb4cda23571d4416d26c3bce72279c69459dc7bccc887006463004f7",
-      "checklist.md": "bd1c720abbaab33c8768f523a9e84e894be451587281279ea2a3e8133262c999"
+      "spec.md": "de92bf226bb631180114b868f1dce547ef0b37d5a597842221214bba9207c187",
+      "plan.md": "5a37dccf04488bdd70c23592f9e2c12218b7b88e703178ab8a7c891e78a64d04",
+      "tasks.md": "23b50cda0e3d77f6e3d7c6aca8fed5cf0db1d251793294627d1d397ab58bb90d",
+      "implementation-summary.md": "0f0fdf5d3b9caf79665654e048b3883955f7e4892dc8d9fb484985b6017970e5"
     },
     "last_active_child_id": null,
     "last_active_at": null
