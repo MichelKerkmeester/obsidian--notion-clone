@@ -11,8 +11,8 @@ _memory:
     packet_pointer: "public/005-component-surface-system/011-mobile-menu-presentation"
     last_updated_at: "2026-08-30T17:45:00Z"
     last_updated_by: "goal-authoring"
-    recent_action: "Goal authored after shipping; before-numbers taken from a detached worktree"
-    next_safe_action: "Operator opens the column menu on the phone and checks it is a sheet"
+    recent_action: "10 criteria audited vs captured f64dd87 run; 7 ticked with numbers, band clause red"
+    next_safe_action: "Rewrite the band clause to AC-4 threshold; add a shared-constant band parity check"
     blockers: []
     key_files:
       - "spec.md"
@@ -22,9 +22,10 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-011-goal"
       parent_session_id: null
-    completion_pct: 90
+    completion_pct: 70
     open_questions:
       - "The re-key moves add-view and calendar captures; design question, not a defect"
+      - "Should the menu sheet's 44px band and the record sheet's 32px band be one constant"
     answered_questions: []
 ---
 # Goal: Mobile Menu Presentation
@@ -64,26 +65,107 @@ predicate. Not a styling gap — a fork that was never wired.
 <!-- ANCHOR:completion -->
 ## 2. COMPLETION CRITERIA
 
-- [ ] A phone menu docks to the floor: `|bottom − innerHeight| ≤ 1`. Was 876 against an 844 viewport.
-- [ ] A phone menu spans the full width. Was 220 against 390.
-- [ ] A 19-row menu is capped and **scrolls** rather than grows: height ≤ 0.9 × innerHeight,
+A ticked criterion carries the harness check that closed it and that check's measured number, quoted
+from the single run captured against a clean tree at `f64dd87` — `verify-placement: 220/224 geometry
+checks passed, 4 red for a declared reason`. An unticked criterion carries the check that would
+settle it and **no number**, because none ran.
+
+- [x] A phone menu docks to the floor: `|bottom − innerHeight| ≤ 1`. Was 876 against an 844 viewport.
+      → *a phone menu docks to the bottom of the screen instead of opening at the point*: `menu
+      bottom=844 viewport=844; opened at y=90 with 19 rows`.
+- [x] A phone menu spans the full width. Was 220 against 390.
+      → *a phone menu spans the full width instead of the menu's own 220-320px*: `width=390
+      viewport=390 (the anchored menu is 220..320)`.
+- [x] A 19-row menu is capped and **scrolls** rather than grows: height ≤ 0.9 × innerHeight,
       `top ≥ −1`, `scrollHeight > clientHeight`. Was 872 tall against a 760 cap, content 870 visible
       870 — it grew.
-- [ ] The backdrop takes the tap, read from `document.elementFromPoint` rather than from the element.
+      → *a 19-row phone menu is capped at the sheet ceiling and scrolls inside it*: `height=760
+      cap=760 top=84 content=898 visible=759 (unclamped these rows measure 836px, past a 844px
+      screen)`. All three clauses: capped at the ceiling, `top=84`, and content 898 against a visible
+      759 — it scrolls.
+- [x] The backdrop takes the tap, read from `document.elementFromPoint` rather than from the element.
       An inert backdrop is present in the tree and absent from the hit test, and only the hit test is
       the behaviour.
-- [ ] The backdrop arrives with the menu **and** leaves with it. Asserting only the second passes
+      → *the backdrop over a menu sheet takes the tap rather than passing it to the table*:
+      `backdrop=present pointer-events=auto; the document paints db-mobile-sheet-scrim above the
+      sheet`. The second clause is the one that matters and it is the one measured: the reading is
+      what the *document* resolves at the point, not what the element declares about itself.
+- [x] The backdrop arrives with the menu **and** leaves with it. Asserting only the second passes
       trivially on a build that never draws one.
+      → *the backdrop arrives with the menu and leaves with it*: `while open=true after close=false
+      menu still mounted=false`. Both directions in one check, which is what closes the trivial pass.
 - [ ] The handle dismisses past the shipped 96px threshold and springs back below it, and its hit
       band matches the record sheet's 32px. The band clause is owed.
-- [ ] Every sheet menu row is built by `createMenuRow` and lays out identically outside the owned
+      **Two clauses met.** → *dragging a menu sheet's handle down past the threshold dismisses it*:
+      `dragged 140px (threshold 96): menu still mounted=false backdrop=gone`. → *a short drag on the
+      handle springs back instead of dismissing*: `dragged 40px (threshold 96): menu still
+      mounted=true backdrop=present`.
+      **Finding — the band clause, as worded here, would fail a correct implementation.** The band is
+      no longer unmeasured. *A menu sheet's grab band is a thumb-sized target and takes no row with
+      it* reports `band 44px (14 above the bar + 29 below + the centre pixel; want >= 44), reaching
+      120px sideways=true; the band ends 44px from the sheet's top edge and the first row starts at
+      47px, 0 of 19 rows answered by the band`. The record sheet's own band measures 32px — *the grab
+      band takes all the chrome above the header*: `band answers presses over y=1..32 of the sheet =
+      32px`. 44 is not 32, so "matches the record sheet's 32px" is red on a menu sheet that correctly
+      clears the 44px thumb floor `010` D3 cites. `acceptance-criteria.md` §AC-4 never said "matches":
+      it asks for a band "at least as tall as the record sheet's own — measured 32px there", which
+      44px satisfies. **The goal line is the defective artefact here, not the implementation** — the
+      same shape `010` D5 names, and the second time this program has found it.
+      **The check to build.** Restate the clause at AC-4's real threshold (menu-sheet band ≥
+      record-sheet band, both read by walking `document.elementFromPoint` down the sheet's top edge
+      until the hit stops being the handle), then add the check that is genuinely absent: assert both
+      surfaces' bands against **one shared constant** rather than two independent literals, so that
+      changing either surface's chrome either moves both or goes red. Pair it with a control that
+      shrinks the menu sheet's band below the record sheet's and requires red.
+- [x] Every sheet menu row is built by `createMenuRow` and lays out identically outside the owned
       menu's shell. Label left edges were `[25, 125, 252, 25]`, a 227px spread; and `[16, 101, 16]`,
       an 85px spread, in a panel sheet.
-- [ ] Desktop opens at its point, ≤ 320px, no sheet class, no handle, no backdrop anywhere in the
+      → *rows in a sheet menu share one left edge, icon or no icon*: `label left edges=[45, 45, 45]
+      spread=0px`. → *a shared menu row lays itself out in any sheet, not only inside the owned menu*:
+      `display=flex text-align=left label left edges=[32, 32, 32] spread=0px`. → *a menu row lays out
+      identically in any sheet*: `owned-menu sheet: min-height 44px, padding 8px 16px 8px 16px, height
+      44px | panel sheet: min-height 44px, padding 8px 16px 8px 16px, height 44px` — identical box
+      metrics across the two containers, which is the "outside the shell" half stated as a number.
+      The control is folded into *utilities rows keep their container's row layout after moving to the
+      shared component*: `a row that lost the class renders inline-block, centred`.
+- [x] Desktop opens at its point, ≤ 320px, no sheet class, no handle, no backdrop anywhere in the
       document.
+      → *a desktop menu still opens at its point and is not a sheet*: `menu=[400,200] asked for
+      [400,200] width=220 bottom=388 viewport=900; sheet class=false backdrop=absent position=fixed`.
+      That covers the point, the 220 ≤ 320 width, the class and the backdrop. It does **not** report
+      the handle, so that clause is settled by reading instead, and it is settled beyond doubt:
+      `src/views/owned-menu.ts:167` gates `applySheetChrome(el, true, …)` behind
+      `isMobileBottomSheet(doc)`, and `src/views/mobile-bottom-sheet.ts:60-68` is the only site in
+      `src/` that *creates* a `.db-mobile-bottom-sheet-handle` — every other occurrence is a
+      `querySelector`. The desktop branch cannot reach the only creator, and `applySheetChrome`
+      removes an existing handle when `isSheet` is false. No handle can exist there.
 - [ ] The five stateful dimensions are covered.
+      **No check exists, and no mapping exists either.** This phase's `acceptance-criteria.md` never
+      names the five dimensions, so not one of its fourteen ACs is assigned to one — unlike `002`,
+      `005` and `008`, whose acceptance documents carry the mapping. Action outcome is incidentally
+      evidenced (*the backdrop arrives with the menu and leaves with it*: `while open=true after
+      close=false menu still mounted=false`); the other four are not. This phase also registers **no
+      standalone negative control at all**: the only one it has is folded into the detail line of
+      *utilities rows keep their container's row layout after moving to the shared component* as `a
+      row that lost the class renders inline-block, centred`, which is not separately reported and so
+      cannot go red on its own.
+      **The check to build.** First the mapping, in `acceptance-criteria.md`: a criterion → dimension
+      table covering all five. Then the three with no measurement on this surface. *Semantic
+      identity*: open the column menu on a named column, re-render the header so its nodes are
+      rebuilt, and assert the menu's rows still act on the original column key rather than on
+      whichever column now occupies that coordinate. *Resource ownership*: open and dismiss a menu
+      sheet ten times, then assert exactly one `.db-mobile-sheet-scrim` in the document while open,
+      zero after the last close, and zero surviving capture-phase `pointerdown` listeners — dismissal
+      has one owner by D2, and a leaked listener is a second one. *Negative-control mutation*: promote
+      the folded control to its own reported line and add one per presentation clause — remove the
+      `isMobileBottomSheet` branch in `showAt` and require the dock, width and cap checks to go red
+      together, which also proves those three are reading the fork and not the stylesheet.
 - [ ] The operator opens the column menu on their phone and gets a sheet, and every sheet's rows
       start on one edge.
+      **Operator criterion. Stays open regardless of the numbers, per D3.** No harness check can close
+      it. The icon defect in the log is the reason to keep it open rather than infer it: `Display
+      width` drew no glyph on a real host and the harness could not see it, because the harness's icon
+      stub draws a placeholder for any id at all.
 <!-- /ANCHOR:completion -->
 
 ---
@@ -93,7 +175,8 @@ predicate. Not a styling gap — a fork that was never wired.
 
 Volatile. Not part of the directive.
 
-**Shipped and verified; not operator-confirmed.**
+**7 of 10 criteria closed against the captured `f64dd87` run; not operator-confirmed. The owed band
+clause is now measured at 44px and that measurement contradicts the clause rather than closing it.**
 
 ### The re-key's blast radius is measured, not assumed
 
@@ -116,11 +199,12 @@ whose icon stub draws a placeholder for any id at all; verified against the bund
 
 | Item | State | Evidence |
 |------|-------|----------|
-| Phone sheet presentation | Shipped, verified | AC-1 to AC-4, before/after from a detached worktree |
-| Dismissal ownership | Shipped, verified | AC-5 to AC-7, real pointer stream |
-| Shared row component | Shipped, verified | AC-10, AC-12, spread 227px → 0 and 85px → 0 |
-| Handle hit band | Owed | Presence asserted; the band is not measured on this surface |
-| Gate | 13 green, 0 red at the time of the run | Within it, placement 48/50 with 2 declared reds |
+| Phone sheet presentation | Shipped, verified | Docks 844/844, spans 390/390, capped 760 with content 898 |
+| Dismissal ownership | Shipped, verified | Dismiss at 140px, spring back at 40px, against a 96px threshold |
+| Shared row component | Shipped, verified | Spread 0px in both containers; identical 44px/8px 16px box metrics |
+| Handle hit band | **Measured, and the criterion is wrong** | Band is 44px against a record sheet's 32px; AC-4 asks ≥, the goal line says "matches" |
+| Five stateful dimensions | **Claimed, unmapped** | No dimension mapping in `acceptance-criteria.md`; no standalone control on this surface |
+| Gate | Not re-run | The captured run is `verify-placement` alone; a shared-gate number against a four-writer tree describes no tree |
 | Operator confirmation | Open | — |
 
 ### Deviations and findings
@@ -128,4 +212,6 @@ whose icon stub draws a placeholder for any id at all; verified against the bund
 | Item | Note |
 |------|------|
 | The green gate is a reading of one moment | Three phases wrote to this tree during the work and the CSS lane changed hands twice. What is durable is the attribution: no capture cites any `src/` file this phase touched |
+| The owed band clause resolved backwards | It was owed because nobody had measured it. Measuring it did not close it — it showed the threshold was the wrong one. A clause that demands parity at 32px forbids the 44px thumb floor the rest of the program asserts, so meeting it would have been the regression |
+| Desktop has no handle for a structural reason, not a measured one | The desktop check never reports the handle. `owned-menu.ts:167` is what settles it: `applySheetChrome` is the sole creator of the handle and the desktop branch never calls it. Worth keeping as a reading, because a check here would only ever confirm an unreachable branch |
 <!-- /ANCHOR:log -->
