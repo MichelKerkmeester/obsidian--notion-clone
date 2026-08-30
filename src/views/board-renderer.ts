@@ -152,11 +152,27 @@ export class BoardRenderer {
   private boundBoardDragOver?: (event: DragEvent) => void;
   private emptyStateRenderer = new EmptyStateRenderer();
   private rovingController = new CardRovingController();
+  /**
+   * Whether this surface takes touch input, answered once per render.
+   *
+   * Every column and every card asks, and the answer cannot change part-way through a synchronous
+   * render: the platform flags are constant, the pointer type is constant, and the pane cannot be
+   * resized while the loop that fills it is still running. Asking per card made it a forced layout
+   * inside a loop appending to the same container, so the browser reflowed the tree built so far
+   * once per card and the total became superlinear in card count.
+   *
+   * It is measured on the container, not on `.db-board`. That element is `width: max-content`, so
+   * it grows as each column is appended and a width read from it is a different number on the
+   * first card than on the last — there is no single value to hoist. The container is the pane,
+   * which is the width the touch threshold was written about.
+   */
+  private touchMode = false;
 
   constructor(private app: App, private actions: BoardRendererActions) {}
 
   render(container: HTMLElement, config: ViewConfig, groups: BoardGroup[], groupField: string, emptyState?: EmptyStateOptions): void {
     this.clear(container);
+    this.touchMode = isTouchDevice(container);
     // 幂等清理：拖拽中途若触发 re-render 导致 board DOM 被替换，dragend 可能不再触发，
     // 这里兜底移除残留的浮动列名 preview 与 dragover 监听，避免孤儿元素与监听器泄漏。
     this.endBoardDragPreview();
@@ -513,7 +529,7 @@ export class BoardRenderer {
     const header = column.createDiv({ cls: "db-board-column-header" });
     const columnCollapsed = Boolean(this.actions.isGroupCollapsed?.(groupField, group.key));
     column.toggleClass("is-collapsed", columnCollapsed);
-    if (this.canReorderGroups() && !isTouchDevice(board)) {
+    if (this.canReorderGroups() && !this.touchMode) {
       header.draggable = true;
       header.addEventListener("dragstart", (event) => {
         event.dataTransfer?.setData(GROUP_MIME, group.key);
@@ -551,7 +567,7 @@ export class BoardRenderer {
       this.actions.renderGroupSummaries?.(summaries, group.rows, config);
     }
     this.renderBoardGroupOptions(headerText, config, groupField, group);
-    if (!isTouchDevice(board)) {
+    if (!this.touchMode) {
       const resizeHandle = column.createDiv({ cls: "db-board-column-resize-handle" });
       resizeHandle.addEventListener("mousedown", (event) => this.startColumnResize(event, board, config));
     }
@@ -767,7 +783,7 @@ export class BoardRenderer {
         ...(subgroupField && subgroupKey != null ? [{ field: subgroupField, key: subgroupKey }] : []),
       ],
     });
-    if (!this.actions.isReadOnly && !isTouchDevice(this.boardEl)) {
+    if (!this.actions.isReadOnly && !this.touchMode) {
       card.draggable = true;
       card.addEventListener("dragstart", (event) => {
         if (isHTMLElement(event.target) && event.target.closest("input, select, textarea, button")) {

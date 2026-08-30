@@ -121,12 +121,23 @@ export class GalleryRenderer {
   private draggingPaths: string[] = [];
   private emptyStateRenderer = new EmptyStateRenderer();
   private rovingController = new CardRovingController();
+  /**
+   * Whether this surface takes touch input, answered once per render.
+   *
+   * Three separate decisions per card asked this — the resize handle, the grouped drag setup and
+   * the reorder drag setup — and answering it reads the container's box, which forces the browser
+   * to lay out every card appended so far. Inside a loop appending to that same container the
+   * total becomes superlinear in card count. The answer cannot change part-way through a
+   * synchronous render, so it is taken once, off the same container the per-card calls used.
+   */
+  private touchMode = false;
 
   constructor(private app: App, private actions: GalleryRendererActions) {}
 
   render(container: HTMLElement, config: ViewConfig, rows: RowData[], emptyState?: EmptyStateOptions): void {
     this.clear(container);
     this.container = container;
+    this.touchMode = isTouchDevice(container);
     container.style.setProperty("--db-gallery-card-width", `${this.getCardSize(config)}px`);
     this.rowByPath = new Map(rows.map((row) => [row.file.path, row]));
     if (rows.length > 0) this.renderTotalHeader(container, rows);
@@ -148,6 +159,7 @@ export class GalleryRenderer {
   ): void {
     this.clear(container);
     this.container = container;
+    this.touchMode = isTouchDevice(container);
     container.style.setProperty("--db-gallery-card-width", `${this.getCardSize(config)}px`);
     this.rowByPath = new Map(groups.flatMap((group) => group.rows.map((row) => [row.file.path, row] as const)));
     const grouped = container.createDiv({ cls: "db-gallery-grouped" });
@@ -274,7 +286,7 @@ export class GalleryRenderer {
       if (this.canManualReorder(config)) this.setupReorderDrag(card, config, row, allRows, groupField, groupKey);
       else this.setupGroupedCardDrag(card, row, groupField, groupKey);
     }
-    if (!isTouchDevice(this.container)) {
+    if (!this.touchMode) {
       const resizeHandle = card.createDiv({ cls: "db-gallery-card-resize-handle" });
       resizeHandle.addEventListener("mousedown", (event) => this.startCardResize(event, config));
       resizeHandle.addEventListener("click", (event) => {
@@ -420,7 +432,7 @@ export class GalleryRenderer {
 
   private setupGroupedCardDrag(card: HTMLElement, row: RowData, groupField?: string, groupKey?: string): void {
     if (!groupField || groupKey == null || this.actions.isReadOnly || !this.actions.moveRowsToGroup) return;
-    if (isTouchDevice(this.container)) return;
+    if (this.touchMode) return;
     card.draggable = true;
     card.addEventListener("dragstart", (event) => {
       if (isHTMLElement(event.target) && event.target.closest("input, select, textarea, button, .db-gallery-card-resize-handle")) {
@@ -445,7 +457,7 @@ export class GalleryRenderer {
   }
 
   private setupReorderDrag(card: HTMLElement, config: ViewConfig, row: RowData, rows: RowData[], groupField?: string, groupKey?: string): void {
-    if (this.actions.isReadOnly || isTouchDevice(this.container) || !this.canManualReorder(config)) return;
+    if (this.actions.isReadOnly || this.touchMode || !this.canManualReorder(config)) return;
     card.draggable = true;
     card.addEventListener("dragstart", (event) => {
       if (isHTMLElement(event.target) && event.target.closest("input, select, textarea, button, .db-gallery-card-resize-handle")) {
