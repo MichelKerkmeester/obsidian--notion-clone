@@ -179,6 +179,16 @@ A disabled option is dimmed and carries a tooltip rather than inline explanatory
 
 Sources: `src/views/dropdown-field.ts`
 
+### Base import confirm modal
+
+The include box in the base-import column table. Same field role as every other modal box, mounted in a centred table cell.
+
+| dark | light |
+|---|---|
+| ![panel-base-import-modal dark](components/panel-base-import-modal-mobile-dark.png) | ![panel-base-import-modal light](components/panel-base-import-modal-mobile-light.png) |
+
+Sources: `src/views/modals/base-import-confirm-modal.ts`
+
 ### Computed field cleanup modal
 
 The one checkbox family that mounts under the modal root instead of the view container. Its box must match every other field-role box.
@@ -188,6 +198,16 @@ The one checkbox family that mounts under the modal root instead of the view con
 | ![panel-computed-cleanup-modal dark](components/panel-computed-cleanup-modal-mobile-dark.png) | ![panel-computed-cleanup-modal light](components/panel-computed-cleanup-modal-mobile-light.png) |
 
 Sources: `src/views/modals/computed-frontmatter-cleanup-modal.ts`
+
+### Invalid time events modal
+
+The select box in the invalid-events grid. It carries placement of its own — centred in the 28px lead column — on top of the shared field-role appearance.
+
+| dark | light |
+|---|---|
+| ![panel-invalid-events-modal dark](components/panel-invalid-events-modal-mobile-dark.png) | ![panel-invalid-events-modal light](components/panel-invalid-events-modal-mobile-light.png) |
+
+Sources: `src/views/modals/invalid-time-events-modal.ts`
 
 ### Column header affordances
 
