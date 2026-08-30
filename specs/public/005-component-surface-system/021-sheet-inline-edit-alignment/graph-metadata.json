@@ -45,6 +45,7 @@
       "plan.md",
       "tasks.md",
       "acceptance-criteria.md",
+      "goal.md",
       "implementation-summary.md",
       "tools/storybook/verify-placement.mjs",
       "src/views/list-renderer.ts",
@@ -73,6 +74,12 @@
         "name": "acceptance-criteria.md",
         "kind": "doc",
         "path": "acceptance-criteria.md",
+        "source": "derived"
+      },
+      {
+        "name": "goal.md",
+        "kind": "doc",
+        "path": "goal.md",
         "source": "derived"
       },
       {
@@ -188,17 +195,11 @@
         "kind": "key_phrase",
         "path": "tasks.md",
         "source": "derived"
-      },
-      {
-        "name": "one",
-        "kind": "key_phrase",
-        "path": "tasks.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "Tapping a value in the phone record sheet opens an editor 6.6px below the line the value sat on, and",
     "created_at": "2026-08-30T15:21:37.027Z",
-    "last_save_at": "2026-08-30T17:56:51.716Z",
+    "last_save_at": "2026-08-30T18:54:57.126Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -206,9 +207,10 @@
       "plan.md",
       "tasks.md",
       "acceptance-criteria.md",
+      "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:b4361b8fe3ba495ed35a7c29a463e55aa4e2715a774b10bb7fd28008edb59f5a",
+    "source_fingerprint": "sha256:e9b6eddb42e942246c726a9ee992aa4dd7ea9004a13fb4cd66f70f742f358ed2",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "7dadc8fcfbd5095c19bf69383e94c6e3c6ec5b29f2f3c7f9a6ab3d402e1241ad",

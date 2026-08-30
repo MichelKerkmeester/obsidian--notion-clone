@@ -45,6 +45,7 @@
       "plan.md",
       "tasks.md",
       "acceptance-criteria.md",
+      "goal.md",
       "implementation-summary.md",
       "tools/storybook/verify-placement.mjs",
       "tools/live/evidence.mjs",
@@ -75,6 +76,12 @@
         "name": "acceptance-criteria.md",
         "kind": "doc",
         "path": "acceptance-criteria.md",
+        "source": "derived"
+      },
+      {
+        "name": "goal.md",
+        "kind": "doc",
+        "path": "goal.md",
         "source": "derived"
       },
       {
@@ -190,17 +197,11 @@
         "kind": "key_phrase",
         "path": "tasks.md",
         "source": "derived"
-      },
-      {
-        "name": "the",
-        "kind": "key_phrase",
-        "path": "tasks.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "Six of seven verifier findings were instruments that could not fail for the reason they claimed to",
     "created_at": "2026-08-30T15:15:27.011Z",
-    "last_save_at": "2026-08-30T15:15:27.011Z",
+    "last_save_at": "2026-08-30T18:54:56.841Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -208,9 +209,10 @@
       "plan.md",
       "tasks.md",
       "acceptance-criteria.md",
+      "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:bd4a0db86440d78357d0f9a46e26f744696302f80eeda492bfe72628163524a8",
+    "source_fingerprint": "sha256:563e992143b225beac17014fddeca1f6fa8cc431d487db967e46a842bbdd5676",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "52d8063b71127e433cb3fa4cb6ae31aa6db5fd6de8561637d54db350764cd3a7",

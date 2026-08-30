@@ -32,7 +32,8 @@
     "public/005-component-surface-system/025-story-coverage-blindness",
     "public/005-component-surface-system/026-production-render-assertions",
     "public/005-component-surface-system/028-remaining-freezes",
-    "public/005-component-surface-system/027-sheet-menu-grammar-and-motion"
+    "public/005-component-surface-system/027-sheet-menu-grammar-and-motion",
+    "public/005-component-surface-system/029-numeric-coercion-parity"
   ],
   "manual": {
     "depends_on": [],
@@ -191,17 +192,17 @@
     ],
     "causal_summary": "Phase parent for the program that gives floating surfaces, sheets, checkboxes and content rows one architecture, one placement authority, and acceptance criteria measured where users actually see them.",
     "created_at": "2026-08-29T12:53:52.104Z",
-    "last_save_at": "2026-08-30T18:44:10.023Z",
+    "last_save_at": "2026-08-30T18:58:32.966Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
       "spec.md",
       "goal.md"
     ],
-    "source_fingerprint": "sha256:954449a622527a3a1da3f51f0449cc3f07aea316480a1d082f8ecb4b078acf97",
+    "source_fingerprint": "sha256:a299730eaa1de610d3ca6254d55f6d6e24765cbe61f46537399ceed71df26483",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "b3e251d8cba97b12d458d1722f57285108f77af9f51267de2d21ea81d14ed5dc"
+      "spec.md": "aebd4a79d6d92c8cc7eb2b858faf73da854349a7a54f7ac74f6917c41efdc3a9"
     },
     "last_active_child_id": "public/005-component-surface-system/006-record-open-target",
     "last_active_at": null

@@ -154,7 +154,7 @@ same specificity, nothing in-container moves — took the unrecoverable count **
 | Reports with an owning phase | Done | 16 of 16; `roadmap.md` §4 |
 | Reports shipped | In Progress | 14 of 16 |
 | Reports operator-confirmed | In Progress | 1 of 16, as an accepted shortfall |
-| Every phase has a `goal.md` | **Not done** | Four do not: `020`, `021`, `023`, `025`. This row claimed `000`-`026` complete and an audit counted |
+| Every phase has a `goal.md` | Done | The four that did not — `020`, `021`, `023`, `025` — were written after an audit counted, having been claimed complete twice |
 | Report 1, the sheet drag | Fixed, awaiting device | The panel's render destroyed the grab bar; a 60px drag now moves 60.0px after a re-render, was 0.0px |
 | Non-table views on device | Broken | List, board and calendar freeze; `028` |
 | Gate checks constructing a renderer | 1 of 16 | `026` shipped as `1bac3c2`. `render-assertion-harness.ts` builds `new ListRenderer` and `new TableRenderer`, green in the gate, both renderer sources fingerprinted as declared inputs. Four view types still have none |

@@ -19,7 +19,10 @@
       "023 note body plan",
       "display only versus editable",
       "frontmatter round trip",
-      "023 note body tasks"
+      "023 note body tasks",
+      "023 goal",
+      "record note body goal",
+      "note body directive"
     ],
     "key_topics": [
       "record",
@@ -41,6 +44,7 @@
       "spec.md",
       "plan.md",
       "tasks.md",
+      "goal.md",
       "device-note-body-in-obsidian.png"
     ],
     "entities": [
@@ -60,6 +64,12 @@
         "name": "tasks.md",
         "kind": "doc",
         "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "goal.md",
+        "kind": "doc",
+        "path": "goal.md",
         "source": "derived"
       },
       {
@@ -151,19 +161,44 @@
         "kind": "key_phrase",
         "path": "tasks.md",
         "source": "derived"
+      },
+      {
+        "name": "a",
+        "kind": "key_phrase",
+        "path": "goal.md",
+        "source": "derived"
+      },
+      {
+        "name": "no",
+        "kind": "key_phrase",
+        "path": "goal.md",
+        "source": "derived"
+      },
+      {
+        "name": "1. DURABLE DIRECTIVE",
+        "kind": "heading",
+        "path": "goal.md",
+        "source": "derived"
+      },
+      {
+        "name": "Decisions",
+        "kind": "heading",
+        "path": "goal.md",
+        "source": "derived"
       }
     ],
     "causal_summary": "Every row is a markdown note whose frontmatter the plugin renders as properties, while the note's actual body is never surfaced anywhere in the plugin.",
     "created_at": "2026-08-30T15:07:29.613Z",
-    "last_save_at": "2026-08-30T15:07:29.613Z",
+    "last_save_at": "2026-08-30T18:54:57.416Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
       "spec.md",
       "plan.md",
-      "tasks.md"
+      "tasks.md",
+      "goal.md"
     ],
-    "source_fingerprint": "sha256:b6127a80c638705a3c605c249cc76df54c969395b65cd0c60df3c7dc572947db",
+    "source_fingerprint": "sha256:8b3c7f4fb0dc84e0d24fe499a035690879fcb7cfcffc0f73130f14aefd9bda87",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "f22e83b9f18a4e7ea3d54b5c7c91a3596f4d6b675bf8d04caf152a2aa4c18f15",
