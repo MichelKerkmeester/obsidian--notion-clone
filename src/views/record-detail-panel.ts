@@ -41,7 +41,7 @@ import { positionToolbarPopover } from "./popover-position";
 import { renderDelayedExternalLink } from "./cell-renderer";
 import { renderCardField } from "./card-field-renderer";
 import { createCheckbox } from "./checkbox";
-import { attachSheetDragToDismiss } from "./mobile-bottom-sheet";
+import { applySheetChrome, attachSheetDragToDismiss } from "./mobile-bottom-sheet";
 import { trapFocus } from "./interaction-scope";
 
 /**
@@ -166,6 +166,10 @@ export function openRecordDetailPanel(opts: OpenRecordDetailOptions): void {
     closed = true;
     removeFocusTrap();
     removeSheetDrag();
+    // Unwind the sheet before dropping the node. The backdrop is a body-level sibling, not a child,
+    // so removing the panel alone leaves the whole app dimmed with nothing on top of it — the
+    // chrome has to be taken off the way it was put on.
+    applySheetChrome(panel, false);
     panel.remove();
     window.activeDocument.removeEventListener("pointerdown", onOutside, true);
     window.activeDocument.removeEventListener("keydown", onKeydown, true);
@@ -198,6 +202,15 @@ export function openRecordDetailPanel(opts: OpenRecordDetailOptions): void {
   // 渲染面板内容（title + fields + footer）；抽成函数以支持 re-render 后局部刷新（常驻编辑）
   const renderContent = (r: RowData): void => {
     panel.empty();
+    // Put the sheet's grab bar back, because emptying the panel just threw it away.
+    //
+    // The bar is chrome, added as a child of this panel by the sheet module, and this function
+    // owns the panel's children — so a refresh destroys a node it did not create and cannot see.
+    // Every view re-render calls this, which means a metadata resolve or a single field edit was
+    // enough to leave the sheet with no bar to grab and no visible affordance to aim at.
+    // Re-applying is idempotent and only fires once the surface is already a sheet, so the first
+    // render and every desktop render are untouched.
+    if (panel.hasClass("db-mobile-bottom-sheet")) applySheetChrome(panel, true);
     const explicitTitleField = getRecordEventTitleField(config);
     const title = resolveTitleFieldDisplay(r, config, explicitTitleField);
     panel.setAttribute("aria-label", title.text || r.file.basename);

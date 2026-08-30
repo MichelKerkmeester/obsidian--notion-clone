@@ -16,6 +16,18 @@
 // 1. SHEET CHROME
 // ───────────────────────────────────────────────────────────────────
 
+export interface SheetChromeOptions {
+  /**
+   * Let the backdrop take the tap instead of passing it through to the app underneath.
+   *
+   * The backdrop is inert by default because the panels that introduced it own no outside-press
+   * dismissal — making it solid there would leave them with no way to close. A surface that DOES
+   * dismiss on an outside press wants the opposite: inert, the tap reaches the table beneath and
+   * edits a cell on the way out, so dismissing a menu also does something the user did not ask for.
+   */
+  scrimCapturesPointer?: boolean;
+}
+
 /**
  * Apply or remove the phone bottom-sheet chrome: the sheet class and the grab handle.
  *
@@ -28,7 +40,11 @@
  * Idempotent: re-applying will not stack handles, and turning the sheet off removes the handle it
  * added rather than leaving an orphan behind.
  */
-export function applySheetChrome(panel: HTMLElement, isSheet: boolean): void {
+export function applySheetChrome(
+  panel: HTMLElement,
+  isSheet: boolean,
+  options: SheetChromeOptions = {},
+): void {
   panel.toggleClass("db-mobile-bottom-sheet", isSheet);
   // The portal is back on, and it is the only mechanism that works.
   //
@@ -40,7 +56,7 @@ export function applySheetChrome(panel: HTMLElement, isSheet: boolean): void {
   //
   // The first attempt at this shipped broken because the sheet left the subtree its rules are
   // written against. It now carries that root with it, so the rules still match.
-  setSheetMount(panel, isSheet);
+  setSheetMount(panel, isSheet, options);
   const existingHandle = panel.querySelector<HTMLElement>(".db-mobile-bottom-sheet-handle");
   if (isSheet && !existingHandle) {
     const handle = panel.ownerDocument.createElement("div");
@@ -76,12 +92,20 @@ const originalMount = new WeakMap<HTMLElement, { parent: HTMLElement; before: Ch
  * close would reorder it against its siblings, and the sheet's owner may well be relying on that
  * order for anything from focus sequence to a nth-child rule.
  */
-function setSheetMount(panel: HTMLElement, isSheet: boolean): void {
+function setSheetMount(panel: HTMLElement, isSheet: boolean, options: SheetChromeOptions = {}): void {
   const doc = panel.ownerDocument;
   const remembered = originalMount.get(panel);
 
   if (isSheet) {
-    if (panel.parentElement === doc.body) return;
+    setScrim(doc, true, options.scrimCapturesPointer);
+    // A surface built on the body is already where a sheet has to be, so there is nothing to move
+    // and nothing to remember. It still needs the backdrop, which is why that is settled above
+    // rather than inside the move: an owned menu mounts itself on the body, and returning here
+    // before the backdrop existed left it dimming nothing and leaked the node on the next open.
+    if (panel.parentElement === doc.body) {
+      panel.setCssProps({ "--db-mobile-sheet-bottom": "0px" });
+      return;
+    }
     if (panel.parentElement) {
       originalMount.set(panel, { parent: panel.parentElement, before: panel.nextSibling });
     }
@@ -97,19 +121,6 @@ function setSheetMount(panel: HTMLElement, isSheet: boolean): void {
     // needed. Until that lands, this keeps the portal from costing the sheet its appearance.
     panel.addClass("db-surface");
     panel.addClass("note-database-container");
-    // The dimmed backdrop is a sibling, not a pseudo-element on the sheet.
-    //
-    // It used to be `::before` with `z-index: -1`, which cannot paint behind its own host once that
-    // host establishes a stacking context — and this one does, twice over, from an isolation
-    // property and from the transform its entrance animation applies. The result was a sheet
-    // rendered at 58% grey instead of a white sheet over a dimmed app: the scrim tinted the surface
-    // it was supposed to sit behind.
-    if (!doc.body.querySelector(".db-mobile-sheet-scrim")) {
-      const scrim = doc.createElement("div");
-      scrim.className = "db-mobile-sheet-scrim";
-      scrim.setAttribute("aria-hidden", "true");
-      doc.body.appendChild(scrim);
-    }
     // The sheet covers the navbar rather than sitting above it. The positioner writes this variable
     // in its anchored branch to hold a popover clear of the navbar, which is right for a popover
     // and wrong for a sheet, so the sheet states its own value rather than inheriting that one.
@@ -118,11 +129,14 @@ function setSheetMount(panel: HTMLElement, isSheet: boolean): void {
     return;
   }
 
-  if (!remembered) return;
+  setScrim(doc, false, false);
+  if (!remembered) {
+    panel.style.removeProperty("--db-mobile-sheet-bottom");
+    return;
+  }
   originalMount.delete(panel);
   panel.removeClass("db-surface");
   panel.removeClass("note-database-container");
-  doc.body.querySelector(".db-mobile-sheet-scrim")?.remove();
   panel.style.removeProperty("--db-mobile-sheet-bottom");
   // A view rebuild can destroy the parent while the sheet is open. Putting the node back into a
   // detached tree would hide it with no way to reach it, so it is removed instead — a closed
@@ -132,6 +146,41 @@ function setSheetMount(panel: HTMLElement, isSheet: boolean): void {
     return;
   }
   remembered.parent.insertBefore(panel, remembered.before);
+}
+
+/**
+ * Create or remove the dimmed backdrop that sits behind every open sheet.
+ *
+ * A sibling of the sheet on the body, not a pseudo-element. It used to be `::before` with
+ * `z-index: -1`, which cannot paint behind its own host once that host establishes a stacking
+ * context — and this one does, twice over, from an isolation property and from the transform its
+ * entrance animation applies. The result was a sheet rendered at 58% grey instead of a white sheet
+ * over a dimmed app: the backdrop tinted the surface it was supposed to sit behind.
+ *
+ * One backdrop is shared by however many sheets are open, so it is only taken away once the last
+ * one has gone. Removing it with the first close left the remaining sheet floating on an undimmed
+ * app, which reads as a surface that has lost its modality rather than as a missing rectangle.
+ *
+ * Whether it takes the tap is the caller's to declare, because the two kinds of sheet want opposite
+ * answers and the stylesheet can only state one. Inert is the default and the safer of the two: a
+ * surface with no outside-press dismissal would otherwise have no way to close at all.
+ */
+function setScrim(doc: Document, wanted: boolean, capturesPointer: boolean | undefined): void {
+  const existing = doc.body.querySelector<HTMLElement>(".db-mobile-sheet-scrim");
+  if (wanted) {
+    const scrim = existing ?? doc.createElement("div");
+    if (!existing) {
+      scrim.className = "db-mobile-sheet-scrim";
+      scrim.setAttribute("aria-hidden", "true");
+      doc.body.appendChild(scrim);
+    }
+    // Opt out, not opt in: the stylesheet makes the backdrop modal and a producer that needs a
+    // permeable one says so. The previous default let every sheet leak presses to the view behind.
+    scrim.style.pointerEvents = capturesPointer === false ? "none" : "";
+    return;
+  }
+  if (doc.body.querySelector(".db-mobile-bottom-sheet")) return;
+  existing?.remove();
 }
 
 // ───────────────────────────────────────────────────────────────────
@@ -145,6 +194,20 @@ function setSheetMount(panel: HTMLElement, isSheet: boolean): void {
  * carries `db-mobile-bottom-sheet` and a `db-mobile-bottom-sheet-handle`);
  * the desktop anchored panel has no handle and must never reach here.
  * Returns a disposer that removes the listeners and clears any drag offset.
+ *
+ * The listeners live on the PANEL, not on the grab bar, and that is the whole
+ * reason this gesture survives. The bar is a child of the panel, and the panel's
+ * own content render empties itself — so every view re-render replaced the node
+ * these listeners were bound to and the drag went dead with it, silently, while
+ * still looking correctly wired in the source. A sheet that had been open long
+ * enough for one metadata resolve could no longer be dragged at all, which is
+ * what "it barely works" describes. The panel outlives every rebuild, so binding
+ * there outlives them too.
+ *
+ * The bar still decides where the gesture may START: the press has to land on
+ * the current handle, which is what the full-width band hit-tests as. That is
+ * resolved at pointerdown rather than captured here, because after a rebuild the
+ * handle passed in is a detached node that no press can ever match again.
  */
 export function attachSheetDragToDismiss(panel: HTMLElement, handle: HTMLElement, close: () => void): () => void {
   const DISMISS_PX = 96;
@@ -154,13 +217,16 @@ export function attachSheetDragToDismiss(panel: HTMLElement, handle: HTMLElement
   const reset = (): void => {
     panel.setCssProps({ transition: "", transform: "" });
   };
+  const grabTarget = (): HTMLElement =>
+    panel.querySelector<HTMLElement>(".db-mobile-bottom-sheet-handle") ?? handle;
   const distance = (event: PointerEvent): number => Math.max(0, event.clientY - startY);
   const onDown = (event: PointerEvent): void => {
     if (event.button !== 0 || pointerId !== undefined) return;
+    if (event.target !== grabTarget()) return;
     pointerId = event.pointerId;
     startY = event.clientY;
     panel.setCssProps({ transition: "none" });
-    handle.setPointerCapture?.(event.pointerId);
+    panel.setPointerCapture?.(event.pointerId);
   };
   const onMove = (event: PointerEvent): void => {
     if (event.pointerId !== pointerId) return;
@@ -178,15 +244,15 @@ export function attachSheetDragToDismiss(panel: HTMLElement, handle: HTMLElement
     reset();
   };
 
-  handle.addEventListener("pointerdown", onDown);
-  handle.addEventListener("pointermove", onMove);
-  handle.addEventListener("pointerup", onUp);
-  handle.addEventListener("pointercancel", onUp);
+  panel.addEventListener("pointerdown", onDown);
+  panel.addEventListener("pointermove", onMove);
+  panel.addEventListener("pointerup", onUp);
+  panel.addEventListener("pointercancel", onUp);
   return () => {
-    handle.removeEventListener("pointerdown", onDown);
-    handle.removeEventListener("pointermove", onMove);
-    handle.removeEventListener("pointerup", onUp);
-    handle.removeEventListener("pointercancel", onUp);
+    panel.removeEventListener("pointerdown", onDown);
+    panel.removeEventListener("pointermove", onMove);
+    panel.removeEventListener("pointerup", onUp);
+    panel.removeEventListener("pointercancel", onUp);
     reset();
   };
 }
