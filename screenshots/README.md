@@ -11,7 +11,7 @@ fails when a source file listed under a shot has changed since it was captured.
 
 ### Add view popover
 
-Tiles keep icon and caption inside their own bounds; the duplicate checkbox is not stretched.
+Settings above, actions below, one row grammar for both the seven types and the duplicate.
 
 | dark | light |
 |---|---|
@@ -89,6 +89,36 @@ An option-typed group field renders its key as a colored status badge; a field w
 
 Sources: `src/views/group-label-renderer.ts`, `src/views/table-renderer.ts`, `src/views/summary-renderer.ts`
 
+### Group selection controls
+
+The whole-group selection box from the list, the gallery and a board subgroup. One role, so all three boxes must be the same size and radius.
+
+| dark | light |
+|---|---|
+| ![chrome-group-selection-controls dark](components/chrome-group-selection-controls-mobile-dark.png) | ![chrome-group-selection-controls light](components/chrome-group-selection-controls-mobile-light.png) |
+
+Sources: `src/views/list-renderer.ts`, `src/views/gallery-renderer.ts`, `src/views/board-renderer.ts`
+
+### Owned menu — the shell every context menu uses
+
+Deliberately not wrapped in note-database-container: this menu mounts on document.body, so a fixture that wrapped it would photograph a surface the plugin never ships. Chromed from Obsidian's own menu variables so it matches the app's real menus and follows a theme that restyles them.
+
+| dark | light |
+|---|---|
+| ![chrome-owned-menu dark](components/chrome-owned-menu-mobile-dark.png) | ![chrome-owned-menu light](components/chrome-owned-menu-mobile-light.png) |
+
+Sources: `src/views/owned-menu.ts`, `src/views/menu-row.ts`
+
+### Cell selection status bar
+
+The bar that appears while table cells are selected. Its checkbox clears the selection, so it is always rendered checked.
+
+| dark | light |
+|---|---|
+| ![chrome-selection-status-bar dark](components/chrome-selection-status-bar-mobile-dark.png) | ![chrome-selection-status-bar light](components/chrome-selection-status-bar-mobile-light.png) |
+
+Sources: `src/views/embedded-database-renderer.ts`
+
 ### Summary row
 
 Total is always present; each configured summary rule is a draggable, clickable item, and the faint + Summary entry adds another.
@@ -148,6 +178,16 @@ A disabled option is dimmed and carries a tooltip rather than inline explanatory
 | ![dropdown-field dark](components/dropdown-field-mobile-dark.png) | ![dropdown-field light](components/dropdown-field-mobile-light.png) |
 
 Sources: `src/views/dropdown-field.ts`
+
+### Computed field cleanup modal
+
+The one checkbox family that mounts under the modal root instead of the view container. Its box must match every other field-role box.
+
+| dark | light |
+|---|---|
+| ![panel-computed-cleanup-modal dark](components/panel-computed-cleanup-modal-mobile-dark.png) | ![panel-computed-cleanup-modal light](components/panel-computed-cleanup-modal-mobile-light.png) |
+
+Sources: `src/views/modals/computed-frontmatter-cleanup-modal.ts`
 
 ### Column header affordances
 
@@ -451,7 +491,19 @@ The list row the renderer builds: controls, a title line and a meta row of fixed
 
 Sources: `src/views/list-renderer.ts`, `src/views/card-field-renderer.ts`
 
+### List rows with fields missing
+
+The shape every other list fixture cannot produce: each row missing a different subset of its properties. A fixture that gives every row every field shows a tidy grid whichever way the row is laid out, so it cannot tell a column claimed by index from a slot taken by count.
+
+| dark | light |
+|---|---|
+| ![list-sparse-fields dark](views/list-sparse-fields-mobile-dark.png) | ![list-sparse-fields light](views/list-sparse-fields-mobile-light.png) |
+
+Sources: `src/views/list-renderer.ts`
+
 ### List view
+
+The desktop list row, controls included. The row checkbox is not a phone-only control; the renderer builds it at every width.
 
 | dark | light |
 |---|---|
