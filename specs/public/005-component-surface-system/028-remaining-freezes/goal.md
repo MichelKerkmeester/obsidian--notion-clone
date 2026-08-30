@@ -38,6 +38,34 @@ Repo `~/MEGA/Development/Obsidian Plugin`. Runs after `024`, which fixed one of 
 <!-- /ANCHOR:completion -->
 
 <!-- ANCHOR:log -->
+
+### The table forced-layout check was specified, measured, and not built
+
+This goal owed a check wrapping the table's render in the layout-read counter and
+requiring 8 reads or fewer, the same bound the list branch holds. It was measured before
+being written, and it fails a correct implementation.
+
+The counter patches `getBoundingClientRect` on `Element.prototype`, so it counts every
+call whether or not the element is connected. The table asks whether it is on a touch
+surface twice per row — once deciding the reorder button, once setting up row drag — and
+each call reads the container's rect. At two thousand rows that is roughly four thousand
+counted reads against a bound of eight.
+
+Those reads are not the quadratic. The table builds its body off-document and attaches it
+once, so each read costs a layout of the document as it stands, not of the rows accumulated
+so far. Constant work, N times: linear. The list froze because its rows went into the
+attached container, which made every read re-lay out everything already appended.
+
+So the table's safety is real but accidental — it rests entirely on the body staying
+detached, not on the call sites being few. The check that guards it already exists and
+asserts the right thing: no row appended to a connected table. If anyone ever attaches the
+body before filling it, those same two reads become quadratic immediately, and that check
+goes red the same day.
+
+Recorded rather than built, because a bound of eight on a renderer that legitimately makes
+two reads per row is the fourth criterion in this packet that would fail correct code — and
+the first of the four to be introduced by a specification rather than by an implementation.
+Specifying a check is exactly as error-prone as writing one.
 **TRAPS.** A pipe makes `$?` the pipe's status — use `cmd >log 2>&1; echo $?`. The screenshot fixtures render hand-written markup and import nothing from `src/`, so they cannot see any of this — but `tools/bench/*-render-bench.ts` and `verify-placement.mjs:52-60` **do** bundle shipped code, and are the instruments that can. The shipped table bench stubs `renderCell` to `td.setText`, so it measures structure only and flatters the table; say so wherever you quote it. `bench:list` defaults stop at 400 rows and the old ceiling was 1,600 — **any run that does not pass `--rows` past 3,200 cannot see this defect at all.**
 
 **STATE at `f64dd87`, so nobody reads this phase as solved.** It is not. Every non-table view still freezes on the operator's device, and nothing in `src/` was changed by this phase. Two things moved underneath it from other work and are now recorded in the criteria above: the board renderer's per-card forced layout was hoisted (`3485d7a`), and the sort/filter sheet's three rebuilds became one (`7ad775b`). Neither touches the cost of the single rebuild that remains, which is the defect. `024`'s 8,646.0ms → 246.6ms is evidence about the list's row loop, not evidence that the list opens. The two inputs this phase is blocked on — the operator's row count and the operator's device — have no substitute; a bench default in their place is the substitution that made 1,600 rows look like a ceiling.
