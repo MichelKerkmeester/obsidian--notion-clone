@@ -1,4 +1,5 @@
 {
+  "level": "3",
   "specFolder": "public/005-component-surface-system/022-selection-bar-keyboard-docking",
   "description": "The cell-selection action bar floats over the table at a fixed offset from the viewport floor, so an open keyboard covers or crowds it, and its own",
   "keywords": [
@@ -16,7 +17,7 @@
     "crowds",
     "own"
   ],
-  "lastUpdated": "2026-08-30T15:03:56.764Z",
+  "lastUpdated": "2026-08-30T18:22:10.332Z",
   "specId": "022",
   "folderSlug": "selection-bar-keyboard-docking",
   "parentChain": [
@@ -24,6 +25,5 @@
     "005-component-surface-system"
   ],
   "memorySequence": 0,
-  "memoryNameHistory": [],
-  "level": "3"
+  "memoryNameHistory": []
 }

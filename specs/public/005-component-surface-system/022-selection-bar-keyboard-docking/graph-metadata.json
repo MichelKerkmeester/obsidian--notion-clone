@@ -19,7 +19,10 @@
       "022 selection bar plan",
       "keyboard docking approach",
       "selection bar fit",
-      "022 selection bar tasks"
+      "022 selection bar tasks",
+      "022 acceptance criteria",
+      "selection bar criteria",
+      "keyboard docking criteria"
     ],
     "key_topics": [
       "selection",
@@ -41,8 +44,12 @@
       "spec.md",
       "plan.md",
       "tasks.md",
+      "acceptance-criteria.md",
+      "goal.md",
+      "implementation-summary.md",
       "device-bar-floating.png",
-      "reference-notion-accessory-bar.jpg"
+      "reference-notion-accessory-bar.jpg",
+      "tools/storybook/verify-placement.mjs"
     ],
     "entities": [
       {
@@ -64,6 +71,24 @@
         "source": "derived"
       },
       {
+        "name": "acceptance-criteria.md",
+        "kind": "doc",
+        "path": "acceptance-criteria.md",
+        "source": "derived"
+      },
+      {
+        "name": "goal.md",
+        "kind": "doc",
+        "path": "goal.md",
+        "source": "derived"
+      },
+      {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
         "name": "device-bar-floating.png",
         "kind": "file",
         "path": "device-bar-floating.png",
@@ -73,6 +98,12 @@
         "name": "reference-notion-accessory-bar.jpg",
         "kind": "file",
         "path": "reference-notion-accessory-bar.jpg",
+        "source": "derived"
+      },
+      {
+        "name": "verify-placement.mjs",
+        "kind": "file",
+        "path": "tools/storybook/verify-placement.mjs",
         "source": "derived"
       },
       {
@@ -164,30 +195,28 @@
         "kind": "key_phrase",
         "path": "tasks.md",
         "source": "derived"
-      },
-      {
-        "name": "the",
-        "kind": "key_phrase",
-        "path": "tasks.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "The cell-selection action bar floats over the table at a fixed offset from the viewport floor, so an open keyboard covers or crowds it, and its own content is taller than the box that holds it.",
     "created_at": "2026-08-30T15:07:29.327Z",
-    "last_save_at": "2026-08-30T15:07:29.327Z",
+    "last_save_at": "2026-08-30T18:22:28.380Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
       "spec.md",
       "plan.md",
-      "tasks.md"
+      "tasks.md",
+      "acceptance-criteria.md",
+      "goal.md",
+      "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:63d7f3be3b46e724c3def46885f8544c7088a5d7e97e265121e977e2bcf7dd6f",
+    "source_fingerprint": "sha256:7db55b03aecadd3a9e8a417128d369534e2fdf979114541f92eaa1abde0dd48e",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "42b7940da7c6a367365d365b388402041fd41589d81131b2d2a0c6ce4b995786",
+      "spec.md": "97eff1cad685eb28bc71139c9f937fd885a54994f784ec124331fb8c5275cff3",
       "plan.md": "6d6a41a091dcf7f2022ec99cf778a0bea3eee0b96c332c1df8b27600033a5261",
-      "tasks.md": "ac392b5bf71f6a67028bc055c29a446510c6a36b1840f1e969d8218f0125ec6b"
+      "tasks.md": "ac392b5bf71f6a67028bc055c29a446510c6a36b1840f1e969d8218f0125ec6b",
+      "implementation-summary.md": "69d6645456f9bfe572594bd28afc99760ca4b3aa52dfa90124fe9aa978c9919d"
     },
     "last_active_child_id": null,
     "last_active_at": null

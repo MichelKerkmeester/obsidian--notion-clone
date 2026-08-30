@@ -14,8 +14,8 @@ _memory:
     packet_pointer: "public/005-component-surface-system/022-selection-bar-keyboard-docking"
     last_updated_at: "2026-08-30T16:30:00Z"
     last_updated_by: "phase-author"
-    recent_action: "Raised to a Level 3 doc set from the operator report and the measured geometry"
-    next_safe_action: "Measure the bar against an open keyboard before choosing a docking mechanism"
+    recent_action: "Shipped: bar docks to --keyboard-height, box 30px to 48px, 8 harness checks green"
+    next_safe_action: "Operator selects cells, opens the keyboard, reports what the bar does"
     blockers: []
     key_files:
       - "spec.md"
@@ -27,7 +27,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-022"
       parent_session_id: null
-    completion_pct: 0
+    completion_pct: 90
     open_questions:
       - "Does the operator's phone shrink visualViewport, or resize the window?"
       - "Does the bar wrap, scroll or shorten its labels to fit its box?"
