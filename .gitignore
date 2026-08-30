@@ -21,3 +21,8 @@ README.zh-CN.md
 # which are rewritten on every run and would keep the tree perpetually dirty.
 storybook-static/
 tools/bench/dist/
+
+# Engineering references, read for behaviour only. AnyType and AppFlowy are AGPL/source-available
+# and this plugin is MIT, so they are never vendored, copied from, or shipped — cloned locally to
+# study interaction semantics and deliberately kept out of the repository.
+external/
