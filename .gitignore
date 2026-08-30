@@ -13,9 +13,21 @@ node_modules/
 README.zh-CN.md
 
 # Shared AI-tooling symlinks into the Public code environment.
+#
+# Every one of these is an ABSOLUTE symlink into a checkout that exists on one
+# machine. Committed, they are worse than useless to anyone else: they resolve to
+# nothing on a fresh clone, and the link target publishes the local filesystem
+# layout, home directory and username of whoever created them. Five of them were
+# tracked and reached the remote before this rule existed.
 .opencode
 .pi
 .pi-subagents
+.claude
+.codex
+.cursor
+.devin
+AGENTS.md
+CLAUDE.md
 
 # Generated harness output: the Storybook build and the bench's raw samples,
 # which are rewritten on every run and would keep the tree perpetually dirty.
