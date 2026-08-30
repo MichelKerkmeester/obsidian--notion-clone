@@ -74,8 +74,12 @@ nothing owned it.
       when written, untrue from the moment a different phase raised both controls to 28px. Two 28px
       controls do not fit in 48px at any gap, and a criterion that read the comment would still pass
       today. Now `4 + 28 + 4 + 28 = 64`.
-- [ ] Both negative controls observed red: restoring the `display` declaration takes the check red on
-      desktop, and restoring the 48px column takes it red on the phone.
+- [x] Both negative controls observed red: restoring the `display` declaration takes the check red on
+      desktop at **-17px in a 40px cell** while the phone stays green, and restoring the 48px column
+      takes it red on the phone at **-12px in a 49px cell** while the desktop stays green. Each moves
+      only its own surface. Restored, the harness is exit 0 at 210 of 214 and `styles.css` hashes
+      byte-identical to the baseline. The phone figure was recorded as -14px and measures -12px;
+      the reproduced number is the one with a run behind it.
 - [ ] The operator opens the table on the phone and reports that the button has room. A positive gap
       in a headless browser is necessary and never sufficient.
 <!-- /ANCHOR:completion -->

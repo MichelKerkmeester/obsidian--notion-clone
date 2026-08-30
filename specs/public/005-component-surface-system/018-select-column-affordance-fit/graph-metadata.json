@@ -1,0 +1,223 @@
+{
+  "schema_version": 1,
+  "packet_id": "public/005-component-surface-system/018-select-column-affordance-fit",
+  "spec_folder": "public/005-component-surface-system/018-select-column-affordance-fit",
+  "parent_id": "public/005-component-surface-system",
+  "children_ids": [],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "reorder button overlaps checkbox",
+      "select column too narrow",
+      "not enough space next to checkbox",
+      "move button desktop list",
+      "018 select column",
+      "018 plan",
+      "select column plan",
+      "018 tasks",
+      "select column tasks",
+      "018 acceptance criteria",
+      "reorder overlap criteria",
+      "select column width criteria"
+    ],
+    "key_topics": [
+      "reorder",
+      "button",
+      "overlaps",
+      "checkbox",
+      "select",
+      "column",
+      "too",
+      "narrow",
+      "enough",
+      "space",
+      "next",
+      "move"
+    ],
+    "importance_tier": "normal",
+    "status": "in_progress",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "acceptance-criteria.md",
+      "goal.md",
+      "implementation-summary.md",
+      "tools/storybook/verify-placement.mjs",
+      "tools/lane/css-lane.json"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "acceptance-criteria.md",
+        "kind": "doc",
+        "path": "acceptance-criteria.md",
+        "source": "derived"
+      },
+      {
+        "name": "goal.md",
+        "kind": "doc",
+        "path": "goal.md",
+        "source": "derived"
+      },
+      {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "verify-placement.mjs",
+        "kind": "file",
+        "path": "tools/storybook/verify-placement.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "css-lane.json",
+        "kind": "config",
+        "path": "tools/lane/css-lane.json",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Select Column Affordance Fit",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "In Progress",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Problem Statement The",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Purpose The",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "In Scope",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Plan",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "no",
+        "kind": "key_phrase",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "1. SUMMARY",
+        "kind": "heading",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "2. QUALITY GATES",
+        "kind": "heading",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "3. ARCHITECTURE",
+        "kind": "heading",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Notation",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Completion Criteria This",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "evidence",
+        "kind": "key_phrase",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Phase 1: Setup",
+        "kind": "heading",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Phase 2: Implementation",
+        "kind": "heading",
+        "path": "tasks.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "The operator, on a phone: \"to the left of checkbox that little button doesnt have enough space.\"",
+    "created_at": "2026-08-30T17:34:54.869Z",
+    "last_save_at": "2026-08-30T17:34:54.869Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "acceptance-criteria.md",
+      "goal.md",
+      "implementation-summary.md"
+    ],
+    "source_fingerprint": "sha256:99d688b4819534284ed48003cb0cf45599e81fb4a4aec2a8795fc27520568d4a",
+    "source_fingerprint_docset": 3,
+    "source_doc_hashes": {
+      "spec.md": "6bde8a8803c11a1964f101bccf69680bbac9920efcb3cbe5c5059d703204d0cf",
+      "plan.md": "636dcd7601caf95ba87f0104b39a2feba3abf1345df53661bf56f8dc6b33822e",
+      "tasks.md": "78e15fcac612729bfd4be0118186e6e9954c3195b8ce1110dbce993e47e35857",
+      "implementation-summary.md": "94e2bcb18956b042e8aa0ef91f61d914a069bb72d9c507595e5903a7fb5c3a28"
+    },
+    "last_active_child_id": null,
+    "last_active_at": null
+  }
+}

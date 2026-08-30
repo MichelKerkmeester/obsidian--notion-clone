@@ -93,10 +93,23 @@ necessary and never sufficient. Operator confirmation is the program's closing c
 
 | Criterion | Producer | Mount | Environment | Negative control | State |
 |---|---|---|---|---|---|
-| AC-1 | `verify-placement.mjs` overlap check | production select cell | desktop + phone | not yet run | Recorded |
-| AC-2 | the same check, presence arm | desktop list and gallery rows | desktop | not yet run | Recorded |
-| AC-3 | column width read from the computed style | production select column | phone touch branch | not yet run | Recorded |
+| AC-1 | `verify-placement.mjs` overlap check | production select cell | desktop + phone | **Both observed red.** Control A (touch-floor block re-declares `display: inline-flex`) takes desktop to `-17px in a 40px cell`; control B (phone column back to 48px) takes phone to `-12px in a 49px cell`. Restored: desktop green, phone `+4px in a 65px cell`, harness exit 0 | Met |
+| AC-2 | the same check, presence arm | desktop list and gallery rows | desktop | **Observed red.** Under control A the desktop reports `11 cells show both`, where production renders none — the button is built only on touch. Restored, it reports `no reorder button is shown in 11 select cells, so nothing can collide` | Met |
+| AC-3 | column width read from the computed style | production select column | phone touch branch | **Observed red.** At 48px the phone cell measures 49px and the gap is `-12px`. At 64px it measures 65px and the gap is `+4px` | Met |
 | AC-4 | the operator | the operator's phone | device | n/a | Not requested |
 
-Four rows, four blank negative-control cells. Under `../spec.md` §6 a blank cell blocks closure even
-when the number in it would have been valid, so **this phase may not close today**.
+Three of the four controls have now been run and observed red, each isolated to the surface it
+belongs to: control A moves only the desktop number, control B only the phone one. Restoring the
+stylesheet returns the harness to exit 0 at 210 of 214 checks, and `shasum -a 256 styles.css` is
+byte-identical to the pre-control baseline.
+
+**One number in the record did not reproduce.** This phase recorded the 48px failure as `-14px`; the
+control measures `-12px` in a 49px cell. The desktop figure reproduced exactly at `-17px`. The
+difference is not explained here, and the reproduced number is the one to trust — it came from a run
+whose output is above, while `-14` came from a run nobody can re-execute. Recorded rather than
+reconciled.
+
+**AC-4 remains open and is not closeable here.** It is the operator opening the table on their phone.
+A positive gap in a headless browser is necessary and never sufficient, which is the whole reason
+this program exists, so **this phase does not close today** — but it now fails for one honest reason
+instead of four unrun controls.

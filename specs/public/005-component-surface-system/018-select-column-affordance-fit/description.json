@@ -1,0 +1,25 @@
+{
+  "specFolder": "public/005-component-surface-system/018-select-column-affordance-fit",
+  "description": "The operator, on a phone: \"to the left of checkbox that little button doesnt have enough space.\"",
+  "keywords": [
+    "operator",
+    "phone",
+    "left",
+    "checkbox",
+    "little",
+    "button",
+    "doesnt",
+    "enough",
+    "space"
+  ],
+  "lastUpdated": "2026-08-30T08:39:54.808Z",
+  "specId": "018",
+  "folderSlug": "select-column-affordance-fit",
+  "parentChain": [
+    "public",
+    "005-component-surface-system"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": [],
+  "level": "1"
+}
