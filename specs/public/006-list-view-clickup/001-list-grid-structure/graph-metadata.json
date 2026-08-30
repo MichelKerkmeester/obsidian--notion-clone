@@ -1,0 +1,221 @@
+{
+  "schema_version": 1,
+  "packet_id": "public/006-list-view-clickup/001-list-grid-structure",
+  "spec_folder": "public/006-list-view-clickup/001-list-grid-structure",
+  "parent_id": "public/006-list-view-clickup",
+  "children_ids": [],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "006 phase 001",
+      "list grid structure",
+      "data-db-row-style",
+      "guard conversion",
+      "006 phase 001 plan",
+      "list grid conversion plan",
+      "006 phase 001 tasks",
+      "006 phase 001 criteria",
+      "ac-10 replacement",
+      "006 phase 001 adr",
+      "leading gutter emission"
+    ],
+    "key_topics": [
+      "phase",
+      "list",
+      "grid",
+      "structure",
+      "data-db-row-style",
+      "guard",
+      "conversion",
+      "plan",
+      "tasks",
+      "criteria",
+      "ac-10",
+      "replacement"
+    ],
+    "importance_tier": "critical",
+    "status": "planned",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "acceptance-criteria.md",
+      "decision-record.md",
+      "checklist.md",
+      "tools/lane/css-lane.json",
+      "tools/storybook/verify-placement.mjs"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "acceptance-criteria.md",
+        "kind": "doc",
+        "path": "acceptance-criteria.md",
+        "source": "derived"
+      },
+      {
+        "name": "decision-record.md",
+        "kind": "doc",
+        "path": "decision-record.md",
+        "source": "derived"
+      },
+      {
+        "name": "checklist.md",
+        "kind": "doc",
+        "path": "checklist.md",
+        "source": "derived"
+      },
+      {
+        "name": "css-lane.json",
+        "kind": "config",
+        "path": "tools/lane/css-lane.json",
+        "source": "derived"
+      },
+      {
+        "name": "verify-placement.mjs",
+        "kind": "file",
+        "path": "tools/storybook/verify-placement.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "List Grid Structure",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Spec Folder",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Parent Spec",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Under Route",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "ordinal",
+        "kind": "key_phrase",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "the",
+        "kind": "key_phrase",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Plan",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "text",
+        "kind": "technology",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "every",
+        "kind": "key_phrase",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "nothing",
+        "kind": "key_phrase",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "no",
+        "kind": "key_phrase",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Breakdown",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Notation",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Completion Criteria",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "evidence",
+        "kind": "key_phrase",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Acceptance Criteria",
+        "kind": "proper_noun",
+        "path": "acceptance-criteria.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "The structural swap. The list renders through the grid renderer behind data-db-row-style: header row repeated per group, sort, resize, reorder, add-column, the shared cell pipeline, cell selection, footer and multi-group. Seven guards convert here, two more in 004, and two never do.",
+    "created_at": "2026-08-30T10:00:32.322Z",
+    "last_save_at": "2026-08-30T10:05:54.840Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "acceptance-criteria.md",
+      "decision-record.md"
+    ],
+    "source_fingerprint": "sha256:a483a7c9a5789ffa7c70586bf446fcba4b821277a383921e8d23af94d1d7b137",
+    "source_fingerprint_docset": 3,
+    "source_doc_hashes": {
+      "spec.md": "1033d7092592528d2170f8ee1f7f566881be2d1ca7e5799c29795d6cc45c2ad8",
+      "plan.md": "96d4d68913239341aae4705d5f1b814558be9646daf8af4012d36a6d74722a8d",
+      "tasks.md": "0ecb8553dacb9b269602c9915b10ba6f28e15f81821f26938546baf895728ce0",
+      "decision-record.md": "c63887710af228b34b3cf0448f097af8321d3695df1bc94edbe605b28e00aab2"
+    },
+    "last_active_child_id": null,
+    "last_active_at": null
+  }
+}

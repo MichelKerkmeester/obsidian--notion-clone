@@ -1,0 +1,222 @@
+{
+  "schema_version": 1,
+  "packet_id": "public/006-list-view-clickup/002-clickup-chrome",
+  "spec_folder": "public/006-list-view-clickup/002-clickup-chrome",
+  "parent_id": "public/006-list-view-clickup",
+  "children_ids": [],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "006 phase 002",
+      "clickup chrome",
+      "list visual language",
+      "lane release",
+      "006 phase 002 plan",
+      "lane release conditions",
+      "006 phase 002 tasks",
+      "006 phase 002 criteria",
+      "chrome negative controls",
+      "006 phase 002 adr",
+      "sort indicator badge",
+      "select pill width"
+    ],
+    "key_topics": [
+      "phase",
+      "clickup",
+      "chrome",
+      "list",
+      "visual",
+      "language",
+      "lane",
+      "release",
+      "plan",
+      "conditions",
+      "tasks",
+      "criteria"
+    ],
+    "importance_tier": "critical",
+    "status": "planned",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "acceptance-criteria.md",
+      "decision-record.md",
+      "checklist.md",
+      "tools/lane/css-lane.json",
+      "tools/storybook/verify-placement.mjs"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "acceptance-criteria.md",
+        "kind": "doc",
+        "path": "acceptance-criteria.md",
+        "source": "derived"
+      },
+      {
+        "name": "decision-record.md",
+        "kind": "doc",
+        "path": "decision-record.md",
+        "source": "derived"
+      },
+      {
+        "name": "checklist.md",
+        "kind": "doc",
+        "path": "checklist.md",
+        "source": "derived"
+      },
+      {
+        "name": "css-lane.json",
+        "kind": "config",
+        "path": "tools/lane/css-lane.json",
+        "source": "derived"
+      },
+      {
+        "name": "verify-placement.mjs",
+        "kind": "file",
+        "path": "tools/storybook/verify-placement.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "Spec Folder",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Parent Spec",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "negative",
+        "kind": "key_phrase",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "a",
+        "kind": "key_phrase",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "no",
+        "kind": "key_phrase",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "the",
+        "kind": "key_phrase",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Plan",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "text",
+        "kind": "technology",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "its",
+        "kind": "key_phrase",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "1. SUMMARY",
+        "kind": "heading",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Breakdown",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Notation",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Completion Criteria",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "evidence",
+        "kind": "key_phrase",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Acceptance Criteria",
+        "kind": "proper_noun",
+        "path": "acceptance-criteria.md",
+        "source": "derived"
+      },
+      {
+        "name": "colour",
+        "kind": "key_phrase",
+        "path": "acceptance-criteria.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "The visual language: row rhythm and dividers, group header pill and count, the reserved leading gutter, chip and pill cell treatments, empty-cell placeholders, density. Every value from the existing token scale. The phase most able to pass while nothing changes on screen.",
+    "created_at": "2026-08-30T10:00:32.765Z",
+    "last_save_at": "2026-08-30T10:00:32.765Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "acceptance-criteria.md",
+      "decision-record.md"
+    ],
+    "source_fingerprint": "sha256:a2825ce0151a4369154b617c0cb0358435769e4a3da93d89989d4cc559c4c1bc",
+    "source_fingerprint_docset": 3,
+    "source_doc_hashes": {
+      "spec.md": "5ab29bc642abb2c8d4f6a948f40e07f90c3e00b623dac5430d40a8a2810260e8",
+      "plan.md": "5db0996c52dc0d9cd6ae083240ae7e1dc48464927f307da7c267d5427767d193",
+      "tasks.md": "94c199f86f762dbb84c03d8ecf7ffbf9a88d6ba6a34adfebef71d8c25e72e8c5",
+      "decision-record.md": "dc1ad156ebb3bfbf248e8678f58ee6959d374ec5048818aeca76db5a115c1a77"
+    },
+    "last_active_child_id": null,
+    "last_active_at": null
+  }
+}
