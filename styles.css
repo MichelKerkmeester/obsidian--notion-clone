@@ -25,6 +25,11 @@
 .db-cell-option-popover,
 .formula-workbench-modal,
 .db-chart-drilldown-modal,
+/* The backdrop is a bare div on the body, outside every other surface in this list, so without
+   naming it here the only way to give it a token was to repeat the literal — and a duration
+   written twice is a duration that drifts. It needs the scale for exactly one value, the sheet
+   entrance it fades in alongside. */
+.db-mobile-sheet-scrim,
 .db-surface {
   color-scheme: light dark;
   -webkit-tap-highlight-color: transparent;
@@ -88,6 +93,15 @@
   --db-hover-bg: var(--background-modifier-hover);
   --db-active-bg: var(--background-modifier-active-hover, var(--background-modifier-hover));
   --db-transition-fast: 120ms ease;
+  /* A phone sheet travels its own full height, so it cannot share the 120ms every other overlay
+     uses: that duration reads as a cut rather than a rise over ~760px. 260ms is the top of the
+     state-change band and stays under the 300ms ceiling for anything the user initiated. The
+     drawer allowance that would permit 500ms is conditioned on not blocking the next input, and
+     this surface does block one — the drag-to-dismiss gesture binds on the sheet itself, so a
+     longer entrance is time the thumb spends waiting. One value, shared by the sheet and the
+     backdrop that arrives with it, so the two cannot drift. */
+  --db-sheet-enter: 260ms;
+  --db-menu-row-gap: 8px;
   --db-disabled-opacity: 0.40;
   --db-disabled-cursor: not-allowed;
   --db-scrollbar-thumb: color-mix(in srgb, var(--text-muted) 48%, transparent);
@@ -182,6 +196,14 @@
      bottom offset reads, and it is 0px whenever no keyboard is open — so with no keyboard this is
      exactly `90svh` and the sheet's existing ceiling is unchanged. */
   max-height: calc(90svh - var(--db-mobile-sheet-bottom, 0px)) !important;
+  /* A sheet scrolls on one axis, and saying so takes two declarations rather than one.
+     `overflow` computes jointly: when one axis is `visible` and the other is not, the `visible`
+     one is coerced to `auto`. The positioner asks for `overflow-y: auto` and says nothing about x,
+     so the sheet silently gained a horizontal scroll axis it never wanted — a full-width surface
+     that can be dragged sideways off its own edge. Declared here rather than beside the inline
+     write because the class has to hold on its own; the inline pair only started reaching a device
+     once those property names were hyphenated, and the axis came with them. */
+  overflow-x: hidden !important;
   padding-bottom: calc(16px + env(safe-area-inset-bottom)) !important;
   border-right: 0 !important;
   border-bottom: 0 !important;
@@ -203,6 +225,7 @@
   inset: 0;
   background: rgba(0, 0, 0, 0.25);
   pointer-events: auto;
+  animation: db-sheet-scrim-in var(--db-sheet-enter) ease-out;
 }
 
 /* The portalled sheet wears the container class so its rules keep matching, but it must not also
@@ -279,12 +302,42 @@
   transform: translateX(-50%);
 }
 
+/* The sheet rises from the bottom edge, and it is the only thing that moves.
+
+   It inherited the popover entrance: 8px of travel, a 0.98 scale and a fade, over 120ms. Three of
+   those four are wrong for a surface docked to the screen edge. 8px is below the threshold at which
+   travel reads as travel, so the sheet appeared rather than arrived. The scale is measured from the
+   element's centre, so shrinking it lifts the bottom edge off the floor the sheet is supposed to be
+   attached to — it detached and re-attached on every open. And a surface that starts entirely below
+   the viewport has nothing to fade in from; opacity only makes the first frames hazy.
+
+   So: one property, the full height of the sheet, over the shared sheet duration. A percentage
+   translate resolves against the element's own border box, which is what makes "just below the
+   bottom edge" correct for a sheet of any height without measuring one. */
 .db-mobile-bottom-sheet.db-overlay-enter {
-  transform: translate3d(0, 8px, 0) scale(0.98);
+  opacity: 1;
+  transform: translate3d(0, 100%, 0);
+  will-change: transform;
+  /* The start state must arrive without a transition, or it animates too.
+     Declaring the transition on the same rule that introduces the offset means the step INTO the
+     start state is itself interpolated: the sheet begins sliding down out of the viewport, the end
+     state lands a frame later, and the reversal happens so close to the origin that nothing visibly
+     moves. Measured that way — a transition object alive at the moment the class was added, and the
+     surface never leaving identity. The transition belongs to the state being moved TO. */
+  transition: none;
 }
 
 .db-mobile-bottom-sheet.db-overlay-enter.is-visible {
-  transform: translate3d(0, 0, 0) scale(1);
+  transform: translate3d(0, 0, 0);
+  transition: transform var(--db-sheet-enter) ease-out;
+}
+
+/* The dim arrives with the sheet rather than a frame before it. An animation rather than a class
+   flip because the backdrop is created and appended in one step with nothing to toggle against,
+   and because a one-shot animation needs no JavaScript to start or to clean up. */
+@keyframes db-sheet-scrim-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 /* A menu row is a click target, so it has to say so under the pointer. These rows are divs rather
@@ -409,16 +462,72 @@
   padding: var(--size-4-2, 8px) var(--size-4-4, 16px);
 }
 
+/* A hairline between adjacent rows, on the sheet presentation only.
+
+   This is the affordance that makes a list of actions read as a list rather than as floating
+   phrases, and it is what a native action sheet and a Notion menu both do. It is drawn on the row
+   rather than as a separate node so a caller cannot forget it, and as `::after` rather than a
+   border because the row carries a rounded highlight that would clip one.
+
+   It starts at the label, not at the sheet edge. That inset is the same arithmetic the row itself
+   uses — its padding, plus the fixed icon column, plus the gap between them — so the hairline lands
+   on the exact x every label starts at and draws the column the eye is meant to track. Deriving it
+   rather than writing 40px means it follows the row if any of the three changes.
+
+   Scoped to the sheet because it answers a phone-sized question. A desktop popover is 292px of
+   tightly spaced rows where hairlines read as clutter, and it is not the surface that was
+   reported. `:has` selects a row that is followed by another one, so a group never ends on a rule
+   with nothing under it. */
+.db-mobile-bottom-sheet .db-menu-item {
+  position: relative;
+  --db-menu-divider-inset: calc(var(--size-4-4, 16px) + var(--icon-s, 16px) + var(--db-menu-row-gap));
+}
+
+/* A checkable option row puts a check slot ahead of its icon, so its label starts one slot further
+   in than an action row's. The inset is a variable rather than a number so each row shape's rule
+   lands on that shape's own label, instead of one of the two carrying a hairline that starts in the
+   middle of its icon column. */
+.db-mobile-bottom-sheet .db-menu-item:has(.db-menu-item-check) {
+  --db-menu-divider-inset: calc(var(--size-4-4, 16px) + (var(--icon-s, 16px) + var(--db-menu-row-gap)) * 2);
+}
+
+.db-mobile-bottom-sheet .db-menu-item:has(+ .db-menu-item)::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: var(--db-menu-divider-inset);
+  height: 1px;
+  background: var(--db-border-subtle);
+  pointer-events: none;
+}
+
 /* The heading shares the rows' inset so it keeps sitting on the icon column. Growing the rows for a
    thumb without this leaves the heading eight pixels adrift of everything under it. */
 .is-phone .db-menu-section.db-menu-section {
   padding-inline: var(--size-4-4, 16px);
 }
 
+/* A row states its own main-axis alignment, and that single declaration is the whole reason menu
+   rows read as a column instead of as ragged centred text.
+
+   Obsidian's own stylesheet carries `button { display: inline-flex; align-items: center;
+   justify-content: center }`. A menu row IS a button — deliberately, so it is focusable and
+   keyboard-activatable without extra wiring — and `button` is a type selector this rule outranks
+   on every property BOTH of them name. `justify-content` was named by only one of them, so the
+   host's value applied uncontested and every row centred its icon and label. The two rows that
+   escaped were the ones carrying a trailing chevron: an auto margin absorbs all free space, which
+   is why a submenu row stayed left-aligned while its siblings drifted, and why the defect looked
+   like an inconsistency between rows rather than one missing declaration.
+
+   Nothing in the plugin's own cascade could show this. Its rules are measured against the plugin
+   stylesheet alone, where an undeclared `justify-content` computes to `normal` and every label
+   already lines up. A shared row is only shared down to the last property it actually states. */
 .db-menu-item.db-menu-item {
   display: flex;
-  gap: 8px;
+  gap: var(--db-menu-row-gap);
   align-items: center;
+  justify-content: flex-start;
   width: 100%;
   padding: 0 8px;
   font-size: var(--db-font-md);
@@ -578,6 +687,14 @@
   .db-menu-item {
     transition: none;
     transform: none;
+  }
+
+  /* The sheet's start state is a transform, so `transform: none` above already lands it at rest —
+     but the backdrop fades through an animation, and an animation ignores a transition reset. It
+     has to be named separately or the one thing still moving is the dim behind a sheet that no
+     longer moves. */
+  .db-mobile-sheet-scrim {
+    animation: none;
   }
 }
 
@@ -2301,6 +2418,27 @@ input[type="checkbox"].db-toggle-switch:disabled {
   backdrop-filter: blur(12px);
   animation: db-selection-dock-in 160ms ease-out;
   box-shadow: var(--db-elevation-1);
+}
+
+.is-phone .note-database-container:not(.note-database-embed) .db-selection-status-bar {
+  bottom: max(16px, env(safe-area-inset-bottom), var(--keyboard-height, 0px));
+  height: 48px;
+  max-width: calc(100vw - 32px);
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-color: var(--interactive-accent) transparent;
+  scrollbar-width: thin;
+  overscroll-behavior-inline: contain;
+}
+
+.is-phone .note-database-container:not(.note-database-embed) .db-selection-status-bar > * {
+  flex: 0 0 auto;
+}
+
+.is-phone .note-database-container:not(.note-database-embed) .db-selection-status-bar .db-selection-action,
+.is-phone .note-database-container:not(.note-database-embed) .db-selection-status-bar .db-selection-clear-pill,
+.is-phone .note-database-container:not(.note-database-embed) .db-selection-status-bar .db-selection-delete {
+  min-height: 44px;
 }
 
 .note-database-container .db-selection-status-bar.is-summary-overlay {
@@ -19123,6 +19261,23 @@ body.is-tablet .note-database-container .db-record-open-btn {
 .db-mobile-bottom-sheet { box-shadow: var(--db-elevation-3); }
 
 .db-column-menu-subpopover { z-index: var(--db-layer-submenu, 110) !important; }
+
+/* Presenting as a sheet outranks whatever layer the surface rests on, and it has to say so with
+   more specificity than the rules that assign those layers.
+
+   `.db-mobile-bottom-sheet` already declares the modal layer with `!important`, and it was losing.
+   Two later rules in this file pin the same surfaces to their resting tier, also with `!important`
+   and with equal or greater specificity, so source order decided it: a dropdown pinned to 100 and
+   a column submenu to 110, both underneath the sheet backdrop at 999. The surface opened, was laid
+   out correctly, was full width and on screen, and painted behind the very scrim its own
+   presentation had just created. On a phone that is indistinguishable from a tap doing nothing,
+   which is exactly how it was reported.
+
+   Doubling the class beats those two on specificity rather than on position, so this holds wherever
+   it sits and whatever is added after it. */
+.db-mobile-bottom-sheet.db-mobile-bottom-sheet {
+  z-index: var(--db-layer-modal, 1000) !important;
+}
 
 :is(.note-database-modal, .formula-workbench-modal, .db-chart-drilldown-modal) {
   z-index: var(--db-layer-modal, 1000) !important;

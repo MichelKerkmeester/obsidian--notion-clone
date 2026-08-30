@@ -1,7 +1,7 @@
 {
   "holder": null,
-  "acquiredAt": "2026-08-30T13:42:05.855Z",
-  "baselineHash": "e92c9f98803f",
+  "acquiredAt": "2026-08-30T16:11:04Z",
+  "baselineHash": "e5ada7e445ce",
   "baselineCommit": "f27da7f78b17",
   "history": [
     {
@@ -535,6 +535,46 @@
       "at": "2026-08-30T13:42:05.855Z",
       "hash": "e92c9f98803f",
       "note": "Recaptured again after the reorder: 224 entries, screenshots:verify green, evidence 8/8 fresh. gate 14 green exit 0, vitest 444, placement 186/190 with the 4 declared reds. Not committed."
+    },
+    {
+      "event": "acquire",
+      "phase": "027-sheet-menu-grammar-and-motion",
+      "at": "2026-08-30T15:21:50.568Z",
+      "hash": "e92c9f98803f"
+    },
+    {
+      "event": "edit",
+      "phase": "027-sheet-menu-grammar-and-motion",
+      "at": "2026-08-30T15:47:23.920Z",
+      "hash": "0fe11f17f45a",
+      "note": "Row grammar states justify-content so the host button rule cannot centre it; hairline between adjacent sheet rows, inset to the label column; sheet entrance rewritten to a full-height rise on the new --db-sheet-enter token with the start state untransitioned; overflow-x pinned hidden; sheet presentation given a doubled-class z-index so it outranks a surface resting layer."
+    },
+    {
+      "event": "release",
+      "phase": "027-sheet-menu-grammar-and-motion",
+      "at": "2026-08-30T15:47:23.920Z",
+      "hash": "0fe11f17f45a",
+      "note": "Recaptured: 228 entries, screenshots:verify green (none blank or theme-identical), evidence 8/8 fresh. gate 13 of 14 green; the only red is `comments`, from two untracked tools/bench/run-*.mjs files another agent created at 17:38 and which this phase did not touch. vitest 444, placement 202/206 with the same 4 declared reds (baseline 186/190). Not committed."
+    },
+    {
+      "event": "acquire",
+      "phase": "022-selection-bar-keyboard-docking",
+      "at": "2026-08-30T15:52:15Z",
+      "hash": "0fe11f17f45a"
+    },
+    {
+      "event": "edit",
+      "phase": "022-selection-bar-keyboard-docking",
+      "at": "2026-08-30T15:56:48Z",
+      "hash": "e5ada7e445ce",
+      "note": "Phone-only standalone selection bar now uses the host keyboard inset as its bottom offset, expands to 48px with 44px action targets, and exposes a thin horizontal scroll lane; embedded bars and desktop presentation remain unchanged."
+    },
+    {
+      "event": "release",
+      "phase": "022-selection-bar-keyboard-docking",
+      "at": "2026-08-30T16:11:04Z",
+      "hash": "e5ada7e445ce",
+      "note": "Released by the coordinator. The dispatched executor finished its work and exited without releasing, leaving the lane held by a phase that was no longer running. The stylesheet hash is unchanged from its last recorded edit, so nothing is being absorbed — this closes a leaked hold, not an unrecorded change."
     }
   ],
   "outstanding": [
