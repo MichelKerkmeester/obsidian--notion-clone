@@ -115,8 +115,11 @@ import { CellRenderer } from "${join(REPO, "src/views/cell-renderer")}";
 import { ListRenderer } from "${join(REPO, "src/views/list-renderer")}";
 import { DatabaseView } from "${join(REPO, "src/views/database-view")}";
 import { EmbeddedDatabaseRenderer } from "${join(REPO, "src/views/embedded-database-renderer")}";
+import { getColumnDisplayType, isEmptyValue } from "${join(REPO, "src/data/column-display")}";
+import { formatEuroCurrency, formatEuroNumber } from "${join(REPO, "src/data/euro-format")}";
 globalThis.__edit = { openRecordDetailPanel, closeRecordDetailPanel, CellRenderer };
 globalThis.__list = { ListRenderer };
+globalThis.__number = { renderCardField, CellRenderer, getColumnDisplayType, isEmptyValue, formatEuroCurrency, formatEuroNumber };
 globalThis.__selection = { DatabaseView, EmbeddedDatabaseRenderer };
 globalThis.__place = { positionToolbarPopover, getVisiblePopoverBounds, COMPACT_MENU_POPOVER, applySheetChrome, renderCardField, createOwnedMenu, createMenuRow, ToolbarRenderer, trackCellGesture, nextCellRange, resolveCellTapAction, isMainItemColumn, shouldExtendRowRange, applyRowSelectionPress, attachRowRangeGesture, isRowSelectionCheckbox, attachLongPress, isTouchDevice, attachTitleOpenAffordance, setupTitleCellTap, openRecordDetailPanel, RowMenu, ColumnMenu };
 globalThis.__p = { positionToolbarPopover, getVisiblePopoverBounds, setPosition, clamp, resolvePopoverHorizontalLeft, COMPACT_MENU_POPOVER, PANEL_POPOVER, createOwnedMenu, createMenuRow };
@@ -4967,10 +4970,167 @@ await section("the sheet's inline editor", async () => {
   inlineEditResults.push(...results);
 });
 
+// ───────────────────────────────────────────────────────────────────
+// A NUMBER READS THE SAME ON A CARD AND IN THE ROW BEHIND IT
+// ───────────────────────────────────────────────────────────────────
+//
+// The operator reported a card reading 1000.24 beside a table row reading 1.000,24, and the fix
+// wired the card's numeric branch to the same formatter the table already used. Nothing in this
+// repository rendered both and compared them, which is why the divergence survived long enough to
+// be found by a person rather than by a check.
+//
+// So what is measured here is disagreement, not a literal. A check asserting the card renders
+// "1.000,24" passes happily while the table drifts the other way, and the complaint was a
+// comparison. The two renderers are built from the shipped modules and handed the same record and
+// the same column, which is the one comparison neither of them can make on its own.
+//
+// The euro sign is followed by U+00A0, not a space. An assertion written from habit fails against
+// output that is correct, so the expected strings below name the code point.
+
+const numberParityResults = [];
+
+await section("a number reads the same on a card and in the row behind it", async () => {
+  const page = await browser.newPage({ viewport: VIEWPORT, reducedMotion: "reduce" });
+  await page.setContent(page_html);
+  await page.addStyleTag({ content: readFileSync(join(REPO, "styles.css"), "utf8") + HOST_BARE_CONTROLS });
+  await page.addScriptTag({ content: shimJs + "\ninstallObsidianDomShim(globalThis);" });
+  await page.addScriptTag({ content: positionerJs });
+
+  const measured = await page.evaluate(() => {
+    const { renderCardField, CellRenderer, getColumnDisplayType, isEmptyValue, formatEuroNumber } = globalThis.__number;
+    const host = document.querySelector(".note-database-container");
+
+    // One record and one column, rendered both ways. The card is given the frontmatter value the
+    // way the board and list renderers give it, and the cell reads the same record itself — so the
+    // two sides share an input rather than sharing a copy of one.
+    const both = (value, type, columnExtra) => {
+      const col = { key: "amount", label: "Amount", type, ...columnExtra };
+      const row = {
+        file: { path: "record.md", basename: "record", name: "record.md" },
+        frontmatter: { amount: value },
+        computed: {},
+      };
+      const displayType = getColumnDisplayType(col, []);
+      const field = renderCardField({
+        app: {}, row, col, config: { schema: { computedFields: [] } },
+        value: row.frontmatter[col.key], displayType, empty: isEmptyValue(row.frontmatter[col.key]),
+        fieldClass: "db-board-card-field", valueClass: "db-board-card-value",
+        labelClass: "db-board-card-field-label", badgesClass: "db-board-card-badges",
+        linkClass: "db-board-card-link",
+      });
+      host.appendChild(field);
+      const td = host.createDiv({ cls: "db-cell" });
+      // The renderer only needs a data source to save through, and nothing here saves.
+      new CellRenderer({ openNote() {}, getRows: () => [row] }, async () => {}).renderCell(td, row, col);
+      return { field, card: field.querySelector(".db-board-card-value").textContent, cell: td.textContent };
+    };
+
+    const pairs = (values) => {
+      const out = [];
+      for (const value of values) {
+        for (const type of ["number", "currency"]) {
+          const { card, cell } = both(value, type);
+          out.push({ type, value: typeof value === "string" ? value : String(value), card, cell });
+        }
+      }
+      return out;
+    };
+
+    // Numbers the plugin stores as numbers. Both sides coerce these identically, so a disagreement
+    // here is a formatter drifting on one side — the defect that was reported. The operator's own
+    // figure and their own record are in the sample, plus the boundaries the formatters turn on:
+    // zero is finite and is not the placeholder, a negative carries its sign past the euro symbol,
+    // a million groups twice, and six fraction digits separate the cell formatter from the summary
+    // one.
+    const numeric = pairs([1000.24, 4975.32, 0, -81.8, 1000000, 1.234567, 1500]);
+
+    // Values a numeric column can hold that are not finite numbers. The card coerces the whole
+    // string and the cell coerces its numeric prefix, so these two take different branches and
+    // then different fallbacks. Kept as its own measurement because it has a different producer
+    // from the one above, and folding them together would let one cause mask the other.
+    const coerced = pairs(["1000.24", "1.000,24", "1000,24", "12abc", "abc", Number.NaN]);
+
+    // A number column set to draw a bar or a ring. The value is chosen so its grouped form and its
+    // raw form differ: the bar labels itself 1234.5 through its own formatter, and the euro form is
+    // 1.234,5. Without that gap the second count below would be green against any implementation
+    // and would prove nothing.
+    const styled = ["progress", "ring"].map((style) => {
+      const { field } = both(1234.5, "number", { numberDisplayStyle: style });
+      const needle = formatEuroNumber(1234.5);
+      // Reached through `window` because this file is linted as Node, where the bare global is
+      // undefined. The named constant is worth the detour; the numeric filter value is not.
+      const walker = document.createTreeWalker(field, window.NodeFilter.SHOW_TEXT);
+      const texts = [];
+      while (walker.nextNode()) texts.push(walker.currentNode.nodeValue);
+      return {
+        style,
+        needle,
+        elements: field.querySelectorAll(style === "ring" ? ".db-cell-progress-ring" : ".db-cell-progress").length,
+        formatted: texts.filter((text) => text.includes(needle)).length,
+        texts,
+      };
+    });
+
+    return { numeric, coerced, styled };
+  });
+  await page.close();
+
+  const results = [];
+  const record = (name, pass, detail) => results.push({ name, pass, detail });
+  // The sign's non-breaking space is invisible in a terminal, and this whole surface is about two
+  // strings that look identical and are not. Show the code point rather than the glyph.
+  const show = (text) => JSON.stringify(text).replace(/\u00A0/g, "\\u00A0");
+  const disagreements = (rows) => rows.filter((row) => row.card !== row.cell);
+  const listing = (rows) => rows
+    .map((row) => `${row.type} ${show(row.value)} card=${show(row.card)} cell=${show(row.cell)}`)
+    .join(", ");
+
+  // A literal, and deliberately so. This one asks whether the output is the Dutch currency form at
+  // all, which comparing the renderer against its own formatter cannot answer — that comparison is
+  // true however the formatter is rewritten.
+  const NBSP = "\u00A0";
+  const currency = measured.numeric.find((row) => row.type === "currency" && row.value === "1000.24");
+  record("a currency card field carries its euro sign and its Dutch separators",
+    currency.card === `€${NBSP}1.000,24`,
+    `card renders ${show(currency.card)} for 1000.24, want ${show(`€${NBSP}1.000,24`)} — grouped with `
+      + `a dot, a comma decimal mark, and a sign followed by U+00A0 rather than a space. The default `
+      + `String() path this replaced rendered "1000.24"`);
+
+  record("a card and a cell agree, byte for byte, on every numeric column type",
+    disagreements(measured.numeric).length === 0,
+    `${measured.numeric.length} pairs compared across number and currency columns, `
+      + `${disagreements(measured.numeric).length} disagreements`
+      + (disagreements(measured.numeric).length ? `: ${listing(disagreements(measured.numeric))}` : "")
+      + `. Sample: ${[...new Set(measured.numeric.map((row) => row.value))].join(", ")}`);
+
+  record("a card and a cell agree when the column holds text or a non-finite number",
+    disagreements(measured.coerced).length === 0,
+    `${measured.coerced.length} pairs compared, ${disagreements(measured.coerced).length} disagreements`
+      + (disagreements(measured.coerced).length ? `: ${listing(disagreements(measured.coerced))}` : "")
+      + `. A clean numeric string agrees; one the card's whole-string coercion rejects does not`);
+
+  // Two counts per style, kept apart on purpose. The element count alone reports green on the shape
+  // that actually breaks this — a formatted string appearing beside the bar rather than instead of
+  // it — so the count that catches that has to be able to go red while the other stays green.
+  for (const style of measured.styled) {
+    const name = style.style === "ring" ? "ring" : "bar";
+    record(`a card's ${name} display renders one ${name}`,
+      style.elements === 1,
+      `${style.elements} ${name} elements on the rendered field, want 1`);
+    record(`a card's ${name} display carries no euro-formatted text beside the ${name}`,
+      style.formatted === 0,
+      `${style.formatted} text nodes carry ${show(style.needle)}, want 0. The ${name} labels itself `
+        + `through its own formatter, so the text nodes present are ${style.texts.map(show).join(", ")} `
+        + `— a different string, which is what makes this count able to fail`);
+  }
+
+  numberParityResults.push(...results);
+});
+
 results.push(...phoneResults, ...menuResults, ...addViewDesktopResults, ...addViewPhoneResults,
   ...grammarResults, ...addViewGrammar, ...motionResults, ...reducedResults, ...desktopMenuResults, ...cellResults, ...sheetResults, ...selectCellResults, ...rowPhoneResults, ...rowNarrowResults,
   ...familyResults, ...touchResults, ...overlapResults, ...rhythmResults, ...rendererRhythmResults,
-  ...liftedResults, ...inlineEditResults, ...sectionFailures);
+  ...liftedResults, ...inlineEditResults, ...numberParityResults, ...sectionFailures);
 
 await browser.close();
 rmSync(work, { recursive: true, force: true });
@@ -5009,6 +5169,20 @@ const KNOWN = new Map([
     "A sheet row's label computes to 13px, between the 12px and 14px steps the rest of the surface "
       + "uses. It is one declaration, but it sits under the shared row grammar, so moving it changes "
       + "every menu and every sheet at once and wants its own measured pass rather than a drive-by.",
+  ],
+  // Found by the parity check the moment it existed, which is the check's whole point: the card and
+  // the cell had never been rendered side by side, so nothing could report that they diverge. The
+  // card is not in this phase's scope, so the number is declared rather than repaired.
+  [
+    "a card and a cell agree when the column holds text or a non-finite number",
+    "The two sides coerce a stored value differently and then fall back differently. The card reads "
+      + "the whole string and treats a partial number as text, so it prints the text unchanged. The "
+      + "cell reads the numeric prefix, so it formats whatever prefix it found and shows the "
+      + "placeholder only when there is none. A field holding the Dutch text 1.000,24 therefore "
+      + "renders as that text on the card and as 1 in the row behind it, which is worse than the "
+      + "reported defect: the row silently drops three digits rather than merely looking unformatted. "
+      + "One coercion has to win, and choosing which is a data decision about what a numeric column "
+      + "may hold, not a formatting one.",
   ],
   [
     "the sheet survives the window resize a keyboard causes",
