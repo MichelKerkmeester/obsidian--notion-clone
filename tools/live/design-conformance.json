@@ -1,9 +1,9 @@
 {
-  "measuredAt": "2026-08-30T13:40:32.835Z",
+  "measuredAt": "2026-08-30T16:13:08.726Z",
   "inputs": {
-    "styles.css": "e92c9f98803f",
-    "tools/live/design-conformance.mjs": "d7140f7c0ae5",
-    "src/views/popover-position.ts": "ed3a75d6b03a"
+    "styles.css": "e5ada7e445ce",
+    "tools/live/design-conformance.mjs": "cf38f906d933",
+    "src/views/popover-position.ts": "0ad4c36947c4"
   },
   "checks": [
     {
@@ -89,10 +89,10 @@
     {
       "name": "gated — placement geometry",
       "enforced": true,
-      "value": 0,
+      "value": 1,
       "target": 0,
-      "note": "passing",
-      "conforms": true
+      "note": "FAILING",
+      "conforms": false
     },
     {
       "name": "gated — story coverage",
@@ -174,10 +174,10 @@
     "src/views/column-manager-renderer.ts:149  .db-panel-header-actions",
     "src/views/column-menu.ts:233  .db-dropdown-section-title",
     "src/views/column-menu.ts:368  .db-column-menu-back",
-    "src/views/database-view.ts:2993  .db-group-order-popover",
-    "src/views/database-view.ts:3107  .db-panel-button",
-    "src/views/database-view.ts:6844  .db-calendar-search-results-popover",
-    "src/views/database-view.ts:11035  .db-mobile-column-width-panel",
+    "src/views/database-view.ts:3032  .db-group-order-popover",
+    "src/views/database-view.ts:3146  .db-panel-button",
+    "src/views/database-view.ts:6885  .db-calendar-search-results-popover",
+    "src/views/database-view.ts:11076  .db-mobile-column-width-panel",
     "src/views/date-value-picker.ts:139  .db-cell-edit-popover",
     "src/views/date-value-picker.ts:206  .db-calendar-mini-popover",
     "src/views/dropdown-field.ts:115  .db-dropdown-field-text",

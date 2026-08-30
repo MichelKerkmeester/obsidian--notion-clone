@@ -1,7 +1,7 @@
 {
-  "measuredAt": "2026-08-30T13:40:47.867Z",
+  "measuredAt": "2026-08-30T16:12:32.329Z",
   "inputs": {
-    "styles.css": "e92c9f98803f",
+    "styles.css": "e5ada7e445ce",
     "tools/live/view-census.mjs": "f911f2e4a8cb",
     "tools/screenshots/scenarios.mjs": "1395f2dacbfd"
   },
@@ -360,7 +360,7 @@
     }
   ],
   "totals": {
-    "fixtures": 56,
+    "fixtures": 57,
     "escaping": 560,
     "growing": 256,
     "scrolling": 304,
@@ -6388,6 +6388,11 @@
     },
     {
       "width": 320,
+      "fixture": "chrome-owned-menu-sheet",
+      "probe": "4px"
+    },
+    {
+      "width": 320,
       "fixture": "chrome-group-selection-controls",
       "probe": "4px"
     },
@@ -6668,6 +6673,11 @@
     },
     {
       "width": 402,
+      "fixture": "chrome-owned-menu-sheet",
+      "probe": "4px"
+    },
+    {
+      "width": 402,
       "fixture": "chrome-group-selection-controls",
       "probe": "4px"
     },
@@ -6948,6 +6958,11 @@
     },
     {
       "width": 768,
+      "fixture": "chrome-owned-menu-sheet",
+      "probe": "4px"
+    },
+    {
+      "width": 768,
       "fixture": "chrome-group-selection-controls",
       "probe": "4px"
     },
@@ -7224,6 +7239,11 @@
     {
       "width": 1440,
       "fixture": "chrome-owned-menu",
+      "probe": "4px"
+    },
+    {
+      "width": 1440,
+      "fixture": "chrome-owned-menu-sheet",
       "probe": "4px"
     },
     {

@@ -1,7 +1,7 @@
 {
-  "measuredAt": "2026-08-30T13:40:39.610Z",
+  "measuredAt": "2026-08-30T16:12:23.851Z",
   "inputs": {
-    "styles.css": "e92c9f98803f",
+    "styles.css": "e5ada7e445ce",
     "tools/live/surface-census.mjs": "09663f4f354e",
     "src/views/surface-contract.ts": "ff7e6bafd3c8"
   },
@@ -130,7 +130,8 @@
       "scenarios": [
         "add-view-popover",
         "add-view-popover",
-        "chrome-owned-menu"
+        "chrome-owned-menu",
+        "chrome-owned-menu-sheet"
       ]
     },
     "db-menu-separator": {
@@ -141,7 +142,8 @@
       "rect": "326x1",
       "scenarios": [
         "add-view-popover",
-        "chrome-owned-menu"
+        "chrome-owned-menu",
+        "chrome-owned-menu-sheet"
       ]
     },
     "db-menu-item": {
@@ -163,7 +165,13 @@
         "chrome-owned-menu",
         "chrome-owned-menu",
         "chrome-owned-menu",
-        "chrome-owned-menu"
+        "chrome-owned-menu",
+        "chrome-owned-menu-sheet",
+        "chrome-owned-menu-sheet",
+        "chrome-owned-menu-sheet",
+        "chrome-owned-menu-sheet",
+        "chrome-owned-menu-sheet",
+        "chrome-owned-menu-sheet"
       ]
     },
     "db-menu-item-icon": {
@@ -184,7 +192,12 @@
         "chrome-owned-menu",
         "chrome-owned-menu",
         "chrome-owned-menu",
-        "chrome-owned-menu"
+        "chrome-owned-menu",
+        "chrome-owned-menu-sheet",
+        "chrome-owned-menu-sheet",
+        "chrome-owned-menu-sheet",
+        "chrome-owned-menu-sheet",
+        "chrome-owned-menu-sheet"
       ]
     },
     "db-menu-item-label": {
@@ -206,7 +219,13 @@
         "chrome-owned-menu",
         "chrome-owned-menu",
         "chrome-owned-menu",
-        "chrome-owned-menu"
+        "chrome-owned-menu",
+        "chrome-owned-menu-sheet",
+        "chrome-owned-menu-sheet",
+        "chrome-owned-menu-sheet",
+        "chrome-owned-menu-sheet",
+        "chrome-owned-menu-sheet",
+        "chrome-owned-menu-sheet"
       ]
     },
     "db-dropdown-popover": {
@@ -866,7 +885,8 @@
       "role": null,
       "rect": "36x4",
       "scenarios": [
-        "panel-record-detail-sheet"
+        "panel-record-detail-sheet",
+        "chrome-owned-menu-sheet"
       ]
     },
     "db-record-peek-panel": {
@@ -1090,7 +1110,8 @@
       "role": null,
       "rect": "230x192",
       "scenarios": [
-        "chrome-owned-menu"
+        "chrome-owned-menu",
+        "chrome-owned-menu-sheet"
       ]
     },
     "db-menu-item-current": {
@@ -1100,7 +1121,8 @@
       "role": null,
       "rect": "36x15",
       "scenarios": [
-        "chrome-owned-menu"
+        "chrome-owned-menu",
+        "chrome-owned-menu-sheet"
       ]
     },
     "db-menu-item-chevron": {
@@ -1110,7 +1132,8 @@
       "role": null,
       "rect": "14x14",
       "scenarios": [
-        "chrome-owned-menu"
+        "chrome-owned-menu",
+        "chrome-owned-menu-sheet"
       ]
     },
     "db-cell-popover-editing": {
