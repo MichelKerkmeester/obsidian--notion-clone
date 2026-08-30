@@ -14,30 +14,31 @@ _memory:
     packet_pointer: "public/005-component-surface-system/012-mobile-touch-semantics"
     last_updated_at: "2026-08-30T09:12:00Z"
     last_updated_by: "sk-design"
-    recent_action: "Code and harness half of the verifier findings landed: title tap shared by both table hosts, real title-ness in the cell renderer, selection paint deferred, 45 tracker ids stripped from comments, sheet grab band stopped at its own header, rename named in the row menu; 88 placement checks, 87 pass, 1 declared red"
-    next_safe_action: "Operator decision on phone row height (44px target is unreachable from CSS: measured 33px reach, cell clips overflow and the row below owns the boundary) and on a taller sheet header (48px grab band does not fit above 33px of chrome); then one recapture covering the select-checkbox pin and this lane"
+    recent_action: "Title tap shared by both hosts; grab band stopped at its header; 87 of 88 checks pass"
+    next_safe_action: "Operator decision on phone row height and sheet header, then one recapture"
     blockers:
-      - "screenshots-fresh red: 204 captures stale against styles.css, edited by 014 without recapture; gate exits 1 at 12/13"
+      - "screenshots-fresh red: 204 captures stale against another phase's styles.css edit"
     key_files:
       - "spec.md"
-      - "device-range-select-on-touch.png"
-      - "device-sheet-from-row.png"
       - "acceptance-criteria.md"
-      - "../../../../src/views/table-cell-gesture.ts"
+      - "plan.md"
+      - "tasks.md"
+      - "implementation-summary.md"
+      - "device-range-select-on-touch.png"
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-012"
       parent_session_id: null
     completion_pct: 90
     open_questions:
-      - "Should a phone row be raised to 44px, against the user's density setting?"
-      - "Should a second row-checkbox tap stop selecting the range between them?"
-      - "Phone title rename has no reachable entry point; only dblclick and type-to-edit reach it (spec.md 6.2)"
+      - "Phone row height 44px: declined by the operator, density outranks (plan.md 7)"
+      - "Row-checkbox range selection: handed to 017 (tasks.md T5)"
+      - "Phone title rename entry point: dblclick and type-to-edit only (spec.md 6.2)"
     answered_questions:
-      - "Whether both pointer owners route a title tap to the sheet: they do now. setupTitleCellTap moved to shared table-record-peek and is bound by both; isTitleCell keys off visible column order (acceptance-criteria.md 5.1)"
-      - "Where the phone predicate belongs: nowhere. Input keys off per-event pointerType; isTouchDevice stays layout and isMobileBottomSheet stays presentation, and their 760/600 disagreement is correct."
-      - "What painted the range: two taps, not a drag. Drag was already disabled on touch."
-      - "How many pointer owners: two, not three. table-renderer binds no cell selection."
+      - "Both pointer owners route a title tap to the sheet, via shared table-record-peek"
+      - "The phone predicate belongs nowhere; input keys off per-event pointerType"
+      - "The range was painted by two taps, not a drag"
+      - "Two pointer owners, not three; table-renderer binds no cell selection"
 ---
 # Feature Specification: Mobile Touch Semantics in the Table
 

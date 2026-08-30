@@ -14,30 +14,29 @@ _memory:
     packet_pointer: "public/005-component-surface-system/016-sheet-drag-and-audit"
     last_updated_at: "2026-08-30T10:30:00Z"
     last_updated_by: "sk-design"
-    recent_action: "Root cause of the third drag report found and fixed: the panel's own content render empties the panel, destroying the grab bar that the sheet module had prepended as its child, so every view re-render silently unbound the gesture. Gesture rebound to the surviving panel and the chrome re-asserted after each render. Eight asks measured on a probe that drives the shipped entry points; 19/22 checks pass, 3 declared."
-    next_safe_action: "Operator decides the two open items: the 13px row label is off the type scale, and the record sheet closes on a window resize, which is how one of the two software-keyboard signals arrives"
+    recent_action: "Third drag report root-caused and fixed; eight asks measured, 19 of 22 pass"
+    next_safe_action: "Operator decides the 13px row label and the sheet resize behaviour"
     blockers: []
     key_files:
       - "spec.md"
       - "acceptance-criteria.md"
+      - "plan.md"
+      - "tasks.md"
+      - "implementation-summary.md"
       - "probe/sheet-audit.mjs"
-      - "probe/drag-probe.mjs"
-      - "probe/transition-probe.mjs"
-      - "../../../../src/views/mobile-bottom-sheet.ts"
-      - "../../../../src/views/record-detail-panel.ts"
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-016"
       parent_session_id: null
     completion_pct: 90
     open_questions:
-      - "The phone row label is 13px, which is not on the 12/14/16/18/20/24 type scale. Move it to 14px, or accept the off-scale step?"
-      - "A window resize closes the record sheet outright. Android-shaped hosts announce the software keyboard that way, so on those the keyboard-avoidance inset can never be reached. Should the sheet survive a resize and re-place instead of closing?"
+      - "Row label 13px is off the 12/14/16/18/20/24 scale. Move to 14px or accept?"
+      - "Should the record sheet survive a window resize and re-place instead of closing?"
     answered_questions:
-      - "Why the drag kept dying after two correct-looking fixes: the listeners were bound to a node the panel's own render destroys, not to the panel."
-      - "Whether a transition was fighting the drag: no. transition:none lands, computed duration is 0s during the gesture, and the sheet reaches the finger in the same frame."
-      - "Whether the scrim interferes with the drag, as the operator supposed it would help: it does neither. It sits one layer below the sheet and a press on the band resolves to the grab handle."
-      - "Whether the keyboard inset is real: the lever is real and works, and it reads --keyboard-height, which Obsidian itself declares."
+      - "The drag kept dying: listeners bound to a node the panel's own render destroys"
+      - "No transition was fighting the drag; computed duration is 0s during the gesture"
+      - "The scrim neither helps nor hinders; a press on the band resolves to the grab handle"
+      - "The keyboard lever is real and reads --keyboard-height, which Obsidian declares"
 ---
 
 # The Sheet Drag, and the Whole Feedback Set Audited Together

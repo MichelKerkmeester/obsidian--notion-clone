@@ -649,6 +649,16 @@ export const CHROME_SCENARIOS = [
     // The clear-selection checkbox is checked by construction — the bar only exists while a
     // selection does — so this is also the only fixture that photographs a row-role box in its
     // checked state at the size the bar gives it.
+    // The bar docks to the viewport with position: fixed, which means it contributes no height to
+    // the element being captured. Without this override the shot was an empty 80x64 rectangle —
+    // fully transparent, byte-identical in both themes and on both devices — while every check
+    // stayed green, because freshness and existence were the only things anyone asked about.
+    // Positioning is all that is undone; the height, border, radius, background and padding that
+    // make up the thing being photographed are left exactly as the stylesheet sets them.
+    captureCss: `.note-database-container .db-selection-status-bar {
+      position: static !important; left: auto !important; bottom: auto !important;
+      transform: none !important;
+    }`,
     note: "The bar that appears while table cells are selected. Its checkbox clears the selection, so it is always rendered checked.",
     html: () => `
       <div class="note-database-container">

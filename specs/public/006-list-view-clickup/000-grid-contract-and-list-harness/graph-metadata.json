@@ -1,0 +1,223 @@
+{
+  "schema_version": 1,
+  "packet_id": "public/006-list-view-clickup/000-grid-contract-and-list-harness",
+  "spec_folder": "public/006-list-view-clickup/000-grid-contract-and-list-harness",
+  "parent_id": "public/006-list-view-clickup",
+  "children_ids": [],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "006 phase 000",
+      "grid contract predicate",
+      "list harness census",
+      "guard tripwire g8 g11",
+      "006 phase 000 plan",
+      "guard tripwire arming",
+      "list census plan",
+      "006 phase 000 tasks",
+      "tripwire arming tasks",
+      "006 phase 000 criteria",
+      "ac-31 ac-32 tripwire",
+      "006 phase 000 adr"
+    ],
+    "key_topics": [
+      "phase",
+      "grid",
+      "contract",
+      "predicate",
+      "list",
+      "harness",
+      "census",
+      "guard",
+      "tripwire",
+      "g11",
+      "plan",
+      "arming"
+    ],
+    "importance_tier": "critical",
+    "status": "planned",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "acceptance-criteria.md",
+      "decision-record.md",
+      "checklist.md",
+      "tools/lane/css-lane.json",
+      "tools/storybook/verify-placement.mjs",
+      "src/views/database-view.ts"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "acceptance-criteria.md",
+        "kind": "doc",
+        "path": "acceptance-criteria.md",
+        "source": "derived"
+      },
+      {
+        "name": "decision-record.md",
+        "kind": "doc",
+        "path": "decision-record.md",
+        "source": "derived"
+      },
+      {
+        "name": "checklist.md",
+        "kind": "doc",
+        "path": "checklist.md",
+        "source": "derived"
+      },
+      {
+        "name": "css-lane.json",
+        "kind": "config",
+        "path": "tools/lane/css-lane.json",
+        "source": "derived"
+      },
+      {
+        "name": "verify-placement.mjs",
+        "kind": "file",
+        "path": "tools/storybook/verify-placement.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "database-view.ts",
+        "kind": "code",
+        "path": "src/views/database-view.ts",
+        "source": "derived"
+      },
+      {
+        "name": "Grid Contract",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Harness That Can See",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Spec Folder",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Parent Spec",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "no",
+        "kind": "key_phrase",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "the",
+        "kind": "key_phrase",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Plan",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "List Harness",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "text",
+        "kind": "technology",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "its",
+        "kind": "key_phrase",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Breakdown",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Notation",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Completion Criteria This",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "evidence",
+        "kind": "key_phrase",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Acceptance Criteria",
+        "kind": "proper_noun",
+        "path": "acceptance-criteria.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "Deliver the isGridView predicate, re-derive the guard table off a stable anchor, build the two view-semantic guard tripwires before any guard is converted, make verify-placement.mjs render a real list, and record every failing number this packet will later claim to fix.",
+    "created_at": "2026-08-30T10:00:31.771Z",
+    "last_save_at": "2026-08-30T10:05:54.348Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "acceptance-criteria.md",
+      "decision-record.md"
+    ],
+    "source_fingerprint": "sha256:23f43edd34e11e2ba142b286e8a00ebb547fe50ed4941a175304ba700543bfaa",
+    "source_fingerprint_docset": 3,
+    "source_doc_hashes": {
+      "spec.md": "bf94e7e283627ebea562ab6a1a59b8056ec317727da19fd829034cac11e0f53a",
+      "plan.md": "1b28c2a2b8eb0e0e1e4ff19ccf516f5003411a5c4bd74a87d535ff11d62f28a7",
+      "tasks.md": "62d84a002b35319b4c7e426c7c9bf408c02e7d1047ff6d7f6609976eb55e4887",
+      "decision-record.md": "618093d7d53c5aefdcdde0f0463ad068d19ecf58a0c46c2103a135056535b5c6"
+    },
+    "last_active_child_id": null,
+    "last_active_at": null
+  }
+}

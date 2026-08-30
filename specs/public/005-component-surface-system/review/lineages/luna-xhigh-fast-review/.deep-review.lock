@@ -1,0 +1,11 @@
+{
+  "owner_pid": 51621,
+  "started_at_iso": "2026-08-30T10:15:51.707Z",
+  "ttl_ms": 300000,
+  "last_heartbeat_iso": "2026-08-30T10:15:51.707Z",
+  "packet_id": "specs/public/005-component-surface-system",
+  "runtime_kind": "main",
+  "phase": "running",
+  "last_activity_iso": "2026-08-30T10:15:51.707Z",
+  "acquire_nonce": "51621-1788084951708-cb7ac497-afa3-4b32-bbca-b7cfbdc7bdac"
+}

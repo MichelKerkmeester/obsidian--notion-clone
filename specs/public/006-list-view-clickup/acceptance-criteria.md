@@ -58,6 +58,50 @@ the harness.
 whose deletion must move an asserted number. If deleting it moves nothing, the criterion is rejected
 and rewritten — that is what happened to every check that passed in release 1.3.1.
 
+### 2.0 Ownership, and where each half of a criterion lives
+
+This register is the **definition** — threshold, negative control, why it fails today. It is owned
+here and stated once. The **measurement** — the "today" number, the target, the evidence tick — lives
+in the owning phase child's `checklist.md`, because that is the document that goes stale if it is
+kept anywhere else.
+
+| Phase | Owns |
+|---|---|
+| `000` | `AC-31`, `AC-32` (armed, not closed), and the **census** that fills every "today" cell in the packet |
+| `001` | `AC-01`-`AC-09`, `AC-10R`, `AC-11`, `AC-28`, `AC-30`; **closes** `AC-31` and `AC-32` |
+| `002` | `AC-12`-`AC-21`, `AC-27`, `AC-29` |
+| `003` | `AC-22`, `AC-23` |
+| `004` | `AC-24`, `AC-25`, `AC-26`; **re-runs** `AC-31` and `AC-32` against the final tree |
+
+### 2.1 A criterion can be invalidated by a decision, not only by evidence
+
+Two rows in this register have been withdrawn for pointing at the wrong behaviour, and they got there
+by different routes. The distinction is worth keeping because the doctrine only defended against one
+of them.
+
+- **`AC-16` (first version)** asserted the checkbox and the record icon share one box. The captures
+  showed otherwise. Route: **evidence was misread**, then better evidence arrived.
+- **`AC-10`** asserted the list keeps its reading behaviours. It was *correct when written* —
+  `FR-17` required exactly that. Route: **the decision changed underneath it** (ADR-005).
+
+The second route is the one nothing was watching. A criterion is therefore re-checked against every
+ADR that lands after it, not only against new evidence. `R7` in `spec.md` §10 carries the risk.
+
+### 2.2 Guard tripwires fail first against a mutant, not against HEAD
+
+`AC-31` and `AC-32` guard branches that are **correct today**, so they pass on HEAD. Read literally,
+the doctrine's *demonstrated failing on the current tree* would classify both as banned shape 1.
+
+They are not, and the resolution is a scoped carve-out recorded in
+[`000-grid-contract-and-list-harness/decision-record.md`](000-grid-contract-and-list-harness/decision-record.md)
+ADR-P0-01: **a guard tripwire's failing-first demonstration is against a deliberately mutated tree**,
+with the mutation, the command and both numbers on record. That is a harder record to produce than
+the ordinary rule requires, not an easier one — an ordinary criterion fails once on a tree nobody
+built on purpose; a tripwire has to fail on a tree built specifically to defeat it.
+
+**The carve-out names its members.** Only `AC-31` and `AC-32` hold it. A third criterion does not
+inherit it by resembling one; it is argued on that page first.
+
 ### Structure — phase 001
 
 | ID | Criterion | Threshold | Negative control | Why it fails today |
@@ -71,9 +115,21 @@ and rewritten — that is what happened to every check that passed in release 1.
 | AC-07 | Tab past the last cell of the last row | creates one row | disable the guard; no row is created | `database-view.ts:1816` returns early |
 | AC-08 | Footer calculation value for a numeric column in a list | equals the table's value for the same data | remove the rule; the cell empties | `database-view.ts:6995` gives the list the summary bar instead |
 | AC-09 | Group depth rendered for a two-field grouping in a list | 2 | drop the second field; depth falls to 1 | `renderList` passes one field |
-| AC-10 | Row-click still opens the record detail panel, and the roving-tabindex model is still active in list mode | both true | switch the view to table; both become false | Guards the FR-17 regression Route B could cause |
+| ~~AC-10~~ | **WITHDRAWN — it would fail a correct implementation.** It asserted the reading behaviours stay; ADR-005 removes them. Replaced by `AC-10R`. Kept here as a stub because it is cited elsewhere in the packet | — | — | The packet's **second banned shape 2**, and the first to arrive from a *decision changing* rather than from evidence being misread. See §2.1 |
+| AC-10R | In list mode the **cell-grid** keyboard model is active and the roving-tabindex model is not; a row click opens on a **target cell** rather than the record detail panel; the keyboard model matches the table's for the same fixture | all three, and the two keyboard models are never simultaneously active | re-enable the roving model in the harness — the cell-grid assertion fails. If both can be true at once, they are not mutually exclusive | Both list behaviours are present on the current tree (`list-renderer.ts:254`, `:248`), so this fails first on HEAD. It does **not** assert that anything replaced the reading affordances — nothing did |
 | AC-11 | Render time for 2,000 rows | within 20 percent of the table baseline from T1.7 | halve the row count; the time falls | Nothing measured yet |
 | AC-28 | Count of sort-indicator nodes in a grouped list with one column sorted, and the ordinal text each carries with two rules active | equals the group count; every instance shows the same ordinal | remove the sort rule; the count falls to 0 | No header exists, so no indicator does. Guards FR-03a: an indicator emitted once outside the repeated header would render on the first group only, and a criterion counting "at least one" would not notice |
+
+### Guard tripwires — built in phase 000, before any guard is converted
+
+Both drive the production render. Neither is a unit test: both failures pass `tsc` and the entire
+unit suite, which is the whole reason ADR-001 requires them. Both fail first against a **mutant**,
+per §2.2.
+
+| ID | Criterion | Threshold | Negative control / arming | Why it is needed |
+|---|---|---|---|---|
+| AC-31 | On the production render of a list view, with the title column configured and **at least one non-title column hidden**: (a) the title field's key is present in the required-column set the view resolves, read from the rendered DOM's column attribution rather than from a direct call to the resolver; and (b) the count of row-level affordance nodes rendered in a list row | (a) present; (b) not below the census value | **Arming:** convert G8 to the grid predicate in a scratch tree. (a) falls to absent and (b) falls. Record all four numbers and the mutation as a diff | G8 keeps the list's title field. Converting it returns empty, the column disappears, and it takes the leading gutter, the collapse chevron, the record glyph and the row-action cluster with it — so the check asserts the column **and its occupants' survival**. **It deliberately does not assert where the leading gutter is emitted:** that is `AC-01`'s undecided choice, and presuming either answer would fail a correct implementation of the other |
+| AC-32 | On a **multi-group** fixture of at least three groups, one with **zero rows**: activate the create affordance of a **named, non-first** group and read the group container that receives the new row. Repeat using the zero-row group's affordance | the receiving group equals the group whose affordance was used, in both runs | **Arming:** convert G11 to the grid predicate in a scratch tree; the check fails. **Fixture control:** a single-group fixture must report *inconclusive*, never a pass | G11 keys new-row reveal to the list and the create affordance is group-scoped — every group carries one, including a zero-row group (C5, C24). **The fixture is the criterion:** with one group, "landed in the right group" is true by construction, and a first-group test passes a reveal that always targets the first group |
 
 ### Chrome — phase 002
 
@@ -133,9 +189,9 @@ explicitly: AC-01 and AC-23.
 
 | Number | Produced by | Phase | Status |
 |---|---|---|---|
-| Every "today" cell in `checklist.md` | the census, `verify-placement.mjs` | 000 | **blank — nothing measured yet** |
+| Every "today" cell in **each child's** `checklist.md` | the census, `verify-placement.mjs` | 000 | **blank — nothing measured yet** |
 | `db-list-group-new` and `db-list-row-checkbox` selector counts | static count against `styles.css` | already measured | **0 and 0** |
-| The eleven guard sites | read from `database-view.ts` | already measured | recorded in `spec.md` §4.1 and `plan.md` §3 |
+| The eleven guard sites | read from `database-view.ts` | **re-derive in 000** | Recorded in `spec.md` §4.1 and `plan.md` §3. **Every line number is stale** — all eleven had moved when re-read on 2026-08-30, and `src/` is under concurrent edit. The sites were confirmed present; `T1.2` re-anchors them off the enclosing method name |
 | Every ClickUp-sourced target shape | the four desktop captures at `../context/clickup/list-view/`, then `reference-clickup-list-operator.png`, then the Mobbin screens | already measured | recorded in `spec.md` §4.2, with `spec.md` §4.2.1 listing what the captures cannot establish. The captures supply the **shape**; the token scale supplies the **value**, and no number is read off any image |
 | Table bench baseline | `npm run bench` | 000, task T1.7 | blank |
 | Contrast values | computed-style probe | 000 for the baseline, 002 for the result | blank |

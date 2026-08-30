@@ -124,11 +124,22 @@ const extensions = {
     if (value === null || value === false) this.removeAttribute(name);
     else this.setAttribute(name, String(value));
   },
+  // These are two different methods on the device and the difference is the whole point.
+  //
+  // Obsidian's own enhance.js defines them as:
+  //   setCssStyles(t) { const e = this.style; for (const n in t) e[n] = t[n]; }
+  //   setCssProps(t)  { const e = this.style; for (const n in t) e.setProperty(n, t[n]); }
+  //
+  // setProperty takes a CSS property name, so a camelCase key like objectFit names no property and
+  // is dropped without error. This shim used to implement setCssProps with the setCssStyles body,
+  // which made the harness MORE permissive than the app: every camelCase key worked here and
+  // silently did nothing on a phone, so no check could see the difference. A harness that accepts
+  // what the device rejects certifies code the device does not run.
   setCssProps(props) {
-    for (const [name, value] of Object.entries(props)) {
-      if (name.startsWith("--")) this.style.setProperty(name, value);
-      else this.style[name] = value;
-    }
+    for (const [name, value] of Object.entries(props)) this.style.setProperty(name, value);
+  },
+  setCssStyles(styles) {
+    for (const [name, value] of Object.entries(styles)) this.style[name] = value;
   },
   empty() {
     while (this.firstChild) this.removeChild(this.firstChild);

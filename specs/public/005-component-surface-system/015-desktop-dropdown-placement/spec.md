@@ -15,33 +15,31 @@ _memory:
     packet_pointer: "public/005-component-surface-system/015-desktop-dropdown-placement"
     last_updated_at: "2026-08-30T09:45:00Z"
     last_updated_by: "design-specialist"
-    recent_action: "Five placement paths inventoried by closure proof; six defects measured; five fixed at two seams; probe 30/31 with one declared red"
-    next_safe_action: "Merge probe-desktop-placement.mjs into tools/storybook/verify-placement.mjs once that file is free"
+    recent_action: "Five paths inventoried by closure proof; six defects measured, five fixed at two seams"
+    next_safe_action: "Merge probe-desktop-placement.mjs into verify-placement.mjs once free"
     blockers:
-      - "The calendar/timeline search-results panel clamps to window.innerWidth and travels 240-292px under an open right sidebar. Its placement method is duplicated verbatim in database-view.ts and embedded-database-renderer.ts, both held by another session for the whole of this phase, so it is measured and declared rather than fixed."
-      - "embedded-database-renderer.ts:2411 is the third copy of the anchor-derived showAt idiom. The other two now pass the anchor; this one still derives a point and keeps the flip defect. One line, blocked on the same file lock."
-      - "Owed: probe-desktop-placement.mjs duplicates checks that belong in verify-placement.mjs. That file was open in another session and moved from 80 to 82 checks during this phase, so the merge was not attempted."
+      - "Calendar/timeline search panel: 240-292px under the sidebar, declared red (plan.md 7)"
+      - "Third copy of the anchor idiom in embedded-database-renderer.ts, same file lock"
+      - "Owed: probe merge into verify-placement.mjs, open in another session (tasks.md T18)"
     key_files:
       - "spec.md"
       - "acceptance-criteria.md"
+      - "plan.md"
+      - "tasks.md"
+      - "implementation-summary.md"
       - "probe-inventory.mjs"
       - "probe-desktop-placement.mjs"
-      - "../../../../src/views/popover-position.ts"
-      - "../../../../src/views/owned-menu.ts"
-      - "../../../../src/views/column-menu.ts"
-      - "../../../../src/views/row-menu.ts"
-      - "../../../../src/views/modals/formula-modal.ts"
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-015"
       parent_session_id: null
     completion_pct: 80
     open_questions:
-      - "Should positionToolbarPopover also handle being CALLED with an already-dead anchor? Today it returns at its entry guard and the panel renders unplaced but visible. That is a different defect from anchor death mid-life and changing it touches all 34 call sites."
-      - "getPlacementOptions in surface.ts drops align, gap and preferredSide. openSurface has zero callers, so nothing is broken today. Fix now, or when the first caller arrives?"
+      - "Anchorless open: entry guard returns and the panel renders unplaced, binds 34 call sites"
+      - "getPlacementOptions drops align, gap and preferredSide into dead code (plan.md 7)"
     answered_questions:
-      - "Is getPlacementOptions the root cause of several reports? No. openSurface has no callers at all, so the dropped options reach nothing."
-      - "Does the phone move? No. Both phone checks hold before and after; every change is inside a desktop-only branch."
+      - "getPlacementOptions is not a root cause; its only consumer has zero callers"
+      - "The phone does not move; every change sits in a desktop-only branch"
 ---
 # Feature Specification: Desktop Dropdown Placement
 

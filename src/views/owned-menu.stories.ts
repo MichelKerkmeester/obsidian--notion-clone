@@ -47,7 +47,7 @@ export const Default: Story = {
     menu.addSeparator();
     menu.addRow({ icon: "trash-2", label: "Delete", disabled: true, disabledReason: "Read-only view" });
     host.appendChild(menu.el);
-    menu.el.setCssProps({ position: "static", boxShadow: "none" });
+    menu.el.setCssProps({ position: "static", "box-shadow": "none" });
     return host;
   },
 };
