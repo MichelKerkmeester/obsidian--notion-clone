@@ -483,7 +483,7 @@ export class BoardRenderer {
       const row = path ? this.rowByPath.get(path) : undefined;
       const fromGroup = event.dataTransfer?.getData(CARD_FROM_GROUP_MIME) || undefined;
       if (row) {
-        // 拖到列空白区：同列保持原位，跨列才追加到目标列末尾（Bug 1 修复）。
+        // 拖到列空白区：同列保持原位，跨列才追加到目标列末尾。
         const drop = resolveBoardContainerDropOrder({
           rows: group.rows,
           draggedPath: row.file.path,
@@ -699,7 +699,7 @@ export class BoardRenderer {
       this.clearCardDropZone(cards);
       const fromGroup = event.dataTransfer?.getData(CARD_FROM_GROUP_MIME) || undefined;
       const fromSubgroup = event.dataTransfer?.getData(CARD_FROM_SUBGROUP_MIME) || undefined;
-      // 拖到卡片容器空白区：同分组保持原位，跨分组才追加到目标分组末尾（Bug 1 修复）。
+      // 拖到卡片容器空白区：同分组保持原位，跨分组才追加到目标分组末尾。
       const drop = resolveBoardContainerDropOrder({
         rows: subgroup?.rows ?? group.rows,
         draggedPath: path,

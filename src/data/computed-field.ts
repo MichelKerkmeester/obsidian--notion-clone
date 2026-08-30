@@ -424,7 +424,7 @@ export class ComputedFieldEngine {
    * 支持 [field]、[label]→key、field("x")、裸标识符四种引用形式；排除函数调用（后跟 `(`）、
    * 无关成员访问（前跟 `.`）与字符串字面量内的内容；Bases 的 `formula.*` 是派生字段引用，
    * 需映射回 schema 中的 computed/Rollup 列。只在 schema 列集合内的标识符才计入依赖
-   * （内置 pi/today/note 等不计）。修复 Bug Z：原先只匹配 field("...")，漏掉默认形式 [field]
+   * （内置 pi/today/note 等不计）。原先只匹配 field("...")，漏掉默认形式 [field]
    * 与裸标识符，导致 automatic 模式增量保存漏算依赖列、computed 存储值停留旧值。
    */
   static extractDependencies(expression: string, columns: ColumnDef[] = []): string[] {

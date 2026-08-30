@@ -443,7 +443,7 @@ export class ChartRenderer {
             position: "bottom",
             // 非 mixed 图：自定义 onClick 把图例项映射到 chartHiddenGroups（按 group key 过滤类别）。
             // mixed 图：dataset label 是聚合文案（"Count"/"Sum"）非 group key，自定义 onClick 会
-            // 写脏 chartHiddenGroups；省略 onClick（undefined）让 Chart.js 走默认 dataset 显隐（Bug S）。
+            // 写脏 chartHiddenGroups；省略 onClick（undefined）让 Chart.js 走默认 dataset 显隐。
             onClick: isMixed ? undefined : (_event, item) => this.toggleLegendGroup(item.text || ""),
             labels: {
               color: colors.text,

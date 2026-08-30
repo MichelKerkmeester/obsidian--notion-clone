@@ -975,7 +975,9 @@ export class ChartToolbarRenderer {
     const text = row.createDiv({ cls: "db-chart-options-row-text" });
     text.createSpan({ cls: "db-chart-options-label", text: label });
     this.renderDisabledReason(text, disabledReason, !disabled);
-    const input = row.createEl("input", { cls: "db-toggle-switch", attr: { type: "checkbox", role: "switch" } });
+    // Named from the same string the visible span shows; that span is not a label element, so
+    // without this the switch reaches assistive technology with no name at all.
+    const input = row.createEl("input", { cls: "db-toggle-switch", attr: { type: "checkbox", role: "switch", "aria-label": label } });
     input.checked = checked;
     input.disabled = disabled;
     applyDisabledReason(input, label, disabled, disabledReason);

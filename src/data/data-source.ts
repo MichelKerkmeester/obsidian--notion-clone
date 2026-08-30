@@ -209,7 +209,7 @@ export class DataSource {
     track(this.vault.on("rename", (file, oldPath) => {
       this.recordCache?.delete(oldPath);
       this.refreshCachedRecord(file);
-      // Bug 5: 迁移 optimistic overrides old→new（不清除，否则丢掉等待 metadata cache 接管
+      // 迁移 optimistic overrides old→new（不清除，否则丢掉等待 metadata cache 接管
       // 的 frontmatter——新创建文件被快速重命名时尤其关键）。
       const fmOverride = this.frontmatterOverrides.get(oldPath);
       if (fmOverride) {

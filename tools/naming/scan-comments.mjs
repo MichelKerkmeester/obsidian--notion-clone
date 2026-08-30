@@ -6,10 +6,10 @@
 //
 // Reports every file under src/ and tools/ missing a `MODULE:` banner or
 // numbered upper-case box-drawing section rules, plus any commented-out
-// code found along the way. Measured today (002-repo-convention-audit/
-// audit.json): 0 of 249 files carry a MODULE banner and only a handful
-// carry a box-drawing rule at all — this scanner exists so that count
-// stops being a hand audit and starts being a re-runnable gate.
+// code found along the way. When this scanner was written 0 of 249 files
+// carried a MODULE banner and only a handful carried a box-drawing rule at
+// all — it exists so that count stops being a hand audit and starts being a
+// re-runnable gate.
 //
 // Usage: node tools/naming/scan-comments.mjs [--json]
 // Exit:  0 when every scanned file has a banner, paired numbered

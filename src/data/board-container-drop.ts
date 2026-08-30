@@ -6,7 +6,7 @@
 // 看板容器拖拽目标决策。
 //
 // 把卡片拖到看板列 / 子分组的「空白区」（非某张卡片上）时，决定卡片是保持原位
-// 还是追加到目标分组末尾。这是 Bug 1 的核心修复：原先容器空白区 drop 会无条件把
+// 还是追加到目标分组末尾。这是核心修复：原先容器空白区 drop 会无条件把
 // 卡片重排到末尾，导致「拖回原位 → 跑到末尾」。
 //
 // 用结构类型 BoardDropRow 而非 RowData，避免引入 obsidian 依赖，便于纯单测
@@ -70,7 +70,7 @@ export type BoardCardDropIntent = "cross-group-move" | "same-group-reorder" | "i
 /**
  * 判断两个分组 key 是否指向同一分组（主组与子组通用）。
  * 用 isEmptyGroupId 归一化：空串 / EMPTY_GROUP / 未分类 / Uncategorized / 未分類 等
- * 空组变体互为相同；空与非空不同；非空按规范化值比较。替代 truthy 判断（Bug L：未分组
+ * 空组变体互为相同；空与非空不同；非空按规范化值比较。替代 truthy 判断（未分组
  * 空串曾被当 falsy，导致从未分组移入子组时漏更新）。非空 key 去除首尾空格，
  * 与 QueryEngine 的分组键及选项编辑/注册口径一致。
  */
@@ -90,7 +90,7 @@ export function isSameBoardGroup(a: string | undefined, b: string | undefined): 
  * - 同组 + 显式排序 → "ignore"：manual order 被排序覆盖，重排无意义。
  *
  * 主组与子组都经 isSameBoardGroup 归一化比较；fromGroup/fromSubgroup 为 undefined
- * （信息缺失）时不作为跨组依据，保持向后兼容。子组维度修复 Bug L：显式排序 + 子分组
+ * （信息缺失）时不作为跨组依据，保持向后兼容。子组维度的修复：显式排序 + 子分组
  * 下同列跨子组的 card-to-card drop 不再被当同组重排吞掉。
  *
  * 与 resolveBoardContainerDropOrder 的区别：本函数只判定「拖到卡片上」的意图（是否

@@ -171,7 +171,7 @@ export class CalendarToolbarRenderer {
 			actions.onChange(t("undo.calendarTitleFieldConfig"));
 		}, "text-cursor-input", true);
 
-		// Calendar scale dropdown (Issue 9: moved from header buttons)
+		// Calendar scale dropdown, moved here out of the header buttons
 		this.renderSelect(data, t("viewConfig.calendarScale"), [
 			{ value: "month", text: t("calendar.scaleMonth") },
 			{ value: "week", text: t("calendar.scaleWeek") },
@@ -334,7 +334,7 @@ export class CalendarToolbarRenderer {
 	/** Render the sizing rows (used by renderSizingSection and refreshSizingRows). */
 	private renderSizingRows(sizing: HTMLElement, config: ViewConfig, actions: CalendarToolbarActions): void {
 		// Column width applies to all scales (month / week / day).
-			// Column width mode dropdown (Issue 7: replace switch with dropdown)
+			// Column width mode dropdown, which replaced an earlier two-state switch
 			this.renderSelect(sizing, t("viewConfig.calendarColumnSizeMode"), [
 				{ value: "adaptive", text: t("viewConfig.calendarColumnSizeMode.adaptive") },
 				{ value: "custom", text: t("viewConfig.calendarColumnSizeMode.custom") },
@@ -378,7 +378,7 @@ export class CalendarToolbarRenderer {
 		// height, which has its own setting). Hide it outside month so the Layout
 		// section never offers a control that does nothing for the current scale.
 		if (config.calendarScale !== "week" && config.calendarScale !== "day") {
-			// Row height mode dropdown (Issue 7: replace switch with dropdown)
+			// Row height mode dropdown, which replaced an earlier two-state switch
 			this.renderSelect(sizing, t("viewConfig.calendarRowSizeMode"), [
 				{ value: "adaptive", text: t("viewConfig.calendarRowSizeMode.adaptive") },
 				{ value: "custom", text: t("viewConfig.calendarRowSizeMode.custom") },
@@ -392,7 +392,7 @@ export class CalendarToolbarRenderer {
 				actions.onChange(t("undo.calendarRowSizeConfig"));
 			}, "rows-3");
 
-			// Row height range slider (Issue 10: uniform row height for all rows)
+			// Row height range slider, giving every row one uniform height
 			if (config.calendarRowSizeMode === "custom") {
 				const setRowHeight = (value: number) => {
 					config.calendarCellMinHeight = Math.max(72, Math.min(400, Math.round(value)));

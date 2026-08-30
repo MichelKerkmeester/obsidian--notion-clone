@@ -710,7 +710,7 @@ export class CalendarTimelineRenderer {
   }
 
   /** 判定事件起始字段是否为 date 列（无 time）。取代已删除的 isAllDay：date 列事件
-   *  按「全天条」语义渲染，datetime 列按 timed 语义渲染。Task 3 会在此基础上重写渲染。 */
+   *  按「全天条」语义渲染，datetime 列按 timed 语义渲染。 */
   private isTimelineDateColumn(config: ViewConfig, event: CalendarTimelineEvent): boolean {
     const startField = config.timelineStartDateField || config.calendarStartDateField || getDefaultEventDateField(config);
     const col = config.schema.columns.find((c) => c.key === startField);
@@ -1259,7 +1259,7 @@ export class CalendarTimelineRenderer {
   }
 
   /**
-   * Bug 4 方案 B: 在同 lane 内找到离 clientY 最近的（排除自身的）事件，判断插入它之前还是之后。
+   * 方案 B: 在同 lane 内找到离 clientY 最近的（排除自身的）事件，判断插入它之前还是之后。
    * 不限同日期——任意事件都可重排。返回命中目标 path、placeBefore，以及供 reorderTimelineEvent
    * 使用的 before/after path。
    */
@@ -1283,14 +1283,14 @@ export class CalendarTimelineRenderer {
     const placeBefore = clientY < rect.top + rect.height / 2;
     const targetPath = closest.getAttribute("data-note-database-row-path") || "";
     // 用完整 lane 顺序（含 jump 事件）算 before/after——jump 事件不在 visible DOM，
-    // 否则 A 会跨越 jump、不紧贴目标（Bug 4）。
+    // 否则 A 会跨越 jump、不紧贴目标。
     const fullPath = laneEvents.map((event) => event.row.file.path).filter((path) => path !== draggedPath);
     const neighbors = resolveTimelineReorderNeighbors(targetPath, placeBefore, fullPath);
     if (neighbors.beforePath === undefined && neighbors.afterPath === undefined) return null;
     return { targetPath, placeBefore, ...neighbors };
   }
 
-  /** Bug 4: pointer onMove 时刷新重排指示线（is-drop-before / is-drop-after），并返回命中目标供松手复用。 */
+  /** pointer onMove 时刷新重排指示线（is-drop-before / is-drop-after），并返回命中目标供松手复用。 */
   private updateTimelineReorderIndicator(eventsEl: HTMLElement, clientY: number, draggedPath: string, laneEvents: readonly CalendarTimelineEvent[]): { targetPath: string; placeBefore: boolean; beforePath?: string; afterPath?: string } | null {
     // 清除旧的插入线（pointer 模式同一时刻只有一条；清所有 lane 避免同↔跨 lane 切换时残留）。
     this.clearAllTimelineReorderLines();

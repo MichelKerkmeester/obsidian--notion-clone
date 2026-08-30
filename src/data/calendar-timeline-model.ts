@@ -66,7 +66,7 @@ export interface CalendarTimelineEvent {
   /** Whole-day span (daysBetween(start,end)+1); kept for drag end-date math. */
   durationDays: number;
   timelineRow?: number;
-  /** Manual-order rank for same-startDate tiebreaking (Bug 4: same-day reorder). */
+  /** Manual-order rank for same-startDate tiebreaking on a same-day reorder. */
   manualRank?: string;
   /** Day-scale start time in minutes from midnight (when a time component exists). */
   startMinutes?: number;
@@ -892,7 +892,7 @@ export function buildCalendarTimelineEvents(
       windowPosition: "visible",
       // Preserve the incoming (view-sorted) order so calendar honors the active sort
       order: order++,
-      // Bug 4: manual-order rank for same-day stack reorder (only matters when start dates tie).
+      // Manual-order rank for same-day stack reorder (only matters when start dates tie).
       manualRank: config.manualOrder?.ranks?.[row.file.path],
     });
     // 标记负区间事件：用原始 parsedEndDateKey（fallback 前）判定，否则「结束日期 < 开始日期」会被
@@ -1150,7 +1150,7 @@ function normalizeDateKey(value: unknown): string | null {
 }
 
 /**
- * Bug 4 方案 B：lane 默认排序——manual order 主导。两个事件都有 rank 时按 rank 排（支持任意重排），
+ * 方案 B：lane 默认排序——manual order 主导。两个事件都有 rank 时按 rank 排（支持任意重排），
  * 否则回退到 rows 顺序（order 字段）。不再按日期序；用户需要日期序时在排序选项显式选择
  * （走 hasActiveTimelineSort → compareTimelineEventOrder）。
  */
@@ -1169,7 +1169,7 @@ function compareManualRank(a: string | undefined, b: string | undefined): number
 }
 
 /**
- * Bug 4 jump 修复：基于完整 lane 顺序（含 jump 事件）计算重排的 before/after 邻居。
+ * jump 修复：基于完整 lane 顺序（含 jump 事件）计算重排的 before/after 邻居。
  * jump 事件不在 visible DOM（它是 .db-timeline-window-jump 而非 .db-timeline-event），
  * 若用 visible DOM 算邻居会跨越 jump，导致拖入事件不紧贴目标。
  */

@@ -20,6 +20,7 @@ import { normalizeComputedSyncMode } from "../data/computed-sync";
 import { getColumnDisplayType } from "../data/column-display";
 import { t } from "../i18n";
 import { DatabaseViewState } from "./view-state-store";
+import { createMenuRow, createMenuSection, createMenuSeparator } from "./menu-row";
 import { COMPACT_MENU_POPOVER, positionToolbarPopover } from "./popover-position";
 import { renderPropertyTypeIcon } from "./property-type-icon";
 import { getEffectiveFilterRules } from "../data/filter-rules";
@@ -174,6 +175,7 @@ export class ToolbarRenderer {
   private descriptionScrollTimers = new WeakMap<HTMLElement, number>();
   private calendarTimelineToolbarRenderer = new CalendarTimelineToolbarRenderer();
   private newRecordPlacement: NewRecordPlacement = "bottom";
+  private addViewFieldSeq = 0;
 
   render(
     containerEl: HTMLElement,
@@ -399,7 +401,7 @@ export class ToolbarRenderer {
 
       if (!actions.hideWidthSelect) {
         const width = config?.displayWidth === "wide" ? "default" : "wide";
-        this.renderToolbarMenuRow(panel, t("toolbar.displayWidth"), "arrows-left-right", () => actions.setDisplayWidth(width));
+        this.renderToolbarMenuRow(panel, t("toolbar.displayWidth"), "arrow-left-right", () => actions.setDisplayWidth(width));
       }
       if (!actions.isReadOnly && normalizeComputedSyncMode(entry?.config.computedSyncMode) === "manual" && actions.syncComputedFields) {
         this.renderToolbarMenuRow(panel, t("viewConfig.saveComputedResults"), "refresh-cw", () => actions.syncComputedFields?.());
@@ -433,18 +435,27 @@ export class ToolbarRenderer {
     };
   }
 
+  /**
+   * A row in the utilities menu, built by the shared row component rather than by hand.
+   *
+   * This used to assemble its own button, icon span and label span — the same three elements
+   * `createMenuRow` assembles, arranged the same way, which is exactly how two implementations of
+   * one row drift apart. Presented as a phone sheet next to the column menu, the difference was
+   * visible: this menu's rows did not line up with that one's.
+   *
+   * `db-toolbar-menu-row` stays on the row because the stylesheet hangs the row's layout on it.
+   */
   private renderToolbarMenuRow(panel: HTMLElement, label: string, icon: string, onClick: () => void, extraClass = ""): HTMLButtonElement {
-    const row = panel.createEl("button", {
-      cls: `db-toolbar-menu-row db-menu-item ${extraClass}`.trim(),
-      attr: { type: "button", role: "menuitem", "aria-label": label },
+    const handle = createMenuRow(panel, {
+      cls: `db-toolbar-menu-row ${extraClass}`.trim(),
+      icon,
+      label,
+      onClick: () => {
+        this.closeUtilitiesPopover();
+        onClick();
+      },
     });
-    setIcon(row.createSpan({ cls: "db-toolbar-menu-icon db-menu-item-icon" }), icon);
-    row.createSpan({ cls: "db-toolbar-menu-label db-menu-item-label", text: label });
-    row.onclick = () => {
-      this.closeUtilitiesPopover();
-      onClick();
-    };
-    return row;
+    return handle.row as HTMLButtonElement;
   }
 
   private renderComputedSyncButton(toolbar: HTMLElement, actions: ToolbarActions): void {
@@ -1207,6 +1218,26 @@ export class ToolbarRenderer {
     });
   }
 
+  /**
+   * A settings field: a visible caption tied to its control by id.
+   *
+   * An `aria-label` alone names a control for a screen reader and leaves the screen silent, which
+   * is how a select showing "Cost" came to be named "Title property" with nothing on screen saying
+   * so. The id is generated per field because more than one database can be open, and two labels
+   * pointing at the same id would hand both controls to the first one.
+   */
+  private createAddViewField(parent: HTMLElement, label: string): { field: HTMLElement; controlId: string } {
+    this.addViewFieldSeq += 1;
+    const controlId = `db-add-view-field-${this.addViewFieldSeq}`;
+    const field = parent.createDiv({ cls: "db-add-view-field" });
+    field.createEl("label", {
+      cls: "db-add-view-field-label",
+      text: label,
+      attr: { for: controlId },
+    });
+    return { field, controlId };
+  }
+
   private getViewTypeOptions(): Array<{ value: DatabaseViewType; text: string; icon: string }> {
     return [
       { value: "table", text: t("common.tableView"), icon: this.getViewTypeIcon("table") },
@@ -1265,61 +1296,74 @@ export class ToolbarRenderer {
     const header = panel.createDiv({ cls: "db-panel-header" });
     header.createDiv({ cls: "db-panel-title", text: t("toolbar.addView") });
 
+    // Settings first, actions second, because the settings modify what the actions produce —
+    // reading order follows causal order. What makes the settings skippable is the heading above
+    // them and the weight below them: captions are muted and small, the action rows carry the
+    // normal text colour and an icon, so the eye lands on the actions even though they come after.
+    createMenuSection(panel, t("toolbar.addViewOptions"));
     const form = panel.createDiv({ cls: "db-add-view-form" });
-    const nameInput = form.createEl("input", {
+    const nameField = this.createAddViewField(form, t("toolbar.newViewName"));
+    // No placeholder: it repeated the caption, and a placeholder is not a label — it vanishes at
+    // the first keystroke, which is when a person most needs to be told what the field is.
+    const nameInput = nameField.field.createEl("input", {
       cls: "db-add-view-name",
-      attr: { type: "text", placeholder: t("toolbar.newViewName"), "aria-label": t("toolbar.newViewName") },
+      attr: { type: "text", id: nameField.controlId },
     });
-    const keyField = form.createEl("select", {
+    const keyFieldWrap = this.createAddViewField(form, t("toolbar.viewKeyField"));
+    const keyField = keyFieldWrap.field.createEl("select", {
       cls: "db-add-view-key-field",
-      attr: { "aria-label": t("toolbar.viewKeyField") },
+      attr: { id: keyFieldWrap.controlId },
     });
     for (const column of db.schema.columns.filter((candidate) => candidate.key !== "file.name")) {
       keyField.createEl("option", { value: column.key, text: column.label });
     }
+    const iconFieldWrap = this.createAddViewField(form, t("toolbar.viewIcon"));
+    const iconInput = iconFieldWrap.field.createEl("input", {
+      cls: "db-add-view-icon",
+      attr: { type: "text", maxlength: "8", id: iconFieldWrap.controlId },
+    });
+    // Named for what it does rather than for the action it resembles. It seeds the new view from
+    // the current one's filters, sorts and column order; the row below makes a same-type copy. Two
+    // behaviours that shared one name read as the same control offered twice.
     const duplicate = form.createEl("label", { cls: "db-add-view-duplicate" });
     const duplicateInput = createCheckbox(duplicate, { role: "field" });
-    duplicate.createSpan({ text: t("toolbar.duplicateCurrentView") });
-    const iconInput = form.createEl("input", {
-      cls: "db-add-view-icon",
-      attr: { type: "text", maxlength: "8", placeholder: t("toolbar.viewIcon"), "aria-label": t("toolbar.viewIcon") },
-    });
-    const cards = panel.createDiv({ cls: "db-add-view-cards" });
+    duplicate.createSpan({ text: t("toolbar.copyCurrentViewSettings") });
+
+    createMenuSeparator(panel);
+    createMenuSection(panel, t("toolbar.addViewCreate"));
+    const choices = panel.createDiv({ cls: "db-add-view-choices" });
+    // Rows, not tiles. The tiles carried a preview that was identical for all seven types, so the
+    // grid's one advantage over a list — showing what each layout looks like — was never delivered,
+    // while it cost a second row vocabulary, an 11px caption and a boundary no theme token can draw
+    // at a visible contrast. A row is the grammar every other menu in the plugin already uses.
     for (const { value, text, icon } of this.getViewTypeOptions()) {
-      // Deliberately not a db-menu-item: that class describes a single-line menu row (row
-      // min-height, row hover, row radius), which is the wrong contract for a tile stacking
-      // a preview over a caption and would collapse it again if the row rule ever changes.
-      // Keyboard navigation keys off role=menuitem, not the class, so it still works.
-      const card = cards.createEl("button", {
-        cls: "db-add-view-card",
-        attr: { type: "button", role: "menuitem", "aria-label": text },
+      createMenuRow(choices, {
+        icon,
+        label: text,
+        onClick: () => {
+          actions.addView(value, {
+            name: nameInput.value.trim() || undefined,
+            icon: iconInput.value.trim() || undefined,
+            keyField: keyField.value || undefined,
+            duplicateCurrent: duplicateInput.checked,
+          });
+          this.closeViewTabPopover();
+        },
       });
-      const preview = card.createDiv({ cls: `db-add-view-preview is-${value}` });
-      setIcon(preview.createSpan({ cls: "db-add-view-preview-icon" }), icon);
-      preview.createSpan({ cls: "db-add-view-preview-lines" });
-      card.createSpan({ cls: "db-add-view-card-label", text });
-      card.onclick = () => {
-        actions.addView(value, {
-          name: nameInput.value.trim() || undefined,
-          icon: iconInput.value.trim() || undefined,
-          keyField: keyField.value || undefined,
-          duplicateCurrent: duplicateInput.checked,
-        });
-        this.closeViewTabPopover();
-      };
     }
     const current = db.views[currentViewIndex];
     if (current) {
-      const duplicateCurrent = panel.createEl("button", {
-        cls: "db-add-view-duplicate-action db-menu-item",
-        attr: { type: "button", role: "menuitem", "aria-label": t("toolbar.duplicateCurrentView") },
+      // Same group as the type rows: duplicating is another way to end up with a new view, so it
+      // belongs with them rather than stranded under a rule of its own.
+      createMenuRow(choices, {
+        cls: "db-add-view-duplicate-action",
+        icon: "copy",
+        label: t("toolbar.duplicateCurrentView"),
+        onClick: () => {
+          actions.addView(current.viewType || "table", { duplicateCurrent: true, name: nameInput.value.trim() || undefined });
+          this.closeViewTabPopover();
+        },
       });
-      setIcon(duplicateCurrent.createSpan({ cls: "db-menu-item-icon" }), "copy");
-      duplicateCurrent.createSpan({ cls: "db-menu-item-label", text: t("toolbar.duplicateCurrentView") });
-      duplicateCurrent.onclick = () => {
-        actions.addView(current.viewType || "table", { duplicateCurrent: true, name: nameInput.value.trim() || undefined });
-        this.closeViewTabPopover();
-      };
     }
     positionToolbarPopover(panel, anchorEl, COMPACT_MENU_POPOVER);
     this.setPopoverTriggerState(anchorEl, true);

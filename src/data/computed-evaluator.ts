@@ -67,7 +67,7 @@ export function evaluateComputedFields(
   context: ComputedEvaluationContext = {}
 ): Record<string, unknown> {
   const result: Record<string, unknown> = { ...(context.derivedValues || {}) };
-  // Bug 8: 注入 file.name/file.tags 到普通公式求值上下文（不求值引擎大改，只在 frontmatter 预填）
+  // 注入 file.name/file.tags 到普通公式求值上下文（不求值引擎大改，只在 frontmatter 预填）
   let enrichedFrontmatter = frontmatter;
   if (context.app && context.file) {
     const cache = context.app.metadataCache.getFileCache(context.file);

@@ -2002,7 +2002,7 @@ export class CalendarRenderer {
 	private shiftWeek(config: ViewConfig, weekDays: CalendarDayModel[], direction: 1 | -1): void {
 		if (weekDays.length === 0) return;
 		const referenceDay = direction === -1 ? weekDays[0] : weekDays[weekDays.length - 1];
-		// navigateCalendarDate 全 UTC 口径 + slice(0,7)，避免负时区跳月（Bug M）。
+		// navigateCalendarDate 全 UTC 口径 + slice(0,7)，避免负时区跳月。
 		const next = navigateCalendarDate(referenceDay.dateKey, direction * 7);
 		if (!next) return;
 		config.calendarWeekStart = next.day;
@@ -2021,7 +2021,7 @@ export class CalendarRenderer {
 	}
 
 	private shiftDay(config: ViewConfig, dateKey: string, direction: 1 | -1): void {
-		// navigateCalendarDate 全 UTC 口径 + slice(0,7)，避免负时区跳月（Bug M）。
+		// navigateCalendarDate 全 UTC 口径 + slice(0,7)，避免负时区跳月。
 		const next = navigateCalendarDate(dateKey, direction);
 		if (!next) return;
 		config.calendarDay = next.day;
@@ -2171,7 +2171,7 @@ export class CalendarRenderer {
 	}
 
 	private getColumnWidth(config: ViewConfig): number {
-		// 列宽范围由共享纯函数统一（Bug N：拖拽/slider/读取三处一致）
+		// 列宽范围由共享纯函数统一（拖拽/slider/读取三处一致）
 		const { min: colMin, max: colMax } = getCalendarColumnWidthRange(config.calendarScale);
 		if (config.calendarColumnSizeMode === "custom" && config.calendarCustomColumnWidth) return Math.max(colMin, Math.min(colMax, config.calendarCustomColumnWidth));
 		return Math.max(colMin, Math.min(240, this.getDefaultColumnWidth(config)));

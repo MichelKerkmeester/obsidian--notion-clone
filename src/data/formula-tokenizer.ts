@@ -3,7 +3,7 @@
 // COMPONENT: shared lexical scanner for formula dependency/rename passes
 // ───────────────────────────────────────────────────────────────────
 //
-// 公式语法片段扫描（Bug Z/AB 共享底层，对齐 SafeEval tokenizer 词法）。
+// 公式语法片段扫描（与 SafeEval tokenizer 词法对齐的共享底层）。
 //
 // 输出带类型的语法片段序列，extractDependencies（Z）与列重命名引用替换（AB）都基于它，
 // 不再对原始表达式跑正则。词法与 SafeEval tokenizer 对齐：数字/字符串/模板/注释/正则/

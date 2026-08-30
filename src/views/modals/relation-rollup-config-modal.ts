@@ -154,7 +154,7 @@ export class RelationRollupConfigModal extends DbModal {
       const targetDatabase = this.databases.find(
         (database) => database.id === relation?.relationConfig?.targetDatabaseId
       );
-      // Bug T：目标字段按 aggregation 过滤——sum/avg 仅数值列（getColumnDisplayType === "number"，
+      // 目标字段按 aggregation 过滤——sum/avg 仅数值列（getColumnDisplayType === "number"，
       // 含数字 computed，排除 file.name / text / date / checkbox computed）；list/count 允许所有非
       // rollup 列（含 file.name / relation）。aggregation 变更触发 renderFields 重选。
       const isSumAvg = aggregation === "sum" || aggregation === "avg" ||

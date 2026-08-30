@@ -9,10 +9,9 @@
 // folder that itself carries source (directly or through its own
 // children), owes both README.md and CODE.md. Below that threshold a
 // folder owes README.md only, and a CODE.md sitting there anyway is a
-// stray-doc error, not a harmless extra. Measured today
-// (002-repo-convention-audit/audit.json): zero folder docs exist anywhere
-// in the tree, so a clean run means the docs actually landed, not that
-// this scanner never looked.
+// stray-doc error, not a harmless extra. When this scanner was written zero
+// folder docs existed anywhere in the tree, so a clean run means the docs
+// actually landed, not that this scanner never looked.
 //
 // Usage: node tools/naming/scan-folder-docs.mjs [--json]
 // Exit:  0 when every scanned folder holds the docs its source count
