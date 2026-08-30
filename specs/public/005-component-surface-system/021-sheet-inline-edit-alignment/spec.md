@@ -146,7 +146,7 @@ deliberately, so criterion 5 freezes those numbers; a phase that fixes desktop h
 
 **`setPosition` converts to the wrong box.** It offsets from the container's border box while
 `absolute` resolves against the padding box, so every popover the sheet hosts is displaced by the
-sheet's border width in both axes. That is the 1px residue in criteria 1 and 2. `containerLeafRect`
+sheet's border width in both axes. That is the 1px residue in criteria 1 and 2. `fixedContainingBlock`
 in the same file already compensates for exactly this on the leaf, with a comment describing it as
 "a silent offset of exactly the border width" — the sheet path never got the same treatment.
 
@@ -187,3 +187,41 @@ the sheet's inline editor on the row it replaces`, with the harness section arri
 `308f0c0`. Its verification clause was then run in full against the committed result: `npx tsc
 --noEmit` exit 0, `npm run build` clean with `main.js` byte-identical, `npx vitest run` 444 passed,
 `npm run screenshots:verify` current.
+
+## CORRECTIONS FROM A FRESH REVIEW
+
+Every measured number in this phase reproduced exactly under an independent probe, including the
+negative control. Three claims around them did not.
+
+**There are five editors, not four, and two of them are inline.** The title's rename editor is the
+same single-line popover class as the number editor, hosted inside the panel, so it receives both
+new declarations. This phase did not measure it and its scoping argument explicitly excluded it.
+
+The harness cannot see it, for two independent reasons: it stubs the rename entry point as a no-op,
+and the trigger is a double-click rather than a click. Either alone would have hidden it.
+
+The consequence is arithmetic, not cosmetic. The vertical correction is derived from the **value's**
+line box at 21.6px, but the title's line box is 18.85px, so the correct offset there is −12.6px
+rather than the −11.2px it inherits. Measured on the title: 9.0px off-centre before, 2.4px after —
+an improvement, and still wrong by 1.4px plus the border. **Open.**
+
+**The residue is sheet-only, not desktop-wide.** The 1px displacement is confirmed, but its cause is
+narrower than recorded here: the sheet chrome stamps the container class onto the panel itself, so
+the nearest matching ancestor *is* the panel, and that panel has a border. On desktop the same
+lookup finds the real container, which has none — measured displacement 0.00 in both axes. The
+sentence that survives is that repairing the shared placement helper would touch desktop callers,
+which is a different claim from desktop being affected today.
+
+Two smaller corrections. The helper cited by name as already compensating does not exist under that
+name; the real one is `fixedContainingBlock`, and the quoted comment is genuine. And the two
+bottom-docked overlays are anchored by their bottom edge, so they are displaced in the opposite
+vertical direction — "low and right" describes the top-positioned ones only.
+
+**Also found, and not this phase's to fix.** The type shrinks at the moment of tap: the resting
+value renders at the large step and the input that replaces it at the medium one, two steps down,
+while the box simultaneously grows from 21.6px to 44px. This phase enlarged the box and left the
+type, widening the mismatch it inherited.
+
+No screenshot in the set shows an open editor, so none could have moved. The capture named for the
+desktop panel renders the sheet presentation at desktop width, so the surface this phase freezes has
+no capture at all.
