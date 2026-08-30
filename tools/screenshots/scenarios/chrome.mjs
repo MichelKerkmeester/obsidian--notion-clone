@@ -620,6 +620,55 @@ export const CHROME_SCENARIOS = [
       </div>`,
   },
   {
+    id: "chrome-owned-menu-sheet",
+    title: "Owned menu — the sheet presentation on a phone",
+    group: "components",
+    width: 402,
+    capture: "viewport",
+    sources: ["src/views/owned-menu.ts", "src/views/menu-row.ts", "src/views/mobile-bottom-sheet.ts"],
+    // The same rows as the popover above, in the presentation a phone actually gets. It exists
+    // because the row grammar the sheet applies — a fixed leading column, one left edge, a hairline
+    // between neighbours, a 44px target — is stated only under `.db-mobile-bottom-sheet`, so the
+    // desktop fixture photographs none of it.
+    //
+    // What this proves is bounded, and worth stating plainly: it is hand-written markup against the
+    // shipped stylesheet, so it documents the CSS and says nothing about the module that builds the
+    // rows. The alignment and divider claims are measured in verify-placement, against the real
+    // menu, with the host's own button rule loaded.
+    note: "The phone form of the owned menu. Rows share one left edge with the icon in a fixed leading column, hairlines divide neighbours but not the last row of a group, and a row that opens a submenu carries a trailing chevron. Captured in viewport mode so the fixed sheet docks at the bottom.",
+    html: () => `
+      <div class="db-surface db-menu db-owned-menu db-mobile-bottom-sheet db-overlay-enter is-visible" role="menu" tabindex="-1">
+        <div class="db-mobile-bottom-sheet-handle" aria-hidden="true"></div>
+        <div class="db-menu-section">Column</div>
+        <button type="button" class="db-menu-item">
+          <span class="db-menu-item-icon">${I.arrowUpDown}</span>
+          <span class="db-menu-item-label">Sort ascending</span>
+        </button>
+        <button type="button" class="db-menu-item">
+          <span class="db-menu-item-icon">${I.listFilter}</span>
+          <span class="db-menu-item-label">Filter on this column</span>
+        </button>
+        <button type="button" class="db-menu-item" aria-haspopup="true" aria-expanded="false">
+          <span class="db-menu-item-icon">${I.columns3}</span>
+          <span class="db-menu-item-label">Property type</span>
+          <span class="db-menu-item-current">Select</span>
+          <span class="db-menu-item-chevron">${I.chevronRight}</span>
+        </button>
+        <div class="db-menu-separator" role="separator"></div>
+        <button type="button" class="db-menu-item">
+          <span class="db-menu-item-icon">${I.copy}</span>
+          <span class="db-menu-item-label">Duplicate property</span>
+        </button>
+        <button type="button" class="db-menu-item" disabled aria-disabled="true">
+          <span class="db-menu-item-icon">${I.group}</span>
+          <span class="db-menu-item-label">Group by this column</span>
+        </button>
+        <button type="button" class="db-menu-item is-warning">
+          <span class="db-menu-item-label">Delete property</span>
+        </button>
+      </div>`,
+  },
+  {
     id: "chrome-group-selection-controls",
     title: "Group selection controls",
     group: "components",

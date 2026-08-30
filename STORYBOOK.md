@@ -52,8 +52,8 @@ can look healthy while the renderer that ships is broken.
 npm run story:coverage
 ```
 
-Fails when a module exporting a `create`/`render` function that takes a parent element has no
-co-located story. Genuinely unrenderable modules — anything resolving notes through the vault —
+Fails when a module exporting a function that takes a parent element has no co-located story,
+regardless of the function's name. Genuinely unrenderable modules — anything resolving notes through the vault —
 are exempt in `tools/storybook/story-coverage-allowlist.json`, each with a written reason. The gate
 also fails on **stale** exemptions, so an allowlist entry can never quietly outlive its excuse.
 
@@ -63,7 +63,7 @@ also fails on **stale** exemptions, so an allowlist entry can never quietly outl
 npm run build-storybook   # the catalogue compiles
 npm run story:smoke       # every story renders in light and dark, zero errors
 npm run storybook:verify  # the DOM shim matches Obsidian's documented behaviour
-npm run storybook:coverage # the shim and stub still cover what the source uses
+npm run shim:coverage      # the shim and stub still cover what the source uses
 ```
 
 `story:smoke` fails on a thrown error, a console error, **or a story that renders nothing** — the
@@ -100,7 +100,7 @@ changing a line of plugin source.
 cache **throws** rather than returning an empty value, so a story straying outside the boundary
 fails loudly instead of quietly documenting a shape nobody ships.
 
-Both are hand-written lists, and hand-written lists fall behind. `storybook:coverage` re-derives
+Both are hand-written lists, and hand-written lists fall behind. `shim:coverage` re-derives
 what they need directly from the source, which is how three real gaps were caught: the
 `activeDocument` global, the `createSvg` and `appendText` extensions, and `SVGElement.prototype`
 never being patched at all.

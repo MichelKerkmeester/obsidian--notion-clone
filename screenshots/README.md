@@ -109,6 +109,16 @@ Deliberately not wrapped in note-database-container: this menu mounts on documen
 
 Sources: `src/views/owned-menu.ts`, `src/views/menu-row.ts`
 
+### Owned menu — the sheet presentation on a phone
+
+The phone form of the owned menu. Rows share one left edge with the icon in a fixed leading column, hairlines divide neighbours but not the last row of a group, and a row that opens a submenu carries a trailing chevron. Captured in viewport mode so the fixed sheet docks at the bottom.
+
+| dark | light |
+|---|---|
+| ![chrome-owned-menu-sheet dark](components/chrome-owned-menu-sheet-mobile-dark.png) | ![chrome-owned-menu-sheet light](components/chrome-owned-menu-sheet-mobile-light.png) |
+
+Sources: `src/views/owned-menu.ts`, `src/views/menu-row.ts`, `src/views/mobile-bottom-sheet.ts`
+
 ### Cell selection status bar
 
 The bar that appears while table cells are selected. Its checkbox clears the selection, so it is always rendered checked.
