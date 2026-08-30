@@ -45,6 +45,7 @@ export default defineConfig([
         location: "readonly",
         getComputedStyle: "readonly",
         requestAnimationFrame: "readonly",
+        Event: "readonly",
         MouseEvent: "readonly",
         PointerEvent: "readonly",
         navigator: "readonly",

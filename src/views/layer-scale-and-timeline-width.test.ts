@@ -58,7 +58,7 @@ describe("stacking order between the record detail panel and its editors", () =>
 
   it("routes the inline mobile editors through the shared token instead of a raw number", () => {
     expect(cellRendererSource).not.toContain('zIndex: "1000"');
-    expect(cellRendererSource).toContain('zIndex: "var(--db-layer-popover, 100)"');
+    expect(cellRendererSource).toContain('"z-index": "var(--db-layer-popover, 100)"');
   });
 });
 

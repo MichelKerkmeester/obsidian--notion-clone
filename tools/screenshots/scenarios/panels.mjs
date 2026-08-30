@@ -556,4 +556,93 @@ export const PANEL_SCENARIOS = [
       </div>`;
     },
   },
+  {
+    id: "panel-invalid-events-modal",
+    title: "Invalid time events modal",
+    group: "components",
+    width: 860,
+    sources: ["src/views/modals/invalid-time-events-modal.ts"],
+    // Two families were declared with two classes on one `cls`, and the collector that reads those
+    // declarations matched a single word, so both dropped out of the coverage set entirely and
+    // "no family is uncovered" was a statement about ten families rather than twelve. This is one of
+    // them, and the one that carries its own placement: the box is centred in a 28px grid column
+    // here and moved to a named grid area in the compact layout, neither of which any capture showed.
+    note: "The select box in the invalid-events grid. It carries placement of its own — centred in the 28px lead column — on top of the shared field-role appearance.",
+    html: () => {
+      const row = (name, start, end, span) => `
+        <div class="db-invalid-event-row">
+          ${fieldCheckbox("db-modal-checkbox db-invalid-event-select").replace(" aria-label=", " checked aria-label=")}
+          <div class="db-invalid-event-name">${name}</div>
+          <div class="db-invalid-event-time-field is-start">
+            <span class="db-invalid-event-time-label">Start</span>
+            <input type="datetime-local" class="db-invalid-event-datetime" value="${start}">
+          </div>
+          <div class="db-invalid-event-time-field is-end">
+            <span class="db-invalid-event-time-label">End</span>
+            <input type="datetime-local" class="db-invalid-event-datetime" value="${end}">
+          </div>
+          <div class="db-invalid-event-span-cell"><span class="db-invalid-event-span">${span}</span></div>
+        </div>`;
+      return `
+      <div class="note-database-modal db-invalid-events-modal">
+        <h3>3 events end before they start</h3>
+        <div class="db-modal-help">Adjust the start or end time of each event, then confirm.</div>
+        <div class="db-invalid-event-grid">
+          <div class="db-invalid-event-grid-header">
+            ${fieldCheckbox("db-modal-checkbox db-invalid-event-select").replace(" aria-label=", " checked aria-label=")}
+            <div class="db-invalid-event-col-note">Note</div>
+            <div class="db-invalid-event-col-time">Start</div>
+            <div class="db-invalid-event-col-time">End</div>
+            <div class="db-invalid-event-col-span">Span</div>
+          </div>
+          ${row("Design review", "2026-03-04T14:00", "2026-03-04T13:00", "-1h")}
+          ${row("Quarterly planning", "2026-03-11T09:30", "2026-03-11T09:00", "-30m")}
+          ${row("Retrospective", "2026-03-18T16:00", "2026-03-18T15:15", "-45m")}
+        </div>
+      </div>`;
+    },
+  },
+  {
+    id: "panel-base-import-modal",
+    title: "Base import confirm modal",
+    group: "components",
+    width: 760,
+    sources: ["src/views/modals/base-import-confirm-modal.ts"],
+    // The second of the two families the single-word collector dropped. It sits in a table cell
+    // rather than a grid column, which is why both are captured: one family, two placements, and
+    // the shared appearance has to survive each.
+    note: "The include box in the base-import column table. Same field role as every other modal box, mounted in a centred table cell.",
+    html: () => {
+      const box = (checked) => (checked
+        ? fieldCheckbox("db-modal-checkbox base-import-include-checkbox").replace(" aria-label=", " checked aria-label=")
+        : fieldCheckbox("db-modal-checkbox base-import-include-checkbox"));
+      const row = (key, label, type, count, checked, excluded) => `
+        <tr${excluded ? ' class="base-import-excluded"' : ""}>
+          <td>${key}</td>
+          <td><input type="text" value="${label}"></td>
+          <td class="base-import-type-cell">${type}</td>
+          <td>${count}</td>
+          <td class="base-import-check-cell">${box(checked)}</td>
+        </tr>`;
+      return `
+      <div class="note-database-modal">
+        <h3>Import 4 columns from base</h3>
+        <div class="db-modal-help">Choose which columns to bring in and confirm the type inferred for each.</div>
+        <table class="base-import-table">
+          <thead>
+            <tr>
+              <th>Key</th><th>Label</th><th>Inferred type</th><th>Files</th>
+              <th class="base-import-check-cell">${box(true)}</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${row("cost", "Cost", "Number", 24, true, false)}
+            ${row("renews", "Renews", "Date", 24, true, false)}
+            ${row("payment", "Payment", "Select", 18, false, true)}
+            ${row("notes", "Notes", "Text", 6, false, false)}
+          </tbody>
+        </table>
+      </div>`;
+    },
+  },
 ];
