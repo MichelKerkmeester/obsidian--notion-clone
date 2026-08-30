@@ -46,14 +46,21 @@
       "tasks.md",
       "acceptance-criteria.md",
       "goal.md",
+      "implementation-summary.md",
       "checklist.md",
+      "src/views/column-width.ts",
+      "src/views/checkbox.ts",
       "src/views/list-renderer.ts",
+      "src/views/checkbox-family-coverage.test.ts",
+      "src/views/checkbox-borrowed-ancestor.test.ts",
+      "tools/screenshots/scenarios/shared.mjs",
+      "tools/live/checkbox-appearance.json",
+      "tools/live/renderer-coverage.json",
+      "tools/lane/css-lane.json",
       "src/views/column-manager-renderer.ts",
       "src/views/view-config-panel-renderer.ts",
       "src/views/chart-toolbar-renderer.ts",
-      "src/views/toolbar-renderer.ts",
-      "tools/storybook/verify-placement.mjs",
-      "tools/live/checkbox-appearance.mjs"
+      "src/views/toolbar-renderer.ts"
     ],
     "entities": [
       {
@@ -87,15 +94,69 @@
         "source": "derived"
       },
       {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
         "name": "checklist.md",
         "kind": "doc",
         "path": "checklist.md",
         "source": "derived"
       },
       {
+        "name": "column-width.ts",
+        "kind": "code",
+        "path": "src/views/column-width.ts",
+        "source": "derived"
+      },
+      {
+        "name": "checkbox.ts",
+        "kind": "code",
+        "path": "src/views/checkbox.ts",
+        "source": "derived"
+      },
+      {
         "name": "list-renderer.ts",
         "kind": "code",
         "path": "src/views/list-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "checkbox-family-coverage.test.ts",
+        "kind": "test",
+        "path": "src/views/checkbox-family-coverage.test.ts",
+        "source": "derived"
+      },
+      {
+        "name": "checkbox-borrowed-ancestor.test.ts",
+        "kind": "test",
+        "path": "src/views/checkbox-borrowed-ancestor.test.ts",
+        "source": "derived"
+      },
+      {
+        "name": "shared.mjs",
+        "kind": "file",
+        "path": "tools/screenshots/scenarios/shared.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "checkbox-appearance.json",
+        "kind": "config",
+        "path": "tools/live/checkbox-appearance.json",
+        "source": "derived"
+      },
+      {
+        "name": "renderer-coverage.json",
+        "kind": "config",
+        "path": "tools/live/renderer-coverage.json",
+        "source": "derived"
+      },
+      {
+        "name": "css-lane.json",
+        "kind": "config",
+        "path": "tools/lane/css-lane.json",
         "source": "derived"
       },
       {
@@ -123,18 +184,6 @@
         "source": "derived"
       },
       {
-        "name": "verify-placement.mjs",
-        "kind": "file",
-        "path": "tools/storybook/verify-placement.mjs",
-        "source": "derived"
-      },
-      {
-        "name": "checkbox-appearance.mjs",
-        "kind": "file",
-        "path": "tools/live/checkbox-appearance.mjs",
-        "source": "derived"
-      },
-      {
         "name": "Feature Specification",
         "kind": "proper_noun",
         "path": "spec.md",
@@ -157,53 +206,11 @@
         "kind": "proper_noun",
         "path": "spec.md",
         "source": "derived"
-      },
-      {
-        "name": "Problem Statement",
-        "kind": "proper_noun",
-        "path": "spec.md",
-        "source": "derived"
-      },
-      {
-        "name": "Purpose One",
-        "kind": "proper_noun",
-        "path": "spec.md",
-        "source": "derived"
-      },
-      {
-        "name": "Implementation Plan",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
-      },
-      {
-        "name": "Task Checklist",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
-      },
-      {
-        "name": "The Stage",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
-      },
-      {
-        "name": "Execution Rules",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
-      },
-      {
-        "name": "Status Reporting Format Report",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "The operator sees round checkboxes everywhere, and the previous fix was real",
     "created_at": "2026-08-29T12:45:04.669Z",
-    "last_save_at": "2026-08-30T16:54:06.363Z",
+    "last_save_at": "2026-08-30T18:36:01.672Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -211,14 +218,16 @@
       "plan.md",
       "tasks.md",
       "acceptance-criteria.md",
-      "goal.md"
+      "goal.md",
+      "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:040b925887e05fa72b501e988bf479c5e65b01bb747266174fce590e6f1aac7e",
+    "source_fingerprint": "sha256:7a7c2c7eb6b5966de5dea40039ab16c4fac888a0bfb91bb284d7bb5b7461e46d",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "88ff7a52a536b0c677ee966574f5932f7342224cf76159e1666aad7b0d02aa67",
+      "spec.md": "2345ad09db3fd49a894456aec3401f2ea822e25b97b86d12414cbb82fb4ae6c0",
       "plan.md": "80c573fa940c99fecd7c0572f9a96a1039302d82eca13f4d378af8efe63facb3",
-      "tasks.md": "b2a4927e073ff8e2750218a6a6a1b1c35d01fdfa9ab6b59fdee33a79aed39bbe"
+      "tasks.md": "b2a4927e073ff8e2750218a6a6a1b1c35d01fdfa9ab6b59fdee33a79aed39bbe",
+      "implementation-summary.md": "63bb341055ab950d1849109fd2afad8e379c9ef1a90be8166acd9230e4c840f1"
     },
     "last_active_child_id": null,
     "last_active_at": null

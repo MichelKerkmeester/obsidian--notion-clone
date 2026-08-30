@@ -12,9 +12,9 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "public/005-component-surface-system/004-checkbox-ownership"
-    last_updated_at: "2026-08-30T11:30:00Z"
-    last_updated_by: "design-agent"
-    recent_action: "4 verifier findings closed with fix + negative control; reorder-button overlap closed too"
+    last_updated_at: "2026-08-30T18:30:00Z"
+    last_updated_by: "phase-author"
+    recent_action: "State established from the tree: 211/211 own appearance, 0 ancestor-owned; roadmap 7.1 closed"
     next_safe_action: "Open the 16 changed PNGs and sign them off in checklist.md"
     blockers: []
     key_files:
@@ -31,8 +31,10 @@ _memory:
       session_id: "surface-system-004"
       parent_session_id: null
     completion_pct: 85
-    open_questions: []
-    answered_questions: []
+    open_questions:
+      - "Can the base rule win against a hostile theme without !important; three themes still untested"
+    answered_questions:
+      - "db-list-row-checkbox is routed through the factory rather than deleted"
 ---
 # Feature Specification: Checkbox Ownership
 

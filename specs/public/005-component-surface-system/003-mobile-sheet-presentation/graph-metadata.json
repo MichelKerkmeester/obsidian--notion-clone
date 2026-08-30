@@ -39,24 +39,26 @@
       "tasks"
     ],
     "importance_tier": "critical",
-    "status": "planned",
+    "status": "in_progress",
     "key_files": [
       "spec.md",
       "plan.md",
       "tasks.md",
       "acceptance-criteria.md",
       "goal.md",
+      "implementation-summary.md",
       "checklist.md",
+      "src/views/mobile-bottom-sheet.ts",
+      "tools/screenshots/runtime-vars.css",
+      "tools/storybook/verify-placement.mjs",
+      "tools/live/probe.mjs",
       "src/views/popover-position.ts",
       "src/data/touch-environment.ts",
       "src/views/modals/db-modal.ts",
       "src/views/database-view.ts",
-      "tools/screenshots/runtime-vars.css",
-      "tools/storybook/verify-placement.mjs",
       "src/main.ts",
       "src/views/image-file-suggest-modal.ts",
-      "src/views/markdown-file-suggest-modal.ts",
-      "src/views/mobile-bottom-sheet.ts"
+      "src/views/markdown-file-suggest-modal.ts"
     ],
     "entities": [
       {
@@ -90,9 +92,39 @@
         "source": "derived"
       },
       {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
         "name": "checklist.md",
         "kind": "doc",
         "path": "checklist.md",
+        "source": "derived"
+      },
+      {
+        "name": "mobile-bottom-sheet.ts",
+        "kind": "code",
+        "path": "src/views/mobile-bottom-sheet.ts",
+        "source": "derived"
+      },
+      {
+        "name": "runtime-vars.css",
+        "kind": "file",
+        "path": "tools/screenshots/runtime-vars.css",
+        "source": "derived"
+      },
+      {
+        "name": "verify-placement.mjs",
+        "kind": "file",
+        "path": "tools/storybook/verify-placement.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "probe.mjs",
+        "kind": "file",
+        "path": "tools/live/probe.mjs",
         "source": "derived"
       },
       {
@@ -120,18 +152,6 @@
         "source": "derived"
       },
       {
-        "name": "runtime-vars.css",
-        "kind": "file",
-        "path": "tools/screenshots/runtime-vars.css",
-        "source": "derived"
-      },
-      {
-        "name": "verify-placement.mjs",
-        "kind": "file",
-        "path": "tools/storybook/verify-placement.mjs",
-        "source": "derived"
-      },
-      {
         "name": "main.ts",
         "kind": "code",
         "path": "src/main.ts",
@@ -147,12 +167,6 @@
         "name": "markdown-file-suggest-modal.ts",
         "kind": "code",
         "path": "src/views/markdown-file-suggest-modal.ts",
-        "source": "derived"
-      },
-      {
-        "name": "mobile-bottom-sheet.ts",
-        "kind": "code",
-        "path": "src/views/mobile-bottom-sheet.ts",
         "source": "derived"
       },
       {
@@ -186,27 +200,15 @@
         "source": "derived"
       },
       {
-        "name": "Parent Spec",
+        "name": "In Progress",
         "kind": "proper_noun",
         "path": "spec.md",
-        "source": "derived"
-      },
-      {
-        "name": "Implementation Plan",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
-      },
-      {
-        "name": "Dependency Matrix",
-        "kind": "proper_noun",
-        "path": "plan.md",
         "source": "derived"
       }
     ],
     "causal_summary": "The sheet starts above the Obsidian bottom navigation bar instead of covering it",
     "created_at": "2026-08-29T12:41:53.187Z",
-    "last_save_at": "2026-08-30T16:54:06.084Z",
+    "last_save_at": "2026-08-30T18:35:59.792Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -214,14 +216,16 @@
       "plan.md",
       "tasks.md",
       "acceptance-criteria.md",
-      "goal.md"
+      "goal.md",
+      "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:d55b4f514b98b5adad87a7bd30c3dc8f22fc2e23b20a6ceaef38763be3faaec0",
+    "source_fingerprint": "sha256:6416f7b0b4a1911be92ad7c65f9c995f8326e5a29703de7790aae140e626d1ad",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "278a7355fb69c60035863d5aff7cb895ad55cf1e49b7db985648cc7348e3c4b6",
+      "spec.md": "1c64665690a91b74cadcae1a69f70456255442825c728138a38172838f44cb17",
       "plan.md": "0ef850a840ccabeab5fa2f1318ec826096a89f85123882e01a2ee03461e0b1f2",
-      "tasks.md": "cba391fa41445013c4db9856026b63561e2c04607c1732227e53070cd9eca38c"
+      "tasks.md": "cba391fa41445013c4db9856026b63561e2c04607c1732227e53070cd9eca38c",
+      "implementation-summary.md": "694249e90b128ca7438fdebc20c2ead2c6e8235262014bb0462d0235853af835"
     },
     "last_active_child_id": null,
     "last_active_at": null

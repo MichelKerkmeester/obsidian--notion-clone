@@ -13,9 +13,9 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "public/005-component-surface-system/003-mobile-sheet-presentation"
-    last_updated_at: "2026-08-29T14:00:00Z"
+    last_updated_at: "2026-08-30T18:30:00Z"
     last_updated_by: "phase-author"
-    recent_action: "Phase cut from measured architecture findings; not started"
+    recent_action: "Portal, scrim, sheet layer and grab band shipped; predicate collapse and census not delivered"
     next_safe_action: "Run the sheet census on a phone profile at runtime; static grep misses the modals"
     accepted_shortfalls:
       - "Grab band 32px against the operator's 48px ask; accepted after the fit was measured"
@@ -29,9 +29,11 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-003"
       parent_session_id: null
-    completion_pct: 0
-    open_questions: []
-    answered_questions: []
+    completion_pct: 70
+    open_questions:
+      - "Does REQ-002 stand as written now that sheets bypass the shared bounds rather than delete it"
+    answered_questions:
+      - "The portal is required; paint containment on the workspace leaf defeats every z-index"
 ---
 # Feature Specification: Mobile Sheet Presentation
 
@@ -76,7 +78,7 @@ so the factory has been shaken out on desktop where debugging is cheap, and bloc
 | **Blocks** | `006-record-open-target` |
 | **CSS lane** | holds `styles.css` for the sheet, scrim and safe-area rules |
 | **Priority** | P0 |
-| **Status** | Planned |
+| **Status** | In Progress — see [`implementation-summary.md`](implementation-summary.md) |
 | **Created** | 2026-08-29 |
 | **Branch** | `main` |
 | **Parent Spec** | `../spec.md` |
