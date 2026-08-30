@@ -4651,6 +4651,16 @@ await section("the sheet's inline editor", async () => {
   const results = [];
   const record = (name, pass, detail) => results.push({ name, pass, detail });
 
+  // The body carries `--font-ui-medium` for the same reason the bare-control rule exists: the host
+  // declares it and a page that omits it measures the plugin's fallback rather than what ships.
+  //
+  // This one is load-bearing here and nowhere else on this page. The record title sizes from that
+  // token and declares no line-height, so it inherits the container's unitless one — which means its
+  // line box is the HOST's font size times the plugin's ratio, and is not computable from the
+  // plugin's scale alone. With the token absent the token reference is invalid at computed-value
+  // time, `font-size` falls back to the inherited value, and the title renders two steps smaller
+  // than a device ever shows it. Every measurement taken against that title is then a measurement of
+  // a box no reader has.
   const pageHtml = (phone) => `<!doctype html><html><head>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
@@ -4666,7 +4676,7 @@ await section("the sheet's inline editor", async () => {
     .app-container.mod-static-nav .workspace { height: calc(100% - 80px); }
     .anchor { width: 120px; height: 28px; background: #ccd; }
   </style></head>
-  <body class="${phone ? "is-phone " : ""}theme-light" style="--safe-area-inset-bottom: 34px; --background-modifier-border: #333333; --background-primary: #ffffff">
+  <body class="${phone ? "is-phone " : ""}theme-light" style="--safe-area-inset-bottom: 34px; --background-modifier-border: #333333; --background-primary: #ffffff; --font-ui-medium: 15px">
     ${phone ? '<div class="mobile-navbar" style="position:fixed;left:0;right:0;bottom:0;height:72px;background:#222;z-index:100"></div>' : ""}
     <div class="app-container${phone ? " mod-static-nav" : ""}"><div class="workspace"><div class="workspace-split mod-root">
       <div class="workspace-leaf"><div class="workspace-leaf-content"><div class="view-content">
@@ -4716,7 +4726,10 @@ await section("the sheet's inline editor", async () => {
       actions: {
         editCell: (target, r, col, event) => cellRenderer.startEdit(target, r, col, event),
         openRow: () => {},
-        editFileName: () => {},
+        // Wired to the shipped renderer, exactly like the cell action beside it. A stub here
+        // renders no editor, so the title's rename had no geometry to measure and the surface's
+        // second inline editor was invisible to every check on this page.
+        editFileName: (target, r, currentName) => cellRenderer.editFileName(target, r, currentName),
         isReadOnly: false,
       },
     });
@@ -4779,6 +4792,46 @@ await section("the sheet's inline editor", async () => {
       document.dispatchEvent(new window.KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
       await raf();
     }
+    // The surface's OTHER inline editor. The title is not a field row, so the loop above never
+    // reaches it, and it opens on a double-click rather than a click — either difference alone is
+    // enough to keep it out of a check that only walks the rows and only clicks.
+    //
+    // It matters because it lands on the same absolutely-positioned popover as a value does, and
+    // therefore inherits the same height and the same centring correction, while anchoring on a
+    // line box of its own. Whether one correction can serve both anchors is only answerable by
+    // measuring the second one.
+    const titleEl = panel.querySelector(".db-record-detail-title");
+    const titleAtRest = rect(titleEl);
+    const titleCs = getComputedStyle(titleEl);
+    titleEl.dispatchEvent(new window.MouseEvent("dblclick", { bubbles: true, cancelable: true, view: window }));
+    await raf();
+    await new Promise((r) => setTimeout(r, 40));
+    await raf();
+    const titleEditor = document.querySelector(".db-cell-edit-popover, .db-cell-option-popover");
+    const titleEditorRect = titleEditor ? rect(titleEditor) : null;
+    out.title = {
+      cls: titleEditor ? titleEditor.className : "(no editor opened)",
+      // The rename reaches the shared single-line popover through the renderer, so it is subject to
+      // the sheet's popover rules. If it ever stops doing so the geometry below measures a
+      // different box and would read as "no defect" rather than as a changed mechanism.
+      inline: Boolean(titleEditor && titleEditor.classList.contains("db-cell-line-edit-popover")),
+      columnKey: titleEditor ? titleEditor.dataset.noteDatabaseColumnKey || "(none)" : null,
+      marginTop: titleEditor ? getComputedStyle(titleEditor).marginTop : null,
+      // The anchor's own metrics, read rather than derived. The title takes its size from a HOST
+      // token and declares no line-height of its own, so both numbers depend on what the host
+      // supplies and neither can be computed from the plugin's own scale.
+      fontSize: titleCs.fontSize,
+      lineHeight: titleCs.lineHeight,
+      titleTop: titleAtRest.top, titleBottom: titleAtRest.bottom, titleHeight: titleAtRest.height,
+      titleCentreY: titleAtRest.centreY,
+      editorTop: titleEditorRect ? titleEditorRect.top : null,
+      editorBottom: titleEditorRect ? titleEditorRect.bottom : null,
+      editorHeight: titleEditorRect ? titleEditorRect.height : null,
+      centreDelta: titleEditorRect ? +(titleEditorRect.centreY - titleAtRest.centreY).toFixed(1) : null,
+    };
+    document.dispatchEvent(new window.KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
+    await raf();
+
     document.getElementById("hostile-host-css")?.remove();
     return out;
   };
@@ -4835,6 +4888,30 @@ await section("the sheet's inline editor", async () => {
   record("the sheet's inline editor sits on its label's centre line",
     sheetInline.length > 0 && worst(sheetInline, (f) => f.centreDelta) <= 1,
     `worst centre offset ${worst(sheetInline, (f) => f.centreDelta)}px (want <= 1px) — ${describe(sheetInline)}`);
+
+  // ── THE SECOND INLINE EDITOR: the title's rename ─────────────────────
+  //
+  // Two assertions, and the first is what makes the second mean anything. The rename reaches the
+  // shared single-line popover, so it is governed by the sheet's popover rules; if it ever stops
+  // doing so, the geometry assertion would be measuring some other box and would pass while the
+  // rename sat anywhere at all.
+  record("the sheet's title opens the same inline editor a value does",
+    phone.title.inline && phone.title.columnKey === "file.name",
+    `a double-click on the title opened "${phone.title.cls}" for column ${phone.title.columnKey}`
+      + ` — wired through the shipped renderer, not a stub; a stub here rendered no editor at all and`
+      + ` left this surface's second inline editor unmeasured`);
+
+  // The correction the popover carries is written in terms of the VALUE's line box. The title's is
+  // its own, and it is not the plugin's to set: the title sizes from a host token and declares no
+  // line-height, so its box is whatever the host's UI font makes it. That is why this reports both
+  // metrics rather than only the offset — the offset alone cannot say which of the two moved.
+  record("the sheet's rename editor sits on the title's centre line",
+    phone.title.inline && Math.abs(phone.title.centreDelta) <= 1,
+    `centre offset ${phone.title.centreDelta}px (want <= 1px) — title [${phone.title.titleTop}..${phone.title.titleBottom}]`
+      + ` h=${phone.title.titleHeight} at ${phone.title.fontSize}/${phone.title.lineHeight},`
+      + ` editor [${phone.title.editorTop}..${phone.title.editorBottom}] h=${phone.title.editorHeight}`
+      + ` carrying margin-top ${phone.title.marginTop}; the value editor beside it measures`
+      + ` ${worst(sheetInline, (f) => f.centreDelta)}px against a ${sheetInline[0]?.valueHeightAtRest}px line box`);
 
   record("the sheet's inline editor stays inside its row",
     sheetInline.length > 0

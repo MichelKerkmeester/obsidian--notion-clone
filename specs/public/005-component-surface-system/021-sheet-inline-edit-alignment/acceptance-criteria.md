@@ -1,6 +1,6 @@
 ---
 title: "Acceptance Criteria: Sheet Inline Edit Alignment"
-description: "Five criteria met on the value editor, each with its failing number and its file:line. A sixth, added by a fresh review, is open: the title's rename editor is 2.4px off its own centre line."
+description: "Six criteria met on the sheet's two inline editors, each with its failing number. The sixth closed without a stylesheet change: its 2.4px was the harness rendering the title at a size no device shows."
 trigger_phrases:
   - "021 acceptance criteria"
   - "inline editor centre line closure"
@@ -10,20 +10,20 @@ contextType: "implementation"
 _memory:
   continuity:
     packet_pointer: "public/005-component-surface-system/021-sheet-inline-edit-alignment"
-    last_updated_at: "2026-08-30T16:30:00Z"
-    last_updated_by: "phase-author"
-    recent_action: "Five criteria met and traced; criterion 6 added by a fresh review and open"
-    next_safe_action: "Give the harness a path to the title editor, then derive its own offset"
-    blockers:
-      - "The harness stubs the rename entry point and triggers on click"
+    last_updated_at: "2026-08-30T19:45:00Z"
+    last_updated_by: "criterion-6-closure"
+    recent_action: "Criterion 6 measured through the shipped rename: red 2.4px, green 0.9px"
+    next_safe_action: "Confirm the title font size and line box on device"
+    blockers: []
     key_files:
       - "acceptance-criteria.md"
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-021"
       parent_session_id: null
-    completion_pct: 85
-    open_questions: []
+    completion_pct: 95
+    open_questions:
+      - "Does a per-anchor correction in the placement path earn its own phase"
     answered_questions: []
 ---
 # Acceptance Criteria: Sheet Inline Edit Alignment
@@ -31,12 +31,13 @@ _memory:
 <!-- SPECKIT_TEMPLATE_SOURCE: acceptance-criteria | v2.2 -->
 
 > Each criterion is measured through the **real** open-and-edit path: the shipped
-> `openRecordDetailPanel` with its `editCell` wired to the shipped `CellRenderer`, and a click on the
-> value element. Nothing here builds an editor by hand.
+> `openRecordDetailPanel` with both `editCell` and `editFileName` wired to the shipped `CellRenderer`,
+> a click on the value element and a double-click on the title. Nothing here builds an editor by hand.
 >
 > Failing numbers are from the tree as received.
 >
-> **This packet is `Partial`.** Criterion 6 was added by a fresh review after shipping and is open.
+> **Criterion 6** was added by a fresh review after shipping. It is now measured through that same
+> real path and met, and the stylesheet did not change to meet it.
 
 ---
 
@@ -61,18 +62,48 @@ _memory:
 | AC-003 | REQ-003 | Inline editor height against the thumb floor the sheet's textarea editor already holds | >= 44px | **34.8px** | 44px | `styles.css:9391` | Met |
 | AC-004 | REQ-004 | AC-001 and AC-002 re-measured with a host stylesheet inflating every input | <= 1px each | **15.2px / 17.7px** | 1.0px / 0.5px | `styles.css:9399` | Met |
 | AC-005 | REQ-005 | Desktop panel editor rectangle, frozen against a leak from the two new selectors | exact, ±0.5px | 34.8px / 8px / 12px | 34.8px / 8px / 12px | `tools/storybook/verify-placement.mjs:4172` | Met |
-| AC-006 | REQ-007 | **The title's rename editor** — the second inline editor — on its own centre line. It receives both new declarations and inherits an offset derived from the **value's** 21.6px line box; its own is 18.85px, so the correct offset is −12.6px rather than −11.2px | <= 1px | **9.0px** | **2.4px** | `styles.css:9393` | Unmet |
+| AC-006 | REQ-007 | **The title's rename editor** — the second inline editor — on its own centre line, driven through the shipped double-click rename and measured against a page that declares the host's `--font-ui-medium` | <= 1px | **2.4px** | **0.9px** | `tools/storybook/verify-placement.mjs` — "the sheet's rename editor sits on the title's centre line" | Met |
 
-### Why AC-006 exists and why this harness could not have produced it
+### Why AC-006 exists, and why its failing number was the harness's and not the product's
 
-The offset expression at `styles.css:9393` is written in terms of `--db-font-lg`'s line height, which
-is the **value's** metric. Every anchor that is not a value inherits a correction computed for a box
-it does not have.
-
-The harness cannot reach the title editor for two independent reasons: it stubs the rename entry
+The harness could not reach the title editor for two independent reasons: it stubbed the rename entry
 point as a no-op, and the trigger is a double-click rather than a click. **Either alone would have
-hidden it.** AC-006 was found by an independent probe, and closing it requires first giving the
-harness a path to that editor — otherwise the criterion is unverifiable here.
+hidden it.** The stub is now wired to the shipped `CellRenderer.editFileName`, the check drives a
+double-click, and the editor it opens is the same `.db-cell-line-edit-popover` a value opens, for
+column `file.name`. That pairing is asserted, because without it the geometry below could measure
+some other box and read as no defect.
+
+With the editor reachable, the criterion was **observed red at 2.4px** and then diagnosed, and the
+diagnosis is not the one written when it was raised.
+
+The offset is written in terms of `--db-font-lg`'s line height, which is the **value's** metric, so
+the concern was real: a non-value anchor inherits a correction computed for a box it does not have.
+But the title's box is not 18.85px on any device. The title sizes from `--font-ui-medium`, a **host**
+token, and declares no line-height, so it inherits the container's unitless `1.45` and its line box is
+the *host's* font size times the plugin's ratio. The harness page declared no `--font-ui-medium`, the
+token reference was therefore invalid at computed-value time, `font-size` fell back to the inherited
+13px, and 18.85px is 13 × 1.45 — the fallback, measured. `tools/screenshots/theme.css` records
+Obsidian's default as 15px, which gives 15 × 1.45 = **21.75px**, against the value's 16 × 1.35 =
+**21.6px**. The two anchors' line boxes agree to 0.15px, so one correction serves both, and the
+shipped −11.2px is within 0.07px of what the title alone would want.
+
+Modelling that token on the page — the same repair the bare-control rule already performs, for the
+reason that file states — takes the measured offset to **0.9px**. **No stylesheet declaration
+changed**; `styles.css` is byte-identical across this work. What changed is that the page now renders
+the title at the size a reader sees.
+
+### The residual, stated
+
+0.9px against a 1px threshold is 0.1px of headroom, and the offset is linear in the host token. Swept
+through the shipped path, the title's centre offset is 2.4px at 13px (and with the token absent),
+1.7px at 14px, **0.9px at 15px**, 0.2px at 16px, −0.5px at 17px and −1.2px at 18px. So the single
+correction holds within 1px for a host UI font of roughly **14.7px to 17.7px** and drifts linearly
+outside it. Obsidian's default sits inside that band; a theme that moves the token far enough takes
+this red, which is correct — it would be visibly off on the device too.
+
+That 15px is Obsidian's default is **inferred** from this repo's own host model rather than confirmed
+against Obsidian's `app.css`, which is not readable from here. The check prints the title's measured
+font size and line box on every run, so a device confirmation is a one-line comparison.
 
 <!-- /ANCHOR:criteria -->
 
@@ -81,8 +112,12 @@ harness a path to that editor — otherwise the criterion is unverifiable here.
 <!-- ANCHOR:closure -->
 ## 3. CLOSURE STATEMENT
 
-**Closeable:** No. Five of six criteria are `Met`; **AC-006 is `Unmet`** and the packet is `Partial`
-rather than complete.
+**Closeable:** On the criteria, yes — all six are `Met`. The packet stays `Partial` because none of
+this is operator-confirmed on device, and shipped, verified and confirmed are three different states.
+
+AC-006 closed **without a stylesheet change**. The criterion was failing a correct implementation,
+which is one of the two banned shapes this program watches for, and the repair was to the page rather
+than to the product.
 
 The five met criteria all concern the number and currency editor and were each shown red on the tree
 as received. AC-005 deserves a note of its own: **its first version passed the mistake it existed to
@@ -93,12 +128,30 @@ value. Meanwhile the input rule **did** leak and shrank the desktop editor from 
 rewritten check measures the rectangle and, under the same control, reports `31/6.1/8.2` against the
 frozen `34.8/8/12` and exits 1.
 
-AC-006 is a genuine open criterion, not a deferred nicety. Two inline editors sit on one surface and
-disagree by 1.4px, and the phase's own declarations are what put the second one where it is. It is
-also **an improvement** on the 9.0px it started at, so reverting would give up ground.
+AC-006 has the same shape from the other side, and it is the more expensive one to have got wrong.
+AC-005's first instrument passed the defect it existed to catch; AC-006's environment **failed a
+correction that is right on the device**. Both were invisible until something drove the shipped path
+against a page that declares what the app declares.
 
-Two shapes are available and neither has been chosen — a second literal for the title, or deriving
-the offset from whichever anchor the popover was placed on. `plan.md` ADR-002 holds the trade-off.
+`plan.md` ADR-002 offered two shapes and both are now declined on measurement rather than left open.
+
+*A second literal for the title* would encode −12.6px, which is what the title's **fallback** box
+wants. On a device that box is 21.75px, not 18.85px, so the literal would take the measured offset
+from 0.9px to roughly 2.3px — it fixes the harness and breaks the device.
+
+*Deriving the offset from the anchor* is the general answer and is correct at every host font, but
+the only in-stylesheet form of it is a `calc()` over `--font-ui-medium`, a token the plugin does not
+own. Where that token is absent the whole declaration is invalid at computed-value time and
+`margin-top` falls back to `0` — measured at **13.6px** out, six times worse than the 2.4px it would
+replace. That is the identical trap AC-005 documents one paragraph above, and writing a second
+declaration with it into this stylesheet is a bad trade. The CSS-only version would also have to key
+on the popover's column rather than on its anchor, so a config whose title field is not `file.name`
+would hand a title's correction to an ordinary value row.
+
+The decision is therefore to **keep −11.2px**, deriving one correction from `--db-font-lg`, because
+at the shipped host values the two anchors' line boxes agree to 0.15px and one number genuinely
+serves both. A per-anchor correction belongs in the placement path, where the anchor is in hand and
+no host token has to survive a cascade; that is a change to that path, not to this stylesheet.
 
 ### Named, measured, not criteria of this packet
 
