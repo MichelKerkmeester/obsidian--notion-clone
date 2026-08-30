@@ -55,11 +55,16 @@ const CHECKS = [
   { name: "replay", cmd: ["node", "tools/live/replay.mjs"] },
   { name: "inverted-assertions", cmd: ["node", "tools/live/guard-inverted-assertions.mjs"] },
   { name: "screenshots-fresh", cmd: ["npm", "run", "screenshots:verify"] },
-  { name: "story-coverage", cmd: ["npm", "run", "storybook:coverage"] },
+  { name: "shim-coverage", cmd: ["npm", "run", "shim:coverage"] },
+  { name: "story-coverage", cmd: ["npm", "run", "story:coverage"] },
   // This has carried an expectFail twice — for the widthless-caller default, and for a sheet that
   // could not reach the screen bottom. Both are discharged, and the declaration is removed rather
   // than updated each time, so a red here means a regression and not a known defect.
   { name: "placement", cmd: ["npm", "run", "storybook:placement"] },
+  // The gate never built a renderer the plugin ships, and a row loop that forced a layout per row
+  // froze the app through every other check. This one bundles the shipped renderers and asserts
+  // structural facts about what they build, so a renderer change moves a number in a gate.
+  { name: "render-assertions", cmd: ["node", "tools/live/render-assertions.mjs"] },
 ];
 
 // ───────────────────────────────────────────────────────────────────

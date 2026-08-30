@@ -240,7 +240,7 @@ const gated = (name, cmd, args) => {
 };
 const gatedResults = [
   gated("placement geometry", "npm", ["run", "storybook:placement"]),
-  gated("story coverage", "npm", ["run", "storybook:coverage"]),
+  gated("story coverage", "npm", ["run", "story:coverage"]),
   gated("handoff replay", "node", ["tools/live/replay.mjs"]),
 ];
 for (const g of gatedResults) record(`gated — ${g.name}`, true, g.ok ? 0 : 1, 0, g.ok ? "passing" : "FAILING");

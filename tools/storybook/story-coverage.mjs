@@ -8,10 +8,10 @@
 // catalogue documents a subset nobody can identify — which is how the previous
 // central story file drifted.
 //
-// "Renderable" here means a module under src/views that exports a create* or
-// render* function: those take a parent element and data, which is exactly
-// what a story can supply. Everything else — classes needing a vault, panels
-// needing an app — is exempt, but each exemption carries a written reason.
+// "Renderable" here means a module under src/views that exports a function
+// taking a parent element, regardless of its name. That is the capability a
+// story can supply. Everything else — classes needing a vault, panels needing
+// an app — is exempt, but each exemption carries a written reason.
 //
 // Stale allowlist entries fail the gate. An exemption that outlives its
 // module, or survives after a story is finally written, is worse than no
@@ -37,14 +37,14 @@ const ALLOWLIST = join(REPO, "tools", "storybook", "story-coverage-allowlist.jso
 const jsonMode = process.argv.includes("--json");
 
 /**
- * A module is renderable when it exports a create or render function that takes a parent element,
- * either directly or through an options object carrying `parent`.
+ * A module is renderable when it exports a function that takes a parent element, either directly
+ * or through an options object carrying `parent`.
  *
  * The name alone is not enough: `createStarterViewConfig` returns a config object and has no DOM
  * to show, so a name-only rule demanded a story that could not meaningfully exist and pushed
  * people toward writing a fake one.
  */
-const EXPORTED = /^export function ((?:create|render)\w+)\s*\(([^)]*)/gms;
+const EXPORTED = /^export function (\w+)\s*\(([^)]*)/gms;
 
 function isRenderable(source) {
   for (const [, , params] of source.matchAll(EXPORTED)) {

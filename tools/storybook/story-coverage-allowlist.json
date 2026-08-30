@@ -27,6 +27,50 @@
     {
       "path": "group-expand-controls.ts",
       "reason": "Same ViewConfig dependency as the group label, plus per-group visible-count state that only the row pipeline produces."
+    },
+    {
+      "path": "bulk-edit-field-menu.ts",
+      "reason": "Opens a dropdown from DatabaseView's active schema and bulk-edit transaction; a standalone frame would have to recreate that caller state instead of exercising this module's surface."
+    },
+    {
+      "path": "calendar-keyboard-navigation.ts",
+      "reason": "Attaches keyboard navigation to a CalendarRenderer grid and moves focus among its live cells; a static story would replace the grid and focus model it is meant to exercise."
+    },
+    {
+      "path": "card-roving-tabindex.ts",
+      "reason": "Mutates tabindex across renderer-owned card cells after layout; a standalone fixture cannot establish the board, gallery or list roving group that supplies its active index."
+    },
+    {
+      "path": "database-viewport.ts",
+      "reason": "Captures and restores scroll positions from live database and embedded-host scrollers; a static story has no host viewport lifecycle to exercise."
+    },
+    {
+      "path": "drag-drop-feedback.ts",
+      "reason": "Resolves a drop edge from a live DragEvent, target geometry and transaction state; a static story cannot produce the browser drag state this feedback reports."
+    },
+    {
+      "path": "field-tooltip.ts",
+      "reason": "The parent-taking export writes the browser's native title tooltip, which has no standalone painted surface; formatting is covered by its unit-level callers."
+    },
+    {
+      "path": "hover-link-preview.ts",
+      "reason": "Installs Obsidian workspace hover events and previews vault files; the Storybook stub has no workspace, vault or hover-popover lifecycle to render."
+    },
+    {
+      "path": "interaction-scope.ts",
+      "reason": "Traps focus inside a live modal scope and restores the prior active element; a static story cannot supply the modal ownership and focus lifecycle it coordinates."
+    },
+    {
+      "path": "option-color-picker.ts",
+      "reason": "Builds a picker through the live popover positioner and closes it through Obsidian's document-level auto-close events; a standalone frame would only duplicate those host events."
+    },
+    {
+      "path": "table-cell-gesture.ts",
+      "reason": "Attaches selection gestures to renderer-owned table cells and resolves touch versus mouse state; a static story cannot supply the table selection model those handlers mutate."
+    },
+    {
+      "path": "table-record-peek.ts",
+      "reason": "Attaches title-cell taps to the live record-peek lifecycle and opens a vault-backed row panel; a static story cannot exercise that owner and its cleanup path."
     }
   ]
 }

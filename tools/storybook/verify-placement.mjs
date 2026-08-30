@@ -48,6 +48,44 @@ const CHROME = [
 ].find(existsSync) || process.env.SCREENSHOT_CHROME;
 
 // ───────────────────────────────────────────────────────────────────
+// 2b. WHAT THE HOST DECLARES ON A BARE CONTROL
+// ───────────────────────────────────────────────────────────────────
+//
+// Copied verbatim out of Obsidian's own app.css, the same way the leaf's `contain: strict` is
+// reproduced in the page below: a harness that omits what the app declares certifies a rendering
+// nobody ships.
+//
+// This one rule is the reason a shared menu row could be measured as correctly aligned here and
+// arrive centred on a phone. A row is a `<button>`, and the plugin's row rule outranks this type
+// selector on every property BOTH of them name — but `justify-content` was named by only one, so
+// the host's `center` applied uncontested and nothing in a plugin-only page could show it. The
+// defect was invisible not because the check was weak but because the document it ran against was
+// missing a declaration the device has.
+//
+// It is loaded on every page rather than only the ones being investigated. A property the plugin
+// leaves unstated is not a phone problem or a menu problem; it is a gap anywhere a host rule
+// reaches, and the whole point is that the gap is silent until something models it.
+const HOST_BARE_CONTROLS = `
+button {
+  --text-color: var(--text-normal);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-color);
+  font-size: var(--font-ui-small);
+  border-radius: var(--button-radius);
+  border: 0;
+  padding: var(--size-4-1) var(--size-4-3);
+  height: var(--input-height);
+  font-weight: var(--input-font-weight);
+  cursor: var(--cursor);
+  font-family: inherit;
+  outline: none;
+  user-select: none;
+  white-space: nowrap;
+}`;
+
+// ───────────────────────────────────────────────────────────────────
 // 3. BUNDLE THE SHIPPED POSITIONER
 // ───────────────────────────────────────────────────────────────────
 
@@ -72,11 +110,15 @@ import { attachLongPress, isTouchDevice } from "${join(REPO, "src/data/touch-env
 import { attachTitleOpenAffordance, setupTitleCellTap } from "${join(REPO, "src/views/table-record-peek")}";
 import { openRecordDetailPanel } from "${join(REPO, "src/views/record-detail-panel")}";
 import { RowMenu } from "${join(REPO, "src/views/row-menu")}";
+import { ColumnMenu } from "${join(REPO, "src/views/column-menu")}";
 import { CellRenderer } from "${join(REPO, "src/views/cell-renderer")}";
 import { ListRenderer } from "${join(REPO, "src/views/list-renderer")}";
+import { DatabaseView } from "${join(REPO, "src/views/database-view")}";
+import { EmbeddedDatabaseRenderer } from "${join(REPO, "src/views/embedded-database-renderer")}";
 globalThis.__edit = { openRecordDetailPanel, closeRecordDetailPanel, CellRenderer };
 globalThis.__list = { ListRenderer };
-globalThis.__place = { positionToolbarPopover, getVisiblePopoverBounds, COMPACT_MENU_POPOVER, applySheetChrome, renderCardField, createOwnedMenu, createMenuRow, ToolbarRenderer, trackCellGesture, nextCellRange, resolveCellTapAction, isMainItemColumn, shouldExtendRowRange, applyRowSelectionPress, attachRowRangeGesture, isRowSelectionCheckbox, attachLongPress, isTouchDevice, attachTitleOpenAffordance, setupTitleCellTap, openRecordDetailPanel, RowMenu };
+globalThis.__selection = { DatabaseView, EmbeddedDatabaseRenderer };
+globalThis.__place = { positionToolbarPopover, getVisiblePopoverBounds, COMPACT_MENU_POPOVER, applySheetChrome, renderCardField, createOwnedMenu, createMenuRow, ToolbarRenderer, trackCellGesture, nextCellRange, resolveCellTapAction, isMainItemColumn, shouldExtendRowRange, applyRowSelectionPress, attachRowRangeGesture, isRowSelectionCheckbox, attachLongPress, isTouchDevice, attachTitleOpenAffordance, setupTitleCellTap, openRecordDetailPanel, RowMenu, ColumnMenu };
 globalThis.__p = { positionToolbarPopover, getVisiblePopoverBounds, setPosition, clamp, resolvePopoverHorizontalLeft, COMPACT_MENU_POPOVER, PANEL_POPOVER, createOwnedMenu, createMenuRow };
 globalThis.__drag = { openRecordDetailPanel, refreshRecordDetailPanel, applySheetChrome, positionToolbarPopover };
 globalThis.__a = { positionToolbarPopover, placeSheet, applySheetChrome, attachSheetDragToDismiss, openRecordDetailPanel, refreshRecordDetailPanel, closeRecordDetailPanel, createOwnedMenu, createMenuRow };
@@ -142,6 +184,50 @@ const page_html = `<!doctype html><html><head>
 </body></html>`;
 
 // ───────────────────────────────────────────────────────────────────
+// 4b. A SECTION THAT THROWS IS A RED CHECK, NOT A DEAD RUN
+// ───────────────────────────────────────────────────────────────────
+//
+// Every section measured into its own array and the arrays were spread into one list at the very
+// end, so nothing was reported until everything had run. One throw anywhere therefore printed none
+// of the two hundred checks that had already been measured — the run died with a stack trace and
+// said nothing about the surface it had just finished measuring.
+//
+// That is strictly worse than a red. A red names the property that broke; an empty run looks like a
+// broken harness and leaves whoever reads it unable to tell a product defect from a typo. It also
+// scales the wrong way: the sections that drive shipped renderers are the ones that can throw for
+// the same reasons production does, and those are the sections this harness is gaining.
+//
+// So each section runs inside this. A throw becomes one red check carrying the error, the run
+// continues into the next section, and the red is not in KNOWN, so it still fails the run. The
+// section's own checks are lost — they were never measured — and the red says so rather than
+// letting the total quietly shrink.
+//
+// `PLACEMENT_SECTION_CONTROL=<substring>` arms the control: the first section whose label contains
+// the substring throws after its checks were measured, which is the worst case this has to survive.
+// A control that stops producing exactly one red and a complete run means the isolation is gone.
+const sectionFailures = [];
+const SECTION_CONTROL = process.env.PLACEMENT_SECTION_CONTROL || "";
+
+const section = async (label, run, fallback = []) => {
+  try {
+    const value = await run();
+    if (SECTION_CONTROL && label.includes(SECTION_CONTROL)) {
+      throw new Error(`PLACEMENT_SECTION_CONTROL is armed for "${label}"`);
+    }
+    return value;
+  } catch (error) {
+    const trace = error && error.stack ? String(error.stack) : String(error);
+    sectionFailures.push({
+      name: `the "${label}" section reports its own checks`,
+      pass: false,
+      detail: `it threw, so none of its checks were measured and the count below is short by that `
+        + `section's worth: ${trace.split("\n").slice(0, 4).map((line) => line.trim()).join(" | ")}`,
+    });
+    return fallback;
+  }
+};
+
+// ───────────────────────────────────────────────────────────────────
 // 5. MEASURE
 // ───────────────────────────────────────────────────────────────────
 
@@ -154,14 +240,14 @@ await page.setContent(page_html);
 // that does not contain the cascade the defects live in — the same structural blindness as
 // wrapping a story in the one container that supplies its tokens. Every desktop number taken
 // before this line was loaded described a rendering nobody ships.
-await page.addStyleTag({ content: readFileSync(join(REPO, "styles.css"), "utf8") });
+await page.addStyleTag({ content: readFileSync(join(REPO, "styles.css"), "utf8") + HOST_BARE_CONTROLS });
 await page.addScriptTag({ content: shimJs + "\ninstallObsidianDomShim(globalThis);" });
 await page.addScriptTag({ content: positionerJs });
 
 // No arguments: every number below is measured off the rendered page. Passing the sidebar width in
 // as a constant would let a check agree with the harness's own idea of the layout rather than with
 // what the browser actually laid out.
-const results = await page.evaluate(() => {
+const results = await section("desktop workspace geometry", () => page.evaluate(() => {
   const out = [];
   const { positionToolbarPopover, getVisiblePopoverBounds, COMPACT_MENU_POPOVER } = globalThis.__place;
   const container = document.querySelector(".note-database-container");
@@ -293,7 +379,7 @@ const results = await page.evaluate(() => {
   widget.remove();
 
   return out;
-});
+}));
 
 await page.close();
 
@@ -320,13 +406,14 @@ const phoneBody = '<body class="is-phone" style="--safe-area-inset-bottom: 34px;
   + '<div class="mobile-navbar" style="position:fixed;left:0;right:0;bottom:0;height:72px;'
   + 'background:#222;z-index:100"></div>';
 await phone.setContent(page_html.replace("<body>", phoneBody));
-await phone.addStyleTag({ content: readFileSync(join(REPO, "styles.css"), "utf8") });
+await phone.addStyleTag({ content: readFileSync(join(REPO, "styles.css"), "utf8") + HOST_BARE_CONTROLS });
 await phone.addScriptTag({ content: shimJs + "\ninstallObsidianDomShim(globalThis);" });
 await phone.addScriptTag({ content: positionerJs });
 
-const phoneResults = await phone.evaluate(async () => {
+const phoneResults = await section("the phone sheet and its selection bar", () => phone.evaluate(async (forceBrokenSelectionDock) => {
   const out = [];
   const { applySheetChrome, positionToolbarPopover, getVisiblePopoverBounds } = globalThis.__place;
+  const { DatabaseView, EmbeddedDatabaseRenderer } = globalThis.__selection;
 
   // Drive the positioner, not only the chrome helper.
   //
@@ -620,6 +707,83 @@ const phoneResults = await phone.evaluate(async () => {
       + `(a min-width label moved it 115px)`,
   });
 
+  // Render both bars through the shipped view methods. The embed must keep its own presentation
+  // because it has no viewport-level keyboard to clear and its host note owns the scroll context.
+  const selectedAddresses = [
+    { rowPath: "record.md", colKey: "amount" },
+    { rowPath: "record.md", colKey: "name" },
+  ];
+  // `Object.create` gives a real view without the constructor, which wants an Obsidian leaf this
+  // page has no way to supply. The cost is that class field initialisers never run: every field the
+  // driven method reads is `undefined` unless it is written here, and a field the method only reads
+  // — never assigns — fails with nothing pointing at the missing state. `historyStack` is one of
+  // those. It decides whether the bar carries an undo action, and a fresh view starts it empty, so
+  // that is what a view drawn at rest holds and what is supplied here.
+  const renderStandaloneSelection = () => {
+    const host = document.body.createDiv({ cls: "note-database-container" });
+    const view = Object.create(DatabaseView.prototype);
+    view.containerEl_ = host;
+    view.selectedRows = new Set();
+    view.cellSelection = { anchor: selectedAddresses[0], focus: selectedAddresses[1] };
+    view.selectionStatusBar = undefined;
+    view.pendingCellFillDraft = null;
+    view.showCellFillInput = false;
+    view.historyStack = [];
+    view.getSelectedCellAddresses = () => selectedAddresses;
+    view.getConfig = () => ({ schema: { columns: [] } });
+    DatabaseView.prototype.renderSelectionStatusBar.call(view);
+    return { host, bar: host.querySelector(".db-selection-status-bar") };
+  };
+  const renderEmbeddedSelection = () => {
+    const host = document.body.createDiv({ cls: "note-database-embed note-database-container" });
+    const renderer = Object.create(EmbeddedDatabaseRenderer.prototype);
+    renderer.containerEl = host;
+    renderer.config = { viewType: "table" };
+    renderer.cellSelection = { anchor: selectedAddresses[0], focus: selectedAddresses[1] };
+    renderer.getSelectedEmbedCellAddresses = () => selectedAddresses;
+    EmbeddedDatabaseRenderer.prototype.renderEmbedSelectionStatusBar.call(renderer);
+    return { host, bar: host.querySelector(".db-selection-status-bar") };
+  };
+  const standaloneSelection = renderStandaloneSelection();
+  const embeddedSelection = renderEmbeddedSelection();
+  const selectionBar = standaloneSelection.bar;
+  const embeddedBar = embeddedSelection.bar;
+  const selectionFloor = selectionBar.getBoundingClientRect().bottom;
+  const selectionContentHeight = selectionBar.scrollHeight;
+  const selectionContentBoxHeight = selectionBar.clientHeight;
+  const selectionStyle = getComputedStyle(selectionBar);
+  const selectionWidth = selectionBar.getBoundingClientRect();
+  const selectionHasOverflow = selectionBar.scrollWidth > selectionBar.clientWidth;
+  const embeddedFloor = embeddedBar.getBoundingClientRect().bottom;
+
+  out.push({
+    name: "selection bar content fits inside its border box",
+    pass: selectionContentHeight <= selectionContentBoxHeight + 1,
+    detail: `content=${selectionContentHeight}px box=${selectionContentBoxHeight}px `
+      + `(the measured pre-fix pair was 36px inside 28px)`,
+  });
+  out.push({
+    name: "selection bar exposes a deliberate horizontal scroll lane when actions exceed phone width",
+    pass: selectionHasOverflow && selectionStyle.overflowX === "auto" && selectionStyle.scrollbarWidth === "thin",
+    detail: `scrollWidth=${selectionBar.scrollWidth}px clientWidth=${selectionBar.clientWidth}px `
+      + `overflow-x=${selectionStyle.overflowX} scrollbar-width=${selectionStyle.scrollbarWidth || "auto"} `
+      + `(bar width ${Math.round(selectionWidth.width)}px)`,
+  });
+  const selectionActions = [...selectionBar.querySelectorAll(
+    ".db-selection-action, .db-selection-clear-pill, .db-selection-delete",
+  )];
+  const minSelectionActionHeight = Math.min(...selectionActions.map((el) => el.getBoundingClientRect().height));
+  out.push({
+    name: "selection bar action targets reach the phone thumb floor",
+    pass: minSelectionActionHeight >= 44,
+    detail: `min action height=${minSelectionActionHeight.toFixed(0)}px (want >=44px)`,
+  });
+  out.push({
+    name: "embedded selection bar keeps its viewport-floor presentation",
+    pass: Math.abs(embeddedFloor - selectionFloor) <= 1,
+    detail: `standalone bottom=${selectionFloor.toFixed(0)}px embedded bottom=${embeddedFloor.toFixed(0)}px`,
+  });
+
   // ── the keyboard ──
   //
   // No harness here contains a software keyboard, and none of these checks claims otherwise. What
@@ -652,6 +816,27 @@ const phoneResults = await phone.evaluate(async () => {
   document.documentElement.style.setProperty("--keyboard-height", `${KEYBOARD}px`);
   window.dispatchEvent(new window.Event("resize"));
   await settle();
+  if (forceBrokenSelectionDock) selectionBar.style.bottom = "0px";
+  const liftedSelectionBox = selectionBar.getBoundingClientRect();
+  const liftedEmbeddedBox = embeddedBar.getBoundingClientRect();
+  const keyboardBarBottom = window.innerHeight - KEYBOARD;
+  out.push({
+    name: "selection bar clears the keyboard the host reports",
+    pass: Math.abs(liftedSelectionBox.bottom - keyboardBarBottom) <= 2,
+    detail: `bar bottom=${liftedSelectionBox.bottom.toFixed(0)} want=${keyboardBarBottom}px `
+      + `(keyboard covers ${keyboardBarBottom}..${window.innerHeight})`,
+  });
+  out.push({
+    name: "selection bar keeps its box fully visible above the keyboard",
+    pass: liftedSelectionBox.top >= -1 && liftedSelectionBox.bottom <= keyboardBarBottom + 1,
+    detail: `bar ${liftedSelectionBox.top.toFixed(0)}-${liftedSelectionBox.bottom.toFixed(0)}px `
+      + `available floor=${keyboardBarBottom}px`,
+  });
+  out.push({
+    name: "embedded selection bar does not inherit standalone keyboard docking",
+    pass: Math.abs(liftedEmbeddedBox.bottom - embeddedFloor) <= 1,
+    detail: `embedded before=${embeddedFloor.toFixed(0)}px after=${liftedEmbeddedBox.bottom.toFixed(0)}px`,
+  });
   const liftedBox = rhythmPanel.getBoundingClientRect();
   out.push({
     name: "the sheet clears the keyboard the host reports",
@@ -668,8 +853,15 @@ const phoneResults = await phone.evaluate(async () => {
   });
 
   document.documentElement.style.removeProperty("--keyboard-height");
+  selectionBar.style.bottom = "";
   window.dispatchEvent(new window.Event("resize"));
   await settle();
+  const closedSelectionBox = selectionBar.getBoundingClientRect();
+  out.push({
+    name: "selection bar returns to its safe floor when the keyboard closes",
+    pass: Math.abs(closedSelectionBox.bottom - selectionFloor) <= 1,
+    detail: `closed bottom=${closedSelectionBox.bottom.toFixed(0)}px resting bottom=${selectionFloor.toFixed(0)}px`,
+  });
   const closedBox = rhythmPanel.getBoundingClientRect();
   out.push({
     name: "the sheet returns to the floor when the keyboard closes",
@@ -736,9 +928,11 @@ const phoneResults = await phone.evaluate(async () => {
   });
 
   rhythmHost.remove();
+  standaloneSelection.host.remove();
+  embeddedSelection.host.remove();
 
   return out;
-});
+}, process.env.SELECTION_BAR_CONTROL === "break"));
 
 // ───────────────────────────────────────────────────────────────────
 // 5c. PHONE — the menu presentation
@@ -755,11 +949,11 @@ const menuPhone = await browser.newPage({
   isMobile: true,
 });
 await menuPhone.setContent(page_html.replace("<body>", phoneBody));
-await menuPhone.addStyleTag({ content: readFileSync(join(REPO, "styles.css"), "utf8") });
+await menuPhone.addStyleTag({ content: readFileSync(join(REPO, "styles.css"), "utf8") + HOST_BARE_CONTROLS });
 await menuPhone.addScriptTag({ content: shimJs + "\ninstallObsidianDomShim(globalThis);" });
 await menuPhone.addScriptTag({ content: positionerJs });
 
-const menuResults = await menuPhone.evaluate(() => {
+const menuResults = await section("the phone menu presentation", () => menuPhone.evaluate(() => {
   const out = [];
   const { createOwnedMenu, createMenuRow, applySheetChrome, positionToolbarPopover, COMPACT_MENU_POPOVER } = globalThis.__place;
   const vw = window.innerWidth;
@@ -944,7 +1138,7 @@ const menuResults = await menuPhone.evaluate(() => {
   bare.remove();
 
   return out;
-});
+}));
 
 // The grab handle, driven by the browser's own pointer stream rather than synthesised events.
 //
@@ -989,21 +1183,23 @@ const dragCase = async (distance) => {
   return { ...after, handle: true };
 };
 
-const longDrag = await dragCase(140);
-menuResults.push({
-  name: "dragging a menu sheet's handle down past the threshold dismisses it",
-  pass: longDrag.handle && !longDrag.mounted && !longDrag.scrim,
-  detail: longDrag.handle
-    ? `dragged 140px (threshold 96): menu still mounted=${longDrag.mounted} backdrop=${longDrag.scrim ? "left behind" : "gone"}`
-    : "the menu has no grab handle, so there is no gesture to drive",
-});
-const shortDrag = await dragCase(40);
-menuResults.push({
-  name: "a short drag on the handle springs back instead of dismissing",
-  pass: shortDrag.handle && shortDrag.mounted && shortDrag.scrim,
-  detail: shortDrag.handle
-    ? `dragged 40px (threshold 96): menu still mounted=${shortDrag.mounted} backdrop=${shortDrag.scrim ? "present" : "gone"}`
-    : "the menu has no grab handle, so there is no gesture to drive",
+await section("the menu sheet's drag-to-dismiss gesture", async () => {
+  const longDrag = await dragCase(140);
+  menuResults.push({
+    name: "dragging a menu sheet's handle down past the threshold dismisses it",
+    pass: longDrag.handle && !longDrag.mounted && !longDrag.scrim,
+    detail: longDrag.handle
+      ? `dragged 140px (threshold 96): menu still mounted=${longDrag.mounted} backdrop=${longDrag.scrim ? "left behind" : "gone"}`
+      : "the menu has no grab handle, so there is no gesture to drive",
+  });
+  const shortDrag = await dragCase(40);
+  menuResults.push({
+    name: "a short drag on the handle springs back instead of dismissing",
+    pass: shortDrag.handle && shortDrag.mounted && shortDrag.scrim,
+    detail: shortDrag.handle
+      ? `dragged 40px (threshold 96): menu still mounted=${shortDrag.mounted} backdrop=${shortDrag.scrim ? "present" : "gone"}`
+      : "the menu has no grab handle, so there is no gesture to drive",
+  });
 });
 
 await menuPhone.close();
@@ -1307,10 +1503,10 @@ const addViewProbe = (isPhone) => {
 
 const addViewDesktop = await browser.newPage({ viewport: VIEWPORT, reducedMotion: "reduce" });
 await addViewDesktop.setContent(page_html);
-await addViewDesktop.addStyleTag({ content: readFileSync(join(REPO, "styles.css"), "utf8") });
+await addViewDesktop.addStyleTag({ content: readFileSync(join(REPO, "styles.css"), "utf8") + HOST_BARE_CONTROLS });
 await addViewDesktop.addScriptTag({ content: shimJs + "\ninstallObsidianDomShim(globalThis);" });
 await addViewDesktop.addScriptTag({ content: positionerJs });
-const addViewDesktopResults = await addViewDesktop.evaluate(addViewProbe, false);
+const addViewDesktopResults = await section("the add-view surface on the desktop", () => addViewDesktop.evaluate(addViewProbe, false));
 await addViewDesktop.close();
 
 const addViewPhone = await browser.newPage({
@@ -1320,11 +1516,384 @@ const addViewPhone = await browser.newPage({
   isMobile: true,
 });
 await addViewPhone.setContent(page_html.replace("<body>", phoneBody));
-await addViewPhone.addStyleTag({ content: readFileSync(join(REPO, "styles.css"), "utf8") });
+await addViewPhone.addStyleTag({ content: readFileSync(join(REPO, "styles.css"), "utf8") + HOST_BARE_CONTROLS });
 await addViewPhone.addScriptTag({ content: shimJs + "\ninstallObsidianDomShim(globalThis);" });
 await addViewPhone.addScriptTag({ content: positionerJs });
-const addViewPhoneResults = await addViewPhone.evaluate(addViewProbe, true);
+const addViewPhoneResults = await section("the add-view surface on a phone", () => addViewPhone.evaluate(addViewProbe, true));
 await addViewPhone.close();
+
+// ───────────────────────────────────────────────────────────────────
+// 5c-iii. ONE ROW GRAMMAR, MEASURED AGAINST THE HOST'S OWN BUTTON RULE
+// ───────────────────────────────────────────────────────────────────
+//
+// "Aligned" is an opinion until it is a count. The number this section exists to hold is the number
+// of DISTINCT x-positions the labels in one sheet take: one means the eye can track a single left
+// edge down the list, and anything above one means it cannot. Measured on the surface the operator
+// reported twice, built by the shipped `ColumnMenu` rather than by markup written here — a fixture
+// that fakes a menu proves nothing about the menu.
+//
+// Before the fix, against the host rule this page now loads: 14 distinct positions across 18 rows.
+// The two that stayed put were the submenu rows, because an auto margin on their trailing chevron
+// absorbed the free space that centred everything else — which is why the defect read as rows
+// disagreeing with each other rather than as one missing declaration.
+//
+// The same page also carries the behaviours a row grammar has to include but a static measurement
+// cannot see: that a row which OPENS something says so, that a sheet scrolls on one axis, and that
+// the submenu a row opens is actually in front of the surface that opened it.
+
+const grammarPhone = await browser.newPage({
+  reducedMotion: "reduce",
+  viewport: { width: 390, height: 844 },
+  hasTouch: true,
+  isMobile: true,
+});
+await grammarPhone.setContent(page_html.replace("<body>", phoneBody));
+await grammarPhone.addStyleTag({ content: readFileSync(join(REPO, "styles.css"), "utf8") + HOST_BARE_CONTROLS });
+await grammarPhone.addScriptTag({ content: shimJs + "\ninstallObsidianDomShim(globalThis);" });
+await grammarPhone.addScriptTag({ content: positionerJs });
+
+const grammarResults = await section("the shared row grammar on a phone", () => grammarPhone.evaluate(async () => {
+  const out = [];
+  const { ColumnMenu } = globalThis.__place;
+
+  const labelXs = (root) => [...root.querySelectorAll(".db-menu-item")]
+    .map((row) => row.querySelector(".db-menu-item-label"))
+    .filter(Boolean)
+    .map((label) => Math.round(label.getBoundingClientRect().x));
+
+  // ── the column menu, through the class that ships it ────────────────
+  const anchor = document.querySelector(".note-database-container").createDiv({ cls: "anchor" });
+  const columnMenu = new ColumnMenu(new Proxy({}, { get: () => () => {} }));
+  const openEvent = new MouseEvent("click", { clientX: 120, clientY: 120, bubbles: true });
+  Object.defineProperty(openEvent, "view", { value: window });
+  columnMenu.show(openEvent, { key: "stocks", label: "Stocks", type: "text" }, anchor, {});
+  const sheet = document.querySelector(".db-owned-menu");
+
+  const xs = labelXs(sheet);
+  const distinct = [...new Set(xs)];
+  out.push({
+    name: "column menu: every label starts at the same x",
+    pass: distinct.length === 1,
+    detail: `${distinct.length} distinct label x-position(s) across ${xs.length} rows `
+      + `[${distinct.sort((a, b) => a - b).join(", ")}] (want exactly 1; measured 14 before the row `
+      + "stated its own justify-content, with only the two chevron rows holding their edge)",
+  });
+
+  const firstRow = sheet.querySelector(".db-menu-item");
+  const rowStyle = getComputedStyle(firstRow);
+  out.push({
+    name: "column menu: the row states its own main-axis alignment",
+    pass: rowStyle.justifyContent === "flex-start",
+    detail: `justify-content=${rowStyle.justifyContent} with the host's button rule loaded `
+      + "(an unstated value resolves to the host's 'center')",
+  });
+
+  // A thumb target, and a hairline between neighbours. The last row of the sheet draws none: a rule
+  // under nothing is a border, not a separator.
+  const rows = [...sheet.querySelectorAll(".db-menu-item")];
+  const shortest = Math.min(...rows.map((row) => Math.round(row.getBoundingClientRect().height)));
+  out.push({
+    name: "column menu: every row clears the 44px thumb floor",
+    pass: shortest >= 44,
+    detail: `shortest row ${shortest}px across ${rows.length} rows`,
+  });
+
+  const hairline = (row) => {
+    const after = getComputedStyle(row, "::after");
+    return after.content !== "none" && Math.round(parseFloat(after.height || "0")) === 1;
+  };
+  const middle = rows.filter((row) => row.nextElementSibling?.classList.contains("db-menu-item"));
+  const trailing = rows.filter((row) => !row.nextElementSibling?.classList.contains("db-menu-item"));
+  out.push({
+    name: "column menu: adjacent rows are divided by a hairline, and a group's last row is not",
+    pass: middle.length > 0 && middle.every(hairline) && trailing.every((row) => !hairline(row)),
+    detail: `${middle.filter(hairline).length}/${middle.length} rows with a following row carry one; `
+      + `${trailing.filter(hairline).length}/${trailing.length} rows that end a group carry one (want 0)`,
+  });
+
+  // The hairline starts where the labels start, which is the whole reason it reads as a column
+  // rather than as a set of stripes.
+  const divided = middle[0];
+  const dividerLeft = Math.round(divided.getBoundingClientRect().x
+    + parseFloat(getComputedStyle(divided, "::after").left || "0"));
+  const labelLeft = Math.round(divided.querySelector(".db-menu-item-label").getBoundingClientRect().x);
+  out.push({
+    name: "column menu: the hairline begins at the label, not at the sheet edge",
+    pass: Math.abs(dividerLeft - labelLeft) <= 1,
+    detail: `divider starts at x=${dividerLeft}, label at x=${labelLeft} `
+      + `(sheet's own left edge is ${Math.round(sheet.getBoundingClientRect().x)})`,
+  });
+
+  // A row that OPENS something announces itself; a row that ACTS does not. That difference is the
+  // component's to express, not each caller's.
+  const opener = rows.find((row) => /Change type/.test(row.textContent));
+  const actor = rows.find((row) => /Duplicate property/.test(row.textContent));
+  out.push({
+    name: "a row that opens a submenu carries a chevron and says so; a row that acts carries neither",
+    pass: Boolean(opener?.querySelector(".db-menu-item-chevron"))
+      && opener?.getAttribute("aria-haspopup") !== null
+      && !actor?.querySelector(".db-menu-item-chevron")
+      && actor?.getAttribute("aria-haspopup") === null,
+    detail: `"Change type" chevron=${Boolean(opener?.querySelector(".db-menu-item-chevron"))} `
+      + `aria-haspopup=${opener?.getAttribute("aria-haspopup")}; `
+      + `"Duplicate property" chevron=${Boolean(actor?.querySelector(".db-menu-item-chevron"))} `
+      + `aria-haspopup=${actor?.getAttribute("aria-haspopup")}`,
+  });
+
+  // One axis, not two. Declaring only `overflow-y` makes the other axis `auto` by the overflow
+  // spec's own coupling rule, so a full-width sheet gains a sideways drag nobody asked for.
+  const longRow = sheet.querySelector(".db-menu-item .db-menu-item-label");
+  longRow.setText("A property name long enough that it cannot possibly fit across a phone sheet in one line");
+  sheet.getBoundingClientRect();
+  const sheetStyle = getComputedStyle(sheet);
+  out.push({
+    name: "a sheet scrolls vertically only, and a long label truncates instead of widening it",
+    pass: sheetStyle.overflowX === "hidden" && sheet.scrollWidth <= sheet.clientWidth + 1,
+    detail: `overflow-x=${sheetStyle.overflowX} overflow-y=${sheetStyle.overflowY}; `
+      + `content ${sheet.scrollWidth}px wide in a ${sheet.clientWidth}px box`,
+  });
+
+  out.push({
+    name: "a sheet stops at 90% of the screen and scrolls inside it",
+    pass: Math.round(sheet.getBoundingClientRect().height) <= Math.round(window.innerHeight * 0.9) + 2
+      && sheet.scrollHeight > sheet.clientHeight + 1,
+    detail: `height=${Math.round(sheet.getBoundingClientRect().height)} `
+      + `cap=${Math.round(window.innerHeight * 0.9)} (90svh) `
+      + `content=${sheet.scrollHeight} visible=${sheet.clientHeight}`,
+  });
+
+  // ── the submenu the operator could not open ─────────────────────────
+  const chevronRow = rows.find((row) => /Change type/.test(row.textContent));
+  const box = chevronRow.getBoundingClientRect();
+  const press = {
+    bubbles: true, cancelable: true, pointerId: 1, isPrimary: true, pointerType: "touch", button: 0,
+    clientX: Math.round(box.x + box.width / 2), clientY: Math.round(box.y + box.height / 2),
+  };
+  chevronRow.dispatchEvent(new PointerEvent("pointerdown", press));
+  chevronRow.dispatchEvent(new PointerEvent("pointerup", press));
+  chevronRow.dispatchEvent(new MouseEvent("click", press));
+  await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+
+  const submenu = document.querySelector(".db-column-type-popover");
+  const scrim = document.querySelector(".db-mobile-sheet-scrim");
+  const submenuZ = submenu ? Number(getComputedStyle(submenu).zIndex) : null;
+  const scrimZ = scrim ? Number(getComputedStyle(scrim).zIndex) : null;
+  const submenuBox = submenu?.getBoundingClientRect();
+  const painted = submenuBox
+    ? document.elementFromPoint(Math.round(submenuBox.x + submenuBox.width / 2),
+      Math.round(submenuBox.y + submenuBox.height / 2))
+    : null;
+  out.push({
+    name: "a submenu opened from a sheet is in front of that sheet and its backdrop",
+    pass: Boolean(submenu) && submenuZ !== null && scrimZ !== null && submenuZ > scrimZ
+      && Boolean(painted) && submenu.contains(painted),
+    detail: submenu
+      ? `submenu z=${submenuZ} scrim z=${scrimZ} sheet z=${getComputedStyle(sheet).zIndex}; `
+        + `the document paints "${painted ? painted.className || painted.tagName : "nothing"}" at the `
+        + "submenu's own centre (it was 110 against a 999 backdrop, opened and laid out correctly "
+        + "and painted underneath, which on a phone is a tap that does nothing)"
+      : "the row produced no submenu at all",
+  });
+
+  return out;
+}));
+
+// The add-view sheet is the second surface the operator reported, and it reaches the row through a
+// different door — `createMenuRow` called directly rather than through the owned menu — so it is
+// measured separately rather than assumed to follow.
+const addViewGrammar = await section("the add-view menu's row grammar", () => grammarPhone.evaluate(async () => {
+  const out = [];
+  const { ToolbarRenderer } = globalThis.__place;
+  document.querySelectorAll(".db-owned-menu, .db-column-menu-subpopover, .db-mobile-sheet-scrim")
+    .forEach((node) => node.remove());
+
+  const host = document.querySelector(".note-database-container");
+  const anchor = host.createDiv({ cls: "anchor" });
+  new ToolbarRenderer().showAddViewMenu(
+    new MouseEvent("click"),
+    { addView() {}, closeToolbarPopovers() {} },
+    anchor,
+    { schema: { columns: [{ key: "file.name", label: "Name" }, { key: "cost", label: "Cost" }] },
+      views: [{ viewType: "table", name: "All" }] },
+    0,
+  );
+  const panel = document.querySelector(".db-add-view-popover");
+  const xs = [...panel.querySelectorAll(".db-add-view-choices .db-menu-item")]
+    .map((row) => Math.round(row.querySelector(".db-menu-item-label").getBoundingClientRect().x));
+  const distinct = [...new Set(xs)];
+  out.push({
+    name: "add view: every create row starts at the same x",
+    pass: distinct.length === 1,
+    detail: `${distinct.length} distinct label x-position(s) across ${xs.length} rows `
+      + `[${distinct.sort((a, b) => a - b).join(", ")}] (want exactly 1)`,
+  });
+
+  // The grab bar was chrome with nothing behind it on every surface the positioner presents. A
+  // gesture, not a source grep: press the handle, drag past the threshold, and see whether the
+  // sheet answers.
+  const handle = panel.querySelector(".db-mobile-bottom-sheet-handle");
+  const hb = handle.getBoundingClientRect();
+  const at = (y) => ({
+    bubbles: true, cancelable: true, pointerId: 2, isPrimary: true, pointerType: "touch", button: 0,
+    clientX: Math.round(hb.x + hb.width / 2), clientY: Math.round(y),
+  });
+  handle.dispatchEvent(new PointerEvent("pointerdown", at(hb.y + hb.height / 2)));
+  panel.dispatchEvent(new PointerEvent("pointermove", at(hb.y + hb.height / 2 + 40)));
+  const followed = getComputedStyle(panel).transform;
+  panel.dispatchEvent(new PointerEvent("pointerup", at(hb.y + hb.height / 2 + 140)));
+  await new Promise((resolve) => requestAnimationFrame(resolve));
+  const stillOpen = Boolean(document.querySelector(".db-add-view-popover"));
+  out.push({
+    name: "add view: the sheet follows a drag on its grab bar and dismisses past the threshold",
+    pass: /matrix/.test(followed) && !/matrix\(1, 0, 0, 1, 0, 0\)/.test(followed) && !stillOpen,
+    detail: `a 40px drag moved the sheet to ${followed}; releasing 140px down left the sheet `
+      + `${stillOpen ? "still open" : "dismissed"} (the bar was drawn on every positioner-presented `
+      + "sheet and wired on none of them)",
+  });
+
+  return out;
+}));
+await grammarPhone.close();
+
+// ───────────────────────────────────────────────────────────────────
+// 5c-iv. THE ENTRANCE — the one page in this file that lets motion run
+// ───────────────────────────────────────────────────────────────────
+//
+// Every other page reduces motion so a rectangle is a layout rather than an animation frame. That
+// is right for placement and blind for exactly one question: does the sheet move at all.
+//
+// It did not. Measured over the whole window, the sheet sat at identity from the first sample and
+// no animation object ever existed — because both call sites added the start class and flipped to
+// the end class inside one `requestAnimationFrame`, which fires BEFORE that frame's style
+// recalculation. One style resolution, already carrying the end state, nothing to interpolate. The
+// duration and the distance were never the reason it appeared instantly, so retuning either would
+// have changed nothing on a device, and no check here could have told anyone that.
+//
+// Both halves are asserted: that it moves, and that reducing motion still lands it at rest.
+
+const motionPhone = await browser.newPage({
+  viewport: { width: 390, height: 844 },
+  hasTouch: true,
+  isMobile: true,
+});
+await motionPhone.setContent(page_html.replace("<body>", phoneBody));
+await motionPhone.addStyleTag({ content: readFileSync(join(REPO, "styles.css"), "utf8") + HOST_BARE_CONTROLS });
+await motionPhone.addScriptTag({ content: shimJs + "\ninstallObsidianDomShim(globalThis);" });
+await motionPhone.addScriptTag({ content: positionerJs });
+
+const motionResults = await section("the sheet entrance with motion allowed", () => motionPhone.evaluate(async () => {
+  const out = [];
+  const { createOwnedMenu } = globalThis.__place;
+  // The vertical translation out of the computed matrix. Parsed rather than read through
+  // DOMMatrixReadOnly so this stays inside the lint's browser-globals set.
+  const offsetY = (el) => {
+    const matrix = getComputedStyle(el).transform;
+    if (!matrix || matrix === "none") return 0;
+    const parts = matrix.slice(matrix.indexOf("(") + 1, -1).split(",").map((n) => parseFloat(n));
+    return Math.round(parts.length === 16 ? parts[13] : parts[5]);
+  };
+
+  const menu = createOwnedMenu(document);
+  for (let i = 0; i < 10; i += 1) menu.addRow({ icon: "pencil", label: `Row ${i}` });
+  menu.showAt({ x: 200, y: 200 });
+  const sheet = menu.el;
+  const height = Math.round(sheet.getBoundingClientRect().height);
+
+  const start = offsetY(sheet);
+  await new Promise((resolve) => setTimeout(resolve, 60));
+  const inFlight = offsetY(sheet);
+  await new Promise((resolve) => setTimeout(resolve, 400));
+  const settled = offsetY(sheet);
+
+  out.push({
+    name: "the sheet starts a full sheet-height below the screen, not a nudge below it",
+    pass: Math.abs(start - height) <= 2,
+    detail: `initial translateY=${start}px against a ${height}px sheet `
+      + "(the popover entrance it inherited moved it 8px, which is below the distance at which "
+      + "travel reads as travel)",
+  });
+  out.push({
+    name: "the sheet is still travelling one frame in, and has settled by the end of its duration",
+    // The mid-flight floor is what stops this passing on the 8px entrance it replaced: a nudge
+    // technically moves, so "greater than zero" is not a threshold anybody can fail.
+    pass: inFlight > height * 0.2 && inFlight < start && settled === 0,
+    detail: `translateY ${start} -> ${inFlight} at 60ms -> ${settled} at 460ms `
+      + `(want more than ${Math.round(height * 0.2)}px still to travel at 60ms; a stalled entrance `
+      + "reads 0 at every sample, which is what it did)",
+  });
+
+  const easing = getComputedStyle(sheet);
+  out.push({
+    name: "the entrance runs on the shared sheet duration, easing out, on transform alone",
+    pass: easing.transitionProperty === "transform"
+      && easing.transitionDuration === "0.26s"
+      && easing.transitionTimingFunction === "ease-out",
+    detail: `${easing.transitionProperty} ${easing.transitionDuration} ${easing.transitionTimingFunction}`,
+  });
+
+  // A gesture must be able to interrupt an entrance. The drag writes an inline transform, and an
+  // inline value outranks the class the transition is running on — so the thumb takes the surface
+  // over mid-flight instead of waiting the animation out.
+  const second = createOwnedMenu(document);
+  for (let i = 0; i < 10; i += 1) second.addRow({ icon: "pencil", label: `Row ${i}` });
+  second.showAt({ x: 200, y: 200 });
+  const rising = second.el;
+  const bar = rising.querySelector(".db-mobile-bottom-sheet-handle");
+  const bb = bar.getBoundingClientRect();
+  const grab = (y) => ({
+    bubbles: true, cancelable: true, pointerId: 4, isPrimary: true, pointerType: "touch", button: 0,
+    clientX: Math.round(bb.x + bb.width / 2), clientY: Math.round(y),
+  });
+  bar.dispatchEvent(new PointerEvent("pointerdown", grab(bb.y + 2)));
+  rising.dispatchEvent(new PointerEvent("pointermove", grab(bb.y + 32)));
+  const held = offsetY(rising);
+  rising.dispatchEvent(new PointerEvent("pointerup", grab(bb.y + 32)));
+  out.push({
+    name: "a thumb on the grab bar takes the sheet over while the entrance is still running",
+    pass: Math.abs(held - 30) <= 4,
+    detail: `a 30px drag begun during the entrance put the sheet at translateY=${held}px `
+      + "(the finger's own offset, not a position the animation chose)",
+  });
+
+  return out;
+}));
+await motionPhone.close();
+
+const reducedPhone = await browser.newPage({
+  reducedMotion: "reduce",
+  viewport: { width: 390, height: 844 },
+  hasTouch: true,
+  isMobile: true,
+});
+await reducedPhone.setContent(page_html.replace("<body>", phoneBody));
+await reducedPhone.addStyleTag({ content: readFileSync(join(REPO, "styles.css"), "utf8") + HOST_BARE_CONTROLS });
+await reducedPhone.addScriptTag({ content: shimJs + "\ninstallObsidianDomShim(globalThis);" });
+await reducedPhone.addScriptTag({ content: positionerJs });
+
+const reducedResults = await section("the sheet entrance under reduced motion", () => reducedPhone.evaluate(async () => {
+  const out = [];
+  const { createOwnedMenu } = globalThis.__place;
+  const menu = createOwnedMenu(document);
+  for (let i = 0; i < 10; i += 1) menu.addRow({ icon: "pencil", label: `Row ${i}` });
+  menu.showAt({ x: 200, y: 200 });
+  const sheet = menu.el;
+  const transform = getComputedStyle(sheet).transform;
+  const scrim = document.querySelector(".db-mobile-sheet-scrim");
+  out.push({
+    name: "reduced motion lands the sheet at rest with nothing running, backdrop included",
+    pass: (transform === "none" || transform === "matrix(1, 0, 0, 1, 0, 0)")
+      && sheet.getAnimations().length === 0
+      && Boolean(scrim)
+      && getComputedStyle(scrim).animationName === "none"
+      && Number(getComputedStyle(scrim).opacity) === 1,
+    detail: `sheet transform=${transform}, ${sheet.getAnimations().length} running animation(s); `
+      + `backdrop animation=${scrim ? getComputedStyle(scrim).animationName : "no backdrop"} `
+      + `opacity=${scrim ? getComputedStyle(scrim).opacity : "n/a"} `
+      + "(the backdrop fades through an animation, which a transition reset does not reach)",
+  });
+  return out;
+}));
+await reducedPhone.close();
 
 // ───────────────────────────────────────────────────────────────────
 // 5d. DESKTOP — the menu must not have become a sheet
@@ -1338,11 +1907,11 @@ await addViewPhone.close();
 
 const menuDesktop = await browser.newPage({ viewport: VIEWPORT, reducedMotion: "reduce" });
 await menuDesktop.setContent(page_html);
-await menuDesktop.addStyleTag({ content: readFileSync(join(REPO, "styles.css"), "utf8") });
+await menuDesktop.addStyleTag({ content: readFileSync(join(REPO, "styles.css"), "utf8") + HOST_BARE_CONTROLS });
 await menuDesktop.addScriptTag({ content: shimJs + "\ninstallObsidianDomShim(globalThis);" });
 await menuDesktop.addScriptTag({ content: positionerJs });
 
-const desktopMenuResults = await menuDesktop.evaluate(() => {
+const desktopMenuResults = await section("the desktop menu presentation", () => menuDesktop.evaluate(() => {
   const out = [];
   const { createOwnedMenu } = globalThis.__place;
   const menu = createOwnedMenu(document);
@@ -1364,7 +1933,7 @@ const desktopMenuResults = await menuDesktop.evaluate(() => {
   });
   menu.close();
   return out;
-});
+}));
 
 await menuDesktop.close();
 
@@ -1388,11 +1957,11 @@ const cellPhone = await browser.newPage({
   isMobile: true,
 });
 await cellPhone.setContent(page_html.replace("<body>", phoneBody));
-await cellPhone.addStyleTag({ content: readFileSync(join(REPO, "styles.css"), "utf8") });
+await cellPhone.addStyleTag({ content: readFileSync(join(REPO, "styles.css"), "utf8") + HOST_BARE_CONTROLS });
 await cellPhone.addScriptTag({ content: shimJs + "\ninstallObsidianDomShim(globalThis);" });
 await cellPhone.addScriptTag({ content: positionerJs });
 
-const cellResults = await cellPhone.evaluate(async () => {
+const cellResults = await section("what a press on a table cell means", () => cellPhone.evaluate(async () => {
   const out = [];
   const {
     trackCellGesture, nextCellRange, resolveCellTapAction, isMainItemColumn,
@@ -1811,7 +2380,7 @@ const cellResults = await cellPhone.evaluate(async () => {
 
   table.remove();
   return out;
-});
+}));
 
 await cellPhone.close();
 
@@ -1841,120 +2410,123 @@ const sheetPhone = await browser.newPage({
   isMobile: true,
 });
 await sheetPhone.setContent(page_html.replace("<body>", phoneBody));
-await sheetPhone.addStyleTag({ content: readFileSync(join(REPO, "styles.css"), "utf8") });
+await sheetPhone.addStyleTag({ content: readFileSync(join(REPO, "styles.css"), "utf8") + HOST_BARE_CONTROLS });
 await sheetPhone.addScriptTag({ content: shimJs + "\ninstallObsidianDomShim(globalThis);" });
 await sheetPhone.addScriptTag({ content: positionerJs });
 
-const sheetSetup = await sheetPhone.evaluate(() => {
-  const { openRecordDetailPanel } = globalThis.__place;
-  const host = document.querySelector(".note-database-container");
-  const row = { file: { path: "33.md", basename: "33", name: "33.md" }, frontmatter: { income: 1 }, computed: {} };
-  globalThis.__renames = 0;
-  openRecordDetailPanel({
-    anchorEl: document.getElementById("anchor"),
-    host,
-    row,
-    columns: [{ key: "file.name", label: "Name", type: "text" }, { key: "income", label: "Income", type: "number" }],
-    config: { viewType: "table", schema: { computedFields: [] }, titleField: "file.name" },
-    app: {},
-    actions: {
-      editCell: () => {},
-      openRow: () => {},
-      editFileName: () => { globalThis.__renames += 1; },
-      isReadOnly: false,
-    },
+const sheetResults = await section("the record sheet's own header", async () => {
+  const sheetSetup = await sheetPhone.evaluate(() => {
+    const { openRecordDetailPanel } = globalThis.__place;
+    const host = document.querySelector(".note-database-container");
+    const row = { file: { path: "33.md", basename: "33", name: "33.md" }, frontmatter: { income: 1 }, computed: {} };
+    globalThis.__renames = 0;
+    openRecordDetailPanel({
+      anchorEl: document.getElementById("anchor"),
+      host,
+      row,
+      columns: [{ key: "file.name", label: "Name", type: "text" }, { key: "income", label: "Income", type: "number" }],
+      config: { viewType: "table", schema: { computedFields: [] }, titleField: "file.name" },
+      app: {},
+      actions: {
+        editCell: () => {},
+        openRow: () => {},
+        editFileName: () => { globalThis.__renames += 1; },
+        isReadOnly: false,
+      },
+    });
+    const panel = document.querySelector(".db-record-detail-panel");
+    const title = panel.querySelector(".db-record-detail-title");
+    const box = (el) => { const r = el.getBoundingClientRect(); return { x: Math.round(r.left + r.width / 2), y: Math.round(r.top + r.height / 2) }; };
+    return { titleCentre: box(title) };
   });
-  const panel = document.querySelector(".db-record-detail-panel");
-  const title = panel.querySelector(".db-record-detail-title");
-  const box = (el) => { const r = el.getBoundingClientRect(); return { x: Math.round(r.left + r.width / 2), y: Math.round(r.top + r.height / 2) }; };
-  return { titleCentre: box(title) };
-});
 
-const sheetResults = await sheetPhone.evaluate((titleCentre) => {
-  const out = [];
-  const panel = document.querySelector(".db-record-detail-panel");
-  const handle = panel.querySelector(".db-mobile-bottom-sheet-handle");
-  const title = panel.querySelector(".db-record-detail-title");
-  const actions = [...panel.querySelectorAll(".db-record-detail-header button")];
-  const panelTop = panel.getBoundingClientRect().top;
+  const measured = await sheetPhone.evaluate((titleCentre) => {
+    const out = [];
+    const panel = document.querySelector(".db-record-detail-panel");
+    const handle = panel.querySelector(".db-mobile-bottom-sheet-handle");
+    const title = panel.querySelector(".db-record-detail-title");
+    const actions = [...panel.querySelectorAll(".db-record-detail-header button")];
+    const panelTop = panel.getBoundingClientRect().top;
 
-  const reaches = (el) => {
-    const r = el.getBoundingClientRect();
-    const hit = document.elementFromPoint(Math.round(r.left + r.width / 2), Math.round(r.top + r.height / 2));
-    return Boolean(hit) && (hit === el || el.contains(hit));
-  };
-  // How much of a declared target a thumb can actually use: walk from its own centre until
-  // something else answers. A 44px button with 18 of them under a drag band is a 26px button.
-  const usableHeight = (el) => {
-    const r = el.getBoundingClientRect();
-    const x = Math.round(r.left + r.width / 2);
-    const owns = (y) => { const hit = document.elementFromPoint(x, Math.round(y)); return Boolean(hit) && (hit === el || el.contains(hit)); };
-    if (!owns(r.top + r.height / 2)) return 0;
+    const reaches = (el) => {
+      const r = el.getBoundingClientRect();
+      const hit = document.elementFromPoint(Math.round(r.left + r.width / 2), Math.round(r.top + r.height / 2));
+      return Boolean(hit) && (hit === el || el.contains(hit));
+    };
+    // How much of a declared target a thumb can actually use: walk from its own centre until
+    // something else answers. A 44px button with 18 of them under a drag band is a 26px button.
+    const usableHeight = (el) => {
+      const r = el.getBoundingClientRect();
+      const x = Math.round(r.left + r.width / 2);
+      const owns = (y) => { const hit = document.elementFromPoint(x, Math.round(y)); return Boolean(hit) && (hit === el || el.contains(hit)); };
+      if (!owns(r.top + r.height / 2)) return 0;
+      let up = 0; let down = 0;
+      while (up < 80 && owns(r.top + r.height / 2 - up - 1)) up += 1;
+      while (down < 80 && owns(r.top + r.height / 2 + down + 1)) down += 1;
+      return up + down + 1;
+    };
+
+    const stolen = [title, ...actions].filter((el) => !reaches(el));
+    out.push({
+      name: "the sheet's grab band takes no press that was aimed at the sheet's own header",
+      pass: stolen.length === 0 && actions.length >= 2,
+      detail: `${actions.length} header action(s) and the title, ${stolen.length} of them answered by`
+        + ` something else` + (stolen.length ? `: ${stolen.map((el) => el.className).join(", ")}` : "")
+        + ` — the band was measured covering the title outright and the top 18px of both actions`,
+    });
+
+    const short = actions.filter((el) => usableHeight(el) < 44);
+    out.push({
+      name: "the sheet's header actions deliver the whole 44px they declare",
+      pass: short.length === 0 && actions.length >= 2,
+      detail: actions.map((el) => `${el.className.split(" ")[0]}=${usableHeight(el)}px of`
+        + ` ${Math.round(el.getBoundingClientRect().height)}px`).join(", ")
+        + ` (want >= 44 each; under the band they measured 26 of 44)`,
+    });
+
+    // The band still has to be a band. Walked the same way the menu sheet's is, so the two numbers
+    // are comparable, and reported against the sheet's top edge so a reader can see where it starts.
+    const hb = handle.getBoundingClientRect();
+    const hits = (x, y) => { const el = document.elementFromPoint(Math.round(x), Math.round(y)); return Boolean(el) && (el === handle || handle.contains(el)); };
+    const cx = hb.left + hb.width / 2; const cy = hb.top + hb.height / 2;
     let up = 0; let down = 0;
-    while (up < 80 && owns(r.top + r.height / 2 - up - 1)) up += 1;
-    while (down < 80 && owns(r.top + r.height / 2 + down + 1)) down += 1;
-    return up + down + 1;
-  };
+    while (up < 80 && hits(cx, cy - up - 1)) up += 1;
+    while (down < 80 && hits(cx, cy + down + 1)) down += 1;
+    // up + down + 1, not + hb.height: the walk begins at the bar's centre and both arms already
+    // cross the bar, so adding its height counted those pixels twice. This surface reported 35px on
+    // that arithmetic and delivers 32px.
+    const band = up + down + 1;
+    const startsAtTheEdge = Math.round(cy - up - panelTop) <= 1;
+    out.push({
+      name: "the record sheet's grab band starts at the sheet's top edge and spans its width",
+      pass: startsAtTheEdge && band >= 30 && hits(cx + 120, cy),
+      detail: `band ${band}px (${up} above the bar + ${down} below), starting ${Math.round(cy - up - panelTop)}px`
+        + ` from the sheet's top edge, reaching 120px sideways=${hits(cx + 120, cy)}`
+        + ` — the operator asked for 48. This surface has ${Math.round(title.getBoundingClientRect().top - panelTop)}px`
+        + ` of chrome above its header, so 48 is only reachable by making the header taller, which`
+        + ` moves every sheet's content and is a decision this does not take`,
+    });
 
-  const stolen = [title, ...actions].filter((el) => !reaches(el));
-  out.push({
-    name: "the sheet's grab band takes no press that was aimed at the sheet's own header",
-    pass: stolen.length === 0 && actions.length >= 2,
-    detail: `${actions.length} header action(s) and the title, ${stolen.length} of them answered by`
-      + ` something else` + (stolen.length ? `: ${stolen.map((el) => el.className).join(", ")}` : "")
-      + ` — the band was measured covering the title outright and the top 18px of both actions`,
+    void titleCentre;
+    void title;
+    return out;
+  }, sheetSetup.titleCentre);
+
+  // The gesture, not a synthesised pair: two real taps through the browser's own touch pipeline, so
+  // the `dblclick` the rename listens for is the one the browser decides to synthesise or not.
+  await sheetPhone.touchscreen.tap(sheetSetup.titleCentre.x, sheetSetup.titleCentre.y);
+  await sheetPhone.waitForTimeout(60);
+  await sheetPhone.touchscreen.tap(sheetSetup.titleCentre.x, sheetSetup.titleCentre.y);
+  await sheetPhone.waitForTimeout(300);
+  const renames = await sheetPhone.evaluate(() => globalThis.__renames);
+  measured.push({
+    name: "a double-tap on the record sheet's title reaches the rename editor",
+    pass: renames === 1,
+    detail: `two taps at the title's centre opened ${renames} rename editor(s) (want 1)`
+      + " — under the grab band this was 0, and every other rename entry point in the plugin is also"
+      + " a double-click, so this was the whole of it on a phone",
   });
-
-  const short = actions.filter((el) => usableHeight(el) < 44);
-  out.push({
-    name: "the sheet's header actions deliver the whole 44px they declare",
-    pass: short.length === 0 && actions.length >= 2,
-    detail: actions.map((el) => `${el.className.split(" ")[0]}=${usableHeight(el)}px of`
-      + ` ${Math.round(el.getBoundingClientRect().height)}px`).join(", ")
-      + ` (want >= 44 each; under the band they measured 26 of 44)`,
-  });
-
-  // The band still has to be a band. Walked the same way the menu sheet's is, so the two numbers
-  // are comparable, and reported against the sheet's top edge so a reader can see where it starts.
-  const hb = handle.getBoundingClientRect();
-  const hits = (x, y) => { const el = document.elementFromPoint(Math.round(x), Math.round(y)); return Boolean(el) && (el === handle || handle.contains(el)); };
-  const cx = hb.left + hb.width / 2; const cy = hb.top + hb.height / 2;
-  let up = 0; let down = 0;
-  while (up < 80 && hits(cx, cy - up - 1)) up += 1;
-  while (down < 80 && hits(cx, cy + down + 1)) down += 1;
-  // up + down + 1, not + hb.height: the walk begins at the bar's centre and both arms already
-  // cross the bar, so adding its height counted those pixels twice. This surface reported 35px on
-  // that arithmetic and delivers 32px.
-  const band = up + down + 1;
-  const startsAtTheEdge = Math.round(cy - up - panelTop) <= 1;
-  out.push({
-    name: "the record sheet's grab band starts at the sheet's top edge and spans its width",
-    pass: startsAtTheEdge && band >= 30 && hits(cx + 120, cy),
-    detail: `band ${band}px (${up} above the bar + ${down} below), starting ${Math.round(cy - up - panelTop)}px`
-      + ` from the sheet's top edge, reaching 120px sideways=${hits(cx + 120, cy)}`
-      + ` — the operator asked for 48. This surface has ${Math.round(title.getBoundingClientRect().top - panelTop)}px`
-      + ` of chrome above its header, so 48 is only reachable by making the header taller, which`
-      + ` moves every sheet's content and is a decision this does not take`,
-  });
-
-  void titleCentre;
-  void title;
-  return out;
-}, sheetSetup.titleCentre);
-
-// The gesture, not a synthesised pair: two real taps through the browser's own touch pipeline, so
-// the `dblclick` the rename listens for is the one the browser decides to synthesise or not.
-await sheetPhone.touchscreen.tap(sheetSetup.titleCentre.x, sheetSetup.titleCentre.y);
-await sheetPhone.waitForTimeout(60);
-await sheetPhone.touchscreen.tap(sheetSetup.titleCentre.x, sheetSetup.titleCentre.y);
-await sheetPhone.waitForTimeout(300);
-const renames = await sheetPhone.evaluate(() => globalThis.__renames);
-sheetResults.push({
-  name: "a double-tap on the record sheet's title reaches the rename editor",
-  pass: renames === 1,
-  detail: `two taps at the title's centre opened ${renames} rename editor(s) (want 1)`
-    + " — under the grab band this was 0, and every other rename entry point in the plugin is also"
-    + " a double-click, so this was the whole of it on a phone",
+  return measured;
 });
 await sheetPhone.close();
 
@@ -1974,9 +2546,9 @@ await sheetPhone.close();
 
 const selectCell = await browser.newPage({ viewport: VIEWPORT, reducedMotion: "reduce" });
 await selectCell.setContent(`<body><div id="shot">${SCENARIOS.find((s) => s.id === "table-view").html()}</div></body>`);
-await selectCell.addStyleTag({ content: readFileSync(join(REPO, "styles.css"), "utf8") });
+await selectCell.addStyleTag({ content: readFileSync(join(REPO, "styles.css"), "utf8") + HOST_BARE_CONTROLS });
 await selectCell.addStyleTag({ content: readFileSync(join(REPO, "tools/screenshots/theme.css"), "utf8") });
-const selectCellResults = await selectCell.evaluate(() => {
+const selectCellResults = await section("the select column's clipping cell", () => selectCell.evaluate(() => {
   const out = [];
   const cells = [...document.querySelectorAll(".db-select-col")].filter((c) => c.querySelector('input[type="checkbox"]'));
   const measured = cells.map((cell) => {
@@ -2020,7 +2592,7 @@ const selectCellResults = await selectCell.evaluate(() => {
       + " — the header and every row must coincide, or sorting a column makes the checkbox jump",
   });
   return out;
-});
+}));
 await selectCell.close();
 
 // ───────────────────────────────────────────────────────────────────
@@ -2301,20 +2873,20 @@ const rowPhone = await browser.newPage({
   isMobile: true,
 });
 await rowPhone.setContent(page_html.replace("<body>", phoneBody));
-await rowPhone.addStyleTag({ content: readFileSync(join(REPO, "styles.css"), "utf8") });
+await rowPhone.addStyleTag({ content: readFileSync(join(REPO, "styles.css"), "utf8") + HOST_BARE_CONTROLS });
 await rowPhone.addScriptTag({ content: shimJs + "\ninstallObsidianDomShim(globalThis);" });
 await rowPhone.addScriptTag({ content: positionerJs });
-const rowPhoneResults = await rowPhone.evaluate(rowRangeProbe, { pointerType: "touch" });
+const rowPhoneResults = await section("a press on a row checkbox, by finger", () => rowPhone.evaluate(rowRangeProbe, { pointerType: "touch" }));
 await rowPhone.close();
 
 const rowNarrowPane = await browser.newPage({ viewport: VIEWPORT, reducedMotion: "reduce" });
 await rowNarrowPane.setContent(page_html);
-await rowNarrowPane.addStyleTag({ content: readFileSync(join(REPO, "styles.css"), "utf8") });
+await rowNarrowPane.addStyleTag({ content: readFileSync(join(REPO, "styles.css"), "utf8") + HOST_BARE_CONTROLS });
 // The split pane the predicate is wrong about: a desktop window, a mouse, and a leaf under 760px.
 await rowNarrowPane.addStyleTag({ content: ".workspace-split.mod-root { flex: 0 0 700px; }" });
 await rowNarrowPane.addScriptTag({ content: shimJs + "\ninstallObsidianDomShim(globalThis);" });
 await rowNarrowPane.addScriptTag({ content: positionerJs });
-const rowNarrowResults = await rowNarrowPane.evaluate(rowRangeProbe, { pointerType: "mouse" });
+const rowNarrowResults = await section("a press on a row checkbox, by mouse in a narrow pane", () => rowNarrowPane.evaluate(rowRangeProbe, { pointerType: "mouse" }));
 await rowNarrowPane.close();
 
 // ───────────────────────────────────────────────────────────────────
@@ -2331,9 +2903,9 @@ await rowNarrowPane.close();
 
 const familyPage = await browser.newPage({ viewport: VIEWPORT, reducedMotion: "reduce" });
 const familyResults = [];
-{
+await section("every checkbox family, at the size its role declares", async () => {
   const sheets = [
-    readFileSync(join(REPO, "styles.css"), "utf8"),
+    readFileSync(join(REPO, "styles.css"), "utf8") + HOST_BARE_CONTROLS,
     readFileSync(join(REPO, "tools/screenshots/theme.css"), "utf8"),
     readFileSync(join(REPO, "tools/screenshots/runtime-vars.css"), "utf8"),
   ];
@@ -2395,7 +2967,7 @@ const familyResults = [];
         + ` take ${shapes.length} distinct shape(s): ${shapes.join(" / ")}`,
     });
   }
-}
+});
 await familyPage.close();
 
 // ───────────────────────────────────────────────────────────────────
@@ -2428,7 +3000,7 @@ for (const file of ["styles.css", "tools/screenshots/theme.css", "tools/screensh
   await touchPage.addStyleTag({ content: readFileSync(join(REPO, file), "utf8") });
 }
 await touchPage.waitForTimeout(250);
-const touchResults = await touchPage.evaluate((floor) => {
+const touchResults = await section("what a finger can actually reach", () => touchPage.evaluate((floor) => {
   const reach = (el, dx, dy) => {
     const box = el.getBoundingClientRect();
     const cx = box.left + box.width / 2, cy = box.top + box.height / 2;
@@ -2448,7 +3020,7 @@ const touchResults = await touchPage.evaluate((floor) => {
         + " counts toward it and a decorative one does not.",
     };
   });
-}, TOUCH_FLOOR);
+}, TOUCH_FLOOR));
 await touchContext.close();
 
 // ───────────────────────────────────────────────────────────────────
@@ -2463,45 +3035,47 @@ await touchContext.close();
 // is a fixture rendering a control production never creates, and that is worth failing on too.
 
 const overlapResults = [];
-for (const device of [
-  { id: "desktop", viewport: VIEWPORT, bodyClass: "", touch: false },
-  { id: "phone", viewport: { width: 402, height: 874 }, bodyClass: "is-mobile is-phone", touch: true },
-]) {
-  const context = await browser.newContext({
-    viewport: device.viewport, reducedMotion: "reduce", hasTouch: device.touch, isMobile: device.touch,
-  });
-  const page = await context.newPage();
-  await page.setContent(`<body class="${device.bodyClass}"><div id="shot">${SCENARIOS.find((s) => s.id === "table-mobile").html()}</div></body>`);
-  for (const file of ["styles.css", "tools/screenshots/theme.css", "tools/screenshots/runtime-vars.css"]) {
-    await page.addStyleTag({ content: readFileSync(join(REPO, file), "utf8") });
+await section("the reorder button and the row checkbox share one cell", async () => {
+  for (const device of [
+    { id: "desktop", viewport: VIEWPORT, bodyClass: "", touch: false },
+    { id: "phone", viewport: { width: 402, height: 874 }, bodyClass: "is-mobile is-phone", touch: true },
+  ]) {
+    const context = await browser.newContext({
+      viewport: device.viewport, reducedMotion: "reduce", hasTouch: device.touch, isMobile: device.touch,
+    });
+    const page = await context.newPage();
+    await page.setContent(`<body class="${device.bodyClass}"><div id="shot">${SCENARIOS.find((s) => s.id === "table-mobile").html()}</div></body>`);
+    for (const file of ["styles.css", "tools/screenshots/theme.css", "tools/screenshots/runtime-vars.css"]) {
+      await page.addStyleTag({ content: readFileSync(join(REPO, file), "utf8") });
+    }
+    await page.waitForTimeout(250);
+    overlapResults.push(...await page.evaluate((id) => {
+      const cells = [...document.querySelectorAll("td.db-select-col")]
+        .filter((cell) => cell.querySelector('input[type="checkbox"]'));
+      const shown = cells.filter((cell) => {
+        const button = cell.querySelector(".db-table-mobile-move-btn");
+        return button && getComputedStyle(button).display !== "none";
+      });
+      const gaps = shown.map((cell) => {
+        const button = cell.querySelector(".db-table-mobile-move-btn").getBoundingClientRect();
+        const checkbox = cell.querySelector('input[type="checkbox"]').getBoundingClientRect();
+        return Math.round(checkbox.left - button.right);
+      });
+      const worst = gaps.length ? Math.min(...gaps) : null;
+      const cellWidth = cells.length ? Math.round(cells[0].getBoundingClientRect().width) : 0;
+      return [{
+        name: `on ${id} the reorder button and the row checkbox do not overlap`,
+        pass: worst === null || worst >= 0,
+        detail: shown.length === 0
+          ? `no reorder button is shown in ${cells.length} select cells, so nothing can collide`
+            + " — the table creates this button only on touch"
+          : `${shown.length} cells show both; narrowest gap ${worst}px in a ${cellWidth}px cell`
+            + " (negative means the two controls are drawn on top of one another)",
+      }];
+    }, device.id));
+    await context.close();
   }
-  await page.waitForTimeout(250);
-  overlapResults.push(...await page.evaluate((id) => {
-    const cells = [...document.querySelectorAll("td.db-select-col")]
-      .filter((cell) => cell.querySelector('input[type="checkbox"]'));
-    const shown = cells.filter((cell) => {
-      const button = cell.querySelector(".db-table-mobile-move-btn");
-      return button && getComputedStyle(button).display !== "none";
-    });
-    const gaps = shown.map((cell) => {
-      const button = cell.querySelector(".db-table-mobile-move-btn").getBoundingClientRect();
-      const checkbox = cell.querySelector('input[type="checkbox"]').getBoundingClientRect();
-      return Math.round(checkbox.left - button.right);
-    });
-    const worst = gaps.length ? Math.min(...gaps) : null;
-    const cellWidth = cells.length ? Math.round(cells[0].getBoundingClientRect().width) : 0;
-    return [{
-      name: `on ${id} the reorder button and the row checkbox do not overlap`,
-      pass: worst === null || worst >= 0,
-      detail: shown.length === 0
-        ? `no reorder button is shown in ${cells.length} select cells, so nothing can collide`
-          + " — the table creates this button only on touch"
-        : `${shown.length} cells show both; narrowest gap ${worst}px in a ${cellWidth}px cell`
-          + " (negative means the two controls are drawn on top of one another)",
-    }];
-  }, device.id));
-  await context.close();
-}
+});
 
 // ───────────────────────────────────────────────────────────────────
 // 5j. A PROPERTY KEEPS ITS COLUMN ON EVERY CARD
@@ -2519,7 +3093,7 @@ for (const device of [
 // measurement, which reported fourteen distinct positions where the truth was two.
 
 const rhythmResults = [];
-{
+await section("a property keeps its column on every card", async () => {
   const sheets = ["tools/screenshots/theme.css", "styles.css", "tools/screenshots/runtime-vars.css"]
     .map((file) => `<style>${readFileSync(join(REPO, file), "utf8")}</style>`).join("\n");
   const sparse = SCENARIOS.find((s) => s.id === "list-sparse-fields");
@@ -2568,7 +3142,7 @@ const rhythmResults = [];
     }, device.id));
     await context.close();
   }
-}
+});
 
 
 // ───────────────────────────────────────────────────────────────────
@@ -2604,7 +3178,7 @@ const rhythmResults = [];
 // could only ever have been the weakest of the three.
 
 const rendererRhythmResults = [];
-{
+await section("the same properties through the renderer that ships", async () => {
   const sheets = ["tools/screenshots/theme.css", "styles.css", "tools/screenshots/runtime-vars.css"]
     .map((file) => `<style>${readFileSync(join(REPO, file), "utf8")}</style>`).join("\n");
   for (const device of [
@@ -2757,7 +3331,7 @@ const rendererRhythmResults = [];
     }, { id: device.id, built }));
     await context.close();
   }
-}
+});
 
 // ───────────────────────────────────────────────────────────────────
 // 5n. LIFTED FROM THE PHASE PROBES
@@ -2784,7 +3358,7 @@ const rendererRhythmResults = [];
 
 const liftedResults = [];
 
-{
+await section("lifted probes: desktop placement", async () => {
   const pageHtml = (opts = {}) => {
     const leftSidebar = opts.leftSidebar === false ? "none" : "block";
     const splitWidth = opts.splitWidth ? `flex: 0 0 ${opts.splitWidth}px; width: ${opts.splitWidth}px;` : "flex: 1 1 auto;";
@@ -2826,7 +3400,7 @@ const liftedResults = [];
   async function openPage(opts) {
     const page = await browser.newPage({ viewport: opts?.viewport ?? VIEWPORT, reducedMotion: "reduce" });
     await page.setContent(pageHtml(opts));
-    await page.addStyleTag({ content: readFileSync(join(REPO, "styles.css"), "utf8") });
+    await page.addStyleTag({ content: readFileSync(join(REPO, "styles.css"), "utf8") + HOST_BARE_CONTROLS });
     await page.addScriptTag({ content: shimJs + "\ninstallObsidianDomShim(globalThis);" });
     await page.addScriptTag({ content: positionerJs });
     return page;
@@ -3387,7 +3961,7 @@ const liftedResults = [];
     '<body class="is-phone" style="--safe-area-inset-bottom: 34px; --background-modifier-border: #333333">'
     + '<div class="mobile-navbar" style="position:fixed;left:0;right:0;bottom:0;height:72px;background:#222;z-index:100"></div>',
   ));
-  await phone.addStyleTag({ content: readFileSync(join(REPO, "styles.css"), "utf8") });
+  await phone.addStyleTag({ content: readFileSync(join(REPO, "styles.css"), "utf8") + HOST_BARE_CONTROLS });
   await phone.addScriptTag({ content: shimJs + "\ninstallObsidianDomShim(globalThis);" });
   await phone.addScriptTag({ content: positionerJs });
   all.push(...await phone.evaluate(() => {
@@ -3416,9 +3990,9 @@ const liftedResults = [];
   await phone.close();
 
   liftedResults.push(...all);
-  }
+  });
 
-{
+await section("lifted probes: the sheet drag", async () => {
   const pageHtml = `<!doctype html><html><head>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
@@ -3448,13 +4022,16 @@ const liftedResults = [];
   // 5. HARNESS
   // ───────────────────────────────────────────────────────────────────
 
+  // Reduced motion, like every other page in this file — see the note on the sheet-behaviour page
+  // below for what a page without it now measures.
   const page = await browser.newPage({
     viewport: { width: 390, height: 844 },
     hasTouch: true,
     isMobile: true,
+    reducedMotion: "reduce",
   });
   await page.setContent(pageHtml);
-  await page.addStyleTag({ content: readFileSync(join(REPO, "styles.css"), "utf8") });
+  await page.addStyleTag({ content: readFileSync(join(REPO, "styles.css"), "utf8") + HOST_BARE_CONTROLS });
   await page.addScriptTag({ content: shimJs + "\ninstallObsidianDomShim(globalThis);" });
   await page.addScriptTag({ content: positionerJs });
 
@@ -3665,9 +4242,9 @@ const liftedResults = [];
 
   liftedResults.push(...results);
   await page.close();
-  }
+  });
 
-{
+await section("lifted probes: the sheet audit", async () => {
   // The nine classes that present as a phone sheet. Named rather than discovered, because the
   // audit asks whether each one gets the sheet treatment and a discovery pass would only ever find
   // the ones that already do.
@@ -3709,9 +4286,23 @@ const liftedResults = [];
   // 4. HARNESS
   // ───────────────────────────────────────────────────────────────────
 
-  const page = await browser.newPage({ viewport: { width: 390, height: 844 }, hasTouch: true, isMobile: true });
+  // Reduced motion, like every other page in this file, and this is the page that shows why the
+  // policy exists rather than merely stating it.
+  //
+  // Two pages were missing it. That cost nothing while the sheet's entrance never ran — the surface
+  // was at rest the instant it opened, so a rectangle read 200ms later was a layout. Now that the
+  // entrance does run, the same read lands 200ms into a 260ms rise and reports the sheet 24px below
+  // where it settles, which reads exactly like a placement defect and is an animation frame. The
+  // checks here are about where the keyboard puts the sheet; geometry is what reduced motion leaves
+  // behind, and the entrance has its own checks on the grammar page that assert it does move.
+  const page = await browser.newPage({
+    viewport: { width: 390, height: 844 },
+    hasTouch: true,
+    isMobile: true,
+    reducedMotion: "reduce",
+  });
   await page.setContent(pageHtml);
-  await page.addStyleTag({ content: readFileSync(join(REPO, "styles.css"), "utf8") });
+  await page.addStyleTag({ content: readFileSync(join(REPO, "styles.css"), "utf8") + HOST_BARE_CONTROLS });
   await page.addScriptTag({ content: shimJs + "\ninstallObsidianDomShim(globalThis);" });
   await page.addScriptTag({ content: positionerJs });
 
@@ -4029,7 +4620,7 @@ const liftedResults = [];
 
   liftedResults.push(...results);
   await page.close();
-  }
+  });
 
 // ───────────────────────────────────────────────────────────────────
 // 5b. THE SHEET'S INLINE EDITOR — where the editor lands once a row is tapped
@@ -4056,7 +4647,7 @@ const liftedResults = [];
 
 const inlineEditResults = [];
 
-{
+await section("the sheet's inline editor", async () => {
   const results = [];
   const record = (name, pass, detail) => results.push({ name, pass, detail });
 
@@ -4197,7 +4788,7 @@ const inlineEditResults = [];
       ? { viewport: { width: 390, height: 844 }, hasTouch: true, isMobile: true }
       : { viewport: VIEWPORT });
     await page.setContent(pageHtml(phone));
-    await page.addStyleTag({ content: readFileSync(join(REPO, "styles.css"), "utf8") });
+    await page.addStyleTag({ content: readFileSync(join(REPO, "styles.css"), "utf8") + HOST_BARE_CONTROLS });
     await page.addScriptTag({ content: shimJs + "\ninstallObsidianDomShim(globalThis);" });
     await page.addScriptTag({ content: positionerJs });
     const out = await page.evaluate(measure, hostileInputCss);
@@ -4297,11 +4888,12 @@ const inlineEditResults = [];
       + ` — ${describe(desktopInline)}`);
 
   inlineEditResults.push(...results);
-}
+});
 
-results.push(...phoneResults, ...menuResults, ...addViewDesktopResults, ...addViewPhoneResults, ...desktopMenuResults, ...cellResults, ...sheetResults, ...selectCellResults, ...rowPhoneResults, ...rowNarrowResults,
+results.push(...phoneResults, ...menuResults, ...addViewDesktopResults, ...addViewPhoneResults,
+  ...grammarResults, ...addViewGrammar, ...motionResults, ...reducedResults, ...desktopMenuResults, ...cellResults, ...sheetResults, ...selectCellResults, ...rowPhoneResults, ...rowNarrowResults,
   ...familyResults, ...touchResults, ...overlapResults, ...rhythmResults, ...rendererRhythmResults,
-  ...liftedResults, ...inlineEditResults);
+  ...liftedResults, ...inlineEditResults, ...sectionFailures);
 
 await browser.close();
 rmSync(work, { recursive: true, force: true });

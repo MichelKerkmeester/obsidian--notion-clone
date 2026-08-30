@@ -19,7 +19,7 @@
     "story:smoke": "node tools/storybook/smoke.mjs",
     "story:coverage": "node tools/storybook/story-coverage.mjs",
     "story:new": "node tools/storybook/new-story.mjs",
-    "storybook:coverage": "node tools/storybook/verify-coverage.mjs",
+    "shim:coverage": "node tools/storybook/verify-coverage.mjs",
     "storybook:placement": "node tools/storybook/verify-placement.mjs",
     "guard:assertions": "node tools/live/guard-inverted-assertions.mjs",
     "census:tokens": "node tools/live/token-census.mjs",
