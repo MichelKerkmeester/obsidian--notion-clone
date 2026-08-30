@@ -9292,6 +9292,18 @@ input[type="checkbox"].db-toggle-switch:disabled {
   flex-shrink: 0;
 }
 
+.db-record-detail-panel.db-mobile-bottom-sheet {
+  /* WCAG 2.5.5 target size, and the only value here that is not a step on the spacing scale. The
+     neighbouring steps miss it in both directions: 32px is under the standard, 48px costs a row of
+     content on every screen.
+
+     It is a variable rather than a literal because three declarations have to agree on it: the row
+     claims this height, and the editor that replaces a row's value is sized and offset against the
+     same number. Two of those are a negative margin computed from it, so a literal that drifted in
+     one place would silently decentre the editor rather than fail visibly. */
+  --db-sheet-row-min-height: 44px;
+}
+
 /* The phone sheet reads as a record rather than as a ledger.
 
    The same markup is an anchored two-column panel on desktop and is deliberately left alone there.
@@ -9321,10 +9333,7 @@ input[type="checkbox"].db-toggle-switch:disabled {
   align-items: center;
   gap: var(--db-space-4);
   padding: var(--db-space-4) var(--db-space-5);
-  /* WCAG 2.5.5 target size, and the only value here that is not a step on the spacing scale. The
-     neighbouring steps miss it in both directions: 32px is under the standard, 48px costs a row of
-     content on every screen. */
-  min-height: 44px;
+  min-height: var(--db-sheet-row-min-height);
 }
 
 .db-record-detail-panel.db-mobile-bottom-sheet .db-record-detail-field:not(:last-child) {
@@ -9357,6 +9366,39 @@ input[type="checkbox"].db-toggle-switch:disabled {
   /* Also the size below which iOS zooms the whole page when this cell becomes an input on tap. */
   font-size: var(--db-font-lg);
   line-height: var(--db-font-lg-line-height);
+}
+
+/* Tapping a number or currency row swaps its value for a single-line editor. That editor is an
+   absolutely positioned overlay, not a flex child of the row, and the positioner puts its TOP edge
+   on the value's TOP edge. In a table that reads correctly, because a cell and its editor are
+   nearly the same height. Here the value is a line of text inside a 44px row, so an editor taller
+   than that line hangs below it: it sat 7.6px under the label's centre line and 2.5px into the row
+   beneath, which is the misalignment and the overlap that were reported as one complaint.
+
+   Out of flow means the row cannot grow to contain it, so the editor is sized to the row instead.
+   At exactly the row's height the two boxes coincide, which makes both the shared centre line and
+   the containment exact rather than approximate, and it holds the same 44px floor the sheet's
+   textarea editor already holds — a focused field still has to be re-tappable to move the caret.
+
+   The offset is what remains after that. `top` was set to the value's top, so lifting the editor by
+   half the difference between the value's line box and the row puts their centres together. Both
+   terms are the tokens that produce those two heights, so the correction follows them.
+
+   Only the inline editor is treated this way. The text and date editors on this surface are
+   full-width overlays docked below the row, and the option list is a menu; none of them is
+   pretending to be the value, so none of them belongs on the value's centre line. */
+.db-record-detail-panel.db-mobile-bottom-sheet .db-cell-line-edit-popover {
+  height: var(--db-sheet-row-min-height);
+  margin-top: calc(
+    (var(--db-font-lg) * var(--db-font-lg-line-height) - var(--db-sheet-row-min-height)) / 2
+  );
+}
+
+/* The input carries the popover's height rather than setting its own, so a host stylesheet that
+   gives every input a height of its own cannot push the box back out of the row. Obsidian's does. */
+.db-record-detail-panel.db-mobile-bottom-sheet .db-cell-line-edit-popover .db-cell-line-input {
+  height: 100%;
+  min-height: 0;
 }
 
 body.is-phone .note-database-container .db-record-detail-panel {

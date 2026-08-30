@@ -77,22 +77,27 @@ describe("list field tracks", () => {
 
 describe("an empty property holds its column instead of leaving the row", () => {
   // A grid track only decides anything where the row is a grid. On a phone the same element is a
-  // wrapping flex line, and `grid-column` means nothing there — four properties were measured
-  // landing across six different card widths and two columns each. The renderer therefore stops
-  // skipping the field and hides it instead, which is a decision no track list can express, so it
-  // is asserted here on the source and proved by computed geometry in verify-placement.
+  // wrapping flex line, and `grid-column` means nothing there, so an omitted property pulls every
+  // later one left. The renderer therefore reserves the column instead of skipping it — a decision
+  // no track list can express.
+  //
+  // These read the source, which is the weaker half. The property itself is measured on the
+  // renderer's own output in verify-placement, which renders the real thing in a browser and reads
+  // back x-positions; that is what would catch this changing, and these would not.
   const renderer = readFileSync(resolve(__dirname, "./list-renderer.ts"), "utf8");
   const fixtures = readFileSync(
     resolve(__dirname, "../../tools/screenshots/scenarios/core.mjs"), "utf8"
   );
 
-  it("builds the field and marks it a placeholder rather than skipping it", () => {
-    expect(renderer, "the renderer marks an empty field instead of dropping it").toContain('field.addClass("is-placeholder")');
+  it("reserves the column instead of skipping it", () => {
+    expect(renderer, "an empty property still produces an element that can claim a column")
+      .toContain("is-placeholder");
     expect(
       /if \(empty && config\.showEmptyFields !== true\) continue;/.test(renderer),
       "the old skip is gone — with it the field never exists and has no column to claim"
     ).toBe(false);
   });
+
 
   it("keeps the sparse fixture rendering what the renderer renders", () => {
     // The fixture is the only place a row missing a subset of its properties is photographed or
