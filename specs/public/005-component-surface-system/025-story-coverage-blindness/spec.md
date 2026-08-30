@@ -14,8 +14,8 @@ _memory:
     packet_pointer: "public/005-component-surface-system/025-story-coverage-blindness"
     last_updated_at: "2026-08-30T16:30:00Z"
     last_updated_by: "phase-author"
-    recent_action: "Authored from a measured audit of the gate lane and the coverage matcher"
-    next_safe_action: "Confirm the lane rename with the operator before changing what the gate runs"
+    recent_action: "All 7 criteria met; C7 control run, matcher 31 vs 18, names 13 hidden modules"
+    next_safe_action: "Operator confirms the catalogue on device; nothing else blocks this phase"
     blockers: []
     key_files:
       - "spec.md"
@@ -25,7 +25,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-025"
       parent_session_id: null
-    completion_pct: 0
+    completion_pct: 95
     open_questions:
       - "Does the lane get renamed, or does the gate gain a second lane and keep both?"
       - "Is a story required for a module whose export drives a gesture rather than painting?"
@@ -268,15 +268,23 @@ those warrant a story is a real question rather than a formality. §12 records i
 
 Each is a command whose output and exit status were read, not a claim about the tree.
 
-| # | Criterion | Threshold | Before |
-|---|---|---|---|
-| C1 | The gate contains a lane that runs `story-coverage.mjs` | present | **absent** |
-| C2 | The gate contains a lane that runs `verify-coverage.mjs` | present | present, misnamed |
-| C3 | `node tools/storybook/story-coverage.mjs` exits 0 | exit 0 | **exit 1** |
-| C4 | `npm run gate` is green with both lanes present | exit 0 | 14 green, one of them mislabelled |
-| C5 | Modules the matcher considers renderable | >= 31 | **18** |
-| C6 | Blind modules exporting a parent-taking function with neither a story nor an exemption | 0 | **13** |
-| C7 | The widened matcher, run against the tree as received, names all 13 | 13 named | n/a — the negative control |
+| # | Criterion | Threshold | Before | After — command output read |
+|---|---|---|---|---|
+| C1 | The gate contains a lane that runs `story-coverage.mjs` | present | **absent** | `tools/gate.mjs:59` runs `npm run story:coverage` → `story-coverage.mjs`. **Met** |
+| C2 | The gate contains a lane that runs `verify-coverage.mjs` | present | present, misnamed | `tools/gate.mjs:58` runs `npm run shim:coverage` → `verify-coverage.mjs`. The old `storybook:coverage` script no longer exists. **Met** |
+| C3 | `node tools/storybook/story-coverage.mjs` exits 0 | exit 0 | **exit 1** | exit 0, `13/31 renderable modules · with stories 13 · exempt 18`. **Met** |
+| C4 | `npm run gate` is green with both lanes present | exit 0 | 14 green, one of them mislabelled | 16 green, exit 0, read unpiped. Both lanes present and distinct. **Met** |
+| C5 | Modules the matcher considers renderable | >= 31 | **18** | 31. **Met** |
+| C6 | Blind modules exporting a parent-taking function with neither a story nor an exemption | 0 | **13** | 0 — every one of the 31 is covered or carries a written reason. **Met** |
+| C7 | The widened matcher, run against the tree as received, names all 13 | 13 named | n/a — the negative control | **Run.** Restoring the name test to the live matcher drops it 31 → 18 and names exactly 13: `bulk-edit-field-menu`, `calendar-keyboard-navigation`, `card-roving-tabindex`, `database-viewport`, `drag-drop-feedback`, `field-tooltip`, `hover-link-preview`, `interaction-scope`, `mobile-bottom-sheet`, `option-color-picker`, `popover-position`, `table-cell-gesture`, `table-record-peek`. **Met** |
+
+**What the control shows beyond its number.** Four of the thirteen — `mobile-bottom-sheet`,
+`popover-position`, `table-cell-gesture` and `table-record-peek` — are the modules the sheet and
+placement work runs through. A naming convention was deciding which of this plugin's most-edited
+surfaces the catalogue was allowed to see, and the rule had no relationship to whether a module
+draws anything. That is the structural half of this phase, and it is why C7 was written as
+un-skippable: a matcher shown only to be green has been shown only to be in the state it was
+already in.
 
 C7 is the control and it is the one that can be skipped. A matcher that has never been shown
 reporting a module it previously missed has not been demonstrated to be wider; it has only been
