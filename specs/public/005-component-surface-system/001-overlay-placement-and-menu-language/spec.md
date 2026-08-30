@@ -13,12 +13,12 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "public/005-component-surface-system/001-overlay-placement-and-menu-language"
-    last_updated_at: "2026-08-29T14:00:00Z"
-    last_updated_by: "phase-author"
-    recent_action: "Phase cut from measured architecture findings; not started"
+    last_updated_at: "2026-08-30T00:00:00Z"
+    last_updated_by: "surface-factory-decision"
+    recent_action: "Decided the unwired surface factory (section 13): src/views/surface.ts deleted, src/views/surface-contract.ts kept. Added a module-reachability count to design-conformance, which read 3 with the factory and 2 without. Gate 13 green exit 0, vitest 434 passing, verify-placement 87/88 with its one declared red — all three equal to the pre-change baseline"
     next_safe_action: "Run the overlay census by user-reachable trigger; no code edits until the census is complete"
     blockers:
-      - "000-surface-contract-and-truthful-harness must land first — this phase places surfaces the factory creates"
+      - "styles.css and the capture manifest are held by another lane; this phase must not edit either, and a comment in popover-position.ts naming the deleted factory is left for that lane to correct alongside a recapture"
     key_files:
       - "spec.md"
       - "plan.md"
@@ -30,7 +30,8 @@ _memory:
       parent_session_id: null
     completion_pct: 0
     open_questions: []
-    answered_questions: []
+    answered_questions:
+      - "Wire openSurface or delete it? Deleted, on nine measurements recorded in section 13. It had zero importers, zero tests, was absent from the shipped bundle, and could not express the cursor placement 12 of 14 menu openings use nor the non-width axes 10 of 34 placement call sites pass. The contract it sat on is live and was kept."
 ---
 # Feature Specification: Overlay Placement and Menu Language
 
@@ -576,6 +577,133 @@ If Sort and Filter genuinely share one role after the parity work, a separate cl
 left to say — but the decision needs the measured parity result, not a guess.
 
 <!-- /ANCHOR:questions -->
+---
+
+## 13. DECISION RECORD — the surface factory is deleted, the contract is kept
+
+**Decision.** `src/views/surface.ts` and its `openSurface()` factory are deleted.
+`src/views/surface-contract.ts` is kept in full. Taken 2026-08-30, on the third time the question
+was raised, because the two previous answers were deferrals and the deferral itself had already
+decayed.
+
+### What was measured
+
+Every figure below was read from the tree before the deletion, and each is reproducible.
+
+| # | Measurement | Value | Bar for wiring | Result |
+|---|---|---|---|---|
+| M1 | Modules importing `views/surface` | **0** | at least 1 | fail |
+| M2 | Tests or stories exercising `openSurface` | **0** | at least 1 | fail |
+| M3 | Production nodes carrying `data-db-surface` | **0** | at least 1 | fail |
+| M4 | Is the factory in the shipped bundle | **no** | yes | fail |
+| M5 | `showAt` call sites that open at a cursor point, which an anchor-only factory cannot express | **12 of 14** | most are anchorable | fail |
+| M6 | `positionToolbarPopover` sites passing a non-width axis (`align`, `gap`, `preferredSide`, `margin`), which the declaration has no field to carry | **10 of 34** | near 0 | fail |
+| M7 | Registered producers adoptable with no new capability | **1 of 5** | a real family | fail |
+| M8 | Largest anchor-only, width-only candidate family | **3** panels, of which **1** traps focus and **0** share a dismissal owner | one behaviour | fail |
+| M9 | Surface-shaped elements built outside any declared role | **193** | the registry names 5 | fail |
+
+M4 is the one that reframes the rest. Nothing imports the factory, so the bundler drops it: it has
+never run on a device, in any release, for any user. It could not be the cause of a defect and could
+not be the fix for one.
+
+### Why wiring was not available
+
+The three blockers are not a to-do list, they are three measurements pointing the same way.
+
+Anchor-only is not a gap next to M5 — it is the wrong model for 12 of 14 menu openings, which begin
+at a pointer coordinate that no element resolves. The role-declared width is not a gap next to M6 —
+placement has four axes and a role has an opinion about one, so 10 real call sites would have to
+give up a value they pass today. A close that cannot commit is not a gap next to the date picker,
+which is **in the factory's own registry** and whose dismissal writes to the operator's vault.
+
+An abstraction that four of its own five registered producers contradict is not unfinished. It is
+falsified. Finishing it would have meant designing a second time, against evidence gathered after
+the first design, with no caller waiting.
+
+And there was no caller waiting. This phase — the one the factory was recorded as blocking — does
+not name `openSurface` in any of its eight documents. Two later phases wrote the refusal into their
+own requirements as a constraint to hold. Four plans cited the factory as a foundation while none
+of them depended on it.
+
+### Why "mark it unfinished" was not the answer either
+
+It was already the answer, and it had already rotted. The factory carried an uncommitted docblock
+naming two blockers and asserting that everything else in it "is exercised by the tests" — while
+M2 was zero at the moment the sentence was written. A third blocker was then found by someone else,
+after that docblock existed and without it helping. A marker that is wrong on its central claim
+within one phase is not a safeguard; it is the fourth deferral wearing a warning label.
+
+### What the program is choosing not to have
+
+**There is no single factory that owns floating-surface creation.** No one function stamps identity,
+registers dismissal, applies placement and owns teardown. Those stay distributed across the paths
+that do them today: `positionToolbarPopover` for placement, `OwnedMenuHandle.showAt` for menus,
+`overlayStack` for LIFO dismissal, `popover-auto-close` for outside-dismissal, and the token root in
+the stylesheet for token inheritance. The 193 in M9 stays uncovered, and is now counted under a name
+that does not promise a destination that is not being built.
+
+This is a real capability the program is declining, not a defect it is denying. Anyone who wants it
+back should want it for the 193, not for the 5.
+
+### What the contract keeps, and why it was not deleted alongside
+
+`surface-contract.ts` was measured separately and is **live**: `surface-contract.test.ts` covers it,
+`anchor-ref.ts` imports `SurfaceRole`, and two tools read it from disk as an input they fingerprint.
+It carries every role, dismissal set, focus mode, width policy, token key and producer registration
+— the whole design. Deleting it would have destroyed the design in order to remove a guess at its
+implementation, and would have broken a passing suite and two tools.
+
+The design survives the factory. That is the point: the roles were right and the factory was one
+opinion about how to apply them.
+
+### What would settle a rebuild
+
+Not a plan and not an argument — three numbers, in this order.
+
+1. **A placement input that carries all four axes.** M6 goes from 10 of 34 to 0: no call site passes
+   an axis the abstraction cannot accept.
+2. **A point anchor.** M5 goes from 12 of 14 to 0: a cursor coordinate is expressible without an
+   element.
+3. **A close that returns a disposition its owner can act on**, proven by the date picker committing
+   through it rather than beside it.
+
+Only then does the migration question become real, and its bar is M7: a family of call sites that
+share a dismissal owner and a focus mode, not merely a width. M8 is the warning — the three panels
+that look like a family share a width preset and disagree about focus, so migrating them on the
+strength of the width would have newly trapped focus in two panels that do not trap it today.
+
+Rebuilding it without those three numbers reproduces exactly what was deleted.
+
+### Guard against re-litigation
+
+The reason this sat for three phases is that nothing measured it. A module that nothing imports is
+invisible to every other check: the bundler drops it, so no screenshot or geometry check sees it,
+and no suite loads it, so nothing contradicts its comments.
+
+`design-conformance.mjs` now walks module reachability from the roots the real builds use — the
+plugin entry point, the suite setup file, and every test and story — and counts what is reached by
+none of them. It read **3** with the factory present and reads **2** without it, naming the file in
+both runs. An unwired module now has a number against a target of 0, and cannot sit unnoticed again.
+
+The two that remain are `create-record-icon-field-modal.ts` and `group-order-modal.ts`. They are the
+same finding in a different file and were left alone: they are outside this decision's scope and
+each needs its own disposition.
+
+### Residual debt this decision creates
+
+- **A stale comment.** `popover-position.ts` explains its hide-on-detached-anchor behaviour by
+  reference to the deleted factory's `place()`. Correcting it changes the file's hash, which marks
+  four `panel-record-detail-sheet` captures stale, and the capture tool only rewrites its manifest
+  on a full run — which would overwrite roughly thirty screenshots another lane has uncommitted.
+  The edit was made, measured, and reverted. It belongs to whoever next holds the capture lane, in
+  the same landing as a recapture.
+- **Predecessor reconciliation.** `000-surface-contract-and-truthful-harness` still names the
+  factory as REQ-001 and lists `surface.ts` as a file it creates, and the parent `spec.md`,
+  `graph-metadata.json` and `design-system.md` still present `openSurface()` as the API. Those are
+  another phase's documents and were not edited from here. They need the disposition above applied.
+- **This phase's blocker is discharged.** The dependency on `000` landing first was recorded on the
+  belief that this phase "places surfaces the factory creates". It does not, and never did.
+
 ---
 
 ## RELATED DOCUMENTS

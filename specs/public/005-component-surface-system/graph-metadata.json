@@ -13,7 +13,17 @@
     "public/005-component-surface-system/006-record-open-target",
     "public/005-component-surface-system/007-architecture-research",
     "public/005-component-surface-system/008-integration-and-release-observability",
-    "public/005-component-surface-system/009-live-verification"
+    "public/005-component-surface-system/009-live-verification",
+    "public/005-component-surface-system/010-sheet-reading-and-keyboard",
+    "public/005-component-surface-system/011-mobile-menu-presentation",
+    "public/005-component-surface-system/012-mobile-touch-semantics",
+    "public/005-component-surface-system/013-add-view-sheet",
+    "public/005-component-surface-system/014-desktop-select-checkbox",
+    "public/005-component-surface-system/015-desktop-dropdown-placement",
+    "public/005-component-surface-system/016-sheet-drag-and-audit",
+    "public/005-component-surface-system/017-touch-row-range-selection",
+    "public/005-component-surface-system/018-select-column-affordance-fit",
+    "public/005-component-surface-system/019-card-field-value-formatting"
   ],
   "manual": {
     "depends_on": [],
@@ -28,7 +38,10 @@
       "sheet overlay navbar",
       "checkbox ownership",
       "openSurface factory",
-      "005 component surface"
+      "005 component surface",
+      "surface system goal",
+      "005 goal",
+      "component surface directive"
     ],
     "key_topics": [
       "component",
@@ -47,13 +60,73 @@
     "importance_tier": "critical",
     "status": "planned",
     "key_files": [
-      "spec.md"
+      "spec.md",
+      "goal.md",
+      "roadmap.md",
+      "architecture-findings.md",
+      "src/views/surface-contract.ts",
+      "001-overlay-placement-and-menu-language/spec.md",
+      "tools/live/probe.mjs",
+      "tools/storybook/verify-placement.mjs",
+      "000-surface-contract-and-truthful-harness/goal.md",
+      "001-overlay-placement-and-menu-language/goal.md",
+      "002-properties-panel/goal.md",
+      "003-mobile-sheet-presentation/goal.md",
+      "004-checkbox-ownership/goal.md",
+      "005-content-row-rhythm/goal.md",
+      "006-record-open-target/goal.md",
+      "007-architecture-research/goal.md",
+      "008-integration-and-release-observability/goal.md",
+      "009-live-verification/goal.md",
+      "tools/lane/css-lane.json"
     ],
     "entities": [
       {
         "name": "spec.md",
         "kind": "doc",
         "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "goal.md",
+        "kind": "doc",
+        "path": "goal.md",
+        "source": "derived"
+      },
+      {
+        "name": "roadmap.md",
+        "kind": "doc",
+        "path": "roadmap.md",
+        "source": "derived"
+      },
+      {
+        "name": "architecture-findings.md",
+        "kind": "doc",
+        "path": "architecture-findings.md",
+        "source": "derived"
+      },
+      {
+        "name": "surface-contract.ts",
+        "kind": "code",
+        "path": "src/views/surface-contract.ts",
+        "source": "derived"
+      },
+      {
+        "name": "probe.mjs",
+        "kind": "file",
+        "path": "tools/live/probe.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "verify-placement.mjs",
+        "kind": "file",
+        "path": "tools/storybook/verify-placement.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "css-lane.json",
+        "kind": "config",
+        "path": "tools/lane/css-lane.json",
         "source": "derived"
       },
       {
@@ -64,6 +137,12 @@
       },
       {
         "name": "Component Surface System",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "The Add View",
         "kind": "proper_noun",
         "path": "spec.md",
         "source": "derived"
@@ -81,29 +160,49 @@
         "source": "derived"
       },
       {
-        "name": "one",
-        "kind": "key_phrase",
+        "name": "In Progress",
+        "kind": "proper_noun",
         "path": "spec.md",
         "source": "derived"
       },
       {
-        "name": "measurements",
+        "name": "Live Preview",
+        "kind": "proper_noun",
+        "path": "goal.md",
+        "source": "derived"
+      },
+      {
+        "name": "Traps Captures",
+        "kind": "proper_noun",
+        "path": "goal.md",
+        "source": "derived"
+      },
+      {
+        "name": "an",
         "kind": "key_phrase",
-        "path": "spec.md",
+        "path": "goal.md",
+        "source": "derived"
+      },
+      {
+        "name": "no",
+        "kind": "key_phrase",
+        "path": "goal.md",
         "source": "derived"
       }
     ],
     "causal_summary": "Phase parent for the program that gives floating surfaces, sheets, checkboxes and content rows one architecture, one placement authority, and acceptance criteria measured where users actually see them.",
     "created_at": "2026-08-29T12:53:52.104Z",
-    "last_save_at": "2026-08-29T14:34:47.562Z",
+    "last_save_at": "2026-08-30T08:36:51.978Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
-      "spec.md"
+      "spec.md",
+      "goal.md"
     ],
-    "source_fingerprint": "sha256:f9590513e608e4511611cea121c2aeb41a792482b99cb45c3f5db22a5394e22a",
+    "source_fingerprint": "sha256:518f5f6942af6ed8f57bbbf80dbf81ce50868b5fa037ef26b250e6d31f26f5bf",
+    "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "fa30ed02f7016675cbb22155035f76ab7a67d1df5f251e1dd943cb3487ba27b0"
+      "spec.md": "b3e251d8cba97b12d458d1722f57285108f77af9f51267de2d21ea81d14ed5dc"
     },
     "last_active_child_id": "public/005-component-surface-system/006-record-open-target",
     "last_active_at": null

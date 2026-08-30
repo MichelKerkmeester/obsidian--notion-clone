@@ -13,21 +13,25 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "public/005-component-surface-system/005-content-row-rhythm"
-    last_updated_at: "2026-08-29T15:00:00Z"
-    last_updated_by: "phase-author"
-    recent_action: "Phase cut from two operator defects that share one sizing question; not started"
-    next_safe_action: "Run the sizing census across all seven view types at four widths before editing anything"
+    last_updated_at: "2026-08-30T11:30:00Z"
+    last_updated_by: "design-agent"
+    recent_action: "Raggedness closed on the phone, where it still was: a property with no value now holds its column instead of leaving the row, so the column is an index rather than a count in either layout regime. The row matrix stopped measuring three classes nothing builds."
+    next_safe_action: "Decide the header rail — this phase's second half, the seven declaration blocks and the mask reversal, is untouched"
     blockers: []
     key_files:
       - "spec.md"
       - "plan.md"
       - "tasks.md"
       - "checklist.md"
+      - "../../../../src/views/list-renderer.ts"
+      - "../../../../src/views/column-width.test.ts"
+      - "../../../../tools/live/view-census.mjs"
+      - "../../../../tools/storybook/verify-placement.mjs"
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-005"
       parent_session_id: null
-    completion_pct: 0
+    completion_pct: 45
     open_questions: []
     answered_questions: []
 ---
@@ -73,7 +77,7 @@ the factory. This phase blocks nothing and runs while the overlay lane is occupi
 | **Blocks** | nothing; it runs while the overlay lane is occupied |
 | **CSS lane** | holds `styles.css` for the sizing contract and the rail deduplication |
 | **Priority** | P0 |
-| **Status** | Planned |
+| **Status** | In progress — list rows done, header rail not started |
 | **Created** | 2026-08-29 |
 | **Branch** | `main` |
 | **Parent Spec** | `../spec.md` |
@@ -185,6 +189,52 @@ The complete list is the output of the Stage-2 census artefact. The files known 
 | Census script | Create | The 84-state census, committed with its artefact |
 
 <!-- /ANCHOR:scope -->
+---
+
+### What was measured, and what it measures now
+
+Recorded 2026-08-30, list rows only. The header rail is untouched.
+
+**Raggedness is horizontal, and the fix was half-landed.** `listFieldTrackTemplate`
+(`src/views/column-width.ts:42`) and the renderer's `grid-column: index + 1` are both present and
+both correct: the index comes from the unfiltered field list, so an omitted property leaves its
+column empty. That decides nothing where the row is not a grid, and on a phone
+`.is-phone .note-database-container .db-list-row-meta` is `display: flex; flex-wrap: wrap`, which
+ignores `grid-column` outright. Both defects reported against the earlier pass were real: the phone
+was left on flex, and a property's position there was still a count.
+
+Measured on `list-sparse-fields` — twelve cards each missing a different subset — on a page built
+the way `capture.mjs` builds one:
+
+| | before | after |
+|---|---|---|
+| desktop, distinct card widths | 1 | 1 |
+| desktop, worst property spread | 1 column | 1 column |
+| **phone, distinct card widths** | **6** (304/226/283/218/118/266px) | **1** (304px) |
+| **phone, worst property spread** | **2 columns** (Payment and Billing) | **1 column** |
+
+The fix is in the renderer rather than in a track list: a property with no value is still built and
+marked `is-placeholder`, so its column is claimed by index in whichever regime the row is in.
+Negative control: reverting the fixture to drop the field returns the phone to 6 widths and 2
+columns while the desktop stays green, which is the check correctly reporting that half of this was
+fixed before and half was not.
+
+**A superseded number.** An earlier reading of 13 to 14 distinct x-positions came from a page with
+no `--capture-max-width`, where the plugin container measured 948px inside a 402px viewport. That
+described a width no phone has. The measurements above set it.
+
+**The row matrix asserted against classes that cannot exist.** `tools/live/view-census.mjs`
+synthesised its rows from `db-list-row-field`, `db-list-row-field-label` and
+`db-list-row-field-value` — **zero stylesheet rules and zero creation sites each**. Every height,
+standard deviation and spill count it has ever reported was a measurement of unstyled divs. Its
+second axis was inert for the same reason: it toggled an inline `flex-wrap` on an element that has
+been a grid since the column fix. The matrix now builds `db-list-field` and its real nesting, and
+the axis is the device, which is what changes the regime. `screenshot-fixtures.test.ts` gained the
+guard the fixtures already had, and the whole-word matcher it needed — the substring version passed
+because this suite's own comment naming the invented classes made them look real.
+
+---
+
 ---
 
 <!-- ANCHOR:requirements -->

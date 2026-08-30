@@ -1,0 +1,30 @@
+{
+  "level": "3",
+  "specFolder": "public/006-list-view-clickup",
+  "description": "The list view gains the table's whole feature surface by becoming a presentation mode of the grid, and takes on ClickUp's list chrome: per-group",
+  "keywords": [
+    "list",
+    "view",
+    "gains",
+    "table",
+    "whole",
+    "feature",
+    "surface",
+    "becoming",
+    "presentation",
+    "mode",
+    "grid",
+    "takes",
+    "clickup",
+    "chrome",
+    "per-group"
+  ],
+  "lastUpdated": "2026-08-30T08:20:47.897Z",
+  "specId": "006",
+  "folderSlug": "list-view-clickup",
+  "parentChain": [
+    "public"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": []
+}

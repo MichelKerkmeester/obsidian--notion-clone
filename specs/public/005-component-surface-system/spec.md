@@ -14,21 +14,26 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "public/005-component-surface-system"
-    last_updated_at: "2026-08-29T14:00:00Z"
-    last_updated_by: "phase-architect"
-    recent_action: "Program scaffolded from measured architecture findings; not started"
-    next_safe_action: "Execute 000-surface-contract-and-truthful-harness; nothing else may start first"
-    blockers: []
+    last_updated_at: "2026-08-30T10:45:00Z"
+    last_updated_by: "roadmap-reconciliation"
+    recent_action: "Scope, phase map and execution-order claims reconciled against the working tree"
+    next_safe_action: "Answer the scope-exclusion question in section 2 that phase 019 crosses"
+    blockers:
+      - "Report 1 (sheet drag) open on the shipped build; 004 state contested; gate red at 12/13"
     key_files:
       - "spec.md"
+      - "roadmap.md"
       - "architecture-findings.md"
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-parent"
       parent_session_id: null
-    completion_pct: 0
-    open_questions: []
-    answered_questions: []
+    completion_pct: 55
+    open_questions:
+      - "Does the out-of-scope exclusion on output number format cover card fields, or only the formula editor"
+      - "Does report-driven scheduling replace the declared 009-first execution order"
+    answered_questions:
+      - "Is openSurface still a deliverable? No. Deleted 2026-08-30 on nine measurements; the contract it sat on was kept"
 ---
 # Feature Specification: Component Surface System
 
@@ -61,14 +66,20 @@ with measurements taken where the user is standing.
 
 ## 2. SCOPE
 
-Nine specs. Three of them were not on the original defect list and all three are mandatory: `000`
-because four defects are one bug, `008` because no child phase can know a later stylesheet edit
-preserved its result, and `009` because every gate so far has measured a reproduction of the product
-rather than the product.
+**Twenty phase folders**, in two generations.
+
+The first ten were cut from the architecture findings. Three of them were not on the original defect
+list and all three are mandatory: `000` because four defects are one bug, `008` because no child
+phase can know a later stylesheet edit preserved its result, and `009` because every gate so far has
+measured a reproduction of the product rather than the product.
+
+The second generation, `010` through `019`, was cut from operator reports made after this program
+started shipping. They are listed below the first ten and mapped to their reports in
+[`roadmap.md`](roadmap.md) §4. They were not planned; they are what the operator found.
 
 | Spec | Owns | Source defect |
 |---|---|---|
-| `000-surface-contract-and-truthful-harness` | `openSurface()`, the token root, honest harnesses | Foundation — four defects are this bug in different clothes |
+| `000-surface-contract-and-truthful-harness` | The token root and the honest harnesses | Foundation — four defects are this bug in different clothes |
 | `001-overlay-placement-and-menu-language` | Placement contract, one row grammar, panel parity | Dropdowns misplaced and inconsistent |
 | `002-properties-panel` | Row grid and information architecture | Properties panel clipped and oversized |
 | `003-mobile-sheet-presentation` | Portal, one phone predicate, anchor lifetime | Sheets not overlaying the navbar; sheet glitches on edit |
@@ -77,9 +88,26 @@ rather than the product.
 | `006-record-open-target` | Where a record opens, and the setting for it | "Open" shows a peek card, not the page |
 | `008-integration-and-release-observability` | The cross-phase replay, the release decision, and every compatibility retirement | Structural — `styles.css` is one serialized lane and every phase edits it in turn |
 | `009-live-verification` | Driving and measuring the plugin inside the running Obsidian from a terminal | Structural — every harness measures a reproduction, not the app the operator installs |
+| `010-sheet-reading-and-keyboard` | The phone sheet's reading rhythm, and keyboard avoidance | Reports 3 and 4 |
+| `011-mobile-menu-presentation` | Owned menus as phone sheets; one sheet menu row | Reports 5 and 6 |
+| `012-mobile-touch-semantics` | What a touch means in the table | Report 8 |
+| `013-add-view-sheet` | The Add View surface, rebuilt on the row grammar | Report 12 |
+| `014-desktop-select-checkbox` | The select-column checkbox pin on desktop | Report 14 |
+| `015-desktop-dropdown-placement` | Five desktop placement paths, and the four that are not maintained | Report 15 |
+| `016-sheet-drag-and-audit` | The sheet drag, and the eight sheet asks measured together | Reports 1, 2, 3, 4, 6, 9, 10, 11 |
+| `017-touch-row-range-selection` | Row range selection on touch, and the gesture that replaces it | An unnumbered report inside report 8's surface |
+| `018-select-column-affordance-fit` | Room for the reorder button beside the row checkbox | Report 16 |
+| `019-card-field-value-formatting` | A number rendering the same in a card as in a cell | Report 7 |
 
-**Out of scope.** Table render performance is already fixed and measured. Formula editor layout and
-output number format remain on the earlier track.
+**Out of scope.** Table render performance is already fixed and measured. Formula editor layout
+remains on the earlier track.
+
+**One exclusion is under amendment.** This section previously also excluded "output number format".
+`019-card-field-value-formatting` changed output number format inside this program, on 2026-08-30,
+before anyone read the exclusion. Two readings are open: the exclusion meant the *formula editor's*
+number format, in which case this sentence should say so; or it meant number format generally, in
+which case `019` belongs on the earlier track. **The operator decides**; the conflict is stated in
+`019/spec.md` §7 rather than resolved by whoever noticed it.
 
 ---
 
@@ -89,24 +117,48 @@ output number format remain on the earlier track.
 > All implementation details — plan, tasks, checklist, acceptance criteria, continuity — live inside
 > the phase children. **Folder numbering is not the execution order.** The order is in §3.
 
-| Phase | Folder | Focus | Status |
+**Status here is the one-word summary. [`roadmap.md`](roadmap.md) §5.1 carries the evidence for each
+and is the document to read before believing any row.** A phase marked Shipped has code in the
+working tree and nothing more; see `roadmap.md` §3 for why shipped, verified and operator-confirmed
+are counted separately.
+
+| Declared order | Folder | Focus | Status |
 |---|---|---|---|
-| 2 | `000-surface-contract-and-truthful-harness` | `openSurface()`, the token root, honest harnesses | Planned |
-| 5 | `001-overlay-placement-and-menu-language` | Placement contract, one row grammar, panel parity | Planned |
-| 6 | `002-properties-panel` | Row grid and information architecture | Planned |
-| 7 | `003-mobile-sheet-presentation` | Portal, one phone predicate, anchor lifetime | Planned |
-| 3 | `004-checkbox-ownership` | One checkbox primitive, unconditional base appearance | Planned |
-| 4 | `005-content-row-rhythm` | Intrinsic sizing for rows and the header rail | Planned |
+| 2 | `000-surface-contract-and-truthful-harness` | The token root and the honest harnesses | Partially shipped |
+| 5 | `001-overlay-placement-and-menu-language` | Placement contract, one row grammar, panel parity | Partially shipped |
+| 6 | `002-properties-panel` | Row grid and information architecture | Shipped |
+| 7 | `003-mobile-sheet-presentation` | Portal, one phone predicate, anchor lifetime | Shipped; report 1 open |
+| 3 | `004-checkbox-ownership` | One checkbox primitive, unconditional base appearance | **Contested — `roadmap.md` §7.1** |
+| 4 | `005-content-row-rhythm` | Intrinsic sizing for rows and the header rail | Shipped |
 | 8 | `006-record-open-target` | Where a record opens, and the setting for it | Planned |
-| 9 + early | `008-integration-and-release-observability` | Replay harness lands **before `001`** and runs at every lane handoff; the release decision and compatibility retirement stay last | Planned |
-| 1 | `009-live-verification` | The independent instrument: drives and measures the plugin in the running Obsidian. Gates `000`'s harness-truth claims | Planned |
-| — | `007-architecture-research` | Standing research run; not a program phase and not on the execution path | In progress |
+| 9 + early | `008-integration-and-release-observability` | Replay harness lands **before `001`** and runs at every lane handoff; the release decision and compatibility retirement stay last | Deliverable A shipped |
+| 1 | `009-live-verification` | The independent instrument: drives and measures the plugin in the running Obsidian. Gates `000`'s harness-truth claims | Instrument built, nothing gated |
+| — | `007-architecture-research` | Standing research run; not a program phase and not on the execution path | Complete |
+| report-driven | `010-sheet-reading-and-keyboard` | Sheet reading rhythm and keyboard avoidance | Shipped + verified |
+| report-driven | `011-mobile-menu-presentation` | Owned menus as phone sheets; one sheet menu row | Shipped + verified |
+| report-driven | `012-mobile-touch-semantics` | What a touch means in the table | 90% |
+| report-driven | `013-add-view-sheet` | The Add View surface, rebuilt on the row grammar | Shipped + verified |
+| report-driven | `014-desktop-select-checkbox` | The select-column checkbox pin on desktop | 85%, recapture owed |
+| report-driven | `015-desktop-dropdown-placement` | Five desktop placement paths | 80%, one defect declared |
+| report-driven | `016-sheet-drag-and-audit` | The sheet drag, and the eight sheet asks together | 90%; report 1 root-caused |
+| report-driven | `017-touch-row-range-selection` | Row range selection on touch | 95% |
+| report-driven | `018-select-column-affordance-fit` | Room for the reorder button beside the row checkbox | Shipped, unverified |
+| report-driven | `019-card-field-value-formatting` | A number rendering the same in a card as in a cell | Shipped, unverified |
 
 ### Phase Transition Rules
 
 - Each phase MUST pass `validate.sh <child> --strict` independently before the next phase begins.
-- The execution order is **009 → 000 → 004 → 005 → 001 → 002 → 003 → 006 → 008**, argued in §3.
-  The folder numbers are identifiers, not sequence.
+  **This rule has not been kept.** As of 2026-08-30 every child fails `--strict`, most on scaffold
+  gaps rather than content: `010` through `017` were created without the `plan.md` and `tasks.md`
+  their declared level requires. `018` and `019` were scaffolded with them and fail only on the
+  `implementation-summary.md` that is written after implementation, not before it.
+- The declared execution order is **009 → 000 → 004 → 005 → 001 → 002 → 003 → 006 → 008**, argued in
+  §3. The folder numbers are identifiers, not sequence.
+- **The declared order was not the order run.** The lane journal's acquire sequence is
+  `000` (partial) → `004` → `005` → `002` → `001` → `003` → `010` → `003` → `013` → `014` → `012` →
+  `004`. `009` gated no handoff and `006` never started; `010` onward were cut in the order the
+  operator reported them. `roadmap.md` §8 states both readings of what that means and does not pick
+  one.
 - **`009` moved to the front.** It was originally parallel and gating nothing. An independent review
   found that `000` repairs the harness and then measures its own work through it — the circularity
   that produced 1.3.1. The running app is the only instrument `000` cannot influence, so `009`
@@ -118,8 +170,10 @@ output number format remain on the earlier track.
 - **`008` re-runs every earlier phase's evidence after every later `styles.css` release.** A phase
   passing its own criteria is necessary and not sufficient; the lane is shared and later edits can
   reverse an earlier result with no compiler warning.
-- **`009` runs in parallel and blocks nothing.** It makes each phase's operator review cheap enough
-  to run per phase rather than once at the end.
+- **A superseded bullet, kept as a record rather than deleted.** This list used to also say
+  *"`009` runs in parallel and blocks nothing"*, which is the pre-review model the bullet three
+  above replaced. The two sat here contradicting each other while the program ran. In practice
+  neither was true: `009` was declared a blocking gate, ran as neither, and gated nothing.
 - **Exactly one phase holds `styles.css` at a time** (§4). A phase releases the lane only after a full
   recapture and a human reviewing the changed PNGs.
 - Use `/speckit:resume [parent-folder]/[NNN-phase]/` to resume a specific phase.
@@ -158,10 +212,16 @@ output number format remain on the earlier track.
                                               008 release gate ─▶ retirement ─▶ release
 ```
 
-**Order: 009 → 000 → 004 → 005 → 001 → 002 → 003 → 006 → 008.**
+**Declared order: 009 → 000 → 004 → 005 → 001 → 002 → 003 → 006 → 008.** This is the argument, not
+the history. The order actually run is in the Phase Transition Rules above, and `roadmap.md` §8
+holds both readings of the difference.
 
-- **000 blocks everything.** 001, 002, 003 and 006 need the factory and the token root; 004 and 005
-  need only the honest harness.
+- **000 blocks everything.** 001, 002, 003 and 006 need the token root and the honest harness; 004
+  and 005 need only the harness. **The factory this bullet used to name is gone**: `openSurface` was
+  deleted on 2026-08-30 after measurement showed it had zero importers, zero tests and was absent
+  from the shipped bundle — nothing imported it, so the bundler dropped it. The contract it sat on,
+  `src/views/surface-contract.ts`, is live and was deliberately kept. The decision and its nine
+  measurements are in `001-overlay-placement-and-menu-language/spec.md` §13.
 - **004 runs before 001 deliberately.** It is small and highly visible, and it validates the
   criteria doctrine cheaply. If checkboxes ship and circles remain, the method is wrong and the
   cost is a week rather than a quarter.
@@ -180,7 +240,12 @@ output number format remain on the earlier track.
 - **009 runs first and gates 000.** It builds the transport that drives and measures the plugin
   inside the running Obsidian. It cannot replace the browser harnesses — they are faster and
   CI-native — and it reaches the one coordinate they structurally cannot: the operator's real app,
-  theme, plugin set and host chrome.
+  theme, plugin set and host chrome. **It did not run first.** `tools/live/probe.mjs` exists, no
+  criterion of `009`'s is recorded as met, and it gated no handoff. The circularity this ordering
+  was designed to prevent — `000` repairing a harness and then measuring its own work through it —
+  was therefore never prevented. `016`'s drag probe then tested the argument by accident, and the
+  argument won: three source-reading checks had certified a drag that no check had ever performed,
+  and the defect surfaced only once something drove a real touch stream through the shipped code.
 
 ---
 
@@ -218,6 +283,10 @@ Beyond its own work, each child spec must contain:
 3. **Implementation.**
 4. **Measured tests** in the browser harness. Vitest runs `environment: "node"` with no jsdom, so
    every DOM assertion lives in `tools/storybook/verify-placement.mjs` or its successor.
+   **This has drifted.** `015` and `016` each built probes inside their own phase folder rather than
+   extending the shared harness, because that file was held by another session. `015` records the
+   merge back as owed. A phase-local probe is a reasonable answer to a file lock and a bad permanent
+   home: it is not run by the gate, so a check that lives there guards nothing after the phase ends.
 5. **Screenshots** across the widths and device profiles the spec names, ending in a human review.
 6. **Storybook verification** at the production mount point, not inside a convenience wrapper.
 7. **A standing research gate**, triggered when a criterion fails twice without a new hypothesis.
@@ -251,8 +320,12 @@ prose commitment.
 
 ### What the unit suite is, and is not
 
-`vitest` runs `environment: "node"` with no jsdom, so all 410 tests exercise pure logic. **No
-criterion in this program can be evidenced by them.** Every phase lists the suite as a quality gate,
+`vitest` runs `environment: "node"` with no jsdom, so every test in it exercises pure logic. The
+count was 410 when this was written and reads 434 in `001`'s continuity as of 2026-08-30; treat any
+number written here as stale and read the run. **No criterion in this program can be evidenced by
+them**, with one exception opened on 2026-08-30: `019`'s subject is three pure formatting functions,
+which is exactly what this suite can evidence and exactly why their having no test at all matters.
+Every phase lists the suite as a quality gate,
 and it is one — a regression guard against breaking what already works. It is not evidence that a
 surface renders correctly, and a green suite must never be read as progress against a criterion.
 ---

@@ -1,0 +1,230 @@
+{
+  "schema_version": 1,
+  "packet_id": "public/006-list-view-clickup",
+  "spec_folder": "public/006-list-view-clickup",
+  "parent_id": null,
+  "children_ids": [],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "list view clickup",
+      "punch list view refactor",
+      "list needs table features",
+      "clickup list chrome",
+      "list grid presentation mode",
+      "006 list view",
+      "006 list view plan",
+      "list grid phase order",
+      "clickup list lane protocol",
+      "006 list view tasks",
+      "list grid task breakdown",
+      "006 list view acceptance criteria"
+    ],
+    "key_topics": [
+      "list",
+      "view",
+      "clickup",
+      "punch",
+      "refactor",
+      "needs",
+      "table",
+      "features",
+      "chrome",
+      "grid",
+      "presentation",
+      "mode"
+    ],
+    "importance_tier": "critical",
+    "status": "planned",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "acceptance-criteria.md",
+      "decision-record.md",
+      "checklist.md",
+      "reference-clickup-list-operator.png",
+      "specs/public/context/clickup/list-view/clickup-desktop-list-view-1.png",
+      "specs/public/context/clickup/list-view/clickup-desktop-list-view-2.png",
+      "specs/public/context/clickup/list-view/clickup-desktop-list-view-3.png",
+      "specs/public/context/clickup/list-view/clickup-desktop-list-view-4.png",
+      "tools/lane/css-lane.json",
+      "tools/storybook/verify-placement.mjs",
+      "src/views/list-renderer.ts",
+      "src/views/table-renderer.ts",
+      "src/views/database-view.ts"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "acceptance-criteria.md",
+        "kind": "doc",
+        "path": "acceptance-criteria.md",
+        "source": "derived"
+      },
+      {
+        "name": "decision-record.md",
+        "kind": "doc",
+        "path": "decision-record.md",
+        "source": "derived"
+      },
+      {
+        "name": "checklist.md",
+        "kind": "doc",
+        "path": "checklist.md",
+        "source": "derived"
+      },
+      {
+        "name": "reference-clickup-list-operator.png",
+        "kind": "file",
+        "path": "reference-clickup-list-operator.png",
+        "source": "derived"
+      },
+      {
+        "name": "clickup-desktop-list-view-1.png",
+        "kind": "file",
+        "path": "specs/public/context/clickup/list-view/clickup-desktop-list-view-1.png",
+        "source": "derived"
+      },
+      {
+        "name": "clickup-desktop-list-view-2.png",
+        "kind": "file",
+        "path": "specs/public/context/clickup/list-view/clickup-desktop-list-view-2.png",
+        "source": "derived"
+      },
+      {
+        "name": "clickup-desktop-list-view-3.png",
+        "kind": "file",
+        "path": "specs/public/context/clickup/list-view/clickup-desktop-list-view-3.png",
+        "source": "derived"
+      },
+      {
+        "name": "clickup-desktop-list-view-4.png",
+        "kind": "file",
+        "path": "specs/public/context/clickup/list-view/clickup-desktop-list-view-4.png",
+        "source": "derived"
+      },
+      {
+        "name": "css-lane.json",
+        "kind": "config",
+        "path": "tools/lane/css-lane.json",
+        "source": "derived"
+      },
+      {
+        "name": "verify-placement.mjs",
+        "kind": "file",
+        "path": "tools/storybook/verify-placement.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "list-renderer.ts",
+        "kind": "code",
+        "path": "src/views/list-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "table-renderer.ts",
+        "kind": "code",
+        "path": "src/views/table-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "database-view.ts",
+        "kind": "code",
+        "path": "src/views/database-view.ts",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "List View",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Style Grid",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Spec Folder",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "No Mobbin",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Add Task",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Plan",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "text",
+        "kind": "technology",
+        "path": "plan.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "The list view gains the table's whole feature surface by becoming a presentation mode of the grid, and takes on ClickUp's list chrome: per-group column headers, inline cell editing, and a per-group add-task affordance.",
+    "created_at": "2026-08-30T07:11:59.138Z",
+    "last_save_at": "2026-08-30T08:21:08.852Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "acceptance-criteria.md",
+      "decision-record.md"
+    ],
+    "source_fingerprint": "sha256:355cc9e2c55fa7ae5ce5d5ba8047fc7ba74f505e899d64db00fb57c5b39d4eb7",
+    "source_fingerprint_docset": 3,
+    "source_doc_hashes": {
+      "spec.md": "9d79d08641786e2c5e77c5be036af17bd5883ac18b567ef2c4040c55c39be982",
+      "plan.md": "169fa858d9fded81794320dfeed26c8bc1bbda45953153d7b407b9aa3b7ead63",
+      "tasks.md": "835e565f9a0d6e8ca6b3461f76c2e55761a00082a34642ea0462ddbefc618eaf",
+      "decision-record.md": "9b41e4bf3c2a7f35299ae5cfce0ddc9314234f440fc34a55644883080e090133"
+    },
+    "last_active_child_id": null,
+    "last_active_at": null
+  }
+}

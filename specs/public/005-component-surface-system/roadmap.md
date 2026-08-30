@@ -1,74 +1,388 @@
 ---
 title: "Roadmap: Component Surface System"
-description: "Execution order, gating, lane ownership and current status for the nine-phase program that gives floating surfaces, sheets, checkboxes and content rows one architecture and criteria measured where users stand."
+description: "Traceability from every operator report to the phase that owns it, the execution order as actually run, and per-phase status measured against the working tree rather than against the plan."
 trigger_phrases:
   - "surface system roadmap"
   - "component surface roadmap"
   - "005 roadmap"
+  - "operator report traceability"
 importance_tier: "high"
 contextType: "planning"
 ---
 # Roadmap: Component Surface System
 
+<!-- SPECKIT_TEMPLATE_SOURCE: roadmap | v2.2 -->
+
 > Read `architecture-findings.md` for the measured root causes and `design-system.md` for how to
-> build on the contract. This file answers one question: **what happens, in what order, and what
-> stops it.**
+> build on the contract. This file answers three questions: **which phase owns each thing the
+> operator reported, what is actually true of each phase today, and what happens next.**
 
 ---
 
-## 1. THE ONE-LINE REASON THIS EXISTS
+<!-- ANCHOR:metadata -->
+## 1. METADATA
 
-1.3.1 passed tsc, build, 410 tests, 196 captures, Storybook and 13 geometry checks, and changed
+**Subject:** Note Database plugin, `specs/public/005-component-surface-system/`
+**Status:** Active
+**Horizon:** Open. The program closes on operator confirmation, not on a date.
+**Owner:** Operator, with four agents holding phase folders concurrently.
+**Last updated:** 2026-08-30
+
+**Reconciliation note.** Sections 2, 5 and 6 were rewritten on 2026-08-30 against the working tree,
+`tools/lane/css-lane.json` and each phase's continuity block. The previous version listed nine
+phases, all Planned, and predated every phase cut from an operator report. Sixteen operator reports
+and eight phase folders were missing from it.
+
+**What this file does not do.** It does not resolve disagreements between a phase's own documents.
+Where they disagree, §7 names both readings and leaves the decision to the operator.
+<!-- /ANCHOR:metadata -->
+
+---
+
+## 2. THE ONE-LINE REASON THIS EXISTS
+
+1.3.1 passed tsc, build, the unit suite, 196 captures, Storybook and 13 geometry checks, and changed
 nothing the operator could see. Every gate measured a mechanism. None measured an outcome.
 
+**The same failure has a documentary form,** which is why this file was rewritten: a status table
+claiming Planned for work that shipped is a gate that passes while nothing is true.
+
 ---
 
-## 2. EXECUTION ORDER
+## 3. THREE STATES, NOT ONE
 
-**`009 → 000 → 004 → 005 → 001 → 002 → 003 → 006 → 008`**, with `007` off-path. Folder numbers are
-identifiers, not sequence.
+Every row in §4 and §5 uses one of these. Collapsing them is how 1.3.1 happened.
 
-**This order changed after an independent review.** `009` was parallel and gating nothing; `008`'s
-replay arrived only at the end. Both were structural holes — see `adversarial-review.md` F1, F4, F7.
-
-| # | Phase | Why here |
+| State | Means | Does not mean |
 |---|---|---|
-| 1 | `009` live verification | **The independent instrument.** `000` repairs the harness and would otherwise measure its own work through it — the circularity that produced 1.3.1. The running app is the one instrument `000` cannot influence. |
-| 2 | `000` surface contract + truthful harness | Everything else measures through it. Blocks all. Its harness numbers must agree with `009`'s live numbers. |
-| 3 | `004` checkboxes | Small, highly visible, needs only the harness. **Proves the method cheaply** — if this ships and circles remain, the doctrine is wrong and the cost is a week, not a quarter. |
-| 4 | `005` content row rhythm | The only work with no overlay dependency. Runs while the CSS lane is free or it never gets scheduled. |
-| 5 | `001` overlays | Needs the factory. Once everything routes through it, later phases get simpler. |
-| 6 | `002` properties panel | After `001` the placement half is solved; only the row grid remains. |
-| 7 | `003` sheets | Riskiest change (a portal). Lands after the factory is shaken out on desktop where debugging is cheap. |
-| 8 | `006` record open target | Needs `003` to answer where a record opens on a phone. |
-| 9 + early | `008` integration + release observability | **Its replay harness lands before `001`** and runs at every lane handoff; the release decision stays last. Only phase allowed to delete a compatibility path. |
-| — | `007` architecture research | Standing research. Not a phase. |
+| **Shipped** | The edit is in the working tree | That anything measured it |
+| **Verified** | A check drives the production path, has a threshold, and has been observed red before it went green | That the operator can see the difference |
+| **Operator-confirmed** | The operator looked at the device and said so | — |
+
+**The program's closing condition is the third** (`spec.md` §7). Of the sixteen reports below,
+**one** has reached it, and it reached it as an accepted shortfall rather than a fix.
+
+**One further caveat that applies to every row.** All of today's work is uncommitted. `HEAD` is at
+`4830275` with `manifest.json` declaring 1.3.1; the working tree declares 1.3.3. Nothing in §4 or §5
+survives a `git checkout`.
 
 ---
 
-## 3. WHAT BLOCKS WHAT
+## 4. OPERATOR REPORT TRACEABILITY
 
-```
-009 ── 000 ──┬── 004 ── 005 ─────────────────────────┐
-             └── 001 ── 002 ── 003 ── 006 ───────────┴── 008 (release)
-             008's replay harness lands before 001 and runs at EVERY lane handoff
-```
+Sixteen reports, each resolved to a named phase. A seventeenth — refactoring the list view to look
+like ClickUp — is its own packet at `specs/public/006-list-view-clickup/` and is not part of this
+program.
 
-- **000 blocks all seven.** No phase can measure honestly until the harness stops wrapping its
-  subject in the container that hides the defect.
-- **008 depends on every phase and re-opens all of them.** A phase passing its own criteria is
-  necessary and never sufficient, because the stylesheet lane is shared.
-- **009 is now a gate, not an accelerator.** It is the second instrument. A harness number and a live
-  number that disagree block the handoff. Desktop only — the mobile story stays operator-reported.
-- **The lane is enforced, not assumed.** A recorded owner and a check that fails when a phase without
-  the lane modifies `styles.css`. `004` and `005` both unblock after `000`, so convention alone would
-  permit two concurrent edits to a 19,000-line file.
+| # | The report, shortened | Phase | State | Evidence |
+|---|---|---|---|---|
+| 1 | *"dragging the sheet downwards on mobile doesnt really work"*, and again on 1.3.3: *"should guaranteed move down in initial drag"* | `003` built it, `016` root-caused it | **Fixed + verified**, not operator-confirmed | **Root cause, after three failed fixes:** the panel's own content render empties the panel, destroying the grab bar the sheet module had prepended as its child — so **every view re-render silently unbound the gesture**. Measured: a 60px drag moves the sheet **60.0px fresh and 60.0px after a re-render**; before, 60.0px fresh and **0.0px after a re-render**, with the grab bar absent from the DOM. The earlier fixes were correct and bound to a node the panel destroys. Two hypotheses were tested and excluded: no transition was fighting the drag (computed duration 0s during the gesture), and the scrim neither helps nor hinders it |
+| 2 | *"Close and expand button top right not aligned"*, reported twice | `003` | **Shipped + verified**, not operator-confirmed | Lane entry 45: "10px centre stagger removed and the expand action raised from a 24px to a 44px target". `016` ask 2, measured on the shipped build: both **44×44**, centre lines differing by **0.00px** |
+| 3 | *"closer to notion… no space between, text a bit bigger, light transparent divider between each item"* — three asks | `010` | **2 of 3 verified; 1 open** | Lane entry 43: value un-pinned from the right edge, label given a fixed 96px column, row gap 2px→0 with a hairline, padding 4/6→8/12. Desktop measured identical before and after. `016` ask 3: gap **0px**, divider **1px at 40% alpha**, value text **16px** — all hold. **The label measures 13px, which is not on the 12/14/16/18/20/24 scale.** A value between two steps reads as "not quite 14" rather than as a decision, which is what a scale exists to prevent. One-token operator decision, not a bug |
+| 4 | *"when you click an item and keyboard opens you no longer see the item"* | `010` built it, `016` measured it | **Mechanism verified; one host shape unreachable** | `keyboardInset()` at `popover-position.ts:514`, written to `--db-mobile-sheet-bottom` at `:301`, with a pinch-zoom guard at `scale <= 1.01`. `016` ask 4: with `--keyboard-height: 336px` the sheet's bottom moves **844 → 508**, its top stays on screen at y=275, and it returns to 844 when the keyboard closes. **But `openRecordDetailPanel` registers `onResize = () => close()`.** iOS shrinks `visualViewport` and leaves the window alone, so the inset works there; a host that announces the keyboard by resizing the window **destroys the sheet before any inset can apply**. Which of the two the operator's phone does decides whether this is finished or blocked |
+| 5 | *"the desktop table column dropdown… should be a sheet on mobile"* | `011` | **Shipped + verified**, not operator-confirmed | `011/acceptance-criteria.md` AC-1: bottom 876 against an 844 viewport → 844. AC-2: width 220 → 390. Before-numbers taken from a detached worktree at `4830275` with the working tree's `styles.css` copied in, so only code differs. `owned-menu.ts:173-177` takes the sheet branch |
+| 6 | *"Buttons of this sheet dont align with other sheets… proper reusable sheet menu item components"* | `011` | **Shipped + verified**, not operator-confirmed | `011/acceptance-criteria.md` measured **17 menu-row shapes on desktop, 15 of 17 on a phone** before the change. Lane entry 46: row grammar keyed to the row by doubling the class; sheet label spread 85px → 0px. `016` ask 8: a row built by `createMenuRow` measures `min-height 44px`, `padding 8px 16px`, height 44px in the owned-menu sheet and **identically** in a panel sheet |
+| 7 | *"missing euro icons and the decimals €1.000,24"* | **`019-card-field-value-formatting`, opened by this pass** | **Shipped, zero checks** | Eleven added lines in `src/views/card-field-renderer.ts` routing the numeric branch through `formatEuroCurrency` / `formatEuroNumber`. **Was an orphan** — see §6 |
+| 8 | *"a tap in a cell will open edit state… for the main item it will open the sheet"* | `012` | **Shipped + verified**, not operator-confirmed | `setupTitleCellTap` moved to the shared `table-record-peek` and bound by both table hosts (`database-view.ts:8457`, `embedded-database-renderer.ts:398`); `isTitleCell` keys off visible column order. `012` continuity: 88 placement checks, 87 pass, 1 declared red |
+| 9 | *"block all interaction with items behind the sheet… black 25% transparent bg"* | `003` built it, `012` and `016` asserted it | **Shipped + verified**, not operator-confirmed | Lane entry 47: "scrim made modal at 25% and capturing by default". `012/acceptance-criteria.md` AC-6 **PASS** — a cell's centre resolves to `db-mobile-sheet-scrim` with `pointer-events: auto`, negative control `{scrimCapturesPointer:false}` observed red. `016` ask 7: scrim is `rgba(0,0,0,0.25)`, a press 120px above the sheet resolves to it, and a press on the grab band resolves to **the grab handle** (sheet z=1000, scrim z=999). **The operator's last clause — "that way drag handler works better" — is a non-issue**: the scrim neither helps nor hinders the drag, whose real cause was elsewhere (row 1) |
+| 10 | *"drag handler tap area should be… atleast 48px high"* | `003` | **Operator-confirmed as an accepted shortfall. Do not reopen.** | `003/spec.md` "OPERATOR DECISION — the grab band stops at 35px": the operator was shown the shortfall and accepted it. 48px needs a taller sheet header, moving every sheet surface. **The decision stands; the number does not.** `016` measured the band answering presses over y=1..32 — **32px, full width at 386 of 390** — and derives it from the stylesheet as `--db-space-6`(16) + 8 + 4 + 4 = 32. Four different heights are now on record; see §7.5. All of them clear WCAG 2.5.8's 24px AA target and fall short of 2.5.5's 44px, so **none of them changes the decision** |
+| 11 | *"make sure each sheet has same bg color"* | `003` | **Shipped + verified**, not operator-confirmed | Lane entry 47: "one overlay fill for all seven sheet surfaces". `016` ask 6 measured **all 9 sheet-capable surfaces at the identical fill** `color(srgb 0.95 0.95 0.95)`. Seven against nine is a small counting conflict, noted in §7.7. No before-number was ever recorded for this ask |
+| 12 | *"Add view sheet is real bad… needs fresh design agent review"* | `013` | **Shipped + verified**, not operator-confirmed | `013/acceptance-criteria.md` §2 adjudicates the six observed defects against production rather than the fixture: **4 REAL, 1 HALF REAL** (the accessible name is present, the visible label is not), **1 FIXTURE ARTIFACT** (it already was a sheet on a phone). Lane entries 50-53; tile grid deleted and rebuilt on the row grammar; a verifier follow-up took the control boundary 1.21:1 → 3.23:1 |
+| 13 | *"Make sure version is updated and for me to test"* | **No phase. Released under version management.** | **Done, awaiting the operator** | `manifest.json` and `package.json` both at **1.3.3**. `HEAD` is at 1.3.1, so 1.3.2 and 1.3.3 exist only in the working tree. This row is deliberately not a phase: a version bump has no acceptance criterion beyond the operator installing it |
+| 14 | *"checkbox is being cut off on desktop"* | `014` | **Shipped + verified**, recapture owed | `014/acceptance-criteria.md` AC-1: narrowest left clearance **0px across 25 cells, all clipping → 18px across 25**. Negative control run **both ways** — re-guarding takes it to exit 1 at 78/80, restoring returns 79/80 exit 0. AC-2 guards the guard: 25/25 carry the shared component's class, so the fixture cannot go green by drifting |
+| 15 | *"fresh pass on dropdown placement in the desktop version"* | `015` | **5 of 6 fixed, the 6th measured and declared** | `015/spec.md`: desktop placement is **five independent paths**, and the defects cluster on the four that are not maintained. The unfixed one — the calendar/timeline search-results panel clamping to `window.innerWidth` and travelling **240-292px under an open right sidebar** — is duplicated verbatim in two files held by another session for the whole phase, so it is measured and declared rather than fixed. Probe 30/31, one declared red |
+| 16 | *"to the left of checkbox that little button doesnt have enough space"* | **`018-select-column-affordance-fit`, opened by this pass** | **Shipped under another phase's lane, unverified** | Lane entry 64: gap **−14px in a 49px cell on a phone, −17px on desktop** → **+4px in a 65px cell**, and no desktop button at all, which is what production builds. **Was an orphan** — see §6 |
+
+### What the table says as a whole
+
+**All sixteen reports now have a named phase**, and fifteen have shipped code. Report 13 is the
+sixteenth and is deliberately not a phase.
+
+**Only report 10 is operator-confirmed,** and it is confirmed as a shortfall the operator agreed to
+live with. Everything else sits at shipped or verified. Under `spec.md` §7 that means **no report in
+this program is closed**, and the count of green checks does not change that.
+
+**Three rows are not simply green.** Report 3's third ask is an open type-scale decision. Report 4
+works on a host that shrinks the visual viewport and is destroyed on a host that resizes the window —
+which of those the operator holds decides the row. Reports 7, 16, 18 and 19 shipped without a check
+of any kind until today.
+
+**Report 1 deserves separate mention.** It was fixed three times and re-reported three times, and the
+reason has now been measured: the fixes were correct and bound to a node the panel's own render
+destroys. Nothing in the harness could see it, because no check had ever moved a finger across the
+grab bar. The next re-report, if there is one, would be the fourth — which is why `016`'s operator
+list asks specifically to drag *after editing a field*, the case that was broken.
 
 ---
 
-## 4. THE SERIALIZED CSS LANE
+<!-- ANCHOR:now-next-later -->
+## 5. PHASES: NOW / NEXT / LATER
 
-`styles.css` is 19,261 lines, must not be split, and all 196 captures fingerprint it.
+Status per phase, measured against the working tree rather than against the plan. Four phases are
+held by live agents and are marked ⚠ — their state is read-only here and may have moved since.
+
+**Now:** In Progress. Four concurrent lanes.
+
+- ⚠ `004-checkbox-ownership` — **state UNKNOWN, see §7.1.** Holds the `styles.css` lane.
+- ⚠ `005-content-row-rhythm` — shipped: list-row border-box, list meta ruled into columns, renderer-declared tracks. Continuity still reads "not started".
+- ⚠ `016-sheet-drag-and-audit` — 90%. **Root-caused report 1** and re-measured all eight sheet asks together on the shipped build: 19 of 22 checks pass, 3 declared. Exit signal: two operator decisions (the 13px row label, and whether the sheet should survive a window resize instead of closing).
+- ⚠ `017-touch-row-range-selection` — 95%. Predicate removed from both views, hold gesture added, 12 checks added, six negative controls run and restored by hash. Exit signal: a decision on whether the gesture gets an announcement in the selection status bar.
+
+**Next:** Planned. The verification debt the shipping created.
+
+- `018-select-column-affordance-fit` — opened today. Code landed, nothing measured. Exit signal: the two after-numbers re-run and both negative controls observed red.
+- `019-card-field-value-formatting` — opened today. Code landed, no test exists for the formatters at all. Exit signal: tests written, parity check added and observed red, and the scope question in §7.4 answered.
+- `010`, `011`, `013` — shipped and self-verified, none operator-confirmed. Exit signal: the operator installs 1.3.3 and reports per surface.
+- **The recapture debt.** `014` released the lane without recapturing, so `screenshots-fresh` is red and the gate exits 1 at 12/13. Deferred deliberately: the lane is held by a phase whose own edits are pending, so one recapture should cover both. Exit signal: a green gate.
+- **The scaffold debt.** `010` through `017` were created without the `plan.md` and `tasks.md` their declared level requires, so each fails `validate.sh --strict` on 4-5 errors that are structural rather than substantive. `012` additionally carries a continuity block over the 2048-byte limit. Exit signal: `validate.sh --recursive --strict` with zero errors.
+- **One warning this reconciliation introduced.** Adding `018` gives `017` a numeric successor it does not reference, so `PHASE_LINKS` went from 14 issues to 17 — one of the three is this pass's, and the other two arrived when `016` gained a `spec.md`. The fix is a line in `017`'s phase-chain blockquote, and `017` is held by a live agent, so it was left rather than written into.
+
+**Later:** Planned. The structural phases the program declared first and ran last.
+
+- `009-live-verification` — instruments exist (`tools/live/probe.mjs`) but no criteria are recorded as met. It was declared phase 1 and has not gated anything.
+- `000-surface-contract-and-truthful-harness` — its census instruments exist and one edit shipped with a recapture debt. Continuity reads 0%.
+- `001` — the overlay census has not run; the factory question was settled by deleting it (§7.2).
+- `002-properties-panel` — held the lane nine times with substantial edits; continuity reads "not started".
+- `006-record-open-target` — genuinely not started. Blocked on `003`, and its one open question (side panel, full-page modal, or both behind a setting) is an operator decision.
+- `008-integration-and-release-observability` — **Deliverable A shipped**: `tools/live/replay.mjs` exists and `npm run replay` re-asserts 8 results against recorded pre-fix numbers. The release decision stays last.
+- `007-architecture-research` — Complete. 10 iterations plus synthesis; not a phase.
+<!-- /ANCHOR:now-next-later -->
+
+### 5.1 Status table
+
+| Phase | Declared | Actual | Evidence for "actual" |
+|---|---|---|---|
+| `000` | Planned | **Partially shipped** | Held the lane, added `.db-surface` to both token roots, released with an unsigned recapture. Census instruments exist under `tools/live/` |
+| `001` | Planned | **Partially shipped** | Lane journal records it as `001-overlay-width-and-chrome` (§7.3). Owned menu chromed; portal-unrecoverable count 537 → 0; `openSurface` deleted (§7.2). Census not run |
+| `002` | Planned | **Shipped, extensively** | Nine lane holds: sheet portal restored, phone list constrained, list card stacked, reduced-motion blocks repaired, row-state cluster landed and recaptured |
+| `003` | Planned | **Shipped; report 1 still open** | Sheet layer, header actions, scrim, single fill, grab band. The drag is reported broken on the shipped build |
+| `004` ⚠ | Planned | **UNKNOWN — §7.1** | Three sources disagree |
+| `005` ⚠ | Planned | **Shipped** | List-row border-box, meta ruled into columns, renderer-declared tracks, portal-safety instrument built |
+| `006` | Planned | **Planned** — accurate | No lane activity; blocked on `003` |
+| `007` | Complete | **Complete** — accurate | Research plus synthesis, folded into `000`, `008`, `009` |
+| `008` | Planned | **Deliverable A shipped** | `tools/live/replay.mjs`, `npm run replay` |
+| `009` | Planned | **Instrument built, nothing gated** | `tools/live/probe.mjs` exists. It was declared phase 1 and gated no handoff |
+| `010` | absent | **Shipped + verified** | Lane entry 43; keyboard lever wired |
+| `011` | absent | **Shipped + verified** | Before/after from a detached worktree |
+| `012` ⚠ | absent | **90%** | 87/88 placement, 1 declared red; blocked on stale captures |
+| `013` | absent | **Shipped + verified** | Lane entries 50-53; six defects adjudicated |
+| `014` | absent | **85%** | AC-1 through AC-3 with a two-way negative control; recapture owed |
+| `015` | absent | **80%** | 30/31; the sixth defect declared, blocked on a file lock |
+| `016` ⚠ | absent | **90%, report 1 root-caused** | 19/22, 3 declared. Gained `spec.md` and `acceptance-criteria.md` on 2026-08-30 while this file was being written |
+| `017` ⚠ | absent | **95%** | 12 checks, six negative controls |
+| `018` | absent | **Opened today** | Code shipped under `004`'s lane hold; unverified |
+| `019` | absent | **Opened today** | Code shipped; no test exists |
+
+---
+
+## 6. THE ORPHANS
+
+Two reports were fixed with no phase owning them. Both are now phases. The search that found them
+covered every markdown file in the program for the report's own vocabulary, then checked the working
+tree diff and the lane journal for edits no document claimed.
+
+**Report 7 — currency and decimal formatting.** No document in this program mentions currency,
+decimals, the euro sign or the card renderer's value branch. The formatter already existed and four
+surfaces already called it; the card renderer was the single number surface not wired to it. Now
+`019-card-field-value-formatting`. It also crosses a written scope exclusion — see §7.4.
+
+**Report 16 — the reorder button.** Landed under `004-checkbox-ownership`'s stylesheet lane hold,
+and `004`'s acquire note names it. But `004`'s thirteen criteria all measure checkbox appearance and
+ownership; **none measures column geometry**. `017/acceptance-criteria.md` independently disclaims
+the two overlap checks as "not this phase's". Both neighbours were right, and nothing owned it. Now
+`018-select-column-affordance-fit`. A lane hold is permission to edit a file, not a scope grant.
+
+**A third gap, closed while this was being written.** `016-sheet-drag-and-audit` owned the
+most-reported defect in the program and, at the start of this pass, had no `spec.md` and no
+`acceptance-criteria.md` — three probes and nothing else. Both appeared before it finished. Recorded
+because the sequence matters: for several hours the program's most-reported defect was being worked
+with no specification, and the only reason that is not still true is that its agent got there first.
+
+---
+
+## 6A. OPERATOR DECISIONS ON RECORD
+
+Four decisions were taken on 2026-08-30. Each closes a question, and each is recorded here because a
+decision that lives only in a conversation gets relitigated by the next agent.
+
+| Decision | What it settles | Where it binds |
+|---|---|---|
+| **Row height stays 34px.** Density outranks the 44px touch floor | WCAG 2.5.5's 44px target is not met by the table's main-item cell and **cannot be met from CSS** — measured 169×34, and a hit-area expansion is a no-op because the cell clips its overflow and the row below owns everything past the boundary. The only fix was a touch row-height floor, which is the reader's density setting | `012`'s first open question. Closed |
+| **The grab band is accepted at 35px** against the 48px ask | 48px needs a taller sheet header, moving every sheet surface and every capture of it. The alternative, letting the band overlap the header, reintroduces the defect that phase had just fixed | `003/spec.md` "OPERATOR DECISION". Closed. §7.5 notes the recorded number is now disputed; the decision is not |
+| **Row range-select moves behind a long press** | A tap on a row checkbox selected everything between it and the last row touched, on every touch device, because `isTouchDevice` was OR-ed into the range predicate — shift held down with no way to let go | `017`. The gesture is `attachLongPress`, the same object the row menu uses, so threshold, tolerance and haptic are shared rather than matched |
+| **The list view is a presentation mode of the grid**, not a separate view | Scopes `specs/public/006-list-view-clickup/`, which is outside this program | Named here so this program does not re-open it |
+
+**Two decisions are still open** and both are `016`'s: whether the phone row label moves from 13px to
+14px to sit on the type scale, and whether the record sheet should survive a window resize instead of
+closing — which decides whether report 4 is finished or blocked on the operator's handset.
+
+---
+
+## 7. WHERE A PHASE'S OWN DOCUMENTS DISAGREE
+
+Reported, not resolved. Each names what would settle it.
+
+### 7.1 `004` — three sources, three answers
+
+| Source | Says |
+|---|---|
+| Program `goal.md` | "171/171 own appearance, **0 borrow it** (was 10); all five families have fixtures" |
+| `004/acceptance-criteria.md` | **AC-001 through AC-013 all "Unmet"**, evidence cells blank |
+| Lane entry 63 (08:05 today) | "Unguarded ancestor-keyed appearance rules 1 → 0"; toggles losing a property outside the container "10/10 → 0/10"; the switch taken from 34×18 to 34×28 |
+| Verifier (reported to this pass) | **FAIL** — 10 toggles still ancestor-owned; a hit target at 37×24 against a 28px floor; the board, gallery, table and list fixtures contain **zero checkboxes**, so those families are measured by nothing |
+
+The lane journal and the verifier disagree on the same two numbers in opposite directions (0/10
+versus 10; 34×28 versus 37×24). **UNKNOWN.** Settled by running `SURFACE_PHASE=004 npm run gate`
+from a quiet tree and reading the checkbox and toggle arms. Not run here: `004` is live, and running
+the shared harness against a moving tree produces a number that describes neither state.
+
+The fixture finding is the more serious half and is independent of the other two: a family with no
+checkbox in its fixture cannot be measured by any criterion, so a green count across five families
+is a count across however many families actually contain one.
+
+### 7.2 `001` — 0% against a decision taken
+
+`001`'s continuity reads `completion_pct: 0`, while its `recent_action` describes deleting
+`src/views/surface.ts` today after nine measurements, keeping `surface-contract.ts`, and confirming
+gate 13 green, vitest 434 passing and verify-placement 87/88 — all equal to the pre-change baseline.
+A phase at 0% does not delete a module. The decision is sound and recorded in that phase's spec §13;
+**the percentage is what is wrong.**
+
+Consequence for the parent: `spec.md` still names `openSurface()` as `000`'s deliverable in two
+places. It no longer exists.
+
+### 7.3 `001` has two names
+
+The folder is `001-overlay-placement-and-menu-language`. `tools/lane/css-lane.json` records its lane
+holds as `001-overlay-width-and-chrome`, and the lane's own outstanding list attributes an unclaimed
+stylesheet drift to that second name. One of the two is wrong and the lane cannot be reconciled
+against the folder until it is settled.
+
+### 7.4 `019` crosses a written scope exclusion
+
+`spec.md` §2 excludes "output number format" as remaining on the earlier track. Report 7 changed
+output number format inside this program. Either the exclusion means the *formula editor's* number
+format and the parent spec should say so, or the work was out of scope and belongs elsewhere.
+Recorded in `019/spec.md` §7.
+
+### 7.5 The grab band has four recorded heights
+
+| Source | Height |
+|---|---|
+| `003/spec.md`, the operator decision | 35px |
+| Lane entry 47 | "widened to the header at **48px**" |
+| The lane's outstanding list | **35px** record sheet, **41px** owned-menu sheet |
+| `016`, measured on the shipped build | **32px**, full width at 386 of 390 |
+
+`016` is the only one of the four that measured the shipped build rather than describing an
+intention, and it derives 32 from the stylesheet's own arithmetic: `--db-space-6`(16) + 8 + 4 + 4.
+The likely sequence is `003` setting 48px, `012` later stopping the band at its own header, and
+nobody re-reading the result. **The operator's decision does not depend on which number is right:**
+all four clear WCAG 2.5.8's 24px AA target and fall short of 2.5.5's 44px, which is exactly the
+trade-off that was accepted. What needs correcting is the record, not the band.
+
+### 7.6 Eight phases say "not started" after shipping
+
+`000`, `001`, `002`, `003`, `004`, `005`, `010` and `013` all carry `completion_pct: 0` with a
+`recent_action` of "Phase cut… not started" or similar, while the lane journal records their edits
+and the working tree contains them. The continuity blocks were written at phase-cut time and never
+advanced. This is the same defect as the old §5 status table, one level down.
+
+### 7.7 Seven sheet surfaces, or nine
+
+Lane entry 47 and `003/spec.md` both say the single overlay fill covers "all **seven** sheet
+surfaces". `016` measured **nine** sheet-capable surfaces, all at the identical fill. Either two were
+added since the count was written or two were never counted. Low stakes — every surface measured
+matches — but the census number is quoted in three documents and only one of them counted.
+
+---
+
+## 8. EXECUTION ORDER — DECLARED, AND AS RUN
+
+**Declared:** `009 → 000 → 004 → 005 → 001 → 002 → 003 → 006 → 008`, with `007` off-path.
+
+**As run:** `000` (partial) → `004` → `005` → `002` → `001` → `003` → `010` → `003` → `013` → `014`
+→ `012` → `004`, read from the lane journal's acquire order, with `009` never gating a handoff and
+`006` never started.
+
+The declared order was an argument about circularity: `000` repairs the harness and would otherwise
+measure its own work through it, so `009` — the running app — had to come first. **That argument was
+never tested, because `009` did not run first.** Phases 010 through 017 were then cut in the order
+the operator reported them, which is a different scheduling principle entirely and was never written
+down.
+
+Two readings, and this file does not choose: either the declared order was wrong and report-driven
+scheduling is what this program actually does, or it was right and the program has been accruing the
+exact risk it was designed to avoid. **What settles it:** whether `016`'s live drag probe finds a
+defect the harness could have caught. That is the circularity argument's test case, arriving by
+accident.
+
+---
+
+<!-- ANCHOR:milestones-targets -->
+## 9. MILESTONES & TARGETS
+
+**Report 1 closed, the drag working on device:** phase Now, target: the operator drags a sheet down
+after editing a field. Status: **Mechanism fixed and measured; awaiting the device.** Evidence:
+`016/acceptance-criteria.md` — 60px drag moves 60.0px both fresh and after a re-render, against
+0.0px after a re-render before. This is the program's oldest defect and the only one re-reported
+three times; the check that would have caught it did not exist until now.
+
+**One green gate:** phase Next, target: after the next recapture. Status: Blocked. Evidence: the gate
+exits 1 at 12/13 on `screenshots-fresh`; `014` released the lane without recapturing and `004` holds
+it now.
+
+**Every orphan owned:** phase Now, target: complete. Status: **Done** — `018` and `019` created
+today. Evidence: §6.
+
+**Two operator decisions on the sheet:** phase Now. Status: Open. Evidence: `016` §2 — the phone row
+label measures 13px against a 12/14/16/18/20/24 scale, and the record sheet closes outright on a
+window resize, which is how one of the two software-keyboard signals arrives.
+
+**A known-inert declaration block left unfixed on purpose:** phase Later. Status: Deferred with a
+reason. Evidence: `016` §2 — `placeSheet` writes five camelCase declarations that Obsidian's
+`setCssProps` discards, and correcting the names would activate `overscroll-behavior: contain` for
+the first time on every sheet, which needs a recapture.
+
+**Sixteen operator confirmations:** phase Later, target: the operator installs 1.3.3 and reports per
+surface. Status: 1 of 16, and that one is an accepted shortfall. Evidence: §4.
+
+**Program closed:** phase Later. Status: Blocked on all of the above plus `008`'s release gate.
+Evidence: `spec.md` §7.
+<!-- /ANCHOR:milestones-targets -->
+
+---
+
+<!-- ANCHOR:dependencies -->
+## 10. DEPENDENCIES
+
+**The `styles.css` lane:** needed by every phase that paints. Owner: `004-checkbox-ownership`,
+acquired 2026-08-30T07:57:53Z. Status: Blocked for everyone else. Risk: it is 19,261 lines, must not
+be split, and all 196+ captures fingerprint it. Mitigation: `tools/lane/check-lane.mjs` makes the
+lane a check rather than an agreement, and it caught an unclaimed drift on 2026-08-30 (lane entry
+42).
+
+**A recapture:** needed by the gate. Owner: whoever holds the lane next. Status: Open. Risk: two
+phases owe one and each is waiting for the other's edits to settle. Mitigation: one recapture covers
+both, which is why the debt was deferred deliberately rather than forgotten.
+
+**The operator:** needed by every milestone in §9. Status: Open. Risk: fourteen reports are shipped
+and unconfirmed, so a regression in any of them would be found by the operator rather than by a
+check. Mitigation: 1.3.3 is built and installed.
+
+**Two open operator decisions:** `006`'s open target (side panel, full-page modal, or both behind a
+setting) and `017`'s status-bar announcement. Status: Open. Neither blocks other work.
+
+**Four concurrent agents:** owner: the operator. Status: Active. Risk: `004`, `005`, `016` and `017`
+are all mid-flight, and §7.1 exists because two of them measured the same thing differently.
+Mitigation: the lane, plus reading a phase's state rather than inheriting it.
+<!-- /ANCHOR:dependencies -->
+
+---
+
+## 11. THE SERIALIZED CSS LANE
+
+`styles.css` is 19,261 lines, must not be split, and every capture fingerprints it.
 
 **Exactly one phase holds the file at a time.** A phase releases the lane only after a full
 recapture **and a human looking at the changed PNGs** — `screenshots:verify` proves a capture was
@@ -76,29 +390,25 @@ regenerated, never that it looks right. `008` then re-runs the earlier phases' e
 later edit can reverse an earlier result with no compiler warning and 87 selectors in this file
 already do exactly that.
 
----
-
-## 5. STATUS
-
-| Phase | State | Next action |
-|---|---|---|
-| `000` | Planned | Invert the CI check that currently asserts the defect, then run the mount-point census by instrumentation |
-| `004` | Planned | Join all checkbox creation sites against every rule that could style one |
-| `005` | Planned | Sizing census across seven view types at four widths |
-| `001` | Planned | Overlay census by user-reachable trigger |
-| `002` | Planned | Count emitted vs laid-out children per breakpoint and condition |
-| `003` | Planned | Sheet census at runtime on a phone profile |
-| `006` | Planned | Trace all twenty open affordances to their six call paths |
-| `008` | Planned | Stand up the replay matrix before the first lane release |
-| `009` | Planned | **Runs first.** Prove `obsidian eval` round-trips a computed style, and that the probe reproduces a defect we already know exists |
-| `007` | Complete | 10 iterations + synthesis; findings folded into `000`, `008`, `009` |
+The lane journal is now the most reliable record in this program. It caught what the continuity
+blocks missed, and §4 and §5 are built on it.
 
 ---
 
-## 6. THE TRAP THAT OUTRANKS THE REST
+## 12. THE TRAPS THAT OUTRANK THE REST
 
-A CI check written during the previous attempt **asserts the defect**: it requires a widthless
+**A CI check that asserts the defect.** Written during the previous attempt: it requires a widthless
 caller to render wider than 320px, and it runs on every push. Fixing `001`'s width policy turns CI
 red. `000` inverts it before `001` starts.
 
-Assume there are others. A gate that has never failed has never been tested.
+**A check that has never failed has never been tested.** Report 1 is the standing proof: three fixes,
+three re-reports, and every check on the drag was a string match against source.
+
+**A rule's scope is not its name.** A touch-floor block decided `display` and put a phone-only
+control on the desktop (`018`). A `:not(shared-checkbox)` guard took placement with appearance
+(`014`). Both passed every check.
+
+**A derived number written in a comment goes stale silently.** `48 = button 24 + checkbox 16 + gap 8`
+was true when written, and nothing recomputed it when both controls grew to 28px.
+
+**A fixture with none of the thing in it measures nothing.** See §7.1.

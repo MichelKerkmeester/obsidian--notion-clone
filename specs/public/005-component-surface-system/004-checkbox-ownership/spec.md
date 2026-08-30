@@ -12,21 +12,25 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "public/005-component-surface-system/004-checkbox-ownership"
-    last_updated_at: "2026-08-29T14:00:00Z"
-    last_updated_by: "phase-author"
-    recent_action: "Phase cut from measured architecture findings; not started"
-    next_safe_action: "Join every checkbox creation site against every CSS rule that could style one"
+    last_updated_at: "2026-08-30T11:30:00Z"
+    last_updated_by: "design-agent"
+    recent_action: "Four verifier findings closed with a failing number, a fix and a negative control each: five families with no fixture, the borrowed-ancestor guard that passed on a broken tree, ten switches that lost their shape when moved, and a switch below the 28px target floor. The reorder button overlapping the row checkbox closed with them."
+    next_safe_action: "Open the sixteen changed PNGs and sign them off — the operator's defect is visible shape, and no machine in this repo has looked at an image"
     blockers: []
     key_files:
       - "spec.md"
       - "plan.md"
       - "tasks.md"
       - "checklist.md"
+      - "../../../../src/views/checkbox-family-coverage.test.ts"
+      - "../../../../src/views/checkbox-borrowed-ancestor.test.ts"
+      - "../../../../tools/storybook/verify-placement.mjs"
+      - "../../../../tools/screenshots/scenarios/shared.mjs"
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-004"
       parent_session_id: null
-    completion_pct: 0
+    completion_pct: 85
     open_questions: []
     answered_questions: []
 ---
@@ -52,7 +56,7 @@ _memory:
 | **Blocks** | nothing. It is deliberately off the overlay critical path |
 | **CSS lane** | holds `styles.css` for the checkbox rules |
 | **Priority** | P0 |
-| **Status** | Planned |
+| **Status** | In progress |
 | **Created** | 2026-08-29 |
 | **Branch** | `main` |
 | **Parent Spec** | `../spec.md` |
@@ -305,6 +309,34 @@ and the checkboxes were still round.
    compute `none` (B1).
 3. **Given** a coarse pointer, **When** any family's hit target is measured, **Then** it is at least
    28x28 (B6).
+
+
+### What was measured, and what it measures now
+
+Recorded 2026-08-30. Each line is a number taken from the tree before the fix, the fix, the number
+after it, and the control that showed the check could fail.
+
+| Finding | Before | After | Control |
+|---|---|---|---|
+| Families with a call site and no fixture | **5** of 15 (`db-board-subgroup-checkbox`, `db-gallery-group-checkbox`, `db-list-group-checkbox`, `db-selection-clear-checkbox`, `db-modal-checkbox`); the desktop `list-view` fixture rendered no checkbox at all while the renderer builds one at every width | **0**. Three scenarios added, `list-view` given its real row controls | Deleting one family from the fixture turns `checkbox-family-coverage.test.ts` red and names it |
+| Fixture and factory agree | not checked | checked by running `createCheckbox` and comparing the class list it composes | Dropping `db-checkbox` from the fixture helper reports 127 mismatches |
+| `checkbox-borrowed-ancestor.test.ts` is a control | **no** — re-keying the base rule to `.note-database-container .db-checkbox-cell input[type="checkbox"]`, the exact pre-fix defect, left it reporting **6 passed** | it now reads the stylesheet: every control must have an `appearance: none` rule whose subject is the control, and no unguarded ancestor may declare one | that same re-key now fails the self-owned assertion |
+| Live ancestor-keyed appearance rules | **1** of 7 (`.db-column-display-style-popover .db-toggle-switch`, a full duplicate that had drifted to a weaker border and a knob taken from the surface fill) | **0** — deleted, the popover inherits the one definition | the assertion names the selector when it returns |
+| Switches that lose a computed property when moved out of the container | **10 of 10** — `border-radius` 9999px inside, **0px** outside, so the pill became a square; `justify-self` lost on 6 of them | **0 of 10** | removing the `9999px` literal returns 10/10; re-scoping one alignment rule returns 2/10 |
+| Switch target under a coarse pointer | painted 34x18, reachable **34x18** against this phase's 28px floor | reachable **34x28**, painted box unchanged so no desktop capture moves | `inset: -5px` reached 26 and failed the same check, which is how the padding-box arithmetic was caught |
+| Reorder button against the row checkbox | desktop **-17px** gap in a 40px cell, phone **-14px** in a 49px cell — drawn on top of each other | desktop: no button rendered, matching a renderer that only creates it on touch; phone **+4px** in a 65px cell | the check reports the gap in pixels and goes negative the moment they touch |
+
+**Superseded numbers.** The reported switch target of 37x24 could not be reproduced: every
+measurement of the switch, settled and under a coarse pointer, reads 34x18. The control below the
+floor is the same one, and its height is 18 rather than 24.
+
+**Declined, with the shortfall stated.** The table's main-item cell measures 169x34 against WCAG
+2.5.5 AAA's 44px, 40px at the loosest density. The operator chose density: row height stays at 34px
+and no phone-only override is added, because raising it would override the reader's own density
+setting. WCAG 2.5.8 AA's 24px floor is met. `verify-placement` reports the 33px reach on every run.
+
+**Not closed.** No human has opened the sixteen changed PNGs. The operator's defect is visible
+shape and a machine that never looks at an image cannot close it.
 
 <!-- /ANCHOR:success-criteria -->
 ---

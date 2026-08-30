@@ -17,6 +17,8 @@ _memory:
     last_updated_by: "phase-author"
     recent_action: "Phase cut from measured architecture findings; not started"
     next_safe_action: "Run the sheet census on a phone profile at runtime; static grep misses the modals"
+    accepted_shortfalls:
+      - "Grab band 32px against the operator's 48px ask; accepted after the fit was measured"
     blockers: []
     key_files:
       - "spec.md"
@@ -568,3 +570,29 @@ after I commit a field, **so that** the keyboard does not cover the next field I
 - **Task Breakdown**: See [`tasks.md`](tasks.md)
 - **Verification Checklist**: See [`checklist.md`](checklist.md)
 - **Acceptance Criteria**: See [`acceptance-criteria.md`](acceptance-criteria.md)
+
+## OPERATOR DECISION — the grab band stops at 32px
+
+The operator asked for a drag band "at least 48px high and as wide as whole sheet header". It ships
+at 32px, full width. **The operator was shown the shortfall and accepted it.**
+
+This section first recorded 35px. A later phase measured the shipped build at 32px and derived it
+from the stylesheet as 16 + 8 + 4 + 4. The decision is unaffected — both clear the 24px AA target
+and miss the 44px AAA one — but the number the operator was shown was wrong, and saying so is
+cheaper than leaving two heights in the program's records.
+
+Why 48 does not fit. The band is anchored below the sheet's top edge so none of it is clipped, and
+the space above the header is all there is: the record sheet has 33px of chrome there, the owned-menu
+sheet 40px. Reaching 48px means a taller sheet header, which moves the content of all nine sheet
+surfaces down and forces a full recapture and re-review. The alternative — letting the band overlap
+the header — was rejected because it reintroduces exactly the defect this phase just fixed: the band
+previously ran 2-50px and answered presses aimed at the sheet title, which is also what hid the
+title's rename gesture and squeezed both 44px header actions down to 26px.
+
+What was actually wrong is fixed. The title takes its own presses again, both header actions measure
+44 of 44, and the band no longer competes with either. 32px clears the 24px WCAG 2.5.8 AA target and
+falls short of the 44px 2.5.5 AAA one; that gap is accepted, not unnoticed.
+
+The matching entry in the stylesheet lane's outstanding list should be marked accepted rather than
+open the next time that file is free — it is recorded here because the lane was held when the
+decision was made.
