@@ -116,12 +116,26 @@ export class ListRenderer {
   private rowDropFeedback = new DragDropFeedbackState();
   private emptyStateRenderer = new EmptyStateRenderer();
   private rovingController = new CardRovingController();
+  /**
+   * Whether this render is laying out for touch, decided once for the whole render.
+   *
+   * Read per row, this hangs the app. Deciding it means measuring the container, and measuring
+   * inside a loop that is also appending to that container forces the browser to lay out
+   * everything built so far, once per row — so the work grows with the square of the row count.
+   * Measured on a twenty-one property database: 1,600 rows took 7.2 seconds of blocked main
+   * thread, and 185ms once the measurement moved out of the loop.
+   *
+   * It is safe to decide once because nothing it reads — platform, pointer type, container width —
+   * can change while a synchronous render is running.
+   */
+  private touchMode = false;
 
   constructor(private app: App, private actions: ListRendererActions) {}
 
   render(container: HTMLElement, config: ViewConfig, rows: RowData[], emptyState?: EmptyStateOptions): void {
     this.clear(container);
     this.container = container;
+    this.touchMode = isTouchDevice(container);
     this.rowByPath = new Map(rows.map((row) => [row.file.path, row]));
     if (rows.length > 0) this.renderTotalHeader(container, rows);
     const list = this.createList(container, config);
@@ -142,6 +156,7 @@ export class ListRenderer {
   ): void {
     this.clear(container);
     this.container = container;
+    this.touchMode = isTouchDevice(container);
     this.rowByPath = new Map(groups.flatMap((group) => group.rows.map((row) => [row.file.path, row] as const)));
     const grouped = container.createDiv({ cls: "db-list-grouped" });
     let actionsRendered = false;
@@ -347,25 +362,39 @@ export class ListRenderer {
       const displayType = this.getDisplayType(config, col);
       const empty = this.isEmptyValue(value) && displayType !== "checkbox";
       const hidden = empty && config.showEmptyFields !== true;
-      const displayValue = empty ? this.getEmptyDisplayValue(col, displayType) : value;
-      const field = this.renderRowFieldContent(row, col, config, displayValue, displayType, empty);
+      const field = hidden
+        ? this.renderRowFieldPlaceholder(col, config)
+        : this.renderRowFieldContent(row, col, config, empty ? this.getEmptyDisplayValue(col, displayType) : value, displayType, empty);
       // The column this property owns, not the slot left by whichever siblings survived.
       field.style.gridColumn = String(index + 1);
-      if (hidden) {
-        // A property with no value keeps its place rather than leaving the row.
-        //
-        // Skipping it outright works on a grid, where the column is claimed by index and an absent
-        // field leaves its column empty. It does not work anywhere the row is laid out in flow: on
-        // a phone this same element is a wrapping flex line, where the nth surviving field takes
-        // the nth slot, and four properties were measured landing across fourteen different
-        // x-positions on twelve cards — Billing alone in six of them. Holding the place with a
-        // hidden field makes the column an index rather than a count, so it survives whichever
-        // layout the surface is in instead of only the one it was fixed for.
-        field.addClass("is-placeholder");
-        field.setAttr("aria-hidden", "true");
-      }
       meta.appendChild(field);
     }
+  }
+
+  /**
+   * The box an empty property leaves behind, holding its place without being rendered into.
+   *
+   * A property with no value has to keep its slot. Dropping it works on a grid, where the column
+   * is claimed by index and an absent field leaves its column empty, and fails anywhere the row is
+   * laid out in flow: on a phone this same element is a wrapping flex line, where the nth
+   * surviving field takes the nth slot, and four properties were measured landing across fourteen
+   * different x-positions on twelve cards — Billing alone in six of them.
+   *
+   * Holding the place with a whole hidden field also worked, and cost three nodes and a full value
+   * render for something nobody can see. On a database of twenty-one mostly-empty properties that
+   * was most of the row: 8,000 field elements where 2,400 carry a value. The width a field
+   * occupies comes from the custom property rather than from its contents, so an empty box of the
+   * same class reserves exactly the same slot for a third of the nodes.
+   */
+  private renderRowFieldPlaceholder(col: ColumnDef, config: ViewConfig): HTMLElement {
+    const spacer = window.activeDocument.createElement("div");
+    spacer.className = "db-list-field is-placeholder";
+    spacer.setAttribute("aria-hidden", "true");
+    // Mirrors what the field renderer puts on a real field, because the slot is sized from these
+    // and a placeholder that skipped them would hold a different width than the value it stands in for.
+    if (col.wrap) spacer.addClass("db-list-field-wrap");
+    else spacer.style.setProperty("--db-card-field-width", `${getFieldWidth(config, col)}px`);
+    return spacer;
   }
 
   private attachRowContextMenu(el: HTMLElement, row: RowData, context?: RowCreateContext): void {
@@ -435,7 +464,7 @@ export class ListRenderer {
 
   private setupGroupedRowDrag(item: HTMLElement, row: RowData, groupField?: string, groupKey?: string): void {
     if (!groupField || groupKey == null || this.actions.isReadOnly || !this.actions.moveRowsToGroup) return;
-    if (isTouchDevice(this.container)) return;
+    if (this.touchMode) return;
     item.draggable = true;
     item.addEventListener("dragstart", (event) => {
       if (isHTMLElement(event.target) && event.target.closest("input, select, textarea, button")) {
@@ -458,7 +487,7 @@ export class ListRenderer {
   }
 
   private setupReorderDrag(item: HTMLElement, config: ViewConfig, row: RowData, rows: RowData[], groupField?: string, groupKey?: string): void {
-    if (this.actions.isReadOnly || isTouchDevice(this.container) || !this.canManualReorder(config)) return;
+    if (this.actions.isReadOnly || this.touchMode || !this.canManualReorder(config)) return;
     item.draggable = true;
     item.addEventListener("dragstart", (event) => {
       if (isHTMLElement(event.target) && event.target.closest("input, select, textarea, button")) {

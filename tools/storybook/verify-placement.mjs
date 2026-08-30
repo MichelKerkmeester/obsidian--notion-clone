@@ -72,6 +72,10 @@ import { attachLongPress, isTouchDevice } from "${join(REPO, "src/data/touch-env
 import { attachTitleOpenAffordance, setupTitleCellTap } from "${join(REPO, "src/views/table-record-peek")}";
 import { openRecordDetailPanel } from "${join(REPO, "src/views/record-detail-panel")}";
 import { RowMenu } from "${join(REPO, "src/views/row-menu")}";
+import { CellRenderer } from "${join(REPO, "src/views/cell-renderer")}";
+import { ListRenderer } from "${join(REPO, "src/views/list-renderer")}";
+globalThis.__edit = { openRecordDetailPanel, closeRecordDetailPanel, CellRenderer };
+globalThis.__list = { ListRenderer };
 globalThis.__place = { positionToolbarPopover, getVisiblePopoverBounds, COMPACT_MENU_POPOVER, applySheetChrome, renderCardField, createOwnedMenu, createMenuRow, ToolbarRenderer, trackCellGesture, nextCellRange, resolveCellTapAction, isMainItemColumn, shouldExtendRowRange, applyRowSelectionPress, attachRowRangeGesture, isRowSelectionCheckbox, attachLongPress, isTouchDevice, attachTitleOpenAffordance, setupTitleCellTap, openRecordDetailPanel, RowMenu };
 globalThis.__p = { positionToolbarPopover, getVisiblePopoverBounds, setPosition, clamp, resolvePopoverHorizontalLeft, COMPACT_MENU_POPOVER, PANEL_POPOVER, createOwnedMenu, createMenuRow };
 globalThis.__drag = { openRecordDetailPanel, refreshRecordDetailPanel, applySheetChrome, positionToolbarPopover };
@@ -2568,6 +2572,146 @@ const rhythmResults = [];
 
 
 // ───────────────────────────────────────────────────────────────────
+// 5k. THE SAME TWO PROPERTIES, THROUGH THE RENDERER THAT SHIPS
+// ───────────────────────────────────────────────────────────────────
+//
+// 5j measures a fixture. The fixture writes its own markup and imports nothing, so it holds
+// whatever shape its author last typed and keeps reporting green while the renderer walks away
+// from it — which is exactly what happened: a change to how empty properties are built shipped
+// twice, and no check here could see it, because none of them run the renderer.
+//
+// So this asserts the same two properties against `ListRenderer` itself, at the shape the defect
+// was reported on rather than the four columns the fixture draws: twenty-one properties, each row
+// missing a different subset. Both surfaces, because the desktop row is a grid where `grid-column`
+// decides and the phone row is a wrapping flex line where it means nothing, and only one of those
+// was ever actually broken.
+//
+// It also counts the elements the renderer built, so a fix that restores alignment by rendering a
+// whole hidden field per empty property — three nodes and a value render for something invisible —
+// cannot pass this quietly. That shape is what took a 1,600-row list to seven seconds of blocked
+// main thread.
+
+const rendererRhythmResults = [];
+{
+  const sheets = ["tools/screenshots/theme.css", "styles.css", "tools/screenshots/runtime-vars.css"]
+    .map((file) => `<style>${readFileSync(join(REPO, file), "utf8")}</style>`).join("\n");
+  for (const device of [
+    { id: "desktop", viewport: VIEWPORT, bodyClass: "", touch: false },
+    { id: "phone", viewport: { width: 402, height: 874 }, bodyClass: "is-mobile is-phone", touch: true },
+  ]) {
+    const context = await browser.newContext({
+      viewport: device.viewport, reducedMotion: "reduce", hasTouch: device.touch, isMobile: device.touch,
+    });
+    const page = await context.newPage();
+    // `capture-element` matters more than it looks: the width cap that keeps the container inside the
+    // device lives on `html.capture-element #shot`, so a page carrying the custom property without
+    // the class is not bounded by anything. Measured without it the phone's field area came out
+    // 858px wide inside a 402px viewport — a width no phone has, on which any wrapping question
+    // answers itself wrongly. With it the same row measures 328px.
+    await page.setContent(`<!doctype html><html class="theme-light capture-element" style="--capture-max-width: ${device.viewport.width}px">`
+      + `<head><meta name="viewport" content="width=device-width, initial-scale=1">${sheets}</head>`
+      + `<body class="${device.bodyClass}"><div id="shot">`
+      + `<div class="note-database-container db-width-default"></div></div></body></html>`);
+    await page.addScriptTag({ content: shimJs + "\ninstallObsidianDomShim(globalThis);" });
+    await page.addScriptTag({ content: positionerJs });
+
+    const built = await page.evaluate(() => {
+      // Four, not the twenty-one of the reported database, because this measures x-positions and
+      // twenty-one of them do not fit on a phone: they wrap to three lines' worth of positions that
+      // every property shares, and a property then lands in one column whether the renderer claims
+      // it by index or by count. The check passes either way and has proved nothing. Four is the
+      // width at which the defect was measured, and the width at which dropping a field visibly
+      // pulls its successors left. Row count and column count for cost live in the bench.
+      const PROPERTIES = ["cost", "renew", "payment", "cycle"];
+      // Widths deliberately unequal: with every column the same width a slot claimed by index and
+      // one taken by count produce the same picture, and the measurement cannot tell them apart.
+      const WIDTHS = { cost: 110, renew: 190, payment: 150, cycle: 130 };
+      const columns = [{ key: "file.name", label: "Name", type: "text" }].concat(
+        PROPERTIES.map((key) => ({ key, label: key, type: "text", width: WIDTHS[key] })),
+      );
+      // Each row missing a different subset, spread so no two adjacent rows drop the same columns.
+      const rows = Array.from({ length: 12 }, (unused, r) => {
+        const frontmatter = {};
+        PROPERTIES.forEach((key, c) => { if ((r * 5 + c * 3) % 7 > 1) frontmatter[key] = `${key}-${r}`; });
+        return { file: { path: `notes/row-${r}.md`, basename: `row-${r}`, name: `row-${r}.md` }, frontmatter, computed: {} };
+      });
+      const config = { name: "Check", sourceFolder: "notes", schema: { columns, computedFields: [] } };
+      const actions = {
+        openRow: () => undefined, createEntry: () => undefined, isRowSelected: () => false,
+        toggleRowSelected: () => undefined, areAllRowsSelected: () => false,
+        toggleRowsSelected: () => undefined, editCell: () => undefined,
+        getColumns: () => columns, moveRowToPosition: () => undefined, isReadOnly: false,
+      };
+      const container = document.querySelector(".note-database-container");
+      new globalThis.__list.ListRenderer(undefined, actions).render(container, config, rows);
+      return { rows: rows.length, properties: PROPERTIES.length };
+    });
+
+    await page.waitForTimeout(250);
+    rendererRhythmResults.push(...await page.evaluate(({ id, built }) => {
+      const metas = [...document.querySelectorAll(".db-list-row-meta")];
+      const widths = [...new Set(metas.map((m) => Math.round(m.getBoundingClientRect().width)))];
+      // Grouped by label, so only properties that carry a value are compared. A placeholder has no
+      // label — it is a reserved box, not a rendered field, and has no position of its own to keep.
+      const byProperty = new Map();
+      for (const meta of metas) {
+        const origin = meta.getBoundingClientRect().left;
+        for (const field of meta.querySelectorAll(".db-list-field")) {
+          const label = (field.querySelector(".db-list-field-label")?.textContent || "").trim();
+          if (!label) continue;
+          if (!byProperty.has(label)) byProperty.set(label, new Set());
+          byProperty.get(label).add(Math.round(field.getBoundingClientRect().left - origin));
+        }
+      }
+      const spread = [...byProperty].map(([label, xs]) => [label, xs.size]);
+      const worst = spread.length ? Math.max(...spread.map(([, n]) => n)) : 0;
+      // How many properties share a line, which decides whether the alignment question is even
+      // askable here. A surface that fits one property per line puts every one of them at x=0
+      // whether the renderer claims a column by index or by count, so it answers "aligned" without
+      // ever having been able to answer anything else. Reported so that green is legible.
+      const perLine = Math.max(...metas.map((meta) => {
+        const rowsByTop = new Map();
+        for (const field of meta.querySelectorAll(".db-list-field")) {
+          const top = Math.round(field.getBoundingClientRect().top);
+          rowsByTop.set(top, (rowsByTop.get(top) || 0) + 1);
+        }
+        return Math.max(0, ...rowsByTop.values());
+      }), 0);
+      const askable = perLine >= 2
+        ? `${perLine} properties share a line here, so a shuffle would move one`
+        : `only ${perLine} property fits per line here, so every one sits at x=0 and this cannot`
+          + " show a shuffle — the column claim is load-bearing on the wider surface, not this one";
+      const placeholders = document.querySelectorAll(".db-list-field.is-placeholder").length;
+      const nodesInPlaceholders = [...document.querySelectorAll(".db-list-field.is-placeholder")]
+        .reduce((total, el) => total + el.querySelectorAll("*").length, 0);
+      return [
+        {
+          name: `on ${id} the renderer gives every list card the same field-area width`,
+          pass: metas.length === built.rows && widths.length === 1,
+          detail: `${metas.length} rendered cards, each missing a different subset of`
+            + ` ${built.properties} properties, take ${widths.length} distinct meta width(s):`
+            + ` ${widths.join("/")}px — this is the renderer's own output, not a fixture's`,
+        },
+        {
+          name: `on ${id} the renderer starts a property in the same column on every card`,
+          pass: metas.length === built.rows && worst === 1,
+          detail: `${spread.length} properties across ${metas.length} cards; worst lands in ${worst}`
+            + ` column(s). Skip the empty ones and the survivors shuffle up one slot each. ${askable}`,
+        },
+        {
+          name: `on ${id} a reserved column costs one element and no rendered content`,
+          pass: placeholders > 0 && nodesInPlaceholders === 0,
+          detail: `${placeholders} reserved columns hold ${nodesInPlaceholders} child element(s)`
+            + " — a full hidden field would carry a label and a value nobody can see, on every"
+            + " empty property of every row",
+        },
+      ];
+    }, { id: device.id, built }));
+    await context.close();
+  }
+}
+
+// ───────────────────────────────────────────────────────────────────
 // 5n. LIFTED FROM THE PHASE PROBES
 // ───────────────────────────────────────────────────────────────────
 //
@@ -3839,8 +3983,277 @@ const liftedResults = [];
   await page.close();
   }
 
+// ───────────────────────────────────────────────────────────────────
+// 5b. THE SHEET'S INLINE EDITOR — where the editor lands once a row is tapped
+// ───────────────────────────────────────────────────────────────────
+//
+// Every check above measures a surface at rest. The reported defect only exists
+// while a row is being edited, so this section drives the real thing: it opens
+// the record sheet, wires the sheet's editCell action to the shipped
+// CellRenderer, and taps a value the way a finger does. Nothing here builds an
+// editor by hand — a fixture that fakes the edit state would measure the
+// fixture.
+//
+// What comes back is not one editor but four, and only one of them is inline.
+// A number or currency cell gets `.db-cell-line-edit-popover`, sized and placed
+// against the value it replaces, which is the one a reader expects to sit on the
+// label's line. Text and date get a full-width overlay docked below the row, and
+// a select gets a list popover; those are deliberately different affordances and
+// are measured for containment rather than for alignment.
+//
+// The inline one is an absolutely positioned child of the sheet, not a flex
+// child of the row. That distinction decides the whole fix: an out-of-flow box
+// cannot make its row grow, so "the row contains the editor" has to be bought by
+// sizing the editor to the row rather than by letting the row stretch.
+
+const inlineEditResults = [];
+
+{
+  const results = [];
+  const record = (name, pass, detail) => results.push({ name, pass, detail });
+
+  const pageHtml = (phone) => `<!doctype html><html><head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    * { box-sizing: border-box; } body { margin: 0; }
+    .app-container { display: flex; width: 100vw; height: 100vh; }
+    .workspace { display: flex; width: 100%; }
+    .workspace-split.mod-root { flex: 1 1 auto; position: relative; overflow: hidden; }
+    .workspace-split.mod-right-split { width: ${SIDEBAR}px; flex: 0 0 ${SIDEBAR}px; background: #eee; }
+    .is-phone .workspace-split.mod-right-split { display: none; }
+    .note-database-container { position: relative; height: 100%; padding: 40px; }
+    .workspace-leaf { position: relative; contain: strict !important; overflow: hidden; isolation: isolate; }
+    .workspace-leaf, .workspace-leaf-content, .view-content { height: 100%; }
+    .app-container.mod-static-nav .workspace { height: calc(100% - 80px); }
+    .anchor { width: 120px; height: 28px; background: #ccd; }
+  </style></head>
+  <body class="${phone ? "is-phone " : ""}theme-light" style="--safe-area-inset-bottom: 34px; --background-modifier-border: #333333; --background-primary: #ffffff">
+    ${phone ? '<div class="mobile-navbar" style="position:fixed;left:0;right:0;bottom:0;height:72px;background:#222;z-index:100"></div>' : ""}
+    <div class="app-container${phone ? " mod-static-nav" : ""}"><div class="workspace"><div class="workspace-split mod-root">
+      <div class="workspace-leaf"><div class="workspace-leaf-content"><div class="view-content">
+      <div class="note-database-container"><div class="anchor" id="anchor"></div></div>
+      </div></div></div>
+    </div><div class="workspace-split mod-right-split"></div></div></div>
+  </body></html>`;
+
+  // Runs inside the page. Opens the sheet through the shipped opener, taps every
+  // editable value through the shipped renderer, and reports the geometry each
+  // tap produced. `hostileInputCss` is how a host stylesheet that inflates every
+  // input is simulated — Obsidian's own app.css is not loaded here, and on a real
+  // phone it makes this editor taller than the plugin's stylesheet alone does.
+  const measure = async (hostileInputCss) => {
+    const { openRecordDetailPanel, closeRecordDetailPanel, CellRenderer } = globalThis.__edit;
+    const row = {
+      file: { path: "33.md", basename: "Quarterly review", name: "33.md" },
+      frontmatter: { income: 4736.32, subs: 254.39, note: "Some text", when: "2026-08-20", status: "Active" },
+      computed: {},
+    };
+    const columns = [
+      { key: "file.name", label: "Name", type: "text" },
+      { key: "income", label: "Income", type: "number" },
+      { key: "subs", label: "Subscriptions", type: "currency" },
+      { key: "note", label: "Note", type: "text" },
+      { key: "when", label: "When", type: "date" },
+      { key: "status", label: "Status", type: "select", options: [{ value: "Active" }, { value: "Done" }] },
+    ];
+    // The renderer only needs a data source to save through, and nothing here saves.
+    const cellRenderer = new CellRenderer({ openNote() {}, getRows: () => [row] }, async () => {});
+
+    if (hostileInputCss) {
+      const style = document.createElement("style");
+      style.id = "hostile-host-css";
+      style.textContent = hostileInputCss;
+      document.head.appendChild(style);
+    }
+
+    closeRecordDetailPanel();
+    openRecordDetailPanel({
+      anchorEl: document.getElementById("anchor"),
+      host: document.querySelector(".note-database-container"),
+      row,
+      columns,
+      config: { viewType: "table", schema: { computedFields: [] }, titleField: "file.name" },
+      app: {},
+      actions: {
+        editCell: (target, r, col, event) => cellRenderer.startEdit(target, r, col, event),
+        openRow: () => {},
+        editFileName: () => {},
+        isReadOnly: false,
+      },
+    });
+
+    const panel = document.querySelector(".db-record-detail-panel");
+    const raf = () => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
+    // The sheet slides in. Measuring before it lands reads a moving rectangle.
+    await new Promise((r) => setTimeout(r, 450));
+    await raf();
+
+    const rect = (el) => {
+      const r = el.getBoundingClientRect();
+      return {
+        top: +r.top.toFixed(1), bottom: +r.bottom.toFixed(1), left: +r.left.toFixed(1),
+        height: +r.height.toFixed(1), centreY: +((r.top + r.bottom) / 2).toFixed(1),
+      };
+    };
+
+    const out = { isSheet: panel.classList.contains("db-mobile-bottom-sheet"), fields: [] };
+    for (const fieldRow of [...panel.querySelectorAll(".db-record-detail-field")]) {
+      const label = fieldRow.querySelector(".db-record-detail-field-label");
+      const value = fieldRow.querySelector(".db-board-card-value");
+      if (!label || !value) continue;
+      const valueAtRest = rect(value);
+
+      value.click();
+      await raf();
+      await new Promise((r) => setTimeout(r, 40));
+      await raf();
+
+      // Document-wide: the desktop panel hosts its editor on the container, the
+      // sheet hosts it on itself, and a check that looked in only one would find
+      // nothing on the other and read that as "no defect".
+      const editor = document.querySelector(".db-cell-edit-popover, .db-cell-option-popover")
+        || document.querySelector("input.db-cell-input, textarea.db-cell-input");
+      const input = editor ? (editor.matches("input, textarea") ? editor : editor.querySelector("input, textarea")) : null;
+      const rowRect = rect(fieldRow);
+      const labelRect = rect(label);
+      const editorRect = editor ? rect(editor) : null;
+
+      out.fields.push({
+        label: label.textContent,
+        cls: editor ? editor.className : "(no editor opened)",
+        inline: Boolean(editor && editor.classList.contains("db-cell-line-edit-popover")),
+        position: editor ? getComputedStyle(editor).position : null,
+        inFlowChildOfRow: Boolean(editor && fieldRow.contains(editor) && getComputedStyle(editor).position === "static"),
+        marginTop: editor ? getComputedStyle(editor).marginTop : null,
+        valueHeightAtRest: valueAtRest.height,
+        rowTop: rowRect.top, rowBottom: rowRect.bottom, rowHeight: rowRect.height,
+        labelCentreY: labelRect.centreY,
+        editorTop: editorRect ? editorRect.top : null,
+        editorBottom: editorRect ? editorRect.bottom : null,
+        editorHeight: editorRect ? editorRect.height : null,
+        inputHeight: input ? rect(input).height : null,
+        centreDelta: editorRect ? +(editorRect.centreY - labelRect.centreY).toFixed(1) : null,
+        overflowBelow: editorRect ? +(editorRect.bottom - rowRect.bottom).toFixed(1) : null,
+        overflowAbove: editorRect ? +(rowRect.top - editorRect.top).toFixed(1) : null,
+      });
+
+      document.dispatchEvent(new window.KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
+      await raf();
+    }
+    document.getElementById("hostile-host-css")?.remove();
+    return out;
+  };
+
+  const runOn = async (phone, hostileInputCss) => {
+    const page = await browser.newPage(phone
+      ? { viewport: { width: 390, height: 844 }, hasTouch: true, isMobile: true }
+      : { viewport: VIEWPORT });
+    await page.setContent(pageHtml(phone));
+    await page.addStyleTag({ content: readFileSync(join(REPO, "styles.css"), "utf8") });
+    await page.addScriptTag({ content: shimJs + "\ninstallObsidianDomShim(globalThis);" });
+    await page.addScriptTag({ content: positionerJs });
+    const out = await page.evaluate(measure, hostileInputCss);
+    await page.close();
+    return out;
+  };
+
+  // A host stylesheet the plugin does not control. Obsidian's app.css gives every
+  // input its own height, which is why the editor on a real phone is taller than
+  // the one this harness builds from styles.css alone. The number is a stress
+  // value, not a claim about what Obsidian sets — what it proves is that the fix
+  // holds as the input grows instead of only at the height measured here.
+  const HOSTILE = "input { min-height: 50px !important; padding: 14px 12px !important; }";
+
+  const phone = await runOn(true, null);
+  const phoneInflated = await runOn(true, HOSTILE);
+  const desktop = await runOn(false, null);
+
+  const inlineOf = (run) => run.fields.filter((f) => f.inline);
+  // A centre offset is wrong in either direction, so it is measured absolutely.
+  const worst = (rows, pick) => rows.reduce((a, f) => Math.max(a, Math.abs(pick(f))), 0);
+  // An overhang is only ever the positive excursion: an editor that stops short of
+  // the row's edge has not overflowed it, and measuring that absolutely would
+  // report the clearance as the defect.
+  const worstOverhang = (rows, pick) => rows.reduce((a, f) => Math.max(a, pick(f)), 0);
+
+  const sheetInline = inlineOf(phone);
+  const describe = (rows) => rows.map((f) => `${f.label}: row [${f.rowTop}..${f.rowBottom}] h=${f.rowHeight},`
+    + ` editor [${f.editorTop}..${f.editorBottom}] h=${f.editorHeight},`
+    + ` labelCentre=${f.labelCentreY} editorCentre=${(f.labelCentreY + f.centreDelta).toFixed(1)}`).join(" | ");
+
+  record("the sheet opens an inline editor on a number row",
+    phone.isSheet && sheetInline.length === 2,
+    `${sheetInline.length} of ${phone.fields.length} sheet rows opened .db-cell-line-edit-popover`
+      + ` (${phone.fields.map((f) => `${f.label}=${f.cls.replace("db-cell-edit-popover ", "")}`).join(", ")})`);
+
+  // Pinning the shape, because the fix depends on it. An out-of-flow editor is
+  // sized to its row; an in-flow one would let the row size itself, and the
+  // correction below would then be a double count.
+  record("the sheet's inline editor is an overlay, not a child of its row",
+    sheetInline.length > 0 && sheetInline.every((f) => f.position === "absolute" && !f.inFlowChildOfRow),
+    sheetInline.map((f) => `${f.label}: position=${f.position}, in-flow child of the row=${f.inFlowChildOfRow}`).join(" | "));
+
+  record("the sheet's inline editor sits on its label's centre line",
+    sheetInline.length > 0 && worst(sheetInline, (f) => f.centreDelta) <= 1,
+    `worst centre offset ${worst(sheetInline, (f) => f.centreDelta)}px (want <= 1px) — ${describe(sheetInline)}`);
+
+  record("the sheet's inline editor stays inside its row",
+    sheetInline.length > 0
+      && worstOverhang(sheetInline, (f) => f.overflowBelow) <= 1
+      && worstOverhang(sheetInline, (f) => f.overflowAbove) <= 1,
+    `worst overhang ${worstOverhang(sheetInline, (f) => f.overflowBelow)}px past the row's bottom edge and`
+      + ` ${worstOverhang(sheetInline, (f) => f.overflowAbove)}px past its top (want <= 1px each) — ${describe(sheetInline)}`);
+
+  record("the sheet's inline editor meets the 44px thumb floor",
+    sheetInline.length > 0 && sheetInline.every((f) => f.editorHeight >= 44),
+    `editor heights ${sheetInline.map((f) => `${f.label}=${f.editorHeight}px`).join(", ")} (want >= 44px,`
+      + ` the same floor the sheet's textarea editor already holds)`);
+
+  const inflated = inlineOf(phoneInflated);
+  record("the sheet's inline editor holds its row when the host inflates every input",
+    inflated.length > 0
+      && worst(inflated, (f) => f.centreDelta) <= 1
+      && worstOverhang(inflated, (f) => f.overflowBelow) <= 1
+      && worstOverhang(inflated, (f) => f.overflowAbove) <= 1,
+    `with ${HOSTILE} applied: worst centre offset ${worst(inflated, (f) => f.centreDelta)}px,`
+      + ` worst overhang ${worstOverhang(inflated, (f) => f.overflowBelow)}px below / ${worstOverhang(inflated, (f) => f.overflowAbove)}px above`
+      + ` (want <= 1px each); inner input measured ${inflated.map((f) => `${f.inputHeight}px`).join(", ")}`);
+
+  // The desktop guard. The anchored panel shares this markup and carries the same
+  // defect — a 34.8px editor top-aligned onto an 18.8px value inside a 26.8px row,
+  // so 8px below the label's line and 12px past the row. It is deliberately out of
+  // scope here, which makes "unchanged" the thing to prove, so its geometry is
+  // pinned to what was measured before this phase touched anything.
+  //
+  // Pinned to the defect's own numbers, deliberately. A later phase that fixes
+  // desktop has to update them, which is right: that is a change to a frozen
+  // surface and should not pass silently.
+  //
+  // The cheaper guard — assert the desktop editor's margin-top is still 0px — was
+  // written first and does not work. Unscoping both selectors, which is the mistake
+  // this exists to catch, still left margin-top reading 0px, because
+  // `--db-sheet-row-min-height` is declared only on the sheet and off it the whole
+  // declaration is invalid at computed-value time and falls back to the initial
+  // value. The input rule leaked anyway and shrank the desktop editor to 31px.
+  // Only measuring the rectangle sees that.
+  const DESKTOP_FROZEN = { height: 34.8, centreDelta: 8, overflowBelow: 12 };
+  const desktopInline = inlineOf(desktop);
+  const frozen = (f) => Math.abs(f.editorHeight - DESKTOP_FROZEN.height) <= 0.5
+    && Math.abs(f.centreDelta - DESKTOP_FROZEN.centreDelta) <= 0.5
+    && Math.abs(f.overflowBelow - DESKTOP_FROZEN.overflowBelow) <= 0.5;
+  record("the desktop record panel's editor geometry is frozen by this phase",
+    desktopInline.length > 0 && desktopInline.every(frozen),
+    `want height ${DESKTOP_FROZEN.height}px, centre offset ${DESKTOP_FROZEN.centreDelta}px, overhang`
+      + ` ${DESKTOP_FROZEN.overflowBelow}px (+-0.5px each); measured `
+      + desktopInline.map((f) => `${f.label} ${f.editorHeight}/${f.centreDelta}/${f.overflowBelow}`).join(", ")
+      + ` — ${describe(desktopInline)}`);
+
+  inlineEditResults.push(...results);
+}
+
 results.push(...phoneResults, ...menuResults, ...addViewDesktopResults, ...addViewPhoneResults, ...desktopMenuResults, ...cellResults, ...sheetResults, ...selectCellResults, ...rowPhoneResults, ...rowNarrowResults,
-  ...familyResults, ...touchResults, ...overlapResults, ...rhythmResults, ...liftedResults);
+  ...familyResults, ...touchResults, ...overlapResults, ...rhythmResults, ...rendererRhythmResults,
+  ...liftedResults, ...inlineEditResults);
 
 await browser.close();
 rmSync(work, { recursive: true, force: true });
