@@ -23,19 +23,43 @@
 // ───────────────────────────────────────────────────────────────────
 
 import { createMenuRow, createMenuSection, createMenuSeparator, MenuRowOptions } from "./menu-row";
-import { clamp, getVisiblePopoverBounds, setPosition } from "./popover-position";
+import { applySheetChrome, attachSheetDragToDismiss } from "./mobile-bottom-sheet";
+import {
+  clamp,
+  getVisiblePopoverBounds,
+  isMobileBottomSheet,
+  placeSheet,
+  setPosition,
+} from "./popover-position";
 
 // ───────────────────────────────────────────────────────────────────
 // 2. TYPES
 // ───────────────────────────────────────────────────────────────────
+
+/**
+ * Where a menu should open.
+ *
+ * A cursor and a trigger button are not the same request, and collapsing them into a point is what
+ * made three call sites write the same four lines: measure the anchor, add the downward gap, throw
+ * the anchor away. Flipping then had nothing left to flip against — it subtracted the menu's height
+ * from a y that already sat below the trigger, so an upward flip landed the menu's bottom edge
+ * below the trigger's bottom edge and covered the control the menu belongs to.
+ *
+ * Passing the anchor keeps the information the flip needs. A point stays a point: for a context
+ * menu the cursor really is the whole request, and a menu whose bottom edge meets the cursor on an
+ * upward flip is correct there.
+ */
+export type OwnedMenuTarget =
+  | { x: number; y: number }
+  | { anchor: HTMLElement };
 
 export interface OwnedMenuHandle {
   el: HTMLElement;
   addRow(options: MenuRowOptions): HTMLElement;
   addSection(label: string): void;
   addSeparator(): void;
-  /** Open at a point — the equivalent of showAtMouseEvent / showAtPosition. */
-  showAt(point: { x: number; y: number }): void;
+  /** Open at a cursor point, or anchored under a trigger element. */
+  showAt(target: OwnedMenuTarget): void;
   close(): void;
 }
 
@@ -62,7 +86,13 @@ export function createOwnedMenu(
   el.setAttr("role", "menu");
   el.setAttr("tabindex", "-1");
 
+  // The menu's own window, not the global one: Obsidian can host this plugin in a popped-out
+  // window, where `window` belongs to the main one and an animation frame scheduled against it
+  // fires against a document this menu is not in.
+  const view = doc.defaultView || window;
+
   let open = true;
+  let releaseDrag: (() => void) | undefined;
 
   const rows = (): HTMLElement[] =>
     Array.from(el.querySelectorAll<HTMLElement>(".db-menu-item:not([disabled])"));
@@ -72,6 +102,12 @@ export function createOwnedMenu(
     open = false;
     doc.removeEventListener("pointerdown", onOutside, true);
     doc.removeEventListener("keydown", onKeydown, true);
+    releaseDrag?.();
+    releaseDrag = undefined;
+    // Take the sheet chrome down before the node goes, not after: the backdrop is a sibling on the
+    // body rather than a child, so removing the menu alone would leave the whole app dimmed behind
+    // a surface that is no longer there.
+    if (el.hasClass("db-mobile-bottom-sheet")) applySheetChrome(el, false);
     el.remove();
     options.onClose?.();
     options.returnFocus?.focus({ preventScroll: true });
@@ -126,20 +162,80 @@ export function createOwnedMenu(
     addSeparator() {
       createMenuSeparator(el);
     },
-    showAt(point) {
-      // Measure before clamping: the menu's height is only known once its rows exist.
-      const bounds = getVisiblePopoverBounds(null);
-      const rect = el.getBoundingClientRect();
-      const left = clamp(point.x, bounds.left + 4, Math.max(bounds.left + 4, bounds.right - rect.width - 4));
-      const flipUp = point.y + rect.height > bounds.bottom - 4;
-      const top = flipUp
-        ? clamp(point.y - rect.height, bounds.top + 4, bounds.bottom - 4)
-        : clamp(point.y, bounds.top + 4, Math.max(bounds.top + 4, bounds.bottom - rect.height - 4));
+    showAt(target) {
+      // A phone gets the sheet, and the target is discarded.
+      //
+      // Every caller names a cursor or a trigger, and on a phone neither answer is usable: a menu
+      // placed at a touch point covers the row it belongs to and runs off whichever edge is
+      // nearest. Discarding the target here rather than at the fourteen call sites is what lets
+      // both shapes reach the sheet from one change — and a design that served only one of them
+      // would have left half the menus wrong.
+      if (isMobileBottomSheet(doc)) {
+        // The backdrop takes the tap on this surface. A menu dismisses on an outside press, so an
+        // inert backdrop means the press that closes the menu also lands on the table underneath
+        // and starts editing a cell on the way out.
+        applySheetChrome(el, true, { scrimCapturesPointer: true });
+        placeSheet(el);
+        if (!el.hasClass("is-visible")) {
+          el.addClass("db-overlay-enter");
+          view.requestAnimationFrame(() => {
+            if (el.isConnected) el.addClass("is-visible");
+          });
+        }
+        const handle = el.querySelector<HTMLElement>(".db-mobile-bottom-sheet-handle");
+        if (handle) releaseDrag = attachSheetDragToDismiss(el, handle, close);
+      } else {
+        const bounds = getVisiblePopoverBounds(null);
+        const margin = 4;
 
-      el.setCssProps({ position: "fixed" });
-      setPosition(el, left, top, undefined, 0, 0);
+        // Cap before measuring, not after.
+        //
+        // A menu with no height cap grows to fit every row it holds, so its measured height is the
+        // height of its content and the clamp below is handed a number larger than the screen. A
+        // sixty-row menu measured 1808px against a 900px editing area and ran 912px past the
+        // bottom edge, with its last rows off screen and unreachable by pointer or keyboard.
+        // Capping first is also what makes the vertical clamp well-formed: once the height cannot
+        // exceed the available space, `bounds.bottom - height - margin` is always at or above
+        // `bounds.top + margin`, so there is no case where the clamp has to invert.
+        //
+        // The panel path has written maxHeight and overflowY on every placement since it was
+        // written. This is the same policy, and the menus not having it is the whole reason the
+        // two families disagreed about what happens to a long list.
+        el.setCssProps({
+          position: "fixed",
+          maxHeight: `${Math.max(120, bounds.height - margin * 2)}px`,
+          overflowY: "auto",
+          overscrollBehavior: "contain",
+        });
+
+        const rect = el.getBoundingClientRect();
+        const height = rect.height;
+        const anchorRect = "anchor" in target && target.anchor.isConnected
+          ? target.anchor.getBoundingClientRect()
+          : undefined;
+
+        let originX: number;
+        let top: number;
+        if (anchorRect) {
+          // Anchored: the menu sits under its trigger, and flips to sit above it — clearing the
+          // trigger on both sides rather than covering it.
+          originX = anchorRect.left;
+          const below = anchorRect.bottom + margin;
+          top = below + height > bounds.bottom - margin ? anchorRect.top - margin - height : below;
+        } else {
+          const point = target as { x: number; y: number };
+          originX = point.x;
+          top = point.y + height > bounds.bottom - margin ? point.y - height : point.y;
+        }
+
+        const left = clamp(originX, bounds.left + margin, Math.max(bounds.left + margin, bounds.right - rect.width - margin));
+        setPosition(el, left, clamp(top, bounds.top + margin, Math.max(bounds.top + margin, bounds.bottom - height - margin)), undefined, 0, 0);
+      }
       rows()[0]?.focus({ preventScroll: true });
 
+      // One owner for dismissal, on both presentations. The sheet's backdrop is a rectangle, not a
+      // handler: a press on it is an outside press like any other and arrives here, so there is no
+      // second path that could close the menu twice or leave it half-closed.
       doc.addEventListener("pointerdown", onOutside, true);
       doc.addEventListener("keydown", onKeydown, true);
     },

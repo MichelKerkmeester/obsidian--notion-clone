@@ -1298,7 +1298,9 @@ export class FormulaModal extends DbModal {
         this.hideSuggestions();
         return;
       }
-      this.showSuggestionBox();
+      // Fill, then place. Placing an empty box measures its `min-width` rather than the width the
+      // rows give it, so the clamp that keeps its right edge inside the field is computed from a
+      // number that is about to change.
       for (const col of matches) {
         const item = this.propertySuggestEl.createEl("button", { cls: "db-formula-property-suggestion" });
         renderPropertyTypeIcon(item, col, "db-formula-property-suggestion-icon");
@@ -1306,6 +1308,7 @@ export class FormulaModal extends DbModal {
         item.createSpan({ text: this.getFormulaFieldReference(col) });
         item.onclick = () => this.insertProperty(openIndex, cursor, col);
       }
+      this.showSuggestionBox();
       this.activateFirstSuggestion();
       return;
     }
@@ -1323,13 +1326,13 @@ export class FormulaModal extends DbModal {
       this.hideSuggestions();
       return;
     }
-    this.showSuggestionBox();
     for (const fn of matches) {
       const item = this.propertySuggestEl.createEl("button", { cls: "db-formula-property-suggestion" });
       item.createSpan({ text: fn.name });
       item.createSpan({ text: fn.signature });
       item.onclick = () => this.replaceRange(cursor - functionMatch[1].length, cursor, fn.signature);
     }
+    this.showSuggestionBox();
     this.activateFirstSuggestion();
   }
 
@@ -1339,10 +1342,22 @@ export class FormulaModal extends DbModal {
       this.hideSuggestions();
       return;
     }
-    const pos = this.estimateCaretPosition();
-    this.propertySuggestEl.setCssProps({ left: `${pos.left}px`, top: `${pos.top + 4}px` });
-    this.suggestionIndex = -1;
+    // Reveal first, then measure. The box is `display: none` until `is-visible`, and a
+    // display-none element measures zero — so any width read before this line describes nothing
+    // and the clamp below would silently do nothing.
     this.propertySuggestEl.addClass("is-visible");
+    const pos = this.estimateCaretPosition();
+    // Keep the box's RIGHT edge inside the field, not only its left edge.
+    //
+    // `estimateCaretPosition` already stops `left` at the textarea's own width, which bounds the
+    // corner the box STARTS at and says nothing about the corner it ends at. With the caret near
+    // the right of a wide field the box ran 169px past its container, and nothing in the placement
+    // or the stylesheet brought it back: the CSS caps the box's width, which does not move it.
+    const container = this.propertySuggestEl.parentElement;
+    const available = container?.clientWidth ?? this.textarea.clientWidth;
+    const left = Math.max(0, Math.min(pos.left, available - this.propertySuggestEl.offsetWidth));
+    this.propertySuggestEl.setCssProps({ left: `${left}px`, top: `${pos.top + 4}px` });
+    this.suggestionIndex = -1;
   }
 
   private hideSuggestions(): void {

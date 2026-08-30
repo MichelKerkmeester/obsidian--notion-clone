@@ -26,7 +26,7 @@ import { t } from "../i18n";
 import { renderPropertyTypeIcon } from "./property-type-icon";
 import { createDropdownField, DropdownOption } from "./dropdown-field";
 import { installPopoverAutoClose } from "./popover-auto-close";
-import { positionToolbarPopover } from "./popover-position";
+import { clamp, getVisiblePopoverBounds, positionToolbarPopover } from "./popover-position";
 import { getTextLinkSchemeChoice, TEXT_LINK_SCHEME_MENU_OPTIONS, TextLinkSchemeChoice } from "../data/text-link-scheme-menu";
 import { createOwnedMenuForEvent, OwnedMenuHandle } from "./owned-menu";
 
@@ -210,8 +210,7 @@ export class ColumnMenu {
     }
 
     if (anchorEl?.isConnected) {
-      const rect = anchorEl.getBoundingClientRect();
-      menu.showAt({ x: rect.left, y: rect.bottom + 4 });
+      menu.showAt({ anchor: anchorEl });
     } else {
       menu.showAt({ x: event.clientX, y: event.clientY });
     }
@@ -604,8 +603,27 @@ export class ColumnMenu {
       });
     } else {
       const point = "clientX" in evt ? { x: evt.clientX, y: evt.clientY } : undefined;
-      const view = doc.defaultView || window;
-      if (point) panel.setCssProps({ position: "fixed", left: `${Math.max(8, Math.min(point.x + 8, view.innerWidth - estimatedWidth - 8))}px`, top: `${Math.max(8, Math.min(point.y - 8, view.innerHeight - 320))}px` });
+      // The editing area, not the window.
+      //
+      // This clamped against `innerWidth`, which is the whole application including both sidebars,
+      // so a submenu opened near the right of the editing area was placed 188px underneath an open
+      // right sidebar and was simply not visible. `getVisiblePopoverBounds` is the one answer to
+      // "how far right may a surface go" that the anchored path has always used; the window is a
+      // different question and it is never the right one here.
+      //
+      // Passing `panel` rather than null derives the document from the surface itself, which
+      // matters when Obsidian hosts the plugin in a popped-out window.
+      const bounds = getVisiblePopoverBounds(panel);
+      // The height was a hardcoded 320, an assumption about a panel that sizes itself from its
+      // rows. Measuring it means a tall submenu is lifted enough to actually fit.
+      const height = panel.getBoundingClientRect().height || 320;
+      if (point) {
+        panel.setCssProps({
+          position: "fixed",
+          left: `${clamp(point.x + 8, bounds.left + 8, Math.max(bounds.left + 8, bounds.right - estimatedWidth - 8))}px`,
+          top: `${clamp(point.y - 8, bounds.top + 8, Math.max(bounds.top + 8, bounds.bottom - height - 8))}px`,
+        });
+      }
     }
     removeAutoClose = installPopoverAutoClose({ panel, anchorEl, close: cleanup });
     this.activeSubmenuCleanup = cleanup;

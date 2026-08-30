@@ -119,10 +119,40 @@ export function positionToolbarPopover(
     boxSizing: "border-box",
     overflowY: "auto",
     overscrollBehavior: "contain",
+    // Cleared on every open, because a surface hidden for a dead anchor (see `place`) is reopened
+    // against a live one and must come back. This is the setup path, so it runs once per open
+    // rather than once per animation frame.
+    visibility: "",
   });
 
+  // Assigned to `cleanup` once that exists. `place` runs synchronously below, before the
+  // `const cleanup` binding is initialised, so naming `cleanup` directly inside `place` would
+  // throw on the very first call.
+  let teardown: (() => void) | undefined;
+
   const place = () => {
-    if (!panel.isConnected || !anchorEl.isConnected) return;
+    // Resolved once: the answer cannot change within a single placement, and calling it again after
+    // the first setPosition has dirtied layout forces a second flush for a value already known.
+    const containingBlock = fixedContainingBlock(panel);
+    if (!panel.isConnected) return;
+    // An anchor that has been removed cannot be measured, so there is no coordinate this function
+    // could write that means anything. Returning quietly — which is what this used to do — leaves
+    // the surface painted at wherever the anchor last was, over content that has since been
+    // rebuilt underneath it, still focusable and still accepting input. The filter panel reaches
+    // this: its date picker commits a draft on every segment edit, the commit refreshes the panel,
+    // and the refresh destroys the trigger button while the picker itself is mounted on the
+    // container and survives.
+    //
+    // Hiding is the same answer `openSurface`'s own `place()` already gives, and it is the
+    // conservative one: `visibility: hidden` takes the surface out of hit-testing, out of the tab
+    // order and out of the accessibility tree without deciding, on the owner's behalf, that the
+    // surface should be destroyed. The reposition loop goes with it, because a removed node is
+    // never reconnected here — a rebuild produces a new node, so this anchor is gone for good.
+    if (!anchorEl.isConnected) {
+      panel.setCssProps({ visibility: "hidden" });
+      teardown?.();
+      return;
+    }
 
     const savedPanelScroll = panel.scrollTop;
 
@@ -137,34 +167,12 @@ export function positionToolbarPopover(
       maxHeight: "",
     });
     if (mobileSheet) {
-      // A sheet sits on the viewport floor, covering the host's bottom navigation bar.
-      //
-      // These two lines used to be `innerHeight - bounds.bottom`, and the bounds this reads
-      // deliberately subtract the navigation bar and the safe-area inset — right for an anchored
-      // popover, which must stay clear of both, and wrong for a sheet, whose whole purpose is to
-      // cover them. On a phone that arithmetic came to 106px, so the sheet was parked that far
-      // above the bottom edge and appeared to start above the bar.
-      //
-      // No portal and no z-index is involved: `position: fixed` is resolved against the viewport,
-      // and the host bar declares no stacking order of its own.
-      panel.style.setProperty("--db-mobile-sheet-bottom", "0px");
-      panel.setCssProps({
-        left: "0px",
-        right: "0px",
-        top: "auto",
-        bottom: "0px",
-        width: "100%",
-        maxWidth: "100%",
-        // Cap at 90% of the small viewport. The stylesheet asks for 90svh, but this inline value
-        // wins, so the ceiling has to be applied here too or the rule never takes effect. `svh`
-        // is the viewport with the browser chrome shown, which is the height a sheet actually gets.
-        maxHeight: `${Math.min(Math.max(160, bounds.height - margin * 2), view.innerHeight * 0.9)}px`,
-      });
+      placeSheet(panel, { margin, bounds });
       panel.scrollTop = savedPanelScroll;
       return;
     }
 
-    setPosition(panel, bounds.left + margin, bounds.top + margin, undefined, 0, 0);
+    setPosition(panel, bounds.left + margin, bounds.top + margin, containingBlock, 0, 0);
     const panelRect = panel.getBoundingClientRect();
     const measuredWidth = Math.min(panelRect.width || width, maxWidth);
     const naturalHeight = Math.max(panel.scrollHeight, panelRect.height || 0);
@@ -188,7 +196,7 @@ export function positionToolbarPopover(
         panel,
         anchorLeft,
         bounds.top + margin,
-        undefined,
+        containingBlock,
         0,
         0
       );
@@ -205,7 +213,7 @@ export function positionToolbarPopover(
       panel,
       anchorLeft,
       clamp(top, bounds.top + margin, bounds.bottom - renderedHeight - margin),
-      undefined,
+      containingBlock,
       0,
       0
     );
@@ -237,11 +245,76 @@ export function positionToolbarPopover(
     visualViewport?.removeEventListener("scroll", schedule);
     if (positionCleanups.get(panel) === cleanup) positionCleanups.delete(panel);
   };
+  teardown = cleanup;
   view.addEventListener("resize", schedule);
   ownerDocument.addEventListener("scroll", schedule, true);
   visualViewport?.addEventListener("resize", schedule);
   visualViewport?.addEventListener("scroll", schedule);
   positionCleanups.set(panel, cleanup);
+}
+
+// ───────────────────────────────────────────────────────────────────
+// 4b. SHEET PLACEMENT
+// ───────────────────────────────────────────────────────────────────
+
+/**
+ * Dock a surface to the bottom of the phone screen, full width, capped in height.
+ *
+ * Lives here rather than inside the anchored positioner because two families of surface present as
+ * this sheet and only one of them has an anchor. Panels reach it through `positionToolbarPopover`;
+ * menus place themselves from a point and cannot call that function at all. While the arithmetic
+ * sat inside the anchored branch, the menus had no way to reach it, which is the whole reason a
+ * phone menu rendered as a desktop dropdown running off both edges of the screen. Copying the six
+ * lines into the menu would have made two answers to "where does a sheet sit", and this program has
+ * already paid for that once.
+ *
+ * A sheet sits on the viewport floor, covering the host's bottom navigation bar. `bottom` used to
+ * be `innerHeight - bounds.bottom`, and the bounds this reads deliberately subtract the navigation
+ * bar and the safe-area inset — right for an anchored popover, which must stay clear of both, and
+ * wrong for a sheet, whose whole purpose is to cover them. On a phone that arithmetic came to
+ * 106px, so the sheet was parked that far above the bottom edge.
+ *
+ * The height cap is 90% of the space the sheet can occupy. `svh` is the viewport with the browser
+ * chrome shown, which is the height a sheet actually gets. Capping is also what makes a tall menu
+ * scroll inside the sheet instead of growing past the screen, so the scroll properties belong to
+ * the same statement rather than to whichever caller remembers them.
+ *
+ * Two ceilings are stated, here and in the stylesheet, and the stylesheet's is the one that binds.
+ * An author `!important` outranks an author inline declaration, so `90svh !important` wins over
+ * anything written to `panel.style` — measured at 759.6px computed against 714px inline on a 844px
+ * screen, and asserted in `verify-placement` so the pair cannot silently drift apart. This is worth
+ * stating plainly because it reads backwards: inline usually wins, and a reader who assumes it does
+ * will conclude that lowering the cap for a keyboard has to happen here, when in fact only the
+ * stylesheet's `calc` can lower it.
+ */
+export function placeSheet(
+  panel: HTMLElement,
+  options: { margin?: number; bounds?: DOMRect } = {},
+): void {
+  const margin = options.margin ?? 12;
+  const view = panel.ownerDocument.defaultView || window;
+  const bounds = options.bounds ?? getVisiblePopoverBounds(null);
+  // Zero in every case the previous hardcoded "0px" covered, so the floor behaviour is unchanged
+  // whenever no keyboard is open. The stylesheet's `bottom` rule reads this variable and carries
+  // `!important`, so the lever was already wired — it was simply always written zero, and the
+  // re-placement that a visual-viewport event triggers recomputed the same zero every time.
+  const keyboard = keyboardInset(view, panel.ownerDocument);
+  panel.style.setProperty("--db-mobile-sheet-bottom", `${keyboard}px`);
+  panel.setCssProps({
+    position: "fixed",
+    left: "0px",
+    right: "0px",
+    top: "auto",
+    bottom: `${keyboard}px`,
+    width: "100%",
+    maxWidth: "100%",
+    boxSizing: "border-box",
+    overflowY: "auto",
+    overscrollBehavior: "contain",
+    // Less whatever the keyboard covers: raising the bottom edge without lowering the cap pushes a
+    // tall sheet off the top of the screen instead of clearing the keyboard.
+    maxHeight: `${Math.min(Math.max(160, bounds.height - margin * 2), (view.innerHeight - keyboard) * 0.9)}px`,
+  });
 }
 
 // ───────────────────────────────────────────────────────────────────
@@ -283,6 +356,85 @@ export function resolvePopoverHorizontalLeft(
     if (left >= minLeft) return left;
   }
   return clamp(aligned, minLeft, maxLeft);
+}
+
+/**
+ * The rect a `position: fixed` descendant of `el` is laid out against.
+ *
+ * Normally that is the viewport, which is why the four callers outside this module hand
+ * `setPosition` a container rect of their own and this one historically passed `undefined`.
+ * Obsidian breaks the assumption: `.workspace-leaf` carries `contain: strict`, and paint
+ * containment makes an element the containing block for its fixed descendants. A popover mounted
+ * inside the leaf and given a viewport coordinate is then displaced by the leaf's own origin —
+ * measured at 244px outside the editing area with one sidebar open.
+ *
+ * `offsetParent` cannot answer this: the spec has it return null for a fixed-position element. So
+ * the ancestors are walked for the properties that establish such a containing block. The list was
+ * checked against the browser rather than against documentation — every property below was
+ * confirmed to establish one, and `contain: size`, `contain: style`, `overflow`, `isolation` and
+ * `opacity` were confirmed not to. `container-type` does not establish one in Chromium, which is
+ * what Obsidian ships, so it is deliberately absent.
+ *
+ * The walk returns the first match. A property missing from the list under-corrects, which is the
+ * safe direction. Overshooting is possible and has one known cause, handled below: the root element
+ * is exempt from the filter family, and matching it there displaces a surface by the document's
+ * scroll offset in the wrong direction. Two more would overshoot if they were ever reachable — an
+ * inline non-replaced box and a table row do not become containing blocks however they are styled,
+ * and this reads computed style without checking the box type. No current mount point puts a
+ * surface under either.
+ *
+ * It does not follow that a body-mounted surface takes an untouched path. Obsidian sets
+ * `contain: strict` on `body` as well as on the leaf, so this returns body's rect rather than
+ * undefined for every portalled surface. That is a numeric no-op only because body sits at the
+ * origin with no border, which is worth knowing before anyone gives body a margin.
+ *
+ * It stops at a shadow boundary, because `parentElement` does. A surface mounted inside a shadow
+ * root would under-correct by the host's offset; the surface vocabulary already names `shadowRoot`
+ * as a mount, so that is a gap waiting rather than a hypothetical.
+ *
+ * Scroll offsets are not passed to `setPosition` here. The leaf does not scroll, so the correction
+ * is exact today; the first time a match is a scrolling container it will be wrong by its scroll
+ * position, and that is what the two unused parameters are for.
+ */
+function fixedContainingBlock(el: HTMLElement): DOMRect | undefined {
+  const view = el.ownerDocument.defaultView;
+  if (!view?.getComputedStyle) return undefined;
+  for (let node = el.parentElement; node; node = node.parentElement) {
+    const style = view.getComputedStyle(node);
+    // The root element is exempt from the filter family: a filter on `<html>` applies to the canvas
+    // and does not make the root a containing block, while `contain` and `transform` on it still do.
+    // Without the exemption a themed `html { filter: invert(1) }` displaces every surface by the
+    // document's scroll offset — measured at 300px, and in the wrong direction, which is the one
+    // outcome this walk is supposed to be unable to produce.
+    const isRoot = node === el.ownerDocument.documentElement;
+    const filterish = !isRoot && (style.filter !== "none" || style.backdropFilter !== "none");
+    const willChange = isRoot
+      ? /\b(transform|translate|rotate|scale|perspective|contain)\b/.test(style.willChange || "")
+      : /\b(transform|translate|rotate|scale|perspective|filter|backdrop-filter|contain)\b/.test(style.willChange || "");
+    const establishes =
+      style.transform !== "none" ||
+      // The individual transform properties are not folded into `transform`, so each has to be read.
+      style.translate !== "none" ||
+      style.rotate !== "none" ||
+      style.scale !== "none" ||
+      style.perspective !== "none" ||
+      // `filter` is not covered by `backdrop-filter` and this stylesheet puts both on popovers, but
+      // neither counts on the root — see above.
+      filterish ||
+      style.contentVisibility === "auto" ||
+      style.contentVisibility === "hidden" ||
+      willChange ||
+      /\b(paint|layout|strict|content)\b/.test(style.contain || "");
+    if (!establishes) continue;
+    // The containing block is the padding box; getBoundingClientRect gives the border box. Vanilla
+    // Obsidian draws no border on the leaf, but themes do, and the difference is a silent offset of
+    // exactly the border width that reads as sloppiness rather than as a bug.
+    const rect = node.getBoundingClientRect();
+    const left = rect.left + parseFloat(style.borderLeftWidth || "0");
+    const top = rect.top + parseFloat(style.borderTopWidth || "0");
+    return new DOMRect(left, top, rect.width, rect.height);
+  }
+  return undefined;
 }
 
 export function setPosition(
@@ -331,7 +483,57 @@ export function getVisiblePopoverBounds(container: HTMLElement | null): DOMRect 
   return new DOMRect(left, top, right - left, bottom - top);
 }
 
-function isMobileBottomSheet(doc: Document): boolean {
+/**
+ * Does this document present overlays as phone bottom sheets?
+ *
+ * Exported so the menu path asks the same question the panel path does. A second predicate would
+ * drift from this one, and the two families would disagree about what a phone is on exactly the
+ * devices nobody tests.
+ */
+export /**
+ * How much of the layout viewport a software keyboard is covering, in CSS pixels.
+ *
+ * The host is the primary source and this is not a preference. Obsidian listens to the platform's
+ * own keyboard events and publishes the height as `--keyboard-height` on the document element, then
+ * places its own mobile toolbar and shrinks its app container from that same number. A surface that
+ * measured the keyboard some other way would sit on a different figure from the host chrome beside
+ * it, and the two would visibly disagree for the length of the keyboard animation.
+ *
+ * It also explains why a sheet never moved. The host does not resize the WebView — `body` stays at
+ * `100vh` and `.app-container` is capped instead. A sheet portalled to `body` is that container's
+ * sibling, so it inherits none of the shrink and stays docked to a floor that is now behind the
+ * keyboard.
+ *
+ * The visual viewport is a fallback rather than a replacement, for the frame before the variable is
+ * written and for any host that never writes one. The two are combined with `max` because they are
+ * observations of a single physical thing, so whichever notices first is the right answer.
+ *
+ * The visual viewport also shrinks under pinch-zoom, which is not a keyboard. `scale` separates the
+ * two cases; without that guard, zooming lifts the sheet off the floor for no reason.
+ */
+function keyboardInset(view: Window, doc: Document): number {
+  let host = 0;
+  if (view.getComputedStyle) {
+    const declared = parseFloat(
+      view.getComputedStyle(doc.documentElement).getPropertyValue("--keyboard-height") || "0",
+    );
+    if (Number.isFinite(declared)) host = Math.max(0, declared);
+  }
+  const visual = view.visualViewport;
+  const observed = visual && visual.scale <= 1.01
+    ? Math.max(0, view.innerHeight - visual.height - visual.offsetTop)
+    : 0;
+  return Math.max(host, observed);
+}
+
+/**
+ * Does this document present overlays as phone bottom sheets?
+ *
+ * Exported so the menu path asks the same question the panel path does. A second predicate would
+ * drift from this one, and the two families would disagree about what a phone is on exactly the
+ * devices nobody tests.
+ */
+export function isMobileBottomSheet(doc: Document): boolean {
   if (doc.body.classList.contains("is-phone")) return true;
   const view = doc.defaultView;
   const touchPoints = typeof navigator !== "undefined" ? navigator.maxTouchPoints : 0;
