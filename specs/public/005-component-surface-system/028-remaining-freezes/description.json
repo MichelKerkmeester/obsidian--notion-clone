@@ -1,4 +1,5 @@
 {
+  "level": "1",
   "specFolder": "public/005-component-surface-system/028-remaining-freezes",
   "description": "Six freeze reports across five surfaces resolve to one shared trigger and one unbounded render; the previous fix closed one of three instances of the",
   "keywords": [
@@ -19,7 +20,7 @@
     "three",
     "instances"
   ],
-  "lastUpdated": "2026-08-30T16:59:32.682Z",
+  "lastUpdated": "2026-08-30T19:15:18.638Z",
   "specId": "028",
   "folderSlug": "remaining-freezes",
   "parentChain": [
@@ -27,6 +28,5 @@
     "005-component-surface-system"
   ],
   "memorySequence": 0,
-  "memoryNameHistory": [],
-  "level": "1"
+  "memoryNameHistory": []
 }

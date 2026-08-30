@@ -10,10 +10,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "public/005-component-surface-system/027-sheet-menu-grammar-and-motion"
-    last_updated_at: "2026-08-30T18:00:00Z"
-    last_updated_by: "phase-author"
-    recent_action: "Shipped; row grammar, submenu layer, sheet drag and entrance all measured"
-    next_safe_action: "Operator opens the column menu on their phone and tracks one left edge down it"
+    last_updated_at: "2026-08-30T21:20:00Z"
+    last_updated_by: "goal-reconcile"
+    recent_action: "Criteria re-read against the 220/224 capture; 13 of 14 met, only the operator row open"
+    next_safe_action: "Operator opens the column menu on a phone, tracks one left edge, taps Change type"
     blockers: []
     key_files:
       - "spec.md"
@@ -93,6 +93,15 @@ and nowhere else. A shared row is only shared down to the last property it actua
 - [x] Reduced motion lands the sheet at rest with nothing running, backdrop included.
 - [ ] The operator opens the column menu on their phone, tracks one left edge down it, taps
       `Change type…` and gets a submenu.
+      **Open, and no check can close it.** Every machine-checkable half of this row is already green
+      in the 2026-08-30 capture (`220/224 geometry checks passed, 4 red for a declared reason`):
+      `column menu: every label starts at the same x` reads **1 distinct label x-position(s) across
+      17 rows [45]**; `a row that opens a submenu carries a chevron and says so` reads `"Change
+      type" chevron=true aria-haspopup=listbox`; and `a submenu opened from a sheet is in front of
+      that sheet and its backdrop` reads `submenu z=1000 scrim z=999 sheet z=1000`. What is left is
+      the part a harness cannot supply — the operator's own device, their own database, their own
+      hand. Writing a check for it would only re-measure the emulator that is already green, which
+      is the substitution this packet was opened over. It stays unticked until they say so.
 <!-- /ANCHOR:completion -->
 
 ---
@@ -132,9 +141,9 @@ transition belongs to the state being moved to.
 | Dividers | Shipped, verified | 12/12 between, 0/5 trailing, inset tracks the row shape |
 | Submenu layer | Shipped, verified | z 110 → 1000 above a 999 backdrop, plus a hit test |
 | Sheet drag | Shipped, verified | Gesture-driven, not a source grep |
-| Entrance | Shipped, verified | 477 → 313 at 60ms → 0 at 460ms; and 0 movement under reduced motion |
+| Entrance | Shipped, verified | 477 → **315** at 60ms → 0 at 460ms, on `transform 0.26s ease-out`; and 0 running animations under reduced motion. The 60ms sample is read from the 2026-08-30 capture, which supersedes the 313 written here from an earlier run |
 | Harness host-blindness | Closed | Obsidian's `button` rule loaded on all 17 pages |
-| Gate | 13 of 14 green | The red is `comments`, from another agent's untracked `tools/bench/` files |
+| Gate | Dated | 13 of 14 green when this phase shipped, the red `comments`, from another agent's untracked `tools/bench/` files. `CHECKS` carries 16 entries today (`tools/gate.mjs:40-67`) and this session did not re-run it; a shared-gate number against a tree several sessions are editing describes none of them |
 | Operator confirmation | Open | — |
 
 ### Deviations and findings

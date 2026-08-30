@@ -9,10 +9,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "public/005-component-surface-system/026-production-render-assertions"
-    last_updated_at: "2026-08-30T17:45:00Z"
-    last_updated_by: "goal-authoring"
-    recent_action: "Goal authored from the 007 harvest; failing numbers measured, nothing built"
-    next_safe_action: "Build control N1 before AC-1, so the first assertion is falsifiable first"
+    last_updated_at: "2026-08-30T21:20:00Z"
+    last_updated_by: "goal-reconcile"
+    recent_action: "Criteria audited against the tree; 8 of 9 met with file:line, N5 clean form open"
+    next_safe_action: "Re-run N5 on a freshly stamped tree: drop the entry, require gate exit 0"
     blockers: []
     key_files:
       - "spec.md"
@@ -21,11 +21,11 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-026-goal"
       parent_session_id: null
-    completion_pct: 0
+    completion_pct: 95
     open_questions:
-      - "Does the coverage ratchet belong in the gate or in the evidence stamp"
       - "Is the embed's thinner action bag a defect or intentional"
-    answered_questions: []
+    answered_questions:
+      - "Ratchet placement: the check enforces it (fails before stamping) and the stamp dates it"
 ---
 # Goal: Production Render Assertions
 
@@ -71,29 +71,80 @@ appear in no gate entry.
 <!-- ANCHOR:completion -->
 ## 2. COMPLETION CRITERIA
 
-- [ ] A gate check constructs a renderer imported from `src/views/` and asserts a thresholded
+> Ticks below are settled by reading the tree at `f64dd87`, cited by `file:line`. The
+> `render-assertions` lane is not in the 2026-08-30 placement capture — that capture is
+> `verify-placement`, a different lane — so no number here is carried from it.
+
+- [x] A gate check constructs a renderer imported from `src/views/` and asserts a thresholded
       property of what it builds. Today **0 of 14**. The threshold is not "14 → 15": adding a line to
       `CHECKS` is trivially satisfiable and proves nothing.
-- [ ] `TableRenderer` and `ListRenderer` are both constructed by that check. Today 2 of 22
+      **Met.** `render-assertions` → `node tools/live/render-assertions.mjs` is a `CHECKS` entry
+      (`tools/gate.mjs:67`, 16 entries today); the harness it bundles imports both renderers from
+      `src/views/` (`tools/live/render-assertion-harness.ts:33-34`) and asserts named thresholds —
+      `layoutReads <= MAX_LAYOUT_READS`, bound **8** (`:72`, `:517-521`), and `rowAppends === 0`
+      (`:541-548`).
+- [x] `TableRenderer` and `ListRenderer` are both constructed by that check. Today 2 of 22
       importable, 0 reached by a gate.
-- [ ] Both hosts' action bags drive the same renderer in one run, and a bag missing a member the
+      **Met.** `new ListRenderer(app, bag)` at `tools/live/render-assertion-harness.ts:504` and
+      `new TableRenderer(bag)` at `:531`, driven by the four scenarios at
+      `tools/live/render-assertions.mjs:58-61`.
+- [x] Both hosts' action bags drive the same renderer in one run, and a bag missing a member the
       renderer calls **fails rather than passing quietly**. Today 0 of 2. The file view's bag has 26
       members and the embed's 18, differing by nine — `openRecordDetail` among them, which is the
       row-click behaviour the list exists for.
-- [ ] Deleting one row-level affordance from the renderer's output makes an assertion go red, naming
+      **Met.** The four scenarios at `tools/live/render-assertions.mjs:58-61` are both bags × both
+      renderers in one run. A bag that loses a member fails twice over: the pinned bag-shape diff
+      reports `missing …` and pushes a failure (`:237-243`), and the file-view row-click assertion
+      returns false when `bag.openRecordDetail` is not a function
+      (`tools/live/render-assertion-harness.ts:429-437`). The precise census is 26/19 with eight
+      file-view-only members, not 26/18 with nine — `acceptance-criteria.md` §2 AC-3 footnote.
+- [x] Deleting one row-level affordance from the renderer's output makes an assertion go red, naming
       the affordance.
-- [ ] **Feeding the check a fixture DOM in place of renderer output fails**, with a message that says
+      **Met.** Both affordance assertions are per-row counts whose names carry the affordance:
+      `row open affordance is one per row` compares `button.db-list-row-open` against `rows.length`
+      (`tools/live/render-assertion-harness.ts:376-380`), and `row checkbox affordance is one per
+      row` does the same for `input.db-list-row-checkbox` (`:381-385`). Deleting either drives the
+      count to 0 against a non-zero row count. Observed as N1, `acceptance-criteria.md` §3.
+- [x] **Feeding the check a fixture DOM in place of renderer output fails**, with a message that says
       so. This is the load-bearing control: every other criterion could be satisfied by a harness that
       photographs a fixture and calls it a render.
-- [ ] The check is red on `173819e^` and green on the fixed tree. It asserts the **shape**, not a
+      **Met.** The render call itself sets `data-production-render` on the container it built into
+      (`tools/live/render-assertion-harness.ts:224`, `:236`); `provenanceResult` is the first
+      assertion and refuses anything else with "refusing DOM without a bundled-renderer marker"
+      (`:255-267`); every other assertion is gated behind `results[0].pass` (`:518`, `:540`).
+      Observed as N2, `acceptance-criteria.md` §3.
+- [x] The check is red on `173819e^` and green on the fixed tree. It asserts the **shape**, not a
       timing threshold — the bench already owns the 2,000ms budget and duplicating it would create
       two systems for one number.
-- [ ] Renderer coverage is published as a number out of 22 and cannot decrease.
-- [ ] A green run **states in its own output what it does not prove**: no Obsidian host constructed,
+      **Met.** The asserted property is a read count against a fixed bound, not a millisecond
+      budget: `layoutReads <= MAX_LAYOUT_READS` with `MAX_LAYOUT_READS = 8`
+      (`tools/live/render-assertion-harness.ts:72`, `:517-521`). The two-tree observation is N3 in
+      `acceptance-criteria.md` §3 — red at `173819e^` (`f27da7f`), "1600 layout reads during render,
+      bound 8"; green at `845a27c`, "2 layout reads during render, bound 8". Carried from that
+      record, which is the only place it exists.
+- [x] Renderer coverage is published as a number out of 22 and cannot decrease.
+      **Met.** `tools/live/renderer-coverage.json` publishes `"constructed": 2, "total": 22`, and
+      the total is recomputed each run by counting `src/views/*.ts` files that export a `*Renderer`
+      (`tools/live/render-assertions.mjs:256-260`). The ratchet exits 1 **before** stamping when
+      `constructed < published` (`:266-272`). Observed as N6, `acceptance-criteria.md` §3.
+- [x] A green run **states in its own output what it does not prove**: no Obsidian host constructed,
       no device, and `App` absent so vault-resolving fields render unresolved.
+      **Met.** All three exclusions print on the pass path, in the runner's own words, at
+      `tools/live/render-assertions.mjs:300-302`.
 - [ ] All six controls N1-N6 observed failing and recorded with the command that produced each,
       including N5 — removing the new `CHECKS` entry must leave `npm run gate` at exit 0, which is
       what stops "the gate has 15 checks" from being satisfied by a check that runs nothing.
+      **Not met, and nothing that exists settles it.** N1-N4 and N6 are recorded with their commands
+      in `acceptance-criteria.md` §3; N5's only recorded run exited 1 on four reds owned by
+      concurrent sessions, which measures those sessions rather than the entry.
+      **The check that would settle it:** on a tree where `npm run gate` is independently green —
+      every `tools/live/*.json` artefact freshly stamped and no `src/` or `styles.css` edit in
+      flight — delete only the `render-assertions` entry from `CHECKS` (`tools/gate.mjs:67`), run
+      `npm run gate >log 2>&1; echo $?`, and require **exit 0 with 15 of 15 checks green**; then
+      restore the entry against its recorded sha256 and require **exit 0 with 16 of 16**. The
+      measured quantity is the gate's exit status with and without the entry; the threshold is 0 in
+      both runs. Any other exit code on the 15-check run leaves AC-1 measured against the file
+      rather than against the entry, which is the substitution N5 exists to rule out.
 <!-- /ANCHOR:completion -->
 
 ---
@@ -121,6 +172,21 @@ dispatch, about a view kind being selected, or about anything either host does a
 builds. That gap belongs to `009` and to the device. The runner says so in its own output on every
 green run.
 
+### The half this covers, and the half it does not
+
+The lane constructs `ListRenderer` and `TableRenderer`, and both sources are declared inputs of the
+stamp (`tools/live/renderer-coverage.json`), so a change to either dates the artefact and the gate
+notices. That is **2 of the 22** `src/views/*.ts` files exporting a `*Renderer`, and it is the first
+check in this packet's history to build a production renderer at all — the founding failure, closed
+in one direction.
+
+The other direction is open and should not be read as covered. `board-renderer.ts`,
+`gallery-renderer.ts`, `calendar-renderer.ts` and `calendar-timeline-renderer.ts` have **no
+production-renderer assertion of any kind**. A row-loop regression in any of them is invisible to
+the gate in exactly the way the list's was, and those are the views the operator reports freezing
+(`../028-remaining-freezes/spec.md` §1). D3 makes 2 a floor rather than a failure — it cannot go
+down — but a floor is not coverage.
+
 ### Progress
 
 | Item | State | Evidence |
@@ -128,7 +194,7 @@ green run.
 | Assertion runner | Built | `tools/live/render-assertions.mjs` + `tools/live/render-assertion-harness.ts`; 40 assertions green at `845a27c` |
 | Gate entry | Built | `render-assertions` at `tools/gate.mjs:67`; red at `173819e^` proves it can fail |
 | Both action bags | Exercised | 2 of 2; both bags drive both renderers; difference printed by name on every run |
-| Six controls | Run | N1-N4 and N6 red as specified, recorded verbatim in `acceptance-criteria.md` §3; N5 reds attributed to concurrent-session movement, clean form pending the CSS lane landing |
+| Six controls | 5 of 6 | N1-N4 and N6 red as specified, recorded verbatim in `acceptance-criteria.md` §3. N5 has no clean observation: its only run exited 1 on four reds owned by concurrent sessions, so it measured those rather than the entry. The criterion states the run that would settle it |
 | Coverage number | 2 of 22 | `tools/live/renderer-coverage.json` through the evidence stamp; ratchet enforced by the check |
 
 ### Deviations and findings

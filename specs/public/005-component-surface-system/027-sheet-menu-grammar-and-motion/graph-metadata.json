@@ -3,7 +3,6 @@
   "packet_id": "public/005-component-surface-system/027-sheet-menu-grammar-and-motion",
   "spec_folder": "public/005-component-surface-system/027-sheet-menu-grammar-and-motion",
   "parent_id": "public/005-component-surface-system",
-  "status_review_required": true,
   "children_ids": [],
   "manual": {
     "depends_on": [],
@@ -204,7 +203,7 @@
     ],
     "causal_summary": "Six operator reports against one surface. The shared menu row reached every one of them and was still centred on a device, because it never declared the one property the host's button rule supplies.",
     "created_at": "2026-08-30T16:52:15.458Z",
-    "last_save_at": "2026-08-30T16:52:15.458Z",
+    "last_save_at": "2026-08-30T19:15:39.392Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -215,10 +214,10 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:1592868e8ffecfd232b4ed887e181229715300692946fb0b10bb153bdbd68109",
+    "source_fingerprint": "sha256:92b884741abc4f25fc83e0eb09ac8638ca23d844cb4dbcc158f6fddc8ca538a7",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "d6a6709e0241fc2469d3afdd1a0fcc1b2fe0c803f5c262eb943f6056913be1d2",
+      "spec.md": "3d839910160052e1f0a1495b53edab8dddf58c6f0311ca55acef17b054ec4dc8",
       "plan.md": "d87eb7c560cd9a7d8e92ee6449b4fc8d372be5b54fc00582d2e63acba6d3edaf",
       "tasks.md": "608c88c6b192d8e7f2c44f8326e8555d533e23ffca991a0bffe3a1b9e2d9179b",
       "implementation-summary.md": "f07c13a74ae28b553a086cfb57652e1e5f22b082e323ce0cc71fae47aa555ece"

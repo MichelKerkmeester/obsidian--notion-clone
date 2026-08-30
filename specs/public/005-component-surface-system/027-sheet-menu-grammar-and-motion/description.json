@@ -1,4 +1,5 @@
 {
+  "level": "3",
   "specFolder": "public/005-component-surface-system/027-sheet-menu-grammar-and-motion",
   "description": "Six operator reports against one surface.",
   "keywords": [
@@ -9,7 +10,7 @@
     "one",
     "surface"
   ],
-  "lastUpdated": "2026-08-30T16:52:11.494Z",
+  "lastUpdated": "2026-08-30T19:13:05.688Z",
   "specId": "027",
   "folderSlug": "sheet-menu-grammar-and-motion",
   "parentChain": [
@@ -17,6 +18,5 @@
     "005-component-surface-system"
   ],
   "memorySequence": 0,
-  "memoryNameHistory": [],
-  "level": "3"
+  "memoryNameHistory": []
 }

@@ -13,10 +13,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "public/005-component-surface-system/027-sheet-menu-grammar-and-motion"
-    last_updated_at: "2026-08-30T18:00:00Z"
-    last_updated_by: "phase-author"
-    recent_action: "Shipped; gate 13 of 14 green, one red owned by another agent's files"
-    next_safe_action: "Operator confirmation on a phone"
+    last_updated_at: "2026-08-30T21:20:00Z"
+    last_updated_by: "goal-reconcile"
+    recent_action: "Criteria re-read against the 220/224 capture; 13 of 14 met, only the operator row open"
+    next_safe_action: "Operator opens the column menu on a phone, tracks one left edge, taps Change type"
     blockers: []
     key_files:
       - "goal.md"
