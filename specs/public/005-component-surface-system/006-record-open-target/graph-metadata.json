@@ -39,19 +39,21 @@
       "path"
     ],
     "importance_tier": "critical",
-    "status": "planned",
+    "status": "in_progress",
     "key_files": [
       "spec.md",
       "plan.md",
       "tasks.md",
       "acceptance-criteria.md",
       "goal.md",
+      "implementation-summary.md",
       "checklist.md",
+      "src/views/database-view.ts",
+      "tools/lane/css-lane.json",
       "src/views/table-record-peek.ts",
       "src/data/types.ts",
       "src/settings.ts",
       "src/data/data-source.ts",
-      "src/views/database-view.ts",
       "tools/storybook/verify-placement.mjs"
     ],
     "entities": [
@@ -86,9 +88,27 @@
         "source": "derived"
       },
       {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
         "name": "checklist.md",
         "kind": "doc",
         "path": "checklist.md",
+        "source": "derived"
+      },
+      {
+        "name": "database-view.ts",
+        "kind": "code",
+        "path": "src/views/database-view.ts",
+        "source": "derived"
+      },
+      {
+        "name": "css-lane.json",
+        "kind": "config",
+        "path": "tools/lane/css-lane.json",
         "source": "derived"
       },
       {
@@ -113,12 +133,6 @@
         "name": "data-source.ts",
         "kind": "code",
         "path": "src/data/data-source.ts",
-        "source": "derived"
-      },
-      {
-        "name": "database-view.ts",
-        "kind": "code",
-        "path": "src/views/database-view.ts",
         "source": "derived"
       },
       {
@@ -186,23 +200,11 @@
         "kind": "proper_noun",
         "path": "plan.md",
         "source": "derived"
-      },
-      {
-        "name": "Parallel Opportunities",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
-      },
-      {
-        "name": "Task Breakdown",
-        "kind": "proper_noun",
-        "path": "tasks.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "On desktop, clicking Open in the table shows a small card listing properties",
     "created_at": "2026-08-29T12:52:42.102Z",
-    "last_save_at": "2026-08-30T16:54:06.943Z",
+    "last_save_at": "2026-08-30T18:33:11.995Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -210,14 +212,16 @@
       "plan.md",
       "tasks.md",
       "acceptance-criteria.md",
-      "goal.md"
+      "goal.md",
+      "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:497297f24b2b2a3bf6bd9b9d29b3f5d7c990c57c25d65a551a7f6c58d96cfcc3",
+    "source_fingerprint": "sha256:7fb8da17bc4a596942f1f5b9812fd90a5dd477e4ac0ddddf54f2c6e11a066de8",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "6b4f340928d9f3dade42ba4bc2d57164bb1e6aa5c41a451af15c0677033c2e1e",
+      "spec.md": "6ac9a34fea5150fcfb9941f19f1c198e692fb46a8de4d31548f877f9a25a91ac",
       "plan.md": "f8632745f580cd1359b7b6c3b70117ffaa16d2b828572c19f14ba237c287ba13",
-      "tasks.md": "4207d3b5d3cb9eb211997f31594f23ab4fe71405b2ba8f0792ac5cd226034d06"
+      "tasks.md": "4207d3b5d3cb9eb211997f31594f23ab4fe71405b2ba8f0792ac5cd226034d06",
+      "implementation-summary.md": "2cdbef01841def8ad776c0ccf2fd15189610d6096a6d2ab28e39eaf53b1fef4b"
     },
     "last_active_child_id": null,
     "last_active_at": null

@@ -13,13 +13,14 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "public/005-component-surface-system/005-content-row-rhythm"
-    last_updated_at: "2026-08-30T11:30:00Z"
-    last_updated_by: "design-agent"
-    recent_action: "Raggedness closed on phone: an empty property now holds its column, not the row"
-    next_safe_action: "Decide the header rail: seven declaration blocks + mask reversal, untouched"
+    last_updated_at: "2026-08-30T18:40:00Z"
+    last_updated_by: "summary-author"
+    recent_action: "List rows shipped over three lane cycles; the header rail is untouched and unmeasured"
+    next_safe_action: "Collapse the rail's 9 blocks, resolve the mask reversal, then re-run the census"
     blockers: []
     key_files:
       - "spec.md"
+      - "implementation-summary.md"
       - "plan.md"
       - "tasks.md"
       - "checklist.md"
@@ -77,7 +78,7 @@ the factory. This phase blocks nothing and runs while the overlay lane is occupi
 | **Blocks** | nothing; it runs while the overlay lane is occupied |
 | **CSS lane** | holds `styles.css` for the sizing contract and the rail deduplication |
 | **Priority** | P0 |
-| **Status** | In progress — list rows done, header rail not started |
+| **Status** | In progress — list rows landed and instrumented, the header rail untouched |
 | **Created** | 2026-08-29 |
 | **Branch** | `main` |
 | **Parent Spec** | `../spec.md` |

@@ -13,14 +13,16 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "public/005-component-surface-system/006-record-open-target"
-    last_updated_at: "2026-08-29T15:00:00Z"
-    last_updated_by: "phase-author"
-    recent_action: "Phase cut from the peek-card defect; open-path census recorded; not started"
-    next_safe_action: "Take the target-policy decision with the operator; the census is already recorded in this spec"
+    last_updated_at: "2026-08-30T18:40:00Z"
+    last_updated_by: "summary-author"
+    recent_action: "Found shipped: desktop Open opens the note and the peek left z-index 998"
+    next_safe_action: "Take the target-policy decision with the operator; no further code before it"
     blockers:
       - "Depends on 003-mobile-sheet-presentation for the phone answer"
+      - "T5, the target-policy decision, is unmade and gates every remaining task"
     key_files:
       - "spec.md"
+      - "implementation-summary.md"
       - "plan.md"
       - "tasks.md"
       - "checklist.md"
@@ -28,7 +30,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-006"
       parent_session_id: null
-    completion_pct: 0
+    completion_pct: 15
     open_questions:
       - "Side panel, full-page modal, or both behind the setting"
     answered_questions: []
@@ -73,7 +75,7 @@ another container-bound panel and A3 cannot pass. This phase is last and blocks 
 | **Blocks** | nothing; it is last |
 | **CSS lane** | holds `styles.css` for the peek retirement and the target surface's rules |
 | **Priority** | P0 |
-| **Status** | Planned |
+| **Status** | In progress — desktop Open and the peek layer landed under `002`'s lane hold; the setting, the resolver and every measurement are outstanding |
 | **Created** | 2026-08-29 |
 | **Branch** | `main` |
 | **Parent Spec** | `../spec.md` |
