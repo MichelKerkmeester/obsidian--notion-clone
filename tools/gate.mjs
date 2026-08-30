@@ -45,6 +45,11 @@ const CHECKS = [
   { name: "naming", cmd: ["node", "tools/naming/scan-naming.mjs"] },
   { name: "pinned-values", cmd: ["node", "tools/screenshots/scan-pinned-values.mjs"] },
   { name: "css-lane", cmd: ["node", "tools/lane/check-lane.mjs"] },
+  // The censuses date themselves against the files they measured, and until this line existed
+  // nothing asked. Seven of the eight were stale, one of them holding a checkbox count the roadmap
+  // quoted as evidence for work that had already changed it. The stamping mechanism was built, the
+  // artefacts carried their fingerprints, and the gate simply never read them.
+  { name: "evidence", cmd: ["node", "tools/live/evidence.mjs", "--check-all"] },
   // Runs here, not only at release. Every phase edits the same stylesheet in turn, so a result
   // measured green three phases ago describes a tree that no longer exists unless something checks.
   { name: "replay", cmd: ["node", "tools/live/replay.mjs"] },

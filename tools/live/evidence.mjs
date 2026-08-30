@@ -18,15 +18,26 @@
 // recorded artefact still describes the current tree, and exits non-zero naming
 // the input that moved.
 //
+// `--check-all` is what the gate runs. For most of this program's life the
+// per-artefact check existed and nothing called it: seven of the eight artefacts
+// were stale, one of them by a number the roadmap quoted as evidence, and the
+// gate went green throughout because it did not know they existed. A freshness
+// check nobody runs is the stale artefact problem wearing the fix's clothes.
+//
+// The artefacts are discovered rather than listed — any JSON here carrying an
+// `inputs` map is one — so a new census joins the gate by being written, which
+// is the only version of this that survives someone adding the ninth.
+//
 // Usage: node tools/live/evidence.mjs --check <artefact.json>
+//        node tools/live/evidence.mjs --check-all
 
 // ───────────────────────────────────────────────────────────────────
 // 1. IMPORTS
 // ───────────────────────────────────────────────────────────────────
 
 import { createHash } from "node:crypto";
-import { existsSync, readFileSync, writeFileSync } from "node:fs";
-import { join, relative } from "node:path";
+import { existsSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
+import { dirname, join, relative } from "node:path";
 import { fileURLToPath } from "node:url";
 
 // ───────────────────────────────────────────────────────────────────
@@ -65,6 +76,27 @@ export function stamp(outPath, payload, inputs) {
   return record;
 }
 
+/**
+ * Every artefact in this directory that dates itself.
+ *
+ * An artefact without an `inputs` map is not skipped for convenience — it cannot be checked at all,
+ * and `check()` already reports that as a failure. This only decides what the gate asks about.
+ */
+export function artefacts() {
+  const dir = dirname(fileURLToPath(import.meta.url));
+  return readdirSync(dir)
+    .filter((name) => name.endsWith(".json"))
+    .map((name) => join(relative(REPO, dir), name))
+    .filter((rel) => {
+      try {
+        return Boolean(JSON.parse(readFileSync(join(REPO, rel), "utf8")).inputs);
+      } catch {
+        return false;
+      }
+    })
+    .sort();
+}
+
 /** Compare a recorded artefact's inputs against the tree as it stands now. */
 export function check(artefactPath) {
   const abs = join(REPO, artefactPath);
@@ -89,6 +121,30 @@ export function check(artefactPath) {
 // ───────────────────────────────────────────────────────────────────
 // 4. MAIN
 // ───────────────────────────────────────────────────────────────────
+
+if (process.argv.includes("--check-all")) {
+  const all = artefacts();
+  const stale = [];
+  for (const rel of all) {
+    const result = check(rel);
+    console.log(`  ${result.ok ? "fresh" : "STALE"}  ${rel}`);
+    if (!result.ok) stale.push({ rel, result });
+  }
+  console.log("");
+  if (stale.length === 0) {
+    console.log(`evidence: ${all.length} artefact(s) still describe this tree`);
+    process.exit(0);
+  }
+  for (const { rel, result } of stale) {
+    console.error(`evidence: ${rel} is STALE — ${result.reason}`);
+    for (const m of result.moved) {
+      console.error(`  ${m.rel}\n    measured against ${m.was}\n    tree now has     ${m.now}`);
+    }
+  }
+  console.error(`\nevidence: ${stale.length} of ${all.length} artefact(s) describe a tree that no`);
+  console.error("longer exists. Re-run the tool that wrote each one; do not edit the numbers.");
+  process.exit(1);
+}
 
 if (process.argv.includes("--check")) {
   const target = process.argv[process.argv.indexOf("--check") + 1];

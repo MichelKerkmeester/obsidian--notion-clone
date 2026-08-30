@@ -76,7 +76,10 @@ function collectSources(dir: string, acc: { file: string; text: string }[] = [])
 interface CallSite {
   file: string;
   role: string;
-  family?: string;
+  /** The whole `cls` value as written, which is what the factory is handed. */
+  cls?: string;
+  /** That value split into the individual classes it puts on the element. */
+  families: string[];
 }
 
 /**
@@ -103,10 +106,53 @@ function callSites(): CallSite[] {
       const args = text.slice(at, end);
       const role = /\brole:\s*"([a-z]+)"/.exec(args)?.[1];
       if (!role) continue;
-      found.push({ file, role, family: /\bcls:\s*"([a-z0-9-]+)"/.exec(args)?.[1] });
+      // `cls` is a class LIST, not a class. Matching `[a-z0-9-]+` stopped at the first space, so the
+      // four sites that declare two classes matched nothing at all and were dropped whole — and a
+      // family that is never asked about reads as covered, which is how "0 uncovered" came to be a
+      // count over ten families rather than the twelve declared.
+      const cls = /\bcls:\s*"([^"]+)"/.exec(args)?.[1];
+      found.push({ file, role, cls, families: cls ? cls.split(/\s+/).filter(Boolean) : [] });
     }
   }
   return found;
+}
+
+/** The classes the factory puts on every box itself, which no call site declares. */
+const FACTORY_OWNED = /^db-checkbox(-row|-field)?$/;
+
+/** A class list reduced to what the call site asked for, in a form two of them can be compared by. */
+function declaredKey(classes: string[]): string {
+  return classes.filter((cls) => !FACTORY_OWNED.test(cls)).join(" ");
+}
+
+/**
+ * Every distinct `cls` the source declares, keyed by that value and carrying the role beside it.
+ *
+ * This is the half the agreement assertion was missing. It read the role off the fixture's own
+ * class list and then asked the factory what that role produces, so the fixture was compared
+ * against a restatement of itself: a fixture at the wrong role agreed with itself and passed, while
+ * photographing a box at a size the plugin never builds there. The role has one source of truth and
+ * it is the call site.
+ *
+ * A `cls` declared at two sites with two different roles is a genuine ambiguity in the source, and
+ * is recorded as such rather than resolved by taking whichever was parsed first.
+ */
+function declaredFamilies(): Map<string, { roles: string[]; cls: string; files: string[] }> {
+  const map = new Map<string, { roles: string[]; cls: string; files: string[] }>();
+  for (const site of callSites()) {
+    // A site with no `cls` is keyed by the empty string. It still constrains its fixtures: the
+    // plain box exists at whichever roles the source asks for it at, and a fixture rendering a
+    // plain box at some other role is describing a control nothing creates.
+    const key = declaredKey(site.families);
+    const seen = map.get(key);
+    if (seen) {
+      if (!seen.files.includes(site.file)) seen.files.push(site.file);
+      if (!seen.roles.includes(site.role)) seen.roles.push(site.role);
+    } else {
+      map.set(key, { roles: [site.role], cls: key, files: [site.file] });
+    }
+  }
+  return map;
 }
 
 // ───────────────────────────────────────────────────────────────────
@@ -156,8 +202,8 @@ describe("every checkbox family the plugin builds is also rendered by a fixture"
   it("leaves no family with a call site and no fixture", async () => {
     const wanted = new Set(
       callSites()
-        .map((site) => site.family)
-        .filter((family): family is string => Boolean(family))
+        .flatMap((site) => site.families)
+        .filter((family) => family !== "db-checkbox" && !family.startsWith("db-checkbox-"))
     );
     const rendered = new Set((await fixtureBoxes()).flatMap((box) => box.classes));
     const uncovered = [...wanted].filter((family) => !rendered.has(family)).sort();
@@ -168,25 +214,29 @@ describe("every checkbox family the plugin builds is also rendered by a fixture"
     ).toEqual([]);
   });
 
-  it("renders each family with the class list the factory actually composes", async () => {
+  it("renders each family at the role its call site asks for", async () => {
+    const declared = declaredFamilies();
     const mismatched: string[] = [];
     for (const box of await fixtureBoxes()) {
       if (box.classes.some((cls) => NOT_FROM_THE_FACTORY.includes(cls))) continue;
-      const role = box.classes.includes("db-checkbox-row")
-        ? "row"
-        : box.classes.includes("db-checkbox-field")
-          ? "field"
-          : undefined;
-      if (!role) {
-        mismatched.push(`${box.scenario}: .${box.classes.join(".") || "(classless)"} has no role class`);
+      const key = declaredKey(box.classes);
+      const site = declared.get(key);
+      if (!site) {
+        mismatched.push(
+          `${box.scenario}: .${box.classes.join(".") || "(classless)"} matches no createCheckbox call`
+        );
         continue;
       }
-      const family = box.classes.find(
-        (cls) => cls !== "db-checkbox" && cls !== `db-checkbox-${role}`
-      );
-      const expected = factoryClasses(role, family).join(" ");
+      // The roles come from the source; the fixture's own role class is part of what is being
+      // judged, so swapping it now produces a mismatch instead of a new expectation.
+      const expected = site.roles.map((role) => factoryClasses(role as CheckboxRole, site.cls).join(" "));
       const actual = box.classes.join(" ");
-      if (expected !== actual) mismatched.push(`${box.scenario}: fixture "${actual}" vs factory "${expected}"`);
+      if (!expected.includes(actual)) {
+        mismatched.push(
+          `${box.scenario}: fixture "${actual}" vs factory "${expected.join('" or "')}" `
+            + `(${site.files.join(", ")} asks for role ${site.roles.map((r) => `"${r}"`).join(" and ")})`
+        );
+      }
     }
     expect(
       mismatched,

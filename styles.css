@@ -237,14 +237,27 @@
   content: "";
   position: absolute;
   left: 50%;
-  top: 50%;
   /* The grab area spans the header, not the bar. A 36px-wide target asks the thumb to find a
      specific spot on a sheet the user is already touching somewhere near the top; a full-width band
      lets the gesture start anywhere along it. Sized past the sheet and clipped by it, because the
      bar itself is only 36px so a percentage here would measure the wrong box. */
   width: 100vw;
-  height: 48px;
-  transform: translate(-50%, -50%);
+  /* Anchored to the sheet's top edge rather than centred on the bar, because a centred band spends
+     half its height above that edge where the sheet clips it. Declared 48px, it delivered 42px on
+     the add-view sheet and 38px on the owned menu — both under the 44px thumb minimum this
+     stylesheet already uses for phone menu rows, and the first of them was reported as 45px by a
+     check that counted the bar twice, so the surface read green while missing the floor.
+
+     The top inset is deliberately larger than any sheet's own top padding so the band starts at the
+     sheet's edge whatever that padding is, and the sheet clips the remainder; deriving it from a
+     padding token instead would pin this rule to one surface's spacing. The bottom inset is what
+     sets the delivered size, and 28px is the value both surfaces can carry: the owned menu is the
+     tighter one, its bar bottom sitting 17px below the sheet edge, so the band measures 45px there
+     and still stops 2px above its first row. 24px would leave that surface at 41px, under the
+     floor; 32px would reach 49px and start taking the first row's presses. */
+  top: -40px;
+  bottom: -28px;
+  transform: translateX(-50%);
 }
 
 /* The record sheet pads its top by --db-space-6, four times what the menu sheets use, so its bar

@@ -1071,9 +1071,9 @@ export class ChartToolbarRenderer {
       position: "absolute",
       right: "auto",
       bottom: "auto",
-      boxSizing: "border-box",
-      overflowY: "auto",
-      overscrollBehavior: "contain",
+      "box-sizing": "border-box",
+      "overflow-y": "auto",
+      "overscroll-behavior": "contain",
     });
 
     const place = () => {

@@ -59,7 +59,9 @@ const bundle = join(work, "bundle.js");
 // positioner would prove the copy.
 import { writeFileSync } from "node:fs";
 writeFileSync(entry, `
-import { positionToolbarPopover, getVisiblePopoverBounds, COMPACT_MENU_POPOVER } from "${join(REPO, "src/views/popover-position")}";
+import { positionToolbarPopover, getVisiblePopoverBounds, COMPACT_MENU_POPOVER, setPosition, clamp, resolvePopoverHorizontalLeft, PANEL_POPOVER, placeSheet } from "${join(REPO, "src/views/popover-position")}";
+import { refreshRecordDetailPanel, closeRecordDetailPanel } from "${join(REPO, "src/views/record-detail-panel")}";
+import { attachSheetDragToDismiss } from "${join(REPO, "src/views/mobile-bottom-sheet")}";
 import { applySheetChrome } from "${join(REPO, "src/views/mobile-bottom-sheet")}";
 import { createOwnedMenu } from "${join(REPO, "src/views/owned-menu")}";
 import { createMenuRow } from "${join(REPO, "src/views/menu-row")}";
@@ -71,6 +73,9 @@ import { attachTitleOpenAffordance, setupTitleCellTap } from "${join(REPO, "src/
 import { openRecordDetailPanel } from "${join(REPO, "src/views/record-detail-panel")}";
 import { RowMenu } from "${join(REPO, "src/views/row-menu")}";
 globalThis.__place = { positionToolbarPopover, getVisiblePopoverBounds, COMPACT_MENU_POPOVER, applySheetChrome, renderCardField, createOwnedMenu, createMenuRow, ToolbarRenderer, trackCellGesture, nextCellRange, resolveCellTapAction, isMainItemColumn, shouldExtendRowRange, applyRowSelectionPress, attachRowRangeGesture, isRowSelectionCheckbox, attachLongPress, isTouchDevice, attachTitleOpenAffordance, setupTitleCellTap, openRecordDetailPanel, RowMenu };
+globalThis.__p = { positionToolbarPopover, getVisiblePopoverBounds, setPosition, clamp, resolvePopoverHorizontalLeft, COMPACT_MENU_POPOVER, PANEL_POPOVER, createOwnedMenu, createMenuRow };
+globalThis.__drag = { openRecordDetailPanel, refreshRecordDetailPanel, applySheetChrome, positionToolbarPopover };
+globalThis.__a = { positionToolbarPopover, placeSheet, applySheetChrome, attachSheetDragToDismiss, openRecordDetailPanel, refreshRecordDetailPanel, closeRecordDetailPanel, createOwnedMenu, createMenuRow };
 `);
 
 execFileSync(join(REPO, "node_modules/.bin/esbuild"), [
@@ -798,6 +803,42 @@ const menuResults = await menuPhone.evaluate(() => {
     detail: `handle=${el.querySelector(".db-mobile-bottom-sheet-handle") ? "present" : "absent"} `
       + `classes=${el.className}`,
   });
+  // The owned menu is the tighter of the two surfaces that share the handle rule — its first row
+  // starts closer to the top than the add-view sheet's first field does — so it is the one that
+  // decides how far the band may reach. It had no check of its own: its band was a number written
+  // into a comment on another surface's check, and a number nothing re-asserts is how the
+  // double-counted arithmetic survived. Both ends are asserted here, because a band that clears the
+  // thumb minimum by eating the first row is not a fix.
+  {
+    const h = el.querySelector(".db-mobile-bottom-sheet-handle");
+    const hb2 = h.getBoundingClientRect();
+    const hit2 = (x, y) => {
+      const e2 = document.elementFromPoint(Math.round(x), Math.round(y));
+      return Boolean(e2) && (e2 === h || h.contains(e2));
+    };
+    const cx2 = hb2.left + hb2.width / 2;
+    const cy2 = hb2.top + hb2.height / 2;
+    let u2 = 0;
+    let d2 = 0;
+    while (u2 < 80 && hit2(cx2, cy2 - u2 - 1)) u2 += 1;
+    while (d2 < 80 && hit2(cx2, cy2 + d2 + 1)) d2 += 1;
+    const band2 = u2 + d2 + 1;
+    const rows = [...el.querySelectorAll(".db-menu-item")];
+    const stolenRows = rows.filter((row) => {
+      const rr = row.getBoundingClientRect();
+      const mid = document.elementFromPoint(Math.round(rr.left + rr.width / 2), Math.round(rr.top + rr.height / 2));
+      return Boolean(mid) && (mid === h || h.contains(mid));
+    });
+    const firstRowTop = rows.length ? Math.round(rows[0].getBoundingClientRect().top - r.top) : 0;
+    out.push({
+      name: "a menu sheet's grab band is a thumb-sized target and takes no row with it",
+      pass: band2 >= 44 && hit2(cx2 + 120, cy2) && stolenRows.length === 0,
+      detail: `band ${band2}px (${u2} above the bar + ${d2} below + the centre pixel; want >= 44), `
+        + `reaching 120px sideways=${hit2(cx2 + 120, cy2)}; the band ends `
+        + `${Math.round(cy2 + d2 - r.top)}px from the sheet's top edge and the first row starts at `
+        + `${firstRowTop}px, ${stolenRows.length} of ${rows.length} rows answered by the band`,
+    });
+  }
 
   // The backdrop has to take the tap, or the press that dismisses the menu also lands on the table
   // underneath. Read from the document rather than from the element: an inert backdrop is present
@@ -1186,10 +1227,15 @@ const addViewProbe = (isPhone) => {
     //
     // So hit-test the document and walk outward until it stops answering "the handle". That also
     // catches what a declaration read would miss: the bar sits 8px below the sheet's top edge and
-    // the sheet clips, so the half of the band above the bar is cut short. The declared 48px is
-    // delivered as 45px here — and as 41px on the owned-menu sheet, measured the same way, so the
-    // shortfall belongs to the shared handle rule rather than to this surface. The threshold is the
-    // 44px thumb minimum this stylesheet already uses for phone menu rows.
+    // the sheet clips, so the half of the band above the bar is cut short.
+    //
+    // The walk starts at the bar's own CENTRE, so up and down already cross the bar. Adding the
+    // bar's height back counted those 4px twice and reported a band 3px larger than the one a thumb
+    // gets: 45 here and 41 on the owned-menu sheet were both that artefact, and the first of them
+    // was over this check's own 44px threshold, so a failing surface reported green. The span of a
+    // walk outward from a centre is up + down + 1 — the two arms plus the pixel they start on,
+    // which is the form usableHeight uses below. The threshold is the 44px thumb minimum this
+    // stylesheet already uses for phone menu rows.
     const hitsHandle = (x, y) => {
       const el = document.elementFromPoint(Math.round(x), Math.round(y));
       return Boolean(el) && (el === handle || handle?.contains(el));
@@ -1202,17 +1248,37 @@ const addViewProbe = (isPhone) => {
       while (up < 80 && hitsHandle(cx, cy - up - 1)) up += 1;
       while (down < 80 && hitsHandle(cx, cy + down + 1)) down += 1;
     }
-    const band = handleBox ? up + down + Math.round(handleBox.height) : 0;
+    const band = handleBox ? up + down + 1 : 0;
+    // Headroom: how far the band could reach downward before it starts taking presses aimed at the
+    // surface's own first content. That is the number the record sheet's fix was sized against, so
+    // measuring it the same way here makes the two surfaces comparable rather than each arguing
+    // from its own vocabulary.
+    const firstContent = [...panel.children].find((el) => el !== handle);
+    const headroom = firstContent
+      ? Math.round(firstContent.getBoundingClientRect().top - rect.top)
+      : 0;
+    // The band is only allowed to be this big because everything it covers is inert. Asserted, not
+    // assumed: the surface's own controls are hit-tested, and if one of them ever moves up under the
+    // band this fails instead of the band quietly swallowing it the way the record sheet's did.
+    const controls = [...panel.querySelectorAll("button, input, select, textarea, .db-menu-item, [role=button]")];
+    const swallowed = controls.filter((el) => {
+      const r = el.getBoundingClientRect();
+      const mid = document.elementFromPoint(Math.round(r.left + r.width / 2), Math.round(r.top + r.height / 2));
+      return Boolean(mid) && (mid === handle || handle?.contains(mid));
+    });
     // Sideways reach is the half of the claim a vertical walk cannot see: the band spans the header
     // rather than the 36px bar, so a thumb landing anywhere along the top still starts the gesture.
     const sideways = handleBox ? hitsHandle(cx + 120, cy) : false;
     out.push({
       name: "add view: the sheet's grab band is a thumb-sized target",
-      pass: band >= 44 && sideways,
+      pass: band >= 44 && sideways && swallowed.length === 0,
       detail: handleBox
         ? `bar ${Math.round(handleBox.width)}x${Math.round(handleBox.height)}, usable band ${band}px `
-          + `(${up}px above + ${down}px below, walked by hit test; want >= 44), reaches 120px sideways=${sideways}`
-          + " — the rule declares 48px and the sheet clips the top of it"
+          + `(${up}px above + ${down}px below + the centre pixel; want >= 44), reaches 120px `
+          + `sideways=${sideways}; ${headroom}px of chrome above the first content `
+          + `(.${firstContent?.className.split(" ")[0] ?? "none"}, which is inert), `
+          + `${swallowed.length} of ${controls.length} controls answered by the band`
+          + (swallowed.length ? `: ${swallowed.map((el) => el.className.split(" ")[0]).join(", ")}` : "")
         : "no grab handle to measure",
     });
     out.push({
@@ -1852,7 +1918,10 @@ const sheetResults = await sheetPhone.evaluate((titleCentre) => {
   let up = 0; let down = 0;
   while (up < 80 && hits(cx, cy - up - 1)) up += 1;
   while (down < 80 && hits(cx, cy + down + 1)) down += 1;
-  const band = up + down + Math.round(hb.height);
+  // up + down + 1, not + hb.height: the walk begins at the bar's centre and both arms already
+  // cross the bar, so adding its height counted those pixels twice. This surface reported 35px on
+  // that arithmetic and delivers 32px.
+  const band = up + down + 1;
   const startsAtTheEdge = Math.round(cy - up - panelTop) <= 1;
   out.push({
     name: "the record sheet's grab band starts at the sheet's top edge and spans its width",
@@ -2497,8 +2566,1281 @@ const rhythmResults = [];
   }
 }
 
+
+// ───────────────────────────────────────────────────────────────────
+// 5n. LIFTED FROM THE PHASE PROBES
+// ───────────────────────────────────────────────────────────────────
+//
+// Three probes were written beside their phases, ran once, and were never run
+// again — 31 desktop placement checks, 10 on the sheet drag, 22 auditing the
+// sheet against the asks it was built from. A check that lives outside the
+// harness asserts nothing after the day it was written, which is the same
+// failure as a stale artefact: it carries the authority of having been measured
+// without the fact of one.
+//
+// They are lifted rather than rewritten, so what passed there passes here for
+// the same reason. Each keeps its own page shape, because each was built around
+// a different trap — the desktop one puts a 300px sidebar before the root split
+// so the leaf is NOT at the viewport origin, and its two GUARD checks fail if
+// that ever stops being true. Two harness defects in the drag probe were fixed
+// on the way in and are commented where they were.
+//
+// The one thing deliberately dropped is each probe's private setCssProps
+// override. They patched in the device's setProperty semantics locally because
+// the shared shim did not have them; it does now, so these run against the same
+// shim everything else does.
+
+const liftedResults = [];
+
+{
+  const pageHtml = (opts = {}) => {
+    const leftSidebar = opts.leftSidebar === false ? "none" : "block";
+    const splitWidth = opts.splitWidth ? `flex: 0 0 ${opts.splitWidth}px; width: ${opts.splitWidth}px;` : "flex: 1 1 auto;";
+    return `<!doctype html><html><head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; contain: strict; width: 100vw; height: 100vh; }
+    .app-container { display: flex; width: 100vw; height: 100vh; }
+    .workspace { display: flex; width: 100%; }
+    .workspace-split.mod-root { ${splitWidth} position: relative; overflow: hidden; }
+    .workspace-split.mod-right-split { width: ${SIDEBAR}px; flex: 0 0 ${SIDEBAR}px; background: #eee; }
+    .workspace-split.mod-left-split { width: ${SIDEBAR}px; flex: 0 0 ${SIDEBAR}px; background: #eee; display: ${leftSidebar}; }
+    .workspace-leaf { position: relative; contain: strict !important; overflow: hidden; isolation: isolate; }
+    .workspace-leaf, .workspace-leaf-content, .view-content { height: 100%; }
+    .note-database-container { position: relative; height: 100%; padding: 40px; overflow: auto; }
+    .anchor { width: 120px; height: 28px; background: #ccd; }
+    .probe-panel { background: #fff; border: 1px solid #999; }
+    .probe-panel .row { height: 30px; }
+    .spacer { height: 2000px; }
+  </style></head><body>
+    <div class="app-container"><div class="workspace">
+      <div class="workspace-split mod-left-split"></div>
+      <div class="workspace-split mod-root">
+        <div class="workspace-leaf"><div class="workspace-leaf-content"><div class="view-content">
+        <div class="note-database-container"><div class="anchor" id="anchor"></div></div>
+        </div></div></div>
+      </div>
+      <div class="workspace-split mod-right-split"></div>
+    </div></div>
+  </body></html>`;
+  };
+
+  // ───────────────────────────────────────────────────────────────────
+  // 5. MEASURE
+  // ───────────────────────────────────────────────────────────────────
+
+
+  async function openPage(opts) {
+    const page = await browser.newPage({ viewport: opts?.viewport ?? VIEWPORT, reducedMotion: "reduce" });
+    await page.setContent(pageHtml(opts));
+    await page.addStyleTag({ content: readFileSync(join(REPO, "styles.css"), "utf8") });
+    await page.addScriptTag({ content: shimJs + "\ninstallObsidianDomShim(globalThis);" });
+    await page.addScriptTag({ content: positionerJs });
+    return page;
+  }
+
+  const all = [];
+
+  // ── 5a. DESKTOP, THE DEFAULT LAYOUT ────────────────────────────────
+
+  const page = await openPage();
+  all.push(...await page.evaluate(async () => {
+    const out = [];
+    const P = globalThis.__p;
+    const container = document.querySelector(".note-database-container");
+    const leaf = document.querySelector(".workspace-leaf");
+    const split = document.querySelector(".workspace-split.mod-root").getBoundingClientRect();
+    const leafRect = leaf.getBoundingClientRect();
+    const bounds = P.getVisiblePopoverBounds(null);
+
+    // ── GUARD: the trap. Without this every number below is zero by construction.
+    out.push({
+      name: "GUARD the leaf is not at the viewport origin",
+      pass: leafRect.left >= 200,
+      detail: `leaf.left=${Math.round(leafRect.left)}px. At 0 the leaf-relative and viewport-relative `
+        + `coordinates of a fixed descendant coincide, so every containing-block check below would `
+        + `pass against a broken positioner.`,
+    });
+
+    // ── GUARD: containment is actually in force.
+    out.push({
+      name: "GUARD the leaf and body both establish a fixed containing block",
+      pass: /strict|paint|content|layout/.test(getComputedStyle(leaf).contain)
+        && /strict|paint|content|layout/.test(getComputedStyle(document.body).contain),
+      detail: `leaf contain=${getComputedStyle(leaf).contain} body contain=${getComputedStyle(document.body).contain}`,
+    });
+
+    const buildPanel = (host, rows, cls = "probe-panel") => {
+      const p = host.createDiv({ cls });
+      for (let i = 0; i < rows; i += 1) p.createDiv({ cls: "row", text: `Item ${i}` });
+      return p;
+    };
+
+    const buildMenu = (rowCount) => {
+      const menu = P.createOwnedMenu(document);
+      for (let i = 0; i < rowCount; i += 1) menu.addRow({ title: `Row ${i}`, onClick: () => undefined });
+      return menu;
+    };
+
+    // ─────────────────────────────────────────────────────────────────
+    // CLASS A — positionToolbarPopover, container mount
+    // Covers the toolbar menus, view-config, filter, sort, column manager,
+    // chart options, calendar toolbar, active-rule popover: 28 of 34 sites.
+    // ─────────────────────────────────────────────────────────────────
+
+    const anchor = document.getElementById("anchor");
+    const a1 = buildPanel(container, 5);
+    P.positionToolbarPopover(a1, anchor, P.COMPACT_MENU_POPOVER);
+    const a1r = a1.getBoundingClientRect();
+    const anchorRect = anchor.getBoundingClientRect();
+
+    out.push({
+      name: "A container-mounted panel is anchored to its trigger, not to the leaf origin",
+      pass: Math.abs(a1r.top - (anchorRect.bottom + 6)) <= 1,
+      detail: `panel.top=${Math.round(a1r.top)} anchor.bottom=${Math.round(anchorRect.bottom)} `
+        + `gap=${Math.round(a1r.top - anchorRect.bottom)}px (want 6)`,
+    });
+
+    // CONTROL. The pre-fix behaviour, reproduced deliberately: place the same panel
+    // with no containing-block compensation. If this does not move the number, the
+    // check above cannot tell a corrected positioner from an uncorrected one and
+    // every "anchored" result in this file is worthless.
+    const ctl = buildPanel(container, 5);
+    ctl.setCssProps({ position: "fixed" });
+    P.setPosition(ctl, anchorRect.left, anchorRect.bottom + 6, undefined, 0, 0);
+    const ctlr = ctl.getBoundingClientRect();
+    out.push({
+      name: "CONTROL uncompensated placement is displaced by the leaf origin",
+      pass: Math.abs(ctlr.top - a1r.top) > 8 || Math.abs(ctlr.left - a1r.left) > 8,
+      detail: `corrected=[${Math.round(a1r.left)},${Math.round(a1r.top)}] `
+        + `uncorrected=[${Math.round(ctlr.left)},${Math.round(ctlr.top)}] `
+        + `displacement=[${Math.round(ctlr.left - a1r.left)},${Math.round(ctlr.top - a1r.top)}]px `
+        + `(leaf origin is [${Math.round(leafRect.left)},${Math.round(leafRect.top)}])`,
+    });
+    ctl.remove();
+
+    out.push({
+      name: "A container-mounted panel stays inside the editing area",
+      pass: Math.round(a1r.right) <= Math.round(split.right) + 1 && Math.round(a1r.left) >= Math.round(split.left) - 1,
+      detail: `panel=[${Math.round(a1r.left)}..${Math.round(a1r.right)}] editing area=[${Math.round(split.left)}..${Math.round(split.right)}]`,
+    });
+
+    // Not clipped: read the document, because a clipped box still reports full geometry.
+    const hitA = document.elementFromPoint(Math.round(a1r.left + a1r.width / 2), Math.round(a1r.bottom - 4));
+    out.push({
+      name: "A container-mounted panel is not clipped by the leaf",
+      pass: Boolean(hitA && (a1 === hitA || a1.contains(hitA))),
+      detail: `the document paints ${hitA ? (hitA.className || hitA.tagName) : "nothing"} at the panel's own bottom edge; `
+        + `panel bottom=${Math.round(a1r.bottom)} leaf bottom=${Math.round(leafRect.bottom)}`,
+    });
+    a1.remove();
+
+    // ─────────────────────────────────────────────────────────────────
+    // CLASS B — owned menu, cursor point, body portal (11 of 14 showAt sites)
+    // ─────────────────────────────────────────────────────────────────
+
+    const shortMenu = buildMenu(5);
+    shortMenu.showAt({ x: Math.round(bounds.left + 100), y: Math.round(bounds.top + 100) });
+    const bm = shortMenu.el.getBoundingClientRect();
+    out.push({
+      name: "B owned menu at a cursor point lands at that point",
+      pass: Math.abs(bm.left - (bounds.left + 100)) <= 1 && Math.abs(bm.top - (bounds.top + 100)) <= 1,
+      detail: `menu=[${Math.round(bm.left)},${Math.round(bm.top)}] point=[${Math.round(bounds.left + 100)},${Math.round(bounds.top + 100)}]`,
+    });
+    out.push({
+      name: "B owned menu stays inside the editing area",
+      pass: Math.round(bm.right) <= Math.round(split.right) + 1,
+      detail: `menu.right=${Math.round(bm.right)} editing area right=${Math.round(split.right)}`,
+    });
+    shortMenu.close();
+
+    // ── DEFECT PROBE: a tall owned menu has no height cap and no scroll.
+    // positionToolbarPopover writes maxHeight and overflowY on every placement.
+    // showAt writes neither, and .db-owned-menu declares neither.
+    const tallMenu = buildMenu(60);
+    tallMenu.showAt({ x: Math.round(bounds.left + 100), y: Math.round(bounds.top + 40) });
+    const tm = tallMenu.el.getBoundingClientRect();
+    const tmStyle = getComputedStyle(tallMenu.el);
+    const overflowPx = Math.round(tm.bottom - bounds.bottom);
+    out.push({
+      name: "B a tall owned menu is capped inside the editing area",
+      pass: overflowPx <= 1,
+      detail: `menu is ${Math.round(tm.height)}px tall and runs ${overflowPx}px past the editing area's `
+        + `bottom edge (menu.bottom=${Math.round(tm.bottom)} bounds.bottom=${Math.round(bounds.bottom)}); `
+        + `max-height=${tmStyle.maxHeight} overflow-y=${tmStyle.overflowY}`,
+    });
+    // Reachability, not scrollability. The obvious form of this check —
+    // `scrollHeight <= clientHeight || overflow is auto` — PASSES on the broken
+    // menu, because an uncapped element grows to fit its content and its
+    // scrollHeight equals its clientHeight by definition. A check that is green
+    // precisely because the defect is present is worse than no check.
+    // So ask the document instead: is the last row somewhere a pointer can land?
+    const lastRow = tallMenu.el.querySelector(".db-menu-item:last-of-type");
+    // Scroll the menu to its end, then ask where the last row actually is. Reachable means
+    // "a user can bring it under the pointer", not "it is visible right now" — a capped,
+    // scrolling menu correctly leaves its last row off screen until scrolled.
+    tallMenu.el.scrollTop = tallMenu.el.scrollHeight;
+    const lastRect = lastRow.getBoundingClientRect();
+    const reachable = lastRect.bottom <= bounds.bottom + 1 && lastRect.top >= bounds.top - 1;
+    out.push({
+      name: "B every row of a tall owned menu is reachable",
+      pass: reachable,
+      detail: `after scrolling to the end (scrollTop=${tallMenu.el.scrollTop}), the last row sits at `
+        + `y=${Math.round(lastRect.top)}..${Math.round(lastRect.bottom)} against an editing area ending at `
+        + `${Math.round(bounds.bottom)} — ${reachable ? "on screen" : "off screen"}. `
+        + `scrollHeight=${tallMenu.el.scrollHeight} clientHeight=${tallMenu.el.clientHeight} `
+        + `overflow-y=${tmStyle.overflowY}. Note the shape of the naive version of this check: an `
+        + `UNCAPPED element grows to fit, so its scrollHeight equals its clientHeight, and asserting `
+        + `"scrollHeight <= clientHeight or overflow is auto" reports success on exactly the defect `
+        + `it is supposed to catch.`,
+    });
+    // CONTROL for the two above: the same menu built short must not trip them, or the
+    // checks are measuring "menus exist" rather than "tall menus overflow".
+    const ctlShort = buildMenu(5);
+    ctlShort.showAt({ x: Math.round(bounds.left + 100), y: Math.round(bounds.top + 40) });
+    const cs = ctlShort.el.getBoundingClientRect();
+    out.push({
+      name: "CONTROL a short owned menu does not overflow, so the cap check can distinguish",
+      pass: Math.round(cs.bottom - bounds.bottom) <= 1,
+      detail: `short menu overflow=${Math.round(cs.bottom - bounds.bottom)}px vs tall menu overflow=${overflowPx}px`,
+    });
+    ctlShort.close();
+    tallMenu.close();
+
+    // ─────────────────────────────────────────────────────────────────
+    // CLASS C — owned menu from an ANCHOR rect (3 of 14 showAt sites):
+    // column-menu.ts:214, row-menu.ts:166, embedded-database-renderer.ts:2411
+    // all pass { x: rect.left, y: rect.bottom + 4 }.
+    // ─────────────────────────────────────────────────────────────────
+
+    // Put the trigger near the bottom edge so the menu must flip up.
+    const lowAnchor = container.createDiv({ cls: "anchor" });
+    lowAnchor.setCssProps({ position: "absolute", left: "40px", top: `${Math.round(leafRect.height - 120)}px` });
+    const lar = lowAnchor.getBoundingClientRect();
+    const flipMenu = buildMenu(12);
+    flipMenu.showAt({ anchor: lowAnchor });
+    const fm = flipMenu.el.getBoundingClientRect();
+    const flipped = fm.top < lar.top;
+    // A menu that flips up must sit ABOVE the trigger with the same 4px gap it would
+    // have had below. The call site bakes the downward gap into the point, so flipping
+    // subtracts the height from a y that is already past the trigger's bottom edge.
+    const coverage = Math.round(Math.min(fm.bottom, lar.bottom) - Math.max(fm.top, lar.top));
+    out.push({
+      name: "C an anchor-derived owned menu that flips up clears its trigger",
+      pass: !flipped || coverage <= 0,
+      detail: `trigger=[${Math.round(lar.top)}..${Math.round(lar.bottom)}] menu=[${Math.round(fm.top)}..${Math.round(fm.bottom)}]; `
+        + `flipped=${flipped}; the menu covers ${Math.max(0, coverage)}px of the trigger it belongs to. `
+        + `Passing the anchor rather than a derived point is what makes this answerable: the point form `
+        + `bakes the downward gap into y, so flipping subtracted the height from a y already below the `
+        + `trigger and landed the menu's bottom 4px BELOW the trigger's bottom — a ${Math.round(lar.height + 8)}px error `
+        + `that covered the whole control.`,
+    });
+    out.push({
+      name: "C an anchor-derived owned menu keeps its gap on the side it flipped to",
+      pass: !flipped || Math.abs((lar.top - fm.bottom) - 4) <= 1,
+      detail: `gap above trigger = ${Math.round(lar.top - fm.bottom)}px (want 4 when flipped up)`,
+    });
+    flipMenu.close();
+
+    // CONTROL: the cursor form must be UNCHANGED. A menu opened at a pointer is a different
+    // request — its bottom edge meeting the cursor on an upward flip is correct, and "fixing"
+    // that would move eleven call sites nobody complained about.
+    const cursorMenu = buildMenu(12);
+    const cursorY = Math.round(lar.bottom + 4);
+    cursorMenu.showAt({ x: lar.left, y: cursorY });
+    const cm = cursorMenu.el.getBoundingClientRect();
+    out.push({
+      name: "C CONTROL the cursor form still flips to meet the point, unchanged",
+      pass: Math.abs(cm.bottom - cursorY) <= 1,
+      detail: `opened at y=${cursorY}, menu bottom=${Math.round(cm.bottom)} — the point form still puts the `
+        + `menu's bottom edge on the cursor. The anchor form above lands at ${Math.round(fm.bottom)} instead, `
+        + `${Math.round(cursorY - fm.bottom)}px higher, which is the trigger's height plus both gaps.`,
+    });
+    cursorMenu.close();
+    lowAnchor.remove();
+
+    // ─────────────────────────────────────────────────────────────────
+    // EDGE — right edge, bottom edge
+    // ─────────────────────────────────────────────────────────────────
+
+    const edgeAnchor = container.createDiv({ cls: "anchor" });
+    edgeAnchor.setCssProps({ position: "absolute", left: `${Math.round(leafRect.width - 180)}px`, top: "40px" });
+    const ear = edgeAnchor.getBoundingClientRect();
+
+    const edgePanel = buildPanel(container, 6);
+    P.positionToolbarPopover(edgePanel, edgeAnchor, P.PANEL_POPOVER);
+    const epr = edgePanel.getBoundingClientRect();
+    out.push({
+      name: "EDGE a panel anchored at the right edge stays inside the editing area",
+      pass: Math.round(epr.right) <= Math.round(split.right) + 1,
+      detail: `panel.right=${Math.round(epr.right)} editing area right=${Math.round(split.right)} `
+        + `anchor.right=${Math.round(ear.right)}`,
+    });
+    edgePanel.remove();
+
+    const edgeMenu = buildMenu(6);
+    edgeMenu.showAt({ x: Math.round(bounds.right - 20), y: Math.round(bounds.top + 60) });
+    const emr = edgeMenu.el.getBoundingClientRect();
+    out.push({
+      name: "EDGE an owned menu opened near the right edge stays inside the editing area",
+      pass: Math.round(emr.right) <= Math.round(split.right) + 1,
+      detail: `menu=[${Math.round(emr.left)}..${Math.round(emr.right)}] editing area right=${Math.round(split.right)}; `
+        + `opened at x=${Math.round(bounds.right - 20)}`,
+    });
+    edgeMenu.close();
+    edgeAnchor.remove();
+
+    // ─────────────────────────────────────────────────────────────────
+    // SCROLL — the container scrolls under a placed surface
+    // ─────────────────────────────────────────────────────────────────
+
+    const spacer = container.createDiv({ cls: "spacer" });
+    const scrollAnchor = container.createDiv({ cls: "anchor" });
+    scrollAnchor.setCssProps({ position: "absolute", left: "40px", top: "600px" });
+    container.scrollTop = 300;
+    const sar = scrollAnchor.getBoundingClientRect();
+    const scrollPanel = buildPanel(container, 5);
+    P.positionToolbarPopover(scrollPanel, scrollAnchor, P.COMPACT_MENU_POPOVER);
+    const spr = scrollPanel.getBoundingClientRect();
+    out.push({
+      name: "SCROLL a panel placed while the container is scrolled tracks its anchor",
+      pass: Math.abs(spr.top - (sar.bottom + 6)) <= 1,
+      detail: `container.scrollTop=${container.scrollTop} anchor.bottom=${Math.round(sar.bottom)} `
+        + `panel.top=${Math.round(spr.top)} gap=${Math.round(spr.top - sar.bottom)}px (want 6)`,
+    });
+    scrollPanel.remove();
+    container.scrollTop = 0;
+    spacer.remove();
+    scrollAnchor.remove();
+
+    // ─────────────────────────────────────────────────────────────────
+    // ANCHOR LIFETIME — the anchor is destroyed while the surface survives
+    // ─────────────────────────────────────────────────────────────────
+    //
+    // place() early-returns when the anchor is disconnected, and the rAF loop only
+    // cleans up when the PANEL goes. A view that rebuilds its toolbar on commit
+    // therefore leaves a live surface pinned to where a now-deleted element used to be.
+
+    const doomed = container.createDiv({ cls: "anchor" });
+    doomed.setCssProps({ position: "absolute", left: "40px", top: "100px" });
+    const orphan = buildPanel(container, 5);
+    P.positionToolbarPopover(orphan, doomed, P.COMPACT_MENU_POPOVER);
+    const before = orphan.getBoundingClientRect();
+    const beforeVisibility = getComputedStyle(orphan).visibility;
+
+    // Drive the REAL sequence, which is not "call the positioner again with a dead anchor".
+    // The surface is opened and placed against a live anchor, which installs the reposition
+    // loop; only then does a commit rebuild the panel that owned the trigger. The loop is what
+    // notices, so it has to be the thing that runs. Simulating this by re-calling
+    // positionToolbarPopover measures a different code path entirely — the entry guard returns
+    // before `place` is ever reached, so the fix under test would never execute and the check
+    // would report a failure that the running app does not have.
+    doomed.remove();
+    const rebuilt = container.createDiv({ cls: "anchor" });
+    rebuilt.setCssProps({ position: "absolute", left: "40px", top: "400px" });
+    window.dispatchEvent(new Event("resize"));
+    await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+
+    const afterVisibility = getComputedStyle(orphan).visibility;
+    const after = orphan.getBoundingClientRect();
+    out.push({
+      name: "LIFETIME a surface whose anchor was destroyed stops presenting as placed",
+      pass: afterVisibility === "hidden" || !orphan.isConnected,
+      detail: `anchor destroyed while the surface stayed open, then the reposition loop ran. `
+        + `visibility before=${beforeVisibility} after=${afterVisibility}; `
+        + `panel.top before=${Math.round(before.top)} after=${Math.round(after.top)}. `
+        + `Unhandled, the surface stays painted at the dead anchor's last coordinate, over content `
+        + `that has been rebuilt underneath it, still focusable and still accepting input.`,
+    });
+
+    // CONTROL: a surface whose anchor is alive must NOT be hidden by the same loop, or the
+    // check above is satisfied by a positioner that hides everything.
+    const liveAnchor = container.createDiv({ cls: "anchor" });
+    liveAnchor.setCssProps({ position: "absolute", left: "40px", top: "200px" });
+    const kept = buildPanel(container, 5);
+    P.positionToolbarPopover(kept, liveAnchor, P.COMPACT_MENU_POPOVER);
+    window.dispatchEvent(new Event("resize"));
+    await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+    const keptRect = kept.getBoundingClientRect();
+    const liveRect = liveAnchor.getBoundingClientRect();
+    out.push({
+      name: "LIFETIME CONTROL a surface with a live anchor survives the same loop and stays placed",
+      pass: getComputedStyle(kept).visibility !== "hidden" && Math.abs(keptRect.top - (liveRect.bottom + 6)) <= 1,
+      detail: `visibility=${getComputedStyle(kept).visibility} panel.top=${Math.round(keptRect.top)} `
+        + `anchor.bottom=${Math.round(liveRect.bottom)} gap=${Math.round(keptRect.top - liveRect.bottom)}px`,
+    });
+
+    orphan.remove();
+    rebuilt.remove();
+    kept.remove();
+    liveAnchor.remove();
+
+    return out;
+  }));
+  await page.close();
+
+  // ── 5b. NARROW SPLIT ───────────────────────────────────────────────
+
+  const narrow = await openPage({ splitWidth: 420 });
+  all.push(...await narrow.evaluate(() => {
+    const out = [];
+    const P = globalThis.__p;
+    const container = document.querySelector(".note-database-container");
+    const split = document.querySelector(".workspace-split.mod-root").getBoundingClientRect();
+    const anchor = document.getElementById("anchor");
+
+    const panel = container.createDiv({ cls: "probe-panel" });
+    for (let i = 0; i < 6; i += 1) panel.createDiv({ cls: "row", text: `Item ${i}` });
+    P.positionToolbarPopover(panel, anchor, P.PANEL_POPOVER);
+    const pr = panel.getBoundingClientRect();
+    out.push({
+      name: "NARROW a 360px panel in a 420px split stays inside it",
+      pass: Math.round(pr.right) <= Math.round(split.right) + 1 && Math.round(pr.left) >= Math.round(split.left) - 1,
+      detail: `split=[${Math.round(split.left)}..${Math.round(split.right)}] (${Math.round(split.width)}px wide) `
+        + `panel=[${Math.round(pr.left)}..${Math.round(pr.right)}] (${Math.round(pr.width)}px wide)`,
+    });
+    panel.remove();
+
+    const menu = P.createOwnedMenu(document);
+    for (let i = 0; i < 6; i += 1) menu.addRow({ title: `Row ${i}`, onClick: () => undefined });
+    const bounds = P.getVisiblePopoverBounds(null);
+    menu.showAt({ x: Math.round(bounds.right - 40), y: Math.round(bounds.top + 60) });
+    const mr = menu.el.getBoundingClientRect();
+    out.push({
+      name: "NARROW an owned menu in a 420px split stays inside it",
+      pass: Math.round(mr.right) <= Math.round(split.right) + 1 && Math.round(mr.left) >= Math.round(split.left) - 1,
+      detail: `split=[${Math.round(split.left)}..${Math.round(split.right)}] menu=[${Math.round(mr.left)}..${Math.round(mr.right)}] (${Math.round(mr.width)}px wide)`,
+    });
+    menu.close();
+    return out;
+  }));
+  await narrow.close();
+
+  // ── 5c. LEFT SIDEBAR CLOSED ────────────────────────────────────────
+
+  const noSidebar = await openPage({ leftSidebar: false });
+  all.push(...await noSidebar.evaluate(() => {
+    const out = [];
+    const P = globalThis.__p;
+    const container = document.querySelector(".note-database-container");
+    const leafRect = document.querySelector(".workspace-leaf").getBoundingClientRect();
+    const split = document.querySelector(".workspace-split.mod-root").getBoundingClientRect();
+    const anchor = document.getElementById("anchor");
+    const anchorRect = anchor.getBoundingClientRect();
+
+    const panel = container.createDiv({ cls: "probe-panel" });
+    for (let i = 0; i < 5; i += 1) panel.createDiv({ cls: "row", text: `Item ${i}` });
+    P.positionToolbarPopover(panel, anchor, P.COMPACT_MENU_POPOVER);
+    const pr = panel.getBoundingClientRect();
+    out.push({
+      name: "SIDEBAR-CLOSED a panel is still anchored when the leaf origin returns to x=0",
+      pass: Math.abs(pr.top - (anchorRect.bottom + 6)) <= 1,
+      detail: `leaf.left=${Math.round(leafRect.left)} (sidebar hidden) anchor.bottom=${Math.round(anchorRect.bottom)} `
+        + `panel.top=${Math.round(pr.top)} gap=${Math.round(pr.top - anchorRect.bottom)}px`,
+    });
+    out.push({
+      name: "SIDEBAR-CLOSED a panel still clears the right sidebar",
+      pass: Math.round(pr.right) <= Math.round(split.right) + 1,
+      detail: `panel.right=${Math.round(pr.right)} editing area right=${Math.round(split.right)}`,
+    });
+    panel.remove();
+    return out;
+  }));
+  await noSidebar.close();
+
+  // ── 5d. HAND-PLACED SURFACES — the ones no primitive touches ────────
+  //
+  // These are reproduced from their source rather than imported, because each is a
+  // private method on a renderer that needs a live Obsidian App. The arithmetic is
+  // copied verbatim from the named file and line; if that arithmetic changes, this
+  // probe goes stale and the merge into verify-placement is what should catch it.
+
+  const hand = await openPage();
+  all.push(...await hand.evaluate(() => {
+    const out = [];
+    const P = globalThis.__p;
+    const split = document.querySelector(".workspace-split.mod-root").getBoundingClientRect();
+    const bounds = P.getVisiblePopoverBounds(null);
+    const view = window;
+
+    // database-view.ts:6890 / embedded-database-renderer.ts:1305, verbatim.
+    // The anchor is a toolbar search control near the right of the editing area.
+    const searchControl = document.querySelector(".note-database-container").createDiv({ cls: "anchor" });
+    searchControl.setCssProps({ position: "absolute", left: "600px", top: "20px", width: "200px" });
+    const rect = searchControl.getBoundingClientRect();
+    const panel = document.body.createDiv({ cls: "db-calendar-search-results-popover" });
+    const width = Math.max(320, Math.min(480, window.innerWidth - 16));
+    const left = Math.max(8, Math.min(rect.left, window.innerWidth - width - 8));
+    const top = Math.min(rect.bottom + 6, window.innerHeight - 80);
+    panel.setCssProps({ left: `${left}px`, top: `${top}px`, width: `${width}px` });
+    const pr = panel.getBoundingClientRect();
+    out.push({
+      name: "HAND calendar/timeline search results clear the right sidebar",
+      pass: Math.round(pr.right) <= Math.round(split.right) + 1,
+      detail: `panel=[${Math.round(pr.left)}..${Math.round(pr.right)}] editing area right=${Math.round(split.right)} `
+        + `window.innerWidth=${window.innerWidth}. The clamp is written against window.innerWidth, not against `
+        + `getVisiblePopoverBounds, so it permits ${Math.round(window.innerWidth - split.right)}px of travel under the sidebar.`,
+    });
+    // Prove the clamp is what permits it: an anchor further right should slide further under.
+    searchControl.setCssProps({ left: "1000px" });
+    const rect2 = searchControl.getBoundingClientRect();
+    const left2 = Math.max(8, Math.min(rect2.left, window.innerWidth - width - 8));
+    panel.setCssProps({ left: `${left2}px` });
+    const pr2 = panel.getBoundingClientRect();
+    out.push({
+      name: "HAND CONTROL the search-results overhang grows with the anchor, so the clamp is the cause",
+      pass: Math.round(pr2.right - split.right) > Math.round(pr.right - split.right),
+      detail: `anchor at x=600 overhangs ${Math.round(pr.right - split.right)}px; `
+        + `anchor at x=1000 overhangs ${Math.round(pr2.right - split.right)}px`,
+    });
+    panel.remove();
+
+    // column-menu.ts anchorless submenu fallback, transcribed from the current source.
+    // It is a private method on a renderer that needs a live Obsidian App, so the arithmetic is
+    // copied rather than called. Copying means this can go stale; lifting it into verify-placement
+    // beside the real modules is what should eventually retire the transcription.
+    const estimatedWidth = 292;
+    const point = { x: Math.round(split.right - 60), y: 200 };
+    const sub = document.body.createDiv({ cls: "db-dropdown-popover db-column-menu-subpopover" });
+    for (let i = 0; i < 5; i += 1) sub.createDiv({ cls: "row", text: `Item ${i}` });
+    sub.setCssProps({ position: "fixed", width: `${estimatedWidth}px` });
+    const subHeight = sub.getBoundingClientRect().height || 320;
+    sub.setCssProps({
+      left: `${P.clamp(point.x + 8, bounds.left + 8, Math.max(bounds.left + 8, bounds.right - estimatedWidth - 8))}px`,
+      top: `${P.clamp(point.y - 8, bounds.top + 8, Math.max(bounds.top + 8, bounds.bottom - subHeight - 8))}px`,
+    });
+    const sr = sub.getBoundingClientRect();
+    out.push({
+      name: "HAND the anchorless column submenu clears the right sidebar",
+      pass: Math.round(sr.right) <= Math.round(split.right) + 1,
+      detail: `submenu=[${Math.round(sr.left)}..${Math.round(sr.right)}] editing area right=${Math.round(split.right)}; `
+        + `clamped against bounds.right=${Math.round(bounds.right)} rather than view.innerWidth=${view.innerWidth}, `
+        + `which is what used to place it 188px under the sidebar`,
+    });
+    sub.remove();
+
+    // formula-modal.ts:1343, verbatim — the property/function autocomplete inside
+    // the formula workbench. Placed at an estimated caret position with no clamp of
+    // any kind, so its right edge is wherever the caret plus its own width land.
+    const modal = document.body.createDiv({ cls: "note-database-modal" });
+    modal.setCssProps({ position: "fixed", left: "300px", top: "100px", width: "800px", height: "400px" });
+    const suggest = modal.createDiv({ cls: "db-formula-property-suggestions is-visible" });
+    for (let i = 0; i < 6; i += 1) {
+      const b = suggest.createEl("button", { cls: "db-formula-property-suggestion" });
+      b.createSpan({ text: `functionName${i}` });
+      b.createSpan({ text: "(value, unit, locale, fallback)" });
+    }
+    // A caret near the right edge of a wide textarea is the ordinary case, not a corner.
+    // The clamp is transcribed from showSuggestionBox for the same reason as the submenu above.
+    const modalRect = modal.getBoundingClientRect();
+    const place = (caretLeft) => {
+      const available = modal.clientWidth;
+      const left = Math.max(0, Math.min(caretLeft, available - suggest.offsetWidth));
+      suggest.setCssProps({ left: `${left}px`, top: "44px" });
+      return suggest.getBoundingClientRect();
+    };
+    const sg = place(700);
+    out.push({
+      name: "HAND the formula autocomplete stays inside its modal",
+      pass: Math.round(sg.right) <= Math.round(modalRect.right) + 1,
+      detail: `suggest=[${Math.round(sg.left)}..${Math.round(sg.right)}] modal=[${Math.round(modalRect.left)}..${Math.round(modalRect.right)}]; `
+        + `overhang=${Math.round(sg.right - modalRect.right)}px with the caret at x=700 of an 800px modal. `
+        + `Unclamped this measured 169px: the old statement bounded the corner the box starts at and `
+        + `left the corner it ends at free.`,
+    });
+    // CONTROL: the check must be able to see an overhang at all, or a green result means nothing.
+    // Reproduce the pre-fix statement — left = caret with no right-edge bound — and require it to fail.
+    suggest.setCssProps({ left: "700px" });
+    const sgBroken = suggest.getBoundingClientRect();
+    out.push({
+      name: "HAND CONTROL the unclamped formula autocomplete overhangs, so the check can distinguish",
+      pass: Math.round(sgBroken.right) > Math.round(modalRect.right) + 1,
+      detail: `unclamped right=${Math.round(sgBroken.right)} (overhang ${Math.round(sgBroken.right - modalRect.right)}px) `
+        + `vs clamped right=${Math.round(sg.right)} (overhang ${Math.round(sg.right - modalRect.right)}px)`,
+    });
+    modal.remove();
+
+    // calendar-renderer.ts:600-616 — the "more events" day popover. Unlike the three
+    // above it clamps to `.note-database-container`, which lives inside the leaf, so it
+    // cannot reach the sidebar however wrong its arithmetic is. That is a different
+    // risk class and the number that establishes it is the container's own right edge.
+    const cont = document.querySelector(".note-database-container").getBoundingClientRect();
+    out.push({
+      name: "HAND the calendar day popover clamps to a container that is inside the editing area",
+      pass: Math.round(cont.right) <= Math.round(split.right) + 1,
+      detail: `container.right=${Math.round(cont.right)} editing area right=${Math.round(split.right)}. `
+        + `positionDayPopover clamps to .note-database-container rather than to the window, so its `
+        + `worst case is a misplacement inside the editing area, never travel under a sidebar.`,
+    });
+
+    searchControl.remove();
+    return out;
+  }));
+  await hand.close();
+
+  // ── 5e. PHONE — must not move ──────────────────────────────────────
+  //
+  // Desktop is the subject. These numbers exist so a desktop change that moves the
+  // phone is visible rather than discovered later.
+
+  const phone = await browser.newPage({
+    reducedMotion: "reduce",
+    viewport: { width: 390, height: 844 },
+    hasTouch: true,
+    isMobile: true,
+  });
+  await phone.setContent(pageHtml().replace(
+    "<body>",
+    '<body class="is-phone" style="--safe-area-inset-bottom: 34px; --background-modifier-border: #333333">'
+    + '<div class="mobile-navbar" style="position:fixed;left:0;right:0;bottom:0;height:72px;background:#222;z-index:100"></div>',
+  ));
+  await phone.addStyleTag({ content: readFileSync(join(REPO, "styles.css"), "utf8") });
+  await phone.addScriptTag({ content: shimJs + "\ninstallObsidianDomShim(globalThis);" });
+  await phone.addScriptTag({ content: positionerJs });
+  all.push(...await phone.evaluate(() => {
+    const out = [];
+    const P = globalThis.__p;
+    const menu = P.createOwnedMenu(document);
+    for (let i = 0; i < 8; i += 1) menu.addRow({ title: `Row ${i}`, onClick: () => undefined });
+    menu.showAt({ x: 40, y: 200 });
+    const r = menu.el.getBoundingClientRect();
+    const style = getComputedStyle(menu.el);
+    out.push({
+      name: "PHONE an owned menu still presents as a full-width bottom sheet",
+      pass: Math.round(r.width) >= window.innerWidth - 1 && Math.abs(r.bottom - window.innerHeight) <= 1,
+      detail: `menu=[${Math.round(r.left)}..${Math.round(r.right)}] width=${Math.round(r.width)} `
+        + `viewport=${window.innerWidth}x${window.innerHeight} bottom=${Math.round(r.bottom)} `
+        + `position=${style.position} max-height=${style.maxHeight}`,
+    });
+    out.push({
+      name: "PHONE the sheet is capped and scrolls rather than growing past the screen",
+      pass: r.height <= window.innerHeight * 0.9 + 2,
+      detail: `height=${Math.round(r.height)} cap=${Math.round(window.innerHeight * 0.9)} overflow-y=${style.overflowY}`,
+    });
+    menu.close();
+    return out;
+  }));
+  await phone.close();
+
+  liftedResults.push(...all);
+  }
+
+{
+  const pageHtml = `<!doctype html><html><head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; }
+    .app-container { display: flex; width: 100vw; height: 100vh; }
+    .workspace { display: flex; width: 100%; }
+    .workspace-split.mod-root { flex: 1 1 auto; position: relative; overflow: hidden; }
+    .note-database-container { position: relative; height: 100%; padding: 40px; }
+    .workspace-leaf { position: relative; contain: strict !important; overflow: hidden; isolation: isolate; }
+    .workspace-leaf, .workspace-leaf-content, .view-content { height: 100%; }
+    .app-container.mod-static-nav .workspace { height: calc(100% - 80px); }
+    .anchor { width: 120px; height: 28px; background: #ccd; }
+  </style></head>
+  <body class="is-phone" style="--safe-area-inset-bottom: 34px; --background-modifier-border: #333333">
+    <div class="mobile-navbar" style="position:fixed;left:0;right:0;bottom:0;height:72px;background:#222;z-index:100"></div>
+    <div class="app-container mod-static-nav"><div class="workspace">
+      <div class="workspace-split mod-root">
+        <div class="workspace-leaf"><div class="workspace-leaf-content"><div class="view-content">
+        <div class="note-database-container"><div class="anchor" id="anchor"></div></div>
+        </div></div></div>
+      </div>
+    </div></div>
+  </body></html>`;
+
+  // ───────────────────────────────────────────────────────────────────
+  // 5. HARNESS
+  // ───────────────────────────────────────────────────────────────────
+
+  const page = await browser.newPage({
+    viewport: { width: 390, height: 844 },
+    hasTouch: true,
+    isMobile: true,
+  });
+  await page.setContent(pageHtml);
+  await page.addStyleTag({ content: readFileSync(join(REPO, "styles.css"), "utf8") });
+  await page.addScriptTag({ content: shimJs + "\ninstallObsidianDomShim(globalThis);" });
+  await page.addScriptTag({ content: positionerJs });
+
+  const cdp = await page.context().newCDPSession(page);
+  const touch = async (type, x, y) => {
+    await cdp.send("Input.dispatchTouchEvent", {
+      type,
+      touchPoints: type === "touchEnd" ? [] : [{ x, y, radiusX: 12, radiusY: 12, force: 1 }],
+    });
+  };
+
+  const results = [];
+  const record = (name, pass, detail) => results.push({ name, pass, detail });
+
+  // ── Open the record sheet through the shipped entry point ─────────────
+  await page.evaluate(() => {
+    const { openRecordDetailPanel } = globalThis.__drag;
+    globalThis.__log = [];
+    for (const type of ["pointerdown", "pointermove", "pointerup", "pointercancel", "lostpointercapture", "touchstart", "touchmove"]) {
+      document.addEventListener(type, (e) => {
+        globalThis.__log.push({
+          type: e.type,
+          target: e.target?.className || e.target?.tagName || "?",
+          button: e.button,
+          pointerType: e.pointerType,
+          clientY: Math.round(e.clientY ?? -1),
+          defaultPrevented: e.defaultPrevented,
+        });
+      }, true);
+    }
+    openRecordDetailPanel({
+      anchorEl: document.getElementById("anchor"),
+      host: document.querySelector(".note-database-container"),
+      row: { file: { path: "33.md", basename: "33", name: "33.md" }, frontmatter: { income: 1 }, computed: {} },
+      columns: [
+        { key: "file.name", label: "Name", type: "text" },
+        { key: "income", label: "Income", type: "number" },
+        { key: "status", label: "Status", type: "text" },
+      ],
+      config: { viewType: "table", schema: { computedFields: [] }, titleField: "file.name" },
+      app: {},
+      actions: { editCell: () => {}, openRow: () => {}, editFileName: () => {}, isReadOnly: false },
+    });
+  });
+  // The positioner re-measures on the next frame; measure after it settles.
+  await page.waitForTimeout(120);
+
+  // ── 1. GEOMETRY: where the grab band actually answers ────────────────
+  const geometry = await page.evaluate(() => {
+    const panel = document.querySelector(".db-record-detail-panel");
+    const handle = panel?.querySelector(".db-mobile-bottom-sheet-handle");
+    if (!panel || !handle) return { error: "no panel or no handle", hasPanel: !!panel, hasHandle: !!handle };
+    const pr = panel.getBoundingClientRect();
+    const hr = handle.getBoundingClientRect();
+    const cx = Math.round(pr.left + pr.width / 2);
+    // Walk down the sheet's own coordinate space and ask the document who answers.
+    const column = [];
+    for (let dy = 0; dy <= 60; dy += 1) {
+      const el = document.elementFromPoint(cx, Math.round(pr.top) + dy);
+      column.push(el === handle ? "H" : panel.contains(el) ? "p" : el ? "x" : "-");
+    }
+    // And across the full width at the band's vertical middle.
+    const bandRows = column.map((c, i) => (c === "H" ? i : -1)).filter((i) => i >= 0);
+    const midY = bandRows.length ? Math.round(pr.top) + bandRows[Math.floor(bandRows.length / 2)] : Math.round(hr.top + 2);
+    let leftMost = null; let rightMost = null;
+    // Stepped 2px, so the scan could miss the edge pixel at each end, and the width was taken as
+    // the distance between the two sample points rather than the count of pixels between them. A
+    // 390px band measured 384 and read as short of a full-width one. Step 1, and count inclusively.
+    for (let x = Math.round(pr.left); x <= Math.round(pr.right); x += 1) {
+      if (document.elementFromPoint(x, midY) === handle) { if (leftMost === null) leftMost = x; rightMost = x; }
+    }
+    return {
+      panel: { top: Math.round(pr.top), bottom: Math.round(pr.bottom), left: Math.round(pr.left), right: Math.round(pr.right), width: Math.round(pr.width), height: Math.round(pr.height) },
+      handleBar: { top: Math.round(hr.top), height: Math.round(hr.height), width: Math.round(hr.width) },
+      column: column.join(""),
+      bandTop: bandRows.length ? bandRows[0] : null,
+      bandBottom: bandRows.length ? bandRows[bandRows.length - 1] : null,
+      bandHeight: bandRows.length,
+      bandLeft: leftMost === null ? null : leftMost - Math.round(pr.left),
+      bandRight: rightMost === null ? null : rightMost - Math.round(pr.left),
+      bandWidth: leftMost === null ? 0 : rightMost - leftMost + 1,
+      midY,
+      handleTouchAction: getComputedStyle(handle).touchAction,
+      panelTouchAction: getComputedStyle(panel).touchAction,
+      panelOverflowY: getComputedStyle(panel).overflowY,
+      panelInlineOverflowY: panel.style.overflowY || "(unset)",
+      panelInlineBoxSizing: panel.style.boxSizing || "(unset)",
+      panelTransformAtRest: getComputedStyle(panel).transform,
+      scrimPointerEvents: getComputedStyle(document.querySelector(".db-mobile-sheet-scrim")).pointerEvents,
+    };
+  });
+  record(
+    "the grab band answers presses at the top of the sheet",
+    geometry.bandHeight > 0,
+    `band occupies y=${geometry.bandTop}..${geometry.bandBottom} of the sheet (${geometry.bandHeight}px tall); hit column from sheet top: ${geometry.column}`,
+  );
+  record(
+    "the grab band spans the full sheet width",
+    geometry.bandWidth >= geometry.panel.width - 4,
+    `band x=${geometry.bandLeft}..${geometry.bandRight} of a ${geometry.panel.width}px sheet (${geometry.bandWidth}px wide)`,
+  );
+  record(
+    "the handle keeps touch-action: none so the browser cannot claim the drag",
+    geometry.handleTouchAction === "none",
+    `handle touch-action=${geometry.handleTouchAction}, panel touch-action=${geometry.panelTouchAction}`,
+  );
+
+  // ── 2. THE GESTURE: a real thumb, from the very first move ───────────
+  const startX = Math.round(geometry.panel.left + geometry.panel.width / 2);
+  const startY = geometry.midY;
+  const samples = [];
+  await touch("touchStart", startX, startY);
+  for (const dy of [1, 2, 4, 8, 16, 32, 64, 95]) {
+    await touch("touchMove", startX, startY + dy);
+    // Read after the frame the handler paints into, not in the same tick as the dispatch.
+    // Without this the transform read back belongs to the PREVIOUS move: the drag reported
+    // 32->16 64->32 95->64, each sample lagging one behind, which looks exactly like a sheet
+    // tracking the finger at half speed. Two frames, because the handler schedules its write in
+    // one rAF and the style is only observable after that frame has been committed.
+    const t = await page.evaluate(() => new Promise((resolve) => {
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        const p = document.querySelector(".db-record-detail-panel");
+        resolve(p ? { computed: getComputedStyle(p).transform, inline: p.style.transform || "(none)" } : null);
+      }));
+    }));
+    samples.push({ dy, ...t });
+  }
+  const log = await page.evaluate(() => globalThis.__log.slice());
+  await touch("touchEnd", startX, startY + 95);
+  await page.waitForTimeout(60);
+
+  const translateY = (m) => {
+    if (!m || m === "none") return 0;
+    const nums = m.match(/matrix(?:3d)?\(([^)]+)\)/);
+    if (!nums) return 0;
+    const parts = nums[1].split(",").map((n) => parseFloat(n.trim()));
+    return parts.length === 6 ? parts[5] : parts[13];
+  };
+  const firstMove = samples[0];
+  const moved = samples.filter((s) => Math.abs(translateY(s.computed) - s.dy) <= 1.5);
+  record(
+    "the sheet follows the finger from the very first movement",
+    Math.abs(translateY(firstMove.computed) - firstMove.dy) <= 1.5,
+    `after a ${firstMove.dy}px move the panel's computed transform is ${firstMove.computed} (translateY=${translateY(firstMove.computed)}px, want ${firstMove.dy}px); inline=${firstMove.inline}`,
+  );
+  record(
+    "the sheet tracks the finger 1:1 across the whole drag",
+    moved.length === samples.length,
+    samples.map((s) => `${s.dy}->${Math.round(translateY(s.computed))}`).join(" "),
+  );
+  const downs = log.filter((e) => e.type === "pointerdown");
+  record(
+    "pointerdown reaches the handle with button 0",
+    downs.length > 0 && downs[0].target.includes("handle") && downs[0].button === 0,
+    downs.length ? `pointerdown target=${downs[0].target} button=${downs[0].button} pointerType=${downs[0].pointerType}` : "no pointerdown observed at all",
+  );
+  record(
+    "the pointer stream is never cancelled mid-drag",
+    !log.some((e) => e.type === "pointercancel"),
+    `${log.filter((e) => e.type === "pointermove").length} pointermove, ${log.filter((e) => e.type === "pointercancel").length} pointercancel, ${log.filter((e) => e.type === "lostpointercapture").length} lostpointercapture`,
+  );
+
+  // ── 3. THE REBUILD: does a field commit take the handle away? ────────
+  const afterRefresh = await page.evaluate(() => {
+    const { refreshRecordDetailPanel } = globalThis.__drag;
+    refreshRecordDetailPanel({ file: { path: "33.md", basename: "33", name: "33.md" }, frontmatter: { income: 2 }, computed: {} });
+    const panel = document.querySelector(".db-record-detail-panel");
+    return {
+      hasPanel: !!panel,
+      hasHandle: !!panel?.querySelector(".db-mobile-bottom-sheet-handle"),
+      firstChild: panel?.firstElementChild?.className || "(none)",
+    };
+  });
+  record(
+    "the grab handle survives a field refresh",
+    afterRefresh.hasHandle,
+    `after refreshRecordDetailPanel the sheet's first child is "${afterRefresh.firstChild}"; handle present=${afterRefresh.hasHandle}`,
+  );
+
+  // A second real drag, after the refresh, is the operator's "barely works" case.
+  if (afterRefresh.hasPanel) {
+    const g2 = await page.evaluate(() => {
+      const p = document.querySelector(".db-record-detail-panel");
+      const r = p.getBoundingClientRect();
+      return { x: Math.round(r.left + r.width / 2), y: Math.round(r.top) + 8 };
+    });
+    await touch("touchStart", g2.x, g2.y);
+    await touch("touchMove", g2.x, g2.y + 40);
+    const t2 = await page.evaluate(() => getComputedStyle(document.querySelector(".db-record-detail-panel")).transform);
+    await touch("touchEnd", g2.x, g2.y + 40);
+    record(
+      "a drag still works after the sheet has refreshed its fields",
+      Math.abs(translateY(t2) - 40) <= 1.5,
+      `after a 40px drag on the refreshed sheet, transform=${t2} (translateY=${Math.round(translateY(t2))}px, want 40px)`,
+    );
+  }
+
+  // ── 4. THE PROPERTY NAMES the positioner writes ──────────────────────
+  record(
+    "every declaration the positioner writes actually lands on the sheet",
+    geometry.panelInlineOverflowY !== "(unset)",
+    `positioner asked for overflow-y:auto and box-sizing:border-box; the panel's inline style holds`
+      + ` overflow-y=${geometry.panelInlineOverflowY}, box-sizing=${geometry.panelInlineBoxSizing}`
+      + ` — measured through the shared shim, which now carries the device's setProperty semantics,`
+      + ` so a camelCase key here would land nowhere and this would read (unset)`,
+  );
+
+
+  liftedResults.push(...results);
+  await page.close();
+  }
+
+{
+  // The nine classes that present as a phone sheet. Named rather than discovered, because the
+  // audit asks whether each one gets the sheet treatment and a discovery pass would only ever find
+  // the ones that already do.
+  const SHEET_SURFACES = [
+    "db-record-detail-panel",
+    "db-owned-menu",
+    "db-dropdown-popover",
+    "db-cell-option-popover",
+    "db-cell-edit-popover",
+    "db-date-value-popover",
+    "db-icon-picker-popover",
+    "db-color-picker-popup",
+    "db-relation-popover",
+  ];
+
+  const pageHtml = `<!doctype html><html><head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    * { box-sizing: border-box; } body { margin: 0; }
+    .app-container { display: flex; width: 100vw; height: 100vh; }
+    .workspace { display: flex; width: 100%; }
+    .workspace-split.mod-root { flex: 1 1 auto; position: relative; overflow: hidden; }
+    .note-database-container { position: relative; height: 100%; padding: 40px; }
+    .workspace-leaf { position: relative; contain: strict !important; overflow: hidden; isolation: isolate; }
+    .workspace-leaf, .workspace-leaf-content, .view-content { height: 100%; }
+    .app-container.mod-static-nav .workspace { height: calc(100% - 80px); }
+    .anchor { width: 120px; height: 28px; background: #ccd; }
+  </style></head>
+  <body class="is-phone theme-light" style="--safe-area-inset-bottom: 34px; --background-modifier-border: #333333; --background-primary: #ffffff">
+    <div class="mobile-navbar" style="position:fixed;left:0;right:0;bottom:0;height:72px;background:#222;z-index:100"></div>
+    <div class="app-container mod-static-nav"><div class="workspace"><div class="workspace-split mod-root">
+      <div class="workspace-leaf"><div class="workspace-leaf-content"><div class="view-content">
+      <div class="note-database-container"><div class="anchor" id="anchor"></div></div>
+      </div></div></div>
+    </div></div></div>
+  </body></html>`;
+
+  // ───────────────────────────────────────────────────────────────────
+  // 4. HARNESS
+  // ───────────────────────────────────────────────────────────────────
+
+  const page = await browser.newPage({ viewport: { width: 390, height: 844 }, hasTouch: true, isMobile: true });
+  await page.setContent(pageHtml);
+  await page.addStyleTag({ content: readFileSync(join(REPO, "styles.css"), "utf8") });
+  await page.addScriptTag({ content: shimJs + "\ninstallObsidianDomShim(globalThis);" });
+  await page.addScriptTag({ content: positionerJs });
+
+  const cdp = await page.context().newCDPSession(page);
+  const touch = (type, x, y) => cdp.send("Input.dispatchTouchEvent", {
+    type, touchPoints: type === "touchEnd" ? [] : [{ x, y, radiusX: 12, radiusY: 12, force: 1 }],
+  });
+
+  const results = [];
+  const record = (ask, name, pass, detail) => results.push({ ask, name, pass, detail });
+
+  const openSheet = () => page.evaluate(() => {
+    globalThis.__a.closeRecordDetailPanel();
+    globalThis.__a.openRecordDetailPanel({
+      anchorEl: document.getElementById("anchor"),
+      host: document.querySelector(".note-database-container"),
+      row: { file: { path: "33.md", basename: "Quarterly review", name: "33.md" }, frontmatter: { income: 1200, status: "Active", owner: "Michel" }, computed: {} },
+      columns: [
+        { key: "file.name", label: "Name", type: "text" },
+        { key: "income", label: "Income", type: "number" },
+        { key: "status", label: "Status", type: "text" },
+        { key: "owner", label: "Owner", type: "text" },
+      ],
+      config: { viewType: "table", schema: { computedFields: [] }, titleField: "file.name" },
+      app: {},
+      actions: { editCell: () => {}, openRow: () => {}, editFileName: () => {}, isReadOnly: false },
+    });
+  });
+
+  await openSheet();
+  await page.waitForTimeout(250);
+
+  // ── ASK 1 — the drag ──────────────────────────────────────────────────
+  const geom = await page.evaluate(() => {
+    const panel = document.querySelector(".db-record-detail-panel");
+    const handle = panel.querySelector(".db-mobile-bottom-sheet-handle");
+    const pr = panel.getBoundingClientRect();
+    const cx = Math.round(pr.left + pr.width / 2);
+    const rows = [];
+    for (let dy = 0; dy <= 70; dy += 1) if (document.elementFromPoint(cx, Math.round(pr.top) + dy) === handle) rows.push(dy);
+    let l = null; let r = null;
+    const midY = Math.round(pr.top) + rows[Math.floor(rows.length / 2)];
+    for (let x = Math.round(pr.left); x <= Math.round(pr.right); x += 1) {
+      if (document.elementFromPoint(x, midY) === handle) { if (l === null) l = x; r = x; }
+    }
+    return {
+      panelTop: Math.round(pr.top), panelLeft: Math.round(pr.left), panelWidth: Math.round(pr.width),
+      bandTop: rows[0], bandBottom: rows[rows.length - 1], bandRows: rows.length,
+      bandLeft: l - Math.round(pr.left), bandRight: r - Math.round(pr.left), bandWidth: r - l + 1,
+      midY, cx,
+    };
+  });
+
+  const dragOnce = async (x, y, dy) => {
+    await touch("touchStart", x, y);
+    await touch("touchMove", x, y + dy);
+    await page.waitForTimeout(160); // outlive the 120ms overlay transition before reading
+    const t = await page.evaluate(() => {
+      const p = document.querySelector(".db-record-detail-panel");
+      return p ? getComputedStyle(p).transform : "gone";
+    });
+    await touch("touchEnd", x, y + dy);
+    await page.waitForTimeout(200);
+    return t;
+  };
+  const ty = (m) => {
+    if (!m || m === "none" || m === "gone") return 0;
+    const g = m.match(/matrix(?:3d)?\(([^)]+)\)/);
+    if (!g) return 0;
+    const p = g[1].split(",").map((n) => parseFloat(n.trim()));
+    return p.length === 6 ? p[5] : p[13];
+  };
+
+  const freshDrag = await dragOnce(geom.cx, geom.midY, 60);
+  record(1, "a fresh sheet follows the finger 1:1", Math.abs(ty(freshDrag) - 60) <= 1,
+    `60px drag on a just-opened sheet moved it ${ty(freshDrag).toFixed(1)}px`);
+
+  // The operator's case: the view re-renders while the sheet is open, which every
+  // edit, metadata resolve and computed sync does.
+  const afterRefresh = await page.evaluate(() => {
+    globalThis.__a.refreshRecordDetailPanel({ file: { path: "33.md", basename: "Quarterly review", name: "33.md" }, frontmatter: { income: 1300, status: "Active", owner: "Michel" }, computed: {} });
+    const panel = document.querySelector(".db-record-detail-panel");
+    return { hasHandle: !!panel.querySelector(".db-mobile-bottom-sheet-handle"), firstChild: panel.firstElementChild?.className || "(none)" };
+  });
+  record(1, "the grab bar survives a view re-render", afterRefresh.hasHandle,
+    `after one refresh the sheet's first child is "${afterRefresh.firstChild}"; grab bar present=${afterRefresh.hasHandle}`);
+
+  const staleDrag = await dragOnce(geom.cx, geom.midY, 60);
+  record(1, "a re-rendered sheet still follows the finger 1:1", Math.abs(ty(staleDrag) - 60) <= 1,
+    `60px drag after a re-render moved it ${ty(staleDrag).toFixed(1)}px`);
+
+  // ── ASK 2 — header actions aligned, 44x44 ─────────────────────────────
+  await openSheet();
+  await page.waitForTimeout(200);
+  const header = await page.evaluate(() => {
+    const panel = document.querySelector(".db-record-detail-panel");
+    const open = panel.querySelector(".db-board-card-open");
+    const close = panel.querySelector(".db-cell-edit-close");
+    const box = (el) => { const r = el.getBoundingClientRect(); return { w: +r.width.toFixed(1), h: +r.height.toFixed(1), cy: +(r.top + r.height / 2).toFixed(1), top: +r.top.toFixed(1), right: +r.right.toFixed(1) }; };
+    return { open: box(open), close: box(close) };
+  });
+  record(2, "expand and close are both 44x44 on the record sheet",
+    header.open.w >= 44 && header.open.h >= 44 && header.close.w >= 44 && header.close.h >= 44,
+    `expand ${header.open.w}x${header.open.h}, close ${header.close.w}x${header.close.h}`);
+  record(2, "expand and close share one centre line",
+    Math.abs(header.open.cy - header.close.cy) <= 0.5,
+    `centres differ by ${Math.abs(header.open.cy - header.close.cy).toFixed(2)}px (expand cy=${header.open.cy}, close cy=${header.close.cy})`);
+
+  // ── ASK 3 — Notion-like rows: no gap, bigger text, a divider ──────────
+  const rows = await page.evaluate(() => {
+    const panel = document.querySelector(".db-record-detail-panel");
+    const fields = panel.querySelectorAll(".db-record-detail-field");
+    const list = panel.querySelector(".db-record-detail-fields");
+    const a = fields[0].getBoundingClientRect();
+    const b = fields[1].getBoundingClientRect();
+    const label = fields[0].querySelector(".db-record-detail-field-label");
+    const value = fields[0].querySelector(".db-board-card-value");
+    const cs = (el) => getComputedStyle(el);
+    return {
+      count: fields.length,
+      gap: +(b.top - a.bottom).toFixed(2),
+      listGap: cs(list).rowGap,
+      labelSize: cs(label).fontSize,
+      valueSize: value ? cs(value).fontSize : "(none)",
+      dividerWidth: cs(fields[0]).borderBottomWidth,
+      dividerColor: cs(fields[0]).borderBottomColor,
+      rowHeight: +a.height.toFixed(2),
+    };
+  });
+  record(3, "no gap between rows", rows.gap <= 0.5, `measured gap between adjacent rows = ${rows.gap}px (row-gap token ${rows.listGap})`);
+  record(3, "the row's value text is larger than the caption default",
+    parseFloat(rows.valueSize) >= 16,
+    `value ${rows.valueSize} (was em-derived caption size), row height ${rows.rowHeight}px`);
+  // 12 14 16 18 20 24 ... is the type scale. 13 is not on it, and an off-scale size is the defect
+  // a scale exists to prevent: it reads as "not quite 14" rather than as a decision.
+  record(3, "the row's label size is on the type scale",
+    [12, 14, 16, 18, 20, 24].includes(parseFloat(rows.labelSize)),
+    `label ${rows.labelSize}; nearest scale steps are 12px and 14px`);
+  record(3, "a light divider separates each row",
+    parseFloat(rows.dividerWidth) > 0 && rows.dividerColor !== "rgba(0, 0, 0, 0)",
+    `border-bottom ${rows.dividerWidth} ${rows.dividerColor}`);
+
+  // ── ASK 5 — the grab band, as accepted: 35px, full width ──────────────
+  // The 48px ask was closed: the band gets the chrome above the header and no more, which is
+  // --db-space-6 (16) + the handle's 8px top margin + its 4px bar + its 4px bottom reach = 32px.
+  // That clears WCAG 2.5.8's 24px AA target and falls short of 2.5.5's 44px AAA one, knowingly.
+  // The prose record says 35px; the stylesheet's own arithmetic says 32px, and this is the number.
+  record(5, "the grab band takes all the chrome above the header", geom.bandRows >= 32 && geom.bandTop <= 1,
+    `band answers presses over y=${geom.bandTop}..${geom.bandBottom} of the sheet = ${geom.bandRows}px (>= the 24px WCAG 2.5.8 AA target; the written record's "35px" is 3px optimistic)`);
+  // Full width less the sheet's own border and scroll gutter, which clip the band's box.
+  record(5, "the grab band spans the full sheet width", geom.bandWidth >= geom.panelWidth - 4,
+    `band x=${geom.bandLeft}..${geom.bandRight} = ${geom.bandWidth}px of a ${geom.panelWidth}px sheet`);
+
+  // ── ASK 6 — one fill for every sheet surface ──────────────────────────
+  // Each surface is built where its owner builds it. A panel is created inside the plugin's
+  // container and portalled out by applySheetChrome, which is what hands it `db-surface` and the
+  // token scope; a bare div parked on the body instead takes applySheetChrome's already-on-the-body
+  // early return, never receives that class, and measures transparent for a reason that has nothing
+  // to do with the fill under test. The owned menu is measured through its own constructor, since it
+  // is the one surface that really does mount itself on the body.
+  const fills = await page.evaluate((classes) => {
+    const { applySheetChrome, createOwnedMenu } = globalThis.__a;
+    const host = document.querySelector(".note-database-container");
+    const out = {};
+    for (const cls of classes) {
+      if (cls === "db-owned-menu") continue;
+      const el = host.createDiv({ cls });
+      applySheetChrome(el, true);
+      out[cls] = getComputedStyle(el).backgroundColor;
+      applySheetChrome(el, false);
+      el.remove();
+    }
+    const menu = createOwnedMenu(document);
+    applySheetChrome(menu.el, true);
+    out["db-owned-menu"] = getComputedStyle(menu.el).backgroundColor;
+    applySheetChrome(menu.el, false);
+    menu.el.remove();
+    return out;
+  }, SHEET_SURFACES);
+  const distinct = [...new Set(Object.values(fills))];
+  record(6, "every sheet surface paints the same fill", distinct.length === 1,
+    distinct.length === 1
+      ? `all ${SHEET_SURFACES.length} surfaces measure ${distinct[0]}`
+      : `${distinct.length} different fills: ` + Object.entries(fills).map(([k, v]) => `${k}=${v}`).join("  "));
+
+  // ── ASK 7 — the scrim: modal, 25% black, and out of the drag's way ────
+  await openSheet();
+  await page.waitForTimeout(200);
+  const scrim = await page.evaluate(() => {
+    const s = document.querySelector(".db-mobile-sheet-scrim");
+    const panel = document.querySelector(".db-record-detail-panel");
+    const handle = panel.querySelector(".db-mobile-bottom-sheet-handle");
+    const cs = getComputedStyle(s);
+    const pr = panel.getBoundingClientRect();
+    // Behind the sheet: does the scrim take the press instead of the table?
+    const behind = document.elementFromPoint(Math.round(pr.left + pr.width / 2), Math.round(pr.top) - 120);
+    // On the grab band: does the scrim steal it?
+    const onBand = document.elementFromPoint(Math.round(pr.left + pr.width / 2), Math.round(pr.top) + 12);
+    return {
+      background: cs.backgroundColor,
+      pointerEvents: cs.pointerEvents,
+      scrimZ: cs.zIndex,
+      sheetZ: getComputedStyle(panel).zIndex,
+      behind: behind?.className || behind?.tagName || "(nothing)",
+      behindIsScrim: behind === s,
+      onBandIsHandle: onBand === handle,
+    };
+  });
+  record(7, "the scrim is a 25% black modal layer", scrim.background === "rgba(0, 0, 0, 0.25)" && scrim.pointerEvents === "auto",
+    `background ${scrim.background}, pointer-events ${scrim.pointerEvents}`);
+  record(7, "the scrim blocks the app behind the sheet", scrim.behindIsScrim,
+    `a press 120px above the sheet lands on "${scrim.behind}"`);
+  record(7, "the scrim does not steal the grab band", scrim.onBandIsHandle,
+    `a press on the band lands on the ${scrim.onBandIsHandle ? "grab handle" : "scrim"}; sheet z=${scrim.sheetZ}, scrim z=${scrim.scrimZ}`);
+
+  // ── ASK 4 — the keyboard inset, driven through the shipped lever ──────
+  //
+  // Two host signals announce a software keyboard and they do not behave the same.
+  // iOS shrinks visualViewport and leaves window.innerHeight alone; Android fires a
+  // window resize as well. The sheet reacts to both, and it reacts to them in
+  // opposite directions, so each is driven separately.
+  await openSheet();
+  await page.waitForTimeout(200);
+  const kbVisual = await page.evaluate(async () => {
+    const panel = document.querySelector(".db-record-detail-panel");
+    const before = Math.round(panel.getBoundingClientRect().bottom);
+    document.documentElement.style.setProperty("--keyboard-height", "336px");
+    // The iOS-shaped signal: visualViewport changes, window does not.
+    window.visualViewport?.dispatchEvent(new Event("resize"));
+    await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
+    const live = document.querySelector(".db-record-detail-panel");
+    const out = live
+      ? { survived: true, before, bottom: Math.round(live.getBoundingClientRect().bottom), top: Math.round(live.getBoundingClientRect().top), varValue: live.style.getPropertyValue("--db-mobile-sheet-bottom"), maxH: getComputedStyle(live).maxHeight }
+      : { survived: false, before };
+    document.documentElement.style.removeProperty("--keyboard-height");
+    window.visualViewport?.dispatchEvent(new Event("resize"));
+    await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
+    const back = document.querySelector(".db-record-detail-panel");
+    return { ...out, restored: back ? Math.round(back.getBoundingClientRect().bottom) : null, viewport: window.innerHeight };
+  });
+  record(4, "a declared keyboard height lifts the sheet clear of it",
+    kbVisual.survived && kbVisual.viewport - kbVisual.bottom >= 330,
+    kbVisual.survived
+      ? `--keyboard-height:336px moved the sheet's bottom edge ${kbVisual.before} -> ${kbVisual.bottom} on an ${kbVisual.viewport}px screen (clearance ${kbVisual.viewport - kbVisual.bottom}px); lever var=${kbVisual.varValue}`
+      : "the sheet was destroyed before any inset could be applied");
+  record(4, "lifting the sheet does not push its top off the screen",
+    kbVisual.survived && kbVisual.top >= 0,
+    kbVisual.survived ? `top edge at y=${kbVisual.top}, max-height ${kbVisual.maxH}` : "n/a — sheet gone");
+  record(4, "the sheet returns to the floor when the keyboard closes",
+    kbVisual.restored !== null && Math.abs(kbVisual.restored - kbVisual.viewport) <= 1,
+    kbVisual.restored === null ? "n/a — sheet gone" : `bottom edge back at ${kbVisual.restored} of ${kbVisual.viewport}`);
+
+  await openSheet();
+  await page.waitForTimeout(200);
+  const kbWindow = await page.evaluate(async () => {
+    document.documentElement.style.setProperty("--keyboard-height", "336px");
+    // The Android-shaped signal: the window itself resizes.
+    window.dispatchEvent(new Event("resize"));
+    await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
+    const live = document.querySelector(".db-record-detail-panel");
+    document.documentElement.style.removeProperty("--keyboard-height");
+    return { survived: !!live, bottom: live ? Math.round(live.getBoundingClientRect().bottom) : null, viewport: window.innerHeight };
+  });
+  record(4, "the sheet survives the window resize a keyboard causes",
+    kbWindow.survived,
+    kbWindow.survived
+      ? `sheet still open, bottom edge ${kbWindow.bottom}`
+      : "one window resize closed the record sheet outright — openRecordDetailPanel registers onResize = close(), so on a host that resizes the window for its keyboard the sheet is gone before any inset can be applied");
+
+  // ── ASK 8 — one row grammar across sheets ─────────────────────────────
+  const grammar = await page.evaluate(() => {
+    const { createOwnedMenu, createMenuRow, applySheetChrome } = globalThis.__a;
+    const measure = (host) => {
+      const row = createMenuRow(host, { label: "Duplicate", icon: "copy" }).row;
+      const cs = getComputedStyle(row);
+      const r = row.getBoundingClientRect();
+      return { minHeight: cs.minHeight, padding: `${cs.paddingTop} ${cs.paddingRight} ${cs.paddingBottom} ${cs.paddingLeft}`, height: +r.height.toFixed(1), cls: row.className };
+    };
+    const menu = createOwnedMenu(document);
+    const menuEl = menu.el || menu.dom || menu.containerEl;
+    document.body.appendChild(menuEl);
+    applySheetChrome(menuEl, true);
+    const inMenuSheet = measure(menuEl);
+    const bare = document.body.createDiv({ cls: "db-record-detail-panel" });
+    applySheetChrome(bare, true);
+    const inPanelSheet = measure(bare);
+    applySheetChrome(menuEl, false); applySheetChrome(bare, false);
+    menuEl.remove(); bare.remove();
+    return { inMenuSheet, inPanelSheet };
+  });
+  record(8, "a menu row lays out identically in any sheet",
+    grammar.inMenuSheet.minHeight === grammar.inPanelSheet.minHeight
+    && grammar.inMenuSheet.padding === grammar.inPanelSheet.padding
+    && Math.abs(grammar.inMenuSheet.height - grammar.inPanelSheet.height) <= 0.5,
+    `owned-menu sheet: min-height ${grammar.inMenuSheet.minHeight}, padding ${grammar.inMenuSheet.padding}, height ${grammar.inMenuSheet.height}px | panel sheet: min-height ${grammar.inPanelSheet.minHeight}, padding ${grammar.inPanelSheet.padding}, height ${grammar.inPanelSheet.height}px`);
+  record(8, "a sheet row meets the 44px thumb floor",
+    grammar.inMenuSheet.height >= 44 && grammar.inPanelSheet.height >= 44,
+    `owned-menu row ${grammar.inMenuSheet.height}px, panel row ${grammar.inPanelSheet.height}px`);
+
+  // ── The declarations the positioner writes but the phone never gets ───
+  await openSheet();
+  await page.waitForTimeout(200);
+  const dropped = await page.evaluate(() => {
+    const panel = document.querySelector(".db-record-detail-panel");
+    return {
+      overflowY: panel.style.getPropertyValue("overflow-y") || "(unset)",
+      overscroll: panel.style.getPropertyValue("overscroll-behavior") || "(unset)",
+      computedOverflowY: getComputedStyle(panel).overflowY,
+    };
+  });
+  record(0, "every declaration placeSheet writes reaches the sheet",
+    dropped.overflowY !== "(unset)",
+    `placeSheet asks for overflowY:auto and overscrollBehavior:contain; inline holds overflow-y=${dropped.overflowY}, overscroll-behavior=${dropped.overscroll}; computed overflow-y=${dropped.computedOverflowY}`);
+
+
+  liftedResults.push(...results);
+  await page.close();
+  }
+
 results.push(...phoneResults, ...menuResults, ...addViewDesktopResults, ...addViewPhoneResults, ...desktopMenuResults, ...cellResults, ...sheetResults, ...selectCellResults, ...rowPhoneResults, ...rowNarrowResults,
-  ...familyResults, ...touchResults, ...overlapResults, ...rhythmResults);
+  ...familyResults, ...touchResults, ...overlapResults, ...rhythmResults, ...liftedResults);
 
 await browser.close();
 rmSync(work, { recursive: true, force: true });

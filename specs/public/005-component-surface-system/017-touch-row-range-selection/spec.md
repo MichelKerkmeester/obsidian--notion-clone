@@ -14,17 +14,16 @@ _memory:
     packet_pointer: "public/005-component-surface-system/017-touch-row-range-selection"
     last_updated_at: "2026-08-30T10:20:00Z"
     last_updated_by: "design-specialist"
-    recent_action: "Predicate removed from both views, hold gesture added, 12 checks added to verify-placement, six negative controls run and restored by hash"
-    next_safe_action: "Decide whether the gesture gets an announcement in the selection status bar; it currently has none"
+    recent_action: "Predicate removed from both views; hold gesture added; 12 checks, 6 controls"
+    next_safe_action: "Decide whether the hold gesture gets an affordance"
     blockers:
-      - "The placement run exits 1 on three checks owned by the concurrent stylesheet lane (switch control size, reorder-button/checkbox overlap). Demonstrated independent of this phase: they fail identically with this phase's code fully restored, and they measure only CSS geometry."
+      - "Placement exits 1 on three stylesheet-lane checks, shown independent of this phase (plan.md 7)"
     key_files:
       - "spec.md"
       - "acceptance-criteria.md"
-      - "../../../../src/views/table-cell-gesture.ts"
-      - "../../../../src/views/database-view.ts"
-      - "../../../../src/views/embedded-database-renderer.ts"
-      - "../../../../tools/storybook/verify-placement.mjs"
+      - "plan.md"
+      - "tasks.md"
+      - "implementation-summary.md"
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-017"
