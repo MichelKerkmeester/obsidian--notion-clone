@@ -1,0 +1,77 @@
+{
+  "measuredAt": "2026-08-30T18:41:27.661Z",
+  "inputs": {
+    "styles.css": "e5ada7e445ce",
+    "tools/screenshots/theme.css": "8239cc22cceb",
+    "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
+    "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
+    "tools/live/replay.mjs": "09de41282b5e"
+  },
+  "claims": [
+    {
+      "phase": "004-checkbox-ownership",
+      "claim": "no checkbox falls back to the platform box",
+      "was": 23,
+      "recorded": 0,
+      "actual": 0,
+      "held": true
+    },
+    {
+      "phase": "004-checkbox-ownership",
+      "claim": "no checkbox or switch borrows its appearance from an ancestor",
+      "was": 10,
+      "recorded": 0,
+      "actual": 0,
+      "held": true
+    },
+    {
+      "phase": "001-overlay-width-and-chrome",
+      "claim": "every surface marker grants a focus ring to a control mounted outside the container",
+      "was": 1,
+      "recorded": 0,
+      "actual": 0,
+      "held": true
+    },
+    {
+      "phase": "005-content-row-rhythm",
+      "claim": "no list row paints outside its container",
+      "was": 26,
+      "recorded": 0,
+      "actual": 0,
+      "held": true
+    },
+    {
+      "phase": "005-content-row-rhythm",
+      "claim": "no list column holds more than one property",
+      "was": 3,
+      "recorded": 0,
+      "actual": 0,
+      "held": true
+    },
+    {
+      "phase": "002-properties-panel",
+      "claim": "the properties row stays on one line",
+      "was": 2,
+      "recorded": 1,
+      "actual": 1,
+      "held": true
+    },
+    {
+      "phase": "002-properties-panel",
+      "claim": "the property name takes the flexible track, not the type icon",
+      "was": 0,
+      "recorded": 1,
+      "actual": 1,
+      "held": true
+    },
+    {
+      "phase": "000-surface-contract-and-truthful-harness",
+      "claim": "a body-mounted surface marked db-surface resolves the plugin tokens",
+      "was": 0,
+      "recorded": 1,
+      "actual": 1,
+      "held": true
+    }
+  ],
+  "reversed": 0
+}

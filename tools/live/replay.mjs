@@ -28,6 +28,7 @@ import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { chromium } from "playwright-core";
 import { SCENARIOS } from "../screenshots/scenarios.mjs";
+import { stamp } from "./evidence.mjs";
 
 // ───────────────────────────────────────────────────────────────────
 // 2. CONSTANTS
@@ -257,16 +258,37 @@ const browser = await chromium.launch({ executablePath: CHROME });
 const page = await browser.newPage({ viewport: { width: 1440, height: 900 }, reducedMotion: "reduce" });
 
 const reversed = [];
+const results = [];
 console.log(`replay: re-asserting ${CLAIMS.length} landed results against today's tree\n`);
 for (const c of CLAIMS) {
   const actual = await c.measure(page);
   const held = actual === c.recorded;
+  results.push({ phase: c.phase, claim: c.claim, was: c.was, recorded: c.recorded, actual, held });
   if (!held) reversed.push({ ...c, actual });
   console.log(`  ${held ? "held " : "BROKE"}  ${c.phase}`);
   console.log(`         ${c.claim}`);
   console.log(`         recorded ${c.recorded}, now ${actual}${held ? "" : `  (the defect stood at ${c.was})`}`);
 }
 await browser.close();
+
+// Dated so the freshness lane can see it. Every claim above is measured by loading a fixture and
+// reading computed style, so the files that decide the answer are enumerable -- which is the whole
+// reason this may be stamped at all. A result whose inputs cannot be listed does not belong in an
+// artefact that claims to be current, and one of those had already sat here recording a gate as
+// failing for a session after it went green.
+//
+// Written whether or not the claims held. Stamping only a passing run would leave the last green
+// record in place while the lane was red, which is the same lie in the other direction.
+stamp("tools/live/replay.json", {
+  claims: results,
+  reversed: reversed.length,
+}, [
+  "styles.css",
+  "tools/screenshots/theme.css",
+  "tools/screenshots/runtime-vars.css",
+  "tools/screenshots/scenarios.mjs",
+  "tools/live/replay.mjs",
+]);
 
 console.log("");
 if (reversed.length === 0) {
