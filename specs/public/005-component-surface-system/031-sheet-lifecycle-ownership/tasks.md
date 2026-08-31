@@ -34,7 +34,11 @@ _memory:
 <!-- ANCHOR:phase -->
 ## PHASE 1: THE CONTROL
 
-- [ ] **T1** Build the producer-parity check — REQ-001, D5. **Blocking.**
+- [x] **T1** Build the producer-parity check — REQ-001, D5. **Blocking.**
+      *Closed by:* `tools/live/sheet-teardown.mjs` + harness, now gate lane `sheet-teardown`
+      (17 lanes). **Observed red first, with the required asymmetry:** owned menu and record panel
+      PASS, the three positioner-mounted families FAIL, exit 1. Re-run against the whole pre-fix
+      file after the fix: the same three go red again, exit 1.
       *Evidence to close:* for each sheet family, open then close, assert no `.db-mobile-sheet-scrim`
       and no `.db-mobile-bottom-sheet` on the body. It must **pass for the owned menu and fail for
       every panel family** on the current tree. A check green everywhere before the fix is not
@@ -42,7 +46,14 @@ _memory:
 
 ## PHASE 2: THE FREEZE
 
-- [ ] **T2** Live-sheet set plus a disposer returned from mount — REQ-006, D1, D2.
+- [x] **T2** Live-sheet set plus a removal watcher — REQ-006, D1, D2.
+      *Closed by:* a per-document set of live sheets and a `MutationObserver` that prunes it on
+      removal, dropping the backdrop when the last sheet goes. **A caller that only removes its
+      panel is now correct by construction**, which is what D2 asked for. Shipped as the watcher
+      rather than a returned disposer: the disposer still needs the producer to call it, and these
+      producers are the ones that never do. Recorded as a deviation from the plan's ADR-001, which
+      proposed both — the set alone closes the defect and the disposer can follow if a caller wants
+      explicit control.
       *Evidence to close:* T1 goes green for every family; a caller that only removes its element
       still leaves no scrim.
 - [ ] **T3** Retained-element pattern for view-config and column-manager — REQ-001.

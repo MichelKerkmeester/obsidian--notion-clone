@@ -126,6 +126,11 @@ function setSheetMount(panel: HTMLElement, isSheet: boolean, options: SheetChrom
 
   if (isSheet) {
     setScrim(doc, true, options.scrimCapturesPointer);
+    // Registered before either branch returns. A surface that already lives on the body takes an
+    // early exit below, and registering only after the move would leave exactly those sheets
+    // unknown to the watcher — so the backdrop could be taken down while one was still open.
+    sheetsFor(doc).add(panel);
+    watchForSheetRemoval(doc);
     // A surface built on the body is already where a sheet has to be, so there is nothing to move
     // and nothing to remember. It still needs the backdrop, which is why that is settled above
     // rather than inside the move: an owned menu mounts itself on the body, and returning here
@@ -157,6 +162,7 @@ function setSheetMount(panel: HTMLElement, isSheet: boolean, options: SheetChrom
     return;
   }
 
+  sheetsFor(doc).delete(panel);
   setScrim(doc, false, false);
   if (!remembered) {
     panel.style.removeProperty("--db-mobile-sheet-bottom");
@@ -193,6 +199,63 @@ function setSheetMount(panel: HTMLElement, isSheet: boolean, options: SheetChrom
  * answers and the stylesheet can only state one. Inert is the default and the safer of the two: a
  * surface with no outside-press dismissal would otherwise have no way to close at all.
  */
+/**
+ * The sheets currently on the body, and the watcher that notices when one leaves.
+ *
+ * Taking the chrome down is a second call the mounting producer has to remember to make, and most
+ * of them never do — they remove their panel and stop. The backdrop is a body SIBLING rather than
+ * a child, so it survives that, and what is left is a full-screen element at `inset: 0` with
+ * `pointer-events: auto` over the whole app. The person using it cannot click anything and calls
+ * it a freeze.
+ *
+ * Rather than ask every producer to remember, the backdrop is made a property of whether any sheet
+ * is still on the body. A removal the watcher sees prunes the set, and the last one out takes the
+ * backdrop with it — so a caller that only calls `.remove()` is correct by construction rather
+ * than by discipline.
+ *
+ * Per document, because Obsidian opens surfaces in detached windows and a watcher on the wrong
+ * body would never fire. Disconnected as soon as the last sheet goes, so an idle document carries
+ * no observer.
+ */
+const liveSheets = new WeakMap<Document, Set<HTMLElement>>();
+const sheetWatchers = new WeakMap<Document, MutationObserver>();
+
+function sheetsFor(doc: Document): Set<HTMLElement> {
+  const existing = liveSheets.get(doc);
+  if (existing) return existing;
+  const created = new Set<HTMLElement>();
+  liveSheets.set(doc, created);
+  return created;
+}
+
+/** Drop anything no longer in the document, and report whether any sheet remains. */
+function pruneSheets(doc: Document): boolean {
+  const sheets = sheetsFor(doc);
+  for (const sheet of Array.from(sheets)) {
+    if (!sheet.isConnected) sheets.delete(sheet);
+  }
+  return sheets.size > 0;
+}
+
+function stopWatching(doc: Document): void {
+  sheetWatchers.get(doc)?.disconnect();
+  sheetWatchers.delete(doc);
+}
+
+function watchForSheetRemoval(doc: Document): void {
+  if (sheetWatchers.has(doc)) return;
+  if (typeof MutationObserver === "undefined") return;
+  const observer = new MutationObserver(() => {
+    if (pruneSheets(doc)) return;
+    // The last sheet has gone, however it went. Remove the backdrop and stop watching:
+    // an idle document should not carry an observer waiting for a sheet that may never open.
+    doc.body.querySelector<HTMLElement>(".db-mobile-sheet-scrim")?.remove();
+    stopWatching(doc);
+  });
+  observer.observe(doc.body, { childList: true, subtree: true });
+  sheetWatchers.set(doc, observer);
+}
+
 function setScrim(doc: Document, wanted: boolean, capturesPointer: boolean | undefined): void {
   const existing = doc.body.querySelector<HTMLElement>(".db-mobile-sheet-scrim");
   if (wanted) {
@@ -207,8 +270,12 @@ function setScrim(doc: Document, wanted: boolean, capturesPointer: boolean | und
     scrim.style.pointerEvents = capturesPointer === false ? "none" : "";
     return;
   }
-  if (doc.body.querySelector(".db-mobile-bottom-sheet")) return;
+  // Only a sheet still IN the document holds the backdrop up. Testing the DOM directly counted a
+  // panel that had been detached without taking its chrome down, so one producer's leak pinned the
+  // backdrop permanently and disabled cleanup for every producer after it.
+  if (pruneSheets(doc)) return;
   existing?.remove();
+  stopWatching(doc);
 }
 
 // ───────────────────────────────────────────────────────────────────

@@ -11,8 +11,8 @@ _memory:
     packet_pointer: "public/005-component-surface-system/031-sheet-lifecycle-ownership"
     last_updated_at: "2026-08-31T16:00:00Z"
     last_updated_by: "phase-author"
-    recent_action: "Opened from six ranked findings, each located in the shipped tree"
-    next_safe_action: "Fix the orphaned scrim first; it is what a user experiences as a freeze"
+    recent_action: "Scrim leak fixed and guarded by a new gate lane; 2 of 6 criteria met"
+    next_safe_action: "T4, the group sheet: re-assert chrome after the panel empties"
     blockers: []
     key_files:
       - "spec.md"
@@ -21,7 +21,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-031-goal"
       parent_session_id: null
-    completion_pct: 0
+    completion_pct: 33
     open_questions:
       - "Microtask prune or explicit teardown for the live-sheet set"
     answered_questions:
@@ -63,8 +63,10 @@ defect in this phase is a consequence of that shape.
 <!-- ANCHOR:completion -->
 ## 2. COMPLETION CRITERIA
 
-- [ ] Closing any sheet family leaves no scrim and no sheet on the body, proven by a producer-parity
+- [x] Closing any sheet family leaves no scrim and no sheet on the body, proven by a producer-parity
       check that **passes for the owned menu and fails for the panel families before the fix.**
+      **Met.** The check was observed red with exactly that asymmetry, and red again when the whole
+      pre-fix file was restored as a control.
 - [ ] The group sheet drags after a re-render: handle present, 120px drag dismisses. Today 0.0px.
 - [ ] A phone view sheet is in the overlay stack. Today `dismissPanel` returns false.
 - [ ] No sheet draws an unwired handle.
@@ -113,3 +115,21 @@ predicate with a lockout (the gesture can only start on the grab target, so it c
 scrollable content), and ignoring subsequent touches (already implemented). The 48dp handle standard
 is already dispositioned as an accepted operator shortfall — do not reopen it.
 <!-- /ANCHOR:log -->
+
+### The fix, and one thing the check taught me about itself
+
+The backdrop is now a property of whether any sheet is still **in the document**, not of whether a
+sheet class is findable in the DOM. A per-document set of live sheets plus a removal watcher means
+the last sheet out takes the backdrop with it, however it leaves — so the producers that never call
+teardown are correct without being changed.
+
+**Two corrections while building it, both mine.** Registration first went in after the body move,
+which skipped the early-return branch a body-mounted surface takes — so the owned menu, the one
+producer that behaves, would have been invisible to the watcher and could have had its backdrop
+pulled while open. And the compounding case first re-attached its "leaked" panel to the body, which
+makes it an **open** sheet: the backdrop staying up there is correct, so the test asserted the
+opposite of the truth. A detached leak is what `.remove()` actually produces, and the case now
+models that.
+
+The watcher is asynchronous, so the check awaits a microtask and a frame before reading. That is the
+real budget — a backdrop still present after a rendered frame is one the user has seen.

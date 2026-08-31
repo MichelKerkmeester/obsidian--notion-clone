@@ -47,7 +47,7 @@ _memory:
 |---|---|
 | **Spec Folder** | 031-sheet-lifecycle-ownership |
 | **Level** | 2 |
-| **Status** | Planned |
+| **Status** | **In progress — 2 of 6 criteria.** In the tree: the backdrop no longer outlives its sheet — `src/views/mobile-bottom-sheet.ts` tracks live sheets and drops the backdrop once the last one leaves the document, guarded by a new `sheet-teardown` gate lane that was observed red on three producer families first. Open: the two drag causes, the dead modal handles, velocity dismissal, and the operator seeing the freeze gone |
 | **Complexity** | 61/100, confidence 92% |
 <!-- /ANCHOR:metadata -->
 

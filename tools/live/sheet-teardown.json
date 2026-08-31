@@ -1,0 +1,12 @@
+{
+  "measuredAt": "2026-08-31T17:27:13.448Z",
+  "inputs": {
+    "tools/live/sheet-teardown.mjs": "977e3a475380",
+    "tools/live/sheet-teardown-harness.ts": "8b7c67d0b111",
+    "src/views/mobile-bottom-sheet.ts": "40d1304a4614",
+    "src/views/popover-position.ts": "fcdb98617dae",
+    "src/views/owned-menu.ts": "687419f690fb"
+  },
+  "producers": 6,
+  "leaking": 0
+}

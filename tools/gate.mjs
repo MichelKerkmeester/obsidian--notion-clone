@@ -65,6 +65,12 @@ const CHECKS = [
   // froze the app through every other check. This one bundles the shipped renderers and asserts
   // structural facts about what they build, so a renderer change moves a number in a gate.
   { name: "render-assertions", cmd: ["node", "tools/live/render-assertions.mjs"] },
+  // Closing a sheet left its backdrop on the body — a full-screen element at inset 0 with
+  // pointer-events auto, over the whole app, which the operator reported as a freeze. The
+  // placement check does assert a backdrop leaves with its menu, but only against the one
+  // producer that cleaned up, and it removed leaked backdrops by hand so later checks could run.
+  // This compares every producer against that reference in one run.
+  { name: "sheet-teardown", cmd: ["node", "tools/live/sheet-teardown.mjs"] },
 ];
 
 // ───────────────────────────────────────────────────────────────────
