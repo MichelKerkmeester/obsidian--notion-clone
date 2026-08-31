@@ -199,7 +199,7 @@
     ],
     "causal_summary": "Tapping a value in the phone record sheet opens an editor 6.6px below the line the value sat on, and",
     "created_at": "2026-08-30T15:21:37.027Z",
-    "last_save_at": "2026-08-31T20:01:16.663Z",
+    "last_save_at": "2026-08-31T20:53:35.765Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -210,13 +210,13 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:3f75288b5f0c1b45ba4e1e540ea302d191adf2e56c7b45a6c5ca37bcbbff6fae",
+    "source_fingerprint": "sha256:51ca33128ad22587732fe89caa80ed9ae1a7ef86b00f9ee9d16a09c3466fceba",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "699182a2ae6d0cdc1fd1a7939ac41066268215be1957a5a3c0f715f9b1b2bf71",
+      "spec.md": "86bcbaa7bbc6a0c7d0ac896abc33ff123ca2ff4ba1cc02ccc22d0e2bf1b990cb",
       "plan.md": "2fdc280a724aebd1f4ef290f8d8bfe92275abd98c58dde512ce7fad9ee78e563",
       "tasks.md": "ba53b91765f39b1420918d3ffcdee44f8ab559d3bc27ef9674f343a4d07e79ab",
-      "implementation-summary.md": "eaf7a9c431b05402e5c07806ff6a9d86bb3a641d5448683c1ec99f84cb3f7068"
+      "implementation-summary.md": "9bfa565ad33aea3fbcae154c50ccb156ad904f2f14a9ab7080e1870925c2e9fd"
     },
     "last_active_child_id": null,
     "last_active_at": null

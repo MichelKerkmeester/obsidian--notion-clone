@@ -12,8 +12,8 @@ _memory:
     packet_pointer: "public/005-component-surface-system/021-sheet-inline-edit-alignment"
     last_updated_at: "2026-08-30T21:00:00Z"
     last_updated_by: "goal-authoring"
-    recent_action: "Goal authored after the fact; 6 of 8 criteria measured green"
-    next_safe_action: "Operator taps a value and the title on device, reports where each editor opens"
+    recent_action: "Host token read from Obsidian 1.13.4: 15px on desktop, user text size on mobile"
+    next_safe_action: "The operator taps a value and the title on device"
     blockers: []
     key_files:
       - "spec.md"
@@ -23,7 +23,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-021"
       parent_session_id: null
-    completion_pct: 62
+    completion_pct: 88
     open_questions:
       - "Is Obsidian's --font-ui-medium default really 15px, or is that this repo's host model"
     answered_questions:
@@ -86,16 +86,29 @@ Five defects `spec.md` §12 names and measures are not criteria here.
       0.5px**.
 - [x] The desktop editor rectangle is frozen at **34.8 / 8 / 12** within 0.5px, and its control
       reports **31 / 6.1 / 8.2** and exits 1.
-- [ ] The title's rename editor sits on its own centre line, <= 1px: **9.0px** -> **0.9px**, driven
+- [x] The title's rename editor sits on its own centre line, <= 1px: **9.0px** -> **0.9px**, driven
       through the shipped double-click against a page declaring `--font-ui-medium`. `styles.css` is
       byte-identical: the 2.4px was the harness rendering the title two font steps small.
-      **Withdrawn to provisional.** The 0.9px is a function of the 15px the harness declares for a
-      token the *host* owns, and the next item says that 15px is inferred rather than confirmed. The
-      phase's own sweep puts the correction outside 1px below 14.7px and above 17.7px, so 0.1px of
-      headroom rests on an unverified host value. Closes with the item below, not before it.
-- [ ] Obsidian's `--font-ui-medium` default is confirmed on a device rather than inferred from this
+      **Closed for desktop, with the phone named.** The 15px it rests on is confirmed below, read
+      from the installed host's own `app.css`, so the 0.1px of headroom no longer rests on an
+      unverified value. What the confirmation also showed is that `--font-ui-medium` is redefined
+      under `.is-mobile` to follow the user's text size, so this correction is bounded on desktop
+      and user-dependent on a phone.
+- [x] Obsidian's `--font-ui-medium` default is confirmed on a device rather than inferred from this
       repo's host model. One correction holds within 1px from **14.7px to 17.7px**; the check prints
       the title's measured size and line box on every run.
+      **Confirmed from the host's own stylesheet — `body { --font-ui-medium: 15px }`**, read out of
+      `app.css` inside `obsidian.asar` in the installed **Obsidian 1.13.4**. That is the value this
+      repo's host model declares, so the inference was right, and it is now a reading of the host
+      rather than a guess about it. The 0.9px correction sits well inside the 14.7-17.7px band.
+      **And the reading found something the inference could not.** The same stylesheet carries a
+      second declaration: `.is-mobile { --font-ui-medium: var(--font-text-size) }`. **On a phone the
+      token is not 15px at all** — it follows the user's configurable text size. A reader who has
+      raised that setting moves the title's font outside the band this row names, and the ≤1px
+      correction is not guaranteed for them.
+      *So the desktop half is settled and the phone half is now a known, bounded risk* rather than
+      an unexamined assumption. Recorded here rather than folded away, because the row above depends
+      on this number and now depends on it only for desktop.
 - [ ] The operator taps a value and the title on device and sees each editor where it started.
 <!-- /ANCHOR:completion -->
 
@@ -134,7 +147,7 @@ desktop editor from 34.8px to 31px. A control that cannot fail is the same defec
 cannot fail, one level up.
 
 **`spec.md` and `implementation-summary.md` still read 2.4px and Open** for the title editor, and
-`completion_pct: 62`. `acceptance-criteria.md`, written later, recorded AC-006 Met at 0.9px. The
+`completion_pct: 88`. `acceptance-criteria.md`, written later, recorded AC-006 Met at 0.9px. The
 supply audit has since moved it to `Provisional` and every document now reads 85: the 0.9px is real
 and the correction is right, but the margin belongs to a `--font-ui-medium` the harness declares and
 this repo infers. Those two documents' `Open` was closer to the truth than the closure that replaced

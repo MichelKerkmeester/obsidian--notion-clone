@@ -12,8 +12,8 @@ _memory:
     packet_pointer: "public/005-component-surface-system/021-sheet-inline-edit-alignment"
     last_updated_at: "2026-08-30T16:30:00Z"
     last_updated_by: "phase-author"
-    recent_action: "Shipped as 0ff9f9a; a fresh review corrected three claims and opened criterion 6"
-    next_safe_action: "Give the harness a path to the title editor, then derive its own offset"
+    recent_action: "Host token read from Obsidian 1.13.4: 15px on desktop, user text size on mobile"
+    next_safe_action: "The operator taps a value and the title on device"
     blockers:
       - "The harness stubs the rename entry point and triggers on click, so it cannot see the title editor"
     key_files:
@@ -23,7 +23,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-021"
       parent_session_id: null
-    completion_pct: 62
+    completion_pct: 88
     open_questions:
       - "A second literal for the title, or a per-anchor offset?"
     answered_questions: []

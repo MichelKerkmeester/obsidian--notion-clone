@@ -14,8 +14,8 @@ _memory:
     packet_pointer: "public/005-component-surface-system/021-sheet-inline-edit-alignment"
     last_updated_at: "2026-08-30T16:30:00Z"
     last_updated_by: "phase-author"
-    recent_action: "Shipped; a fresh review corrected three claims and left the title editor open"
-    next_safe_action: "Derive the title editor's offset from its own line box, not the value's"
+    recent_action: "Host token read from Obsidian 1.13.4: 15px on desktop, user text size on mobile"
+    next_safe_action: "The operator taps a value and the title on device"
     blockers: []
     key_files:
       - "spec.md"
@@ -27,7 +27,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-021"
       parent_session_id: null
-    completion_pct: 62
+    completion_pct: 88
     open_questions:
       - "Does the title editor get its own offset, or does the correction become per-anchor?"
     answered_questions:
