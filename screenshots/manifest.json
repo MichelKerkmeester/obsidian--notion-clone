@@ -1031,7 +1031,7 @@
       },
       "note": "The phone form of the owned menu. Rows share one left edge with the icon in a fixed leading column, hairlines divide neighbours but not the last row of a group, and a row that opens a submenu carries a trailing chevron. Captured in viewport mode so the fixed sheet docks at the bottom.",
       "capture": "viewport",
-      "bytes": 51712
+      "bytes": 51714
     },
     {
       "id": "chrome-owned-menu-sheet",
@@ -1085,7 +1085,7 @@
       },
       "note": "The phone form of the owned menu. Rows share one left edge with the icon in a fixed leading column, hairlines divide neighbours but not the last row of a group, and a row that opens a submenu carries a trailing chevron. Captured in viewport mode so the fixed sheet docks at the bottom.",
       "capture": "viewport",
-      "bytes": 38739
+      "bytes": 38727
     },
     {
       "id": "chrome-selection-status-bar",
@@ -2497,7 +2497,7 @@
       },
       "note": "The trigger shows the committed value; the popover stacks quick dates, the three segment inputs and the mini calendar, which renders flat inside the date popover rather than as its own floating surface.",
       "capture": "element",
-      "bytes": 57172
+      "bytes": 57165
     },
     {
       "id": "field-file-fields",
@@ -3855,7 +3855,7 @@
       },
       "note": "The phone form of the record detail panel. positionToolbarPopover renders it as a bottom sheet with a grab handle; a permanent close button (reusing db-cell-edit-close) and drag-down on the handle dismiss it where the desktop panel relies on Escape and outside-click. Captured in viewport mode so the fixed sheet docks at the bottom. The note body is the last group, below the properties.",
       "capture": "viewport",
-      "bytes": 93504
+      "bytes": 93510
     },
     {
       "id": "panel-record-detail-sheet",
@@ -3884,7 +3884,7 @@
       },
       "note": "The phone form of the record detail panel. positionToolbarPopover renders it as a bottom sheet with a grab handle; a permanent close button (reusing db-cell-edit-close) and drag-down on the handle dismiss it where the desktop panel relies on Escape and outside-click. Captured in viewport mode so the fixed sheet docks at the bottom. The note body is the last group, below the properties.",
       "capture": "viewport",
-      "bytes": 77140
+      "bytes": 77152
     },
     {
       "id": "panel-record-detail-sheet",
@@ -3913,7 +3913,7 @@
       },
       "note": "The phone form of the record detail panel. positionToolbarPopover renders it as a bottom sheet with a grab handle; a permanent close button (reusing db-cell-edit-close) and drag-down on the handle dismiss it where the desktop panel relies on Escape and outside-click. Captured in viewport mode so the fixed sheet docks at the bottom. The note body is the last group, below the properties.",
       "capture": "viewport",
-      "bytes": 77717
+      "bytes": 77720
     },
     {
       "id": "panel-record-peek",
@@ -5739,7 +5739,7 @@
       ],
       "layoutHash": "1f513083a592",
       "sourceHashes": {
-        "src/views/calendar-timeline-renderer.ts": "3a553f24e2fd",
+        "src/views/calendar-timeline-renderer.ts": "422432b43e60",
         "styles.css": "96f5fa440637",
         "tools/screenshots/theme.css": "8239cc22cceb",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -5762,7 +5762,7 @@
       ],
       "layoutHash": "1f513083a592",
       "sourceHashes": {
-        "src/views/calendar-timeline-renderer.ts": "3a553f24e2fd",
+        "src/views/calendar-timeline-renderer.ts": "422432b43e60",
         "styles.css": "96f5fa440637",
         "tools/screenshots/theme.css": "8239cc22cceb",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -5785,7 +5785,7 @@
       ],
       "layoutHash": "e2ad5add12c7",
       "sourceHashes": {
-        "src/views/calendar-timeline-renderer.ts": "3a553f24e2fd",
+        "src/views/calendar-timeline-renderer.ts": "422432b43e60",
         "styles.css": "96f5fa440637",
         "tools/screenshots/theme.css": "8239cc22cceb",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -5808,7 +5808,7 @@
       ],
       "layoutHash": "e2ad5add12c7",
       "sourceHashes": {
-        "src/views/calendar-timeline-renderer.ts": "3a553f24e2fd",
+        "src/views/calendar-timeline-renderer.ts": "422432b43e60",
         "styles.css": "96f5fa440637",
         "tools/screenshots/theme.css": "8239cc22cceb",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",

@@ -1,0 +1,209 @@
+{
+  "schema_version": 1,
+  "packet_id": "public/005-component-surface-system/030-gallery-view-deprecation",
+  "spec_folder": "public/005-component-surface-system/030-gallery-view-deprecation",
+  "parent_id": "public/005-component-surface-system",
+  "children_ids": [],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "gallery deprecation",
+      "remove gallery view",
+      "030 gallery",
+      "deprecate gallery",
+      "030 plan",
+      "gallery deprecation plan",
+      "030 tasks",
+      "gallery deprecation tasks",
+      "030 goal",
+      "gallery deprecation goal"
+    ],
+    "key_topics": [
+      "gallery",
+      "deprecation",
+      "remove",
+      "view",
+      "deprecate",
+      "plan",
+      "tasks",
+      "goal",
+      "plugin",
+      "including",
+      "migration",
+      "path"
+    ],
+    "importance_tier": "important",
+    "status": "planned",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "goal.md",
+      "tools/bench/gallery-render-bench.ts"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "goal.md",
+        "kind": "doc",
+        "path": "goal.md",
+        "source": "derived"
+      },
+      {
+        "name": "gallery-render-bench.ts",
+        "kind": "code",
+        "path": "tools/bench/gallery-render-bench.ts",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Gallery View",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Spec Folder",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "the",
+        "kind": "key_phrase",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "an",
+        "kind": "key_phrase",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Metadata",
+        "kind": "heading",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Plan",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Gallery View Deprecation",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "1. ORDER, AND WHY THIS ORDER",
+        "kind": "heading",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "2. ADR-001 — the migration target (**Proposed**, not Accepted)",
+        "kind": "heading",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "3. WHAT MAKES THE BOARD CONTROL CREDIBLE",
+        "kind": "heading",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "no",
+        "kind": "key_phrase",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "its",
+        "kind": "key_phrase",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "PHASE 1: THE DECISION",
+        "kind": "heading",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "PHASE 2: THE DATA PATH, WHILE THE GALLERY STILL WORKS",
+        "kind": "heading",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "a",
+        "kind": "key_phrase",
+        "path": "goal.md",
+        "source": "derived"
+      },
+      {
+        "name": "1. DURABLE DIRECTIVE",
+        "kind": "heading",
+        "path": "goal.md",
+        "source": "derived"
+      },
+      {
+        "name": "Decisions",
+        "kind": "heading",
+        "path": "goal.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "Remove the gallery view from the plugin, including the migration path for databases already configured to use it and the gate coverage that currently counts it.",
+    "created_at": "2026-08-31T13:08:59.395Z",
+    "last_save_at": "2026-08-31T13:08:59.395Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "goal.md"
+    ],
+    "source_fingerprint": "sha256:fa7e2e3784affcd41891386ce11abb51abf3cd2d1dc3c6dc9408cc568214a443",
+    "source_fingerprint_docset": 3,
+    "source_doc_hashes": {
+      "spec.md": "44efb2896c59c34fd81f9b725e71dd4542618d9171bab9c201f013bbc8ae878d",
+      "plan.md": "c2585a94f679605e4ac0e09af1c25a524563526d3ab3bf7e8b5c1fc4c14b37d3",
+      "tasks.md": "e7e0e4449023516b4dab9b0f577b4477c1a42ab63eb0c44626169e22920c2cf5"
+    },
+    "last_active_child_id": null,
+    "last_active_at": null
+  }
+}

@@ -237,10 +237,11 @@ export class CalendarTimelineRenderer {
    * layout inside a loop appending to the same container, so the browser reflowed the tree
    * built so far once per event and the total became superlinear in event count.
    *
-   * It is measured on the container, not on `.db-timeline`. That element is sized from the unit
-   * count, so a width read from it while events are still being laid in is a different number on
-   * the first event than on the last — there is no single value to hoist. The container is the
-   * pane, which is the width the touch threshold was written about.
+   * It is measured on the container rather than on `.db-timeline` for consistency with the list,
+   * board and gallery, which all ask the same question of the same element. The container is the
+   * pane, which is the width the touch threshold was written about; the timeline root merely
+   * fills it, so the two agree today and the container is the one that stays meaningful if the
+   * root's sizing ever changes.
    */
   private touchMode = false;
 

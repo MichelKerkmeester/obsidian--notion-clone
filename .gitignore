@@ -44,3 +44,15 @@ external/
 # linked credential. It is regenerable, it is large, and a credential must never
 # reach history. The artifacts worth keeping (state, prompts, reports) sit beside it.
 specs/**/lineages/*/.codex-home/
+# Deep-loop lineage working directories, under review/ as well as research/.
+# A lineage runs a CLI executor inside its own directory, so the executor drops its whole
+# runtime there: a config naming this machine's absolute home path, an installation UUID,
+# multi-megabyte sqlite databases with their write-ahead logs, and vendored skills under a
+# different licence than this repository. None of that is evidence and none of it belongs in
+# a public tree. The lineage's own findings live in files beside these and stay tracked.
+specs/**/review/**/lineages/*/.codex-runtime/
+specs/**/lineages/*/.codex-runtime/
+specs/**/lineages/*/.tmp/
+specs/**/lineages/**/*.sqlite
+specs/**/lineages/**/*.sqlite-wal
+specs/**/lineages/**/*.sqlite-shm
