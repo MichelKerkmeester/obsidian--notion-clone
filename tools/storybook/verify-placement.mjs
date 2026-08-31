@@ -97,7 +97,7 @@ const bundle = join(work, "bundle.js");
 // positioner would prove the copy.
 import { writeFileSync } from "node:fs";
 writeFileSync(entry, `
-import { positionToolbarPopover, getVisiblePopoverBounds, COMPACT_MENU_POPOVER, setPosition, clamp, resolvePopoverHorizontalLeft, PANEL_POPOVER, placeSheet, publishKeyboardInset, calendarSearchResultsPlacement } from "${join(REPO, "src/views/popover-position")}";
+import { positionToolbarPopover, getVisiblePopoverBounds, COMPACT_MENU_POPOVER, setPosition, clamp, resolvePopoverHorizontalLeft, PANEL_POPOVER, placeSheet, publishKeyboardInset, calendarSearchResultsPlacement, resolveKeyboardInset, MAX_UNZOOMED_SCALE } from "${join(REPO, "src/views/popover-position")}";
 import { refreshRecordDetailPanel, closeRecordDetailPanel, getOpenRecordDetailPath } from "${join(REPO, "src/views/record-detail-panel")}";
 import { attachSheetDragToDismiss } from "${join(REPO, "src/views/mobile-bottom-sheet")}";
 import { applySheetChrome } from "${join(REPO, "src/views/mobile-bottom-sheet")}";
@@ -121,8 +121,8 @@ globalThis.__edit = { openRecordDetailPanel, closeRecordDetailPanel, CellRendere
 globalThis.__list = { ListRenderer };
 globalThis.__number = { renderCardField, CellRenderer, getColumnDisplayType, isEmptyValue, formatEuroCurrency, formatEuroNumber };
 globalThis.__selection = { DatabaseView, EmbeddedDatabaseRenderer };
-globalThis.__place = { positionToolbarPopover, getVisiblePopoverBounds, COMPACT_MENU_POPOVER, applySheetChrome, renderCardField, createOwnedMenu, createMenuRow, ToolbarRenderer, trackCellGesture, nextCellRange, resolveCellTapAction, isMainItemColumn, shouldExtendRowRange, applyRowSelectionPress, attachRowRangeGesture, isRowSelectionCheckbox, attachLongPress, isTouchDevice, attachTitleOpenAffordance, setupTitleCellTap, openRecordDetailPanel, closeRecordDetailPanel, getOpenRecordDetailPath, RowMenu, ColumnMenu };
-globalThis.__p = { positionToolbarPopover, getVisiblePopoverBounds, setPosition, clamp, resolvePopoverHorizontalLeft, COMPACT_MENU_POPOVER, PANEL_POPOVER, createOwnedMenu, createMenuRow, publishKeyboardInset, calendarSearchResultsPlacement };
+globalThis.__place = { positionToolbarPopover, getVisiblePopoverBounds, COMPACT_MENU_POPOVER, applySheetChrome, renderCardField, createOwnedMenu, createMenuRow, ToolbarRenderer, trackCellGesture, nextCellRange, resolveCellTapAction, isMainItemColumn, shouldExtendRowRange, applyRowSelectionPress, attachRowRangeGesture, isRowSelectionCheckbox, attachLongPress, isTouchDevice, attachTitleOpenAffordance, setupTitleCellTap, openRecordDetailPanel, closeRecordDetailPanel, getOpenRecordDetailPath, refreshRecordDetailPanel, RowMenu, ColumnMenu };
+globalThis.__p = { positionToolbarPopover, getVisiblePopoverBounds, setPosition, clamp, resolvePopoverHorizontalLeft, COMPACT_MENU_POPOVER, PANEL_POPOVER, createOwnedMenu, createMenuRow, publishKeyboardInset, calendarSearchResultsPlacement, resolveKeyboardInset, MAX_UNZOOMED_SCALE };
 globalThis.__drag = { openRecordDetailPanel, refreshRecordDetailPanel, applySheetChrome, positionToolbarPopover };
 globalThis.__a = { positionToolbarPopover, placeSheet, applySheetChrome, attachSheetDragToDismiss, openRecordDetailPanel, refreshRecordDetailPanel, closeRecordDetailPanel, createOwnedMenu, createMenuRow };
 `);
@@ -1058,14 +1058,37 @@ const phoneResults = await section("the phone sheet and its selection bar", () =
   });
 
   // The pinch-zoom case, which the visual-viewport fallback would otherwise mistake for a keyboard.
-  // Chromium reports scale through visualViewport, and it cannot be pinched from script, so the
-  // guard is exercised directly against the same input the fallback reads.
-  const zoomed = window.innerHeight - window.visualViewport.height - window.visualViewport.offsetTop;
+  //
+  // THIS USED TO BE A CHECK THAT COULD NOT FAIL. It read
+  // `window.visualViewport.scale <= 1.01 && zoomed <= 1` off the harness's own untouched viewport,
+  // where `scale` is always 1 and the visual height always equals `innerHeight` — `1 <= 1.01 &&
+  // 0 <= 1`, two constants, true on every run for ever. It never called the positioner, and its own
+  // comment conceded that a viewport cannot be pinched from script. It measured the harness's
+  // viewport identity and reported it as the guard.
+  //
+  // A viewport still cannot be pinched from script, so the answer is not a better browser trick: the
+  // decision is three numbers in and one out, and it is now called as one. Same shrink, two scales.
+  const restingScale = window.visualViewport.scale;
+  const covered = 336;
+  const { resolveKeyboardInset } = globalThis.__p;
+  const atRest = resolveKeyboardInset(0, window.innerHeight, {
+    height: window.innerHeight - covered, offsetTop: 0, scale: 1,
+  });
+  const whileZoomed = resolveKeyboardInset(0, window.innerHeight, {
+    height: window.innerHeight - covered, offsetTop: 0, scale: 2,
+  });
+  const hostStillHeard = resolveKeyboardInset(covered, window.innerHeight, {
+    height: window.innerHeight - covered, offsetTop: 0, scale: 2,
+  });
   out.push({
     name: "the visual-viewport fallback is guarded against pinch-zoom",
-    pass: window.visualViewport.scale <= 1.01 && zoomed <= 1,
-    detail: `scale=${window.visualViewport.scale} inset=${zoomed.toFixed(1)}px; the fallback ignores `
-      + `its term when scale exceeds 1.01, so a zoom cannot lift the sheet`,
+    pass: atRest === covered && whileZoomed === 0 && hostStillHeard === covered,
+    detail: `the shipped resolveKeyboardInset, called with the same ${covered}px shrink at two `
+      + `scales: at rest it returns ${atRest}px, zoomed it returns ${whileZoomed}px. With the host `
+      + `also declaring ${covered}px it returns ${hostStillHeard}px while zoomed, because the guard `
+      + `belongs to the observed term and does not contradict a host that says a keyboard is open. `
+      + `The page's own viewport reports scale=${restingScale}, which is why this is called rather `
+      + `than observed — a check reading that number measures the harness, not the guard.`,
   });
 
   // The publisher's teardown, driven rather than assumed.
@@ -2904,6 +2927,257 @@ const sheetResults = await section("the record sheet's own header", async () => 
   return measured;
 });
 await sheetPhone.close();
+
+// ───────────────────────────────────────────────────────────────────
+// 5a2. THE DESKTOP RECORD PANEL'S FOUR FROZEN VALUES
+// ───────────────────────────────────────────────────────────────────
+//
+// `010` reshaped the record row on the phone and claimed the desktop was untouched, with four
+// numbers attached: row 26.84px, value right-aligned, 2px between rows, and no divider. Three of the
+// four were measured nowhere in the run and the fourth appeared only inside another phase's detail
+// line. The stylesheet does corroborate the SCOPING — every phone rule for this surface is written
+// under `.db-record-detail-panel.db-mobile-bottom-sheet` — but scoping proves the phone rules cannot
+// match a desktop panel. It does not prove the four values, because row height and the gap between
+// rows are computed rather than declared.
+//
+// So the desktop panel is built through the shipped opener at 1440x900 and the four are read off it.
+// `--background-modifier-border` is supplied for the same reason the phone body supplies it: the
+// plugin's hairline tokens are `color-mix` over Obsidian's variable, so with the host silent every
+// border computes as `0px none` and a "no divider" check reports a pass against a stylesheet that
+// declares one. That trap is the whole reason this criterion's fourth clause needs a real host value.
+
+const desktopPanel = await browser.newPage({ viewport: VIEWPORT, reducedMotion: "reduce" });
+await desktopPanel.setContent(page_html.replace(
+  "<body>",
+  '<body style="--background-modifier-border: #333333">',
+));
+await desktopPanel.addStyleTag({ content: readFileSync(join(REPO, "styles.css"), "utf8") + HOST_BARE_CONTROLS });
+await desktopPanel.addScriptTag({ content: shimJs + "\ninstallObsidianDomShim(globalThis);" });
+await desktopPanel.addScriptTag({ content: positionerJs });
+
+const desktopPanelResults = await section("the desktop record panel's frozen values", () => desktopPanel.evaluate(() => {
+  const out = [];
+  const { openRecordDetailPanel } = globalThis.__place;
+  const host = document.querySelector(".note-database-container");
+  const anchor = host.createDiv({ cls: "anchor" });
+  anchor.setCssProps({ position: "absolute", left: "80px", top: "80px" });
+  openRecordDetailPanel({
+    anchorEl: anchor,
+    host,
+    row: {
+      file: { path: "37.md", basename: "Figma", name: "37.md" },
+      frontmatter: { cost: 18.75, billing: "Yearly", payment: "Revolut", category: "Design" },
+      computed: {},
+    },
+    columns: [
+      { key: "file.name", label: "Name", type: "text" },
+      { key: "cost", label: "Cost", type: "number" },
+      { key: "billing", label: "Billing", type: "text" },
+      { key: "payment", label: "Payment", type: "text" },
+      { key: "category", label: "Category", type: "text" },
+    ],
+    config: { viewType: "table", schema: { computedFields: [] }, titleField: "file.name" },
+    app: {},
+    actions: { editCell: () => {}, openRow: () => {}, editFileName: () => {}, isReadOnly: false },
+  });
+
+  const panel = document.querySelector(".db-record-detail-panel");
+  const isSheet = panel ? panel.classList.contains("db-mobile-bottom-sheet") : true;
+  const rows = panel ? [...panel.querySelectorAll(".db-record-detail-field")] : [];
+  const boxes = rows.map((row) => row.getBoundingClientRect());
+  const heights = boxes.map((b) => +b.height.toFixed(2));
+  // The gap between rows, measured as the space between one row's bottom and the next row's top
+  // rather than read off `row-gap`. A declared gap that a margin or a border eats is still a
+  // declared gap; what the reader sees is this number.
+  const gaps = boxes.slice(1).map((b, i) => +(b.top - boxes[i].bottom).toFixed(2));
+  const borders = rows.map((row) => {
+    const cs = getComputedStyle(row);
+    return `${cs.borderBottomWidth} ${cs.borderBottomStyle}`;
+  });
+  const withDivider = borders.filter((b) => !b.startsWith("0px")).length;
+  // Right-aligned: the value box ends where the row's content box ends. Read against the row's own
+  // padding rather than its border box, because the padding is not the alignment.
+  const alignment = rows.map((row) => {
+    const value = row.querySelector(".db-board-card-value");
+    if (!value) return null;
+    const rowRect = row.getBoundingClientRect();
+    const valueRect = value.getBoundingClientRect();
+    const padRight = parseFloat(getComputedStyle(row).paddingRight) || 0;
+    return +(rowRect.right - padRight - valueRect.right).toFixed(2);
+  }).filter((v) => v !== null);
+  const worstAlignment = alignment.length ? Math.max(...alignment.map((v) => Math.abs(v))) : 999;
+
+  const uniformHeight = heights.length > 0 && heights.every((h) => Math.abs(h - heights[0]) <= 0.02);
+  out.push({
+    name: "the desktop record panel keeps the four values 010 froze",
+    pass: !isSheet && rows.length >= 4 && uniformHeight
+      && Math.abs(heights[0] - 26.84) <= 0.5
+      && gaps.every((g) => Math.abs(g - 2) <= 0.5)
+      && withDivider === 0
+      && worstAlignment <= 1,
+    detail: `${rows.length} row(s) on a desktop panel (bottom sheet=${isSheet}):`
+      + ` heights ${[...new Set(heights)].join(", ")}px (want 26.84, uniform=${uniformHeight});`
+      + ` gaps ${[...new Set(gaps)].join(", ")}px (want 2);`
+      + ` ${withDivider} row(s) carry a bottom border, borders read ${[...new Set(borders)].join(" | ")}`
+      + ` against --background-modifier-border supplied, so "0px none" here is the stylesheet's`
+      + ` answer rather than an absent host variable;`
+      + ` the value box ends within ${worstAlignment}px of the row's content right edge`,
+  });
+  document.querySelectorAll(".db-record-detail-panel").forEach((el) => el.remove());
+  anchor.remove();
+  return out;
+}));
+await desktopPanel.close();
+
+// ───────────────────────────────────────────────────────────────────
+// 5a3. THE SHEET'S SEMANTIC IDENTITY AND ITS RESOURCE OWNERSHIP
+// ───────────────────────────────────────────────────────────────────
+//
+// Two of the five stateful dimensions had no measurement on this surface at all. Every check here
+// read a geometry number, which covers state only by accident: a panel can be the right size and
+// still be showing the wrong record, and it can look correct while leaving a viewport subscription
+// alive that silently moves the NEXT sheet.
+//
+// SEMANTIC IDENTITY is not node identity. A refresh empties and rebuilds the panel, so every node is
+// new by construction — asserting a surviving node would assert the opposite of what happens. What
+// must survive is the mapping: the row that means "Income" is still found BY ITS COLUMN KEY, still
+// belongs to the record the panel was opened on, and now shows that record's current value.
+//
+// RESOURCE OWNERSHIP is counted rather than inferred. The inset is written by a subscription, so a
+// leaked one is invisible until the next sheet moves for no reason.
+
+const statePhone = await browser.newPage({
+  reducedMotion: "reduce",
+  viewport: { width: 390, height: 844 },
+  hasTouch: true,
+  isMobile: true,
+});
+await statePhone.setContent(page_html.replace("<body>", phoneBody));
+await statePhone.addStyleTag({ content: readFileSync(join(REPO, "styles.css"), "utf8") + HOST_BARE_CONTROLS });
+await statePhone.addScriptTag({ content: shimJs + "\ninstallObsidianDomShim(globalThis);" });
+await statePhone.addScriptTag({ content: positionerJs });
+
+const stateResults = await section("the record sheet's identity and its subscriptions", () => statePhone.evaluate(async () => {
+  const out = [];
+  const {
+    openRecordDetailPanel, closeRecordDetailPanel, getOpenRecordDetailPath, refreshRecordDetailPanel,
+  } = globalThis.__place;
+  const host = document.querySelector(".note-database-container");
+  const anchor = host.createDiv({ cls: "anchor" });
+  anchor.setCssProps({ position: "absolute", left: "40px", top: "40px" });
+
+  const columns = [
+    { key: "file.name", label: "Name", type: "text" },
+    { key: "income", label: "Income", type: "number" },
+    { key: "expenses", label: "Expenses", type: "number" },
+  ];
+  const config = { viewType: "table", schema: { computedFields: [] }, titleField: "file.name" };
+  const actions = { editCell: () => {}, openRow: () => {}, editFileName: () => {}, isReadOnly: false };
+  const recordA = (income) => ({
+    file: { path: "A.md", basename: "Record A", name: "A.md" },
+    frontmatter: { income, expenses: 7 },
+    computed: {},
+  });
+  const recordB = {
+    file: { path: "B.md", basename: "Record B", name: "B.md" },
+    frontmatter: { income: 999, expenses: 1 },
+    computed: {},
+  };
+
+  // ── the subscription count, taken around the whole cycle ──
+  //
+  // Wrapped before anything opens, so what is counted is what this surface adds and removes rather
+  // than whatever the page was already carrying.
+  const live = new Map();
+  const realAdd = window.visualViewport.addEventListener.bind(window.visualViewport);
+  const realRemove = window.visualViewport.removeEventListener.bind(window.visualViewport);
+  window.visualViewport.addEventListener = (type, fn, opts) => {
+    live.set(fn, (live.get(fn) || 0) + 1);
+    return realAdd(type, fn, opts);
+  };
+  window.visualViewport.removeEventListener = (type, fn, opts) => {
+    const held = live.get(fn) || 0;
+    if (held <= 1) live.delete(fn); else live.set(fn, held - 1);
+    return realRemove(type, fn, opts);
+  };
+  const outstanding = () => [...live.values()].reduce((a, b) => a + b, 0);
+  const before = outstanding();
+
+  openRecordDetailPanel({ anchorEl: anchor, host, row: recordA(100), columns, config, app: {}, actions });
+  const openedPath = getOpenRecordDetailPath();
+  const fieldFor = (key) => document.querySelector(
+    `.db-record-detail-panel .db-record-detail-field[data-note-database-column-key="${key}"]`);
+  const incomeBefore = fieldFor("income");
+  const textBefore = incomeBefore ? incomeBefore.textContent : "";
+
+  refreshRecordDetailPanel(recordA(250));
+  const incomeAfter = fieldFor("income");
+  const textAfter = incomeAfter ? incomeAfter.textContent : "";
+  const stillSameRecord = getOpenRecordDetailPath();
+  // The panel was rebuilt, so the node MUST have changed. If it had not, the refresh did nothing and
+  // "the mapping survived" would be a statement about a panel that never moved.
+  const nodeWasRebuilt = Boolean(incomeBefore) && Boolean(incomeAfter) && incomeBefore !== incomeAfter;
+
+  out.push({
+    name: "a refreshed sheet still maps its rows to the record it was opened on",
+    pass: openedPath === "A.md" && stillSameRecord === "A.md"
+      && Boolean(incomeAfter) && nodeWasRebuilt
+      && textBefore.includes("100") && textAfter.includes("250"),
+    detail: `opened on "${openedPath}", after a refresh the panel still holds "${stillSameRecord}";`
+      + ` the row is found by its column key rather than by index, its node was rebuilt=${nodeWasRebuilt}`
+      + ` (a surviving node would mean the refresh did nothing), and its text went`
+      + ` "${textBefore.trim()}" -> "${textAfter.trim()}"`,
+  });
+
+  // The control for identity: a refresh naming a DIFFERENT record must not silently re-point the
+  // panel. Without this, "the mapping survived" is satisfied by a panel that shows whatever it is
+  // last handed.
+  refreshRecordDetailPanel(recordB);
+  const afterForeign = getOpenRecordDetailPath();
+  const panelAfterForeign = document.querySelectorAll(".db-record-detail-panel").length;
+  out.push({
+    name: "CONTROL a refresh naming another record closes the sheet rather than re-pointing it",
+    pass: afterForeign === null && panelAfterForeign === 0,
+    detail: `refreshed with ${recordB.file.path} while open on A.md: the panel now holds`
+      + ` ${afterForeign === null ? "nothing" : `"${afterForeign}"`} and ${panelAfterForeign} panel(s)`
+      + ` remain. Re-pointing would show B's values under A's identity`,
+  });
+
+  // ── resource ownership ──
+  //
+  // One full cycle: open, drive a keyboard open and closed, close. Anything still subscribed after
+  // that is a leak, and a leak here writes the inset for the NEXT sheet.
+  openRecordDetailPanel({ anchorEl: anchor, host, row: recordA(100), columns, config, app: {}, actions });
+  const whileOpen = outstanding();
+  document.documentElement.style.setProperty("--keyboard-height", "336px");
+  window.visualViewport.dispatchEvent(new Event("resize"));
+  await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
+  const liftedBottom = document.querySelector(".db-record-detail-panel")?.style
+    .getPropertyValue("--db-mobile-sheet-bottom") || "(unset)";
+  document.documentElement.style.removeProperty("--keyboard-height");
+  window.visualViewport.dispatchEvent(new Event("resize"));
+  await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
+  closeRecordDetailPanel();
+  await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
+  const after = outstanding();
+  const leftBehind = document.querySelectorAll(".db-record-detail-panel, .db-mobile-sheet-scrim").length;
+
+  out.push({
+    name: "a closed sheet leaves no viewport subscription and no node behind",
+    pass: after === before && whileOpen > before && leftBehind === 0,
+    detail: `visualViewport listeners: ${before} before, ${whileOpen} while the sheet was open,`
+      + ` ${after} after one keyboard cycle and a close. The sheet lifted to`
+      + ` --db-mobile-sheet-bottom=${liftedBottom} while the keyboard was declared.`
+      + ` ${leftBehind} panel or scrim node(s) remain. The inset is written by a subscription, so a`
+      + ` leaked one silently moves the next sheet rather than this one`,
+  });
+
+  window.visualViewport.addEventListener = realAdd;
+  window.visualViewport.removeEventListener = realRemove;
+  anchor.remove();
+  return out;
+}));
+await statePhone.close();
 
 // ───────────────────────────────────────────────────────────────────
 // 5b. THE SELECT COLUMN'S CHECKBOX STAYS INSIDE ITS CLIPPING CELL
@@ -5899,7 +6173,7 @@ await section("a number reads the same on a card and in the row behind it", asyn
 
 results.push(...phoneResults, ...menuResults, ...addViewDesktopResults, ...addViewPhoneResults,
   ...grammarResults, ...addViewGrammar, ...motionResults, ...reducedResults, ...desktopMenuResults, ...cellResults, ...sheetResults, ...selectCellResults, ...selectPhoneResults, ...rowPhoneResults, ...rowNarrowResults,
-  ...familyResults, ...touchResults, ...overlapResults, ...rhythmResults, ...rendererRhythmResults,
+  ...desktopPanelResults, ...stateResults, ...familyResults, ...touchResults, ...overlapResults, ...rhythmResults, ...rendererRhythmResults,
   ...liftedResults, ...inlineEditResults, ...numberParityResults, ...sectionFailures);
 
 await browser.close();

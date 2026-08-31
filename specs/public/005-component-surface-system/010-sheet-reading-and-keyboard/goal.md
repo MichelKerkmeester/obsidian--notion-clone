@@ -10,12 +10,11 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "public/005-component-surface-system/010-sheet-reading-and-keyboard"
-    last_updated_at: "2026-08-30T17:45:00Z"
+    last_updated_at: "2026-09-01T00:40:00Z"
     last_updated_by: "goal-authoring"
-    recent_action: "AC-15 checked at last: the viewport fallback carries the inset with no host variable"
-    next_safe_action: "The desktop four-value freeze, which still has no check"
-    blockers:
-      - "spec.md continuity says 0% and not started; implementation-summary.md says 90% and shipped"
+    recent_action: "Pinch guard, desktop four values and both missing state dimensions now measured"
+    next_safe_action: "Operator reads a record on the phone and taps a field"
+    blockers: []
     key_files:
       - "spec.md"
       - "acceptance-criteria.md"
@@ -24,12 +23,13 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-010-goal"
       parent_session_id: null
-    completion_pct: 64
+    completion_pct: 91
     open_questions:
       - "Does the operator's handset shrink visualViewport or resize the window"
-      - "Does the visual-viewport fallback ever fire, given no check has executed that branch"
-      - "Desktop non-regression is claimed with four values that no check measures"
-    answered_questions: []
+    answered_questions:
+      - "The visual-viewport fallback fires: the shipped resolveKeyboardInset is called at two scales"
+      - "The desktop four values are measured on the shipped panel: 26.84px, 2px, 0px none, right"
+      - "The reposition loop released only on the next viewport event; close now releases it"
 ---
 # Goal: Sheet Reading Rhythm and Keyboard Avoidance
 
@@ -135,20 +135,33 @@ settle it and **no number**, because none ran.
       sheet is destroyed by, so *the sheet returns to the floor when the keyboard closes* and *with no
       keyboard the sheet still sits on the viewport floor* both describe a surface that does not
       ship.
-- [ ] **Withdrawn — the pinch-zoom guard (AC-14) is asserted by a check that cannot fail.** Not
-      previously carried as a goal criterion at all, which is half the finding. *the visual-viewport
-      fallback is guarded against pinch-zoom* evaluates `window.visualViewport.scale <= 1.01 &&
-      zoomed <= 1` where `zoomed = innerHeight − visualViewport.height − offsetTop`
-      (`verify-placement.mjs:921-926`). In the harness `scale` is always 1 and `visualViewport.height`
-      always equals `innerHeight`, so the expression is `1 <= 1.01 && 0 <= 1` — two constants, true by
-      construction, on every run for ever. The check never calls `keyboardInset`, never zooms, and its
-      own comment concedes the viewport "cannot be pinched from script". It measures the harness's
-      viewport identity, not the guard.
-      **The check to build.** The guard is a pure function of two numbers, so test it as one: export
-      the inset calculation, or take it via the module the check already bundles, and call it against
-      a stubbed `{ scale: 1.4, height: 500, offsetTop: 0 }` on a 844px view, requiring 0. Pair it with
-      the same stub at `scale: 1.0`, requiring 344. Two calls, one control each way; today's check is
-      neither.
+- [x] **AC-14's pinch-zoom guard now has a check that can fail. Built 2026-09-01, on the design the
+      withdrawal specified.** Carrying it as a goal criterion at all was half the finding.
+      **What was wrong.** *the visual-viewport fallback is guarded against pinch-zoom* evaluated
+      `window.visualViewport.scale <= 1.01 && zoomed <= 1` where
+      `zoomed = innerHeight − visualViewport.height − offsetTop`. In the harness `scale` is always 1
+      and `visualViewport.height` always equals `innerHeight`, so the expression was
+      `1 <= 1.01 && 0 <= 1` — two constants, true by construction, on every run for ever. It never
+      called `keyboardInset`, never zoomed, and its own comment conceded that a viewport "cannot be
+      pinched from script". It measured the harness's viewport identity and reported it as the guard.
+      **What replaced it.** A viewport still cannot be pinched from script, so the answer is not a
+      better browser trick. The decision is three numbers in and one out, and it is now exported as
+      `resolveKeyboardInset(hostDeclared, layoutHeight, visual)` with the DOM reading left in
+      `keyboardInset`. The lane check calls it with the **same** 336px shrink at two scales:
+      `at rest it returns 336px, zoomed it returns 0px`. Its third call is the case the withdrawal
+      did not name — with the host also declaring 336px it returns 336px **while zoomed**, because
+      the guard belongs to the observed term and must not contradict a host that says a keyboard is
+      open. Same input, three answers, and no constant among them.
+      **Watched failing.** With the `scale <= MAX_UNZOOMED_SCALE` clause removed, the same check
+      reports `zoomed it returns 336px` and the lane exits 1.
+      **And the boundary is checked, which the browser check cannot reach.**
+      `src/views/keyboard-inset.test.ts` — 9 cases: the guard's threshold from both sides
+      (`MAX_UNZOOMED_SCALE` takes the shrink, a hair above it does not), a host declaration surviving
+      a zoom, `max()` from either arm, a host with no visual viewport at all, a visual viewport
+      taller than the layout viewport (reported during overscroll, and read as an inset it would push
+      the sheet below the floor), and a scrolled viewport whose `offsetTop` would otherwise read as a
+      100px keyboard. Removing the guard fails exactly the two cases that exist for it:
+      `expected 336 to be +0`.
 - [x] **AC-15 now has a check, and it passes.** `the keyboard inset falls back to the visual
       viewport when the host declares nothing` — with `--keyboard-height` removed and the visual
       viewport reporting a 336px shrink, `publishKeyboardInset` writes `--db-keyboard-inset: 336px`.
@@ -169,17 +182,34 @@ settle it and **no number**, because none ran.
       against a stub reporting `height: innerHeight − 331` at `scale: 1`, and require `placeSheet` to
       write `--db-mobile-sheet-bottom: 331px` and the sheet's bottom to land on `innerHeight − 331`.
       Its control is the same run with the stub reporting the full height, requiring `0px`.
-- [ ] Desktop keeps its four measured values — row 26.84px, right-aligned, 2px gap, no divider —
-      identical before and after.
-      **No check exists.** Three of the four values are unmeasured anywhere in the captured run. The
-      fourth appears only incidentally, as `row [83..109.8] h=26.8` inside the detail line of *the
-      desktop record panel's editor geometry is frozen by this phase* — a check owned by another
-      phase and thresholded on editor height, centre offset and overhang, not on these four. The
-      stylesheet does corroborate the scoping claim in `acceptance-criteria.md` §4.3: every phone
+- [x] Desktop keeps its four measured values — row 26.84px, right-aligned, 2px gap, no divider —
+      identical before and after. **Measured on the shipped panel 2026-09-01; all four land exactly.**
+      **What was missing.** Three of the four were measured nowhere in the captured run, and the
+      fourth appeared only incidentally as `row [83..109.8] h=26.8` inside another phase's detail
+      line — a check thresholded on editor height, centre offset and overhang, not on these four.
+      The stylesheet corroborated the SCOPING claim in `acceptance-criteria.md` §4.3: every phone
       rule for this surface is written under `.db-record-detail-panel.db-mobile-bottom-sheet …`
-      (`styles.css:9464`, `:9468`, `:9477`, `:9485`, `:9489`, `:9502`). That proves the phone rules
-      cannot match a desktop panel. It does not prove the four desktop values are what AC-16 says
-      they are, because row height and inter-row gap are computed, not declared.
+      (`styles.css:9464`, `:9468`, `:9477`, `:9485`, `:9489`, `:9502`), which proves the phone rules
+      cannot match a desktop panel. It did not prove the four values, because row height and the gap
+      between rows are computed rather than declared.
+      → *the desktop record panel keeps the four values 010 froze*, built through the shipped
+      `openRecordDetailPanel` at 1440×900: `4 row(s) on a desktop panel (bottom sheet=false): heights
+      26.84px (uniform=true); gaps 2px; 0 row(s) carry a bottom border, borders read 0px none …; the
+      value box ends within 0px of the row's content right edge`.
+      **The gap is measured between boxes, not read off `row-gap`.** A declared gap that a margin or
+      a border eats is still a declared gap; what a reader sees is the space between one row's bottom
+      and the next row's top, so that is the number taken.
+      **The divider clause needed a real host value or it would have passed on nothing.** The
+      plugin's hairline tokens are `color-mix` over `--background-modifier-border`, so with the host
+      silent every border computes as `0px none` and "no divider" reports a pass against a stylesheet
+      that declares one. The page supplies Obsidian's own dark-theme value, so `0px none` here is the
+      stylesheet's answer rather than an absent variable. That trap is named in the harness beside
+      the phone body that first hit it.
+      **Every clause is separately falsifiable, checked one at a time.** Giving the same page the
+      phone rules moves three of them at once — `bottom sheet=true: heights 44px; gaps 0px; 3 row(s)
+      carry a bottom border` — which is also the clearest statement of how far apart the two hosts
+      are. Right-alignment survives that control, so it has its own: with the value no longer filling
+      its row, `the value box ends within 212.75px of the row's content right edge`.
       **The check to build.** In `verify-placement.mjs`, mount `.db-record-detail-panel` **without**
       the `db-mobile-bottom-sheet` class at 1440×900, building the rows through the same shipped
       `renderCardField` the phone case uses, and assert four computed values on
@@ -189,24 +219,40 @@ settle it and **no number**, because none ran.
       a phone rule that ever leaks to desktop moves all four at once and the check goes red for the
       reason it exists. Pair it with a negative control that adds `db-mobile-bottom-sheet` to the
       same panel and requires all four to move — the phone's own 44px, `left`, 0px and 1px.
-- [ ] The five stateful dimensions are covered: semantic identity, transition trace, action outcome,
-      resource ownership, negative-control mutation.
-      **No check exists, and no mapping exists either.** Only negative-control mutation is evidenced,
-      by *control: the column check reacts when a label really does shove the value* (`widening the
-      label moved the value box 129 -> 253px`) and *control: the divider check reacts when the
-      divider is taken away* (`with the border removed the check reads 0px none`). This phase's
-      `acceptance-criteria.md` never names the five dimensions, so not one of its sixteen criteria is
-      assigned to one — unlike `002`, `005` and `008`, whose acceptance documents carry the mapping.
-      Nothing in the captured run labels a check by dimension, so "covered" cannot be read off it.
-      **The check to build.** First the mapping, in `acceptance-criteria.md`: a criterion → dimension
-      table covering all five, so the claim is auditable instead of asserted. Then the two dimensions
-      with no measurement on this surface. *Semantic identity*: open the sheet on a known record, call
-      `refreshRecordDetailPanel`, and assert the row labelled `Income` still resolves to the record id
-      and column key it opened with — node identity, not a node that happens to sit at the same
-      coordinates. *Resource ownership*: open the sheet, drive one `--keyboard-height` open/close
-      cycle, close the sheet, then assert 0 surviving `visualViewport` `resize` and `scroll`
-      listeners and that `--db-mobile-sheet-bottom` is back to `0px` with no writer still subscribed.
-      The inset is written by a subscription, so a leaked one silently moves the *next* sheet.
+- [x] The five stateful dimensions are covered: semantic identity, transition trace, action outcome,
+      resource ownership, negative-control mutation. **Mapped and measured 2026-09-01, in that order.**
+      **The mapping came first, because without it "covered" could not be read off anything.** This
+      phase's `acceptance-criteria.md` carried sixteen criteria and assigned none of them to a
+      dimension, unlike `002`, `005` and `008`. Its new §5 is a dimension → criteria → evidence table
+      covering all five, so the claim is auditable instead of asserted.
+      **Three dimensions already had evidence and now have a row naming it.** Transition trace: the
+      keyboard sequence is driven and read at each step, floor 844 → lifted 508 with `top ≥ 0` →
+      floor 844, so a check that read only the lifted state cannot stand in for it. Action outcome:
+      the rename path reaches the editor rather than a counter, and criterion 9 reads the value
+      **box** rather than its text rect, which is what made the first version pass against the
+      defect. Negative-control mutation: five controls, each quoted.
+      **Semantic identity had no measurement, and now has one plus its control.**
+      → *a refreshed sheet still maps its rows to the record it was opened on*: `opened on "A.md",
+      after a refresh the panel still holds "A.md"; the row is found by its column key rather than by
+      index, its node was rebuilt=true …, and its text went "Income100" -> "Income250"`. Requiring
+      the node to have been rebuilt is deliberate: a refresh empties and rebuilds, so asserting a
+      surviving node would assert the opposite of what happens. What survives is the mapping.
+      → *CONTROL a refresh naming another record closes the sheet rather than re-pointing it*:
+      `refreshed with B.md while open on A.md: the panel now holds nothing and 0 panel(s) remain`.
+      Without it, "the mapping survived" is satisfied by a panel showing whatever it was last handed.
+      **Resource ownership had no measurement either, and the one built found a real leak.**
+      It failed on its first run at `0 listeners before, 4 while open, 2 after`. The reposition loop
+      tears itself down lazily — `schedule` notices a disconnected panel — and nothing schedules on a
+      close, so between a sheet closing and the next resize or scroll that sheet's `resize` and
+      `scroll` handlers stayed registered on `window.visualViewport`: one pair per closed surface,
+      all firing on the event that finally cleared them. Bounded and self-healing, which is why it
+      went unnoticed, and still a subscription outliving the thing it was for.
+      **Fixed at the producer:** `releasePopoverPosition(panel)` is exported and called from the
+      panel's own `close`, before the node is removed. → *a closed sheet leaves no viewport
+      subscription and no node behind*: `0 before, 2 while the sheet was open, 0 after one keyboard
+      cycle and a close … 0 panel or scrim node(s) remain`.
+      **Named rather than swept:** the same lazy shape exists on the other anchored surfaces. They
+      were not in this phase's scope, and what they need is now a function rather than a design.
 - [ ] The operator opens a record on the phone, reads every row as one line, taps a field, and still
       sees it.
       **Operator criterion. Stays open regardless of the numbers, per D3.** No harness check can close

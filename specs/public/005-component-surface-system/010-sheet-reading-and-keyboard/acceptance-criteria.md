@@ -192,11 +192,14 @@ resting and returning readings are not readings of the shipped surface at all.
    (`--keyboard-height`, `visualViewport`) at a value measured from the operator's screenshot
    (331px). They prove the sheet responds correctly *to the signal*. They do not prove iOS emits
    that signal at that moment with that number. Only the operator's device can close that gap.
-2. **`record-detail-panel.ts` closes the panel on `window` resize** (`const onResize = () => close()`).
-   On iOS this never fires for the keyboard, which is why the reported screenshot shows the sheet
-   still open, so it is not part of the reported defect. On a WebView that *does* resize, it would
-   close the sheet mid-edit. Left unchanged: it is outside the reported defect and could not be
-   verified here without driving the panel opener, which needs a vault.
+2. **`record-detail-panel.ts` used to close the panel on any `window` resize** (`onResize = () =>
+   close()`). On iOS that never fires for the keyboard, which is why the reported screenshot showed
+   the sheet still open, so it was never part of the reported defect. On a WebView that *does*
+   resize, it closed the sheet mid-edit. **Repaired 2026-08-31 under `016`**, which was where the
+   declared red lived: the handler now separates a keyboard from a rotation by whether the width
+   moved. It is driven through the shipped opener at a real page resize, both directions. The reason
+   recorded here for leaving it — that it could not be verified without a vault — turned out to be
+   wrong: the opener is reachable, and this line is corrected rather than left standing.
 3. **Desktop is untouched.** Every rule added is scoped
    `.db-record-detail-panel.db-mobile-bottom-sheet …`, a class only the phone sheet carries.
    Criterion 16 asserts it.
@@ -205,9 +208,64 @@ resting and returning readings are not readings of the shipped surface at all.
 |---|---|---|---|
 | 16 | The desktop anchored panel keeps its existing geometry. | four measured values identical before and after: row height **26.84px**, value `text-align: right`, field-list gap **2px**, `border-bottom` **`0px none`** | n/a — a non-regression, and the reason it carries four numbers rather than the word "unchanged" is below |
 
+**Criterion 16 is now measured rather than argued.** *the desktop record panel keeps the four
+values 010 froze* builds the panel through the shipped `openRecordDetailPanel` at 1440 × 900 and
+reads all four: `heights 26.84px (uniform=true); gaps 2px; 0 row(s) carry a bottom border …; the
+value box ends within 0px of the row's content right edge`. The page supplies Obsidian's own
+`--background-modifier-border`, because the plugin's hairline tokens are `color-mix` over it and a
+silent host makes every border compute `0px none` — which would pass the divider clause against a
+stylesheet that declares one. Giving the same page the phone rules moves three clauses at once
+(`44px`, `0px`, `3 row(s) carry a bottom border`); right-alignment survives that control and has its
+own, at `212.75px` off when the value stops filling its row.
+
 Criterion 16 originally read "unchanged from baseline" with no values. That is not a criterion: a
 later reader has nothing to compare against, so the check silently becomes "somebody looked once".
 The four numbers above are the ones the run produced, and they are deliberately the **inverse** of
 what the phone criteria assert — the phone moved to a 44px row, left-aligned values, a 0px gap and a
 1px divider, so if a phone rule ever leaks to desktop, all four move at once and this row goes red
 for the exact reason it exists. A single value would not have that property.
+
+
+---
+
+## 5. THE FIVE STATEFUL DIMENSIONS
+
+Added 2026-09-01. This document carried sixteen criteria and assigned none of them to a dimension, so
+"the five stateful dimensions are covered" could not be read off the run — unlike `002`, `005` and
+`008`, whose acceptance documents carry the mapping. The table is the audit; the two rows that had
+no measurement at all are the work it produced.
+
+| Dimension | What it asks | Criteria | Evidence |
+|---|---|---|---|
+| **Semantic identity** | Does the surface still mean the same thing after it changes? | new | *a refreshed sheet still maps its rows to the record it was opened on* — opened on `A.md`, refreshed, the panel still holds `A.md`, the Income row is found **by its column key** rather than by index, and its text goes `Income100` → `Income250` |
+| **Transition trace** | Does the surface move through the states it claims, in order? | 11, 12, 13 | The keyboard sequence is driven as a sequence and read at each step: floor `844` → lifted `508` with `top ≥ 0` → floor `844` again. A check that read only the lifted state would pass on a sheet that never came back |
+| **Action outcome** | Does an action produce the outcome, not merely the call? | 2, 9 | The rename path is driven to the editor rather than to a counter, and the column check reads the value **box** rather than its text rect — the text edge is pinned by `text-align: right`, so the first version passed against the defect |
+| **Resource ownership** | Does the surface own and release what it acquires? | new | *a closed sheet leaves no viewport subscription and no node behind* — `0` listeners before, `2` while open, `0` after one keyboard cycle and a close, and `0` panel or scrim nodes remaining |
+| **Negative-control mutation** | Does each check react when the thing it measures really moves? | 2, 6, 14, 15, 16 | *control: the column check reacts when a label really does shove the value* (`129 → 253px`); *control: the divider check reacts when the divider is taken away* (`0px none`); the pinch guard's removal turns `0px` into `336px`; the fallback's `observed` term removed reports `0px` against `336px`; the desktop four go red under the phone rules |
+
+### 5.1 What resource ownership found
+
+The check failed on its first run: **`0` listeners before, `4` while open, `2` after**. The
+reposition loop tears itself down lazily — `schedule` notices a disconnected panel and cleans up —
+and nothing schedules on a close. Between a sheet closing and the next resize or scroll, that
+sheet's `resize` and `scroll` handlers were still registered on `window.visualViewport`, one pair per
+closed surface, all firing on the event that finally cleared them.
+
+Bounded and self-healing, which is why it went unnoticed for as long as it did. Still a subscription
+outliving the thing it was for, writing an inset for a panel that is gone. `releasePopoverPosition`
+is now exported and called from the panel's own `close`, **before** the node is removed. The same
+lazy shape exists on the other anchored surfaces and is named here rather than swept: they were not
+in this phase's scope, and the release they would need is now a function rather than a design.
+
+### 5.2 What semantic identity is not
+
+It is not node identity. A refresh empties and rebuilds the panel, so every node is new by
+construction and asserting a surviving node would assert the opposite of what happens — which is why
+the check requires `node was rebuilt=true` alongside the mapping. What survives is the mapping: the
+row that means "Income" is still found by its column key, still belongs to the record the panel was
+opened on, and now shows that record's current value.
+
+Its control is the case that would make the whole dimension vacuous: *CONTROL a refresh naming
+another record closes the sheet rather than re-pointing it*. Refreshed with `B.md` while open on
+`A.md`, the panel holds nothing and `0` panels remain. Without it, "the mapping survived" is
+satisfied by a panel that shows whatever it was last handed.

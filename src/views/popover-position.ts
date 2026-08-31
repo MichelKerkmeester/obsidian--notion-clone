@@ -75,6 +75,22 @@ export const PANEL_POPOVER: ToolbarPopoverPositionOptions = {
 
 const positionCleanups = new WeakMap<HTMLElement, () => void>();
 
+/**
+ * Release a panel's reposition loop and its viewport subscriptions, now rather than eventually.
+ *
+ * The loop tears itself down lazily: `schedule` notices a disconnected panel and cleans up. That is
+ * correct and it is late. Nothing schedules on a close, so between a sheet closing and the next
+ * resize or scroll the panel's `resize` and `scroll` handlers are still registered on
+ * `window.visualViewport` — one pair per closed surface, all firing on the event that finally clears
+ * them. It is bounded and self-healing, which is why it went unnoticed; it is still a subscription
+ * outliving the thing it was for, and the inset those handlers write belongs to a panel that is gone.
+ *
+ * Idempotent, and safe on a panel that was never positioned.
+ */
+export function releasePopoverPosition(panel: HTMLElement): void {
+  positionCleanups.get(panel)?.();
+}
+
 // ───────────────────────────────────────────────────────────────────
 // 4. TOOLBAR POPOVER POSITIONING
 // ───────────────────────────────────────────────────────────────────
@@ -591,10 +607,44 @@ function keyboardInset(view: Window, doc: Document): number {
     if (Number.isFinite(declared)) host = Math.max(0, declared);
   }
   const visual = view.visualViewport;
-  const observed = visual && visual.scale <= 1.01
-    ? Math.max(0, view.innerHeight - visual.height - visual.offsetTop)
+  return resolveKeyboardInset(
+    host,
+    view.innerHeight,
+    visual ? { height: visual.height, offsetTop: visual.offsetTop, scale: visual.scale } : null,
+  );
+}
+
+/**
+ * The inset decision itself, with the DOM reading left to the caller above.
+ *
+ * Split out because the pinch-zoom guard could not otherwise be checked. The browser check that
+ * claimed to cover it evaluated `visualViewport.scale <= 1.01 && zoomed <= 1` against the harness's
+ * own untouched viewport, where `scale` is always 1 and the visual height always equals
+ * `innerHeight` — so it read `1 <= 1.01 && 0 <= 1`, two constants, true on every run for ever. It
+ * measured the harness's viewport identity, never the guard, and its own comment conceded that a
+ * viewport cannot be pinched from script. A guard that is a decision over three numbers is checked
+ * as one.
+ *
+ * `MAX_UNZOOMED_SCALE` is 1.01 rather than 1 because a resting viewport does not always report
+ * exactly 1: browser zoom, device pixel ratio rounding and the keyboard animation's own frames can
+ * put it a hair either side, and a strict comparison would read those as a pinch and switch the
+ * fallback off on a real keyboard.
+ */
+export const MAX_UNZOOMED_SCALE = 1.01;
+
+export function resolveKeyboardInset(
+  hostDeclared: number,
+  layoutHeight: number,
+  visual: { height: number; offsetTop: number; scale: number } | null,
+): number {
+  // A pinch shrinks the visual viewport exactly as a keyboard does, and reading one as the other
+  // lifts the sheet off the floor for no reason. Scale is what separates them.
+  const observed = visual && visual.scale <= MAX_UNZOOMED_SCALE
+    ? Math.max(0, layoutHeight - visual.height - visual.offsetTop)
     : 0;
-  return Math.max(host, observed);
+  // `max`, not a preference: the two are observations of one physical thing, so whichever notices
+  // first is the right answer.
+  return Math.max(Math.max(0, hostDeclared), observed);
 }
 
 /**

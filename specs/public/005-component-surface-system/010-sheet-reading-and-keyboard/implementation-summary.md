@@ -11,8 +11,8 @@ _memory:
     packet_pointer: "public/005-component-surface-system/010-sheet-reading-and-keyboard"
     last_updated_at: "2026-08-30T06:48:00Z"
     last_updated_by: "phase-author"
-    recent_action: "AC-15 checked at last: the viewport fallback carries the inset with no host variable"
-    next_safe_action: "The desktop four-value freeze, which still has no check"
+    recent_action: "Pinch guard, desktop four values and both missing state dimensions now measured"
+    next_safe_action: "Operator reads a record on the phone and taps a field"
     blockers: []
     key_files:
       - "spec.md"
@@ -21,9 +21,12 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-010"
       parent_session_id: null
-    completion_pct: 64
+    completion_pct: 91
     open_questions: []
-    answered_questions: []
+    answered_questions:
+      - "The visual-viewport fallback fires: the shipped resolveKeyboardInset is called at two scales"
+      - "The desktop four values are measured on the shipped panel: 26.84px, 2px, 0px none, right"
+      - "The reposition loop released only on the next viewport event; close now releases it"
 ---
 # Implementation Summary
 
@@ -166,8 +169,10 @@ Sixteen criteria, each with a red baseline where one was obtainable.
    rule that the project's scale outranks the design skill's default. A later audit measured it and
    raised it as an open operator decision — one token, not a defect.
 
-5. **This phase's continuity block still reads `completion_pct: 64` and "not started".** That is
-   contradicted by the lane journal, by the working tree and by this document. The conflict is
-   recorded in the parent roadmap rather than silently corrected here.
+5. **The continuity contradiction is resolved.** The block read `completion_pct: 64` and "not
+   started" while the lane journal, the working tree and this document all said otherwise. The
+   figure is now derived the way every other packet's is — ticked criteria over its own `goal.md`
+   checklist — and the "not started" string is gone. Ten of eleven are ticked; the eleventh is the
+   operator's, and no harness closes it.
 
 <!-- /ANCHOR:limitations -->

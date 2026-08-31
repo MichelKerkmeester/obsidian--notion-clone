@@ -37,7 +37,7 @@ import { getFieldWidth } from "./column-width";
 import { parseInlineMarkdown } from "../data/inline-markdown";
 import { renderInlineMarkdown, resolveInlineImageSrc, valueToTooltip } from "./inline-markdown-renderer";
 import { markNoteHoverLink } from "./hover-link-preview";
-import { isMobileBottomSheet, positionToolbarPopover } from "./popover-position";
+import { isMobileBottomSheet, positionToolbarPopover, releasePopoverPosition } from "./popover-position";
 import { renderDelayedExternalLink } from "./cell-renderer";
 import { renderCardField } from "./card-field-renderer";
 import { createCheckbox } from "./checkbox";
@@ -193,6 +193,10 @@ export function openRecordDetailPanel(opts: OpenRecordDetailOptions): void {
     // so removing the panel alone leaves the whole app dimmed with nothing on top of it — the
     // chrome has to be taken off the way it was put on.
     applySheetChrome(panel, false);
+    // Before the node goes, not after: the reposition loop only notices a disconnected panel when it
+    // next runs, so a close with no resize behind it leaves this sheet's viewport handlers
+    // registered until some unrelated event fires them.
+    releasePopoverPosition(panel);
     panel.remove();
     window.activeDocument.removeEventListener("pointerdown", onOutside, true);
     window.activeDocument.removeEventListener("keydown", onKeydown, true);

@@ -1004,7 +1004,7 @@
       },
       "note": "The phone form of the owned menu. Rows share one left edge with the icon in a fixed leading column, hairlines divide neighbours but not the last row of a group, and a row that opens a submenu carries a trailing chevron. Captured in viewport mode so the fixed sheet docks at the bottom.",
       "capture": "viewport",
-      "bytes": 49261
+      "bytes": 49273
     },
     {
       "id": "chrome-owned-menu-sheet",
@@ -1031,7 +1031,7 @@
       },
       "note": "The phone form of the owned menu. Rows share one left edge with the icon in a fixed leading column, hairlines divide neighbours but not the last row of a group, and a row that opens a submenu carries a trailing chevron. Captured in viewport mode so the fixed sheet docks at the bottom.",
       "capture": "viewport",
-      "bytes": 51714
+      "bytes": 51712
     },
     {
       "id": "chrome-owned-menu-sheet",
@@ -3505,7 +3505,7 @@
       ],
       "layoutHash": "60634d6fc6fc",
       "sourceHashes": {
-        "src/views/record-detail-panel.ts": "c5181281572f",
+        "src/views/record-detail-panel.ts": "f6d0308b4df2",
         "src/views/card-field-renderer.ts": "33212bef3422",
         "src/views/note-body-region.ts": "4660f1f93bd7",
         "styles.css": "e018db2135f2",
@@ -3532,7 +3532,7 @@
       ],
       "layoutHash": "60634d6fc6fc",
       "sourceHashes": {
-        "src/views/record-detail-panel.ts": "c5181281572f",
+        "src/views/record-detail-panel.ts": "f6d0308b4df2",
         "src/views/card-field-renderer.ts": "33212bef3422",
         "src/views/note-body-region.ts": "4660f1f93bd7",
         "styles.css": "e018db2135f2",
@@ -3559,7 +3559,7 @@
       ],
       "layoutHash": "df2b70c09747",
       "sourceHashes": {
-        "src/views/record-detail-panel.ts": "c5181281572f",
+        "src/views/record-detail-panel.ts": "f6d0308b4df2",
         "src/views/card-field-renderer.ts": "33212bef3422",
         "src/views/note-body-region.ts": "4660f1f93bd7",
         "styles.css": "e018db2135f2",
@@ -3586,7 +3586,7 @@
       ],
       "layoutHash": "df2b70c09747",
       "sourceHashes": {
-        "src/views/record-detail-panel.ts": "c5181281572f",
+        "src/views/record-detail-panel.ts": "f6d0308b4df2",
         "src/views/card-field-renderer.ts": "33212bef3422",
         "src/views/note-body-region.ts": "4660f1f93bd7",
         "styles.css": "e018db2135f2",
@@ -3612,7 +3612,7 @@
       ],
       "layoutHash": "34dd726c871e",
       "sourceHashes": {
-        "src/views/record-detail-panel.ts": "c5181281572f",
+        "src/views/record-detail-panel.ts": "f6d0308b4df2",
         "src/views/note-body-region.ts": "4660f1f93bd7",
         "styles.css": "e018db2135f2",
         "tools/screenshots/theme.css": "8239cc22cceb",
@@ -3637,7 +3637,7 @@
       ],
       "layoutHash": "34dd726c871e",
       "sourceHashes": {
-        "src/views/record-detail-panel.ts": "c5181281572f",
+        "src/views/record-detail-panel.ts": "f6d0308b4df2",
         "src/views/note-body-region.ts": "4660f1f93bd7",
         "styles.css": "e018db2135f2",
         "tools/screenshots/theme.css": "8239cc22cceb",
@@ -3662,7 +3662,7 @@
       ],
       "layoutHash": "1d45f5f06b18",
       "sourceHashes": {
-        "src/views/record-detail-panel.ts": "c5181281572f",
+        "src/views/record-detail-panel.ts": "f6d0308b4df2",
         "src/views/note-body-region.ts": "4660f1f93bd7",
         "styles.css": "e018db2135f2",
         "tools/screenshots/theme.css": "8239cc22cceb",
@@ -3687,7 +3687,7 @@
       ],
       "layoutHash": "1d45f5f06b18",
       "sourceHashes": {
-        "src/views/record-detail-panel.ts": "c5181281572f",
+        "src/views/record-detail-panel.ts": "f6d0308b4df2",
         "src/views/note-body-region.ts": "4660f1f93bd7",
         "styles.css": "e018db2135f2",
         "tools/screenshots/theme.css": "8239cc22cceb",
@@ -3712,7 +3712,7 @@
       ],
       "layoutHash": "0f97e916eb20",
       "sourceHashes": {
-        "src/views/record-detail-panel.ts": "c5181281572f",
+        "src/views/record-detail-panel.ts": "f6d0308b4df2",
         "src/views/note-body-region.ts": "4660f1f93bd7",
         "styles.css": "e018db2135f2",
         "tools/screenshots/theme.css": "8239cc22cceb",
@@ -3737,7 +3737,7 @@
       ],
       "layoutHash": "0f97e916eb20",
       "sourceHashes": {
-        "src/views/record-detail-panel.ts": "c5181281572f",
+        "src/views/record-detail-panel.ts": "f6d0308b4df2",
         "src/views/note-body-region.ts": "4660f1f93bd7",
         "styles.css": "e018db2135f2",
         "tools/screenshots/theme.css": "8239cc22cceb",
@@ -3747,7 +3747,7 @@
       },
       "note": "A record whose note has frontmatter and nothing else. One faint line rather than an empty box: without an affordance the records most in need of a body would be exactly the ones that could not be given one.",
       "capture": "viewport",
-      "bytes": 52766
+      "bytes": 52776
     },
     {
       "id": "panel-record-detail-sheet-body-empty",
@@ -3762,7 +3762,7 @@
       ],
       "layoutHash": "fbcf3ece6a3d",
       "sourceHashes": {
-        "src/views/record-detail-panel.ts": "c5181281572f",
+        "src/views/record-detail-panel.ts": "f6d0308b4df2",
         "src/views/note-body-region.ts": "4660f1f93bd7",
         "styles.css": "e018db2135f2",
         "tools/screenshots/theme.css": "8239cc22cceb",
@@ -3787,7 +3787,7 @@
       ],
       "layoutHash": "fbcf3ece6a3d",
       "sourceHashes": {
-        "src/views/record-detail-panel.ts": "c5181281572f",
+        "src/views/record-detail-panel.ts": "f6d0308b4df2",
         "src/views/note-body-region.ts": "4660f1f93bd7",
         "styles.css": "e018db2135f2",
         "tools/screenshots/theme.css": "8239cc22cceb",
@@ -3814,8 +3814,8 @@
       ],
       "layoutHash": "1462d3f27dd8",
       "sourceHashes": {
-        "src/views/record-detail-panel.ts": "c5181281572f",
-        "src/views/popover-position.ts": "cc8ca07a1a5d",
+        "src/views/record-detail-panel.ts": "f6d0308b4df2",
+        "src/views/popover-position.ts": "075b5761f121",
         "src/views/card-field-renderer.ts": "33212bef3422",
         "src/views/note-body-region.ts": "4660f1f93bd7",
         "styles.css": "e018db2135f2",
@@ -3843,8 +3843,8 @@
       ],
       "layoutHash": "1462d3f27dd8",
       "sourceHashes": {
-        "src/views/record-detail-panel.ts": "c5181281572f",
-        "src/views/popover-position.ts": "cc8ca07a1a5d",
+        "src/views/record-detail-panel.ts": "f6d0308b4df2",
+        "src/views/popover-position.ts": "075b5761f121",
         "src/views/card-field-renderer.ts": "33212bef3422",
         "src/views/note-body-region.ts": "4660f1f93bd7",
         "styles.css": "e018db2135f2",
@@ -3872,8 +3872,8 @@
       ],
       "layoutHash": "ade783c1a018",
       "sourceHashes": {
-        "src/views/record-detail-panel.ts": "c5181281572f",
-        "src/views/popover-position.ts": "cc8ca07a1a5d",
+        "src/views/record-detail-panel.ts": "f6d0308b4df2",
+        "src/views/popover-position.ts": "075b5761f121",
         "src/views/card-field-renderer.ts": "33212bef3422",
         "src/views/note-body-region.ts": "4660f1f93bd7",
         "styles.css": "e018db2135f2",
@@ -3884,7 +3884,7 @@
       },
       "note": "The phone form of the record detail panel. positionToolbarPopover renders it as a bottom sheet with a grab handle; a permanent close button (reusing db-cell-edit-close) and drag-down on the handle dismiss it where the desktop panel relies on Escape and outside-click. Captured in viewport mode so the fixed sheet docks at the bottom. The note body is the last group, below the properties.",
       "capture": "viewport",
-      "bytes": 77050
+      "bytes": 77062
     },
     {
       "id": "panel-record-detail-sheet",
@@ -3901,8 +3901,8 @@
       ],
       "layoutHash": "ade783c1a018",
       "sourceHashes": {
-        "src/views/record-detail-panel.ts": "c5181281572f",
-        "src/views/popover-position.ts": "cc8ca07a1a5d",
+        "src/views/record-detail-panel.ts": "f6d0308b4df2",
+        "src/views/popover-position.ts": "075b5761f121",
         "src/views/card-field-renderer.ts": "33212bef3422",
         "src/views/note-body-region.ts": "4660f1f93bd7",
         "styles.css": "e018db2135f2",
@@ -3913,7 +3913,7 @@
       },
       "note": "The phone form of the record detail panel. positionToolbarPopover renders it as a bottom sheet with a grab handle; a permanent close button (reusing db-cell-edit-close) and drag-down on the handle dismiss it where the desktop panel relies on Escape and outside-click. Captured in viewport mode so the fixed sheet docks at the bottom. The note body is the last group, below the properties.",
       "capture": "viewport",
-      "bytes": 77700
+      "bytes": 77698
     },
     {
       "id": "panel-record-peek",
@@ -4774,7 +4774,7 @@
       },
       "note": "Multi-day all-day bars, timed events, an overflow week and one event carried across the week boundary.",
       "capture": "viewport",
-      "bytes": 85997
+      "bytes": 86403
     },
     {
       "id": "calendar-month-view",
@@ -4966,7 +4966,7 @@
       },
       "note": "Sticky day header and all-day strip over the 08–16 time grid; the current-time ruler sits on Wednesday at 13:45.",
       "capture": "viewport",
-      "bytes": 57756
+      "bytes": 57407
     },
     {
       "id": "calendar-week-time-grid",
@@ -5748,7 +5748,7 @@
       },
       "note": "Two weeks at one column per day; the April band marks the month boundary and the today line sits at 25 March 13:45.",
       "capture": "viewport",
-      "bytes": 147239
+      "bytes": 146959
     },
     {
       "id": "timeline-view",

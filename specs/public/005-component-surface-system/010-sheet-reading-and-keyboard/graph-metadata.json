@@ -52,7 +52,8 @@
       "reference-notion-record.png",
       "src/views/popover-position.ts",
       "tools/storybook/verify-placement.mjs",
-      "src/views/card-field-renderer.ts"
+      "src/views/card-field-renderer.ts",
+      "src/views/keyboard-inset.test.ts"
     ],
     "entities": [
       {
@@ -128,6 +129,12 @@
         "source": "derived"
       },
       {
+        "name": "keyboard-inset.test.ts",
+        "kind": "test",
+        "path": "src/views/keyboard-inset.test.ts",
+        "source": "derived"
+      },
+      {
         "name": "Feature Specification",
         "kind": "proper_noun",
         "path": "spec.md",
@@ -146,12 +153,6 @@
         "source": "derived"
       },
       {
-        "name": "no",
-        "kind": "key_phrase",
-        "path": "spec.md",
-        "source": "derived"
-      },
-      {
         "name": "screenshots",
         "kind": "key_phrase",
         "path": "spec.md",
@@ -159,6 +160,12 @@
       },
       {
         "name": "the",
+        "kind": "key_phrase",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "nothing",
         "kind": "key_phrase",
         "path": "spec.md",
         "source": "derived"
@@ -192,17 +199,11 @@
         "kind": "key_phrase",
         "path": "tasks.md",
         "source": "derived"
-      },
-      {
-        "name": "Acceptance Criteria",
-        "kind": "proper_noun",
-        "path": "acceptance-criteria.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "Make the phone record sheet read like a record rather than a two-column ledger, and keep the field being edited visible when the software keyboard opens.",
     "created_at": "2026-08-30T16:47:04.848Z",
-    "last_save_at": "2026-08-31T20:38:59.431Z",
+    "last_save_at": "2026-08-31T22:17:41.028Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -213,13 +214,13 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:d229e7cac72a20cb13916a2ff03d4a524d68c5ba6863e2d4f881b97eebc06cf9",
+    "source_fingerprint": "sha256:c16739a2dd11701cbc49613027d370996b4d50bcdb5ab565f3792b6412b6fd29",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "f68dcb1563b48b2a47465c178975cbb4cc7863b98cdad29873055c0c87402886",
+      "spec.md": "42da41e5a852a11fd56ad3094ffaf0f9af3489b7a456e6b67a0b8a70a413d16c",
       "plan.md": "1b064a259bd0fcdbe57b5c882d05539d1a4c70a6cb911659c2cb19177d8f89ed",
       "tasks.md": "c4537b17516d3dcdf8437e2f38d79efba1c7416a360f993b611ab3f819deaca2",
-      "implementation-summary.md": "f589c3a8939a5123f93b503812fcead123edbe3cdbb1ee61e1b9105eb93a4cc0"
+      "implementation-summary.md": "1007550be312d2390cdbdc3ccff55bd1dc63b4ff37d555bbac7d54d17f2fceb6"
     },
     "last_active_child_id": null,
     "last_active_at": null
