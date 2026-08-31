@@ -11,8 +11,8 @@ _memory:
     packet_pointer: "public/005-component-surface-system/015-desktop-dropdown-placement"
     last_updated_at: "2026-08-30T09:45:00Z"
     last_updated_by: "phase-author"
-    recent_action: "The suggestion clamp and threshold exported, so a check drives them instead of copying"
-    next_safe_action: "AC-7 and the phone rows, whose values still come from the harness"
+    recent_action: "Search clamp lifted to one exported function; phone dead-anchor arm built"
+    next_safe_action: "Operator opens a desktop dropdown and says whether it is where they expected"
     blockers:
       - "database-view.ts and embedded-database-renderer.ts held by another session all phase"
     key_files:
@@ -24,7 +24,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-015"
       parent_session_id: null
-    completion_pct: 62
+    completion_pct: 88
     open_questions: []
     answered_questions: []
 ---
@@ -43,7 +43,7 @@ _memory:
 | **Spec Folder** | 015-desktop-dropdown-placement |
 | **Shipped** | 2026-08-30 |
 | **Level** | 1 |
-| **State** | Five of six defects fixed and verified. The sixth measured and declared. Not operator-confirmed |
+| **State** | All six defects fixed and verified. The search clamp is lifted into one exported function both renderers call, so a source regression now reddens both harnesses, and the phone arm of the dead-anchor pair exists. Not operator-confirmed |
 
 <!-- /ANCHOR:metadata -->
 

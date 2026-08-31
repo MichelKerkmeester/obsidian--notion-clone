@@ -55,7 +55,8 @@
       "src/views/row-menu.ts",
       "src/views/modals/formula-modal.ts",
       "tools/storybook/verify-placement.mjs",
-      "tools/live/renderer-coverage.json"
+      "tools/live/renderer-coverage.json",
+      "src/views/calendar-search-placement.test.ts"
     ],
     "entities": [
       {
@@ -149,6 +150,12 @@
         "source": "derived"
       },
       {
+        "name": "calendar-search-placement.test.ts",
+        "kind": "test",
+        "path": "src/views/calendar-search-placement.test.ts",
+        "source": "derived"
+      },
+      {
         "name": "Feature Specification",
         "kind": "proper_noun",
         "path": "spec.md",
@@ -157,6 +164,12 @@
       {
         "name": "Desktop Dropdown Placement",
         "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "it",
+        "kind": "key_phrase",
         "path": "spec.md",
         "source": "derived"
       },
@@ -179,12 +192,6 @@
         "source": "derived"
       },
       {
-        "name": "1. WHAT THIS PHASE FOUND",
-        "kind": "heading",
-        "path": "spec.md",
-        "source": "derived"
-      },
-      {
         "name": "Implementation Plan",
         "kind": "proper_noun",
         "path": "plan.md",
@@ -195,17 +202,11 @@
         "kind": "key_phrase",
         "path": "plan.md",
         "source": "derived"
-      },
-      {
-        "name": "reach",
-        "kind": "key_phrase",
-        "path": "plan.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "Measure where every desktop dropdown, popover and menu actually lands, against where it should land, and repair the two seams that explain five of the six defects found.",
     "created_at": "2026-08-30T16:46:50.351Z",
-    "last_save_at": "2026-08-31T20:50:29.323Z",
+    "last_save_at": "2026-08-31T21:57:49.859Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -216,13 +217,13 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:1fb062d1f8ea7e051a677869cc9d2f2f2b17c10e3d1b8a114a2bf2229745bbf8",
+    "source_fingerprint": "sha256:c25ae891e7fef453dcbf82522c51ebd7753db6efb6aafbe46d03d0f9d908605e",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "250a114405c5a567c2e4f5107ba262825228ad6c8ef794d471fdcc2cec0e9c1d",
+      "spec.md": "037c15fb50b85f4271708759c81b595376a05387a380df6c4b6db8fd96bf29a4",
       "plan.md": "3077a030820f6dd48a5ba05d9116563c0e9ae58c8796927eefeb67941b59c642",
       "tasks.md": "71293bcc99a0d6e27024bada5453f548b6d91adaa1064621eaf49da7f3c81197",
-      "implementation-summary.md": "1ce02ce2716a7f408a764e3eaeee6301164e5b2673d37831b85121143cb0c49a"
+      "implementation-summary.md": "7cbe681c7e5256e78e0d3d4c540c2798f9c7cf32ef353a68f4d7c862ac860f90"
     },
     "last_active_child_id": null,
     "last_active_at": null

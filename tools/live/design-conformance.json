@@ -1,9 +1,9 @@
 {
-  "measuredAt": "2026-08-31T21:33:17.296Z",
+  "measuredAt": "2026-08-31T21:55:28.107Z",
   "inputs": {
     "styles.css": "e018db2135f2",
     "tools/live/design-conformance.mjs": "ca98bf93ea28",
-    "src/views/popover-position.ts": "69ba36f662fe"
+    "src/views/popover-position.ts": "cc8ca07a1a5d"
   },
   "checks": [
     {
@@ -163,7 +163,7 @@
     "src/views/database-view.ts:3052  .db-group-order-popover",
     "src/views/database-view.ts:3166  .db-panel-button",
     "src/views/database-view.ts:6910  .db-calendar-search-results-popover",
-    "src/views/database-view.ts:11131  .db-mobile-column-width-panel",
+    "src/views/database-view.ts:11130  .db-mobile-column-width-panel",
     "src/views/date-value-picker.ts:139  .db-cell-edit-popover",
     "src/views/date-value-picker.ts:206  .db-calendar-mini-popover",
     "src/views/dropdown-field.ts:115  .db-dropdown-field-text",
@@ -172,8 +172,8 @@
     "src/views/dropdown-field.ts:216  .db-dropdown-empty",
     "src/views/dropdown-field.ts:258  .db-dropdown-section-title",
     "src/views/embedded-database-renderer.ts:1255  .db-calendar-search-results-popover",
-    "src/views/embedded-database-renderer.ts:2806  .db-group-order-popover",
-    "src/views/embedded-database-renderer.ts:2922  .db-panel-button",
+    "src/views/embedded-database-renderer.ts:2805  .db-group-order-popover",
+    "src/views/embedded-database-renderer.ts:2921  .db-panel-button",
     "src/views/filter-panel-renderer.ts:166  .db-filter-panel",
     "src/views/filter-panel-renderer.ts:187  .db-panel-empty",
     "src/views/filter-panel-renderer.ts:207  .db-panel-button",

@@ -178,6 +178,12 @@ export function positionToolbarPopover(
     // anchor is gone for good.
     if (!anchorEl.isConnected) {
       panel.setCssProps({ visibility: "hidden" });
+      // A sheet's backdrop is a body-level sibling, not a child, so hiding the panel alone leaves a
+      // full-screen scrim swallowing every tap with nothing visible above it — which is the freeze
+      // symptom, not a conservative outcome. The chrome comes down with the surface. The panel node
+      // itself is still only hidden: this decides that an unreachable sheet stops blocking the app,
+      // not that the owner's surface is destroyed behind its back.
+      applySheetChrome(panel, false);
       teardown?.();
       return;
     }
@@ -350,6 +356,37 @@ export function placeSheet(
 // ───────────────────────────────────────────────────────────────────
 // 5. PURE POSITIONING HELPERS
 // ───────────────────────────────────────────────────────────────────
+
+/**
+ * Where the calendar/timeline search-results panel goes, given its anchor and the bounds it must
+ * stay inside.
+ *
+ * Lifted out of two private methods that held byte-identical copies of it. That duplication was not
+ * the reason to move it — the reason is that both copies needed a live Obsidian `App` to reach, so
+ * every check of this arithmetic was a TRANSCRIPTION into a probe. A transcribed check answers a
+ * question about the copy: this folder measured the consequence in both directions and found that
+ * reverting the *source* to `window.innerWidth` left the run at exit 0, while reverting the
+ * *transcription* turned it red. A check that cannot fail when the code it names regresses is
+ * evidence about the harness, not about the panel.
+ *
+ * `bounds` is a parameter rather than a call, so the caller decides which surface it is clamping
+ * against and this stays drivable. Both callers pass `getVisiblePopoverBounds(null)`: the panel is
+ * created on `window.activeDocument.body` to escape the view, so a container would narrow it.
+ */
+export function calendarSearchResultsPlacement(
+  anchor: Pick<DOMRect, "left" | "bottom">,
+  bounds: Pick<DOMRect, "left" | "right" | "bottom" | "width">,
+): { left: number; top: number; width: number } {
+  const width = Math.max(320, Math.min(480, bounds.width - 16));
+  return {
+    width,
+    // The left floor is `bounds.left + 8`, not `8`. A window-relative margin permits x=8, which is
+    // underneath an open LEFT sidebar — the same class of error as clamping the right edge to
+    // `innerWidth`, in the other direction and easier to miss because it only shows with a sidebar.
+    left: Math.max(bounds.left + 8, Math.min(anchor.left, bounds.right - width - 8)),
+    top: Math.min(anchor.bottom + 6, bounds.bottom - 80),
+  };
+}
 
 export function resolvePopoverHorizontalLeft(
   anchor: Pick<DOMRect, "left" | "right" | "width">,

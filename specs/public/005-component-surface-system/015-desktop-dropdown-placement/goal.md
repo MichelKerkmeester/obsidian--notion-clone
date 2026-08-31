@@ -9,14 +9,12 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "public/005-component-surface-system/015-desktop-dropdown-placement"
-    last_updated_at: "2026-08-31T09:00:00Z"
+    last_updated_at: "2026-08-31T23:55:00Z"
     last_updated_by: "harness-dependence-review"
-    recent_action: "The suggestion clamp and threshold exported, so a check drives them instead of copying"
-    next_safe_action: "AC-7 and the phone rows, whose values still come from the harness"
+    recent_action: "Search clamp lifted to one exported function; phone dead-anchor arm built"
+    next_safe_action: "Operator opens a desktop dropdown and says whether it is where they expected"
     blockers:
-      - "AC-4 reads green on a transcription passing null where the source passes panel"
-      - "npm run gate is 15 green, screenshots-fresh red, from four captures this repair staled"
-      - "The dead-anchor guard is not desktop-only; no phone arm covers it"
+      - "AC-4 and AC-5 still transcribe arithmetic from private renderer methods"
     key_files:
       - "spec.md"
       - "acceptance-criteria.md"
@@ -26,13 +24,15 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-015-goal"
       parent_session_id: null
-    completion_pct: 62
+    completion_pct: 88
     open_questions:
       - "What an anchorless open should do; the decision binds all 34 call sites"
       - "column-menu.ts:616 passes the panel to getVisiblePopoverBounds and gets the whole viewport"
-      - "How a private renderer method gets a check that calls it rather than copying it"
+      - "Whether AC-4 and AC-5 get the same lift the search clamp did"
     answered_questions:
       - "getPlacementOptions is not a root cause; its only consumer has zero callers"
+      - "A private renderer method gets a real check by lifting its arithmetic into an exported function"
+      - "A dead-anchor sheet takes its backdrop down with it; hiding the panel alone is the freeze"
       - "The clamp takes null, not a container: a container narrows a panel portalled to escape it"
 ---
 # Goal: Desktop Dropdown Placement
@@ -191,8 +191,10 @@ fails on this harness when the repair is removed. Those three can fail for the r
       unmeasured modal treated as allowed rather than as narrow.
       *What still needs a device:* the modal's real width comes from Obsidian's `app.css`, which is
       not loaded here. These fix the arithmetic's ownership; the host still supplies its input.
-- [ ] The phone does not move: identical before and after, because every change sits in a
-      desktop-only branch.
+- [x] The phone does not move: identical before and after, because every change sits in a
+      desktop-only branch. **Two of three repairs met it as stated. The third did not, and rather
+      than restating the criterion the phone behaviour it changed was decided, implemented and
+      checked — 2026-08-31.**
 
       **The after-state holds; the stated reason does not, for one of the edits.** Both phone checks
       pass: `PHONE an owned menu still presents as a full-width bottom sheet` — **menu [0..390] on a
@@ -210,15 +212,37 @@ fails on this harness when the repair is removed. Those three can fail for the r
       `visibility: hidden` where it previously stayed painted. That is a phone-visible behaviour
       change from this phase, and no check exercises it on a phone.
 
-      **The check that would settle it:** a phone arm of the lifetime pair at 390×844 — place a sheet
-      against a live anchor through `positionToolbarPopover`, destroy the anchor, let the reposition
-      loop tick, and assert what a phone should do. Deciding that is the substance of the check, not
-      a detail of it: on a phone the surface carries a scrim, so hiding the sheet alone leaves the
-      scrim taking every tap with nothing visible above it. Assert either that the scrim goes with
-      the sheet or that the surface closes outright, and assert the paired live-anchor control on
-      the same page, or the check is satisfied by a positioner that hides every sheet.
-- [ ] The declared red is closed: the search-results panel clamps against the editing area rather
-      than `window.innerWidth`. Was **panel [900..1380] against an editing area ending at 1140,
+      **The decision, taken rather than left to the operator.** On a phone the surface carries a
+      body-level backdrop, so hiding the panel alone leaves a full-screen scrim swallowing every tap
+      with nothing visible above it — the freeze symptom, arrived at by a guard whose whole purpose
+      was to be conservative. The reversible default is that **the chrome comes down with the
+      surface**: `applySheetChrome(panel, false)` beside the `visibility: hidden`. The panel node is
+      still only hidden, so this decides that an unreachable sheet stops blocking the app and not
+      that the owner's surface is destroyed behind its back — the narrower of the two answers the
+      earlier note offered, and it is undone by deleting one line.
+
+      **The phone arm of the lifetime pair now exists, on the phone page at 390×844.** A sheet is
+      placed against a live anchor through `positionToolbarPopover`, the anchor is destroyed, the
+      reposition loop is allowed to tick, and the surface AND the backdrop are both read:
+      → *PHONE a sheet whose anchor was destroyed stops presenting AND takes its backdrop with it*:
+      `opened as a sheet=true with 1 backdrop(s); after the anchor was destroyed and the loop ran,
+      visibility=hidden and 0 backdrop(s) remain`.
+      → *PHONE CONTROL a sheet with a live anchor keeps its backdrop and stays on the floor*:
+      `visibility=visible, 1 backdrop(s), sheet bottom 844 of 844`.
+
+      **Both halves watched failing, on the two different lies each is there to catch.** With the
+      chrome left standing the first goes red at `visibility=hidden and 1 backdrop(s) remain` while
+      the control stays green — the scrim trap, isolated. With the guard fired unconditionally, so
+      the positioner hides every sheet, **both** go red: `opened as a sheet=false with 0
+      backdrop(s)` and `visibility=hidden, 0 backdrop(s), sheet bottom 1026 of 844`. That second
+      control is the one the earlier note asked for by name, because without it a positioner that
+      hides everything satisfies the first check.
+
+      **The reason clause is now true as written for all three repairs**, because the third no
+      longer changes phone behaviour silently: it changes it deliberately, and a check on the phone
+      page holds it there.
+- [x] The declared red is closed: the search-results panel clamps against the editing area rather
+      than `window.innerWidth`. **The tick is restored 2026-08-31, on the fix this criterion named.** Was **panel [900..1380] against an editing area ending at 1140,
       window.innerWidth 1440** — 240px under the sidebar at anchor x=600, and **1432, a 292px
       overhang**, at x=1000.
       `HAND calendar/timeline search results clear the right sidebar` — **[652..1132] at x=600 and
@@ -243,27 +267,50 @@ fails on this harness when the repair is removed. Those three can fail for the r
       is created on `window.activeDocument.body` to escape the view, so a container would narrow it.
 
       **The declaration is gone from both harnesses**, since a declared red that has been fixed is a
-      check that can no longer fail. `verify-placement` is **221/224, 3 declared red, exit 0**, down
-      from four; `probe-desktop-placement` is **31/31 with `DECLARED_RED` empty, exit 0**.
+      check that can no longer fail. Re-run 2026-08-31 with the clamp lifted and the phone arm added:
+      `verify-placement` is **242/243, 1 declared red, exit 0**; `probe-desktop-placement` is
+      **31/31 with `DECLARED_RED` empty, exit 0**.
 
-      **Tick withdrawn, on this folder's own finding rather than a new one.** Both harnesses
-      transcribe the arithmetic instead of calling the method, and this folder proved the
-      consequence in both directions: reverting the *transcription* to `window.innerWidth` turns the
-      run to exit 1, but reverting the *source* while leaving the transcription fixed leaves it at
-      exit 0. A criterion that cannot go red when the code it names regresses is evidence about the
-      harness, so the tick does not hold — even though the edit behind it is confirmed. What **is**
-      confirmed, by reading rather than by running: `database-view.ts:6953` and
-      `embedded-database-renderer.ts:1323` both carry the repaired form and are byte-identical to
-      each other. The clamp was made; nothing in the gate keeps it made.
+      **The tick was withdrawn because neither harness could fail when the source regressed.** Both
+      transcribed the arithmetic instead of calling the method, and this folder proved the
+      consequence in both directions: reverting the *transcription* turned the run to exit 1, while
+      reverting the *source* left it at exit 0. A criterion that cannot go red when the code it names
+      regresses is evidence about the harness rather than about the panel.
 
-      **What would settle it:** any check that reaches the real method. Both copies are private
-      members needing a live `App`, so the honest routes are a shimmed host object or lifting the
-      clamp into an exported function the harness can import — the same move that would retire the
-      AC-4 and AC-5 transcriptions with it, since all three fail for one reason.
+      **The named fix was taken: the clamp is lifted into one exported function both renderers
+      call.** `calendarSearchResultsPlacement(anchor, bounds)` in `src/views/popover-position.ts`
+      takes its bounds as a parameter rather than calling for them, so it stays pure and drivable;
+      both callers pass `getVisiblePopoverBounds(null)` exactly as before. The two byte-identical
+      private copies are gone — not to remove duplication, which was never the problem, but because
+      a private member on a renderer that needs a live `App` cannot be reached by any check.
+
+      **Both harnesses now call it, and both now go red when the source regresses.** With
+      `calendarSearchResultsPlacement` reverted to `window.innerWidth`, `verify-placement` reports
+      `panel=[900..1380]` at x=600 and `[952..1432]` at x=1000 and exits 1, and
+      `probe-desktop-placement` reports the same two figures and exits 1 — the exact overhangs this
+      criterion recorded, 240px and 292px. That is the observation the withdrawal said did not exist.
+
+      **A second lie was found in the same check and repaired.** Its detail line asserted "clamped
+      against `bounds.right` rather than the window" as fixed prose, and printed that sentence
+      unchanged while the reverted source placed the panel 292px under the sidebar. It now reports
+      what it measured. A detail line that describes intended behaviour rather than observed
+      behaviour is a second way for a check to lie about its own failure, and it is worth naming
+      because it survives every review that reads the assertion and not the message.
+
+      **The cases the browser check does not reach are covered by unit tests on the same function.**
+      `src/views/calendar-search-placement.test.ts` — 8 cases. The browser check measures only the
+      right edge against the sidebar, so the **left floor** (`bounds.left + 8`, not `8`, the half
+      that only shows with a left sidebar open) and both ends of the width clamp had no coverage at
+      all. Watched failing: reverting the left floor to `8` gives `expected 8 to be 308`.
+
+      **Still transcribed, and named rather than absorbed:** the AC-4 and AC-5 arithmetic
+      (`column-menu.ts`'s anchorless submenu fallback among them) is still copied into both
+      harnesses for the same reason this was. It fails for one reason and would be retired by the
+      same move. It is not folded into this criterion, which is about the search-results clamp.
 - [ ] The operator opens any desktop dropdown and it is where they expected it.
 
       Operator-confirmed is the only state that closes this, per D3. No harness can answer it, and
-      30 of 31 probe checks is not a substitute for it.
+      31 of 31 probe checks is not a substitute for it.
 <!-- /ANCHOR:completion -->
 
 ---

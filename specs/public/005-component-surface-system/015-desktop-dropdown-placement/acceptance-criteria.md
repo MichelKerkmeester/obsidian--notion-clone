@@ -219,7 +219,7 @@ their inputs rather than declaring them.
 | `npx tsc --noEmit` | exit 0 | **exit 0** |
 | `npx vitest run` | 434 passed | **450 passed across 59 files, exit 0** |
 | `npm run build` | — | **exit 0** |
-| `node tools/storybook/verify-placement.mjs` | 220/224, 4 declared red, exit 0 | **221/224, 3 declared red, exit 0** |
+| `node tools/storybook/verify-placement.mjs` | 220/224, 4 declared red, exit 0 | **221/224, 3 declared red, exit 0** · re-run 2026-08-31 after the clamp lift and the phone arm: **242/243, 1 declared red, exit 0** |
 | `node probe-desktop-placement.mjs` | 30/31, 1 declared red | **31/31, none declared, exit 0** |
 | `node probe-inventory.mjs` | 16 writes outside a primitive, unclassified | **16 writes across 7 files, all classified, baseline holds, exit 0** |
 | `npm run gate` | 16 green, exit 0 | **15 green, `screenshots-fresh` red, exit 1 — see below** |

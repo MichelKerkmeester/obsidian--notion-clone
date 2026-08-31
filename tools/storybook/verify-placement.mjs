@@ -97,7 +97,7 @@ const bundle = join(work, "bundle.js");
 // positioner would prove the copy.
 import { writeFileSync } from "node:fs";
 writeFileSync(entry, `
-import { positionToolbarPopover, getVisiblePopoverBounds, COMPACT_MENU_POPOVER, setPosition, clamp, resolvePopoverHorizontalLeft, PANEL_POPOVER, placeSheet, publishKeyboardInset } from "${join(REPO, "src/views/popover-position")}";
+import { positionToolbarPopover, getVisiblePopoverBounds, COMPACT_MENU_POPOVER, setPosition, clamp, resolvePopoverHorizontalLeft, PANEL_POPOVER, placeSheet, publishKeyboardInset, calendarSearchResultsPlacement } from "${join(REPO, "src/views/popover-position")}";
 import { refreshRecordDetailPanel, closeRecordDetailPanel, getOpenRecordDetailPath } from "${join(REPO, "src/views/record-detail-panel")}";
 import { attachSheetDragToDismiss } from "${join(REPO, "src/views/mobile-bottom-sheet")}";
 import { applySheetChrome } from "${join(REPO, "src/views/mobile-bottom-sheet")}";
@@ -122,7 +122,7 @@ globalThis.__list = { ListRenderer };
 globalThis.__number = { renderCardField, CellRenderer, getColumnDisplayType, isEmptyValue, formatEuroCurrency, formatEuroNumber };
 globalThis.__selection = { DatabaseView, EmbeddedDatabaseRenderer };
 globalThis.__place = { positionToolbarPopover, getVisiblePopoverBounds, COMPACT_MENU_POPOVER, applySheetChrome, renderCardField, createOwnedMenu, createMenuRow, ToolbarRenderer, trackCellGesture, nextCellRange, resolveCellTapAction, isMainItemColumn, shouldExtendRowRange, applyRowSelectionPress, attachRowRangeGesture, isRowSelectionCheckbox, attachLongPress, isTouchDevice, attachTitleOpenAffordance, setupTitleCellTap, openRecordDetailPanel, closeRecordDetailPanel, getOpenRecordDetailPath, RowMenu, ColumnMenu };
-globalThis.__p = { positionToolbarPopover, getVisiblePopoverBounds, setPosition, clamp, resolvePopoverHorizontalLeft, COMPACT_MENU_POPOVER, PANEL_POPOVER, createOwnedMenu, createMenuRow, publishKeyboardInset };
+globalThis.__p = { positionToolbarPopover, getVisiblePopoverBounds, setPosition, clamp, resolvePopoverHorizontalLeft, COMPACT_MENU_POPOVER, PANEL_POPOVER, createOwnedMenu, createMenuRow, publishKeyboardInset, calendarSearchResultsPlacement };
 globalThis.__drag = { openRecordDetailPanel, refreshRecordDetailPanel, applySheetChrome, positionToolbarPopover };
 globalThis.__a = { positionToolbarPopover, placeSheet, applySheetChrome, attachSheetDragToDismiss, openRecordDetailPanel, refreshRecordDetailPanel, closeRecordDetailPanel, createOwnedMenu, createMenuRow };
 `);
@@ -4408,19 +4408,28 @@ await section("lifted probes: desktop placement", async () => {
     const bounds = P.getVisiblePopoverBounds(null);
     const view = window;
 
-    // database-view.ts:6953 / embedded-database-renderer.ts:1323, verbatim.
+    // The shipped placement, CALLED rather than copied.
+    //
+    // This used to reproduce the arithmetic from `database-view.ts` and `embedded-database-renderer.ts`
+    // verbatim, because both copies were private methods on renderers that need a live Obsidian
+    // `App`. That transcription was measured failing in the way that matters: reverting the SOURCE
+    // to `window.innerWidth` left this run at exit 0, while reverting the COPY turned it red. The
+    // check answered a question about the copy. The arithmetic now lives in one exported function
+    // both renderers call, and this calls the same one.
+    //
     // The anchor is a toolbar search control near the right of the editing area.
     const searchControl = document.querySelector(".note-database-container").createDiv({ cls: "anchor" });
     searchControl.setCssProps({ position: "absolute", top: "20px", width: "200px" });
     const panel = document.body.createDiv({ cls: "db-calendar-search-results-popover" });
     const placeSearchPanel = (anchorX) => {
       searchControl.setCssProps({ left: `${anchorX}px` });
-      const rect = searchControl.getBoundingClientRect();
-      const b = P.getVisiblePopoverBounds(null);
-      const width = Math.max(320, Math.min(480, b.width - 16));
-      const left = Math.max(b.left + 8, Math.min(rect.left, b.right - width - 8));
-      const top = Math.min(rect.bottom + 6, b.bottom - 80);
-      panel.setCssProps({ left: `${left}px`, top: `${top}px`, width: `${width}px` });
+      const placement = P.calendarSearchResultsPlacement(
+        searchControl.getBoundingClientRect(),
+        P.getVisiblePopoverBounds(null),
+      );
+      panel.setCssProps({
+        left: `${placement.left}px`, top: `${placement.top}px`, width: `${placement.width}px`,
+      });
       return panel.getBoundingClientRect();
     };
     // Two anchor positions, because one cannot tell a clamp from a coincidence. The overhang used to
@@ -4429,14 +4438,20 @@ await section("lifted probes: desktop placement", async () => {
     const near = placeSearchPanel(600);
     const far = placeSearchPanel(1000);
     out.push({
-      name: "HAND calendar/timeline search results clear the right sidebar",
+      name: "the shipped search-results placement clears the right sidebar",
       pass: Math.round(near.right) <= Math.round(split.right) + 1
         && Math.round(far.right) <= Math.round(split.right) + 1,
+      // Reports what it measured rather than asserting the fix. The old wording said "clamped
+      // against bounds.right rather than the window" unconditionally, and printed that sentence
+      // unchanged while the reverted source was placing the panel 292px under the sidebar — a
+      // detail line that describes the intended behaviour instead of the observed one is a second
+      // way for a check to lie about its own failure.
       detail: `anchor x=600 panel=[${Math.round(near.left)}..${Math.round(near.right)}], `
         + `anchor x=1000 panel=[${Math.round(far.left)}..${Math.round(far.right)}], `
-        + `editing area right=${Math.round(split.right)}, window.innerWidth=${window.innerWidth}. Clamped `
-        + `against bounds.right=${Math.round(bounds.right)} rather than the window, which is what used to `
-        + `place it ${Math.round(window.innerWidth - split.right)}px under the sidebar.`,
+        + `editing area right=${Math.round(split.right)}, bounds.right=${Math.round(bounds.right)}, `
+        + `window.innerWidth=${window.innerWidth}. Both anchors land at the same right edge when the `
+        + `clamp decides it; against the window they land ${Math.round(window.innerWidth - split.right)}px `
+        + `under the sidebar and the overhang grows with the anchor, which the control below measures.`,
     });
     // The negative control: the statement this replaced, re-run in place. It still overhangs and the
     // overhang still grows with the anchor, so the check above can distinguish a clamp from a
@@ -4562,7 +4577,7 @@ await section("lifted probes: desktop placement", async () => {
   await phone.addStyleTag({ content: readFileSync(join(REPO, "styles.css"), "utf8") + HOST_BARE_CONTROLS });
   await phone.addScriptTag({ content: shimJs + "\ninstallObsidianDomShim(globalThis);" });
   await phone.addScriptTag({ content: positionerJs });
-  all.push(...await phone.evaluate(() => {
+  all.push(...await phone.evaluate(async () => {
     const out = [];
     const P = globalThis.__p;
     const menu = P.createOwnedMenu(document);
@@ -4583,6 +4598,81 @@ await section("lifted probes: desktop placement", async () => {
       detail: `height=${Math.round(r.height)} cap=${Math.round(window.innerHeight * 0.9)} overflow-y=${style.overflowY}`,
     });
     menu.close();
+
+    // ─────────────────────────────────────────────────────────────────
+    // PHONE ANCHOR LIFETIME — the arm that was never exercised
+    // ─────────────────────────────────────────────────────────────────
+    //
+    // The dead-anchor guard sits BEFORE the sheet branch, so it runs on phones too, and the phase
+    // that added it checked only desktop. On a phone the consequence is different in kind rather
+    // than in degree: the surface carries a body-level backdrop, so hiding the panel alone leaves a
+    // full-screen scrim swallowing every tap with nothing visible above it. That is the freeze
+    // symptom, arrived at by a guard whose whole purpose was to be conservative.
+    //
+    // What a phone should do is the substance of this check, not a detail of it. The answer taken:
+    // the surface stops presenting AND its chrome comes down with it. The panel node is still only
+    // hidden — an unreachable sheet stops blocking the app, and the owner's surface is not destroyed
+    // behind its back.
+    //
+    // Sequential, not parallel: the backdrop is shared and comes down when the LAST sheet goes, so
+    // two open at once would report each other's state.
+    const buildSheet = (rows) => {
+      const el = document.body.createDiv({ cls: "probe-panel" });
+      for (let i = 0; i < rows; i += 1) el.createDiv({ cls: "row", text: `Item ${i}` });
+      return el;
+    };
+    const scrims = () => document.querySelectorAll(".db-mobile-sheet-scrim").length;
+    const tick = () => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+
+    const doomed = document.body.createDiv({ cls: "anchor" });
+    doomed.setCssProps({ position: "absolute", left: "40px", top: "100px", width: "40px", height: "20px" });
+    const orphan = buildSheet(6);
+    P.positionToolbarPopover(orphan, doomed, P.COMPACT_MENU_POPOVER);
+    const openedAsSheet = orphan.classList.contains("db-mobile-bottom-sheet");
+    const scrimWhileOpen = scrims();
+    // The real sequence: a commit rebuilds the toolbar that owned the trigger while the surface
+    // stays open, and the reposition loop is what notices. Re-calling the positioner would measure
+    // the entry guard instead of the loop.
+    doomed.remove();
+    window.dispatchEvent(new Event("resize"));
+    await tick();
+    const orphanVisibility = getComputedStyle(orphan).visibility;
+    const scrimAfter = scrims();
+    out.push({
+      name: "PHONE a sheet whose anchor was destroyed stops presenting AND takes its backdrop with it",
+      pass: openedAsSheet && scrimWhileOpen === 1
+        && (orphanVisibility === "hidden" || !orphan.isConnected) && scrimAfter === 0,
+      detail: `opened as a sheet=${openedAsSheet} with ${scrimWhileOpen} backdrop(s);`
+        + ` after the anchor was destroyed and the loop ran, visibility=${orphanVisibility} and`
+        + ` ${scrimAfter} backdrop(s) remain. Hiding the panel alone would leave a full-screen scrim`
+        + ` taking every tap with nothing visible above it — the freeze symptom, reached by a guard`
+        + ` meant to be conservative`,
+    });
+    orphan.remove();
+    await tick();
+
+    // CONTROL: a live anchor must survive the same loop with its backdrop intact, or the check
+    // above is satisfied by a positioner that hides every sheet and clears every scrim.
+    const liveAnchor = document.body.createDiv({ cls: "anchor" });
+    liveAnchor.setCssProps({ position: "absolute", left: "40px", top: "200px", width: "40px", height: "20px" });
+    const kept = buildSheet(6);
+    P.positionToolbarPopover(kept, liveAnchor, P.COMPACT_MENU_POPOVER);
+    window.dispatchEvent(new Event("resize"));
+    await tick();
+    const keptRect = kept.getBoundingClientRect();
+    const keptVisibility = getComputedStyle(kept).visibility;
+    const keptScrims = scrims();
+    out.push({
+      name: "PHONE CONTROL a sheet with a live anchor keeps its backdrop and stays on the floor",
+      pass: keptVisibility !== "hidden" && keptScrims === 1
+        && Math.abs(keptRect.bottom - window.innerHeight) <= 1,
+      detail: `visibility=${keptVisibility}, ${keptScrims} backdrop(s), sheet bottom`
+        + ` ${Math.round(keptRect.bottom)} of ${window.innerHeight}`,
+    });
+    kept.remove();
+    liveAnchor.remove();
+    await tick();
+
     return out;
   }));
   await phone.close();

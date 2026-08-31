@@ -15,8 +15,8 @@ _memory:
     packet_pointer: "public/005-component-surface-system/015-desktop-dropdown-placement"
     last_updated_at: "2026-08-30T21:15:00Z"
     last_updated_by: "criteria-adjudication"
-    recent_action: "The suggestion clamp and threshold exported, so a check drives them instead of copying"
-    next_safe_action: "AC-7 and the phone rows, whose values still come from the harness"
+    recent_action: "Search clamp lifted to one exported function; phone dead-anchor arm built"
+    next_safe_action: "Operator opens a desktop dropdown and says whether it is where they expected"
     blockers:
       - "Calendar/timeline search panel: 240-292px under the sidebar, declared red (plan.md 7)"
       - "Third copy of the anchor idiom in embedded-database-renderer.ts, same file lock"
@@ -33,13 +33,15 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-015"
       parent_session_id: null
-    completion_pct: 62
+    completion_pct: 88
     open_questions:
       - "Anchorless open: entry guard returns and the panel renders unplaced, binds 34 call sites"
       - "getPlacementOptions drops align, gap and preferredSide into dead code (plan.md 7)"
       - "The dead-anchor guard runs on a phone too; what a scrimmed sheet should do is undecided"
     answered_questions:
       - "getPlacementOptions is not a root cause; its only consumer has zero callers"
+      - "A private renderer method gets a real check by lifting its arithmetic into an exported function"
+      - "A dead-anchor sheet takes its backdrop down with it; hiding the panel alone is the freeze"
 ---
 # Feature Specification: Desktop Dropdown Placement
 

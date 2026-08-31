@@ -72,13 +72,14 @@ writeFileSync(entry, `
 import {
   positionToolbarPopover, getVisiblePopoverBounds, setPosition, clamp,
   resolvePopoverHorizontalLeft, COMPACT_MENU_POPOVER, PANEL_POPOVER,
+  calendarSearchResultsPlacement,
 } from "${join(REPO, "src/views/popover-position")}";
 import { createOwnedMenu } from "${join(REPO, "src/views/owned-menu")}";
 import { createMenuRow } from "${join(REPO, "src/views/menu-row")}";
 globalThis.__p = {
   positionToolbarPopover, getVisiblePopoverBounds, setPosition, clamp,
   resolvePopoverHorizontalLeft, COMPACT_MENU_POPOVER, PANEL_POPOVER,
-  createOwnedMenu, createMenuRow,
+  createOwnedMenu, createMenuRow, calendarSearchResultsPlacement,
 };
 `);
 
@@ -573,19 +574,24 @@ all.push(...await hand.evaluate(() => {
   const bounds = P.getVisiblePopoverBounds(null);
   const view = window;
 
-  // database-view.ts:6953 / embedded-database-renderer.ts:1323, verbatim.
+  // The shipped placement, CALLED rather than copied. Both renderers held byte-identical private
+  // copies of this arithmetic and both now call one exported function; this probe calls the same
+  // one. The transcription it replaced could not fail when the source regressed, which was measured
+  // in both directions and is recorded in this folder's goal.
+  //
   // The anchor is a toolbar search control near the right of the editing area.
   const searchControl = document.querySelector(".note-database-container").createDiv({ cls: "anchor" });
   searchControl.setCssProps({ position: "absolute", top: "20px", width: "200px" });
   const panel = document.body.createDiv({ cls: "db-calendar-search-results-popover" });
   const placeSearchPanel = (anchorX) => {
     searchControl.setCssProps({ left: `${anchorX}px` });
-    const rect = searchControl.getBoundingClientRect();
-    const b = P.getVisiblePopoverBounds(null);
-    const width = Math.max(320, Math.min(480, b.width - 16));
-    const left = Math.max(b.left + 8, Math.min(rect.left, b.right - width - 8));
-    const top = Math.min(rect.bottom + 6, b.bottom - 80);
-    panel.setCssProps({ left: `${left}px`, top: `${top}px`, width: `${width}px` });
+    const placement = P.calendarSearchResultsPlacement(
+      searchControl.getBoundingClientRect(),
+      P.getVisiblePopoverBounds(null),
+    );
+    panel.setCssProps({
+      left: `${placement.left}px`, top: `${placement.top}px`, width: `${placement.width}px`,
+    });
     return panel.getBoundingClientRect();
   };
   // Two anchor positions, because one cannot tell a clamp from a coincidence. The overhang used to
@@ -594,14 +600,18 @@ all.push(...await hand.evaluate(() => {
   const near = placeSearchPanel(600);
   const far = placeSearchPanel(1000);
   out.push({
-    name: "HAND calendar/timeline search results clear the right sidebar",
+    name: "the shipped search-results placement clears the right sidebar",
     pass: Math.round(near.right) <= Math.round(split.right) + 1
       && Math.round(far.right) <= Math.round(split.right) + 1,
+    // Reports what it measured rather than asserting the fix: the old wording claimed "clamped
+    // against bounds.right rather than the window" and printed that sentence unchanged while a
+    // reverted source placed the panel 292px under the sidebar.
     detail: `anchor x=600 panel=[${Math.round(near.left)}..${Math.round(near.right)}], `
       + `anchor x=1000 panel=[${Math.round(far.left)}..${Math.round(far.right)}], `
-      + `editing area right=${Math.round(split.right)}, window.innerWidth=${window.innerWidth}. Clamped `
-      + `against bounds.right=${Math.round(bounds.right)} rather than the window, which is what used to `
-      + `place it ${Math.round(window.innerWidth - split.right)}px under the sidebar.`,
+      + `editing area right=${Math.round(split.right)}, bounds.right=${Math.round(bounds.right)}, `
+      + `window.innerWidth=${window.innerWidth}. Both anchors land at the same right edge when the `
+      + `clamp decides it; against the window they land ${Math.round(window.innerWidth - split.right)}px `
+      + `under the sidebar and the overhang grows with the anchor, which the control below measures.`,
   });
   // The negative control: the statement this replaced, re-run in place. It still overhangs and the
   // overhang still grows with the anchor, so the check above can distinguish a clamp from a
