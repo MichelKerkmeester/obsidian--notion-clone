@@ -7,10 +7,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "public/005-component-surface-system/033-list-virtualisation"
-    last_updated_at: "2026-08-31T17:00:00Z"
+    last_updated_at: "2026-08-31T23:30:00Z"
     last_updated_by: "phase-author"
-    recent_action: "Goal added; the packet binds on this file and it was missing"
-    next_safe_action: "Record the three row contracts against an off-window row before windowing exists"
+    recent_action: "Baseline reproduced; the three row contracts recorded before windowing exists"
+    next_safe_action: "Order the selection from data, not from the DOM, before windowing anything"
     blockers: []
     key_files: ["spec.md", "tasks.md"]
     session_dedup:
@@ -19,7 +19,7 @@ _memory:
       parent_session_id: null
     completion_pct: 0
     open_questions: ["Do drag, range selection and group collapse survive rows that are not in the DOM"]
-    answered_questions: ["The shape is already LINEAR, so no further loop work reaches the remaining cost"]
+    answered_questions: ["Windowing breaks range selection only, and silently — drag and group collapse are data-driven"]
 ---
 # Goal: List Virtualisation
 

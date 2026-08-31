@@ -41,7 +41,7 @@ _memory:
 |---|---|
 | **Spec Folder** | 033-list-virtualisation |
 | **Level** | 2 |
-| **Status** | Planned |
+| **Status** | **In progress — T1 done, windowing not started.** Baseline re-derived from this tree: 4,748.6ms blocked at 3,000 rows / 21 cols / 6x throttle over 225,007 nodes, LINEAR x1.07 — the packet's figures reproduce. Open: range selection orders from the DOM and must be re-sourced before any window exists |
 | **Complexity** | 60/100, confidence 92% |
 <!-- /ANCHOR:metadata -->
 

@@ -44,6 +44,22 @@ _memory:
 Row drag, range selection and group collapse all assume today that every row exists in the DOM.
 Windowing removes that assumption, and those three are where it will fail first. They are named as
 requirements rather than discovered as regressions.
+
+**T1 has now measured all three, and only one of them actually assumes it.** Drag filters its batch
+through `rowByPath`, which is built from the rows handed to `render` rather than from the DOM;
+group collapse is a config question, and a collapsed group having no rendered rows is its normal
+state. Both survive untouched.
+
+Range selection does not. `getOrderedSelectionRowPaths` orders by `querySelectorAll` and falls back
+to the full row list only when that query returns nothing — and a windowed list is never empty,
+only incomplete, so the fallback never fires. Measured with the off-window rows absent, a
+shift-click from row 0 to row 15 selects **2** rows rather than 16: the range collapses to anchor
+plus target. **This must be fixed before the window exists, not after**, because the failure is
+silent and a check written after windowing would have nothing to compare against.
+
+**One more constraint the order above did not know.** `.db-list-row` is `min-height: 44px`, not a
+fixed height, so windowing needs estimated offsets with correction rather than `index * rowHeight`.
+Assuming uniform height produces a scroll bar that lies about where it is.
 <!-- /ANCHOR:architecture -->
 
 <!-- ANCHOR:testing -->

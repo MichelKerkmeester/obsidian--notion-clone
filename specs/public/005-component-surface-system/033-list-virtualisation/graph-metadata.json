@@ -18,7 +18,9 @@
       "033 plan",
       "033 tasks",
       "033 acceptance criteria",
-      "033 goal"
+      "033 goal",
+      "033 implementation summary",
+      "list windowing status"
     ],
     "key_topics": [
       "list",
@@ -31,17 +33,19 @@
       "acceptance",
       "criteria",
       "goal",
-      "renders",
-      "every"
+      "implementation",
+      "summary"
     ],
     "importance_tier": "important",
-    "status": "planned",
+    "status": "in_progress",
     "key_files": [
       "spec.md",
       "plan.md",
       "tasks.md",
       "acceptance-criteria.md",
-      "goal.md"
+      "goal.md",
+      "implementation-summary.md",
+      "src/views/list-row-contracts.test.ts"
     ],
     "entities": [
       {
@@ -72,6 +76,18 @@
         "name": "goal.md",
         "kind": "doc",
         "path": "goal.md",
+        "source": "derived"
+      },
+      {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "list-row-contracts.test.ts",
+        "kind": "test",
+        "path": "src/views/list-row-contracts.test.ts",
         "source": "derived"
       },
       {
@@ -153,13 +169,13 @@
         "source": "derived"
       },
       {
-        "name": "TASKS",
-        "kind": "heading",
+        "name": "correction",
+        "kind": "key_phrase",
         "path": "tasks.md",
         "source": "derived"
       },
       {
-        "name": "COMPLETION",
+        "name": "TASKS",
         "kind": "heading",
         "path": "tasks.md",
         "source": "derived"
@@ -175,23 +191,11 @@
         "kind": "key_phrase",
         "path": "acceptance-criteria.md",
         "source": "derived"
-      },
-      {
-        "name": "CRITERIA",
-        "kind": "heading",
-        "path": "acceptance-criteria.md",
-        "source": "derived"
-      },
-      {
-        "name": "EVIDENCE STANDARD",
-        "kind": "heading",
-        "path": "acceptance-criteria.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "The list renders every row, so its cost is proportional to node count; at the operator's shape that is 2.0-4.9s of blocked main thread and no loop fix reaches it.",
     "created_at": "2026-08-31T14:46:50.524Z",
-    "last_save_at": "2026-08-31T15:27:30.925Z",
+    "last_save_at": "2026-08-31T18:40:21.056Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -199,14 +203,16 @@
       "plan.md",
       "tasks.md",
       "acceptance-criteria.md",
-      "goal.md"
+      "goal.md",
+      "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:2f641a3e97322a57709646d1340f76203e6320ef1242a7ba50937c5656a59b1a",
+    "source_fingerprint": "sha256:3647d05e805e9757b39a932f4859e8a3e6e63abb4093d74554c1d5a62317075e",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "3d4b3d5c940e443c7cc30ccb93e9832c11e26023220b8a77be2e931ee5f75c38",
-      "plan.md": "c3c3a76674a250f1ee4ff729abacaf007eb27bd99e9943be216193b8ab9a9d05",
-      "tasks.md": "0669e766d3e71d60786ffa1f76926f8783b92f3bd72c2cdf2cd26387e426a77b"
+      "spec.md": "8895d2988e6c1beb1d57e9bab97db62942457d21a224ca51f4ce4619a7222360",
+      "plan.md": "ba8a378a960832b5d8ecb7e9793bc01987bbee1affe0ad44e090c41dea8c56f3",
+      "tasks.md": "cc1199ec2c74168ee1fac04f37e6d302281b4b385449f5a8c260180b8dce1d7a",
+      "implementation-summary.md": "b2e9666728e85ab0452947ec8cb7ff6aa7deebde611f4aaef7a21c5ac5eed95f"
     },
     "last_active_child_id": null,
     "last_active_at": null
