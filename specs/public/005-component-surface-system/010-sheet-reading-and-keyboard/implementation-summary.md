@@ -11,8 +11,8 @@ _memory:
     packet_pointer: "public/005-component-surface-system/010-sheet-reading-and-keyboard"
     last_updated_at: "2026-08-30T06:48:00Z"
     last_updated_by: "phase-author"
-    recent_action: "Sheet rows re-ruled and the keyboard inset lever wired; 16 criteria measured"
-    next_safe_action: "Operator opens a record on the device and edits a field"
+    recent_action: "AC-15 checked at last: the viewport fallback carries the inset with no host variable"
+    next_safe_action: "The desktop four-value freeze, which still has no check"
     blockers: []
     key_files:
       - "spec.md"
@@ -21,7 +21,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-010"
       parent_session_id: null
-    completion_pct: 55
+    completion_pct: 64
     open_questions: []
     answered_questions: []
 ---
@@ -166,7 +166,7 @@ Sixteen criteria, each with a red baseline where one was obtainable.
    rule that the project's scale outranks the design skill's default. A later audit measured it and
    raised it as an open operator decision — one token, not a defect.
 
-5. **This phase's continuity block still reads `completion_pct: 55` and "not started".** That is
+5. **This phase's continuity block still reads `completion_pct: 64` and "not started".** That is
    contradicted by the lane journal, by the working tree and by this document. The conflict is
    recorded in the parent roadmap rather than silently corrected here.
 

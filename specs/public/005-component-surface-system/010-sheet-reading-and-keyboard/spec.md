@@ -16,8 +16,8 @@ _memory:
     packet_pointer: "public/005-component-surface-system/010-sheet-reading-and-keyboard"
     last_updated_at: "2026-08-30T05:20:00Z"
     last_updated_by: "phase-author"
-    recent_action: "Phase cut from operator device reports with screenshots; not started"
-    next_safe_action: "Measure the sheet's label/value geometry against the Notion reference before changing any value"
+    recent_action: "AC-15 checked at last: the viewport fallback carries the inset with no host variable"
+    next_safe_action: "The desktop four-value freeze, which still has no check"
     blockers: []
     key_files:
       - "spec.md"
@@ -28,7 +28,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-010"
       parent_session_id: null
-    completion_pct: 55
+    completion_pct: 64
     open_questions: []
     answered_questions: []
 ---

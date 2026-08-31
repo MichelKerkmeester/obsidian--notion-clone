@@ -12,8 +12,8 @@ _memory:
     packet_pointer: "public/005-component-surface-system/010-sheet-reading-and-keyboard"
     last_updated_at: "2026-08-30T17:45:00Z"
     last_updated_by: "goal-authoring"
-    recent_action: "Harness-dependency audit: AC-14 withdrawn as unfailable, AC-15 has no check"
-    next_safe_action: "Build AC-15: drive keyboardInset from a stubbed shrunken visualViewport"
+    recent_action: "AC-15 checked at last: the viewport fallback carries the inset with no host variable"
+    next_safe_action: "The desktop four-value freeze, which still has no check"
     blockers:
       - "spec.md continuity says 0% and not started; implementation-summary.md says 90% and shipped"
     key_files:
@@ -24,7 +24,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-010-goal"
       parent_session_id: null
-    completion_pct: 55
+    completion_pct: 64
     open_questions:
       - "Does the operator's handset shrink visualViewport or resize the window"
       - "Does the visual-viewport fallback ever fire, given no check has executed that branch"
@@ -149,8 +149,16 @@ settle it and **no number**, because none ran.
       a stubbed `{ scale: 1.4, height: 500, offsetTop: 0 }` on a 844px view, requiring 0. Pair it with
       the same stub at `scale: 1.0`, requiring 344. Two calls, one control each way; today's check is
       neither.
-- [ ] **AC-15 has no check, and it is the one criterion that would settle this phase's headline
-      question.** `acceptance-criteria.md` §3.1 states it plainly — *the fallback works on its own:
+- [x] **AC-15 now has a check, and it passes.** `the keyboard inset falls back to the visual
+      viewport when the host declares nothing` — with `--keyboard-height` removed and the visual
+      viewport reporting a 336px shrink, `publishKeyboardInset` writes `--db-keyboard-inset: 336px`.
+      Observed red first: with the `observed` term removed from `keyboardInset`, the same check
+      reports `0px` against `336px`.
+      `visualViewport` cannot be resized from a test, so it is replaced with a stub reporting the
+      shrink a keyboard causes. What that leaves under test is the arithmetic that reads it — which
+      is exactly the half a host cannot supply, and the half that was never exercised because every
+      other keyboard reading in this packet comes through the host-variable branch.
+      *The original statement of the gap, kept:* `acceptance-criteria.md` §3.1 states it plainly — *the fallback works on its own:
       with the host variable absent but the visual viewport shrunk, the sheet still clears the
       keyboard* — and nothing in `verify-placement.mjs` ever shrinks `visualViewport.height`. Every
       keyboard reading in this packet comes through the host-variable branch. Until AC-15 runs, the

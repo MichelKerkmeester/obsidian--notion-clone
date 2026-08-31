@@ -97,7 +97,7 @@ const bundle = join(work, "bundle.js");
 // positioner would prove the copy.
 import { writeFileSync } from "node:fs";
 writeFileSync(entry, `
-import { positionToolbarPopover, getVisiblePopoverBounds, COMPACT_MENU_POPOVER, setPosition, clamp, resolvePopoverHorizontalLeft, PANEL_POPOVER, placeSheet } from "${join(REPO, "src/views/popover-position")}";
+import { positionToolbarPopover, getVisiblePopoverBounds, COMPACT_MENU_POPOVER, setPosition, clamp, resolvePopoverHorizontalLeft, PANEL_POPOVER, placeSheet, publishKeyboardInset } from "${join(REPO, "src/views/popover-position")}";
 import { refreshRecordDetailPanel, closeRecordDetailPanel } from "${join(REPO, "src/views/record-detail-panel")}";
 import { attachSheetDragToDismiss } from "${join(REPO, "src/views/mobile-bottom-sheet")}";
 import { applySheetChrome } from "${join(REPO, "src/views/mobile-bottom-sheet")}";
@@ -122,7 +122,7 @@ globalThis.__list = { ListRenderer };
 globalThis.__number = { renderCardField, CellRenderer, getColumnDisplayType, isEmptyValue, formatEuroCurrency, formatEuroNumber };
 globalThis.__selection = { DatabaseView, EmbeddedDatabaseRenderer };
 globalThis.__place = { positionToolbarPopover, getVisiblePopoverBounds, COMPACT_MENU_POPOVER, applySheetChrome, renderCardField, createOwnedMenu, createMenuRow, ToolbarRenderer, trackCellGesture, nextCellRange, resolveCellTapAction, isMainItemColumn, shouldExtendRowRange, applyRowSelectionPress, attachRowRangeGesture, isRowSelectionCheckbox, attachLongPress, isTouchDevice, attachTitleOpenAffordance, setupTitleCellTap, openRecordDetailPanel, RowMenu, ColumnMenu };
-globalThis.__p = { positionToolbarPopover, getVisiblePopoverBounds, setPosition, clamp, resolvePopoverHorizontalLeft, COMPACT_MENU_POPOVER, PANEL_POPOVER, createOwnedMenu, createMenuRow };
+globalThis.__p = { positionToolbarPopover, getVisiblePopoverBounds, setPosition, clamp, resolvePopoverHorizontalLeft, COMPACT_MENU_POPOVER, PANEL_POPOVER, createOwnedMenu, createMenuRow, publishKeyboardInset };
 globalThis.__drag = { openRecordDetailPanel, refreshRecordDetailPanel, applySheetChrome, positionToolbarPopover };
 globalThis.__a = { positionToolbarPopover, placeSheet, applySheetChrome, attachSheetDragToDismiss, openRecordDetailPanel, refreshRecordDetailPanel, closeRecordDetailPanel, createOwnedMenu, createMenuRow };
 `);
@@ -4989,6 +4989,47 @@ await section("lifted probes: the sheet audit", async () => {
   record(4, "the sheet returns to the floor when the keyboard closes",
     kbVisual.restored !== null && Math.abs(kbVisual.restored - kbVisual.viewport) <= 1,
     kbVisual.restored === null ? "n/a — sheet gone" : `bottom edge back at ${kbVisual.restored} of ${kbVisual.viewport}`);
+
+  // The fallback ON ITS OWN, with the host variable absent.
+  //
+  // Every keyboard reading above comes through `--keyboard-height`, which only Obsidian writes. On
+  // a host that does not write it — an older release, a platform whose keyboard plugin is missing —
+  // the inset has to come from the visual viewport shrinking instead, and nothing here had ever
+  // shrunk it. So the branch that carries those hosts was the one branch never exercised.
+  //
+  // `visualViewport` cannot be resized from a test, so it is replaced with a stub reporting the
+  // shrink a keyboard causes. What is under test is the arithmetic that reads it, and that is the
+  // half a host cannot supply.
+  const kbFallback = await page.evaluate(async () => {
+    const { publishKeyboardInset } = globalThis.__p;
+    const host = document.querySelector(".note-database-container");
+    if (!host) return { ran: false };
+    // Host variable absent, which is the whole premise.
+    document.documentElement.style.removeProperty("--keyboard-height");
+    const real = window.visualViewport;
+    const shrunk = 336;
+    Object.defineProperty(window, "visualViewport", {
+      configurable: true,
+      value: {
+        height: window.innerHeight - shrunk,
+        offsetTop: 0,
+        scale: 1,
+        addEventListener: () => undefined,
+        removeEventListener: () => undefined,
+      },
+    });
+    const stop = publishKeyboardInset(host);
+    await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
+    const observed = host.style.getPropertyValue("--db-keyboard-inset");
+    stop();
+    Object.defineProperty(window, "visualViewport", { configurable: true, value: real });
+    return { ran: true, observed, want: `${shrunk}px`, declared: document.documentElement.style.getPropertyValue("--keyboard-height") || "(absent)" };
+  });
+  record(4, "the keyboard inset falls back to the visual viewport when the host declares nothing",
+    kbFallback.ran && kbFallback.observed === kbFallback.want,
+    kbFallback.ran
+      ? `--keyboard-height ${kbFallback.declared}, visual viewport shrunk by 336px, published --db-keyboard-inset=${kbFallback.observed} (want ${kbFallback.want})`
+      : "no container to publish onto");
 
   await openSheet();
   await page.waitForTimeout(200);

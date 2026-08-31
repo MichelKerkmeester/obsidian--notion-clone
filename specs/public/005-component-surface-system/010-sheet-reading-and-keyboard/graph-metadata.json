@@ -146,6 +146,12 @@
         "source": "derived"
       },
       {
+        "name": "no",
+        "kind": "key_phrase",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
         "name": "screenshots",
         "kind": "key_phrase",
         "path": "spec.md",
@@ -153,12 +159,6 @@
       },
       {
         "name": "the",
-        "kind": "key_phrase",
-        "path": "spec.md",
-        "source": "derived"
-      },
-      {
-        "name": "nothing",
         "kind": "key_phrase",
         "path": "spec.md",
         "source": "derived"
@@ -194,15 +194,15 @@
         "source": "derived"
       },
       {
-        "name": "no",
-        "kind": "key_phrase",
-        "path": "tasks.md",
+        "name": "Acceptance Criteria",
+        "kind": "proper_noun",
+        "path": "acceptance-criteria.md",
         "source": "derived"
       }
     ],
     "causal_summary": "Make the phone record sheet read like a record rather than a two-column ledger, and keep the field being edited visible when the software keyboard opens.",
     "created_at": "2026-08-30T16:47:04.848Z",
-    "last_save_at": "2026-08-31T20:01:08.549Z",
+    "last_save_at": "2026-08-31T20:38:59.431Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -213,13 +213,13 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:945ae9b2ce4b46ccf24b903c89f9a7341add77baa48b528008a3cdf2cf85e999",
+    "source_fingerprint": "sha256:d229e7cac72a20cb13916a2ff03d4a524d68c5ba6863e2d4f881b97eebc06cf9",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "f3b6e4d9b85ebe8d42a5a313b41e3b60b25c601ea0119644342d69b4fb18a040",
+      "spec.md": "f68dcb1563b48b2a47465c178975cbb4cc7863b98cdad29873055c0c87402886",
       "plan.md": "1b064a259bd0fcdbe57b5c882d05539d1a4c70a6cb911659c2cb19177d8f89ed",
       "tasks.md": "c4537b17516d3dcdf8437e2f38d79efba1c7416a360f993b611ab3f819deaca2",
-      "implementation-summary.md": "145c76dc36cb4500a1b350a04713f0e42342198d4268a13aa668620d9c9d6c3e"
+      "implementation-summary.md": "f589c3a8939a5123f93b503812fcead123edbe3cdbb1ee61e1b9105eb93a4cc0"
     },
     "last_active_child_id": null,
     "last_active_at": null
