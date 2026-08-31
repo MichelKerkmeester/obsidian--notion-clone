@@ -19,6 +19,7 @@ import { RefreshCoordinator } from "../data/refresh-coordinator";
 import { isRefreshBlockedByDrag } from "../data/refresh-blockers";
 import { evaluateBaseFilterExpression } from "../data/base-expression";
 import { moveDatabaseFilePath, sortDatabaseFileEntries } from "../data/database-file-order";
+import { applyGalleryMigration, planGalleryMigration } from "../data/gallery-migration";
 import { QueryEngine } from "../data/query-engine";
 import { PropertyService } from "../data/property-service";
 import { ComputedFieldEngine } from "../data/computed-field";
@@ -531,6 +532,14 @@ export class DatabaseView extends FileView {
   private optionTransactionQueue = Promise.resolve();
   private applyingHistory = false;
   private pendingUndoLabel: string | null = null;
+  /**
+   * Views already offered the gallery migration this session, by id.
+   *
+   * `refresh` runs on every scroll, resize and edit, so the migration has to be idempotent AND
+   * quiet. Without this a user who undid the change would be shown the notice again on the next
+   * render, and the undo they just performed would be re-applied on top of itself.
+   */
+  private migratedGalleryViews = new Set<string>();
   private undoActionEl?: HTMLElement;
   private viewStateStore = new ViewStateStore();
   private viewState?: DatabaseViewState;
@@ -2696,6 +2705,35 @@ export class DatabaseView extends FileView {
       config.timelineStartDateField = config.timelineStartDateField || defaultDateField;
       config.calendarStartDateField = config.calendarStartDateField || defaultDateField;
     }
+  }
+
+  /**
+   * Turn an existing gallery into a board the first time its view is rendered.
+   *
+   * The pickers stopped offering `gallery`, which does nothing for the views already written into
+   * vault files: the type string sits on disk, and deleting the renderer later would coerce those
+   * views to `table` — a card grid becoming a spreadsheet with no warning and no way back.
+   *
+   * Migrating on open is a WRITE caused by a read, and that is the part worth stating plainly rather
+   * than burying: opening a view changes it. Three things make it the reversible default rather than
+   * a liberty. It is one undo step, labelled as itself. The gallery's own fields are left on the view
+   * so the undo restores the surface exactly. And the renderer is still shipped, so an undone view
+   * renders as it always did.
+   *
+   * Once per view id per session. `refresh` runs on every scroll and edit, so a migration that
+   * re-applied would fight the undo the notice just asked for.
+   */
+  private migrateGalleryViewOnOpen(): void {
+    if (!this.hasActiveDatabase()) return;
+    const view = this.getActiveView();
+    if (!view?.id || this.migratedGalleryViews.has(view.id)) return;
+    const plan = planGalleryMigration(view);
+    if (!plan) return;
+    this.migratedGalleryViews.add(view.id);
+    if (!applyGalleryMigration(view, plan)) return;
+    this.pendingUndoLabel = t("undo.galleryMigration");
+    this.scheduleConfigSave();
+    new Notice(t("notice.galleryMigrated", { name: view.name || t("common.galleryView") }));
   }
 
   private updateToolbarViewConfig(label?: string): void {
@@ -11520,6 +11558,7 @@ export class DatabaseView extends FileView {
 
   refresh(options: { viewport?: DatabaseViewportRequest } = {}): void {
     if (!this.containerEl_) return;
+    this.migrateGalleryViewOnOpen();
     const interaction = this.captureInteractionSnapshot();
     this.showSkeletonLoader();
     const nextViewType = this.hasActiveDatabase() ? (this.getConfig()?.viewType || "table") : "table";

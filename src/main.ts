@@ -1521,7 +1521,12 @@ export default class NoteDatabasePlugin extends Plugin {
     const views: ViewConfig[] = parsed.views
       .filter((bv) => bv.type === "table" || bv.type === "cards" || bv.type === "list" || bv.type === "map")
       .map((bv) => {
-      const viewType = bv.type === "cards" ? "gallery" : bv.type === "list" ? "list" : "table";
+      // A `cards` view used to import as `gallery`. Withdrawing the type from the pickers did
+      // nothing about this path: the importer kept minting new galleries, so a deprecation that
+      // migrates on open would have spent its first act undoing an import from a minute earlier.
+      // `board` is the same landing the migration makes, and for the same reason — it is the other
+      // surface that draws a cover image, so the cards keep their covers and their shape.
+      const viewType = bv.type === "cards" ? "board" : bv.type === "list" ? "list" : "table";
       const galleryImageField = bv.image ? this.cleanBaseKey(bv.image) : undefined;
       const schemaColumnKeys = new Set(schema.columns.map(c => c.key));
       const importedGalleryImageField = galleryImageField && schemaColumnKeys.has(galleryImageField) ? galleryImageField : undefined;
@@ -1555,7 +1560,7 @@ export default class NoteDatabasePlugin extends Plugin {
 
       const view: ViewConfig = {
         id: generateId(),
-        name: bv.name || (viewType === "gallery" ? t("common.galleryView") : viewType === "list" ? t("common.listView") : t("common.tableView")),
+        name: bv.name || (viewType === "board" ? t("common.boardView") : viewType === "list" ? t("common.listView") : t("common.tableView")),
         viewType,
         sourceFolder,
         // A view carries only its OWN source rules; global rules live on the db level and are
@@ -1581,11 +1586,11 @@ export default class NoteDatabasePlugin extends Plugin {
         summaryRules: this.normalizeBaseSummaryRules(bv.summaries, schemaColumnKeys),
       };
 
-      if (viewType === "gallery") {
-        view.galleryImageField = importedGalleryImageField;
-        view.galleryImageAspectRatio = typeof bv.imageAspectRatio === "number" ? bv.imageAspectRatio : undefined;
-        view.galleryCardSize = typeof bv.cardSize === "number" ? bv.cardSize : undefined;
-        view.galleryImageFit = bv.imageFit === "contain" ? "contain" : bv.imageFit === "cover" ? "cover" : undefined;
+      if (viewType === "board") {
+        // The cover field lands on the board's own property, which is what `resolveCoverImage` reads
+        // there. The gallery-shaped settings beside it have no board equivalent and are dropped
+        // rather than carried as dead keys.
+        view.boardImageField = importedGalleryImageField;
       }
 
       return view;

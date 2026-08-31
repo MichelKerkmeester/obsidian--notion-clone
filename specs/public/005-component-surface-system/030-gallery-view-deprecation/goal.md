@@ -11,8 +11,8 @@ _memory:
     packet_pointer: "public/005-component-surface-system/030-gallery-view-deprecation"
     last_updated_at: "2026-08-31T14:10:00Z"
     last_updated_by: "phase-author"
-    recent_action: "Gallery withdrawn from every picker; renderer kept so existing views still open"
-    next_safe_action: "The operator confirms an existing gallery database still opens on device"
+    recent_action: "Importer stops minting galleries; existing ones migrate to board on open with an undo"
+    next_safe_action: "Operator opens a migrated gallery on device and tries the undo"
     blockers:
       - "The migration shape for existing gallery-configured databases is undecided"
     key_files:
@@ -62,22 +62,53 @@ outcome this packet exists to prevent.
 <!-- ANCHOR:completion -->
 ## 2. COMPLETION CRITERIA
 
-- [x] The operator's migration decision is recorded in this folder, and implemented. **Decided:
-      withdraw, do not delete.** `gallery` is a value in a persisted union — it is written into
-      vault files — so deleting the renderer would leave every database already configured as one
-      unable to open. The pickers no longer offer it; every existing gallery keeps rendering. The
-      step is reversible by removing one filter, and it is the half that carries no data risk.
+- [x] The migration decision is recorded in this folder, and implemented. **Decided in three parts,
+      2026-09-01: keep rendering, stop minting, migrate on open with an undo.**
+      **1. Keep rendering.** `gallery` is a value in a persisted union — it is written into vault
+      files — so deleting the renderer would leave every database already configured as one unable
+      to open. The renderer stays shipped. That is also what makes the undo below mean anything: an
+      undone view renders exactly as it always did.
+      **2. Stop minting.** Withdrawing the type from the pickers was only half of it. The `.base`
+      importer still mapped a `cards` view to `gallery` (`main.ts:1524`), so the plugin kept
+      producing new galleries — and a deprecation that migrates on open would have spent its first
+      act undoing an import from a minute earlier. `cards` now imports as **board**, with the cover
+      field landing on `boardImageField`.
+      **3. Migrate on open, with an undo.** An existing gallery becomes a board the first time its
+      view renders. `board` is the target rather than `table` because it is the only other surface
+      that draws a cover image — the same `resolveCoverImage` call with its own field — so the cards
+      keep their covers and their shape. Without this, deleting the renderer later would coerce
+      those views through the unknown-type path to `table`: a card grid becoming a spreadsheet with
+      no warning and no way back.
+      **The reservation, stated rather than buried: this is a write caused by a read.** Opening a
+      view changes it. Three things make it the reversible default rather than a liberty — it is one
+      undo step labelled as itself (`undo.galleryMigration`), the gallery's own fields are left on
+      the view so the undo restores the surface exactly, and the renderer is still shipped. A notice
+      names what happened and says undo keeps it a gallery. It runs once per view id per session,
+      because `refresh` runs on every scroll and a migration that re-applied would fight the undo it
+      just asked for.
+      **Watched failing.** Stripping the gallery fields on migrate reddens *keeps the gallery's own
+      fields on the view*; reversing the plan's preference reddens *does not overwrite a board image
+      field the view already carries*. A third control passed and removed code: guarding the write
+      against an existing `boardImageField` could only ever re-write the same value the plan had
+      already chosen, so the guard was doing no work and is gone.
 - [ ] A database previously configured as a gallery opens on the operator's device. **Only the
       operator closes this row.**
-- [x] No surface offers gallery as a choice. **Met** — withdrawn from the add-view menu, the
-      view-type change menu and the view-config picker. A database that already IS a gallery still
-      sees the option in its own picker, or that control would display a value it does not list.
+- [x] No surface offers gallery as a choice, **and no path produces one.** Withdrawn from the
+      add-view menu, the view-type change menu and the view-config picker. A database that already
+      IS a gallery still sees the option in its own picker, or that control would display a value it
+      does not list. **The second half was missing until 2026-09-01:** the `.base` importer mapped
+      `cards` to `gallery`, so "no surface offers it" was true of the pickers and false of the
+      plugin. It imports as a board now.
 - [x] The board renders unchanged — captures byte-identical, or every difference explained. **Met** —
       no renderer was touched. The only capture that changed is the add-view menu, which no longer
       draws a Gallery row.
-- [ ] Renderer coverage publishes its new floor, and the ratchet passes at it. **Not applicable to
-      a withdrawal** — the renderer still exists and is still covered. This row belongs to the
-      deletion that follows, once the operator confirms no vault of theirs still opens one.
+- [ ] Renderer coverage publishes its new floor, and the ratchet passes at it. **Not applicable
+      while the renderer ships** — it still exists and is still covered, and the migration's undo
+      depends on it continuing to. This row belongs to the deletion, which is now gated on evidence
+      rather than on a question: once no view migrates on open for a while, nothing is producing
+      galleries and the renderer has no callers left. It is left unticked rather than marked
+      not-applicable, because the figure is ticked over total and inventing an exemption would
+      inflate it.
 - [x] `npm run gate` exits 0, read from `$?` and not through a pipe. **20 green, re-run 2026-09-01.**
 <!-- /ANCHOR:completion -->
 

@@ -104,13 +104,13 @@
         "source": "derived"
       },
       {
-        "name": "the",
+        "name": "an",
         "kind": "key_phrase",
         "path": "spec.md",
         "source": "derived"
       },
       {
-        "name": "an",
+        "name": "the",
         "kind": "key_phrase",
         "path": "spec.md",
         "source": "derived"
@@ -176,27 +176,21 @@
         "source": "derived"
       },
       {
-        "name": "PHASE 2: THE DATA PATH, WHILE THE GALLERY STILL WORKS",
-        "kind": "heading",
-        "path": "tasks.md",
-        "source": "derived"
-      },
-      {
         "name": "a",
         "kind": "key_phrase",
         "path": "goal.md",
         "source": "derived"
       },
       {
-        "name": "1. DURABLE DIRECTIVE",
-        "kind": "heading",
-        "path": "goal.md",
+        "name": "Implementation Summary",
+        "kind": "proper_noun",
+        "path": "implementation-summary.md",
         "source": "derived"
       }
     ],
     "causal_summary": "Remove the gallery view from the plugin, including the migration path for databases already configured to use it and the gate coverage that currently counts it.",
     "created_at": "2026-08-31T13:08:59.395Z",
-    "last_save_at": "2026-08-31T20:01:23.584Z",
+    "last_save_at": "2026-08-31T23:12:32.925Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -206,13 +200,13 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:edb08af63437a1e742c9626493ece28f835bbf42db8c46508608bd61ab038cc6",
+    "source_fingerprint": "sha256:11e29d018f9898ae734bf4358f4b1fc812ee1034dd5ee235cfc37eddddd48105",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "8fc78b13cb744c5f8ad79e2bf72ad978cacf15a8b2938663c5c2fdd08a170cfa",
+      "spec.md": "40c8b89e4be38b502fb86cfa53e42f5fe4741cd15df327f6a3399b4f66bb27c6",
       "plan.md": "81f8fa19d638c99b6f529a784b12fcd15f115ca9c2875e0be04c0a49e4af91d8",
-      "tasks.md": "72645de14f870b93390ec3b040998d88bf5cbb0ef3e234c77075ce036de7bfa5",
-      "implementation-summary.md": "dfa49224dc6320c4d97fbb2dc10eca49e8c81435ed7367ee61526b9a6f889da2"
+      "tasks.md": "86e64a3aa56105794799f94cba87286580bd020c0b61b14f3dda94f85fa654bf",
+      "implementation-summary.md": "d7b20b2efb36b05bf2f6a28ac51bb9e79c6e1adb7bc17cfd58ffd019ae2b4860"
     },
     "last_active_child_id": null,
     "last_active_at": null

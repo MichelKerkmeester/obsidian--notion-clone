@@ -1004,7 +1004,7 @@
       },
       "note": "The phone form of the owned menu. Rows share one left edge with the icon in a fixed leading column, hairlines divide neighbours but not the last row of a group, and a row that opens a submenu carries a trailing chevron. Captured in viewport mode so the fixed sheet docks at the bottom.",
       "capture": "viewport",
-      "bytes": 49273
+      "bytes": 49261
     },
     {
       "id": "chrome-owned-menu-sheet",
@@ -4630,7 +4630,7 @@
       },
       "note": "Days with events carry a short accent underline; the visible week reads as the selected pill run.",
       "capture": "viewport",
-      "bytes": 57193
+      "bytes": 57127
     },
     {
       "id": "calendar-mini-calendar",
@@ -4680,7 +4680,7 @@
       },
       "note": "Days with events carry a short accent underline; the visible week reads as the selected pill run.",
       "capture": "viewport",
-      "bytes": 42742
+      "bytes": 42768
     },
     {
       "id": "calendar-mini-calendar",
@@ -4728,7 +4728,7 @@
       },
       "note": "Multi-day all-day bars, timed events, an overflow week and one event carried across the week boundary.",
       "capture": "viewport",
-      "bytes": 130108
+      "bytes": 129143
     },
     {
       "id": "calendar-month-view",
@@ -4989,7 +4989,7 @@
       },
       "note": "Sticky day header and all-day strip over the 08–16 time grid; the current-time ruler sits on Wednesday at 13:45.",
       "capture": "viewport",
-      "bytes": 61971
+      "bytes": 61744
     },
     {
       "id": "gallery-view",
@@ -5114,7 +5114,7 @@
       },
       "note": "The list row the renderer builds: controls, a title line and a meta row of fixed-width fields. On desktop the fields sit on one line; on the phone (is-phone) the card fills the viewport and the fields wrap inside its border instead of escaping it.",
       "capture": "viewport",
-      "bytes": 244292
+      "bytes": 244301
     },
     {
       "id": "list-mobile",
@@ -5748,7 +5748,7 @@
       },
       "note": "Two weeks at one column per day; the April band marks the month boundary and the today line sits at 25 March 13:45.",
       "capture": "viewport",
-      "bytes": 147239
+      "bytes": 146959
     },
     {
       "id": "timeline-view",
@@ -5794,7 +5794,7 @@
       },
       "note": "Two weeks at one column per day; the April band marks the month boundary and the today line sits at 25 March 13:45.",
       "capture": "viewport",
-      "bytes": 70278
+      "bytes": 69974
     },
     {
       "id": "timeline-view",
@@ -5817,7 +5817,7 @@
       },
       "note": "Two weeks at one column per day; the April band marks the month boundary and the today line sits at 25 March 13:45.",
       "capture": "viewport",
-      "bytes": 73062
+      "bytes": 72679
     }
   ]
 }
