@@ -26,14 +26,29 @@ Repo `~/MEGA/Development/Obsidian Plugin`. **Runs seventh**, last of the feature
 
 <!-- ANCHOR:completion -->
 **ACCEPTANCE.**
-- Activating Open produces a surface containing the note's **rendered body**, not a property list. **Today the peek shows properties only.**
-- The target is a real leaf or modal that **survives the database view re-rendering**.
-- On phone the action never produces a sub-half-height panel. **Today: a 360px dock on a 402px screen, and a 50vh detail panel.**
-- The peek's layer sits inside the token scale; a dropdown opened inside it paints **above** it. **Today `998` beats popover and submenu.**
-- The setting round-trips and **every** affordance honours it — no path bypasses the policy.
-- Plus the five stateful dimensions.
 
-**DONE MEANS** the operator clicks Open and reads the note.
+*Written as a checklist on 2026-09-01. It was prose, so this packet's figure was `0/0` — no
+denominator at all, which reads as finished rather than as unmeasured. Nothing is ticked that this
+folder does not carry evidence for, and the harness-dependence audit below is why several rows that
+have a number are still open.*
+
+- [x] Activating Open produces a surface containing the note's **rendered body**, not a property
+      list. **Today the peek shows properties only.** **Met** — `023` shipped the record body, and
+      the sheet's own captures show it rendered below the property rows with its own separation.
+- [x] The target is a real leaf or modal that **survives the database view re-rendering**. **Met** —
+      the record sheet survives a re-render with its node rebuilt and its identity intact, asserted
+      by column key rather than by index, with a control that requires a different record to close
+      the sheet rather than re-point it.
+- [ ] On phone the action never produces a sub-half-height panel. **Today: a 360px dock on a 402px
+      screen, and a 50vh detail panel.** **No check asserts the floor.** The sheet's cap is
+      asserted; its minimum is not.
+- [ ] The peek's layer sits inside the token scale; a dropdown opened inside it paints **above** it.
+      **Today `998` beats popover and submenu.** **No check.**
+- [ ] The setting round-trips and **every** affordance honours it — no path bypasses the policy.
+      **The exposure is the stubs:** this has to drive `openRow`, which is `() => undefined` in the
+      harness — the shape `012` repaired for the title-cell tap by driving the real opener instead.
+- [ ] Plus the five stateful dimensions. **No mapping exists** for this packet.
+- [ ] The operator clicks Open and reads the note. **Only the operator closes this.**
 **HARNESS DEPENDENCE, 2026-08-31 — 9 sound / 4 dependent / 0 unknown. The least style-exposed packet
 of the seven**, because its bullets ask what was produced, which record is displayed and where the
 write landed — content and identity, not computed geometry. The rendered-body bullet, the phone

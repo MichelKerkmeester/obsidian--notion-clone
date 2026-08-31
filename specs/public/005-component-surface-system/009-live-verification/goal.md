@@ -26,13 +26,30 @@ The running app is the one measurement surface `000` cannot edit. **This phase i
 
 <!-- ANCHOR:completion -->
 **ACCEPTANCE.**
-- The probe reproduces the known body-mount divergence live. Agreement fails.
-- `elementFromPoint` over the navbar answers from the real app.
-- The probe exits non-zero when an assertion fails and zero when it passes; infrastructure failure is a distinct exit 2.
-- Every claim about mobile states explicitly whether it is measured, emulated, or operator-reported — and every downstream citation carries the same qualifier.
-- `000` receives both cross-check artefacts.
 
-**DONE MEANS** any phase can ask the real app a question and get a number back — and `000` can no longer certify its own instrument.
+*Written as a checklist on 2026-09-01. It was prose, so this packet's figure was `0/0` — no
+denominator at all, which reads as finished rather than as unmeasured. Nothing is ticked without
+evidence in this folder or in a lane.*
+
+- [ ] The probe reproduces the known body-mount divergence live. Agreement fails. **Unreachable from
+      this repository.** Every instrument here renders `styles.css` against a headless page; none of
+      them can open the real app, which is the whole reason this packet exists.
+- [ ] `elementFromPoint` over the navbar answers from the real app. **Unreachable for the same
+      reason**, and it is the row `003`'s two open rows are waiting on: their navbar is a
+      hand-written div with no `app.css` rule and no stacking context.
+- [ ] The probe exits non-zero when an assertion fails and zero when it passes; infrastructure
+      failure is a distinct exit 2. **No probe exists to exit.**
+- [x] Every claim about mobile states explicitly whether it is measured, emulated, or
+      operator-reported — and every downstream citation carries the same qualifier. **Met in
+      practice across the program, 2026-09-01.** Every packet carries a harness-dependence audit
+      naming which of its numbers survive the question *would this still fail on a device*, and the
+      operator rows are marked as only the operator can close them. It is a discipline rather than
+      a check, and it is ticked because the artefacts exist and are cited, not because anything
+      enforces it.
+- [ ] `000` receives both cross-check artefacts. **Nothing to receive** until the probe exists.
+- [ ] Any phase can ask the real app a question and get a number back — and `000` can no longer
+      certify its own instrument. **Only the operator's device closes this**, and until it does,
+      every other packet's audit is the honest substitute rather than the answer.
 <!-- /ANCHOR:completion -->
 
 ---

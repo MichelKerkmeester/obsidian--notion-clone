@@ -24,15 +24,41 @@ Repo `~/MEGA/Development/Obsidian Plugin`. **Runs second, right after `000`.** N
 
 <!-- ANCHOR:completion -->
 **ACCEPTANCE — every one measured, thresholded, failing value recorded, negative control named.**
-- Every `input[type=checkbox]` the plugin creates computes `appearance: none`. **Today: 1 of 12.**
-- Radius and box size identical within a role across board, gallery, list, table, modal, panel — set equality.
-- Appearance identical at all three mount points.
-- Checked, indeterminate, disabled and focus each produce a measurable difference, per family.
-- Unchanged under three third-party themes, at least one that restyles native checkboxes.
-- Hit target ≥ 28×28 on coarse pointer, per family.
-- Plus the five stateful dimensions: semantic identity, transition trace, action outcome, resource ownership, negative-control mutation.
 
-**DONE MEANS** the operator opens a board on a phone and sees squares. Gate passage has already proven insufficient here.
+*Written as a checklist on 2026-09-01. It was prose, so this packet's figure was `0/0` — not zero
+progress but no denominator, which is worse: a phase with nothing to divide reports nothing and
+reads as finished. A tick here needs evidence in this folder or in a lane, and the audit below is
+why most of them are still open even where a number looks green.*
+
+- [x] Every `input[type=checkbox]` the plugin creates computes `appearance: none`. **Today: 1 of 12.**
+      **Measured 0 of 12 failing, and held.** `replay` carries it as *no checkbox falls back to the
+      platform box*: was 23, recorded 0, now 0.
+      **The audit's objection stands and is recorded rather than dismissed:** `appearance: none`
+      discriminates in the harness and stops discriminating on a device, because a checkbox the
+      plugin never touched reads the host's `none` too. What makes the tick defensible is the second
+      claim beside it — *no checkbox or switch borrows its appearance from an ancestor*, was 10,
+      recorded 0, now 0 — which is a statement about ownership rather than about a computed value,
+      and a host cannot satisfy it on the plugin's behalf.
+- [ ] Radius and box size identical within a role across board, gallery, list, table, modal, panel —
+      set equality. **Exposed the same way as the row above and without its companion claim.**
+      `checkbox-inventory` reports the families; nothing asserts set equality of radius and box size
+      per role, and a harness without `app.css` cannot tell a plugin box from a host one.
+- [ ] Appearance identical at all three mount points. **No check.**
+- [ ] Checked, indeterminate, disabled and focus each produce a measurable difference, per family.
+      **No check.** This is the "states with no visible difference" class, and it is the one a
+      capture can show but no capture asserts.
+- [ ] Unchanged under three third-party themes, at least one that restyles native checkboxes.
+      **Unreachable here.** No harness in this repository loads a third-party theme.
+- [x] Hit target ≥ 28×28 on coarse pointer, per family. **Measured with the pointer mode that
+      matters.** `checkbox-appearance` sends every phone scenario to a `hasTouch` page, and the
+      stylesheet's `@media (pointer: coarse)` rule raises the box to 28×28; the touch-target census
+      declares the checkbox because its hit area comes from a `::before` inset a bounding box does
+      not include, and measures that surface directly.
+- [ ] Plus the five stateful dimensions: semantic identity, transition trace, action outcome,
+      resource ownership, negative-control mutation. **No mapping exists.** `010` and `011` each
+      built one; this packet has not.
+- [ ] The operator opens a board on a phone and sees squares. **Only the operator closes this.**
+      Gate passage has already proven insufficient here.
 **HARNESS DEPENDENCE, 2026-08-31 — 1 sound / 16 dependent / 1 unknown. This packet is the most
 exposed in the program.** `styles.css` contains **no unconditional `input[type="checkbox"]` rule**:
 every appearance the plugin gives a checkbox is reached through an ancestor or through a class the

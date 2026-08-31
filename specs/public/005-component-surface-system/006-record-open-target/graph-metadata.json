@@ -205,7 +205,7 @@
     ],
     "causal_summary": "On desktop, clicking Open in the table shows a small card listing properties",
     "created_at": "2026-08-29T12:52:42.102Z",
-    "last_save_at": "2026-08-31T16:18:36.349Z",
+    "last_save_at": "2026-08-31T23:35:33.336Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -216,13 +216,13 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:529b779572a7c8783168d7375c63c5a255644e83ebeada666fee1607aea7d7a8",
+    "source_fingerprint": "sha256:1a3ebf3f5d1b883816e42a3d8adf7fd5f2a0f399fd35dcb14a0b8d6dd5e9a2d2",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "c14f892aed942dd4f8e5067f28e6fef107cd702daf48c0037ee32201862c62cf",
+      "spec.md": "612a3d2329b8a66800b5f7690ae2767068876054cf707e480cd62ce17bd934b2",
       "plan.md": "f8632745f580cd1359b7b6c3b70117ffaa16d2b828572c19f14ba237c287ba13",
       "tasks.md": "4207d3b5d3cb9eb211997f31594f23ab4fe71405b2ba8f0792ac5cd226034d06",
-      "implementation-summary.md": "2cdbef01841def8ad776c0ccf2fd15189610d6096a6d2ab28e39eaf53b1fef4b"
+      "implementation-summary.md": "806648a03a23c46befb8204f121ee617d910cac752fb89d2dcdff4eb7ca581fb"
     },
     "last_active_child_id": null,
     "last_active_at": null

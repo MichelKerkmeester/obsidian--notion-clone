@@ -24,17 +24,50 @@ Repo `~/MEGA/Development/Obsidian Plugin`. **Ships in two parts on two schedules
 
 <!-- ANCHOR:completion -->
 **ACCEPTANCE.**
-- Every earlier phase's criteria re-pass **from the current tree at every handoff**, and from the final tree at release — not from the tree they were written against.
-- A seeded reversal is demonstrated to fail the handoff replay, and only in its own cells.
-- A non-holder `styles.css` edit is demonstrated to be refused.
-- A lane release with an unreviewed changed PNG is demonstrated to be refused.
-- A stale replay result is demonstrated to be rejected.
-- Every registered surface family appears in the replay; registry equality between source census and runtime census.
-- Each negative control fails when its dimension is substituted.
-- No compatibility path removed without its agreements recorded.
-- **A red operator device review is demonstrated to block a release with the pipeline green** — the rehearsal, not just the rule.
 
-**DONE MEANS** the operator confirms on device that each original defect is gone. That is the only closing condition for the program.
+*Written as a checklist on 2026-09-01. It was prose, so this packet's figure was `0/0` — no
+denominator at all, which reads as finished rather than as unmeasured. Nothing is ticked without
+evidence in a lane, and the rows that ask for a REHEARSAL are open even where the rule they
+rehearse is enforced, because "the rule exists" is the claim this packet was written to distrust.*
+
+- [x] Every earlier phase's criteria re-pass **from the current tree at every handoff**, and from the
+      final tree at release — not from the tree they were written against. **Met by the `replay`
+      lane**, which re-measures eight recorded claims from the current tree on every gate run and
+      names the phase each belongs to. It is in the gate, so it runs at every handoff by
+      construction rather than by anyone remembering.
+- [x] A seeded reversal is demonstrated to fail the handoff replay, and only in its own cells.
+      **Demonstrated on 2026-09-01, unintentionally, which is the strongest form of this evidence.**
+      A fixture repair moved one claim from 0 to 4 and the lane reported `005-content-row-rhythm
+      measured 0 and now gets 4` — that phase's cell alone, with the other seven still held. The
+      cause turned out to be the check counting an unlabelled reserved box as a property, so the
+      check was repaired and the recorded value left alone; the lane's own instruction is *find
+      which, rather than re-recording the new number*, and that is what happened.
+- [x] A non-holder `styles.css` edit is demonstrated to be refused. **Met by `css-lane`**, which
+      fails when the stylesheet hash moves and no phase holds the lane. Observed refusing on
+      2026-08-31 and again on 2026-09-01: `check-lane: FAIL — the stylesheet changed and no phase
+      claimed the edit`.
+- [ ] A lane release with an unreviewed changed PNG is demonstrated to be refused. **Not enforced,
+      and the record says so every time.** Every lane release note in `css-lane.json` ends with
+      *per-image operator sign-off still owed* — the reviewing is done and recorded in prose, and
+      nothing refuses a release that skipped it.
+- [x] A stale replay result is demonstrated to be rejected. **Met by the `evidence` lane**, which
+      fingerprints every artefact's inputs and reports one describing a tree that no longer exists.
+      Observed rejecting repeatedly on 2026-09-01, once per stylesheet edit.
+- [ ] Every registered surface family appears in the replay; registry equality between source census
+      and runtime census. **Partly instrumented, not asserted.** `surface-census` and `view-census`
+      each publish a count; nothing compares them, so the equality this row asks for is computable
+      and uncomputed.
+- [ ] Each negative control fails when its dimension is substituted. **True where it has been
+      exercised and enforced nowhere.** `012` now machine-checks that every check in its section
+      carries a recorded red, and that mechanism is per-phase rather than program-wide.
+- [ ] No compatibility path removed without its agreements recorded. **No check.** The gallery
+      deprecation is the live test of it: `030` records the decision and the undo, and nothing
+      would have stopped a deletion that did not.
+- [ ] **A red operator device review is demonstrated to block a release with the pipeline green** —
+      the rehearsal, not just the rule. **Never rehearsed.** The pipeline has been green while
+      operator rows stayed open throughout this program, which is the condition, not the rehearsal.
+- [ ] The operator confirms on device that each original defect is gone. **That is the only closing
+      condition for the program**, and no harness can stand in for it.
 <!-- /ANCHOR:completion -->
 
 ---

@@ -23,9 +23,48 @@ Repo `~/MEGA/Development/Obsidian Plugin`, branch `main`. **This phase blocks th
 ---
 
 <!-- ANCHOR:completion -->
-**ACCEPTANCE.** Every criterion measured at the production mount point, a number or hit test with a threshold, **proven to fail on today's tree with the number recorded**, and paired with a negative control. Plus the five stateful dimensions: semantic identity, transition trace, action outcome, resource ownership, negative-control mutation. **Plus the tenth condition: an instrument this phase did not repair.** Class names and call counts are **banned** — every 1.3.1 criterion was that shape and every one passed.
+**ACCEPTANCE.**
 
-**DONE MEANS** the numbers moved from their recorded failing values, the negative controls hold, **every harness number agrees with `009`'s live number or is listed uncorroborated with a reason**, both named exit criteria are recorded for `001` and `003`, and the operator confirms on device.
+*Written as a checklist on 2026-09-01. It was one prose paragraph, so this packet — the one that sets
+the evidence standard for the whole program — had a figure of `0/0`, which reads as finished rather
+than as unmeasured. That is the failure mode this packet exists to name, and it had it.*
+
+- [x] Every criterion measured at the **production mount point** rather than against a fixture.
+      **Met and re-proven repeatedly.** The renderer-driven sections drive `ListRenderer`,
+      `ToolbarRenderer`, `ColumnMenu`, `RowMenu` and `openRecordDetailPanel` themselves; where a
+      decision sat in a private method it was lifted into an exported function so a check could call
+      it rather than copy it — done three times on 2026-09-01 alone.
+- [x] A number or hit test with a threshold, **not a class name or a call count.** **Met, and the
+      ban has teeth.** The `inverted-assertions` lane is in the gate, and the two checks caught
+      counting a call rather than an outcome this session — the title-cell tap and the pinch guard —
+      were both rebuilt onto the thing they claimed to measure.
+- [ ] **Proven to fail on today's tree with the number recorded**, for every criterion.
+      **True for many and enforced for one section.** `012` now machine-checks that every check
+      attributed to it carries a recorded red and fails the lane when one does not. That mechanism
+      is per-phase; program-wide, several packets still carry criteria with no recorded failing
+      value, and this row is the one that says so.
+- [ ] Paired with a negative control, for every criterion. **Same shape as the row above, and the
+      same gap.** Building the controls found three checks that could not fail and two that passed
+      on a defect, so the controls are load-bearing rather than ceremonial.
+- [ ] Plus the five stateful dimensions: semantic identity, transition trace, action outcome,
+      resource ownership, negative-control mutation. **Two packets have the mapping and this one
+      does not.** The audit also records that the **action-outcome** dimension here drives `openRow`
+      and `editCell`, which are no-op stubs — the same false green the title-cell tap had.
+- [ ] **Plus the tenth condition: an instrument this phase did not repair.** **The audit says this is
+      the row that holds**, and it is the only one in the program that can catch a supply nobody has
+      named yet. It is left open because it is a standing condition rather than a state.
+- [ ] The numbers moved from their recorded failing values, and the negative controls hold.
+      **Partly.** `replay` holds all eight recorded claims from the current tree, which is this row
+      for the phases it covers and not for the ones it does not.
+- [ ] **Every harness number agrees with `009`'s live number or is listed uncorroborated with a
+      reason.** **The second half is met and the first is unreachable.** Every packet now carries a
+      harness-dependence audit naming which of its numbers survive the question *would this still
+      fail on a device* — and `009`'s probe does not exist, so there is no live number to agree with.
+- [ ] Both named exit criteria are recorded for `001` and `003`. **Both packets now carry a
+      checklist**, written the same day as this one; the exit criteria within them are open.
+- [ ] The operator confirms on device. **Only the operator closes this**, and `AC-016`'s checker
+      still implements the opposite of `AC-016` — `scan-pinned-values.mjs` skips a property `src/`
+      also assigns, which is the population the criterion names.
 **HARNESS DEPENDENCE, 2026-08-31 — 17 sound / 2 dependent / 1 unknown.** Two acceptance bullets do
 not survive the question *would this still fail on a device*. The **action-outcome** dimension drives
 `openRow` and `editCell`, which are no-op stubs, so a model delta asserted against them is the

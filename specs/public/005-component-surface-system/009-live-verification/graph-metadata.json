@@ -202,7 +202,7 @@
     ],
     "causal_summary": "The program's founding fact is that a release passed every gate and changed nothing on device",
     "created_at": "2026-08-29T14:34:47.371Z",
-    "last_save_at": "2026-08-31T18:47:42.561Z",
+    "last_save_at": "2026-08-31T23:35:37.708Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -213,13 +213,13 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:c245a7a0c4e3c75928eb21ef04b7fe3ced927325613e5102afd312d5f8d78eeb",
+    "source_fingerprint": "sha256:e9ec91689919dec0bd7def8dd76e535a2449b21b907ae79fa7c539f6d2832dcc",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "7f257fcded023d79ac2dce640f287e81cb1ff2458f84efc04f8a4551149dbac7",
+      "spec.md": "c54c76a7c054642db1f91e902f426cf46b40573b02ec14a143dd66fa966c4a64",
       "plan.md": "1c6dcf824de8a59d2f89ff36f7d49b59643e58687beab07d557868e9cf8cb4f7",
       "tasks.md": "250d6a2d48b1f123f93c4bd97955654275b5a9c4c051b0a0d3ed87d2dc171003",
-      "implementation-summary.md": "a1431d6254bbc15fb7f26d06dedff8c9081aaf553532d049b0cf1d3b2c651351"
+      "implementation-summary.md": "ada83c7b482c6b4d45c8b526ff68ee8536d85deb532491aea2db1ce5ac97bb2b"
     },
     "last_active_child_id": null,
     "last_active_at": null

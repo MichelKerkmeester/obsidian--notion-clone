@@ -27,7 +27,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-009"
       parent_session_id: null
-    completion_pct: 15
+    completion_pct: 17
     open_questions:
       - "Does Obsidian's own mobile emulation insert a real .mobile-navbar, or only resize"
       - "Does Obsidian on iOS expose any remote debugging port — unverifiable from a Mac"

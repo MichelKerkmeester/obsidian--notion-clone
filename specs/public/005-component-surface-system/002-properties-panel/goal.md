@@ -26,14 +26,34 @@ Repo `~/MEGA/Development/Obsidian Plugin`. **Runs fifth**, after `001` solves pl
 
 <!-- ANCHOR:completion -->
 **ACCEPTANCE.**
-- Every laid-out child resolves to grid row 1; row height ≤ 36px both viewports. **Today: 8 into 7, 52px.**
-- Declared track count equals laid-out child count at every breakpoint and condition. **Today desktop 7 vs 8, phone 8 vs 7.**
-- Name element computed content width ≥ 120px desktop / ≥ 96px phone, right edge inside the panel content box. **Today the phone name track is 22px.**
-- Panel height ≤ min(560px, 70% of visible bounds) at 40 properties. **Today the inline maxHeight takes the full bounds.**
-- Delete is not a bare one-click target in the row's primary line.
-- Plus the five stateful dimensions.
 
-**DONE MEANS** the operator opens Properties on a phone and can read every property name.
+*Written as a checklist on 2026-09-01. It was prose, so this packet's figure was `0/0` — no
+denominator at all, which reads as finished rather than as unmeasured. Nothing is ticked without
+evidence in this folder or in a lane.*
+
+- [ ] Every laid-out child resolves to grid row 1; row height ≤ 36px both viewports. **Today: 8 into
+      7, 52px.** **Half.** `replay` carries *the properties row stays on one line*: was 2, recorded
+      **1**, now 1 — a recorded value that is not zero, so one child still wraps by the packet's own
+      accounting. The height clause is the audit's named exposure: it is decided by the tallest
+      child, and the tallest children take `height: var(--input-height)` from `app.css`, which the
+      harness does not load, so the row measures shorter here than on any phone.
+- [x] Declared track count equals laid-out child count at every breakpoint and condition. **Today
+      desktop 7 vs 8, phone 8 vs 7.** **Sound by the audit's own reading** — the track lists and the
+      `grid-column` claims are written in `styles.css`, so no host rule can move them.
+- [x] Name element computed content width ≥ 120px desktop / ≥ 96px phone, right edge inside the panel
+      content box. **Today the phone name track is 22px.** **Met, and held under replay** — *the
+      property name takes the flexible track, not the type icon*, was 0, recorded 1, now 1. The
+      floors are `minmax(120px, 1fr)` and `minmax(96px, 1fr)` in the stylesheet.
+      **The recorded 22px is optimistic and the packet says so:** the three `auto` action tracks are
+      host-padded wider on a device, so the name is squeezed harder there, not less.
+- [ ] Panel height ≤ min(560px, 70% of visible bounds) at 40 properties. **Today the inline maxHeight
+      takes the full bounds.** **The clamp is in the stylesheet and no check asserts it at 40 rows.**
+- [ ] Delete is not a bare one-click target in the row's primary line. **No check.** This is
+      information architecture rather than layout, and the packet's own summary records that half
+      as not started.
+- [ ] Plus the five stateful dimensions. **No mapping exists** for this packet.
+- [ ] The operator opens Properties on a phone and can read every property name. **Only the operator
+      closes this.**
 **HARNESS DEPENDENCE, 2026-08-31 — 10 sound / 2 dependent / 0 unknown.** The panel came through well,
 because its layout is **written down**: the track lists, the `grid-column` claims and the
 `minmax(120px, 1fr)` / `minmax(96px, 1fr)` name floors are all in `styles.css`, so no host rule can

@@ -24,7 +24,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-000-impl-summary"
       parent_session_id: null
-    completion_pct: 22
+    completion_pct: 20
     open_questions:
       - "T14 and T18 read Closed in tasks.md prose but their checkboxes stay open; T14 states no reason"
       - "Whether commit 52e96cc's bundled recapture discharges css-lane.json's outstanding db-surface debt"

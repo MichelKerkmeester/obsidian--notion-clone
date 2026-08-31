@@ -24,15 +24,34 @@ Repo `~/MEGA/Development/Obsidian Plugin`. **Runs sixth.** The riskiest change i
 
 <!-- ANCHOR:completion -->
 **ACCEPTANCE.**
-- `elementFromPoint(centreX, navbarCentreY)` returns the sheet. **Today: returns `.mobile-navbar` even at 9999.**
-- Sheet bottom equals viewport bottom, offset 0px, for **both** mechanisms. **Today 49px vs 0px.**
-- After a field commit: node identity unchanged, top edge moved 0px, and a later resize still repositions. **Today repositioning is dead after the first commit.**
-- With `visualViewport` reduced for the keyboard, the focused field stays visible.
-- Scrim covers the full viewport including the navbar band.
-- Removing the navbar from the harness moves an asserted number.
-- Plus the five stateful dimensions.
 
-**DONE MEANS** the operator opens a sheet on their phone and it covers the nav bar.
+*Written as a checklist on 2026-09-01. It was prose, so this packet's figure was `0/0` — no
+denominator at all, which reads as finished rather than as unmeasured. Nothing is ticked that this
+folder does not carry evidence for, and the harness-dependence audit below is why several rows that
+have a number are still open.*
+
+- [ ] `elementFromPoint(centreX, navbarCentreY)` returns the sheet. **Today: returns
+      `.mobile-navbar` even at 9999.** **The number is green and the audit disowns it:** it is
+      measured against a hand-written `<div class="mobile-navbar" height:72px>` with no `app.css`
+      rule, no stacking context and no z-index — a stand-in a body portal beats almost by default.
+- [x] Sheet bottom equals viewport bottom, offset 0px, for **both** mechanisms. **Today 49px vs
+      0px.** **Met on both** — the panel path and the menu path are asserted in one check that
+      compares them against each other, so a surface that docks correctly alone cannot pass while
+      its sibling does not.
+- [x] After a field commit: node identity unchanged, top edge moved 0px, and a later resize still
+      repositions. **Today repositioning is dead after the first commit.** **Met** — the rebuild is
+      driven through the real renderer and the drag survives it, which is what `016` root-caused and
+      `031` made unrepresentable by construction.
+- [x] With `visualViewport` reduced for the keyboard, the focused field stays visible. **Met on both
+      arms** — the host variable and the visual-viewport shrink, the second driven with the host
+      silent, and both families of sheet now answer one keyboard identically.
+- [ ] Scrim covers the full viewport including the navbar band. **Same exposure as the first row:**
+      the navbar it must cover is the harness's own div.
+- [ ] Removing the navbar from the harness moves an asserted number. **No control.** This row is the
+      one that would settle the two above it, and it has never been run.
+- [ ] Plus the five stateful dimensions. **No mapping exists** for this packet.
+- [ ] The operator opens a sheet on their phone and it covers the nav bar. **Only the operator
+      closes this.**
 **HARNESS DEPENDENCE, 2026-08-31 — 9 sound / 5 dependent / 0 unknown.** The headline bullet is one of
 the five. *"`elementFromPoint(centreX, navbarCentreY)` returns the sheet"* is measured against a
 hand-written `<div class="mobile-navbar" ... height:72px>` (`verify-placement.mjs:409`) with no

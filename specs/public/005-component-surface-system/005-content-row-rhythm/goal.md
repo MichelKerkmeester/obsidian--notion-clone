@@ -26,14 +26,32 @@ Repo `~/MEGA/Development/Obsidian Plugin`. **Runs third.** No overlay dependency
 
 <!-- ANCHOR:completion -->
 **ACCEPTANCE.**
-- 20 rows, wrapping off: standard deviation of row heights is **0**. Wrapping on: every height a whole multiple of the line box.
-- **Nothing sized `max-content` paints outside the container that bounds it**, 4 widths × 7 views; every legitimate overflow scrolls rather than grows.
-- No descendant of `.db-header` has a right edge beyond the header's content box — 4 widths × 7 views.
-- The rail scrolls rather than grows: `scrollWidth > clientWidth` with parent width unchanged.
-- Switching view type changes header height by at most one token step.
-- Plus the five stateful dimensions.
 
-**DONE MEANS** the operator scrolls a list and the rows do not jitter.
+*Written as a checklist on 2026-09-01. It was prose, so this packet's figure was `0/0` — no
+denominator, which reads as finished rather than as unmeasured. The audit below is why the two
+green-looking rows are ticked with their exposure attached and the rest are not ticked at all.*
+
+- [ ] 20 rows, wrapping off: standard deviation of row heights is **0**. Wrapping on: every height a
+      whole multiple of the line box. **The number exists and the audit disowns it:** row-height
+      uniformity here is a property of the fixtures, which give every row the same content. A device
+      pads bare controls from `app.css`, which the instruments do not load.
+- [x] **Nothing sized `max-content` paints outside the container that bounds it**, 4 widths × 7
+      views; every legitimate overflow scrolls rather than grows. **Held, with its exposure stated.**
+      `replay` carries *no list row paints outside its container*: was 26, recorded 0, now 0. The
+      audit's objection is that the harness makes the content small, so this can pass for the wrong
+      reason — what keeps the tick is that the failing value was 26 on the same instrument, so the
+      instrument can distinguish, and the repair moved it.
+- [ ] No descendant of `.db-header` has a right edge beyond the header's content box — 4 widths ×
+      7 views. **Same exposure, no failing baseline recorded.** Without a red on this instrument
+      there is nothing to say it discriminates rather than measures a narrow harness.
+- [x] The rail scrolls rather than grows: `scrollWidth > clientWidth` with parent width unchanged.
+      **Sound by the audit's own reading** — a relation between two measurements of the same element
+      rather than an absolute size, so a host that pads the content moves both terms.
+- [ ] Switching view type changes header height by at most one token step. **No check.**
+- [ ] Plus the five stateful dimensions. **No mapping exists.** One negative control is recorded —
+      *no list column holds more than one property*, was 3, recorded 0 — and it was repaired on
+      2026-09-01 after it turned out to be counting an unlabelled reserved box as a property.
+- [ ] The operator scrolls a list and the rows do not jitter. **Only the operator closes this.**
 **HARNESS DEPENDENCE, 2026-08-31 — 5 sound / 8 dependent / 0 unknown.** Every bullet here is about
 **intrinsic size**, and an intrinsic width is content plus padding — where the padding on a bare
 control comes from `app.css`, which the instruments do not load. `view-census.mjs:69-71` loads

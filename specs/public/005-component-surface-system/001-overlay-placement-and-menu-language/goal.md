@@ -24,15 +24,37 @@ Repo `~/MEGA/Development/Obsidian Plugin`. **Runs fourth**, after `000`, `004`, 
 
 <!-- ANCHOR:completion -->
 **ACCEPTANCE.**
-- Every popover's rect fully inside the visible editing bounds at 1440/1024/768, sidebar open and closed. **Today: More tools clips.**
-- Any two surfaces of the same role: identical computed padding, radius, shadow, row height, font-size — set equality.
-- A row's computed layout is unchanged when mounted in a different container. **Today `.db-menu-item` only lays out inside `.db-owned-menu`.**
-- A submenu is produced by the same mechanism as its parent and lands inside bounds.
-- Filter and Sort expose the same role, focus behaviour and keyboard contract — asserted, not inspected.
-- **Removing any one class from a panel changes a measured value** — no surface may depend on an undeclared piggyback.
-- Plus the five stateful dimensions.
 
-**DONE MEANS** the operator opens three different dropdowns and they look like one family.
+*Written as a checklist on 2026-09-01. It was prose, so this packet's figure was `0/0` — no
+denominator at all, which reads as finished rather than as unmeasured. Nothing is ticked that this
+folder does not carry evidence for, and the harness-dependence audit below is why several rows that
+have a number are still open.*
+
+- [x] Every popover's rect fully inside the visible editing bounds at 1440/1024/768, sidebar open
+      and closed. **Today: More tools clips.** **Measured green across the placement lane's width
+      sweep**, and the two surfaces that used to escape are each asserted at two anchor positions —
+      one position cannot tell a clamp from a coincidence.
+- [ ] Any two surfaces of the same role: identical computed padding, radius, shadow, row height,
+      font-size — set equality. **Compromised, and this packet holds the program's third
+      false-green case.** `createMenuRow` builds a `<button>`, and `app.css` declares `display`,
+      `align-items`, `padding`, `border-radius`, `height` and `font-size` on every bare button —
+      none of which the harness loads outside `HOST_BARE_CONTROLS`.
+- [x] A row's computed layout is unchanged when mounted in a different container. **Today
+      `.db-menu-item` only lays out inside `.db-owned-menu`.** **Met** — *a menu row lays out
+      identically in any sheet* reports the same `min-height`, padding and height in the owned-menu
+      shell and in a panel sheet, which is the "outside the shell" half stated as a number.
+- [ ] A submenu is produced by the same mechanism as its parent and lands inside bounds. **Half.**
+      The anchorless submenu clears the right sidebar, but its arithmetic is still transcribed into
+      both harnesses rather than called — the shape `015` repaired for the search-results clamp and
+      named as still owed here.
+- [ ] Filter and Sort expose the same role, focus behaviour and keyboard contract — asserted, not
+      inspected. **No check.**
+- [ ] **Removing any one class from a panel changes a measured value** — no surface may depend on an
+      undeclared piggyback. **No check.** This is the strongest row in the packet and the one with
+      nothing behind it.
+- [ ] Plus the five stateful dimensions. **No mapping exists.**
+- [ ] The operator opens three different dropdowns and they look like one family. **Only the
+      operator closes this.**
 **HARNESS DEPENDENCE, 2026-08-31 — 9 sound / 4 dependent / 0 unknown.** Two acceptance bullets are
 compromised, and this packet holds the program's third false-green case. `createMenuRow` builds a
 **`<button>`** (`menu-row.ts:92`), and Obsidian's `app.css` declares `display`, `align-items`,

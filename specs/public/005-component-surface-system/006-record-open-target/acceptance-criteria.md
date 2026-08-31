@@ -24,7 +24,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-006"
       parent_session_id: null
-    completion_pct: 0
+    completion_pct: 29
     open_questions:
       - "Side panel, full-page modal, or both behind the setting"
     answered_questions: []
