@@ -79,6 +79,13 @@ const CHECKS = [
   // against the same real window: the DOM one must still fall short, or the check is not
   // exercising the difference it exists to catch.
   { name: "list-window", cmd: ["node", "tools/live/list-window.mjs"] },
+  // Reading captures catches what a person notices; it does not catch a control four pixels short
+  // of a thumb, because four pixels is invisible in a picture and decisive under a finger. This
+  // measures every interactive element at phone width with a COARSE pointer — the mode that
+  // actually applies the stylesheet touch rules, and the one a sibling tool was missing when it
+  // reported 53 checkboxes at a size no phone paints. It ratchets rather than cliffs: 286 controls
+  // sit below this project own 28px floor today, and the count may not grow while they are triaged.
+  { name: "touch-targets", cmd: ["node", "tools/live/touch-targets.mjs"] },
   // The censuses date themselves against the files they measured, and until this line existed
   // nothing asked. Seven of the eight were stale, one of them holding a checkbox count the roadmap
   // quoted as evidence for work that had already changed it. The stamping mechanism was built, the

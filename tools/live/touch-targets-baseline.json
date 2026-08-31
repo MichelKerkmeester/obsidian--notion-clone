@@ -1,0 +1,8 @@
+{
+  "under": 286,
+  "floor": 28,
+  "recorded": "2026-09-01",
+  "why": "Controls below this project's own 28px coarse-pointer floor, recorded so the count cannot grow while the existing set is triaged. Not an allowance: every one of these is a real shortfall, spanning 37 control classes. Resizing them changes how the plugin feels and how nearly every capture looks, which is an operator decision rather than a repair one pass should make silently.",
+  "smallest": "db-file-tag-remove at 10x14, db-multi-select-remove at 14x14, db-table-row-drag-handle at 16x16",
+  "note": "db-toggle-switch measures 34x18 under a coarse pointer here, which is a second independent contradiction of roadmap 7.1's claim that the switch reaches 34x28."
+}
