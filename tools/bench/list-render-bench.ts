@@ -190,6 +190,14 @@ export function runListBench(host: HTMLElement, options: BenchOptions = {}): Lis
         // One discarded warm-up: the first run pays for lazily-compiled paths.
         for (let run = 0; run <= REPEATS; run += 1) {
           const container = host.createDiv({ cls: "note-database-container" });
+          // Give the container the surface's own viewport height.
+          //
+          // Without this it inherits an unconstrained host, and a windowed list computes its
+          // window against a height nothing on a device would have. The old full-render numbers
+          // were unaffected by it — every row was built regardless — so this changes nothing
+          // historical, but it decides how many rows a window keeps and therefore what this bench
+          // is measuring. A harness that supplies its own viewport is measuring the harness.
+          container.setCssProps({ height: `${window.innerHeight}px` });
           const renderer = new ListRenderer(app, actions);
 
           const start = performance.now();

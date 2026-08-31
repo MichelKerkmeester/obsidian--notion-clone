@@ -169,14 +169,14 @@
         "source": "derived"
       },
       {
-        "name": "correction",
+        "name": "no",
         "kind": "key_phrase",
         "path": "tasks.md",
         "source": "derived"
       },
       {
-        "name": "TASKS",
-        "kind": "heading",
+        "name": "correction",
+        "kind": "key_phrase",
         "path": "tasks.md",
         "source": "derived"
       },
@@ -195,7 +195,7 @@
     ],
     "causal_summary": "The list renders every row, so its cost is proportional to node count; at the operator's shape that is 2.0-4.9s of blocked main thread and no loop fix reaches it.",
     "created_at": "2026-08-31T14:46:50.524Z",
-    "last_save_at": "2026-08-31T18:40:21.056Z",
+    "last_save_at": "2026-08-31T19:09:52.074Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -206,13 +206,13 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:3647d05e805e9757b39a932f4859e8a3e6e63abb4093d74554c1d5a62317075e",
+    "source_fingerprint": "sha256:5cfab275ef5fc8f8ae51aaac63e3c8f72720dcf2386ca59361cb20e7c157a47b",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "8895d2988e6c1beb1d57e9bab97db62942457d21a224ca51f4ce4619a7222360",
+      "spec.md": "899d5525e3d4c56b363aba88d259493cda040a1a04e4bdc39096252ca01e3e46",
       "plan.md": "ba8a378a960832b5d8ecb7e9793bc01987bbee1affe0ad44e090c41dea8c56f3",
-      "tasks.md": "cc1199ec2c74168ee1fac04f37e6d302281b4b385449f5a8c260180b8dce1d7a",
-      "implementation-summary.md": "b2e9666728e85ab0452947ec8cb7ff6aa7deebde611f4aaef7a21c5ac5eed95f"
+      "tasks.md": "0184891d60549ebb139af8b861cea03db56912cbfbe0d6298f11c28ebaca1128",
+      "implementation-summary.md": "1b8b3f11f7cfa243bfc21d4279bd4efbe5c3c9fbb0fe5457a32e3df15be395cd"
     },
     "last_active_child_id": null,
     "last_active_at": null

@@ -9,15 +9,15 @@ _memory:
     packet_pointer: "public/005-component-surface-system/033-list-virtualisation"
     last_updated_at: "2026-08-31T16:00:00Z"
     last_updated_by: "phase-author"
-    recent_action: "Opened as the only remaining lever on the list freeze"
-    next_safe_action: "Decide whether windowing preserves the drag, selection and grouping contracts"
+    recent_action: "Flat list windowed; node count flat at 2,184 and blocked time 4,748.6ms -> 48.4ms"
+    next_safe_action: "Window the grouped path, which still renders every row"
     blockers: []
     key_files: ["spec.md", "tasks.md"]
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-033"
       parent_session_id: null
-    completion_pct: 0
+    completion_pct: 83
     open_questions:
       - "Does windowing break row drag, range selection, or group collapse, which all assume every row exists?"
     answered_questions:
@@ -41,7 +41,7 @@ _memory:
 |---|---|
 | **Spec Folder** | 033-list-virtualisation |
 | **Level** | 2 |
-| **Status** | **In progress — T1 done, windowing not started.** Baseline re-derived from this tree: 4,748.6ms blocked at 3,000 rows / 21 cols / 6x throttle over 225,007 nodes, LINEAR x1.07 — the packet's figures reproduce. Open: range selection orders from the DOM and must be re-sourced before any window exists |
+| **Status** | **In progress — 5 of 6 criteria, flat lists only.** Windowed: blocked main thread 4,748.6ms -> 48.4ms at 3,000 rows, node count 225,007 -> 2,184 and flat to 3,400 rows. Open: the grouped path still renders every row, and the operator has not opened their database |
 | **Complexity** | 60/100, confidence 92% |
 <!-- /ANCHOR:metadata -->
 

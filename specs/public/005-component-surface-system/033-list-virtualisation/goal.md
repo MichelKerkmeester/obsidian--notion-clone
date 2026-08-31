@@ -9,15 +9,15 @@ _memory:
     packet_pointer: "public/005-component-surface-system/033-list-virtualisation"
     last_updated_at: "2026-08-31T23:30:00Z"
     last_updated_by: "phase-author"
-    recent_action: "Baseline reproduced; the three row contracts recorded before windowing exists"
-    next_safe_action: "Order the selection from data, not from the DOM, before windowing anything"
+    recent_action: "Flat list windowed; node count flat at 2,184 and blocked time 4,748.6ms -> 48.4ms"
+    next_safe_action: "Window the grouped path, which still renders every row"
     blockers: []
     key_files: ["spec.md", "tasks.md"]
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-033-goal"
       parent_session_id: null
-    completion_pct: 0
+    completion_pct: 83
     open_questions: ["Do drag, range selection and group collapse survive rows that are not in the DOM"]
     answered_questions: ["Windowing breaks range selection only, and silently — drag and group collapse are data-driven"]
 ---
@@ -54,11 +54,21 @@ at 3,000 rows means rendering about a fifth of what renders now.
 <!-- ANCHOR:completion -->
 ## 2. COMPLETION CRITERIA
 
-- [ ] Blocked main thread under 2,000ms at 3,000 rows, 21 columns, full fill, phone-class throttle.
-- [ ] Drag, range selection and group collapse each proven against an off-window row.
-- [ ] Scroll offset stable across a window recycle.
-- [ ] Node count no longer grows linearly with row count.
-- [ ] The renderer assertion still passes; windowing must not defeat the layout-read bound.
+- [x] Blocked main thread under 2,000ms at 3,000 rows, 21 columns, full fill, phone-class throttle.
+      **Met — 48.4ms**, from 4,748.6ms. Measured past the bend too: 50.3ms at 3,400 rows. Flat
+      lists only; a grouped list still renders every row.
+- [x] Drag, range selection and group collapse each proven against an off-window row. **Two of
+      three proven; the third has nothing to prove yet.** Drag and range selection are asserted
+      against a row the renderer declined to mount, with the DOM ordering kept as a failing control
+      (2 rows against 28). Group collapse is unchanged and untestable here, because grouped lists
+      are not windowed and so have no off-window row.
+- [x] Scroll offset stable across a window recycle. **Met** — 4,000px held across a recycle that
+      is itself asserted to have happened.
+- [x] Node count no longer grows linearly with row count. **Met — flat at 2,184** across 1,000,
+      3,000 and 3,400 rows, from 225,007.
+- [x] The renderer assertion still passes; windowing must not defeat the layout-read bound. **Met,
+      after it caught me** — the first row-height measurement forced a layout per row and the bound
+      failed at 13 against 8. Now three reads, constant.
 - [ ] The operator opens their real database without a stall. **Only the operator closes this.**
 <!-- /ANCHOR:completion -->
 

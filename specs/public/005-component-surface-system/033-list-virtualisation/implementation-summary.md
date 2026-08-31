@@ -1,6 +1,6 @@
 ---
 title: "Implementation Summary: List Virtualisation"
-description: "The baseline reproduces and the three row contracts are recorded; one of them breaks silently and must be fixed before the window exists."
+description: "The flat list is windowed — 4,748.6ms to 48.4ms, node count flat — with the selection reordered first so the window could not break it silently."
 trigger_phrases:
   - "033 implementation summary"
   - "list windowing status"
@@ -11,10 +11,10 @@ _memory:
     packet_pointer: "public/005-component-surface-system/033-list-virtualisation"
     last_updated_at: "2026-08-31T23:30:00Z"
     last_updated_by: "phase-implementer"
-    recent_action: "Baseline reproduced; the three row contracts recorded before windowing exists"
-    next_safe_action: "Order the selection from data, not from the DOM, before windowing anything"
+    recent_action: "Flat list windowed; node count flat at 2,184 and blocked time 4,748.6ms -> 48.4ms"
+    next_safe_action: "Window the grouped path, which still renders every row"
     blockers:
-      - "Windowing itself is not started; T1 found a prerequisite the plan's order did not have"
+      - "The grouped path is not windowed; the operator has not opened their database"
     key_files:
       - "plan.md"
       - "tasks.md"
@@ -22,7 +22,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-033-impl"
       parent_session_id: null
-    completion_pct: 20
+    completion_pct: 83
     open_questions:
       - "Variable row height: estimated offsets with correction, or a forced uniform height"
     answered_questions:
@@ -43,17 +43,39 @@ _memory:
 |---|---|
 | **Spec Folder** | 033-list-virtualisation |
 | **Level** | 2 |
-| **Status** | In progress — T1 done, baseline re-derived. Windowing not started |
-| **State** | No renderer change. Gate 18 green, exit 0 |
+| **Status** | In progress — 5 of 6 criteria. Flat lists windowed; the grouped path is not |
+| **State** | Gate **19 green**, exit 0. tsc, build and vitest exit 0 |
 <!-- /ANCHOR:metadata -->
 
 ---
 
 <!-- ANCHOR:what-built -->
-## 1. WHAT THIS ADVANCED
+## 1. WHAT SHIPPED
 
-No windowing yet. Two things the rest of the phase depends on, both of which had to happen before
-the renderer changed.
+**The flat list renders only the rows near the viewport**, with spacers standing in for the rest.
+
+| | before | after |
+|---|---|---|
+| blocked main thread, 3,000 rows | 4,748.6ms | **48.4ms** |
+| DOM nodes | 225,007 | **2,184** |
+| nodes at 3,400 rows | — | **2,184**, unchanged |
+| verdict | LINEAR ×1.07 | **SUBLINEAR ×0.31** |
+
+Row height is measured rather than assumed, because `.db-list-row` is `min-height: 44px` and a row
+grows when its fields wrap; a spacer sized from a constant produces a scroll bar that lies. It is
+re-measured on each recycle, so the estimate improves as taller rows come into view.
+
+Below 120 rows nothing changes at all — no spacers, no listener, the same DOM. Every screenshot
+fixture and placement story is small, and a window engaging for twelve rows would rewrite hundreds
+of captures to no purpose.
+
+**Only the flat path is windowed.** A grouped list still renders every row and still blocks at the
+operator's shape. Stated here rather than left to be discovered.
+
+### And the prerequisite, which came first
+
+Two things the rest of the phase depended on, both of which had to happen before the renderer
+changed.
 
 **The baseline was re-derived from this tree rather than quoted.** 3,000 rows, 21 columns, 100%
 fill, 6x throttle: phone **4,748.6ms** blocked — 1,201.6ms render plus 3,547.0ms layout — over
@@ -104,7 +126,13 @@ worked.
 | The break is measured, not argued | The selection is exercised with a truncated order and the resulting set is asserted exactly — `{row-0, row-15}` |
 | The order really is DOM-derived | Asserted against the source of `getRenderedSelectionRows`, so the consequence above is not hypothetical |
 | The two survivors are survivors | Asserted at their sources: `rowByPath.has(path)` with no DOM query, and the config-backed collapse check |
-| Gates | `npx tsc --noEmit` and `npx vitest run` exit 0 — 546 tests. `npm run gate` 18 green, exit 0 |
+| The window is a window | The lane asserts a real subset — **27 of 2,000** rows mounted — before it checks anything else. A list that rendered everything would satisfy every contract below trivially |
+| The off-window row is genuine | It is one the renderer itself declined to mount, not one modelled by hand — the only version that can catch the renderer deciding wrongly |
+| Range selection is fixed, and the fix is what fixed it | Both orderings run against the SAME window: the DOM order still collapses to **2 rows**, the recorded order spans all **28**. The failing half is kept, so a green cannot mean the window stopped exercising the difference |
+| Scroll offset holds | 4,000px across a recycle that is itself asserted to have happened (row-0 → row-70). Mis-sized spacers would clamp or jump here |
+| Node count is bounded | **2,184** at 1,000, 3,000 and 3,400 rows — flat, not merely smaller |
+| The budget is cleared past the bend | 48.3ms / 48.4ms / 50.3ms at 1,000 / 3,000 / 3,400 rows, against 2,000ms |
+| Gates | `npx tsc --noEmit`, `npm run build`, `npx vitest run` all exit 0 — 546 tests. `npm run gate` **19 green**, exit 0 read from `$?` |
 <!-- /ANCHOR:verification -->
 
 ---
@@ -112,22 +140,32 @@ worked.
 <!-- ANCHOR:limitations -->
 ## 4. WHAT THIS DOES NOT PROVE
 
-The off-window row is *simulated* by leaving it out of the ordered list, because no window exists
-yet to leave it out for real. That is exactly what windowing will do to this input, but it is a
-model of the cause rather than the cause itself.
+**The grouped list is not windowed.** It still renders every row and still blocks at the operator's
+shape. If their database is grouped, nothing here helps them yet — which is why the criterion for
+group collapse is not ticked rather than ticked with a caveat.
 
-Nothing here makes the list faster. The budget still breaks by 2.4×.
+**No Obsidian host is constructed.** The list is rendered directly rather than through a view, so
+what is measured is the renderer's own behaviour. The window itself is real.
+
+**The bench's viewport is now supplied by the bench.** It had none, which meant a windowed list
+computed its window against a height no device has; it now takes the surface's own
+`window.innerHeight`. That is more honest than before and still not a device.
+
+**Nothing is device-confirmed.** The operator has not opened their database.
 <!-- /ANCHOR:limitations -->
 
 ---
 
 <!-- ANCHOR:decisions -->
-## 5. DECISIONS, AND TWO THINGS THE PLAN DID NOT KNOW
+## 5. DECISIONS, AND WHAT THE CHECKS CAUGHT
 
 | Item | Note |
 |---|---|
 | The selection order must be fixed BEFORE windowing | The plan's order is window, then re-prove. That sequence ships a silent selection bug and then asks a check written afterwards to notice — with nothing to compare against. Deriving the order from the same data the renderer orders by is a prerequisite, not a follow-up |
-| Rows are not a fixed height | `.db-list-row` is `min-height: 44px`, so a row grows when its fields wrap. Windowing needs estimated offsets with correction rather than `index * rowHeight`; assuming uniform height produces a scroll bar that lies about where it is. The plan does not say which approach, and it is the main open question |
+| Rows are not a fixed height | `.db-list-row` is `min-height: 44px`, so a row grows when its fields wrap. The spacers are sized from a MEASURED average, re-measured on every recycle, rather than from `index * rowHeight` — a guessed constant produces a scroll bar that lies about where it is |
+| My first height measurement was the very defect this packet is about | It summed `offsetHeight` across every painted row — a forced layout read per row. The renderer assertion caught it at 13 reads against a bound of 8. "Bounded by the window" is not "bounded". Rewritten to span the first and last row: three reads, constant |
+| Three render assertions were changed, and that needs justifying | "rows rendered" and the two affordance counts compared against the TOTAL row count. REQ-001 requires node count to stop tracking row count, so "every row is rendered" is a requirement this phase deliberately replaced — the two could not both hold. The affordance invariants are unchanged (a second checkbox on a row still fails); only the denominator moved to mounted rows. "rows rendered" became stricter: the window must be a real subset |
+| The grouped path was left alone | Windowing it means reasoning about group headers inside the offset arithmetic, and the flat path is what the bench and the operator's report describe. Scoped out deliberately and recorded, rather than attempted badly |
 | A prediction of mine was wrong, and is kept | The first draft of the range test asserted the target row would also be missing. It is not — which is precisely what makes the failure quiet. Had the test shipped with that expectation, it would have "passed" after windowing and certified the defect |
 | Windowing itself was not started | It is the largest change in this packet — variable-height windowing across a 792-line renderer with both flat and grouped paths — and it has a prerequisite that was only discovered by doing T1. Starting it in the same pass would have meant building on an order that is known to be wrong |
 <!-- /ANCHOR:decisions -->

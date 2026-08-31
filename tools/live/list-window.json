@@ -1,0 +1,9 @@
+{
+  "measuredAt": "2026-08-31T19:07:37.545Z",
+  "inputs": {
+    "tools/live/list-window.mjs": "a91a9292997f",
+    "tools/live/list-window-harness.ts": "72e685295c24",
+    "src/views/list-renderer.ts": "70b36c3bc445"
+  },
+  "checks": 8
+}

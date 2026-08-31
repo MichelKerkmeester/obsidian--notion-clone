@@ -109,6 +109,61 @@ interface ParsedLink {
 // 4. LIST RENDERER
 // ───────────────────────────────────────────────────────────────────
 
+// ───────────────────────────────────────────────────────────────────
+// WINDOWING SHAPES
+// ───────────────────────────────────────────────────────────────────
+
+/**
+ * Below this many rows the list renders whole, exactly as it always has.
+ *
+ * Chosen so every screenshot fixture and placement story stays on the unwindowed path: they are
+ * all small, and a window engaging for twelve rows would rewrite hundreds of captures to no
+ * purpose. It also keeps the cheap case from paying for the expensive one — a scroll listener and
+ * a spacer pair buy nothing on a list that fits on screen.
+ */
+const WINDOW_THRESHOLD = 120;
+
+/** Rows kept mounted beyond each edge, so a scroll of a few rows shows content rather than blank. */
+const OVERSCAN = 8;
+
+/** Only ever the first guess, replaced by a measurement as soon as one row is on screen. */
+const ESTIMATED_ROW_HEIGHT = 44;
+
+/** Used when the scroller reports no height, which a detached or unsized host does. */
+const FALLBACK_VIEWPORT_PX = 800;
+
+interface ListWindow {
+  container: HTMLElement;
+  list: HTMLElement;
+  config: ViewConfig;
+  rows: RowData[];
+  scroller: HTMLElement;
+  rowHeight: number;
+  start: number;
+  end: number;
+  onScroll: () => void;
+}
+
+/**
+ * The nearest ancestor that actually scrolls.
+ *
+ * The plugin's own container is usually it — it carries `height: 100%` and `overflow: auto` so the
+ * table header can stick to it — but a list can also be embedded, and then the scroller is
+ * something the embed owns. Asking the computed style rather than assuming the container means an
+ * embedded list windows against the box it really moves inside.
+ */
+function findScrollParent(from: HTMLElement): HTMLElement {
+  const doc = from.ownerDocument;
+  const view = doc.defaultView;
+  let node: HTMLElement | null = from;
+  while (node && node !== doc.body) {
+    const overflowY = view?.getComputedStyle(node).overflowY;
+    if (overflowY === "auto" || overflowY === "scroll") return node;
+    node = node.parentElement;
+  }
+  return (doc.scrollingElement as HTMLElement | null) || doc.body || from;
+}
+
 export class ListRenderer {
   private container: HTMLElement | null = null;
   private rowByPath = new Map<string, RowData>();
@@ -155,6 +210,8 @@ export class ListRenderer {
   private reservesColumns = true;
   /** Cleared at the top of each render, set the first time a row asks. */
   private reservationDecided = false;
+  /** Live only while a windowed list is mounted; undefined for a fully rendered one. */
+  private windowing?: ListWindow;
 
   constructor(private app: App, private actions: ListRendererActions) {}
 
@@ -171,9 +228,145 @@ export class ListRenderer {
     if (rows.length === 0) {
       this.emptyStateRenderer.renderCard(list, emptyState || { reason: "no-matching-data" });
     }
+    if (rows.length > WINDOW_THRESHOLD) {
+      this.mountWindow(container, list, config, rows);
+      return;
+    }
     for (const row of rows) this.renderRow(list, config, row, undefined, undefined, undefined, rows);
     this.renderNewRow(list, undefined, rows);
     syncCardRoving(container, this.rovingController, ".db-list-row");
+  }
+
+  // ───────────────────────────────────────────────────────────────────
+  // WINDOWING
+  // ───────────────────────────────────────────────────────────────────
+
+  /**
+   * Render only the rows near the viewport, with spacers standing in for the rest.
+   *
+   * Measured at the operator's shape — 3,000 rows, 21 columns, full fill, 6x throttle — a full
+   * render blocks the main thread for 4,748.6ms, of which 3,547.0ms is layout over 225,007 nodes.
+   * Layout is three quarters of the cost and is proportional to how many nodes EXIST, not to how
+   * they were built, so nothing inside the row loop reaches it. Rendering fewer rows is the only
+   * lever, and it has to clear a 2.4x gap.
+   *
+   * Below the threshold nothing changes: no spacers, no listener, the same DOM a full render
+   * produces. That is deliberate. Every screenshot fixture and placement story is small, and a
+   * window that engaged for twelve rows would change 236 captures to no purpose while making the
+   * cheap case pay for the expensive one.
+   *
+   * Row height is MEASURED rather than assumed. `.db-list-row` is `min-height: 44px`, so a row
+   * grows when its fields wrap; a spacer sized from a guessed constant produces a scroll bar that
+   * lies about where it is. The first window is rendered, the rows it produced are measured, and
+   * that average sizes the spacers — refined on every recycle, so the estimate improves as the
+   * user scrolls through taller and shorter rows rather than being fixed by whatever the first
+   * screen happened to hold.
+   */
+  private mountWindow(container: HTMLElement, list: HTMLElement, config: ViewConfig, rows: RowData[]): void {
+    const scroller = findScrollParent(container);
+    const state: ListWindow = {
+      container,
+      list,
+      config,
+      rows,
+      scroller,
+      // A starting guess only. It is replaced by a measurement as soon as one row exists, and the
+      // first paint is the one place it has to come from somewhere.
+      rowHeight: ESTIMATED_ROW_HEIGHT,
+      start: -1,
+      end: -1,
+      onScroll: () => this.updateWindow(),
+    };
+    this.windowing = state;
+    this.updateWindow();
+    scroller.addEventListener("scroll", state.onScroll, { passive: true });
+  }
+
+  /** Recompute which rows belong on screen, and rebuild the list only if that answer changed. */
+  private updateWindow(): void {
+    const state = this.windowing;
+    if (!state || !state.list.isConnected) return;
+
+    const viewport = state.scroller.clientHeight || FALLBACK_VIEWPORT_PX;
+    // Where the list starts inside the scroller. Without this the window is computed as though the
+    // list began at the top of the pane, and everything above it — the toolbar, the total header —
+    // shifts the answer by its own height.
+    const listTop = state.list.offsetTop - state.scroller.offsetTop;
+    const scrolled = Math.max(0, state.scroller.scrollTop - listTop);
+
+    const first = Math.floor(scrolled / state.rowHeight);
+    const visible = Math.ceil(viewport / state.rowHeight);
+    const start = Math.max(0, first - OVERSCAN);
+    const end = Math.min(state.rows.length, first + visible + OVERSCAN);
+    if (start === state.start && end === state.end) return;
+
+    state.start = start;
+    state.end = end;
+    this.paintWindow(state);
+  }
+
+  /**
+   * Rebuild the list's contents for the current window.
+   *
+   * The whole list is rebuilt rather than diffed. A window is a few dozen rows, so rebuilding it
+   * costs about what one screen of the old render cost — and a diff would have to reason about
+   * which rows moved, which is where a recycler usually goes wrong.
+   */
+  private paintWindow(state: ListWindow): void {
+    const { list, config, rows, start, end } = state;
+    list.empty();
+
+    const topSpacer = list.createDiv({ cls: "db-list-window-spacer" });
+    topSpacer.setCssProps({ height: `${Math.round(start * state.rowHeight)}px` });
+
+    for (let index = start; index < end; index += 1) {
+      const row = rows[index];
+      if (row) this.renderRow(list, config, row, undefined, undefined, undefined, rows);
+    }
+
+    const bottomSpacer = list.createDiv({ cls: "db-list-window-spacer" });
+    bottomSpacer.setCssProps({ height: `${Math.round((rows.length - end) * state.rowHeight)}px` });
+
+    // The create affordance belongs after every row, including the ones the bottom spacer stands
+    // in for, so it sits below that spacer rather than in the middle of the list.
+    this.renderNewRow(list, undefined, rows);
+    syncCardRoving(state.container, this.rovingController, ".db-list-row");
+
+    this.measureRowHeight(state, topSpacer, bottomSpacer);
+  }
+
+  /**
+   * Take the row height from what was actually rendered, and resize the spacers if it moved.
+   *
+   * THREE layout reads, not one per row. The first version of this summed `offsetHeight` across
+   * every painted row — which is the forced-read-per-row shape the renderer assertion exists to
+   * catch, and it caught it: 13 reads against a bound of 8. Bounded by the window rather than by
+   * the row count is not the same as bounded, and the assertion was right to say so.
+   *
+   * Spanning the first and last row gives the same average for a constant cost: where the block of
+   * rows starts, where it ends, and how many are in it. Rows can differ in height and this reports
+   * their mean, which is exactly what a spacer standing in for a few thousand of them needs.
+   */
+  private measureRowHeight(state: ListWindow, topSpacer: HTMLElement, bottomSpacer: HTMLElement): void {
+    const painted = state.list.querySelectorAll<HTMLElement>(".db-list-row");
+    const first = painted[0];
+    const last = painted[painted.length - 1];
+    if (!first || !last) return;
+    const span = last.offsetTop + last.offsetHeight - first.offsetTop;
+    const measured = span / painted.length;
+    if (measured <= 0 || Math.abs(measured - state.rowHeight) < 0.5) return;
+
+    state.rowHeight = measured;
+    topSpacer.setCssProps({ height: `${Math.round(state.start * measured)}px` });
+    bottomSpacer.setCssProps({ height: `${Math.round((state.rows.length - state.end) * measured)}px` });
+  }
+
+  /** Stop listening when the list this window belongs to is torn down. */
+  private releaseWindow(): void {
+    const state = this.windowing;
+    if (!state) return;
+    state.scroller.removeEventListener("scroll", state.onScroll);
+    this.windowing = undefined;
   }
 
   renderGrouped(
@@ -772,6 +965,10 @@ export class ListRenderer {
 
   private clear(container: HTMLElement): void {
     this.rowDropFeedback.clear();
+    // Before the nodes go: the listener is on the scroller, which outlives this list, so dropping
+    // the list without dropping the listener would leave every previous render still recomputing
+    // a window over rows that are gone.
+    this.releaseWindow();
     container.querySelectorAll(".db-list, .db-list-grouped, .db-list-total-header").forEach((el) => el.remove());
   }
 

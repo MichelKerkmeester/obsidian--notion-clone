@@ -72,6 +72,13 @@ const CHECKS = [
   // renderer check here, this one constructs the real renderer instead of grepping its source: a
   // grep cannot tell a call that runs from a call behind a condition that is never true.
   { name: "sheet-rebuild", cmd: ["node", "tools/live/sheet-rebuild.mjs"] },
+  // The list renders only the rows near the viewport, so most rows have no DOM element at all.
+  // Range selection used to order itself by querying the DOM and fell back to the full row list
+  // only when that query returned NOTHING — a windowed list is never empty, only incomplete, so a
+  // shift-click collapsed to the two rows at its ends and said nothing. This runs both orderings
+  // against the same real window: the DOM one must still fall short, or the check is not
+  // exercising the difference it exists to catch.
+  { name: "list-window", cmd: ["node", "tools/live/list-window.mjs"] },
   // The censuses date themselves against the files they measured, and until this line existed
   // nothing asked. Seven of the eight were stale, one of them holding a checkbox count the roadmap
   // quoted as evidence for work that had already changed it. The stamping mechanism was built, the

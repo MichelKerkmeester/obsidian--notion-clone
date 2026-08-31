@@ -677,20 +677,28 @@ function listAssertions(
   const valuePerRow = rowEls.map((row) => row.querySelectorAll<HTMLElement>(".db-list-field:not(.is-placeholder)").length);
   const expectedFields = columns.length - 1;
 
+  // The list is windowed, so "every row is rendered" is now deliberately false. The whole point of
+  // windowing is that node count stops tracking row count, and that cannot be true while this
+  // asserts the opposite — the two are the same claim pointing in opposite directions. What
+  // replaces it is stricter about the thing that actually matters: the window must be a real
+  // subset, neither empty nor the whole list.
   results.push({
-    name: "rows rendered",
-    pass: rowEls.length === rows.length,
-    detail: `${rowEls.length} .db-list-row for ${rows.length} rows`,
+    name: "the list mounts a window, not every row",
+    pass: rowEls.length > 0 && rowEls.length < rows.length,
+    detail: `${rowEls.length} .db-list-row mounted for ${rows.length} rows`,
+  });
+  // Counted per MOUNTED row rather than per row. The invariant is unchanged — one affordance per
+  // row, so a second checkbox on any row still fails — but its denominator is now the rows that
+  // exist in the DOM, which is the only set an affordance can belong to.
+  results.push({
+    name: "row open affordance is one per mounted row",
+    pass: container.querySelectorAll("button.db-list-row-open").length === rowEls.length,
+    detail: `${container.querySelectorAll("button.db-list-row-open").length} open buttons for ${rowEls.length} mounted rows`,
   });
   results.push({
-    name: "row open affordance is one per row",
-    pass: container.querySelectorAll("button.db-list-row-open").length === rows.length,
-    detail: `${container.querySelectorAll("button.db-list-row-open").length} open buttons for ${rows.length} rows`,
-  });
-  results.push({
-    name: "row checkbox affordance is one per row",
-    pass: container.querySelectorAll("input.db-list-row-checkbox").length === rows.length,
-    detail: `${container.querySelectorAll("input.db-list-row-checkbox").length} checkboxes for ${rows.length} rows`,
+    name: "row checkbox affordance is one per mounted row",
+    pass: container.querySelectorAll("input.db-list-row-checkbox").length === rowEls.length,
+    detail: `${container.querySelectorAll("input.db-list-row-checkbox").length} checkboxes for ${rowEls.length} mounted rows`,
   });
   results.push({
     name: "every row renders every non-title column",

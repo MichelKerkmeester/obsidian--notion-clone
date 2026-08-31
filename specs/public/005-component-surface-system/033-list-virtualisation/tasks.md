@@ -9,15 +9,15 @@ _memory:
     packet_pointer: "public/005-component-surface-system/033-list-virtualisation"
     last_updated_at: "2026-08-31T16:00:00Z"
     last_updated_by: "phase-author"
-    recent_action: "Opened as the only remaining lever on the list freeze"
-    next_safe_action: "Record the three row contracts before windowing exists"
+    recent_action: "Flat list windowed; node count flat at 2,184 and blocked time 4,748.6ms -> 48.4ms"
+    next_safe_action: "Window the grouped path, which still renders every row"
     blockers: []
     key_files: ["spec.md", "tasks.md"]
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-033"
       parent_session_id: null
-    completion_pct: 0
+    completion_pct: 83
     open_questions: ["Does windowing break drag, range selection or group collapse"]
     answered_questions: ["The shape is LINEAR; layout over node count is the remaining cost"]
 ---
@@ -56,13 +56,51 @@ _memory:
       "passed" after windowing, it would have certified the defect.
       *What T2 must do first:* derive the selection order from the same data the renderer orders by,
       not from what is currently drawn. Windowing before that ships a silent selection bug.
-- [ ] **T2** Window the rendered row range — REQ-001.
+- [x] **T2** Window the rendered row range — REQ-001. **Flat lists only — see the limit below.**
       *Evidence to close:* node count stops growing linearly with row count.
-- [ ] **T3** Re-prove the three contracts against an **off-window** row — REQ-002.
+      *Closed by:* `mountWindow` / `updateWindow` / `paintWindow` in `list-renderer.ts`. Spacers
+      carry the height of everything unmounted, so the scroll bar keeps its length and its
+      position. **Node count is flat: 2,184 at 1,000 rows, 2,184 at 3,000, 2,184 at 3,400.**
+      Row height is MEASURED, not assumed — `.db-list-row` is `min-height: 44px`, so a guessed
+      constant would size the spacers wrong and the scroll bar would lie. It is re-measured on
+      every recycle, so the estimate improves as taller and shorter rows come into view.
+      *Below 120 rows nothing changes:* no spacers, no listener, the same DOM as before. Every
+      screenshot fixture and placement story is small, so a window that engaged for twelve rows
+      would rewrite hundreds of captures to no purpose.
+      *The limit, stated rather than discovered later:* **only the flat list is windowed.** Grouped
+      lists still render every row, so a grouped view at the operator's shape still blocks. That is
+      not a regression, but it is not a fix either, and REQ-001 is met for one of the two paths.
+- [x] **T3** Re-prove the three contracts against an **off-window** row — REQ-002.
       *Evidence to close:* each behaves as T1 recorded. This is where windowing breaks first.
-- [ ] **T4** Scroll offset survives a window recycle.
+      *Closed by:* the `list-window` gate lane, driving the real renderer at 2,000 rows. The
+      off-window row is one **the renderer itself declined to mount** — 27 of 2,000 — rather than
+      one modelled by hand, which is the only version that can catch the renderer deciding wrongly.
+      **Range selection** — fixed first, as T1 required. `database-view` now records the visual
+      order at render time and the selection reads that instead of the DOM. The lane runs BOTH
+      orderings against the same window: the DOM order still collapses to **2 rows**, the recorded
+      order spans all **28**. The failing half is kept deliberately — without it a green could mean
+      the window was not exercising the difference at all.
+      **Drag batch** — an off-window row stays addressable, as T1 predicted, because `rowByPath`
+      holds every row the renderer was given.
+      **Group collapse** — *not applicable yet, and not ticked.* Grouped lists are not windowed, so
+      a grouped list has no off-window row to prove it against. It behaves exactly as T1 recorded
+      because nothing about it changed.
+- [x] **T4** Scroll offset survives a window recycle.
       *Evidence to close:* offset stable across a recycle, asserted.
-- [~] **T5** Re-measure past the bend — REQ-003. **Baseline re-measured; the target is untouched.**
+      *Closed by:* the lane scrolls to 4,000px, confirms the mounted range actually moved (row-0 to
+      row-70 — a recycle that did not happen would make the offset check meaningless), and asserts
+      `scrollTop` is still 4,000. The spacers carry the unmounted height, so replacing the middle
+      cannot move the position; mis-sized spacers would show up here as a clamp or a jump.
+- [x] **T5** Re-measure past the bend — REQ-003.
+      *After windowing*, 21 cols / 100% fill / 6x throttle, phone: **48.3ms at 1,000 rows, 48.4ms
+      at 3,000, 50.3ms at 3,400** — measured past 3,200 as the task requires. Verdict **SUBLINEAR
+      x0.31**. Against a 2,000ms budget that is a 40x margin where there was a 2.4x breach.
+      *One honesty fix to the bench itself:* it created its container with no height, so a windowed
+      list computed its window against a viewport no device has. The container now takes the
+      surface's own `window.innerHeight`. This changed nothing about the old full-render numbers —
+      every row was built regardless — but it decides how many rows a window keeps, and a harness
+      supplying its own viewport is measuring the harness.
+      *The pre-fix baseline, kept:* **Baseline re-measured before any change.**
       *Baseline, re-derived from this tree rather than quoted from the packet* — 3,000 rows, 21
       cols, 100% fill, 6x throttle: phone **4,748.6ms** blocked (1,201.6 render + 3,547.0 layout),
       **225,007 nodes**, verdict **LINEAR x1.07**. The packet recorded 4,908.6 / 3,722 / 225,007;
@@ -74,8 +112,20 @@ _memory:
       which, and assuming uniform height would produce a scroll bar that lies.
       *Evidence to close:* under 2,000ms at 3,000 rows, 21 cols, full fill, 6x throttle; verdict
       still LINEAR measured past 3,200 rows.
-- [ ] **T6** The renderer assertion still passes — REQ-004.
+- [x] **T6** The renderer assertion still passes — REQ-004.
       *Evidence to close:* the layout-read bound holds; windowing has not defeated it.
+      **It did not pass at first, and it was right not to.** The first version of the row-height
+      measurement summed `offsetHeight` across every painted row — a forced read per row, which is
+      the exact shape this assertion exists to catch. It reported 13 reads against a bound of 8.
+      Bounded by the window is not the same as bounded. Rewritten to span the first and last row:
+      three reads, constant whatever the window size, same average.
+      *Three assertions were changed, and this is the honest part:* "rows rendered", "open
+      affordance is one per row" and "checkbox affordance is one per row" all counted against the
+      TOTAL row count. REQ-001 requires node count to stop tracking row count, so "every row is
+      rendered" is a requirement this phase deliberately replaced — it could not be met while that
+      assertion demanded the opposite. The affordance checks keep their invariant exactly (a second
+      checkbox on any row still fails); only their denominator moved to the mounted rows. "rows
+      rendered" became a stricter claim: the window must be a real subset, neither empty nor whole.
 - [ ] **T7** The operator opens their real database without a stall.
       *Evidence to close:* the operator says so. Nothing else closes this.
 <!-- /ANCHOR:phase -->

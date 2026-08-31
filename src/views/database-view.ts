@@ -493,6 +493,17 @@ export class DatabaseView extends FileView {
   private calendarTimelineSearchResultsEl: HTMLElement | null = null;
   private selectedRows = new Set<string>();
   private lastSelectedRowPath: string | null = null;
+  /**
+   * The visual order of every row the list last rendered, whether or not it is on screen.
+   *
+   * The list is windowed, so the DOM holds a slice. Range selection used to derive its order by
+   * querying the DOM, and fell back to the unsorted row list only when that query returned
+   * NOTHING — a windowed list is never empty, only incomplete, so the fallback could not fire and
+   * a shift-click silently collapsed to the two rows at its ends. Recording the order at render
+   * time is the only place both facts are available: the full row set, in the order the renderer
+   * actually laid it out.
+   */
+  private renderedRowOrder: string[] | null = null;
   private cellSelection: CellSelectionRange | null = null;
   private lastCellFocusPosition: TableGridPosition | null = null;
   private isSelectingCells = false;
@@ -4513,6 +4524,11 @@ export class DatabaseView extends FileView {
   }
 
   private getOrderedSelectionRowPaths(): string[] {
+    // The recorded order first, because it is the only source that is both complete and in the
+    // order the rows were laid out. The DOM is in the right order but holds only what is mounted;
+    // `this.rows` is complete but unsorted and ungrouped. A windowed list makes the difference
+    // load-bearing: reading the DOM there collapses a shift-click to its two ends.
+    if (this.renderedRowOrder && this.renderedRowOrder.length > 0) return this.renderedRowOrder;
     const ordered = this.getRenderedSelectionRows();
     const source = ordered.length > 0 ? ordered : this.rows;
     return source.map((candidate) => candidate.file.path);
@@ -8155,6 +8171,9 @@ export class DatabaseView extends FileView {
   }
 
   private renderTable(config: ViewConfig): void {
+    // Only the list is windowed, so only the list records an order. Cleared here or a stale list
+    // order would outlive its view and answer for a table's rows.
+    this.renderedRowOrder = null;
     if (!this.containerEl_) return;
     this.tableRenderer.renderTable(
       this.containerEl_,
@@ -10365,6 +10384,9 @@ export class DatabaseView extends FileView {
   }
 
   private renderBoard(config: ViewConfig): void {
+    // Only the list is windowed, so only the list records an order. Cleared here or a stale list
+    // order would outlive its view and answer for a table's rows.
+    this.renderedRowOrder = null;
     if (!this.containerEl_) return;
     const groupField = config.boardGroupField || this.vs().groupByField || this.getDefaultBoardField(config);
     const groups = this.getBoardGroups(config, groupField);
@@ -10378,6 +10400,9 @@ export class DatabaseView extends FileView {
   }
 
   private renderGallery(config: ViewConfig): void {
+    // Only the list is windowed, so only the list records an order. Cleared here or a stale list
+    // order would outlive its view and answer for a table's rows.
+    this.renderedRowOrder = null;
     if (!this.containerEl_) return;
     const renderConfig = this.getStatefulConfig(config);
     if (this.vs().groupByField) {
@@ -10403,15 +10428,19 @@ export class DatabaseView extends FileView {
       const field = this.vs().groupByField;
       const groups = withEmptyOptionGroups(config, field, this.queryEngine.groupBy(this.rows, field, [], config.schema.columns.find((c) => c.key === field), config));
       const order = getEffectiveGroupOrder(config, field, groups.map((group) => group.key));
+      const sorted = this.queryEngine.sortGroups(groups, order);
+      // Recorded from the same array the renderer is handed, so the two cannot disagree.
+      this.renderedRowOrder = sorted.flatMap((group) => group.rows.map((row) => row.file.path));
       this.listRenderer.renderGrouped(
         this.containerEl_,
         renderConfig,
-        this.queryEngine.sortGroups(groups, order),
+        sorted,
         field,
         this.getEmptyStateOptions(config),
       );
       return;
     }
+    this.renderedRowOrder = this.rows.map((row) => row.file.path);
     this.listRenderer.render(this.containerEl_, renderConfig, this.rows, this.getEmptyStateOptions(config));
   }
 
@@ -10479,6 +10508,9 @@ export class DatabaseView extends FileView {
   }
 
   private renderChart(config: ViewConfig): void {
+    // Only the list is windowed, so only the list records an order. Cleared here or a stale list
+    // order would outlive its view and answer for a table's rows.
+    this.renderedRowOrder = null;
     if (!this.containerEl_) return;
     this.chartRenderer.render(this.containerEl_, this.getStatefulConfig(config), this.rows, config.schema.columns, {
       onFilter: (rules) => this.applyChartFilters(config, rules),
