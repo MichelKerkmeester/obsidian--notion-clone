@@ -83,7 +83,8 @@
       "tools/live/probe.mjs",
       "tools/storybook/verify-placement.mjs",
       "tools/lane/css-lane.json",
-      "020-harness-fidelity-repair/acceptance-criteria.md"
+      "020-harness-fidelity-repair/acceptance-criteria.md",
+      "review/lineages/cursor-grok46-xhigh-fast/review-report.md"
     ],
     "entities": [
       {
@@ -138,6 +139,12 @@
         "name": "css-lane.json",
         "kind": "config",
         "path": "tools/lane/css-lane.json",
+        "source": "derived"
+      },
+      {
+        "name": "review-report.md",
+        "kind": "doc",
+        "path": "review/lineages/cursor-grok46-xhigh-fast/review-report.md",
         "source": "derived"
       },
       {
@@ -227,7 +234,7 @@
     ],
     "causal_summary": "Phase parent for the program that gives floating surfaces, sheets, checkboxes and content rows one architecture, one placement authority, and acceptance criteria measured where users actually see them.",
     "created_at": "2026-08-29T12:53:52.104Z",
-    "last_save_at": "2026-08-31T13:07:20.267Z",
+    "last_save_at": "2026-08-31T14:09:02.355Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -235,11 +242,11 @@
       "goal.md",
       "handover.md"
     ],
-    "source_fingerprint": "sha256:1816a93a73b685b94e7966b742d8158db17da6e3527ab461c0f5d9a276e0bb76",
+    "source_fingerprint": "sha256:c60859ab0a351bd06b0f7556ea8bbc2e57a9a342f342d5a698bacca73a535df0",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "ee7716225d6f8dd9782936e77e614759de190288028c69bb2fcb7b7b014f11fd",
-      "handover.md": "37b8ec20f921e8e4a7c96846d208d7024aaf723af135632264e94fcabcc8acf8"
+      "handover.md": "d01da6dadf6a4126f431889f1f3e026e9e19cf3ba8ff68123540f764ce1f8446"
     },
     "last_active_child_id": "public/005-component-surface-system/006-record-open-target",
     "last_active_at": null

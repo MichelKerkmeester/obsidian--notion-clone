@@ -12,8 +12,8 @@ _memory:
     packet_pointer: "public/005-component-surface-system"
     last_updated_at: "2026-08-31T08:30:00Z"
     last_updated_by: "timeline-freeze-diagnosis"
-    recent_action: "Timeline fixed and guarded; coverage 2 to 6 of 22; N5 run; all 16 reports dispositioned"
-    next_safe_action: "The 20-iteration deep review, then remediation, then the device check"
+    recent_action: "Deep review ran and returned FAIL; its fifteen findings are now recorded here"
+    next_safe_action: "Triage the review FAIL: F001 severity, then the seven P1 doc-truth findings"
     blockers:
       - "The list needs virtualisation; at the operator shape it blocks 2.0-4.9s and the shape is LINEAR"
     key_files:
@@ -135,7 +135,20 @@ writing one.
 
 1. **Re-run linearity on the full matrix** before anyone recloses the list phase. Do not reclose
    from a 1,600-row run.
-2. **A 20-iteration deep review**, ordered and not yet started: ten on `cursor-grok-4.6-xhigh`
+2. ~~**A 20-iteration deep review**, ordered and not yet started~~ — **it ran, and it returned
+   FAIL.** `review/lineages/cursor-grok46-xhigh-fast/review-report.md`: verdict **FAIL**,
+   `release-blocking`, **P0=1, P1=7, P2=7**, stop reason `max-iterations` at 10 of 10, generated
+   2026-08-31T12:21Z against **1.3.9** — the release the device pass exists to test. The fifteen
+   findings are listed in §7 below.
+
+   **Two honesty notes about that run, both from its own artifacts.** The fan-out reported
+   `succeeded: 0, failed: 2`: containment rejected both lineages, and their reports survived
+   anyway. And the codex lane's `invocation-metadata.json` carries
+   `"invocationFingerprint": "rebound-from-prior-complete-lineage"` — it is a rebound copy of an
+   earlier run, not a second fresh opinion. So **D4 is satisfied by one lane, not two**, and a
+   genuinely independent second reviewer is still owed.
+
+   The original order, for whoever re-runs it: ten on `cursor-grok-4.6-xhigh`
    through cli-cursor, ten on `gpt-5.6-luna` at `model_reasoning_effort=xhigh` through cli-codex,
    `--stop-policy=max-iterations`, spread across every phase touched. **The codex lane cannot run
    the placement harness** — its sandbox excludes Chrome, and it reports the gate as 13 green where
@@ -202,3 +215,41 @@ figures and deliberately left the spec ones, on the argument that `spec.md` meas
 the pass measured verification. That is defensible and it is not recorded anywhere as policy. Either
 write it down or reconcile them; leaving two numbers per phase is how a document starts lying.
 <!-- /ANCHOR:when-to-use -->
+
+---
+
+<!-- ANCHOR:review-findings -->
+## 7. THE DEEP REVIEW'S FIFTEEN FINDINGS
+
+Recorded from the lineage's registry rather than summarised from memory. **None is fixed.**
+
+| ID | Sev | Where | What |
+|----|-----|-------|------|
+| F001 | **P0** | `board-renderer.ts:971` | Non-files cover fields open `javascript:`/`data:` targets via `window.open` |
+| F002 | P1 | `database-view.ts:11484` | Sort and filter mutations still destroy and rebuild every view |
+| F003 | P1 | `000/spec.md:59` | Child 000 still specifies the deleted `openSurface` as the create path |
+| F004 | P1 | `spec.md:69` | Parent phase map is incomplete and under-counts folders |
+| F005 | P1 | `009/implementation-summary.md:48` | 009 never drove the running Obsidian, so the circular harness remains in force |
+| F006 | P1 | `004/checklist.md:31` | Completion marks and parent evidence missing or unchecked |
+| F007 | P1 | `spec.md:133` | Parent lists 006 Planned while the child is in progress |
+| F013 | P1 | `surface-contract.ts:224` | `SURFACE_REGISTRY` names five producers and omits live panels |
+| F008 | P2 | `spec.md:259` | Parent `styles.css` length is stale |
+| F009 | P2 | `028/spec.md:53` | 028 cites refresh at a line it no longer occupies |
+| F010 | P2 | `board-renderer.ts:1409` | External `window.open` calls omit `noopener` |
+| F011 | P2 | `spec.md:235` | Parent still narrates the deleted factory as the overlay sequence |
+| F012 | P2 | `spec.md:157` | Parent says 010-017 lack `plan.md` |
+| F014 | P2 | `spec.md:132` | Parent still labels 004 Contested after the roadmap resolved it |
+| F015 | P2 | `popover-position.ts:177` | Still documents `openSurface.place()` after the factory was deleted |
+
+**Eleven of fifteen are documentation drift in this packet's own files.** That is the review's
+sharpest result and it is uncomfortable: the packet that exists to stop untrue completion claims is
+itself the largest source of untrue statements found.
+
+**On F001's severity.** A fresh reviewer checked it and found three mitigations the finding never
+weighed: the victim must configure the attacker-controlled key as the cover field; the cover's
+`onerror` removes the clickable element when a `javascript:` target fails to load; and top-level
+`javascript:` navigation is inert in Chromium. The residual real case is a valid
+`data:image/png;base64,…` ending in an image extension. It is a real defect worth fixing — and
+`cover-image.test.ts` currently pins the vulnerable behaviour as intended, so a fix rewrites tests
+too. Recorded as **disputed severity**, not adopted at P0 on one lane's label.
+<!-- /ANCHOR:review-findings -->

@@ -1,0 +1,928 @@
+{
+  "sessionId": "fanout-cursor-grok46-xhigh-fast-1788178447595-968qzp",
+  "parentSessionId": null,
+  "generation": 1,
+  "lineageMode": "new",
+  "continuedFromRun": null,
+  "terminalStop": null,
+  "status": "COMPLETE",
+  "openFindings": [
+    {
+      "findingId": "F001",
+      "severity": "P0",
+      "title": "Non-files cover fields open javascript and data scheme targets via window.open",
+      "file": "src/views/board-renderer.ts",
+      "line": 971,
+      "description": "Allowlist http(s) on cover parse and click; reject javascript/data/file schemes the same way normalizeExplicitLinkTarget does.",
+      "findingClass": "unsafe-scheme-open",
+      "deltaStatus": null,
+      "scopeProof": "Re-read cover-image.ts:56-72 and :107-108, tests 128-160, board-renderer.ts:969-971, gallery-renderer.ts:625-719.",
+      "affectedSurfaceHints": [
+        "board-cover",
+        "gallery-cover",
+        "cover-image"
+      ],
+      "contentHash": "6d8832f97df3185c709037ec4a23371457009787fafd6f321f7c1151bfbd2671",
+      "dimension": "security",
+      "firstSeen": 3,
+      "lastSeen": 9,
+      "status": "active",
+      "transitions": [
+        {
+          "iteration": 3,
+          "from": null,
+          "to": "P0",
+          "reason": "Initial discovery (delta)"
+        },
+        {
+          "iteration": 9,
+          "from": "P0",
+          "to": "P0",
+          "reason": "Adversarial replay confirmed"
+        }
+      ],
+      "dimensions": [
+        "security"
+      ],
+      "mergedFindingIds": []
+    },
+    {
+      "findingId": "F002",
+      "severity": "P1",
+      "title": "Sort and filter mutations still destroy and rebuild every view",
+      "file": "src/views/database-view.ts",
+      "line": 11484,
+      "description": "Replace sort/filter refresh with an incremental rules-apply path that does not teardown :scope view roots.",
+      "findingClass": "state-transition",
+      "deltaStatus": null,
+      "scopeProof": "Read refresh() body at 11484-11502 and sort-panel add-sort onclick at 81-88; dismissalNeedsRebuild still calls refresh() at 2833.",
+      "affectedSurfaceHints": [
+        "database-view.refresh",
+        "sort-panel",
+        "filter-panel"
+      ],
+      "contentHash": "323781fe15b57500a21a18899916e0e14d2aa3011a6e8f5c1658506e9ef71101",
+      "dimension": "correctness",
+      "firstSeen": 1,
+      "lastSeen": 1,
+      "status": "active",
+      "transitions": [
+        {
+          "iteration": 1,
+          "from": null,
+          "to": "P1",
+          "reason": "Initial discovery (delta)"
+        },
+        {
+          "iteration": 1,
+          "from": null,
+          "to": "P1",
+          "reason": "Initial discovery"
+        }
+      ],
+      "dimensions": [
+        "correctness"
+      ],
+      "mergedFindingIds": []
+    },
+    {
+      "findingId": "F003",
+      "severity": "P1",
+      "title": "Child 000 still specifies deleted openSurface as the create path",
+      "file": "specs/public/005-component-surface-system/000-surface-contract-and-truthful-harness/spec.md",
+      "line": 59,
+      "description": "Rewrite 000 to SURFACE_REGISTRY and drop openSurface/surface.ts as deliverables.",
+      "findingClass": "spec-code-drift",
+      "deltaStatus": null,
+      "scopeProof": "Globbed src/**/surface.ts (absent). Grepped export function openSurface (no matches). REQ-001 at 000/spec.md:306 still names openSurface().",
+      "affectedSurfaceHints": [
+        "surface-contract",
+        "000-spec"
+      ],
+      "contentHash": "a82404c6e59c3f00cad0f53e7872a93634d74cb7da50de4d184f1a365de1e217",
+      "dimension": "correctness",
+      "firstSeen": 2,
+      "lastSeen": 2,
+      "status": "active",
+      "transitions": [
+        {
+          "iteration": 2,
+          "from": null,
+          "to": "P1",
+          "reason": "Initial discovery (delta)"
+        },
+        {
+          "iteration": 2,
+          "from": null,
+          "to": "P1",
+          "reason": "Initial discovery"
+        }
+      ],
+      "dimensions": [
+        "correctness"
+      ],
+      "mergedFindingIds": []
+    },
+    {
+      "findingId": "F004",
+      "severity": "P1",
+      "title": "Parent phase map is incomplete and under-counts folders",
+      "file": "specs/public/005-component-surface-system/spec.md",
+      "line": 69,
+      "description": "Rewrite the parent PHASE DOCUMENTATION MAP to list 000-029 with current status.",
+      "findingClass": "inventory-gap",
+      "deltaStatus": null,
+      "scopeProof": "Listed child directories with spec.md: 29. Roadmap names 027/028; parent map does not list 020-028.",
+      "affectedSurfaceHints": [
+        "parent-spec-map"
+      ],
+      "contentHash": "00220b51ef38dc615368602107106a0c3b471e43d06c43f271f6cc5011dea09a",
+      "dimension": "traceability",
+      "firstSeen": 4,
+      "lastSeen": 4,
+      "status": "active",
+      "transitions": [
+        {
+          "iteration": 4,
+          "from": null,
+          "to": "P1",
+          "reason": "Initial discovery (delta)"
+        },
+        {
+          "iteration": 4,
+          "from": null,
+          "to": "P1",
+          "reason": "Initial discovery"
+        }
+      ],
+      "dimensions": [
+        "traceability"
+      ],
+      "mergedFindingIds": []
+    },
+    {
+      "findingId": "F005",
+      "severity": "P1",
+      "title": "009 never drove the running Obsidian so the circular harness remains in force",
+      "file": "specs/public/005-component-surface-system/009-live-verification/implementation-summary.md",
+      "line": 48,
+      "description": "Record an exit-0 live probe against a known defect with before/after numbers, then gate later handoffs on it.",
+      "findingClass": "playbook-capability",
+      "deltaStatus": null,
+      "scopeProof": "Read 009 implementation-summary:48 and parent spec.md:248-253. tools/live/probe.mjs exists.",
+      "affectedSurfaceHints": [
+        "009-live-verification",
+        "tools/live/probe.mjs"
+      ],
+      "contentHash": "059b32f32d16600772baebce4d0b6ff94b8ef0900de5b3af4c6c71ff01e9fca5",
+      "dimension": "correctness",
+      "firstSeen": 8,
+      "lastSeen": 8,
+      "status": "active",
+      "transitions": [
+        {
+          "iteration": 8,
+          "from": null,
+          "to": "P1",
+          "reason": "Initial discovery (delta)"
+        },
+        {
+          "iteration": 8,
+          "from": null,
+          "to": "P1",
+          "reason": "Initial discovery"
+        }
+      ],
+      "dimensions": [
+        "correctness"
+      ],
+      "mergedFindingIds": []
+    },
+    {
+      "findingId": "F006",
+      "severity": "P1",
+      "title": "Completion marks and parent evidence are missing or unchecked",
+      "file": "specs/public/005-component-surface-system/004-checkbox-ownership/checklist.md",
+      "line": 31,
+      "description": "Add a parent checklist with evidenced rows and mark 004 B-rows from the census command.",
+      "findingClass": "checklist-evidence",
+      "deltaStatus": null,
+      "scopeProof": "Glob parent checklist.md (absent). Read 004 checklist evidence columns: empty checkboxes.",
+      "affectedSurfaceHints": [
+        "004-checklist",
+        "parent-checklist"
+      ],
+      "contentHash": "36c4b0b38322fa37ac89c8c543512ae5853b932e72a50c0445f38c7b2b5bc28b",
+      "dimension": "traceability",
+      "firstSeen": 5,
+      "lastSeen": 5,
+      "status": "active",
+      "transitions": [
+        {
+          "iteration": 5,
+          "from": null,
+          "to": "P1",
+          "reason": "Initial discovery (delta)"
+        },
+        {
+          "iteration": 5,
+          "from": null,
+          "to": "P1",
+          "reason": "Initial discovery"
+        }
+      ],
+      "dimensions": [
+        "traceability"
+      ],
+      "mergedFindingIds": []
+    },
+    {
+      "findingId": "F007",
+      "severity": "P1",
+      "title": "Parent lists 006 as Planned while the child is in progress without the resolver",
+      "file": "specs/public/005-component-surface-system/spec.md",
+      "line": 133,
+      "description": "Ship the open-target resolver and align parent status with the child.",
+      "findingClass": "spec-code-drift",
+      "deltaStatus": null,
+      "scopeProof": "Read 006/spec.md:78 (In progress — setting, resolver outstanding). Parent map row at spec.md:133 says Planned.",
+      "affectedSurfaceHints": [
+        "record-open-target"
+      ],
+      "contentHash": "c9389929e223df496fcfd44a9aacbc72dd539b138d87342995a41417c378cf17",
+      "dimension": "correctness",
+      "firstSeen": 2,
+      "lastSeen": 2,
+      "status": "active",
+      "transitions": [
+        {
+          "iteration": 2,
+          "from": null,
+          "to": "P1",
+          "reason": "Initial discovery (delta)"
+        },
+        {
+          "iteration": 2,
+          "from": null,
+          "to": "P1",
+          "reason": "Initial discovery"
+        }
+      ],
+      "dimensions": [
+        "correctness"
+      ],
+      "mergedFindingIds": []
+    },
+    {
+      "findingId": "F013",
+      "severity": "P1",
+      "title": "SURFACE_REGISTRY names five producers and omits live panels",
+      "file": "src/views/surface-contract.ts",
+      "line": 224,
+      "description": "Census live floating surfaces into SURFACE_REGISTRY or explicitly narrow 000.",
+      "findingClass": "feature-catalog-gap",
+      "deltaStatus": null,
+      "scopeProof": "Read SurfaceProducerId union at :63-68; only SURFACE_REGISTRY exists. Sort panel mounts from sort-panel-renderer.ts.",
+      "affectedSurfaceHints": [
+        "SURFACE_REGISTRY",
+        "sort-panel",
+        "column-manager"
+      ],
+      "contentHash": "5b966651ba222c7d3c185fa976435ef392cddbfac5394020ec2595bd5bed9e35",
+      "dimension": "correctness",
+      "firstSeen": 6,
+      "lastSeen": 6,
+      "status": "active",
+      "transitions": [
+        {
+          "iteration": 6,
+          "from": null,
+          "to": "P1",
+          "reason": "Initial discovery (delta)"
+        },
+        {
+          "iteration": 6,
+          "from": null,
+          "to": "P1",
+          "reason": "Initial discovery"
+        }
+      ],
+      "dimensions": [
+        "correctness"
+      ],
+      "mergedFindingIds": []
+    },
+    {
+      "findingId": "F008",
+      "severity": "P2",
+      "title": "Parent styles.css length is stale",
+      "file": "specs/public/005-component-surface-system/spec.md",
+      "line": 259,
+      "description": "Update the line-count claim or drop the exact number.",
+      "findingClass": "stale-constant",
+      "deltaStatus": null,
+      "scopeProof": "Compared spec.md:259 with wc -l styles.css = 20124.",
+      "affectedSurfaceHints": [
+        "styles.css"
+      ],
+      "contentHash": "634c11c6b89561b1b63929d31aedd07831e05766e95d33a8a8a23925fb241205",
+      "dimension": "maintainability",
+      "firstSeen": 7,
+      "lastSeen": 7,
+      "status": "active",
+      "transitions": [
+        {
+          "iteration": 7,
+          "from": null,
+          "to": "P2",
+          "reason": "Initial discovery (delta)"
+        }
+      ],
+      "dimensions": [
+        "maintainability"
+      ],
+      "mergedFindingIds": []
+    },
+    {
+      "findingId": "F009",
+      "severity": "P2",
+      "title": "028 cites refresh at line 11421",
+      "file": "specs/public/005-component-surface-system/028-remaining-freezes/spec.md",
+      "line": 53,
+      "description": "Retarget the citation to 11484.",
+      "findingClass": "stale-citation",
+      "deltaStatus": null,
+      "scopeProof": "Read database-view.ts around 11421 and 11484.",
+      "affectedSurfaceHints": [
+        "028-spec",
+        "database-view.refresh"
+      ],
+      "contentHash": "87f1fe6685263b0c2cd33dd5c91a876731555ae15272e3cde53b0d8c901b17b7",
+      "dimension": "maintainability",
+      "firstSeen": 7,
+      "lastSeen": 7,
+      "status": "active",
+      "transitions": [
+        {
+          "iteration": 7,
+          "from": null,
+          "to": "P2",
+          "reason": "Initial discovery (delta)"
+        }
+      ],
+      "dimensions": [
+        "maintainability"
+      ],
+      "mergedFindingIds": []
+    },
+    {
+      "findingId": "F010",
+      "severity": "P2",
+      "title": "External window.open calls omit noopener",
+      "file": "src/views/board-renderer.ts",
+      "line": 1409,
+      "description": "Pass noopener,noreferrer on every window.open.",
+      "findingClass": "tabnabbing",
+      "deltaStatus": null,
+      "scopeProof": "Read board-renderer.ts:971 and :1409, gallery-renderer.ts:717-719, list-renderer.ts:764-766.",
+      "affectedSurfaceHints": [
+        "board-cover",
+        "openTarget"
+      ],
+      "contentHash": "88d6856632702851e23511160f1b5b523aee28ee928f193be0b1e71be5d5a366",
+      "dimension": "security",
+      "firstSeen": 3,
+      "lastSeen": 3,
+      "status": "active",
+      "transitions": [
+        {
+          "iteration": 3,
+          "from": null,
+          "to": "P2",
+          "reason": "Initial discovery (delta)"
+        }
+      ],
+      "dimensions": [
+        "security"
+      ],
+      "mergedFindingIds": []
+    },
+    {
+      "findingId": "F011",
+      "severity": "P2",
+      "title": "Parent still narrates the deleted factory as the overlay sequence",
+      "file": "specs/public/005-component-surface-system/spec.md",
+      "line": 235,
+      "description": "Replace leftover factory language with SURFACE_REGISTRY wording.",
+      "findingClass": "stale-prose",
+      "deltaStatus": null,
+      "scopeProof": "Read spec.md:225 and :235 in sequence.",
+      "affectedSurfaceHints": [
+        "parent-spec"
+      ],
+      "contentHash": "53a897870fecb7e2cd0a6430f5c34fe6eb23d563946b6fedda6ed255d827c05d",
+      "dimension": "traceability",
+      "firstSeen": 4,
+      "lastSeen": 4,
+      "status": "active",
+      "transitions": [
+        {
+          "iteration": 4,
+          "from": null,
+          "to": "P2",
+          "reason": "Initial discovery (delta)"
+        }
+      ],
+      "dimensions": [
+        "traceability"
+      ],
+      "mergedFindingIds": []
+    },
+    {
+      "findingId": "F012",
+      "severity": "P2",
+      "title": "Parent says 010-017 lack plan.md",
+      "file": "specs/public/005-component-surface-system/spec.md",
+      "line": 157,
+      "description": "Drop or rewrite the scaffold-gap sentence.",
+      "findingClass": "stale-prose",
+      "deltaStatus": null,
+      "scopeProof": "Globbed child plan.md files; 010 through 017 all present.",
+      "affectedSurfaceHints": [
+        "parent-spec"
+      ],
+      "contentHash": "300da33ce94ed321383df1eef979aa9d4ea9b729d5430507430790c9a31a592d",
+      "dimension": "maintainability",
+      "firstSeen": 7,
+      "lastSeen": 7,
+      "status": "active",
+      "transitions": [
+        {
+          "iteration": 7,
+          "from": null,
+          "to": "P2",
+          "reason": "Initial discovery (delta)"
+        }
+      ],
+      "dimensions": [
+        "maintainability"
+      ],
+      "mergedFindingIds": []
+    },
+    {
+      "findingId": "F014",
+      "severity": "P2",
+      "title": "Parent still labels 004 Contested after roadmap 7.1 resolved it",
+      "file": "specs/public/005-component-surface-system/spec.md",
+      "line": 132,
+      "description": "Update the parent map row to match roadmap 7.1 and the child status.",
+      "findingClass": "stale-status",
+      "deltaStatus": null,
+      "scopeProof": "Compared spec.md:132 with roadmap.md:368 and 004/spec.md:61.",
+      "affectedSurfaceHints": [
+        "004-status",
+        "parent-spec-map"
+      ],
+      "contentHash": "b7f477e7321e7d07f5ce94cad923ce0c9eedaf2f76b194a68c1eaf3556eb19e0",
+      "dimension": "maintainability",
+      "firstSeen": 10,
+      "lastSeen": 10,
+      "status": "active",
+      "transitions": [
+        {
+          "iteration": 10,
+          "from": null,
+          "to": "P2",
+          "reason": "Initial discovery (delta)"
+        }
+      ],
+      "dimensions": [
+        "maintainability"
+      ],
+      "mergedFindingIds": []
+    },
+    {
+      "findingId": "F015",
+      "severity": "P2",
+      "title": "popover-position still documents openSurface.place() after the factory was deleted",
+      "file": "src/views/popover-position.ts",
+      "line": 177,
+      "description": "Retarget the comment to the current hide-on-disconnected-anchor behavior without naming a deleted factory.",
+      "findingClass": "stale-comment",
+      "deltaStatus": null,
+      "scopeProof": "Read popover-position.ts:177-181. Grep found no openSurface symbol in src/.",
+      "affectedSurfaceHints": [
+        "popover-position"
+      ],
+      "contentHash": "5e2ee329d6b13c2760af4001dda08f70861d73ff19703353ee17b3968aaa144b",
+      "dimension": "maintainability",
+      "firstSeen": 10,
+      "lastSeen": 10,
+      "status": "active",
+      "transitions": [
+        {
+          "iteration": 10,
+          "from": null,
+          "to": "P2",
+          "reason": "Initial discovery (delta)"
+        }
+      ],
+      "dimensions": [
+        "maintainability"
+      ],
+      "mergedFindingIds": []
+    }
+  ],
+  "resolvedFindings": [],
+  "blockedStopHistory": [],
+  "persistentSameSeverity": [],
+  "severityChanged": [
+    {
+      "findingId": "F001",
+      "severity": "P0",
+      "title": "Non-files cover fields open javascript and data scheme targets via window.open",
+      "file": "src/views/board-renderer.ts",
+      "line": 971,
+      "description": "Allowlist http(s) on cover parse and click; reject javascript/data/file schemes the same way normalizeExplicitLinkTarget does.",
+      "findingClass": "unsafe-scheme-open",
+      "deltaStatus": null,
+      "scopeProof": "Re-read cover-image.ts:56-72 and :107-108, tests 128-160, board-renderer.ts:969-971, gallery-renderer.ts:625-719.",
+      "affectedSurfaceHints": [
+        "board-cover",
+        "gallery-cover",
+        "cover-image"
+      ],
+      "contentHash": "6d8832f97df3185c709037ec4a23371457009787fafd6f321f7c1151bfbd2671",
+      "dimension": "security",
+      "firstSeen": 3,
+      "lastSeen": 9,
+      "status": "active",
+      "transitions": [
+        {
+          "iteration": 3,
+          "from": null,
+          "to": "P0",
+          "reason": "Initial discovery (delta)"
+        },
+        {
+          "iteration": 9,
+          "from": "P0",
+          "to": "P0",
+          "reason": "Adversarial replay confirmed"
+        }
+      ],
+      "dimensions": [
+        "security"
+      ],
+      "mergedFindingIds": []
+    }
+  ],
+  "repeatedFindings": [
+    {
+      "findingId": "F001",
+      "severity": "P0",
+      "title": "Non-files cover fields open javascript and data scheme targets via window.open",
+      "file": "src/views/board-renderer.ts",
+      "line": 971,
+      "description": "Allowlist http(s) on cover parse and click; reject javascript/data/file schemes the same way normalizeExplicitLinkTarget does.",
+      "findingClass": "unsafe-scheme-open",
+      "deltaStatus": null,
+      "scopeProof": "Re-read cover-image.ts:56-72 and :107-108, tests 128-160, board-renderer.ts:969-971, gallery-renderer.ts:625-719.",
+      "affectedSurfaceHints": [
+        "board-cover",
+        "gallery-cover",
+        "cover-image"
+      ],
+      "contentHash": "6d8832f97df3185c709037ec4a23371457009787fafd6f321f7c1151bfbd2671",
+      "dimension": "security",
+      "firstSeen": 3,
+      "lastSeen": 9,
+      "status": "active",
+      "transitions": [
+        {
+          "iteration": 3,
+          "from": null,
+          "to": "P0",
+          "reason": "Initial discovery (delta)"
+        },
+        {
+          "iteration": 9,
+          "from": "P0",
+          "to": "P0",
+          "reason": "Adversarial replay confirmed"
+        }
+      ],
+      "dimensions": [
+        "security"
+      ],
+      "mergedFindingIds": []
+    }
+  ],
+  "dimensionCoverage": {
+    "correctness": true,
+    "security": true,
+    "traceability": true,
+    "maintainability": true
+  },
+  "findingsBySeverity": {
+    "P0": 1,
+    "P1": 7,
+    "P2": 7
+  },
+  "openFindingsCount": 15,
+  "resolvedFindingsCount": 0,
+  "convergenceScore": 0.92,
+  "graphConvergenceScore": 0,
+  "graphDecision": null,
+  "graphBlockers": [],
+  "graphSignals": {},
+  "candidateCoverage": {
+    "covered": [
+      "checklist_evidence",
+      "feature_catalog_gap",
+      "inventory_gap",
+      "playbook_capability",
+      "spec_code_drift",
+      "stale_constant",
+      "state_transition",
+      "unsafe_scheme"
+    ],
+    "ruledOut": [
+      "unsafe_scheme"
+    ],
+    "deferred": [
+      "stale_status"
+    ],
+    "blocked": [],
+    "byBugClass": {
+      "state_transition": {
+        "covered": true,
+        "ruledOut": false,
+        "deferred": false,
+        "blocked": false,
+        "iterations": [
+          1
+        ]
+      },
+      "spec_code_drift": {
+        "covered": true,
+        "ruledOut": false,
+        "deferred": false,
+        "blocked": false,
+        "iterations": [
+          2
+        ]
+      },
+      "unsafe_scheme": {
+        "covered": true,
+        "ruledOut": true,
+        "deferred": false,
+        "blocked": false,
+        "iterations": [
+          3,
+          9
+        ]
+      },
+      "inventory_gap": {
+        "covered": true,
+        "ruledOut": false,
+        "deferred": false,
+        "blocked": false,
+        "iterations": [
+          4
+        ]
+      },
+      "checklist_evidence": {
+        "covered": true,
+        "ruledOut": false,
+        "deferred": false,
+        "blocked": false,
+        "iterations": [
+          5
+        ]
+      },
+      "feature_catalog_gap": {
+        "covered": true,
+        "ruledOut": false,
+        "deferred": false,
+        "blocked": false,
+        "iterations": [
+          6
+        ]
+      },
+      "stale_constant": {
+        "covered": true,
+        "ruledOut": false,
+        "deferred": false,
+        "blocked": false,
+        "iterations": [
+          7
+        ]
+      },
+      "playbook_capability": {
+        "covered": true,
+        "ruledOut": false,
+        "deferred": false,
+        "blocked": false,
+        "iterations": [
+          8
+        ]
+      },
+      "stale_status": {
+        "covered": false,
+        "ruledOut": false,
+        "deferred": true,
+        "blocked": false,
+        "iterations": [
+          10
+        ]
+      }
+    }
+  },
+  "searchDebt": [
+    {
+      "iteration": 10,
+      "id": "SL-010",
+      "dimension": "maintainability",
+      "targetRefs": [
+        "specs/public/005-component-surface-system/027-sheet-menu-grammar-and-motion/spec.md",
+        "specs/public/005-component-surface-system/spec.md",
+        "specs/public/005-component-surface-system/roadmap.md",
+        "specs/public/005-component-surface-system/004-checkbox-ownership/spec.md",
+        "src/views/popover-position.ts"
+      ],
+      "bugClass": "stale_status",
+      "disposition": "deferred",
+      "rationale": "packet already records it as the one open criterion pending a device pass",
+      "evidenceRefs": [
+        "specs/public/005-component-surface-system/027-sheet-menu-grammar-and-motion/spec.md:18"
+      ],
+      "reason": "Expected remaining work, not a new P1"
+    }
+  ],
+  "ruledOutCandidates": [
+    {
+      "iteration": 9,
+      "id": "SL-009",
+      "dimension": "security",
+      "targetRefs": [
+        "src/data/cover-image.ts",
+        "src/data/cover-image.ts",
+        "src/data/cover-image.test.ts",
+        "src/data/cover-image.test.ts",
+        "src/views/board-renderer.ts",
+        "src/views/gallery-renderer.ts",
+        "src/views/gallery-renderer.ts"
+      ],
+      "bugClass": "unsafe_scheme",
+      "disposition": "ruled_out",
+      "rationale": "gallery uses the same blocked check at 615 and openTarget window.open at 719",
+      "evidenceRefs": [
+        "src/data/cover-image.ts:47"
+      ],
+      "reason": "Gallery shares the hole; F001 refined not replaced"
+    }
+  ],
+  "cleanSearchProof": [
+    {
+      "iteration": 9,
+      "id": "SL-009",
+      "dimension": "security",
+      "targetRefs": [
+        "src/data/cover-image.ts",
+        "src/data/cover-image.ts",
+        "src/data/cover-image.test.ts",
+        "src/data/cover-image.test.ts",
+        "src/views/board-renderer.ts",
+        "src/views/gallery-renderer.ts",
+        "src/views/gallery-renderer.ts"
+      ],
+      "bugClass": "unsafe_scheme",
+      "disposition": "ruled_out",
+      "rationale": "gallery uses the same blocked check at 615 and openTarget window.open at 719",
+      "evidenceRefs": [
+        "src/data/cover-image.ts:47"
+      ],
+      "proof": "Gallery shares the hole; F001 refined not replaced"
+    }
+  ],
+  "searchCoverage": {
+    "requiredBugClasses": [
+      "stale_status"
+    ],
+    "covered": [],
+    "ruledOut": [],
+    "deferred": [
+      "stale_status"
+    ],
+    "blocked": [],
+    "graphCoverageMode": "graphless_fallback"
+  },
+  "traceability": {
+    "summary": {
+      "required": 4,
+      "executed": 4,
+      "pass": 0,
+      "partial": 2,
+      "fail": 2,
+      "blocked": 0,
+      "notApplicable": 0,
+      "gatingFailures": 2
+    },
+    "results": [
+      {
+        "protocolId": "spec_code",
+        "status": "partial",
+        "gateClass": "hard",
+        "applicable": true,
+        "counts": {
+          "pass": 0,
+          "partial": 1,
+          "fail": 0,
+          "skipped": 0
+        },
+        "evidence": [
+          "specs/public/005-component-surface-system/027-sheet-menu-grammar-and-motion/spec.md:18",
+          "specs/public/005-component-surface-system/spec.md:132"
+        ],
+        "findingRefs": [
+          "F014",
+          "F015"
+        ],
+        "summary": "004 status row stale versus resolved roadmap 7.1."
+      },
+      {
+        "protocolId": "checklist_evidence",
+        "status": "fail",
+        "gateClass": "hard",
+        "applicable": true,
+        "counts": {
+          "pass": 0,
+          "partial": 0,
+          "fail": 1,
+          "skipped": 0
+        },
+        "evidence": [
+          "specs/public/005-component-surface-system/004-checkbox-ownership/checklist.md:31",
+          "specs/public/005-component-surface-system/004-checkbox-ownership/spec.md:17"
+        ],
+        "findingRefs": [
+          "F006"
+        ],
+        "summary": "Parent absent; sampled child unchecked."
+      },
+      {
+        "protocolId": "feature_catalog_code",
+        "status": "fail",
+        "gateClass": "advisory",
+        "applicable": true,
+        "counts": {
+          "pass": 0,
+          "partial": 0,
+          "fail": 1,
+          "skipped": 0
+        },
+        "evidence": [
+          "src/views/surface-contract.ts:63",
+          "src/views/surface-contract.ts:224"
+        ],
+        "findingRefs": [
+          "F013"
+        ],
+        "summary": "Catalog stale vs live panels."
+      },
+      {
+        "protocolId": "playbook_capability",
+        "status": "partial",
+        "gateClass": "advisory",
+        "applicable": true,
+        "counts": {
+          "pass": 0,
+          "partial": 1,
+          "fail": 0,
+          "skipped": 0
+        },
+        "evidence": [
+          "specs/public/005-component-surface-system/027-sheet-menu-grammar-and-motion/spec.md:18",
+          "specs/public/005-component-surface-system/spec.md:132"
+        ],
+        "findingRefs": [
+          "F014",
+          "F015"
+        ],
+        "summary": "027: 13 of 14 criteria met; operator row open by design."
+      }
+    ]
+  },
+  "divergence": {
+    "started": [],
+    "completed": [],
+    "failed": [],
+    "overrides": [],
+    "saturatedDirections": [],
+    "remainingFrontier": [],
+    "currentFocus": ""
+  },
+  "fieldWarnings": [],
+  "corruptionWarnings": []
+}

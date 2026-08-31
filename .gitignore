@@ -56,3 +56,19 @@ specs/**/lineages/*/.tmp/
 specs/**/lineages/**/*.sqlite
 specs/**/lineages/**/*.sqlite-wal
 specs/**/lineages/**/*.sqlite-shm
+
+# Deep-loop lineage internals. A lineage's evidence is its report, its findings registry, its
+# per-iteration deltas and the run summary — those stay tracked and are what the packet cites.
+# Everything else it emits is machinery: event streams, logs, audit and effect ledgers, dispatch
+# receipts, prompt copies, lock files, and archived copies of a previous run. Several hundred files
+# per run, none of it read by anyone, all of it noise in a public tree.
+specs/**/lineages/*/events/
+specs/**/lineages/*/logs/
+specs/**/lineages/*/prompts/
+specs/**/lineages/*/_archive/
+specs/**/lineages/*/dispatch-receipts/
+specs/**/lineages/*/locks-and-fencing-v1/
+specs/**/lineages/*/deep-*-ledger/
+specs/**/lineages/*/deep-*-audit-ledger/
+specs/**/lineages/*/deep-*-effect-ledger/
+specs/**/lineages/*/observability-events.jsonl

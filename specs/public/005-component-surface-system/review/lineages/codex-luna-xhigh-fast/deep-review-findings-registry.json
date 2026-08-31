@@ -1,0 +1,1143 @@
+{
+  "sessionId": "fanout-codex-luna-xhigh-fast-1788178447595-968qzp",
+  "parentSessionId": null,
+  "generation": 1,
+  "lineageMode": "new",
+  "continuedFromRun": null,
+  "terminalStop": null,
+  "status": "COMPLETE",
+  "openFindings": [
+    {
+      "findingId": "F001",
+      "severity": "P1",
+      "title": "The parent phase map does not cover the live child set",
+      "file": "specs/public/005-component-surface-system/spec.md",
+      "line": 149,
+      "description": "the scope declares twenty phase folders at line 69 but explicitly omits rows 020–028, while the roadmap records those phases as existing at lines 39–45. A release review cannot derive complete phase coverage or status from the parent map.",
+      "dimension": "correctness",
+      "firstSeen": 1,
+      "lastSeen": 1,
+      "status": "active",
+      "transitions": [
+        {
+          "iteration": 1,
+          "from": null,
+          "to": "P1",
+          "reason": "Initial discovery"
+        }
+      ],
+      "dimensions": [
+        "correctness"
+      ],
+      "mergedFindingIds": []
+    },
+    {
+      "findingId": "F002",
+      "severity": "P1",
+      "title": "Handover validation status contradicts the transition rule",
+      "file": "specs/public/005-component-surface-system/handover.md",
+      "line": 52,
+      "description": "handover says `--strict` has zero errors and warnings, while the parent spec says every child fails `--strict` and names the missing-doc causes at lines 155–159. The two claims cannot both describe the same review state.",
+      "dimension": "correctness",
+      "firstSeen": 1,
+      "lastSeen": 1,
+      "status": "active",
+      "transitions": [
+        {
+          "iteration": 1,
+          "from": null,
+          "to": "P1",
+          "reason": "Initial discovery"
+        }
+      ],
+      "dimensions": [
+        "correctness"
+      ],
+      "mergedFindingIds": []
+    },
+    {
+      "findingId": "F003",
+      "severity": "P1",
+      "title": "Phase 019 shipped without verification evidence",
+      "file": "specs/public/005-component-surface-system/019-card-field-value-formatting/implementation-summary.md",
+      "line": 40,
+      "description": "the summary marks the phase In Progress and says no verification exists, and its verification section says every criterion is unmet at lines 84–88. The parent roadmap nevertheless presents the phase as shipped and unverified rather than release-blocked at its evidence boundary.",
+      "dimension": "correctness",
+      "firstSeen": 1,
+      "lastSeen": 1,
+      "status": "active",
+      "transitions": [
+        {
+          "iteration": 1,
+          "from": null,
+          "to": "P1",
+          "reason": "Initial discovery"
+        }
+      ],
+      "dimensions": [
+        "correctness"
+      ],
+      "mergedFindingIds": []
+    },
+    {
+      "findingId": "F004",
+      "severity": "P1",
+      "title": "Record-detail listeners are bound through the global active document instead of the panel's owning document",
+      "file": "src/views/record-detail-panel.ts",
+      "line": 196,
+      "description": "cleanup and registration use `window.activeDocument` and `window` at lines 196–198 and 382–385, while the owned-menu path deliberately derives a document from the event at lines 246–250. In a popped-out or otherwise non-global host, the panel can receive dismissal events from the wrong document or leave listeners attached to the wrong window.",
+      "dimension": "correctness",
+      "firstSeen": 2,
+      "lastSeen": 2,
+      "status": "active",
+      "transitions": [
+        {
+          "iteration": 2,
+          "from": null,
+          "to": "P1",
+          "reason": "Initial discovery"
+        }
+      ],
+      "dimensions": [
+        "correctness"
+      ],
+      "mergedFindingIds": []
+    },
+    {
+      "findingId": "F006",
+      "severity": "P1",
+      "title": "Phase 001's roadmap status is not supported by its phase-local closure artifacts",
+      "file": "specs/public/005-component-surface-system/roadmap.md",
+      "line": 296,
+      "description": "the roadmap says 001 is shipped and verified, while the phase spec remains In Progress and the implementation summary records 0 of 67 tasks and 0 of 13 acceptance criteria met at `001-overlay-placement-and-menu-language/implementation-summary.md:52`; its checklist is still entirely unchecked at `001-overlay-placement-and-menu-language/checklist.md:62`.",
+      "dimension": "correctness",
+      "firstSeen": 3,
+      "lastSeen": 3,
+      "status": "active",
+      "transitions": [
+        {
+          "iteration": 3,
+          "from": null,
+          "to": "P1",
+          "reason": "Initial discovery"
+        }
+      ],
+      "dimensions": [
+        "correctness"
+      ],
+      "mergedFindingIds": []
+    },
+    {
+      "findingId": "F007",
+      "severity": "P1",
+      "title": "The parent requires a live-verification gate before phase 000, but phase 009 has not produced the required evidence",
+      "file": "specs/public/005-component-surface-system/spec.md",
+      "line": 192,
+      "description": "the handoff requires a known defect reproduced in the running app, while 009's acceptance criteria say only 1 of 3 transport legs has been observed at `009-live-verification/acceptance-criteria.md:93`, its mobile citation audit is still unmet at line 101, and its implementation summary remains In Progress at `009-live-verification/implementation-summary.md:47`.",
+      "dimension": "correctness",
+      "firstSeen": 3,
+      "lastSeen": 3,
+      "status": "active",
+      "transitions": [
+        {
+          "iteration": 3,
+          "from": null,
+          "to": "P1",
+          "reason": "Initial discovery"
+        }
+      ],
+      "dimensions": [
+        "correctness"
+      ],
+      "mergedFindingIds": []
+    },
+    {
+      "findingId": "F009",
+      "severity": "P1",
+      "title": "Phase 003's single-predicate contract remains explicitly unimplemented",
+      "file": "specs/public/005-component-surface-system/003-mobile-sheet-presentation/plan.md",
+      "line": 87,
+      "description": "the plan requires `isTouchDevice()` and `isMobileBottomSheet()` to collapse into one exported predicate, but its implementation summary says both symbols remain live and disagree in the 601–760px band at `003-mobile-sheet-presentation/implementation-summary.md:195`; the parent still describes phase 003 as shipped at `specs/public/005-component-surface-system/spec.md:130`. Two independently evolving decisions remain on the surface boundary.",
+      "dimension": "correctness",
+      "firstSeen": 4,
+      "lastSeen": 4,
+      "status": "active",
+      "transitions": [
+        {
+          "iteration": 4,
+          "from": null,
+          "to": "P1",
+          "reason": "Initial discovery"
+        }
+      ],
+      "dimensions": [
+        "correctness"
+      ],
+      "mergedFindingIds": []
+    },
+    {
+      "findingId": "F010",
+      "severity": "P1",
+      "title": "Phase 026's commit/provenance state is contradictory across its own summary and the roadmap",
+      "file": "specs/public/005-component-surface-system/026-production-render-assertions/implementation-summary.md",
+      "line": 46,
+      "description": "the phase says it is committed at `1bac3c2` while the parent roadmap says no commit exists and the working tree holds the check at `roadmap.md:312`; the summary also retains a pending clean N5 gate at lines 13–16 and 45. This prevents a maintainer from identifying one authoritative reproducible input state.",
+      "dimension": "correctness",
+      "firstSeen": 4,
+      "lastSeen": 4,
+      "status": "active",
+      "transitions": [
+        {
+          "iteration": 4,
+          "from": null,
+          "to": "P1",
+          "reason": "Initial discovery"
+        }
+      ],
+      "dimensions": [
+        "correctness"
+      ],
+      "mergedFindingIds": []
+    },
+    {
+      "findingId": "F012",
+      "severity": "P1",
+      "title": "The record-detail panel closes on window resize instead of satisfying the sheet's resize-preservation contract",
+      "file": "src/views/record-detail-panel.ts",
+      "line": 226,
+      "description": "`onResize` calls `close()` whenever the body is not editing, while phase 003 AC-003 requires an open sheet to survive resize and remain repositionable at `003-mobile-sheet-presentation/acceptance-criteria.md:107`; the roadmap records this same window-resize hazard at `roadmap.md:93`.",
+      "dimension": "correctness",
+      "firstSeen": 5,
+      "lastSeen": 5,
+      "status": "active",
+      "transitions": [
+        {
+          "iteration": 5,
+          "from": null,
+          "to": "P1",
+          "reason": "Initial discovery"
+        }
+      ],
+      "dimensions": [
+        "correctness"
+      ],
+      "mergedFindingIds": []
+    },
+    {
+      "findingId": "F013",
+      "severity": "P1",
+      "title": "Sheet placement can compute bounds from the global active document even when the panel belongs to another document",
+      "file": "src/views/popover-position.ts",
+      "line": 329,
+      "description": "`placeSheet` calls `getVisiblePopoverBounds(null)`, whose null-container branch selects `window.activeDocument` at lines 491–493 instead of `panel.ownerDocument`. In a popped-out host, the sheet's keyboard and viewport coordinates can be clamped against the wrong document.",
+      "dimension": "correctness",
+      "firstSeen": 5,
+      "lastSeen": 5,
+      "status": "active",
+      "transitions": [
+        {
+          "iteration": 5,
+          "from": null,
+          "to": "P1",
+          "reason": "Initial discovery"
+        }
+      ],
+      "dimensions": [
+        "correctness"
+      ],
+      "mergedFindingIds": []
+    },
+    {
+      "findingId": "F015",
+      "severity": "P1",
+      "title": "Phase 000's acceptance row still reports four old pinned runtime values although the current harness file says those values were removed and replaced with a different runtime-value policy",
+      "file": "specs/public/005-component-surface-system/000-surface-contract-and-truthful-harness/acceptance-criteria.md",
+      "line": 116,
+      "description": "the row says four pins remain, while `tools/screenshots/runtime-vars.css:12` says five values were removed and the implementation summary records the changed scan rule at `000-surface-contract-and-truthful-harness/tasks.md:90`; closure evidence cannot tell which population is authoritative.",
+      "dimension": "correctness",
+      "firstSeen": 7,
+      "lastSeen": 7,
+      "status": "active",
+      "transitions": [
+        {
+          "iteration": 7,
+          "from": null,
+          "to": "P1",
+          "reason": "Initial discovery"
+        }
+      ],
+      "dimensions": [
+        "correctness"
+      ],
+      "mergedFindingIds": []
+    },
+    {
+      "findingId": "F016",
+      "severity": "P1",
+      "title": "The capture-fingerprint criterion requires three harness edits to stale captures, but the current forced input set does not include two of them",
+      "file": "specs/public/005-component-surface-system/000-surface-contract-and-truthful-harness/acceptance-criteria.md",
+      "line": 128,
+      "description": "`CAPTURE_INPUTS` includes runtime-vars, scenarios, and capture at `tools/screenshots/capture.mjs:39`, but not `.storybook/preview.ts` or `tools/storybook/verify-placement.mjs`; the task itself records those exclusions at `000-surface-contract-and-truthful-harness/tasks.md:120`.",
+      "dimension": "correctness",
+      "firstSeen": 7,
+      "lastSeen": 7,
+      "status": "active",
+      "transitions": [
+        {
+          "iteration": 7,
+          "from": null,
+          "to": "P1",
+          "reason": "Initial discovery"
+        }
+      ],
+      "dimensions": [
+        "correctness"
+      ],
+      "mergedFindingIds": []
+    },
+    {
+      "findingId": "F017",
+      "severity": "P1",
+      "title": "The implemented pinned-value scanner no longer enforces the acceptance criterion it is marked as closing",
+      "file": "specs/public/005-component-surface-system/000-surface-contract-and-truthful-harness/acceptance-criteria.md",
+      "line": 240,
+      "description": "the row requires flagging harness properties also assigned by `src/`, while the same row says the checker skips exactly that population; tasks mark T4a closed under a different rule at `000-surface-contract-and-truthful-harness/tasks.md:90` and the implementation summary presents the changed rule as complete.",
+      "dimension": "correctness",
+      "firstSeen": 7,
+      "lastSeen": 7,
+      "status": "active",
+      "transitions": [
+        {
+          "iteration": 7,
+          "from": null,
+          "to": "P1",
+          "reason": "Initial discovery"
+        }
+      ],
+      "dimensions": [
+        "correctness"
+      ],
+      "mergedFindingIds": []
+    },
+    {
+      "findingId": "F018",
+      "severity": "P1",
+      "title": "Phase 026's coverage evidence is stale and internally contradictory",
+      "file": "tools/live/renderer-coverage.json",
+      "line": 21,
+      "description": "the stamped artifact says 6 renderers are constructed, while the phase acceptance and implementation summary still say 2 of 22 at `026-production-render-assertions/acceptance-criteria.md:91` and `026-production-render-assertions/implementation-summary.md:60`; the current scenario list names six renderer families at `tools/live/render-assertions.mjs:58`.",
+      "dimension": "correctness",
+      "firstSeen": 8,
+      "lastSeen": 8,
+      "status": "active",
+      "transitions": [
+        {
+          "iteration": 8,
+          "from": null,
+          "to": "P1",
+          "reason": "Initial discovery"
+        }
+      ],
+      "dimensions": [
+        "correctness"
+      ],
+      "mergedFindingIds": []
+    },
+    {
+      "findingId": "F019",
+      "severity": "P1",
+      "title": "The handover generalizes renderer-level coverage into host-level coverage that the assertion explicitly excludes",
+      "file": "specs/public/005-component-surface-system/handover.md",
+      "line": 53,
+      "description": "handover says every reported view is now asserted, while phase 026 says DatabaseView and EmbeddedDatabaseRenderer are not constructed and no device is involved at `026-production-render-assertions/implementation-summary.md:121`; the harness creates a synthetic container and casts an undefined App at `tools/live/render-assertion-harness.ts:887`.",
+      "dimension": "correctness",
+      "firstSeen": 8,
+      "lastSeen": 8,
+      "status": "active",
+      "transitions": [
+        {
+          "iteration": 8,
+          "from": null,
+          "to": "P1",
+          "reason": "Initial discovery"
+        }
+      ],
+      "dimensions": [
+        "correctness"
+      ],
+      "mergedFindingIds": []
+    },
+    {
+      "findingId": "F020",
+      "severity": "P1",
+      "title": "The CSS lane history contains a stylesheet acquisition for phase 001 with no matching release",
+      "file": "tools/lane/css-lane.json",
+      "line": 638,
+      "description": "the outstanding entry says the acquisition has no release, while the live record has `holder: null` at `tools/lane/css-lane.json:2` and later phase handoffs. The lane README defines the history as the record that must make who last touched the file and against what answerable at `tools/lane/README.md:30`; an unreleased acquisition leaves the phase boundary and baseline provenance ambiguous even though the lane is now shown as free.",
+      "dimension": "correctness",
+      "firstSeen": 9,
+      "lastSeen": 9,
+      "status": "active",
+      "transitions": [
+        {
+          "iteration": 9,
+          "from": null,
+          "to": "P1",
+          "reason": "Initial discovery"
+        }
+      ],
+      "dimensions": [
+        "correctness"
+      ],
+      "mergedFindingIds": []
+    },
+    {
+      "findingId": "F022",
+      "severity": "P1",
+      "title": "REQ-007 names thirteen blind modules but its literal widened-matcher run reports fourteen missing modules",
+      "file": "specs/public/005-component-surface-system/verification-audit.md",
+      "line": 376,
+      "description": "the audit distinguishes the 13 newly revealed modules from the 14 modules reported missing on the tree as received at lines 410–418, and says the phase discharged the un-skippable control with a substitute run at lines 417–424. The release evidence therefore cannot claim the exact acceptance experiment passed until the criterion is rewritten to ask for the intended set or the fourteen-result run is recorded as the required control.",
+      "dimension": "correctness",
+      "firstSeen": 10,
+      "lastSeen": 10,
+      "status": "active",
+      "transitions": [
+        {
+          "iteration": 10,
+          "from": null,
+          "to": "P1",
+          "reason": "Initial discovery"
+        }
+      ],
+      "dimensions": [
+        "correctness"
+      ],
+      "mergedFindingIds": []
+    },
+    {
+      "findingId": "F005",
+      "severity": "P2",
+      "title": "Mobile-sheet detection mixes an owner document with the global navigator",
+      "file": "src/views/popover-position.ts",
+      "line": 621,
+      "description": "`isMobileBottomSheet(doc)` receives the panel document but reads `navigator.maxTouchPoints` from the global realm. A popped-out or test document can therefore take a different sheet branch from its own touch environment.",
+      "dimension": "correctness",
+      "firstSeen": 2,
+      "lastSeen": 2,
+      "status": "active",
+      "transitions": [
+        {
+          "iteration": 2,
+          "from": null,
+          "to": "P2",
+          "reason": "Initial discovery"
+        }
+      ],
+      "dimensions": [
+        "correctness"
+      ],
+      "mergedFindingIds": []
+    },
+    {
+      "findingId": "F008",
+      "severity": "P2",
+      "title": "The adversarial review carries a historical nine-child target without a current-scope qualifier",
+      "file": "specs/public/005-component-surface-system/adversarial-review.md",
+      "line": 13,
+      "description": "it says the target is all nine children even though the parent now declares later generations and the roadmap records phases through 029. A reader can mistake the historical review for complete current coverage.",
+      "dimension": "correctness",
+      "firstSeen": 3,
+      "lastSeen": 3,
+      "status": "active",
+      "transitions": [
+        {
+          "iteration": 3,
+          "from": null,
+          "to": "P2",
+          "reason": "Initial discovery"
+        }
+      ],
+      "dimensions": [
+        "correctness"
+      ],
+      "mergedFindingIds": []
+    },
+    {
+      "findingId": "F011",
+      "severity": "P2",
+      "title": "The shared surface registry has an unproven equality boundary",
+      "file": "src/views/surface-contract.ts",
+      "line": 224,
+      "description": "the contract is type-closed, but no source-level enforcement shown in the inspected files proves every remaining producer is registered. The partial registry is a drift seam until the census/registry equality criterion is closed.",
+      "dimension": "correctness",
+      "firstSeen": 4,
+      "lastSeen": 4,
+      "status": "active",
+      "transitions": [
+        {
+          "iteration": 4,
+          "from": null,
+          "to": "P2",
+          "reason": "Initial discovery"
+        }
+      ],
+      "dimensions": [
+        "correctness"
+      ],
+      "mergedFindingIds": []
+    },
+    {
+      "findingId": "F014",
+      "severity": "P2",
+      "title": "Anchor lease fallback timeout has no evidence-backed budget for asynchronous rebuilds",
+      "file": "src/views/anchor-ref.ts",
+      "line": 53,
+      "description": "the default pending timeout is fixed at 250ms while the surrounding render path is explicitly asynchronous; a renderer that misses one refresh window can transition to `anchor-missing` and close before a delayed replacement anchor is available, and no phase evidence establishes that 250ms covers the slowest supported rebuild.",
+      "dimension": "correctness",
+      "firstSeen": 5,
+      "lastSeen": 5,
+      "status": "active",
+      "transitions": [
+        {
+          "iteration": 5,
+          "from": null,
+          "to": "P2",
+          "reason": "Initial discovery"
+        }
+      ],
+      "dimensions": [
+        "correctness"
+      ],
+      "mergedFindingIds": []
+    },
+    {
+      "findingId": "F021",
+      "severity": "P2",
+      "title": "Capture churn and sign-off remain only partially attributable",
+      "file": "tools/lane/css-lane.json",
+      "line": 637,
+      "description": "the outstanding record says five of nineteen changed images have individual verdicts, fourteen are covered by one bulk expected-change line, and all verdicts are assistant readings of regenerated PNGs while device confirmation remains outstanding. This preserves a debt note but does not provide reproducible per-image or device-backed evidence for the moved captures.",
+      "dimension": "correctness",
+      "firstSeen": 9,
+      "lastSeen": 9,
+      "status": "active",
+      "transitions": [
+        {
+          "iteration": 9,
+          "from": null,
+          "to": "P2",
+          "reason": "Initial discovery"
+        }
+      ],
+      "dimensions": [
+        "correctness"
+      ],
+      "mergedFindingIds": []
+    }
+  ],
+  "resolvedFindings": [],
+  "blockedStopHistory": [],
+  "persistentSameSeverity": [],
+  "severityChanged": [],
+  "repeatedFindings": [],
+  "dimensionCoverage": {
+    "correctness": true,
+    "security": true,
+    "traceability": true,
+    "maintainability": true
+  },
+  "findingsBySeverity": {
+    "P0": 0,
+    "P1": 17,
+    "P2": 5
+  },
+  "openFindingsCount": 22,
+  "resolvedFindingsCount": 0,
+  "convergenceScore": 0.9,
+  "graphConvergenceScore": 0,
+  "graphDecision": null,
+  "graphBlockers": [],
+  "graphSignals": {},
+  "candidateCoverage": {
+    "covered": [
+      "ambiguous stylesheet baseline",
+      "contract drift",
+      "coverage count drift",
+      "criterion-rule drift",
+      "cross-window event leakage",
+      "focus escape",
+      "global realm mismatch",
+      "historical scope ambiguity",
+      "host-vs-renderer boundary",
+      "incomplete capture sign-off",
+      "missing verification",
+      "open handoff gate",
+      "owner-document coordinate mismatch",
+      "partial fingerprint",
+      "partial registry equality",
+      "pointer-through-scrim",
+      "provenance drift",
+      "release evidence ambiguity",
+      "requirement/result count mismatch",
+      "resize transition violation",
+      "scope incompleteness",
+      "stale coverage stamp",
+      "stale listener",
+      "stale measured-today row",
+      "status contradiction",
+      "status drift",
+      "substitute control not labeled",
+      "unbounded async budget",
+      "unclosed lane acquisition",
+      "unsafe content sink",
+      "user-content sink"
+    ],
+    "ruledOut": [
+      "13-module set difference being invalid",
+      "active holder left by this lineage",
+      "direct inline-markdown HTML sink",
+      "matcher falsely green",
+      "new overlay-stack stale listener",
+      "new scrim pointer leak",
+      "new unsafe HTML sink"
+    ],
+    "deferred": [],
+    "blocked": [],
+    "byBugClass": {
+      "scope incompleteness": {
+        "covered": true,
+        "ruledOut": false,
+        "deferred": false,
+        "blocked": false,
+        "iterations": [
+          1
+        ]
+      },
+      "status contradiction": {
+        "covered": true,
+        "ruledOut": false,
+        "deferred": false,
+        "blocked": false,
+        "iterations": [
+          1
+        ]
+      },
+      "missing verification": {
+        "covered": true,
+        "ruledOut": false,
+        "deferred": false,
+        "blocked": false,
+        "iterations": [
+          1
+        ]
+      },
+      "runtime behavior": {
+        "covered": false,
+        "ruledOut": false,
+        "deferred": false,
+        "blocked": false,
+        "iterations": [
+          1
+        ]
+      },
+      "security ownership": {
+        "covered": false,
+        "ruledOut": false,
+        "deferred": false,
+        "blocked": false,
+        "iterations": [
+          1
+        ]
+      },
+      "maintainability": {
+        "covered": false,
+        "ruledOut": false,
+        "deferred": false,
+        "blocked": false,
+        "iterations": [
+          1
+        ]
+      },
+      "cross-window event leakage": {
+        "covered": true,
+        "ruledOut": false,
+        "deferred": false,
+        "blocked": false,
+        "iterations": [
+          2
+        ]
+      },
+      "global realm mismatch": {
+        "covered": true,
+        "ruledOut": false,
+        "deferred": false,
+        "blocked": false,
+        "iterations": [
+          2
+        ]
+      },
+      "user-content sink": {
+        "covered": true,
+        "ruledOut": false,
+        "deferred": false,
+        "blocked": false,
+        "iterations": [
+          2
+        ]
+      },
+      "direct inline-markdown HTML sink": {
+        "covered": false,
+        "ruledOut": true,
+        "deferred": false,
+        "blocked": false,
+        "iterations": [
+          2
+        ]
+      },
+      "harness security": {
+        "covered": false,
+        "ruledOut": false,
+        "deferred": false,
+        "blocked": false,
+        "iterations": [
+          2
+        ]
+      },
+      "CSS lane state": {
+        "covered": false,
+        "ruledOut": false,
+        "deferred": false,
+        "blocked": false,
+        "iterations": [
+          2
+        ]
+      },
+      "status drift": {
+        "covered": true,
+        "ruledOut": false,
+        "deferred": false,
+        "blocked": false,
+        "iterations": [
+          3
+        ]
+      },
+      "open handoff gate": {
+        "covered": true,
+        "ruledOut": false,
+        "deferred": false,
+        "blocked": false,
+        "iterations": [
+          3
+        ]
+      },
+      "historical scope ambiguity": {
+        "covered": true,
+        "ruledOut": false,
+        "deferred": false,
+        "blocked": false,
+        "iterations": [
+          3
+        ]
+      },
+      "runtime ownership": {
+        "covered": false,
+        "ruledOut": false,
+        "deferred": false,
+        "blocked": false,
+        "iterations": [
+          3
+        ]
+      },
+      "CSS coupling": {
+        "covered": false,
+        "ruledOut": false,
+        "deferred": false,
+        "blocked": false,
+        "iterations": [
+          3
+        ]
+      },
+      "contract drift": {
+        "covered": true,
+        "ruledOut": false,
+        "deferred": false,
+        "blocked": false,
+        "iterations": [
+          4
+        ]
+      },
+      "provenance drift": {
+        "covered": true,
+        "ruledOut": false,
+        "deferred": false,
+        "blocked": false,
+        "iterations": [
+          4
+        ]
+      },
+      "partial registry equality": {
+        "covered": true,
+        "ruledOut": false,
+        "deferred": false,
+        "blocked": false,
+        "iterations": [
+          4
+        ]
+      },
+      "runtime geometry": {
+        "covered": false,
+        "ruledOut": false,
+        "deferred": false,
+        "blocked": false,
+        "iterations": [
+          4
+        ]
+      },
+      "renderer behavior": {
+        "covered": false,
+        "ruledOut": false,
+        "deferred": false,
+        "blocked": false,
+        "iterations": [
+          4,
+          7
+        ]
+      },
+      "resize transition violation": {
+        "covered": true,
+        "ruledOut": false,
+        "deferred": false,
+        "blocked": false,
+        "iterations": [
+          5
+        ]
+      },
+      "owner-document coordinate mismatch": {
+        "covered": true,
+        "ruledOut": false,
+        "deferred": false,
+        "blocked": false,
+        "iterations": [
+          5
+        ]
+      },
+      "unbounded async budget": {
+        "covered": true,
+        "ruledOut": false,
+        "deferred": false,
+        "blocked": false,
+        "iterations": [
+          5
+        ]
+      },
+      "scrim modality": {
+        "covered": false,
+        "ruledOut": false,
+        "deferred": false,
+        "blocked": false,
+        "iterations": [
+          5
+        ]
+      },
+      "nested dismissal": {
+        "covered": false,
+        "ruledOut": false,
+        "deferred": false,
+        "blocked": false,
+        "iterations": [
+          5
+        ]
+      },
+      "pointer-through-scrim": {
+        "covered": true,
+        "ruledOut": false,
+        "deferred": false,
+        "blocked": false,
+        "iterations": [
+          6
+        ]
+      },
+      "stale listener": {
+        "covered": true,
+        "ruledOut": false,
+        "deferred": false,
+        "blocked": false,
+        "iterations": [
+          6
+        ]
+      },
+      "focus escape": {
+        "covered": true,
+        "ruledOut": false,
+        "deferred": false,
+        "blocked": false,
+        "iterations": [
+          6
+        ]
+      },
+      "unsafe content sink": {
+        "covered": true,
+        "ruledOut": false,
+        "deferred": false,
+        "blocked": false,
+        "iterations": [
+          6
+        ]
+      },
+      "new scrim pointer leak": {
+        "covered": false,
+        "ruledOut": true,
+        "deferred": false,
+        "blocked": false,
+        "iterations": [
+          6
+        ]
+      },
+      "new overlay-stack stale listener": {
+        "covered": false,
+        "ruledOut": true,
+        "deferred": false,
+        "blocked": false,
+        "iterations": [
+          6
+        ]
+      },
+      "new unsafe HTML sink": {
+        "covered": false,
+        "ruledOut": true,
+        "deferred": false,
+        "blocked": false,
+        "iterations": [
+          6
+        ]
+      },
+      "cross-window listener/bounds risks": {
+        "covered": false,
+        "ruledOut": false,
+        "deferred": false,
+        "blocked": false,
+        "iterations": [
+          6
+        ]
+      },
+      "stale measured-today row": {
+        "covered": true,
+        "ruledOut": false,
+        "deferred": false,
+        "blocked": false,
+        "iterations": [
+          7
+        ]
+      },
+      "partial fingerprint": {
+        "covered": true,
+        "ruledOut": false,
+        "deferred": false,
+        "blocked": false,
+        "iterations": [
+          7
+        ]
+      },
+      "criterion-rule drift": {
+        "covered": true,
+        "ruledOut": false,
+        "deferred": false,
+        "blocked": false,
+        "iterations": [
+          7
+        ]
+      },
+      "production assertion coverage": {
+        "covered": false,
+        "ruledOut": false,
+        "deferred": false,
+        "blocked": false,
+        "iterations": [
+          7
+        ]
+      },
+      "coverage count drift": {
+        "covered": true,
+        "ruledOut": false,
+        "deferred": false,
+        "blocked": false,
+        "iterations": [
+          8
+        ]
+      },
+      "host-vs-renderer boundary": {
+        "covered": true,
+        "ruledOut": false,
+        "deferred": false,
+        "blocked": false,
+        "iterations": [
+          8
+        ]
+      },
+      "stale coverage stamp": {
+        "covered": true,
+        "ruledOut": false,
+        "deferred": false,
+        "blocked": false,
+        "iterations": [
+          8
+        ]
+      },
+      "CSS lane provenance": {
+        "covered": false,
+        "ruledOut": false,
+        "deferred": false,
+        "blocked": false,
+        "iterations": [
+          8
+        ]
+      },
+      "generated evidence": {
+        "covered": false,
+        "ruledOut": false,
+        "deferred": false,
+        "blocked": false,
+        "iterations": [
+          8
+        ]
+      },
+      "unclosed lane acquisition": {
+        "covered": true,
+        "ruledOut": false,
+        "deferred": false,
+        "blocked": false,
+        "iterations": [
+          9
+        ]
+      },
+      "ambiguous stylesheet baseline": {
+        "covered": true,
+        "ruledOut": false,
+        "deferred": false,
+        "blocked": false,
+        "iterations": [
+          9
+        ]
+      },
+      "incomplete capture sign-off": {
+        "covered": true,
+        "ruledOut": false,
+        "deferred": false,
+        "blocked": false,
+        "iterations": [
+          9
+        ]
+      },
+      "active holder left by this lineage": {
+        "covered": false,
+        "ruledOut": true,
+        "deferred": false,
+        "blocked": false,
+        "iterations": [
+          9
+        ]
+      },
+      "final requirement-count reconciliation": {
+        "covered": false,
+        "ruledOut": false,
+        "deferred": false,
+        "blocked": false,
+        "iterations": [
+          9
+        ]
+      },
+      "requirement/result count mismatch": {
+        "covered": true,
+        "ruledOut": false,
+        "deferred": false,
+        "blocked": false,
+        "iterations": [
+          10
+        ]
+      },
+      "substitute control not labeled": {
+        "covered": true,
+        "ruledOut": false,
+        "deferred": false,
+        "blocked": false,
+        "iterations": [
+          10
+        ]
+      },
+      "release evidence ambiguity": {
+        "covered": true,
+        "ruledOut": false,
+        "deferred": false,
+        "blocked": false,
+        "iterations": [
+          10
+        ]
+      },
+      "matcher falsely green": {
+        "covered": false,
+        "ruledOut": true,
+        "deferred": false,
+        "blocked": false,
+        "iterations": [
+          10
+        ]
+      },
+      "13-module set difference being invalid": {
+        "covered": false,
+        "ruledOut": true,
+        "deferred": false,
+        "blocked": false,
+        "iterations": [
+          10
+        ]
+      }
+    }
+  },
+  "searchDebt": [],
+  "ruledOutCandidates": [],
+  "cleanSearchProof": [],
+  "searchCoverage": {
+    "requiredBugClasses": [
+      "requirement/result count mismatch",
+      "substitute control not labeled",
+      "release evidence ambiguity"
+    ],
+    "covered": [
+      "requirement/result count mismatch",
+      "substitute control not labeled",
+      "release evidence ambiguity"
+    ],
+    "ruledOut": [
+      "matcher falsely green",
+      "13-module set difference being invalid"
+    ],
+    "deferred": [],
+    "blocked": [],
+    "graphCoverageMode": "graphless_fallback"
+  },
+  "traceability": {
+    "summary": {
+      "required": 0,
+      "executed": 0,
+      "pass": 0,
+      "partial": 0,
+      "fail": 0,
+      "blocked": 0,
+      "notApplicable": 0,
+      "gatingFailures": 0
+    },
+    "results": []
+  },
+  "divergence": {
+    "started": [],
+    "completed": [],
+    "failed": [],
+    "overrides": [],
+    "saturatedDirections": [],
+    "remainingFrontier": [],
+    "currentFocus": ""
+  },
+  "fieldWarnings": [],
+  "corruptionWarnings": []
+}

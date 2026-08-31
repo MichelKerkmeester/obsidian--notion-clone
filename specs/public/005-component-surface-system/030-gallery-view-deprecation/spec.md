@@ -189,3 +189,25 @@ silently breaks existing data is the exact failure this packet exists to stop sh
 - Parent spec: [`../spec.md`](../spec.md)
 - Coverage ratchet this phase lowers: [`../026-production-render-assertions/goal.md`](../026-production-render-assertions/goal.md)
 - The gallery's per-card hoist, still live in the renderer being removed: [`../028-remaining-freezes/goal.md`](../028-remaining-freezes/goal.md)
+
+---
+
+## 8. AI EXECUTION PROTOCOL
+
+Lives in [`plan.md`](plan.md) §5, which is where the contract expects it and therefore where a
+reader and the validator both look. Kept in one place rather than copied here, because two copies
+of an execution protocol drift and the wrong one gets followed.
+
+---
+
+## 9. ON THE DECLARED LEVEL
+
+Scored 81/100, which is Level 3, and the phase carries the Level 3 doc set.
+
+**The `COMPLEXITY_MATCH` warning is expected and is not a defect to resolve.** It reports zero
+phases against a Level 3 minimum of two, because the scorer also recommends decomposing this work
+into three sub-phases. That is declined deliberately: this folder is already a child of a phase
+parent, and nesting another phase parent requires **both** qualification thresholds to be met
+independently — meeting one of them plus a suggestion is not enough. The decomposition is recorded
+in `goal.md`'s log as a possibility rather than acted on, and the warning stands as the honest
+signal that a judgment was made here rather than a rule followed.

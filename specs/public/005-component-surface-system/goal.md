@@ -12,7 +12,7 @@ _memory:
     packet_pointer: "public/005-component-surface-system"
     last_updated_at: "2026-08-31T08:25:00Z"
     last_updated_by: "timeline-freeze-diagnosis"
-    recent_action: "Timeline quadratic found, fixed and guarded; renderer coverage 2 to 6 of 22"
+    recent_action: "Deep review returned FAIL; the report criterion un-ticked against the right denominator"
     next_safe_action: "Get the operator a build with the timeline fix, then confirm the sheet drag"
     blockers:
       - "Every fix is measured on a bench; 1 of 16 reports is confirmed on the operator device"
@@ -33,6 +33,8 @@ _memory:
       - "Reports 7 and 16 had no owning phase; 018 and 019 now own them"
       - "Every phase 000-026 now carries its own goal.md"
       - "The timeline froze on a per-event touch probe; the calendar does not scale with row count at all"
+      - "The deep review ran and returned FAIL: P0=1, P1=7, P2=7, release-blocking, against 1.3.9"
+      - "Eleven of its fifteen findings are documentation drift inside this packet's own files"
       - "Operator shape: 1,000-3,000 rows at 80-100% fill. The 2,000ms budget breaks at 1,300 rows"
       - "The scope exclusion on output number format means the formula editor's only, so report 7 is in scope"
       - "The editable note body is accepted; its writer already goes through the per-file queue"
@@ -91,19 +93,21 @@ resolve them silently.
 <!-- ANCHOR:completion -->
 ## 3. COMPLETION CRITERIA
 
-- [x] Every operator report is confirmed on device, **or deferred by the operator with the
-      deferral recorded.** **16 of 16 are now in one of those two states**: report 10
-      confirmed, as an accepted shortfall; the other 15 deferred to the device pass on 1.3.9,
-      each with its terms in `roadmap.md` §4A — what it is deferred to, what to do, what
-      passes, and what a failure would mean.
+- [ ] Every operator report is confirmed on device, **or deferred by the operator with the
+      deferral recorded.** **Unticked again, because the tick used the wrong denominator.** It read
+      16 of 16 while `roadmap.md` §4 had grown to **27 numbered rows** (1-16, 18-28) — three of
+      which this session added. §4A dispositioned fifteen and covered 18-20 in prose; **reports
+      21-28 are in neither state.**
 
-      **Read what this does and does not say.** The criterion is an `or`, and the second
-      branch is a *documentation* state: it says no report is sitting in silence, unconfirmed
-      and unrecorded. It is not evidence that anything works on the operator's device. Fifteen
-      surfaces remain unproven there, and the two things that would make their numbers
-      independent — an unstarted deep review against D4, and an unread `--font-ui-medium` —
-      are owed. **D3 still governs: shipped, verified and operator-confirmed differ, and only
-      the third closes a defect.** This tick closes the bookkeeping, not the defects.
+      The error is worth naming precisely because of what preceded it. The commit that set this tick
+      argued for reading a criterion against its own wording rather than a stricter one. It then
+      read it against a **looser** one: "every operator report" means every row in the table, not
+      the sixteen that existed when the sentence was written. Reading a criterion loosely is the
+      same failure as reading it strictly, pointed the other way.
+
+      Today: **1 confirmed** (report 10, an accepted shortfall), **15 deferred with terms**
+      (`roadmap.md` §4A), **12 in neither state** (21-28). D3 still governs — only
+      operator-confirmed closes a defect.
 - [ ] Every view opens on device without freezing. Today only the table does.
 - [x] A gate check constructs a production renderer for **every** view. One lane does now, for
       List, Table, Board, Gallery, Calendar and Timeline — **6 of 22**, a ratchet, twelve
@@ -233,7 +237,7 @@ later phases opened of which one has shipped.
 | Grab band: three surfaces, three numbers | I had carried 35px and 32px in different places and both are wrong. The harness hit-tests it through the browser: the owned menu measures **44px** (14 above the bar + 29 below + the centre pixel), ends 44px from the sheet's top edge against a first row at 47px, and takes 0 of 19 rows; the add-view sheet measures **48px** and takes 0 of 12 controls. The stylesheet's own comment says 45px on the owned menu, which is one more than the browser reports. The floor is 44px, so that surface passes at **zero headroom** — any padding or font change tips it red. The selection-bar check reading content=46px against box=46px is **not** the same shape and was wrongly filed here: `scrollHeight` returns the box height whenever content fits, so equal numbers are what a comfortable pass prints. Shrinking that box shows 47px and 45px passing, 30px failing — 2px of real margin plus the tolerance. The title editor's 0.9px is the genuine article: bit-identical across eight runs under six stylesheets. One check with no margin, not two. **These are not the surface the operator's decision is about.** That is the record sheet, which measures **32px** and is the subject of roadmap §7.5's four conflicting records — the only one of the four taken from the shipped build. So there is no single grab-band number to reconcile: three surfaces carry three bands, and citing one for another is how four records became four |
 | 44px table row height declined | Density outranks it, and the cell clips its own overflow so a hit-area expansion is a no-op. Closed with a number |
 | `024` missing `plan.md` and `tasks.md` | Level 1 requires both; `validate.sh --strict` reports 5 errors there, and its continuity block is 2806 bytes against a 2048 cap |
-| 22 of 29 children fail `--strict`; the parent passes | Measured per folder, not inferred from the recursive tail. The rule is **level-driven, not marker-driven**: a folder's level decides which docs are validated and which anchors their template renders. The acceptance-criteria body sits behind an `IF level:2,3,3+` guard, so at Level 1 it renders empty and the file is exempt — which is why `018` and `019` pass carrying no marker at all, and why removing a marker from a Level 3 folder trades one error for another rather than clearing it. So `goal.md` costs `000`-`009` two errors each, and `spec.md` costs `010`-`017` the same two — I had recorded only the first half and written that `010`-`026` "add nothing", which the scan refutes. `acceptance-criteria.md` carries no marker in 12 folders and that is free: `018` and `019` validate clean with none. `024` and `027` are each missing `plan.md` and `tasks.md`; `028` has no marker on any of its five docs. Content is sound throughout — this is conformance, not rewriting |
+| ~~22 of 29 children fail `--strict`~~; the parent passes | Measured per folder, not inferred from the recursive tail. The rule is **level-driven, not marker-driven**: a folder's level decides which docs are validated and which anchors their template renders. The acceptance-criteria body sits behind an `IF level:2,3,3+` guard, so at Level 1 it renders empty and the file is exempt — which is why `018` and `019` pass carrying no marker at all, and why removing a marker from a Level 3 folder trades one error for another rather than clearing it. So `goal.md` costs `000`-`009` two errors each, and `spec.md` costs `010`-`017` the same two — I had recorded only the first half and written that `010`-`026` "add nothing", which the scan refutes. `acceptance-criteria.md` carries no marker in 12 folders and that is free: `018` and `019` validate clean with none. `024` and `027` are each missing `plan.md` and `tasks.md`; `028` has no marker on any of its five docs. Content is sound throughout — this is conformance, not rewriting. **This row is stale and was re-measured: `000`, `010` and `018` all pass today. A fresh reviewer found only `022` and `024` failing, both from a metadata regeneration this session skipped after editing them, and both now at Errors: 0.** The count moved because the tree moved; re-derive it rather than citing it |
 | `000` declares Planned over nine checked tasks | `spec.md` declares Status Planned; `tasks.md` carries nine checked implementation tasks and the lane journal independently records the acquire, the token-root edit and a release "with a debt". Work started, so the contract also wants an implementation summary. Recorded, not resolved: writing one means asserting what `000` delivered without having verified it |
 
 ### `007` cannot reach Errors: 0, and should not be made to

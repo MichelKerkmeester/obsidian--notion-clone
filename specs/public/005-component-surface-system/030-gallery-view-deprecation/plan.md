@@ -100,3 +100,41 @@ but the migration in step 2 rewrites user configuration on load — that one is 
 reverting code, because the rewrite has already happened in the user's vault. It therefore ships
 only after ADR-001 is Accepted, and the migration must be idempotent so a re-run cannot compound.
 <!-- /ANCHOR:rollback -->
+
+<!-- ANCHOR:quality-gates -->
+## 5. AI EXECUTION PROTOCOL
+
+### Pre-Task Checklist
+
+Before any file in this phase is touched:
+
+- [ ] ADR-001 is **Accepted**, not Proposed. D5 blocks everything on it, and the answer changes
+      whether this phase writes a migration or only deletes files.
+- [ ] The board control baseline is captured (T2). "Unchanged" needs something to be measured
+      against, and capturing it after the deletion proves nothing.
+- [ ] The renderer-coverage floor is known before it moves, so lowering it is an act rather than a
+      discovery.
+
+### Execution Rules
+
+1. **Order is not negotiable.** The data path ships before the deletion, so no build ever exists
+   that removes the renderer while old configurations still point at it.
+2. **The board is the control.** If the board moves, the deletion reached shared code — narrow the
+   deletion, do not fix the board.
+3. **Delete the instruments together.** A half-removed view is worse than either state.
+4. **Read exit codes directly.** A pipe makes `$?` the pipe's status.
+5. **Regenerate metadata after any spec-doc edit** in this folder, or the fingerprint check fails.
+
+### Status Reporting Format
+
+Each task reports: the task id, what ran, its exit code read directly, and the observation that
+closes it. Shipped, verified and operator-confirmed are distinct words here and are not
+interchangeable — only the third closes anything.
+
+### Blocked Task Protocol
+
+Halt and report rather than proceeding if: ADR-001 is still Proposed; the board's captures move and
+the cause is not immediately located in gallery-owned code; a gallery string is found in a code path
+this spec did not inventory; or `npm run gate` is red for a reason this phase introduced. Report the
+blocker with its evidence and the decision needed — do not route around it.
+<!-- /ANCHOR:quality-gates -->

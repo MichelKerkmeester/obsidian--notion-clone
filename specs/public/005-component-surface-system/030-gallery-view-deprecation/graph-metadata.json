@@ -125,20 +125,26 @@
         "source": "derived"
       },
       {
-        "name": "1. ORDER, AND WHY THIS ORDER",
-        "kind": "heading",
+        "name": "Task Checklist Before",
+        "kind": "proper_noun",
         "path": "plan.md",
         "source": "derived"
       },
       {
-        "name": "2. ADR-001 — the migration target (**Proposed**, not Accepted)",
-        "kind": "heading",
+        "name": "Execution Rules",
+        "kind": "proper_noun",
         "path": "plan.md",
         "source": "derived"
       },
       {
-        "name": "3. WHAT MAKES THE BOARD CONTROL CREDIBLE",
-        "kind": "heading",
+        "name": "Status Reporting Format Each",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Blocked Task Protocol Halt",
+        "kind": "proper_noun",
         "path": "plan.md",
         "source": "derived"
       },
@@ -187,7 +193,7 @@
     ],
     "causal_summary": "Remove the gallery view from the plugin, including the migration path for databases already configured to use it and the gate coverage that currently counts it.",
     "created_at": "2026-08-31T13:08:59.395Z",
-    "last_save_at": "2026-08-31T13:08:59.395Z",
+    "last_save_at": "2026-08-31T14:08:51.342Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -196,11 +202,11 @@
       "tasks.md",
       "goal.md"
     ],
-    "source_fingerprint": "sha256:fa7e2e3784affcd41891386ce11abb51abf3cd2d1dc3c6dc9408cc568214a443",
+    "source_fingerprint": "sha256:ef7934e9c69869e70b8f4a899e31468559b87545f80c16b14421814f21a1a666",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "44efb2896c59c34fd81f9b725e71dd4542618d9171bab9c201f013bbc8ae878d",
-      "plan.md": "c2585a94f679605e4ac0e09af1c25a524563526d3ab3bf7e8b5c1fc4c14b37d3",
+      "spec.md": "6ff7719c93357e40d71e4d43cfdafb8bfac4ee8258a770fbe271aba1f25aac82",
+      "plan.md": "414f4ba1eb89b1159e4bdb47b7ae0f9bd2959a2812f2f22fe78a732eec81bc7c",
       "tasks.md": "e7e0e4449023516b4dab9b0f577b4477c1a42ab63eb0c44626169e22920c2cf5"
     },
     "last_active_child_id": null,

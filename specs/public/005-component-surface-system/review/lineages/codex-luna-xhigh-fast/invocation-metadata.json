@@ -1,0 +1,15 @@
+{
+  "effectiveConfig": {
+    "kind": "cli-codex",
+    "executable": "codex",
+    "model": "gpt-5.6-luna",
+    "reasoningEffort": "xhigh",
+    "serviceTier": "fast",
+    "sandboxMode": "workspace-write",
+    "permissionMode": "acceptEdits",
+    "webSearch": "inherit"
+  },
+  "sessionId": "fanout-codex-luna-xhigh-fast-1788178447595-968qzp",
+  "invocationFingerprint": "rebound-from-prior-complete-lineage",
+  "artifactDir": "specs/public/005-component-surface-system/review/lineages/codex-luna-xhigh-fast"
+}

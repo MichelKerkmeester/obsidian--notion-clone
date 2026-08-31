@@ -25,7 +25,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-023"
       parent_session_id: null
-    completion_pct: 0
+    completion_pct: 80
     open_questions:
       - "Where does a body live in a sheet already carrying 13+ properties?"
       - "Does the empty-body placeholder read as an affordance or as clutter on device?"
@@ -120,6 +120,11 @@ not a surface to change.
 ## 4. LOG
 
 Volatile. Not part of the directive.
+
+**Three completion figures disagreed inside one folder** — this file and `spec.md` read 0 while
+`implementation-summary.md` read 80, after the feature had shipped and been summarised. Zero for
+shipped work is not defensible under either side of the packet's spec-versus-goal argument, so
+all three now read 80: fifteen of nineteen tasks discharged, two open, device unconfirmed.
 
 **Decided and shipped: editable in place.** The operator chose editable, conditional on the write
 path being correct before it ships, and that condition is met rather than outstanding.

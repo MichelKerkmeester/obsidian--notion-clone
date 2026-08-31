@@ -70,7 +70,7 @@ Every row in §4 and §5 uses one of these. Collapsing them is how 1.3.1 happene
 | **Verified** | A check drives the production path, has a threshold, and has been observed red before it went green | That the operator can see the difference |
 | **Operator-confirmed** | The operator looked at the device and said so | — |
 
-**The program's closing condition is the third** (`spec.md` §7). Of the twenty-four reports below,
+**The program's closing condition is the third** (`spec.md` §7). Of the twenty-seven reports below,
 **one** has reached it, and it reached it as an accepted shortfall rather than a fix.
 
 **One further caveat that applies to every row.** All of today's work is uncommitted. `HEAD` is at
@@ -81,9 +81,9 @@ survives a `git checkout`.
 
 ## 4. OPERATOR REPORT TRACEABILITY
 
-Twenty-four reports, each resolved to a named phase. A seventeenth — refactoring the list view to
+**Twenty-seven reports** (1-16, 18-28), each resolved to a named phase. A seventeenth — refactoring the list view to
 look like ClickUp — is its own packet at `specs/public/006-list-view-clickup/`, is not part of
-this program, and does not occupy a row here; the table below runs 1-16 then 18-25 because of it.
+this program, and does not occupy a row here; the table below runs 1-16 then 18-28 because of it.
 
 | # | The report, shortened | Phase | State | Evidence |
 |---|---|---|---|---|
@@ -119,9 +119,9 @@ this program, and does not occupy a row here; the table below runs 1-16 then 18-
 
 ### What the table says as a whole
 
-**All twenty-four reports now have a named phase**, and fifteen of the original sixteen have
+**All twenty-seven reports now have a named phase**, and fifteen of the original sixteen have
 shipped code — report 13 remains the exception, deliberately not a phase. None of the eight rows
-added today (18-25) have shipped code under the phase each now names, `027` or `028`, both opened
+added later (18-28) have shipped code under the phase each now names, `027` or `028`, both opened
 today and still being investigated. Row 18 is the one worth naming apart from the rest: the phase
 it succeeds, `024`, did ship and rigorously verify a fix for the same symptom, and this report is
 that fix not holding on the operator's device.
@@ -183,6 +183,14 @@ exists to abolish.
 
 **Deferred to:** the device pass on **1.3.9**, cut for this purpose because 1.3.8 predates the
 timeline fix. **Deferred at:** 2026-08-31. **Deferred by:** the operator, who chose a build first.
+
+**What this section does NOT cover, stated so the count cannot be read as complete.** The table
+below disposes of the original sixteen. Reports **21-28 are in neither state** — not confirmed, not
+deferred with terms. Eight of them: the sort, filter and column-setting sheets (21-24), the bundled
+sheet-grammar asks (25), the group and view sheets that will not drag (26), the intermittent
+close-freeze (27), and the More-tools dropdown alignment (28). Four of those eight arrived after
+this section was written, which is exactly how a denominator goes stale: the section was correct
+when written and was not re-derived when the table grew.
 
 Report 10 is not in the table: it is the one report already **operator-confirmed**, as an accepted
 shortfall, and `spec.md` says do not reopen it.

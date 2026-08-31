@@ -196,7 +196,7 @@
     ],
     "causal_summary": "Every row is a markdown note whose frontmatter the plugin renders as properties, while the note's actual body is never surfaced anywhere in the plugin.",
     "created_at": "2026-08-30T15:07:29.613Z",
-    "last_save_at": "2026-08-31T06:46:26.823Z",
+    "last_save_at": "2026-08-31T14:07:13.370Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -206,10 +206,10 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:8c3469b41b4c7ed69101225ee1ff947c14fdeb5355d3e32bd49ed0e8ce001d14",
+    "source_fingerprint": "sha256:f037b1778a465e7ec56493383088d9b9352c39cc05e1d92cf33f0d520a8f179f",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "f730523990cc496ab74a8d0447cdba0ce6076f83617a915e5c7e6c3e7940fcdf",
+      "spec.md": "a8536a3498040e54d683432e342245b98ee2110e77a483a4000d3ba4b3f286f2",
       "plan.md": "33c796d934285a7235531e6329ade64f92ae9750902a0a8ed8cbd690f7823d61",
       "tasks.md": "d05793a827252062cca1522b6a27c6a607c6b26ca25b0a13be588ad5854876c0",
       "implementation-summary.md": "cd8e07a77eb346c93969a20d55f39b43f5c4dc6fd96d2a868d35ab14311f21e9"
