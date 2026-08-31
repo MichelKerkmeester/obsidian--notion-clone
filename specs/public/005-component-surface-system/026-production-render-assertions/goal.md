@@ -231,6 +231,7 @@ green run.
 
 | Item | Note |
 |------|------|
+| The table is the only covered renderer with no read bound | `table-renderer.ts` still asks the touch question once per row at two sites — the same shape hoisted out of list, board, gallery and now timeline. It is harmless **today** because the body is built off-document, and the harness asserts exactly that property. But the mitigation is guarded and the reads are not: the table scenario is the only one of the six carrying no `MAX_LAYOUT_READS` assertion. Recorded rather than fixed, per scope discipline — attach the body before filling it and this becomes quadratic with nothing watching |
 | The bound was right and blind | The timeline shipped a forced layout per event that `layoutReads <= 8` catches at 964. Nothing was wrong with the threshold; nothing constructed the renderer. Coverage, not calibration, was the gap |
 | An empty window passes every bound | A windowed view renders nothing when its anchor is unpinned, and every per-item bound then passes trivially. Each date-driven scenario asserts a non-zero drawn-item count ahead of its bound |
 | A read-count bound cannot see a scan | The list's second superlinear term costs no layout read and appends no row, so both of this lane's thresholds are blind to it. Recorded, not fixed: the threshold that would catch it is an open question, not an obvious edit |

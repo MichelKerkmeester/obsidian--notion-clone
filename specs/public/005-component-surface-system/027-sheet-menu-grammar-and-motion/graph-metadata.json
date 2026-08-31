@@ -203,7 +203,7 @@
     ],
     "causal_summary": "Six operator reports against one surface. The shared menu row reached every one of them and was still centred on a device, because it never declared the one property the host's button rule supplies.",
     "created_at": "2026-08-30T16:52:15.458Z",
-    "last_save_at": "2026-08-31T03:39:49.671Z",
+    "last_save_at": "2026-08-31T14:50:10.734Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -214,7 +214,7 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:3936c7046119964816261cd1c590b58e6beb7158c1a058560d99658eba6a6944",
+    "source_fingerprint": "sha256:131fa536ad254c7a468c8f236bf79a63bfb7e614fb43a23e649dcb456b640551",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "3d839910160052e1f0a1495b53edab8dddf58c6f0311ca55acef17b054ec4dc8",

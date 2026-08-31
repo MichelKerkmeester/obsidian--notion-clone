@@ -1,0 +1,26 @@
+{
+  "specFolder": "public/005-component-surface-system/032-cover-target-scheme-safety",
+  "description": "A cover image click target is opened without checking its URL scheme, so a javascript or data target ending in an image extension reaches window.open",
+  "keywords": [
+    "cover",
+    "image",
+    "scheme",
+    "javascript",
+    "data",
+    "window",
+    "open",
+    "allowlist",
+    "security",
+    "noopener"
+  ],
+  "lastUpdated": "2026-08-31T14:46:37.742855Z",
+  "specId": "032",
+  "folderSlug": "cover-target-scheme-safety",
+  "parentChain": [
+    "public",
+    "005-component-surface-system"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": [],
+  "level": "3"
+}

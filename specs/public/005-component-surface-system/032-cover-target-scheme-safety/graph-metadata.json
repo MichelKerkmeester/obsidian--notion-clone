@@ -1,0 +1,166 @@
+{
+  "schema_version": 1,
+  "packet_id": "public/005-component-surface-system/032-cover-target-scheme-safety",
+  "spec_folder": "public/005-component-surface-system/032-cover-target-scheme-safety",
+  "parent_id": "public/005-component-surface-system",
+  "children_ids": [],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "cover image scheme",
+      "F001",
+      "javascript url cover",
+      "032 cover safety",
+      "032 plan",
+      "032 tasks"
+    ],
+    "key_topics": [
+      "cover",
+      "image",
+      "scheme",
+      "f001",
+      "javascript",
+      "url",
+      "safety",
+      "plan",
+      "tasks",
+      "click",
+      "target",
+      "opened"
+    ],
+    "importance_tier": "important",
+    "status": "planned",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Cover Target Scheme Safety",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Spec Folder",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "its",
+        "kind": "key_phrase",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "a",
+        "kind": "key_phrase",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "the",
+        "kind": "key_phrase",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Plan",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Checklist",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Execution Rules",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Status Reporting Format Task",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Blocked Task Protocol Halt",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "TASKS",
+        "kind": "heading",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "COMPLETION",
+        "kind": "heading",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "CROSS-REFERENCES",
+        "kind": "heading",
+        "path": "tasks.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "A cover image's click target is opened without checking its URL scheme, so a javascript: or data: target ending in an image extension reaches window.open.",
+    "created_at": "2026-08-31T14:46:48.971Z",
+    "last_save_at": "2026-08-31T14:48:18.516Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md"
+    ],
+    "source_fingerprint": "sha256:df43855dfd4d44e93f0f55ecae3f2d5f1d191efb6d4243ee572f046e9a24bf6f",
+    "source_fingerprint_docset": 3,
+    "source_doc_hashes": {
+      "spec.md": "c1bc7148ee238b63b2874a9ddff8e76c779906106d804bc5dbb3c3142dc0b892",
+      "plan.md": "e53ca919c3bd753ed3e2cbe1de9e99f04ae0dcfde174c9fbab63812b40357613",
+      "tasks.md": "4c1f2137e8c553f8234b4c9ea34e52d22a5ce8b47cdb7d9e992ce2f42b4831aa"
+    },
+    "last_active_child_id": null,
+    "last_active_at": null
+  }
+}

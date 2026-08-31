@@ -1,0 +1,26 @@
+{
+  "specFolder": "public/005-component-surface-system/033-list-virtualisation",
+  "description": "The list renders every row so its cost is proportional to node count, and at the operator shape no loop fix reaches it",
+  "keywords": [
+    "list",
+    "virtualisation",
+    "windowing",
+    "layout",
+    "nodes",
+    "freeze",
+    "budget",
+    "rows",
+    "scroll",
+    "recycle"
+  ],
+  "lastUpdated": "2026-08-31T14:46:37.742855Z",
+  "specId": "033",
+  "folderSlug": "list-virtualisation",
+  "parentChain": [
+    "public",
+    "005-component-surface-system"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": [],
+  "level": "3"
+}

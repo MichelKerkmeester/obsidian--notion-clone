@@ -13,7 +13,7 @@ _memory:
     last_updated_at: "2026-08-31T08:30:00Z"
     last_updated_by: "timeline-freeze-diagnosis"
     recent_action: "Deep review ran and returned FAIL; its fifteen findings are now recorded here"
-    next_safe_action: "Triage the review FAIL: F001 severity, then the seven P1 doc-truth findings"
+    next_safe_action: "031 T1: build the producer-parity check and observe it failing on the panel families"
     blockers:
       - "The list needs virtualisation; at the operator shape it blocks 2.0-4.9s and the shape is LINEAR"
     key_files:
@@ -253,3 +253,31 @@ weighed: the victim must configure the attacker-controlled key as the cover fiel
 `cover-image.test.ts` currently pins the vulnerable behaviour as intended, so a fix rewrites tests
 too. Recorded as **disputed severity**, not adopted at P0 on one lane's label.
 <!-- /ANCHOR:review-findings -->
+
+---
+
+<!-- ANCHOR:phase-map -->
+## 8. WHERE EVERY FINDING NOW LIVES
+
+Nothing from the research, the review or the audit is carried in conversation. Each has an owning
+phase with criteria and evidence.
+
+| Source | Finding | Phase |
+|---|---|---|
+| Research | Orphaned scrim; both drag causes; dead modal handles; velocity dismissal; the disposer | **031** (new) |
+| Review F001, F010 | Cover targets open any URL scheme; missing `noopener` | **032** (new) |
+| Directive priority 2 | List still blocks 2.0-4.9s; layout over node count | **033** (new) |
+| Review F003-F009, F011-F015 | Eleven untrue statements in this packet's own documents | **034** (new) |
+| Audit | The table is the only covered renderer with no layout-read bound | 026 |
+| Report 28 | More-tools dropdown alignment | 027 |
+| Review F002 | Sort and filter still rebuild every view | 028 |
+| Operator | Gallery deprecation | 030 |
+
+**Start at 031 T1.** It is the producer-parity check, and it must be **observed failing** on the
+panel families before any fix — a check that passes everywhere beforehand is not discriminating, and
+this packet has shipped that mistake before.
+
+**Review F013** — `SURFACE_REGISTRY` names five producers and omits live panels — has no owner yet.
+It is a contract-truth finding about code rather than docs, and it plausibly belongs with 031's
+disposer work once that lands. Recorded as unassigned rather than silently filed.
+<!-- /ANCHOR:phase-map -->

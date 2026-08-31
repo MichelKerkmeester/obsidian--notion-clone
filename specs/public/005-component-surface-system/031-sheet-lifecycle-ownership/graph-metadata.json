@@ -1,0 +1,208 @@
+{
+  "schema_version": 1,
+  "packet_id": "public/005-component-surface-system/031-sheet-lifecycle-ownership",
+  "spec_folder": "public/005-component-surface-system/031-sheet-lifecycle-ownership",
+  "parent_id": "public/005-component-surface-system",
+  "children_ids": [],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "sheet lifecycle",
+      "orphaned scrim",
+      "sheet wont drag",
+      "031 lifecycle",
+      "031 plan",
+      "sheet lifecycle plan",
+      "031 tasks",
+      "sheet lifecycle tasks",
+      "031 goal",
+      "sheet lifecycle goal"
+    ],
+    "key_topics": [
+      "sheet",
+      "lifecycle",
+      "orphaned",
+      "scrim",
+      "wont",
+      "drag",
+      "plan",
+      "tasks",
+      "goal",
+      "every",
+      "one",
+      "owner"
+    ],
+    "importance_tier": "important",
+    "status": "planned",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "goal.md"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "goal.md",
+        "kind": "doc",
+        "path": "goal.md",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Sheet Lifecycle Ownership",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Spec Folder",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "a",
+        "kind": "key_phrase",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "no",
+        "kind": "key_phrase",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "separate",
+        "kind": "key_phrase",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Plan",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Checklist",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Execution Rules",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Status Reporting Format Task",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Blocked Task Protocol Halt",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "the",
+        "kind": "key_phrase",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "its",
+        "kind": "key_phrase",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "PHASE 1: THE CONTROL",
+        "kind": "heading",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "PHASE 2: THE FREEZE",
+        "kind": "heading",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "PHASE 3: THE TWO DRAG CAUSES, SEPARATELY",
+        "kind": "heading",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "No Root",
+        "kind": "proper_noun",
+        "path": "goal.md",
+        "source": "derived"
+      },
+      {
+        "name": "1. DURABLE DIRECTIVE",
+        "kind": "heading",
+        "path": "goal.md",
+        "source": "derived"
+      },
+      {
+        "name": "Decisions",
+        "kind": "heading",
+        "path": "goal.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "Every sheet has one owner for its whole life, so the scrim always comes down, the drag always survives a re-render, and no handle is drawn onto nothing.",
+    "created_at": "2026-08-31T14:46:45.699Z",
+    "last_save_at": "2026-08-31T14:46:45.699Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "goal.md"
+    ],
+    "source_fingerprint": "sha256:a48280c61a84708ce137d7197f0440e2ea0297db382f7f246125af151b2a7d1b",
+    "source_fingerprint_docset": 3,
+    "source_doc_hashes": {
+      "spec.md": "4f08e96ab9f071ba2ac437cdbdee0cef49c21a6479454a177ab66a23005bb59f",
+      "plan.md": "808630e42990ca0d3c2e6d1518e397c9a8d0dc31b665a6f35a80e4ddf59cf9c3",
+      "tasks.md": "967bfdcca7ae2c5c1e7afefa66f0df4f591f77279a8c04afc020d674cefce116"
+    },
+    "last_active_child_id": null,
+    "last_active_at": null
+  }
+}

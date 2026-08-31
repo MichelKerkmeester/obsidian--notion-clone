@@ -34,7 +34,11 @@
     "public/005-component-surface-system/028-remaining-freezes",
     "public/005-component-surface-system/027-sheet-menu-grammar-and-motion",
     "public/005-component-surface-system/029-numeric-coercion-parity",
-    "public/005-component-surface-system/030-gallery-view-deprecation"
+    "public/005-component-surface-system/030-gallery-view-deprecation",
+    "public/005-component-surface-system/031-sheet-lifecycle-ownership",
+    "public/005-component-surface-system/032-cover-target-scheme-safety",
+    "public/005-component-surface-system/033-list-virtualisation",
+    "public/005-component-surface-system/034-packet-doc-truth"
   ],
   "manual": {
     "depends_on": [],
@@ -234,7 +238,7 @@
     ],
     "causal_summary": "Phase parent for the program that gives floating surfaces, sheets, checkboxes and content rows one architecture, one placement authority, and acceptance criteria measured where users actually see them.",
     "created_at": "2026-08-29T12:53:52.104Z",
-    "last_save_at": "2026-08-31T14:09:02.355Z",
+    "last_save_at": "2026-08-31T14:49:16.867Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -242,11 +246,11 @@
       "goal.md",
       "handover.md"
     ],
-    "source_fingerprint": "sha256:c60859ab0a351bd06b0f7556ea8bbc2e57a9a342f342d5a698bacca73a535df0",
+    "source_fingerprint": "sha256:e9a3b22787989b10fc1b2f5ab89bc6707ef73d5ce9ea6826c3b9f39374354888",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "ee7716225d6f8dd9782936e77e614759de190288028c69bb2fcb7b7b014f11fd",
-      "handover.md": "d01da6dadf6a4126f431889f1f3e026e9e19cf3ba8ff68123540f764ce1f8446"
+      "handover.md": "268b6aa47d29ba618534468d19167a13731990884287f6be0b827bf8bbd77dae"
     },
     "last_active_child_id": "public/005-component-surface-system/006-record-open-target",
     "last_active_at": null

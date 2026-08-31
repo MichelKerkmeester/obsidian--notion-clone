@@ -1,0 +1,172 @@
+{
+  "schema_version": 1,
+  "packet_id": "public/005-component-surface-system/033-list-virtualisation",
+  "spec_folder": "public/005-component-surface-system/033-list-virtualisation",
+  "parent_id": "public/005-component-surface-system",
+  "children_ids": [],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "list virtualisation",
+      "windowing",
+      "033 virtualisation",
+      "large list freeze",
+      "033 plan",
+      "033 tasks"
+    ],
+    "key_topics": [
+      "list",
+      "virtualisation",
+      "windowing",
+      "large",
+      "freeze",
+      "plan",
+      "tasks",
+      "renders",
+      "every",
+      "row",
+      "cost",
+      "proportional"
+    ],
+    "importance_tier": "important",
+    "status": "planned",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "List Virtualisation",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Spec Folder",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "row",
+        "kind": "key_phrase",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Metadata",
+        "kind": "heading",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "1. PROBLEM",
+        "kind": "heading",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Plan",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Checklist",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Execution Rules",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Status Reporting Format Task",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Blocked Task Protocol Halt",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "its",
+        "kind": "key_phrase",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "the",
+        "kind": "key_phrase",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "TASKS",
+        "kind": "heading",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "COMPLETION",
+        "kind": "heading",
+        "path": "tasks.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "The list renders every row, so its cost is proportional to node count; at the operator's shape that is 2.0-4.9s of blocked main thread and no loop fix reaches it.",
+    "created_at": "2026-08-31T14:46:50.524Z",
+    "last_save_at": "2026-08-31T14:48:20.159Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md"
+    ],
+    "source_fingerprint": "sha256:bc5954fd39a55bf94e70a70ed47f739c756f0a8c1ec04426a2b6d5bb3cff4bd0",
+    "source_fingerprint_docset": 3,
+    "source_doc_hashes": {
+      "spec.md": "3d4b3d5c940e443c7cc30ccb93e9832c11e26023220b8a77be2e931ee5f75c38",
+      "plan.md": "c3c3a76674a250f1ee4ff729abacaf007eb27bd99e9943be216193b8ab9a9d05",
+      "tasks.md": "0669e766d3e71d60786ffa1f76926f8783b92f3bd72c2cdf2cd26387e426a77b"
+    },
+    "last_active_child_id": null,
+    "last_active_at": null
+  }
+}

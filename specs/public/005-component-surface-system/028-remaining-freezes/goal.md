@@ -351,3 +351,25 @@ reads 97.1ms at 1× and 625.3ms at 6×.
 | Table bound-of-8 check not built | Specified, then measured as failing a correct implementation. The guard that already exists — no row appended to a connected table — asserts the right property |
 | `spec.md` §2 and §2A are stale | They describe the three-rebuild tree that `7ad775b` replaced. Left for the phase author; the rest of `spec.md` still holds |
 <!-- /ANCHOR:log -->
+
+---
+
+## THE CLOSE-FREEZE HAS AN OWNER NOW, AND IT IS NOT A RENDER COST
+
+Operator report 27 — *sometimes* freezes on closing — is **not** this phase's kind of defect, and
+carrying it here would have sent the next reader hunting a rebuild cost that is not there.
+
+A research pass verified against the shipped bundle that `applySheetChrome` has six call sites and
+only **two** ever pass `false`. Every sheet mounted through the shared positioner creates a
+body-level scrim at `inset: 0` with `pointer-events: auto` and never removes it; two panels never
+remove the sheet either. A dimmed, tap-swallowing overlay across the whole app is what a user calls
+a freeze, and it is a lifecycle defect, not a render-cost one.
+
+It belongs to `../031-sheet-lifecycle-ownership`. **What stays here** is the render-cost half: the
+list at the operator's shape, which is now `../033-list-virtualisation`, and the table sweep that
+still reads x4.5 and has never been re-run.
+
+The intermittency that made this look like a render cost is explained too. A container-wide keyboard
+inset does cost 55ms per write at 36,001 nodes under throttle, and that is size-dependent — but
+three dropped frames is jank, not a hang. Adopting it would have closed report 27 against the wrong
+mechanism.

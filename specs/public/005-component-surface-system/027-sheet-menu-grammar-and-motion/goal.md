@@ -156,3 +156,24 @@ transition belongs to the state being moved to.
 | Add-view form | The create rows are fixed. The form above them keeps its existing grammar; restyling it is wider than what was reported |
 | Two harness pages lacked reduced motion | Both fixed. Neither mattered until the entrance started running |
 <!-- /ANCHOR:log -->
+
+---
+
+## OPERATOR REPORT 28 — THE MORE-TOOLS DROPDOWN
+
+A fourth report against this surface: the desktop More-tools dropdown's section heading and its rows
+do not share a left edge. That count matters — a fourth report on one surface says the row is still
+not a shared thing.
+
+**Hypothesis, testable, not a diagnosis.** The shared row declares `padding: 0 8px` with
+`justify-content: flex-start`, and the section heading declares `padding: 6px 8px 2px` — the same
+8px inset. A surface built on the shared row therefore *cannot* show this gap, which points at this
+dropdown not using `createMenuRow`.
+
+**Why our own checks are blind to it, in the stylesheet's own words:** the `justify-content`
+declaration exists precisely because an undeclared value computes to `normal` against the plugin
+stylesheet alone and only centres under the host's cascade. A rule measured without the host looks
+correct. That is this packet's lens pointed at its own instrument.
+
+What refutes the hypothesis: finding this surface already on `createMenuRow`, which would make it a
+cascade escape rather than a grammar gap — a different fix entirely.

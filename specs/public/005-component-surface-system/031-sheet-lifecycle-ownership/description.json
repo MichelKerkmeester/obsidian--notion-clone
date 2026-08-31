@@ -1,0 +1,26 @@
+{
+  "specFolder": "public/005-component-surface-system/031-sheet-lifecycle-ownership",
+  "description": "Every sheet has one owner for its whole life, so the scrim always comes down, the drag survives a re-render, and no handle is drawn onto nothing",
+  "keywords": [
+    "sheet",
+    "lifecycle",
+    "scrim",
+    "drag",
+    "dismiss",
+    "handle",
+    "disposer",
+    "overlay",
+    "portal",
+    "teardown"
+  ],
+  "lastUpdated": "2026-08-31T14:46:37.742855Z",
+  "specId": "031",
+  "folderSlug": "sheet-lifecycle-ownership",
+  "parentChain": [
+    "public",
+    "005-component-surface-system"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": [],
+  "level": "3"
+}
