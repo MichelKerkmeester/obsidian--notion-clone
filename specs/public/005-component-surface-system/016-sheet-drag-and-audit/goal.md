@@ -11,8 +11,8 @@ _memory:
     packet_pointer: "public/005-component-surface-system/016-sheet-drag-and-audit"
     last_updated_at: "2026-08-31T09:00:00Z"
     last_updated_by: "harness-dependence-review"
-    recent_action: "Keyboard-inset and sheet-fill ticks withdrawn: both read values the harness sets"
-    next_safe_action: "Operator answers keyboard step 3 and sheet-colour step 4 of the five-step list"
+    recent_action: "The ablation arm exists: a rebuild orphans the bar node while the panel survives"
+    next_safe_action: "The operator answers the 13px label and the resize question, and drags a sheet"
     blockers:
       - "The keyboard lever is proven; that Obsidian publishes --keyboard-height is not"
       - "Two operator decisions open: the 13px row label and the window-resize close"
@@ -25,7 +25,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-016-goal"
       parent_session_id: null
-    completion_pct: 50
+    completion_pct: 60
     open_questions:
       - "Row label 13px is off the type scale; move to 14px or accept"
       - "Should the record sheet survive a window resize instead of closing"
@@ -101,12 +101,22 @@ host or the harness contributes.
       60.0px. `a re-rendered sheet still follows the finger 1:1` — 60px drag after a re-render moved
       it 60.0px. `the grab bar survives a view re-render` — after one refresh the sheet's first
       child is `db-mobile-bottom-sheet-handle`; grab bar present=true.
-- [ ] Both halves of the fix are shown necessary by reverting each on its own. With the chrome
+- [x] Both halves of the fix are shown necessary by reverting each on its own. With the chrome
       re-assert reverted: no bar, 0.0px. With the panel binding reverted: **bar present, still
       0.0px**. That third row is the important one — restoring the bar alone leaves the drag dead
       while making the sheet look repaired.
-      **No check exists.** Neither `verify-placement.mjs` nor `probe/sheet-audit.mjs` carries an
-      ablation arm; both measure the shipped tree only, so the necessity claim rests on prose.
+      **A check exists now, in the `sheet-rebuild` lane.** The necessity of the second half is a
+      fact about node identity, so it is measurable without reverting anything: a rebuild empties
+      the panel, so the bar the gesture would have bound to is **detached** afterwards and a
+      different node takes its place, while the panel is the same object throughout and keeps its
+      gesture registration. Both halves of that asymmetry are asserted in the same run —
+      `a rebuild replaces the bar node, so a bar-bound listener would die` and `the panel is the
+      same object across the rebuild`.
+      The first half's necessity was already observed directly: without the chrome re-assert the
+      lane reports `bar before: true, after: false` and a real pointer drag cannot even be staged.
+      *What is still prose:* the specific reading "bar present, still 0.0px". This proves a
+      bar-bound listener would be orphaned, which is why that state arises; it does not reconstruct
+      the reverted build to re-measure the 0.0px itself.
       **The check:** on the record sheet at 390×844, open through `openRecordDetailPanel`, call
       `refreshRecordDetailPanel` once, then drive a 60px drag on the handle with real touch events
       through the browser's input pipeline — three times, over three trees. Tree 1, shipped. Tree 2,

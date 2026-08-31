@@ -14,8 +14,8 @@ _memory:
     packet_pointer: "public/005-component-surface-system/016-sheet-drag-and-audit"
     last_updated_at: "2026-08-30T19:10:41Z"
     last_updated_by: "criteria-reconciliation"
-    recent_action: "Completion anchor reconciled to the captured run: 7 of 10 criteria evidenced"
-    next_safe_action: "Add the two-revert ablation check; operator answers the label and resize"
+    recent_action: "The ablation arm exists: a rebuild orphans the bar node while the panel survives"
+    next_safe_action: "The operator answers the 13px label and the resize question, and drags a sheet"
     blockers: []
     key_files:
       - "spec.md"
@@ -28,7 +28,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-016"
       parent_session_id: null
-    completion_pct: 50
+    completion_pct: 60
     open_questions:
       - "Row label 13px is off the 12/14/16/18/20/24 scale. Move to 14px or accept?"
       - "Should the record sheet survive a window resize and re-place instead of closing?"

@@ -274,8 +274,68 @@ function runHandleWiring(doc: Document): RebuildResult[] {
   return cases;
 }
 
+/**
+ * Why the gesture binds to the PANEL and not to the bar, shown rather than asserted.
+ *
+ * The fix for a dead sheet drag had two halves, and a phase recorded that only prose established
+ * the second one was necessary: re-assert the chrome after a rebuild, AND bind the gesture to the
+ * panel. Restoring the bar alone leaves the drag dead while making the sheet look repaired — the
+ * worst of the three states, because it removes the visible symptom and keeps the defect.
+ *
+ * The necessity is a fact about node identity, so it can be measured without reverting anything.
+ * A rebuild empties the panel: the bar node it held is destroyed and a different one takes its
+ * place, so any listener bound to the first is orphaned on a node no press can reach. The panel is
+ * the same object throughout. That asymmetry IS the argument, and it is checked here in the same
+ * run as the working drag.
+ */
+function runBindingAblation(doc: Document): RebuildResult[] {
+  const panel = doc.createElement("div");
+  doc.body.appendChild(panel);
+  applySheetChrome(panel, true);
+  const release = attachSheetDragToDismiss(panel, () => undefined);
+
+  const barBefore = panel.querySelector<HTMLElement>(HANDLE);
+  // The rebuild a group change performs.
+  panel.empty();
+  applySheetChrome(panel, true);
+  const barAfter = panel.querySelector<HTMLElement>(HANDLE);
+
+  const barWasReplaced = Boolean(barBefore && barAfter && barBefore !== barAfter);
+  const oldBarOrphaned = Boolean(barBefore && !barBefore.isConnected);
+  const panelSurvived = panel.isConnected && hasSheetDrag(panel);
+
+  release();
+  applySheetChrome(panel, false);
+  panel.remove();
+
+  return [
+    {
+      surface: "a rebuild replaces the bar node, so a bar-bound listener would die",
+      rebuildShape: "ablation",
+      barBeforeRebuild: Boolean(barBefore),
+      barAfterRebuild: Boolean(barAfter),
+      pass: barWasReplaced && oldBarOrphaned,
+      detail: !barWasReplaced
+        ? "the same bar node survived the rebuild, so binding to it would have been safe and this argument is wrong"
+        : oldBarOrphaned
+          ? "the bar the gesture would have bound to is detached after the rebuild — a listener on it reaches nothing"
+          : "the old bar is still connected, so it was not really replaced",
+    },
+    {
+      surface: "the panel is the same object across the rebuild",
+      rebuildShape: "ablation",
+      barBeforeRebuild: true,
+      barAfterRebuild: true,
+      pass: panelSurvived,
+      detail: panelSurvived
+        ? "the panel and its gesture registration both survive, which is why the drag still works"
+        : "the panel lost its gesture across the rebuild",
+    },
+  ];
+}
+
 export function runSheetRebuildParity(doc: Document = document): RebuildResult[] {
-  return [runGroupSheet(doc), ...runChromeContract(doc), ...runHandleWiring(doc)];
+  return [runGroupSheet(doc), ...runChromeContract(doc), ...runHandleWiring(doc), ...runBindingAblation(doc)];
 }
 
 // ───────────────────────────────────────────────────────────────────
