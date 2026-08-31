@@ -57,12 +57,13 @@ production renderer**. One now does (`026`).
 | D3 | Shipped, verified and operator-confirmed differ. Only the third closes. |
 | D4 | A fresh reviewer verifies. Never self-certify. |
 | D5 | A criterion can fail a correct implementation. Check both ways. |
-| D6 | Absent evidence is a finding only if the sample could have shown it. |
+| D6 | Absent evidence is a finding only if the sample could have shown it. A pass on an empty set proves nothing. |
 | D7 | A lane hold permits editing a file. It grants no scope. |
 | D8 | A check reading a different environment than what it certifies is decoration. |
 | D9 | Read the rule before theorising. Measure the leaf off the viewport origin. |
-| D10 | Only the **screenshot fixtures** are hand-written. `verify-placement` bundles shipped modules; `tools/bench/` and the render-assertions lane build real renderers. |
+| D10 | Check the **mount**, not just the module: a check can bundle shipped code and still render a hand-written fixture. |
 | D11 | One phase holds `styles.css`, released only after a recapture a person looked at. |
+| D12 | Prefer **parity**: a harness cannot fake one without giving two independent producers the same wrong answer. |
 <!-- /ANCHOR:directive -->
 
 ---
@@ -72,8 +73,7 @@ production renderer**. One now does (`026`).
 
 **Read the phase's own `goal.md` first.** Each binds as if written here.
 
-`000`-`009` are structural; `010`-`019` are operator device reports, `020`-`026` reviews and
-research. `roadmap.md` §4 maps report to phase, §5 state, §7 conflicts.
+`roadmap.md` §4 maps report to phase, §5 state, §7 conflicts.
 
 **Precedence.** Decisions outrank child detail, which outranks any summary. Name conflicts; never
 resolve them silently.
@@ -86,15 +86,15 @@ resolve them silently.
 <!-- ANCHOR:completion -->
 ## 3. COMPLETION CRITERIA
 
-- [ ] Every operator report is operator-confirmed on device, **or explicitly deferred by the
-      operator with the deferral recorded.** Today 1 of 16, an accepted shortfall.
+- [ ] Every operator report is confirmed on device, **or deferred by the operator with the
+      deferral recorded.** Today 1 of 16, an accepted shortfall.
 - [ ] Every view opens on device without freezing. Today only the table does.
 - [ ] A gate check constructs a production renderer for **every** view. One lane does now, for
       List and Table; Board, Gallery, Calendar and Timeline have none.
-- [ ] `SURFACE_PHASE=<phase> npm run gate` exits 0, read from `$?`, never via a pipe.
+- [ ] `SURFACE_PHASE=<phase> npm run gate` exits 0, read from `$?`, not a pipe.
 - [ ] `npm run replay` re-asserts every landed result against its recorded pre-fix number.
-- [ ] No phase's `acceptance-criteria.md` leaves a **data** cell empty or placeholder. Parse the
-      table; an adjacent-pipe grep cannot distinguish. See LOG.
+- [ ] No criterion's green depends on a value the harness supplies that a device would not — a
+      pinned variable, a stubbed action, a hand-written mount, or an absent host stylesheet.
 - [ ] `validate.sh <this folder> --strict` reports the parent at Errors: 0.
 <!-- /ANCHOR:completion -->
 
