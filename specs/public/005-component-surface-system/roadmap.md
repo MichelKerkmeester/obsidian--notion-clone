@@ -167,6 +167,52 @@ horizontal overflow. `027`'s own documents were likewise not read for this pass.
 ---
 
 <!-- ANCHOR:now-next-later -->
+## 4A. THE DEVICE PASS — DEFERRAL RECORDED, PER REPORT
+
+The parent's completion criterion offers two ways to close a report: **confirmed on the operator's
+device**, or **deferred by the operator with the deferral recorded**. Today's count is 1 of 16 and
+the operator has chosen to verify rather than defer the pass outright, so every row below is
+**deferred to that pass** — the deferral, and what it is deferred *to*, recorded here rather than
+left implicit. A report that is neither confirmed nor recorded as deferred is the state this section
+exists to abolish.
+
+**Deferred to:** the device pass on **1.3.9**, cut for this purpose because 1.3.8 predates the
+timeline fix. **Deferred at:** 2026-08-31. **Deferred by:** the operator, who chose a build first.
+
+Report 10 is not in the table: it is the one report already **operator-confirmed**, as an accepted
+shortfall, and `spec.md` says do not reopen it.
+
+| # | What to do on device | What passes | Risk if it fails |
+|---|---|---|---|
+| 1 | Open a record sheet, **edit a field**, then drag the sheet down | It moves with the finger, both before and after the edit | The fix bound to a node the panel destroys — this was re-reported three times, so the after-edit case is the one that matters |
+| 2 | Look at the close and expand buttons, top right of a sheet | Aligned on one centre line, both comfortably tappable | Measured 44x44 with 0.00px stagger; a miss means the harness and the device disagree |
+| 3 | Open a record sheet and read the property rows | No gap between rows, a hairline divider, label smaller than its value | Label now 14px on the audited scale — the only ask of the three that was still open |
+| 4 | Tap a field so the keyboard opens | The row you tapped stays visible; the sheet does not vanish | Your phone shrinks content and keeps the window, so the inset path runs. A sheet that disappears means the other host shape after all |
+| 5 | On a phone, open the table's column dropdown | It arrives as a sheet from the bottom, not a desktop popover | — |
+| 6 | Compare buttons across two different sheets | Same height, same padding, same alignment | Measured identical at 44px; a difference means the shared grammar is not reaching one of them |
+| 7 | Look at a currency card field | Euro sign and Dutch separators, e.g. `€ 1.000,24` | In scope after the operator's narrow reading of the exclusion |
+| 8 | Tap a cell, then tap a title cell | A cell opens edit state; a title opens the record sheet | — |
+| 9 | With a sheet open, try to tap a row behind it | Nothing behind responds; the backdrop is dark and blocks | — |
+| 11 | Open several different sheets in turn | All the same background fill | Nine surfaces measured identical; no before-number was ever recorded |
+| 12 | Open the add-view sheet | Readable layout, controls legible and tappable | Rebuilt on the row grammar after six observed defects |
+| 13 | Check the installed version | **1.3.9** | This report is the install itself |
+| 14 | On desktop, look at a select checkbox in a table | Not clipped at its left edge | Measured 0px clearance across 25 cells before, 18px after |
+| 15 | On desktop with a right sidebar open, open dropdowns across views | They land under their trigger and stay on screen | One of six paths is declared unfixed — the calendar/timeline search panel, held by another session |
+| 16 | Look left of a select checkbox on a phone | The small button has clear space around it | Was -14px on a phone, -17px on desktop; now +4px, and no desktop button at all |
+
+**The three that are more than a look.** Reports 18-20 — list, board, calendar and timeline freezing
+— are the ones 1.3.9 exists for. Open each view on the real database (**1,000-3,000 rows at 80-100%
+fill**) and time it. The timeline should now open; the list is **expected to still stall**, because
+at that shape it blocks 2.0-4.9s and the remaining cost is layout over node count, which only
+virtualisation reaches. A list that still hangs is **not** a failed fix — it is the measured,
+recorded state, and saying so in advance is the point of recording the deferral.
+
+**What none of this closes.** The 20-iteration deep review is unstarted, so every number above is
+self-certified against D4. `--font-ui-medium` is unread on a device, so `021` still rests on an
+inferred value. Both are recorded as owed rather than counted as done.
+
+---
+
 ## 5. PHASES: NOW / NEXT / LATER
 
 Status per phase, measured against the working tree rather than against the plan. Six phases are

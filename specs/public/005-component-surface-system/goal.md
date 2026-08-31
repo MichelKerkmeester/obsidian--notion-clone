@@ -92,7 +92,10 @@ resolve them silently.
 ## 3. COMPLETION CRITERIA
 
 - [ ] Every operator report is confirmed on device, **or deferred by the operator with the
-      deferral recorded.** Today 1 of 16, an accepted shortfall.
+      deferral recorded.** Today **1 confirmed** (report 10, an accepted shortfall) and **15
+      deferred with the deferral recorded** — `roadmap.md` §4A names what each is deferred to,
+      what to check, and what passes. Deferral is not closure: this row stays open until the
+      device pass on 1.3.9 returns.
 - [ ] Every view opens on device without freezing. Today only the table does.
 - [x] A gate check constructs a production renderer for **every** view. One lane does now, for
       List, Table, Board, Gallery, Calendar and Timeline — **6 of 22**, a ratchet, twelve
