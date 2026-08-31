@@ -109,7 +109,7 @@
       "layoutHash": "7363964f9c49",
       "sourceHashes": {
         "src/views/active-rule-popover-renderer.ts": "d9143edf30ba",
-        "src/views/filter-panel-renderer.ts": "df7edd42c4ee",
+        "src/views/filter-panel-renderer.ts": "a231643a2078",
         "styles.css": "96f5fa440637",
         "tools/screenshots/theme.css": "8239cc22cceb",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -134,7 +134,7 @@
       "layoutHash": "7363964f9c49",
       "sourceHashes": {
         "src/views/active-rule-popover-renderer.ts": "d9143edf30ba",
-        "src/views/filter-panel-renderer.ts": "df7edd42c4ee",
+        "src/views/filter-panel-renderer.ts": "a231643a2078",
         "styles.css": "96f5fa440637",
         "tools/screenshots/theme.css": "8239cc22cceb",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -159,7 +159,7 @@
       "layoutHash": "f2bea9d458ed",
       "sourceHashes": {
         "src/views/active-rule-popover-renderer.ts": "d9143edf30ba",
-        "src/views/filter-panel-renderer.ts": "df7edd42c4ee",
+        "src/views/filter-panel-renderer.ts": "a231643a2078",
         "styles.css": "96f5fa440637",
         "tools/screenshots/theme.css": "8239cc22cceb",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -184,7 +184,7 @@
       "layoutHash": "f2bea9d458ed",
       "sourceHashes": {
         "src/views/active-rule-popover-renderer.ts": "d9143edf30ba",
-        "src/views/filter-panel-renderer.ts": "df7edd42c4ee",
+        "src/views/filter-panel-renderer.ts": "a231643a2078",
         "styles.css": "96f5fa440637",
         "tools/screenshots/theme.css": "8239cc22cceb",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -209,7 +209,7 @@
       "layoutHash": "5707bce8b00b",
       "sourceHashes": {
         "src/views/active-rule-popover-renderer.ts": "d9143edf30ba",
-        "src/views/sort-panel-renderer.ts": "2689215615eb",
+        "src/views/sort-panel-renderer.ts": "6e7312250497",
         "styles.css": "96f5fa440637",
         "tools/screenshots/theme.css": "8239cc22cceb",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -234,7 +234,7 @@
       "layoutHash": "5707bce8b00b",
       "sourceHashes": {
         "src/views/active-rule-popover-renderer.ts": "d9143edf30ba",
-        "src/views/sort-panel-renderer.ts": "2689215615eb",
+        "src/views/sort-panel-renderer.ts": "6e7312250497",
         "styles.css": "96f5fa440637",
         "tools/screenshots/theme.css": "8239cc22cceb",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -259,7 +259,7 @@
       "layoutHash": "00e103558920",
       "sourceHashes": {
         "src/views/active-rule-popover-renderer.ts": "d9143edf30ba",
-        "src/views/sort-panel-renderer.ts": "2689215615eb",
+        "src/views/sort-panel-renderer.ts": "6e7312250497",
         "styles.css": "96f5fa440637",
         "tools/screenshots/theme.css": "8239cc22cceb",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -284,7 +284,7 @@
       "layoutHash": "00e103558920",
       "sourceHashes": {
         "src/views/active-rule-popover-renderer.ts": "d9143edf30ba",
-        "src/views/sort-panel-renderer.ts": "2689215615eb",
+        "src/views/sort-panel-renderer.ts": "6e7312250497",
         "styles.css": "96f5fa440637",
         "tools/screenshots/theme.css": "8239cc22cceb",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -1031,7 +1031,7 @@
       },
       "note": "The phone form of the owned menu. Rows share one left edge with the icon in a fixed leading column, hairlines divide neighbours but not the last row of a group, and a row that opens a submenu carries a trailing chevron. Captured in viewport mode so the fixed sheet docks at the bottom.",
       "capture": "viewport",
-      "bytes": 51714
+      "bytes": 51712
     },
     {
       "id": "chrome-owned-menu-sheet",
@@ -1058,7 +1058,7 @@
       },
       "note": "The phone form of the owned menu. Rows share one left edge with the icon in a fixed leading column, hairlines divide neighbours but not the last row of a group, and a row that opens a submenu carries a trailing chevron. Captured in viewport mode so the fixed sheet docks at the bottom.",
       "capture": "viewport",
-      "bytes": 36596
+      "bytes": 36591
     },
     {
       "id": "chrome-owned-menu-sheet",
@@ -3204,7 +3204,7 @@
       ],
       "layoutHash": "9600725adb9f",
       "sourceHashes": {
-        "src/views/column-manager-renderer.ts": "088c4f9c718c",
+        "src/views/column-manager-renderer.ts": "7bad4b84666c",
         "src/views/property-type-icon.ts": "ae5fe0065e84",
         "styles.css": "96f5fa440637",
         "tools/screenshots/theme.css": "8239cc22cceb",
@@ -3229,7 +3229,7 @@
       ],
       "layoutHash": "9600725adb9f",
       "sourceHashes": {
-        "src/views/column-manager-renderer.ts": "088c4f9c718c",
+        "src/views/column-manager-renderer.ts": "7bad4b84666c",
         "src/views/property-type-icon.ts": "ae5fe0065e84",
         "styles.css": "96f5fa440637",
         "tools/screenshots/theme.css": "8239cc22cceb",
@@ -3254,7 +3254,7 @@
       ],
       "layoutHash": "1a92e3083ac6",
       "sourceHashes": {
-        "src/views/column-manager-renderer.ts": "088c4f9c718c",
+        "src/views/column-manager-renderer.ts": "7bad4b84666c",
         "src/views/property-type-icon.ts": "ae5fe0065e84",
         "styles.css": "96f5fa440637",
         "tools/screenshots/theme.css": "8239cc22cceb",
@@ -3279,7 +3279,7 @@
       ],
       "layoutHash": "1a92e3083ac6",
       "sourceHashes": {
-        "src/views/column-manager-renderer.ts": "088c4f9c718c",
+        "src/views/column-manager-renderer.ts": "7bad4b84666c",
         "src/views/property-type-icon.ts": "ae5fe0065e84",
         "styles.css": "96f5fa440637",
         "tools/screenshots/theme.css": "8239cc22cceb",
@@ -3304,7 +3304,7 @@
       ],
       "layoutHash": "b1a296e0a894",
       "sourceHashes": {
-        "src/views/filter-panel-renderer.ts": "df7edd42c4ee",
+        "src/views/filter-panel-renderer.ts": "a231643a2078",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
         "styles.css": "96f5fa440637",
         "tools/screenshots/theme.css": "8239cc22cceb",
@@ -3329,7 +3329,7 @@
       ],
       "layoutHash": "b1a296e0a894",
       "sourceHashes": {
-        "src/views/filter-panel-renderer.ts": "df7edd42c4ee",
+        "src/views/filter-panel-renderer.ts": "a231643a2078",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
         "styles.css": "96f5fa440637",
         "tools/screenshots/theme.css": "8239cc22cceb",
@@ -3354,7 +3354,7 @@
       ],
       "layoutHash": "f30d58ccb0d2",
       "sourceHashes": {
-        "src/views/filter-panel-renderer.ts": "df7edd42c4ee",
+        "src/views/filter-panel-renderer.ts": "a231643a2078",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
         "styles.css": "96f5fa440637",
         "tools/screenshots/theme.css": "8239cc22cceb",
@@ -3379,7 +3379,7 @@
       ],
       "layoutHash": "f30d58ccb0d2",
       "sourceHashes": {
-        "src/views/filter-panel-renderer.ts": "df7edd42c4ee",
+        "src/views/filter-panel-renderer.ts": "a231643a2078",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
         "styles.css": "96f5fa440637",
         "tools/screenshots/theme.css": "8239cc22cceb",
@@ -3404,7 +3404,7 @@
       ],
       "layoutHash": "a9fd632b2da8",
       "sourceHashes": {
-        "src/views/filter-panel-renderer.ts": "df7edd42c4ee",
+        "src/views/filter-panel-renderer.ts": "a231643a2078",
         "src/data/view-filter-tree.ts": "1efdb923d4bb",
         "styles.css": "96f5fa440637",
         "tools/screenshots/theme.css": "8239cc22cceb",
@@ -3429,7 +3429,7 @@
       ],
       "layoutHash": "a9fd632b2da8",
       "sourceHashes": {
-        "src/views/filter-panel-renderer.ts": "df7edd42c4ee",
+        "src/views/filter-panel-renderer.ts": "a231643a2078",
         "src/data/view-filter-tree.ts": "1efdb923d4bb",
         "styles.css": "96f5fa440637",
         "tools/screenshots/theme.css": "8239cc22cceb",
@@ -3454,7 +3454,7 @@
       ],
       "layoutHash": "71ee27a8db9f",
       "sourceHashes": {
-        "src/views/filter-panel-renderer.ts": "df7edd42c4ee",
+        "src/views/filter-panel-renderer.ts": "a231643a2078",
         "src/data/view-filter-tree.ts": "1efdb923d4bb",
         "styles.css": "96f5fa440637",
         "tools/screenshots/theme.css": "8239cc22cceb",
@@ -3479,7 +3479,7 @@
       ],
       "layoutHash": "71ee27a8db9f",
       "sourceHashes": {
-        "src/views/filter-panel-renderer.ts": "df7edd42c4ee",
+        "src/views/filter-panel-renderer.ts": "a231643a2078",
         "src/data/view-filter-tree.ts": "1efdb923d4bb",
         "styles.css": "96f5fa440637",
         "tools/screenshots/theme.css": "8239cc22cceb",
@@ -3747,7 +3747,7 @@
       },
       "note": "A record whose note has frontmatter and nothing else. One faint line rather than an empty box: without an affordance the records most in need of a body would be exactly the ones that could not be given one.",
       "capture": "viewport",
-      "bytes": 52881
+      "bytes": 52870
     },
     {
       "id": "panel-record-detail-sheet-body-empty",
@@ -4027,7 +4027,7 @@
       ],
       "layoutHash": "6d599788ac66",
       "sourceHashes": {
-        "src/views/sort-panel-renderer.ts": "2689215615eb",
+        "src/views/sort-panel-renderer.ts": "6e7312250497",
         "styles.css": "96f5fa440637",
         "tools/screenshots/theme.css": "8239cc22cceb",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -4050,7 +4050,7 @@
       ],
       "layoutHash": "6d599788ac66",
       "sourceHashes": {
-        "src/views/sort-panel-renderer.ts": "2689215615eb",
+        "src/views/sort-panel-renderer.ts": "6e7312250497",
         "styles.css": "96f5fa440637",
         "tools/screenshots/theme.css": "8239cc22cceb",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -4073,7 +4073,7 @@
       ],
       "layoutHash": "fcfd2cde39f9",
       "sourceHashes": {
-        "src/views/sort-panel-renderer.ts": "2689215615eb",
+        "src/views/sort-panel-renderer.ts": "6e7312250497",
         "styles.css": "96f5fa440637",
         "tools/screenshots/theme.css": "8239cc22cceb",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -4096,7 +4096,7 @@
       ],
       "layoutHash": "fcfd2cde39f9",
       "sourceHashes": {
-        "src/views/sort-panel-renderer.ts": "2689215615eb",
+        "src/views/sort-panel-renderer.ts": "6e7312250497",
         "styles.css": "96f5fa440637",
         "tools/screenshots/theme.css": "8239cc22cceb",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -4120,7 +4120,7 @@
       ],
       "layoutHash": "de72617dc86d",
       "sourceHashes": {
-        "src/views/sort-panel-renderer.ts": "2689215615eb",
+        "src/views/sort-panel-renderer.ts": "6e7312250497",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
         "styles.css": "96f5fa440637",
         "tools/screenshots/theme.css": "8239cc22cceb",
@@ -4145,7 +4145,7 @@
       ],
       "layoutHash": "de72617dc86d",
       "sourceHashes": {
-        "src/views/sort-panel-renderer.ts": "2689215615eb",
+        "src/views/sort-panel-renderer.ts": "6e7312250497",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
         "styles.css": "96f5fa440637",
         "tools/screenshots/theme.css": "8239cc22cceb",
@@ -4170,7 +4170,7 @@
       ],
       "layoutHash": "17ee8bccb55b",
       "sourceHashes": {
-        "src/views/sort-panel-renderer.ts": "2689215615eb",
+        "src/views/sort-panel-renderer.ts": "6e7312250497",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
         "styles.css": "96f5fa440637",
         "tools/screenshots/theme.css": "8239cc22cceb",
@@ -4195,7 +4195,7 @@
       ],
       "layoutHash": "17ee8bccb55b",
       "sourceHashes": {
-        "src/views/sort-panel-renderer.ts": "2689215615eb",
+        "src/views/sort-panel-renderer.ts": "6e7312250497",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
         "styles.css": "96f5fa440637",
         "tools/screenshots/theme.css": "8239cc22cceb",
@@ -4220,7 +4220,7 @@
       ],
       "layoutHash": "adcaaa2a62cb",
       "sourceHashes": {
-        "src/views/view-config-panel-renderer.ts": "bf712d798709",
+        "src/views/view-config-panel-renderer.ts": "07c10bfdd2f1",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
         "styles.css": "96f5fa440637",
         "tools/screenshots/theme.css": "8239cc22cceb",
@@ -4245,7 +4245,7 @@
       ],
       "layoutHash": "adcaaa2a62cb",
       "sourceHashes": {
-        "src/views/view-config-panel-renderer.ts": "bf712d798709",
+        "src/views/view-config-panel-renderer.ts": "07c10bfdd2f1",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
         "styles.css": "96f5fa440637",
         "tools/screenshots/theme.css": "8239cc22cceb",
@@ -4270,7 +4270,7 @@
       ],
       "layoutHash": "9cc3b3afdac6",
       "sourceHashes": {
-        "src/views/view-config-panel-renderer.ts": "bf712d798709",
+        "src/views/view-config-panel-renderer.ts": "07c10bfdd2f1",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
         "styles.css": "96f5fa440637",
         "tools/screenshots/theme.css": "8239cc22cceb",
@@ -4295,7 +4295,7 @@
       ],
       "layoutHash": "9cc3b3afdac6",
       "sourceHashes": {
-        "src/views/view-config-panel-renderer.ts": "bf712d798709",
+        "src/views/view-config-panel-renderer.ts": "07c10bfdd2f1",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
         "styles.css": "96f5fa440637",
         "tools/screenshots/theme.css": "8239cc22cceb",
@@ -4774,7 +4774,7 @@
       },
       "note": "Multi-day all-day bars, timed events, an overflow week and one event carried across the week boundary.",
       "capture": "viewport",
-      "bytes": 86403
+      "bytes": 85997
     },
     {
       "id": "calendar-month-view",
@@ -4966,7 +4966,7 @@
       },
       "note": "Sticky day header and all-day strip over the 08–16 time grid; the current-time ruler sits on Wednesday at 13:45.",
       "capture": "viewport",
-      "bytes": 57756
+      "bytes": 57407
     },
     {
       "id": "calendar-week-time-grid",

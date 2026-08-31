@@ -2885,14 +2885,20 @@ export class DatabaseView extends FileView {
   private installHeaderPopoverAutoClose(kind: HeaderPopoverKind): void {
     this.removeHeaderPopoverAutoClose?.();
     this.removeHeaderPopoverAutoClose = undefined;
-    const panelSelector = kind === "filter"
-      ? ".db-filter-panel"
+    // Ask the renderer that built the panel, rather than searching the container for it.
+    //
+    // On a phone these panels are portalled onto the body to escape the workspace leaf's
+    // `contain: strict`, so a container-scoped selector stops matching the moment the panel
+    // becomes a sheet — and this returned early without registering anything. That is why the
+    // backdrop and Escape close these sheets on desktop and a drag does nothing on a phone:
+    // dismissal is the overlay stack's to perform, and the stack was never told the sheet exists.
+    const panel = kind === "filter"
+      ? this.filterPanelRenderer.getPanel()
       : kind === "sort"
-        ? ".db-sort-panel"
+        ? this.sortPanelRenderer.getPanel()
         : kind === "view"
-          ? ".db-view-config-panel"
-          : ".db-column-manager";
-    const panel = this.containerEl_?.querySelector<HTMLElement>(panelSelector);
+          ? this.viewConfigPanelRenderer.getPanel()
+          : this.columnManagerRenderer.getPanel();
     if (!panel) return;
     this.removeHeaderPopoverAutoClose = installPopoverAutoClose({
       panel,

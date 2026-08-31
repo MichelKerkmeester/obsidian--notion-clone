@@ -270,6 +270,21 @@ export interface ViewConfigPanelActions {
 // ───────────────────────────────────────────────────────────────────
 
 export class ViewConfigPanelRenderer {
+  // Hold the panel, because on a phone it does not stay where it was built.
+  //
+  // This is created inside the view container and then portalled onto the body, so a container-
+  // scoped `querySelector` — which is how this used to find its own panel — matches nothing from
+  // the moment it becomes a sheet. Measured on a phone viewport: reopening left TWO panels on the
+  // body and closing removed NEITHER, with the backdrop still up over the whole app. The same
+  // sequence on desktop was clean, because there the panel never leaves the container. That is the
+  // shape of a defect no desktop pass can see.
+  private panelEl: HTMLElement | null = null;
+
+  /** The live panel, wherever it currently is. Callers must not go looking for it by selector. */
+  getPanel(): HTMLElement | null {
+    return this.panelEl?.isConnected ? this.panelEl : null;
+  }
+
   render(
     containerEl: HTMLElement,
     visible: boolean,
@@ -277,12 +292,15 @@ export class ViewConfigPanelRenderer {
     actions: ViewConfigPanelActions,
     anchorEl?: HTMLElement
   ): void {
-    const existingPanel = containerEl.querySelector(".db-view-config-panel");
-    const savedScroll = (existingPanel as HTMLElement | null)?.scrollTop ?? 0;
-    containerEl.querySelectorAll(".db-view-config-panel").forEach((el) => el.remove());
+    const savedScroll = this.panelEl?.scrollTop ?? 0;
+    // Removing it is enough to take the backdrop with it: the sheet module drops the backdrop once
+    // the last live sheet leaves the document, so this does not have to remember to say so.
+    this.panelEl?.remove();
+    this.panelEl = null;
     if (!visible || !config) return;
 
     const panel = containerEl.createDiv({ cls: "db-view-config-panel", attr: { id: "db-view-config-panel" } });
+    this.panelEl = panel;
     const header = panel.createDiv({ cls: "db-panel-header" });
     header.createDiv({ cls: "db-panel-title", text: t("toolbar.settings") });
 

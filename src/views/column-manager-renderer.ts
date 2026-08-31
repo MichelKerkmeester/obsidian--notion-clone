@@ -55,6 +55,16 @@ export interface ColumnManagerActions {
 export class ColumnManagerRenderer {
   private draggedKey: string | null = null;
   private lastSelectedColumnVisibilityKey: string | null = null;
+  // Hold the panel, because on a phone it does not stay where it was built. It is created inside
+  // the view container and then portalled onto the body, so a container-scoped `querySelector` —
+  // which is how this used to find its own panel — matches nothing once it becomes a sheet, and
+  // the panel it failed to find is never removed.
+  private panelEl: HTMLElement | null = null;
+
+  /** The live panel, wherever it currently is. Callers must not go looking for it by selector. */
+  getPanel(): HTMLElement | null {
+    return this.panelEl?.isConnected ? this.panelEl : null;
+  }
 
   render(
     containerEl: HTMLElement,
@@ -65,15 +75,18 @@ export class ColumnManagerRenderer {
     actions: ColumnManagerActions,
     anchorEl?: HTMLElement
   ): void {
-    const existing = containerEl.querySelector(".db-column-manager");
-    const savedScroll = (existing as HTMLElement | null)?.scrollTop ?? 0;
-    if (existing) existing.remove();
+    const savedScroll = this.panelEl?.scrollTop ?? 0;
+    // Removing it is enough to take the backdrop with it: the sheet module drops the backdrop once
+    // the last live sheet leaves the document, so this does not have to remember to say so.
+    this.panelEl?.remove();
+    this.panelEl = null;
     if (!visible) return;
 
     const panel = containerEl.createDiv({
       cls: "db-column-manager",
       attr: { id: "db-column-manager" },
     });
+    this.panelEl = panel;
     const header = containerEl.querySelector(".db-header") || containerEl.querySelector(".db-toolbar");
     if (header?.parentElement) {
       header.parentElement.insertBefore(panel, header.nextSibling);

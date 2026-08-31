@@ -36,7 +36,7 @@ _memory:
 
 - [x] **T1** Build the producer-parity check — REQ-001, D5. **Blocking.**
       *Closed by:* `tools/live/sheet-teardown.mjs` + harness, now gate lane `sheet-teardown`
-      (17 lanes). **Observed red first, with the required asymmetry:** owned menu and record panel
+      (the gate is 18 lanes as of T4). **Observed red first, with the required asymmetry:** owned menu and record panel
       PASS, the three positioner-mounted families FAIL, exit 1. Re-run against the whole pre-fix
       file after the fix: the same three go red again, exit 1.
       *Evidence to close:* for each sheet family, open then close, assert no `.db-mobile-sheet-scrim`
@@ -56,9 +56,16 @@ _memory:
       explicit control.
       *Evidence to close:* T1 goes green for every family; a caller that only removes its element
       still leaves no scrim.
-- [ ] **T3** Retained-element pattern for view-config and column-manager — REQ-001.
+- [x] **T3** Retained-element pattern for view-config and column-manager — REQ-001.
       *Evidence to close:* closing each removes its own sheet; no orphan survives to block a later
       cleanup.
+      *Closed by:* both renderers now hold their panel instead of searching the container for it,
+      and both expose `getPanel()`. Reproduced first, on a phone viewport, with the real renderer:
+      reopening left **2 panels** on the body and closing removed **neither**, with the backdrop
+      still up. Desktop was clean throughout — which is why no desktop pass could see it. After the
+      fix: one panel throughout, body clean, backdrop gone. Guarded by two new real-renderer cases
+      in the `sheet-teardown` lane, which fail with exactly that duplicate message when the
+      renderers are reverted.
 
 ## PHASE 3: THE TWO DRAG CAUSES, SEPARATELY
 
@@ -74,9 +81,23 @@ _memory:
       destroys the bar; re-asserting restores it) stay green either way, which is the asymmetry
       that makes a false green hard to manufacture.
       *Not closed by this:* the operator has not seen it (T10).
-- [ ] **T5** Register the header panels from a retained reference — REQ-003, D3.
+- [x] **T5** Register the header panels from a retained reference — REQ-003, D3.
       *Evidence to close:* under `is-phone`, `dismissPanel(panel, "programmatic")` returns true.
       Today it returns false.
+      *Closed by:* `installHeaderPopoverAutoClose` now asks the renderer that built the panel
+      instead of running a container-scoped selector that cannot match a portalled node. All four
+      renderers expose `getPanel()`; filter and sort already retained their panel and only needed
+      the getter.
+      *Measured:* a `sheet-teardown` case now runs BOTH lookups against the same open sheet and
+      asserts all three parts together — the container selector finds nothing, the retained
+      reference finds the sheet, and `overlayStack.dismissPanel(panel, "programmatic")` returns
+      **true**. The first clause is what stops it passing vacuously: if both lookups found the
+      panel, the sheet never portalled and the case would prove nothing.
+      *Honest limit:* this case cannot be observed red by reverting, the way T1 and T4 were.
+      Pre-fix the renderers have no `getPanel()`, so the harness would not compile rather than fail
+      — its discrimination comes from the three-way assertion, not from a red-first run. An earlier
+      probe reading of `dismissPanel === false` was discarded rather than cited: that probe never
+      registered anything, so its `false` said nothing about this path.
 
 ## PHASE 4: THE REST
 

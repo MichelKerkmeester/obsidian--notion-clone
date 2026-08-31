@@ -135,6 +135,11 @@ export class FilterPanelRenderer {
   private refreshTimer: number | null = null;
   private removeFocusTrap: (() => void) | null = null;
 
+  /** The live panel, wherever it currently is. On a phone it is portalled out of the container. */
+  getPanel(): HTMLElement | null {
+    return this.panelEl?.isConnected ? this.panelEl : null;
+  }
+
   render(
     containerEl: HTMLElement,
     visible: boolean,

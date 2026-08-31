@@ -11,8 +11,8 @@ _memory:
     packet_pointer: "public/005-component-surface-system/031-sheet-lifecycle-ownership"
     last_updated_at: "2026-08-31T20:30:00Z"
     last_updated_by: "phase-implementer"
-    recent_action: "Group sheet keeps its bar through a rebuild; drag measured with a real pointer"
-    next_safe_action: "T5, the view sheet: register it with the overlay stack from a retained reference"
+    recent_action: "Header panels hold their own panel; portalled sheets now reach the overlay stack"
+    next_safe_action: "T6, the 16 modal sheets that draw a handle wired to nothing"
     blockers: []
     key_files:
       - "spec.md"
@@ -21,7 +21,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-031-goal"
       parent_session_id: null
-    completion_pct: 33
+    completion_pct: 50
     open_questions:
       - "Microtask prune or explicit teardown for the live-sheet set"
     answered_questions:
@@ -76,7 +76,11 @@ defect in this phase is a consequence of that shape.
       `completion_pct: 33` while only ONE criterion was ticked. That was a criterion ahead of the
       evidence, counted from tasks (T1, T2) against a denominator of criteria. The figure is
       honest as of this line and not before it.
-- [ ] A phone view sheet is in the overlay stack. Today `dismissPanel` returns false.
+- [x] A phone view sheet is in the overlay stack. Today `dismissPanel` returns false.
+      **Met.** Measured in one case against a real open sheet: the container selector finds
+      nothing, the retained reference finds the sheet, and `dismissPanel(panel, "programmatic")`
+      returns true. The first clause is what keeps it from passing vacuously — if both lookups
+      found the panel, the sheet never portalled.
 - [ ] No sheet draws an unwired handle.
 - [ ] A flick dismisses.
 - [ ] The operator opens and closes each sheet on device without the app locking up. **Only the
@@ -91,8 +95,8 @@ defect in this phase is a consequence of that shape.
 Volatile. Not part of the directive.
 
 Opened from a research pass that verified each finding against the shipped 1.3.9 bundle rather than
-source alone. Findings 1 and 2 are now fixed and gated; 3, 4, 5 and 6 are untouched, and none of the
-six is device-confirmed.
+source alone. Findings 1, 2 and 3 are now fixed and gated; 4, 5 and 6 are untouched, and none of the six is
+device-confirmed.
 
 ### The six findings, ranked as delivered
 
@@ -104,6 +108,20 @@ six is device-confirmed.
 | 4 | Report 26, "some sheets" | 16 `DbModal` sheets draw a handle wired to nothing | ~10 lines |
 | 5 | Report 27, jank | A keyboard inset written on the whole container, not the one bar that reads it | 2 lines |
 | 6 | Report 26, partial | 96px distance-only dismissal; a flick does nothing | ~15 lines |
+
+### #3 was estimated at ~5 lines and was not
+
+The estimate assumed one missing registration. The cause underneath it is that a phone sheet is
+portalled onto the body, so **every** container-scoped lookup for these panels misses — the
+registration was one victim, and each renderer's own cleanup was another. Reproduced on a phone
+viewport with the real renderer: reopening left two panels on the body and closing removed neither,
+with the backdrop still up. Desktop was clean throughout, which is why the desktop-only defect
+survived every desktop pass.
+
+So #3 was two defects sharing a mechanism, and the second was the more serious: an orphaned panel
+stays *connected*, so the finding-1 watcher correctly holds the backdrop up for what it can only
+read as an open sheet. Finding 1's fix does not rescue this case, and a reading that stopped at
+"the backdrop leak is fixed" would have shipped the freeze.
 
 ### Honest sizing on #5
 

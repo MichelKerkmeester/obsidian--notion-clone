@@ -33,6 +33,10 @@
 // ───────────────────────────────────────────────────────────────────
 
 import { applySheetChrome } from "../../src/views/mobile-bottom-sheet";
+import { ViewConfigPanelRenderer } from "../../src/views/view-config-panel-renderer";
+import { ColumnManagerRenderer } from "../../src/views/column-manager-renderer";
+import { installPopoverAutoClose } from "../../src/views/popover-auto-close";
+import { overlayStack } from "../../src/views/overlay-stack";
 
 // ───────────────────────────────────────────────────────────────────
 // 2. SHAPES
@@ -171,6 +175,171 @@ async function runCompoundingCase(doc: Document): Promise<TeardownResult> {
   };
 }
 
+// ───────────────────────────────────────────────────────────────────
+// 3a. THE REAL HEADER PANELS
+// ───────────────────────────────────────────────────────────────────
+
+/**
+ * Open, reopen and close a real header panel, and require the body to be clean at the end.
+ *
+ * Everything above models a close SHAPE with a plain div, which is honest about the chrome
+ * contract and blind to what any caller actually does. These two cases close that gap for the
+ * surfaces where it mattered most.
+ *
+ * Both renderers used to find their own panel with a container-scoped `querySelector`, and on a
+ * phone the panel is portalled onto the body — so the lookup matched nothing from the moment it
+ * became a sheet. Measured before the fix: reopening left TWO panels on the body and closing
+ * removed NEITHER, with the backdrop still up over the whole app. On desktop the same sequence was
+ * clean, because there the panel never leaves the container, which is why no desktop pass could
+ * see it. The reopen step is in here deliberately: a check that only opened and closed once would
+ * have passed on the duplicate-leaking code.
+ */
+async function runHeaderPanel(
+  doc: Document,
+  producer: string,
+  selector: string,
+  open: (container: HTMLElement, visible: boolean, anchor: HTMLElement) => void,
+): Promise<TeardownResult> {
+  clearBody(doc);
+  const container = doc.createElement("div");
+  container.className = "note-database-container";
+  doc.body.appendChild(container);
+  // A connected anchor, because the positioner returns without doing anything when it has none —
+  // and a panel that never became a sheet would measure nothing about sheet teardown.
+  const anchor = doc.createElement("button");
+  container.appendChild(anchor);
+
+  open(container, true, anchor);
+  const mountedScrim = doc.body.querySelectorAll(SCRIM).length;
+  const mountedPanels = doc.body.querySelectorAll(selector).length;
+
+  // Reopening without closing: the step that exposed the duplicate.
+  open(container, true, anchor);
+  const panelsAfterReopen = doc.body.querySelectorAll(selector).length;
+
+  open(container, false, anchor);
+  await settle(doc);
+
+  const scrimLeft = doc.body.querySelectorAll(SCRIM).length;
+  const panelsLeft = doc.body.querySelectorAll(selector).length;
+  container.remove();
+
+  const mountedCleanly = mountedScrim === 1 && mountedPanels === 1;
+  const pass = mountedCleanly && panelsAfterReopen === 1 && scrimLeft === 0 && panelsLeft === 0;
+
+  return {
+    producer,
+    closeShape: "open / reopen / close",
+    scrimLeft,
+    sheetsLeft: panelsLeft,
+    pass,
+    detail: !mountedCleanly
+      ? `opening produced ${mountedPanels} panel(s) and ${mountedScrim} backdrop(s), expected 1 of each`
+        + " — this run proves nothing about teardown"
+      : panelsAfterReopen !== 1
+        ? `reopening left ${panelsAfterReopen} panels on the body — the old one was never found to remove`
+        : pass
+          ? "one panel throughout, and the body is clean after close"
+          : `${panelsLeft} panel(s) and ${scrimLeft} backdrop(s) left on the body after close`,
+  };
+}
+
+/**
+ * Thunks, not promises. These cases share one body and each resets it, so building them as started
+ * promises would let the second one clear the body out from under the first before it read its
+ * result — the harness racing itself, which is exactly the kind of fault that reports a green.
+ */
+function headerPanelCases(doc: Document): (() => Promise<TeardownResult>)[] {
+  const config = {
+    viewType: "table",
+    schema: { columns: [{ key: "name", label: "Name", type: "text" }] },
+  } as never;
+  const columns = [{ key: "name", label: "Name", type: "text" }] as never;
+
+  const viewConfig = new ViewConfigPanelRenderer();
+  const columnManager = new ColumnManagerRenderer();
+  const noop = (): void => undefined;
+
+  return [
+    () => runHeaderPanel(doc, "view config panel (real renderer)", ".db-view-config-panel", (container, visible, anchor) => {
+      viewConfig.render(container, visible, config, { app: {} as never, onChange: noop } as never, anchor);
+    }),
+    () => runHeaderPanel(doc, "column manager (real renderer)", ".db-column-manager", (container, visible, anchor) => {
+      // `hiddenColumns` is a real Set here, not a stub: the header reads it to count visible
+      // columns, so an empty object would throw rather than render.
+      columnManager.render(container, visible, config, { groupByField: "", hiddenColumns: new Set<string>() } as never, columns, {
+        close: noop,
+        setColumnVisible: noop,
+        setAllColumnsVisible: noop,
+        moveColumn: noop,
+        moveColumnTo: noop,
+        toggleColumnWrap: noop,
+        editColumn: noop,
+        addColumn: noop,
+        deleteColumn: noop,
+      } as never, anchor);
+    }),
+  ];
+}
+
+/**
+ * The two lookups, run against the same open sheet, in the same breath.
+ *
+ * A phone sheet is portalled onto the body, so the container-scoped `querySelector` this used to
+ * register with matches NOTHING — it returned early and the overlay stack never learned the sheet
+ * existed, which is why the backdrop and Escape dismiss these panels on desktop while a drag does
+ * nothing on a phone. Dismissal is the stack's to perform, and it can only dismiss what it knows.
+ *
+ * Both lookups are run here rather than only the new one, because "the retained reference works"
+ * is only half the claim; the half that explains the bug is that the selector does not. A run
+ * where BOTH found the panel would mean the sheet never portalled and the case proves nothing.
+ */
+async function runRegistrationCase(doc: Document): Promise<TeardownResult> {
+  clearBody(doc);
+  const container = doc.createElement("div");
+  container.className = "note-database-container";
+  doc.body.appendChild(container);
+  const anchor = doc.createElement("button");
+  container.appendChild(anchor);
+
+  const renderer = new ViewConfigPanelRenderer();
+  const config = {
+    viewType: "table",
+    schema: { columns: [{ key: "name", label: "Name", type: "text" }] },
+  } as never;
+  renderer.render(container, true, config, { app: {} as never, onChange: () => undefined } as never, anchor);
+
+  const foundBySelector = container.querySelector<HTMLElement>(".db-view-config-panel");
+  const foundByReference = renderer.getPanel();
+
+  let dismissed = false;
+  if (foundByReference) {
+    installPopoverAutoClose({ panel: foundByReference, anchorEl: anchor, close: () => foundByReference.remove() });
+    dismissed = overlayStack.dismissPanel(foundByReference, "programmatic");
+  }
+  await settle(doc);
+
+  renderer.render(container, false, config, { app: {} as never, onChange: () => undefined } as never, anchor);
+  await settle(doc);
+  container.remove();
+
+  const pass = foundBySelector === null && foundByReference !== null && dismissed;
+  return {
+    producer: "overlay-stack registration of a portalled sheet",
+    closeShape: "selector vs retained reference",
+    scrimLeft: doc.body.querySelectorAll(SCRIM).length,
+    sheetsLeft: doc.body.querySelectorAll(SHEET).length,
+    pass,
+    detail: foundBySelector !== null
+      ? "the container selector still found the panel, so it never portalled — this run proves nothing"
+      : !foundByReference
+        ? "the retained reference did not find the panel either"
+        : dismissed
+          ? "the selector finds nothing, the retained reference finds the sheet, and the stack dismisses it"
+          : "the stack would not dismiss the sheet, so it was never registered",
+  };
+}
+
 export async function runSheetTeardownParity(doc: Document = document): Promise<TeardownResult[]> {
   const results: TeardownResult[] = [
     // The reference. Its own comment says it takes the chrome down before the node goes,
@@ -184,6 +353,9 @@ export async function runSheetTeardownParity(doc: Document = document): Promise<
     await runProducer(doc, "add-view sheet", "remove-only"),
     await runCompoundingCase(doc),
   ];
+  // Real renderers, started one at a time: each resets the body, so they must not overlap.
+  for (const runCase of headerPanelCases(doc)) results.push(await runCase());
+  results.push(await runRegistrationCase(doc));
   clearBody(doc);
   return results;
 }

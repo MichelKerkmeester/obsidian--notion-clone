@@ -11,8 +11,8 @@ _memory:
     packet_pointer: "public/005-component-surface-system/031-sheet-lifecycle-ownership"
     last_updated_at: "2026-08-31T20:45:00Z"
     last_updated_by: "phase-implementer"
-    recent_action: "Group sheet keeps its bar through a rebuild; real-pointer drag measured"
-    next_safe_action: "T5, the view sheet: register it with the overlay stack from a retained reference"
+    recent_action: "Header panels hold their own panel; portalled sheets reach the overlay stack"
+    next_safe_action: "T6, the 16 modal sheets that draw a handle wired to nothing"
     blockers:
       - "Nothing here is confirmed on the operator's device"
     key_files:
@@ -22,7 +22,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-031-impl"
       parent_session_id: null
-    completion_pct: 33
+    completion_pct: 50
     open_questions:
       - "Does a returned disposer still earn its place now the watcher makes callers correct?"
     answered_questions:
@@ -43,7 +43,7 @@ _memory:
 |---|---|
 | **Spec Folder** | 031-sheet-lifecycle-ownership |
 | **Level** | 2 |
-| **Status** | In progress — 2 of 6 criteria met, backdrop leak and group-sheet bar both fixed and guarded |
+| **Status** | In progress — 3 of 6 criteria met; the freeze, the group-sheet bar and the portalled-sheet lookups are fixed and gated |
 | **State** | Committed; gate 18 green, exit 0. Not device-confirmed |
 <!-- /ANCHOR:metadata -->
 
@@ -85,6 +85,26 @@ which rejects a pointer id no real device owns).
 Before fixing it, all 40 `.empty()` sites under `src/views/` were read to find out whether the same
 defect sat in others. Mostly it did not — the inventory and the two conditional cases that remain
 are in `spec.md` §5a.
+
+### The header panels find their own panel (REQ-001, REQ-003)
+
+A phone sheet is portalled onto the body to escape the workspace leaf's `contain: strict`. Two of
+these renderers looked for their own panel with a **container-scoped** `querySelector`, which stops
+matching the moment the panel leaves the container — and so did the code that registers the panel
+with the overlay stack.
+
+Reproduced first, on a phone viewport, driving the real renderer: reopening left **two** panels on
+the body and closing removed **neither**, with the backdrop still up over the whole app. The same
+sequence on desktop was clean, because there the panel never moves. That asymmetry is the whole
+reason it survived: there is no desktop state in which it appears.
+
+**This is the more serious half of the finding, and it is not rescued by the backdrop fix.** An
+orphaned panel is still *connected*, so the watcher correctly holds the backdrop up for what it can
+only read as an open sheet. Stopping at "the backdrop leak is fixed" would have shipped the freeze.
+
+All four header renderers now hold their panel and expose `getPanel()`; filter and sort already
+retained theirs and needed only the getter. Removal is enough to take the backdrop with it, which
+is the payoff of the watcher above.
 <!-- /ANCHOR:what-built -->
 
 ---
@@ -121,6 +141,9 @@ packet's own lens turned on its own instrument.
 | Captures | Recaptured and read; the owned menu sheet renders unchanged |
 | The rebuild check discriminates | Observed **red first** on both halves: bar `before: true, after: false`, and the drag could not be staged. Green with the fix, and a real 120px pointer drag dismisses the rebuilt sheet |
 | The rebuild check's premise holds | Its two mechanism cases (emptying destroys the bar; re-asserting restores it) stay green either way, so a green producer case cannot be a vacuous one |
+| The portalled-lookup defect is real | Reproduced before fixing, on a phone viewport with the real renderer: reopen left 2 panels, close removed 0, backdrop still up. Desktop clean in the same run |
+| Its guard discriminates | Reverting both renderers turns the two new real-renderer cases red with the exact duplicate message, while the six modelled cases stay green |
+| The sheet reaches the overlay stack | One case asserts all three parts together: the container selector finds nothing, the retained reference finds the sheet, and `dismissPanel` returns true |
 <!-- /ANCHOR:verification -->
 
 ---
@@ -131,6 +154,11 @@ packet's own lens turned on its own instrument.
 No Obsidian host is constructed, so the check measures the **chrome contract**, not any particular
 caller's lifecycle. A producer whose close path is never reached on a device would pass here and
 still leak there.
+
+**The registration case cannot be observed red by reverting**, the way the others were: pre-fix the
+renderers have no `getPanel()`, so the harness would fail to compile rather than fail. Its
+discrimination comes from asserting the selector finds nothing in the same breath — if both lookups
+found the panel, the sheet never portalled and the case proves nothing.
 
 **Nothing is device-confirmed.** The operator reported this as the app freezing on close; that
 report closes when they say it no longer does, and not before.
@@ -150,4 +178,7 @@ report closes when they say it no longer does, and not before.
 | I counted a criterion that was not met | The first commit recorded "2 of 6 criteria" and `completion_pct: 33` with only ONE criterion ticked — tasks counted against a denominator of criteria. T4 makes 2 of 6 true now, which is exactly why it is written down: a wrong number that later comes true is the kind that never gets caught |
 | I expected the group fix to need two halves | The reasoning was that re-creating the bar leaves the drag bound to a detached node. The source says otherwise, in a comment written for this exact reason: the listeners are on the panel and the bar is re-resolved at pointerdown. Read before predicting |
 | I expected the defect to be systemic | A guess of "8 or more sites" put a shared lifecycle fix on the table. Reading all 40 `.empty()` sites brought it down to one unconditional case plus two conditional ones, so the one-liner was the right size and the bigger fix was not built |
+| A harness case that raced itself | The two real-renderer cases share one body and each resets it, and they were first built as already-started promises — so the second would clear the body under the first before it read its result. Rewritten as thunks awaited in sequence. A harness racing itself reports a green |
+| I nearly cited a reading that meant nothing | An early probe reported `dismissPanel === false` and it was tempting as evidence for REQ-003. That probe never registered anything, so `false` was the only answer it could give, in either mode. Discarded and measured properly instead |
+| The gate's `evidence` lane self-heals | It checks artefact freshness at lane 9, and lanes 11, 16, 17 and 18 re-stamp their own artefacts afterwards. So the first run after a source change reds and the second greens with no human action. The re-stamps are genuine re-measurements, so nothing is hidden — but "just run it again" is the wrong habit to teach, and moving the lane last would fix it. Left for the packet that owns the gate |
 <!-- /ANCHOR:decisions -->

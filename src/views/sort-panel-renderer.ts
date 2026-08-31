@@ -41,6 +41,11 @@ export class SortPanelRenderer {
   private anchorEl: HTMLElement | null = null;
   private draggedRuleIndex: number | null = null;
 
+  /** The live panel, wherever it currently is. On a phone it is portalled out of the container. */
+  getPanel(): HTMLElement | null {
+    return this.panelEl?.isConnected ? this.panelEl : null;
+  }
+
   render(
     containerEl: HTMLElement,
     visible: boolean,
