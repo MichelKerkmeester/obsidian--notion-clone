@@ -47,6 +47,31 @@ import { openExternalUrl } from "./open-external";
 // 2. CONSTANTS
 // ───────────────────────────────────────────────────────────────────
 
+/**
+ * Can two properties share a line in a field area this wide?
+ *
+ * The decision `shouldReserveColumns` makes, lifted out of it so a check can ask the same question
+ * the renderer asked instead of re-deriving it. It was a private method needing a rendered element,
+ * which meant a width sweep could only compare its own arithmetic against the renderer's — and a
+ * sweep built that way passes a renderer that reserves everywhere, because both sides move together.
+ *
+ * The test is the two NARROWEST declared widths plus one column gap, deliberately: the uncertain
+ * cases resolve toward reserving, because a needless reservation costs height while a needless skip
+ * costs the alignment the mechanism exists to hold. So there is a band where this says yes and the
+ * pair the data actually renders still does not fit — 14 reservations at a 268px field area, where
+ * only one property lands per line. That band is intended, and a check that fails it fails a correct
+ * renderer.
+ */
+export function reservesColumnsOnWrappingLine(
+  fieldWidths: readonly number[],
+  columnGap: number,
+  fieldAreaWidth: number,
+): boolean {
+  if (fieldWidths.length < 2) return true;
+  const widths = [...fieldWidths].sort((a, b) => a - b);
+  return widths[0] + columnGap + widths[1] <= fieldAreaWidth;
+}
+
 const ROW_MIME = "application/x-note-database-row";
 const ROW_FROM_GROUP_MIME = "application/x-note-database-row-from-group";
 const ROW_BATCH_MIME = "application/x-note-database-row-batch";
@@ -800,10 +825,11 @@ export class ListRenderer {
     // A wrapping column takes its width from its content, so it can always share a line and can
     // never be the proof that nothing fits beside it.
     if (fields.some((col) => col.wrap)) return true;
-    const widths = fields.map((col) => getFieldWidth(config, col)).sort((a, b) => a - b);
-    if (widths.length < 2) return true;
-    const gap = Number.parseFloat(style.columnGap) || 0;
-    return widths[0] + gap + widths[1] <= meta.getBoundingClientRect().width;
+    return reservesColumnsOnWrappingLine(
+      fields.map((col) => getFieldWidth(config, col)),
+      Number.parseFloat(style.columnGap) || 0,
+      meta.getBoundingClientRect().width,
+    );
   }
 
   /**

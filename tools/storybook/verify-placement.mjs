@@ -112,13 +112,13 @@ import { openRecordDetailPanel } from "${join(REPO, "src/views/record-detail-pan
 import { RowMenu } from "${join(REPO, "src/views/row-menu")}";
 import { ColumnMenu } from "${join(REPO, "src/views/column-menu")}";
 import { CellRenderer } from "${join(REPO, "src/views/cell-renderer")}";
-import { ListRenderer } from "${join(REPO, "src/views/list-renderer")}";
+import { ListRenderer, reservesColumnsOnWrappingLine } from "${join(REPO, "src/views/list-renderer")}";
 import { DatabaseView } from "${join(REPO, "src/views/database-view")}";
 import { EmbeddedDatabaseRenderer } from "${join(REPO, "src/views/embedded-database-renderer")}";
 import { getColumnDisplayType, isEmptyValue } from "${join(REPO, "src/data/column-display")}";
 import { formatEuroCurrency, formatEuroNumber } from "${join(REPO, "src/data/euro-format")}";
 globalThis.__edit = { openRecordDetailPanel, closeRecordDetailPanel, CellRenderer };
-globalThis.__list = { ListRenderer };
+globalThis.__list = { ListRenderer, reservesColumnsOnWrappingLine };
 globalThis.__number = { renderCardField, CellRenderer, getColumnDisplayType, isEmptyValue, formatEuroCurrency, formatEuroNumber };
 globalThis.__selection = { DatabaseView, EmbeddedDatabaseRenderer };
 globalThis.__place = { positionToolbarPopover, getVisiblePopoverBounds, COMPACT_MENU_POPOVER, applySheetChrome, renderCardField, createOwnedMenu, createMenuRow, ToolbarRenderer, trackCellGesture, nextCellRange, resolveCellTapAction, isMainItemColumn, shouldExtendRowRange, applyRowSelectionPress, attachRowRangeGesture, isRowSelectionCheckbox, attachLongPress, isTouchDevice, attachTitleOpenAffordance, setupTitleCellTap, openRecordDetailPanel, closeRecordDetailPanel, getOpenRecordDetailPath, refreshRecordDetailPanel, RowMenu, ColumnMenu };
@@ -4343,9 +4343,25 @@ const rendererRhythmResults = [];
 await section("the same properties through the renderer that ships", async () => {
   const sheets = ["tools/screenshots/theme.css", "styles.css", "tools/screenshots/runtime-vars.css"]
     .map((file) => `<style>${readFileSync(join(REPO, file), "utf8")}</style>`).join("\n");
+  // "Phone" is not a width, and that is the whole point of the sweep.
+  //
+  // One 402px phone answered the reservation question once, by hand, and a criterion was written off
+  // it. But `shouldReserveColumns` decides on the field area's measured width, so the interesting
+  // cases are the band where it changes its mind and the two sides of it — and a phone rotated to
+  // landscape is wide while still carrying `is-phone`, which is the case a device-keyed check gets
+  // wrong on a correct renderer.
+  //
+  // Six widths under the same body class: 360 is the narrowest common handset, 402 is the reported
+  // one, 430 is the largest current handset, 480 and 540 straddle the band where two properties
+  // start to fit, and 1024 is that phone in landscape on a tablet-sized viewport.
   for (const device of [
     { id: "desktop", viewport: VIEWPORT, bodyClass: "", touch: false },
-    { id: "phone", viewport: { width: 402, height: 874 }, bodyClass: "is-mobile is-phone", touch: true },
+    ...[360, 402, 430, 480, 540, 1024].map((width) => ({
+      id: `phone-${width}`,
+      viewport: { width, height: 874 },
+      bodyClass: "is-mobile is-phone",
+      touch: true,
+    })),
   ]) {
     const context = await browser.newContext({
       viewport: device.viewport, reducedMotion: "reduce", hasTouch: device.touch, isMobile: device.touch,
@@ -4440,6 +4456,23 @@ await section("the same properties through the renderer that ships", async () =>
       // renderer at the first width nobody tested.
       const isGrid = metas.length > 0 && metas.every((m) => getComputedStyle(m).display === "grid");
       const reservationHoldsSomething = isGrid || perLine >= 2;
+      // What the RENDERER decided, asked of the shipped decision rather than re-derived here. The
+      // first version of this sweep split its arms on `perLine`, which is what actually fitted — and
+      // a rig that reserved at every width simply moved every narrow surface into the permissive arm
+      // and passed. Both sides moved together, so the check could not see the defect it exists for.
+      //
+      // The inputs are read off the rendered boxes: each field and placeholder carries the declared
+      // width the renderer sized it from, and the gap and the field area are computed style.
+      const declaredWidths = metas.length
+        ? [...metas[0].querySelectorAll(".db-list-field")]
+          .map((f) => Number.parseFloat(f.style.getPropertyValue("--db-card-field-width")))
+          .filter((w) => Number.isFinite(w))
+        : [];
+      const columnGap = metas.length ? Number.parseFloat(getComputedStyle(metas[0]).columnGap) || 0 : 0;
+      const fieldAreaWidth = metas.length ? metas[0].getBoundingClientRect().width : 0;
+      const rendererReserves = isGrid
+        || globalThis.__list.reservesColumnsOnWrappingLine(declaredWidths, columnGap, fieldAreaWidth);
+      const narrowestPair = [...declaredWidths].sort((a, b) => a - b).slice(0, 2).join(" + ");
       // A field line carrying nothing but reserved boxes: zero height nobody sees, plus the row gap
       // beneath it. A grid has none by construction. A wrapping line grows one per gap in the data.
       let deadLines = 0;
@@ -4479,7 +4512,7 @@ await section("the same properties through the renderer that ships", async () =>
             + ` ${isGrid ? "grid" : "wrapping line"}, so a reservation holds a real slot here.`
             + " A full hidden field would carry a label and a value nobody can see, on every"
             + " empty property of every row",
-        } : {
+        } : !rendererReserves ? {
           name: `on ${id} the wrapping card spends no line on a property it does not show`,
           pass: metas.length > 0 && deadLines === 0 && placeholders === 0,
           detail: `${metas.length} cards over ${totalLines} field line(s), ${deadLines} of them`
@@ -4488,6 +4521,28 @@ await section("the same properties through the renderer that ships", async () =>
             + ` only ${perLine} property fits per line here, so every property sits at x=0 either`
             + " way and a reservation buys a blank line and the row gap under it rather than a slot"
             + " — measured at 84px per card on the reported database",
+        } : {
+          // THE DECLARED OVER-RESERVATION BAND, reported rather than failed.
+          //
+          // `shouldReserveColumns` tests the two NARROWEST declared widths plus a gap, deliberately,
+          // so the uncertain cases resolve toward reserving: a needless reservation costs height
+          // while a needless skip costs the alignment the whole mechanism exists to hold. At this
+          // width the narrowest pair fits and the pair the data actually renders does not, so the
+          // renderer reserves and nothing pairs.
+          //
+          // Failing here would fail a correct implementation — the shape the goal line itself warns
+          // about. What IS asserted is that the band stays cheap: every reserved box holds nothing,
+          // and the dead lines are exactly the reservations rather than a multiple of them.
+          name: `on ${id} the declared over-reservation band stays a reservation and not a render`,
+          pass: metas.length > 0 && nodesInPlaceholders === 0 && deadLines <= placeholders,
+          detail: `only ${perLine} property fits per line here, yet ${placeholders} box(es) are`
+            + ` reserved — the narrowest declared pair (${narrowestPair} + ${Math.round(columnGap)}px`
+            + ` gap) fits this ${Math.round(fieldAreaWidth)}px field area and the pair the data`
+            + ` renders does not, which is the band the shipped decision resolves toward reserving`
+            + ` on purpose. The cost is bounded and measured: ${nodesInPlaceholders} child element(s)`
+            + ` inside those boxes, ${deadLines} line(s) carrying only reserved boxes across`
+            + ` ${totalLines} field line(s), field area ${metaHeight}px per card. Failing this width`
+            + ` would fail a correct renderer; letting it go unreported would hide the height`,
         },
       ];
     }, { id: device.id, built }));

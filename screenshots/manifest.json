@@ -785,7 +785,7 @@
       ],
       "layoutHash": "d6746de4359c",
       "sourceHashes": {
-        "src/views/list-renderer.ts": "67a9210b863f",
+        "src/views/list-renderer.ts": "722b433d196c",
         "src/views/gallery-renderer.ts": "c7d6e9216f39",
         "src/views/board-renderer.ts": "31a49df5b500",
         "styles.css": "e018db2135f2",
@@ -812,7 +812,7 @@
       ],
       "layoutHash": "d6746de4359c",
       "sourceHashes": {
-        "src/views/list-renderer.ts": "67a9210b863f",
+        "src/views/list-renderer.ts": "722b433d196c",
         "src/views/gallery-renderer.ts": "c7d6e9216f39",
         "src/views/board-renderer.ts": "31a49df5b500",
         "styles.css": "e018db2135f2",
@@ -839,7 +839,7 @@
       ],
       "layoutHash": "d106956abbb6",
       "sourceHashes": {
-        "src/views/list-renderer.ts": "67a9210b863f",
+        "src/views/list-renderer.ts": "722b433d196c",
         "src/views/gallery-renderer.ts": "c7d6e9216f39",
         "src/views/board-renderer.ts": "31a49df5b500",
         "styles.css": "e018db2135f2",
@@ -866,7 +866,7 @@
       ],
       "layoutHash": "d106956abbb6",
       "sourceHashes": {
-        "src/views/list-renderer.ts": "67a9210b863f",
+        "src/views/list-renderer.ts": "722b433d196c",
         "src/views/gallery-renderer.ts": "c7d6e9216f39",
         "src/views/board-renderer.ts": "31a49df5b500",
         "styles.css": "e018db2135f2",
@@ -1058,7 +1058,7 @@
       },
       "note": "The phone form of the owned menu. Rows share one left edge with the icon in a fixed leading column, hairlines divide neighbours but not the last row of a group, and a row that opens a submenu carries a trailing chevron. Captured in viewport mode so the fixed sheet docks at the bottom.",
       "capture": "viewport",
-      "bytes": 36596
+      "bytes": 36591
     },
     {
       "id": "chrome-owned-menu-sheet",
@@ -1085,7 +1085,7 @@
       },
       "note": "The phone form of the owned menu. Rows share one left edge with the icon in a fixed leading column, hairlines divide neighbours but not the last row of a group, and a row that opens a submenu carries a trailing chevron. Captured in viewport mode so the fixed sheet docks at the bottom.",
       "capture": "viewport",
-      "bytes": 38739
+      "bytes": 38727
     },
     {
       "id": "chrome-selection-status-bar",
@@ -3884,7 +3884,7 @@
       },
       "note": "The phone form of the record detail panel. positionToolbarPopover renders it as a bottom sheet with a grab handle; a permanent close button (reusing db-cell-edit-close) and drag-down on the handle dismiss it where the desktop panel relies on Escape and outside-click. Captured in viewport mode so the fixed sheet docks at the bottom. The note body is the last group, below the properties.",
       "capture": "viewport",
-      "bytes": 77062
+      "bytes": 77050
     },
     {
       "id": "panel-record-detail-sheet",
@@ -3913,7 +3913,7 @@
       },
       "note": "The phone form of the record detail panel. positionToolbarPopover renders it as a bottom sheet with a grab handle; a permanent close button (reusing db-cell-edit-close) and drag-down on the handle dismiss it where the desktop panel relies on Escape and outside-click. Captured in viewport mode so the fixed sheet docks at the bottom. The note body is the last group, below the properties.",
       "capture": "viewport",
-      "bytes": 77700
+      "bytes": 77698
     },
     {
       "id": "panel-record-peek",
@@ -4680,7 +4680,7 @@
       },
       "note": "Days with events carry a short accent underline; the visible week reads as the selected pill run.",
       "capture": "viewport",
-      "bytes": 42742
+      "bytes": 42768
     },
     {
       "id": "calendar-mini-calendar",
@@ -4705,7 +4705,7 @@
       },
       "note": "Days with events carry a short accent underline; the visible week reads as the selected pill run.",
       "capture": "viewport",
-      "bytes": 45917
+      "bytes": 45911
     },
     {
       "id": "calendar-month-view",
@@ -4728,7 +4728,7 @@
       },
       "note": "Multi-day all-day bars, timed events, an overflow week and one event carried across the week boundary.",
       "capture": "viewport",
-      "bytes": 129143
+      "bytes": 130108
     },
     {
       "id": "calendar-month-view",
@@ -4797,7 +4797,7 @@
       },
       "note": "Multi-day all-day bars, timed events, an overflow week and one event carried across the week boundary.",
       "capture": "viewport",
-      "bytes": 87551
+      "bytes": 87204
     },
     {
       "id": "calendar-toolbar-options",
@@ -4920,7 +4920,7 @@
       },
       "note": "Sticky day header and all-day strip over the 08–16 time grid; the current-time ruler sits on Wednesday at 13:45.",
       "capture": "viewport",
-      "bytes": 114040
+      "bytes": 113210
     },
     {
       "id": "calendar-week-time-grid",
@@ -5104,7 +5104,7 @@
       ],
       "layoutHash": "f1297b4855f0",
       "sourceHashes": {
-        "src/views/list-renderer.ts": "67a9210b863f",
+        "src/views/list-renderer.ts": "722b433d196c",
         "src/views/card-field-renderer.ts": "33212bef3422",
         "styles.css": "e018db2135f2",
         "tools/screenshots/theme.css": "8239cc22cceb",
@@ -5129,7 +5129,7 @@
       ],
       "layoutHash": "f1297b4855f0",
       "sourceHashes": {
-        "src/views/list-renderer.ts": "67a9210b863f",
+        "src/views/list-renderer.ts": "722b433d196c",
         "src/views/card-field-renderer.ts": "33212bef3422",
         "styles.css": "e018db2135f2",
         "tools/screenshots/theme.css": "8239cc22cceb",
@@ -5154,7 +5154,7 @@
       ],
       "layoutHash": "a6463bb7f439",
       "sourceHashes": {
-        "src/views/list-renderer.ts": "67a9210b863f",
+        "src/views/list-renderer.ts": "722b433d196c",
         "src/views/card-field-renderer.ts": "33212bef3422",
         "styles.css": "e018db2135f2",
         "tools/screenshots/theme.css": "8239cc22cceb",
@@ -5179,7 +5179,7 @@
       ],
       "layoutHash": "a6463bb7f439",
       "sourceHashes": {
-        "src/views/list-renderer.ts": "67a9210b863f",
+        "src/views/list-renderer.ts": "722b433d196c",
         "src/views/card-field-renderer.ts": "33212bef3422",
         "styles.css": "e018db2135f2",
         "tools/screenshots/theme.css": "8239cc22cceb",
@@ -5203,7 +5203,7 @@
       ],
       "layoutHash": "11452d97c47c",
       "sourceHashes": {
-        "src/views/list-renderer.ts": "67a9210b863f",
+        "src/views/list-renderer.ts": "722b433d196c",
         "styles.css": "e018db2135f2",
         "tools/screenshots/theme.css": "8239cc22cceb",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -5226,7 +5226,7 @@
       ],
       "layoutHash": "11452d97c47c",
       "sourceHashes": {
-        "src/views/list-renderer.ts": "67a9210b863f",
+        "src/views/list-renderer.ts": "722b433d196c",
         "styles.css": "e018db2135f2",
         "tools/screenshots/theme.css": "8239cc22cceb",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -5249,7 +5249,7 @@
       ],
       "layoutHash": "964d2766f4e9",
       "sourceHashes": {
-        "src/views/list-renderer.ts": "67a9210b863f",
+        "src/views/list-renderer.ts": "722b433d196c",
         "styles.css": "e018db2135f2",
         "tools/screenshots/theme.css": "8239cc22cceb",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -5272,7 +5272,7 @@
       ],
       "layoutHash": "964d2766f4e9",
       "sourceHashes": {
-        "src/views/list-renderer.ts": "67a9210b863f",
+        "src/views/list-renderer.ts": "722b433d196c",
         "styles.css": "e018db2135f2",
         "tools/screenshots/theme.css": "8239cc22cceb",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -5296,7 +5296,7 @@
       ],
       "layoutHash": "5ac65ba9f3f3",
       "sourceHashes": {
-        "src/views/list-renderer.ts": "67a9210b863f",
+        "src/views/list-renderer.ts": "722b433d196c",
         "src/views/card-field-renderer.ts": "33212bef3422",
         "styles.css": "e018db2135f2",
         "tools/screenshots/theme.css": "8239cc22cceb",
@@ -5321,7 +5321,7 @@
       ],
       "layoutHash": "5ac65ba9f3f3",
       "sourceHashes": {
-        "src/views/list-renderer.ts": "67a9210b863f",
+        "src/views/list-renderer.ts": "722b433d196c",
         "src/views/card-field-renderer.ts": "33212bef3422",
         "styles.css": "e018db2135f2",
         "tools/screenshots/theme.css": "8239cc22cceb",
@@ -5346,7 +5346,7 @@
       ],
       "layoutHash": "6c91de853622",
       "sourceHashes": {
-        "src/views/list-renderer.ts": "67a9210b863f",
+        "src/views/list-renderer.ts": "722b433d196c",
         "src/views/card-field-renderer.ts": "33212bef3422",
         "styles.css": "e018db2135f2",
         "tools/screenshots/theme.css": "8239cc22cceb",
@@ -5371,7 +5371,7 @@
       ],
       "layoutHash": "6c91de853622",
       "sourceHashes": {
-        "src/views/list-renderer.ts": "67a9210b863f",
+        "src/views/list-renderer.ts": "722b433d196c",
         "src/views/card-field-renderer.ts": "33212bef3422",
         "styles.css": "e018db2135f2",
         "tools/screenshots/theme.css": "8239cc22cceb",
@@ -5725,7 +5725,7 @@
       },
       "note": "Column width is a switch plus a slider here, not the calendar's mode dropdown; the slider only appears once the switch is on.",
       "capture": "viewport",
-      "bytes": 85562
+      "bytes": 85566
     },
     {
       "id": "timeline-view",

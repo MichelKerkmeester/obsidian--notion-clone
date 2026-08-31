@@ -29,7 +29,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-024"
       parent_session_id: null
-    completion_pct: 67
+    completion_pct: 83
     open_questions:
       - "Operator's actual row count — freeze threshold sits between 400 and 1600, never captured"
       - "Is the desktop reservation worth keeping? Measures redundant when forced off — see spec.md §8"

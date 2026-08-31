@@ -9,13 +9,12 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "public/005-component-surface-system/024-list-view-freeze"
-    last_updated_at: "2026-08-31T05:15:00Z"
+    last_updated_at: "2026-09-01T01:50:00Z"
     last_updated_by: "goal-reconcile"
-    recent_action: "AC-2 met: basename index lands LINEAR x1.07 to 12,800 rows; control returns x1.92"
-    next_safe_action: "Answer the width half of AC-5 with a standing check; leave AC-6 to the device"
+    recent_action: "AC-5 width half built: six phone widths, arm chosen by the shipped decision"
+    next_safe_action: "Operator confirms the list view opens on device"
     blockers:
       - "Non-table views still freeze on device; 028 owns the remaining cause"
-      - "No standing check reserves-by-width under is-phone; AC-5 measured it once by hand"
     key_files:
       - "spec.md"
       - "acceptance-criteria.md"
@@ -23,13 +22,14 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-024-goal"
       parent_session_id: null
-    completion_pct: 67
+    completion_pct: 83
     open_questions:
       - "How many rows does the operator's database hold, and at what fill rate"
       - "Is the desktop reservation worth keeping now that it measures as redundant"
     answered_questions:
       - "c31acf5 is not the cause; the same list took 6,777ms on the commit before it"
       - "The superlinear term was a per-row basename scan, not the hoisted forced layout"
+      - "At 430px the renderer over-reserves on purpose; the band is intended and now measured"
 ---
 # Goal: List View Freeze
 
@@ -78,9 +78,35 @@ the table was fast only because its default asks about one row.
       fixture. **Met:** 4 properties over 12 cards, worst in 1 column; 12 cards, 1 meta width
       of 616px.
 - [x] A reserved column costs one element and no rendered content. **Met:** 14 columns, 0 children.
-- [ ] A slot is reserved only where a slot exists to reserve, on every surface and at every width.
-      **The width half has no standing check** — the captured run covers desktop and one 402px
-      phone, neither being the case this was written about. The check it owes is in the log.
+- [x] A slot is reserved wherever two properties can share a line, and never where none can — on
+      every surface and at six widths. **Built 2026-09-01, and restated at the threshold the shipped
+      predicate actually holds, which the literal wording would have failed.**
+      **The sweep.** The real `ListRenderer` is driven through the 5k shape — 4 unequal-width
+      properties, 12 cards each missing a different subset — on a body carrying `is-mobile is-phone`
+      at **360, 402, 430, 480, 540 and 1024px**, plus desktop. At each width the worst property lands
+      in exactly 1 column across the 12 cards.
+      **What the sweep found, at the width nobody had rendered:** at 430px the renderer reserves 14
+      boxes while only one property fits per line. That is the band the log predicted — the predicate
+      tests the two *narrowest* declared widths plus a gap, so the uncertain cases resolve toward
+      reserving, and here the narrowest pair `110 + 130 + 12px gap` fits a 268px field area while the
+      pair the data renders does not. Reported with its cost, not failed: `0 child element(s) inside
+      those boxes, 14 line(s) carrying only reserved boxes across 48 field line(s), field area
+      67.3px per card`. Failing it would fail a correct renderer.
+      **The first version of this sweep was worthless, and that is the finding worth keeping.** It
+      split its arms on `perLine` — what actually fitted — so a rig that reserved at *every* width
+      simply moved every narrow surface into the permissive arm and passed. Both sides moved
+      together, and the check could not see the defect it exists for. It now asks the **shipped
+      decision** which arm applies: `reservesColumnsOnWrappingLine(widths, gap, fieldArea)` is lifted
+      out of the private `shouldReserveColumns`, and the sweep reads its inputs off the rendered
+      boxes — each field carries the declared width the renderer sized it from.
+      **Watched failing, after the lift.** With the predicate forced to `true`, 360 and 402 report
+      `14 boxes reserved` and `14 line(s) carrying only reserved boxes` and go red. Before the lift,
+      the same rig passed at every width.
+      **And the boundary is covered where the browser cannot reach it.**
+      `src/views/list-reservation.test.ts` — 5 cases: the pair fitting exactly at 252px and failing
+      at 251, the two *narrowest* rather than the first two declared (the difference the 430px width
+      lands on), the gap as the term that does not fit, fewer than two widths resolving toward
+      reserving, and a zero-width field area refusing.
 - [ ] The operator confirms on device that the list view opens. **Operator, NOT MET.** The bench
       numbers describe the row loop, not whether it opens.
 <!-- /ANCHOR:completion -->
@@ -189,7 +215,7 @@ where only one property fits. Written literally, this criterion fails a correct 
 | Budget asserts the right term | Fixed | Observed failing first with 5,000ms of injected layout |
 | Surface-conditional reservation | Shipped | Predicate read off the element, not a flag |
 | Renderer-driven alignment check | Shipped | Section 5k, three assertions |
-| Reservation by width under `is-phone` | Open | Measured once by hand; no script guards it |
+| Reservation by width under `is-phone` | Shipped, swept | Six widths in the placement lane; the arm is chosen by the shipped decision, and a reserve-everywhere rig reddens 360 and 402 |
 | Remaining layout at scale | Handed to `028` | 2,684ms over 960,007 nodes at 12,800 rows |
 | Operator confirmation | Open, and currently contradicted on device | `028` |
 
