@@ -10,10 +10,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "public/005-component-surface-system/028-remaining-freezes"
-    last_updated_at: "2026-08-31T08:05:00Z"
+    last_updated_at: "2026-09-01T02:10:00Z"
     last_updated_by: "timeline-freeze-diagnosis"
-    recent_action: "Table sweep run and the table windowed: SUPERLINEAR x4.89 -> SUBLINEAR x0.01"
-    next_safe_action: "The table two per-row layout reads, which the bound-of-8 check would misjudge"
+    recent_action: "Table sweep re-run: x0.01 is the windowing cliff; below it 4 cols read x1.79"
+    next_safe_action: "Trace the sub-threshold superlinear term in the detached table build"
     blockers:
       - "The list needs virtualisation; at the operator shape it spends 2.0-4.9s blocked and no loop fix reaches it"
       - "Every fix is measured on a bench, never on the operator device"
@@ -97,8 +97,30 @@ how they were built. That is a virtualisation question and nothing else reaches 
       LINEAR ×1.06 across the operator's own range** (1,000-3,000 rows, full fill, 6× throttle), so
       what remains is node count rather than a loop. **The list arm
       is closed:** SUPERLINEAR ×2.56 → LINEAR ×1.07 over 400 to 12,800 rows, 21 cols, full fill, with
-      per-row cost flat at 0.057–0.063ms and the prior state restoring ×1.92 as control. **The table
-      sweep has not been re-run** and still reads ×4.5, so this row stays open.
+      per-row cost flat at 0.057–0.063ms and the prior state restoring ×1.92 as control.
+      **The table sweep was re-run 2026-09-01, and the stale ×4.5 is replaced by two numbers rather
+      than one, because one of them is manufactured by a cliff.**
+      *Over the full range* 400 → 12,800 rows the verdict is **SUBLINEAR ×0.01** at both 4 and 16
+      columns. That number is not a scaling result: table windowing engages at 2,000 rows, so the
+      sweep falls off a cliff — 16 columns go `124.2ms / 43,297 nodes` at 1,600 rows to
+      `3.1ms / 422 nodes` at 3,200. Quoting ×0.01 as the answer would be quoting the threshold.
+      *Below the threshold*, where the renderer still builds every row, the same tool over
+      400 → 1,600 rows reports **4 columns: SUPERLINEAR ×1.79** and **16 columns: LINEAR ×1.45**.
+      So the criterion as written is **not met**: there is a measured shape that reads SUPERLINEAR.
+      **What that costs, stated so the row is not read as a freeze.** The worst un-windowed shape is
+      1,600 rows: 78.1ms detached at 4 columns, 121.7ms at 16. The superlinear range is bounded above
+      by the windowing threshold, so the worst case is bounded too — it is a real term, and it cannot
+      grow past ~2,000 rows.
+      **It is not the forced-layout term, and the sweep says so.** The reported layout time grows
+      **linearly** with rows — 17.5 → 35.9 → 73.7ms at 4 columns for 400 → 800 → 1,600, which is ×4.2
+      for ×4 rows. The per-row *total* rises at both column counts (0.0280 → 0.0500 at 4 columns,
+      0.0533 → 0.0772 at 16); 16 columns is classified LINEAR only because the tool's threshold falls
+      between ×1.45 and ×1.79. So this is one mild term of roughly n^1.2 present at both shapes,
+      sitting outside layout, and it is in the build rather than in attachment — the detached numbers
+      carry it too (9.6 → 78.1ms at 4 columns).
+      **What would close it.** Either find and remove that term, or restate the criterion to bound
+      absolute cost at the threshold rather than to forbid a shape. Restating is not taken here: the
+      row was written to catch exactly this, and a measurement that fails it is the row working.
 - [x] Opening, mutating and dismissing a sort or filter sheet costs **one** rebuild, not three.
       **Met by the tree, not by this phase:** `7ad775b` made opening and dismissing free and left the
       single rebuild on the mutation. This bounds the number of rebuilds, never the cost of the one.

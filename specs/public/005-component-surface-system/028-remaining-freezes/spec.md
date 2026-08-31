@@ -16,8 +16,8 @@ _memory:
     last_updated_at: "2026-08-30T21:20:00Z"
     last_updated_by: "goal-reconcile"
     completion_pct: 67
-    recent_action: "Table sweep run and the table windowed: SUPERLINEAR x4.89 -> SUBLINEAR x0.01"
-    next_safe_action: "The table two per-row layout reads, which the bound-of-8 check would misjudge"
+    recent_action: "Table sweep re-run: x0.01 is the windowing cliff; below it 4 cols read x1.79"
+    next_safe_action: "Trace the sub-threshold superlinear term in the detached table build"
     blockers:
       - "The operator reports the table view works, but measurement shows the table is the slowest surface here and still carries the unfixed per-row forced layout; four reconciliations were tested and all four failed"
       - "The operator's actual row count and column count are still unconfirmed; the freeze threshold is derived from a synthetic bench at a CPU throttle chosen as a phone stand-in, not from their device"
