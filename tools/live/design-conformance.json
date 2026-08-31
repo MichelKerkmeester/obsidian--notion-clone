@@ -1,9 +1,9 @@
 {
-  "measuredAt": "2026-08-31T22:14:54.477Z",
+  "measuredAt": "2026-08-31T22:36:06.310Z",
   "inputs": {
     "styles.css": "e018db2135f2",
     "tools/live/design-conformance.mjs": "ca98bf93ea28",
-    "src/views/popover-position.ts": "075b5761f121"
+    "src/views/popover-position.ts": "b73634ce5815"
   },
   "checks": [
     {
@@ -236,7 +236,7 @@
     "src/views/modals/status-preset-manager-modal.ts:53  .db-modal-help",
     "src/views/modals/status-preset-manager-modal.ts:69  .db-modal-button-row",
     "src/views/option-color-picker.ts:43  .db-color-picker-popup",
-    "src/views/owned-menu.ts:85  .db-menu",
+    "src/views/owned-menu.ts:86  .db-menu",
     "src/views/record-detail-panel.ts:166  .db-record-detail-panel",
     "src/views/sort-panel-renderer.ts:66  .db-sort-panel",
     "src/views/sort-panel-renderer.ts:71  .db-panel-header",

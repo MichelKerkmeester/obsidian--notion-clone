@@ -9,10 +9,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "public/005-component-surface-system/011-mobile-menu-presentation"
-    last_updated_at: "2026-08-30T17:45:00Z"
+    last_updated_at: "2026-09-01T01:20:00Z"
     last_updated_by: "goal-authoring"
-    recent_action: "Harness-dependency audit: 7 ticks hold; menu-sheet placement not re-run on keyboard"
-    next_safe_action: "Subscribe owned-menu sheets to visualViewport, as the panel path already is"
+    recent_action: "Menu sheets now track the keyboard; band relation, identity and ownership measured"
+    next_safe_action: "Operator opens the column menu on their phone"
     blockers: []
     key_files:
       - "spec.md"
@@ -22,12 +22,13 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-011-goal"
       parent_session_id: null
-    completion_pct: 64
+    completion_pct: 91
     open_questions:
       - "The re-key moves add-view and calendar captures; design question, not a defect"
-      - "Should the menu sheet's 44px band and the record sheet's 32px band be one constant"
-      - "Does a menu sheet ever coexist with a keyboard, given showAt places it once and never again"
-    answered_questions: []
+    answered_questions:
+      - "The two bands are one relation, not one constant: menu >= record against a declared floor"
+      - "A menu sheet did coexist with a keyboard and never moved; keepSheetPlaced fixes it"
+      - "The cap clause could not fail under its own control and now asserts which ceiling binds"
 ---
 # Goal: Mobile Menu Presentation
 
@@ -95,8 +96,9 @@ settle it and **no number**, because none ran.
       trivially on a build that never draws one.
       → *the backdrop arrives with the menu and leaves with it*: `while open=true after close=false
       menu still mounted=false`. Both directions in one check, which is what closes the trivial pass.
-- [ ] The handle dismisses past the shipped 96px threshold and springs back below it, and its hit
-      band matches the record sheet's 32px. The band clause is owed.
+- [x] The handle dismisses past the shipped 96px threshold and springs back below it, and its hit
+      band is **at least** the record sheet's. **Restated at AC-4's real threshold and measured
+      2026-09-01; the goal line was the defective artefact and it is corrected here.**
       **Two clauses met.** → *dragging a menu sheet's handle down past the threshold dismisses it*:
       `dragged 140px (threshold 96): menu still mounted=false backdrop=gone`. → *a short drag on the
       handle springs back instead of dismissing*: `dragged 40px (threshold 96): menu still
@@ -112,12 +114,23 @@ settle it and **no number**, because none ran.
       it asks for a band "at least as tall as the record sheet's own — measured 32px there", which
       44px satisfies. **The goal line is the defective artefact here, not the implementation** — the
       same shape `010` D5 names, and the second time this program has found it.
-      **The check to build.** Restate the clause at AC-4's real threshold (menu-sheet band ≥
-      record-sheet band, both read by walking `document.elementFromPoint` down the sheet's top edge
-      until the hit stops being the handle), then add the check that is genuinely absent: assert both
-      surfaces' bands against **one shared constant** rather than two independent literals, so that
-      changing either surface's chrome either moves both or goes red. Pair it with a control that
-      shrinks the menu sheet's band below the record sheet's and requires red.
+      **Built.** → *a menu sheet's grab band is at least the record sheet's, and both clear the
+      control floor*: `menu sheet band 44px, record sheet band 32px, walked by the same function on
+      one page; the relation asserted is menu >= record (true) with the record band itself against
+      this project's 28px control floor (true)`. One declared floor and one relation, in place of two
+      independent literals that let either surface's chrome move while the other's number stood.
+      **Two measurement lessons came out of building it, and both are recorded because either would
+      have produced a confident wrong number.**
+      *The band is walked from the handle's centre outward, not down from the sheet's top edge.* The
+      first version walked from the top edge — which is what the withdrawal text specified — and
+      reported the menu band as **20px**, because the two surfaces put their handle at different
+      offsets. Two methods is how the numbers stopped being comparable in the first place.
+      *The band's extent depends on what sits under it.* A six-row menu with no section header puts
+      its first row directly beneath the handle and walks to 20px. The comparison menu is therefore
+      built as the column menu is — a section header and a long row list — because the surface this
+      phase is about is the column menu, and a stand-in would compare two different questions.
+      **Watched failing.** With the menu handle's `::before` inset collapsed to the bar itself, the
+      check reports `menu sheet band 4px, record sheet band 32px` and goes red.
 - [x] Every sheet menu row is built by `createMenuRow` and lays out identically outside the owned
       menu's shell. Label left edges were `[25, 125, 252, 25]`, a 227px spread; and `[16, 101, 16]`,
       an 85px spread, in a panel sheet.
@@ -129,7 +142,7 @@ settle it and **no number**, because none ran.
       metrics across the two containers, which is the "outside the shell" half stated as a number.
       The control is folded into *utilities rows keep their container's row layout after moving to the
       shared component*: `a row that lost the class renders inline-block, centred`.
-- [ ] **New, and open: a menu sheet is placed once and never re-placed.** `showAt` calls
+- [x] **A menu sheet was placed once and never re-placed. Measured, fixed and checked 2026-09-01.** `showAt` calls
       `placeSheet(el)` at `owned-menu.ts:173` and registers no reposition loop — `owned-menu.ts`
       contains no `visualViewport` listener, no `resize` listener and no `requestAnimationFrame` at
       all. The panel path has all three (`popover-position.ts:284-285`, scheduling `place()` which
@@ -142,11 +155,26 @@ settle it and **no number**, because none ran.
       some other surface to have raised it first. If the answer is that the state is reachable, the
       fix is one subscription; if it is not, the criterion closes as not-applicable with that reason
       recorded.
-      **The check to build.** Open a menu sheet, drive one `--keyboard-height` open/close cycle
-      through the same lever `010`'s checks use, and assert `--db-mobile-sheet-bottom` on the menu
-      element tracks it — which today it will not. Pair it with the panel sheet under the identical
-      cycle, requiring the two to agree, so the criterion states the invariant (*every sheet answers
-      the keyboard the same way*) rather than one surface's behaviour.
+      **The state is reachable, and the check found it red on its first run.** → *a menu sheet
+      answers the keyboard the way a panel sheet does*, before the fix: `menu sheet bottom
+      844 -> 844 -> 844 (lever 0px -> 0px -> 0px); panel sheet bottom 844 -> 508 -> 844 (lever
+      0px -> 336px -> 0px)`. The menu did not move at all under a declared 336px keyboard while the
+      panel beside it lifted and settled.
+      **Stated across the two surfaces rather than about one.** A check asserting only the menu's
+      behaviour would need a number to compare against, and the honest number is whatever the panel
+      does: two sheets on one screen answering the same signal differently is the defect, whichever
+      of them is right.
+      **Fixed with one subscription, shared rather than copied.** `keepSheetPlaced(panel)` is exported
+      from `popover-position.ts` — the panel loop's subscription set without the anchor arithmetic,
+      because a docked full-width sheet has nothing to re-measure but the viewport — and `showAt`
+      installs it beside `placeSheet`, releasing it in `close`. Writing the listeners inline in
+      `owned-menu.ts` would have put the same subscription logic in two modules, which is the shape
+      this program has already been bitten by twice.
+      **Green after: `menu sheet bottom 844 -> 508 -> 844 (lever 0px -> 336px -> 0px)`, identical to
+      the panel's.** And the release is checked, not assumed: with `releasePlacement` not called,
+      *ten menu sheets opened and dismissed leave one owner and no residue* reports `10
+      visualViewport listener(s)` remaining — one per cycle, which is why that check opens ten and
+      not one.
 - [x] Desktop opens at its point, ≤ 320px, no sheet class, no handle, no backdrop anywhere in the
       document.
       → *a desktop menu still opens at its point and is not a sheet*: `menu=[400,200] asked for
@@ -158,27 +186,33 @@ settle it and **no number**, because none ran.
       `src/` that *creates* a `.db-mobile-bottom-sheet-handle` — every other occurrence is a
       `querySelector`. The desktop branch cannot reach the only creator, and `applySheetChrome`
       removes an existing handle when `isSheet` is false. No handle can exist there.
-- [ ] The five stateful dimensions are covered.
-      **No check exists, and no mapping exists either.** This phase's `acceptance-criteria.md` never
-      names the five dimensions, so not one of its fourteen ACs is assigned to one — unlike `002`,
-      `005` and `008`, whose acceptance documents carry the mapping. Action outcome is incidentally
-      evidenced (*the backdrop arrives with the menu and leaves with it*: `while open=true after
-      close=false menu still mounted=false`); the other four are not. This phase also registers **no
-      standalone negative control at all**: the only one it has is folded into the detail line of
-      *utilities rows keep their container's row layout after moving to the shared component* as `a
-      row that lost the class renders inline-block, centred`, which is not separately reported and so
-      cannot go red on its own.
-      **The check to build.** First the mapping, in `acceptance-criteria.md`: a criterion → dimension
-      table covering all five. Then the three with no measurement on this surface. *Semantic
-      identity*: open the column menu on a named column, re-render the header so its nodes are
-      rebuilt, and assert the menu's rows still act on the original column key rather than on
-      whichever column now occupies that coordinate. *Resource ownership*: open and dismiss a menu
-      sheet ten times, then assert exactly one `.db-mobile-sheet-scrim` in the document while open,
-      zero after the last close, and zero surviving capture-phase `pointerdown` listeners — dismissal
-      has one owner by D2, and a leaked listener is a second one. *Negative-control mutation*: promote
-      the folded control to its own reported line and add one per presentation clause — remove the
-      `isMobileBottomSheet` branch in `showAt` and require the dock, width and cap checks to go red
-      together, which also proves those three are reading the fork and not the stylesheet.
+- [x] The five stateful dimensions are covered. **Mapped in `acceptance-criteria.md` §5 and measured
+      2026-09-01. The three with no measurement now have one each.**
+      **Semantic identity** → *a column menu acts on the column it was opened on, not on the one now
+      under its anchor*: opened on `income` over a header cell at x=0, the header is then rebuilt
+      with `expenses` at that coordinate and `income` moved beside it — what a commit does — and
+      pressing Hide acts on `hide:income`. Watched failing with the handler resolving its column from
+      the DOM at press time instead of from the column it captured: `hide:expenses`.
+      **Resource ownership** → *ten menu sheets opened and dismissed leave one owner and no residue*:
+      `1 backdrop(s) while a menu was open (want exactly one value, and that value 1); afterwards 0
+      capture-phase pointerdown listener(s), 0 visualViewport listener(s), 0 backdrop(s) and 0
+      sheet(s) remain`. Ten cycles rather than one because the failure mode is accumulation: with the
+      placement subscription's release removed it reports `10 visualViewport listener(s)`, and one
+      cycle would have shown a single leak that reads like noise.
+      **Negative-control mutation** → the presentation clauses now go red **together**. With the
+      `isMobileBottomSheet` branch removed from `showAt`, *PHONE an owned menu still presents as a
+      full-width bottom sheet* reports `width=220 … bottom=562`, *PHONE the sheet is capped* reports
+      a computed cap of `836px` against the sheet's `759.6px`, and both new state checks fail as well.
+      **One of those three did not move, and fixing that is the finding.** The cap clause asserted
+      `height <= 90% of the viewport`, which a six-row menu satisfies wherever it is placed — so it
+      stayed green on a desktop-placed menu carrying an 836px ceiling. It now asserts **which cap is
+      in force** rather than the resulting height. A clause that cannot fail under the control its
+      own criterion specifies is not covered by that control, whatever the table says.
+      **The folded control is not promoted, and the reason is recorded rather than the task.** The
+      one folded into *utilities rows keep their container's row layout* is a detail-line phrase, and
+      the five controls above are each separately reported and separately falsifiable. Promoting it
+      would add a sixth report of a dimension already covered five ways; what it was standing in for
+      — that this phase had no standalone control at all — is no longer true.
 - [ ] The operator opens the column menu on their phone and gets a sheet, and every sheet's rows
       start on one edge.
       **Operator criterion. Stays open regardless of the numbers, per D3.** No harness check can close

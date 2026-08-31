@@ -3180,6 +3180,316 @@ const stateResults = await section("the record sheet's identity and its subscrip
 await statePhone.close();
 
 // ───────────────────────────────────────────────────────────────────
+// 5a4. EVERY SHEET ANSWERS THE KEYBOARD THE SAME WAY
+// ───────────────────────────────────────────────────────────────────
+//
+// The panel path registers a reposition loop; `owned-menu.ts` calls `placeSheet` once at `showAt`
+// and contains no `visualViewport` listener, no `resize` listener and no `requestAnimationFrame` at
+// all. So whatever the keyboard inset was at open time is the number a menu sheet keeps for its
+// whole life, and every existing check measures a sheet at rest — none of them can see it.
+//
+// The invariant is stated across the two surfaces rather than about one of them. A check that only
+// asserted the menu's behaviour would need a number to compare against, and the honest number is
+// whatever the panel does: two sheets on one screen answering the same signal differently is the
+// defect, whichever of them is right.
+
+const keyboardPhone = await browser.newPage({
+  reducedMotion: "reduce",
+  viewport: { width: 390, height: 844 },
+  hasTouch: true,
+  isMobile: true,
+});
+await keyboardPhone.setContent(page_html.replace("<body>", phoneBody));
+await keyboardPhone.addStyleTag({ content: readFileSync(join(REPO, "styles.css"), "utf8") + HOST_BARE_CONTROLS });
+await keyboardPhone.addScriptTag({ content: shimJs + "\ninstallObsidianDomShim(globalThis);" });
+await keyboardPhone.addScriptTag({ content: positionerJs });
+
+const keyboardParityResults = await section("both sheet families under one keyboard", () => keyboardPhone.evaluate(async () => {
+  const out = [];
+  const P = globalThis.__p;
+  const { openRecordDetailPanel, closeRecordDetailPanel } = globalThis.__place;
+  const host = document.querySelector(".note-database-container");
+  const KEYBOARD = 336;
+  const tick = () => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
+
+  // The same signal both surfaces are supposed to read, delivered the way a host delivers it.
+  const openKeyboard = async () => {
+    document.documentElement.style.setProperty("--keyboard-height", `${KEYBOARD}px`);
+    window.dispatchEvent(new Event("resize"));
+    window.visualViewport.dispatchEvent(new Event("resize"));
+    await tick();
+  };
+  const closeKeyboard = async () => {
+    document.documentElement.style.removeProperty("--keyboard-height");
+    window.dispatchEvent(new Event("resize"));
+    window.visualViewport.dispatchEvent(new Event("resize"));
+    await tick();
+  };
+  const readSheet = (el) => ({
+    lever: el.style.getPropertyValue("--db-mobile-sheet-bottom") || "(unset)",
+    bottom: Math.round(el.getBoundingClientRect().bottom),
+  });
+
+  // ── the menu sheet ──
+  const menu = P.createOwnedMenu(document);
+  for (let i = 0; i < 6; i += 1) menu.addRow({ title: `Row ${i}`, onClick: () => undefined });
+  menu.showAt({ x: 40, y: 200 });
+  const menuEl = menu.el || menu.dom || menu.containerEl;
+  const menuAtRest = readSheet(menuEl);
+  await openKeyboard();
+  const menuLifted = readSheet(menuEl);
+  await closeKeyboard();
+  const menuBack = readSheet(menuEl);
+  menu.close();
+  await tick();
+
+  // ── the panel sheet, the same cycle ──
+  const anchor = host.createDiv({ cls: "anchor" });
+  anchor.setCssProps({ position: "absolute", left: "40px", top: "40px" });
+  openRecordDetailPanel({
+    anchorEl: anchor,
+    host,
+    row: { file: { path: "K.md", basename: "K", name: "K.md" }, frontmatter: { income: 1 }, computed: {} },
+    columns: [{ key: "file.name", label: "Name", type: "text" }, { key: "income", label: "Income", type: "number" }],
+    config: { viewType: "table", schema: { computedFields: [] }, titleField: "file.name" },
+    app: {},
+    actions: { editCell: () => {}, openRow: () => {}, editFileName: () => {}, isReadOnly: false },
+  });
+  const panelEl = document.querySelector(".db-record-detail-panel");
+  const panelAtRest = readSheet(panelEl);
+  await openKeyboard();
+  const panelLifted = readSheet(panelEl);
+  await closeKeyboard();
+  const panelBack = readSheet(panelEl);
+  closeRecordDetailPanel();
+  anchor.remove();
+
+  const lifted = (before, after) => after.bottom < before.bottom - 1;
+  out.push({
+    name: "a menu sheet answers the keyboard the way a panel sheet does",
+    pass: lifted(panelAtRest, panelLifted) && lifted(menuAtRest, menuLifted)
+      && Math.abs(menuLifted.bottom - panelLifted.bottom) <= 1
+      && Math.abs(menuBack.bottom - menuAtRest.bottom) <= 1
+      && Math.abs(panelBack.bottom - panelAtRest.bottom) <= 1,
+    detail: `under one declared ${KEYBOARD}px keyboard — menu sheet bottom`
+      + ` ${menuAtRest.bottom} -> ${menuLifted.bottom} -> ${menuBack.bottom} (lever`
+      + ` ${menuAtRest.lever} -> ${menuLifted.lever} -> ${menuBack.lever}); panel sheet bottom`
+      + ` ${panelAtRest.bottom} -> ${panelLifted.bottom} -> ${panelBack.bottom} (lever`
+      + ` ${panelAtRest.lever} -> ${panelLifted.lever} -> ${panelBack.lever}).`
+      + ` Stated across the two surfaces rather than about one: two sheets on one screen answering`
+      + ` the same signal differently is the defect, whichever of them is right`,
+  });
+
+  // ── resource ownership, over ten cycles rather than one ──
+  //
+  // One open and close proves the happy path. Ten proves nothing accumulates, which is the failure
+  // mode a dismissal owner actually has: a leaked capture-phase `pointerdown` is a second owner, and
+  // a second owner closes the menu on a press the first one meant to deliver. The subscription that
+  // keeps a sheet placed is counted here too, because it was added in the same change as the check
+  // above and a fix that leaks is not a fix.
+  const docLive = new Map();
+  const realDocAdd = document.addEventListener.bind(document);
+  const realDocRemove = document.removeEventListener.bind(document);
+  const key = (type, fn, opts) => `${type}|${opts === true || (opts && opts.capture) ? "capture" : "bubble"}`;
+  document.addEventListener = (type, fn, opts) => {
+    if (type === "pointerdown") docLive.set(fn, key(type, fn, opts));
+    return realDocAdd(type, fn, opts);
+  };
+  document.removeEventListener = (type, fn, opts) => {
+    if (type === "pointerdown") docLive.delete(fn);
+    return realDocRemove(type, fn, opts);
+  };
+  const vvLive = new Set();
+  const realVvAdd = window.visualViewport.addEventListener.bind(window.visualViewport);
+  const realVvRemove = window.visualViewport.removeEventListener.bind(window.visualViewport);
+  window.visualViewport.addEventListener = (type, fn, opts) => { vvLive.add(fn); return realVvAdd(type, fn, opts); };
+  window.visualViewport.removeEventListener = (type, fn, opts) => { vvLive.delete(fn); return realVvRemove(type, fn, opts); };
+
+  let scrimsWhileOpen = new Set();
+  for (let i = 0; i < 10; i += 1) {
+    const m = P.createOwnedMenu(document);
+    for (let r = 0; r < 4; r += 1) m.addRow({ title: `Row ${r}`, onClick: () => undefined });
+    m.showAt({ x: 40, y: 200 });
+    scrimsWhileOpen.add(document.querySelectorAll(".db-mobile-sheet-scrim").length);
+    m.close();
+    await tick();
+  }
+  const capturesLeft = [...docLive.values()].filter((k) => k.endsWith("capture")).length;
+  const viewportLeft = vvLive.size;
+  const scrimsLeft = document.querySelectorAll(".db-mobile-sheet-scrim").length;
+  const sheetsLeft = document.querySelectorAll(".db-mobile-bottom-sheet").length;
+  document.addEventListener = realDocAdd;
+  document.removeEventListener = realDocRemove;
+  window.visualViewport.addEventListener = realVvAdd;
+  window.visualViewport.removeEventListener = realVvRemove;
+
+  // ── the two grab bands, against one constant instead of two literals ──
+  //
+  // Both bands were already measured, in different sections, against independent literals: 44px on
+  // the menu sheet and 32px on the record sheet. Two literals cannot express the relation the
+  // acceptance criterion actually states — a menu sheet's band "at least as tall as the record
+  // sheet's own" — so a change to either surface's chrome moved one number and left the other
+  // standing, and the goal line drifted into "matches the record sheet's 32px", which would fail a
+  // menu sheet that correctly clears the 44px thumb floor.
+  //
+  // So both are walked here, on one page, by the same function, and the assertion is the relation
+  // plus one declared floor.
+  const SHEET_BAND_FLOOR = 28;
+  // Walked from the handle's own centre outward, counting the pixels the HANDLE answers — the same
+  // method both existing band checks use, so the two numbers are comparable. Walking down from the
+  // sheet's top edge instead reports a different quantity: the menu sheet measures 20px that way and
+  // 44px this way, because the two surfaces put their handle at different offsets. Two methods is
+  // how the numbers stopped being comparable in the first place.
+  const walkBand = (sheet) => {
+    const handle = sheet.querySelector(".db-mobile-bottom-sheet-handle");
+    if (!handle) return 0;
+    const box = handle.getBoundingClientRect();
+    const answers = (y) => {
+      const hit = document.elementFromPoint(Math.round(box.left + box.width / 2), Math.round(y));
+      return Boolean(hit) && (hit === handle || handle.contains(hit));
+    };
+    const centre = box.top + box.height / 2;
+    let up = 0;
+    let down = 0;
+    while (up < 80 && answers(centre - up - 1)) up += 1;
+    while (down < 80 && answers(centre + down + 1)) down += 1;
+    return up + down + 1;
+  };
+
+  // Built as the column menu is — a section header and a long row list — because the band's extent
+  // depends on what sits under it. A six-row menu with no header puts its first row directly beneath
+  // the handle and the band walks to 20px; the surface this phase is about is the column menu, and
+  // comparing a stand-in against the record sheet would compare two different questions.
+  const bandMenu = P.createOwnedMenu(document);
+  bandMenu.addSection("Property");
+  for (const label of [
+    "Edit property", "Change type", "Insert property left", "Insert property right",
+    "Duplicate property", "Move up", "Move down", "Hide property", "Enable wrap",
+    "Filter by property", "Adjust column width", "Sort ascending", "Delete property",
+  ]) bandMenu.addRow({ icon: "pencil", label });
+  bandMenu.showAt({ x: 300, y: 90 });
+  const menuBand = walkBand(bandMenu.el || bandMenu.dom || bandMenu.containerEl);
+  bandMenu.close();
+  await tick();
+
+  const bandAnchor = host.createDiv({ cls: "anchor" });
+  bandAnchor.setCssProps({ position: "absolute", left: "40px", top: "40px" });
+  openRecordDetailPanel({
+    anchorEl: bandAnchor,
+    host,
+    row: { file: { path: "B.md", basename: "B", name: "B.md" }, frontmatter: { income: 1 }, computed: {} },
+    columns: [{ key: "file.name", label: "Name", type: "text" }, { key: "income", label: "Income", type: "number" }],
+    config: { viewType: "table", schema: { computedFields: [] }, titleField: "file.name" },
+    app: {},
+    actions: { editCell: () => {}, openRow: () => {}, editFileName: () => {}, isReadOnly: false },
+  });
+  const recordBand = walkBand(document.querySelector(".db-record-detail-panel"));
+  closeRecordDetailPanel();
+  bandAnchor.remove();
+  await tick();
+
+  out.push({
+    name: "a menu sheet's grab band is at least the record sheet's, and both clear the control floor",
+    pass: recordBand >= SHEET_BAND_FLOOR && menuBand >= recordBand,
+    detail: `menu sheet band ${menuBand}px, record sheet band ${recordBand}px, walked by the same`
+      + ` function on one page; the relation asserted is menu >= record (${menuBand >= recordBand})`
+      + ` with the record band itself against this project's ${SHEET_BAND_FLOOR}px control floor`
+      + ` (${recordBand >= SHEET_BAND_FLOOR}). Two independent literals could not state this: they`
+      + ` let one surface's chrome move while the other's number stood, which is how the goal line`
+      + ` came to read "matches the record sheet's 32px" and would have failed a menu sheet that`
+      + ` correctly clears the 44px thumb floor`,
+  });
+
+  // ── semantic identity: the menu acts on the column it was opened on ──
+  //
+  // Every other check on this surface reads geometry, which covers state only by accident: a menu
+  // can be the right size, docked and dismissible while acting on the wrong column. The failure this
+  // rules out is specific and cheap to write by mistake — a menu that resolves its target from the
+  // header cell under its anchor, rather than from the column it captured, acts on whichever column
+  // now occupies that coordinate after a re-render.
+  const header = host.createDiv({ cls: "db-header-row" });
+  const cellFor = (label, left) => {
+    const cell = header.createDiv({ cls: "db-header-cell", text: label });
+    cell.setCssProps({ position: "absolute", top: "0px", left: `${left}px`, width: "100px", height: "28px" });
+    return cell;
+  };
+  const colA = { key: "income", label: "Income", type: "number" };
+  const colB = { key: "expenses", label: "Expenses", type: "number" };
+  let cellA = cellFor("Income", 0);
+  cellFor("Expenses", 100);
+  const acted = [];
+  const columnMenu = new (globalThis.__place.ColumnMenu)({
+    editColumn: (c) => acted.push(`edit:${c.key}`),
+    editFormula: () => undefined,
+    editStatusOptions: () => undefined,
+    showOptionsEditor: () => undefined,
+    changeColumnType: () => undefined,
+    insertColumn: () => undefined,
+    duplicateColumn: (c) => acted.push(`duplicate:${c.key}`),
+    moveColumn: () => undefined,
+    hideColumn: (c) => acted.push(`hide:${c.key}`),
+    toggleColumnWrap: () => undefined,
+    setTextRenderMode: () => undefined,
+    setTextLinkScheme: () => undefined,
+    setNumberDisplayStyle: () => undefined,
+    updateNumberDisplayConfig: () => undefined,
+    sortByColumn: () => undefined,
+    deleteColumn: (c) => acted.push(`delete:${c.key}`),
+  });
+  const cellARect = cellA.getBoundingClientRect();
+  columnMenu.show(
+    new MouseEvent("contextmenu", {
+      bubbles: true, cancelable: true,
+      clientX: Math.round(cellARect.left + 10), clientY: Math.round(cellARect.bottom),
+    }),
+    colA,
+    cellA,
+  );
+  const menuEl2 = document.querySelector(".db-owned-menu");
+  const openedRows = menuEl2 ? menuEl2.querySelectorAll(".db-menu-item").length : 0;
+
+  // The header is rebuilt and the columns swap places, so the coordinate the menu opened at now
+  // belongs to the OTHER column and the node the menu captured is gone from the document.
+  header.empty();
+  cellFor("Expenses", 0);
+  cellA = cellFor("Income", 100);
+  const labelOf2 = (el) => (el.querySelector(".db-menu-item-label") ?? el).textContent.trim();
+  const rowsNow = menuEl2 ? [...menuEl2.querySelectorAll(".db-menu-item")] : [];
+  const hideRow = rowsNow.find((el) => /hide/i.test(labelOf2(el)));
+  hideRow?.click();
+  const stillOpenAfterAction = document.querySelectorAll(".db-owned-menu").length;
+  document.querySelectorAll(".db-owned-menu").forEach((el) => el.remove());
+  document.querySelectorAll(".db-mobile-sheet-scrim").forEach((el) => el.remove());
+  header.remove();
+
+  out.push({
+    name: "a column menu acts on the column it was opened on, not on the one now under its anchor",
+    pass: openedRows > 0 && Boolean(hideRow) && acted.length === 1 && acted[0] === `hide:${colA.key}`,
+    detail: `opened on "${colA.key}" over a header cell at x=${Math.round(cellARect.left)};`
+      + ` the header was then rebuilt with ${colB.key} at that coordinate and ${colA.key} moved`
+      + ` beside it, which is what a commit does. Pressing Hide acted on`
+      + ` ${acted.length ? acted.join(", ") : "nothing"} (want hide:${colA.key}).`
+      + ` ${openedRows} row(s) were drawn, ${stillOpenAfterAction} menu(s) stood after the press.`
+      + ` A menu that resolved its target from the cell under its anchor would report hide:${colB.key}`,
+  });
+
+  out.push({
+    name: "ten menu sheets opened and dismissed leave one owner and no residue",
+    pass: scrimsWhileOpen.size === 1 && scrimsWhileOpen.has(1)
+      && capturesLeft === 0 && viewportLeft === 0 && scrimsLeft === 0 && sheetsLeft === 0,
+    detail: `across 10 open/dismiss cycles the document held`
+      + ` ${[...scrimsWhileOpen].sort().join(", ")} backdrop(s) while a menu was open (want exactly`
+      + ` one value, and that value 1); afterwards ${capturesLeft} capture-phase pointerdown`
+      + ` listener(s), ${viewportLeft} visualViewport listener(s), ${scrimsLeft} backdrop(s) and`
+      + ` ${sheetsLeft} sheet(s) remain. A leaked capture listener is a second dismissal owner, and`
+      + ` a second owner closes the menu on a press the first one meant to deliver`,
+  });
+
+  return out;
+}));
+await keyboardPhone.close();
+
+// ───────────────────────────────────────────────────────────────────
 // 5b. THE SELECT COLUMN'S CHECKBOX STAYS INSIDE ITS CLIPPING CELL
 // ───────────────────────────────────────────────────────────────────
 //
@@ -4866,10 +5176,20 @@ await section("lifted probes: desktop placement", async () => {
         + `viewport=${window.innerWidth}x${window.innerHeight} bottom=${Math.round(r.bottom)} `
         + `position=${style.position} max-height=${style.maxHeight}`,
     });
+    // The CAP, not the resulting height. Asserting only `height <= 90%` passes on almost any menu:
+    // a six-row list is under that ceiling wherever it is placed, so the clause went green on a
+    // desktop-placed menu carrying an 836px cap — measured, when the sheet fork was removed as a
+    // control and this was the one presentation clause that did not move. What discriminates is
+    // which ceiling is in force.
+    const cap = parseFloat(style.maxHeight);
+    const sheetCap = window.innerHeight * 0.9;
     out.push({
       name: "PHONE the sheet is capped and scrolls rather than growing past the screen",
-      pass: r.height <= window.innerHeight * 0.9 + 2,
-      detail: `height=${Math.round(r.height)} cap=${Math.round(window.innerHeight * 0.9)} overflow-y=${style.overflowY}`,
+      pass: Math.abs(cap - sheetCap) <= 1 && r.height <= cap + 2 && style.overflowY === "auto",
+      detail: `height=${Math.round(r.height)} against a computed max-height of ${cap.toFixed(1)}px; `
+        + `the sheet's 90svh cap is ${sheetCap.toFixed(1)}px, and the two agree=`
+        + `${Math.abs(cap - sheetCap) <= 1} — which is the clause, because the desktop branch writes `
+        + `its own ceiling and a short menu sits under either one; overflow-y=${style.overflowY}`,
     });
     menu.close();
 
@@ -6173,7 +6493,7 @@ await section("a number reads the same on a card and in the row behind it", asyn
 
 results.push(...phoneResults, ...menuResults, ...addViewDesktopResults, ...addViewPhoneResults,
   ...grammarResults, ...addViewGrammar, ...motionResults, ...reducedResults, ...desktopMenuResults, ...cellResults, ...sheetResults, ...selectCellResults, ...selectPhoneResults, ...rowPhoneResults, ...rowNarrowResults,
-  ...desktopPanelResults, ...stateResults, ...familyResults, ...touchResults, ...overlapResults, ...rhythmResults, ...rendererRhythmResults,
+  ...desktopPanelResults, ...stateResults, ...keyboardParityResults, ...familyResults, ...touchResults, ...overlapResults, ...rhythmResults, ...rendererRhythmResults,
   ...liftedResults, ...inlineEditResults, ...numberParityResults, ...sectionFailures);
 
 await browser.close();

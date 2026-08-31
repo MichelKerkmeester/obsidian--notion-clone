@@ -22,9 +22,12 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-011"
       parent_session_id: null
-    completion_pct: 64
+    completion_pct: 91
     open_questions: []
-    answered_questions: []
+    answered_questions:
+      - "The two bands are one relation, not one constant: menu >= record against a declared floor"
+      - "A menu sheet did coexist with a keyboard and never moved; keepSheetPlaced fixes it"
+      - "The cap clause could not fail under its own control and now asserts which ceiling binds"
 ---
 # Implementation Summary
 

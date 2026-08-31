@@ -244,3 +244,42 @@ The green run is a reading of one moment. Three phases wrote to this tree during
 CSS lane changed hands twice, so `screenshots-fresh` in particular tracks a stylesheet this phase
 does not own. What is durable is the attribution: no capture cites any `src/` file this phase
 touched. [`findings.md`](findings.md) §6 records the rest.
+
+---
+
+## 5. THE FIVE STATEFUL DIMENSIONS
+
+Added 2026-09-01. This document carried fourteen acceptance criteria and assigned none of them to a
+dimension, so "the five stateful dimensions are covered" could not be read off the run — unlike
+`002`, `005` and `008`, whose acceptance documents carry the mapping. The table is the audit; the
+three rows that had no measurement are the work it produced.
+
+| Dimension | What it asks | Evidence |
+|---|---|---|
+| **Semantic identity** | Does the surface still act on what it was opened on? | *a column menu acts on the column it was opened on, not on the one now under its anchor* — opened on `income`, the header rebuilt with `expenses` at that coordinate, Hide acts on `hide:income` |
+| **Transition trace** | Does the surface move through the states it claims? | *dragging a menu sheet's handle down past the threshold dismisses it* (`140px, mounted=false, backdrop=gone`) paired with *a short drag springs back* (`40px, mounted=true, backdrop=present`) — the pair is the trace; either alone is a one-line rig |
+| **Action outcome** | Does an action produce the outcome, not the call? | *the backdrop arrives with the menu and leaves with it* (`while open=true after close=false menu still mounted=false`), and the keyboard cycle read as a sequence: `844 → 508 → 844` |
+| **Resource ownership** | Does the surface release what it acquires? | *ten menu sheets opened and dismissed leave one owner and no residue* — `0` capture-phase pointerdown listeners, `0` visualViewport listeners, `0` backdrops, `0` sheets |
+| **Negative-control mutation** | Does each check react when the thing it measures really moves? | The `isMobileBottomSheet` fork removed from `showAt` reddens the dock, width and cap clauses together; the handle's band collapsed reddens the band relation (`4px` against `32px`); the placement release removed reddens ownership (`10` listeners); the column resolved from the DOM at press time reddens identity (`hide:expenses`) |
+
+### 5.1 The cap clause could not fail under its own control
+
+The negative-control row above is the one that did work rather than recorded it. Removing the sheet
+fork was supposed to redden the dock, width and cap clauses together. Two moved. The cap clause
+asserted `height <= 90% of the viewport`, and a six-row menu satisfies that wherever it is placed —
+so it stayed green on a desktop-placed menu carrying an `836px` ceiling.
+
+It now asserts **which ceiling is in force**: the computed `max-height` against the sheet's `90svh`,
+rather than the height that resulted. Under the same control it reports `836.0px` against `759.6px`
+and goes red with the other two.
+
+A clause that cannot fail under the control its own criterion specifies is not covered by that
+control, whatever a mapping table says. The table is only worth having if building it is allowed to
+find this.
+
+### 5.2 Why resource ownership opens ten sheets
+
+One cycle proves the happy path. The failure mode of a dismissal owner is accumulation: a leaked
+capture-phase `pointerdown` is a second owner, and a second owner closes the menu on a press the
+first one meant to deliver. With the placement subscription's release removed, ten cycles report
+`10 visualViewport listener(s)` — a count no one can read as noise. One cycle would have reported 1.

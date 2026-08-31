@@ -1,11 +1,11 @@
 {
-  "measuredAt": "2026-08-31T22:18:32.958Z",
+  "measuredAt": "2026-08-31T22:39:18.847Z",
   "inputs": {
     "tools/live/sheet-teardown.mjs": "977e3a475380",
     "tools/live/sheet-teardown-harness.ts": "e0276d251779",
     "src/views/mobile-bottom-sheet.ts": "66b72d09ee79",
-    "src/views/popover-position.ts": "075b5761f121",
-    "src/views/owned-menu.ts": "e06f7bef597a"
+    "src/views/popover-position.ts": "b73634ce5815",
+    "src/views/owned-menu.ts": "f32cc37ad4be"
   },
   "producers": 10,
   "leaking": 0

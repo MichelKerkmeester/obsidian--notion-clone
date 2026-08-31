@@ -28,6 +28,7 @@ import {
   clamp,
   getVisiblePopoverBounds,
   isMobileBottomSheet,
+  keepSheetPlaced,
   placeSheet,
   setPosition,
 } from "./popover-position";
@@ -88,6 +89,7 @@ export function createOwnedMenu(
 
   let open = true;
   let releaseDrag: (() => void) | undefined;
+  let releasePlacement: (() => void) | undefined;
 
   const rows = (): HTMLElement[] =>
     Array.from(el.querySelectorAll<HTMLElement>(".db-menu-item:not([disabled])"));
@@ -99,6 +101,8 @@ export function createOwnedMenu(
     doc.removeEventListener("keydown", onKeydown, true);
     releaseDrag?.();
     releaseDrag = undefined;
+    releasePlacement?.();
+    releasePlacement = undefined;
     // Take the sheet chrome down before the node goes, not after: the backdrop is a sibling on the
     // body rather than a child, so removing the menu alone would leave the whole app dimmed behind
     // a surface that is no longer there.
@@ -171,6 +175,10 @@ export function createOwnedMenu(
         // and starts editing a cell on the way out.
         applySheetChrome(el, true, { scrimCapturesPointer: true });
         placeSheet(el);
+        // And keep it placed. A single call fixes the sheet at whatever the keyboard inset was when
+        // it opened, so a menu opened over an open keyboard stays lifted after it closes, and one
+        // opened before a keyboard never moves for it — while the panel sheet beside it does both.
+        releasePlacement = keepSheetPlaced(el);
         playSheetEntrance(el);
         releaseDrag = attachSheetDragToDismiss(el, close);
       } else {

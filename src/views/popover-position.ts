@@ -369,6 +369,51 @@ export function placeSheet(
   });
 }
 
+/**
+ * Keep a sheet placed while it is open, rather than only at the moment it opened.
+ *
+ * `placeSheet` is a single placement. The anchored panel path re-runs it from its own reposition
+ * loop, so a panel sheet lifts when a keyboard opens and settles when it closes. A surface that
+ * calls `placeSheet` once keeps whatever inset happened to be true at open time for its whole life —
+ * measured as a menu sheet sitting at `bottom 844 -> 844 -> 844` beside a panel sheet going
+ * `844 -> 508 -> 844` under the same declared keyboard. Two sheets on one screen answering the same
+ * signal differently is the defect, whichever of them is right.
+ *
+ * This is the panel loop's subscription set without the anchor arithmetic, because a menu on a phone
+ * has no anchor: the sheet is full width and docked, so there is nothing to re-measure but the
+ * viewport. Coalesced onto a frame for the reason the panel loop is — the read forces a style flush,
+ * and two sheets publishing on different schedules visibly lead one another.
+ *
+ * Returns its teardown and the caller owns it. Nothing here is tied to the element's lifetime, so a
+ * caller that drops the handle leaves viewport listeners alive for as long as the window lives.
+ */
+export function keepSheetPlaced(
+  panel: HTMLElement,
+  options: { margin?: number } = {},
+): () => void {
+  const view = panel.ownerDocument.defaultView || window;
+  const visual = view.visualViewport;
+  let frame: number | undefined;
+  const replace = () => {
+    frame = undefined;
+    if (!panel.isConnected) return;
+    placeSheet(panel, options);
+  };
+  const schedule = () => {
+    if (frame !== undefined) return;
+    frame = view.requestAnimationFrame(replace);
+  };
+  view.addEventListener("resize", schedule);
+  visual?.addEventListener("resize", schedule);
+  visual?.addEventListener("scroll", schedule);
+  return () => {
+    if (frame !== undefined) view.cancelAnimationFrame(frame);
+    view.removeEventListener("resize", schedule);
+    visual?.removeEventListener("resize", schedule);
+    visual?.removeEventListener("scroll", schedule);
+  };
+}
+
 // ───────────────────────────────────────────────────────────────────
 // 5. PURE POSITIONING HELPERS
 // ───────────────────────────────────────────────────────────────────

@@ -892,7 +892,7 @@
       ],
       "layoutHash": "e1ad8df01021",
       "sourceHashes": {
-        "src/views/owned-menu.ts": "e06f7bef597a",
+        "src/views/owned-menu.ts": "f32cc37ad4be",
         "src/views/menu-row.ts": "dd0e9eeeb997",
         "styles.css": "e018db2135f2",
         "tools/screenshots/theme.css": "8239cc22cceb",
@@ -917,7 +917,7 @@
       ],
       "layoutHash": "e1ad8df01021",
       "sourceHashes": {
-        "src/views/owned-menu.ts": "e06f7bef597a",
+        "src/views/owned-menu.ts": "f32cc37ad4be",
         "src/views/menu-row.ts": "dd0e9eeeb997",
         "styles.css": "e018db2135f2",
         "tools/screenshots/theme.css": "8239cc22cceb",
@@ -942,7 +942,7 @@
       ],
       "layoutHash": "2389dbe9ce03",
       "sourceHashes": {
-        "src/views/owned-menu.ts": "e06f7bef597a",
+        "src/views/owned-menu.ts": "f32cc37ad4be",
         "src/views/menu-row.ts": "dd0e9eeeb997",
         "styles.css": "e018db2135f2",
         "tools/screenshots/theme.css": "8239cc22cceb",
@@ -967,7 +967,7 @@
       ],
       "layoutHash": "2389dbe9ce03",
       "sourceHashes": {
-        "src/views/owned-menu.ts": "e06f7bef597a",
+        "src/views/owned-menu.ts": "f32cc37ad4be",
         "src/views/menu-row.ts": "dd0e9eeeb997",
         "styles.css": "e018db2135f2",
         "tools/screenshots/theme.css": "8239cc22cceb",
@@ -993,7 +993,7 @@
       ],
       "layoutHash": "e9246471b820",
       "sourceHashes": {
-        "src/views/owned-menu.ts": "e06f7bef597a",
+        "src/views/owned-menu.ts": "f32cc37ad4be",
         "src/views/menu-row.ts": "dd0e9eeeb997",
         "src/views/mobile-bottom-sheet.ts": "66b72d09ee79",
         "styles.css": "e018db2135f2",
@@ -1020,7 +1020,7 @@
       ],
       "layoutHash": "e9246471b820",
       "sourceHashes": {
-        "src/views/owned-menu.ts": "e06f7bef597a",
+        "src/views/owned-menu.ts": "f32cc37ad4be",
         "src/views/menu-row.ts": "dd0e9eeeb997",
         "src/views/mobile-bottom-sheet.ts": "66b72d09ee79",
         "styles.css": "e018db2135f2",
@@ -1047,7 +1047,7 @@
       ],
       "layoutHash": "25dd560799b2",
       "sourceHashes": {
-        "src/views/owned-menu.ts": "e06f7bef597a",
+        "src/views/owned-menu.ts": "f32cc37ad4be",
         "src/views/menu-row.ts": "dd0e9eeeb997",
         "src/views/mobile-bottom-sheet.ts": "66b72d09ee79",
         "styles.css": "e018db2135f2",
@@ -1058,7 +1058,7 @@
       },
       "note": "The phone form of the owned menu. Rows share one left edge with the icon in a fixed leading column, hairlines divide neighbours but not the last row of a group, and a row that opens a submenu carries a trailing chevron. Captured in viewport mode so the fixed sheet docks at the bottom.",
       "capture": "viewport",
-      "bytes": 36591
+      "bytes": 36596
     },
     {
       "id": "chrome-owned-menu-sheet",
@@ -1074,7 +1074,7 @@
       ],
       "layoutHash": "25dd560799b2",
       "sourceHashes": {
-        "src/views/owned-menu.ts": "e06f7bef597a",
+        "src/views/owned-menu.ts": "f32cc37ad4be",
         "src/views/menu-row.ts": "dd0e9eeeb997",
         "src/views/mobile-bottom-sheet.ts": "66b72d09ee79",
         "styles.css": "e018db2135f2",
@@ -3815,7 +3815,7 @@
       "layoutHash": "1462d3f27dd8",
       "sourceHashes": {
         "src/views/record-detail-panel.ts": "f6d0308b4df2",
-        "src/views/popover-position.ts": "075b5761f121",
+        "src/views/popover-position.ts": "b73634ce5815",
         "src/views/card-field-renderer.ts": "33212bef3422",
         "src/views/note-body-region.ts": "4660f1f93bd7",
         "styles.css": "e018db2135f2",
@@ -3844,7 +3844,7 @@
       "layoutHash": "1462d3f27dd8",
       "sourceHashes": {
         "src/views/record-detail-panel.ts": "f6d0308b4df2",
-        "src/views/popover-position.ts": "075b5761f121",
+        "src/views/popover-position.ts": "b73634ce5815",
         "src/views/card-field-renderer.ts": "33212bef3422",
         "src/views/note-body-region.ts": "4660f1f93bd7",
         "styles.css": "e018db2135f2",
@@ -3873,7 +3873,7 @@
       "layoutHash": "ade783c1a018",
       "sourceHashes": {
         "src/views/record-detail-panel.ts": "f6d0308b4df2",
-        "src/views/popover-position.ts": "075b5761f121",
+        "src/views/popover-position.ts": "b73634ce5815",
         "src/views/card-field-renderer.ts": "33212bef3422",
         "src/views/note-body-region.ts": "4660f1f93bd7",
         "styles.css": "e018db2135f2",
@@ -3902,7 +3902,7 @@
       "layoutHash": "ade783c1a018",
       "sourceHashes": {
         "src/views/record-detail-panel.ts": "f6d0308b4df2",
-        "src/views/popover-position.ts": "075b5761f121",
+        "src/views/popover-position.ts": "b73634ce5815",
         "src/views/card-field-renderer.ts": "33212bef3422",
         "src/views/note-body-region.ts": "4660f1f93bd7",
         "styles.css": "e018db2135f2",
@@ -3913,7 +3913,7 @@
       },
       "note": "The phone form of the record detail panel. positionToolbarPopover renders it as a bottom sheet with a grab handle; a permanent close button (reusing db-cell-edit-close) and drag-down on the handle dismiss it where the desktop panel relies on Escape and outside-click. Captured in viewport mode so the fixed sheet docks at the bottom. The note body is the last group, below the properties.",
       "capture": "viewport",
-      "bytes": 77698
+      "bytes": 77700
     },
     {
       "id": "panel-record-peek",
@@ -4680,7 +4680,7 @@
       },
       "note": "Days with events carry a short accent underline; the visible week reads as the selected pill run.",
       "capture": "viewport",
-      "bytes": 42768
+      "bytes": 42742
     },
     {
       "id": "calendar-mini-calendar",
@@ -4797,7 +4797,7 @@
       },
       "note": "Multi-day all-day bars, timed events, an overflow week and one event carried across the week boundary.",
       "capture": "viewport",
-      "bytes": 87204
+      "bytes": 87551
     },
     {
       "id": "calendar-toolbar-options",
@@ -4920,7 +4920,7 @@
       },
       "note": "Sticky day header and all-day strip over the 08–16 time grid; the current-time ruler sits on Wednesday at 13:45.",
       "capture": "viewport",
-      "bytes": 113210
+      "bytes": 114040
     },
     {
       "id": "calendar-week-time-grid",
@@ -5725,7 +5725,7 @@
       },
       "note": "Column width is a switch plus a slider here, not the calendar's mode dropdown; the slider only appears once the switch is on.",
       "capture": "viewport",
-      "bytes": 85566
+      "bytes": 85562
     },
     {
       "id": "timeline-view",
