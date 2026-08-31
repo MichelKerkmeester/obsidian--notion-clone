@@ -12,9 +12,8 @@ _memory:
     last_updated_at: "2026-08-31T08:20:00Z"
     last_updated_by: "renderer-coverage-extension"
     recent_action: "Coverage 2 to 6 of 22; the added timeline scenario caught a live quadratic at 964 reads"
-    next_safe_action: "Re-run N5 on a quiet tree: drop the entry, require gate exit 0 at 15 of 15"
-    blockers:
-      - "N5 needs a tree with no src/ or styles.css edit in flight; one is in flight now"
+    next_safe_action: "Extend coverage past the six view renderers, or leave the ratchet where it is"
+    blockers: []
     key_files:
       - "spec.md"
       - "acceptance-criteria.md"
@@ -22,7 +21,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-026-goal"
       parent_session_id: null
-    completion_pct: 95
+    completion_pct: 100
     open_questions:
       - "Is the embed's thinner action bag a defect or intentional"
       - "What threshold would have caught a per-row scan that costs no layout read"
@@ -31,6 +30,7 @@ _memory:
       - "2 of 22 is a floor, not coverage: a second defect shipped through the uncovered 20"
       - "The bound needed no recalibration; pointing it at a fourth renderer caught a live quadratic at 964 reads"
       - "A windowed view drawing nothing passes every per-item bound, so a non-zero drawn-item count is asserted first"
+      - "N5 is met: the gate exits 0 at 15 of 15 without the entry and 16 of 16 with it, sha256 identical on restore"
 ---
 # Goal: Production Render Assertions
 
@@ -87,9 +87,12 @@ assertions, both bags and a gate entry did not.
       production-renderer assertion.** The remaining sixteen are panels, cells and chrome.
 - [x] A green run **states what it does not prove**: no host, no device, `App` absent. **Met:** all
       three print on the pass path.
-- [ ] All six controls N1-N6 observed failing, each with its command — including N5, where removing
-      the `CHECKS` entry must leave `npm run gate` at exit 0. **Not met:** N5's only run exited 1 on
-      reds owned by other sessions, and it needs a quiet tree; `src/` is under edit.
+- [x] All six controls N1-N6 observed failing, each with its command — including N5, where removing
+      the `CHECKS` entry must leave `npm run gate` at exit 0. **Met.** The precondition finally
+      existed: a fully committed tree, nothing in flight. Baseline **exit 0, 16 green**, `gate.mjs`
+      at sha256 `763c8a32…`; the `render-assertions` entry deleted and nothing else, **exit 0 with
+      15 green**; restored and re-hashed **identical**, then **exit 0 with 16 green**. The measured
+      quantity is the gate's exit status with and without the entry, and the threshold is 0 in both.
 <!-- /ANCHOR:completion -->
 
 ---
@@ -159,7 +162,23 @@ makes 2 a floor rather than a failure. A floor is still not coverage.
 | Coverage ratchet | `tools/live/renderer-coverage.json` publishes `"constructed": 6, "total": 22`; total recomputed each run (`render-assertions.mjs:256-260`); exits 1 before stamping when `constructed < published` (`:266-272`). N6 |
 | Green run states its exclusions | `tools/live/render-assertions.mjs:300-302` |
 
-### The run N5 still owes
+### N5, run at last, and what made it possible
+
+It is done, and the reason it took until now is the whole of its difficulty: its precondition is a
+tree with nothing in flight, and no day this phase was worked had one. Committing the session's work
+produced one for the first time.
+
+| Run | `gate.mjs` sha256 | Result |
+|---|---|---|
+| Baseline | `763c8a32…` | exit 0, **16 green** |
+| `render-assertions` entry deleted, nothing else | — | exit 0, **15 green** |
+| Entry restored | `763c8a32…`, **identical** | exit 0, **16 green** |
+
+That rules out the substitution N5 exists to rule out: AC-1 is measured against the *entry* rather
+than against the file, because removing the entry leaves a gate that still passes and still counts
+one fewer check. The only artefact movement across the three runs was two `measuredAt` timestamps.
+
+### The run N5 owed, as it was specified
 
 On a tree where `npm run gate` is independently green — every `tools/live/*.json` artefact freshly
 stamped and **no `src/` or `styles.css` edit in flight** — delete only the `render-assertions` entry
@@ -203,7 +222,7 @@ green run.
 | Assertion runner | Built | `render-assertions.mjs` + `render-assertion-harness.ts`; 40 assertions green at `845a27c` |
 | Gate entry | Built | `render-assertions` at `tools/gate.mjs:67`; red at `173819e^` proves it can fail |
 | Both action bags | Exercised | 2 of 2; both bags drive both renderers; difference printed by name each run |
-| Six controls | 5 of 6 | N1-N4 and N6 red as specified. N5 has no clean observation; its precondition is unmet while `src/` is being edited |
+| Six controls | **6 of 6** | N1-N4 and N6 red as specified. N5 run on the first fully committed tree this phase has seen: 15 green without the entry, 16 with it, both exit 0 |
 | Coverage number | 6 of 22 | `renderer-coverage.json` through the evidence stamp; ratchet enforced by the check |
 | Calendar and timeline | Covered | Eight scenarios, both bags; timeline reads 964 → 5 against a bound of 8 across the fix |
 | Board and gallery | Covered | 1 layout read each against a bound of 8; the earlier per-card hoist is now guarded |
@@ -217,5 +236,5 @@ green run.
 | A read-count bound cannot see a scan | The list's second superlinear term costs no layout read and appends no row, so both of this lane's thresholds are blind to it. Recorded, not fixed: the threshold that would catch it is an open question, not an obvious edit |
 | Numbers re-read rather than inherited | The gate has 16 checks and six `tools/` importers (was 14 and 4) because concurrent sessions landed work mid-implementation |
 | AC-3 census corrected | The published 18/9 census missed `expandGroup` (4-space indent quirk) and counted `includeWidthActions` (an option literal, not a member); precise census 26/19, eight file-view-only members |
-| N5's clean form still deferred | Its precondition — a tree with nothing in flight — has not existed on any day this phase has been worked |
+| N5's clean form deferred four times, then run | Its precondition — a tree with nothing in flight — had not existed on any day this phase was worked. Committing the session's work made one, and it passed as specified |
 <!-- /ANCHOR:log -->
