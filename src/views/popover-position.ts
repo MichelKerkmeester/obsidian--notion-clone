@@ -517,13 +517,6 @@ export function getVisiblePopoverBounds(container: HTMLElement | null): DOMRect 
 }
 
 /**
- * Does this document present overlays as phone bottom sheets?
- *
- * Exported so the menu path asks the same question the panel path does. A second predicate would
- * drift from this one, and the two families would disagree about what a phone is on exactly the
- * devices nobody tests.
- */
-export /**
  * How much of the layout viewport a software keyboard is covering, in CSS pixels.
  *
  * The host is the primary source and this is not a preference. Obsidian listens to the platform's
@@ -557,6 +550,62 @@ function keyboardInset(view: Window, doc: Document): number {
     ? Math.max(0, view.innerHeight - visual.height - visual.offsetTop)
     : 0;
   return Math.max(host, observed);
+}
+
+/**
+ * Publish a container's keyboard inset as `--db-keyboard-inset`, and keep it current.
+ *
+ * A phone surface that docks to the bottom of the screen has to know how much of that screen the
+ * software keyboard is covering, and `--keyboard-height` cannot be asked on its own. That variable
+ * belongs to the host: only Obsidian ever writes it, and on a host that does not — an older
+ * release, a platform whose keyboard plugin is absent, a desktop build in a phone-shaped window —
+ * every CSS rule reading it resolves to its fallback forever. Such a rule does not fail loudly. It
+ * silently never moves, which is how a status bar came to sit under an open keyboard while the
+ * sheet beside it lifted correctly: the sheet asked the function below, the bar asked the host.
+ *
+ * `keyboardInset` is the answer to the question, combining the host's report with the visual
+ * viewport's own shrink so whichever notices first wins. It was reachable from one caller and wrote
+ * a per-panel variable, so exactly one surface benefited. This writes the same number where any
+ * descendant of the container can read it, which is what makes it a property of the surface rather
+ * than of one panel.
+ *
+ * On the container rather than the document element deliberately. `--keyboard-height` is the host's
+ * namespace and a plugin has no business writing beside it, where one view's measurement would sit
+ * in front of every other view and of the host's own chrome. Custom properties inherit through the
+ * DOM and not through layout, so a `position: fixed` child of the container still reads this.
+ *
+ * Coalesced onto a frame for the two reasons the reposition loop above is: the read forces a style
+ * flush, and the sheet moves on that same schedule — a bar that published a frame earlier would
+ * visibly lead the sheet sitting beside it.
+ *
+ * Returns its own teardown, and the caller owns it. Nothing here is tied to the container's
+ * lifetime, so a caller that drops the handle leaves a viewport listener alive for as long as the
+ * window lives.
+ */
+export function publishKeyboardInset(container: HTMLElement): () => void {
+  const doc = container.ownerDocument;
+  const view = doc.defaultView || window;
+  const visual = view.visualViewport;
+  let frame: number | undefined;
+  const publish = () => {
+    frame = undefined;
+    container.style.setProperty("--db-keyboard-inset", `${keyboardInset(view, doc)}px`);
+  };
+  const schedule = () => {
+    if (frame !== undefined) return;
+    frame = view.requestAnimationFrame(publish);
+  };
+  view.addEventListener("resize", schedule);
+  visual?.addEventListener("resize", schedule);
+  visual?.addEventListener("scroll", schedule);
+  publish();
+  return () => {
+    if (frame !== undefined) view.cancelAnimationFrame(frame);
+    view.removeEventListener("resize", schedule);
+    visual?.removeEventListener("resize", schedule);
+    visual?.removeEventListener("scroll", schedule);
+    container.style.removeProperty("--db-keyboard-inset");
+  };
 }
 
 /**

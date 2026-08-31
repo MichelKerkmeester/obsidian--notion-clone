@@ -1,7 +1,7 @@
 {
   "holder": null,
-  "acquiredAt": "2026-08-30T16:11:04Z",
-  "baselineHash": "e5ada7e445ce",
+  "acquiredAt": "2026-08-31T04:01:53Z",
+  "baselineHash": "5280f269018a",
   "baselineCommit": "f27da7f78b17",
   "history": [
     {
@@ -575,6 +575,27 @@
       "at": "2026-08-30T16:11:04Z",
       "hash": "e5ada7e445ce",
       "note": "Released by the coordinator. The dispatched executor finished its work and exited without releasing, leaving the lane held by a phase that was no longer running. The stylesheet hash is unchanged from its last recorded edit, so nothing is being absorbed — this closes a leaked hold, not an unrecorded change."
+    },
+    {
+      "event": "acquire",
+      "phase": "022-selection-bar-keyboard-docking",
+      "at": "2026-08-31T04:01:53Z",
+      "hash": "e5ada7e445ce",
+      "note": "Reacquired to repair the docking rule the operator reported still floating."
+    },
+    {
+      "event": "edit",
+      "phase": "022-selection-bar-keyboard-docking",
+      "at": "2026-08-31T04:01:53Z",
+      "hash": "5280f269018a",
+      "note": "One declaration: the phone selection bar now docks on --db-keyboard-inset, published by the plugin from its own measurement, instead of --keyboard-height, which only the host writes. On a host that publishes nothing the old rule resolved to its fallback forever and the bar never left the floor - silently, because a var() that misses does not fail. Measured 828px unmoved before, 513px after, with no host variable set."
+    },
+    {
+      "event": "release",
+      "phase": "022-selection-bar-keyboard-docking",
+      "at": "2026-08-31T04:04:25Z",
+      "hash": "5280f269018a",
+      "note": "Recaptured and reviewed before release. 10 of 228 images moved, all in the owned-menu sheet, record-detail sheet, calendar and timeline families that churn on an identical rerun - the same set as the two previous recaptures. No selection-bar capture moved, and none could: the changed rule differs only when a keyboard is open, and no capture has one, so the bar resolves identically at an inset of 0."
     }
   ],
   "outstanding": [

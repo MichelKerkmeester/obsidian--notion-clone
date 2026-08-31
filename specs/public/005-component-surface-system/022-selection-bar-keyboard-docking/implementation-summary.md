@@ -9,23 +9,28 @@ contextType: "implementation"
 _memory:
   continuity:
     packet_pointer: "public/005-component-surface-system/022-selection-bar-keyboard-docking"
-    last_updated_at: "2026-08-30T20:12:00Z"
-    last_updated_by: "phase-reconciliation"
-    recent_action: "Docking rule recorded; box 30px to 48px; 8 harness checks cited"
-    next_safe_action: "Operator opens a keyboard with cells selected and reports what the bar does"
-    blockers: []
+    last_updated_at: "2026-08-31T00:00:00Z"
+    last_updated_by: "keyboard-inset-publisher"
+    recent_action: "Bar moved onto a plugin-published inset; fallback-only checks added and green"
+    next_safe_action: "Regenerate the three staled fingerprint artefacts, then operator opens a keyboard on a device"
+    blockers:
+      - "css-lane, evidence and screenshots-fresh red on the stylesheet fingerprint; remedies write outside this phase's scope"
     key_files:
       - "spec.md"
       - "acceptance-criteria.md"
+      - "src/views/popover-position.ts"
+      - "src/views/database-view.ts"
+      - "styles.css"
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-022"
       parent_session_id: null
-    completion_pct: 55
+    completion_pct: 70
     open_questions:
       - "Which host shape is the operator's phone"
     answered_questions:
       - "Both reported defects are fixed and measured"
+      - "The sheet's visual-viewport fallback works: it lifts with no host variable set"
 ---
 # Implementation Summary: Dock the Selection Bar to the Keyboard
 
@@ -37,9 +42,9 @@ _memory:
 
 | Field | Value |
 |---|---|
-| **State** | Shipped and verified. Not operator-confirmed, so not closed |
+| **State** | Shipped and verified against a host that publishes nothing. Not operator-confirmed, so not closed |
 | **Surface** | `.db-selection-status-bar`, phone, standalone only |
-| **Evidence** | 8 checks in `tools/storybook/verify-placement.mjs`, all passing |
+| **Evidence** | 15 checks in `tools/storybook/verify-placement.mjs`, all passing; two negative controls |
 | **Written** | After the fact, from the shipped rule — this phase's documents lagged its code |
 <!-- /ANCHOR:metadata -->
 
@@ -48,11 +53,11 @@ _memory:
 <!-- ANCHOR:what-built -->
 ## 2. WHAT WAS BUILT
 
-One rule, at `styles.css:2423`, keyed to a phone and guarded against the embed:
+One rule keyed to a phone and guarded against the embed, and one publisher that feeds it:
 
 ```css
 .is-phone .note-database-container:not(.note-database-embed) .db-selection-status-bar {
-  bottom: max(16px, env(safe-area-inset-bottom), var(--keyboard-height, 0px));
+  bottom: max(16px, env(safe-area-inset-bottom), var(--db-keyboard-inset, 0px));
   height: 48px;
   max-width: calc(100vw - 32px);
   overflow-x: auto;
@@ -62,9 +67,20 @@ One rule, at `styles.css:2423`, keyed to a phone and guarded against the embed:
 
 It answers both halves of the operator's report.
 
-**The bar now rides the keyboard.** `--keyboard-height` is Obsidian's own variable. Adding it to the
-`max()` means the bar sits above the keyboard when one is open and returns to the safe-area floor
-when it is not, because the variable is `0px` in that state and the other two terms win.
+**The bar now rides the keyboard, on a number the plugin measures.** The rule first shipped reading
+`--keyboard-height`, which is Obsidian's variable and which nothing in this plugin sets. On a host
+that publishes it the bar moved; on one that does not, the `var()` missed, the `max()` fell to its
+safe floor and the bar never moved at all — silently, because a missing custom property is not an
+error. `publishKeyboardInset` in `src/views/popover-position.ts` now writes `keyboardInset()` to
+`--db-keyboard-inset` on the view's container, and the bar reads that. `keyboardInset()` takes the
+larger of the host's report and the visual viewport's own shrink, so the host's number still reaches
+the bar and a silent host no longer strands it.
+
+**The sheet was checked the same way, and its fallback is real.** With no `--keyboard-height` set and
+the visual viewport shrunk instead, the sheet lifts to 513px on an 844px screen. That branch had
+never executed in any captured run — both keyboard blocks in the harness set the variable and
+dispatched a synthetic resize while the viewport stayed at full height, so the observed term computed
+zero every time. It works; it had simply never been asked.
 
 **The bar's content now fits.** The box was 30px with `box-sizing: border-box` and a 1px border on
 each edge, leaving 28px for 36px of content, so labels wrapped and were cut. It is 48px now. Actions
@@ -94,7 +110,10 @@ bar that had no reason to move.
 
 | Decision | Why |
 |---|---|
-| Consume `--keyboard-height` rather than observe `visualViewport` here | The host already publishes the number, and a `max()` degrades correctly to the safe floor when it is absent. A JavaScript observer would need its own teardown and would duplicate a mechanism that already exists |
+| ~~Consume `--keyboard-height` rather than observe `visualViewport` here~~ **Reversed.** Consume a plugin-published `--db-keyboard-inset` | The original reasoning assumed the host always publishes. It does not, and "degrades correctly to the safe floor" describes the defect rather than a graceful fallback: the bar sat on the floor under an open keyboard. The teardown this decision was avoiding is nine lines and is now asserted by a check with its own control |
+| Write the container, not `documentElement` | `--keyboard-height` is the host's namespace and a plugin has no business writing beside it, where one view's measurement would sit in front of every other view and the host's own chrome. Custom properties inherit through the DOM rather than through layout, so the `position: fixed` bar still reads a value set on its container |
+| Scope the subscription to the bar, not the view | The variable is only needed while a bar exists. Taken when one is created and released when the selection clears, the common case holds no viewport listener at all — strictly better than one per open view, and it is the path the harness can drive end to end |
+| Reuse `keyboardInset()` rather than write a second measurement | Two answers to "how much is the keyboard covering" would drift, and the sheet and the bar would disagree for the length of the keyboard animation. One function, two consumers |
 | Scroll the bar rather than shorten its labels | Copy TSV and Copy Markdown are the only route to those actions. A truncated label is a control the user cannot identify; a scrollable lane keeps every action reachable and says so with a visible scrollbar |
 | Raise the box to 48px rather than reduce the content | The content was already the minimum that names each action, and 44px is the thumb floor the rest of this phone surface holds |
 | Leave the desktop bar alone | It has room and there is no keyboard. The rule is keyed to `.is-phone` for exactly that reason |
@@ -105,10 +124,18 @@ bar that had no reason to move.
 <!-- ANCHOR:verification -->
 ## 5. VERIFICATION
 
-Eight checks, each a number a browser produced against the shipped rule:
+Fifteen checks, each a number a browser produced against the shipped rule. The first three are the
+ones that matter: they set **no** `--keyboard-height` and shrink the visual viewport instead, so they
+cannot pass on a value the harness supplied.
 
 | What | Number |
 |---|---|
+| **Bar clears a keyboard no host reported** | **bottom 513px, want 513px; bar reads 331px from the bottom** |
+| **Sheet clears a keyboard no host reported** | **bottom 513px, want 513px; lever var 331px** |
+| **Publisher's listener does not survive its bar** | **`0px` while up, unset after clear, unset after a shrink that would have republished it** |
+| Embedded bar unmoved when only the visual viewport moves | 828px before and after |
+| Bar and sheet return to the floor when the viewport comes back | 828px and 844px |
+| No host variable in play while the fallback is measured | `--keyboard-height` reads unset |
 | Bar clears the keyboard the host reports | bottom 513px, keyboard covers 513..844 |
 | Bar returns to its floor when the keyboard closes | 828px, matching its resting position |
 | Content fits its border box | 46px in 46px |
@@ -133,7 +160,23 @@ surface has no margin for an unrelated edit.
 WebView exposes `visualViewport`, which is a different question. The docking works under either
 shape because of the `max()` fallback, so this is unresolved rather than blocking.
 
-**Nothing here has been seen on a device.** Eight browser measurements are not a person looking at
+**Nothing here has been seen on a device.** Fifteen browser measurements are not a person looking at
 their phone, and this packet exists because a release passed every gate and changed nothing anyone
 could see.
+
+**Three gate checks are red, and this phase cannot clear them.** `css-lane`, `evidence` and
+`screenshots-fresh` are content fingerprints over `styles.css` and `src/views/popover-position.ts`,
+and no fix for this defect leaves either file untouched — the bar's declaration is in one and the
+publisher is in the other. Every stale entry names those two files and nothing else. The remedies
+write to `tools/lane/css-lane.json`, the eight `tools/live/*.json` artefacts and `screenshots/`, which
+are outside this phase's write scope, so they are reported rather than performed:
+
+| Red | Remedy | Owner |
+|---|---|---|
+| `css-lane` | Take the lane: set `holder` and `baselineHash`, append to `history` | whoever holds the stylesheet next |
+| `evidence` | Re-run the eight tools that wrote the stale artefacts; do not edit the numbers | same |
+| `screenshots-fresh` | `npm run screenshots`, then per-image sign-off | the operator |
+
+**The captures on disk predate this edit.** Any screenshot fingerprinted against the stylesheet or
+the positioner now describes a tree that no longer exists.
 <!-- /ANCHOR:limitations -->

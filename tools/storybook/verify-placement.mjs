@@ -413,7 +413,7 @@ await phone.addStyleTag({ content: readFileSync(join(REPO, "styles.css"), "utf8"
 await phone.addScriptTag({ content: shimJs + "\ninstallObsidianDomShim(globalThis);" });
 await phone.addScriptTag({ content: positionerJs });
 
-const phoneResults = await section("the phone sheet and its selection bar", () => phone.evaluate(async (forceBrokenSelectionDock) => {
+const phoneResults = await section("the phone sheet and its selection bar", () => phone.evaluate(async (control) => {
   const out = [];
   const { applySheetChrome, positionToolbarPopover, getVisiblePopoverBounds } = globalThis.__place;
   const { DatabaseView, EmbeddedDatabaseRenderer } = globalThis.__selection;
@@ -735,7 +735,7 @@ const phoneResults = await section("the phone sheet and its selection bar", () =
     view.getSelectedCellAddresses = () => selectedAddresses;
     view.getConfig = () => ({ schema: { columns: [] } });
     DatabaseView.prototype.renderSelectionStatusBar.call(view);
-    return { host, bar: host.querySelector(".db-selection-status-bar") };
+    return { host, view, bar: host.querySelector(".db-selection-status-bar") };
   };
   const renderEmbeddedSelection = () => {
     const host = document.body.createDiv({ cls: "note-database-embed note-database-container" });
@@ -819,7 +819,7 @@ const phoneResults = await section("the phone sheet and its selection bar", () =
   document.documentElement.style.setProperty("--keyboard-height", `${KEYBOARD}px`);
   window.dispatchEvent(new window.Event("resize"));
   await settle();
-  if (forceBrokenSelectionDock) selectionBar.style.bottom = "0px";
+  if (control.breakDock) selectionBar.style.bottom = "0px";
   const liftedSelectionBox = selectionBar.getBoundingClientRect();
   const liftedEmbeddedBox = embeddedBar.getBoundingClientRect();
   const keyboardBarBottom = window.innerHeight - KEYBOARD;
@@ -870,6 +870,109 @@ const phoneResults = await section("the phone sheet and its selection bar", () =
     name: "the sheet returns to the floor when the keyboard closes",
     pass: Math.abs(closedBox.bottom - window.innerHeight) <= 1,
     detail: `bottom=${closedBox.bottom.toFixed(0)} viewport=${window.innerHeight}`,
+  });
+
+  // ── the same keyboard, with the host silent ──
+  //
+  // Everything above drives the host's REPORT of a keyboard. This block drives the DEVICE, and the
+  // difference between the two is the reason it exists.
+  //
+  // Writing `--keyboard-height` does the host's job for it. It presupposes the one thing actually
+  // in question — that Obsidian published a number this surface can read — so a check built that
+  // way can only ever confirm arithmetic. Shrinking `visualViewport.height` grants no such favour:
+  // a phone shrinks that viewport itself when the software keyboard opens, on every host, whether
+  // or not anything is published. The override below therefore models the platform, and the
+  // variable stays absent on purpose.
+  //
+  // It also covers a real gap rather than a hypothetical one. Both blocks above set the variable
+  // and then dispatched a synthetic resize while the viewport stayed at full height, so the
+  // observed term inside the positioner's inset computed zero in every run ever captured and only
+  // the host term was ever exercised. The branch that is supposed to protect these surfaces on a
+  // host that publishes nothing had never once run.
+  //
+  // `height` is an accessor on VisualViewport.prototype, so an own property on the instance shadows
+  // it for the duration and `delete` hands the real getter back.
+  const restingVisualHeight = window.visualViewport ? window.visualViewport.height : window.innerHeight;
+  const shrinkVisualViewport = (covered) => {
+    Object.defineProperty(window.visualViewport, "height", {
+      configurable: true,
+      get: () => restingVisualHeight - covered,
+    });
+  };
+  const restoreVisualViewport = () => { delete window.visualViewport.height; };
+
+  out.push({
+    name: "the visual viewport rests at the window height before it is shrunk",
+    pass: Boolean(window.visualViewport) && Math.abs(restingVisualHeight - window.innerHeight) <= 1,
+    detail: `visualViewport.height=${restingVisualHeight} innerHeight=${window.innerHeight}; `
+      + `a gap here means the shrink below is measured from the wrong resting height and every `
+      + `number in this block is off by it`,
+  });
+
+  // `SELECTION_BAR_CONTROL=revert` puts the bar back on the host variable alone — the declaration
+  // that shipped and that the operator watched float over an open keyboard. The fallback check below
+  // must go red under it. If it stays green, the check is not testing the docking rule and should be
+  // deleted rather than believed. Written inline on the one element under test, which is the same
+  // declaration the stylesheet used to carry and reaches only this bar.
+  if (control.revertDock) {
+    selectionBar.style.setProperty(
+      "bottom",
+      "max(16px, env(safe-area-inset-bottom), var(--keyboard-height, 0px))",
+      "important",
+    );
+  }
+  shrinkVisualViewport(KEYBOARD);
+  window.visualViewport.dispatchEvent(new window.Event("resize"));
+  await settle();
+  const silentVar = getComputedStyle(document.documentElement)
+    .getPropertyValue("--keyboard-height").trim();
+  const fallbackFloor = window.innerHeight - KEYBOARD;
+  const fallbackSheetBox = rhythmPanel.getBoundingClientRect();
+  const fallbackSelectionBox = selectionBar.getBoundingClientRect();
+  const fallbackEmbeddedBox = embeddedBar.getBoundingClientRect();
+
+  out.push({
+    name: "no host variable is in play while the fallback is measured",
+    pass: silentVar === "" || parseFloat(silentVar) === 0,
+    detail: `--keyboard-height reads "${silentVar || "(unset)"}"; anything else means this block is `
+      + `driving the host path again under a different name and proves nothing new`,
+  });
+  out.push({
+    name: "the sheet clears a keyboard no host reported",
+    pass: Math.abs(fallbackSheetBox.bottom - fallbackFloor) <= 2,
+    detail: `sheet bottom=${fallbackSheetBox.bottom.toFixed(0)} want=${fallbackFloor} `
+      + `(window ${window.innerHeight}, visual viewport shrunk to ${window.visualViewport.height}); `
+      + `lever var=${rhythmPanel.style.getPropertyValue("--db-mobile-sheet-bottom") || "(unset)"}`,
+  });
+  out.push({
+    name: "the selection bar clears a keyboard no host reported",
+    pass: Math.abs(fallbackSelectionBox.bottom - fallbackFloor) <= 2,
+    detail: `bar bottom=${fallbackSelectionBox.bottom.toFixed(0)} want=${fallbackFloor} `
+      + `(window ${window.innerHeight}, visual viewport shrunk to ${window.visualViewport.height}); `
+      + `bar reads ${getComputedStyle(selectionBar).bottom} from the bottom`,
+  });
+  out.push({
+    name: "the embedded selection bar stays put when only the visual viewport moves",
+    pass: Math.abs(fallbackEmbeddedBox.bottom - embeddedFloor) <= 1,
+    detail: `embedded before=${embeddedFloor.toFixed(0)}px after=${fallbackEmbeddedBox.bottom.toFixed(0)}px `
+      + `(an embedded database is not the phone's bottom surface and must not dock to a keyboard)`,
+  });
+
+  if (control.revertDock) selectionBar.style.removeProperty("bottom");
+  restoreVisualViewport();
+  window.visualViewport.dispatchEvent(new window.Event("resize"));
+  await settle();
+  const settledSheetBox = rhythmPanel.getBoundingClientRect();
+  const settledSelectionBox = selectionBar.getBoundingClientRect();
+  out.push({
+    name: "the sheet returns to the floor when the visual viewport comes back",
+    pass: Math.abs(settledSheetBox.bottom - window.innerHeight) <= 1,
+    detail: `bottom=${settledSheetBox.bottom.toFixed(0)} viewport=${window.innerHeight}`,
+  });
+  out.push({
+    name: "the selection bar returns to its safe floor when the visual viewport comes back",
+    pass: Math.abs(settledSelectionBox.bottom - selectionFloor) <= 1,
+    detail: `closed bottom=${settledSelectionBox.bottom.toFixed(0)}px resting bottom=${selectionFloor.toFixed(0)}px`,
   });
 
   // ── controls ──
@@ -930,12 +1033,48 @@ const phoneResults = await section("the phone sheet and its selection bar", () =
       + `its term when scale exceeds 1.01, so a zoom cannot lift the sheet`,
   });
 
+  // The publisher's teardown, driven rather than assumed.
+  //
+  // Publishing the inset costs a viewport subscription, and one left alive per view is a real leak.
+  // Nothing in this repository counts listeners — the owner census that would is still unbuilt — so
+  // this asserts the consequence instead. Clearing the selection is the shipped release path: it
+  // removes the bar and drops the subscription with it. After that the variable is gone, and a
+  // shrink that would have republished it a moment earlier leaves it gone. A publisher still
+  // holding its subscription would rewrite the variable on that very event and fail here.
+  const publishedWhileOpen = standaloneSelection.host.style.getPropertyValue("--db-keyboard-inset");
+  standaloneSelection.view.selectedRows = new Set();
+  standaloneSelection.view.cellSelection = undefined;
+  standaloneSelection.view.getSelectedCellAddresses = () => [];
+  DatabaseView.prototype.renderSelectionStatusBar.call(standaloneSelection.view);
+  const afterClear = standaloneSelection.host.style.getPropertyValue("--db-keyboard-inset");
+  shrinkVisualViewport(KEYBOARD);
+  window.visualViewport.dispatchEvent(new window.Event("resize"));
+  await settle();
+  const afterClearedShrink = standaloneSelection.host.style.getPropertyValue("--db-keyboard-inset");
+  restoreVisualViewport();
+  out.push({
+    name: "clearing the selection takes the keyboard publisher's viewport listener with it",
+    pass: publishedWhileOpen !== "" && afterClear === "" && afterClearedShrink === "",
+    detail: `--db-keyboard-inset held "${publishedWhileOpen || "(unset)"}" while a bar was up, `
+      + `"${afterClear || "(unset)"}" once the selection cleared, and "${afterClearedShrink || "(unset)"}" `
+      + `after a viewport shrink that would have republished it`,
+  });
+  out.push({
+    name: "clearing the selection removes the bar it published for",
+    pass: !standaloneSelection.host.querySelector(".db-selection-status-bar"),
+    detail: `bars left in the container: ${standaloneSelection.host.querySelectorAll(".db-selection-status-bar").length} `
+      + `(a surviving bar would keep the publisher legitimately alive and make the check above vacuous)`,
+  });
+
   rhythmHost.remove();
   standaloneSelection.host.remove();
   embeddedSelection.host.remove();
 
   return out;
-}, process.env.SELECTION_BAR_CONTROL === "break"));
+}, {
+  breakDock: process.env.SELECTION_BAR_CONTROL === "break",
+  revertDock: process.env.SELECTION_BAR_CONTROL === "revert",
+}));
 
 // ───────────────────────────────────────────────────────────────────
 // 5c. PHONE — the menu presentation

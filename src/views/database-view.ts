@@ -177,7 +177,7 @@ import { InteractionScopeRegistry } from "./interaction-scope";
 import { safeString } from "../data/safe-string";
 import { parseClipboardTable, serializeSelectedCells as serializeClipboardSelectedCells } from "../data/clipboard-serializer";
 import { openBulkEditFieldMenu } from "./bulk-edit-field-menu";
-import { getVisiblePopoverBounds, positionToolbarPopover } from "./popover-position";
+import { getVisiblePopoverBounds, positionToolbarPopover, publishKeyboardInset } from "./popover-position";
 import { closeRecordDetailPanel, getOpenRecordDetailPath, openRecordDetailPanel, refreshRecordDetailPanel } from "./record-detail-panel";
 import {
   attachTitleOpenAffordance,
@@ -502,6 +502,7 @@ export class DatabaseView extends FileView {
   private bulkEditingColumnKey?: string;
   private closeBulkEditPopover?: () => void;
   private selectionStatusBar?: HTMLElement;
+  private releaseKeyboardInset?: () => void;
   private operationResultRail?: HTMLElement;
   private interactionScopes = new InteractionScopeRegistry();
   private readonly interactionScopeId = `database-view-${generateId()}`;
@@ -1454,6 +1455,8 @@ export class DatabaseView extends FileView {
     this.timelineInvalidEventsScanner.clear();
     this.removeHeaderPopoverAutoClose?.();
     this.removeHeaderPopoverAutoClose = undefined;
+    this.releaseKeyboardInset?.();
+    this.releaseKeyboardInset = undefined;
     this.closeMobileColumnWidthPanel();
     this.closeGroupOrderPopover();
     window.activeDocument.removeEventListener("mousedown", this.handleOutsideClickBound, true);
@@ -7451,10 +7454,18 @@ export class DatabaseView extends FileView {
     if (!hasSelection) {
       this.selectionStatusBar?.remove();
       this.selectionStatusBar = undefined;
+      this.releaseKeyboardInset?.();
+      this.releaseKeyboardInset = undefined;
       return;
     }
     const bar = this.selectionStatusBar || this.containerEl_.createDiv({ cls: "db-selection-status-bar" });
     this.selectionStatusBar = bar;
+    // The bar docks above the software keyboard, and only this container can tell it how far. The
+    // measurement is published for exactly as long as a bar exists to read it: attached here, torn
+    // down on the branch above when the selection clears, and again in onClose for a view closed
+    // with a selection still live. Scoping it to the bar rather than to the view means the common
+    // case — no selection — holds no viewport listener at all.
+    this.releaseKeyboardInset ??= publishKeyboardInset(this.containerEl_);
     bar.empty();
     const clearSelectionButton = bar.createEl("button", {
       cls: "db-selection-clear-pill",

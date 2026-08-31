@@ -2420,8 +2420,14 @@ input[type="checkbox"].db-toggle-switch:disabled {
   box-shadow: var(--db-elevation-1);
 }
 
+/* --db-keyboard-inset, not --keyboard-height: the host variable is written only by Obsidian, so on
+   any host that does not publish one this rule would resolve to its fallback forever and the bar
+   would never move off the floor — silently, because a var() that misses does not fail. The plugin
+   publishes --db-keyboard-inset from its own measurement, which combines the host's number with the
+   visual viewport's own shrink, so the bar docks on a host that reports a keyboard and on one that
+   does not. */
 .is-phone .note-database-container:not(.note-database-embed) .db-selection-status-bar {
-  bottom: max(16px, env(safe-area-inset-bottom), var(--keyboard-height, 0px));
+  bottom: max(16px, env(safe-area-inset-bottom), var(--db-keyboard-inset, 0px));
   height: 48px;
   max-width: calc(100vw - 32px);
   overflow-x: auto;

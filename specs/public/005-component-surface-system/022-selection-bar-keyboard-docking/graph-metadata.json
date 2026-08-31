@@ -49,7 +49,9 @@
       "implementation-summary.md",
       "device-bar-floating.png",
       "reference-notion-accessory-bar.jpg",
-      "tools/storybook/verify-placement.mjs"
+      "tools/storybook/verify-placement.mjs",
+      "src/views/popover-position.ts",
+      "tools/lane/css-lane.json"
     ],
     "entities": [
       {
@@ -104,6 +106,18 @@
         "name": "verify-placement.mjs",
         "kind": "file",
         "path": "tools/storybook/verify-placement.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "popover-position.ts",
+        "kind": "code",
+        "path": "src/views/popover-position.ts",
+        "source": "derived"
+      },
+      {
+        "name": "css-lane.json",
+        "kind": "config",
+        "path": "tools/lane/css-lane.json",
         "source": "derived"
       },
       {
@@ -183,23 +197,11 @@
         "kind": "key_phrase",
         "path": "tasks.md",
         "source": "derived"
-      },
-      {
-        "name": "C1",
-        "kind": "key_phrase",
-        "path": "tasks.md",
-        "source": "derived"
-      },
-      {
-        "name": "a",
-        "kind": "key_phrase",
-        "path": "tasks.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "The cell-selection action bar floats over the table at a fixed offset from the viewport floor, so an open keyboard covers or crowds it, and its own content is taller than the box that holds it.",
     "created_at": "2026-08-30T15:07:29.327Z",
-    "last_save_at": "2026-08-31T03:07:10.642Z",
+    "last_save_at": "2026-08-31T04:05:28.127Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -210,13 +212,13 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:5dd59fb8ca203ca167995b1f6953f3b7b5f07cf052524d07f4751bd0843d73e5",
+    "source_fingerprint": "sha256:6736a23460da3410bd7ee95a5ec67b1c95220a3f6d6f58492c159ca7f8160b53",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "8cf81b928b883b047999cbccd3eb17b4d75aa8360c061309ca44befa96dbe67c",
       "plan.md": "6d6a41a091dcf7f2022ec99cf778a0bea3eee0b96c332c1df8b27600033a5261",
       "tasks.md": "ac392b5bf71f6a67028bc055c29a446510c6a36b1840f1e969d8218f0125ec6b",
-      "implementation-summary.md": "887a1ead4146fef6080f5194c1d681e43b0b323b7b3491885269b93d4823d55c"
+      "implementation-summary.md": "d19947359a46d88cbcdde07d8184548ac7e6a103f47a02470aeceb0044da60ea"
     },
     "last_active_child_id": null,
     "last_active_at": null
