@@ -286,6 +286,38 @@ the current tree.** A phase's evidence is valid only for the tree it was measure
 
 ---
 
+## 4a. THE VISUAL PASS, AND WHAT READING BEAT MEASURING TO
+
+Captures were recaptured and read, not merely regenerated. Seven surfaces end to end, chosen to span
+every family rather than to sample evenly: owned menu sheet, record detail sheet, list view, board
+view, timeline, table view, and the date-value picker — each at phone width, dark theme.
+
+**What reading found that no check had.** The list row's checkbox looked far too large against its
+neighbours. It is not: the stylesheet raises every checkbox to a 28px minimum under
+`@media (pointer: coarse)`, and `min-width` beats `width`, so a phone paints 28x28 where a desktop
+paints 16x16. But `checkbox-appearance.mjs` measured **every** fixture on one 1200px fine-pointer
+page, including the ones named `list-mobile`, `board-mobile` and `table-mobile`. The coarse block
+never applied. Fifty-three controls were reported at a size no phone renders, and the 28px floor was
+invisible to the only instrument that existed to see it.
+
+That resolved a contradiction recorded as open elsewhere in this packet: `roadmap.md` §7.1 had the
+switch at 34x28 and the artefact at 34x18. Same control, two pointer modes, one of which the tool
+could not see.
+
+**What reading confirmed.** Long names ellipsise rather than wrap. Sheets reach the bottom edge, 844
+of 844 with a 0px gap. Date-picker states are distinguishable — selected boxed, today in accent,
+out-of-month dimmed. The timeline's bars align to their day columns. Board columns clip for
+horizontal scroll rather than overflowing.
+
+**What reading cannot do, and what replaced it.** Four pixels is invisible in a picture and decisive
+under a thumb, so target size is measured instead. The `touch-targets` lane renders every scenario
+at 390px with `hasTouch` and measures all 1,080 interactive elements. Against this project's own
+28px floor, **286 controls across 37 classes** fall short, the smallest at 10x14. That set is held
+as a ratchet rather than mass-edited: resizing 37 control classes changes how the plugin feels and
+how nearly every capture looks, which is an operator decision rather than a repair.
+
+---
+
 ## 5. EVERY SPEC CARRIES THESE PHASES
 
 Beyond its own work, each child spec must contain:
