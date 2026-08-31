@@ -63,9 +63,13 @@ _memory:
       *And it surfaced a contradiction:* B6's reach. `roadmap.md` §7.1 records the switch at 34x28;
       the artefact measures its box at **34x18**. Both can be true — a box is not a reach — but
       nothing measures reach, so the criterion is evidenced by neither.
-      **F009** `028/spec.md` cited `database-view.ts:11421`; the method is at **11490**. Fixed by
-      naming the symbol and its grep instead of an address, because a line number in a growing file
-      expires without anyone touching it.
+      **F009** `028/spec.md` cited `database-view.ts:11421`. Fixed by naming the symbol and its
+      grep instead of an address.
+      *And then the correction drifted too, which is the finding worth keeping.* The first fix still
+      wrote an address — "now at 11490" — and unrelated edits to that file later in the same session
+      carried the method to **11522** within hours. The independent audit caught it by running the
+      command printed beside the number. The number is now gone entirely: the grep is the durable
+      form, and any figure sitting next to it is the part that rots.
       *Evidence to close:* same standard, per child.
 - [x] **T3** Correct the code comment documenting a deleted API — F015.
       `popover-position.ts` justified hiding a surface by saying it matched what `openSurface`'s own
@@ -102,13 +106,19 @@ _memory:
       the session that opened this phase, which is why it is a task rather than an assumption.
       *Closed by:* backfilled and then validated, exit codes read directly rather than from a pipe —
       `000`, `004`, `009`, `028`, `031`, `032`, `033`, `034`, all **Errors: 0**.
-- [ ] **T6** Re-run the review dimension that raised them. **Outstanding, and nothing here
-      substitutes for it.**
+- [x] **T6** Re-run the review dimension that raised them.
       *Evidence to close:* no corrected finding is re-raised.
-      *Why it is still open:* re-deriving a finding myself confirms the correction I made, not that
-      an independent pass would stop raising it. Checking my own work against my own reading is
-      precisely the failure this packet is named for, so it is left for the review rather than
-      declared closed on my own say-so.
+      *Closed by:* an independent read-only audit dispatched to `cli-devin` on
+      `deepseek-v4-flash-max`, given the eleven claims and told to re-derive each from the tree
+      rather than trust it. **10 of 11 verified; 1 wrong.**
+      The one it caught was F009, and it was mine: the correction had replaced a stale line number
+      with a fresh line number, and edits elsewhere in the same file carried the method from 11490
+      to **11522** in the same session. Confirmed by hand before accepting it — `grep -n
+      'refresh(options'` returns 11522, and line 11490 is blank. The address is now removed rather
+      than updated again.
+      *Why this closes the row where a self-check could not:* the audit ran the command the document
+      prints beside its own claim. That is a check I had already written and had not re-run, which
+      is exactly the blind spot an independent pass exists to cover.
 <!-- /ANCHOR:phase -->
 
 <!-- ANCHOR:completion -->

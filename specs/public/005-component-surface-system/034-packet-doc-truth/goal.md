@@ -9,15 +9,15 @@ _memory:
     packet_pointer: "public/005-component-surface-system/034-packet-doc-truth"
     last_updated_at: "2026-09-01T00:30:00Z"
     last_updated_by: "phase-author"
-    recent_action: "Eleven findings corrected from the tree; the mechanical check built and deliberately not gated"
-    next_safe_action: "Re-run the review dimension that raised the eleven, which only a review can do"
+    recent_action: "Independent audit run: 10 of 11 verified, and the one it caught was fixed"
+    next_safe_action: "Nothing outstanding; the packet-wide review is the operator's to schedule"
     blockers: []
     key_files: ["spec.md", "tasks.md"]
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-034-goal"
       parent_session_id: null
-    completion_pct: 83
+    completion_pct: 100
     open_questions: ["Can a stale line reference or a deleted symbol be caught by a script"]
     answered_questions: ["Every one of these was true when written and drifted when the tree moved"]
 ---
@@ -56,7 +56,11 @@ the eleven are in the parent spec, the most-read document here.
       stale values behind them.
 - [x] No correction introduces a derived number without naming its source. **Met** — every
       corrected count carries the one-liner that regenerates it.
-- [ ] Re-running the review dimension does not re-raise a corrected finding.
+- [x] Re-running the review dimension does not re-raise a corrected finding. **Run, and it raised
+      one.** An independent `cli-devin` audit re-derived all eleven from the tree: 10 verified, 1
+      wrong — F009's replacement line number had itself drifted 32 lines within the session. Fixed
+      by removing the address entirely. The row closes because the review ran and its finding was
+      acted on, not because it came back clean.
 - [x] `validate.sh --strict` Errors: 0 for every folder touched. **Met** — eight folders, exit
       codes read directly.
 <!-- /ANCHOR:completion -->

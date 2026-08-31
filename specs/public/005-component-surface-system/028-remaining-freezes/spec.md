@@ -53,8 +53,14 @@ the surfaces alone would not.
 All four sheet reports route through one method: **`DatabaseView.refresh()`** in `database-view.ts`
 (`grep -n 'refresh(options' src/views/database-view.ts`).
 
-This cited line 11421 and the method is now at 11490. A line number in a file that grows is a claim
-that expires without anyone touching it, so the symbol is named instead of its address.
+This cited line 11421, and the address has moved twice since — a line number in a growing file is a
+claim that expires without anyone touching it, so the symbol is named instead.
+
+**The correction demonstrated its own point.** Replacing 11421 with "now at 11490" was still an
+address, and edits elsewhere in the same file, in the same session, carried the method to 11522
+within hours. An independent audit caught it by running the command written directly beside the
+number. No figure is given here now, because the grep is the durable form and any number placed
+next to it is the part that rots.
 
 It removes every top-level rendered result and calls `render()` again:
 

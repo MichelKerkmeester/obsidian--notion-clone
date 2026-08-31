@@ -11,10 +11,9 @@ _memory:
     packet_pointer: "public/005-component-surface-system/034-packet-doc-truth"
     last_updated_at: "2026-09-01T00:30:00Z"
     last_updated_by: "phase-implementer"
-    recent_action: "Eleven findings corrected from the tree; the mechanical check built and deliberately not gated"
-    next_safe_action: "Re-run the review dimension that raised the eleven, which only a review can do"
-    blockers:
-      - "T6 needs the review re-run; nothing in this session can stand in for it"
+    recent_action: "Independent audit run: 10 of 11 verified, and the one it caught was fixed"
+    next_safe_action: "Nothing outstanding; the packet-wide review is the operator's to schedule"
+    blockers: []
     key_files:
       - "spec.md"
       - "tasks.md"
@@ -22,7 +21,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-034-impl"
       parent_session_id: null
-    completion_pct: 83
+    completion_pct: 100
     open_questions:
       - "No mobile-named fixture holds a switch, so its coarse-pointer reach is still unmeasured"
     answered_questions:
@@ -42,7 +41,7 @@ _memory:
 |---|---|
 | **Spec Folder** | 034-packet-doc-truth |
 | **Level** | 2 |
-| **Status** | In progress — eleven corrected, five of six tasks; the review re-run is outstanding |
+| **Status** | In progress — eleven corrected and independently audited; awaiting device rows elsewhere |
 | **State** | `validate.sh --strict` Errors: 0 for every folder touched. Gate 18 green |
 <!-- /ANCHOR:metadata -->
 
@@ -109,10 +108,15 @@ path, which is what a reader arriving at it would take it for.
 <!-- ANCHOR:limitations -->
 ## 4. WHAT THIS DOES NOT PROVE
 
-**T6 is not done.** The review dimension that raised these has not been re-run, and nothing here
-substitutes for it: re-deriving a finding myself confirms the correction I made, not that an
-independent pass would stop raising it. Checking my own work against my own reading is the failure
-mode this packet is named for.
+**T6 has now run, and it caught one.** An independent read-only audit on `cli-devin` re-derived all
+eleven from the tree: 10 verified, 1 wrong. The wrong one was F009 — the correction had swapped a
+stale line number for a fresh line number, and unrelated edits to that same file later in the
+session carried the method from 11490 to 11522. It was confirmed by hand before being accepted, and
+the address is now removed rather than updated a third time.
+
+**That is the whole thesis of this packet, demonstrated on its own work.** The audit found it by
+running the command the document prints directly beside its own claim — a check already written and
+not re-run, which is precisely the blind spot a self-check cannot cover.
 
 **The contradiction surfaced here has since been RESOLVED**, by a visual pass that read the captures
 rather than the numbers. `checkbox-appearance.mjs` measured every fixture on one 1200px fine-pointer
@@ -137,5 +141,7 @@ follow-up rather than absorbed.
 | The mechanical check exists and is **not** a gate lane | `scan-spec-references.mjs` catches the class — a canonical spec doc naming a source path that does not exist. It cannot be gated, for a structural reason rather than a tuning one: a spec names a path both to describe what IS and to specify what WILL BE, and the path alone cannot separate them. Measured — 3,597 hits tree-wide, 3,569 of them in completed packets; 28 here, of which 26 are planning rows and **0** are genuine drift. Gating 28 known-benign hits trains people to ignore a red lane, which is this packet's own failure mode |
 | The zero is the useful result | The scanner reports no true drift here *because* the corrections say the file was deleted, and it skips deletion sentences by design. It agrees with the fixes rather than merely being quiet |
 | Numbers carry their command | Every corrected count is dated and given the one-liner that regenerates it. The mechanism named in `spec.md` §1 is that these were all true when written; a number without its source is the same trap re-armed |
-| Line numbers replaced by symbols | F009's `database-view.ts:11421` became a symbol plus a grep. An address into a growing file expires with no one touching it, which is drift that nobody can even be blamed for |
+| Line numbers replaced by symbols | F009's `database-view.ts:11421` became a symbol plus a grep. An address into a growing file expires with no one touching it, which is drift nobody can be blamed for |
+| The first fix to F009 was still an address, and it rotted in hours | "Now at 11490" was written, and edits elsewhere in the same file moved the method to 11522 in the same session. Correcting a stale number by writing a fresher number is not a correction, it is a shorter fuse. No figure is given there now |
+| A sub-agent finding was weighed, not adopted | The audit's one WRONG was confirmed by hand — `grep -n 'refresh(options'` returns 11522, line 11490 is blank — before any document changed |
 <!-- /ANCHOR:decisions -->
