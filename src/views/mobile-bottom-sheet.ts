@@ -313,6 +313,18 @@ function setScrim(doc: Document, wanted: boolean, capturesPointer: boolean | und
  */
 const activeSheetDrag = new WeakMap<HTMLElement, () => void>();
 
+/**
+ * Whether this panel currently has a dismissal gesture attached.
+ *
+ * Exists so the invariant in D4 — never draw a grab bar without wiring it — can be MEASURED rather
+ * than eyeballed. Nothing in the product reads this; a bar and its gesture are otherwise invisible
+ * to each other from the outside, so without it a check could only grep for the call and a grep
+ * cannot tell a call that runs from one behind a condition that is never true.
+ */
+export function hasSheetDrag(panel: HTMLElement): boolean {
+  return activeSheetDrag.has(panel);
+}
+
 export function attachSheetDragToDismiss(panel: HTMLElement, handle: HTMLElement, close: () => void): () => void {
   activeSheetDrag.get(panel)?.();
 

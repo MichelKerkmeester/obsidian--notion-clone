@@ -36,7 +36,7 @@
 
 import { ToolbarRenderer } from "../../src/views/toolbar-renderer";
 import { COMPACT_MENU_POPOVER, positionToolbarPopover } from "../../src/views/popover-position";
-import { applySheetChrome } from "../../src/views/mobile-bottom-sheet";
+import { applySheetChrome, hasSheetDrag } from "../../src/views/mobile-bottom-sheet";
 import { installPopoverAutoClose } from "../../src/views/popover-auto-close";
 
 // ───────────────────────────────────────────────────────────────────
@@ -196,8 +196,81 @@ function runChromeContract(doc: Document): RebuildResult[] {
   ];
 }
 
+/**
+ * D4, stated as a measurement: a sheet that draws a grab bar must have a gesture on it.
+ *
+ * A bar with no drag is worse than no bar. It says the sheet can be pulled down, then ignores the
+ * thumb — which reads as a frozen app rather than as a missing feature, and is exactly how the
+ * modals presented before this.
+ *
+ * WHAT THIS DOES NOT DO. It enumerates the paths it knows, so it cannot catch a NEW producer that
+ * draws a bar and wires nothing. Making that structurally impossible — having the gesture create
+ * the bar, so one cannot exist without the other — was considered and rejected: the group sheet's
+ * fix depends on `applySheetChrome` re-creating a bar destroyed by a rebuild, and moving creation
+ * into the gesture would break that path. The enumeration is the honest compromise, and this note
+ * is here so the limit is not mistaken for a guarantee.
+ */
+function runHandleWiring(doc: Document): RebuildResult[] {
+  const cases: RebuildResult[] = [];
+
+  // A bar drawn by chrome alone, with nothing attached: the modal's old shape.
+  const bare = doc.createElement("div");
+  doc.body.appendChild(bare);
+  applySheetChrome(bare, true);
+  const bareHasBar = Boolean(bare.querySelector(HANDLE));
+  const bareHasDrag = hasSheetDrag(bare);
+  applySheetChrome(bare, false);
+  bare.remove();
+
+  cases.push({
+    surface: "chrome alone draws a bar with no gesture",
+    rebuildShape: "control",
+    barBeforeRebuild: bareHasBar,
+    barAfterRebuild: bareHasBar,
+    // Inverted deliberately. If chrome alone ever DID attach a gesture, the wiring below would be
+    // proving nothing about the producers, because everything would be wired for free.
+    pass: bareHasBar && !bareHasDrag,
+    detail: !bareHasBar
+      ? "chrome drew no bar, so this control measures nothing"
+      : bareHasDrag
+        ? "chrome attached a gesture on its own — the producer cases below prove nothing"
+        : "chrome draws the bar and attaches nothing, so wiring it is the producer's job",
+  });
+
+  // The positioner path, which every toolbar sheet reaches.
+  const root = doc.createElement("div");
+  root.className = "note-database-container";
+  doc.body.appendChild(root);
+  const anchor = doc.createElement("button");
+  root.appendChild(anchor);
+  const panel = doc.createElement("div");
+  panel.className = "db-group-popover";
+  root.appendChild(panel);
+  positionToolbarPopover(panel, anchor, COMPACT_MENU_POPOVER);
+
+  const positionedBar = Boolean(panel.querySelector(HANDLE));
+  const positionedDrag = hasSheetDrag(panel);
+  panel.remove();
+  root.remove();
+
+  cases.push({
+    surface: "positioner-mounted sheet",
+    rebuildShape: "bar implies gesture",
+    barBeforeRebuild: positionedBar,
+    barAfterRebuild: positionedBar,
+    pass: positionedBar && positionedDrag,
+    detail: !positionedBar
+      ? "no bar was drawn, so this proves nothing about wiring"
+      : positionedDrag
+        ? "the bar it drew has a gesture attached"
+        : "it drew a bar and attached nothing — a control that says drag me and does not",
+  });
+
+  return cases;
+}
+
 export function runSheetRebuildParity(doc: Document = document): RebuildResult[] {
-  return [runGroupSheet(doc), ...runChromeContract(doc)];
+  return [runGroupSheet(doc), ...runChromeContract(doc), ...runHandleWiring(doc)];
 }
 
 // ───────────────────────────────────────────────────────────────────

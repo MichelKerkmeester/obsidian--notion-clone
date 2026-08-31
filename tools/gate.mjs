@@ -45,11 +45,6 @@ const CHECKS = [
   { name: "naming", cmd: ["node", "tools/naming/scan-naming.mjs"] },
   { name: "pinned-values", cmd: ["node", "tools/screenshots/scan-pinned-values.mjs"] },
   { name: "css-lane", cmd: ["node", "tools/lane/check-lane.mjs"] },
-  // The censuses date themselves against the files they measured, and until this line existed
-  // nothing asked. Seven of the eight were stale, one of them holding a checkbox count the roadmap
-  // quoted as evidence for work that had already changed it. The stamping mechanism was built, the
-  // artefacts carried their fingerprints, and the gate simply never read them.
-  { name: "evidence", cmd: ["node", "tools/live/evidence.mjs", "--check-all"] },
   // Runs here, not only at release. Every phase edits the same stylesheet in turn, so a result
   // measured green three phases ago describes a tree that no longer exists unless something checks.
   { name: "replay", cmd: ["node", "tools/live/replay.mjs"] },
@@ -77,6 +72,18 @@ const CHECKS = [
   // renderer check here, this one constructs the real renderer instead of grepping its source: a
   // grep cannot tell a call that runs from a call behind a condition that is never true.
   { name: "sheet-rebuild", cmd: ["node", "tools/live/sheet-rebuild.mjs"] },
+  // The censuses date themselves against the files they measured, and until this line existed
+  // nothing asked. Seven of the eight were stale, one of them holding a checkbox count the roadmap
+  // quoted as evidence for work that had already changed it. The stamping mechanism was built, the
+  // artefacts carried their fingerprints, and the gate simply never read them.
+  //
+  // LAST on purpose. Four lanes above re-stamp their own artefacts as they run, so checking
+  // freshness before them meant the first run after any source change went red and the second went
+  // green with nobody doing anything. The re-stamps are real measurements, so nothing was being
+  // hidden — but a gate that passes on the second try teaches "just run it again", which is the
+  // habit this whole lane exists to prevent. Reading the stamps after the lanes that write them
+  // makes one run the answer.
+  { name: "evidence", cmd: ["node", "tools/live/evidence.mjs", "--check-all"] },
 ];
 
 // ───────────────────────────────────────────────────────────────────

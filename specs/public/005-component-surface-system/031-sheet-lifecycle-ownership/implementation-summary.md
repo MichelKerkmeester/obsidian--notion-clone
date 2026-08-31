@@ -11,8 +11,8 @@ _memory:
     packet_pointer: "public/005-component-surface-system/031-sheet-lifecycle-ownership"
     last_updated_at: "2026-08-31T20:45:00Z"
     last_updated_by: "phase-implementer"
-    recent_action: "Header panels hold their own panel; portalled sheets reach the overlay stack"
-    next_safe_action: "T6, the 16 modal sheets that draw a handle wired to nothing"
+    recent_action: "Modal sheets wired; gate reordered so one run is the answer"
+    next_safe_action: "T7, velocity dismissal — a flick should dismiss, a slow short drag should not"
     blockers:
       - "Nothing here is confirmed on the operator's device"
     key_files:
@@ -43,7 +43,7 @@ _memory:
 |---|---|
 | **Spec Folder** | 031-sheet-lifecycle-ownership |
 | **Level** | 2 |
-| **Status** | In progress — 3 of 6 criteria met; the freeze, the group-sheet bar and the portalled-sheet lookups are fixed and gated |
+| **Status** | In progress — 3 of 6 criteria met; the freeze, the group-sheet bar and the portalled-sheet lookups are fixed and gated. Modal handles wired but not measurable outside a device |
 | **State** | Committed; gate 18 green, exit 0. Not device-confirmed |
 <!-- /ANCHOR:metadata -->
 
@@ -105,6 +105,28 @@ only read as an open sheet. Stopping at "the backdrop leak is fixed" would have 
 All four header renderers now hold their panel and expose `getPanel()`; filter and sort already
 retained theirs and needed only the getter. Removal is enough to take the backdrop with it, which
 is the payoff of the watcher above.
+
+### The modal sheets are wired (REQ-004, partial)
+
+Asking a modal to present as `sheet` drew it a grab bar and attached nothing, on every surface that
+presents that way. `DbModal` now wires the bar it draws, through `this.close()` rather than
+`super.close()` — one modal overrides `close()` to confirm before discarding edits, and the drag
+has to go through that override or the gesture becomes the one way to lose work silently.
+
+**T6 stays open even so.** Its evidence line asks for the invariant to hold *by construction*, and
+what landed is by enumeration: `hasSheetDrag()` is exported so the property is measurable at all,
+and two cases assert it — but for the positioner path, not for `DbModal`, which cannot be built
+outside Obsidian because the catalogue's stub throws on `Modal` by design. The structural version
+was designed and rejected on a concrete conflict, recorded in `tasks.md`.
+
+### The gate answers in one run
+
+`evidence` checked artefact freshness before the four lanes that re-stamp their own artefacts, so
+the first run after any source change went red and the second went green with nobody doing
+anything. The re-stamps are real measurements, so nothing was hidden — but a gate that passes on
+the second try teaches "just run it again". Moved last, and **verified by making an artefact
+genuinely stale and running once**: `evidence` green, with `screenshots-fresh` correctly still red
+because nothing auto-refreshes captures.
 <!-- /ANCHOR:what-built -->
 
 ---

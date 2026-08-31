@@ -1,13 +1,13 @@
 {
-  "measuredAt": "2026-08-31T17:55:18.608Z",
+  "measuredAt": "2026-08-31T18:04:45.481Z",
   "inputs": {
     "tools/live/sheet-rebuild.mjs": "92dbf9c0678a",
-    "tools/live/sheet-rebuild-harness.ts": "e5933e865dfd",
+    "tools/live/sheet-rebuild-harness.ts": "504ab371efd8",
     "src/views/toolbar-renderer.ts": "88fdd50cb460",
     "src/views/popover-position.ts": "fcdb98617dae",
-    "src/views/mobile-bottom-sheet.ts": "40d1304a4614"
+    "src/views/mobile-bottom-sheet.ts": "ac0a882afc60"
   },
-  "cases": 4,
+  "cases": 6,
   "barsLost": 0,
   "dragDismissed": true
 }

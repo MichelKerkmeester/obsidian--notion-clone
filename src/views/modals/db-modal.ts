@@ -30,7 +30,7 @@
 
 import { App, Modal } from "obsidian";
 import { isTouchDevice } from "../../data/touch-environment";
-import { applySheetChrome } from "../mobile-bottom-sheet";
+import { applySheetChrome, attachSheetDragToDismiss } from "../mobile-bottom-sheet";
 
 // ───────────────────────────────────────────────────────────────────
 // 2. TYPES
@@ -53,6 +53,8 @@ export const DB_MODAL_FULLSCREEN_CLASS = "db-modal-fullscreen";
 // ───────────────────────────────────────────────────────────────────
 
 export class DbModal extends Modal {
+  private releaseSheetDrag?: () => void;
+
   constructor(app: App, private readonly presentation: DbModalPresentation = "sheet") {
     super(app);
     // Obsidian builds containerEl/modalEl/contentEl during super(), so the nodes exist here. Doing
@@ -69,5 +71,22 @@ export class DbModal extends Modal {
 
     applySheetChrome(this.modalEl, asSheet);
     this.modalEl.toggleClass(DB_MODAL_FULLSCREEN_CLASS, asFullscreen);
+
+    // Wire the bar the line above just drew, because until now nothing did.
+    //
+    // Asking for `sheet` gave a modal a grab bar and no gesture, on every one of the surfaces that
+    // present this way — an affordance that says the sheet can be pulled down and then ignores the
+    // thumb. That is worse than drawing no bar at all: a dead control reads as a frozen app rather
+    // than as a missing feature.
+    //
+    // `this.close()` rather than `super.close()` on purpose. One modal here overrides `close()` to
+    // raise a confirm dialog before discarding edits, and a drag has to go through that override
+    // for the same reason the button does — otherwise the gesture becomes the one way to lose work
+    // silently.
+    this.releaseSheetDrag?.();
+    this.releaseSheetDrag = undefined;
+    if (!asSheet) return;
+    const handle = this.modalEl.querySelector<HTMLElement>(".db-mobile-bottom-sheet-handle");
+    if (handle) this.releaseSheetDrag = attachSheetDragToDismiss(this.modalEl, handle, () => this.close());
   }
 }

@@ -12,7 +12,7 @@ _memory:
     last_updated_at: "2026-08-31T20:30:00Z"
     last_updated_by: "phase-implementer"
     recent_action: "Header panels hold their own panel; portalled sheets now reach the overlay stack"
-    next_safe_action: "T6, the 16 modal sheets that draw a handle wired to nothing"
+    next_safe_action: "T7, velocity dismissal — a flick should dismiss, a slow short drag should not"
     blockers: []
     key_files:
       - "spec.md"
@@ -81,7 +81,10 @@ defect in this phase is a consequence of that shape.
       nothing, the retained reference finds the sheet, and `dismissPanel(panel, "programmatic")`
       returns true. The first clause is what keeps it from passing vacuously — if both lookups
       found the panel, the sheet never portalled.
-- [ ] No sheet draws an unwired handle.
+- [ ] No sheet draws an unwired handle. **Fix landed, criterion not met.** `DbModal` now wires the
+      bar it draws, and `hasSheetDrag()` makes the property measurable — but only the positioner
+      path is asserted, not `DbModal` itself, which cannot be constructed outside Obsidian. This
+      stays open because it asks for an invariant, and what exists is two examples of it holding.
 - [ ] A flick dismisses.
 - [ ] The operator opens and closes each sheet on device without the app locking up. **Only the
       operator closes this.**

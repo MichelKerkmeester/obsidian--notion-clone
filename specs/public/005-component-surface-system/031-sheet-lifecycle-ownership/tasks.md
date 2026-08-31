@@ -101,9 +101,23 @@ _memory:
 
 ## PHASE 4: THE REST
 
-- [ ] **T6** Wire or remove the modal handles — REQ-004, D4.
+- [ ] **T6** Wire or remove the modal handles — REQ-004, D4. **Fix landed; the task stays open.**
       *Evidence to close:* no sheet draws a handle without an attached drag, asserted by
       construction rather than by inspection.
+      *What landed:* `DbModal.applyPresentation` now attaches the gesture to the bar it draws,
+      through `this.close()` rather than `super.close()` — one modal here overrides `close()` to
+      confirm before discarding edits, and a drag must go through that override or the gesture
+      becomes the one way to lose work silently. `hasSheetDrag(panel)` is exported so the invariant
+      can be measured at all, and two `sheet-rebuild` cases now assert it: a control proving chrome
+      alone attaches nothing, and the positioner path proving its bar is wired.
+      *Why it does not close:* the evidence line asks for **by construction**, and this is by
+      enumeration. The cases cover the positioner path; they do NOT cover `DbModal`, because the
+      catalogue's `obsidian` stub deliberately throws on `Modal` — a documented choice, so a modal
+      cannot be built outside Obsidian without weakening it. The structural version (let the
+      gesture create the bar, so an unwired one cannot exist) was designed and rejected: T4's fix
+      depends on `applySheetChrome` re-creating a bar that a rebuild destroyed, and moving creation
+      into the gesture breaks that path. So the 16 modals are wired and unverified outside a
+      device, which is T10's job.
 - [ ] **T7** Velocity-based dismissal — REQ-005.
       *Evidence to close:* a short fast flick dismisses; a slow short drag still springs back.
 - [ ] ~~**T8** Move the keyboard inset onto the element that reads it.~~ **Moved to `../022`.**
