@@ -32,14 +32,46 @@ export interface FileTitleDisplay {
 // 3. TITLE COMPUTATION
 // ───────────────────────────────────────────────────────────────────
 
+/**
+ * The basenames that appear more than once, built once for a whole render.
+ *
+ * Without this every row answers "does any other row share my basename?" by scanning every other
+ * row, which is linear work inside a loop over the same rows — quadratic, and invisible at the row
+ * counts a fixture uses. It is worst in the ordinary case: with all-distinct names the scan never
+ * finds a match and never exits early, so every row walks the whole set.
+ *
+ * A caller with one row in hand does not need this and should keep passing that row alone.
+ */
+/** Passed where a caller supplies an index instead, so no array is allocated per row. */
+export const EMPTY_ROWS: RowData[] = [];
+
+export function buildDuplicateNameIndex(rows: RowData[]): ReadonlySet<string> {
+  const seen = new Set<string>();
+  const duplicates = new Set<string>();
+  for (const row of rows) {
+    const basename = row.file.basename;
+    if (seen.has(basename)) duplicates.add(basename);
+    else seen.add(basename);
+  }
+  return duplicates;
+}
+
 /** Build the visible file title pieces; duplicate basenames get a muted folder prefix. */
-export function getFileTitleDisplay(row: RowData, rows: RowData[]): FileTitleDisplay {
+export function getFileTitleDisplay(
+  row: RowData,
+  rows: RowData[],
+  duplicateNames?: ReadonlySet<string>,
+): FileTitleDisplay {
   const name = row.file.basename || row.file.name.replace(/\.md$/, "");
   const fullPath = row.file.path;
   const displayPath = row.file.path.replace(/\.md$/, "");
-  const hasDuplicateName = rows.some((candidate) =>
-    candidate.file.path !== row.file.path && candidate.file.basename === row.file.basename
-  );
+  // The index answers in constant time when a caller built one. The scan stays for callers holding
+  // a single row, where it is already constant and an index would cost more than it saves.
+  const hasDuplicateName = duplicateNames
+    ? duplicateNames.has(row.file.basename)
+    : rows.some((candidate) =>
+      candidate.file.path !== row.file.path && candidate.file.basename === row.file.basename
+    );
   const slash = row.file.path.lastIndexOf("/");
   const folderPrefix = slash >= 0 ? `${row.file.path.slice(0, slash)}/` : "/";
   return {

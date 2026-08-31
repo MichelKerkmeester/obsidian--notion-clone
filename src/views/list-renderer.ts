@@ -26,7 +26,7 @@ import { markNoteHoverLink } from "./hover-link-preview";
 import { ColumnDef, CreateEntryPosition, NO_TITLE_FIELD, RowCreateContext, RowData, ViewConfig } from "../data/types";
 import { t } from "../i18n";
 import { setFieldTooltip } from "./field-tooltip";
-import { getFileTitleDisplay, renderStackedFileTitle } from "./file-title-display";
+import { EMPTY_ROWS, buildDuplicateNameIndex, getFileTitleDisplay, renderStackedFileTitle } from "./file-title-display";
 import { isHTMLElement } from "./dom-guards";
 import { renderMobileMoveIcon } from "./mobile-move-icon";
 import { getFieldWidth, listFieldTrackTemplate } from "./column-width";
@@ -111,6 +111,8 @@ interface ParsedLink {
 export class ListRenderer {
   private container: HTMLElement | null = null;
   private rowByPath = new Map<string, RowData>();
+  /** Basenames shared by more than one row, rebuilt whenever the row set is. */
+  private duplicateNames: ReadonlySet<string> = new Set<string>();
   private draggingPath: string | undefined;
   private draggingPaths: string[] = [];
   private rowDropFeedback = new DragDropFeedbackState();
@@ -162,6 +164,7 @@ export class ListRenderer {
     this.reservesColumns = true;
     this.reservationDecided = false;
     this.rowByPath = new Map(rows.map((row) => [row.file.path, row]));
+    this.duplicateNames = buildDuplicateNameIndex([...this.rowByPath.values()]);
     if (rows.length > 0) this.renderTotalHeader(container, rows);
     const list = this.createList(container, config);
     if (rows.length === 0) {
@@ -185,6 +188,7 @@ export class ListRenderer {
     this.reservesColumns = true;
     this.reservationDecided = false;
     this.rowByPath = new Map(groups.flatMap((group) => group.rows.map((row) => [row.file.path, row] as const)));
+    this.duplicateNames = buildDuplicateNameIndex([...this.rowByPath.values()]);
     const grouped = container.createDiv({ cls: "db-list-grouped" });
     let actionsRendered = false;
     for (const group of groups) {
@@ -352,7 +356,7 @@ export class ListRenderer {
       });
       markNoteHoverLink(title, row.file.path, row.file.path);
       if (titleDisplay.isFileTitle) {
-        renderStackedFileTitle(title, getFileTitleDisplay(row, Array.from(this.rowByPath.values())), true);
+        renderStackedFileTitle(title, getFileTitleDisplay(row, EMPTY_ROWS, this.duplicateNames), true);
       } else {
         title.textContent = titleDisplay.text;
         if (titleDisplay.isEmpty) title.addClass("is-empty-title");
@@ -718,7 +722,7 @@ export class ListRenderer {
   }
 
   private getCellValue(row: RowData, col: ColumnDef): unknown {
-    if (col.key === "file.name") return getFileTitleDisplay(row, Array.from(this.rowByPath.values())).displayPath;
+    if (col.key === "file.name") return getFileTitleDisplay(row, EMPTY_ROWS, this.duplicateNames).displayPath;
     if (isFileFieldKey(col.key)) return getRowFileFieldValue(row, col.key);
     if (col.type === "computed" || col.type === "rollup") {
       return row.computed[col.type === "computed" ? col.computedKey || col.key : col.key];

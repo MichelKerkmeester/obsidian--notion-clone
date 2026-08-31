@@ -30,7 +30,7 @@ import { ColumnDef, CreateEntryPosition, NO_TITLE_FIELD, RowCreateContext, RowDa
 import { t } from "../i18n";
 import { isHTMLElement } from "./dom-guards";
 import { setFieldTooltip } from "./field-tooltip";
-import { getFileTitleDisplay, renderStackedFileTitle } from "./file-title-display";
+import { EMPTY_ROWS, buildDuplicateNameIndex, getFileTitleDisplay, renderStackedFileTitle } from "./file-title-display";
 import { renderMobileMoveIcon } from "./mobile-move-icon";
 import { clampCardFieldWidth, getFieldWidth } from "./column-width";
 import { renderGroupExpandControls } from "./group-expand-controls";
@@ -116,6 +116,8 @@ export class GalleryRenderer {
   private resizeState?: { startX: number; startWidth: number };
   private container: HTMLElement | null = null;
   private rowByPath = new Map<string, RowData>();
+  /** Basenames shared by more than one row, rebuilt whenever the row set is. */
+  private duplicateNames: ReadonlySet<string> = new Set<string>();
   private draggingPath: string | undefined;
   private rowDropFeedback = new DragDropFeedbackState();
   private draggingPaths: string[] = [];
@@ -140,6 +142,7 @@ export class GalleryRenderer {
     this.touchMode = isTouchDevice(container);
     container.style.setProperty("--db-gallery-card-width", `${this.getCardSize(config)}px`);
     this.rowByPath = new Map(rows.map((row) => [row.file.path, row]));
+    this.duplicateNames = buildDuplicateNameIndex([...this.rowByPath.values()]);
     if (rows.length > 0) this.renderTotalHeader(container, rows);
     const gallery = this.createGallery(container, config);
     if (rows.length === 0) {
@@ -162,6 +165,7 @@ export class GalleryRenderer {
     this.touchMode = isTouchDevice(container);
     container.style.setProperty("--db-gallery-card-width", `${this.getCardSize(config)}px`);
     this.rowByPath = new Map(groups.flatMap((group) => group.rows.map((row) => [row.file.path, row] as const)));
+    this.duplicateNames = buildDuplicateNameIndex([...this.rowByPath.values()]);
     const grouped = container.createDiv({ cls: "db-gallery-grouped" });
     let actionsRendered = false;
     for (const group of groups) {
@@ -339,7 +343,7 @@ export class GalleryRenderer {
       });
       markNoteHoverLink(titleEl, row.file.path, row.file.path);
       if (title.isFileTitle) {
-        renderStackedFileTitle(titleEl, getFileTitleDisplay(row, Array.from(this.rowByPath.values())), true);
+        renderStackedFileTitle(titleEl, getFileTitleDisplay(row, EMPTY_ROWS, this.duplicateNames), true);
         if (!this.actions.isReadOnly && this.actions.editFileName) {
           titleEl.addClass("db-editable-cell");
           setFieldTooltip(titleEl, row.file.path, t("cell.doubleClickRename"));
@@ -657,7 +661,7 @@ export class GalleryRenderer {
   }
 
   private getCellValue(row: RowData, col: ColumnDef): unknown {
-    if (col.key === "file.name") return getFileTitleDisplay(row, Array.from(this.rowByPath.values())).displayPath;
+    if (col.key === "file.name") return getFileTitleDisplay(row, EMPTY_ROWS, this.duplicateNames).displayPath;
     if (isFileFieldKey(col.key)) return getRowFileFieldValue(row, col.key);
     if (col.type === "computed" || col.type === "rollup") {
       return row.computed[col.type === "computed" ? col.computedKey || col.key : col.key];

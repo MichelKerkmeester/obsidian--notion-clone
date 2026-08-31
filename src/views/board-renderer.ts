@@ -32,7 +32,7 @@ import { ColumnDef, CreateEntryPosition, NO_TITLE_FIELD, RowCreateContext, RowDa
 import { t } from "../i18n";
 import { isHTMLElement } from "./dom-guards";
 import { setFieldTooltip } from "./field-tooltip";
-import { getFileTitleDisplay, renderStackedFileTitle } from "./file-title-display";
+import { EMPTY_ROWS, buildDuplicateNameIndex, getFileTitleDisplay, renderStackedFileTitle } from "./file-title-display";
 import { renderMobileMoveIcon } from "./mobile-move-icon";
 import { clampCardFieldWidth, getFieldWidth } from "./column-width";
 import { renderGroupExpandControls } from "./group-expand-controls";
@@ -132,6 +132,8 @@ interface ParsedLink {
 
 export class BoardRenderer {
   private rowByPath = new Map<string, RowData>();
+  /** Basenames shared by more than one row, rebuilt whenever the row set is. */
+  private duplicateNames: ReadonlySet<string> = new Set<string>();
   private dragEnterCount = new WeakMap<HTMLElement, number>();
   // .db-board 兜底拖拽落点: the highlighted zone is owned by the current gesture.
   private currentBoardDropZone: HTMLElement | null = null;
@@ -177,6 +179,7 @@ export class BoardRenderer {
     // 这里兜底移除残留的浮动列名 preview 与 dragover 监听，避免孤儿元素与监听器泄漏。
     this.endBoardDragPreview();
     this.rowByPath = new Map(groups.flatMap((group) => group.rows.map((row) => [row.file.path, row] as const)));
+    this.duplicateNames = buildDuplicateNameIndex([...this.rowByPath.values()]);
     const hiddenGroups = new Set(config.boardHiddenGroups?.[groupField] || []);
     groups = groups.filter((group) => !hiddenGroups.has(group.key));
     const board = container.createDiv({ cls: "db-board", attr: { role: "grid" } });
@@ -919,7 +922,7 @@ export class BoardRenderer {
       });
       markNoteHoverLink(titleEl, row.file.path, row.file.path);
       if (title.isFileTitle) {
-        renderStackedFileTitle(titleEl, getFileTitleDisplay(row, Array.from(this.rowByPath.values())), true);
+        renderStackedFileTitle(titleEl, getFileTitleDisplay(row, EMPTY_ROWS, this.duplicateNames), true);
         if (!this.actions.isReadOnly && this.actions.editFileName) {
           titleEl.addClass("db-editable-cell");
           setFieldTooltip(titleEl, row.file.path, t("cell.doubleClickRename"));
@@ -1304,7 +1307,7 @@ export class BoardRenderer {
   }
 
   private getCellValue(row: RowData, col: ColumnDef): unknown {
-    if (col.key === "file.name") return getFileTitleDisplay(row, Array.from(this.rowByPath.values())).displayPath;
+    if (col.key === "file.name") return getFileTitleDisplay(row, EMPTY_ROWS, this.duplicateNames).displayPath;
     if (isFileFieldKey(col.key)) return getRowFileFieldValue(row, col.key);
     if (col.type === "computed" || col.type === "rollup") {
       return row.computed[col.type === "computed" ? col.computedKey || col.key : col.key];
