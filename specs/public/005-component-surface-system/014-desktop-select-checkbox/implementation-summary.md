@@ -11,8 +11,8 @@ _memory:
     packet_pointer: "public/005-component-surface-system/014-desktop-select-checkbox"
     last_updated_at: "2026-08-30T09:10:00Z"
     last_updated_by: "orchestrator"
-    recent_action: "Pin de-guarded; 3 checks added; negative control run both ways"
-    next_safe_action: "Recapture once the lane frees, then rerun the gate"
+    recent_action: "The coincidence clause withdrawn on its own evidence; clearance carries the row"
+    next_safe_action: "The operator opens the table on desktop and sees a whole checkbox"
     blockers:
       - "screenshots-fresh red: lane released without recapture; gate exits 1 at 12/13"
     key_files:
@@ -22,7 +22,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-014"
       parent_session_id: null
-    completion_pct: 57
+    completion_pct: 71
     open_questions: []
     answered_questions: []
 ---

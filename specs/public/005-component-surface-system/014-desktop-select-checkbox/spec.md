@@ -14,8 +14,8 @@ _memory:
     packet_pointer: "public/005-component-surface-system/014-desktop-select-checkbox"
     last_updated_at: "2026-08-30T21:15:00Z"
     last_updated_by: "criteria-adjudication"
-    recent_action: "Criteria adjudicated against the captured harness run; AC-1 and AC-2 ticked"
-    next_safe_action: "Run the two owed controls; add header/row height-delta and phone arms"
+    recent_action: "The coincidence clause withdrawn on its own evidence; clearance carries the row"
+    next_safe_action: "The operator opens the table on desktop and sees a whole checkbox"
     blockers:
       - "Owed: this phase edited the stylesheet and released without recapturing, so screenshots-fresh is red and the gate exits 1. Deferred deliberately, not forgotten: the lane is held by a phase whose own CSS edits are still pending, so one recapture should cover both."
     key_files:
@@ -27,7 +27,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-014"
       parent_session_id: null
-    completion_pct: 57
+    completion_pct: 71
     open_questions:
       - "Should the three dead :not(shared-checkbox) blocks be deleted, given they are capture-affecting?"
     answered_questions:

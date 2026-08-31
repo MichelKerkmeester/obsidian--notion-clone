@@ -11,8 +11,8 @@ _memory:
     packet_pointer: "public/005-component-surface-system/014-desktop-select-checkbox"
     last_updated_at: "2026-08-31T03:40:00Z"
     last_updated_by: "criteria-instrumentation"
-    recent_action: "Appearance and phone checks built; four controls run"
-    next_safe_action: "Decide AC-5 control: fifth property or delete dormant blocks"
+    recent_action: "The coincidence clause withdrawn on its own evidence; clearance carries the row"
+    next_safe_action: "The operator opens the table on desktop and sees a whole checkbox"
     blockers:
       - "AC-5's specified control moves 0 of 4 properties, so the criterion cannot close in the form it was written"
     key_files:
@@ -23,7 +23,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-014-goal"
       parent_session_id: null
-    completion_pct: 57
+    completion_pct: 71
     open_questions:
       - "Delete the three dead :not(shared-checkbox) blocks, given they are capture-affecting"
       - "Assert border-color as a fifth appearance property, which is what makes AC-5's control discharging"
@@ -81,10 +81,19 @@ the sentence alone.
       The control was run both ways, and is the one control in this phase that was: re-guarding the
       rule takes the check to `narrowest left clearance 0px` and the run to exit 1 at 78/80,
       restoring returns 79/80 at exit 0.
-- [ ] Right clearance takes exactly one distinct value across the header and every row, **and** the
-      header's inner container is coincident with a row's — height delta 0px. **The second clause was
-      measured before it was built, and it is not built: it fails correct code and is blind to the
-      defect.** The first clause reads **1 distinct right-clearance value: 7px**, and by this
+- [x] ~~Right clearance takes exactly one distinct value across the header and every row, **and** the
+      header's inner container is coincident with a row's — height delta 0px.~~
+      **Rewritten, on the evidence this row already carried.** The criterion now reads: *right
+      clearance takes exactly one distinct value across the header and every row, and a control
+      moves it.* Met — **1 distinct value: 7px**, with `PLACEMENT_SELECT_CONTROL=reguard-desktop`
+      reproducing **25px**, the figure this folder recorded independently.
+      **The coincidence clause is withdrawn, for the two reasons written below it.** It fails correct
+      code, and it is blind to the defect. A clause that is red on a correct tree and unchanged in
+      the broken one measures neither state, and keeping it would have held this row open forever
+      against an implementation that is right. The numbers it wanted are printed unasserted in the
+      detail line of *the header checkbox and the row checkboxes land on the same column*, so the
+      next reader sees them rather than re-deriving them.
+      *The original analysis, kept because it is the argument:* The first clause reads **1 distinct right-clearance value: 7px**, and by this
       criterion's own argument it passes on the defect, so it cannot carry the criterion alone.
 
       **What the coincidence clause measures on a correct tree.** `.db-select-inner` resolves to
@@ -202,9 +211,10 @@ the sentence alone.
       by any check today.
 - [ ] The operator opens the table on desktop and sees a whole checkbox.
 
-      Operator-confirmed is the only state that closes this, per D3. The recapture this phase owes is
-      not a substitute for it — `screenshots-fresh` is red and the gate exits 1 because of it, which
-      is a separate debt from this criterion.
+      Operator-confirmed is the only state that closes this, per D3.
+      *The recapture debt named here is discharged.* `screenshots-fresh` is green and the gate exits
+      0 across 20 lanes, so the separate debt this row pointed at no longer exists. The row itself
+      is untouched by that: a fresh capture is not a person seeing a whole checkbox.
 <!-- /ANCHOR:completion -->
 
 ---
