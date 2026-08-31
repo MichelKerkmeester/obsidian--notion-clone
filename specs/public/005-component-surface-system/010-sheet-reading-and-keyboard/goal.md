@@ -24,7 +24,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-010-goal"
       parent_session_id: null
-    completion_pct: 60
+    completion_pct: 55
     open_questions:
       - "Does the operator's handset shrink visualViewport or resize the window"
       - "Does the visual-viewport fallback ever fire, given no check has executed that branch"

@@ -27,7 +27,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-019"
       parent_session_id: null
-    completion_pct: 50
+    completion_pct: 71
     open_questions:
     answered_questions:
       - "Was the formatter missing? No. It existed and four other surfaces already used it; the card renderer was the one number surface not wired to it"

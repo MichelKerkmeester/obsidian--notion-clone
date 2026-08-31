@@ -23,7 +23,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-029"
       parent_session_id: null
-    completion_pct: 85
+    completion_pct: 71
     open_questions:
       - "Does sorting keep a leading-digits parse now that no display surface uses one"
     answered_questions:

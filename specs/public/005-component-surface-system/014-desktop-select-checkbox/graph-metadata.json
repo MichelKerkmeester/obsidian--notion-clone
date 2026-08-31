@@ -198,7 +198,7 @@
     ],
     "causal_summary": "Restore the select-column checkbox pin on desktop, lost when the shared checkbox component took ownership of appearance and the fallback guard switched off placement with it.",
     "created_at": "2026-08-30T16:46:48.681Z",
-    "last_save_at": "2026-08-31T03:28:46.835Z",
+    "last_save_at": "2026-08-31T20:01:11.499Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -209,13 +209,13 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:5fbe1aa7d8c6d178d49dcfa621b4b67029495a8a0eedd54373553da2e88da5c5",
+    "source_fingerprint": "sha256:6f688435a4d7c0bf8617203b6a540ec684d6f70bb6826bc5a3e68ce75f6da804",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "15a1d45e2f807a37d5e8ce18db7116e2b5a83ffc870256b402bc427b1eb17444",
+      "spec.md": "cbd5b81a5026a4d4ee2e54346c31a4d0d45790aced148d508f154da7e0fcd726",
       "plan.md": "778270545ef8876abdd74d420a3bbd73ff912bfa50bf8cd3b1b0a5bcd7339045",
       "tasks.md": "dc1b19cfe80d514c76c2c164dc2a6fbb55e3f3710e0eabca252a1ed21de706ba",
-      "implementation-summary.md": "a5352c7ee27213c4398074d46d1b8960ba5ff1b3aa059000ec769e4f5c661b65"
+      "implementation-summary.md": "e4ad0aaebc01ed3c29ff473a36735937c9a404c5f0c0139d03ae1055b94a0f7d"
     },
     "last_active_child_id": null,
     "last_active_at": null

@@ -26,7 +26,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-015-goal"
       parent_session_id: null
-    completion_pct: 70
+    completion_pct: 38
     open_questions:
       - "What an anchorless open should do; the decision binds all 34 call sites"
       - "column-menu.ts:616 passes the panel to getVisiblePopoverBounds and gets the whole viewport"

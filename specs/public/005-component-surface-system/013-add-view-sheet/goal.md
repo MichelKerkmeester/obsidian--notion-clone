@@ -21,7 +21,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-013-goal"
       parent_session_id: null
-    completion_pct: 85
+    completion_pct: 67
     open_questions:
       - "--text-muted at 12px measures 4.1:1; program-wide token decision, escalated"
       - "Is the Add View sheet subscribed to visualViewport, or placed once like an owned menu"

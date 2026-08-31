@@ -15,7 +15,7 @@ _memory:
     packet_pointer: "public/005-component-surface-system/028-remaining-freezes"
     last_updated_at: "2026-08-30T21:20:00Z"
     last_updated_by: "goal-reconcile"
-    completion_pct: 30
+    completion_pct: 50
     recent_action: "Criteria audited at f64dd87; 1 of 5 met, board hoist landed elsewhere, freeze open"
     next_safe_action: "Operator answers Q1-Q3 in spec.md section 7; no build starts before that"
     blockers:

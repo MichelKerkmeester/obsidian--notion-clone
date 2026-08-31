@@ -195,7 +195,7 @@
     ],
     "causal_summary": "The list renders every row, so its cost is proportional to node count; at the operator's shape that is 2.0-4.9s of blocked main thread and no loop fix reaches it.",
     "created_at": "2026-08-31T14:46:50.524Z",
-    "last_save_at": "2026-08-31T19:40:28.210Z",
+    "last_save_at": "2026-08-31T20:01:25.772Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -206,11 +206,11 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:93d3e4f8dcd263a485d7abe9f2d530d870c9188586f36a751a5c55769e183bea",
+    "source_fingerprint": "sha256:636ad9636538017f597473b758f059459b23ff01da86523e72a60be84c8894a2",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "bbb140c7fab8b3b59dfd23d7c5995415e2bde1fd3f0ba5ec356fef0d1588c74d",
-      "plan.md": "ba8a378a960832b5d8ecb7e9793bc01987bbee1affe0ad44e090c41dea8c56f3",
+      "plan.md": "90c08f6e7ea811c6bdef17885635836acfd6a525358aa71362420e1c3b0e3527",
       "tasks.md": "91f7f67dce4b88972b2a4c50b6716fd6869a92d916630a5a332aa61940435b16",
       "implementation-summary.md": "2f0c23fce3b77669091cd188eeabf0fb8c5e7bfe091807c1405a0be872d7e965"
     },

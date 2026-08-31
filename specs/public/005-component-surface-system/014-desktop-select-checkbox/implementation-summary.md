@@ -22,7 +22,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-014"
       parent_session_id: null
-    completion_pct: 85
+    completion_pct: 57
     open_questions: []
     answered_questions: []
 ---

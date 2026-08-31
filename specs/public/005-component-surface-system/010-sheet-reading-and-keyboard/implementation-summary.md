@@ -21,7 +21,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-010"
       parent_session_id: null
-    completion_pct: 90
+    completion_pct: 55
     open_questions: []
     answered_questions: []
 ---
@@ -166,7 +166,7 @@ Sixteen criteria, each with a red baseline where one was obtainable.
    rule that the project's scale outranks the design skill's default. A later audit measured it and
    raised it as an open operator decision — one token, not a defect.
 
-5. **This phase's continuity block still reads `completion_pct: 0` and "not started".** That is
+5. **This phase's continuity block still reads `completion_pct: 55` and "not started".** That is
    contradicted by the lane journal, by the working tree and by this document. The conflict is
    recorded in the parent roadmap rather than silently corrected here.
 

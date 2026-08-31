@@ -17,7 +17,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-032"
       parent_session_id: null
-    completion_pct: 0
+    completion_pct: 100
     open_questions: ["Is this P0 once the onerror teardown is weighed"]
     answered_questions: ["The safe helper already exists and text links use it"]
 ---

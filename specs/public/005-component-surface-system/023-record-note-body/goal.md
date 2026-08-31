@@ -25,7 +25,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-023"
       parent_session_id: null
-    completion_pct: 80
+    completion_pct: 56
     open_questions:
       - "Where does a body live in a sheet already carrying 13+ properties?"
       - "Does the empty-body placeholder read as an affordance or as clutter on device?"

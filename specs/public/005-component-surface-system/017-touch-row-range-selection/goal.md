@@ -22,7 +22,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-017-goal"
       parent_session_id: null
-    completion_pct: 88
+    completion_pct: 73
     open_questions:
       - "Does the hold gesture get an announcement in the selection status bar"
       - "Would a real thumb reach the checkbox; synthetic dispatch skips hit-testing"

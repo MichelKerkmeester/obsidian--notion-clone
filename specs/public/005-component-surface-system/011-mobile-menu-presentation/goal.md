@@ -22,7 +22,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-011-goal"
       parent_session_id: null
-    completion_pct: 66
+    completion_pct: 64
     open_questions:
       - "The re-key moves add-view and calendar captures; design question, not a defect"
       - "Should the menu sheet's 44px band and the record sheet's 32px band be one constant"

@@ -73,7 +73,7 @@ defect in this phase is a consequence of that shape.
       Observed red first on both — pre-fix the bar went `after: false` and the drag could not be
       staged at all.
       *Correction 1:* the commit that ticked this recorded "2 of 6 criteria" and
-      `completion_pct: 33` while only ONE criterion was ticked. That was a criterion ahead of the
+      `completion_pct: 83` while only ONE criterion was ticked. That was a criterion ahead of the
       evidence, counted from tasks (T1, T2) against a denominator of criteria.
       *Correction 2, and the worse one:* the drag half of this criterion was ticked on a
       measurement that was not measuring the drag. The sheet rises from below the fold, and the

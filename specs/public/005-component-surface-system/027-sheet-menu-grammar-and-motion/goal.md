@@ -23,7 +23,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-027"
       parent_session_id: null
-    completion_pct: 90
+    completion_pct: 93
     open_questions:
       - "Should the Add-view form above the create rows be restyled, or is the row grammar enough?"
     answered_questions: []

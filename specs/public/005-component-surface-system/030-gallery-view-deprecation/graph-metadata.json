@@ -196,7 +196,7 @@
     ],
     "causal_summary": "Remove the gallery view from the plugin, including the migration path for databases already configured to use it and the gate coverage that currently counts it.",
     "created_at": "2026-08-31T13:08:59.395Z",
-    "last_save_at": "2026-08-31T19:47:39.625Z",
+    "last_save_at": "2026-08-31T20:01:23.584Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -206,11 +206,11 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:52e9533094adf23ae35a1a61b9e234e0be40caba890b3b3df7709a48fbb3f7db",
+    "source_fingerprint": "sha256:edb08af63437a1e742c9626493ece28f835bbf42db8c46508608bd61ab038cc6",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "8fc78b13cb744c5f8ad79e2bf72ad978cacf15a8b2938663c5c2fdd08a170cfa",
-      "plan.md": "414f4ba1eb89b1159e4bdb47b7ae0f9bd2959a2812f2f22fe78a732eec81bc7c",
+      "plan.md": "81f8fa19d638c99b6f529a784b12fcd15f115ca9c2875e0be04c0a49e4af91d8",
       "tasks.md": "72645de14f870b93390ec3b040998d88bf5cbb0ef3e234c77075ce036de7bfa5",
       "implementation-summary.md": "dfa49224dc6320c4d97fbb2dc10eca49e8c81435ed7367ee61526b9a6f889da2"
     },

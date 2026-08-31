@@ -192,7 +192,7 @@
     ],
     "causal_summary": "A cover image's click target is opened without checking its URL scheme, so a javascript: or data: target ending in an image extension reaches window.open.",
     "created_at": "2026-08-31T14:46:48.971Z",
-    "last_save_at": "2026-08-31T18:32:10.133Z",
+    "last_save_at": "2026-08-31T20:01:25.080Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -202,11 +202,11 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:e2afdfe4e10d7780eae1c934da6b577e014fb0f18cf362423bc2c589fe11d6c1",
+    "source_fingerprint": "sha256:b5cc6c27c9c94041b6fd4e48ccdd5da35ac4085ef01695829493233d8c006975",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "433ac996775b94ab74f72739cf739c84ac10d67854ab4324334d038ac4e2e667",
-      "plan.md": "e53ca919c3bd753ed3e2cbe1de9e99f04ae0dcfde174c9fbab63812b40357613",
+      "plan.md": "8476a8279945b1694463064e1f4d7a0ab26eedd617f4751c6fc048a6d75e0903",
       "tasks.md": "02bdc93ba7ddc5e6bf1921e140959a569cd1f5c36d0154845a364865af9b8cb5",
       "implementation-summary.md": "584d1f798b278ab6a903d63ea7d71b8b1c40672b2bd66c63cdbeb28d04f9548d"
     },

@@ -196,7 +196,7 @@
     ],
     "causal_summary": "Eleven of the deep review's fifteen findings are untrue statements inside this packet's own documents; this phase corrects them and records why they drifted.",
     "created_at": "2026-08-31T14:46:51.989Z",
-    "last_save_at": "2026-08-31T19:53:57.870Z",
+    "last_save_at": "2026-08-31T20:01:26.477Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -207,12 +207,12 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:10743ec781ca7a79444227e16779c5c6ac8820ba23cd18edd41db65688710507",
+    "source_fingerprint": "sha256:73f6c650e8eff1d27259bd497c37ac144c159cd316ec3fa3e1ef95eddb63b3a3",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "a60f4c8444c9f0d5d88bcb91dab1827d07f3094470a98715daaadbbebe416bd8",
-      "plan.md": "0fa1886f83ba4b2e4135194dc42fe8d4285283d0f8162b65917f1c3dbf152a97",
-      "tasks.md": "e71e49de7a4f5f5e58d8e08c6ecdafe0e9d21b6046fef79f4797fb58d7fb0053",
+      "spec.md": "24c330fd9791990b4c392546b4a2159b39e2c5d1672b7082426d32e17e58efc5",
+      "plan.md": "f6ae5dbb8d10c684d43cf56f15c5afb6b45d4d57e6fb678122c8040668eb3376",
+      "tasks.md": "eac5bd71fe8d298954fbb66dc759c260522cd9c6c7d98772a7ce5778f635a974",
       "implementation-summary.md": "30cef3a69cdfbc183db3c9d73e055e44b3fec48855f5ab3bc3e366d5c7bcfb47"
     },
     "last_active_child_id": null,

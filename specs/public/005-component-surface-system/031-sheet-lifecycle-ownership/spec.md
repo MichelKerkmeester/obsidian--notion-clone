@@ -23,7 +23,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-031"
       parent_session_id: null
-    completion_pct: 0
+    completion_pct: 83
     open_questions:
       - "Does the live-sheet set prune on a microtask, or on an explicit teardown call?"
     answered_questions:
@@ -47,7 +47,7 @@ _memory:
 |---|---|
 | **Spec Folder** | 031-sheet-lifecycle-ownership |
 | **Level** | 2 |
-| **Status** | **In progress — 2 of 6 criteria.** In the tree: the backdrop no longer outlives its sheet — `src/views/mobile-bottom-sheet.ts` tracks live sheets and drops the backdrop once the last one leaves the document, guarded by a new `sheet-teardown` gate lane that was observed red on three producer families first. Open: the two drag causes, the dead modal handles, velocity dismissal, and the operator seeing the freeze gone |
+| **Status** | **In progress — 5 of 6 criteria.** In the tree: the backdrop no longer outlives its sheet; the group sheet keeps its bar through a rebuild; the portalled header panels find their own panel and reach the overlay stack; an unwired grab bar is now unrepresentable; and a flick dismisses at a measured threshold. Open: the operator seeing the freeze gone |
 | **Complexity** | 61/100, confidence 92% |
 <!-- /ANCHOR:metadata -->
 
@@ -126,15 +126,20 @@ belong to `../028-remaining-freezes`.
 <!-- ANCHOR:success-criteria -->
 ## 4. SUCCESS CRITERIA
 
-- [ ] A producer-parity check opens and closes **each** sheet family and asserts no scrim and no
+- [x] A producer-parity check opens and closes **each** sheet family and asserts no scrim and no
       sheet survives. It must **pass for the owned menu and fail for the panel families today** —
       a check that passes everywhere before the fix is not discriminating.
-- [ ] The group sheet's handle survives a toggle, and a 120px drag dismisses. Today: handle absent,
-      0.0px.
-- [ ] `overlayStack.dismissPanel(panel, "programmatic")` returns true for a phone view sheet.
-      Today: false.
-- [ ] Every sheet that draws a handle has a drag attached, asserted by construction rather than by
-      inspection.
+      **Met** — the `sheet-teardown` lane, observed red with exactly that asymmetry.
+- [x] The group sheet's handle survives a toggle, and a 120px drag dismisses. Today: handle absent,
+      0.0px. **Met** — asserted on the real `ToolbarRenderer` with a real pointer, red first on both
+      halves.
+- [x] `overlayStack.dismissPanel(panel, "programmatic")` returns true for a phone view sheet.
+      Today: false. **Met** — asserted alongside the container selector finding nothing, so the
+      case cannot pass on a sheet that never portalled.
+- [x] Every sheet that draws a handle has a drag attached, asserted by construction rather than by
+      inspection. **Met by construction** — the gesture draws the bar and chrome re-creates one only
+      where a gesture is attached, so an unwired bar cannot be built. Verified by removing that
+      guard: the guarantee goes red.
 - [ ] The operator opens and closes each sheet on device without the app becoming unresponsive.
       **Only the operator closes this row.**
 <!-- /ANCHOR:success-criteria -->

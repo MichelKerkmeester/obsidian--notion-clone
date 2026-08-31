@@ -27,7 +27,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-028-goal"
       parent_session_id: null
-    completion_pct: 60
+    completion_pct: 50
     open_questions:
       - "Why was the calendar reported freezing when its render is bounded and measures 30ms at 12,800 rows"
       - "Does virtualising the list belong in this phase or its own"

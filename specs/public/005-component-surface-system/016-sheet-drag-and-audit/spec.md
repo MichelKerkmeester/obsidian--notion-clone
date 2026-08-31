@@ -28,7 +28,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-016"
       parent_session_id: null
-    completion_pct: 92
+    completion_pct: 50
     open_questions:
       - "Row label 13px is off the 12/14/16/18/20/24 scale. Move to 14px or accept?"
       - "Should the record sheet survive a window resize and re-place instead of closing?"

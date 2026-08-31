@@ -17,7 +17,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-031-tasks"
       parent_session_id: null
-    completion_pct: 0
+    completion_pct: 83
     open_questions: []
     answered_questions: ["The owned menu is the one producer that cleans up, so it is the parity reference"]
 ---

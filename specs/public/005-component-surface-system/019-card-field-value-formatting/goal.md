@@ -22,7 +22,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-019-goal"
       parent_session_id: null
-    completion_pct: 70
+    completion_pct: 71
     open_questions:
       - "Does the parent scope exclusion mean the formula editor's number format"
       - "Which coercion wins when a numeric column holds text the card and the cell read differently"

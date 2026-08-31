@@ -17,7 +17,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-033"
       parent_session_id: null
-    completion_pct: 0
+    completion_pct: 83
     open_questions: ["Does windowing break drag, range selection or group collapse"]
     answered_questions: ["The shape is LINEAR; layout over node count is the remaining cost"]
 ---

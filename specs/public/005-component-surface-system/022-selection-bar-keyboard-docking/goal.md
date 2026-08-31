@@ -147,6 +147,6 @@ the defect became visible second.
 | Item | Note |
 |------|------|
 | D1 amended | Was "consume the host's `--keyboard-height`". No host here writes it, so the decision described a mechanism that could only ever pass under a harness. Now: the plugin publishes its own inset and the host value is one input to it |
-| The documents lagged the code | Spec, plan and tasks were written, the rule shipped, and the folder then sat at `completion_pct: 0` with no criteria and no summary — the same drift eight other phases in this packet carry. The numbers here were recovered from the harness afterwards, not recorded as the work happened |
+| The documents lagged the code | Spec, plan and tasks were written, the rule shipped, and the folder then sat at `completion_pct: 75` with no criteria and no summary — the same drift eight other phases in this packet carry. The numbers here were recovered from the harness afterwards, not recorded as the work happened |
 | `completion_pct` held at 55 | A criterion closed today, but the operator row is what moves this number and the device has not been touched |
 <!-- /ANCHOR:log -->

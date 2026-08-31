@@ -17,7 +17,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-034"
       parent_session_id: null
-    completion_pct: 83
+    completion_pct: 100
     open_questions: ["Can a stale line reference be caught by a script"]
     answered_questions: ["Every one of these was true when written and drifted when the tree moved"]
 ---

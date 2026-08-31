@@ -47,7 +47,6 @@
       "acceptance-criteria.md",
       "goal.md",
       "implementation-summary.md",
-      "src/views/mobile-bottom-sheet.ts",
       "tools/live/sheet-teardown.mjs"
     ],
     "entities": [
@@ -88,12 +87,6 @@
         "source": "derived"
       },
       {
-        "name": "mobile-bottom-sheet.ts",
-        "kind": "code",
-        "path": "src/views/mobile-bottom-sheet.ts",
-        "source": "derived"
-      },
-      {
         "name": "sheet-teardown.mjs",
         "kind": "file",
         "path": "tools/live/sheet-teardown.mjs",
@@ -130,7 +123,7 @@
         "source": "derived"
       },
       {
-        "name": "separate",
+        "name": "exactly",
         "kind": "key_phrase",
         "path": "spec.md",
         "source": "derived"
@@ -178,12 +171,6 @@
         "source": "derived"
       },
       {
-        "name": "exactly",
-        "kind": "key_phrase",
-        "path": "tasks.md",
-        "source": "derived"
-      },
-      {
         "name": "PHASE 1: THE CONTROL",
         "kind": "heading",
         "path": "tasks.md",
@@ -194,11 +181,23 @@
         "kind": "proper_noun",
         "path": "acceptance-criteria.md",
         "source": "derived"
+      },
+      {
+        "name": "CRITERIA",
+        "kind": "heading",
+        "path": "acceptance-criteria.md",
+        "source": "derived"
+      },
+      {
+        "name": "EVIDENCE STANDARD",
+        "kind": "heading",
+        "path": "acceptance-criteria.md",
+        "source": "derived"
       }
     ],
     "causal_summary": "Every sheet has one owner for its whole life, so the scrim always comes down, the drag always survives a re-render, and no handle is drawn onto nothing.",
     "created_at": "2026-08-31T14:46:45.699Z",
-    "last_save_at": "2026-08-31T19:35:09.027Z",
+    "last_save_at": "2026-08-31T20:01:24.327Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -209,13 +208,13 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:6bb0ddc87ed10aa2e707e25606a7dff5d120f1900d48e22111bf402475e8ce7b",
+    "source_fingerprint": "sha256:e47083bac88b5ecf0b6d42d0313f03f9a51513b51409c339a10df5ceb04f16ac",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "2846f4f64c605056ec1c6f015d54aff0125a2031f3c5d83fb090c2ec5bb0582b",
-      "plan.md": "808630e42990ca0d3c2e6d1518e397c9a8d0dc31b665a6f35a80e4ddf59cf9c3",
-      "tasks.md": "d91d90135b9f642b4130a836ce2f1631a7f7651207d26ea0da9bb16edc9529f9",
-      "implementation-summary.md": "5613579796dc7c90c61eef1ed4acde2a298a89541b5de50af2be22c744b10cd4"
+      "spec.md": "fe2fb7341bfad11d28b747f182ba9285a044a63c5a213d5565d23651fb839d84",
+      "plan.md": "2264168f9037d95db0330d5a67d0218cbd5a98f47af2207b051116b1163be05a",
+      "tasks.md": "ec1ddd6ec5f24e0bd4df253cff63920a2a4fecdf32016bd9ca590ce00a9c418c",
+      "implementation-summary.md": "f90b18162faf4e58e6a256b18f3d0efcbdc918e50e476addd387fc1893c25d20"
     },
     "last_active_child_id": null,
     "last_active_at": null

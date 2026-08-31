@@ -26,7 +26,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-027"
       parent_session_id: null
-    completion_pct: 90
+    completion_pct: 93
     open_questions:
       - "Does the Add-view form above the create rows want the same treatment?"
     answered_questions:

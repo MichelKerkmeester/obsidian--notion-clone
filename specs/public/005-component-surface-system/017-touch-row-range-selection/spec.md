@@ -28,7 +28,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-017"
       parent_session_id: null
-    completion_pct: 96
+    completion_pct: 73
     open_questions:
       - "The hold gesture has no affordance anywhere. Should the selection status bar carry a one-line hint the first time a row is selected on touch?"
     answered_questions:

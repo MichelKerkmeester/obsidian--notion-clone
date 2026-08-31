@@ -25,7 +25,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-016-goal"
       parent_session_id: null
-    completion_pct: 78
+    completion_pct: 50
     open_questions:
       - "Row label 13px is off the type scale; move to 14px or accept"
       - "Should the record sheet survive a window resize instead of closing"

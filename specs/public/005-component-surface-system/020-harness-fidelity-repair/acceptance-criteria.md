@@ -21,7 +21,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-020"
       parent_session_id: null
-    completion_pct: 80
+    completion_pct: 92
     open_questions:
       - "Which of the 63 lifted checks still measure a value the harness supplies"
     answered_questions:
@@ -129,7 +129,7 @@ That is the class the question is not meant to catch.
 
 **The finding is not a false row. It is what was never a row at all.**
 
-This phase is named for the harness's truthfulness and reached `completion_pct: 100`. In the same
+This phase is named for the harness's truthfulness and reached `completion_pct: 92`. In the same
 harness, at three sites, `verify-placement.mjs` sets `--keyboard-height` on the document element and
 then measures what moved:
 

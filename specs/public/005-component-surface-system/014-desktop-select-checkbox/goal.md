@@ -23,7 +23,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-014-goal"
       parent_session_id: null
-    completion_pct: 85
+    completion_pct: 57
     open_questions:
       - "Delete the three dead :not(shared-checkbox) blocks, given they are capture-affecting"
       - "Assert border-color as a fifth appearance property, which is what makes AC-5's control discharging"

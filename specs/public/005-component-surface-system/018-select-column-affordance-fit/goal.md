@@ -24,7 +24,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-018-goal"
       parent_session_id: null
-    completion_pct: 72
+    completion_pct: 20
     open_questions:
       - "Do the desktop drag handle and the row checkbox clear each other in a 40px column"
       - "Does the renderer build the reorder button only on touch, measured rather than read"

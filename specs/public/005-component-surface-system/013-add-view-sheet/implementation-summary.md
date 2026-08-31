@@ -21,7 +21,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-013"
       parent_session_id: null
-    completion_pct: 90
+    completion_pct: 67
     open_questions: []
     answered_questions: []
 ---
@@ -174,7 +174,7 @@ add-view captures are the only files that moved, and they are byte-stable across
    600px window. On a 700px tablet this surface is "touch" to every renderer and not a sheet to the
    positioner. Pre-existing and out of scope.
 
-5. **This phase's `spec.md` continuity block still reads `completion_pct: 0` and "not started".** The
+5. **This phase's `spec.md` continuity block still reads `completion_pct: 67` and "not started".** The
    lane journal records this phase acquiring, editing and releasing the lane twice. The conflict is
    recorded in the parent roadmap rather than silently corrected here.
 

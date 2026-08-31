@@ -23,7 +23,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-021"
       parent_session_id: null
-    completion_pct: 85
+    completion_pct: 62
     open_questions:
       - "Is Obsidian's --font-ui-medium default really 15px, or is that this repo's host model"
     answered_questions:
@@ -134,7 +134,7 @@ desktop editor from 34.8px to 31px. A control that cannot fail is the same defec
 cannot fail, one level up.
 
 **`spec.md` and `implementation-summary.md` still read 2.4px and Open** for the title editor, and
-`completion_pct: 85`. `acceptance-criteria.md`, written later, recorded AC-006 Met at 0.9px. The
+`completion_pct: 62`. `acceptance-criteria.md`, written later, recorded AC-006 Met at 0.9px. The
 supply audit has since moved it to `Provisional` and every document now reads 85: the 0.9px is real
 and the correction is right, but the margin belongs to a `--font-ui-medium` the harness declares and
 this repo infers. Those two documents' `Open` was closer to the truth than the closure that replaced
