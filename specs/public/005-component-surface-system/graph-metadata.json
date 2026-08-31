@@ -52,7 +52,7 @@
       "dropdown design system",
       "sheet overlay navbar",
       "checkbox ownership",
-      "openSurface factory",
+      "openSurface factory (deleted 2026-08-30)",
       "005 component surface",
       "surface system goal",
       "005 goal",
@@ -238,7 +238,7 @@
     ],
     "causal_summary": "Phase parent for the program that gives floating surfaces, sheets, checkboxes and content rows one architecture, one placement authority, and acceptance criteria measured where users actually see them.",
     "created_at": "2026-08-29T12:53:52.104Z",
-    "last_save_at": "2026-08-31T16:21:58.818Z",
+    "last_save_at": "2026-08-31T18:47:44.651Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -246,10 +246,10 @@
       "goal.md",
       "handover.md"
     ],
-    "source_fingerprint": "sha256:e284dae4684407110589c70560661043683f77edb690059b8adf7e0ba61f6a91",
+    "source_fingerprint": "sha256:d772ab13cdaa86fa5cba64ae962e05a41f0918742bc312d14d596eedb14258cd",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "fc987a400cddc0fc98a428b8f552a1b894e199779eecc83ce3bb63c0fe968b2b",
+      "spec.md": "e33e900f5bbc25b4f6ce754f82b74580008bb644a39eec041df0ccec5a670818",
       "handover.md": "9fa809addac066856c56a44a2b435fc41bf3ab7e64687b39176d54226dbf5aff"
     },
     "last_active_child_id": "public/005-component-surface-system/006-record-open-target",

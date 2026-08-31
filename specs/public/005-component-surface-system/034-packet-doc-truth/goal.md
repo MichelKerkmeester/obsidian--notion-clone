@@ -7,17 +7,17 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "public/005-component-surface-system/034-packet-doc-truth"
-    last_updated_at: "2026-08-31T17:00:00Z"
+    last_updated_at: "2026-09-01T00:30:00Z"
     last_updated_by: "phase-author"
-    recent_action: "Goal added; the packet binds on this file and it was missing"
-    next_safe_action: "Correct the parent spec first; six of the eleven live there"
+    recent_action: "Eleven findings corrected from the tree; the mechanical check built and deliberately not gated"
+    next_safe_action: "Re-run the review dimension that raised the eleven, which only a review can do"
     blockers: []
     key_files: ["spec.md", "tasks.md"]
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-034-goal"
       parent_session_id: null
-    completion_pct: 0
+    completion_pct: 83
     open_questions: ["Can a stale line reference or a deleted symbol be caught by a script"]
     answered_questions: ["Every one of these was true when written and drifted when the tree moved"]
 ---
@@ -51,10 +51,14 @@ the eleven are in the parent spec, the most-read document here.
 <!-- ANCHOR:completion -->
 ## 2. COMPLETION CRITERIA
 
-- [ ] All eleven corrected against the tree, or declared still-true with the evidence.
-- [ ] No correction introduces a derived number without naming its source.
+- [x] All eleven corrected against the tree, or declared still-true with the evidence. **Met** —
+      and three were understated: F011 named one site of three, F006 named the marks but not the
+      stale values behind them.
+- [x] No correction introduces a derived number without naming its source. **Met** — every
+      corrected count carries the one-liner that regenerates it.
 - [ ] Re-running the review dimension does not re-raise a corrected finding.
-- [ ] `validate.sh --strict` Errors: 0 for every folder touched.
+- [x] `validate.sh --strict` Errors: 0 for every folder touched. **Met** — eight folders, exit
+      codes read directly.
 <!-- /ANCHOR:completion -->
 
 ---

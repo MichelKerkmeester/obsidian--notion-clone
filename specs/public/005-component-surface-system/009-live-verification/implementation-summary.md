@@ -126,6 +126,15 @@ beside the existing commands — was never built: `src/dev/` does not exist, and
 Run from the final state on 2026-08-30. Exit statuses read from `$?` immediately after each command,
 never through a pipe.
 
+**Observed 2026-08-29, and recorded as observed rather than kept current.** These are the outputs
+of commands run on that day against that tree; they are a transcript, not a statement about today.
+The gate has since grown from 16 lanes to 18, and `main.js` has been rebuilt many times. Updating
+the numbers in place would turn a true record into a false one, so the date carries the caveat
+instead.
+
+**The one thing that has NOT changed is the finding:** the app was never driven. The transport
+reports `cannot ask — Obsidian is not running`, which is exit 2, and that is still the state.
+
 | Command | Output | Exit |
 |---|---|---|
 | `node tools/live/probe.mjs --check transport` | `probe: cannot ask — Obsidian is not running` · `this is not an assertion failure.` | **2** |

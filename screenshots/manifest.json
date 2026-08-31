@@ -1004,7 +1004,7 @@
       },
       "note": "The phone form of the owned menu. Rows share one left edge with the icon in a fixed leading column, hairlines divide neighbours but not the last row of a group, and a row that opens a submenu carries a trailing chevron. Captured in viewport mode so the fixed sheet docks at the bottom.",
       "capture": "viewport",
-      "bytes": 49261
+      "bytes": 49273
     },
     {
       "id": "chrome-owned-menu-sheet",
@@ -1031,7 +1031,7 @@
       },
       "note": "The phone form of the owned menu. Rows share one left edge with the icon in a fixed leading column, hairlines divide neighbours but not the last row of a group, and a row that opens a submenu carries a trailing chevron. Captured in viewport mode so the fixed sheet docks at the bottom.",
       "capture": "viewport",
-      "bytes": 51712
+      "bytes": 51714
     },
     {
       "id": "chrome-owned-menu-sheet",
@@ -3815,7 +3815,7 @@
       "layoutHash": "284d2e5550f5",
       "sourceHashes": {
         "src/views/record-detail-panel.ts": "f4a6e1732fa9",
-        "src/views/popover-position.ts": "fcdb98617dae",
+        "src/views/popover-position.ts": "6ef7767fc87e",
         "src/views/card-field-renderer.ts": "33212bef3422",
         "src/views/note-body-region.ts": "4660f1f93bd7",
         "styles.css": "96f5fa440637",
@@ -3844,7 +3844,7 @@
       "layoutHash": "284d2e5550f5",
       "sourceHashes": {
         "src/views/record-detail-panel.ts": "f4a6e1732fa9",
-        "src/views/popover-position.ts": "fcdb98617dae",
+        "src/views/popover-position.ts": "6ef7767fc87e",
         "src/views/card-field-renderer.ts": "33212bef3422",
         "src/views/note-body-region.ts": "4660f1f93bd7",
         "styles.css": "96f5fa440637",
@@ -3873,7 +3873,7 @@
       "layoutHash": "8ec8a665485d",
       "sourceHashes": {
         "src/views/record-detail-panel.ts": "f4a6e1732fa9",
-        "src/views/popover-position.ts": "fcdb98617dae",
+        "src/views/popover-position.ts": "6ef7767fc87e",
         "src/views/card-field-renderer.ts": "33212bef3422",
         "src/views/note-body-region.ts": "4660f1f93bd7",
         "styles.css": "96f5fa440637",
@@ -3902,7 +3902,7 @@
       "layoutHash": "8ec8a665485d",
       "sourceHashes": {
         "src/views/record-detail-panel.ts": "f4a6e1732fa9",
-        "src/views/popover-position.ts": "fcdb98617dae",
+        "src/views/popover-position.ts": "6ef7767fc87e",
         "src/views/card-field-renderer.ts": "33212bef3422",
         "src/views/note-body-region.ts": "4660f1f93bd7",
         "styles.css": "96f5fa440637",
@@ -4728,7 +4728,7 @@
       },
       "note": "Multi-day all-day bars, timed events, an overflow week and one event carried across the week boundary.",
       "capture": "viewport",
-      "bytes": 129143
+      "bytes": 130108
     },
     {
       "id": "calendar-month-view",

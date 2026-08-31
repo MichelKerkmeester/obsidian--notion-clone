@@ -26,14 +26,19 @@ Each row records the failing measurement from the current tree **before** work s
 with an empty "today" cell is not accepted. Every measurement is taken on the real renderer at the
 production mount point, computed rather than declared.
 
+**Re-derived 2026-08-31 from `tools/live/checkbox-appearance.json`**, which the gate's `evidence`
+lane confirms is fingerprinted against today's `styles.css`. Two rows are settled by it, four are
+not, and the four are left unticked rather than carried along by the two — the "today" column of
+every row had gone stale, which is not the same as every row having been met.
+
 | # | Criterion | Today | Target | Evidence |
 |---|---|---|---|---|
-| B1 | Every `input[type="checkbox"]` the plugin creates computes `appearance: none` | 1 of 12 families | 12 of 12 | [ ] |
-| B2 | Radius and box size identical within a role across board, gallery, list, table, modal and panel | families diverge; 11 of 12 fall back to the platform box | distinct-value set has cardinality 1 | [ ] |
-| B3 | Appearance identical at all three mount points | decided by ancestry, so it differs by construction | 0 delta | [ ] |
-| B4 | Checked, indeterminate, disabled and focus each produce a measurable difference for every family | only ancestor-styled families have state rules | 4 states x 12 families | [ ] |
+| B1 | Every `input[type="checkbox"]` the plugin creates computes `appearance: none` | **211 of 211 controls across 59 fixtures self-own appearance; `platformBox: 0`** (was recorded as "1 of 12 families") | 12 of 12 | [x] `checkbox-appearance.json` totals |
+| B2 | Radius and box size identical within a role across board, gallery, list, table, modal and panel | **3 distinct shapes: 16x16 r=4px (181), 18x18 r=4px (20), 34x18 r=9999px (10)**. The old "11 of 12 fall back to the platform box" is refuted — `platformBox: 0`. Whether 3 shapes across 3 roles satisfies "identical WITHIN a role" is not answerable from totals | distinct-value set has cardinality 1 *per role* | [ ] needs the artefact grouped by role, which it does not currently emit |
+| B3 | Appearance identical at all three mount points | **`appearanceOwnedByAncestor: 0`** — nothing is decided by ancestry any more (was "differs by construction") | 0 delta | [x] `checkbox-appearance.json` totals |
+| B4 | Checked, indeterminate, disabled and focus each produce a measurable difference for every family | **unmeasured.** The artefact records resting appearance only, so the old "only ancestor-styled families have state rules" is neither confirmed nor refuted | 4 states x 12 families | [ ] needs a state-sweep the current instrument does not perform |
 | B5 | Unchanged under three third-party themes, at least one restyling native checkboxes | untested; such a theme reaches 11 of 12 families today | 0 changed | [ ] |
-| B6 | Hit target at least 28x28 under a coarse pointer for every family | not asserted anywhere | 12 of 12 | [ ] |
+| B6 | Hit target at least 28x28 under a coarse pointer for every family | **contested.** `../roadmap.md` §7.1 records the switch reaching 34x28; the artefact measures its box at **34x18**. Both can be true — a box is not a reach, and padding or a pseudo-element can extend one — but nothing here measures reach, so the criterion is not evidenced either way | 12 of 12 | [ ] needs a reach measurement, not a box measurement |
 
 **B1 is the operator's reported defect. B2 is the criterion that fails when a family is missed — which
 is how the previous attempt passed while circles remained.**

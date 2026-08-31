@@ -7,7 +7,7 @@ trigger_phrases:
   - "dropdown design system"
   - "sheet overlay navbar"
   - "checkbox ownership"
-  - "openSurface factory"
+  - "openSurface factory (deleted 2026-08-30)"
   - "005 component surface"
 importance_tier: "critical"
 contextType: "planning"
@@ -66,7 +66,9 @@ with measurements taken where the user is standing.
 
 ## 2. SCOPE
 
-**Twenty phase folders**, in two generations.
+**Thirty-five phase folders** as of 2026-08-31 (`ls -d [0-9][0-9][0-9]-* | wc -l`), in two
+generations. This read "twenty" long after the count moved; it is a growing number, so it is dated
+and given its command rather than restated.
 
 The first ten were cut from the architecture findings. Three of them were not on the original defect
 list and all three are mandatory: `000` because four defects are one bug, `008` because no child
@@ -128,9 +130,9 @@ are counted separately.
 | 5 | `001-overlay-placement-and-menu-language` | Placement contract, one row grammar, panel parity | Partially shipped |
 | 6 | `002-properties-panel` | Row grid and information architecture | Shipped |
 | 7 | `003-mobile-sheet-presentation` | Portal, one phone predicate, anchor lifetime | Shipped; report 1 open |
-| 3 | `004-checkbox-ownership` | One checkbox primitive, unconditional base appearance | **Contested — `roadmap.md` §7.1** |
+| 3 | `004-checkbox-ownership` | One checkbox primitive, unconditional base appearance | **Resolved — `roadmap.md` §7.1.** The lane entry is corroborated and the verifier refuted: `appearanceOwnedByAncestor: 0` of 211 controls |
 | 4 | `005-content-row-rhythm` | Intrinsic sizing for rows and the header rail | Shipped |
-| 8 | `006-record-open-target` | Where a record opens, and the setting for it | Planned |
+| 8 | `006-record-open-target` | Where a record opens, and the setting for it | **In progress** — desktop Open and the peek layer landed under another phase's lane hold |
 | 9 + early | `008-integration-and-release-observability` | Replay harness lands **before `001`** and runs at every lane handoff; the release decision and compatibility retirement stay last | Deliverable A shipped |
 | 1 | `009-live-verification` | The independent instrument: drives and measures the plugin in the running Obsidian. Gates `000`'s harness-truth claims | Instrument built, nothing gated |
 | — | `007-architecture-research` | Standing research run; not a program phase and not on the execution path | Complete |
@@ -153,10 +155,11 @@ claim its own phase owns.
 ### Phase Transition Rules
 
 - Each phase MUST pass `validate.sh <child> --strict` independently before the next phase begins.
-  **This rule has not been kept.** As of 2026-08-30 every child fails `--strict`, most on scaffold
-  gaps rather than content: `010` through `017` were created without the `plan.md` and `tasks.md`
-  their declared level requires. `018` and `019` were scaffolded with them and fail only on the
-  `implementation-summary.md` that is written after implementation, not before it.
+  **This rule was not kept, and the scaffold half of it has since been closed.** As of 2026-08-30
+  every child failed `--strict`, most on scaffold gaps rather than content. `010` through `017` were
+  then missing the `plan.md` and `tasks.md` their declared level requires; as of 2026-08-31 **all
+  eight carry both**. What remains is the `implementation-summary.md` a child owes once its tasks
+  are ticked, which is written after implementation rather than before it.
 - The declared execution order is **009 → 000 → 004 → 005 → 001 → 002 → 003 → 006 → 008**, argued in
   §3. The folder numbers are identifiers, not sequence.
 - **The declared order was not the order run.** The lane journal's acquire sequence is
@@ -193,10 +196,10 @@ claim its own phase owns.
 | `000` | `004` | Honest harness landed: a check fails when its subject is deleted, **and every harness number agrees with the live probe on the same surface** | `000` criteria A4, A5, A6 + the `009` cross-check |
 | `004` | `005` | Checkbox criteria moved from their failing values; the doctrine verdict is recorded | `004` criteria B1-B6 and its §6 verdict |
 | `005` | `001` | Sizing contract landed and the CSS lane released | `005` criteria A1-A7 |
-| `000` | `001` | Factory and token root landed: a body-mounted surface carries its tokens; **the registry is complete** (source census equals runtime census) and **the anchor lease survives a wholesale refresh** | `000` criteria A1, A2, A7, plus registry equality and the anchor-lease criterion |
+| `000` | `001` | Token root landed (the factory this row named, `openSurface`, was deleted 2026-08-30): a body-mounted surface carries its tokens; **the registry is complete** (source census equals runtime census) and **the anchor lease survives a wholesale refresh** | `000` criteria A1, A2, A7, plus registry equality and the anchor-lease criterion |
 | `000` | `003` | **The `AnchorRef` lease is proven**, not merely implemented: a surface survives its anchor being destroyed and still repositions | `000`'s anchor-lease criterion, named explicitly because `003`'s sheet fix consumes it |
-| `001` | `002` | Every surface goes through the factory; placement is resolved by role | `001` criteria A1-A7 |
-| `002` | `003` | The factory has been shaken out on desktop where debugging is cheap | `002` criteria B1-B6 |
+| `001` | `002` | Every surface shares one placement contract; placement is resolved by role | `001` criteria A1-A7 |
+| `002` | `003` | That contract has been shaken out on desktop where debugging is cheap | `002` criteria B1-B6 |
 | `003` | `006` | Phone presentation exists, so "where does a record open on a phone" is answerable | `003` criteria C1-C6 |
 | `006` | `008` | Every child phase has handed its matrix rows forward | each child's `acceptance-criteria.md` proof-tuple coverage filled |
 | any | `008` | A phase releasing the `styles.css` lane triggers a cascade re-confirmation before the next phase takes it | `008` criteria G3 |
@@ -232,10 +235,12 @@ holds both readings of the difference.
   cost is a week rather than a quarter.
 - **005 next**, while the overlay lane is free. It is the only work with no overlay dependency and
   will otherwise never be scheduled.
-- **001 before 002:** once every surface goes through the factory, the properties panel is just
-  another surface and only its row grid remains.
-- **003 after 002:** the portal is the riskiest change, so it lands once the factory has been shaken
-  out on desktop where debugging is cheap.
+- **001 before 002:** once every surface shares one placement contract, the properties panel is just
+  another surface and only its row grid remains. *(This read "goes through the factory" — the
+  `openSurface` factory it named was deleted, and `positionToolbarPopover` plus the sheet module are
+  what the surfaces actually share.)*
+- **003 after 002:** the portal is the riskiest change, so it lands once that shared contract has
+  been shaken out on desktop where debugging is cheap.
 - **006 last of the defect phases:** it needs 003's phone presentation to answer where a record opens
   on a phone.
 - **008 closes the program.** It is not a final screenshot collection: it replays every registered
@@ -256,8 +261,12 @@ holds both readings of the difference.
 
 ## 4. THE SERIALIZED CSS LANE
 
-`styles.css` is 19,261 lines, must not be split, and all 196 captures fingerprint it. **Exactly one
-spec may hold the file at a time.**
+`styles.css` must not be split, and every capture fingerprints it. **Exactly one spec may hold the
+file at a time.**
+
+Measured 2026-08-31: **20,124 lines** (`wc -l styles.css`) and **236 captures**
+(`find screenshots -name '*.png' | wc -l`). Both were recorded here as 19,261 and 196 and drifted
+unread — the commands are given so the next reader re-derives them instead of trusting this line.
 
 **This was a convention with no enforcement, and conventions do not survive autonomous execution.**
 `004` and `005` both unblock after `000`, so a runner could edit a 19,000-line stylesheet twice

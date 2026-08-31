@@ -7,17 +7,17 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "public/005-component-surface-system/034-packet-doc-truth"
-    last_updated_at: "2026-08-31T16:00:00Z"
+    last_updated_at: "2026-09-01T00:30:00Z"
     last_updated_by: "phase-author"
-    recent_action: "Opened from the eleven documentation findings in the deep review"
-    next_safe_action: "Correct the parent spec's six findings first; they are the most cited document"
+    recent_action: "Eleven findings corrected from the tree; the mechanical check built and deliberately not gated"
+    next_safe_action: "Re-run the review dimension that raised the eleven, which only a review can do"
     blockers: []
     key_files: ["spec.md", "tasks.md"]
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-034"
       parent_session_id: null
-    completion_pct: 0
+    completion_pct: 83
     open_questions:
       - "Is a periodic re-derivation cheaper than correcting drift after a review finds it?"
     answered_questions:
@@ -39,7 +39,7 @@ _memory:
 |---|---|
 | **Spec Folder** | 034-packet-doc-truth |
 | **Level** | 2 |
-| **Status** | Planned |
+| **Status** | **In progress — all eleven corrected, five of six tasks.** Each re-derived from the tree with the command that regenerates it. Open: T6, the review re-run, which nothing in a self-check can stand in for |
 | **Complexity** | 39/100, confidence 80% |
 
 **On the declared level.** `recommend-level.sh` returned Level 1; this folder declares Level

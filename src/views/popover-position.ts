@@ -174,11 +174,11 @@ export function positionToolbarPopover(
     // and the refresh destroys the trigger button while the picker itself is mounted on the
     // container and survives.
     //
-    // Hiding is the same answer `openSurface`'s own `place()` already gives, and it is the
-    // conservative one: `visibility: hidden` takes the surface out of hit-testing, out of the tab
-    // order and out of the accessibility tree without deciding, on the owner's behalf, that the
-    // surface should be destroyed. The reposition loop goes with it, because a removed node is
-    // never reconnected here — a rebuild produces a new node, so this anchor is gone for good.
+    // Hiding is the conservative answer: `visibility: hidden` takes the surface out of
+    // hit-testing, out of the tab order and out of the accessibility tree without deciding, on the
+    // owner's behalf, that the surface should be destroyed. The reposition loop goes with it,
+    // because a removed node is never reconnected here — a rebuild produces a new node, so this
+    // anchor is gone for good.
     if (!anchorEl.isConnected) {
       panel.setCssProps({ visibility: "hidden" });
       teardown?.();

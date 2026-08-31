@@ -56,13 +56,23 @@ them. This phase introduces a typed surface handle that owns the mount point and
 makes the cascade single-valued per context, and repairs harnesses that are structurally incapable
 of failing.
 
-**Key Decisions**: `openSurface()` returns a typed `SurfaceHandle` **owned by the interaction scope
-that already exists** — it extends `overlay-stack.ts` and `interaction-scope.ts` rather than
+**Key Decisions** *(the first was superseded — see the note below)*: `openSurface()` returns a typed
+`SurfaceHandle` **owned by the interaction scope that already exists** — it extends `overlay-stack.ts` and `interaction-scope.ts` rather than
 building a second global listener system beside them. Tokens travel as an **owned snapshot copied
 onto the surface root**, never as plugin variables written to `body`, `documentElement` or an
 Obsidian ancestor. The mount is an **explicit adapter** (`local | bodyPortal | shadowRoot |
 topLayer`), declared, never inferred. The anchor is a **logical lease**, not an element reference.
 And nothing is removed until the compatibility path has been proven equivalent.
+
+**Superseded 2026-08-30: there is no `openSurface`.** The factory was deleted after measurement
+showed it had zero importers, zero tests, and was absent from the shipped bundle — nothing imported
+it, so the bundler dropped it. `src/views/surface-contract.ts` is live and was deliberately kept.
+What the surfaces actually share today is `positionToolbarPopover` for placement and the sheet
+module for phone presentation.
+
+The decision is left standing rather than rewritten, because it was the real decision at the time
+and the reasoning below still applies to the contract that replaced it. What was untrue was
+presenting it as the current create path, which is what a reader arriving here would take it for.
 
 **The instrument problem, and its fix.** This phase repairs the harness in Stage 1 and then asserts
 its own criteria through that same repaired harness. A repair that is subtly wrong in a way that

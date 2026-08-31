@@ -18,7 +18,9 @@
       "034 plan",
       "034 tasks",
       "034 acceptance criteria",
-      "034 goal"
+      "034 goal",
+      "034 implementation summary",
+      "doc drift corrections"
     ],
     "key_topics": [
       "doc",
@@ -32,16 +34,19 @@
       "acceptance",
       "criteria",
       "goal",
-      "eleven"
+      "implementation"
     ],
     "importance_tier": "important",
-    "status": "planned",
+    "status": "in_progress",
     "key_files": [
       "spec.md",
       "plan.md",
       "tasks.md",
       "acceptance-criteria.md",
-      "goal.md"
+      "goal.md",
+      "implementation-summary.md",
+      "tools/live/checkbox-appearance.json",
+      "tools/naming/scan-spec-references.mjs"
     ],
     "entities": [
       {
@@ -75,6 +80,24 @@
         "source": "derived"
       },
       {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "checkbox-appearance.json",
+        "kind": "config",
+        "path": "tools/live/checkbox-appearance.json",
+        "source": "derived"
+      },
+      {
+        "name": "scan-spec-references.mjs",
+        "kind": "file",
+        "path": "tools/naming/scan-spec-references.mjs",
+        "source": "derived"
+      },
+      {
         "name": "Feature Specification",
         "kind": "proper_noun",
         "path": "spec.md",
@@ -93,13 +116,13 @@
         "source": "derived"
       },
       {
-        "name": "fifteen",
+        "name": "the",
         "kind": "key_phrase",
         "path": "spec.md",
         "source": "derived"
       },
       {
-        "name": "the",
+        "name": "fifteen",
         "kind": "key_phrase",
         "path": "spec.md",
         "source": "derived"
@@ -147,26 +170,20 @@
         "source": "derived"
       },
       {
-        "name": "evidence",
+        "name": "a",
         "kind": "key_phrase",
         "path": "tasks.md",
         "source": "derived"
       },
       {
-        "name": "TASKS",
-        "kind": "heading",
+        "name": "what",
+        "kind": "key_phrase",
         "path": "tasks.md",
         "source": "derived"
       },
       {
-        "name": "COMPLETION",
-        "kind": "heading",
-        "path": "tasks.md",
-        "source": "derived"
-      },
-      {
-        "name": "CROSS-REFERENCES",
-        "kind": "heading",
+        "name": "evidence",
+        "kind": "key_phrase",
         "path": "tasks.md",
         "source": "derived"
       },
@@ -175,23 +192,11 @@
         "kind": "proper_noun",
         "path": "acceptance-criteria.md",
         "source": "derived"
-      },
-      {
-        "name": "substantive",
-        "kind": "key_phrase",
-        "path": "acceptance-criteria.md",
-        "source": "derived"
-      },
-      {
-        "name": "CRITERIA",
-        "kind": "heading",
-        "path": "acceptance-criteria.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "Eleven of the deep review's fifteen findings are untrue statements inside this packet's own documents; this phase corrects them and records why they drifted.",
     "created_at": "2026-08-31T14:46:51.989Z",
-    "last_save_at": "2026-08-31T15:27:32.687Z",
+    "last_save_at": "2026-08-31T18:49:29.959Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -199,14 +204,16 @@
       "plan.md",
       "tasks.md",
       "acceptance-criteria.md",
-      "goal.md"
+      "goal.md",
+      "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:c33ded3c6b707bd8412b62e6c70c0a64edee43563acd0e1035fac4d2831f5091",
+    "source_fingerprint": "sha256:71a0ed336d523fd74b4c5c80fcbfb60669a710d36d19a8b70d77f4776d2d5e53",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "88eadd716a0c35208170c1968cc292c20142ce8373383595bb389ecdf79d936d",
+      "spec.md": "a60f4c8444c9f0d5d88bcb91dab1827d07f3094470a98715daaadbbebe416bd8",
       "plan.md": "0fa1886f83ba4b2e4135194dc42fe8d4285283d0f8162b65917f1c3dbf152a97",
-      "tasks.md": "df25ee877b56a0bb3164a48b0209931d54d959760e5ed023e5aa159cce87ec9a"
+      "tasks.md": "69cf97cea79131ae100421811d68720c61819dbf4fd3c51c35b71f6e5645534f",
+      "implementation-summary.md": "f1f1abae889b55a2540ceb61cac5d418b2cce912e35d711288d573e05cd9128c"
     },
     "last_active_child_id": null,
     "last_active_at": null

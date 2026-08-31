@@ -1,10 +1,10 @@
 {
-  "measuredAt": "2026-08-31T18:38:47.449Z",
+  "measuredAt": "2026-08-31T18:54:10.156Z",
   "inputs": {
     "tools/live/sheet-rebuild.mjs": "7619cfedd91b",
     "tools/live/sheet-rebuild-harness.ts": "44e6b65eb7c9",
     "src/views/toolbar-renderer.ts": "88fdd50cb460",
-    "src/views/popover-position.ts": "fcdb98617dae",
+    "src/views/popover-position.ts": "6ef7767fc87e",
     "src/views/mobile-bottom-sheet.ts": "ac0a882afc60"
   },
   "cases": 8,

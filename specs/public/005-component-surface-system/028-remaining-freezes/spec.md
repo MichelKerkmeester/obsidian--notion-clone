@@ -50,7 +50,11 @@ the surfaces alone would not.
 
 ## 2. THE SHARED TRIGGER
 
-All four sheet reports route through one method: **`DatabaseView.refresh()`**, `database-view.ts:11421`.
+All four sheet reports route through one method: **`DatabaseView.refresh()`** in `database-view.ts`
+(`grep -n 'refresh(options' src/views/database-view.ts`).
+
+This cited line 11421 and the method is now at 11490. A line number in a file that grows is a claim
+that expires without anyone touching it, so the symbol is named instead of its address.
 
 It removes every top-level rendered result and calls `render()` again:
 
