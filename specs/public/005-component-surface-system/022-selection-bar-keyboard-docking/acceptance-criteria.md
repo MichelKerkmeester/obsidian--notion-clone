@@ -13,7 +13,7 @@ _memory:
     last_updated_at: "2026-08-31T00:00:00Z"
     last_updated_by: "keyboard-inset-publisher"
     recent_action: "AC-1 restored on a fallback-only measurement; bar reads --db-keyboard-inset"
-    next_safe_action: "Regenerate the three fingerprint artefacts the stylesheet edit staled, then operator opens a keyboard on a device"
+    next_safe_action: "Operator selects cells, opens the keyboard, reports whether the bar docks"
     blockers:
       - "css-lane, evidence and screenshots-fresh are red on the stylesheet fingerprint; their remedies write outside this phase's scope"
     key_files:
