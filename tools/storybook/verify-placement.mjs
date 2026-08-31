@@ -3344,6 +3344,54 @@ const keyboardParityResults = await section("both sheet families under one keybo
   window.visualViewport.addEventListener = realVvAdd;
   window.visualViewport.removeEventListener = realVvRemove;
 
+  // ── THE GATE 003 WROTE FOR ITSELF, and never ran ──
+  //
+  // Its plan says it plainly: "Stage 1 is a gate, not a task. Until removing the navbar from the
+  // harness moves an asserted number by more than the 1.35px fallback artefact, no later claim in
+  // this spec means anything." Two of that packet's rows are open precisely because nobody could say
+  // whether its navbar was load-bearing or scenery — a hand-written div with no `app.css` rule and
+  // no stacking context, which a body portal beats almost by default.
+  //
+  // It is load-bearing, and by a margin nothing could mistake for noise. `getVisiblePopoverBounds`
+  // reads the navbar's measured height and falls back to a hardcoded 50 when there is none, so a
+  // 72px navbar and its absence are 22px apart — sixteen times the artefact the gate names.
+  //
+  // The fallback is why the number has to be read rather than assumed: removing the navbar does not
+  // give the surface the whole screen, it gives it 50px of guessed chrome instead of 72px of
+  // measured chrome. A check written against "no navbar means no inset" would report the opposite
+  // sign and pass on a positioner that ignored the element entirely.
+  //
+  // NOT REDUNDANT WITH ITS NEIGHBOUR, and the difference is the whole reason to keep both. The
+  // earlier check asserts `bounds.bottom === viewport - navbar - inset`, which TRANSCRIBES the
+  // positioner's arithmetic into the harness — and this packet's own plan says a later phase deletes
+  // that subtraction outright, because the sheet is supposed to COVER the navbar rather than avoid
+  // it. On the day that lands, the transcription goes red for an intended change and the obvious
+  // repair is to copy the new formula across, at which point it stops discriminating. This asks only
+  // whether the element is read at all, which stays the right question on both sides of that change.
+  const withNavbar = P.getVisiblePopoverBounds(null);
+  const navbarEl = document.querySelector(".mobile-navbar");
+  const navbarHeight = navbarEl ? Math.round(navbarEl.getBoundingClientRect().height) : 0;
+  const navbarParent = navbarEl?.parentElement ?? null;
+  const navbarNext = navbarEl?.nextSibling ?? null;
+  navbarEl?.remove();
+  const withoutNavbar = P.getVisiblePopoverBounds(null);
+  if (navbarEl && navbarParent) navbarParent.insertBefore(navbarEl, navbarNext);
+  const restored = P.getVisiblePopoverBounds(null);
+  const moved = Math.abs(Math.round(withoutNavbar.bottom) - Math.round(withNavbar.bottom));
+
+  out.push({
+    name: "removing the navbar from the harness moves an asserted number",
+    pass: navbarHeight > 0 && moved > 1.35
+      && Math.round(restored.bottom) === Math.round(withNavbar.bottom),
+    detail: `the harness navbar measures ${navbarHeight}px; the visible bounds end at`
+      + ` ${Math.round(withNavbar.bottom)} with it and ${Math.round(withoutNavbar.bottom)} without,`
+      + ` a move of ${moved}px against the 1.35px fallback artefact the gate names. Removing it does`
+      + ` not hand the surface the screen — the positioner falls back to a hardcoded 50px of guessed`
+      + ` chrome — so the sign is the one a check written from intuition would get backwards.`
+      + ` Restored to ${Math.round(restored.bottom)}, because a gate that leaves the page it`
+      + ` measured in a different state has broken every check after it`,
+  });
+
   // ── the two grab bands, against one constant instead of two literals ──
   //
   // Both bands were already measured, in different sections, against independent literals: 44px on

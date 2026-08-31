@@ -1,7 +1,7 @@
 {
-  "measuredAt": "2026-08-31T23:21:28.848Z",
+  "measuredAt": "2026-08-31T23:48:58.540Z",
   "inputs": {
-    "styles.css": "3c11e032ebb8",
+    "styles.css": "a4bb85a2e2ab",
     "tools/live/view-census.mjs": "f911f2e4a8cb",
     "tools/screenshots/scenarios.mjs": "1395f2dacbfd"
   },
@@ -361,9 +361,9 @@
   ],
   "totals": {
     "fixtures": 59,
-    "escaping": 568,
+    "escaping": 569,
     "growing": 264,
-    "scrolling": 304,
+    "scrolling": 305,
     "rhythmGroups": 20,
     "ragged": 0,
     "probeBlind": 0
@@ -776,7 +776,7 @@
       "tag": "div",
       "cls": "db-list",
       "parentCls": "note-database-container.db-width-default",
-      "by": 386,
+      "by": 428,
       "scrolls": true
     },
     {
@@ -3406,7 +3406,7 @@
       "tag": "div",
       "cls": "db-list",
       "parentCls": "note-database-container.db-width-default",
-      "by": 304,
+      "by": 346,
       "scrolls": true
     },
     {
@@ -5127,6 +5127,16 @@
       "cls": "db-board-column-header",
       "parentCls": "db-board-column",
       "by": 8,
+      "scrolls": true
+    },
+    {
+      "width": 768,
+      "fixture": "list-sparse-fields",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-list",
+      "parentCls": "note-database-container.db-width-default",
+      "by": 4,
       "scrolls": true
     },
     {

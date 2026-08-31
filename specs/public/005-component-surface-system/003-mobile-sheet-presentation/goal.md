@@ -31,9 +31,13 @@ folder does not carry evidence for, and the harness-dependence audit below is wh
 have a number are still open.*
 
 - [ ] `elementFromPoint(centreX, navbarCentreY)` returns the sheet. **Today: returns
-      `.mobile-navbar` even at 9999.** **The number is green and the audit disowns it:** it is
-      measured against a hand-written `<div class="mobile-navbar" height:72px>` with no `app.css`
-      rule, no stacking context and no z-index — a stand-in a body portal beats almost by default.
+      `.mobile-navbar` even at 9999.** **The audit's objection is now half answered and half
+      standing, so this stays open.** The gate below proves the harness navbar is load-bearing for
+      the BOUNDS — the positioner reads its measured height and moves 22px without it. That is not
+      the same claim as stacking: the hand-written div carries `z-index: 100` and no `app.css` rule,
+      so what a hit test over it proves is that the plugin's declared z-index beats 100, not that it
+      beats Obsidian's own navbar. Two different properties of one element, and only one of them is
+      now evidenced.
 - [x] Sheet bottom equals viewport bottom, offset 0px, for **both** mechanisms. **Today 49px vs
       0px.** **Met on both** — the panel path and the menu path are asserted in one check that
       compares them against each other, so a surface that docks correctly alone cannot pass while
@@ -47,8 +51,26 @@ have a number are still open.*
       silent, and both families of sheet now answer one keyboard identically.
 - [ ] Scrim covers the full viewport including the navbar band. **Same exposure as the first row:**
       the navbar it must cover is the harness's own div.
-- [ ] Removing the navbar from the harness moves an asserted number. **No control.** This row is the
-      one that would settle the two above it, and it has never been run.
+- [x] Removing the navbar from the harness moves an asserted number. **Run 2026-09-01, and it is
+      this packet's own gate rather than one of its tasks.** `plan.md` Phase 1 says it plainly:
+      *"Until removing the navbar from the harness moves an asserted number by more than the 1.35px
+      fallback artefact, no later claim in this spec means anything."*
+      → *removing the navbar from the harness moves an asserted number*: `the harness navbar measures
+      72px; the visible bounds end at 738 with it and 760 without, a move of 22px against the 1.35px
+      fallback artefact the gate names` — sixteen times the artefact, and restored afterwards,
+      because a gate that leaves the page in a different state has broken every check after it.
+      **The sign is the one intuition gets backwards.** Removing the navbar does not hand the surface
+      the screen: `getVisiblePopoverBounds` falls back to a hardcoded 50px of guessed chrome instead
+      of 72px of measured chrome. A check written against "no navbar means no inset" would pass on a
+      positioner that ignored the element entirely.
+      **Watched failing** with the positioner's `navbarHeight` pinned to the fallback: `a move of
+      0px`.
+      **Kept alongside the check that transcribes the arithmetic, deliberately.** Its neighbour
+      asserts `bounds.bottom === viewport - navbar - inset`, and this packet's plan says a later
+      phase deletes that subtraction outright so the sheet COVERS the navbar. On that day the
+      transcription reddens for an intended change and the obvious repair is to copy the new formula
+      across — after which it stops discriminating. The ablation asks only whether the element is
+      read, which is the right question on both sides of that change.
 - [ ] Plus the five stateful dimensions. **No mapping exists** for this packet.
 - [ ] The operator opens a sheet on their phone and it covers the nav bar. **Only the operator
       closes this.**

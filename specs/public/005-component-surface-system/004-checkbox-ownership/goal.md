@@ -44,9 +44,30 @@ why most of them are still open even where a number looks green.*
       `checkbox-inventory` reports the families; nothing asserts set equality of radius and box size
       per role, and a harness without `app.css` cannot tell a plugin box from a host one.
 - [ ] Appearance identical at all three mount points. **No check.**
-- [ ] Checked, indeterminate, disabled and focus each produce a measurable difference, per family.
-      **No check.** This is the "states with no visible difference" class, and it is the one a
-      capture can show but no capture asserts.
+- [x] Checked, indeterminate, disabled and focus each produce a measurable difference, per family.
+      **Built 2026-09-01, and it found one.** `checkbox-appearance` now drives all four states on one
+      representative per SHAPE — the shape is what a family shares, so running all 223 would report
+      the same four answers 223 times and hide which four they were — and reads a wide signature
+      (background, border, image, shadow, opacity), because a state may be drawn any of those ways
+      and the question is whether it is drawn at all.
+      `16x16 checked yes indeterminate yes disabled yes focus yes` · `18x18` same · `28x28` same ·
+      `34x18 checked yes indeterminate n/a disabled yes focus yes`.
+      **The toggle switch had no focus indicator at all**, where the three checkbox families each get
+      one from `.db-checkbox:focus-visible` — a keyboard user tabbing through a settings panel could
+      not see which switch they were on. Fixed with the same outline and ring, because the two are
+      the same control to a reader even though they are different shapes. Watched failing by renaming
+      the selector: `focus NO`.
+      **`indeterminate` is declared n/a for the switch**, named with its reason rather than filtered
+      out by a predicate wide enough to hide the next real one: `indeterminate` is a checkbox's third
+      value and a toggle is binary by construction.
+      **The finding almost went the other way, and that is worth more than the fix.** The first run
+      reported the switch with no checked, indeterminate OR focus state. The cause was the pass
+      reading a signature in the same tick as the state change, while the switch's `0.15s`
+      background transition was still running — the other three families change `background-image`,
+      which has no transition, which is why exactly one family lied. A theme root, a `:checked` match
+      and a pseudo-element read all had to be ruled out first. Recording it as written would have
+      been a fabricated defect in a shipped control, and the mitigation is now in the tool: that pass
+      disables transitions and says why.
 - [ ] Unchanged under three third-party themes, at least one that restyles native checkboxes.
       **Unreachable here.** No harness in this repository loads a third-party theme.
 - [x] Hit target ≥ 28×28 on coarse pointer, per family. **Measured with the pointer mode that

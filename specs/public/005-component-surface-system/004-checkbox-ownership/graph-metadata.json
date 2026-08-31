@@ -210,7 +210,7 @@
     ],
     "causal_summary": "The operator sees round checkboxes everywhere, and the previous fix was real",
     "created_at": "2026-08-29T12:45:04.669Z",
-    "last_save_at": "2026-08-31T23:35:28.853Z",
+    "last_save_at": "2026-08-31T23:47:50.843Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -221,13 +221,13 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:65afda072f8259385ca58bbb792e4ea551431802fe984dd9062810d8db7ec244",
+    "source_fingerprint": "sha256:7d0a29437351f490071406744d921008498045adc6f80741d7c1f949362996cc",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "923a75ddb754e4152ba4b6ac88ece12a5175a54de16513a7114bfbf4c069de7e",
+      "spec.md": "69b007530875c238f145678175607f00169c826a93cee08b8dc08fee71c2aa74",
       "plan.md": "80c573fa940c99fecd7c0572f9a96a1039302d82eca13f4d378af8efe63facb3",
       "tasks.md": "b2a4927e073ff8e2750218a6a6a1b1c35d01fdfa9ab6b59fdee33a79aed39bbe",
-      "implementation-summary.md": "88c9a8fd075fcd405f1e39d6f2fbe1892c84ee20771174e71a40f2ef1454941f"
+      "implementation-summary.md": "d79858877a18af728a28dd4501f610f09c013f805491d2efc48b18c4aa6e8c5d"
     },
     "last_active_child_id": null,
     "last_active_at": null

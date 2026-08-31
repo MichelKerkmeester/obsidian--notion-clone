@@ -208,7 +208,7 @@
     ],
     "causal_summary": "The sheet starts above the Obsidian bottom navigation bar instead of covering it",
     "created_at": "2026-08-29T12:41:53.187Z",
-    "last_save_at": "2026-08-31T23:35:26.619Z",
+    "last_save_at": "2026-08-31T23:47:48.368Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -219,13 +219,13 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:475d0e263166c0cc4fc2cb775ff602166bbef309309bcf6430a45c02e75d8348",
+    "source_fingerprint": "sha256:c24745bf3350474402dd1b550d732c87e7ed773a66d41fa2610f53ef72ad58e7",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "b45d166d407d824e1b2b808b7f066f4747e155f7d71e5a8e4cc4d95ee808ed42",
+      "spec.md": "f7a43c750b9796e4ef1ff9f62da3abcbd3ddfb6ab4b81a1ee62256bb79c01325",
       "plan.md": "0ef850a840ccabeab5fa2f1318ec826096a89f85123882e01a2ee03461e0b1f2",
       "tasks.md": "cba391fa41445013c4db9856026b63561e2c04607c1732227e53070cd9eca38c",
-      "implementation-summary.md": "ca3f4f00bd52d3065eefc616c988689ad76f038d0ca741e4f31ead792df51019"
+      "implementation-summary.md": "8a9549113ff73266ff860371711ab6a1a63517b25ce35ededefd7f25c0539bbf"
     },
     "last_active_child_id": null,
     "last_active_at": null

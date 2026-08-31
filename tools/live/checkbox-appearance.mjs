@@ -183,8 +183,6 @@ for (const scenario of scenarios) {
   rows.push(...found);
 }
 
-await browser.close();
-
 // ───────────────────────────────────────────────────────────────────
 // 5. REPORT
 // ───────────────────────────────────────────────────────────────────
@@ -231,6 +229,123 @@ if (ancestorOwned.length) {
   console.log("");
 }
 
+// ───────────────────────────────────────────────────────────────────
+// STATES: does each one look different, per family
+// ───────────────────────────────────────────────────────────────────
+//
+// Everything above measures a checkbox at rest. A box that owns its appearance, clears the touch
+// floor and shares a shape with its family can still be indistinguishable once it is checked — and
+// a control whose states look the same is a control that reports nothing, which no capture catches
+// because a capture shows one state at a time.
+//
+// One representative per SHAPE, not per scenario. The shape is what the family shares, so a state
+// difference established on one 16x16 box holds for the other 139; running all 223 would report the
+// same four answers 223 times and hide which four they were.
+//
+// The signature is deliberately wide — background, border, image, shadow, opacity — because a state
+// may be drawn any of those ways and this asks whether it is drawn AT ALL, not how. `indeterminate`
+// is compared against checked as well as against rest: a build that drew them identically would
+// satisfy "differs from rest" twice while showing the reader one thing for two states.
+const stateFamilies = new Map();
+for (const r of owned) {
+  const key = `${r.measured.width}x${r.measured.height} r=${r.measured.radius}`;
+  if (!stateFamilies.has(key)) stateFamilies.set(key, r);
+}
+
+const statePage = await browser.newPage({ viewport: { width: 1200, height: 900 }, reducedMotion: "reduce" });
+// The theme class matters here and nowhere above: the resting measurements read `appearance`,
+// radius and size, none of which touch a host variable, while every state rule is written in terms
+// of `--interactive-accent`. On a page with no theme root those resolve to nothing, every state
+// computes the resting value, and this pass reports four families with no visible states — a
+// harness gap wearing the costume of the exact defect it was built to find.
+await statePage.setContent('<html class="theme-light"><body class="theme-light"><div id="shot"></div></body></html>');
+for (const content of [styles, theme, runtime]) await statePage.addStyleTag({ content });
+// Transitions off, and this is not tidiness. The switch declares
+// `transition: background-color 0.15s, border-color 0.15s`, so a signature read in the same tick as
+// `checked = true` reports the RESTING colours — and the pass then says a switch has no checked
+// state at all. It said exactly that, and the claim survived a theme root, a `:checked` match and a
+// pseudo-element read before the transition turned out to be the cause. The other three families
+// change `background-image` instead, which has no transition, which is why only one family lied.
+//
+// Reading the settled value is the right answer rather than waiting 150ms per state: what a reader
+// sees is where the state lands, not the frames on the way.
+await statePage.addStyleTag({ content: "*, *::before, *::after { transition: none !important; animation: none !important; }" });
+
+const stateResults = await statePage.evaluate((families) => {
+  const host = document.getElementById("shot");
+  const signature = (el) => {
+    const s = getComputedStyle(el);
+    return [s.backgroundColor, s.borderColor, s.backgroundImage, s.boxShadow, s.opacity].join(" | ");
+  };
+  return families.map((family) => {
+    const wrap = document.createElement("div");
+    wrap.className = family.chainClass;
+    host.appendChild(wrap);
+    const box = document.createElement("input");
+    box.type = "checkbox";
+    box.className = family.classes.join(" ");
+    wrap.appendChild(box);
+    const rest = signature(box);
+    box.checked = true;
+    const checked = signature(box);
+    box.checked = false;
+    box.indeterminate = true;
+    const indeterminate = signature(box);
+    box.indeterminate = false;
+    box.disabled = true;
+    const disabled = signature(box);
+    box.disabled = false;
+    box.focus();
+    const focused = signature(box);
+    box.blur();
+    wrap.remove();
+    return {
+      shape: family.shape,
+      classes: family.classes,
+      checkedDiffers: checked !== rest,
+      indeterminateDiffers: indeterminate !== rest && indeterminate !== checked,
+      disabledDiffers: disabled !== rest,
+      focusDiffers: focused !== rest,
+      rest,
+    };
+  });
+}, [...stateFamilies].map(([shape, r]) => ({
+  shape,
+  classes: r.classes,
+  chainClass: r.chain[r.chain.length - 1] || "note-database-container",
+})));
+await statePage.close();
+await browser.close();
+
+/**
+ * A switch has no indeterminate state, and that is a fact about the control rather than a gap.
+ *
+ * Declared the way the touch-target census declares its exempt controls: named, with the reason,
+ * rather than filtered out by a predicate wide enough to hide the next real one. `indeterminate` is
+ * a checkbox's third value; a toggle is binary by construction and drawing a third state on it would
+ * be inventing an affordance nothing sets.
+ */
+const NO_INDETERMINATE = ["db-toggle-switch"];
+const exemptFromIndeterminate = (r) => r.classes.some((c) => NO_INDETERMINATE.includes(c));
+
+const stateFailures = stateResults.filter((r) =>
+  !r.checkedDiffers || !r.disabledDiffers || !r.focusDiffers
+  || (!r.indeterminateDiffers && !exemptFromIndeterminate(r)));
+
+console.log(`  states, one representative per shape (${stateResults.length} families):`);
+for (const r of stateResults) {
+  const mark = (ok) => (ok ? "yes" : "NO ");
+  console.log(`    ${r.shape.padEnd(28)} checked ${mark(r.checkedDiffers)}`
+    + `  indeterminate ${exemptFromIndeterminate(r) ? "n/a" : mark(r.indeterminateDiffers)}`
+    + `  disabled ${mark(r.disabledDiffers)}`
+    + `  focus ${mark(r.focusDiffers)}`);
+}
+if (stateFailures.length) {
+  console.log("  A STATE THAT LOOKS LIKE ANOTHER STATE reports nothing to the reader, and no capture");
+  console.log("  catches it, because a capture shows one state at a time.\n");
+}
+console.log("");
+
 stamp("tools/live/checkbox-appearance.json", {
   totals: {
     checkboxes: boxes.length,
@@ -241,7 +356,10 @@ stamp("tools/live/checkbox-appearance.json", {
     tokenDependent: tokenDependent.length,
     platformBox: platform.length,
     distinctShapes: shapes.size,
+    stateFamilies: stateResults.length,
+    stateFailures: stateFailures.length,
   },
   shapes: Object.fromEntries(shapes),
+  states: stateResults,
   rows,
 }, ["styles.css", "tools/live/checkbox-appearance.mjs", "tools/screenshots/scenarios.mjs"]);

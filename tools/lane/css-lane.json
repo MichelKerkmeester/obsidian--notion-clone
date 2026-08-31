@@ -1,7 +1,7 @@
 {
   "holder": null,
-  "acquiredAt": "2026-09-01T03:55:00Z",
-  "baselineHash": "3c11e032ebb8",
+  "acquiredAt": "2026-09-01T04:45:00Z",
+  "baselineHash": "a4bb85a2e2ab",
   "baselineCommit": "3990be47b525",
   "history": [
     {
@@ -673,6 +673,27 @@
       "at": "2026-09-01T03:55:00Z",
       "hash": "3c11e032ebb8",
       "note": "Recaptured and reviewed. 20 captures moved, all of them mobile: the filter panels, the record sheet and the list rows were opened and read, and the raised controls sit correctly with no row growing to meet them. Desktop is untouched by construction — the rule is inside a coarse-pointer media block — and the desktop captures that moved are the same unexplained machine-level churn the previous four releases recorded, not this edit. Per-image operator sign-off still owed, as for every prior release."
+    },
+    {
+      "event": "acquire",
+      "phase": "004-checkbox-ownership",
+      "at": "2026-09-01T04:30:00Z",
+      "hash": "3c11e032ebb8",
+      "note": "Taken for a state this packet's own criterion asks about and nothing measured: 'checked, indeterminate, disabled and focus each produce a measurable difference, per family'. The pass built to answer it found the toggle switch reading byte-identical focused and at rest across background, border, image, shadow and opacity — no focus indicator at all, where the three checkbox families each get one from .db-checkbox:focus-visible."
+    },
+    {
+      "event": "edit",
+      "phase": "004-checkbox-ownership",
+      "at": "2026-09-01T04:32:00Z",
+      "hash": "a4bb85a2e2ab",
+      "note": "One rule: .db-toggle-switch:focus-visible, the same outline and ring the checkbox carries, because they are the same control to a reader even though they are different shapes. Watched failing by renaming the selector: the family reads 'focus NO'. THE FINDING ALMOST WENT THE OTHER WAY. The first run reported the switch with no checked, indeterminate or focus state, and the cause was the pass reading a signature in the same tick as the state change while the switch's 0.15s background transition was still running — the other three families change background-image, which has no transition, so only one family lied. Transitions are now disabled for that pass. A theme root, a :checked match and a pseudo-element read all had to be ruled out first, and recording it as a product defect would have been a fabricated bug in a shipped control."
+    },
+    {
+      "event": "release",
+      "phase": "004-checkbox-ownership",
+      "at": "2026-09-01T04:45:00Z",
+      "hash": "a4bb85a2e2ab",
+      "note": "Recaptured and reviewed. A focus ring is a :focus-visible state and no capture holds focus, so no PNG moves for this edit and none did beyond the usual churn — which is itself worth stating rather than presenting an unchanged capture set as sign-off. The state pass is the evidence here, and it is in the tool rather than in a picture. Per-image operator sign-off still owed, as for every prior release."
     }
   ],
   "outstanding": [
