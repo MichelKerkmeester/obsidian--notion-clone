@@ -73,6 +73,53 @@ const COLUMN_DEFS = [
 // ───────────────────────────────────────────────────────────────────
 
 /**
+ * The record's note body, as it sits under the properties.
+ *
+ * The inner markup is a stand-in and is worth being explicit about: at runtime Obsidian's own
+ * `MarkdownRenderer` fills this element, and it has no standalone build, so nothing in this
+ * repository can photograph its real output. These are the block elements it emits, hand-written,
+ * which is enough to photograph the region's spacing, its separator and its type — and is not
+ * evidence that a link, an embed or a task checkbox renders. That is device-verified only.
+ */
+const BODY_RENDERED = `
+          <div class="db-record-detail-body">
+            <div class="db-record-detail-body-rendered" tabindex="0">
+              <h3>Cancellation</h3>
+              <p>Cancel before the renewal date or it bills for another year.</p>
+              <ul><li>Support answer on weekdays only</li><li>Keep the receipt</li></ul>
+            </div>
+          </div>`;
+
+/** The phone sheet with its header and properties, wrapped around whichever body state is shown. */
+function sheetWithBody(bodyHtml) {
+  const row = ROWS[1];
+  const closeGlyph = glyph('<path d="M18 6 6 18M6 6l12 12"/>');
+  const field = (col, value, valueClass = "") => `
+        <div class="db-record-detail-field" data-note-database-column-key="${col.key}" role="gridcell">
+          <span class="db-record-detail-field-label">${col.label}</span>
+          <div class="db-board-card-value${valueClass ? ` ${valueClass}` : ""}">${value}</div>
+        </div>`;
+  const badge = (text, tone) => `<span class="status-badge status-color-${tone}" title="${text}">${text}</span>`;
+  return `
+      <div class="note-database-container db-width-default">
+        <div class="db-record-detail-panel db-anchored-popover db-mobile-bottom-sheet is-visible" role="dialog" aria-modal="true" aria-label="${row.name}">
+          <div class="db-mobile-bottom-sheet-handle" aria-hidden="true"></div>
+          <div class="db-record-detail-header">
+            <div class="db-record-detail-title">${row.name}</div>
+            <button type="button" class="db-board-card-open" aria-label="Open note">${I.maximize2}</button>
+            <button type="button" class="db-cell-edit-close" aria-label="Close">${closeGlyph}</button>
+          </div>
+          <div class="db-record-detail-fields">
+            ${field(COLUMN_DEFS[1], row.cost, "db-card-field-number")}
+            ${field(COLUMN_DEFS[2], badge(row.cycle, "orange"))}
+            ${field(COLUMN_DEFS[4], row.renew, "db-date-value")}
+          </div>
+${bodyHtml}
+        </div>
+      </div>`;
+}
+
+/**
  * The button `createDropdownField` builds. `hideLabel` is set at every call site in these
  * panels, so the label span is absent and only the value span is rendered; `has-current-icon`
  * is present exactly when the selected option carries an icon, because that is the class the
@@ -387,8 +434,12 @@ export const PANEL_SCENARIOS = [
     title: "Record detail panel",
     group: "panels",
     width: 392,
-    sources: ["src/views/record-detail-panel.ts", "src/views/card-field-renderer.ts"],
-    note: "Opened from a calendar or timeline event card. Fields are click-to-edit; an empty field only appears when the view asks for empty properties.",
+    sources: [
+      "src/views/record-detail-panel.ts",
+      "src/views/card-field-renderer.ts",
+      "src/views/note-body-region.ts",
+    ],
+    note: "Opened from a calendar or timeline event card. Fields are click-to-edit; an empty field only appears when the view asks for empty properties. The note body sits last, under the properties. What is photographed there is hand-written markup standing in for Obsidian's renderer output — the real MarkdownRenderer has no standalone build, so no capture in this repository can show it.",
     // This panel is the exception in this family: nothing in the stylesheet positions it, so
     // it is already in flow here — `positionToolbarPopover` is what makes it fixed at
     // runtime. Only the 60vh cap is lifted, and the panel keeps its --db-layer-panel z-index,
@@ -420,6 +471,7 @@ export const PANEL_SCENARIOS = [
               <div class="db-board-card-value db-card-empty-placeholder">Empty</div>
             </div>
           </div>
+          ${BODY_RENDERED}
         </div>
       </div>`;
     },
@@ -430,8 +482,13 @@ export const PANEL_SCENARIOS = [
     group: "panels",
     width: 402,
     capture: "viewport",
-    sources: ["src/views/record-detail-panel.ts", "src/views/popover-position.ts", "src/views/card-field-renderer.ts"],
-    note: "The phone form of the record detail panel. positionToolbarPopover renders it as a bottom sheet with a grab handle; a permanent close button (reusing db-cell-edit-close) and drag-down on the handle dismiss it where the desktop panel relies on Escape and outside-click. Captured in viewport mode so the fixed sheet docks at the bottom.",
+    sources: [
+      "src/views/record-detail-panel.ts",
+      "src/views/popover-position.ts",
+      "src/views/card-field-renderer.ts",
+      "src/views/note-body-region.ts",
+    ],
+    note: "The phone form of the record detail panel. positionToolbarPopover renders it as a bottom sheet with a grab handle; a permanent close button (reusing db-cell-edit-close) and drag-down on the handle dismiss it where the desktop panel relies on Escape and outside-click. Captured in viewport mode so the fixed sheet docks at the bottom. The note body is the last group, below the properties.",
     html: () => {
       const row = ROWS[1];
       const closeGlyph = glyph('<path d="M18 6 6 18M6 6l12 12"/>');
@@ -457,9 +514,42 @@ export const PANEL_SCENARIOS = [
             ${field(COLUMN_DEFS[4], row.renew, "db-date-value")}
             ${field(COLUMN_DEFS[5], badge(row.category, "blue"))}
           </div>
+          ${BODY_RENDERED}
         </div>
       </div>`;
     },
+  },
+  {
+    id: "panel-record-detail-sheet-body-editing",
+    title: "Record detail — note body being typed",
+    group: "panels",
+    width: 402,
+    capture: "viewport",
+    sources: ["src/views/record-detail-panel.ts", "src/views/note-body-region.ts"],
+    note: "Tapping the rendered body swaps it for a textarea. The box grows to its content rather than scrolling inside itself, because the sheet is already a scroll container. What a capture cannot show is the software keyboard: the sheet lifts and shortens against --db-keyboard-inset only when one is open, and no capture has one, so this is the editor at an inset of zero. Focus and the keyboard-avoided sheet are device-verified.",
+    // The height is pinned to the content because nothing runs the auto-fit here. It is the height
+    // `fit()` would set at this width, so the capture shows a box that ends where its text does —
+    // which is the shipped behaviour. A box that clipped its own last line would photograph a
+    // defect this editor does not have.
+    html: () => sheetWithBody(`
+          <div class="db-record-detail-body is-editing">
+            <textarea class="db-record-detail-body-editor" rows="1" style="height: 138px;">## Cancellation
+
+Cancel before the renewal date or it bills for another year. Support answer on weekdays.</textarea>
+          </div>`),
+  },
+  {
+    id: "panel-record-detail-sheet-body-empty",
+    title: "Record detail — note body not written yet",
+    group: "panels",
+    width: 402,
+    capture: "viewport",
+    sources: ["src/views/record-detail-panel.ts", "src/views/note-body-region.ts"],
+    note: "A record whose note has frontmatter and nothing else. One faint line rather than an empty box: without an affordance the records most in need of a body would be exactly the ones that could not be given one.",
+    html: () => sheetWithBody(`
+          <div class="db-record-detail-body">
+            <div class="db-record-detail-body-rendered is-empty" tabindex="0">Write a note…</div>
+          </div>`),
   },
   {
     id: "panel-record-peek",

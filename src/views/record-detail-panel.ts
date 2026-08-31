@@ -16,7 +16,7 @@
 // 1. IMPORTS
 // ───────────────────────────────────────────────────────────────────
 
-import { App, setIcon, setTooltip } from "obsidian";
+import { App, Component, MarkdownRenderer, setIcon, setTooltip } from "obsidian";
 import { isObsidianTagsKey, resolveOptionDisplay, toBooleanValue, toMultiSelectValuesForKey } from "../data/column-types";
 import { getColumnDisplayType, getNumberDisplayStyle } from "../data/column-display";
 import { formatDateValueDisplay, formatDateTimeValueDisplay } from "../data/date-time-format";
@@ -42,6 +42,8 @@ import { renderDelayedExternalLink } from "./cell-renderer";
 import { renderCardField } from "./card-field-renderer";
 import { createCheckbox } from "./checkbox";
 import { applySheetChrome, attachSheetDragToDismiss } from "./mobile-bottom-sheet";
+import { mountNoteBodyRegion } from "./note-body-region";
+import type { NoteBodyRegion } from "./note-body-region";
 import { trapFocus } from "./interaction-scope";
 
 /**
@@ -75,6 +77,10 @@ export interface RecordDetailActions {
   openRow: (row: RowData) => void;
   renderRecordIcon?(parent: HTMLElement, row: RowData, config: ViewConfig, compact?: boolean): HTMLElement | null;
   applyConditionalFormat?(element: HTMLElement, row: RowData, config: ViewConfig, targetField?: string): void;
+  /** The record's markdown body. Absent means the panel shows properties only, as it always did. */
+  readNoteBody?: (row: RowData) => Promise<string>;
+  /** Persist a new body. Serialization against the frontmatter writes is the implementer's job. */
+  saveNoteBody?: (row: RowData, body: string) => void | Promise<void>;
   isReadOnly?: boolean;
 }
 
@@ -114,6 +120,10 @@ const RECORD_DETAIL_CHILD_POPOVER_SELECTOR = [
 
 function isRecordDetailChildPopoverTarget(target: EventTarget | null): boolean {
   return isElement(target) && Boolean(target.closest(RECORD_DETAIL_CHILD_POPOVER_SELECTOR));
+}
+
+function isBodyEditorTarget(target: EventTarget | null): boolean {
+  return isElement(target) && Boolean(target.closest(".db-record-detail-body-editor"));
 }
 
 // ───────────────────────────────────────────────────────────────────
@@ -161,9 +171,21 @@ export function openRecordDetailPanel(opts: OpenRecordDetailOptions): void {
   let closed = false;
   let removeFocusTrap: () => void = () => undefined;
   let removeSheetDrag: () => void = () => undefined;
+  // The body is read once for the record that was opened, never for the rows merely listed behind
+  // it, so a file read never lands in the row pipeline.
+  let bodyRegion: NoteBodyRegion | null = null;
+  let bodyText: string | null = null;
+  let resumeCaret: number | null = null;
+  // Loaded, not merely constructed. `MarkdownRenderer.render` hangs the render children that drive
+  // embeds and transclusions off this component, and an unloaded parent never loads them.
+  const bodyLifetime = actions.readNoteBody ? new Component() : null;
+  bodyLifetime?.load();
   const close = (): void => {
     if (closed) return;
     closed = true;
+    bodyRegion?.destroy();
+    bodyRegion = null;
+    bodyLifetime?.unload();
     removeFocusTrap();
     removeSheetDrag();
     // Unwind the sheet before dropping the node. The backdrop is a body-level sibling, not a child,
@@ -190,6 +212,10 @@ export function openRecordDetailPanel(opts: OpenRecordDetailOptions): void {
     if (event.key === "Escape") {
       // 嵌套编辑器拥有第一层 Escape：先关闭/取消编辑器，详情面板继续保留。
       if (isRecordDetailChildPopoverTarget(event.target)) return;
+      // The body editor is a child of the panel rather than a popover beside it, so it needs
+      // naming here too. This listener is registered in the capture phase, which runs before the
+      // textarea's own handler — stopping propagation down there could never have reached it.
+      if (isBodyEditorTarget(event.target)) return;
       // 焦点留在触发按钮时（如记录图标按钮打开 IconPickerPopover），event.target 不在白名单内。
       // 收窄到图标/颜色选择器（会留焦点的嵌套浮层），避免其他位置同类浮窗误命中。
       if (window.activeDocument.querySelector(".db-icon-picker-popover, .db-color-picker-popup")) return;
@@ -197,10 +223,74 @@ export function openRecordDetailPanel(opts: OpenRecordDetailOptions): void {
       close();
     }
   };
-  const onResize = (): void => close();
+  const onResize = (): void => {
+    // A software keyboard appearing resizes the window on some platforms, and this listener's job
+    // is to dismiss a panel whose anchor has moved out from under it. Those two collide the moment
+    // the body becomes editable: the sheet would close on the first tap into the editor, on exactly
+    // the surface the editor exists for. The sheet re-places itself against the keyboard inset
+    // already, so there is nothing here for it to escape.
+    if (bodyRegion?.isEditing()) return;
+    close();
+  };
+
+  /**
+   * Take the body region down, keeping whatever is in it.
+   *
+   * A view re-render empties the panel, which would otherwise destroy a textarea the user is
+   * typing into — losing the uncommitted text and the caret with it. That is the same defect the
+   * grab bar and the drag gesture were both fixed for on this surface: a child destroyed by a
+   * refresh that does not know it is there. Here the draft outlives the node.
+   */
+  const teardownBody = (): void => {
+    if (!bodyRegion) return;
+    if (bodyRegion.isEditing()) resumeCaret = bodyRegion.caret();
+    bodyText = bodyRegion.draft();
+    bodyRegion.destroy();
+    bodyRegion = null;
+  };
+
+  /** Mount the body under the properties, resuming an interrupted edit where it left off. */
+  const mountBody = (r: RowData): void => {
+    const save = actions.saveNoteBody;
+    if (bodyText === null || closed || !bodyLifetime) return;
+    bodyRegion = mountNoteBodyRegion({
+      parent: panel,
+      body: bodyText,
+      readOnly: actions.isReadOnly || !save,
+      placeholder: t("panel.noteBodyPlaceholder"),
+      renderMarkdown: (target, markdown) => {
+        void MarkdownRenderer.render(app, markdown, target, r.file.path, bodyLifetime);
+      },
+      onCommit: (next) => {
+        bodyText = next;
+        void save?.(r, next);
+      },
+    });
+    if (resumeCaret === null) return;
+    bodyRegion.beginEdit(resumeCaret);
+    resumeCaret = null;
+  };
+
+  /** Read the body for the opened record. Skipped while editing, so a refresh cannot clobber a draft. */
+  const loadBody = (r: RowData): void => {
+    const read = actions.readNoteBody;
+    if (!read || bodyRegion?.isEditing()) return;
+    void read(r).then((text) => {
+      if (closed || bodyRegion?.isEditing() || text === bodyText) return;
+      // Teardown first. It carries the mounted region's own draft back into bodyText, so assigning
+      // the freshly read text before it would hand the file's contents straight back to the value
+      // it was meant to replace.
+      teardownBody();
+      bodyText = text;
+      mountBody(r);
+    }).catch((err) => {
+      console.error("Note Database: failed to read the record's note body", err);
+    });
+  };
 
   // 渲染面板内容（title + fields + footer）；抽成函数以支持 re-render 后局部刷新（常驻编辑）
   const renderContent = (r: RowData): void => {
+    teardownBody();
     panel.empty();
     // Put the sheet's grab bar back, because emptying the panel just threw it away.
     //
@@ -265,9 +355,12 @@ export function openRecordDetailPanel(opts: OpenRecordDetailOptions): void {
       if (empty && config.showEmptyFields !== true) continue;
       renderRecordField(fieldsEl, r, col, config, app, actions);
     }
+    // Last, so the body reads as the note under its properties rather than as another property.
+    mountBody(r);
   };
 
   renderContent(row);
+  loadBody(row);
   removeFocusTrap = trapFocus(panel);
   panel.focus?.({ preventScroll: true });
   // 定位（复用 positionToolbarPopover：挂载点选择 / 视口夹取 / 翻转 / 移动端留白）
@@ -294,7 +387,12 @@ export function openRecordDetailPanel(opts: OpenRecordDetailOptions): void {
   currentPanel = {
     filePath: row.file.path,
     close,
-    refreshFields: (newRow: RowData) => renderContent(newRow),
+    refreshFields: (newRow: RowData) => {
+      renderContent(newRow);
+      // Picks up a body edited in Obsidian while the panel was open. `loadBody` declines while the
+      // editor is active, so a refresh arriving mid-sentence does not overwrite what is being typed.
+      loadBody(newRow);
+    },
   };
 }
 

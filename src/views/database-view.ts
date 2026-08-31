@@ -11471,6 +11471,11 @@ export class DatabaseView extends FileView {
         renderRecordIcon: (parent, r, view, compact) => this.renderRowRecordIcon(parent, r, view, compact),
         applyConditionalFormat: (element, r, view, targetField) =>
           applyConditionalFormat(element, r, view, this.getActiveDb(), targetField),
+        readNoteBody: (r) => this.dataSource.readNoteBody(r.file),
+        // Through the DataSource, so the whole-file write is serialized against the frontmatter
+        // writes on the same path rather than racing them.
+        saveNoteBody: (r, body) =>
+          this.dataSource.updateNoteBody(r.file, body, { sourceInstanceId: this.instanceId }),
         isReadOnly: false,
       },
     });

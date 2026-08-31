@@ -37,6 +37,7 @@ import type { ReportsComputedConfigOptions, ReportsComputedConfigResult } from "
 import { parseUniqueIdConfig } from "./unique-id-stamp";
 import { parseConditionalFormats as parseConditionalFormatsValue } from "./conditional-format-parser";
 import { normalizeViewFilterTree } from "./view-filter-tree";
+import { composeNoteContent, splitNoteContent } from "./note-body";
 import { t } from "../i18n";
 
 // ───────────────────────────────────────────────────────────────────
@@ -361,6 +362,36 @@ export class DataSource {
         if (value === null) delete frontmatter[key];
         else frontmatter[key] = value;
       }
+    }, context);
+  }
+
+  /** Read a note's markdown body — everything below the frontmatter block. */
+  async readNoteBody(file: TFile): Promise<string> {
+    return splitNoteContent(await this.vault.cachedRead(file)).body;
+  }
+
+  /**
+   * Replace a note's markdown body, leaving its frontmatter exactly as it was found.
+   *
+   * This is the plugin's second writer onto a file it already writes, and the first one that
+   * rewrites the whole file rather than a set of frontmatter keys. Sitting outside the queue would
+   * be the same corruption `processFrontMatter` was serialized to prevent, reached from a direction
+   * the queue cannot see: a property edit and a body save landing together, each having read the
+   * file before the other wrote it, and the second overwriting the first.
+   *
+   * The read happens INSIDE the queued operation, not before it. Reading first and writing second
+   * would carry a snapshot taken before the preceding write into a file that no longer matches it,
+   * which is the same race with an extra step. Queueing also credits the path as plugin-owned, so
+   * the write does not come back as an external edit.
+   */
+  async updateNoteBody(file: TFile, nextBody: string, context?: DataWriteContext): Promise<void> {
+    return this.enqueueWrite(file.path, async () => {
+      const content = await this.vault.read(file);
+      const next = composeNoteContent(splitNoteContent(content), nextBody);
+      // An edit that settles back on what is already there writes nothing, so an open editor does
+      // not touch mtime on every debounce tick.
+      if (next === content) return;
+      await this.vault.modify(file, next);
     }, context);
   }
 
