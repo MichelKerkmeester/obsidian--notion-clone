@@ -22,6 +22,7 @@ import { t } from "../i18n";
 import { DatabaseViewState } from "./view-state-store";
 import { createMenuRow, createMenuSection, createMenuSeparator } from "./menu-row";
 import { COMPACT_MENU_POPOVER, positionToolbarPopover } from "./popover-position";
+import { applySheetChrome } from "./mobile-bottom-sheet";
 import { renderPropertyTypeIcon } from "./property-type-icon";
 import { getEffectiveFilterRules } from "../data/filter-rules";
 import { isImeComposing } from "../data/keyboard-utils";
@@ -1733,6 +1734,16 @@ export class ToolbarRenderer {
 
     const scrollTop = panel.scrollTop;
     panel.empty();
+    // Put the sheet's grab bar back, because emptying the panel just threw it away.
+    //
+    // The bar is chrome the sheet module adds as a child of this panel, and this function owns the
+    // panel's children — so a rebuild destroys a node it did not create and cannot see. Changing
+    // the grouping field rebuilds, which means using the sheet for its one purpose left it with no
+    // bar to grab and no visible way out. The gesture itself survives: its listeners are on the
+    // panel and it re-resolves the current bar when a press lands, so restoring the node is enough
+    // to make the drag reachable again. Re-applying is idempotent and only does anything once the
+    // surface is already a sheet, so desktop rebuilds are untouched.
+    if (panel.hasClass("db-mobile-bottom-sheet")) applySheetChrome(panel, true);
 
     const groupValue = this.resolveGroupValue(config, viewType, state);
 

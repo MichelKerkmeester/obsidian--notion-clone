@@ -62,9 +62,18 @@ _memory:
 
 ## PHASE 3: THE TWO DRAG CAUSES, SEPARATELY
 
-- [ ] **T4** Re-assert chrome after the group panel empties — REQ-002, D3.
+- [x] **T4** Re-assert chrome after the group panel empties — REQ-002, D3.
       *Evidence to close:* handle present after a group toggle; a 120px drag dismisses. Today the
       handle is absent and the drag moves 0.0px.
+      *Closed by:* one line in `rebuildGroupPopover`, guarded by a new `sheet-rebuild` gate lane
+      that constructs the real `ToolbarRenderer`, opens the group popover through the real
+      positioner and calls the real rebuild — the first check here that drives a renderer rather
+      than grepping its source. Observed red first on both halves: the bar went `before: true,
+      after: false`, and a real 120px pointer drag could not be staged at all. With the line, both
+      go green and a real drag dismisses the rebuilt sheet. The two mechanism cases (emptying
+      destroys the bar; re-asserting restores it) stay green either way, which is the asymmetry
+      that makes a false green hard to manufacture.
+      *Not closed by this:* the operator has not seen it (T10).
 - [ ] **T5** Register the header panels from a retained reference — REQ-003, D3.
       *Evidence to close:* under `is-phone`, `dismissPanel(panel, "programmatic")` returns true.
       Today it returns false.

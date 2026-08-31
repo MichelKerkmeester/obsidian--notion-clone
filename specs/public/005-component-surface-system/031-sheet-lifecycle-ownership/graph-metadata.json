@@ -198,7 +198,7 @@
     ],
     "causal_summary": "Every sheet has one owner for its whole life, so the scrim always comes down, the drag always survives a re-render, and no handle is drawn onto nothing.",
     "created_at": "2026-08-31T14:46:45.699Z",
-    "last_save_at": "2026-08-31T17:26:11.780Z",
+    "last_save_at": "2026-08-31T17:41:43.742Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -209,13 +209,13 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:8dae485688b47f629a076efa985e46c41ff15cc0a901b9bf454a12318d3aa68d",
+    "source_fingerprint": "sha256:c73c2da70fb2f772f08c0f8154f77a17896f4c6189db2a967905a9213b08646e",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "d2a24929f9209e1cb3715ee0a58a9912bfd66dc1f2c1444e6544c05832618df9",
+      "spec.md": "2846f4f64c605056ec1c6f015d54aff0125a2031f3c5d83fb090c2ec5bb0582b",
       "plan.md": "808630e42990ca0d3c2e6d1518e397c9a8d0dc31b665a6f35a80e4ddf59cf9c3",
-      "tasks.md": "edbb718048940feb13f98e4298415e44288b4e64c6bfa9d44e94bbf0d5f803d5",
-      "implementation-summary.md": "40b6e887a5cdee279e45167a1b952fef49163faab0346671fc9deb6fee6b4ebc"
+      "tasks.md": "98fc26a0aa3ad633ec6861244a704572aa66b1b3022b8d951f9563ccfbeea8f9",
+      "implementation-summary.md": "5140b7bd011a5382760e463ebf75a0e8f7833fb97bf240b5617e97ec2b0cc2f1"
     },
     "last_active_child_id": null,
     "last_active_at": null

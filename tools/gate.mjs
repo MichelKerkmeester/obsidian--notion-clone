@@ -71,6 +71,12 @@ const CHECKS = [
   // producer that cleaned up, and it removed leaked backdrops by hand so later checks could run.
   // This compares every producer against that reference in one run.
   { name: "sheet-teardown", cmd: ["node", "tools/live/sheet-teardown.mjs"] },
+  // The grab bar is a child of the sheet panel, so a surface that refreshes by emptying that
+  // panel throws its own bar away — and for the group sheet, changing the group IS the refresh,
+  // so using the surface for its one purpose left it with no visible way out. Unlike every other
+  // renderer check here, this one constructs the real renderer instead of grepping its source: a
+  // grep cannot tell a call that runs from a call behind a condition that is never true.
+  { name: "sheet-rebuild", cmd: ["node", "tools/live/sheet-rebuild.mjs"] },
 ];
 
 // ───────────────────────────────────────────────────────────────────

@@ -9,10 +9,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "public/005-component-surface-system/031-sheet-lifecycle-ownership"
-    last_updated_at: "2026-08-31T16:00:00Z"
-    last_updated_by: "phase-author"
-    recent_action: "Scrim leak fixed and guarded by a new gate lane; 2 of 6 criteria met"
-    next_safe_action: "T4, the group sheet: re-assert chrome after the panel empties"
+    last_updated_at: "2026-08-31T20:30:00Z"
+    last_updated_by: "phase-implementer"
+    recent_action: "Group sheet keeps its bar through a rebuild; drag measured with a real pointer"
+    next_safe_action: "T5, the view sheet: register it with the overlay stack from a retained reference"
     blockers: []
     key_files:
       - "spec.md"
@@ -67,7 +67,15 @@ defect in this phase is a consequence of that shape.
       check that **passes for the owned menu and fails for the panel families before the fix.**
       **Met.** The check was observed red with exactly that asymmetry, and red again when the whole
       pre-fix file was restored as a control.
-- [ ] The group sheet drags after a re-render: handle present, 120px drag dismisses. Today 0.0px.
+- [x] The group sheet drags after a re-render: handle present, 120px drag dismisses. Today 0.0px.
+      **Met.** Both halves measured on the real `ToolbarRenderer`, not on a model of it: the bar is
+      present after the real rebuild, and a real 120px pointer drag dismisses the rebuilt sheet.
+      Observed red first on both — pre-fix the bar went `after: false` and the drag could not be
+      staged at all.
+      *Correction:* the previous commit recorded this phase at "2 of 6 criteria" and
+      `completion_pct: 33` while only ONE criterion was ticked. That was a criterion ahead of the
+      evidence, counted from tasks (T1, T2) against a denominator of criteria. The figure is
+      honest as of this line and not before it.
 - [ ] A phone view sheet is in the overlay stack. Today `dismissPanel` returns false.
 - [ ] No sheet draws an unwired handle.
 - [ ] A flick dismisses.
@@ -82,8 +90,9 @@ defect in this phase is a consequence of that shape.
 
 Volatile. Not part of the directive.
 
-**Nothing has started.** Opened from a research pass that verified each finding against the shipped
-1.3.9 bundle rather than source alone.
+Opened from a research pass that verified each finding against the shipped 1.3.9 bundle rather than
+source alone. Findings 1 and 2 are now fixed and gated; 3, 4, 5 and 6 are untouched, and none of the
+six is device-confirmed.
 
 ### The six findings, ranked as delivered
 

@@ -1,0 +1,13 @@
+{
+  "measuredAt": "2026-08-31T17:42:39.502Z",
+  "inputs": {
+    "tools/live/sheet-rebuild.mjs": "92dbf9c0678a",
+    "tools/live/sheet-rebuild-harness.ts": "e5933e865dfd",
+    "src/views/toolbar-renderer.ts": "88fdd50cb460",
+    "src/views/popover-position.ts": "fcdb98617dae",
+    "src/views/mobile-bottom-sheet.ts": "40d1304a4614"
+  },
+  "cases": 4,
+  "barsLost": 0,
+  "dragDismissed": true
+}

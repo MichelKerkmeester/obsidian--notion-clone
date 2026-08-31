@@ -150,7 +150,38 @@ belong to `../028-remaining-freezes`.
 | The scrim fix hides a leak rather than removing it | Med | Assert absence of both scrim and sheet, not just the scrim |
 | Velocity dismissal makes accidental dismissal easier | Low | The gesture can only start on the grab target, so it cannot begin on scrollable content |
 | Fixing one drag cause is mistaken for fixing both | **High** | REQ-002 and REQ-003 are separate rows with separate evidence, deliberately |
+| The group sheet is fixed and the same shape is read as fixed everywhere | Med | It is not. An inventory of all 40 `.empty()` sites is below; two conditional cases remain |
 <!-- /ANCHOR:risks -->
+
+---
+
+<!-- ANCHOR:empty-inventory -->
+## 5a. WHO ELSE EMPTIES A SHEET PANEL
+
+REQ-002 was written as a one-line fix for one surface. Before taking that on trust, all 40
+`.empty()` call sites under `src/views/` were read to find out whether the same defect was
+sitting in others. It mostly was not, and the inventory is recorded so the next person does not
+have to redo it — and does not assume a wider fix landed than actually did.
+
+| Site | What it empties | Re-asserts chrome? |
+|---|---|---|
+| `toolbar-renderer.ts` group popover | the sheet panel | **No** — the defect. Fixed by T4 |
+| `toolbar-renderer.ts` database popover | the sheet panel | Yes, repositions unconditionally at the end |
+| `record-detail-panel.ts` `renderContent` | the sheet panel | Yes, explicit re-assert — the precedent T4 followed |
+| `icon-picker-popover.ts` `render` | the sheet panel | Yes, repositions unconditionally at the end |
+| `column-menu.ts` × 2 (number display, text render mode) | the sheet panel | **Only `if (anchorEl?.isConnected)`** |
+| filter / sort `renderSingleRuleEditor` | a rule-row child | n/a — the panel is untouched, and the enclosing re-render repositions |
+| `calendar-timeline-toolbar-renderer.ts` | a content child | n/a |
+| the other 30 | rows, lists, cells, labels | n/a |
+
+**The open one.** Both `column-menu.ts` rebuilds restore their chrome inside
+`if (anchorEl?.isConnected)`, and `anchorEl` is an optional parameter. A caller that omits it, or
+whose anchor has left the document by the time a rebuild runs, empties the panel and never puts the
+bar back — the exact T4 defect behind a condition. It is left open rather than fixed because
+whether either call path actually reaches a phone sheet without a live anchor is unknown, and
+guessing would add a line to a surface nobody has reported. Deciding it needs the device, which is
+T10's job anyway.
+<!-- /ANCHOR:empty-inventory -->
 
 ---
 

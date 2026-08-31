@@ -1,6 +1,6 @@
 ---
 title: "Implementation Summary: Sheet Lifecycle Ownership"
-description: "The backdrop leak is fixed and guarded by a new gate lane; the two drag causes and the dead handles remain."
+description: "The backdrop leak and the group sheet's vanishing grab bar are fixed and gated; the view sheet, the dead handles and flick dismissal remain."
 trigger_phrases:
   - "031 implementation summary"
   - "sheet teardown shipped"
@@ -9,10 +9,10 @@ contextType: "implementation"
 _memory:
   continuity:
     packet_pointer: "public/005-component-surface-system/031-sheet-lifecycle-ownership"
-    last_updated_at: "2026-08-31T19:00:00Z"
+    last_updated_at: "2026-08-31T20:45:00Z"
     last_updated_by: "phase-implementer"
-    recent_action: "Backdrop leak fixed; parity check observed red first and now a gate lane"
-    next_safe_action: "T4, the group sheet: re-assert chrome after the panel empties"
+    recent_action: "Group sheet keeps its bar through a rebuild; real-pointer drag measured"
+    next_safe_action: "T5, the view sheet: register it with the overlay stack from a retained reference"
     blockers:
       - "Nothing here is confirmed on the operator's device"
     key_files:
@@ -43,8 +43,8 @@ _memory:
 |---|---|
 | **Spec Folder** | 031-sheet-lifecycle-ownership |
 | **Level** | 2 |
-| **Status** | In progress — 2 of 6 criteria met, backdrop leak fixed and guarded |
-| **State** | Working tree; gate 17 green, exit 0. Not device-confirmed |
+| **Status** | In progress — 2 of 6 criteria met, backdrop leak and group-sheet bar both fixed and guarded |
+| **State** | Committed; gate 18 green, exit 0. Not device-confirmed |
 <!-- /ANCHOR:metadata -->
 
 ---
@@ -65,6 +65,26 @@ of them and would break again with the next producer. A caller that only does `.
 correct by construction.
 
 **A new gate lane, `sheet-teardown`**, takes the gate from 16 lanes to 17.
+
+### The group sheet keeps its bar (REQ-002)
+
+The grab bar is a child of the sheet panel, so a surface that refreshes by emptying that panel
+throws its own bar away. For the group sheet the refresh IS the feature — changing the group field
+rebuilds it — so using the surface for its one purpose left it with no visible way out.
+
+One line puts the chrome back, following the record panel's precedent. The gesture needed nothing:
+its listeners live on the panel, not the bar, and it re-resolves the current bar when a press lands,
+so restoring the node is enough to make the drag reachable again.
+
+**A second lane, `sheet-rebuild`**, takes the gate to 18. It is the first check here that
+constructs a real renderer instead of reading its source — it builds an actual `ToolbarRenderer`,
+opens the group popover through the actual positioner, calls the actual rebuild, and then drags the
+result with a **real pointer** rather than a synthetic event (the gesture calls `setPointerCapture`,
+which rejects a pointer id no real device owns).
+
+Before fixing it, all 40 `.empty()` sites under `src/views/` were read to find out whether the same
+defect sat in others. Mostly it did not — the inventory and the two conditional cases that remain
+are in `spec.md` §5a.
 <!-- /ANCHOR:what-built -->
 
 ---
@@ -97,8 +117,10 @@ packet's own lens turned on its own instrument.
 | The compounding failure is gone | A detached leak no longer blocks a later correct teardown |
 | Types | `npx tsc --noEmit` exit 0 |
 | Tests | `npx vitest run` — 531 passed, no reduction |
-| Gate | `npm run gate` — **17 green, exit 0**, read from `$?` |
+| Gate | `npm run gate` — **18 green, exit 0**, read from `$?` |
 | Captures | Recaptured and read; the owned menu sheet renders unchanged |
+| The rebuild check discriminates | Observed **red first** on both halves: bar `before: true, after: false`, and the drag could not be staged. Green with the fix, and a real 120px pointer drag dismisses the rebuilt sheet |
+| The rebuild check's premise holds | Its two mechanism cases (emptying destroys the bar; re-asserting restores it) stay green either way, so a green producer case cannot be a vacuous one |
 <!-- /ANCHOR:verification -->
 
 ---
@@ -117,7 +139,7 @@ report closes when they say it no longer does, and not before.
 ---
 
 <!-- ANCHOR:decisions -->
-## 5. DEVIATIONS, AND TWO ERRORS OF MINE
+## 5. DEVIATIONS, AND WHAT I GOT WRONG ALONG THE WAY
 
 | Item | Note |
 |---|---|
@@ -125,4 +147,7 @@ report closes when they say it no longer does, and not before.
 | Registration was in the wrong place first | It went in after the body move, which skips the early-return branch a body-mounted surface takes — so the owned menu, the one producer that behaves, would have been invisible to the watcher and could have had its backdrop pulled while still open. Caught by re-reading both branches |
 | The compounding test asserted the opposite of the truth | It re-attached its "leaked" panel to the body, which makes it an **open** sheet — and holding the backdrop up for an open sheet is correct. A detached leak is what `.remove()` produces, and the case now models that. The check was failing on a wrong expectation, not a wrong fix |
 | The watcher is asynchronous | `MutationObserver` fires as a microtask, so the check awaits a microtask and a frame before reading. A backdrop still present after a rendered frame is one the user has seen |
+| I counted a criterion that was not met | The first commit recorded "2 of 6 criteria" and `completion_pct: 33` with only ONE criterion ticked — tasks counted against a denominator of criteria. T4 makes 2 of 6 true now, which is exactly why it is written down: a wrong number that later comes true is the kind that never gets caught |
+| I expected the group fix to need two halves | The reasoning was that re-creating the bar leaves the drag bound to a detached node. The source says otherwise, in a comment written for this exact reason: the listeners are on the panel and the bar is re-resolved at pointerdown. Read before predicting |
+| I expected the defect to be systemic | A guess of "8 or more sites" put a shared lifecycle fix on the table. Reading all 40 `.empty()` sites brought it down to one unconditional case plus two conditional ones, so the one-liner was the right size and the bigger fix was not built |
 <!-- /ANCHOR:decisions -->
