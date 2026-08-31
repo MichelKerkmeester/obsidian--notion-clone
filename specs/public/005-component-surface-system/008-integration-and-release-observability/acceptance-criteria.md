@@ -15,8 +15,8 @@ _memory:
     packet_pointer: "public/005-component-surface-system/008-integration-and-release-observability"
     last_updated_at: "2026-08-29T18:10:00Z"
     last_updated_by: "phase-architect"
-    recent_action: "Criteria split by deliverable; provenance added; AC-011/012/013 added"
-    next_safe_action: "Fill every Produced-by cell before this packet moves to In Progress"
+    recent_action: "Harness audit: AC-010 stands, but freshness certifies vintage and not validity"
+    next_safe_action: "Add a replay claim asserting no result was measured against a pinned variable"
     blockers:
       - "000 must land its registry, cascade audit and input-hash recorder first"
     key_files:
@@ -126,6 +126,56 @@ AC-003 (87 / 124, from `000`'s predecessor audit) and AC-006 (no controls exist,
 | AC-011 (G9) | REQ-010 | A | **The handoff replay catches a reversal.** With a phase already closed, reintroduce a known cascade reversal into its surface — restoring one duplicate block `000`'s audit classified dead is the cheapest — then run the handoff replay for the next lane release | the replay **fails**, exits non-zero, and names **only** that phase's cells; the same run passes with the reversal removed. Runtime recorded and inside the handoff budget | *census* — no handoff replay exists. The gap it closes is measured: **87 selectors and 124 conflicts** already live in this file, so a reversal is the documented norm rather than a hypothetical | `npm run integration:handoff -- --seed-reversal <selector>` · Phase 3, on the first handoff after `000` closes. The cell records which cells reddened and which did not, plus the wall-clock runtime | N12 | Unmet | - |
 | AC-012 (G10) | REQ-011 | A | **The lane refuses a non-holder.** With the ledger recording one phase as holder, modify `styles.css` as a different phase and run `npm run lane:check`. Separately, attempt `lane:acquire` while the lane is held | the modification is **refused** with a non-zero exit naming both phases and the drifted hash; the second acquire is **refused**; a `verify` run on an unmodified tree exits 0 | *census* — no ledger and no check exist. The rule is prose at `../spec.md` §4, and `004` and `005` both unblock after `000`, so two concurrent edits to a 19,261-line file (`wc -l styles.css`) are permitted today | `npm run lane:check` · Phase 2, immediately after the ledger lands and before `000` releases the lane. The cell records the exit code and message of the seeded non-holder edit | N13 | Unmet | - |
 | AC-013 (G11) | REQ-012 | A | **The capture review gates the lane.** Recapture after a real stylesheet change, author `capture-review.md`, then delete one row and attempt `npm run lane:release` | the release is **refused**, the lane stays held, and the message names the unreviewed PNG; restoring the row lets the release succeed | *census* — no sign-off artefact exists anywhere in the program. `screenshots:verify` passes on file existence and recorded source hashes; it never opens an image, so a capture showing the wrong thing passes today exactly as it did in 1.3.1 | `npm run lane:capture-review` · Phase 2, on the first lane release after the checker lands. The cell records the changed-PNG count of that release and the exit code of the seeded incomplete review | N14 | Unmet | - |
+
+### Harness-dependency audit of the one `Met` row, 2026-08-31
+
+Twelve of the thirteen rows are `Unmet`, so there is little here to re-audit. **AC-010 is the
+exception, and it is worth the space, because an observability criterion satisfied by a
+harness-supplied value would be the sharpest instance of the failure this audit exists to find.**
+
+**AC-010 stands. It is not satisfied by a harness-supplied value.** Its mechanism is file hashing:
+`replay.mjs` stamps `tools/live/replay.json` with sha256 prefixes of `styles.css`,
+`tools/screenshots/theme.css`, `tools/screenshots/runtime-vars.css`, `tools/screenshots/scenarios.mjs`
+and `tools/live/replay.mjs`. Hashes come from the filesystem, not from the DOM, so no CSS variable,
+stubbed action, hand-built host node or absent stylesheet can reach the assertion. N11 was observed
+in both directions — one appended line takes the artefact to `STALE` and the freshness check to exit
+1; restoring it byte-identical returns exit 0. The row keeps its `Met`.
+
+**What it must not be read as proving.** A freshness gate certifies **vintage, not validity**.
+`tools/screenshots/runtime-vars.css` is one of the five files AC-010 fingerprints, and it is also the
+file that pins `--db-layer-sticky` to 25 where production resolves 40, `--db-status-bg` to a hover
+background where production is transparent, `--db-number-color` to `text-normal` where production is
+`text-accent`, `--db-calendar-row-height` to 44px where production is `auto`, and
+`--db-week-grid-height` to a viewport expression where production is 1152px. A replay result computed
+against those pins is a result about the harness. AC-010 confirms it is a **current** result about the
+harness, and every downstream gate then treats it as admissible.
+
+That is the precise shape of this program's two operator-reported regressions: the number was fresh,
+the gate was green, and the value under test was one the harness had supplied. AC-010 is not the
+cause — it is doing its own job correctly — but it is the mechanism that makes a harness-derived
+result carry authority, so its scope belongs on the row rather than in a reader's head.
+
+**The claim to add**, and it is cheap because the replay already reads every input it needs: for each
+claim in `CLAIMS`, record whether the value it asserts resolves through any custom property that
+`runtime-vars.css` declares, and fail the run when a claim asserts an absolute number that does.
+That converts "this result is current" into "this result is current **and** was not measured against
+a pin", which is the property every consumer of `replay.json` already assumes it has.
+
+**Why the other twelve rows need no re-audit.** Each is `Unmet` with its producer named and unrun, so
+none carries a green that could be resting on anything. The exposure this audit looks for is created
+by *closing* a criterion, and this phase has closed one.
+
+**A finding for `000`, from the child phases.** Auditing `010`, `011`, `012` and `013` surfaced two
+supplies the harness inventory does not list, and both belong in it:
+1. **Surfaces built by the check rather than by their production opener.** `verify-placement.mjs:575`
+   mounts a `div.db-record-detail-panel` by hand, drives it through the production placement path,
+   and thereby inherits none of `openRecordDetailPanel`'s lifecycle — notably not
+   `onResize = () => close()`. Production placement plus fixture lifecycle reads as production.
+2. **`var(host-token, fallback)` readings.** Any computed pixel that resolves through an Obsidian
+   token — `--size-4-2`, `--size-4-4`, `--icon-s` — takes the fallback in every harness run, because
+   `app.css` is absent. Relative comparisons survive this; quoted absolutes are fallback values.
+
+---
 
 ### Proof-tuple coverage
 

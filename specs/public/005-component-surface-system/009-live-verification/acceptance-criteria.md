@@ -14,8 +14,8 @@ _memory:
     packet_pointer: "public/005-component-surface-system/009-live-verification"
     last_updated_at: "2026-08-29T18:00:00Z"
     last_updated_by: "phase-architect"
-    recent_action: "Added AC-011 to AC-013 from the adversarial review"
-    next_safe_action: "Run the transport proof, then the defect reproduction"
+    recent_action: "Harness audit: AC-006 green is subject-absent, not product-correct"
+    next_safe_action: "Run the transport proof; AC-006 needs a grep whose exit 1 is not read as pass"
     blockers: []
     key_files:
       - "acceptance-criteria.md"
@@ -100,6 +100,48 @@ outcome x negative control`.
 | AC-011 | REQ-010 | **The probe reproduces a defect that is present.** In the running app, read the same menu class's computed style twice — mounted on `document.body`, and inside `.note-database-container` — and compare | the two values **differ**. Agreement fails this criterion: it means the probe measured one node twice, read a stale frame, or resolved against the wrong document | *trace* — no live transport exists. The divergence it must reproduce is the recorded **29 of 29 probed overlay classes differ between the two mount points, and 25 of 29 carry no tokens at all on body**. A round trip proves the channel; this proves the instrument. **Produced by:** Phase 1b, the second stop condition | N8 | Unmet | - |
 | AC-012 | REQ-011 | **Every mobile claim carries its own verification status, and so does every citation of it.** Label each §3B block VERIFIED / PARTLY VERIFIED / UNVERIFIED with what was read or what would settle it; then audit every citation of the conclusion outside this packet | 4 of 4 blocks individually labelled; 0 downstream citations presenting an assumption as settled without the qualifier — one that does is raised as a finding against the citing document, never edited from here | **2 of 4 verified.** Block 1 VERIFIED (`obsidian-local-rest-api` manifest `"isDesktopOnly": true`, id absent from the 22-entry `community-plugins.json`). Block 2 VERIFIED **by hand** (brace-matched in `obsidian.asar`: ten handlers inside the `isDesktopApp && window.electron` block — `devtools`, `dev:mobile`, `dev:debug`, `dev:errors`, `dev:screenshot`, `dev:cdp`, `dev:css`, `dev:dom`, `dev:console`, `eval` — with `eval` last and the block closing immediately before `registerHandler("commands"`; previously recorded as read by an agent, not by the author). Block 3 **PARTLY VERIFIED** — the absence of `obsidian-advanced-uri` is confirmed, the built-in protocol-action registry was never enumerated. Block 4 **UNVERIFIED and unverifiable from this machine** — only the desktop bundle is present, `grep -c remote-debugging` over it returns 0, and that says nothing about the iOS binary. Downstream, the citation audit is **UNKNOWN**: `008/spec.md` contains no occurrence of `iOS`, `WebView` or `remote debugging`, so the claim as worded is not there. The nearest candidate is `008/spec.md:573`, "manual review is the documented fallback on phone", which states the *consequence* of block 4 rather than block 4. Whether that is an unqualified citation is a judgment about T2d's intent, not a measurement. **What would settle it:** T2d's matching rule written down before the audit is run. **Produced by:** T2a, T2b, T2c and the T2d citation audit | N9 | Unmet | - |
 | AC-013 | REQ-012 | **`000` can consume this packet's output, holes included.** Produce a per-surface probe record in a shape `000`'s Stage-1.5 runner can pair against, **and** an explicit list of every surface this packet could not reach, each with its reason | both artefacts exist; the union of the two covers every surface `000`'s Stage-1 harness repairs touch, or the shortfall is stated plainly | no probe exists, so `000` currently has no cross-check and would measure its own repair through the harness it repaired. **Produced by:** the cross-check export at Phase 3. The unreachable list is the load-bearing half — without it `000` reads an absent surface as a corroborated one | N10 | Unmet | - |
+
+### Harness-dependency audit of the one `Met` row, 2026-08-31
+
+Every criterion re-asked as: *if this value came from the device instead of the harness, would the
+check still pass — and could it still fail?* Twelve of thirteen rows are `Unmet`, so only AC-006 has
+a green to examine.
+
+**AC-006 is not harness-dependent — it is subject-absent, which is a third species and is worth
+naming separately.** `grep -c __ndProbe main.js` returns 0 because the symbol was never created:
+`src/dev/surface-probe.ts` was never built, no `src/dev/` exists, and neither `surface-probe` nor
+`__ndProbe` appears under `src/` at all. No harness supplies this green. Nothing supplies it. The row
+already records this as "Met vacuously, and the caveat travels with the row", which is the honest
+form, and the tick is **not withdrawn**: the assertion can still go red for the right reason the day
+a probe API is built and leaks into the bundle, so it is vacuous rather than tautological.
+
+**The reversed exit status is the part that will bite.** The row records that `grep -c` exits 1 at a
+count of 0 — so a gate lane reading `$?` reads *failure* at the passing value and *success* at the
+failing one. AC-004's threshold elsewhere in this table insists exit codes be "read without a pipe"
+for exactly this reason. Whoever wires N5 must invert deliberately (`! grep -q __ndProbe main.js`)
+rather than let `grep -c` stand in for a predicate.
+
+**The finding that matters most for this phase is structural, not per-row.** This packet exists
+because "`000` can no longer certify its own instrument" — AC-002 states that every current
+measurement in the repository is of a harness-constructed node inside a hand-built workspace, and
+AC-010 exists to pair each harness reading against a live one. **That is the only defence the program
+has against a green resting on a harness supply, and it is 12/13 unmet.** The two operator-reported
+regressions both landed in that gap: the checks were green, the values were the harness's, and no
+instrument existed to disagree with them. Nothing in the child phases can close it, because the
+disagreement AC-010 looks for cannot be observed from inside the instrument under suspicion.
+
+**Two supplies to add to `000`'s inventory**, surfaced by auditing `010`–`013` and recorded here
+because AC-002 is the criterion that would catch both:
+1. **Surfaces built by the check rather than by their production opener.** `verify-placement.mjs:575`
+   hand-mounts a `div.db-record-detail-panel`, drives it through the production placement path, and
+   inherits none of `openRecordDetailPanel`'s lifecycle — notably not `onResize = () => close()`. It
+   is precisely the "probe-constructed node" AC-002 forbids, in a check that otherwise reads as
+   production because its *placement* genuinely is.
+2. **`var(host-token, fallback)` readings.** Any computed pixel resolving through an Obsidian token
+   takes the fallback whenever `app.css` is absent, which is every harness run. AC-001's expected
+   divergence is the same effect at the level of a whole class.
+
+---
 
 ### The transport, as measured
 

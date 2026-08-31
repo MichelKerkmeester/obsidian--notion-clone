@@ -11,8 +11,8 @@ _memory:
     packet_pointer: "public/005-component-surface-system/011-mobile-menu-presentation"
     last_updated_at: "2026-08-30T17:45:00Z"
     last_updated_by: "goal-authoring"
-    recent_action: "10 criteria audited vs captured f64dd87 run; 7 ticked with numbers, band clause red"
-    next_safe_action: "Rewrite the band clause to AC-4 threshold; add a shared-constant band parity check"
+    recent_action: "Harness-dependency audit: 7 ticks hold; menu-sheet placement not re-run on keyboard"
+    next_safe_action: "Subscribe owned-menu sheets to visualViewport, as the panel path already is"
     blockers: []
     key_files:
       - "spec.md"
@@ -22,10 +22,11 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-011-goal"
       parent_session_id: null
-    completion_pct: 70
+    completion_pct: 66
     open_questions:
       - "The re-key moves add-view and calendar captures; design question, not a defect"
       - "Should the menu sheet's 44px band and the record sheet's 32px band be one constant"
+      - "Does a menu sheet ever coexist with a keyboard, given showAt places it once and never again"
     answered_questions: []
 ---
 # Goal: Mobile Menu Presentation
@@ -128,6 +129,24 @@ settle it and **no number**, because none ran.
       metrics across the two containers, which is the "outside the shell" half stated as a number.
       The control is folded into *utilities rows keep their container's row layout after moving to the
       shared component*: `a row that lost the class renders inline-block, centred`.
+- [ ] **New, and open: a menu sheet is placed once and never re-placed.** `showAt` calls
+      `placeSheet(el)` at `owned-menu.ts:173` and registers no reposition loop — `owned-menu.ts`
+      contains no `visualViewport` listener, no `resize` listener and no `requestAnimationFrame` at
+      all. The panel path has all three (`popover-position.ts:284-285`, scheduling `place()` which
+      reaches `placeSheet` at `:201`), which is why `010` can argue its sheet lifts on a silent host.
+      A menu sheet cannot make that argument: whatever `keyboardInset()` returned at open time is the
+      number it keeps. Every ticked criterion above is measured on a sheet at rest, so none of them
+      sees this and none of them is wrong — the gap is that no criterion covers the state at all.
+      **Whether it matters is a real question rather than a rhetorical one**, and it is now in the
+      frontmatter: menu rows are buttons, not text inputs, so a keyboard under an open menu needs
+      some other surface to have raised it first. If the answer is that the state is reachable, the
+      fix is one subscription; if it is not, the criterion closes as not-applicable with that reason
+      recorded.
+      **The check to build.** Open a menu sheet, drive one `--keyboard-height` open/close cycle
+      through the same lever `010`'s checks use, and assert `--db-mobile-sheet-bottom` on the menu
+      element tracks it — which today it will not. Pair it with the panel sheet under the identical
+      cycle, requiring the two to agree, so the criterion states the invariant (*every sheet answers
+      the keyboard the same way*) rather than one surface's behaviour.
 - [x] Desktop opens at its point, ≤ 320px, no sheet class, no handle, no backdrop anywhere in the
       document.
       → *a desktop menu still opens at its point and is not a sheet*: `menu=[400,200] asked for
@@ -194,6 +213,57 @@ against **5** for `arrow-left-right`. It was the only `arrows-`-prefixed id in `
 singular siblings. The row therefore drew no glyph, and with no glyph its label sat left of every
 sibling's — the report's "Display width carries no icon and floats". Not observable in the harness,
 whose icon stub draws a placeholder for any id at all; verified against the bundle instead.
+
+### Harness-dependency classification, 2026-08-31
+
+Every criterion re-asked as: *if this value came from the device instead of the harness, would the
+check still pass — and could it still fail?* This phase's exposure was expected to be its computed
+style, read with Obsidian's `app.css` absent. It is markedly lower than expected, and the reason is
+worth recording rather than assuming.
+
+| Criterion | Class | Rests on |
+|---|---|---|
+| Menu docks to the floor, 844/844 | SOUND | `bottom: var(--db-mobile-sheet-bottom, 0px) !important` at `styles.css:185`, written by `placeSheet` |
+| Full width 390/390 | SOUND | `left`, `right`, `width`, `max-width`, all `!important` on the plugin's own sheet class |
+| 19 rows capped at 760, content 898 | SOUND | the cap is `calc(90svh - …) !important` (`:198`); the content floor is `min-height: 44px` (`:461`) |
+| Backdrop takes the tap | SOUND | scrim `inset: 0`, `pointer-events: auto`, `z-index: calc(var(--db-layer-modal, 1000) - 1)` — and `--db-layer-modal: 1000` is declared at `styles.css:87`, not pinned by `runtime-vars.css` |
+| Backdrop arrives and leaves | SOUND | node presence in both directions; no computed style involved |
+| Grab band | open already | unchanged — the goal line is the defective artefact, per the entry above |
+| Row grammar, spread 0px | SOUND — **and this is the repaired instance** | see below |
+| Desktop opens at its point | SOUND | position and width are the plugin's; the handle clause is settled by reading, as recorded |
+| Menu sheet re-placement | **UNKNOWN — no check, new** | `owned-menu.ts` registers no reposition loop at all |
+
+**The row-grammar criterion is the one the harness inventory says should have failed, and it no
+longer can.** The inventory's fifth item records that `app.css` declares `button {
+justify-content: center }`, that the plugin's menu row never declared `justify-content`, and that
+five checks passed for months while sheet buttons were centred on device. A menu row *is* a
+`<button>` (`menu-row.ts:92`), so this criterion sat directly on that defect. The plugin now declares
+it: `justify-content: flex-start` at `styles.css:530`, in a rule whose comment names the host
+declaration, the type-selector specificity that let it through, and why the two chevron rows escaped.
+The same repair was made for the fill — `background: transparent` at `styles.css:453`, keyed to the
+row rather than to the owned menu, because "a host stylesheet gives every bare button a fill".
+
+So the tick stands, and it stands for a reason that can be pointed at rather than assumed. Every
+property this criterion measures — `display`, `gap`, `align-items`, `justify-content`, `width`,
+`padding`, `font-size`, `text-align`, `min-height` — is named by the plugin's own rule, and a
+declared property outranks the host's type selector.
+
+**Where it is still thin.** The rule does *not* name `line-height`, `font-family` or `color` (the
+last is declared only inside `.db-owned-menu`, `styles.css:444`). No ticked clause measures those, so
+nothing here is withdrawn — but "a shared row is only shared down to the last property it actually
+states", as `styles.css:526` puts it, and that list is the current edge.
+
+**A supply the inventory does not list: fallback readings.** The phone padding measured as
+`8px 16px` is `var(--size-4-2, 8px) var(--size-4-4, 16px)` (`styles.css:462`). `--size-4-2` and
+`--size-4-4` are **Obsidian's** tokens, absent with `app.css`, so every run takes the fallback. The
+*relative* clause — identical box metrics in a menu sheet and a panel sheet — is unaffected, since
+both sides take the same fallback either way. The *absolute* figures quoted above are fallback
+values, not device values. They are very likely right, because Obsidian's scale puts `--size-4-N` at
+`N × 4px` and the fallbacks were written to match, but they are corroborated rather than measured.
+This applies to every `var(host-token, fallback)` reading in the packet and is worth carrying to
+`000` as an inventory addition.
+
+---
 
 ### Progress
 

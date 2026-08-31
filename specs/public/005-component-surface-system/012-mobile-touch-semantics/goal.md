@@ -11,8 +11,8 @@ _memory:
     packet_pointer: "public/005-component-surface-system/012-mobile-touch-semantics"
     last_updated_at: "2026-08-30T17:45:00Z"
     last_updated_by: "goal-authoring"
-    recent_action: "10 criteria audited vs captured f64dd87 run; 6 ticked with numbers, gate not re-run"
-    next_safe_action: "Register the scrim negative control as a standing check; split the gate threshold"
+    recent_action: "Harness-dependency audit: title-cell outcome clause withdrawn, openRow is a stub"
+    next_safe_action: "Drive openRecordDetailPanel for real; assert a connected sheet, not a call count"
     blockers:
       - "screenshots-fresh red: captures stale against another phase's styles.css edit"
     key_files:
@@ -22,7 +22,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-012-goal"
       parent_session_id: null
-    completion_pct: 60
+    completion_pct: 54
     open_questions:
       - "Phone title rename has no reachable entry point; acceptable or not"
       - "Should AC-8 stay keyed to the whole-tree gate or be split into phase-owned legs"
@@ -100,8 +100,9 @@ settle it and **no number**, because none ran.
       `file.name in [file.name,income,expenses]=true; income in [income,expenses]=true; income in
       [file.name,income,expenses]=false; expenses in [income,expenses]=false; income in
       [nothing]=false`.
-- [x] The **whole** title cell opens the record, not the icon inside it: a press 40px left of the
-      button resolves to `open-record`. Cell 169×34 against a button 24×24.
+- [ ] The **whole** title cell opens the record, not the icon inside it: a press 40px left of the
+      button resolves to `open-record`. Cell 169×34 against a button 24×24. **Routing clause met;
+      outcome clause withdrawn 2026-08-31.**
       → *a tap anywhere in the title cell opens the record, and a click there still does not*: `press
       at x=151 (bare cell found 1px left of the button) hits td, and that is the cell itself=true;
       tap=open-record click=select-cell; cell=169x34 vs button=24x24`. → *the shipped title-cell
@@ -109,6 +110,25 @@ settle it and **no number**, because none ran.
       x=151 opened 1; tap on the link opened 1 more and navigated 0 time(s); a mouse click on the link
       opened 0 more and navigated 1 time(s); a tap on the open button opened 0 more, because the
       button owns that press`.
+      **HARNESS-DEPENDENT on its second half — the outcome clause is withdrawn, the routing clause
+      stands.** "Opens the record" is an outcome, and no record was opened. The check passes
+      `setupTitleCellTap` an `openRecord` that is a push-to-array stub
+      (`verify-placement.mjs:2199`), so `opened 1` counts a function call: no record sheet is
+      created, mounted, placed or rendered anywhere in the run. This is the shape the harness
+      inventory records as having already produced one false green, where `editFileName` was a
+      counting stub and a check proved a double-tap reached the handler while no editor existed.
+      **What survives is more than a bare counter and less than the criterion says.** The press is a
+      real pointer event on a real `<td>`, `elementFromPoint` resolves to the cell rather than the
+      button, and the stub records `r.file.path` — so the handler was reached, from the right point,
+      with the right row. Routing and argument identity are measured. The record sheet appearing is
+      not, and neither is anything downstream of it: the counterpart check in `010` shows that a
+      sheet, once opened for real, brings a placement path and an `onResize = () => close()` binding
+      that this stub never exercises.
+      **The check to build.** Drive `openRecordDetailPanel` itself rather than a stub, and assert the
+      outcome instead of the call: after the tap, exactly one `.db-record-detail-panel` is connected,
+      it carries `db-mobile-bottom-sheet` at phone width, and its title resolves to the tapped row.
+      Its control is a tap on a different row requiring a different title, so the check cannot pass by
+      opening any sheet at all.
       **The 40px is not what ran, and it cannot be.** §AC-5 specifies a press 40px left of the
       button's left edge; the run locates bare cell only **1px** left of it, because the link covers
       the rest of the cell. AC-5's two threshold clauses — resolves to `open-record`, and
@@ -217,6 +237,37 @@ bound to `dblclick` and to keyboard type-to-edit, and a phone has neither; routi
 does not recover it, because the sheet's title is bound to `dblclick` too, and the long-press row
 menu has no rename entry. Whether that is acceptable is an open question, not a decision this phase
 took.
+
+### Harness-dependency classification, 2026-08-31
+
+Every criterion re-asked as: *if this value came from the device instead of the harness, would the
+check still pass — and could it still fail?* This phase drives real pointer events, which is the
+strongest evidence in the packet, and the audit mostly confirms that. The exception is where a
+driven gesture terminates in a stubbed action.
+
+| Criterion | Class | Rests on |
+|---|---|---|
+| A tap never extends a range | SOUND | `nextCellRange` is a pure shipped function called with literal addresses; no stub, no computed style, no host chrome |
+| A mouse still extends at 390px | SOUND | same function, and the guard is exercised with `hasTouch=true` rather than beside it |
+| The gesture reader routes real events | SOUND — **the strongest check here** | four values from one binding on real pointer events, with `Platform` and `isTouchDevice` deliberately disagreeing, so the answer can only have come from `pointerType` |
+| The tap truth table, 5 of 5 | SOUND as a truth table | `resolveCellTapAction` is pure and called with literal inputs, so it proves the mapping. That a real tap supplies those inputs is proven separately, by the main-item check and by the title-cell press |
+| The whole title cell opens the record | **HARNESS-DEPENDENT — outcome clause withdrawn** | `openRecord` is a push-to-array stub at `verify-placement.mjs:2199` |
+| A tap does not fight the sheet | open already | scrim geometry is plugin-declared (`inset: 0`, `pointer-events: auto`, `styles.css:222-229`), so the first clause is SOUND; the missing control is the recorded gap |
+| The long-press row menu survives | SOUND | real timers, real pointer events, and the criterion is worded about the gesture firing rather than about what the menu then does |
+
+**The pattern worth carrying to `000`.** Three of this phase's checks call pure shipped functions
+with literal arguments and are unusually robust for exactly that reason: a pure function has no host,
+no stylesheet and no chrome to depend on. Two others drive real events into stubbed actions, and
+those are only as strong as the clause they are read against. The distinction is not "driven versus
+undriven" — every one of these is driven. It is **where the assertion is taken**: on a value the
+shipped code computed, or on a call the harness counted.
+
+**What is not at risk here.** This phase reads almost no computed style, so the absent `app.css` costs
+it little; and it reads none of the five variables `runtime-vars.css` pins away from production. Its
+exposure is item 3 of the inventory, the stubbed actions, and that exposure is now stated per
+criterion above rather than in general.
+
+---
 
 ### Progress
 

@@ -12,8 +12,8 @@ _memory:
     packet_pointer: "public/005-component-surface-system/010-sheet-reading-and-keyboard"
     last_updated_at: "2026-08-30T17:45:00Z"
     last_updated_by: "goal-authoring"
-    recent_action: "9 criteria audited vs captured f64dd87 run; 6 ticked with numbers, 2 have no check"
-    next_safe_action: "Build the desktop four-value non-regression check and the five-dimension mapping"
+    recent_action: "Harness-dependency audit: AC-14 withdrawn as unfailable, AC-15 has no check"
+    next_safe_action: "Build AC-15: drive keyboardInset from a stubbed shrunken visualViewport"
     blockers:
       - "spec.md continuity says 0% and not started; implementation-summary.md says 90% and shipped"
     key_files:
@@ -24,9 +24,10 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-010-goal"
       parent_session_id: null
-    completion_pct: 67
+    completion_pct: 60
     open_questions:
       - "Does the operator's handset shrink visualViewport or resize the window"
+      - "Does the visual-viewport fallback ever fire, given no check has executed that branch"
       - "Desktop non-regression is claimed with four values that no check measures"
     answered_questions: []
 ---
@@ -109,6 +110,57 @@ settle it and **no number**, because none ran.
       closed the record sheet outright — openRecordDetailPanel registers onResize = close()`. On a
       host that announces its keyboard by resizing the window, this criterion's mechanism never gets
       to run. Which of the two the operator's handset does is the open question in the frontmatter.
+      **HARNESS-DEPENDENT — tick narrowed to the reporting path, and the reporting path is the whole
+      of it.** Both sides of the comparison are the harness's own constant: the check writes
+      `--keyboard-height: 331px` and computes `want` as `innerHeight - 331` from that same `KEYBOARD`
+      literal (`verify-placement.mjs:800`, `:819`, `:845`). That is the exact shape `022`'s AC-1 was
+      withdrawn for. **The sheet is nevertheless not the bar, and the difference is in the source, not
+      in the evidence.** `keyboardInset()` returns `max(host variable, innerHeight −
+      visualViewport.height − offsetTop)` with a pinch guard (`popover-position.ts:547-561`), and the
+      panel path re-runs it on every `visualViewport` resize and scroll
+      (`popover-position.ts:284-285`, reaching `placeSheet` at `:201`). A host that never writes the
+      variable still lifts this sheet; the bar, reading `var(--keyboard-height, 0px)` in CSS with no
+      second source, never moves at all. **But the second source has never executed under test.** Both
+      keyboard blocks set the variable and then dispatch a *synthetic* `resize` —
+      `verify-placement.mjs:820` on `window`, `:4727` on `visualViewport` — without ever shrinking
+      `visualViewport.height`, so the `observed` term computes 0 in every run this packet has
+      captured. The branch that distinguishes this phase from the withdrawn one is argued from the
+      source and measured nowhere.
+      **A supply the inventory does not list.** The panel under measurement is `rhythmPanel`
+      (`verify-placement.mjs:575`) — a hand-mounted `div.db-record-detail-panel` driven through the
+      production placement path and the production `renderCardField`, but built by the check rather
+      than by `openRecordDetailPanel`. It therefore carries none of that opener's lifecycle, and in
+      particular not `window.addEventListener("resize", onResize)` with `onResize = () => close()`
+      (`record-detail-panel.ts:200`, `:292`). The harness's sheet survives a resize the operator's
+      sheet is destroyed by, so *the sheet returns to the floor when the keyboard closes* and *with no
+      keyboard the sheet still sits on the viewport floor* both describe a surface that does not
+      ship.
+- [ ] **Withdrawn — the pinch-zoom guard (AC-14) is asserted by a check that cannot fail.** Not
+      previously carried as a goal criterion at all, which is half the finding. *the visual-viewport
+      fallback is guarded against pinch-zoom* evaluates `window.visualViewport.scale <= 1.01 &&
+      zoomed <= 1` where `zoomed = innerHeight − visualViewport.height − offsetTop`
+      (`verify-placement.mjs:921-926`). In the harness `scale` is always 1 and `visualViewport.height`
+      always equals `innerHeight`, so the expression is `1 <= 1.01 && 0 <= 1` — two constants, true by
+      construction, on every run for ever. The check never calls `keyboardInset`, never zooms, and its
+      own comment concedes the viewport "cannot be pinched from script". It measures the harness's
+      viewport identity, not the guard.
+      **The check to build.** The guard is a pure function of two numbers, so test it as one: export
+      the inset calculation, or take it via the module the check already bundles, and call it against
+      a stubbed `{ scale: 1.4, height: 500, offsetTop: 0 }` on a 844px view, requiring 0. Pair it with
+      the same stub at `scale: 1.0`, requiring 344. Two calls, one control each way; today's check is
+      neither.
+- [ ] **AC-15 has no check, and it is the one criterion that would settle this phase's headline
+      question.** `acceptance-criteria.md` §3.1 states it plainly — *the fallback works on its own:
+      with the host variable absent but the visual viewport shrunk, the sheet still clears the
+      keyboard* — and nothing in `verify-placement.mjs` ever shrinks `visualViewport.height`. Every
+      keyboard reading in this packet comes through the host-variable branch. Until AC-15 runs, the
+      claim that this sheet is protected where `022`'s bar was not rests on reading
+      `popover-position.ts:547-561`, which is real evidence and is not a measurement.
+      **The check to build.** Chromium will not shrink the visual viewport from script, so drive the
+      calculation rather than the browser: with `--keyboard-height` absent, call the inset function
+      against a stub reporting `height: innerHeight − 331` at `scale: 1`, and require `placeSheet` to
+      write `--db-mobile-sheet-bottom: 331px` and the sheet's bottom to land on `innerHeight − 331`.
+      Its control is the same run with the stub reporting the full height, requiring `0px`.
 - [ ] Desktop keeps its four measured values — row 26.84px, right-aligned, 2px gap, no divider —
       identical before and after.
       **No check exists.** Three of the four values are unmeasured anywhere in the captured run. The
@@ -192,6 +244,33 @@ this half is finished or blocked.**
 | Desktop non-regression | **Claimed, unmeasured** | No check measures the four values; row height alone appears, incidentally, in another phase's check |
 | Five stateful dimensions | **Claimed, unmapped** | Only negative-control mutation is evidenced; `acceptance-criteria.md` never names the five |
 | Operator confirmation | Open | — |
+
+### Harness-dependency classification, 2026-08-31
+
+Every criterion re-asked as: *if this value came from the device instead of the harness, would the
+check still pass — and could it still fail?*
+
+| Criterion | Class | Rests on |
+|---|---|---|
+| Value left-edge spread 0.0px | SOUND | `text-align: left` and the 96px label basis, both declared by this plugin's own rule |
+| Value column at 33.1% | SOUND | same declarations; a ratio of two measured boxes |
+| Row pitch 44.0px / height 44.0px | SOUND | `min-height: 44px` at `styles.css:346` and `:461`, plugin-declared |
+| Divider, 0.0px gap, 16px value | SOUND | `border-bottom` and `font-size` declared on the phone rule |
+| Long label moves the value box 0px | SOUND | `flex` basis declared; a before/after delta on one box |
+| Keyboard clearance 513/513 | **HARNESS-DEPENDENT** | `--keyboard-height`, written by the check and read back as its own `want`. Narrowed above, not withdrawn: `keyboardInset()` has a second source the bar lacks |
+| Pinch-zoom guard (AC-14) | **WITHDRAWN** | two harness constants; the assertion is true by construction and cannot go red |
+| Fallback alone (AC-15) | **UNKNOWN — no check** | nothing shrinks `visualViewport.height` anywhere in the repository |
+| Desktop four values (AC-16) | UNKNOWN — no check | unchanged from the previous audit |
+| Five stateful dimensions | UNKNOWN — no check, no mapping | unchanged from the previous audit |
+
+**What this phase does not share with `022`.** The bar docks in CSS on `var(--keyboard-height, 0px)`
+and has no second source, so a silent host leaves it where it was. The sheet's number is computed in
+TypeScript as `max(host, observed)` and recomputed on every visual-viewport event. That is a real
+structural difference and it is why five of this phase's six keyboard readings survive as narrowed
+rather than withdrawn. **What it does share** is that every captured number came through the host
+variable, so the difference is currently an argument from source rather than a measurement.
+
+---
 
 ### Deviations and findings
 

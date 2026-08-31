@@ -11,8 +11,8 @@ _memory:
     packet_pointer: "public/005-component-surface-system/013-add-view-sheet"
     last_updated_at: "2026-08-30T21:15:00Z"
     last_updated_by: "criteria-adjudication"
-    recent_action: "Criteria adjudicated against the captured harness run; 8 of 12 ticked with numbers"
-    next_safe_action: "Run AC-6's two heading controls and vitest add-view-popover-layout.test.ts"
+    recent_action: "Harness-dependency audit: no tick withdrawn; two absolutes are var() fallbacks"
+    next_safe_action: "Run AC-6 heading controls and vitest add-view-popover-layout.test.ts, read $?"
     blockers: []
     key_files:
       - "spec.md"
@@ -24,6 +24,7 @@ _memory:
     completion_pct: 85
     open_questions:
       - "--text-muted at 12px measures 4.1:1; program-wide token decision, escalated"
+      - "Is the Add View sheet subscribed to visualViewport, or placed once like an owned menu"
     answered_questions:
       - "It was already a sheet on a phone; defect 6 was a fixture artifact"
 ---
@@ -208,6 +209,60 @@ The two phone predicates still disagree — `isTouchDevice` at a 760px container
 `isMobileBottomSheet` at a 600px window — so on a 700px tablet this surface is "touch" to every
 renderer and not a sheet to the positioner. Pre-existing, named in `design-system.md` §7, out of
 scope here.
+
+### Harness-dependency classification, 2026-08-31
+
+Every criterion re-asked as: *if this value came from the device instead of the harness, would the
+check still pass — and could it still fail?* **No tick is withdrawn here, and the reason is specific
+rather than lucky:** every property these criteria measure is named by this plugin's own rules, so
+the host's declaration is outranked rather than absent.
+
+| Criterion | Class | Rests on |
+|---|---|---|
+| 12 controls, 12 distinct names | SOUND | accessible-name computation is DOM and ARIA; no stylesheet, no host chrome |
+| 4 fields, 4 visibly labelled | SOUND | structural — element presence and association |
+| Every action row is the shared grammar | SOUND, with two absolutes narrowed | see below |
+| 0 elements drawn as bare rules | SOUND | a structural count of content shape, not a colour reading |
+| Group gap 16px against item gap 8px | SOUND | both derive from `--db-space-*`, which is this plugin's token namespace and not the host's |
+| Headings load-bearing | open already | unchanged; the control is still unrun |
+| One content left edge | SOUND | see below |
+| A resting row paints no fill | SOUND — **and this is a repaired instance** | `background: transparent` at `styles.css:453` |
+| Phone sheet, desktop inverted | SOUND | every sheet property is `!important` on the plugin's own class (`styles.css:177-198`); the 48px band comes from the plugin's `::before` |
+
+**Two of these sit directly on the inventory's fifth item and survive it by declaration.** The row is
+a `<button>` (`menu-row.ts:92`), so *a resting row paints no fill* was measuring a property `app.css`
+declares — `button` gets a fill from the host — and the plugin now declares
+`background: transparent` keyed to the row rather than to the owned menu, in a rule whose comment
+states exactly that ("a host stylesheet gives every bare button a fill; scoped to the owned menu,
+this reset only reached the rows that happened to be inside one"). Likewise the left-edge criterion
+depends on `justify-content`, which `app.css` sets to `center` on every button and which the plugin
+now sets to `flex-start` at `styles.css:530`. Both were live exposures. Both are closed in the
+stylesheet, not in the harness.
+
+**The checkbox contributor, checked rather than assumed.** The left-edge criterion counts the
+checkbox among the four things on one edge, and `input` is the element `app.css` chromes most
+heavily. `.note-database-container .db-add-view-duplicate input` declares `margin: 0`
+(`styles.css:19660-19663`) at a specificity the host's type selector cannot reach, so the box sits on
+its flex container's content edge and that edge comes from `--db-space-*`. The rule deliberately
+declines to set width and height — "the native checkbox metrics are correct" — but neither is on this
+criterion's measure. SOUND.
+
+**What is narrowed rather than withdrawn: two absolutes are `var()` fallbacks.** The phone row
+padding quoted as `8px/16px/8px/16px` is `var(--size-4-2, 8px) var(--size-4-4, 16px)`
+(`styles.css:462`), and `--size-4-2` / `--size-4-4` are **Obsidian's** tokens, absent whenever
+`app.css` is. Every harness run therefore reads the fallback. The criterion's load-bearing clause is
+relative — each row against a live `createMenuRow` reference in the same document — and a relative
+clause is unaffected, because both sides take the same fallback. The absolute figures are
+corroborated by Obsidian's `N × 4px` scale, which is what the fallbacks were written to match, but
+they are not device measurements. The desktop `30px` pin is different and is safe: it is a literal in
+the plugin's own rule (`styles.css:346`).
+
+**One question this audit opened rather than closed**, now in the frontmatter: `011` establishes that
+`owned-menu.ts` places a sheet once and subscribes to nothing, while the panel path re-places on
+every visual-viewport event. Which of the two this surface uses decides whether its floor reading
+survives a keyboard, and no criterion here asks.
+
+---
 
 ### Progress
 

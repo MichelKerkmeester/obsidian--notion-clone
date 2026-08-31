@@ -132,8 +132,49 @@ observes the keyboard first wins.
 | 11 | When the host reports a keyboard, the sheet's bottom edge sits on top of it. | bottom within **2px** of `innerHeight − keyboardHeight` | **844, want 513** — the sheet did not move at all |
 | 12 | A lifted sheet fits in the space the keyboard leaves; it must not be pushed off the top. | `top ≥ -1` **and** height ≤ `innerHeight − keyboardHeight` | **top 84, height 760, space available 513** |
 | 13 | When the keyboard closes, the sheet returns to the floor. | bottom within **1px** of `innerHeight` | green, and stays green |
-| 14 | A pinch-zoom must not be mistaken for a keyboard. | with `visualViewport.scale > 1`, sheet stays on the floor | not previously observable |
-| 15 | The fallback works on its own: with the host variable absent but the visual viewport shrunk, the sheet still clears the keyboard. | bottom within **2px** of the visual viewport's bottom | not previously observable |
+| 14 | A pinch-zoom must not be mistaken for a keyboard. | with `visualViewport.scale > 1`, sheet stays on the floor | not previously observable — and **still not observable**: see the withdrawal below |
+| 15 | The fallback works on its own: with the host variable absent but the visual viewport shrunk, the sheet still clears the keyboard. | bottom within **2px** of the visual viewport's bottom | not previously observable — and **no check was ever written**: see below |
+
+#### 14 and 15 re-audited, 2026-08-31 — the two that decide whether this sheet shares `022`'s defect
+
+**Criterion 14 is withdrawn.** The check that stands for it, *the visual-viewport fallback is guarded
+against pinch-zoom*, evaluates `window.visualViewport.scale <= 1.01 && zoomed <= 1` where `zoomed =
+innerHeight − visualViewport.height − offsetTop` (`verify-placement.mjs:921-926`). Under Playwright
+`scale` is always 1 and `visualViewport.height` always equals `innerHeight`, so the expression
+reduces to `1 <= 1.01 && 0 <= 1`: two constants, true on every run, unfailable. The check does not
+call `keyboardInset` and its own comment concedes the viewport "cannot be pinched from script". It
+measures the harness's viewport identity, not the guard. The guard itself
+(`popover-position.ts:557-560`) is correct on reading; it is simply unmeasured.
+
+**Criterion 15 has no check at all.** Nothing in `verify-placement.mjs` — or anywhere in `tools/` —
+shrinks `visualViewport.height`. Both keyboard blocks (`:819` and `:4724`) set `--keyboard-height`
+and then dispatch a *synthetic* resize event, which triggers re-placement but supplies no
+measurement, so the `observed` term is 0 in every captured run.
+
+**Why these two matter more than their position in the table suggests.** `022-selection-bar-keyboard-docking`
+withdrew its own AC-1 on 2026-08-30 because the bar docks on `var(--keyboard-height, 0px)` in CSS,
+nothing in the plugin writes that variable, and the harness writes it — so the check proved
+arithmetic given a number that may never arrive. Criteria 11–13 here read the same variable through
+the same harness write, and their `want` is computed from the same `KEYBOARD = 331` literal that set
+it (`verify-placement.mjs:800`, `:819`, `:845`).
+
+The sheet is nevertheless **not** in the bar's position, and criterion 15 is the reason: the sheet's
+number is not the variable. `placeSheet` calls `keyboardInset()`, which returns `max(host variable,
+innerHeight − visualViewport.height − offsetTop)` (`popover-position.ts:547-561`), and the panel path
+re-runs it on every `visualViewport` `resize` and `scroll` (`:284-285` → `:201`). On a host that
+shrinks the visual viewport and never writes the variable, this sheet lifts and that bar does not.
+Criterion 15 is the criterion that would demonstrate it, and it has never run — so the protection is
+established by reading the source, at that strength and no higher.
+
+**A supply not in the harness inventory.** The panel these criteria measure is `rhythmPanel`
+(`verify-placement.mjs:575`), a hand-mounted `div.db-record-detail-panel`. It is driven through the
+production placement path and the production `renderCardField`, which is why §1 can claim the
+placement arithmetic is real — but it is not built by `openRecordDetailPanel`, so it carries none of
+that opener's lifecycle. Specifically it lacks `window.addEventListener("resize", onResize)` with
+`onResize = () => close()` (`record-detail-panel.ts:200`, `:292`). Criteria 10 and 13 therefore
+measure a sheet that survives a window resize the shipped sheet is destroyed by. §4 item 2 already
+records the `onResize` behaviour; what is new is that the surface under test does not have it, so the
+resting and returning readings are not readings of the shipped surface at all.
 
 ### 3.2 Values
 

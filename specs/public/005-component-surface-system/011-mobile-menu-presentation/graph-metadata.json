@@ -202,7 +202,7 @@
     ],
     "causal_summary": "Present the plugin's owned menus as bottom sheets on a phone instead of desktop dropdowns that run off both edges of the screen.",
     "created_at": "2026-08-30T16:47:04.999Z",
-    "last_save_at": "2026-08-30T19:15:22.639Z",
+    "last_save_at": "2026-08-31T03:37:36.681Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -213,7 +213,7 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:2b5fbab141424e34b6e05429c8e17c940927cbee6f248908b8976c748407fc2d",
+    "source_fingerprint": "sha256:0bd3a783c20d368647cbbf4a46b6d6c609b7f5fa259adab15e696a806215be14",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "33749996638c6b8127df3bc358c9746ea39ce56ce130c8aab88ed4e98dff2a3c",
