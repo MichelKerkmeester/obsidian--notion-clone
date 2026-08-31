@@ -39,6 +39,41 @@ Repo `~/MEGA/Development/Obsidian Plugin`. Runs after `024`, which fixed one of 
 
 <!-- ANCHOR:log -->
 
+### The budget criterion now has an instrument, and the answer depends on fill as much as rows
+
+This phase's central criterion is a blocked-main-thread budget under a 6x CPU throttle, and
+the bench could not produce that number: its parser accepted rows, cols, fill, repeats and
+kind and threw on anything else. The sibling card driver had throttling end to end; the list
+bench predates it and launches its own browser, so the one bench measuring the view that
+actually froze was the only one that could not ask the question. Every number it had produced
+described a laptop.
+
+It takes `--throttle` now, and the flag moves the measurement rather than decorating it: the
+same shape reads **97.1ms at 1x and 625.3ms at 6x**, and a value below 1 is rejected.
+
+Measured, phone at 390px, 21 columns, 6x throttle:
+
+| rows | 100% fill | 30% fill |
+|---|---|---|
+| 400 | 624.1ms | 273.2ms |
+| 800 | 1247.8ms | 545.9ms |
+| 1600 | **2638.1ms** | 1226.6ms |
+| 2400 | **4108.0ms** | — |
+
+**The quadratic is genuinely gone.** Cost per row holds between 0.43 and 0.49ms at full fill
+and 0.20 to 0.28 at 30%, roughly flat across a sixfold change in row count — which is what
+the earlier repair was for, and it held.
+
+**What is left is a linear constant large enough to matter.** At full fill the budget breaks
+somewhere near 1,300 rows, and 1,600 rows already costs 2,638ms. At 30% fill the same 1,600
+rows costs 1,227ms and clears it. So the question put to the operator is not row count alone:
+a database of 1,500 sparsely-filled rows is comfortable where 1,500 densely-filled rows is
+not, and the earlier note recording the crossing at roughly 2,300 rows was measuring a fill
+rate it did not state.
+
+Layout dominates throughout — 2,927ms of the 4,108 at 2,400 rows — so the remaining cost is
+in what the rows force the browser to lay out, not in building them.
+
 ### The table forced-layout check was specified, measured, and not built
 
 This goal owed a check wrapping the table's render in the layout-read counter and

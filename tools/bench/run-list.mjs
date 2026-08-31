@@ -48,6 +48,10 @@ const blockedMs = (sample) => Number((sample.renderMs + sample.layoutMs).toFixed
 
 /** Shape overrides, so row counts and column types can be pushed without editing the bench. */
 const OPTIONS = {};
+// 1 = the development machine. The budget this bench enforces was written about a phone, and a
+// render that is comfortable on a laptop can be a freeze on the device that reported it, so the
+// ceiling question has to be askable with a multiplier. Without this the pass is about this Mac.
+let throttle = 1;
 for (const arg of process.argv.slice(2)) {
   const [key, value] = arg.replace(/^--/, "").split("=");
   if (key === "rows") OPTIONS.rowCounts = value.split(",").map(Number);
@@ -55,7 +59,11 @@ for (const arg of process.argv.slice(2)) {
   else if (key === "fill") OPTIONS.fillRates = value.split(",").map(Number);
   else if (key === "repeats") OPTIONS.repeats = Number(value);
   else if (key === "kind") OPTIONS.columnKind = value;
+  else if (key === "throttle") throttle = Number(value);
   else throw new Error(`run-list: unknown argument "${arg}"`);
+}
+if (!Number.isFinite(throttle) || throttle < 1) {
+  throw new Error(`run-list: --throttle must be a number >= 1, got "${throttle}"`);
 }
 
 // ───────────────────────────────────────────────────────────────────
@@ -125,6 +133,12 @@ try {
     const page = await browser.newPage({ viewport: surface.viewport });
     const errors = [];
     page.on("pageerror", (err) => errors.push(err.message));
+    // Applied through CDP before navigation so the measured render pays it. It slows the CPU
+    // rather than layout in isolation, which is what a slower device actually does.
+    if (throttle > 1) {
+      const client = await page.context().newCDPSession(page);
+      await client.send("Emulation.setCPUThrottlingRate", { rate: throttle });
+    }
     await page.goto(`file://${resolve(OUT, "list-index.html")}`);
     if (surface.phone) await page.evaluate(() => document.body.classList.add("is-phone"));
 
@@ -136,7 +150,8 @@ try {
     }
     collected[surface.name] = samples;
 
-    console.log(`\n${surface.name} (${surface.viewport.width}px): real ListRenderer, text fields only\n`);
+    console.log(`\n${surface.name} (${surface.viewport.width}px): real ListRenderer, text fields only`
+      + `${throttle > 1 ? ` — ${throttle}x CPU throttle` : ""}\n`);
     console.log("  fill  cols  rows   median   p95   layout  blocked   nodes  fields  blanks   ms/row");
     for (const s of samples) {
       if (blockedMs(s) > blockedMs(worst)) worst = { ...s, surface: surface.name };
