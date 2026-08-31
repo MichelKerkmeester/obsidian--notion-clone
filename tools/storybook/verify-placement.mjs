@@ -1476,7 +1476,11 @@ const addViewProbe = (isPhone) => {
   const expectedMinHeight = isPhone ? "44px" : "30px";
   out.push({
     name: `add view: every action row is the shared row grammar (${where})`,
-    pass: rows.length >= 8 && offGrammar.length === 0 && refCs.minHeight === expectedMinHeight,
+    // The floor is a guard against an empty-set pass — a menu that rendered nothing would satisfy
+    // "no row diverges" trivially. It was 8 when the gallery was still offered; withdrawing that
+    // view type legitimately removes one row, so the floor follows the surface down to 7 rather
+    // than pinning a count this check was never about.
+    pass: rows.length >= 7 && offGrammar.length === 0 && refCs.minHeight === expectedMinHeight,
     detail: `${rows.length} rows, ${offGrammar.length} off-grammar; reference ${refBox}`
       + (offGrammar.length ? `; first divergence ${box(offGrammar[0])} on .${offGrammar[0].className}` : "")
       + `; reference min-height ${refCs.minHeight} (want ${expectedMinHeight})`

@@ -13,9 +13,9 @@
       "sources": [
         "src/views/toolbar-renderer.ts"
       ],
-      "layoutHash": "9832f8e4c814",
+      "layoutHash": "e0bec454db5f",
       "sourceHashes": {
-        "src/views/toolbar-renderer.ts": "88fdd50cb460",
+        "src/views/toolbar-renderer.ts": "2990d93c5c19",
         "styles.css": "96f5fa440637",
         "tools/screenshots/theme.css": "8239cc22cceb",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -24,7 +24,7 @@
       },
       "note": "Settings above, actions below, one row grammar for both the seven types and the duplicate.",
       "capture": "element",
-      "bytes": 64859
+      "bytes": 60970
     },
     {
       "id": "add-view-popover",
@@ -36,9 +36,9 @@
       "sources": [
         "src/views/toolbar-renderer.ts"
       ],
-      "layoutHash": "9832f8e4c814",
+      "layoutHash": "e0bec454db5f",
       "sourceHashes": {
-        "src/views/toolbar-renderer.ts": "88fdd50cb460",
+        "src/views/toolbar-renderer.ts": "2990d93c5c19",
         "styles.css": "96f5fa440637",
         "tools/screenshots/theme.css": "8239cc22cceb",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -47,7 +47,7 @@
       },
       "note": "Settings above, actions below, one row grammar for both the seven types and the duplicate.",
       "capture": "element",
-      "bytes": 65892
+      "bytes": 61938
     },
     {
       "id": "add-view-popover",
@@ -59,9 +59,9 @@
       "sources": [
         "src/views/toolbar-renderer.ts"
       ],
-      "layoutHash": "28a92ad7d388",
+      "layoutHash": "1e2926d8db7d",
       "sourceHashes": {
-        "src/views/toolbar-renderer.ts": "88fdd50cb460",
+        "src/views/toolbar-renderer.ts": "2990d93c5c19",
         "styles.css": "96f5fa440637",
         "tools/screenshots/theme.css": "8239cc22cceb",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -70,7 +70,7 @@
       },
       "note": "Settings above, actions below, one row grammar for both the seven types and the duplicate.",
       "capture": "element",
-      "bytes": 66817
+      "bytes": 62688
     },
     {
       "id": "add-view-popover",
@@ -82,9 +82,9 @@
       "sources": [
         "src/views/toolbar-renderer.ts"
       ],
-      "layoutHash": "28a92ad7d388",
+      "layoutHash": "1e2926d8db7d",
       "sourceHashes": {
-        "src/views/toolbar-renderer.ts": "88fdd50cb460",
+        "src/views/toolbar-renderer.ts": "2990d93c5c19",
         "styles.css": "96f5fa440637",
         "tools/screenshots/theme.css": "8239cc22cceb",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -93,7 +93,7 @@
       },
       "note": "Settings above, actions below, one row grammar for both the seven types and the duplicate.",
       "capture": "element",
-      "bytes": 67853
+      "bytes": 63710
     },
     {
       "id": "chrome-active-rule-popover-filter",
@@ -1031,7 +1031,7 @@
       },
       "note": "The phone form of the owned menu. Rows share one left edge with the icon in a fixed leading column, hairlines divide neighbours but not the last row of a group, and a row that opens a submenu carries a trailing chevron. Captured in viewport mode so the fixed sheet docks at the bottom.",
       "capture": "viewport",
-      "bytes": 51714
+      "bytes": 51712
     },
     {
       "id": "chrome-owned-menu-sheet",
@@ -1058,7 +1058,7 @@
       },
       "note": "The phone form of the owned menu. Rows share one left edge with the icon in a fixed leading column, hairlines divide neighbours but not the last row of a group, and a row that opens a submenu carries a trailing chevron. Captured in viewport mode so the fixed sheet docks at the bottom.",
       "capture": "viewport",
-      "bytes": 36596
+      "bytes": 36591
     },
     {
       "id": "chrome-owned-menu-sheet",
@@ -1383,7 +1383,7 @@
       ],
       "layoutHash": "09b4c18a8d8b",
       "sourceHashes": {
-        "src/views/toolbar-renderer.ts": "88fdd50cb460",
+        "src/views/toolbar-renderer.ts": "2990d93c5c19",
         "styles.css": "96f5fa440637",
         "tools/screenshots/theme.css": "8239cc22cceb",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -1406,7 +1406,7 @@
       ],
       "layoutHash": "09b4c18a8d8b",
       "sourceHashes": {
-        "src/views/toolbar-renderer.ts": "88fdd50cb460",
+        "src/views/toolbar-renderer.ts": "2990d93c5c19",
         "styles.css": "96f5fa440637",
         "tools/screenshots/theme.css": "8239cc22cceb",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -1429,7 +1429,7 @@
       ],
       "layoutHash": "63543946cbb9",
       "sourceHashes": {
-        "src/views/toolbar-renderer.ts": "88fdd50cb460",
+        "src/views/toolbar-renderer.ts": "2990d93c5c19",
         "styles.css": "96f5fa440637",
         "tools/screenshots/theme.css": "8239cc22cceb",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -1452,7 +1452,7 @@
       ],
       "layoutHash": "63543946cbb9",
       "sourceHashes": {
-        "src/views/toolbar-renderer.ts": "88fdd50cb460",
+        "src/views/toolbar-renderer.ts": "2990d93c5c19",
         "styles.css": "96f5fa440637",
         "tools/screenshots/theme.css": "8239cc22cceb",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -1475,7 +1475,7 @@
       ],
       "layoutHash": "a5bc6b18803f",
       "sourceHashes": {
-        "src/views/toolbar-renderer.ts": "88fdd50cb460",
+        "src/views/toolbar-renderer.ts": "2990d93c5c19",
         "styles.css": "96f5fa440637",
         "tools/screenshots/theme.css": "8239cc22cceb",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -1498,7 +1498,7 @@
       ],
       "layoutHash": "a5bc6b18803f",
       "sourceHashes": {
-        "src/views/toolbar-renderer.ts": "88fdd50cb460",
+        "src/views/toolbar-renderer.ts": "2990d93c5c19",
         "styles.css": "96f5fa440637",
         "tools/screenshots/theme.css": "8239cc22cceb",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -1521,7 +1521,7 @@
       ],
       "layoutHash": "b252703f1475",
       "sourceHashes": {
-        "src/views/toolbar-renderer.ts": "88fdd50cb460",
+        "src/views/toolbar-renderer.ts": "2990d93c5c19",
         "styles.css": "96f5fa440637",
         "tools/screenshots/theme.css": "8239cc22cceb",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -1544,7 +1544,7 @@
       ],
       "layoutHash": "b252703f1475",
       "sourceHashes": {
-        "src/views/toolbar-renderer.ts": "88fdd50cb460",
+        "src/views/toolbar-renderer.ts": "2990d93c5c19",
         "styles.css": "96f5fa440637",
         "tools/screenshots/theme.css": "8239cc22cceb",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -1567,7 +1567,7 @@
       ],
       "layoutHash": "697c8d866e6b",
       "sourceHashes": {
-        "src/views/toolbar-renderer.ts": "88fdd50cb460",
+        "src/views/toolbar-renderer.ts": "2990d93c5c19",
         "styles.css": "96f5fa440637",
         "tools/screenshots/theme.css": "8239cc22cceb",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -1590,7 +1590,7 @@
       ],
       "layoutHash": "697c8d866e6b",
       "sourceHashes": {
-        "src/views/toolbar-renderer.ts": "88fdd50cb460",
+        "src/views/toolbar-renderer.ts": "2990d93c5c19",
         "styles.css": "96f5fa440637",
         "tools/screenshots/theme.css": "8239cc22cceb",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -1613,7 +1613,7 @@
       ],
       "layoutHash": "9c9324a36cd6",
       "sourceHashes": {
-        "src/views/toolbar-renderer.ts": "88fdd50cb460",
+        "src/views/toolbar-renderer.ts": "2990d93c5c19",
         "styles.css": "96f5fa440637",
         "tools/screenshots/theme.css": "8239cc22cceb",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -1636,7 +1636,7 @@
       ],
       "layoutHash": "9c9324a36cd6",
       "sourceHashes": {
-        "src/views/toolbar-renderer.ts": "88fdd50cb460",
+        "src/views/toolbar-renderer.ts": "2990d93c5c19",
         "styles.css": "96f5fa440637",
         "tools/screenshots/theme.css": "8239cc22cceb",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -3747,7 +3747,7 @@
       },
       "note": "A record whose note has frontmatter and nothing else. One faint line rather than an empty box: without an affordance the records most in need of a body would be exactly the ones that could not be given one.",
       "capture": "viewport",
-      "bytes": 52881
+      "bytes": 52870
     },
     {
       "id": "panel-record-detail-sheet-body-empty",
@@ -4220,7 +4220,7 @@
       ],
       "layoutHash": "adcaaa2a62cb",
       "sourceHashes": {
-        "src/views/view-config-panel-renderer.ts": "07c10bfdd2f1",
+        "src/views/view-config-panel-renderer.ts": "9e7f8e147bfd",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
         "styles.css": "96f5fa440637",
         "tools/screenshots/theme.css": "8239cc22cceb",
@@ -4245,7 +4245,7 @@
       ],
       "layoutHash": "adcaaa2a62cb",
       "sourceHashes": {
-        "src/views/view-config-panel-renderer.ts": "07c10bfdd2f1",
+        "src/views/view-config-panel-renderer.ts": "9e7f8e147bfd",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
         "styles.css": "96f5fa440637",
         "tools/screenshots/theme.css": "8239cc22cceb",
@@ -4270,7 +4270,7 @@
       ],
       "layoutHash": "9cc3b3afdac6",
       "sourceHashes": {
-        "src/views/view-config-panel-renderer.ts": "07c10bfdd2f1",
+        "src/views/view-config-panel-renderer.ts": "9e7f8e147bfd",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
         "styles.css": "96f5fa440637",
         "tools/screenshots/theme.css": "8239cc22cceb",
@@ -4295,7 +4295,7 @@
       ],
       "layoutHash": "9cc3b3afdac6",
       "sourceHashes": {
-        "src/views/view-config-panel-renderer.ts": "07c10bfdd2f1",
+        "src/views/view-config-panel-renderer.ts": "9e7f8e147bfd",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
         "styles.css": "96f5fa440637",
         "tools/screenshots/theme.css": "8239cc22cceb",
@@ -4774,7 +4774,7 @@
       },
       "note": "Multi-day all-day bars, timed events, an overflow week and one event carried across the week boundary.",
       "capture": "viewport",
-      "bytes": 85997
+      "bytes": 86403
     },
     {
       "id": "calendar-month-view",
@@ -4797,7 +4797,7 @@
       },
       "note": "Multi-day all-day bars, timed events, an overflow week and one event carried across the week boundary.",
       "capture": "viewport",
-      "bytes": 87551
+      "bytes": 87204
     },
     {
       "id": "calendar-toolbar-options",
@@ -4966,7 +4966,7 @@
       },
       "note": "Sticky day header and all-day strip over the 08–16 time grid; the current-time ruler sits on Wednesday at 13:45.",
       "capture": "viewport",
-      "bytes": 57407
+      "bytes": 57756
     },
     {
       "id": "calendar-week-time-grid",
@@ -5748,7 +5748,7 @@
       },
       "note": "Two weeks at one column per day; the April band marks the month boundary and the today line sits at 25 March 13:45.",
       "capture": "viewport",
-      "bytes": 146959
+      "bytes": 147239
     },
     {
       "id": "timeline-view",

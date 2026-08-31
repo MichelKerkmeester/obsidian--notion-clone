@@ -11,8 +11,8 @@ _memory:
     packet_pointer: "public/005-component-surface-system/030-gallery-view-deprecation"
     last_updated_at: "2026-08-31T14:10:00Z"
     last_updated_by: "phase-author"
-    recent_action: "Task list drafted; T1 blocks the rest"
-    next_safe_action: "Close T1 with the operator"
+    recent_action: "Gallery withdrawn from every picker; renderer kept so existing views still open"
+    next_safe_action: "The operator confirms an existing gallery database still opens on device"
     blockers:
       - "T1 is blocking and belongs to the operator"
     key_files:
@@ -22,7 +22,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-030-tasks"
       parent_session_id: null
-    completion_pct: 0
+    completion_pct: 67
     open_questions:
       - "T1: the migration target"
     answered_questions:

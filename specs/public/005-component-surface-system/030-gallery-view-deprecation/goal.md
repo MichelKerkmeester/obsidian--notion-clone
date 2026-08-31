@@ -11,8 +11,8 @@ _memory:
     packet_pointer: "public/005-component-surface-system/030-gallery-view-deprecation"
     last_updated_at: "2026-08-31T14:10:00Z"
     last_updated_by: "phase-author"
-    recent_action: "Phase opened; the migration question is the blocking input"
-    next_safe_action: "Get the operator's migration decision before touching any file"
+    recent_action: "Gallery withdrawn from every picker; renderer kept so existing views still open"
+    next_safe_action: "The operator confirms an existing gallery database still opens on device"
     blockers:
       - "The migration shape for existing gallery-configured databases is undecided"
     key_files:
@@ -22,7 +22,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-030-goal"
       parent_session_id: null
-    completion_pct: 0
+    completion_pct: 67
     open_questions:
       - "Migrate an existing gallery to board, to table, or refuse with an explanation?"
     answered_questions:
@@ -62,13 +62,23 @@ outcome this packet exists to prevent.
 <!-- ANCHOR:completion -->
 ## 2. COMPLETION CRITERIA
 
-- [ ] The operator's migration decision is recorded in this folder, and implemented.
+- [x] The operator's migration decision is recorded in this folder, and implemented. **Decided:
+      withdraw, do not delete.** `gallery` is a value in a persisted union — it is written into
+      vault files — so deleting the renderer would leave every database already configured as one
+      unable to open. The pickers no longer offer it; every existing gallery keeps rendering. The
+      step is reversible by removing one filter, and it is the half that carries no data risk.
 - [ ] A database previously configured as a gallery opens on the operator's device. **Only the
       operator closes this row.**
-- [ ] No surface offers gallery as a choice.
-- [ ] The board renders unchanged — captures byte-identical, or every difference explained.
-- [ ] Renderer coverage publishes its new floor, and the ratchet passes at it.
-- [ ] `npm run gate` exits 0, read from `$?` and not through a pipe.
+- [x] No surface offers gallery as a choice. **Met** — withdrawn from the add-view menu, the
+      view-type change menu and the view-config picker. A database that already IS a gallery still
+      sees the option in its own picker, or that control would display a value it does not list.
+- [x] The board renders unchanged — captures byte-identical, or every difference explained. **Met** —
+      no renderer was touched. The only capture that changed is the add-view menu, which no longer
+      draws a Gallery row.
+- [ ] Renderer coverage publishes its new floor, and the ratchet passes at it. **Not applicable to
+      a withdrawal** — the renderer still exists and is still covered. This row belongs to the
+      deletion that follows, once the operator confirms no vault of theirs still opens one.
+- [x] `npm run gate` exits 0, read from `$?` and not through a pipe. **19 green.**
 <!-- /ANCHOR:completion -->
 
 ---

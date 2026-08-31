@@ -411,6 +411,9 @@ export class ViewConfigPanelRenderer {
     this.renderSelect(
       panel,
       t("viewConfig.viewType"),
+      // The gallery is withdrawn from the picker but kept for a database that already is one —
+      // otherwise its own type control would display a value it does not list. Deprecated rather
+      // than deleted because the type is persisted in vault files.
       [
         { value: "table", text: t("common.tableView"), icon: "table" },
         { value: "board", text: t("common.boardView"), icon: "layout-grid" },
@@ -419,7 +422,7 @@ export class ViewConfigPanelRenderer {
         { value: "chart", text: t("common.chartView"), icon: "bar-chart" },
         { value: "calendar", text: t("common.calendarView"), icon: "calendar-days" },
         { value: "timeline", text: t("common.timelineView"), icon: "chart-gantt" },
-      ],
+      ].filter((option) => option.value !== "gallery" || config.viewType === "gallery"),
       config.viewType || "table",
       (value) => {
         const next = value as DatabaseViewType;

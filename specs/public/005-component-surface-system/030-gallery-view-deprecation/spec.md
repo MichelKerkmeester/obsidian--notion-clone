@@ -13,8 +13,8 @@ _memory:
     packet_pointer: "public/005-component-surface-system/030-gallery-view-deprecation"
     last_updated_at: "2026-08-31T14:10:00Z"
     last_updated_by: "phase-author"
-    recent_action: "Phase opened on operator instruction to deprecate the gallery view completely"
-    next_safe_action: "Decide the migration shape for databases already configured as gallery"
+    recent_action: "Gallery withdrawn from every picker; renderer kept so existing views still open"
+    next_safe_action: "The operator confirms an existing gallery database still opens on device"
     blockers:
       - "Undecided: what happens to a user's existing gallery-configured view on upgrade"
     key_files:
@@ -25,7 +25,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-030"
       parent_session_id: null
-    completion_pct: 0
+    completion_pct: 67
     open_questions:
       - "Does an existing gallery view migrate to board, to table, or refuse to open?"
       - "Is the gallery removed from the type union, or kept as an accepted-but-redirected value?"
@@ -50,7 +50,7 @@ _memory:
 |---|---|
 | **Spec Folder** | 030-gallery-view-deprecation |
 | **Level** | 3 |
-| **Status** | Planned |
+| **Status** | **In progress — withdrawn, not deleted.** The gallery is gone from the add-view menu, the view-type change menu and the view-config picker; the renderer is untouched so a database already configured as one still opens. Open: the deletion itself, and the operator confirming an existing gallery view on device |
 | **Complexity** | 81/100, confidence 94% — 900 LOC, 41 files, architectural + API change |
 <!-- /ANCHOR:metadata -->
 

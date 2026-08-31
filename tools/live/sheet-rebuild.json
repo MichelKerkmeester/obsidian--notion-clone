@@ -1,9 +1,9 @@
 {
-  "measuredAt": "2026-08-31T19:40:01.014Z",
+  "measuredAt": "2026-08-31T19:46:42.937Z",
   "inputs": {
     "tools/live/sheet-rebuild.mjs": "ebf317b8ec14",
     "tools/live/sheet-rebuild-harness.ts": "eba0728b5dba",
-    "src/views/toolbar-renderer.ts": "88fdd50cb460",
+    "src/views/toolbar-renderer.ts": "2990d93c5c19",
     "src/views/popover-position.ts": "365fa71ee7f1",
     "src/views/mobile-bottom-sheet.ts": "66b72d09ee79"
   },

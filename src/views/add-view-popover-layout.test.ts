@@ -71,11 +71,21 @@ const addViewMenuBody = (): string => {
 };
 
 /** View types the renderer offers, read from `getViewTypeOptions`. */
+/**
+ * Every view type the options method LISTS, offered or not.
+ *
+ * Located by name rather than by exact signature: pinning `getViewTypeOptions()` with its
+ * parentheses meant that adding one parameter silently found nothing, and the test then failed
+ * claiming the renderer offers zero view types — a true-looking result from a broken locator.
+ */
 const rendererViewTypes = (): string[] => {
-  const block = toolbarSource.slice(toolbarSource.indexOf("private getViewTypeOptions()"));
+  const block = toolbarSource.slice(toolbarSource.indexOf("private getViewTypeOptions"));
   const body = block.slice(0, block.indexOf("\n  }"));
   return [...body.matchAll(/text:\s*t\("common\.(\w+)"\)/g)].map((m) => m[1]);
 };
+
+/** The view types actually offered — the gallery is listed but withdrawn from the pickers. */
+const offeredViewTypes = (): string[] => rendererViewTypes().filter((type) => type !== "galleryView");
 
 describe("add-view surface", () => {
   it("keeps the duplicate checkbox at its native size instead of stretching it to the form width", () => {
@@ -138,13 +148,18 @@ describe("add-view surface", () => {
 
   describe("the screenshot fixture depicts what the renderer emits", () => {
     it("draws one row per view type the renderer offers", () => {
-      const types = rendererViewTypes();
-      expect(types).toHaveLength(7);
+      // Seven exist in the union; six are offered. The gallery is deprecated, not deleted — the
+      // type is persisted in vault files, so the entry stays and only the picker withdraws it.
+      expect(rendererViewTypes()).toHaveLength(7);
+      const types = offeredViewTypes();
+      expect(types).toHaveLength(6);
       const fixture = addViewFixture();
       const drawn = [...fixture.matchAll(/class="db-menu-item-label">([^<]+)</g)].map((m) => m[1]);
       // The duplicate action is a row too, so the fixture draws one more than there are types.
       expect(drawn).toHaveLength(types.length + 1);
       expect(drawn).toContain("Duplicate current view");
+      // A withdrawn type must not be depicted as available.
+      expect(drawn).not.toContain("Gallery view");
       // `common.tableView` -> "Table view", which is the caption the fixture writes out.
       for (const type of types) {
         const label = type.replace(/View$/, " view");

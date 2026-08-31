@@ -1211,7 +1211,7 @@ export class ToolbarRenderer {
       label: t("toolbar.changeViewType"),
       value: viewType,
       popoverClassName: "db-view-tabs-dropdown-popover",
-      options: this.getViewTypeOptions(),
+      options: this.getViewTypeOptions(viewType),
       onChange: (value) => {
         this.closeViewTabPopover();
         actions.setViewType(value as DatabaseViewType, viewIndex);
@@ -1239,8 +1239,20 @@ export class ToolbarRenderer {
     return { field, controlId };
   }
 
-  private getViewTypeOptions(): Array<{ value: DatabaseViewType; text: string; icon: string }> {
-    return [
+  /**
+   * The view types a user may pick, with the gallery withdrawn.
+   *
+   * Deprecated, not deleted, and the difference is the whole point. `gallery` is a value in a
+   * persisted union — it is written into vault files — so removing the renderer would leave every
+   * database already configured as one unable to open. Withdrawing it from the pickers stops
+   * anyone new arriving at it while every existing gallery keeps working, and the step is
+   * reversible by deleting one filter.
+   *
+   * `current` is what keeps that honest: a database that IS a gallery still sees the option, or its
+   * own type picker would show a value it does not offer and the control would read as broken.
+   */
+  private getViewTypeOptions(current?: DatabaseViewType): Array<{ value: DatabaseViewType; text: string; icon: string }> {
+    const all: Array<{ value: DatabaseViewType; text: string; icon: string }> = [
       { value: "table", text: t("common.tableView"), icon: this.getViewTypeIcon("table") },
       { value: "board", text: t("common.boardView"), icon: this.getViewTypeIcon("board") },
       { value: "gallery", text: t("common.galleryView"), icon: this.getViewTypeIcon("gallery") },
@@ -1249,6 +1261,7 @@ export class ToolbarRenderer {
       { value: "calendar", text: t("common.calendarView"), icon: this.getViewTypeIcon("calendar") },
       { value: "timeline", text: t("common.timelineView"), icon: this.getViewTypeIcon("timeline") },
     ];
+    return all.filter((option) => option.value !== "gallery" || current === "gallery");
   }
 
   private renderViewTabPopoverRow(
