@@ -26,7 +26,7 @@ version: 1.0.0.0
 # Rule: Screenshot currency
 
 > Routed from [`REPO RULES.md`](../REPO%20RULES.md). Load it before changing any UI surface, and before claiming UI work is done.
-> Expands `AGENTS.md`, never overrides it — where they appear to disagree, `AGENTS.md` wins and this file is wrong. Say so.
+> Expands `AGENTS.md`, never overrides it. Where they appear to disagree, `AGENTS.md` wins and this file is wrong. Say so.
 
 ## Fires when
 
@@ -67,8 +67,8 @@ Each scenario declares the `sources` it depicts, and that list decides which cap
 
 Two properties change how a capture should be read:
 
-- It renders hand-written fixture markup against the shipped stylesheet, **not the real renderers**, which need a live Obsidian `App`, vault and metadata cache. Markup drift appears as a screenshot that no longer matches the code, never as a capture error.
-- It stands in for what Obsidian supplies — host theme variables, bare form-control styling, and layout values the plugin sets from JavaScript — through `theme.css` and `runtime-vars.css`.
+- It renders hand-written fixture markup against the shipped stylesheet, **not the real renderers** which need a live Obsidian `App`, vault and metadata cache. Markup drift appears as a screenshot that no longer matches the code, never as a capture error.
+- It stands in for what Obsidian supplies, host theme variables, bare form-control styling, and layout values the plugin sets from JavaScript, through `theme.css` and `runtime-vars.css`.
 
 **So a surface that looks wrong in a capture may be a gap in those stand-ins rather than a defect in the plugin. Check which before filing it as a bug.**
 

@@ -24,7 +24,7 @@ version: 1.0.0.0
 # Rule: Verification gates
 
 > Routed from [`REPO RULES.md`](../REPO%20RULES.md). Load it before claiming any work in this repository is complete.
-> Expands `AGENTS.md`, never overrides it — where they appear to disagree, `AGENTS.md` wins and this file is wrong. Say so.
+> Expands `AGENTS.md`, never overrides it. Where they appear to disagree, `AGENTS.md` wins and this file is wrong. Say so.
 
 ## Fires when
 
