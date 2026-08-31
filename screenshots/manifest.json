@@ -995,7 +995,7 @@
       "sourceHashes": {
         "src/views/owned-menu.ts": "e06f7bef597a",
         "src/views/menu-row.ts": "dd0e9eeeb997",
-        "src/views/mobile-bottom-sheet.ts": "58afdaea3b6f",
+        "src/views/mobile-bottom-sheet.ts": "66b72d09ee79",
         "styles.css": "96f5fa440637",
         "tools/screenshots/theme.css": "8239cc22cceb",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -1022,7 +1022,7 @@
       "sourceHashes": {
         "src/views/owned-menu.ts": "e06f7bef597a",
         "src/views/menu-row.ts": "dd0e9eeeb997",
-        "src/views/mobile-bottom-sheet.ts": "58afdaea3b6f",
+        "src/views/mobile-bottom-sheet.ts": "66b72d09ee79",
         "styles.css": "96f5fa440637",
         "tools/screenshots/theme.css": "8239cc22cceb",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -1049,7 +1049,7 @@
       "sourceHashes": {
         "src/views/owned-menu.ts": "e06f7bef597a",
         "src/views/menu-row.ts": "dd0e9eeeb997",
-        "src/views/mobile-bottom-sheet.ts": "58afdaea3b6f",
+        "src/views/mobile-bottom-sheet.ts": "66b72d09ee79",
         "styles.css": "96f5fa440637",
         "tools/screenshots/theme.css": "8239cc22cceb",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -1058,7 +1058,7 @@
       },
       "note": "The phone form of the owned menu. Rows share one left edge with the icon in a fixed leading column, hairlines divide neighbours but not the last row of a group, and a row that opens a submenu carries a trailing chevron. Captured in viewport mode so the fixed sheet docks at the bottom.",
       "capture": "viewport",
-      "bytes": 36591
+      "bytes": 36596
     },
     {
       "id": "chrome-owned-menu-sheet",
@@ -1076,7 +1076,7 @@
       "sourceHashes": {
         "src/views/owned-menu.ts": "e06f7bef597a",
         "src/views/menu-row.ts": "dd0e9eeeb997",
-        "src/views/mobile-bottom-sheet.ts": "58afdaea3b6f",
+        "src/views/mobile-bottom-sheet.ts": "66b72d09ee79",
         "styles.css": "96f5fa440637",
         "tools/screenshots/theme.css": "8239cc22cceb",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -4797,7 +4797,7 @@
       },
       "note": "Multi-day all-day bars, timed events, an overflow week and one event carried across the week boundary.",
       "capture": "viewport",
-      "bytes": 87551
+      "bytes": 87204
     },
     {
       "id": "calendar-toolbar-options",
@@ -4847,7 +4847,7 @@
       },
       "note": "The Time section only exists in week and day scale; the setup preview card below Data carries no stylesheet rules.",
       "capture": "viewport",
-      "bytes": 129708
+      "bytes": 129679
     },
     {
       "id": "calendar-toolbar-options",

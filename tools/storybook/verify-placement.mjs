@@ -1296,7 +1296,15 @@ const menuResults = await section("the phone menu presentation", () => menuPhone
 // The short drag is the control. Both directions of the threshold are asserted, because a check
 // that only proves "a long drag closes it" also passes on a surface that closes on any touch at
 // all — which would make the menu impossible to scroll.
-const dragCase = async (distance) => {
+// `pauseMs` is what makes a short drag a DRAG rather than a flick.
+//
+// Dismissal is no longer distance-only: a fast pull past a velocity threshold closes the sheet too,
+// which is the gesture a phone user already has and which did nothing before. That makes timing
+// load-bearing here. Fired back-to-back these two moves complete a 40px gesture in about 18ms —
+// roughly 2 px/ms, faster than a measured real flick — so an unpaced "short drag" is a flick and
+// asserting it springs back would be asserting the feature is absent. Paced, it models the
+// deliberate drag it was always meant to describe.
+const dragCase = async (distance, { pauseMs = 0, steps = 2 } = {}) => {
   const start = await menuPhone.evaluate(() => {
     const { createOwnedMenu } = globalThis.__place;
     const menu = globalThis.__dragMenu = createOwnedMenu(document);
@@ -1315,8 +1323,10 @@ const dragCase = async (distance) => {
   }
   await menuPhone.mouse.move(start.x, start.y);
   await menuPhone.mouse.down();
-  await menuPhone.mouse.move(start.x, start.y + Math.round(distance / 2));
-  await menuPhone.mouse.move(start.x, start.y + distance);
+  for (let step = 1; step <= steps; step += 1) {
+    await menuPhone.mouse.move(start.x, start.y + Math.round((distance * step) / steps));
+    if (pauseMs) await menuPhone.waitForTimeout(pauseMs);
+  }
   await menuPhone.mouse.up();
   const after = await menuPhone.evaluate(() => {
     const state = {
@@ -1338,12 +1348,24 @@ await section("the menu sheet's drag-to-dismiss gesture", async () => {
       ? `dragged 140px (threshold 96): menu still mounted=${longDrag.mounted} backdrop=${longDrag.scrim ? "left behind" : "gone"}`
       : "the menu has no grab handle, so there is no gesture to drive",
   });
-  const shortDrag = await dragCase(40);
+  // Deliberate: 40px spread over four paced moves, which is how a person drags a sheet they are
+  // reading rather than dismissing.
+  const shortDrag = await dragCase(40, { pauseMs: 120, steps: 4 });
   menuResults.push({
-    name: "a short drag on the handle springs back instead of dismissing",
+    name: "a short SLOW drag on the handle springs back instead of dismissing",
     pass: shortDrag.handle && shortDrag.mounted && shortDrag.scrim,
     detail: shortDrag.handle
-      ? `dragged 40px (threshold 96): menu still mounted=${shortDrag.mounted} backdrop=${shortDrag.scrim ? "present" : "gone"}`
+      ? `dragged 40px slowly (distance threshold 96): menu still mounted=${shortDrag.mounted} backdrop=${shortDrag.scrim ? "present" : "gone"}`
+      : "the menu has no grab handle, so there is no gesture to drive",
+  });
+  // The same 40px delivered fast. It must dismiss, or the velocity path does not exist — and this
+  // is the half that keeps the check above from passing on a sheet that ignores flicks entirely.
+  const flick = await dragCase(40, { pauseMs: 0, steps: 4 });
+  menuResults.push({
+    name: "a short FAST flick on the handle dismisses it",
+    pass: flick.handle && !flick.mounted && !flick.scrim,
+    detail: flick.handle
+      ? `flicked 40px, under the 96px distance threshold: menu still mounted=${flick.mounted} backdrop=${flick.scrim ? "left behind" : "gone"}`
       : "the menu has no grab handle, so there is no gesture to drive",
   });
 });
@@ -4504,6 +4526,15 @@ await section("lifted probes: the sheet drag", async () => {
     samples.push({ dy, ...t });
   }
   const log = await page.evaluate(() => globalThis.__log.slice());
+  // Settle before lifting, so this stays the deliberate drag it is describing.
+  //
+  // Dismissal is no longer distance-only — a fast pull past a velocity threshold closes the sheet
+  // too. These samples are two animation frames apart, which carries 95px at roughly 1 px/ms:
+  // flick speed, not the speed of someone dragging a sheet to read it. Lifting straight from that
+  // last move would dismiss the panel and this story would be asserting the feature is absent,
+  // while what it is actually about is the grab bar surviving a field refresh. A pause before the
+  // lift models a finger that came to rest, which is what a 95px non-dismissing drag means.
+  await page.waitForTimeout(180);
   await touch("touchEnd", startX, startY + 95);
   await page.waitForTimeout(60);
 

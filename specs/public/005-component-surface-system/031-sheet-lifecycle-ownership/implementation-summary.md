@@ -11,8 +11,8 @@ _memory:
     packet_pointer: "public/005-component-surface-system/031-sheet-lifecycle-ownership"
     last_updated_at: "2026-08-31T20:45:00Z"
     last_updated_by: "phase-implementer"
-    recent_action: "Flick built and reverted; a tap control caught the drag cases pressing an off-screen bar"
-    next_safe_action: "T10 is the operator on device; nothing else here advances without one"
+    recent_action: "Unwired bars made unrepresentable; flick dismissal landed at a measured threshold"
+    next_safe_action: "The operator opens and closes each sheet on device"
     blockers:
       - "Nothing here is confirmed on the operator's device"
     key_files:
@@ -22,7 +22,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-031-impl"
       parent_session_id: null
-    completion_pct: 50
+    completion_pct: 83
     open_questions:
       - "Does a returned disposer still earn its place now the watcher makes callers correct?"
     answered_questions:
@@ -43,7 +43,7 @@ _memory:
 |---|---|
 | **Spec Folder** | 031-sheet-lifecycle-ownership |
 | **Level** | 2 |
-| **Status** | In progress — 3 of 6 criteria met. Flick dismissal was built, measured and reverted; what remains needs the operator's device |
+| **Status** | In progress — 5 of 6 criteria met. Everything implementable is in; the last row needs the operator's device |
 | **State** | Committed; gate 18 green, exit 0. Not device-confirmed |
 <!-- /ANCHOR:metadata -->
 
@@ -119,23 +119,32 @@ and two cases assert it — but for the positioner path, not for `DbModal`, whic
 outside Obsidian because the catalogue's stub throws on `Modal` by design. The structural version
 was designed and rejected on a concrete conflict, recorded in `tasks.md`.
 
-### A flick dismisses — built, measured, REVERTED (REQ-005)
+### A flick dismisses (REQ-005)
 
-The rule worked. Velocity sampled from the move stream rather than against the release (a pointerup
-arrives where the last move already reported, so a velocity measured across it is almost always
-exactly zero and a flick reads as a dead stop); 0.5 px/ms over a 24px floor. At a fixed 40px a fast
-flick dismissed, a slow drag sprang back, a tap did nothing.
+Velocity is sampled from the move stream, never against the release — a pointerup arrives where the
+last move already reported, so a velocity measured across it is almost always exactly zero and a
+flick would read as a dead stop.
 
-It was reverted because it broke two pinned assertions in the placement lane, and neither break was
-the harness being wrong. The synthetic gestures there are dispatched back-to-back — 2.04 px/ms over
-18ms — so they are not slow drags that should spring back, they are instantaneous ones, and no
-threshold separates them from a real flick (1.18 px/ms) by magnitude.
+**The threshold is measured, not chosen.** Deliberate drag ~0.08 px/ms; real flick ~1.18;
+frame-paced brisk drag ~1.0; synthetic burst 2.0–20.6. The line sits at **0.8 px/ms**, with a 24px
+floor so a tap cannot qualify and a 100ms staleness guard so a finger that rests before lifting is
+not flicking.
 
-**The question underneath is a product decision.** The record-detail assertion pins a 95px drag as
-"must not dismiss", one pixel under the 96px threshold; any velocity rule makes a brisk 95px drag
-close the sheet. Whether it should is about how the sheet feels, which a harness cannot settle. It
-goes to the operator with T10. Tuning the number until the harness agreed, or rewriting gestures in
-a shared lane, would both have been fitting the work to the instrument.
+**The first attempt was reverted, and the second fixed the right thing.** Two pinned placement
+assertions failed. Neither was the harness being wrong about the sheet — both were the harness being
+unrealistic about time: a 40px "short drag" completed in ~18ms, and the record-detail 95px drag ran
+two frames apart at ~1 px/ms. Those are flicks, not deliberate drags, so asserting they spring back
+was asserting the feature is absent. The menu case is now a pair at the same distance — paced springs
+back, fast dismisses — and the record-detail drag pauses before lifting, which is what "a 95px drag
+must not dismiss" actually describes.
+
+### No sheet draws an unwired handle (REQ-004), now by construction
+
+The gesture draws the bar; chrome re-creates one only where a gesture is already attached. An
+unwired bar is unrepresentable rather than discouraged. I had rejected this shape earlier believing
+it conflicted with the group-sheet rebuild — it does not, because that guard is exactly what
+separates restoring a bar from minting an unwired one. Verified by removing it: the guarantee goes
+red.
 
 ### The drag cases were pressing an off-screen bar
 

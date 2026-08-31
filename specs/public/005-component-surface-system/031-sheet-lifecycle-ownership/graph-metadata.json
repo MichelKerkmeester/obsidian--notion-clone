@@ -184,21 +184,21 @@
         "source": "derived"
       },
       {
-        "name": "T10",
-        "kind": "key_phrase",
+        "name": "PHASE 1: THE CONTROL",
+        "kind": "heading",
         "path": "tasks.md",
         "source": "derived"
       },
       {
-        "name": "PHASE 1: THE CONTROL",
-        "kind": "heading",
-        "path": "tasks.md",
+        "name": "Acceptance Criteria",
+        "kind": "proper_noun",
+        "path": "acceptance-criteria.md",
         "source": "derived"
       }
     ],
     "causal_summary": "Every sheet has one owner for its whole life, so the scrim always comes down, the drag always survives a re-render, and no handle is drawn onto nothing.",
     "created_at": "2026-08-31T14:46:45.699Z",
-    "last_save_at": "2026-08-31T18:21:20.342Z",
+    "last_save_at": "2026-08-31T19:35:09.027Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -209,13 +209,13 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:2a19352d732e26ff60f70a4b7dddbef0e1bf7f5afe6bcb6c7da64f5fa37c9ffe",
+    "source_fingerprint": "sha256:6bb0ddc87ed10aa2e707e25606a7dff5d120f1900d48e22111bf402475e8ce7b",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "2846f4f64c605056ec1c6f015d54aff0125a2031f3c5d83fb090c2ec5bb0582b",
       "plan.md": "808630e42990ca0d3c2e6d1518e397c9a8d0dc31b665a6f35a80e4ddf59cf9c3",
-      "tasks.md": "de7641da7c99ed24eafb05445a332d2874c7ef9f1156971ccacb9681a7c540a6",
-      "implementation-summary.md": "e121ec90eebad5e2f1ac2e11a886b09836daaf141ae4ab50b16096c3b3c515c6"
+      "tasks.md": "d91d90135b9f642b4130a836ce2f1631a7f7651207d26ea0da9bb16edc9529f9",
+      "implementation-summary.md": "5613579796dc7c90c61eef1ed4acde2a298a89541b5de50af2be22c744b10cd4"
     },
     "last_active_child_id": null,
     "last_active_at": null

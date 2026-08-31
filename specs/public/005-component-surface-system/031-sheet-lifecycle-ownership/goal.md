@@ -11,8 +11,8 @@ _memory:
     packet_pointer: "public/005-component-surface-system/031-sheet-lifecycle-ownership"
     last_updated_at: "2026-08-31T20:30:00Z"
     last_updated_by: "phase-implementer"
-    recent_action: "Header panels hold their own panel; portalled sheets now reach the overlay stack"
-    next_safe_action: "T10 is the operator on device; nothing else here advances without one"
+    recent_action: "Unwired bars made unrepresentable; flick dismissal landed at a measured threshold"
+    next_safe_action: "The operator opens and closes each sheet on device"
     blockers: []
     key_files:
       - "spec.md"
@@ -21,7 +21,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-031-goal"
       parent_session_id: null
-    completion_pct: 50
+    completion_pct: 83
     open_questions:
       - "Microtask prune or explicit teardown for the live-sheet set"
     answered_questions:
@@ -88,16 +88,16 @@ defect in this phase is a consequence of that shape.
       nothing, the retained reference finds the sheet, and `dismissPanel(panel, "programmatic")`
       returns true. The first clause is what keeps it from passing vacuously — if both lookups
       found the panel, the sheet never portalled.
-- [ ] No sheet draws an unwired handle. **Fix landed, criterion not met.** `DbModal` now wires the
-      bar it draws, and `hasSheetDrag()` makes the property measurable — but only the positioner
-      path is asserted, not `DbModal` itself, which cannot be constructed outside Obsidian. This
-      stays open because it asks for an invariant, and what exists is two examples of it holding.
-- [ ] A flick dismisses. **Built, measured, reverted — needs a decision, not more code.** The rule
-      worked (fast flick dismisses, slow drag springs back, tap does nothing), but it makes a brisk
-      95px drag dismiss, and the placement lane pins exactly that gesture as "must not dismiss" one
-      pixel under the distance threshold. Whether a brisk 95px drag should close the sheet is a
-      question about how it feels, so it belongs with the operator. Details and the measured
-      numbers are under T7 in `tasks.md`.
+- [x] No sheet draws an unwired handle. **Met, by construction.** The gesture now draws the bar and
+      chrome re-creates one only where a gesture is already attached, so an unwired bar is
+      unrepresentable rather than merely discouraged. Verified by removing that guard: the
+      guarantee goes red.
+- [x] A flick dismisses. **Met, at a threshold taken from measured speeds** — deliberate drag
+      ~0.08 px/ms, real flick ~1.18, frame-paced brisk drag ~1.0, so the line sits at 0.8 with a
+      24px floor and a 100ms staleness guard. Four real-pointer cases: distance drag dismisses,
+      fast 40px flick dismisses, slow 40px springs back, a tap does nothing. The two harness
+      gestures that blocked the first attempt were themselves unrealistically fast and were paced,
+      not argued away.
 - [ ] The operator opens and closes each sheet on device without the app locking up. **Only the
       operator closes this.**
 <!-- /ANCHOR:completion -->

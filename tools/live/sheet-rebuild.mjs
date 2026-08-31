@@ -104,7 +104,9 @@ function findChrome() {
 
 // Past the gesture's own 96px dismissal threshold, with room to spare.
 const DRAG_PX = 120;
-// Well UNDER that threshold, so a gesture this short must spring back.
+// Well UNDER the distance threshold, so only velocity can dismiss at this distance. The same
+// number is used for both the flick and its slow control, because the pair is only meaningful if
+// the distance is identical and speed is the single thing that differs.
 const SHORT_PX = 40;
 
 let results = null;
@@ -173,9 +175,12 @@ try {
 
   // 1. Past the distance threshold. The original path, and the one that always worked.
   const longDrag = await gesture({ distance: DRAG_PX, steps: 12, pauseMs: 0 });
-  // 2. A short drag, well under the distance threshold. Dismissal is distance-only, so this must
-  //    spring back. Velocity dismissal was built and reverted — see the phase's T7 for why.
-  const shortDrag = await gesture({ distance: SHORT_PX, steps: 4, pauseMs: 0 });
+  // 2. A short, FAST flick — well under the distance threshold. This is what did nothing before
+  //    velocity dismissal existed.
+  const flick = await gesture({ distance: SHORT_PX, steps: 4, pauseMs: 0 });
+  // 3. The SAME distance delivered slowly. It must NOT dismiss, or the velocity rule has become
+  //    "any gesture closes the sheet" and the threshold means nothing.
+  const slowDrag = await gesture({ distance: SHORT_PX, steps: 4, pauseMs: 120 });
   // 4. A press and release that never moves. This is the control that caught the harness pressing
   //    an off-screen bar: with the sheet still below the fold every press missed, the overlay stack
   //    dismissed it as an OUTSIDE press, and all three gestures above "passed" without the drag
@@ -192,11 +197,18 @@ try {
           : "did nothing — the bar is back but inert",
     },
     {
-      name: `a ${SHORT_PX}px drag`,
-      pass: shortDrag.staged && !shortDrag.closed,
-      detail: !shortDrag.staged ? `could not stage: ${shortDrag.detail}`
-        : shortDrag.closed ? "dismissed, but dismissal is distance-only and this is under the threshold"
-          : "sprang back, as a gesture under the distance threshold should",
+      name: `a fast ${SHORT_PX}px flick`,
+      pass: flick.staged && flick.closed,
+      detail: !flick.staged ? `could not stage: ${flick.detail}`
+        : flick.closed ? "dismissed on velocity, under the distance threshold"
+          : "did nothing — a flick short of the distance threshold is still ignored",
+    },
+    {
+      name: `a slow ${SHORT_PX}px drag`,
+      pass: slowDrag.staged && !slowDrag.closed,
+      detail: !slowDrag.staged ? `could not stage: ${slowDrag.detail}`
+        : slowDrag.closed ? "dismissed, so the velocity rule fires on any gesture and means nothing"
+          : "sprang back, as a slow gesture short of the threshold should",
     },
     {
       name: "a tap that never moves",

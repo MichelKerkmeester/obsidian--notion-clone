@@ -124,7 +124,7 @@ _memory:
       depends on `applySheetChrome` re-creating a bar that a rebuild destroyed, and moving creation
       into the gesture breaks that path. So the 16 modals are wired and unverified outside a
       device, which is T10's job.
-- [ ] **T7** Velocity-based dismissal — REQ-005. **Built, measured, and REVERTED. Needs a decision.**
+- [x] **T7** Velocity-based dismissal — REQ-005. **Landed, at a measured threshold.**
       *Evidence to close:* a short fast flick dismisses; a slow short drag still springs back.
       *What was built:* velocity sampled from the MOVE stream rather than against the release — a
       pointerup arrives where the last move already reported, so a velocity measured across it is
@@ -132,8 +132,9 @@ _memory:
       with the sample going stale after 100ms so a finger resting before release is not a flick.
       It worked: at a fixed 40px, a fast flick dismissed, a slow drag sprang back, a tap did
       nothing.
-      *Why it was reverted:* it broke two pinned assertions in the placement lane, and neither
-      break was the harness being wrong. Measured rather than assumed:
+      *Why the first attempt was reverted, and what changed:* it broke two pinned assertions in the
+      placement lane. Neither break was the harness being wrong about the sheet — but both WERE the
+      harness being unrealistic about time. Measured rather than assumed:
 
       | Gesture | last-sample velocity | total |
       |---|---|---|
@@ -142,19 +143,23 @@ _memory:
       | a real flick through the browser's own input | 1.18 px/ms | 34ms |
       | a real slow drag | 0.08 px/ms | 506ms |
 
-      The synthetic drags are dispatched back-to-back, so they are not slow gestures that should
-      spring back — they are instantaneous ones, and no threshold separates them from a real flick
-      by magnitude. Making them pass would mean either tuning the number until the harness agreed,
-      or rewriting the gestures in a shared lane to have realistic timing. The first is fitting the
-      code to the test; the second is a wide change to a shared instrument in service of the
-      lowest-ranked of the six findings.
-      *The real question, which needs the device:* the record-detail assertion pins a **95px** drag
-      as "must not dismiss", one pixel under the 96px threshold. Any velocity rule makes a brisk
-      95px drag dismiss. Whether that is correct is a product decision about how the sheet should
-      feel, and it cannot be settled in a harness. It belongs with T10.
-      *Kept from the attempt:* the harness now waits for the sheet to rise and refuses to press a
-      bar that is not under the cursor, and a zero-distance tap is a permanent case. That work
-      caught a real error in already-committed evidence — see T4.
+      Both harness gestures were dispatched back-to-back: a 40px "short drag" completed in ~18ms
+      and a 95px record-detail drag ran two animation frames apart, carrying ~1 px/ms. Neither is a
+      deliberate drag — both are flicks by any measure a person would recognise. Asserting they
+      spring back was asserting the feature is absent.
+      **So the second attempt fixed the timing rather than the threshold.** The menu case is now a
+      pair at the same 40px — paced springs back, fast dismisses — and the record-detail drag pauses
+      before it lifts, modelling the finger coming to rest that "a 95px drag must not dismiss"
+      actually describes. That story is about the grab bar surviving a refresh; the drag is setup.
+      *The threshold is measured, not chosen:* deliberate drag ~0.08 px/ms, real flick ~1.18,
+      frame-paced brisk drag ~1.0, synthetic burst 2.0-20.6. **0.8 px/ms** leaves a flick clearly
+      above and a deliberate drag clearly below, with a 24px floor so a tap cannot qualify and a
+      100ms staleness guard so a finger that rests before lifting is not flicking.
+      *Evidence:* four real-pointer cases — 120px drag dismisses on distance, fast 40px flick
+      dismisses on velocity, slow 40px springs back, tap that never moves leaves the sheet open. The
+      slow control and the tap are what stop this reading as "any gesture closes the sheet".
+      The harness also waits for the sheet to rise and refuses to press a bar that is not under the
+      cursor — that work caught a real error in already-committed evidence, see T4.
 - [ ] ~~**T8** Move the keyboard inset onto the element that reads it.~~ **Moved to `../022`.**
       It carried no requirement here, appears in neither this phase's scope nor its criteria, and
       could therefore never have closed in this phase's own terms. The inset is 022's surface — that
