@@ -12,7 +12,7 @@ _memory:
     last_updated_at: "2026-08-31T20:30:00Z"
     last_updated_by: "phase-implementer"
     recent_action: "Header panels hold their own panel; portalled sheets now reach the overlay stack"
-    next_safe_action: "T7, velocity dismissal — a flick should dismiss, a slow short drag should not"
+    next_safe_action: "T10 is the operator on device; nothing else here advances without one"
     blockers: []
     key_files:
       - "spec.md"
@@ -72,10 +72,17 @@ defect in this phase is a consequence of that shape.
       present after the real rebuild, and a real 120px pointer drag dismisses the rebuilt sheet.
       Observed red first on both — pre-fix the bar went `after: false` and the drag could not be
       staged at all.
-      *Correction:* the previous commit recorded this phase at "2 of 6 criteria" and
+      *Correction 1:* the commit that ticked this recorded "2 of 6 criteria" and
       `completion_pct: 33` while only ONE criterion was ticked. That was a criterion ahead of the
-      evidence, counted from tasks (T1, T2) against a denominator of criteria. The figure is
-      honest as of this line and not before it.
+      evidence, counted from tasks (T1, T2) against a denominator of criteria.
+      *Correction 2, and the worse one:* the drag half of this criterion was ticked on a
+      measurement that was not measuring the drag. The sheet rises from below the fold, and the
+      harness read the bar's box the instant it opened — putting it at y=860 in an 844px viewport.
+      Every press missed, the overlay stack dismissed the sheet as an OUTSIDE press, and the case
+      reported a successful drag. A zero-distance tap "dismissing" the sheet is what exposed it.
+      The harness now waits for the sheet to rise and refuses to press a bar that is not under the
+      cursor, and that tap is a permanent case. Re-measured on that footing, the 120px drag really
+      does dismiss — but it did not become evidence until this line.
 - [x] A phone view sheet is in the overlay stack. Today `dismissPanel` returns false.
       **Met.** Measured in one case against a real open sheet: the container selector finds
       nothing, the retained reference finds the sheet, and `dismissPanel(panel, "programmatic")`
@@ -85,7 +92,12 @@ defect in this phase is a consequence of that shape.
       bar it draws, and `hasSheetDrag()` makes the property measurable — but only the positioner
       path is asserted, not `DbModal` itself, which cannot be constructed outside Obsidian. This
       stays open because it asks for an invariant, and what exists is two examples of it holding.
-- [ ] A flick dismisses.
+- [ ] A flick dismisses. **Built, measured, reverted — needs a decision, not more code.** The rule
+      worked (fast flick dismisses, slow drag springs back, tap does nothing), but it makes a brisk
+      95px drag dismiss, and the placement lane pins exactly that gesture as "must not dismiss" one
+      pixel under the distance threshold. Whether a brisk 95px drag should close the sheet is a
+      question about how it feels, so it belongs with the operator. Details and the measured
+      numbers are under T7 in `tasks.md`.
 - [ ] The operator opens and closes each sheet on device without the app locking up. **Only the
       operator closes this.**
 <!-- /ANCHOR:completion -->

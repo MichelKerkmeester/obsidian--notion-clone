@@ -11,8 +11,8 @@ _memory:
     packet_pointer: "public/005-component-surface-system/031-sheet-lifecycle-ownership"
     last_updated_at: "2026-08-31T20:45:00Z"
     last_updated_by: "phase-implementer"
-    recent_action: "Modal sheets wired; gate reordered so one run is the answer"
-    next_safe_action: "T7, velocity dismissal — a flick should dismiss, a slow short drag should not"
+    recent_action: "Flick built and reverted; a tap control caught the drag cases pressing an off-screen bar"
+    next_safe_action: "T10 is the operator on device; nothing else here advances without one"
     blockers:
       - "Nothing here is confirmed on the operator's device"
     key_files:
@@ -43,7 +43,7 @@ _memory:
 |---|---|
 | **Spec Folder** | 031-sheet-lifecycle-ownership |
 | **Level** | 2 |
-| **Status** | In progress — 3 of 6 criteria met; the freeze, the group-sheet bar and the portalled-sheet lookups are fixed and gated. Modal handles wired but not measurable outside a device |
+| **Status** | In progress — 3 of 6 criteria met. Flick dismissal was built, measured and reverted; what remains needs the operator's device |
 | **State** | Committed; gate 18 green, exit 0. Not device-confirmed |
 <!-- /ANCHOR:metadata -->
 
@@ -118,6 +118,37 @@ what landed is by enumeration: `hasSheetDrag()` is exported so the property is m
 and two cases assert it — but for the positioner path, not for `DbModal`, which cannot be built
 outside Obsidian because the catalogue's stub throws on `Modal` by design. The structural version
 was designed and rejected on a concrete conflict, recorded in `tasks.md`.
+
+### A flick dismisses — built, measured, REVERTED (REQ-005)
+
+The rule worked. Velocity sampled from the move stream rather than against the release (a pointerup
+arrives where the last move already reported, so a velocity measured across it is almost always
+exactly zero and a flick reads as a dead stop); 0.5 px/ms over a 24px floor. At a fixed 40px a fast
+flick dismissed, a slow drag sprang back, a tap did nothing.
+
+It was reverted because it broke two pinned assertions in the placement lane, and neither break was
+the harness being wrong. The synthetic gestures there are dispatched back-to-back — 2.04 px/ms over
+18ms — so they are not slow drags that should spring back, they are instantaneous ones, and no
+threshold separates them from a real flick (1.18 px/ms) by magnitude.
+
+**The question underneath is a product decision.** The record-detail assertion pins a 95px drag as
+"must not dismiss", one pixel under the 96px threshold; any velocity rule makes a brisk 95px drag
+close the sheet. Whether it should is about how the sheet feels, which a harness cannot settle. It
+goes to the operator with T10. Tuning the number until the harness agreed, or rewriting gestures in
+a shared lane, would both have been fitting the work to the instrument.
+
+### The drag cases were pressing an off-screen bar
+
+Worth its own heading, because it invalidated evidence already committed. The sheet rises from
+below the fold, and the harness read the bar's box the instant it opened — y=860 in an 844px
+viewport. Every press missed the sheet entirely, the overlay stack dismissed it as an OUTSIDE
+press, and the case reported a successful drag. The gesture ran, the sheet went away, the case
+passed, and none of it was the drag.
+
+**A zero-distance tap "dismissing" the sheet is what exposed it** — the one result that cannot be
+explained by the gesture working. The harness now waits for the sheet to rise and refuses to press
+a bar that is not under the cursor, and the tap is a permanent case. Re-measured on that footing
+the drag genuinely dismisses, but it was not evidence when it was first cited for REQ-002.
 
 ### The gate answers in one run
 
@@ -201,6 +232,7 @@ report closes when they say it no longer does, and not before.
 | I expected the group fix to need two halves | The reasoning was that re-creating the bar leaves the drag bound to a detached node. The source says otherwise, in a comment written for this exact reason: the listeners are on the panel and the bar is re-resolved at pointerdown. Read before predicting |
 | I expected the defect to be systemic | A guess of "8 or more sites" put a shared lifecycle fix on the table. Reading all 40 `.empty()` sites brought it down to one unconditional case plus two conditional ones, so the one-liner was the right size and the bigger fix was not built |
 | A harness case that raced itself | The two real-renderer cases share one body and each resets it, and they were first built as already-started promises — so the second would clear the body under the first before it read its result. Rewritten as thunks awaited in sequence. A harness racing itself reports a green |
-| I nearly cited a reading that meant nothing | An early probe reported `dismissPanel === false` and it was tempting as evidence for REQ-003. That probe never registered anything, so `false` was the only answer it could give, in either mode. Discarded and measured properly instead |
+| I cited a reading that meant nothing, and shipped it | The 120px drag was committed as REQ-002's evidence while the press was landing off-screen and the overlay stack was doing the dismissing. Two things would have caught it earlier: a control gesture that must NOT close, and asking what the harness proves when it passes rather than only when it fails. Both exist now |
+| I nearly cited another reading that meant nothing | An early probe reported `dismissPanel === false` and it was tempting as evidence for REQ-003. That probe never registered anything, so `false` was the only answer it could give, in either mode. Discarded and measured properly instead |
 | The gate's `evidence` lane self-heals | It checks artefact freshness at lane 9, and lanes 11, 16, 17 and 18 re-stamp their own artefacts afterwards. So the first run after a source change reds and the second greens with no human action. The re-stamps are genuine re-measurements, so nothing is hidden — but "just run it again" is the wrong habit to teach, and moving the lane last would fix it. Left for the packet that owns the gate |
 <!-- /ANCHOR:decisions -->

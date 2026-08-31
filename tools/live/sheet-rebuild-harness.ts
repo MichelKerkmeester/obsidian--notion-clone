@@ -38,6 +38,7 @@ import { ToolbarRenderer } from "../../src/views/toolbar-renderer";
 import { COMPACT_MENU_POPOVER, positionToolbarPopover } from "../../src/views/popover-position";
 import { applySheetChrome, hasSheetDrag } from "../../src/views/mobile-bottom-sheet";
 import { installPopoverAutoClose } from "../../src/views/popover-auto-close";
+import { overlayStack } from "../../src/views/overlay-stack";
 
 // ───────────────────────────────────────────────────────────────────
 // 2. SHAPES
@@ -295,7 +296,23 @@ export interface DragSetup {
  */
 export function openGroupSheetForDrag(doc: Document): DragSetup {
   const view = doc.defaultView as (Window & { __sheetClosed?: boolean }) | null;
-  if (view) view.__sheetClosed = false;
+
+  // Take the previous run's surface out of the overlay stack before building a new one.
+  //
+  // Registering a surface closes the one beneath it, and that close is the previous run's callback
+  // — which sets the "was it dismissed" flag. Resetting the flag at the TOP of this function and
+  // then registering was enough to make every gesture after the first report a dismissal it never
+  // performed: a zero-distance tap "passed". The flick looked correct and the slow-drag control
+  // looked broken, and both readings were the harness reporting its own leftovers.
+  while (overlayStack.size() > 0) {
+    const top = overlayStack.getTopSurface()?.panel;
+    if (!top || !overlayStack.dismissPanel(top, "programmatic")) break;
+  }
+  // Sheets are fixed-position and stack, so a leftover panel would also take the press meant for
+  // this one and the run would measure the wrong surface.
+  for (const stale of Array.from(doc.body.querySelectorAll(".note-database-container, .db-group-popover"))) {
+    stale.remove();
+  }
 
   const { root, anchor } = makeHarness(doc);
   const renderer = new ToolbarRenderer();
@@ -323,6 +340,7 @@ export function openGroupSheetForDrag(doc: Document): DragSetup {
     anchorEl: anchor,
     close: () => {
       if (view) view.__sheetClosed = true;
+      (view as unknown as { __closeTrace?: string }).__closeTrace = new Error("close").stack || "no stack";
       panel.remove();
     },
   });
@@ -337,6 +355,9 @@ export function openGroupSheetForDrag(doc: Document): DragSetup {
   if (box.width === 0 || box.height === 0) {
     return { ready: false, handleBox: null, detail: "the grab bar has no hit area" };
   }
+  // Last, deliberately: everything above can fire a close of its own, and the flag must describe
+  // only what the gesture that follows does.
+  if (view) view.__sheetClosed = false;
   return {
     ready: true,
     handleBox: { x: box.x, y: box.y, width: box.width, height: box.height },

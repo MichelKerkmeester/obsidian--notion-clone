@@ -72,6 +72,12 @@ _memory:
 - [x] **T4** Re-assert chrome after the group panel empties — REQ-002, D3.
       *Evidence to close:* handle present after a group toggle; a 120px drag dismisses. Today the
       handle is absent and the drag moves 0.0px.
+      *CORRECTED:* the drag half of this was first ticked on a harness that pressed an off-screen
+      bar — the sheet rises from below the fold, the box was read before it arrived, every press
+      missed, and the overlay stack's outside-press dismissal was being reported as a working drag.
+      A zero-distance tap "dismissing" the sheet exposed it. The harness now waits for the rise and
+      refuses to press a bar that is not under the cursor; the tap is a permanent case. Re-measured,
+      the drag genuinely dismisses.
       *Closed by:* one line in `rebuildGroupPopover`, guarded by a new `sheet-rebuild` gate lane
       that constructs the real `ToolbarRenderer`, opens the group popover through the real
       positioner and calls the real rebuild — the first check here that drives a renderer rather
@@ -118,8 +124,37 @@ _memory:
       depends on `applySheetChrome` re-creating a bar that a rebuild destroyed, and moving creation
       into the gesture breaks that path. So the 16 modals are wired and unverified outside a
       device, which is T10's job.
-- [ ] **T7** Velocity-based dismissal — REQ-005.
+- [ ] **T7** Velocity-based dismissal — REQ-005. **Built, measured, and REVERTED. Needs a decision.**
       *Evidence to close:* a short fast flick dismisses; a slow short drag still springs back.
+      *What was built:* velocity sampled from the MOVE stream rather than against the release — a
+      pointerup arrives where the last move already reported, so a velocity measured across it is
+      almost always exactly zero and a flick reads as a dead stop. 0.5 px/ms over a 24px floor,
+      with the sample going stale after 100ms so a finger resting before release is not a flick.
+      It worked: at a fixed 40px, a fast flick dismissed, a slow drag sprang back, a tap did
+      nothing.
+      *Why it was reverted:* it broke two pinned assertions in the placement lane, and neither
+      break was the harness being wrong. Measured rather than assumed:
+
+      | Gesture | last-sample velocity | total |
+      |---|---|---|
+      | placement's "short drag springs back" (synthetic) | 2.04 px/ms | 18ms |
+      | placement's record-detail 95px drag (1px under the distance threshold) | ~0.5 px/ms | rAF-paced |
+      | a real flick through the browser's own input | 1.18 px/ms | 34ms |
+      | a real slow drag | 0.08 px/ms | 506ms |
+
+      The synthetic drags are dispatched back-to-back, so they are not slow gestures that should
+      spring back — they are instantaneous ones, and no threshold separates them from a real flick
+      by magnitude. Making them pass would mean either tuning the number until the harness agreed,
+      or rewriting the gestures in a shared lane to have realistic timing. The first is fitting the
+      code to the test; the second is a wide change to a shared instrument in service of the
+      lowest-ranked of the six findings.
+      *The real question, which needs the device:* the record-detail assertion pins a **95px** drag
+      as "must not dismiss", one pixel under the 96px threshold. Any velocity rule makes a brisk
+      95px drag dismiss. Whether that is correct is a product decision about how the sheet should
+      feel, and it cannot be settled in a harness. It belongs with T10.
+      *Kept from the attempt:* the harness now waits for the sheet to rise and refuses to press a
+      bar that is not under the cursor, and a zero-distance tap is a permanent case. That work
+      caught a real error in already-committed evidence — see T4.
 - [ ] ~~**T8** Move the keyboard inset onto the element that reads it.~~ **Moved to `../022`.**
       It carried no requirement here, appears in neither this phase's scope nor its criteria, and
       could therefore never have closed in this phase's own terms. The inset is 022's surface — that

@@ -104,6 +104,8 @@ function findChrome() {
 
 // Past the gesture's own 96px dismissal threshold, with room to spare.
 const DRAG_PX = 120;
+// Well UNDER that threshold, so a gesture this short must spring back.
+const SHORT_PX = 40;
 
 let results = null;
 let dragResult = null;
@@ -122,25 +124,88 @@ try {
   // after it rebuilt itself, which is what the operator does — and a restored-but-inert bar
   // would pass a presence check and fail this one. Driven with a real pointer because the
   // gesture calls setPointerCapture, which rejects any pointer id no real device owns.
-  const setup = await page.evaluate(() => window.__openGroupSheetForDrag());
-  if (!setup.ready) {
-    dragResult = { pass: false, detail: `could not stage the drag: ${setup.detail}` };
-  } else {
-    const centreX = setup.handleBox.x + setup.handleBox.width / 2;
-    const centreY = setup.handleBox.y + setup.handleBox.height / 2;
+  /** Drive one real gesture on a freshly opened, freshly rebuilt sheet. */
+  const gesture = async ({ distance, steps, pauseMs }) => {
+    const setup = await page.evaluate(() => window.__openGroupSheetForDrag());
+    if (!setup.ready) return { staged: false, closed: false, detail: setup.detail };
+
+    // Wait for the sheet to finish rising before touching it, and then prove the bar is actually
+    // under the cursor.
+    //
+    // The entrance animates from below the fold, so a box measured the instant the sheet opens
+    // puts the grab bar at y=860 in an 844px viewport — off-screen. Every press then landed on
+    // nothing, the overlay stack dismissed it as an OUTSIDE press, and the sheet closed. Which
+    // looked exactly like a working drag: the gesture ran, the sheet went away, the case passed.
+    // A zero-distance tap "passing" is what exposed it.
+    //
+    // So the hit test is the gate, not the wait. A bar that is not under the cursor is refused
+    // rather than pressed, because a press that misses can still close the sheet for the wrong
+    // reason and there is no way to tell that apart from the outside.
+    const hit = await page
+      .waitForFunction(() => {
+        const handle = document.querySelector(".db-mobile-bottom-sheet-handle");
+        if (!handle) return null;
+        const box = handle.getBoundingClientRect();
+        if (box.width === 0 || box.height === 0) return null;
+        const x = box.x + box.width / 2;
+        const y = box.y + box.height / 2;
+        if (y < 0 || y > window.innerHeight || x < 0 || x > window.innerWidth) return null;
+        return document.elementFromPoint(x, y) === handle ? { x, y } : null;
+      }, null, { timeout: 4000 })
+      .then((handleResult) => handleResult.jsonValue())
+      .catch(() => null);
+
+    if (!hit) {
+      return { staged: false, closed: false, detail: "the grab bar never became hit-testable, so no press could reach it" };
+    }
+
+    const centreX = hit.x;
+    const centreY = hit.y;
     await page.mouse.move(centreX, centreY);
     await page.mouse.down();
-    // Past the 96px dismissal threshold, in steps, the way a thumb travels.
-    await page.mouse.move(centreX, centreY + DRAG_PX, { steps: 12 });
+    for (let step = 1; step <= steps; step += 1) {
+      await page.mouse.move(centreX, centreY + (distance * step) / steps);
+      if (pauseMs) await page.waitForTimeout(pauseMs);
+    }
     await page.mouse.up();
-    const closed = await page.evaluate(() => window.__sheetClosed === true);
-    dragResult = {
-      pass: closed,
-      detail: closed
-        ? `a ${DRAG_PX}px drag on the rebuilt sheet dismissed it`
-        : `a ${DRAG_PX}px drag on the rebuilt sheet did nothing — the bar is back but inert`,
-    };
-  }
+    return { staged: true, closed: await page.evaluate(() => window.__sheetClosed === true), detail: "" };
+  };
+
+  // 1. Past the distance threshold. The original path, and the one that always worked.
+  const longDrag = await gesture({ distance: DRAG_PX, steps: 12, pauseMs: 0 });
+  // 2. A short drag, well under the distance threshold. Dismissal is distance-only, so this must
+  //    spring back. Velocity dismissal was built and reverted — see the phase's T7 for why.
+  const shortDrag = await gesture({ distance: SHORT_PX, steps: 4, pauseMs: 0 });
+  // 4. A press and release that never moves. This is the control that caught the harness pressing
+  //    an off-screen bar: with the sheet still below the fold every press missed, the overlay stack
+  //    dismissed it as an OUTSIDE press, and all three gestures above "passed" without the drag
+  //    doing anything. A tap closing the sheet is the one result that cannot be explained by the
+  //    gesture working, which is why it stays.
+  const tap = await gesture({ distance: 0, steps: 1, pauseMs: 0 });
+
+  dragResult = [
+    {
+      name: `a ${DRAG_PX}px drag after a rebuild`,
+      pass: longDrag.staged && longDrag.closed,
+      detail: !longDrag.staged ? `could not stage: ${longDrag.detail}`
+        : longDrag.closed ? "dismissed, as the distance threshold requires"
+          : "did nothing — the bar is back but inert",
+    },
+    {
+      name: `a ${SHORT_PX}px drag`,
+      pass: shortDrag.staged && !shortDrag.closed,
+      detail: !shortDrag.staged ? `could not stage: ${shortDrag.detail}`
+        : shortDrag.closed ? "dismissed, but dismissal is distance-only and this is under the threshold"
+          : "sprang back, as a gesture under the distance threshold should",
+    },
+    {
+      name: "a tap that never moves",
+      pass: tap.staged && !tap.closed,
+      detail: !tap.staged ? `could not stage: ${tap.detail}`
+        : tap.closed ? "dismissed the sheet — the press is not reaching the bar, and every gesture above is passing for that reason rather than its own"
+          : "left the sheet open, so the presses above are landing on the bar",
+    },
+  ];
 
   await page.close();
   for (const error of pageErrors) failures.push(`page error: ${error}`);
@@ -165,11 +230,13 @@ for (const r of results) {
 }
 
 if (dragResult) {
-  console.log(`  ${dragResult.pass ? "PASS" : "FAIL"}  ${"drag to dismiss after a rebuild".padEnd(44)} real pointer`);
-  console.log(`        ${dragResult.detail}`);
-  if (!dragResult.pass) failures.push(`drag to dismiss after a rebuild: ${dragResult.detail}`);
+  for (const g of dragResult) {
+    console.log(`  ${g.pass ? "PASS" : "FAIL"}  ${g.name.padEnd(44)} real pointer`);
+    console.log(`        ${g.detail}`);
+    if (!g.pass) failures.push(`${g.name}: ${g.detail}`);
+  }
 } else {
-  failures.push("the drag case never ran, so the gesture is unmeasured");
+  failures.push("the gesture cases never ran, so the drag is unmeasured");
 }
 
 // ───────────────────────────────────────────────────────────────────
@@ -183,7 +250,7 @@ if (failures.length > 0) {
   process.exit(1);
 }
 
-stamp(STAMP_PATH, { cases: results.length + 1, barsLost: 0, dragDismissed: true }, [
+stamp(STAMP_PATH, { cases: results.length + dragResult.length, barsLost: 0, gesturesMeasured: dragResult.length }, [
   "tools/live/sheet-rebuild.mjs",
   "tools/live/sheet-rebuild-harness.ts",
   ...REQUIRED,

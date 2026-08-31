@@ -1085,7 +1085,7 @@
       },
       "note": "The phone form of the owned menu. Rows share one left edge with the icon in a fixed leading column, hairlines divide neighbours but not the last row of a group, and a row that opens a submenu carries a trailing chevron. Captured in viewport mode so the fixed sheet docks at the bottom.",
       "capture": "viewport",
-      "bytes": 38727
+      "bytes": 38739
     },
     {
       "id": "chrome-selection-status-bar",
@@ -4630,7 +4630,7 @@
       },
       "note": "Days with events carry a short accent underline; the visible week reads as the selected pill run.",
       "capture": "viewport",
-      "bytes": 57127
+      "bytes": 57193
     },
     {
       "id": "calendar-mini-calendar",
@@ -4655,7 +4655,7 @@
       },
       "note": "Days with events carry a short accent underline; the visible week reads as the selected pill run.",
       "capture": "viewport",
-      "bytes": 61305
+      "bytes": 61342
     },
     {
       "id": "calendar-mini-calendar",
@@ -4705,7 +4705,7 @@
       },
       "note": "Days with events carry a short accent underline; the visible week reads as the selected pill run.",
       "capture": "viewport",
-      "bytes": 45911
+      "bytes": 45917
     },
     {
       "id": "calendar-month-view",
@@ -4797,7 +4797,7 @@
       },
       "note": "Multi-day all-day bars, timed events, an overflow week and one event carried across the week boundary.",
       "capture": "viewport",
-      "bytes": 87551
+      "bytes": 87204
     },
     {
       "id": "calendar-toolbar-options",

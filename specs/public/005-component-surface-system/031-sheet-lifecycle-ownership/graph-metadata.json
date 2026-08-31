@@ -184,13 +184,13 @@
         "source": "derived"
       },
       {
-        "name": "PHASE 1: THE CONTROL",
-        "kind": "heading",
+        "name": "T10",
+        "kind": "key_phrase",
         "path": "tasks.md",
         "source": "derived"
       },
       {
-        "name": "PHASE 2: THE FREEZE",
+        "name": "PHASE 1: THE CONTROL",
         "kind": "heading",
         "path": "tasks.md",
         "source": "derived"
@@ -198,7 +198,7 @@
     ],
     "causal_summary": "Every sheet has one owner for its whole life, so the scrim always comes down, the drag always survives a re-render, and no handle is drawn onto nothing.",
     "created_at": "2026-08-31T14:46:45.699Z",
-    "last_save_at": "2026-08-31T18:05:26.989Z",
+    "last_save_at": "2026-08-31T18:21:20.342Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -209,13 +209,13 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:8efd03c84e3eb314523e06bdcd7288d3f3162dc25118cab3b5109d83e9bbbfcf",
+    "source_fingerprint": "sha256:2a19352d732e26ff60f70a4b7dddbef0e1bf7f5afe6bcb6c7da64f5fa37c9ffe",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "2846f4f64c605056ec1c6f015d54aff0125a2031f3c5d83fb090c2ec5bb0582b",
       "plan.md": "808630e42990ca0d3c2e6d1518e397c9a8d0dc31b665a6f35a80e4ddf59cf9c3",
-      "tasks.md": "f96b3cc5507764e2f50c75c6a7ec00c6863c5054bbc3752e70d49863dda00c34",
-      "implementation-summary.md": "6228c9136c2a6819b154e64c5159c5bf00a8c89d4b2909772c2dd6c3dc844fa6"
+      "tasks.md": "de7641da7c99ed24eafb05445a332d2874c7ef9f1156971ccacb9681a7c540a6",
+      "implementation-summary.md": "e121ec90eebad5e2f1ac2e11a886b09836daaf141ae4ab50b16096c3b3c515c6"
     },
     "last_active_child_id": null,
     "last_active_at": null
