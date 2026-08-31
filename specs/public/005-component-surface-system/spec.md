@@ -28,7 +28,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-parent"
       parent_session_id: null
-    completion_pct: 55
+    completion_pct: 50
     open_questions:
       - "Does the out-of-scope exclusion on output number format cover card fields, or only the formula editor"
       - "Does report-driven scheduling replace the declared 009-first execution order"

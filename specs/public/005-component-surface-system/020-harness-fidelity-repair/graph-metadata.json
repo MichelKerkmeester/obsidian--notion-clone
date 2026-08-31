@@ -202,7 +202,7 @@
     ],
     "causal_summary": "Six of seven verifier findings were instruments that could not fail for the reason they claimed to",
     "created_at": "2026-08-30T15:15:27.011Z",
-    "last_save_at": "2026-08-31T06:13:28.122Z",
+    "last_save_at": "2026-08-31T16:14:53.906Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -213,13 +213,13 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:d78e47bd542e934e3f6243191e544b3a035cf7071ac3cead7d3f08384bde525d",
+    "source_fingerprint": "sha256:363c9fb6de779c5e8602d79db290103a95dc8663d0954229e54e30bd657e8ff4",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "6888b5683bb4bd287b7ac1bd0de8c238076919dcebaeb819b90ef53fcaa40300",
+      "spec.md": "9820f79d39a736be2d4656f38461a3146f8db9511bb7c02051594a3aea57e09a",
       "plan.md": "d6b90a6afcec22af0807cd83b07ee4864fc942c3769c3218fdfadd71a42fa741",
       "tasks.md": "bce05c66f57d8a60a9995713e589e2a5356dbc8a3b2acd89b15bf81b54564927",
-      "implementation-summary.md": "bdafb4b2df10ea7bb406a314c06f578ccf54bfd629d5ca4c353d7b0091db6b71"
+      "implementation-summary.md": "d58930b65f48349546d5a91950d75951342fc254fda8c8fc71a80297543524d8"
     },
     "last_active_child_id": null,
     "last_active_at": null

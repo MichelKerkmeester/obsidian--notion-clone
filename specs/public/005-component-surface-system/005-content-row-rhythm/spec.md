@@ -78,7 +78,7 @@ the factory. This phase blocks nothing and runs while the overlay lane is occupi
 | **Blocks** | nothing; it runs while the overlay lane is occupied |
 | **CSS lane** | holds `styles.css` for the sizing contract and the rail deduplication |
 | **Priority** | P0 |
-| **Status** | In progress — list rows landed and instrumented, the header rail untouched |
+| **Status** | **Partial — list rows landed and instrumented, the header rail untouched.** In the tree: renderer-declared tracks via `listFieldTrackTemplate` at `src/views/list-renderer.ts:390`. `tasks.md` carries 0 of 36 ticked against work the tree contains. **Completion figure: UNKNOWN** — this phase has no `goal.md` criteria checklist, so the rule in `../roadmap.md` §3.2 has nothing to count and the `completion_pct` below is an unrevised phase-cut value. Writing that checklist settles it. |
 | **Created** | 2026-08-29 |
 | **Branch** | `main` |
 | **Parent Spec** | `../spec.md` |

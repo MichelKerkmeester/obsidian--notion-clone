@@ -53,7 +53,7 @@ _memory:
 | **Spec Folder** | 002-properties-panel |
 | **Level** | 2 |
 | **Priority** | P0 |
-| **Status** | In Progress |
+| **Status** | **Partial.** In the tree: `.db-column-manager` is styled at `styles.css:674` and carried in the `.db-surface` portal list at `styles.css:10453`, across nine recorded lane holds. `tasks.md` carries 0 of 65 ticked against work the tree contains. **Completion figure: UNKNOWN** — this phase has no `goal.md` criteria checklist, so the rule in `../roadmap.md` §3.2 has nothing to count and the `completion_pct` below is an unrevised phase-cut value. Writing that checklist settles it. |
 | **Created** | 2026-08-29 |
 | **Blocked by** | `001-overlay-placement-and-menu-language` |
 | **Blocks** | `003-mobile-sheet-presentation` |

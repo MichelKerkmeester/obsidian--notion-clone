@@ -27,9 +27,9 @@ _memory:
       session_id: "surface-system-handover"
       parent_session_id: null
     completion_pct: 50
-    open_questions:
-      - "Does spec.md measure shipping and goal.md verification, or should they agree"
+    open_questions: []
     answered_questions:
+      - "spec.md vs goal.md completion_pct: reconciled, one derived figure per phase. D13, roadmap 3.2"
       - "The sheet's keyboard fallback is real and now measured, not merely argued"
       - "The list quadratic is NOT gone; the verdict came from a truncated row range"
       - "The calendar and timeline are two defects, not one: the timeline was quadratic, the calendar never was"
@@ -209,11 +209,24 @@ Read `goal.md`'s LOG for the full set. The ones that cost time here:
   not a function` — Obsidian patches `show`/`hide` onto `HTMLElement` and the shim lacked them.
   Check which side the gap is on before filing it.
 
-**The divergence to decide.** Nine phases carry different `completion_pct` in `spec.md` and
-`goal.md` — 010, 011, 012, 014, 015, 016, 017, 018, 019. The verification pass lowered the goal
-figures and deliberately left the spec ones, on the argument that `spec.md` measures shipping while
-the pass measured verification. That is defensible and it is not recorded anywhere as policy. Either
-write it down or reconcile them; leaving two numbers per phase is how a document starts lying.
+**The divergence is decided: reconcile.** It was recorded here as nine phases carrying different
+`completion_pct` in `spec.md` and `goal.md` — 010, 011, 012, 014, 015, 016, 017, 018, 019 — with the
+proposed policy that `spec.md` measures shipping while `goal.md` measures verification. Re-derived
+from the continuity blocks, the entry was wrong in two ways worth keeping visible:
+
+- **It is fourteen phases, not nine, and three carriers, not two.** `implementation-summary.md`
+  holds the same field and diverges from both in 010, 011, 013, 016, 017 and 022. Adding 000, 026 and
+  028, fourteen phases carry at least two disagreeing figures.
+- **"The verification pass lowered the goal figures" does not describe the data.** In 010 (0 against
+  60), 011 (0 against 66), 014 (75 against 85) and 019 (50 against 70) the goal figure is the
+  *higher* one. That also refutes the policy it was offered to justify: verification cannot exceed
+  shipping, so four of the nine break the invariant the split depends on.
+
+The decision, its three reasons and the derivation rule that replaces judgement are in `roadmap.md`
+§3.2, with the status vocabulary that takes over the shipped/verified/confirmed distinction in §3.1
+and the one-line record as **D13** in `goal.md`. Applied where the tree settles it — 020, 022, 025
+and 026. **Not applied to 010-019**, whose figures now need one re-derivation each against their own
+`goal.md` checklists; that is those phases' work, and the command is in §3.2.
 <!-- /ANCHOR:when-to-use -->
 
 ---

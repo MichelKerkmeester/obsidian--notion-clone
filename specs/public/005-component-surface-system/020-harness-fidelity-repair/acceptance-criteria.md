@@ -45,7 +45,7 @@ _memory:
 
 **Packet:** 020-harness-fidelity-repair
 **Level:** 3
-**Status:** Complete
+**Status:** Shipped + verified, awaiting device — 12 of 13 criteria
 **Date:** 2026-08-30
 <!-- /ANCHOR:metadata -->
 

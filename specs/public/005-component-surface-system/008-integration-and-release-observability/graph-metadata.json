@@ -210,7 +210,7 @@
     ],
     "causal_summary": "Release 1.3.1 passed every gate and changed nothing",
     "created_at": "2026-08-29T14:23:23.345Z",
-    "last_save_at": "2026-08-31T03:37:31.446Z",
+    "last_save_at": "2026-08-31T16:18:36.533Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -221,10 +221,10 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:04926ea6fe4f81ecaa2da4a7f9d6845f6b19a13aef00921e7cde502b3fa24c5b",
+    "source_fingerprint": "sha256:3e93d9c526fc630197cfa5dea8cc3a60d3bcdb946e7ffd41360f49c3e951f30b",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "412be69a70078708940be42d11cbf018271e475fa7fb4a8c63683cc235a3a020",
+      "spec.md": "02ff5d140cf8a1cd63731131903af6f86de318444ed07696ba5f593b753b024e",
       "plan.md": "fb4021ce452cd5ecf6c04d2145a0647fd3ad6f21b1bf7b1d098184e021f60383",
       "tasks.md": "9c166e5ac5b79a1f300f4460a3ca12fb3a30304e26efa3e2ca679b0805685815",
       "implementation-summary.md": "242ab72346ea418a59a970ffdf1d13c0fd05c9d950aa0ed84da953f5fe3989d7"

@@ -89,7 +89,7 @@ sibling phase's local evidence. `009`'s live-verification transport for the devi
 | **Spec Folder** | 008-integration-and-release-observability |
 | **Level** | 3 |
 | **Priority** | P0 |
-| **Status** | In Progress |
+| **Status** | **Partial — Deliverable A only.** In the tree: `tools/live/replay.mjs`, the `replay` package script, and a `replay` gate lane at `tools/gate.mjs:55`. The release decision and the compatibility retirements stay last and are untouched. `tasks.md` carries 0 of 37 ticked. **Completion figure: UNKNOWN** — this phase has no `goal.md` criteria checklist, so the rule in `../roadmap.md` §3.2 has nothing to count and the `completion_pct` below is an unrevised phase-cut value. Writing that checklist settles it. |
 | **Created** | 2026-08-29 |
 | **Branch** | `main` |
 | **Parent Spec** | `../spec.md` |

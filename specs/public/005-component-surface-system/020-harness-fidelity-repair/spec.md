@@ -28,7 +28,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-020"
       parent_session_id: null
-    completion_pct: 80
+    completion_pct: 92
     open_questions: []
     answered_questions:
       - "Is the 44px floor this phase's invention — no, it is WCAG 2.5.5 and already in the stylesheet"
@@ -71,7 +71,7 @@ measurement, not a parallel piece of work: the add-view sheet's grab band read 4
 | **Spec Folder** | 020-harness-fidelity-repair |
 | **Level** | 3 |
 | **Priority** | P0 |
-| **Status** | Complete |
+| **Status** | **Shipped + verified, awaiting device — 12 of 13 criteria.** The one open criterion is the operator signing off the two new modal fixtures. Was *Complete*, which D3 reserves for operator-confirmed |
 | **Created** | 2026-08-30 |
 | **Shipped** | 2026-08-30 |
 | **Branch** | `main` |

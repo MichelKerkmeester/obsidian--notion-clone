@@ -58,7 +58,7 @@ _memory:
 | **Blocks** | nothing. It is deliberately off the overlay critical path |
 | **CSS lane** | holds `styles.css` for the checkbox rules |
 | **Priority** | P0 |
-| **Status** | In progress |
+| **Status** | **Partial.** `tools/live/checkbox-appearance.json`, measured 2026-08-31, reports 211 checkboxes across 59 fixtures with `appearanceOwnedByAncestor: 0` and `appearanceSelfOwned: 211` — this phase's central claim, holding on today's tree. The three-way contest over its state is settled in `../roadmap.md` §7.1. `tasks.md` carries 0 of 28 ticked, and `acceptance-criteria.md` still records the pre-fix baseline of 2026-08-29, so neither is a measure of today. **Completion figure: UNKNOWN** — this phase has no `goal.md` criteria checklist, so the rule in `../roadmap.md` §3.2 has nothing to count and the `completion_pct` below is an unrevised phase-cut value. Writing that checklist settles it. |
 | **Created** | 2026-08-29 |
 | **Branch** | `main` |
 | **Parent Spec** | `../spec.md` |

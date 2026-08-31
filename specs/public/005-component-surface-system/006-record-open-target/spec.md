@@ -75,7 +75,7 @@ another container-bound panel and A3 cannot pass. This phase is last and blocks 
 | **Blocks** | nothing; it is last |
 | **CSS lane** | holds `styles.css` for the peek retirement and the target surface's rules |
 | **Priority** | P0 |
-| **Status** | In progress — desktop Open and the peek layer landed under `002`'s lane hold; the setting, the resolver and every measurement are outstanding |
+| **Status** | **Partial — desktop Open and the peek layer landed under `002`'s lane hold; the setting, the resolver and every measurement are outstanding.** In the tree: `openRow` routes through `dataSource.openNote` at `src/views/database-view.ts:410` and four further call sites. `tasks.md` carries 0 of 32 ticked. **Completion figure: UNKNOWN** — this phase has no `goal.md` criteria checklist, so the rule in `../roadmap.md` §3.2 has nothing to count and the `completion_pct` below is an unrevised phase-cut value. Writing that checklist settles it. |
 | **Created** | 2026-08-29 |
 | **Branch** | `main` |
 | **Parent Spec** | `../spec.md` |

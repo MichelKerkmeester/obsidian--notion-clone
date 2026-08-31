@@ -51,6 +51,7 @@
       "tools/live/probe.mjs",
       "tools/live/README.md",
       "tools/lane/css-lane.json",
+      "tools/gate.mjs",
       "src/main.ts"
     ],
     "entities": [
@@ -112,6 +113,12 @@
         "name": "css-lane.json",
         "kind": "config",
         "path": "tools/lane/css-lane.json",
+        "source": "derived"
+      },
+      {
+        "name": "gate.mjs",
+        "kind": "file",
+        "path": "tools/gate.mjs",
         "source": "derived"
       },
       {
@@ -191,17 +198,11 @@
         "kind": "key_phrase",
         "path": "tasks.md",
         "source": "derived"
-      },
-      {
-        "name": "what",
-        "kind": "key_phrase",
-        "path": "tasks.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "The program's founding fact is that a release passed every gate and changed nothing on device",
     "created_at": "2026-08-29T14:34:47.371Z",
-    "last_save_at": "2026-08-31T03:37:31.735Z",
+    "last_save_at": "2026-08-31T16:18:36.717Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -212,10 +213,10 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:a21504204ea3709f15fd843049442e239459ace2b6a60613d37fd90f3ae6fdb3",
+    "source_fingerprint": "sha256:1241a5ca00f16f30089080b86a1f1da9845dbec54f9f19ca03141db5ba4adf9f",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "3b7855f9ea727c9d647decffe68790da6f986795293b0984000aac8f3a6517a5",
+      "spec.md": "7f257fcded023d79ac2dce640f287e81cb1ff2458f84efc04f8a4551149dbac7",
       "plan.md": "1c6dcf824de8a59d2f89ff36f7d49b59643e58687beab07d557868e9cf8cb4f7",
       "tasks.md": "250d6a2d48b1f123f93c4bd97955654275b5a9c4c051b0a0d3ed87d2dc171003",
       "implementation-summary.md": "938be65abd9f7d39e53e4eca4520b63a9134a235a287902fa7bd7f9ce15e25eb"

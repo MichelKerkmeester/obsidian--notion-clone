@@ -73,9 +73,96 @@ Every row in §4 and §5 uses one of these. Collapsing them is how 1.3.1 happene
 **The program's closing condition is the third** (`spec.md` §7). Of the twenty-seven reports below,
 **one** has reached it, and it reached it as an accepted shortfall rather than a fix.
 
-**One further caveat that applies to every row.** All of today's work is uncommitted. `HEAD` is at
-`4830275` with `manifest.json` declaring 1.3.1; the working tree declares 1.3.3. Nothing in §4 or §5
-survives a `git checkout`.
+**One further caveat that applies to every row.** Re-derived rather than carried: `HEAD` is at
+`4228370`, `manifest.json` and `package.json` both declare **1.3.9**, and `git status --porcelain`
+returns nothing, so the tree these rows describe is committed. The sentence here previously read
+`4830275` / 1.3.1 / 1.3.3 and had been true three releases earlier — a version number in prose is a
+number nothing recomputes, so read it off the tree before believing it.
+
+### 3.1 The status vocabulary, because "In Progress" was carrying too much
+
+A phase's `spec.md` **Status** field is this board's unit of truth. It had drifted into one phrase —
+*In Progress* — covering everything from nine tasks of forty-one to code shipped in 1.3.9 and running
+on the operator's phone. A word that spans that range costs a reader more than it tells them. Status
+now takes one of the values below and nothing else, and each row names the observation that decides
+it, so a status is checkable rather than asserted.
+
+| Status | Means | What decides it |
+|---|---|---|
+| **Planned** | No code for this phase is in the working tree | The phase's named symbols, selectors and instruments are absent from `src/`, `styles.css` and `tools/` |
+| **In progress — N of M tasks** | Part of the work is written, the rest is not, and `tasks.md` has been kept current | `grep -c '^- \[x\]' tasks.md` against the total. **The fraction is mandatory.** Bare *In progress* is not a status |
+| **Partial** | Some deliverables are in the tree and some are not, and the phase's own tasks and criteria were never advanced past phase-cut, so no fraction is derivable | Named deliverables found in the tree, together with the absence of an advanced criteria record |
+| **Shipped, unverified** | Every deliverable is in the tree; nothing drives it | The phase's criteria carry no measured after-number |
+| **Shipped + verified** | Checks drive the production path, each with a threshold observed red before green | Every ticked criterion in the phase's `goal.md` carries its check and its number |
+| **Shipped + verified, awaiting device** | As above, and every criterion still open is the operator's own | The unticked criteria are operator-confirmation rows |
+| **Complete** | The operator confirmed it on the device | An operator statement recorded in the phase. D3 says only the third state closes, so **nothing else may read Complete** |
+| **Not a program phase** | `007` only | Its own spec says so |
+
+**These words are read by a machine, so choose them rather than paraphrase them.**
+`scripts/rules/check-status-cross-doc-consistency.sh` buckets a Status field into
+complete / in-progress / planned by keyword and **fails** a folder whose `spec.md` and
+`implementation-summary.md` land in different buckets. *Shipped*, *done*, *delivered*, *closed* and
+*implemented* all read as complete wherever they appear in the sentence — including inside *not
+done* — and *partial*, *in progress* and *active* read as in-progress. That is why the third row
+says **Partial** and not *partially shipped*: the longer phrase is more informative to a person and
+tells the classifier the opposite of what it means. `000` was being bucketed **complete** before this
+section was written, on the word *complete* inside *9 of 41 tasks complete* — a phase 22% of the way
+through, reading to every consumer of that classifier as finished.
+
+### 3.2 One completion figure per phase, and it is derived
+
+**Decided here, after running as an open question across nine phases.** `spec.md`, `goal.md` and
+`implementation-summary.md` each carry a `completion_pct`, and in fourteen phases at least two of the
+three disagreed. The proposal was to keep the split and write it down as policy — *`spec.md` measures
+shipping, `goal.md` measures verification*. **Rejected**, for three reasons, each re-derived from the
+continuity blocks rather than argued:
+
+1. **The data refutes the policy's own invariant.** If `spec` is shipping and `goal` is verification,
+   the goal figure can never exceed the spec figure — you cannot verify more than you shipped. In
+   `010` (0 against 60), `011` (0 against 66), `014` (75 against 85) and `019` (50 against 70) it
+   does. Four of the nine phases the policy was written to explain contradict it.
+2. **There are three carriers, not two.** `implementation-summary.md` holds the same field and
+   diverges from both in `010`, `011`, `013`, `016`, `017` and `022`. A two-axis policy has no axis
+   for the third number, so it would leave a third figure unexplained in six phases.
+3. **The distinction already has a home.** Shipped, verified and operator-confirmed are §3's states
+   and §3.1's vocabulary. Encoding the same distinction a second time as a percentage is what
+   drifted — and a percentage cannot say *which* of the three states a phase has reached, which is
+   the question anyone reading this board is asking.
+
+**The rule.** Every continuity block inside a phase folder carries the **same** `completion_pct`, and
+that figure is **derived, never judged**:
+
+> `completion_pct` = ticked ÷ total over the phase's own `goal.md` completion-criteria checklist,
+> rounded to a whole number.
+
+Re-checking any phase costs one command:
+
+```sh
+d=specs/public/005-component-surface-system/<phase>
+awk '/ANCHOR:completion/,/\/ANCHOR:completion/' "$d/goal.md" | grep -c '^- \[x\]'   # ticked
+awk '/ANCHOR:completion/,/\/ANCHOR:completion/' "$d/goal.md" | grep -c '^- \[ \]'   # open
+```
+
+That checklist is the right denominator because it is where the criteria already live. `goal.md` §2
+is what the parent's *"only the criteria below decide done"* points at, it carries the operator's own
+confirmation as a criterion wherever one is owed — so D3 is enforced by the denominator rather than
+by remembering — and it is the record a verification pass advances when it withdraws a tick.
+
+**The rule governs phase children.** This parent's own figure is not a proportion of its criteria —
+1 of 7 are ticked and the program is plainly further along than 14% — because its criteria are
+program gates rather than units of work. It is derived from the report ledger instead, as `goal.md`'s
+LOG states, and it now reads the same **50** in `spec.md`, `goal.md` and `handover.md`; `spec.md` had
+carried 55 with no derivation written anywhere. That basis is itself owed a correction: it reads
+*14 of 16 reports shipped* while §4 has grown to 27 rows, which is the same denominator error
+`goal.md` §3 already un-ticked its report criterion for. One number now, with a stated basis and a
+known defect in the basis, beats two numbers and no basis.
+
+**Where a phase has no such checklist, the figure is UNKNOWN**, and the phase says so rather than
+carrying a judged number. That is the state of `000`-`006`, `008` and `009`: their `goal.md` files
+predate the checklist form, and their `acceptance-criteria.md` tables still hold the pre-fix baseline
+this program requires them to record, so counting *Met* there measures 2026-08-29 rather than today.
+One operation settles each — give it the same `goal.md` criteria checklist every phase from `010` on
+already has — and it is that phase's own work, not this board's.
 
 ---
 
@@ -242,8 +329,12 @@ inferred value. Both are recorded as owed rather than counted as done.
 Status per phase, measured against the working tree rather than against the plan. Six phases are
 held by live agents and are marked ⚠ — their state is read-only here and may have moved since.
 
-**Now:** In Progress. Six phases held by other agents — four unaudited since this morning's
-snapshot, two opened today.
+**These three headings are a schedule, not a status.** They group phases by when they are worked,
+and several bullets under *Next* and *Later* are shipped. Each bullet carries its own status word
+from §3.1; read that, not the heading above it.
+
+**Now:** Six phases held by other agents — four unaudited since this morning's snapshot, two opened
+today.
 
 - ⚠ `004-checkbox-ownership` — **state UNKNOWN, see §7.1.** Holds the `styles.css` lane.
 - ⚠ `005-content-row-rhythm` — shipped: list-row border-box, list meta ruled into columns, renderer-declared tracks. Continuity still reads "not started".
@@ -256,7 +347,7 @@ snapshot, two opened today.
   non-table views; the sort and filter sheets). Held by another agent at the time of this pass;
   state UNKNOWN, not read.
 
-**Next:** Planned. The verification debt the shipping created.
+**Next:** the verification debt the shipping created.
 
 - `020-harness-fidelity-repair` — shipped and self-verified: the grab band's arithmetic
   corrected (add-view 42px → 48px, owned-menu 38px → 44px, both over the 44px thumb floor), a
@@ -280,7 +371,7 @@ snapshot, two opened today.
   Two folders remain, both honestly: `000` needs the `implementation-summary.md` its nine checked tasks make mandatory — all nine verified against the tree first, so the document rests on evidence rather than assertion. `007` cannot reach zero at all: it declares itself off-path and has no `spec.md`, `plan.md` or `tasks.md` by design, so the validator checks it as a child and reports files that were never meant to exist. Writing them would produce three documents whose only reader is the validator.
 - **One warning this reconciliation introduced.** Adding `018` gives `017` a numeric successor it does not reference, so `PHASE_LINKS` went from 14 issues to 17 — one of the three is this pass's, and the other two arrived when `016` gained a `spec.md`. The fix is a line in `017`'s phase-chain blockquote, and `017` is held by a live agent, so it was left rather than written into.
 
-**Later:** Planned. The structural phases the program declared first and ran last.
+**Later:** the structural phases the program declared first and ran last.
 
 - `009-live-verification` — instruments exist (`tools/live/probe.mjs`) but no criteria are recorded as met. It was declared phase 1 and has not gated anything.
 - `000-surface-contract-and-truthful-harness` — its census instruments exist and one edit shipped with a recapture debt. Continuity reads 0%.
@@ -289,18 +380,25 @@ snapshot, two opened today.
 - `006-record-open-target` — **partly shipped, and this entry said otherwise.** Commit `2babab2`, "make Open open the note", routes desktop Open through `openNote` instead of the peek and replaces the peek's hardcoded `z-index: 998` with a layer token. It landed under `002`'s lane hold, and none of that hold's nine notes mentions it. Still open: the setting, the touch branch, and retiring the peek. Its one operator question — side panel, full-page modal, or both behind a setting — stands.
 - `008-integration-and-release-observability` — **Deliverable A shipped**: `tools/live/replay.mjs` exists and `npm run replay` re-asserts 8 results against recorded pre-fix numbers. The release decision stays last.
 - `007-architecture-research` — Complete. 10 iterations plus synthesis; not a phase.
-- `022-selection-bar-keyboard-docking` — Planned. Needs the bar measured against an open
-  keyboard before a docking mechanism is chosen; depends on the keyboard-inset mechanism `010`
-  built.
+- `022-selection-bar-keyboard-docking` — **Shipped + verified, awaiting device — 6 of 8.** This
+  bullet read *Planned. Needs the bar measured against an open keyboard before a docking mechanism
+  is chosen* after the mechanism had been chosen, built and released. The bar docks on
+  `--db-keyboard-inset`, which the plugin publishes itself rather than reading the host's
+  `--keyboard-height`; that distinction is the phase's actual result, because the first shipped rule
+  read a variable nothing in `src/` sets and moved nothing, silently. Open: which host shape the
+  operator's phone is, and the operator seeing a usable bar.
 - `023-record-note-body` — Planned, and **deliberately not startable**: the operator has not
   yet picked display-only or editable, which the phase's own spec says decides its size by
   roughly an order of magnitude.
-- `025-story-coverage-blindness` — Planned. Not a product defect: the gate lane named
-  `story-coverage` runs the DOM-shim checker instead of the real story checker, which exits 1
-  today unread.
-- `026-production-render-assertions` — Planned, evidence-gathering stage. Opened from `007`'s
-  harvest to generalize `024`'s real-renderer bench into a gate-wide assertion harness; its own
-  `next_safe_action` still names running the census commands its criteria depend on.
+- `025-story-coverage-blindness` — **Shipped + verified, awaiting device — 8 of 10.** The
+  sentence this bullet used to carry — *the gate lane named `story-coverage` runs the DOM-shim
+  checker* — was the defect, and it was fixed: `tools/gate.mjs:58-59` now carries `shim-coverage`
+  and `story-coverage` as two distinct lanes running two distinct scripts. Open: the control that
+  was substituted rather than run on the tree as received, and the operator opening the catalogue.
+- `026-production-render-assertions` — **Shipped + verified — 9 of 9.** `render-assertions` is a
+  gate lane (`tools/gate.mjs:67`) and renderer coverage stands at 6 of 22. This phase owes no device
+  confirmation: its deliverable is a check in the gate, and the gate is where it is confirmed. Its
+  own `spec.md` read *Draft — nothing built* while that lane was green.
 <!-- /ANCHOR:now-next-later -->
 
 ### 5.1 Status table
@@ -327,13 +425,13 @@ snapshot, two opened today.
 | `017` ⚠ | absent | **95%** | 12 checks, six negative controls |
 | `018` | absent | **Opened today** | Code shipped under `004`'s lane hold; unverified |
 | `019` | absent | **Opened today** | Code shipped; no test exists |
-| `020` | absent | **Shipped + verified** | Grab-band arithmetic corrected (42→48px add-view, 38→44px owned-menu, both over the 44px floor); test shim, evidence-freshness and in-harness checks repaired alongside it. Lane journal acquire→edit→release 12:05-12:53; commits `9d4f569`, `780a736`, `0a38723`, `1e6397d`, `56ba94e` |
+| `020` | absent | **Shipped + verified, awaiting device — 12 of 13** | Its own `spec.md` read *Complete* against a `completion_pct` of 80; D3 reserves Complete for operator-confirmed and the one open criterion is the operator's fixture sign-off. Grab-band arithmetic corrected (42→48px add-view, 38→44px owned-menu, both over the 44px floor); test shim, evidence-freshness and in-harness checks repaired alongside it. Lane journal acquire→edit→release 12:05-12:53; commits `9d4f569`, `780a736`, `0a38723`, `1e6397d`, `56ba94e` |
 | `021` | absent | **Shipped; 4 of 5 editors verified, 1 still off** | Lane journal, two full acquire→release cycles, 13:19-13:42, "Not committed" at release. Commit `0ff9f9a` centres the number/currency inline editor on its row (7.6px→1.0px claimed). A fresh review, commit `3d4d2f2`, found the fix also reaches a fifth, previously uncounted editor sharing the same popover class — the title's inline rename editor — which improves 9.0px→2.4px off-centre and is still wrong: "left open rather than quietly claimed" |
-| `022` | absent | **Planned** | Own `spec.md` declares itself Planned. Level-3 spec, plan, tasks and two reference images authored; no matching commit found; `next_safe_action` is to measure against an open keyboard before choosing a mechanism |
+| `022` | absent | **Shipped + verified, awaiting device — 6 of 8** | This row and the phase's own `spec.md` both read *Planned* after the code landed. `styles.css:2436` docks the bar on `--db-keyboard-inset`, published by `publishKeyboardInset` in `src/views/popover-position.ts`; commit `a0d42a1` precedes the 1.3.9 cut `9e12fe1`, so it is in the build the operator is running. Open: which host shape the phone is, and the operator seeing a usable bar |
 | `023` | absent | **Planned, not startable** | Own `spec.md` declares itself Planned and "deliberately not startable" pending an operator choice between a display-only and an editable note body |
 | `024` | absent | **Shipped + verified; operator confirmation now answered, negatively** | `acceptance-criteria.md` AC-1 through AC-5 and AC-7 pass with real red-before-green controls on the actual renderer; AC-6 (operator confirmation) reads **NOT MET** in the phase's own words. Row 18 is that criterion closing |
-| `025` | absent | **Planned** | Own `spec.md` declares itself Planned. A harness-diagnostic phase — the gate's `story-coverage` lane runs the DOM-shim checker, not the story checker — not a product fix; no matching commit found |
-| `026` | absent | **Implemented; gate check landed, controls N1-N6 observed failing** | `tools/live/render-assertions.mjs` + harness; one `CHECKS` entry (`render-assertions`). Bundles the shipped renderers in headless Chrome and asserts structure: red at `173819e^` (1,600 layout reads in the row loop) and green at `845a27c` (2). Coverage 2 of 22 stamped at `tools/live/renderer-coverage.json`. No commit — the operator's working tree holds it |
+| `025` | absent | **Shipped + verified, awaiting device — 8 of 10** | This row's evidence was the defect, not the state: the `story-coverage` lane now runs `npm run story:coverage` and `shim-coverage` runs the shim checker, two distinct entries at `tools/gate.mjs:58-59`, and the ambiguous package script is gone. Re-run today: **13 of 32 renderable modules carry a story, 19 exempt** — the phase's own table records 13/31 and 18, so its counts have drifted by one module while the property it asserts (0 unanswered) still holds. Open: the substituted control, and the operator opening the catalogue |
+| `026` | absent | **Shipped + verified — 9 of 9; controls N1-N6 observed failing** | `tools/live/render-assertions.mjs` + harness; one `CHECKS` entry (`render-assertions`). Bundles the shipped renderers in headless Chrome and asserts structure: red at `173819e^` (1,600 layout reads in the row loop) and green at `845a27c` (2). Coverage is now **6 of 22** stamped at `tools/live/renderer-coverage.json`, and it is committed. Its own `spec.md` read *Draft — nothing built* against a lane that has been green in the gate |
 | `027` | absent | **UNKNOWN** | Folder absent from the working tree as of this pass; opened by another agent to investigate rows 24-25; not read per this update's own scope |
 | `028` | absent | **UNKNOWN** | Folder absent from the working tree as of this pass; opened by another agent to investigate rows 18-23; not read per this update's own scope |
 

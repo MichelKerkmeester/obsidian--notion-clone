@@ -78,7 +78,7 @@ so the factory has been shaken out on desktop where debugging is cheap, and bloc
 | **Blocks** | `006-record-open-target` |
 | **CSS lane** | holds `styles.css` for the sheet, scrim and safe-area rules |
 | **Priority** | P0 |
-| **Status** | In Progress — see [`implementation-summary.md`](implementation-summary.md) |
+| **Status** | **Partial; operator report 1 is open.** In the tree: `.db-mobile-sheet-scrim` is a token root at `styles.css:229` with its phone block at `:703`, and the grab bar and the reason the drag did nothing are at `styles.css:245`. The drag was root-caused in `016`, not here. `tasks.md` carries 0 of 27 ticked. **Completion figure: UNKNOWN** — this phase has no `goal.md` criteria checklist, so the rule in `../roadmap.md` §3.2 has nothing to count and the `completion_pct` below is an unrevised phase-cut value. Writing that checklist settles it. See [`implementation-summary.md`](implementation-summary.md) |
 | **Created** | 2026-08-29 |
 | **Branch** | `main` |
 | **Parent Spec** | `../spec.md` |

@@ -153,12 +153,6 @@
         "source": "derived"
       },
       {
-        "name": "In Progress",
-        "kind": "proper_noun",
-        "path": "spec.md",
-        "source": "derived"
-      },
-      {
         "name": "Problem Statement The",
         "kind": "proper_noun",
         "path": "spec.md",
@@ -166,6 +160,12 @@
       },
       {
         "name": "Purpose One",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "In Scope",
         "kind": "proper_noun",
         "path": "spec.md",
         "source": "derived"
@@ -203,7 +203,7 @@
     ],
     "causal_summary": "The properties panel's row is a positional grid contract: it says \"the third track is 96px wide\"",
     "created_at": "2026-08-29T12:37:20.727Z",
-    "last_save_at": "2026-08-31T03:40:20.412Z",
+    "last_save_at": "2026-08-31T16:18:35.580Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -214,10 +214,10 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:cd423f2c1e13f076bc03e6fae2a3a4f31ed88dcbbeca7b05424a6f6ff3e6ccab",
+    "source_fingerprint": "sha256:6f9e0aaeae8869a0bf7553b8d6a84284051dfb22e9eb464c38694178c9cda809",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "cc7ce98fa392631559a86d92b850342e31d1c78b68c16e6ea0af6a78c58e21a0",
+      "spec.md": "3c0e86e4652110089fe107d447ef98f0c2d230ee22fc32e2153ab3cc8e179038",
       "plan.md": "9930d86cdc3393986c1e6202d8ce05a4d565bfed694d03c6c72909899eb2b873",
       "tasks.md": "fac4aac0a28947fa323c81ca8e44f3fc646f684158b57e52cc1edea90cb15004",
       "implementation-summary.md": "272222be6fd142a2f3308a31400ae5d162f498349271e911c5bffde287b115b7"

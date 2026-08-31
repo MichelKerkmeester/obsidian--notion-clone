@@ -22,7 +22,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-020"
       parent_session_id: null
-    completion_pct: 80
+    completion_pct: 92
     open_questions:
       - "Which of the 63 lifted checks still measure a value the harness supplies"
     answered_questions:

@@ -26,7 +26,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-026"
       parent_session_id: null
-    completion_pct: 95
+    completion_pct: 100
     open_questions:
       - "Does the ratchet in AC-7 belong in the gate or in the evidence stamp"
     answered_questions: []
@@ -82,7 +82,7 @@ not need the CSS lane.
 **Level:** 2 (Verification) — `recommend-level.sh --loc 450 --files 5 --architectural` scores 55/100
 at 92% confidence, phase score 10/50 against a threshold of 25, so this is a flat phase with no
 children.
-**Status:** Draft — nothing built.
+**Status:** Shipped + verified — 9 of 9 criteria. `tools/live/render-assertions.mjs` is a gate lane (`tools/gate.mjs:67`) and `tools/live/renderer-coverage.json` stamps 6 of 22. This phase owes no device confirmation: its deliverable is a check in the gate, and the gate is where it is confirmed. Was *Draft — nothing built*.
 **Owner:** unassigned.
 **Lane:** does not take the `styles.css` lane. If this phase is holding the lane, something is wrong.
 **Opened:** 2026-08-30, from the 007 harvest.

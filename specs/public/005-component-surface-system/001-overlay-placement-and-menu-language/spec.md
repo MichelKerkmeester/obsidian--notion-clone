@@ -71,7 +71,7 @@ duration, and blocks `002-properties-panel` and through it `003` and `006`.
 | **Spec Folder** | 001-overlay-placement-and-menu-language |
 | **Level** | 3 |
 | **Priority** | P0 |
-| **Status** | In Progress |
+| **Status** | **Partial.** In the tree: `src/views/surface.ts` is gone (the `openSurface` factory deleted), `surface-contract.ts` kept, and `tools/live/portal-safety.mjs` built. Not run: the overlay census. `tasks.md` carries 0 of 67 ticked against work the tree contains, so the ticks are not evidence either way. **Completion figure: UNKNOWN** — this phase has no `goal.md` criteria checklist, so the rule in `../roadmap.md` §3.2 has nothing to count and the `completion_pct` below is an unrevised phase-cut value. Writing that checklist settles it. |
 | **Created** | 2026-08-29 |
 | **Blocked by** | `000-surface-contract-and-truthful-harness` |
 | **Blocks** | `002-properties-panel`, and through it `003` and `006` |

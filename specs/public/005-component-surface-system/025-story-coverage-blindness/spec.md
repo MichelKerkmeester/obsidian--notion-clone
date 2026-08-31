@@ -25,7 +25,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-025"
       parent_session_id: null
-    completion_pct: 95
+    completion_pct: 80
     open_questions:
       - "Does the lane get renamed, or does the gate gain a second lane and keep both?"
       - "Is a story required for a module whose export drives a gesture rather than painting?"
@@ -82,7 +82,7 @@ open. The program has spent its whole length repairing surfaces that its story c
 | **Spec Folder** | 025-story-coverage-blindness |
 | **Level** | 3 |
 | **Priority** | P1 |
-| **Status** | Planned |
+| **Status** | **Shipped + verified, awaiting device — 8 of 10 criteria.** Both lanes exist and are distinct in `tools/gate.mjs:58-59`; the ambiguous package script is gone. Open: the substituted control, and the operator opening the catalogue. Was *Planned*, three weeks after the work landed |
 | **Created** | 2026-08-30 |
 | **Branch** | `main` |
 | **Parent Spec** | `../spec.md` |

@@ -71,6 +71,7 @@ production renderer**. One now does (`026`).
 | D10 | Check the **mount**, not just the module: a check can bundle shipped code and still render a hand-written fixture. |
 | D11 | One phase holds `styles.css`, released only after a recapture a person looked at. |
 | D12 | Prefer **parity**: a harness cannot fake one without giving two independent producers the same wrong answer. |
+| D13 | One completion figure per phase, **derived** from its `goal.md` criteria checklist — never judged, never two. Status carries shipped/verified/confirmed; a percentage cannot. `roadmap.md` §3.1-3.2. |
 <!-- /ANCHOR:directive -->
 
 ---

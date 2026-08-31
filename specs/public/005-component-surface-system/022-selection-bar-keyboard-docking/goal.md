@@ -23,7 +23,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-022"
       parent_session_id: null
-    completion_pct: 55
+    completion_pct: 75
     open_questions:
       - "Which host shape is the operator's phone: visualViewport shrink or window resize"
     answered_questions:

@@ -27,7 +27,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-022"
       parent_session_id: null
-    completion_pct: 55
+    completion_pct: 75
     open_questions:
       - "Does the operator's phone shrink visualViewport, or resize the window?"
       - "Does the bar wrap, scroll or shorten its labels to fit its box?"
@@ -37,7 +37,10 @@ _memory:
 ---
 # Feature Specification: Dock the Selection Bar to the Keyboard
 
-> Phase chain: parent [`../spec.md`](../spec.md). Not started. Depends on the keyboard-inset
+> Phase chain: parent [`../spec.md`](../spec.md). Shipped in 1.3.9 — commit `a0d42a1` precedes the
+> release cut `9e12fe1` — so it is in the build the operator is running. That is not the same as
+> confirmed: the operator has not yet opened a keyboard over a selection. This line read *Not
+> started* after the code landed. Depends on the keyboard-inset
 > mechanism built in [`../010-sheet-reading-and-keyboard/spec.md`](../010-sheet-reading-and-keyboard/spec.md)
 > and measured in `016`; inherits the unresolved host-shape question recorded in
 > [`../roadmap.md`](../roadmap.md) row 4.
@@ -70,7 +73,7 @@ working. What is not yet known is whether the operator's phone is the host shape
 | **Spec Folder** | 022-selection-bar-keyboard-docking |
 | **Level** | 3 |
 | **Priority** | P1 |
-| **Status** | Planned |
+| **Status** | **Shipped + verified, awaiting device — 6 of 8 criteria.** Shipped in 1.3.9: `styles.css:2436-2445` docks the bar on `--db-keyboard-inset`, published by `publishKeyboardInset` in `src/views/popover-position.ts`. Open: which host shape the phone is, and the operator seeing a usable bar. Was *Planned* |
 | **Created** | 2026-08-30 |
 | **Branch** | `main` |
 | **Parent Spec** | `../spec.md` |

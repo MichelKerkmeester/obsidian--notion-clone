@@ -112,7 +112,7 @@ accident.
 | **Spec Folder** | 009-live-verification |
 | **Level** | 3 |
 | **Priority** | P0 |
-| **Status** | In Progress |
+| **Status** | **Partial — instrument built, nothing gated.** `tools/live/probe.mjs` exists; no entry in `tools/gate.mjs`'s `CHECKS` list runs it, so the phase declared first has still gated no handoff. `tasks.md` carries 1 of 30 ticked. **Completion figure: UNKNOWN** — this phase has no `goal.md` criteria checklist, so the rule in `../roadmap.md` §3.2 has nothing to count and the `completion_pct` below is an unrevised phase-cut value. Writing that checklist settles it. |
 | **Created** | 2026-08-29 |
 | **Branch** | `main` |
 | **Parent Spec** | `../spec.md` |

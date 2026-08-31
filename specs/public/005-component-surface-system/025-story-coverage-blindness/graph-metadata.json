@@ -39,7 +39,7 @@
       "rename"
     ],
     "importance_tier": "critical",
-    "status": "planned",
+    "status": "in_progress",
     "key_files": [
       "spec.md",
       "plan.md",
@@ -201,7 +201,7 @@
     ],
     "causal_summary": "A gate lane's name is the only thing most readers ever check",
     "created_at": "2026-08-30T15:00:28.772Z",
-    "last_save_at": "2026-08-31T03:39:39.410Z",
+    "last_save_at": "2026-08-31T16:14:54.255Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -212,13 +212,13 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:f6b6f4a340922f0ad0b88f94c9080235ab49a0d63d59d35a7b6b551dc0854896",
+    "source_fingerprint": "sha256:9335c8d3e441367184b322aee44752d85b4b5b2bd5cd7885d25cfb8b4ac8cc61",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "375c7afd798883d8ba384eee882783a620e549da700cdd82bb835676defd97f0",
+      "spec.md": "0ab76959f574cd10f11c113a3101ec61d4fdc26395347db1bd275991b72dc2c8",
       "plan.md": "0c8658cd69033439ed1084720d77659118c2cecfc47d1a190e7b0be8237bac6c",
       "tasks.md": "20c6826b7d00b7f1bb11ff38c46a03cffde7eba01c4bb6a9b66dd5b46cb48a64",
-      "implementation-summary.md": "1851cabae2a017a3b804b83a9e736fc06e689d23aaa04155a2d17c2fa6e3689c"
+      "implementation-summary.md": "ce11bf669a55dfc7f09e78fc4c90de57aa66c0ffe6eee02a526129640821c1f7"
     },
     "last_active_child_id": null,
     "last_active_at": null

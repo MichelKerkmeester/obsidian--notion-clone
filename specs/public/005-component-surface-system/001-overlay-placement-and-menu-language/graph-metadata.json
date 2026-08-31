@@ -207,7 +207,7 @@
     ],
     "causal_summary": "Placement has no authority and menus have no shared grammar",
     "created_at": "2026-08-29T12:35:11.814Z",
-    "last_save_at": "2026-08-31T03:40:20.129Z",
+    "last_save_at": "2026-08-31T16:18:35.390Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -218,10 +218,10 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:6fff28b6fb795bd2f447753ddbcde26629a3f0794f9041e0518a75cc42b4135a",
+    "source_fingerprint": "sha256:25abac9628a6afa5a1065e42b6943411f29350d57bf3a0906963b8537d7dde39",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "dbc9042f830cac09f7351d97bbdf58afb4931ce3d0d4a6dc9e1eb34bb452090a",
+      "spec.md": "1eb21e051ecb4d8963cf4dfa064263a215821a968477b8db1cd8ed6682a7b5fe",
       "plan.md": "b98a78e625093aa2a211eddf0ead78cd9b04c902e8ddf6f5b19848c43269d6de",
       "tasks.md": "0ce46b748f354659d4aac99863218e1cbf676698b749ff66533c8c670e029394",
       "implementation-summary.md": "c052915d64338ee0ef549db671d9f94c3836060d07cc986aac0ee8b510adda3b"

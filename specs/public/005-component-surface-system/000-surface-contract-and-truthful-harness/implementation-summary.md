@@ -45,7 +45,7 @@ _memory:
 |---|---|
 | **Spec Folder** | 000-surface-contract-and-truthful-harness |
 | **Level** | 3 |
-| **Status** | In progress — 9 of 41 tasks complete, 2 in progress, 30 not started |
+| **Status** | In progress — 9 of 41 tasks discharged, 2 under way, 30 untouched |
 | **State** | Stage 1 harness-truthfulness repairs committed (`14fc433`, `6bc121a`, `4928626`, `1cc397c`, `65ab2b9`, `58b3c13`, `0a38723`, `52e96cc`). Phase 1.5 live cross-check, Phase 2 production implementation and Phase 3 verification have not started; `checklist.md` and `acceptance-criteria.md` are unchanged from their pre-work state |
 
 <!-- /ANCHOR:metadata -->
