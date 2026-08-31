@@ -49,9 +49,31 @@ have a number are still open.*
       named as still owed here.
 - [ ] Filter and Sort expose the same role, focus behaviour and keyboard contract — asserted, not
       inspected. **No check.**
-- [ ] **Removing any one class from a panel changes a measured value** — no surface may depend on an
-      undeclared piggyback. **No check.** This is the strongest row in the packet and the one with
-      nothing behind it.
+- [x] **Removing any one class from a panel changes a measured value** — no surface may depend on an
+      undeclared piggyback. **Built 2026-09-01.** It was the strongest row in the packet and the one
+      with nothing behind it, which is the usual fate of a criterion phrased as a universal: easy to
+      write, and it needs an ablation per class to answer.
+      → *removing any one class from a panel changes a measured value*: the owned menu carries
+      `[db-surface, db-menu, db-owned-menu, db-mobile-bottom-sheet, db-overlay-enter, is-visible]`
+      and the filter panel `[db-filter-panel, db-surface]`; each is removed on its own and the
+      surface re-measured across sixteen properties at two mount points, then restored.
+      **What it is really asking**, and why the sixteen properties matter: a class that changes
+      nothing is either dead — and the next tidy-up takes a rule with it — or its work is being done
+      by an ancestor, which is the piggyback: right here and wrong the moment the surface is
+      portalled. This program has paid for that twice, in the checkbox that borrowed its appearance
+      from an ancestor class and in the menu row that only laid out inside the owned menu's shell.
+      **Two mount points, because a one-position ablation would have called the token marker dead.**
+      Inside the container `db-surface` changes nothing — the tokens already resolve — and on the
+      body it is the only thing making them resolve at all, which `replay` has recorded since `000`.
+      A class earns its place by moving something at either.
+      **Three declarations, each named with its reason rather than filtered out.** `db-menu` is
+      Obsidian's own class, carried so `app.css` reaches the surface, and the harness does not load
+      `app.css`. `db-overlay-enter` and `is-visible` are the entrance: their work is a transition,
+      and this measures a surface already at rest under reduced motion — the correct state to ablate
+      a layout class in and the wrong one for a transition class. Both are covered where their work
+      happens, by the two sheet-entrance sections.
+      **Watched failing** with a class added that declares nothing: `1 changed nothing:
+      filter-panel .db-dead-class`.
 - [ ] Plus the five stateful dimensions. **No mapping exists.**
 - [ ] The operator opens three different dropdowns and they look like one family. **Only the
       operator closes this.**

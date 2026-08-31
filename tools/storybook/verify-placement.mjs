@@ -3344,6 +3344,121 @@ const keyboardParityResults = await section("both sheet families under one keybo
   window.visualViewport.addEventListener = realVvAdd;
   window.visualViewport.removeEventListener = realVvRemove;
 
+  // ── NO SURFACE DEPENDS ON AN UNDECLARED PIGGYBACK ──
+  //
+  // `001` asks that removing any one class from a panel change a measured value. It is the strongest
+  // row in that packet and it had nothing behind it, which is the usual fate of a criterion phrased
+  // as a universal: it is easy to write and needs an ablation per class to answer.
+  //
+  // What it is really asking is whether a surface's appearance is DECLARED by the classes it
+  // carries, or borrowed from one it happens to sit inside. A class that changes nothing when
+  // removed is either dead — and will be deleted by someone tidying up, taking a rule with it — or
+  // its work is being done by an ancestor, which is the piggyback: the surface looks right here and
+  // wrong the moment it is portalled somewhere else. This program has already paid for that twice,
+  // in the checkbox that borrowed its appearance from an ancestor class and in the menu row that
+  // only laid out inside the owned menu's shell.
+  //
+  // The signature is the box plus the properties a panel is made of. Removing a class and measuring
+  // nothing is the failure; removing it and measuring a change is the class earning its place.
+  // A class carried for the HOST's stylesheet cannot move anything here, and that is a fact about
+  // the harness rather than about the class. Declared by name with its reason, the way the
+  // touch-target census declares its exempt controls — a predicate wide enough to hide these would
+  // hide the next dead class with them.
+  const HOST_OWNED_CLASSES = {
+    "db-menu": "Obsidian's own menu class, carried so the host's app.css reaches the surface;"
+      + " the harness does not load app.css, so nothing it declares can move here",
+    // These two are the entrance, and an entrance has no resting value to move. The page runs with
+    // `reducedMotion: reduce`, so the surface is already at rest when this measures it — which is
+    // the correct state to ablate a LAYOUT class in and the wrong one to ablate a TRANSITION class
+    // in. They are covered where their work happens: the motion-allowed section asserts the sheet
+    // travels and settles, and its reduced-motion counterpart asserts it lands at rest with nothing
+    // running. Declaring them here rather than widening this check to run animations keeps one
+    // question per check.
+    "db-overlay-enter": "the entrance class; its work is the transition, and this measures a surface"
+      + " already at rest under reducedMotion. Covered by the two sheet-entrance sections",
+    "is-visible": "the entrance's end state; same reason — at rest it is the state, not a change to"
+      + " it, and the transition it completes is asserted by the entrance sections",
+  };
+  const signOf = (el) => {
+    const cs = getComputedStyle(el);
+    const r = el.getBoundingClientRect();
+    return [
+      Math.round(r.width), Math.round(r.height), cs.display, cs.position, cs.padding,
+      cs.borderRadius, cs.backgroundColor, cs.boxShadow, cs.fontSize, cs.maxHeight, cs.overflowY,
+      // State and animation classes do their work here rather than in the box, and a signature
+      // without them reported three of them dead.
+      cs.opacity, cs.visibility, cs.transform, cs.color, cs.zIndex, cs.pointerEvents,
+    ].join("|");
+  };
+  const ablateAt = (el) => {
+    const base = signOf(el);
+    const inert = [];
+    for (const cls of [...el.classList]) {
+      el.classList.remove(cls);
+      const moved = signOf(el) !== base;
+      el.classList.add(cls);
+      if (!moved) inert.push(cls);
+    }
+    return { classes: [...el.classList], inert, restored: signOf(el) === base };
+  };
+
+  const ablationMenu = P.createOwnedMenu(document);
+  for (let i = 0; i < 6; i += 1) ablationMenu.addRow({ title: `Row ${i}`, onClick: () => undefined });
+  ablationMenu.showAt({ x: 40, y: 200 });
+  const menuAblation = ablateAt(ablationMenu.el || ablationMenu.dom || ablationMenu.containerEl);
+  ablationMenu.close();
+  await tick();
+
+  // TWO MOUNT POINTS, and a class earns its place by moving something at EITHER. `db-surface` is the
+  // token-root marker: inside the container the tokens already resolve, so removing it changes
+  // nothing and it reads dead. On the body — where the panels that need it actually go — it is the
+  // only thing making them resolve at all, which `replay` has recorded since `000`. A one-position
+  // ablation would have called the marker dead and invited its deletion.
+  const buildPanel = (parent) => {
+    const el = parent.createDiv({ cls: "db-filter-panel db-surface" });
+    el.createDiv({ cls: "db-panel-header" }).createDiv({ cls: "db-panel-title", text: "Filter" });
+    for (let i = 0; i < 3; i += 1) el.createDiv({ cls: "db-panel-row", text: `Rule ${i}` });
+    return el;
+  };
+  const inContainer = buildPanel(host);
+  const containerAblation = ablateAt(inContainer);
+  inContainer.remove();
+  const onBody = buildPanel(document.body);
+  const bodyAblation = ablateAt(onBody);
+  onBody.remove();
+
+  const panelAblation = {
+    classes: containerAblation.classes,
+    // Dead only if it moved nothing at BOTH mount points.
+    inert: containerAblation.inert.filter((c) => bodyAblation.inert.includes(c)),
+    restored: containerAblation.restored && bodyAblation.restored,
+  };
+  const inertAll = [
+    ...menuAblation.inert.map((c) => `owned-menu .${c}`),
+    ...panelAblation.inert.map((c) => `filter-panel .${c}`),
+  ].filter((entry) => !Object.keys(HOST_OWNED_CLASSES).some((c) => entry.endsWith(`.${c}`)));
+  const declaredInert = [
+    ...menuAblation.inert.map((c) => `owned-menu .${c}`),
+    ...panelAblation.inert.map((c) => `filter-panel .${c}`),
+  ].filter((entry) => Object.keys(HOST_OWNED_CLASSES).some((c) => entry.endsWith(`.${c}`)));
+  out.push({
+    name: "removing any one class from a panel changes a measured value",
+    pass: menuAblation.classes.length >= 2 && panelAblation.classes.length >= 2
+      && inertAll.length === 0 && menuAblation.restored && panelAblation.restored,
+    detail: `owned menu carries [${menuAblation.classes.join(", ")}] and the filter panel`
+      + ` [${panelAblation.classes.join(", ")}]; each class was removed on its own and the surface`
+      + ` re-measured across box, display, position, padding, radius, background, shadow, font-size,`
+      + ` max-height, overflow, opacity, visibility, transform, colour, z-index and pointer-events,`
+      + ` at two mount points — inside the container and on the body.`
+      + (declaredInert.length ? ` Declared inert: ${declaredInert.join(", ")}.` : "")
+      + (inertAll.length
+        ? ` ${inertAll.length} changed nothing: ${inertAll.join(", ")} — either dead, and the next`
+          + ` tidy-up takes a rule with it, or its work is being done by an ancestor, which is the`
+          + ` piggyback: right here and wrong the moment the surface is portalled`
+        : " Every class moved something, so none of the appearance is borrowed from an ancestor.")
+      + ` Both surfaces restored to their original signature=${menuAblation.restored && panelAblation.restored}`,
+  });
+
   // ── THE GATE 003 WROTE FOR ITSELF, and never ran ──
   //
   // Its plan says it plainly: "Stage 1 is a gate, not a task. Until removing the navbar from the
