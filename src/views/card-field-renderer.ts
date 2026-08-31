@@ -34,6 +34,7 @@ import { renderDelayedExternalLink } from "./cell-renderer";
 import { renderProgress, renderProgressRing, renderRating } from "./number-display-renderer";
 import { createCheckbox } from "./checkbox";
 import { renderRelationValue } from "./relation-value-renderer";
+import { openExternalUrl } from "./open-external";
 
 // ───────────────────────────────────────────────────────────────────
 // 2. TYPES
@@ -273,7 +274,7 @@ export function renderCardFieldValue(
     if (parsed.some((nodes) => nodes !== null)) {
       valueEl.empty();
       const onOpenLink = (target: string, external: boolean): void => {
-        void (options.onOpenTarget?.(row, target, external) || (external ? Promise.resolve(window.open(target)) : app.workspace.openLinkText(target, row.file.path)));
+        void (options.onOpenTarget?.(row, target, external) || (external ? Promise.resolve(openExternalUrl(target)) : app.workspace.openLinkText(target, row.file.path)));
       };
       const onResolveImage = (target: string, external: boolean): string | null => resolveInlineImageSrc(app, row, target, external);
       parsed.forEach((nodes, index) => {
@@ -293,7 +294,7 @@ export function renderCardFieldValue(
       anchor.onclick = (event) => {
         event.preventDefault();
         event.stopPropagation();
-        void (options.onOpenTarget?.(row, link.target, link.external) || (link.external ? Promise.resolve(window.open(link.target)) : app.workspace.openLinkText(link.target, row.file.path)));
+        void (options.onOpenTarget?.(row, link.target, link.external) || (link.external ? Promise.resolve(openExternalUrl(link.target)) : app.workspace.openLinkText(link.target, row.file.path)));
       };
     }
     if (links.length > 0) return;

@@ -19,7 +19,7 @@
 // ───────────────────────────────────────────────────────────────────
 import { App, TFile } from "obsidian";
 import { ColumnDef, RowData } from "./types";
-import { hasUrlScheme } from "./text-link";
+import { hasUrlScheme, normalizeExternalUrlTarget } from "./text-link";
 
 // ───────────────────────────────────────────────────────────────────
 // 2. TYPES & CONSTANTS
@@ -67,6 +67,19 @@ export function parseCoverImage(value: unknown, row: RowData, app: App): ParsedI
   // non-http(s) scheme (javascript:, file:, data:, ...) can never be mistaken for a
   // vault-internal target and routed through vault resolution.
   const external = hasUrlScheme(target);
+  // An external cover has to survive the same allowlist every text link already passes.
+  //
+  // Marking a scheme external was only ever half the job: it kept the target away from vault
+  // resolution and then handed it, unchanged, to `window.open`. And the extension test above
+  // cannot stop that, because it only looks at the END of the string — `javascript:…#x.png` and
+  // `data:text/html;base64,…#a.png` both satisfy it while the scheme in front is what actually
+  // opens. Rejecting here rather than at the click means no cover element is ever built for a
+  // target that must not be opened, so there is nothing to click in the first place.
+  //
+  // A `data:image/...` URI is refused with the rest. It is the one case with an arguable use, but
+  // nothing here can tell it from the html payload above without trusting the string's own claim
+  // about itself, and a cover has no need of an inline image the vault could hold instead.
+  if (external && !normalizeExternalUrlTarget(target)) return null;
   const src = resolveImageSrc(app, row, target, external);
   if (!src) return null;
   return { alt, label: alt, target, src, external };

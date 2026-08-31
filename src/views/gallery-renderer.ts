@@ -44,6 +44,7 @@ import { attachLongPress, isTouchDevice } from "../data/touch-environment";
 import { CardRovingController, syncCardRoving, wireCardKeyboard } from "./card-roving-tabindex";
 import { isImeComposing } from "../data/keyboard-utils";
 import { createOwnedMenuForEvent, OwnedMenuHandle } from "./owned-menu";
+import { openExternalUrl } from "./open-external";
 
 // ───────────────────────────────────────────────────────────────────
 // 2. CONSTANTS
@@ -716,7 +717,7 @@ export class GalleryRenderer {
 
   private async openTarget(row: RowData, target: string, external: boolean): Promise<void> {
     if (external) {
-      window.open(target);
+      openExternalUrl(target);
       return;
     }
     await this.app.workspace.openLinkText(target, row.file.path);

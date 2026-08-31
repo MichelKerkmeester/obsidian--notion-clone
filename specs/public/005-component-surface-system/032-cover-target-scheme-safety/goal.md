@@ -7,17 +7,17 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "public/005-component-surface-system/032-cover-target-scheme-safety"
-    last_updated_at: "2026-08-31T17:00:00Z"
+    last_updated_at: "2026-08-31T22:30:00Z"
     last_updated_by: "phase-author"
-    recent_action: "Goal added; the packet binds on this file and it was missing"
-    next_safe_action: "Write the failing control with the three exploit strings"
+    recent_action: "Covers routed through the allowlist; all ten external opens now sever the opener"
+    next_safe_action: "The operator confirms a real cover still renders and opens on device"
     blockers: []
     key_files: ["spec.md", "tasks.md"]
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-032-goal"
       parent_session_id: null
-    completion_pct: 0
+    completion_pct: 100
     open_questions: ["Is this P0 once the onerror teardown and Chromium inertness are weighed"]
     answered_questions: ["The allowlist helper exists and every text-link path already uses it"]
 ---
@@ -51,11 +51,15 @@ directly. The fix is which function the cover path calls.
 <!-- ANCHOR:completion -->
 ## 2. COMPLETION CRITERIA
 
-- [ ] The three exploit strings are rejected, asserted with those exact strings.
-- [ ] An http(s) cover and a vault-internal cover both still open — the fix must not trade a hole
-      for a regression.
-- [ ] External opens pass `noopener`.
-- [ ] The severity question is answered and recorded.
+- [x] The three exploit strings are rejected, asserted with those exact strings. **Met** — the
+      strings are pinned in the test, not described.
+- [x] An http(s) cover and a vault-internal cover both still open — the fix must not trade a hole
+      for a regression. **Met** — both asserted in the same suite as the refusals, so refusing
+      everything would fail here rather than pass.
+- [x] External opens pass `noopener`. **Met** — all ten sites route through one helper, and a
+      test asserts it is the only place in `src/` that calls `window.open`.
+- [x] The severity question is answered and recorded. **Not P0, fixed anyway** — the reasoning,
+      including which mitigation was checked rather than repeated, is under T6 in `tasks.md`.
 <!-- /ANCHOR:completion -->
 
 ---

@@ -69,6 +69,7 @@ import type { TableCellNavigationIntent } from "../data/table-keyboard-navigatio
 import { markNoteHoverLink } from "./hover-link-preview";
 import { isTouchDevice } from "../data/touch-environment";
 import { resolveCellTapAction, trackCellGesture } from "./table-cell-gesture";
+import { openExternalUrl } from "./open-external";
 
 // ───────────────────────────────────────────────────────────────────
 // 2. TYPES
@@ -135,7 +136,7 @@ export function renderDelayedExternalLink(
     open.onclick = (event) => {
       event.preventDefault();
       event.stopPropagation();
-      window.open(link.target);
+      openExternalUrl(link.target);
     };
     const copy = actions.createEl("button", {
       cls: "db-inline-link-action",
@@ -165,7 +166,7 @@ export function renderDelayedExternalLink(
     }
     openTimer = window.setTimeout(() => {
       openTimer = undefined;
-      if (external) window.open(link.target);
+      if (external) openExternalUrl(link.target);
       else void app?.workspace.openLinkText(link.target, row.file.path);
     }, 280);
   });
@@ -355,7 +356,7 @@ export class CellRenderer {
               sourcePath: row.file.path,
               linkClickStrategy: "table",
               onOpenLink: (target, external) => {
-                if (external) window.open(target);
+                if (external) openExternalUrl(target);
                 else void this.app?.workspace.openLinkText(target, row.file.path);
               },
               onResolveImage: (target, external) =>

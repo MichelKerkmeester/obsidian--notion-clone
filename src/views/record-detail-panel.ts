@@ -45,6 +45,7 @@ import { applySheetChrome, attachSheetDragToDismiss } from "./mobile-bottom-shee
 import { mountNoteBodyRegion } from "./note-body-region";
 import type { NoteBodyRegion } from "./note-body-region";
 import { trapFocus } from "./interaction-scope";
+import { openExternalUrl } from "./open-external";
 
 /**
  * 日历 / 时间线事件卡片「展开为可编辑浮动面板」。
@@ -612,7 +613,7 @@ function renderBadge(parent: HTMLElement, col: ColumnDef, value: string): void {
 /** 打开内部 / 外部链接（markdown 内联链接 / 图片点击复用）。 */
 function openTarget(app: App, row: RowData, target: string, external: boolean): void {
   if (external) {
-    window.open(target);
+    openExternalUrl(target);
     return;
   }
   void app.workspace.openLinkText(target, row.file.path);

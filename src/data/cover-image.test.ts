@@ -125,35 +125,51 @@ describe("CoverImage safety: external URLs never yield a network src for Files c
     expect(blocked).toBe(true);
   });
 
-  it("marks a javascript: scheme cover value as external, never touching vault resolution", () => {
+  // These three used to assert the opposite — that a javascript: or data: cover PARSED, as long
+  // as it ended in an image extension. That was the defect written down as the intent: the
+  // extension test only looks at the end of the string, so a fragment is enough to satisfy it
+  // while the scheme in front is what actually gets opened.
+  //
+  // The exact strings are pinned rather than described. A rule stated in prose can be satisfied by
+  // a parser that rejects for some unrelated reason, and these are the inputs that must not parse.
+  it.each([
+    ["javascript:", "javascript:alert(document.domain)#x.png"],
+    ["data: with an html payload", "data:text/html;base64,PHNjcmlwdD5hbGVydCgxKTwvc2NyaXB0Pg==#a.png"],
+    ["file:", "file:///etc/passwd#x.png"],
+  ])("refuses a %s cover target that ends in an image extension", (_label, target) => {
     const app = appWithDestination(null);
 
-    const image = parseCoverImage("javascript:alert(1).png", row(), app);
-
-    expect(image).not.toBeNull();
-    expect(image?.external).toBe(true);
-    expect(image?.target).toBe("javascript:alert(1).png");
-    // Same guarantee as the https:// case: a scheme-typed target resolves to itself
-    // and never reaches vault resolution.
+    expect(parseCoverImage(target, row(), app)).toBeNull();
+    // Rejected before resolution, not after: a target that reached the vault would already have
+    // been treated as a path.
     expect(app.getFirstLinkpathDest).not.toHaveBeenCalled();
     expect(app.getResourcePath).not.toHaveBeenCalled();
   });
 
-  it("marks a data: scheme cover value as external, never touching vault resolution", () => {
+  it("refuses a data:image cover even though the payload is a real image type", () => {
     const app = appWithDestination(null);
 
-    const image = parseCoverImage("data:image/png;base64,AAAA.png", row(), app);
+    // The one case a reviewer argued was legitimate. It is still refused, because the parser
+    // cannot tell this from the html payload above without trusting the string's own claim about
+    // itself — and a cover has no need of an inline data URI when the vault can hold the file.
+    expect(parseCoverImage("data:image/png;base64,iVBORw0KGgo=#a.png", row(), app)).toBeNull();
+  });
+
+  it("still parses the http(s) cover the allowlist exists to permit", () => {
+    const app = appWithDestination(null);
+
+    const image = parseCoverImage("https://example.com/real.png", row(), app);
 
     expect(image).not.toBeNull();
     expect(image?.external).toBe(true);
+    expect(image?.target).toBe("https://example.com/real.png");
     expect(app.getFirstLinkpathDest).not.toHaveBeenCalled();
-    expect(app.getResourcePath).not.toHaveBeenCalled();
   });
 
-  it("blocks a non-http(s) scheme cover image from a Files column same as an https URL", () => {
+  it("blocks an http(s) cover image from a Files column", () => {
     const app = appWithDestination(null);
-    const image = parseCoverImage("javascript:alert(1).png", row(), app);
-    if (!image) throw new Error("expected the scheme-typed image to parse as external");
+    const image = parseCoverImage("https://example.com/real.png", row(), app);
+    if (!image) throw new Error("expected the https image to parse as external");
 
     expect(isCoverImageBlocked(image, "files")).toBe(true);
     expect(isCoverImageBlocked(image, "text")).toBe(false);

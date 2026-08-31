@@ -17,7 +17,9 @@
       "032 cover safety",
       "032 plan",
       "032 tasks",
-      "032 goal"
+      "032 goal",
+      "032 implementation summary",
+      "cover scheme fix"
     ],
     "key_topics": [
       "cover",
@@ -30,16 +32,17 @@
       "plan",
       "tasks",
       "goal",
-      "click",
-      "target"
+      "implementation",
+      "summary"
     ],
     "importance_tier": "important",
-    "status": "planned",
+    "status": "complete",
     "key_files": [
       "spec.md",
       "plan.md",
       "tasks.md",
-      "goal.md"
+      "goal.md",
+      "implementation-summary.md"
     ],
     "entities": [
       {
@@ -67,6 +70,12 @@
         "source": "derived"
       },
       {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
         "name": "Feature Specification",
         "kind": "proper_noun",
         "path": "spec.md",
@@ -85,12 +94,6 @@
         "source": "derived"
       },
       {
-        "name": "its",
-        "kind": "key_phrase",
-        "path": "spec.md",
-        "source": "derived"
-      },
-      {
         "name": "a",
         "kind": "key_phrase",
         "path": "spec.md",
@@ -98,6 +101,12 @@
       },
       {
         "name": "the",
+        "kind": "key_phrase",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "those",
         "kind": "key_phrase",
         "path": "spec.md",
         "source": "derived"
@@ -133,6 +142,12 @@
         "source": "derived"
       },
       {
+        "name": "its",
+        "kind": "key_phrase",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
         "name": "TASKS",
         "kind": "heading",
         "path": "tasks.md",
@@ -142,18 +157,6 @@
         "name": "COMPLETION",
         "kind": "heading",
         "path": "tasks.md",
-        "source": "derived"
-      },
-      {
-        "name": "CROSS-REFERENCES",
-        "kind": "heading",
-        "path": "tasks.md",
-        "source": "derived"
-      },
-      {
-        "name": "those",
-        "kind": "key_phrase",
-        "path": "goal.md",
         "source": "derived"
       },
       {
@@ -173,25 +176,39 @@
         "kind": "heading",
         "path": "goal.md",
         "source": "derived"
+      },
+      {
+        "name": "3. LOG",
+        "kind": "heading",
+        "path": "goal.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Summary",
+        "kind": "proper_noun",
+        "path": "implementation-summary.md",
+        "source": "derived"
       }
     ],
     "causal_summary": "A cover image's click target is opened without checking its URL scheme, so a javascript: or data: target ending in an image extension reaches window.open.",
     "created_at": "2026-08-31T14:46:48.971Z",
-    "last_save_at": "2026-08-31T15:27:29.296Z",
+    "last_save_at": "2026-08-31T18:32:10.133Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
       "spec.md",
       "plan.md",
       "tasks.md",
-      "goal.md"
+      "goal.md",
+      "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:c7f8b02903f010b51700208da0807b9d7653812644780bd4de9de330d1bfbb04",
+    "source_fingerprint": "sha256:e2afdfe4e10d7780eae1c934da6b577e014fb0f18cf362423bc2c589fe11d6c1",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "cf27eea93b7cbb36e9d45d414db4cf69b4fd00a68c531df2ed78923f006831f8",
+      "spec.md": "433ac996775b94ab74f72739cf739c84ac10d67854ab4324334d038ac4e2e667",
       "plan.md": "e53ca919c3bd753ed3e2cbe1de9e99f04ae0dcfde174c9fbab63812b40357613",
-      "tasks.md": "4c1f2137e8c553f8234b4c9ea34e52d22a5ce8b47cdb7d9e992ce2f42b4831aa"
+      "tasks.md": "02bdc93ba7ddc5e6bf1921e140959a569cd1f5c36d0154845a364865af9b8cb5",
+      "implementation-summary.md": "584d1f798b278ab6a903d63ea7d71b8b1c40672b2bd66c63cdbeb28d04f9548d"
     },
     "last_active_child_id": null,
     "last_active_at": null

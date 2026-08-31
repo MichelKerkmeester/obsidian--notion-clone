@@ -7,17 +7,17 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "public/005-component-surface-system/032-cover-target-scheme-safety"
-    last_updated_at: "2026-08-31T16:00:00Z"
+    last_updated_at: "2026-08-31T22:30:00Z"
     last_updated_by: "phase-author"
-    recent_action: "Opened from review finding F001, with its severity recorded as disputed"
-    next_safe_action: "Decide the severity, then route cover targets through the existing safe helper"
+    recent_action: "Covers routed through the allowlist; all ten external opens now sever the opener"
+    next_safe_action: "The operator confirms a real cover still renders and opens on device"
     blockers: []
     key_files: ["spec.md", "tasks.md"]
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-032"
       parent_session_id: null
-    completion_pct: 0
+    completion_pct: 100
     open_questions: ["Is this P0 or lower once the onerror teardown and Chromium's inertness are weighed?"]
     answered_questions: ["The repo already has the correct helper; text links use it and covers do not"]
 ---
@@ -37,7 +37,7 @@ _memory:
 |---|---|
 | **Spec Folder** | 032-cover-target-scheme-safety |
 | **Level** | 1 |
-| **Status** | Planned |
+| **Status** | **In progress — 4 of 4 criteria met, awaiting device.** In the tree: `parseCoverImage` refuses any external target the allowlist rejects, and all ten external opens route through `openExternalUrl` with `noopener,noreferrer`. Open: the operator confirming a real cover still renders and opens |
 | **Complexity** | 15/100, confidence 90% |
 
 **On the declared level.** `recommend-level.sh` returned Level 0; this folder declares Level
@@ -101,9 +101,9 @@ parser.
 <!-- ANCHOR:success-criteria -->
 ## 4. SUCCESS CRITERIA
 
-- [ ] `javascript:`, `data:` and `file:` targets ending in an image extension are rejected, asserted
+- [x] `javascript:`, `data:` and `file:` targets ending in an image extension are rejected, asserted
       with those exact strings as the control.
-- [ ] An http(s) cover and a vault-internal cover both still open.
-- [ ] The severity question in §1 is answered and recorded, rather than left as one lane's label.
-- [ ] `npm run gate` exits 0.
+- [x] An http(s) cover and a vault-internal cover both still open.
+- [x] The severity question in §1 is answered and recorded, rather than left as one lane's label.
+- [x] `npm run gate` exits 0. **18 green, read from `$?`.**
 <!-- /ANCHOR:success-criteria -->

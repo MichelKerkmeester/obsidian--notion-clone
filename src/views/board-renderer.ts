@@ -49,6 +49,7 @@ import { DragDropFeedbackState, resolveDropPlacement } from "./drag-drop-feedbac
 import { attachLongPress, isTouchDevice } from "../data/touch-environment";
 import { CardRovingController, syncCardRoving, wireCardKeyboard } from "./card-roving-tabindex";
 import { createOwnedMenuForEvent } from "./owned-menu";
+import { openExternalUrl } from "./open-external";
 
 // ───────────────────────────────────────────────────────────────────
 // 2. CONSTANTS
@@ -968,7 +969,7 @@ export class BoardRenderer {
     setTooltip(coverLink, image.label, { delay: 100 });
     const openCover = (): void => {
       if (image.external) {
-        window.open(image.target);
+        openExternalUrl(image.target);
         return;
       }
       void this.app.workspace.openLinkText(image.target, row.file.path);
@@ -1406,7 +1407,7 @@ export class BoardRenderer {
 
   private async openTarget(row: RowData, target: string, external: boolean): Promise<void> {
     if (external) {
-      window.open(target);
+      openExternalUrl(target);
       return;
     }
     await this.app.workspace.openLinkText(target, row.file.path);
