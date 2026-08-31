@@ -146,6 +146,24 @@ const extensions = {
   detach() {
     this.remove();
   },
+  // Visibility runs through inline display rather than a class. The typed contract fixes this:
+  // its isShown() is specified as "attached to the DOM and none of the parent and ancestor
+  // elements are hidden with display: none", so display is the property the pair has to move.
+  // A class-based stand-in would need a rule the harness's stylesheet does not carry, and the
+  // element would stay visible here while disappearing on the device.
+  //
+  // Only the day-scale calendar's current-time line calls these today, and it called them from a
+  // surface no bench drove until now — which is why their absence stayed invisible.
+  show() {
+    this.style.removeProperty("display");
+  },
+  hide() {
+    this.style.setProperty("display", "none");
+  },
+  toggleVisibility(visible) {
+    if (visible) this.show();
+    else this.hide();
+  },
 };
 
 /**

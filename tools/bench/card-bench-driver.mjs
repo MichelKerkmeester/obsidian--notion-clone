@@ -103,6 +103,9 @@ export function parseArgs(argv, name) {
     else if (key === "groups") options.groupCount = Number(value);
     else if (key === "repeats") options.repeats = Number(value);
     else if (key === "kind") options.columnKind = value;
+    // The date-driven benches draw a window whose size the scale decides, and a verdict taken at
+    // one scale says nothing about the others. Ignored by the benches that have no scale.
+    else if (key === "scale") options.scale = value;
     else if (key === "throttle") throttle = Number(value);
     // Names the run in the output only. A control is a real edit to the renderer; this flag
     // exists so a control run cannot be mistaken for a normal one when reading scrollback later.
