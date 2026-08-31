@@ -203,7 +203,7 @@
     ],
     "causal_summary": "Give a touch in the table the meaning a touch has, rather than replaying the desktop pointer grammar: a tap edits the cell it lands on, a tap on the row's main item opens the record sheet, and dragging does not paint a selection range.",
     "created_at": "2026-08-30T16:47:05.145Z",
-    "last_save_at": "2026-08-31T19:58:20.206Z",
+    "last_save_at": "2026-08-31T21:17:30.142Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -214,13 +214,13 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:25a06fa2f6e1ba480e76ea8ac14a13fb1dd539ce642fa04f3e472d16a3e860f5",
+    "source_fingerprint": "sha256:8760e6874933d725887ae30fef7e5795a2657e1be536faca8cec1d9723087eb1",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "f7a2303dcc86003dadda16b985bc65f5bca00bb1be9f690edf84a4a80b66bf70",
+      "spec.md": "a5cd998a68ef28bfbb8c09e31e76ca30f4e54a4e57972d6fd679e5834fa96a75",
       "plan.md": "69c662f64daf24c3989f128686f846b459ae52777a083ebd7cbc5e7b0e629d68",
       "tasks.md": "fc29fd1b6d58f3d3f65b45cfc29a53b4934e97345b12da1fa071b6c5c0824414",
-      "implementation-summary.md": "978c5f4407e27da846e15c150f0d37f921ec38a2409eb87ea2523dc06a0137b8"
+      "implementation-summary.md": "e0e3490acf66ccec1e36bd374d490316ecb3539ea35fa284e8832711b897521b"
     },
     "last_active_child_id": null,
     "last_active_at": null

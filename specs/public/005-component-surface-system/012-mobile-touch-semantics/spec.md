@@ -12,12 +12,11 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "public/005-component-surface-system/012-mobile-touch-semantics"
-    last_updated_at: "2026-08-30T09:12:00Z"
+    last_updated_at: "2026-08-31T18:30:00Z"
     last_updated_by: "sk-design"
-    recent_action: "Gate criterion closed on a quiet 19-green run; the scrim control is now a gate lane case"
-    next_safe_action: "The operator drags a finger across the table on device"
-    blockers:
-      - "screenshots-fresh red: 204 captures stale against another phase's styles.css edit"
+    recent_action: "Title-cell check rebuilt on the real opener; four controls installed"
+    next_safe_action: "Operator drags a finger across the table on device"
+    blockers: []
     key_files:
       - "spec.md"
       - "acceptance-criteria.md"
@@ -29,7 +28,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-012"
       parent_session_id: null
-    completion_pct: 60
+    completion_pct: 80
     open_questions:
       - "Phone row height 44px: declined by the operator, density outranks (plan.md 7)"
       - "Row-checkbox range selection: handed to 017 (tasks.md T5)"

@@ -9,12 +9,11 @@ contextType: "general"
 _memory:
   continuity:
     packet_pointer: "public/005-component-surface-system/012-mobile-touch-semantics"
-    last_updated_at: "2026-08-30T09:12:00Z"
+    last_updated_at: "2026-08-31T18:30:00Z"
     last_updated_by: "sk-design"
-    recent_action: "Gate criterion closed on a quiet 19-green run; the scrim control is now a gate lane case"
-    next_safe_action: "The operator drags a finger across the table on device"
-    blockers:
-      - "screenshots-fresh red: 204 captures stale against another phase's styles.css edit; gate exits 1 at 12/13"
+    recent_action: "Title-cell check rebuilt on the real opener; four controls installed"
+    next_safe_action: "Operator drags a finger across the table on device"
+    blockers: []
     key_files:
       - "spec.md"
       - "acceptance-criteria.md"
@@ -22,7 +21,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-012"
       parent_session_id: null
-    completion_pct: 60
+    completion_pct: 80
     open_questions: []
     answered_questions: []
 ---
@@ -41,7 +40,7 @@ _memory:
 | **Spec Folder** | 012-mobile-touch-semantics |
 | **Shipped** | 2026-08-30 |
 | **Level** | 1 |
-| **State** | Shipped and harness-verified. Phase gate FAIL on another phase's recapture debt. Not operator-confirmed |
+| **State** | Shipped and harness-verified; gate 20 green at exit 0. Every check in this phase's section now carries a recorded red. Not operator-confirmed |
 
 <!-- /ANCHOR:metadata -->
 
@@ -129,13 +128,13 @@ so four is the floor, and none of the movers is a table or field capture.
 | AC-2 a mouse still extends at 390px | **PASS.** 24 cells across 8 rows by 3 columns, anchor held at `file.name` |
 | AC-3 the reader routes real events | **PASS.** rest=mouse, touch=touch, mouse=mouse, pen=touch — four values from one binding |
 | AC-4 the tap truth table | **PASS. 5 of 5 rows** |
-| AC-5 the whole title cell opens the record | **PASS.** A press 40px left of the button resolves to `open-record`; cell 169×34 against a 24×24 button |
+| AC-5 the whole title cell opens the record | **PASS, and the outcome half now measured.** A press at the bare-cell point resolves to `open-record`, and the shipped `openRecordDetailPanel` builds a real sheet: `held "note-5.md"`, title `34`, 2 field rows, `390x189`, `db-mobile-bottom-sheet`, and a different row opens a different record. The 40px figure is restated at the dynamically located point — bare cell exists only 1px left of the button |
 | AC-6 a tap does not fight the sheet | **PASS.** Cell centre resolves to the scrim with `pointer-events: auto`; control observed red |
 | AC-6b a tap does not scroll the table | **UNVERIFIED.** Not measurable without a live Obsidian `App` |
 | AC-7 the long-press row menu survives | **PASS.** 100ms fires 0; 600ms fires 1 |
-| AC-8 the phase gate | **FAIL.** Exit 1, 12 of 13 green. All 204 stale captures attributed to `styles.css`, none to any source file |
-| Controls | **7 of 7 observed red** before the corresponding check was trusted |
-| Placement, last run | 79/80, exit 0. This phase's own contribution is seven checks added, seven green, no new red |
+| AC-8 the phase gate | **PASS, 2026-08-31.** `gate: PASS — 20 green, 0 red for a declared reason`, exit 0 read from `$?`. The `screenshots-fresh` leg that held it at exit 1, 12 of 13 is green; the earlier reading and its attribution are kept in `acceptance-criteria.md` §4.2 as the record of that run |
+| Controls | **11 of 11 observed red.** Seven were tabulated in §4.1; the section had grown to eleven, and the four missing controls were installed and watched on 2026-08-31. Provenance is now machine-checked by `PHASE_CONTROLS` in `verify-placement.mjs` rather than asserted in prose |
+| Placement, last run | 240 checks, 238 green, 2 red for a declared reason, exit 0 |
 | Row height against the thumb floor | **DECLINED by the operator with the shortfall stated.** 34px default, 40px at the loosest, against 44px. WCAG 2.5.8's 24px AA met; 2.5.5's 44px AAA not met |
 
 <!-- /ANCHOR:verification -->
@@ -155,9 +154,12 @@ so four is the floor, and none of the movers is a table or field capture.
 2. **AC-6b was never measured.** Whether a tap that opens an editor also scrolls the table needs a
    live Obsidian `App`. It is recorded as UNVERIFIED rather than passed.
 
-3. **The phase gate fails, and not on this phase's work.** 204 captures are stale against a
-   stylesheet edit this phase did not make and a lane it never held. The red is left with its owner
-   and the gate still reads FAIL, because attribution is not a clearance.
+3. **The phase gate held at exit 1 on another lane's red, and that leg has since gone green.** 204
+   captures were stale against a stylesheet edit this phase did not make and a lane it never held.
+   The red was left with its owner rather than cleared by attribution; the 2026-08-31 run reads 20
+   green at exit 0. The scoping objection survives the green: a per-phase criterion keyed to a
+   whole-tree number is hostage to every other lane, and it will go red again for reasons this phase
+   neither causes nor can repair.
 
 4. **This phase's own evidence contained an overclaim, now corrected.** The AC-1 control was said to
    reproduce the operator's screenshot "exactly". The control gives 8 rows by 2 columns and the

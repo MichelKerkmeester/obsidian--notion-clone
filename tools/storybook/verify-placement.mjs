@@ -98,7 +98,7 @@ const bundle = join(work, "bundle.js");
 import { writeFileSync } from "node:fs";
 writeFileSync(entry, `
 import { positionToolbarPopover, getVisiblePopoverBounds, COMPACT_MENU_POPOVER, setPosition, clamp, resolvePopoverHorizontalLeft, PANEL_POPOVER, placeSheet, publishKeyboardInset } from "${join(REPO, "src/views/popover-position")}";
-import { refreshRecordDetailPanel, closeRecordDetailPanel } from "${join(REPO, "src/views/record-detail-panel")}";
+import { refreshRecordDetailPanel, closeRecordDetailPanel, getOpenRecordDetailPath } from "${join(REPO, "src/views/record-detail-panel")}";
 import { attachSheetDragToDismiss } from "${join(REPO, "src/views/mobile-bottom-sheet")}";
 import { applySheetChrome } from "${join(REPO, "src/views/mobile-bottom-sheet")}";
 import { createOwnedMenu } from "${join(REPO, "src/views/owned-menu")}";
@@ -121,7 +121,7 @@ globalThis.__edit = { openRecordDetailPanel, closeRecordDetailPanel, CellRendere
 globalThis.__list = { ListRenderer };
 globalThis.__number = { renderCardField, CellRenderer, getColumnDisplayType, isEmptyValue, formatEuroCurrency, formatEuroNumber };
 globalThis.__selection = { DatabaseView, EmbeddedDatabaseRenderer };
-globalThis.__place = { positionToolbarPopover, getVisiblePopoverBounds, COMPACT_MENU_POPOVER, applySheetChrome, renderCardField, createOwnedMenu, createMenuRow, ToolbarRenderer, trackCellGesture, nextCellRange, resolveCellTapAction, isMainItemColumn, shouldExtendRowRange, applyRowSelectionPress, attachRowRangeGesture, isRowSelectionCheckbox, attachLongPress, isTouchDevice, attachTitleOpenAffordance, setupTitleCellTap, openRecordDetailPanel, RowMenu, ColumnMenu };
+globalThis.__place = { positionToolbarPopover, getVisiblePopoverBounds, COMPACT_MENU_POPOVER, applySheetChrome, renderCardField, createOwnedMenu, createMenuRow, ToolbarRenderer, trackCellGesture, nextCellRange, resolveCellTapAction, isMainItemColumn, shouldExtendRowRange, applyRowSelectionPress, attachRowRangeGesture, isRowSelectionCheckbox, attachLongPress, isTouchDevice, attachTitleOpenAffordance, setupTitleCellTap, openRecordDetailPanel, closeRecordDetailPanel, getOpenRecordDetailPath, RowMenu, ColumnMenu };
 globalThis.__p = { positionToolbarPopover, getVisiblePopoverBounds, setPosition, clamp, resolvePopoverHorizontalLeft, COMPACT_MENU_POPOVER, PANEL_POPOVER, createOwnedMenu, createMenuRow, publishKeyboardInset };
 globalThis.__drag = { openRecordDetailPanel, refreshRecordDetailPanel, applySheetChrome, positionToolbarPopover };
 globalThis.__a = { positionToolbarPopover, placeSheet, applySheetChrome, attachSheetDragToDismiss, openRecordDetailPanel, refreshRecordDetailPanel, closeRecordDetailPanel, createOwnedMenu, createMenuRow };
@@ -2169,6 +2169,7 @@ const cellResults = await section("what a press on a table cell means", () => ce
   const {
     trackCellGesture, nextCellRange, resolveCellTapAction, isMainItemColumn,
     attachLongPress, isTouchDevice, attachTitleOpenAffordance, setupTitleCellTap,
+    openRecordDetailPanel, closeRecordDetailPanel, getOpenRecordDetailPath,
   } = globalThis.__place;
   const vw = window.innerWidth;
 
@@ -2388,15 +2389,62 @@ const cellResults = await section("what a press on a table cell means", () => ce
   // produces, at three points that mean three different things. The link carries a click handler
   // here because the shipped cell renderer gives it one: without that stand-in, "the capture phase
   // suppresses the link" is a claim with nothing on the other side of it to suppress.
+  //
+  // AND THE OTHER END IS THE REAL OPENER, NOT A COUNTER. This check used to hand `setupTitleCellTap`
+  // an `openRecord` that pushed a path onto an array, so `opened 1` meant a function had been
+  // called and nothing else: no record sheet was created, mounted, placed or rendered anywhere in
+  // the run, and the check would have gone on passing if `openRecordDetailPanel` had been deleted.
+  // "Opens the record" is an outcome, so what is asserted below is the panel itself — the module's
+  // own report of which record it holds, its mounted node, its rendered fields, and its box on
+  // screen. Each open is closed again immediately, because the probes further down this section
+  // hit-test the table and a sheet left standing would answer for it.
   const openTd = cellAt(5, 0);
-  const openRow = { file: { path: rowPaths[5], name: "34.md" } };
+  const openRow = {
+    file: { path: rowPaths[5], basename: "34", name: "34.md" },
+    frontmatter: { income: 4975.32, expenses: 12 },
+    computed: {},
+  };
   const openLink = openTd.querySelector("a");
   let navigated = 0;
   openLink.addEventListener("click", () => { navigated += 1; });
   attachTitleOpenAffordance(openTd, openRow, { open: () => undefined });
   const openBtn = openTd.querySelector(".db-record-open-btn");
   const openedPaths = [];
-  setupTitleCellTap(openTd, openRow, { openRecord: (anchorEl, r) => openedPaths.push(r.file.path) });
+  const openedSheets = [];
+  const driveRealOpener = (anchorEl, r) => {
+    openedPaths.push(r.file.path);
+    openRecordDetailPanel({
+      anchorEl,
+      host,
+      row: r,
+      columns: [
+        { key: "file.name", label: "Name", type: "text" },
+        { key: "income", label: "Income", type: "number" },
+        { key: "expenses", label: "Expenses", type: "number" },
+      ],
+      config: { viewType: "table", schema: { computedFields: [] }, titleField: "file.name" },
+      app: {},
+      actions: {
+        editCell: () => {}, openRow: () => {}, editFileName: () => {}, isReadOnly: false,
+      },
+    });
+    const sheet = document.querySelector(".db-record-detail-panel");
+    const rect = sheet ? sheet.getBoundingClientRect() : null;
+    openedSheets.push({
+      row: r.file.path,
+      held: getOpenRecordDetailPath(),
+      mounted: Boolean(sheet && sheet.isConnected),
+      isSheet: Boolean(sheet && sheet.classList.contains("db-mobile-bottom-sheet")),
+      title: sheet ? (sheet.querySelector(".db-record-detail-title")?.textContent ?? "") : "",
+      fields: sheet ? sheet.querySelectorAll(".db-record-detail-field").length : 0,
+      width: rect ? Math.round(rect.width) : 0,
+      height: rect ? Math.round(rect.height) : 0,
+      onScreen: Boolean(rect && rect.width > 0 && rect.height > 0
+        && rect.top < window.innerHeight && rect.bottom > 0),
+    });
+    closeRecordDetailPanel();
+  };
+  setupTitleCellTap(openTd, openRow, { openRecord: driveRealOpener });
 
   const openCellRect = openTd.getBoundingClientRect();
   const openBtnRect = openBtn.getBoundingClientRect();
@@ -2428,19 +2476,61 @@ const cellResults = await section("what a press on a table cell means", () => ce
   pressAndRelease(openBtn, Math.round(openBtnRect.left + openBtnRect.width / 2), openY, "touch");
   const afterButtonTap = openedPaths.length;
 
+  // The control for "a record sheet exists": a different row, whose sheet must hold a different
+  // record and draw a different title. Without it, a handler that opened row 0 every time would
+  // satisfy every assertion above — one sheet is not evidence that it is THIS row's sheet.
+  const otherTd = cellAt(9, 0);
+  const otherLink = otherTd.querySelector("a");
+  otherLink.textContent = "99 • Dec '27";
+  const otherRow = {
+    file: { path: rowPaths[9], basename: "99", name: "99.md" },
+    frontmatter: { income: 1, expenses: 2 },
+    computed: {},
+  };
+  setupTitleCellTap(otherTd, otherRow, { openRecord: driveRealOpener });
+  const otherLinkRect = otherLink.getBoundingClientRect();
+  pressAndRelease(
+    otherLink,
+    Math.round(otherLinkRect.left + otherLinkRect.width / 2),
+    Math.round(otherLinkRect.top + otherLinkRect.height / 2),
+    "touch",
+  );
+
+  // Nothing may be left standing: the probes below hit-test the table, and a sheet or a scrim
+  // still on the body would answer for it — which is the failure 031 root-caused on other surfaces.
+  const sheetsLeft = document.querySelectorAll(".db-record-detail-panel").length;
+  const scrimsLeft = document.querySelectorAll(".db-mobile-sheet-scrim").length;
+
+  const everySheetReal = openedSheets.length === 3 && openedSheets.every((sheet) => sheet.mounted
+    && sheet.isSheet && sheet.held === sheet.row && sheet.title.length > 0 && sheet.fields >= 2
+    && sheet.onScreen);
+  const firstSheet = openedSheets[0];
+  const otherSheet = openedSheets[2];
+  const distinct = Boolean(firstSheet && otherSheet
+    && otherSheet.held === rowPaths[9] && otherSheet.title !== firstSheet.title);
+
   out.push({
-    name: "the shipped title-cell handler opens the record from a real tap, and leaves the mouse alone",
+    name: "the shipped title-cell handler opens a real record sheet from a real tap, and leaves the mouse alone",
     pass: openBareX !== null
       && afterBareTap === 1 && afterLinkTap === 2 && navigatedAfterTaps === 0
       && afterLinkClick === 2 && navigated === 1
       && afterButtonTap === 2
-      && openedPaths.every((path) => path === rowPaths[5]),
+      && openedPaths.slice(0, 2).every((path) => path === rowPaths[5])
+      && everySheetReal && distinct && sheetsLeft === 0 && scrimsLeft === 0,
     detail: `tap on bare cell at x=${openBareX} opened ${afterBareTap}; tap on the link opened`
       + ` ${afterLinkTap - afterBareTap} more and navigated ${navigatedAfterTaps} time(s);`
       + ` a mouse click on the link opened ${afterLinkClick - afterLinkTap} more and navigated`
       + ` ${navigated - navigatedAfterTaps} time(s); a tap on the open button opened`
       + ` ${afterButtonTap - afterLinkClick} more, because the button owns that press;`
-      + ` rows opened=${openedPaths.join(",") || "none"} (want ${rowPaths[5]} twice)`,
+      + ` rows opened=${openedPaths.join(",") || "none"} (want ${rowPaths[5]} twice, then ${rowPaths[9]}).`
+      + ` Each open built the shipped panel: ${openedSheets.length} sheet(s), first one held`
+      + ` "${firstSheet ? firstSheet.held : "nothing"}" with title "${firstSheet ? firstSheet.title : ""}",`
+      + ` ${firstSheet ? firstSheet.fields : 0} field row(s), box`
+      + ` ${firstSheet ? firstSheet.width : 0}x${firstSheet ? firstSheet.height : 0}, bottom sheet=`
+      + `${firstSheet ? firstSheet.isSheet : false}, on screen=${firstSheet ? firstSheet.onScreen : false};`
+      + ` the control row opened "${otherSheet ? otherSheet.held : "nothing"}" titled`
+      + ` "${otherSheet ? otherSheet.title : ""}", different from the first=${distinct};`
+      + ` after closing, ${sheetsLeft} sheet(s) and ${scrimsLeft} scrim(s) remain`,
   });
 
   // ── how much of a thumb the main-item cell actually gets ──
@@ -2584,6 +2674,61 @@ const cellResults = await section("what a press on a table cell means", () => ce
   table.remove();
   return out;
 }));
+
+// ── every check above must have been watched failing ──
+//
+// `012-mobile-touch-semantics` asked for "every check watched failing first on a deliberately broken
+// tree, with the failing number recorded", and for most of a year that was prose in a spec doc: seven
+// checks had a control, the section grew to eleven, and nothing noticed. The two that were named as
+// missing were found by reading the run against the doc — which is exactly the method that stops
+// happening the next time someone is in a hurry.
+//
+// So the attribution is on the SECTION, not on each check. A check added to this section inherits the
+// phase automatically and the run goes red until someone records the red they watched. Registering
+// per-check would have let the next addition arrive unregistered, which is the failure being fixed.
+const SURFACE_PHASE = "012-mobile-touch-semantics";
+const phaseChecks = cellResults.map((r) => ({ ...r, phase: SURFACE_PHASE }));
+
+/**
+ * The failing number each check produced on a deliberately broken tree.
+ *
+ * Every entry is a red someone watched, quoted from the run that produced it — not a description of
+ * a red that could be produced. The break is named too, because "it went red" is worth nothing
+ * without saying what was broken to make it.
+ */
+const PHASE_CONTROLS = new Map([
+  ["a table cell reads its gesture from the pointer event, not from the device",
+    "with the reader consulting the device instead of the event: `after touch=mouse` (acceptance-criteria.md §4.1)"],
+  ["a second tap picks one cell while a mouse still paints the range",
+    "with the tap extending like a mouse: `16 cells, rows 2-9 x 2 columns` (§4.1)"],
+  ["shift-extend still works at 390px with touch reported present",
+    "with the guard keyed to the device rather than the event: shift+click collapses to 1 cell at 390px (§4.1)"],
+  ["a tap edits its column and the main item opens the record, while a click does neither",
+    "with the truth table pinned: rows disagree with their wanted action, printed inline as `WANT ...` (§4.1)"],
+  ["the row's main item is the note name, or the first visible column when it is hidden",
+    "with `isMainItemColumn` reduced to `colKey === TITLE_COLUMN_KEY`, the pre-fix answer: "
+      + "`income in [income,expenses]=false WANT true`"],
+  ["a tap anywhere in the title cell opens the record, and a click there still does not",
+    "with the same press dispatched as a mouse: `tap=select-cell` (§4.1, AC-5)"],
+  ["the shipped title-cell handler opens a real record sheet from a real tap, and leaves the mouse alone",
+    "twice. With the opener replaced by the old push-to-array stub the routing half is unchanged and "
+      + "the outcome half is empty: `first one held \"null\" with title \"\", 0 field row(s), box 0x0 "
+      + "on screen=false`. With every open forced to row 5: `the control row opened \"note-5.md\" "
+      + "titled \"34\", different from the first=false`"],
+  ["every pixel of a table row belongs to the row it looks like it belongs to",
+    "with a 44px band centred on the cell instead of anchored to it AND the cell's clip lifted: "
+      + "`the cell owns 28px of the 34px row`, `the last pixel above the boundary is still this "
+      + "row's=false`. The band alone is not enough — the cell clips its overflow, so the naive "
+      + "fix is defeated by the surface before the check ever sees it, and only lifting both makes "
+      + "the mis-anchoring reachable"],
+  ["a held press still opens the row menu and a tap still does not",
+    "with the delay removed: a 100ms press fires 1 long-press (§4.1, AC-7)"],
+  ["the long-press row menu offers a rename, and pressing it reaches the shipped editor",
+    "with the rename entry not built, the pre-fix menu: `3 menu entries [Open note, Duplicate record, "
+      + "Delete \"36\"]; a rename entry is MISSING and pressing it renamed 0 row(s)`"],
+  ["while a record sheet is open the backdrop takes the tap, not the cell under it",
+    "with the backdrop's pointer-events at none: `pointer-events=none ... resolves to <td>` (§4.1, AC-6)"],
+]);
 
 await cellPhone.close();
 
@@ -5660,6 +5805,26 @@ const KNOWN = new Map([
       + "behaviour change in the panel's lifecycle rather than a geometry correction.",
   ],
 ]);
+
+// A check attributed to a phase with no recorded red is a check nobody watched fail, and that is
+// reported as a failure of the run rather than as a note. The inverse is checked too: a baseline
+// whose check has vanished means a rename dropped its provenance silently.
+for (const r of phaseChecks.filter((row) => !PHASE_CONTROLS.has(row.name))) {
+  results.push({
+    name: `the ${SURFACE_PHASE} check "${r.name}" records the red it was watched failing at`,
+    pass: false,
+    detail: "it carries no entry in PHASE_CONTROLS, so nothing says it was ever seen to fail."
+      + " Break the thing it checks, read the failing number, and record it there.",
+  });
+}
+for (const name of [...PHASE_CONTROLS.keys()].filter((n) => !phaseChecks.some((r) => r.name === n))) {
+  results.push({
+    name: `the recorded red for "${name}" still belongs to a check in this run`,
+    pass: false,
+    detail: "PHASE_CONTROLS holds a baseline for a check name that no longer appears in the"
+      + " section — a rename or a removal took its provenance with it.",
+  });
+}
 
 const failed = results.filter((r) => !r.pass);
 const unexpectedFail = failed.filter((r) => !KNOWN.has(r.name));
