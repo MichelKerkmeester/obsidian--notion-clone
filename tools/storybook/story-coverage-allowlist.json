@@ -71,6 +71,10 @@
     {
       "path": "table-record-peek.ts",
       "reason": "Attaches title-cell taps to the live record-peek lifecycle and opens a vault-backed row panel; a static story cannot exercise that owner and its cleanup path."
+    },
+    {
+      "path": "note-body-region.ts",
+      "reason": "Read mode is Obsidian's MarkdownRenderer, which has no standalone build — the stub declares it out of scope, so a story could only demonstrate the stub, exactly as for inline-markdown-renderer.ts. The half a story could show is covered instead by note-body-region.test.ts, which drives the swap, focus, debounce and flush against a fake DOM, and by the two panel-record-detail-sheet-body-* screenshot scenarios."
     }
   ]
 }
