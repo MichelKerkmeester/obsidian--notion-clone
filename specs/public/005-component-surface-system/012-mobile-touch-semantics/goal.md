@@ -11,8 +11,8 @@ _memory:
     packet_pointer: "public/005-component-surface-system/012-mobile-touch-semantics"
     last_updated_at: "2026-08-30T17:45:00Z"
     last_updated_by: "goal-authoring"
-    recent_action: "Harness-dependency audit: title-cell outcome clause withdrawn, openRow is a stub"
-    next_safe_action: "Drive openRecordDetailPanel for real; assert a connected sheet, not a call count"
+    recent_action: "Gate criterion closed on a quiet 19-green run; the scrim control is now a gate lane case"
+    next_safe_action: "The operator drags a finger across the table on device"
     blockers:
       - "screenshots-fresh red: captures stale against another phase's styles.css edit"
     key_files:
@@ -22,7 +22,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-012-goal"
       parent_session_id: null
-    completion_pct: 54
+    completion_pct: 60
     open_questions:
       - "Phone title rename has no reachable entry point; acceptable or not"
       - "Should AC-8 stay keyed to the whole-tree gate or be split into phase-owned legs"
@@ -142,7 +142,14 @@ settle it and **no number**, because none ran.
       **First clause met.** → *while a record sheet is open the backdrop takes the tap, not the cell
       under it*: `backdrop=present pointer-events=auto inset=0px; a press at the centre of a visible
       cell resolves to <div class="db-mobile-sheet-scrim">`.
-      **The control is not in the run.** `acceptance-criteria.md` §AC-6 records it as observed once,
+      **The control is now in a run, and in the gate.** `sheet-teardown` carries "the backdrop's
+      pointer contract, both directions": the default backdrop leaves the stylesheet's modal value
+      standing, and `{ scrimCapturesPointer: false }` reads `none`. Both directions in one case,
+      because "the backdrop is modal" also passes on a build where the option is ignored entirely —
+      the opt-out is what proves the default is a decision rather than the only behaviour available.
+      Observed red before green: with the option ignored, the opt-out reports `""` instead of
+      `none` and the case fails.
+      *The original record, kept:* `acceptance-criteria.md` §AC-6 records it as observed once,
       reporting `pointer-events=none ... resolves to <td>`, and §4.1 repeats the entry. No `control:`
       check for it appears anywhere in the captured run — the only two the whole run reports are
       `010`'s. A control observed once and written into prose cannot go red when the behaviour
@@ -179,13 +186,14 @@ settle it and **no number**, because none ran.
       `setupTitleCellTap` in `table-record-peek.ts` for the embedded renderer and require the
       title-cell handler check to go red; and pin `isMainItemColumn` to return `false` and require the
       main-item check and the tap truth table to go red together.
-- [ ] The gate exits 0. **Today it exits 1 at 12 of 13** on `screenshots-fresh`, red for a stylesheet
-      edit this phase does not own. The threshold asks for exit 0 and this is not exit 0.
-      **Not settled here, and deliberately not re-run.** The captured evidence is `verify-placement`
-      alone — `verify-placement: 220/224 geometry checks passed, 4 red for a declared reason` — which
-      is one leg of the gate, not the gate. No gate run has been captured against this tree, and one
-      taken now would be a shared whole-tree number read while four agents are writing to it, which
-      describes no tree and has already cost this packet time once.
+- [x] The gate exits 0. **Met, on a quiet tree.** `npm run gate` -> `gate: PASS — 19 green, 0 red
+      for a declared reason`, exit 0 read from `$?` rather than through a pipe.
+      The reason this stayed open no longer holds: it was left because a whole-tree number read
+      while four agents were writing to it describes no tree. This run was taken from a working tree
+      with nothing outstanding but files another process owns, and the gate has since grown from 13
+      lanes to 19 — `sheet-teardown`, `sheet-rebuild` and `list-window` among them. The
+      `screenshots-fresh` red that blocked it was a stale-capture state, not a defect in this
+      phase, and captures are current.
       **Finding — this criterion cannot be closed by this phase as written.** Its failing leg,
       `screenshots-fresh`, reported 204 stale captures with all 204 attributed to `styles.css` and
       none to any `src/` file (§4.2). This phase made no CSS edit and never held the lane. A per-phase

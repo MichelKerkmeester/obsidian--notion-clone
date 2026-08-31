@@ -340,6 +340,58 @@ async function runRegistrationCase(doc: Document): Promise<TeardownResult> {
   };
 }
 
+/**
+ * The backdrop takes the tap by default, and lets it through only when a producer asks.
+ *
+ * Both directions in one case, because only the pair is evidence. "The backdrop is modal" passes on
+ * a build where the option is ignored entirely and every backdrop is modal — the opt-out is what
+ * proves the default is a decision rather than the only behaviour available.
+ *
+ * This is the control the phase recorded as observed once and never carried in a run: without it,
+ * a regression that made every backdrop permeable would leave the modal assertion the only witness,
+ * and that assertion would fail loudly — but a regression that made the opt-out inert would pass
+ * silently, and that is the direction users lose presses to.
+ */
+async function runScrimPointerContract(doc: Document): Promise<TeardownResult> {
+  clearBody(doc);
+  const modal = doc.createElement("div");
+  modal.className = "db-panel";
+  modal.setAttribute("data-producer", "scrim-default");
+  doc.body.appendChild(modal);
+  applySheetChrome(modal, true);
+  const defaultPointer = doc.body.querySelector<HTMLElement>(SCRIM)?.style.pointerEvents ?? "(none present)";
+  applySheetChrome(modal, false);
+  modal.remove();
+  await settle(doc);
+
+  const permeable = doc.createElement("div");
+  permeable.className = "db-panel";
+  permeable.setAttribute("data-producer", "scrim-optout");
+  doc.body.appendChild(permeable);
+  applySheetChrome(permeable, true, { scrimCapturesPointer: false });
+  const optOutPointer = doc.body.querySelector<HTMLElement>(SCRIM)?.style.pointerEvents ?? "(none present)";
+  applySheetChrome(permeable, false);
+  permeable.remove();
+  await settle(doc);
+
+  // "" means the stylesheet's own value stands, which is the modal one.
+  const defaultIsModal = defaultPointer === "";
+  const optOutIsPermeable = optOutPointer === "none";
+
+  return {
+    producer: "the backdrop's pointer contract, both directions",
+    closeShape: "default vs opt-out",
+    scrimLeft: doc.body.querySelectorAll(SCRIM).length,
+    sheetsLeft: doc.body.querySelectorAll(SHEET).length,
+    pass: defaultIsModal && optOutIsPermeable,
+    detail: !defaultIsModal
+      ? `the default backdrop set pointer-events to "${defaultPointer}" — a sheet is leaking presses to the view behind it`
+      : !optOutIsPermeable
+        ? `the opt-out produced "${optOutPointer}", not "none" — a producer that asked for a permeable backdrop did not get one`
+        : 'default is modal (stylesheet value stands) and the opt-out reads "none"',
+  };
+}
+
 export async function runSheetTeardownParity(doc: Document = document): Promise<TeardownResult[]> {
   const results: TeardownResult[] = [
     // The reference. Its own comment says it takes the chrome down before the node goes,
@@ -356,6 +408,7 @@ export async function runSheetTeardownParity(doc: Document = document): Promise<
   // Real renderers, started one at a time: each resets the body, so they must not overlap.
   for (const runCase of headerPanelCases(doc)) results.push(await runCase());
   results.push(await runRegistrationCase(doc));
+  results.push(await runScrimPointerContract(doc));
   clearBody(doc);
   return results;
 }
