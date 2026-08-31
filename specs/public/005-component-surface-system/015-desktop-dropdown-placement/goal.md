@@ -11,8 +11,8 @@ _memory:
     packet_pointer: "public/005-component-surface-system/015-desktop-dropdown-placement"
     last_updated_at: "2026-08-31T09:00:00Z"
     last_updated_by: "harness-dependence-review"
-    recent_action: "AC-4 settled: the shipped argument returned the whole viewport, and now does not"
-    next_safe_action: "AC-5 and AC-7 need their shipped methods driven, not their arithmetic copied"
+    recent_action: "The suggestion clamp and threshold exported, so a check drives them instead of copying"
+    next_safe_action: "AC-7 and the phone rows, whose values still come from the harness"
     blockers:
       - "AC-4 reads green on a transcription passing null where the source passes panel"
       - "npm run gate is 15 green, screenshots-fresh red, from four captures this repair staled"
@@ -26,7 +26,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-015-goal"
       parent_session_id: null
-    completion_pct: 50
+    completion_pct: 62
     open_questions:
       - "What an anchorless open should do; the decision binds all 34 call sites"
       - "column-menu.ts:616 passes the panel to getVisiblePopoverBounds and gets the whole viewport"
@@ -151,7 +151,7 @@ fails on this harness when the repair is removed. Those three can fail for the r
       Both arguments are asserted in one case deliberately: `null` alone cannot fail this way, so on
       its own it would be evidence about the wrong call — which is the transcription cost this row
       was withdrawn for.
-- [ ] The formula autocomplete stays inside its field. Was a 169px overhang, and the pre-fix
+- [x] The formula autocomplete stays inside its field. Was a 169px overhang, and the pre-fix
       statement re-run in place still overhangs 169px.
       `HAND the formula autocomplete stays inside its modal` — **suggest [830..1100] inside a modal
       [300..1100], overhang 0px**, with the caret at x=700 of an 800px modal. `HAND CONTROL the
@@ -176,8 +176,21 @@ fails on this harness when the repair is removed. Those three can fail for the r
       `app.css`, which is not loaded. And `shouldDisableInlineSuggestions()` returns early below
       760px, a threshold the probe never crosses in either direction.
 
-      **What would settle it:** drive the shipped `showSuggestionBox` against a modal sized the way
-      the host sizes it, and assert both the clamp and the 760px suppression.
+      **Settled, by removing the reason a transcription was needed at all.** The clamp and the
+      suppression threshold were inline expressions inside private methods on a modal that needs a
+      live `App`, which is *why* every check of them was a copy. They are now exported functions —
+      `clampSuggestionLeft` and `suppressesInlineSuggestions` — and the modal calls them, so a check
+      that imports them is driving the shipped arithmetic rather than a restatement of it.
+      **The cost this row named is gone, and that is provable:** deleting the clamp from the shipped
+      function turns the tests red (`pulls the box back when the caret would push its right edge past
+      the field`, `never returns a negative left`). The transcribed version could not do that, which
+      was the entire complaint.
+      Six cases cover both: the 170px overhang pulled back to land exactly on the container edge, a
+      box that already fits left alone, a box wider than its field clamped to 0 rather than negative,
+      the 760px boundary asserted on both sides, the phone suppressed whatever its width, and an
+      unmeasured modal treated as allowed rather than as narrow.
+      *What still needs a device:* the modal's real width comes from Obsidian's `app.css`, which is
+      not loaded here. These fix the arithmetic's ownership; the host still supplies its input.
 - [ ] The phone does not move: identical before and after, because every change sits in a
       desktop-only branch.
 

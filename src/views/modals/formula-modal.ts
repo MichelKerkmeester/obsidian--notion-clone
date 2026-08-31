@@ -143,6 +143,36 @@ const FUNCTION_NAMES = new Set(FUNCTIONS.flatMap((fn) => [fn.name, fn.name.toLow
 // 4. MODAL
 // ───────────────────────────────────────────────────────────────────
 
+/**
+ * Where the suggestion box's left edge may sit, given the caret and the room available.
+ *
+ * Exported because it could not otherwise be checked. It used to live inline in a private method on
+ * a modal that needs a live Obsidian `App`, so every check of it was a TRANSCRIPTION — the
+ * arithmetic copied into a probe. A transcribed check answers a question about the copy: it matched
+ * its source, and it would have gone on passing if the source lost the clamp entirely.
+ *
+ * The clamp exists because `estimateCaretPosition` bounds the corner the box STARTS at and says
+ * nothing about the corner it ends at. With the caret near the right of a wide field the box ran
+ * 169px past its container, and neither the placement nor the stylesheet brought it back — the CSS
+ * caps the box's width, which does not move it.
+ */
+export function clampSuggestionLeft(caretLeft: number, availableWidth: number, boxWidth: number): number {
+  return Math.max(0, Math.min(caretLeft, availableWidth - boxWidth));
+}
+
+/**
+ * Below this width the inline suggestion box is suppressed rather than clamped.
+ *
+ * A narrow modal cannot hold the field and the box side by side, so the box is not shown at all.
+ * Exported for the same reason as the clamp: the check that covers it was reading a copy.
+ */
+export const INLINE_SUGGESTION_MIN_WIDTH = 760;
+
+export function suppressesInlineSuggestions(modalWidth: number, isPhone: boolean): boolean {
+  if (isPhone) return true;
+  return modalWidth > 0 && modalWidth < INLINE_SUGGESTION_MIN_WIDTH;
+}
+
 export class FormulaModal extends DbModal {
   private selectedCategoryKey = "formula.catFields";
   private selectedHelpItem: FormulaHelpItem | null = null;
@@ -1355,7 +1385,7 @@ export class FormulaModal extends DbModal {
     // or the stylesheet brought it back: the CSS caps the box's width, which does not move it.
     const container = this.propertySuggestEl.parentElement;
     const available = container?.clientWidth ?? this.textarea.clientWidth;
-    const left = Math.max(0, Math.min(pos.left, available - this.propertySuggestEl.offsetWidth));
+    const left = clampSuggestionLeft(pos.left, available, this.propertySuggestEl.offsetWidth);
     this.propertySuggestEl.setCssProps({ left: `${left}px`, top: `${pos.top + 4}px` });
     this.suggestionIndex = -1;
   }
@@ -1366,9 +1396,9 @@ export class FormulaModal extends DbModal {
   }
 
   private shouldDisableInlineSuggestions(): boolean {
-    if (window.activeDocument.body.classList.contains("is-phone")) return true;
+    const isPhone = window.activeDocument.body.classList.contains("is-phone");
     const width = this.modalEl?.getBoundingClientRect().width || this.contentEl?.getBoundingClientRect().width || 0;
-    return width > 0 && width < 760;
+    return suppressesInlineSuggestions(width, isPhone);
   }
 
   private highlightSuggestion(items: HTMLButtonElement[]): void {
