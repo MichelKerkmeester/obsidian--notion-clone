@@ -102,3 +102,39 @@ harness change, not the assertions: Obsidian's real `button` rule now loads on a
 | `npm run screenshots:verify` | 228 entries current, none blank or theme-identical — baseline 224, +4 for the new sheet scenario |
 | `node tools/live/evidence.mjs --check-all` | 8 of 8 fresh |
 | `npm run gate` | **13 of 14 green.** The red is `comments`, from `tools/bench/run-board.mjs` and `run-gallery.mjs` — untracked files another agent created at 17:38 during this work, which this phase did not touch |
+
+---
+
+## 6. HARNESS-SUPPLY CLASSIFICATION
+
+Asked of every row: *if this value came from the device instead of the harness, would the check still
+pass — and could it still fail?* **All sixteen are sound, and none is withdrawn.**
+
+This phase is the one that found the supply rather than fell for it. §4 is the finding in its purest
+form: five checks written by earlier phases had passed on every run since they were written, and they
+passed because the page had no host stylesheet — an undeclared `justify-content` computes to
+`flex-start`, so every label already lined up and the checks measured a document no reader has. The
+repair was to the harness, not to the assertions. That is inventory item 5, caught and closed for the
+rule it names.
+
+| Group | Class | Why |
+|---|---|---|
+| AC-1, AC-2, AC-6 | Sound | Label and divider origins measured against shipped `styles.css` **plus** Obsidian's real `button` rule, which is the declaration that made the earlier greens false |
+| AC-3, AC-4, AC-5, AC-7 | Sound | Computed `justify-content`, a 44px floor, hairline presence, `aria-haspopup` and the chevron — plugin declarations and plugin markup throughout |
+| AC-8, AC-9 | Sound | `--db-layer-modal` and `--db-layer-submenu` are plugin tokens and `runtime-vars.css` pins neither; the paint test reads what the document actually returns at the submenu's own centre |
+| AC-10 | Sound | The 90% cap is the stylesheet's `!important` `calc(90svh - …)`. Noted at the row: the inline arithmetic in `placeSheet` is dead, and the two sources disagree in mechanism rather than in value |
+| AC-11 to AC-16 | Sound | Transform, transition shorthand and animation count read off the running element in a real browser, driven by a real pointer stream. AC-13 samples travel at 60ms and rest at 460ms rather than trusting a declared duration |
+
+### The gap this phase narrowed and did not close
+
+**One host rule is modelled. The stylesheet has thousands.** `button` now loads on all 17 pages
+because a specific defect proved it had to. Every other declaration Obsidian makes and this plugin
+does not is still computed from CSS defaults here and from the host's value on a device, and the
+`button` case is the demonstration that the difference is not theoretical — it cost five checks and
+several months of centred sheet buttons.
+
+So the correct reading of these sixteen greens is: sound against the rules the harness models, on a
+surface where the one known host contribution is now present. A rule keyed to a host declaration
+nobody has thought to add is still invisible, and no check in this phase would report it. The
+general repair is a host stylesheet the harness loads rather than a growing list of rules it
+remembers to copy.

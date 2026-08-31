@@ -201,7 +201,7 @@
     ],
     "causal_summary": "Remove the device predicate that made every touch press on a row checkbox extend a range, and give touch a real gesture for the range it lost — a held press on the checkbox.",
     "created_at": "2026-08-30T16:46:52.479Z",
-    "last_save_at": "2026-08-30T19:13:51.907Z",
+    "last_save_at": "2026-08-31T03:42:58.881Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -212,7 +212,7 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:c3651e43a6e982ce85df111f5902cbbd467c90404b49ef2994750b01333db152",
+    "source_fingerprint": "sha256:70bfa452918c47794db74897a813e3bb18695edb9b8f1afea8e77318b4f96bd3",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "cb815125a67c3e0075c1cf376e564e4d49381ad69aafe6e1e962c3cd194b201c",

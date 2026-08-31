@@ -9,9 +9,9 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "public/005-component-surface-system/019-card-field-value-formatting"
-    last_updated_at: "2026-08-30T21:10:00Z"
-    last_updated_by: "parity-check"
-    recent_action: "Parity, currency and bar/ring criteria closed in verify-placement, each observed red first"
+    last_updated_at: "2026-08-31T09:00:00Z"
+    last_updated_by: "harness-dependence-review"
+    recent_action: "Harness-dependence review: no tick withdrawn; both parity sides are shipped renderers"
     next_safe_action: "Settle the scope exclusion with the operator, then confirm the figure on device"
     blockers:
       - "Crosses a written scope exclusion in the parent spec; unresolved"
@@ -65,6 +65,29 @@ enough for the operator to find it, and that absence is the criterion's own reas
 
 <!-- ANCHOR:completion -->
 ## 2. COMPLETION CRITERIA
+
+**Reviewed against "if this value came from the device instead of the harness, would the check still
+pass — and could it still fail?", and nothing here is withdrawn.** That is a result rather than an
+absence of one, so it is worth saying why it holds.
+
+Both sides of the parity check are shipped renderers: `renderCardField` from
+`card-field-renderer.ts` and `new CellRenderer(…).renderCell(…)` from `cell-renderer.ts`, bundled
+from `src/` and handed one record (`verify-placement.mjs:5205-5222`). The stubs they receive —
+`app: {}`, `openNote(){}`, and an `async () => {}` save — are navigation and persistence, and take no
+part in producing the text that is compared. The comparison is `textContent`, so it is untouched by
+the absent host stylesheet, by the pinned variables and by every other supply the harness makes: none
+of them can change a string. **AC-2 is the soundest criterion in this packet**, and its form is why:
+a parity check cannot be satisfied by the harness handing over the answer, because the harness would
+have to hand the same wrong answer to two independent renderers.
+
+**One dependency does exist and it runs the other way.** The formatters are `Intl.NumberFormat("nl-NL")`
+(`euro-format.ts:17-31`), so the exact glyphs in AC-1 and AC-6 — the U+00A0 after the euro sign, `.`
+for grouping, `,` for the decimal — are ICU's output in Chromium and in Node, not the plugin's. A
+device whose WebView ships different ICU data could print U+202F and turn AC-1 red while the product
+is perfectly correct. That is a **false red, never a false green**: it cannot hide a defect, only
+invent one. AC-2 is immune to it entirely, since both sides call the same formatter in the same
+runtime and would shift together. Recorded so a future red on AC-1 is diagnosed before it is
+"fixed".
 
 - [x] Card and cell agree, byte for byte, on every numeric column type. `verify-placement` now
       builds both from the shipped modules and hands them one record: **`14 pairs compared across

@@ -9,11 +9,12 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "public/005-component-surface-system/015-desktop-dropdown-placement"
-    last_updated_at: "2026-08-30T22:00:00Z"
-    last_updated_by: "search-results-clamp-repair"
-    recent_action: "The sixth defect is fixed in both copies; declaration dropped from both harnesses"
-    next_safe_action: "Recapture the four chrome-selection-status-bar PNGs and look at them"
+    last_updated_at: "2026-08-31T09:00:00Z"
+    last_updated_by: "harness-dependence-review"
+    recent_action: "AC-4, AC-5 and AC-7 ticks withdrawn: all three are measured on transcriptions"
+    next_safe_action: "Reach the real clamp: shim a host App or export the method the probe copies"
     blockers:
+      - "AC-4 reads green on a transcription passing null where the source passes panel"
       - "npm run gate is 15 green, screenshots-fresh red, from four captures this repair staled"
       - "The dead-anchor guard is not desktop-only; no phone arm covers it"
     key_files:
@@ -25,10 +26,11 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-015-goal"
       parent_session_id: null
-    completion_pct: 90
+    completion_pct: 70
     open_questions:
       - "What an anchorless open should do; the decision binds all 34 call sites"
       - "column-menu.ts:616 passes the panel to getVisiblePopoverBounds and gets the whole viewport"
+      - "How a private renderer method gets a check that calls it rather than copying it"
     answered_questions:
       - "getPlacementOptions is not a root cause; its only consumer has zero callers"
       - "The clamp takes null, not a container: a container narrows a panel portalled to escape it"
@@ -76,6 +78,24 @@ from a clean tree at `f64dd87` — `220/224 geometry checks passed, 4 red for a 
 exit 0. Unticked criteria carry the check that would settle them, written to be implementable from
 the sentence alone.
 
+**Three ticks were withdrawn on review, and the question that took them is not "is it green".** It
+is: *if this value came from the device instead of the harness, would the check still pass — and
+could it still fail?* AC-4, AC-5 and AC-7 are measured on **transcriptions** — the arithmetic copied
+out of a private renderer method into the probe, because the method needs a live Obsidian `App`.
+A transcribed check answers a question about the copy. AC-4 is the severe case: its copy passes
+`null` where `column-menu.ts:616` passes `panel`, and this folder has already measured that the
+shipped argument returns the whole viewport. AC-5 and AC-7 are the milder case: their copies match
+their sources today, verified by reading both, but neither can go red if its source loses the clamp.
+
+**AC-1, AC-2 and AC-3 survive the same question and are the phase's real result.** Each drives a
+shipped module — `createOwnedMenu`, `positionToolbarPopover`, the reposition loop — through the
+browser, with every input measured rather than assumed: AC-2 reads the trigger's own
+`getBoundingClientRect` rather than a declared height, so a device trigger of a different size flows
+through the arithmetic instead of past it. Their bounds come from `.workspace-split.mod-root`, which
+the harness builds by hand, but that selector is the one the shipped `getVisiblePopoverBounds` looks
+for and the relationship under test — capped, clear of the trigger, hidden when the anchor dies —
+fails on this harness when the repair is removed. Those three can fail for the right reason.
+
 - [x] A tall menu is capped and every row is reachable after scrolling. Was 1808px tall, 912px past
       the bounds, last row at y=1778 off screen. A 5-row menu overflows by −702px under the same
       call, so the check distinguishes a tall menu from any menu.
@@ -100,12 +120,30 @@ the sentence alone.
       before=visible, after=hidden, with panel.top unchanged at 134** across the loop tick. `LIFETIME
       CONTROL a surface with a live anchor survives the same loop and stays placed` — **visibility
       visible, panel.top 234 against anchor.bottom 228, gap 6px**.
-- [x] The anchorless column submenu clears the right sidebar: `panel.right ≤ editing area right`. Was
+- [ ] The anchorless column submenu clears the right sidebar: `panel.right ≤ editing area right`. Was
       1328 against 1140.
       `HAND the anchorless column submenu clears the right sidebar` — **submenu [840..1080] against
       an editing area ending at 1140**, clamped against `bounds.right=1140` rather than
       `view.innerWidth=1440`, which is what used to place it 188px under the sidebar.
-- [x] The formula autocomplete stays inside its field. Was a 169px overhang, and the pre-fix
+
+      **Tick withdrawn: the transcription does not say what the source says, at the one argument
+      that decides the answer.** `probe-desktop-placement.mjs:637` and its `verify-placement` twin
+      clamp against `P.getVisiblePopoverBounds(null)`. `column-menu.ts:616` calls
+      `getVisiblePopoverBounds(panel)`. `null` yields the editing area `[300..1140]` and the check
+      reads green; `panel` intersects the surface's own rect, and a body-portalled fixed panel that
+      has not laid out trips the degenerate guard at `popover-position.ts:515` and returns the
+      **whole viewport**. This folder already measured that: `bounds(sub)` for a 292px five-row
+      submenu returns `[0..1440]` — the exact bound the repair existed to remove. So this is not a
+      check blind to some future regression. It is a check reading green over a defect this folder
+      has already measured in the shipped path, which is the strongest form of the transcription
+      cost recorded under AC-7.
+
+      **What would settle it:** drive `openColumnSubmenu` itself, or — since the method is private
+      and needs a live `App` — a shimmed probe that calls `getVisiblePopoverBounds` with a freshly
+      created, not-yet-laid-out panel and asserts the returned rect is the editing area and not the
+      viewport. An unshimmed call throws in the element guard, which is its own finding about that
+      guard. Until one of those exists, the AC-4 repair is unverified in the shape it ships.
+- [ ] The formula autocomplete stays inside its field. Was a 169px overhang, and the pre-fix
       statement re-run in place still overhangs 169px.
       `HAND the formula autocomplete stays inside its modal` — **suggest [830..1100] inside a modal
       [300..1100], overhang 0px**, with the caret at x=700 of an 800px modal. `HAND CONTROL the
@@ -113,6 +151,25 @@ the sentence alone.
       1270, overhang 170px, against a clamped right of 1100**. The control prints **170px** where
       this folder recorded 169px; the run is the measurement, and the 1px is carried here rather
       than reconciled away.
+
+      **Tick withdrawn: the clamp is transcribed, so the check cannot fail when the source loses
+      it.** `probe-desktop-placement.mjs:668` reproduces `showSuggestionBox`'s statement rather than
+      calling it — the method is private on a modal that needs a live `App`. Unlike AC-4 the copy
+      **does** match the source today: `formula-modal.ts:1357-1358` reads
+      `propertySuggestEl.parentElement?.clientWidth ?? textarea.clientWidth`, and the probe's
+      `suggest` is a direct child of its modal, so `modal.clientWidth` is the same quantity. Checked,
+      not assumed. What the check cannot do is notice the clamp being deleted from
+      `formula-modal.ts`: the probe would still place its own copy correctly and still report 0px.
+      That is the AC-7 cost, not the AC-4 one, and the difference is worth keeping — the arithmetic
+      is right, its ownership is unproven.
+
+      **Two host values also come from the harness rather than the product.** The modal is a
+      hand-built div pinned at `width: 800px`; the real modal's width comes from Obsidian's
+      `app.css`, which is not loaded. And `shouldDisableInlineSuggestions()` returns early below
+      760px, a threshold the probe never crosses in either direction.
+
+      **What would settle it:** drive the shipped `showSuggestionBox` against a modal sized the way
+      the host sizes it, and assert both the clamp and the 760px suppression.
 - [ ] The phone does not move: identical before and after, because every change sits in a
       desktop-only branch.
 
@@ -139,7 +196,7 @@ the sentence alone.
       scrim taking every tap with nothing visible above it. Assert either that the scrim goes with
       the sheet or that the surface closes outright, and assert the paired live-anchor control on
       the same page, or the check is satisfied by a positioner that hides every sheet.
-- [x] The declared red is closed: the search-results panel clamps against the editing area rather
+- [ ] The declared red is closed: the search-results panel clamps against the editing area rather
       than `window.innerWidth`. Was **panel [900..1380] against an editing area ending at 1140,
       window.innerWidth 1440** — 240px under the sidebar at anchor x=600, and **1432, a 292px
       overhang**, at x=1000.
@@ -167,6 +224,21 @@ the sentence alone.
       **The declaration is gone from both harnesses**, since a declared red that has been fixed is a
       check that can no longer fail. `verify-placement` is **221/224, 3 declared red, exit 0**, down
       from four; `probe-desktop-placement` is **31/31 with `DECLARED_RED` empty, exit 0**.
+
+      **Tick withdrawn, on this folder's own finding rather than a new one.** Both harnesses
+      transcribe the arithmetic instead of calling the method, and this folder proved the
+      consequence in both directions: reverting the *transcription* to `window.innerWidth` turns the
+      run to exit 1, but reverting the *source* while leaving the transcription fixed leaves it at
+      exit 0. A criterion that cannot go red when the code it names regresses is evidence about the
+      harness, so the tick does not hold — even though the edit behind it is confirmed. What **is**
+      confirmed, by reading rather than by running: `database-view.ts:6953` and
+      `embedded-database-renderer.ts:1323` both carry the repaired form and are byte-identical to
+      each other. The clamp was made; nothing in the gate keeps it made.
+
+      **What would settle it:** any check that reaches the real method. Both copies are private
+      members needing a live `App`, so the honest routes are a shimmed host object or lifting the
+      clamp into an exported function the harness can import — the same move that would retire the
+      AC-4 and AC-5 transcriptions with it, since all three fail for one reason.
 - [ ] The operator opens any desktop dropdown and it is where they expected it.
 
       Operator-confirmed is the only state that closes this, per D3. No harness can answer it, and

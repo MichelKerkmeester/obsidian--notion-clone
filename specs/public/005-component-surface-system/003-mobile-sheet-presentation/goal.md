@@ -33,6 +33,17 @@ Repo `~/MEGA/Development/Obsidian Plugin`. **Runs sixth.** The riskiest change i
 - Plus the five stateful dimensions.
 
 **DONE MEANS** the operator opens a sheet on their phone and it covers the nav bar.
+**HARNESS DEPENDENCE, 2026-08-31 — 9 sound / 5 dependent / 0 unknown.** The headline bullet is one of
+the five. *"`elementFromPoint(centreX, navbarCentreY)` returns the sheet"* is measured against a
+hand-written `<div class="mobile-navbar" ... height:72px>` (`verify-placement.mjs:409`) with no
+`app.css` rule, no stacking context and no z-index — a stand-in for the element the operator's defect
+is about, which a body portal beats almost by default. The scrim bullet and the every-popover
+deletion bullet inherit the same stand-in, and the keyboard bullet is answered by an instrument that
+**injects `--keyboard-height`** rather than driving `visualViewport`, which is the fragile half of
+`keyboardInset()`. **Sound:** the anchor lease, the two-mechanism offset agreement, the transition
+trace, and the host-isolation read — that last one is a differential on one document, so the missing
+stylesheet cancels out of both sides. `--db-mobile-sheet-bottom` is no longer pinned, so that supply
+is spent. Rows in `acceptance-criteria.md` § Harness-dependence audit.
 <!-- /ANCHOR:completion -->
 
 ---

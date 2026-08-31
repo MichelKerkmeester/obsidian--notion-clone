@@ -138,3 +138,46 @@ which is untouched, and `formatNumber` reaches it only with an already-numeric a
 fail — but it is the contract AC-4 is protecting, stated as a test.
 
 **State.** Met.
+
+---
+
+## HARNESS-SUPPLY CLASSIFICATION
+
+Asked of every row: *if this value came from the device instead of the harness, would the check still
+pass — and could it still fail?* **It holds up. Nothing is withdrawn.**
+
+This phase is the cleanest evidence shape in the packet, and the reason is structural rather than
+careful: **it compares text, not geometry.** `"1.000,24"` is the same eleven characters on a phone, on
+a desktop, under any theme, at any font size, with or without Obsidian's `app.css`, whatever
+`--keyboard-height` the host publishes. None of the five channels in the supply inventory can reach a
+string comparison. A pinned variable changes a colour or a length; it does not change what
+`Number("1.000,24")` returns.
+
+| # | Class | Why |
+|---|---|---|
+| AC-1 | Sound | A named literal through the shipped `renderCell`. The string is the assertion; there is no measured quantity for a harness to supply |
+| AC-2 | Sound | 12 pairs, byte-identical text, both sides produced by bundled production modules — `renderCardField` and `CellRenderer.renderCell`. Neither is a stub, and the comparison is renderer-against-renderer rather than renderer-against-expectation |
+| AC-3 | Sound | The blast-radius control, and an unchanged number is the right evidence: both renderers short-circuit on `typeof value === "number"`, so the coercion is unreachable for ordinary data and the count must not move |
+| AC-5 | Sound | The negative control, observed: restoring `parseFloat` reddens AC-1 and AC-2 and the run exits 1. Red-then-green on the same instrument, in the same session |
+| AC-7 | Sound | 450 tests, exit 0, and the near miss at `reports-display.test.ts:70` reported rather than edited |
+| AC-4 | **Unprotected** | See below |
+| AC-6 | Open, already | The stale captures name `cell-renderer.ts` and no other source, which is ownership evidence rather than inherited red |
+
+### AC-4 is true and has no control
+
+The claim is confirmed in source, not merely reasoned: `cell-renderer.ts:400-402` reads
+`return this.hasNothingToPrint(value) ? Number.NaN : Number(value);`, so the guard does run ahead of
+the coercion and an empty computed result keeps its `-` rather than becoming `0`. The row's own note
+is accurate and its "Met, by construction rather than by a number" is the right label.
+
+What it does not have is an assertion. The sample holds no empty value, so **no run of this suite can
+turn AC-4 red** — and the row itself says a direct `parseFloat` → `Number` swap "would have shipped
+green" for exactly that reason. That is a check-shaped gap, not a harness-supply one: no device value
+is being substituted, there is simply nothing watching. It is recorded here rather than left implicit
+because this phase demonstrated at AC-5 that it knows how to build the control, and the distance
+between AC-4 and AC-5 is one fixture entry.
+
+**What is owed:** one empty-value pair in the comparison sample — a `""` or whitespace value on a
+Reports computed column — so the `-` is asserted rather than argued. Until then AC-4 is a correct
+statement about the code with no regression protection, and a later edit to `toDisplayNumber` would
+not be caught by anything in this phase.

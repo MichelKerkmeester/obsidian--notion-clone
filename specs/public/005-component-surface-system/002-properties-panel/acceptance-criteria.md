@@ -12,10 +12,10 @@ contextType: "implementation"
 _memory:
   continuity:
     packet_pointer: "public/005-component-surface-system/002-properties-panel"
-    last_updated_at: "2026-08-29T18:00:00Z"
-    last_updated_by: "phase-architect"
-    recent_action: "Applied review findings F3, F8, F11 and F16"
-    next_safe_action: "Record the AC-007 to AC-012 failing numbers from the Phase-1 audit"
+    last_updated_at: "2026-08-31T00:00:00Z"
+    last_updated_by: "harness-dependence-audit"
+    recent_action: "Classified 12 criteria for harness dependence; 2 rest on host control heights"
+    next_safe_action: "Model app.css input and button heights before trusting the 36px row threshold"
     blockers:
       - "001-overlay-placement-and-menu-language must land first"
     key_files:
@@ -266,6 +266,53 @@ against an unedited stylesheet, or the audit records a tree nobody shipped.
 Write `-` when the row is `Met` or `Unmet`. Write `ADR-NNN` when the row is `Waived` or
 `Superseded`, naming a decision record that exists in `decision-record.md`. A waiver naming an ADR
 that is not there fails validation.
+
+### Harness-dependence audit — 2026-08-31
+
+The pass before this one asked of each criterion whether it was green. This one asks a different
+question: **if the value came from the device instead of the harness, would the check still pass —
+and could it still fail?**
+
+**No row in the table above was `Met` when this audit ran, so no tick was withdrawn and
+`completion_pct` does not move.**
+
+The supplies, by number: **1** `--keyboard-height`, injected by the harness. **2** values
+`runtime-vars.css` pins where the runtime computes them. **3** production actions replaced by
+stubs. **4** host chrome built by hand. **5** Obsidian's `app.css`, absent except for one `button`
+rule copied into `HOST_BARE_CONTROLS` (`verify-placement.mjs:69`).
+
+**10 sound · 2 harness-dependent · 0 unknown.**
+
+**The panel came through better than expected, and the reason is worth stating.** Its row is not an
+intrinsic layout the host can push around: `styles.css § .db-column-manager-row` declares
+`grid-template-columns: 18px 0 20px 18px minmax(120px, 1fr) auto auto auto`, the phone rules declare
+their own lists, and the three trailing actions claim `grid-column: 6/7/8` by name. Track counts,
+grid areas and the name-width floor are **written down in the plugin's own stylesheet**, so a host
+rule cannot move them. That is exactly the class of geometry this audit is required to leave alone.
+
+What the host does reach is **height**, and the two rows that read one are the two flagged below.
+
+| AC-ID | Class | Supply | On a device |
+|---|---|---|---|
+| AC-001 | **Harness-dependent** | 5 | Two thresholds in one row. `grid-row-start = 1` for every child is pure plugin grid and sound — the recorded 8-children-into-7-tracks failure is real in both worlds. **`height <= 36px` is not.** The row's height is `max(min-height: 30px, tallest child)`, and its tallest children are `.clickable-icon` buttons, which take `height: var(--input-height)` from `app.css`. The harness gives them no host height, so the row measures shorter here than it ever will on a phone. The recorded 52px is a real grid defect; the 36px threshold is a number this document has never measured under the cascade that decides it. Split the row, or model the host input and button heights before trusting the second half |
+| AC-002 | Sound | — | Declared track count against laid-out child count. Both sides are the plugin's: the declared list is in `styles.css`, and `.db-column-drag` is hidden by a plugin rule. The recorded desktop-7-vs-8 and phone-8-vs-7 hold under any host sheet |
+| AC-003 | Sound | — | The floors the threshold names — `>= 120px` desktop, `>= 96px` phone — **are literally the `minmax()` floors the plugin declares**, so the criterion cannot be satisfied by a host contribution. **The recorded 22px is harness-scaled and optimistic**: a name track can only fall under its own floor when the fixed and `auto` tracks overflow the container, and the three `auto` tracks are buttons the host pads wider than the harness does. A device squeezes the name harder than 22px, not less. Re-record the number; keep the criterion |
+| AC-004 | Sound | — | The subject is whether the positioner clamps. If it clamps, the height is bounded whatever the rows measure; the recorded failure — the inline `maxHeight` taking the full bounds — is plugin behaviour |
+| AC-005 | Sound | — | Whether a single click reaches `deleteColumn` with nothing interposed. `deleteColumn` is the plugin's own function, not one of the stubbed actions |
+| AC-006 | Sound | — | Remove a condition's child, read the grid area each survivor resolves to. The fix and the failure both live in the explicit `grid-column` claims. A positional list shifting under a hidden child is a plugin property end to end |
+| AC-007 | **Harness-dependent** | 5 | "0 primary-line controls extend past the panel content box" and "0 require horizontal scrolling". Whether a control overflows depends on its intrinsic width, and its intrinsic width is content plus `padding: var(--size-4-1) var(--size-4-3)` from the host's `button` rule. **Here the controls are narrower than any device produces, so a row of them fits when it would not fit on a phone.** This is a masked green: the check passes because the harness made the controls small |
+| AC-008 | Sound | — | Column-id resolution and a driven delete that removes property X. The delete path is the plugin's |
+| AC-009 | Sound | — | Re-runs AC-002's track equality and AC-008's identity after each schema mutation. Both are sound, so the composition is |
+| AC-010 | Sound | — | Model deltas for delete, rename and reorder, plus a cancel that leaves the model untouched. All plugin state |
+| AC-011 | Sound | — | Owner counts, listener and node counts, and a click reaching the element underneath after close |
+| AC-012 | Sound | — | A substitution suite over its own coordinates |
+
+**One stale citation, recorded not repaired.** AC-012's evidence cell cites "`styles.css:16879` vs
+`:16995`" as the two fighting phone rules. Those line numbers now land in the timeline block. The
+real pair is `.is-phone .note-database-container .db-column-manager-row` declared twice, the later
+winning with a `minmax(96px, 1fr)` name track — resolvable with
+`rg -n '\.is-phone .*\.db-column-manager-row' styles.css`. This is the citation drift `000`'s goal
+predicted for every `styles.css` line number in the program; cite the selector plus the grep.
 
 <!-- /ANCHOR:criteria -->
 

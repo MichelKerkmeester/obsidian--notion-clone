@@ -12,10 +12,10 @@ contextType: "implementation"
 _memory:
   continuity:
     packet_pointer: "public/005-component-surface-system/001-overlay-placement-and-menu-language"
-    last_updated_at: "2026-08-29T18:00:00Z"
-    last_updated_by: "phase-architect"
-    recent_action: "Applied review findings F3, F8, F11 and F16"
-    next_safe_action: "Record the AC-008 to AC-013 failing numbers from the Phase-1 census"
+    last_updated_at: "2026-08-31T00:00:00Z"
+    last_updated_by: "harness-dependence-audit"
+    recent_action: "Classified 13 criteria for harness dependence; 4 rest on the absent host sheet"
+    next_safe_action: "Load Obsidian app.css into the menu census before recording any row number"
     blockers:
       - "000-surface-contract-and-truthful-harness must land first"
     key_files:
@@ -288,6 +288,55 @@ what catches it — which is why step 3 runs at every handoff and not once at th
 Write `-` when the row is `Met` or `Unmet`. Write `ADR-NNN` when the row is `Waived` or
 `Superseded`, naming a decision record that exists in `decision-record.md`. A waiver naming an ADR
 that is not there fails validation.
+
+### Harness-dependence audit — 2026-08-31
+
+The pass before this one asked of each criterion whether it was green. This one asks a different
+question: **if the value came from the device instead of the harness, would the check still pass —
+and could it still fail?**
+
+**No row in the table above was `Met` when this audit ran, so no tick was withdrawn and
+`completion_pct` does not move.** What is recorded instead is which criteria are compromised
+*before* anyone runs them.
+
+The supplies, by number: **1** `--keyboard-height`, injected by the harness and set by nothing in
+`src/`. **2** values `runtime-vars.css` pins where the runtime computes them. **3** production
+actions replaced by no-op or counting stubs. **4** host chrome built by hand. **5** Obsidian's
+`app.css`, absent except for one `button` rule copied verbatim into `HOST_BARE_CONTROLS`
+(`verify-placement.mjs:69`).
+
+**9 sound · 4 harness-dependent · 0 unknown.**
+
+**This packet holds the third case, and it is the `justify-content` defect one property over.**
+`createMenuRow` builds a **`<button>`** (`menu-row.ts:92`). Obsidian's `app.css` declares
+`display: inline-flex`, `align-items: center`, `justify-content: center`, `padding`,
+`border-radius`, `height` and `font-size` on every bare button. The plugin's row rule outranks that
+type selector on every property **both** name — and on the properties only the host names, the
+host's value applies uncontested. A row measured in a page built from `styles.css` alone is measured
+against Chromium defaults at exactly the mounts where the plugin declares nothing.
+
+| AC-ID | Class | Supply | On a device |
+|---|---|---|---|
+| AC-001 | Sound | — | Containment is relational: the rect and the bounds are both read from the same DOM, and the plugin owns the clamp. The harness's hand-built chrome sets the scale, not the relation, and `contain: strict` is reproduced verbatim from `app.css` (`verify-placement.mjs:166`). A surface that escapes its bounds escapes them anywhere |
+| AC-002 | **Harness-dependent** | 5 | Set equality over computed `padding`, `border-radius`, `box-shadow`, row `height` and `font-size`. **Four of those five are declared by the host's `button` rule**, and menu rows are buttons. Here, a role-mate the plugin never styled reads Chromium defaults, the set has cardinality > 1, and the row goes red for the right reason. **On a device the host supplies one identical value to every unstyled role-mate, the set collapses to cardinality 1, and the criterion passes with the defect fully present.** This is a masked green, not a wrong number |
+| AC-003 | **Harness-dependent** | 5 | The sharpest instance. The recorded value is "`display` computes `flex` inside `.db-owned-menu` and `block` outside". `block` is the default for a bare element — **the row is a `<button>`, so a device computes `inline-flex` there**, and `align-items` computes `center` on both sides because the host declares it. Of the two properties the threshold names, **one can no longer differ on a device at all**, and the other differs between two values neither of which is `block`. The recorded failing number is not the product's and the threshold is half-masked |
+| AC-004 | Sound | — | A submenu either opens or does not. Node count, role resolution and the bounds test are all the plugin's |
+| AC-005 | Sound | — | `role` attribute, tab cycle and `document.activeElement`. Attributes and focus order the plugin sets |
+| AC-006 | Sound | — | Panels are containers, not bare controls, so the host's `button` rule does not reach the measured properties. Deleting a class and watching a number move is a differential on one document |
+| AC-007 | Sound | — | Menu width is declared outright by the plugin — the 292px that reads correctly and the 520px default that does not. The host declares no width on a plugin class |
+| AC-008 | Sound | — | `position`, `top`, `right`, `width` and `maxHeight` are written inline by the positioner; `padding` is read on panels, not on rows |
+| AC-009 | **Harness-dependent** | 3 | The identity half — every row resolves to its declared action key across a re-emission — is plugin-internal and sound. The threshold conjoins it with "**driving each row by its key produces the same model delta it produced before**", and in the harness the drivable actions are stubs (`verify-placement.mjs:2434-2437`, `:3398-3401`). A model delta asserted against `() => {}` is the `editFileName` counting-stub failure. Split the row, or wire real handlers |
+| AC-010 | Sound | — | Surface id, the bounds test and key resolution across a forced re-emit are all the plugin's. Inherits AC-009's outcome exposure only where it re-runs it |
+| AC-011 | **Harness-dependent** | 3 | "A sort applied, a filter added, a column hidden" are model changes, and the harness has no model to change. The criterion is written correctly — it bans asserting on node presence — and is unrunnable against stubs |
+| AC-012 | Sound | — | Owner counts, LIFO dismissal, listener and node counts, and a click reaching the element underneath. All plugin-owned |
+| AC-013 | Sound | — | A substitution suite. One coordinate — "mount it in a bare `div`" — reads AC-003's observable and would stop failing on a device, but that turns the row **red**, not green: a substitution that no longer fails breaches the threshold loudly. A phantom red announces itself; a masked green does not |
+
+**What would settle AC-002 and AC-003.** Load Obsidian's real `app.css` into the menu census the way
+`verify-placement.mjs` already loads `HOST_BARE_CONTROLS`, and re-record both rows before either is
+trusted. The single `button` rule the harness models today is the right idea applied to one
+instrument: `token-census.mjs:53` loads `styles.css` alone and `surface-census.mjs:66-68` adds only
+theme and runtime vars, so a number from either is not comparable with a number from
+`verify-placement.mjs` for the same surface.
 
 <!-- /ANCHOR:criteria -->
 

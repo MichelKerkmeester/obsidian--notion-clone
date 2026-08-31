@@ -12,10 +12,10 @@ contextType: "implementation"
 _memory:
   continuity:
     packet_pointer: "public/005-component-surface-system/006-record-open-target"
-    last_updated_at: "2026-08-29T18:00:00Z"
-    last_updated_by: "phase-architect"
-    recent_action: "Applied review findings F3, F8, F11 and F16"
-    next_safe_action: "Drive the twenty affordances and record what each produces"
+    last_updated_at: "2026-08-31T00:00:00Z"
+    last_updated_by: "harness-dependence-audit"
+    recent_action: "Classified 13 criteria for harness dependence; 4 rest on stubbed open actions"
+    next_safe_action: "Wire openRow to the shipped opener before driving the 20-affordance census"
     blockers:
       - "Depends on 003-mobile-sheet-presentation for the phone answer"
     key_files:
@@ -289,6 +289,48 @@ hardening; register them in `checklist.md` when its verification protocol is nex
 Write `-` when the row is `Met` or `Unmet`. Write `ADR-NNN` when the row is `Waived` or
 `Superseded`, naming a decision record that exists in `decision-record.md`. A waiver naming an ADR
 that is not there fails validation.
+
+### Harness-dependence audit — 2026-08-31
+
+The pass before this one asked of each criterion whether it was green. This one asks a different
+question: **if the value came from the device instead of the harness, would the check still pass —
+and could it still fail?**
+
+**No row in the table above was `Met` when this audit ran, so no tick was withdrawn and
+`completion_pct` does not move.**
+
+The supplies, by number: **1** `--keyboard-height`. **2** values `runtime-vars.css` pins. **3**
+production actions replaced by no-op or counting stubs. **4** host chrome built by hand. **5**
+Obsidian's `app.css`, absent except for one `button` rule.
+
+**9 sound · 4 harness-dependent · 0 unknown.**
+
+**This packet is the least style-exposed of the seven, and for a structural reason.** Its criteria
+ask *what was produced*, *which record is displayed* and *where the write landed* — content and
+identity, not computed geometry. A missing host stylesheet does not change which file an edit wrote
+to. The exposure it does have is the other kind: **the actions it must drive are the stubbed ones**,
+and its one leaf-lifetime criterion runs against a workspace the harness builds by hand.
+
+| AC-ID | Class | Supply | On a device |
+|---|---|---|---|
+| AC-001 | Sound | — | Count the body characters present in the produced surface and match them against the seeded body. Content, not style. The recorded **0** — the peek stringifies column values and never reads the file (`table-record-peek.ts:262-271`) — is a source fact that holds anywhere |
+| AC-002 | Sound | — | `elementFromPoint` at the surface's own centre after a re-render. Both the surface and the view underneath are the plugin's; no host element competes at that point |
+| AC-003 | Sound | — | Surface height against viewport height on a phone profile. Every bound in play is plugin-declared — the detail panel's `50vh` and `60vh` clamps, and the peek's `min(360px, 100%)` dock with no phone rule at all. A host sheet does not move a `vh` clamp |
+| AC-004 | **Harness-dependent** | 3 | "Drive every affordance in the open-path census; record which surface each produced." **In the harness the affordance is `openRow: () => undefined` / `openRow: () => {}`** (`verify-placement.mjs:2329`, `:2435`, `:3398`, `:4268`, `:4523`, `:4920`). A no-op produces no surface, so the count is of nothing, and a threshold of *"0 produced a surface other than the configured target"* is satisfied vacuously. **This is the exact shape of the `editFileName` false green**: a check proved a gesture reached the handler while nothing was ever created. The recorded finding — 20 affordances resolve to 4 surfaces, `types.ts:636-657` — comes from reading the open paths, not from driving them, and is sound as a source fact |
+| AC-005 | **Harness-dependent** | 3 | The row is written correctly: it refuses to close on a round-trip alone and demands that the driven affordance produce the surface the setting names. That second half needs the real opener, and inherits AC-004's stub exactly |
+| AC-006 | Sound | — | A dropdown opened inside the peek must paint above it. **Both sides of the comparison are plugin-declared numbers** — the peek's `z-index: 998` against `--db-layer-popover: 100` and `--db-layer-submenu: 110`. Note the layer variables this row reads are not among those `runtime-vars.css` pins, and `--db-layer-sticky` — which was pinned at 25 against a production 40 — has since been removed from that file |
+| AC-007 | **Harness-dependent** | 4 | "Assert the database view is still rendered in its own leaf." A leaf is host machinery. The harness hand-writes `workspace-leaf`, `workspace-split mod-root` and their siblings (`verify-placement.mjs:178-186`) and resolves the `obsidian` module to `tools/storybook/obsidian-stub.mjs`, so `getLeaf(false)` behaves the way the stub behaves. Leaf reuse navigating the view away is a real defect (`data-source.ts:425`) and it is not observable against hand-built chrome |
+| AC-008 | Sound | — | Harness-measuring by construction: delete the target from the harness DOM and require an asserted number to change. The row exists to prove the others are connected |
+| AC-009 | Sound | — | Requested id against displayed id, before and after a re-render that changed the view's order. **This is the criterion the packet's worst risk needs** — a surface showing and editing the wrong record — and it reads model state, which no stylesheet and no host can supply |
+| AC-010 | Sound | — | Displayed id unchanged across a background data change, a sort change and a field commit, or an explicit close. Plugin state throughout |
+| AC-011 | **Harness-dependent** | 3 | "Assert the write landed in the file backing the requested id." There is no vault behind the harness and `editCell` is a stub, so no write can be attributed to a record id at all. The criterion is right and needs a real data source, not a better fixture. **It is also the packet's highest-value row** — a misattributed write is silent and permanent — and should be the one that gets the real driver first |
+| AC-012 | Sound | — | Owner counts, the view's own interaction scope still registered, listener and node counts returning to baseline, and the view scrolling and answering its shortcuts after close. All plugin-owned state |
+| AC-013 | Sound | — | A substitution suite over its own coordinates |
+
+**What would settle the four.** All of AC-004, AC-005 and AC-011 need the same thing: `openRow` and
+`editCell` wired to the shipped opener and the shipped writer, the way `editFileName` was wired to
+the shipped renderer after it caused a false green. AC-007 needs a different instrument entirely —
+leaf lifetime is `009`'s live probe or nothing.
 
 <!-- /ANCHOR:criteria -->
 

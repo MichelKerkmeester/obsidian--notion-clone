@@ -173,3 +173,58 @@ Stated because a gap read as a pass is how this program got here.
   do not rebuild it here.
 - **Nothing measured is the operator's device.** Every number here is synthetic, at a chosen
   throttle, on a fixture. The operator's confirmation remains the only proof.
+
+---
+
+## 4. WHAT THE THROTTLED BENCH ESTABLISHES, AND WHAT IT DOES NOT
+
+The bench changed class when `--throttle` landed. It is worth being exact about how much, because a
+number from a real browser under real CPU throttling is not the same kind of claim as a pinned
+variable — and it is also not a phone.
+
+### What it does establish
+
+**A shape, and shapes travel across hardware.** Cost per row holding between 0.43 and 0.49ms at full
+fill across the row counts measured is a statement about the algorithm, not about the machine. A
+quadratic does not become linear on faster silicon. `024`'s repair genuinely removed the quadratic,
+and this bench is what confirms it rather than assumes it.
+
+**That the flag moves the measurement.** The same shape reads **97.1ms at 1× and 625.3ms at 6×**.
+A knob that changes the number by 6.4× is measuring something; a knob that changed nothing would mean
+the throttle never applied, which is the failure mode worth ruling out and this rules it out.
+
+**That the budget is reachable, not hypothetical.** 1,600 rows at full fill costs **2,638.1ms**
+against a declared 2,000ms. Under the previous 1×, 1,600-row ceiling, no run in this program could
+produce a number over budget on the fixed tree at all. The instrument can now go red for the reason it
+exists, which is the property `024`'s AC-2 turned out to lack.
+
+**A direction of error.** The table figures stub `renderCell` to constant time, so the real table is
+slower than shown; `App` is absent, so vault-resolving fields render unresolved and a real database
+pays more per field. Both known errors point the same way. Every number here is a **lower bound**,
+which is the safe direction for a budget.
+
+### What it does not establish
+
+**Not the operator's device.** 6× is a mid-range approximation chosen by this phase, not a
+measurement of their phone. A device 3× slower than the model puts the budget crossing near 800 rows;
+one 2× faster puts it past 4,000. The crossing point ≈2,300 rows is an output of the chosen rate and
+must never be quoted without it.
+
+**Not a phone's memory, thermal behaviour or GPU.** CPU throttling scales instruction throughput. It
+does not model memory pressure on a device holding 75,207 DOM nodes, thermal drop after sustained
+work, a slower rasteriser, or a WebView competing with the rest of Obsidian. A phone that swaps or
+throttles thermally does not degrade by a constant factor.
+
+**Not the host.** No `DatabaseView`, no workspace, no metadata cache, no live vault. The bench renders
+one `ListRenderer` into a bare page. What the operator experiences includes everything the host does
+around that render.
+
+**Not a scaling law past the last sampled point.** The matrix ends at 12,800. Extrapolating the
+crossing point is interpolation between measured samples and arithmetic beyond them.
+
+### The honest one-line form
+
+*On a laptop pretending to be a phone, the fixed list crosses its own freeze budget between roughly
+1,300 and 2,300 rows depending on fill, and the shape of the cost is now linear.* Every clause of
+that is load-bearing. §3's last bullet remains true and is not weakened by any of the above:
+**nothing measured is the operator's device, and their confirmation is still the only proof.**

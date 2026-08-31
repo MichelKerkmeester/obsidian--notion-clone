@@ -10,10 +10,10 @@ contextType: "general"
 _memory:
   continuity:
     packet_pointer: "public/005-component-surface-system/020-harness-fidelity-repair"
-    last_updated_at: "2026-08-30T16:30:00Z"
-    last_updated_by: "phase-author"
-    recent_action: "Eight repairs shipped; gate 13 to 14 lanes, placement 114 to 177 checks"
-    next_safe_action: "Operator reviews the two new modal fixtures and signs off the recapture"
+    last_updated_at: "2026-08-31T06:00:00Z"
+    last_updated_by: "harness-supply-audit"
+    recent_action: "Supply audit: 2 of the 63 lifted checks set --keyboard-height themselves"
+    next_safe_action: "Add a placement check that never sets --keyboard-height, so the fallback can fail"
     blockers: []
     key_files:
       - "spec.md"
@@ -22,9 +22,11 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-020"
       parent_session_id: null
-    completion_pct: 100
-    open_questions: []
-    answered_questions: []
+    completion_pct: 80
+    open_questions:
+      - "Which of the 63 lifted checks still measure a value the harness supplies"
+    answered_questions:
+      - "No acceptance row is false as worded; the overclaim was closure at 100"
 ---
 # Implementation Summary
 
@@ -182,5 +184,15 @@ stale-registry failure mode and accepts an unfingerprinted-artefact one.
 and `000`'s AC-006 had already flagged the same matcher.
 
 **Not operator-signed.** The two new modal fixtures have not had per-image sign-off.
+
+**The harness's largest remaining supply was never in this phase's scope, and two of the 63 lifted
+checks carry it.** `verify-placement.mjs` sets `--keyboard-height` on the document element at three
+sites — `:819`, `:4724`, `:4753` — and measures what moved. Nothing in `src/` publishes that
+variable: `popover-position.ts:530` documents it as the host's and `:551` only reads it. Two of the
+three sites are ASK-4 of the lifted record-sheet audit, so they are inside the 63 this summary counts
+as a fidelity gain, and `placement 114 -> 177` reads as 63 units of new truth when two of them repeat
+the failure shape this phase existed to remove. `022` withdrew its AC-1 on the same supply. No
+acceptance row is false as worded; the phase's own `100` was. It now reads `80`, and
+`acceptance-criteria.md` §4 carries the audit.
 
 <!-- /ANCHOR:limitations -->

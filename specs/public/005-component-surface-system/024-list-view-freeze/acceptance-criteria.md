@@ -71,6 +71,18 @@ alone.
 33.7× is not a smaller result, it is a true one. Seven-plus seconds of frozen application became a
 quarter of a second either way.
 
+**The rows labelled `phone` are a phone's width on a laptop's CPU.** The bench renders at a 390–402px
+viewport with the mobile body class, in desktop Chrome on an M-series Mac. That is the *surface*
+the operator uses and not the *processor* they use, and every millisecond in the table above is
+therefore a lower bound. `028` measured the same list shape under CDP CPU throttling and the gap is
+not a rounding error: at 1,600 rows, 21 columns and 30% fill, **1,290.5ms of blocked main thread at
+6×** against the 85.2ms this table records at 1×. The freeze budget is crossed at ≈2,300 rows at 6×,
+against ≈10,000 at 1×.
+
+The verdict `PASS` survives at the row counts measured here — 1,290.5ms is still inside the 2,000ms
+budget. The numbers do not survive as a description of a phone, and reading them as one is how the
+budget looked four times further away than it is. Quote them with the multiplier, never alone.
+
 The runner declares a 2,000ms budget and exits non-zero above it. **It was observed failing first**:
 on `HEAD`, `list-bench: FAIL — 7173.5ms exceeds the 2000ms budget`, exit 1. On the fixed tree,
 `list-bench: PASS — worst render 85.2ms`. Both of those messages name render only, because they
@@ -85,7 +97,26 @@ Per-row cost, 400 → 1,600 rows:
 | desktop | ×4.05 SUPERLINEAR | ×3.59 SUPERLINEAR | **×1.17 LINEAR** |
 | phone | ×2.20 SUPERLINEAR | ×1.73 SUPERLINEAR | **×1.01 LINEAR** |
 
-**PASS.** `npm run bench:list` reports LINEAR at all eight shapes of the default matrix.
+**WITHDRAWN.** `npm run bench:list` reports LINEAR at all eight shapes of the default matrix, and the
+default matrix stops at 1,600 rows.
+
+`028` ran the same fixed tree past that ceiling — `--rows=400,1600,3200,6400,12800` — and the verdict
+inverts: **`SUPERLINEAR (per-row ×2.55)`** on the desktop and **`SUPERLINEAR (per-row ×3.21)`** at
+phone width, at the same 21 columns and 30% fill this row measures. Nothing about the tree changed
+between the two readings. What changed is the row range, and the row range is the harness's.
+
+The ×1.17 above is true inside 400–1,600 rows and describes a segment below the bend. `028` §1A puts
+it plainly: *a run that does not pass `--rows` past 3,200 cannot observe this defect.* This row's
+threshold is "cost is linear in row count", unqualified, and the measurement that answered it could
+not have returned anything else — which is the shape this program withdraws ticks for.
+
+**Device consequence.** The operator's database is the one that froze. Above roughly 2,300 rows at
+phone-class CPU the fixed list is still superlinear and still crosses the freeze budget, so the
+non-table freeze report that opened `028` is consistent with this tree rather than contradicted by
+it. The repair in AC-1 is real and large; it moved the bend, it did not remove it.
+
+**What would close this.** The same verdict at `LINEAR` or `SUBLINEAR` across the full `028` matrix,
+which is `028`'s AC-3 and is currently `Unmet`. Do not re-close it here from a 1,600-row run.
 
 ### AC-3 — A property starts in the same column on every card (REQ-003)
 
@@ -336,3 +367,31 @@ popover); none of them lists the renderer as a dependency, and the churn is capt
 - **A `wrap` or compact column on a wrapping line.** Both take their width from content, so the
   predicate declines to skip whenever one is present rather than trying to price it. That is the
   safe answer, not a measured one.
+
+- **A phone's CPU.** Every timing here is desktop Chrome on an M-series Mac at a phone's *width*.
+  `028` re-measured the same shapes under CDP CPU throttling; the 6× numbers are 10–15× the 1×
+  numbers, and the budget crossing moves from ≈10,000 rows to ≈2,300. AC-1's verdict holds at the
+  row counts measured; its milliseconds are a lower bound, not a phone reading.
+- **Anything above 1,600 rows.** The default matrix ends there, which is below this tree's bend.
+  AC-2's LINEAR verdict is withdrawn on exactly that ground.
+
+---
+
+## 5. HARNESS-SUPPLY CLASSIFICATION
+
+Asked of every row: *if this value came from the device instead of the harness, would the check still
+pass — and could it still fail?*
+
+| # | Class | Why |
+|---|---|---|
+| AC-1 | **Harness-dependent**, verdict kept | Real renderer, real browser, real budget — but a laptop CPU wearing a phone's width. Requalified above; PASS survives at 1,600 rows, the milliseconds do not describe a phone |
+| AC-2 | **Withdrawn** | The LINEAR verdict is an artefact of a row range that stops below the bend. `028` reports SUPERLINEAR ×2.55 / ×3.21 on this same tree past 3,200 rows |
+| AC-3 | Sound | Column origins measured off the shipped `ListRenderer`'s own output. `runtime-vars.css` pins no variable the list card reads; `--db-card-field-width` was removed from it precisely so the fallback ships |
+| AC-4 | Sound | Element and node counts from the real render. Counts are not geometry and no host value enters |
+| AC-5 | Sound | Observed red on `c31acf5^` and green here, and it reports its own dead arm — the phone's 240px field area fits one property, so that assertion cannot shuffle and says so |
+| AC-7 | Sound | Heights measured through the real renderer across a 360–1,024px sweep; the predicate reads `display` and `column-gap` off the element rather than inferring from a body class |
+| AC-8 | Sound | The budget's own term was wrong and was shown wrong by injecting 5,000ms of layout, which is a negative control on the instrument itself |
+
+The pattern worth carrying: nothing here was falsified by a *pinned variable*. Both defects came from
+the **range** the harness chose to sample — a row count and a CPU speed — which is the supply that
+leaves no trace in a stylesheet and no entry in `runtime-vars.css`.

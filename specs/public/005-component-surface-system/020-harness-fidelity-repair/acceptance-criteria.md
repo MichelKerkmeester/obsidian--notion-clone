@@ -10,10 +10,10 @@ contextType: "implementation"
 _memory:
   continuity:
     packet_pointer: "public/005-component-surface-system/020-harness-fidelity-repair"
-    last_updated_at: "2026-08-30T16:30:00Z"
-    last_updated_by: "phase-author"
-    recent_action: "Ten criteria traced to file:line; all met at ship"
-    next_safe_action: "Operator signs off the two new modal fixtures"
+    last_updated_at: "2026-08-31T06:00:00Z"
+    last_updated_by: "harness-supply-audit"
+    recent_action: "Supply audit: 12 rows sound as worded; keyboard-height supply never in scope"
+    next_safe_action: "Add a placement check that never sets --keyboard-height, so the fallback can fail"
     blockers: []
     key_files:
       - "acceptance-criteria.md"
@@ -21,9 +21,11 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-020"
       parent_session_id: null
-    completion_pct: 100
-    open_questions: []
-    answered_questions: []
+    completion_pct: 80
+    open_questions:
+      - "Which of the 63 lifted checks still measure a value the harness supplies"
+    answered_questions:
+      - "No AC-001..AC-012 row is false as worded; the overclaim was closure at 100"
 ---
 # Acceptance Criteria: Harness Fidelity Repair
 
@@ -64,8 +66,8 @@ _memory:
 | AC-008 | REQ-006 | Checkbox families visible to the coverage collector, whose regex could not match a two-class `cls` value | 12 of 12 | **10 of 12**; `db-invalid-event-select` and `base-import-include-checkbox` dropped out and "0 uncovered" described ten families | 12 of 12, both with fixtures from the modals' real markup | `tools/screenshots/scenarios/panels.mjs:574`, `tools/screenshots/scenarios/panels.mjs:617` | Met |
 | AC-009 | REQ-007 | The role-agreement check takes its expectation from the call site, proven by swapping a modal fixture's role from field to row | the swapped fixture fails | **passed 3/3** — the expectation was derived from the fixture being checked, so a fixture at the wrong role agreed with itself | fails, naming the source file and the role it asks for | `tools/live/checkbox-appearance.mjs:1` | Met |
 | AC-010 | REQ-008 | `setCssProps` matches the shipped runtime, which calls `setProperty` and silently drops a camelCase key | 0 camelCase keys reaching it | **23 across 6 files**, all working in the harness and vanishing on a phone | 0; correcting the shim surfaced `inline=NaNpx` on the inline-cap check | `tools/storybook/obsidian-dom-shim.mjs:137` | Met |
-| AC-011 | REQ-009 | Orphaned probe checks running inside the shared harness, with none weakened on the way in | all 63 | **0 of 63**; they lived in five files nothing re-ran | 63; placement 114 -> 177 checks | `tools/storybook/verify-placement.mjs:1888` | Met |
-| AC-012 | REQ-010 | Every product defect the repaired instruments revealed is fixed here or recorded with its number and its owner | 0 dropped | n/a — the instruments could not reveal them | 1 handed to `022` with its number; 3 declared in `KNOWN` | `specs/public/005-component-surface-system/022-selection-bar-keyboard-docking/spec.md:1` | Met |
+| AC-011 | REQ-009 | Orphaned probe checks running inside the shared harness, with none weakened on the way in | all 63 | **0 of 63**; they lived in five files nothing re-ran | 63; placement 114 -> 177 checks | `tools/storybook/verify-placement.mjs:1888` | Met, **arrival only** — see §4 |
+| AC-012 | REQ-010 | Every product defect the repaired instruments revealed is fixed here or recorded with its number and its owner | 0 dropped | n/a — the instruments could not reveal them | 1 handed to `022` with its number; 3 declared in `KNOWN` | `specs/public/005-component-surface-system/022-selection-bar-keyboard-docking/spec.md:1` | Met, **of what was revealed** — see §4 |
 
 <!-- /ANCHOR:criteria -->
 
@@ -74,7 +76,8 @@ _memory:
 <!-- ANCHOR:closure -->
 ## 3. CLOSURE STATEMENT
 
-**Closeable:** Yes. Twelve of twelve criteria are `Met`.
+**Closeable:** Not at 100. Twelve of twelve criteria are `Met` and none is withdrawn — every row is
+true as worded, and §4 records why that is not the same as a harness this phase left truthful.
 
 The criterion that carries the phase is AC-001. The add-view sheet reported 45px against its own 44px
 floor and passed; corrected, it read 42px and went red **before any stylesheet edit**. Every other
@@ -110,3 +113,59 @@ already flagged the same matcher.
 
 The two new modal fixtures have not had per-image sign-off.
 <!-- /ANCHOR:closure -->
+
+---
+
+## 4. THE SUPPLY THIS PHASE DID NOT AUDIT
+
+Asked of every row: *if this value came from the device instead of the harness, would the check still
+pass — and could it still fail?* Twelve rows answer it. **None is withdrawn.** Nine of them
+(AC-005 to AC-012) are properties of the repository and its tooling — an artefact's freshness, a
+regex's reach, a shim's key casing, a check's presence. No device value enters, so no device value
+can falsify them. Three (AC-001 to AC-004) are the grab band, and the band is geometry this
+stylesheet declares outright: `top: -40px`, `bottom: -28px`, `--db-space-6: 16px`, clipped by the
+sheet's own top edge. Nothing in `tools/screenshots/runtime-vars.css` pins a variable the band reads.
+That is the class the question is not meant to catch.
+
+**The finding is not a false row. It is what was never a row at all.**
+
+This phase is named for the harness's truthfulness and reached `completion_pct: 100`. In the same
+harness, at three sites, `verify-placement.mjs` sets `--keyboard-height` on the document element and
+then measures what moved:
+
+| Site | What it drives |
+|---|---|
+| `:819` | the phone sheet and its selection bar |
+| `:4724` | the record sheet, iOS-shaped signal (`visualViewport`) |
+| `:4753` | the record sheet, Android-shaped signal (window resize) |
+
+Nothing in `src/` publishes that variable. `popover-position.ts:530` documents it as the *host's*, and
+`:551` only reads it; `styles.css:2424` consumes it in a `max()`. So all three checks prove arithmetic
+*given* the variable and say nothing about whether it arrives on a phone. `022` withdrew its AC-1 on
+exactly this and went from 90 to 55.
+
+**Two of those three sites are inside the 63 checks AC-011 counted.** `:4724` and `:4753` are ASK-4
+of the lifted record-sheet audit. So this phase counted, as fidelity gained, two checks carrying the
+precise defect shape it existed to eliminate — and `C10`'s "placement 114 -> 177" reads as 63 units of
+new truth when two of them are the old failure wearing the new harness's badge.
+
+That is why AC-011 now reads **arrival only**. Its threshold — *all 63 running, none weakened* — is a
+transport guarantee, and it is met: a dropped or loosened check would fail it. It cannot fail because
+a lifted check was unsound to begin with, and nothing in this phase asked it to.
+
+AC-012 is qualified for the matching reason. "Every product defect the repaired instruments
+**revealed**" is true and narrow. The docking defect was not among them, and could not have been: the
+instrument supplies the value the defect lives in, so there was nothing for it to reveal. `0 dropped`
+is honest about the set it ranges over and reads as completeness at 100.
+
+**What is owed.** A check that does **not** set `--keyboard-height`, so it can only pass if the
+plugin's own fallback works — the same negative-control discipline this phase applied to six other
+instruments and did not apply here. `022` names the product half: publish the computed inset as a
+plugin-owned document variable and have the bar consume it.
+
+**One correction to the standing inventory.** `runtime-vars.css` no longer pins the five values
+recorded as divergent (`--db-layer-sticky`, `--db-status-bg`, `--db-number-color`,
+`--db-calendar-row-height`, `--db-week-grid-height`); the file documents removing them, plus
+`--db-header-height`, `--db-card-field-width`, `--db-mobile-sheet-bottom` and `--db-timeline-row`,
+under the rule *never assign a property the runtime also assigns*. That channel is narrowed. The
+`--keyboard-height` channel is not, and it is the one still costing withdrawn ticks.

@@ -1,8 +1,15 @@
 # Acceptance Criteria: Desktop Dropdown Placement
 
 Each criterion carries a number with a threshold, was demonstrated failing on the unfixed tree with
-the failing number recorded, and is measured in a real browser against the shipped modules and the
-shipped stylesheet, with the leaf deliberately off the viewport origin.
+the failing number recorded, and is measured in a real browser against the shipped stylesheet, with
+the leaf deliberately off the viewport origin.
+
+**"Against the shipped modules" is true of AC-1 to AC-3 and false of AC-4, AC-5 and AC-7**, and the
+sentence used to say it of all of them. The three in section 5d of the probe are *transcriptions*:
+the arithmetic copied out of a private renderer method, because calling it needs a live Obsidian
+`App`. All three ticks are withdrawn below. AC-4 is the severe case — its copy passes an argument
+the source does not — and AC-5 and AC-7 are the milder one, where the copy is faithful today and
+nothing stops the source drifting away from it tomorrow.
 
 **Harness.** `probe-desktop-placement.mjs` in this folder. 31 checks, **31 pass, none declared
 red** — `DECLARED_RED` is now empty. `node probe-desktop-placement.mjs` exits 0; an undeclared
@@ -75,7 +82,7 @@ tick. Only the loop can observe this.
 on every segment edit; the commit calls `actions.refresh()`, which rebuilds the panel and destroys
 the trigger button, while the picker is mounted on the container and survives.
 
-## AC-4 — the anchorless column submenu clears the right sidebar
+## AC-4 — the anchorless column submenu clears the right sidebar — **WITHDRAWN**
 
 **Threshold.** `panel.right <= editing area right`.
 
@@ -85,7 +92,24 @@ an open right sidebar**. Clamped against `view.innerWidth=1440`, which spans bot
 **After.** Right edge **1080**. Clamped against `bounds.right=1140`. The hardcoded 320px height
 assumption was also replaced with the panel's measured height.
 
-## AC-5 — the formula autocomplete stays inside its field
+**Withdrawn: the number above measures a transcription that disagrees with the source.** The probe
+(`probe-desktop-placement.mjs:637`) and its `verify-placement` twin clamp against
+`getVisiblePopoverBounds(**null**)`. The shipped `column-menu.ts:616` calls
+`getVisiblePopoverBounds(**panel**)`. That is not a cosmetic difference: the function intersects the
+container's own rect into its result and returns the viewport when the intersection degenerates
+(`popover-position.ts:515`), so a body-portalled fixed panel that has not yet laid out — which is
+what this one is, one line before its own `height || 320` fallback admits the same thing — gets
+`[0..1440]`, the whole viewport, the exact bound the repair removed. This folder measured it:
+`bounds(sub)` for a 292px five-row submenu returns `[0..1440]`.
+
+So AC-4 is not green-but-blind. It is **green over a defect already measured in the shipped path**.
+The 1080 is the copy's answer, and the copy is not what runs.
+
+**What would settle it.** A probe that calls `getVisiblePopoverBounds` with a freshly created,
+not-yet-laid-out panel and asserts the editing area rather than the viewport comes back; then the
+same assertion against the real `openColumnSubmenu`, which needs a shimmed `App`.
+
+## AC-5 — the formula autocomplete stays inside its field — **WITHDRAWN**
 
 **Threshold.** `suggest.right <= container right`.
 
@@ -102,6 +126,21 @@ distinguish.
 measured at its `min-width` rather than its real width. Filling now precedes placing, and the reveal
 precedes the measurement because a `display: none` element measures zero.
 
+**Withdrawn: the clamp is transcribed, so the check cannot fail when the source loses it.** The copy
+**does** match the source, which was checked rather than assumed —
+`formula-modal.ts:1357-1358` reads `propertySuggestEl.parentElement?.clientWidth ?? textarea.clientWidth`,
+and the probe's `suggest` is a direct child of its modal, so `modal.clientWidth` is that same
+quantity. The arithmetic is right. What is unproven is that the shipped file still holds it: delete
+the clamp from `formula-modal.ts` and the probe places its own copy correctly and still prints 0px.
+
+**Two further values come from the harness rather than the product.** The modal is a hand-built div
+pinned at `width: 800px` — the real modal is sized by Obsidian's `app.css`, which this page never
+loads — and `shouldDisableInlineSuggestions()` suppresses the box below a 760px modal, a threshold
+the probe never approaches from either side.
+
+**What would settle it.** Drive the shipped `showSuggestionBox` at a host-sized modal, and assert
+both the clamp and the 760px suppression.
+
 ## AC-6 — the phone does not move
 
 **Threshold.** Both phone checks hold before and after.
@@ -113,7 +152,7 @@ Identical before and after. Every change is inside a desktop-only branch — the
 
 ---
 
-## AC-7 — the calendar/timeline search results clear the right sidebar
+## AC-7 — the calendar/timeline search results clear the right sidebar — **WITHDRAWN**
 
 **Threshold.** `panel.right <= editing area right`, **at two anchor positions**. One cannot tell a
 clamp from a coincidence: the overhang grew with the anchor, so a panel that happens to fit at one x
@@ -159,6 +198,17 @@ transcription to `window.innerWidth` turns the check red and the run to **exit 1
 decoration — but reverting the **source** while leaving the transcription fixed leaves the run at
 **exit 0**. A source-only regression here is invisible to the gate. That is the standing cost of a
 transcribed probe, and it is the reason the transcription carries its file and line.
+
+**Which is why the tick is withdrawn, on the sentence above rather than on anything new.** A
+criterion that cannot go red when the code it names regresses is evidence about the harness. What
+survives, confirmed by reading rather than by running: `database-view.ts:6953` and
+`embedded-database-renderer.ts:1323` both carry the repaired form and are byte-identical to each
+other. The clamp was made. Nothing in the gate keeps it made.
+
+AC-4, AC-5 and AC-7 all fail for this one reason, so one fix retires all three: lift the clamp into
+a function the harness can import, or give the probe a shimmed `App` so the private methods can be
+called. Until then the phase's real result is AC-1 to AC-3, which drive shipped modules and measure
+their inputs rather than declaring them.
 
 ---
 

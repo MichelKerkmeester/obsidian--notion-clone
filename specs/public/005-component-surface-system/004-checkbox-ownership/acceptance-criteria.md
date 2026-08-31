@@ -12,10 +12,10 @@ contextType: "implementation"
 _memory:
   continuity:
     packet_pointer: "public/005-component-surface-system/004-checkbox-ownership"
-    last_updated_at: "2026-08-29T18:00:00Z"
-    last_updated_by: "phase-architect"
-    recent_action: "Applied review findings F3, F8, F11, F13 and F16"
-    next_safe_action: "Complete the source-to-CSS join before recording any passing number"
+    last_updated_at: "2026-08-31T00:00:00Z"
+    last_updated_by: "harness-dependence-audit"
+    recent_action: "Classified 18 criteria for harness dependence; 16 read appearance with no app.css"
+    next_safe_action: "Load Obsidian app.css into checkbox-appearance.mjs before recording a number"
     blockers:
       - "000-surface-contract-and-truthful-harness honest harness must land first"
     key_files:
@@ -335,6 +335,89 @@ hardening; register them in `checklist.md` when its verification protocol is nex
 Write `-` when the row is `Met` or `Unmet`. Write `ADR-NNN` when the row is `Waived` or
 `Superseded`, naming a decision record that exists in `decision-record.md`. A waiver naming an ADR
 that is not there fails validation.
+
+### Harness-dependence audit — 2026-08-31
+
+The pass before this one asked of each criterion whether it was green. This one asks a different
+question: **if the value came from the device instead of the harness, would the check still pass —
+and could it still fail?**
+
+**No row in the table above was `Met` when this audit ran, so no tick was withdrawn and
+`completion_pct` does not move.** The finding here is not a wrong green; it is that **almost every
+row in this packet is pre-compromised**, and would have produced one.
+
+The supplies, by number: **1** `--keyboard-height`. **2** values `runtime-vars.css` pins. **3**
+production actions replaced by stubs. **4** host chrome built by hand. **5** Obsidian's `app.css`,
+absent except for one `button` rule copied into `HOST_BARE_CONTROLS` (`verify-placement.mjs:69`).
+
+**1 sound · 16 harness-dependent · 1 unknown.**
+
+#### The single fact this packet rests on
+
+**Every plugin checkbox rule is conditional, and the harness has no host rule to fall back to.**
+
+`styles.css` contains no unconditional `input[type="checkbox"]` declaration. Every rule that gives a
+checkbox an appearance is reached through an ancestor — `.note-database-container`,
+`.db-select-inner`, `.db-checkbox-cell`, `.note-database-modal` — or through a class the input
+carries, `.db-checkbox` or `.db-toggle-switch`. A checkbox outside all of them gets **nothing** from
+the plugin.
+
+What it gets instead is decided by which stylesheet is in the document:
+
+- **In the harness:** the Chromium user-agent checkbox. `checkbox-appearance.mjs:86-88` loads
+  exactly `styles.css`, `theme.css` and `runtime-vars.css`; there is no `app.css` and not even
+  `HOST_BARE_CONTROLS`, which covers `button` and not `input`. The tool says so itself: *"What this
+  is NOT: the running app."*
+- **On a device:** whatever Obsidian's `app.css` declares for a bare checkbox. Obsidian draws its
+  own checkbox rather than the platform one, which is why the operator's report is *round* — a
+  circle is an authored `border-radius`, not a platform box.
+
+**The consequence, stated exactly.** In the harness, `appearance` discriminates: an unstyled
+checkbox reads the UA value and a plugin-styled one reads `none`. **On a device it stops
+discriminating**, because a checkbox the plugin never touched reads the host's `none` too. The
+threshold "computes `appearance: none` for every family" is then satisfiable **by Obsidian**, with
+all twelve families still round. That is the `justify-content` failure — a property the host names
+and the plugin does not, measured in a document without the host — applied to the exact property
+this packet is judged on.
+
+The same argument covers `border-radius` and box size, which are the properties the roundness lives
+in, and it runs in both directions: the recorded failing counts are counts of *differs from the
+Chromium default*, which is not the defect and not a number any device produces.
+
+| AC-ID | Class | Supply | On a device |
+|---|---|---|---|
+| AC-001 | **Harness-dependent** | 5 | The core case above. "23 of 84 fall back to the platform box" counts divergence from a UA default that no device shows, and the threshold can be met by the host. Both the number and the pass condition are the harness's |
+| AC-002 | **Harness-dependent** | 5 | Radius and box size, set equality within a role. An unowned checkbox reads the UA 13x13 here and Obsidian's box there; if the host gives every unowned family the same value, the set collapses to cardinality 1 and the row passes with the divergence intact. The cell already concedes the fixtures do not exercise the 18px and 20px paths |
+| AC-003 | **Harness-dependent** | 5 | "Appearance identical at all three mount points", one of which is `document.body`. Here the three differ because only one carries plugin ancestors. **On a device `app.css` reaches all three equally, so an entirely unstyled checkbox reads identical at all three and passes.** The structural finding underneath — 61 of 61 owned checkboxes lose their appearance when a named ancestor's class is stripped — is a plugin-cascade fact and survives; the criterion's own observable does not |
+| AC-004 | **Unknown** | 5 | "Read a measurable property that must differ per state." The plugin declares `:checked`, `:indeterminate`, `:disabled` and `:focus-visible` rules for the families it reaches; for the families it does not, the state difference on a device comes from the host. Whether this row is sound depends entirely on which property it reads, and the criterion does not say. **Settled by** naming the property per state and confirming the plugin declares it unconditionally |
+| AC-005 | **Harness-dependent** | 5 | Three third-party themes, "at least one that restyles native checkboxes". A theme layers over `app.css`; testing it in a page that has no `app.css` tests theme-over-nothing. The one scenario the row was written for — a theme fighting the host's checkbox rule — is the one the harness cannot stage |
+| AC-006 | **Harness-dependent** | 5 | Hit rect `>= 28x28` under a coarse pointer. The harness documents this supply against itself at `verify-placement.mjs:5044-5046`: *"Obsidian's app.css gives every input its own height, which is why the editor on a real phone is taller than the one this harness builds from styles.css alone."* A hit rect measured without that height is not the rect a thumb meets |
+| AC-007 | **Harness-dependent** | 5 | Computed `appearance`, `border-radius`, box size and hit rect on the list-row checkbox, compared with its role-mate. Every observable is host-floored. The source fact — `list-renderer.ts:271` applies a class no selector in `styles.css` matches — is sound and is the better evidence |
+| AC-008 | **Harness-dependent** | 5 | The same four observables across the ten classless creation sites |
+| AC-009 | **Sound** | — | **The one row in this packet that does not read a computed style.** It joins observed node to creation site to declared role and requires the observed-family set to equal the declared-family set. No host rule participates in a join. It is also the row that answers B1's real question — *which family is this* — without asking the cascade |
+| AC-010 | **Harness-dependent** | 5 | "Appearance byte-identical after every transition." Invariance is cheap under a host floor: a checkbox the plugin never styles is perfectly stable across a theme switch, a re-render and a re-mount, and passes |
+| AC-011 | **Harness-dependent** | 3 | "Click each family's checkbox and assert the model value changed." The row-selection actions are stubs — `isRowSelected: () => false`, `toggleRowSelected: () => undefined`, `toggleRowsSelected: () => undefined` (`verify-placement.mjs:3398-3400`). A model delta asserted against those is the `editFileName` counting-stub failure |
+| AC-012 | **Harness-dependent** | 5 | The two-sided strip control. The post-fix side — stripping the parent must move nothing — is sound in both worlds and is the half that matters. **The pre-fix side is not.** "Stripping the parent class MUST move a computed value" holds here because the fallback is the UA box; on a device the fallback is Obsidian's box, which may equal the plugin's on the property being read, in which case nothing moves. The row then declares the site *"measured wrong, not fixed"* when what actually happened is the host masked the strip |
+| AC-012a | **Harness-dependent** | 5 | `table-renderer.ts:514`, the table select-all. Same two-sided control, same objection |
+| AC-012b | **Harness-dependent** | 5 | `table-renderer.ts:785`, the per-row select |
+| AC-012c | **Harness-dependent** | 5 | `cell-renderer.ts:489`, the boolean cell. The one family the previous attempt styled — through the cell rather than the input — which is why it looked fixed |
+| AC-012d | **Harness-dependent** | 5 | `card-field-renderer.ts:184`, the card boolean field |
+| AC-012e | **Harness-dependent** | 5 | `record-detail-panel.ts:339`, the record-detail boolean field |
+| AC-013 | **Harness-dependent** | 5 | "A raw `createEl` bypass must **fail** the census equality." The census equality is the appearance read, so the bypass is caught only while the UA default is the floor. Under a host floor the bypass looks like every other family |
+
+**This is not a reason to weaken the packet.** The defect is real, the operator can see it, and the
+source facts this document already carries — no unconditional checkbox rule anywhere in
+`styles.css`, twelve families reached through four different ancestors, ten classless creation
+sites, five borrowed parents — are all sound and all independent of any instrument. What is not
+sound is the *evidence shape*: thirteen of eighteen rows close on a computed value read in a
+document that is missing the stylesheet deciding it.
+
+**What would settle it.** Load Obsidian's real `app.css` into `checkbox-appearance.mjs` beside the
+three sheets it already loads, and re-record AC-001 through AC-003 before any of them is trusted.
+Then restate the thresholds so they cannot be met by the host: not *"computes `appearance: none`"*
+but *"computes the plugin's declared box, and the declaration reaching it names the checkbox's own
+role class"* — which is AC-009's question, asked of the cascade. **AC-009 is the row to build
+first**, and the rest should be re-derived from it rather than from a bare computed read.
 
 <!-- /ANCHOR:criteria -->
 

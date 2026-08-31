@@ -34,6 +34,15 @@ Repo `~/MEGA/Development/Obsidian Plugin`. **Runs fifth**, after `001` solves pl
 - Plus the five stateful dimensions.
 
 **DONE MEANS** the operator opens Properties on a phone and can read every property name.
+**HARNESS DEPENDENCE, 2026-08-31 — 10 sound / 2 dependent / 0 unknown.** The panel came through well,
+because its layout is **written down**: the track lists, the `grid-column` claims and the
+`minmax(120px, 1fr)` / `minmax(96px, 1fr)` name floors are all in `styles.css`, so no host rule can
+move them. Track counts, grid areas, the name-width floor and the panel-height clamp are sound. **The
+exposure is height.** *"row height <= 36px both viewports"* is decided by the tallest child, and the
+tallest children are `.clickable-icon` buttons taking `height: var(--input-height)` from `app.css`,
+which the harness does not load — the row measures shorter here than on any phone. The recorded 22px
+name track is likewise optimistic: the three `auto` action tracks are host-padded wider on a device,
+so the name is squeezed harder, not less. Rows in `acceptance-criteria.md` § Harness-dependence audit.
 <!-- /ANCHOR:completion -->
 
 ---

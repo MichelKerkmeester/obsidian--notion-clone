@@ -48,7 +48,8 @@
       "goal.md",
       "implementation-summary.md",
       "tools/storybook/verify-placement.mjs",
-      "tools/lane/css-lane.json"
+      "tools/lane/css-lane.json",
+      "tools/screenshots/runtime-vars.css"
     ],
     "entities": [
       {
@@ -97,6 +98,12 @@
         "name": "css-lane.json",
         "kind": "config",
         "path": "tools/lane/css-lane.json",
+        "source": "derived"
+      },
+      {
+        "name": "runtime-vars.css",
+        "kind": "file",
+        "path": "tools/screenshots/runtime-vars.css",
         "source": "derived"
       },
       {
@@ -188,17 +195,11 @@
         "kind": "heading",
         "path": "tasks.md",
         "source": "derived"
-      },
-      {
-        "name": "Phase 2: Implementation",
-        "kind": "heading",
-        "path": "tasks.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "The operator, on a phone: \"to the left of checkbox that little button doesnt have enough space.\"",
     "created_at": "2026-08-30T17:34:54.869Z",
-    "last_save_at": "2026-08-30T18:43:20.919Z",
+    "last_save_at": "2026-08-31T03:42:59.195Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -209,7 +210,7 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:9a66508a5f65042cf32f582262043f58d74744dabef8920fbce251cf6bde2880",
+    "source_fingerprint": "sha256:1f872f0d2ba8c55b0864d79631f7ea9b70912aa60dbca0cd59f1b35912990cde",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "8f103d271c99a2109c5860ab3ab99ba35906110a1a7f44a066f87d06c2721409",

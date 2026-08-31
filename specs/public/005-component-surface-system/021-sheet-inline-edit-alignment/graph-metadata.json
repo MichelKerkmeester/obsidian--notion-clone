@@ -199,7 +199,7 @@
     ],
     "causal_summary": "Tapping a value in the phone record sheet opens an editor 6.6px below the line the value sat on, and",
     "created_at": "2026-08-30T15:21:37.027Z",
-    "last_save_at": "2026-08-30T18:54:57.126Z",
+    "last_save_at": "2026-08-31T03:39:36.108Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -210,7 +210,7 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:e9b6eddb42e942246c726a9ee992aa4dd7ea9004a13fb4cd66f70f742f358ed2",
+    "source_fingerprint": "sha256:17876dd2fcb2ff9b2c401f4542ae860b0696a91c56bdf8c8951d95d158e2ab57",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "7dadc8fcfbd5095c19bf69383e94c6e3c6ec5b29f2f3c7f9a6ab3d402e1241ad",

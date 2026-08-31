@@ -12,8 +12,8 @@ _memory:
     packet_pointer: "public/005-component-surface-system/026-production-render-assertions"
     last_updated_at: "2026-08-30T17:00:00Z"
     last_updated_by: "007-harvest"
-    recent_action: "Criteria written with today's failing numbers observed from commands"
-    next_safe_action: "Build N1 before AC-1, so the first assertion is falsifiable before it is trusted"
+    recent_action: "Supply audit: 9 of 9 sound, structural not geometric; uncovered four named"
+    next_safe_action: "Extend the check to board and gallery, the two uncovered renderers 028 suspects"
     blockers: []
     key_files:
       - "acceptance-criteria.md"
@@ -201,6 +201,18 @@ it and the gate fails on staleness. The ratchet is enforced by the check itself:
 publish fewer renderers than the previous run fails before stamping. N6 observed that failure:
 "coverage cannot decrease: 2 published, this check constructs 1", exit 1.
 
+**Name the twenty, or the ratchet reads as reassurance.** `2 of 22` is an arithmetic disclosure and
+a reader takes it as *some coverage, growing*. The four that matter most today are the four the
+operator reports freezing, and none of them is covered: **board, gallery, calendar and timeline**.
+`028` puts a per-item forced layout at `board-renderer.ts:770`, reached from three separate loops,
+and none of the assertions in this phase can see it — the check constructs `ListRenderer` and
+`TableRenderer` and nothing else.
+
+So the ratchet's floor is not neutral: it is 2 of 22 with the four highest-suspicion renderers
+outside it. That is not a defect in this phase, whose criteria claim exactly the two they cover and
+whose AC-8 makes every run say so. It is the reason the number must be read with its names attached
+rather than as a coverage percentage trending upward.
+
 ### AC-8 — A green run states what it does not prove (REQ-008)
 
 | | Value |
@@ -287,3 +299,44 @@ construct `DatabaseView` or `EmbeddedDatabaseRenderer`, so it proves nothing abo
 view kind being selected, or about anything either host does around the renderer it builds. That gap
 belongs to `../009-live-verification/` and to the device.
 <!-- /ANCHOR:closure -->
+
+---
+
+## 5. HARNESS-SUPPLY CLASSIFICATION
+
+Asked of every row: *if this value came from the device instead of the harness, would the check still
+pass — and could it still fail?* **All nine are sound, and none is withdrawn.** This is the strongest
+evidence shape in the packet, and the reasons are worth naming because they are reusable.
+
+**It asserts structure, never geometry.** Node counts, affordance counts, a column's declared grid
+position, the number of layout reads during a render. Not one criterion reads a computed length, so
+the absent host stylesheet, the pinned variables in `runtime-vars.css` and the hand-built host chrome
+have nothing to contribute. Inventory items 2, 4 and 5 cannot reach a count.
+
+**It refuses its own most likely false positive.** AC-5 is the load-bearing control: the render entry
+tags the container the real render call built into, the assertions require that tag, and the bundle
+manifest must name the renderer sources. N2 fed it fixture markup lifted from the screenshot scenario
+and it exited 1 rather than agreeing. Every other DOM-shaped check in this repository would have
+passed that substitution — which is inventory item 3 in its general form, and this is the only phase
+that closes it.
+
+**Its regression control is a real tree, not an invented mutant.** AC-6 runs against `173819e^` and
+goes red with the quadratic shape that actually shipped, then green at `HEAD`. A control that
+reproduces a historical failure cannot be tuned to the fix.
+
+**It states its own exclusions as a criterion.** AC-8 requires the runner to print, on every green
+run, that no Obsidian host is constructed, no device is involved, and `App` is undefined so
+vault-resolving fields render unresolved. A harness that says what it does not prove is the direct
+countermeasure to the failure this packet exists to correct.
+
+**Does it claim more coverage than it has? No.** AC-2's target is literally *2 of 22 reached by a
+gate check*, AC-7 publishes `2 of 22` through the dated evidence stamp, and the closure disclaims both
+hosts. The only correction this audit makes is to §2 AC-7: name board, gallery, calendar and timeline
+as the uncovered four, because they are the views the operator reports freezing and a bare `2 of 22`
+does not say which twenty are missing.
+
+**The one caveat, and it is not a criterion defect.** The stubs in inventory item 3 are still the
+action bags this phase builds as data — AC-3 measures them by census and N4 proves a missing member
+fails rather than passing quietly, which is the right treatment. But a bag whose *members are all
+present and all no-ops* still exercises call reachability rather than behaviour. AC-8's printed
+exclusions already cover this; it is recorded here so the two are not conflated.

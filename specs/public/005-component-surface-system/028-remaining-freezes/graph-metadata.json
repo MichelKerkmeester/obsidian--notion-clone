@@ -208,7 +208,7 @@
     ],
     "causal_summary": "Six freeze reports across five surfaces resolve to one shared trigger and one unbounded render; the previous fix closed one of three instances of the same forced-layout defect, and the card-pipeline hypothesis is refuted by measurement.",
     "created_at": "2026-08-30T16:59:04.977Z",
-    "last_save_at": "2026-08-31T03:01:15.999Z",
+    "last_save_at": "2026-08-31T03:39:51.386Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -219,7 +219,7 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:f9c908bf2d07cfc6a3c88c3a4715319cf3d503a4b36fd203800db3e1ca8eb70f",
+    "source_fingerprint": "sha256:9fa39203c40e82581a78dff3cef9a86474d4a96d5f682123b8dbbf53edf19933",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "565d6c9a533165d2c52e0afe8502852e13c38a141c301338a72836f6e7e35dc5",

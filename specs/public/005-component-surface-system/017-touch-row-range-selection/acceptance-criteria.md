@@ -2,7 +2,23 @@
 
 Each criterion carries a number with a threshold, was demonstrated failing on a deliberately broken
 tree with the failing number recorded, and is measured by driving the shipped gesture module with
-real `PointerEvent`s in a real browser.
+`PointerEvent`s in a real browser.
+
+**"Real" was doing work that word cannot do here, and the sentence has been narrowed.** The events
+are constructed and dispatched at the element — `el.dispatchEvent(new PointerEvent(…))` — so they
+are real objects reaching real listeners, but they are **not delivered through the browser's input
+pipeline** and therefore skip hit-testing: nothing in this file can notice an overlay, a
+`pointer-events` rule or a `touch-action` that would stop a thumb reaching the checkbox. Phase 016
+drives Chrome DevTools `Input.dispatchTouchEvent` and does not have this gap.
+
+**What is real, and it is most of it.** `applyRowSelectionPress`, `attachRowRangeGesture`,
+`attachLongPress` and `isTouchDevice` are bundled from `src/`, so the algebra, the 450ms threshold,
+the pointer-type guard and the click swallow at `table-cell-gesture.ts:233` are the shipped ones. The
+table around them is hand-built, and its adapter was compared against `database-view.ts:8156` and
+`:4475` and **matches** — same `heldPress` constants, same `ignoreTarget` predicate, and
+`createCheckbox({ role: "row" })` really does emit the bare `input.db-checkbox-row[type=checkbox]`
+that `isRowSelectionCheckbox` looks for. So these checks are not passing over a defect that exists;
+they are blind to one introduced in `setupRowInteractions` alone, where no check would move.
 
 Every negative control below was applied, run, observed red, then restored, and the restoration was
 verified by SHA-256 rather than by reading the file. `src/views/table-cell-gesture.ts` returns to
@@ -141,7 +157,7 @@ shift-click away from a device that reports touch, and no desktop check would ha
 
 **Negative control.** NC6 → `FAIL … selected 2 row(s) — want 7` on both pages.
 
-## AC-9 — a hold on the checkbox and a hold on the row body are one gesture with two answers
+## AC-9 — a hold on the checkbox and a hold on the row body are one gesture with two answers — **WITHDRAWN on the row-menu term**
 
 **Threshold.** On the checkbox: 1 extension, 0 row menus, 1 haptic. On the row body: 0 extensions,
 1 row menu, 1 haptic. On the mouse page: 0/0/0 for both.
@@ -160,6 +176,23 @@ having been quietly displaced by the new gesture.
 **Check.** `a hold on the checkbox and a hold on the row body are one gesture with two answers`.
 
 **Negative control.** NC4 → `FAIL … on the checkbox: 1 extension(s), 0 row menu(s), 2 haptic(s)`.
+
+**Withdrawn: the row-menu count is a counter, not a menu.** `verify-placement.mjs:2864` passes
+`onLongPress: () => { menuCount += 1 }`; `database-view.ts:8155` passes
+`(event) => this.rowMenu.show(event, row, context, tr)`. So "1 row menu" evidences that the hold
+reached a handler, not that a menu was built, anchored or dismissable — the same shape that already
+produced a false green in this program when `editFileName` was a counting stub and a check certified
+a double-tap that created no editor. The rationale above says the count "proves the row menu still
+answers"; a counter cannot carry that sentence.
+
+**The other two terms hold.** The extension count comes from the shipped `attachRowRangeGesture`, and
+the haptic is counted by intercepting `navigator.vibrate`, which the shipped `attachLongPress` really
+calls — so the buzz-twice defect this criterion exists for is genuinely observable. The **2 haptics**
+before-number, though, came from the embedded renderer, and this check pairs two harness-attached
+`attachLongPress` instances instead: it reproduces the defect's shape, not its site.
+
+**What would settle it.** `verify-placement` already bundles `RowMenu`. Assert a menu is in the
+document and anchored to the row, rather than incrementing an integer.
 
 ## Run totals
 

@@ -9,11 +9,12 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "public/005-component-surface-system/016-sheet-drag-and-audit"
-    last_updated_at: "2026-08-30T19:10:41Z"
-    last_updated_by: "criteria-reconciliation"
-    recent_action: "Completion anchor reconciled to the captured run: 7 of 10 criteria evidenced"
-    next_safe_action: "Add the two-revert ablation check; operator answers the label and resize"
+    last_updated_at: "2026-08-31T09:00:00Z"
+    last_updated_by: "harness-dependence-review"
+    recent_action: "Keyboard-inset and sheet-fill ticks withdrawn: both read values the harness sets"
+    next_safe_action: "Operator answers keyboard step 3 and sheet-colour step 4 of the five-step list"
     blockers:
+      - "The keyboard lever is proven; that Obsidian publishes --keyboard-height is not"
       - "Two operator decisions open: the 13px row label and the window-resize close"
       - "No ablation check: the two-revert necessity claim rests on prose"
     key_files:
@@ -24,10 +25,11 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-016-goal"
       parent_session_id: null
-    completion_pct: 92
+    completion_pct: 78
     open_questions:
       - "Row label 13px is off the type scale; move to 14px or accept"
       - "Should the record sheet survive a window resize instead of closing"
+      - "Do the nine sheet surfaces agree in situ, with a theme and the host stylesheet present"
     answered_questions:
       - "The drag kept dying: listeners bound to a node the panel's own render destroys"
 ---
@@ -78,6 +80,21 @@ geometry checks passed, 4 red for a declared reason**, exit 0. A met criterion c
 own name and its measured number. An operator criterion is never ticked here, however green the
 measurement around it reads.
 
+**Two ticks were withdrawn on review, against the question "if this value came from the device
+instead of the harness, would the check still pass — and could it still fail?"** The keyboard inset
+is measured on a `--keyboard-height` the harness writes and no line of `src/` ever sets, so it proves
+the lever and not the signal. The nine-surface fill is 95% of a `--background-primary` the harness
+pins inline, read off nine bare divs that all resolve one declaration — so it proves the rule exists
+and not that nine real surfaces agree.
+
+**The drag survives that question, and it is the strongest evidence in this packet.** Ask 1 is driven
+through Chrome DevTools `Input.dispatchTouchEvent` — the browser's own input pipeline, subject to
+hit-testing and `touch-action` — against the shipped `openRecordDetailPanel` and the shipped
+`refreshRecordDetailPanel`. The stubs it is handed (`editCell`, `openRow`, `editFileName`) take no
+part in producing the transform it measures. The 44×44 header, the scrim and the menu-row metrics
+also survive, because each is a literal the plugin's own stylesheet declares rather than a value the
+host or the harness contributes.
+
 - [x] A 60px drag moves the sheet 60.0px both on a fresh sheet and **after a view re-render**. Was
       60.0px fresh and **0.0px** after a re-render, with the grab bar absent from the DOM.
       **Met.** `a fresh sheet follows the finger 1:1` — 60px drag on a just-opened sheet moved it
@@ -106,17 +123,65 @@ measurement around it reads.
       **Met.** `no gap between rows` — measured gap between adjacent rows = 0px (row-gap token 0px).
       `a light divider separates each row` — border-bottom 1px color(srgb 0.2 0.2 0.2 / 0.4).
       `the row's value text is larger than the caption default` — value 16px, row height 44px.
-- [x] The keyboard inset moves the sheet's bottom 844 → 508 on an 844px screen, keeps its top on
+
+      **Tick held; one number in it is the harness's own.** The 0px gap, the 1px width, the 40% alpha
+      and the 16px are all declared outright in `styles.css` — `--db-border-subtle` is
+      `color-mix(in srgb, var(--background-modifier-border) 40%, transparent)` at `:71`, applied at
+      `:9481` — so they reproduce on any host. The **colour** does not: `srgb 0.2 0.2 0.2` is
+      `#333333`, which `probe/sheet-audit.mjs:105` sets inline as `--background-modifier-border`. On
+      a device the theme supplies it. Read the row as "1px at 40% of whatever the host's border
+      colour is", which is what the stylesheet says and what the operator asked for; the specific
+      grey is a reading of the harness.
+- [ ] The keyboard inset moves the sheet's bottom 844 → 508 on an 844px screen, keeps its top on
       screen at y=275, and returns it to 844.
-      **Met.** `a declared keyboard height lifts the sheet clear of it` — `--keyboard-height:336px`
-      moved the sheet's bottom edge 844 → 508 on an 844px screen (clearance 336px); lever var=336px.
-      `lifting the sheet does not push its top off the screen` — top edge at y=275, max-height
-      423.6px. `the sheet returns to the floor when the keyboard closes` — bottom edge back at 844
-      of 844.
-- [x] All 9 sheet-capable surfaces at the identical fill. **No before-number was ever recorded for
+      **Measured, and the tick withdrawn.** `a declared keyboard height lifts the sheet clear of it`
+      — `--keyboard-height:336px` moved the sheet's bottom edge 844 → 508 on an 844px screen
+      (clearance 336px); lever var=336px. `lifting the sheet does not push its top off the screen` —
+      top edge at y=275, max-height 423.6px. `the sheet returns to the floor when the keyboard
+      closes` — bottom edge back at 844 of 844.
+
+      **The harness writes the variable the defect would live in.** `probe/sheet-audit.mjs:349` calls
+      `document.documentElement.style.setProperty("--keyboard-height", "336px")`, and **nothing in
+      `src/` ever sets it** — the two source mentions are a comment and a read. So the three numbers
+      prove the arithmetic *given* the variable and say nothing about whether it arrives. That is the
+      whole open question here, and `acceptance-criteria.md` §3 already states it as inferred rather
+      than confirmed; the tick contradicted its own document.
+
+      **What is proven, and it is not nothing.** The lever moves the sheet, the direction is right,
+      the magnitude is exact, and it reverses. `keyboardInset()` also takes
+      `max(host variable, visual-viewport shrink)` behind a pinch-zoom guard, so the host variable is
+      the *first* of two arms — but the probe exercises only that arm, because a headless page cannot
+      shrink its own visual viewport, and the second arm is the one that would carry an iOS host that
+      publishes nothing.
+
+      **What would settle it:** the operator reporting which of three things happens when the
+      keyboard opens (step 3 of `acceptance-criteria.md` §4). No harness in this repository contains
+      a software keyboard, so nothing here can take this criterion.
+- [ ] All 9 sheet-capable surfaces at the identical fill. **No before-number was ever recorded for
       this ask**, so what is evidenced is that they agree today, not that they used to disagree.
-      **Met.** `every sheet surface paints the same fill` — all 9 surfaces measure
-      color(srgb 0.95 0.95 0.95).
+      **Measured, and the tick withdrawn.** `every sheet surface paints the same fill` — all 9
+      surfaces measure color(srgb 0.95 0.95 0.95).
+
+      **Both halves of that sentence come from the harness rather than the product.** The *value* is
+      95% of a white the harness declares: `probe/sheet-audit.mjs:105` sets
+      `--background-primary: #ffffff` inline on the body, and `styles.css:78` computes
+      `--db-surface-overlay: color-mix(in srgb, var(--background-primary) 95%, black)`. On a device
+      that variable comes from the theme, and 0.95/0.95/0.95 is not a number the product has. The
+      *agreement* is read off nine bare `<div>`s built in one parent and handed one class:
+      `styles.css:19996` declares `.db-mobile-bottom-sheet.db-mobile-bottom-sheet { background:
+      var(--db-surface-overlay) }`, which every surface then resolves through, so the comparison
+      re-reads one declaration nine times.
+
+      **What survives: one rule declares the fill for all nine classes, and that is checked.** What
+      is not measured is nine real surfaces agreeing *in situ* — each is built by its own renderer,
+      in its own host, and a custom-property like `--background-primary` inherits from the nearest
+      ancestor that sets it. Obsidian's own `app.css` is absent here, so a theme scoping that
+      variable differently under a modal is exactly the shape this check cannot see, and it is how
+      the ask arose in the first place.
+
+      **What would settle it:** build the nine through their own entry points rather than as bare
+      divs, and read the fill with the host stylesheet present — or step 4 of the operator list,
+      swiping between a record sheet and a menu sheet and saying whether they match.
 - [x] The scrim is `rgba(0,0,0,0.25)` and captures; a press 120px above the sheet resolves to it and
       a press on the band resolves to the grab handle.
       **Met.** `the scrim is a 25% black modal layer` — background rgba(0, 0, 0, 0.25),
@@ -128,6 +193,18 @@ measurement around it reads.
       **Met.** `a menu row lays out identically in any sheet` — owned-menu sheet: min-height 44px,
       padding 8px 16px 8px 16px, height 44px | panel sheet: min-height 44px, padding
       8px 16px 8px 16px, height 44px.
+
+      **Tick held for the three properties it names, and it should not be read as more than that.**
+      Those are declared literals in `styles.css`, measured on rows built by the shipped
+      `createMenuRow`, so they hold wherever the plugin's stylesheet does. But this is the component
+      whose one known device defect was invisible to checks of exactly this shape: Obsidian's
+      `app.css` declares `button { justify-content: center }`, the menu row declared no
+      `justify-content` of its own, and five checks passed for months while sheet buttons sat centred
+      on device. Box metrics are not the whole of "proper reusable sheet menu item components". The
+      harness now appends a partial reproduction of the host's `button` rule
+      (`verify-placement.mjs:68`, `HOST_BARE_CONTROLS`), which closes that one hole and no other —
+      it leaves `--input-height` and the `--size-4-*` scale undefined, so any property the host
+      contributes through those still resolves differently here than on a device.
 - [ ] The two open operator decisions are answered: the 13px row label, and whether the sheet should
       survive a window resize instead of closing.
       **Operator.** Both are measured, and both stand red by declaration in the captured run:

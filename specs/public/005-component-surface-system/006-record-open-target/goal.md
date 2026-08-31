@@ -34,6 +34,18 @@ Repo `~/MEGA/Development/Obsidian Plugin`. **Runs seventh**, last of the feature
 - Plus the five stateful dimensions.
 
 **DONE MEANS** the operator clicks Open and reads the note.
+**HARNESS DEPENDENCE, 2026-08-31 — 9 sound / 4 dependent / 0 unknown. The least style-exposed packet
+of the seven**, because its bullets ask what was produced, which record is displayed and where the
+write landed — content and identity, not computed geometry. The rendered-body bullet, the phone
+height bullet and the layering bullet are all sound: every bound and every z-index in play is
+plugin-declared. **The exposure is the stubs.** *"Every affordance honours the setting — no path
+bypasses the policy"* has to drive `openRow`, which is `() => undefined` in the harness
+(`verify-placement.mjs:2329`, `:3398`, `:4523`): a no-op produces no surface, so a threshold of *"0
+produced a surface other than the configured target"* is satisfied vacuously — the `editFileName`
+false green exactly. The write-attribution row needs a vault the harness does not have, and it is the
+packet's highest-value criterion because a misattributed write is silent and permanent. One further
+row, *the view is still rendered in its own leaf*, cannot be answered here at all: leaf lifetime is
+`009`'s live probe or nothing. Rows in `acceptance-criteria.md` § Harness-dependence audit.
 <!-- /ANCHOR:completion -->
 
 ---

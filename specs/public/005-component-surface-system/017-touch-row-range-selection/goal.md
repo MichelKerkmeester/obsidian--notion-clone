@@ -9,11 +9,12 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "public/005-component-surface-system/017-touch-row-range-selection"
-    last_updated_at: "2026-08-30T19:10:41Z"
-    last_updated_by: "criteria-reconciliation"
-    recent_action: "Completion anchor reconciled: AC-1 to AC-9 all green in the captured run"
-    next_safe_action: "Operator answers the status-bar announcement, then taps a checkbox on device"
-    blockers: []
+    last_updated_at: "2026-08-31T09:00:00Z"
+    last_updated_by: "harness-dependence-review"
+    recent_action: "AC-9 tick withdrawn: its row-menu term is a counter, not a menu being shown"
+    next_safe_action: "Drive RowMenu in the AC-9 check instead of counting onLongPress calls"
+    blockers:
+      - "AC-9 counts handler calls where production shows a menu; the editFileName shape"
     key_files:
       - "spec.md"
       - "acceptance-criteria.md"
@@ -21,9 +22,10 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-017-goal"
       parent_session_id: null
-    completion_pct: 96
+    completion_pct: 88
     open_questions:
       - "Does the hold gesture get an announcement in the selection status bar"
+      - "Would a real thumb reach the checkbox; synthetic dispatch skips hit-testing"
     answered_questions:
       - "Row range-select moves behind a long press, sharing attachLongPress with the row menu"
 ---
@@ -65,9 +67,35 @@ click extended a range on a machine with no touchscreen at all.
 
 Evidence below is the `verify-placement` run captured on a clean tree at `f64dd87`: **220/224
 geometry checks passed, 4 red for a declared reason**, exit 0. Every criterion that names a
-measurement is green there; the two that remain are not measurements. Each check reports
+measurement is green there; the ones that remain are not measurements. Each check reports
 `isTouchDevice(row)=true` alongside its result, per D2, so the guard is exercised rather than
 sidestepped.
+
+**Read against "if this value came from the device, could the check still fail?", eight of the nine
+hold and one does not.** The decision logic under test is genuinely the shipped code —
+`applyRowSelectionPress`, `attachRowRangeGesture`, `attachLongPress` and `isTouchDevice` are bundled
+from `src/`, and the swallow that AC-4 and AC-5 turn on is the real `onClickCapture` at
+`table-cell-gesture.ts:233`, not a copy of it. Six negative controls, each restored and confirmed by
+SHA-256, show the checks moving for their own reason and not as a bank of switches. AC-9's row-menu
+term is the exception and is withdrawn below: it is a counting stub where production shows a menu.
+
+**Two residuals apply to all nine and neither is a reason to withdraw a tick.** They are recorded so
+the next reader does not have to re-derive them.
+
+*The row is hand-built and the adapter around it is a mirror.* The checks assemble a `<table>` by
+hand and wire the shipped modules to a local `Set`. That mirror was compared against production
+line by line and **matches**: `database-view.ts:8156` passes
+`onExtendRange: () => setRowSelection(row, true, { shiftKey: false, heldPress: true })` and `:4475`
+passes `heldPress: false` from a click, which is exactly what the harness's adapter passes; the
+`ignoreTarget` closure is the same predicate; and `createCheckbox({ role: "row" })` produces the bare
+`input.db-checkbox-row[type=checkbox]` that `isRowSelectionCheckbox` matches, with no wrapper to
+intercept the press. So these are not green over a present defect. They are blind to a future one:
+regress `setupRowInteractions` alone and every check here stays green, the same cost phase 015
+records for its transcriptions.
+
+*The gestures are synthetic.* `new PointerEvent` dispatched at the element skips hit-testing, so an
+overlay or a `touch-action` that would stop a real thumb is invisible. Phase 016 drives CDP touch
+and does not have this gap; this phase does.
 
 - [x] A tap on a row checkbox leaves exactly 2 rows selected after two presses. Was 7.
       **Met.** `a tap on a row checkbox selects only that row` — pressing rows 2 and 8 selected
@@ -115,13 +143,32 @@ sidestepped.
       shift-clicking row 8 after row 2 selected 7 row(s) (want 7, rows 2 through 8) at
       pointerType=touch isTouchDevice(row)=true innerWidth=390, and again at pointerType=mouse
       isTouchDevice(row)=true innerWidth=1440.
-- [x] A hold on the checkbox and a hold on the row body are one gesture with two answers: 1/0/1 and
+- [ ] A hold on the checkbox and a hold on the row body are one gesture with two answers: 1/0/1 and
       0/1/1. Was **2 haptics for one hold** — the row menu's own hold buzzing and swallowing the press
       before declining to open anything.
-      **Met.** `a hold on the checkbox and a hold on the row body are one gesture with two answers` —
-      on the checkbox: 1 extension(s), 0 row menu(s), 1 haptic(s); on the row body: 0 extension(s),
-      1 row menu(s), 1 haptic(s). Want 1/0/1 and 0/1/1. pointerType=touch isTouchDevice(row)=true
-      innerWidth=390. The mouse page reads 0/0/0 and 0/0/0 on the same pair, which is the other half.
+      **Measured, and the tick withdrawn on the row-menu term.** `a hold on the checkbox and a hold
+      on the row body are one gesture with two answers` — on the checkbox: 1 extension(s), 0 row
+      menu(s), 1 haptic(s); on the row body: 0 extension(s), 1 row menu(s), 1 haptic(s). Want 1/0/1
+      and 0/1/1. pointerType=touch isTouchDevice(row)=true innerWidth=390. The mouse page reads 0/0/0
+      and 0/0/0 on the same pair.
+
+      **"1 row menu" is a counter, not a menu.** `verify-placement.mjs:2864` passes
+      `onLongPress: () => { menuCount += 1 }` where `database-view.ts:8155` passes
+      `(event) => this.rowMenu.show(event, row, context, tr)`. So the number proves the hold reached
+      the handler and nothing about a menu being built, placed or dismissable — which is precisely
+      the shape that already produced one false green in this program, when `editFileName` was a
+      counting stub and a check proved a double-tap reached a handler while no editor was ever
+      created. Two of the three terms are real: the extension count comes from the shipped
+      `attachRowRangeGesture`, and the haptic is counted by intercepting `navigator.vibrate`, which
+      the shipped `attachLongPress` really calls.
+
+      **The pre-fix number is also from a surface this check does not run.** The **2 haptics** came
+      from the embedded renderer screening its target after the timer; the check pairs two
+      harness-attached `attachLongPress` instances instead, so it reproduces the *shape* of that
+      defect rather than the site of it.
+
+      **What would settle it:** count menus by asserting a row menu is in the document and anchored,
+      driving `RowMenu` — which `verify-placement` already bundles — rather than a counter.
 - [ ] The status-bar announcement decision is answered.
       **Operator.** Not a measurement: whether the hold should announce itself is a design decision
       and no check can take it. If the answer is yes, the check that would then settle the
@@ -130,8 +177,13 @@ sidestepped.
       extension painted (7) within one animation frame of the extension firing, with the hold that
       fires no extension leaving the text unchanged.
 - [ ] The operator taps a row checkbox on their phone and one row is selected.
-      **Operator.** `Input.dispatchTouchEvent` enters where a thumb enters and respects hit-testing
-      and `touch-action`, but it is one clean finger. Only the device closes this.
+      **Operator.** This sentence used to read "`Input.dispatchTouchEvent` enters where a thumb
+      enters and respects hit-testing and `touch-action`, but it is one clean finger" — which is
+      true of phase 016 and **false here**. These checks use `el.dispatchEvent(new PointerEvent(…))`
+      (`verify-placement.mjs:2878`), which is aimed at the element and therefore skips hit-testing
+      entirely: it cannot notice an overlay, a `pointer-events` rule or a `touch-action` that would
+      stop a real thumb reaching the checkbox. So the gap to the device is wider than the sentence
+      claimed, and only the device closes it.
 <!-- /ANCHOR:completion -->
 
 ---

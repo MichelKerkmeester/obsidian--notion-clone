@@ -9,12 +9,14 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "public/005-component-surface-system/018-select-column-affordance-fit"
-    last_updated_at: "2026-08-30T17:45:00Z"
-    last_updated_by: "goal-authoring"
-    recent_action: "Both controls run and observed red; phone control needed both edits reverted"
-    next_safe_action: "Operator opens the table on a phone and reports the button has room"
+    last_updated_at: "2026-08-31T09:00:00Z"
+    last_updated_by: "harness-dependence-review"
+    recent_action: "AC-1 desktop and AC-2 withdrawn: the overlap check mounts a hand-written fixture"
+    next_safe_action: "Mount a TableRenderer-built row, then re-read the gap and the button presence"
     blockers:
-      - "Not operator-confirmed on device; every other criterion is measured"
+      - "The desktop cell production paints holds a drag handle the fixture never contains"
+      - "The phone column width is declared twice; only the CSS copy is measured"
+      - "Not operator-confirmed on device"
     key_files:
       - "spec.md"
       - "acceptance-criteria.md"
@@ -22,9 +24,12 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-018-goal"
       parent_session_id: null
-    completion_pct: 85
-    open_questions: []
-    answered_questions: []
+    completion_pct: 72
+    open_questions:
+      - "Do the desktop drag handle and the row checkbox clear each other in a 40px column"
+      - "Does the renderer build the reorder button only on touch, measured rather than read"
+    answered_questions:
+      - "runtime-vars.css pins nothing that reaches the select column; the fixture is the exposure"
 ---
 # Goal: Select Column Affordance Fit
 
@@ -53,6 +58,8 @@ nothing owned it.
 | D2 | Every before-number here is copied from the lane journal, **not reproduced** — this phase opened after the fact and must not take a lane another phase holds. |
 | D3 | No row may be marked Met on a recorded number alone. This program has already shipped a release on numbers nobody re-ran. |
 | D4 | A criterion that reads a comment is not a measurement. The column width is re-measured from what the controls paint. |
+| D5 | A number measured on a hand-written fixture is a fact about the fixture. The overlap check mounts the `table-mobile` screenshot scenario, so every row above says which of its claims survives that, and the two that do not are withdrawn. |
+| D6 | A constant declared in both `styles.css` and TypeScript has one authority on device — the inline write — and a harness that loads only the stylesheet measures the other one. Say which copy a number came from. |
 <!-- /ANCHOR:directive -->
 
 ---
@@ -79,6 +86,16 @@ nothing owned it.
       green. The phone control takes it red while the desktop stays green. Restored, the harness
       returns to exit 0 and `styles.css` hashes byte-identical to the baseline.
 
+      **Tick held, and narrowed to what a control can establish.** Both are complete — AC-2's fix was
+      one edit and its control restores it; the phone's was two and its control now reverts both —
+      and each moves only its own surface, which is what makes them discriminating. What they prove
+      is that the check is wired to `styles.css`. They cannot prove it is wired to the product,
+      because the subject they move is a **hand-written fixture**: `verify-placement.mjs:3228`
+      renders the `table-mobile` screenshot scenario's markup, not a table `TableRenderer` built. The
+      two consequences are in `acceptance-criteria.md` — the desktop gap is measured on a cell whose
+      real occupant is a drag handle the fixture omits, and the phone width has a second declaration
+      in `table-renderer.ts:475` that an inline style makes authoritative on device.
+
       **The phone control has to revert two edits, not one, and the first attempt reverted one.**
       This phase widened the column 48px to 64px *and* moved the phone checkbox pin from `right: 6px`
       to `4px`. Reverting only the column leaves the pin's 2px in place and measures **-12px**, a
@@ -96,9 +113,12 @@ nothing owned it.
 
 Volatile. Not part of the directive.
 
-**Read the coverage table at the end of `acceptance-criteria.md` before anything else** — four rows,
-four blank negative-control cells. Under the parent `spec.md` §6 a blank cell blocks closure even
-when the number in it would have been valid, so **this phase may not close today.**
+**Read the coverage table at the end of `acceptance-criteria.md` before anything else.** It no longer
+reads as it did when this line was written: the control cells were blank then and are filled now, and
+the table has grown a row because AC-1's two arms have different answers. What blocks closure is no
+longer a blank cell. It is that two rows are withdrawn — the desktop gap and the button-presence
+count both measure a hand-written fixture rather than the renderer — and that AC-4 was never
+requested. **This phase may not close today**, for those reasons rather than the earlier one.
 
 ### Progress
 
@@ -107,6 +127,8 @@ when the number in it would have been valid, so **this phase may not close today
 | Code | Shipped | Lane journal entry 64, under `004`'s hold |
 | Numbers | Recorded, not reproduced | `acceptance-criteria.md` provenance note |
 | Negative controls | Run, both red | Desktop -17px; phone -14px with both of its edits reverted |
+| What they moved | A fixture, not the renderer | `verify-placement.mjs:3228` mounts the `table-mobile` screenshot scenario |
+| AC-1 desktop, AC-2 | Withdrawn | Absence measured instead of clearance; `display` measured instead of presence |
 | Operator confirmation | Not requested | — |
 
 ### Deviations and findings

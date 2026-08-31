@@ -11,7 +11,7 @@ _memory:
     packet_pointer: "public/005-component-surface-system/025-story-coverage-blindness"
     last_updated_at: "2026-08-30T21:12:00Z"
     last_updated_by: "phase-reconciliation"
-    recent_action: "Eight requirements carry a command; the ninth records a substituted control"
+    recent_action: "Supply audit: 8 Met rows sound; all are repo-wiring, no device value enters"
     next_safe_action: "Operator opens the catalogue and confirms the surfaces it lists"
     blockers: []
     key_files:
@@ -93,3 +93,29 @@ requirement names, and the operator.
 **This phase does not close.** Per the packet's third decision, shipped, verified and
 operator-confirmed are three states, and only the third closes anything.
 <!-- /ANCHOR:closure -->
+
+---
+
+## 4. HARNESS-SUPPLY CLASSIFICATION
+
+Asked of every row: *if this value came from the device instead of the harness, would the check still
+pass — and could it still fail?* **All eight Met rows are sound, and none is withdrawn.**
+
+Nothing here measures a rendered surface. AC-1 to AC-3 are about which script a gate lane invokes and
+whether two package scripts can be mistaken for each other. AC-5 to AC-8 are about what a source
+matcher can see — whether it decides on a function's parameters or on its exported name. These are
+properties of the repository's own wiring, and a device supplies no value any of them reads. The
+inventory's five channels — a set variable, a pinned value, a stubbed action, hand-built host chrome,
+an absent host stylesheet — have no path into a question of the form *does this lane run this file*.
+
+That is also the limit of what this phase's greens mean, and it is worth stating in the same breath.
+AC-6's `0` and AC-7's `31` say every renderable module is now answered by a story or an argued
+exemption. They do not say the stories are faithful — a story renders what its author wrote, and
+`026` §5 records that hand-written markup satisfies every DOM-shaped check in this repository. This
+phase makes the catalogue complete. Whether the catalogue resembles the product is AC-10's question,
+and AC-10 is Open and belongs to the operator.
+
+**AC-9 is the row to keep.** It was discharged by a control that answered a neighbouring question —
+31 to 18 naming thirteen, on today's tree, where the requirement asked for the tree as received,
+which reports fourteen. Both numbers are true of different sets. Recording that as `Open` rather than
+as `Met` with a footnote is the same discipline this audit applies elsewhere, arrived at without it.

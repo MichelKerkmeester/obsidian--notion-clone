@@ -12,10 +12,10 @@ contextType: "implementation"
 _memory:
   continuity:
     packet_pointer: "public/005-component-surface-system/000-surface-contract-and-truthful-harness"
-    last_updated_at: "2026-08-29T18:00:00Z"
-    last_updated_by: "phase-architect"
-    recent_action: "Added AC-013 to AC-020 from the adversarial review"
-    next_safe_action: "Confirm each failing value against the current tree"
+    last_updated_at: "2026-08-31T00:00:00Z"
+    last_updated_by: "harness-dependence-audit"
+    recent_action: "Classified 20 criteria for harness dependence; 2 compromised, 1 unknown"
+    next_safe_action: "Run scan-pinned-values.mjs and read whether it skips runtime-assigned pins"
     blockers: []
     key_files:
       - "acceptance-criteria.md"
@@ -199,6 +199,62 @@ registered in `checklist.md`.
 Write `-` when the row is `Met` or `Unmet`. Write `ADR-NNN` when the row is `Waived` or
 `Superseded`, naming a decision record that exists in `decision-record.md`. A waiver naming an ADR
 that is not there fails validation.
+
+### Harness-dependence audit — 2026-08-31
+
+The pass before this one asked of each criterion whether it was green. This one asks a different
+question: **if the value came from the device instead of the harness, would the check still pass —
+and could it still fail?** A criterion whose green rests on a variable the harness injects, a value
+it pins, an action it stubs, host chrome it hand-builds, or Obsidian's absent `app.css` is evidence
+about the harness, not about the product.
+
+**No row in the table above was `Met` when this audit ran, so no tick was withdrawn and
+`completion_pct` does not move.** What the audit records instead is which criteria are compromised
+*before* anyone runs them, so the green they eventually produce is read for what it is.
+
+The five supplies, referred to below by number: **1** `--keyboard-height`, set by the harness
+(`verify-placement.mjs:819`, `:4724`, `:4753`) and by nothing in `src/`. **2** values
+`runtime-vars.css` pins where the runtime computes them. **3** production actions replaced by no-op
+or counting stubs. **4** host chrome the harness builds by hand. **5** Obsidian's `app.css`, absent
+except for one `button` rule copied verbatim into `HOST_BARE_CONTROLS` (`verify-placement.mjs:69`).
+
+**17 sound · 2 harness-dependent · 1 unknown.**
+
+| AC-ID | Class | Supply | On a device |
+|---|---|---|---|
+| AC-001 | Sound | — | The comparison is plugin-cascade at both mounts, so a host rule reaching both cancels and the difference persists. **The recorded absolute values do not survive.** `token-census.mjs:53` loads `styles.css` alone; `.db-menu-item` is a `<button>` (`menu-row.ts:92`), so `border-radius: 0px` and `font-size: 14px` are Chromium defaults. A device reads `var(--button-radius)` and `var(--font-ui-small)` there. Re-record the numbers, keep the criterion |
+| AC-002 | Sound | — | `--db-*` is never declared by the host. A custom property resolving empty resolves empty everywhere |
+| AC-003 | **Unknown** | 5 | The audit resolves the computed winner among *duplicated plugin selectors*. Without `app.css` in the page, "each active cascade context" is incomplete: a host rule that beats both duplicates makes neither the winner, and the audit cannot see that. **Settled by** re-resolving the 87 selectors with a real `app.css` loaded, and recording whether any winner changes |
+| AC-004 | Sound | — | Harness-measuring by construction: the criterion exists to test whether the harness's navbar is load-bearing. Note the threshold is calibrated to the hand-built 72px navbar (`verify-placement.mjs:409`); a device navbar is a different height and `> 1.35px` is not a device number |
+| AC-005 | Sound | — | The subject is four harness files. Recorded state is stale in the phase's favour: all four are now removed from `runtime-vars.css` (see its closing comment). Left as recorded — this pass does not raise a completion |
+| AC-006 | Sound | — | A registry join over `src/`; no host or harness input |
+| AC-007 | Sound | — | Two exit statuses from a scan. The subject is the scan |
+| AC-008 | Sound | — | Observed-root set against registry-entry set. Both are the plugin's |
+| AC-009 | Sound | — | Re-reads AC-001's four properties for *invariance across a transition*. A differential on one document, so a host contribution cancels |
+| AC-010 | **Harness-dependent** | 3 | "Drive the affordance a user drives and assert the resulting model change." In the harness the affordances are `openRow: () => undefined`, `editCell: () => {}` and their siblings (`verify-placement.mjs:2329`, `:2434-2437`, `:3398-3401`, `:4268`, `:4523`). A model delta asserted against a no-op is the `editFileName` counting-stub failure with a different name. **On a device this cannot fail for the right reason: there is no model to fail against.** The criterion is only admissible once the drive runs through real handlers |
+| AC-011 | Sound | — | Listener and node counts before, during and after. Plugin-owned throughout |
+| AC-012 | Sound | — | A substitution suite over its own coordinates |
+| AC-013 | Sound | — | **This is the criterion that answers the question this audit asks.** Pairing every harness number with `009`'s live probe is the only row in the program that can catch a supply the inventory has not yet named. It should be treated as the phase's gate, not as one row among twenty |
+| AC-014 | Sound | — | The subject is `verify-placement.mjs` itself |
+| AC-015 | Sound | — | The subject is which page loads the stylesheet. Recorded state is stale in the phase's favour — `styles.css` now loads on the desktop page (`verify-placement.mjs:246`) — and is left as recorded |
+| AC-016 | **Harness-dependent** | 2 | **The checker implements the opposite of the criterion.** AC-016 says: flag a harness file that assigns a custom property `src/` also assigns. `scan-pinned-values.mjs:128` reads `if (runtime.has(prop) \|\| sheet.declared.has(prop)) continue;` — it **skips** exactly that population and flags the complement, properties nothing assigns. Three variables still pinned in `runtime-vars.css` are assigned by `src/` through `setProperty`: `--db-table-header-top` (2 sites), `--db-board-column-width` (2), `--db-gallery-card-width` (3). All three are skipped. A green scan is evidence for a rule the criterion did not state, and the pin the criterion was written to catch survives it |
+| AC-017 | Sound | — | The subject is the capture fingerprint. Recorded state is stale in the phase's favour — the three harness files now appear in the fingerprint loop at `verify-placement.mjs:3171` — and is left as recorded |
+| AC-018 | Sound | — | Content-addressing is a property of the recorder |
+| AC-019 | Sound | — | A source guard over five call sites, not a computed read |
+| AC-020 | Sound | — | A checker over this table's own cells |
+
+**The one that matters most.** AC-016 is not a weak criterion; it is a criterion with a checker that
+cannot fail for its stated reason. That is the shape this whole audit exists to find, and finding it
+in the phase that owns harness honesty is the useful result. Either the criterion adopts the scan's
+rule — flag a pin for a property *nothing* assigns — or the scan gains a second pass for the
+population the criterion names. Both rules are worth having; only one is implemented, and the
+criterion names the other.
+
+**A latent sixth pin, recorded so it is not rediscovered.** `--db-mobile-bar-height` is pinned at
+`runtime-vars.css:55` and assigned nowhere in `src/`; its only consumer is `styles.css:18251`, which
+reads it with a `48px` fallback — the same value. **Nothing is wrong today**, because the pin and the
+fallback agree. It is the `--db-header-height` shape with a value that happens to match, and it goes
+silently wrong the day either side changes.
 
 <!-- /ANCHOR:criteria -->
 

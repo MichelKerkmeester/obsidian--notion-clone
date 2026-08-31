@@ -33,6 +33,23 @@ Repo `~/MEGA/Development/Obsidian Plugin`. **Runs second, right after `000`.** N
 - Plus the five stateful dimensions: semantic identity, transition trace, action outcome, resource ownership, negative-control mutation.
 
 **DONE MEANS** the operator opens a board on a phone and sees squares. Gate passage has already proven insufficient here.
+**HARNESS DEPENDENCE, 2026-08-31 — 1 sound / 16 dependent / 1 unknown. This packet is the most
+exposed in the program.** `styles.css` contains **no unconditional `input[type="checkbox"]` rule**:
+every appearance the plugin gives a checkbox is reached through an ancestor or through a class the
+input carries. So a checkbox the plugin misses falls back to whatever stylesheet is in the document —
+the Chromium default here, **Obsidian's own checkbox in the app**. `checkbox-appearance.mjs:86-88`
+loads `styles.css`, `theme.css` and `runtime-vars.css` and nothing else; the tool says so itself.
+**The consequence is exact: `appearance: none` discriminates in the harness and stops discriminating
+on a device**, because a checkbox the plugin never touched reads the host's `none` too. *"Every
+`input[type=checkbox]` the plugin creates computes `appearance: none`"* is therefore satisfiable **by
+Obsidian, with all twelve families still round** — the `justify-content` failure applied to the one
+property this phase is judged on. Radius, box size, per-state difference, theme survival and the
+28x28 hit target are exposed the same way; the harness itself records at `verify-placement.mjs:5044`
+that `app.css` gives every input its own height. **The source facts are untouched and remain the
+better evidence**: no unconditional rule, twelve families across four ancestors, ten classless
+creation sites, five borrowed parents. **AC-009 is the one sound row** — it joins node to creation
+site to declared role and asks no cascade anything. Build it first and re-derive the rest from it.
+Rows in `acceptance-criteria.md` § Harness-dependence audit.
 <!-- /ANCHOR:completion -->
 
 ---

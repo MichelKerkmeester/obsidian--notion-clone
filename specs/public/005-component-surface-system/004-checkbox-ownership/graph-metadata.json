@@ -210,7 +210,7 @@
     ],
     "causal_summary": "The operator sees round checkboxes everywhere, and the previous fix was real",
     "created_at": "2026-08-29T12:45:04.669Z",
-    "last_save_at": "2026-08-30T18:36:01.672Z",
+    "last_save_at": "2026-08-31T03:40:20.987Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -221,7 +221,7 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:7a7c2c7eb6b5966de5dea40039ab16c4fac888a0bfb91bb284d7bb5b7461e46d",
+    "source_fingerprint": "sha256:a861984b55ee299146f8b3c0adb1f79bc3be136b0db9b53e5afdd2954fdb9a50",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "2345ad09db3fd49a894456aec3401f2ea822e25b97b86d12414cbb82fb4ae6c0",

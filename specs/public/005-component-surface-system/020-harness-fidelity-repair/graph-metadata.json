@@ -39,7 +39,7 @@
       "capture"
     ],
     "importance_tier": "critical",
-    "status": "complete",
+    "status": "in_progress",
     "key_files": [
       "spec.md",
       "plan.md",
@@ -51,7 +51,8 @@
       "tools/live/evidence.mjs",
       "tools/gate.mjs",
       "tools/screenshots/verify.mjs",
-      "tools/storybook/obsidian-dom-shim.mjs"
+      "tools/storybook/obsidian-dom-shim.mjs",
+      "tools/screenshots/runtime-vars.css"
     ],
     "entities": [
       {
@@ -118,6 +119,12 @@
         "name": "obsidian-dom-shim.mjs",
         "kind": "file",
         "path": "tools/storybook/obsidian-dom-shim.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "runtime-vars.css",
+        "kind": "file",
+        "path": "tools/screenshots/runtime-vars.css",
         "source": "derived"
       },
       {
@@ -191,17 +198,11 @@
         "kind": "proper_noun",
         "path": "tasks.md",
         "source": "derived"
-      },
-      {
-        "name": "itself",
-        "kind": "key_phrase",
-        "path": "tasks.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "Six of seven verifier findings were instruments that could not fail for the reason they claimed to",
     "created_at": "2026-08-30T15:15:27.011Z",
-    "last_save_at": "2026-08-30T18:54:56.841Z",
+    "last_save_at": "2026-08-31T03:39:23.949Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -212,13 +213,13 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:563e992143b225beac17014fddeca1f6fa8cc431d487db967e46a842bbdd5676",
+    "source_fingerprint": "sha256:a054ca1dddf73f6fb773a9e556c73647821608b37cacbd9b20dde94e7b50f0d3",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "52d8063b71127e433cb3fa4cb6ae31aa6db5fd6de8561637d54db350764cd3a7",
+      "spec.md": "6888b5683bb4bd287b7ac1bd0de8c238076919dcebaeb819b90ef53fcaa40300",
       "plan.md": "d6b90a6afcec22af0807cd83b07ee4864fc942c3769c3218fdfadd71a42fa741",
       "tasks.md": "bce05c66f57d8a60a9995713e589e2a5356dbc8a3b2acd89b15bf81b54564927",
-      "implementation-summary.md": "6600ca66011d0c29ff48abf25026a505e0329ad6815f021f8123eadecc8cd11d"
+      "implementation-summary.md": "bdafb4b2df10ea7bb406a314c06f578ccf54bfd629d5ca4c353d7b0091db6b71"
     },
     "last_active_child_id": null,
     "last_active_at": null

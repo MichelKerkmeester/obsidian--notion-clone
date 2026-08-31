@@ -11,8 +11,8 @@ _memory:
     packet_pointer: "public/005-component-surface-system/024-list-view-freeze"
     last_updated_at: "2026-08-30T19:10:41Z"
     last_updated_by: "criteria-reconciliation"
-    recent_action: "Completion anchor reconciled: 4 of 6 criteria evidenced, bench and 5k apart"
-    next_safe_action: "Add the is-phone width-sweep reservation check; device stays blocked"
+    recent_action: "AC-2 withdrawn: LINEAR verdict came from a 1,600-row ceiling below the bend"
+    next_safe_action: "Re-run the linearity verdict on 028 full matrix; do not reclose AC-2 at 1,600"
     blockers:
       - "Non-table views still freeze on device; 028 is investigating whether a second cause remains"
       - "No standing check reserves-by-width under is-phone; AC-7 measured it once by hand"
@@ -23,7 +23,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-024-goal"
       parent_session_id: null
-    completion_pct: 92
+    completion_pct: 70
     open_questions:
       - "How many rows does the operator's database actually hold"
       - "Is the desktop reservation worth keeping now that it measures as redundant"
@@ -86,13 +86,20 @@ figure quoted as a geometry-harness figure is how a record starts drifting.
       164.2ms layout)`, exit 0. The pre-fix tree through the same runner: `FAIL — 8646ms of blocked
       main thread (8633.5ms render + 12.5ms layout)`, exit 1. The budget was observed failing first
       with 5,000ms of layout injected per sample, which is what makes the pass mean anything.
-- [x] Per-row cost reports LINEAR at every measured shape, replacing SUPERLINEAR, and a run with one
+      **Qualified:** the rows labelled `phone` are a phone's width on an M-series Mac's CPU. `028`
+      reads the same 1,600-row shape at **1,290.5ms** under 6× CPU throttling. The verdict holds at
+      this row count; the milliseconds are a lower bound and must never be quoted as a phone's.
+- [ ] Per-row cost reports LINEAR at every measured shape, replacing SUPERLINEAR, and a run with one
       row count prints no verdict at all.
-      **Met, by the bench.** AC-2: per-row cost 400 → 1,600 rows is ×1.17 LINEAR desktop and
-      ×1.01 LINEAR phone, against ×3.59 and ×1.73 SUPERLINEAR shipped; `npm run bench:list` reports
-      LINEAR at all eight shapes of the default matrix. AC-9: at `--rows=1600` the line now reads
-      `NO VERDICT — a slope needs two row counts and this run measured 1`, where it previously read
-      LINEAR by arithmetic beneath a 7,462.6ms render.
+      **Withdrawn.** AC-2 read ×1.17 LINEAR desktop and ×1.01 LINEAR phone against ×3.59 and ×1.73
+      SUPERLINEAR shipped, and `npm run bench:list` reports LINEAR at all eight shapes — of a default
+      matrix that stops at 1,600 rows. `028` ran this same tree to 12,800 and the verdict inverts:
+      `SUPERLINEAR (per-row ×2.55)` desktop, `×3.21` phone width, same columns and fill. "Every
+      measured shape" was every shape the harness chose to measure, and the bend sits above it.
+      Closes on `028`'s AC-3, not from a 1,600-row run.
+      **The second half stands:** AC-9's `NO VERDICT — a slope needs two row counts and this run
+      measured 1` replaced a LINEAR printed by arithmetic beneath a 7,462.6ms render, and that is a
+      property of the runner rather than of the range.
 - [x] A property starts in the same column on every card, asserted against the renderer's own output
       rather than a fixture.
       **Met.** `on desktop the renderer starts a property in the same column on every card` —

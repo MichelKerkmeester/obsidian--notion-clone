@@ -54,7 +54,8 @@
       "src/data/types.ts",
       "src/settings.ts",
       "src/data/data-source.ts",
-      "tools/storybook/verify-placement.mjs"
+      "tools/storybook/verify-placement.mjs",
+      "tools/storybook/obsidian-stub.mjs"
     ],
     "entities": [
       {
@@ -142,6 +143,12 @@
         "source": "derived"
       },
       {
+        "name": "obsidian-stub.mjs",
+        "kind": "file",
+        "path": "tools/storybook/obsidian-stub.mjs",
+        "source": "derived"
+      },
+      {
         "name": "Feature Specification",
         "kind": "proper_noun",
         "path": "spec.md",
@@ -194,17 +201,11 @@
         "kind": "proper_noun",
         "path": "plan.md",
         "source": "derived"
-      },
-      {
-        "name": "Total Critical Path",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "On desktop, clicking Open in the table shows a small card listing properties",
     "created_at": "2026-08-29T12:52:42.102Z",
-    "last_save_at": "2026-08-30T18:33:11.995Z",
+    "last_save_at": "2026-08-31T03:40:21.555Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -215,7 +216,7 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:7fb8da17bc4a596942f1f5b9812fd90a5dd477e4ac0ddddf54f2c6e11a066de8",
+    "source_fingerprint": "sha256:f64ef054f7181096732a8a579a4e31582876627ab463f092868e6a98f8af36e3",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "6ac9a34fea5150fcfb9941f19f1c198e692fb46a8de4d31548f877f9a25a91ac",

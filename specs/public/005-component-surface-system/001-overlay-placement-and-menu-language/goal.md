@@ -33,6 +33,17 @@ Repo `~/MEGA/Development/Obsidian Plugin`. **Runs fourth**, after `000`, `004`, 
 - Plus the five stateful dimensions.
 
 **DONE MEANS** the operator opens three different dropdowns and they look like one family.
+**HARNESS DEPENDENCE, 2026-08-31 — 9 sound / 4 dependent / 0 unknown.** Two acceptance bullets are
+compromised, and this packet holds the program's third false-green case. `createMenuRow` builds a
+**`<button>`** (`menu-row.ts:92`), and Obsidian's `app.css` declares `display`, `align-items`,
+`padding`, `border-radius`, `height` and `font-size` on every bare button — none of which the
+harness loads outside `HOST_BARE_CONTROLS`. So *"a row's computed layout is unchanged when mounted in
+a different container"* records `flex` versus `block` where a device gives `flex` versus
+`inline-flex`, and `align-items` cannot differ on a device at all. *"Any two surfaces of the same
+role: identical padding, radius, shadow, row height, font-size"* is worse: **on a device the host
+supplies one identical value to every unstyled role-mate, so the set equality passes with the defect
+present.** Widths, bounds containment and the submenu bullet are sound — the plugin declares those
+outright. Rows in `acceptance-criteria.md` § Harness-dependence audit.
 <!-- /ANCHOR:completion -->
 
 ---

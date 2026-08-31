@@ -13,10 +13,10 @@ contextType: "implementation"
 _memory:
   continuity:
     packet_pointer: "public/005-component-surface-system/003-mobile-sheet-presentation"
-    last_updated_at: "2026-08-29T18:00:00Z"
-    last_updated_by: "phase-architect"
-    recent_action: "Applied review findings F3, F8, F11 and F16"
-    next_safe_action: "Land Stage 1 so the harness can distinguish a navbar from no navbar"
+    last_updated_at: "2026-08-31T00:00:00Z"
+    last_updated_by: "harness-dependence-audit"
+    recent_action: "Classified 14 criteria for harness dependence; 5 rest on the hand-built navbar"
+    next_safe_action: "Drive visualViewport for C4 instead of injecting --keyboard-height"
     blockers:
       - "000-surface-contract-and-truthful-harness must land first"
     key_files:
@@ -307,6 +307,58 @@ work and must run against an unedited stylesheet.
 Write `-` when the row is `Met` or `Unmet`. Write `ADR-NNN` when the row is `Waived` or
 `Superseded`, naming a decision record that exists in `decision-record.md`. A waiver naming an ADR
 that is not there fails validation.
+
+### Harness-dependence audit — 2026-08-31
+
+The pass before this one asked of each criterion whether it was green. This one asks a different
+question: **if the value came from the device instead of the harness, would the check still pass —
+and could it still fail?**
+
+**No row in the table above was `Met` when this audit ran** — this packet reopened all of them on
+2026-08-29 — **so no tick was withdrawn and `completion_pct` does not move.**
+
+The supplies, by number: **1** `--keyboard-height`, set by the harness at
+`verify-placement.mjs:819`, `:4724` and `:4753`, and by nothing in `src/`. **2** values
+`runtime-vars.css` pins where the runtime computes them. **3** production actions replaced by
+stubs. **4** host chrome the harness builds by hand. **5** Obsidian's `app.css`, absent except for
+one `button` rule.
+
+**9 sound · 5 harness-dependent · 0 unknown.**
+
+**The navbar is the supply that runs through this packet.** Every criterion whose subject is "the
+sheet covers the navigation bar" is measured against a hand-written
+`<div class="mobile-navbar" style="position:fixed;left:0;right:0;bottom:0;height:72px">`
+(`verify-placement.mjs:409`) carrying no `app.css` rule, no stacking context of its own and no
+z-index. That div is a stand-in for the element the operator's defect is about. The harness has
+done real work here — `contain: strict` and `isolation: isolate` are reproduced verbatim from
+`app.css` at `verify-placement.mjs:166`, and `.app-container.mod-static-nav` models the non-floating
+configuration — but a hit test against a stand-in is a hit test against a stand-in.
+
+**One supply is now spent.** `--db-mobile-sheet-bottom` is no longer pinned; `runtime-vars.css`
+records its removal in the file's closing comment. C2's exposure is narrower than it was.
+
+| AC-ID | Class | Supply | On a device |
+|---|---|---|---|
+| AC-001 | **Harness-dependent** | 4, 5 | The headline. `elementFromPoint` over the navbar band must return the sheet. Here the competitor is a bare fixed `div` with no z-index and no host rule; a body-portalled sheet beats it almost by default. **On a device the competitor is Obsidian's real navbar, carrying whatever `app.css` gives it — plausibly its own stacking context, in which case the portal's z-index is compared inside a different stack and can lose.** The criterion is right and the instrument cannot decide it. This is the check that was green while the operator's phone showed the defect |
+| AC-002 | Sound | — | Bottom edge against the visual viewport for both mechanisms, and the two must agree. Both offsets are produced by plugin arithmetic and the disagreement between them is a plugin fact. The recorded 49px is scaled by the hand-built 72px navbar and should be re-recorded, but "both mechanisms return one offset" holds under any navbar |
+| AC-003 | Sound | — | Node identity, a top edge that moved 0px, and whether a later resize still repositions. `anchorEl.isConnected` going false after a wholesale `refresh()` is plugin state end to end, and it fails on a device for exactly the reason it fails here |
+| AC-004 | **Harness-dependent** | 1 | The criterion as written is sound: reduce `visualViewport` and assert the focused field stays inside the reduced rect. **The instrument that would answer it injects the variable instead** — `verify-placement.mjs:4724` and `:4753` set `--keyboard-height: 336px` on the document element, and nothing in `src/` ever sets it. The plugin's own `keyboardInset()` takes `max(host variable, visual-viewport shrink)`, so driving the viewport exercises the robust path and injecting the variable exercises the fragile one. Drive `visualViewport`; do not set the variable |
+| AC-005 | **Harness-dependent** | 4 | The scrim's own rectangle is plugin geometry and the containment that bounds it is reproduced from `app.css` — that half is sound. The criterion's subject, though, is coverage **of the navbar band**, and the band is the stand-in div's. A scrim proven to cover 72px of hand-built chrome is not a scrim proven to cover Obsidian's bar. The recorded value — no sheet scrim exists at all — is a source fact and stands |
+| AC-006 | Sound | — | Harness-measuring by construction: the row exists to prove the other five are not theatre. Note the `> 1.35px` threshold is calibrated to the 72px stand-in and the hardcoded `50` fallback at `popover-position.ts:291`; it is not a device number, and the cell already says harness and device agree and both are wrong |
+| AC-007 | **Harness-dependent** | 4 | "0 non-sheet popovers wholly or partly obscured by the navbar band", decided by `elementFromPoint` at each popover's centre. Same stand-in, same objection as AC-001, over a wider population. The per-popover bottom-bound deltas across the deletion are plugin arithmetic and are worth recording either way |
+| AC-008 | Sound | — | The six-width sweep of the 601-760px band. Two of the three observables — computed bottom offset and width as a fraction of the viewport — are plugin arithmetic, and the predicate disagreement between `isTouchDevice()` and `isMobileBottomSheet()` is a plugin fact. Only the third, the navbar-band hit, inherits the stand-in; the criterion can still fail for the right reason through the other two |
+| AC-009 | Sound | — | Measured presentation against declared role for every positioner sheet, all 20 `DbModal` subclasses and the 3 `FuzzySuggestModal` subclasses. Bottom offset and portal parent are the plugin's; the navbar hit is one observable of three |
+| AC-010 | Sound | — | The anchor lease surviving a wholesale `refresh()`, with a different resolved node afterwards. Pure plugin state, and `000`'s exit criterion consumed here |
+| AC-011 | Sound | — | Observed states in order and a bounded pending window. Plugin state machine |
+| AC-012 | **Harness-dependent** | 3, 4 | Two supplies at once. The tap lands on the navbar band — the stand-in — and it must produce "the sheet's model delta", which in the harness means asserting against `editCell: () => {}` (`verify-placement.mjs:2434`, `:4268`, `:4523`). The scrim half is sound. As written the row cannot close honestly on either instrument |
+| AC-013 | Sound | — | **The best-built row in the packet.** Reading the host's computed custom properties and class lists before, during and after the open is a *differential on one document*, so a missing `app.css` cancels out of both sides. The added consequence — the vacated region is tappable and the page scrolls again — is observable without any host rule |
+| AC-014 | Sound | — | A substitution suite over its own coordinates. One coordinate, "pin `--db-mobile-sheet-bottom` again", now requires re-adding a pin that has been removed; still runnable, and worth keeping as a regression guard on the removal |
+
+**What would settle AC-001, AC-005 and AC-007 together.** They are one question — does a portalled
+sheet win against Obsidian's real navigation bar — and no harness fixture can answer it. `009`'s
+live probe against the running app is the instrument, and `000`'s AC-013 is the criterion that
+requires the pairing. Until that pair exists for the navbar band, this packet's headline is
+uncorroborated and should be listed as such rather than left silent.
 
 <!-- /ANCHOR:criteria -->
 

@@ -28,7 +28,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-020"
       parent_session_id: null
-    completion_pct: 100
+    completion_pct: 80
     open_questions: []
     answered_questions:
       - "Is the 44px floor this phase's invention — no, it is WCAG 2.5.5 and already in the stylesheet"

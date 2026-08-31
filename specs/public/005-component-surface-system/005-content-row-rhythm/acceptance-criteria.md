@@ -12,10 +12,10 @@ contextType: "implementation"
 _memory:
   continuity:
     packet_pointer: "public/005-component-surface-system/005-content-row-rhythm"
-    last_updated_at: "2026-08-29T18:00:00Z"
-    last_updated_by: "phase-architect"
-    recent_action: "Applied review findings F3, F8, F11 and F16"
-    next_safe_action: "Widen the harness, then run the 84-state census"
+    last_updated_at: "2026-08-31T00:00:00Z"
+    last_updated_by: "harness-dependence-audit"
+    recent_action: "Classified 13 criteria for harness dependence; 8 read intrinsic widths with no app.css"
+    next_safe_action: "Add the host button rule to view-census.mjs before the 84-state census"
     blockers:
       - "000-surface-contract-and-truthful-harness honest harness must land first"
     key_files:
@@ -319,6 +319,66 @@ hardening; register them in `checklist.md` when its verification protocol is nex
 Write `-` when the row is `Met` or `Unmet`. Write `ADR-NNN` when the row is `Waived` or
 `Superseded`, naming a decision record that exists in `decision-record.md`. A waiver naming an ADR
 that is not there fails validation.
+
+### Harness-dependence audit — 2026-08-31
+
+The pass before this one asked of each criterion whether it was green. This one asks a different
+question: **if the value came from the device instead of the harness, would the check still pass —
+and could it still fail?**
+
+**No row in the table above was `Met` when this audit ran, so no tick was withdrawn and
+`completion_pct` does not move.**
+
+The supplies, by number: **1** `--keyboard-height`. **2** values `runtime-vars.css` pins where the
+runtime computes them. **3** production actions replaced by stubs. **4** host chrome built by hand.
+**5** Obsidian's `app.css`, absent except for one `button` rule copied into `HOST_BARE_CONTROLS`
+(`verify-placement.mjs:69`).
+
+**5 sound · 8 harness-dependent · 0 unknown.**
+
+#### Why this packet is exposed, in one sentence
+
+Every criterion here is about **intrinsic size** — how wide a thing gets when nothing tells it how
+wide to be — and an intrinsic width is content plus padding, where **the padding on a bare control
+comes from the host**.
+
+`app.css` declares `padding: var(--size-4-1) var(--size-4-3)` and `height: var(--input-height)` on
+every bare `<button>`. Chips, rail controls, header actions and list-row affordances are buttons.
+In a page built from `styles.css` alone they are **narrower and shorter than any device produces**,
+so a row fits that would not fit, a rail stays inside a container it would overflow, and a
+`max-content` element paints inside a box it would paint outside. **Every one of those is a masked
+green**: the check passes because the harness made the content small.
+
+The instruments confirm the gap. `view-census.mjs:69-71` — the tool that produced this packet's
+recorded numbers — loads `styles.css`, `theme.css` and `runtime-vars.css`. The two rhythm sections
+in `verify-placement.mjs` (`:3269` and `:3354`) build their stylesheet set the same way and
+**omit `HOST_BARE_CONTROLS`**, so the one host rule the harness does model is absent from exactly
+the sections that measure row rhythm.
+
+`runtime-vars.css` also still pins `--db-table-header-top: 22px` while `src/` assigns that property
+through `setProperty` at two sites — a live instance of supply 2, on a variable that offsets the
+sticky header this packet's rail sits above.
+
+| AC-ID | Class | Supply | On a device |
+|---|---|---|---|
+| AC-001 | **Harness-dependent** | 5 | Standard deviation of 20 row heights. A list row's height is driven by its tallest child, and its children include a checkbox (`list-renderer.ts:271`) the host sizes and the plugin does not. **The cell already concedes the deeper half of this** — *"The uniformity recorded here is a property of the fixtures, not of the product"* — and the host sheet is a second, independent reason the recorded 54.4px and sd 0 are not the product's. The horizontal finding recorded alongside it, 13 distinct x positions and the `box-sizing: border-box` fix, is plugin-cascade and sound |
+| AC-002 | **Harness-dependent** | 5 | The residual against the declared line box. Same height dependency, and the cell already records the row as *"satisfied trivially and therefore weakly"* because no row ever reaches a second line. Under host padding a row reaches a second line sooner, which is the case the criterion was written for and the one the harness cannot stage |
+| AC-003 | **Harness-dependent** | 5 | Every `.db-header` descendant's right edge against the header's content box. The descendants are toolbar buttons. Here they are narrow, so nothing overflows and the row reads clean; on a device they are wider and the overflow the criterion exists to catch appears. A masked green |
+| AC-004 | Sound | — | `scrollWidth > clientWidth` with the parent's width delta 0. **The relation is plugin-declared** — `overflow-x: auto` on `.db-active-view-controls-scroll` decides whether the rail scrolls or grows, whatever its contents measure. The recorded 908 against 199/281/623/850 are harness-scaled numbers and should be re-recorded, but the pass condition holds under any padding. The three-act fade assertion is likewise plugin-owned |
+| AC-005 | **Harness-dependent** | 5 | Header height across a driven view switch, `<= 8px`. The header's height is its tallest control's height, and that is `var(--input-height)` from the host. **The cell's provenance is also stale**: it cites `runtime-vars.css:24` as the only assignment of `--db-header-height`, and that pin has since been removed — the file's closing comment records it. Production and harness now agree on the `34px` fallback, so the variable is no longer the exposure; the control heights are |
+| AC-006 | **Harness-dependent** | 5 | **The packet's central criterion and the most exposed.** "0 elements paint outside the content box of the container that bounds them", over every element computing an intrinsic `max-content` width, at 4 widths x 7 view types. A `max-content` width *is* content plus padding, and the padding on every bare control in that population is the host's. The harness systematically under-measures the exact quantity the criterion thresholds. The 31 static declarations remain a sound input |
+| AC-007 | Sound | — | Delete a chip, delete a field, and mutate every declaration this spec touches; each must move a number. A differential on one document, so a host contribution appears on both sides and cancels. The two inert declarations already recorded are plugin-cascade facts |
+| AC-008 | Sound | — | **The best-built row in the packet, and this packet's answer to its own problem.** It closes on `.db-list-row` computing `min-height: 44px` — a value only `styles.css` supplies — and a `--db-*` token resolving non-empty, on both pages at all four widths. The host declares neither, so neither can be supplied by anything but the plugin's own sheet. It should be extended: the same shape, applied to the host's `button` rule, would detect the gap this audit found by hand |
+| AC-009 | **Harness-dependent** | 3 | The identity half — row resolves to record id, chip to filter clause, re-resolved after a reflow — is plugin-internal and sound. The threshold conjoins it with a driven outcome, *"opening the row asserted to be record R opens R"*, and `openRow: () => undefined` (`verify-placement.mjs:3398`) opens nothing. Split the row, or wire the real opener |
+| AC-010 | **Harness-dependent** | 5 | Re-runs AC-001 through AC-005 after each transition. Four of those five are harness-dependent, so the composition is. The row's own contribution — that a number must hold across a reflow rather than at first paint — is sound and worth keeping |
+| AC-011 | **Harness-dependent** | 3 | "Click a chip's remove control and assert the filter clause left the model"; "open a row and assert the record it opened is the record its id claims". Both need a model the harness does not have. The middle third — a rail drag moving `scrollLeft` with the parent width unchanged — is sound and could close on its own |
+| AC-012 | Sound | — | Exactly one scrolling owner in the header subtree, listener counts stable across 20 re-emissions, one drag moving exactly one `scrollLeft`. All plugin-owned, and the recorded census fact — the scroll owner and the overflow source are different elements — is a cascade fact independent of any host rule |
+| AC-013 | Sound | — | A substitution suite. Its own evidence cell is now stale in the phase's favour: it notes the desktop page was running a permanent *"render without `styles.css`"* substitution, and `styles.css` now loads on the desktop page (`verify-placement.mjs:246`). Left as recorded — this pass does not raise a completion |
+
+**What would settle the eight.** Add `HOST_BARE_CONTROLS` to the two rhythm sections that omit it
+and to `view-census.mjs`, then re-record AC-001, AC-002, AC-003, AC-005 and AC-006 before the
+84-state census runs. Every number this packet holds today was taken with the controls too small,
+and the census would inherit that at scale.
 
 <!-- /ANCHOR:criteria -->
 

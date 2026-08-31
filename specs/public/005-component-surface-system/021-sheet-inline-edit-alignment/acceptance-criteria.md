@@ -1,6 +1,6 @@
 ---
 title: "Acceptance Criteria: Sheet Inline Edit Alignment"
-description: "Six criteria met on the sheet's two inline editors, each with its failing number. The sixth closed without a stylesheet change: its 2.4px was the harness rendering the title at a size no device shows."
+description: "Five criteria met on the sheet's two inline editors and one provisional. The sixth needed no stylesheet change, but its 0.9px rests on a host token the harness declares and this repo infers."
 trigger_phrases:
   - "021 acceptance criteria"
   - "inline editor centre line closure"
@@ -12,8 +12,8 @@ _memory:
     packet_pointer: "public/005-component-surface-system/021-sheet-inline-edit-alignment"
     last_updated_at: "2026-08-30T19:45:00Z"
     last_updated_by: "criterion-6-closure"
-    recent_action: "Criterion 6 measured through the shipped rename: red 2.4px, green 0.9px"
-    next_safe_action: "Confirm the title font size and line box on device"
+    recent_action: "AC-006 to Provisional: its 0.9px rests on a harness-declared --font-ui-medium"
+    next_safe_action: "Read --font-ui-medium off a device; AC-006 closes or reddens on that number"
     blockers: []
     key_files:
       - "acceptance-criteria.md"
@@ -21,7 +21,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-021"
       parent_session_id: null
-    completion_pct: 95
+    completion_pct: 85
     open_questions:
       - "Does a per-anchor correction in the placement path earn its own phase"
     answered_questions: []
@@ -37,7 +37,8 @@ _memory:
 > Failing numbers are from the tree as received.
 >
 > **Criterion 6** was added by a fresh review after shipping. It is now measured through that same
-> real path and met, and the stylesheet did not change to meet it.
+> real path and the stylesheet did not change to meet it — but its margin is supplied by a host token
+> the harness declares, so it is `Provisional` rather than `Met`.
 
 ---
 
@@ -62,7 +63,7 @@ _memory:
 | AC-003 | REQ-003 | Inline editor height against the thumb floor the sheet's textarea editor already holds | >= 44px | **34.8px** | 44px | `styles.css:9391` | Met |
 | AC-004 | REQ-004 | AC-001 and AC-002 re-measured with a host stylesheet inflating every input | <= 1px each | **15.2px / 17.7px** | 1.0px / 0.5px | `styles.css:9399` | Met |
 | AC-005 | REQ-005 | Desktop panel editor rectangle, frozen against a leak from the two new selectors | exact, ±0.5px | 34.8px / 8px / 12px | 34.8px / 8px / 12px | `tools/storybook/verify-placement.mjs:4172` | Met |
-| AC-006 | REQ-007 | **The title's rename editor** — the second inline editor — on its own centre line, driven through the shipped double-click rename and measured against a page that declares the host's `--font-ui-medium` | <= 1px | **2.4px** | **0.9px** | `tools/storybook/verify-placement.mjs` — "the sheet's rename editor sits on the title's centre line" | Met |
+| AC-006 | REQ-007 | **The title's rename editor** — the second inline editor — on its own centre line, driven through the shipped double-click rename and measured against a page that declares the host's `--font-ui-medium` | <= 1px | **2.4px** | **0.9px** at a harness-declared 15px | `tools/storybook/verify-placement.mjs` — "the sheet's rename editor sits on the title's centre line" | **Provisional** |
 
 ### Why AC-006 exists, and why its failing number was the harness's and not the product's
 
@@ -105,6 +106,32 @@ That 15px is Obsidian's default is **inferred** from this repo's own host model 
 against Obsidian's `app.css`, which is not readable from here. The check prints the title's measured
 font size and line box on every run, so a device confirmation is a one-line comparison.
 
+### Why AC-006 is Provisional and the other five are not
+
+Asked of each row: *if this value came from the device instead of the harness, would the check still
+pass — and could it still fail?*
+
+AC-001, AC-002, AC-003 and AC-005 measure a plugin-declared box through the shipped open-and-edit
+path. The numbers are the stylesheet's own — a 44px floor, a frozen `34.8 / 8 / 12` rectangle, a
+centre-line delta between two elements the plugin sizes. A device supplies nothing they read.
+AC-004 is stronger than sound: it deliberately *simulates* an adversarial host stylesheet inflating
+every input and re-measures underneath it, which is the failure mode the absent `app.css` creates,
+modelled rather than ignored.
+
+AC-006 is the one that inverts. Its 0.9px is not the plugin's number; it is the plugin's number
+*given a host token the harness supplies*. `--font-ui-medium` belongs to Obsidian, the title declares
+no line-height, and the whole offset is linear in that token — 2.4px at 13px, 0.9px at 15px, −1.2px
+at 18px, by this phase's own sweep. The harness pins 15px from `tools/screenshots/theme.css`, which
+the paragraph above concedes is inferred and not read from `app.css`.
+
+So the check can fail, and it did fail at 2.4px — but its *pass* is 0.1px of headroom standing on an
+unverified host value, and a theme or a platform that moves the token takes it red. That is the same
+shape as `022`'s withdrawn AC-1 with the sign flipped: there the harness supplied a variable the
+plugin never publishes and manufactured a green; here the harness supplies a token the host owns and
+manufactures the margin. The correction shipped is right — the reasoning for keeping −11.2px stands
+on its own, and no stylesheet declaration changed — so this is `Provisional`, not `Withdrawn`. It
+closes when the goal's outstanding item does: `--font-ui-medium` read off a device.
+
 <!-- /ANCHOR:criteria -->
 
 ---
@@ -112,8 +139,10 @@ font size and line box on every run, so a device confirmation is a one-line comp
 <!-- ANCHOR:closure -->
 ## 3. CLOSURE STATEMENT
 
-**Closeable:** On the criteria, yes — all six are `Met`. The packet stays `Partial` because none of
-this is operator-confirmed on device, and shipped, verified and confirmed are three different states.
+**Closeable:** No. Five criteria are `Met` and AC-006 is `Provisional` — its 0.9px is a function of a
+host token the harness declares and this phase infers. The packet stays `Partial` for the older
+reason too: none of this is operator-confirmed on device, and shipped, verified and confirmed are
+three different states.
 
 AC-006 closed **without a stylesheet change**. The criterion was failing a correct implementation,
 which is one of the two banned shapes this program watches for, and the repair was to the page rather

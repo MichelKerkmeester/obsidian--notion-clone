@@ -34,6 +34,19 @@ Repo `~/MEGA/Development/Obsidian Plugin`. **Runs third.** No overlay dependency
 - Plus the five stateful dimensions.
 
 **DONE MEANS** the operator scrolls a list and the rows do not jitter.
+**HARNESS DEPENDENCE, 2026-08-31 — 5 sound / 8 dependent / 0 unknown.** Every bullet here is about
+**intrinsic size**, and an intrinsic width is content plus padding — where the padding on a bare
+control comes from `app.css`, which the instruments do not load. `view-census.mjs:69-71` loads
+`styles.css`, `theme.css` and `runtime-vars.css`; the two rhythm sections in `verify-placement.mjs`
+(`:3269`, `:3354`) build the same set and **omit `HOST_BARE_CONTROLS`**, the one host rule the harness
+does model. So chips, rail controls and header actions are narrower and shorter here than on any
+device: *"nothing sized `max-content` paints outside the container that bounds it"* and *"no
+descendant of `.db-header` has a right edge beyond the header's content box"* both pass **because the
+harness made the content small**. Row-height standard deviation and the header-height step inherit
+the same floor — and the row-height cell already concedes its uniformity is a property of the
+fixtures. **Sound:** the rail scrolls-not-grows relation, the deletion and mutation controls, the
+scroll-owner count, and AC-008, which closes on `min-height: 44px` and a `--db-*` token — values only
+`styles.css` can supply. Rows in `acceptance-criteria.md` § Harness-dependence audit.
 <!-- /ANCHOR:completion -->
 
 ---

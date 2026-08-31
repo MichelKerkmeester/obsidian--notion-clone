@@ -26,6 +26,15 @@ Repo `~/MEGA/Development/Obsidian Plugin`, branch `main`. **This phase blocks th
 **ACCEPTANCE.** Every criterion measured at the production mount point, a number or hit test with a threshold, **proven to fail on today's tree with the number recorded**, and paired with a negative control. Plus the five stateful dimensions: semantic identity, transition trace, action outcome, resource ownership, negative-control mutation. **Plus the tenth condition: an instrument this phase did not repair.** Class names and call counts are **banned** — every 1.3.1 criterion was that shape and every one passed.
 
 **DONE MEANS** the numbers moved from their recorded failing values, the negative controls hold, **every harness number agrees with `009`'s live number or is listed uncorroborated with a reason**, both named exit criteria are recorded for `001` and `003`, and the operator confirms on device.
+**HARNESS DEPENDENCE, 2026-08-31 — 17 sound / 2 dependent / 1 unknown.** Two acceptance bullets do
+not survive the question *would this still fail on a device*. The **action-outcome** dimension drives
+`openRow` and `editCell`, which are no-op stubs, so a model delta asserted against them is the
+`editFileName` false green again. And **AC-016's checker implements the opposite of AC-016**:
+`scan-pinned-values.mjs:128` skips a property `src/` also assigns, which is the population the
+criterion names — `--db-table-header-top`, `--db-board-column-width` and `--db-gallery-card-width`
+are all still pinned and all skipped. **The tenth condition is the one that holds**: AC-013's live
+pairing is the only row in the program that can catch a supply nobody has named yet. Full row-by-row
+classification in `acceptance-criteria.md` § Harness-dependence audit.
 <!-- /ANCHOR:completion -->
 
 ---

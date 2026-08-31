@@ -11,9 +11,9 @@ _memory:
   continuity:
     packet_pointer: "public/005-component-surface-system/020-harness-fidelity-repair"
     last_updated_at: "2026-08-30T21:00:00Z"
-    last_updated_by: "goal-authoring"
-    recent_action: "Goal authored after the fact; 12 of 13 criteria measured green"
-    next_safe_action: "Operator signs off the two new modal fixtures, per image"
+    last_updated_by: "harness-supply-audit"
+    recent_action: "Supply audit: 2 of the 63 lifted checks set --keyboard-height themselves"
+    next_safe_action: "Add a placement check that never sets --keyboard-height, so the fallback can fail"
     blockers: []
     key_files:
       - "spec.md"
@@ -23,7 +23,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-020"
       parent_session_id: null
-    completion_pct: 95
+    completion_pct: 80
     open_questions: []
     answered_questions:
       - "Is the 44px floor this phase's invention - no, it is WCAG 2.5.5 and already in the stylesheet"
@@ -115,9 +115,15 @@ run so the number stays visible rather than closed by silence.
 exit 0; `npm run screenshots:verify` 224 entries; `evidence.mjs --check-all` 8 of 8. Five commits:
 `9d4f569`, `0a38723`, `780a736`, `1e6397d`, `99214f5`.
 
-**Why `completion_pct` is 95 and not 100.** `spec.md`, `implementation-summary.md` and
-`acceptance-criteria.md` each record 100, which counts shipped-and-harness-verified. The parent's D3
-does not let that close anything, and the fixture sign-off is outstanding.
+**Why `completion_pct` is 80 and not 100.** It was 95 here against 100 in the other three documents,
+which counted shipped-and-harness-verified; the parent's D3 does not let that close anything and the
+fixture sign-off is outstanding. All four now read 80, for a reason found later and larger than the
+sign-off: this phase is named for the harness's truthfulness and never audited the harness's own
+largest supply. `verify-placement.mjs` sets `--keyboard-height` at `:819`, `:4724` and `:4753`,
+nothing in `src/` publishes it, and two of those three sites are inside the 63 checks AC-011 counts
+as a fidelity gain. No acceptance row is false as worded — `acceptance-criteria.md` §4 carries the
+audit and withdraws nothing — but a phase that certified six instruments and left that channel
+uncatalogued is not at 100.
 
 **A discrepancy left alone.** `acceptance-criteria.md`'s own title and description say "Ten criteria"
 while its table carries twelve rows, AC-001 to AC-012. The twelve are what this goal counts.
