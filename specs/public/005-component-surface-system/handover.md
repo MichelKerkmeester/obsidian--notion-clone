@@ -12,7 +12,7 @@ _memory:
     packet_pointer: "public/005-component-surface-system"
     last_updated_at: "2026-08-31T08:30:00Z"
     last_updated_by: "timeline-freeze-diagnosis"
-    recent_action: "Timeline quadratic found, fixed, guarded; calendar measured clean; coverage 2 to 6 of 22"
+    recent_action: "Timeline fixed and guarded; coverage 2 to 6 of 22; N5 run; all 16 reports dispositioned"
     next_safe_action: "The 20-iteration deep review, then remediation, then the device check"
     blockers:
       - "The list needs virtualisation; at the operator shape it blocks 2.0-4.9s and the shape is LINEAR"
@@ -51,7 +51,7 @@ Verified from the tree, not remembered:
 | Placement harness | **233 of 236**, 3 red for a declared reason, exit 0 |
 | Parent validation | `--strict` **Errors: 0, Warnings: 0** |
 | Renderer coverage | **6 of 22**, raised from 2; every reported view now asserted |
-| Operator-confirmed reports | **1 of 16**, unchanged all session |
+| Operator report disposition | **1 confirmed, 15 deferred with terms recorded** (`roadmap.md` §4A). Confirmed-on-device is still **1 of 16** |
 
 **This session withdrew more criteria than it closed, and that is the result rather than a
 setback.** Eleven completion figures went down, none went up.

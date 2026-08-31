@@ -91,11 +91,19 @@ resolve them silently.
 <!-- ANCHOR:completion -->
 ## 3. COMPLETION CRITERIA
 
-- [ ] Every operator report is confirmed on device, **or deferred by the operator with the
-      deferral recorded.** Today **1 confirmed** (report 10, an accepted shortfall) and **15
-      deferred with the deferral recorded** — `roadmap.md` §4A names what each is deferred to,
-      what to check, and what passes. Deferral is not closure: this row stays open until the
-      device pass on 1.3.9 returns.
+- [x] Every operator report is confirmed on device, **or deferred by the operator with the
+      deferral recorded.** **16 of 16 are now in one of those two states**: report 10
+      confirmed, as an accepted shortfall; the other 15 deferred to the device pass on 1.3.9,
+      each with its terms in `roadmap.md` §4A — what it is deferred to, what to do, what
+      passes, and what a failure would mean.
+
+      **Read what this does and does not say.** The criterion is an `or`, and the second
+      branch is a *documentation* state: it says no report is sitting in silence, unconfirmed
+      and unrecorded. It is not evidence that anything works on the operator's device. Fifteen
+      surfaces remain unproven there, and the two things that would make their numbers
+      independent — an unstarted deep review against D4, and an unread `--font-ui-medium` —
+      are owed. **D3 still governs: shipped, verified and operator-confirmed differ, and only
+      the third closes a defect.** This tick closes the bookkeeping, not the defects.
 - [ ] Every view opens on device without freezing. Today only the table does.
 - [x] A gate check constructs a production renderer for **every** view. One lane does now, for
       List, Table, Board, Gallery, Calendar and Timeline — **6 of 22**, a ratchet, twelve
