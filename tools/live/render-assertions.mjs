@@ -59,9 +59,24 @@ const SCENARIOS = [
   { name: "list/embed", renderer: "list", bag: "embed" },
   { name: "table/file-view", renderer: "table", bag: "file-view" },
   { name: "table/embed", renderer: "table", bag: "embed" },
+  { name: "board/file-view", renderer: "board", bag: "file-view" },
+  { name: "board/embed", renderer: "board", bag: "embed" },
+  { name: "gallery/file-view", renderer: "gallery", bag: "file-view" },
+  { name: "gallery/embed", renderer: "gallery", bag: "embed" },
+  { name: "calendar/file-view", renderer: "calendar", bag: "file-view" },
+  { name: "calendar/embed", renderer: "calendar", bag: "embed" },
+  { name: "timeline/file-view", renderer: "timeline", bag: "file-view" },
+  { name: "timeline/embed", renderer: "timeline", bag: "embed" },
 ];
 
-const RENDERER_SOURCES = ["src/views/list-renderer.ts", "src/views/table-renderer.ts"];
+const RENDERER_SOURCES = [
+  "src/views/list-renderer.ts",
+  "src/views/table-renderer.ts",
+  "src/views/board-renderer.ts",
+  "src/views/gallery-renderer.ts",
+  "src/views/calendar-renderer.ts",
+  "src/views/calendar-timeline-renderer.ts",
+];
 
 // The action bags the two hosts build, measured at the two construction sites
 // and pinned here as data. The harness builds its own bags; this comparison is
@@ -96,6 +111,61 @@ const BAGS = {
     "isReadOnly", "isRowSelected", "moveRowToPosition", "renderCell", "renderGroupSummaries",
     "renderRecordIcon", "setupColumnHeader", "setupRow", "showRowMenu", "toggleGroupCollapsed",
     "toggleRowSelected", "toggleRowsSelected",
+  ],
+  "board/file-view": [
+    "applyConditionalFormat", "areAllRowsSelected", "createEntry", "createGroup", "editCell",
+    "editFileName", "editFormula", "expandGroup", "getColumns", "getSelectedRows",
+    "hideCreateEntry", "isGroupCollapsed", "isRowSelected", "moveRowToPosition",
+    "moveRowWithGroupUpdatesAndPosition", "moveRowsToPosition", "openRecordDetail", "openRow",
+    "renderGroupSummaries", "renderRecordIcon", "saveCellValue", "showColumnMenu", "showRowMenu",
+    "toggleGroupCollapsed", "toggleRowSelected", "toggleRowsSelected", "updateCardOrder",
+    "updateColumnWidth", "updateGroup", "updateGroupOrder",
+  ],
+  "board/embed": [
+    "applyConditionalFormat", "areAllRowsSelected", "canReorderGroups", "createEntry",
+    "editCell", "expandGroup", "getColumns", "hideCreateEntry", "isGroupCollapsed", "isReadOnly",
+    "isRowSelected", "moveRowToPosition", "openRow", "renderGroupSummaries", "renderRecordIcon",
+    "showColumnMenu", "showRowMenu", "toggleGroupCollapsed", "toggleRowSelected",
+    "toggleRowsSelected", "updateCardOrder", "updateColumnWidth", "updateGroup",
+    "updateGroupOrder",
+  ],
+  "gallery/file-view": [
+    "applyConditionalFormat", "areAllRowsSelected", "createEntry", "editCell", "editFileName",
+    "editFormula", "expandGroup", "getColumns", "getSelectedRows", "hideCreateEntry",
+    "isGroupCollapsed", "isRowSelected", "moveRowToGroupAndPosition", "moveRowToPosition",
+    "moveRowsToGroup", "moveRowsToPosition", "openRecordDetail", "openRow",
+    "renderGroupSummaries", "renderRecordIcon", "saveCellValue", "showColumnMenu", "showRowMenu",
+    "toggleGroupCollapsed", "toggleRowSelected", "toggleRowsSelected", "updateCardSize",
+  ],
+  "gallery/embed": [
+    "applyConditionalFormat", "areAllRowsSelected", "createEntry", "editCell", "expandGroup",
+    "getColumns", "hideCreateEntry", "isGroupCollapsed", "isReadOnly", "isRowSelected",
+    "moveRowToPosition", "openRow", "renderGroupSummaries", "renderRecordIcon", "showColumnMenu",
+    "showRowMenu", "toggleGroupCollapsed", "toggleRowSelected", "toggleRowsSelected",
+    "updateCardSize",
+  ],
+  "calendar/file-view": [
+    "applyConditionalFormat", "createEntryForDate", "getCalendarInvalidEventCount", "getColumns",
+    "onConfigChange", "openCalendarInvalidEvents", "openDateConfig", "openRecordDetail", "openRow",
+    "renderRecordIcon", "showRowMenu", "updateCalendarScale", "updateEventDates",
+  ],
+  "calendar/embed": [
+    "applyConditionalFormat", "getCalendarInvalidEventCount", "getColumns", "isReadOnly",
+    "onConfigChange", "openCalendarInvalidEvents", "openDateConfig", "openRecordDetail", "openRow",
+    "renderRecordIcon",
+  ],
+  "timeline/file-view": [
+    "applyConditionalFormat", "createEntryForDate", "expandGroup", "getTimelineInvalidEventCount",
+    "isGroupCollapsed", "moveTimelineEventToGroup", "onConfigChange", "openDateConfig",
+    "openRecordDetail", "openRow", "openTimelineInvalidEvents", "renderGroupSummaries",
+    "renderRecordIcon", "reorderTimelineEvent", "showRowMenu", "toggleGroupCollapsed",
+    "updateEventDates", "updateTimelineAnchor", "updateTimelineScale",
+  ],
+  "timeline/embed": [
+    "applyConditionalFormat", "expandGroup", "getTimelineInvalidEventCount", "isGroupCollapsed",
+    "isReadOnly", "onConfigChange", "openDateConfig", "openRecordDetail", "openRow",
+    "openTimelineInvalidEvents", "renderGroupSummaries", "renderRecordIcon",
+    "toggleGroupCollapsed", "updateTimelineAnchor", "updateTimelineScale",
   ],
 };
 
@@ -198,8 +268,11 @@ try {
   for (const outcome of outcomes) {
     const shape = outcome.results.find((result) =>
       result.name === "no forced layout inside the row loop"
+      || result.name === "no forced layout inside the card loop"
+      || result.name === "no forced layout inside the segment loop"
+      || result.name === "no forced layout inside the event loop"
       || result.name === "no row appended to a connected table");
-    if (shape) console.log(`  shape  ${`${outcome.scenario.renderer}/${outcome.scenario.bag}`.padEnd(14)} ${shape.detail}`);
+    if (shape) console.log(`  shape  ${`${outcome.scenario.renderer}/${outcome.scenario.bag}`.padEnd(20)} ${shape.detail}`);
   }
   console.log("");
 
@@ -208,7 +281,7 @@ try {
     for (const result of outcome.results) {
       const mark = result.pass ? "PASS" : "FAIL";
       if (!result.pass) failures.push(`${label}: ${result.name} — ${result.detail}`);
-      console.log(`  ${mark}  ${label.padEnd(14)} ${result.name}`);
+      console.log(`  ${mark}  ${label.padEnd(20)} ${result.name}`);
       if (!result.pass) console.log(`       ${result.detail}`);
     }
   }
@@ -237,7 +310,7 @@ for (const outcome of outcomes) {
   const missing = expected.filter((member) => !actual.includes(member));
   const extra = actual.filter((member) => !expected.includes(member));
   const ok = missing.length === 0 && extra.length === 0;
-  console.log(`  ${ok ? "PASS" : "FAIL"}  ${key.padEnd(14)} ${actual.length}/${expected.length} members`
+  console.log(`  ${ok ? "PASS" : "FAIL"}  ${key.padEnd(20)} ${actual.length}/${expected.length} members`
     + (missing.length ? `; MISSING: ${missing.join(", ")}` : "")
     + (extra.length ? `; UNEXPECTED: ${extra.join(", ")}` : ""));
   if (!ok) failures.push(`bag shape ${key}: ${missing.length ? `missing ${missing.join(", ")}` : `unexpected ${extra.join(", ")}`}`);
@@ -290,6 +363,10 @@ stamp(
     ...RENDERER_SOURCES,
     "tools/bench/list-render-bench.ts",
     "tools/bench/table-render-bench.ts",
+    "tools/bench/board-render-bench.ts",
+    "tools/bench/gallery-render-bench.ts",
+    "tools/bench/calendar-render-bench.ts",
+    "tools/bench/timeline-render-bench.ts",
     "src/views/database-view.ts",
     "src/views/embedded-database-renderer.ts",
   ],

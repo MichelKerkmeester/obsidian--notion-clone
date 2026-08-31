@@ -61,7 +61,7 @@ const MIXED_TYPES: ColumnDef["type"][] = [
   "text", "number", "date", "select", "multi-select", "checkbox", "relation", "currency",
 ];
 
-function makeColumns(count: number, kind: "text" | "mixed"): ColumnDef[] {
+export function makeColumns(count: number, kind: "text" | "mixed"): ColumnDef[] {
   return Array.from({ length: count }, (_unused, i) => {
     const base = {
       key: i === 0 ? "file.name" : REPORTED_COLUMNS[i % REPORTED_COLUMNS.length] + (i >= REPORTED_COLUMNS.length ? String(i) : ""),
@@ -88,7 +88,7 @@ function valueForType(col: ColumnDef, i: number): unknown {
  * Rows whose gaps are spread rather than clustered, and deterministic rather than random, so a
  * rerun measures the same shape.
  */
-function makeRows(count: number, columns: ColumnDef[], fillRate: number): RowData[] {
+export function makeRows(count: number, columns: ColumnDef[], fillRate: number): RowData[] {
   return Array.from({ length: count }, (_unused, i) => {
     const frontmatter: Record<string, unknown> = {};
     columns.forEach((col, colIndex) => {
@@ -103,7 +103,7 @@ function makeRows(count: number, columns: ColumnDef[], fillRate: number): RowDat
   });
 }
 
-function makeConfig(columns: ColumnDef[]): ViewConfig {
+export function makeConfig(columns: ColumnDef[]): ViewConfig {
   return {
     name: "Bench",
     sourceFolder: "notes",

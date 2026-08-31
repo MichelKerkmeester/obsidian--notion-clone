@@ -32,6 +32,11 @@
 
 import { ListRenderer, type ListRendererActions } from "../../src/views/list-renderer";
 import { TableRenderer, type TableRendererActions } from "../../src/views/table-renderer";
+import { CalendarRenderer, type CalendarRendererActions } from "../../src/views/calendar-renderer";
+import {
+  CalendarTimelineRenderer,
+  type CalendarTimelineRendererActions,
+} from "../../src/views/calendar-timeline-renderer";
 import type { App } from "obsidian";
 import type { ColumnDef, RowData, ViewConfig } from "../../src/data/types";
 import {
@@ -44,6 +49,30 @@ import {
   makeRows as makeTableRows,
   makeConfig as makeTableConfig,
 } from "../bench/table-render-bench";
+import { BoardRenderer, type BoardRendererActions } from "../../src/views/board-renderer";
+import { GalleryRenderer, type GalleryRendererActions } from "../../src/views/gallery-renderer";
+import {
+  makeColumns as makeBoardColumns,
+  makeRows as makeBoardRows,
+  makeGroups as makeBoardGroups,
+  makeConfig as makeBoardConfig,
+  GROUP_FIELD as BOARD_GROUP_FIELD,
+} from "../bench/board-render-bench";
+import {
+  makeColumns as makeGalleryColumns,
+  makeRows as makeGalleryRows,
+  makeConfig as makeGalleryConfig,
+} from "../bench/gallery-render-bench";
+import {
+  makeColumns as makeCalendarColumns,
+  makeRows as makeCalendarRows,
+  makeConfig as makeCalendarConfig,
+} from "../bench/calendar-render-bench";
+import {
+  makeColumns as makeTimelineColumns,
+  makeRows as makeTimelineRows,
+  makeConfig as makeTimelineConfig,
+} from "../bench/timeline-render-bench";
 
 // ───────────────────────────────────────────────────────────────────
 // 2. SHAPES UNDER TEST
@@ -71,8 +100,28 @@ export const ALIGNMENT_GRID_COLUMN = "18";
 // once per render: the touch-mode probe and the reservation decision.
 export const MAX_LAYOUT_READS = 8;
 
+// The two date-driven views, at the row count their freeze was reported at. Both draw a window
+// rather than the whole set, so their row count and their drawn-item count are different numbers
+// and the assertions below check the second one is not zero.
+export const CALENDAR_COLUMNS = 21;
+export const CALENDAR_ROWS = 1600;
+export const CALENDAR_FILL = 0.3;
+export const TIMELINE_COLUMNS = 21;
+export const TIMELINE_ROWS = 1600;
+export const TIMELINE_FILL = 0.3;
+
+// The two card views, at the same shape their benches time. Both build one card per row into a
+// single container, which is the arrangement the per-item layout read is dangerous in.
+export const BOARD_COLUMNS = 21;
+export const BOARD_ROWS = 1600;
+export const BOARD_FILL = 0.3;
+export const BOARD_GROUPS = 5;
+export const GALLERY_COLUMNS = 21;
+export const GALLERY_ROWS = 1600;
+export const GALLERY_FILL = 0.3;
+
 export interface ScenarioSpec {
-  renderer: "list" | "table";
+  renderer: "list" | "table" | "calendar" | "timeline" | "board" | "gallery";
   bag: "file-view" | "embed";
 }
 
@@ -209,6 +258,212 @@ function embedTableBag(columns: ColumnDef[]): TableRendererActions {
   };
 }
 
+// The calendar and timeline bags, transcribed from the same two construction sites.
+//
+// The embed sets isReadOnly where the file view leaves it unset, and that difference used to be
+// invisible on the timeline in the way that matters here: the per-event touch probe was evaluated
+// before the read-only guard, so a read-only embed paid a forced layout per event for a button it
+// then declined to render. Both bags are exercised so a guard that moves back in front of the
+// probe fails on the embed rather than only on the file view.
+
+function fileViewBoardBag(columns: ColumnDef[]): BoardRendererActions {
+  return {
+    openRow: () => undefined,
+    openRecordDetail: () => undefined,
+    createEntry: () => undefined,
+    createGroup: async () => true,
+    updateGroup: async () => undefined,
+    updateGroupOrder: () => undefined,
+    updateCardOrder: () => undefined,
+    moveRowToPosition: () => undefined,
+    moveRowWithGroupUpdatesAndPosition: () => undefined,
+    moveRowsToPosition: () => undefined,
+    getSelectedRows: () => [],
+    updateColumnWidth: () => undefined,
+    isRowSelected: () => false,
+    toggleRowSelected: () => undefined,
+    areAllRowsSelected: () => false,
+    toggleRowsSelected: () => undefined,
+    editCell: () => undefined,
+    saveCellValue: () => undefined,
+    editFileName: () => undefined,
+    getColumns: () => columns,
+    isGroupCollapsed: () => false,
+    toggleGroupCollapsed: () => undefined,
+    expandGroup: () => undefined,
+    showRowMenu: () => undefined,
+    showColumnMenu: () => undefined,
+    editFormula: () => undefined,
+    renderRecordIcon: () => null,
+    renderGroupSummaries: () => undefined,
+    applyConditionalFormat: () => undefined,
+    get hideCreateEntry() { return false; },
+  };
+}
+
+function embedBoardBag(columns: ColumnDef[]): BoardRendererActions {
+  return {
+    openRow: () => undefined,
+    createEntry: () => undefined,
+    updateGroup: async () => undefined,
+    updateGroupOrder: () => undefined,
+    updateCardOrder: () => undefined,
+    moveRowToPosition: () => undefined,
+    updateColumnWidth: () => undefined,
+    isRowSelected: () => false,
+    toggleRowSelected: () => undefined,
+    areAllRowsSelected: () => false,
+    toggleRowsSelected: () => undefined,
+    editCell: () => undefined,
+    getColumns: () => columns,
+    isGroupCollapsed: () => false,
+    toggleGroupCollapsed: () => undefined,
+    expandGroup: () => undefined,
+    showRowMenu: () => undefined,
+    showColumnMenu: () => undefined,
+    renderRecordIcon: () => null,
+    renderGroupSummaries: () => undefined,
+    applyConditionalFormat: () => undefined,
+    isReadOnly: true,
+    get canReorderGroups() { return false; },
+    get hideCreateEntry() { return false; },
+  };
+}
+
+function fileViewGalleryBag(columns: ColumnDef[]): GalleryRendererActions {
+  return {
+    openRow: () => undefined,
+    openRecordDetail: () => undefined,
+    createEntry: () => undefined,
+    isRowSelected: () => false,
+    toggleRowSelected: () => undefined,
+    areAllRowsSelected: () => false,
+    toggleRowsSelected: () => undefined,
+    editCell: () => undefined,
+    saveCellValue: () => undefined,
+    editFileName: () => undefined,
+    getColumns: () => columns,
+    updateCardSize: () => undefined,
+    moveRowToPosition: () => undefined,
+    moveRowsToGroup: () => undefined,
+    moveRowToGroupAndPosition: () => undefined,
+    moveRowsToPosition: () => undefined,
+    getSelectedRows: () => [],
+    isGroupCollapsed: () => false,
+    toggleGroupCollapsed: () => undefined,
+    expandGroup: () => undefined,
+    showRowMenu: () => undefined,
+    showColumnMenu: () => undefined,
+    editFormula: () => undefined,
+    renderRecordIcon: () => null,
+    renderGroupSummaries: () => undefined,
+    applyConditionalFormat: () => undefined,
+    get hideCreateEntry() { return false; },
+  };
+}
+
+function embedGalleryBag(columns: ColumnDef[]): GalleryRendererActions {
+  return {
+    openRow: () => undefined,
+    createEntry: () => undefined,
+    isRowSelected: () => false,
+    toggleRowSelected: () => undefined,
+    areAllRowsSelected: () => false,
+    toggleRowsSelected: () => undefined,
+    editCell: () => undefined,
+    getColumns: () => columns,
+    updateCardSize: () => undefined,
+    moveRowToPosition: () => undefined,
+    isGroupCollapsed: () => false,
+    toggleGroupCollapsed: () => undefined,
+    expandGroup: () => undefined,
+    showRowMenu: () => undefined,
+    showColumnMenu: () => undefined,
+    renderRecordIcon: () => null,
+    renderGroupSummaries: () => undefined,
+    applyConditionalFormat: () => undefined,
+    isReadOnly: true,
+    get hideCreateEntry() { return false; },
+  };
+}
+
+function fileViewCalendarBag(columns: ColumnDef[]): CalendarRendererActions {
+  return {
+    openRow: () => undefined,
+    openRecordDetail: () => undefined,
+    showRowMenu: () => undefined,
+    createEntryForDate: () => undefined,
+    updateEventDates: () => undefined,
+    updateCalendarScale: () => undefined,
+    onConfigChange: () => undefined,
+    getColumns: () => columns,
+    getCalendarInvalidEventCount: () => 0,
+    openCalendarInvalidEvents: () => undefined,
+    openDateConfig: () => undefined,
+    renderRecordIcon: () => null,
+    applyConditionalFormat: () => undefined,
+  };
+}
+
+function embedCalendarBag(columns: ColumnDef[]): CalendarRendererActions {
+  return {
+    openRow: () => undefined,
+    openRecordDetail: () => undefined,
+    isReadOnly: true,
+    onConfigChange: () => undefined,
+    getColumns: () => columns,
+    getCalendarInvalidEventCount: () => 0,
+    openCalendarInvalidEvents: () => undefined,
+    openDateConfig: () => undefined,
+    renderRecordIcon: () => null,
+    applyConditionalFormat: () => undefined,
+  };
+}
+
+function fileViewTimelineBag(): CalendarTimelineRendererActions {
+  return {
+    openRow: () => undefined,
+    openRecordDetail: () => undefined,
+    showRowMenu: () => undefined,
+    createEntryForDate: () => undefined,
+    updateEventDates: () => undefined,
+    reorderTimelineEvent: () => undefined,
+    moveTimelineEventToGroup: () => undefined,
+    isGroupCollapsed: () => false,
+    toggleGroupCollapsed: () => undefined,
+    expandGroup: () => undefined,
+    getTimelineInvalidEventCount: () => 0,
+    openTimelineInvalidEvents: () => undefined,
+    updateTimelineAnchor: () => undefined,
+    updateTimelineScale: () => undefined,
+    onConfigChange: () => undefined,
+    openDateConfig: () => undefined,
+    renderRecordIcon: () => null,
+    renderGroupSummaries: () => undefined,
+    applyConditionalFormat: () => undefined,
+  };
+}
+
+function embedTimelineBag(): CalendarTimelineRendererActions {
+  return {
+    openRow: () => undefined,
+    openRecordDetail: () => undefined,
+    isReadOnly: true,
+    isGroupCollapsed: () => false,
+    toggleGroupCollapsed: () => undefined,
+    expandGroup: () => undefined,
+    updateTimelineAnchor: () => undefined,
+    updateTimelineScale: () => undefined,
+    onConfigChange: () => undefined,
+    openDateConfig: () => undefined,
+    getTimelineInvalidEventCount: () => 0,
+    openTimelineInvalidEvents: () => undefined,
+    renderRecordIcon: () => null,
+    renderGroupSummaries: () => undefined,
+    applyConditionalFormat: () => undefined,
+  };
+}
+
 // ───────────────────────────────────────────────────────────────────
 // 4. PROVENANCE
 // ───────────────────────────────────────────────────────────────────
@@ -249,10 +504,65 @@ function tagTableRenders(): void {
   };
 }
 
+function tagBoardRenders(): void {
+  const original = BoardRenderer.prototype.render;
+  BoardRenderer.prototype.render = function taggedRender(
+    container: HTMLElement,
+    config: ViewConfig,
+    groups: Parameters<BoardRenderer["render"]>[2],
+    groupField: string,
+    emptyState?: Parameters<BoardRenderer["render"]>[4],
+  ): void {
+    original.call(this, container, config, groups, groupField, emptyState);
+    container.setAttribute(PROVENANCE_ATTR, "board-renderer");
+  };
+}
+
+function tagGalleryRenders(): void {
+  const original = GalleryRenderer.prototype.render;
+  GalleryRenderer.prototype.render = function taggedRender(
+    container: HTMLElement,
+    config: ViewConfig,
+    rows: RowData[],
+    emptyState?: Parameters<GalleryRenderer["render"]>[3],
+  ): void {
+    original.call(this, container, config, rows, emptyState);
+    container.setAttribute(PROVENANCE_ATTR, "gallery-renderer");
+  };
+}
+
+function tagCalendarRenders(): void {
+  const original = CalendarRenderer.prototype.render;
+  CalendarRenderer.prototype.render = function taggedRender(
+    container: HTMLElement,
+    config: ViewConfig,
+    rows: RowData[],
+  ): void {
+    original.call(this, container, config, rows);
+    container.setAttribute(PROVENANCE_ATTR, "calendar-renderer");
+  };
+}
+
+function tagTimelineRenders(): void {
+  const original = CalendarTimelineRenderer.prototype.renderTimeline;
+  CalendarTimelineRenderer.prototype.renderTimeline = function taggedRenderTimeline(
+    container: HTMLElement,
+    config: ViewConfig,
+    rows: RowData[],
+  ): void {
+    original.call(this, container, config, rows);
+    container.setAttribute(PROVENANCE_ATTR, "timeline-renderer");
+  };
+}
+
 // Armed once at module load, in the browser only: the harness is bundled into
 // the render entry and never runs outside it.
 tagListRenders();
 tagTableRenders();
+tagBoardRenders();
+tagGalleryRenders();
+tagCalendarRenders();
+tagTimelineRenders();
 
 function provenanceResult(container: HTMLElement, expected: string): AssertionResult {
   const marker = container.getAttribute(PROVENANCE_ATTR);
@@ -485,6 +795,89 @@ function tableAssertions(
   return results;
 }
 
+// Both date-driven views draw a window rather than the whole row set, so "rows rendered" is the
+// wrong question for them and a count of zero is the failure that matters. A window that drew
+// nothing satisfies every per-item bound trivially — no items, no per-item work — which would
+// make a silent fixture break read as a clean pass. Each suite therefore establishes that the
+// view drew something before any bound below it is worth reading.
+
+// The card views render one card per row with no window, so unlike the two date-driven views
+// their drawn count is the row count and a shortfall is a real failure rather than a fixture slip.
+
+function boardAssertions(container: HTMLElement, rows: RowData[]): AssertionResult[] {
+  const results: AssertionResult[] = [];
+  const cards = container.querySelectorAll<HTMLElement>(".db-board-card").length;
+  const columns = container.querySelectorAll<HTMLElement>(".db-board-column").length;
+
+  results.push({
+    name: "every row becomes a card",
+    pass: cards === rows.length,
+    detail: `${cards} cards for ${rows.length} rows`,
+  });
+  results.push({
+    name: "the board drew its columns",
+    pass: columns === BOARD_GROUPS,
+    detail: `${columns} columns, want ${BOARD_GROUPS}`,
+  });
+  return results;
+}
+
+function galleryAssertions(container: HTMLElement, rows: RowData[]): AssertionResult[] {
+  const results: AssertionResult[] = [];
+  const cards = container.querySelectorAll<HTMLElement>(".db-gallery-card").length;
+
+  results.push({
+    name: "every row becomes a card",
+    pass: cards === rows.length,
+    detail: `${cards} cards for ${rows.length} rows`,
+  });
+  return results;
+}
+
+function calendarAssertions(container: HTMLElement): AssertionResult[] {
+  const results: AssertionResult[] = [];
+  const dayCells = container.querySelectorAll<HTMLElement>(".db-calendar-day").length;
+  const segments = container.querySelectorAll<HTMLElement>(
+    ".db-calendar-month-segment, .db-calendar-week-allday-segment, .db-calendar-timed-event",
+  ).length;
+
+  results.push({
+    name: "the month grid drew its day cells",
+    pass: dayCells > 0,
+    detail: `${dayCells} day cells`,
+  });
+  results.push({
+    name: "the drawn month is not empty",
+    pass: segments > 0,
+    detail: segments > 0
+      ? `${segments} event segments drawn from ${CALENDAR_ROWS} rows`
+      : "no event segment was drawn: every bound below this passes trivially on an empty grid, "
+        + "so this run proves nothing about the calendar",
+  });
+  return results;
+}
+
+function timelineAssertions(container: HTMLElement): AssertionResult[] {
+  const results: AssertionResult[] = [];
+  const bars = container.querySelectorAll<HTMLElement>(".db-timeline-event").length;
+  const lanes = container.querySelectorAll<HTMLElement>(".db-timeline-events").length;
+
+  results.push({
+    name: "the timeline drew its lanes",
+    pass: lanes > 0,
+    detail: `${lanes} lanes`,
+  });
+  results.push({
+    name: "the drawn window is not empty",
+    pass: bars > 0,
+    detail: bars > 0
+      ? `${bars} event bars drawn from ${TIMELINE_ROWS} rows`
+      : "no event bar was drawn: every bound below this passes trivially on an empty window, "
+        + "so this run proves nothing about the timeline",
+  });
+  return results;
+}
+
 // ───────────────────────────────────────────────────────────────────
 // 7. SCENARIO RUNNER
 // ───────────────────────────────────────────────────────────────────
@@ -522,6 +915,106 @@ export function runRenderAssertions(host: HTMLElement, scenario: ScenarioSpec): 
             : " (the touch-mode probe and reservation decision are the legitimate O(1) reads)"),
       });
     }
+  } else if (scenario.renderer === "board") {
+    const columns = makeBoardColumns(BOARD_COLUMNS, "text");
+    const rows = makeBoardRows(BOARD_ROWS, columns, BOARD_FILL, BOARD_GROUPS);
+    const groups = makeBoardGroups(rows, BOARD_GROUPS);
+    const config = makeBoardConfig(columns);
+    const bag = scenario.bag === "file-view" ? fileViewBoardBag(columns) : embedBoardBag(columns);
+    bagKeys = Object.keys(bag).sort();
+    const renderer = new BoardRenderer(app, bag);
+
+    const stopCounting = countLayoutReads();
+    renderer.render(container, config, groups, BOARD_GROUP_FIELD);
+    const layoutReads = stopCounting();
+
+    results.push(provenanceResult(container, "board-renderer"));
+    if (results[0].pass) {
+      results.push(...boardAssertions(container, rows));
+      results.push({
+        name: "no forced layout inside the card loop",
+        pass: layoutReads <= MAX_LAYOUT_READS,
+        detail: `${layoutReads} layout reads during render, bound ${MAX_LAYOUT_READS}`
+          + (layoutReads > MAX_LAYOUT_READS
+            ? " — reads scale with cards, which is the quadratic shape that froze the app"
+            : " (the touch-mode probe is the legitimate O(1) read)"),
+      });
+    }
+  } else if (scenario.renderer === "gallery") {
+    const columns = makeGalleryColumns(GALLERY_COLUMNS, "text");
+    const rows = makeGalleryRows(GALLERY_ROWS, columns, GALLERY_FILL);
+    const config = makeGalleryConfig(columns);
+    const bag = scenario.bag === "file-view" ? fileViewGalleryBag(columns) : embedGalleryBag(columns);
+    bagKeys = Object.keys(bag).sort();
+    const renderer = new GalleryRenderer(app, bag);
+
+    const stopCounting = countLayoutReads();
+    renderer.render(container, config, rows);
+    const layoutReads = stopCounting();
+
+    results.push(provenanceResult(container, "gallery-renderer"));
+    if (results[0].pass) {
+      results.push(...galleryAssertions(container, rows));
+      results.push({
+        name: "no forced layout inside the card loop",
+        pass: layoutReads <= MAX_LAYOUT_READS,
+        detail: `${layoutReads} layout reads during render, bound ${MAX_LAYOUT_READS}`
+          + (layoutReads > MAX_LAYOUT_READS
+            ? " — reads scale with cards, which is the quadratic shape that froze the app"
+            : " (the touch-mode probe is the legitimate O(1) read)"),
+      });
+    }
+  } else if (scenario.renderer === "calendar") {
+    const columns = makeCalendarColumns(CALENDAR_COLUMNS, "text");
+    const rows = makeCalendarRows(CALENDAR_ROWS, columns, CALENDAR_FILL);
+    const config = makeCalendarConfig(columns, "month");
+    const bag = scenario.bag === "file-view" ? fileViewCalendarBag(columns) : embedCalendarBag(columns);
+    bagKeys = Object.keys(bag).sort();
+    const renderer = new CalendarRenderer(bag);
+
+    const stopCounting = countLayoutReads();
+    renderer.render(container, config, rows);
+    const layoutReads = stopCounting();
+
+    results.push(provenanceResult(container, "calendar-renderer"));
+    if (results[0].pass) {
+      results.push(...calendarAssertions(container));
+      results.push({
+        name: "no forced layout inside the segment loop",
+        pass: layoutReads <= MAX_LAYOUT_READS,
+        detail: `${layoutReads} layout reads during render, bound ${MAX_LAYOUT_READS}`
+          + (layoutReads > MAX_LAYOUT_READS
+            ? " — reads scale with events, which is the quadratic shape that froze the app"
+            : " (the window is sized once per render, not once per segment)"),
+      });
+    }
+  } else if (scenario.renderer === "timeline") {
+    const columns = makeTimelineColumns(TIMELINE_COLUMNS, "text");
+    const rows = makeTimelineRows(TIMELINE_ROWS, columns, TIMELINE_FILL);
+    const config = makeTimelineConfig(columns, "week");
+    const bag = scenario.bag === "file-view" ? fileViewTimelineBag() : embedTimelineBag();
+    bagKeys = Object.keys(bag).sort();
+    const renderer = new CalendarTimelineRenderer(bag);
+
+    const stopCounting = countLayoutReads();
+    renderer.renderTimeline(container, config, rows);
+    const layoutReads = stopCounting();
+
+    results.push(provenanceResult(container, "timeline-renderer"));
+    if (results[0].pass) {
+      results.push(...timelineAssertions(container));
+      results.push({
+        name: "no forced layout inside the event loop",
+        pass: layoutReads <= MAX_LAYOUT_READS,
+        detail: `${layoutReads} layout reads during render, bound ${MAX_LAYOUT_READS}`
+          + (layoutReads > MAX_LAYOUT_READS
+            ? " — reads scale with events, which is the quadratic shape that froze the app"
+            : " (the touch-mode probe and the viewport window are the legitimate O(1) reads)"),
+      });
+    }
+    // The renderer holds a ResizeObserver and pending timers; dropping the container without
+    // this leaks one of each per scenario into the run that follows.
+    renderer.destroy();
   } else {
     const columns = makeTableColumns(TABLE_COLUMNS);
     const rows = makeTableRows(TABLE_ROWS, columns);
