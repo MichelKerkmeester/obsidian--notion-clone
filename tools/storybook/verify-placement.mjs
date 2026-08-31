@@ -2546,16 +2546,85 @@ await sheetPhone.close();
 // Two assertions, because either alone can pass while the defect is live. The class assertion is
 // what makes the geometry meaningful: it fails if the shared component ever stops stamping the class
 // the fixture carries, which is the drift that would make this fixture stop resembling production.
+//
+// The document is two fixtures, not one. Appearance is asserted as a comparison against a role-mate
+// the same factory builds in another family, and the table fixture holds no second family — so the
+// gallery is mounted beside it and both are read out of one document. Two absolute assertions in two
+// documents can drift together and still agree, which is the failure a comparison exists to catch.
+// The gallery contributes no select cell, so every number the three geometry checks report is
+// unchanged by its presence.
+//
+// `PLACEMENT_SELECT_CONTROL=<name>` arms one of this section's negative controls. styles.css is not
+// this harness's to edit, so a control that has to reproduce the pre-fix cascade appends the guard
+// the fix removed rather than reverting the file. That is a fixture mutation and is recorded as one.
+//
+//   strip-select     removes the shared component's class from one select checkbox
+//   strip-mate       removes it from the role-mate the appearance check compares against
+//   reguard-desktop  puts the desktop pin back behind the guard, leaving the phone arm standing
+//   reguard-phone    does the same to the phone arm
+//
+// Armed rather than hand-edited because a control nobody can re-run is a claim, not evidence, and
+// the phone pair this section now prints used to rest on exactly such a run.
+//
+// Measured here and deliberately not asserted: the height of the select cell's inner flex container.
+// A specification asked for the header's and a row's to be coincident to 0px, citing 32px against
+// 33px as the pre-fix failing pair. On the shipped tree the header measures 32px, twenty-three rows
+// measure 33px and the last row 34px — and with the pin re-guarded the same three numbers come back
+// unchanged. The spread is table-border geometry: the header's container starts 1px into its cell
+// and the last row has no bottom border to give back. An exact-equality clause there is red against
+// correct code and blind to the defect in the same breath, so the clause that is asserted is the
+// horizontal one, which does move — 7px uniform when pinned, 25px uniform when not.
 
-const selectCell = await browser.newPage({ viewport: VIEWPORT, reducedMotion: "reduce" });
-await selectCell.setContent(`<body><div id="shot">${SCENARIOS.find((s) => s.id === "table-view").html()}</div></body>`);
-await selectCell.addStyleTag({ content: readFileSync(join(REPO, "styles.css"), "utf8") + HOST_BARE_CONTROLS });
-await selectCell.addStyleTag({ content: readFileSync(join(REPO, "tools/screenshots/theme.css"), "utf8") });
-const selectCellResults = await section("the select column's clipping cell", () => selectCell.evaluate(() => {
+const SELECT_CONTROL = process.env.PLACEMENT_SELECT_CONTROL || "";
+
+// Scoped by body class so the desktop arm can be taken back to the defect while the phone arm is
+// left standing. That is the half of the phone criterion that tells "the phone was already right"
+// apart from "the desktop edit reached the phone".
+const SELECT_CONTROL_CSS = {
+  "reguard-desktop": 'body:not(.is-phone) .note-database-container .db-table .db-select-col'
+    + ' .db-select-inner input[type="checkbox"].db-checkbox { position: static; right: auto; }',
+  "reguard-phone": 'body.is-phone .note-database-container .db-table .db-select-col'
+    + ' .db-select-inner input[type="checkbox"].db-checkbox { position: static; right: auto; }',
+}[SELECT_CONTROL] || "";
+
+const SELECT_FIXTURE = ["table-view", "gallery-view"]
+  .map((id) => SCENARIOS.find((s) => s.id === id).html()).join("");
+
+const selectStyles = (extra) => readFileSync(join(REPO, "styles.css"), "utf8") + HOST_BARE_CONTROLS + extra;
+
+/**
+ * Arms a class-stripping control, and refuses to arm silently.
+ *
+ * A control that matches nothing produces a green run and reads as safety, which is the one outcome
+ * a negative control must never have. So an armed control that strips nothing throws, and the
+ * section wrapper turns that into a named red rather than a quiet pass.
+ */
+const armSelectControl = async (page) => {
+  if (SELECT_CONTROL !== "strip-select" && SELECT_CONTROL !== "strip-mate") return;
+  const stripped = await page.evaluate((which) => {
+    const boxes = [...document.querySelectorAll('input[type="checkbox"].db-checkbox')];
+    const target = which === "strip-select"
+      ? boxes.find((el) => el.closest(".db-select-col"))
+      : boxes.find((el) => !el.closest(".db-select-col") && el.classList.contains("db-checkbox-row"));
+    if (!target) return 0;
+    target.classList.remove("db-checkbox");
+    return 1;
+  }, SELECT_CONTROL);
+  if (!stripped) throw new Error(`PLACEMENT_SELECT_CONTROL=${SELECT_CONTROL} matched no element to strip`);
+};
+
+/**
+ * Everything this section measures, out of whichever document it is handed.
+ *
+ * One probe rather than a desktop copy and a phone copy, so a number that differs between the two
+ * arms is a property of the viewport and not of two hand-written measurements that drifted apart.
+ */
+const selectCellProbe = ({ phone }) => {
   const out = [];
   const cells = [...document.querySelectorAll(".db-select-col")].filter((c) => c.querySelector('input[type="checkbox"]'));
   const measured = cells.map((cell) => {
     const box = cell.querySelector('input[type="checkbox"]');
+    const inner = cell.querySelector(".db-select-inner");
     const c = cell.getBoundingClientRect();
     const b = box.getBoundingClientRect();
     return {
@@ -2563,9 +2632,37 @@ const selectCellResults = await section("the select column's clipping cell", () 
       owned: box.classList.contains("db-checkbox"),
       left: +(b.left - c.left).toFixed(2),
       right: +(c.right - b.right).toFixed(2),
+      innerH: inner ? +inner.getBoundingClientRect().height.toFixed(2) : null,
       clips: getComputedStyle(cell).overflow === "hidden",
     };
   });
+
+  const worst = measured.reduce((a, m) => Math.min(a, m.left), Infinity);
+  const clipping = measured.filter((m) => m.clips).length;
+  const rights = new Set(measured.map((m) => m.right));
+
+  if (phone) {
+    // A phone page that is not actually being measured as a phone reports the desktop numbers, and
+    // the desktop numbers satisfy both clauses — so the surface is asserted before its geometry is,
+    // or a green here would mean nothing about a phone.
+    const onPhone = document.body.classList.contains("is-phone") && matchMedia("(pointer: coarse)").matches;
+    out.push({
+      name: "the select checkbox keeps its clearance on a phone",
+      pass: onPhone && measured.length > 0 && worst >= 4,
+      detail: `narrowest left clearance ${worst}px across ${measured.length} cells`
+        + ` (${clipping} of them clip their overflow); right clearance`
+        + ` ${[...rights].join("/")}px. Measured as a phone=${onPhone}, which is asserted alongside`
+        + " the geometry because a desktop rendering of this page passes both clauses",
+    });
+    out.push({
+      name: "the phone header and the phone row checkboxes land on the same column",
+      pass: onPhone && rights.size === 1,
+      detail: `right clearance takes ${rights.size} distinct value(s): ${[...rights].join(", ")}px`
+        + ` across ${measured.length} cells, measured as a phone=${onPhone}. The phone arm was`
+        + " repaired before the desktop one, so this is what the desktop repair must not disturb",
+    });
+    return out;
+  }
 
   const owned = measured.filter((m) => m.owned).length;
   out.push({
@@ -2576,27 +2673,108 @@ const selectCellResults = await section("the select column's clipping cell", () 
       + " check below is measuring something production does not render)",
   });
 
-  const worst = measured.reduce((a, m) => Math.min(a, m.left), Infinity);
-  const clipping = measured.filter((m) => m.clips).length;
   out.push({
     name: "the select checkbox keeps clearance from the cell edge that clips it",
     pass: measured.length > 0 && worst >= 4,
     detail: `narrowest left clearance ${worst}px across ${measured.length} cells`
       + ` (${clipping} of them clip their overflow); right clearance`
-      + ` ${[...new Set(measured.map((m) => m.right))].join("/")}px. Unpinned this measures 0px and the`
+      + ` ${[...rights].join("/")}px. Unpinned this measures 0px and the`
       + " box is sheared by the cell wall.",
   });
 
-  const rights = new Set(measured.map((m) => m.right));
+  const headerInner = measured.filter((m) => m.tag === "TH").map((m) => m.innerH);
+  const rowInner = [...new Set(measured.filter((m) => m.tag === "TD").map((m) => m.innerH))];
   out.push({
     name: "the header checkbox and the row checkboxes land on the same column",
     pass: rights.size === 1,
     detail: `right clearance takes ${rights.size} distinct value(s): ${[...rights].join(", ")}px`
-      + " — the header and every row must coincide, or sorting a column makes the checkbox jump",
+      + " — the header and every row must coincide, or sorting a column makes the checkbox jump."
+      + ` The inner flex containers are not coincident and are not asserted to be: header`
+      + ` ${headerInner.join("/")}px against row values ${rowInner.join("/")}px, the same spread`
+      + " with the pin re-guarded, so it is table-border geometry rather than a placement defect",
+  });
+
+  // Appearance has one owner, measured as a comparison rather than asserted absolutely. Two absolute
+  // assertions can drift together and still agree; a comparison against a role-mate in the same
+  // document cannot.
+  //
+  // `borderColor` is asserted alongside the rest, and it is the one that earns the list its fifth
+  // entry. Stripping the shared class does not leave the control unstyled: a second block guarded
+  // against that class wakes and repaints it with the same appearance, border width, radius and
+  // fill, so a four-property comparison sees nothing move and reports a single owner where there
+  // are two. Only the colour separates them — and it separates them across an accessibility floor.
+  // A checkbox border is the only thing identifying an unchecked control, which puts it under the
+  // 3:1 non-text contrast minimum: the shared component measures 3.22:1 against the panel and the
+  // dormant fallback 1.36:1, the same figure recorded beside the rule this ownership work replaced.
+  // Without this entry the control is dormant rather than dead, and nothing here can tell.
+  const APPEARANCE = ["appearance", "borderWidth", "borderRadius", "backgroundColor", "borderColor"];
+  const readAppearance = (el) => {
+    const s = getComputedStyle(el);
+    return {
+      appearance: s.appearance || s.webkitAppearance || "",
+      borderWidth: s.borderWidth,
+      borderRadius: s.borderRadius,
+      backgroundColor: s.backgroundColor,
+      borderColor: s.borderColor,
+    };
+  };
+  const selectBox = cells.length ? cells[0].querySelector('input[type="checkbox"]') : null;
+  const mate = [...document.querySelectorAll('input[type="checkbox"].db-checkbox-row')]
+    .find((el) => !el.closest(".db-select-col"));
+  const mateFamily = mate
+    ? ([...mate.classList].find((c) => c !== "db-checkbox" && !c.startsWith("db-checkbox-")) || "(role only)")
+    : "(no role-mate in this document)";
+  const selectStyle = selectBox ? readAppearance(selectBox) : null;
+  const mateStyle = mate ? readAppearance(mate) : null;
+  const differing = selectStyle && mateStyle ? APPEARANCE.filter((k) => selectStyle[k] !== mateStyle[k]) : APPEARANCE;
+  out.push({
+    name: "the select checkbox and a role-mate compute one appearance",
+    pass: !!(selectStyle && mateStyle) && differing.length === 0,
+    detail: `${differing.length} of ${APPEARANCE.length} properties differ between the select`
+      + ` checkbox and the ${mateFamily} role-mate`
+      + (differing.length ? `: ${differing.map((k) => `${k} ${selectStyle[k]} vs ${mateStyle[k]}`).join(", ")}` : "")
+      + `. Select reads ${APPEARANCE.map((k) => `${k}=${selectStyle ? selectStyle[k] : "?"}`).join(" ")}`
+      + ". borderColor is the only one of the five that moves when the shared class is stripped,"
+      + " because this column keeps its own fallback block and that block agrees with the component"
+      + " on the other four — so a comparison without it reports one owner where there are two,"
+      + " and misses that the fallback repaints the border below the 3:1 non-text contrast floor",
   });
   return out;
-}));
+};
+
+const selectCell = await browser.newPage({ viewport: VIEWPORT, reducedMotion: "reduce" });
+await selectCell.setContent(`<body><div id="shot">${SELECT_FIXTURE}</div></body>`);
+await selectCell.addStyleTag({ content: selectStyles(SELECT_CONTROL_CSS) });
+await selectCell.addStyleTag({ content: readFileSync(join(REPO, "tools/screenshots/theme.css"), "utf8") });
+const selectCellResults = await section("the select column's clipping cell", async () => {
+  await armSelectControl(selectCell);
+  // The component rule transitions background and border over 120ms, so a colour read before the
+  // page settles is an animation frame rather than a computed value — the trap the family probe
+  // below documents, and this section reads colours now.
+  await selectCell.waitForTimeout(250);
+  return selectCell.evaluate(selectCellProbe, { phone: false });
+});
 await selectCell.close();
+
+// The same cell on a phone, because the desktop arm cannot speak for it. The phone hit this defect
+// first and was repaired on its own, so the desktop repair had to leave the phone where it was —
+// and until this page existed that invariance was a sentence rather than a number. Run it with
+// `PLACEMENT_SELECT_CONTROL=reguard-desktop` and the pair below must not move; with `reguard-phone`
+// it must collapse to a sheared 0px, which is what distinguishes the two claims.
+const selectPhoneContext = await browser.newContext({
+  viewport: { width: 390, height: 844 }, reducedMotion: "reduce", hasTouch: true, isMobile: true,
+});
+const selectPhone = await selectPhoneContext.newPage();
+await selectPhone.setContent(`<body class="is-mobile is-phone"><div id="shot">${SELECT_FIXTURE}</div></body>`);
+await selectPhone.addStyleTag({ content: selectStyles(SELECT_CONTROL_CSS) });
+await selectPhone.addStyleTag({ content: readFileSync(join(REPO, "tools/screenshots/theme.css"), "utf8") });
+const selectPhoneResults = await section("the select column's clipping cell, on a phone", async () => {
+  await armSelectControl(selectPhone);
+  await selectPhone.waitForTimeout(250);
+  return selectPhone.evaluate(selectCellProbe, { phone: true });
+});
+await selectPhone.close();
+await selectPhoneContext.close();
 
 // ───────────────────────────────────────────────────────────────────
 // 5f. WHAT A PRESS ON A ROW CHECKBOX MEANS
@@ -5160,7 +5338,7 @@ await section("a number reads the same on a card and in the row behind it", asyn
 });
 
 results.push(...phoneResults, ...menuResults, ...addViewDesktopResults, ...addViewPhoneResults,
-  ...grammarResults, ...addViewGrammar, ...motionResults, ...reducedResults, ...desktopMenuResults, ...cellResults, ...sheetResults, ...selectCellResults, ...rowPhoneResults, ...rowNarrowResults,
+  ...grammarResults, ...addViewGrammar, ...motionResults, ...reducedResults, ...desktopMenuResults, ...cellResults, ...sheetResults, ...selectCellResults, ...selectPhoneResults, ...rowPhoneResults, ...rowNarrowResults,
   ...familyResults, ...touchResults, ...overlapResults, ...rhythmResults, ...rendererRhythmResults,
   ...liftedResults, ...inlineEditResults, ...numberParityResults, ...sectionFailures);
 

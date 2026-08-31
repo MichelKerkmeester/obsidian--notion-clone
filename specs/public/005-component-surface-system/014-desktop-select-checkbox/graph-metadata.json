@@ -184,21 +184,21 @@
         "source": "derived"
       },
       {
-        "name": "AC-1 — the checkbox keeps clearance from the edge that clips it",
-        "kind": "heading",
+        "name": "no",
+        "kind": "key_phrase",
         "path": "acceptance-criteria.md",
         "source": "derived"
       },
       {
-        "name": "any",
-        "kind": "key_phrase",
+        "name": "1. DURABLE DIRECTIVE",
+        "kind": "heading",
         "path": "goal.md",
         "source": "derived"
       }
     ],
     "causal_summary": "Restore the select-column checkbox pin on desktop, lost when the shared checkbox component took ownership of appearance and the fallback guard switched off placement with it.",
     "created_at": "2026-08-30T16:46:48.681Z",
-    "last_save_at": "2026-08-30T19:14:37.523Z",
+    "last_save_at": "2026-08-31T03:28:46.835Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -209,7 +209,7 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:4114e41a305a3a18333157bb9bde6a3cba002babe2d6a53152ac4f4a955b7b5d",
+    "source_fingerprint": "sha256:5fbe1aa7d8c6d178d49dcfa621b4b67029495a8a0eedd54373553da2e88da5c5",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "15a1d45e2f807a37d5e8ce18db7116e2b5a83ffc870256b402bc427b1eb17444",
