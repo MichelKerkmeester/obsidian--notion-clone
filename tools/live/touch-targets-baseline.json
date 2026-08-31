@@ -1,8 +1,9 @@
 {
-  "under": 286,
+  "under": 224,
   "floor": 28,
   "recorded": "2026-09-01",
-  "why": "Controls below this project's own 28px coarse-pointer floor, recorded so the count cannot grow while the existing set is triaged. Not an allowance: every one of these is a real shortfall, spanning 37 control classes. Resizing them changes how the plugin feels and how nearly every capture looks, which is an operator decision rather than a repair one pass should make silently.",
+  "why": "Controls below this project's own 28px coarse-pointer floor, recorded so the count cannot grow while the existing set is triaged. Not an allowance: every one of these is a real shortfall. Resizing them changes how the plugin feels and how nearly every capture looks, which is an operator decision rather than a repair one pass should make silently.",
   "smallest": "db-file-tag-remove at 10x14, db-multi-select-remove at 14x14, db-table-row-drag-handle at 16x16",
-  "note": "db-toggle-switch measures 34x18 under a coarse pointer here, which is a second independent contradiction of roadmap 7.1's claim that the switch reaches 34x28."
+  "note": "db-toggle-switch measures 34x18 under a coarse pointer here, which is a second independent contradiction of roadmap 7.1's claim that the switch reaches 34x28.",
+  "lastTriage": "286 -> 224 on 2026-09-01. `db-list-row-open` (36) and `db-source-rule-icon-button` (26) were 2px short and had no coarse-pointer rule at all, so they were raised there rather than at the declaration — 26px is a density choice for the pointer that can hit it, and changing it at source would move every desktop capture to fix a phone. Raised with min-width/min-height, because the source-rule button declares its own min-width and a width alone loses to it."
 }

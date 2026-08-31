@@ -1,7 +1,7 @@
 {
   "holder": null,
-  "acquiredAt": "2026-08-31T21:45:00Z",
-  "baselineHash": "e018db2135f2",
+  "acquiredAt": "2026-09-01T03:55:00Z",
+  "baselineHash": "3c11e032ebb8",
   "baselineCommit": "3990be47b525",
   "history": [
     {
@@ -652,6 +652,27 @@
       "at": "2026-08-31T21:45:00Z",
       "hash": "e018db2135f2",
       "note": "Recaptured and reviewed. 27 captures moved; the record-detail sheet was opened and read at phone light and the desktop panel at dark, and in both the title now sits on the line its actions sit on. The desktop panel was NOT in scope and improved anyway, because the rule is written for both hosts - stated rather than left for someone to discover in a diff. Churn outside the panels set (owned-menu sheet, calendar, timeline) moved again; this rule cannot select those surfaces, and it is the same unexplained machine-level churn the previous three releases recorded. Not explained here either, and not leaned on. Per-image operator sign-off still owed, as for every prior release."
+    },
+    {
+      "event": "acquire",
+      "phase": "030-gallery-view-deprecation",
+      "at": "2026-09-01T03:40:00Z",
+      "hash": "e018db2135f2",
+      "note": "Taken during the visual pass, for a defect the touch-target census names and no capture shows: db-list-row-open and db-source-rule-icon-button sit 2px under this project's own 28px coarse-pointer floor, 62 controls between them, and neither had a coarse-pointer rule at all. Acquired after the edit again, which is the third time this has been recorded rather than backdated."
+    },
+    {
+      "event": "edit",
+      "phase": "030-gallery-view-deprecation",
+      "at": "2026-09-01T03:42:00Z",
+      "hash": "3c11e032ebb8",
+      "note": "One block added to the existing @media (pointer: coarse) rule: min-width/min-height 28px on both classes. Raised THERE rather than at the declaration, because 26px is a density choice for the pointer that can hit it and changing it at source would move every desktop capture to fix a phone. min-width/min-height rather than width/height because the source-rule button declares its own min-width and a width alone loses to it — the same silent defeat the checkbox rule above it was written for. Measured: the census goes 286 -> 224 undeclared, both classes to zero, and the ratchet baseline is lowered to 224 in the same change so it stays a ratchet rather than an allowance."
+    },
+    {
+      "event": "release",
+      "phase": "030-gallery-view-deprecation",
+      "at": "2026-09-01T03:55:00Z",
+      "hash": "3c11e032ebb8",
+      "note": "Recaptured and reviewed. 20 captures moved, all of them mobile: the filter panels, the record sheet and the list rows were opened and read, and the raised controls sit correctly with no row growing to meet them. Desktop is untouched by construction — the rule is inside a coarse-pointer media block — and the desktop captures that moved are the same unexplained machine-level churn the previous four releases recorded, not this edit. Per-image operator sign-off still owed, as for every prior release."
     }
   ],
   "outstanding": [

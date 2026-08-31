@@ -20075,6 +20075,21 @@ input[type="checkbox"].db-checkbox.db-checkbox-field {
     min-width: 28px;
     min-height: 28px;
   }
+
+  /* Two classes that sat 2px under this project's own floor on every touch surface, 62 controls
+     between them, and neither had a coarse-pointer rule at all. Raised here rather than at the
+     declaration, because 26px is a density choice the reader made for the pointer that can hit it —
+     changing it there would move every desktop capture to fix a phone.
+
+     `min-width`/`min-height` rather than `width`/`height`: the source-rule button declares
+     `min-width: 26px` beside its width, and a width alone loses to it. That is the same defeat the
+     checkbox rule above was written for, and it is worth stating twice because the failure is
+     silent — the box simply does not grow, and a census reads the old number. */
+  .note-database-container .db-list-row-open,
+  .note-database-container .db-source-rule-icon-button {
+    min-width: 28px;
+    min-height: 28px;
+  }
 }
 
 input[type="checkbox"].db-checkbox::before {

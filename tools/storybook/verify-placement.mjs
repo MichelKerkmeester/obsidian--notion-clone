@@ -4299,7 +4299,13 @@ await section("a property keeps its column on every card", async () => {
       for (const meta of metas) {
         const origin = meta.getBoundingClientRect().left;
         for (const field of meta.querySelectorAll(".db-list-field")) {
-          const label = (field.querySelector(".db-list-field-label")?.textContent || "?").trim();
+          const label = (field.querySelector(".db-list-field-label")?.textContent || "").trim();
+          // A reserved box has no label, because the renderer builds it with no children at all —
+          // and a box with no name has no column of its own to keep. Grouping the unlabelled ones
+          // together under "?" made every placeholder in the fixture look like one property landing
+          // in four columns, which is a statement about the check rather than about the surface.
+          // The renderer-driven section next door has always skipped them for the same reason.
+          if (!label) continue;
           if (!byProperty.has(label)) byProperty.set(label, new Set());
           byProperty.get(label).add(Math.round(field.getBoundingClientRect().left - origin));
         }

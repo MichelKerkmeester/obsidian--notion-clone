@@ -1,11 +1,11 @@
 {
-  "measuredAt": "2026-08-31T23:10:45.563Z",
+  "measuredAt": "2026-08-31T23:30:23.648Z",
   "inputs": {
-    "styles.css": "e018db2135f2",
+    "styles.css": "3c11e032ebb8",
     "tools/screenshots/theme.css": "8239cc22cceb",
     "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
     "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-    "tools/live/replay.mjs": "09de41282b5e"
+    "tools/live/replay.mjs": "a7bb3c7b715a"
   },
   "claims": [
     {

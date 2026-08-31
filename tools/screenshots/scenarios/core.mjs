@@ -321,8 +321,23 @@ export const CORE_SCENARIOS = [
     group: "views",
     width: 1100,
     sources: ["src/views/list-renderer.ts"],
-    note: "The shape every other list fixture cannot produce: each row missing a different subset of its properties. A fixture that gives every row every field shows a tidy grid whichever way the row is laid out, so it cannot tell a column claimed by index from a slot taken by count.",
+    note: "The shape every other list fixture cannot produce: each row missing a different subset of its properties. A fixture that gives every row every field shows a tidy grid whichever way the row is laid out, so it cannot tell a column claimed by index from a slot taken by count. The mobile capture hides the reserved boxes rather than drawing them: `shouldReserveColumns` reserves only where two properties can share a line, and at 402px only one fits — so the phone capture used to photograph blank gaps the renderer never draws. Static markup cannot make that decision, so `captureCss` makes it instead, at the one width where the answer differs.",
+    captureCss: `
+      /* What the RENDERER does at this width, which static markup cannot express. Reserving is a
+         measured decision — the two narrowest declared widths plus a column gap against the field
+         area — and at 402px it comes out false, so no placeholder is built at all. Without this the
+         phone capture shows a blank line per missing property: 84px of scrolling for boxes nobody
+         can see, which is the exact cost the renderer was changed to stop paying. */
+      .is-phone .db-list-field.is-placeholder { display: none; }
+    `,
     html: () => {
+      // The controls cell is not decoration and its absence was not harmless. `.db-list-row` is a
+      // two-track grid on a phone — `auto minmax(0, 1fr)` — so a row with one child puts its main
+      // cell in the `auto` track and sizes it to its content. This fixture had no controls cell, so
+      // every card was as wide as whatever it happened to contain; that was invisible only because
+      // the placeholders padded them all to the same width. Emptying the placeholders exposed six
+      // distinct card widths in a list the renderer draws at one.
+      //
       // Which fields each row is missing. Fixed rather than random so the capture is reproducible,
       // and spread so no two adjacent rows share a subset.
       const MISSING = [[], ["payment"], ["cost", "cycle"], ["renew"], ["cost"], ["cycle", "payment"],
@@ -343,11 +358,22 @@ export const CORE_SCENARIOS = [
           // behaviour — dropping the element — would photograph a row the renderer no longer
           // builds, and would hide the phone defect this fixture exists to show, because a
           // wrapping flex line has no grid column to fall back on.
+          //
+          // EMPTY, though. `renderRowFieldPlaceholder` builds a bare spacer sized from the custom
+          // property and puts nothing inside it — a label and a value nobody can see was the shape
+          // that took a 1,600-row list to seven seconds. This fixture used to draw both children
+          // inside the placeholder, so the capture depicted three nodes per gap where the plugin
+          // draws one, and the placement lane's own `nodesInPlaceholders === 0` had no counterpart
+          // in the picture.
           .map(([label, key, column]) => `
-            <div class="db-list-field${gone.has(key) ? " is-placeholder" : ""}"${gone.has(key) ? ' aria-hidden="true"' : ""} style="grid-column: ${column}; --db-card-field-width: ${WIDTHS[key]}px"><span class="db-list-field-label">${label}</span><div class="db-list-field-value">${r[key]}</div></div>`)
+            <div class="db-list-field${gone.has(key) ? " is-placeholder" : ""}"${gone.has(key) ? ' aria-hidden="true"' : ""} style="grid-column: ${column}; --db-card-field-width: ${WIDTHS[key]}px">${gone.has(key) ? "" : `<span class="db-list-field-label">${label}</span><div class="db-list-field-value">${r[key]}</div>`}</div>`)
           .join("");
         return `
         <div class="db-list-row" role="row" tabindex="-1">
+          <div class="db-list-row-controls">
+            ${rowCheckbox("db-list-row-checkbox")}
+            <button type="button" class="db-list-row-open" aria-label="Open note">${ICONS.maximize}</button>
+          </div>
           <div class="db-list-row-main">
             <div class="db-record-title-line"><span class="db-list-row-title">${r.name}</span></div>
             <div class="db-list-row-meta" style="grid-template-columns: ${template}">${pairs}</div>

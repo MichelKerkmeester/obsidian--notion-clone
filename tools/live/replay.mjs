@@ -178,6 +178,12 @@ const CLAIMS = [
           for (const field of meta.querySelectorAll(".db-list-field")) {
             const x = Math.round(field.getBoundingClientRect().left);
             const label = field.querySelector(".db-list-field-label")?.textContent ?? "";
+            // A reserved box carries no label, because the renderer builds it with no children at
+            // all. Counting its empty string as a property name put a second "name" in every column
+            // that held one, so the claim reported a collision wherever a card had a gap — a
+            // statement about the fixture's markup rather than about the columns. This read 0 only
+            // while the fixture gave its placeholders a label the renderer never gives them.
+            if (!label) continue;
             if (!byColumn.has(x)) byColumn.set(x, new Set());
             byColumn.get(x).add(label);
           }

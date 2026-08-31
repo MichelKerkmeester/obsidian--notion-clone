@@ -543,7 +543,7 @@ Sources: `src/views/list-renderer.ts`, `src/views/card-field-renderer.ts`
 
 ### List rows with fields missing
 
-The shape every other list fixture cannot produce: each row missing a different subset of its properties. A fixture that gives every row every field shows a tidy grid whichever way the row is laid out, so it cannot tell a column claimed by index from a slot taken by count.
+The shape every other list fixture cannot produce: each row missing a different subset of its properties. A fixture that gives every row every field shows a tidy grid whichever way the row is laid out, so it cannot tell a column claimed by index from a slot taken by count. The mobile capture hides the reserved boxes rather than drawing them: `shouldReserveColumns` reserves only where two properties can share a line, and at 402px only one fits — so the phone capture used to photograph blank gaps the renderer never draws. Static markup cannot make that decision, so `captureCss` makes it instead, at the one width where the answer differs.
 
 | dark | light |
 |---|---|
