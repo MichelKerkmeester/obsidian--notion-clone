@@ -1,7 +1,7 @@
 {
-  "measuredAt": "2026-08-31T13:45:47.787Z",
+  "measuredAt": "2026-08-31T21:33:24.514Z",
   "inputs": {
-    "styles.css": "96f5fa440637",
+    "styles.css": "e018db2135f2",
     "tools/live/surface-census.mjs": "09663f4f354e",
     "src/views/surface-contract.ts": "ff7e6bafd3c8"
   },
@@ -160,7 +160,6 @@
         "add-view-popover",
         "add-view-popover",
         "add-view-popover",
-        "add-view-popover",
         "chrome-owned-menu",
         "chrome-owned-menu",
         "chrome-owned-menu",
@@ -188,7 +187,6 @@
         "add-view-popover",
         "add-view-popover",
         "add-view-popover",
-        "add-view-popover",
         "chrome-owned-menu",
         "chrome-owned-menu",
         "chrome-owned-menu",
@@ -207,7 +205,6 @@
       "role": null,
       "rect": "63x16",
       "scenarios": [
-        "add-view-popover",
         "add-view-popover",
         "add-view-popover",
         "add-view-popover",

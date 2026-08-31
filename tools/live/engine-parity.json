@@ -1,13 +1,13 @@
 {
-  "measuredAt": "2026-08-31T13:46:47.130Z",
+  "measuredAt": "2026-08-31T21:33:40.728Z",
   "inputs": {
-    "styles.css": "96f5fa440637",
+    "styles.css": "e018db2135f2",
     "tools/live/engine-parity.mjs": "0264fc2e3d90",
     "tools/screenshots/scenarios.mjs": "1395f2dacbfd"
   },
   "totals": {
     "fixtures": 59,
-    "differences": 50
+    "differences": 49
   },
   "differences": [
     {
@@ -88,14 +88,6 @@
       "scenarioId": "add-view-popover",
       "selector": "button",
       "index": 6,
-      "notes": [
-        "width 342 vs 334"
-      ]
-    },
-    {
-      "scenarioId": "add-view-popover",
-      "selector": "button",
-      "index": 7,
       "notes": [
         "width 342 vs 334"
       ]

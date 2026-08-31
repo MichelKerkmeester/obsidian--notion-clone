@@ -1,7 +1,7 @@
 {
-  "measuredAt": "2026-08-31T20:15:46.164Z",
+  "measuredAt": "2026-08-31T21:33:17.296Z",
   "inputs": {
-    "styles.css": "96f5fa440637",
+    "styles.css": "e018db2135f2",
     "tools/live/design-conformance.mjs": "ca98bf93ea28",
     "src/views/popover-position.ts": "69ba36f662fe"
   },
@@ -223,7 +223,7 @@
     "src/views/modals/delete-database-modal.ts:59  .db-delete-modal-info",
     "src/views/modals/delete-database-modal.ts:74  .db-delete-modal-buttons",
     "src/views/modals/delete-database-modal.ts:75  .db-delete-modal-primary-actions",
-    "src/views/modals/formula-modal.ts:672  .db-modal-button-row",
+    "src/views/modals/formula-modal.ts:702  .db-modal-button-row",
     "src/views/modals/group-order-modal.ts:54  .db-modal-help",
     "src/views/modals/group-order-modal.ts:89  .db-modal-actions",
     "src/views/modals/invalid-time-events-modal.ts:87  .db-modal-help",

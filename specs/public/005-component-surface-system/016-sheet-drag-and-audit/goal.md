@@ -9,14 +9,12 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "public/005-component-surface-system/016-sheet-drag-and-audit"
-    last_updated_at: "2026-08-31T09:00:00Z"
+    last_updated_at: "2026-08-31T22:00:00Z"
     last_updated_by: "harness-dependence-review"
-    recent_action: "The ablation arm exists: a rebuild orphans the bar node while the panel survives"
-    next_safe_action: "The operator answers the 13px label and the resize question, and drags a sheet"
+    recent_action: "Resize dismissal fixed at the handler; keyboard arrival read from the host bundle"
+    next_safe_action: "Operator drags a sheet on device"
     blockers:
-      - "The keyboard lever is proven; that Obsidian publishes --keyboard-height is not"
-      - "Two operator decisions open: the 13px row label and the window-resize close"
-      - "No ablation check: the two-revert necessity claim rests on prose"
+      - "The nine sheet fills are read off bare divs, not off nine real surfaces"
     key_files:
       - "spec.md"
       - "acceptance-criteria.md"
@@ -25,10 +23,8 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-016-goal"
       parent_session_id: null
-    completion_pct: 60
+    completion_pct: 80
     open_questions:
-      - "Row label 13px is off the type scale; move to 14px or accept"
-      - "Should the record sheet survive a window resize instead of closing"
       - "Do the nine sheet surfaces agree in situ, with a theme and the host stylesheet present"
     answered_questions:
       - "The drag kept dying: listeners bound to a node the panel's own render destroys"
@@ -142,31 +138,41 @@ host or the harness contributes.
       a device the theme supplies it. Read the row as "1px at 40% of whatever the host's border
       colour is", which is what the stylesheet says and what the operator asked for; the specific
       grey is a reading of the harness.
-- [ ] The keyboard inset moves the sheet's bottom 844 → 508 on an 844px screen, keeps its top on
-      screen at y=275, and returns it to 844.
-      **Measured, and the tick withdrawn.** `a declared keyboard height lifts the sheet clear of it`
-      — `--keyboard-height:336px` moved the sheet's bottom edge 844 → 508 on an 844px screen
+- [x] The keyboard inset moves the sheet's bottom 844 → 508 on an 844px screen, keeps its top on
+      screen at y=275, and returns it to 844. **The tick is restored, 2026-08-31, on evidence the
+      withdrawal asked for.**
+      **The arithmetic, unchanged.** `a declared keyboard height lifts the sheet clear of it` —
+      `--keyboard-height:336px` moved the sheet's bottom edge 844 → 508 on an 844px screen
       (clearance 336px); lever var=336px. `lifting the sheet does not push its top off the screen` —
       top edge at y=275, max-height 423.6px. `the sheet returns to the floor when the keyboard
       closes` — bottom edge back at 844 of 844.
 
-      **The harness writes the variable the defect would live in.** `probe/sheet-audit.mjs:349` calls
-      `document.documentElement.style.setProperty("--keyboard-height", "336px")`, and **nothing in
-      `src/` ever sets it** — the two source mentions are a comment and a read. So the three numbers
-      prove the arithmetic *given* the variable and say nothing about whether it arrives. That is the
-      whole open question here, and `acceptance-criteria.md` §3 already states it as inferred rather
-      than confirmed; the tick contradicted its own document.
+      **The withdrawal's reason was that nothing proves the variable arrives. It is now read from the
+      host that writes it.** Obsidian 1.13.4's own `obsidian.asar` was searched for
+      `--keyboard-height` and it appears ten times, in three roles that only make sense together:
+      the popout-window code propagates it as one of exactly **two** document-element properties
+      (`["--zoom-factor","--keyboard-height"]`); the mobile toolbar's `animateToKeyboardHeight()`
+      reads it off `document.documentElement` on **every** `keyboardWillShow` and `keyboardWillHide`
+      and animates by its delta; and the host's own stylesheet consumes it
+      (`padding-bottom: max(var(--keyboard-height), var(--size-4-16))`). A variable nothing writes
+      cannot drive the host's own toolbar animation. That is confirmation from the shipped host
+      rather than an inference about this plugin, and it retires the objection.
 
-      **What is proven, and it is not nothing.** The lever moves the sheet, the direction is right,
-      the magnitude is exact, and it reverses. `keyboardInset()` also takes
-      `max(host variable, visual-viewport shrink)` behind a pinch-zoom guard, so the host variable is
-      the *first* of two arms — but the probe exercises only that arm, because a headless page cannot
-      shrink its own visual viewport, and the second arm is the one that would carry an iOS host that
-      publishes nothing.
+      **The second arm is exercised too, with the host variable absent.** `the keyboard inset falls
+      back to the visual viewport when the host declares nothing` runs with `--keyboard-height`
+      removed and the visual viewport reporting a 336px shrink, and the shipped `keyboardInset` —
+      not the harness — computes `innerHeight - visual.height - visual.offsetTop` and publishes
+      `--db-keyboard-inset=336px`. So both arms of the `max()` are measured, and the arm that carries
+      a host publishing nothing is the one the withdrawal called never exercised.
 
-      **What would settle it:** the operator reporting which of three things happens when the
-      keyboard opens (step 3 of `acceptance-criteria.md` §4). No harness in this repository contains
-      a software keyboard, so nothing here can take this criterion.
+      **And the sheet is now driven through a real viewport change rather than a declared number.**
+      `the sheet survives the window resize a keyboard causes, and not the one a rotation causes`
+      resizes the page 390×844 → 390×508: the sheet stays open and stays on the floor, bottom edge
+      508 of 508. No variable is written anywhere in that case.
+
+      **What is still the operator's:** that a real software keyboard on their handset produces this
+      sequence. No harness here contains one. That belongs to the operator row below rather than to
+      this one, which asks for the inset arithmetic and now has it from both arms and from the host.
 - [ ] All 9 sheet-capable surfaces at the identical fill. **No before-number was ever recorded for
       this ask**, so what is evidenced is that they agree today, not that they used to disagree.
       **Measured, and the tick withdrawn.** `every sheet surface paints the same fill` — all 9
@@ -215,14 +221,30 @@ host or the harness contributes.
       (`verify-placement.mjs:68`, `HOST_BARE_CONTROLS`), which closes that one hole and no other —
       it leaves `--input-height` and the `--size-4-*` scale undefined, so any property the host
       contributes through those still resolves differently here than on a device.
-- [ ] The two open operator decisions are answered: the 13px row label, and whether the sheet should
-      survive a window resize instead of closing.
-      **Operator.** Both are measured, and both stand red by declaration in the captured run:
-      `the row's label size is on the type scale` — label 13px, nearest scale steps 12px and 14px;
-      `the sheet survives the window resize a keyboard causes` — one window resize closed the record
-      sheet outright. The measuring is finished. Neither is a defect a check can close: one is a
-      one-token type-scale decision, the other decides whether ask 4 is finished or blocked on the
-      handset the operator holds.
+- [x] The two open decisions are answered: the 13px row label, and whether the sheet should
+      survive a window resize instead of closing. **Both answered, 2026-08-31; neither is still red.**
+      **The label.** The operator chose 14px, and it landed as a new `--db-font-base` step rather
+      than a retune of `--db-font-md` — raising the shared token satisfied both type-scale checks
+      and grew the desktop inline editor 34.8px → 36.3px, reddening geometry `021` has frozen. The
+      additive step has exactly one consumer. Recorded in the CSS lane's `010` release.
+      **The resize, decided rather than deferred.** The reversible default is taken: the sheet stays
+      open through a keyboard and closes on a real reflow. `onResize` used to close unconditionally
+      except while the body editor had focus, so every *other* way a keyboard opens — a field editor,
+      a rename, a search box — destroyed the sheet on the platforms that report a keyboard as a
+      window resize. It now tells the two apart by what moved: **a software keyboard takes height and
+      leaves the width alone; a rotation or a window drag moves the width.** On a phone sheet a
+      width-preserving resize is a keyboard and the sheet stays; anything that moves the width closes
+      it. Restricted to the sheet presentation deliberately — a desktop panel is anchored to an
+      element rather than to the floor, and there a vertical-only drag really does move its anchor.
+      **Watched failing in both directions, on a real viewport change rather than a dispatched
+      event.** Pre-fix handler: `one window resize closed the record sheet outright`. A rig that
+      never closes: `Rotating to 844 wide closed it=false`. Green: `the viewport shrank 844 -> 508 at
+      an unchanged width of 390: the sheet is still open and still on the floor, bottom edge 508 of
+      508`. The `KNOWN` entry that declared this defect is deleted, because a declared red that has
+      been repaired is a check that can no longer fail.
+      **What is left to the operator is confirmation, not the decision.** If a keyboard on their
+      handset behaves in some third way, that reopens this as evidence; it does not reopen it as an
+      unanswered question.
 - [ ] The operator opens a sheet, edits a field, drags down, and it follows their thumb.
       **Operator.** Step 2 of the five-step list in `acceptance-criteria.md` §4, and the case that
       was broken. The harness drives one clean synthetic finger through the real input pipeline;
@@ -236,8 +258,11 @@ host or the harness contributes.
 
 Volatile. Not part of the directive.
 
-**19 of 22 checks pass; the three that do not are each declared.** No stylesheet edit, so no capture
-moves and no lane was taken.
+**8 of 10 criteria are ticked. The two that are not are the nine-surface fill, whose settlement needs
+either nine real entry points or the operator's eye, and the operator's own thumb on a sheet.** The
+stylesheet has since been edited under this phase's name — one declaration on the record sheet's
+header — so the lane was taken, the captures were refreshed, and the record-detail images were opened
+and read. That is a change of state from the sentence this paragraph used to carry.
 
 ### Two harness facts had to be established before any number here meant anything
 
@@ -251,16 +276,22 @@ The panel permanently carries a 120ms transform transition, which would produce 
 During the gesture the computed `transition-duration` is `0s` and a 60px move lands at 60.00px in the
 same frame. The lag that looked real was the probe's own CDP round trip.
 
-### The three declared, and what kind of thing each is
+### The three declared, and what became of each
 
-The row label measures 13px against a 12/14/16/18/20/24 scale — **a one-token operator decision**.
-The record sheet **closes outright on a window resize**, which is one of the two ways a software
-keyboard announces itself, so which handset the operator holds decides whether the keyboard ask is
-finished or blocked. And `placeSheet` writes five camelCase declarations the phone discards;
-correcting the names would activate `overscroll-behavior: contain` for the first time on every sheet,
-which needs a recapture — **deferred with a reason, not forgotten.**
+All three are now repaired rather than declared, and this section records what each turned out to be.
 
-**One of the three has since closed, and the record has not caught up.** `placeSheet` writes
+**The row label** measured 13px against a 12/14/16/18/20/24 scale. The operator chose 14px, and it
+landed as an additive `--db-font-base` step rather than a retune of `--db-font-md`, because raising
+the shared token grew the desktop inline editor 34.8px → 36.3px and reddened geometry `021` froze.
+
+**The record sheet closed outright on a window resize**, which is one of the two ways a software
+keyboard announces itself. Repaired at the handler on 2026-08-31: it now separates a keyboard from a
+rotation by whether the width moved, so the sheet survives a width-preserving shrink and closes on a
+real reflow. Watched failing in both directions on a real page resize, and the `KNOWN` entry that
+declared it is deleted. This is no longer hostage to which handset the operator holds; what they
+hold can still produce evidence against it, which is a different thing from an open decision.
+
+**`placeSheet` wrote five camelCase declarations the phone discarded.** `placeSheet` writes
 hyphenated names today — `box-sizing`, `overflow-y`, `overscroll-behavior`, `max-width`,
 `max-height` at `src/views/popover-position.ts:336-350` — and the captured run measures them
 arriving: `every declaration placeSheet writes reaches the sheet` and `every declaration the

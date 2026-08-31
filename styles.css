@@ -9380,6 +9380,13 @@ input[type="checkbox"].db-toggle-switch:disabled {
 .db-mobile-bottom-sheet .db-record-detail-header .db-record-detail-title {
   flex: 1;
   min-width: 0;
+  /* The header row anchors at flex-start so a title that wraps keeps its actions at the top of the
+     block rather than dragging them to its middle. A one-line title, though, is a 19px line box
+     beside a 44px touch target, and anchoring both at the top puts the words 13px above the icons —
+     visibly two rows where the design has one. Centring the TITLE against the line, rather than
+     centring the row, fixes the short case without touching the tall one: when the title is the
+     tallest item it already fills the line and this is a no-op. */
+  align-self: center;
 }
 
 .note-database-container .db-record-detail-title,

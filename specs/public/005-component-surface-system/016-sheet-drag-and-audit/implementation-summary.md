@@ -11,8 +11,8 @@ _memory:
     packet_pointer: "public/005-component-surface-system/016-sheet-drag-and-audit"
     last_updated_at: "2026-08-30T10:30:00Z"
     last_updated_by: "phase-author"
-    recent_action: "The ablation arm exists: a rebuild orphans the bar node while the panel survives"
-    next_safe_action: "The operator answers the 13px label and the resize question, and drags a sheet"
+    recent_action: "Resize dismissal fixed at the handler; keyboard arrival read from the host bundle"
+    next_safe_action: "Operator drags a sheet on device"
     blockers: []
     key_files:
       - "spec.md"
@@ -22,7 +22,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-016"
       parent_session_id: null
-    completion_pct: 60
+    completion_pct: 80
     open_questions: []
     answered_questions: []
 ---

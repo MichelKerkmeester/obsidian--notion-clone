@@ -2823,6 +2823,33 @@ const sheetResults = await section("the record sheet's own header", async () => 
         + ` — the band was measured covering the title outright and the top 18px of both actions`,
     });
 
+    // ── the title and its actions read as one row ──
+    //
+    // Found by reading the capture, then measured rather than argued. The header is a flex row at
+    // `align-items: flex-start`, so a one-line title occupies its own line box while each action
+    // occupies a 44px touch target beside it — and the glyphs end up on visibly different lines.
+    // `flex-start` is the right anchor for a title that wraps, so the fix is not `center`: it is
+    // that the title's own band matches the control's.
+    const titleRect = title.getBoundingClientRect();
+    const actionCentres = actions.map((el) => {
+      const r = el.getBoundingClientRect();
+      return Math.round(r.top + r.height / 2);
+    });
+    const titleMiddle = Math.round(titleRect.top + titleRect.height / 2);
+    const worstOffset = actionCentres.length
+      ? Math.max(...actionCentres.map((c) => Math.abs(c - titleMiddle)))
+      : 999;
+    out.push({
+      name: "the sheet header's title and its actions sit on one line",
+      // 2px, not 0: sub-pixel line boxes and an odd control height can land a centre half a pixel
+      // out either way, and a check that demanded exact equality would fail on rounding.
+      pass: actions.length >= 2 && worstOffset <= 2,
+      detail: `title centre y=${titleMiddle} (box ${Math.round(titleRect.height)}px tall),`
+        + ` action centres ${actionCentres.join(", ")}; worst offset ${worstOffset}px, want <= 2.`
+        + ` The header anchors at flex-start so a wrapping title keeps its actions at the top,`
+        + ` which is right — what has to match is the single-line band, not the alignment mode`,
+    });
+
     const short = actions.filter((el) => usableHeight(el) < 44);
     out.push({
       name: "the sheet's header actions deliver the whole 44px they declare",
@@ -5176,22 +5203,45 @@ await section("lifted probes: the sheet audit", async () => {
       ? `--keyboard-height ${kbFallback.declared}, visual viewport shrunk by 336px, published --db-keyboard-inset=${kbFallback.observed} (want ${kbFallback.want})`
       : "no container to publish onto");
 
+  // The Android-shaped signal: the window itself resizes. Driven by resizing the page rather than
+  // by dispatching a synthetic event, so the geometry the handler reads actually changed — a
+  // dispatched `resize` on an unchanged viewport passes any width comparison for free.
+  //
+  // Both directions, because "never close" is a one-line rig that satisfies the first half. A
+  // keyboard takes height and leaves the width alone; a rotation moves the width. The sheet has to
+  // survive the first and not the second, and the pair is what says the handler is reading the
+  // geometry rather than ignoring the event.
   await openSheet();
   await page.waitForTimeout(200);
-  const kbWindow = await page.evaluate(async () => {
-    document.documentElement.style.setProperty("--keyboard-height", "336px");
-    // The Android-shaped signal: the window itself resizes.
-    window.dispatchEvent(new Event("resize"));
-    await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
+  await page.setViewportSize({ width: 390, height: 508 });
+  await page.waitForTimeout(120);
+  const kbWindow = await page.evaluate(() => {
     const live = document.querySelector(".db-record-detail-panel");
-    document.documentElement.style.removeProperty("--keyboard-height");
-    return { survived: !!live, bottom: live ? Math.round(live.getBoundingClientRect().bottom) : null, viewport: window.innerHeight };
+    return {
+      survived: Boolean(live),
+      bottom: live ? Math.round(live.getBoundingClientRect().bottom) : null,
+      viewport: window.innerHeight,
+      width: window.innerWidth,
+    };
   });
-  record(4, "the sheet survives the window resize a keyboard causes",
-    kbWindow.survived,
+  await page.setViewportSize({ width: 844, height: 390 });
+  await page.waitForTimeout(120);
+  const rotated = await page.evaluate(() => ({
+    survived: Boolean(document.querySelector(".db-record-detail-panel")),
+    width: window.innerWidth,
+  }));
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.waitForTimeout(120);
+  record(4, "the sheet survives the window resize a keyboard causes, and not the one a rotation causes",
+    kbWindow.survived && kbWindow.bottom === kbWindow.viewport && !rotated.survived,
     kbWindow.survived
-      ? `sheet still open, bottom edge ${kbWindow.bottom}`
-      : "one window resize closed the record sheet outright — openRecordDetailPanel registers onResize = close(), so on a host that resizes the window for its keyboard the sheet is gone before any inset can be applied");
+      ? `the viewport shrank 844 -> ${kbWindow.viewport} at an unchanged width of ${kbWindow.width}:`
+        + ` the sheet is still open and still on the floor, bottom edge ${kbWindow.bottom} of`
+        + ` ${kbWindow.viewport}. Rotating to ${rotated.width} wide closed it=${!rotated.survived},`
+        + ` which is what says the handler reads the geometry rather than ignoring the event`
+      : "one window resize closed the record sheet outright — openRecordDetailPanel registers"
+        + " onResize = close(), so on a host that resizes the window for its keyboard the sheet is"
+        + " gone before any inset can be applied");
 
   // ── ASK 8 — one row grammar across sheets ─────────────────────────────
   const grammar = await page.evaluate(() => {
@@ -5783,27 +5833,14 @@ const KNOWN = new Map([
       + "`contain: paint !important`. Placement is correct; the surface is cut off at the widget's own "
       + "edge, which no coordinate can fix. The remedy is the body portal the mobile sheet already uses.",
   ],
-  // The two below arrived with the lifted probes. Each was already red where it was written, and
-  // each is a defect in the plugin rather than in the check — so they are declared rather than
-  // repaired, and the run reports an unexpected pass the moment either of them is fixed. Lifting a
-  // check and quietly loosening it would have been the one outcome worse than leaving it orphaned.
-  //
-  // A third, the calendar/timeline search-results clamp, was declared here and has since been
-  // repaired in both of its duplicated copies, so its entry is gone rather than left standing: a
-  // declared red that has been fixed is a check that can no longer fail.
-  // A fourth, the row label's off-scale size, was declared here and is now repaired at the token
-  // rather than at the one declaration, so its entry is gone too. It was unsatisfiable as declared:
-  // one check bound the label to `--db-font-md` and another required it on the audited scale, and
-  // no label value satisfied both while that token read 13px. Moving the step to 14px satisfies
-  // both at once, and it is the measured pass the entry asked for rather than the drive-by it
-  // warned against.
-  [
-    "the sheet survives the window resize a keyboard causes",
-    "`openRecordDetailPanel` registers `onResize = close()`, so on a host that resizes the window to "
-      + "make room for the software keyboard the sheet is dismissed before any inset can be applied. "
-      + "The fix is a resize handler that distinguishes a keyboard from a real resize, which is a "
-      + "behaviour change in the panel's lifecycle rather than a geometry correction.",
-  ],
+  // Four entries have left this map by being repaired rather than by being weakened, which is the
+  // outcome it exists to produce. The calendar/timeline search-results clamp was fixed in both of
+  // its duplicated copies. The row label's off-scale size was unsatisfiable as declared — one check
+  // bound the label to `--db-font-md` and another required it on the audited scale, and no value
+  // satisfied both while that token read 13px — and moving the step to 14px satisfies both at once.
+  // And the record sheet's window-resize dismissal is fixed at the handler: it now tells a keyboard
+  // from a rotation by whether the width moved, so the sheet survives the first and not the second.
+  // A declared red that has been repaired is a check that can no longer fail, so its entry goes.
 ]);
 
 // A check attributed to a phase with no recorded red is a check nobody watched fail, and that is

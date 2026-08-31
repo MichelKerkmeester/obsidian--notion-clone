@@ -37,7 +37,7 @@ import { getFieldWidth } from "./column-width";
 import { parseInlineMarkdown } from "../data/inline-markdown";
 import { renderInlineMarkdown, resolveInlineImageSrc, valueToTooltip } from "./inline-markdown-renderer";
 import { markNoteHoverLink } from "./hover-link-preview";
-import { positionToolbarPopover } from "./popover-position";
+import { isMobileBottomSheet, positionToolbarPopover } from "./popover-position";
 import { renderDelayedExternalLink } from "./cell-renderer";
 import { renderCardField } from "./card-field-renderer";
 import { createCheckbox } from "./checkbox";
@@ -224,6 +224,10 @@ export function openRecordDetailPanel(opts: OpenRecordDetailOptions): void {
       close();
     }
   };
+  // The viewport this panel was placed against. A resize is only worth escaping if the geometry
+  // the placement depended on actually changed, and this is what that is compared to.
+  let placedWidth = window.innerWidth;
+
   const onResize = (): void => {
     // A software keyboard appearing resizes the window on some platforms, and this listener's job
     // is to dismiss a panel whose anchor has moved out from under it. Those two collide the moment
@@ -231,6 +235,20 @@ export function openRecordDetailPanel(opts: OpenRecordDetailOptions): void {
     // the surface the editor exists for. The sheet re-places itself against the keyboard inset
     // already, so there is nothing here for it to escape.
     if (bodyRegion?.isEditing()) return;
+
+    // The same collision, one layer wider. Guarding only the body editor left every OTHER way a
+    // keyboard opens — a field editor, a rename, a search box — closing the sheet on the platforms
+    // that report a keyboard as a window resize. The two events are told apart by what changed
+    // rather than by which surface has focus: a software keyboard takes height and leaves the width
+    // alone, while a rotation or a window drag moves the width. So on a phone sheet a
+    // width-preserving resize is a keyboard, and the sheet stays and re-places itself against the
+    // inset; anything that moves the width is a real reflow the panel cannot survive anchored.
+    //
+    // Restricted to the sheet presentation deliberately. A desktop panel is anchored to an element
+    // rather than to the floor, and a vertical-only window drag genuinely does move its anchor out
+    // from under it — there, closing is still the right answer.
+    if (isMobileBottomSheet(window.activeDocument) && window.innerWidth === placedWidth) return;
+    placedWidth = window.innerWidth;
     close();
   };
 
