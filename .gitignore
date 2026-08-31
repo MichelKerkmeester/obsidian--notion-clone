@@ -72,3 +72,15 @@ specs/**/lineages/*/deep-*-ledger/
 specs/**/lineages/*/deep-*-audit-ledger/
 specs/**/lineages/*/deep-*-effect-ledger/
 specs/**/lineages/*/observability-events.jsonl
+
+# Shared repo rules symlinked from the Public monorepo. Local rule files
+# and the router beside them stay tracked; only the links are ignored.
+repo-rules/blast-radius.md
+repo-rules/communication.md
+repo-rules/delegation-and-orchestration.md
+repo-rules/evidence-and-proof.md
+repo-rules/hub-routing.md
+repo-rules/overengineering.md
+repo-rules/root-cause.md
+repo-rules/scope-discipline.md
+repo-rules/uncertainty-and-honesty.md
