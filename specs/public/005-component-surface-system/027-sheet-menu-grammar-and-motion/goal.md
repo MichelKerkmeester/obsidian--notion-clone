@@ -161,19 +161,34 @@ transition belongs to the state being moved to.
 
 ## OPERATOR REPORT 28 — THE MORE-TOOLS DROPDOWN
 
-A fourth report against this surface: the desktop More-tools dropdown's section heading and its rows
-do not share a left edge. That count matters — a fourth report on one surface says the row is still
-not a shared thing.
+A fourth report against this surface: the desktop More-tools dropdown's heading and its rows do not
+share a left edge. A fourth report on one surface says the row is still not a shared thing.
 
-**Hypothesis, testable, not a diagnosis.** The shared row declares `padding: 0 8px` with
-`justify-content: flex-start`, and the section heading declares `padding: 6px 8px 2px` — the same
-8px inset. A surface built on the shared row therefore *cannot* show this gap, which points at this
-dropdown not using `createMenuRow`.
+**My first hypothesis was wrong, and the tree refuted it in one grep.** I wrote that the shared row
+and `.db-menu-section` both sit at an 8px inset, so a surface built on `createMenuRow` *cannot* show
+this gap — concluding the dropdown must not use it. I even named the refutation: *"finding this
+surface already on `createMenuRow`."* I did not run it. Three facts, each one command away:
 
-**Why our own checks are blind to it, in the stylesheet's own words:** the `justify-content`
-declaration exists precisely because an undeclared value computes to `normal` against the plugin
-stylesheet alone and only centres under the host's cascade. A rule measured without the host looks
-correct. That is this packet's lens pointed at its own instrument.
+- **The popover already uses `createMenuRow`**, through `renderToolbarMenuRow` in
+  `toolbar-renderer.ts`, for every row it draws.
+- Those rows carry `db-toolbar-menu-row`, which sets `padding: var(--db-space-3) var(--db-space-5)`
+  — **6px 12px**, overriding the shared row's `0 8px` at equal specificity and later position. The
+  rows are not at an 8px inset.
+- The heading is **`.db-panel-title` inside `.db-panel-header`**, not `.db-menu-section`.
+  `.db-panel-header` sets no inline padding at all.
 
-What refutes the hypothesis: finding this surface already on `createMenuRow`, which would make it a
-cascade escape rather than a grammar gap — a different fix entirely.
+So the two selectors the hypothesis compared are not the two elements in the operator's screenshot,
+and the shared-grammar conclusion was reached from the wrong pair.
+
+**What the evidence actually supports.** The rows sit at a 12px inset from a per-surface override
+while the heading sits at whatever its header gives it — a genuine grammar hole, but *inside* a
+surface that already uses the shared row, which is a different and more interesting failure than the
+one I wrote down. The shared row is only shared down to the last property a per-surface class does
+not override, which is this phase's founding observation applied to horizontal padding.
+
+**One lead, offered without asserting it as the cause:** there is a rule aligning the heading to the
+rows' icon column, and it is scoped `.is-phone` only. Report 28 is a desktop report. Whether that is
+the mechanism or a coincidence needs measuring, not arguing.
+
+**Recorded as a correction rather than quietly rewritten**, because writing a falsification test and
+not running it is exactly the failure this packet exists to catch, and it happened here.

@@ -64,8 +64,8 @@ who is responsible for it.
 That single gap produces four separate operator-visible defects, none of which is fixed by fixing
 another.
 
-**The scrim is never taken down.** `applySheetChrome` has six call sites in the shipped bundle and
-only **two** ever pass `false`. Every sheet mounted through `positionToolbarPopover` — filter, sort,
+**The scrim is never taken down.** `applySheetChrome` has six call sites in `src/` and only **two** ever
+pass `false`. Every sheet mounted through `positionToolbarPopover` — filter, sort,
 columns, view config, group, add-view, cell editors, pickers — creates a body-level
 `.db-mobile-sheet-scrim` at `inset: 0`, `pointer-events: auto`, and never removes it. A dimmed,
 tap-swallowing overlay across the whole app is what a user calls a freeze. Two panels are worse:
@@ -80,8 +80,12 @@ sheet is portalled to `body` but registers through a container-scoped selector, 
 never in the overlay stack and the drag springs back. Outside-tap still closes it, which is exactly
 why only the drag was reported.
 
-**Thirteen modal sheets draw a handle wired to nothing.** `DbModal` applies sheet chrome and never
-attaches the drag, so the grab bar is visible and permanently dead.
+**Sixteen modal sheets draw a handle wired to nothing.** `DbModal` applies sheet chrome and never
+attaches the drag, so the grab bar is visible and permanently dead. Sixteen, not thirteen: twenty
+classes extend `DbModal`, four ask for `fullscreen`, thirteen ask for `sheet` explicitly, and three
+more take the constructor default — which is `sheet`. Counting explicit arguments instead of
+presentations is how the number came out low, and it is the kind of derived count this packet's log
+warns goes stale silently.
 
 **Dismissal is distance-only.** A 96px threshold with no velocity term on an 844px screen: a flick
 that travels 60px springs back. A user reports that as "cannot be dragged down".

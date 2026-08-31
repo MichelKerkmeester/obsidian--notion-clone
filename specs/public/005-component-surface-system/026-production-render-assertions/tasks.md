@@ -196,3 +196,14 @@ tasks in their own right and carry the run that made them fail.
 - Criteria doctrine: [`../architecture-findings.md`](../architecture-findings.md) §9
 - The regression this instrument would have caught: [`../024-list-view-freeze/acceptance-criteria.md`](../024-list-view-freeze/acceptance-criteria.md) §2
 <!-- /ANCHOR:cross-refs -->
+
+## ADDED FROM THE SESSION AUDIT
+
+- [ ] **T-TABLE** Give the table scenario a layout-read bound, or record why it cannot have one.
+      *Evidence to close:* either the table asserts `layoutReads` like the other five, or the reason
+      it is exempt is written where the next reader will look.
+      **Why:** the table asks the touch question once per row at two sites — the shape hoisted out
+      of every other view — and it is the only one of the six covered renderers with no
+      `MAX_LAYOUT_READS` assertion. It is safe today because the body is built off-document, and
+      that property is asserted. But the mitigation is guarded and the reads are not: attach the
+      body before filling it and this is quadratic with nothing watching.

@@ -117,6 +117,17 @@ this program, and does not occupy a row here; the table below runs 1-16 then 18-
 
 | 28 | *"this dropdown doesnt align with other components yet dropdowns and sheets"* — the desktop **More tools** toolbar dropdown | `027-sheet-menu-grammar-and-motion` | **New, this session. Not investigated.** | Operator report on 1.3.9, with a screenshot: the section heading sits at the panel's left inset while the rows below start far to its right, so heading and rows do not share a left edge. **Hypothesis, testable:** the shared row grammar declares `padding: 0 8px` and `justify-content: flex-start` on `.db-menu-item`, and `.db-menu-section` declares `padding: 6px 8px 2px` — the same 8px inset, so a surface built on the shared row cannot show this gap. That points at the More-tools dropdown not using `createMenuRow`. **The stylesheet already records why this shape is invisible to our checks:** the `justify-content` declaration exists precisely because an undeclared value computes to `normal` against the plugin stylesheet alone and only centres under the host's cascade, so a rule measured without the host looks correct. What refutes the hypothesis: finding this surface already on `createMenuRow`, which would make it a cascade escape rather than a grammar gap |
 
+**Reports 21-24 and report 27 are probably one defect with two owners.** 21, 22 and 23 are the sort
+and filter sheets bugging out and freezing on open or close; 24 is the column-setting sheet not
+responding. All three surfaces are panel families that `031` identifies as leaving a scrim behind,
+and column-manager is one of the two it identifies as leaving the sheet itself. They still route to
+`028` and `027` because that is where they were filed when the symptom looked like a render cost.
+
+Not re-routed yet, deliberately: re-routing four reports on a mechanism that is diagnosed but not
+yet fixed would be filing them where I expect the answer to be rather than where it is shown to be.
+When `031` T1's parity check runs, it will say which of these surfaces leak — and that measurement,
+not this note, is what should move them.
+
 ### What the table says as a whole
 
 **All twenty-seven reports now have a named phase**, and fifteen of the original sixteen have

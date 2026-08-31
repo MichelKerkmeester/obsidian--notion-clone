@@ -214,7 +214,7 @@ same specificity, nothing in-container moves — took the unrecoverable count **
 | Reports with an owning phase | Done | 16 of 16; `roadmap.md` §4 |
 | Reports shipped | In Progress | 14 of 16 |
 | Reports operator-confirmed | In Progress | 1 of 16, as an accepted shortfall |
-| Every phase has a `goal.md` | Done | The four that did not — `020`, `021`, `023`, `025` — were written after an audit counted, having been claimed complete twice |
+| Every phase has a `goal.md` | Done | 035 folders, all carrying one. **This row was briefly false:** 032, 033 and 034 were opened without one by the same commit that opened 034 to fix documentation drift — the drift mechanism reproducing itself inside its own remedy. Added and re-checked across every folder rather than assumed | The four that did not — `020`, `021`, `023`, `025` — were written after an audit counted, having been claimed complete twice |
 | Report 1, the sheet drag | Fixed, awaiting device | The panel's render destroyed the grab bar; a 60px drag now moves 60.0px after a re-render, was 0.0px |
 | Non-table views on device | Unconfirmed | Two quadratics found and fixed (list `024`, timeline `028`); the calendar measured clean. None confirmed on device |
 | Gate checks constructing a renderer | 1 of 16 | `026`. `render-assertion-harness.ts` builds all six view renderers across twelve scenarios and both bags, green in the gate, all six sources fingerprinted as declared inputs. Coverage 6 of 22 |

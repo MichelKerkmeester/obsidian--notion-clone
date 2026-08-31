@@ -39,6 +39,10 @@ _memory:
 | **Level** | 1 |
 | **Status** | Planned |
 | **Complexity** | 15/100, confidence 90% |
+
+**On the declared level.** `recommend-level.sh` returned Level 0; this folder declares Level
+1. Raising it is permitted and is recorded here rather than left silent: A security defect with a disputed severity and a test rewrite is not a no-doc change, whatever the line count says. The scorer
+reads line and file counts and cannot see either.
 <!-- /ANCHOR:metadata -->
 
 ---

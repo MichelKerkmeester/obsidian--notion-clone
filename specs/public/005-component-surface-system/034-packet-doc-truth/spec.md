@@ -41,6 +41,10 @@ _memory:
 | **Level** | 2 |
 | **Status** | Planned |
 | **Complexity** | 39/100, confidence 80% |
+
+**On the declared level.** `recommend-level.sh` returned Level 1; this folder declares Level
+2. Raising it is permitted and is recorded here rather than left silent: Eleven corrections across nine files, two of which carry substantive residue rather than wording. The scorer
+reads line and file counts and cannot see either.
 <!-- /ANCHOR:metadata -->
 
 ---

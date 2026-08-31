@@ -16,7 +16,9 @@
       "034 doc truth",
       "review doc findings",
       "034 plan",
-      "034 tasks"
+      "034 tasks",
+      "034 acceptance criteria",
+      "034 goal"
     ],
     "key_topics": [
       "doc",
@@ -27,17 +29,19 @@
       "findings",
       "plan",
       "tasks",
-      "eleven",
-      "deep",
-      "fifteen",
-      "untrue"
+      "acceptance",
+      "criteria",
+      "goal",
+      "eleven"
     ],
     "importance_tier": "important",
     "status": "planned",
     "key_files": [
       "spec.md",
       "plan.md",
-      "tasks.md"
+      "tasks.md",
+      "acceptance-criteria.md",
+      "goal.md"
     ],
     "entities": [
       {
@@ -56,6 +60,18 @@
         "name": "tasks.md",
         "kind": "doc",
         "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "acceptance-criteria.md",
+        "kind": "doc",
+        "path": "acceptance-criteria.md",
+        "source": "derived"
+      },
+      {
+        "name": "goal.md",
+        "kind": "doc",
+        "path": "goal.md",
         "source": "derived"
       },
       {
@@ -153,22 +169,42 @@
         "kind": "heading",
         "path": "tasks.md",
         "source": "derived"
+      },
+      {
+        "name": "Acceptance Criteria",
+        "kind": "proper_noun",
+        "path": "acceptance-criteria.md",
+        "source": "derived"
+      },
+      {
+        "name": "substantive",
+        "kind": "key_phrase",
+        "path": "acceptance-criteria.md",
+        "source": "derived"
+      },
+      {
+        "name": "CRITERIA",
+        "kind": "heading",
+        "path": "acceptance-criteria.md",
+        "source": "derived"
       }
     ],
     "causal_summary": "Eleven of the deep review's fifteen findings are untrue statements inside this packet's own documents; this phase corrects them and records why they drifted.",
     "created_at": "2026-08-31T14:46:51.989Z",
-    "last_save_at": "2026-08-31T14:48:21.746Z",
+    "last_save_at": "2026-08-31T15:27:32.687Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
       "spec.md",
       "plan.md",
-      "tasks.md"
+      "tasks.md",
+      "acceptance-criteria.md",
+      "goal.md"
     ],
-    "source_fingerprint": "sha256:a37a7b936e1602e3f97ad85bd23c0551d60b374cfde71b4204d0663406734cc7",
+    "source_fingerprint": "sha256:c33ded3c6b707bd8412b62e6c70c0a64edee43563acd0e1035fac4d2831f5091",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "d9d43920fadeaa53d4a53c11787455288ae2424900546872658412f9eaf2ecc2",
+      "spec.md": "88eadd716a0c35208170c1968cc292c20142ce8373383595bb389ecdf79d936d",
       "plan.md": "0fa1886f83ba4b2e4135194dc42fe8d4285283d0f8162b65917f1c3dbf152a97",
       "tasks.md": "df25ee877b56a0bb3164a48b0209931d54d959760e5ed023e5aa159cce87ec9a"
     },

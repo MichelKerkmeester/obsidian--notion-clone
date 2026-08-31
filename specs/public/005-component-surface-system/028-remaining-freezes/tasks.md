@@ -81,3 +81,14 @@ owed refresh rather than cancelling it.
   `verify-placement` 186/190 with 4 declared reds.
 - **T5.5** Operator confirms on device. Nothing here substitutes for it.
 <!-- /ANCHOR:phase-3 -->
+
+## ADDED FROM THE DEEP REVIEW
+
+- [ ] **T-F002** A sort or filter mutation must not destroy and rebuild every view — review finding
+      F002, `database-view.ts:11485`.
+      *Evidence to close:* a mutation repaints the affected rows without a full teardown, measured
+      at the operator's shape rather than at a bench default.
+      **Why this needs its own row:** this phase's ticked criterion bounds the *number* of rebuilds
+      at one and says outright that it "bounds the number of rebuilds, never the cost of the one."
+      F002 is about that one rebuild still being wrong, so the ticked row does not cover it and
+      would otherwise read as if it did.

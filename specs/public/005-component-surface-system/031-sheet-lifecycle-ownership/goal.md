@@ -41,8 +41,9 @@ _memory:
 behind — and that is true by construction rather than by every caller remembering.
 
 **The root cause is one missing thing.** Mount is `applySheetChrome(el, true)` and teardown is
-`applySheetChrome(el, false)`: a symmetric-call contract that 25 of 27 producers simply never
-complete. No type, test or review catches it, because the "on" call looks complete on its own. Every
+`applySheetChrome(el, false)`: a symmetric-call contract whose "off" half is almost never called.
+Six call sites in `src/`, and **only two of them ever pass `false`** — the owned menu and the record
+panel. Every other producer mounts and never tears down. No type, test or review catches it, because the "on" call looks complete on its own. Every
 defect in this phase is a consequence of that shape.
 
 ### Decisions
@@ -89,7 +90,7 @@ Volatile. Not part of the directive.
 | 1 | Report 27, the freeze | Scrim and sometimes the sheet orphaned on `document.body` at close | ~20 lines |
 | 2 | Report 26, group sheet | `panel.empty()` destroys the grab bar; chrome never re-asserted | 1 line |
 | 3 | Report 26, view sheet | Portalled panel never registers with the overlay stack | ~5 lines |
-| 4 | Report 26, "some sheets" | 13 `DbModal` sheets draw a handle wired to nothing | ~10 lines |
+| 4 | Report 26, "some sheets" | 16 `DbModal` sheets draw a handle wired to nothing | ~10 lines |
 | 5 | Report 27, jank | A keyboard inset written on the whole container, not the one bar that reads it | 2 lines |
 | 6 | Report 26, partial | 96px distance-only dismissal; a flick does nothing | ~15 lines |
 

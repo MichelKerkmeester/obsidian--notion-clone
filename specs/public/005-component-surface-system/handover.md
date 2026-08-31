@@ -260,14 +260,20 @@ too. Recorded as **disputed severity**, not adopted at P0 on one lane's label.
 ## 8. WHERE EVERY FINDING NOW LIVES
 
 Nothing from the research, the review or the audit is carried in conversation. Each has an owning
-phase with criteria and evidence.
+phase, and — after a fresh reviewer found three rows that had prose but no task — each now has a
+criterion or a task that can actually close.
+
+**The correction is worth keeping visible.** The first version of this map claimed ownership for
+026, 027 and 028 on the strength of a paragraph in a LOG. A reader following the map to F002 would
+have found a folder with no requirement, no task and no criterion, and a ticked row that explicitly
+disclaims the cost F002 is about. Prose in a log is a note; it is not an owner.
 
 | Source | Finding | Phase |
 |---|---|---|
 | Research | Orphaned scrim; both drag causes; dead modal handles; velocity dismissal; the disposer | **031** (new) |
 | Review F001, F010 | Cover targets open any URL scheme; missing `noopener` | **032** (new) |
 | Directive priority 2 | List still blocks 2.0-4.9s; layout over node count | **033** (new) |
-| Review F003-F009, F011-F015 | Eleven untrue statements in this packet's own documents | **034** (new) |
+| Review F003-F009, F011-F012, F014-F015 | Eleven untrue statements in this packet's own documents | **034** (new) |
 | Audit | The table is the only covered renderer with no layout-read bound | 026 |
 | Report 28 | More-tools dropdown alignment | 027 |
 | Review F002 | Sort and filter still rebuild every view | 028 |

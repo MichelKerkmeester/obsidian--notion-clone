@@ -135,3 +135,12 @@ open. Traced in `acceptance-criteria.md` (AC-1 through AC-16) and `implementatio
 - [`../013-add-view-sheet/spec.md`](../013-add-view-sheet/spec.md)
 
 <!-- /ANCHOR:cross-refs -->
+
+## ADDED FROM OPERATOR REPORT 28
+
+- [ ] **T-R28** The More-tools popover's heading and rows share a left edge — operator report 28.
+      *Evidence to close:* the two measured from the rendered surface at desktop width, equal.
+      **Start by measuring, not by theorising.** The first hypothesis here was refuted by the tree
+      (the popover already uses the shared row; the heading is not the element compared), so the
+      first step is to read the computed inset off both elements rather than to reason about which
+      rule should win.

@@ -65,8 +65,11 @@ _memory:
       construction rather than by inspection.
 - [ ] **T7** Velocity-based dismissal — REQ-005.
       *Evidence to close:* a short fast flick dismisses; a slow short drag still springs back.
-- [ ] **T8** Move the keyboard inset onto the element that reads it.
-      *Evidence to close:* per-write cost flat in row count. It grows today.
+- [ ] ~~**T8** Move the keyboard inset onto the element that reads it.~~ **Moved to `../022`.**
+      It carried no requirement here, appears in neither this phase's scope nor its criteria, and
+      could therefore never have closed in this phase's own terms. The inset is 022's surface — that
+      phase docked the selection bar on it — and this phase's own goal says the container-wide write
+      is jank rather than the freeze. Recorded rather than deleted, so the finding is not lost.
 
 ## PHASE 5: VERIFICATION
 
