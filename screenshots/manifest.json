@@ -678,7 +678,7 @@
       "layoutHash": "161f683925b4",
       "sourceHashes": {
         "src/views/group-label-renderer.ts": "3fee8449607c",
-        "src/views/table-renderer.ts": "4da7fde17e18",
+        "src/views/table-renderer.ts": "4a071454f15b",
         "src/views/summary-renderer.ts": "c6752fec0dfe",
         "styles.css": "96f5fa440637",
         "tools/screenshots/theme.css": "8239cc22cceb",
@@ -705,7 +705,7 @@
       "layoutHash": "161f683925b4",
       "sourceHashes": {
         "src/views/group-label-renderer.ts": "3fee8449607c",
-        "src/views/table-renderer.ts": "4da7fde17e18",
+        "src/views/table-renderer.ts": "4a071454f15b",
         "src/views/summary-renderer.ts": "c6752fec0dfe",
         "styles.css": "96f5fa440637",
         "tools/screenshots/theme.css": "8239cc22cceb",
@@ -732,7 +732,7 @@
       "layoutHash": "0af5e5769cdb",
       "sourceHashes": {
         "src/views/group-label-renderer.ts": "3fee8449607c",
-        "src/views/table-renderer.ts": "4da7fde17e18",
+        "src/views/table-renderer.ts": "4a071454f15b",
         "src/views/summary-renderer.ts": "c6752fec0dfe",
         "styles.css": "96f5fa440637",
         "tools/screenshots/theme.css": "8239cc22cceb",
@@ -759,7 +759,7 @@
       "layoutHash": "0af5e5769cdb",
       "sourceHashes": {
         "src/views/group-label-renderer.ts": "3fee8449607c",
-        "src/views/table-renderer.ts": "4da7fde17e18",
+        "src/views/table-renderer.ts": "4a071454f15b",
         "src/views/summary-renderer.ts": "c6752fec0dfe",
         "styles.css": "96f5fa440637",
         "tools/screenshots/theme.css": "8239cc22cceb",
@@ -1031,7 +1031,7 @@
       },
       "note": "The phone form of the owned menu. Rows share one left edge with the icon in a fixed leading column, hairlines divide neighbours but not the last row of a group, and a row that opens a submenu carries a trailing chevron. Captured in viewport mode so the fixed sheet docks at the bottom.",
       "capture": "viewport",
-      "bytes": 51712
+      "bytes": 51714
     },
     {
       "id": "chrome-owned-menu-sheet",
@@ -1058,7 +1058,7 @@
       },
       "note": "The phone form of the owned menu. Rows share one left edge with the icon in a fixed leading column, hairlines divide neighbours but not the last row of a group, and a row that opens a submenu carries a trailing chevron. Captured in viewport mode so the fixed sheet docks at the bottom.",
       "capture": "viewport",
-      "bytes": 36596
+      "bytes": 36591
     },
     {
       "id": "chrome-owned-menu-sheet",
@@ -1285,7 +1285,7 @@
       "layoutHash": "2e0bbd255d7a",
       "sourceHashes": {
         "src/views/table-footer-renderer.ts": "2a076187efd5",
-        "src/views/table-renderer.ts": "4da7fde17e18",
+        "src/views/table-renderer.ts": "4a071454f15b",
         "styles.css": "96f5fa440637",
         "tools/screenshots/theme.css": "8239cc22cceb",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -1310,7 +1310,7 @@
       "layoutHash": "2e0bbd255d7a",
       "sourceHashes": {
         "src/views/table-footer-renderer.ts": "2a076187efd5",
-        "src/views/table-renderer.ts": "4da7fde17e18",
+        "src/views/table-renderer.ts": "4a071454f15b",
         "styles.css": "96f5fa440637",
         "tools/screenshots/theme.css": "8239cc22cceb",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -1335,7 +1335,7 @@
       "layoutHash": "e4ec7be5246c",
       "sourceHashes": {
         "src/views/table-footer-renderer.ts": "2a076187efd5",
-        "src/views/table-renderer.ts": "4da7fde17e18",
+        "src/views/table-renderer.ts": "4a071454f15b",
         "styles.css": "96f5fa440637",
         "tools/screenshots/theme.css": "8239cc22cceb",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -1360,7 +1360,7 @@
       "layoutHash": "e4ec7be5246c",
       "sourceHashes": {
         "src/views/table-footer-renderer.ts": "2a076187efd5",
-        "src/views/table-renderer.ts": "4da7fde17e18",
+        "src/views/table-renderer.ts": "4a071454f15b",
         "styles.css": "96f5fa440637",
         "tools/screenshots/theme.css": "8239cc22cceb",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -2906,7 +2906,7 @@
       "layoutHash": "41171c8dcdeb",
       "sourceHashes": {
         "src/views/record-icon-renderer.ts": "3d90a87b2a0b",
-        "src/views/table-renderer.ts": "4da7fde17e18",
+        "src/views/table-renderer.ts": "4a071454f15b",
         "src/data/record-icon.ts": "dd6940af82f2",
         "styles.css": "96f5fa440637",
         "tools/screenshots/theme.css": "8239cc22cceb",
@@ -2933,7 +2933,7 @@
       "layoutHash": "41171c8dcdeb",
       "sourceHashes": {
         "src/views/record-icon-renderer.ts": "3d90a87b2a0b",
-        "src/views/table-renderer.ts": "4da7fde17e18",
+        "src/views/table-renderer.ts": "4a071454f15b",
         "src/data/record-icon.ts": "dd6940af82f2",
         "styles.css": "96f5fa440637",
         "tools/screenshots/theme.css": "8239cc22cceb",
@@ -2960,7 +2960,7 @@
       "layoutHash": "faa74778b1c3",
       "sourceHashes": {
         "src/views/record-icon-renderer.ts": "3d90a87b2a0b",
-        "src/views/table-renderer.ts": "4da7fde17e18",
+        "src/views/table-renderer.ts": "4a071454f15b",
         "src/data/record-icon.ts": "dd6940af82f2",
         "styles.css": "96f5fa440637",
         "tools/screenshots/theme.css": "8239cc22cceb",
@@ -2987,7 +2987,7 @@
       "layoutHash": "faa74778b1c3",
       "sourceHashes": {
         "src/views/record-icon-renderer.ts": "3d90a87b2a0b",
-        "src/views/table-renderer.ts": "4da7fde17e18",
+        "src/views/table-renderer.ts": "4a071454f15b",
         "src/data/record-icon.ts": "dd6940af82f2",
         "styles.css": "96f5fa440637",
         "tools/screenshots/theme.css": "8239cc22cceb",
@@ -3647,7 +3647,7 @@
       },
       "note": "Tapping the rendered body swaps it for a textarea. The box grows to its content rather than scrolling inside itself, because the sheet is already a scroll container. What a capture cannot show is the software keyboard: the sheet lifts and shortens against --db-keyboard-inset only when one is open, and no capture has one, so this is the editor at an inset of zero. Focus and the keyboard-avoided sheet are device-verified.",
       "capture": "viewport",
-      "bytes": 72137
+      "bytes": 72132
     },
     {
       "id": "panel-record-detail-sheet-body-editing",
@@ -3929,7 +3929,7 @@
       "layoutHash": "4f0c5d22f7f0",
       "sourceHashes": {
         "src/views/table-record-peek.ts": "ca49c8ce6aab",
-        "src/views/table-renderer.ts": "4da7fde17e18",
+        "src/views/table-renderer.ts": "4a071454f15b",
         "styles.css": "96f5fa440637",
         "tools/screenshots/theme.css": "8239cc22cceb",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -3954,7 +3954,7 @@
       "layoutHash": "4f0c5d22f7f0",
       "sourceHashes": {
         "src/views/table-record-peek.ts": "ca49c8ce6aab",
-        "src/views/table-renderer.ts": "4da7fde17e18",
+        "src/views/table-renderer.ts": "4a071454f15b",
         "styles.css": "96f5fa440637",
         "tools/screenshots/theme.css": "8239cc22cceb",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -3979,7 +3979,7 @@
       "layoutHash": "84d812d7a13b",
       "sourceHashes": {
         "src/views/table-record-peek.ts": "ca49c8ce6aab",
-        "src/views/table-renderer.ts": "4da7fde17e18",
+        "src/views/table-renderer.ts": "4a071454f15b",
         "styles.css": "96f5fa440637",
         "tools/screenshots/theme.css": "8239cc22cceb",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -4004,7 +4004,7 @@
       "layoutHash": "84d812d7a13b",
       "sourceHashes": {
         "src/views/table-record-peek.ts": "ca49c8ce6aab",
-        "src/views/table-renderer.ts": "4da7fde17e18",
+        "src/views/table-renderer.ts": "4a071454f15b",
         "styles.css": "96f5fa440637",
         "tools/screenshots/theme.css": "8239cc22cceb",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -4655,7 +4655,7 @@
       },
       "note": "Days with events carry a short accent underline; the visible week reads as the selected pill run.",
       "capture": "viewport",
-      "bytes": 61342
+      "bytes": 61305
     },
     {
       "id": "calendar-mini-calendar",
@@ -4943,7 +4943,7 @@
       },
       "note": "Sticky day header and all-day strip over the 08–16 time grid; the current-time ruler sits on Wednesday at 13:45.",
       "capture": "viewport",
-      "bytes": 119833
+      "bytes": 119776
     },
     {
       "id": "calendar-week-time-grid",
@@ -5401,7 +5401,7 @@
       ],
       "layoutHash": "0a098255cd1c",
       "sourceHashes": {
-        "src/views/table-renderer.ts": "4da7fde17e18",
+        "src/views/table-renderer.ts": "4a071454f15b",
         "src/views/table-column-layout-sync.ts": "a678b28c2bf2",
         "src/views/table-layout.ts": "a39067d21b59",
         "src/views/cell-renderer.ts": "6b23762ee384",
@@ -5435,7 +5435,7 @@
       ],
       "layoutHash": "0a098255cd1c",
       "sourceHashes": {
-        "src/views/table-renderer.ts": "4da7fde17e18",
+        "src/views/table-renderer.ts": "4a071454f15b",
         "src/views/table-column-layout-sync.ts": "a678b28c2bf2",
         "src/views/table-layout.ts": "a39067d21b59",
         "src/views/cell-renderer.ts": "6b23762ee384",
@@ -5469,7 +5469,7 @@
       ],
       "layoutHash": "eaee4fc9f747",
       "sourceHashes": {
-        "src/views/table-renderer.ts": "4da7fde17e18",
+        "src/views/table-renderer.ts": "4a071454f15b",
         "src/views/table-column-layout-sync.ts": "a678b28c2bf2",
         "src/views/table-layout.ts": "a39067d21b59",
         "src/views/cell-renderer.ts": "6b23762ee384",
@@ -5503,7 +5503,7 @@
       ],
       "layoutHash": "eaee4fc9f747",
       "sourceHashes": {
-        "src/views/table-renderer.ts": "4da7fde17e18",
+        "src/views/table-renderer.ts": "4a071454f15b",
         "src/views/table-column-layout-sync.ts": "a678b28c2bf2",
         "src/views/table-layout.ts": "a39067d21b59",
         "src/views/cell-renderer.ts": "6b23762ee384",
@@ -5533,7 +5533,7 @@
       ],
       "layoutHash": "b518b455de1a",
       "sourceHashes": {
-        "src/views/table-renderer.ts": "4da7fde17e18",
+        "src/views/table-renderer.ts": "4a071454f15b",
         "src/views/column-header-controller.ts": "7714b894b5b0",
         "src/views/cell-renderer.ts": "6b23762ee384",
         "styles.css": "96f5fa440637",
@@ -5560,7 +5560,7 @@
       ],
       "layoutHash": "b518b455de1a",
       "sourceHashes": {
-        "src/views/table-renderer.ts": "4da7fde17e18",
+        "src/views/table-renderer.ts": "4a071454f15b",
         "src/views/column-header-controller.ts": "7714b894b5b0",
         "src/views/cell-renderer.ts": "6b23762ee384",
         "styles.css": "96f5fa440637",
@@ -5587,7 +5587,7 @@
       ],
       "layoutHash": "0c23ab1ce5a1",
       "sourceHashes": {
-        "src/views/table-renderer.ts": "4da7fde17e18",
+        "src/views/table-renderer.ts": "4a071454f15b",
         "src/views/column-header-controller.ts": "7714b894b5b0",
         "src/views/cell-renderer.ts": "6b23762ee384",
         "styles.css": "96f5fa440637",
@@ -5614,7 +5614,7 @@
       ],
       "layoutHash": "0c23ab1ce5a1",
       "sourceHashes": {
-        "src/views/table-renderer.ts": "4da7fde17e18",
+        "src/views/table-renderer.ts": "4a071454f15b",
         "src/views/column-header-controller.ts": "7714b894b5b0",
         "src/views/cell-renderer.ts": "6b23762ee384",
         "styles.css": "96f5fa440637",
@@ -5650,7 +5650,7 @@
       },
       "note": "Column width is a switch plus a slider here, not the calendar's mode dropdown; the slider only appears once the switch is on.",
       "capture": "viewport",
-      "bytes": 100165
+      "bytes": 100188
     },
     {
       "id": "timeline-toolbar-options",
@@ -5794,7 +5794,7 @@
       },
       "note": "Two weeks at one column per day; the April band marks the month boundary and the today line sits at 25 March 13:45.",
       "capture": "viewport",
-      "bytes": 70278
+      "bytes": 69974
     },
     {
       "id": "timeline-view",

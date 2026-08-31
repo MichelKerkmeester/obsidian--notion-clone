@@ -25,6 +25,16 @@ import esbuild from "esbuild";
 import { chromium } from "playwright-core";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
+
+// Shape overrides: `--rows=400,12800` pushes the sweep past the default ceiling. A scaling verdict
+// taken from a range that stops below the bend cannot see the bend.
+const BENCH_OPTIONS = {};
+for (const arg of process.argv.slice(2)) {
+  const [key, value] = arg.replace(/^--/, "").split("=");
+  if (key === "rows") BENCH_OPTIONS.rowCounts = value.split(",").map(Number);
+  else if (key === "cols") BENCH_OPTIONS.columnCounts = value.split(",").map(Number);
+  else throw new Error(`run: unknown argument "${arg}"`);
+}
 const REPO = resolve(HERE, "../..");
 const OUT = resolve(HERE, "dist");
 
@@ -49,7 +59,7 @@ import { installObsidianDomShim } from "../../storybook/obsidian-dom-shim.mjs";
 import { runBench } from "../table-render-bench";
 
 installObsidianDomShim(window);
-window.__bench = (detached) => runBench(document.body, detached);
+window.__bench = (detached, options) => runBench(document.body, detached, options);
 `);
 
 await esbuild.build({
@@ -89,8 +99,8 @@ try {
   page.on("pageerror", (err) => errors.push(err.message));
   await page.goto(`file://${resolve(OUT, "index.html")}`);
 
-  const samples = await page.evaluate(() => window.__bench(false));
-  const detachedSamples = await page.evaluate(() => window.__bench(true));
+  const samples = await page.evaluate((o) => window.__bench(false, o), BENCH_OPTIONS);
+  const detachedSamples = await page.evaluate((o) => window.__bench(true, o), BENCH_OPTIONS);
   for (const err of errors) console.error(`  page error: ${err}`);
   if (errors.length) {
     console.error("bench: FAIL — the bench threw");

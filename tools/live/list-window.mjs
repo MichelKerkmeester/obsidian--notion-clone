@@ -65,9 +65,10 @@ const built = await esbuild.build({
 });
 
 // The renderer under test must be the shipped one.
-const SOURCE = "src/views/list-renderer.ts";
-if (!Object.keys(built.metafile.inputs).includes(SOURCE)) {
-  console.error(`list-window: FAIL — the bundle no longer imports ${SOURCE}`);
+const SOURCES = ["src/views/list-renderer.ts", "src/views/table-renderer.ts"];
+const missing = SOURCES.filter((src) => !Object.keys(built.metafile.inputs).includes(src));
+if (missing.length > 0) {
+  console.error(`list-window: FAIL — the bundle no longer imports ${missing.join(", ")}`);
   process.exit(1);
 }
 
@@ -135,7 +136,7 @@ if (failures.length > 0) {
 stamp(STAMP_PATH, { checks: results.length }, [
   "tools/live/list-window.mjs",
   "tools/live/list-window-harness.ts",
-  SOURCE,
+  ...SOURCES,
 ]);
 
 console.log(`\nlist-window: stamped at ${STAMP_PATH}`);

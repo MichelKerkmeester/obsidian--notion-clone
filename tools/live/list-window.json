@@ -1,9 +1,10 @@
 {
-  "measuredAt": "2026-08-31T20:16:35.043Z",
+  "measuredAt": "2026-08-31T20:26:58.392Z",
   "inputs": {
-    "tools/live/list-window.mjs": "a91a9292997f",
-    "tools/live/list-window-harness.ts": "4dc132dc5a54",
-    "src/views/list-renderer.ts": "67a9210b863f"
+    "tools/live/list-window.mjs": "f76523ef1405",
+    "tools/live/list-window-harness.ts": "6f13567ae40b",
+    "src/views/list-renderer.ts": "67a9210b863f",
+    "src/views/table-renderer.ts": "4a071454f15b"
   },
-  "checks": 13
+  "checks": 16
 }

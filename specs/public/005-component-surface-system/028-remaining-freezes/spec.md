@@ -15,9 +15,9 @@ _memory:
     packet_pointer: "public/005-component-surface-system/028-remaining-freezes"
     last_updated_at: "2026-08-30T21:20:00Z"
     last_updated_by: "goal-reconcile"
-    completion_pct: 50
-    recent_action: "Criteria audited at f64dd87; 1 of 5 met, board hoist landed elsewhere, freeze open"
-    next_safe_action: "Operator answers Q1-Q3 in spec.md section 7; no build starts before that"
+    completion_pct: 67
+    recent_action: "Table sweep run and the table windowed: SUPERLINEAR x4.89 -> SUBLINEAR x0.01"
+    next_safe_action: "The table two per-row layout reads, which the bound-of-8 check would misjudge"
     blockers:
       - "The operator reports the table view works, but measurement shows the table is the slowest surface here and still carries the unfixed per-row forced layout; four reconciliations were tested and all four failed"
       - "The operator's actual row count and column count are still unconfirmed; the freeze threshold is derived from a synthetic bench at a CPU throttle chosen as a phone stand-in, not from their device"

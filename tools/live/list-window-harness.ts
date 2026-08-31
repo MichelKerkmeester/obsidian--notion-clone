@@ -21,6 +21,13 @@
 // ───────────────────────────────────────────────────────────────────
 
 import { ListRenderer, type ListRendererActions } from "../../src/views/list-renderer";
+import { TableRenderer } from "../../src/views/table-renderer";
+import {
+  makeColumns as makeTableColumns,
+  makeRows as makeTableRows,
+  makeConfig as makeTableConfig,
+  makeActions as makeTableActions,
+} from "../bench/table-render-bench";
 import { applyRowSelectionPress } from "../../src/views/table-cell-gesture";
 import type { ColumnDef, RowData } from "../../src/data/types";
 import { makeColumns, makeRows, makeConfig } from "../bench/list-render-bench";
@@ -143,6 +150,66 @@ function runGroupedChecks(doc: Document): WindowResult[] {
       check: "the group header survives a recycle",
       pass: headerSurvived,
       detail: headerSurvived ? "one header, untouched by the row swap" : "the header was lost or duplicated",
+    },
+  ];
+}
+
+/**
+ * The windowed table, and the thing about it that no geometry check would notice.
+ *
+ * `aria-rowcount` and `aria-rowindex` are claims about the DATA, not about the DOM. A windowed
+ * table holds a few dozen rows and represents thousands, so counting what is rendered would tell a
+ * screen reader the table has thirty rows, and numbering from the rendered index would announce
+ * row 6,400 as row 2. Both are silent to every pixel measurement in this repo.
+ */
+function runTableWindowChecks(doc: Document): WindowResult[] {
+  const ROWS = 3000;
+  const host = doc.createElement("div");
+  host.className = "note-database-container";
+  host.setCssProps({ height: "800px", overflow: "auto" });
+  doc.body.appendChild(host);
+
+  const columns = makeTableColumns(8);
+  const config = makeTableConfig(columns);
+  const rows = makeTableRows(ROWS, columns);
+  // The bench's own bag, so this drives the same shape the bench measures rather than a
+  // hand-rolled one that can drift from it.
+  const renderer = new TableRenderer(makeTableActions(columns));
+
+  renderer.renderTable(host, config, rows);
+
+  const table = host.querySelector<HTMLElement>("table");
+  const mounted = table?.querySelectorAll("tbody > tr[data-note-database-row-path]").length ?? 0;
+  const nodes = host.querySelectorAll("*").length;
+  const rowCount = table?.getAttribute("aria-rowcount") ?? "(unset)";
+
+  // Scroll far enough that the window cannot still be showing row 0.
+  host.scrollTop = 20000;
+  host.dispatchEvent(new Event("scroll"));
+  const firstAfter = table?.querySelector<HTMLElement>("tbody > tr[data-note-database-row-path]");
+  const indexAfter = Number(firstAfter?.getAttribute("aria-rowindex") ?? 0);
+  const pathAfter = firstAfter?.dataset.noteDatabaseRowPath ?? "";
+  const absolute = rows.findIndex((row) => row.file.path === pathAfter) + 2;
+
+  host.remove();
+
+  return [
+    {
+      check: "the table mounts a window, not every row",
+      pass: mounted > 0 && mounted < ROWS,
+      detail: `${mounted} of ${ROWS} rows mounted, ${nodes} nodes`,
+    },
+    {
+      check: "aria-rowcount counts the data, not the window",
+      pass: rowCount === String(ROWS + 1),
+      detail: `aria-rowcount=${rowCount}, want ${ROWS + 1} (rows plus the header)`,
+    },
+    {
+      check: "aria-rowindex is absolute after scrolling, not window-relative",
+      // If it numbered from the rendered index this would read 2 no matter how far we scrolled,
+      // which is the whole failure: plausible, consistent, and wrong.
+      pass: indexAfter > 2 && indexAfter === absolute,
+      detail: `first mounted row is ${pathAfter} at aria-rowindex=${indexAfter}, and its position in the data is ${absolute}`,
     },
   ];
 }
@@ -280,5 +347,6 @@ export function runListWindowChecks(doc: Document): WindowResult[] {
 
   host.remove();
   results.push(...runGroupedChecks(doc));
+  results.push(...runTableWindowChecks(doc));
   return results;
 }

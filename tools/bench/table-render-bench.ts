@@ -64,7 +64,7 @@ export function makeConfig(columns: ColumnDef[]): ViewConfig {
 }
 
 /** Minimal but honest: every required action, none of them doing work worth measuring. */
-function makeActions(columns: ColumnDef[]): TableRendererActions {
+export function makeActions(columns: ColumnDef[]): TableRendererActions {
   return {
     getVisibleColumns: () => columns,
     isRowSelected: () => false,
@@ -101,15 +101,28 @@ function percentile(values: number[], p: number): number {
   return sorted[Math.min(sorted.length - 1, Math.floor(sorted.length * p))];
 }
 
-export function runBench(host: HTMLElement, detached = false): BenchSample[] {
-  const samples: BenchSample[] = [];
+/**
+ * Shape overrides, so a sweep can be pushed past the default range without editing this file.
+ *
+ * The defaults stop at 2,000 rows, and a scaling verdict taken from a range that stops below the
+ * bend cannot see the bend. The list bench grew the same override for the same reason.
+ */
+export interface TableBenchOptions {
+  rowCounts?: number[];
+  columnCounts?: number[];
+}
 
-  for (const columnCount of COLUMN_COUNTS) {
+export function runBench(host: HTMLElement, detached = false, options: TableBenchOptions = {}): BenchSample[] {
+  const samples: BenchSample[] = [];
+  const columnCounts = options.columnCounts ?? COLUMN_COUNTS;
+  const rowCounts = options.rowCounts ?? ROW_COUNTS;
+
+  for (const columnCount of columnCounts) {
     const columns = makeColumns(columnCount);
     const config = makeConfig(columns);
     const actions = makeActions(columns);
 
-    for (const rowCount of ROW_COUNTS) {
+    for (const rowCount of rowCounts) {
       const rows = makeRows(rowCount, columns);
       const renderTimes: number[] = [];
       let layoutMs = 0;

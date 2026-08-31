@@ -12,8 +12,8 @@ _memory:
     packet_pointer: "public/005-component-surface-system/028-remaining-freezes"
     last_updated_at: "2026-08-31T08:05:00Z"
     last_updated_by: "timeline-freeze-diagnosis"
-    recent_action: "Timeline fixed; calendar cleared; operator shape confirms the list needs virtualisation"
-    next_safe_action: "Scope list virtualisation; every reported view now has a gate assertion"
+    recent_action: "Table sweep run and the table windowed: SUPERLINEAR x4.89 -> SUBLINEAR x0.01"
+    next_safe_action: "The table two per-row layout reads, which the bound-of-8 check would misjudge"
     blockers:
       - "The list needs virtualisation; at the operator shape it spends 2.0-4.9s blocked and no loop fix reaches it"
       - "Every fix is measured on a bench, never on the operator device"
@@ -27,7 +27,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-028-goal"
       parent_session_id: null
-    completion_pct: 50
+    completion_pct: 67
     open_questions:
       - "Why was the calendar reported freezing when its render is bounded and measures 30ms at 12,800 rows"
       - "Does virtualising the list belong in this phase or its own"
@@ -82,11 +82,12 @@ how they were built. That is a virtualisation question and nothing else reaches 
 <!-- ANCHOR:completion -->
 ## 2. COMPLETION CRITERIA
 
-- [ ] One full-view rebuild stays under 2,000ms at the operator's confirmed shape, at phone-class
-      CPU. **No longer blocked, and the answer is no.** The operator confirmed **1,000-3,000 rows
-      at 80-100% fill**. Measured at that shape, 21 cols, 6× throttle: the budget breaks at
-      **1,300 rows** (2,022.9ms desktop, 2,066.3ms phone) and reaches **4,908.6ms at 3,000 rows**.
-      So the operator sits at or past the break across nearly their whole range.
+- [x] One full-view rebuild stays under 2,000ms at the operator's confirmed shape, at phone-class
+      CPU. **Was no; is now yes.** The operator confirmed **1,000-3,000 rows at 80-100% fill**, and
+      at that shape the list broke the budget at **1,300 rows** and reached **4,908.6ms at 3,000**.
+      Windowed, the same shape measures **48.4ms at 3,000 rows and 50.3ms at 3,400** — node count
+      flat at 2,184 rather than 225,007. The record of the breach is kept above because the fix is
+      only legible against it.
 - [ ] The per-item forced layout is gone from `board-renderer.ts` and `table-renderer.ts`, each shown
       failing first. **Board is fixed** (`3485d7a`), asking once per render. **The table's two
       per-row sites are live and are not the quadratic:** it builds its body off-document, so each

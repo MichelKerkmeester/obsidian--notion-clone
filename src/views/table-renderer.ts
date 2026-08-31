@@ -110,7 +110,53 @@ export interface TableRendererActions {
 // 4. TABLE RENDERER
 // ───────────────────────────────────────────────────────────────────
 
+/**
+ * Above this many rows the table renders a window instead of every row.
+ *
+ * Deliberately high. The table builds its body off-document and attaches once, so it is genuinely
+ * fast through the range anyone reported — 1,600 rows cost 125ms. What it is not is FLAT: measured
+ * 400 to 12,800 rows at 16 columns, per-row cost rises from 0.057ms to 0.277ms, a x4.89 verdict
+ * over 345,697 nodes. That is node count, and only windowing reaches it.
+ *
+ * Setting the floor at 2,000 keeps every shape this packet measured, and the table's standing as
+ * the control it compares other renderers against, byte-identical. Only the pathological end
+ * changes, which is the end that had no answer.
+ */
+const TABLE_WINDOW_THRESHOLD = 2000;
+/** Rows kept beyond each edge so a small scroll shows content rather than blank. */
+const TABLE_OVERSCAN = 10;
+/** First guess only; replaced by a measurement once a row exists. */
+const TABLE_ESTIMATED_ROW_HEIGHT = 34;
+const TABLE_FALLBACK_VIEWPORT_PX = 800;
+
+interface TableWindow {
+  table: HTMLElement;
+  tbody: HTMLElement;
+  config: ViewConfig;
+  rows: RowData[];
+  columns: ColumnDef[];
+  scroller: HTMLElement;
+  rowHeight: number;
+  start: number;
+  end: number;
+  onScroll: () => void;
+}
+
+/** The nearest ancestor that actually scrolls; the plugin's own container usually is it. */
+function findTableScrollParent(from: HTMLElement): HTMLElement {
+  const doc = from.ownerDocument;
+  const view = doc.defaultView;
+  let node: HTMLElement | null = from;
+  while (node && node !== doc.body) {
+    const overflowY = view?.getComputedStyle(node).overflowY;
+    if (overflowY === "auto" || overflowY === "scroll") return node;
+    node = node.parentElement;
+  }
+  return (doc.scrollingElement as HTMLElement | null) || doc.body || from;
+}
+
 export class TableRenderer {
+  private windowing?: TableWindow;
   private rowByPath = new Map<string, RowData>();
   private draggingPath: string | undefined;
   private rowDropFeedback = new DragDropFeedbackState();
@@ -141,6 +187,12 @@ export class TableRenderer {
     // widens with row count. Column widths are measured from `tableWrap` above, so they are already
     // resolved before the body exists and nothing here depends on being attached.
     const tbody = table.ownerDocument.createElement("tbody");
+    if (rows.length > TABLE_WINDOW_THRESHOLD) {
+      table.appendChild(tbody);
+      this.mountTableWindow(table, tbody, config, rows, visibleColumns);
+      this.renderFooter(table, config, visibleColumns, rows);
+      return;
+    }
     this.renderRows(tbody, config, rows, visibleColumns);
     if (rows.length === 0) {
       this.emptyStateRenderer.renderTableRow(
@@ -409,6 +461,10 @@ export class TableRenderer {
   }
 
   private clearTable(container: HTMLElement): void {
+    // The listener lives on the scroller, which outlives this table. Dropping the table without
+    // dropping the listener leaves every previous render recomputing a window over rows that are
+    // gone.
+    this.releaseTableWindow();
     this.rowDropFeedback.clear();
     container.querySelectorAll(".db-table-wrap, .db-grouped-table, .db-empty").forEach((el) => el.remove());
   }
@@ -1089,13 +1145,123 @@ export class TableRenderer {
     return `group-section-${encodeURIComponent(`${field}:${key}`)}`;
   }
 
-  private applyGridSemantics(table: HTMLElement, config: ViewConfig, columns: ColumnDef[], rows: RowData[]): void {
-    const rowCount = table.querySelectorAll<HTMLElement>("tbody > tr[data-note-database-row-path]").length;
-    table.setAttr("aria-rowcount", String(Math.max(1, rowCount + 1)));
+  /**
+   * `startIndex` is where the rendered block sits in the full row list.
+   *
+   * A windowed table has thirty rows in the document and thousands in the data, and both aria
+   * values are about the DATA. Counting the rendered rows would tell a screen reader the table has
+   * thirty rows, and numbering from the rendered index would announce row 6,400 as row 2 — a
+   * regression no geometry check would notice, because nothing about it is geometry.
+   */
+  // ───────────────────────────────────────────────────────────────────
+  // WINDOWING
+  // ───────────────────────────────────────────────────────────────────
+
+  /**
+   * Render only the rows near the viewport, with spacer rows standing in for the rest.
+   *
+   * Spacers are `<tr>` carrying one `<td colspan>` of a computed height, because a table's layout
+   * belongs to the table: a plain div between rows is not a row, and the browser either drops it
+   * out of the row box or lets it break the column grid. They carry no row path, so every query
+   * that looks for real rows — selection, drag, grid semantics — skips them without being taught to.
+   */
+  private mountTableWindow(
+    table: HTMLElement,
+    tbody: HTMLElement,
+    config: ViewConfig,
+    rows: RowData[],
+    columns: ColumnDef[],
+  ): void {
+    this.releaseTableWindow();
+    const scroller = findTableScrollParent(table);
+    const state: TableWindow = {
+      table,
+      tbody,
+      config,
+      rows,
+      columns,
+      scroller,
+      rowHeight: TABLE_ESTIMATED_ROW_HEIGHT,
+      start: -1,
+      end: -1,
+      onScroll: () => this.updateTableWindow(),
+    };
+    this.windowing = state;
+    this.updateTableWindow();
+    scroller.addEventListener("scroll", state.onScroll, { passive: true });
+  }
+
+  private updateTableWindow(): void {
+    const state = this.windowing;
+    if (!state || !state.tbody.isConnected) return;
+    const viewport = state.scroller.clientHeight || TABLE_FALLBACK_VIEWPORT_PX;
+    const bodyTop = state.tbody.offsetTop - state.scroller.offsetTop;
+    const scrolled = Math.max(0, state.scroller.scrollTop - bodyTop);
+    const first = Math.floor(scrolled / state.rowHeight);
+    const visible = Math.ceil(viewport / state.rowHeight);
+    const start = Math.max(0, first - TABLE_OVERSCAN);
+    const end = Math.min(state.rows.length, first + visible + TABLE_OVERSCAN);
+    if (start === state.start && end === state.end) return;
+    state.start = start;
+    state.end = end;
+    this.paintTableWindow(state);
+  }
+
+  private paintTableWindow(state: TableWindow): void {
+    const { table, tbody, config, rows, columns, start, end } = state;
+    const span = columns.length + this.getUtilityColumnCount(config);
+    tbody.empty();
+
+    const spacer = (height: number): void => {
+      const tr = tbody.createEl("tr", { cls: "db-table-window-spacer" });
+      tr.setAttr("aria-hidden", "true");
+      const cell = tr.createEl("td");
+      cell.setAttr("colspan", String(span));
+      cell.setCssProps({ height: `${Math.round(height)}px`, padding: "0", border: "0" });
+    };
+
+    spacer(start * state.rowHeight);
+    this.renderRows(tbody, config, rows.slice(start, end), columns);
+    spacer((rows.length - end) * state.rowHeight);
+
+    // The absolute offset, so a screen reader hears row 6,400 as row 6,400.
+    this.applyGridSemantics(table, config, columns, rows, start);
+    this.measureTableRowHeight(state);
+  }
+
+  /** Three layout reads: where the block starts, where it ends, how many rows are in it. */
+  private measureTableRowHeight(state: TableWindow): void {
+    const painted = state.tbody.querySelectorAll<HTMLElement>("tr[data-note-database-row-path]");
+    const first = painted[0];
+    const last = painted[painted.length - 1];
+    if (!first || !last) return;
+    const measured = (last.offsetTop + last.offsetHeight - first.offsetTop) / painted.length;
+    if (measured <= 0 || Math.abs(measured - state.rowHeight) < 0.5) return;
+    state.rowHeight = measured;
+    const spacers = state.tbody.querySelectorAll<HTMLElement>(".db-table-window-spacer td");
+    spacers[0]?.setCssProps({ height: `${Math.round(state.start * measured)}px` });
+    spacers[1]?.setCssProps({ height: `${Math.round((state.rows.length - state.end) * measured)}px` });
+  }
+
+  private releaseTableWindow(): void {
+    const state = this.windowing;
+    if (!state) return;
+    state.scroller.removeEventListener("scroll", state.onScroll);
+    this.windowing = undefined;
+  }
+
+  private applyGridSemantics(
+    table: HTMLElement,
+    config: ViewConfig,
+    columns: ColumnDef[],
+    rows: RowData[],
+    startIndex = 0,
+  ): void {
+    table.setAttr("aria-rowcount", String(Math.max(1, rows.length + 1)));
     table.setAttr("aria-colcount", String(columns.length + this.getUtilityColumnCount(config)));
     table.querySelectorAll<HTMLElement>("tbody > tr[data-note-database-row-path]").forEach((row, index) => {
       row.setAttr("role", "row");
-      row.setAttr("aria-rowindex", String(index + 2));
+      row.setAttr("aria-rowindex", String(startIndex + index + 2));
       const dataRow = rows.find((candidate) => candidate.file.path === row.dataset.noteDatabaseRowPath);
       const selected = dataRow ? this.actions.isRowSelected(dataRow) : false;
       row.setAttr("aria-selected", String(Boolean(selected)));
