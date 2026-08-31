@@ -9,13 +9,13 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "public/005-component-surface-system/024-list-view-freeze"
-    last_updated_at: "2026-08-30T19:10:41Z"
-    last_updated_by: "criteria-reconciliation"
-    recent_action: "AC-2 withdrawn: LINEAR verdict came from a 1,600-row ceiling below the bend"
-    next_safe_action: "Re-run the linearity verdict on 028 full matrix; do not reclose AC-2 at 1,600"
+    last_updated_at: "2026-08-31T05:15:00Z"
+    last_updated_by: "goal-reconcile"
+    recent_action: "AC-2 met: basename index lands LINEAR x1.07 to 12,800 rows; control returns x1.92"
+    next_safe_action: "Answer the width half of AC-5 with a standing check; leave AC-6 to the device"
     blockers:
-      - "Non-table views still freeze on device; 028 is investigating whether a second cause remains"
-      - "No standing check reserves-by-width under is-phone; AC-7 measured it once by hand"
+      - "Non-table views still freeze on device; 028 owns the remaining cause"
+      - "No standing check reserves-by-width under is-phone; AC-5 measured it once by hand"
     key_files:
       - "spec.md"
       - "acceptance-criteria.md"
@@ -25,10 +25,11 @@ _memory:
       parent_session_id: null
     completion_pct: 70
     open_questions:
-      - "How many rows does the operator's database actually hold"
+      - "How many rows does the operator's database hold, and at what fill rate"
       - "Is the desktop reservation worth keeping now that it measures as redundant"
     answered_questions:
       - "c31acf5 is not the cause; the same list took 6,777ms on the commit before it"
+      - "The superlinear term was a per-row basename scan, not the hoisted forced layout"
 ---
 # Goal: List View Freeze
 
@@ -42,29 +43,21 @@ _memory:
 **Objective:** Opening a list view does not block the main thread at any row count the operator's
 vault can hold, and the column alignment the renderer buys survives the fix.
 
-It took **7,174ms** on 1,600 rows shaped like the operator's database. Per-row cost rose ×3.59 from
-400 to 1,600 rows, so this was never a large constant — it was the wrong shape.
-
-**The root cause.** `renderRow` called `isTouchDevice(this.container)` for every row, and that
-measures the container with `getBoundingClientRect()`. A forced synchronous layout, inside a loop
-that is simultaneously appending rows **to the very container being measured**. Every row made the
-browser lay out everything built so far. Quadratic in row count.
-
-**The leading suspect was exonerated by measurement, and that is the part to keep.** `c31acf5` was
-the obvious cause and survived inspection. It died on measurement: the renderer at `4830275` is
-byte-identical to the renderer at `c31acf5^`, and that renderer takes **6,777ms** on the same 1,600
-rows. What the commit actually did was triple the field elements — 2,400 to 8,000 — for 6% on desktop
-and 28% on the phone. A real regression, fixed here, and not the freeze.
+**Two superlinear terms, months apart.** First, `isTouchDevice()` read the container's rect
+once per row inside the loop appending to it — hoisted, 8,646.0ms to 246.6ms at 1,600 rows. Second,
+and why the verdict stayed SUPERLINEAR above that: **deciding whether a row's basename is shared
+scanned every other row**, over a set built per row. Indexed once per render the curve flattens;
+the table was fast only because its default asks about one row.
 
 ### Decisions
 
 | ID | Decision |
 |----|----------|
-| D1 | The budget asserts the **whole blocked main thread**, render plus forced layout. Render alone is the wrong half for this repair, because the fix moves cost from the term under budget into the term that was not. |
-| D2 | The reservation predicate is the property itself — can two properties share a line — read off the field area's computed display and measured width. Not a platform flag, not a viewport threshold, not a body class. |
-| D3 | No windowing. Both renderers are linear once the forced layout leaves the loop, and an asymptote that is already linear does not need one. |
-| D4 | No scaling verdict from a single sample. |
-| D5 | Measure before fixing. A leading suspect that survives inspection can still die on measurement. |
+| D1 | The budget asserts the **whole blocked main thread**, render plus forced layout. Render alone is the wrong half. |
+| D2 | The reservation predicate is the property itself: can two properties share a line, read off the field area rather than a platform flag. |
+| D3 | No windowing decided from the row loop. What remains at scale is layout over node count — `028`'s. |
+| D4 | No scaling verdict from a single sample, and none from a range that stops below the bend. |
+| D5 | Measure before fixing. A suspect that survives inspection can still die on measurement. |
 <!-- /ANCHOR:directive -->
 
 ---
@@ -72,74 +65,24 @@ and 28% on the phone. A real regression, fixed here, and not the freeze.
 <!-- ANCHOR:completion -->
 ## 2. COMPLETION CRITERIA
 
-Two instruments answer this phase and they are not interchangeable. The geometry criteria are
-evidenced by the `verify-placement` run captured on a clean tree at `f64dd87` (**220/224 geometry
-checks passed, 4 red for a declared reason**, exit 0), which contains **no timing check at all**.
-The timing criteria are evidenced by `tools/bench/run-list.mjs`, recorded in
-`acceptance-criteria.md` §2. Where a number below comes from the bench it says so, because a bench
-figure quoted as a geometry-harness figure is how a record starts drifting.
-
 - [x] Opening a list view stays inside the declared 2,000ms budget on the **blocked main thread**.
-      Was 8,646.0ms desktop and 1,027.7ms phone at the reported shape; now 246.6ms and 189.2ms.
-      **Met, by the bench.** `node tools/bench/run-list.mjs --cols=21 --fill=0.3 --rows=1600
-      --repeats=3` (AC-1, AC-8): `PASS — worst blocked main thread 246.6ms (82.4ms render +
-      164.2ms layout)`, exit 0. The pre-fix tree through the same runner: `FAIL — 8646ms of blocked
-      main thread (8633.5ms render + 12.5ms layout)`, exit 1. The budget was observed failing first
-      with 5,000ms of layout injected per sample, which is what makes the pass mean anything.
-      **Qualified:** the rows labelled `phone` are a phone's width on an M-series Mac's CPU. `028`
-      reads the same 1,600-row shape at **1,290.5ms** under 6× CPU throttling. The verdict holds at
-      this row count; the milliseconds are a lower bound and must never be quoted as a phone's.
-- [ ] Per-row cost reports LINEAR at every measured shape, replacing SUPERLINEAR, and a run with one
-      row count prints no verdict at all.
-      **Withdrawn.** AC-2 read ×1.17 LINEAR desktop and ×1.01 LINEAR phone against ×3.59 and ×1.73
-      SUPERLINEAR shipped, and `npm run bench:list` reports LINEAR at all eight shapes — of a default
-      matrix that stops at 1,600 rows. `028` ran this same tree to 12,800 and the verdict inverts:
-      `SUPERLINEAR (per-row ×2.55)` desktop, `×3.21` phone width, same columns and fill. "Every
-      measured shape" was every shape the harness chose to measure, and the bend sits above it.
-      Closes on `028`'s AC-3, not from a 1,600-row run.
-      **The second half stands:** AC-9's `NO VERDICT — a slope needs two row counts and this run
-      measured 1` replaced a LINEAR printed by arithmetic beneath a 7,462.6ms render, and that is a
-      property of the runner rather than of the range.
-- [x] A property starts in the same column on every card, asserted against the renderer's own output
-      rather than a fixture.
-      **Met.** `on desktop the renderer starts a property in the same column on every card` —
-      4 properties across 12 cards; worst lands in 1 column(s), with 4 properties sharing a line so
-      a shuffle would move one. `on desktop the renderer gives every list card the same field-area
-      width` — 12 rendered cards take 1 distinct meta width(s): 616px, the renderer's own output and
-      not a fixture's. The phone arm passes at 240px and says in its own output that it cannot fail
-      there, one property per line putting every one at x=0.
-- [x] A reserved column costs one element and carries no rendered content.
-      **Met.** `on desktop a reserved column costs one element and no rendered content` —
-      14 reserved columns hold 0 child element(s).
+      **Met, by the bench:** 8,646.0ms → 246.6ms at 1,600 rows, 21 cols, 30% fill, observed failing
+      first with 5,000ms injected layout. `phone` rows are phone width on a Mac CPU; throttled 6×
+      it reads 1,290.5ms.
+- [x] Per-row cost reports LINEAR at every measured shape; a one-row-count run prints no verdict.
+      **Met.** Indexing repeated basenames once per render moves the verdict **SUPERLINEAR ×2.56 →
+      LINEAR ×1.07** over 400 to 12,800 rows, 21 cols, full fill; per-row cost holds at
+      **0.057–0.063ms**, render at 12,800 falls **2,016ms → 784ms**, and restoring the prior state
+      returns **×1.92**.
+- [x] A property starts in the same column on every card, asserted against renderer output, not a
+      fixture. **Met:** 4 properties over 12 cards, worst in 1 column; 12 cards, 1 meta width
+      of 616px.
+- [x] A reserved column costs one element and no rendered content. **Met:** 14 columns, 0 children.
 - [ ] A slot is reserved only where a slot exists to reserve, on every surface and at every width.
-      The first attempt keyed this on the phone class and was measured breaking alignment the moment
-      the phone turned sideways.
-      **No standing check exists for the width half.** The captured run covers two points —
-      desktop, 14 reserved; phone at 402px, `on phone the wrapping card spends no line on a property
-      it does not show`, 12 cards over 34 field line(s), 0 carrying only reserved boxes, 0 boxes
-      reserved — and section 5k runs exactly those two device profiles
-      (`tools/storybook/verify-placement.mjs:3189`). Neither is the case the criterion was written
-      about: a body still carrying `is-phone` at a width where two properties fit. The width sweep in
-      `acceptance-criteria.md` §2 AC-7 measured it once, by hand, from no script in the tree, so
-      nothing guards it now.
-      **The check:** drive the real `ListRenderer` through section 5k's shape — 4 unequal-width
-      properties, 12 cards each missing a different subset — on a body carrying `is-mobile is-phone`
-      at container widths 360, 402, 430, 480, 540 and 1024px, and at each width assert the worst
-      property lands in exactly 1 column across the 12 cards, and that reserved placeholders are
-      present wherever the field area fits two properties. **Phrase the reservation half as "reserved
-      wherever two properties can share a line, and never where none can" — not as the criterion's
-      literal "only where a slot exists to reserve", which the shipped predicate deliberately
-      violates.** `shouldReserveColumns` (`src/views/list-renderer.ts:440`) tests the two *narrowest*
-      declared widths plus one column gap, so in the uncertain band it over-reserves on purpose —
-      AC-7 records 14 reservations at 430px where only one property fits. Written literally this
-      criterion fails a correct implementation at that boundary.
-- [ ] The operator confirms on device that the list view opens. **Today it does not** — every
-      non-table view freezes, which is `028`'s subject, so this criterion is open regardless of the
-      numbers above.
-      **Operator, and NOT MET.** The bench numbers above are evidence about the row loop and nothing
-      else: they say a 1,600-row render no longer blocks the main thread for seven seconds. They do
-      not say the list view opens, and on the device it still does not. Nothing measured here can
-      move this row.
+      **The width half has no standing check** — the captured run covers desktop and one 402px
+      phone, neither being the case this was written about. The check it owes is in the log.
+- [ ] The operator confirms on device that the list view opens. **Operator, NOT MET.** The bench
+      numbers describe the row loop, not whether it opens.
 <!-- /ANCHOR:completion -->
 
 ---
@@ -149,16 +92,58 @@ figure quoted as a geometry-harness figure is how a record starts drifting.
 
 Volatile. Not part of the directive.
 
-**95%: shipped and measured, awaiting the device.** Took no stylesheet lane.
+### The second quadratic, and why it hid behind the first
+
+The hoisted forced layout was real and it was not the whole defect. Above 1,600 rows the verdict
+went back to SUPERLINEAR, and the reason was a helper nobody suspected: deciding whether a row's
+basename is shared scanned every other row, and list, board and gallery each called it with the
+whole row set **and materialised that set per row**. An n-element allocation plus an n-element scan,
+once per row.
+
+Three properties of it are worth carrying forward:
+
+- **It is worst on ordinary data.** With all-distinct basenames the scan never matches, so it never
+  exits early and every row walks the entire set. Duplicate-heavy data is the fast case.
+- **It explains the table.** The table's default asks about a single row — a one-element array — so
+  the table paid a one-element scan where the card views paid an n-element one. The
+  table-versus-everything-else boundary that framed this whole investigation was a default argument,
+  not an architecture.
+- **The fix is an index, not a loop change.** Repeated basenames are indexed once per render in
+  `src/views/file-title-display.ts` (`buildDuplicateNameIndex`), and the three renderers consume it.
+
+Measured on the same tree, 21 columns, full fill, 400 to 12,800 rows: **SUPERLINEAR ×2.56 → LINEAR
+×1.07**, per-row cost flat at **0.057–0.063ms** across a 32-fold row change, render at 12,800 rows
+**2,016ms → 784ms**. Restoring the whole prior state returns **SUPERLINEAR ×1.92** at 1,459ms, which
+is the control that makes the verdict mean something.
+
+### A competing theory was tested and falsified
+
+Building the list body off-document — the pattern the table uses — was the obvious next move. It
+moved the verdict from superlinear to superlinear, and was reverted. The reason it cannot work here:
+**nothing in those loops reads layout per row**, and absent a read the browser coalesces
+invalidation rather than laying out per append. The table's comment about off-document construction
+is true for tables and does not generalise. Record it refuted, or the next reader spends a day on it.
+
+### What remains at scale is not this loop
+
+At 12,800 rows there is still **2,684ms of layout from a single forced read over 960,007 nodes**.
+That is proportional to how many nodes exist, not to how they were built, so no change inside the
+row loop touches it. It is a virtualisation question and it is unanswered; `028` owns it, and it
+needs the operator's row count **and fill rate** — at full fill the budget breaks near 1,300 rows,
+while the same 1,600 rows at 30% fill cost 1,227ms and clear it.
 
 ### Three checks covered this code and each was blind in a different direction
 
 The screenshot fixture writes its own markup and imports nothing from `src/`, so it reported green
 while the renderer tripled its output. The unit test asserted that the renderer's **source text**
-contained a string — a spelling, not a property, which **passes for a broken implementation and fails
-for a correct one spelled differently**, which is exactly what it did. And the geometry check was the
-right instrument pointed at the wrong thing: real x-positions in a real browser, read off
+contained a string — a spelling, not a property, which **passes for a broken implementation and
+fails for a correct one spelled differently**, which is exactly what it did. And the geometry check
+was the right instrument pointed at the wrong thing: real x-positions in a real browser, read off
 hand-written markup.
+
+Add today's: the production-renderer lane that does exist bounds **layout reads** and **row
+appends**. A per-row scan over the row set moves neither, so the second quadratic was invisible to
+the one check built to catch the first. That belongs to `026`, and it is recorded there.
 
 ### The fixture also overstates the phone's field area
 
@@ -182,22 +167,39 @@ commit as a whole buys the alignment and never which part of it does. Worth 22,4
 1,600 rows. Not done here: scope is frozen, and `wrap` and compact modes declare tracks that collapse
 when empty and were not measured. **That is a phase, not an aside.**
 
+### The width check AC-5 still owes
+
+Drive the real `ListRenderer` through section 5k's shape — 4 unequal-width properties, 12 cards each
+missing a different subset — on a body carrying `is-mobile is-phone` at container widths 360, 402,
+430, 480, 540 and 1024px. At each width assert the worst property lands in exactly 1 column across
+the 12 cards, and that reserved placeholders are present wherever the field area fits two properties.
+
+**Phrase the reservation half as "reserved wherever two properties can share a line, and never where
+none can"** — not as the criterion's literal "only where a slot exists to reserve", which the shipped
+predicate deliberately violates. `shouldReserveColumns` tests the two *narrowest* declared widths
+plus one column gap, so in the uncertain band it over-reserves on purpose: 14 reservations at 430px
+where only one property fits. Written literally, this criterion fails a correct implementation.
+
 ### Progress
 
 | Item | State | Evidence |
 |------|-------|----------|
-| Forced layout out of the row loop | Shipped, measured | 8,646.0ms → 246.6ms blocked |
+| Forced layout out of the row loop | Shipped, measured | 8,646.0ms → 246.6ms blocked at 1,600 rows |
+| Per-row basename scan indexed | Shipped, measured | ×2.56 → ×1.07 to 12,800 rows; control returns ×1.92 |
 | Budget asserts the right term | Fixed | Observed failing first with 5,000ms of injected layout |
 | Surface-conditional reservation | Shipped | Predicate read off the element, not a flag |
 | Renderer-driven alignment check | Shipped | Section 5k, three assertions |
+| Reservation by width under `is-phone` | Open | Measured once by hand; no script guards it |
+| Remaining layout at scale | Handed to `028` | 2,684ms over 960,007 nodes at 12,800 rows |
 | Operator confirmation | Open, and currently contradicted on device | `028` |
 
 ### Deviations and findings
 
 | Item | Note |
 |------|------|
-| SC-001 was stated on render alone | The half AC-8 declares wrong for this repair; its 200ms threshold would fail a correct implementation at 246.6ms. Restated on the blocked main thread |
-| Missing `plan.md` and `tasks.md` | Level 1 requires both; `validate.sh --strict` reports 5 errors on this folder |
-| Both of those are now closed | `plan.md` and `tasks.md` are present and the continuity block is inside its cap; `validate.sh --strict` on this folder reports `Errors: 0  Warnings: 0`, `RESULT: PASSED`. The two rows above are kept because the finding was real, not because it still holds |
-| Continuity block is 2,806 bytes | Against a 2,048 cap, and `recent_action`/`next_safe_action` in `spec.md` are flagged non-compact. Left for the phase author: the content is real and trimming it is a content decision |
+| Off-document list body | Tested and refuted: superlinear before, superlinear after, reverted. No per-row layout read means nothing to coalesce around |
+| SC-001 was stated on render alone | The half AC-1 declares wrong for this repair; its 200ms threshold would fail a correct implementation at 246.6ms. Restated on the blocked main thread |
+| AC-2 reopened, then closed | It was withdrawn because a LINEAR verdict came from a matrix that stopped at 1,600 rows, below the bend. It closes here on a 12,800-row sweep with a restore-the-state control, not by re-quoting the old run |
+| Missing `plan.md` and `tasks.md` | Both present now; `validate.sh --strict` on this folder reports `Errors: 0` |
+| Log claimed 95% while continuity said 70 | The claim is removed. The operator row is what moves this number, and the device has not been touched |
 <!-- /ANCHOR:log -->

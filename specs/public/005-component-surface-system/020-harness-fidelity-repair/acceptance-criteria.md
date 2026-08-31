@@ -163,6 +163,71 @@ plugin's own fallback works — the same negative-control discipline this phase 
 instruments and did not apply here. `022` names the product half: publish the computed inset as a
 plugin-owned document variable and have the bar consume it.
 
+### Re-derived against the tree, and two items had gone stale
+
+The instruction attached to this section is to re-derive it rather than cite it. Done; both stale
+items are in the same direction — **this inventory now understates the repair.**
+
+**Stale 1 — "What is owed" is owed no longer.** The check described below as missing exists, at
+`verify-placement.mjs` in the block commented *"the same keyboard, with the host silent"*. It does
+exactly what this section asked for and did not assume it would get: it **shrinks
+`visualViewport.height`** to model the platform rather than writing `--keyboard-height` to do the
+host's job, it asserts *"no host variable is in play while the fallback is measured"* (passing only
+when the variable is unset or zero), and it carries a named negative control —
+`SELECTION_BAR_CONTROL=revert` restores the shipped declaration and the fallback check must go red
+under it, with the comment stating that a check staying green there *"should be deleted rather than
+believed"*. The block's own note records why this mattered: both earlier blocks set the variable and
+dispatched a synthetic resize at full viewport height, so the observed term computed zero in every
+run ever captured and **the branch protecting these surfaces on a silent host had never once run.**
+
+**Stale 2 — the `--keyboard-height` channel is narrowed after all.** The closing claim below says it
+is not, and that it is "the one still costing withdrawn ticks". The plugin now publishes its own
+`--db-keyboard-inset` on the container (`popover-position.ts`), computed by `keyboardInset()`, which
+combines the host's report with the visual viewport's own shrink *so whichever notices first wins*.
+The literal sentence "nothing in `src/` publishes that variable" remains true — `src/` still only
+**reads** `--keyboard-height` — but the conclusion drawn from it does not: a surface reading the
+plugin-owned inset no longer depends on the host channel at all. The reason it is a container
+variable rather than a document one is recorded there too: `--keyboard-height` is the host's
+namespace, and a plugin writing beside it would put one view's measurement in front of every other
+view and of the host's own chrome.
+
+**Line references drifted** and should be re-derived rather than cited: the two record-sheet sites
+have moved, and the `popover-position.ts` pair has moved. Cite the block comments, which are stable,
+rather than the numbers.
+
+### The same question, asked of the instruments added since
+
+Three new checks now supply values. Asked of each: *if this came from the device, would it still
+pass — and could it still fail?*
+
+| Instrument | What it supplies | Can a device value falsify it? |
+|---|---|---|
+| Calendar and timeline benches | Fixture rows, column count, fill rate, and the pinned window anchors | **Yes.** The measured quantity is the **slope across row counts**, which no fixture sets. The same fixture read ×1.95 before the fix and ×0.98 after |
+| Timeline and calendar gate scenarios | The action bags and the fixture | **Yes.** The layout-read count is produced by the renderer: 964 before the fix, 5 after, same fixture |
+| Board and gallery gate scenarios | The action bags and the fixture | **Partly.** Both read 1 and have no observed red on this tree; they inherit a control from the board's earlier hoist rather than owning one |
+
+**The anchors are this family's `--keyboard-height`,** and they had already cost a false green before
+anyone looked: with an unpinned anchor both date views draw an empty window very fast, and the first
+timeline run reported a clean LINEAR ×0.61 over **zero** event bars. The fixture, not the renderer,
+supplied that verdict. Guarded now by asserting a non-zero drawn-item count *ahead* of every
+per-item bound — an empty window satisfies a per-item bound trivially, which is D6 with a specific
+instrument.
+
+**What the timeline arm has that satisfies D12.** The defect was measured by **two independent
+producers in different currencies**: the bench timed it (8,547.9ms blocked, fitted ×1.95) and the
+gate check counted it (964 layout reads against a bound of 8). One edit moved both, together, in
+proportion. A harness faking that would have to supply the same wrong answer twice, in milliseconds
+and in read counts, across two separately-written instruments. That is the parity property D12
+prefers, arrived at by accident rather than by design — and it is the strongest evidence in this
+packet that the timeline finding is real rather than instrumental.
+
+**What none of them prove, stated because the lens demands it.** No Obsidian host is constructed, no
+vault or metadata cache exists, and `App` is undefined, so vault-resolving fields render unresolved —
+a real database pays more per field, never less. The 6x CPU throttle **models** a slow device and is
+not one. And the pinned bag censuses are derived from the same reading of the construction sites that
+built the harness bags, so a mis-reading of a site is invisible to the comparison: it catches future
+drift, not a present mistake.
+
 **One correction to the standing inventory.** `runtime-vars.css` no longer pins the five values
 recorded as divergent (`--db-layer-sticky`, `--db-status-bg`, `--db-number-color`,
 `--db-calendar-row-height`, `--db-week-grid-height`); the file documents removing them, plus

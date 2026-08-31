@@ -100,14 +100,14 @@ started shipping. They are listed below the first ten and mapped to their report
 | `019-card-field-value-formatting` | A number rendering the same in a card as in a cell | Report 7 |
 
 **Out of scope.** Table render performance is already fixed and measured. Formula editor layout
-remains on the earlier track.
+**and the formula editor's output number format** remain on the earlier track.
 
-**One exclusion is under amendment.** This section previously also excluded "output number format".
-`019-card-field-value-formatting` changed output number format inside this program, on 2026-08-30,
-before anyone read the exclusion. Two readings are open: the exclusion meant the *formula editor's*
-number format, in which case this sentence should say so; or it meant number format generally, in
-which case `019` belongs on the earlier track. **The operator decides**; the conflict is stated in
-`019/spec.md` §7 rather than resolved by whoever noticed it.
+**That exclusion is now amended, by the operator.** It previously read "output number format" with
+no owner named, and `019-card-field-value-formatting` changed output number format inside this
+program on 2026-08-30 before anyone read it. The operator has resolved it to the **narrow reading:
+the exclusion covers the formula editor's number format only.** A card field's number format is a
+different surface and this program legitimately owns it, so `019` is in scope where it sits and does
+not move. The sentence above now says which, because the previous wording did not.
 
 ---
 

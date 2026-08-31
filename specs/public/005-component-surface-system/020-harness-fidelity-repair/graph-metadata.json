@@ -202,7 +202,7 @@
     ],
     "causal_summary": "Six of seven verifier findings were instruments that could not fail for the reason they claimed to",
     "created_at": "2026-08-30T15:15:27.011Z",
-    "last_save_at": "2026-08-31T03:39:23.949Z",
+    "last_save_at": "2026-08-31T06:13:28.122Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -213,7 +213,7 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:a054ca1dddf73f6fb773a9e556c73647821608b37cacbd9b20dde94e7b50f0d3",
+    "source_fingerprint": "sha256:d78e47bd542e934e3f6243191e544b3a035cf7071ac3cead7d3f08384bde525d",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "6888b5683bb4bd287b7ac1bd0de8c238076919dcebaeb819b90ef53fcaa40300",

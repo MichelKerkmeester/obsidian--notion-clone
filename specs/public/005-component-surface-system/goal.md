@@ -10,13 +10,14 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "public/005-component-surface-system"
-    last_updated_at: "2026-08-30T17:30:00Z"
-    last_updated_by: "goal-reconciliation"
-    recent_action: "Goal rewritten to current reality; phases 010-019, 024 and 026 gained a goal.md"
-    next_safe_action: "Get the operator a build where a non-table view opens, then confirm the sheet drag"
+    last_updated_at: "2026-08-31T08:25:00Z"
+    last_updated_by: "timeline-freeze-diagnosis"
+    recent_action: "Timeline quadratic found, fixed and guarded; renderer coverage 2 to 6 of 22"
+    next_safe_action: "Get the operator a build with the timeline fix, then confirm the sheet drag"
     blockers:
-      - "Every non-table view freezes on device - list, board and calendar; 028 is investigating"
-      - "Board, Gallery, Calendar and Timeline have no production-renderer assertion"
+      - "Every fix is measured on a bench; 1 of 16 reports is confirmed on the operator device"
+      - "Every fix is bench-measured; none of the six renderers is asserted against a live Obsidian host"
+      - "The list needs virtualisation: at the operator shape it blocks 2.0-4.9s and the shape is already LINEAR"
     key_files:
       - "roadmap.md"
       - "spec.md"
@@ -31,6 +32,10 @@ _memory:
     answered_questions:
       - "Reports 7 and 16 had no owning phase; 018 and 019 now own them"
       - "Every phase 000-026 now carries its own goal.md"
+      - "The timeline froze on a per-event touch probe; the calendar does not scale with row count at all"
+      - "Operator shape: 1,000-3,000 rows at 80-100% fill. The 2,000ms budget breaks at 1,300 rows"
+      - "The scope exclusion on output number format means the formula editor's only, so report 7 is in scope"
+      - "The editable note body is accepted; its writer already goes through the per-file queue"
 ---
 # Goal: Component Surface System
 
@@ -89,8 +94,9 @@ resolve them silently.
 - [ ] Every operator report is confirmed on device, **or deferred by the operator with the
       deferral recorded.** Today 1 of 16, an accepted shortfall.
 - [ ] Every view opens on device without freezing. Today only the table does.
-- [ ] A gate check constructs a production renderer for **every** view. One lane does now, for
-      List and Table; Board, Gallery, Calendar and Timeline have none.
+- [x] A gate check constructs a production renderer for **every** view. One lane does now, for
+      List, Table, Board, Gallery, Calendar and Timeline — **6 of 22**, a ratchet, twelve
+      scenarios driven by both action bags. Every view named in an operator report is asserted.
 - [ ] `SURFACE_PHASE=<phase> npm run gate` exits 0, read from `$?`, not a pipe.
 - [ ] `npm run replay` re-asserts every landed result against its recorded pre-fix number.
 - [ ] No criterion's green depends on a value the harness supplies that a device would not — a
@@ -125,12 +131,32 @@ checked here before it is believed.
 
 Volatile. Not part of the directive and not copied into an objective.
 
+### The operator's numbers, and what they settle
+
+Confirmed by the operator: **1,000-3,000 rows at 80-100% fill**. Measured at 21 columns and 6× CPU
+throttle, the list blocks **2,022.9ms at 1,300 rows** against a 2,000ms budget and **4,908.6ms at
+3,000**. Their range starts at 1,000 rows, which already costs 1.6s.
+
+The shape across that range is **LINEAR ×1.06** — the quadratic is genuinely gone — and at 3,000
+rows **3,722.5ms of the 4,908.6ms is layout** over 225,007 nodes. Cost is proportional to node
+count, so no further loop work reaches it. **Virtualisation is the only remaining lever**, and
+clearing the budget at 3,000 rows means rendering roughly a fifth of the nodes rendered now.
+
+Two other operator decisions, recorded here because both had been escalated rather than picked:
+the **editable note body is accepted** (its writer already runs inside the per-file write queue,
+with a negative control proving the interleaving check can fail), and the **output-number-format
+scope exclusion means the formula editor's only**, so report 7 is in scope for `019`.
+
 ### What is broken on device right now
 
-**Every non-table view freezes** — list, board, calendar. The table works. Under investigation in
-`028`. `024` fixed the list renderer's quadratic and measured it 8,646.0ms → 246.6ms of blocked main
-thread, so whatever remains is either a second cause or lives above the renderer. Treat `024` as
-evidence about the row loop, not as evidence that the list opens.
+**Every non-table view was reported freezing** — list, board, calendar, timeline. The table works.
+`024` fixed the list renderer's quadratic and measured it 8,646.0ms → 246.6ms of blocked main
+thread; `028` then found and fixed a **second, unrelated quadratic in the timeline** — a forced
+layout per event — measuring 8,547.9ms → 234.2ms at 6,400 rows, and established that **the
+calendar was never superlinear at all** (30.3ms at 12,800 rows, constant DOM). So three of the
+four reported views now have a measured, fixed cause and one has a measured absence of one.
+None of it is confirmed on the operator's device. Treat these as evidence about the render
+loops, not as evidence that the views open.
 
 ### The two founding failures
 
@@ -175,8 +201,8 @@ same specificity, nothing in-container moves — took the unrecoverable count **
 | Reports operator-confirmed | In Progress | 1 of 16, as an accepted shortfall |
 | Every phase has a `goal.md` | Done | The four that did not — `020`, `021`, `023`, `025` — were written after an audit counted, having been claimed complete twice |
 | Report 1, the sheet drag | Fixed, awaiting device | The panel's render destroyed the grab bar; a 60px drag now moves 60.0px after a re-render, was 0.0px |
-| Non-table views on device | Broken | List, board and calendar freeze; `028` |
-| Gate checks constructing a renderer | 1 of 16 | `026` shipped as `1bac3c2`. `render-assertion-harness.ts` builds `new ListRenderer` and `new TableRenderer`, green in the gate, both renderer sources fingerprinted as declared inputs. Four view types still have none |
+| Non-table views on device | Unconfirmed | Two quadratics found and fixed (list `024`, timeline `028`); the calendar measured clean. None confirmed on device |
+| Gate checks constructing a renderer | 1 of 16 | `026`. `render-assertion-harness.ts` builds all six view renderers across twelve scenarios and both bags, green in the gate, all six sources fingerprinted as declared inputs. Coverage 6 of 22 |
 | `004` state | Unknown | Three sources disagree; `roadmap.md` §7.1 |
 | Gate | Green | 16 lanes, exit 0. This row read Red 12/13 long after it went green |
 | Version | Done | `manifest.json` and `package.json` both at 1.3.7. The freeze was reported on 1.3.4 and 1.3.5 and is unconfirmed on 1.3.7 |

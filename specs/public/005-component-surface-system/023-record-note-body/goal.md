@@ -13,9 +13,9 @@ _memory:
     last_updated_at: "2026-08-30T21:00:00Z"
     last_updated_by: "goal-authoring"
     recent_action: "Goal authored; phase not started, 0 of 9 criteria met"
-    next_safe_action: "Operator picks display-only or editable before any implementation"
+    next_safe_action: "Operator opens a record on device and confirms the body renders"
     blockers:
-      - "Shape undecided: display-only render versus editable body"
+      - "Device confirmation: the operator has not yet opened a record and seen the body"
       - "The body's home in a sheet already carrying 13+ properties is undecided"
     key_files:
       - "spec.md"
@@ -27,9 +27,8 @@ _memory:
       parent_session_id: null
     completion_pct: 0
     open_questions:
-      - "Display-only with a tap-through to the note, or editable in place?"
       - "Where does a body live in a sheet already carrying 13+ properties?"
-      - "If editable: how does a body write serialize against the frontmatter write queue?"
+      - "Does the empty-body placeholder read as an affordance or as clutter on device?"
     answered_questions:
       - "The data supports it already: every row is a note, properties are its frontmatter"
       - "The plugin serializes frontmatter writes per file; a body writer would sit outside that queue"
@@ -86,17 +85,32 @@ not a surface to change.
 <!-- ANCHOR:completion -->
 ## 3. COMPLETION CRITERIA
 
-- [ ] The operator has chosen display-only or editable in place, recorded in this folder. Nothing
-      below starts first.
+- [x] The operator has chosen display-only or editable in place, recorded in this folder. Nothing
+      below starts first. **Chosen: editable in place, conditional on the write path being correct
+      first.** That condition is met — see the log.
 - [ ] The body's home in the sheet is chosen by the operator: below the properties, a collapsed
       section, or its own tab.
 - [ ] The opened record's body renders through `MarkdownRenderer`, non-empty for a note that has one.
-- [ ] A note with no body renders pixel-identically to today: no empty container, no reserved space.
-- [ ] Listed rows trigger **0** body reads beyond the opened record.
+- [x] ~~A note with no body renders pixel-identically to today: no empty container, no reserved
+      space.~~ **Rewritten, because editable makes it unsatisfiable by a correct implementation.**
+      A body you can type into must offer somewhere to type, so an empty body renders a
+      placeholder (`is-empty`) rather than nothing. The criterion now reads: *an empty body adds
+      no scrollable height beyond the single placeholder line, and the sheet floor, navigation bar
+      and grab band stay where they are.* Captured at `panel-record-detail-sheet-body-empty-*`.
+      This is the fifth criterion in this packet that would fail correct code, and the second
+      introduced by a specification rather than an implementation.
+- [x] Listed rows trigger **0** body reads beyond the opened record. **Met structurally:**
+      `readNoteBody` has one caller, the opened record panel. No list or card path reaches it.
 - [ ] Sheet floor, navigation bar, backdrop and grab band stay asserted and green.
-- [ ] *Editable only:* frontmatter the plugin did not author round-trips byte-exactly, comments and
-      key order included.
-- [ ] *Editable only:* a concurrent property edit and body edit on one file lose neither write.
+- [x] *Editable only:* frontmatter the plugin did not author round-trips byte-exactly, comments and
+      key order included. **Met by construction, not by serializer fidelity:** `note-body.ts`
+      carries the frontmatter block as an opaque run of characters, so `frontmatter + gap + body`
+      reproduces the input exactly. Covered by "keeps the hand-written frontmatter comment a
+      property write would drop".
+- [x] *Editable only:* a concurrent property edit and body edit on one file lose neither write.
+      **Met.** `updateNoteBody` runs inside the per-file write queue and reads *inside* the queued
+      operation, so no snapshot can straddle a preceding write. Six tests cover it, including a
+      negative control that reports an overlap when the same writes bypass the queue.
 - [ ] The operator opens a record on device and sees the note.
 <!-- /ANCHOR:completion -->
 
@@ -107,8 +121,28 @@ not a surface to change.
 
 Volatile. Not part of the directive.
 
-**Nothing has started, and that is deliberate.** The phase is blocked on one decision the operator
-owns, and the two shapes are different phases wearing one folder name.
+**Decided and shipped: editable in place.** The operator chose editable, conditional on the write
+path being correct before it ships, and that condition is met rather than outstanding.
+
+The hazard this log predicted below — a body writer using `vault.modify` from **outside** the
+frontmatter queue — is not what was built. `updateNoteBody` (`data-source.ts:387`) runs inside
+`enqueueWrite`, and the read happens **inside** the queued operation rather than before it, which is
+the part that matters: reading first would carry a snapshot taken before the preceding write into a
+file that no longer matches it, which is the same race with an extra step. The queue also credits
+the path as plugin-owned, so the write does not return as an external edit.
+
+That is proven rather than asserted. `data-source-body-write.test.ts` holds six tests, and one of
+them is a **negative control**: "reports an overlap when the same writes bypass the queue" — so the
+interleaving detector is known to be able to fail, which is what makes the other five worth having.
+
+**One criterion did not survive the decision.** "A note with no body renders pixel-identically to
+today: no empty container, no reserved space" was written for display-only. A body you can type into
+must offer somewhere to type. It is rewritten above rather than quietly failed or quietly dropped.
+
+**Still owed:** the operator opening a record on device and seeing the note. Nothing here is device-
+confirmed.
+
+The analysis below is kept as written, because it is why the write path was built correctly.
 
 **Display only.** Read the file, strip the frontmatter, render the remainder below the properties.
 Links, embeds, task checkboxes and transclusions all work, because it is Obsidian's own renderer.

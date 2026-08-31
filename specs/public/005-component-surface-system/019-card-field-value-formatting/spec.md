@@ -17,7 +17,7 @@ _memory:
     recent_action: "Phase opened retroactively for an operator report fixed in the renderer with no owning spec"
     next_safe_action: "Write the first test for the two format functions, which have none"
     blockers:
-      - "The parent spec declares output number format out of scope; that exclusion needs an amendment or this phase needs moving"
+      - "Resolved: the exclusion covers the formula editor only, so this phase is in scope and stays put"
     key_files:
       - "spec.md"
       - "acceptance-criteria.md"
@@ -29,7 +29,6 @@ _memory:
       parent_session_id: null
     completion_pct: 50
     open_questions:
-      - "Does the scope exclusion in the parent spec get amended, or does this phase move to the earlier track"
     answered_questions:
       - "Was the formatter missing? No. It existed and four other surfaces already used it; the card renderer was the one number surface not wired to it"
 ---
@@ -157,7 +156,7 @@ One number, one rendering, wherever it surfaces.
 
 ---
 
-## 7. THE SCOPE CONFLICT, STATED RATHER THAN RESOLVED
+## 7. THE SCOPE CONFLICT, RESOLVED BY THE OPERATOR
 
 `../spec.md` §2 says, under **Out of scope**: *"Formula editor layout and output number format remain
 on the earlier track."*
@@ -171,10 +170,14 @@ one:
 2. The exclusion means output number format generally, in which case this work was out of scope and
    the fix belongs on the earlier track.
 
-Under reading 1 the parent spec should say so explicitly, because it currently does not. Under
-reading 2 this folder should move. **The operator decides.** It is recorded here because the fix
-shipped today with neither reading written down anywhere, which is how a scope exclusion stops
-meaning anything.
+**The operator chose reading 1: the exclusion covers the formula editor's output number format
+only.** A card field's number format is a different surface, and this program owns it. So this phase
+is in scope where it sits and does not move, and `../spec.md` §2 has been amended to name the
+formula editor explicitly rather than leaving "output number format" unqualified.
+
+Recorded rather than quietly dropped, because the fix shipped before anyone read the exclusion. The
+lesson survives the resolution: an exclusion that does not name its surface stops meaning anything,
+and the cost is found only when someone crosses it.
 
 ---
 
