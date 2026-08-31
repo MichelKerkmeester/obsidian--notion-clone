@@ -228,6 +228,21 @@ export class CalendarTimelineRenderer {
   private timelineInvalidWarningCount: number | null = null;
   private backlogCollapsed = false;
   private emptyStateRenderer = new EmptyStateRenderer();
+  /**
+   * Whether this surface takes touch input, decided once per render.
+   *
+   * Every event bar asks, and the answer cannot change part-way through a synchronous render:
+   * the platform flags are constant, the pointer type is constant, and the pane cannot be
+   * resized while the loop that fills it is still running. Asking per event made it a forced
+   * layout inside a loop appending to the same container, so the browser reflowed the tree
+   * built so far once per event and the total became superlinear in event count.
+   *
+   * It is measured on the container, not on `.db-timeline`. That element is sized from the unit
+   * count, so a width read from it while events are still being laid in is a different number on
+   * the first event than on the last — there is no single value to hoist. The container is the
+   * pane, which is the width the touch threshold was written about.
+   */
+  private touchMode = false;
 
   constructor(private actions: CalendarTimelineRendererActions) {}
 
@@ -258,6 +273,7 @@ export class CalendarTimelineRenderer {
   }
 
   renderTimeline(container: HTMLElement, config: ViewConfig, rows: RowData[]): void {
+    this.touchMode = isTouchDevice(container);
     if (normalizeTimelineDayScale(config)) {
       this.actions.onConfigChange?.(t("undo.timelineScaleConfig"));
     }
@@ -617,7 +633,7 @@ export class CalendarTimelineRenderer {
       if (!range.isClippedStart) this.renderTimelineResizeHandle(button, eventsEl, config, event, model, "start", groupKey);
       if (!range.isClippedEnd) this.renderTimelineResizeHandle(button, eventsEl, config, event, model, "end", groupKey);
     }
-    if (isTouchDevice(this.timelineRoot) && !this.actions.isReadOnly) {
+    if (this.touchMode && !this.actions.isReadOnly) {
       this.renderTimelineMobileMenuButton(button, config, event, groupKey, laneEvents, lanes);
     }
   }
