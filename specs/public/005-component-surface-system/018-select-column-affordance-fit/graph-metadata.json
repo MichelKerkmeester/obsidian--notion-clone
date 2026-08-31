@@ -199,7 +199,7 @@
     ],
     "causal_summary": "The operator, on a phone: \"to the left of checkbox that little button doesnt have enough space.\"",
     "created_at": "2026-08-30T17:34:54.869Z",
-    "last_save_at": "2026-08-31T20:01:14.461Z",
+    "last_save_at": "2026-08-31T20:08:53.641Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -210,13 +210,13 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:bec94a961cb9cbdac0fbe399ef73e304f17f486738bacd24bea887133721d586",
+    "source_fingerprint": "sha256:24aeef5ae035a4e94a7e94983f6dbc66a54124f7a36928ee3601c11144746591",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "ce9aa30b8a8ee54c86eef8c1d86cbbcd01e6f8c4f9e8215d848667979cbc41aa",
+      "spec.md": "d04a9a65fcd67a636c6eba6731ad53773b79de56f30f31a90f18e110d8aa5f91",
       "plan.md": "636dcd7601caf95ba87f0104b39a2feba3abf1345df53661bf56f8dc6b33822e",
       "tasks.md": "78e15fcac612729bfd4be0118186e6e9954c3195b8ce1110dbce993e47e35857",
-      "implementation-summary.md": "42f0703850f322175e0ee5b3c37ae7f3875ed82d2dc6494d7aa11a70d0161eba"
+      "implementation-summary.md": "f5ff9de7de5dffbe81ec9223966500f237f50ac5449ff9b1257b6272568ae55e"
     },
     "last_active_child_id": null,
     "last_active_at": null

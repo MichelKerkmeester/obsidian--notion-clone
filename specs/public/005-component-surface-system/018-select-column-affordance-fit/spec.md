@@ -14,8 +14,8 @@ _memory:
     packet_pointer: "public/005-component-surface-system/018-select-column-affordance-fit"
     last_updated_at: "2026-08-30T10:40:00Z"
     last_updated_by: "roadmap-reconciliation"
-    recent_action: "Phase opened retroactively for an operator report whose fix shipped with no owning spec"
-    next_safe_action: "Re-run verify-placement and record the after-numbers against the red baselines below"
+    recent_action: "Three rows measured and closed; the column width is now summed from painted boxes"
+    next_safe_action: "The operator opens the table on the phone and reports the button has room"
     blockers:
       - "The stylesheet edit landed under 004-checkbox-ownership's lane hold; that phase is live and this phase must not take the lane"
     key_files:
@@ -27,7 +27,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-018"
       parent_session_id: null
-    completion_pct: 20
+    completion_pct: 80
     open_questions:
       - "Does a 64px select column survive the operator's density setting, or does it need the touch branch only"
     answered_questions:

@@ -3413,7 +3413,7 @@ await section("the reorder button and the row checkbox share one cell", async ()
       });
       const worst = gaps.length ? Math.min(...gaps) : null;
       const cellWidth = cells.length ? Math.round(cells[0].getBoundingClientRect().width) : 0;
-      return [{
+      const results = [{
         name: `on ${id} the reorder button and the row checkbox do not overlap`,
         pass: worst === null || worst >= 0,
         detail: shown.length === 0
@@ -3422,6 +3422,31 @@ await section("the reorder button and the row checkbox share one cell", async ()
           : `${shown.length} cells show both; narrowest gap ${worst}px in a ${cellWidth}px cell`
             + " (negative means the two controls are drawn on top of one another)",
       }];
+
+      // The column has to be wide enough for what is painted in it, measured now rather than
+      // taken from the arithmetic in a comment.
+      //
+      // This is the failure that produced the phase. The width carried a comment reading
+      // `48 = button 24 + checkbox 16 + gap 8`, which was true when written and became false the
+      // moment another phase raised both controls to 28px — two 28px controls do not fit in 48px
+      // at any gap. A criterion that read the comment would still pass today. Summing the boxes
+      // the browser actually painted, plus the cell's own padding, cannot go stale that way.
+      if (shown.length > 0) {
+        const cell = shown[0];
+        const style = getComputedStyle(cell);
+        const padding = parseFloat(style.paddingLeft) + parseFloat(style.paddingRight);
+        const button = cell.querySelector(".db-table-mobile-move-btn").getBoundingClientRect().width;
+        const checkbox = cell.querySelector('input[type="checkbox"]').getBoundingClientRect().width;
+        const needed = Math.round(padding + button + Math.max(0, worst) + checkbox);
+        results.push({
+          name: `on ${id} the select column is wide enough for the controls it paints`,
+          pass: cellWidth >= needed,
+          detail: `cell ${cellWidth}px against ${needed}px needed`
+            + ` = padding ${Math.round(padding)} + button ${Math.round(button)} + gap ${worst} + checkbox ${Math.round(checkbox)}`
+            + " — summed from the painted boxes, not from the width comment that went stale when both controls became 28px",
+        });
+      }
+      return results;
     }, device.id));
     await context.close();
   }

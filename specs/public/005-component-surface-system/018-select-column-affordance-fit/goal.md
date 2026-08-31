@@ -11,8 +11,8 @@ _memory:
     packet_pointer: "public/005-component-surface-system/018-select-column-affordance-fit"
     last_updated_at: "2026-08-31T09:00:00Z"
     last_updated_by: "harness-dependence-review"
-    recent_action: "AC-1 desktop and AC-2 withdrawn: the overlap check mounts a hand-written fixture"
-    next_safe_action: "Mount a TableRenderer-built row, then re-read the gap and the button presence"
+    recent_action: "Three rows measured and closed; the column width is now summed from painted boxes"
+    next_safe_action: "The operator opens the table on the phone and reports the button has room"
     blockers:
       - "The desktop cell production paints holds a drag handle the fixture never contains"
       - "The phone column width is declared twice; only the CSS copy is measured"
@@ -24,7 +24,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-018-goal"
       parent_session_id: null
-    completion_pct: 20
+    completion_pct: 80
     open_questions:
       - "Do the desktop drag handle and the row checkbox clear each other in a 40px column"
       - "Does the renderer build the reorder button only on touch, measured rather than read"
@@ -67,20 +67,34 @@ nothing owned it.
 <!-- ANCHOR:completion -->
 ## 2. COMPLETION CRITERIA
 
-- [ ] The gap between the button's right edge and the checkbox's left edge is ≥ 0 on every surface
+- [x] The gap between the button's right edge and the checkbox's left edge is ≥ 0 on every surface
       that renders both. Recorded failing at −14px phone and −17px desktop; recorded after at +4px in
       a 65px cell.
-- [ ] Zero reorder buttons render in a desktop list or gallery row, which is what production builds —
-      the table creates it only on touch. Was present and unstyled in every desktop row, because a
+      **Met, re-measured on this tree:** `11 cells show both; narrowest gap 4px in a 65px cell`. The
+      desktop surface renders no button at all, so it has no pair to collide.
+- [x] Zero reorder buttons render in a desktop list or gallery row, which is what production builds —
+      the table creates it only on touch. **Met:** `no reorder button is shown in 11 select cells,
+      so nothing can collide`. Was present and unstyled in every desktop row, because a
       **touch-floor block declared `display: inline-flex`** at equal specificity and later in the
       file than the `display: none` written for the non-phone case. A minimum-size rule decided
       visibility, and a check on the gap alone would have gone green the moment the button
       disappeared without anyone establishing why.
-- [ ] The column width equals the sum of the painted control boxes and their insets, re-measured
+- [x] The column width equals the sum of the painted control boxes and their insets, re-measured
       rather than read from a comment. Was 48px, from `48 = button 24 + checkbox 16 + gap 8` — true
       when written, untrue from the moment a different phase raised both controls to 28px. Two 28px
       controls do not fit in 48px at any gap, and a criterion that read the comment would still pass
-      today. Now `4 + 28 + 4 + 28 = 64`.
+      today.
+      **Met, and now asserted rather than asserted-about.** A new check sums the boxes the browser
+      painted: `cell 65px against 60px needed = padding 0 + button 28 + gap 4 + checkbox 28`. It
+      cannot go stale the way the comment did, because nothing in it is read from prose.
+      *A correction the measurement forced.* This row said the width is now `4 + 28 + 4 + 28 = 64`.
+      The stylesheet declares 64px and the cell paints at **65px** — the extra pixel is its border —
+      and the padding is **0**, not 4 a side. The controls are spaced by the flex layout and the
+      checkbox's right pin, not by cell padding. So the arithmetic here was itself the kind of
+      comment this criterion exists to distrust; the measured decomposition replaces it.
+      *Negative control:* returning the column to 48px takes both checks red — gap −12px, and
+      `cell 49px against 56px needed`. −12px rather than −14px because this control reverts the
+      column alone, which is precisely the distinction the tick below records.
 - [x] Both negative controls observed red, each moving only its own surface. Restoring the `display`
       declaration takes the desktop check red at **-17px in a 40px cell** while the phone stays
       green. The phone control takes it red while the desktop stays green. Restored, the harness
