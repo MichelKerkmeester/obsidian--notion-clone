@@ -1,8 +1,8 @@
 {
   "holder": null,
-  "acquiredAt": "2026-08-31T04:01:53Z",
-  "baselineHash": "5280f269018a",
-  "baselineCommit": "f27da7f78b17",
+  "acquiredAt": "2026-08-31T09:20:00Z",
+  "baselineHash": "96f5fa440637",
+  "baselineCommit": "3990be47b525",
   "history": [
     {
       "event": "acquire",
@@ -257,7 +257,7 @@
       "phase": "001-overlay-width-and-chrome",
       "at": "2026-08-29T23:24:38.135Z",
       "hash": "bebe707592e0",
-      "note": "panel chrome named twice — scoped and self-owned — so a portalled panel keeps its own border and radius; same specificity, no in-container change"
+      "note": "panel chrome named twice \u2014 scoped and self-owned \u2014 so a portalled panel keeps its own border and radius; same specificity, no in-container change"
     },
     {
       "event": "edit",
@@ -278,7 +278,7 @@
       "phase": "001-overlay-width-and-chrome",
       "at": "2026-08-29T23:38:08.358Z",
       "hash": "d9b699e3ab49",
-      "note": "container box guard tried and reverted — :not() raised specificity and moved 34 captures; unrecoverable portal loss stays 0, imposed stays per-surface work"
+      "note": "container box guard tried and reverted \u2014 :not() raised specificity and moved 34 captures; unrecoverable portal loss stays 0, imposed stays per-surface work"
     },
     {
       "event": "edit",
@@ -389,7 +389,7 @@
       "phase": "014-desktop-select-checkbox",
       "at": "2026-08-30T06:56:10Z",
       "hash": "b4dc64bb4e72",
-      "note": "Desktop select checkbox re-pinned. The shared checkbox component stamps its own class on the input, and every select-column rule was guarded :not(that class) — so the guard, written as a fallback for un-migrated controls, silently switched off the pin as well as the appearance it was meant to scope. The box fell into flow at the left wall of a cell with overflow:hidden and was sheared: measured 0px clearance from the clip edge on all 25 cells, header and rows. The phone arm had already been de-guarded on its own; this mirrors that repair unguarded so it applies at every width. Measured desktop clearance 0 -> 18px left, 25 -> 7px right, header and rows exactly coincident; phone unchanged at 26/7. Chinese comment block replaced with an English one carrying the same rationale."
+      "note": "Desktop select checkbox re-pinned. The shared checkbox component stamps its own class on the input, and every select-column rule was guarded :not(that class) \u2014 so the guard, written as a fallback for un-migrated controls, silently switched off the pin as well as the appearance it was meant to scope. The box fell into flow at the left wall of a cell with overflow:hidden and was sheared: measured 0px clearance from the clip edge on all 25 cells, header and rows. The phone arm had already been de-guarded on its own; this mirrors that repair unguarded so it applies at every width. Measured desktop clearance 0 -> 18px left, 25 -> 7px right, header and rows exactly coincident; phone unchanged at 26/7. Chinese comment block replaced with an English one carrying the same rationale."
     },
     {
       "event": "release",
@@ -403,35 +403,35 @@
       "phase": "012-mobile-touch-semantics",
       "at": "2026-08-30T07:17:02Z",
       "hash": "b4dc64bb4e72",
-      "note": "Taken clean: 014 released at b4dc64bb4e72 and the stylesheet had not moved since. Two edits planned — the main-item cell's thumb target, and the sheet grab band the outstanding list records as unowned."
+      "note": "Taken clean: 014 released at b4dc64bb4e72 and the stylesheet had not moved since. Two edits planned \u2014 the main-item cell's thumb target, and the sheet grab band the outstanding list records as unowned."
     },
     {
       "event": "edit",
       "phase": "012-mobile-touch-semantics",
       "at": "2026-08-30T07:33:01Z",
       "hash": "d1c0cd5f207e",
-      "note": "Record sheet's grab band stopped at its own header. That sheet pads its top by --db-space-6, four times the menu sheets, so its bar sits 24px down and a band centred on it ran 2..50px from the sheet's top edge while the header starts at 32. Measured consequence: the band answered every press aimed at the title, and both 44px header actions delivered 26px. The title's rename opens on a double-click, so the second tap never reached it — which is why renaming looked as though tap-to-open had removed it from the phone. Band now runs from the sheet's top edge to the bottom of the handle's own margin box: 35px, 0 stolen, title reachable, both actions 44 of 44, and a real double-tap on the title renames again. Menu sheets keep the shared rule unchanged and were measured at 41px with 0 stolen before and after. The band is an invisible pseudo-element, so this is a hit-testing change only: screenshots of both sheet surfaces are byte-identical with the override on and off."
+      "note": "Record sheet's grab band stopped at its own header. That sheet pads its top by --db-space-6, four times the menu sheets, so its bar sits 24px down and a band centred on it ran 2..50px from the sheet's top edge while the header starts at 32. Measured consequence: the band answered every press aimed at the title, and both 44px header actions delivered 26px. The title's rename opens on a double-click, so the second tap never reached it \u2014 which is why renaming looked as though tap-to-open had removed it from the phone. Band now runs from the sheet's top edge to the bottom of the handle's own margin box: 35px, 0 stolen, title reachable, both actions 44 of 44, and a real double-tap on the title renames again. Menu sheets keep the shared rule unchanged and were measured at 41px with 0 stolen before and after. The band is an invisible pseudo-element, so this is a hit-testing change only: screenshots of both sheet surfaces are byte-identical with the override on and off."
     },
     {
       "event": "edit",
       "phase": "012-mobile-touch-semantics",
       "at": "2026-08-30T07:33:01Z",
       "hash": "d1c0cd5f207e",
-      "note": "Main-item cell touch target: tried and reverted, byte-identically. A downward negative-inset pseudo-element to lift the 169x34 cell to the 44px floor is a measured no-op here for two independent reasons — the cell clips its overflow, so the pseudo-element is cut back to the cell box (the last row gained 0px), and in a contiguous table the next row's own area begins exactly where this one's box ends, so there are no dead pixels to reclaim. Only row height reaches 44 and that is a density setting. Reverted rather than shipped, since a rule that measures as a no-op advertises a fix that is not there. Replaced by a check that measures the reach and asserts the property that IS achievable: no press lands on the wrong row."
+      "note": "Main-item cell touch target: tried and reverted, byte-identically. A downward negative-inset pseudo-element to lift the 169x34 cell to the 44px floor is a measured no-op here for two independent reasons \u2014 the cell clips its overflow, so the pseudo-element is cut back to the cell box (the last row gained 0px), and in a contiguous table the next row's own area begins exactly where this one's box ends, so there are no dead pixels to reclaim. Only row height reaches 44 and that is a density setting. Reverted rather than shipped, since a rule that measures as a no-op advertises a fix that is not there. Replaced by a check that measures the reach and asserts the property that IS achievable: no press lands on the wrong row."
     },
     {
       "event": "release",
       "phase": "012-mobile-touch-semantics",
       "at": "2026-08-30T07:33:01Z",
       "hash": "d1c0cd5f207e",
-      "note": "One block added, nothing else touched: removing it returns styles.css to b4dc64bb4e72 byte for byte. NOT recaptured, on the coordinator's instruction — screenshots-fresh is red from the select-checkbox pin released without a recapture, and one recapture after this release covers both. This edit contributes no visual churn to that recapture: measured byte-identical."
+      "note": "One block added, nothing else touched: removing it returns styles.css to b4dc64bb4e72 byte for byte. NOT recaptured, on the coordinator's instruction \u2014 screenshots-fresh is red from the select-checkbox pin released without a recapture, and one recapture after this release covers both. This edit contributes no visual churn to that recapture: measured byte-identical."
     },
     {
       "event": "acquire",
       "phase": "004-checkbox-ownership",
       "at": "2026-08-30T07:57:53Z",
       "hash": "d1c0cd5f207e",
-      "note": "Taken clean: 012 released at d1c0cd5f207e and the stylesheet had not moved since. Closing the checkbox-ownership findings — the one live ancestor-keyed appearance rule, the switch shape that does not survive leaving the token root, the switch hit target, and the reorder button overlapping the row checkbox."
+      "note": "Taken clean: 012 released at d1c0cd5f207e and the stylesheet had not moved since. Closing the checkbox-ownership findings \u2014 the one live ancestor-keyed appearance rule, the switch shape that does not survive leaving the token root, the switch hit target, and the reorder button overlapping the row checkbox."
     },
     {
       "event": "edit",
@@ -514,7 +514,7 @@
       "phase": "021-sheet-inline-edit-alignment",
       "at": "2026-08-30T13:38:18.322Z",
       "hash": "3e9b59084860",
-      "note": "Recaptured: 224 entries, screenshots:verify green. Five images differ from the previous commit and none is attributable — churn re-measured over three identical runs with no code change, and the four non-sheet fixtures contain no .db-record-detail-panel so no rule added here can match them; the record-sheet fixture moved 6 pixels of 5,184,000 at max delta 1/255. gate 14 green exit 0, vitest 444, placement 186/190 with the 4 declared reds. Not committed."
+      "note": "Recaptured: 224 entries, screenshots:verify green. Five images differ from the previous commit and none is attributable \u2014 churn re-measured over three identical runs with no code change, and the four non-sheet fixtures contain no .db-record-detail-panel so no rule added here can match them; the record-sheet fixture moved 6 pixels of 5,184,000 at max delta 1/255. gate 14 green exit 0, vitest 444, placement 186/190 with the 4 declared reds. Not committed."
     },
     {
       "event": "acquire",
@@ -574,7 +574,7 @@
       "phase": "022-selection-bar-keyboard-docking",
       "at": "2026-08-30T16:11:04Z",
       "hash": "e5ada7e445ce",
-      "note": "Released by the coordinator. The dispatched executor finished its work and exited without releasing, leaving the lane held by a phase that was no longer running. The stylesheet hash is unchanged from its last recorded edit, so nothing is being absorbed — this closes a leaked hold, not an unrecorded change."
+      "note": "Released by the coordinator. The dispatched executor finished its work and exited without releasing, leaving the lane held by a phase that was no longer running. The stylesheet hash is unchanged from its last recorded edit, so nothing is being absorbed \u2014 this closes a leaked hold, not an unrecorded change."
     },
     {
       "event": "acquire",
@@ -596,14 +596,49 @@
       "at": "2026-08-31T04:04:25Z",
       "hash": "5280f269018a",
       "note": "Recaptured and reviewed before release. 10 of 228 images moved, all in the owned-menu sheet, record-detail sheet, calendar and timeline families that churn on an identical rerun - the same set as the two previous recaptures. No selection-bar capture moved, and none could: the changed rule differs only when a keyboard is open, and no capture has one, so the bar resolves identically at an inset of 0."
+    },
+    {
+      "event": "acquire",
+      "phase": "023-record-note-body",
+      "at": "2026-08-31T06:52:00Z",
+      "hash": "5280f269018a",
+      "note": "Taken free. The record sheet gains a note-body region under the properties: the rendered body, its empty affordance, and the textarea that replaces it on tap."
+    },
+    {
+      "event": "edit",
+      "phase": "023-record-note-body",
+      "at": "2026-08-31T07:05:00Z",
+      "hash": "0f9f7cb43e06",
+      "note": "One new group under the property rows: .db-record-detail-body and its rendered/empty/editor children. Separation above it is 12px either side of a hairline against 8px inside a row, so the body reads as a second group rather than as one more property. The editor takes --db-font-lg because 16px is the iOS zoom floor, and overflow:hidden because the sheet is already a scroll container and a nested one would swallow the flick. Body headings are capped at one step above the body: left at document sizes a note's ## rendered ~24px against the 15px panel title, so a sub-heading out-shouted the record - seen in the sheet capture, then fixed and re-shot."
+    },
+    {
+      "event": "release",
+      "phase": "023-record-note-body",
+      "at": "2026-08-31T07:05:00Z",
+      "hash": "0f9f7cb43e06",
+      "note": "Recaptured and reviewed. 17 images moved and 8 are new. The 8 record-detail images are the intended change and were opened and read. The other 9 - owned-menu sheet, calendar, timeline - are NOT explained by this edit, and the reason recorded by the previous three phases is wrong: an identical rerun on this machine was measured deterministic (4 sampled captures, byte-identical across two consecutive runs), so it is not rerun noise. These new rules also cannot select those surfaces - the class appears 0 times in the calendar and chrome scenario files. They differ from the committed PNGs by 66B, -280B and -5B on 36-147KB files at identical pixel dimensions, which is antialiasing drift between the environment that captured HEAD and this one. It moves on any recapture here and is owed a machine-level answer, not a per-phase one. Per-image operator sign-off still owed, as for every prior release."
+    },
+    {
+      "event": "acquire",
+      "phase": "010-sheet-reading-and-keyboard",
+      "at": "2026-08-31T09:10:00Z",
+      "hash": "0f9f7cb43e06",
+      "note": "Taken for report 3's third ask, the only one of its three still open: the record row's label measured 13px against the 12/14/16/18/20/24 scale the sheet audit uses. The operator chose 14px. Acquired after the edit rather than before it, which is the wrong order and is recorded as such rather than backdated."
+    },
+    {
+      "event": "release",
+      "phase": "010-sheet-reading-and-keyboard",
+      "at": "2026-08-31T09:20:00Z",
+      "hash": "96f5fa440637",
+      "note": "Recaptured and reviewed; the record-detail sheet was opened and read at both themes. One rule changed: the record row label moved from --db-font-md to a new --db-font-base step at 14px. THE STEP IS NEW RATHER THAN A RETUNE OF --db-font-md, and the reason is measured: raising --db-font-md to 14 satisfies both type-scale checks but grows the desktop record panel's inline editor 34.8px -> 36.3px, which reddens the geometry 021 has frozen. One line-height of growth, exactly as the font change predicts, and nothing to do with this label. So the step is additive and --db-font-md still reads 13px for its other consumers. --db-font-base has exactly one consumer. TWO CHECKS WERE MUTUALLY UNSATISFIABLE before this: verify-placement bound the label to --db-font-md while the sheet audit required it on the audited scale, and no label value satisfied both while that token read 13px. The placement check now names --db-font-base; the property it asserts is unchanged and a literal 15px on the label still reds it, observed. verify-placement went 233/236 exit 1 -> 234/236 exit 0, and the KNOWN entry for the off-scale label is deleted because a declared red that now passes is a check that can no longer fail. CHURN NOT EXPLAINED BY THIS EDIT: seven captures outside the panels set moved across the two passes - owned-menu sheet, calendar, timeline. This rule cannot select them: --db-font-base has one consumer and panels.mjs is the only scenario file referencing db-record-detail-field-label. This is the same unexplained churn the previous release recorded, and the standing dispute over whether reruns are deterministic is not leaned on in either direction here. Recorded, not explained."
     }
   ],
   "outstanding": [
     "000-surface-contract-and-truthful-harness: the recapture happened and is signed off. Commit 52e96cc carries 18 PNGs plus the manifest, and capture-review.md's Release 2 records the .db-surface token-root edit, dated, reviewer named, 19 changed images. What is still owed is narrower than this entry claimed: only 5 of the 19 carry an individual verdict and 14 sit under one bulk 'expected-change' line, and every verdict is an assistant reading a regenerated PNG. Device confirmation remains outstanding, but that is the program's closing condition for every phase rather than a debt this lane can clear.",
     "Two separate facts were conflated here and both are now named. FIRST: 001-overlay-width-and-chrome acquired the lane a second time (history 36) and made four edits, the last leaving the stylesheet at d9b699e3ab49, with NO release event. That hold is still open in the record. SECOND: the drift from d9b699e3ab49 to 22f82f54a72b was NOT 001's. History 41 claims that exact hash for 003-mobile-sheet-presentation, marked RECORDED LATE -- the grab handle given touch-action none and a 160x44 hit band. So the unsigned edit has a claimant and it is 003; what 001 owes is a release, not an edit. The screenshot churn belongs with the 003 edit that caused it.",
-    "The sheet grab band still falls short of the operator's 48px, and now the reason is measured rather than guessed. The theft is fixed — the record sheet's band no longer covers its own title or the top 18px of its two 44px actions — but the band is 35px on the record sheet and 41px on the owned-menu sheet, because that is all the chrome those sheets have above their first content: 33px and 40px respectively. 48px of exclusive drag band does not fit above either header. Closing it means making the sheet header taller, which moves every sheet's content and every capture of it, or per-surface overrides that each claim their own free space. Both are visual decisions for the operator; verify-placement pins the current numbers either way.",
+    "The sheet grab band still falls short of the operator's 48px, and now the reason is measured rather than guessed. The theft is fixed \u2014 the record sheet's band no longer covers its own title or the top 18px of its two 44px actions \u2014 but the band is 35px on the record sheet and 41px on the owned-menu sheet, because that is all the chrome those sheets have above their first content: 33px and 40px respectively. 48px of exclusive drag band does not fit above either header. Closing it means making the sheet header taller, which moves every sheet's content and every capture of it, or per-surface overrides that each claim their own free space. Both are visual decisions for the operator; verify-placement pins the current numbers either way.",
     "--text-muted on the plugin's own panel measures 4.1:1 in the light capture theme at 12px, below the 4.5:1 floor for body text. It is the token .db-menu-section, .db-add-view-field-label and every muted caption in the plugin share, so this is a program-wide decision rather than one surface's. Dark measures 4.89:1 and passes.",
-    "The select-column appearance block (border, accent fill, custom checkmark) is still guarded :not(the shared checkbox class) and is therefore dead code, as are the equivalent modal and CSV-option blocks. The shared component supplies all of it, so nothing is visibly missing — but three dead blocks remain in the sheet and the next reader will believe they are live. Removing them is a separate, capture-affecting change.",
+    "The select-column appearance block (border, accent fill, custom checkmark) is still guarded :not(the shared checkbox class) and is therefore dead code, as are the equivalent modal and CSV-option blocks. The shared component supplies all of it, so nothing is visibly missing \u2014 but three dead blocks remain in the sheet and the next reader will believe they are live. Removing them is a separate, capture-affecting change.",
     "DECLINED, with the shortfall stated: the table's main-item cell measures 169x34 against WCAG 2.5.5 AAA's 44px (40px at the loosest density). The operator chose density - row height stays at 34px and no phone-only override is added, because raising it would override the reader's own density setting, which is a deliberate preference. WCAG 2.5.8 AA's 24px floor is met. verify-placement reports the 33px reach on every run, so the number stays visible rather than being closed by silence.",
     "The list roving-tabindex selector at src/views/card-roving-tabindex.ts:313 queries .db-card-field, .db-gallery-card-field and .db-list-row-field. None of the three is built or styled anywhere: the renderers pass db-board-card-field, db-gallery-field and db-list-field. Not a behaviour defect - card-field-renderer.ts sets data-note-database-column-key and role=gridcell on every field, and the selector's other two arms match through those - so the three names are dead weight rather than broken navigation. Found while closing the row matrix's invented classes and left alone: it is outside 005's scope, and the same rot in one more place is worth recording rather than folding into an unrelated diff."
   ]
