@@ -72,12 +72,12 @@ export class DbModal extends Modal {
     applySheetChrome(this.modalEl, asSheet);
     this.modalEl.toggleClass(DB_MODAL_FULLSCREEN_CLASS, asFullscreen);
 
-    // Wire the bar the line above just drew, because until now nothing did.
+    // This call is what draws the grab bar, and that ordering is the point.
     //
-    // Asking for `sheet` gave a modal a grab bar and no gesture, on every one of the surfaces that
-    // present this way — an affordance that says the sheet can be pulled down and then ignores the
-    // thumb. That is worse than drawing no bar at all: a dead control reads as a frozen app rather
-    // than as a missing feature.
+    // Asking for `sheet` used to give a modal a bar and no gesture, on every one of the surfaces
+    // that present this way — an affordance that says the sheet can be pulled down and then ignores
+    // the thumb, which reads as a frozen app rather than a missing feature. The bar now comes from
+    // the gesture, so a modal that skipped this line would get no bar rather than a dead one.
     //
     // `this.close()` rather than `super.close()` on purpose. One modal here overrides `close()` to
     // raise a confirm dialog before discarding edits, and a drag has to go through that override
@@ -86,7 +86,6 @@ export class DbModal extends Modal {
     this.releaseSheetDrag?.();
     this.releaseSheetDrag = undefined;
     if (!asSheet) return;
-    const handle = this.modalEl.querySelector<HTMLElement>(".db-mobile-bottom-sheet-handle");
-    if (handle) this.releaseSheetDrag = attachSheetDragToDismiss(this.modalEl, handle, () => this.close());
+    this.releaseSheetDrag = attachSheetDragToDismiss(this.modalEl, () => this.close());
   }
 }

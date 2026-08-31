@@ -367,10 +367,7 @@ export function openRecordDetailPanel(opts: OpenRecordDetailOptions): void {
   // 定位（复用 positionToolbarPopover：挂载点选择 / 视口夹取 / 翻转 / 移动端留白）
   positionToolbarPopover(panel, anchorEl, { minWidth: 240, preferredWidth: 360, maxWidth: 420, align: "center" });
   // 移动端底部抽屉：positionToolbarPopover 已加 .db-mobile-bottom-sheet 与抓手；接上向下拖拽关闭手势。
-  if (panel.hasClass("db-mobile-bottom-sheet")) {
-    const handle = panel.querySelector<HTMLElement>(".db-mobile-bottom-sheet-handle");
-    if (handle) removeSheetDrag = attachSheetDragToDismiss(panel, handle, close);
-  }
+  if (panel.hasClass("db-mobile-bottom-sheet")) removeSheetDrag = attachSheetDragToDismiss(panel, close);
   // positionToolbarPopover 会在下一帧复测一次；按注册顺序在其复测之后隐藏来源
   // overflow，既保留正确锚点位置，也避免详情面板与事件列表继续层叠显示。
   window.requestAnimationFrame(() => {

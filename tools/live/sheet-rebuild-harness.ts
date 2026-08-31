@@ -36,7 +36,7 @@
 
 import { ToolbarRenderer } from "../../src/views/toolbar-renderer";
 import { COMPACT_MENU_POPOVER, positionToolbarPopover } from "../../src/views/popover-position";
-import { applySheetChrome, hasSheetDrag } from "../../src/views/mobile-bottom-sheet";
+import { applySheetChrome, attachSheetDragToDismiss, hasSheetDrag } from "../../src/views/mobile-bottom-sheet";
 import { installPopoverAutoClose } from "../../src/views/popover-auto-close";
 import { overlayStack } from "../../src/views/overlay-stack";
 
@@ -159,37 +159,65 @@ function runGroupSheet(doc: Document): RebuildResult {
  * producer case is passing for a reason nobody has established.
  */
 function runChromeContract(doc: Document): RebuildResult[] {
+  // A panel given chrome and nothing else. Under the rule this file exists to pin, it gets NO bar:
+  // the gesture draws the bar, so an unwired one has nowhere to come from.
   const bare = doc.createElement("div");
   doc.body.appendChild(bare);
   applySheetChrome(bare, true);
-  const barBefore = Boolean(bare.querySelector(HANDLE));
-  bare.empty();
-  const barAfterBareEmpty = Boolean(bare.querySelector(HANDLE));
+  const barFromChromeAlone = Boolean(bare.querySelector(HANDLE));
 
+  // Attaching the gesture is what produces it.
+  const release = attachSheetDragToDismiss(bare, () => undefined);
+  const barAfterAttach = Boolean(bare.querySelector(HANDLE));
+
+  // The rebuild path: emptying destroys the bar, and re-asserting chrome restores it — but only
+  // because a gesture is still attached to the panel. That guard is the whole difference between
+  // restoring a bar and minting an unwired one.
+  bare.empty();
+  const barAfterEmpty = Boolean(bare.querySelector(HANDLE));
   applySheetChrome(bare, true);
   const barAfterReassert = Boolean(bare.querySelector(HANDLE));
+
+  release();
   applySheetChrome(bare, false);
   bare.remove();
 
   return [
     {
-      surface: "emptying a sheet panel (the mechanism)",
-      rebuildShape: "empty-only",
-      barBeforeRebuild: barBefore,
-      barAfterRebuild: barAfterBareEmpty,
-      // Inverted on purpose: the bar MUST be gone here, or the producer case above is
-      // green for a reason that has nothing to do with the re-assert it is meant to check.
-      pass: barBefore && !barAfterBareEmpty,
-      detail: !barBefore
-        ? "no bar was created, so nothing was measured"
-        : barAfterBareEmpty
-          ? "emptying left the bar in place — the whole premise of the re-assert is wrong"
-          : "emptying destroyed the bar, as the producer case assumes",
+      surface: "chrome alone draws no bar",
+      rebuildShape: "the guarantee",
+      barBeforeRebuild: barFromChromeAlone,
+      barAfterRebuild: barFromChromeAlone,
+      // Inverted deliberately. If chrome drew a bar on its own, an unwired affordance would be
+      // representable again and every other case here would be measuring a weaker rule.
+      pass: !barFromChromeAlone,
+      detail: barFromChromeAlone
+        ? "chrome drew a bar with no gesture attached — an unwired affordance is possible again"
+        : "no bar without a gesture, so an unwired one cannot be built",
     },
     {
-      surface: "re-asserting chrome after emptying",
+      surface: "attaching the gesture draws it",
+      rebuildShape: "gesture-owns-the-bar",
+      barBeforeRebuild: barFromChromeAlone,
+      barAfterRebuild: barAfterAttach,
+      pass: barAfterAttach,
+      detail: barAfterAttach ? "the bar appeared with the gesture" : "no bar even with a gesture attached",
+    },
+    {
+      surface: "emptying a sheet panel (the mechanism)",
+      rebuildShape: "empty-only",
+      barBeforeRebuild: barAfterAttach,
+      barAfterRebuild: barAfterEmpty,
+      // Also inverted: the bar MUST be gone, or the re-assert below is proving nothing.
+      pass: barAfterAttach && !barAfterEmpty,
+      detail: barAfterEmpty
+        ? "emptying left the bar in place — the whole premise of the re-assert is wrong"
+        : "emptying destroyed the bar, as the producer case assumes",
+    },
+    {
+      surface: "re-asserting chrome restores it while the gesture lives",
       rebuildShape: "empty-then-rechrome",
-      barBeforeRebuild: barBefore,
+      barBeforeRebuild: barAfterEmpty,
       barAfterRebuild: barAfterReassert,
       pass: barAfterReassert,
       detail: barAfterReassert ? "the bar came back" : "re-asserting did not restore the bar",
@@ -213,30 +241,6 @@ function runChromeContract(doc: Document): RebuildResult[] {
  */
 function runHandleWiring(doc: Document): RebuildResult[] {
   const cases: RebuildResult[] = [];
-
-  // A bar drawn by chrome alone, with nothing attached: the modal's old shape.
-  const bare = doc.createElement("div");
-  doc.body.appendChild(bare);
-  applySheetChrome(bare, true);
-  const bareHasBar = Boolean(bare.querySelector(HANDLE));
-  const bareHasDrag = hasSheetDrag(bare);
-  applySheetChrome(bare, false);
-  bare.remove();
-
-  cases.push({
-    surface: "chrome alone draws a bar with no gesture",
-    rebuildShape: "control",
-    barBeforeRebuild: bareHasBar,
-    barAfterRebuild: bareHasBar,
-    // Inverted deliberately. If chrome alone ever DID attach a gesture, the wiring below would be
-    // proving nothing about the producers, because everything would be wired for free.
-    pass: bareHasBar && !bareHasDrag,
-    detail: !bareHasBar
-      ? "chrome drew no bar, so this control measures nothing"
-      : bareHasDrag
-        ? "chrome attached a gesture on its own — the producer cases below prove nothing"
-        : "chrome draws the bar and attaches nothing, so wiring it is the producer's job",
-  });
 
   // The positioner path, which every toolbar sheet reaches.
   const root = doc.createElement("div");

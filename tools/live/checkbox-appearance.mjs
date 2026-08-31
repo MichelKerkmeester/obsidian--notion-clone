@@ -80,9 +80,27 @@ if (!CHROME) {
 // ───────────────────────────────────────────────────────────────────
 
 const browser = await chromium.launch({ executablePath: CHROME });
-// Without this, a checked checkbox read during its 120ms transition reports a background that is
-// almost transparent — which looks exactly like a control that never got its style.
-const page = await browser.newPage({ viewport: { width: 1200, height: 900 }, reducedMotion: "reduce" });
+// Without reducedMotion, a checked checkbox read during its 120ms transition reports a background
+// that is almost transparent — which looks exactly like a control that never got its style.
+//
+// TWO pages, because pointer type changes the answer and this measured only one of them.
+//
+// The stylesheet raises every checkbox to a 28px minimum under `@media (pointer: coarse)`, and
+// `min-width` beats `width` — so a phone checkbox is 28x28 where a desktop one is 16x16. Measuring
+// every fixture on a single fine-pointer page reported 16x16 for `list-mobile`, which is a surface
+// no phone renders, and made the 28px floor invisible to the one instrument that exists to see it.
+//
+// It also explains a contradiction that had been recorded as unresolved: the switch measured
+// 34x18 here and 34x28 in the roadmap. Same control, two pointer modes, both readings correct.
+const desktopPage = await browser.newPage({ viewport: { width: 1200, height: 900 }, reducedMotion: "reduce" });
+const touchPage = await browser.newPage({
+  viewport: { width: 390, height: 844 },
+  reducedMotion: "reduce",
+  hasTouch: true,
+  isMobile: true,
+});
+/** A fixture named for the phone is measured as the phone. */
+const pageFor = (scenarioId) => (/mobile|phone/i.test(scenarioId) ? touchPage : desktopPage);
 const styles = readFileSync(join(REPO, "styles.css"), "utf8");
 const theme = readFileSync(join(REPO, "tools/screenshots/theme.css"), "utf8");
 const runtime = readFileSync(join(REPO, "tools/screenshots/runtime-vars.css"), "utf8");
@@ -97,6 +115,7 @@ for (const scenario of scenarios) {
     rows.push({ scenario: scenario.id, error: "fixture did not render" });
     continue;
   }
+  const page = pageFor(scenario.id);
   await page.setContent(`<body><div id="shot">${html}</div></body>`);
   await page.addStyleTag({ content: styles });
   await page.addStyleTag({ content: theme });

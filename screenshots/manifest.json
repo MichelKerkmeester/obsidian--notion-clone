@@ -892,7 +892,7 @@
       ],
       "layoutHash": "e1ad8df01021",
       "sourceHashes": {
-        "src/views/owned-menu.ts": "687419f690fb",
+        "src/views/owned-menu.ts": "e06f7bef597a",
         "src/views/menu-row.ts": "dd0e9eeeb997",
         "styles.css": "96f5fa440637",
         "tools/screenshots/theme.css": "8239cc22cceb",
@@ -917,7 +917,7 @@
       ],
       "layoutHash": "e1ad8df01021",
       "sourceHashes": {
-        "src/views/owned-menu.ts": "687419f690fb",
+        "src/views/owned-menu.ts": "e06f7bef597a",
         "src/views/menu-row.ts": "dd0e9eeeb997",
         "styles.css": "96f5fa440637",
         "tools/screenshots/theme.css": "8239cc22cceb",
@@ -942,7 +942,7 @@
       ],
       "layoutHash": "2389dbe9ce03",
       "sourceHashes": {
-        "src/views/owned-menu.ts": "687419f690fb",
+        "src/views/owned-menu.ts": "e06f7bef597a",
         "src/views/menu-row.ts": "dd0e9eeeb997",
         "styles.css": "96f5fa440637",
         "tools/screenshots/theme.css": "8239cc22cceb",
@@ -967,7 +967,7 @@
       ],
       "layoutHash": "2389dbe9ce03",
       "sourceHashes": {
-        "src/views/owned-menu.ts": "687419f690fb",
+        "src/views/owned-menu.ts": "e06f7bef597a",
         "src/views/menu-row.ts": "dd0e9eeeb997",
         "styles.css": "96f5fa440637",
         "tools/screenshots/theme.css": "8239cc22cceb",
@@ -993,9 +993,9 @@
       ],
       "layoutHash": "e9246471b820",
       "sourceHashes": {
-        "src/views/owned-menu.ts": "687419f690fb",
+        "src/views/owned-menu.ts": "e06f7bef597a",
         "src/views/menu-row.ts": "dd0e9eeeb997",
-        "src/views/mobile-bottom-sheet.ts": "ac0a882afc60",
+        "src/views/mobile-bottom-sheet.ts": "58afdaea3b6f",
         "styles.css": "96f5fa440637",
         "tools/screenshots/theme.css": "8239cc22cceb",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -1020,9 +1020,9 @@
       ],
       "layoutHash": "e9246471b820",
       "sourceHashes": {
-        "src/views/owned-menu.ts": "687419f690fb",
+        "src/views/owned-menu.ts": "e06f7bef597a",
         "src/views/menu-row.ts": "dd0e9eeeb997",
-        "src/views/mobile-bottom-sheet.ts": "ac0a882afc60",
+        "src/views/mobile-bottom-sheet.ts": "58afdaea3b6f",
         "styles.css": "96f5fa440637",
         "tools/screenshots/theme.css": "8239cc22cceb",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -1047,9 +1047,9 @@
       ],
       "layoutHash": "25dd560799b2",
       "sourceHashes": {
-        "src/views/owned-menu.ts": "687419f690fb",
+        "src/views/owned-menu.ts": "e06f7bef597a",
         "src/views/menu-row.ts": "dd0e9eeeb997",
-        "src/views/mobile-bottom-sheet.ts": "ac0a882afc60",
+        "src/views/mobile-bottom-sheet.ts": "58afdaea3b6f",
         "styles.css": "96f5fa440637",
         "tools/screenshots/theme.css": "8239cc22cceb",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -1074,9 +1074,9 @@
       ],
       "layoutHash": "25dd560799b2",
       "sourceHashes": {
-        "src/views/owned-menu.ts": "687419f690fb",
+        "src/views/owned-menu.ts": "e06f7bef597a",
         "src/views/menu-row.ts": "dd0e9eeeb997",
-        "src/views/mobile-bottom-sheet.ts": "ac0a882afc60",
+        "src/views/mobile-bottom-sheet.ts": "58afdaea3b6f",
         "styles.css": "96f5fa440637",
         "tools/screenshots/theme.css": "8239cc22cceb",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -3505,7 +3505,7 @@
       ],
       "layoutHash": "02a22403f04b",
       "sourceHashes": {
-        "src/views/record-detail-panel.ts": "f4a6e1732fa9",
+        "src/views/record-detail-panel.ts": "a43a5683a412",
         "src/views/card-field-renderer.ts": "33212bef3422",
         "src/views/note-body-region.ts": "4660f1f93bd7",
         "styles.css": "96f5fa440637",
@@ -3532,7 +3532,7 @@
       ],
       "layoutHash": "02a22403f04b",
       "sourceHashes": {
-        "src/views/record-detail-panel.ts": "f4a6e1732fa9",
+        "src/views/record-detail-panel.ts": "a43a5683a412",
         "src/views/card-field-renderer.ts": "33212bef3422",
         "src/views/note-body-region.ts": "4660f1f93bd7",
         "styles.css": "96f5fa440637",
@@ -3559,7 +3559,7 @@
       ],
       "layoutHash": "6d12c01dfbd8",
       "sourceHashes": {
-        "src/views/record-detail-panel.ts": "f4a6e1732fa9",
+        "src/views/record-detail-panel.ts": "a43a5683a412",
         "src/views/card-field-renderer.ts": "33212bef3422",
         "src/views/note-body-region.ts": "4660f1f93bd7",
         "styles.css": "96f5fa440637",
@@ -3586,7 +3586,7 @@
       ],
       "layoutHash": "6d12c01dfbd8",
       "sourceHashes": {
-        "src/views/record-detail-panel.ts": "f4a6e1732fa9",
+        "src/views/record-detail-panel.ts": "a43a5683a412",
         "src/views/card-field-renderer.ts": "33212bef3422",
         "src/views/note-body-region.ts": "4660f1f93bd7",
         "styles.css": "96f5fa440637",
@@ -3612,7 +3612,7 @@
       ],
       "layoutHash": "06858530ffe2",
       "sourceHashes": {
-        "src/views/record-detail-panel.ts": "f4a6e1732fa9",
+        "src/views/record-detail-panel.ts": "a43a5683a412",
         "src/views/note-body-region.ts": "4660f1f93bd7",
         "styles.css": "96f5fa440637",
         "tools/screenshots/theme.css": "8239cc22cceb",
@@ -3637,7 +3637,7 @@
       ],
       "layoutHash": "06858530ffe2",
       "sourceHashes": {
-        "src/views/record-detail-panel.ts": "f4a6e1732fa9",
+        "src/views/record-detail-panel.ts": "a43a5683a412",
         "src/views/note-body-region.ts": "4660f1f93bd7",
         "styles.css": "96f5fa440637",
         "tools/screenshots/theme.css": "8239cc22cceb",
@@ -3662,7 +3662,7 @@
       ],
       "layoutHash": "659a6a805e4e",
       "sourceHashes": {
-        "src/views/record-detail-panel.ts": "f4a6e1732fa9",
+        "src/views/record-detail-panel.ts": "a43a5683a412",
         "src/views/note-body-region.ts": "4660f1f93bd7",
         "styles.css": "96f5fa440637",
         "tools/screenshots/theme.css": "8239cc22cceb",
@@ -3687,7 +3687,7 @@
       ],
       "layoutHash": "659a6a805e4e",
       "sourceHashes": {
-        "src/views/record-detail-panel.ts": "f4a6e1732fa9",
+        "src/views/record-detail-panel.ts": "a43a5683a412",
         "src/views/note-body-region.ts": "4660f1f93bd7",
         "styles.css": "96f5fa440637",
         "tools/screenshots/theme.css": "8239cc22cceb",
@@ -3712,7 +3712,7 @@
       ],
       "layoutHash": "a48185940548",
       "sourceHashes": {
-        "src/views/record-detail-panel.ts": "f4a6e1732fa9",
+        "src/views/record-detail-panel.ts": "a43a5683a412",
         "src/views/note-body-region.ts": "4660f1f93bd7",
         "styles.css": "96f5fa440637",
         "tools/screenshots/theme.css": "8239cc22cceb",
@@ -3737,7 +3737,7 @@
       ],
       "layoutHash": "a48185940548",
       "sourceHashes": {
-        "src/views/record-detail-panel.ts": "f4a6e1732fa9",
+        "src/views/record-detail-panel.ts": "a43a5683a412",
         "src/views/note-body-region.ts": "4660f1f93bd7",
         "styles.css": "96f5fa440637",
         "tools/screenshots/theme.css": "8239cc22cceb",
@@ -3762,7 +3762,7 @@
       ],
       "layoutHash": "6358e7d93a4d",
       "sourceHashes": {
-        "src/views/record-detail-panel.ts": "f4a6e1732fa9",
+        "src/views/record-detail-panel.ts": "a43a5683a412",
         "src/views/note-body-region.ts": "4660f1f93bd7",
         "styles.css": "96f5fa440637",
         "tools/screenshots/theme.css": "8239cc22cceb",
@@ -3787,7 +3787,7 @@
       ],
       "layoutHash": "6358e7d93a4d",
       "sourceHashes": {
-        "src/views/record-detail-panel.ts": "f4a6e1732fa9",
+        "src/views/record-detail-panel.ts": "a43a5683a412",
         "src/views/note-body-region.ts": "4660f1f93bd7",
         "styles.css": "96f5fa440637",
         "tools/screenshots/theme.css": "8239cc22cceb",
@@ -3814,8 +3814,8 @@
       ],
       "layoutHash": "284d2e5550f5",
       "sourceHashes": {
-        "src/views/record-detail-panel.ts": "f4a6e1732fa9",
-        "src/views/popover-position.ts": "6ef7767fc87e",
+        "src/views/record-detail-panel.ts": "a43a5683a412",
+        "src/views/popover-position.ts": "365fa71ee7f1",
         "src/views/card-field-renderer.ts": "33212bef3422",
         "src/views/note-body-region.ts": "4660f1f93bd7",
         "styles.css": "96f5fa440637",
@@ -3843,8 +3843,8 @@
       ],
       "layoutHash": "284d2e5550f5",
       "sourceHashes": {
-        "src/views/record-detail-panel.ts": "f4a6e1732fa9",
-        "src/views/popover-position.ts": "6ef7767fc87e",
+        "src/views/record-detail-panel.ts": "a43a5683a412",
+        "src/views/popover-position.ts": "365fa71ee7f1",
         "src/views/card-field-renderer.ts": "33212bef3422",
         "src/views/note-body-region.ts": "4660f1f93bd7",
         "styles.css": "96f5fa440637",
@@ -3872,8 +3872,8 @@
       ],
       "layoutHash": "8ec8a665485d",
       "sourceHashes": {
-        "src/views/record-detail-panel.ts": "f4a6e1732fa9",
-        "src/views/popover-position.ts": "6ef7767fc87e",
+        "src/views/record-detail-panel.ts": "a43a5683a412",
+        "src/views/popover-position.ts": "365fa71ee7f1",
         "src/views/card-field-renderer.ts": "33212bef3422",
         "src/views/note-body-region.ts": "4660f1f93bd7",
         "styles.css": "96f5fa440637",
@@ -3901,8 +3901,8 @@
       ],
       "layoutHash": "8ec8a665485d",
       "sourceHashes": {
-        "src/views/record-detail-panel.ts": "f4a6e1732fa9",
-        "src/views/popover-position.ts": "6ef7767fc87e",
+        "src/views/record-detail-panel.ts": "a43a5683a412",
+        "src/views/popover-position.ts": "365fa71ee7f1",
         "src/views/card-field-renderer.ts": "33212bef3422",
         "src/views/note-body-region.ts": "4660f1f93bd7",
         "styles.css": "96f5fa440637",
@@ -3913,7 +3913,7 @@
       },
       "note": "The phone form of the record detail panel. positionToolbarPopover renders it as a bottom sheet with a grab handle; a permanent close button (reusing db-cell-edit-close) and drag-down on the handle dismiss it where the desktop panel relies on Escape and outside-click. Captured in viewport mode so the fixed sheet docks at the bottom. The note body is the last group, below the properties.",
       "capture": "viewport",
-      "bytes": 77720
+      "bytes": 77717
     },
     {
       "id": "panel-record-peek",
@@ -4728,7 +4728,7 @@
       },
       "note": "Multi-day all-day bars, timed events, an overflow week and one event carried across the week boundary.",
       "capture": "viewport",
-      "bytes": 130108
+      "bytes": 129143
     },
     {
       "id": "calendar-month-view",
@@ -4751,7 +4751,7 @@
       },
       "note": "Multi-day all-day bars, timed events, an overflow week and one event carried across the week boundary.",
       "capture": "viewport",
-      "bytes": 132656
+      "bytes": 132404
     },
     {
       "id": "calendar-month-view",
@@ -4797,7 +4797,7 @@
       },
       "note": "Multi-day all-day bars, timed events, an overflow week and one event carried across the week boundary.",
       "capture": "viewport",
-      "bytes": 87204
+      "bytes": 87551
     },
     {
       "id": "calendar-toolbar-options",
@@ -4966,7 +4966,7 @@
       },
       "note": "Sticky day header and all-day strip over the 08–16 time grid; the current-time ruler sits on Wednesday at 13:45.",
       "capture": "viewport",
-      "bytes": 57756
+      "bytes": 57407
     },
     {
       "id": "calendar-week-time-grid",

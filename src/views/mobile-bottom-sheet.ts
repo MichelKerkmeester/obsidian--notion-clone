@@ -58,14 +58,32 @@ export function applySheetChrome(
   // written against. It now carries that root with it, so the rules still match.
   setSheetMount(panel, isSheet, options);
   const existingHandle = panel.querySelector<HTMLElement>(".db-mobile-bottom-sheet-handle");
-  if (isSheet && !existingHandle) {
-    const handle = panel.ownerDocument.createElement("div");
-    handle.className = "db-mobile-bottom-sheet-handle";
-    handle.setAttribute("aria-hidden", "true");
-    panel.prepend(handle);
+  // A grab bar is drawn by the GESTURE, never by the chrome — so one cannot exist unwired.
+  //
+  // This used to draw the bar here, which meant a producer got the affordance for free and had to
+  // remember to wire it. Sixteen modal sheets did not, and a bar that says the sheet can be pulled
+  // down and then ignores the thumb reads as a frozen app rather than a missing feature. Moving
+  // creation into `attachSheetDragToDismiss` makes the unwired bar unrepresentable instead of
+  // merely discouraged.
+  //
+  // The one case that still creates it here is a REBUILD: a panel that empties itself destroys the
+  // bar while the gesture — bound to the panel, not the bar — survives. Re-asserting chrome then
+  // legitimately restores it, and the `hasSheetDrag` guard is what distinguishes that from a
+  // producer that never wired anything.
+  if (isSheet && !existingHandle && activeSheetDrag.has(panel)) {
+    createSheetHandle(panel);
     return;
   }
   if (!isSheet) existingHandle?.remove();
+}
+
+/** The bar itself. One place, so its shape and its aria treatment cannot drift between callers. */
+function createSheetHandle(panel: HTMLElement): HTMLElement {
+  const handle = panel.ownerDocument.createElement("div");
+  handle.className = "db-mobile-bottom-sheet-handle";
+  handle.setAttribute("aria-hidden", "true");
+  panel.prepend(handle);
+  return handle;
 }
 
 // ───────────────────────────────────────────────────────────────────
@@ -325,8 +343,10 @@ export function hasSheetDrag(panel: HTMLElement): boolean {
   return activeSheetDrag.has(panel);
 }
 
-export function attachSheetDragToDismiss(panel: HTMLElement, handle: HTMLElement, close: () => void): () => void {
+export function attachSheetDragToDismiss(panel: HTMLElement, close: () => void): () => void {
   activeSheetDrag.get(panel)?.();
+  // Drawn here, because this is the only place that can promise it does something.
+  const handle = panel.querySelector<HTMLElement>(".db-mobile-bottom-sheet-handle") ?? createSheetHandle(panel);
 
   const DISMISS_PX = 96;
   let startY = 0;
@@ -337,6 +357,7 @@ export function attachSheetDragToDismiss(panel: HTMLElement, handle: HTMLElement
   };
   const grabTarget = (): HTMLElement =>
     panel.querySelector<HTMLElement>(".db-mobile-bottom-sheet-handle") ?? handle;
+
   const distance = (event: PointerEvent): number => Math.max(0, event.clientY - startY);
   const onDown = (event: PointerEvent): void => {
     if (event.button !== 0 || pointerId !== undefined) return;

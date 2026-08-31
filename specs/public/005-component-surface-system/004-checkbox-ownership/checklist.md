@@ -26,10 +26,19 @@ Each row records the failing measurement from the current tree **before** work s
 with an empty "today" cell is not accepted. Every measurement is taken on the real renderer at the
 production mount point, computed rather than declared.
 
-**Re-derived 2026-08-31 from `tools/live/checkbox-appearance.json`**, which the gate's `evidence`
-lane confirms is fingerprinted against today's `styles.css`. Two rows are settled by it, four are
-not, and the four are left unticked rather than carried along by the two — the "today" column of
-every row had gone stale, which is not the same as every row having been met.
+**Re-derived from `tools/live/checkbox-appearance.json`**, which the gate's `evidence` lane confirms
+is fingerprinted against today's `styles.css`. Three rows are settled by it, three are not, and the
+three are left unticked rather than carried along — the "today" column of every row had gone stale,
+which is not the same as every row having been met.
+
+**The instrument was fixed in the course of reading it.** It measured every fixture, including the
+ones named for the phone, on a single 1200px fine-pointer page — so the stylesheet's coarse-pointer
+28px floor never applied and could not be observed. That is the shape this packet exists to catch:
+a harness supplying the value the defect would live in. Mobile fixtures now measure under
+`hasTouch` at 390x844.
+
+*Coverage gap this exposed:* no mobile-named fixture contains a switch, so the switch is still only
+measured with a fine pointer. Its coarse reach is unevidenced here rather than contradicted.
 
 | # | Criterion | Today | Target | Evidence |
 |---|---|---|---|---|
@@ -38,7 +47,7 @@ every row had gone stale, which is not the same as every row having been met.
 | B3 | Appearance identical at all three mount points | **`appearanceOwnedByAncestor: 0`** — nothing is decided by ancestry any more (was "differs by construction") | 0 delta | [x] `checkbox-appearance.json` totals |
 | B4 | Checked, indeterminate, disabled and focus each produce a measurable difference for every family | **unmeasured.** The artefact records resting appearance only, so the old "only ancestor-styled families have state rules" is neither confirmed nor refuted | 4 states x 12 families | [ ] needs a state-sweep the current instrument does not perform |
 | B5 | Unchanged under three third-party themes, at least one restyling native checkboxes | untested; such a theme reaches 11 of 12 families today | 0 changed | [ ] |
-| B6 | Hit target at least 28x28 under a coarse pointer for every family | **contested.** `../roadmap.md` §7.1 records the switch reaching 34x28; the artefact measures its box at **34x18**. Both can be true — a box is not a reach, and padding or a pseudo-element can extend one — but nothing here measures reach, so the criterion is not evidenced either way | 12 of 12 | [ ] needs a reach measurement, not a box measurement |
+| B6 | Hit target at least 28x28 under a coarse pointer for every family | **Resolved, and the contradiction with it.** The instrument measured every fixture on one 1200px page with a FINE pointer, so `@media (pointer: coarse)` never applied and the 28px floor was invisible to the only tool that could see it — `list-mobile` was reported at 16x16, a surface no phone renders. Fixtures named for the phone are now measured with `hasTouch` at 390x844: **all 53 mobile checkboxes measure 28x28**, meeting the floor exactly. The roadmap's 34x28 and the artefact's 34x18 were never in conflict — same control, two pointer modes | 12 of 12 | [x] `checkbox-appearance.json`, coarse-pointer pass |
 
 **B1 is the operator's reported defect. B2 is the criterion that fails when a family is missed — which
 is how the previous attempt passed while circles remained.**

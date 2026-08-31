@@ -122,11 +122,11 @@ export function positionToolbarPopover(
 
   // Drag-to-dismiss belongs to the sheet, not to the caller.
   //
-  // `applySheetChrome` gives every phone surface a grab bar, and until now only two of them — the
-  // owned menu and the record panel — ever wired a gesture to it. Every one of the thirty-odd
-  // surfaces that reach a sheet through this function drew a handle that advertised a drag nothing
-  // implemented, which is worse than drawing none: a sheet that says it can be dragged down and
-  // cannot is a surface with no visible way out.
+  // The bar is drawn by this call, not by the chrome above it. Chrome used to draw it for every
+  // phone surface while only two of them — the owned menu and the record panel — ever wired a
+  // gesture, so thirty-odd surfaces advertised a drag nothing implemented. A sheet that says it can
+  // be pulled down and cannot is worse than one with no bar at all, so the gesture now owns the
+  // affordance and an unwired bar has nowhere to come from.
   //
   // The overlay stack is what makes this reachable from here. This function has no close callback
   // and adding one would mean editing every call site; the stack already knows who owns each
@@ -135,13 +135,10 @@ export function positionToolbarPopover(
   // spring-back instead of being left parked below the screen with the gesture half-finished.
   let releaseSheetDrag: (() => void) | undefined;
   if (mobileSheet) {
-    const handle = panel.querySelector<HTMLElement>(".db-mobile-bottom-sheet-handle");
-    if (handle) {
-      releaseSheetDrag = attachSheetDragToDismiss(panel, handle, () => {
-        if (overlayStack.dismissPanel(panel, "programmatic")) return;
-        panel.setCssProps({ transition: "", transform: "" });
-      });
-    }
+    releaseSheetDrag = attachSheetDragToDismiss(panel, () => {
+      if (overlayStack.dismissPanel(panel, "programmatic")) return;
+      panel.setCssProps({ transition: "", transform: "" });
+    });
   }
   panel.setCssProps({
     position: "fixed",

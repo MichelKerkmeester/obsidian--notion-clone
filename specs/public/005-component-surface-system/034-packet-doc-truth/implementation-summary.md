@@ -24,7 +24,7 @@ _memory:
       parent_session_id: null
     completion_pct: 83
     open_questions:
-      - "B6's reach: the roadmap says 34x28, the artefact measures a 34x18 box, and nothing measures reach"
+      - "No mobile-named fixture holds a switch, so its coarse-pointer reach is still unmeasured"
     answered_questions:
       - "A path-existence check catches the class but cannot separate description from planning"
 ---
@@ -114,10 +114,12 @@ substitutes for it: re-deriving a finding myself confirms the correction I made,
 independent pass would stop raising it. Checking my own work against my own reading is the failure
 mode this packet is named for.
 
-**A contradiction was surfaced, not resolved.** `roadmap.md` §7.1 records the checkbox switch
-reaching 34×28; `checkbox-appearance.json` measures its box at 34×18. Both can be true, because a
-box is not a reach — but nothing in the tree measures reach, so B6 is evidenced by neither and is
-left open rather than decided.
+**The contradiction surfaced here has since been RESOLVED**, by a visual pass that read the captures
+rather than the numbers. `checkbox-appearance.mjs` measured every fixture on one 1200px fine-pointer
+page, so `@media (pointer: coarse)` never applied — `list-mobile` was reported at 16×16 while a
+phone renders 28×28. The roadmap's 34×28 and the artefact's 34×18 were never in conflict: same
+control, two pointer modes, one of which the instrument could not see. Mobile fixtures are now
+measured with `hasTouch`, all 53 mobile checkboxes read 28×28, and B6 is evidenced.
 
 **Adjacent drift was found and not fixed.** `roadmap.md` lines 339 and 412 still route `004` to
 "UNKNOWN — three sources disagree" while §7.1 of the same document is titled "resolved" and says

@@ -172,8 +172,7 @@ export function createOwnedMenu(
         applySheetChrome(el, true, { scrimCapturesPointer: true });
         placeSheet(el);
         playSheetEntrance(el);
-        const handle = el.querySelector<HTMLElement>(".db-mobile-bottom-sheet-handle");
-        if (handle) releaseDrag = attachSheetDragToDismiss(el, handle, close);
+        releaseDrag = attachSheetDragToDismiss(el, close);
       } else {
         const bounds = getVisiblePopoverBounds(null);
         const margin = 4;
