@@ -1,9 +1,9 @@
 {
-  "measuredAt": "2026-08-31T19:34:17.275Z",
+  "measuredAt": "2026-08-31T19:40:01.805Z",
   "inputs": {
     "tools/live/list-window.mjs": "a91a9292997f",
-    "tools/live/list-window-harness.ts": "72e685295c24",
-    "src/views/list-renderer.ts": "70b36c3bc445"
+    "tools/live/list-window-harness.ts": "4dc132dc5a54",
+    "src/views/list-renderer.ts": "67a9210b863f"
   },
-  "checks": 8
+  "checks": 13
 }

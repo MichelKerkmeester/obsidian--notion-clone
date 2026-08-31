@@ -77,6 +77,76 @@ function mountedPaths(host: HTMLElement): string[] {
 // 3. THE RUN
 // ───────────────────────────────────────────────────────────────────
 
+/**
+ * One group holding every row — the shape that still blocked after the flat list was windowed.
+ *
+ * Grouping does have a row cap, but `groupRowLimit` defaults to 0, which `getGroupVisibleCount`
+ * reads as "all". So a grouped view of the operator's database renders every row unless they went
+ * looking for a setting.
+ */
+function runGroupedChecks(doc: Document): WindowResult[] {
+  const host = doc.createElement("div");
+  host.className = "note-database-container";
+  host.setCssProps({ height: "800px", overflow: "auto" });
+  doc.body.appendChild(host);
+
+  const columns = makeColumns(COLUMNS, "text");
+  const config = makeConfig(columns);
+  const rows = makeRows(ROWS, columns, 1);
+  const renderer = new ListRenderer({} as never, actionsFor(columns, new Set<string>()));
+
+  renderer.renderGrouped(host, config, [{ key: "All", rows, count: rows.length }], "status");
+
+  const mounted = mountedPaths(host);
+  const nodes = host.querySelectorAll("*").length;
+
+  const scrollTarget = 3000;
+  host.scrollTop = scrollTarget;
+  host.dispatchEvent(new Event("scroll"));
+  const afterScroll = mountedPaths(host);
+  const recycled = afterScroll.length > 0 && afterScroll[0] !== mounted[0];
+  // Read ONCE, while the host is still attached. A detached element reports scrollTop 0, so
+  // interpolating it into the message after removal made a passing check print "is 0, was set to
+  // 3000" — a verdict and a message that contradict each other, which is worse than either failing.
+  const offsetAfterRecycle = host.scrollTop;
+  const offsetHeld = offsetAfterRecycle === scrollTarget;
+
+  // The section's own chrome must survive a recycle: only rows and spacers are swapped, and the
+  // header is a sibling of the list rather than a child, so a recycle that touched it would be
+  // rebuilding the wrong thing.
+  const headerSurvived = host.querySelectorAll(".db-list-group-header").length === 1;
+
+  host.remove();
+
+  return [
+    {
+      check: "a single oversized group is windowed",
+      pass: mounted.length > 0 && mounted.length < ROWS,
+      detail: `${mounted.length} of ${ROWS} rows mounted in one group`,
+    },
+    {
+      check: "grouped node count is bounded by the window",
+      pass: nodes < ROWS,
+      detail: `${nodes} nodes for ${ROWS} grouped rows`,
+    },
+    {
+      check: "scrolling recycles the group window",
+      pass: recycled,
+      detail: recycled ? `mounted range moved from ${mounted[0]} to ${afterScroll[0]}` : "nothing recycled",
+    },
+    {
+      check: "grouped scroll offset survives the recycle",
+      pass: offsetHeld,
+      detail: `scrollTop is ${offsetAfterRecycle}, was set to ${scrollTarget}`,
+    },
+    {
+      check: "the group header survives a recycle",
+      pass: headerSurvived,
+      detail: headerSurvived ? "one header, untouched by the row swap" : "the header was lost or duplicated",
+    },
+  ];
+}
+
 export function runListWindowChecks(doc: Document): WindowResult[] {
   const results: WindowResult[] = [];
 
@@ -209,5 +279,6 @@ export function runListWindowChecks(doc: Document): WindowResult[] {
   });
 
   host.remove();
+  results.push(...runGroupedChecks(doc));
   return results;
 }

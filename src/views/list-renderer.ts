@@ -132,6 +132,30 @@ const ESTIMATED_ROW_HEIGHT = 44;
 /** Used when the scroller reports no height, which a detached or unsized host does. */
 const FALLBACK_VIEWPORT_PX = 800;
 
+/**
+ * A group large enough to be worth windowing on its own.
+ *
+ * Higher than the flat threshold because a grouped list pays for its sections whatever happens, and
+ * a list of many small groups is already bounded by having few rows in each. This engages only for
+ * the shape that actually blocked: one group holding thousands of rows.
+ */
+const GROUP_WINDOW_THRESHOLD = 200;
+
+interface GroupWindow {
+  container: HTMLElement;
+  list: HTMLElement;
+  config: ViewConfig;
+  rows: RowData[];
+  groupField: string;
+  groupKey: string;
+  groups: ListGroup[];
+  scroller: HTMLElement;
+  rowHeight: number;
+  start: number;
+  end: number;
+  onScroll: () => void;
+}
+
 interface ListWindow {
   container: HTMLElement;
   list: HTMLElement;
@@ -212,6 +236,10 @@ export class ListRenderer {
   private reservationDecided = false;
   /** Live only while a windowed list is mounted; undefined for a fully rendered one. */
   private windowing?: ListWindow;
+  /** One entry per oversized group section. A grouped list is many lists, each windowed alone. */
+  private groupWindows: GroupWindow[] = [];
+  private groupScroller?: HTMLElement;
+  private groupScrollListener?: () => void;
 
   constructor(private app: App, private actions: ListRendererActions) {}
 
@@ -361,12 +389,131 @@ export class ListRenderer {
     bottomSpacer.setCssProps({ height: `${Math.round((state.rows.length - state.end) * measured)}px` });
   }
 
+  /**
+   * Window one group's rows against that section's own position in the scroller.
+   *
+   * A grouped list is many lists. Rather than compute every section's offset analytically — which
+   * means modelling each header, create-row and expand-control it sits above, and drifting as soon
+   * as one of them changes — each section asks the browser where IT is and windows from there. The
+   * cost is one layout read per section per recycle, bounded by the number of groups on screen.
+   */
+  private mountGroupWindow(
+    container: HTMLElement,
+    list: HTMLElement,
+    config: ViewConfig,
+    rows: RowData[],
+    groupField: string,
+    groupKey: string,
+    groups: ListGroup[],
+  ): void {
+    const scroller = findScrollParent(container);
+    const state: GroupWindow = {
+      container,
+      list,
+      config,
+      rows,
+      groupField,
+      groupKey,
+      groups,
+      scroller,
+      rowHeight: ESTIMATED_ROW_HEIGHT,
+      start: -1,
+      end: -1,
+      onScroll: () => this.updateGroupWindows(),
+    };
+    this.groupWindows.push(state);
+    this.paintGroupWindow(state);
+    if (this.groupWindows.length === 1) {
+      this.groupScrollListener = state.onScroll;
+      scroller.addEventListener("scroll", state.onScroll, { passive: true });
+      this.groupScroller = scroller;
+    }
+  }
+
+  /** Recompute every windowed group. Groups off screen collapse to their spacers. */
+  private updateGroupWindows(): void {
+    for (const state of this.groupWindows) {
+      if (!state.list.isConnected) continue;
+      const viewport = state.scroller.clientHeight || FALLBACK_VIEWPORT_PX;
+      // Where this section's rows begin, relative to the scrolled content.
+      const listTop = state.list.offsetTop - state.scroller.offsetTop;
+      const scrolled = state.scroller.scrollTop - listTop;
+      const first = Math.floor(Math.max(0, scrolled) / state.rowHeight);
+      const visible = Math.ceil(viewport / state.rowHeight);
+      const start = Math.max(0, first - OVERSCAN);
+      const end = Math.min(state.rows.length, first + visible + OVERSCAN);
+      if (start === state.start && end === state.end) continue;
+      state.start = start;
+      state.end = end;
+      this.paintGroupWindow(state);
+    }
+  }
+
+  private paintGroupWindow(state: GroupWindow): void {
+    const { list, config, rows, groupField, groupKey, groups } = state;
+    if (state.start < 0) {
+      const viewport = state.scroller.clientHeight || FALLBACK_VIEWPORT_PX;
+      state.start = 0;
+      state.end = Math.min(rows.length, Math.ceil(viewport / state.rowHeight) + OVERSCAN);
+    }
+    // Only the rows are swapped. The section's header, create-row and expand controls are siblings
+    // of this list and are never touched, so a recycle cannot disturb them.
+    for (const old of Array.from(list.querySelectorAll(".db-list-row, .db-list-window-spacer"))) old.remove();
+
+    const topSpacer = list.createDiv({ cls: "db-list-window-spacer" });
+    topSpacer.setCssProps({ height: `${Math.round(state.start * state.rowHeight)}px` });
+    list.prepend(topSpacer);
+
+    let anchor: HTMLElement = topSpacer;
+    for (let index = state.start; index < state.end; index += 1) {
+      const row = rows[index];
+      if (!row) continue;
+      this.renderRow(list, config, row, groupField, groupKey, groups, rows);
+      const built = list.lastElementChild as HTMLElement | null;
+      if (built && built !== anchor) {
+        anchor.after(built);
+        anchor = built;
+      }
+    }
+
+    const bottomSpacer = list.createDiv({ cls: "db-list-window-spacer" });
+    bottomSpacer.setCssProps({ height: `${Math.round((rows.length - state.end) * state.rowHeight)}px` });
+    anchor.after(bottomSpacer);
+
+    this.measureGroupRowHeight(state, topSpacer, bottomSpacer);
+    syncCardRoving(state.container, this.rovingController, ".db-list-row");
+  }
+
+  /** Three layout reads, as the flat window uses: where the block starts, where it ends, how many. */
+  private measureGroupRowHeight(state: GroupWindow, topSpacer: HTMLElement, bottomSpacer: HTMLElement): void {
+    const painted = state.list.querySelectorAll<HTMLElement>(".db-list-row");
+    const first = painted[0];
+    const last = painted[painted.length - 1];
+    if (!first || !last) return;
+    const span = last.offsetTop + last.offsetHeight - first.offsetTop;
+    const measured = span / painted.length;
+    if (measured <= 0 || Math.abs(measured - state.rowHeight) < 0.5) return;
+    state.rowHeight = measured;
+    topSpacer.setCssProps({ height: `${Math.round(state.start * measured)}px` });
+    bottomSpacer.setCssProps({ height: `${Math.round((state.rows.length - state.end) * measured)}px` });
+  }
+
   /** Stop listening when the list this window belongs to is torn down. */
   private releaseWindow(): void {
     const state = this.windowing;
     if (!state) return;
     state.scroller.removeEventListener("scroll", state.onScroll);
     this.windowing = undefined;
+  }
+
+  /** The grouped equivalent: one shared listener for however many sections were windowed. */
+  private releaseGroupWindows(): void {
+    if (this.groupScroller && this.groupScrollListener) {
+      this.groupScroller.removeEventListener("scroll", this.groupScrollListener);
+    }
+    this.groupScroller = undefined;
+    this.groupScrollListener = undefined;
+    this.groupWindows = [];
   }
 
   renderGrouped(
@@ -440,7 +587,17 @@ export class ListRenderer {
         );
         empty.addClass("db-list-empty-group");
       }
-      for (const row of group.rows.slice(0, visibleCount)) this.renderRow(list, config, row, groupField, group.key, groups, group.rows);
+      const shown = group.rows.slice(0, visibleCount);
+      if (shown.length > GROUP_WINDOW_THRESHOLD) {
+        // One oversized group is the case that still blocked after the flat list was windowed:
+        // grouping does have a row cap, but `groupRowLimit` defaults to 0, which means "all".
+        // Sections are laid out by the browser, so this window is derived from THIS section's own
+        // measured position rather than from arithmetic across every section above it — which
+        // would have to model each section's header, create-row and expand controls to stay true.
+        this.mountGroupWindow(container, list, config, shown, groupField, group.key, groups);
+      } else {
+        for (const row of shown) this.renderRow(list, config, row, groupField, group.key, groups, group.rows);
+      }
       const computedGroup = isComputedGroupField(config, groupField);
       this.renderNewRow(list, computedGroup ? undefined : { [groupField]: group.key || "" }, group.rows, computedGroup);
       renderGroupExpandControls(list, config, groupField, group.key, group.rows.length, this.actions);
@@ -969,6 +1126,7 @@ export class ListRenderer {
     // the list without dropping the listener would leave every previous render still recomputing
     // a window over rows that are gone.
     this.releaseWindow();
+    this.releaseGroupWindows();
     container.querySelectorAll(".db-list, .db-list-grouped, .db-list-total-header").forEach((el) => el.remove());
   }
 

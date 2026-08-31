@@ -785,7 +785,7 @@
       ],
       "layoutHash": "d6746de4359c",
       "sourceHashes": {
-        "src/views/list-renderer.ts": "70b36c3bc445",
+        "src/views/list-renderer.ts": "67a9210b863f",
         "src/views/gallery-renderer.ts": "c7d6e9216f39",
         "src/views/board-renderer.ts": "31a49df5b500",
         "styles.css": "96f5fa440637",
@@ -812,7 +812,7 @@
       ],
       "layoutHash": "d6746de4359c",
       "sourceHashes": {
-        "src/views/list-renderer.ts": "70b36c3bc445",
+        "src/views/list-renderer.ts": "67a9210b863f",
         "src/views/gallery-renderer.ts": "c7d6e9216f39",
         "src/views/board-renderer.ts": "31a49df5b500",
         "styles.css": "96f5fa440637",
@@ -839,7 +839,7 @@
       ],
       "layoutHash": "d106956abbb6",
       "sourceHashes": {
-        "src/views/list-renderer.ts": "70b36c3bc445",
+        "src/views/list-renderer.ts": "67a9210b863f",
         "src/views/gallery-renderer.ts": "c7d6e9216f39",
         "src/views/board-renderer.ts": "31a49df5b500",
         "styles.css": "96f5fa440637",
@@ -866,7 +866,7 @@
       ],
       "layoutHash": "d106956abbb6",
       "sourceHashes": {
-        "src/views/list-renderer.ts": "70b36c3bc445",
+        "src/views/list-renderer.ts": "67a9210b863f",
         "src/views/gallery-renderer.ts": "c7d6e9216f39",
         "src/views/board-renderer.ts": "31a49df5b500",
         "styles.css": "96f5fa440637",
@@ -1085,7 +1085,7 @@
       },
       "note": "The phone form of the owned menu. Rows share one left edge with the icon in a fixed leading column, hairlines divide neighbours but not the last row of a group, and a row that opens a submenu carries a trailing chevron. Captured in viewport mode so the fixed sheet docks at the bottom.",
       "capture": "viewport",
-      "bytes": 38739
+      "bytes": 38727
     },
     {
       "id": "chrome-selection-status-bar",
@@ -4797,7 +4797,7 @@
       },
       "note": "Multi-day all-day bars, timed events, an overflow week and one event carried across the week boundary.",
       "capture": "viewport",
-      "bytes": 87204
+      "bytes": 87551
     },
     {
       "id": "calendar-toolbar-options",
@@ -4847,7 +4847,7 @@
       },
       "note": "The Time section only exists in week and day scale; the setup preview card below Data carries no stylesheet rules.",
       "capture": "viewport",
-      "bytes": 129679
+      "bytes": 129708
     },
     {
       "id": "calendar-toolbar-options",
@@ -5104,7 +5104,7 @@
       ],
       "layoutHash": "f1297b4855f0",
       "sourceHashes": {
-        "src/views/list-renderer.ts": "70b36c3bc445",
+        "src/views/list-renderer.ts": "67a9210b863f",
         "src/views/card-field-renderer.ts": "33212bef3422",
         "styles.css": "96f5fa440637",
         "tools/screenshots/theme.css": "8239cc22cceb",
@@ -5129,7 +5129,7 @@
       ],
       "layoutHash": "f1297b4855f0",
       "sourceHashes": {
-        "src/views/list-renderer.ts": "70b36c3bc445",
+        "src/views/list-renderer.ts": "67a9210b863f",
         "src/views/card-field-renderer.ts": "33212bef3422",
         "styles.css": "96f5fa440637",
         "tools/screenshots/theme.css": "8239cc22cceb",
@@ -5154,7 +5154,7 @@
       ],
       "layoutHash": "a6463bb7f439",
       "sourceHashes": {
-        "src/views/list-renderer.ts": "70b36c3bc445",
+        "src/views/list-renderer.ts": "67a9210b863f",
         "src/views/card-field-renderer.ts": "33212bef3422",
         "styles.css": "96f5fa440637",
         "tools/screenshots/theme.css": "8239cc22cceb",
@@ -5179,7 +5179,7 @@
       ],
       "layoutHash": "a6463bb7f439",
       "sourceHashes": {
-        "src/views/list-renderer.ts": "70b36c3bc445",
+        "src/views/list-renderer.ts": "67a9210b863f",
         "src/views/card-field-renderer.ts": "33212bef3422",
         "styles.css": "96f5fa440637",
         "tools/screenshots/theme.css": "8239cc22cceb",
@@ -5203,7 +5203,7 @@
       ],
       "layoutHash": "11452d97c47c",
       "sourceHashes": {
-        "src/views/list-renderer.ts": "70b36c3bc445",
+        "src/views/list-renderer.ts": "67a9210b863f",
         "styles.css": "96f5fa440637",
         "tools/screenshots/theme.css": "8239cc22cceb",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -5226,7 +5226,7 @@
       ],
       "layoutHash": "11452d97c47c",
       "sourceHashes": {
-        "src/views/list-renderer.ts": "70b36c3bc445",
+        "src/views/list-renderer.ts": "67a9210b863f",
         "styles.css": "96f5fa440637",
         "tools/screenshots/theme.css": "8239cc22cceb",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -5249,7 +5249,7 @@
       ],
       "layoutHash": "964d2766f4e9",
       "sourceHashes": {
-        "src/views/list-renderer.ts": "70b36c3bc445",
+        "src/views/list-renderer.ts": "67a9210b863f",
         "styles.css": "96f5fa440637",
         "tools/screenshots/theme.css": "8239cc22cceb",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -5272,7 +5272,7 @@
       ],
       "layoutHash": "964d2766f4e9",
       "sourceHashes": {
-        "src/views/list-renderer.ts": "70b36c3bc445",
+        "src/views/list-renderer.ts": "67a9210b863f",
         "styles.css": "96f5fa440637",
         "tools/screenshots/theme.css": "8239cc22cceb",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -5296,7 +5296,7 @@
       ],
       "layoutHash": "5ac65ba9f3f3",
       "sourceHashes": {
-        "src/views/list-renderer.ts": "70b36c3bc445",
+        "src/views/list-renderer.ts": "67a9210b863f",
         "src/views/card-field-renderer.ts": "33212bef3422",
         "styles.css": "96f5fa440637",
         "tools/screenshots/theme.css": "8239cc22cceb",
@@ -5321,7 +5321,7 @@
       ],
       "layoutHash": "5ac65ba9f3f3",
       "sourceHashes": {
-        "src/views/list-renderer.ts": "70b36c3bc445",
+        "src/views/list-renderer.ts": "67a9210b863f",
         "src/views/card-field-renderer.ts": "33212bef3422",
         "styles.css": "96f5fa440637",
         "tools/screenshots/theme.css": "8239cc22cceb",
@@ -5346,7 +5346,7 @@
       ],
       "layoutHash": "6c91de853622",
       "sourceHashes": {
-        "src/views/list-renderer.ts": "70b36c3bc445",
+        "src/views/list-renderer.ts": "67a9210b863f",
         "src/views/card-field-renderer.ts": "33212bef3422",
         "styles.css": "96f5fa440637",
         "tools/screenshots/theme.css": "8239cc22cceb",
@@ -5371,7 +5371,7 @@
       ],
       "layoutHash": "6c91de853622",
       "sourceHashes": {
-        "src/views/list-renderer.ts": "70b36c3bc445",
+        "src/views/list-renderer.ts": "67a9210b863f",
         "src/views/card-field-renderer.ts": "33212bef3422",
         "styles.css": "96f5fa440637",
         "tools/screenshots/theme.css": "8239cc22cceb",

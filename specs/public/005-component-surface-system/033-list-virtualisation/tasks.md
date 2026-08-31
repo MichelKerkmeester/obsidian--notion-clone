@@ -9,8 +9,8 @@ _memory:
     packet_pointer: "public/005-component-surface-system/033-list-virtualisation"
     last_updated_at: "2026-08-31T16:00:00Z"
     last_updated_by: "phase-author"
-    recent_action: "Flat list windowed; node count flat at 2,184 and blocked time 4,748.6ms -> 48.4ms"
-    next_safe_action: "Window the grouped path, which still renders every row"
+    recent_action: "Grouped lists windowed too; header survives a recycle"
+    next_safe_action: "The operator opens their real database on device"
     blockers: []
     key_files: ["spec.md", "tasks.md"]
     session_dedup:
@@ -67,9 +67,14 @@ _memory:
       *Below 120 rows nothing changes:* no spacers, no listener, the same DOM as before. Every
       screenshot fixture and placement story is small, so a window that engaged for twelve rows
       would rewrite hundreds of captures to no purpose.
-      *The limit, stated rather than discovered later:* **only the flat list is windowed.** Grouped
-      lists still render every row, so a grouped view at the operator's shape still blocks. That is
-      not a regression, but it is not a fix either, and REQ-001 is met for one of the two paths.
+      *Grouped lists are now windowed too.* A group past 200 rows gets its own window, derived from
+      that SECTION's measured position rather than from arithmetic across every section above it —
+      which would have to model each header, create-row and expand control and would drift the
+      moment one changed. Only rows and spacers are swapped, so the section's own chrome is never
+      rebuilt. Measured: 2,000 rows in one group render **1,310 nodes**, 27 mounted.
+      *Why grouping needed it at all:* it already has a row cap, but `groupRowLimit` defaults to 0
+      and `getGroupVisibleCount` reads that as "all" — so a grouped view rendered every row unless
+      the operator went looking for a setting.
 - [x] **T3** Re-prove the three contracts against an **off-window** row — REQ-002.
       *Evidence to close:* each behaves as T1 recorded. This is where windowing breaks first.
       *Closed by:* the `list-window` gate lane, driving the real renderer at 2,000 rows. The
@@ -82,9 +87,10 @@ _memory:
       the window was not exercising the difference at all.
       **Drag batch** — an off-window row stays addressable, as T1 predicted, because `rowByPath`
       holds every row the renderer was given.
-      **Group collapse** — *not applicable yet, and not ticked.* Grouped lists are not windowed, so
-      a grouped list has no off-window row to prove it against. It behaves exactly as T1 recorded
-      because nothing about it changed.
+      **Group collapse** — now provable, and proven. Grouped lists are windowed, so an off-window
+      row exists in a grouped list too. The section's header is asserted to survive a recycle: one
+      header, untouched, because only rows and spacers are swapped. Collapse itself is unchanged —
+      it is a config question, and a collapsed group rendering no rows is its normal state.
 - [x] **T4** Scroll offset survives a window recycle.
       *Evidence to close:* offset stable across a recycle, asserted.
       *Closed by:* the lane scrolls to 4,000px, confirms the mounted range actually moved (row-0 to

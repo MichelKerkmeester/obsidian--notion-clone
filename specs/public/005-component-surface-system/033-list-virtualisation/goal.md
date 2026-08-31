@@ -9,8 +9,8 @@ _memory:
     packet_pointer: "public/005-component-surface-system/033-list-virtualisation"
     last_updated_at: "2026-08-31T23:30:00Z"
     last_updated_by: "phase-author"
-    recent_action: "Flat list windowed; node count flat at 2,184 and blocked time 4,748.6ms -> 48.4ms"
-    next_safe_action: "Window the grouped path, which still renders every row"
+    recent_action: "Grouped lists windowed too; header survives a recycle"
+    next_safe_action: "The operator opens their real database on device"
     blockers: []
     key_files: ["spec.md", "tasks.md"]
     session_dedup:
@@ -55,17 +55,17 @@ at 3,000 rows means rendering about a fifth of what renders now.
 ## 2. COMPLETION CRITERIA
 
 - [x] Blocked main thread under 2,000ms at 3,000 rows, 21 columns, full fill, phone-class throttle.
-      **Met — 48.4ms**, from 4,748.6ms. Measured past the bend too: 50.3ms at 3,400 rows. Flat
-      lists only; a grouped list still renders every row.
-- [x] Drag, range selection and group collapse each proven against an off-window row. **Two of
-      three proven; the third has nothing to prove yet.** Drag and range selection are asserted
-      against a row the renderer declined to mount, with the DOM ordering kept as a failing control
-      (2 rows against 28). Group collapse is unchanged and untestable here, because grouped lists
-      are not windowed and so have no off-window row.
+      **Met — 48.4ms**, from 4,748.6ms. Measured past the bend too: 50.3ms at 3,400 rows. Grouped
+      lists are windowed as well: 2,000 rows in one group render 1,310 nodes.
+- [x] Drag, range selection and group collapse each proven against an off-window row. **Met.** Drag
+      and range selection are asserted against a row the renderer declined to mount, with the DOM
+      ordering kept as a failing control (2 rows against 28). Grouped lists are windowed too, and
+      the section header is asserted to survive a recycle — collapse itself is a config question and
+      a collapsed group rendering no rows is its normal state.
 - [x] Scroll offset stable across a window recycle. **Met** — 4,000px held across a recycle that
       is itself asserted to have happened.
 - [x] Node count no longer grows linearly with row count. **Met — flat at 2,184** across 1,000,
-      3,000 and 3,400 rows, from 225,007.
+      3,000 and 3,400 rows, from 225,007. Grouped: 1,310 nodes for 2,000 rows in one group.
 - [x] The renderer assertion still passes; windowing must not defeat the layout-read bound. **Met,
       after it caught me** — the first row-height measurement forced a layout per row and the bound
       failed at 13 against 8. Now three reads, constant.

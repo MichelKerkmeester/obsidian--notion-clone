@@ -9,8 +9,8 @@ _memory:
     packet_pointer: "public/005-component-surface-system/033-list-virtualisation"
     last_updated_at: "2026-08-31T16:00:00Z"
     last_updated_by: "phase-author"
-    recent_action: "Flat list windowed; node count flat at 2,184 and blocked time 4,748.6ms -> 48.4ms"
-    next_safe_action: "Window the grouped path, which still renders every row"
+    recent_action: "Grouped lists windowed too; header survives a recycle"
+    next_safe_action: "The operator opens their real database on device"
     blockers: []
     key_files: ["spec.md", "tasks.md"]
     session_dedup:
