@@ -11,8 +11,8 @@ _memory:
     packet_pointer: "public/005-component-surface-system/015-desktop-dropdown-placement"
     last_updated_at: "2026-08-31T09:00:00Z"
     last_updated_by: "harness-dependence-review"
-    recent_action: "AC-4, AC-5 and AC-7 ticks withdrawn: all three are measured on transcriptions"
-    next_safe_action: "Reach the real clamp: shim a host App or export the method the probe copies"
+    recent_action: "AC-4 settled: the shipped argument returned the whole viewport, and now does not"
+    next_safe_action: "AC-5 and AC-7 need their shipped methods driven, not their arithmetic copied"
     blockers:
       - "AC-4 reads green on a transcription passing null where the source passes panel"
       - "npm run gate is 15 green, screenshots-fresh red, from four captures this repair staled"
@@ -26,7 +26,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-015-goal"
       parent_session_id: null
-    completion_pct: 38
+    completion_pct: 50
     open_questions:
       - "What an anchorless open should do; the decision binds all 34 call sites"
       - "column-menu.ts:616 passes the panel to getVisiblePopoverBounds and gets the whole viewport"
@@ -120,7 +120,7 @@ fails on this harness when the repair is removed. Those three can fail for the r
       before=visible, after=hidden, with panel.top unchanged at 134** across the loop tick. `LIFETIME
       CONTROL a surface with a live anchor survives the same loop and stays placed` — **visibility
       visible, panel.top 234 against anchor.bottom 228, gap 6px**.
-- [ ] The anchorless column submenu clears the right sidebar: `panel.right ≤ editing area right`. Was
+- [x] The anchorless column submenu clears the right sidebar: `panel.right ≤ editing area right`. Was
       1328 against 1140.
       `HAND the anchorless column submenu clears the right sidebar` — **submenu [840..1080] against
       an editing area ending at 1140**, clamped against `bounds.right=1140` rather than
@@ -138,11 +138,19 @@ fails on this harness when the repair is removed. Those three can fail for the r
       has already measured in the shipped path, which is the strongest form of the transcription
       cost recorded under AC-7.
 
-      **What would settle it:** drive `openColumnSubmenu` itself, or — since the method is private
-      and needs a live `App` — a shimmed probe that calls `getVisiblePopoverBounds` with a freshly
-      created, not-yet-laid-out panel and asserts the returned rect is the editing area and not the
-      viewport. An unshimmed call throws in the element guard, which is its own finding about that
-      guard. Until one of those exists, the AC-4 repair is unverified in the shape it ships.
+      **Settled, by the second route this row named — and it found the defect rather than clearing
+      it.** A check now calls `getVisiblePopoverBounds` with a freshly created, not-yet-laid-out
+      panel, alongside the same call with `null`, and requires them to agree. Observed **red first**:
+      `(panel).right=1440` against `(null).right=1140` on a 1440 viewport. The prediction in this row
+      was exactly right — the shipped argument returned the whole viewport, so the submenu was
+      clamped 300px past the editing area and could sit under an open right sidebar.
+      **Fixed at the source rather than in the check.** A container that has not laid out reports a
+      zero rect, and intersecting that collapses the range into the degenerate guard at
+      `popover-position.ts`. An empty rect is missing information, not a constraint of zero width, so
+      it is now ignored rather than intersected. `(panel).right` returns 1140.
+      Both arguments are asserted in one case deliberately: `null` alone cannot fail this way, so on
+      its own it would be evidence about the wrong call — which is the transcription cost this row
+      was withdrawn for.
 - [ ] The formula autocomplete stays inside its field. Was a 169px overhang, and the pre-fix
       statement re-run in place still overhangs 169px.
       `HAND the formula autocomplete stays inside its modal` — **suggest [830..1100] inside a modal

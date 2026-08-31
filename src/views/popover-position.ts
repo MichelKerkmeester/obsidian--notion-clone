@@ -497,7 +497,18 @@ export function getVisiblePopoverBounds(container: HTMLElement | null): DOMRect 
     || doc.querySelector(".app-container")
     || doc.querySelector(".workspace");
   const appRect = isHTMLElement(app) ? app.getBoundingClientRect() : viewport;
-  const containerRect = container?.getBoundingClientRect() || viewport;
+  // A container that has not laid out yet says nothing about where a surface may go.
+  //
+  // A body-portalled fixed panel reports a zero rect until its first layout, and intersecting that
+  // with the editing area produces `right <= left` — which trips the degenerate guard below and
+  // hands back the WHOLE viewport, the exact bound this function exists to narrow. The column
+  // submenu passes its own panel here, so it was clamped against the window and could sit under an
+  // open right sidebar. Measured: `.right` came back 1440 where the editing area ends at 1140.
+  //
+  // An empty rect is missing information, not a constraint of zero width, so it is ignored rather
+  // than intersected.
+  const measured = container?.getBoundingClientRect();
+  const containerRect = measured && measured.width > 0 && measured.height > 0 ? measured : viewport;
   const left = Math.max(viewport.left, appRect.left, containerRect.left);
   const top = Math.max(viewport.top, appRect.top, containerRect.top);
   const right = Math.min(viewport.right, appRect.right, containerRect.right);

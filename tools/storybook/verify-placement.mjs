@@ -264,6 +264,37 @@ const results = await section("desktop workspace geometry", () => page.evaluate(
 
   const split = rootSplit.getBoundingClientRect();
 
+  // 0. What the SHIPPED call returns, with the argument the shipped call passes.
+  //
+  // `column-menu.ts` calls `getVisiblePopoverBounds(panel)`. Every check that clamps a submenu here
+  // passed `null` instead, because the real caller is private and needs a live App — and `null`
+  // yields the editing area, so those checks read green over the argument that decides the answer.
+  //
+  // A body-portalled fixed panel that has not laid out yet reports a zero rect. Intersecting that
+  // with the editing area gives `right <= left`, which trips the degenerate guard and returns the
+  // WHOLE VIEWPORT — the exact bound the clamp exists to remove. A submenu placed against it slides
+  // under an open right sidebar.
+  //
+  // Both arguments are measured in one case. `null` alone cannot fail this way, so on its own it
+  // would be evidence about the wrong call.
+  {
+    const fresh = document.body.createDiv({ cls: "db-anchored-popover" });
+    fresh.setCssProps({ position: "fixed", width: "292px" });
+    const withNull = getVisiblePopoverBounds(null);
+    const withPanel = getVisiblePopoverBounds(fresh);
+    fresh.remove();
+    const viewportWidth = window.innerWidth;
+    out.push({
+      name: "AC-4 bounds for an unlaid-out panel are the editing area, not the viewport",
+      pass: Math.round(withPanel.right) === Math.round(withNull.right)
+        && Math.round(withPanel.right) < viewportWidth,
+      detail: `getVisiblePopoverBounds(panel).right=${Math.round(withPanel.right)}`
+        + ` against (null).right=${Math.round(withNull.right)} and viewport ${viewportWidth}`
+        + " — a fresh fixed panel has a zero rect, and intersecting it collapses the range into the"
+        + " degenerate guard, which hands back the whole viewport and lets a submenu sit under the sidebar",
+    });
+  }
+
   // 1. The clamp target, isolated.
   //
   // Passing a container does NOT test this: bounds are the intersection of viewport, app element

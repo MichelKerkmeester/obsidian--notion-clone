@@ -11,8 +11,8 @@ _memory:
     packet_pointer: "public/005-component-surface-system/015-desktop-dropdown-placement"
     last_updated_at: "2026-08-30T09:45:00Z"
     last_updated_by: "phase-author"
-    recent_action: "Five paths inventoried by closure proof; six defects measured, five fixed at two seams"
-    next_safe_action: "Merge probe-desktop-placement.mjs into verify-placement.mjs once free"
+    recent_action: "AC-4 settled: the shipped argument returned the whole viewport, and now does not"
+    next_safe_action: "AC-5 and AC-7 need their shipped methods driven, not their arithmetic copied"
     blockers:
       - "database-view.ts and embedded-database-renderer.ts held by another session all phase"
     key_files:
@@ -24,7 +24,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-015"
       parent_session_id: null
-    completion_pct: 38
+    completion_pct: 50
     open_questions: []
     answered_questions: []
 ---

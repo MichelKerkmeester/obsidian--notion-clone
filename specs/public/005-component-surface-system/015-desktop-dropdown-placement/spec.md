@@ -15,8 +15,8 @@ _memory:
     packet_pointer: "public/005-component-surface-system/015-desktop-dropdown-placement"
     last_updated_at: "2026-08-30T21:15:00Z"
     last_updated_by: "criteria-adjudication"
-    recent_action: "Criteria adjudicated against the captured run; 5 ticked, the sixth stays red"
-    next_safe_action: "Fix the clamp in both host files; add a phone arm to the lifetime check"
+    recent_action: "AC-4 settled: the shipped argument returned the whole viewport, and now does not"
+    next_safe_action: "AC-5 and AC-7 need their shipped methods driven, not their arithmetic copied"
     blockers:
       - "Calendar/timeline search panel: 240-292px under the sidebar, declared red (plan.md 7)"
       - "Third copy of the anchor idiom in embedded-database-renderer.ts, same file lock"
@@ -33,7 +33,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-015"
       parent_session_id: null
-    completion_pct: 38
+    completion_pct: 50
     open_questions:
       - "Anchorless open: entry guard returns and the panel renders unplaced, binds 34 call sites"
       - "getPlacementOptions drops align, gap and preferredSide into dead code (plan.md 7)"

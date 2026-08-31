@@ -205,7 +205,7 @@
     ],
     "causal_summary": "Measure where every desktop dropdown, popover and menu actually lands, against where it should land, and repair the two seams that explain five of the six defects found.",
     "created_at": "2026-08-30T16:46:50.351Z",
-    "last_save_at": "2026-08-31T20:01:12.270Z",
+    "last_save_at": "2026-08-31T20:17:01.685Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -216,13 +216,13 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:533dae1ae2a786df2bfde2e49f663c276c6554e827871ccbb86ba05d6c6a90c6",
+    "source_fingerprint": "sha256:03b4f7273fcafa1466db756f900a71ab919408e38a05323deb28920747314692",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "eaeca3a4da72905fdde1c8c8a26e839220872eb3049135c3fa63aa1ed0e298cd",
+      "spec.md": "7e3d1c5162a391386f89ffaccea282bc034f563ff2d48a12975f6b20e8cb0079",
       "plan.md": "3077a030820f6dd48a5ba05d9116563c0e9ae58c8796927eefeb67941b59c642",
       "tasks.md": "71293bcc99a0d6e27024bada5453f548b6d91adaa1064621eaf49da7f3c81197",
-      "implementation-summary.md": "f6c2ad8190af47be4676cc5681f49a0dd44d1306f8ff37d87295323a6a58f29c"
+      "implementation-summary.md": "8a1acb6e9e5224c845a0e45185a3d2b1b83801d5d3ae9caceadc432412e02011"
     },
     "last_active_child_id": null,
     "last_active_at": null
