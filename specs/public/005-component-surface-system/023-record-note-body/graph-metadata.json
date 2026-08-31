@@ -39,12 +39,13 @@
       "display"
     ],
     "importance_tier": "critical",
-    "status": "planned",
+    "status": "in_progress",
     "key_files": [
       "spec.md",
       "plan.md",
       "tasks.md",
       "goal.md",
+      "implementation-summary.md",
       "device-note-body-in-obsidian.png"
     ],
     "entities": [
@@ -70,6 +71,12 @@
         "name": "goal.md",
         "kind": "doc",
         "path": "goal.md",
+        "source": "derived"
+      },
+      {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
         "source": "derived"
       },
       {
@@ -189,21 +196,23 @@
     ],
     "causal_summary": "Every row is a markdown note whose frontmatter the plugin renders as properties, while the note's actual body is never surfaced anywhere in the plugin.",
     "created_at": "2026-08-30T15:07:29.613Z",
-    "last_save_at": "2026-08-31T06:09:04.851Z",
+    "last_save_at": "2026-08-31T06:46:26.823Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
       "spec.md",
       "plan.md",
       "tasks.md",
-      "goal.md"
+      "goal.md",
+      "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:16ce27ae4e4d81f35425aced5b4f7ac4886571ee128a995ea79f7b8d82b96e63",
+    "source_fingerprint": "sha256:8c3469b41b4c7ed69101225ee1ff947c14fdeb5355d3e32bd49ed0e8ce001d14",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "f22e83b9f18a4e7ea3d54b5c7c91a3596f4d6b675bf8d04caf152a2aa4c18f15",
+      "spec.md": "f730523990cc496ab74a8d0447cdba0ce6076f83617a915e5c7e6c3e7940fcdf",
       "plan.md": "33c796d934285a7235531e6329ade64f92ae9750902a0a8ed8cbd690f7823d61",
-      "tasks.md": "d1f498434db331044ad554f598e748f0ba220c6653b02823e369e95d2656373e"
+      "tasks.md": "d05793a827252062cca1522b6a27c6a607c6b26ca25b0a13be588ad5854876c0",
+      "implementation-summary.md": "cd8e07a77eb346c93969a20d55f39b43f5c4dc6fd96d2a868d35ab14311f21e9"
     },
     "last_active_child_id": null,
     "last_active_at": null

@@ -68,7 +68,7 @@ different, carefully serialized path.
 | **Spec Folder** | 023-record-note-body |
 | **Level** | 3 |
 | **Priority** | P2 |
-| **Status** | Planned |
+| **Status** | Implemented — editable in place, chosen by the operator; shipped in 1.3.9, not device-confirmed |
 | **Created** | 2026-08-30 |
 | **Branch** | `main` |
 | **Parent Spec** | `../spec.md` |
