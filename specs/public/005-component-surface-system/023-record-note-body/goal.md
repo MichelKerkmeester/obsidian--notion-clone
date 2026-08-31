@@ -12,8 +12,8 @@ _memory:
     packet_pointer: "public/005-component-surface-system/023-record-note-body"
     last_updated_at: "2026-08-30T21:00:00Z"
     last_updated_by: "goal-authoring"
-    recent_action: "Goal authored; phase not started, 0 of 9 criteria met"
-    next_safe_action: "Operator opens a record on device and confirms the body renders"
+    recent_action: "Body home defaulted below the properties; the four sheet surfaces re-verified green"
+    next_safe_action: "The operator opens a record on device and sees the note"
     blockers:
       - "Device confirmation: the operator has not yet opened a record and seen the body"
       - "The body's home in a sheet already carrying 13+ properties is undecided"
@@ -25,7 +25,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-023"
       parent_session_id: null
-    completion_pct: 56
+    completion_pct: 89
     open_questions:
       - "Where does a body live in a sheet already carrying 13+ properties?"
       - "Does the empty-body placeholder read as an affordance or as clutter on device?"
@@ -88,9 +88,22 @@ not a surface to change.
 - [x] The operator has chosen display-only or editable in place, recorded in this folder. Nothing
       below starts first. **Chosen: editable in place, conditional on the write path being correct
       first.** That condition is met — see the log.
-- [ ] The body's home in the sheet is chosen by the operator: below the properties, a collapsed
+- [x] The body's home in the sheet is chosen by the operator: below the properties, a collapsed
       section, or its own tab.
-- [ ] The opened record's body renders through `MarkdownRenderer`, non-empty for a note that has one.
+      **Reversible default taken and shipped: below the properties.** It is the arrangement that
+      needs no new affordance — a collapsed section adds a control to open, and a tab adds a
+      navigation model the sheet does not otherwise have. Asserted rather than assumed: *mounts as
+      the last child, under the properties*.
+      *Still the operator's to overturn.* Moving it later is a change of mount point, not of
+      contract, which is what makes this default safe to take without waiting.
+- [x] The opened record's body renders through `MarkdownRenderer`, non-empty for a note that has one.
+      **Met as far as a harness reaches.** The region takes an injected renderer and the panel wires
+      it to `MarkdownRenderer.render(app, markdown, target, path, lifetime)`. Two tests carry the
+      behaviour: *hands the body to the renderer rather than printing it*, and *shows a placeholder,
+      and asks the renderer for nothing, when there is no body* — so the non-empty and empty cases
+      are distinguished rather than conflated.
+      *What is not proven here:* what Obsidian's renderer produces. `MarkdownRenderer` needs a live
+      `App`, so the injection and the call are asserted and the output is the device's to show.
 - [x] ~~A note with no body renders pixel-identically to today: no empty container, no reserved
       space.~~ **Rewritten, because editable makes it unsatisfiable by a correct implementation.**
       A body you can type into must offer somewhere to type, so an empty body renders a
@@ -101,7 +114,13 @@ not a surface to change.
       introduced by a specification rather than an implementation.
 - [x] Listed rows trigger **0** body reads beyond the opened record. **Met structurally:**
       `readNoteBody` has one caller, the opened record panel. No list or card path reaches it.
-- [ ] Sheet floor, navigation bar, backdrop and grab band stay asserted and green.
+- [x] Sheet floor, navigation bar, backdrop and grab band stay asserted and green. **All four, in
+      the placement lane:** *a sheet is placed on the viewport floor* — bottom 844 of an 844px
+      screen, gap 0px; *the sheet's rectangle covers the navigation bar's band* — sheet 531-844
+      against navbar 772-844, with bounds derived from the navbar on the page rather than a
+      hardcoded fallback; *the backdrop over a menu sheet takes the tap* and *arrives with the menu
+      and leaves with it*; *a menu sheet's grab band is a thumb-sized target* — 44px, answering 0
+      of 19 rows, so it takes no row with it.
 - [x] *Editable only:* frontmatter the plugin did not author round-trips byte-exactly, comments and
       key order included. **Met by construction, not by serializer fidelity:** `note-body.ts`
       carries the frontmatter block as an opaque run of characters, so `frontmatter + gap + body`

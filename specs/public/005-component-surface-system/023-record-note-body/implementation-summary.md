@@ -12,8 +12,8 @@ _memory:
     packet_pointer: "public/005-component-surface-system/023-record-note-body"
     last_updated_at: "2026-08-31T09:55:00Z"
     last_updated_by: "note-body-discharge"
-    recent_action: "Tasks discharged 15 of 19; the write path was already inside the per-file queue"
-    next_safe_action: "Put the layout question to the operator (T2) and verify self-transclusion (T9)"
+    recent_action: "Body home defaulted below the properties; the four sheet surfaces re-verified green"
+    next_safe_action: "The operator opens a record on device and sees the note"
     blockers:
       - "T2: the body's home was never decided as its own question, only shipped"
       - "T9: a note transcluding itself is expected to work and has not been verified"
@@ -25,7 +25,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-023-impl"
       parent_session_id: null
-    completion_pct: 56
+    completion_pct: 89
     open_questions:
       - "Does the empty-body placeholder read as an affordance or as clutter on device?"
     answered_questions:

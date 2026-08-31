@@ -14,8 +14,8 @@ _memory:
     packet_pointer: "public/005-component-surface-system/023-record-note-body"
     last_updated_at: "2026-08-30T16:30:00Z"
     last_updated_by: "phase-author"
-    recent_action: "Raised to a Level 3 doc set from the operator request and the verified paths"
-    next_safe_action: "Operator picks display-only or editable before any implementation"
+    recent_action: "Body home defaulted below the properties; the four sheet surfaces re-verified green"
+    next_safe_action: "The operator opens a record on device and sees the note"
     blockers:
       - "Shape undecided: display-only render versus editable body"
     key_files:
@@ -27,7 +27,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-023"
       parent_session_id: null
-    completion_pct: 56
+    completion_pct: 89
     open_questions:
       - "Display-only with a tap-through to the note, or editable in place?"
       - "Where does a body live in a sheet already carrying 13+ properties?"
