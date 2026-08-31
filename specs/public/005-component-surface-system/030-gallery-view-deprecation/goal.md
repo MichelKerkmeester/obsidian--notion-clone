@@ -78,7 +78,7 @@ outcome this packet exists to prevent.
 - [ ] Renderer coverage publishes its new floor, and the ratchet passes at it. **Not applicable to
       a withdrawal** — the renderer still exists and is still covered. This row belongs to the
       deletion that follows, once the operator confirms no vault of theirs still opens one.
-- [x] `npm run gate` exits 0, read from `$?` and not through a pipe. **19 green.**
+- [x] `npm run gate` exits 0, read from `$?` and not through a pipe. **20 green, re-run 2026-09-01.**
 <!-- /ANCHOR:completion -->
 
 ---

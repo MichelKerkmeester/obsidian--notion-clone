@@ -1575,21 +1575,42 @@ const addViewProbe = (isPhone) => {
   const lastField = formFields[formFields.length - 1];
   const trailing = Math.round(form.getBoundingClientRect().bottom - lastField.getBoundingClientRect().bottom);
   const between = Math.round(choices.getBoundingClientRect().top - form.getBoundingClientRect().bottom);
+  // `between` carries its own threshold now, and the reason is a control that did not go red.
+  //
+  // The criterion this serves asked for each heading to be "load-bearing for the gap above", and the
+  // control it named — remove a heading element and require this check to fall to the within-group
+  // value — does not do that. It cannot: `trailing` is the FORM's own bottom whitespace, and a
+  // heading outside the form cannot change it. That independence is deliberate and this check's own
+  // comment explains why, so restoring the dependency would restore the defect.
+  //
+  // What the heading IS load-bearing for is the distance between the two groups, and that was
+  // asserted only as `> 0` — satisfied by the separator alone. Removing the "Create" heading takes
+  // `between` from 36px to 9px, measured, and the same `within` the rest of the check uses gives the
+  // threshold: two group-gaps' worth of space, which a bare separator cannot supply.
   out.push({
     name: `add view: groups are further apart than the items inside them (${where})`,
-    pass: trailing >= within * 2 && trailing > 0 && between > 0,
+    pass: trailing >= within * 2 && trailing > 0 && between >= within * 2,
     detail: `group trailing space ${trailing}px vs within-group item gap ${within}px (want >= 2x; `
-      + `was 0px vs 4px), and ${between}px of separator and heading between the two groups`,
+      + `was 0px vs 4px), and ${between}px of separator and heading between the two groups`
+      + ` (want >= ${within * 2}px — a separator on its own measures 9px there, so this is the`
+      + ` clause the heading carries)`,
   });
 
   // The groups are named, in the vocabulary the owned menu already uses.
-  const sections = panel.querySelectorAll(".db-menu-section");
+  //
+  // The TEXT is load-bearing, not just the element. Counting `.db-menu-section` nodes is a
+  // class-name criterion: two empty divs satisfy it, draw nothing a reader can use, and still hold
+  // the gap the check below measures — so the two clauses pass together while the surface says
+  // nothing. Asserting the text is what separates "the group is named" from "the group has a box
+  // where a name would go".
+  const sections = [...panel.querySelectorAll(".db-menu-section")];
   const separators = panel.querySelectorAll(".db-menu-separator");
+  const namedSections = sections.filter((el) => (el.textContent || "").trim().length > 0);
   out.push({
     name: `add view: the groups carry headings (${where})`,
-    pass: sections.length >= 2 && separators.length >= 1,
-    detail: `${sections.length} headings [${[...sections].map((s) => s.textContent).join(", ")}], `
-      + `${separators.length} separators (was 0 and 0)`,
+    pass: sections.length >= 2 && separators.length >= 1 && namedSections.length === sections.length,
+    detail: `${sections.length} headings [${sections.map((s) => `"${(s.textContent || "").trim()}"`).join(", ")}], `
+      + `${namedSections.length} of them carrying text, ${separators.length} separators (was 0 and 0)`,
   });
 
   // One left edge for the whole surface.

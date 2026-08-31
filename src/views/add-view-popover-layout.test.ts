@@ -30,6 +30,7 @@ import { describe, expect, it } from "vitest";
 // @ts-expect-error -- a tools-side .mjs fixture with no type declarations; imported so the parity
 // checks read the markup the capture actually renders rather than the source that produces it.
 import { CORE_SCENARIOS } from "../../tools/screenshots/scenarios/core.mjs";
+import { setLocale, t } from "../i18n";
 
 const stylesContent = readFileSync(resolve(__dirname, "../../styles.css"), "utf-8");
 const toolbarSource = readFileSync(resolve(__dirname, "./toolbar-renderer.ts"), "utf-8");
@@ -186,6 +187,28 @@ describe("add-view surface", () => {
       const fors = [...fixture.matchAll(/for="([^"]+)"/g)].map((m) => m[1]);
       expect(fors.length).toBeGreaterThanOrEqual(3);
       for (const id of fors) expect(fixture).toContain(`id="${id}"`);
+    });
+
+    it("names its fields with the renderer's own strings, not with strings that look like them", () => {
+      // The association clause above passes on a fixture whose captions say anything at all: it
+      // checks that every `for` finds an `id`, which is a structural claim. A fixture reading
+      // "Key field" beside a renderer saying "Title property" satisfies it completely — and a
+      // capture is then a picture of a surface nobody ships. Accessible NAME equality is the clause
+      // that was missing, and it is taken from the renderer's own translation table rather than
+      // from a literal, so a wording change moves both sides or fails here.
+      const fixture = addViewFixture();
+      const drawnLabels = [...fixture.matchAll(/class="db-add-view-field-label"[^>]*>([^<]+)</g)]
+        .map((m) => m[1].trim());
+      // Pinned to English, because the capture is taken in English and a locale-dependent
+      // comparison would pass or fail on whichever locale the runner happened to hold.
+      setLocale("en");
+      const rendered = ["toolbar.newViewName", "toolbar.viewKeyField", "toolbar.viewIcon"].map((key) => t(key));
+      expect(rendered.every((label) => label.length > 0 && !label.startsWith("toolbar."))).toBe(true);
+      expect(drawnLabels).toEqual(rendered);
+
+      // The checkbox is named by an adjacent span rather than by a `for`, so it is checked in its
+      // own right — it was the control that carried two different names in two places.
+      expect(fixture).toContain(t("toolbar.copyCurrentViewSettings"));
     });
 
     it("records that no capture of this scenario can answer a placement question", () => {

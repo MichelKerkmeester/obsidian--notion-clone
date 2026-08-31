@@ -9,10 +9,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "public/005-component-surface-system/013-add-view-sheet"
-    last_updated_at: "2026-08-30T21:15:00Z"
+    last_updated_at: "2026-09-01T02:40:00Z"
     last_updated_by: "criteria-adjudication"
-    recent_action: "Harness-dependency audit: no tick withdrawn; two absolutes are var() fallbacks"
-    next_safe_action: "Run AC-6 heading controls and vitest add-view-popover-layout.test.ts, read $?"
+    recent_action: "AC-6 controls run; heading text and between-group gap now load-bearing"
+    next_safe_action: "Cover the remaining state dimensions for the Add View panel"
     blockers: []
     key_files:
       - "spec.md"
@@ -21,12 +21,14 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-013-goal"
       parent_session_id: null
-    completion_pct: 67
+    completion_pct: 83
     open_questions:
       - "--text-muted at 12px measures 4.1:1; program-wide token decision, escalated"
-      - "Is the Add View sheet subscribed to visualViewport, or placed once like an owned menu"
+      - "Do the remaining state dimensions need a check each, or one driving showAddViewMenu"
     answered_questions:
       - "It was already a sheet on a phone; defect 6 was a fixture artifact"
+      - "The Add View panel goes through positionToolbarPopover, so it carries the reposition loop"
+      - "The gap check cannot depend on a heading; its subject is the form's own trailing whitespace"
 ---
 # Goal: Add View Surface Redesign
 
@@ -96,19 +98,36 @@ the sentence alone.
       them. `add view: groups are further apart than the items inside them` — **group trailing space
       16px against a within-group item gap of 8px**, with 36px of separator and heading between the
       two groups.
-- [ ] At least 2 group headings, each carrying non-empty text and each load-bearing for the gap
-      above. The element count alone is a class-name criterion and is banned as one.
+- [x] At least 2 group headings, each carrying non-empty text and each load-bearing for the space
+      between the groups. The element count alone is a class-name criterion and is banned as one.
+      **Measured 2026-09-01, with the load-bearing clause restated at the gap it can actually carry.**
 
-      **Half measured.** `add view: the groups carry headings` reads **2 headings [Options, Create],
-      1 separator**, which settles the count and the non-empty text. Nothing measures the
-      load-bearing clause, and `acceptance-criteria.md` AC-6 records its control as *not yet run*.
+      **The text is now load-bearing rather than reported.** `add view: the groups carry headings`
+      reads **2 headings ["Options", "Create"], 2 of them carrying text, 1 separators** and requires
+      that second number to equal the first. Counting `.db-menu-section` nodes is a class-name
+      criterion: two empty divs satisfy it, draw nothing a reader can use, and hold the gap the
+      companion check measures — so both clauses pass together while the surface says nothing.
 
-      **The check that would settle it:** two mutations of the Add View panel inside
-      `verify-placement`, each observed red on its own. (a) Empty one heading's text while leaving
-      the element in place — the heading check must fail on its text clause while the gap check
-      stays green, which is what proves the text clause does work of its own. (b) Remove one heading
-      element outright — `add view: groups are further apart than the items inside them` must fall
-      from 16px to the 8px within-group value, below its 2× threshold, which is what proves the
+      **Control (a), run and behaving exactly as specified.** Emptying one heading's text while
+      leaving the element in place: the heading check fails at `2 headings ["", "Create"], 1 of them
+      carrying text` while the gap check stays green at `16px vs 8px`. The text clause does work of
+      its own.
+
+      **Control (b) did not do what this criterion predicted, and that is the finding.** Removing a
+      heading element outright leaves `groups are further apart than the items inside them` green,
+      because its subject is the FORM's own trailing whitespace — a heading outside the form cannot
+      change it. That independence is deliberate: the check's own comment records that its first
+      version measured the distance between groups, stayed green when the padding was reverted
+      because the separator and heading carry that distance on their own, and was rewritten for
+      exactly that reason. **Asking it to depend on the heading again would restore the defect.**
+
+      **So the clause is restated at the gap the heading really does carry.** Removing the "Create"
+      heading takes the between-group distance from **36px to 9px**, measured — and that distance was
+      asserted only as `> 0`, which a bare separator satisfies. It now carries the same `2 × within`
+      threshold the rest of the check uses, so 9px fails it. Control (b) reddens the check at both
+      surfaces, on the clause it can honestly redden.
+
+      *The original prediction, kept:* the criterion asked for the gap check to fall
       heading is the element producing the gap rather than a sibling margin that happens to sit
       there.
 - [x] The group heading, field caption, checkbox caption and row icon share one content left edge.
@@ -127,19 +146,27 @@ the sentence alone.
       inverted arm, `add view: on a desktop the surface is still an anchored popover, not a sheet`,
       reads **sheet=false, scrim=false, handle=false, position fixed, width 292** against the
       menu-role ceiling of 320.
-- [ ] The fixture stops lying: same tile count, accessible names and class list as production,
-      asserted by a test that reads both. Was 4 divergences.
+- [x] The fixture stops lying: same tile count, accessible names and class list as production,
+      asserted by a test that reads both. Was 4 divergences. **Run and recorded 2026-09-01, and the
+      accessible-name clause it was missing is now in it.**
 
       **The test exists and reads both** — `src/views/add-view-popover-layout.test.ts:139-189`
       compares `rendererViewTypes()` against the `add-view-popover` scenario in
       `tools/screenshots/scenarios/core.mjs` — but no run of it is recorded in this folder, and
       `verify-placement` does not carry it, so nothing here says it passes.
 
-      **The check that would settle it:** `npx vitest run
-      src/views/add-view-popover-layout.test.ts`, its exit status read from `$?` rather than through
-      a pipe, with the passing count recorded here. It must also gain the one clause of the three
-      the file does not assert: accessible-name equality. Today the fixture arm asserts `for`/`id`
-      association and counts `for` attributes ≥ 3 (`:170-174`), which a fixture whose label text has
+      **Run and recorded 2026-09-01:** `npx vitest run src/views/add-view-popover-layout.test.ts`
+      → `Test Files 1 passed (1), Tests 11 passed (11)`, exit `0` read from `$?` rather than through
+      a pipe.
+
+      **And it gained the clause it was missing: accessible-name equality.** The fixture's three
+      field captions are now compared against the renderer's own strings, taken from the shipped
+      translator rather than from literals, so a wording change moves both sides or fails here.
+      Watched failing: renaming the fixture's caption to "Key field" against the renderer's "Title
+      property" reddens it — a change the association clause passes completely.
+
+      *The gap this closes, kept:* the fixture arm asserted `for`/`id`
+      association and counted `for` attributes ≥ 3, which a fixture whose label text has
       drifted from the renderer's `aria-label` still satisfies. The added assertion is set equality
       between the accessible names the fixture markup resolves to and the names `showAddViewMenu`
       emits, 0 differing.

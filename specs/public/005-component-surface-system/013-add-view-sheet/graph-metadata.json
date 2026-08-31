@@ -200,7 +200,7 @@
     ],
     "causal_summary": "Rebuild the Add View surface against the design system: one control idiom per job, one affordance per action, a real grouping, and sheet presentation on a phone.",
     "created_at": "2026-08-30T16:47:05.287Z",
-    "last_save_at": "2026-08-31T20:01:10.742Z",
+    "last_save_at": "2026-08-31T23:02:02.275Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -211,13 +211,13 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:191f770597fd867fb21bc0168d0f2d55afd2dd03b6623c06f39f0447c550ee9a",
+    "source_fingerprint": "sha256:0bdef372e43c455b0007a19ccfb9eb8f6f5f584e04e0c5994bd62048c809e641",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "c0f52afe33b931cbe9ec2db267f98ab4631f5696b168093ed2422ba05c83d0e4",
+      "spec.md": "09d252a0e0e4f8f8061d533c20a49dc40947bbbc9c233f467e9bd8a28980ed0b",
       "plan.md": "ca3345b39491355fd62a6d32845223c782614d95f89521360fca66c3392739db",
       "tasks.md": "227e25af8de655e4c3746f76794512ff956dd35826567d49e10a03b7830c61db",
-      "implementation-summary.md": "4d44cbda2e0ee45b1e0c95692ac0ccea6a2de6e58740294e7ba0d9dc0eae667b"
+      "implementation-summary.md": "7c9e833bb5beaae2042dadfa6866429aaaea2f969be0eed658064a96edeec234"
     },
     "last_active_child_id": null,
     "last_active_at": null
