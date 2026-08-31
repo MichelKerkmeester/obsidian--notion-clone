@@ -1,7 +1,7 @@
 {
-  "measuredAt": "2026-08-31T04:03:49.154Z",
+  "measuredAt": "2026-08-31T06:30:31.517Z",
   "inputs": {
-    "styles.css": "5280f269018a",
+    "styles.css": "96f5fa440637",
     "tools/live/surface-census.mjs": "09663f4f354e",
     "src/views/surface-contract.ts": "ff7e6bafd3c8"
   },
@@ -872,10 +872,12 @@
       "mountParent": "note-database-container",
       "tokens": true,
       "role": null,
-      "rect": "1352x241",
+      "rect": "1352x370",
       "scenarios": [
         "panel-record-detail",
-        "panel-record-detail-sheet"
+        "panel-record-detail-sheet",
+        "panel-record-detail-sheet-body-editing",
+        "panel-record-detail-sheet-body-empty"
       ]
     },
     "db-mobile-bottom-sheet-handle": {
@@ -886,6 +888,8 @@
       "rect": "36x4",
       "scenarios": [
         "panel-record-detail-sheet",
+        "panel-record-detail-sheet-body-editing",
+        "panel-record-detail-sheet-body-empty",
         "chrome-owned-menu-sheet"
       ]
     },

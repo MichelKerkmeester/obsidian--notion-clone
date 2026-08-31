@@ -57,6 +57,13 @@
   --db-font-sm-line-height: 1.4;
   --db-font-md: 13px;
   --db-font-md-line-height: 1.45;
+  /* The step between --db-font-md and --db-font-lg, added because the ladder had no member of the
+     audited 12/14/16/18/20/24 scale between 13 and 16 and a surface measured against that scale
+     needs one. Kept as its own step rather than by moving --db-font-md, which thirty-odd rules read
+     and which another phase's frozen editor geometry is measured against: raising it grew that
+     editor by exactly one line-height and reddened a freeze that has nothing to do with this label. */
+  --db-font-base: 14px;
+  --db-font-base-line-height: 1.4;
   --db-font-lg: 16px;
   --db-font-lg-line-height: 1.35;
   --db-font-lg-weight: 600;
@@ -9495,11 +9502,13 @@ input[type="checkbox"].db-toggle-switch:disabled {
 .db-record-detail-panel.db-mobile-bottom-sheet .db-record-detail-field-label {
   flex: 0 0 96px;
   min-width: 0;
-  /* Same rendered size as the token it replaces, but stated in px. The previous one was `0.875em`,
-     and an em-relative size compounds through nesting and drifts with the reader's text-size
-     setting, so the type scale quietly stops applying. */
-  font-size: var(--db-font-md);
-  line-height: var(--db-font-md-line-height);
+  /* Stated in px, never em: the previous `0.875em` compounded through nesting and drifted with the
+     reader's text-size setting, so the type scale quietly stopped applying.
+
+     The base step rather than the medium one. This label is audited against the 12/14/16/18/20/24
+     scale, on which 13 is not a member, so it reads the one token that is. */
+  font-size: var(--db-font-base);
+  line-height: var(--db-font-base-line-height);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -9543,6 +9552,118 @@ input[type="checkbox"].db-toggle-switch:disabled {
 .db-record-detail-panel.db-mobile-bottom-sheet .db-cell-line-edit-popover .db-cell-line-input {
   height: 100%;
   min-height: 0;
+}
+
+/* ── The note, under its properties ──────────────────────────────────
+
+   A record IS a note, and this panel showed only that note's frontmatter. The body sits last and
+   is separated from the property rows by the same hairline those rows use between themselves, so
+   it reads as the next thing down rather than as one more property.
+
+   The separation above it is wider than any gap inside the rows — 12px above the line and 12px
+   below it, against 8px of padding within a row. A group has to be spaced further from its
+   neighbour than its own contents are from each other, or the body binds to the last property
+   instead of standing apart from the list. */
+.note-database-container .db-record-detail-body,
+.db-mobile-bottom-sheet .db-record-detail-body {
+  margin-top: var(--db-space-5);
+  padding-top: var(--db-space-5);
+  /* A line that only divides content, at the same faint step the row separators use. The 3:1
+     non-text floor is for a border that identifies a control; this one identifies nothing. */
+  border-top: 1px solid var(--db-border-subtle);
+}
+
+.note-database-container .db-record-detail-body-rendered,
+.db-mobile-bottom-sheet .db-record-detail-body-rendered {
+  font-size: var(--db-font-md);
+  line-height: var(--db-font-md-line-height);
+  border-radius: var(--db-radius-sm);
+  /* Tapping it opens an editor, so the pointer says text rather than the pointer the rows use. */
+  cursor: text;
+}
+
+/* Obsidian's renderer emits real markdown blocks, and a leading `<p>` or `<h1>` brings its own
+   margin. Left alone, the first one pushes the body away from the hairline by a distance this
+   surface never chose and that changes with whatever the body happens to start with. */
+.note-database-container .db-record-detail-body-rendered > :first-child,
+.db-mobile-bottom-sheet .db-record-detail-body-rendered > :first-child {
+  margin-top: 0;
+}
+
+.note-database-container .db-record-detail-body-rendered > :last-child,
+.db-mobile-bottom-sheet .db-record-detail-body-rendered > :last-child {
+  margin-bottom: 0;
+}
+
+/* Headings in the body are ranked below the record's own name.
+
+   Left at document sizes, a note's `##` renders around 24px against a 15px panel title, so a
+   sub-heading inside the record out-shouts the record — measured in the sheet capture before this
+   rule existed. This is an excerpt of a note in a 400px sheet, not the note's own page, and six
+   heading steps are noise at that width. One step above the body carries the emphasis on the
+   phone, where the body is already at 16px, weight does it instead. */
+.note-database-container .db-record-detail-body-rendered :is(h1, h2, h3, h4, h5, h6),
+.db-mobile-bottom-sheet .db-record-detail-body-rendered :is(h1, h2, h3, h4, h5, h6) {
+  font-size: var(--db-font-lg);
+  line-height: var(--db-font-lg-line-height);
+  font-weight: 600;
+  margin: var(--db-space-4) 0 var(--db-space-2);
+}
+
+/* A body that does not exist yet still has to be reachable, or the notes most in need of one are
+   the only notes that cannot be given one. One line of faint text, not an empty box. */
+.note-database-container .db-record-detail-body-rendered.is-empty,
+.db-mobile-bottom-sheet .db-record-detail-body-rendered.is-empty {
+  color: var(--text-faint);
+}
+
+/* The body takes a tab stop, so the ring is not decoration. `box-shadow` rather than `outline`
+   because outline ignores the border radius. */
+.note-database-container .db-record-detail-body-rendered:focus-visible,
+.db-mobile-bottom-sheet .db-record-detail-body-rendered:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--interactive-accent);
+}
+
+.note-database-container .db-record-detail-body-editor,
+.db-mobile-bottom-sheet .db-record-detail-body-editor {
+  width: 100%;
+  box-sizing: border-box;
+  /* The box grows to its content from JavaScript instead of scrolling inside itself. The sheet is
+     already a scroll container; a second one nested in it over the same gesture means a flick that
+     starts on the text moves nothing once the inner box reaches its end. */
+  overflow: hidden;
+  resize: none;
+  min-height: var(--db-sheet-row-min-height, 44px);
+  padding: var(--db-space-3);
+  border: 1px solid var(--background-modifier-border);
+  border-radius: var(--db-radius-md);
+  background: var(--background-primary);
+  color: var(--text-normal);
+  font-family: inherit;
+  /* Also the size below which iOS zooms the whole page when this box takes focus — the same reason
+     the value cells on this sheet carry it. */
+  font-size: var(--db-font-lg);
+  line-height: var(--db-font-lg-line-height);
+}
+
+.note-database-container .db-record-detail-body-editor:focus,
+.db-mobile-bottom-sheet .db-record-detail-body-editor:focus {
+  outline: none;
+  border-color: var(--interactive-accent);
+  box-shadow: 0 0 0 1px var(--interactive-accent);
+}
+
+/* On a phone the body lines up with the property values rather than with the rows' outer edge, and
+   reads at the value's size. Both follow what the sheet already does one group above. */
+.db-record-detail-panel.db-mobile-bottom-sheet .db-record-detail-body {
+  padding-left: var(--db-space-5);
+  padding-right: var(--db-space-5);
+}
+
+.db-record-detail-panel.db-mobile-bottom-sheet .db-record-detail-body-rendered {
+  font-size: var(--db-font-lg);
+  line-height: var(--db-font-lg-line-height);
 }
 
 body.is-phone .note-database-container .db-record-detail-panel {

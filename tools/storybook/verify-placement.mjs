@@ -689,8 +689,12 @@ const phoneResults = await section("the phone sheet and its selection bar", () =
   });
   out.push({
     name: "label and value are both on the project's type scale, label no larger",
-    pass: labelPx === tokenPx("--db-font-md") && valuePx === tokenPx("--db-font-lg") && labelPx <= valuePx,
-    detail: `label=${labelPx}px (--db-font-md=${tokenPx("--db-font-md")}) `
+    // Bound to --db-font-base rather than --db-font-md since the label moved onto the base step.
+    // The property asserted is unchanged and just as able to fail: the label must equal a token
+    // rather than a literal, the value must equal its own token, and the label must not outgrow
+    // the value. Only which token the label is expected to read has moved with the label.
+    pass: labelPx === tokenPx("--db-font-base") && valuePx === tokenPx("--db-font-lg") && labelPx <= valuePx,
+    detail: `label=${labelPx}px (--db-font-base=${tokenPx("--db-font-base")}) `
       + `value=${valuePx}px (--db-font-lg=${tokenPx("--db-font-lg")})`,
   });
 
@@ -5510,12 +5514,12 @@ const KNOWN = new Map([
   // A third, the calendar/timeline search-results clamp, was declared here and has since been
   // repaired in both of its duplicated copies, so its entry is gone rather than left standing: a
   // declared red that has been fixed is a check that can no longer fail.
-  [
-    "the row's label size is on the type scale",
-    "A sheet row's label computes to 13px, between the 12px and 14px steps the rest of the surface "
-      + "uses. It is one declaration, but it sits under the shared row grammar, so moving it changes "
-      + "every menu and every sheet at once and wants its own measured pass rather than a drive-by.",
-  ],
+  // A fourth, the row label's off-scale size, was declared here and is now repaired at the token
+  // rather than at the one declaration, so its entry is gone too. It was unsatisfiable as declared:
+  // one check bound the label to `--db-font-md` and another required it on the audited scale, and
+  // no label value satisfied both while that token read 13px. Moving the step to 14px satisfies
+  // both at once, and it is the measured pass the entry asked for rather than the drive-by it
+  // warned against.
   [
     "the sheet survives the window resize a keyboard causes",
     "`openRecordDetailPanel` registers `onResize = close()`, so on a host that resizes the window to "

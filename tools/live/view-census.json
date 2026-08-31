@@ -1,7 +1,7 @@
 {
-  "measuredAt": "2026-08-31T04:03:57.610Z",
+  "measuredAt": "2026-08-31T06:30:39.827Z",
   "inputs": {
-    "styles.css": "5280f269018a",
+    "styles.css": "96f5fa440637",
     "tools/live/view-census.mjs": "f911f2e4a8cb",
     "tools/screenshots/scenarios.mjs": "1395f2dacbfd"
   },
@@ -360,9 +360,9 @@
     }
   ],
   "totals": {
-    "fixtures": 57,
-    "escaping": 560,
-    "growing": 256,
+    "fixtures": 59,
+    "escaping": 568,
+    "growing": 264,
     "scrolling": 304,
     "rhythmGroups": 20,
     "ragged": 0,
@@ -1932,6 +1932,26 @@
     {
       "width": 320,
       "fixture": "panel-record-detail-sheet",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-record-detail-panel.db-anchored-popover",
+      "parentCls": "note-database-container.db-width-default",
+      "by": 28,
+      "scrolls": false
+    },
+    {
+      "width": 320,
+      "fixture": "panel-record-detail-sheet-body-editing",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-record-detail-panel.db-anchored-popover",
+      "parentCls": "note-database-container.db-width-default",
+      "by": 28,
+      "scrolls": false
+    },
+    {
+      "width": 320,
+      "fixture": "panel-record-detail-sheet-body-empty",
       "kind": "escaping",
       "tag": "div",
       "cls": "db-record-detail-panel.db-anchored-popover",
@@ -4111,6 +4131,26 @@
     },
     {
       "width": 402,
+      "fixture": "panel-record-detail-sheet-body-editing",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-record-detail-panel.db-anchored-popover",
+      "parentCls": "note-database-container.db-width-default",
+      "by": 28,
+      "scrolls": false
+    },
+    {
+      "width": 402,
+      "fixture": "panel-record-detail-sheet-body-empty",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-record-detail-panel.db-anchored-popover",
+      "parentCls": "note-database-container.db-width-default",
+      "by": 28,
+      "scrolls": false
+    },
+    {
+      "width": 402,
       "fixture": "panel-record-peek",
       "kind": "escaping",
       "tag": "button",
@@ -5311,6 +5351,26 @@
     },
     {
       "width": 768,
+      "fixture": "panel-record-detail-sheet-body-editing",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-record-detail-panel.db-anchored-popover",
+      "parentCls": "note-database-container.db-width-default",
+      "by": 40,
+      "scrolls": false
+    },
+    {
+      "width": 768,
+      "fixture": "panel-record-detail-sheet-body-empty",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-record-detail-panel.db-anchored-popover",
+      "parentCls": "note-database-container.db-width-default",
+      "by": 40,
+      "scrolls": false
+    },
+    {
+      "width": 768,
       "fixture": "panel-record-peek",
       "kind": "escaping",
       "tag": "div",
@@ -5971,6 +6031,26 @@
     },
     {
       "width": 1440,
+      "fixture": "panel-record-detail-sheet-body-editing",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-record-detail-panel.db-anchored-popover",
+      "parentCls": "note-database-container.db-width-default",
+      "by": 340,
+      "scrolls": false
+    },
+    {
+      "width": 1440,
+      "fixture": "panel-record-detail-sheet-body-empty",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-record-detail-panel.db-anchored-popover",
+      "parentCls": "note-database-container.db-width-default",
+      "by": 340,
+      "scrolls": false
+    },
+    {
+      "width": 1440,
       "fixture": "panel-record-peek",
       "kind": "escaping",
       "tag": "div",
@@ -6303,6 +6383,16 @@
     },
     {
       "width": 320,
+      "fixture": "panel-record-detail-sheet-body-editing",
+      "probe": "4px"
+    },
+    {
+      "width": 320,
+      "fixture": "panel-record-detail-sheet-body-empty",
+      "probe": "4px"
+    },
+    {
+      "width": 320,
       "fixture": "panel-record-peek",
       "probe": "4px"
     },
@@ -6588,6 +6678,16 @@
     },
     {
       "width": 402,
+      "fixture": "panel-record-detail-sheet-body-editing",
+      "probe": "4px"
+    },
+    {
+      "width": 402,
+      "fixture": "panel-record-detail-sheet-body-empty",
+      "probe": "4px"
+    },
+    {
+      "width": 402,
       "fixture": "panel-record-peek",
       "probe": "4px"
     },
@@ -6873,6 +6973,16 @@
     },
     {
       "width": 768,
+      "fixture": "panel-record-detail-sheet-body-editing",
+      "probe": "4px"
+    },
+    {
+      "width": 768,
+      "fixture": "panel-record-detail-sheet-body-empty",
+      "probe": "4px"
+    },
+    {
+      "width": 768,
       "fixture": "panel-record-peek",
       "probe": "4px"
     },
@@ -7154,6 +7264,16 @@
     {
       "width": 1440,
       "fixture": "panel-record-detail-sheet",
+      "probe": "4px"
+    },
+    {
+      "width": 1440,
+      "fixture": "panel-record-detail-sheet-body-editing",
+      "probe": "4px"
+    },
+    {
+      "width": 1440,
+      "fixture": "panel-record-detail-sheet-body-empty",
       "probe": "4px"
     },
     {

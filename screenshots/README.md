@@ -375,23 +375,43 @@ Sources: `src/views/filter-panel-renderer.ts`, `src/data/view-filter-tree.ts`
 
 ### Record detail panel
 
-Opened from a calendar or timeline event card. Fields are click-to-edit; an empty field only appears when the view asks for empty properties.
+Opened from a calendar or timeline event card. Fields are click-to-edit; an empty field only appears when the view asks for empty properties. The note body sits last, under the properties. What is photographed there is hand-written markup standing in for Obsidian's renderer output — the real MarkdownRenderer has no standalone build, so no capture in this repository can show it.
 
 | dark | light |
 |---|---|
 | ![panel-record-detail dark](panels/panel-record-detail-mobile-dark.png) | ![panel-record-detail light](panels/panel-record-detail-mobile-light.png) |
 
-Sources: `src/views/record-detail-panel.ts`, `src/views/card-field-renderer.ts`
+Sources: `src/views/record-detail-panel.ts`, `src/views/card-field-renderer.ts`, `src/views/note-body-region.ts`
 
 ### Record detail — mobile bottom sheet
 
-The phone form of the record detail panel. positionToolbarPopover renders it as a bottom sheet with a grab handle; a permanent close button (reusing db-cell-edit-close) and drag-down on the handle dismiss it where the desktop panel relies on Escape and outside-click. Captured in viewport mode so the fixed sheet docks at the bottom.
+The phone form of the record detail panel. positionToolbarPopover renders it as a bottom sheet with a grab handle; a permanent close button (reusing db-cell-edit-close) and drag-down on the handle dismiss it where the desktop panel relies on Escape and outside-click. Captured in viewport mode so the fixed sheet docks at the bottom. The note body is the last group, below the properties.
 
 | dark | light |
 |---|---|
 | ![panel-record-detail-sheet dark](panels/panel-record-detail-sheet-mobile-dark.png) | ![panel-record-detail-sheet light](panels/panel-record-detail-sheet-mobile-light.png) |
 
-Sources: `src/views/record-detail-panel.ts`, `src/views/popover-position.ts`, `src/views/card-field-renderer.ts`
+Sources: `src/views/record-detail-panel.ts`, `src/views/popover-position.ts`, `src/views/card-field-renderer.ts`, `src/views/note-body-region.ts`
+
+### Record detail — note body being typed
+
+Tapping the rendered body swaps it for a textarea. The box grows to its content rather than scrolling inside itself, because the sheet is already a scroll container. What a capture cannot show is the software keyboard: the sheet lifts and shortens against --db-keyboard-inset only when one is open, and no capture has one, so this is the editor at an inset of zero. Focus and the keyboard-avoided sheet are device-verified.
+
+| dark | light |
+|---|---|
+| ![panel-record-detail-sheet-body-editing dark](panels/panel-record-detail-sheet-body-editing-mobile-dark.png) | ![panel-record-detail-sheet-body-editing light](panels/panel-record-detail-sheet-body-editing-mobile-light.png) |
+
+Sources: `src/views/record-detail-panel.ts`, `src/views/note-body-region.ts`
+
+### Record detail — note body not written yet
+
+A record whose note has frontmatter and nothing else. One faint line rather than an empty box: without an affordance the records most in need of a body would be exactly the ones that could not be given one.
+
+| dark | light |
+|---|---|
+| ![panel-record-detail-sheet-body-empty dark](panels/panel-record-detail-sheet-body-empty-mobile-dark.png) | ![panel-record-detail-sheet-body-empty light](panels/panel-record-detail-sheet-body-empty-mobile-light.png) |
+
+Sources: `src/views/record-detail-panel.ts`, `src/views/note-body-region.ts`
 
 ### Table record peek
 
