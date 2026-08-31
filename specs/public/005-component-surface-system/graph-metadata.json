@@ -51,7 +51,9 @@
       "005 component surface",
       "surface system goal",
       "005 goal",
-      "component surface directive"
+      "component surface directive",
+      "005 handover",
+      "surface system handover"
     ],
     "key_topics": [
       "component",
@@ -72,13 +74,15 @@
     "key_files": [
       "spec.md",
       "goal.md",
+      "handover.md",
       "roadmap.md",
       "architecture-findings.md",
       "src/views/surface-contract.ts",
       "001-overlay-placement-and-menu-language/spec.md",
       "tools/live/probe.mjs",
       "tools/storybook/verify-placement.mjs",
-      "tools/lane/css-lane.json"
+      "tools/lane/css-lane.json",
+      "020-harness-fidelity-repair/acceptance-criteria.md"
     ],
     "entities": [
       {
@@ -91,6 +95,12 @@
         "name": "goal.md",
         "kind": "doc",
         "path": "goal.md",
+        "source": "derived"
+      },
+      {
+        "name": "handover.md",
+        "kind": "doc",
+        "path": "handover.md",
         "source": "derived"
       },
       {
@@ -188,21 +198,53 @@
         "kind": "key_phrase",
         "path": "goal.md",
         "source": "derived"
+      },
+      {
+        "name": "Session Handover",
+        "kind": "proper_noun",
+        "path": "handover.md",
+        "source": "derived"
+      },
+      {
+        "name": "a",
+        "kind": "key_phrase",
+        "path": "handover.md",
+        "source": "derived"
+      },
+      {
+        "name": "1. WHERE THIS STANDS",
+        "kind": "heading",
+        "path": "handover.md",
+        "source": "derived"
+      },
+      {
+        "name": "2. THE LENS — the single most transferable thing here",
+        "kind": "heading",
+        "path": "handover.md",
+        "source": "derived"
+      },
+      {
+        "name": "3. WHAT CHANGED, AND TWO THINGS I GOT WRONG",
+        "kind": "heading",
+        "path": "handover.md",
+        "source": "derived"
       }
     ],
     "causal_summary": "Phase parent for the program that gives floating surfaces, sheets, checkboxes and content rows one architecture, one placement authority, and acceptance criteria measured where users actually see them.",
     "created_at": "2026-08-29T12:53:52.104Z",
-    "last_save_at": "2026-08-31T03:46:57.646Z",
+    "last_save_at": "2026-08-31T04:32:17.214Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
       "spec.md",
-      "goal.md"
+      "goal.md",
+      "handover.md"
     ],
-    "source_fingerprint": "sha256:5bd98222b6234b03af9cd57e52d8a9b659420ebb5a8e9fe8a597bf56bd8a914a",
+    "source_fingerprint": "sha256:62c8cc922b9dd3421814f44421237e5dd31453e224f1bc18d9f5ea8fd58e7df3",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "aebd4a79d6d92c8cc7eb2b858faf73da854349a7a54f7ac74f6917c41efdc3a9"
+      "spec.md": "aebd4a79d6d92c8cc7eb2b858faf73da854349a7a54f7ac74f6917c41efdc3a9",
+      "handover.md": "8b2895d34c3b140969e4d23339a69f10bac70a1325d4d814295997ad553093e7"
     },
     "last_active_child_id": "public/005-component-surface-system/006-record-open-target",
     "last_active_at": null
