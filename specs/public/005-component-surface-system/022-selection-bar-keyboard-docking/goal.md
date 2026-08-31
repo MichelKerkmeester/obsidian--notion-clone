@@ -12,8 +12,8 @@ _memory:
     packet_pointer: "public/005-component-surface-system/022-selection-bar-keyboard-docking"
     last_updated_at: "2026-08-30T20:15:00Z"
     last_updated_by: "phase-reconciliation"
-    recent_action: "Goal authored after the fact; 6 of 8 criteria measured green"
-    next_safe_action: "Operator selects cells, opens the keyboard, reports what the bar does"
+    recent_action: "AC-1 withdrawn: harness sets --keyboard-height; bar has no fallback"
+    next_safe_action: "Publish the computed inset as a plugin variable; bar consumes it"
     blockers: []
     key_files:
       - "spec.md"
@@ -23,7 +23,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-022"
       parent_session_id: null
-    completion_pct: 90
+    completion_pct: 55
     open_questions:
       - "Which host shape is the operator's phone: visualViewport shrink or window resize"
     answered_questions:
@@ -72,8 +72,10 @@ this phase consumes it. Desktop is out of scope: it has room and no keyboard.
 <!-- ANCHOR:completion -->
 ## 3. COMPLETION CRITERIA
 
-- [x] With a keyboard open, the bar's bottom edge sits above it. Measured: **bottom 513px against a
-      keyboard covering 513..844**.
+- [ ] With a keyboard open, the bar's bottom edge sits above it. **Withdrawn, not met.** The 513px
+      measurement holds only because the harness sets `--keyboard-height` itself; nothing in the
+      plugin publishes it and the bar has no fallback, so on a host that stays silent the bar never
+      moves. The operator still sees it floating.
 - [x] With no keyboard, the bar rests where it always did. Measured: **828px**, and 828px again
       after a keyboard opens and closes.
 - [x] The bar's content fits its own box at phone width. Was **36px inside 28px**; now **46px inside

@@ -57,7 +57,7 @@ recomputed.
 
 | # | REQ | Measurement | Threshold | Before | After | State |
 |---|---|---|---|---|---|---|
-| AC-1 | REQ-002 | The bar's bottom edge against the keyboard's top edge, with the host reporting a keyboard | above it | under the keyboard: the rule read the viewport floor, which a keyboard does not move | **bar bottom 513px, keyboard covers 513..844** | Met |
+| AC-1 | REQ-002 | The bar's bottom edge against the keyboard's top edge, with the host reporting a keyboard | above it | under the keyboard: the rule read the viewport floor, which a keyboard does not move | **bar bottom 513px, keyboard covers 513..844 — but only because the harness sets the variable itself** | **Withdrawn** |
 | AC-2 | REQ-003 | The bar's resting bottom with no keyboard | unchanged from today | 828px | **828px, and 828px again after a keyboard opens and closes** | Met |
 | AC-3 | REQ-004 | The bar's content width against its own border box at phone width | content <= box | **36px inside a 28px box** — labels wrapped and clipped | **46px inside 46px** | Met |
 | AC-4 | REQ-005 | Whether every action is reachable, and whether an overflowing bar says so | reachable, and visibly scrollable | actions ran off the screen edge silently | **scrollWidth 558px against clientWidth 356px, `overflow-x: auto`, `scrollbar-width: thin`** | Met |
@@ -76,6 +76,31 @@ fails. The real margin is 2px plus the 1px tolerance.
 
 Recorded because the opposite was written here first, and "passes with nothing to spare" is the kind
 of claim that sounds appropriately cautious while being false.
+
+### AC-1 is withdrawn: the harness supplies the value the defect lives in
+
+The operator reports the bar still floating, and they are right. This row was marked Met on a
+green check, and the check is green for a reason that does not reach a device.
+
+`styles.css` docks the bar with `max(16px, env(safe-area-inset-bottom), var(--keyboard-height, 0px))`.
+**Nothing in this plugin sets `--keyboard-height`.** It is expected from the host, and the two source
+mentions of it are a comment and a read. The harness sets it directly on the document element before
+measuring, so the check proves the arithmetic *given* the variable, and says nothing about whether the
+variable ever arrives.
+
+The plugin already knows how to answer this properly. `keyboardInset()` takes the larger of the host
+variable and the visual viewport's own shrink, with a pinch-zoom guard — it works whether or not the
+host publishes anything. But it is called from exactly one place, inside the sheet placement, and
+writes a per-panel variable. The sheet therefore gets the robust number and the bar gets the fragile
+one, which is precisely the difference the operator is seeing: the sheet moves, the bar does not.
+
+This is the packet's founding failure in miniature, and the second time in this program a harness has
+supplied the single value a defect lives in — the earlier one hardcoded the sheet's bottom offset for
+the same reason.
+
+**What is owed:** publish the computed inset as a plugin-owned document-level variable and have the
+bar consume that instead, with the listener lifecycle that implies; then a check that does **not**
+set `--keyboard-height`, so it can only pass if the fallback works.
 
 ### Why AC-9 does not block the rest
 
