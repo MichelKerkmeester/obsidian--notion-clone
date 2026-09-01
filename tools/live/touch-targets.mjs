@@ -15,8 +15,16 @@
 // THE POINTER MODE IS THE POINT. The stylesheet raises controls under
 // `@media (pointer: coarse)`, and a page opened without touch emulation never
 // applies those rules — a sibling tool measured 53 checkboxes at 16x16 that a
-// phone paints at 28x28, and reported a surface no device renders. This page is
-// built with `hasTouch`, so what it measures is what a thumb meets.
+// phone paints at 28x28, and reported a surface no device renders.
+//
+// So the mode is forced at the engine and then PROVEN before every scenario is
+// measured, rather than asked for once and assumed. `hasTouch` does produce a
+// coarse pointer, but one gate run reported 198 controls newly under the floor
+// that eleven later runs could not reproduce, and the premise check added with
+// this comment caught the same page answering `pointer: coarse` with false.
+// Losing the mode does not shrink these numbers, it inflates them — so a run
+// that cannot establish its own premise now refuses and names the scenario
+// instead of publishing a count that accuses the product.
 //
 // THE FLOOR IS THIS PROJECT'S, NOT THE ONE I WOULD PICK. WCAG 2.5.5 Enhanced is
 // 44px, and measuring against it reports 784 controls short — but the packet
@@ -108,7 +116,17 @@ function findChrome() {
   throw new Error("touch-targets: no Chrome/Chromium found. Set SCREENSHOT_CHROME.");
 }
 
-const browser = await chromium.launch({ executablePath: findChrome() });
+// The coarse pointer is forced at the engine, not asked for at the context.
+//
+// `hasTouch` does give `pointer: coarse` — measured, three ways — but not reliably for the whole
+// life of a run: one gate run measured 198 controls that no later run could reproduce, and the
+// premise check below caught the same page reporting `pointer: coarse` as false. Blink's own
+// setting cannot drift the way a context flag did: 2 is COARSE and 1 is NONE-hover in its pointer
+// and hover enums, which is what a phone reports.
+const browser = await chromium.launch({
+  executablePath: findChrome(),
+  args: ["--blink-settings=primaryPointerType=2,availablePointerTypes=2,primaryHoverType=1,availableHoverTypes=1"],
+});
 const page = await browser.newPage({
   viewport: { width: 390, height: 844 },
   hasTouch: true,
@@ -119,6 +137,48 @@ const page = await browser.newPage({
 const styles = readFileSync(join(REPO, "styles.css"), "utf8");
 const theme = readFileSync(join(REPO, "tools/screenshots/theme.css"), "utf8");
 const runtime = readFileSync(join(REPO, "tools/screenshots/runtime-vars.css"), "utf8");
+
+// THE RUN HAS TO PROVE ITS OWN PREMISE BEFORE IT MEASURES ANYTHING.
+//
+// Everything below is measured through two conditions: that the page reports a coarse pointer, and
+// that the plugin's stylesheet is actually attached. Lose either and the numbers do not shrink —
+// they GROW, because the coarse rules are what raise these controls, so a broken run looks exactly
+// like a tree that regressed 198 controls at once. That reading appeared in one gate run and could
+// not be reproduced in eleven, which is the worst shape a check can have: an unexplained number
+// that accuses the product.
+//
+// So the premise is asserted rather than assumed, and a run that cannot establish it exits with a
+// message naming what was missing instead of a count. A wrong number is worse than no number.
+async function assertPremise(page, scenarioId) {
+  const state = await page.evaluate(() => ({
+    coarse: window.matchMedia("(pointer: coarse)").matches,
+    // A control the coarse rules raise, built here rather than borrowed from a scenario so the
+    // canary cannot go missing when a fixture changes.
+    canary: (() => {
+      const probe = document.createElement("input");
+      probe.type = "checkbox";
+      probe.className = "db-checkbox db-checkbox-row";
+      document.body.appendChild(probe);
+      const box = probe.getBoundingClientRect();
+      probe.remove();
+      return { width: Math.round(box.width), height: Math.round(box.height) };
+    })(),
+  }));
+  if (!state.coarse) {
+    console.error(`touch-targets: REFUSED on scenario "${scenarioId}" — the page does not report a coarse pointer, so none of the`
+      + " rules that raise these controls applied. Every measurement would be of a surface no device"
+      + " renders, and the count would be far too high rather than too low.");
+    return false;
+  }
+  if (state.canary.width < FLOOR || state.canary.height < FLOOR) {
+    console.error(`touch-targets: REFUSED on scenario "${scenarioId}" — the coarse-pointer canary measured `
+      + `${state.canary.width}x${state.canary.height}, under the ${FLOOR}px floor it is raised to.`
+      + " The stylesheet is not attached, or the rule that raises it is gone. Either way the run"
+      + " would report a number about a page the plugin did not style.");
+    return false;
+  }
+  return true;
+}
 
 const findings = [];
 let measured = 0;
@@ -133,6 +193,13 @@ for (const scenario of SCENARIOS) {
   }
   await page.setContent(`<body class="is-phone theme-dark"><div id="shot">${html}</div></body>`);
   for (const content of [styles, theme, runtime]) await page.addStyleTag({ content });
+  // Checked on every scenario, not once at startup: `setContent` replaces the document and the
+  // style tags with it, so a premise established before the loop says nothing about the page any
+  // particular scenario was measured on.
+  if (!(await assertPremise(page, scenario.id))) {
+    await browser.close();
+    process.exit(1);
+  }
   scenariosRendered += 1;
 
   const result = await page.evaluate(({ selector, floor, enhanced, declared, id }) => {

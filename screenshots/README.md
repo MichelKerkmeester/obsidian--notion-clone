@@ -169,6 +169,16 @@ The wrap is 28px wide at rest and widens to 150px under is-active; the clear but
 
 Sources: `src/views/toolbar-renderer.ts`
 
+### More-tools dropdown
+
+The toolbar's overflow menu. Rows come from the shared createMenuRow but carry db-toolbar-menu-row, whose own inline padding is what the heading is aligned to.
+
+| dark | light |
+|---|---|
+| ![chrome-utilities-popover dark](components/chrome-utilities-popover-mobile-dark.png) | ![chrome-utilities-popover light](components/chrome-utilities-popover-mobile-light.png) |
+
+Sources: `src/views/toolbar-renderer.ts`, `src/views/menu-row.ts`
+
 ### View switcher tablist
 
 The active tab carries is-active; the ⋯ tab appears only once the toolbar has measured tabs out of view, and opens the all-views hub.

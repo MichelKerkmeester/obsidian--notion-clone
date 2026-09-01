@@ -192,3 +192,41 @@ the mechanism or a coincidence needs measuring, not arguing.
 
 **Recorded as a correction rather than quietly rewritten**, because writing a falsification test and
 not running it is exactly the failure this packet exists to catch, and it happened here.
+
+### The lead, run — 2026-09-01
+
+**The lead is refuted, and the gap is fixed.** Both by the same measurement, in the placement lane.
+
+*The lead was wrong.* Removing `.is-phone .db-menu-section`'s `padding-inline` in place moves the
+phone menu's heading **20 → 12** and leaves the desktop one at **316**. A rule scoped to the phone
+cannot reach a desktop report; the rule is real, it does align the phone heading, and it is not the
+mechanism behind report 28.
+
+*The mechanism is the per-surface row inset, measured.* The More-tools dropdown read **heading 756
+against icon 768** — the rows take `db-toolbar-menu-row`'s `padding: 6px 12px` and the heading takes
+`.db-panel-header`, which declares no inline padding at all. After: **768 / 768**.
+
+**Two things the first fix got wrong, both caught by extending the check rather than by re-reading
+the CSS.**
+
+- *It was container-scoped*, and passed. On a phone these surfaces present as sheets and portal onto
+  the body, leaving `.note-database-container` behind — so the rule was correct on the desktop half
+  and simply **absent** where the rows are largest. Caught by mounting the same dropdown on the body:
+  `heading left 56, row icon left 72`. The rules are now keyed to the popover, which is the lesson
+  `.db-menu-item` already carries three hundred lines above it in the same file.
+- *One inset is not enough.* The row takes `--size-4-4` under `.is-phone` and `--db-space-5`
+  otherwise, so a single number is four pixels adrift on one presentation: `heading 32, icon 36`.
+
+**And the surface had never been photographed.** Four operator reports named it and no capture
+existed, so nothing a person could open would ever have shown this. `chrome-utilities-popover` now
+captures it at both widths and both themes; both were opened and read. Two icon glyphs were added
+with it, because `renderUtilitiesOverflowButton` names `refresh-cw` and `settings-2` and the fixture
+file had neither — the same omission that once drew a bare delete row.
+
+**What is deliberately not asserted.** The desktop-portalled pairing reads `heading 916, icon 912`:
+on the body the *row* loses `.note-database-container .db-toolbar-menu-row` and falls back to the
+shared row's own inset. A desktop popover is never portalled — only the sheet presentation moves —
+so that is a combination no surface renders, and a check failing on it would be asking the
+stylesheet to be right about something the app does not produce. Un-scoping the row rule would
+settle it and is **not taken**: it drops the row from two classes to one and hands the next host
+rule a fight it does not currently have.

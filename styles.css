@@ -19758,6 +19758,37 @@ body.is-tablet .note-database-container .db-record-open-btn {
   box-sizing: border-box;
 }
 
+/* A heading sits on the icon column of the rows beneath it, on every surface that draws these rows.
+
+   Four operator reports named this surface before it was measured. The rows come from the shared
+   `createMenuRow`, but they carry `db-toolbar-menu-row`, whose `padding: 6px 12px` overrides the
+   shared row's inline inset — and the heading lives in `.db-panel-header`, which declares no inline
+   padding at all. So the heading took the popover's own content edge and the rows' first ink sat
+   12px further in: measured at heading 756 against icon 768.
+
+   The earlier hypothesis blamed `.is-phone .db-menu-section`. That rule is real and does align the
+   phone menu's heading, but it cannot reach a desktop popover, and the measurement says so —
+   removing its padding-inline moves the phone heading 20 → 12 and leaves the desktop one at 316.
+   The mechanism is the per-surface row inset, which is why the fix is stated in the same variable
+   the rows use rather than as a literal that would drift away from them. */
+:is(.db-toolbar-utilities-popover, .db-new-template-popover) .db-panel-header {
+  padding-inline: var(--db-space-5);
+}
+
+/* Keyed to the popover, not to the container that usually holds it — the same lesson
+   `.db-menu-item` above already records. On a phone these surfaces present as sheets and are
+   portalled onto the body, which leaves `.note-database-container` behind; a rule scoped to the
+   container would have been correct on the desktop half and absent on exactly the presentation
+   where the rows grow for a thumb.
+
+   And the phone inset is the row's phone inset, not the desktop one. `.is-phone .db-menu-item`
+   takes `--size-4-4` where the desktop row takes `--db-space-5`, so a heading pinned to one number
+   is four pixels adrift on the other presentation: measured at heading 32 against icon 36 before
+   this second rule existed. */
+.is-phone :is(.db-toolbar-utilities-popover, .db-new-template-popover) .db-panel-header {
+  padding-inline: var(--size-4-4, 16px);
+}
+
 .note-database-container .db-all-views-header {
   display: grid;
   grid-template-columns: minmax(0, 1fr);

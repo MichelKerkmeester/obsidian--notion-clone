@@ -1,8 +1,8 @@
 {
   "holder": null,
-  "acquiredAt": "2026-09-01T08:20:00Z",
-  "baselineHash": "810036205adf",
-  "baselineCommit": "3990be47b525",
+  "acquiredAt": "2026-09-01T09:10:00Z",
+  "baselineHash": "b346c59576b5",
+  "baselineCommit": "3c6522897379",
   "history": [
     {
       "event": "acquire",
@@ -257,7 +257,7 @@
       "phase": "001-overlay-width-and-chrome",
       "at": "2026-08-29T23:24:38.135Z",
       "hash": "bebe707592e0",
-      "note": "panel chrome named twice — scoped and self-owned — so a portalled panel keeps its own border and radius; same specificity, no in-container change"
+      "note": "panel chrome named twice \u2014 scoped and self-owned \u2014 so a portalled panel keeps its own border and radius; same specificity, no in-container change"
     },
     {
       "event": "edit",
@@ -278,7 +278,7 @@
       "phase": "001-overlay-width-and-chrome",
       "at": "2026-08-29T23:38:08.358Z",
       "hash": "d9b699e3ab49",
-      "note": "container box guard tried and reverted — :not() raised specificity and moved 34 captures; unrecoverable portal loss stays 0, imposed stays per-surface work"
+      "note": "container box guard tried and reverted \u2014 :not() raised specificity and moved 34 captures; unrecoverable portal loss stays 0, imposed stays per-surface work"
     },
     {
       "event": "edit",
@@ -389,7 +389,7 @@
       "phase": "014-desktop-select-checkbox",
       "at": "2026-08-30T06:56:10Z",
       "hash": "b4dc64bb4e72",
-      "note": "Desktop select checkbox re-pinned. The shared checkbox component stamps its own class on the input, and every select-column rule was guarded :not(that class) — so the guard, written as a fallback for un-migrated controls, silently switched off the pin as well as the appearance it was meant to scope. The box fell into flow at the left wall of a cell with overflow:hidden and was sheared: measured 0px clearance from the clip edge on all 25 cells, header and rows. The phone arm had already been de-guarded on its own; this mirrors that repair unguarded so it applies at every width. Measured desktop clearance 0 -> 18px left, 25 -> 7px right, header and rows exactly coincident; phone unchanged at 26/7. Chinese comment block replaced with an English one carrying the same rationale."
+      "note": "Desktop select checkbox re-pinned. The shared checkbox component stamps its own class on the input, and every select-column rule was guarded :not(that class) \u2014 so the guard, written as a fallback for un-migrated controls, silently switched off the pin as well as the appearance it was meant to scope. The box fell into flow at the left wall of a cell with overflow:hidden and was sheared: measured 0px clearance from the clip edge on all 25 cells, header and rows. The phone arm had already been de-guarded on its own; this mirrors that repair unguarded so it applies at every width. Measured desktop clearance 0 -> 18px left, 25 -> 7px right, header and rows exactly coincident; phone unchanged at 26/7. Chinese comment block replaced with an English one carrying the same rationale."
     },
     {
       "event": "release",
@@ -403,35 +403,35 @@
       "phase": "012-mobile-touch-semantics",
       "at": "2026-08-30T07:17:02Z",
       "hash": "b4dc64bb4e72",
-      "note": "Taken clean: 014 released at b4dc64bb4e72 and the stylesheet had not moved since. Two edits planned — the main-item cell's thumb target, and the sheet grab band the outstanding list records as unowned."
+      "note": "Taken clean: 014 released at b4dc64bb4e72 and the stylesheet had not moved since. Two edits planned \u2014 the main-item cell's thumb target, and the sheet grab band the outstanding list records as unowned."
     },
     {
       "event": "edit",
       "phase": "012-mobile-touch-semantics",
       "at": "2026-08-30T07:33:01Z",
       "hash": "d1c0cd5f207e",
-      "note": "Record sheet's grab band stopped at its own header. That sheet pads its top by --db-space-6, four times the menu sheets, so its bar sits 24px down and a band centred on it ran 2..50px from the sheet's top edge while the header starts at 32. Measured consequence: the band answered every press aimed at the title, and both 44px header actions delivered 26px. The title's rename opens on a double-click, so the second tap never reached it — which is why renaming looked as though tap-to-open had removed it from the phone. Band now runs from the sheet's top edge to the bottom of the handle's own margin box: 35px, 0 stolen, title reachable, both actions 44 of 44, and a real double-tap on the title renames again. Menu sheets keep the shared rule unchanged and were measured at 41px with 0 stolen before and after. The band is an invisible pseudo-element, so this is a hit-testing change only: screenshots of both sheet surfaces are byte-identical with the override on and off."
+      "note": "Record sheet's grab band stopped at its own header. That sheet pads its top by --db-space-6, four times the menu sheets, so its bar sits 24px down and a band centred on it ran 2..50px from the sheet's top edge while the header starts at 32. Measured consequence: the band answered every press aimed at the title, and both 44px header actions delivered 26px. The title's rename opens on a double-click, so the second tap never reached it \u2014 which is why renaming looked as though tap-to-open had removed it from the phone. Band now runs from the sheet's top edge to the bottom of the handle's own margin box: 35px, 0 stolen, title reachable, both actions 44 of 44, and a real double-tap on the title renames again. Menu sheets keep the shared rule unchanged and were measured at 41px with 0 stolen before and after. The band is an invisible pseudo-element, so this is a hit-testing change only: screenshots of both sheet surfaces are byte-identical with the override on and off."
     },
     {
       "event": "edit",
       "phase": "012-mobile-touch-semantics",
       "at": "2026-08-30T07:33:01Z",
       "hash": "d1c0cd5f207e",
-      "note": "Main-item cell touch target: tried and reverted, byte-identically. A downward negative-inset pseudo-element to lift the 169x34 cell to the 44px floor is a measured no-op here for two independent reasons — the cell clips its overflow, so the pseudo-element is cut back to the cell box (the last row gained 0px), and in a contiguous table the next row's own area begins exactly where this one's box ends, so there are no dead pixels to reclaim. Only row height reaches 44 and that is a density setting. Reverted rather than shipped, since a rule that measures as a no-op advertises a fix that is not there. Replaced by a check that measures the reach and asserts the property that IS achievable: no press lands on the wrong row."
+      "note": "Main-item cell touch target: tried and reverted, byte-identically. A downward negative-inset pseudo-element to lift the 169x34 cell to the 44px floor is a measured no-op here for two independent reasons \u2014 the cell clips its overflow, so the pseudo-element is cut back to the cell box (the last row gained 0px), and in a contiguous table the next row's own area begins exactly where this one's box ends, so there are no dead pixels to reclaim. Only row height reaches 44 and that is a density setting. Reverted rather than shipped, since a rule that measures as a no-op advertises a fix that is not there. Replaced by a check that measures the reach and asserts the property that IS achievable: no press lands on the wrong row."
     },
     {
       "event": "release",
       "phase": "012-mobile-touch-semantics",
       "at": "2026-08-30T07:33:01Z",
       "hash": "d1c0cd5f207e",
-      "note": "One block added, nothing else touched: removing it returns styles.css to b4dc64bb4e72 byte for byte. NOT recaptured, on the coordinator's instruction — screenshots-fresh is red from the select-checkbox pin released without a recapture, and one recapture after this release covers both. This edit contributes no visual churn to that recapture: measured byte-identical."
+      "note": "One block added, nothing else touched: removing it returns styles.css to b4dc64bb4e72 byte for byte. NOT recaptured, on the coordinator's instruction \u2014 screenshots-fresh is red from the select-checkbox pin released without a recapture, and one recapture after this release covers both. This edit contributes no visual churn to that recapture: measured byte-identical."
     },
     {
       "event": "acquire",
       "phase": "004-checkbox-ownership",
       "at": "2026-08-30T07:57:53Z",
       "hash": "d1c0cd5f207e",
-      "note": "Taken clean: 012 released at d1c0cd5f207e and the stylesheet had not moved since. Closing the checkbox-ownership findings — the one live ancestor-keyed appearance rule, the switch shape that does not survive leaving the token root, the switch hit target, and the reorder button overlapping the row checkbox."
+      "note": "Taken clean: 012 released at d1c0cd5f207e and the stylesheet had not moved since. Closing the checkbox-ownership findings \u2014 the one live ancestor-keyed appearance rule, the switch shape that does not survive leaving the token root, the switch hit target, and the reorder button overlapping the row checkbox."
     },
     {
       "event": "edit",
@@ -514,7 +514,7 @@
       "phase": "021-sheet-inline-edit-alignment",
       "at": "2026-08-30T13:38:18.322Z",
       "hash": "3e9b59084860",
-      "note": "Recaptured: 224 entries, screenshots:verify green. Five images differ from the previous commit and none is attributable — churn re-measured over three identical runs with no code change, and the four non-sheet fixtures contain no .db-record-detail-panel so no rule added here can match them; the record-sheet fixture moved 6 pixels of 5,184,000 at max delta 1/255. gate 14 green exit 0, vitest 444, placement 186/190 with the 4 declared reds. Not committed."
+      "note": "Recaptured: 224 entries, screenshots:verify green. Five images differ from the previous commit and none is attributable \u2014 churn re-measured over three identical runs with no code change, and the four non-sheet fixtures contain no .db-record-detail-panel so no rule added here can match them; the record-sheet fixture moved 6 pixels of 5,184,000 at max delta 1/255. gate 14 green exit 0, vitest 444, placement 186/190 with the 4 declared reds. Not committed."
     },
     {
       "event": "acquire",
@@ -574,7 +574,7 @@
       "phase": "022-selection-bar-keyboard-docking",
       "at": "2026-08-30T16:11:04Z",
       "hash": "e5ada7e445ce",
-      "note": "Released by the coordinator. The dispatched executor finished its work and exited without releasing, leaving the lane held by a phase that was no longer running. The stylesheet hash is unchanged from its last recorded edit, so nothing is being absorbed — this closes a leaked hold, not an unrecorded change."
+      "note": "Released by the coordinator. The dispatched executor finished its work and exited without releasing, leaving the lane held by a phase that was no longer running. The stylesheet hash is unchanged from its last recorded edit, so nothing is being absorbed \u2014 this closes a leaked hold, not an unrecorded change."
     },
     {
       "event": "acquire",
@@ -665,35 +665,35 @@
       "phase": "030-gallery-view-deprecation",
       "at": "2026-09-01T03:42:00Z",
       "hash": "3c11e032ebb8",
-      "note": "One block added to the existing @media (pointer: coarse) rule: min-width/min-height 28px on both classes. Raised THERE rather than at the declaration, because 26px is a density choice for the pointer that can hit it and changing it at source would move every desktop capture to fix a phone. min-width/min-height rather than width/height because the source-rule button declares its own min-width and a width alone loses to it — the same silent defeat the checkbox rule above it was written for. Measured: the census goes 286 -> 224 undeclared, both classes to zero, and the ratchet baseline is lowered to 224 in the same change so it stays a ratchet rather than an allowance."
+      "note": "One block added to the existing @media (pointer: coarse) rule: min-width/min-height 28px on both classes. Raised THERE rather than at the declaration, because 26px is a density choice for the pointer that can hit it and changing it at source would move every desktop capture to fix a phone. min-width/min-height rather than width/height because the source-rule button declares its own min-width and a width alone loses to it \u2014 the same silent defeat the checkbox rule above it was written for. Measured: the census goes 286 -> 224 undeclared, both classes to zero, and the ratchet baseline is lowered to 224 in the same change so it stays a ratchet rather than an allowance."
     },
     {
       "event": "release",
       "phase": "030-gallery-view-deprecation",
       "at": "2026-09-01T03:55:00Z",
       "hash": "3c11e032ebb8",
-      "note": "Recaptured and reviewed. 20 captures moved, all of them mobile: the filter panels, the record sheet and the list rows were opened and read, and the raised controls sit correctly with no row growing to meet them. Desktop is untouched by construction — the rule is inside a coarse-pointer media block — and the desktop captures that moved are the same unexplained machine-level churn the previous four releases recorded, not this edit. Per-image operator sign-off still owed, as for every prior release."
+      "note": "Recaptured and reviewed. 20 captures moved, all of them mobile: the filter panels, the record sheet and the list rows were opened and read, and the raised controls sit correctly with no row growing to meet them. Desktop is untouched by construction \u2014 the rule is inside a coarse-pointer media block \u2014 and the desktop captures that moved are the same unexplained machine-level churn the previous four releases recorded, not this edit. Per-image operator sign-off still owed, as for every prior release."
     },
     {
       "event": "acquire",
       "phase": "004-checkbox-ownership",
       "at": "2026-09-01T04:30:00Z",
       "hash": "3c11e032ebb8",
-      "note": "Taken for a state this packet's own criterion asks about and nothing measured: 'checked, indeterminate, disabled and focus each produce a measurable difference, per family'. The pass built to answer it found the toggle switch reading byte-identical focused and at rest across background, border, image, shadow and opacity — no focus indicator at all, where the three checkbox families each get one from .db-checkbox:focus-visible."
+      "note": "Taken for a state this packet's own criterion asks about and nothing measured: 'checked, indeterminate, disabled and focus each produce a measurable difference, per family'. The pass built to answer it found the toggle switch reading byte-identical focused and at rest across background, border, image, shadow and opacity \u2014 no focus indicator at all, where the three checkbox families each get one from .db-checkbox:focus-visible."
     },
     {
       "event": "edit",
       "phase": "004-checkbox-ownership",
       "at": "2026-09-01T04:32:00Z",
       "hash": "a4bb85a2e2ab",
-      "note": "One rule: .db-toggle-switch:focus-visible, the same outline and ring the checkbox carries, because they are the same control to a reader even though they are different shapes. Watched failing by renaming the selector: the family reads 'focus NO'. THE FINDING ALMOST WENT THE OTHER WAY. The first run reported the switch with no checked, indeterminate or focus state, and the cause was the pass reading a signature in the same tick as the state change while the switch's 0.15s background transition was still running — the other three families change background-image, which has no transition, so only one family lied. Transitions are now disabled for that pass. A theme root, a :checked match and a pseudo-element read all had to be ruled out first, and recording it as a product defect would have been a fabricated bug in a shipped control."
+      "note": "One rule: .db-toggle-switch:focus-visible, the same outline and ring the checkbox carries, because they are the same control to a reader even though they are different shapes. Watched failing by renaming the selector: the family reads 'focus NO'. THE FINDING ALMOST WENT THE OTHER WAY. The first run reported the switch with no checked, indeterminate or focus state, and the cause was the pass reading a signature in the same tick as the state change while the switch's 0.15s background transition was still running \u2014 the other three families change background-image, which has no transition, so only one family lied. Transitions are now disabled for that pass. A theme root, a :checked match and a pseudo-element read all had to be ruled out first, and recording it as a product defect would have been a fabricated bug in a shipped control."
     },
     {
       "event": "release",
       "phase": "004-checkbox-ownership",
       "at": "2026-09-01T04:45:00Z",
       "hash": "a4bb85a2e2ab",
-      "note": "Recaptured and reviewed. A focus ring is a :focus-visible state and no capture holds focus, so no PNG moves for this edit and none did beyond the usual churn — which is itself worth stating rather than presenting an unchanged capture set as sign-off. The state pass is the evidence here, and it is in the tool rather than in a picture. Per-image operator sign-off still owed, as for every prior release."
+      "note": "Recaptured and reviewed. A focus ring is a :focus-visible state and no capture holds focus, so no PNG moves for this edit and none did beyond the usual churn \u2014 which is itself worth stating rather than presenting an unchanged capture set as sign-off. The state pass is the evidence here, and it is in the tool rather than in a picture. Per-image operator sign-off still owed, as for every prior release."
     },
     {
       "event": "acquire",
@@ -721,14 +721,14 @@
       "phase": "005-content-row-rhythm",
       "at": "2026-09-01T06:00:00Z",
       "hash": "1ce52a63b090",
-      "note": "Taken during the visual pass for a defect only a capture shows: the timeline's title read 'M...' on a phone — one character and an ellipsis, which costs space and tells the reader nothing. Measured: the range 'Mar 23 - Apr 5' wants 153px and the header gives it 61. The calendar's week view clips the same way, 124 wanted against 81. Only the month view's single word fits."
+      "note": "Taken during the visual pass for a defect only a capture shows: the timeline's title read 'M...' on a phone \u2014 one character and an ellipsis, which costs space and tells the reader nothing. Measured: the range 'Mar 23 - Apr 5' wants 153px and the header gives it 61. The calendar's week view clips the same way, 124 wanted against 81. Only the month view's single word fits."
     },
     {
       "event": "edit",
       "phase": "005-content-row-rhythm",
       "at": "2026-09-01T06:05:00Z",
       "hash": "16dfd395f592",
-      "note": "Two declarations under .is-phone: the calendar and timeline headers wrap, and the title takes a full line. ALWAYS, not only when it clips — wrapping on overflow alone would make the same view's header jump 26px between a month whose name fits and a range that does not, which is a worse defect than the one being fixed. Shrinking the font does not reach it: at 14px the range still wants 103px against 61, measured. The controls cannot yield either, being icon buttons at a fixed size. After: 0 of 3 temporal titles clipped, both calendar headers 97px and the timeline 89px — the 8px is their different control sets and predates this."
+      "note": "Two declarations under .is-phone: the calendar and timeline headers wrap, and the title takes a full line. ALWAYS, not only when it clips \u2014 wrapping on overflow alone would make the same view's header jump 26px between a month whose name fits and a range that does not, which is a worse defect than the one being fixed. Shrinking the font does not reach it: at 14px the range still wants 103px against 61, measured. The controls cannot yield either, being icon buttons at a fixed size. After: 0 of 3 temporal titles clipped, both calendar headers 97px and the timeline 89px \u2014 the 8px is their different control sets and predates this."
     },
     {
       "event": "release",
@@ -749,14 +749,14 @@
       "phase": "005-content-row-rhythm",
       "at": "2026-09-01T07:02:00Z",
       "hash": "b113cd1af39e",
-      "note": "One declaration: flex-wrap: wrap on .db-toolbar. The earlier note called the two fixes opposite directions and that was wrong — wrapping is ADDITIVE. flex-wrap does nothing at any width where the row already fits, so 402 and up are untouched by construction, and at 320 the clusters take a second line instead of overhanging. Letting the cluster shrink was the alternative and does not work: it is flex: 0 0 auto with fixed-size icon children and overflow: visible, so shrinking moves the overflow into the cluster rather than removing it. Measured: header descendants past the header's content box 1 -> 0, and back to 1 with the declaration removed."
+      "note": "One declaration: flex-wrap: wrap on .db-toolbar. The earlier note called the two fixes opposite directions and that was wrong \u2014 wrapping is ADDITIVE. flex-wrap does nothing at any width where the row already fits, so 402 and up are untouched by construction, and at 320 the clusters take a second line instead of overhanging. Letting the cluster shrink was the alternative and does not work: it is flex: 0 0 auto with fixed-size icon children and overflow: visible, so shrinking moves the overflow into the cluster rather than removing it. Measured: header descendants past the header's content box 1 -> 0, and back to 1 with the declaration removed."
     },
     {
       "event": "release",
       "phase": "005-content-row-rhythm",
       "at": "2026-09-01T07:15:00Z",
       "hash": "b113cd1af39e",
-      "note": "Recaptured and reviewed. No capture moves: the census measures at 320px and the capture harness renders at 402 and 1440, where the rule is inert by construction — stated rather than presented as sign-off. It does not settle what the narrowest supported width IS, which is still the operator's call; it makes the surface correct at either answer. Per-image operator sign-off still owed."
+      "note": "Recaptured and reviewed. No capture moves: the census measures at 320px and the capture harness renders at 402 and 1440, where the rule is inert by construction \u2014 stated rather than presented as sign-off. It does not settle what the narrowest supported width IS, which is still the operator's call; it makes the surface correct at either answer. Per-image operator sign-off still owed."
     },
     {
       "event": "acquire",
@@ -770,7 +770,7 @@
       "phase": "001-overlay-placement-and-menu-language",
       "at": "2026-09-01T08:05:00Z",
       "hash": "810036205adf",
-      "note": "One literal fallback: font-size: var(--db-font-md, 13px) on .db-menu-item.db-menu-item. Type tokens live on the plugin's token roots, so a row in a surface mounted outside them resolved the var to nothing, the declaration was dropped entirely, and the row took whatever the host gives a bare button — measured at 14px on a bare page and 16px in the sheet. The switch's radius carries the same fallback for the same reason. TWO THINGS WORTH RECORDING. The fallback was first added to .db-menu-item and changed nothing, because this doubled-specificity rule already owned the property — a shadowed declaration looks exactly like one that did not work. And the existing check for this ('a menu row lays out identically in any sheet') compares min-height, padding and height, all of which the row declares; the one property it did NOT declare is the one that drifted, which is the whole argument for set equality over a spot check. Measured: 3 containers, 2 signatures -> 1. Red again with the fallback removed."
+      "note": "One literal fallback: font-size: var(--db-font-md, 13px) on .db-menu-item.db-menu-item. Type tokens live on the plugin's token roots, so a row in a surface mounted outside them resolved the var to nothing, the declaration was dropped entirely, and the row took whatever the host gives a bare button \u2014 measured at 14px on a bare page and 16px in the sheet. The switch's radius carries the same fallback for the same reason. TWO THINGS WORTH RECORDING. The fallback was first added to .db-menu-item and changed nothing, because this doubled-specificity rule already owned the property \u2014 a shadowed declaration looks exactly like one that did not work. And the existing check for this ('a menu row lays out identically in any sheet') compares min-height, padding and height, all of which the row declares; the one property it did NOT declare is the one that drifted, which is the whole argument for set equality over a spot check. Measured: 3 containers, 2 signatures -> 1. Red again with the fallback removed."
     },
     {
       "event": "release",
@@ -778,14 +778,35 @@
       "at": "2026-09-01T08:20:00Z",
       "hash": "810036205adf",
       "note": "Recaptured and reviewed. The owned-menu and record-sheet captures were opened and read; the rows carry one type across both. Per-image operator sign-off still owed."
+    },
+    {
+      "event": "acquire",
+      "phase": "027-sheet-menu-grammar-and-motion",
+      "at": "2026-09-01T09:10:00Z",
+      "hash": "810036205adf",
+      "note": "Operator report 28, now measured rather than argued. The More-tools dropdown's heading sits at 756 and its rows' icons at 768 \u2014 12px adrift, on a surface whose rows already come from the shared factory. The packet's own lead (the .is-phone heading rule) is refuted by the same measurement: removing that rule's padding-inline moves the phone heading 20 to 12 and leaves the desktop one at 316. So the mechanism is the per-surface row inset, not the phone rule."
+    },
+    {
+      "event": "edit",
+      "phase": "027-sheet-menu-grammar-and-motion",
+      "at": "2026-09-01T09:35:00Z",
+      "hash": "b346c59576b5",
+      "note": "Two rules, giving the More-tools dropdown's heading the inset its own rows take. Measured before: heading 756 against icon 768 on desktop, 32 against 36 on a phone. After: 768/768 and 36/36. THREE THINGS WORTH RECORDING. The packet's own lead blamed `.is-phone .db-menu-section`; the ablation refutes it \u2014 removing that rule's padding-inline moves the phone menu's heading 20 to 12 and leaves the desktop one at 316, and a rule scoped to the phone cannot reach a desktop report. The first version of the fix was container-scoped and passed both in-container checks while being absent on the phone sheet, which portals out of `.note-database-container` \u2014 so the rules are keyed to the popover, the same lesson `.db-menu-item` already carries three hundred lines above. And the phone inset is not the desktop one: the row takes `--size-4-4` under `.is-phone` and `--db-space-5` otherwise, so one number would have been four pixels adrift on one of the two presentations. Both halves watched red."
+    },
+    {
+      "event": "release",
+      "phase": "027-sheet-menu-grammar-and-motion",
+      "at": "2026-09-01T09:40:00Z",
+      "hash": "b346c59576b5",
+      "note": "Recaptured and read. A new scenario, chrome-utilities-popover, photographs this surface for the first time \u2014 four operator reports had named it and nothing had ever pictured it. Desktop and phone captures opened and read: heading and icon column share an edge in both. Two icon glyphs were added with it, because renderUtilitiesOverflowButton names `refresh-cw` and `settings-2` and this file had neither, which would have drawn bare rows the renderer never makes. Per-image operator sign-off still owed, as everywhere."
     }
   ],
   "outstanding": [
     "000-surface-contract-and-truthful-harness: the recapture happened and is signed off. Commit 52e96cc carries 18 PNGs plus the manifest, and capture-review.md's Release 2 records the .db-surface token-root edit, dated, reviewer named, 19 changed images. What is still owed is narrower than this entry claimed: only 5 of the 19 carry an individual verdict and 14 sit under one bulk 'expected-change' line, and every verdict is an assistant reading a regenerated PNG. Device confirmation remains outstanding, but that is the program's closing condition for every phase rather than a debt this lane can clear.",
     "Two separate facts were conflated here and both are now named. FIRST: 001-overlay-width-and-chrome acquired the lane a second time (history 36) and made four edits, the last leaving the stylesheet at d9b699e3ab49, with NO release event. That hold is still open in the record. SECOND: the drift from d9b699e3ab49 to 22f82f54a72b was NOT 001's. History 41 claims that exact hash for 003-mobile-sheet-presentation, marked RECORDED LATE -- the grab handle given touch-action none and a 160x44 hit band. So the unsigned edit has a claimant and it is 003; what 001 owes is a release, not an edit. The screenshot churn belongs with the 003 edit that caused it.",
-    "The sheet grab band still falls short of the operator's 48px, and now the reason is measured rather than guessed. The theft is fixed — the record sheet's band no longer covers its own title or the top 18px of its two 44px actions — but the band is 35px on the record sheet and 41px on the owned-menu sheet, because that is all the chrome those sheets have above their first content: 33px and 40px respectively. 48px of exclusive drag band does not fit above either header. Closing it means making the sheet header taller, which moves every sheet's content and every capture of it, or per-surface overrides that each claim their own free space. Both are visual decisions for the operator; verify-placement pins the current numbers either way.",
+    "The sheet grab band still falls short of the operator's 48px, and now the reason is measured rather than guessed. The theft is fixed \u2014 the record sheet's band no longer covers its own title or the top 18px of its two 44px actions \u2014 but the band is 35px on the record sheet and 41px on the owned-menu sheet, because that is all the chrome those sheets have above their first content: 33px and 40px respectively. 48px of exclusive drag band does not fit above either header. Closing it means making the sheet header taller, which moves every sheet's content and every capture of it, or per-surface overrides that each claim their own free space. Both are visual decisions for the operator; verify-placement pins the current numbers either way.",
     "--text-muted on the plugin's own panel measures 4.1:1 in the light capture theme at 12px, below the 4.5:1 floor for body text. It is the token .db-menu-section, .db-add-view-field-label and every muted caption in the plugin share, so this is a program-wide decision rather than one surface's. Dark measures 4.89:1 and passes.",
-    "The select-column appearance block (border, accent fill, custom checkmark) is still guarded :not(the shared checkbox class) and is therefore dead code, as are the equivalent modal and CSV-option blocks. The shared component supplies all of it, so nothing is visibly missing — but three dead blocks remain in the sheet and the next reader will believe they are live. Removing them is a separate, capture-affecting change.",
+    "The select-column appearance block (border, accent fill, custom checkmark) is still guarded :not(the shared checkbox class) and is therefore dead code, as are the equivalent modal and CSV-option blocks. The shared component supplies all of it, so nothing is visibly missing \u2014 but three dead blocks remain in the sheet and the next reader will believe they are live. Removing them is a separate, capture-affecting change.",
     "DECLINED, with the shortfall stated: the table's main-item cell measures 169x34 against WCAG 2.5.5 AAA's 44px (40px at the loosest density). The operator chose density - row height stays at 34px and no phone-only override is added, because raising it would override the reader's own density setting, which is a deliberate preference. WCAG 2.5.8 AA's 24px floor is met. verify-placement reports the 33px reach on every run, so the number stays visible rather than being closed by silence.",
     "The list roving-tabindex selector at src/views/card-roving-tabindex.ts:313 queries .db-card-field, .db-gallery-card-field and .db-list-row-field. None of the three is built or styled anywhere: the renderers pass db-board-card-field, db-gallery-field and db-list-field. Not a behaviour defect - card-field-renderer.ts sets data-note-database-column-key and role=gridcell on every field, and the selector's other two arms match through those - so the three names are dead weight rather than broken navigation. Found while closing the row matrix's invented classes and left alone: it is outside 005's scope, and the same rot in one more place is worth recording rather than folding into an unrelated diff."
   ]

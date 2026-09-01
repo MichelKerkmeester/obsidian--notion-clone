@@ -7229,10 +7229,206 @@ await section("what a single click on a property row reaches", async () => {
       + `set and not a count`);
 });
 
+// ───────────────────────────────────────────────────────────────────
+// A MENU'S HEADING AND ITS ROWS SHARE ONE LEFT EDGE
+// ───────────────────────────────────────────────────────────────────
+//
+// `027` recorded a fourth operator report against this: in the desktop More-tools dropdown the
+// heading and the rows do not line up. It also recorded a correction — the first hypothesis compared
+// two selectors that are not the two elements in the report — and left a lead explicitly unmeasured:
+//
+//   "there is a rule aligning the heading to the rows' icon column, and it is scoped `.is-phone`
+//    only. Report 28 is a desktop report. Whether that is the mechanism or a coincidence needs
+//    measuring, not arguing."
+//
+// This measures it. Both presentations of the same grammar, one page each, reading the left edge
+// the eye actually tracks: the heading's text box, the row's icon box, and the row's label box.
+//
+// The rule the lead names is `.is-phone .db-menu-section { padding-inline: 16px }`. If it is the
+// mechanism, removing it moves the phone heading and leaves the desktop one where it is — which is
+// the ablation below, and it is what makes this a measurement rather than a second argument.
+
+const menuEdgeResults = [];
+
+const menuEdgeProbe = async (isPhone) => {
+  const page = await browser.newPage({
+    viewport: isPhone ? { width: 390, height: 844 } : VIEWPORT,
+    reducedMotion: "reduce",
+    ...(isPhone ? { isMobile: true, hasTouch: true } : {}),
+  });
+  await page.setContent(page_html);
+  if (isPhone) await page.evaluate(() => document.body.classList.add("is-mobile", "is-phone"));
+  await page.addStyleTag({ content: readFileSync(join(REPO, "styles.css"), "utf8") + HOST_BARE_CONTROLS });
+  await page.addScriptTag({ content: shimJs + "\ninstallObsidianDomShim(globalThis);" });
+  await page.addScriptTag({ content: positionerJs });
+
+  const measured = await page.evaluate(() => {
+    const { createOwnedMenu, createMenuRow } = globalThis.__place;
+    const host = document.querySelector(".note-database-container");
+
+    // Surface A: the owned menu, which is what a column menu is on a phone. Heading through its own
+    // `addSection`, rows through `addRow` — both the shipped entry points.
+    const menu = createOwnedMenu(document);
+    menu.addSection("Column");
+    for (const label of ["Sort ascending", "Filter on this column", "Duplicate property"]) {
+      menu.addRow({ icon: "pencil", label });
+    }
+    menu.showAt({ x: 200, y: 200 });
+
+    // Surface B: the More-tools dropdown, built the way `renderUtilitiesOverflowButton` builds it —
+    // `.db-panel-header` holding a `.db-panel-title`, then `createMenuRow` rows carrying
+    // `db-toolbar-menu-row`. Those three classes ARE the subject of report 28, so they are named
+    // from the shipped source rather than guessed, and the rows come from the shared factory.
+    const utilities = host.createDiv({ cls: "db-view-tab-popover db-toolbar-utilities-popover" });
+    const header = utilities.createDiv({ cls: "db-panel-header" });
+    header.createDiv({ cls: "db-panel-title", text: "Utilities" });
+    for (const label of ["Display width", "Refresh database", "View settings"]) {
+      createMenuRow(utilities, { cls: "db-toolbar-menu-row", icon: "pencil", label });
+    }
+
+    // The INK's left edge, not the box's. A heading is a padded div whose border box starts at the
+    // surface's content edge however much padding it carries, so comparing boxes reports every
+    // heading as aligned with every row and cannot fail. The first version of this check did
+    // exactly that and reported `heading 4, row box 4` on a heading whose text sits at 20.
+    const inkLeft = (el) => {
+      if (!el) return null;
+      const box = el.getBoundingClientRect();
+      const pad = parseFloat(getComputedStyle(el).paddingLeft) || 0;
+      return Math.round(box.left + pad);
+    };
+    const edgesOf = (root, headingSel, rowSel) => {
+      const heading = root.querySelector(headingSel);
+      const row = root.querySelector(rowSel);
+      if (!heading || !row) return null;
+      const icon = row.querySelector(".db-menu-item-icon");
+      const label = row.querySelector(".db-menu-item-label");
+      return {
+        heading: inkLeft(heading),
+        rowBox: inkLeft(row),
+        icon: icon ? Math.round(icon.getBoundingClientRect().left) : null,
+        // The glyph inside the icon slot, when there is one. A slot wider than its glyph would let
+        // box edges agree while the ink a reader tracks sits somewhere else — so it is reported,
+        // and reported as absent rather than as a number when the DOM shim draws no SVG. What is
+        // ASSERTED is the slot: that is what the stylesheet places, and a glyph inset within a
+        // correctly placed slot is the icon set's metrics, not this surface's alignment.
+        glyph: icon?.querySelector("svg")
+          ? Math.round(icon.querySelector("svg").getBoundingClientRect().left)
+          : "not drawn by the shim",
+        label: label ? Math.round(label.getBoundingClientRect().left) : null,
+        headingText: heading.textContent,
+      };
+    };
+
+    // Surface C: the same dropdown mounted on the BODY, which is where a phone puts it. These
+    // surfaces present as sheets and are portalled out of `.note-database-container`, so a rule
+    // scoped to the container is correct on the desktop half and simply absent on the presentation
+    // whose rows are largest. Same builder, different parent, and that is the whole test.
+    const portalled = document.body.createDiv({ cls: "db-view-tab-popover db-toolbar-utilities-popover db-surface" });
+    const portalledHeader = portalled.createDiv({ cls: "db-panel-header" });
+    portalledHeader.createDiv({ cls: "db-panel-title", text: "Utilities" });
+    for (const label of ["Display width", "Refresh database"]) {
+      createMenuRow(portalled, { cls: "db-toolbar-menu-row", icon: "pencil", label });
+    }
+
+    const read = () => ({
+      owned: edgesOf(menu.el, ".db-menu-section", ".db-menu-item"),
+      utilities: edgesOf(utilities, ".db-panel-title", ".db-toolbar-menu-row"),
+      portalled: edgesOf(portalled, ".db-panel-title", ".db-toolbar-menu-row"),
+    });
+
+    const shipped = read();
+
+    // THE ABLATION the lead asks for. The `.is-phone`-scoped rule is switched off in place, and the
+    // two surfaces are re-read. A rule scoped to the phone cannot move the desktop; if the desktop
+    // number moves anyway the lead is wrong about the mechanism, and if the phone number does not
+    // move the rule is not doing what its comment claims.
+    for (const sheet of document.styleSheets) {
+      let rules;
+      try { rules = sheet.cssRules; } catch { continue; }
+      for (const rule of rules) {
+        if (rule.selectorText && rule.selectorText.includes(".is-phone .db-menu-section")) {
+          rule.style.removeProperty("padding-inline");
+        }
+      }
+    }
+    const ablated = read();
+
+    menu.close();
+    utilities.remove();
+    portalled.remove();
+    return { shipped, ablated, phone: document.body.classList.contains("is-phone") };
+  });
+
+  await page.close();
+  return measured;
+};
+
+await section("a menu's heading and its rows share one left edge", async () => {
+  const phone = await menuEdgeProbe(true);
+  const desktop = await menuEdgeProbe(false);
+  const record = (name, pass, detail) => menuEdgeResults.push({ name, pass, detail });
+
+  // The edge a reader tracks down a menu is the ICON column, because that is the first ink on every
+  // row. A heading that lines up with the label instead sits eight to sixteen pixels in from
+  // everything below it, which is what the four reports describe.
+  for (const [where, m] of [["a phone sheet", phone], ["a desktop popover", desktop]]) {
+    record(`the owned menu's heading sits on its rows' icon column in ${where}`,
+      m.shipped.owned !== null && Math.abs(m.shipped.owned.heading - m.shipped.owned.icon) <= 1,
+      `heading left ${m.shipped.owned?.heading}, row icon slot left ${m.shipped.owned?.icon} `
+        + `(its glyph at ${m.shipped.owned?.glyph}), row label left ${m.shipped.owned?.label}, `
+        + `row box left ${m.shipped.owned?.rowBox}`);
+  }
+
+  // Both presentations, because the row's inset is not the same on both and a fix stated once can
+  // land on only one of them. Report 28 is a desktop report; the phone is where the rows grow for a
+  // thumb, which is exactly where a heading pinned to the wrong number drifts furthest.
+  for (const [where, m] of [["a phone sheet", phone], ["a desktop popover", desktop]]) {
+    record(`the More-tools dropdown's heading sits on its rows' icon column in ${where}`,
+      m.shipped.utilities !== null
+        && Math.abs(m.shipped.utilities.heading - m.shipped.utilities.icon) <= 1,
+      `heading left ${m.shipped.utilities?.heading}, row icon slot left `
+        + `${m.shipped.utilities?.icon} (its glyph at ${m.shipped.utilities?.glyph}), row label left `
+        + `${m.shipped.utilities?.label}. `
+        + `This is operator report 28, measured rather than argued: the rows take a per-surface `
+        + `\`db-toolbar-menu-row\` inset and the heading takes whatever \`.db-panel-header\` gives it`);
+  }
+
+  // The same surface, portalled — on the PHONE, which is the only presentation that portals it.
+  // A container-scoped fix passes the in-container rows above and fails here, which is the
+  // difference between a rule that reaches a phone sheet and one that does not.
+  //
+  // The desktop half of this pairing is deliberately not asserted. Measured, it reads heading 916
+  // against icon 912: on the body the ROW loses `.note-database-container .db-toolbar-menu-row` and
+  // falls back to the shared row's own inset, so the heading is four pixels in rather than out. But
+  // a desktop popover is never portalled — only the sheet presentation moves — so that shape is one
+  // no surface renders, and a check that failed on it would be asking the stylesheet to be correct
+  // about a combination the app does not produce. Un-scoping the row rule would settle it and is
+  // not taken: it drops the row from two classes to one and hands the next host rule a fight it
+  // does not currently have.
+  record("the dropdown keeps its heading's inset after it is portalled onto the body on a phone",
+    phone.shipped.portalled !== null
+      && Math.abs(phone.shipped.portalled.heading - phone.shipped.portalled.icon) <= 1,
+    `mounted on the body at phone width: heading left ${phone.shipped.portalled?.heading}, row icon `
+      + `left ${phone.shipped.portalled?.icon}. On a phone these surfaces leave `
+      + `\`.note-database-container\` to become sheets, so a rule that names that container is `
+      + `absent exactly where the rows are largest`);
+
+  // The lead, answered. Two claims in one row, because either alone is satisfiable by a coincidence.
+  const phoneMoved = phone.shipped.owned.heading !== phone.ablated.owned.heading;
+  const desktopMoved = desktop.shipped.owned.heading !== desktop.ablated.owned.heading;
+  record("the .is-phone heading rule moves the phone menu and cannot move the desktop one",
+    phoneMoved && !desktopMoved,
+    `with \`.is-phone .db-menu-section\`'s padding-inline removed, the phone heading goes `
+      + `${phone.shipped.owned.heading} → ${phone.ablated.owned.heading} and the desktop heading `
+      + `goes ${desktop.shipped.owned.heading} → ${desktop.ablated.owned.heading}. `
+      + `\`027\` left this as a lead: a rule scoped to the phone cannot be the mechanism behind a `
+      + `desktop report, and this is the measurement that says so instead of arguing it`);
+});
+
 results.push(...phoneResults, ...menuResults, ...addViewDesktopResults, ...addViewPhoneResults,
   ...grammarResults, ...addViewGrammar, ...motionResults, ...reducedResults, ...desktopMenuResults, ...cellResults, ...sheetResults, ...selectCellResults, ...selectPhoneResults, ...rowPhoneResults, ...rowNarrowResults,
   ...desktopPanelResults, ...stateResults, ...keyboardParityResults, ...familyResults, ...touchResults, ...overlapResults, ...rhythmResults, ...rendererRhythmResults,
-  ...liftedResults, ...inlineEditResults, ...numberParityResults, ...peekLayerResults, ...propertyRowResults, ...sectionFailures);
+  ...liftedResults, ...inlineEditResults, ...numberParityResults, ...peekLayerResults, ...propertyRowResults, ...menuEdgeResults, ...sectionFailures);
 
 await browser.close();
 rmSync(work, { recursive: true, force: true });

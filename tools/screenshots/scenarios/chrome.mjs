@@ -65,7 +65,23 @@ const I = {
   paintbrush: glyph('<path d="M18 3a3 3 0 0 1 3 3c0 3-4 5-7 8"/><path d="M9 14a3 3 0 0 1 3 3c0 2-2 4-5 4H3c1-2 2-3 2-5a3 3 0 0 1 4-2Z"/>'),
   textCursor: glyph('<path d="M5 4h4M5 20h4M7 4v16"/><rect x="12" y="7" width="9" height="10" rx="1"/>'),
   grip: glyph('<circle cx="9" cy="6" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="9" cy="18" r="1"/><circle cx="15" cy="6" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="15" cy="18" r="1"/>'),
+  /* The More-tools rows. `renderUtilitiesOverflowButton` names `refresh-cw`, `settings-2`,
+     `arrow-left-right` and `file-output`; the first two had no glyph here, and the same omission
+     that drew a bare delete row would have drawn bare utility rows. */
+  refresh: glyph('<path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 3v6h-6"/>'),
+  settings: glyph('<circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M19.1 4.9 17 7M7 17l-2.1 2.1"/>'),
+  arrowLeftRight: glyph('<path d="m8 3-5 5 5 5"/><path d="M3 8h13"/><path d="m16 21 5-5-5-5"/><path d="M21 16H8"/>'),
+  fileOutput: glyph('<path d="M14 2H7a2 2 0 0 0-2 2v6"/><path d="M14 2v5h5"/><path d="M19 7v13a2 2 0 0 1-2 2H9"/><path d="M3 15h8"/><path d="m7 11-4 4 4 4"/>'),
 };
+
+/* One More-tools row, built the way `renderToolbarMenuRow` builds it: the shared `db-menu-item`
+   from `createMenuRow`, plus the per-surface `db-toolbar-menu-row` whose own inline padding is the
+   inset the heading above it is aligned to. */
+const utilitiesRow = (label, icon) => `
+  <button type="button" class="db-menu-item db-toolbar-menu-row" role="menuitem">
+    <span class="db-menu-item-icon">${icon}</span>
+    <span class="db-menu-item-label">${label}</span>
+  </button>`;
 
 /* `createIconButton` builds `button.db-toolbar-icon-button` with the extra classes the call
    site passes; `setBadge`/`setHiddenBadge` append the count span inside the same button. */
@@ -396,6 +412,31 @@ export const CHROME_SCENARIOS = [
         </div>
       </div>`;
     },
+  },
+  {
+    // Four operator reports named this surface before anything photographed it, and the alignment
+    // they were describing is the one thing a measurement caught and no capture could show — because
+    // there was no capture. That is the gap this closes: the heading and the rows' first ink now sit
+    // on one edge, and from here a person can see whether they still do.
+    id: "chrome-utilities-popover",
+    title: "More-tools dropdown",
+    group: "components",
+    width: 420,
+    sources: ["src/views/toolbar-renderer.ts", "src/views/menu-row.ts"],
+    note: "The toolbar's overflow menu. Rows come from the shared createMenuRow but carry db-toolbar-menu-row, whose own inline padding is what the heading is aligned to.",
+    captureCss: `.note-database-container .db-toolbar-utilities-popover { ${IN_FLOW_PANEL} }`,
+    html: () => `
+      <div class="note-database-container">
+        <div class="db-view-tab-popover db-toolbar-utilities-popover" role="menu" aria-label="Utilities">
+          <div class="db-panel-header"><div class="db-panel-title">Utilities</div></div>
+          ${utilitiesRow("Wide display", I.arrowLeftRight)}
+          ${utilitiesRow("Save computed results", I.refresh)}
+          ${utilitiesRow("Refresh database", I.refresh)}
+          ${utilitiesRow("Copy formatting", I.copy)}
+          ${utilitiesRow("Open database file", I.fileOutput)}
+          ${utilitiesRow("View settings", I.settings)}
+        </div>
+      </div>`,
   },
   {
     id: "chrome-active-rule-popover-filter",

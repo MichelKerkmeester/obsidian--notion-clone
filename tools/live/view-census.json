@@ -1,7 +1,7 @@
 {
-  "measuredAt": "2026-09-01T02:05:48.007Z",
+  "measuredAt": "2026-09-01T03:17:55.649Z",
   "inputs": {
-    "styles.css": "810036205adf",
+    "styles.css": "b346c59576b5",
     "tools/live/view-census.mjs": "2ce0c7f439a4",
     "tools/screenshots/scenarios.mjs": "1395f2dacbfd"
   },
@@ -360,10 +360,10 @@
     }
   ],
   "totals": {
-    "fixtures": 59,
-    "escaping": 568,
+    "fixtures": 60,
+    "escaping": 570,
     "growing": 261,
-    "scrolling": 307,
+    "scrolling": 309,
     "rhythmGroups": 20,
     "ragged": 0,
     "probeBlind": 0
@@ -2498,6 +2498,17 @@
       "by": 706.8,
       "scrolls": true,
       "pastHeader": 650.2
+    },
+    {
+      "width": 320,
+      "fixture": "chrome-utilities-popover",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-view-tab-popover.db-toolbar-utilities-popover",
+      "parentCls": "note-database-container",
+      "by": 50,
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -4872,6 +4883,17 @@
     },
     {
       "width": 402,
+      "fixture": "chrome-utilities-popover",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-view-tab-popover.db-toolbar-utilities-popover",
+      "parentCls": "note-database-container",
+      "by": 32,
+      "scrolls": true,
+      "pastHeader": 0
+    },
+    {
+      "width": 402,
       "fixture": "chrome-table-footer",
       "kind": "escaping",
       "tag": "div",
@@ -7001,6 +7023,11 @@
     },
     {
       "width": 320,
+      "fixture": "chrome-utilities-popover",
+      "probe": "4px"
+    },
+    {
+      "width": 320,
       "fixture": "chrome-active-rule-popover-filter",
       "probe": "4px"
     },
@@ -7296,6 +7323,11 @@
     },
     {
       "width": 402,
+      "fixture": "chrome-utilities-popover",
+      "probe": "4px"
+    },
+    {
+      "width": 402,
       "fixture": "chrome-active-rule-popover-filter",
       "probe": "4px"
     },
@@ -7591,6 +7623,11 @@
     },
     {
       "width": 768,
+      "fixture": "chrome-utilities-popover",
+      "probe": "4px"
+    },
+    {
+      "width": 768,
       "fixture": "chrome-active-rule-popover-filter",
       "probe": "4px"
     },
@@ -7882,6 +7919,11 @@
     {
       "width": 1440,
       "fixture": "chrome-active-view-controls",
+      "probe": "4px"
+    },
+    {
+      "width": 1440,
+      "fixture": "chrome-utilities-popover",
       "probe": "4px"
     },
     {

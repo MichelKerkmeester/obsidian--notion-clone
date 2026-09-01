@@ -1,7 +1,7 @@
 {
-  "measuredAt": "2026-09-01T02:05:37.321Z",
+  "measuredAt": "2026-09-01T03:17:36.017Z",
   "inputs": {
-    "styles.css": "810036205adf",
+    "styles.css": "b346c59576b5",
     "tools/live/surface-census.mjs": "09663f4f354e",
     "src/views/surface-contract.ts": "ff7e6bafd3c8"
   },
@@ -80,7 +80,8 @@
       "role": null,
       "rect": "360x520",
       "scenarios": [
-        "add-view-popover"
+        "add-view-popover",
+        "chrome-utilities-popover"
       ]
     },
     "db-panel-header": {
@@ -99,6 +100,7 @@
         "panel-sort-calendar-empty",
         "panel-view-config",
         "panel-column-manager",
+        "chrome-utilities-popover",
         "chrome-chart-options-popover"
       ]
     },
@@ -118,6 +120,7 @@
         "panel-sort-calendar-empty",
         "panel-view-config",
         "panel-column-manager",
+        "chrome-utilities-popover",
         "chrome-chart-options-popover"
       ]
     },
@@ -160,6 +163,12 @@
         "add-view-popover",
         "add-view-popover",
         "add-view-popover",
+        "chrome-utilities-popover",
+        "chrome-utilities-popover",
+        "chrome-utilities-popover",
+        "chrome-utilities-popover",
+        "chrome-utilities-popover",
+        "chrome-utilities-popover",
         "chrome-owned-menu",
         "chrome-owned-menu",
         "chrome-owned-menu",
@@ -187,6 +196,12 @@
         "add-view-popover",
         "add-view-popover",
         "add-view-popover",
+        "chrome-utilities-popover",
+        "chrome-utilities-popover",
+        "chrome-utilities-popover",
+        "chrome-utilities-popover",
+        "chrome-utilities-popover",
+        "chrome-utilities-popover",
         "chrome-owned-menu",
         "chrome-owned-menu",
         "chrome-owned-menu",
@@ -213,6 +228,12 @@
         "add-view-popover",
         "add-view-popover",
         "add-view-popover",
+        "chrome-utilities-popover",
+        "chrome-utilities-popover",
+        "chrome-utilities-popover",
+        "chrome-utilities-popover",
+        "chrome-utilities-popover",
+        "chrome-utilities-popover",
         "chrome-owned-menu",
         "chrome-owned-menu",
         "chrome-owned-menu",
