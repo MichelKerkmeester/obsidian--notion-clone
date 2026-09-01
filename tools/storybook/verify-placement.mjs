@@ -110,7 +110,7 @@ writeFileSync(entry, `
 import { positionToolbarPopover, getVisiblePopoverBounds, COMPACT_MENU_POPOVER, setPosition, clamp, resolvePopoverHorizontalLeft, PANEL_POPOVER, placeSheet, publishKeyboardInset, calendarSearchResultsPlacement, anchorlessSubmenuPlacement, resolveKeyboardInset, MAX_UNZOOMED_SCALE } from "${join(REPO, "src/views/popover-position")}";
 import { shouldFlickDismiss, FLICK_PX_PER_MS, FLICK_MIN_PX, STALE_SAMPLE_MS } from "${join(REPO, "src/views/mobile-bottom-sheet")}";
 import { refreshRecordDetailPanel, closeRecordDetailPanel, getOpenRecordDetailPath } from "${join(REPO, "src/views/record-detail-panel")}";
-import { attachSheetDragToDismiss } from "${join(REPO, "src/views/mobile-bottom-sheet")}";
+import { attachSheetDragToDismiss, hasSheetDrag } from "${join(REPO, "src/views/mobile-bottom-sheet")}";
 import { applySheetChrome } from "${join(REPO, "src/views/mobile-bottom-sheet")}";
 import { createOwnedMenu } from "${join(REPO, "src/views/owned-menu")}";
 import { createMenuRow } from "${join(REPO, "src/views/menu-row")}";
@@ -143,7 +143,7 @@ globalThis.__opentarget = { DatabaseView, openTableRecordPeek, closeTableRecordP
 globalThis.__place = { positionToolbarPopover, getVisiblePopoverBounds, COMPACT_MENU_POPOVER, applySheetChrome, renderCardField, createOwnedMenu, createMenuRow, ToolbarRenderer, trackCellGesture, nextCellRange, resolveCellTapAction, isMainItemColumn, shouldExtendRowRange, applyRowSelectionPress, attachRowRangeGesture, isRowSelectionCheckbox, attachLongPress, isTouchDevice, attachTitleOpenAffordance, setupTitleCellTap, openRecordDetailPanel, closeRecordDetailPanel, getOpenRecordDetailPath, refreshRecordDetailPanel, RowMenu, ColumnMenu };
 globalThis.__p = { positionToolbarPopover, getVisiblePopoverBounds, setPosition, clamp, resolvePopoverHorizontalLeft, COMPACT_MENU_POPOVER, PANEL_POPOVER, createOwnedMenu, createMenuRow, publishKeyboardInset, calendarSearchResultsPlacement, anchorlessSubmenuPlacement, resolveKeyboardInset, MAX_UNZOOMED_SCALE };
 globalThis.__drag = { openRecordDetailPanel, refreshRecordDetailPanel, applySheetChrome, positionToolbarPopover };
-globalThis.__a = { positionToolbarPopover, placeSheet, applySheetChrome, attachSheetDragToDismiss, openRecordDetailPanel, refreshRecordDetailPanel, closeRecordDetailPanel, createOwnedMenu, createMenuRow };
+globalThis.__a = { positionToolbarPopover, placeSheet, applySheetChrome, attachSheetDragToDismiss, hasSheetDrag, openRecordDetailPanel, refreshRecordDetailPanel, closeRecordDetailPanel, createOwnedMenu, createMenuRow };
 globalThis.__flick = { shouldFlickDismiss, FLICK_PX_PER_MS, FLICK_MIN_PX, STALE_SAMPLE_MS };
 globalThis.__layer = { openTableRecordPeek, closeTableRecordPeek, openDropdownMenu };
 globalThis.__columns = { ColumnManagerRenderer };
@@ -6445,6 +6445,54 @@ await section("lifted probes: the sheet audit", async () => {
   // Full width less the sheet's own border and scroll gutter, which clip the band's box.
   record(5, "the grab band spans the full sheet width", geom.bandWidth >= geom.panelWidth - 4,
     `band x=${geom.bandLeft}..${geom.bandRight} = ${geom.bandWidth}px of a ${geom.panelWidth}px sheet`);
+
+  // ── the handle exists only where a gesture drew it, across every surface ──
+  //
+  // A bar that says a sheet can be pulled down and then ignores the thumb reads as a frozen app
+  // rather than as a missing feature, and sixteen modal sheets shipped exactly that. The repair was
+  // to move the bar's creation into the gesture, so an unwired bar is unrepresentable rather than
+  // merely discouraged — and the claim to check is that it holds for EVERY sheet surface, not for
+  // the two the rebuild lane happens to cover.
+  //
+  // Both directions, per surface. Chrome alone must draw nothing: if it did, the invariant would be
+  // one call away from breaking again. And the gesture must draw exactly one: a check that only
+  // asserted "no unwired bar" would pass a build where the bar had stopped appearing at all.
+  const handles = await page.evaluate((classes) => {
+    const { applySheetChrome, attachSheetDragToDismiss, hasSheetDrag } = globalThis.__a;
+    const host = document.querySelector(".note-database-container");
+    const out = [];
+    for (const cls of classes) {
+      const el = host.createDiv({ cls });
+      applySheetChrome(el, true);
+      const chromeAlone = el.querySelectorAll(".db-mobile-bottom-sheet-handle").length;
+      const wiredBefore = hasSheetDrag(el);
+      const release = attachSheetDragToDismiss(el, () => undefined);
+      const afterGesture = el.querySelectorAll(".db-mobile-bottom-sheet-handle").length;
+      const wiredAfter = hasSheetDrag(el);
+      if (typeof release === "function") release();
+      applySheetChrome(el, false);
+      el.remove();
+      out.push({ cls, chromeAlone, afterGesture, wiredBefore, wiredAfter });
+    }
+    return out;
+  }, SHEET_SURFACES);
+
+  const drewUnwired = handles.filter((h) => h.chromeAlone > 0);
+  const missingWired = handles.filter((h) => h.afterGesture !== 1);
+  record(4, "chrome alone draws no grab bar, on every sheet surface",
+    drewUnwired.length === 0 && handles.every((h) => !h.wiredBefore),
+    `${handles.length} surfaces given the sheet treatment with no gesture attached: `
+      + `${drewUnwired.length} drew a bar (${drewUnwired.map((h) => h.cls).join(", ") || "none"}). `
+      + `A bar the thumb does not answer reads as a frozen app, and sixteen modal sheets shipped one`);
+  record(4, "the gesture draws exactly one grab bar, on every sheet surface",
+    missingWired.length === 0 && handles.every((h) => h.wiredAfter),
+    `after attaching the gesture: ${handles.filter((h) => h.afterGesture === 1).length} of `
+      + `${handles.length} carry exactly one bar`
+      + (missingWired.length
+        ? `; wrong count on ${missingWired.map((h) => `${h.cls}=${h.afterGesture}`).join(", ")}`
+        : "")
+      + `. Asserted beside the clause above because "no unwired bar" alone would pass a build where `
+      + `the bar had stopped being drawn at all`);
 
   // ── ASK 6 — one fill for every sheet surface ──────────────────────────
   // Each surface is built where its owner builds it. A panel is created inside the plugin's

@@ -107,9 +107,15 @@ _memory:
 
 ## PHASE 4: THE REST
 
-- [ ] **T6** Wire or remove the modal handles — REQ-004, D4. **Fix landed; the task stays open.**
-      *Evidence to close:* no sheet draws a handle without an attached drag, asserted by
-      construction rather than by inspection.
+- [x] **T6** Wire or remove the modal handles — REQ-004, D4. **Closed by construction, across every
+      surface.**
+      *Closed.* The two `sheet-rebuild` cases proved the invariant on two paths; what the task asked
+      for was every surface. The placement lane now walks all **nine** sheet-capable classes and
+      asserts both directions per surface: chrome alone draws **0** bars, and attaching the gesture
+      draws exactly **1**, with `hasSheetDrag` reporting unwired before and wired after. Both clauses
+      are needed — "no unwired bar" alone would pass a build where the bar had stopped appearing at
+      all. Control: removing the `activeSheetDrag` guard so chrome draws unconditionally takes the
+      first clause red and names all nine surfaces. Restored, hash-verified against `HEAD`.
       *What landed:* `DbModal.applyPresentation` now attaches the gesture to the bar it draws,
       through `this.close()` rather than `super.close()` — one modal here overrides `close()` to
       confirm before discarding edits, and a drag must go through that override or the gesture
@@ -168,8 +174,9 @@ _memory:
 
 ## PHASE 5: VERIFICATION
 
-- [ ] **T9** Whole gate from the final state.
-      *Evidence to close:* `npm run gate` exit 0 read from `$?`; `npx vitest run` no reduction.
+- [x] **T9** Whole gate from the final state.
+      *Closed.* `npm run gate` **23 green, exit 0** read from `$?` rather than through a pipe;
+      `npx vitest run` **625 tests**, up from the count this phase started at, so no reduction.
 - [ ] **T10** The operator opens and closes each sheet on device without the app locking up.
       *Evidence to close:* the operator says so. Nothing else closes this.
 <!-- /ANCHOR:phase -->
