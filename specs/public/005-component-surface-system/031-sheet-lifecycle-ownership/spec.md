@@ -13,8 +13,8 @@ _memory:
     packet_pointer: "public/005-component-surface-system/031-sheet-lifecycle-ownership"
     last_updated_at: "2026-08-31T16:00:00Z"
     last_updated_by: "phase-author"
-    recent_action: "Phase opened from the research agent's six ranked findings"
-    next_safe_action: "Fix the orphaned scrim; it is the one users experience as a frozen app"
+    recent_action: "Flick threshold settled at 0.8 px/ms and the lane's drags given a clock they choose"
+    next_safe_action: "The operator opens and closes each sheet family on device"
     blockers: []
     key_files:
       - "spec.md"
@@ -201,6 +201,56 @@ instead of the harness, would the check still pass?* Here the harness cleaned up
 defect in order to keep testing. The producer-parity check in §4 is the D12-shaped replacement — it
 compares every producer against the one that behaves, so a harness cannot fake it without giving the
 same wrong answer for all of them.
+
+---
+
+## 7. THE FLICK THRESHOLD, DECIDED — 2026-09-01
+
+REQ-005 was built, measured, and reverted once, because the velocity rule it first carried dismissed
+a **brisk 95px drag** — a gesture deliberately stopped short of the 96px distance threshold, which is
+a cancel. A surface that closes anyway ignores the correction the user just made.
+
+**The decision: 0.8 px/ms, which sits above frame pace.** A deliberate slow drag runs about 0.08
+px/ms, a genuine flick about 1.18, and a brisk drag delivered at frame pace lands near 0.5. Putting
+the line at 0.8 leaves the flick clearly above and the brisk drag clearly below, so the gesture the
+revert was about now reads the same way to both rules and there is nothing left to arbitrate.
+
+**It is measured, not reasoned.** `95px at 0.59 px/ms → sprang back`, driven through the shipped
+gesture on a real sheet. Red with the threshold lowered to 0.4: the same gesture `→ dismissed`, which
+is the conflict that caused the revert, reproduced on demand.
+
+### 7a. AND THE HARNESS THAT COULD NOT HAVE SEEN IT
+
+The lane's synthetic drags carried no timing, and that was not a small gap.
+
+`PointerEvent.timeStamp` is stamped by the browser at dispatch, and **two dispatches in one tick are
+0.0999ms apart** — measured, not assumed. The gesture divides by that interval, so a 30px synthetic
+move computed **300 px/ms** against a 0.8 threshold. Every hand-made drag in the placement lane was
+reading as an infinitely fast flick.
+
+Nothing went red for it, which is exactly why it mattered: a drag that dismisses because it passed
+the distance threshold and a drag that dismisses because it was mistaken for a flick look identical
+from outside. Two checks kept their stated cause in their own detail text while the real cause had
+changed underneath them.
+
+**`timeStamp` is writable per instance**, so the clock is now the check's to choose. Both existing
+drags were retimed — the add-view dismissal at 0.58 px/ms so it is the distance path it claims to be,
+the entrance-interrupt at 0.19 px/ms so it stops dismissing the sheet it is measuring — and six new
+checks drive the decision end to end on a real grab bar:
+
+| Gesture | Result | What it pins |
+|---|---|---|
+| 40px at 1.25 px/ms | dismissed | the velocity path is wired into `onUp` at all |
+| 40px at 0.08 px/ms | sprang back | the clock is the only difference between the two |
+| 140px at 0.58 px/ms | dismissed | the distance path still works independently |
+| 40px at 1.25 px/ms, 150ms rest | sprang back | staleness is measured from the last MOVE, not the press |
+| 95px at 0.59 px/ms | sprang back | the gesture the revert was about |
+
+Three watched reds: unwiring `|| flicked` leaves the fast short drag springing back; passing `0` for
+the staleness interval dismisses the rested finger; lowering the threshold to 0.4 dismisses the brisk
+95px drag. **`sheet-rebuild` asks `shouldFlickDismiss` four questions directly and that is right for a
+pure function whose speed a harness cannot control — but it cannot see the wiring.** All three of
+those breaks leave it green.
 
 ---
 

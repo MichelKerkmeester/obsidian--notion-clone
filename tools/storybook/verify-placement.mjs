@@ -144,7 +144,52 @@ execFileSync(join(REPO, "node_modules/.bin/esbuild"), [
   `--alias:obsidian=${join(REPO, "tools/storybook/obsidian-stub.mjs")}`,
 ], { stdio: "pipe" });
 
-const positionerJs = readFileSync(bundle, "utf8");
+const positionerJs = readFileSync(bundle, "utf8")
+  // ── A DRAG WITH TIMING IT CHOSE, APPENDED TO EVERY PAGE ─────────────
+  //
+  // `PointerEvent.timeStamp` is stamped by the browser at dispatch, and two dispatches in one tick
+  // are 0.0999ms apart — measured, not assumed. The shipped gesture divides by that interval, so a
+  // 30px synthetic move computes 300 px/ms against a 0.8 px/ms flick threshold. EVERY hand-made
+  // drag in this file has been reading as an infinitely fast flick.
+  //
+  // Nothing went red for it, which is the problem: a drag that dismisses because the distance
+  // threshold was passed and a drag that dismisses because it was mistaken for a flick look
+  // identical from outside, so the checks kept their stated cause while the real one had changed.
+  // A sibling lane learned this the expensive way — two lanes went red on a commit touching
+  // neither the gesture nor its constants, because machine load moved a number the harness was
+  // producing rather than measuring.
+  //
+  // `timeStamp` is writable per instance, so the clock becomes the check's to choose. Speed is
+  // then an input rather than an accident, and a check can say which path it is exercising.
+  + `
+globalThis.__timedDrag = (opts) => {
+  const { target, panel, x, from, to, steps = 6, msPerStep = 16, restMs = 0, pointerId = 7,
+    onStep } = opts;
+  let clock = 1000;
+  const send = (type, node, y) => {
+    const event = new PointerEvent(type, {
+      bubbles: true, cancelable: true, pointerId, isPrimary: true, pointerType: "touch", button: 0,
+      clientX: Math.round(x), clientY: Math.round(y),
+    });
+    Object.defineProperty(event, "timeStamp", { value: clock, configurable: true });
+    node.dispatchEvent(event);
+  };
+  send("pointerdown", target, from);
+  for (let i = 1; i <= steps; i += 1) {
+    clock += msPerStep;
+    send("pointermove", panel, from + ((to - from) * i) / steps);
+    // A caller that needs to see the surface mid-gesture gets it here. Reading after the release
+    // reads a dismissed sheet, which is how the follow-the-thumb half of a check goes quiet.
+    if (onStep) onStep(i, steps);
+  }
+  // A finger that rests before it lifts is not flicking, however fast it arrived. The gesture
+  // reads that as the interval between the last move and the release, so the rest is time and
+  // not another move.
+  clock += restMs;
+  send("pointerup", panel, to);
+  return { pxPerMs: Math.abs(to - from) / steps / msPerStep, restMs };
+};
+`;
 const shimJs = readFileSync(join(REPO, "tools/storybook/obsidian-dom-shim.mjs"), "utf8")
   .replace(/^export /gm, "");
 
@@ -2016,22 +2061,26 @@ const addViewGrammar = await section("the add-view menu's row grammar", () => gr
   // sheet answers.
   const handle = panel.querySelector(".db-mobile-bottom-sheet-handle");
   const hb = handle.getBoundingClientRect();
-  const at = (y) => ({
-    bubbles: true, cancelable: true, pointerId: 2, isPrimary: true, pointerType: "touch", button: 0,
-    clientX: Math.round(hb.x + hb.width / 2), clientY: Math.round(y),
+  const start = hb.y + hb.height / 2;
+  const x = hb.x + hb.width / 2;
+  // Deliberately SLOW — 140px over six 40ms steps is 0.58 px/ms, under the 0.8 flick threshold, so
+  // the dismissal this asserts is the distance one it names. Left to the event loop the same drag
+  // computes 300 px/ms and dismisses as a flick, which is a different mechanism wearing this
+  // check's description.
+  let followed = "";
+  globalThis.__timedDrag({
+    target: handle, panel, x, from: start, to: start + 140, steps: 6, msPerStep: 40, pointerId: 2,
+    onStep: (i) => { if (i === 2) followed = getComputedStyle(panel).transform; },
   });
-  handle.dispatchEvent(new PointerEvent("pointerdown", at(hb.y + hb.height / 2)));
-  panel.dispatchEvent(new PointerEvent("pointermove", at(hb.y + hb.height / 2 + 40)));
-  const followed = getComputedStyle(panel).transform;
-  panel.dispatchEvent(new PointerEvent("pointerup", at(hb.y + hb.height / 2 + 140)));
   await new Promise((resolve) => requestAnimationFrame(resolve));
   const stillOpen = Boolean(document.querySelector(".db-add-view-popover"));
   out.push({
     name: "add view: the sheet follows a drag on its grab bar and dismisses past the threshold",
     pass: /matrix/.test(followed) && !/matrix\(1, 0, 0, 1, 0, 0\)/.test(followed) && !stillOpen,
-    detail: `a 40px drag moved the sheet to ${followed}; releasing 140px down left the sheet `
-      + `${stillOpen ? "still open" : "dismissed"} (the bar was drawn on every positioner-presented `
-      + "sheet and wired on none of them)",
+    detail: `two steps in the sheet had moved to ${followed}; the full 140px drag delivered at `
+      + `0.58 px/ms — under the 0.8 px/ms flick threshold, so this is the distance path and not the `
+      + `velocity one — left the sheet ${stillOpen ? "still open" : "dismissed"} (the bar was drawn `
+      + "on every positioner-presented sheet and wired on none of them)",
   });
 
   return out;
@@ -2123,14 +2172,25 @@ const motionResults = await section("the sheet entrance with motion allowed", ()
   const rising = second.el;
   const bar = rising.querySelector(".db-mobile-bottom-sheet-handle");
   const bb = bar.getBoundingClientRect();
+  const grabX = bb.x + bb.width / 2;
   const grab = (y) => ({
     bubbles: true, cancelable: true, pointerId: 4, isPrimary: true, pointerType: "touch", button: 0,
-    clientX: Math.round(bb.x + bb.width / 2), clientY: Math.round(y),
+    clientX: Math.round(grabX), clientY: Math.round(y),
   });
-  bar.dispatchEvent(new PointerEvent("pointerdown", grab(bb.y + 2)));
-  rising.dispatchEvent(new PointerEvent("pointermove", grab(bb.y + 32)));
+  // The press and the move are timed so the 30px travel reads as 0.19 px/ms rather than as 300.
+  // This check reads the transform mid-gesture, so an accidental flick would not fail it — it
+  // would dismiss the sheet underneath it and leave the next reader measuring a surface that is
+  // gone. Timing it makes the gesture the one the name describes.
+  const downEvent = new PointerEvent("pointerdown", grab(bb.y + 2));
+  Object.defineProperty(downEvent, "timeStamp", { value: 1000, configurable: true });
+  bar.dispatchEvent(downEvent);
+  const moveEvent = new PointerEvent("pointermove", grab(bb.y + 32));
+  Object.defineProperty(moveEvent, "timeStamp", { value: 1160, configurable: true });
+  rising.dispatchEvent(moveEvent);
   const held = offsetY(rising);
-  rising.dispatchEvent(new PointerEvent("pointerup", grab(bb.y + 32)));
+  const upEvent = new PointerEvent("pointerup", grab(bb.y + 32));
+  Object.defineProperty(upEvent, "timeStamp", { value: 1176, configurable: true });
+  rising.dispatchEvent(upEvent);
   out.push({
     name: "a thumb on the grab bar takes the sheet over while the entrance is still running",
     pass: Math.abs(held - 30) <= 4,
@@ -7835,10 +7895,126 @@ await section("the registry describes where these surfaces actually mount", asyn
   }
 });
 
+// ───────────────────────────────────────────────────────────────────
+// THE FLICK, DRIVEN THROUGH THE GESTURE RATHER THAN ASKED OF THE RULE
+// ───────────────────────────────────────────────────────────────────
+//
+// `031` shipped velocity dismissal and `sheet-rebuild` asks `shouldFlickDismiss` four questions
+// directly, which is the right thing to do with a pure function whose speed a harness cannot
+// control. What neither covers is the WIRING: that `onUp` consults the rule at all, that it feeds
+// it the velocity carried from the move stream rather than one measured against the release, and
+// that it feeds it the interval since the last move rather than since the press.
+//
+// Any of those three could be wrong while both existing checks stay green — the rule would be
+// correct and never reach the surface. Now that a drag can name its own speed, the decision can be
+// driven end to end on a real sheet, which is what this does.
+//
+// FOUR CASES, AND THE PAIRS ARE THE POINT. A fast short drag and a slow short drag differ only in
+// the clock; a slow long drag and a fast short one dismiss for different reasons. A single case
+// passes on a gesture wired to nothing, because "the sheet went away" is also what an outside-tap
+// does.
+
+const flickResults = [];
+
+await section("the flick decision reaches the sheet", async () => {
+  const page = await browser.newPage({
+    viewport: { width: 390, height: 844 }, hasTouch: true, isMobile: true, reducedMotion: "reduce",
+  });
+  await page.setContent(page_html.replace("<body>", phoneBody));
+  await page.addStyleTag({ content: readFileSync(join(REPO, "styles.css"), "utf8") + HOST_BARE_CONTROLS });
+  await page.addScriptTag({ content: shimJs + "\ninstallObsidianDomShim(globalThis);" });
+  await page.addScriptTag({ content: positionerJs });
+
+  const measured = await page.evaluate(() => {
+    const { createOwnedMenu } = globalThis.__place;
+    const { FLICK_PX_PER_MS, FLICK_MIN_PX, STALE_SAMPLE_MS } = globalThis.__flick;
+
+    const attempt = ({ travel, msPerStep, restMs }) => {
+      const menu = createOwnedMenu(document);
+      for (let i = 0; i < 8; i += 1) menu.addRow({ icon: "pencil", label: `Row ${i}` });
+      menu.showAt({ x: 200, y: 200 });
+      const panel = menu.el;
+      const bar = panel.querySelector(".db-mobile-bottom-sheet-handle");
+      if (!bar) return { built: false };
+      const bb = bar.getBoundingClientRect();
+      const from = bb.y + bb.height / 2;
+      const info = globalThis.__timedDrag({
+        target: bar, panel, x: bb.x + bb.width / 2,
+        from, to: from + travel, steps: 4, msPerStep, restMs,
+      });
+      const dismissed = !panel.isConnected;
+      if (!dismissed) menu.close();
+      return { built: true, dismissed, pxPerMs: Number(info.pxPerMs.toFixed(2)), travel, restMs };
+    };
+
+    return {
+      threshold: FLICK_PX_PER_MS,
+      minPx: FLICK_MIN_PX,
+      staleMs: STALE_SAMPLE_MS,
+      // Well under the 96px distance threshold, so only the velocity path can dismiss these.
+      fastShort: attempt({ travel: 40, msPerStep: 8, restMs: 0 }),
+      slowShort: attempt({ travel: 40, msPerStep: 120, restMs: 0 }),
+      // Past the distance threshold at a speed the flick rule refuses, so only distance can.
+      slowLong: attempt({ travel: 140, msPerStep: 60, restMs: 0 }),
+      // Fast, then the finger rests on the glass before lifting.
+      restedAfterFast: attempt({ travel: 40, msPerStep: 8, restMs: 150 }),
+      // THE GESTURE THE PACKET ARGUED ABOUT. A brisk drag aiming for the distance threshold and
+      // falling a pixel short: 95px at frame pace. An earlier velocity rule dismissed it, which is
+      // why `031` reverted that attempt — a drag deliberately stopped short is a cancel, and a
+      // surface that closes anyway ignores the user's own correction.
+      briskShortOfThreshold: attempt({ travel: 95, msPerStep: 40, restMs: 0 }),
+    };
+  });
+
+  const record = (name, pass, detail) => flickResults.push({ name, pass, detail });
+  const { threshold, minPx, staleMs } = measured;
+  const shape = (r) => `${r.travel}px at ${r.pxPerMs} px/ms`
+    + (r.restMs ? ` with a ${r.restMs}ms rest before release` : "")
+    + ` → ${r.dismissed ? "dismissed" : "sprang back"}`;
+
+  record("all four gestures were staged on a real grab bar",
+    [measured.fastShort, measured.slowShort, measured.slowLong, measured.restedAfterFast]
+      .every((r) => r.built),
+    `a sheet with no bar cannot answer any of these, and a run that could not stage them would `
+      + `report four identical "sprang back" results and read as a working threshold`);
+
+  record("a short drag delivered fast dismisses, and the same drag delivered slowly does not",
+    measured.fastShort.dismissed && !measured.slowShort.dismissed,
+    `${shape(measured.fastShort)}; ${shape(measured.slowShort)}. Both are ${measured.fastShort.travel}px, `
+      + `well under the 96px distance threshold, so the only thing separating them is the clock — `
+      + `which is the whole of what velocity dismissal added, and neither existing check drives it`);
+
+  record("a long drag dismisses at a speed the flick rule refuses",
+    measured.slowLong.dismissed && measured.slowLong.pxPerMs < threshold,
+    `${shape(measured.slowLong)}, against a ${threshold} px/ms threshold. Distance and velocity are `
+      + `separate paths and this one proves the distance path still works — a gesture wired only to `
+      + `velocity would fail here while passing the pair above`);
+
+  record("a finger that rests before lifting is not flicking",
+    !measured.restedAfterFast.dismissed,
+    `${shape(measured.restedAfterFast)}, against a ${staleMs}ms staleness bound. Same travel and `
+      + `same speed as the case that dismissed, so what is asserted is that the interval the gesture `
+      + `measures is the one since the last MOVE and not the one since the press`);
+
+  record("a brisk drag that stops one pixel short of the threshold springs back",
+    !measured.briskShortOfThreshold.dismissed,
+    `${shape(measured.briskShortOfThreshold)} against a 96px distance threshold and a ${threshold} `
+      + `px/ms velocity one. This is the gesture the packet argued about: an earlier velocity rule `
+      + `dismissed it, and a drag deliberately stopped short is a cancel — a surface that closes `
+      + `anyway ignores the correction the user just made. The 0.8 threshold sits above frame-pace `
+      + `so both readings of this gesture agree, and that is why it is measured here rather than reasoned`);
+
+  record("the distance floor is what keeps a tap off the velocity path",
+    measured.fastShort.travel >= minPx,
+    `the fast case travels ${measured.fastShort.travel}px against a ${minPx}px floor. A press and `
+      + `release in one spot divides a tiny distance by a tiny interval and reads as infinitely `
+      + `fast, which is the number this floor exists to refuse`);
+});
+
 results.push(...phoneResults, ...menuResults, ...addViewDesktopResults, ...addViewPhoneResults,
   ...grammarResults, ...addViewGrammar, ...motionResults, ...reducedResults, ...desktopMenuResults, ...cellResults, ...sheetResults, ...selectCellResults, ...selectPhoneResults, ...rowPhoneResults, ...rowNarrowResults,
   ...desktopPanelResults, ...stateResults, ...keyboardParityResults, ...familyResults, ...touchResults, ...overlapResults, ...rhythmResults, ...rendererRhythmResults,
-  ...liftedResults, ...inlineEditResults, ...numberParityResults, ...peekLayerResults, ...propertyRowResults, ...menuEdgeResults, ...headerRhythmResults, ...panelParityResults, ...registryResults, ...sectionFailures);
+  ...liftedResults, ...inlineEditResults, ...numberParityResults, ...peekLayerResults, ...propertyRowResults, ...menuEdgeResults, ...headerRhythmResults, ...panelParityResults, ...registryResults, ...flickResults, ...sectionFailures);
 
 await browser.close();
 rmSync(work, { recursive: true, force: true });
