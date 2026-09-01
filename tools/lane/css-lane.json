@@ -1,7 +1,7 @@
 {
   "holder": null,
-  "acquiredAt": "2026-09-01T15:10:00Z",
-  "baselineHash": "12dd57157348",
+  "acquiredAt": "2026-09-01T16:20:00Z",
+  "baselineHash": "f947f0e35bc1",
   "baselineCommit": "be6c16e",
   "history": [
     {
@@ -862,6 +862,27 @@
       "at": "2026-09-01T15:35:00Z",
       "hash": "12dd57157348",
       "note": "Recaptured and read, twice \u2014 the first read is what found the empty pill. The second shows all seven selected days carrying their numerals, today among them, with the event underlines intact. Per-image operator sign-off still owed."
+    },
+    {
+      "event": "acquire",
+      "phase": "000-surface-contract-and-truthful-harness",
+      "at": "2026-09-01T16:20:00Z",
+      "hash": "12dd57157348",
+      "note": "Last cluster off the capture review's triage queue: truncation where the row still has slack. Measured on the sort rule row \u2014 the direction chip is flex: 0 0 92px and clips 'Descending' by 15px (value box 52px against a 67px need), while the field chip beside it is flex: 1 1 0 at 422px holding 'Cost', which needs 26. So 396px of slack sits next to a 15px shortfall, and the shortfall is in a chip whose fixed basis cannot hold its own longest label."
+    },
+    {
+      "event": "edit",
+      "phase": "000-surface-contract-and-truthful-harness",
+      "at": "2026-09-01T16:50:00Z",
+      "hash": "f947f0e35bc1",
+      "note": "One value. The sort row's direction chip goes from flex: 0 0 92px to 0 0 108px, because 92 left its value box 52px and 'Descending' needs 67 \u2014 while the field chip beside it held 'Cost' at 422px, which needs 26. AND A WRONG TURN WORTH RECORDING: flex: 0 0 auto was tried first and is wrong, because the row is flex-wrap: wrap and was exactly full at 422 + 92 + 6, so sizing the chip to its content put both on their own line. A min-width: 0 was then added to the field chip on the theory that the shrink needed permission, and removed when a control showed the row stays on one line without it. That theory was written before it was tested and was wrong; the inert rule is gone and the comment says so."
+    },
+    {
+      "event": "release",
+      "phase": "000-surface-contract-and-truthful-harness",
+      "at": "2026-09-01T16:55:00Z",
+      "hash": "f947f0e35bc1",
+      "note": "Recaptured and read. The sort popover shows 'Descending' in full on one line, the field chip having given up 34px. Per-image operator sign-off still owed."
     }
   ],
   "outstanding": [

@@ -1,7 +1,7 @@
 {
-  "measuredAt": "2026-09-01T08:24:17.964Z",
+  "measuredAt": "2026-09-01T08:53:04.237Z",
   "inputs": {
-    "styles.css": "12dd57157348",
+    "styles.css": "f947f0e35bc1",
     "tools/live/view-census.mjs": "2ce0c7f439a4",
     "tools/screenshots/scenarios.mjs": "1395f2dacbfd"
   },
@@ -362,8 +362,8 @@
   "totals": {
     "fixtures": 60,
     "escaping": 570,
-    "growing": 261,
-    "scrolling": 309,
+    "growing": 259,
+    "scrolling": 311,
     "rhythmGroups": 20,
     "ragged": 0,
     "probeBlind": 0
@@ -1934,8 +1934,8 @@
       "tag": "button",
       "cls": "db-panel-button",
       "parentCls": "db-panel-row.db-sort-rule-row",
-      "by": 5.6,
-      "scrolls": false,
+      "by": 21.6,
+      "scrolls": true,
       "pastHeader": 0
     },
     {
@@ -1945,8 +1945,8 @@
       "tag": "button",
       "cls": "db-panel-button",
       "parentCls": "db-panel-row.db-sort-rule-row",
-      "by": 5.6,
-      "scrolls": false,
+      "by": 21.6,
+      "scrolls": true,
       "pastHeader": 0
     },
     {

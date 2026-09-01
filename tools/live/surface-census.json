@@ -1,18 +1,18 @@
 {
-  "measuredAt": "2026-09-01T08:23:55.800Z",
+  "measuredAt": "2026-09-01T08:52:43.452Z",
   "inputs": {
-    "styles.css": "12dd57157348",
+    "styles.css": "f947f0e35bc1",
     "tools/live/surface-census.mjs": "8eddb1d0c81c",
     "src/views/surface-contract.ts": "ff7e6bafd3c8"
   },
   "totals": {
-    "rendered": 82,
+    "rendered": 84,
     "buildable": 214,
     "declared": 5,
     "renderedOnly": 0,
-    "buildableNotRendered": 132,
+    "buildableNotRendered": 130,
     "untokened": 0,
-    "unroled": 82
+    "unroled": 84
   },
   "rendered": {
     "db-column-menu-trigger": {
@@ -279,12 +279,36 @@
         "dropdown-field"
       ]
     },
-    "db-dropdown-option-label": {
-      "cls": "db-dropdown-option-label",
+    "db-dropdown-option-check": {
+      "cls": "db-dropdown-option-check",
       "mountParent": "db-dropdown-option",
       "tokens": true,
       "role": null,
-      "rect": "16x17",
+      "rect": "16x16",
+      "scenarios": [
+        "dropdown-field",
+        "dropdown-field",
+        "dropdown-field"
+      ]
+    },
+    "db-dropdown-option-text": {
+      "cls": "db-dropdown-option-text",
+      "mountParent": "db-dropdown-option",
+      "tokens": true,
+      "role": null,
+      "rect": "1296x17",
+      "scenarios": [
+        "dropdown-field",
+        "dropdown-field",
+        "dropdown-field"
+      ]
+    },
+    "db-dropdown-option-label": {
+      "cls": "db-dropdown-option-label",
+      "mountParent": "db-dropdown-option-text",
+      "tokens": true,
+      "role": null,
+      "rect": "1296x17",
       "scenarios": [
         "dropdown-field",
         "dropdown-field",
@@ -1437,7 +1461,6 @@
     "db-chart-dropdown-popover",
     "db-column-manager-file-property-dropdown",
     "db-column-type-popover",
-    "db-dropdown-option-check",
     "db-dropdown-option-icon",
     "db-column-display-style-popover",
     "db-column-number-style-popover",
@@ -1457,7 +1480,6 @@
     "db-dropdown-field-disabled-reason",
     "db-dropdown-search",
     "db-dropdown-options",
-    "db-dropdown-option-text",
     "db-dropdown-option-swatches",
     "db-dropdown-option-swatch",
     "db-dropdown-popover-context-settings",

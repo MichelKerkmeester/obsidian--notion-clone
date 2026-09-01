@@ -183,16 +183,29 @@ export const CORE_SCENARIOS = [
     width: 380,
     sources: ["src/views/dropdown-field.ts"],
     note: "A disabled option is dimmed and carries a tooltip rather than inline explanatory text.",
-    html: () => `
+    html: () => {
+      // The option's real shape, from `openDropdownPopover`: a check span, then a text wrapper
+      // holding the label. The row is `display: grid` with `grid-template-columns: 16px minmax(0,
+      // 1fr)`, so the check takes the first track and the text takes the second.
+      //
+      // Without the check, the LABEL landed in the 16px track. Every option rendered as one
+      // character and an ellipsis — "S…", "A…", "R…" — in a popover over a thousand pixels wide,
+      // which is a picture of a dropdown the plugin does not build.
+      const option = (label, extra = "", attrs = "") => `
+          <button type="button" class="${`db-dropdown-option ${extra}`.trim()}" ${attrs}>
+            <span class="db-dropdown-option-check db-menu-item-check"></span>
+            <span class="db-dropdown-option-text db-menu-item-label"><span class="db-dropdown-option-label">${label}</span></span>
+          </button>`;
+      return `
       <div class="note-database-container">
-        <div class="db-dropdown-popover">
+        <div class="db-dropdown-popover db-dropdown-popover-context-container">
           <div class="db-dropdown-section-title">Aggregate</div>
-          <button type="button" class="db-dropdown-option is-selected"><span class="db-dropdown-option-label">Sum</span></button>
-          <button type="button" class="db-dropdown-option"><span class="db-dropdown-option-label">Average</span></button>
-          <button type="button" class="db-dropdown-option" aria-disabled="true" title="Rollup needs a numeric target field">
-            <span class="db-dropdown-option-label">Rollup</span></button>
+          ${option("Sum", "is-selected")}
+          ${option("Average")}
+          ${option("Rollup", "", 'aria-disabled="true" title="Rollup needs a numeric target field"')}
         </div>
-      </div>`,
+      </div>`;
+    },
   },
   {
     id: "empty-state",

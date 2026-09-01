@@ -11681,8 +11681,22 @@ body.is-phone .note-database-container .db-record-detail-panel {
   font-size: 12px;
 }
 
+/* Wide enough for its own longest value, and the neighbour is allowed to give up the difference.
+
+   A fixed 92px basis left the value box 52px and "Descending" needs 67, so the one chip in the row
+   that CANNOT grow was the one truncating — while its neighbour sat at 422px holding "Cost", which
+   needs 26. Nearly 400px of slack beside a 15px shortfall.
+
+   `flex: 0 0 auto` was tried first and is wrong here: the row is `flex-wrap: wrap` and was EXACTLY
+   full at 422 + 92 + 6, so sizing the chip to its content put both onto their own line — a worse
+   outcome than the truncation. A wider FIXED basis does not, because the field chip is `flex: 1 1 0`
+   and absorbs the extra 16px on its own: it measures 388 here where it measured 422.
+
+   A `min-width: 0` was added to the field chip alongside this and then removed. It was inert — the
+   row stays on one line without it, which a control proved after the fact. The claim that the two
+   changes were needed together was written before it was tested, and was wrong. */
 .note-database-container .db-panel-row .db-sort-direction-dropdown {
-  flex: 0 0 92px;
+  flex: 0 0 108px;
 }
 
 .note-database-container .db-panel-row .db-filter-operator-dropdown {

@@ -9624,10 +9624,95 @@ await section("the selected day is the one thing the picker exists to show", asy
   }
 });
 
+// ───────────────────────────────────────────────────────────────────
+// NOTHING TRUNCATES WHILE ITS NEIGHBOUR HAS ROOM TO SPARE
+// ───────────────────────────────────────────────────────────────────
+//
+// The last cluster off the capture review. Measured on the sort rule row: the direction chip was
+// `flex: 0 0 92px`, which left its value box 52px while "Descending" needs 67 — and the field chip
+// beside it sat at 422px holding "Cost", which needs 26. Nearly 400px of slack next to a 15px
+// shortfall, and the shortfall was in the one chip that could not grow.
+//
+// THE ROW IS `flex-wrap: wrap` AND WAS EXACTLY FULL, which is why the obvious fix is wrong.
+// Sizing the direction chip to its content (`flex: 0 0 auto`) put both onto their own lines — a
+// worse outcome than the truncation. A wider FIXED basis does not, because the field chip is
+// `flex: 1 1 0` and absorbs the difference by itself.
+//
+// So the check reads both halves: the value fits, AND the row is still one line. A `min-width: 0`
+// was added to the field chip alongside the fix on the theory that it was needed for that shrink,
+// then removed when a control showed the row stays on one line without it. The theory was written
+// before it was tested and it was wrong; the one-line assertion below is what would have caught it
+// either way.
+
+const rowSlackResults = [];
+
+await section("nothing truncates while its neighbour has room to spare", async () => {
+  const page = await browser.newPage({ viewport: VIEWPORT, reducedMotion: "reduce" });
+  await page.setContent(page_html);
+  await page.addStyleTag({ content: readFileSync(join(REPO, "styles.css"), "utf8") + HOST_BARE_CONTROLS });
+  await page.addStyleTag({ content: readFileSync(join(REPO, "tools/screenshots/theme.css"), "utf8") });
+  await page.addScriptTag({ content: shimJs + "\ninstallObsidianDomShim(globalThis);" });
+  await page.addScriptTag({ content: positionerJs });
+
+  const measured = await page.evaluate(() => {
+    const host = document.querySelector(".note-database-container");
+    const chip = (cls, value) => `
+      <button type="button" class="db-dropdown-field db-panel-dropdown ${cls}">
+        <span class="db-dropdown-field-icon"></span>
+        <div class="db-dropdown-field-text"><span class="db-dropdown-field-value">${value}</span></div>
+        <span class="db-dropdown-field-chevron"></span>
+      </button>`;
+
+    // The longest value each chip can hold, which is what a fixed basis has to be sized against.
+    const read = (direction) => {
+      const wrap = host.createDiv({ cls: "db-active-rule-popover db-filter-panel db-sort-panel is-sort" });
+      wrap.innerHTML = `<div class="db-panel-row db-sort-rule-row db-active-rule-editor-row">`
+        + chip("db-sort-field-dropdown", "Cost")
+        + chip("db-sort-direction-dropdown", direction)
+        + `</div>`;
+      const row = wrap.querySelector(".db-panel-row");
+      const kids = [...row.children];
+      const tops = new Set(kids.map((el) => Math.round(el.getBoundingClientRect().top)));
+      const value = kids[1].querySelector(".db-dropdown-field-value");
+      const result = {
+        direction,
+        lines: tops.size,
+        clipped: value.scrollWidth > value.clientWidth + 1,
+        valueW: Math.round(value.getBoundingClientRect().width),
+        wants: value.scrollWidth,
+        fieldW: Math.round(kids[0].getBoundingClientRect().width),
+        dirW: Math.round(kids[1].getBoundingClientRect().width),
+      };
+      wrap.remove();
+      return result;
+    };
+
+    return { descending: read("Descending"), ascending: read("Ascending") };
+  });
+
+  const record = (name, pass, detail) => rowSlackResults.push({ name, pass, detail });
+
+  for (const arm of [measured.descending, measured.ascending]) {
+    record(`the sort row shows "${arm.direction}" without clipping it`,
+      !arm.clipped,
+      `the value box is ${arm.valueW}px and the text needs ${arm.wants}px; the field chip beside it `
+        + `is ${arm.fieldW}px holding "Cost". A fixed basis has to be sized against the LONGEST `
+        + `value the chip can hold, and "${arm.direction}" is that test`);
+
+    record(`the sort row stays on one line for "${arm.direction}"`,
+      arm.lines === 1,
+      `${arm.lines} line(s): field ${arm.fieldW}px + direction ${arm.dirW}px. The row is `
+        + `flex-wrap: wrap and was exactly full, so sizing the direction chip to its CONTENT put `
+        + `both on their own line. A wider fixed basis does not — the field chip absorbs it, 422 `
+        + `to 388 — and this row is asserted beside the clipping because that distinction is the `
+        + `whole of the fix`);
+  }
+});
+
 results.push(...phoneResults, ...menuResults, ...addViewDesktopResults, ...addViewPhoneResults,
   ...grammarResults, ...addViewGrammar, ...motionResults, ...reducedResults, ...desktopMenuResults, ...cellResults, ...sheetResults, ...selectCellResults, ...selectPhoneResults, ...rowPhoneResults, ...rowNarrowResults,
   ...desktopPanelResults, ...stateResults, ...keyboardParityResults, ...familyResults, ...touchResults, ...overlapResults, ...rhythmResults, ...rendererRhythmResults,
-  ...liftedResults, ...inlineEditResults, ...numberParityResults, ...peekLayerResults, ...propertyRowResults, ...menuEdgeResults, ...headerRhythmResults, ...panelParityResults, ...registryResults, ...flickResults, ...selectWidthResults, ...fixtureTableResults, ...panelOwnershipResults, ...peekOwnershipResults, ...checkboxIdentityResults, ...listOwnershipResults, ...addViewOutcomeResults, ...editOutcomeResults, ...menuOutcomeResults, ...backdropOutcomeResults, ...paletteResults, ...dayStateResults, ...sectionFailures);
+  ...liftedResults, ...inlineEditResults, ...numberParityResults, ...peekLayerResults, ...propertyRowResults, ...menuEdgeResults, ...headerRhythmResults, ...panelParityResults, ...registryResults, ...flickResults, ...selectWidthResults, ...fixtureTableResults, ...panelOwnershipResults, ...peekOwnershipResults, ...checkboxIdentityResults, ...listOwnershipResults, ...addViewOutcomeResults, ...editOutcomeResults, ...menuOutcomeResults, ...backdropOutcomeResults, ...paletteResults, ...dayStateResults, ...rowSlackResults, ...sectionFailures);
 
 await browser.close();
 rmSync(work, { recursive: true, force: true });

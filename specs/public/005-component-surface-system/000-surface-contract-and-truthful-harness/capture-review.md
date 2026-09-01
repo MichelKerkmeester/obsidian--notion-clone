@@ -297,8 +297,39 @@ the list gained a phone rule and is welcome. One JOINING it lost a rule, or ship
 that is the regression worth a red — observed by copying a desktop capture over its mobile twin:
 `FAIL — 1 scenario(s) newly identical. list-view`.
 
-*Still on the queue:* truncation where the row still has slack — the sort direction chips, the
-dropdown options, the base-import labels.
+### The fifth cluster, and the queue is empty
+
+*"Truncation where the row still has slack"* named three surfaces. Measured, they are three different
+things.
+
+**The dropdown options were a fixture defect** — the same class as the two table fixtures. Labels
+rendered as `S…`, `A…`, `R…` in a popover over a thousand pixels wide, because `.db-dropdown-option`
+is `display: grid` with `grid-template-columns: 16px minmax(0, 1fr)` and the fixture omitted the
+check span that belongs in the first track. **The label was landing in the 16px column.** The real
+producer emits `check` + `text > label`; the fixture now does too, and the truncation is gone.
+
+**The base-import labels do not truncate at desktop width** — that reading was from the mobile shot,
+and the column sizing there is a separate question this pass did not open.
+
+**The sort direction chip was real.** `flex: 0 0 92px` left its value box 52px and "Descending" needs
+67, while the field chip beside it sat at 422px holding "Cost", which needs 26. Nearly 400px of slack
+next to a 15px shortfall, in the one chip that could not grow. Now `0 0 108px`; the field chip
+absorbs it and measures 388.
+
+**Two wrong turns, both recorded rather than tidied away.** `flex: 0 0 auto` looks like the right
+answer and is not: the row is `flex-wrap: wrap` and was **exactly** full at 422 + 92 + 6, so sizing
+the chip to its content put both on their own line — worse than the truncation. Then a `min-width: 0`
+was added to the field chip on the theory that its shrink needed permission, and **removed when a
+control showed the row stays on one line without it.** That theory was written before it was tested.
+The check now asserts both halves — the value fits *and* the row is one line — because the second is
+what makes the first safe.
+
+---
+
+**The triage queue from Release 4 is now empty.** Five clusters, five different outcomes: two product
+fixes, one fixture defect, one harness silence, one measured-and-rejected inference — plus two
+reports examined and deliberately left alone. The reviewers' observations were reliable; their causal
+claims were not, which is why each was measured before anything moved.
 
 ---
 
