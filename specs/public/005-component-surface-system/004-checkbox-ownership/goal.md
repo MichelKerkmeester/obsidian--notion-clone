@@ -92,9 +92,24 @@ why most of them are still open even where a number looks green.*
       stylesheet's `@media (pointer: coarse)` rule raises the box to 28×28; the touch-target census
       declares the checkbox because its hit area comes from a `::before` inset a bounding box does
       not include, and measures that surface directly.
-- [ ] Plus the five stateful dimensions: semantic identity, transition trace, action outcome,
-      resource ownership, negative-control mutation. **No mapping exists.** `010` and `011` each
-      built one; this packet has not.
+- [x] Plus the five stateful dimensions: semantic identity, transition trace, action outcome,
+      resource ownership, negative-control mutation. **Mapped and measured 2026-09-01**, in
+      `acceptance-criteria.md` §2b.
+      **This packet measures how a checkbox LOOKS to death and had never asked what one DOES.**
+      Sizes, radii, per-state signatures, borrowed ancestors — none of it can see a box that toggles
+      the wrong row.
+      → *the checkbox in each row toggles the row it was drawn in*: 8 rows driven through the
+      shipped `TableRenderer`, each box handed its own path. **Red** with every box wired to
+      `rows[0]`: `drawn in note-1.md but toggled note-0.md` and six more. An index-keyed selection
+      is invisible to every appearance check in this packet, which is why the check drives eight
+      rows rather than one — one row cannot show a row toggling its neighbour.
+      → *the checkbox factory subscribes to nothing*: `0 document or window subscription(s) while
+      rendering 8 rows`. **The zero is asserted rather than assumed**, because a DOM factory that
+      started subscribing would leak once per row — the worst place for it. Red with one listener
+      added inside `createCheckbox`: `9 … document:click=9`, header included.
+      **Transition trace and negative-control mutation were already measured** and now have a row
+      naming them: the per-state appearance pass, and the borrowed-ancestor guard's five removals.
+
 - [ ] The operator opens a board on a phone and sees squares. **Only the operator closes this.**
       Gate passage has already proven insufficient here.
 **HARNESS DEPENDENCE, 2026-08-31 — 1 sound / 16 dependent / 1 unknown. This packet is the most

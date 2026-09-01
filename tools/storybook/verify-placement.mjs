@@ -8545,10 +8545,128 @@ await section("the record peek owns what it subscribes", async () => {
       + `an open-and-close that waits`);
 });
 
+// ───────────────────────────────────────────────────────────────────
+// EVERY ROW CHECKBOX TOGGLES ITS OWN ROW
+// ───────────────────────────────────────────────────────────────────
+//
+// `004`'s five-dimension row names them and maps none. Its appearance is measured to death — sizes,
+// radii, per-state signatures, borrowed ancestors — and all of that is about how a checkbox LOOKS.
+// Nothing here had asked what one DOES.
+//
+// Semantic identity and action outcome are the same question for this surface: the box in row seven
+// must toggle row seven. That is the bug an index-keyed selection produces, it survives every
+// appearance check ever written, and it is invisible until two rows disagree.
+//
+// So every row's checkbox is clicked in turn and the row the action received is compared to the row
+// the box was drawn in. `createCheckbox` itself subscribes to nothing — it is a DOM factory — so
+// resource ownership here is a zero claim, and it is asserted rather than assumed for the same
+// reason: a factory that started subscribing would be a change worth catching.
+
+const checkboxIdentityResults = [];
+
+await section("every row checkbox toggles its own row", async () => {
+  const page = await browser.newPage({ viewport: VIEWPORT, reducedMotion: "reduce" });
+  await page.setContent(page_html);
+  await page.addStyleTag({ content: readFileSync(join(REPO, "styles.css"), "utf8") + HOST_BARE_CONTROLS });
+  await page.addScriptTag({ content: shimJs + "\ninstallObsidianDomShim(globalThis);" });
+  await page.addScriptTag({ content: positionerJs });
+
+  const measured = await page.evaluate(() => {
+    const { TableRenderer } = globalThis.__table;
+    const host = document.querySelector(".note-database-container");
+
+    const columns = [
+      { key: "file.name", label: "Name", type: "text" },
+      { key: "cost", label: "Cost", type: "number" },
+    ];
+    const rows = Array.from({ length: 8 }, (_, i) => ({
+      file: { path: `note-${i}.md`, name: `note-${i}.md`, basename: `Note ${i}` },
+      frontmatter: { cost: i }, computed: {},
+    }));
+
+    const toggled = [];
+    const bag = {
+      getVisibleColumns: () => columns,
+      isRowSelected: () => false,
+      toggleRowSelected: (row) => toggled.push(row?.file?.path ?? String(row)),
+      areAllRowsSelected: () => false, toggleRowsSelected: () => undefined,
+      setupColumnHeader: (th, col) => { th.setText(col.label); },
+      setupRow: () => undefined,
+      renderCell: (td, row, col) => { td.setText(String(row.frontmatter[col.key] ?? "")); },
+      captureInteractionSnapshot: () => undefined, restoreInteractionSnapshot: () => undefined,
+      renderRecordIcon: () => null, renderGroupSummaries: () => undefined,
+      applyConditionalFormat: () => undefined, setupFillHandle: () => undefined,
+      moveRowToPosition: () => undefined, moveRowsToGroup: () => undefined,
+      moveRowToGroupAndPosition: () => undefined,
+      createEntry: () => undefined, addColumn: () => undefined, showRowMenu: () => undefined,
+      changeColumnCalculation: () => undefined,
+      isGroupCollapsed: () => false, toggleGroupCollapsed: () => undefined,
+      expandGroup: () => undefined,
+      get hideCreateEntry() { return false; },
+    };
+
+    // A factory that takes nothing is a claim, so it is watched rather than trusted.
+    const live = new Map();
+    for (const [name, target] of [["document", document], ["window", window]]) {
+      const add = target.addEventListener.bind(target);
+      target.addEventListener = (type, fn, opts) => {
+        live.set(`${name}:${type}`, (live.get(`${name}:${type}`) || 0) + 1);
+        return add(type, fn, opts);
+      };
+    }
+
+    const container = host.createDiv({ cls: "db-cb-host" });
+    const config = { schema: { columns }, viewType: "table", columnOrder: columns.map((c) => c.key) };
+    new TableRenderer(bag).renderTable(container, config, rows);
+
+    const rowEls = [...container.querySelectorAll("tr[data-note-database-row-path]")];
+    const pairs = [];
+    for (const tr of rowEls) {
+      const drawnIn = tr.getAttribute("data-note-database-row-path");
+      const box = tr.querySelector("td.db-select-col input.db-checkbox");
+      if (!box) { pairs.push({ drawnIn, received: "(no checkbox)" }); continue; }
+      const before = toggled.length;
+      box.click();
+      pairs.push({ drawnIn, received: toggled.slice(before)[0] ?? "(nothing)" });
+    }
+
+    container.remove();
+    return {
+      rows: rowEls.length,
+      pairs,
+      mismatched: pairs.filter((p) => p.drawnIn !== p.received),
+      factoryKeys: [...live.entries()].map(([k, n]) => `${k}=${n}`).join(", ") || "none",
+      factoryCount: [...live.values()].reduce((a, b) => a + b, 0),
+    };
+  });
+
+  const record = (name, pass, detail) => checkboxIdentityResults.push({ name, pass, detail });
+  const m = measured;
+
+  record("every row rendered a checkbox to click",
+    m.rows > 1 && m.pairs.every((p) => p.received !== "(no checkbox)"),
+    `${m.rows} row(s) rendered, ${m.pairs.filter((p) => p.received === "(no checkbox)").length} `
+      + `without a checkbox. A run over one row cannot show a row toggling its neighbour, and a run `
+      + `over none reports perfect agreement`);
+
+  record("the checkbox in each row toggles the row it was drawn in",
+    m.rows > 1 && m.mismatched.length === 0,
+    m.mismatched.length === 0
+      ? `${m.rows} rows, each box handed the action its own path — this is the bug an index-keyed `
+        + `selection produces, and it survives every appearance check in this packet`
+      : m.mismatched.map((p) => `drawn in ${p.drawnIn} but toggled ${p.received}`).join("; "));
+
+  record("the checkbox factory subscribes to nothing",
+    m.factoryCount === 0,
+    `${m.factoryCount} document or window subscription(s) taken while rendering ${m.rows} rows: `
+      + `${m.factoryKeys}. A DOM factory that started subscribing would leak once per row, which is `
+      + `the worst place for it — so the zero is asserted rather than assumed`);
+});
+
 results.push(...phoneResults, ...menuResults, ...addViewDesktopResults, ...addViewPhoneResults,
   ...grammarResults, ...addViewGrammar, ...motionResults, ...reducedResults, ...desktopMenuResults, ...cellResults, ...sheetResults, ...selectCellResults, ...selectPhoneResults, ...rowPhoneResults, ...rowNarrowResults,
   ...desktopPanelResults, ...stateResults, ...keyboardParityResults, ...familyResults, ...touchResults, ...overlapResults, ...rhythmResults, ...rendererRhythmResults,
-  ...liftedResults, ...inlineEditResults, ...numberParityResults, ...peekLayerResults, ...propertyRowResults, ...menuEdgeResults, ...headerRhythmResults, ...panelParityResults, ...registryResults, ...flickResults, ...selectWidthResults, ...fixtureTableResults, ...panelOwnershipResults, ...peekOwnershipResults, ...sectionFailures);
+  ...liftedResults, ...inlineEditResults, ...numberParityResults, ...peekLayerResults, ...propertyRowResults, ...menuEdgeResults, ...headerRhythmResults, ...panelParityResults, ...registryResults, ...flickResults, ...selectWidthResults, ...fixtureTableResults, ...panelOwnershipResults, ...peekOwnershipResults, ...checkboxIdentityResults, ...sectionFailures);
 
 await browser.close();
 rmSync(work, { recursive: true, force: true });

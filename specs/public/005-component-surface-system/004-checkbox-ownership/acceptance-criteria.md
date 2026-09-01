@@ -424,6 +424,30 @@ first**, and the rest should be re-derived from it rather than from a bare compu
 ---
 
 <!-- ANCHOR:closure -->
+## 2b. THE FIVE STATEFUL DIMENSIONS — 2026-09-01
+
+This packet's appearance is measured to death — sizes, radii, per-state signatures, borrowed
+ancestors. All of that is about how a checkbox LOOKS. Nothing here had asked what one DOES.
+
+| Dimension | Where this packet answers it | Evidence |
+|---|---|---|
+| **Semantic identity** | *new here* — the box in row seven toggles row seven | 8 rows driven through the shipped `TableRenderer`, each box handed its own path. Red with every box wired to `rows[0]`: `drawn in note-1.md but toggled note-0.md` and six more |
+| **Transition trace** | unchecked → checked → indeterminate → focus, each a measurable difference | The `checkbox-appearance` per-state pass, one representative per shape with transitions disabled — a signature read in the same tick as the state change reported a false "no difference" for exactly one family |
+| **Action outcome** | *new here* — the row the action received, not the call count | Same measurement as semantic identity: the assertion is on the argument `toggleRowSelected` was handed |
+| **Resource ownership** | *new here* — the factory takes nothing, and that is a claim | `0 document or window subscription(s) while rendering 8 rows`. Red with one listener added inside `createCheckbox`: `9 … document:click=9` — once per checkbox, header included |
+| **Negative-control mutation** | The borrowed-ancestor guard's five removals, plus the three above | Each of the five call sites removed in turn; the guard fails on each |
+
+**Identity is the bug this packet could not otherwise see.** An index-keyed selection toggles the
+wrong row and survives every appearance check ever written here, because nothing about the box's
+size, radius or state signature changes. It is invisible until two rows disagree, which is why the
+check drives eight rows rather than one.
+
+**The zero is asserted, not assumed.** `createCheckbox` is a DOM factory and subscribes to nothing
+today. A factory that started subscribing would leak once per row — the worst possible place for it —
+so the count is measured while eight rows render rather than read off the source.
+
+---
+
 ## 3. CLOSURE STATEMENT
 
 **Closeable:** No
