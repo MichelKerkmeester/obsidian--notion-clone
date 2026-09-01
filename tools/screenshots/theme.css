@@ -26,6 +26,13 @@
   --text-error: #c0392b;
   --text-accent: #5a67d8;
   --text-selection: rgba(90, 103, 216, 0.18);
+  /* The host's link tokens. Their absence is why the file-field captures painted #0000EE — the
+     plugin reads `var(--link-color)` and styles nothing itself for an internal link, which is
+     correct for an Obsidian plugin and leaves the colour to the app. With no stand-in here the
+     declaration resolved to nothing and the USER AGENT answered, so every capture of that surface
+     showed a blue no reader will ever see. Mirrors --text-accent, which is what Obsidian does. */
+  --link-color: #5a67d8;
+  --link-color-hover: #4c56b8;
 
   --interactive-normal: #f2f3f5;
   --interactive-hover: #e9e9e9;
@@ -72,6 +79,8 @@
   --text-faint: #6c6f74;
   --text-accent: #a5b4fc;
   --text-selection: rgba(130, 145, 255, 0.22);
+  --link-color: #a5b4fc;
+  --link-color-hover: #c7d2fe;
 
   --interactive-normal: #2a2a2a;
   --interactive-hover: #333333;
@@ -224,4 +233,20 @@ button {
 
 .theme-dark {
   --background-modifier-form-field: #1a1a1a;
+}
+
+/* Obsidian styles `.internal-link` itself, and the plugin deliberately does not — a link inside a
+   database should look like every other link in the vault. This stand-in has to carry that rule or
+   the captures show a link the app never renders. It is the host's job being stood in for, not a
+   plugin style, which is why it lives here rather than in `styles.css`. */
+
+
+.internal-link {
+  color: var(--link-color);
+  text-decoration: none;
+}
+
+.internal-link:hover {
+  color: var(--link-color-hover);
+  text-decoration: underline;
 }

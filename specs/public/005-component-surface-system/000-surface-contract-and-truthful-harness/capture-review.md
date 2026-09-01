@@ -247,8 +247,36 @@ It now builds the combination too, and goes red at `rgb(107, 116, 224) on rgb(10
 default dark pair measures **4.04**. The plugin cannot raise that without overriding an accent the
 user chose, which is worse than the shortfall. The number is recorded here so it stays visible.
 
-*Still on the queue:* the unstyled `#0000EE` link in dark, truncation where the row still has slack,
-and the `-mobile-*` captures that are byte-identical to their desktop counterparts.
+### The third cluster: a harness silence, not a plugin colour
+
+The reviewer reported the file-field links at `#0000EE` on a dark row — 1.78:1, unreadable. True, and
+the cause is the opposite of what it looks like.
+
+**The plugin styles nothing here on purpose.** `.db-file-self-link` carries no rule at all, and a
+link inside a database is meant to look like every other link in the vault — Obsidian styles
+`.internal-link` itself. What was missing is that the capture harness's stand-in for the host never
+did, and never defined `--link-color` either. The declaration resolved to nothing and **the user
+agent answered**, so every capture of that surface showed a blue no reader will ever see.
+
+That is the pinned-values scan's shape arriving from the other side: not a harness value
+*contradicting* production, but a harness **silence** letting the browser fill in. Both produce a
+picture of a surface the plugin does not render, and neither was catchable by the other's tool — so
+`unstyled-links` is now a gate lane, scanning every scenario in both themes for a user-agent link
+colour. It found **four**, in *both* themes rather than only the dark one the reviewer saw, and it
+names `.db-file-self-link` rather than the sibling class the report guessed at.
+
+Fixed in `theme.css`, which is the stand-in host, not in `styles.css`. Red with the rule removed.
+
+### One report examined and not acted on
+
+The same capture shows `design` as a filled pill and `saas` as outline-only, reported as "two
+different treatments in one cell". The fixture gives `design` a `status-color-blue` class and `saas`
+none — it is deliberately depicting the **no-colour-assigned** state alongside a coloured one. Two
+treatments, because there are two states. **Nothing changed**, and it is recorded here so the next
+reader does not re-raise it.
+
+*Still on the queue:* truncation where the row still has slack, and the `-mobile-*` captures that are
+byte-identical to their desktop counterparts.
 
 ---
 

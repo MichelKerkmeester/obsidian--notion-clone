@@ -87,6 +87,7 @@ const CHECKS = [
   // reported 53 checkboxes at a size no phone paints. It ratchets rather than cliffs: 286 controls
   // sit below this project own 28px floor today, and the count may not grow while they are triaged.
   { name: "touch-targets", cmd: ["node", "tools/live/touch-targets.mjs"] },
+  { name: "unstyled-links", cmd: ["node", "tools/live/unstyled-links.mjs"] },
   // The censuses date themselves against the files they measured, and until this line existed
   // nothing asked. Seven of the eight were stale, one of them holding a checkbox count the roadmap
   // quoted as evidence for work that had already changed it. The stamping mechanism was built, the
