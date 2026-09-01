@@ -505,10 +505,39 @@ const phone = await browser.newPage({
 // they resolve to the guaranteed-invalid value and every border computes as `0px none` — a divider
 // check would then report "no divider" against a stylesheet that declares one, which is a harness
 // failure wearing the costume of a product defect.
+// The navbar as the host actually declares it, not as this file used to guess it.
+//
+// It was a hand-written div at `height:72px; z-index:100`. Both numbers were inventions. The
+// installed application stylesheet gives `.mobile-navbar` `position: var(--navbar-position)` which
+// is `fixed`, `height: var(--navbar-height)` which is **80px**, full width — and **no z-index at
+// all**. That last one is the whole of the difference: an invented stacking context made the navbar
+// win a hit test it does not win on a device, and every check reading through it inherited the
+// invention. Declared as tokens rather than literals so the rule and its values arrive together.
+const NAVBAR_TOKENS = '--navbar-position: fixed; --navbar-height: 80px; --navbar-width: 100%;'
+  + ' --navbar-max-width: 100%; --navbar-radius: 0;'
+  + ' --navbar-bottom-offset: max(var(--safe-area-inset-bottom), 12px);';
+const NAVBAR_RULE = `.mobile-navbar {
+  background-color: var(--background-primary, #222);
+  position: var(--navbar-position);
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  width: var(--navbar-width);
+  max-width: var(--navbar-max-width);
+  height: var(--navbar-height);
+  padding: 0 8px var(--navbar-bottom-offset);
+  border-radius: var(--navbar-radius);
+  display: flex;
+}`;
 const phoneBody = '<body class="is-phone" style="--safe-area-inset-bottom: 34px;'
-  + '--background-modifier-border: #333333">'
-  + '<div class="mobile-navbar" style="position:fixed;left:0;right:0;bottom:0;height:72px;'
-  + 'background:#222;z-index:100"></div>';
+  + '--background-modifier-border: #333333;' + NAVBAR_TOKENS + '">'
+  // The rule travels with the markup rather than as a separate stylesheet call. Fifteen pages build
+  // themselves from this string, and a rule added per page is a rule fourteen of them can miss —
+  // which is exactly what happened: the navbar carried its class, no page but one gave it a height,
+  // and the check that reads it measured 0px while still reporting a number.
+  + '<style>' + NAVBAR_RULE + '</style>'
+  + '<div class="mobile-navbar"></div>';
 await phone.setContent(page_html.replace("<body>", phoneBody));
 await phone.addStyleTag({ content: readFileSync(join(REPO, "styles.css"), "utf8") + HOST_BARE_CONTROLS });
 await phone.addScriptTag({ content: shimJs + "\ninstallObsidianDomShim(globalThis);" });
@@ -5854,9 +5883,11 @@ await section("lifted probes: desktop placement", async () => {
   });
   await phone.setContent(pageHtml().replace(
     "<body>",
-    '<body class="is-phone" style="--safe-area-inset-bottom: 34px; --background-modifier-border: #333333">'
-    + '<div class="mobile-navbar" style="position:fixed;left:0;right:0;bottom:0;height:72px;background:#222;z-index:100"></div>',
+    '<body class="is-phone" style="--safe-area-inset-bottom: 34px; --background-modifier-border: #333333;'
+    + NAVBAR_TOKENS + '">'
+    + '<div class="mobile-navbar"></div>',
   ));
+  await phone.addStyleTag({ content: NAVBAR_RULE });
   await phone.addStyleTag({ content: readFileSync(join(REPO, "styles.css"), "utf8") + HOST_BARE_CONTROLS });
   await phone.addScriptTag({ content: shimJs + "\ninstallObsidianDomShim(globalThis);" });
   await phone.addScriptTag({ content: positionerJs });
@@ -5987,9 +6018,10 @@ await section("lifted probes: the sheet drag", async () => {
     .workspace-leaf, .workspace-leaf-content, .view-content { height: 100%; }
     .app-container.mod-static-nav .workspace { height: calc(100% - 80px); }
     .anchor { width: 120px; height: 28px; background: #ccd; }
+    ${NAVBAR_RULE}
   </style></head>
-  <body class="is-phone" style="--safe-area-inset-bottom: 34px; --background-modifier-border: #333333">
-    <div class="mobile-navbar" style="position:fixed;left:0;right:0;bottom:0;height:72px;background:#222;z-index:100"></div>
+  <body class="is-phone" style="--safe-area-inset-bottom: 34px; --background-modifier-border: #333333; ${NAVBAR_TOKENS}">
+    <div class="mobile-navbar"></div>
     <div class="app-container mod-static-nav"><div class="workspace">
       <div class="workspace-split mod-root">
         <div class="workspace-leaf"><div class="workspace-leaf-content"><div class="view-content">
@@ -6262,9 +6294,10 @@ await section("lifted probes: the sheet audit", async () => {
     .workspace-leaf, .workspace-leaf-content, .view-content { height: 100%; }
     .app-container.mod-static-nav .workspace { height: calc(100% - 80px); }
     .anchor { width: 120px; height: 28px; background: #ccd; }
+    ${NAVBAR_RULE}
   </style></head>
-  <body class="is-phone theme-light" style="--safe-area-inset-bottom: 34px; --background-modifier-border: #333333; --background-primary: #ffffff">
-    <div class="mobile-navbar" style="position:fixed;left:0;right:0;bottom:0;height:72px;background:#222;z-index:100"></div>
+  <body class="is-phone theme-light" style="--safe-area-inset-bottom: 34px; --background-modifier-border: #333333; --background-primary: #ffffff; ${NAVBAR_TOKENS}">
+    <div class="mobile-navbar"></div>
     <div class="app-container mod-static-nav"><div class="workspace"><div class="workspace-split mod-root">
       <div class="workspace-leaf"><div class="workspace-leaf-content"><div class="view-content">
       <div class="note-database-container"><div class="anchor" id="anchor"></div></div>
@@ -6561,6 +6594,65 @@ await section("lifted probes: the sheet audit", async () => {
     `the same class left unportalled under wrapper 1 measures ${fills.unportalledFill} against the `
       + `sheets' ${distinct[0]}; the wrapper declares --background-primary: ${fills.wrapperValue || "(nothing)"}`);
 
+  // ── the sheet covers the navbar, hit-tested against the host's own rule ──
+  //
+  // This was recorded unmeasurable, and the objection was right about the harness rather than about
+  // the sheet: the navbar it hit-tested was a hand-written div carrying `height: 72px` and
+  // `z-index: 100`, and both numbers were inventions. The installed application stylesheet gives
+  // `.mobile-navbar` `position: fixed`, `height: 80px`, full width — and **no z-index at all**. An
+  // invented stacking context made the navbar win a contest it does not enter on a device, so a
+  // check reading through it was measuring the invention.
+  //
+  // With the real rule in the page the question becomes answerable, and it is answered by a hit
+  // test rather than by comparing declared z-indexes: what a thumb reaches is what
+  // `elementFromPoint` returns, and a sheet that merely declares a higher layer while something
+  // else takes the press is the defect this is about.
+  await openSheet();
+  await page.waitForTimeout(200);
+  const navbarCover = await page.evaluate(() => {
+    const nav = document.querySelector(".mobile-navbar");
+    const panel = document.querySelector(".db-record-detail-panel");
+    const scrim = document.querySelector(".db-mobile-sheet-scrim");
+    if (!nav || !panel) return null;
+    const navBox = nav.getBoundingClientRect();
+    const x = Math.round(navBox.left + navBox.width / 2);
+    const y = Math.round(navBox.top + navBox.height / 2);
+    const hit = document.elementFromPoint(x, y);
+    const describe = (el) => (el ? `${el.tagName.toLowerCase()}.${String(el.className || "").split(" ").filter(Boolean).join(".") || "(none)"}` : "nothing");
+    const scrimBox = scrim ? scrim.getBoundingClientRect() : null;
+    return {
+      navHeight: Math.round(navBox.height),
+      navZ: getComputedStyle(nav).zIndex,
+      panelZ: getComputedStyle(panel).zIndex,
+      at: describe(hit),
+      insidePanel: Boolean(hit && panel.contains(hit)),
+      isPanel: hit === panel,
+      panelBottom: Math.round(panel.getBoundingClientRect().bottom),
+      viewportH: window.innerHeight,
+      scrimCoversNavBand: Boolean(scrimBox && scrimBox.top <= 0.5 && scrimBox.bottom >= window.innerHeight - 0.5
+        && scrimBox.left <= 0.5 && scrimBox.right >= window.innerWidth - 0.5),
+      scrimBox: scrimBox
+        ? `${Math.round(scrimBox.left)},${Math.round(scrimBox.top)} ${Math.round(scrimBox.width)}x${Math.round(scrimBox.height)}`
+        : "(no scrim)",
+    };
+  });
+
+  record(7, "a press at the navbar's centre reaches the sheet, not the navbar",
+    Boolean(navbarCover) && navbarCover.navHeight === 80 && (navbarCover.isPanel || navbarCover.insidePanel),
+    navbarCover
+      ? `the navbar is ${navbarCover.navHeight}px with z-index ${navbarCover.navZ} — the host declares none — `
+        + `and a press at its centre lands on ${navbarCover.at}. The sheet reads z-index ${navbarCover.panelZ}. `
+        + `The height is asserted at 80 because this used to be a hand-written 72px div at z-index 100, and a `
+        + `check that passed against that was reading an invention`
+      : "no navbar or no panel in the page — the harness cannot observe this at all");
+
+  record(7, "the scrim covers the whole viewport, navbar band included",
+    Boolean(navbarCover) && navbarCover.scrimCoversNavBand,
+    navbarCover
+      ? `scrim box ${navbarCover.scrimBox} against a ${navbarCover ? 390 : 0}x${navbarCover.viewportH} viewport. `
+        + `A scrim stopping short of the navbar leaves a live strip of the app under a modal surface`
+      : "no navbar or no panel in the page");
+
   // ── ASK 7 — the scrim: modal, 25% black, and out of the drag's way ────
   await openSheet();
   await page.waitForTimeout(200);
@@ -6812,9 +6904,10 @@ await section("the sheet's inline editor", async () => {
     .workspace-leaf, .workspace-leaf-content, .view-content { height: 100%; }
     .app-container.mod-static-nav .workspace { height: calc(100% - 80px); }
     .anchor { width: 120px; height: 28px; background: #ccd; }
+    ${NAVBAR_RULE}
   </style></head>
-  <body class="${phone ? "is-phone " : ""}theme-light" style="--safe-area-inset-bottom: 34px; --background-modifier-border: #333333; --background-primary: #ffffff; --font-ui-medium: 15px">
-    ${phone ? '<div class="mobile-navbar" style="position:fixed;left:0;right:0;bottom:0;height:72px;background:#222;z-index:100"></div>' : ""}
+  <body class="${phone ? "is-phone " : ""}theme-light" style="--safe-area-inset-bottom: 34px; --background-modifier-border: #333333; --background-primary: #ffffff; --font-ui-medium: 15px; ${NAVBAR_TOKENS}">
+    ${phone ? '<div class="mobile-navbar"></div>' : ""}
     <div class="app-container${phone ? " mod-static-nav" : ""}"><div class="workspace"><div class="workspace-split mod-root">
       <div class="workspace-leaf"><div class="workspace-leaf-content"><div class="view-content">
       <div class="note-database-container"><div class="anchor" id="anchor"></div></div>

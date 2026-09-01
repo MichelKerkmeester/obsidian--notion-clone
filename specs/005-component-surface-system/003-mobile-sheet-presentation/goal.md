@@ -30,14 +30,31 @@ denominator at all, which reads as finished rather than as unmeasured. Nothing i
 folder does not carry evidence for, and the harness-dependence audit below is why several rows that
 have a number are still open.*
 
-- [ ] `elementFromPoint(centreX, navbarCentreY)` returns the sheet. **Today: returns
-      `.mobile-navbar` even at 9999.** **The audit's objection is now half answered and half
-      standing, so this stays open.** The gate below proves the harness navbar is load-bearing for
-      the BOUNDS — the positioner reads its measured height and moves 22px without it. That is not
-      the same claim as stacking: the hand-written div carries `z-index: 100` and no `app.css` rule,
-      so what a hit test over it proves is that the plugin's declared z-index beats 100, not that it
-      beats Obsidian's own navbar. Two different properties of one element, and only one of them is
-      now evidenced.
+- [x] `elementFromPoint(centreX, navbarCentreY)` returns the sheet. **Today: returns
+      `.mobile-navbar` even at 9999.**
+      **The audit's objection was right about the harness, and it is now answered by removing the
+      invention rather than by arguing with it.** The div being hit-tested carried `height: 72px` and
+      `z-index: 100`, neither of which the host declares. Read out of the installed application
+      stylesheet, `.mobile-navbar` is `position: fixed`, `height: 80px`, full width, and **carries no
+      z-index at all**. The harness had invented a stacking context, and every check reading through
+      it inherited the invention.
+
+      **With the host's own rule in the page, a press at the navbar's centre lands on the sheet** —
+      `div.db-record-detail-panel…db-mobile-bottom-sheet`, navbar at `z-index auto`, sheet at 1000.
+      Hit-tested rather than compared by declared layer, because what a thumb reaches is what
+      `elementFromPoint` returns, and a sheet that declares a higher number while something else
+      takes the press is the defect this row is about.
+
+      **The recorded "even at 9999" was the harness stacking the navbar, not the sheet losing.**
+      Restoring 9999 is the control, and this row was **observed red** under it: the press lands on
+      `div.mobile-navbar`. The failing value is that one — the whole check reports the element a
+      thumb reaches, so the value it moved from is `div.mobile-navbar` and the value it moved to is
+      the sheet.
+      Restoring only the old invented `z-index: 100` does **not** fail it, because 1000 beats 100 —
+      that control ran first, did not discriminate, and is recorded because it is the one a reader
+      would reach for. Modelling the real navbar also moved this packet's own gate number: bounds
+      end at **730** rather than 810 and the removal delta is **30px** rather than 50px, so the
+      repair is visible in a figure the phase already asserts.
 - [x] Sheet bottom equals viewport bottom, offset 0px, for **both** mechanisms. **Today 49px vs
       0px.** **Met on both** — the panel path and the menu path are asserted in one check that
       compares them against each other, so a surface that docks correctly alone cannot pass while
@@ -49,8 +66,11 @@ have a number are still open.*
 - [x] With `visualViewport` reduced for the keyboard, the focused field stays visible. **Met on both
       arms** — the host variable and the visual-viewport shrink, the second driven with the host
       silent, and both families of sheet now answer one keyboard identically.
-- [ ] Scrim covers the full viewport including the navbar band. **Same exposure as the first row:**
-      the navbar it must cover is the harness's own div.
+- [x] Scrim covers the full viewport including the navbar band. **Same exposure as the first row,
+      and it lifts with it.** Measured against the host's own navbar rule rather than the harness's
+      div: the scrim boxes **0,0 390x844** against a 390x844 viewport, covering the navbar band
+      rather than stopping above it. A scrim short of the navbar leaves a live strip of the
+      application under a surface that is supposed to be modal.
 - [x] Removing the navbar from the harness moves an asserted number. **Run 2026-09-01, and it is
       this packet's own gate rather than one of its tasks.** `plan.md` Phase 1 says it plainly:
       *"Until removing the navbar from the harness moves an asserted number by more than the 1.35px
