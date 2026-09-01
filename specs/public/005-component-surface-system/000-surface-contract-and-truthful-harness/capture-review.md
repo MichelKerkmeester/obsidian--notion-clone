@@ -275,8 +275,30 @@ none — it is deliberately depicting the **no-colour-assigned** state alongside
 treatments, because there are two states. **Nothing changed**, and it is recorded here so the next
 reader does not re-raise it.
 
-*Still on the queue:* truncation where the row still has slack, and the `-mobile-*` captures that are
-byte-identical to their desktop counterparts.
+### The fourth cluster: half right, and the wrong half matters
+
+The reviewer found four scenarios whose `-mobile-*` PNG is byte-identical to its desktop twin and
+concluded *"these components have no mobile adaptation at all … the mobile shots prove nothing about
+mobile."*
+
+**The count is right and the inference is not.** The capture pipeline does apply `is-mobile is-phone`
+and a 402px viewport on the mobile pass — **56 of 60 scenarios differ between the two devices**, which
+is the evidence the switch is live. The four that match carry no rule keyed to the phone and their
+content is narrower than either viewport, so their mobile capture is **redundant rather than false**.
+`dropdown-field`, `field-date-value-picker`, `field-date-value-picker-datetime`,
+`field-option-color-picker`.
+
+*And the consequence the reviewer drew from it is already counted.* Their under-floor day cells and
+swatches are in `touch-targets`' recorded baseline of 224 controls awaiting triage — known, named,
+and not a new finding.
+
+**`device-parity` is now a gate lane, and its ratchet runs one way on purpose.** A scenario LEAVING
+the list gained a phone rule and is welcome. One JOINING it lost a rule, or shipped without one, and
+that is the regression worth a red — observed by copying a desktop capture over its mobile twin:
+`FAIL — 1 scenario(s) newly identical. list-view`.
+
+*Still on the queue:* truncation where the row still has slack — the sort direction chips, the
+dropdown options, the base-import labels.
 
 ---
 

@@ -1,0 +1,12 @@
+{
+  "identical": 4,
+  "pairs": 60,
+  "recorded": "2026-09-01",
+  "why": "Scenarios whose mobile capture is byte-identical to its desktop twin. NOT a broken pipeline: the mobile pass applies `is-mobile is-phone` and a 402px viewport, and 56 of 60 scenarios differ, which is the evidence the switch is live. These four carry no rule keyed to the phone and their content is narrower than either viewport, so their mobile capture is redundant rather than false. Recorded as a ratchet on the COUNT: a scenario leaving this list gained a phone rule and is welcome; one joining it lost a rule or shipped without one, which is the regression worth a red.",
+  "scenarios": [
+    "dropdown-field",
+    "field-date-value-picker",
+    "field-date-value-picker-datetime",
+    "field-option-color-picker"
+  ]
+}

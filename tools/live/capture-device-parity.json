@@ -1,0 +1,10 @@
+{
+  "measuredAt": "2026-09-01T08:40:43.265Z",
+  "inputs": {
+    "tools/live/capture-device-parity.mjs": "ff0cac47e594",
+    "screenshots/manifest.json": "d99ed0d74d6e"
+  },
+  "pairs": 60,
+  "identical": 4,
+  "differing": 56
+}
