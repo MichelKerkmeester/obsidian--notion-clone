@@ -16441,6 +16441,31 @@ body.is-mobile .note-database-container .db-calendar-month-time {
 }
 
 
+/* On a phone the temporal title takes its own line, and it is not conditional.
+ *
+ * The title is a RANGE on two of these three surfaces — "Mar 23 – Apr 5" wants 153px and the header
+ * gives it 61, so it rendered as "M…", one character and an ellipsis, which costs space and tells
+ * the reader nothing. The calendar's week view clips the same way at 124 wanted against 81. Only the
+ * month view's single word fits.
+ *
+ * Shrinking the font does not reach it: at 14px the range still wants 103px against 61. The controls
+ * cannot yield either — they are icon buttons at a fixed size, so compressing them moves the overflow
+ * rather than removing it.
+ *
+ * ALWAYS, not only when it clips. Wrapping on overflow alone would make the same view's header jump
+ * 26px between a month whose name fits and a range that does not, which is a worse defect than the
+ * one being fixed: a header that changes height as you page through dates. All three temporal
+ * headers now read title-line then controls-line at phone width. */
+.is-phone .note-database-container .db-calendar-header,
+.is-phone .note-database-container .db-timeline-header {
+  flex-wrap: wrap;
+}
+
+.is-phone .note-database-container .db-calendar-title,
+.is-phone .note-database-container .db-timeline-title {
+  flex: 1 0 100%;
+}
+
 .note-database-container .db-timeline-empty-range {
   min-height: 160px;
   margin: 0;

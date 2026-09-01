@@ -1,7 +1,7 @@
 {
   "holder": null,
-  "acquiredAt": "2026-09-01T05:25:00Z",
-  "baselineHash": "1ce52a63b090",
+  "acquiredAt": "2026-09-01T06:20:00Z",
+  "baselineHash": "16dfd395f592",
   "baselineCommit": "3990be47b525",
   "history": [
     {
@@ -715,6 +715,27 @@
       "at": "2026-09-01T05:25:00Z",
       "hash": "1ce52a63b090",
       "note": "Recaptured and reviewed; the record-detail sheet captures were opened and read at phone light and dark. A sparse record now fills half the screen rather than sitting as a strip at the bottom edge, and a full one is unchanged because the floor is a minimum. The empty space below a short record is the trade this makes and it is visible in the capture rather than argued for here. Per-image operator sign-off still owed."
+    },
+    {
+      "event": "acquire",
+      "phase": "005-content-row-rhythm",
+      "at": "2026-09-01T06:00:00Z",
+      "hash": "1ce52a63b090",
+      "note": "Taken during the visual pass for a defect only a capture shows: the timeline's title read 'M...' on a phone — one character and an ellipsis, which costs space and tells the reader nothing. Measured: the range 'Mar 23 - Apr 5' wants 153px and the header gives it 61. The calendar's week view clips the same way, 124 wanted against 81. Only the month view's single word fits."
+    },
+    {
+      "event": "edit",
+      "phase": "005-content-row-rhythm",
+      "at": "2026-09-01T06:05:00Z",
+      "hash": "16dfd395f592",
+      "note": "Two declarations under .is-phone: the calendar and timeline headers wrap, and the title takes a full line. ALWAYS, not only when it clips — wrapping on overflow alone would make the same view's header jump 26px between a month whose name fits and a range that does not, which is a worse defect than the one being fixed. Shrinking the font does not reach it: at 14px the range still wants 103px against 61, measured. The controls cannot yield either, being icon buttons at a fixed size. After: 0 of 3 temporal titles clipped, both calendar headers 97px and the timeline 89px — the 8px is their different control sets and predates this."
+    },
+    {
+      "event": "release",
+      "phase": "005-content-row-rhythm",
+      "at": "2026-09-01T06:20:00Z",
+      "hash": "16dfd395f592",
+      "note": "Recaptured and reviewed; the timeline and calendar-week captures were opened and read at phone light. The header now reads title-line then controls-line and the full range is legible. Signed off in 000's capture-review.md as Release 3, which also records two findings this pass produced that are DECISIONS rather than repairs: the week grid's timed event titles are unreadable (7 of 7 clipped at 402px, 2 of 7 at 1440), and the toolbar's utilities cluster overhangs the header by 10px at 320px. Neither is taken, because each has two or three fixes that are different products. Per-image operator sign-off owed."
     }
   ],
   "outstanding": [

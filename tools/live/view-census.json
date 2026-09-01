@@ -1,7 +1,7 @@
 {
-  "measuredAt": "2026-09-01T00:15:21.906Z",
+  "measuredAt": "2026-09-01T00:28:36.748Z",
   "inputs": {
-    "styles.css": "1ce52a63b090",
+    "styles.css": "16dfd395f592",
     "tools/live/view-census.mjs": "2ce0c7f439a4",
     "tools/screenshots/scenarios.mjs": "1395f2dacbfd"
   },
@@ -530,7 +530,7 @@
       "tag": "div",
       "cls": "db-list",
       "parentCls": "note-database-container",
-      "by": 146,
+      "by": 267.9,
       "scrolls": true,
       "pastHeader": 0
     },
@@ -3429,7 +3429,7 @@
       "tag": "div",
       "cls": "db-list",
       "parentCls": "note-database-container",
-      "by": 64,
+      "by": 185.9,
       "scrolls": true,
       "pastHeader": 0
     },

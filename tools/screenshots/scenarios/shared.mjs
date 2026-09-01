@@ -43,7 +43,7 @@ export const ROWS = [
   { name: "GitHub Team",      cost: "€ 3,67",   cycle: "Monthly", payment: "Revolut", renew: "March 26, 2026",    category: "Infrastructure" },
   { name: "Supabase",         cost: "€ 23,00",  cycle: "Monthly", payment: "ING",     renew: "April 8, 2026",     category: "Infrastructure" },
   { name: "Backblaze",        cost: "€ 8,25",   cycle: "Monthly", payment: "Revolut", renew: "April 11, 2026",    category: "Infrastructure" },
-  { name: "A deliberately long service name that has to truncate", cost: "€ 1,00", cycle: "Yearly", payment: "ING", renew: "December 31, 2026", category: "Infrastructure" },
+  { name: "A deliberately long service name, wraps on a card and truncates in a cell", cost: "€ 1,00", cycle: "Yearly", payment: "ING", renew: "December 31, 2026", category: "Infrastructure" },
   { name: "Spotify",          cost: "€ 11,26",  cycle: "Monthly", payment: "ING",     renew: "March 2, 2026",     category: "Personal" },
   { name: "iCloud+",          cost: "€ 2,99",   cycle: "Monthly", payment: "Apple",   renew: "March 9, 2026",     category: "Personal" },
   { name: "Netflix",          cost: "€ 13,99",  cycle: "Monthly", payment: "ING",     renew: "March 16, 2026",    category: "Personal" },
