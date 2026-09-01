@@ -1,5 +1,5 @@
 {
-  "measuredAt": "2026-09-01T03:17:11.372Z",
+  "measuredAt": "2026-09-01T03:54:40.680Z",
   "inputs": {
     "styles.css": "b346c59576b5",
     "tools/live/engine-parity.mjs": "0264fc2e3d90",
@@ -7,7 +7,7 @@
   },
   "totals": {
     "fixtures": 60,
-    "differences": 59
+    "differences": 67
   },
   "differences": [
     {
@@ -230,11 +230,75 @@
       ]
     },
     {
+      "scenarioId": "panel-invalid-events-modal",
+      "selector": "input[type=\"checkbox\"]",
+      "index": 0,
+      "notes": [
+        "background rgba(0, 0, 0, 0) vs rgba(90, 103, 216, 0.094)"
+      ]
+    },
+    {
+      "scenarioId": "panel-invalid-events-modal",
+      "selector": "input[type=\"checkbox\"]",
+      "index": 1,
+      "notes": [
+        "background rgba(0, 0, 0, 0) vs rgba(90, 103, 216, 0.094)"
+      ]
+    },
+    {
+      "scenarioId": "panel-invalid-events-modal",
+      "selector": "input[type=\"checkbox\"]",
+      "index": 2,
+      "notes": [
+        "background rgba(0, 0, 0, 0) vs rgba(90, 103, 216, 0.094)"
+      ]
+    },
+    {
+      "scenarioId": "panel-invalid-events-modal",
+      "selector": "input[type=\"checkbox\"]",
+      "index": 3,
+      "notes": [
+        "background rgba(0, 0, 0, 0) vs rgba(90, 103, 216, 0.094)"
+      ]
+    },
+    {
+      "scenarioId": "panel-invalid-events-modal",
+      "selector": ".db-checkbox",
+      "index": 0,
+      "notes": [
+        "background rgba(0, 0, 0, 0) vs rgba(90, 103, 216, 0.094)"
+      ]
+    },
+    {
+      "scenarioId": "panel-invalid-events-modal",
+      "selector": ".db-checkbox",
+      "index": 1,
+      "notes": [
+        "background rgba(0, 0, 0, 0) vs rgba(90, 103, 216, 0.094)"
+      ]
+    },
+    {
+      "scenarioId": "panel-invalid-events-modal",
+      "selector": ".db-checkbox",
+      "index": 2,
+      "notes": [
+        "background rgba(0, 0, 0, 0) vs rgba(90, 103, 216, 0.094)"
+      ]
+    },
+    {
+      "scenarioId": "panel-invalid-events-modal",
+      "selector": ".db-checkbox",
+      "index": 3,
+      "notes": [
+        "background rgba(0, 0, 0, 0) vs rgba(90, 103, 216, 0.094)"
+      ]
+    },
+    {
       "scenarioId": "panel-base-import-modal",
       "selector": "input[type=\"checkbox\"]",
       "index": 0,
       "notes": [
-        "background rgba(0, 0, 0, 0) vs rgba(90, 103, 216, 0.055)"
+        "background rgba(0, 0, 0, 0) vs rgba(90, 103, 216, 0.11)"
       ]
     },
     {
@@ -242,7 +306,7 @@
       "selector": "input[type=\"checkbox\"]",
       "index": 1,
       "notes": [
-        "background rgba(0, 0, 0, 0) vs rgba(90, 103, 216, 0.055)"
+        "background rgba(0, 0, 0, 0) vs rgba(90, 103, 216, 0.11)"
       ]
     },
     {
@@ -250,7 +314,7 @@
       "selector": "input[type=\"checkbox\"]",
       "index": 2,
       "notes": [
-        "background rgba(0, 0, 0, 0) vs rgba(90, 103, 216, 0.055)"
+        "background rgba(0, 0, 0, 0) vs rgba(90, 103, 216, 0.11)"
       ]
     },
     {
@@ -258,7 +322,7 @@
       "selector": "input[type=\"checkbox\"]",
       "index": 3,
       "notes": [
-        "background rgba(0, 0, 0, 0) vs rgba(255, 255, 255, 0.055)"
+        "background rgba(0, 0, 0, 0) vs rgba(255, 255, 255, 0.11)"
       ]
     },
     {
@@ -266,7 +330,7 @@
       "selector": "input[type=\"checkbox\"]",
       "index": 4,
       "notes": [
-        "background rgba(0, 0, 0, 0) vs rgba(255, 255, 255, 0.055)"
+        "background rgba(0, 0, 0, 0) vs rgba(255, 255, 255, 0.11)"
       ]
     },
     {
@@ -306,7 +370,7 @@
       "selector": ".db-checkbox",
       "index": 0,
       "notes": [
-        "background rgba(0, 0, 0, 0) vs rgba(90, 103, 216, 0.055)"
+        "background rgba(0, 0, 0, 0) vs rgba(90, 103, 216, 0.11)"
       ]
     },
     {
@@ -314,7 +378,7 @@
       "selector": ".db-checkbox",
       "index": 1,
       "notes": [
-        "background rgba(0, 0, 0, 0) vs rgba(90, 103, 216, 0.055)"
+        "background rgba(0, 0, 0, 0) vs rgba(90, 103, 216, 0.11)"
       ]
     },
     {
@@ -322,7 +386,7 @@
       "selector": ".db-checkbox",
       "index": 2,
       "notes": [
-        "background rgba(0, 0, 0, 0) vs rgba(90, 103, 216, 0.055)"
+        "background rgba(0, 0, 0, 0) vs rgba(90, 103, 216, 0.11)"
       ]
     },
     {
@@ -330,7 +394,7 @@
       "selector": ".db-checkbox",
       "index": 3,
       "notes": [
-        "background rgba(0, 0, 0, 0) vs rgba(255, 255, 255, 0.055)"
+        "background rgba(0, 0, 0, 0) vs rgba(255, 255, 255, 0.11)"
       ]
     },
     {
@@ -338,7 +402,7 @@
       "selector": ".db-checkbox",
       "index": 4,
       "notes": [
-        "background rgba(0, 0, 0, 0) vs rgba(255, 255, 255, 0.055)"
+        "background rgba(0, 0, 0, 0) vs rgba(255, 255, 255, 0.11)"
       ]
     },
     {

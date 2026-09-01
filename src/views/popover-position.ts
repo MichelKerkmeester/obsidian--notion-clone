@@ -449,6 +449,39 @@ export function calendarSearchResultsPlacement(
   };
 }
 
+/**
+ * Where an ANCHORLESS column submenu goes: the branch that runs when the row that opened it has
+ * already left the document, so there is a click point and nothing to hang off.
+ *
+ * Lifted for the same reason as `calendarSearchResultsPlacement` above, and `001` named this one as
+ * still owed after that lift: the arithmetic lived in a private method on a renderer that needs a
+ * live Obsidian `App`, so the only way to check it was to copy the expression into a probe. The
+ * harness said so in its own comment — "transcribed from the current source ... copying means this
+ * can go stale". A transcribed check answers a question about the copy, and it goes on passing
+ * while the source it names regresses.
+ *
+ * `bounds` is a parameter, not a call, so the caller decides which surface it is clamping against.
+ * The shipped caller passes `getVisiblePopoverBounds(panel)` — the editing area, never the window,
+ * which is the whole point of this branch: clamping to `innerWidth` placed the submenu 188px
+ * underneath an open right sidebar.
+ */
+export function anchorlessSubmenuPlacement(
+  point: { x: number; y: number },
+  bounds: Pick<DOMRect, "left" | "right" | "top" | "bottom">,
+  size: { width: number; height: number },
+): { left: number; top: number } {
+  // The source carried `Math.max(lower, upper)` around both upper bounds. It is redundant: `clamp`
+  // already answers an inverted range with its lower bound (`if (max < min) return min`), which is
+  // the same result. Kept out rather than kept in, because a guard that cannot change an outcome
+  // reads as protection and is one more thing to keep true. Removing it was verified by the two
+  // narrow-bounds cases in `submenu-placement.test.ts`, which pin the outcome either way — and
+  // that is what those cases are actually pinning, so they say so rather than claiming a guard.
+  return {
+    left: clamp(point.x + 8, bounds.left + 8, bounds.right - size.width - 8),
+    top: clamp(point.y - 8, bounds.top + 8, bounds.bottom - size.height - 8),
+  };
+}
+
 export function resolvePopoverHorizontalLeft(
   anchor: Pick<DOMRect, "left" | "right" | "width">,
   bounds: Pick<DOMRect, "left" | "right">,

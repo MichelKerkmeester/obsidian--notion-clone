@@ -97,7 +97,7 @@ const bundle = join(work, "bundle.js");
 // positioner would prove the copy.
 import { writeFileSync } from "node:fs";
 writeFileSync(entry, `
-import { positionToolbarPopover, getVisiblePopoverBounds, COMPACT_MENU_POPOVER, setPosition, clamp, resolvePopoverHorizontalLeft, PANEL_POPOVER, placeSheet, publishKeyboardInset, calendarSearchResultsPlacement, resolveKeyboardInset, MAX_UNZOOMED_SCALE } from "${join(REPO, "src/views/popover-position")}";
+import { positionToolbarPopover, getVisiblePopoverBounds, COMPACT_MENU_POPOVER, setPosition, clamp, resolvePopoverHorizontalLeft, PANEL_POPOVER, placeSheet, publishKeyboardInset, calendarSearchResultsPlacement, anchorlessSubmenuPlacement, resolveKeyboardInset, MAX_UNZOOMED_SCALE } from "${join(REPO, "src/views/popover-position")}";
 import { shouldFlickDismiss, FLICK_PX_PER_MS, FLICK_MIN_PX, STALE_SAMPLE_MS } from "${join(REPO, "src/views/mobile-bottom-sheet")}";
 import { refreshRecordDetailPanel, closeRecordDetailPanel, getOpenRecordDetailPath } from "${join(REPO, "src/views/record-detail-panel")}";
 import { attachSheetDragToDismiss } from "${join(REPO, "src/views/mobile-bottom-sheet")}";
@@ -125,7 +125,7 @@ globalThis.__list = { ListRenderer, reservesColumnsOnWrappingLine };
 globalThis.__number = { renderCardField, CellRenderer, getColumnDisplayType, isEmptyValue, formatEuroCurrency, formatEuroNumber };
 globalThis.__selection = { DatabaseView, EmbeddedDatabaseRenderer };
 globalThis.__place = { positionToolbarPopover, getVisiblePopoverBounds, COMPACT_MENU_POPOVER, applySheetChrome, renderCardField, createOwnedMenu, createMenuRow, ToolbarRenderer, trackCellGesture, nextCellRange, resolveCellTapAction, isMainItemColumn, shouldExtendRowRange, applyRowSelectionPress, attachRowRangeGesture, isRowSelectionCheckbox, attachLongPress, isTouchDevice, attachTitleOpenAffordance, setupTitleCellTap, openRecordDetailPanel, closeRecordDetailPanel, getOpenRecordDetailPath, refreshRecordDetailPanel, RowMenu, ColumnMenu };
-globalThis.__p = { positionToolbarPopover, getVisiblePopoverBounds, setPosition, clamp, resolvePopoverHorizontalLeft, COMPACT_MENU_POPOVER, PANEL_POPOVER, createOwnedMenu, createMenuRow, publishKeyboardInset, calendarSearchResultsPlacement, resolveKeyboardInset, MAX_UNZOOMED_SCALE };
+globalThis.__p = { positionToolbarPopover, getVisiblePopoverBounds, setPosition, clamp, resolvePopoverHorizontalLeft, COMPACT_MENU_POPOVER, PANEL_POPOVER, createOwnedMenu, createMenuRow, publishKeyboardInset, calendarSearchResultsPlacement, anchorlessSubmenuPlacement, resolveKeyboardInset, MAX_UNZOOMED_SCALE };
 globalThis.__drag = { openRecordDetailPanel, refreshRecordDetailPanel, applySheetChrome, positionToolbarPopover };
 globalThis.__a = { positionToolbarPopover, placeSheet, applySheetChrome, attachSheetDragToDismiss, openRecordDetailPanel, refreshRecordDetailPanel, closeRecordDetailPanel, createOwnedMenu, createMenuRow };
 globalThis.__flick = { shouldFlickDismiss, FLICK_PX_PER_MS, FLICK_MIN_PX, STALE_SAMPLE_MS };
@@ -5502,27 +5502,28 @@ await section("lifted probes: desktop placement", async () => {
     });
     panel.remove();
 
-    // column-menu.ts anchorless submenu fallback, transcribed from the current source.
-    // It is a private method on a renderer that needs a live Obsidian App, so the arithmetic is
-    // copied rather than called. Copying means this can go stale; lifting it into verify-placement
-    // beside the real modules is what should eventually retire the transcription.
+    // column-menu.ts anchorless submenu fallback — CALLED, not copied.
+    //
+    // This used to carry the expression transcribed from the source, and said so: "copying means
+    // this can go stale". It could also go green while the source regressed, which is the failure
+    // that matters. `anchorlessSubmenuPlacement` is now exported from `popover-position` and the
+    // shipped renderer calls the same function this does, so reverting the source to a
+    // window-relative clamp turns this red.
     const estimatedWidth = 292;
     const point = { x: Math.round(split.right - 60), y: 200 };
     const sub = document.body.createDiv({ cls: "db-dropdown-popover db-column-menu-subpopover" });
     for (let i = 0; i < 5; i += 1) sub.createDiv({ cls: "row", text: `Item ${i}` });
     sub.setCssProps({ position: "fixed", width: `${estimatedWidth}px` });
     const subHeight = sub.getBoundingClientRect().height || 320;
-    sub.setCssProps({
-      left: `${P.clamp(point.x + 8, bounds.left + 8, Math.max(bounds.left + 8, bounds.right - estimatedWidth - 8))}px`,
-      top: `${P.clamp(point.y - 8, bounds.top + 8, Math.max(bounds.top + 8, bounds.bottom - subHeight - 8))}px`,
-    });
+    const placed = P.anchorlessSubmenuPlacement(point, bounds, { width: estimatedWidth, height: subHeight });
+    sub.setCssProps({ left: `${placed.left}px`, top: `${placed.top}px` });
     const sr = sub.getBoundingClientRect();
     out.push({
-      name: "HAND the anchorless column submenu clears the right sidebar",
+      name: "the anchorless column submenu clears the right sidebar",
       pass: Math.round(sr.right) <= Math.round(split.right) + 1,
       detail: `submenu=[${Math.round(sr.left)}..${Math.round(sr.right)}] editing area right=${Math.round(split.right)}; `
-        + `clamped against bounds.right=${Math.round(bounds.right)} rather than view.innerWidth=${view.innerWidth}, `
-        + `which is what used to place it 188px under the sidebar`,
+        + `placed by the shipped \`anchorlessSubmenuPlacement\` against bounds.right=${Math.round(bounds.right)} `
+        + `rather than view.innerWidth=${view.innerWidth}, which is what used to place it 188px under the sidebar`,
     });
     sub.remove();
 

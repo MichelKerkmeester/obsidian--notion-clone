@@ -62,10 +62,31 @@ have a number are still open.*
       `.db-menu-item` only lays out inside `.db-owned-menu`.** **Met** — *a menu row lays out
       identically in any sheet* reports the same `min-height`, padding and height in the owned-menu
       shell and in a panel sheet, which is the "outside the shell" half stated as a number.
-- [ ] A submenu is produced by the same mechanism as its parent and lands inside bounds. **Half.**
+- [x] A submenu is produced by the same mechanism as its parent and lands inside bounds. **Half.**
       The anchorless submenu clears the right sidebar, but its arithmetic is still transcribed into
       both harnesses rather than called — the shape `015` repaired for the search-results clamp and
-      named as still owed here.
+      named as still owed here. **Owed, then paid, 2026-09-01.**
+      `anchorlessSubmenuPlacement` is exported from `popover-position.ts`; `column-menu.ts` calls it
+      and so does the placement lane, which had said so itself — *"transcribed from the current
+      source ... copying means this can go stale"*. **Staleness was never the cost.** A transcribed
+      check answers a question about the copy, so it passes while the source it names regresses.
+      → *the anchorless column submenu clears the right sidebar*: `submenu=[840..1080] editing area
+      right=1140`, placed by the shipped function against `bounds.right=1140` rather than
+      `innerWidth=1440`.
+      **Watched red on the SOURCE**, which is the whole difference: reverting
+      `anchorlessSubmenuPlacement` to a window-relative clamp gives `submenu=[1088..1328]` — the
+      188px under the sidebar this packet recorded, and a number the transcription could never have
+      produced.
+      **Plus seven unit cases** in `submenu-placement.test.ts`, covering what a placement check
+      usually leaves out: the left floor is `bounds.left + 8`, not `8`, so a click over an open left
+      sidebar is pushed off it; the height is measured rather than assumed at 320, so a short panel
+      is not lifted; and a visible area *narrower than the submenu* pins to the left edge rather than
+      off it. Red on that last one when the inverted range is resolved toward its upper bound:
+      `expected 200 to be 308`.
+      **One line came out rather than in.** The lifted source carried `Math.max(lower, upper)` around
+      both bounds; `clamp` already answers an inverted range with its lower bound, so the guard could
+      not change an outcome. Verified by removing it — the suite stays green — and the two
+      narrow-bounds cases now say what they actually pin, which is `clamp`'s choice and not a guard.
 - [ ] Filter and Sort expose the same role, focus behaviour and keyboard contract — asserted, not
       inspected. **No check.**
 - [x] **Removing any one class from a panel changes a measured value** — no surface may depend on an

@@ -1,10 +1,10 @@
 {
-  "measuredAt": "2026-09-01T03:40:04.227Z",
+  "measuredAt": "2026-09-01T03:58:12.959Z",
   "inputs": {
     "tools/live/sheet-teardown.mjs": "977e3a475380",
     "tools/live/sheet-teardown-harness.ts": "e0276d251779",
     "src/views/mobile-bottom-sheet.ts": "2da2bd058754",
-    "src/views/popover-position.ts": "b73634ce5815",
+    "src/views/popover-position.ts": "48a6ffec6b38",
     "src/views/owned-menu.ts": "f32cc37ad4be"
   },
   "producers": 10,

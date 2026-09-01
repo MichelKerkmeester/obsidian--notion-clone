@@ -26,7 +26,7 @@ import { t } from "../i18n";
 import { renderPropertyTypeIcon } from "./property-type-icon";
 import { createDropdownField, DropdownOption } from "./dropdown-field";
 import { installPopoverAutoClose } from "./popover-auto-close";
-import { clamp, getVisiblePopoverBounds, positionToolbarPopover } from "./popover-position";
+import { anchorlessSubmenuPlacement, getVisiblePopoverBounds, positionToolbarPopover } from "./popover-position";
 import { getTextLinkSchemeChoice, TEXT_LINK_SCHEME_MENU_OPTIONS, TextLinkSchemeChoice } from "../data/text-link-scheme-menu";
 import { createOwnedMenuForEvent, OwnedMenuHandle } from "./owned-menu";
 
@@ -618,10 +618,11 @@ export class ColumnMenu {
       // rows. Measuring it means a tall submenu is lifted enough to actually fit.
       const height = panel.getBoundingClientRect().height || 320;
       if (point) {
+        const placed = anchorlessSubmenuPlacement(point, bounds, { width: estimatedWidth, height });
         panel.setCssProps({
           position: "fixed",
-          left: `${clamp(point.x + 8, bounds.left + 8, Math.max(bounds.left + 8, bounds.right - estimatedWidth - 8))}px`,
-          top: `${clamp(point.y - 8, bounds.top + 8, Math.max(bounds.top + 8, bounds.bottom - height - 8))}px`,
+          left: `${placed.left}px`,
+          top: `${placed.top}px`,
         });
       }
     }
