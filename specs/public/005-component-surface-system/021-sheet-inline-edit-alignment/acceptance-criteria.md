@@ -12,8 +12,8 @@ _memory:
     packet_pointer: "public/005-component-surface-system/021-sheet-inline-edit-alignment"
     last_updated_at: "2026-08-30T19:45:00Z"
     last_updated_by: "criterion-6-closure"
-    recent_action: "AC-006 to Provisional: its 0.9px rests on a harness-declared --font-ui-medium"
-    next_safe_action: "Read --font-ui-medium off a device; AC-006 closes or reddens on that number"
+    recent_action: "Host token read from Obsidian 1.13.4: 15px on desktop, user text size on mobile"
+    next_safe_action: "The operator taps a value and the title on device"
     blockers: []
     key_files:
       - "acceptance-criteria.md"
@@ -21,7 +21,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-021"
       parent_session_id: null
-    completion_pct: 62
+    completion_pct: 88
     open_questions:
       - "Does a per-anchor correction in the placement path earn its own phase"
     answered_questions: []

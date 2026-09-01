@@ -108,7 +108,8 @@ import { renderCardField } from "${join(REPO, "src/views/card-field-renderer")}"
 import { ToolbarRenderer } from "${join(REPO, "src/views/toolbar-renderer")}";
 import { trackCellGesture, nextCellRange, resolveCellTapAction, isMainItemColumn, shouldExtendRowRange, applyRowSelectionPress, attachRowRangeGesture, isRowSelectionCheckbox } from "${join(REPO, "src/views/table-cell-gesture")}";
 import { attachLongPress, isTouchDevice } from "${join(REPO, "src/data/touch-environment")}";
-import { attachTitleOpenAffordance, setupTitleCellTap } from "${join(REPO, "src/views/table-record-peek")}";
+import { attachTitleOpenAffordance, setupTitleCellTap, openTableRecordPeek, closeTableRecordPeek } from "${join(REPO, "src/views/table-record-peek")}";
+import { openDropdownMenu } from "${join(REPO, "src/views/dropdown-field")}";
 import { openRecordDetailPanel } from "${join(REPO, "src/views/record-detail-panel")}";
 import { RowMenu } from "${join(REPO, "src/views/row-menu")}";
 import { ColumnMenu } from "${join(REPO, "src/views/column-menu")}";
@@ -127,6 +128,7 @@ globalThis.__p = { positionToolbarPopover, getVisiblePopoverBounds, setPosition,
 globalThis.__drag = { openRecordDetailPanel, refreshRecordDetailPanel, applySheetChrome, positionToolbarPopover };
 globalThis.__a = { positionToolbarPopover, placeSheet, applySheetChrome, attachSheetDragToDismiss, openRecordDetailPanel, refreshRecordDetailPanel, closeRecordDetailPanel, createOwnedMenu, createMenuRow };
 globalThis.__flick = { shouldFlickDismiss, FLICK_PX_PER_MS, FLICK_MIN_PX, STALE_SAMPLE_MS };
+globalThis.__layer = { openTableRecordPeek, closeTableRecordPeek, openDropdownMenu };
 `);
 
 execFileSync(join(REPO, "node_modules/.bin/esbuild"), [
@@ -6930,10 +6932,178 @@ await section("a number reads the same on a card and in the row behind it", asyn
   numberParityResults.push(...results);
 });
 
+// ───────────────────────────────────────────────────────────────────
+// A DROPDOWN OPENED INSIDE THE PEEK PAINTS ABOVE IT
+// ───────────────────────────────────────────────────────────────────
+//
+// The peek was docked with a hand-written `z-index: 998`. That number is not in the layer scale —
+// the scale is panel 50, popover 100, submenu 110, modal 1000 — so it beat two declared tiers
+// without anyone choosing that, and a dropdown opened inside the peek painted underneath the panel
+// containing it. The literal has since been replaced with `var(--db-layer-panel, 50)`, and nothing
+// in this repository could tell the difference: no check reads a stacking order anywhere.
+//
+// A check that reads the stylesheet for the string "998" would pass on the fixed tree and prove
+// nothing about painting. What decides this on a screen is `elementFromPoint`, so that is what is
+// asked — with the shipped stylesheet loaded, because on a page with no cascade no z-index applies
+// to anything and the hit test returns whatever DOM order gives.
+//
+// BOTH SURFACES ARE THE SHIPPED ONES. `openTableRecordPeek` mounts the panel and `openDropdownMenu`
+// mounts the dropdown, which matters more than usual here: the dropdown resolves its own host, and
+// it resolves to `.note-database-container` — the peek's parent. That shared parent is the whole
+// mechanism. A hand-built dropdown appended somewhere else would be in a different stacking context
+// and would paint above a peek at any z-index, which is a check that cannot fail.
+//
+// The last check is the ablation. It puts 998 back on the shipped panel and requires the hit test to
+// flip. Without it the two above are a pair of numbers nobody has watched move.
+
+const peekLayerResults = [];
+
+await section("the peek's layer sits inside the token scale", async () => {
+  const page = await browser.newPage({ viewport: VIEWPORT, reducedMotion: "reduce" });
+  await page.setContent(page_html);
+  await page.addStyleTag({ content: readFileSync(join(REPO, "styles.css"), "utf8") + HOST_BARE_CONTROLS });
+  await page.addScriptTag({ content: shimJs + "\ninstallObsidianDomShim(globalThis);" });
+  await page.addScriptTag({ content: positionerJs });
+
+  const measured = await page.evaluate(() => {
+    const { openTableRecordPeek, closeTableRecordPeek, openDropdownMenu } = globalThis.__layer;
+    const container = document.querySelector(".note-database-container");
+    const anchor = document.getElementById("anchor");
+
+    const row = {
+      file: { path: "note.md", name: "note.md", basename: "Quarterly review" },
+      frontmatter: { status: "Open", owner: "Ada" },
+      computed: {},
+    };
+    const columns = [
+      { key: "file.name", label: "Name", type: "text" },
+      { key: "status", label: "Status", type: "text" },
+      { key: "owner", label: "Owner", type: "text" },
+    ];
+
+    openTableRecordPeek({
+      anchor, row, config: {}, visibleColumns: columns, allColumns: columns, container,
+    });
+    const peek = container.querySelector(".db-record-peek-panel");
+
+    // The dropdown is anchored inside the peek, which is what the criterion says: opened *inside*
+    // it. The anchor's own host resolution then puts the popover in the container beside the peek.
+    const trigger = peek.querySelector(".db-record-peek-title");
+    const close = openDropdownMenu({
+      anchor: trigger,
+      label: "Status",
+      options: [{ value: "open", text: "Open" }, { value: "done", text: "Done" }],
+      value: "open",
+      onChange: () => undefined,
+    });
+    const dropdown = container.querySelector(".db-dropdown-popover");
+
+    // The scale is declared on the surface list, not on `:root` — `.note-database-container` is in
+    // that list and is what both surfaces inherit through, so this is the scale they actually
+    // resolve against. Read off the document element it comes back empty and every tier reads 0,
+    // which compares the peek against a scale that does not exist.
+    const rootStyle = getComputedStyle(container);
+    const tier = (name) => Number(rootStyle.getPropertyValue(name).trim());
+    const layers = {
+      panel: tier("--db-layer-panel"),
+      popover: tier("--db-layer-popover"),
+      submenu: tier("--db-layer-submenu"),
+    };
+
+    // Painting at 50 and declaring the tier are different claims: a hand-written 50 paints
+    // identically today and drifts the moment the scale moves. This asks the cascade's own record
+    // rather than the stylesheet's text, so it answers for the rule that actually won.
+    let declaredZ = "(no rule found)";
+    for (const sheet of document.styleSheets) {
+      let rules;
+      try { rules = sheet.cssRules; } catch { continue; }
+      for (const rule of rules) {
+        if (!rule.selectorText || !rule.style) continue;
+        if (!rule.selectorText.includes(".db-record-peek-panel")) continue;
+        const z = rule.style.getPropertyValue("z-index");
+        if (z) declaredZ = z.trim();
+      }
+    }
+
+    // Where the two rectangles actually meet. A point picked from the dropdown's centre alone can
+    // land outside the peek entirely, and then the hit test answers a question about empty page.
+    const a = peek.getBoundingClientRect();
+    const b = dropdown.getBoundingClientRect();
+    const overlap = {
+      left: Math.max(a.left, b.left),
+      right: Math.min(a.right, b.right),
+      top: Math.max(a.top, b.top),
+      bottom: Math.min(a.bottom, b.bottom),
+    };
+    const overlaps = overlap.right > overlap.left && overlap.bottom > overlap.top;
+    const point = {
+      x: Math.round((overlap.left + overlap.right) / 2),
+      y: Math.round((overlap.top + overlap.bottom) / 2),
+    };
+
+    const whoIsOnTop = () => {
+      const hit = document.elementFromPoint(point.x, point.y);
+      if (!hit) return "nothing";
+      if (dropdown.contains(hit)) return "dropdown";
+      if (peek.contains(hit)) return "peek";
+      return `${hit.tagName.toLowerCase()}.${String(hit.className).split(" ")[0]}`;
+    };
+
+    const shipped = {
+      peekZ: getComputedStyle(peek).zIndex,
+      dropdownZ: getComputedStyle(dropdown).zIndex,
+      onTop: whoIsOnTop(),
+      sameParent: peek.parentElement === dropdown.parentElement,
+      parent: dropdown.parentElement?.className || "(none)",
+      declaredZ,
+    };
+
+    // THE ABLATION. The literal that used to be here, put back on the shipped panel by the same
+    // property the stylesheet sets. Everything else is untouched, so a flip is attributable to the
+    // number and to nothing else.
+    peek.style.zIndex = "998";
+    const ablated = { peekZ: getComputedStyle(peek).zIndex, onTop: whoIsOnTop() };
+    peek.style.zIndex = "";
+
+    close();
+    closeTableRecordPeek();
+    return { layers, shipped, ablated, overlaps, point, peekBox: a, dropBox: b };
+  });
+
+  const { layers, shipped, ablated } = measured;
+  const record = (name, pass, detail) => peekLayerResults.push({ name, pass, detail });
+
+  record("the peek's layer is a declared tier, not a literal outside the scale",
+    Number(shipped.peekZ) === layers.panel
+      && shipped.declaredZ.includes("--db-layer-panel")
+      && layers.panel < layers.popover && layers.popover < layers.submenu,
+    `peek paints at z-index ${shipped.peekZ} from the declaration \`${shipped.declaredZ}\`, against `
+      + `the scale panel=${layers.panel} popover=${layers.popover} submenu=${layers.submenu}. The `
+      + `value this row exists for is 998, which is inside no tier and above two of them`);
+
+  record("the dropdown and the peek are siblings, so the comparison is a real one",
+    shipped.sameParent && measured.overlaps,
+    `dropdown parent is .${String(shipped.parent).split(" ")[0]}, same as the peek's=${shipped.sameParent}; `
+      + `the rectangles overlap=${measured.overlaps} and the hit test is taken at `
+      + `[${measured.point.x},${measured.point.y}]. Different parents means different stacking `
+      + `contexts, and then the dropdown paints on top whatever the peek's z-index says`);
+
+  record("a dropdown opened inside the peek paints above it",
+    shipped.onTop === "dropdown",
+    `the topmost element where the two overlap is the ${shipped.onTop}; peek z-index ${shipped.peekZ}, `
+      + `dropdown z-index ${shipped.dropdownZ}`);
+
+  record("the same hit test reports the peek on top when 998 is put back",
+    ablated.onTop === "peek",
+    `with the peek forced to z-index ${ablated.peekZ} the topmost element is the ${ablated.onTop}, `
+      + `want the peek. A check that answers "dropdown" both ways is measuring DOM order, not the `
+      + `cascade, and would have passed on the tree this row was written against`);
+});
+
 results.push(...phoneResults, ...menuResults, ...addViewDesktopResults, ...addViewPhoneResults,
   ...grammarResults, ...addViewGrammar, ...motionResults, ...reducedResults, ...desktopMenuResults, ...cellResults, ...sheetResults, ...selectCellResults, ...selectPhoneResults, ...rowPhoneResults, ...rowNarrowResults,
   ...desktopPanelResults, ...stateResults, ...keyboardParityResults, ...familyResults, ...touchResults, ...overlapResults, ...rhythmResults, ...rendererRhythmResults,
-  ...liftedResults, ...inlineEditResults, ...numberParityResults, ...sectionFailures);
+  ...liftedResults, ...inlineEditResults, ...numberParityResults, ...peekLayerResults, ...sectionFailures);
 
 await browser.close();
 rmSync(work, { recursive: true, force: true });

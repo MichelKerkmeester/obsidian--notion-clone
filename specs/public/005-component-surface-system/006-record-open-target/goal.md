@@ -55,8 +55,28 @@ have a number are still open.*
       the second, which is the opposite defect and the one `003`'s cap exists to prevent.
       **The trade is visible rather than argued.** A short record now carries empty space below its
       fields, where the note editor grows. The capture was recaptured and read.
-- [ ] The peek's layer sits inside the token scale; a dropdown opened inside it paints **above** it.
-      **Today `998` beats popover and submenu.** **No check.**
+- [x] The peek's layer sits inside the token scale; a dropdown opened inside it paints **above** it.
+      **Today `998` beats popover and submenu.** **Checked 2026-09-01.**
+      The literal had already been replaced with `var(--db-layer-panel, 50)`; what was missing was
+      anything that could tell the difference. Nothing in this repository read a stacking order, so
+      the fix and the defect looked identical to every check that existed.
+      → *a dropdown opened inside the peek paints above it*: `the topmost element where the two
+      overlap is the dropdown; peek z-index 50, dropdown z-index 100`. **Both surfaces are the
+      shipped producers** — `openTableRecordPeek` mounts the panel, `openDropdownMenu` mounts the
+      dropdown and resolves its own host to `.note-database-container`, the peek's parent. That
+      shared parent is the mechanism: a hand-built dropdown appended elsewhere sits in a different
+      stacking context and paints above a peek at any z-index, which is a check that cannot fail. So
+      the sibling relation is asserted as its own row rather than assumed.
+      **Watched failing on the value the row names.** With the shipped rule put back to `998`:
+      `the topmost element where the two overlap is the peek; peek z-index 998, dropdown z-index 100`,
+      and the tier row `peek paints at z-index 998 from the declaration \`998\`, against the scale
+      panel=50 popover=100 submenu=110`. Two reds, exit 1, styles.css restored and hash-verified.
+      **Painting at 50 and declaring the tier are separate claims**, so both are asserted: a
+      hand-written `50` paints identically today and drifts the moment the scale moves. The
+      declaration is read from the CSSOM rule that won, not from the stylesheet's text.
+      **And the check carries its own ablation**: it forces `998` back onto the shipped panel and
+      requires the hit test to flip. A check that answers "dropdown" both ways is measuring DOM
+      order, not the cascade.
 - [ ] The setting round-trips and **every** affordance honours it — no path bypasses the policy.
       **The exposure is the stubs:** this has to drive `openRow`, which is `() => undefined` in the
       harness — the shape `012` repaired for the title-cell tap by driving the real opener instead.
