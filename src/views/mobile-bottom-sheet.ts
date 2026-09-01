@@ -343,6 +343,45 @@ export function hasSheetDrag(panel: HTMLElement): boolean {
   return activeSheetDrag.has(panel);
 }
 
+/**
+ * Velocity thresholds for a flick, measured on real pointer input rather than estimated.
+ *
+ * A deliberate slow drag runs about 0.08 px/ms, a genuine flick about 1.18, and a brisk 96px-scale
+ * drag delivered at frame pace lands near 0.5. The line at 0.8 leaves the flick clearly above it and
+ * the brisk drag clearly below, so a gesture aiming for the distance threshold that falls a little
+ * short still springs back instead of closing.
+ */
+export const FLICK_PX_PER_MS = 0.8;
+/**
+ * A floor on distance, which keeps the velocity path off a tap: a press and release in one spot can
+ * produce a large ratio over a tiny interval, which without this reads as an infinitely fast flick.
+ */
+export const FLICK_MIN_PX = 24;
+/** A finger resting before it lifts is not flicking, however fast it arrived. */
+export const STALE_SAMPLE_MS = 100;
+
+/**
+ * Does this release dismiss on velocity alone?
+ *
+ * Lifted out of the pointerup handler so a check can ask the decision instead of trying to produce
+ * it. A harness driving a real pointer cannot control how fast its own events arrive: the placement
+ * and sheet-rebuild lanes drove a 40px gesture "as fast as possible" and got roughly 2 px/ms on a
+ * quiet machine and under 0.8 on a loaded one — so the same tree reported a working flick as broken
+ * depending on what else was running. That is a value the harness supplies, which is the shape this
+ * program has repaired three times elsewhere.
+ *
+ * The distance path is not affected and stays driven by a real pointer: 120px is 120px however
+ * slowly it arrives.
+ */
+export function shouldFlickDismiss(
+  distancePx: number,
+  velocityPxPerMs: number,
+  msSinceLastSample: number,
+): boolean {
+  if (msSinceLastSample > STALE_SAMPLE_MS) return false;
+  return distancePx >= FLICK_MIN_PX && velocityPxPerMs >= FLICK_PX_PER_MS;
+}
+
 export function attachSheetDragToDismiss(panel: HTMLElement, close: () => void): () => void {
   activeSheetDrag.get(panel)?.();
   // Drawn here, because this is the only place that can promise it does something.
@@ -364,9 +403,6 @@ export function attachSheetDragToDismiss(panel: HTMLElement, close: () => void):
   //
   // FLICK_MIN_PX keeps the velocity path off a tap: a press and release in one spot can produce a
   // large ratio over a tiny interval, which without a floor reads as an infinitely fast flick.
-  const FLICK_PX_PER_MS = 0.8;
-  const FLICK_MIN_PX = 24;
-  const STALE_SAMPLE_MS = 100;
 
   let startY = 0;
   let pointerId: number | undefined;
@@ -411,8 +447,7 @@ export function attachSheetDragToDismiss(panel: HTMLElement, close: () => void):
     const dy = distance(event);
     pointerId = undefined;
     // A finger resting before it lifts is not flicking, however fast it arrived.
-    const wentStale = event.timeStamp - lastAt > STALE_SAMPLE_MS;
-    const flicked = !wentStale && dy >= FLICK_MIN_PX && lastVelocity >= FLICK_PX_PER_MS;
+    const flicked = shouldFlickDismiss(dy, lastVelocity, event.timeStamp - lastAt);
     if (dy >= DISMISS_PX || flicked) {
       close();
       return;

@@ -98,6 +98,7 @@ const bundle = join(work, "bundle.js");
 import { writeFileSync } from "node:fs";
 writeFileSync(entry, `
 import { positionToolbarPopover, getVisiblePopoverBounds, COMPACT_MENU_POPOVER, setPosition, clamp, resolvePopoverHorizontalLeft, PANEL_POPOVER, placeSheet, publishKeyboardInset, calendarSearchResultsPlacement, resolveKeyboardInset, MAX_UNZOOMED_SCALE } from "${join(REPO, "src/views/popover-position")}";
+import { shouldFlickDismiss, FLICK_PX_PER_MS, FLICK_MIN_PX, STALE_SAMPLE_MS } from "${join(REPO, "src/views/mobile-bottom-sheet")}";
 import { refreshRecordDetailPanel, closeRecordDetailPanel, getOpenRecordDetailPath } from "${join(REPO, "src/views/record-detail-panel")}";
 import { attachSheetDragToDismiss } from "${join(REPO, "src/views/mobile-bottom-sheet")}";
 import { applySheetChrome } from "${join(REPO, "src/views/mobile-bottom-sheet")}";
@@ -125,6 +126,7 @@ globalThis.__place = { positionToolbarPopover, getVisiblePopoverBounds, COMPACT_
 globalThis.__p = { positionToolbarPopover, getVisiblePopoverBounds, setPosition, clamp, resolvePopoverHorizontalLeft, COMPACT_MENU_POPOVER, PANEL_POPOVER, createOwnedMenu, createMenuRow, publishKeyboardInset, calendarSearchResultsPlacement, resolveKeyboardInset, MAX_UNZOOMED_SCALE };
 globalThis.__drag = { openRecordDetailPanel, refreshRecordDetailPanel, applySheetChrome, positionToolbarPopover };
 globalThis.__a = { positionToolbarPopover, placeSheet, applySheetChrome, attachSheetDragToDismiss, openRecordDetailPanel, refreshRecordDetailPanel, closeRecordDetailPanel, createOwnedMenu, createMenuRow };
+globalThis.__flick = { shouldFlickDismiss, FLICK_PX_PER_MS, FLICK_MIN_PX, STALE_SAMPLE_MS };
 `);
 
 execFileSync(join(REPO, "node_modules/.bin/esbuild"), [
@@ -1412,14 +1414,38 @@ await section("the menu sheet's drag-to-dismiss gesture", async () => {
       ? `dragged 40px slowly (distance threshold 96): menu still mounted=${shortDrag.mounted} backdrop=${shortDrag.scrim ? "present" : "gone"}`
       : "the menu has no grab handle, so there is no gesture to drive",
   });
-  // The same 40px delivered fast. It must dismiss, or the velocity path does not exist — and this
-  // is the half that keeps the check above from passing on a sheet that ignores flicks entirely.
+  // The velocity half, ASKED rather than raced for.
+  //
+  // This drove the same 40px "as fast as possible" and asserted it dismissed. A harness cannot
+  // control how fast its own events arrive: that delivered roughly 2 px/ms on a quiet machine and
+  // under 0.8 on a loaded one, so the same tree reported a working flick as broken depending on what
+  // else was running. Both this lane and `sheet-rebuild` failed that way on a commit that touched
+  // neither the gesture nor its constants — a value the harness supplies, which is the shape this
+  // program has repaired three times elsewhere.
+  //
+  // The gesture is still driven, because reaching the handler is a real claim; what is asserted is
+  // the decision, which is three numbers in and one out.
   const flick = await dragCase(40, { pauseMs: 0, steps: 4 });
+  const flickRule = await menuPhone.evaluate(() => {
+    const { shouldFlickDismiss, FLICK_PX_PER_MS, FLICK_MIN_PX, STALE_SAMPLE_MS } = globalThis.__flick;
+    return {
+      genuine: shouldFlickDismiss(40, 1.18, 8),
+      brisk: shouldFlickDismiss(80, 0.5, 8),
+      tap: shouldFlickDismiss(FLICK_MIN_PX - 1, 50, 1),
+      rested: shouldFlickDismiss(40, 2, STALE_SAMPLE_MS + 1),
+      threshold: FLICK_PX_PER_MS,
+    };
+  });
   menuResults.push({
-    name: "a short FAST flick on the handle dismisses it",
-    pass: flick.handle && !flick.mounted && !flick.scrim,
+    name: "the flick rule dismisses on speed and refuses a brisk drag, a tap and a rest",
+    pass: flick.handle && flickRule.genuine && !flickRule.brisk && !flickRule.tap && !flickRule.rested,
     detail: flick.handle
-      ? `flicked 40px, under the 96px distance threshold: menu still mounted=${flick.mounted} backdrop=${flick.scrim ? "left behind" : "gone"}`
+      ? `the shipped rule takes a genuine flick at 1.18 px/ms (${flickRule.genuine}), refuses a brisk`
+        + ` drag at 0.5 (${flickRule.brisk}), refuses a tap that travelled nowhere (${flickRule.tap})`
+        + ` and refuses a finger that rested before lifting (${flickRule.rested}), against a`
+        + ` ${flickRule.threshold} px/ms threshold. A real 40px gesture was driven at the bar and`
+        + ` left the menu mounted=${flick.mounted} — NOT asserted, because that number moved with`
+        + ` machine load rather than with the tree`
       : "the menu has no grab handle, so there is no gesture to drive",
   });
 });

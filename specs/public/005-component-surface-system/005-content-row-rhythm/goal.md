@@ -49,24 +49,30 @@ green-looking rows are ticked with their exposure attached and the rest are not 
       audit's objection is that the harness makes the content small, so this can pass for the wrong
       reason — what keeps the tick is that the failing value was 26 on the same instrument, so the
       instrument can distinguish, and the repair moved it.
-- [ ] No descendant of `.db-header` has a right edge beyond the header's content box — 4 widths ×
-      7 views. **Now measured, and it names an operator decision rather than a repair.**
+- [x] No descendant of `.db-header` has a right edge beyond the header's content box — 4 widths ×
+      7 views. **Measured, then repaired 2026-09-01: 0 spills at any of the four widths.**
       **The check exists.** `view-census` measures every descendant against the HEADER's content box
       rather than against its immediate parent's, which is a different question: a control can sit
       neatly inside its own wrapper while the wrapper hangs off the header's edge, and a
       parent-by-parent measurement reports that chain as clean.
       **One spill, at one width.** `320px chrome-toolbar-search
       .db-toolbar-cluster.db-toolbar-utilities-cluster by 10px`. Nothing spills at 402, 768 or 1440.
-      **Why this is not a repair to make unasked.** The cluster is `flex: 0 0 auto` with fixed-size
-      icon children, so letting it shrink moves the overflow from the header to the cluster rather
-      than removing it — the buttons still paint past the edge, because the cluster carries
-      `overflow: visible`. Removing it properly means letting the toolbar WRAP at very narrow widths,
-      which changes the chrome's shape.
-      **The decision this waits on: what is the narrowest width the plugin supports?** 320px is below
-      the narrowest common handset — this program's own list-width sweep starts at 360 for that
-      reason. If 360 is the floor, this criterion is met as it stands and the census width should
-      say so. If 320 is supported, the toolbar needs a wrapping rule and every chrome capture moves.
-      Both are one-line changes in opposite directions, which is why it is not taken here.
+      **Repaired 2026-09-01, and the earlier reading of it was wrong.** This note called the two
+      fixes "one-line changes in opposite directions" and used that to leave the row open. They are
+      not opposite: **`flex-wrap: wrap` is additive.** It does nothing at any width where the row
+      already fits, so 402 and up are untouched by construction, and at 320 the clusters take a
+      second line instead of overhanging. One declaration on `.db-toolbar`, reversible by deleting it.
+      **The alternative genuinely does not work, and that is what made it look like a fork.** The
+      cluster is `flex: 0 0 auto` with fixed-size icon children and `overflow: visible`, so letting
+      it shrink moves the overflow from the header into the cluster rather than removing it — the
+      buttons still paint past the edge.
+      → *header descendants past the header's content box*: **1 → 0**, and back to 1 with the
+      declaration removed.
+      **It still does not settle what the narrowest supported width IS.** 320px is below the
+      narrowest common handset, and this program's own list sweep starts at 360 for that reason.
+      That remains the operator's call — it decides whether 320 is a width to design for or one to
+      stop measuring. This makes the surface correct at either answer in the meantime, which is what
+      a reversible default is for.
 - [x] The rail scrolls rather than grows: `scrollWidth > clientWidth` with parent width unchanged.
       **Sound by the audit's own reading** — a relation between two measurements of the same element
       rather than an absolute size, so a host that pads the content moves both terms.

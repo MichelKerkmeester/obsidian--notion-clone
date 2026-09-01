@@ -1600,6 +1600,25 @@
   flex-wrap: nowrap;
 }
 
+/* The toolbar may take a second line rather than hang off the header.
+ *
+ * Measured: at 320px the utilities cluster reaches 10px past the header's content box, and nothing
+ * spills at 402, 768 or 1440. The cluster is `flex: 0 0 auto` with fixed-size icon children and
+ * `overflow: visible`, so letting IT shrink moves the overflow into the cluster rather than removing
+ * it — the buttons still paint past the edge.
+ *
+ * Wrapping is additive, which is why it is the reversible default rather than a choice between two
+ * shapes: `flex-wrap` does nothing at any width where the row already fits, so 402 and up are
+ * untouched by construction, and at 320 the clusters take a second line instead of overhanging.
+ * Reversible by deleting this one declaration.
+ *
+ * It does not settle what the narrowest supported width IS. That is still the operator's call, and
+ * it decides whether 320 is a width to design for or one to stop measuring. This makes the surface
+ * correct at both answers in the meantime. */
+.note-database-container .db-toolbar {
+  flex-wrap: wrap;
+}
+
 .note-database-container .db-toolbar-left,
 .note-database-container .db-toolbar-right {
   display: flex;

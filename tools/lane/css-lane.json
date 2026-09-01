@@ -1,7 +1,7 @@
 {
   "holder": null,
-  "acquiredAt": "2026-09-01T06:20:00Z",
-  "baselineHash": "16dfd395f592",
+  "acquiredAt": "2026-09-01T07:15:00Z",
+  "baselineHash": "b113cd1af39e",
   "baselineCommit": "3990be47b525",
   "history": [
     {
@@ -736,6 +736,27 @@
       "at": "2026-09-01T06:20:00Z",
       "hash": "16dfd395f592",
       "note": "Recaptured and reviewed; the timeline and calendar-week captures were opened and read at phone light. The header now reads title-line then controls-line and the full range is legible. Signed off in 000's capture-review.md as Release 3, which also records two findings this pass produced that are DECISIONS rather than repairs: the week grid's timed event titles are unreadable (7 of 7 clipped at 402px, 2 of 7 at 1440), and the toolbar's utilities cluster overhangs the header by 10px at 320px. Neither is taken, because each has two or three fixes that are different products. Per-image operator sign-off owed."
+    },
+    {
+      "event": "acquire",
+      "phase": "005-content-row-rhythm",
+      "at": "2026-09-01T07:00:00Z",
+      "hash": "16dfd395f592",
+      "note": "Taken to close the header-spill row this phase left open rather than leave it as a deferral: at 320px the toolbar's utilities cluster reaches 10px past the header's content box, and nothing spills at 402, 768 or 1440."
+    },
+    {
+      "event": "edit",
+      "phase": "005-content-row-rhythm",
+      "at": "2026-09-01T07:02:00Z",
+      "hash": "b113cd1af39e",
+      "note": "One declaration: flex-wrap: wrap on .db-toolbar. The earlier note called the two fixes opposite directions and that was wrong — wrapping is ADDITIVE. flex-wrap does nothing at any width where the row already fits, so 402 and up are untouched by construction, and at 320 the clusters take a second line instead of overhanging. Letting the cluster shrink was the alternative and does not work: it is flex: 0 0 auto with fixed-size icon children and overflow: visible, so shrinking moves the overflow into the cluster rather than removing it. Measured: header descendants past the header's content box 1 -> 0, and back to 1 with the declaration removed."
+    },
+    {
+      "event": "release",
+      "phase": "005-content-row-rhythm",
+      "at": "2026-09-01T07:15:00Z",
+      "hash": "b113cd1af39e",
+      "note": "Recaptured and reviewed. No capture moves: the census measures at 320px and the capture harness renders at 402 and 1440, where the rule is inert by construction — stated rather than presented as sign-off. It does not settle what the narrowest supported width IS, which is still the operator's call; it makes the surface correct at either answer. Per-image operator sign-off still owed."
     }
   ],
   "outstanding": [

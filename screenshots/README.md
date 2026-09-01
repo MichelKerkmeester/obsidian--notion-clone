@@ -567,7 +567,7 @@ The full table the renderer builds: a select gutter, a record-icon gutter and a 
 
 | dark | light |
 |---|---|
-| ![table-mobile dark](views/table-mobile-mobile-dark.png) | ![table-mobile light](views/table-mobile-mobile-light.png) |
+| ![table-mobile dark](views/table-mobile-desktop-dark.png) | ![table-mobile light](views/table-mobile-mobile-light.png) |
 
 Sources: `src/views/table-renderer.ts`, `src/views/table-column-layout-sync.ts`, `src/views/table-layout.ts`, `src/views/cell-renderer.ts`, `src/views/file-title-display.ts`, `src/views/table-record-peek.ts`, `styles.css`
 

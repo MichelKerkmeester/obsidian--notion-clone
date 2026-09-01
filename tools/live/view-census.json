@@ -1,7 +1,7 @@
 {
-  "measuredAt": "2026-09-01T00:28:36.748Z",
+  "measuredAt": "2026-09-01T00:58:20.938Z",
   "inputs": {
-    "styles.css": "16dfd395f592",
+    "styles.css": "b113cd1af39e",
     "tools/live/view-census.mjs": "2ce0c7f439a4",
     "tools/screenshots/scenarios.mjs": "1395f2dacbfd"
   },
@@ -361,9 +361,9 @@
   ],
   "totals": {
     "fixtures": 59,
-    "escaping": 569,
-    "growing": 264,
-    "scrolling": 305,
+    "escaping": 568,
+    "growing": 261,
+    "scrolling": 307,
     "rhythmGroups": 20,
     "ragged": 0,
     "probeBlind": 0
@@ -2350,11 +2350,22 @@
       "fixture": "chrome-toolbar",
       "kind": "escaping",
       "tag": "div",
-      "cls": "db-view-tabs",
-      "parentCls": "db-toolbar-left",
-      "by": 80.5,
+      "cls": "db-toolbar-left",
+      "parentCls": "db-toolbar",
+      "by": 145.9,
       "scrolls": true,
-      "pastHeader": 80.5
+      "pastHeader": 145.9
+    },
+    {
+      "width": 320,
+      "fixture": "chrome-toolbar",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-toolbar-right",
+      "parentCls": "db-toolbar",
+      "by": 145.9,
+      "scrolls": true,
+      "pastHeader": 145.9
     },
     {
       "width": 320,
@@ -2391,28 +2402,6 @@
     },
     {
       "width": 320,
-      "fixture": "chrome-toolbar",
-      "kind": "escaping",
-      "tag": "div",
-      "cls": "db-toolbar-cluster.db-toolbar-utilities-cluster",
-      "parentCls": "db-toolbar-right",
-      "by": 38,
-      "scrolls": true,
-      "pastHeader": 32
-    },
-    {
-      "width": 320,
-      "fixture": "chrome-toolbar",
-      "kind": "escaping",
-      "tag": "div",
-      "cls": "db-toolbar-cluster.db-toolbar-creation-cluster",
-      "parentCls": "db-toolbar-right",
-      "by": 145.9,
-      "scrolls": true,
-      "pastHeader": 139.9
-    },
-    {
-      "width": 320,
       "fixture": "chrome-view-switcher",
       "kind": "escaping",
       "tag": "div",
@@ -2427,8 +2416,8 @@
       "fixture": "chrome-view-switcher",
       "kind": "escaping",
       "tag": "div",
-      "cls": "db-view-tabs",
-      "parentCls": "db-toolbar-left",
+      "cls": "db-toolbar-left",
+      "parentCls": "db-toolbar",
       "by": 178.7,
       "scrolls": true,
       "pastHeader": 178.7
@@ -2441,7 +2430,7 @@
       "cls": "db-header",
       "parentCls": "note-database-container",
       "by": 4,
-      "scrolls": false,
+      "scrolls": true,
       "pastHeader": 0
     },
     {
@@ -2449,11 +2438,11 @@
       "fixture": "chrome-toolbar-search",
       "kind": "escaping",
       "tag": "div",
-      "cls": "db-toolbar-cluster.db-toolbar-utilities-cluster",
-      "parentCls": "db-toolbar-right",
+      "cls": "db-toolbar-right",
+      "parentCls": "db-toolbar",
       "by": 16,
-      "scrolls": false,
-      "pastHeader": 10
+      "scrolls": true,
+      "pastHeader": 16
     },
     {
       "width": 320,
@@ -4742,6 +4731,28 @@
       "width": 402,
       "fixture": "chrome-toolbar",
       "kind": "escaping",
+      "tag": "div",
+      "cls": "db-toolbar-left",
+      "parentCls": "db-toolbar",
+      "by": 63.9,
+      "scrolls": true,
+      "pastHeader": 63.9
+    },
+    {
+      "width": 402,
+      "fixture": "chrome-toolbar",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-toolbar-right",
+      "parentCls": "db-toolbar",
+      "by": 63.9,
+      "scrolls": true,
+      "pastHeader": 63.9
+    },
+    {
+      "width": 402,
+      "fixture": "chrome-toolbar",
+      "kind": "escaping",
       "tag": "span",
       "cls": "db-toolbar-badge",
       "parentCls": "db-toolbar-icon-button.db-filter-btn",
@@ -4773,17 +4784,6 @@
     },
     {
       "width": 402,
-      "fixture": "chrome-toolbar",
-      "kind": "escaping",
-      "tag": "div",
-      "cls": "db-toolbar-cluster.db-toolbar-creation-cluster",
-      "parentCls": "db-toolbar-right",
-      "by": 63.9,
-      "scrolls": true,
-      "pastHeader": 57.9
-    },
-    {
-      "width": 402,
       "fixture": "chrome-view-switcher",
       "kind": "escaping",
       "tag": "div",
@@ -4798,8 +4798,8 @@
       "fixture": "chrome-view-switcher",
       "kind": "escaping",
       "tag": "div",
-      "cls": "db-view-tabs",
-      "parentCls": "db-toolbar-left",
+      "cls": "db-toolbar-left",
+      "parentCls": "db-toolbar",
       "by": 96.7,
       "scrolls": true,
       "pastHeader": 96.7
@@ -5885,17 +5885,6 @@
       "cls": "db-header",
       "parentCls": "note-database-container",
       "by": 4,
-      "scrolls": false,
-      "pastHeader": 0
-    },
-    {
-      "width": 768,
-      "fixture": "chrome-toolbar",
-      "kind": "escaping",
-      "tag": "div",
-      "cls": "db-view-tabs",
-      "parentCls": "db-toolbar-left",
-      "by": 108.4,
       "scrolls": false,
       "pastHeader": 0
     },

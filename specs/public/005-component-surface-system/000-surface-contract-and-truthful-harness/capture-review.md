@@ -89,17 +89,33 @@ titles clipped at 402px, with title boxes between **0 and 19px**; at 1440px **2 
 widest box 41px. The capture shows one character per line — `F…` `s…` `0…`. Seven columns on a
 402px screen give each event ~50px, and the time and its dot are laid out before the title.
 
-*Not taken here, because the three fixes are three different products.* Scroll the grid horizontally
-with a minimum column width, the way the timeline already does. Show fewer days on a phone, the way
-the platform calendars do. Or drop the time from a narrow segment and keep the title. The first is
-smallest, the second is what a reader expects, the third changes what the block means. **The decision
-is which.**
+**One of the three candidate fixes is already shipped and is not enough, which narrows the decision
+to two.** `body.is-mobile .db-calendar-month-time { display: none }` already hides the time in a
+narrow segment — and the title still measures 19px at its widest, because a ~50px column minus 4px
+of margin, 12px of padding, a 3px accent border, the timed dot and its gap leaves about twenty
+pixels. **The contents are not what is squeezing it; the column is.**
 
-**The toolbar's utilities cluster overhangs the header by 10px at 320px.** Nothing spills at 402,
-768 or 1440. The cluster is `flex: 0 0 auto` with fixed-size icon children and `overflow: visible`,
-so letting it shrink moves the overflow rather than removing it; removing it properly means the
-toolbar wraps and every chrome capture changes. **The decision is the narrowest supported width** —
-320 is below the narrowest common handset, and this program's own list sweep starts at 360.
+So the remaining two are: scroll the grid horizontally with a minimum column width, the way the
+timeline already does, or show fewer days on a phone, the way the platform calendars do.
+
+*Not taken here, and this is a limit rather than a preference.* Neither is a one-line reversible
+default. The week view already sizes three rows from `--db-calendar-col-width` — the day header
+(`.db-calendar-time-header-days`), the all-day band (`.db-calendar-week-allday-cols`) and the body
+(`.db-calendar-week-body`) — and they sit in **different parents**, so a scroller has to synchronise
+three horizontal offsets while keeping the 52px time gutter fixed. The stylesheet carries four
+comments explaining how those widths were made to agree; a scroll container is where that agreement
+would break, and breaking it would trade an unreadable title for a misaligned grid. **The decision is
+which of the two, and it comes with a layout task rather than a declaration.**
+
+**The toolbar's utilities cluster overhung the header by 10px at 320px — repaired the same day, and
+the reasoning that deferred it was wrong.** This entry first called the two fixes opposite
+directions. They are not: `flex-wrap: wrap` is **additive** — inert at any width where the row
+already fits, so 402 and up are untouched by construction. `header descendants past the header's
+content box` goes **1 → 0**, and back to 1 without the declaration. Letting the cluster shrink is
+the alternative and genuinely does not work, which is what made it look like a fork: it is
+`flex: 0 0 auto` with fixed-size icon children and `overflow: visible`, so shrinking moves the
+overflow into the cluster instead of removing it. **What is still the operator's call is the
+narrowest supported width**, and the surface is now correct at either answer.
 
 ---
 

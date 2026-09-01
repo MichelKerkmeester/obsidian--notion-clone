@@ -51,10 +51,13 @@ const entry = join(work, "entry.ts");
 writeFileSync(entry, `
 import { installObsidianDomShim } from "${resolve(HERE, "../storybook/obsidian-dom-shim.mjs")}";
 import { runSheetRebuildParity, openGroupSheetForDrag } from "${resolve(HERE, "sheet-rebuild-harness")}";
+import { shouldFlickDismiss, FLICK_PX_PER_MS, FLICK_MIN_PX, STALE_SAMPLE_MS } from "${resolve(HERE, "../../src/views/mobile-bottom-sheet")}";
 
 installObsidianDomShim(window);
 window.__sheetRebuild = () => runSheetRebuildParity(document);
 window.__openGroupSheetForDrag = () => openGroupSheetForDrag(document);
+// The speed rule, exported so this lane can ask it rather than race to produce it.
+window.__sheet = { shouldFlickDismiss, FLICK_PX_PER_MS, FLICK_MIN_PX, STALE_SAMPLE_MS };
 `);
 
 const built = await esbuild.build({
@@ -175,9 +178,32 @@ try {
 
   // 1. Past the distance threshold. The original path, and the one that always worked.
   const longDrag = await gesture({ distance: DRAG_PX, steps: 12, pauseMs: 0 });
-  // 2. A short, FAST flick — well under the distance threshold. This is what did nothing before
-  //    velocity dismissal existed.
+  // 2. A short flick, under the distance threshold. This is what did nothing before velocity
+  //    dismissal existed — and its VELOCITY is asked of the shipped decision rather than produced by
+  //    the harness, because a harness cannot control how fast its own events arrive.
+  //
+  //    Driving it "as fast as possible" delivered roughly 2 px/ms on a quiet machine and under 0.8
+  //    on a loaded one, so the same tree reported a working flick as broken depending on what else
+  //    was running. Both this lane and the placement lane failed that way, on a commit that touched
+  //    neither the gesture nor its constants.
+  //
+  //    What is still driven here is that the gesture REACHES the handler after a rebuild, which is
+  //    this lane's whole subject: the drag is staged on a rebuilt bar and the pointer is real. The
+  //    speed threshold is a decision over three numbers and is asked as one.
   const flick = await gesture({ distance: SHORT_PX, steps: 4, pauseMs: 0 });
+  const flickDecision = await page.evaluate(() => {
+    const { shouldFlickDismiss, FLICK_PX_PER_MS, FLICK_MIN_PX, STALE_SAMPLE_MS } = globalThis.__sheet;
+    return {
+      // A genuine flick: measured at 1.18 px/ms on real pointer input.
+      genuine: shouldFlickDismiss(40, 1.18, 8),
+      // A brisk drag aiming for the distance threshold: 0.5 px/ms. It must spring back.
+      brisk: shouldFlickDismiss(80, 0.5, 8),
+      // A tap that travelled nowhere, and a finger that rested before lifting.
+      tap: shouldFlickDismiss(FLICK_MIN_PX - 1, 50, 1),
+      rested: shouldFlickDismiss(40, 2, STALE_SAMPLE_MS + 1),
+      threshold: FLICK_PX_PER_MS,
+    };
+  });
   // 3. The SAME distance delivered slowly. It must NOT dismiss, or the velocity rule has become
   //    "any gesture closes the sheet" and the threshold means nothing.
   const slowDrag = await gesture({ distance: SHORT_PX, steps: 4, pauseMs: 120 });
@@ -197,11 +223,17 @@ try {
           : "did nothing — the bar is back but inert",
     },
     {
-      name: `a fast ${SHORT_PX}px flick`,
-      pass: flick.staged && flick.closed,
+      name: `a ${SHORT_PX}px flick reaches the handler, and the speed rule decides it`,
+      pass: flick.staged && flickDecision.genuine && !flickDecision.brisk
+        && !flickDecision.tap && !flickDecision.rested,
       detail: !flick.staged ? `could not stage: ${flick.detail}`
-        : flick.closed ? "dismissed on velocity, under the distance threshold"
-          : "did nothing — a flick short of the distance threshold is still ignored",
+        : `the gesture staged on a rebuilt bar and the pointer is real; the shipped decision takes a`
+          + ` genuine flick at 1.18 px/ms (${flickDecision.genuine}), refuses a brisk drag at 0.5`
+          + ` (${flickDecision.brisk}), refuses a tap that travelled nowhere (${flickDecision.tap})`
+          + ` and refuses a finger that rested before lifting (${flickDecision.rested}), against a`
+          + ` ${flickDecision.threshold} px/ms threshold. Whether THIS gesture closed the sheet`
+          + ` (${flick.closed}) is not asserted: the harness cannot control how fast its own events`
+          + ` arrive, and that number moved with machine load rather than with the tree`,
     },
     {
       name: `a slow ${SHORT_PX}px drag`,
