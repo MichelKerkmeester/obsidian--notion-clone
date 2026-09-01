@@ -338,7 +338,7 @@ today.
 
 - ⚠ `004-checkbox-ownership` — **state UNKNOWN, see §7.1.** Holds the `styles.css` lane.
 - ⚠ `005-content-row-rhythm` — shipped: list-row border-box, list meta ruled into columns, renderer-declared tracks. Continuity still reads "not started".
-- ⚠ `016-sheet-drag-and-audit` — 90%. **Root-caused report 1** and re-measured all eight sheet asks together on the shipped build: 19 of 22 checks pass, 3 declared. Exit signal: two operator decisions (the 13px row label, and whether the sheet should survive a window resize instead of closing).
+- `016-sheet-drag-and-audit` — **Shipped + verified, awaiting device — 9 of 10.** Root-caused report 1 and re-measured all eight sheet asks together on the shipped build. The fill ask no longer reads one declaration nine times: the nine surfaces are built under nine wrappers each declaring its own `--background-primary` and still measure one colour, because `setSheetMount` relocates every sheet to `document.body` and it stops inheriting from its builder. The in-run control — the same class left unportalled, measuring its wrapper's colour — is what makes that not vacuous. Exit signal: the operator swiping between a record sheet and a menu sheet.
 - ⚠ `017-touch-row-range-selection` — 91%. Predicate removed from both views, hold gesture added, checks added, negative controls run and restored by hash. The announcement decision is answered — the code had already taken it with an `aria-live` attribute the bar's own rebuild made inert, and a persistent live region outside the bar now carries it. The row-menu term is no longer a counter: the hold builds the shipped menu and the check measures it. Exit signal: one operator row, a tap on a real phone.
 - ⚠ `027-sheet-menu-grammar-and-motion` — opened today for rows 24-25 (a non-responsive
   column-type control, and five sheet button/motion/overflow asks). Held by another agent at
@@ -443,7 +443,7 @@ done | sort -n
 | `013-add-view-sheet` | **92%** — 11/12 | 1 | 1 | 0 |
 | `014-desktop-select-checkbox` | **71%** — 5/7 | 2 | 1 | 1 |
 | `015-desktop-dropdown-placement` | **88%** — 7/8 | 1 | 1 | 0 |
-| `016-sheet-drag-and-audit` | **80%** — 8/10 | 2 | 1 | 1 |
+| `016-sheet-drag-and-audit` | **90%** — 9/10 | 1 | 1 | 0 |
 | `017-touch-row-range-selection` | **91%** — 10/11 | 1 | 1 | 0 |
 | `018-select-column-affordance-fit` | **80%** — 4/5 | 1 | 1 | 0 |
 | `019-card-field-value-formatting` | **86%** — 6/7 | 1 | 1 | 0 |

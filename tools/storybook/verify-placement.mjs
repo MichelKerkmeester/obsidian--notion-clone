@@ -6442,30 +6442,65 @@ await section("lifted probes: the sheet audit", async () => {
   // early return, never receives that class, and measures transparent for a reason that has nothing
   // to do with the fill under test. The owned menu is measured through its own constructor, since it
   // is the one surface that really does mount itself on the body.
+  // Each surface is built under an ancestor that declares its OWN `--background-primary`.
+  //
+  // The previous version of this built all nine in one parent, so they inherited one value from one
+  // node and the comparison could only ever re-read a single declaration nine times. It could not
+  // see the shape the ask came from — a host scoping `--background-primary` differently under a
+  // modal — because nothing in it ever varied by ancestor.
+  //
+  // So the ancestors vary here, deliberately and distinctly: nine wrappers, nine different values,
+  // none of them the value the sheets should end up painting. If a surface resolved its fill from
+  // where it was BUILT, the nine would come back nine different colours. They do not, and the reason
+  // is structural rather than stylistic: `setSheetMount` appends every sheet to `document.body`, so
+  // a surface stops inheriting from its builder the moment it becomes a sheet. That is a stronger
+  // claim than "one rule declares the fill", and it is the one that answers the ask.
   const fills = await page.evaluate((classes) => {
     const { applySheetChrome, createOwnedMenu } = globalThis.__a;
     const host = document.querySelector(".note-database-container");
     const out = {};
-    for (const cls of classes) {
-      if (cls === "db-owned-menu") continue;
-      const el = host.createDiv({ cls });
+    const parents = {};
+    const wrappers = [];
+    classes.forEach((cls, index) => {
+      // Nine values a theme might plausibly scope, all far from the sheet's own fill so a leak shows.
+      const wrapper = host.createDiv({ cls: "sheet-fill-ancestor" });
+      wrapper.style.setProperty("--background-primary", `rgb(${20 + index * 25}, ${index * 20}, ${200 - index * 20})`);
+      wrappers.push(wrapper);
+      const el = cls === "db-owned-menu" ? createOwnedMenu(document).el : wrapper.createDiv({ cls });
+      if (cls === "db-owned-menu") wrapper.appendChild(el);
       applySheetChrome(el, true);
       out[cls] = getComputedStyle(el).backgroundColor;
+      parents[cls] = el.parentElement === document.body ? "body" : (el.parentElement?.className || "detached");
       applySheetChrome(el, false);
       el.remove();
-    }
-    const menu = createOwnedMenu(document);
-    applySheetChrome(menu.el, true);
-    out["db-owned-menu"] = getComputedStyle(menu.el).backgroundColor;
-    applySheetChrome(menu.el, false);
-    menu.el.remove();
-    return out;
+    });
+    // The control lives in the same run: one surface given the same varied ancestor and NOT made a
+    // sheet. It has to read its wrapper's colour, or the nine agreeing above proves nothing about
+    // the portal — they would agree just as well if the property were never inherited at all.
+    const unportalled = wrappers[0].createDiv({ cls: classes[0] });
+    const unportalledFill = getComputedStyle(unportalled).backgroundColor;
+    const wrapperValue = getComputedStyle(wrappers[0]).getPropertyValue("--background-primary").trim();
+    unportalled.remove();
+    for (const w of wrappers) w.remove();
+    return { out, parents, unportalledFill, wrapperValue };
   }, SHEET_SURFACES);
-  const distinct = [...new Set(Object.values(fills))];
-  record(6, "every sheet surface paints the same fill", distinct.length === 1,
+  const distinct = [...new Set(Object.values(fills.out))];
+  const allOnBody = Object.values(fills.parents).every((p) => p === "body");
+  record(6, "every sheet surface paints the same fill, from nine different ancestors", distinct.length === 1,
     distinct.length === 1
-      ? `all ${SHEET_SURFACES.length} surfaces measure ${distinct[0]}`
-      : `${distinct.length} different fills: ` + Object.entries(fills).map(([k, v]) => `${k}=${v}`).join("  "));
+      ? `all ${SHEET_SURFACES.length} surfaces measure ${distinct[0]} despite being built under nine `
+        + `wrappers each declaring its own --background-primary`
+      : `${distinct.length} different fills: ` + Object.entries(fills.out).map(([k, v]) => `${k}=${v}`).join("  "));
+  record(6, "the agreement is the portal, not the ancestor each was built under", allOnBody,
+    `mount after the sheet treatment: ${[...new Set(Object.values(fills.parents))].join(", ")} `
+      + `(setSheetMount appends to document.body, so a host rule scoped under a modal cannot reach a sheet)`);
+  // Without this the pair above is vacuous: if `--background-primary` reached nothing, nine
+  // surfaces would agree for the wrong reason and the check would pass on a stylesheet that had
+  // stopped using the variable at all.
+  record(6, "PREMISE the varied ancestor does reach an unportalled surface",
+    fills.unportalledFill !== distinct[0] && fills.wrapperValue !== "",
+    `the same class left unportalled under wrapper 1 measures ${fills.unportalledFill} against the `
+      + `sheets' ${distinct[0]}; the wrapper declares --background-primary: ${fills.wrapperValue || "(nothing)"}`);
 
   // ── ASK 7 — the scrim: modal, 25% black, and out of the drag's way ────
   await openSheet();

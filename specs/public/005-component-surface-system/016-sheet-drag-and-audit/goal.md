@@ -173,31 +173,39 @@ host or the harness contributes.
       **What is still the operator's:** that a real software keyboard on their handset produces this
       sequence. No harness here contains one. That belongs to the operator row below rather than to
       this one, which asks for the inset arithmetic and now has it from both arms and from the host.
-- [ ] All 9 sheet-capable surfaces at the identical fill. **No before-number was ever recorded for
+- [x] All 9 sheet-capable surfaces at the identical fill. **No before-number was ever recorded for
       this ask**, so what is evidenced is that they agree today, not that they used to disagree.
-      **Measured, and the tick withdrawn.** `every sheet surface paints the same fill` — all 9
-      surfaces measure color(srgb 0.95 0.95 0.95).
+      **Re-measured against the objection this row raised against itself, and the objection is
+      answered by the mechanism rather than the stylesheet.**
 
-      **Both halves of that sentence come from the harness rather than the product.** The *value* is
-      95% of a white the harness declares: `probe/sheet-audit.mjs:105` sets
-      `--background-primary: #ffffff` inline on the body, and `styles.css:78` computes
-      `--db-surface-overlay: color-mix(in srgb, var(--background-primary) 95%, black)`. On a device
-      that variable comes from the theme, and 0.95/0.95/0.95 is not a number the product has. The
-      *agreement* is read off nine bare `<div>`s built in one parent and handed one class:
-      `styles.css:19996` declares `.db-mobile-bottom-sheet.db-mobile-bottom-sheet { background:
-      var(--db-surface-overlay) }`, which every surface then resolves through, so the comparison
-      re-reads one declaration nine times.
+      The old check built all nine in one parent, so they inherited one value from one node and the
+      comparison re-read a single declaration nine times. It could not see the shape the ask came
+      from — a host scoping `--background-primary` differently under a modal. So the ancestors now
+      vary: nine wrappers, each declaring its own `--background-primary`, none of them the colour a
+      sheet should paint. **All 9 still measure `color(srgb 0.95 0.95 0.95)`.**
 
-      **What survives: one rule declares the fill for all nine classes, and that is checked.** What
-      is not measured is nine real surfaces agreeing *in situ* — each is built by its own renderer,
-      in its own host, and a custom-property like `--background-primary` inherits from the nearest
-      ancestor that sets it. Obsidian's own `app.css` is absent here, so a theme scoping that
-      variable differently under a modal is exactly the shape this check cannot see, and it is how
-      the ask arose in the first place.
+      **Because a sheet stops inheriting from its builder the moment it becomes one.**
+      `setSheetMount` appends every sheet to `document.body`, and the check now asserts that
+      directly: after the sheet treatment, all nine report `body` as their parent. A theme rule
+      scoped under a modal cannot reach a surface that is no longer under the modal. That is a
+      structural guarantee and a stronger claim than "one rule declares the fill".
 
-      **What would settle it:** build the nine through their own entry points rather than as bare
-      divs, and read the fill with the host stylesheet present — or step 4 of the operator list,
-      swiping between a record sheet and a menu sheet and saying whether they match.
+      **The control is in the same run, and it has to be.** The same class, left under the same
+      varied wrapper and *not* made a sheet, measures `rgb(20, 0, 200)` — its wrapper's own colour —
+      against the sheets' `0.95 0.95 0.95`. Without that row the nine agreeing proves nothing: they
+      would agree just as well if `--background-primary` had stopped reaching anything at all.
+
+      **A blunter control was tried and is not evidence.** Removing the `appendChild` from
+      `setSheetMount` outright takes 17 unrelated sheet checks down with it — positioning, grab
+      bands, hit tests — and the sheet-audit section then throws on `elementFromPoint` before ASK 6
+      runs at all, so it reports nothing about this row in either direction. Restoration verified by
+      SHA-256, matching. The in-run control above is the one that discriminates.
+
+      **What is still not measured, and it is the same half as before:** nine surfaces built by their
+      own renderers, in their own hosts, with Obsidian's `app.css` present. What has moved is that
+      the ancestor no longer has to be trusted — whatever a renderer builds a sheet under, the sheet
+      treatment relocates it to one root, and that is now asserted rather than assumed. Step 4 of the
+      operator list still owns the rest.
 - [x] The scrim is `rgba(0,0,0,0.25)` and captures; a press 120px above the sheet resolves to it and
       a press on the band resolves to the grab handle.
       **Met.** `the scrim is a 25% black modal layer` — background rgba(0, 0, 0, 0.25),
