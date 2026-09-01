@@ -64,6 +64,24 @@ control set (two classes raised to the touch floor), and the sparse-list set (fi
 | `panels/panel-record-detail-desktop-dark.png` | `correct` | Title and expand action share one line; the desktop panel was not in the header-alignment fix's scope and improved with it, because the rule is written for both hosts. |
 | `views/board-view-desktop-light.png` | `pre-existing-defect (card-title-wrap)` | The row named *"A deliberately long service name that has to truncate"* **wraps** on a card and truncates in a table cell. Both are correct for their surface — a card title that truncated would hide the distinguishing part of a name — so the FIXTURE's name is the wrong artefact, not the CSS. Renamed. |
 
+### What a capture cannot show, and the defect it nearly invented
+
+`components/panel-invalid-events-modal-mobile-light.png` reads as broken: the Start inputs run to
+the modal's edge and the End column is not in the picture at all, on a modal whose own subtitle says
+*"Adjust the start or end time of each event"*. A probe agreed — **21 elements past the modal's right
+edge, the worst by 314px**, with `overflow-x: hidden` on the modal.
+
+**It is not broken.** The grid inside it measures `width 370, scrollWidth 684, overflow-x auto`: the
+End column is one horizontal scroll away and always was. The probe compared each element against the
+MODAL rather than walking up for a scroller — the same naive comparison `view-census` avoids on
+purpose, reproduced here while chasing a capture.
+
+**A still image cannot show a scroll affordance**, so every horizontally scrolling surface reads as
+truncated in review. That is a standing property of this method, not of these surfaces, and it is
+worth stating beside the verdicts: a capture is evidence about what is drawn, never about what is
+reachable. A speculative `min-width: 0` was tried on the grid, changed nothing measurable, and was
+reverted rather than kept as a tidy-looking no-op.
+
 ### Two findings this pass produced that are decisions rather than repairs
 
 **The week grid's timed events are unreadable, and not only on a phone.** Measured: **7 of 7** event
