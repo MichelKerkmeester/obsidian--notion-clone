@@ -55,6 +55,10 @@ const I = {
   eyeOff: glyph('<path d="M9.9 4.2A9 9 0 0 1 21 12a17 17 0 0 1-2.2 3M6.6 6.6A17 17 0 0 0 3 12a9 9 0 0 0 12.5 5.4"/><path d="m2 2 20 20"/>'),
   download: glyph('<path d="M12 3v12M7 12l5 5 5-5"/><path d="M4 21h16"/>'),
   copy: glyph('<rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>'),
+  /* The destructive row's icon. `ColumnMenu` builds that row with `icon: "trash"` and this file had
+     no trash glyph, so the fixture drew the row bare — a picture of a row the renderer does not
+     make, and one that quietly exercised the icon-less alignment path on a menu that never has one. */
+  trash: glyph('<path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>'),
   listChecks: glyph('<path d="M11 6h10M11 12h10M11 18h10"/><path d="m3 7 2 2 3-3"/>'),
   palette: glyph('<circle cx="13.5" cy="6.5" r="1"/><circle cx="17.5" cy="10.5" r="1"/><circle cx="8.5" cy="7.5" r="1"/><circle cx="6.5" cy="12.5" r="1"/><path d="M12 2a10 10 0 0 0 0 20 2 2 0 0 0 2-2v-1a2 2 0 0 1 2-2h2a4 4 0 0 0 4-4 10 10 0 0 0-10-11Z"/>'),
   paintBucket: glyph('<path d="m5 11 8-8 8 8-8 8-8-8Z"/><path d="M5 11h16"/><path d="M20 17a2 2 0 1 1-4 0c0-1.1 2-3 2-3s2 1.9 2 3Z"/>'),
@@ -635,7 +639,7 @@ export const CHROME_SCENARIOS = [
     // shipped stylesheet, so it documents the CSS and says nothing about the module that builds the
     // rows. The alignment and divider claims are measured in verify-placement, against the real
     // menu, with the host's own button rule loaded.
-    note: "The phone form of the owned menu. Rows share one left edge with the icon in a fixed leading column, hairlines divide neighbours but not the last row of a group, and a row that opens a submenu carries a trailing chevron. Captured in viewport mode so the fixed sheet docks at the bottom.",
+    note: "The phone form of the owned menu. Rows share one left edge with the icon in a fixed leading column, hairlines divide neighbours but not the last row of a group, and a row that opens a submenu carries a trailing chevron. Captured in viewport mode so the fixed sheet docks at the bottom. Every row carries its icon, including the destructive one: `ColumnMenu` builds that row with `icon: \"trash\"`, and the fixture drew it bare — a picture of a row the renderer does not make. The icon-less shape is real elsewhere and is exercised where it belongs, by the placement lane's own three-row menu.",
     html: () => `
       <div class="db-surface db-menu db-owned-menu db-mobile-bottom-sheet db-overlay-enter is-visible" role="menu" tabindex="-1">
         <div class="db-mobile-bottom-sheet-handle" aria-hidden="true"></div>
@@ -664,6 +668,7 @@ export const CHROME_SCENARIOS = [
           <span class="db-menu-item-label">Group by this column</span>
         </button>
         <button type="button" class="db-menu-item is-warning">
+          <span class="db-menu-item-icon">${I.trash}</span>
           <span class="db-menu-item-label">Delete property</span>
         </button>
       </div>`,

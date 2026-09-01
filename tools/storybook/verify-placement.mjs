@@ -3461,6 +3461,83 @@ const keyboardParityResults = await section("both sheet families under one keybo
       + ` screen, which is the opposite defect and the one the cap exists to prevent`,
   });
 
+  // ── TWO SURFACES OF THE SAME ROLE AGREE, AS A SET ──
+  //
+  // `001` asks that any two surfaces of the same role carry identical computed padding, radius,
+  // shadow, row height and font-size — set equality, not a pairwise spot check. Nothing asserted it,
+  // and the shape of the claim is why: a spot check between two named surfaces passes while a third
+  // drifts, and there are eight panels sharing one base rule.
+  //
+  // Grouped by ROLE rather than by class, and compared as a set, so a surface that leaves the family
+  // shows up as a second value rather than as a check nobody wrote for it. The same shape as the
+  // checkbox census next door, which found its answer needed a pointer-mode axis before it was true.
+  //
+  // THE AUDIT'S EXPOSURE IS REAL AND IS NOT CURED HERE. `createMenuRow` builds a `<button>`, and
+  // `app.css` declares display, align-items, padding, border-radius, height and font-size on every
+  // bare button — none of which this page loads outside HOST_BARE_CONTROLS. So this says the plugin
+  // gives one role one set of values; it cannot say what a host does to them. That is stated rather
+  // than left for a reader to discover, and it is why the row it answers keeps its caveat.
+  const surfaceSignature = (el) => {
+    const cs = getComputedStyle(el);
+    return [cs.padding, cs.borderRadius, cs.boxShadow, cs.fontSize, cs.borderWidth].join(" | ");
+  };
+  const roleFamilies = {
+    panel: ["db-filter-panel", "db-view-config-panel", "db-column-manager", "db-group-popover",
+      "db-export-popover", "db-chart-options-popover"],
+    "menu-row": [],
+  };
+  const panelValues = new Map();
+  for (const cls of roleFamilies.panel) {
+    const el = host.createDiv({ cls: `${cls} db-surface` });
+    el.createDiv({ cls: "db-panel-header" }).createDiv({ cls: "db-panel-title", text: "T" });
+    panelValues.set(cls, surfaceSignature(el));
+    el.remove();
+  }
+  // A menu row, built by the shipped `createMenuRow` in each container that hosts one.
+  const rowHosts = [
+    ["owned-menu", () => {
+      const menu = P.createOwnedMenu(document);
+      menu.showAt({ x: 20, y: 20 });
+      return { el: menu.el || menu.dom || menu.containerEl, done: () => menu.close() };
+    }],
+    ["panel-sheet", () => {
+      const el = document.body.createDiv({ cls: "db-record-detail-panel" });
+      P.applySheetChrome ? undefined : undefined;
+      globalThis.__a.applySheetChrome(el, true);
+      return { el, done: () => { globalThis.__a.applySheetChrome(el, false); el.remove(); } };
+    }],
+    ["filter-panel", () => {
+      const el = host.createDiv({ cls: "db-filter-panel db-surface" });
+      return { el, done: () => el.remove() };
+    }],
+  ];
+  const rowValues = new Map();
+  for (const [name, build] of rowHosts) {
+    const { el, done } = build();
+    const row = P.createMenuRow(el, { label: "Duplicate", icon: "copy" }).row;
+    const cs = getComputedStyle(row);
+    rowValues.set(name, [cs.minHeight, cs.padding, cs.fontSize,
+      Math.round(row.getBoundingClientRect().height)].join(" | "));
+    done();
+  }
+  await tick();
+
+  const panelSet = new Set(panelValues.values());
+  const rowSet = new Set(rowValues.values());
+  out.push({
+    name: "two surfaces of the same role carry the same padding, radius, shadow and type",
+    pass: panelValues.size >= 4 && panelSet.size === 1 && rowValues.size >= 3 && rowSet.size === 1,
+    detail: `${panelValues.size} panel surfaces resolve ${panelSet.size} distinct signature(s)`
+      + ` [${[...panelSet].join("  //  ")}]; ${rowValues.size} containers give a shipped menu row`
+      + ` ${rowSet.size} distinct signature(s) [${[...rowSet].join("  //  ")}].`
+      + (panelSet.size > 1 || rowSet.size > 1
+        ? ` Split: ${[...panelValues].concat([...rowValues]).map(([k, v]) => `${k}=${v}`).join(" ; ")}`
+        : " One role, one set of values.")
+      + ` What this cannot say is what a HOST does to them: createMenuRow builds a <button>, and`
+      + ` app.css declares padding, radius, height and font-size on every bare button, which this`
+      + ` page does not load outside HOST_BARE_CONTROLS`,
+  });
+
   // ── NO SURFACE DEPENDS ON AN UNDECLARED PIGGYBACK ──
   //
   // `001` asks that removing any one class from a panel change a measured value. It is the strongest

@@ -34,11 +34,30 @@ have a number are still open.*
       and closed. **Today: More tools clips.** **Measured green across the placement lane's width
       sweep**, and the two surfaces that used to escape are each asserted at two anchor positions —
       one position cannot tell a clamp from a coincidence.
-- [ ] Any two surfaces of the same role: identical computed padding, radius, shadow, row height,
-      font-size — set equality. **Compromised, and this packet holds the program's third
-      false-green case.** `createMenuRow` builds a `<button>`, and `app.css` declares `display`,
-      `align-items`, `padding`, `border-radius`, `height` and `font-size` on every bare button —
-      none of which the harness loads outside `HOST_BARE_CONTROLS`.
+- [x] Any two surfaces of the same role: identical computed padding, radius, shadow, row height,
+      font-size — set equality. **Built 2026-09-01, and it found a defect on its first run.**
+      → *two surfaces of the same role carry the same padding, radius, shadow and type*: `6 panel
+      surfaces resolve 1 distinct signature(s) …; 3 containers give a shipped menu row 1 distinct
+      signature(s) [44px | 8px 16px | 13px | 44]`.
+      **What it found.** The shipped menu row measured **13px** inside an owned menu and inside a
+      filter panel, and **16px** inside a record-detail sheet. Same component, same class, three
+      containers, two sizes. The cause is that `font-size: var(--db-font-md)` carried no literal
+      fallback: type tokens live on the plugin's token roots, so a row in a surface mounted outside
+      them resolved the var to nothing, the declaration was dropped entirely, and the row took
+      whatever the host gives a bare button. The switch's radius carries the same fallback for the
+      same reason, recorded there with the same note.
+      **Why set equality and not a spot check, answered by the defect itself.** The existing check —
+      *a menu row lays out identically in any sheet* — compares `min-height`, padding and height,
+      all of which the row declares. The one property it did **not** declare is the one that
+      drifted, and a pairwise check between the two surfaces that agreed would have passed forever.
+      **Watched failing** with the fallback removed: `3 containers … 2 distinct signature(s)`.
+      **Two things worth recording from building it.** The fallback was first added to
+      `.db-menu-item` and changed nothing, because a doubled-specificity rule already owned the
+      property — a shadowed declaration looks exactly like one that did not work. And the audit's
+      exposure is **not** cured by this: `createMenuRow` builds a `<button>`, and `app.css` declares
+      padding, radius, height and font-size on every bare button, which this page does not load
+      outside `HOST_BARE_CONTROLS`. What this establishes is that the plugin gives one role one set
+      of values, not what a host does to them.
 - [x] A row's computed layout is unchanged when mounted in a different container. **Today
       `.db-menu-item` only lays out inside `.db-owned-menu`.** **Met** — *a menu row lays out
       identically in any sheet* reports the same `min-height`, padding and height in the owned-menu

@@ -1,7 +1,7 @@
 {
   "holder": null,
-  "acquiredAt": "2026-09-01T07:15:00Z",
-  "baselineHash": "b113cd1af39e",
+  "acquiredAt": "2026-09-01T08:20:00Z",
+  "baselineHash": "810036205adf",
   "baselineCommit": "3990be47b525",
   "history": [
     {
@@ -757,6 +757,27 @@
       "at": "2026-09-01T07:15:00Z",
       "hash": "b113cd1af39e",
       "note": "Recaptured and reviewed. No capture moves: the census measures at 320px and the capture harness renders at 402 and 1440, where the rule is inert by construction — stated rather than presented as sign-off. It does not settle what the narrowest supported width IS, which is still the operator's call; it makes the surface correct at either answer. Per-image operator sign-off still owed."
+    },
+    {
+      "event": "acquire",
+      "phase": "001-overlay-placement-and-menu-language",
+      "at": "2026-09-01T08:00:00Z",
+      "hash": "b113cd1af39e",
+      "note": "Taken for a defect the set-equality check this phase asked for found on its first run: the shipped menu row measures 13px inside an owned menu and inside a filter panel, and 16px inside a record-detail sheet. Same component, same class, three containers, two sizes."
+    },
+    {
+      "event": "edit",
+      "phase": "001-overlay-placement-and-menu-language",
+      "at": "2026-09-01T08:05:00Z",
+      "hash": "810036205adf",
+      "note": "One literal fallback: font-size: var(--db-font-md, 13px) on .db-menu-item.db-menu-item. Type tokens live on the plugin's token roots, so a row in a surface mounted outside them resolved the var to nothing, the declaration was dropped entirely, and the row took whatever the host gives a bare button — measured at 14px on a bare page and 16px in the sheet. The switch's radius carries the same fallback for the same reason. TWO THINGS WORTH RECORDING. The fallback was first added to .db-menu-item and changed nothing, because this doubled-specificity rule already owned the property — a shadowed declaration looks exactly like one that did not work. And the existing check for this ('a menu row lays out identically in any sheet') compares min-height, padding and height, all of which the row declares; the one property it did NOT declare is the one that drifted, which is the whole argument for set equality over a spot check. Measured: 3 containers, 2 signatures -> 1. Red again with the fallback removed."
+    },
+    {
+      "event": "release",
+      "phase": "001-overlay-placement-and-menu-language",
+      "at": "2026-09-01T08:20:00Z",
+      "hash": "810036205adf",
+      "note": "Recaptured and reviewed. The owned-menu and record-sheet captures were opened and read; the rows carry one type across both. Per-image operator sign-off still owed."
     }
   ],
   "outstanding": [

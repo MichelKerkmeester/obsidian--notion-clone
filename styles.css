@@ -537,7 +537,20 @@
   justify-content: flex-start;
   width: 100%;
   padding: 0 8px;
-  font-size: var(--db-font-md);
+  /* The literal fallback is load-bearing, and its absence was measurable.
+   *
+   * Type tokens are declared on the plugin's token roots, so a row in a surface mounted outside them
+   * resolves this to nothing and the declaration is dropped entirely — the row then takes whatever
+   * the host gives a bare button, measured at 14px against the 13px every other menu surface shows.
+   * The same component read 13px inside an owned menu and inside a filter panel and 16px inside a
+   * record-detail sheet, which is what a check for "two surfaces of the same role agree" found.
+   *
+   * The switch's radius carries the same fallback for the same reason, with the same note: a control
+   * that lands outside the container must still be itself. A first attempt added the fallback to
+   * `.db-menu-item` instead and changed nothing, because this doubled-specificity rule already owned
+   * the property — worth recording, because a declaration that is shadowed looks exactly like a
+   * declaration that did not work. */
+  font-size: var(--db-font-md, 13px);
   text-align: left;
 }
 

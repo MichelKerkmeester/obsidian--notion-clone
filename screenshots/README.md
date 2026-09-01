@@ -111,7 +111,7 @@ Sources: `src/views/owned-menu.ts`, `src/views/menu-row.ts`
 
 ### Owned menu — the sheet presentation on a phone
 
-The phone form of the owned menu. Rows share one left edge with the icon in a fixed leading column, hairlines divide neighbours but not the last row of a group, and a row that opens a submenu carries a trailing chevron. Captured in viewport mode so the fixed sheet docks at the bottom.
+The phone form of the owned menu. Rows share one left edge with the icon in a fixed leading column, hairlines divide neighbours but not the last row of a group, and a row that opens a submenu carries a trailing chevron. Captured in viewport mode so the fixed sheet docks at the bottom. Every row carries its icon, including the destructive one: `ColumnMenu` builds that row with `icon: "trash"`, and the fixture drew it bare — a picture of a row the renderer does not make. The icon-less shape is real elsewhere and is exercised where it belongs, by the placement lane's own three-row menu.
 
 | dark | light |
 |---|---|
@@ -567,7 +567,7 @@ The full table the renderer builds: a select gutter, a record-icon gutter and a 
 
 | dark | light |
 |---|---|
-| ![table-mobile dark](views/table-mobile-desktop-dark.png) | ![table-mobile light](views/table-mobile-mobile-light.png) |
+| ![table-mobile dark](views/table-mobile-mobile-dark.png) | ![table-mobile light](views/table-mobile-mobile-light.png) |
 
 Sources: `src/views/table-renderer.ts`, `src/views/table-column-layout-sync.ts`, `src/views/table-layout.ts`, `src/views/cell-renderer.ts`, `src/views/file-title-display.ts`, `src/views/table-record-peek.ts`, `styles.css`
 
