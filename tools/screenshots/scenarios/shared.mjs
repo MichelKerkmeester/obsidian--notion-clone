@@ -123,8 +123,19 @@ export const toggleSwitch = ({ checked = false, disabled = false } = {}) =>
 export const collapseToggle = (cls) =>
   `<button type="button" class="${cls}"><span class="db-collapse-triangle"></span></button>`;
 
-export function tableHeader() {
-  return `<th class="db-select-col"><div class="db-select-inner">${rowCheckbox()}</div></th>` +
+/**
+ * The header cells for the standard column set.
+ *
+ * `selectColumn` exists because a caller that draws its own gutters was still getting this one's.
+ * `table-mobile` wrote a select `th` and a record-icon `th` of its own and then called this, which
+ * emitted a SECOND select header — nine header cells against eight body cells, so every column was
+ * labelled with its neighbour's name and the phone shot had no visible labels at all. Passing the
+ * flag is how a caller says it has already drawn the gutter.
+ */
+export function tableHeader({ selectColumn = true } = {}) {
+  return (selectColumn
+    ? `<th class="db-select-col"><div class="db-select-inner">${rowCheckbox()}</div></th>`
+    : "") +
     COLUMNS.map((c) => `
     <th data-note-database-column-key="${c.label.toLowerCase()}">
       <div class="db-th-content">

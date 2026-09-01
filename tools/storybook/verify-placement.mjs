@@ -115,6 +115,7 @@ import { FilterPanelRenderer } from "${join(REPO, "src/views/filter-panel-render
 import { SortPanelRenderer } from "${join(REPO, "src/views/sort-panel-renderer")}";
 import { renderDateValuePicker, closeActiveDateValuePicker } from "${join(REPO, "src/views/date-value-picker")}";
 import { SURFACE_REGISTRY } from "${join(REPO, "src/views/surface-contract")}";
+import { TableRenderer } from "${join(REPO, "src/views/table-renderer")}";
 import { openRecordDetailPanel } from "${join(REPO, "src/views/record-detail-panel")}";
 import { RowMenu } from "${join(REPO, "src/views/row-menu")}";
 import { ColumnMenu } from "${join(REPO, "src/views/column-menu")}";
@@ -137,6 +138,7 @@ globalThis.__layer = { openTableRecordPeek, closeTableRecordPeek, openDropdownMe
 globalThis.__columns = { ColumnManagerRenderer };
 globalThis.__panels = { FilterPanelRenderer, SortPanelRenderer };
 globalThis.__registry = { SURFACE_REGISTRY, renderDateValuePicker, closeActiveDateValuePicker };
+globalThis.__table = { TableRenderer };
 `);
 
 execFileSync(join(REPO, "node_modules/.bin/esbuild"), [
@@ -2808,6 +2810,38 @@ const cellResults = await section("what a press on a table cell means", () => ce
       + ` resolves to <${overCell ? overCell.tagName.toLowerCase() : "nothing"}`
       + `${overCell && overCell.className ? ` class="${overCell.className}"` : ""}>`,
   });
+  // ── the same hit test, with the scrim told not to take pointers ──
+  //
+  // `012` recorded this control as "observed" once, in prose: `pointer-events=none ... resolves to
+  // <td>`. That was honest when it was written and it is the weaker half of the criterion, because
+  // a control observed once and written down cannot go red when the behaviour regresses — and going
+  // red on a regression is the only thing a control is for.
+  //
+  // So it runs. Same panel, same cell, same `elementFromPoint`; the one thing that changes is the
+  // option, and the result has to change with it. Registered on its own line so the run reports it
+  // by name beside the case it defends, the way `010` registers its two.
+  globalThis.__place.applySheetChrome(sheetPanel, false);
+  document.querySelector(".db-mobile-sheet-scrim")?.remove();
+  globalThis.__place.applySheetChrome(sheetPanel, true, { scrimCapturesPointer: false });
+  const openScrim = document.body.querySelector(".db-mobile-sheet-scrim");
+  const openStyle = openScrim ? getComputedStyle(openScrim) : null;
+  const overCellOpen = document.elementFromPoint(
+    Math.round(cellBox.left + cellBox.width / 2),
+    Math.round(cellBox.top + cellBox.height / 2),
+  );
+  out.push({
+    name: "control: the scrim check reacts when the scrim stops taking pointers",
+    pass: Boolean(openScrim) && openStyle.pointerEvents === "none"
+      && Boolean(overCellOpen) && Boolean(overCellOpen.closest("td")),
+    detail: `with {scrimCapturesPointer: false} the backdrop is `
+      + `${openScrim ? "present" : "absent"} at pointer-events=`
+      + `${openStyle ? openStyle.pointerEvents : "n/a"}, and the same press resolves to `
+      + `<${overCellOpen ? overCellOpen.tagName.toLowerCase() : "nothing"}`
+      + `${overCellOpen && overCellOpen.className ? ` class="${overCellOpen.className}"` : ""}>. `
+      + `The case above and this one are the same measurement with one option flipped, so a build `
+      + `that ignored the option entirely would pass one and fail the other`,
+  });
+
   globalThis.__place.applySheetChrome(sheetPanel, false);
   sheetPanel.remove();
 
@@ -2868,6 +2902,11 @@ const PHASE_CONTROLS = new Map([
       + "Delete \"36\"]; a rename entry is MISSING and pressing it renamed 0 row(s)`"],
   ["while a record sheet is open the backdrop takes the tap, not the cell under it",
     "with the backdrop's pointer-events at none: `pointer-events=none ... resolves to <td>` (§4.1, AC-6)"],
+  ["control: the scrim check reacts when the scrim stops taking pointers",
+    "this IS the red the row above was watched failing at, promoted from a one-off observation in "
+      + "prose to a standing case. It fails on a build that ignores `scrimCapturesPointer`: the "
+      + "opt-out then reports the modal value and the press still resolves to the scrim, so the "
+      + "pair stops disagreeing and the default stops being a decision"],
 ]);
 
 await cellPhone.close();
@@ -8011,10 +8050,230 @@ await section("the flick decision reaches the sheet", async () => {
       + `fast, which is the number this floor exists to refuse`);
 });
 
+// ───────────────────────────────────────────────────────────────────
+// THE SELECT COLUMN IS AS WIDE AS WHAT IT DRAWS
+// ───────────────────────────────────────────────────────────────────
+//
+// Read off the phone table capture: the select column is 65px of cell around a single 28px
+// checkbox. The width rule said "on touch this cell holds two controls" and the row drew the second
+// one only when a reorder was possible — two questions that had drifted apart, with the column
+// always taking the wider answer.
+//
+// That is not an edge case. `canManualReorder` is false the moment a view is explicitly sorted,
+// which is where a reader lands as soon as they tap a column header, so the ordinary sorted table
+// on a phone carried 36px of dead width on every row of a 402px screen.
+//
+// Both states are rendered through the shipped `TableRenderer` on a coarse-pointer page, because
+// the width rule only forks under touch and a desktop harness cannot see this at all.
+
+const selectWidthResults = [];
+
+await section("the select column is as wide as what it draws", async () => {
+  const page = await browser.newPage({
+    viewport: { width: 402, height: 874 }, hasTouch: true, isMobile: true, reducedMotion: "reduce",
+  });
+  await page.setContent(page_html.replace("<body>", phoneBody));
+  await page.addStyleTag({ content: readFileSync(join(REPO, "styles.css"), "utf8") + HOST_BARE_CONTROLS });
+  await page.addScriptTag({ content: shimJs + "\ninstallObsidianDomShim(globalThis);" });
+  await page.addScriptTag({ content: positionerJs });
+
+  const measured = await page.evaluate(() => {
+    const { TableRenderer } = globalThis.__table;
+    const host = document.querySelector(".note-database-container");
+
+    const columns = [
+      { key: "file.name", label: "Name", type: "text" },
+      { key: "cost", label: "Cost", type: "number" },
+    ];
+    const rows = [0, 1, 2].map((i) => ({
+      file: { path: `note-${i}.md`, name: `note-${i}.md`, basename: `Note ${i}` },
+      frontmatter: { cost: i }, computed: {},
+    }));
+
+    const bag = {
+      getVisibleColumns: () => columns,
+      isRowSelected: () => false, toggleRowSelected: () => undefined,
+      areAllRowsSelected: () => false, toggleRowsSelected: () => undefined,
+      setupColumnHeader: (th, col) => { th.setText(col.label); },
+      setupRow: () => undefined,
+      renderCell: (td, row, col) => { td.setText(String(row.frontmatter[col.key] ?? "")); },
+      captureInteractionSnapshot: () => undefined, restoreInteractionSnapshot: () => undefined,
+      renderRecordIcon: () => null, renderGroupSummaries: () => undefined,
+      applyConditionalFormat: () => undefined, setupFillHandle: () => undefined,
+      // Present, so `canManualReorder` turns on the sort state alone rather than on a missing action.
+      moveRowToPosition: () => undefined, moveRowsToGroup: () => undefined,
+      moveRowToGroupAndPosition: () => undefined,
+      createEntry: () => undefined, addColumn: () => undefined, showRowMenu: () => undefined,
+      changeColumnCalculation: () => undefined,
+      isGroupCollapsed: () => false, toggleGroupCollapsed: () => undefined,
+      expandGroup: () => undefined,
+      get hideCreateEntry() { return false; },
+    };
+
+    const render = (config) => {
+      const container = host.createDiv({ cls: "db-table-host" });
+      new TableRenderer(bag).renderTable(container, config, rows);
+      const cell = container.querySelector("td.db-select-col");
+      const headerCell = container.querySelector("th.db-select-col");
+      const box = cell?.getBoundingClientRect();
+      const controls = cell ? cell.querySelectorAll("button, input").length : 0;
+      const widest = cell
+        ? Math.max(0, ...[...cell.querySelectorAll("button, input")]
+          .map((el) => Math.round(el.getBoundingClientRect().width)))
+        : 0;
+      const result = {
+        built: Boolean(cell),
+        headerWidth: headerCell ? Math.round(headerCell.getBoundingClientRect().width) : null,
+        headerLeft: headerCell ? Math.round(headerCell.getBoundingClientRect().left) : null,
+        cellLeft: box ? Math.round(box.left) : null,
+        width: box ? Math.round(box.width) : null,
+        controls,
+        widest,
+        classes: cell ? [...cell.querySelectorAll("button, input")]
+          .map((el) => String(el.className).split(" ")[0]).join(", ") : "",
+      };
+      container.remove();
+      return result;
+    };
+
+    const base = { schema: { columns }, viewType: "table", columnOrder: columns.map((c) => c.key) };
+    return {
+      // Reorder available: nothing pinned to a sort, so the row can draw its move button.
+      reorderable: render({ ...base }),
+      // The state a reader reaches by tapping a column header.
+      sorted: render({ ...base, sortColumn: "cost", sortDirection: "asc" }),
+    };
+  });
+
+  const record = (name, pass, detail) => selectWidthResults.push({ name, pass, detail });
+  const { reorderable, sorted } = measured;
+  const show = (r) => `${r.width}px of cell around ${r.controls} control(s) [${r.classes || "none"}]`
+    + `, header ${r.headerWidth}px`;
+
+  record("both table states render a select cell to measure",
+    reorderable.built && sorted.built,
+    `reorderable built=${reorderable.built}, sorted built=${sorted.built}. A width comparison over `
+      + `a cell that never rendered compares nothing`);
+
+  record("a sorted table does not reserve room for a reorder button it will not draw",
+    sorted.controls === 1 && sorted.width !== null && sorted.width - sorted.widest <= 16,
+    `sorted: ${show(sorted)}; reorderable: ${show(reorderable)}. The gap between the cell and its `
+      + `widest control is ${sorted.width - sorted.widest}px — that is padding, and anything much `
+      + `larger is a second control's worth of room with no second control in it`);
+
+  // A HEADER/ROW ALIGNMENT PAIR WAS WRITTEN HERE AND REMOVED, BECAUSE IT COULD NOT FAIL.
+  //
+  // The concern was real: a `th` never holds a move button, so a `:has()` written against the CELL
+  // rather than the table would shrink the header and leave it on a different column from its rows.
+  // Two attempts to produce that red both stayed green — once with the cell-keyed rule, once with a
+  // rule narrowing the `th` outright — because in an AUTO-layout table the column algorithm
+  // reconciles a `th` and a `td` in the same column to one width. The pair was asserting a property
+  // of table layout, not of this stylesheet.
+  //
+  // The width check above is the real guard: run against the cell-keyed rule it reported 64px in
+  // both states, which is that mistake failing. The header/row numbers stay in the detail line so a
+  // reader can still see them.
+
+  record("the two states differ, so the width is answering the question and not a constant",
+    reorderable.width !== sorted.width,
+    `reorderable ${reorderable.width}px against sorted ${sorted.width}px. Equal widths here mean `
+      + `the rule stopped forking — which is how it went wrong the first time, in the other direction`);
+});
+
+// ───────────────────────────────────────────────────────────────────
+// EVERY FIXTURE TABLE HAS AS MANY CELLS AS IT HAS HEADERS
+// ───────────────────────────────────────────────────────────────────
+//
+// Two captures were photographing tables the plugin does not build, and both were found by a person
+// opening the PNG rather than by anything here.
+//
+// `panel-record-peek` hand-rolled its rows and omitted the select cell its own header declares, so
+// every body row sat one column LEFT of its header: the record name rendered inside the 76px
+// checkbox column and truncated to two characters, the cost sat under "Name", the category under
+// "Next Renewal". `table-mobile` drew its own select and record-icon headers and then called
+// `tableHeader()`, which emits a select header of its own — nine header cells against eight body
+// cells, so the columns were labelled with their neighbours' names and the phone shot had no
+// visible labels at all.
+//
+// Both are one bug: a header and its rows disagreeing about how many columns there are. It is
+// mechanically checkable, and it is exactly the kind of thing that survives because the picture
+// still looks like a table. Every scenario is rendered and every `<table>` in it is asked.
+//
+// COLSPAN IS COUNTED, NOT IGNORED. A footer or group row legitimately spans columns, and summing
+// `colSpan` rather than counting elements is what lets those rows pass while a missing cell fails.
+
+const fixtureTableResults = [];
+
+await section("every fixture table has as many cells as it has headers", async () => {
+  const page = await browser.newPage({ viewport: VIEWPORT, reducedMotion: "reduce" });
+  const styles = readFileSync(join(REPO, "styles.css"), "utf8");
+  const theme = readFileSync(join(REPO, "tools/screenshots/theme.css"), "utf8");
+
+  const offenders = [];
+  let tablesChecked = 0;
+  let scenariosRendered = 0;
+
+  for (const scenario of SCENARIOS) {
+    let html;
+    try {
+      html = scenario.html();
+    } catch {
+      continue;
+    }
+    await page.setContent(`<body class="theme-dark"><div id="shot">${html}</div></body>`);
+    for (const content of [styles, theme]) await page.addStyleTag({ content });
+    scenariosRendered += 1;
+
+    const found = await page.evaluate((id) => {
+      const rows = [];
+      let tables = 0;
+      for (const table of document.querySelectorAll("table")) {
+        const headerRow = table.querySelector("thead tr");
+        if (!headerRow) continue;
+        tables += 1;
+        const span = (cells) => [...cells].reduce((sum, cell) => sum + (cell.colSpan || 1), 0);
+        const headerCells = span(headerRow.querySelectorAll(":scope > th, :scope > td"));
+        for (const bodyRow of table.querySelectorAll("tbody > tr")) {
+          const bodyCells = span(bodyRow.querySelectorAll(":scope > th, :scope > td"));
+          if (bodyCells === headerCells) continue;
+          rows.push({
+            scenario: id,
+            headerCells,
+            bodyCells,
+            first: (bodyRow.textContent || "").trim().replace(/\s+/g, " ").slice(0, 40),
+          });
+          break;
+        }
+      }
+      return { rows, tables };
+    }, scenario.id);
+
+    tablesChecked += found.tables;
+    offenders.push(...found.rows);
+  }
+
+  await page.close();
+
+  const record = (name, pass, detail) => fixtureTableResults.push({ name, pass, detail });
+
+  record("there are fixture tables to check",
+    tablesChecked > 0,
+    `${tablesChecked} table(s) with a header row across ${scenariosRendered} scenario(s). A run that `
+      + `found no table would report perfect agreement over nothing, which is how this class of `
+      + `defect survived in the first place`);
+
+  record("no fixture body row disagrees with its own header about the column count",
+    offenders.length === 0,
+    offenders.length === 0
+      ? `${tablesChecked} table(s) checked, every body row matching its header's column span`
+      : offenders.map((o) => `${o.scenario}: header spans ${o.headerCells}, a body row spans `
+        + `${o.bodyCells} ("${o.first}")`).join("; "));
+});
+
 results.push(...phoneResults, ...menuResults, ...addViewDesktopResults, ...addViewPhoneResults,
   ...grammarResults, ...addViewGrammar, ...motionResults, ...reducedResults, ...desktopMenuResults, ...cellResults, ...sheetResults, ...selectCellResults, ...selectPhoneResults, ...rowPhoneResults, ...rowNarrowResults,
   ...desktopPanelResults, ...stateResults, ...keyboardParityResults, ...familyResults, ...touchResults, ...overlapResults, ...rhythmResults, ...rendererRhythmResults,
-  ...liftedResults, ...inlineEditResults, ...numberParityResults, ...peekLayerResults, ...propertyRowResults, ...menuEdgeResults, ...headerRhythmResults, ...panelParityResults, ...registryResults, ...flickResults, ...sectionFailures);
+  ...liftedResults, ...inlineEditResults, ...numberParityResults, ...peekLayerResults, ...propertyRowResults, ...menuEdgeResults, ...headerRhythmResults, ...panelParityResults, ...registryResults, ...flickResults, ...selectWidthResults, ...fixtureTableResults, ...sectionFailures);
 
 await browser.close();
 rmSync(work, { recursive: true, force: true });

@@ -138,7 +138,7 @@ settle it and **no number**, because none ran.
       centre — and the pair covers it. That is the reversible reading of the two the earlier note
       offered, and it is taken rather than left open; the recipe's figure was stale, the behaviour
       was not.
-- [ ] A tap does not fight the sheet: the cell centre resolves to the scrim with
+- [x] A tap does not fight the sheet: the cell centre resolves to the scrim with
       `pointer-events: auto`, negative control `{scrimCapturesPointer: false}` observed red.
       **First clause met.** → *while a record sheet is open the backdrop takes the tap, not the cell
       under it*: `backdrop=present pointer-events=auto inset=0px; a press at the centre of a visible
@@ -150,6 +150,14 @@ settle it and **no number**, because none ran.
       the opt-out is what proves the default is a decision rather than the only behaviour available.
       Observed red before green: with the option ignored, the opt-out reports `""` instead of
       `none` and the case fails.
+      **The standing check exists as of 2026-09-01.** The clause asked for the control to be
+      *registered* beside its subject, and it now is: `control: the scrim check reacts when the
+      scrim stops taking pointers` runs on every pass, applying
+      `{ scrimCapturesPointer: false }` to the same panel and hit-testing the same cell centre.
+      → `with {scrimCapturesPointer: false} the backdrop is present at pointer-events=none, and the
+      same press resolves to <td>`. **Watched red** with the option ignored at the call site:
+      `pointer-events=auto ... resolves to <div class="db-mobile-sheet-scrim">` — the pair stops
+      disagreeing, which is precisely the build the opt-out exists to distinguish.
       *The original record, kept:* `acceptance-criteria.md` §AC-6 records it as observed once,
       reporting `pointer-events=none ... resolves to <td>`, and §4.1 repeats the entry. No `control:`
       check for it appears anywhere in the captured run — the only two the whole run reports are

@@ -24,7 +24,7 @@
 // 1. IMPORTS
 // ───────────────────────────────────────────────────────────────────
 
-import { ROWS, fieldCheckbox, glyph, pill, tableHeader } from "./shared.mjs";
+import { ROWS, fieldCheckbox, glyph, pill, rowCheckbox, tableHeader } from "./shared.mjs";
 
 // ───────────────────────────────────────────────────────────────────
 // 2. ICONS
@@ -581,6 +581,12 @@ Cancel before the renewal date or it bills for another year. Support answer on w
           <thead><tr>${tableHeader()}</tr></thead>
           <tbody>${rows.map((r) => `
             <tr>
+              <!-- The select cell the header declares. Without it every body row sat one column
+                   left of its own header: the name rendered inside the 76px checkbox column and
+                   truncated to two characters, the cost sat under Name, and the category under
+                   Next Renewal. The header comes from tableHeader(), which emits the th; these
+                   rows are hand-rolled rather than built by tableRows(), and the cell was missing. -->
+              <td class="db-select-col"><div class="db-select-inner">${rowCheckbox()}</div></td>
               <td>${r.name}</td>
               <td>${r.cost}</td>
               <td>${pill(r.cycle, "orange")}</td>

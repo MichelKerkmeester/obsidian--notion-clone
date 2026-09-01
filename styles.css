@@ -17831,6 +17831,26 @@ body.is-mobile .note-database-container .db-calendar-month-time {
   max-width: 64px;
 }
 
+/* And 40 when the reorder button is not there to need the other half.
+   The arithmetic above is right for a cell holding two controls. The row only builds the reorder
+   button when a reorder is possible, and it is not the moment a view is explicitly sorted — which
+   is where a reader lands as soon as they tap a column header. In that ordinary state the column
+   held 64px around a single 28px checkbox: 36px of dead width on every row of a 402px screen,
+   measured off the capture at 65px of cell.
+
+   Keyed to the TABLE, not to the cell. A `:has()` on the cell would shrink the header — a `th`
+   never holds a move button — and leave the header on a different column from its rows, which is a
+   worse defect than the one being fixed. Asking the table means all three selectors move together
+   or none of them do, and the DOM answers the question rather than a flag that can drift away from
+   the row's own condition the way the JS width did. */
+.is-phone .note-database-container .db-table:not(:has(.db-table-mobile-move-btn)) col.db-select-colgroup,
+.is-phone .note-database-container .db-table:not(:has(.db-table-mobile-move-btn)) th.db-select-col,
+.is-phone .note-database-container .db-table:not(:has(.db-table-mobile-move-btn)) td.db-select-col {
+  width: 40px;
+  min-width: 40px;
+  max-width: 40px;
+}
+
 .is-phone .note-database-container .db-table-mobile-move-btn {
   display: inline-flex;
   align-items: center;

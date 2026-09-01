@@ -203,7 +203,7 @@
     ],
     "causal_summary": "Give a touch in the table the meaning a touch has, rather than replaying the desktop pointer grammar: a tap edits the cell it lands on, a tap on the row's main item opens the record sheet, and dragging does not paint a selection range.",
     "created_at": "2026-08-30T16:47:05.145Z",
-    "last_save_at": "2026-08-31T21:17:30.142Z",
+    "last_save_at": "2026-09-01T05:07:20.467Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -214,7 +214,7 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:8760e6874933d725887ae30fef7e5795a2657e1be536faca8cec1d9723087eb1",
+    "source_fingerprint": "sha256:e06afbccd8f676410e14ff2e528b940234fc620164ade034b9121a5b597e8075",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "a5cd998a68ef28bfbb8c09e31e76ca30f4e54a4e57972d6fd679e5834fa96a75",

@@ -259,7 +259,7 @@ export const CORE_SCENARIOS = [
             <thead><tr>
               <th class="db-select-col"><div class="db-select-inner">${rowCheckbox()}</div></th>
               <th class="db-record-icon-col"></th>
-              ${tableHeader()}
+              ${tableHeader({ selectColumn: false })}
             </tr></thead>
             <tbody>${bodyRows}</tbody>
           </table>

@@ -1,17 +1,17 @@
 {
-  "measuredAt": "2026-09-01T03:49:38.012Z",
+  "measuredAt": "2026-09-01T05:02:26.482Z",
   "inputs": {
-    "styles.css": "b346c59576b5",
+    "styles.css": "078298819983",
     "tools/live/checkbox-appearance.mjs": "3173162bff2a",
     "tools/screenshots/scenarios.mjs": "1395f2dacbfd"
   },
   "totals": {
-    "checkboxes": 223,
+    "checkboxes": 250,
     "fixtures": 60,
-    "owned": 223,
+    "owned": 250,
     "appearanceOwnedByAncestor": 0,
-    "appearanceSelfOwned": 223,
-    "tokenDependent": 213,
+    "appearanceSelfOwned": 250,
+    "tokenDependent": 240,
     "platformBox": 0,
     "distinctShapes": 4,
     "stateFamilies": 4,
@@ -22,9 +22,9 @@
     "mountShapeSplits": 0
   },
   "shapes": {
-    "16x16 r=4px": 140,
+    "16x16 r=4px": 168,
     "18x18 r=4px": 20,
-    "28x28 r=4px": 53,
+    "28x28 r=4px": 52,
     "34x18 r=9999px": 10
   },
   "states": [
@@ -2262,29 +2262,6 @@
       "tokensFrom": "note-database-container db-width-default"
     },
     {
-      "scenario": "table-mobile",
-      "index": 12,
-      "classes": [
-        "db-checkbox",
-        "db-checkbox-row"
-      ],
-      "chain": [
-        "note-database-container db-width-default",
-        "db-table-wrap",
-        "db-table",
-        "db-select-col",
-        "db-select-inner"
-      ],
-      "measured": {
-        "appearance": "none",
-        "radius": "4px",
-        "width": 28,
-        "height": 28
-      },
-      "appearanceOwnedBy": null,
-      "tokensFrom": "note-database-container db-width-default"
-    },
-    {
       "scenario": "list-mobile",
       "index": 0,
       "classes": [
@@ -3832,6 +3809,622 @@
     {
       "scenario": "panel-record-peek",
       "index": 0,
+      "classes": [
+        "db-checkbox",
+        "db-checkbox-row"
+      ],
+      "chain": [
+        "note-database-container",
+        "db-table",
+        "db-select-col",
+        "db-select-inner"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 16,
+        "height": 16
+      },
+      "appearanceOwnedBy": null,
+      "tokensFrom": "note-database-container"
+    },
+    {
+      "scenario": "panel-record-peek",
+      "index": 1,
+      "classes": [
+        "db-checkbox",
+        "db-checkbox-row"
+      ],
+      "chain": [
+        "note-database-container",
+        "db-table",
+        "db-select-col",
+        "db-select-inner"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 16,
+        "height": 16
+      },
+      "appearanceOwnedBy": null,
+      "tokensFrom": "note-database-container"
+    },
+    {
+      "scenario": "panel-record-peek",
+      "index": 2,
+      "classes": [
+        "db-checkbox",
+        "db-checkbox-row"
+      ],
+      "chain": [
+        "note-database-container",
+        "db-table",
+        "db-select-col",
+        "db-select-inner"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 16,
+        "height": 16
+      },
+      "appearanceOwnedBy": null,
+      "tokensFrom": "note-database-container"
+    },
+    {
+      "scenario": "panel-record-peek",
+      "index": 3,
+      "classes": [
+        "db-checkbox",
+        "db-checkbox-row"
+      ],
+      "chain": [
+        "note-database-container",
+        "db-table",
+        "db-select-col",
+        "db-select-inner"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 16,
+        "height": 16
+      },
+      "appearanceOwnedBy": null,
+      "tokensFrom": "note-database-container"
+    },
+    {
+      "scenario": "panel-record-peek",
+      "index": 4,
+      "classes": [
+        "db-checkbox",
+        "db-checkbox-row"
+      ],
+      "chain": [
+        "note-database-container",
+        "db-table",
+        "db-select-col",
+        "db-select-inner"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 16,
+        "height": 16
+      },
+      "appearanceOwnedBy": null,
+      "tokensFrom": "note-database-container"
+    },
+    {
+      "scenario": "panel-record-peek",
+      "index": 5,
+      "classes": [
+        "db-checkbox",
+        "db-checkbox-row"
+      ],
+      "chain": [
+        "note-database-container",
+        "db-table",
+        "db-select-col",
+        "db-select-inner"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 16,
+        "height": 16
+      },
+      "appearanceOwnedBy": null,
+      "tokensFrom": "note-database-container"
+    },
+    {
+      "scenario": "panel-record-peek",
+      "index": 6,
+      "classes": [
+        "db-checkbox",
+        "db-checkbox-row"
+      ],
+      "chain": [
+        "note-database-container",
+        "db-table",
+        "db-select-col",
+        "db-select-inner"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 16,
+        "height": 16
+      },
+      "appearanceOwnedBy": null,
+      "tokensFrom": "note-database-container"
+    },
+    {
+      "scenario": "panel-record-peek",
+      "index": 7,
+      "classes": [
+        "db-checkbox",
+        "db-checkbox-row"
+      ],
+      "chain": [
+        "note-database-container",
+        "db-table",
+        "db-select-col",
+        "db-select-inner"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 16,
+        "height": 16
+      },
+      "appearanceOwnedBy": null,
+      "tokensFrom": "note-database-container"
+    },
+    {
+      "scenario": "panel-record-peek",
+      "index": 8,
+      "classes": [
+        "db-checkbox",
+        "db-checkbox-row"
+      ],
+      "chain": [
+        "note-database-container",
+        "db-table",
+        "db-select-col",
+        "db-select-inner"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 16,
+        "height": 16
+      },
+      "appearanceOwnedBy": null,
+      "tokensFrom": "note-database-container"
+    },
+    {
+      "scenario": "panel-record-peek",
+      "index": 9,
+      "classes": [
+        "db-checkbox",
+        "db-checkbox-row"
+      ],
+      "chain": [
+        "note-database-container",
+        "db-table",
+        "db-select-col",
+        "db-select-inner"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 16,
+        "height": 16
+      },
+      "appearanceOwnedBy": null,
+      "tokensFrom": "note-database-container"
+    },
+    {
+      "scenario": "panel-record-peek",
+      "index": 10,
+      "classes": [
+        "db-checkbox",
+        "db-checkbox-row"
+      ],
+      "chain": [
+        "note-database-container",
+        "db-table",
+        "db-select-col",
+        "db-select-inner"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 16,
+        "height": 16
+      },
+      "appearanceOwnedBy": null,
+      "tokensFrom": "note-database-container"
+    },
+    {
+      "scenario": "panel-record-peek",
+      "index": 11,
+      "classes": [
+        "db-checkbox",
+        "db-checkbox-row"
+      ],
+      "chain": [
+        "note-database-container",
+        "db-table",
+        "db-select-col",
+        "db-select-inner"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 16,
+        "height": 16
+      },
+      "appearanceOwnedBy": null,
+      "tokensFrom": "note-database-container"
+    },
+    {
+      "scenario": "panel-record-peek",
+      "index": 12,
+      "classes": [
+        "db-checkbox",
+        "db-checkbox-row"
+      ],
+      "chain": [
+        "note-database-container",
+        "db-table",
+        "db-select-col",
+        "db-select-inner"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 16,
+        "height": 16
+      },
+      "appearanceOwnedBy": null,
+      "tokensFrom": "note-database-container"
+    },
+    {
+      "scenario": "panel-record-peek",
+      "index": 13,
+      "classes": [
+        "db-checkbox",
+        "db-checkbox-row"
+      ],
+      "chain": [
+        "note-database-container",
+        "db-table",
+        "db-select-col",
+        "db-select-inner"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 16,
+        "height": 16
+      },
+      "appearanceOwnedBy": null,
+      "tokensFrom": "note-database-container"
+    },
+    {
+      "scenario": "panel-record-peek",
+      "index": 14,
+      "classes": [
+        "db-checkbox",
+        "db-checkbox-row"
+      ],
+      "chain": [
+        "note-database-container",
+        "db-table",
+        "db-select-col",
+        "db-select-inner"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 16,
+        "height": 16
+      },
+      "appearanceOwnedBy": null,
+      "tokensFrom": "note-database-container"
+    },
+    {
+      "scenario": "panel-record-peek",
+      "index": 15,
+      "classes": [
+        "db-checkbox",
+        "db-checkbox-row"
+      ],
+      "chain": [
+        "note-database-container",
+        "db-table",
+        "db-select-col",
+        "db-select-inner"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 16,
+        "height": 16
+      },
+      "appearanceOwnedBy": null,
+      "tokensFrom": "note-database-container"
+    },
+    {
+      "scenario": "panel-record-peek",
+      "index": 16,
+      "classes": [
+        "db-checkbox",
+        "db-checkbox-row"
+      ],
+      "chain": [
+        "note-database-container",
+        "db-table",
+        "db-select-col",
+        "db-select-inner"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 16,
+        "height": 16
+      },
+      "appearanceOwnedBy": null,
+      "tokensFrom": "note-database-container"
+    },
+    {
+      "scenario": "panel-record-peek",
+      "index": 17,
+      "classes": [
+        "db-checkbox",
+        "db-checkbox-row"
+      ],
+      "chain": [
+        "note-database-container",
+        "db-table",
+        "db-select-col",
+        "db-select-inner"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 16,
+        "height": 16
+      },
+      "appearanceOwnedBy": null,
+      "tokensFrom": "note-database-container"
+    },
+    {
+      "scenario": "panel-record-peek",
+      "index": 18,
+      "classes": [
+        "db-checkbox",
+        "db-checkbox-row"
+      ],
+      "chain": [
+        "note-database-container",
+        "db-table",
+        "db-select-col",
+        "db-select-inner"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 16,
+        "height": 16
+      },
+      "appearanceOwnedBy": null,
+      "tokensFrom": "note-database-container"
+    },
+    {
+      "scenario": "panel-record-peek",
+      "index": 19,
+      "classes": [
+        "db-checkbox",
+        "db-checkbox-row"
+      ],
+      "chain": [
+        "note-database-container",
+        "db-table",
+        "db-select-col",
+        "db-select-inner"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 16,
+        "height": 16
+      },
+      "appearanceOwnedBy": null,
+      "tokensFrom": "note-database-container"
+    },
+    {
+      "scenario": "panel-record-peek",
+      "index": 20,
+      "classes": [
+        "db-checkbox",
+        "db-checkbox-row"
+      ],
+      "chain": [
+        "note-database-container",
+        "db-table",
+        "db-select-col",
+        "db-select-inner"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 16,
+        "height": 16
+      },
+      "appearanceOwnedBy": null,
+      "tokensFrom": "note-database-container"
+    },
+    {
+      "scenario": "panel-record-peek",
+      "index": 21,
+      "classes": [
+        "db-checkbox",
+        "db-checkbox-row"
+      ],
+      "chain": [
+        "note-database-container",
+        "db-table",
+        "db-select-col",
+        "db-select-inner"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 16,
+        "height": 16
+      },
+      "appearanceOwnedBy": null,
+      "tokensFrom": "note-database-container"
+    },
+    {
+      "scenario": "panel-record-peek",
+      "index": 22,
+      "classes": [
+        "db-checkbox",
+        "db-checkbox-row"
+      ],
+      "chain": [
+        "note-database-container",
+        "db-table",
+        "db-select-col",
+        "db-select-inner"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 16,
+        "height": 16
+      },
+      "appearanceOwnedBy": null,
+      "tokensFrom": "note-database-container"
+    },
+    {
+      "scenario": "panel-record-peek",
+      "index": 23,
+      "classes": [
+        "db-checkbox",
+        "db-checkbox-row"
+      ],
+      "chain": [
+        "note-database-container",
+        "db-table",
+        "db-select-col",
+        "db-select-inner"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 16,
+        "height": 16
+      },
+      "appearanceOwnedBy": null,
+      "tokensFrom": "note-database-container"
+    },
+    {
+      "scenario": "panel-record-peek",
+      "index": 24,
+      "classes": [
+        "db-checkbox",
+        "db-checkbox-row"
+      ],
+      "chain": [
+        "note-database-container",
+        "db-table",
+        "db-select-col",
+        "db-select-inner"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 16,
+        "height": 16
+      },
+      "appearanceOwnedBy": null,
+      "tokensFrom": "note-database-container"
+    },
+    {
+      "scenario": "panel-record-peek",
+      "index": 25,
+      "classes": [
+        "db-checkbox",
+        "db-checkbox-row"
+      ],
+      "chain": [
+        "note-database-container",
+        "db-table",
+        "db-select-col",
+        "db-select-inner"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 16,
+        "height": 16
+      },
+      "appearanceOwnedBy": null,
+      "tokensFrom": "note-database-container"
+    },
+    {
+      "scenario": "panel-record-peek",
+      "index": 26,
+      "classes": [
+        "db-checkbox",
+        "db-checkbox-row"
+      ],
+      "chain": [
+        "note-database-container",
+        "db-table",
+        "db-select-col",
+        "db-select-inner"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 16,
+        "height": 16
+      },
+      "appearanceOwnedBy": null,
+      "tokensFrom": "note-database-container"
+    },
+    {
+      "scenario": "panel-record-peek",
+      "index": 27,
+      "classes": [
+        "db-checkbox",
+        "db-checkbox-row"
+      ],
+      "chain": [
+        "note-database-container",
+        "db-table",
+        "db-select-col",
+        "db-select-inner"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 16,
+        "height": 16
+      },
+      "appearanceOwnedBy": null,
+      "tokensFrom": "note-database-container"
+    },
+    {
+      "scenario": "panel-record-peek",
+      "index": 28,
       "classes": [
         "db-checkbox",
         "db-checkbox-row"

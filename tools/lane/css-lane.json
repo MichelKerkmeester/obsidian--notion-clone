@@ -1,8 +1,8 @@
 {
   "holder": null,
-  "acquiredAt": "2026-09-01T09:10:00Z",
-  "baselineHash": "b346c59576b5",
-  "baselineCommit": "3c6522897379",
+  "acquiredAt": "2026-09-01T11:05:00Z",
+  "baselineHash": "078298819983",
+  "baselineCommit": "d561f656fdba",
   "history": [
     {
       "event": "acquire",
@@ -799,6 +799,27 @@
       "at": "2026-09-01T09:40:00Z",
       "hash": "b346c59576b5",
       "note": "Recaptured and read. A new scenario, chrome-utilities-popover, photographs this surface for the first time \u2014 four operator reports had named it and nothing had ever pictured it. Desktop and phone captures opened and read: heading and icon column share an edge in both. Two icon glyphs were added with it, because renderUtilitiesOverflowButton names `refresh-cw` and `settings-2` and this file had neither, which would have drawn bare rows the renderer never makes. Per-image operator sign-off still owed, as everywhere."
+    },
+    {
+      "event": "acquire",
+      "phase": "012-mobile-touch-semantics",
+      "at": "2026-09-01T11:05:00Z",
+      "hash": "b346c59576b5",
+      "note": "Read off the phone table capture: the select column is 65px of cell around a single 28px checkbox. styles.css:17817 pins it to 64 unconditionally under .is-phone, with an arithmetic comment for the case where BOTH controls are drawn \u2014 but the row only draws the reorder button when a reorder is possible, and canManualReorder is false the moment a view is explicitly sorted. Measured on an isolated fixture: computed width/min-width/max-width all 64px on the td, so the JS colgroup value never decides it and the change I made in table-renderer.ts cannot reach the phone at all."
+    },
+    {
+      "event": "edit",
+      "phase": "012-mobile-touch-semantics",
+      "at": "2026-09-01T11:40:00Z",
+      "hash": "078298819983",
+      "note": "One rule: the phone select column drops to 40px when no row in the table draws a reorder button. Measured 64 -> 40 in the sorted state, still 64 where the button is drawn. TWO THINGS WORTH RECORDING. The JS width in table-renderer.ts cannot reach this at all \u2014 the .is-phone rule at 17817 pins width/min-width/max-width to 64 and the phone table is auto-layout, so the colgroup value never decides it; the JS change still went in because it feeds the grouped table's min-width, which was also 24px too wide. And the rule is keyed to the TABLE, not the cell: a :has() on the cell would narrow the header alone, since a th never holds a move button. A header/row alignment pair written to guard that could not be made to fail \u2014 an auto-layout column reconciles th and td to one width \u2014 so it was removed rather than kept as evidence it is not."
+    },
+    {
+      "event": "release",
+      "phase": "012-mobile-touch-semantics",
+      "at": "2026-09-01T11:45:00Z",
+      "hash": "078298819983",
+      "note": "Recaptured and read. Two capture fixtures were also repaired in the same pass, both found by opening the PNGs: panel-record-peek omitted the select cell its own header declares, so every body row sat one column left of its header and record names rendered inside the 76px checkbox column truncated to two characters; table-mobile drew its own select header and then called tableHeader(), which emits another \u2014 nine header cells against eight body cells. Both captures reopened after the fix and read. A new placement check now renders every scenario and compares each table's header span against its body rows, so this class fails mechanically rather than waiting for someone to look. Per-image operator sign-off still owed."
     }
   ],
   "outstanding": [

@@ -119,6 +119,75 @@ narrowest supported width**, and the surface is now correct at either answer.
 
 ---
 
+## Release 4 — the full sweep, 2026-09-01
+
+**All 60 scenarios opened, across five parallel reviewers**, one per capture group, each reading both
+a phone-dark and a desktop-light variant. Reviewers were told to report only what is visible, to mark
+a confidence, and to say what would settle an ambiguous case.
+
+### Two capture fixtures were photographing tables the plugin does not build
+
+Both are the same bug — a header and its rows disagreeing about how many columns there are — and both
+survived because the picture still looks like a table.
+
+**`panel-record-peek`** hand-rolled its body rows and omitted the select cell its own header declares.
+Every row therefore sat one column LEFT of its header: the record name rendered inside the 76px
+checkbox column and truncated to two characters (`Fi…`, `A…`, `S…`), the cost sat under **Name**, the
+billing pill under **Cost**, the category under **Next Renewal**. The peek panel beside it showed the
+true values all along, which is what made the mismatch legible once someone looked.
+
+**`table-mobile`** drew its own select and record-icon headers and *then* called `tableHeader()`,
+which emits a select header of its own — **nine header cells against eight body cells**. Every column
+was labelled with its neighbour's name, and on the phone the labels were pushed off-screen entirely,
+so that capture had no visible headers at all. `tableHeader()` now takes `{ selectColumn }` so a
+caller that has already drawn the gutter can say so.
+
+**The class is now checked mechanically.** A placement-lane case renders every scenario and compares
+each table's header span against every body row's, counting `colSpan` rather than elements so a
+footer or group row that legitimately spans still passes. Red on the tree as received:
+`table-mobile: header spans 9, a body row spans 8`. It also refuses to pass vacuously — a run that
+found no table says so.
+
+### One product defect, found the same way
+
+The phone table's select column read as **65px of cell around a single 28px checkbox**. The stylesheet
+pins it to 64 under `.is-phone` with an arithmetic comment for a cell holding *two* controls, but the
+row only draws the reorder button when a reorder is possible — and it is not the moment a view is
+explicitly sorted, which is where a reader lands as soon as they tap a column header. **36px of dead
+width on every row of a 402px screen, in the ordinary sorted state.** Now 40px when the button is
+absent, 64px when it is drawn.
+
+*Two things that pass will not survive a rewrite of this note.* The JS width in `table-renderer.ts`
+cannot reach the phone at all — the phone table is auto-layout and the `.is-phone` rule pins all three
+of `width`/`min-width`/`max-width`, so the `<colgroup>` value never decides it. The JS change went in
+anyway because it also feeds the grouped table's `min-width`, which was 24px too wide for the same
+reason. And the CSS is keyed to the **table**, not the cell: a `:has()` on the cell would narrow the
+header alone, because a `th` never holds a move button.
+
+### What the reviewers found that is not yet acted on
+
+The five reports carry roughly sixty further observations. They are **not** treated as findings here,
+for a reason the reviewers surfaced themselves: several captures are transparent PNGs, and one
+reviewer reported two scenarios as badly broken on first read, then withdrew both after compositing
+them over the app's own background. A contrast or visibility verdict taken against a viewer's white
+matte is a verdict about the viewer.
+
+So the reports are kept as a **triage queue, not a defect list**. The clusters worth taking first,
+each still needing its own measurement before anything changes:
+
+| Cluster | Where | Why it is first |
+|---|---|---|
+| Option-palette collisions — `gray` ≡ `slate`, `brown` ≡ `orange` in dark | status colours, icon picker, colour picker | One palette fix clears three surfaces' worth of reports |
+| The selected day in the date picker is 1.10:1 against its own panel | date-value-picker, both themes | The one piece of state the picker exists to show |
+| Unstyled `#0000EE` link colour in dark theme | file fields | No dark token at all; 1.78:1 |
+| Truncation where the row still has slack | sort direction chips, dropdown options, base-import labels | Width is going to the control that does not need it |
+| Several `-mobile-*` captures are byte-identical to their desktop counterparts | date pickers, colour picker | If real, those mobile shots prove nothing about mobile |
+
+**Nothing above is claimed as verified.** Each is a reviewer's reading that has to be reproduced by
+measurement before it becomes a row anywhere.
+
+---
+
 ## Standing caveat
 
 Every verdict above is the assistant's reading of a regenerated PNG. **None of it is device

@@ -171,13 +171,22 @@ export class TableRenderer {
   // layout this renderer takes. The answer cannot change while one render runs, so it is asked
   // when the container is set and read from here afterwards.
   private renderTouch: boolean | null = null;
+  // Whether this render can draw a reorder button beside the row checkbox.
+  //
+  // The select column's width and the row's decision to draw that button were asking different
+  // questions, and the column always assumed the wider answer. On a phone that is 64px of column
+  // holding one 28px checkbox — 36px of dead width per row on a 402px screen, in the ordinary state
+  // of a table someone has sorted, because `canManualReorder` is false the moment a view is
+  // explicitly sorted. Set beside the container so the two questions cannot drift apart again.
+  private renderCanReorder = false;
 
   constructor(private actions: TableRendererActions) {}
 
   /** Bind the container for a render, and settle the questions that are constant across it. */
-  private setRenderContainer(container: HTMLElement): void {
+  private setRenderContainer(container: HTMLElement, canReorder = false): void {
     this.renderContainer = container;
     this.renderTouch = isTouchDevice(container);
+    this.renderCanReorder = canReorder;
   }
 
   /** The render's touch answer, or a live one for a caller that arrived outside a render. */
@@ -187,7 +196,7 @@ export class TableRenderer {
 
   renderTable(container: HTMLElement, config: ViewConfig, rows: RowData[], emptyState?: EmptyStateOptions): void {
     this.clearTable(container);
-    this.setRenderContainer(container);
+    this.setRenderContainer(container, this.canManualReorder(config));
     this.rowByPath = new Map(rows.map((row) => [row.file.path, row]));
     this.applyDensity(container, config);
 
@@ -236,7 +245,10 @@ export class TableRenderer {
     emptyState?: EmptyStateOptions,
   ): void {
     this.clearTable(containerEl);
-    this.setRenderContainer(containerEl);
+    this.setRenderContainer(
+      containerEl,
+      this.canManualReorder(config) || Boolean(groupField && groups.length),
+    );
     this.rowByPath = new Map(rows.map((row) => [row.file.path, row]));
     this.applyDensity(containerEl, config);
 
@@ -540,13 +552,17 @@ export class TableRenderer {
   }
 
   /**
-   * On touch this cell holds two controls, not one: the reorder button in flow and the selection
-   * checkbox pinned right. Both are 28px wide because that is the target floor a finger needs, so
-   * 48 could never fit them and they were drawn overlapping. 4 + 28 + 4 + 28 = 64.
-   * Off touch the reorder button is never created, so the checkbox alone keeps the narrower column.
+   * On touch this cell CAN hold two controls: the reorder button in flow and the selection checkbox
+   * pinned right. Both are 28px wide because that is the target floor a finger needs, so 48 could
+   * never fit them and they were drawn overlapping. 4 + 28 + 4 + 28 = 64.
+   *
+   * It only holds two when a reorder button will actually be drawn. Off touch it never is; on touch
+   * it is not either once the view is explicitly sorted, which is where a reader lands the moment
+   * they tap a column header. Reserving 64 there left 36px of dead width on every row of a 402px
+   * screen — measured on the shipped fixture at 65px of cell around a single 28px control.
    */
   private getSelectionColumnWidth(): number {
-    return this.isTouchRender() ? 64 : 40;
+    return this.isTouchRender() && this.renderCanReorder ? 64 : 40;
   }
 
   private getRecordIconColumnWidth(): number {
