@@ -37,8 +37,30 @@ evidence in this folder or in a lane.*
 - [ ] `elementFromPoint` over the navbar answers from the real app. **Unreachable for the same
       reason**, and it is the row `003`'s two open rows are waiting on: their navbar is a
       hand-written div with no `app.css` rule and no stacking context.
-- [ ] The probe exits non-zero when an assertion fails and zero when it passes; infrastructure
-      failure is a distinct exit 2. **No probe exists to exit.**
+- [x] The probe exits non-zero when an assertion fails and zero when it passes; infrastructure
+      failure is a distinct exit 2. **No probe exists to exit.** **Stale, and now held rather than
+      written down — 2026-09-01.** `tools/live/probe.mjs` exists and declares exactly these three
+      codes; what was missing is that **nothing checked them**.
+      **The asking needs the app; the deciding does not.** That is why the verdict was lifted out of
+      `checkTransport` into `transportVerdict(result)`, a pure function of whatever the app said.
+      Seven cases now drive all three codes without an Obsidian: a loaded plugin gives 0, an
+      answering app with the plugin absent gives 1, and a refused question gives 2.
+      **The case that matters is the set, not the three.** *gives the three states three different
+      codes* is what goes red when two of them collapse — watched, by setting
+      `EXIT_INFRASTRUCTURE = 1`: `expected 2 to be 3`, **while all three individual assertions still
+      passed**. Conflating "the product is wrong" with "I could not ask" is this packet's founding
+      blindness, and it is the one shape a per-code assertion cannot see.
+      **Three answers that look like passes are coded as infrastructure**, not as product failures:
+      unparseable output, an empty payload, and no result at all. A CLI printing a banner instead of
+      JSON says nothing about the plugin, so reporting a defect there would be inventing one.
+      **A defect found by trying to test it.** The probe had no entry guard, so importing it ran
+      `main()`, went looking for a running Obsidian, and called `process.exit(2)` from inside the
+      test runner. **A module that cannot be imported cannot be tested**, which is most of why these
+      codes were written down and never checked. `vitest.config.ts` now includes
+      `tools/**/*.test.mjs` — only that suffix, so a harness script is not mistaken for a suite.
+      **What this still does not do:** ask the real app anything. Rows 1, 2 and 5 stay open for
+      exactly that reason, and this row was never about the app answering — it is about what the
+      probe does with the answer.
 - [x] Every claim about mobile states explicitly whether it is measured, emulated, or
       operator-reported — and every downstream citation carries the same qualifier. **Met in
       practice across the program, 2026-09-01.** Every packet carries a harness-dependence audit

@@ -12,7 +12,12 @@ export default defineConfig({
     alias: { obsidian: resolve(__dirname, "tools/storybook/obsidian-stub.mjs") },
   },
   test: {
-    include: ["src/**/*.test.ts"],
+    // `tools/**` joins `src/**` because the live probe's exit-code contract is testable and was
+    // not tested. Its three codes are `009`'s whole point — conflating "the product is wrong" with
+    // "I could not ask" is the blindness that packet exists to remove — and the ASKING needs a
+    // running Obsidian while the DECISION does not. Only files that end `.test.mjs` are picked up,
+    // so a harness script is not mistaken for a suite.
+    include: ["src/**/*.test.ts", "tools/**/*.test.mjs"],
     environment: "node",
     setupFiles: ["src/__tests__/setup.ts"],
   },

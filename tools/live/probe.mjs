@@ -38,6 +38,7 @@
 
 import { execFile } from "node:child_process";
 import { existsSync } from "node:fs";
+import { pathToFileURL } from "node:url";
 import { promisify } from "node:util";
 
 const run = promisify(execFile);
@@ -114,6 +115,69 @@ export async function evaluate(expression) {
  * Deliberately asks for something no fixture could fabricate — the app's own vault name and the
  * plugin's loaded state — so a pass cannot be produced by anything but the real app.
  */
+/**
+ * The exit-code decision, separated from the asking.
+ *
+ * The three codes are this packet's whole contract — conflating "the product is wrong" with "I
+ * could not ask" is the blindness it exists to remove — and until this function existed nothing
+ * could check them. The asking needs a running Obsidian and is therefore unreachable from this
+ * repository; the DECISION is a pure function of the answer, and that is reachable here.
+ *
+ * So the transport hands its result to this and this alone decides. A test drives all three shapes
+ * without an app, which is the difference between a contract that is written down and one that is
+ * held. Returns the code and the lines the caller should print, so the decision does not also own
+ * the console.
+ */
+export function transportVerdict(result) {
+  if (!result || !result.ok) {
+    return {
+      exit: EXIT_INFRASTRUCTURE,
+      out: [],
+      err: [
+        `probe: cannot ask — ${result?.reason ?? "no result"}`,
+        "probe: open Obsidian and retry; this is not an assertion failure.",
+      ],
+    };
+  }
+
+  let data;
+  try {
+    data = typeof result.value === "string" ? JSON.parse(result.value) : result.value;
+  } catch {
+    // An answer arrived and could not be read. That is still "I could not ask" rather than "the
+    // product is wrong": nothing about the plugin has been established either way.
+    return {
+      exit: EXIT_INFRASTRUCTURE,
+      out: [],
+      err: [`probe: cannot ask — the app answered with something that is not JSON`],
+    };
+  }
+  if (!data || typeof data !== "object") {
+    return {
+      exit: EXIT_INFRASTRUCTURE,
+      out: [],
+      err: ["probe: cannot ask — the app answered with no payload"],
+    };
+  }
+
+  const out = [
+    `  vault        ${data.vault}`,
+    `  plugin       ${data.plugin ? "loaded" : "NOT LOADED"}`,
+    `  version      ${data.version ?? "(none)"}`,
+    `  theme        ${data.theme}`,
+    `  navbar       ${data.navbar ? "present" : "absent (desktop)"}`,
+  ];
+
+  if (!data.plugin) {
+    return {
+      exit: EXIT_ASSERTION,
+      out,
+      err: ["probe: FAIL — the plugin is not loaded in the running app"],
+    };
+  }
+  return { exit: EXIT_PASS, out: [...out, "probe: PASS — the real app answered"], err: [] };
+}
+
 async function checkTransport() {
   const result = await evaluate(
     "JSON.stringify({"
@@ -125,25 +189,10 @@ async function checkTransport() {
     + " })",
   );
 
-  if (!result.ok) {
-    console.error(`probe: cannot ask — ${result.reason}`);
-    console.error("probe: open Obsidian and retry; this is not an assertion failure.");
-    return EXIT_INFRASTRUCTURE;
-  }
-
-  const data = typeof result.value === "string" ? JSON.parse(result.value) : result.value;
-  console.log(`  vault        ${data.vault}`);
-  console.log(`  plugin       ${data.plugin ? "loaded" : "NOT LOADED"}`);
-  console.log(`  version      ${data.version ?? "(none)"}`);
-  console.log(`  theme        ${data.theme}`);
-  console.log(`  navbar       ${data.navbar ? "present" : "absent (desktop)"}`);
-
-  if (!data.plugin) {
-    console.error("probe: FAIL — the plugin is not loaded in the running app");
-    return EXIT_ASSERTION;
-  }
-  console.log("probe: PASS — the real app answered");
-  return EXIT_PASS;
+  const verdict = transportVerdict(result);
+  for (const line of verdict.out) console.log(line);
+  for (const line of verdict.err) console.error(line);
+  return verdict.exit;
 }
 
 // ───────────────────────────────────────────────────────────────────
@@ -236,7 +285,18 @@ async function main() {
   return EXIT_INFRASTRUCTURE;
 }
 
-main().then((code) => process.exit(code)).catch((error) => {
-  console.error("probe:", error.message);
-  process.exit(EXIT_INFRASTRUCTURE);
-});
+// Run only when this file IS the command, not when something imports it.
+//
+// Without the guard, importing `transportVerdict` to test it ran the command as a side effect: the
+// import went looking for a running Obsidian, failed to find one, and tore the test runner down
+// with the infrastructure code. A module that cannot be imported cannot be tested, which is most of
+// why this file's exit codes were written down and never checked.
+const isEntry = process.argv[1]
+  && import.meta.url === pathToFileURL(process.argv[1]).href;
+
+if (isEntry) {
+  main().then((code) => process.exit(code)).catch((error) => {
+    console.error("probe:", error.message);
+    process.exit(EXIT_INFRASTRUCTURE);
+  });
+}
