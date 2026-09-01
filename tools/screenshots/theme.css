@@ -60,6 +60,13 @@
   --menu-radius: var(--radius-m);
   --menu-shadow: var(--shadow-s);
 
+  /* Control height. The host sizes buttons, dropdowns and text inputs to this, and the plugin's
+     surfaces inherit it wherever they do not set their own. Absent, every such control measures
+     its content and a row built out of them measures shorter here than on any device — which is
+     the exact direction that makes a height check pass optimistically. Read from the installed
+     app stylesheet, not recalled. */
+  --input-height: 30px;
+
   --scrollbar-thumb-bg: rgba(0, 0, 0, 0.18);
   --divider-color: #e0e0e0;
 }

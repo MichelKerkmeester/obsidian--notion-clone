@@ -1,5 +1,5 @@
 {
-  "measuredAt": "2026-09-01T10:28:12.701Z",
+  "measuredAt": "2026-09-01T11:09:38.917Z",
   "inputs": {
     "tools/live/render-assertions.mjs": "bc554f010c08",
     "tools/live/render-assertion-harness.ts": "26eb72abcebd",
@@ -9,7 +9,7 @@
     "src/views/gallery-renderer.ts": "c7d6e9216f39",
     "src/views/calendar-renderer.ts": "ec0b922af690",
     "src/views/calendar-timeline-renderer.ts": "422432b43e60",
-    "tools/bench/list-render-bench.ts": "16ca7c0d982a",
+    "tools/bench/list-render-bench.ts": "af7fa1913bbb",
     "tools/bench/table-render-bench.ts": "d9c1f7c3e162",
     "tools/bench/board-render-bench.ts": "468718e05f2a",
     "tools/bench/gallery-render-bench.ts": "97b52377f347",

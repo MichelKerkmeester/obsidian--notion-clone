@@ -66,6 +66,16 @@ const CHROME = [
 // leaves unstated is not a phone problem or a menu problem; it is a gap anywhere a host rule
 // reaches, and the whole point is that the gap is silent until something models it.
 const HOST_BARE_CONTROLS = `
+/* The variable the rule below has always read and never had.
+ *
+ * This block was transcribed from the host's own button rule, including its
+ * height declaration — but not the token that declaration resolves through, so
+ * every button here measured content height while a real one measures a fixed
+ * 30. A rule modelled without its variable is worse than a rule left out: it
+ * looks like the host is represented and it answers every question with auto.
+ * Read from the installed app stylesheet rather than recalled, which is the
+ * only reason it is a number and not an estimate. */
+:root { --input-height: 30px; }
 button {
   --text-color: var(--text-normal);
   display: inline-flex;
@@ -7401,6 +7411,162 @@ await section("the peek's layer sits inside the token scale", async () => {
 // assumed absent. The identity half then clicks the delete on a NAMED row and reads which column
 // object arrived, which is the assertion AC-008 asks for and no positional check can make.
 
+// ───────────────────────────────────────────────────────────────────
+// THE PROPERTY ROW'S OWN GEOMETRY, ON BOTH VIEWPORTS
+// ───────────────────────────────────────────────────────────────────
+//
+// Two clauses, and the packet had them both wrong for different reasons.
+//
+// "Every laid-out child resolves to grid row 1" was being read off a replay claim whose recorded
+// value is 1. That claim counts GRID TRACKS, where one track means one line and is the good answer,
+// and it was read as if it counted wrapping children, where anything above zero is a failure. So a
+// passing measurement was recorded as half a failure. The metric is sound — an overflowing grid
+// really does report its implicit tracks in computed `grid-template-rows`, which was verified
+// against a two-by-two fixture that reports `20px 18px` — but a track count and a defect count are
+// not the same number and nothing reconciled them.
+//
+// "Row height <= 36px" was recorded as undecidable here, because the tallest children were said to
+// take `height: var(--input-height)` from the host stylesheet and the harness never declared it, so
+// the row would measure shorter here than on a device. The token is now declared, read from the
+// installed app stylesheet rather than recalled. It changed nothing: 0 of 240 captures moved
+// geometry and no check on this page moved. The stated exposure does not hold for this row, because
+// its children are the plugin's own controls with their own heights, and that is now measurable
+// instead of assumed.
+//
+// The premise row is what keeps the second clause honest. If the token were dropped again, every
+// height here would fall back to content and the clause would pass optimistically for exactly the
+// reason the packet feared. So the run asserts the token reaches a bare host-styled control before
+// trusting any height it reports.
+
+const propertyGeometryResults = [];
+
+for (const surface of [
+  { label: "desktop", viewport: VIEWPORT },
+  { label: "phone", viewport: { width: 390, height: 844 } },
+]) {
+  await section(`the property row's geometry on ${surface.label}`, async () => {
+    const page = await browser.newPage({ viewport: surface.viewport, reducedMotion: "reduce" });
+    await page.setContent(page_html);
+    await page.addStyleTag({ content: readFileSync(join(REPO, "styles.css"), "utf8") + HOST_BARE_CONTROLS });
+    await page.addScriptTag({ content: shimJs + "\ninstallObsidianDomShim(globalThis);" });
+    await page.addScriptTag({ content: positionerJs });
+    await page.addScriptTag({
+      content: `globalThis.__propertyRowControl = ${JSON.stringify(process.env.PROPERTY_ROW_CONTROL || "")};`,
+    });
+
+    const geo = await page.evaluate(() => {
+      const { ColumnManagerRenderer } = globalThis.__columns;
+      const container = document.querySelector(".note-database-container");
+      const columns = [
+        { key: "file.name", label: "Name", type: "text" },
+        { key: "status", label: "Status", type: "text" },
+        { key: "owner", label: "Owner", type: "text" },
+      ];
+      const config = { schema: { columns }, viewType: "table", columnOrder: columns.map((c) => c.key) };
+      const state = { hiddenColumns: new Set(), filters: [], sortRules: [], sortDirection: "asc" };
+      const actions = {};
+      for (const name of ["close", "setColumnVisible", "setAllColumnsVisible", "moveColumn",
+        "moveColumnTo", "toggleColumnWrap", "editColumn", "addColumn", "deleteColumn"]) {
+        actions[name] = () => undefined;
+      }
+      const renderer = new ColumnManagerRenderer();
+      renderer.render(container, true, config, state, columns, actions, document.getElementById("anchor"));
+      const panel = renderer.getPanel();
+      const rows = [...panel.querySelectorAll(".db-column-manager-row")];
+
+      // Two controls, one per clause, because the clauses fail in different ways and a single
+      // mutation would leave one of them untested.
+      //
+      // `wrap` appends one more child than the track list has columns, so auto-placement has to
+      // open an implicit second row — the shape a real wrap takes. `escape` leaves the track count
+      // alone and pushes one child below the band, which is the case a track count cannot see and
+      // is the entire reason the containment clause exists beside it.
+      const control = globalThis.__propertyRowControl || "";
+      if (control === "wrap") {
+        for (const row of rows) row.appendChild(document.createElement("span")).textContent = "overflow";
+      } else if (control === "escape") {
+        for (const row of rows) {
+          // A LAID-OUT child, not simply the second one. The first attempt took `children[1]` and
+          // moved nothing measurable, because the measurement filters zero-size children and that
+          // is what it had picked — a control failing for its own reason rather than the check's.
+          const victim = [...row.children].find((child) => {
+            const box = child.getBoundingClientRect();
+            return box.width > 0 || box.height > 0;
+          });
+          if (victim) { victim.style.position = "relative"; victim.style.top = "40px"; }
+        }
+      }
+
+      // The premise, measured on a bare host-styled control rather than asserted about the token.
+      const probe = document.body.appendChild(document.createElement("button"));
+      probe.textContent = "x";
+      const probeHeight = probe.getBoundingClientRect().height;
+      const declared = getComputedStyle(document.documentElement).getPropertyValue("--input-height").trim();
+      probe.remove();
+
+      const perRow = rows.map((row) => {
+        const cs = getComputedStyle(row);
+        const rowBox = row.getBoundingClientRect();
+        const laidOut = [...row.children].filter((child) => {
+          const box = child.getBoundingClientRect();
+          return box.width > 0 || box.height > 0;
+        });
+        // The single track's own band, not the row's box: the row carries padding the track does
+        // not. A child inside the band is in row 1 whatever its vertical alignment within it, and a
+        // child hanging below it has been placed somewhere row 1 does not reach. Comparing child
+        // TOPS instead measures alignment — a 16px icon centred in a 26px track legitimately starts
+        // lower than a stretched sibling, and reading that as a second line is a check failing for
+        // its own reason.
+        const trackSizes = cs.gridTemplateRows.split(/\s+/).filter(Boolean);
+        const bandTop = rowBox.top + parseFloat(cs.paddingTop || "0");
+        const bandBottom = bandTop + parseFloat(trackSizes[0] || "0");
+        const escaped = laidOut.filter((child) => {
+          const box = child.getBoundingClientRect();
+          return box.top < bandTop - 1 || box.bottom > bandBottom + 1;
+        });
+        return {
+          height: Math.round(rowBox.height * 100) / 100,
+          tracks: trackSizes.length,
+          trackText: cs.gridTemplateRows,
+          children: row.children.length,
+          laidOut: laidOut.length,
+          escaped: escaped.length,
+          band: `${Math.round(bandTop * 10) / 10}..${Math.round(bandBottom * 10) / 10}`,
+        };
+      });
+      return { perRow, probeHeight, declared };
+    });
+    await page.close();
+
+    const record = (name, pass, detail) => propertyGeometryResults.push({ name, pass, detail });
+    const tallest = Math.max(...geo.perRow.map((r) => r.height));
+    const worstTracks = Math.max(...geo.perRow.map((r) => r.tracks));
+    const worstEscaped = Math.max(...geo.perRow.map((r) => r.escaped));
+
+    record(`PREMISE the host control height reaches this ${surface.label} page`,
+      geo.declared !== "" && Math.abs(geo.probeHeight - parseFloat(geo.declared)) <= 1,
+      `--input-height reads "${geo.declared || "(undeclared)"}" and a bare button measures `
+        + `${geo.probeHeight.toFixed(1)}px. Undeclared, every height below falls back to content and `
+        + `the row reads shorter here than on a device — which is the direction that passes a height `
+        + `clause for the wrong reason`);
+
+    record(`every laid-out child of a property row is on one line, ${surface.label}`,
+      worstTracks === 1 && worstEscaped === 0,
+      `${geo.perRow.length} row(s): worst grid-track count ${worstTracks} (${geo.perRow[0].trackText}), `
+        + `and ${worstEscaped} of ${geo.perRow[0].laidOut} laid-out children of ${geo.perRow[0].children} `
+        + `fall outside the single track's band ${geo.perRow[0].band}. One track means there is no `
+        + `second line to be on — a wrapped row reports its implicit track, verified against a fixture `
+        + `that reports two — and the containment clause is what catches a child placed outside the `
+        + `track without creating one`);
+
+    record(`a property row is no taller than 36px, ${surface.label}`,
+      tallest <= 36,
+      `tallest of ${geo.perRow.length} row(s) is ${tallest}px against the 36px ceiling `
+        + `(the packet's recorded failing value was 52px), measured with the host's own `
+        + `--input-height present at ${geo.declared || "(undeclared)"}`);
+  });
+}
+
 const propertyRowResults = [];
 
 await section("what a single click on a property row reaches", async () => {
@@ -9886,7 +10052,7 @@ await section("nothing truncates while its neighbour has room to spare", async (
 results.push(...phoneResults, ...menuResults, ...addViewDesktopResults, ...addViewPhoneResults,
   ...grammarResults, ...addViewGrammar, ...motionResults, ...reducedResults, ...desktopMenuResults, ...cellResults, ...sheetResults, ...selectCellResults, ...selectPhoneResults, ...rowPhoneResults, ...rowNarrowResults,
   ...desktopPanelResults, ...stateResults, ...keyboardParityResults, ...familyResults, ...touchResults, ...overlapResults, ...rhythmResults, ...rendererRhythmResults,
-  ...liftedResults, ...inlineEditResults, ...numberParityResults, ...peekLayerResults, ...propertyRowResults, ...menuEdgeResults, ...headerRhythmResults, ...panelParityResults, ...registryResults, ...flickResults, ...selectWidthResults, ...fixtureTableResults, ...panelOwnershipResults, ...peekOwnershipResults, ...checkboxIdentityResults, ...listOwnershipResults, ...addViewOutcomeResults, ...editOutcomeResults, ...menuOutcomeResults, ...backdropOutcomeResults, ...paletteResults, ...dayStateResults, ...rowSlackResults, ...sectionFailures);
+  ...liftedResults, ...inlineEditResults, ...numberParityResults, ...peekLayerResults, ...propertyRowResults, ...propertyGeometryResults, ...menuEdgeResults, ...headerRhythmResults, ...panelParityResults, ...registryResults, ...flickResults, ...selectWidthResults, ...fixtureTableResults, ...panelOwnershipResults, ...peekOwnershipResults, ...checkboxIdentityResults, ...listOwnershipResults, ...addViewOutcomeResults, ...editOutcomeResults, ...menuOutcomeResults, ...backdropOutcomeResults, ...paletteResults, ...dayStateResults, ...rowSlackResults, ...sectionFailures);
 
 await browser.close();
 rmSync(work, { recursive: true, force: true });
