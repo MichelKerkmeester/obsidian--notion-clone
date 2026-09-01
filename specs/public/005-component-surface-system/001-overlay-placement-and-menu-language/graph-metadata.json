@@ -207,7 +207,7 @@
     ],
     "causal_summary": "Placement has no authority and menus have no shared grammar",
     "created_at": "2026-08-29T12:35:11.814Z",
-    "last_save_at": "2026-09-01T04:08:10.668Z",
+    "last_save_at": "2026-09-01T07:45:08.530Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -218,7 +218,7 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:475caf01497b576c61661fd22c86fcb0530e42d641d0494bd4ddb6436140e0e6",
+    "source_fingerprint": "sha256:d17bede52597d16803dc3f396354d2d975c278297623c82884d0618d5181921b",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "4bb8a681b47c344ccd2c473ad69c195f6f5321e7b3fc8c6b47c1f40397c544c3",

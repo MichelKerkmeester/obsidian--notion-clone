@@ -134,7 +134,31 @@ have a number are still open.*
       happens, by the two sheet-entrance sections.
       **Watched failing** with a class added that declares nothing: `1 changed nothing:
       filter-panel .db-dead-class`.
-- [ ] Plus the five stateful dimensions. **No mapping exists.**
+- [x] Plus the five stateful dimensions. **No mapping exists.** **Mapped 2026-09-01**, and action
+      outcome was the bare one on the surface this packet actually owns.
+      **Everything this file measures about the column menu is SHAPE** — one left edge, one row
+      height, a chevron where a submenu opens, a hairline that starts at the label. All of it
+      survives a menu whose every row calls the same action, or the wrong one, or none.
+      → *every action row reached an action*: 16 of 16, each on a freshly opened menu because
+      pressing a row closes it. Red with one row's `onClick` removed: `Duplicate property →
+      (nothing)`.
+      → *only the direction pairs share an action, and nothing else does*: 16 rows over 13 actions,
+      sharing exactly `insertColumn ← left + right`, `moveColumn ← up + down`,
+      `sortColumnDirection ← ascending + descending`. **"Not all the same action" is too weak** —
+      rewiring one row to a neighbour's action moves the distinct count from 13 to 12 and leaves
+      that check green. Red on the sharing assertion: `hideColumn ← Duplicate property + Hide
+      "Cost"`, a fourth group.
+      → *every row that names a column names the one the menu was opened on*: every per-column
+      action received `"cost"`.
+      **Two of the three failures on the first run were the harness, not the menu, and both are
+      recorded rather than quietly fixed.** `Sort by "Cost" → (nothing)` came from a guessed action
+      list missing `sortByColumn` — the stub was undefined and the press reached nobody, which read
+      as a dead row in a shipped menu. And `autoFitAllColumns handed undefined` was reported as a
+      defect when it is the correct call for an action that takes no column. **The action list is
+      now read off `ColumnMenuActions` rather than guessed**, and supplying the sort actions changed
+      the menu from 14 rows to 16 — its contents depend on which actions exist, which a guessed bag
+      silently understates.
+
 - [ ] The operator opens three different dropdowns and they look like one family. **Only the
       operator closes this.**
 **HARNESS DEPENDENCE, 2026-08-31 — 9 sound / 4 dependent / 0 unknown.** Two acceptance bullets are

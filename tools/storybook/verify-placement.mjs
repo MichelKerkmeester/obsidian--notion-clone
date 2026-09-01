@@ -9043,10 +9043,163 @@ await section("a tap on a field edits that field", async () => {
       : wrong.map((p) => `row declares ${p.declared} but edited ${p.received}`).join("; "));
 });
 
+// ───────────────────────────────────────────────────────────────────
+// EVERY MENU ROW REACHES ITS OWN ACTION
+// ───────────────────────────────────────────────────────────────────
+//
+// `001` owns menu language and its five-dimension row maps none. Everything this file measures about
+// the column menu is SHAPE — one left edge, one row height, a chevron where a submenu opens, a
+// hairline that starts at the label. All of it survives a menu whose every row calls the same
+// action, or the wrong one.
+//
+// The add-view menu had exactly that gap and it took a driven press to see it. This is the same
+// question asked of the surface `001` actually owns: press every row of a real `ColumnMenu` and read
+// which action each one reached.
+//
+// PRESSING BY LABEL, NOT BY INDEX. The menu's contents depend on the column's type, so a positional
+// assertion would encode today's ordering and fail the next time a row is inserted. Each row is
+// identified by its own label, and the pairing is label → action name.
+
+const menuOutcomeResults = [];
+
+await section("every menu row reaches its own action", async () => {
+  const page = await browser.newPage({ viewport: VIEWPORT, reducedMotion: "reduce" });
+  await page.setContent(page_html);
+  await page.addStyleTag({ content: readFileSync(join(REPO, "styles.css"), "utf8") + HOST_BARE_CONTROLS });
+  await page.addScriptTag({ content: shimJs + "\ninstallObsidianDomShim(globalThis);" });
+  await page.addScriptTag({ content: positionerJs });
+
+  const measured = await page.evaluate(() => {
+    const { ColumnMenu } = globalThis.__place;
+    const host = document.querySelector(".note-database-container");
+    const col = { key: "cost", label: "Cost", type: "number" };
+
+    const calls = [];
+    // Every action records its own name and the column it was handed. A menu wired to one action
+    // shows up as one name repeated; a menu wired to the wrong COLUMN shows up in the second field.
+    // Every member of `ColumnMenuActions`, read off the interface. A guessed list is why the first
+    // run reported `Sort by "Cost" → (nothing)`: the row calls `sortByColumn`, which was not in the
+    // guess, so the stub was undefined and the press reached nobody. That read as a dead row in a
+    // shipped menu, and it was a hole in the harness.
+    const names = [
+      "editColumn", "editFormula", "editRelationRollup", "editStatusOptions", "showOptionsEditor",
+      "changeColumnType", "insertColumn", "duplicateColumn", "moveColumn", "hideColumn",
+      "toggleColumnWrap", "setTextRenderMode", "setTextLinkScheme", "setNumberDisplayStyle",
+      "updateNumberDisplayConfig", "sortByColumn", "sortColumnDirection", "filterByColumn",
+      "getColumnSortDirection", "clearColumnSort", "openColumnWidthPanel", "autoFitColumn",
+      "autoFitAllColumns", "deleteColumn",
+    ];
+    // Actions that take no column. Demanding one from these is demanding the wrong thing: the first
+    // run reported `Auto fit all visible columns → autoFitAllColumns handed undefined` as a defect,
+    // and it is the correct call for an action whose whole point is that it is not per-column.
+    const COLUMNLESS = new Set(["autoFitAllColumns"]);
+    const actions = {};
+    for (const name of names) {
+      actions[name] = (first) => calls.push({ action: name, key: first?.key ?? String(first) });
+    }
+
+    const pressRow = (label) => {
+      const anchor = host.createDiv({ cls: "anchor" });
+      new ColumnMenu(actions).show(
+        new MouseEvent("click", { clientX: 300, clientY: 200 }), col, anchor, {},
+      );
+      const menu = document.querySelector(".db-menu") ?? document.querySelector(".menu");
+      const rows = menu ? [...menu.querySelectorAll(".db-menu-item")] : [];
+      const target = rows.find(
+        (r) => (r.querySelector(".db-menu-item-label")?.textContent || "").trim() === label,
+      );
+      const before = calls.length;
+      target?.click();
+      const got = calls.slice(before)[0] ?? null;
+      menu?.remove();
+      anchor.remove();
+      document.querySelectorAll(".db-mobile-sheet-scrim").forEach((el) => el.remove());
+      return { label, action: got?.action ?? "(nothing)", key: got?.key ?? "(none)", found: Boolean(target) };
+    };
+
+    // Read the labels once from a real menu, then press each on its own freshly opened one —
+    // pressing a row closes the menu, so one open cannot reach the second row.
+    const anchor = host.createDiv({ cls: "anchor" });
+    new ColumnMenu(actions).show(new MouseEvent("click", { clientX: 300, clientY: 200 }), col, anchor, {});
+    const first = document.querySelector(".db-menu") ?? document.querySelector(".menu");
+    const labels = first
+      ? [...first.querySelectorAll(".db-menu-item")]
+        .filter((r) => !r.querySelector(".db-menu-item-chevron"))
+        .map((r) => (r.querySelector(".db-menu-item-label")?.textContent || "").trim())
+        .filter(Boolean)
+      : [];
+    first?.remove();
+    anchor.remove();
+    document.querySelectorAll(".db-mobile-sheet-scrim").forEach((el) => el.remove());
+
+    const pressed = labels.map(pressRow);
+    return {
+      labels,
+      pressed,
+      reached: pressed.filter((p) => p.action !== "(nothing)"),
+      distinct: [...new Set(pressed.filter((p) => p.action !== "(nothing)").map((p) => p.action))].length,
+      columnless: [...COLUMNLESS],
+      wrongColumn: pressed.filter(
+        (p) => p.action !== "(nothing)" && !COLUMNLESS.has(p.action) && p.key !== "cost",
+      ),
+    };
+  });
+
+  const record = (name, pass, detail) => menuOutcomeResults.push({ name, pass, detail });
+  const m = measured;
+
+  record("the column menu offers several action rows to press",
+    m.labels.length > 3,
+    `${m.labels.length} non-submenu row(s): ${m.labels.join(", ") || "none"}. A menu with one row `
+      + `cannot show every row calling the same action`);
+
+  record("every action row reached an action",
+    m.reached.length === m.pressed.length && m.pressed.length > 0,
+    `${m.reached.length} of ${m.pressed.length} rows reached one: `
+      + `${m.pressed.map((p) => `${p.label} → ${p.action}`).join("; ")}. Everything else this file `
+      + `measures about this menu is shape, and shape survives a row wired to nothing`);
+
+  // SHARING AN ACTION IS ALLOWED IN PAIRS, AND ONLY IN PAIRS.
+  //
+  // "not all the same action" is too weak — rewiring one row to a neighbour's action leaves the
+  // count barely moved and the check green. The menu's real structure is 16 rows over 13 actions,
+  // and the three that share are the ones that legitimately do: insert left/right, move up/down,
+  // sort ascending/descending. Each is one action taking a direction argument.
+  //
+  // So the assertion is that every action reached by more than one row is one of those three. A row
+  // rewired to any other row's action produces a fourth sharing group and fails, whatever the
+  // distinct count happens to be.
+  const byAction = new Map();
+  for (const p of m.reached) {
+    if (!byAction.has(p.action)) byAction.set(p.action, []);
+    byAction.get(p.action).push(p.label);
+  }
+  const shared = [...byAction.entries()].filter(([, labels]) => labels.length > 1);
+  const ALLOWED_PAIRS = new Set(["insertColumn", "moveColumn", "sortColumnDirection"]);
+  const unexpected = shared.filter(([action]) => !ALLOWED_PAIRS.has(action));
+
+  record("only the direction pairs share an action, and nothing else does",
+    m.reached.length > 3 && unexpected.length === 0,
+    `${m.reached.length} rows over ${m.distinct} actions. Sharing: `
+      + `${shared.map(([a, l]) => `${a} ← ${l.join(" + ")}`).join("; ") || "none"}. The three that `
+      + `may share are one action taking a direction — insert left/right, move up/down, sort `
+      + `asc/desc. Any fourth sharing group is a row wired to its neighbour's action, which "not `
+      + `all the same" would miss because the count barely moves`);
+
+  record("every row that names a column names the one the menu was opened on",
+    m.wrongColumn.length === 0,
+    m.wrongColumn.length === 0
+      ? `every per-column action received "cost", the column the menu was opened on. `
+        + `${m.columnless.join(", ")} is excluded because it takes no column — demanding one from `
+        + `an action whose whole point is that it is not per-column is demanding the wrong thing, `
+        + `and the first version of this row reported exactly that as a defect`
+      : m.wrongColumn.map((p) => `${p.label} → ${p.action} handed ${p.key}`).join("; "));
+});
+
 results.push(...phoneResults, ...menuResults, ...addViewDesktopResults, ...addViewPhoneResults,
   ...grammarResults, ...addViewGrammar, ...motionResults, ...reducedResults, ...desktopMenuResults, ...cellResults, ...sheetResults, ...selectCellResults, ...selectPhoneResults, ...rowPhoneResults, ...rowNarrowResults,
   ...desktopPanelResults, ...stateResults, ...keyboardParityResults, ...familyResults, ...touchResults, ...overlapResults, ...rhythmResults, ...rendererRhythmResults,
-  ...liftedResults, ...inlineEditResults, ...numberParityResults, ...peekLayerResults, ...propertyRowResults, ...menuEdgeResults, ...headerRhythmResults, ...panelParityResults, ...registryResults, ...flickResults, ...selectWidthResults, ...fixtureTableResults, ...panelOwnershipResults, ...peekOwnershipResults, ...checkboxIdentityResults, ...listOwnershipResults, ...addViewOutcomeResults, ...editOutcomeResults, ...sectionFailures);
+  ...liftedResults, ...inlineEditResults, ...numberParityResults, ...peekLayerResults, ...propertyRowResults, ...menuEdgeResults, ...headerRhythmResults, ...panelParityResults, ...registryResults, ...flickResults, ...selectWidthResults, ...fixtureTableResults, ...panelOwnershipResults, ...peekOwnershipResults, ...checkboxIdentityResults, ...listOwnershipResults, ...addViewOutcomeResults, ...editOutcomeResults, ...menuOutcomeResults, ...sectionFailures);
 
 await browser.close();
 rmSync(work, { recursive: true, force: true });
