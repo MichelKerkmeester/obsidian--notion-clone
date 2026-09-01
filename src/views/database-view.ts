@@ -188,6 +188,7 @@ import {
   syncTableRecordPeek,
 } from "./table-record-peek";
 import { syncTableColumnLayouts } from "./table-column-layout-sync";
+import { type ResolvedOpenTarget, resolveRecordOpenTarget } from "./record-open-target";
 import { hasRelationValue, planRelationTargetChange } from "../data/relation-target-change";
 import { highlightSearchMatches, renderSearchHighlightedText } from "./search-highlight";
 import { isImeComposing } from "../data/keyboard-utils";
@@ -408,8 +409,8 @@ export class DatabaseView extends FileView {
   private chartToolbarRenderer = new ChartToolbarRenderer();
   private mobileColumnWidthPanelCleanup?: () => void;
   private calendarTimelineRenderer = new CalendarTimelineRenderer({
-    openRow: (row) => this.dataSource.openNote(row.file),
-    openRecordDetail: (anchorEl, row) => this.openRecordDetailPanel(anchorEl, row),
+    openRow: (row) => { void this.openRecordAt(row); },
+    openRecordDetail: (anchorEl, row) => { void this.openRecordAt(row, anchorEl); },
     showRowMenu: (event, row) => this.rowMenu.show(event, row),
     createEntryForDate: (config, dateKey, options) => {
       const suppressed = this.suppressNextCreate || this.hasActiveOverlay();
@@ -439,8 +440,8 @@ export class DatabaseView extends FileView {
     applyConditionalFormat: (element, row, config) => applyConditionalFormat(element, row, config, this.getActiveDb()),
   });
   private calendarRenderer = new CalendarRenderer({
-    openRow: (row) => this.dataSource.openNote(row.file),
-    openRecordDetail: (anchorEl, row) => this.openRecordDetailPanel(anchorEl, row),
+    openRow: (row) => { void this.openRecordAt(row); },
+    openRecordDetail: (anchorEl, row) => { void this.openRecordAt(row, anchorEl); },
     showRowMenu: (event, row) => this.rowMenu.show(event, row),
     createEntryForDate: (config, dateKey, timeRange) => {
       const suppressed = this.suppressNextCreate || this.hasActiveOverlay();
@@ -763,8 +764,8 @@ export class DatabaseView extends FileView {
       get hideCreateEntry() { return shouldHideResultCreateEntryButtons(); },
     });
     this.boardRenderer = new BoardRenderer(this.app, {
-      openRow: (row) => this.dataSource.openNote(row.file),
-      openRecordDetail: (anchorEl, row) => this.openRecordDetailPanel(anchorEl, row),
+      openRow: (row) => { void this.openRecordAt(row); },
+      openRecordDetail: (anchorEl, row) => { void this.openRecordAt(row, anchorEl); },
       createEntry: (defaults, position) => this.guardedCreateEntry(defaults, position),
       createGroup: (field, name, color) => this.createBoardGroup(field, name, color),
       updateGroup: (row, field, value, fromValue) => this.updateBoardGroup(row, field, value, fromValue),
@@ -798,8 +799,8 @@ export class DatabaseView extends FileView {
       get hideCreateEntry() { return shouldHideResultCreateEntryButtons(); },
     });
     this.galleryRenderer = new GalleryRenderer(this.app, {
-      openRow: (row) => this.dataSource.openNote(row.file),
-      openRecordDetail: (anchorEl, row) => this.openRecordDetailPanel(anchorEl, row),
+      openRow: (row) => { void this.openRecordAt(row); },
+      openRecordDetail: (anchorEl, row) => { void this.openRecordAt(row, anchorEl); },
       createEntry: (defaults, position) => this.guardedCreateEntry(defaults, position),
       isRowSelected: (row) => this.selectedRows.has(row.file.path),
       toggleRowSelected: (row, selected, event) => this.toggleRowSelected(row, selected, event),
@@ -830,8 +831,8 @@ export class DatabaseView extends FileView {
       get hideCreateEntry() { return shouldHideResultCreateEntryButtons(); },
     });
     this.listRenderer = new ListRenderer(this.app, {
-      openRow: (row) => this.dataSource.openNote(row.file),
-      openRecordDetail: (anchorEl, row) => this.openRecordDetailPanel(anchorEl, row),
+      openRow: (row) => { void this.openRecordAt(row); },
+      openRecordDetail: (anchorEl, row) => { void this.openRecordAt(row, anchorEl); },
       createEntry: (defaults, position) => this.guardedCreateEntry(defaults, position),
       isRowSelected: (row) => this.selectedRows.has(row.file.path),
       toggleRowSelected: (row, selected, event) => this.toggleRowSelected(row, selected, event),
@@ -1775,19 +1776,9 @@ export class DatabaseView extends FileView {
         const context = this.getCellSelectionFocusContext();
         if (context && this.containerEl_) {
           event.preventDefault();
-          const config = this.getConfig();
-          const visible = getVisibleColumns(config, this.rows, this.vs(), this.pendingShowColumns);
-          openTableRecordPeek({
-            anchor: context.td,
-            row: context.row,
-            config,
-            visibleColumns: visible,
-            allColumns: getColumnsInOrder(config),
-            container: this.containerEl_,
-            returnFocus: () => context.td.focus(),
-            renderRecordIcon: (parent, currentRow, currentConfig) =>
-              this.renderRowRecordIcon(parent, currentRow, currentConfig),
-          });
+          // Mod+Enter used to open the preview layer directly and had no touch guard at all, so
+          // it was the one path that could disagree with the button sitting next to it.
+          void this.openRecordAt(context.row, context.td, () => context.td.focus());
           return;
         }
       }
@@ -8265,9 +8256,57 @@ export class DatabaseView extends FileView {
     }
   }
 
-  private async openRow(row: RowData): Promise<void> {
+  /**
+   * Where a record opens, asked once and answered the same way for every affordance.
+   *
+   * The platform and the anchor are facts only the view has; the preference is the reader's. The
+   * resolver combines them and this carries out the answer. Nothing below decides a surface for
+   * itself, which is the whole repair: the same icon used to open a preview from a table row and a
+   * real leaf from a list row, and a keyboard shortcut disagreed with the button beside it.
+   */
+  private resolveOpenTarget(anchorEl?: HTMLElement): ResolvedOpenTarget {
+    return resolveRecordOpenTarget({
+      setting: getNoteDatabasePlugin(this.app)?.settings.recordOpenTarget,
+      // `Platform.isPhone` alone, deliberately. `isTouchDevice` answers "coarse pointer or narrow
+      // pane", which is true of a 700px split on a 1440px desktop — the harness reports exactly that
+      // — and folding on it would take the split, the popout and the preview layer away from a
+      // reader who has a mouse and simply keeps a narrow pane. What the folds are about is a device
+      // with one pane and no hover, and that is what this predicate names.
+      isPhone: Platform.isPhone,
+      hasAnchor: Boolean(anchorEl),
+    });
+  }
+
+  private async openRecordAt(row: RowData, anchorEl?: HTMLElement, returnFocus?: () => void): Promise<void> {
     await this.syncComputedFieldsNow(false);
-    this.dataSource.openNote(row.file);
+    const resolved = this.resolveOpenTarget(anchorEl);
+    if (resolved.target === "peek" && anchorEl && this.containerEl_) {
+      const config = this.getConfig();
+      openTableRecordPeek({
+        anchor: anchorEl,
+        row,
+        config,
+        visibleColumns: getVisibleColumns(config, this.rows, this.vs(), this.pendingShowColumns),
+        allColumns: getColumnsInOrder(config),
+        container: this.containerEl_,
+        returnFocus: returnFocus ?? (() => anchorEl.focus()),
+        renderRecordIcon: (parent, currentRow, currentConfig) =>
+          this.renderRowRecordIcon(parent, currentRow, currentConfig),
+      });
+      return;
+    }
+    if (resolved.target === "panel") {
+      // The container stands in when an affordance has no element of its own — a menu item or a
+      // shortcut. The panel is anchored on a phone by its own sheet chrome rather than by this.
+      const host = anchorEl ?? this.containerEl_;
+      if (host) this.openRecordDetailPanel(host, row);
+      return;
+    }
+    this.dataSource.openNote(row.file, resolved.target === "split" ? "split" : resolved.target === "window" ? "window" : "tab");
+  }
+
+  private async openRow(row: RowData, anchorEl?: HTMLElement): Promise<void> {
+    await this.openRecordAt(row, anchorEl);
   }
 
   private async duplicateRow(row: RowData): Promise<void> {
@@ -8592,11 +8631,11 @@ export class DatabaseView extends FileView {
           // behaviours where the point was to have one. It is also an async call whose promise had
           // no rejection handler here, so a failing sync would have left Open doing nothing at all
           // while the other three still opened.
-          open: () => (isTouchDevice(td)
-            ? this.openRecordDetailPanel(td, row)
-            : this.dataSource.openNote(row.file)),
+          // The touch branch that used to live here decided a surface from the pointer, which made
+          // this control the one affordance that answered the question for itself.
+          open: () => { void this.openRecordAt(row, td); },
         });
-        setupTitleCellTap(td, row, { openRecord: (anchorEl, target) => this.openRecordDetailPanel(anchorEl, target) });
+        setupTitleCellTap(td, row, { openRecord: (anchorEl, target) => { void this.openRecordAt(target, anchorEl); } });
       }
     }
     this.setupTableCellSelection(td, row, col);
@@ -11564,7 +11603,7 @@ export class DatabaseView extends FileView {
         saveCellValue: (row, col, value) => this.saveCellValueWithHistory(row, col, value),
         editFileName: (target, r, currentName) => this.cellRenderer.editFileName(target, r, currentName),
         showColumnMenu: (event, col, anchorEl) => this.showContextMenu(event, col, anchorEl, { includeWidthActions: false }),
-        openRow: (r) => this.dataSource.openNote(r.file),
+        openRow: (r) => { void this.openRecordAt(r); },
         renderRecordIcon: (parent, r, view, compact) => this.renderRowRecordIcon(parent, r, view, compact),
         applyConditionalFormat: (element, r, view, targetField) =>
           applyConditionalFormat(element, r, view, this.getActiveDb(), targetField),

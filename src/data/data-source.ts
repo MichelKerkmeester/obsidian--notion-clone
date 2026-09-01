@@ -452,8 +452,21 @@ export class DataSource {
   }
 
   /** Open a note in the workspace */
-  openNote(file: TFile): void {
-    void this.app.workspace.getLeaf(false)?.openFile(file);
+  /**
+   * Open a note in a real workspace leaf.
+   *
+   * The default is the tab the reader is already in, which is what this always did. It is a default
+   * rather than the only behaviour because reusing the current tab navigates the database view
+   * away from itself, and that was never something anyone chose — it was one argument nobody had
+   * revisited. Which leaf to use is now the resolver's answer, and this only carries it out.
+   */
+  openNote(file: TFile, target: "tab" | "split" | "window" = "tab"): void {
+    const leaf = target === "split"
+      ? this.app.workspace.getLeaf("split")
+      : target === "window"
+        ? this.app.workspace.getLeaf("window")
+        : this.app.workspace.getLeaf(false);
+    void leaf?.openFile(file);
   }
 
   /** Move a note to trash instead of deleting permanently. */

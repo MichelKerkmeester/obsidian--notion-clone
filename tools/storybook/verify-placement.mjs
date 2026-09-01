@@ -139,6 +139,7 @@ globalThis.__edit = { openRecordDetailPanel, closeRecordDetailPanel, CellRendere
 globalThis.__list = { ListRenderer, reservesColumnsOnWrappingLine };
 globalThis.__number = { renderCardField, CellRenderer, getColumnDisplayType, isEmptyValue, formatEuroCurrency, formatEuroNumber };
 globalThis.__selection = { DatabaseView, EmbeddedDatabaseRenderer };
+globalThis.__opentarget = { DatabaseView, openTableRecordPeek, closeTableRecordPeek, closeRecordDetailPanel };
 globalThis.__place = { positionToolbarPopover, getVisiblePopoverBounds, COMPACT_MENU_POPOVER, applySheetChrome, renderCardField, createOwnedMenu, createMenuRow, ToolbarRenderer, trackCellGesture, nextCellRange, resolveCellTapAction, isMainItemColumn, shouldExtendRowRange, applyRowSelectionPress, attachRowRangeGesture, isRowSelectionCheckbox, attachLongPress, isTouchDevice, attachTitleOpenAffordance, setupTitleCellTap, openRecordDetailPanel, closeRecordDetailPanel, getOpenRecordDetailPath, refreshRecordDetailPanel, RowMenu, ColumnMenu };
 globalThis.__p = { positionToolbarPopover, getVisiblePopoverBounds, setPosition, clamp, resolvePopoverHorizontalLeft, COMPACT_MENU_POPOVER, PANEL_POPOVER, createOwnedMenu, createMenuRow, publishKeyboardInset, calendarSearchResultsPlacement, anchorlessSubmenuPlacement, resolveKeyboardInset, MAX_UNZOOMED_SCALE };
 globalThis.__drag = { openRecordDetailPanel, refreshRecordDetailPanel, applySheetChrome, positionToolbarPopover };
@@ -7438,6 +7439,124 @@ await section("the peek's layer sits inside the token scale", async () => {
 // reason the packet feared. So the run asserts the token reaches a bare host-styled control before
 // trusting any height it reports.
 
+// ───────────────────────────────────────────────────────────────────
+// WHERE A RECORD OPENS, AND WHETHER THE SETTING DECIDES IT
+// ───────────────────────────────────────────────────────────────────
+//
+// Twenty affordances used to resolve to four surfaces, and the surface was decided by which control
+// was pressed: the same icon opened a preview from a table row and a real leaf from a list row, and
+// a keyboard shortcut disagreed with the button beside it. The repair is one resolver every
+// affordance calls, so the claim to check is not "the resolver returns the right name" — a unit
+// test already holds that — but "changing the setting changes the surface a real open produces".
+//
+// So this drives the shipped `openRecordAt` on a real view object once per setting and reads what
+// appeared in the document. The two plugin surfaces are built for real and found by their own
+// selectors. The three leaf targets have no DOM, so what is recorded there is the argument handed
+// to the data source, which is the whole of what the view decides for them.
+const openTargetResults = [];
+
+await section("the setting decides where a record opens", async () => {
+  const page = await browser.newPage({ viewport: VIEWPORT, reducedMotion: "reduce" });
+  await page.setContent(page_html);
+  await page.addStyleTag({ content: readFileSync(join(REPO, "styles.css"), "utf8") + HOST_BARE_CONTROLS });
+  await page.addScriptTag({ content: shimJs + "\ninstallObsidianDomShim(globalThis);" });
+  await page.addScriptTag({ content: positionerJs });
+
+  const measured = await page.evaluate(async () => {
+    const { DatabaseView, closeTableRecordPeek, closeRecordDetailPanel } = globalThis.__opentarget;
+    const host = document.querySelector(".note-database-container");
+    const columns = [
+      { key: "file.name", label: "Name", type: "text" },
+      { key: "amount", label: "Amount", type: "text" },
+    ];
+    const config = { schema: { columns, computedFields: [] }, viewType: "table" };
+    const row = { file: { path: "record.md", name: "record.md", basename: "record" }, frontmatter: { amount: "1" }, computed: {} };
+
+    const anchor = host.createDiv({ cls: "db-cell" });
+    anchor.tabIndex = 0;
+
+    const run = async (setting, hasAnchor) => {
+      closeTableRecordPeek();
+      closeRecordDetailPanel();
+      // A panel whose construction was refused mid-way leaves its node behind, and the next run
+      // would then read a surface the run before it opened. Clearing by selector rather than by the
+      // close helper is what makes each reading independent.
+      for (const stale of document.querySelectorAll(".db-record-detail-panel, .db-record-peek-panel")) stale.remove();
+      const opened = [];
+      // `Object.create` gives a real view without the constructor, which wants a leaf this page
+      // cannot supply. Every field the driven method reads is written here; a field it only reads
+      // would otherwise be undefined with nothing pointing at the omission.
+      const view = Object.create(DatabaseView.prototype);
+      view.containerEl_ = host;
+      view.rows = [row];
+      // The view-state shape the column resolver really reads. An empty object throws inside
+      // `getVisibleColumns` on `searchText.trim()`, and a stub that throws is a stub that was
+      // never standing in for anything.
+      view.pendingShowColumns = new Set();
+      view.vs = () => ({ searchText: "", statusFilter: "", filters: [], filterTree: undefined, hiddenColumns: new Set() });
+      view.getConfig = () => config;
+      view.renderRowRecordIcon = () => undefined;
+      view.syncComputedFieldsNow = async () => undefined;
+      view.dataSource = { openNote: (file, target) => opened.push(`leaf:${target}`) };
+      // The settings lookup the view really performs, answered by a stub registry shaped like the
+      // one Obsidian keeps. Supplying the value any other way would test a different code path.
+      view.app = { plugins: { plugins: { "note-database": { saveSettings: async () => undefined, settings: { recordOpenTarget: setting } } } } };
+
+      // The panel is identified by reaching the shim's boundary, and that is a proxy.
+      //
+      // The record panel always asks for the note body, so building it constructs an Obsidian
+      // `Component`, which this catalogue's stub refuses on purpose — its rule is that a surface
+      // reaching the vault fails loudly rather than renders a pretence. Weakening that to make this
+      // check easier would trade a real guard for a convenient one. So the panel branch is read
+      // from the refusal it raises, which proves the view chose the panel and NOT one of the other
+      // four, and does not prove a panel was built. The other four outcomes are observed directly.
+      try {
+        await DatabaseView.prototype.openRecordAt.call(view, row, hasAnchor ? anchor : undefined);
+      } catch (err) {
+        if (/Component is not available/.test(String(err && err.message))) opened.push("panel");
+        else throw err;
+      }
+
+      const peek = document.querySelector(".db-record-peek-panel");
+      const panel = document.querySelector(".db-record-detail-panel");
+      if (peek) opened.push("peek");
+      if (panel && !opened.includes("panel")) opened.push("panel");
+      closeTableRecordPeek();
+      closeRecordDetailPanel();
+      return opened;
+    };
+
+    const anchored = {};
+    for (const setting of ["panel", "peek", "tab", "split", "window", undefined, "nonsense"]) {
+      anchored[String(setting)] = await run(setting, true);
+    }
+    const unanchored = { peek: await run("peek", false) };
+    return { anchored, unanchored };
+  });
+  await page.close();
+
+  const record = (name, pass, detail) => openTargetResults.push({ name, pass, detail });
+  const got = (key) => (measured.anchored[key] || []).join("+") || "(nothing)";
+
+  record("each setting produces its own surface, driven through the shipped opener",
+    got("panel") === "panel" && got("peek") === "peek"
+      && got("tab") === "leaf:tab" && got("split") === "leaf:split" && got("window") === "leaf:window",
+    `panel -> ${got("panel")}, peek -> ${got("peek")}, tab -> ${got("tab")}, `
+      + `split -> ${got("split")}, window -> ${got("window")}. Five settings, five outcomes: if any two `
+      + `matched, the setting would not be deciding the surface`);
+
+  record("an unset setting and an unreadable one both land on the default",
+    got("undefined") === "panel" && got("nonsense") === "panel",
+    `unset -> ${got("undefined")}, "nonsense" -> ${got("nonsense")}. A settings file written by a `
+      + `newer build must not reach the view as a surface nobody implemented`);
+
+  record("a peek with nothing to anchor against falls back rather than opening nowhere",
+    (measured.unanchored.peek || []).join("+") === "panel",
+    `peek without an anchor -> ${(measured.unanchored.peek || []).join("+") || "(nothing)"}. `
+      + `A keyboard shortcut and a menu item have a record and no element to point at, and a `
+      + `preview layer with no anchor has no position to take`);
+});
+
 const propertyGeometryResults = [];
 
 for (const surface of [
@@ -10052,7 +10171,7 @@ await section("nothing truncates while its neighbour has room to spare", async (
 results.push(...phoneResults, ...menuResults, ...addViewDesktopResults, ...addViewPhoneResults,
   ...grammarResults, ...addViewGrammar, ...motionResults, ...reducedResults, ...desktopMenuResults, ...cellResults, ...sheetResults, ...selectCellResults, ...selectPhoneResults, ...rowPhoneResults, ...rowNarrowResults,
   ...desktopPanelResults, ...stateResults, ...keyboardParityResults, ...familyResults, ...touchResults, ...overlapResults, ...rhythmResults, ...rendererRhythmResults,
-  ...liftedResults, ...inlineEditResults, ...numberParityResults, ...peekLayerResults, ...propertyRowResults, ...propertyGeometryResults, ...menuEdgeResults, ...headerRhythmResults, ...panelParityResults, ...registryResults, ...flickResults, ...selectWidthResults, ...fixtureTableResults, ...panelOwnershipResults, ...peekOwnershipResults, ...checkboxIdentityResults, ...listOwnershipResults, ...addViewOutcomeResults, ...editOutcomeResults, ...menuOutcomeResults, ...backdropOutcomeResults, ...paletteResults, ...dayStateResults, ...rowSlackResults, ...sectionFailures);
+  ...liftedResults, ...inlineEditResults, ...numberParityResults, ...peekLayerResults, ...propertyRowResults, ...propertyGeometryResults, ...openTargetResults, ...menuEdgeResults, ...headerRhythmResults, ...panelParityResults, ...registryResults, ...flickResults, ...selectWidthResults, ...fixtureTableResults, ...panelOwnershipResults, ...peekOwnershipResults, ...checkboxIdentityResults, ...listOwnershipResults, ...addViewOutcomeResults, ...editOutcomeResults, ...menuOutcomeResults, ...backdropOutcomeResults, ...paletteResults, ...dayStateResults, ...rowSlackResults, ...sectionFailures);
 
 await browser.close();
 rmSync(work, { recursive: true, force: true });

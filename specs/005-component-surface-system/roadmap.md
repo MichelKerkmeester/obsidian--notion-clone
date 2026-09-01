@@ -382,7 +382,7 @@ today.
 - `000-surface-contract-and-truthful-harness` — its census instruments exist and one edit shipped with a recapture debt. Continuity reads 0%.
 - `001` — the overlay census has not run; the factory question was settled by deleting it (§7.2).
 - `002-properties-panel` — **Shipped + verified, awaiting device — 6 of 7.** Held the lane nine times with substantial edits while continuity read "not started". The geometry row is now measured on the shipped renderer at both viewports: one grid track with every laid-out child inside its band, and 30px against a 36px ceiling where the failing value was 52px. The clause recorded as undecidable turned out not to be — the host's `--input-height` is declared now, read from the installed app stylesheet, and it moved `layoutHash` for 0 of 240 captures. Exit signal: the operator reading every property name on a phone.
-- `006-record-open-target` — **partly shipped, and this entry said otherwise.** Commit `2babab2`, "make Open open the note", routes desktop Open through `openNote` instead of the peek and replaces the peek's hardcoded `z-index: 998` with a layer token. It landed under `002`'s lane hold, and none of that hold's nine notes mentions it. Still open: the setting, the touch branch, and retiring the peek. Its one operator question — side panel, full-page modal, or both behind a setting — stands.
+- `006-record-open-target` — **Shipped + verified, awaiting device — 6 of 7.** The setting, the resolver and every measurement were outstanding and are now in: `recordOpenTarget` on `PluginSettings` with five options and `panel` as the unset default, one `resolveRecordOpenTarget` that folds by platform and anchor, and fourteen call sites routed through a single opener — including the Open button's hardcoded touch branch and `Mod+Enter`, which had no touch guard and disagreed with the button beside it. Driven in the placement lane: five settings produce five distinct surfaces, and a control that ignores the resolver collapses all five to one. Exit signal: the operator clicking Open and reading the note.
 - `008-integration-and-release-observability` — **Deliverable A shipped**: `tools/live/replay.mjs` exists and `npm run replay` re-asserts 8 results against recorded pre-fix numbers. The release decision stays last.
 - `007-architecture-research` — Complete. 10 iterations plus synthesis; not a phase.
 - `022-selection-bar-keyboard-docking` — **Shipped + verified, awaiting device — 6 of 8.** This
@@ -433,7 +433,7 @@ done | sort -n
 | `003-mobile-sheet-presentation` | **62%** — 5/8 | 3 | 1 | 2 |
 | `004-checkbox-ownership` | **88%** — 7/8 | 1 | 1 | 0 |
 | `005-content-row-rhythm` | **86%** — 6/7 | 1 | 1 | 0 |
-| `006-record-open-target` | **71%** — 5/7 | 2 | 1 | 1 |
+| `006-record-open-target` | **86%** — 6/7 | 1 | 1 | 0 |
 | `007-architecture-research` | **100%** — 2/2 | 0 | 0 | 0 |
 | `008-integration-and-release-observability` | **50%** — 5/10 | 5 | 1 | 4 |
 | `009-live-verification` | **33%** — 2/6 | 4 | 1 | 3 |

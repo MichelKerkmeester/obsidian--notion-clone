@@ -654,6 +654,15 @@ export interface PluginSettings {
   trashedDatabases?: TrashedDatabase[];
   /** Set to true after databases have been migrated from settings to files. */
   databasesMigrated?: boolean;
+  /**
+   * Where activating a record opens it: `panel`, `peek`, `tab`, `split` or `window`.
+   *
+   * Absent means it has never been written, which the resolver reads as the default rather than as
+   * "whatever the affordance used to do" — the affordances disagreeing with each other is the
+   * defect this replaces. Typed as a string so a value written by a newer build, or edited by hand,
+   * arrives as data to be normalised rather than as a union the parser must already know.
+   */
+  recordOpenTarget?: string;
 }
 
 export interface TrashedDatabase {

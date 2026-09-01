@@ -77,9 +77,50 @@ have a number are still open.*
       **And the check carries its own ablation**: it forces `998` back onto the shipped panel and
       requires the hit test to flip. A check that answers "dropdown" both ways is measuring DOM
       order, not the cascade.
-- [ ] The setting round-trips and **every** affordance honours it — no path bypasses the policy.
-      **The exposure is the stubs:** this has to drive `openRow`, which is `() => undefined` in the
-      harness — the shape `012` repaired for the title-cell tap by driving the real opener instead.
+- [x] The setting round-trips and **every** affordance honours it — no path bypasses the policy.
+      **Built, wired and driven.** The setting did not exist when this row was written; the phase was
+      recorded at 0 of 32 tasks with the resolver, the setting and every measurement outstanding.
+
+      **`recordOpenTarget` on `PluginSettings`**, offered in the settings tab as five options, absent
+      meaning `panel`. `panel` rather than `peek` because it is what most affordances already did —
+      every list, board, gallery, calendar and timeline body press, and every touch open — so an
+      unset plugin keeps the behaviour most of its surfaces had and the ones that change are the four
+      that disagreed with their own siblings. **That is the decision this row was waiting on.**
+
+      **`resolveRecordOpenTarget` is the only thing that decides a surface.** Setting x platform x
+      anchor, folding one way only: an unanchored `peek` becomes `panel` because a preview layer with
+      nothing to point at has no position to take, and a phone's `split` and `window` become `tab`
+      while its `peek` becomes `panel`. Each fold carries its reason, so a caller can report rather
+      than guess. 11 unit tests, two controls observed red — removing the phone's split fold, and
+      letting an unrecognised stored value through — each restored and hash-verified.
+
+      **Twelve action definitions and the two direct paths now route through one method.** Six
+      `openRow` sites, five `openRecordDetail` sites, the table Open button's hardcoded touch branch,
+      and `Mod+Enter`, which had no touch guard at all and was the one path that could disagree with
+      the button beside it. `openNote` gained a target argument so a real leaf can be a tab, a split
+      or a popout instead of always reusing the current tab and navigating the database view away
+      from itself.
+
+      **Driven, not asserted about the source.** Three checks in the placement lane call the shipped
+      `openRecordAt` on a real view object once per setting and read what appeared in the document:
+      **panel → panel, peek → peek, tab → leaf:tab, split → leaf:split, window → leaf:window.** Five
+      settings, five outcomes. An unset setting and an unreadable one both land on the default. The
+      control makes the opener ignore the resolver and all five collapse to `panel`; restored and
+      hash-verified.
+
+      **Wiring it found a defect in the wiring.** The first version read the platform as
+      `Platform.isPhone || isTouchDevice(container)`, and the harness reports `isTouchDevice` true on
+      a 700px pane in a 1440px window. That would have taken the split, the popout and the preview
+      layer away from a reader with a mouse who merely keeps a narrow pane. The predicate is
+      `Platform.isPhone` alone, which is what the folds are actually about.
+
+      **Two bounded exceptions, named rather than left to be found.** The embedded database renderer
+      keeps its own seven open paths: it is a read-only preview host and is not in this phase's
+      affordance census. And the panel branch is identified in the lane by the boundary it reaches
+      rather than by a panel appearing — the record panel always asks for the note body, so building
+      it constructs an Obsidian `Component`, which the catalogue's stub refuses by design. Weakening
+      that refusal to make this check easier would trade a real guard for a convenient one. The other
+      four outcomes are observed directly.
 - [x] Plus the five stateful dimensions. **No mapping exists** for this packet. **Mapped 2026-09-01**,
       in `acceptance-criteria.md` §2b. Three dimensions already had evidence; **resource ownership
       had none, and the peek is the surface where it is worth measuring rather than reasoning.**

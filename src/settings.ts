@@ -14,6 +14,7 @@
 import { App, Notice, PluginSettingTab, Setting, setIcon, setTooltip } from "obsidian";
 import NoteDatabasePlugin from "./main";
 import { DatabaseConfig, PluginSettings, TrashedDatabase } from "./data/types";
+import { DEFAULT_RECORD_OPEN_TARGET, RECORD_OPEN_TARGETS, normalizeRecordOpenTarget } from "./views/record-open-target";
 import { LocaleCode, setLocale, t } from "./i18n";
 import { DeleteDatabaseModal } from "./views/modals/delete-database-modal";
 import { DEFAULT_STATUS_PRESET_ID, getBuiltinStatusPresets, normalizeStatusPresets, resolveDefaultStatusPresetId } from "./data/column-types";
@@ -48,6 +49,7 @@ export const DEFAULT_SETTINGS = {
   showDatabaseIcon: true,
   lastChangelogVersion: "",
   language: "system" as LocaleCode,
+  recordOpenTarget: DEFAULT_RECORD_OPEN_TARGET as string,
 };
 
 export function createDefaultSettings(): PluginSettings {
@@ -63,6 +65,7 @@ export function createDefaultSettings(): PluginSettings {
     showDatabaseIcon: DEFAULT_SETTINGS.showDatabaseIcon,
     lastChangelogVersion: DEFAULT_SETTINGS.lastChangelogVersion,
     language: DEFAULT_SETTINGS.language,
+    recordOpenTarget: DEFAULT_SETTINGS.recordOpenTarget,
   };
 }
 
@@ -121,6 +124,23 @@ export class SettingsTab extends PluginSettingTab {
             await this.plugin.saveSettings();
           })
       );
+    new Setting(general)
+      .setName(t("settings.recordOpenTarget.name"))
+      .setDesc(t("settings.recordOpenTarget.desc"))
+      .addDropdown((dropdown) => {
+        for (const target of RECORD_OPEN_TARGETS) {
+          dropdown.addOption(target, t(`settings.recordOpenTarget.option.${target}`));
+        }
+        // The stored value goes through the same normaliser the resolver uses, so a settings file
+        // holding something this build does not know shows the default here instead of an empty
+        // control that silently rewrites the setting on the next change.
+        dropdown
+          .setValue(normalizeRecordOpenTarget(this.plugin.settings.recordOpenTarget))
+          .onChange(async (value) => {
+            this.plugin.settings.recordOpenTarget = normalizeRecordOpenTarget(value);
+            await this.plugin.saveSettings();
+          });
+      });
     new Setting(general)
       .setName(t("settings.databaseFilesAlwaysOpenInNewTab.name"))
       .setDesc(t("settings.databaseFilesAlwaysOpenInNewTab.desc"))
