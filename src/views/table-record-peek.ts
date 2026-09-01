@@ -14,7 +14,8 @@
 // ───────────────────────────────────────────────────────────────────
 
 import { setIcon } from "obsidian";
-import { getColumnValue, isDerivedColumn } from "../data/column-display";
+import { getColumnDisplayType, getColumnValue, isDerivedColumn } from "../data/column-display";
+import { resolveOptionDisplay } from "../data/column-types";
 import { isReadonlyFileField } from "../data/file-fields";
 import { isImeComposing } from "../data/keyboard-utils";
 import { isTouchDevice } from "../data/touch-environment";
@@ -232,7 +233,7 @@ export function openTableRecordPeek(options: OpenTableRecordPeekOptions): void {
     }
 
     for (const column of visibleProperties) {
-      renderProperty(properties, currentRow, column);
+      renderProperty(properties, currentRow, column, config);
     }
 
     if (hiddenProperties.length === 0) return;
@@ -256,7 +257,7 @@ export function openTableRecordPeek(options: OpenTableRecordPeekOptions): void {
     });
 
     for (const column of hiddenProperties) {
-      renderProperty(hiddenFields, currentRow, column);
+      renderProperty(hiddenFields, currentRow, column, config);
     }
   };
 
@@ -299,7 +300,25 @@ export function syncTableRecordPeek(rows: readonly RowData[]): void {
 // 5. HELPERS
 // ───────────────────────────────────────────────────────────────────
 
-function renderProperty(parent: HTMLElement, row: RowData, column: ColumnDef): void {
+/**
+ * A property row: label, then the value in the form the rest of the plugin gives it.
+ *
+ * An option-typed value is a badge coloured from its own option, which is what the table cell, the
+ * card field, the record detail panel and every group header build for the same value. This panel
+ * used to write `textContent` for everything, so a select value docked beside the table lost the
+ * colour the cell two hundred pixels to its left was showing it in — the same record, the same
+ * column, on one screen, saying the plugin colours by surface. It does not; the colour is the
+ * option's and follows the value.
+ *
+ * An unregistered value keeps the grey badge rather than falling back to text, because grey is what
+ * every other surface gives it and "no option matched" is a state worth looking the same everywhere.
+ */
+function renderProperty(
+  parent: HTMLElement,
+  row: RowData,
+  column: ColumnDef,
+  config: ViewConfig,
+): void {
   const field = createChild(parent, "div", "db-record-peek-field");
   field.setAttribute("data-note-database-column-key", column.key);
 
@@ -307,7 +326,30 @@ function renderProperty(parent: HTMLElement, row: RowData, column: ColumnDef): v
   label.textContent = column.label || column.key;
 
   const value = createChild(field, "span", "db-record-peek-field-value");
-  value.textContent = stringifyValue(getColumnValue(row, column));
+  const text = stringifyValue(getColumnValue(row, column));
+
+  const displayType = getColumnDisplayType(column, config.schema.computedFields);
+  const isOption = displayType === "status" || displayType === "select" || displayType === "multi-select";
+  if (!isOption || !text) {
+    value.textContent = text;
+    return;
+  }
+
+  // Multi-select stringifies to a comma-joined list, and one badge around the whole list would be a
+  // chip that reads as a single option. Each value gets its own, in the container the cell uses.
+  const values = displayType === "multi-select"
+    ? text.split(",").map((item) => item.trim()).filter(Boolean)
+    : [text];
+  const host = displayType === "multi-select"
+    ? createChild(value, "div", "db-multi-select-values")
+    : value;
+  for (const item of values) {
+    const { option } = resolveOptionDisplay(column, item);
+    const badge = createChild(host, "span", `status-badge status-color-${option?.color || "gray"}`);
+    badge.textContent = item;
+    badge.title = item;
+    badge.setAttribute("data-status-color", option?.color || "gray");
+  }
 }
 
 function isEmptyValue(value: unknown): boolean {

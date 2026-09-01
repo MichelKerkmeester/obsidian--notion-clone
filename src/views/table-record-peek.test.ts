@@ -217,7 +217,18 @@ function row(overrides: { path?: string; basename?: string; frontmatter?: Record
   };
 }
 
-const config = {} as unknown as ViewConfig;
+/**
+ * A minimal but REAL config, not `{}`.
+ *
+ * It was an empty object, which every test passed and no caller ever does — the panel only had to
+ * survive it because nothing in the panel read the config. The first thing that needed one (the
+ * display type of a column, so an option value can be badged the way every other surface badges it)
+ * turned all six of these red with `Cannot read properties of undefined`. The fixture was the wrong
+ * shape and the tests were agreeing with it.
+ */
+const config = {
+  schema: { columns: [], computedFields: [] },
+} as unknown as ViewConfig;
 
 function col(overrides: Partial<ColumnDef> & Pick<ColumnDef, "key" | "label">): ColumnDef {
   return { type: "text", ...overrides } as ColumnDef;
@@ -305,6 +316,77 @@ describe("TableRecordPeek visible/hidden column split", () => {
     expect(findByClass(container, "db-record-peek-empty")).toHaveLength(1);
     expect(findByClass(container, "db-record-peek-hidden-group")).toHaveLength(0);
 
+    closeTableRecordPeek();
+  });
+});
+
+describe("TableRecordPeek option values", () => {
+  // The peek docks BESIDE the table, so its properties and the cells they mirror are on screen at
+  // once. Writing textContent here while the cell two hundred pixels away drew a coloured badge is
+  // the same record, the same column, disagreeing with itself in one glance.
+  const options = [
+    { value: "Design", color: "pink" },
+    { value: "Business", color: "blue" },
+  ];
+
+  function openWith(column: ColumnDef, frontmatter: Record<string, unknown>) {
+    const { container } = makeContainer();
+    const anchor = container.appendChild(container.ownerDocument.createElement("span"));
+    openTableRecordPeek({
+      anchor: anchor as unknown as HTMLElement,
+      row: row({ frontmatter }),
+      config,
+      visibleColumns: [col({ key: "file.name", label: "Name" }), column],
+      allColumns: [col({ key: "file.name", label: "Name" }), column],
+      container: container as unknown as HTMLElement,
+    });
+    return container;
+  }
+
+  it("gives a select value the badge and the colour its own option carries", () => {
+    const container = openWith(
+      col({ key: "category", label: "Category", type: "select", statusOptions: options } as Partial<ColumnDef> & Pick<ColumnDef, "key" | "label">),
+      { category: "Design" },
+    );
+    const badges = findByClass(container, "status-badge");
+    expect(badges).toHaveLength(1);
+    expect(badges[0].textContent).toBe("Design");
+    expect(badges[0].className).toContain("status-color-pink");
+    expect(badges[0].getAttribute("data-status-color")).toBe("pink");
+    closeTableRecordPeek();
+  });
+
+  it("falls back to grey for a value no option matches, rather than back to plain text", () => {
+    // Grey is what the cell, the card and the group header all give an unregistered value. Falling
+    // back to text instead would make "no option matched" look different in this one panel, which
+    // is the divergence this whole change removes.
+    const container = openWith(
+      col({ key: "category", label: "Category", type: "select", statusOptions: options } as Partial<ColumnDef> & Pick<ColumnDef, "key" | "label">),
+      { category: "Archived" },
+    );
+    const badges = findByClass(container, "status-badge");
+    expect(badges).toHaveLength(1);
+    expect(badges[0].className).toContain("status-color-gray");
+    closeTableRecordPeek();
+  });
+
+  it("gives a multi-select one badge per value rather than one chip around the list", () => {
+    const container = openWith(
+      col({ key: "tags", label: "Tags", type: "multi-select", statusOptions: options } as Partial<ColumnDef> & Pick<ColumnDef, "key" | "label">),
+      { tags: ["Design", "Business"] },
+    );
+    const badges = findByClass(container, "status-badge");
+    expect(badges.map((b) => b.textContent)).toEqual(["Design", "Business"]);
+    expect(badges[0].className).toContain("status-color-pink");
+    expect(badges[1].className).toContain("status-color-blue");
+    expect(findByClass(container, "db-multi-select-values")).toHaveLength(1);
+    closeTableRecordPeek();
+  });
+
+  it("leaves a non-option column as text, so only option types gain a chip", () => {
+    const container = openWith(col({ key: "cost", label: "Cost" }), { cost: "€ 18,75" });
+    expect(findByClass(container, "status-badge")).toHaveLength(0);
+    expect(findByClass(container, "db-record-peek-field-value")[0].textContent).toBe("€ 18,75");
     closeTableRecordPeek();
   });
 });

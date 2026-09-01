@@ -24,7 +24,7 @@
 // 1. IMPORTS
 // ───────────────────────────────────────────────────────────────────
 
-import { ROWS, fieldCheckbox, glyph, optionPill, rowCheckbox, tableHeader } from "./shared.mjs";
+import { ROWS, fieldCheckbox, glyph, optionPill, optionTone, rowCheckbox, tableHeader } from "./shared.mjs";
 
 // ───────────────────────────────────────────────────────────────────
 // 2. ICONS
@@ -99,7 +99,11 @@ function sheetWithBody(bodyHtml) {
           <span class="db-record-detail-field-label">${col.label}</span>
           <div class="db-board-card-value${valueClass ? ` ${valueClass}` : ""}">${value}</div>
         </div>`;
-  const badge = (text, tone) => `<span class="status-badge status-color-${tone}" title="${text}">${text}</span>`;
+  /* The panel's badge carries a `title` the table's does not, so it cannot just be `optionPill` —
+     but the tone is the option's, not the panel's. A value that is purple in a table and orange in
+     the panel beside it says the plugin colours by surface, which it does not: the colour comes
+     from the schema and is the same everywhere the value appears. */
+  const badge = (text) => `<span class="status-badge status-color-${optionTone(text)}" title="${text}">${text}</span>`;
   return `
       <div class="note-database-container db-width-default">
         <div class="db-record-detail-panel db-anchored-popover db-mobile-bottom-sheet is-visible" role="dialog" aria-modal="true" aria-label="${row.name}">
@@ -111,7 +115,7 @@ function sheetWithBody(bodyHtml) {
           </div>
           <div class="db-record-detail-fields">
             ${field(COLUMN_DEFS[1], row.cost, "db-card-field-number")}
-            ${field(COLUMN_DEFS[2], badge(row.cycle, "orange"))}
+            ${field(COLUMN_DEFS[2], badge(row.cycle))}
             ${field(COLUMN_DEFS[4], row.renew, "db-date-value")}
           </div>
 ${bodyHtml}
@@ -452,7 +456,11 @@ export const PANEL_SCENARIOS = [
           <span class="db-record-detail-field-label">${col.label}</span>
           <div class="db-board-card-value${valueClass ? ` ${valueClass}` : ""}">${value}</div>
         </div>`;
-      const badge = (text, tone) => `<span class="status-badge status-color-${tone}" title="${text}">${text}</span>`;
+      /* The panel's badge carries a `title` the table's does not, so it cannot just be `optionPill` —
+     but the tone is the option's, not the panel's. A value that is purple in a table and orange in
+     the panel beside it says the plugin colours by surface, which it does not: the colour comes
+     from the schema and is the same everywhere the value appears. */
+  const badge = (text) => `<span class="status-badge status-color-${optionTone(text)}" title="${text}">${text}</span>`;
       return `
       <div class="note-database-container">
         <div class="db-record-detail-panel" role="dialog" aria-modal="true" aria-label="${row.name}">
@@ -462,10 +470,10 @@ export const PANEL_SCENARIOS = [
           </div>
           <div class="db-record-detail-fields">
             ${field(COLUMN_DEFS[1], row.cost, "db-card-field-number")}
-            ${field(COLUMN_DEFS[2], badge(row.cycle, "orange"))}
-            ${field(COLUMN_DEFS[3], badge(row.payment, "gray"))}
+            ${field(COLUMN_DEFS[2], badge(row.cycle))}
+            ${field(COLUMN_DEFS[3], badge(row.payment))}
             ${field(COLUMN_DEFS[4], row.renew, "db-date-value")}
-            ${field(COLUMN_DEFS[5], badge(row.category, "blue"))}
+            ${field(COLUMN_DEFS[5], badge(row.category))}
             <div class="db-record-detail-field is-empty-field" data-note-database-column-key="notes" role="gridcell">
               <span class="db-record-detail-field-label">Notes</span>
               <div class="db-board-card-value db-card-empty-placeholder">Empty</div>
@@ -497,7 +505,11 @@ export const PANEL_SCENARIOS = [
           <span class="db-record-detail-field-label">${col.label}</span>
           <div class="db-board-card-value${valueClass ? ` ${valueClass}` : ""}">${value}</div>
         </div>`;
-      const badge = (text, tone) => `<span class="status-badge status-color-${tone}" title="${text}">${text}</span>`;
+      /* The panel's badge carries a `title` the table's does not, so it cannot just be `optionPill` —
+     but the tone is the option's, not the panel's. A value that is purple in a table and orange in
+     the panel beside it says the plugin colours by surface, which it does not: the colour comes
+     from the schema and is the same everywhere the value appears. */
+  const badge = (text) => `<span class="status-badge status-color-${optionTone(text)}" title="${text}">${text}</span>`;
       return `
       <div class="note-database-container db-width-default">
         <div class="db-record-detail-panel db-anchored-popover db-mobile-bottom-sheet is-visible" role="dialog" aria-modal="true" aria-label="${row.name}">
@@ -509,10 +521,10 @@ export const PANEL_SCENARIOS = [
           </div>
           <div class="db-record-detail-fields">
             ${field(COLUMN_DEFS[1], row.cost, "db-card-field-number")}
-            ${field(COLUMN_DEFS[2], badge(row.cycle, "orange"))}
-            ${field(COLUMN_DEFS[3], badge(row.payment, "gray"))}
+            ${field(COLUMN_DEFS[2], badge(row.cycle))}
+            ${field(COLUMN_DEFS[3], badge(row.payment))}
             ${field(COLUMN_DEFS[4], row.renew, "db-date-value")}
-            ${field(COLUMN_DEFS[5], badge(row.category, "blue"))}
+            ${field(COLUMN_DEFS[5], badge(row.category))}
           </div>
           ${BODY_RENDERED}
         </div>
@@ -570,10 +582,16 @@ Cancel before the renewal date or it bills for another year. Support answer on w
         { name: "Linear", cost: "€ 96,00", cycle: "Yearly", payment: "Revolut", renew: "June 30, 2026", category: "Business" },
       ];
       const rows = [...ROWS, ...extra];
+      /* `renderProperty` badges an option-typed value and writes text for everything else. The
+         three option columns here take the chip; cost and the dates do not. This fixture wrote text
+         for all of them, which is what the panel used to do — and since the peek docks beside the
+         table, the capture showed the same value as a coloured chip in a cell and as bare text six
+         inches to its right. */
+      const OPTION_KEYS = new Set(["cycle", "payment", "category"]);
       const peekField = (key, label, value) => `
         <div class="db-record-peek-field" data-note-database-column-key="${key}">
           <span class="db-record-peek-field-label">${label}</span>
-          <span class="db-record-peek-field-value">${value}</span>
+          <span class="db-record-peek-field-value">${OPTION_KEYS.has(key) ? optionPill(value) : value}</span>
         </div>`;
       return `
       <div class="note-database-container">

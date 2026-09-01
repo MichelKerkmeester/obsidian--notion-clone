@@ -3703,7 +3703,7 @@
         "src/views/card-field-renderer.ts",
         "src/views/note-body-region.ts"
       ],
-      "layoutHash": "78be2b4a72e1",
+      "layoutHash": "697c61310174",
       "sourceHashes": {
         "src/views/record-detail-panel.ts": "f6d0308b4df2",
         "src/views/card-field-renderer.ts": "33212bef3422",
@@ -3716,7 +3716,7 @@
       },
       "note": "Opened from a calendar or timeline event card. Fields are click-to-edit; an empty field only appears when the view asks for empty properties. The note body sits last, under the properties. What is photographed there is hand-written markup standing in for Obsidian's renderer output — the real MarkdownRenderer has no standalone build, so no capture in this repository can show it.",
       "capture": "element",
-      "bytes": 65413
+      "bytes": 65404
     },
     {
       "id": "panel-record-detail",
@@ -3730,7 +3730,7 @@
         "src/views/card-field-renderer.ts",
         "src/views/note-body-region.ts"
       ],
-      "layoutHash": "78be2b4a72e1",
+      "layoutHash": "697c61310174",
       "sourceHashes": {
         "src/views/record-detail-panel.ts": "f6d0308b4df2",
         "src/views/card-field-renderer.ts": "33212bef3422",
@@ -3743,7 +3743,7 @@
       },
       "note": "Opened from a calendar or timeline event card. Fields are click-to-edit; an empty field only appears when the view asks for empty properties. The note body sits last, under the properties. What is photographed there is hand-written markup standing in for Obsidian's renderer output — the real MarkdownRenderer has no standalone build, so no capture in this repository can show it.",
       "capture": "element",
-      "bytes": 64550
+      "bytes": 64634
     },
     {
       "id": "panel-record-detail",
@@ -3757,7 +3757,7 @@
         "src/views/card-field-renderer.ts",
         "src/views/note-body-region.ts"
       ],
-      "layoutHash": "df2b70c09747",
+      "layoutHash": "735fe48f601a",
       "sourceHashes": {
         "src/views/record-detail-panel.ts": "f6d0308b4df2",
         "src/views/card-field-renderer.ts": "33212bef3422",
@@ -3770,7 +3770,7 @@
       },
       "note": "Opened from a calendar or timeline event card. Fields are click-to-edit; an empty field only appears when the view asks for empty properties. The note body sits last, under the properties. What is photographed there is hand-written markup standing in for Obsidian's renderer output — the real MarkdownRenderer has no standalone build, so no capture in this repository can show it.",
       "capture": "element",
-      "bytes": 65555
+      "bytes": 65542
     },
     {
       "id": "panel-record-detail",
@@ -3784,7 +3784,7 @@
         "src/views/card-field-renderer.ts",
         "src/views/note-body-region.ts"
       ],
-      "layoutHash": "df2b70c09747",
+      "layoutHash": "735fe48f601a",
       "sourceHashes": {
         "src/views/record-detail-panel.ts": "f6d0308b4df2",
         "src/views/card-field-renderer.ts": "33212bef3422",
@@ -3797,7 +3797,7 @@
       },
       "note": "Opened from a calendar or timeline event card. Fields are click-to-edit; an empty field only appears when the view asks for empty properties. The note body sits last, under the properties. What is photographed there is hand-written markup standing in for Obsidian's renderer output — the real MarkdownRenderer has no standalone build, so no capture in this repository can show it.",
       "capture": "element",
-      "bytes": 64664
+      "bytes": 64729
     },
     {
       "id": "panel-record-detail-sheet-body-editing",
@@ -3810,7 +3810,7 @@
         "src/views/record-detail-panel.ts",
         "src/views/note-body-region.ts"
       ],
-      "layoutHash": "34dd726c871e",
+      "layoutHash": "d401aec73182",
       "sourceHashes": {
         "src/views/record-detail-panel.ts": "f6d0308b4df2",
         "src/views/note-body-region.ts": "4660f1f93bd7",
@@ -3822,7 +3822,7 @@
       },
       "note": "Tapping the rendered body swaps it for a textarea. The box grows to its content rather than scrolling inside itself, because the sheet is already a scroll container. What a capture cannot show is the software keyboard: the sheet lifts and shortens against --db-keyboard-inset only when one is open, and no capture has one, so this is the editor at an inset of zero. Focus and the keyboard-avoided sheet are device-verified.",
       "capture": "viewport",
-      "bytes": 71302
+      "bytes": 71241
     },
     {
       "id": "panel-record-detail-sheet-body-editing",
@@ -3835,7 +3835,7 @@
         "src/views/record-detail-panel.ts",
         "src/views/note-body-region.ts"
       ],
-      "layoutHash": "34dd726c871e",
+      "layoutHash": "d401aec73182",
       "sourceHashes": {
         "src/views/record-detail-panel.ts": "f6d0308b4df2",
         "src/views/note-body-region.ts": "4660f1f93bd7",
@@ -3847,7 +3847,7 @@
       },
       "note": "Tapping the rendered body swaps it for a textarea. The box grows to its content rather than scrolling inside itself, because the sheet is already a scroll container. What a capture cannot show is the software keyboard: the sheet lifts and shortens against --db-keyboard-inset only when one is open, and no capture has one, so this is the editor at an inset of zero. Focus and the keyboard-avoided sheet are device-verified.",
       "capture": "viewport",
-      "bytes": 72118
+      "bytes": 72127
     },
     {
       "id": "panel-record-detail-sheet-body-editing",
@@ -3860,7 +3860,7 @@
         "src/views/record-detail-panel.ts",
         "src/views/note-body-region.ts"
       ],
-      "layoutHash": "1d45f5f06b18",
+      "layoutHash": "5568b06e6099",
       "sourceHashes": {
         "src/views/record-detail-panel.ts": "f6d0308b4df2",
         "src/views/note-body-region.ts": "4660f1f93bd7",
@@ -3872,7 +3872,7 @@
       },
       "note": "Tapping the rendered body swaps it for a textarea. The box grows to its content rather than scrolling inside itself, because the sheet is already a scroll container. What a capture cannot show is the software keyboard: the sheet lifts and shortens against --db-keyboard-inset only when one is open, and no capture has one, so this is the editor at an inset of zero. Focus and the keyboard-avoided sheet are device-verified.",
       "capture": "viewport",
-      "bytes": 60068
+      "bytes": 59951
     },
     {
       "id": "panel-record-detail-sheet-body-editing",
@@ -3885,7 +3885,7 @@
         "src/views/record-detail-panel.ts",
         "src/views/note-body-region.ts"
       ],
-      "layoutHash": "1d45f5f06b18",
+      "layoutHash": "5568b06e6099",
       "sourceHashes": {
         "src/views/record-detail-panel.ts": "f6d0308b4df2",
         "src/views/note-body-region.ts": "4660f1f93bd7",
@@ -3897,7 +3897,7 @@
       },
       "note": "Tapping the rendered body swaps it for a textarea. The box grows to its content rather than scrolling inside itself, because the sheet is already a scroll container. What a capture cannot show is the software keyboard: the sheet lifts and shortens against --db-keyboard-inset only when one is open, and no capture has one, so this is the editor at an inset of zero. Focus and the keyboard-avoided sheet are device-verified.",
       "capture": "viewport",
-      "bytes": 60999
+      "bytes": 61010
     },
     {
       "id": "panel-record-detail-sheet-body-empty",
@@ -3910,7 +3910,7 @@
         "src/views/record-detail-panel.ts",
         "src/views/note-body-region.ts"
       ],
-      "layoutHash": "6f87d813d398",
+      "layoutHash": "b09734a70f0d",
       "sourceHashes": {
         "src/views/record-detail-panel.ts": "f6d0308b4df2",
         "src/views/note-body-region.ts": "4660f1f93bd7",
@@ -3922,7 +3922,7 @@
       },
       "note": "A record whose note has frontmatter and nothing else. One faint line rather than an empty box: without an affordance the records most in need of a body would be exactly the ones that could not be given one.",
       "capture": "viewport",
-      "bytes": 52112
+      "bytes": 52063
     },
     {
       "id": "panel-record-detail-sheet-body-empty",
@@ -3935,7 +3935,7 @@
         "src/views/record-detail-panel.ts",
         "src/views/note-body-region.ts"
       ],
-      "layoutHash": "6f87d813d398",
+      "layoutHash": "b09734a70f0d",
       "sourceHashes": {
         "src/views/record-detail-panel.ts": "f6d0308b4df2",
         "src/views/note-body-region.ts": "4660f1f93bd7",
@@ -3947,7 +3947,7 @@
       },
       "note": "A record whose note has frontmatter and nothing else. One faint line rather than an empty box: without an affordance the records most in need of a body would be exactly the ones that could not be given one.",
       "capture": "viewport",
-      "bytes": 52914
+      "bytes": 52925
     },
     {
       "id": "panel-record-detail-sheet-body-empty",
@@ -3960,7 +3960,7 @@
         "src/views/record-detail-panel.ts",
         "src/views/note-body-region.ts"
       ],
-      "layoutHash": "64e27194a3db",
+      "layoutHash": "9a4d16eda818",
       "sourceHashes": {
         "src/views/record-detail-panel.ts": "f6d0308b4df2",
         "src/views/note-body-region.ts": "4660f1f93bd7",
@@ -3972,7 +3972,7 @@
       },
       "note": "A record whose note has frontmatter and nothing else. One faint line rather than an empty box: without an affordance the records most in need of a body would be exactly the ones that could not be given one.",
       "capture": "viewport",
-      "bytes": 38897
+      "bytes": 38776
     },
     {
       "id": "panel-record-detail-sheet-body-empty",
@@ -3985,7 +3985,7 @@
         "src/views/record-detail-panel.ts",
         "src/views/note-body-region.ts"
       ],
-      "layoutHash": "64e27194a3db",
+      "layoutHash": "9a4d16eda818",
       "sourceHashes": {
         "src/views/record-detail-panel.ts": "f6d0308b4df2",
         "src/views/note-body-region.ts": "4660f1f93bd7",
@@ -3997,7 +3997,7 @@
       },
       "note": "A record whose note has frontmatter and nothing else. One faint line rather than an empty box: without an affordance the records most in need of a body would be exactly the ones that could not be given one.",
       "capture": "viewport",
-      "bytes": 39856
+      "bytes": 39858
     },
     {
       "id": "panel-record-detail-sheet",
@@ -4012,7 +4012,7 @@
         "src/views/card-field-renderer.ts",
         "src/views/note-body-region.ts"
       ],
-      "layoutHash": "1462d3f27dd8",
+      "layoutHash": "575fb39e3ac1",
       "sourceHashes": {
         "src/views/record-detail-panel.ts": "f6d0308b4df2",
         "src/views/popover-position.ts": "48a6ffec6b38",
@@ -4026,7 +4026,7 @@
       },
       "note": "The phone form of the record detail panel. positionToolbarPopover renders it as a bottom sheet with a grab handle; a permanent close button (reusing db-cell-edit-close) and drag-down on the handle dismiss it where the desktop panel relies on Escape and outside-click. Captured in viewport mode so the fixed sheet docks at the bottom. The note body is the last group, below the properties.",
       "capture": "viewport",
-      "bytes": 92997
+      "bytes": 92928
     },
     {
       "id": "panel-record-detail-sheet",
@@ -4041,7 +4041,7 @@
         "src/views/card-field-renderer.ts",
         "src/views/note-body-region.ts"
       ],
-      "layoutHash": "1462d3f27dd8",
+      "layoutHash": "575fb39e3ac1",
       "sourceHashes": {
         "src/views/record-detail-panel.ts": "f6d0308b4df2",
         "src/views/popover-position.ts": "48a6ffec6b38",
@@ -4055,7 +4055,7 @@
       },
       "note": "The phone form of the record detail panel. positionToolbarPopover renders it as a bottom sheet with a grab handle; a permanent close button (reusing db-cell-edit-close) and drag-down on the handle dismiss it where the desktop panel relies on Escape and outside-click. Captured in viewport mode so the fixed sheet docks at the bottom. The note body is the last group, below the properties.",
       "capture": "viewport",
-      "bytes": 93467
+      "bytes": 93506
     },
     {
       "id": "panel-record-detail-sheet",
@@ -4070,7 +4070,7 @@
         "src/views/card-field-renderer.ts",
         "src/views/note-body-region.ts"
       ],
-      "layoutHash": "ade783c1a018",
+      "layoutHash": "ad3a644047da",
       "sourceHashes": {
         "src/views/record-detail-panel.ts": "f6d0308b4df2",
         "src/views/popover-position.ts": "48a6ffec6b38",
@@ -4084,7 +4084,7 @@
       },
       "note": "The phone form of the record detail panel. positionToolbarPopover renders it as a bottom sheet with a grab handle; a permanent close button (reusing db-cell-edit-close) and drag-down on the handle dismiss it where the desktop panel relies on Escape and outside-click. Captured in viewport mode so the fixed sheet docks at the bottom. The note body is the last group, below the properties.",
       "capture": "viewport",
-      "bytes": 77050
+      "bytes": 76953
     },
     {
       "id": "panel-record-detail-sheet",
@@ -4099,7 +4099,7 @@
         "src/views/card-field-renderer.ts",
         "src/views/note-body-region.ts"
       ],
-      "layoutHash": "ade783c1a018",
+      "layoutHash": "ad3a644047da",
       "sourceHashes": {
         "src/views/record-detail-panel.ts": "f6d0308b4df2",
         "src/views/popover-position.ts": "48a6ffec6b38",
@@ -4113,7 +4113,7 @@
       },
       "note": "The phone form of the record detail panel. positionToolbarPopover renders it as a bottom sheet with a grab handle; a permanent close button (reusing db-cell-edit-close) and drag-down on the handle dismiss it where the desktop panel relies on Escape and outside-click. Captured in viewport mode so the fixed sheet docks at the bottom. The note body is the last group, below the properties.",
       "capture": "viewport",
-      "bytes": 77683
+      "bytes": 77826
     },
     {
       "id": "panel-record-peek",
@@ -4126,9 +4126,9 @@
         "src/views/table-record-peek.ts",
         "src/views/table-renderer.ts"
       ],
-      "layoutHash": "bd765e468644",
+      "layoutHash": "3c0ce507059c",
       "sourceHashes": {
-        "src/views/table-record-peek.ts": "ca49c8ce6aab",
+        "src/views/table-record-peek.ts": "a08f7a4c7469",
         "src/views/table-renderer.ts": "2044cea151d8",
         "styles.css": "9a84a91b5cf1",
         "tools/screenshots/theme.css": "868563a663de",
@@ -4138,7 +4138,7 @@
       },
       "note": "Docks against the right edge of the table it was opened from. Values are display-only text, and properties hidden from the table sit behind the disclosure.",
       "capture": "element",
-      "bytes": 382296
+      "bytes": 385392
     },
     {
       "id": "panel-record-peek",
@@ -4151,9 +4151,9 @@
         "src/views/table-record-peek.ts",
         "src/views/table-renderer.ts"
       ],
-      "layoutHash": "bd765e468644",
+      "layoutHash": "3c0ce507059c",
       "sourceHashes": {
-        "src/views/table-record-peek.ts": "ca49c8ce6aab",
+        "src/views/table-record-peek.ts": "a08f7a4c7469",
         "src/views/table-renderer.ts": "2044cea151d8",
         "styles.css": "9a84a91b5cf1",
         "tools/screenshots/theme.css": "868563a663de",
@@ -4163,7 +4163,7 @@
       },
       "note": "Docks against the right edge of the table it was opened from. Values are display-only text, and properties hidden from the table sit behind the disclosure.",
       "capture": "element",
-      "bytes": 370755
+      "bytes": 373162
     },
     {
       "id": "panel-record-peek",
@@ -4176,9 +4176,9 @@
         "src/views/table-record-peek.ts",
         "src/views/table-renderer.ts"
       ],
-      "layoutHash": "0c23dd051db4",
+      "layoutHash": "7ebabf0bd5a2",
       "sourceHashes": {
-        "src/views/table-record-peek.ts": "ca49c8ce6aab",
+        "src/views/table-record-peek.ts": "a08f7a4c7469",
         "src/views/table-renderer.ts": "2044cea151d8",
         "styles.css": "9a84a91b5cf1",
         "tools/screenshots/theme.css": "868563a663de",
@@ -4188,7 +4188,7 @@
       },
       "note": "Docks against the right edge of the table it was opened from. Values are display-only text, and properties hidden from the table sit behind the disclosure.",
       "capture": "element",
-      "bytes": 42670
+      "bytes": 45223
     },
     {
       "id": "panel-record-peek",
@@ -4201,9 +4201,9 @@
         "src/views/table-record-peek.ts",
         "src/views/table-renderer.ts"
       ],
-      "layoutHash": "0c23dd051db4",
+      "layoutHash": "7ebabf0bd5a2",
       "sourceHashes": {
-        "src/views/table-record-peek.ts": "ca49c8ce6aab",
+        "src/views/table-record-peek.ts": "a08f7a4c7469",
         "src/views/table-renderer.ts": "2044cea151d8",
         "styles.css": "9a84a91b5cf1",
         "tools/screenshots/theme.css": "868563a663de",
@@ -4213,7 +4213,7 @@
       },
       "note": "Docks against the right edge of the table it was opened from. Values are display-only text, and properties hidden from the table sit behind the disclosure.",
       "capture": "element",
-      "bytes": 43134
+      "bytes": 44832
     },
     {
       "id": "panel-sort-calendar-empty",
@@ -5606,7 +5606,7 @@
         "src/views/table-layout.ts": "a39067d21b59",
         "src/views/cell-renderer.ts": "6b23762ee384",
         "src/views/file-title-display.ts": "53ac58228638",
-        "src/views/table-record-peek.ts": "ca49c8ce6aab",
+        "src/views/table-record-peek.ts": "a08f7a4c7469",
         "styles.css": "9a84a91b5cf1",
         "tools/screenshots/theme.css": "868563a663de",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -5640,7 +5640,7 @@
         "src/views/table-layout.ts": "a39067d21b59",
         "src/views/cell-renderer.ts": "6b23762ee384",
         "src/views/file-title-display.ts": "53ac58228638",
-        "src/views/table-record-peek.ts": "ca49c8ce6aab",
+        "src/views/table-record-peek.ts": "a08f7a4c7469",
         "styles.css": "9a84a91b5cf1",
         "tools/screenshots/theme.css": "868563a663de",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -5674,7 +5674,7 @@
         "src/views/table-layout.ts": "a39067d21b59",
         "src/views/cell-renderer.ts": "6b23762ee384",
         "src/views/file-title-display.ts": "53ac58228638",
-        "src/views/table-record-peek.ts": "ca49c8ce6aab",
+        "src/views/table-record-peek.ts": "a08f7a4c7469",
         "styles.css": "9a84a91b5cf1",
         "tools/screenshots/theme.css": "868563a663de",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -5708,7 +5708,7 @@
         "src/views/table-layout.ts": "a39067d21b59",
         "src/views/cell-renderer.ts": "6b23762ee384",
         "src/views/file-title-display.ts": "53ac58228638",
-        "src/views/table-record-peek.ts": "ca49c8ce6aab",
+        "src/views/table-record-peek.ts": "a08f7a4c7469",
         "styles.css": "9a84a91b5cf1",
         "tools/screenshots/theme.css": "868563a663de",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -5948,7 +5948,7 @@
       },
       "note": "Two weeks at one column per day; the April band marks the month boundary and the today line sits at 25 March 13:45.",
       "capture": "viewport",
-      "bytes": 147239
+      "bytes": 146959
     },
     {
       "id": "timeline-view",

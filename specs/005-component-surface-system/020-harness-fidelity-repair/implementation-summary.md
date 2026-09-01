@@ -281,6 +281,35 @@ withdrawn by `030`, and closing it means taking the stylesheet lane and moving c
 difference with no functional consequence. Recorded with its numbers so it stays visible rather than
 closed by silence, which is the same disposition this phase took on the 169x34 cell.
 
+**A product divergence the capture set proved, because one fixture holds both surfaces at once.**
+`panel-record-peek` photographs the table and the peek panel docked beside it, and in that one image
+the same record's Billing read as a purple badge in the cell and as bare text six inches to its
+right. `table-record-peek.ts` wrote `textContent` for every property, while the table cell, the card
+field, the record detail panel and all five group headers route an option-typed value through a
+`.status-badge` coloured from its own option. Four surfaces agreed and one did not, on one screen.
+
+Fixed in the panel rather than in the fixture, because the fixture was faithful: `renderProperty`
+now badges a status, select or multi-select value the way `renderGroupLabel` and the cell renderer
+do, gives a multi-select one badge per value inside the container the cell uses, keeps grey for an
+unregistered value rather than falling back to text, and leaves every other type as text. Three of
+the four new tests were observed red against the old behaviour; the fourth — a non-option column
+stays text — passes both ways on purpose, because its job is to catch the over-reach rather than the
+defect.
+
+**Its test fixture had the same shape defect as the code under test.** `table-record-peek.test.ts`
+passed `config = {} as unknown as ViewConfig` to every case, which survived only because nothing in
+the panel had ever read the config. The first line that did turned all six existing tests red with
+`Cannot read properties of undefined`. An empty object is a shape no caller passes; the fixture is
+now a minimal real one.
+
+**Seven more call sites were flattening tones after the table was fixed.** `panels.mjs` carries its
+own `badge(text, tone)` helper — a different name from `pill`, so the new rule's `pill(r.FIELD` form
+did not see it — and it hardcoded `orange`, `gray` and `blue` across the record detail panel and both
+sheet fixtures. The same value was therefore purple in a capture of a table and orange in a capture
+of the panel beside it. The rule is no longer keyed to a helper name: any two-argument call taking a
+row field and a literal tone is the shape, whatever it is called. Observed red by reintroducing one
+through the differently-named helper.
+
 **Why no existing lane caught the cover family, checked rather than assumed.** `surface-census.mjs`
 is the instrument built for exactly this gap — buildable from the source, rendered by no fixture —
 and it reported none. It is not wrong: its `SURFACE_WORDS` filter scopes both inventories to overlay
@@ -308,9 +337,22 @@ the summary line, the log path, and a file holding both streams. Disarmed, and t
 that correctly reddened on the control file — `comments` and `folder-docs`, which found it carried no
 module banner — went green again with it removed.
 
-The flake itself stays open and unexplained. It is recorded because it is a property of the evidence:
-this lane's count is not deterministic under load, a single green from it is weaker than it reads,
-and the next occurrence will now leave the detail behind that this one did not.
+**The logging earned itself on its first red, and corrected the reading of the earlier two.** The
+next `placement RED` was not a flake: the log named it in one line — `TypeError: Cannot read
+properties of undefined (reading 'computedFields')` inside `renderProperty`, thrown from
+`openTableRecordPeek`, because the harness constructed the peek with `config: {}` at three sites and
+the panel had just started reading the column's display type. A section that throws loses **all** of
+its checks, which is why the totals read `377/380` rather than one check short: the denominator moves
+too. That is the same signature as the two earlier reds — `384/386`, `383/386`, both a shrunken pair
+rather than a failed assertion — so **"intermittent geometry flake" was probably the wrong reading,
+and a thrown section is the better one.** Neither earlier run is diagnosable after the fact, and no
+cause is claimed for them; the point is that the shape now has a known explanation it did not have,
+found by a log rather than by a re-run.
+
+Fixed in the harness, not by making the panel defensive: `config: {}` is a shape no caller passes,
+and `?.` there would be code guarding a state the type forbids. The three sites now build the same
+minimal real config the unit tests do. The panel's own tests carried the identical fixture defect and
+turned red the same way — six of them, before any new assertion was written.
 
 **The harness's largest remaining supply was never in this phase's scope, and two of the 63 lifted
 checks carry it.** `verify-placement.mjs` sets `--keyboard-height` on the document element at three

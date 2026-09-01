@@ -7415,8 +7415,12 @@ await section("the peek's layer sits inside the token scale", async () => {
       { key: "owner", label: "Owner", type: "text" },
     ];
 
+    // A real config, not `{}`. The panel reads the column's display type to decide whether a value
+    // is a badge, and `{}` is a shape no caller passes — it threw here the first time the panel
+    // needed one, and a thrown section takes its whole check count with it.
+    const peekConfig = { viewType: "table", schema: { columns, computedFields: [] }, titleField: "file.name" };
     openTableRecordPeek({
-      anchor, row, config: {}, visibleColumns: columns, allColumns: columns, container,
+      anchor, row, config: peekConfig, visibleColumns: columns, allColumns: columns, container,
     });
     const peek = container.querySelector(".db-record-peek-panel");
 
@@ -9209,10 +9213,11 @@ await section("the record peek owns what it subscribes", async () => {
       file: { path: `${name}.md`, name: `${name}.md`, basename: name },
       frontmatter: { status: "Open" }, computed: {},
     });
+    const peekConfig = { viewType: "table", schema: { columns, computedFields: [] }, titleField: "file.name" };
     const open = (name) => {
       const anchor = host.createDiv({ cls: "anchor" });
       openTableRecordPeek({
-        anchor, row: rowFor(name), config: {},
+        anchor, row: rowFor(name), config: peekConfig,
         visibleColumns: columns, allColumns: columns, container: host,
       });
       return anchor;

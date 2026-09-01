@@ -53,14 +53,20 @@ const OPTION_FIELDS = ["cycle", "payment", "category"];
 /**
  * Two shapes that pick a tone at the call site instead of from the value.
  *
- * `pill(r.field, ...)` is the one that flattened the table columns. The ternary is the same mistake
- * written inline — `status-color-${r.category === "Business" ? "blue" : "green"}` never went through
- * `pill` at all, so a rule that only watched that helper reported the multi-select badge clean while
- * it painted three categories one colour.
+ * The first rule is not keyed to `pill`, deliberately. Naming that one helper is how the record
+ * detail panel kept its own `badge(row.cycle, "orange")` for three surfaces after the table was
+ * fixed — so the same value was purple in a capture of a table and orange in a capture of the panel
+ * beside it, which says the plugin colours by surface. It does not: the colour is the option's and
+ * follows the value everywhere. Any two-argument call taking a row field and a literal tone is the
+ * shape, whatever the helper is called.
+ *
+ * The ternary is the same mistake written inline — `status-color-${r.category === "Business" ?
+ * "blue" : "green"}` went through no helper at all, so a rule watching call names alone reported
+ * the multi-select badge clean while it painted three categories one colour.
  */
 const HAND_PICKED = [
-  { why: "pill(r.FIELD, ...)", pattern: /\bpill\(\s*r\.(\w+)/g },
-  { why: "an inline tone ternary", pattern: /\br\.(\w+)\s*===\s*"[^"]*"\s*\?\s*"[a-z]+"\s*:\s*"[a-z]+"/g },
+  { why: "a row field with a literal tone", pattern: /\b\w+\(\s*\w+\.(\w+)\s*,\s*"[a-z]+"\s*\)/g },
+  { why: "an inline tone ternary", pattern: /\b\w+\.(\w+)\s*===\s*"[^"]*"\s*\?\s*"[a-z]+"\s*:\s*"[a-z]+"/g },
 ];
 
 const TONE = /status-color-([a-z]+)/;
