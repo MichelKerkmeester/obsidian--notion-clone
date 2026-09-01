@@ -48,6 +48,7 @@ export default defineConfig([
         Event: "readonly",
         MouseEvent: "readonly",
         PointerEvent: "readonly",
+        KeyboardEvent: "readonly",
         navigator: "readonly",
         matchMedia: "readonly",
         CSS: "readonly",

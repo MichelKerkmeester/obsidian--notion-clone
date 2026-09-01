@@ -87,8 +87,28 @@ have a number are still open.*
       both bounds; `clamp` already answers an inverted range with its lower bound, so the guard could
       not change an outcome. Verified by removing it — the suite stays green — and the two
       narrow-bounds cases now say what they actually pin, which is `clamp`'s choice and not a guard.
-- [ ] Filter and Sort expose the same role, focus behaviour and keyboard contract — asserted, not
-      inspected. **No check.**
+- [x] Filter and Sort expose the same role, focus behaviour and keyboard contract — asserted, not
+      inspected. **No check.** **Inspected 2026-09-01, and the assertion was false.**
+      **Five of six dimensions diverged.** Both panels driven through their own shipped renderers
+      and compared to *each other*: `role` filter `"dialog"` / sort `"(none)"`; accessible name
+      `present` / `absent`; focus on open `the panel` / `something outside it`; Escape closes
+      `true` / `false`; Tab wraps inside `true` / `false`. Only the effective `tabindex` agreed, and
+      only because a `div` defaults to −1.
+      **What that cost a reader.** Opening Sort with a keyboard put focus nowhere, announced nothing,
+      offered no way out, and let Tab walk straight into the page behind it. These two sit behind
+      adjacent toolbar buttons and share a stylesheet class — the shape where a difference survives,
+      because they look identical and nobody checks that they behave identically.
+      **Fixed by giving the sort panel the contract the filter panel already had**: `role="dialog"`,
+      an `aria-label`, `tabIndex = -1`, `trapFocus` with an `onEscape` that closes and returns focus
+      to the anchor, and a focus call on open — plus the trap teardown on re-render the filter panel
+      already does. All six now agree.
+      **Compared to each other, never to a list.** A list of expected attributes has to be updated
+      when the contract moves and is then the thing that is wrong; a comparison stays true to
+      whatever the pair agrees on, and where they differ the detail prints both values so which one
+      is right stays a legible question rather than an implied one.
+      **The premise is its own row.** A panel with one focusable child cannot show a Tab trap, so
+      *both panels render, so there is something to compare* asserts the focusable count too — an
+      empty panel would report perfect agreement about nothing.
 - [x] **Removing any one class from a panel changes a measured value** — no surface may depend on an
       undeclared piggyback. **Built 2026-09-01.** It was the strongest row in the packet and the one
       with nothing behind it, which is the usual fate of a criterion phrased as a universal: easy to

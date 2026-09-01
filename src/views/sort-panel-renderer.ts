@@ -19,6 +19,7 @@ import { DatabaseViewState } from "./view-state-store";
 import { PANEL_POPOVER, positionToolbarPopover } from "./popover-position";
 import { createDropdownField } from "./dropdown-field";
 import { isHTMLElement } from "./dom-guards";
+import { trapFocus } from "./interaction-scope";
 import { renderDropdownPropertyTypeIcon, toPropertyDropdownOption } from "./property-type-icon";
 import { getViewRuleColumns, removeSortRuleAt } from "./view-rule-operations";
 
@@ -40,6 +41,7 @@ export class SortPanelRenderer {
   private panelEl: HTMLElement | null = null;
   private anchorEl: HTMLElement | null = null;
   private draggedRuleIndex: number | null = null;
+  private removeFocusTrap: (() => void) | null = null;
 
   /** The live panel, wherever it currently is. On a phone it is portalled out of the container. */
   getPanel(): HTMLElement | null {
@@ -55,6 +57,8 @@ export class SortPanelRenderer {
     anchorEl?: HTMLElement
   ): void {
     const savedScroll = this.panelEl?.scrollTop ?? 0;
+    this.removeFocusTrap?.();
+    this.removeFocusTrap = null;
     this.panelEl?.remove();
     this.panelEl = null;
     if (!visible) {
@@ -63,10 +67,28 @@ export class SortPanelRenderer {
     }
     if (anchorEl?.isConnected) this.anchorEl = anchorEl;
 
-    const panel = containerEl.createDiv({ cls: "db-sort-panel db-filter-panel", attr: { id: "db-sort-panel" } });
+    // The same dialog contract the filter panel already had.
+    //
+    // These two sit behind adjacent toolbar buttons and share a stylesheet class, which is exactly
+    // the shape where a difference survives: they look identical, so nobody checks that they behave
+    // identically. Compared against each other rather than read, five of six dimensions diverged —
+    // no role, no accessible name, focus left outside the panel, Escape did nothing, and Tab walked
+    // straight out of it. A reader who opened Sort with a keyboard could not close it.
+    const panel = containerEl.createDiv({
+      cls: "db-sort-panel db-filter-panel",
+      attr: { id: "db-sort-panel", role: "dialog", "aria-label": t("toolbar.sort") },
+    });
+    panel.tabIndex = -1;
     const header = containerEl.querySelector(".db-header") || containerEl.querySelector(".db-toolbar");
     if (header?.parentElement) header.parentElement.insertBefore(panel, header.nextSibling);
     this.panelEl = panel;
+    this.removeFocusTrap = trapFocus(panel, {
+      onEscape: () => {
+        actions.close();
+        this.anchorEl?.focus({ preventScroll: true });
+      },
+    });
+    panel.focus?.({ preventScroll: true });
 
     const top = panel.createDiv({ cls: "db-panel-header" });
     top.createSpan({ cls: "db-panel-title", text: t("toolbar.sort") });

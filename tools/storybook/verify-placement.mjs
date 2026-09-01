@@ -111,6 +111,8 @@ import { attachLongPress, isTouchDevice } from "${join(REPO, "src/data/touch-env
 import { attachTitleOpenAffordance, setupTitleCellTap, openTableRecordPeek, closeTableRecordPeek } from "${join(REPO, "src/views/table-record-peek")}";
 import { openDropdownMenu } from "${join(REPO, "src/views/dropdown-field")}";
 import { ColumnManagerRenderer } from "${join(REPO, "src/views/column-manager-renderer")}";
+import { FilterPanelRenderer } from "${join(REPO, "src/views/filter-panel-renderer")}";
+import { SortPanelRenderer } from "${join(REPO, "src/views/sort-panel-renderer")}";
 import { openRecordDetailPanel } from "${join(REPO, "src/views/record-detail-panel")}";
 import { RowMenu } from "${join(REPO, "src/views/row-menu")}";
 import { ColumnMenu } from "${join(REPO, "src/views/column-menu")}";
@@ -131,6 +133,7 @@ globalThis.__a = { positionToolbarPopover, placeSheet, applySheetChrome, attachS
 globalThis.__flick = { shouldFlickDismiss, FLICK_PX_PER_MS, FLICK_MIN_PX, STALE_SAMPLE_MS };
 globalThis.__layer = { openTableRecordPeek, closeTableRecordPeek, openDropdownMenu };
 globalThis.__columns = { ColumnManagerRenderer };
+globalThis.__panels = { FilterPanelRenderer, SortPanelRenderer };
 `);
 
 execFileSync(join(REPO, "node_modules/.bin/esbuild"), [
@@ -7545,10 +7548,138 @@ await section("the header keeps its height when the view type changes", async ()
       + `would need re-tuning every time the scale moves`);
 });
 
+// ───────────────────────────────────────────────────────────────────
+// FILTER AND SORT ANSWER A KEYBOARD THE SAME WAY
+// ───────────────────────────────────────────────────────────────────
+//
+// `001` asks that Filter and Sort expose the same role, focus behaviour and keyboard contract, and
+// marks it "asserted, not inspected". The two panels share a stylesheet class and sit behind
+// adjacent toolbar buttons, which is exactly the shape where a difference survives: they look
+// identical, so nobody checks that they behave identically.
+//
+// Both are driven through their own shipped renderers and compared to EACH OTHER rather than to a
+// list of expected attributes. A list would have to be updated whenever the contract moves, and
+// then it would be the list that was wrong; a comparison stays true to whatever the pair agrees on.
+// Which of the two is right is a separate question — and where they disagree, the detail names both
+// values so the answer is legible rather than implied.
+
+const panelParityResults = [];
+
+await section("filter and sort answer a keyboard the same way", async () => {
+  const page = await browser.newPage({ viewport: VIEWPORT, reducedMotion: "reduce" });
+  await page.setContent(page_html);
+  await page.addStyleTag({ content: readFileSync(join(REPO, "styles.css"), "utf8") + HOST_BARE_CONTROLS });
+  await page.addScriptTag({ content: shimJs + "\ninstallObsidianDomShim(globalThis);" });
+  await page.addScriptTag({ content: positionerJs });
+
+  const measured = await page.evaluate(() => {
+    const { FilterPanelRenderer, SortPanelRenderer } = globalThis.__panels;
+    const host = document.querySelector(".note-database-container");
+
+    const columns = [
+      { key: "file.name", label: "Name", type: "text" },
+      { key: "status", label: "Status", type: "text" },
+    ];
+    const config = { schema: { columns }, viewType: "table", columnOrder: columns.map((c) => c.key) };
+
+    const probe = (which) => {
+      const container = host.createDiv({ cls: "db-panel-host" });
+      container.createDiv({ cls: "db-toolbar" });
+      const anchor = container.createEl("button", { cls: "anchor", text: which });
+      let closed = 0;
+      const actions = {
+        save: () => undefined, saveState: () => undefined, refresh: () => undefined,
+        close: () => { closed += 1; },
+      };
+      // Each panel carries at least one rule, so the focus and Tab questions have somewhere to go.
+      // An empty panel has no focusable child, and a trap over nothing is indistinguishable from
+      // no trap at all — which is the exact difference being measured.
+      const state = {
+        hiddenColumns: new Set(), filters: [], sortRules: [{ field: "status", direction: "asc" }],
+        filterTree: undefined, sortColumn: undefined, sortDirection: "asc",
+      };
+      const renderer = which === "filter" ? new FilterPanelRenderer() : new SortPanelRenderer();
+      // The two renderers take `state` and `config` in opposite orders, which is its own small
+      // inconsistency and is why each call is written out rather than shared.
+      if (which === "filter") renderer.render(container, true, state, config, actions, anchor);
+      else renderer.render(container, true, config, state, actions, anchor);
+
+      const panel = renderer.getPanel();
+      if (!panel) return { which, built: false };
+
+      const focusedOnOpen = document.activeElement === panel
+        ? "the panel"
+        : panel.contains(document.activeElement)
+          ? "a child of the panel"
+          : "something outside it";
+
+      // Escape driven on the panel, not asserted from the source. A handler that exists and is
+      // registered on the wrong node answers a reading and not a key press.
+      panel.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true, cancelable: true }));
+      const escapeClosed = closed > 0;
+
+      // Tab from the last focusable child: a trap wraps to the first, no trap lets it leave.
+      const focusable = [...panel.querySelectorAll(
+        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
+      )].filter((el) => !el.disabled);
+      let tabWrapped = null;
+      if (focusable.length > 1) {
+        focusable[focusable.length - 1].focus();
+        const before = document.activeElement;
+        panel.dispatchEvent(new KeyboardEvent("keydown", { key: "Tab", bubbles: true, cancelable: true }));
+        tabWrapped = document.activeElement !== before && document.activeElement === focusable[0];
+      }
+
+      const result = {
+        which,
+        built: true,
+        role: panel.getAttribute("role") || "(none)",
+        labelled: Boolean(panel.getAttribute("aria-label") || panel.getAttribute("aria-labelledby")),
+        tabIndex: panel.tabIndex,
+        focusedOnOpen,
+        escapeClosed,
+        tabWrapped,
+        focusables: focusable.length,
+      };
+      container.remove();
+      return result;
+    };
+
+    return { filter: probe("filter"), sort: probe("sort") };
+  });
+
+  const record = (name, pass, detail) => panelParityResults.push({ name, pass, detail });
+  const { filter, sort } = measured;
+
+  record("both panels render, so there is something to compare",
+    filter.built && sort.built && filter.focusables > 1 && sort.focusables > 1,
+    `filter built=${filter.built} with ${filter.focusables} focusable child(ren); `
+      + `sort built=${sort.built} with ${sort.focusables}. A panel with one focusable child cannot `
+      + `show a Tab trap, so the count is part of the premise rather than an aside`);
+
+  const DIMENSIONS = [
+    ["role", (p) => p.role],
+    ["accessible name", (p) => (p.labelled ? "present" : "absent")],
+    ["panel tabindex", (p) => p.tabIndex],
+    ["focus on open", (p) => p.focusedOnOpen],
+    ["Escape closes", (p) => p.escapeClosed],
+    ["Tab wraps inside", (p) => p.tabWrapped],
+  ];
+  for (const [name, read] of DIMENSIONS) {
+    const a = read(filter);
+    const b = read(sort);
+    record(`filter and sort agree on ${name}`,
+      filter.built && sort.built && String(a) === String(b),
+      `filter=${JSON.stringify(a)} sort=${JSON.stringify(b)}. Compared to each other rather than to `
+        + `an expected value, so this stays true when the contract moves; where they differ, which `
+        + `one is right is a separate question and both numbers are here to answer it`);
+  }
+});
+
 results.push(...phoneResults, ...menuResults, ...addViewDesktopResults, ...addViewPhoneResults,
   ...grammarResults, ...addViewGrammar, ...motionResults, ...reducedResults, ...desktopMenuResults, ...cellResults, ...sheetResults, ...selectCellResults, ...selectPhoneResults, ...rowPhoneResults, ...rowNarrowResults,
   ...desktopPanelResults, ...stateResults, ...keyboardParityResults, ...familyResults, ...touchResults, ...overlapResults, ...rhythmResults, ...rendererRhythmResults,
-  ...liftedResults, ...inlineEditResults, ...numberParityResults, ...peekLayerResults, ...propertyRowResults, ...menuEdgeResults, ...headerRhythmResults, ...sectionFailures);
+  ...liftedResults, ...inlineEditResults, ...numberParityResults, ...peekLayerResults, ...propertyRowResults, ...menuEdgeResults, ...headerRhythmResults, ...panelParityResults, ...sectionFailures);
 
 await browser.close();
 rmSync(work, { recursive: true, force: true });
