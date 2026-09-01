@@ -1,7 +1,7 @@
 {
   "holder": null,
-  "acquiredAt": "2026-09-01T14:20:00Z",
-  "baselineHash": "0c4581aea761",
+  "acquiredAt": "2026-09-01T15:10:00Z",
+  "baselineHash": "12dd57157348",
   "baselineCommit": "be6c16e",
   "history": [
     {
@@ -841,6 +841,27 @@
       "at": "2026-09-01T14:45:00Z",
       "hash": "0c4581aea761",
       "note": "Recaptured and read. The dark picker now shows a 4x4 grid with no orphan row, brown reading as a muted tan against orange's lighter one, and slate distinguishable from gray. All sixteen entries are distinct on both the chip and the swatch, in both themes \u2014 asserted as two separate properties because a pair sharing a background while differing in foreground is still distinguishable. Per-image operator sign-off still owed."
+    },
+    {
+      "event": "acquire",
+      "phase": "000-surface-contract-and-truthful-harness",
+      "at": "2026-09-01T15:10:00Z",
+      "hash": "0c4581aea761",
+      "note": "Second cluster off the capture review's triage queue. The mini calendar's selected day is filled with --background-modifier-hover, the HOVER token \u2014 measured at rgba(255,255,255,0.055) in dark and rgba(0,0,0,0.043) in light, which composite to 1.17:1 and 1.1:1 against the popover they sit on, against WCAG 1.4.11's 3:1 for a non-text indicator. The reviewer's phrasing was 'states with no visible difference' and that is too strong: the three states DO produce three distinct signatures. What they do not produce is a visible one, and the check separates those two claims rather than merging them."
+    },
+    {
+      "event": "edit",
+      "phase": "000-surface-contract-and-truthful-harness",
+      "at": "2026-09-01T15:30:00Z",
+      "hash": "12dd57157348",
+      "note": "Selection moves off the hover token onto the accent: 1.17:1 to 4.13:1 in dark, 1.1:1 to 4.81:1 in light against the popover it sits on. The view cell's hover and selected rules were sharing one declaration and are now separate, so a selected cell and a hovered one are no longer the same pixels. AND A REGRESSION THE CHECK COULD NOT SEE, FOUND BY OPENING THE CAPTURE: the is-today and is-selected rules carry equal specificity, so source order gave today's accent NUMERAL the win over selection's new accent FILL, and day 25 rendered as an empty pill. That is every reader's view whenever today falls inside the selected week. Two combination rules added, and the check extended to build the combined state \u2014 it had been building the three states separately and could never have caught it."
+    },
+    {
+      "event": "release",
+      "phase": "000-surface-contract-and-truthful-harness",
+      "at": "2026-09-01T15:35:00Z",
+      "hash": "12dd57157348",
+      "note": "Recaptured and read, twice \u2014 the first read is what found the empty pill. The second shows all seven selected days carrying their numerals, today among them, with the event underlines intact. Per-image operator sign-off still owed."
     }
   ],
   "outstanding": [

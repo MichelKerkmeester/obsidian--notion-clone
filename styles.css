@@ -14891,13 +14891,37 @@ body.is-phone .note-database-container .db-record-detail-panel {
   color: var(--text-faint);
 }
 
+/* The accent, not the hover tint. Selection was drawn with `--background-modifier-hover` — a 4 to 5
+   per cent wash that composites to 1.17:1 in dark and 1.1:1 in light against the popover it sits on,
+   under WCAG 1.4.11's 3:1 for a non-text indicator. The state a date picker exists to communicate
+   was its faintest, and it was borrowing the token that means "the pointer is over this".
+
+   `today` keeps accent TEXT on no fill, so the two stay distinguishable: today is an accent numeral,
+   selected is a numeral on accent. */
 .note-database-container .db-calendar-mini-day.is-selected .db-calendar-mini-day-num {
-  background: var(--background-modifier-hover)
+  background: var(--interactive-accent);
+  color: var(--text-on-accent);
 }
 
 .note-database-container .db-calendar-mini-day.is-today .db-calendar-mini-day-num {
   color: var(--interactive-accent);
 }
+
+/* Today AND selected. These two rules carry equal specificity, so source order decided it and
+   `is-today` came later — an accent numeral painted on the accent fill selection had just gained,
+   and the day vanished. Found by opening the capture, not by the check beside it, which builds the
+   three states separately and never combines them. Whenever today falls inside the selected week
+   this is every reader's view of it. The fill wins: a day that is both is selected first. */
+.note-database-container .db-calendar-mini-day.is-today.is-selected .db-calendar-mini-day-num {
+  color: var(--text-on-accent);
+}
+
+/* Today AND selected. These two rules carry equal specificity, so source order decided it and
+   `is-today` came later — an accent numeral painted on the accent fill selection had just gained,
+   and the day vanished. Found by opening the capture, not by the check beside it, which builds the
+   three states separately and never combines them. Whenever today falls inside the selected week
+   this is every reader's view of it. The fill wins: a day that is both is selected first. */
+
 
 /* Event marker: a short accent underline beneath the number. */
 .note-database-container .db-calendar-mini-day-dot {
@@ -14940,14 +14964,27 @@ body.is-phone .note-database-container .db-record-detail-panel {
   font-weight: 600;
 }
 
-.note-database-container .db-calendar-mini-view-cell:hover,
-.note-database-container .db-calendar-mini-view-cell.is-selected {
+.note-database-container .db-calendar-mini-view-cell:hover {
   background: var(--background-modifier-hover);
+}
+
+/* Split from `:hover` above, which it used to share a declaration with — so a selected cell and a
+   hovered one were the same pixel for pixel, and the selection carried no state of its own. */
+.note-database-container .db-calendar-mini-view-cell.is-selected {
+  background: var(--interactive-accent);
+  color: var(--text-on-accent);
 }
 
 .note-database-container .db-calendar-mini-view-cell.is-today {
   color: var(--interactive-accent);
 }
+
+/* Same collision, same answer, on the view cell. */
+.note-database-container .db-calendar-mini-view-cell.is-today.is-selected {
+  color: var(--text-on-accent);
+}
+
+
 
 .note-database-container .db-calendar-mini-view-label {
   overflow: hidden;

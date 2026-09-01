@@ -221,9 +221,34 @@ All four checks were observed red on the tree as received, and the layout one re
 **The attribution is loose and worth saying.** The lane was taken under `004`, and this is not
 `004`'s work — it came out of this review. There is no palette packet to hold it.
 
-*Still on the queue:* the date picker's selected-day contrast at 1.10:1, the unstyled `#0000EE` link
-in dark, truncation where the row still has slack, and the `-mobile-*` captures that are byte-
-identical to their desktop counterparts.
+### The second cluster, and the thing a check could not have caught
+
+**The selected day was drawn with the HOVER token.** Measured: `rgba(255, 255, 255, 0.055)` in dark
+and `rgba(0, 0, 0, 0.043)` in light — a 4 to 5 per cent wash compositing to **1.17:1** and **1.1:1**
+against the popover it sits on, under WCAG 1.4.11's 3:1 for a non-text indicator. On the view cell,
+`:hover` and `.is-selected` were literally the same declaration.
+
+*The reviewer's phrasing was "states with no visible difference", and that is too strong.* The three
+states DO produce three distinct signatures. What they do not produce is a **visible** one, and the
+check keeps those two claims apart rather than merging them. Selection now carries the accent:
+**4.13:1** dark, **4.81:1** light.
+
+**Then reading the recapture found a regression the check had just passed.** `is-today` and
+`is-selected` carry equal specificity, so source order gave today's accent NUMERAL the win over
+selection's new accent FILL — and **day 25 rendered as an empty pill**. That is not a corner case: it
+is every reader's view whenever today falls inside the selected week.
+
+The check could never have seen it. It built the three states **separately** and never combined them.
+It now builds the combination too, and goes red at `rgb(107, 116, 224) on rgb(107, 116, 224), at
+1:1` when the combination rules are removed.
+
+**Its floor is 3:1, not AA's 4.5, and the reason is ownership rather than lenience.** The pair is
+`--text-on-accent` on `--interactive-accent` and both are the HOST's, re-themeable by the reader; the
+default dark pair measures **4.04**. The plugin cannot raise that without overriding an accent the
+user chose, which is worse than the shortfall. The number is recorded here so it stays visible.
+
+*Still on the queue:* the unstyled `#0000EE` link in dark, truncation where the row still has slack,
+and the `-mobile-*` captures that are byte-identical to their desktop counterparts.
 
 ---
 

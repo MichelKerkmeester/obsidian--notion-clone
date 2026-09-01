@@ -9469,10 +9469,165 @@ await section("sixteen named colours are sixteen different colours", async () =>
   }
 });
 
+// ───────────────────────────────────────────────────────────────────
+// THE SELECTED DAY IS THE ONE THING THE PICKER EXISTS TO SHOW
+// ───────────────────────────────────────────────────────────────────
+//
+// A capture reviewer reported the selected day at 1.10:1 against its own panel. Measured, the fill
+// is `rgba(255, 255, 255, 0.055)` in dark and `rgba(0, 0, 0, 0.043)` in light — a 4 to 5 per cent
+// wash, and it is `--background-modifier-hover`, the HOVER token. On the view-cell rule `:hover` and
+// `.is-selected` are literally the same declaration.
+//
+// So the three states a date picker has to keep apart — plain, selected, today — differ by one
+// barely-visible property each, and the one the picker exists to communicate is the faintest.
+//
+// CONTRAST AGAINST THE PANEL, NOT AGAINST NOTHING. A fill is only visible against what it sits on,
+// so the ratio is computed against the popover's own background rather than against white. The floor
+// is WCAG 1.4.11's 3:1 for a non-text UI indicator, which is the standard that actually governs
+// "you can see which day is selected".
+
+const dayStateResults = [];
+
+await section("the selected day is the one thing the picker exists to show", async () => {
+  const page = await browser.newPage({ viewport: VIEWPORT, reducedMotion: "reduce" });
+  await page.setContent(page_html);
+  // THE HOST'S OWN TOKENS, because this section reads colours rather than boxes. Without
+  // `theme.css` every `var(--background-modifier-hover)` resolves to nothing and all three states
+  // read `rgba(0, 0, 0, 0)` — which the first run reported as "three identical states", a product
+  // verdict drawn from a missing stylesheet. The premise row below is what turns that into a
+  // refusal instead of a finding.
+  await page.addStyleTag({ content: readFileSync(join(REPO, "styles.css"), "utf8") + HOST_BARE_CONTROLS });
+  await page.addStyleTag({ content: readFileSync(join(REPO, "tools/screenshots/theme.css"), "utf8") });
+  await page.addScriptTag({ content: shimJs + "\ninstallObsidianDomShim(globalThis);" });
+  await page.addScriptTag({ content: positionerJs });
+
+  const measured = await page.evaluate(() => {
+    const host = document.querySelector(".note-database-container");
+
+    const parse = (value) => {
+      const m = String(value).match(/rgba?\(([^)]+)\)/);
+      if (!m) return null;
+      const parts = m[1].split(",").map((n) => parseFloat(n));
+      return { r: parts[0], g: parts[1], b: parts[2], a: parts.length > 3 ? parts[3] : 1 };
+    };
+    const over = (top, bottom) => ({
+      r: top.r * top.a + bottom.r * (1 - top.a),
+      g: top.g * top.a + bottom.g * (1 - top.a),
+      b: top.b * top.a + bottom.b * (1 - top.a),
+      a: 1,
+    });
+    const lum = (c) => {
+      const f = (v) => {
+        const x = v / 255;
+        return x <= 0.03928 ? x / 12.92 : ((x + 0.055) / 1.055) ** 2.4;
+      };
+      return 0.2126 * f(c.r) + 0.7152 * f(c.g) + 0.0722 * f(c.b);
+    };
+    const ratio = (a, b) => {
+      const [hi, lo] = [lum(a), lum(b)].sort((x, y) => y - x);
+      return (hi + 0.05) / (lo + 0.05);
+    };
+
+    const read = (themeClass) => {
+      document.body.className = themeClass;
+      const popover = host.createDiv({ cls: "db-calendar-mini-popover db-surface" });
+      const grid = popover.createDiv({ cls: "db-calendar-mini-grid" });
+      const make = (cls) => {
+        const day = grid.createEl("button", { cls: `db-calendar-mini-day ${cls}`.trim() });
+        const num = day.createSpan({ cls: "db-calendar-mini-day-num", text: "9" });
+        const style = getComputedStyle(num);
+        return {
+          bg: style.backgroundColor, color: style.color,
+          weight: style.fontWeight, outline: style.outlineWidth, border: style.borderWidth,
+        };
+      };
+      const plain = make("");
+      const selected = make("is-selected");
+      const today = make("is-today");
+      // The COMBINATION, which is every reader's view whenever today falls in the selected week.
+      // Building the three states separately cannot see it: `is-today` and `is-selected` carry
+      // equal specificity, so source order decided the colour, and an accent numeral landed on the
+      // accent fill — the day rendered as an empty pill. That was found by opening the capture
+      // after this section was already green.
+      const both = make("is-today is-selected");
+      const panel = parse(getComputedStyle(popover).backgroundColor);
+      const selFill = parse(selected.bg);
+      popover.remove();
+      const sig = (s) => `${s.bg}|${s.color}|${s.weight}|${s.outline}|${s.border}`;
+      const bothFill = parse(both.bg);
+      const bothText = parse(both.color);
+      return {
+        theme: themeClass,
+        signatures: { plain: sig(plain), selected: sig(selected), today: sig(today), both: sig(both) },
+        distinct: new Set([sig(plain), sig(selected), sig(today)]).size,
+        selectedFill: selected.bg,
+        contrast: selFill && panel ? Number(ratio(over(selFill, panel), panel).toFixed(2)) : null,
+        bothReadable: bothFill && bothText
+          ? Number(ratio(over(bothText, over(bothFill, panel)), over(bothFill, panel)).toFixed(2))
+          : null,
+        bothDesc: `${both.color} on ${both.bg}`,
+      };
+    };
+
+    const dark = read("theme-dark");
+    const light = read("theme-light");
+    document.body.className = "";
+    return { dark, light };
+  });
+
+  const record = (name, pass, detail) => dayStateResults.push({ name, pass, detail });
+
+  for (const arm of [measured.dark, measured.light]) {
+    // A page whose tokens did not resolve paints every state the same and reads as a defect. It is
+    // a refusal, not a finding, and it is separated here because the first run of this section made
+    // exactly that mistake.
+    record(`the ${arm.theme} page resolved its host tokens`,
+      arm.signatures.plain !== arm.signatures.selected || arm.contrast !== 1,
+      `plain=${arm.signatures.plain}. All three states identical AND a 1:1 fill means no stylesheet `
+        + `supplied \`--background-modifier-hover\` — the states below would then be compared on a `
+        + `page that painted none of them`);
+
+    record(`plain, selected and today are three different things in ${arm.theme}`,
+      arm.distinct === 3,
+      `${arm.distinct} distinct signature(s) from 3 states. plain=${arm.signatures.plain} · `
+        + `selected=${arm.signatures.selected} · today=${arm.signatures.today}`);
+
+    // A day that is both today and selected is not a corner case — it is what every reader sees
+    // whenever today falls inside the selected week.
+    // THE FLOOR IS 3, AND THE REASON IS OWNERSHIP RATHER THAN LENIENCE.
+    //
+    // The pair here is `--text-on-accent` on `--interactive-accent`, and BOTH are the host's —
+    // Obsidian's, and re-themeable by the reader. In the default dark theme that pair measures
+    // 4.04:1, under AA's 4.5 for text. The plugin cannot raise it without overriding an accent the
+    // user chose, which is a worse outcome than the shortfall.
+    //
+    // What this row exists to catch is the numeral DISAPPEARING — accent on accent, 1:1 — which is
+    // what the losing source order produced and what the capture showed as an empty pill. A 3:1
+    // floor catches that with room to spare and does not pretend the plugin owns a token it does
+    // not. The 4.04 is recorded here so the shortfall is visible rather than silently accepted.
+    record(`a day that is both today and selected still shows its number in ${arm.theme}`,
+      arm.bothReadable !== null && arm.bothReadable >= 3,
+      `the numeral reads ${arm.bothDesc}, at ${arm.bothReadable}:1 against its own fill, against a `
+        + `3:1 floor. Equal specificity between the two state rules means source order picks the `
+        + `colour, and the losing order paints the accent numeral onto the accent fill — an empty `
+        + `pill where the date should be, which is what the capture showed. The floor is 3 rather `
+        + `than AA's 4.5 because both tokens are the HOST's and re-themeable: the default dark pair `
+        + `measures 4.04 and the plugin cannot raise it without overriding the reader's own accent`);
+
+    record(`the selected day is visible against its own panel in ${arm.theme}`,
+      arm.contrast !== null && arm.contrast >= 3,
+      `the selected fill ${arm.selectedFill} sits at ${arm.contrast}:1 against the popover it is `
+        + `drawn on, against a 3:1 floor for a non-text indicator. Measured against the PANEL rather `
+        + `than against white, because a fill is only visible against what it sits on — and the `
+        + `fill was the hover tint at 1.17:1 in dark and 1.1:1 in light before this row existed, `
+        + `which is a state the DOM distinguishes and the eye does not`);
+  }
+});
+
 results.push(...phoneResults, ...menuResults, ...addViewDesktopResults, ...addViewPhoneResults,
   ...grammarResults, ...addViewGrammar, ...motionResults, ...reducedResults, ...desktopMenuResults, ...cellResults, ...sheetResults, ...selectCellResults, ...selectPhoneResults, ...rowPhoneResults, ...rowNarrowResults,
   ...desktopPanelResults, ...stateResults, ...keyboardParityResults, ...familyResults, ...touchResults, ...overlapResults, ...rhythmResults, ...rendererRhythmResults,
-  ...liftedResults, ...inlineEditResults, ...numberParityResults, ...peekLayerResults, ...propertyRowResults, ...menuEdgeResults, ...headerRhythmResults, ...panelParityResults, ...registryResults, ...flickResults, ...selectWidthResults, ...fixtureTableResults, ...panelOwnershipResults, ...peekOwnershipResults, ...checkboxIdentityResults, ...listOwnershipResults, ...addViewOutcomeResults, ...editOutcomeResults, ...menuOutcomeResults, ...backdropOutcomeResults, ...paletteResults, ...sectionFailures);
+  ...liftedResults, ...inlineEditResults, ...numberParityResults, ...peekLayerResults, ...propertyRowResults, ...menuEdgeResults, ...headerRhythmResults, ...panelParityResults, ...registryResults, ...flickResults, ...selectWidthResults, ...fixtureTableResults, ...panelOwnershipResults, ...peekOwnershipResults, ...checkboxIdentityResults, ...listOwnershipResults, ...addViewOutcomeResults, ...editOutcomeResults, ...menuOutcomeResults, ...backdropOutcomeResults, ...paletteResults, ...dayStateResults, ...sectionFailures);
 
 await browser.close();
 rmSync(work, { recursive: true, force: true });
