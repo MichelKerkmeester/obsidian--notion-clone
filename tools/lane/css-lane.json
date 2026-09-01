@@ -1,7 +1,7 @@
 {
   "holder": null,
-  "acquiredAt": "2026-09-01T16:20:00Z",
-  "baselineHash": "f947f0e35bc1",
+  "acquiredAt": "2026-09-01T17:30:00Z",
+  "baselineHash": "44351ed7a9bd",
   "baselineCommit": "be6c16e",
   "history": [
     {
@@ -883,6 +883,27 @@
       "at": "2026-09-01T16:55:00Z",
       "hash": "f947f0e35bc1",
       "note": "Recaptured and read. The sort popover shows 'Descending' in full on one line, the field chip having given up 34px. Per-image operator sign-off still owed."
+    },
+    {
+      "event": "acquire",
+      "phase": "017-touch-row-range-selection",
+      "at": "2026-09-01T17:30:00Z",
+      "hash": "f947f0e35bc1",
+      "note": "The selection count badge carried aria-live and could never announce: bar.empty() rebuilds every child on each selection change, so the badge was a new element every time and a live region only announces changes made inside an EXISTING region. The attribute stated the intent and the structure prevented it. A persistent region now lives outside the bar and needs a visually-hidden rule."
+    },
+    {
+      "event": "edit",
+      "phase": "017-touch-row-range-selection",
+      "at": "2026-09-01T17:45:00Z",
+      "hash": "44351ed7a9bd",
+      "note": "One rule: a visually-hidden live region for the selection count, clipped rather than display:none or visibility:hidden because both of those take the node out of the accessibility tree and the announcement with it. Measured 1x1, clip-path inset(50%), display block, visibility visible \u2014 hidden to the eye and present to a screen reader."
+    },
+    {
+      "event": "release",
+      "phase": "017-touch-row-range-selection",
+      "at": "2026-09-01T17:50:00Z",
+      "hash": "44351ed7a9bd",
+      "note": "Recaptured; the region is invisible by construction so no capture changed. Nothing to sign off per-image here."
     }
   ],
   "outstanding": [

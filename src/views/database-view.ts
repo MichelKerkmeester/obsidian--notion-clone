@@ -514,6 +514,16 @@ export class DatabaseView extends FileView {
   private bulkEditingColumnKey?: string;
   private closeBulkEditPopover?: () => void;
   private selectionStatusBar?: HTMLElement;
+  // A live region that OUTLIVES the bar's contents.
+  //
+  // The count badge carried `aria-live="polite"` and could never announce: `bar.empty()` destroys
+  // and rebuilds every child on each selection change, so the badge was a brand-new element every
+  // time. A live region announces changes made INSIDE an existing region — an element that appears
+  // with its text already set has no region observing it. The attribute stated the intent and the
+  // structure prevented it.
+  //
+  // So the region is held here, outside the bar, and only its text is rewritten.
+  private selectionLiveRegion?: HTMLElement;
   private releaseKeyboardInset?: () => void;
   private operationResultRail?: HTMLElement;
   private interactionScopes = new InteractionScopeRegistry();
@@ -7513,6 +7523,8 @@ export class DatabaseView extends FileView {
     if (!hasSelection) {
       this.selectionStatusBar?.remove();
       this.selectionStatusBar = undefined;
+      this.selectionLiveRegion?.remove();
+      this.selectionLiveRegion = undefined;
       this.releaseKeyboardInset?.();
       this.releaseKeyboardInset = undefined;
       return;
@@ -7525,6 +7537,12 @@ export class DatabaseView extends FileView {
     // with a selection still live. Scoping it to the bar rather than to the view means the common
     // case — no selection — holds no viewport listener at all.
     this.releaseKeyboardInset ??= publishKeyboardInset(this.containerEl_);
+    if (!this.selectionLiveRegion?.isConnected) {
+      this.selectionLiveRegion = this.containerEl_.createDiv({
+        cls: "db-selection-live-region",
+        attr: { role: "status", "aria-live": "polite", "aria-atomic": "true" },
+      });
+    }
     bar.empty();
     const clearSelectionButton = bar.createEl("button", {
       cls: "db-selection-clear-pill",
@@ -7543,8 +7561,10 @@ export class DatabaseView extends FileView {
       bar.createSpan({
         cls: "db-selection-count-badge",
         text: t("toolbar.selectedCells", { count: cellCount }),
-        attr: { "aria-live": "polite" },
       });
+      if (this.selectionLiveRegion) {
+        this.selectionLiveRegion.setText(t("toolbar.selectedCells", { count: cellCount }));
+      }
       const copyTsvBtn = bar.createEl("button", {
         cls: "db-selection-action",
         text: t("selection.copyTsv"),
@@ -7599,8 +7619,10 @@ export class DatabaseView extends FileView {
       bar.createSpan({
         cls: "db-selection-count-badge",
         text: t("toolbar.selectedCount", { count: rowCount }),
-        attr: { "aria-live": "polite" },
       });
+      if (this.selectionLiveRegion) {
+        this.selectionLiveRegion.setText(t("toolbar.selectedCount", { count: rowCount }));
+      }
       // Icon-led actions, matching the reference: an icon carries the action faster than a word,
       // and it lets the bar stay compact as more bulk actions arrive.
       const editBtn = bar.createEl("button", {

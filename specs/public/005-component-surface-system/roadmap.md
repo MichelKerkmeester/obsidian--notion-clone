@@ -339,7 +339,7 @@ today.
 - ⚠ `004-checkbox-ownership` — **state UNKNOWN, see §7.1.** Holds the `styles.css` lane.
 - ⚠ `005-content-row-rhythm` — shipped: list-row border-box, list meta ruled into columns, renderer-declared tracks. Continuity still reads "not started".
 - ⚠ `016-sheet-drag-and-audit` — 90%. **Root-caused report 1** and re-measured all eight sheet asks together on the shipped build: 19 of 22 checks pass, 3 declared. Exit signal: two operator decisions (the 13px row label, and whether the sheet should survive a window resize instead of closing).
-- ⚠ `017-touch-row-range-selection` — 95%. Predicate removed from both views, hold gesture added, 12 checks added, six negative controls run and restored by hash. Exit signal: a decision on whether the gesture gets an announcement in the selection status bar.
+- ⚠ `017-touch-row-range-selection` — 91%. Predicate removed from both views, hold gesture added, checks added, negative controls run and restored by hash. The announcement decision is answered — the code had already taken it with an `aria-live` attribute the bar's own rebuild made inert, and a persistent live region outside the bar now carries it. The row-menu term is no longer a counter: the hold builds the shipped menu and the check measures it. Exit signal: one operator row, a tap on a real phone.
 - ⚠ `027-sheet-menu-grammar-and-motion` — opened today for rows 24-25 (a non-responsive
   column-type control, and five sheet button/motion/overflow asks). Held by another agent at
   the time of this pass; state UNKNOWN, not read.
@@ -436,7 +436,7 @@ done | sort -n
 | `014-desktop-select-checkbox` | **71%** — 5/7 | 2 | 1 | 1 |
 | `015-desktop-dropdown-placement` | **88%** — 7/8 | 1 | 1 | 0 |
 | `016-sheet-drag-and-audit` | **80%** — 8/10 | 2 | 1 | 1 |
-| `017-touch-row-range-selection` | **73%** — 8/11 | 3 | 1 | 2 |
+| `017-touch-row-range-selection` | **91%** — 10/11 | 1 | 1 | 0 |
 | `018-select-column-affordance-fit` | **80%** — 4/5 | 1 | 1 | 0 |
 | `019-card-field-value-formatting` | **71%** — 5/7 | 2 | 1 | 1 |
 | `020-harness-fidelity-repair` | **92%** — 12/13 | 1 | 1 | 0 |

@@ -65,11 +65,12 @@ click extended a range on a machine with no touchscreen at all.
 <!-- ANCHOR:completion -->
 ## 2. COMPLETION CRITERIA
 
-Evidence below is the `verify-placement` run captured on a clean tree at `f64dd87`: **220/224
-geometry checks passed, 4 red for a declared reason**, exit 0. Every criterion that names a
-measurement is green there; the ones that remain are not measurements. Each check reports
-`isTouchDevice(row)=true` alongside its result, per D2, so the guard is exercised rather than
-sidestepped.
+Evidence below is the `verify-placement` run on the tree these ticks were taken on: **365/366
+geometry checks passed, 1 red for a declared reason**, exit 0. The earlier figure here was
+**220/224 at `f64dd87`**; the lane has grown since and the count moves with it, which is why the
+number is restated rather than carried. Every criterion that names a measurement is green; the one
+that remains is not a measurement. Each check reports `isTouchDevice(row)=true` alongside its
+result, per D2, so the guard is exercised rather than sidestepped.
 
 **Read against "if this value came from the device, could the check still fail?", eight of the nine
 hold and one does not.** The decision logic under test is genuinely the shipped code —
@@ -143,39 +144,68 @@ and does not have this gap; this phase does.
       shift-clicking row 8 after row 2 selected 7 row(s) (want 7, rows 2 through 8) at
       pointerType=touch isTouchDevice(row)=true innerWidth=390, and again at pointerType=mouse
       isTouchDevice(row)=true innerWidth=1440.
-- [ ] A hold on the checkbox and a hold on the row body are one gesture with two answers: 1/0/1 and
+- [x] A hold on the checkbox and a hold on the row body are one gesture with two answers: 1/0/1 and
       0/1/1. Was **2 haptics for one hold** — the row menu's own hold buzzing and swallowing the press
       before declining to open anything.
-      **Measured, and the tick withdrawn on the row-menu term.** `a hold on the checkbox and a hold
-      on the row body are one gesture with two answers` — on the checkbox: 1 extension(s), 0 row
-      menu(s), 1 haptic(s); on the row body: 0 extension(s), 1 row menu(s), 1 haptic(s). Want 1/0/1
-      and 0/1/1. pointerType=touch isTouchDevice(row)=true innerWidth=390. The mouse page reads 0/0/0
-      and 0/0/0 on the same pair.
+      **The withdrawn term is restored, by doing what this row said would settle it.** The check no
+      longer counts calls. The long-press handler now builds the shipped `RowMenu` with the same
+      three arguments production hands it — the event, the row, the row element — and the menu term
+      counts menus that are in the document, carry entries, and are placed. On the checkbox: 1
+      extension, 0 row menus, 1 haptic. On the row body: 0 extensions, 1 row menu, 1 haptic, and
+      that one menu reads *in the document with 4 entries, placed=true, as the phone sheet,
+      390x222 at 0,622*. pointerType=touch isTouchDevice(row)=true innerWidth=390. The mouse page
+      still reads 0/0/0 and 0/0/0.
 
-      **"1 row menu" is a counter, not a menu.** `verify-placement.mjs:2864` passes
-      `onLongPress: () => { menuCount += 1 }` where `database-view.ts:8155` passes
-      `(event) => this.rowMenu.show(event, row, context, tr)`. So the number proves the hold reached
-      the handler and nothing about a menu being built, placed or dismissable — which is precisely
-      the shape that already produced one false green in this program, when `editFileName` was a
-      counting stub and a check proved a double-tap reached a handler while no editor was ever
-      created. Two of the three terms are real: the extension count comes from the shipped
-      `attachRowRangeGesture`, and the haptic is counted by intercepting `navigator.vibrate`, which
-      the shipped `attachLongPress` really calls.
+      **The control the counter could not have failed.** Making `RowMenu.show` return before it
+      builds anything leaves the hold reaching the handler exactly as before — the haptic still
+      fires, so the gesture is intact — and the row goes red on `no menu was built`. The old
+      `menuCount += 1` would have counted 1 there and passed. Restoration of both control edits
+      verified by SHA-256 against `HEAD`, matching.
 
-      **The pre-fix number is also from a surface this check does not run.** The **2 haptics** came
-      from the embedded renderer screening its target after the timer; the check pairs two
+      **A second control changed the answer without breaking it, which is the finding.** Forcing the
+      phone off the sheet path left the menu built and placed as an anchored popover under the row,
+      and the check stayed green — correctly, because both presentations are legitimate placements.
+      It is recorded because it is the control that did *not* discriminate, and the first version of
+      the placement rule was wrong for the same reason it exists: that rule demanded an anchored
+      popover, and the driven menu failed it at `0,622` spanning the full 390px width. That was not
+      a misplacement. `owned-menu.ts:165` discards the anchor on a phone on purpose. A counter could
+      not have been wrong about this, because it never knew what a menu looked like — the rule now
+      reads the presentation and holds each to its own contract.
+
+      **The pre-fix number still comes from a surface this check does not run.** The **2 haptics**
+      came from the embedded renderer screening its target after the timer; the check pairs two
       harness-attached `attachLongPress` instances instead, so it reproduces the *shape* of that
-      defect rather than the site of it.
+      defect rather than the site of it. That gap is unchanged and is the honest limit of this row.
+- [x] The status-bar announcement decision is answered.
+      **Answered yes, and the answer was already in the tree.** The row was written as an operator
+      design call, but the code had taken it long before this phase asked: the selection count badge
+      carried `aria-live="polite"` and `aria-atomic="true"`. So the decision needed no operator — it
+      needed checking, and the check found the stated intent could not fire.
 
-      **What would settle it:** count menus by asserting a row menu is in the document and anchored,
-      driving `RowMenu` — which `verify-placement` already bundles — rather than a counter.
-- [ ] The status-bar announcement decision is answered.
-      **Operator.** Not a measurement: whether the hold should announce itself is a design decision
-      and no check can take it. If the answer is yes, the check that would then settle the
-      implementation is — on the touch page at 390px, hold a second row checkbox for 520ms after
-      tapping one, and assert the selection bar's own count text equals the number of rows the
-      extension painted (7) within one animation frame of the extension firing, with the hold that
-      fires no extension leaving the text unchanged.
+      **The mechanism contradicted the attribute.** A live region announces a change made *inside a
+      region that was already there when the change happened*. `renderSelectionStatusBar` empties
+      and rebuilds the bar on every selection change, so the badge holding the attribute is a brand
+      new element each time — there is no before for the after to differ from, and a screen reader
+      gets nothing. The attribute made the intent legible in the source and the structure made it
+      inert, which is the failure mode a review that greps for `aria-live` is least able to see.
+
+      **What shipped:** a persistent `db-selection-live-region` created on the container, outside the
+      bar, before the rebuild, updated by text on each render and removed when the selection clears.
+      Both count badges gave up their own `aria-live`. The region is hidden by `clip-path: inset(50%)`
+      at 1x1 rather than by `display: none` or `visibility: hidden`, because both of those take the
+      node out of the accessibility tree and the announcement with it.
+
+      **Evidence, and the formulation that discriminates.** Three rows in `verify-placement` drive
+      two real renders at counts 2 and 3 through the shipped method and compare the announcing
+      *node* across them. Under the pre-fix shape restored as a control, the text moved correctly —
+      `"2 selected" -> "3 selected"` — while the node identity went `false`. A check that compared
+      only the text would have passed against the defect. A second control that parented the region
+      inside the bar left zero announcing nodes, so it fails all three rows without ever exercising
+      the identity clause, and is the weaker of the two.
+
+      **Still the operator's:** the wording. Whether `"3 selected"` is the right thing to hear on a
+      hold — rather than something naming the range or the gesture — is a judgement no check takes,
+      and this one ships the count the bar already displays.
 - [ ] The operator taps a row checkbox on their phone and one row is selected.
       **Operator.** This sentence used to read "`Input.dispatchTouchEvent` enters where a thumb
       enters and respects hit-testing and `touch-action`, but it is one clean finger" — which is

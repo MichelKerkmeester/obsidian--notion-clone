@@ -1183,6 +1183,68 @@ const phoneResults = await section("the phone sheet and its selection bar", () =
       + `(a surviving bar would keep the publisher legitimately alive and make the check above vacuous)`,
   });
 
+  // The announcement, driven rather than read off an attribute.
+  //
+  // An aria-live attribute states an intent. What actually reaches a screen reader is a change made
+  // INSIDE a region that was already there when the change happened — a region that is itself
+  // brand new announces nothing, because there is no before for the after to differ from. The
+  // selection bar is emptied and rebuilt on every selection change, so a badge inside it carrying
+  // the attribute is a different element each time and the intent never fires. That is the defect
+  // this pair is written to catch, and it is invisible to any check that only looks for the
+  // attribute. Both checks below drive two real renders at different counts through the shipped
+  // method and compare the announcing NODE across them.
+  const liveHost = document.body.createDiv({ cls: "note-database-container" });
+  const liveView = Object.create(DatabaseView.prototype);
+  liveView.containerEl_ = liveHost;
+  liveView.selectedRows = new Set(["one.md", "two.md"]);
+  liveView.cellSelection = undefined;
+  liveView.selectionStatusBar = undefined;
+  liveView.pendingCellFillDraft = null;
+  liveView.showCellFillInput = false;
+  liveView.historyStack = [];
+  liveView.getSelectedCellAddresses = () => [];
+  liveView.getConfig = () => ({ schema: { columns: [] } });
+  DatabaseView.prototype.renderSelectionStatusBar.call(liveView);
+  const announcerBefore = liveHost.querySelector("[aria-live]");
+  const announcerTextBefore = announcerBefore ? announcerBefore.textContent : "";
+  liveView.selectedRows = new Set(["one.md", "two.md", "three.md"]);
+  DatabaseView.prototype.renderSelectionStatusBar.call(liveView);
+  const announcerAfter = liveHost.querySelector("[aria-live]");
+  const announcerTextAfter = announcerAfter ? announcerAfter.textContent : "";
+  const announcerCount = liveHost.querySelectorAll("[aria-live]").length;
+  out.push({
+    name: "the selection announcer survives the count change it is meant to announce",
+    pass: !!announcerBefore && announcerBefore === announcerAfter
+      && announcerTextBefore !== announcerTextAfter && /\b3\b/.test(announcerTextAfter),
+    detail: `same node across renders: ${announcerBefore === announcerAfter} `
+      + `text "${announcerTextBefore}" -> "${announcerTextAfter}" `
+      + `(a badge rebuilt inside the bar reads as a different node and announces nothing)`,
+  });
+  // One region, and outside the bar. Two announcing nodes would make the pair above pick whichever
+  // came first in the tree and could hide a stale one, and a region the rebuild can reach is the
+  // original defect wearing a new class name.
+  const liveBar = liveHost.querySelector(".db-selection-status-bar");
+  out.push({
+    name: "exactly one announcer exists and the bar rebuild cannot reach it",
+    pass: announcerCount === 1 && !!liveBar && !!announcerAfter && !liveBar.contains(announcerAfter),
+    detail: `announcing nodes=${announcerCount} inside the bar=${liveBar && announcerAfter ? liveBar.contains(announcerAfter) : "n/a"}`,
+  });
+  // Hidden to the eye, present to the reader. display:none and visibility:hidden both take a node
+  // out of the accessibility tree and the announcement with it, so the region has to be clipped
+  // instead — which is a CSS decision a check can hold, not a comment.
+  const announcerStyle = announcerAfter ? getComputedStyle(announcerAfter) : null;
+  const announcerBox = announcerAfter ? announcerAfter.getBoundingClientRect() : { width: 0, height: 0 };
+  out.push({
+    name: "the announcer is clipped rather than hidden, so it stays in the accessibility tree",
+    pass: !!announcerStyle && announcerStyle.display !== "none" && announcerStyle.visibility !== "hidden"
+      && announcerBox.width <= 2 && announcerBox.height <= 2,
+    detail: `display=${announcerStyle ? announcerStyle.display : "n/a"} `
+      + `visibility=${announcerStyle ? announcerStyle.visibility : "n/a"} `
+      + `clip-path=${announcerStyle ? announcerStyle.clipPath : "n/a"} `
+      + `box=${Math.round(announcerBox.width)}x${Math.round(announcerBox.height)}px`,
+  });
+  liveHost.remove();
+
   rhythmHost.remove();
   standaloneSelection.host.remove();
   embeddedSelection.host.remove();
@@ -4240,7 +4302,7 @@ await selectPhoneContext.close();
 
 const rowRangeProbe = async ({ pointerType }) => {
   const {
-    applyRowSelectionPress, attachRowRangeGesture, attachLongPress, isTouchDevice,
+    applyRowSelectionPress, attachRowRangeGesture, attachLongPress, isTouchDevice, RowMenu,
   } = globalThis.__place;
   const out = [];
 
@@ -4259,6 +4321,7 @@ const rowRangeProbe = async ({ pointerType }) => {
   let anchorId = null;
   let extendCount = 0;
   let menuCount = 0;
+  let menuReport = "no hold yet";
 
   const boxes = [];
   const cells = [];
@@ -4268,6 +4331,56 @@ const rowRangeProbe = async ({ pointerType }) => {
   };
 
   const host = document.querySelector(".note-database-container");
+
+  // A real menu, not a counter.
+  //
+  // This used to pass `onLongPress` a function that added one to a number, and the number was then
+  // read as "1 row menu". It proved the hold reached a handler and nothing about a menu — not that
+  // one was built, not that it carried entries, not that it landed on the row that was held. That
+  // is the same shape that produced a false green earlier in this program, where a counting stub
+  // for the filename editor let a check certify a double-tap had opened an editor that was never
+  // created. So the handler below is the shipped one: production hands the row menu the event, the
+  // row and the row element, and so does this, through the same `RowMenu` the rename check on this
+  // page already drives.
+  const heldRowMenu = new RowMenu({
+    app: { workspace: { containerEl: host } },
+    openRow: () => undefined,
+    deleteRow: async () => undefined,
+    duplicateRow: async () => undefined,
+    renameRow: () => undefined,
+    isReadOnly: false,
+  });
+  // Placed, not merely built — and the first version of this rule got the shipped answer wrong.
+  //
+  // It demanded the menu sit on one of the row's edges, and the driven menu failed it: on a 390px
+  // page the menu came back at 0,622 spanning 390x222 while the row sat at 12,198. That is not a
+  // misplacement, it is the phone presentation. `owned-menu.ts:165` discards the anchor on a phone
+  // on purpose and shows a bottom sheet, so a check demanding an anchored popover there is asserting
+  // against the design. Which is the whole argument for driving the menu rather than counting calls:
+  // the counter could not have been wrong about this, because it never knew what a menu looked like.
+  //
+  // So the rule reads the presentation and holds it to its own contract. A sheet has to be full
+  // width and sitting on the bottom edge. A popover has to be against the row that was held. Either
+  // way it has to be on screen, and either way a menu dropped at the origin fails.
+  const menuAnchoredTo = (menu, tr) => {
+    const m = menu.getBoundingClientRect();
+    const r = tr.getBoundingClientRect();
+    const asSheet = menu.classList.contains("db-mobile-bottom-sheet");
+    const onScreen = m.top >= 0 && m.left >= -1
+      && m.bottom <= window.innerHeight + 1 && m.right <= window.innerWidth + 1;
+    const placed = asSheet
+      ? Math.abs(m.width - window.innerWidth) <= 1 && Math.abs(m.bottom - window.innerHeight) <= 1
+      : (Math.abs(m.top - r.bottom) <= 12 || Math.abs(m.bottom - r.top) <= 12
+        || (m.top >= r.top - 12 && m.top <= r.bottom + 12))
+        && m.right > r.left && m.left < r.right;
+    return { ok: placed && onScreen, asSheet, placed, onScreen, m, r };
+  };
+  const dismissAnyMenu = () => {
+    // The shipped dismissal first, so the teardown a user gets is the one exercised here.
+    document.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
+    for (const stale of document.querySelectorAll(".db-owned-menu")) stale.remove();
+  };
+
   const table = document.createElement("table");
   table.className = "db-table";
   const tbody = document.createElement("tbody");
@@ -4313,7 +4426,27 @@ const rowRangeProbe = async ({ pointerType }) => {
     attachLongPress(tr, {
       ignoreTarget: (event) => typeof event.target?.closest === "function"
         && Boolean(event.target.closest("input, select, textarea, button, a")),
-      onLongPress: () => { menuCount += 1; },
+      onLongPress: (event) => {
+        heldRowMenu.show(
+          event,
+          { file: { path, name: path, basename: path.replace(/\.md$/, "") } },
+          undefined,
+          tr,
+        );
+        const built = document.querySelector(".db-owned-menu");
+        const entries = built ? built.querySelectorAll(".db-menu-item").length : 0;
+        const placement = built ? menuAnchoredTo(built, tr) : null;
+        if (built && entries > 0 && placement.ok) menuCount += 1;
+        menuReport = built
+          ? `in the document with ${entries} entries, placed=${placement.ok} `
+            + `[as ${placement.asSheet ? "the phone sheet" : "a popover"}, placed=${placement.placed} onscreen=${placement.onScreen}] `
+            + `menu ${Math.round(placement.m.left)},${Math.round(placement.m.top)} `
+            + `${Math.round(placement.m.width)}x${Math.round(placement.m.height)} `
+            + `against row ${Math.round(placement.r.left)},${Math.round(placement.r.top)} `
+            + `${Math.round(placement.r.width)}x${Math.round(placement.r.height)}`
+          : "no menu was built";
+        dismissAnyMenu();
+      },
     });
     attachRowRangeGesture(tr, {
       onExtendRange: () => {
@@ -4356,7 +4489,9 @@ const rowRangeProbe = async ({ pointerType }) => {
     anchorId = null;
     extendCount = 0;
     menuCount = 0;
+    menuReport = "no hold yet";
     vibrations = 0;
+    dismissAnyMenu();
     sync();
   };
   const shown = () => [...selected].sort().join(",");
@@ -4466,12 +4601,14 @@ const rowRangeProbe = async ({ pointerType }) => {
   const boxExtends = extendCount;
   const boxMenus = menuCount;
   const boxBuzz = vibrations;
+  const boxMenuReport = menuReport;
   release(boxes[5]);
   reset();
   await holdDown(cells[5], 520);
   const bodyExtends = extendCount;
   const bodyMenus = menuCount;
   const bodyBuzz = vibrations;
+  const bodyMenuReport = menuReport;
   release(cells[5]);
   const wantMenu = pointerType === "touch" ? 1 : 0;
   const wantBox = pointerType === "touch" ? 1 : 0;
@@ -4484,7 +4621,9 @@ const rowRangeProbe = async ({ pointerType }) => {
       + ` Want ${wantBox}/0/${wantBox} and 0/${wantMenu}/${wantMenu}. The row menu is the only way to`
       + ` reach several row actions on a phone, so it has to still answer; and the two holds share one`
       + ` implementation, so a single haptic each is what proves they are not two gestures at one`
-      + ` threshold by coincidence. ${where}`,
+      + ` threshold by coincidence. ${where}.`
+      + ` The menu term is counted by building the shipped row menu and measuring it rather than by`
+      + ` adding one to a number — on the checkbox: ${boxMenuReport}. On the row body: ${bodyMenuReport}`,
   });
 
   return out;

@@ -1,9 +1,9 @@
 {
-  "measuredAt": "2026-09-01T08:54:32.791Z",
+  "measuredAt": "2026-09-01T09:48:38.766Z",
   "inputs": {
     "tools/live/touch-targets.mjs": "b4b851bbf59c",
     "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
-    "styles.css": "f947f0e35bc1"
+    "styles.css": "44351ed7a9bd"
   },
   "measured": 1137,
   "scenarios": 60,

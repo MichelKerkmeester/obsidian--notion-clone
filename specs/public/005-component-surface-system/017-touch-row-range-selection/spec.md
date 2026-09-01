@@ -12,12 +12,11 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "public/005-component-surface-system/017-touch-row-range-selection"
-    last_updated_at: "2026-08-30T19:10:41Z"
-    last_updated_by: "criteria-reconciliation"
-    recent_action: "Completion anchor reconciled: AC-1 to AC-9 all green in the captured run"
-    next_safe_action: "Operator answers the status-bar announcement, then taps a checkbox on device"
-    blockers:
-      - "Placement exits 1 on three stylesheet-lane checks, shown independent of this phase (plan.md 7)"
+    last_updated_at: "2026-09-01T18:20:00Z"
+    last_updated_by: "announcement-and-menu-term"
+    recent_action: "Live region persisted outside the bar; row-menu term driven, not counted"
+    next_safe_action: "Operator taps a row checkbox on a real phone and confirms one row selects"
+    blockers: []
     key_files:
       - "spec.md"
       - "acceptance-criteria.md"
@@ -28,10 +27,10 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-017"
       parent_session_id: null
-    completion_pct: 73
-    open_questions:
-      - "The hold gesture has no affordance anywhere. Should the selection status bar carry a one-line hint the first time a row is selected on touch?"
+    completion_pct: 91
+    open_questions: []
     answered_questions:
+      - "Should the selection status bar announce? Yes, and the code had already answered it: the count badge carried aria-live. The mechanism could not fire because the bar is emptied and rebuilt on every change, so the badge was a new element each time. A persistent region outside the bar now carries the text; the wording remains the operator's."
       - "Not a second mechanism: the gesture is `attachLongPress`, the same object the row menu uses, so the threshold, tolerance and haptic are shared rather than matched."
       - "The long-press row menu is untouched and still the only path to several row actions on a phone; the two holds are separated by target, not by timing."
 ---

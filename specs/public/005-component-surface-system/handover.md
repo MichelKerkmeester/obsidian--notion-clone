@@ -196,7 +196,7 @@ Read `goal.md`'s LOG for the full set. The ones that cost time here:
 - A pipe makes `$?` the pipe's status. Read exit codes directly.
 - `validate.sh` on a phase parent recurses; take the **first** `Summary:` line.
 - Regenerate metadata after any spec-doc edit or the fingerprint check fails.
-- Captures churn ~12 files on an identical rerun. Read any diff against that floor.
+- **Do not read a capture diff against a file count.** This line used to say ~12 files churn on an identical rerun. The count is not 12 and is not stable — one rerun moved 2 files, both `timeline-view-desktop`; a later one moved a different set including `calendar-week-time-grid-desktop-dark`. Every instance is antialiasing-scale: worst seen 25,048 of 5,184,000 pixels at max channel delta 38, spread across a content block, no element moving. Across all of it `layoutHash` moved for 0 of 240 manifest entries. Read the diff against `layoutHash` and open the image when that moves.
 - A negative control must restore **the whole** prior state. Reverting one of two edits produces a
   real number for a tree that never existed.
 - Running the shared gate while another agent edits the tree describes neither state.

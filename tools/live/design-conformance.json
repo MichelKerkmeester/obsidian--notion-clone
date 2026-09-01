@@ -1,7 +1,7 @@
 {
-  "measuredAt": "2026-09-01T08:52:16.179Z",
+  "measuredAt": "2026-09-01T09:00:54.498Z",
   "inputs": {
-    "styles.css": "f947f0e35bc1",
+    "styles.css": "44351ed7a9bd",
     "tools/live/design-conformance.mjs": "ca98bf93ea28",
     "src/views/popover-position.ts": "48a6ffec6b38"
   },
@@ -18,7 +18,7 @@
     {
       "name": "registry equality — rendered surfaces with no declared role",
       "enforced": false,
-      "value": 82,
+      "value": 84,
       "target": 0,
       "note": "the registry holds five producers; the rest are unmigrated",
       "gated": false,
@@ -27,7 +27,7 @@
     {
       "name": "reachability — buildable surfaces no fixture renders",
       "enforced": false,
-      "value": 132,
+      "value": 130,
       "target": 0,
       "note": "nothing photographs or measures these, so nothing would notice if they broke",
       "gated": false,
@@ -160,10 +160,10 @@
     "src/views/column-manager-renderer.ts:162  .db-panel-header-actions",
     "src/views/column-menu.ts:233  .db-dropdown-section-title",
     "src/views/column-menu.ts:368  .db-column-menu-back",
-    "src/views/database-view.ts:3090  .db-group-order-popover",
-    "src/views/database-view.ts:3204  .db-panel-button",
-    "src/views/database-view.ts:6948  .db-calendar-search-results-popover",
-    "src/views/database-view.ts:11168  .db-mobile-column-width-panel",
+    "src/views/database-view.ts:3100  .db-group-order-popover",
+    "src/views/database-view.ts:3214  .db-panel-button",
+    "src/views/database-view.ts:6958  .db-calendar-search-results-popover",
+    "src/views/database-view.ts:11190  .db-mobile-column-width-panel",
     "src/views/date-value-picker.ts:139  .db-cell-edit-popover",
     "src/views/date-value-picker.ts:206  .db-calendar-mini-popover",
     "src/views/dropdown-field.ts:115  .db-dropdown-field-text",
