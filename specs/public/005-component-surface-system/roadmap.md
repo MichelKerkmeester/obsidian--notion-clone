@@ -364,7 +364,7 @@ today.
   today answers it — the freeze persists on the operator's device. Exit signal is no longer
   "the operator installs and reports"; it is `028-remaining-freezes`.
 - `018-select-column-affordance-fit` — opened today. Code landed, nothing measured. Exit signal: the two after-numbers re-run and both negative controls observed red.
-- `019-card-field-value-formatting` — opened today. Code landed, no test exists for the formatters at all. Exit signal: tests written, parity check added and observed red, and the scope question in §7.4 answered.
+- `019-card-field-value-formatting` — **Shipped + verified, awaiting device — 6 of 7.** Tests written, parity check added and observed red. The scope question is answered: the parent's exclusion sentence now names the formula editor as its surface, so this phase is in scope where it sits. Exit signal: the operator comparing the figure on a card against the table row behind it.
 - `010`, `011`, `013` — shipped and self-verified, none operator-confirmed. Exit signal: the operator installs 1.3.3 and reports per surface.
 - **The recapture debt — CLOSED.** The captures were regenerated and `screenshots-fresh` is green. `npm run gate` now runs **16 lanes and exits 0**, up from 13 lanes exiting 1: the two added since are `render-assertions`, which builds real `ListRenderer` and `TableRenderer` instances, and the repaired `placement`, which had been printing zero checks because one throwing check destroyed all 205 others before any of them reported.
 - **The scaffold debt — CLOSED for 27 of 29 folders.** `010` through `017` all carry `plan.md` and `tasks.md`, every spec and goal carries its template marker and anchors, and `012`'s continuity block measures 1,481 bytes against the 2,048 cap. The parent validates at Errors: 0, Warnings: 0.
@@ -441,7 +441,7 @@ done | sort -n
 | `016-sheet-drag-and-audit` | **80%** — 8/10 | 2 | 1 | 1 |
 | `017-touch-row-range-selection` | **91%** — 10/11 | 1 | 1 | 0 |
 | `018-select-column-affordance-fit` | **80%** — 4/5 | 1 | 1 | 0 |
-| `019-card-field-value-formatting` | **71%** — 5/7 | 2 | 1 | 1 |
+| `019-card-field-value-formatting` | **86%** — 6/7 | 1 | 1 | 0 |
 | `020-harness-fidelity-repair` | **92%** — 12/13 | 1 | 1 | 0 |
 | `021-sheet-inline-edit-alignment` | **88%** — 7/8 | 1 | 1 | 0 |
 | `022-selection-bar-keyboard-docking` | **75%** — 6/8 | 2 | 1 | 1 |
@@ -515,7 +515,7 @@ tree diff and the lane journal for edits no document claimed.
 **Report 7 — currency and decimal formatting.** No document in this program mentions currency,
 decimals, the euro sign or the card renderer's value branch. The formatter already existed and four
 surfaces already called it; the card renderer was the single number surface not wired to it. Now
-`019-card-field-value-formatting`. It also crosses a written scope exclusion — see §7.4.
+`019-card-field-value-formatting`. It also crossed a written scope exclusion, now resolved — see §7.4.
 
 **Report 16 — the reorder button.** Landed under `004-checkbox-ownership`'s stylesheet lane hold,
 and `004`'s acquire note names it. But `004`'s thirteen criteria all measure checkbox appearance and

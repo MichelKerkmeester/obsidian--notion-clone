@@ -139,7 +139,14 @@ fallback, not the formatter.
 **Threshold.** `../spec.md` §2 either names card field formatting as in scope, or this folder moves
 to the earlier track. A written decision either way.
 
-**State.** Open. `../spec.md` §7 of this document's spec states both readings.
+**Measured — the threshold is a document, so the evidence is the document.** `../../spec.md` §2 now
+reads *"Formula editor layout **and the formula editor's output number format** remain on the earlier
+track"*, where it previously read "output number format" with no surface named, and the paragraph
+below it records the amendment and its date. `../spec.md` §7 no longer states both readings: it names
+the one chosen and why the other was rejected. So the exclusion names card field formatting as in
+scope, in writing, in the document the threshold points at, and this folder does not move.
+
+**State.** Met.
 
 ## AC-6 — the formatters have a test
 
@@ -173,7 +180,7 @@ figure the operator sees and break no check.
 | AC-2 | `verify-placement`, coercion arm | production card field vs production table cell | desktop | align the card's coercion and fallback: `0 disagreements` | Red, declared in `KNOWN` |
 | AC-3 | `verify-placement`, display-style arm | production card field | desktop | drop the early return: `0` bars, `1` formatted text. Append instead of assign: bar count stays `1` and passes while the text count reports `1` | Met |
 | AC-4 | `src/data/euro-format.test.ts` | pure function | node | remove the guard: `expected '€ NaN' to be '-'` | Met |
-| AC-5 | a written decision | `../spec.md` §2 | n/a | n/a — a decision has no control | Open |
+| AC-5 | a written decision | `../spec.md` §2 | the surface is now named in the exclusion itself | n/a — a decision has no control | Met |
 | AC-6 | `src/data/euro-format.test.ts` | pure function | node | locale to `en-US`: 4 assertions fail on the separator reversal | Met |
 
 Five criteria met, one open on an operator decision, and one measured defect declared rather than

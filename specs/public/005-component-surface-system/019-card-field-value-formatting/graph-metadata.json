@@ -200,7 +200,7 @@
     ],
     "causal_summary": "The operator, looking at the record sheet: \"the data doesnt use proper formatting here like in",
     "created_at": "2026-08-30T17:52:46.407Z",
-    "last_save_at": "2026-08-31T20:01:15.229Z",
+    "last_save_at": "2026-09-01T10:01:44.813Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -211,7 +211,7 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:5b449ba44ca5a77ac8d2433aebd4f0cfd07dde270fc7f88eb696c185d86b7384",
+    "source_fingerprint": "sha256:277f94d5b7f9496dbdfe093c3d18297fea965df3782bfb25da849c43881f2199",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "2921ba64e3731833a6005cb08482588918b1b08c0db355a48425b18693899298",

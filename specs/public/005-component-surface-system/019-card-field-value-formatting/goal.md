@@ -9,12 +9,11 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "public/005-component-surface-system/019-card-field-value-formatting"
-    last_updated_at: "2026-08-31T09:00:00Z"
-    last_updated_by: "harness-dependence-review"
-    recent_action: "Harness-dependence review: no tick withdrawn; both parity sides are shipped renderers"
-    next_safe_action: "Settle the scope exclusion with the operator, then confirm the figure on device"
-    blockers:
-      - "Crosses a written scope exclusion in the parent spec; unresolved"
+    last_updated_at: "2026-09-01T19:10:00Z"
+    last_updated_by: "scope-exclusion-reconciliation"
+    recent_action: "Scope exclusion reconciled; the parent sentence now names its surface"
+    next_safe_action: "Operator compares the euro figure on a card and the table row behind it"
+    blockers: []
     key_files:
       - "spec.md"
       - "acceptance-criteria.md"
@@ -22,11 +21,11 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-019-goal"
       parent_session_id: null
-    completion_pct: 71
+    completion_pct: 86
     open_questions:
-      - "Does the parent scope exclusion mean the formula editor's number format"
       - "Which coercion wins when a numeric column holds text the card and the cell read differently"
     answered_questions:
+      - "The parent exclusion covers the formula editor's number format only; the sentence now names that surface, so a card field's format is this program's to own and the phase does not move."
       - "Card and cell agree on every finite numeric value; measured, not inferred"
       - "The bar and ring branches are unreachable by the numeric text branch; measured by two counts, not by reading the returns"
 ---
@@ -124,7 +123,20 @@ runtime and would shift together. Recorded so a future red on AC-1 is diagnosed 
       the suite rather than as a footer disagreeing with its own column. Negative control: swapping
       the locale to `en-US` fails 4 assertions on the separator reversal — `'1,000,000'` against
       `'1.000.000'`, `'1.234567'` against `'1,234567'`.
-- [ ] The scope exclusion is settled in writing, either way.
+- [x] The scope exclusion is settled in writing, either way.
+      **Settled, in the document the criterion points at.** The parent spec's *Out of scope*
+      sentence previously read "Formula editor layout and output number format remain on the earlier
+      track" — an exclusion naming no surface, which is why this phase could change output number
+      format without anyone noticing it had crossed one. It now reads "**and the formula editor's
+      output number format**", and the paragraph under it records that the narrow reading was chosen,
+      by whom, and that this phase is therefore in scope where it sits and does not move. This
+      phase's own spec §7 no longer presents two readings either; it names the chosen one and says
+      why the other was rejected.
+
+      **What made it settleable was writing the surface into the exclusion, not picking a side.**
+      Either reading would have closed this row. An exclusion that does not name its surface stops
+      meaning anything, and the cost is found only when someone crosses it — which is what happened
+      here, a day before anyone read it.
 - [ ] The operator sees the same euro figure on a card and in the table row behind it.
 <!-- /ANCHOR:completion -->
 
