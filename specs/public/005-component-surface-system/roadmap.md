@@ -425,7 +425,7 @@ done | sort -n
 | `003-mobile-sheet-presentation` | **50%** — 4/8 | 4 | 1 | 3 |
 | `004-checkbox-ownership` | **62%** — 5/8 | 3 | 1 | 2 |
 | `005-content-row-rhythm` | **71%** — 5/7 | 2 | 1 | 1 |
-| `006-record-open-target` | **57%** — 4/7 | 3 | 1 | 2 |
+| `006-record-open-target` | **71%** — 5/7 | 2 | 1 | 1 |
 | `007-architecture-research` | **100%** — 2/2 | 0 | 0 | 0 |
 | `008-integration-and-release-observability` | **50%** — 5/10 | 5 | 1 | 4 |
 | `009-live-verification` | **33%** — 2/6 | 4 | 1 | 3 |
@@ -455,7 +455,7 @@ done | sort -n
 | `033-list-virtualisation` | **83%** — 5/6 | 1 | 1 | 0 |
 | `034-packet-doc-truth` | **100%** — 4/4 | 0 | 0 | 0 |
 
-**Program: 218/281 = 78%.** 63 rows open — 30 closable only by the operator's device, 33 still reachable here.
+**Program: 219/281 = 78%.** 62 rows open — 30 closable only by the operator's device, 32 still reachable here.
 
 **The two columns after "Open" are the ones worth reading.** A row only the operator can close is not
 work waiting to be done here — it is the program's closing condition, and §4A records why it is

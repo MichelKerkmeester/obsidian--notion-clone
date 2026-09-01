@@ -8411,10 +8411,144 @@ await section("the properties panel owns what it subscribes", async () => {
       + `render subscribing more than once, which no event count would collect back`);
 });
 
+// ───────────────────────────────────────────────────────────────────
+// THE RECORD PEEK OWNS WHAT IT SUBSCRIBES
+// ───────────────────────────────────────────────────────────────────
+//
+// `006`'s five-dimension row says "No mapping exists for this packet", and resource ownership is
+// again the one with nothing behind it.
+//
+// The peek is the surface where this is worth asking rather than reasoning. It takes four things —
+// a capturing `keydown` on the document, a `scroll` on its container, a `resize` on the window, and
+// a `setTimeout` that later adds a capturing `mousedown` — and it is a module-level SINGLETON:
+// opening a second peek closes the first. So there are two teardown paths, the explicit close and
+// the replacement, and only one of them is the one a reader takes most often.
+//
+// The timer is the interesting part. The outside-click listener is added a tick AFTER open, so a
+// peek closed within that tick must not add it — and a peek closed after must remove it. Those are
+// different bugs and a single open-and-close exercises neither.
+
+const peekOwnershipResults = [];
+
+await section("the record peek owns what it subscribes", async () => {
+  const page = await browser.newPage({ viewport: VIEWPORT, reducedMotion: "reduce" });
+  await page.setContent(page_html);
+  await page.addStyleTag({ content: readFileSync(join(REPO, "styles.css"), "utf8") + HOST_BARE_CONTROLS });
+  await page.addScriptTag({ content: shimJs + "\ninstallObsidianDomShim(globalThis);" });
+  await page.addScriptTag({ content: positionerJs });
+
+  const measured = await page.evaluate(async () => {
+    const { openTableRecordPeek, closeTableRecordPeek } = globalThis.__layer;
+    const host = document.querySelector(".note-database-container");
+
+    const live = new Map();
+    const watch = (name, target) => {
+      const add = target.addEventListener.bind(target);
+      const remove = target.removeEventListener.bind(target);
+      target.addEventListener = (type, fn, opts) => {
+        const key = `${name}:${type}`;
+        live.set(key, (live.get(key) || 0) + 1);
+        return add(type, fn, opts);
+      };
+      target.removeEventListener = (type, fn, opts) => {
+        const key = `${name}:${type}`;
+        const held = live.get(key) || 0;
+        if (held <= 1) live.delete(key); else live.set(key, held - 1);
+        return remove(type, fn, opts);
+      };
+    };
+    watch("document", document);
+    watch("window", window);
+    watch("container", host);
+    const outstanding = () => [...live.values()].reduce((a, b) => a + b, 0);
+    const keys = () => [...live.entries()].map(([k, n]) => `${k}=${n}`).join(", ") || "none";
+
+    const columns = [
+      { key: "file.name", label: "Name", type: "text" },
+      { key: "status", label: "Status", type: "text" },
+    ];
+    const rowFor = (name) => ({
+      file: { path: `${name}.md`, name: `${name}.md`, basename: name },
+      frontmatter: { status: "Open" }, computed: {},
+    });
+    const open = (name) => {
+      const anchor = host.createDiv({ cls: "anchor" });
+      openTableRecordPeek({
+        anchor, row: rowFor(name), config: {},
+        visibleColumns: columns, allColumns: columns, container: host,
+      });
+      return anchor;
+    };
+    const settle = () => new Promise((r) => setTimeout(r, 4));
+
+    const before = outstanding();
+
+    // 1. Open, let the deferred listener arrive, close.
+    const a = open("A");
+    const afterOpen = outstanding();
+    await settle();
+    const afterTimer = outstanding();
+    closeTableRecordPeek();
+    const afterClose = outstanding();
+
+    // 2. Replacement, which is the path a reader takes by clicking a second row. The singleton
+    //    closes the first peek itself, and that teardown is a different line from the explicit one.
+    const b = open("B");
+    await settle();
+    const twoDeep = outstanding();
+    const c = open("C");
+    await settle();
+    const afterReplace = outstanding();
+    closeTableRecordPeek();
+    await settle();
+    const afterReplaceClose = outstanding();
+
+    // 3. Closed INSIDE the tick, before the deferred listener is due. It must never be added.
+    const d = open("D");
+    closeTableRecordPeek();
+    await settle();
+    const closedInsideTick = outstanding();
+
+    for (const anchor of [a, b, c, d]) anchor.remove();
+    const nodesLeft = document.querySelectorAll(".db-record-peek-panel").length;
+    return {
+      before, afterOpen, afterTimer, afterClose,
+      twoDeep, afterReplace, afterReplaceClose, closedInsideTick, nodesLeft, keys: keys(),
+    };
+  });
+
+  const record = (name, pass, detail) => peekOwnershipResults.push({ name, pass, detail });
+  const m = measured;
+
+  record("opening a peek subscribes, and the deferred outside-click arrives after it",
+    m.afterOpen > m.before && m.afterTimer > m.afterOpen,
+    `${m.before} before, ${m.afterOpen} on open, ${m.afterTimer} once the tick has passed. The `
+      + `outside-click listener is added a tick late on purpose — the click that opened the panel `
+      + `must not close it — so a count taken at open misses it and a balanced total proves nothing`);
+
+  record("closing a peek takes back everything it took",
+    m.afterClose === m.before,
+    `${m.before} before, ${m.afterClose} after one open-and-close`);
+
+  record("replacing a peek does not stack a second peek's subscriptions",
+    m.afterReplace === m.twoDeep && m.afterReplaceClose === m.before,
+    `${m.twoDeep} with one peek open, ${m.afterReplace} after opening a second on top of it, and `
+      + `${m.afterReplaceClose} after closing. The peek is a module singleton, so the second open `
+      + `tears the first down itself — a different line from the explicit close, and the one a `
+      + `reader takes by clicking another row`);
+
+  record("a peek closed inside the tick never adds the deferred listener",
+    m.closedInsideTick === m.before && m.nodesLeft === 0,
+    `${m.closedInsideTick} outstanding after opening and closing within the same tick, `
+      + `${m.nodesLeft} panel node(s) left. Adding a capturing document listener for a panel that `
+      + `is already gone is the shape a timer-based subscription fails in, and it is invisible to `
+      + `an open-and-close that waits`);
+});
+
 results.push(...phoneResults, ...menuResults, ...addViewDesktopResults, ...addViewPhoneResults,
   ...grammarResults, ...addViewGrammar, ...motionResults, ...reducedResults, ...desktopMenuResults, ...cellResults, ...sheetResults, ...selectCellResults, ...selectPhoneResults, ...rowPhoneResults, ...rowNarrowResults,
   ...desktopPanelResults, ...stateResults, ...keyboardParityResults, ...familyResults, ...touchResults, ...overlapResults, ...rhythmResults, ...rendererRhythmResults,
-  ...liftedResults, ...inlineEditResults, ...numberParityResults, ...peekLayerResults, ...propertyRowResults, ...menuEdgeResults, ...headerRhythmResults, ...panelParityResults, ...registryResults, ...flickResults, ...selectWidthResults, ...fixtureTableResults, ...panelOwnershipResults, ...sectionFailures);
+  ...liftedResults, ...inlineEditResults, ...numberParityResults, ...peekLayerResults, ...propertyRowResults, ...menuEdgeResults, ...headerRhythmResults, ...panelParityResults, ...registryResults, ...flickResults, ...selectWidthResults, ...fixtureTableResults, ...panelOwnershipResults, ...peekOwnershipResults, ...sectionFailures);
 
 await browser.close();
 rmSync(work, { recursive: true, force: true });

@@ -80,7 +80,23 @@ have a number are still open.*
 - [ ] The setting round-trips and **every** affordance honours it — no path bypasses the policy.
       **The exposure is the stubs:** this has to drive `openRow`, which is `() => undefined` in the
       harness — the shape `012` repaired for the title-cell tap by driving the real opener instead.
-- [ ] Plus the five stateful dimensions. **No mapping exists** for this packet.
+- [x] Plus the five stateful dimensions. **No mapping exists** for this packet. **Mapped 2026-09-01**,
+      in `acceptance-criteria.md` §2b. Three dimensions already had evidence; **resource ownership
+      had none, and the peek is the surface where it is worth measuring rather than reasoning.**
+      It takes four things — a capturing `keydown`, a container `scroll`, a window `resize`, and a
+      `setTimeout` that later adds a capturing `mousedown` — and it is a module singleton, so
+      opening a second peek tears the first down through a *different line* than the explicit close.
+      → `0 before, 3 on open, 4 once the tick has passed, 0 after close`. Replacement does not
+      stack: `4 → 4 → 0`. Red with the resize release removed: `1 after one open-and-close`, and the
+      replacement case reports `5 → 6 → 3`, which is the stacking it exists to catch.
+      **A count taken at open would have missed the deferred listener entirely** — 3 on open, 4 a
+      tick later — so a balanced total from the wrong moment proves nothing.
+      **The tick case needed BOTH defences removed to go red, and that is recorded.** A peek closed
+      inside the tick must never add the outside-click listener, and that is defended twice: the
+      close clears the timer, and the callback re-checks `closed`. Removing either alone left the
+      check green; only removing both gave `1 outstanding`. The check proves the property holds
+      while at least one mechanism does — not that either works. **A control that had stopped at
+      the first green would have recorded a discriminating check that is not one.**
 - [ ] The operator clicks Open and reads the note. **Only the operator closes this.**
 **HARNESS DEPENDENCE, 2026-08-31 — 9 sound / 4 dependent / 0 unknown. The least style-exposed packet
 of the seven**, because its bullets ask what was produced, which record is displayed and where the

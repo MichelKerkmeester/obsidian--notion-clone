@@ -337,6 +337,32 @@ leaf lifetime is `009`'s live probe or nothing.
 ---
 
 <!-- ANCHOR:closure -->
+## 2b. THE FIVE STATEFUL DIMENSIONS — 2026-09-01
+
+`000` asks every packet to map its criteria onto five dimensions, and this one carried none.
+
+| Dimension | Where this packet answers it | Evidence |
+|---|---|---|
+| **Semantic identity** | The surface holds the record it was opened on, across a re-render | The record sheet survives a re-render with its node rebuilt and its identity intact, asserted by **column key rather than index**, with a control requiring a different record to close the sheet rather than re-point it |
+| **Transition trace** | Open → replace → close, not open → close | The peek is a module singleton: opening a second closes the first. Measured across all three, because the replacement teardown is a different line from the explicit one and is the path a reader takes by clicking another row |
+| **Action outcome** | Activating Open produces the rendered body, not a call count | `023` shipped the record body; the sheet's captures show it rendered below the property rows. The peek's own layer is asserted by paint order, not by class name |
+| **Resource ownership** | *new here* — the peek takes four things and one of them is deferred | `0 before, 3 on open, 4 once the tick has passed, 0 after close`. Replacement does not stack: `4 → 4 → 0`. Red with the resize release removed: `1 after one open-and-close`, and the replacement case reports `5 → 6 → 3` |
+| **Negative-control mutation** | Each row above names its own | The peek's `998` restored; the resize release removed; both tick defences removed together |
+
+**The tick case needed BOTH defences removed to go red, and that is recorded rather than smoothed
+over.** The peek adds its outside-click listener a tick late so the opening click cannot close the
+panel. A peek closed inside that tick must never add it — and that is defended twice, by
+`clearTimeout` in the close path and by a `!closed` guard inside the callback. Removing either alone
+left the check green. Only removing both produced `1 outstanding after opening and closing within
+the same tick`.
+
+*So the check is honest about what it proves.* It does not prove either mechanism works; it proves
+the property holds while at least one does. A single-line break here is genuinely survivable, which
+is a fact about the code rather than a weakness in the check — but a control that had stopped at the
+first green would have recorded a discriminating check that is not.
+
+---
+
 ## 3. CLOSURE STATEMENT
 
 **Closeable:** No
