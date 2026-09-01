@@ -93,9 +93,29 @@ green-looking rows are ticked with their exposure attached and the rest are not 
       `if (actions.hideHeaderChrome) return;` is the first line of the render. **A truthy stub is
       not a neutral one** — flags now resolve to booleans and never to functions, and
       *every view type renders a header to measure* fails if any of the six stops drawing.
-- [ ] Plus the five stateful dimensions. **No mapping exists.** One negative control is recorded —
-      *no list column holds more than one property*, was 3, recorded 0 — and it was repaired on
-      2026-09-01 after it turned out to be counting an unlabelled reserved box as a property.
+- [x] Plus the five stateful dimensions. **No mapping exists.** **Mapped 2026-09-01**, in
+      `acceptance-criteria.md` §2b. Three dimensions had evidence and now have a row naming it;
+      **resource ownership had none, and it is the one that matters most here** because the listener
+      is registered on the SCROLLER, which outlives the list — `clear()` says so in its own comment,
+      and a comment is not a measurement.
+      → *each re-render of the flat list releases the listener it replaces*: `10 added, 9 removed,
+      1 outstanding over 10 renders`. Same for the grouped path, whose release is a **separate
+      line** added recently enough that nothing had exercised it. **Red on each with its own release
+      dropped from `clear()`, and the two break differently** — the flat path accumulates,
+      `10 added, 0 removed, 10 outstanding; per render [1, 2, 3 … 10]`, while the grouped path
+      subscribes once and keeps it, `1 added, 0 removed`. One rising series and one flat line, both
+      wrong, and only the add count sees both.
+      **The assertion took three formulations and the first two passed the control.** `outstanding
+      === 1` is true of a list that releases every re-render *and* of one that subscribed once and
+      never released — `10/9` and `1/0` are the same total. `removed === added - 1` is also true of
+      both, trivially: `0 === 1 - 1`. Only `added === renders` discriminates. **Two plausible
+      statements of the same claim were non-discriminating**, and a control run once would have
+      recorded either as evidence.
+      **The premise row caught its own fixture.** The grouped arm first measured `0 scroll
+      subscription(s)` — two groups of exactly 200 rows against a `shown.length > 200` threshold, so
+      neither section windowed and the arm proved nothing. A check that only asserted the release
+      would have reported a clean pass over an empty measurement.
+
 - [ ] The operator scrolls a list and the rows do not jitter. **Only the operator closes this.**
 **HARNESS DEPENDENCE, 2026-08-31 — 5 sound / 8 dependent / 0 unknown.** Every bullet here is about
 **intrinsic size**, and an intrinsic width is content plus padding — where the padding on a bare

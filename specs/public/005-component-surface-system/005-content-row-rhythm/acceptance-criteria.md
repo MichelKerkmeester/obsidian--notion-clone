@@ -385,6 +385,37 @@ and the census would inherit that at scale.
 ---
 
 <!-- ANCHOR:closure -->
+## 2b. THE FIVE STATEFUL DIMENSIONS — 2026-09-01
+
+| Dimension | Where this packet answers it | Evidence |
+|---|---|---|
+| **Semantic identity** | A field belongs to its column on every row | `column "amount" sits at the same grid column on every row that renders it`, in the render-assertion lane, over a real `ListRenderer` |
+| **Transition trace** | Render → re-render → recycle, not a single paint | Ten renders measured for this mapping, plus the `list-window` lane's scroll recycle: `the mounted range moved from notes/row-0.md to notes/row-64.md` with `scrollTop` preserved |
+| **Action outcome** | A row click reaches the record-panel action, not a counter | `row click reaches the record-panel action in the file-view bag` |
+| **Resource ownership** | *new here* — the scroll listener, on both windowing paths | Flat and grouped each: `10 added, 9 removed, 1 outstanding over 10 renders`. Red on each with its own release removed, and they break differently: flat accumulates (`10 added, 0 removed, per render [1, 2, 3 … 10]`), grouped subscribes once and keeps it (`1 added, 0 removed`) |
+| **Negative-control mutation** | The reservation decision's own controls | `reservesColumnsOnWrappingLine` unit cases, plus the two release controls above |
+
+**The assertion took three formulations, and the first two passed the control.** That is recorded
+because it is the whole lesson of this row.
+
+1. *`outstanding === 1`* — true of a list that releases on every re-render **and** of one that
+   subscribed once and never released. `10 added / 9 removed` and `1 added / 0 removed` are the same
+   total.
+2. *`removed === added - 1`* — also true of both, and trivially so in the broken case: `0 === 1 - 1`.
+3. *`added === renders`* — the one that discriminates. Ten renders must take ten subscriptions and
+   give back nine.
+
+Only the third goes red when `releaseGroupWindows()` is dropped from `clear()`. **Two plausible
+statements of the same claim were non-discriminating**, and both would have been recorded as evidence
+by a control that was only run once.
+
+**Why the listener matters more than most.** It is registered on the SCROLLER, which outlives the
+list — `clear()` says so in its own comment. A stale one keeps recomputing a window over rows that
+are gone, and the grouped path's release is a separate line from the flat one, added recently enough
+that nothing had exercised it.
+
+---
+
 ## 3. CLOSURE STATEMENT
 
 **Closeable:** No

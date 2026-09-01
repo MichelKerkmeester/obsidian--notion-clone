@@ -8663,10 +8663,151 @@ await section("every row checkbox toggles its own row", async () => {
       + `the worst place for it — so the zero is asserted rather than assumed`);
 });
 
+// ───────────────────────────────────────────────────────────────────
+// THE LIST GIVES BACK ITS SCROLL LISTENER, ON BOTH PATHS
+// ───────────────────────────────────────────────────────────────────
+//
+// `005`'s five-dimension row maps none, and resource ownership is again the one with nothing behind
+// it. Here it is worth measuring because the listener is on the SCROLLER, which outlives the list —
+// `clear()` says so in its own comment: "dropping the list without dropping the listener would leave
+// every previous render still recomputing a window over rows that are gone."
+//
+// A comment is not a measurement, and there are two release paths, not one. `releaseWindow` handles
+// the flat list and `releaseGroupWindows` the grouped one, and the grouped windowing is recent
+// enough that its release has never been exercised by anything.
+//
+// THREE BEHAVIOURS, ONE MEASUREMENT. A count across ten renders separates them: flat means released
+// on each re-render, accumulating-then-dropping means deferred collection like the properties panel,
+// and accumulating-forever means a leak. Only the first is what this code claims.
+
+const listOwnershipResults = [];
+
+await section("the list gives back its scroll listener on both paths", async () => {
+  const page = await browser.newPage({ viewport: VIEWPORT, reducedMotion: "reduce" });
+  await page.setContent(page_html);
+  await page.addStyleTag({ content: readFileSync(join(REPO, "styles.css"), "utf8") + HOST_BARE_CONTROLS });
+  await page.addScriptTag({ content: shimJs + "\ninstallObsidianDomShim(globalThis);" });
+  await page.addScriptTag({ content: positionerJs });
+
+  const measured = await page.evaluate(() => {
+    const { ListRenderer } = globalThis.__list;
+    const host = document.querySelector(".note-database-container");
+
+    const columns = [
+      { key: "file.name", label: "Name", type: "text" },
+      { key: "cost", label: "Cost", type: "number" },
+    ];
+    // Enough rows that the window engages; a list short enough to render whole never subscribes,
+    // and a run over one would report a clean zero for the wrong reason.
+    const rows = Array.from({ length: 900 }, (_, i) => ({
+      file: { path: `note-${i}.md`, name: `note-${i}.md`, basename: `Note ${i}` },
+      frontmatter: { cost: i }, computed: {},
+    }));
+    const config = { schema: { columns }, viewType: "list", columnOrder: columns.map((c) => c.key) };
+
+    const RENDERS = 10;
+    const measure = (label, run) => {
+      // A fresh scroller each time, watched from before the first render.
+      const scroller = host.createDiv({ cls: "db-list-scroller" });
+      scroller.setCssProps({ height: "600px", overflow: "auto" });
+      let added = 0;
+      let removed = 0;
+      const realAdd = scroller.addEventListener.bind(scroller);
+      const realRemove = scroller.removeEventListener.bind(scroller);
+      scroller.addEventListener = (type, fn, opts) => {
+        if (type === "scroll") added += 1;
+        return realAdd(type, fn, opts);
+      };
+      scroller.removeEventListener = (type, fn, opts) => {
+        if (type === "scroll") removed += 1;
+        return realRemove(type, fn, opts);
+      };
+
+      //  takes (app, actions) — the app first. Passing the bag as the only argument
+      // put it in the  slot and left  undefined, which surfaced as a TypeError
+      // deep inside a group header rather than at the constructor.
+      const renderer = new ListRenderer({}, {
+        // Every member of `ListRendererActions`, read off the interface rather than discovered one
+        // TypeError at a time. A bag missing a required method throws from deep inside a row paint,
+        // which reads as a harness fault rather than as an incomplete stub.
+        openRow: () => undefined, openRecordDetail: () => undefined,
+        createEntry: () => undefined,
+        isRowSelected: () => false, toggleRowSelected: () => undefined,
+        areAllRowsSelected: () => false, toggleRowsSelected: () => undefined,
+        editCell: () => undefined, saveCellValue: () => undefined, editFileName: () => undefined,
+        getColumns: () => columns,
+        moveRowToPosition: () => undefined, moveRowsToGroup: () => undefined,
+        moveRowToGroupAndPosition: () => undefined, moveRowsToPosition: () => undefined,
+        getSelectedRows: () => [],
+        isGroupCollapsed: () => false, toggleGroupCollapsed: () => undefined,
+        expandGroup: () => undefined,
+        showRowMenu: () => undefined, showColumnMenu: () => undefined,
+        editFormula: () => undefined, renderRecordIcon: () => null,
+        renderGroupSummaries: () => undefined, applyConditionalFormat: () => undefined,
+        get isReadOnly() { return false; },
+        get hideCreateEntry() { return false; },
+      });
+
+      const after = [];
+      for (let i = 0; i < RENDERS; i += 1) {
+        run(renderer, scroller);
+        after.push(added - removed);
+      }
+      const outstanding = added - removed;
+      scroller.remove();
+      return { label, added, removed, outstanding, perRender: after, renders: RENDERS };
+    };
+
+    const flat = measure("flat", (renderer, scroller) => {
+      renderer.render(scroller, config, rows);
+    });
+    const grouped = measure("grouped", (renderer, scroller) => {
+      // Each group must exceed GROUP_WINDOW_THRESHOLD (200) for a section to window — the source
+      // reads `shown.length > 200`, so two groups of exactly 200 window neither and the arm
+      // measures nothing. The premise row above is what caught that: `0 scroll subscription(s)`.
+      const half = Math.floor(rows.length / 2);
+      const groups = [
+        { key: "a", label: "A", rows: rows.slice(0, half), count: half },
+        { key: "b", label: "B", rows: rows.slice(half), count: rows.length - half },
+      ];
+      renderer.renderGrouped(scroller, config, groups, "cost");
+    });
+
+    return { flat, grouped };
+  });
+
+  const record = (name, pass, detail) => listOwnershipResults.push({ name, pass, detail });
+
+  for (const arm of [measured.flat, measured.grouped]) {
+    record(`the ${arm.label} list subscribes at all, so there is something to give back`,
+      arm.added > 0,
+      `${arm.added} scroll subscription(s) taken across ten renders of the ${arm.label} list. A list `
+        + `short enough to render whole never windows and never subscribes — a clean zero for the `
+        + `wrong reason — so this is the premise, not an aside`);
+
+    // THE LEDGER, NOT THE TOTAL. `outstanding === 1` is true of a list that releases on every
+    // re-render AND of one that subscribed once and never releases at all — 10 added / 9 removed
+    // and 1 added / 0 removed are the same total and opposite behaviours. Only the second leaves a
+    // listener on the scroller when the list is finally torn down, which is the leak `clear()`'s
+    // own comment describes. Measured: dropping `releaseGroupWindows()` from `clear()` moves the
+    // grouped arm from 10/9 to 1/0 and does not move the total at all.
+    record(`each re-render of the ${arm.label} list releases the listener it replaces`,
+      arm.added === arm.renders && arm.removed === arm.renders - 1 && arm.outstanding === 1
+        && arm.perRender.every((n) => n === 1),
+      `${arm.added} added, ${arm.removed} removed, ${arm.outstanding} outstanding over ${arm.renders} `
+        + `renders; per render [${arm.perRender.join(", ")}]. The ADD COUNT is the discriminator, `
+        + `not the total and not the difference: 1 added / 0 removed leaves the same outstanding `
+        + `count as ${arm.renders}/${arm.renders - 1} and satisfies "removed === added - 1" just as well, `
+        + `while meaning the opposite — subscribed once and never released. That is the one that `
+        + `leaves a listener on the SCROLLER, which outlives the list, still recomputing a window `
+        + `over rows that are gone`);
+  }
+});
+
 results.push(...phoneResults, ...menuResults, ...addViewDesktopResults, ...addViewPhoneResults,
   ...grammarResults, ...addViewGrammar, ...motionResults, ...reducedResults, ...desktopMenuResults, ...cellResults, ...sheetResults, ...selectCellResults, ...selectPhoneResults, ...rowPhoneResults, ...rowNarrowResults,
   ...desktopPanelResults, ...stateResults, ...keyboardParityResults, ...familyResults, ...touchResults, ...overlapResults, ...rhythmResults, ...rendererRhythmResults,
-  ...liftedResults, ...inlineEditResults, ...numberParityResults, ...peekLayerResults, ...propertyRowResults, ...menuEdgeResults, ...headerRhythmResults, ...panelParityResults, ...registryResults, ...flickResults, ...selectWidthResults, ...fixtureTableResults, ...panelOwnershipResults, ...peekOwnershipResults, ...checkboxIdentityResults, ...sectionFailures);
+  ...liftedResults, ...inlineEditResults, ...numberParityResults, ...peekLayerResults, ...propertyRowResults, ...menuEdgeResults, ...headerRhythmResults, ...panelParityResults, ...registryResults, ...flickResults, ...selectWidthResults, ...fixtureTableResults, ...panelOwnershipResults, ...peekOwnershipResults, ...checkboxIdentityResults, ...listOwnershipResults, ...sectionFailures);
 
 await browser.close();
 rmSync(work, { recursive: true, force: true });
