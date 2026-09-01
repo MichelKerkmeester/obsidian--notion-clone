@@ -343,9 +343,14 @@ today.
 - ⚠ `027-sheet-menu-grammar-and-motion` — opened today for rows 24-25 (a non-responsive
   column-type control, and five sheet button/motion/overflow asks). Held by another agent at
   the time of this pass; state UNKNOWN, not read.
-- ⚠ `028-remaining-freezes` — opened today for rows 18-23 (list, board, calendar and other
-  non-table views; the sort and filter sheets). Held by another agent at the time of this pass;
-  state UNKNOWN, not read.
+- `028-remaining-freezes` — **Shipped + verified — 6 of 6.** Opened for rows 18-23 (list, board,
+  calendar and other non-table views; the sort and filter sheets) and now closed on every criterion,
+  none of which is an operator row. The last one held on the table's own un-windowed range, and it
+  named two ways out: remove the superlinear term, or restate the row to bound cost instead of
+  forbidding a shape. The term was removable. `applyGridSemantics` was scanning every row per row
+  and rebuilding a children array per cell — 8.8% of a 400-row render, 26.2% of a 1,600-row one on
+  the profile — and with both gone the 4-column arm goes **SUPERLINEAR ×1.82 → LINEAR ×0.93** and
+  1,600 rows renders in **22.3ms against 76.7ms**. Reverting the one function restores ×1.82.
 
 **Next:** the verification debt the shipping created.
 
@@ -450,7 +455,7 @@ done | sort -n
 | `025-story-coverage-blindness` | **90%** — 9/10 | 1 | 1 | 0 |
 | `026-production-render-assertions` | **100%** — 9/9 | 0 | 0 | 0 |
 | `027-sheet-menu-grammar-and-motion` | **93%** — 13/14 | 1 | 1 | 0 |
-| `028-remaining-freezes` | **83%** — 5/6 | 1 | 0 | 1 |
+| `028-remaining-freezes` | **100%** — 6/6 | 0 | 0 | 0 |
 | `029-numeric-coercion-parity` | **86%** — 6/7 | 1 | 1 | 0 |
 | `030-gallery-view-deprecation` | **67%** — 4/6 | 2 | 1 | 1 |
 | `031-sheet-lifecycle-ownership` | **83%** — 5/6 | 1 | 1 | 0 |

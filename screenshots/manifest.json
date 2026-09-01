@@ -678,7 +678,7 @@
       "layoutHash": "161f683925b4",
       "sourceHashes": {
         "src/views/group-label-renderer.ts": "3fee8449607c",
-        "src/views/table-renderer.ts": "1732b9ab65d3",
+        "src/views/table-renderer.ts": "2044cea151d8",
         "src/views/summary-renderer.ts": "c6752fec0dfe",
         "styles.css": "44351ed7a9bd",
         "tools/screenshots/theme.css": "6b879b442ee0",
@@ -705,7 +705,7 @@
       "layoutHash": "161f683925b4",
       "sourceHashes": {
         "src/views/group-label-renderer.ts": "3fee8449607c",
-        "src/views/table-renderer.ts": "1732b9ab65d3",
+        "src/views/table-renderer.ts": "2044cea151d8",
         "src/views/summary-renderer.ts": "c6752fec0dfe",
         "styles.css": "44351ed7a9bd",
         "tools/screenshots/theme.css": "6b879b442ee0",
@@ -732,7 +732,7 @@
       "layoutHash": "1088dc430045",
       "sourceHashes": {
         "src/views/group-label-renderer.ts": "3fee8449607c",
-        "src/views/table-renderer.ts": "1732b9ab65d3",
+        "src/views/table-renderer.ts": "2044cea151d8",
         "src/views/summary-renderer.ts": "c6752fec0dfe",
         "styles.css": "44351ed7a9bd",
         "tools/screenshots/theme.css": "6b879b442ee0",
@@ -759,7 +759,7 @@
       "layoutHash": "1088dc430045",
       "sourceHashes": {
         "src/views/group-label-renderer.ts": "3fee8449607c",
-        "src/views/table-renderer.ts": "1732b9ab65d3",
+        "src/views/table-renderer.ts": "2044cea151d8",
         "src/views/summary-renderer.ts": "c6752fec0dfe",
         "styles.css": "44351ed7a9bd",
         "tools/screenshots/theme.css": "6b879b442ee0",
@@ -1285,7 +1285,7 @@
       "layoutHash": "2e0bbd255d7a",
       "sourceHashes": {
         "src/views/table-footer-renderer.ts": "2a076187efd5",
-        "src/views/table-renderer.ts": "1732b9ab65d3",
+        "src/views/table-renderer.ts": "2044cea151d8",
         "styles.css": "44351ed7a9bd",
         "tools/screenshots/theme.css": "6b879b442ee0",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -1310,7 +1310,7 @@
       "layoutHash": "2e0bbd255d7a",
       "sourceHashes": {
         "src/views/table-footer-renderer.ts": "2a076187efd5",
-        "src/views/table-renderer.ts": "1732b9ab65d3",
+        "src/views/table-renderer.ts": "2044cea151d8",
         "styles.css": "44351ed7a9bd",
         "tools/screenshots/theme.css": "6b879b442ee0",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -1335,7 +1335,7 @@
       "layoutHash": "e8d54c0b03c8",
       "sourceHashes": {
         "src/views/table-footer-renderer.ts": "2a076187efd5",
-        "src/views/table-renderer.ts": "1732b9ab65d3",
+        "src/views/table-renderer.ts": "2044cea151d8",
         "styles.css": "44351ed7a9bd",
         "tools/screenshots/theme.css": "6b879b442ee0",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -1360,7 +1360,7 @@
       "layoutHash": "e8d54c0b03c8",
       "sourceHashes": {
         "src/views/table-footer-renderer.ts": "2a076187efd5",
-        "src/views/table-renderer.ts": "1732b9ab65d3",
+        "src/views/table-renderer.ts": "2044cea151d8",
         "styles.css": "44351ed7a9bd",
         "tools/screenshots/theme.css": "6b879b442ee0",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -3006,7 +3006,7 @@
       "layoutHash": "41171c8dcdeb",
       "sourceHashes": {
         "src/views/record-icon-renderer.ts": "3d90a87b2a0b",
-        "src/views/table-renderer.ts": "1732b9ab65d3",
+        "src/views/table-renderer.ts": "2044cea151d8",
         "src/data/record-icon.ts": "dd6940af82f2",
         "styles.css": "44351ed7a9bd",
         "tools/screenshots/theme.css": "6b879b442ee0",
@@ -3033,7 +3033,7 @@
       "layoutHash": "41171c8dcdeb",
       "sourceHashes": {
         "src/views/record-icon-renderer.ts": "3d90a87b2a0b",
-        "src/views/table-renderer.ts": "1732b9ab65d3",
+        "src/views/table-renderer.ts": "2044cea151d8",
         "src/data/record-icon.ts": "dd6940af82f2",
         "styles.css": "44351ed7a9bd",
         "tools/screenshots/theme.css": "6b879b442ee0",
@@ -3060,7 +3060,7 @@
       "layoutHash": "faa74778b1c3",
       "sourceHashes": {
         "src/views/record-icon-renderer.ts": "3d90a87b2a0b",
-        "src/views/table-renderer.ts": "1732b9ab65d3",
+        "src/views/table-renderer.ts": "2044cea151d8",
         "src/data/record-icon.ts": "dd6940af82f2",
         "styles.css": "44351ed7a9bd",
         "tools/screenshots/theme.css": "6b879b442ee0",
@@ -3087,7 +3087,7 @@
       "layoutHash": "faa74778b1c3",
       "sourceHashes": {
         "src/views/record-icon-renderer.ts": "3d90a87b2a0b",
-        "src/views/table-renderer.ts": "1732b9ab65d3",
+        "src/views/table-renderer.ts": "2044cea151d8",
         "src/data/record-icon.ts": "dd6940af82f2",
         "styles.css": "44351ed7a9bd",
         "tools/screenshots/theme.css": "6b879b442ee0",
@@ -4029,7 +4029,7 @@
       "layoutHash": "5e2c1b050fe6",
       "sourceHashes": {
         "src/views/table-record-peek.ts": "ca49c8ce6aab",
-        "src/views/table-renderer.ts": "1732b9ab65d3",
+        "src/views/table-renderer.ts": "2044cea151d8",
         "styles.css": "44351ed7a9bd",
         "tools/screenshots/theme.css": "6b879b442ee0",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -4054,7 +4054,7 @@
       "layoutHash": "5e2c1b050fe6",
       "sourceHashes": {
         "src/views/table-record-peek.ts": "ca49c8ce6aab",
-        "src/views/table-renderer.ts": "1732b9ab65d3",
+        "src/views/table-renderer.ts": "2044cea151d8",
         "styles.css": "44351ed7a9bd",
         "tools/screenshots/theme.css": "6b879b442ee0",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -4079,7 +4079,7 @@
       "layoutHash": "e78a5ab225cc",
       "sourceHashes": {
         "src/views/table-record-peek.ts": "ca49c8ce6aab",
-        "src/views/table-renderer.ts": "1732b9ab65d3",
+        "src/views/table-renderer.ts": "2044cea151d8",
         "styles.css": "44351ed7a9bd",
         "tools/screenshots/theme.css": "6b879b442ee0",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -4104,7 +4104,7 @@
       "layoutHash": "e78a5ab225cc",
       "sourceHashes": {
         "src/views/table-record-peek.ts": "ca49c8ce6aab",
-        "src/views/table-renderer.ts": "1732b9ab65d3",
+        "src/views/table-renderer.ts": "2044cea151d8",
         "styles.css": "44351ed7a9bd",
         "tools/screenshots/theme.css": "6b879b442ee0",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -5020,7 +5020,7 @@
       },
       "note": "Sticky day header and all-day strip over the 08–16 time grid; the current-time ruler sits on Wednesday at 13:45.",
       "capture": "viewport",
-      "bytes": 114040
+      "bytes": 113210
     },
     {
       "id": "calendar-week-time-grid",
@@ -5501,7 +5501,7 @@
       ],
       "layoutHash": "220c077fa070",
       "sourceHashes": {
-        "src/views/table-renderer.ts": "1732b9ab65d3",
+        "src/views/table-renderer.ts": "2044cea151d8",
         "src/views/table-column-layout-sync.ts": "a678b28c2bf2",
         "src/views/table-layout.ts": "a39067d21b59",
         "src/views/cell-renderer.ts": "6b23762ee384",
@@ -5535,7 +5535,7 @@
       ],
       "layoutHash": "220c077fa070",
       "sourceHashes": {
-        "src/views/table-renderer.ts": "1732b9ab65d3",
+        "src/views/table-renderer.ts": "2044cea151d8",
         "src/views/table-column-layout-sync.ts": "a678b28c2bf2",
         "src/views/table-layout.ts": "a39067d21b59",
         "src/views/cell-renderer.ts": "6b23762ee384",
@@ -5569,7 +5569,7 @@
       ],
       "layoutHash": "50f1941fbfb9",
       "sourceHashes": {
-        "src/views/table-renderer.ts": "1732b9ab65d3",
+        "src/views/table-renderer.ts": "2044cea151d8",
         "src/views/table-column-layout-sync.ts": "a678b28c2bf2",
         "src/views/table-layout.ts": "a39067d21b59",
         "src/views/cell-renderer.ts": "6b23762ee384",
@@ -5603,7 +5603,7 @@
       ],
       "layoutHash": "50f1941fbfb9",
       "sourceHashes": {
-        "src/views/table-renderer.ts": "1732b9ab65d3",
+        "src/views/table-renderer.ts": "2044cea151d8",
         "src/views/table-column-layout-sync.ts": "a678b28c2bf2",
         "src/views/table-layout.ts": "a39067d21b59",
         "src/views/cell-renderer.ts": "6b23762ee384",
@@ -5633,7 +5633,7 @@
       ],
       "layoutHash": "b518b455de1a",
       "sourceHashes": {
-        "src/views/table-renderer.ts": "1732b9ab65d3",
+        "src/views/table-renderer.ts": "2044cea151d8",
         "src/views/column-header-controller.ts": "7714b894b5b0",
         "src/views/cell-renderer.ts": "6b23762ee384",
         "styles.css": "44351ed7a9bd",
@@ -5660,7 +5660,7 @@
       ],
       "layoutHash": "b518b455de1a",
       "sourceHashes": {
-        "src/views/table-renderer.ts": "1732b9ab65d3",
+        "src/views/table-renderer.ts": "2044cea151d8",
         "src/views/column-header-controller.ts": "7714b894b5b0",
         "src/views/cell-renderer.ts": "6b23762ee384",
         "styles.css": "44351ed7a9bd",
@@ -5687,7 +5687,7 @@
       ],
       "layoutHash": "e391620af1de",
       "sourceHashes": {
-        "src/views/table-renderer.ts": "1732b9ab65d3",
+        "src/views/table-renderer.ts": "2044cea151d8",
         "src/views/column-header-controller.ts": "7714b894b5b0",
         "src/views/cell-renderer.ts": "6b23762ee384",
         "styles.css": "44351ed7a9bd",
@@ -5714,7 +5714,7 @@
       ],
       "layoutHash": "e391620af1de",
       "sourceHashes": {
-        "src/views/table-renderer.ts": "1732b9ab65d3",
+        "src/views/table-renderer.ts": "2044cea151d8",
         "src/views/column-header-controller.ts": "7714b894b5b0",
         "src/views/cell-renderer.ts": "6b23762ee384",
         "styles.css": "44351ed7a9bd",
@@ -5848,7 +5848,7 @@
       },
       "note": "Two weeks at one column per day; the April band marks the month boundary and the today line sits at 25 March 13:45.",
       "capture": "viewport",
-      "bytes": 147239
+      "bytes": 146959
     },
     {
       "id": "timeline-view",

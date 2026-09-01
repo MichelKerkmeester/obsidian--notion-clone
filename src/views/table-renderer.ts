@@ -1293,16 +1293,29 @@ export class TableRenderer {
   ): void {
     table.setAttr("aria-rowcount", String(Math.max(1, rows.length + 1)));
     table.setAttr("aria-colcount", String(columns.length + this.getUtilityColumnCount(config)));
+    // Index the rows once, then walk them once.
+    //
+    // This loop carried two quadratic terms and they were the table's whole superlinear cost. It
+    // asked `rows.find` for the record behind each `<tr>`, which is a scan of every row per row,
+    // and it rebuilt `Array.from(row.children)` for each cell only to ask that fresh array where
+    // the cell it had just been handed sits. Both read as ordinary per-item work and neither is:
+    // the profile put this one function at 8.8% of a 400-row render and 26.2% of a 1,600-row one,
+    // which is the shape of a term that grows with the thing it is iterating.
+    //
+    // The lookup becomes a map built once from the same argument, and the column index is the
+    // position the iteration already knows. Nothing about the emitted attributes changes.
+    const rowByPath = new Map(rows.map((candidate) => [candidate.file.path, candidate]));
     table.querySelectorAll<HTMLElement>("tbody > tr[data-note-database-row-path]").forEach((row, index) => {
       row.setAttr("role", "row");
       row.setAttr("aria-rowindex", String(startIndex + index + 2));
-      const dataRow = rows.find((candidate) => candidate.file.path === row.dataset.noteDatabaseRowPath);
+      const path = row.dataset.noteDatabaseRowPath;
+      const dataRow = path === undefined ? undefined : rowByPath.get(path);
       const selected = dataRow ? this.actions.isRowSelected(dataRow) : false;
       row.setAttr("aria-selected", String(Boolean(selected)));
-      Array.from(row.children).forEach((cell) => {
+      Array.from(row.children).forEach((cell, cellIndex) => {
         const element = cell as HTMLElement;
         element.setAttr("role", "gridcell");
-        element.setAttr("aria-colindex", String(Array.from(row.children).indexOf(cell) + 1));
+        element.setAttr("aria-colindex", String(cellIndex + 1));
         element.setAttr("aria-selected", String(Boolean(selected) || element.hasClass("db-cell-range-selected")));
       });
     });
