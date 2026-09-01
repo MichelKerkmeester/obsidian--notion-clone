@@ -332,6 +332,47 @@ const stateFailures = stateResults.filter((r) =>
   !r.checkedDiffers || !r.disabledDiffers || !r.focusDiffers
   || (!r.indeterminateDiffers && !exemptFromIndeterminate(r)));
 
+// ───────────────────────────────────────────────────────────────────
+// SET EQUALITY: one shape per role, and one shape per role per mount point
+// ───────────────────────────────────────────────────────────────────
+//
+// `004` asks for radius and box size to be identical WITHIN A ROLE across board, gallery, list,
+// table, modal and panel, and identical at all three mount points. Both are set-equality claims and
+// the shape census above answers neither: it reports four shapes across everything, which is the
+// right answer to a different question.
+//
+// THE POINTER MODE IS AN AXIS, NOT A VIOLATION. Grouped by role alone, `db-checkbox-row` reports two
+// shapes — 16x16 and 28x28 — and that reads as a role disagreeing with itself. It is the coarse
+// pointer: the stylesheet raises the box under `@media (pointer: coarse)`, and the phone fixtures
+// render on the touch page. A check without this axis fails a correct stylesheet, which is the shape
+// this program keeps finding in criteria phrased as universals.
+const roleOf = (row) => ([...row.classes].find((c) => c.startsWith("db-checkbox-")) || "(switch)");
+const deviceOf = (row) => (/mobile|phone/i.test(row.scenario) ? "touch" : "fine");
+const mountOf = (row) => (row.chain[0] || "(body)");
+
+const groupShapes = (keyOf) => {
+  const groups = new Map();
+  for (const row of owned) {
+    const key = keyOf(row);
+    if (!groups.has(key)) groups.set(key, { shapes: new Set(), fixtures: new Set() });
+    groups.get(key).shapes.add(`${row.measured.width}x${row.measured.height} r=${row.measured.radius}`);
+    groups.get(key).fixtures.add(row.scenario);
+  }
+  return groups;
+};
+
+const byRole = groupShapes((r) => `${roleOf(r)} @ ${deviceOf(r)}`);
+const byMount = groupShapes((r) => `${roleOf(r)} @ ${deviceOf(r)} @ ${mountOf(r)}`);
+const roleSplits = [...byRole].filter(([, g]) => g.shapes.size > 1);
+const mountSplits = [...byMount].filter(([, g]) => g.shapes.size > 1);
+
+console.log(`  one shape per role and pointer mode (${byRole.size} groups, ${roleSplits.length} split):`);
+for (const [key, g] of [...byRole].sort()) {
+  console.log(`    ${key.padEnd(34)} ${[...g.shapes].join(" / ")}  across ${g.fixtures.size} fixture(s)`
+    + (g.shapes.size > 1 ? "   <-- one role, more than one box" : ""));
+}
+console.log(`  and unchanged at every mount point (${byMount.size} groups, ${mountSplits.length} split)\n`);
+
 console.log(`  states, one representative per shape (${stateResults.length} families):`);
 for (const r of stateResults) {
   const mark = (ok) => (ok ? "yes" : "NO ");
@@ -358,6 +399,10 @@ stamp("tools/live/checkbox-appearance.json", {
     distinctShapes: shapes.size,
     stateFamilies: stateResults.length,
     stateFailures: stateFailures.length,
+    roleGroups: byRole.size,
+    roleShapeSplits: roleSplits.length,
+    mountGroups: byMount.size,
+    mountShapeSplits: mountSplits.length,
   },
   shapes: Object.fromEntries(shapes),
   states: stateResults,

@@ -39,11 +39,28 @@ why most of them are still open even where a number looks green.*
       claim beside it — *no checkbox or switch borrows its appearance from an ancestor*, was 10,
       recorded 0, now 0 — which is a statement about ownership rather than about a computed value,
       and a host cannot satisfy it on the plugin's behalf.
-- [ ] Radius and box size identical within a role across board, gallery, list, table, modal, panel —
-      set equality. **Exposed the same way as the row above and without its companion claim.**
-      `checkbox-inventory` reports the families; nothing asserts set equality of radius and box size
-      per role, and a harness without `app.css` cannot tell a plugin box from a host one.
-- [ ] Appearance identical at all three mount points. **No check.**
+- [x] Radius and box size identical within a role across board, gallery, list, table, modal, panel —
+      set equality. **Measured 2026-09-01: 4 groups, 0 split.**
+      `(switch) @ fine 34x18 r=9999px across 4 fixtures` · `db-checkbox-field @ fine 18x18 r=4px
+      across 5` · `db-checkbox-row @ fine 16x16 r=4px across 10` · `db-checkbox-row @ touch
+      28x28 r=4px across 3`.
+      **The pointer mode is an axis, not a violation, and leaving it out fails a correct
+      stylesheet.** Grouped by role alone, `db-checkbox-row` reports two shapes — 16×16 and 28×28 —
+      which reads as a role disagreeing with itself. It is the coarse pointer: the stylesheet raises
+      the box under `@media (pointer: coarse)` and the phone fixtures render on the touch page. This
+      is the shape the program keeps finding in criteria phrased as universals, and this one was
+      found while building the check rather than after shipping it.
+      **Watched failing** with one surface given a different radius for the same role: `16x16
+      r=9999px / 16x16 r=4px … <-- one role, more than one box`, at both pointer modes.
+      **The audit's exposure still stands and is not cured by this:** a harness without `app.css`
+      cannot tell a plugin box from a host one. What this adds is that whatever the boxes are, the
+      plugin gives one role one box.
+- [x] Appearance identical at all three mount points. **Measured as the same set-equality question
+      with the mount point as a third axis: 7 groups, 0 split.** The roots the census finds are
+      `note-database-container`, `note-database-container db-width-default`, `note-database-modal`
+      and `note-database-modal db-invalid-events-modal`, and no role changes shape across them.
+      Red under the same control, which splits the mount groups as well as the role groups —
+      the two claims share one measurement and one failure mode.
 - [x] Checked, indeterminate, disabled and focus each produce a measurable difference, per family.
       **Built 2026-09-01, and it found one.** `checkbox-appearance` now drives all four states on one
       representative per SHAPE — the shape is what a family shares, so running all 223 would report

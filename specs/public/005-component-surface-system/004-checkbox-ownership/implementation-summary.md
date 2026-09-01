@@ -26,7 +26,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-004"
       parent_session_id: null
-    completion_pct: 38
+    completion_pct: 62
     open_questions:
       - "Can the base rule win against a hostile theme without !important; three themes still untested"
     answered_questions:

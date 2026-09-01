@@ -1,8 +1,8 @@
 {
-  "measuredAt": "2026-09-01T00:08:38.244Z",
+  "measuredAt": "2026-09-01T00:18:16.035Z",
   "inputs": {
     "styles.css": "1ce52a63b090",
-    "tools/live/checkbox-appearance.mjs": "1256033225c8",
+    "tools/live/checkbox-appearance.mjs": "3173162bff2a",
     "tools/screenshots/scenarios.mjs": "1395f2dacbfd"
   },
   "totals": {
@@ -15,7 +15,11 @@
     "platformBox": 0,
     "distinctShapes": 4,
     "stateFamilies": 4,
-    "stateFailures": 0
+    "stateFailures": 0,
+    "roleGroups": 4,
+    "roleShapeSplits": 0,
+    "mountGroups": 7,
+    "mountShapeSplits": 0
   },
   "shapes": {
     "16x16 r=4px": 140,
