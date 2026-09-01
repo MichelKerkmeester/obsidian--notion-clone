@@ -1,7 +1,7 @@
 {
   "holder": null,
   "acquiredAt": "2026-09-01T17:30:00Z",
-  "baselineHash": "8f1414356dc8",
+  "baselineHash": "9a84a91b5cf1",
   "baselineCommit": "be6c16e",
   "history": [
     {
@@ -960,6 +960,20 @@
       "at": "2026-09-02T05:30:00Z",
       "hash": "8f1414356dc8",
       "note": "Three surfaces given box-sizing: border-box. The empty-state hero states width: min(100%, 780px) and carries 28px of padding, so under content-box it overflowed its pane by 26px; the two inline cell editors are width: 100% over the host's input padding and overflowed the cell they edit by 24px."
+    },
+    {
+      "event": "acquire",
+      "phase": "visual-pass",
+      "at": "2026-09-02T06:00:00Z",
+      "hash": "8f1414356dc8",
+      "note": "The invalid-events modal is width:100% over a border under content-box, so it overflows by 2px."
+    },
+    {
+      "event": "release",
+      "phase": "visual-pass",
+      "at": "2026-09-02T06:15:00Z",
+      "hash": "9a84a91b5cf1",
+      "note": "Recaptured and read. Three classes still overhang their parent and each was characterised rather than changed: the toolbar badge is position:absolute at left:9px on a button corner, and the board subgroup header carries an explicit margin-right:-8px. The list group header bleeds the same 8px by content-box instead, which makes the pair visually consistent through two different mechanisms \u2014 changing one alone would break that alignment, so it is a design question rather than a defect to take unilaterally."
     }
   ],
   "outstanding": [

@@ -1,7 +1,7 @@
 {
-  "measuredAt": "2026-09-01T13:33:42.035Z",
+  "measuredAt": "2026-09-01T13:41:11.119Z",
   "inputs": {
-    "styles.css": "8f1414356dc8",
+    "styles.css": "9a84a91b5cf1",
     "tools/live/view-census.mjs": "2ce0c7f439a4",
     "tools/screenshots/scenarios.mjs": "1395f2dacbfd"
   },
@@ -2187,7 +2187,7 @@
       "tag": "div",
       "cls": "db-invalid-event-col-time",
       "parentCls": "db-invalid-event-grid-header",
-      "by": 110,
+      "by": 112,
       "scrolls": true,
       "pastHeader": 0
     },
@@ -2198,7 +2198,7 @@
       "tag": "div",
       "cls": "db-invalid-event-col-time",
       "parentCls": "db-invalid-event-grid-header",
-      "by": 286,
+      "by": 288,
       "scrolls": true,
       "pastHeader": 0
     },
@@ -2209,7 +2209,7 @@
       "tag": "div",
       "cls": "db-invalid-event-col-span",
       "parentCls": "db-invalid-event-grid-header",
-      "by": 410,
+      "by": 412,
       "scrolls": true,
       "pastHeader": 0
     },
@@ -2220,7 +2220,7 @@
       "tag": "div",
       "cls": "db-invalid-event-time-field.is-start",
       "parentCls": "db-invalid-event-row",
-      "by": 110,
+      "by": 112,
       "scrolls": true,
       "pastHeader": 0
     },
@@ -2231,7 +2231,7 @@
       "tag": "div",
       "cls": "db-invalid-event-time-field.is-end",
       "parentCls": "db-invalid-event-row",
-      "by": 286,
+      "by": 288,
       "scrolls": true,
       "pastHeader": 0
     },
@@ -2242,7 +2242,7 @@
       "tag": "div",
       "cls": "db-invalid-event-span-cell",
       "parentCls": "db-invalid-event-row",
-      "by": 410,
+      "by": 412,
       "scrolls": true,
       "pastHeader": 0
     },
@@ -2253,7 +2253,7 @@
       "tag": "div",
       "cls": "db-invalid-event-time-field.is-start",
       "parentCls": "db-invalid-event-row",
-      "by": 110,
+      "by": 112,
       "scrolls": true,
       "pastHeader": 0
     },
@@ -2264,7 +2264,7 @@
       "tag": "div",
       "cls": "db-invalid-event-time-field.is-end",
       "parentCls": "db-invalid-event-row",
-      "by": 286,
+      "by": 288,
       "scrolls": true,
       "pastHeader": 0
     },
@@ -2275,7 +2275,7 @@
       "tag": "div",
       "cls": "db-invalid-event-span-cell",
       "parentCls": "db-invalid-event-row",
-      "by": 410,
+      "by": 412,
       "scrolls": true,
       "pastHeader": 0
     },
@@ -2286,7 +2286,7 @@
       "tag": "div",
       "cls": "db-invalid-event-time-field.is-start",
       "parentCls": "db-invalid-event-row",
-      "by": 110,
+      "by": 112,
       "scrolls": true,
       "pastHeader": 0
     },
@@ -2297,7 +2297,7 @@
       "tag": "div",
       "cls": "db-invalid-event-time-field.is-end",
       "parentCls": "db-invalid-event-row",
-      "by": 286,
+      "by": 288,
       "scrolls": true,
       "pastHeader": 0
     },
@@ -2308,7 +2308,7 @@
       "tag": "div",
       "cls": "db-invalid-event-span-cell",
       "parentCls": "db-invalid-event-row",
-      "by": 410,
+      "by": 412,
       "scrolls": true,
       "pastHeader": 0
     },
@@ -4580,7 +4580,7 @@
       "tag": "div",
       "cls": "db-invalid-event-col-time",
       "parentCls": "db-invalid-event-grid-header",
-      "by": 28,
+      "by": 30,
       "scrolls": true,
       "pastHeader": 0
     },
@@ -4591,7 +4591,7 @@
       "tag": "div",
       "cls": "db-invalid-event-col-time",
       "parentCls": "db-invalid-event-grid-header",
-      "by": 204,
+      "by": 206,
       "scrolls": true,
       "pastHeader": 0
     },
@@ -4602,7 +4602,7 @@
       "tag": "div",
       "cls": "db-invalid-event-col-span",
       "parentCls": "db-invalid-event-grid-header",
-      "by": 328,
+      "by": 330,
       "scrolls": true,
       "pastHeader": 0
     },
@@ -4613,7 +4613,7 @@
       "tag": "div",
       "cls": "db-invalid-event-time-field.is-start",
       "parentCls": "db-invalid-event-row",
-      "by": 28,
+      "by": 30,
       "scrolls": true,
       "pastHeader": 0
     },
@@ -4624,7 +4624,7 @@
       "tag": "div",
       "cls": "db-invalid-event-time-field.is-end",
       "parentCls": "db-invalid-event-row",
-      "by": 204,
+      "by": 206,
       "scrolls": true,
       "pastHeader": 0
     },
@@ -4635,7 +4635,7 @@
       "tag": "div",
       "cls": "db-invalid-event-span-cell",
       "parentCls": "db-invalid-event-row",
-      "by": 328,
+      "by": 330,
       "scrolls": true,
       "pastHeader": 0
     },
@@ -4646,7 +4646,7 @@
       "tag": "div",
       "cls": "db-invalid-event-time-field.is-start",
       "parentCls": "db-invalid-event-row",
-      "by": 28,
+      "by": 30,
       "scrolls": true,
       "pastHeader": 0
     },
@@ -4657,7 +4657,7 @@
       "tag": "div",
       "cls": "db-invalid-event-time-field.is-end",
       "parentCls": "db-invalid-event-row",
-      "by": 204,
+      "by": 206,
       "scrolls": true,
       "pastHeader": 0
     },
@@ -4668,7 +4668,7 @@
       "tag": "div",
       "cls": "db-invalid-event-span-cell",
       "parentCls": "db-invalid-event-row",
-      "by": 328,
+      "by": 330,
       "scrolls": true,
       "pastHeader": 0
     },
@@ -4679,7 +4679,7 @@
       "tag": "div",
       "cls": "db-invalid-event-time-field.is-start",
       "parentCls": "db-invalid-event-row",
-      "by": 28,
+      "by": 30,
       "scrolls": true,
       "pastHeader": 0
     },
@@ -4690,7 +4690,7 @@
       "tag": "div",
       "cls": "db-invalid-event-time-field.is-end",
       "parentCls": "db-invalid-event-row",
-      "by": 204,
+      "by": 206,
       "scrolls": true,
       "pastHeader": 0
     },
@@ -4701,7 +4701,7 @@
       "tag": "div",
       "cls": "db-invalid-event-span-cell",
       "parentCls": "db-invalid-event-row",
-      "by": 328,
+      "by": 330,
       "scrolls": true,
       "pastHeader": 0
     },
