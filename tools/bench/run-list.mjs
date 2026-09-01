@@ -52,6 +52,7 @@ const OPTIONS = {};
 // render that is comfortable on a laptop can be a freeze on the device that reported it, so the
 // ceiling question has to be askable with a multiplier. Without this the pass is about this Mac.
 let throttle = 1;
+let grouped = false;
 for (const arg of process.argv.slice(2)) {
   const [key, value] = arg.replace(/^--/, "").split("=");
   if (key === "rows") OPTIONS.rowCounts = value.split(",").map(Number);
@@ -60,6 +61,9 @@ for (const arg of process.argv.slice(2)) {
   else if (key === "repeats") OPTIONS.repeats = Number(value);
   else if (key === "kind") OPTIONS.columnKind = value;
   else if (key === "throttle") throttle = Number(value);
+  // The grouped renderer is a different entry point, not an option on the flat one, so nothing
+  // the flat arm reports says anything about it.
+  else if (key === "grouped") grouped = value === undefined ? true : value !== "false";
   else throw new Error(`run-list: unknown argument "${arg}"`);
 }
 if (!Number.isFinite(throttle) || throttle < 1) {
@@ -84,10 +88,11 @@ mkdirSync(OUT, { recursive: true });
 const entry = resolve(OUT, "list-entry.ts");
 writeFileSync(entry, `
 import { installObsidianDomShim } from "../../storybook/obsidian-dom-shim.mjs";
-import { runListBench } from "../list-render-bench";
+import { runListBench, runGroupedListBench } from "../list-render-bench";
 
 installObsidianDomShim(window);
 window.__listBench = (options) => runListBench(document.body, options);
+window.__groupedListBench = (options) => runGroupedListBench(document.body, options);
 `);
 
 await esbuild.build({
@@ -142,7 +147,9 @@ try {
     await page.goto(`file://${resolve(OUT, "list-index.html")}`);
     if (surface.phone) await page.evaluate(() => document.body.classList.add("is-phone"));
 
-    const samples = await page.evaluate((options) => window.__listBench(options), OPTIONS);
+    const samples = grouped
+      ? await page.evaluate((options) => window.__groupedListBench(options), OPTIONS)
+      : await page.evaluate((options) => window.__listBench(options), OPTIONS);
     for (const err of errors) console.error(`  page error: ${err}`);
     if (errors.length) {
       console.error("list-bench: FAIL — the bench threw");
@@ -150,7 +157,7 @@ try {
     }
     collected[surface.name] = samples;
 
-    console.log(`\n${surface.name} (${surface.viewport.width}px): real ListRenderer, text fields only`
+    console.log(`\n${surface.name} (${surface.viewport.width}px): real ListRenderer, ${grouped ? "GROUPED — nine rows in ten in one section" : "flat"}, text fields only`
       + `${throttle > 1 ? ` — ${throttle}x CPU throttle` : ""}\n`);
     console.log("  fill  cols  rows   median   p95   layout  blocked   nodes  fields  blanks   ms/row");
     for (const s of samples) {

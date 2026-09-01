@@ -28,7 +28,7 @@
 // 1. IMPORTS
 // ───────────────────────────────────────────────────────────────────
 
-import { ListRenderer, type ListRendererActions } from "../../src/views/list-renderer";
+import { ListRenderer, type ListGroup, type ListRendererActions } from "../../src/views/list-renderer";
 import type { App } from "obsidian";
 import type { ColumnDef, RowData, ViewConfig } from "../../src/data/types";
 
@@ -142,6 +142,8 @@ function makeActions(columns: ColumnDef[]): ListRendererActions {
 // ───────────────────────────────────────────────────────────────────
 
 export interface ListBenchSample {
+  /** "flat" or "grouped". A grouped list is a different renderer entry point, not a variant of one. */
+  shape?: "flat" | "grouped";
   columns: number;
   rows: number;
   fillRate: number;
@@ -222,6 +224,102 @@ export function runListBench(host: HTMLElement, options: BenchOptions = {}): Lis
 
         const median = percentile(renderTimes, 0.5);
         samples.push({
+          columns: columnCount,
+          rows: rowCount,
+          fillRate,
+          renderMs: Number(median.toFixed(2)),
+          p95Ms: Number(percentile(renderTimes, 0.95).toFixed(2)),
+          layoutMs: Number(percentile(layoutTimes, 0.5).toFixed(2)),
+          domNodes,
+          fieldNodes,
+          placeholderNodes,
+          msPerRow: Number((median / rowCount).toFixed(4)),
+        });
+      }
+    }
+  }
+
+  return samples;
+}
+
+// ───────────────────────────────────────────────────────────────────
+// 4. THE GROUPED ARM
+// ───────────────────────────────────────────────────────────────────
+
+/**
+ * One oversized group, which is the shape that still blocked after the flat list was windowed.
+ *
+ * A grouped list is a different entry point, not an option on the flat one, so nothing the flat
+ * bench measured said anything about it. Grouping does have a row cap, but it defaults to "all",
+ * so a database grouped by a field most of its rows share renders every one of them.
+ *
+ * The distribution is deliberate: most rows in a single group, the rest spread thin. A bench that
+ * split rows evenly across many groups would keep every section under the windowing threshold and
+ * report a cost the operator's database never pays — the harness choosing the shape that passes.
+ */
+function makeGroups(rows: RowData[], groupCount: number): ListGroup[] {
+  const groups: ListGroup[] = Array.from({ length: groupCount }, (_unused, i) => ({
+    key: `group-${i}`,
+    rows: [],
+    count: 0,
+  }));
+  rows.forEach((row, i) => {
+    // Nine in ten land in group 0; the remainder round-robin through the others.
+    const target = i % 10 === 0 && groupCount > 1 ? 1 + (i % (groupCount - 1)) : 0;
+    groups[target].rows.push(row);
+  });
+  for (const group of groups) group.count = group.rows.length;
+  return groups;
+}
+
+export function runGroupedListBench(host: HTMLElement, options: BenchOptions = {}): ListBenchSample[] {
+  const { fillRates, columnCounts, rowCounts, repeats: REPEATS, columnKind } = { ...DEFAULTS, ...options };
+  const samples: ListBenchSample[] = [];
+  const app = undefined as unknown as App;
+
+  for (const fillRate of fillRates) {
+    for (const columnCount of columnCounts) {
+      const columns = makeColumns(columnCount, columnKind);
+      const config = makeConfig(columns);
+      const actions = makeActions(columns);
+
+      for (const rowCount of rowCounts) {
+        const rows = makeRows(rowCount, columns, fillRate);
+        const groups = makeGroups(rows, 4);
+        const renderTimes: number[] = [];
+        const layoutTimes: number[] = [];
+        let domNodes = 0;
+        let fieldNodes = 0;
+        let placeholderNodes = 0;
+
+        for (let run = 0; run <= REPEATS; run += 1) {
+          const container = host.createDiv({ cls: "note-database-container" });
+          // The same viewport the flat arm gives itself. A windowed section keeps rows against the
+          // scroller's height, so a harness with no height decides the answer instead of measuring it.
+          container.setCssProps({ height: `${window.innerHeight}px` });
+          const renderer = new ListRenderer(app, actions);
+
+          const start = performance.now();
+          renderer.renderGrouped(container, config, groups, "category");
+          const rendered = performance.now();
+
+          const layoutStart = performance.now();
+          void container.offsetHeight;
+          const layoutEnd = performance.now();
+
+          if (run > 0) {
+            renderTimes.push(rendered - start);
+            layoutTimes.push(layoutEnd - layoutStart);
+            domNodes = container.querySelectorAll("*").length;
+            fieldNodes = container.querySelectorAll(".db-list-field").length;
+            placeholderNodes = container.querySelectorAll(".db-list-field.is-placeholder").length;
+          }
+          container.remove();
+        }
+
+        const median = percentile(renderTimes, 0.5);
+        samples.push({
+          shape: "grouped",
           columns: columnCount,
           rows: rowCount,
           fillRate,
