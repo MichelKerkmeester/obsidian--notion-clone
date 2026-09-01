@@ -78,6 +78,12 @@
      the exact direction that makes a height check pass optimistically. Read from the installed
      app stylesheet, not recalled. */
   --input-height: 30px;
+  --input-padding: 4px 8px;
+  --input-radius: 5px;
+  --button-radius: 5px;
+  --size-4-1: 4px;
+  --size-4-2: 8px;
+  --size-4-3: 12px;
 
   --scrollbar-thumb-bg: rgba(0, 0, 0, 0.18);
   --divider-color: #e0e0e0;
@@ -209,7 +215,15 @@ html.capture-element #shot {
    The plugin declares no rules for bare input, select, button or textarea; it inherits
    Obsidian's. Without a stand-in, every captured control falls back to the browser default
    and photographs as a white box on a dark surface, which misrepresents the UI rather than
-   documenting it. These mirror Obsidian's default control styling. */
+   documenting it.
+
+   These are TRANSCRIBED from the installed application stylesheet, not recalled. They used to
+   say "mirror Obsidian's default control styling" while carrying padding of 5px 10px on a button
+   and 5px 8px on an input, where the host resolves `var(--size-4-1) var(--size-4-3)` to 4px 12px
+   and `--input-padding` to 4px 8px, with `--input-radius: 5px` rather than the 4px radius token
+   this file was reaching for. A baseline that is nearly the host is worse than none: it looks
+   settled, so nothing re-checks it, and a sweep for spacing that fights the plugin's own scale
+   reports the harness's invented values as though they were the plugin's. */
 input[type="text"],
 input[type="search"],
 input[type="number"],
@@ -218,10 +232,10 @@ textarea {
   background: var(--background-modifier-form-field, var(--background-primary-alt));
   color: var(--text-normal);
   border: 1px solid var(--background-modifier-border);
-  border-radius: var(--radius-s);
-  padding: 5px 8px;
+  border-radius: var(--input-radius, 5px);
+  padding: var(--input-padding, 4px 8px);
   font-family: inherit;
-  font-size: 14px;
+  font-size: var(--font-ui-small, 13px);
   outline: none;
 }
 
@@ -241,10 +255,10 @@ button {
   background: var(--interactive-normal);
   color: var(--text-normal);
   border: none;
-  border-radius: var(--radius-s);
-  padding: 5px 10px;
+  border-radius: var(--button-radius, 5px);
+  padding: var(--size-4-1, 4px) var(--size-4-3, 12px);
   font-family: inherit;
-  font-size: 14px;
+  font-size: var(--font-ui-small, 13px);
   cursor: pointer;
 }
 
