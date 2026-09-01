@@ -110,6 +110,7 @@ import { trackCellGesture, nextCellRange, resolveCellTapAction, isMainItemColumn
 import { attachLongPress, isTouchDevice } from "${join(REPO, "src/data/touch-environment")}";
 import { attachTitleOpenAffordance, setupTitleCellTap, openTableRecordPeek, closeTableRecordPeek } from "${join(REPO, "src/views/table-record-peek")}";
 import { openDropdownMenu } from "${join(REPO, "src/views/dropdown-field")}";
+import { ColumnManagerRenderer } from "${join(REPO, "src/views/column-manager-renderer")}";
 import { openRecordDetailPanel } from "${join(REPO, "src/views/record-detail-panel")}";
 import { RowMenu } from "${join(REPO, "src/views/row-menu")}";
 import { ColumnMenu } from "${join(REPO, "src/views/column-menu")}";
@@ -129,6 +130,7 @@ globalThis.__drag = { openRecordDetailPanel, refreshRecordDetailPanel, applyShee
 globalThis.__a = { positionToolbarPopover, placeSheet, applySheetChrome, attachSheetDragToDismiss, openRecordDetailPanel, refreshRecordDetailPanel, closeRecordDetailPanel, createOwnedMenu, createMenuRow };
 globalThis.__flick = { shouldFlickDismiss, FLICK_PX_PER_MS, FLICK_MIN_PX, STALE_SAMPLE_MS };
 globalThis.__layer = { openTableRecordPeek, closeTableRecordPeek, openDropdownMenu };
+globalThis.__columns = { ColumnManagerRenderer };
 `);
 
 execFileSync(join(REPO, "node_modules/.bin/esbuild"), [
@@ -7100,10 +7102,137 @@ await section("the peek's layer sits inside the token scale", async () => {
       + `cascade, and would have passed on the tree this row was written against`);
 });
 
+// ───────────────────────────────────────────────────────────────────
+// WHAT A SINGLE CLICK ON A PROPERTY ROW REACHES
+// ───────────────────────────────────────────────────────────────────
+//
+// The packet's row reads "Delete is not a bare one-click target in the row's primary line", and it
+// was recorded failing from a reading of the wiring: `deleteBtn.onclick = () => deleteColumn(col)`.
+// The cost of that click is decided one call deeper, and `column-delete-confirmation.test.ts` drives
+// it — every branch interposes a confirmation, a refusal is a zero delta, and consent deletes.
+//
+// What that unit test cannot see is the ROW. It knows what `deleteColumn` costs; it does not know
+// how many ways there are to reach it, or whether the row that says "status" hands `deleteColumn`
+// the status column. Both are properties of the rendered row, and both are what "in the row's
+// primary line" is asking about.
+//
+// So this drives a real click on every element of a real row. Not a synthetic dispatch on the one
+// button that is expected to answer — every element, so a second path is discoverable rather than
+// assumed absent. The identity half then clicks the delete on a NAMED row and reads which column
+// object arrived, which is the assertion AC-008 asks for and no positional check can make.
+
+const propertyRowResults = [];
+
+await section("what a single click on a property row reaches", async () => {
+  const page = await browser.newPage({ viewport: VIEWPORT, reducedMotion: "reduce" });
+  await page.setContent(page_html);
+  await page.addStyleTag({ content: readFileSync(join(REPO, "styles.css"), "utf8") + HOST_BARE_CONTROLS });
+  await page.addScriptTag({ content: shimJs + "\ninstallObsidianDomShim(globalThis);" });
+  await page.addScriptTag({ content: positionerJs });
+
+  const measured = await page.evaluate(() => {
+    const { ColumnManagerRenderer } = globalThis.__columns;
+    const container = document.querySelector(".note-database-container");
+
+    const columns = [
+      { key: "file.name", label: "Name", type: "text" },
+      { key: "status", label: "Status", type: "text" },
+      { key: "owner", label: "Owner", type: "text" },
+    ];
+    const config = { schema: { columns }, viewType: "table", columnOrder: columns.map((c) => c.key) };
+    const state = { hiddenColumns: new Set(), filters: [], sortRules: [], sortDirection: "asc" };
+
+    // Every action records, none mutates. What is being measured is which action a click reaches
+    // and with which column — the mutation itself is the unit test's subject, not this one's.
+    const calls = [];
+    const actions = {};
+    for (const name of ["close", "setColumnVisible", "setAllColumnsVisible", "moveColumn",
+      "moveColumnTo", "toggleColumnWrap", "editColumn", "addColumn", "deleteColumn"]) {
+      actions[name] = (...args) => calls.push({ action: name, arg: args[0] });
+    }
+
+    const renderer = new ColumnManagerRenderer();
+    renderer.render(container, true, config, state, columns, actions, document.getElementById("anchor"));
+    const panel = renderer.getPanel();
+
+    // The middle row, so a mis-resolution has somewhere to land in both directions. A first or last
+    // row hides an off-by-one against the array's own edge.
+    const rows = [...panel.querySelectorAll(".db-column-manager-row")];
+    const row = rows[1];
+    const named = row.querySelector(".db-column-name").textContent;
+
+    // Every element inside the row, clicked once. `elementFromPoint` at each one's centre would
+    // measure the same thing for overlapping children; dispatching on the element itself asks what
+    // that element's own handler does, and the bubbling then reports any ancestor that also answers.
+    const describe = (el) => `${el.tagName.toLowerCase()}.`
+      + (String(el.className || "").split(" ").filter(Boolean).join(".") || "(none)");
+    const reached = [];
+    for (const el of [row, ...row.querySelectorAll("*")]) {
+      const before = calls.length;
+      el.dispatchEvent(new MouseEvent("click", { bubbles: true, cancelable: true }));
+      for (const call of calls.slice(before)) {
+        reached.push({
+          on: describe(el),
+          // A click on the trash's own glyph bubbles to the trash, which is one path reported
+          // twice, not two paths. What separates a real second route from that is whether the
+          // element sits inside the delete control at all.
+          insideDelete: Boolean(el.closest(".db-column-delete-btn")),
+          isRow: el === row,
+          action: call.action,
+          key: call.arg && call.arg.key ? call.arg.key : String(call.arg),
+        });
+      }
+    }
+
+    const deletes = reached.filter((r) => r.action === "deleteColumn");
+    return {
+      named,
+      rows: rows.length,
+      elements: 1 + row.querySelectorAll("*").length,
+      reached,
+      deletes,
+      outside: deletes.filter((d) => !d.insideDelete).map((d) => d.on),
+      rowItselfDeletes: deletes.some((d) => d.isRow),
+      deleteKeys: [...new Set(deletes.map((d) => d.key))],
+    };
+  });
+
+  const record = (name, pass, detail) => propertyRowResults.push({ name, pass, detail });
+  const quote = (value) => JSON.stringify(String(value));
+  const { deletes, deleteKeys } = measured;
+
+  record("nothing outside the trash control reaches the delete",
+    deletes.length > 0 && measured.outside.length === 0 && !measured.rowItselfDeletes,
+    `${measured.elements} element(s) in the row were each clicked once; ${deletes.length} reached `
+      + `deleteColumn and ${measured.outside.length} of those were outside the trash control `
+      + `(${measured.outside.join(", ") || "none"}). The row itself was clicked too, and answered `
+      + `with ${measured.rowItselfDeletes ? "a delete" : "no delete"} — a stray press on the row is `
+      + `the shape this row of the packet is about`);
+
+  record("the delete on a named row deletes the property that row names",
+    deleteKeys.length === 1 && measured.named.includes(deleteKeys[0]),
+    `the row reads ${quote(measured.named)} and its delete was handed ${quote(deleteKeys.join(", "))}. `
+      + `Asserted by the column object the action received, not by the row's index — the same index `
+      + `is a different property on phone than on desktop, which is the misattribution this catches`);
+
+  // A row is more than its delete, and "nothing else deletes" is satisfied by a row where nothing
+  // else does anything. So the rest of the line is asserted as a SET: these four actions and no
+  // others. Dropping any one of them goes red here, which a count or an every() over the same list
+  // does not — an every() with one control removed is still true of the remainder.
+  const WANTED = ["editColumn", "moveColumn", "setColumnVisible", "toggleColumnWrap"];
+  const others = [...new Set(measured.reached
+    .filter((r) => r.action !== "deleteColumn").map((r) => r.action))].sort();
+  record("the rest of the row's primary line offers exactly its four non-destructive actions",
+    others.join(",") === WANTED.join(","),
+    `the row's other clicks reached [${others.join(", ") || "nothing"}], want `
+      + `[${WANTED.join(", ")}]. Reorder is two buttons reaching one action, which is why this is a `
+      + `set and not a count`);
+});
+
 results.push(...phoneResults, ...menuResults, ...addViewDesktopResults, ...addViewPhoneResults,
   ...grammarResults, ...addViewGrammar, ...motionResults, ...reducedResults, ...desktopMenuResults, ...cellResults, ...sheetResults, ...selectCellResults, ...selectPhoneResults, ...rowPhoneResults, ...rowNarrowResults,
   ...desktopPanelResults, ...stateResults, ...keyboardParityResults, ...familyResults, ...touchResults, ...overlapResults, ...rhythmResults, ...rendererRhythmResults,
-  ...liftedResults, ...inlineEditResults, ...numberParityResults, ...peekLayerResults, ...sectionFailures);
+  ...liftedResults, ...inlineEditResults, ...numberParityResults, ...peekLayerResults, ...propertyRowResults, ...sectionFailures);
 
 await browser.close();
 rmSync(work, { recursive: true, force: true });

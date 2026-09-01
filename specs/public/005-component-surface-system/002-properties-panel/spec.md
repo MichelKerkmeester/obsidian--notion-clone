@@ -27,7 +27,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-002"
       parent_session_id: null
-    completion_pct: 43
+    completion_pct: 57
     open_questions:
       - "Does the duplicate phone rule at styles.css:17413 get collapsed, or declared as intentional"
     answered_questions:
@@ -53,7 +53,7 @@ _memory:
 | **Spec Folder** | 002-properties-panel |
 | **Level** | 2 |
 | **Priority** | P0 |
-| **Status** | **Partial.** In the tree: `.db-column-manager` is styled at `styles.css:674` and carried in the `.db-surface` portal list at `styles.css:10453`, across nine recorded lane holds. `tasks.md` carries 0 of 65 ticked against work the tree contains. **Completion figure: UNKNOWN** — this phase has no `goal.md` criteria checklist, so the rule in `../roadmap.md` §3.2 has nothing to count and the `completion_pct` below is an unrevised phase-cut value. Writing that checklist settles it. |
+| **Status** | **Partial.** In the tree: `.db-column-manager` is styled at `styles.css:674` and carried in the `.db-surface` portal list at `styles.css:10453`, across nine recorded lane holds. `tasks.md` carries 0 of 65 ticked against work the tree contains. **Completion figure: 4/7**, derived from `goal.md`'s checklist under `../roadmap.md` §3.2 — the checklist that was absent when this line first read UNKNOWN was written on 2026-09-01, and delete-target semantics ticked against a driven click the same day. Still open: the grid-row/height row, the five stateful dimensions, and the operator's read on a phone. |
 | **Created** | 2026-08-29 |
 | **Blocked by** | `001-overlay-placement-and-menu-language` |
 | **Blocks** | `003-mobile-sheet-presentation` |

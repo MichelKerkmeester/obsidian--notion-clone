@@ -53,7 +53,8 @@
       "src/views/card-field-renderer.ts",
       "tools/live/renderer-coverage.json",
       "src/views/overlay-stack.ts",
-      "src/views/interaction-scope.ts"
+      "src/views/interaction-scope.ts",
+      "src/views/column-delete-confirmation.test.ts"
     ],
     "entities": [
       {
@@ -135,6 +136,12 @@
         "source": "derived"
       },
       {
+        "name": "column-delete-confirmation.test.ts",
+        "kind": "test",
+        "path": "src/views/column-delete-confirmation.test.ts",
+        "source": "derived"
+      },
+      {
         "name": "Feature Specification",
         "kind": "proper_noun",
         "path": "spec.md",
@@ -193,17 +200,11 @@
         "kind": "proper_noun",
         "path": "plan.md",
         "source": "derived"
-      },
-      {
-        "name": "Blocked Task Protocol",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "The properties panel's row is a positional grid contract: it says \"the third track is 96px wide\"",
     "created_at": "2026-08-29T12:37:20.727Z",
-    "last_save_at": "2026-09-01T00:07:18.436Z",
+    "last_save_at": "2026-09-01T02:33:21.375Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -214,10 +215,10 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:aa714db8be396e0bbb0aeabd8c0bd43d0cac7d0bf024d6ce752bff4d628b1d63",
+    "source_fingerprint": "sha256:e9d003141d3aad4431a263fa05f780f57a5ccb54b91b0a17f987d1a562dddbdf",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "003ed430bf7765e12acc001ed2860549ae59565f7fb8b6bfc1cd823e37747662",
+      "spec.md": "c081d19d6df19bb036d229825892eac2f1ac85239bdfe661682774196a56902a",
       "plan.md": "9930d86cdc3393986c1e6202d8ce05a4d565bfed694d03c6c72909899eb2b873",
       "tasks.md": "fac4aac0a28947fa323c81ca8e44f3fc646f684158b57e52cc1edea90cb15004",
       "implementation-summary.md": "d4d5182746d4e5851a934ac5abc54be763759e1ffb5ff798d4acf7feb7c0ece2"

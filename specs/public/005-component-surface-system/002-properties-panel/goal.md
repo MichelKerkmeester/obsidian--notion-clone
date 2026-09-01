@@ -65,9 +65,36 @@ evidence in this folder or in a lane.*
       the content small" failure this packet's own audit names, reproduced while writing a check to
       answer one of its criteria. The rows now carry the children the shipped one has, and the
       content wants 1296px.
-- [ ] Delete is not a bare one-click target in the row's primary line. **No check.** This is
-      information architecture rather than layout, and the packet's own summary records that half
-      as not started.
+- [x] Delete is not a bare one-click target in the row's primary line. **Checked 2026-09-01.**
+      The packet recorded this failing from a reading of the wiring — `deleteBtn.onclick = () =>
+      actions.deleteColumn(col)`, one click straight to a delete. **What a click costs is decided one
+      call deeper**, and reading a call site cannot see it.
+      **`src/views/column-delete-confirmation.test.ts`** drives all four branches of the shipped
+      `deleteColumn`. Every one interposes `confirmWithModal` before touching the schema, a refusal
+      is a zero delta, and consent removes the column — the third case is why the first two mean
+      anything, since an operation broken into doing nothing at all satisfies both.
+      **Two reds, both watched.** Removing the plain branch's confirmation: `expected 0 to be greater
+      than 0` — no question was asked. Keeping the confirmation but moving the mutation ahead of the
+      await: `expected [ 'file.name' ] to deeply equal [ 'file.name', 'status' ]` — the property was
+      gone while its question was still on screen. **The second is the one that matters**: it is the
+      break a reading of the call site cannot distinguish from correct code.
+      **The row itself is the other half**, and the unit test cannot see it. The placement lane now
+      renders a real `ColumnManagerRenderer` row and clicks **every one of its 24 elements** once:
+      → *nothing outside the trash control reaches the delete*: `2 reached deleteColumn and 0 of
+      those were outside the trash control`. A click on the trash's glyph bubbles to the trash — one
+      path reported twice, not two paths — so what separates a real second route is whether the
+      element sits inside the delete control at all. Red with the row wired to delete: **18 of 22
+      outside it**, the whole row destructive.
+      → *the delete on a named row deletes the property that row names*: the row reads
+      `"Status [status]"` and its delete was handed `"status"` — **asserted by the column object the
+      action received, never by index**, which is AC-008's clause. Red with the delete pointed at
+      `columns[0]`: `handed "file.name"`.
+      → *the rest of the row's primary line offers exactly its four non-destructive actions*:
+      `[editColumn, moveColumn, setColumnVisible, toggleColumnWrap]`. A **set**, because "nothing
+      else deletes" is also true of a row where nothing else does anything. Red with the wrap toggle
+      unwired: three of four.
+      **What is still not closed here:** AC-009's mutation trace and AC-010's rename and reorder
+      deltas. This row asked about delete, and delete is what was driven.
 - [ ] Plus the five stateful dimensions. **No mapping exists** for this packet.
 - [ ] The operator opens Properties on a phone and can read every property name. **Only the operator
       closes this.**
