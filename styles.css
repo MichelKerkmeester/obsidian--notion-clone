@@ -7103,6 +7103,9 @@ input[type="checkbox"].db-toggle-switch:disabled {
 }
 
 .note-database-container .db-cell-textarea {
+  /* Border-box: this is `width: 100%` over a border and the host's input padding, so under
+     content-box the editor is wider than the cell it is editing — measured 24px past it. */
+  box-sizing: border-box;
   width: 100%;
   min-width: 0;
   min-height: 24px;
@@ -7157,6 +7160,8 @@ input[type="checkbox"].db-toggle-switch:disabled {
 .note-database-container .db-cell-line-input,
 .db-cell-line-input {
   display: block;
+  /* Same reason as the textarea above: `width: 100%` plus inherited padding overflows the cell. */
+  box-sizing: border-box;
   width: 100%;
   min-height: 34px;
   border: 0;
@@ -7578,6 +7583,14 @@ input[type="checkbox"].db-toggle-switch:disabled {
 
 .note-database-container .db-empty-hero {
   display: flex;
+  /* Border-box, because this card states a width AND carries 28px of padding.
+   *
+   * Under the default content-box those 28px sit outside `width`, so `min(100%, 780px)` promises to
+   * fit the pane and then exceeds it by the padding and border — measured at 602px inside a 552px
+   * content box, overflowing by 26px. The capture showed the right border cut off and that was the
+   * symptom rather than the fault: a card that overflows its pane in a screenshot overflows it in
+   * the app too. */
+  box-sizing: border-box;
   width: min(100%, 780px);
   flex-wrap: wrap;
   align-items: flex-start;

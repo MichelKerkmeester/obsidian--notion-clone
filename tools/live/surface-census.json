@@ -1,7 +1,7 @@
 {
-  "measuredAt": "2026-09-01T12:57:28.019Z",
+  "measuredAt": "2026-09-01T13:33:25.963Z",
   "inputs": {
-    "styles.css": "3f23aea38b47",
+    "styles.css": "8f1414356dc8",
     "tools/live/surface-census.mjs": "8eddb1d0c81c",
     "src/views/surface-contract.ts": "ff7e6bafd3c8"
   },
@@ -744,7 +744,7 @@
       "mountParent": "note-database-container",
       "tokens": true,
       "role": null,
-      "rect": "538x514",
+      "rect": "538x511",
       "scenarios": [
         "timeline-toolbar-options"
       ]
@@ -806,7 +806,7 @@
       "mountParent": "db-panel-row",
       "tokens": true,
       "role": null,
-      "rect": "28x28",
+      "rect": "32x28",
       "scenarios": [
         "panel-filter-conditions",
         "panel-filter-conditions",
@@ -831,7 +831,7 @@
       "mountParent": "db-panel-row",
       "tokens": true,
       "role": null,
-      "rect": "134x19",
+      "rect": "132x19",
       "scenarios": [
         "panel-filter-conditions"
       ]
@@ -1092,7 +1092,7 @@
       "mountParent": "note-database-modal",
       "tokens": true,
       "role": null,
-      "rect": "1406x27",
+      "rect": "1406x24",
       "scenarios": [
         "panel-computed-cleanup-modal"
       ]
@@ -1241,7 +1241,7 @@
       "mountParent": "db-icon-picker-header",
       "tokens": true,
       "role": null,
-      "rect": "126x37",
+      "rect": "122x37",
       "scenarios": [
         "field-icon-picker"
       ]
@@ -1251,7 +1251,7 @@
       "mountParent": "db-icon-picker-header",
       "tokens": true,
       "role": null,
-      "rect": "96x29",
+      "rect": "96x26",
       "scenarios": [
         "field-icon-picker"
       ]

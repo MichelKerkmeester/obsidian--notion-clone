@@ -97,6 +97,13 @@ function captureMode(scenario) {
   return scenario.capture || (scenario.group === "views" ? "viewport" : "element");
 }
 
+// The declared width frames the DESKTOP shot only.
+//
+// A phone capture exists to show what the phone's own width does to a surface, so a scenario's
+// declared width must not reach it. `panel-record-detail` declares 392 against a 402px phone: apply
+// it to both and the two captures become the same layout, which is how honouring this field first
+// erased a real responsive difference. The parity ratchet caught it as "newly identical", which is
+// exactly the reading that rule exists for.
 function buildPage(scenario, theme, styles, themeCss, runtimeCss, device) {
   // captureCss lands after the plugin stylesheet so a scenario can undo the parts of a
   // rule that only make sense against a live anchor — an overlay positioned absolutely
@@ -104,7 +111,7 @@ function buildPage(scenario, theme, styles, themeCss, runtimeCss, device) {
   // It must never restyle what is being photographed, only make it visible.
   const overrides = scenario.captureCss ? `<style>${scenario.captureCss}</style>` : "";
   return `<!doctype html>
-<html class="${[theme === "dark" ? "theme-dark" : "theme-light", captureMode(scenario) === "element" ? "capture-element" : ""].filter(Boolean).join(" ")}" style="--capture-max-width: ${device.width}px">
+<html class="${[theme === "dark" ? "theme-dark" : "theme-light", captureMode(scenario) === "element" ? "capture-element" : ""].filter(Boolean).join(" ")}" style="--capture-max-width: ${device.width}px${scenario.width && !device.bodyClass ? `; --capture-scenario-width: ${Math.min(scenario.width, device.width)}px` : ""}">
 <head><meta charset="utf-8">
 <!-- Without this the layout viewport is 980px whatever device is emulated, and the page is then
      zoomed down to fit the frame. Every "mobile" capture ever taken was a desktop layout at 0.41

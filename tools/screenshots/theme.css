@@ -192,7 +192,16 @@ html.capture-element body {
 
 html.capture-element #shot {
   display: inline-block;
-  width: max-content;
+  /* The width the scenario declared, when it declared one.
+   *
+   * Sixty scenarios carry a `width` and nothing read it, so every element capture sized itself to
+   * `max-content` instead. A surface written as `width: min(100%, 780px)` then resolves its
+   * percentage against a box that was sized from content, and the result overflows: the empty-state
+   * card measured 399px inside a 381px shot and was photographed with its right border cut off.
+   * Honouring the declared width gives the percentage something to resolve against, which is what
+   * the field was for. Still bounded by the device, since a scenario cannot be wider than the frame
+   * it is photographed in. */
+  width: var(--capture-scenario-width, max-content);
   /* The viewport-fill height that lets a calendar stretch would otherwise pad a component
      out to the full device height, leaving a small popover sitting in a page of empty
      space. A component is measured by its own content in both axes. */
