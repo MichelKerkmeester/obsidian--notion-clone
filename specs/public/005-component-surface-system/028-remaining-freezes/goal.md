@@ -88,11 +88,26 @@ how they were built. That is a virtualisation question and nothing else reaches 
       Windowed, the same shape measures **48.4ms at 3,000 rows and 50.3ms at 3,400** — node count
       flat at 2,184 rather than 225,007. The record of the breach is kept above because the fix is
       only legible against it.
-- [ ] The per-item forced layout is gone from `board-renderer.ts` and `table-renderer.ts`, each shown
-      failing first. **Board is fixed** (`3485d7a`), asking once per render. **The table's two
-      per-row sites are live and are not the quadratic:** it builds its body off-document, so each
-      read costs one layout of the document as it stands. The bound-of-8 check this phase specified
-      would fail that correct implementation; the log says why.
+- [x] The per-item forced layout is gone from `board-renderer.ts` and `table-renderer.ts`, each shown
+      failing first. **Board is fixed** (`3485d7a`), asking once per render. **The table is fixed
+      2026-09-01, and the reasoning that had left it open was wrong about which node was read.**
+      The log said the table's per-row reads were harmless because it builds its body off-document.
+      The reads are not on the body. `isTouchDevice(this.renderContainer)` reads the **render
+      container**, which is attached, and it was asked twice per row — `getSelectionColumnWidth`,
+      the reorder-button branch and `setupRowDrag`. Measured before the fix: **4005 of 4005 layout
+      reads taken against a connected node over 2,000 rows**, which is every forced layout this
+      renderer takes. After hoisting the question to where the container is bound: **3 of 3**.
+      **The check had to be able to tell those apart**, which is why the bound-of-8 this phase
+      specified was unusable and was recorded as such rather than written to lie. A geometry read on
+      a detached node forces no layout, so a bound over the total would fail a correct
+      implementation. The bound that survives is over the **connected** reads alone, and
+      `countLayoutReadsSplit` in the render-assertion harness now keeps the two populations apart.
+      Observed red at `4005 of 4005 … bound 8` on the tree as received, on both bags.
+      **It buys no measured time here, and the row says so.** The table bench over 400 → 1,600 rows
+      reports the same layout column before and after (17.9 / 36.7 / 73.8ms at 4 columns), because
+      the document is not being mutated between those reads, so all but the first flush nothing.
+      What changes is that the count is now bounded: the same code inside a render that *does* dirty
+      the document pays 4,000 real layouts, and nothing was stopping that from arriving.
 - [ ] The scaling verdict is not SUPERLINEAR at any measured shape up to 12,800 rows. **Confirmed
       LINEAR ×1.06 across the operator's own range** (1,000-3,000 rows, full fill, 6× throttle), so
       what remains is node count rather than a loop. **The list arm

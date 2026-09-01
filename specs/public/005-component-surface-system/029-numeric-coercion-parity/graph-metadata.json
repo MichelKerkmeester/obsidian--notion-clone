@@ -198,7 +198,7 @@
     ],
     "causal_summary": "Two renderers read the same stored value differently, and the table row is the wrong one",
     "created_at": "2026-08-30T18:48:20.649Z",
-    "last_save_at": "2026-08-31T20:01:22.836Z",
+    "last_save_at": "2026-09-01T02:54:02.200Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -209,7 +209,7 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:7b0be995b2e3408496f332122a8b8b38b513bb52e2e1ee1933a481775a6b389e",
+    "source_fingerprint": "sha256:9d8ea1e9d625ce5670590516bd98f2caa64ac93f78b7ad0c8a0f7e7ae089e17e",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "e3e56d8141dd5d7a29f566876693288dc6c642a557555f1789ddc75bfbc32c95",

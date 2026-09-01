@@ -83,8 +83,19 @@ Sorting, the record detail panel, the editor's write path and the card itself ar
 - [x] The check can fail. Measured: restoring `parseFloat` gave **exit 1**, both checks `FAIL`.
 - [x] An empty computed result keeps its placeholder rather than gaining a `0`.
 - [x] The unit suite is unreduced. Measured: **450 tests, exit 0**; none encoded the old behaviour.
-- [ ] `npm run gate` exits 0, read from `$?`. Today **exit 1**: 20 captures fingerprint the edited
+- [x] `npm run gate` exits 0, read from `$?`. Today **exit 1**: 20 captures fingerprint the edited
       file. Owned by this edit, and the refresh writes outside this phase's scope.
+      **Met 2026-09-01.** The captures were regenerated and the stamps re-fingerprinted; the gate
+      now runs **20 lanes and exits 0**, read from `$?` and not from a pipe — a pipe would have
+      reported the status of `tail`.
+      **The exit code is not the whole claim**, because a gate that lost lanes also exits 0. The
+      lane count is stated with it: 20 green, 0 red for a declared reason, against the 13 this row
+      was written beside. The seven added since are `render-assertions`, the repaired `placement`,
+      `sheet-teardown`, `sheet-rebuild`, `list-window`, `touch-targets` and `evidence`.
+      **And one of those twenty was lying when this row was last read.** `sheet-rebuild` reported red
+      on 4 of 10 runs from a race in its own staging, not from the tree — repaired the same day, 0 of
+      10 after. A row that closes on "exit 0" closes on whatever the lanes happened to say that
+      minute, so the flake had to go first.
 - [ ] The operator sees a hand-authored numeric field read as written, on device.
 <!-- /ANCHOR:completion -->
 

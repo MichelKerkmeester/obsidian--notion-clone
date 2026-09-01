@@ -265,14 +265,19 @@ try {
   // The shape numbers this check exists to keep visible, printed whether they
   // pass or fail: layout reads must not scale with rows, and data rows must not
   // be appended to a table that is already in the document.
+  // Every shape number, not the first one found. The table carries two — where its rows are
+  // attached, and how many of its reads land on a connected node — and they answer different
+  // questions: a `find` printed whichever was pushed first and silently hid the other.
   for (const outcome of outcomes) {
-    const shape = outcome.results.find((result) =>
+    const shapes = outcome.results.filter((result) =>
       result.name === "no forced layout inside the row loop"
       || result.name === "no forced layout inside the card loop"
       || result.name === "no forced layout inside the segment loop"
       || result.name === "no forced layout inside the event loop"
       || result.name === "no row appended to a connected table");
-    if (shape) console.log(`  shape  ${`${outcome.scenario.renderer}/${outcome.scenario.bag}`.padEnd(20)} ${shape.detail}`);
+    for (const shape of shapes) {
+      console.log(`  shape  ${`${outcome.scenario.renderer}/${outcome.scenario.bag}`.padEnd(20)} ${shape.detail}`);
+    }
   }
   console.log("");
 

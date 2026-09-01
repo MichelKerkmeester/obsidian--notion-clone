@@ -164,12 +164,30 @@ export class TableRenderer {
   private emptyStateRenderer = new EmptyStateRenderer();
   private footerRenderer = new TableFooterRenderer();
   private renderContainer: HTMLElement | null = null;
+  // The touch answer for the render in progress.
+  //
+  // `isTouchDevice` reads the container's box, and the container is attached — so asking it inside
+  // the row loop forces a layout per row: 4,000 of them over 2,000 rows, which is every forced
+  // layout this renderer takes. The answer cannot change while one render runs, so it is asked
+  // when the container is set and read from here afterwards.
+  private renderTouch: boolean | null = null;
 
   constructor(private actions: TableRendererActions) {}
 
+  /** Bind the container for a render, and settle the questions that are constant across it. */
+  private setRenderContainer(container: HTMLElement): void {
+    this.renderContainer = container;
+    this.renderTouch = isTouchDevice(container);
+  }
+
+  /** The render's touch answer, or a live one for a caller that arrived outside a render. */
+  private isTouchRender(): boolean {
+    return this.renderTouch ?? isTouchDevice(this.renderContainer);
+  }
+
   renderTable(container: HTMLElement, config: ViewConfig, rows: RowData[], emptyState?: EmptyStateOptions): void {
     this.clearTable(container);
-    this.renderContainer = container;
+    this.setRenderContainer(container);
     this.rowByPath = new Map(rows.map((row) => [row.file.path, row]));
     this.applyDensity(container, config);
 
@@ -218,7 +236,7 @@ export class TableRenderer {
     emptyState?: EmptyStateOptions,
   ): void {
     this.clearTable(containerEl);
-    this.renderContainer = containerEl;
+    this.setRenderContainer(containerEl);
     this.rowByPath = new Map(rows.map((row) => [row.file.path, row]));
     this.applyDensity(containerEl, config);
 
@@ -528,7 +546,7 @@ export class TableRenderer {
    * Off touch the reorder button is never created, so the checkbox alone keeps the narrower column.
    */
   private getSelectionColumnWidth(): number {
-    return isTouchDevice(this.renderContainer) ? 64 : 40;
+    return this.isTouchRender() ? 64 : 40;
   }
 
   private getRecordIconColumnWidth(): number {
@@ -843,7 +861,7 @@ export class TableRenderer {
         visibleRows: rows,
         groups: groupPath ?? (groupField && groupKey != null ? [{ field: groupField, key: groupKey }] : undefined),
       });
-      if (isTouchDevice(this.renderContainer) && (this.canManualReorder(config) || Boolean(rowMoveField && groups?.length))) {
+      if (this.isTouchRender() && (this.canManualReorder(config) || Boolean(rowMoveField && groups?.length))) {
         this.renderMobileMoveButton(selectInner, config, row, rows, rowMoveField, rowMoveKey, groups);
       }
       const cb = createCheckbox(selectInner, { role: "row" });
@@ -965,7 +983,7 @@ export class TableRenderer {
     const canMoveGroup = Boolean(groupField && groupKey != null && typeof this.actions.moveRowsToGroup === "function");
     const canReorder = this.canManualReorder(config);
     if (this.actions.isReadOnly) return;
-    if (isTouchDevice(this.renderContainer)) return;
+    if (this.isTouchRender()) return;
     if (!handleParent) return;
 
     const handle = handleParent.createEl("button", {

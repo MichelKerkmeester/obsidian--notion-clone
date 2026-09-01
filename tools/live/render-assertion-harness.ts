@@ -588,7 +588,26 @@ const win = globalThis.window;
 // layout, so its shape is "reads scale with rows", which a constant bound
 // distinguishes at any row count.
 function countLayoutReads(): () => number {
+  const stop = countLayoutReadsSplit();
+  return () => stop().total;
+}
+
+/**
+ * The same instrumentation, keeping the two populations apart.
+ *
+ * A geometry read on a DETACHED node forces no layout of the document — it returns zeros off a
+ * node the engine has never laid out. So "reads scale with rows" and "layout is forced per row"
+ * are different claims, and the table is the surface where they come apart: it builds its body
+ * off-document and reads per row, which is a growing count of reads that flush nothing.
+ *
+ * A bound over the total would fail that correct implementation, which is why `028` recorded the
+ * check it specified as unusable rather than writing one that lied. The bound that survives is
+ * over the CONNECTED reads: those are the ones that cost a layout, and their count is what
+ * regresses the moment the body is attached before the loop rather than after it.
+ */
+function countLayoutReadsSplit(): () => { total: number; connected: number } {
   let count = 0;
+  let connected = 0;
   const win = window;
   const elementProto = win.Element.prototype;
   const htmlProto = win.HTMLElement.prototype;
@@ -602,6 +621,7 @@ function countLayoutReads(): () => number {
       ...descriptor,
       get(this: HTMLElement) {
         count += 1;
+        if (this.isConnected) connected += 1;
         return original.call(this);
       },
     });
@@ -612,6 +632,7 @@ function countLayoutReads(): () => number {
     if (typeof original !== "function") continue;
     elementProto[name] = function counted(this: Element, ...args: unknown[]) {
       count += 1;
+      if (this.isConnected) connected += 1;
       return (original as (...rest: unknown[]) => unknown).apply(this, args);
     };
     restored.push(() => {
@@ -621,6 +642,7 @@ function countLayoutReads(): () => number {
   const originalStyle = win.getComputedStyle.bind(win);
   win.getComputedStyle = ((el: Element, pseudo?: string | null) => {
     count += 1;
+    if (el.isConnected) connected += 1;
     return originalStyle(el, pseudo);
   }) as typeof win.getComputedStyle;
   restored.push(() => {
@@ -629,7 +651,7 @@ function countLayoutReads(): () => number {
 
   return () => {
     for (const restore of restored) restore();
-    return count;
+    return { total: count, connected };
   };
 }
 
@@ -1032,7 +1054,9 @@ export function runRenderAssertions(host: HTMLElement, scenario: ScenarioSpec): 
     const renderer = new TableRenderer(bag);
 
     const stopCounting = countRowAppendsToConnectedNodes();
+    const stopReads = countLayoutReadsSplit();
     renderer.renderTable(container, config, rows);
+    const reads = stopReads();
     const rowAppends = stopCounting();
 
     results.push(provenanceResult(container, "table-renderer"));
@@ -1044,6 +1068,26 @@ export function runRenderAssertions(host: HTMLElement, scenario: ScenarioSpec): 
         detail: rowAppends === 0
           ? "the row body is built off-document and attached once"
           : `${rowAppends} row(s) appended to a connected table — per-insertion layout is back`,
+      });
+      // `028` asked for "the per-item forced layout is gone from board-renderer.ts and
+      // table-renderer.ts" and recorded that the bound it specified would fail the shipped table,
+      // because the table reads per row against a DETACHED body and those reads flush nothing. The
+      // bound that survives that distinction is over the connected reads alone — and it is the one
+      // that goes red the moment the body is attached before the loop instead of after it, which is
+      // the regression the row exists to catch.
+      results.push({
+        name: "no forced layout inside the row loop",
+        pass: reads.connected <= MAX_LAYOUT_READS,
+        detail: `${reads.connected} of ${reads.total} layout reads were taken against a connected `
+          + `node, bound ${MAX_LAYOUT_READS}, over ${rows.length} rows`
+          + (reads.connected > MAX_LAYOUT_READS
+            ? " — reads scale with rows against an attached body, which is the shape that froze the app"
+            : reads.total > reads.connected
+              ? ". The rest land on the detached body the renderer builds before attaching it, and a"
+                + " geometry read on a node the engine has never laid out forces no layout — which is"
+                + " why the total is allowed to grow and this number is not"
+              : ". Both numbers are O(1): the questions that need a box are asked once per render"
+                + " rather than once per row"),
       });
     }
   }

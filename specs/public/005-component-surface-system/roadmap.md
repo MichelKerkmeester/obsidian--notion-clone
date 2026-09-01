@@ -447,15 +447,15 @@ done | sort -n
 | `025-story-coverage-blindness` | **80%** — 8/10 | 2 | 1 | 1 |
 | `026-production-render-assertions` | **100%** — 9/9 | 0 | 0 | 0 |
 | `027-sheet-menu-grammar-and-motion` | **93%** — 13/14 | 1 | 1 | 0 |
-| `028-remaining-freezes` | **67%** — 4/6 | 2 | 0 | 2 |
-| `029-numeric-coercion-parity` | **71%** — 5/7 | 2 | 1 | 1 |
+| `028-remaining-freezes` | **83%** — 5/6 | 1 | 0 | 1 |
+| `029-numeric-coercion-parity` | **86%** — 6/7 | 1 | 1 | 0 |
 | `030-gallery-view-deprecation` | **67%** — 4/6 | 2 | 1 | 1 |
 | `031-sheet-lifecycle-ownership` | **83%** — 5/6 | 1 | 1 | 0 |
 | `032-cover-target-scheme-safety` | **100%** — 4/4 | 0 | 0 | 0 |
 | `033-list-virtualisation` | **83%** — 5/6 | 1 | 1 | 0 |
 | `034-packet-doc-truth` | **100%** — 4/4 | 0 | 0 | 0 |
 
-**Program: 208/281 = 74%.** 73 rows open — 30 closable only by the operator's device, 43 still reachable here.
+**Program: 210/281 = 75%.** 71 rows open — 30 closable only by the operator's device, 41 still reachable here.
 
 **The two columns after "Open" are the ones worth reading.** A row only the operator can close is not
 work waiting to be done here — it is the program's closing condition, and §4A records why it is
