@@ -27,6 +27,12 @@
 // caller that treats "could not ask" as "nothing wrong" has rebuilt the exact
 // blindness this phase exists to remove.
 //
+// A passing or failing run WRITES ITS READING to tools/live/probe-navbar.json, so the measurement
+// leaves the shell it was taken in. That artefact is the cross-check the contract phase is waiting
+// to receive: it carries what the running app said beside what this repository's harness models,
+// and whether the two agree. An exit-2 run writes nothing — a file recording "could not ask" that a
+// later reader mistakes for a reading is the blindness this phase exists to remove.
+//
 // Usage:
 //   node tools/live/probe.mjs --check transport
 //   node tools/live/probe.mjs --check navbar
@@ -37,8 +43,9 @@
 // ───────────────────────────────────────────────────────────────────
 
 import { execFile } from "node:child_process";
-import { existsSync } from "node:fs";
-import { pathToFileURL } from "node:url";
+import { existsSync, mkdirSync, writeFileSync } from "node:fs";
+import { dirname, join } from "node:path";
+import { fileURLToPath, pathToFileURL } from "node:url";
 import { promisify } from "node:util";
 
 const run = promisify(execFile);
@@ -258,10 +265,68 @@ async function checkNavbar() {
     console.error(`\nprobe: FAIL — the navbar sits at ${navLayer}, above the sheet's ${sheetLayer}.`);
     console.error("A sheet portalled to the body would still be painted under it. Raise the sheet's");
     console.error("layer to clear this value, and record the number that made it necessary.");
+    stampNavbar(nav, navLayer, sheetLayer, false);
     return EXIT_ASSERTION;
   }
+  stampNavbar(nav, navLayer, sheetLayer, true);
   console.log(`\nprobe: PASS — the sheet's layer (${sheetLayer}) clears the navbar's (${navLayer}).`);
   return EXIT_PASS;
+}
+
+/**
+ * What this repository's harness believes about the navbar, transcribed from the installed
+ * application stylesheet rather than recalled.
+ *
+ * These are the values the placement lane draws its own `.mobile-navbar` with. Recording them
+ * beside the live reading is the whole point of the artefact: the question is not "what does the
+ * app say" but "does what the app says match what every headless check here assumed".
+ */
+export const MODELLED_NAVBAR = { position: "fixed", height: 80, zIndex: "auto" };
+
+/**
+ * Compare a live reading against what the harness models. Pure, and exported, so the comparison can
+ * be tested without a running application — the same reason `transportVerdict` is.
+ *
+ * A field the app did not report is a disagreement rather than a match. Treating a missing value as
+ * agreement is how a cross-check certifies a harness against nothing.
+ */
+export function compareNavbar(live, modelled = MODELLED_NAVBAR) {
+  const disagreements = [];
+  if (live.position !== modelled.position) {
+    disagreements.push(`position: app ${live.position ?? "(not reported)"}, harness ${modelled.position}`);
+  }
+  if (!Number.isFinite(live.height) || Math.abs(live.height - modelled.height) > 1) {
+    disagreements.push(`height: app ${Number.isFinite(live.height) ? `${live.height}px` : "(not reported)"}, harness ${modelled.height}px`);
+  }
+  if (live.zIndex !== modelled.zIndex) {
+    disagreements.push(`z-index: app ${live.zIndex ?? "(not reported)"}, harness ${modelled.zIndex}`);
+  }
+  return { agrees: disagreements.length === 0, disagreements };
+}
+
+function stampNavbar(nav, navLayer, sheetLayer, cleared) {
+  const { disagreements } = compareNavbar(nav);
+  const out = join(dirname(fileURLToPath(import.meta.url)), "probe-navbar.json");
+  mkdirSync(dirname(out), { recursive: true });
+  writeFileSync(out, `${JSON.stringify({
+    takenAt: new Date().toISOString(),
+    source: "the running application, through the renderer eval",
+    live: { position: nav.position, height: nav.height, zIndex: nav.zIndex, top: nav.top,
+      parent: nav.parent, safeAreaInset: nav.safeAreaInset || null },
+    modelled: MODELLED_NAVBAR,
+    agrees: disagreements.length === 0,
+    disagreements,
+    sheetLayerClearsNavbar: cleared,
+    note: "Written only by a run that reached the app. A run that could not ask writes nothing, so"
+      + " the absence of this file means no live reading exists rather than that one agreed.",
+  }, null, 2)}\n`, "utf8");
+  console.log(`\nprobe: reading written to tools/live/probe-navbar.json`);
+  if (disagreements.length) {
+    console.log("probe: it DISAGREES with the harness on:");
+    for (const d of disagreements) console.log(`    ${d}`);
+  } else {
+    console.log("probe: the running app agrees with what the harness models.");
+  }
 }
 
 async function main() {

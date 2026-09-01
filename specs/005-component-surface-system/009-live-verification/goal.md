@@ -37,6 +37,15 @@ evidence in this folder or in a lane.*
 - [ ] `elementFromPoint` over the navbar answers from the real app. **Unreachable for the same
       reason**, and it is the row `003`'s two open rows are waiting on: their navbar is a
       hand-written div with no `app.css` rule and no stacking context.
+      **The second half of that sentence is no longer true, and `003` is no longer waiting.** The
+      harness navbar is now transcribed from the installed application stylesheet — `position: fixed`,
+      `height: 80px`, and **no z-index**, where the hand-written div carried `72px` and `z-index: 100`.
+      `003`'s two rows closed against that, taking it from **5 of 8** to 7 of 8.
+
+      **What that does and does not settle.** It removes the invention, so the headless answer is now
+      derived from the same declarations the app ships. It is still not the app: a theme, another
+      plugin, or a host rule this transcription missed would not show up here. The row stays open for
+      that residue, which is a much smaller claim than the one it was written for.
 - [x] The probe exits non-zero when an assertion fails and zero when it passes; infrastructure
       failure is a distinct exit 2. **No probe exists to exit.** **Stale, and now held rather than
       written down — 2026-09-01.** `tools/live/probe.mjs` exists and declares exactly these three
@@ -69,6 +78,22 @@ evidence in this folder or in a lane.*
       a check, and it is ticked because the artefacts exist and are cited, not because anything
       enforces it.
 - [ ] `000` receives both cross-check artefacts. **Nothing to receive** until the probe exists.
+      **The probe exists and now produces one, so what is missing is a run rather than a mechanism.**
+      `--check navbar` writes `tools/live/probe-navbar.json` carrying the live reading beside the
+      values this repository models, the fields they disagree on, and whether the sheet's layer
+      cleared the navbar's. A run that could not reach the app writes **nothing** — verified here,
+      exit 2 with no file — because a stamp recording "could not ask" is the blindness this packet
+      exists to remove, and a later reader would take it for a reading.
+
+      **The comparison is tested even though the reading cannot be.** `compareNavbar` is pure and
+      exported for the same reason `transportVerdict` is: 6 tests hold it, including that a 72px
+      reading disagrees with the 80px model, that an invented `z-index: 100` is reported, and that a
+      field the app did not report counts as a disagreement rather than a match — treating absent as
+      equal is how a cross-check certifies a harness against nothing. Control: disabling the height
+      comparison fails 3 of them.
+
+      **Still open, and the reason is now specific.** One artefact of the two, and no run has
+      produced it. Ticking this would claim `000` had received something nobody has generated.
 - [ ] Any phase can ask the real app a question and get a number back — and `000` can no longer
       certify its own instrument. **Only the operator's device closes this**, and until it does,
       every other packet's audit is the honest substitute rather than the answer.
