@@ -8803,6 +8803,8 @@ await section("the select column is as wide as what it draws", async () => {
 // `colSpan` rather than counting elements is what lets those rows pass while a missing cell fails.
 
 const fixtureTableResults = [];
+let titleLinksChecked = 0;
+const bareTitleOffenders = [];
 
 await section("every fixture table has as many cells as it has headers", async () => {
   const page = await browser.newPage({ viewport: VIEWPORT, reducedMotion: "reduce" });
@@ -8845,11 +8847,28 @@ await section("every fixture table has as many cells as it has headers", async (
           break;
         }
       }
-      return { rows, tables };
+      // A title link the renderer never builds.
+      //
+      // `cell-renderer` puts the note title through `renderInlineFileTitle`, which wraps it in
+      // `.db-file-title-inline > .db-file-title-name` — and the ellipsis lives on that inner span.
+      // A fixture that drops bare text into the anchor instead gets no ellipsis owner, so a long
+      // name hard-clips at the cell wall. That is a fact about the fixture, and it was photographed
+      // as though it were a fact about the plugin.
+      const bareTitles = [];
+      for (const link of document.querySelectorAll(".db-title-cell a.internal-link")) {
+        if (link.querySelector(".db-file-title-name")) continue;
+        bareTitles.push({
+          scenario: id,
+          text: (link.textContent || "").trim().replace(/\s+/g, " ").slice(0, 40),
+        });
+      }
+      return { rows, tables, bareTitles, titleLinks: document.querySelectorAll(".db-title-cell a.internal-link").length };
     }, scenario.id);
 
     tablesChecked += found.tables;
     offenders.push(...found.rows);
+    titleLinksChecked += found.titleLinks;
+    bareTitleOffenders.push(...found.bareTitles);
   }
 
   await page.close();
@@ -8861,6 +8880,16 @@ await section("every fixture table has as many cells as it has headers", async (
     `${tablesChecked} table(s) with a header row across ${scenariosRendered} scenario(s). A run that `
       + `found no table would report perfect agreement over nothing, which is how this class of `
       + `defect survived in the first place`);
+
+  record("every fixture title link is built the way the renderer builds one",
+    titleLinksChecked > 0 && bareTitleOffenders.length === 0,
+    `${titleLinksChecked} title link(s) across the fixture set; ${bareTitleOffenders.length} carry bare `
+      + `text instead of the renderer's .db-file-title-name`
+      + (bareTitleOffenders.length
+        ? `: ${[...new Set(bareTitleOffenders.map((b) => b.scenario))].join(", ")}`
+        : "")
+      + `. The ellipsis lives on that inner span, so a bare-text anchor hard-clips a long name at the `
+      + `cell wall and the capture then shows a truncation the plugin does not produce`);
 
   record("no fixture body row disagrees with its own header about the column count",
     offenders.length === 0,

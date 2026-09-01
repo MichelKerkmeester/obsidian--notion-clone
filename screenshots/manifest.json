@@ -2218,7 +2218,7 @@
         "src/views/cell-renderer.ts",
         "src/data/column-types.ts"
       ],
-      "layoutHash": "1fbc59be4b04",
+      "layoutHash": "d6a73cabf8e0",
       "sourceHashes": {
         "src/views/cell-renderer.ts": "6b23762ee384",
         "src/data/column-types.ts": "c48057b05309",
@@ -2243,7 +2243,7 @@
         "src/views/cell-renderer.ts",
         "src/data/column-types.ts"
       ],
-      "layoutHash": "1fbc59be4b04",
+      "layoutHash": "d6a73cabf8e0",
       "sourceHashes": {
         "src/views/cell-renderer.ts": "6b23762ee384",
         "src/data/column-types.ts": "c48057b05309",
@@ -2268,7 +2268,7 @@
         "src/views/cell-renderer.ts",
         "src/data/column-types.ts"
       ],
-      "layoutHash": "d1892cba659a",
+      "layoutHash": "760518b706d4",
       "sourceHashes": {
         "src/views/cell-renderer.ts": "6b23762ee384",
         "src/data/column-types.ts": "c48057b05309",
@@ -2293,7 +2293,7 @@
         "src/views/cell-renderer.ts",
         "src/data/column-types.ts"
       ],
-      "layoutHash": "d1892cba659a",
+      "layoutHash": "760518b706d4",
       "sourceHashes": {
         "src/views/cell-renderer.ts": "6b23762ee384",
         "src/data/column-types.ts": "c48057b05309",
@@ -2317,7 +2317,7 @@
       "sources": [
         "src/views/cell-renderer.ts"
       ],
-      "layoutHash": "505d8e1a1950",
+      "layoutHash": "03a17e225af5",
       "sourceHashes": {
         "src/views/cell-renderer.ts": "6b23762ee384",
         "styles.css": "13860e4b908a",
@@ -2340,7 +2340,7 @@
       "sources": [
         "src/views/cell-renderer.ts"
       ],
-      "layoutHash": "505d8e1a1950",
+      "layoutHash": "03a17e225af5",
       "sourceHashes": {
         "src/views/cell-renderer.ts": "6b23762ee384",
         "styles.css": "13860e4b908a",
@@ -2363,7 +2363,7 @@
       "sources": [
         "src/views/cell-renderer.ts"
       ],
-      "layoutHash": "e028e449ac94",
+      "layoutHash": "5b334af87d4b",
       "sourceHashes": {
         "src/views/cell-renderer.ts": "6b23762ee384",
         "styles.css": "13860e4b908a",
@@ -2386,7 +2386,7 @@
       "sources": [
         "src/views/cell-renderer.ts"
       ],
-      "layoutHash": "e028e449ac94",
+      "layoutHash": "5b334af87d4b",
       "sourceHashes": {
         "src/views/cell-renderer.ts": "6b23762ee384",
         "styles.css": "13860e4b908a",
@@ -3003,7 +3003,7 @@
         "src/views/table-renderer.ts",
         "src/data/record-icon.ts"
       ],
-      "layoutHash": "41171c8dcdeb",
+      "layoutHash": "5ac59941e9ea",
       "sourceHashes": {
         "src/views/record-icon-renderer.ts": "3d90a87b2a0b",
         "src/views/table-renderer.ts": "2044cea151d8",
@@ -3030,7 +3030,7 @@
         "src/views/table-renderer.ts",
         "src/data/record-icon.ts"
       ],
-      "layoutHash": "41171c8dcdeb",
+      "layoutHash": "5ac59941e9ea",
       "sourceHashes": {
         "src/views/record-icon-renderer.ts": "3d90a87b2a0b",
         "src/views/table-renderer.ts": "2044cea151d8",
@@ -3057,7 +3057,7 @@
         "src/views/table-renderer.ts",
         "src/data/record-icon.ts"
       ],
-      "layoutHash": "faa74778b1c3",
+      "layoutHash": "14a9ef880f3c",
       "sourceHashes": {
         "src/views/record-icon-renderer.ts": "3d90a87b2a0b",
         "src/views/table-renderer.ts": "2044cea151d8",
@@ -3084,7 +3084,7 @@
         "src/views/table-renderer.ts",
         "src/data/record-icon.ts"
       ],
-      "layoutHash": "faa74778b1c3",
+      "layoutHash": "14a9ef880f3c",
       "sourceHashes": {
         "src/views/record-icon-renderer.ts": "3d90a87b2a0b",
         "src/views/table-renderer.ts": "2044cea151d8",
@@ -3109,7 +3109,7 @@
       "sources": [
         "src/views/relation-value-renderer.ts"
       ],
-      "layoutHash": "71c4e1c98e2f",
+      "layoutHash": "f5a1fc0341fa",
       "sourceHashes": {
         "src/views/relation-value-renderer.ts": "8eb0d49c5c0a",
         "styles.css": "13860e4b908a",
@@ -3132,7 +3132,7 @@
       "sources": [
         "src/views/relation-value-renderer.ts"
       ],
-      "layoutHash": "71c4e1c98e2f",
+      "layoutHash": "f5a1fc0341fa",
       "sourceHashes": {
         "src/views/relation-value-renderer.ts": "8eb0d49c5c0a",
         "styles.css": "13860e4b908a",
@@ -3155,7 +3155,7 @@
       "sources": [
         "src/views/relation-value-renderer.ts"
       ],
-      "layoutHash": "1d56a86a0a8e",
+      "layoutHash": "6dbc235f5d17",
       "sourceHashes": {
         "src/views/relation-value-renderer.ts": "8eb0d49c5c0a",
         "styles.css": "13860e4b908a",
@@ -3178,7 +3178,7 @@
       "sources": [
         "src/views/relation-value-renderer.ts"
       ],
-      "layoutHash": "1d56a86a0a8e",
+      "layoutHash": "6dbc235f5d17",
       "sourceHashes": {
         "src/views/relation-value-renderer.ts": "8eb0d49c5c0a",
         "styles.css": "13860e4b908a",
@@ -3202,7 +3202,7 @@
         "src/data/status-colors.ts",
         "src/views/cell-renderer.ts"
       ],
-      "layoutHash": "9abdbf72489d",
+      "layoutHash": "8ec7acdbecda",
       "sourceHashes": {
         "src/data/status-colors.ts": "954425583842",
         "src/views/cell-renderer.ts": "6b23762ee384",
@@ -3214,7 +3214,7 @@
       },
       "note": "Every select, status, multi-select and tag value in the plugin is a status-badge in one of these sixteen status-color-* variants, so this is the whole colour vocabulary in one shot. The multi-select remove buttons only become visible on hover.",
       "capture": "element",
-      "bytes": 381761
+      "bytes": 381696
     },
     {
       "id": "field-status-colors",
@@ -3227,7 +3227,7 @@
         "src/data/status-colors.ts",
         "src/views/cell-renderer.ts"
       ],
-      "layoutHash": "9abdbf72489d",
+      "layoutHash": "8ec7acdbecda",
       "sourceHashes": {
         "src/data/status-colors.ts": "954425583842",
         "src/views/cell-renderer.ts": "6b23762ee384",
@@ -3239,7 +3239,7 @@
       },
       "note": "Every select, status, multi-select and tag value in the plugin is a status-badge in one of these sixteen status-color-* variants, so this is the whole colour vocabulary in one shot. The multi-select remove buttons only become visible on hover.",
       "capture": "element",
-      "bytes": 355044
+      "bytes": 354974
     },
     {
       "id": "field-status-colors",
@@ -3252,7 +3252,7 @@
         "src/data/status-colors.ts",
         "src/views/cell-renderer.ts"
       ],
-      "layoutHash": "6899c37c1a11",
+      "layoutHash": "32d2fd8bf560",
       "sourceHashes": {
         "src/data/status-colors.ts": "954425583842",
         "src/views/cell-renderer.ts": "6b23762ee384",
@@ -3264,7 +3264,7 @@
       },
       "note": "Every select, status, multi-select and tag value in the plugin is a status-badge in one of these sixteen status-color-* variants, so this is the whole colour vocabulary in one shot. The multi-select remove buttons only become visible on hover.",
       "capture": "element",
-      "bytes": 190779
+      "bytes": 189925
     },
     {
       "id": "field-status-colors",
@@ -3277,7 +3277,7 @@
         "src/data/status-colors.ts",
         "src/views/cell-renderer.ts"
       ],
-      "layoutHash": "6899c37c1a11",
+      "layoutHash": "32d2fd8bf560",
       "sourceHashes": {
         "src/data/status-colors.ts": "954425583842",
         "src/views/cell-renderer.ts": "6b23762ee384",
@@ -3289,7 +3289,7 @@
       },
       "note": "Every select, status, multi-select and tag value in the plugin is a status-badge in one of these sixteen status-color-* variants, so this is the whole colour vocabulary in one shot. The multi-select remove buttons only become visible on hover.",
       "capture": "element",
-      "bytes": 182338
+      "bytes": 181422
     },
     {
       "id": "panel-column-manager",
@@ -4780,7 +4780,7 @@
       },
       "note": "Days with events carry a short accent underline; the visible week reads as the selected pill run.",
       "capture": "viewport",
-      "bytes": 42427
+      "bytes": 42401
     },
     {
       "id": "calendar-mini-calendar",
@@ -4828,7 +4828,7 @@
       },
       "note": "Multi-day all-day bars, timed events, an overflow week and one event carried across the week boundary.",
       "capture": "viewport",
-      "bytes": 129143
+      "bytes": 130108
     },
     {
       "id": "calendar-month-view",
@@ -4851,7 +4851,7 @@
       },
       "note": "Multi-day all-day bars, timed events, an overflow week and one event carried across the week boundary.",
       "capture": "viewport",
-      "bytes": 132404
+      "bytes": 132656
     },
     {
       "id": "calendar-month-view",
@@ -4897,7 +4897,7 @@
       },
       "note": "Multi-day all-day bars, timed events, an overflow week and one event carried across the week boundary.",
       "capture": "viewport",
-      "bytes": 88121
+      "bytes": 88453
     },
     {
       "id": "calendar-toolbar-options",
@@ -5848,7 +5848,7 @@
       },
       "note": "Two weeks at one column per day; the April band marks the month boundary and the today line sits at 25 March 13:45.",
       "capture": "viewport",
-      "bytes": 146959
+      "bytes": 147239
     },
     {
       "id": "timeline-view",
@@ -5871,7 +5871,7 @@
       },
       "note": "Two weeks at one column per day; the April band marks the month boundary and the today line sits at 25 March 13:45.",
       "capture": "viewport",
-      "bytes": 152396
+      "bytes": 151947
     },
     {
       "id": "timeline-view",
