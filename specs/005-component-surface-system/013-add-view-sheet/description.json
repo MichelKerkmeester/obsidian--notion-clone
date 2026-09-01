@@ -1,6 +1,6 @@
 {
   "level": "1",
-  "specFolder": "public/005-component-surface-system/013-add-view-sheet",
+  "specFolder": "005-component-surface-system/013-add-view-sheet",
   "description": "Rebuild the Add View surface against the design system: one control idiom per job, one affordance per action, a real grouping, and sheet presentation",
   "keywords": [
     "rebuild",

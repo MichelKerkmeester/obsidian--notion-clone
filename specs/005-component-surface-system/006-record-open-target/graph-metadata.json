@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "packet_id": "public/005-component-surface-system/006-record-open-target",
-  "spec_folder": "public/005-component-surface-system/006-record-open-target",
-  "parent_id": "public/005-component-surface-system",
+  "packet_id": "005-component-surface-system/006-record-open-target",
+  "spec_folder": "005-component-surface-system/006-record-open-target",
+  "parent_id": "005-component-surface-system",
   "children_ids": [],
   "manual": {
     "depends_on": [],
@@ -205,7 +205,7 @@
     ],
     "causal_summary": "On desktop, clicking Open in the table shows a small card listing properties",
     "created_at": "2026-08-29T12:52:42.102Z",
-    "last_save_at": "2026-09-01T06:08:04.755Z",
+    "last_save_at": "2026-09-01T10:50:16.329Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -216,13 +216,13 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:0f708029e01006e176c85544017e551316d150179663f297bf98ce5f81108704",
+    "source_fingerprint": "sha256:9224c0d2826054830605f10ccea9eda6a237628c0dac407863a4e691b5472ac9",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "eebd575d1d3acb1b81054d7b8dde37df355ca733cb8e28fb8e34f017f0a75571",
+      "spec.md": "e0f812388470f1911be9ca2db0211979514224d963653e931744c62f300a493c",
       "plan.md": "f8632745f580cd1359b7b6c3b70117ffaa16d2b828572c19f14ba237c287ba13",
       "tasks.md": "4207d3b5d3cb9eb211997f31594f23ab4fe71405b2ba8f0792ac5cd226034d06",
-      "implementation-summary.md": "7687a71b2b123691636d3f7495211198365df3be1f635f1df6753ad2d28cc351"
+      "implementation-summary.md": "a8010bbd3442433d98106928ea19bd2b9deb0de0874811c3a223e0b38024f5d7"
     },
     "last_active_child_id": null,
     "last_active_at": null

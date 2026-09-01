@@ -11,7 +11,7 @@ Cross-document event ownership and user-content boundaries for body-mounted menu
 - `src/views/popover-position.ts`
 - `src/views/inline-markdown-renderer.ts`
 - `src/data/inline-markdown.ts`
-- `specs/public/005-component-surface-system/003-mobile-sheet-presentation`
+- `specs/005-component-surface-system/003-mobile-sheet-presentation`
 
 ## Findings - New
 

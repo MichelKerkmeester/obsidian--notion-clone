@@ -1,6 +1,6 @@
 {
   "level": "1",
-  "specFolder": "public/001-note-db-notion-parity-build/007-unique-id-stamp/003-create-entry-stamp",
+  "specFolder": "001-note-db-notion-parity-build/007-unique-id-stamp/003-create-entry-stamp",
   "description": "Even after children 001–002, creates never allocate",
   "keywords": [
     "even",

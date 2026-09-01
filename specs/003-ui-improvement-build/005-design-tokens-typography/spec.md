@@ -18,7 +18,7 @@ importance_tier: "high"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "public/003-ui-improvement-build/005-design-tokens-typography"
+    packet_pointer: "003-ui-improvement-build/005-design-tokens-typography"
     last_updated_at: "2026-08-28T04:30:57Z"
     last_updated_by: "phase-author"
     recent_action: "Reconciled design tokens and typography feature specification"
@@ -286,9 +286,9 @@ All implementation choices follow the research synthesis recommendations; no ope
 
 - **Parent Spec**: [`../spec.md`](../spec.md)
 - **Predecessor Spec**: [`../004-toolbar-and-view-controls/spec.md`](../004-toolbar-and-view-controls/spec.md)
-- **Research Synthesis**: `specs/public/002-ui-improvement-research/research/synthesis.md`
-- **Research Iteration 05 (Devin Track)**: `specs/public/002-ui-improvement-research/research/devin-gemini/iteration-05.md`
-- **Research Iteration 05 (Codex Track)**: `specs/public/002-ui-improvement-research/research/codex-luna/iteration-05.md`
+- **Research Synthesis**: `specs/002-ui-improvement-research/research/synthesis.md`
+- **Research Iteration 05 (Devin Track)**: `specs/002-ui-improvement-research/research/devin-gemini/iteration-05.md`
+- **Research Iteration 05 (Codex Track)**: `specs/002-ui-improvement-research/research/codex-luna/iteration-05.md`
 - **Implementation Plan**: See `plan.md`
 - **Task Breakdown**: See `tasks.md`
 - **Verification Checklist**: See `checklist.md`

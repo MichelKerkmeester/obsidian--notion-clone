@@ -1,5 +1,5 @@
 {
-  "specFolder": "public/001-note-db-notion-parity-build/013-template-toolbar-button/001-adaptive-toolbar-control",
+  "specFolder": "001-note-db-notion-parity-build/013-template-toolbar-button/001-adaptive-toolbar-control",
   "description": "`renderNewButton` already calls `actions.createEntry()` with no args (`src/views/ToolbarRenderer.ts:1683-1691`), which reaches `createBlankEntry` then",
   "keywords": [
     "rendernewbutton",

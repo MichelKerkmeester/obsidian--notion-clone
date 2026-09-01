@@ -8,7 +8,7 @@ importance_tier: "critical"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "public/005-component-surface-system/016-sheet-drag-and-audit"
+    packet_pointer: "005-component-surface-system/016-sheet-drag-and-audit"
     last_updated_at: "2026-08-31T22:00:00Z"
     last_updated_by: "harness-dependence-review"
     recent_action: "Resize dismissal fixed at the handler; keyboard arrival read from the host bundle"

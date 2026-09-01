@@ -8,7 +8,7 @@ importance_tier: "high"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "public/001-note-db-notion-parity-build/010-conditional-format-icons/002-format-parse-persist"
+    packet_pointer: "001-note-db-notion-parity-build/010-conditional-format-icons/002-format-parse-persist"
     last_updated_at: "2026-08-27T12:27:53Z"
     last_updated_by: "phase-architect"
     recent_action: "Authored format-parse-persist child from synthesis rank 4 and final-plan step 5"

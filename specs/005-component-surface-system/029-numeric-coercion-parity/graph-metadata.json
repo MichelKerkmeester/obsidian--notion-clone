@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "packet_id": "public/005-component-surface-system/029-numeric-coercion-parity",
-  "spec_folder": "public/005-component-surface-system/029-numeric-coercion-parity",
-  "parent_id": "public/005-component-surface-system",
+  "packet_id": "005-component-surface-system/029-numeric-coercion-parity",
+  "spec_folder": "005-component-surface-system/029-numeric-coercion-parity",
+  "parent_id": "005-component-surface-system",
   "children_ids": [],
   "manual": {
     "depends_on": [],
@@ -198,7 +198,7 @@
     ],
     "causal_summary": "Two renderers read the same stored value differently, and the table row is the wrong one",
     "created_at": "2026-08-30T18:48:20.649Z",
-    "last_save_at": "2026-09-01T02:54:02.200Z",
+    "last_save_at": "2026-09-01T10:50:16.497Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -209,13 +209,13 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:9d8ea1e9d625ce5670590516bd98f2caa64ac93f78b7ad0c8a0f7e7ae089e17e",
+    "source_fingerprint": "sha256:6eb946ded7ab2a00a93b2c9603d4159cfa0b98d434ddfe72d0e8a5590ca1535c",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "e3e56d8141dd5d7a29f566876693288dc6c642a557555f1789ddc75bfbc32c95",
+      "spec.md": "23b7565a5e4454d8baa03b70078ffbab44195318169a131a3a45f5f7d0343746",
       "plan.md": "ba46f3baad1f45c7d0bfde1f82fcf7bb3df76b6f98af002e844c83a2283cdb08",
       "tasks.md": "e2f2d55bb31139c94c02426a62cfe1edf819fdc23519039787700d1a6c8fee5d",
-      "implementation-summary.md": "b6c3cb9311ab3de80972cedf8fee01690eb4bfa5cee7d1461a747d76e2054545"
+      "implementation-summary.md": "6f690e312014f39286b719a84d1cfeb0c773a3e2bedfb617c4d92421a71d137e"
     },
     "last_active_child_id": null,
     "last_active_at": null

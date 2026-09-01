@@ -6,7 +6,7 @@ importance_tier: "critical"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "public/005-component-surface-system/032-cover-target-scheme-safety"
+    packet_pointer: "005-component-surface-system/032-cover-target-scheme-safety"
     last_updated_at: "2026-08-31T22:30:00Z"
     last_updated_by: "phase-author"
     recent_action: "Covers routed through the allowlist; all ten external opens now sever the opener"

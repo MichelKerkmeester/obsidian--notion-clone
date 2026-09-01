@@ -11,7 +11,7 @@ importance_tier: "high"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "public/001-note-db-notion-parity-build/013-template-toolbar-button/003-create-path-proof"
+    packet_pointer: "001-note-db-notion-parity-build/013-template-toolbar-button/003-create-path-proof"
     last_updated_at: "2026-08-27T12:27:53Z"
     last_updated_by: "phase-architect"
     recent_action: "Authored create-path-proof child from synthesis edge cases and final-plan step 8"

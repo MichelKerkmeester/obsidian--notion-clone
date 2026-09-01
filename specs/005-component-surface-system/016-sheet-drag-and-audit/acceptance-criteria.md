@@ -9,7 +9,7 @@ contextType: "verification"
 Every number below comes from `probe/sheet-audit.mjs`, which opens the surfaces through
 `openRecordDetailPanel`, `createOwnedMenu` and `applySheetChrome`, loads the shipped `styles.css`,
 installs Obsidian's own `setCssProps`, and drives the gesture with real touch events through the
-browser's input pipeline. Run: `node specs/public/005-component-surface-system/016-sheet-drag-and-audit/probe/sheet-audit.mjs`
+browser's input pipeline. Run: `node specs/005-component-surface-system/016-sheet-drag-and-audit/probe/sheet-audit.mjs`
 
 Result at the time of writing: **19 of 22 pass**, and the three that do not are each declared below.
 

@@ -47,7 +47,7 @@ I did not find a case in the 001 packet where a ticked functional claim was cont
 
 ## Promised but missing
 
-These are `REQ-*` shortfalls with no corresponding open checklist item — the packet's own six-lane design review (`specs/public/003-ui-improvement-build/review/design-review-index.md`, commit `a42c22f`) found them **after** all eight phases were ticked, and I confirmed each against code.
+These are `REQ-*` shortfalls with no corresponding open checklist item — the packet's own six-lane design review (`specs/003-ui-improvement-build/review/design-review-index.md`, commit `a42c22f`) found them **after** all eight phases were ticked, and I confirmed each against code.
 
 **`003` REQ-005 — the unified z-index layer scale is a minority mechanism, and one bypass is a live P0.** REQ-005 requires consuming `--db-layer-panel: 50 / popover: 100 / submenu: 110 / modal: 1000`. Reality: `grep -c "var(--db-layer-" styles.css` = **29**, versus **96** hardcoded numeric `z-index` declarations. The consequence is real: `.note-database-container .db-record-detail-panel { z-index: 999 }` (`styles.css:8783`) hosts cell editors that resolve to `var(--db-layer-popover, 100)` (`styles.css:116, 2336, 2618`), so on desktop the children paint *behind* their parent. The Chinese comment at `styles.css:8777-8780` still asserts the children sit at 1000/1001/1002 — true only on the mobile path, which hardcodes `zIndex: "1000"` at `CellRenderer.ts:1751, 2313`. Phase 003's checklist shows 24/25 with all P0s ticked.
 
@@ -80,7 +80,7 @@ I found nothing unticked that is actually finished.
 
 **The 003 parent contradicts every one of its children.** `003-ui-improvement-build/spec.md:48` says `| **Status** | Planned |`, `:110-117` lists all eight phases as `Planned`, and `:29` says `completion_pct: 0`. Meanwhile the children report 100/100/96/100/100/94/100/100 and `graph-metadata.json` says `"status": "in_progress"`. Three sources, three answers. This is the mirror image of 001, whose parent was carefully updated.
 
-**The "1228 open items" figure is an artifact.** 1,087 of them live in `specs/public/001-note-db-notion-parity-build/scratch/doc-backups/` — three timestamped pre-edit snapshots (`pre-rewrite`, `pre-findingsfix`, `pre-decompose`) holding 42 archived checklists with every box unticked. Real open work in 001's live checklists is **141 items**, not 1,228. Nothing in the docs is lying here, but any count that walks the tree naively will be off by 8×.
+**The "1228 open items" figure is an artifact.** 1,087 of them live in `specs/001-note-db-notion-parity-build/scratch/doc-backups/` — three timestamped pre-edit snapshots (`pre-rewrite`, `pre-findingsfix`, `pre-decompose`) holding 42 archived checklists with every box unticked. Real open work in 001's live checklists is **141 items**, not 1,228. Nothing in the docs is lying here, but any count that walks the tree naively will be off by 8×.
 
 **`phase-verification-4-PASS.md` is a planning-doc audit, not a code audit.** It is dated 2026-08-27, states "Gate **for** implementation", and its pass criterion is "An implementer following `tasks.md` is not sent to the wrong code." Filed alongside the design review in `review/`, its "FINAL (round 4): PASS" heading reads as verification of shipped code. It is not, and the ~100-line citation drift I found in the shipped checklists is the direct evidence that its guarantees did not survive implementation.
 

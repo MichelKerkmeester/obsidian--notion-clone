@@ -8,7 +8,7 @@ importance_tier: "high"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "public/003-ui-improvement-build/012-mobile-name-column-and-fab"
+    packet_pointer: "003-ui-improvement-build/012-mobile-name-column-and-fab"
     last_updated_at: "2026-08-29T00:00:00Z"
     last_updated_by: "phase-author"
     recent_action: "Fixed three phone defects; all gates green"

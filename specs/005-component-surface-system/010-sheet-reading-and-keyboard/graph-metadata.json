@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "packet_id": "public/005-component-surface-system/010-sheet-reading-and-keyboard",
-  "spec_folder": "public/005-component-surface-system/010-sheet-reading-and-keyboard",
-  "parent_id": "public/005-component-surface-system",
+  "packet_id": "005-component-surface-system/010-sheet-reading-and-keyboard",
+  "spec_folder": "005-component-surface-system/010-sheet-reading-and-keyboard",
+  "parent_id": "005-component-surface-system",
   "children_ids": [],
   "manual": {
     "depends_on": [],
@@ -203,7 +203,7 @@
     ],
     "causal_summary": "Make the phone record sheet read like a record rather than a two-column ledger, and keep the field being edited visible when the software keyboard opens.",
     "created_at": "2026-08-30T16:47:04.848Z",
-    "last_save_at": "2026-08-31T22:17:41.028Z",
+    "last_save_at": "2026-09-01T10:50:16.358Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -214,13 +214,13 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:c16739a2dd11701cbc49613027d370996b4d50bcdb5ab565f3792b6412b6fd29",
+    "source_fingerprint": "sha256:ee9f9e70be4924e66fc06aa0f1665ff56363a9b763c4cb5cb13036ebc7af5532",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "42da41e5a852a11fd56ad3094ffaf0f9af3489b7a456e6b67a0b8a70a413d16c",
+      "spec.md": "ba633afdee8b94bc4c923fcff017c99c1233f67bf2faa758eb93027598951869",
       "plan.md": "1b064a259bd0fcdbe57b5c882d05539d1a4c70a6cb911659c2cb19177d8f89ed",
       "tasks.md": "c4537b17516d3dcdf8437e2f38d79efba1c7416a360f993b611ab3f819deaca2",
-      "implementation-summary.md": "1007550be312d2390cdbdc3ccff55bd1dc63b4ff37d555bbac7d54d17f2fceb6"
+      "implementation-summary.md": "c24b841d2640dae67b984ae3846a94757e5a433a319ef615ad2627ca9e246fd4"
     },
     "last_active_child_id": null,
     "last_active_at": null

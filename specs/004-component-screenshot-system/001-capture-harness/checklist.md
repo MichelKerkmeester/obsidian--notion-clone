@@ -8,7 +8,7 @@ importance_tier: "medium"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "public/004-component-screenshot-system/001-capture-harness"
+    packet_pointer: "004-component-screenshot-system/001-capture-harness"
     last_updated_at: "2026-08-28T00:00:00Z"
     last_updated_by: "phase-author"
     recent_action: "Reconciled the harness checklist against the files; left gate items unticked"

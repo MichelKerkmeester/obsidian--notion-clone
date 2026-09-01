@@ -13,7 +13,7 @@ importance_tier: "critical"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "public/005-component-surface-system/010-sheet-reading-and-keyboard"
+    packet_pointer: "005-component-surface-system/010-sheet-reading-and-keyboard"
     last_updated_at: "2026-08-30T05:20:00Z"
     last_updated_by: "phase-author"
     recent_action: "Pinch guard, desktop four values and both missing state dimensions now measured"

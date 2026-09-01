@@ -1,6 +1,6 @@
 {
   "level": "2",
-  "specFolder": "public/001-note-db-notion-parity-build/003-reports-computed-fields",
+  "specFolder": "001-note-db-notion-parity-build/003-reports-computed-fields",
   "description": "The finance Reports view lacks Remaining and Saved as live computed columns",
   "keywords": [
     "finance",

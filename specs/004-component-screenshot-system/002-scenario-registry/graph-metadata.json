@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "packet_id": "public/004-component-screenshot-system/002-scenario-registry",
-  "spec_folder": "public/004-component-screenshot-system/002-scenario-registry",
-  "parent_id": "public/004-component-screenshot-system",
+  "packet_id": "004-component-screenshot-system/002-scenario-registry",
+  "spec_folder": "004-component-screenshot-system/002-scenario-registry",
+  "parent_id": "004-component-screenshot-system",
   "children_ids": [],
   "migrated": true,
   "migration_source": "legacy",
@@ -46,8 +46,13 @@
       "spec.md",
       "plan.md",
       "tasks.md",
+      "implementation-summary.md",
       "checklist.md",
-      "implementation-summary.md"
+      "tools/screenshots/scenarios.mjs",
+      "screenshots/README.md",
+      "screenshots/manifest.json",
+      "tools/screenshots/capture.mjs",
+      "tools/screenshots/verify.mjs"
     ],
     "entities": [
       {
@@ -69,15 +74,45 @@
         "source": "derived"
       },
       {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
         "name": "checklist.md",
         "kind": "doc",
         "path": "checklist.md",
         "source": "derived"
       },
       {
-        "name": "implementation-summary.md",
+        "name": "scenarios.mjs",
+        "kind": "file",
+        "path": "tools/screenshots/scenarios.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "README.md",
         "kind": "doc",
-        "path": "implementation-summary.md",
+        "path": "screenshots/README.md",
+        "source": "derived"
+      },
+      {
+        "name": "manifest.json",
+        "kind": "config",
+        "path": "screenshots/manifest.json",
+        "source": "derived"
+      },
+      {
+        "name": "capture.mjs",
+        "kind": "file",
+        "path": "tools/screenshots/capture.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "verify.mjs",
+        "kind": "file",
+        "path": "tools/screenshots/verify.mjs",
         "source": "derived"
       },
       {
@@ -163,57 +198,26 @@
         "kind": "proper_noun",
         "path": "tasks.md",
         "source": "derived"
-      },
-      {
-        "name": "Completion Criteria",
-        "kind": "proper_noun",
-        "path": "tasks.md",
-        "source": "derived"
-      },
-      {
-        "name": "Run Vitest",
-        "kind": "proper_noun",
-        "path": "tasks.md",
-        "source": "derived"
-      },
-      {
-        "name": "Quality Checklist",
-        "kind": "proper_noun",
-        "path": "checklist.md",
-        "source": "derived"
-      },
-      {
-        "name": "Verification Protocol",
-        "kind": "proper_noun",
-        "path": "checklist.md",
-        "source": "derived"
-      },
-      {
-        "name": "Completion Impact",
-        "kind": "proper_noun",
-        "path": "checklist.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "A harness that can photograph a page still needs to be told what to photograph, and three constraints shape the answer",
     "created_at": "2026-08-28T00:00:00.000Z",
-    "last_save_at": "2026-08-28T13:52:14.719Z",
+    "last_save_at": "2026-09-01T10:50:16.228Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
       "spec.md",
       "plan.md",
       "tasks.md",
-      "checklist.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:33f45a31ef62be09b592aef97ffa06c636ad1a238f6027a4dbf93bf63a5f5130",
+    "source_fingerprint": "sha256:37a8f391627638dac6eab17fbe2714177a55e5d079198879b7e2998e9d2d36be",
+    "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "e6c8e12bfd6139e6b2bd5932bb568c1dc97f3a642a7c7cc6a32e971cd598c8a4",
-      "plan.md": "516d36935e1a564b047e8c723e9a6174477b79802c4d93c4b78b3c5da8ac1d99",
-      "tasks.md": "7dc15898e9dc15d02463ca3a264de6b7b7eb9357fa566716f69758075eadd561",
-      "checklist.md": "1ee66ad268c1aaeb61c9fc91684966281357168642a334b80c37fe8f6be8284d",
-      "implementation-summary.md": "80c38d15be3ea39f59fc94dc51594b8aaa743c3892067f9e2a3e17cffba56b49"
+      "spec.md": "9424248103bcc511d924aabf993786df4b96a6147a94f3140ba4c8b5e397bad1",
+      "plan.md": "e57d2ede28e3a942eb1f2884600f7ced837f2d6e634c486b2c993846a05a707b",
+      "tasks.md": "868c17c27e2187d05f508dd4ede7c6620256f8be219d3ff67d05966d88e16e02",
+      "implementation-summary.md": "7368e6234535a07ee312b44343bcf226ad558def03e694356404ea20b872bd64"
     },
     "last_active_child_id": null,
     "last_active_at": null

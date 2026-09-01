@@ -6,7 +6,7 @@ importance_tier: "important"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "public/005-component-surface-system/032-cover-target-scheme-safety"
+    packet_pointer: "005-component-surface-system/032-cover-target-scheme-safety"
     last_updated_at: "2026-08-31T16:00:00Z"
     last_updated_by: "phase-author"
     recent_action: "Opened from review findings F001 and F010"

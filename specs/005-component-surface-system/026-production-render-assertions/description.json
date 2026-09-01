@@ -1,6 +1,6 @@
 {
   "level": "2",
-  "specFolder": "public/005-component-surface-system/026-production-render-assertions",
+  "specFolder": "005-component-surface-system/026-production-render-assertions",
   "description": "Fourteen gate checks and none of them constructs a renderer the plugin ships, so a quadratic freeze reached a user through every one.",
   "keywords": [
     "fourteen",

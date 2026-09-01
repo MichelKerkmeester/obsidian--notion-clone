@@ -50,7 +50,7 @@ while succeeding, and both reported success with exit 0 while producing nothing.
 Each lineage holds its synthesized `research.md` under `research/lineages/<lineage>/research/`, and its iterations under `research/lineages/<lineage>/iterations/` — one directory deeper than this file used to say, which matters when the whole point of the trap below is to go and look.
 
 **HOW TO RE-RUN.** From **inside the plugin worktree** — containment rejects a run launched from the hub, which cost a full 5-minute lineage once:
-`node .opencode/skills/system-deep-loop/runtime/scripts/fanout-run.cjs --spec-folder specs/public/005-component-surface-system/007-architecture-research --loop-type research --research-topic "<topic>" --fanout-config-json '{"executors":[{"kind":"cli-codex","label":"<label>","model":"gpt-5.6-luna","reasoningEffort":"xhigh","serviceTier":"fast","iterations":10}]}' --base-artifact-dir <spec-folder>/research --stop-policy max-iterations`
+`node .opencode/skills/system-deep-loop/runtime/scripts/fanout-run.cjs --spec-folder specs/005-component-surface-system/007-architecture-research --loop-type research --research-topic "<topic>" --fanout-config-json '{"executors":[{"kind":"cli-codex","label":"<label>","model":"gpt-5.6-luna","reasoningEffort":"xhigh","serviceTier":"fast","iterations":10}]}' --base-artifact-dir <spec-folder>/research --stop-policy max-iterations`
 
 **TWO TRAPS THAT COST REAL TIME HERE.**
 - **Do not run a research lineage while an agent is editing the same tree.** Write containment saw a concurrent agent's edits, attributed them to the lineage and **reverted 15 paths** — killing a completed 27-minute run at the final step.

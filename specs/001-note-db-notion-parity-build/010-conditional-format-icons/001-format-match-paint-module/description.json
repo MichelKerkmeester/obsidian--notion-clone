@@ -1,6 +1,6 @@
 {
   "level": "1",
-  "specFolder": "public/001-note-db-notion-parity-build/010-conditional-format-icons/001-format-match-paint-module",
+  "specFolder": "001-note-db-notion-parity-build/010-conditional-format-icons/001-format-match-paint-module",
   "description": "The shared helper already matches Notion's core CF contract through `getConditionalFormatMatch` / `applyConditionalFormat`",
   "keywords": [
     "shared",

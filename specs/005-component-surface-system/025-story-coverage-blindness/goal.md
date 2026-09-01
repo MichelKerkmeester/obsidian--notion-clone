@@ -9,7 +9,7 @@ importance_tier: "critical"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "public/005-component-surface-system/025-story-coverage-blindness"
+    packet_pointer: "005-component-surface-system/025-story-coverage-blindness"
     last_updated_at: "2026-08-30T21:05:00Z"
     last_updated_by: "phase-reconciliation"
     recent_action: "Goal authored after the fact; 8 of 9 criteria measured, C7 caveated"

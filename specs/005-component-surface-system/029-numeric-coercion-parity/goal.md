@@ -9,7 +9,7 @@ importance_tier: "critical"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "public/005-component-surface-system/029-numeric-coercion-parity"
+    packet_pointer: "005-component-surface-system/029-numeric-coercion-parity"
     last_updated_at: "2026-08-30T18:50:00Z"
     last_updated_by: "phase-author"
     recent_action: "Cell coercion switched to whole-string; 10 harness disagreements closed to 0"

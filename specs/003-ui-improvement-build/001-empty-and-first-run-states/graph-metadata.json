@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "packet_id": "public/003-ui-improvement-build/001-empty-and-first-run-states",
-  "spec_folder": "public/003-ui-improvement-build/001-empty-and-first-run-states",
-  "parent_id": "public/003-ui-improvement-build",
+  "packet_id": "003-ui-improvement-build/001-empty-and-first-run-states",
+  "spec_folder": "003-ui-improvement-build/001-empty-and-first-run-states",
+  "parent_id": "003-ui-improvement-build",
   "children_ids": [],
   "manual": {
     "depends_on": [],
@@ -44,8 +44,11 @@
       "spec.md",
       "plan.md",
       "tasks.md",
+      "implementation-summary.md",
       "checklist.md",
-      "implementation-summary.md"
+      "specs/002-ui-improvement-research/research/synthesis.md",
+      "specs/002-ui-improvement-research/research/devin-gemini/iteration-01.md",
+      "specs/002-ui-improvement-research/research/codex-luna/iteration-01.md"
     ],
     "entities": [
       {
@@ -67,15 +70,27 @@
         "source": "derived"
       },
       {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
         "name": "checklist.md",
         "kind": "doc",
         "path": "checklist.md",
         "source": "derived"
       },
       {
-        "name": "implementation-summary.md",
+        "name": "synthesis.md",
         "kind": "doc",
-        "path": "implementation-summary.md",
+        "path": "specs/002-ui-improvement-research/research/synthesis.md",
+        "source": "derived"
+      },
+      {
+        "name": "iteration-01.md",
+        "kind": "doc",
+        "path": "specs/002-ui-improvement-research/research/devin-gemini/iteration-01.md",
         "source": "derived"
       },
       {
@@ -175,43 +190,30 @@
         "source": "derived"
       },
       {
-        "name": "Verification Checklist",
+        "name": "Implementation Summary",
         "kind": "proper_noun",
-        "path": "checklist.md",
-        "source": "derived"
-      },
-      {
-        "name": "Verification Protocol",
-        "kind": "proper_noun",
-        "path": "checklist.md",
-        "source": "derived"
-      },
-      {
-        "name": "Completion Impact",
-        "kind": "proper_noun",
-        "path": "checklist.md",
+        "path": "implementation-summary.md",
         "source": "derived"
       }
     ],
     "causal_summary": "Currently, empty and first-run states across the Note Database plugin are visually stark, inconsistent, and functionally dead ends:",
     "created_at": "2026-08-27T19:13:50.525Z",
-    "last_save_at": "2026-08-28T16:54:47.714Z",
+    "last_save_at": "2026-09-01T10:50:16.086Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
       "spec.md",
       "plan.md",
       "tasks.md",
-      "checklist.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:c4b363b74390714a3c9b5f4c7821f1640fd07f0467e7f5aee6a2a9985dd766a4",
+    "source_fingerprint": "sha256:56906a7112c682190a07aeb904f943cecab065585506399bb5d98ade6d6c7095",
+    "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "0d12c708f3ae5ae048bb3176ce3447978517183ee7410a3cec8fa43d12ca905f",
-      "plan.md": "fc062785f8edc0951310b1d1f2c6d5c5dea9714180f3b10695052c8673c608f3",
-      "tasks.md": "2e97741c7c469f81d4daac4ee18c3842b143e85b6a82fa4bf5a8a702080d4ebd",
-      "checklist.md": "08f9ca686f56c7125fd9c53f5da31629b32e6e6db358dd6bf46bbbde3a5de49c",
-      "implementation-summary.md": "4fb5842519a3af814880430a62566c4487d0c510ca6957d464ef10cfbe414fec"
+      "spec.md": "98d6c8c683c5c84a7552e5dc551f3fdaf393c811bdbf0544e0ac408d799ec086",
+      "plan.md": "c906d93923a1a5da9fc5164ba4f459bf48aea8b615aaf8dc358bbc8a579f5fda",
+      "tasks.md": "f2e5b4177a0b00f20964a7e6271bb61589c2d751c2ea0c2729ce4acf2940022d",
+      "implementation-summary.md": "740fde7ca1394840b44085ca4736d6f6cfe3a2ca5ae9bf42b97e24f0102ca91a"
     },
     "last_active_child_id": null,
     "last_active_at": null

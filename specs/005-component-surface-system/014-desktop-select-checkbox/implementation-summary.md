@@ -8,7 +8,7 @@ importance_tier: "critical"
 contextType: "general"
 _memory:
   continuity:
-    packet_pointer: "public/005-component-surface-system/014-desktop-select-checkbox"
+    packet_pointer: "005-component-surface-system/014-desktop-select-checkbox"
     last_updated_at: "2026-08-30T09:10:00Z"
     last_updated_by: "orchestrator"
     recent_action: "The coincidence clause withdrawn on its own evidence; clearance carries the row"

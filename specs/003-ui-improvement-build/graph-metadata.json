@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "packet_id": "public/003-ui-improvement-build",
-  "spec_folder": "public/003-ui-improvement-build",
+  "packet_id": "003-ui-improvement-build",
+  "spec_folder": "003-ui-improvement-build",
   "parent_id": null,
   "children_ids": [
     "public/003-ui-improvement-build/001-empty-and-first-run-states",
@@ -13,7 +13,31 @@
     "public/003-ui-improvement-build/007-micro-interactions",
     "public/003-ui-improvement-build/008-mobile-and-accessibility",
     "public/003-ui-improvement-build/009-header-affordance-defects",
-    "public/003-ui-improvement-build/010-add-view-popover-layout"
+    "public/003-ui-improvement-build/010-add-view-popover-layout",
+    "003-ui-improvement-build/001-empty-and-first-run-states",
+    "003-ui-improvement-build/002-table-grid-experience",
+    "003-ui-improvement-build/003-popovers-menus-elevation",
+    "003-ui-improvement-build/004-toolbar-and-view-controls",
+    "003-ui-improvement-build/005-design-tokens-typography",
+    "003-ui-improvement-build/006-views-parity-polish",
+    "003-ui-improvement-build/007-micro-interactions",
+    "003-ui-improvement-build/008-mobile-and-accessibility",
+    "003-ui-improvement-build/009-header-affordance-defects",
+    "003-ui-improvement-build/010-add-view-popover-layout",
+    "003-ui-improvement-build/011-mobile-table-and-panel-ux",
+    "003-ui-improvement-build/012-mobile-name-column-and-fab",
+    "003-ui-improvement-build/013-mobile-ux-research",
+    "003-ui-improvement-build/014-unbreak-and-references",
+    "003-ui-improvement-build/015-ts-only-wins-and-release-proof",
+    "003-ui-improvement-build/016-overlay-contracts",
+    "003-ui-improvement-build/017-touch-predicate",
+    "003-ui-improvement-build/018-surface-taxonomy-and-menus",
+    "003-ui-improvement-build/019-row-geometry",
+    "003-ui-improvement-build/020-board-and-calendar",
+    "003-ui-improvement-build/021-output-format-and-formula",
+    "003-ui-improvement-build/022-desktop-popover-research",
+    "003-ui-improvement-build/023-performance-research",
+    "003-ui-improvement-build/024-storybook-harness"
   ],
   "manual": {
     "depends_on": [],
@@ -96,17 +120,18 @@
     ],
     "causal_summary": "The forked Note Database plugin is functionally rich — 12 column types, 7 view types, live relations and rollups — but its interface has not kept pace with that capability",
     "created_at": "2026-08-27T19:53:21.285Z",
-    "last_save_at": "2026-08-28T12:47:33.513Z",
+    "last_save_at": "2026-09-01T10:50:16.078Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
       "spec.md"
     ],
-    "source_fingerprint": "sha256:c83d636e7d0aa41ad7e61dcfc3a26bfc1f9d40ae5af695ac3118cd7b04a8ba77",
+    "source_fingerprint": "sha256:3a614424abd1870275f5ec428bc946d81515b62e79869a1d43f1fc0cd17bac15",
+    "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "a7c2184c196baa35876071bd47786582aa950da2afa906abd6a461197715b927"
+      "spec.md": "906e58457b5b5000e6df99f262895a7bae0acb3e3b2fcebaab48cb0ce400c8b7"
     },
-    "last_active_child_id": "public/003-ui-improvement-build/008-mobile-and-accessibility",
+    "last_active_child_id": "003-ui-improvement-build/008-mobile-and-accessibility",
     "last_active_at": null
   }
 }

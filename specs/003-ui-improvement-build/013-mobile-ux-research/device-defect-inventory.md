@@ -2,7 +2,7 @@
 
 Reported by the operator from a real phone across several rounds, with screenshots. This file is
 the auditable inventory for this packet. It supersedes any other 18-item list; in particular it is
-NOT the desktop-era list at `specs/public/002-ui-improvement-research/research/synthesis.md:149-164`,
+NOT the desktop-era list at `specs/002-ui-improvement-research/research/synthesis.md:149-164`,
 which covers a different programme.
 
 Evidence lines are current-branch source locations established during triage. Items marked

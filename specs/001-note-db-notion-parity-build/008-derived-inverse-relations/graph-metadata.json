@@ -1,15 +1,18 @@
 {
   "schema_version": 1,
-  "packet_id": "public/001-note-db-notion-parity-build/008-derived-inverse-relations",
-  "spec_folder": "public/001-note-db-notion-parity-build/008-derived-inverse-relations",
-  "parent_id": "public/001-note-db-notion-parity-build",
+  "packet_id": "001-note-db-notion-parity-build/008-derived-inverse-relations",
+  "spec_folder": "001-note-db-notion-parity-build/008-derived-inverse-relations",
+  "parent_id": "001-note-db-notion-parity-build",
   "children_ids": [
     "obsidian/002-note-db-notion-parity-build/008-derived-inverse-relations/001-relation-inverse-module",
     "obsidian/002-note-db-notion-parity-build/008-derived-inverse-relations/002-rollup-inverse-resolution",
     "obsidian/002-note-db-notion-parity-build/008-derived-inverse-relations/003-inverse-refresh-membership",
     "public/001-note-db-notion-parity-build/008-derived-inverse-relations/001-relation-inverse-module",
     "public/001-note-db-notion-parity-build/008-derived-inverse-relations/002-rollup-inverse-resolution",
-    "public/001-note-db-notion-parity-build/008-derived-inverse-relations/003-inverse-refresh-membership"
+    "public/001-note-db-notion-parity-build/008-derived-inverse-relations/003-inverse-refresh-membership",
+    "001-note-db-notion-parity-build/008-derived-inverse-relations/001-relation-inverse-module",
+    "001-note-db-notion-parity-build/008-derived-inverse-relations/002-rollup-inverse-resolution",
+    "001-note-db-notion-parity-build/008-derived-inverse-relations/003-inverse-refresh-membership"
   ],
   "manual": {
     "depends_on": [],
@@ -51,12 +54,14 @@
       "spec.md",
       "plan.md",
       "tasks.md",
-      "checklist.md",
       "implementation-summary.md",
+      "research/research.md",
+      "checklist.md",
       "research/sonnet-verification.md",
       "research/synthesis.md",
-      "research/research.md",
-      "research/final-plan.md"
+      "src/__tests__/setup.ts",
+      "research/final-plan.md",
+      "specs/001-note-db-notion-parity-build/008-derived-inverse-relations/checklist.md"
     ],
     "entities": [
       {
@@ -78,15 +83,21 @@
         "source": "derived"
       },
       {
-        "name": "checklist.md",
-        "kind": "doc",
-        "path": "checklist.md",
-        "source": "derived"
-      },
-      {
         "name": "implementation-summary.md",
         "kind": "doc",
         "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "research.md",
+        "kind": "doc",
+        "path": "research/research.md",
+        "source": "derived"
+      },
+      {
+        "name": "checklist.md",
+        "kind": "doc",
+        "path": "checklist.md",
         "source": "derived"
       },
       {
@@ -102,9 +113,9 @@
         "source": "derived"
       },
       {
-        "name": "research.md",
-        "kind": "doc",
-        "path": "research/research.md",
+        "name": "setup.ts",
+        "kind": "code",
+        "path": "src/__tests__/setup.ts",
         "source": "derived"
       },
       {
@@ -192,38 +203,31 @@
         "source": "derived"
       },
       {
-        "name": "Verification Checklist",
+        "name": "Implementation Summary",
         "kind": "proper_noun",
-        "path": "checklist.md",
-        "source": "derived"
-      },
-      {
-        "name": "Verification Protocol",
-        "kind": "proper_noun",
-        "path": "checklist.md",
+        "path": "implementation-summary.md",
         "source": "derived"
       }
     ],
     "causal_summary": "Notion two-way relations store a second property on the target data source and mirror it on write: the relation type object is `{ datasourceid, dualproperty: { syncedpropertyid, syncedpropertyname } }` (Notion API, `developers.notion.com/reference/property-object#relation`), and \"with two-way relations, the edits work both ways\" (`notion.com/help/relations-and-rollups`)",
     "created_at": "2026-08-24T17:58:41.421Z",
-    "last_save_at": "2026-08-28T10:56:21.985Z",
+    "last_save_at": "2026-09-01T10:50:15.817Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
       "spec.md",
       "plan.md",
       "tasks.md",
-      "checklist.md",
       "implementation-summary.md",
       "research/research.md"
     ],
-    "source_fingerprint": "sha256:8cf903bfc8cd1f3af09d127c21b4c4813846783b64a943a00aab364831924ab1",
+    "source_fingerprint": "sha256:2e0290ae225d4204e2893a6c7d97277afcd752f5f90e291bcc9676de7b44e928",
+    "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "775447115b3b35adfbfae610ee69024b1bbf0d9f726e95867e9b8eddc6b5656e",
-      "plan.md": "a779d768573ae49b0c2aee5749fa2521d930792ff283137671b2c69a3463a240",
-      "tasks.md": "a48dcaff74633eab7c9d814fea452d51b8724bfb1c068fb97213dee986ae255b",
-      "checklist.md": "a59e817bab0f60b0204682d6f7aa599ee680a10aca4ee43a2fb0dea124bf9d78",
-      "implementation-summary.md": "dd22cb005ca82253532073c7be0460e674eb61b5607f2636453022459d60f0d1",
+      "spec.md": "2ed7e88417dc27024416dec86c1d9b022338b7817b616b9aa746f9552df31223",
+      "plan.md": "54635ac5b3e8e75a4fc7b6fff849a927ffec2ca67dffa441202a8723ab3a8d8d",
+      "tasks.md": "572174f0beec050291989ab705d0924380986fb6e497de065cebd8fd52586ea5",
+      "implementation-summary.md": "758a0d6f095054b36fc305d93255eb8669cdc65ceb7461ee777dab00ac9b8b9d",
       "research/research.md": "75684800a31f01a5c208c14cbc999b5be8b8cfcf4b182aa97e24774fa1b766be"
     },
     "last_active_child_id": "obsidian/002-note-db-notion-parity-build/008-derived-inverse-relations/003-inverse-refresh-membership",

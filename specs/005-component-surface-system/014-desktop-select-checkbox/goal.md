@@ -8,7 +8,7 @@ importance_tier: "critical"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "public/005-component-surface-system/014-desktop-select-checkbox"
+    packet_pointer: "005-component-surface-system/014-desktop-select-checkbox"
     last_updated_at: "2026-09-01T21:00:00Z"
     last_updated_by: "fifth-property-control"
     recent_action: "borderColor added as a fifth property; the strip control now discharges"

@@ -1,5 +1,5 @@
 {
-  "specFolder": "public/001-note-db-notion-parity-build/014-record-detail-panel/003-title-open-affordance",
+  "specFolder": "001-note-db-notion-parity-build/014-record-detail-panel/003-title-open-affordance",
   "description": "The title cell already navigates on click (`CellRenderer.ts:126-129` → `openNote`) and already feeds Page Preview via `markNoteHoverLink`",
   "keywords": [
     "title",

@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "packet_id": "public/003-ui-improvement-build/009-header-affordance-defects",
-  "spec_folder": "public/003-ui-improvement-build/009-header-affordance-defects",
-  "parent_id": "public/003-ui-improvement-build",
+  "packet_id": "003-ui-improvement-build/009-header-affordance-defects",
+  "spec_folder": "003-ui-improvement-build/009-header-affordance-defects",
+  "parent_id": "003-ui-improvement-build",
   "children_ids": [],
   "manual": {
     "depends_on": [],
@@ -44,8 +44,8 @@
       "spec.md",
       "plan.md",
       "tasks.md",
-      "checklist.md",
-      "implementation-summary.md"
+      "implementation-summary.md",
+      "checklist.md"
     ],
     "entities": [
       {
@@ -67,15 +67,15 @@
         "source": "derived"
       },
       {
-        "name": "checklist.md",
-        "kind": "doc",
-        "path": "checklist.md",
-        "source": "derived"
-      },
-      {
         "name": "implementation-summary.md",
         "kind": "doc",
         "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "checklist.md",
+        "kind": "doc",
+        "path": "checklist.md",
         "source": "derived"
       },
       {
@@ -175,43 +175,42 @@
         "source": "derived"
       },
       {
-        "name": "Quality Checklist",
+        "name": "Implementation Summary",
         "kind": "proper_noun",
-        "path": "checklist.md",
+        "path": "implementation-summary.md",
         "source": "derived"
       },
       {
-        "name": "Verification Protocol",
+        "name": "Phase Name",
         "kind": "proper_noun",
-        "path": "checklist.md",
+        "path": "implementation-summary.md",
         "source": "derived"
       },
       {
-        "name": "Completion Impact",
+        "name": "Completion Pct",
         "kind": "proper_noun",
-        "path": "checklist.md",
+        "path": "implementation-summary.md",
         "source": "derived"
       }
     ],
     "causal_summary": "A user reported that on table column headers — and in the same shape on board column headers — the three-dots menu button renders on its own line underneath the column name, left-aligned, instead of sitting beside it",
     "created_at": "2026-08-28T12:21:51.178Z",
-    "last_save_at": "2026-08-28T16:54:47.516Z",
+    "last_save_at": "2026-09-01T10:50:16.152Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
       "spec.md",
       "plan.md",
       "tasks.md",
-      "checklist.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:5be9fd47003681dfaa873da2fc738b25975bdb8d38997ac9853176966a83747f",
+    "source_fingerprint": "sha256:32277e9cd4e8c582635169f920f820484c8bd331ef39a592ea98dd3c384ab772",
+    "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "06c0956ce5938e24ba0427ea984985e929d29ff70856456eceb5a161499ca5b3",
-      "plan.md": "866f68fb119987a329eb205a8ea3b3e61b4b860bdb12ca474203e35b1d985f1e",
-      "tasks.md": "6248c8b944f1341cb62d5995a33202d8deeced9abf5166c23ddf67e6d1f12f34",
-      "checklist.md": "76114e7752d80130a632630b60de8dec167b4177bfbf6e8eb07f341accfa1844",
-      "implementation-summary.md": "db39087540e80cc5b4f60594429308e4c06891f0660a2347b916c8100b8ea1e3"
+      "spec.md": "9c09e321609b9ddfd3c043a90eb048a3f94ae19dc622807a1ca703ffde9389d3",
+      "plan.md": "818a141ae774be23dced7216f51abd900ac1b39ea273533fea0c3bdf6ed2849d",
+      "tasks.md": "ec6f87d34e614c0a808d9226eb813240862908043eca7d6e40a2d824b7e713ca",
+      "implementation-summary.md": "b63f3622ad0c6c754ac830f9a2a603faaaa27dfe7dd1c3e24e4a1ff03897a4c5"
     },
     "last_active_child_id": null,
     "last_active_at": null

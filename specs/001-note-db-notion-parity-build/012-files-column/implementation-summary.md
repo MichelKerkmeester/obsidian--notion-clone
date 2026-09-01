@@ -11,7 +11,7 @@ importance_tier: "high"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "public/001-note-db-notion-parity-build/012-files-column"
+    packet_pointer: "001-note-db-notion-parity-build/012-files-column"
     last_updated_at: "2026-08-28T10:54:50.251Z"
     last_updated_by: "docs-reconciliation"
     recent_action: "Corrected unsupported checklist claims against the shipped code"
@@ -74,7 +74,7 @@ Built on Luna-via-cursor after the Codex OpenAI executor's quota died mid-run (s
 | `src/data/PropertyTypeConflict.ts` | Modified | `files → multitext` mapping |
 | `src/views/GalleryRenderer.ts`, `src/views/BoardRenderer.ts` | Modified | Cover guard skips `image.external` for `"files"` columns; `onerror` placeholder |
 | `src/views/DatabaseView.ts` | Modified | Auto-prefer `col.type === "files"` for gallery cover field |
-| `specs/public/001-note-db-notion-parity-build/012-files-column/{spec,plan,tasks,checklist,implementation-summary}.md` | Reconciled | Docs updated to reflect shipped state (this pass) |
+| `specs/001-note-db-notion-parity-build/012-files-column/{spec,plan,tasks,checklist,implementation-summary}.md` | Reconciled | Docs updated to reflect shipped state (this pass) |
 
 <!-- /ANCHOR:what-built -->
 ---

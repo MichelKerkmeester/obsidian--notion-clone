@@ -1,6 +1,6 @@
 {
   "level": "2",
-  "specFolder": "public/001-note-db-notion-parity-build/010-conditional-format-icons",
+  "specFolder": "001-note-db-notion-parity-build/010-conditional-format-icons",
   "description": "The fork already matches Notion's core conditional-format contract — per-view rules, first-match, row-or-property color — through one shared helper",
   "keywords": [
     "fork",

@@ -10,7 +10,7 @@ importance_tier: "high"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "public/004-component-screenshot-system/001-capture-harness"
+    packet_pointer: "004-component-screenshot-system/001-capture-harness"
     last_updated_at: "2026-08-28T00:00:00Z"
     last_updated_by: "phase-author"
     recent_action: "Recorded the capture harness plan against the shipped tools/screenshots files"

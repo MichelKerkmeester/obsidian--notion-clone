@@ -1,6 +1,6 @@
 {
   "level": "2",
-  "specFolder": "public/005-component-surface-system",
+  "specFolder": "005-component-surface-system",
   "description": "Phase parent for the program that gives floating surfaces, sheets, checkboxes and content rows one architecture, one placement authority, and",
   "keywords": [
     "phase",

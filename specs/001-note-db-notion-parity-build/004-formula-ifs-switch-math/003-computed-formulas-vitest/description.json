@@ -1,6 +1,6 @@
 {
   "level": "1",
-  "specFolder": "public/001-note-db-notion-parity-build/004-formula-ifs-switch-math/003-computed-formulas-vitest",
+  "specFolder": "001-note-db-notion-parity-build/004-formula-ifs-switch-math/003-computed-formulas-vitest",
   "description": "Parent plan.md's “run the plugin test suite” currently has nothing to run",
   "keywords": [
     "parent",

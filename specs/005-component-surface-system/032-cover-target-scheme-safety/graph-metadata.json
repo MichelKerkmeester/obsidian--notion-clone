@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "packet_id": "public/005-component-surface-system/032-cover-target-scheme-safety",
-  "spec_folder": "public/005-component-surface-system/032-cover-target-scheme-safety",
-  "parent_id": "public/005-component-surface-system",
+  "packet_id": "005-component-surface-system/032-cover-target-scheme-safety",
+  "spec_folder": "005-component-surface-system/032-cover-target-scheme-safety",
+  "parent_id": "005-component-surface-system",
   "children_ids": [],
   "manual": {
     "depends_on": [],
@@ -192,7 +192,7 @@
     ],
     "causal_summary": "A cover image's click target is opened without checking its URL scheme, so a javascript: or data: target ending in an image extension reaches window.open.",
     "created_at": "2026-08-31T14:46:48.971Z",
-    "last_save_at": "2026-08-31T20:01:25.080Z",
+    "last_save_at": "2026-09-01T10:50:16.515Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -202,13 +202,13 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:b5cc6c27c9c94041b6fd4e48ccdd5da35ac4085ef01695829493233d8c006975",
+    "source_fingerprint": "sha256:2c307a127b6e0598e4225517788f4134c09c02562193894eaa7dc5136776f686",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "433ac996775b94ab74f72739cf739c84ac10d67854ab4324334d038ac4e2e667",
-      "plan.md": "8476a8279945b1694463064e1f4d7a0ab26eedd617f4751c6fc048a6d75e0903",
-      "tasks.md": "02bdc93ba7ddc5e6bf1921e140959a569cd1f5c36d0154845a364865af9b8cb5",
-      "implementation-summary.md": "584d1f798b278ab6a903d63ea7d71b8b1c40672b2bd66c63cdbeb28d04f9548d"
+      "spec.md": "d3e05a353ec72543a5bf21975545396595de09ee8b3078826fa6d26ae44314f1",
+      "plan.md": "90a105424708ae56816e49d4788f8a58bdd1647840f76de1a19d892a61e6a48a",
+      "tasks.md": "f3fa67243ede09036315b9a417d2bafb8b81e060ef0a22ba9a17b2277abe2d33",
+      "implementation-summary.md": "3fa739e3f0b54bc6956fe1e291bad02c08e4cc4d733b55666787c59953cb13f3"
     },
     "last_active_child_id": null,
     "last_active_at": null

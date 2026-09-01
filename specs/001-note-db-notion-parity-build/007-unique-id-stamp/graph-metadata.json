@@ -1,15 +1,18 @@
 {
   "schema_version": 1,
-  "packet_id": "public/001-note-db-notion-parity-build/007-unique-id-stamp",
-  "spec_folder": "public/001-note-db-notion-parity-build/007-unique-id-stamp",
-  "parent_id": "public/001-note-db-notion-parity-build",
+  "packet_id": "001-note-db-notion-parity-build/007-unique-id-stamp",
+  "spec_folder": "001-note-db-notion-parity-build/007-unique-id-stamp",
+  "parent_id": "001-note-db-notion-parity-build",
   "children_ids": [
     "obsidian/002-note-db-notion-parity-build/007-unique-id-stamp/001-unique-id-stamp-module",
     "obsidian/002-note-db-notion-parity-build/007-unique-id-stamp/002-unique-id-config-persist",
     "obsidian/002-note-db-notion-parity-build/007-unique-id-stamp/003-create-entry-stamp",
     "public/001-note-db-notion-parity-build/007-unique-id-stamp/001-unique-id-stamp-module",
     "public/001-note-db-notion-parity-build/007-unique-id-stamp/002-unique-id-config-persist",
-    "public/001-note-db-notion-parity-build/007-unique-id-stamp/003-create-entry-stamp"
+    "public/001-note-db-notion-parity-build/007-unique-id-stamp/003-create-entry-stamp",
+    "001-note-db-notion-parity-build/007-unique-id-stamp/001-unique-id-stamp-module",
+    "001-note-db-notion-parity-build/007-unique-id-stamp/002-unique-id-config-persist",
+    "001-note-db-notion-parity-build/007-unique-id-stamp/003-create-entry-stamp"
   ],
   "manual": {
     "depends_on": [],
@@ -51,24 +54,31 @@
       "spec.md",
       "plan.md",
       "tasks.md",
-      "checklist.md",
       "implementation-summary.md",
-      "research/sonnet-verification.md",
-      "research/synthesis.md",
       "research/research.md",
-      "research/final-plan.md"
+      "checklist.md",
+      "research/sonnet-verification.md",
+      "src/data/types.ts",
+      "src/__tests__/setup.ts",
+      "specs/001-note-db-notion-parity-build/007-unique-id-stamp/spec.md",
+      "specs/001-note-db-notion-parity-build/007-unique-id-stamp/plan.md",
+      "specs/001-note-db-notion-parity-build/007-unique-id-stamp/checklist.md",
+      "specs/001-note-db-notion-parity-build/007-unique-id-stamp/implementation-summary.md",
+      "research/synthesis.md",
+      "research/final-plan.md",
+      "src/i18n.ts"
     ],
     "entities": [
       {
         "name": "spec.md",
         "kind": "doc",
-        "path": "spec.md",
+        "path": "specs/001-note-db-notion-parity-build/007-unique-id-stamp/spec.md",
         "source": "derived"
       },
       {
         "name": "plan.md",
         "kind": "doc",
-        "path": "plan.md",
+        "path": "specs/001-note-db-notion-parity-build/007-unique-id-stamp/plan.md",
         "source": "derived"
       },
       {
@@ -78,27 +88,9 @@
         "source": "derived"
       },
       {
-        "name": "checklist.md",
-        "kind": "doc",
-        "path": "checklist.md",
-        "source": "derived"
-      },
-      {
         "name": "implementation-summary.md",
         "kind": "doc",
-        "path": "implementation-summary.md",
-        "source": "derived"
-      },
-      {
-        "name": "sonnet-verification.md",
-        "kind": "doc",
-        "path": "research/sonnet-verification.md",
-        "source": "derived"
-      },
-      {
-        "name": "synthesis.md",
-        "kind": "doc",
-        "path": "research/synthesis.md",
+        "path": "specs/001-note-db-notion-parity-build/007-unique-id-stamp/implementation-summary.md",
         "source": "derived"
       },
       {
@@ -108,9 +100,45 @@
         "source": "derived"
       },
       {
+        "name": "checklist.md",
+        "kind": "doc",
+        "path": "checklist.md",
+        "source": "derived"
+      },
+      {
+        "name": "sonnet-verification.md",
+        "kind": "doc",
+        "path": "research/sonnet-verification.md",
+        "source": "derived"
+      },
+      {
+        "name": "types.ts",
+        "kind": "code",
+        "path": "src/data/types.ts",
+        "source": "derived"
+      },
+      {
+        "name": "setup.ts",
+        "kind": "code",
+        "path": "src/__tests__/setup.ts",
+        "source": "derived"
+      },
+      {
+        "name": "synthesis.md",
+        "kind": "doc",
+        "path": "research/synthesis.md",
+        "source": "derived"
+      },
+      {
         "name": "final-plan.md",
         "kind": "doc",
         "path": "research/final-plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "i18n.ts",
+        "kind": "code",
+        "path": "src/i18n.ts",
         "source": "derived"
       },
       {
@@ -184,46 +212,27 @@
         "kind": "proper_noun",
         "path": "tasks.md",
         "source": "derived"
-      },
-      {
-        "name": "Task Format",
-        "kind": "proper_noun",
-        "path": "tasks.md",
-        "source": "derived"
-      },
-      {
-        "name": "Core Documents",
-        "kind": "proper_noun",
-        "path": "tasks.md",
-        "source": "derived"
-      },
-      {
-        "name": "Verification Documents",
-        "kind": "proper_noun",
-        "path": "tasks.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "The note-database fork creates rows through `planCreateEntry` in `src/data/CreateEntryPlan.ts` and writes frontmatter, but it never allocates a Notion-style sequential unique ID at create time (`CreateEntryPlan.ts:119-173`)",
     "created_at": "2026-08-24T17:23:16.662Z",
-    "last_save_at": "2026-08-28T10:56:21.784Z",
+    "last_save_at": "2026-09-01T10:50:15.791Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
       "spec.md",
       "plan.md",
       "tasks.md",
-      "checklist.md",
       "implementation-summary.md",
       "research/research.md"
     ],
-    "source_fingerprint": "sha256:a262db02ecb0c8a74d50d3c0758371da8f30e43f77f5ea6d9218e33099999891",
+    "source_fingerprint": "sha256:c57c2a8ff36442ead363fee27d6d0c6abf4a2060793a7c9d0b467a8c37069595",
+    "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "4a89a25aa27f3124db1c6a4a410984edd3675790814f2272044f7eb0abaeecf7",
-      "plan.md": "01d2f173c811b99fabc563835ffe267434bc3a5cadf65d12b8152cc109ed2a58",
-      "tasks.md": "97b21cc03ce0dfb4a4961f9afa5c998162d5f5e30a05c491f7edde2feed63a74",
-      "checklist.md": "923db0806b32bf31da0632fe404371eca501255facb089c89ac164c59707d801",
-      "implementation-summary.md": "3ac376c74036f089c9018ef234d72b0c9797b336a5af4865c69866a476aa04b4",
+      "spec.md": "93a1356cfd559a2f3eea6f5959fa604da08134a53857ef6fe0614130394dab60",
+      "plan.md": "16352938a217f514515504f6e9a021c1b4b165b5ce0f0d9c8bf1a8260ac4e150",
+      "tasks.md": "a24bed2ca958a0729b5c73b4c1e665764a3f6a1f8f9791dde00863a630ea64e0",
+      "implementation-summary.md": "2488158c23b3d53f107227ba9809a86e68ebf757f28081635c2382ec486d4e35",
       "research/research.md": "f20e556ed43c9b9034f788a04e271777c92d1bd84b8731ca9b44bae541e336c2"
     },
     "last_active_child_id": "obsidian/002-note-db-notion-parity-build/007-unique-id-stamp/003-create-entry-stamp",

@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "packet_id": "public/001-note-db-notion-parity-build/009-view-filter-tree/001-kleene-eval-module",
-  "spec_folder": "public/001-note-db-notion-parity-build/009-view-filter-tree/001-kleene-eval-module",
-  "parent_id": "public/001-note-db-notion-parity-build/009-view-filter-tree",
+  "packet_id": "001-note-db-notion-parity-build/009-view-filter-tree/001-kleene-eval-module",
+  "spec_folder": "001-note-db-notion-parity-build/009-view-filter-tree/001-kleene-eval-module",
+  "parent_id": "001-note-db-notion-parity-build/009-view-filter-tree",
   "children_ids": [],
   "manual": {
     "depends_on": [],
@@ -42,7 +42,9 @@
       "spec.md",
       "plan.md",
       "tasks.md",
-      "implementation-summary.md"
+      "implementation-summary.md",
+      "src/__tests__/setup.ts",
+      "src/data/types.ts"
     ],
     "entities": [
       {
@@ -67,6 +69,18 @@
         "name": "implementation-summary.md",
         "kind": "doc",
         "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "setup.ts",
+        "kind": "code",
+        "path": "src/__tests__/setup.ts",
+        "source": "derived"
+      },
+      {
+        "name": "types.ts",
+        "kind": "code",
+        "path": "src/data/types.ts",
         "source": "derived"
       },
       {
@@ -176,23 +190,11 @@
         "kind": "proper_noun",
         "path": "implementation-summary.md",
         "source": "derived"
-      },
-      {
-        "name": "Spec Folder",
-        "kind": "proper_noun",
-        "path": "implementation-summary.md",
-        "source": "derived"
-      },
-      {
-        "name": "Actual Effort",
-        "kind": "proper_noun",
-        "path": "implementation-summary.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "View filters are a flat `FilterRule[]` plus one global `filterLogic`, so `(A and B) or C` is inexpressible",
     "created_at": "2026-08-25T20:51:12Z",
-    "last_save_at": "2026-08-27T12:27:59.798Z",
+    "last_save_at": "2026-09-01T10:50:15.852Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -201,12 +203,13 @@
       "tasks.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:74a6de120f12c4e8c19594e533492cdd3f9d63cd3934e930c0f97c6f27d7c6dc",
+    "source_fingerprint": "sha256:304142a31c9e2005540a0339963ce3e98b63fb706670fbb4441a70861c6a6985",
+    "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "f4c0e270ad54f3cf7a0724bab05bd3ff1fd16e49499d06c210c9151b16dafc34",
-      "plan.md": "12d54525df321e83fe8e99e57168fae36c180246eed616d512cd6b42cc59b25d",
-      "tasks.md": "842b5fd18c5878024c361809b4f56b33bc3f410325930906c44aaf15a01e43e2",
-      "implementation-summary.md": "f5a6591901f7790b400cf3eb760d2deadfc812c4a632680f7a54325fd9004208"
+      "spec.md": "9055d61b3196e241754ea3c071e776171b848617da25e9264a3b8f1bfbee078b",
+      "plan.md": "8bb42bbdccddea5dd2320507e26b96026e59d3d8b256d2fddbb3746b203857b9",
+      "tasks.md": "6b0b4619f081b4e4bd6bfc33b0308a478461087ee51091bdd6af6c1ae2e1a180",
+      "implementation-summary.md": "253a3746ca269b9f780f46846b1a0d57c186bdfa4d5c1b5ce8e54e917ca64053"
     },
     "last_active_child_id": null,
     "last_active_at": null

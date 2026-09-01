@@ -1,6 +1,6 @@
 {
   "level": "3",
-  "specFolder": "public/005-component-surface-system/020-harness-fidelity-repair",
+  "specFolder": "005-component-surface-system/020-harness-fidelity-repair",
   "description": "Six of seven verifier findings were instruments that could not fail for the reason they claimed to",
   "keywords": [
     "six",

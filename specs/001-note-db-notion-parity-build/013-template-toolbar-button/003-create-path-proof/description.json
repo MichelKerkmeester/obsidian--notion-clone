@@ -1,5 +1,5 @@
 {
-  "specFolder": "public/001-note-db-notion-parity-build/013-template-toolbar-button/003-create-path-proof",
+  "specFolder": "001-note-db-notion-parity-build/013-template-toolbar-button/003-create-path-proof",
   "description": "Call-site prose that says `onclick` then `actions.createEntry()` after `executeNewFromTemplate` writes two notes per click",
   "keywords": [
     "call-site",

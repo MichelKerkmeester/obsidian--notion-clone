@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "packet_id": "public/001-note-db-notion-parity-build/009-view-filter-tree/003-filter-panel-tree-editor",
-  "spec_folder": "public/001-note-db-notion-parity-build/009-view-filter-tree/003-filter-panel-tree-editor",
-  "parent_id": "public/001-note-db-notion-parity-build/009-view-filter-tree",
+  "packet_id": "001-note-db-notion-parity-build/009-view-filter-tree/003-filter-panel-tree-editor",
+  "spec_folder": "001-note-db-notion-parity-build/009-view-filter-tree/003-filter-panel-tree-editor",
+  "parent_id": "001-note-db-notion-parity-build/009-view-filter-tree",
   "children_ids": [],
   "manual": {
     "depends_on": [],
@@ -18,8 +18,6 @@
       "source rule chrome",
       "filter panel tree plan",
       "filter panel tree tasks",
-      "filter panel tree checklist",
-      "source op leak",
       "filter panel tree summary"
     ],
     "key_topics": [
@@ -42,8 +40,8 @@
       "spec.md",
       "plan.md",
       "tasks.md",
-      "checklist.md",
-      "implementation-summary.md"
+      "implementation-summary.md",
+      "checklist.md"
     ],
     "entities": [
       {
@@ -65,15 +63,15 @@
         "source": "derived"
       },
       {
-        "name": "checklist.md",
-        "kind": "doc",
-        "path": "checklist.md",
-        "source": "derived"
-      },
-      {
         "name": "implementation-summary.md",
         "kind": "doc",
         "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "checklist.md",
+        "kind": "doc",
+        "path": "checklist.md",
         "source": "derived"
       },
       {
@@ -173,43 +171,42 @@
         "source": "derived"
       },
       {
-        "name": "Verification Checklist",
+        "name": "Implementation Summary",
         "kind": "proper_noun",
-        "path": "checklist.md",
+        "path": "implementation-summary.md",
         "source": "derived"
       },
       {
-        "name": "Verification Protocol",
+        "name": "Spec Folder",
         "kind": "proper_noun",
-        "path": "checklist.md",
+        "path": "implementation-summary.md",
         "source": "derived"
       },
       {
-        "name": "Completion Impact",
+        "name": "Actual Effort",
         "kind": "proper_noun",
-        "path": "checklist.md",
+        "path": "implementation-summary.md",
         "source": "derived"
       }
     ],
     "causal_summary": "The filter panel is a global AND/OR toggle plus a flat row list (`FilterPanelRenderer.ts` `renderHeader` `125-146` and the flat loop `81-90`)",
     "created_at": "2026-08-25T20:51:13Z",
-    "last_save_at": "2026-08-27T12:50:05.364Z",
+    "last_save_at": "2026-09-01T10:50:15.860Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
       "spec.md",
       "plan.md",
       "tasks.md",
-      "checklist.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:b6ca693993d3df8b7eda10ac68a80f34444da693fa44ab8711c1d167e9a5be1a",
+    "source_fingerprint": "sha256:deda4ce60e7d6dc36ff8f1d503926128dd61085331e50463f7749dc7478eb696",
+    "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "36116672ae3778fcab5ec3b2f5fd0582d324426e8f0b006203d5d4c6b0a86354",
-      "plan.md": "51ca7944be7848fe3b1e43749088455b906b3425cb220ffb0d399aae238539fb",
-      "tasks.md": "53badacf4426ed590b62e176fd170ed5886019fa154052f5a077b301aeb280ab",
-      "checklist.md": "7cbd2f5e1b5693ccc8db446e1899f16063e917534195e91e145201589ff31a05",
-      "implementation-summary.md": "9bb4f27afac275541c666c38ebef7ad154569026b8b0a8cdf53847586a7de7e0"
+      "spec.md": "5e8c016f36d91f4b496674451c55553176ad8f7bd58a81c87fc1be3d96b52d6c",
+      "plan.md": "68a9ab0309601edcea8fa37a5ad570331d796f98322baa33e52196d8188d4011",
+      "tasks.md": "fbb951edb2792b63d1bde377245ba9e51c339b0236b01e752fa4cc11e4e96f7b",
+      "implementation-summary.md": "ec9d08dd265c90acd812358931cdeb8b0fcf00da258d5d905175389eeba3b836"
     },
     "last_active_child_id": null,
     "last_active_at": null

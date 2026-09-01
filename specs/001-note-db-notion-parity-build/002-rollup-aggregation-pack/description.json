@@ -1,6 +1,6 @@
 {
   "level": "2",
-  "specFolder": "public/001-note-db-notion-parity-build/002-rollup-aggregation-pack",
+  "specFolder": "001-note-db-notion-parity-build/002-rollup-aggregation-pack",
   "description": "The fork's rollup columns are stuck on four kinds — `count | sum | avg | list` (`src/data/types.ts:44`) — while Notion exposes ~18 rollup calculations",
   "keywords": [
     "fork",

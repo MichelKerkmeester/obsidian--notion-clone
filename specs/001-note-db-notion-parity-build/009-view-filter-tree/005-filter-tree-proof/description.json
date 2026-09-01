@@ -1,6 +1,6 @@
 {
   "level": "2",
-  "specFolder": "public/001-note-db-notion-parity-build/009-view-filter-tree/005-filter-tree-proof",
+  "specFolder": "001-note-db-notion-parity-build/009-view-filter-tree/005-filter-tree-proof",
   "description": "Without recorded proofs, nested AND/OR can look done while `DataSource.ts` drops `filterTree` on reload, a source-op leak matches every row",
   "keywords": [
     "without",

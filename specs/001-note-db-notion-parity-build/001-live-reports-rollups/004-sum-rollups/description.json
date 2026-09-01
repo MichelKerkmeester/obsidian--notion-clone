@@ -1,6 +1,6 @@
 {
   "level": "1",
-  "specFolder": "public/001-note-db-notion-parity-build/001-live-reports-rollups/004-sum-rollups",
+  "specFolder": "001-note-db-notion-parity-build/001-live-reports-rollups/004-sum-rollups",
   "description": "The vault still stores screenshot-era static totals",
   "keywords": [
     "vault",

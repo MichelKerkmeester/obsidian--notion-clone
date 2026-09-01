@@ -1,5 +1,5 @@
 {
-  "specFolder": "public/005-component-surface-system/030-gallery-view-deprecation",
+  "specFolder": "005-component-surface-system/030-gallery-view-deprecation",
   "description": "Remove the gallery view from the plugin, including the migration path for databases already configured to use it and the gate coverage that currently counts it",
   "keywords": [
     "remove",

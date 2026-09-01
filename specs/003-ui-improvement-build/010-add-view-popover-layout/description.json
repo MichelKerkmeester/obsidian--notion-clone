@@ -1,6 +1,6 @@
 {
   "level": "1",
-  "specFolder": "public/003-ui-improvement-build/010-add-view-popover-layout",
+  "specFolder": "003-ui-improvement-build/010-add-view-popover-layout",
   "description": "A user reported that \"the view selector is completely broken ui wise\"",
   "keywords": [
     "user",

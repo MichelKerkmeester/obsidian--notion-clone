@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "packet_id": "public/001-note-db-notion-parity-build/009-view-filter-tree/002-filter-tree-persistence",
-  "spec_folder": "public/001-note-db-notion-parity-build/009-view-filter-tree/002-filter-tree-persistence",
-  "parent_id": "public/001-note-db-notion-parity-build/009-view-filter-tree",
+  "packet_id": "001-note-db-notion-parity-build/009-view-filter-tree/002-filter-tree-persistence",
+  "spec_folder": "001-note-db-notion-parity-build/009-view-filter-tree/002-filter-tree-persistence",
+  "parent_id": "001-note-db-notion-parity-build/009-view-filter-tree",
   "children_ids": [],
   "manual": {
     "depends_on": [],
@@ -191,7 +191,7 @@
     ],
     "causal_summary": "Notion groups survive close/reopen",
     "created_at": "2026-08-25T20:51:12Z",
-    "last_save_at": "2026-08-27T12:27:59.997Z",
+    "last_save_at": "2026-09-01T10:50:15.857Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -200,12 +200,13 @@
       "tasks.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:cb8306fcdbb14b0b2b00ed4d312039605aeb3d477fa1b214dace10814d585163",
+    "source_fingerprint": "sha256:f58b6ce0782b3328c3a29e34e869a89dc693b7d9d333930971c81ac9cc17a3ff",
+    "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "d6b5812075de6075d7236bc0e422a25a6db48d1eb284aaf27900441353f82a0f",
-      "plan.md": "b13801018e670418ddfcb11eb4f58740614c52244b0752eec64bfde80cae6be6",
-      "tasks.md": "60a54cd2ba8a73fd17b4c1d5867d150f740afb15920c07b5f5bd6f5a7a9f0be8",
-      "implementation-summary.md": "becf843075a1b08850f2d8450cfb670075c5b20007d9135424e25c955fc404a5"
+      "spec.md": "1057873262edeb2726fe00a2c4850ea4524a27b8725169a16252afe0d1b24494",
+      "plan.md": "e21b96cf8269586adda0934e834183329e55e0cddbd3b999ef2597c1a6b49a1b",
+      "tasks.md": "a5ee0267d8469d67b5ff60dc31a0661aa46574c34f7f27861ec3bde21a944b2d",
+      "implementation-summary.md": "894bceb9863f710b4fc878dcbc1e2362d9af57f654ba4caf5e5c978df6276d52"
     },
     "last_active_child_id": null,
     "last_active_at": null

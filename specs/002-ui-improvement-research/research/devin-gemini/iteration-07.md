@@ -2,7 +2,7 @@
 
 Track: `devin-gemini` (Gemini 3.7 Flash High)  
 Focus Area: AppFlowy UI/UX patterns worth adopting (grid/board/calendar, field editors, theming, row detail).  
-Target Artifact: `specs/public/002-ui-improvement-research/research/devin-gemini/iteration-07.md`  
+Target Artifact: `specs/002-ui-improvement-research/research/devin-gemini/iteration-07.md`  
 
 ---
 

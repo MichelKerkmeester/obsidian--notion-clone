@@ -10,7 +10,7 @@ importance_tier: "high"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "public/001-note-db-notion-parity-build/001-live-reports-rollups/003-count-list-resolution"
+    packet_pointer: "001-note-db-notion-parity-build/001-live-reports-rollups/003-count-list-resolution"
     last_updated_at: "2026-08-27T12:27:53Z"
     last_updated_by: "phase-architect"
     recent_action: "Authored COUNT plus diagnostic-list child from synthesis ranks 2 and 4 and final-plan step 7"

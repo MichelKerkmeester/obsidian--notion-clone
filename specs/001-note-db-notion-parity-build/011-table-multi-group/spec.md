@@ -13,7 +13,7 @@ importance_tier: "high"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "public/001-note-db-notion-parity-build/011-table-multi-group"
+    packet_pointer: "001-note-db-notion-parity-build/011-table-multi-group"
     last_updated_at: "2026-08-27T17:27:13Z"
     last_updated_by: "phase-architect"
     recent_action: "Nested sub-phases authored from synthesis and final-plan"

@@ -8,7 +8,7 @@ importance_tier: "critical"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "public/006-list-view-clickup"
+    packet_pointer: "006-list-view-clickup"
     last_updated_at: "2026-08-30T12:00:00Z"
     last_updated_by: "desktop-screenshot-audit"
     recent_action: "T0.1 closed (Route B); T1.2a added for guard checks; T3.4 rewritten to the gutter"
@@ -248,7 +248,7 @@ The packet is complete when:
 3. Every P1 task is either closed or explicitly deferred with a reason.
 4. The `styles.css` lane is released and captures are signed off by name.
 5. T5.4 is closed — the operator has looked at the running plugin and confirmed the change.
-6. `validate.sh specs/public/006-list-view-clickup --strict` reports `RESULT: PASSED`.
+6. `validate.sh specs/006-list-view-clickup --strict` reports `RESULT: PASSED`.
 
 A criterion that passes without its prior failure on record does not count toward 2.
 

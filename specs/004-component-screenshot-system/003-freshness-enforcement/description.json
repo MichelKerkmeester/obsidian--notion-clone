@@ -1,6 +1,6 @@
 {
   "level": "1",
-  "specFolder": "public/004-component-screenshot-system/003-freshness-enforcement",
+  "specFolder": "004-component-screenshot-system/003-freshness-enforcement",
   "description": "A folder of screenshots decays quietly",
   "keywords": [
     "folder",

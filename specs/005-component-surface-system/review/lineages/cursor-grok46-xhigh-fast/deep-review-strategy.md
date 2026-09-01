@@ -2,11 +2,11 @@
 
 ## 1. OVERVIEW
 
-Fan-out lineage `cursor-grok46-xhigh-fast` reviewing phase parent `specs/public/005-component-surface-system`. Stop policy is `max-iterations` (10). Convergence is telemetry only; each pass after coverage must broaden angle rather than synthesize early.
+Fan-out lineage `cursor-grok46-xhigh-fast` reviewing phase parent `specs/005-component-surface-system`. Stop policy is `max-iterations` (10). Convergence is telemetry only; each pass after coverage must broaden angle rather than synthesize early.
 
 ## 2. TOPIC
 
-Review: specs/public/005-component-surface-system (spec-folder). Production UI freeze path, surface contract, cover/open targets, checklist evidence, live probe.
+Review: specs/005-component-surface-system (spec-folder). Production UI freeze path, surface contract, cover/open targets, checklist evidence, live probe.
 
 <!-- ANCHOR:review-dimensions -->
 ## 3. REVIEW DIMENSIONS (remaining)
@@ -153,13 +153,13 @@ resource-map.md not present; skipping coverage gate.
 <!-- MACHINE-OWNED: START -->
 | File | Dimensions Reviewed | Last Iteration | Findings | Status |
 |------|-------------------|----------------|----------|--------|
-| specs/public/005-component-surface-system/spec.md | | | | pending |
-| specs/public/005-component-surface-system/roadmap.md | | | | pending |
-| specs/public/005-component-surface-system/000-surface-contract-and-truthful-harness/spec.md | | | | pending |
-| specs/public/005-component-surface-system/004-checkbox-ownership/checklist.md | | | | pending |
-| specs/public/005-component-surface-system/006-record-open-target/spec.md | | | | pending |
-| specs/public/005-component-surface-system/009-live-verification/implementation-summary.md | | | | pending |
-| specs/public/005-component-surface-system/028-remaining-freezes/spec.md | | | | pending |
+| specs/005-component-surface-system/spec.md | | | | pending |
+| specs/005-component-surface-system/roadmap.md | | | | pending |
+| specs/005-component-surface-system/000-surface-contract-and-truthful-harness/spec.md | | | | pending |
+| specs/005-component-surface-system/004-checkbox-ownership/checklist.md | | | | pending |
+| specs/005-component-surface-system/006-record-open-target/spec.md | | | | pending |
+| specs/005-component-surface-system/009-live-verification/implementation-summary.md | | | | pending |
+| specs/005-component-surface-system/028-remaining-freezes/spec.md | | | | pending |
 | src/views/database-view.ts | | | | pending |
 | src/views/sort-panel-renderer.ts | | | | pending |
 | src/views/surface-contract.ts | | | | pending |

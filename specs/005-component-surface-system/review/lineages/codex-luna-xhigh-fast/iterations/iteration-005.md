@@ -10,8 +10,8 @@ Sheet keyboard/resize transitions and bounds resolution when surfaces are mounte
 - `src/views/popover-position.ts`
 - `src/views/mobile-bottom-sheet.ts`
 - `src/views/anchor-ref.ts`
-- `specs/public/005-component-surface-system/003-mobile-sheet-presentation/acceptance-criteria.md`
-- `specs/public/005-component-surface-system/roadmap.md`
+- `specs/005-component-surface-system/003-mobile-sheet-presentation/acceptance-criteria.md`
+- `specs/005-component-surface-system/roadmap.md`
 
 ## Findings - New
 
@@ -33,7 +33,7 @@ Sheet keyboard/resize transitions and bounds resolution when surfaces are mounte
 ### Claim adjudication — F012
 
 ```json
-{"findingId":"F012","claim":"An ordinary window resize closes a record-detail panel instead of preserving and repositioning it, contrary to AC-003's transition contract.","evidenceRefs":["src/views/record-detail-panel.ts:226","src/views/record-detail-panel.ts:232","src/views/record-detail-panel.ts:233","specs/public/005-component-surface-system/003-mobile-sheet-presentation/acceptance-criteria.md:107","specs/public/005-component-surface-system/roadmap.md:93"],"counterevidenceSought":"Read the complete resize handler and checked the phase acceptance row and parent risk note for an exception.","alternativeExplanation":"The close may be intentional for desktop anchored panels, but the same handler is attached after mobile-sheet setup and the acceptance row requires the sheet to survive resize.","finalSeverity":"P1","confidence":0.96,"downgradeTrigger":"Resize handling branches by presentation and preserves/repositions a sheet, with a test or measured evidence for the window-resize host shape."}
+{"findingId":"F012","claim":"An ordinary window resize closes a record-detail panel instead of preserving and repositioning it, contrary to AC-003's transition contract.","evidenceRefs":["src/views/record-detail-panel.ts:226","src/views/record-detail-panel.ts:232","src/views/record-detail-panel.ts:233","specs/005-component-surface-system/003-mobile-sheet-presentation/acceptance-criteria.md:107","specs/005-component-surface-system/roadmap.md:93"],"counterevidenceSought":"Read the complete resize handler and checked the phase acceptance row and parent risk note for an exception.","alternativeExplanation":"The close may be intentional for desktop anchored panels, but the same handler is attached after mobile-sheet setup and the acceptance row requires the sheet to survive resize.","finalSeverity":"P1","confidence":0.96,"downgradeTrigger":"Resize handling branches by presentation and preserves/repositions a sheet, with a test or measured evidence for the window-resize host shape."}
 ```
 
 ### Claim adjudication — F013

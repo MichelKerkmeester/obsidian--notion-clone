@@ -1,6 +1,6 @@
 {
   "level": "1",
-  "specFolder": "public/001-note-db-notion-parity-build/009-view-filter-tree/004-nonpanel-filter-coherence",
+  "specFolder": "001-note-db-notion-parity-build/009-view-filter-tree/004-nonpanel-filter-coherence",
   "description": "The fork also mutates `state.filters` from the active rail, column delete/rename, and chart drilldown",
   "keywords": [
     "fork",

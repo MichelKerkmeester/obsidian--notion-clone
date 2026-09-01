@@ -8,7 +8,7 @@ importance_tier: "critical"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "public/006-list-view-clickup"
+    packet_pointer: "006-list-view-clickup"
     last_updated_at: "2026-08-30T12:00:00Z"
     last_updated_by: "desktop-screenshot-audit"
     recent_action: "AC-16 replaced; AC-01/02/15/21/23 sharpened; AC-30 added; second banned phrasing"
@@ -38,7 +38,7 @@ _memory:
 
 | Field | Value |
 |---|---|
-| **Packet** | `specs/public/006-list-view-clickup/` |
+| **Packet** | `specs/006-list-view-clickup/` |
 | **Doctrine** | `../005-component-surface-system/architecture-findings.md` §9, binding |
 | **Measurement surface** | `tools/storybook/verify-placement.mjs` against system Chrome, at the production mount point |
 | **Numbers filled by** | Phase 000, before any stylesheet edit exists |

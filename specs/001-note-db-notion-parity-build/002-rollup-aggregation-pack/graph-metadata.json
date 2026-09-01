@@ -1,15 +1,18 @@
 {
   "schema_version": 1,
-  "packet_id": "public/001-note-db-notion-parity-build/002-rollup-aggregation-pack",
-  "spec_folder": "public/001-note-db-notion-parity-build/002-rollup-aggregation-pack",
-  "parent_id": "public/001-note-db-notion-parity-build",
+  "packet_id": "001-note-db-notion-parity-build/002-rollup-aggregation-pack",
+  "spec_folder": "001-note-db-notion-parity-build/002-rollup-aggregation-pack",
+  "parent_id": "001-note-db-notion-parity-build",
   "children_ids": [
     "obsidian/002-note-db-notion-parity-build/002-rollup-aggregation-pack/001-numeric-aggregate-module",
     "obsidian/002-note-db-notion-parity-build/002-rollup-aggregation-pack/002-date-aggregation-pack",
     "obsidian/002-note-db-notion-parity-build/002-rollup-aggregation-pack/003-percent-aggregation-pack",
     "public/001-note-db-notion-parity-build/002-rollup-aggregation-pack/001-numeric-aggregate-module",
     "public/001-note-db-notion-parity-build/002-rollup-aggregation-pack/002-date-aggregation-pack",
-    "public/001-note-db-notion-parity-build/002-rollup-aggregation-pack/003-percent-aggregation-pack"
+    "public/001-note-db-notion-parity-build/002-rollup-aggregation-pack/003-percent-aggregation-pack",
+    "001-note-db-notion-parity-build/002-rollup-aggregation-pack/001-numeric-aggregate-module",
+    "001-note-db-notion-parity-build/002-rollup-aggregation-pack/002-date-aggregation-pack",
+    "001-note-db-notion-parity-build/002-rollup-aggregation-pack/003-percent-aggregation-pack"
   ],
   "manual": {
     "depends_on": [],
@@ -51,10 +54,14 @@
       "spec.md",
       "plan.md",
       "tasks.md",
-      "checklist.md",
       "implementation-summary.md",
-      "research/synthesis.md",
-      "research/research.md"
+      "research/research.md",
+      "checklist.md",
+      "src/data/Aggregate.ts",
+      "src/data/types.ts",
+      "src/__tests__/setup.ts",
+      "src/data/Aggregate.test.ts",
+      "research/synthesis.md"
     ],
     "entities": [
       {
@@ -76,27 +83,51 @@
         "source": "derived"
       },
       {
-        "name": "checklist.md",
-        "kind": "doc",
-        "path": "checklist.md",
-        "source": "derived"
-      },
-      {
         "name": "implementation-summary.md",
         "kind": "doc",
         "path": "implementation-summary.md",
         "source": "derived"
       },
       {
-        "name": "synthesis.md",
-        "kind": "doc",
-        "path": "research/synthesis.md",
-        "source": "derived"
-      },
-      {
         "name": "research.md",
         "kind": "doc",
         "path": "research/research.md",
+        "source": "derived"
+      },
+      {
+        "name": "checklist.md",
+        "kind": "doc",
+        "path": "checklist.md",
+        "source": "derived"
+      },
+      {
+        "name": "Aggregate.ts",
+        "kind": "code",
+        "path": "src/data/Aggregate.ts",
+        "source": "derived"
+      },
+      {
+        "name": "types.ts",
+        "kind": "code",
+        "path": "src/data/types.ts",
+        "source": "derived"
+      },
+      {
+        "name": "setup.ts",
+        "kind": "code",
+        "path": "src/__tests__/setup.ts",
+        "source": "derived"
+      },
+      {
+        "name": "Aggregate.test.ts",
+        "kind": "test",
+        "path": "src/data/Aggregate.test.ts",
+        "source": "derived"
+      },
+      {
+        "name": "synthesis.md",
+        "kind": "doc",
+        "path": "research/synthesis.md",
         "source": "derived"
       },
       {
@@ -176,52 +207,27 @@
         "kind": "proper_noun",
         "path": "tasks.md",
         "source": "derived"
-      },
-      {
-        "name": "Implementation Task",
-        "kind": "proper_noun",
-        "path": "tasks.md",
-        "source": "derived"
-      },
-      {
-        "name": "Historical Notion",
-        "kind": "proper_noun",
-        "path": "tasks.md",
-        "source": "derived"
-      },
-      {
-        "name": "Unit Tests",
-        "kind": "proper_noun",
-        "path": "tasks.md",
-        "source": "derived"
-      },
-      {
-        "name": "Verification Checklist",
-        "kind": "proper_noun",
-        "path": "checklist.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "The fork's rollup columns are stuck on four kinds — `count | sum | avg | list` (`src/data/types.ts:44`) — while Notion exposes ~18 rollup calculations (9 universal + 6 number-only + 3 date-only)",
     "created_at": "2026-08-24T17:58:29.331Z",
-    "last_save_at": "2026-08-28T10:56:20.662Z",
+    "last_save_at": "2026-09-01T10:50:15.657Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
       "spec.md",
       "plan.md",
       "tasks.md",
-      "checklist.md",
       "implementation-summary.md",
       "research/research.md"
     ],
-    "source_fingerprint": "sha256:da5af1ab168bec1b596a5acc7bb43ebcec0d9851c2ddac887aa60acd1b7e11b5",
+    "source_fingerprint": "sha256:17f1daef7d103033a34d6b85d696d08d8b08353b0ca9f8f3a99e9d9193c9e042",
+    "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "a30f8596ba3e032c8e17eac45f373c25f5a996ec58d9f8703fafb8f71c88e6f2",
-      "plan.md": "fc02bbaabac50449ccad3c4f5d54ff2e4e32b7227dbb5ffc19c70d94fe9247e0",
-      "tasks.md": "aba6839199dbbbea8d31bbe284b9a0cbc5f179dc8a9de529a42231c2b0a2fbc2",
-      "checklist.md": "76f98765f4a80150be2c4b1dca6e8961b454db5bf3783e3b423f79c75fc65a76",
-      "implementation-summary.md": "7c75a4cac862676cb8c981ff71ef3fb8468f3caa11eab7052f256770c9d94eb2",
+      "spec.md": "6e462e9ab68bc27bdbd6b45b76275c63221cee342353edd36bd75a2106041c2a",
+      "plan.md": "8774c3d01089a531bd827c0cb4f31eea8ccc2e8d7aee5fe65abc5c432dd49379",
+      "tasks.md": "1c4414298c0fb1280f3141d3adfceb8f2852449ca452ee0711d91a093f44ec4b",
+      "implementation-summary.md": "334f82799a5d1d7dabde2bf02012b1ed7eadd01804f5aacd54b5576531a1ba83",
       "research/research.md": "13f52a74afec75e4276199877df53c2b52e6314e0ad11440d55839a79f49d7b4"
     },
     "last_active_child_id": "obsidian/002-note-db-notion-parity-build/002-rollup-aggregation-pack/003-percent-aggregation-pack",

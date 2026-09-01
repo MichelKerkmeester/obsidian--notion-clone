@@ -11,7 +11,7 @@ Scrim modality, nested dismissal, focus restoration, and per-document overlay ow
 - `src/views/overlay-stack.ts`
 - `src/views/interaction-scope.ts`
 - `src/views/record-detail-panel.ts`
-- `specs/public/005-component-surface-system/003-mobile-sheet-presentation/acceptance-criteria.md`
+- `specs/005-component-surface-system/003-mobile-sheet-presentation/acceptance-criteria.md`
 
 ## Findings - New
 

@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "packet_id": "public/005-component-surface-system/031-sheet-lifecycle-ownership",
-  "spec_folder": "public/005-component-surface-system/031-sheet-lifecycle-ownership",
-  "parent_id": "public/005-component-surface-system",
+  "packet_id": "005-component-surface-system/031-sheet-lifecycle-ownership",
+  "spec_folder": "005-component-surface-system/031-sheet-lifecycle-ownership",
+  "parent_id": "005-component-surface-system",
   "children_ids": [],
   "manual": {
     "depends_on": [],
@@ -197,7 +197,7 @@
     ],
     "causal_summary": "Every sheet has one owner for its whole life, so the scrim always comes down, the drag always survives a re-render, and no handle is drawn onto nothing.",
     "created_at": "2026-08-31T14:46:45.699Z",
-    "last_save_at": "2026-09-01T04:32:54.484Z",
+    "last_save_at": "2026-09-01T10:50:16.508Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -208,13 +208,13 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:98981ae57e0addeda0205cddf051a3622acf08e978b9296dff9fcfdbaa017583",
+    "source_fingerprint": "sha256:e342f4a4aff535c4eba34148fe63a47e47945702f2c1ff2d7802b046463afaaa",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "664f4fd9d8609c19db47f70ba71133317a4aa7d71c705ac619b948e5bf022711",
-      "plan.md": "2264168f9037d95db0330d5a67d0218cbd5a98f47af2207b051116b1163be05a",
-      "tasks.md": "ec1ddd6ec5f24e0bd4df253cff63920a2a4fecdf32016bd9ca590ce00a9c418c",
-      "implementation-summary.md": "f90b18162faf4e58e6a256b18f3d0efcbdc918e50e476addd387fc1893c25d20"
+      "spec.md": "bfb541c98999540dd1bba0e0fafba417ab58f31f8d03f8ec661531d6fbd14f72",
+      "plan.md": "b3552998690b88665d02c8ad2eb710e0e825a9f785f4400e22c8405ff78c553c",
+      "tasks.md": "6f2931c1188cab0618aeda6f2949c5629bb3a9e9bdabcd3a547e691b1dc13aa4",
+      "implementation-summary.md": "bf67e67c871ccf1289a71d999a5f37013bd86b4d7c65c7dcee15c5398f9e2e4d"
     },
     "last_active_child_id": null,
     "last_active_at": null

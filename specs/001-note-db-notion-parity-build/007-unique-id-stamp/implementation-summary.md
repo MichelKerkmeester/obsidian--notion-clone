@@ -14,7 +14,7 @@ importance_tier: "high"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "public/001-note-db-notion-parity-build/007-unique-id-stamp"
+    packet_pointer: "001-note-db-notion-parity-build/007-unique-id-stamp"
     last_updated_at: "2026-08-28T10:54:49.374Z"
     last_updated_by: "docs-reconciliation"
     recent_action: "Corrected unsupported checklist claims against the shipped code"
@@ -72,10 +72,10 @@ A fresh Claude Sonnet 5 adversarial review (`research/sonnet-verification.md`) r
 | `src/views/DatabaseView.ts` | Modified | `stampUniqueId` wiring (`buildCreateEntryPlan` `:3638-3671`), core-template allocate-once guard (`:3572-3583`), create-then-persist with paired rollback (`:3628-3662`) |
 | `src/__tests__/setup.ts` | Reused | Vitest harness bootstrap (shared with phase 005) |
 | `src/data/UniqueIdStamp.test.ts` | Created | 10 tests (prefix trim/defaults, missing-field defaults, non-object → `undefined`, trailing-hyphen de-dup, invalid counter/padding fallback) |
-| `specs/public/001-note-db-notion-parity-build/007-unique-id-stamp/spec.md` | Reconciled | Status Planned → Complete |
-| `specs/public/001-note-db-notion-parity-build/007-unique-id-stamp/plan.md` / `tasks.md` | Unchanged | Already matched the shipped design |
-| `specs/public/001-note-db-notion-parity-build/007-unique-id-stamp/checklist.md` | Reconciled | All items verified against the shipped commits |
-| `specs/public/001-note-db-notion-parity-build/007-unique-id-stamp/implementation-summary.md` | Reconciled | This record — shipped-state evidence |
+| `specs/001-note-db-notion-parity-build/007-unique-id-stamp/spec.md` | Reconciled | Status Planned → Complete |
+| `specs/001-note-db-notion-parity-build/007-unique-id-stamp/plan.md` / `tasks.md` | Unchanged | Already matched the shipped design |
+| `specs/001-note-db-notion-parity-build/007-unique-id-stamp/checklist.md` | Reconciled | All items verified against the shipped commits |
+| `specs/001-note-db-notion-parity-build/007-unique-id-stamp/implementation-summary.md` | Reconciled | This record — shipped-state evidence |
 
 Commits on branch `impl`: `3566ccc` (001-unique-id-stamp-module), `576240b` (002-unique-id-config-persist), `e43f5c1` (003-create-entry-stamp).
 

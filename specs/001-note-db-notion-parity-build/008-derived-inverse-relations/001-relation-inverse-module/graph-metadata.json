@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "packet_id": "public/001-note-db-notion-parity-build/008-derived-inverse-relations/001-relation-inverse-module",
-  "spec_folder": "public/001-note-db-notion-parity-build/008-derived-inverse-relations/001-relation-inverse-module",
-  "parent_id": "public/001-note-db-notion-parity-build/008-derived-inverse-relations",
+  "packet_id": "001-note-db-notion-parity-build/008-derived-inverse-relations/001-relation-inverse-module",
+  "spec_folder": "001-note-db-notion-parity-build/008-derived-inverse-relations/001-relation-inverse-module",
+  "parent_id": "001-note-db-notion-parity-build/008-derived-inverse-relations",
   "children_ids": [],
   "manual": {
     "depends_on": [],
@@ -42,7 +42,8 @@
       "spec.md",
       "plan.md",
       "tasks.md",
-      "implementation-summary.md"
+      "implementation-summary.md",
+      "src/__tests__/setup.ts"
     ],
     "entities": [
       {
@@ -67,6 +68,12 @@
         "name": "implementation-summary.md",
         "kind": "doc",
         "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "setup.ts",
+        "kind": "code",
+        "path": "src/__tests__/setup.ts",
         "source": "derived"
       },
       {
@@ -182,17 +189,11 @@
         "kind": "proper_noun",
         "path": "implementation-summary.md",
         "source": "derived"
-      },
-      {
-        "name": "What Was Built Shipped",
-        "kind": "proper_noun",
-        "path": "implementation-summary.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "Notion shows related pages on the target via a second stored relation (`dualproperty`)",
     "created_at": "2026-08-25T19:36:48Z",
-    "last_save_at": "2026-08-27T12:27:59.199Z",
+    "last_save_at": "2026-09-01T10:50:15.825Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -201,12 +202,13 @@
       "tasks.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:70c6d30f7fd015f50e1b913d33346019be77f5fd261bcc98618454f6c396c483",
+    "source_fingerprint": "sha256:e51ebd94da20ec29b38f6e84506b04b75e49a40a5edba8aae5ab094ee68d815b",
+    "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "bc17e6f809efd1e1115ec4f48f858f8a5937ce0a79ec08a850c09a32874f2d49",
-      "plan.md": "08e6b69bb83318d0bfbb4ba5a86ba9a8a03c5f1931e5c7190b7b33ab182fe04e",
-      "tasks.md": "a706d44586898907eb6e254de40c966adc927246883abb943408b0bd68438ef9",
-      "implementation-summary.md": "b3be084f1433c98fddede7fe82a6cb87661f7f490cf93aff57e1369d29239898"
+      "spec.md": "3cb24b57bf701cda8286f008995c635e70813991bca482e0f3908d6d58a18778",
+      "plan.md": "c8b8cd4d5407fa4e39dddbf17c52cd7f9246ff3583ad1347c2115a5dd5999924",
+      "tasks.md": "e4cd3b6f6d9fc351e1fdf9f2c173364166561f2f2c6984ea649cfaa6395ba0e5",
+      "implementation-summary.md": "55126af93469535932f33d30db3bdc52380f894cdb3777b94fea3dbc693e2c6c"
     },
     "last_active_child_id": null,
     "last_active_at": null

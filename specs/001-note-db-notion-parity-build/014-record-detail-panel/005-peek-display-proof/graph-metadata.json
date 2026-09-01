@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "packet_id": "public/001-note-db-notion-parity-build/014-record-detail-panel/005-peek-display-proof",
-  "spec_folder": "public/001-note-db-notion-parity-build/014-record-detail-panel/005-peek-display-proof",
-  "parent_id": "public/001-note-db-notion-parity-build/014-record-detail-panel",
+  "packet_id": "001-note-db-notion-parity-build/014-record-detail-panel/005-peek-display-proof",
+  "spec_folder": "001-note-db-notion-parity-build/014-record-detail-panel/005-peek-display-proof",
+  "parent_id": "001-note-db-notion-parity-build/014-record-detail-panel",
   "children_ids": [],
   "manual": {
     "depends_on": [],
@@ -17,7 +17,6 @@
       "nowrite peek",
       "peek display proof plan",
       "peek display proof tasks",
-      "peek display proof checklist",
       "peek display proof summary"
     ],
     "key_topics": [
@@ -31,8 +30,8 @@
       "nowrite",
       "plan",
       "tasks",
-      "checklist",
-      "summary"
+      "summary",
+      "without"
     ],
     "importance_tier": "high",
     "status": "in_progress",
@@ -40,8 +39,8 @@
       "spec.md",
       "plan.md",
       "tasks.md",
-      "checklist.md",
-      "implementation-summary.md"
+      "implementation-summary.md",
+      "checklist.md"
     ],
     "entities": [
       {
@@ -63,15 +62,15 @@
         "source": "derived"
       },
       {
-        "name": "checklist.md",
-        "kind": "doc",
-        "path": "checklist.md",
-        "source": "derived"
-      },
-      {
         "name": "implementation-summary.md",
         "kind": "doc",
         "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "checklist.md",
+        "kind": "doc",
+        "path": "checklist.md",
         "source": "derived"
       },
       {
@@ -165,49 +164,48 @@
         "source": "derived"
       },
       {
-        "name": "Verification Checklist",
+        "name": "Implementation Summary",
         "kind": "proper_noun",
-        "path": "checklist.md",
+        "path": "implementation-summary.md",
         "source": "derived"
       },
       {
-        "name": "Verification Protocol",
+        "name": "Spec Folder",
         "kind": "proper_noun",
-        "path": "checklist.md",
+        "path": "implementation-summary.md",
         "source": "derived"
       },
       {
-        "name": "Completion Impact",
+        "name": "Actual Effort",
         "kind": "proper_noun",
-        "path": "checklist.md",
+        "path": "implementation-summary.md",
         "source": "derived"
       },
       {
-        "name": "Code Quality",
+        "name": "What Was Built",
         "kind": "proper_noun",
-        "path": "checklist.md",
+        "path": "implementation-summary.md",
         "source": "derived"
       }
     ],
     "causal_summary": "Without the locked proofs, OPEN can look done while still navigating (title `<a>` at `CellRenderer.ts:126-129`), fighting Page Preview (`HoverLinkPreview.ts:8-17`), orphaning after `refresh()` (`DatabaseView.ts:10483-10488`), truncating via `.db-record-detail-` (`styles.css:7592-7597`), or writing via a `DataSource` import",
     "created_at": "2026-08-25T21:14:48Z",
-    "last_save_at": "2026-08-27T17:27:14.022Z",
+    "last_save_at": "2026-09-01T10:50:16.038Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
       "spec.md",
       "plan.md",
       "tasks.md",
-      "checklist.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:cdbbaa2d87f7b9ea67fd0e05f4c86e25acf6eca6395d36bbacd8e9793b9c3aa1",
+    "source_fingerprint": "sha256:f92b78573298477286daac1e043bbd92fc9901ab11499f101e2a779a1c4bf43c",
+    "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "ae0274a90df5b0f5e3c6940b0b06cc19959516738f44203edbee5828da6e4eb6",
-      "plan.md": "bf9113a75e48836eb16bdaeb2ee7c2ff9d5700760173e6f07e592cceb4d253e9",
-      "tasks.md": "d15128eecb2b2207a49fe8abf69b4b084d0efe7a781e37d3486baf0f6c19006b",
-      "checklist.md": "f4ae702686b9ad6446d7896e2a85512ae05fa0caa63725176af116c7c13208a8",
-      "implementation-summary.md": "2fb9a8b6d3e1518c56922441a7a9471eebdf0c77c1a5519a2e988cd55de4f3c1"
+      "spec.md": "23b557cd0921119e906f2e0cd9f061ae646e6d70b0fdee3608ede8d35cf93d84",
+      "plan.md": "2bd1ce0c9f337004ad95b9e8e2d4bfb18a54a356deee492d7ec3c9d2296cd357",
+      "tasks.md": "2399fdeab6b82e1b8739675af4ddd493a3845ae24d956b446d884e15ff82b287",
+      "implementation-summary.md": "91fdcd7fb8f5be1426245eb881ae0ab6a73189eca401baf4d76c6710e503cbe9"
     },
     "last_active_child_id": null,
     "last_active_at": null

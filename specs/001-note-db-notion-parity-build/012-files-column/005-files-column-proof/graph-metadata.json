@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "packet_id": "public/001-note-db-notion-parity-build/012-files-column/005-files-column-proof",
-  "spec_folder": "public/001-note-db-notion-parity-build/012-files-column/005-files-column-proof",
-  "parent_id": "public/001-note-db-notion-parity-build/012-files-column",
+  "packet_id": "001-note-db-notion-parity-build/012-files-column/005-files-column-proof",
+  "spec_folder": "001-note-db-notion-parity-build/012-files-column/005-files-column-proof",
+  "parent_id": "001-note-db-notion-parity-build/012-files-column",
   "children_ids": [],
   "manual": {
     "depends_on": [],
@@ -19,8 +19,6 @@
       "files column proof plan",
       "files diff shape",
       "files column proof tasks",
-      "files column proof checklist",
-      "files tsc",
       "files column proof summary"
     ],
     "key_topics": [
@@ -43,8 +41,8 @@
       "spec.md",
       "plan.md",
       "tasks.md",
-      "checklist.md",
-      "implementation-summary.md"
+      "implementation-summary.md",
+      "checklist.md"
     ],
     "entities": [
       {
@@ -66,15 +64,15 @@
         "source": "derived"
       },
       {
-        "name": "checklist.md",
-        "kind": "doc",
-        "path": "checklist.md",
-        "source": "derived"
-      },
-      {
         "name": "implementation-summary.md",
         "kind": "doc",
         "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "checklist.md",
+        "kind": "doc",
+        "path": "checklist.md",
         "source": "derived"
       },
       {
@@ -174,43 +172,42 @@
         "source": "derived"
       },
       {
-        "name": "Verification Checklist",
+        "name": "Implementation Summary",
         "kind": "proper_noun",
-        "path": "checklist.md",
+        "path": "implementation-summary.md",
         "source": "derived"
       },
       {
-        "name": "Verification Protocol",
+        "name": "Spec Folder",
         "kind": "proper_noun",
-        "path": "checklist.md",
+        "path": "implementation-summary.md",
         "source": "derived"
       },
       {
-        "name": "Completion Impact",
+        "name": "Actual Effort",
         "kind": "proper_noun",
-        "path": "checklist.md",
+        "path": "implementation-summary.md",
         "source": "derived"
       }
     ],
     "causal_summary": "Without this proof, `\"files\"` can compile while cells still stringify, covers still fetch URLs, or `PROPERTYTYPEICONNAMES` is missing and `tsc` was never re-run",
     "created_at": "2026-08-25T21:08:53Z",
-    "last_save_at": "2026-08-27T17:27:13.842Z",
+    "last_save_at": "2026-09-01T10:50:15.970Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
       "spec.md",
       "plan.md",
       "tasks.md",
-      "checklist.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:56f4ec7ad0ee2860715323f80855f1dc84e9a014f6a03beeeaa049371de9a9b6",
+    "source_fingerprint": "sha256:e30e1cfc0f51040052373ee6c84b99c2199b443d4253c4b4226f4bb93a5363d2",
+    "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "22f7d79cacc900f6e9206aa212c6cc83a6607ae09bbe11493aa6291a2d0013e0",
-      "plan.md": "3eca73cbad15bca67f8588987d1b17fd901042cf8c33f1638c12df188b48d596",
-      "tasks.md": "3f837ba66fe24e72bd6cbf5a4b071c5f4a5e969736ab13db21fa6d55a8d09182",
-      "checklist.md": "5024b6f1468dc5aa350b87f7b1f6ea8f238751a5e9145f138f06ef936130464e",
-      "implementation-summary.md": "4ab6e603cae87ca5598931bb13dc53938536400b55a70db3c1599a56e04ba5f2"
+      "spec.md": "24172f5e7846aed57e0bf630170902d54164c16a7707322cb3b3d266f37623bc",
+      "plan.md": "08b0e004eafd4bb9da8bfc5cb18a314c94f4ad953d59f7f53c08836ccc575928",
+      "tasks.md": "dd4fc37a24a82ade9172022515ea1ec1a96376f6af6953bc4f3a05605a797d2a",
+      "implementation-summary.md": "ed154b3b6cde6f750f12f8bf98dcd1b897ffe2407f73e8e3fca307f46ddd414d"
     },
     "last_active_child_id": null,
     "last_active_at": null

@@ -14,7 +14,7 @@ importance_tier: "high"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "public/001-note-db-notion-parity-build/013-template-toolbar-button"
+    packet_pointer: "001-note-db-notion-parity-build/013-template-toolbar-button"
     last_updated_at: "2026-08-27T12:25:50Z"
     last_updated_by: "phase-architect"
     recent_action: "Nested sub-phases authored from synthesis and final-plan"

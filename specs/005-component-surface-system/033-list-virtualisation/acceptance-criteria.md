@@ -6,7 +6,7 @@ importance_tier: "important"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "public/005-component-surface-system/033-list-virtualisation"
+    packet_pointer: "005-component-surface-system/033-list-virtualisation"
     last_updated_at: "2026-08-31T17:00:00Z"
     last_updated_by: "phase-author"
     recent_action: "Acceptance criteria added; Level 2 requires them and they were missing"

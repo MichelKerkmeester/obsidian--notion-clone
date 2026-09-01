@@ -1,5 +1,5 @@
 {
-  "specFolder": "public/005-component-surface-system/031-sheet-lifecycle-ownership",
+  "specFolder": "005-component-surface-system/031-sheet-lifecycle-ownership",
   "description": "Every sheet has one owner for its whole life, so the scrim always comes down, the drag survives a re-render, and no handle is drawn onto nothing",
   "keywords": [
     "sheet",

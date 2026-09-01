@@ -18,7 +18,7 @@ importance_tier: "high"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "public/003-ui-improvement-build/005-design-tokens-typography"
+    packet_pointer: "003-ui-improvement-build/005-design-tokens-typography"
     last_updated_at: "2026-08-28T04:30:57Z"
     last_updated_by: "phase-author"
     recent_action: "Verified design tokens and typography checklist gates"
@@ -60,10 +60,10 @@ _memory:
 <!-- ANCHOR:pre-impl -->
 ## Pre-Implementation
 
-- [x] CHK-001 [P0] Requirements documented in `spec.md` with real `file:line` citations [EVIDENCE: specs/public/003-ui-improvement-build/005-design-tokens-typography/spec.md:50-240 REQ-001 through REQ-013]
-  - **Evidence**: `specs/public/003-ui-improvement-build/005-design-tokens-typography/spec.md:50-240` covers REQ-001 through REQ-013.
-- [x] CHK-002 [P0] Technical architecture and token hierarchy defined in `plan.md` [EVIDENCE: specs/public/003-ui-improvement-build/005-design-tokens-typography/plan.md:50-200]
-  - **Evidence**: `specs/public/003-ui-improvement-build/005-design-tokens-typography/plan.md:50-200` defines typography, elevation, and token systems.
+- [x] CHK-001 [P0] Requirements documented in `spec.md` with real `file:line` citations [EVIDENCE: specs/003-ui-improvement-build/005-design-tokens-typography/spec.md:50-240 REQ-001 through REQ-013]
+  - **Evidence**: `specs/003-ui-improvement-build/005-design-tokens-typography/spec.md:50-240` covers REQ-001 through REQ-013.
+- [x] CHK-002 [P0] Technical architecture and token hierarchy defined in `plan.md` [EVIDENCE: specs/003-ui-improvement-build/005-design-tokens-typography/plan.md:50-200]
+  - **Evidence**: `specs/003-ui-improvement-build/005-design-tokens-typography/plan.md:50-200` defines typography, elevation, and token systems.
 - [x] CHK-003 [P1] Dependencies identified and available (`ChartPalettes.ts`, `ConditionalFormatting.ts`, `OptionColorPicker.ts`) [EVIDENCE: src/data/ChartPalettes.ts:1-50; src/data/ConditionalFormatting.ts:1-170]
   - **Evidence**: `src/data/ChartPalettes.ts:1-50` and `src/data/ConditionalFormatting.ts:1-170` are available.
 
@@ -151,7 +151,7 @@ _memory:
 <!-- ANCHOR:docs -->
 ## Documentation
 
-- [x] CHK-050 [P1] Specification (`spec.md`), plan (`plan.md`), and tasks (`tasks.md`) synchronized [EVIDENCE: specs/public/003-ui-improvement-build/005-design-tokens-typography/spec.md:50-240; tasks.md:50-100]
+- [x] CHK-050 [P1] Specification (`spec.md`), plan (`plan.md`), and tasks (`tasks.md`) synchronized [EVIDENCE: specs/003-ui-improvement-build/005-design-tokens-typography/spec.md:50-240; tasks.md:50-100]
   - **Evidence**: Phase documents synchronized across all sections in `spec.md:50-240`.
 - [x] CHK-051 [P1] Code comments explain durable intent and architectural rationale (no narrating obvious code) [EVIDENCE: src/data/ChartPalettes.ts:1-8; src/data/ConditionalFormatting.ts:1-15]
   - **Evidence**: Comments in `ChartPalettes.ts:1-8` and `ConditionalFormatting.ts:1-15` explain token contracts.

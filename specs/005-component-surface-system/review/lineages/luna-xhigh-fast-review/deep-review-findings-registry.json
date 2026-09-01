@@ -104,7 +104,7 @@
       "id": "SL-001",
       "dimension": "correctness",
       "targetRefs": [
-        "specs/public/005-component-surface-system"
+        "specs/005-component-surface-system"
       ],
       "bugClass": "executor_availability",
       "disposition": "blocked",

@@ -2,7 +2,7 @@
 
 Track: `devin-gemini` (Gemini 3.7 Flash High)  
 Focus Area: Visual design system: color tokens, typography scale, spacing, radius, dark/light theming.  
-Target Artifact: `specs/public/002-ui-improvement-research/research/devin-gemini/iteration-05.md`  
+Target Artifact: `specs/002-ui-improvement-research/research/devin-gemini/iteration-05.md`  
 
 ---
 

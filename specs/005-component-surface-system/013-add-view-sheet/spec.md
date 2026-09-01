@@ -11,7 +11,7 @@ importance_tier: "critical"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "public/005-component-surface-system/013-add-view-sheet"
+    packet_pointer: "005-component-surface-system/013-add-view-sheet"
     last_updated_at: "2026-09-01T02:40:00Z"
     last_updated_by: "criteria-adjudication"
     recent_action: "Redesign shipped and verified; criteria adjudicated in goal.md against the run"

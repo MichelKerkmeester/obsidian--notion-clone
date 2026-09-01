@@ -13,7 +13,7 @@ importance_tier: "high"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "public/001-note-db-notion-parity-build/013-template-toolbar-button"
+    packet_pointer: "001-note-db-notion-parity-build/013-template-toolbar-button"
     last_updated_at: "2026-08-28T10:54:50.419Z"
     last_updated_by: "docs-reconciliation"
     recent_action: "Corrected unsupported checklist claims against the shipped code"
@@ -70,7 +70,7 @@ Built on Luna-via-cursor after the Codex OpenAI executor's quota died mid-run (s
 | `src/views/ToolbarRenderer.ts` | Modified | Adaptive toolbar New control (label/icon/tooltip, phone icon-only) |
 | `src/views/RowMenu.ts` | Modified | Row-menu New-from-template twin, gated on `hasRecordTemplate` |
 | `src/views/DatabaseView.ts` | Modified | `getDatabaseConfig` wiring for the RowMenu host |
-| `specs/public/001-note-db-notion-parity-build/013-template-toolbar-button/{spec,plan,tasks,checklist,implementation-summary}.md` | Reconciled | Docs updated to reflect shipped state (this pass) |
+| `specs/001-note-db-notion-parity-build/013-template-toolbar-button/{spec,plan,tasks,checklist,implementation-summary}.md` | Reconciled | Docs updated to reflect shipped state (this pass) |
 
 <!-- /ANCHOR:what-built -->
 ---

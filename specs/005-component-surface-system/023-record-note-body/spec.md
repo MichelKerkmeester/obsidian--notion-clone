@@ -11,7 +11,7 @@ importance_tier: "critical"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "public/005-component-surface-system/023-record-note-body"
+    packet_pointer: "005-component-surface-system/023-record-note-body"
     last_updated_at: "2026-08-30T16:30:00Z"
     last_updated_by: "phase-author"
     recent_action: "Body home defaulted below the properties; the four sheet surfaces re-verified green"

@@ -1,6 +1,6 @@
 {
   "level": "1",
-  "specFolder": "public/001-note-db-notion-parity-build/001-live-reports-rollups/005-snapshot-audit-columns",
+  "specFolder": "001-note-db-notion-parity-build/001-live-reports-rollups/005-snapshot-audit-columns",
   "description": "Notion has no screenshot-freeze; this vault does",
   "keywords": [
     "notion",

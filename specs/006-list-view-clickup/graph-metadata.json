@@ -1,9 +1,15 @@
 {
   "schema_version": 1,
-  "packet_id": "public/006-list-view-clickup",
-  "spec_folder": "public/006-list-view-clickup",
+  "packet_id": "006-list-view-clickup",
+  "spec_folder": "006-list-view-clickup",
   "parent_id": null,
-  "children_ids": [],
+  "children_ids": [
+    "006-list-view-clickup/000-grid-contract-and-list-harness",
+    "006-list-view-clickup/001-list-grid-structure",
+    "006-list-view-clickup/002-clickup-chrome",
+    "006-list-view-clickup/003-group-affordances-and-selection",
+    "006-list-view-clickup/004-mobile-and-live-verification"
+  ],
   "manual": {
     "depends_on": [],
     "supersedes": [],
@@ -48,15 +54,16 @@
       "decision-record.md",
       "checklist.md",
       "reference-clickup-list-operator.png",
-      "specs/public/context/clickup/list-view/clickup-desktop-list-view-1.png",
-      "specs/public/context/clickup/list-view/clickup-desktop-list-view-2.png",
-      "specs/public/context/clickup/list-view/clickup-desktop-list-view-3.png",
-      "specs/public/context/clickup/list-view/clickup-desktop-list-view-4.png",
+      "specs/context/clickup/list-view/clickup-desktop-list-view-1.png",
+      "specs/context/clickup/list-view/clickup-desktop-list-view-2.png",
+      "specs/context/clickup/list-view/clickup-desktop-list-view-3.png",
+      "specs/context/clickup/list-view/clickup-desktop-list-view-4.png",
       "tools/lane/css-lane.json",
       "tools/storybook/verify-placement.mjs",
       "src/views/list-renderer.ts",
       "src/views/table-renderer.ts",
-      "src/views/database-view.ts"
+      "src/views/database-view.ts",
+      "000-grid-contract-and-list-harness/decision-record.md"
     ],
     "entities": [
       {
@@ -104,25 +111,25 @@
       {
         "name": "clickup-desktop-list-view-1.png",
         "kind": "file",
-        "path": "specs/public/context/clickup/list-view/clickup-desktop-list-view-1.png",
+        "path": "specs/context/clickup/list-view/clickup-desktop-list-view-1.png",
         "source": "derived"
       },
       {
         "name": "clickup-desktop-list-view-2.png",
         "kind": "file",
-        "path": "specs/public/context/clickup/list-view/clickup-desktop-list-view-2.png",
+        "path": "specs/context/clickup/list-view/clickup-desktop-list-view-2.png",
         "source": "derived"
       },
       {
         "name": "clickup-desktop-list-view-3.png",
         "kind": "file",
-        "path": "specs/public/context/clickup/list-view/clickup-desktop-list-view-3.png",
+        "path": "specs/context/clickup/list-view/clickup-desktop-list-view-3.png",
         "source": "derived"
       },
       {
         "name": "clickup-desktop-list-view-4.png",
         "kind": "file",
-        "path": "specs/public/context/clickup/list-view/clickup-desktop-list-view-4.png",
+        "path": "specs/context/clickup/list-view/clickup-desktop-list-view-4.png",
         "source": "derived"
       },
       {
@@ -206,7 +213,7 @@
     ],
     "causal_summary": "The list view gains the table's whole feature surface by becoming a presentation mode of the grid, and takes on ClickUp's list chrome: per-group column headers, inline cell editing, and a per-group add-task affordance.",
     "created_at": "2026-08-30T07:11:59.138Z",
-    "last_save_at": "2026-08-30T08:21:08.852Z",
+    "last_save_at": "2026-09-01T10:50:16.532Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -216,15 +223,15 @@
       "acceptance-criteria.md",
       "decision-record.md"
     ],
-    "source_fingerprint": "sha256:355cc9e2c55fa7ae5ce5d5ba8047fc7ba74f505e899d64db00fb57c5b39d4eb7",
+    "source_fingerprint": "sha256:32c1bfa4bba603af340a62d032fc45605ca60fa3a1667baca814553d5f16a07e",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "9d79d08641786e2c5e77c5be036af17bd5883ac18b567ef2c4040c55c39be982",
-      "plan.md": "169fa858d9fded81794320dfeed26c8bc1bbda45953153d7b407b9aa3b7ead63",
-      "tasks.md": "835e565f9a0d6e8ca6b3461f76c2e55761a00082a34642ea0462ddbefc618eaf",
-      "decision-record.md": "9b41e4bf3c2a7f35299ae5cfce0ddc9314234f440fc34a55644883080e090133"
+      "spec.md": "5fd7d28123bc23fea993c72f947ea0e6f4f40174ff3b0328042461ad0509bd00",
+      "plan.md": "d2840e21d0324c9f96a57369405a370b6e3e44c23776c208c7ecb8c5a7b07acf",
+      "tasks.md": "da9587110b467dc2d3e767937027e869eaddfee5dc0aa90dd1680cb883109472",
+      "decision-record.md": "be41fe97c63bb5daff62e0253882205fe22d988737fa7d5cfa789dfb719e7f73"
     },
-    "last_active_child_id": null,
+    "last_active_child_id": "006-list-view-clickup/001-list-grid-structure",
     "last_active_at": null
   }
 }

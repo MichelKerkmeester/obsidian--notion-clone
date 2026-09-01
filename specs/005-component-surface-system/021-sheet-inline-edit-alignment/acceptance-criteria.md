@@ -9,7 +9,7 @@ importance_tier: "critical"
 contextType: "implementation"
 _memory:
   continuity:
-    packet_pointer: "public/005-component-surface-system/021-sheet-inline-edit-alignment"
+    packet_pointer: "005-component-surface-system/021-sheet-inline-edit-alignment"
     last_updated_at: "2026-08-30T19:45:00Z"
     last_updated_by: "criterion-6-closure"
     recent_action: "Host token read from Obsidian 1.13.4: 15px on desktop, user text size on mobile"

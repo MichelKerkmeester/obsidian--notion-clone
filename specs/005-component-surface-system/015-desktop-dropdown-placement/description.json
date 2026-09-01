@@ -1,6 +1,6 @@
 {
   "level": "1",
-  "specFolder": "public/005-component-surface-system/015-desktop-dropdown-placement",
+  "specFolder": "005-component-surface-system/015-desktop-dropdown-placement",
   "description": "Measure where every desktop dropdown, popover and menu actually lands, against where it should land, and repair the two seams that explain five of the",
   "keywords": [
     "measure",

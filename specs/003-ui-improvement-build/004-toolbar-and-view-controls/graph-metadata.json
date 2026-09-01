@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "packet_id": "public/003-ui-improvement-build/004-toolbar-and-view-controls",
-  "spec_folder": "public/003-ui-improvement-build/004-toolbar-and-view-controls",
-  "parent_id": "public/003-ui-improvement-build",
+  "packet_id": "003-ui-improvement-build/004-toolbar-and-view-controls",
+  "spec_folder": "003-ui-improvement-build/004-toolbar-and-view-controls",
+  "parent_id": "003-ui-improvement-build",
   "children_ids": [],
   "manual": {
     "depends_on": [],
@@ -44,8 +44,12 @@
       "spec.md",
       "plan.md",
       "tasks.md",
+      "implementation-summary.md",
       "checklist.md",
-      "implementation-summary.md"
+      "src/i18n.ts",
+      "specs/002-ui-improvement-research/research/synthesis.md",
+      "specs/002-ui-improvement-research/research/devin-gemini/iteration-04.md",
+      "specs/002-ui-improvement-research/research/codex-luna/iteration-04.md"
     ],
     "entities": [
       {
@@ -67,15 +71,33 @@
         "source": "derived"
       },
       {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
         "name": "checklist.md",
         "kind": "doc",
         "path": "checklist.md",
         "source": "derived"
       },
       {
-        "name": "implementation-summary.md",
+        "name": "i18n.ts",
+        "kind": "code",
+        "path": "src/i18n.ts",
+        "source": "derived"
+      },
+      {
+        "name": "synthesis.md",
         "kind": "doc",
-        "path": "implementation-summary.md",
+        "path": "specs/002-ui-improvement-research/research/synthesis.md",
+        "source": "derived"
+      },
+      {
+        "name": "iteration-04.md",
+        "kind": "doc",
+        "path": "specs/002-ui-improvement-research/research/devin-gemini/iteration-04.md",
         "source": "derived"
       },
       {
@@ -157,24 +179,6 @@
         "source": "derived"
       },
       {
-        "name": "Verification Checklist",
-        "kind": "proper_noun",
-        "path": "checklist.md",
-        "source": "derived"
-      },
-      {
-        "name": "Verification Protocol",
-        "kind": "proper_noun",
-        "path": "checklist.md",
-        "source": "derived"
-      },
-      {
-        "name": "Completion Impact",
-        "kind": "proper_noun",
-        "path": "checklist.md",
-        "source": "derived"
-      },
-      {
         "name": "Implementation Summary",
         "kind": "proper_noun",
         "path": "implementation-summary.md",
@@ -195,23 +199,22 @@
     ],
     "causal_summary": "The toolbar and view controls form the primary operational command deck of the Note Database plugin",
     "created_at": "2026-08-27T19:53:19.853Z",
-    "last_save_at": "2026-08-28T16:54:48.227Z",
+    "last_save_at": "2026-09-01T10:50:16.112Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
       "spec.md",
       "plan.md",
       "tasks.md",
-      "checklist.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:2f45b60169a7c43f1142009d63517a28341366b892ba84bdab32ee55a810098e",
+    "source_fingerprint": "sha256:74a3dd8cfc254491d2d79b5852d25b82b1819dbb2c3c5899a4245f4bfb9f4efb",
+    "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "4b0c351839ac73a421b6fccdc5a9ea49b43ab69ac8bf526eb8b3f4655660e1b9",
-      "plan.md": "1040b89ede65678b9bbb4a720862daeb823e0fc859ee349a481c6d8e81224643",
-      "tasks.md": "750207f1ebea360580eb1862e8165eb2adac3967f0fb936b207755dd1e030e69",
-      "checklist.md": "644d0b37e723f6cb47845ce5c705475d86229f03eff05406f8ba6a134c0efa2d",
-      "implementation-summary.md": "9111dd533083dbaefbeb1e0ecc3fd8df9ba79ccd00b72953776f7eb886f9a1a4"
+      "spec.md": "64f6d431160537f09ea823fcdc2c67c213addf1d50dc27d5dc5d033aa59c2a2d",
+      "plan.md": "ff82d66e6482e89728cc2242d7644d8d3fe313a961486eca9b24e8c0b5d52c44",
+      "tasks.md": "98312781975b20210fc63fcfe40a63ecd0cfc017ed80ef170bb77feb663e057d",
+      "implementation-summary.md": "784f46be6b0d1e63246d0c642957d43feb74674fa816de80714c08dcc8cbf31d"
     },
     "last_active_child_id": null,
     "last_active_at": null

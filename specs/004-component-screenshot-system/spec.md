@@ -14,7 +14,7 @@ importance_tier: "high"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "public/004-component-screenshot-system"
+    packet_pointer: "004-component-screenshot-system"
     last_updated_at: "2026-08-28T00:00:00Z"
     last_updated_by: "phase-architect"
     recent_action: "Recorded the shipped screenshot system as four phases under one parent"

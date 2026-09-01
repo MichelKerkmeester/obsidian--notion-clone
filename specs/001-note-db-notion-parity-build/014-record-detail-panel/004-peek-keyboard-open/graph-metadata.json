@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "packet_id": "public/001-note-db-notion-parity-build/014-record-detail-panel/004-peek-keyboard-open",
-  "spec_folder": "public/001-note-db-notion-parity-build/014-record-detail-panel/004-peek-keyboard-open",
-  "parent_id": "public/001-note-db-notion-parity-build/014-record-detail-panel",
+  "packet_id": "001-note-db-notion-parity-build/014-record-detail-panel/004-peek-keyboard-open",
+  "spec_folder": "001-note-db-notion-parity-build/014-record-detail-panel/004-peek-keyboard-open",
+  "parent_id": "001-note-db-notion-parity-build/014-record-detail-panel",
   "children_ids": [],
   "manual": {
     "depends_on": [],
@@ -183,7 +183,7 @@
     ],
     "causal_summary": "Spec §8 requires a keyboard path beside hover",
     "created_at": "2026-08-25T21:14:48Z",
-    "last_save_at": "2026-08-27T12:28:06.141Z",
+    "last_save_at": "2026-09-01T10:50:16.033Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -192,12 +192,13 @@
       "tasks.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:41ffe8b726457dfe254586a3d714cccc1bd016efb13840f5f76a423696c50a68",
+    "source_fingerprint": "sha256:798d2d76cee2e1a5a8f770a5164a4993c68c3d5d8123bd9f39db16e6d6c1a53c",
+    "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "a7fbf5f1f30bbfce10b53d8c6a0f6323603b04f6fe315db271fdda1159936f47",
-      "plan.md": "2ce708b85e7ccc008ae3c9fb11d7cac508c5bf5c1d20bff76ea3f6bfd6ae8788",
-      "tasks.md": "d605ac5d976a910190494bba20629fd11394d4b03f32997b12ab1da44ba8261b",
-      "implementation-summary.md": "ff6edebe6a15b57d262ee13f3f14029a8ce4f3acb2e64f8b81ed46b898f70132"
+      "spec.md": "ceb12bab969ad3b514ae3bc51e9c78b9aa859f85709015c7992d92afc1ec82b2",
+      "plan.md": "1be13244502d3ce0ea929e121f174cdfce73753aead3a630e157d81cc98c2b00",
+      "tasks.md": "d81e77310690bd2a3bf5adcee62157e1c90a0f376c019e30f30405aa67850897",
+      "implementation-summary.md": "2680c6d0717f23d88e2df1c18d319809c7a4e365e8115ac5c3db56aa9f08d67b"
     },
     "last_active_child_id": null,
     "last_active_at": null

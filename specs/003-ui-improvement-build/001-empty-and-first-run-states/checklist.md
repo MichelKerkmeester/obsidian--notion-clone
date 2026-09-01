@@ -10,7 +10,7 @@ importance_tier: "high"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "public/003-ui-improvement-build/001-empty-and-first-run-states"
+    packet_pointer: "003-ui-improvement-build/001-empty-and-first-run-states"
     last_updated_at: "2026-08-28T04:30:57Z"
     last_updated_by: "codex"
     recent_action: "Verified empty and first-run states implementation gates"
@@ -52,9 +52,9 @@ _memory:
 <!-- ANCHOR:pre-impl -->
 ## Pre-Implementation
 
-- [x] CHK-001 [P0] Requirements documented and traceable in spec.md (REQ-001 through REQ-010) [EVIDENCE: specs/public/003-ui-improvement-build/001-empty-and-first-run-states/spec.md:120-145 REQ-001 through REQ-010]
+- [x] CHK-001 [P0] Requirements documented and traceable in spec.md (REQ-001 through REQ-010) [EVIDENCE: specs/003-ui-improvement-build/001-empty-and-first-run-states/spec.md:120-145 REQ-001 through REQ-010]
   - **Evidence**: Requirements and acceptance scenarios documented in `spec.md:120-145`.
-- [x] CHK-002 [P0] Technical architecture defined in plan.md with verified call-site citations [EVIDENCE: specs/public/003-ui-improvement-build/001-empty-and-first-run-states/plan.md:54-120 isolated renderer architecture]
+- [x] CHK-002 [P0] Technical architecture defined in plan.md with verified call-site citations [EVIDENCE: specs/003-ui-improvement-build/001-empty-and-first-run-states/plan.md:54-120 isolated renderer architecture]
   - **Evidence**: Architecture and call-site citations defined in `plan.md:54-120`.
 - [x] CHK-003 [P1] Dependencies identified and verified available in the plugin codebase [EVIDENCE: src/views/EmptyStateRenderer.ts:1-4; src/views/DatabaseView.ts:17-21, 6624-6634]
   - **Evidence**: Existing Obsidian DOM helpers, Lucide `setIcon`, database view navigation, and `CreatePropertyModal` are used in `src/views/EmptyStateRenderer.ts:1-4`.
@@ -129,7 +129,7 @@ _memory:
 <!-- ANCHOR:docs -->
 ## Documentation
 
-- [x] CHK-040 [P1] Spec, plan, tasks, and checklist synchronized with exact file:line citations [EVIDENCE: specs/public/003-ui-improvement-build/001-empty-and-first-run-states/spec.md:50-240; tasks.md:50-100]
+- [x] CHK-040 [P1] Spec, plan, tasks, and checklist synchronized with exact file:line citations [EVIDENCE: specs/003-ui-improvement-build/001-empty-and-first-run-states/spec.md:50-240; tasks.md:50-100]
   - **Evidence**: Task completion markers, checklist evidence, and implementation summary synchronized in `spec.md:50-240`.
 - [x] CHK-041 [P1] Code comments explain durable intent and architecture constraints [EVIDENCE: src/views/EmptyStateRenderer.ts:40-54, 178-186, 211-224]
   - **Evidence**: Code comments explain durable diagnostics and presentation intent in `src/views/EmptyStateRenderer.ts:40-54, 178-186, 211-224`.

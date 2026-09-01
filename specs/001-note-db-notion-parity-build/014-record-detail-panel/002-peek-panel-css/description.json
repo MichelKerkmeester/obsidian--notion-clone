@@ -1,5 +1,5 @@
 {
-  "specFolder": "public/001-note-db-notion-parity-build/014-record-detail-panel/002-peek-panel-css",
+  "specFolder": "001-note-db-notion-parity-build/014-record-detail-panel/002-peek-panel-css",
   "description": "Obsidian loads only plugin-root `styles.css` (no esbuild CSS pipeline)",
   "keywords": [
     "obsidian",

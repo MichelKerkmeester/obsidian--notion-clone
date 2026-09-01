@@ -1,6 +1,6 @@
 {
   "level": "2",
-  "specFolder": "public/001-note-db-notion-parity-build/012-files-column/005-files-column-proof",
+  "specFolder": "001-note-db-notion-parity-build/012-files-column/005-files-column-proof",
   "description": "Without this proof, `\"files\"` can compile while cells still stringify, covers still fetch URLs, or `PROPERTYTYPEICONNAMES` is missing and `tsc` was",
   "keywords": [
     "without",

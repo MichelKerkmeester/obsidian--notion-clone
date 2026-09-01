@@ -8,7 +8,7 @@ importance_tier: "medium"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "public/003-ui-improvement-build/009-header-affordance-defects"
+    packet_pointer: "003-ui-improvement-build/009-header-affordance-defects"
     last_updated_at: "2026-08-28T16:54:47.516Z"
     last_updated_by: "phase-author"
     recent_action: "Recorded delivered scope and the gates left to the orchestrator"

@@ -9,7 +9,7 @@ description: Lineage-local strategy for the autonomous component surface review.
 Autonomous detached lineage review. The target is read-only; only this lineage packet is writable.
 
 ## 2. TOPIC
-Review of `specs/public/005-component-surface-system` as a `spec-folder`.
+Review of `specs/005-component-surface-system` as a `spec-folder`.
 
 <!-- ANCHOR:review-dimensions -->
 ## 3. REVIEW DIMENSIONS (remaining)

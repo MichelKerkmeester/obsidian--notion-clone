@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "packet_id": "public/005-component-surface-system",
-  "spec_folder": "public/005-component-surface-system",
+  "packet_id": "005-component-surface-system",
+  "spec_folder": "005-component-surface-system",
   "parent_id": null,
   "children_ids": [
     "public/005-component-surface-system/000-surface-contract-and-truthful-harness",
@@ -38,7 +38,42 @@
     "public/005-component-surface-system/031-sheet-lifecycle-ownership",
     "public/005-component-surface-system/032-cover-target-scheme-safety",
     "public/005-component-surface-system/033-list-virtualisation",
-    "public/005-component-surface-system/034-packet-doc-truth"
+    "public/005-component-surface-system/034-packet-doc-truth",
+    "005-component-surface-system/000-surface-contract-and-truthful-harness",
+    "005-component-surface-system/001-overlay-placement-and-menu-language",
+    "005-component-surface-system/002-properties-panel",
+    "005-component-surface-system/003-mobile-sheet-presentation",
+    "005-component-surface-system/004-checkbox-ownership",
+    "005-component-surface-system/005-content-row-rhythm",
+    "005-component-surface-system/006-record-open-target",
+    "005-component-surface-system/007-architecture-research",
+    "005-component-surface-system/008-integration-and-release-observability",
+    "005-component-surface-system/009-live-verification",
+    "005-component-surface-system/010-sheet-reading-and-keyboard",
+    "005-component-surface-system/011-mobile-menu-presentation",
+    "005-component-surface-system/012-mobile-touch-semantics",
+    "005-component-surface-system/013-add-view-sheet",
+    "005-component-surface-system/014-desktop-select-checkbox",
+    "005-component-surface-system/015-desktop-dropdown-placement",
+    "005-component-surface-system/016-sheet-drag-and-audit",
+    "005-component-surface-system/017-touch-row-range-selection",
+    "005-component-surface-system/018-select-column-affordance-fit",
+    "005-component-surface-system/019-card-field-value-formatting",
+    "005-component-surface-system/020-harness-fidelity-repair",
+    "005-component-surface-system/021-sheet-inline-edit-alignment",
+    "005-component-surface-system/022-selection-bar-keyboard-docking",
+    "005-component-surface-system/023-record-note-body",
+    "005-component-surface-system/024-list-view-freeze",
+    "005-component-surface-system/025-story-coverage-blindness",
+    "005-component-surface-system/026-production-render-assertions",
+    "005-component-surface-system/027-sheet-menu-grammar-and-motion",
+    "005-component-surface-system/028-remaining-freezes",
+    "005-component-surface-system/029-numeric-coercion-parity",
+    "005-component-surface-system/030-gallery-view-deprecation",
+    "005-component-surface-system/031-sheet-lifecycle-ownership",
+    "005-component-surface-system/032-cover-target-scheme-safety",
+    "005-component-surface-system/033-list-virtualisation",
+    "005-component-surface-system/034-packet-doc-truth"
   ],
   "manual": {
     "depends_on": [],
@@ -238,7 +273,7 @@
     ],
     "causal_summary": "Phase parent for the program that gives floating surfaces, sheets, checkboxes and content rows one architecture, one placement authority, and acceptance criteria measured where users actually see them.",
     "created_at": "2026-08-29T12:53:52.104Z",
-    "last_save_at": "2026-09-01T09:46:09.674Z",
+    "last_save_at": "2026-09-01T10:50:16.255Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -246,13 +281,13 @@
       "goal.md",
       "handover.md"
     ],
-    "source_fingerprint": "sha256:f4f4dd7db9d1c02f2034dbb76d6f45bda2a38676ce3c7cfee47e1e905248517e",
+    "source_fingerprint": "sha256:2fee7f4393c536bfd620e210a0bb13f4ae0c0c85db478385366f63f86230ee30",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "2877504a8edaae36add5da00a9be465ec110d3b596c57d4196a3e51c58911d8b",
-      "handover.md": "b06a61967b803e9de71ee868af249e885f8168e82e12ef4cb8a5247871ce5ab3"
+      "spec.md": "937e88a2a837b990002c7e2193ceeab83cf5c9914cef351c0edacbea91b24d60",
+      "handover.md": "79c0a7a0231b37a19d7f0b74988c09f6b99d8370f66103db294d2ddb4bed8891"
     },
-    "last_active_child_id": "public/005-component-surface-system/006-record-open-target",
+    "last_active_child_id": "005-component-surface-system/006-record-open-target",
     "last_active_at": null
   }
 }

@@ -8,7 +8,7 @@ importance_tier: "high"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "public/001-note-db-notion-parity-build/002-rollup-aggregation-pack/003-percent-aggregation-pack"
+    packet_pointer: "001-note-db-notion-parity-build/002-rollup-aggregation-pack/003-percent-aggregation-pack"
     last_updated_at: "2026-08-27T12:27:53Z"
     last_updated_by: "phase-architect"
     recent_action: "Authored percent-pack child from synthesis rank 6 and final-plan step 9"

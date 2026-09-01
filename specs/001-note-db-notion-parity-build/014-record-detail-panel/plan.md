@@ -11,7 +11,7 @@ importance_tier: "high"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "public/001-note-db-notion-parity-build/014-record-detail-panel"
+    packet_pointer: "001-note-db-notion-parity-build/014-record-detail-panel"
     last_updated_at: "2026-08-27T17:09:01Z"
     last_updated_by: "markdown-agent"
     recent_action: "Reconciled docs vs final-plan.md per-step acceptance (grep + view-switch); Planned"

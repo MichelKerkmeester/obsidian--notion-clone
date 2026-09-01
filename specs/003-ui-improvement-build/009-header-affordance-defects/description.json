@@ -1,6 +1,6 @@
 {
   "level": "1",
-  "specFolder": "public/003-ui-improvement-build/009-header-affordance-defects",
+  "specFolder": "003-ui-improvement-build/009-header-affordance-defects",
   "description": "A user reported that on table column headers — and in the same shape on board column headers — the three-dots menu button renders on its own line",
   "keywords": [
     "user",

@@ -1,5 +1,5 @@
 {
-  "specFolder": "public/003-ui-improvement-build/003-popovers-menus-elevation",
+  "specFolder": "003-ui-improvement-build/003-popovers-menus-elevation",
   "description": "Popovers, menus, dropdowns, and floating pickers form the interactive overlay layer of the Note Database plugin",
   "keywords": [
     "popovers",

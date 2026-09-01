@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "packet_id": "public/001-note-db-notion-parity-build/012-files-column/002-files-type-registry",
-  "spec_folder": "public/001-note-db-notion-parity-build/012-files-column/002-files-type-registry",
-  "parent_id": "public/001-note-db-notion-parity-build/012-files-column",
+  "packet_id": "001-note-db-notion-parity-build/012-files-column/002-files-type-registry",
+  "spec_folder": "001-note-db-notion-parity-build/012-files-column/002-files-type-registry",
+  "parent_id": "001-note-db-notion-parity-build/012-files-column",
   "children_ids": [],
   "manual": {
     "depends_on": [],
@@ -41,7 +41,9 @@
       "spec.md",
       "plan.md",
       "tasks.md",
-      "implementation-summary.md"
+      "implementation-summary.md",
+      "src/data/types.ts",
+      "src/i18n.ts"
     ],
     "entities": [
       {
@@ -66,6 +68,18 @@
         "name": "implementation-summary.md",
         "kind": "doc",
         "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "types.ts",
+        "kind": "code",
+        "path": "src/data/types.ts",
+        "source": "derived"
+      },
+      {
+        "name": "i18n.ts",
+        "kind": "code",
+        "path": "src/i18n.ts",
         "source": "derived"
       },
       {
@@ -175,23 +189,11 @@
         "kind": "proper_noun",
         "path": "implementation-summary.md",
         "source": "derived"
-      },
-      {
-        "name": "Actual Effort",
-        "kind": "proper_noun",
-        "path": "implementation-summary.md",
-        "source": "derived"
-      },
-      {
-        "name": "What Was Built Shipped",
-        "kind": "proper_noun",
-        "path": "implementation-summary.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "The fork union is 12 types (`types.ts:50`)",
     "created_at": "2026-08-25T21:08:50Z",
-    "last_save_at": "2026-08-27T12:28:03.646Z",
+    "last_save_at": "2026-09-01T10:50:15.956Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -200,12 +202,13 @@
       "tasks.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:0a82aaa0b44bad2f77086eb0d4669be7ca6152afda0a401221252056ca8ff9df",
+    "source_fingerprint": "sha256:5a02c2fa5261a09dc6186a89f65790e1c8b1ed33296b5996f306bfd5fda3dfe7",
+    "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "4f1b8a79faabd9d687151e36b88e306a8e4a3090612e46cf26a33576d103fd01",
-      "plan.md": "f65d496bea5d13c97ae11dd064e7c2e623649a2d42e33e7c0bd3ac0ab002fc44",
-      "tasks.md": "ab714252114614f0be6061705b4c25e02d8e92275178ef6bd0e3e5070b23db4d",
-      "implementation-summary.md": "7fc393611b45ae1cc0a0de12cdc9f9704110da4c2108d0bff25feb11123c2486"
+      "spec.md": "259446f1fc574bbd99d59b4cd02e7a8ba395c9dc2ccd74fb03d37ce3b124e518",
+      "plan.md": "f6cab2c4567982d4a1a168b52b4f1b5c13952875fb57f6f30a0d174448ca64f4",
+      "tasks.md": "3863ce9f11da24ca85904efd4140a73e0c2830d0a122900750133d53a6e3e35f",
+      "implementation-summary.md": "a1abe21cdbc68a3a70220919b68adfc198578a4a0db1d91cc9326c691aff5d73"
     },
     "last_active_child_id": null,
     "last_active_at": null

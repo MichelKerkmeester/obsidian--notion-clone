@@ -10,7 +10,7 @@ importance_tier: "high"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "public/003-ui-improvement-build/010-add-view-popover-layout"
+    packet_pointer: "003-ui-improvement-build/010-add-view-popover-layout"
     last_updated_at: "2026-08-28T00:00:00Z"
     last_updated_by: "phase-author"
     recent_action: "Authored implementation plan for the add-view popover layout fix"

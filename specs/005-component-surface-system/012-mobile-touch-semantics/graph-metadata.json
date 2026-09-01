@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "packet_id": "public/005-component-surface-system/012-mobile-touch-semantics",
-  "spec_folder": "public/005-component-surface-system/012-mobile-touch-semantics",
-  "parent_id": "public/005-component-surface-system",
+  "packet_id": "005-component-surface-system/012-mobile-touch-semantics",
+  "spec_folder": "005-component-surface-system/012-mobile-touch-semantics",
+  "parent_id": "005-component-surface-system",
   "children_ids": [],
   "manual": {
     "depends_on": [],
@@ -203,7 +203,7 @@
     ],
     "causal_summary": "Give a touch in the table the meaning a touch has, rather than replaying the desktop pointer grammar: a tap edits the cell it lands on, a tap on the row's main item opens the record sheet, and dragging does not paint a selection range.",
     "created_at": "2026-08-30T16:47:05.145Z",
-    "last_save_at": "2026-09-01T05:07:20.467Z",
+    "last_save_at": "2026-09-01T10:50:16.375Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -214,13 +214,13 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:e06afbccd8f676410e14ff2e528b940234fc620164ade034b9121a5b597e8075",
+    "source_fingerprint": "sha256:be57b60a9dc6d454118941f0a7e02b21c332c1f5d2e00def46840a3f5a672f2b",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "a5cd998a68ef28bfbb8c09e31e76ca30f4e54a4e57972d6fd679e5834fa96a75",
+      "spec.md": "f8229e333fc518f817478781bcca732a30ed7d8045c24dba21897748f25efa4f",
       "plan.md": "69c662f64daf24c3989f128686f846b459ae52777a083ebd7cbc5e7b0e629d68",
       "tasks.md": "fc29fd1b6d58f3d3f65b45cfc29a53b4934e97345b12da1fa071b6c5c0824414",
-      "implementation-summary.md": "e0e3490acf66ccec1e36bd374d490316ecb3539ea35fa284e8832711b897521b"
+      "implementation-summary.md": "8a8cc76f1ac42c48bd383242e73105f9c46fa8cd6c2b999237fcb29ec5a315e6"
     },
     "last_active_child_id": null,
     "last_active_at": null

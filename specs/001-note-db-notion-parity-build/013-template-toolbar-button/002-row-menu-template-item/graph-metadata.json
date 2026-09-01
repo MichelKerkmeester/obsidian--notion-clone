@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "packet_id": "public/001-note-db-notion-parity-build/013-template-toolbar-button/002-row-menu-template-item",
-  "spec_folder": "public/001-note-db-notion-parity-build/013-template-toolbar-button/002-row-menu-template-item",
-  "parent_id": "public/001-note-db-notion-parity-build/013-template-toolbar-button",
+  "packet_id": "001-note-db-notion-parity-build/013-template-toolbar-button/002-row-menu-template-item",
+  "spec_folder": "001-note-db-notion-parity-build/013-template-toolbar-button/002-row-menu-template-item",
+  "parent_id": "001-note-db-notion-parity-build/013-template-toolbar-button",
   "children_ids": [],
   "manual": {
     "depends_on": [],
@@ -191,7 +191,7 @@
     ],
     "causal_summary": "Notion exposes templates from the New control",
     "created_at": "2026-08-25T21:10:03Z",
-    "last_save_at": "2026-08-27T12:28:04.828Z",
+    "last_save_at": "2026-09-01T10:50:15.991Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -200,12 +200,13 @@
       "tasks.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:4199e31815badce779f4953adfe6805016bd0dc62b14543ef4b4fef73b651087",
+    "source_fingerprint": "sha256:32a3ddba788c20ea2cda206c9094534de2406ae2ee019961a2d760910985b0ce",
+    "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "8aeb5e5bd5383767337cc0952fef7ee01b019e06a7704997a1f650616c5e7083",
-      "plan.md": "cf0910b6aaf783ec2d512f6061d4295282869582a47cadfd341ce34af20d4933",
-      "tasks.md": "ff06696245f2c6f81d740c64d9980bb9214325594e30b164815cf2575085f1af",
-      "implementation-summary.md": "9d6d5f6b070839ff8ac0265b96e40bb499fa9415eff0c67c0da1d0d969952049"
+      "spec.md": "a4727a191fdde9999a57404db41004b706e51396d4906539a93579980c0e56c9",
+      "plan.md": "5aff1c2e4317e15563c27cf2c5ab5694310a60acac809a57a8addf06b390d112",
+      "tasks.md": "a88a53b68d3f80f19def1b4883929b26d591221054fbf12ac7e14643a9821d6d",
+      "implementation-summary.md": "dcc162e853e0dd292004709e0892d5769d9cca80a373a6bd3b41413267c91577"
     },
     "last_active_child_id": null,
     "last_active_at": null

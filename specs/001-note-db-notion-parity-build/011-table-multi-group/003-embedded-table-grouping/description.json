@@ -1,6 +1,6 @@
 {
   "level": "1",
-  "specFolder": "public/001-note-db-notion-parity-build/011-table-multi-group/003-embedded-table-grouping",
+  "specFolder": "001-note-db-notion-parity-build/011-table-multi-group/003-embedded-table-grouping",
   "description": "Spec §8 requires identical nested headers in linked/embedded views",
   "keywords": [
     "spec",

@@ -18,7 +18,7 @@ importance_tier: "high"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "public/003-ui-improvement-build/007-micro-interactions"
+    packet_pointer: "003-ui-improvement-build/007-micro-interactions"
     last_updated_at: "2026-08-28T04:30:57Z"
     last_updated_by: "phase-author"
     recent_action: "Verified micro-interactions checklist gates"

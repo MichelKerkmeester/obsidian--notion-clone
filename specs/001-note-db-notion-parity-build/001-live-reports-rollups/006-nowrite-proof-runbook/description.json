@@ -1,6 +1,6 @@
 {
   "level": "1",
-  "specFolder": "public/001-note-db-notion-parity-build/001-live-reports-rollups/006-nowrite-proof-runbook",
+  "specFolder": "001-note-db-notion-parity-build/001-live-reports-rollups/006-nowrite-proof-runbook",
   "description": "Notion rollups are not page storage",
   "keywords": [
     "notion",

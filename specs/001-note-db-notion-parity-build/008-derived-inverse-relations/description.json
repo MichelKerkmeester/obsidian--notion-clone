@@ -1,6 +1,6 @@
 {
   "level": "2",
-  "specFolder": "public/001-note-db-notion-parity-build/008-derived-inverse-relations",
+  "specFolder": "001-note-db-notion-parity-build/008-derived-inverse-relations",
   "description": "Notion two-way relations store a second property on the target data source and mirror it on write: the relation type object is `{ datasourceid,",
   "keywords": [
     "notion",

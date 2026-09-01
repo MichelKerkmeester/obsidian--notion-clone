@@ -9,7 +9,7 @@ importance_tier: "critical"
 contextType: "implementation"
 _memory:
   continuity:
-    packet_pointer: "public/005-component-surface-system/024-list-view-freeze"
+    packet_pointer: "005-component-surface-system/024-list-view-freeze"
     last_updated_at: "2026-08-30T18:45:00Z"
     last_updated_by: "docs-remediation"
     recent_action: "Added template marker, six anchors and continuity block; wrapped existing prose"

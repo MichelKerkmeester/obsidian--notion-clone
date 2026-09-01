@@ -1,6 +1,6 @@
 {
   "level": "1",
-  "specFolder": "public/001-note-db-notion-parity-build/002-rollup-aggregation-pack/001-numeric-aggregate-module",
+  "specFolder": "001-note-db-notion-parity-build/002-rollup-aggregation-pack/001-numeric-aggregate-module",
   "description": "Rollup columns are stuck on `count | sum | avg | list` at `src/data/types.ts:44`",
   "keywords": [
     "rollup",

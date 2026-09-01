@@ -8,7 +8,7 @@ importance_tier: "high"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "public/003-ui-improvement-build/011-mobile-table-and-panel-ux"
+    packet_pointer: "003-ui-improvement-build/011-mobile-table-and-panel-ux"
     last_updated_at: "2026-08-28T00:00:00Z"
     last_updated_by: "phase-author"
     recent_action: "Fixed six mobile defects as one root cause; all gates green"

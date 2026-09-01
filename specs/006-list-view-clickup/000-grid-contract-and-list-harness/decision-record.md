@@ -8,7 +8,7 @@ importance_tier: "critical"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "public/006-list-view-clickup/000-grid-contract-and-list-harness"
+    packet_pointer: "006-list-view-clickup/000-grid-contract-and-list-harness"
     last_updated_at: "2026-08-30T00:00:00Z"
     last_updated_by: "phase-scaffold"
     recent_action: "Scaffolded phase 000; AC-31 and AC-32 defined as guard tripwires"

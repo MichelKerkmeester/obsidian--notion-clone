@@ -1,5 +1,5 @@
 {
-  "specFolder": "public/005-component-surface-system/033-list-virtualisation",
+  "specFolder": "005-component-surface-system/033-list-virtualisation",
   "description": "The list renders every row so its cost is proportional to node count, and at the operator shape no loop fix reaches it",
   "keywords": [
     "list",

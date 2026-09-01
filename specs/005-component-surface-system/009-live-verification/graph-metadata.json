@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "packet_id": "public/005-component-surface-system/009-live-verification",
-  "spec_folder": "public/005-component-surface-system/009-live-verification",
-  "parent_id": "public/005-component-surface-system",
+  "packet_id": "005-component-surface-system/009-live-verification",
+  "spec_folder": "005-component-surface-system/009-live-verification",
+  "parent_id": "005-component-surface-system",
   "children_ids": [],
   "manual": {
     "depends_on": [],
@@ -202,7 +202,7 @@
     ],
     "causal_summary": "The program's founding fact is that a release passed every gate and changed nothing on device",
     "created_at": "2026-08-29T14:34:47.371Z",
-    "last_save_at": "2026-09-01T05:12:54.493Z",
+    "last_save_at": "2026-09-01T10:50:16.349Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -213,13 +213,13 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:cc712e56172ebda4962ccafab9bc18e81c953817a15da1c0d9f7ea09ee4c72f4",
+    "source_fingerprint": "sha256:95a0906882eefe19f0085816b87d3faf30931cc88f56ca5194512f1ccbb9f001",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "c54c76a7c054642db1f91e902f426cf46b40573b02ec14a143dd66fa966c4a64",
+      "spec.md": "921838990aa54b2ca12c6785e34e0c3295b7d9e3137a66615357213b59adf55f",
       "plan.md": "1c6dcf824de8a59d2f89ff36f7d49b59643e58687beab07d557868e9cf8cb4f7",
       "tasks.md": "250d6a2d48b1f123f93c4bd97955654275b5a9c4c051b0a0d3ed87d2dc171003",
-      "implementation-summary.md": "ada83c7b482c6b4d45c8b526ff68ee8536d85deb532491aea2db1ce5ac97bb2b"
+      "implementation-summary.md": "a6ce3320fca498ee46a01db1bcca34e6180f5a8ae283d2358dbc9435b4487cb0"
     },
     "last_active_child_id": null,
     "last_active_at": null

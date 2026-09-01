@@ -1,8 +1,8 @@
 {
   "run_id": "1787987715423-jyrwi8",
   "loop_type": "research",
-  "spec_folder": "specs/public/003-ui-improvement-build/022-desktop-popover-research",
-  "base_artifact_dir": "specs/public/003-ui-improvement-build/022-desktop-popover-research/research",
+  "spec_folder": "specs/003-ui-improvement-build/022-desktop-popover-research",
+  "base_artifact_dir": "specs/003-ui-improvement-build/022-desktop-popover-research/research",
   "total_cli_lineages": 1,
   "orphaned_lineages": [],
   "total": 1,

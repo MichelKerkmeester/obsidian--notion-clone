@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "packet_id": "public/003-ui-improvement-build/013-mobile-ux-research",
-  "spec_folder": "public/003-ui-improvement-build/013-mobile-ux-research",
-  "parent_id": null,
+  "packet_id": "003-ui-improvement-build/013-mobile-ux-research",
+  "spec_folder": "003-ui-improvement-build/013-mobile-ux-research",
+  "parent_id": "003-ui-improvement-build",
   "children_ids": [],
   "manual": {
     "depends_on": [],
@@ -18,39 +18,176 @@
       "modal presentation taxonomy phone",
       "bounded wrapping row density",
       "canonical touch predicate",
-      "device defect inventory"
+      "device defect inventory",
+      "mobile ux research plan",
+      "forced depth research loop",
+      "max-iterations stop policy research",
+      "research evidence convention"
     ],
     "key_topics": [
-      "mobile ux",
-      "bottom sheet",
-      "layer scale",
-      "row density",
-      "touch predicate",
-      "menu semantics",
-      "calendar month grid",
-      "computed output format"
+      "mobile",
+      "research",
+      "eight",
+      "architecture",
+      "decisions",
+      "sheet",
+      "presentation",
+      "placement",
+      "seam",
+      "layer",
+      "scale",
+      "sibling"
     ],
-    "importance_tier": "important",
+    "importance_tier": "high",
     "status": "in_progress",
     "key_files": [
       "spec.md",
       "plan.md",
       "tasks.md",
       "device-defect-inventory.md",
-      "research/lineages/luna/research.md"
+      "research/lineages/luna/research.md",
+      "research/lineages/luna/resource-map.md"
     ],
-    "entities": [],
-    "causal_summary": "Phase 013: ten-iteration source audit turning 18 device-reported mobile defects into 8 architecture decisions",
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "device-defect-inventory.md",
+        "kind": "doc",
+        "path": "device-defect-inventory.md",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Eight Architecture Decisions",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Spec Folder",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "In Progress",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Problem Statement Eighteen",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Purpose Establish",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Plan",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "narrative",
+        "kind": "key_phrase",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "the",
+        "kind": "key_phrase",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "1. SUMMARY",
+        "kind": "heading",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "2. QUALITY GATES",
+        "kind": "heading",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Breakdown",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Notation",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Completion Criteria",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Verification Checklist",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Verification Protocol Read",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "Eighteen mobile defects accumulated across several rounds of device testing",
     "created_at": "2026-08-29T05:43:00Z",
-    "last_save_at": "2026-08-29T06:30:00Z",
+    "last_save_at": "2026-09-01T10:50:16.177Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
       "spec.md",
       "plan.md",
-      "tasks.md",
-      "device-defect-inventory.md"
+      "tasks.md"
     ],
-    "source_fingerprint": "sha256:7a8955275a6fb93baf5ab66e7f619eefd50aaedd2208676ead2addcf1596a05b"
+    "source_fingerprint": "sha256:8e434f49ced80bea383f5b01036d8cae77aa9759a7840906ba9c502caf95d812",
+    "source_fingerprint_docset": 3,
+    "source_doc_hashes": {
+      "spec.md": "135dd2b5b462f172293543616555a102f200890366d4bd4449233b5a95ee0935",
+      "plan.md": "80a0e498093ddcba6407804f62d6dc3ff872212507b80ac35cbf812547790c6f",
+      "tasks.md": "30300f4e166f4f2c173f6bf63ccd77b658810a6af5f036238de4277ceb227cda"
+    },
+    "last_active_child_id": null,
+    "last_active_at": null
   }
 }

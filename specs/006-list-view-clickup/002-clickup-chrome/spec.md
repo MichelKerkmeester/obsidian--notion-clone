@@ -10,7 +10,7 @@ importance_tier: "critical"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "public/006-list-view-clickup/002-clickup-chrome"
+    packet_pointer: "006-list-view-clickup/002-clickup-chrome"
     last_updated_at: "2026-08-30T00:00:00Z"
     last_updated_by: "phase-scaffold"
     recent_action: "Scaffolded phase 002; the two banned criterion shapes carried in verbatim"
@@ -48,7 +48,7 @@ _memory:
 
 | Field | Value |
 |---|---|
-| **Spec Folder** | `specs/public/006-list-view-clickup/002-clickup-chrome/` |
+| **Spec Folder** | `specs/006-list-view-clickup/002-clickup-chrome/` |
 | **Parent Spec** | [`../spec.md`](../spec.md) |
 | **Predecessor** | [`../001-list-grid-structure/spec.md`](../001-list-grid-structure/spec.md) |
 | **Successor** | [`../003-group-affordances-and-selection/spec.md`](../003-group-affordances-and-selection/spec.md) |

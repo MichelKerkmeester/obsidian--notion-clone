@@ -12,7 +12,7 @@ importance_tier: "critical"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "public/006-list-view-clickup"
+    packet_pointer: "006-list-view-clickup"
     last_updated_at: "2026-08-30T12:00:00Z"
     last_updated_by: "desktop-screenshot-audit"
     recent_action: "Audited §4.2 on four desktop captures; C13 contradicted, 14 claims added, ADR-004 opened"
@@ -26,10 +26,10 @@ _memory:
       - "checklist.md"
       - "decision-record.md"
       - "reference-clickup-list-operator.png"
-      - "specs/public/context/clickup/list-view/clickup-desktop-list-view-1.png"
-      - "specs/public/context/clickup/list-view/clickup-desktop-list-view-2.png"
-      - "specs/public/context/clickup/list-view/clickup-desktop-list-view-3.png"
-      - "specs/public/context/clickup/list-view/clickup-desktop-list-view-4.png"
+      - "specs/context/clickup/list-view/clickup-desktop-list-view-1.png"
+      - "specs/context/clickup/list-view/clickup-desktop-list-view-2.png"
+      - "specs/context/clickup/list-view/clickup-desktop-list-view-3.png"
+      - "specs/context/clickup/list-view/clickup-desktop-list-view-4.png"
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "list-view-clickup-006"
@@ -104,7 +104,7 @@ assertion belongs in `tools/storybook/verify-placement.mjs`, which today renders
 
 | Field | Value |
 |---|---|
-| **Spec Folder** | `specs/public/006-list-view-clickup/` |
+| **Spec Folder** | `specs/006-list-view-clickup/` |
 | **Level** | 3 (Full) — `recommend-level.sh --loc 2500 --files 22 --architectural --api` returned 80/100, confidence 94% |
 | **Phase decomposition** | Qualifies. Phase score 40/50 against a threshold of 25, and level 3 against a threshold of 3. Both met independently |
 | **Status** | Planned — spec and plan only, no code written. ADR-001 answered, so no phase is blocked |

@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "packet_id": "/Users/michelkerkmeester/MEGA/Development/Obsidian Plugin/specs/public/003-ui-improvement-build/012-mobile-name-column-and-fab",
-  "spec_folder": "/Users/michelkerkmeester/MEGA/Development/Obsidian Plugin/specs/public/003-ui-improvement-build/012-mobile-name-column-and-fab",
-  "parent_id": null,
+  "packet_id": "003-ui-improvement-build/012-mobile-name-column-and-fab",
+  "spec_folder": "003-ui-improvement-build/012-mobile-name-column-and-fab",
+  "parent_id": "003-ui-improvement-build",
   "children_ids": [],
   "manual": {
     "depends_on": [],
@@ -10,17 +10,213 @@
     "related_to": []
   },
   "derived": {
-    "trigger_phrases": [],
-    "key_topics": [],
-    "importance_tier": "important",
+    "trigger_phrases": [
+      "mobile name column and fab",
+      "title column too narrow on phone",
+      "name column truncates mobile auto-fit",
+      "open text label eats title column width",
+      "floating new button unreachable under nav bar",
+      "fab hidden behind obsidian mobile navbar",
+      "mobile name column and fab plan",
+      "title column auto-fit correction plan",
+      "fab nav bar clearance plan",
+      "mobile name column and fab tasks",
+      "title column fab task breakdown",
+      "mobile name column and fab implementation summary"
+    ],
+    "key_topics": [
+      "mobile",
+      "name",
+      "column",
+      "fab",
+      "title",
+      "too",
+      "narrow",
+      "phone",
+      "truncates",
+      "auto-fit",
+      "open",
+      "text"
+    ],
+    "importance_tier": "high",
     "status": "complete",
-    "key_files": ["spec.md", "plan.md", "tasks.md", "implementation-summary.md"],
-    "entities": [],
-    "causal_summary": "Phase 012: mobile-name-column-and-fab",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "implementation-summary.md",
+      "src/views/table-record-peek.ts",
+      "src/views/toolbar-renderer.ts",
+      "src/views/table-record-peek.test.ts",
+      "tools/screenshots/scenarios/core.mjs",
+      "screenshots/README.md"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "table-record-peek.ts",
+        "kind": "code",
+        "path": "src/views/table-record-peek.ts",
+        "source": "derived"
+      },
+      {
+        "name": "toolbar-renderer.ts",
+        "kind": "code",
+        "path": "src/views/toolbar-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "table-record-peek.test.ts",
+        "kind": "test",
+        "path": "src/views/table-record-peek.test.ts",
+        "source": "derived"
+      },
+      {
+        "name": "core.mjs",
+        "kind": "file",
+        "path": "tools/screenshots/scenarios/core.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "README.md",
+        "kind": "doc",
+        "path": "screenshots/README.md",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Mobile Name Column",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Button Reach",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Spec Folder",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Problem Statement Phase",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Adobe Creati",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Plan",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Breakdown",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Summary",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "a",
+        "kind": "key_phrase",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Notation",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Format",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Completion Criteria",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Phase Name",
+        "kind": "proper_noun",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "Completion Pct",
+        "kind": "proper_noun",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "Phase 011 gave the phone its own table layout: on `body.is-phone` the table switches to `table-layout: auto` (`styles.css:4508`) so every column hugs its content instead of keeping desktop fixed widths",
     "created_at": "2026-08-29T00:00:00Z",
-    "last_save_at": "2026-08-29T00:00:00Z",
+    "last_save_at": "2026-09-01T10:50:16.171Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
-    "source_docs": ["spec.md", "plan.md", "tasks.md", "implementation-summary.md"]
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "implementation-summary.md"
+    ],
+    "source_fingerprint": "sha256:cc06b440b3b57637a8d7f8ce073d87f772d6a6ae62843eb34f96b30ef9c10b5e",
+    "source_fingerprint_docset": 3,
+    "source_doc_hashes": {
+      "spec.md": "e37045a23344ef3d9d9b4ff77a07083c5734e3d7eebd836326d0c0b15566bf75",
+      "plan.md": "2c9ab6f5a986954abf6ef99aa0426f39d91040a6e76ee1067354a3fc4c391da1",
+      "tasks.md": "dc3021dfdda0dda5ec017ca9359ecd355a6900858be15e2ccf25769b49199615",
+      "implementation-summary.md": "3bb400206ef71246f9008fd311f0a4cbef800345bdb859055221137aa8a1e3ee"
+    },
+    "last_active_child_id": null,
+    "last_active_at": null
   }
 }

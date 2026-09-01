@@ -1,6 +1,6 @@
 {
   "level": "1",
-  "specFolder": "public/001-note-db-notion-parity-build/012-files-column/002-files-type-registry",
+  "specFolder": "001-note-db-notion-parity-build/012-files-column/002-files-type-registry",
   "description": "The fork union is 12 types (`types.ts:50`)",
   "keywords": [
     "fork",

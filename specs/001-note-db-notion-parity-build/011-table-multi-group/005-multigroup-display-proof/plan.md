@@ -8,7 +8,7 @@ importance_tier: "high"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "public/001-note-db-notion-parity-build/011-table-multi-group/005-multigroup-display-proof"
+    packet_pointer: "001-note-db-notion-parity-build/011-table-multi-group/005-multigroup-display-proof"
     last_updated_at: "2026-08-27T17:27:13Z"
     last_updated_by: "phase-architect"
     recent_action: "Authored multi-group display-proof child from synthesis and final-plan"

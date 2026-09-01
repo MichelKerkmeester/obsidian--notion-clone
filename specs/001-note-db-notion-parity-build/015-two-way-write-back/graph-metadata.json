@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "packet_id": "public/001-note-db-notion-parity-build/015-two-way-write-back",
-  "spec_folder": "public/001-note-db-notion-parity-build/015-two-way-write-back",
-  "parent_id": "public/001-note-db-notion-parity-build",
+  "packet_id": "001-note-db-notion-parity-build/015-two-way-write-back",
+  "spec_folder": "001-note-db-notion-parity-build/015-two-way-write-back",
+  "parent_id": "001-note-db-notion-parity-build",
   "children_ids": [],
   "manual": {
     "depends_on": [],
@@ -45,8 +45,8 @@
       "plan.md",
       "tasks.md",
       "implementation-summary.md",
-      "research/synthesis.md",
       "research/research.md",
+      "research/synthesis.md",
       "research/final-plan.md"
     ],
     "entities": [
@@ -75,15 +75,15 @@
         "source": "derived"
       },
       {
-        "name": "synthesis.md",
-        "kind": "doc",
-        "path": "research/synthesis.md",
-        "source": "derived"
-      },
-      {
         "name": "research.md",
         "kind": "doc",
         "path": "research/research.md",
+        "source": "derived"
+      },
+      {
+        "name": "synthesis.md",
+        "kind": "doc",
+        "path": "research/synthesis.md",
         "source": "derived"
       },
       {
@@ -197,7 +197,7 @@
     ],
     "causal_summary": "The Wave 6 question was whether to port Notion's two-way relations into the note-database fork as stored dual frontmatter mirrors — i.e., on every relation click, mirror the wikilink into both notes' frontmatter",
     "created_at": "2026-08-24T18:16:22.374Z",
-    "last_save_at": "2026-08-28T10:56:23.271Z",
+    "last_save_at": "2026-09-01T10:50:16.046Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -207,12 +207,13 @@
       "implementation-summary.md",
       "research/research.md"
     ],
-    "source_fingerprint": "sha256:592d86b641a0dfa338bde7bb15160be2abe5000d1bb1420a3047cfabf7f1b809",
+    "source_fingerprint": "sha256:436686cf8aace8c63a6cabf7c71258caf29537207871cc16c07bb9a253c112d7",
+    "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "d3bfc44dfd224173aca940ddbe86ca8c12eaab1a0a15f96b6a792866aae21f03",
-      "plan.md": "8658e5e066d553efd99d71e6590e9e898fed32fc47c93fb541ccf72087d057f1",
-      "tasks.md": "4a6f0444727a5c3ad752257ed54aa510af084202234ae7730968159fa2fe5078",
-      "implementation-summary.md": "78aec75b9b20209fb153569b0cfdf9a92e399c08fe6f10a4a9b5ca5e10f29479",
+      "spec.md": "79289ed98c504cd408efb0afb3f2f962410896876adccca9011ca85ac3649d54",
+      "plan.md": "b7d0c5a8f6ac5be82a47097ae24a95997ebf637ca69d49429389e4572ea2db8e",
+      "tasks.md": "90ec82ea2bbfd60d4c18b70338afc3bc703819b83da5d01b8dd3493eed509767",
+      "implementation-summary.md": "c243bb27d509e9432de040e31e23ab5ec2f4a223bd1b7cb4f42a160a46555b7a",
       "research/research.md": "9a7306e5f281df4aea96315f100ca1a9ffc2b769575967180583aa719869a79f"
     },
     "last_active_child_id": null,

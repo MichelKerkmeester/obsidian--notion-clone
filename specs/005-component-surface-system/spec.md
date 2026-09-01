@@ -13,7 +13,7 @@ importance_tier: "critical"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "public/005-component-surface-system"
+    packet_pointer: "005-component-surface-system"
     last_updated_at: "2026-08-30T10:45:00Z"
     last_updated_by: "roadmap-reconciliation"
     recent_action: "Scope, phase map and execution-order claims reconciled against the working tree"

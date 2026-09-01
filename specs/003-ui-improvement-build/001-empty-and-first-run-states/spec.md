@@ -14,7 +14,7 @@ importance_tier: "high"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "public/003-ui-improvement-build/001-empty-and-first-run-states"
+    packet_pointer: "003-ui-improvement-build/001-empty-and-first-run-states"
     last_updated_at: "2026-08-28T04:30:57Z"
     last_updated_by: "phase-author"
     recent_action: "Reconciled empty and first-run states feature specification"
@@ -242,9 +242,9 @@ All implementation choices follow the research synthesis recommendations; no ope
 ## RELATED DOCUMENTS
 
 - **Parent Spec**: [`../spec.md`](../spec.md)
-- **Research Synthesis**: `specs/public/002-ui-improvement-research/research/synthesis.md`
-- **Research Iteration 01 (Devin Track)**: `specs/public/002-ui-improvement-research/research/devin-gemini/iteration-01.md`
-- **Research Iteration 01 (Codex Track)**: `specs/public/002-ui-improvement-research/research/codex-luna/iteration-01.md`
+- **Research Synthesis**: `specs/002-ui-improvement-research/research/synthesis.md`
+- **Research Iteration 01 (Devin Track)**: `specs/002-ui-improvement-research/research/devin-gemini/iteration-01.md`
+- **Research Iteration 01 (Codex Track)**: `specs/002-ui-improvement-research/research/codex-luna/iteration-01.md`
 - **Implementation Plan**: See `plan.md`
 - **Task Breakdown**: See `tasks.md`
 - **Verification Checklist**: See `checklist.md`

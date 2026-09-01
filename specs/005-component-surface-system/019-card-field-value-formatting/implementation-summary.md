@@ -8,7 +8,7 @@ importance_tier: "normal"
 contextType: "general"
 _memory:
   continuity:
-    packet_pointer: "public/005-component-surface-system/019-card-field-value-formatting"
+    packet_pointer: "005-component-surface-system/019-card-field-value-formatting"
     last_updated_at: "2026-08-30T11:00:00Z"
     last_updated_by: "roadmap-reconciliation"
     recent_action: "Opened for code that landed before this folder existed"

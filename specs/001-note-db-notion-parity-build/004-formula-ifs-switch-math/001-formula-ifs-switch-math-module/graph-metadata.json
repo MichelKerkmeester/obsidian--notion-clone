@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "packet_id": "public/001-note-db-notion-parity-build/004-formula-ifs-switch-math/001-formula-ifs-switch-math-module",
-  "spec_folder": "public/001-note-db-notion-parity-build/004-formula-ifs-switch-math/001-formula-ifs-switch-math-module",
-  "parent_id": "public/001-note-db-notion-parity-build/004-formula-ifs-switch-math",
+  "packet_id": "001-note-db-notion-parity-build/004-formula-ifs-switch-math/001-formula-ifs-switch-math-module",
+  "spec_folder": "001-note-db-notion-parity-build/004-formula-ifs-switch-math/001-formula-ifs-switch-math-module",
+  "parent_id": "001-note-db-notion-parity-build/004-formula-ifs-switch-math",
   "children_ids": [],
   "manual": {
     "depends_on": [],
@@ -192,7 +192,7 @@
     ],
     "causal_summary": "The fork already evaluates `IF` (`ComputedField.ts:325`), exposes `Math` on eval scope (`:433-437`), and dual-names `POWER`/`POW` (`:372-373`), but Notion `ifs(cond, val, …, [else])` is absent and the Excel-style names `SQRT` / `LN` / `LOG10` / `EXP` / `CBRT` are missing even though raw `Math.` works",
     "created_at": "2026-08-25T19:11:18Z",
-    "last_save_at": "2026-08-27T12:27:56.597Z",
+    "last_save_at": "2026-09-01T10:50:15.718Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -201,12 +201,13 @@
       "tasks.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:3f2f86de79dd7c862c08568955686edadc158f060a4f1d94a1e807108ca74083",
+    "source_fingerprint": "sha256:831a39f37ef6576abdf42f41a93e7d5b220fea8a89288582896ce753dbd41714",
+    "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "c19cd8d8fa64d8f65a756202ffcd08954797b12ffe3e1147422e7e1c7dbb4c29",
-      "plan.md": "b9f2f379546066bef2492b45e180c1f4a0accfc608e982288a4396ab4579c2c9",
-      "tasks.md": "69af2bc5bfc2e1d1b87503ea518babddf9fc3640ff8a6cd57d112deb6a8fbfa6",
-      "implementation-summary.md": "277de27a943cbed0dc182bcb2ba2cd7556f9ad7223e39fcdbb8d9df1d53ca51d"
+      "spec.md": "f626e87096f97f83c7aa1dface21e515654e5b4ca3eccffb82c8c349a3775d57",
+      "plan.md": "5b934e66f76082931c5ee030dfa1c65fe46905c2476becc60948625b4f650fe4",
+      "tasks.md": "dd6720912f3a98121cc5cc263a48b79e729816f9f667c0ad7661699f42e77488",
+      "implementation-summary.md": "0b1e4f53f51f4311da2ad9a54d2e48e6bf1b556761d76c5267577e75f9027cd5"
     },
     "last_active_child_id": null,
     "last_active_at": null

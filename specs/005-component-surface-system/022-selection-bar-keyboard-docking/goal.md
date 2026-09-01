@@ -9,7 +9,7 @@ importance_tier: "critical"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "public/005-component-surface-system/022-selection-bar-keyboard-docking"
+    packet_pointer: "005-component-surface-system/022-selection-bar-keyboard-docking"
     last_updated_at: "2026-08-31T05:15:00Z"
     last_updated_by: "goal-reconcile"
     recent_action: "AC-1 met: plugin publishes --db-keyboard-inset; host-silent bar 828px to 513px"

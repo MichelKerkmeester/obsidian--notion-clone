@@ -1,13 +1,13 @@
 {
   "schema_version": 1,
-  "packet_id": "public/003-ui-improvement-build/003-popovers-menus-elevation",
-  "spec_folder": "public/003-ui-improvement-build/003-popovers-menus-elevation",
-  "parent_id": "public/003-ui-improvement-build",
+  "packet_id": "003-ui-improvement-build/003-popovers-menus-elevation",
+  "spec_folder": "003-ui-improvement-build/003-popovers-menus-elevation",
+  "parent_id": "003-ui-improvement-build",
   "children_ids": [],
   "manual": {
     "depends_on": [
       {
-        "packet_id": "public/003-ui-improvement-build/005-design-tokens-typography",
+        "packet_id": "003-ui-improvement-build/005-design-tokens-typography",
         "reason": "Imported from legacy graph-metadata.json",
         "source": "legacy"
       }
@@ -45,13 +45,17 @@
       "listbox"
     ],
     "importance_tier": "high",
-    "status": "in_progress",
+    "status": "complete",
     "key_files": [
       "spec.md",
       "plan.md",
       "tasks.md",
+      "implementation-summary.md",
       "checklist.md",
-      "implementation-summary.md"
+      "src/i18n.ts",
+      "specs/002-ui-improvement-research/research/synthesis.md",
+      "specs/002-ui-improvement-research/research/devin-gemini/iteration-03.md",
+      "specs/002-ui-improvement-research/research/codex-luna/iteration-03.md"
     ],
     "entities": [
       {
@@ -73,15 +77,33 @@
         "source": "derived"
       },
       {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
         "name": "checklist.md",
         "kind": "doc",
         "path": "checklist.md",
         "source": "derived"
       },
       {
-        "name": "implementation-summary.md",
+        "name": "i18n.ts",
+        "kind": "code",
+        "path": "src/i18n.ts",
+        "source": "derived"
+      },
+      {
+        "name": "synthesis.md",
         "kind": "doc",
-        "path": "implementation-summary.md",
+        "path": "specs/002-ui-improvement-research/research/synthesis.md",
+        "source": "derived"
+      },
+      {
+        "name": "iteration-03.md",
+        "kind": "doc",
+        "path": "specs/002-ui-improvement-research/research/devin-gemini/iteration-03.md",
         "source": "derived"
       },
       {
@@ -179,45 +201,26 @@
         "kind": "proper_noun",
         "path": "tasks.md",
         "source": "derived"
-      },
-      {
-        "name": "Next Week",
-        "kind": "proper_noun",
-        "path": "tasks.md",
-        "source": "derived"
-      },
-      {
-        "name": "Unit Tests",
-        "kind": "proper_noun",
-        "path": "tasks.md",
-        "source": "derived"
-      },
-      {
-        "name": "Verification Checklist",
-        "kind": "proper_noun",
-        "path": "checklist.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "Popovers, menus, dropdowns, and floating pickers form the interactive overlay layer of the Note Database plugin",
     "created_at": "2026-08-27T19:53:19.572Z",
-    "last_save_at": "2026-08-28T16:54:47.311Z",
+    "last_save_at": "2026-09-01T10:50:16.104Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
       "spec.md",
       "plan.md",
       "tasks.md",
-      "checklist.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:abdbbad063b6cecc847f00f58d2d943d9f108a95b6f5c392a5f55af4bf8e88dd",
+    "source_fingerprint": "sha256:b3124d52b926526bfd192ff309d0a9e41edad719a160bff4cefb99b182cb2f9a",
+    "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "7ee82f83d40b0111343f4853d07f5542fc2e9e32d9a80f8ee82db16e41fd14e1",
-      "plan.md": "9e81c56ce6a88d17a038f2fb38a9ec4ae9c2fa510a6a7d7d6ffd6044c4d35f8f",
-      "tasks.md": "60d6efc2c9a9a0de7d4032876f1bc98ccb8dc3d4deaf29a3feae6d84858739b4",
-      "checklist.md": "f2b52e005b7b5508e0855f2729e289aa21e1dd70ffda505d0dcf952dd8c6167a",
-      "implementation-summary.md": "8880f0867f116e00530cb83d5199bbdcefdba4bf7565f0ce6d150f2dae0d3ebe"
+      "spec.md": "b6a29af013a5a096d9fc71073891bd5394e2bff76143ec3a720cd119c9f98d6b",
+      "plan.md": "a5dc63b6feb9bfe52f5c67337c0a5d2d043dfe08a3608fa4111960d1ab514e52",
+      "tasks.md": "fe9f8d4cc51c1288e228414bfdb2f579ccb0428472b13a606db00d11df180e8c",
+      "implementation-summary.md": "dd652755888f1e0dadca1ee0f68ebd906b4febb1de3fbf6ff97d2aecc42d86f4"
     },
     "last_active_child_id": null,
     "last_active_at": null

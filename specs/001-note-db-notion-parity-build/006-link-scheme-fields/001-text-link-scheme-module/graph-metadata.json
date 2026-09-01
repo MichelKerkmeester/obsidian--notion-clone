@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "packet_id": "public/001-note-db-notion-parity-build/006-link-scheme-fields/001-text-link-scheme-module",
-  "spec_folder": "public/001-note-db-notion-parity-build/006-link-scheme-fields/001-text-link-scheme-module",
-  "parent_id": "public/001-note-db-notion-parity-build/006-link-scheme-fields",
+  "packet_id": "001-note-db-notion-parity-build/006-link-scheme-fields/001-text-link-scheme-module",
+  "spec_folder": "001-note-db-notion-parity-build/006-link-scheme-fields/001-text-link-scheme-module",
+  "parent_id": "001-note-db-notion-parity-build/006-link-scheme-fields",
   "children_ids": [],
   "manual": {
     "depends_on": [],
@@ -40,7 +40,9 @@
       "spec.md",
       "plan.md",
       "tasks.md",
-      "implementation-summary.md"
+      "implementation-summary.md",
+      "src/__tests__/setup.ts",
+      "src/data/types.ts"
     ],
     "entities": [
       {
@@ -65,6 +67,18 @@
         "name": "implementation-summary.md",
         "kind": "doc",
         "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "setup.ts",
+        "kind": "code",
+        "path": "src/__tests__/setup.ts",
+        "source": "derived"
+      },
+      {
+        "name": "types.ts",
+        "kind": "code",
+        "path": "src/data/types.ts",
         "source": "derived"
       },
       {
@@ -174,23 +188,11 @@
         "kind": "proper_noun",
         "path": "implementation-summary.md",
         "source": "derived"
-      },
-      {
-        "name": "Actual Effort",
-        "kind": "proper_noun",
-        "path": "implementation-summary.md",
-        "source": "derived"
-      },
-      {
-        "name": "What Was Built Shipped",
-        "kind": "proper_noun",
-        "path": "implementation-summary.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "Notion URL / Email / Phone properties store ordinary text and differ only in click behavior",
     "created_at": "2026-08-25T19:27:08Z",
-    "last_save_at": "2026-08-27T12:27:57.693Z",
+    "last_save_at": "2026-09-01T10:50:15.769Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -199,12 +201,13 @@
       "tasks.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:aec63a0e9774cad58495ceeaff07337e618c8c76ff653197db09bdc887c97149",
+    "source_fingerprint": "sha256:1be97df3b4a0b505a6f61c6ffef623f6c57c4abe260fe3a8994209c9aca36c20",
+    "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "c2bf3dcae689b820efe90ec6a9a88db0cc74f98680c9e1fc32e138a136d6b0ce",
-      "plan.md": "b58c3ac15c56a4674bb09b0c636ea0e82f3527b8770d8b4892b0ae422248bec9",
-      "tasks.md": "7428e140931502218f1063a6bce43f230b309899ea66d2a2985cc665e6bb8d66",
-      "implementation-summary.md": "b0f97fbd8e59fe22b58994a55c1cfda820b81a3a658d1884e98e0a3c1ca89759"
+      "spec.md": "2e10d5769bc2bd5466b3d175f17d64caa15e2a72cc8f1d244377fcdc4291e8c4",
+      "plan.md": "af10fb5990e04cf80c318de986a7a5cd65f6c05fbb3db146ce0fc3f53344ecef",
+      "tasks.md": "2f41d25e7b4dbbcf67a3544bf0717a34676ee403b20da0a833d62b48f4d4a9a6",
+      "implementation-summary.md": "f878166e1132b5f339d09c6a8c6098b1c7e25cc7cb929748f71c82b5c4e1e7e6"
     },
     "last_active_child_id": null,
     "last_active_at": null

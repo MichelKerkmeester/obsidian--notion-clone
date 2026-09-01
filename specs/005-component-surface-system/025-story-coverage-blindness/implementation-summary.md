@@ -8,7 +8,7 @@ importance_tier: "critical"
 contextType: "implementation"
 _memory:
   continuity:
-    packet_pointer: "public/005-component-surface-system/025-story-coverage-blindness"
+    packet_pointer: "005-component-surface-system/025-story-coverage-blindness"
     last_updated_at: "2026-08-30T21:10:00Z"
     last_updated_by: "phase-reconciliation"
     recent_action: "8 requirements verified; matcher 31 vs 18; control substitution recorded"

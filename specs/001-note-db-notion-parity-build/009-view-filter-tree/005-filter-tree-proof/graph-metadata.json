@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "packet_id": "public/001-note-db-notion-parity-build/009-view-filter-tree/005-filter-tree-proof",
-  "spec_folder": "public/001-note-db-notion-parity-build/009-view-filter-tree/005-filter-tree-proof",
-  "parent_id": "public/001-note-db-notion-parity-build/009-view-filter-tree",
+  "packet_id": "001-note-db-notion-parity-build/009-view-filter-tree/005-filter-tree-proof",
+  "spec_folder": "001-note-db-notion-parity-build/009-view-filter-tree/005-filter-tree-proof",
+  "parent_id": "001-note-db-notion-parity-build/009-view-filter-tree",
   "children_ids": [],
   "manual": {
     "depends_on": [],
@@ -18,8 +18,6 @@
       "nowrite filter panel",
       "filter tree proof plan",
       "filter tree proof tasks",
-      "filter tree proof checklist",
-      "vitest viewfiltertree",
       "filter tree proof summary"
     ],
     "key_topics": [
@@ -42,8 +40,9 @@
       "spec.md",
       "plan.md",
       "tasks.md",
+      "implementation-summary.md",
       "checklist.md",
-      "implementation-summary.md"
+      "src/__tests__/setup.ts"
     ],
     "entities": [
       {
@@ -65,15 +64,21 @@
         "source": "derived"
       },
       {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
         "name": "checklist.md",
         "kind": "doc",
         "path": "checklist.md",
         "source": "derived"
       },
       {
-        "name": "implementation-summary.md",
-        "kind": "doc",
-        "path": "implementation-summary.md",
+        "name": "setup.ts",
+        "kind": "code",
+        "path": "src/__tests__/setup.ts",
         "source": "derived"
       },
       {
@@ -161,55 +166,48 @@
         "source": "derived"
       },
       {
-        "name": "Verification Checklist",
+        "name": "Implementation Summary",
         "kind": "proper_noun",
-        "path": "checklist.md",
+        "path": "implementation-summary.md",
         "source": "derived"
       },
       {
-        "name": "Vitest Kleene",
+        "name": "Planned Vitest",
         "kind": "proper_noun",
-        "path": "checklist.md",
+        "path": "implementation-summary.md",
         "source": "derived"
       },
       {
-        "name": "Verification Protocol",
+        "name": "Spec Folder",
         "kind": "proper_noun",
-        "path": "checklist.md",
+        "path": "implementation-summary.md",
         "source": "derived"
       },
       {
-        "name": "Completion Impact",
+        "name": "Actual Effort",
         "kind": "proper_noun",
-        "path": "checklist.md",
-        "source": "derived"
-      },
-      {
-        "name": "Code Quality",
-        "kind": "proper_noun",
-        "path": "checklist.md",
+        "path": "implementation-summary.md",
         "source": "derived"
       }
     ],
     "causal_summary": "Without recorded proofs, nested AND/OR can look done while `DataSource.ts` drops `filterTree` on reload, a source-op leak matches every row (`QueryEngine.ts:124-125`), or phase 010 is forced into `applyFilterTree([row])` (null-passes would paint every row)",
     "created_at": "2026-08-25T20:51:14Z",
-    "last_save_at": "2026-08-27T12:28:00.687Z",
+    "last_save_at": "2026-09-01T10:50:15.869Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
       "spec.md",
       "plan.md",
       "tasks.md",
-      "checklist.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:4cd32f21ee25da86d2cf99842d41d086edc2ed4864dcad6ce81373a1cc9dbb30",
+    "source_fingerprint": "sha256:c2fe39042b522886eff4652f9af0dc3624754f72a2c9e15ddb27509b18d2648f",
+    "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "eb5271409a96e3fb7165aeb4f15361f95b9def50cea53f6d92520cc136c56ce2",
-      "plan.md": "dcea6aaa76103ccf9b607e7f228eebf89ba4727c33fadaa8054be3dbd1332dba",
-      "tasks.md": "c4148fdcec891f6da71822e568e7571dd828f055062f9673493ce95f80b7050d",
-      "checklist.md": "3c2fd4433ecaef1eda2e345b327c9ff04137d634a1569bafb5b05431e604ca4d",
-      "implementation-summary.md": "f4aeaa7f2e78d6b90604dda7694ff1b654760534d0637d0e52d00a9b8d91aa12"
+      "spec.md": "e18628eb8403313f9fb98bd7b5df32a46cf37312250cdb7bd1d2da18a52dd2a9",
+      "plan.md": "2dcb1a25a19384c236e8fddce24633395d49814537ea928d7381a163160eba9d",
+      "tasks.md": "19dcc762274e9cc676f6f90f0ed4df28eff2d5f929ccd8d5aeb4becfccfa1341",
+      "implementation-summary.md": "1f1653c0f6b4e7034e8a79dfc3c2d84ed41244fc0c669531a899dbd791b942e4"
     },
     "last_active_child_id": null,
     "last_active_at": null

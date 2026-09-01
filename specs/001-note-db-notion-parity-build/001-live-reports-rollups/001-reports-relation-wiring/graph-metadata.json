@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "packet_id": "public/001-note-db-notion-parity-build/001-live-reports-rollups/001-reports-relation-wiring",
-  "spec_folder": "public/001-note-db-notion-parity-build/001-live-reports-rollups/001-reports-relation-wiring",
-  "parent_id": "public/001-note-db-notion-parity-build/001-live-reports-rollups",
+  "packet_id": "001-note-db-notion-parity-build/001-live-reports-rollups/001-reports-relation-wiring",
+  "spec_folder": "001-note-db-notion-parity-build/001-live-reports-rollups/001-reports-relation-wiring",
+  "parent_id": "001-note-db-notion-parity-build/001-live-reports-rollups",
   "children_ids": [],
   "manual": {
     "depends_on": [],
@@ -192,7 +192,7 @@
     ],
     "causal_summary": "Notion exposes both directions (Reports.Expenses (R) ↔ child Month)",
     "created_at": "2026-08-25T19:11:29Z",
-    "last_save_at": "2026-08-27T12:27:54.376Z",
+    "last_save_at": "2026-09-01T10:50:15.623Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -201,12 +201,13 @@
       "tasks.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:50146aa1523a4ab51b8a509eabc2ab982e4826ea34038132df79ff40b01e0a29",
+    "source_fingerprint": "sha256:ce6c442ea0cba82f3908cf2679512f7a6272a8ff097f63f4a1535d15e279c8ca",
+    "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "574772da812a82ac4e318219dc9b6ffe88a0ee59c2e044c58b718707d14e7da4",
-      "plan.md": "18dfba85a5a4f42fbea247a8f37ddb87e30fb9974f5fc748b3edeae6882e1471",
-      "tasks.md": "7155184cb0c796c517556f8c592b02c40677e148269bfe76ddc81e954266ab34",
-      "implementation-summary.md": "d2ce7a7e1b1c9b54013857d4ea64b0bd14fcecee4b53e4fbe356f0a5a7516762"
+      "spec.md": "76c1b06e42eb162c6a2e427a96c20a64d882ad2b37e5f4203e3baa504814224a",
+      "plan.md": "2c49bdf92e882f031ccc0d542fa146b72de78b7cc223155285fc0006b2c47413",
+      "tasks.md": "68ce0206523269380a6032204001ac4a6781cbf0e1986cc96d396de17e2f62ce",
+      "implementation-summary.md": "f572d3a0c74ef188e539e04f63c0447c32fbe791953cff9a8219cbfb147b4bd6"
     },
     "last_active_child_id": null,
     "last_active_at": null

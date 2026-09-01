@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "packet_id": "public/005-component-surface-system/016-sheet-drag-and-audit",
-  "spec_folder": "public/005-component-surface-system/016-sheet-drag-and-audit",
-  "parent_id": "public/005-component-surface-system",
+  "packet_id": "005-component-surface-system/016-sheet-drag-and-audit",
+  "spec_folder": "005-component-surface-system/016-sheet-drag-and-audit",
+  "parent_id": "005-component-surface-system",
   "children_ids": [],
   "manual": {
     "depends_on": [],
@@ -199,7 +199,7 @@
     ],
     "causal_summary": "Find why the phone sheet's drag-to-dismiss kept dying after it had been fixed twice, and settle every one of the operator's bottom-sheet asks against the shipped build with a measured number rather than a reading of the source.",
     "created_at": "2026-08-30T16:46:51.404Z",
-    "last_save_at": "2026-09-01T10:22:14.071Z",
+    "last_save_at": "2026-09-01T10:50:16.403Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -210,13 +210,13 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:8b627b1bd1227a6bd143e6e145bda2d5c0706f5de3edf7d2113e6558e0079eab",
+    "source_fingerprint": "sha256:a4a71a3ff172905af9d0d127fa76b7d9b76432b37b324485a63d70942f75d72b",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "7187cfecb69775b784ae00e6a762bf333012b5a5bfb68b798cd4109075cfe3ae",
+      "spec.md": "8904337047d4c8428ad74a792bee497ed32155a146837b6c56f0b2d2ee3fd212",
       "plan.md": "63e1896d8a7dcd209bb355587a9d320a20db9b047cfc2521fd97b408bf860e0a",
       "tasks.md": "1585169c418176058b23b38a095cfcac45c9dd064b3716ebef09ec05b40d7a3c",
-      "implementation-summary.md": "c5eae8a0400facf8c77c3b6d33c0e3108121579f50f420c0cb63e79e6745aced"
+      "implementation-summary.md": "f1563de2f0fcba16c9d0d764e295d193e0811c578c1b3bb79b5b0d12acec1b74"
     },
     "last_active_child_id": null,
     "last_active_at": null

@@ -9,7 +9,7 @@ importance_tier: "critical"
 contextType: "handover"
 _memory:
   continuity:
-    packet_pointer: "public/005-component-surface-system"
+    packet_pointer: "005-component-surface-system"
     last_updated_at: "2026-08-31T08:30:00Z"
     last_updated_by: "timeline-freeze-diagnosis"
     recent_action: "Deep review ran and returned FAIL; its fifteen findings are now recorded here"

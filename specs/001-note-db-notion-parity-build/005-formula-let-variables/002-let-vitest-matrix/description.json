@@ -1,6 +1,6 @@
 {
   "level": "1",
-  "specFolder": "public/001-note-db-notion-parity-build/005-formula-let-variables/002-let-vitest-matrix",
+  "specFolder": "001-note-db-notion-parity-build/005-formula-let-variables/002-let-vitest-matrix",
   "description": "Parent success criteria assume “the fork’s formula test suite.” It does not exist",
   "keywords": [
     "parent",

@@ -1,6 +1,6 @@
 {
   "level": "1",
-  "specFolder": "public/001-note-db-notion-parity-build/006-link-scheme-fields/001-text-link-scheme-module",
+  "specFolder": "001-note-db-notion-parity-build/006-link-scheme-fields/001-text-link-scheme-module",
   "description": "Notion URL / Email / Phone properties store ordinary text and differ only in click behavior",
   "keywords": [
     "notion",

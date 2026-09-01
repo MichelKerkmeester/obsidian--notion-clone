@@ -13,7 +13,7 @@ importance_tier: "high"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "public/001-note-db-notion-parity-build/012-files-column"
+    packet_pointer: "001-note-db-notion-parity-build/012-files-column"
     last_updated_at: "2026-08-27T17:09:01Z"
     last_updated_by: "phase-architect"
     recent_action: "Nested sub-phases authored from synthesis and final-plan"
@@ -97,11 +97,11 @@ Add a first-class Files/media column (`"files"`, the 13th type) backed by an iso
 
 | File Path | Change Type | Description |
 |-----------|-------------|-------------|
-| `specs/public/001-note-db-notion-parity-build/012-files-column/spec.md` | Edit | This phase specification (rewritten to match synthesis) |
-| `specs/public/001-note-db-notion-parity-build/012-files-column/plan.md` | Edit | Implementation plan (rewritten to match synthesis) |
-| `specs/public/001-note-db-notion-parity-build/012-files-column/tasks.md` | Edit | Task breakdown (rewritten to synthesis ranked backlog) |
-| `specs/public/001-note-db-notion-parity-build/012-files-column/checklist.md` | Edit | Verification checklist (rewritten to synthesis edge cases) |
-| `specs/public/001-note-db-notion-parity-build/012-files-column/implementation-summary.md` | Untouched | Scaffold state — nothing implemented yet |
+| `specs/001-note-db-notion-parity-build/012-files-column/spec.md` | Edit | This phase specification (rewritten to match synthesis) |
+| `specs/001-note-db-notion-parity-build/012-files-column/plan.md` | Edit | Implementation plan (rewritten to match synthesis) |
+| `specs/001-note-db-notion-parity-build/012-files-column/tasks.md` | Edit | Task breakdown (rewritten to synthesis ranked backlog) |
+| `specs/001-note-db-notion-parity-build/012-files-column/checklist.md` | Edit | Verification checklist (rewritten to synthesis edge cases) |
+| `specs/001-note-db-notion-parity-build/012-files-column/implementation-summary.md` | Untouched | Scaffold state — nothing implemented yet |
 | `<fork>/src/data/FilesColumn.ts` (planned) | Create | Isolated module: normalize, `formatForEdit`/`parseEdit`, classify, resolve, `renderChips`, chip cap |
 | `<fork>/src/data/types.ts:50` (planned) | Edit | Add `"files"` to `ColumnDef["type"]` union |
 | `<fork>/src/data/ColumnTypes.ts:108-138,172-177` (planned) | Edit | `COLUMN_TYPE_LABELS`, `isColumnType`, `getDefaultCellValue` → `[]` |

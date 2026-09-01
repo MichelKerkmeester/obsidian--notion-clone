@@ -8,7 +8,7 @@ importance_tier: "critical"
 contextType: "general"
 _memory:
   continuity:
-    packet_pointer: "public/005-component-surface-system/013-add-view-sheet"
+    packet_pointer: "005-component-surface-system/013-add-view-sheet"
     last_updated_at: "2026-08-30T07:57:00Z"
     last_updated_by: "phase-author"
     recent_action: "Tile grid deleted and rebuilt on the row grammar; six reports adjudicated"

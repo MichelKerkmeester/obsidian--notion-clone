@@ -1,14 +1,18 @@
 {
   "schema_version": 1,
-  "packet_id": "public/004-component-screenshot-system",
-  "spec_folder": "public/004-component-screenshot-system",
+  "packet_id": "004-component-screenshot-system",
+  "spec_folder": "004-component-screenshot-system",
   "parent_id": "null",
   "parent_id_review_required": true,
   "children_ids": [
     "public/004-component-screenshot-system/001-capture-harness",
     "public/004-component-screenshot-system/002-scenario-registry",
     "public/004-component-screenshot-system/003-freshness-enforcement",
-    "public/004-component-screenshot-system/004-coverage-expansion"
+    "public/004-component-screenshot-system/004-coverage-expansion",
+    "004-component-screenshot-system/001-capture-harness",
+    "004-component-screenshot-system/002-scenario-registry",
+    "004-component-screenshot-system/003-freshness-enforcement",
+    "004-component-screenshot-system/004-coverage-expansion"
   ],
   "migrated": true,
   "migration_source": "legacy",
@@ -93,17 +97,18 @@
     ],
     "causal_summary": "The fork's interface work produced no visual record",
     "created_at": "2026-08-28T00:00:00.000Z",
-    "last_save_at": "2026-08-28T13:51:35.073Z",
+    "last_save_at": "2026-09-01T10:50:16.218Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
       "spec.md"
     ],
-    "source_fingerprint": "sha256:5ee5d148782a67a40d786dc9664e8e152dd1e3093fc056fcebf3ae9f17f53611",
+    "source_fingerprint": "sha256:2c3e6ff56d3dc124bfe22ca5371e661f09768d7117f50c50413c2937ade79929",
+    "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "c7637e56a30fa3c99bc5729c20c1820718fc327b5911aae51043a6cb5489bed8"
+      "spec.md": "f5c27ccaa354ef258d839ffb9c619a18ecd28fd1e9e0ae4b5e683c892341ffb0"
     },
-    "last_active_child_id": "public/004-component-screenshot-system/004-coverage-expansion",
+    "last_active_child_id": "004-component-screenshot-system/004-coverage-expansion",
     "last_active_at": null
   }
 }

@@ -1,6 +1,6 @@
 {
   "level": "3",
-  "specFolder": "public/006-list-view-clickup",
+  "specFolder": "006-list-view-clickup",
   "description": "The list view gains the table's whole feature surface by becoming a presentation mode of the grid, and takes on ClickUp's list chrome: per-group",
   "keywords": [
     "list",

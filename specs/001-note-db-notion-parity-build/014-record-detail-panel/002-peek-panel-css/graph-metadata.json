@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "packet_id": "public/001-note-db-notion-parity-build/014-record-detail-panel/002-peek-panel-css",
-  "spec_folder": "public/001-note-db-notion-parity-build/014-record-detail-panel/002-peek-panel-css",
-  "parent_id": "public/001-note-db-notion-parity-build/014-record-detail-panel",
+  "packet_id": "001-note-db-notion-parity-build/014-record-detail-panel/002-peek-panel-css",
+  "spec_folder": "001-note-db-notion-parity-build/014-record-detail-panel/002-peek-panel-css",
+  "parent_id": "001-note-db-notion-parity-build/014-record-detail-panel",
   "children_ids": [],
   "manual": {
     "depends_on": [],
@@ -189,7 +189,7 @@
     ],
     "causal_summary": "Obsidian loads only plugin-root `styles.css` (no esbuild CSS pipeline)",
     "created_at": "2026-08-25T21:14:47Z",
-    "last_save_at": "2026-08-27T12:28:05.586Z",
+    "last_save_at": "2026-09-01T10:50:16.022Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -198,12 +198,13 @@
       "tasks.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:ae9d49936ce438bf0ad0cac2f15ded1e04b7a0a0bfc502ee9b5ff73b125cfebc",
+    "source_fingerprint": "sha256:1034fac26f3fbc6a845525f39b91b00ce639dab4b0eb3b1e1ba1e845e487a3ae",
+    "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "1c0ba476b622f55dfbc54607cd9ccb17d7f7c2937264eae6fca82f2f88cc8c5b",
-      "plan.md": "44191684ca6a08b722818cb550244bacc1e1d11cbbaa6aecaf48657aee307482",
-      "tasks.md": "afac02af9454802ed208ddb2c1743447fcc5b062954a20bd8eeb080e8234631f",
-      "implementation-summary.md": "89ec0712aaebf7345ef42cc3331f017a9f80e4d39297dc93f8f352b9e907eefb"
+      "spec.md": "83f535f002b83a07ea42f2773e4e6a9111663cb2a1d8db9014d67afddaa64d32",
+      "plan.md": "6d16e7ab3794c6e5c9037b08542a2e10d41394662fa6e3464fab02ef0d67f8c6",
+      "tasks.md": "ed7e61492329769a25ab9045ff3e6b1a7e39f74c55ab2e3a1d049c108feabc9c",
+      "implementation-summary.md": "56eaf85683d8bae92b0502846337dd5d0b1d4a7cc5c1bf6551969b6f07cbb610"
     },
     "last_active_child_id": null,
     "last_active_at": null

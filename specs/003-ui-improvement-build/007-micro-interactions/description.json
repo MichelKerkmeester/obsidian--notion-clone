@@ -1,5 +1,5 @@
 {
-  "specFolder": "public/003-ui-improvement-build/007-micro-interactions",
+  "specFolder": "003-ui-improvement-build/007-micro-interactions",
   "description": "While the Note Database plugin provides rich underlying database querying and calculations, its micro-interactions and tactile feedback surfaces",
   "keywords": [
     "while",

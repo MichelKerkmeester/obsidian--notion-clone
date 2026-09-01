@@ -9,7 +9,7 @@ importance_tier: "critical"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "public/006-list-view-clickup/004-mobile-and-live-verification"
+    packet_pointer: "006-list-view-clickup/004-mobile-and-live-verification"
     last_updated_at: "2026-08-30T00:00:00Z"
     last_updated_by: "phase-scaffold"
     recent_action: "Scaffolded phase 004; AC-26 recorded as unsubstitutable"
@@ -43,7 +43,7 @@ _memory:
 
 | Field | Value |
 |---|---|
-| **Spec Folder** | `specs/public/006-list-view-clickup/004-mobile-and-live-verification/` |
+| **Spec Folder** | `specs/006-list-view-clickup/004-mobile-and-live-verification/` |
 | **Parent Spec** | [`../spec.md`](../spec.md) |
 | **Predecessor** | [`../003-group-affordances-and-selection/spec.md`](../003-group-affordances-and-selection/spec.md) |
 | **Successor** | None — this is the last phase |

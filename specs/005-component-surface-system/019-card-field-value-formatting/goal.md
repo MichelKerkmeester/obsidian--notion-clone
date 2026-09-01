@@ -8,7 +8,7 @@ importance_tier: "critical"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "public/005-component-surface-system/019-card-field-value-formatting"
+    packet_pointer: "005-component-surface-system/019-card-field-value-formatting"
     last_updated_at: "2026-09-01T19:10:00Z"
     last_updated_by: "scope-exclusion-reconciliation"
     recent_action: "Scope exclusion reconciled; the parent sentence now names its surface"

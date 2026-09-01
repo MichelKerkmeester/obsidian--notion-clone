@@ -1,5 +1,5 @@
 ---
-title: "Resource Map — specs/public/005-component-surface-system"
+title: "Resource Map — specs/005-component-surface-system"
 description: "Auto-generated review resource map from convergence evidence."
 ---
 # Resource Map
@@ -68,11 +68,11 @@ description: "Auto-generated review resource map from convergence evidence."
 
 | Path | Action | Status | Note |
 |------|--------|--------|------|
-| specs/public/005-component-surface-system/000-surface-contract-and-truthful-harness/spec.md | Analyzed | MISSING | Findings P0=0 P1=1 P2=0; Iterations=1 |
-| specs/public/005-component-surface-system/004-checkbox-ownership/checklist.md | Analyzed | MISSING | Findings P0=0 P1=1 P2=0; Iterations=1 |
-| specs/public/005-component-surface-system/009-live-verification/implementation-summary.md | Analyzed | MISSING | Findings P0=0 P1=1 P2=0; Iterations=1 |
-| specs/public/005-component-surface-system/028-remaining-freezes/spec.md | Analyzed | MISSING | Findings P0=0 P1=0 P2=1; Iterations=1 |
-| specs/public/005-component-surface-system/spec.md | Analyzed | MISSING | Findings P0=0 P1=2 P2=4; Iterations=4 |
+| specs/005-component-surface-system/000-surface-contract-and-truthful-harness/spec.md | Analyzed | MISSING | Findings P0=0 P1=1 P2=0; Iterations=1 |
+| specs/005-component-surface-system/004-checkbox-ownership/checklist.md | Analyzed | MISSING | Findings P0=0 P1=1 P2=0; Iterations=1 |
+| specs/005-component-surface-system/009-live-verification/implementation-summary.md | Analyzed | MISSING | Findings P0=0 P1=1 P2=0; Iterations=1 |
+| specs/005-component-surface-system/028-remaining-freezes/spec.md | Analyzed | MISSING | Findings P0=0 P1=0 P2=1; Iterations=1 |
+| specs/005-component-surface-system/spec.md | Analyzed | MISSING | Findings P0=0 P1=2 P2=4; Iterations=4 |
 
 ---
 

@@ -1,6 +1,6 @@
 {
   "level": "1",
-  "specFolder": "public/001-note-db-notion-parity-build/006-link-scheme-fields/003-column-menu-scheme-picker",
+  "specFolder": "001-note-db-notion-parity-build/006-link-scheme-fields/003-column-menu-scheme-picker",
   "description": "Notion users pick URL / Email / Phone in the property-type menu",
   "keywords": [
     "notion",

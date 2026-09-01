@@ -1,5 +1,5 @@
 {
-  "specFolder": "public/003-ui-improvement-build/006-views-parity-polish",
+  "specFolder": "003-ui-improvement-build/006-views-parity-polish",
   "description": "While the Table view provides the tabular foundation for high-density record management, the Note Database plugin's non-table views (Board, Gallery,",
   "keywords": [
     "while",

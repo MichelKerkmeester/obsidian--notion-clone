@@ -1,6 +1,6 @@
 {
   "level": "2",
-  "specFolder": "public/005-component-surface-system/004-checkbox-ownership",
+  "specFolder": "005-component-surface-system/004-checkbox-ownership",
   "description": "The operator sees round checkboxes everywhere, and the previous fix was real",
   "keywords": [
     "operator",

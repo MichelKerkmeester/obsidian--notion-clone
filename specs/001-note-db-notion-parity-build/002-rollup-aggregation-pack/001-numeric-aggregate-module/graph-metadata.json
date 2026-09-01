@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "packet_id": "public/001-note-db-notion-parity-build/002-rollup-aggregation-pack/001-numeric-aggregate-module",
-  "spec_folder": "public/001-note-db-notion-parity-build/002-rollup-aggregation-pack/001-numeric-aggregate-module",
-  "parent_id": "public/001-note-db-notion-parity-build/002-rollup-aggregation-pack",
+  "packet_id": "001-note-db-notion-parity-build/002-rollup-aggregation-pack/001-numeric-aggregate-module",
+  "spec_folder": "001-note-db-notion-parity-build/002-rollup-aggregation-pack/001-numeric-aggregate-module",
+  "parent_id": "001-note-db-notion-parity-build/002-rollup-aggregation-pack",
   "children_ids": [],
   "manual": {
     "depends_on": [],
@@ -43,7 +43,11 @@
       "spec.md",
       "plan.md",
       "tasks.md",
-      "implementation-summary.md"
+      "implementation-summary.md",
+      "src/data/Aggregate.ts",
+      "src/__tests__/setup.ts",
+      "src/data/Aggregate.test.ts",
+      "src/data/types.ts"
     ],
     "entities": [
       {
@@ -68,6 +72,30 @@
         "name": "implementation-summary.md",
         "kind": "doc",
         "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "Aggregate.ts",
+        "kind": "code",
+        "path": "src/data/Aggregate.ts",
+        "source": "derived"
+      },
+      {
+        "name": "setup.ts",
+        "kind": "code",
+        "path": "src/__tests__/setup.ts",
+        "source": "derived"
+      },
+      {
+        "name": "Aggregate.test.ts",
+        "kind": "test",
+        "path": "src/data/Aggregate.test.ts",
+        "source": "derived"
+      },
+      {
+        "name": "types.ts",
+        "kind": "code",
+        "path": "src/data/types.ts",
         "source": "derived"
       },
       {
@@ -165,29 +193,11 @@
         "kind": "proper_noun",
         "path": "implementation-summary.md",
         "source": "derived"
-      },
-      {
-        "name": "Actual Effort",
-        "kind": "proper_noun",
-        "path": "implementation-summary.md",
-        "source": "derived"
-      },
-      {
-        "name": "What Was Built Shipped",
-        "kind": "proper_noun",
-        "path": "implementation-summary.md",
-        "source": "derived"
-      },
-      {
-        "name": "Files Changed",
-        "kind": "proper_noun",
-        "path": "implementation-summary.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "Rollup columns are stuck on `count | sum | avg | list` at `src/data/types.ts:44`",
     "created_at": "2026-08-25T18:58:57Z",
-    "last_save_at": "2026-08-27T12:27:55.392Z",
+    "last_save_at": "2026-09-01T10:50:15.663Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -196,12 +206,13 @@
       "tasks.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:2d1d2b1b83ad2a2f00af5d0297094831cce8b4b4f3a54327973088eb7b9973a5",
+    "source_fingerprint": "sha256:441accb369797e8fcb8d293e07175affddbd32076a8e69579fc6ba3e7e262dbb",
+    "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "b6920eb864d298d43dacfeead1d8406ce6e7f56fc4f3610192eef4fae2454748",
-      "plan.md": "c6bb1edee0f5ee9f596c7156a90c0c5c6ed7f9baea370a00fc38cdb0ef26644b",
-      "tasks.md": "5359e25eb9443106a29a2ab5da9761c90aa95587b4acef115e998106827451da",
-      "implementation-summary.md": "68783b83ffb0d8e358037440adcb5ac669559aa753d5e134f09df722738678c0"
+      "spec.md": "8873de18d16fc0fc0f12700c3ec5534682ee948504a3c00d30bdd4be47a1d78c",
+      "plan.md": "251c3d3faf001c8c07dbe5bb396ba77d158ad7922086ce6d6ef69ee1a7742f3d",
+      "tasks.md": "ef7229505e2c127821c458b0f431b5bb8978b368c2f6ac15ff3303e54a5aac02",
+      "implementation-summary.md": "aba13f43f38d53f09e948177e0fe5a742dbd039ffd4f18a0d98e1d30236e843b"
     },
     "last_active_child_id": null,
     "last_active_at": null

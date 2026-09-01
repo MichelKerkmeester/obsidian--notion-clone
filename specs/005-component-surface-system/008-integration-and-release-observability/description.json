@@ -1,6 +1,6 @@
 {
   "level": "3",
-  "specFolder": "public/005-component-surface-system/008-integration-and-release-observability",
+  "specFolder": "005-component-surface-system/008-integration-and-release-observability",
   "description": "Release 1.3.1 passed every gate and changed nothing",
   "keywords": [
     "release",

@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "packet_id": "public/001-note-db-notion-parity-build/014-record-detail-panel/003-title-open-affordance",
-  "spec_folder": "public/001-note-db-notion-parity-build/014-record-detail-panel/003-title-open-affordance",
-  "parent_id": "public/001-note-db-notion-parity-build/014-record-detail-panel",
+  "packet_id": "001-note-db-notion-parity-build/014-record-detail-panel/003-title-open-affordance",
+  "spec_folder": "001-note-db-notion-parity-build/014-record-detail-panel/003-title-open-affordance",
+  "parent_id": "001-note-db-notion-parity-build/014-record-detail-panel",
   "children_ids": [],
   "manual": {
     "depends_on": [],
@@ -184,7 +184,7 @@
     ],
     "causal_summary": "The title cell already navigates on click (`CellRenderer.ts:126-129` → `openNote`) and already feeds Page Preview via `markNoteHoverLink` (`CellRenderer.ts:124`; `HoverLinkPreview.ts:8-17`)",
     "created_at": "2026-08-25T21:14:47Z",
-    "last_save_at": "2026-08-27T12:28:05.814Z",
+    "last_save_at": "2026-09-01T10:50:16.028Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -193,12 +193,13 @@
       "tasks.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:89a99b10e2e55fcc7a5f0b13823e303454fa2600972d17293832a584cbd88bdb",
+    "source_fingerprint": "sha256:9cf68027addd4a819801a3e95a96178e34dfa57f52fefec247434985e223bdbf",
+    "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "34ad31a22cf3839ba3282724fd4b83c36279cd95d42ab632b84c892a3003ac18",
-      "plan.md": "78865c0519563c150de5f362423846ccf4063da95e0ef26fc07b77f8a46a19e8",
-      "tasks.md": "7c3df49f3e75fbb44e93f83303f47be3d0532c0925265e7e5b41cedd94808d2f",
-      "implementation-summary.md": "75bfbe8525b2ed6edff3d2a0a95b613f21c3659769ada829c54ea97a4e08d0e1"
+      "spec.md": "d135cbacf007c8349977acc28cd1e4dba003f29c40890af8f0174df76fc7b0a1",
+      "plan.md": "05f2481b2bda7ba04e84a4f70ece9a11152523d10733cf3955e8ed64eda93fcd",
+      "tasks.md": "cf029d58650d5a08a34618f1e963d7a14830ec1b51db4d005a12ed94f76d0dac",
+      "implementation-summary.md": "12af2266acc81cfc9a499d639737264600f5e982a594307e9452653116f2057a"
     },
     "last_active_child_id": null,
     "last_active_at": null

@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "packet_id": "public/005-component-surface-system/025-story-coverage-blindness",
-  "spec_folder": "public/005-component-surface-system/025-story-coverage-blindness",
-  "parent_id": "public/005-component-surface-system",
+  "packet_id": "005-component-surface-system/025-story-coverage-blindness",
+  "spec_folder": "005-component-surface-system/025-story-coverage-blindness",
+  "parent_id": "005-component-surface-system",
   "children_ids": [],
   "manual": {
     "depends_on": [],
@@ -201,7 +201,7 @@
     ],
     "causal_summary": "A gate lane's name is the only thing most readers ever check",
     "created_at": "2026-08-30T15:00:28.772Z",
-    "last_save_at": "2026-09-01T09:57:41.032Z",
+    "last_save_at": "2026-09-01T10:50:16.466Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -212,13 +212,13 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:a18922d25d268bce37e531912bad0cd30ae7f97c0c2f124ad1d84952952faa23",
+    "source_fingerprint": "sha256:303fd18e6efb7808c9a777c1a56e7ef4e03201404a6088a11941878fb8cd482b",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "dd05660d2f26bc9811fc3f228ff7bd2775af127a89b987fa503c0d83ece86538",
+      "spec.md": "25f003206dc02b583ea335aaf37af93eb3b3a0e272ce799946ed523cbf47dedb",
       "plan.md": "0c8658cd69033439ed1084720d77659118c2cecfc47d1a190e7b0be8237bac6c",
       "tasks.md": "875ddf0ac177d7c5e9f43c703bdcdf988a1fc3eb207636ccca71fe98a77b8572",
-      "implementation-summary.md": "8059bb0b0ff892a3112e9dac7d994fc519a02ce934b5a27c95a8a67587ebb3d0"
+      "implementation-summary.md": "8c01102a3770ebfce60fb5917366487e56edaf14d31195f22b431129b21bb12b"
     },
     "last_active_child_id": null,
     "last_active_at": null

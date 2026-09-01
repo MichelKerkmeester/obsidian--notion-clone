@@ -11,7 +11,7 @@ importance_tier: "high"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "public/001-note-db-notion-parity-build/012-files-column/003-files-cell-dispatch"
+    packet_pointer: "001-note-db-notion-parity-build/012-files-column/003-files-cell-dispatch"
     last_updated_at: "2026-08-27T12:27:53Z"
     last_updated_by: "phase-architect"
     recent_action: "Authored files CellRenderer dispatch child from synthesis ranks 4,9 and final-plan step 4"

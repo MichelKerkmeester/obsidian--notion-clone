@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "packet_id": "public/004-component-screenshot-system/004-coverage-expansion",
-  "spec_folder": "public/004-component-screenshot-system/004-coverage-expansion",
-  "parent_id": "public/004-component-screenshot-system",
+  "packet_id": "004-component-screenshot-system/004-coverage-expansion",
+  "spec_folder": "004-component-screenshot-system/004-coverage-expansion",
+  "parent_id": "004-component-screenshot-system",
   "children_ids": [],
   "migrated": true,
   "migration_source": "legacy",
@@ -46,8 +46,13 @@
       "spec.md",
       "plan.md",
       "tasks.md",
+      "implementation-summary.md",
       "checklist.md",
-      "implementation-summary.md"
+      "tools/screenshots/runtime-vars.css",
+      "tools/screenshots/scenarios.mjs",
+      "screenshots/README.md",
+      "tools/screenshots/capture.mjs",
+      "tools/screenshots/verify.mjs"
     ],
     "entities": [
       {
@@ -69,15 +74,45 @@
         "source": "derived"
       },
       {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
         "name": "checklist.md",
         "kind": "doc",
         "path": "checklist.md",
         "source": "derived"
       },
       {
-        "name": "implementation-summary.md",
+        "name": "runtime-vars.css",
+        "kind": "file",
+        "path": "tools/screenshots/runtime-vars.css",
+        "source": "derived"
+      },
+      {
+        "name": "scenarios.mjs",
+        "kind": "file",
+        "path": "tools/screenshots/scenarios.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "README.md",
         "kind": "doc",
-        "path": "implementation-summary.md",
+        "path": "screenshots/README.md",
+        "source": "derived"
+      },
+      {
+        "name": "capture.mjs",
+        "kind": "file",
+        "path": "tools/screenshots/capture.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "verify.mjs",
+        "kind": "file",
+        "path": "tools/screenshots/verify.mjs",
         "source": "derived"
       },
       {
@@ -163,57 +198,26 @@
         "kind": "proper_noun",
         "path": "tasks.md",
         "source": "derived"
-      },
-      {
-        "name": "Completion Criteria",
-        "kind": "proper_noun",
-        "path": "tasks.md",
-        "source": "derived"
-      },
-      {
-        "name": "Run Vitest",
-        "kind": "proper_noun",
-        "path": "tasks.md",
-        "source": "derived"
-      },
-      {
-        "name": "Quality Checklist",
-        "kind": "proper_noun",
-        "path": "checklist.md",
-        "source": "derived"
-      },
-      {
-        "name": "Verification Protocol",
-        "kind": "proper_noun",
-        "path": "checklist.md",
-        "source": "derived"
-      },
-      {
-        "name": "Completion Impact",
-        "kind": "proper_noun",
-        "path": "checklist.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "The screenshot system works and its coverage is partial",
     "created_at": "2026-08-28T00:00:00.000Z",
-    "last_save_at": "2026-08-28T13:53:19.516Z",
+    "last_save_at": "2026-09-01T10:50:16.237Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
       "spec.md",
       "plan.md",
       "tasks.md",
-      "checklist.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:1b622f66c9c005d431a38acbbc873b7a29df83c97a7c62c201e1225301973feb",
+    "source_fingerprint": "sha256:3027f6f56bf85a7f86e449eb0efc87854ef01eaeccd5e0f4560c67e823ccc681",
+    "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "b88d598d875168cefe7182b75327baa60a3b9143a735988f0b49b6fb6646ab05",
-      "plan.md": "335aca9d3ef4fb09b2fe7a993ce783b03c931220c5a25d696b4bc9997d8c65e8",
-      "tasks.md": "d6583c8e6606069b121274817d5b5d8d3f6b0c21d20ce5781b56447279acebff",
-      "checklist.md": "7badc9aedf49677d0408dba72d398bcf3534923e9ee6f2e688ba426f1a6f5017",
-      "implementation-summary.md": "3bdf899b2ca2a488d2c360b7589c7a71d556dbd1f0feb2e9f2104b8744d544de"
+      "spec.md": "d15caf8adfd2f55dd50975a315f16aad889e31abc264348848ad88882b56f989",
+      "plan.md": "d52da345edaba7c3afe58517d2543b79a9ccad97a03862eff650598f99a60bec",
+      "tasks.md": "39d583fe1d72176fda4dc9590c934d4afeaea2752edef96f40c21b40406fcf2f",
+      "implementation-summary.md": "f5c7ae5ade1649bad37ee0dc8eacaebf6860a3985d5dd21b052174183d18d04c"
     },
     "last_active_child_id": null,
     "last_active_at": null

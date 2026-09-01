@@ -11,7 +11,7 @@ importance_tier: "critical"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "public/005-component-surface-system/024-list-view-freeze"
+    packet_pointer: "005-component-surface-system/024-list-view-freeze"
     last_updated_at: "2026-08-30T19:10:41Z"
     last_updated_by: "criteria-reconciliation"
     recent_action: "Completion anchor reconciled: 4 of 6 criteria evidenced, bench and 5k apart"

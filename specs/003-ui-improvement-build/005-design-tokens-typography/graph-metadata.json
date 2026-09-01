@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "packet_id": "public/003-ui-improvement-build/005-design-tokens-typography",
-  "spec_folder": "public/003-ui-improvement-build/005-design-tokens-typography",
-  "parent_id": "public/003-ui-improvement-build",
+  "packet_id": "003-ui-improvement-build/005-design-tokens-typography",
+  "spec_folder": "003-ui-improvement-build/005-design-tokens-typography",
+  "parent_id": "003-ui-improvement-build",
   "children_ids": [],
   "manual": {
     "depends_on": [],
@@ -44,8 +44,11 @@
       "spec.md",
       "plan.md",
       "tasks.md",
+      "implementation-summary.md",
       "checklist.md",
-      "implementation-summary.md"
+      "specs/002-ui-improvement-research/research/synthesis.md",
+      "specs/002-ui-improvement-research/research/devin-gemini/iteration-05.md",
+      "specs/002-ui-improvement-research/research/codex-luna/iteration-05.md"
     ],
     "entities": [
       {
@@ -67,15 +70,27 @@
         "source": "derived"
       },
       {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
         "name": "checklist.md",
         "kind": "doc",
         "path": "checklist.md",
         "source": "derived"
       },
       {
-        "name": "implementation-summary.md",
+        "name": "synthesis.md",
         "kind": "doc",
-        "path": "implementation-summary.md",
+        "path": "specs/002-ui-improvement-research/research/synthesis.md",
+        "source": "derived"
+      },
+      {
+        "name": "iteration-05.md",
+        "kind": "doc",
+        "path": "specs/002-ui-improvement-research/research/devin-gemini/iteration-05.md",
         "source": "derived"
       },
       {
@@ -175,43 +190,30 @@
         "source": "derived"
       },
       {
-        "name": "Verification Checklist",
+        "name": "Implementation Summary",
         "kind": "proper_noun",
-        "path": "checklist.md",
-        "source": "derived"
-      },
-      {
-        "name": "Verification Protocol",
-        "kind": "proper_noun",
-        "path": "checklist.md",
-        "source": "derived"
-      },
-      {
-        "name": "Completion Impact",
-        "kind": "proper_noun",
-        "path": "checklist.md",
+        "path": "implementation-summary.md",
         "source": "derived"
       }
     ],
     "causal_summary": "The visual design system of the Note Database plugin forms the foundational aesthetic and structural substrate across all 7 view layouts (Table, Board, Gallery, List, Calendar, Timeline, Chart), modals, popovers, and drawers",
     "created_at": "2026-08-27T19:53:20.152Z",
-    "last_save_at": "2026-08-28T16:54:49.032Z",
+    "last_save_at": "2026-09-01T10:50:16.119Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
       "spec.md",
       "plan.md",
       "tasks.md",
-      "checklist.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:e039cc4b6599e6364a44426193dbca2229264b3ce267c17e7c5f924fe9b1c765",
+    "source_fingerprint": "sha256:6106759df8d3818d6dbed540b5b32b3567231e9fd8827046f82304fd52883f94",
+    "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "7849ad435deb6094562b8055ee31a034b4da45b2d94096b0eedb878786cc5791",
-      "plan.md": "297ebea382083e39145bfc811b152bfe3af6209c58926ace92b2d6df76fe85c4",
-      "tasks.md": "6be2b105972df3fc6c57f7a2383b3870ed949814a623db63c56daa669e6a13dc",
-      "checklist.md": "a641a7e7ec348e1695f2c9d592e64eed7da47a1284a43f9925edf43e80a5429a",
-      "implementation-summary.md": "e42fbfa03d8541be627970407abcb8a297d4f5bcd1ea47f49c51b91508cb0dbd"
+      "spec.md": "31b99c39a125d5ea5c41f8bc88a1e1bad9a1476d31f6f1a820a401e93a92dcb8",
+      "plan.md": "efa1546fce16cdc8875013b756c1afac703d17df4b552b25a767b51eb7e69d69",
+      "tasks.md": "bf9e9f10f7dbb3058bf431d192a70f6db8b57299e4cd1031dfde7783e3e58a08",
+      "implementation-summary.md": "a686d72314df62f92e72c3aa34e9b20aadb19173a8cd4475d70d1841ab329bc1"
     },
     "last_active_child_id": null,
     "last_active_at": null

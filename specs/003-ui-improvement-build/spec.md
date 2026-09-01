@@ -14,7 +14,7 @@ importance_tier: "high"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "public/003-ui-improvement-build"
+    packet_pointer: "003-ui-improvement-build"
     last_updated_at: "2026-08-27T00:00:00Z"
     last_updated_by: "phase-architect"
     recent_action: "Scaffolded eight UI build phases from the two-track research synthesis"

@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "packet_id": "public/005-component-surface-system/011-mobile-menu-presentation",
-  "spec_folder": "public/005-component-surface-system/011-mobile-menu-presentation",
-  "parent_id": "public/005-component-surface-system",
+  "packet_id": "005-component-surface-system/011-mobile-menu-presentation",
+  "spec_folder": "005-component-surface-system/011-mobile-menu-presentation",
+  "parent_id": "005-component-surface-system",
   "children_ids": [],
   "manual": {
     "depends_on": [],
@@ -202,7 +202,7 @@
     ],
     "causal_summary": "Present the plugin's owned menus as bottom sheets on a phone instead of desktop dropdowns that run off both edges of the screen.",
     "created_at": "2026-08-30T16:47:04.999Z",
-    "last_save_at": "2026-08-31T22:38:26.405Z",
+    "last_save_at": "2026-09-01T10:50:16.365Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -213,13 +213,13 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:8c829cb1f7e33453c900b0583d75d3714bb0f8c8bc109df621131141ea41e09d",
+    "source_fingerprint": "sha256:e6f9b77058cc06d09774be5ca1d427a4299d787d957ebbd99d20adccae7b7dad",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "571976eb115154acb81b7d60860102e2938146a731b139ea596d7c819a0dd054",
+      "spec.md": "a8e8b85023cc437be132e816426949ebbfa9c31a0bc4a62d3c67f1fd7406a1d1",
       "plan.md": "e7f660a8f746c8fbb23cbc0e9c5265b670989f78fad5b614be4bee99985683a7",
       "tasks.md": "1d1aca3f985f3c84a045e3edec0f77098359d3f74fd66c18a5453126d2d5d9fc",
-      "implementation-summary.md": "55bd4a218384412eb4a0b9627ff5318cfe5b8665453c2e5536e17787494732a7"
+      "implementation-summary.md": "4c8c8a8e220412459a10eb2fa45669f732794c8537489a10a4e2015d38682007"
     },
     "last_active_child_id": null,
     "last_active_at": null

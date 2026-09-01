@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "packet_id": "public/005-component-surface-system/014-desktop-select-checkbox",
-  "spec_folder": "public/005-component-surface-system/014-desktop-select-checkbox",
-  "parent_id": "public/005-component-surface-system",
+  "packet_id": "005-component-surface-system/014-desktop-select-checkbox",
+  "spec_folder": "005-component-surface-system/014-desktop-select-checkbox",
+  "parent_id": "005-component-surface-system",
   "children_ids": [],
   "manual": {
     "depends_on": [],
@@ -198,7 +198,7 @@
     ],
     "causal_summary": "Restore the select-column checkbox pin on desktop, lost when the shared checkbox component took ownership of appearance and the fallback guard switched off placement with it.",
     "created_at": "2026-08-30T16:46:48.681Z",
-    "last_save_at": "2026-09-01T10:27:07.368Z",
+    "last_save_at": "2026-09-01T10:50:16.389Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -209,13 +209,13 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:d0227a51f17672d3b76d8cd35641bdc9e0c43dc3e464f19de0ef32c351bf3bec",
+    "source_fingerprint": "sha256:3cc164710c4c7fa4a1737f1541a512e9e30e7dbbb47c2765d9c2d701cd855303",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "76d33f4d60c4024553ef1dc1a23096c76cfe4d2a451a5e70deafed97d7742905",
+      "spec.md": "708f62588f678cc482ca2c68dcc9d6e82ff155645ec8dadbb9ef627438626ff1",
       "plan.md": "778270545ef8876abdd74d420a3bbd73ff912bfa50bf8cd3b1b0a5bcd7339045",
       "tasks.md": "dc1b19cfe80d514c76c2c164dc2a6fbb55e3f3710e0eabca252a1ed21de706ba",
-      "implementation-summary.md": "a1d5af9bfe57c044828418a16a6f184dfe291009fa081bb7ce4c0b0587fa8cbe"
+      "implementation-summary.md": "c1dff380f6eb721c08def0f86984aecadae256abd6fa8c8311330acf2f5f9e4e"
     },
     "last_active_child_id": null,
     "last_active_at": null

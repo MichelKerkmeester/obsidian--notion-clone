@@ -9,7 +9,7 @@ importance_tier: "critical"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "public/005-component-surface-system/024-list-view-freeze"
+    packet_pointer: "005-component-surface-system/024-list-view-freeze"
     last_updated_at: "2026-08-30T18:45:00Z"
     last_updated_by: "docs-remediation"
     recent_action: "Authored plan.md retroactively from spec.md, AC and commit 31dce9aa"

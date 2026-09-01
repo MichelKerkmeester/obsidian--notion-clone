@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "packet_id": "/Users/michelkerkmeester/MEGA/Development/Obsidian Plugin/specs/public/003-ui-improvement-build/019-row-geometry",
-  "spec_folder": "/Users/michelkerkmeester/MEGA/Development/Obsidian Plugin/specs/public/003-ui-improvement-build/019-row-geometry",
-  "parent_id": null,
+  "packet_id": "003-ui-improvement-build/019-row-geometry",
+  "spec_folder": "003-ui-improvement-build/019-row-geometry",
+  "parent_id": "003-ui-improvement-build",
   "children_ids": [],
   "manual": {
     "depends_on": [],
@@ -11,29 +11,154 @@
   },
   "derived": {
     "trigger_phrases": [
-      "bounded wrapping and a shared density contract"
+      "bounded wrapping and a shared density contract",
+      "019 row geometry",
+      "019 row geometry plan",
+      "019 row geometry tasks"
     ],
     "key_topics": [
-      "13",
-      "14"
+      "bounded",
+      "wrapping",
+      "shared",
+      "density",
+      "contract",
+      "row",
+      "geometry",
+      "plan",
+      "tasks",
+      "rows",
+      "ragged",
+      "because"
     ],
-    "importance_tier": "important",
+    "importance_tier": "high",
     "status": "planned",
     "key_files": [
       "spec.md",
       "plan.md",
       "tasks.md"
     ],
-    "entities": [],
-    "causal_summary": "Phase 019: Bounded Wrapping and a Shared Density Contract",
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Bounded Wrapping",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Shared Density Contract",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Spec Folder",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Problem Statement Rows",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Purpose Bound",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Plan",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "those",
+        "kind": "key_phrase",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "no",
+        "kind": "key_phrase",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "1. SUMMARY",
+        "kind": "heading",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Breakdown",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "read",
+        "kind": "key_phrase",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "evidence",
+        "kind": "key_phrase",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "wrap",
+        "kind": "key_phrase",
+        "path": "tasks.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "Rows are ragged, but not because a row-height model is missing",
     "created_at": "2026-08-29T07:00:00Z",
-    "last_save_at": "2026-08-29T07:00:00Z",
+    "last_save_at": "2026-09-01T10:50:16.205Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
       "spec.md",
       "plan.md",
       "tasks.md"
-    ]
+    ],
+    "source_fingerprint": "sha256:fcb350ff5c764c1330cbce0431b32a25373cec6b95c92091ed4292df94aa055b",
+    "source_fingerprint_docset": 3,
+    "source_doc_hashes": {
+      "spec.md": "be6af977229febec7ffdb4225a5c5a664676c9ff38532246ea5fc9d37c3f3880",
+      "plan.md": "7b3f53a3814b4177f6a486fc719c30d20ba698774d761720258060b79cc62e04",
+      "tasks.md": "937d859bf91d037779de2206b6d6ee0ce1a114f27dd5f2032ef3f76d54723d66"
+    },
+    "last_active_child_id": null,
+    "last_active_at": null
   }
 }

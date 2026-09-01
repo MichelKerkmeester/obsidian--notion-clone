@@ -2,7 +2,7 @@
 
 Track: `devin-gemini` (Gemini 3.7 Flash High)  
 Focus Area: Anytype UI/UX patterns worth adopting (object-oriented UI, sidebar, blocks, sets/collections).  
-Target Artifact: `specs/public/002-ui-improvement-research/research/devin-gemini/iteration-06.md`  
+Target Artifact: `specs/002-ui-improvement-research/research/devin-gemini/iteration-06.md`  
 
 ---
 

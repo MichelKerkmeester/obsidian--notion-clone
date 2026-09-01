@@ -8,7 +8,7 @@ importance_tier: "high"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "public/001-note-db-notion-parity-build/001-live-reports-rollups/004-sum-rollups"
+    packet_pointer: "001-note-db-notion-parity-build/001-live-reports-rollups/004-sum-rollups"
     last_updated_at: "2026-08-27T12:27:53Z"
     last_updated_by: "phase-architect"
     recent_action: "Authored SUM child from synthesis rank 2 remainder and final-plan step 8"

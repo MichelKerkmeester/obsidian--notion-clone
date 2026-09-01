@@ -8,7 +8,7 @@ importance_tier: "critical"
 contextType: "general"
 _memory:
   continuity:
-    packet_pointer: "public/005-component-surface-system/011-mobile-menu-presentation"
+    packet_pointer: "005-component-surface-system/011-mobile-menu-presentation"
     last_updated_at: "2026-08-30T07:12:00Z"
     last_updated_by: "phase-author"
     recent_action: "Menu path routed to the sheet branch; utilities rows moved to the shared component"

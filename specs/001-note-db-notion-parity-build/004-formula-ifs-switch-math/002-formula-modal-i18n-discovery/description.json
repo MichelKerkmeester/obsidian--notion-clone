@@ -1,6 +1,6 @@
 {
   "level": "1",
-  "specFolder": "public/001-note-db-notion-parity-build/004-formula-ifs-switch-math/002-formula-modal-i18n-discovery",
+  "specFolder": "001-note-db-notion-parity-build/004-formula-ifs-switch-math/002-formula-modal-i18n-discovery",
   "description": "Even after child 001 evaluates, the editor's own registry drives autocomplete, `NAME(` highlighting, and help",
   "keywords": [
     "even",

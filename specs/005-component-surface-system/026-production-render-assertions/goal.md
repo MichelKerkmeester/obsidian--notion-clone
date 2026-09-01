@@ -8,7 +8,7 @@ importance_tier: "critical"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "public/005-component-surface-system/026-production-render-assertions"
+    packet_pointer: "005-component-surface-system/026-production-render-assertions"
     last_updated_at: "2026-08-31T08:20:00Z"
     last_updated_by: "renderer-coverage-extension"
     recent_action: "Coverage 2 to 6 of 22; the added timeline scenario caught a live quadratic at 964 reads"

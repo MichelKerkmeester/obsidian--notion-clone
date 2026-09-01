@@ -13,7 +13,7 @@ importance_tier: "high"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "public/001-note-db-notion-parity-build/008-derived-inverse-relations"
+    packet_pointer: "001-note-db-notion-parity-build/008-derived-inverse-relations"
     last_updated_at: "2026-08-27T12:25:50Z"
     last_updated_by: "markdown-agent"
     recent_action: "Compacted continuity fields after final-plan findings applied to docs"
@@ -62,7 +62,7 @@ Effort tiers: **S** ≈ ≤2h, **M** ≈ ~8h total phase, **L** ≈ multi-phase 
 <!-- ANCHOR:phase-1 -->
 ## Phase 1: Setup
 
-- [ ] T001 Confirm the forward relation scan is readable in the fork (`RelationRollup.ts:24-88`); packet `001-live-reports-rollups` need **not** be complete — it is vault YAML only ("no new `src/` module, no fork TypeScript"), so there is **no code dependency**. For manual proof only, confirm at least one Expense `Month` wikilink exists in the vault. (`specs/public/001-note-db-notion-parity-build/001-live-reports-rollups/`) [S] -- DEFERRED: source scan exists, but no vault fixture/manual wikilink proof is present in the repository
+- [ ] T001 Confirm the forward relation scan is readable in the fork (`RelationRollup.ts:24-88`); packet `001-live-reports-rollups` need **not** be complete — it is vault YAML only ("no new `src/` module, no fork TypeScript"), so there is **no code dependency**. For manual proof only, confirm at least one Expense `Month` wikilink exists in the vault. (`specs/001-note-db-notion-parity-build/001-live-reports-rollups/`) [S] -- DEFERRED: source scan exists, but no vault fixture/manual wikilink proof is present in the repository
 - [x] T002 Read the confirmed scan/export/refresh contracts before coding: `RelationRollup.ts:10-16,18-22,28-32,36,50-56,69-75,92-129`; `RelationLinks.ts:1-31`; `DataSource.ts:89,99-120,229-232,288-296`; `types.ts:34-45,69`; `DatabaseView.ts:2101-2140,3348-3401`; `EmbeddedDatabaseRenderer.ts:3190-3221` (research-confirmed in `research/synthesis.md`; do not assume) [S] -- done during build
 - [x] T003 Resolve operator decisions (spec §10 open questions 1–7): SC-002 surface, inverse resolution rule, chip window N, label, sort order, verification-harness bootstrap (shared with 007), `syncWrites` OFF [S] -- done during build
 
@@ -115,7 +115,7 @@ Tasks follow the final build plan (`research/final-plan.md`): items 1–2, 7–8
 - [ ] T017 On mobile-safe APIs only (`metadataCache.getFirstLinkpathDest`, `workspace.openLinkText`, `setIcon`, DOM `createDiv`/`createEl`; no `electron` / `node:` / `fs`), confirm a Report lists inbound Expenses from stored `Month` wikilinks with no second file dirtying; empty `Month` → 0/`[]` and hide-when-empty is automatic (`emptyRollupValue`); dangling wikilink omitted. Grep the diff for `electron` / `node:` / `fs` / telemetry. (fork running in Obsidian) [S] -- DEFERRED: no Obsidian runtime proof was produced; source grep alone is insufficient
 
 ### Documentation
-- [x] T018 Record observed evidence in `checklist.md` and `implementation-summary.md` after commands pass (`specs/public/001-note-db-notion-parity-build/008-derived-inverse-relations/checklist.md`) [S] -- checklist.md:60-65,92-103; implementation-summary.md:76-83
+- [x] T018 Record observed evidence in `checklist.md` and `implementation-summary.md` after commands pass (`specs/001-note-db-notion-parity-build/008-derived-inverse-relations/checklist.md`) [S] -- checklist.md:60-65,92-103; implementation-summary.md:76-83
 
 <!-- /ANCHOR:phase-3 -->
 ---
@@ -125,7 +125,7 @@ Tasks follow the final build plan (`research/final-plan.md`): items 1–2, 7–8
 
 - [x] All non-deferred tasks marked `[x]`. -- task status reconciliation leaves only documented proof gaps and backlog deferrals
 - [x] No `[B]` blocked tasks remaining except the explicitly deferred T006, T008, T019–T021 (operator-approved deferral: chip helper, chip window, record-page section, table badge, `syncWrites` ON). -- no unexpected blocked entries remain
-- [x] Strict validation passed: `bash .opencode/skills/system-spec-kit/scripts/spec/validate.sh specs/public/001-note-db-notion-parity-build/008-derived-inverse-relations --strict` → `Summary: Errors: 0  Warnings: 0`. -- validator exit 0
+- [x] Strict validation passed: `bash .opencode/skills/system-spec-kit/scripts/spec/validate.sh specs/001-note-db-notion-parity-build/008-derived-inverse-relations --strict` → `Summary: Errors: 0  Warnings: 0`. -- validator exit 0
 - [ ] Checklist.md fully verified. -- DEFERRED: checklist contains pending evidence rows and cannot be edited in this dispatch
 
 <!-- /ANCHOR:completion -->

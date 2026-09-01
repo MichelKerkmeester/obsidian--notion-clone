@@ -1,6 +1,6 @@
 {
   "level": "1",
-  "specFolder": "public/001-note-db-notion-parity-build/001-live-reports-rollups/002-display-only-amount-types",
+  "specFolder": "001-note-db-notion-parity-build/001-live-reports-rollups/002-display-only-amount-types",
   "description": "The fork defaults to display-only (`ComputedSync.ts:3`; load-time coerce at `DataSource.ts:787`), but leaving the view-config UI on `automatic` would",
   "keywords": [
     "fork",

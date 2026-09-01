@@ -1,6 +1,6 @@
 {
   "level": "2",
-  "specFolder": "public/001-note-db-notion-parity-build/007-unique-id-stamp",
+  "specFolder": "001-note-db-notion-parity-build/007-unique-id-stamp",
   "description": "The note-database fork creates rows through `planCreateEntry` in `src/data/CreateEntryPlan.ts` and writes frontmatter, but it never allocates a",
   "keywords": [
     "note-database",

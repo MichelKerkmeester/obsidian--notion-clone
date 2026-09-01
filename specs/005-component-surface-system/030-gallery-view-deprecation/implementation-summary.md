@@ -8,7 +8,7 @@ importance_tier: "critical"
 contextType: "implementation"
 _memory:
   continuity:
-    packet_pointer: "public/005-component-surface-system/030-gallery-view-deprecation"
+    packet_pointer: "005-component-surface-system/030-gallery-view-deprecation"
     last_updated_at: "2026-09-01T03:20:00Z"
     last_updated_by: "phase-implementer"
     recent_action: "Importer stops minting galleries; existing ones migrate to board on open with an undo"

@@ -16,7 +16,7 @@ importance_tier: "high"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "public/003-ui-improvement-build/002-table-grid-experience"
+    packet_pointer: "003-ui-improvement-build/002-table-grid-experience"
     last_updated_at: "2026-08-28T04:30:57Z"
     last_updated_by: "phase-author"
     recent_action: "Reconciled table and grid experience feature specification"
@@ -297,9 +297,9 @@ All implementation choices follow the research synthesis recommendations; no ope
 
 - **Parent Spec**: [`../spec.md`](../spec.md)
 - **Predecessor Spec**: [`../001-empty-and-first-run-states/spec.md`](../001-empty-and-first-run-states/spec.md)
-- **Research Synthesis**: `specs/public/002-ui-improvement-research/research/synthesis.md`
-- **Research Iteration 02 (Devin Track)**: `specs/public/002-ui-improvement-research/research/devin-gemini/iteration-02.md`
-- **Research Iteration 02 (Codex Track)**: `specs/public/002-ui-improvement-research/research/codex-luna/iteration-02.md`
+- **Research Synthesis**: `specs/002-ui-improvement-research/research/synthesis.md`
+- **Research Iteration 02 (Devin Track)**: `specs/002-ui-improvement-research/research/devin-gemini/iteration-02.md`
+- **Research Iteration 02 (Codex Track)**: `specs/002-ui-improvement-research/research/codex-luna/iteration-02.md`
 - **Implementation Plan**: See `plan.md`
 - **Task Breakdown**: See `tasks.md`
 - **Verification Checklist**: See `checklist.md`

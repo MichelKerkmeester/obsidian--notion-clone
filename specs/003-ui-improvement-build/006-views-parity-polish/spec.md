@@ -16,7 +16,7 @@ importance_tier: "high"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "public/003-ui-improvement-build/006-views-parity-polish"
+    packet_pointer: "003-ui-improvement-build/006-views-parity-polish"
     last_updated_at: "2026-08-28T04:30:57Z"
     last_updated_by: "phase-author"
     recent_action: "Reconciled views parity and polish feature specification"
@@ -303,10 +303,10 @@ All implementation choices follow the research synthesis recommendations; no ope
 
 - **Parent Spec**: [`../spec.md`](../spec.md)
 - **Predecessor Spec**: [`../005-design-tokens-typography/spec.md`](../005-design-tokens-typography/spec.md)
-- **Research Synthesis**: `specs/public/002-ui-improvement-research/research/synthesis.md`
-- **Research Iteration 06 (Devin Track)**: `specs/public/002-ui-improvement-research/research/devin-gemini/iteration-06.md`
-- **Research Iteration 08 (Devin Track)**: `specs/public/002-ui-improvement-research/research/devin-gemini/iteration-08.md`
-- **Research Iteration 08 (Codex Track)**: `specs/public/002-ui-improvement-research/research/codex-luna/iteration-08.md`
+- **Research Synthesis**: `specs/002-ui-improvement-research/research/synthesis.md`
+- **Research Iteration 06 (Devin Track)**: `specs/002-ui-improvement-research/research/devin-gemini/iteration-06.md`
+- **Research Iteration 08 (Devin Track)**: `specs/002-ui-improvement-research/research/devin-gemini/iteration-08.md`
+- **Research Iteration 08 (Codex Track)**: `specs/002-ui-improvement-research/research/codex-luna/iteration-08.md`
 - **Implementation Plan**: See `plan.md`
 - **Task Breakdown**: See `tasks.md`
 - **Verification Checklist**: See `checklist.md`

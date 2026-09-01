@@ -1,6 +1,6 @@
 {
   "level": "1",
-  "specFolder": "public/001-note-db-notion-parity-build/005-formula-let-variables/001-let-variables-module",
+  "specFolder": "001-note-db-notion-parity-build/005-formula-let-variables/001-let-variables-module",
   "description": "Notion formulas bind per-row names with `let`/`lets` (`let(person, \"Alan\", \"Hello, \" + person + \"!\")` = `\"Hello, Alan!\"`)",
   "keywords": [
     "notion",

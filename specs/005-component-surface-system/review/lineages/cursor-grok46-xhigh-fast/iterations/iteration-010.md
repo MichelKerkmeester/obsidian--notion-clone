@@ -4,10 +4,10 @@
 maintainability
 
 ## Files Reviewed
-- `specs/public/005-component-surface-system/027-sheet-menu-grammar-and-motion/spec.md:18`
-- `specs/public/005-component-surface-system/spec.md:132`
-- `specs/public/005-component-surface-system/roadmap.md:368`
-- `specs/public/005-component-surface-system/004-checkbox-ownership/spec.md:61`
+- `specs/005-component-surface-system/027-sheet-menu-grammar-and-motion/spec.md:18`
+- `specs/005-component-surface-system/spec.md:132`
+- `specs/005-component-surface-system/roadmap.md:368`
+- `specs/005-component-surface-system/004-checkbox-ownership/spec.md:61`
 - `src/views/popover-position.ts:177`
 
 ## Findings by Severity
@@ -19,7 +19,7 @@ None this iteration.
 None this iteration.
 
 ### P2, Suggestion
-- **F014**: Parent still labels 004 Contested after roadmap 7.1 resolved it — `specs/public/005-component-surface-system/spec.md:132` — Roadmap 7.1 settled the three-source fight; 004 spec status is In progress. Parent map row still says Contested.
+- **F014**: Parent still labels 004 Contested after roadmap 7.1 resolved it — `specs/005-component-surface-system/spec.md:132` — Roadmap 7.1 settled the three-source fight; 004 spec status is In progress. Parent map row still says Contested.
 - **F015**: popover-position still documents openSurface.place() after the factory was deleted — `src/views/popover-position.ts:177` — Comment says hiding is the same answer openSurface's own place() already gives. openSurface does not exist in src/.
 
 ## Traceability Checks

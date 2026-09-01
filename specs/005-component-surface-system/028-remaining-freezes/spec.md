@@ -12,7 +12,7 @@ importance_tier: "critical"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "public/005-component-surface-system/028-remaining-freezes"
+    packet_pointer: "005-component-surface-system/028-remaining-freezes"
     last_updated_at: "2026-08-30T21:20:00Z"
     last_updated_by: "goal-reconcile"
     completion_pct: 67

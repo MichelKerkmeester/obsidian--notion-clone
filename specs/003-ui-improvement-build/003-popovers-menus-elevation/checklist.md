@@ -11,7 +11,7 @@ importance_tier: "high"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "public/003-ui-improvement-build/003-popovers-menus-elevation"
+    packet_pointer: "003-ui-improvement-build/003-popovers-menus-elevation"
     last_updated_at: "2026-08-28T04:30:57Z"
     last_updated_by: "phase-author"
     recent_action: "Verified popovers and menus checklist gates"
@@ -53,9 +53,9 @@ _memory:
 <!-- ANCHOR:pre-impl -->
 ## Pre-Implementation
 
-- [x] CHK-001 [P0] Requirements documented and traceable in spec.md (REQ-001 through REQ-014) [EVIDENCE: specs/public/003-ui-improvement-build/003-popovers-menus-elevation/spec.md:50-250 REQ-001 through REQ-014]
+- [x] CHK-001 [P0] Requirements documented and traceable in spec.md (REQ-001 through REQ-014) [EVIDENCE: specs/003-ui-improvement-build/003-popovers-menus-elevation/spec.md:50-250 REQ-001 through REQ-014]
   - **Evidence**: Requirements and acceptance criteria documented in `spec.md:50-250`.
-- [x] CHK-002 [P0] Technical architecture defined in plan.md with verified call-site citations [EVIDENCE: specs/public/003-ui-improvement-build/003-popovers-menus-elevation/plan.md:50-200 technical architecture and call-site citations]
+- [x] CHK-002 [P0] Technical architecture defined in plan.md with verified call-site citations [EVIDENCE: specs/003-ui-improvement-build/003-popovers-menus-elevation/plan.md:50-200 technical architecture and call-site citations]
   - **Evidence**: `plan.md:50-200` defines OverlayStack, positioning, keyboard, and CSS sequencing.
 - [x] CHK-003 [P1] Dependencies identified and available in codebase (`KeyboardUtils.ts`, `OverlayStack.ts`) [EVIDENCE: src/data/KeyboardUtils.ts:1-16; src/views/OverlayStack.ts:1-120]
   - **Evidence**: Existing `isImeComposing` helper in `src/data/KeyboardUtils.ts:1-16` and `src/views/OverlayStack.ts:1-120` are available.
@@ -130,7 +130,7 @@ _memory:
 <!-- ANCHOR:docs -->
 ## Documentation
 
-- [x] CHK-040 [P1] Spec, plan, tasks, and checklist synchronized [EVIDENCE: specs/public/003-ui-improvement-build/003-popovers-menus-elevation/spec.md:50-250; tasks.md:50-100]
+- [x] CHK-040 [P1] Spec, plan, tasks, and checklist synchronized [EVIDENCE: specs/003-ui-improvement-build/003-popovers-menus-elevation/spec.md:50-250; tasks.md:50-100]
   - **Evidence**: Completed implementation tasks, added test-file scope, and verification evidence are recorded in `spec.md:50-250`.
 - [x] CHK-041 [P1] Code comments adequate (durable WHY only) [EVIDENCE: src/views/OverlayStack.ts:32-36; src/views/PopoverAutoClose.ts:15-18]
   - **Evidence**: Comments explain durable interaction constraints in `src/views/OverlayStack.ts:32-36` and `src/views/PopoverAutoClose.ts:15-18`.

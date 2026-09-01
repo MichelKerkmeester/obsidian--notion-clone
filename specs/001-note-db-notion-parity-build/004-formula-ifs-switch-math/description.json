@@ -1,6 +1,6 @@
 {
   "level": "2",
-  "specFolder": "public/001-note-db-notion-parity-build/004-formula-ifs-switch-math",
+  "specFolder": "001-note-db-notion-parity-build/004-formula-ifs-switch-math",
   "description": "The note database fork's native Excel-style formula engine already evaluates `IF`, exposes `Math` on the sandbox eval scope",
   "keywords": [
     "note",

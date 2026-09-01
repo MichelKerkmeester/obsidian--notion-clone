@@ -1,5 +1,5 @@
 {
-  "specFolder": "public/003-ui-improvement-build/008-mobile-and-accessibility",
+  "specFolder": "003-ui-improvement-build/008-mobile-and-accessibility",
   "description": "While the Note Database plugin provides rich underlying database calculation and querying capabilities, its mobile ergonomics, touch responsiveness,",
   "keywords": [
     "while",

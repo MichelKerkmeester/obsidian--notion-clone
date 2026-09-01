@@ -18,7 +18,7 @@ importance_tier: "high"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "public/003-ui-improvement-build/003-popovers-menus-elevation"
+    packet_pointer: "003-ui-improvement-build/003-popovers-menus-elevation"
     last_updated_at: "2026-08-28T04:30:57Z"
     last_updated_by: "phase-author"
     recent_action: "Reconciled popovers and menus feature specification"
@@ -288,9 +288,9 @@ All implementation choices follow the research synthesis recommendations; no ope
 
 - **Parent Spec**: [`../spec.md`](../spec.md)
 - **Predecessor Spec**: [`../002-table-grid-experience/spec.md`](../002-table-grid-experience/spec.md)
-- **Research Synthesis**: `specs/public/002-ui-improvement-research/research/synthesis.md`
-- **Research Iteration 03 (Devin Track)**: `specs/public/002-ui-improvement-research/research/devin-gemini/iteration-03.md`
-- **Research Iteration 03 (Codex Track)**: `specs/public/002-ui-improvement-research/research/codex-luna/iteration-03.md`
+- **Research Synthesis**: `specs/002-ui-improvement-research/research/synthesis.md`
+- **Research Iteration 03 (Devin Track)**: `specs/002-ui-improvement-research/research/devin-gemini/iteration-03.md`
+- **Research Iteration 03 (Codex Track)**: `specs/002-ui-improvement-research/research/codex-luna/iteration-03.md`
 - **Implementation Plan**: See `plan.md`
 - **Task Breakdown**: See `tasks.md`
 - **Verification Checklist**: See `checklist.md`

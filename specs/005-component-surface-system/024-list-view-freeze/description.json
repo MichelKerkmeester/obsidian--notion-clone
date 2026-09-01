@@ -1,6 +1,6 @@
 {
   "level": "1",
-  "specFolder": "public/005-component-surface-system/024-list-view-freeze",
+  "specFolder": "005-component-surface-system/024-list-view-freeze",
   "description": "The operator, on a shipped build: \"opening list view bugs out obsidian freezes and you cant do",
   "keywords": [
     "operator",

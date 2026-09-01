@@ -1,14 +1,19 @@
 {
   "schema_version": 1,
-  "packet_id": "public/001-note-db-notion-parity-build/011-table-multi-group",
-  "spec_folder": "public/001-note-db-notion-parity-build/011-table-multi-group",
-  "parent_id": "public/001-note-db-notion-parity-build",
+  "packet_id": "001-note-db-notion-parity-build/011-table-multi-group",
+  "spec_folder": "001-note-db-notion-parity-build/011-table-multi-group",
+  "parent_id": "001-note-db-notion-parity-build",
   "children_ids": [
     "public/001-note-db-notion-parity-build/011-table-multi-group/001-multifield-grouping-module",
     "public/001-note-db-notion-parity-build/011-table-multi-group/002-grouped-table-flatten",
     "public/001-note-db-notion-parity-build/011-table-multi-group/003-embedded-table-grouping",
     "public/001-note-db-notion-parity-build/011-table-multi-group/004-table-subgroup-picker",
-    "public/001-note-db-notion-parity-build/011-table-multi-group/005-multigroup-display-proof"
+    "public/001-note-db-notion-parity-build/011-table-multi-group/005-multigroup-display-proof",
+    "001-note-db-notion-parity-build/011-table-multi-group/001-multifield-grouping-module",
+    "001-note-db-notion-parity-build/011-table-multi-group/002-grouped-table-flatten",
+    "001-note-db-notion-parity-build/011-table-multi-group/003-embedded-table-grouping",
+    "001-note-db-notion-parity-build/011-table-multi-group/004-table-subgroup-picker",
+    "001-note-db-notion-parity-build/011-table-multi-group/005-multigroup-display-proof"
   ],
   "manual": {
     "depends_on": [],
@@ -50,11 +55,12 @@
       "spec.md",
       "plan.md",
       "tasks.md",
-      "checklist.md",
       "implementation-summary.md",
+      "research/research.md",
+      "checklist.md",
       "research/sonnet-verification.md",
-      "research/synthesis.md",
-      "research/research.md"
+      "src/data/types.ts",
+      "research/synthesis.md"
     ],
     "entities": [
       {
@@ -76,15 +82,21 @@
         "source": "derived"
       },
       {
-        "name": "checklist.md",
-        "kind": "doc",
-        "path": "checklist.md",
-        "source": "derived"
-      },
-      {
         "name": "implementation-summary.md",
         "kind": "doc",
         "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "research.md",
+        "kind": "doc",
+        "path": "research/research.md",
+        "source": "derived"
+      },
+      {
+        "name": "checklist.md",
+        "kind": "doc",
+        "path": "checklist.md",
         "source": "derived"
       },
       {
@@ -94,15 +106,15 @@
         "source": "derived"
       },
       {
-        "name": "synthesis.md",
-        "kind": "doc",
-        "path": "research/synthesis.md",
+        "name": "types.ts",
+        "kind": "code",
+        "path": "src/data/types.ts",
         "source": "derived"
       },
       {
-        "name": "research.md",
+        "name": "synthesis.md",
         "kind": "doc",
-        "path": "research/research.md",
+        "path": "research/synthesis.md",
         "source": "derived"
       },
       {
@@ -194,37 +206,30 @@
         "kind": "proper_noun",
         "path": "tasks.md",
         "source": "derived"
-      },
-      {
-        "name": "Verification Checklist",
-        "kind": "proper_noun",
-        "path": "checklist.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "TABLE views in the note-database fork group rows by a single string (`groupByField`) only, while Notion's current View settings expose Group + Sub-group (exactly two levels) and the fork already ships the 2-level algorithm on the board (`applyBoardSubgroups` / `getBoardSubgroups`)",
     "created_at": "2026-08-24T17:58:47.637Z",
-    "last_save_at": "2026-08-28T10:56:22.557Z",
+    "last_save_at": "2026-09-01T10:50:15.908Z",
     "save_lineage": "same_pass",
     "last_accessed_at": null,
     "source_docs": [
       "spec.md",
       "plan.md",
       "tasks.md",
-      "checklist.md",
       "implementation-summary.md",
       "research/research.md"
     ],
-    "source_fingerprint": "sha256:1f062d065d30714fa60a6e67c0e81b37e8e258e6b964a34a91e17ae6c7d4f5d4",
+    "source_fingerprint": "sha256:e42c342dd0846d839cf0da86bfbbb9d991507b9a465b86a246cd9709708660e3",
+    "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "980841ccbb59f20cf49d650a89002aa823eeeefc30b01ec09929992ee0d060bd",
-      "plan.md": "4698b9c32d3af1a5d2230188e36ccb844e9ac3444ce2e62dd9068b4e2a894dcc",
-      "tasks.md": "a4e22e9d03aeb2c482a82c990b5733fcf94093af1d432bef4bb72268fe9e46fe",
-      "checklist.md": "48bf498b2e6c3cc9ed82a7f992f66856c3eb65e672dbad9a455996c019a8a85f",
-      "implementation-summary.md": "c72986038ddcb7520d61475c288675acf9bedb382b8273d4c2514004c1474cd3",
+      "spec.md": "0ceb6f4f96e413419f2eaaf2a310971d71f2f05180182a90a9137a92594dc246",
+      "plan.md": "81d02831312d095dac3587d6fd307db4af5d7faa8c54da1b760af6000be2e040",
+      "tasks.md": "f7365c349b04812d8cb3fe874b876ac2a123ec94eb29abd914dc4e569710f9e4",
+      "implementation-summary.md": "3e6e5e7a6659ebc08e000bb02635ed131cd2de30a5c5c29eb2438e889cc2f0fe",
       "research/research.md": "4f89a3363c26e5c7453fc0a5cc5d9acbcde271e2b3e0d1128516a7500c911a83"
     },
-    "last_active_child_id": "public/001-note-db-notion-parity-build/011-table-multi-group/005-multigroup-display-proof",
+    "last_active_child_id": "001-note-db-notion-parity-build/011-table-multi-group/005-multigroup-display-proof",
     "last_active_at": null
   }
 }

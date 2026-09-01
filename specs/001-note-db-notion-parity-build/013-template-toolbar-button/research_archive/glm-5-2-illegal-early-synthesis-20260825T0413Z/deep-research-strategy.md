@@ -1,6 +1,6 @@
 # Deep Research Strategy: Toolbar New-From-Template Button
 
-> Spec: `specs/public/001-note-db-notion-parity-build/013-template-toolbar-button`
+> Spec: `specs/001-note-db-notion-parity-build/013-template-toolbar-button`
 > Lineage: `glm-5-2` · Session: `fanout-glm-5-2-1787630131864-cpa84y` · Mode: new
 
 ## Research Topic

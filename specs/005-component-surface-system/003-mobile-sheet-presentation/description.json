@@ -1,6 +1,6 @@
 {
   "level": "3",
-  "specFolder": "public/005-component-surface-system/003-mobile-sheet-presentation",
+  "specFolder": "005-component-surface-system/003-mobile-sheet-presentation",
   "description": "The sheet starts above the Obsidian bottom navigation bar instead of covering it",
   "keywords": [
     "sheet",

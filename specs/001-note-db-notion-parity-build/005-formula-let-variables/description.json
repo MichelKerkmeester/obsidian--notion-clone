@@ -1,6 +1,6 @@
 {
   "level": "2",
-  "specFolder": "public/001-note-db-notion-parity-build/005-formula-let-variables",
+  "specFolder": "001-note-db-notion-parity-build/005-formula-let-variables",
   "description": "Notion formulas support `let()` / `lets()` to bind named intermediate values in a per-row child scope (`let(person, \"Alan\", \"Hello, \" + person + \"!\")`",
   "keywords": [
     "notion",

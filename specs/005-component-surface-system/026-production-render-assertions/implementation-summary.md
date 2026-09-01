@@ -7,7 +7,7 @@ importance_tier: "critical"
 contextType: "verification"
 _memory:
   continuity:
-    packet_pointer: "public/005-component-surface-system/026-production-render-assertions"
+    packet_pointer: "005-component-surface-system/026-production-render-assertions"
     last_updated_at: "2026-08-30T18:15:00Z"
     last_updated_by: "code-agent"
     recent_action: "Phase implemented; all nine criteria Met; controls N1-N4, N6 red as specified"

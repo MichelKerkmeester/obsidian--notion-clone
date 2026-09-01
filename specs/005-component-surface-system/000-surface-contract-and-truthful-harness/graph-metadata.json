@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "packet_id": "public/005-component-surface-system/000-surface-contract-and-truthful-harness",
-  "spec_folder": "public/005-component-surface-system/000-surface-contract-and-truthful-harness",
-  "parent_id": "public/005-component-surface-system",
+  "packet_id": "005-component-surface-system/000-surface-contract-and-truthful-harness",
+  "spec_folder": "005-component-surface-system/000-surface-contract-and-truthful-harness",
+  "parent_id": "005-component-surface-system",
   "children_ids": [],
   "manual": {
     "depends_on": [],
@@ -210,7 +210,7 @@
     ],
     "causal_summary": "Four of the program's defects are one bug wearing different clothes: a surface's appearance is",
     "created_at": "2026-08-29T12:29:43.455Z",
-    "last_save_at": "2026-09-01T07:28:58.000Z",
+    "last_save_at": "2026-09-01T10:50:16.267Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -221,13 +221,13 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:a4da12c156c8b208d3d56d74dd652d75d8fdb3edde3efbf7c6d42f8640e3b278",
+    "source_fingerprint": "sha256:a7a3c0ed1a4286278f5ca86b7ccfe65e4fdf4b62a22ef807fba1944ccdab9b64",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "37c0ea2af490a7d304e9b1dc43ca977f0497368a7c01e34fbcf7735c928f5321",
+      "spec.md": "b8413f6cabf82823d617cd82567d9b3627181184458b119d26dc05c1501ccc4b",
       "plan.md": "5a37dccf04488bdd70c23592f9e2c12218b7b88e703178ab8a7c891e78a64d04",
       "tasks.md": "23b50cda0e3d77f6e3d7c6aca8fed5cf0db1d251793294627d1d397ab58bb90d",
-      "implementation-summary.md": "612ac0f5497deec3395981d2882645fae930be543ff130ae43100c43903322d4"
+      "implementation-summary.md": "ddc40a4ab03d7741a0be0d26cb0a0268f9f15388b9ce555c2392c07a07395824"
     },
     "last_active_child_id": null,
     "last_active_at": null

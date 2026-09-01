@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "packet_id": "public/001-note-db-notion-parity-build/006-link-scheme-fields",
-  "spec_folder": "public/001-note-db-notion-parity-build/006-link-scheme-fields",
-  "parent_id": "public/001-note-db-notion-parity-build",
+  "packet_id": "001-note-db-notion-parity-build/006-link-scheme-fields",
+  "spec_folder": "001-note-db-notion-parity-build/006-link-scheme-fields",
+  "parent_id": "001-note-db-notion-parity-build",
   "children_ids": [
     "obsidian/002-note-db-notion-parity-build/006-link-scheme-fields/001-text-link-scheme-module",
     "obsidian/002-note-db-notion-parity-build/006-link-scheme-fields/002-layout-scheme-honor",
@@ -11,7 +11,11 @@
     "public/001-note-db-notion-parity-build/006-link-scheme-fields/001-text-link-scheme-module",
     "public/001-note-db-notion-parity-build/006-link-scheme-fields/002-layout-scheme-honor",
     "public/001-note-db-notion-parity-build/006-link-scheme-fields/003-column-menu-scheme-picker",
-    "public/001-note-db-notion-parity-build/006-link-scheme-fields/004-scheme-column-width"
+    "public/001-note-db-notion-parity-build/006-link-scheme-fields/004-scheme-column-width",
+    "001-note-db-notion-parity-build/006-link-scheme-fields/001-text-link-scheme-module",
+    "001-note-db-notion-parity-build/006-link-scheme-fields/002-layout-scheme-honor",
+    "001-note-db-notion-parity-build/006-link-scheme-fields/003-column-menu-scheme-picker",
+    "001-note-db-notion-parity-build/006-link-scheme-fields/004-scheme-column-width"
   ],
   "manual": {
     "depends_on": [],
@@ -30,7 +34,6 @@
       "phone column",
       "implementation plan",
       "task breakdown",
-      "checklist",
       "implementation summary"
     ],
     "key_topics": [
@@ -53,24 +56,31 @@
       "spec.md",
       "plan.md",
       "tasks.md",
-      "checklist.md",
       "implementation-summary.md",
+      "research/research.md",
+      "checklist.md",
       "research/sonnet-verification.md",
+      "src/data/types.ts",
+      "src/i18n.ts",
+      "specs/001-note-db-notion-parity-build/006-link-scheme-fields/spec.md",
+      "specs/001-note-db-notion-parity-build/006-link-scheme-fields/plan.md",
+      "specs/001-note-db-notion-parity-build/006-link-scheme-fields/checklist.md",
+      "specs/001-note-db-notion-parity-build/006-link-scheme-fields/implementation-summary.md",
+      "src/__tests__/setup.ts",
       "research/synthesis.md",
-      "research/final-plan.md",
-      "research/research.md"
+      "research/final-plan.md"
     ],
     "entities": [
       {
         "name": "spec.md",
         "kind": "doc",
-        "path": "spec.md",
+        "path": "specs/001-note-db-notion-parity-build/006-link-scheme-fields/spec.md",
         "source": "derived"
       },
       {
         "name": "plan.md",
         "kind": "doc",
-        "path": "plan.md",
+        "path": "specs/001-note-db-notion-parity-build/006-link-scheme-fields/plan.md",
         "source": "derived"
       },
       {
@@ -80,21 +90,45 @@
         "source": "derived"
       },
       {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "specs/001-note-db-notion-parity-build/006-link-scheme-fields/implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "research.md",
+        "kind": "doc",
+        "path": "research/research.md",
+        "source": "derived"
+      },
+      {
         "name": "checklist.md",
         "kind": "doc",
         "path": "checklist.md",
         "source": "derived"
       },
       {
-        "name": "implementation-summary.md",
-        "kind": "doc",
-        "path": "implementation-summary.md",
-        "source": "derived"
-      },
-      {
         "name": "sonnet-verification.md",
         "kind": "doc",
         "path": "research/sonnet-verification.md",
+        "source": "derived"
+      },
+      {
+        "name": "types.ts",
+        "kind": "code",
+        "path": "src/data/types.ts",
+        "source": "derived"
+      },
+      {
+        "name": "i18n.ts",
+        "kind": "code",
+        "path": "src/i18n.ts",
+        "source": "derived"
+      },
+      {
+        "name": "setup.ts",
+        "kind": "code",
+        "path": "src/__tests__/setup.ts",
         "source": "derived"
       },
       {
@@ -107,12 +141,6 @@
         "name": "final-plan.md",
         "kind": "doc",
         "path": "research/final-plan.md",
-        "source": "derived"
-      },
-      {
-        "name": "research.md",
-        "kind": "doc",
-        "path": "research/research.md",
         "source": "derived"
       },
       {
@@ -186,46 +214,27 @@
         "kind": "proper_noun",
         "path": "tasks.md",
         "source": "derived"
-      },
-      {
-        "name": "Open Questions",
-        "kind": "proper_noun",
-        "path": "tasks.md",
-        "source": "derived"
-      },
-      {
-        "name": "Task Format",
-        "kind": "proper_noun",
-        "path": "tasks.md",
-        "source": "derived"
-      },
-      {
-        "name": "Core Changes",
-        "kind": "proper_noun",
-        "path": "tasks.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "Notion treats URL, email, and phone property values as first-class clickable links: URL opens in a new tab, Email launches the mail client, Phone prompts a call, while the stored value stays an ordinary string",
     "created_at": "2026-08-24T17:23:14.443Z",
-    "last_save_at": "2026-08-28T10:56:21.570Z",
+    "last_save_at": "2026-09-01T10:50:15.762Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
       "spec.md",
       "plan.md",
       "tasks.md",
-      "checklist.md",
       "implementation-summary.md",
       "research/research.md"
     ],
-    "source_fingerprint": "sha256:ea4bca3267ee7c2f3ed8492182e0c34f955c375fd7cc4f918e6b0143b07ceb57",
+    "source_fingerprint": "sha256:bc6f760ee0c51f4256a851bc92ca70557466b9f79457d250b9de68504e56e98f",
+    "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "64b3052dba3ddfbb60d10b47f9eb01d4f558770360beaf6f27957054b4f3d3e3",
-      "plan.md": "d0157ce695330a20e2aac2dde1a2a27e31ccbd40ea2594b7363aa5a5c3b1f72d",
-      "tasks.md": "03c97d01063fda7ccb64d3b6a9a02aabbc38df463e3f95a27570ba532b8198dc",
-      "checklist.md": "9829b1f59bdb0eb7ce26b15c64f5644f6906f86125612203566ccf958705e27b",
-      "implementation-summary.md": "2ec2e96aaf3c3dc842ae29721e4862734246857c742bc60e160067a5222ac087",
+      "spec.md": "34902f14c3bc02593c96f4051a3f5c477117c7b0ad8ec82f3d7a0a7a35441351",
+      "plan.md": "a444c6899dbdd2ee8e5c402d6da18ffc7f295175f747a21173c701f9f9956934",
+      "tasks.md": "803cf685f63247bdc201df228bac4ee132f11b6c350634a59420c4c21c4e47b1",
+      "implementation-summary.md": "3ed6e6b199e67549b334d3ef14ab26742d526293a2594c083f4af8d8bf7a1b50",
       "research/research.md": "91acebd6d99f67cab4be7b96d36ba5c72b924009e328a247f277340987aac54a"
     },
     "last_active_child_id": "obsidian/002-note-db-notion-parity-build/006-link-scheme-fields/004-scheme-column-width",

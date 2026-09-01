@@ -1,6 +1,6 @@
 {
   "level": "1",
-  "specFolder": "public/004-component-screenshot-system/004-coverage-expansion",
+  "specFolder": "004-component-screenshot-system/004-coverage-expansion",
   "description": "The screenshot system works and its coverage is partial",
   "keywords": [
     "screenshot",

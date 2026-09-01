@@ -1,6 +1,6 @@
 {
   "level": "3",
-  "specFolder": "public/006-list-view-clickup/001-list-grid-structure",
+  "specFolder": "006-list-view-clickup/001-list-grid-structure",
   "description": "The structural swap.",
   "keywords": [
     "structural",

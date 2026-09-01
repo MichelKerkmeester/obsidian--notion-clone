@@ -12,7 +12,7 @@ importance_tier: "critical"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "public/005-component-surface-system/000-surface-contract-and-truthful-harness"
+    packet_pointer: "005-component-surface-system/000-surface-contract-and-truthful-harness"
     last_updated_at: "2026-08-29T18:00:00Z"
     last_updated_by: "phase-architect"
     recent_action: "Adversarial-review remediation applied to criteria and stage order"

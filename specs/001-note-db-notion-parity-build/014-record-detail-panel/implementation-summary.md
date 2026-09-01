@@ -11,7 +11,7 @@ importance_tier: "high"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "public/001-note-db-notion-parity-build/014-record-detail-panel"
+    packet_pointer: "001-note-db-notion-parity-build/014-record-detail-panel"
     last_updated_at: "2026-08-28T10:56:17.281Z"
     last_updated_by: "docs-reconciliation"
     recent_action: "Corrected unsupported checklist claims against the shipped code"
@@ -72,7 +72,7 @@ Built on Luna-via-cursor after the Codex OpenAI executor's quota died mid-run (s
 | `src/views/DatabaseView.ts` | Modified | `renderCell` OPEN-affordance hunk, Mod+Enter keyboard hunk, overlay-lifecycle hunk |
 | `src/i18n.ts` | Modified | `panel.open`, `panel.noProperties`, `panel.hiddenProperties` in en/zh-CN/zh-TW |
 | `styles.css` | Modified (`cc11f90`, completed in `c90aee6`) | `.db-record-peek-*` panel CSS + the 9 missing classes and `.is-hidden` collapse rule |
-| `specs/public/001-note-db-notion-parity-build/014-record-detail-panel/{spec,plan,tasks,checklist,implementation-summary}.md` | Reconciled | Docs updated to reflect shipped state (this pass) |
+| `specs/001-note-db-notion-parity-build/014-record-detail-panel/{spec,plan,tasks,checklist,implementation-summary}.md` | Reconciled | Docs updated to reflect shipped state (this pass) |
 
 <!-- /ANCHOR:what-built -->
 ---

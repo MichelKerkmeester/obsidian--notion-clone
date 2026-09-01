@@ -1,6 +1,6 @@
 {
   "level": "2",
-  "specFolder": "public/001-note-db-notion-parity-build/009-view-filter-tree",
+  "specFolder": "001-note-db-notion-parity-build/009-view-filter-tree",
   "description": "View filters today are a flat `FilterRule[]` with a single global `filterLogic` (`and` | `or`) applied uniformly across every rule",
   "keywords": [
     "view",

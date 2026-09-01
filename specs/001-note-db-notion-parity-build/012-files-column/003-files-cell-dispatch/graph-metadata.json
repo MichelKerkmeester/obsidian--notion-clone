@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "packet_id": "public/001-note-db-notion-parity-build/012-files-column/003-files-cell-dispatch",
-  "spec_folder": "public/001-note-db-notion-parity-build/012-files-column/003-files-cell-dispatch",
-  "parent_id": "public/001-note-db-notion-parity-build/012-files-column",
+  "packet_id": "001-note-db-notion-parity-build/012-files-column/003-files-cell-dispatch",
+  "spec_folder": "001-note-db-notion-parity-build/012-files-column/003-files-cell-dispatch",
+  "parent_id": "001-note-db-notion-parity-build/012-files-column",
   "children_ids": [],
   "manual": {
     "depends_on": [],
@@ -190,7 +190,7 @@
     ],
     "causal_summary": "A `\"files\"` column would fall through the `displayType` switch (`CellRenderer.ts:185-234`) to `default` and `String(value)`",
     "created_at": "2026-08-25T21:08:51Z",
-    "last_save_at": "2026-08-27T12:28:03.859Z",
+    "last_save_at": "2026-09-01T10:50:15.961Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -199,12 +199,13 @@
       "tasks.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:cceb520b4eeb2243a22444809a9f522e73809057d2ecc0718987d8fdeeaedb69",
+    "source_fingerprint": "sha256:f5496eecfe7fa6fa3c4d2b53d0b63f6fe72e0958bb96a2bac5fe953af50de9c6",
+    "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "54fa5747ffb1779f2466137cdc73526d206ab3350d685174f002ca28cad7c430",
-      "plan.md": "bfb0a2fb3ee1ed086d9294ea925ef8aff61783d315cc09ff204013a4f2c90f30",
-      "tasks.md": "06e942dfb6c6d083b4b98ee64adc8c10a9a3ebd0f59f9af0850babae1c46f341",
-      "implementation-summary.md": "35d91539eb1bc7e991507e50ce44671866ef29cb945c7d8e50959ba9c4aa6d2d"
+      "spec.md": "aed9a662bb46a0cec9021bcaf195296d5443239b4f81817b098c7b770ec19753",
+      "plan.md": "3162ee1056751f9328d1db4caf582ccef2daa7371571cffbfa1932ca995b80a7",
+      "tasks.md": "dfba31b7f9b34a2dbb28a18f7ed59ec9789ebfb475088b948ca8605e818e64b8",
+      "implementation-summary.md": "661e75f9ea832e8cfafb4aabbdc853c2cc3ad401ddeab1f391e504ef7806795f"
     },
     "last_active_child_id": null,
     "last_active_at": null

@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "packet_id": "public/005-component-surface-system/030-gallery-view-deprecation",
-  "spec_folder": "public/005-component-surface-system/030-gallery-view-deprecation",
-  "parent_id": "public/005-component-surface-system",
+  "packet_id": "005-component-surface-system/030-gallery-view-deprecation",
+  "spec_folder": "005-component-surface-system/030-gallery-view-deprecation",
+  "parent_id": "005-component-surface-system",
   "children_ids": [],
   "manual": {
     "depends_on": [],
@@ -190,7 +190,7 @@
     ],
     "causal_summary": "Remove the gallery view from the plugin, including the migration path for databases already configured to use it and the gate coverage that currently counts it.",
     "created_at": "2026-08-31T13:08:59.395Z",
-    "last_save_at": "2026-08-31T23:12:32.925Z",
+    "last_save_at": "2026-09-01T10:50:16.503Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -200,13 +200,13 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:11e29d018f9898ae734bf4358f4b1fc812ee1034dd5ee235cfc37eddddd48105",
+    "source_fingerprint": "sha256:35c13243b718a794f83e3c4e84cf626ffe4de28068aa9e483b7b787a921d939e",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "40c8b89e4be38b502fb86cfa53e42f5fe4741cd15df327f6a3399b4f66bb27c6",
-      "plan.md": "81f8fa19d638c99b6f529a784b12fcd15f115ca9c2875e0be04c0a49e4af91d8",
-      "tasks.md": "86e64a3aa56105794799f94cba87286580bd020c0b61b14f3dda94f85fa654bf",
-      "implementation-summary.md": "d7b20b2efb36b05bf2f6a28ac51bb9e79c6e1adb7bc17cfd58ffd019ae2b4860"
+      "spec.md": "f43e9dda25c5806e37d4c50b2b1afa0690d3700b467532cf373755bd6bcc81c3",
+      "plan.md": "7ea995e7bf47104c7297f543bc5ba8aa04fcc72737a894fe512bd95c78f39b2c",
+      "tasks.md": "56017ec8c1c7ed3aafeb7d844e8e9b4a746b837ffb32eefadbfd4658388e80f9",
+      "implementation-summary.md": "578fbca58ba6d79a1f7337f9f3087f61eb26f32c5465010955c136a489dcf0df"
     },
     "last_active_child_id": null,
     "last_active_at": null

@@ -1,8 +1,8 @@
 {
   "run_id": "1787987725068-w0s5l3",
   "loop_type": "research",
-  "spec_folder": "specs/public/003-ui-improvement-build/023-performance-research",
-  "base_artifact_dir": "specs/public/003-ui-improvement-build/023-performance-research/research",
+  "spec_folder": "specs/003-ui-improvement-build/023-performance-research",
+  "base_artifact_dir": "specs/003-ui-improvement-build/023-performance-research/research",
   "total_cli_lineages": 1,
   "orphaned_lineages": [],
   "total": 1,

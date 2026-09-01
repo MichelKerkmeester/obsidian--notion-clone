@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "packet_id": "public/001-note-db-notion-parity-build/002-rollup-aggregation-pack/003-percent-aggregation-pack",
-  "spec_folder": "public/001-note-db-notion-parity-build/002-rollup-aggregation-pack/003-percent-aggregation-pack",
-  "parent_id": "public/001-note-db-notion-parity-build/002-rollup-aggregation-pack",
+  "packet_id": "001-note-db-notion-parity-build/002-rollup-aggregation-pack/003-percent-aggregation-pack",
+  "spec_folder": "001-note-db-notion-parity-build/002-rollup-aggregation-pack/003-percent-aggregation-pack",
+  "parent_id": "001-note-db-notion-parity-build/002-rollup-aggregation-pack",
   "children_ids": [],
   "manual": {
     "depends_on": [],
@@ -40,7 +40,10 @@
       "spec.md",
       "plan.md",
       "tasks.md",
-      "implementation-summary.md"
+      "implementation-summary.md",
+      "src/data/Aggregate.ts",
+      "src/data/types.ts",
+      "src/data/Aggregate.test.ts"
     ],
     "entities": [
       {
@@ -65,6 +68,24 @@
         "name": "implementation-summary.md",
         "kind": "doc",
         "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "Aggregate.ts",
+        "kind": "code",
+        "path": "src/data/Aggregate.ts",
+        "source": "derived"
+      },
+      {
+        "name": "types.ts",
+        "kind": "code",
+        "path": "src/data/types.ts",
+        "source": "derived"
+      },
+      {
+        "name": "Aggregate.test.ts",
+        "kind": "test",
+        "path": "src/data/Aggregate.test.ts",
         "source": "derived"
       },
       {
@@ -168,29 +189,11 @@
         "kind": "proper_noun",
         "path": "implementation-summary.md",
         "source": "derived"
-      },
-      {
-        "name": "Spec Folder",
-        "kind": "proper_noun",
-        "path": "implementation-summary.md",
-        "source": "derived"
-      },
-      {
-        "name": "Actual Effort",
-        "kind": "proper_noun",
-        "path": "implementation-summary.md",
-        "source": "derived"
-      },
-      {
-        "name": "What Was Built Shipped",
-        "kind": "proper_noun",
-        "path": "implementation-summary.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "Notion universal rollups include Percent empty / Percent not empty",
     "created_at": "2026-08-25T18:58:58Z",
-    "last_save_at": "2026-08-27T12:27:55.789Z",
+    "last_save_at": "2026-09-01T10:50:15.675Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -199,12 +202,13 @@
       "tasks.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:2738dea6996fb57a66cbeaf7f67edf2985048f856cecbc6b04cfcfa47253221b",
+    "source_fingerprint": "sha256:7f8638a88950f44e76da02d851ba0fc20901e0635bdf61831e503d313df5a0c7",
+    "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "3d7932c26a634d467d4b7f5b2ee4cea48f3ff9fc25a54b033bd58233d5eae91a",
-      "plan.md": "18da5a38406c9236da688ab67a9443c5cf6990313f4fa613895fb8dacd6dbfc6",
-      "tasks.md": "d05f237e6ff4df535f8c622d3442452dbdae74fda9c6a601efd1ecefa0c612e1",
-      "implementation-summary.md": "02a5d0925f87bc6ff7b71317b8230f2e78847fabb339e1ff643872e398470a41"
+      "spec.md": "16c1414ab77fea680b0bb1ea0c01b9a94bd0dcc9034b34b179c185c78dc00297",
+      "plan.md": "9a920bcc9d2ae28477f0a0d8fce637ad9434d132af82cd454058c7b5679f4d15",
+      "tasks.md": "d02591f76a6163674469c8c5cdba38109e254e4aec0f702e2f644b24799c9d87",
+      "implementation-summary.md": "ca063690831342a4d15b9f39546de00e9994257691c9821e811cf6ca69ed8431"
     },
     "last_active_child_id": null,
     "last_active_at": null

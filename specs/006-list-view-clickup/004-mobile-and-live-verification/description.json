@@ -1,5 +1,5 @@
 {
-  "specFolder": "public/006-list-view-clickup/004-mobile-and-live-verification",
+  "specFolder": "006-list-view-clickup/004-mobile-and-live-verification",
   "description": "Phone layout and touch targets, the two deferred guards, and the only evidence that closes the packet: the operator opens the plugin and confirms the",
   "keywords": [
     "phone",

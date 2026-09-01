@@ -6,10 +6,10 @@ Whether REQ-007's acceptance wording and the evidence run that was used to close
 
 ## Files Reviewed
 
-- `specs/public/005-component-surface-system/verification-audit.md`
-- `specs/public/005-component-surface-system/000-surface-contract-and-truthful-harness/acceptance-criteria.md`
-- `specs/public/005-component-surface-system/000-surface-contract-and-truthful-harness/tasks.md`
-- `specs/public/005-component-surface-system/000-surface-contract-and-truthful-harness/implementation-summary.md`
+- `specs/005-component-surface-system/verification-audit.md`
+- `specs/005-component-surface-system/000-surface-contract-and-truthful-harness/acceptance-criteria.md`
+- `specs/005-component-surface-system/000-surface-contract-and-truthful-harness/tasks.md`
+- `specs/005-component-surface-system/000-surface-contract-and-truthful-harness/implementation-summary.md`
 
 ## Findings - New
 
@@ -19,7 +19,7 @@ Whether REQ-007's acceptance wording and the evidence run that was used to close
 
 ### P1 Findings
 
-- **F022**: REQ-007 names thirteen blind modules but its literal widened-matcher run reports fourteen missing modules — `specs/public/005-component-surface-system/verification-audit.md:376` — the audit distinguishes the 13 newly revealed modules from the 14 modules reported missing on the tree as received at lines 410–418, and says the phase discharged the un-skippable control with a substitute run at lines 417–424. The release evidence therefore cannot claim the exact acceptance experiment passed until the criterion is rewritten to ask for the intended set or the fourteen-result run is recorded as the required control.
+- **F022**: REQ-007 names thirteen blind modules but its literal widened-matcher run reports fourteen missing modules — `specs/005-component-surface-system/verification-audit.md:376` — the audit distinguishes the 13 newly revealed modules from the 14 modules reported missing on the tree as received at lines 410–418, and says the phase discharged the un-skippable control with a substitute run at lines 417–424. The release evidence therefore cannot claim the exact acceptance experiment passed until the criterion is rewritten to ask for the intended set or the fourteen-result run is recorded as the required control.
 
 ### P2 Findings
 
@@ -30,7 +30,7 @@ Whether REQ-007's acceptance wording and the evidence run that was used to close
 ### Claim adjudication — F022
 
 ```json
-{"findingId":"F022","claim":"REQ-007's acceptance number and its literal control run disagree by one module, and the phase closure uses a substitute experiment without labeling that as the criterion's exact run.","evidenceRefs":["specs/public/005-component-surface-system/verification-audit.md:376","specs/public/005-component-surface-system/verification-audit.md:392","specs/public/005-component-surface-system/verification-audit.md:417","specs/public/005-component-surface-system/verification-audit.md:423"],"counterevidenceSought":"Compared the quoted requirement, the literal tree-as-received output, the set distinction, and the audit's stated remediation options.","alternativeExplanation":"The thirteen newly revealed modules may be the intended semantic result, while fourteen is the complete missing set; that makes the wording ambiguous but does not make the exact acceptance control unambiguous.","finalSeverity":"P1","confidence":0.99,"downgradeTrigger":"Change REQ-007 to require the 14-module literal result or explicitly require the 13-module set-difference run, then link the resulting control to phase closure."}
+{"findingId":"F022","claim":"REQ-007's acceptance number and its literal control run disagree by one module, and the phase closure uses a substitute experiment without labeling that as the criterion's exact run.","evidenceRefs":["specs/005-component-surface-system/verification-audit.md:376","specs/005-component-surface-system/verification-audit.md:392","specs/005-component-surface-system/verification-audit.md:417","specs/005-component-surface-system/verification-audit.md:423"],"counterevidenceSought":"Compared the quoted requirement, the literal tree-as-received output, the set distinction, and the audit's stated remediation options.","alternativeExplanation":"The thirteen newly revealed modules may be the intended semantic result, while fourteen is the complete missing set; that makes the wording ambiguous but does not make the exact acceptance control unambiguous.","finalSeverity":"P1","confidence":0.99,"downgradeTrigger":"Change REQ-007 to require the 14-module literal result or explicitly require the 13-module set-difference run, then link the resulting control to phase closure."}
 ```
 
 ## Traceability Checks

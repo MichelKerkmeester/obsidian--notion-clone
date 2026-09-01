@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "packet_id": "public/005-component-surface-system/018-select-column-affordance-fit",
-  "spec_folder": "public/005-component-surface-system/018-select-column-affordance-fit",
-  "parent_id": "public/005-component-surface-system",
+  "packet_id": "005-component-surface-system/018-select-column-affordance-fit",
+  "spec_folder": "005-component-surface-system/018-select-column-affordance-fit",
+  "parent_id": "005-component-surface-system",
   "children_ids": [],
   "manual": {
     "depends_on": [],
@@ -199,7 +199,7 @@
     ],
     "causal_summary": "The operator, on a phone: \"to the left of checkbox that little button doesnt have enough space.\"",
     "created_at": "2026-08-30T17:34:54.869Z",
-    "last_save_at": "2026-08-31T20:08:53.641Z",
+    "last_save_at": "2026-09-01T10:50:16.419Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -210,13 +210,13 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:24aeef5ae035a4e94a7e94983f6dbc66a54124f7a36928ee3601c11144746591",
+    "source_fingerprint": "sha256:d5d0ed90963d37520afed65310b5c2f3344549a52a3d3787ba79034d948f1acf",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "d04a9a65fcd67a636c6eba6731ad53773b79de56f30f31a90f18e110d8aa5f91",
+      "spec.md": "4918b9cfb2930c04c3af10546fa226fa000348bb3d610b0d759b5b85f07c0b1d",
       "plan.md": "636dcd7601caf95ba87f0104b39a2feba3abf1345df53661bf56f8dc6b33822e",
       "tasks.md": "78e15fcac612729bfd4be0118186e6e9954c3195b8ce1110dbce993e47e35857",
-      "implementation-summary.md": "f5ff9de7de5dffbe81ec9223966500f237f50ac5449ff9b1257b6272568ae55e"
+      "implementation-summary.md": "d2ce5b0a9eeb443ae2e8a5b9139ff2ed633efa7ed281299cafc77d8eba073edc"
     },
     "last_active_child_id": null,
     "last_active_at": null

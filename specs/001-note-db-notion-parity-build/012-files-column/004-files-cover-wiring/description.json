@@ -1,6 +1,6 @@
 {
   "level": "1",
-  "specFolder": "public/001-note-db-notion-parity-build/012-files-column/004-files-cover-wiring",
+  "specFolder": "001-note-db-notion-parity-build/012-files-column/004-files-cover-wiring",
   "description": "`parseCoverImage` sets `external: true` for URLs (`CoverImage.ts:41-44`) and `resolveImageSrc` returns that URL as `src` (`:22-23`)",
   "keywords": [
     "parsecoverimage",

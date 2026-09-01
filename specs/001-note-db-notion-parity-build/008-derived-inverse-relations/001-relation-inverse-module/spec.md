@@ -12,7 +12,7 @@ importance_tier: "high"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "public/001-note-db-notion-parity-build/008-derived-inverse-relations/001-relation-inverse-module"
+    packet_pointer: "001-note-db-notion-parity-build/008-derived-inverse-relations/001-relation-inverse-module"
     last_updated_at: "2026-08-27T12:27:53Z"
     last_updated_by: "phase-architect"
     recent_action: "Authored RelationInverse module child from synthesis ranks 1 and 8 and final-plan step 2"

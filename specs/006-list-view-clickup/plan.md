@@ -75,7 +75,7 @@ repository — §4.2 of `spec.md` cites URLs.
 
 One third-party image sits in this packet: `reference-clickup-list-operator.png`, the operator's
 first capture, held as evidence for §4.2. Four more sit **outside** it, at
-`specs/public/context/clickup/list-view/`, and are cited by path only — not moved, cropped,
+`specs/context/clickup/list-view/`, and are cited by path only — not moved, cropped,
 re-encoded or duplicated into this packet. None is shipped in the plugin, turned into an asset, or
 the origin of any value that reaches the codebase. §4.2 describes shape classes from them — filled
 versus outlined, capsule versus rounded rectangle, reserved versus inserted space, truncating versus
@@ -326,7 +326,7 @@ earns its place by failing for one real reason no current test catches.
 | `tools/lane/css-lane.json` free | blocking for 001 | Currently unheld; `005` also queues for it |
 | `verify-placement.mjs` renders a list | blocking for 001-004 | Phase 000 delivers it |
 | `playwright-core` plus system Chrome | existing | Already used by the harness |
-| `specs/public/context/clickup/list-view/clickup-desktop-list-view-{1,2,3,4}.png` | reference only | Primary source for §4.2, cited by path; evidence, not a build dependency |
+| `specs/context/clickup/list-view/clickup-desktop-list-view-{1,2,3,4}.png` | reference only | Primary source for §4.2, cited by path; evidence, not a build dependency |
 | `reference-clickup-list-operator.png` | reference only | Primary source for §4.2; evidence, not a build dependency |
 | Mobbin MCP | reference only | Secondary source for §4.2; not a build dependency |
 | No new npm package | constraint | The scoped result does not require one |

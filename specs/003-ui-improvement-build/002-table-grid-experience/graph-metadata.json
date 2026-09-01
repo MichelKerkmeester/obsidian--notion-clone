@@ -1,13 +1,13 @@
 {
   "schema_version": 1,
-  "packet_id": "public/003-ui-improvement-build/002-table-grid-experience",
-  "spec_folder": "public/003-ui-improvement-build/002-table-grid-experience",
-  "parent_id": "public/003-ui-improvement-build",
+  "packet_id": "003-ui-improvement-build/002-table-grid-experience",
+  "spec_folder": "003-ui-improvement-build/002-table-grid-experience",
+  "parent_id": "003-ui-improvement-build",
   "children_ids": [],
   "manual": {
     "depends_on": [
       {
-        "packet_id": "public/003-ui-improvement-build/005-design-tokens-typography",
+        "packet_id": "003-ui-improvement-build/005-design-tokens-typography",
         "reason": "Imported from legacy graph-metadata.json",
         "source": "legacy"
       }
@@ -50,8 +50,14 @@
       "spec.md",
       "plan.md",
       "tasks.md",
+      "implementation-summary.md",
       "checklist.md",
-      "implementation-summary.md"
+      "src/data/types.ts",
+      "src/i18n.ts",
+      "src/data/Aggregate.ts",
+      "specs/002-ui-improvement-research/research/synthesis.md",
+      "specs/002-ui-improvement-research/research/devin-gemini/iteration-02.md",
+      "specs/002-ui-improvement-research/research/codex-luna/iteration-02.md"
     ],
     "entities": [
       {
@@ -73,15 +79,45 @@
         "source": "derived"
       },
       {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
         "name": "checklist.md",
         "kind": "doc",
         "path": "checklist.md",
         "source": "derived"
       },
       {
-        "name": "implementation-summary.md",
+        "name": "types.ts",
+        "kind": "code",
+        "path": "src/data/types.ts",
+        "source": "derived"
+      },
+      {
+        "name": "i18n.ts",
+        "kind": "code",
+        "path": "src/i18n.ts",
+        "source": "derived"
+      },
+      {
+        "name": "Aggregate.ts",
+        "kind": "code",
+        "path": "src/data/Aggregate.ts",
+        "source": "derived"
+      },
+      {
+        "name": "synthesis.md",
         "kind": "doc",
-        "path": "implementation-summary.md",
+        "path": "specs/002-ui-improvement-research/research/synthesis.md",
+        "source": "derived"
+      },
+      {
+        "name": "iteration-02.md",
+        "kind": "doc",
+        "path": "specs/002-ui-improvement-research/research/devin-gemini/iteration-02.md",
         "source": "derived"
       },
       {
@@ -167,57 +203,26 @@
         "kind": "proper_noun",
         "path": "tasks.md",
         "source": "derived"
-      },
-      {
-        "name": "Consume Phase",
-        "kind": "proper_noun",
-        "path": "tasks.md",
-        "source": "derived"
-      },
-      {
-        "name": "Unit Tests",
-        "kind": "proper_noun",
-        "path": "tasks.md",
-        "source": "derived"
-      },
-      {
-        "name": "Verification Checklist",
-        "kind": "proper_noun",
-        "path": "checklist.md",
-        "source": "derived"
-      },
-      {
-        "name": "Verification Protocol",
-        "kind": "proper_noun",
-        "path": "checklist.md",
-        "source": "derived"
-      },
-      {
-        "name": "Completion Impact",
-        "kind": "proper_noun",
-        "path": "checklist.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "The table/grid view is the primary data surface of the Note Database plugin, but its user experience is compromised by structural layout stutter, hidden affordances, and interaction friction:",
     "created_at": "2026-08-27T19:53:19.293Z",
-    "last_save_at": "2026-08-28T16:54:47.884Z",
+    "last_save_at": "2026-09-01T10:50:16.097Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
       "spec.md",
       "plan.md",
       "tasks.md",
-      "checklist.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:49c0bb99b68d1fe295f19e091865a6386d9da403e54ebfbf98dc489a534bcbeb",
+    "source_fingerprint": "sha256:c10a2e600efe466ece879090b7eb69e3da80d44693d843c3da23c6428b917929",
+    "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "95d7aca709aed0f562da5ae02421cceec90b9324930f53460af4bc32109a8e3c",
-      "plan.md": "37032ced3ac37602036119eb5f566d819981644e40cfb867bc30a25afcbeec34",
-      "tasks.md": "6782f789ee0bd96fa9758e2f1ea5d916515bb6258b045f3c6a2105e6ef7f4743",
-      "checklist.md": "8a5b27a8b7c0034ec6eef27880bb5522866402d27ab27b2dc679fc9fcd924309",
-      "implementation-summary.md": "f84315012f96413c91aa582f29d2196a60430263f405d9911ae9e4dc3fd3a35c"
+      "spec.md": "ce26beddfc309e67c2ae8c201923bfbaef4dd7b14e12a7fc4ca9eb8b355b625a",
+      "plan.md": "008c74431a70aca0d9ce42397d50bdf73f7bca4bcd03d93c8eaec325ab03e0d0",
+      "tasks.md": "04dc76f901f5c14600092ab5f347f0174ee569f851c0f0a0d9b39e5cf2944e10",
+      "implementation-summary.md": "ad7c84bca5fcd52b2024f040465737adba0674317ca69a1bbb796692ffca29ac"
     },
     "last_active_child_id": null,
     "last_active_at": null

@@ -8,7 +8,7 @@ importance_tier: "medium"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "public/004-component-screenshot-system/003-freshness-enforcement"
+    packet_pointer: "004-component-screenshot-system/003-freshness-enforcement"
     last_updated_at: "2026-08-28T13:52:15.236Z"
     last_updated_by: "phase-author"
     recent_action: "Recorded delivered gate scope and the negative control result"

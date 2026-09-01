@@ -8,7 +8,7 @@ importance_tier: "critical"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "public/005-component-surface-system/018-select-column-affordance-fit"
+    packet_pointer: "005-component-surface-system/018-select-column-affordance-fit"
     last_updated_at: "2026-08-31T09:00:00Z"
     last_updated_by: "harness-dependence-review"
     recent_action: "Three rows measured and closed; the column width is now summed from painted boxes"

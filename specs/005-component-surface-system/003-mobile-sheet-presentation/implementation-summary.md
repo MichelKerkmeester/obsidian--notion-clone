@@ -9,7 +9,7 @@ importance_tier: "critical"
 contextType: "general"
 _memory:
   continuity:
-    packet_pointer: "public/005-component-surface-system/003-mobile-sheet-presentation"
+    packet_pointer: "005-component-surface-system/003-mobile-sheet-presentation"
     last_updated_at: "2026-08-30T18:30:00Z"
     last_updated_by: "phase-author"
     recent_action: "Portal, scrim, sheet layer and grab band recorded from git and the lane journal; 0% drift closed"

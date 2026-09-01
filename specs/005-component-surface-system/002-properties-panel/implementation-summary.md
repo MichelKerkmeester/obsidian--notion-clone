@@ -9,7 +9,7 @@ importance_tier: "critical"
 contextType: "verification"
 _memory:
   continuity:
-    packet_pointer: "public/005-component-surface-system/002-properties-panel"
+    packet_pointer: "005-component-surface-system/002-properties-panel"
     last_updated_at: "2026-08-30T20:30:00Z"
     last_updated_by: "phase-reconciliation"
     recent_action: "Row grid fixed: desktop 52px to 34px on one line, name takes the 1fr track; replay holds"

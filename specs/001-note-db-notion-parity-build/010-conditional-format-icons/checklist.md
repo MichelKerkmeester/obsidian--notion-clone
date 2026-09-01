@@ -13,7 +13,7 @@ importance_tier: "high"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "public/001-note-db-notion-parity-build/010-conditional-format-icons"
+    packet_pointer: "001-note-db-notion-parity-build/010-conditional-format-icons"
     last_updated_at: "2026-08-27T12:25:50Z"
     last_updated_by: "markdown-agent"
     recent_action: "Shipped + 2 P1 fixes (929769d, e3600d2) + Sonnet-verified; checklist reconciled to evidence"

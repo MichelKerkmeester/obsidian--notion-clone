@@ -1,6 +1,6 @@
 {
   "level": "3",
-  "specFolder": "public/005-component-surface-system/022-selection-bar-keyboard-docking",
+  "specFolder": "005-component-surface-system/022-selection-bar-keyboard-docking",
   "description": "The cell-selection action bar floats over the table at a fixed offset from the viewport floor, so an open keyboard covers or crowds it, and its own",
   "keywords": [
     "cell-selection",

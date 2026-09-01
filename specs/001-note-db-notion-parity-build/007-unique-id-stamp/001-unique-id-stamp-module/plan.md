@@ -10,7 +10,7 @@ importance_tier: "high"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "public/001-note-db-notion-parity-build/007-unique-id-stamp/001-unique-id-stamp-module"
+    packet_pointer: "001-note-db-notion-parity-build/007-unique-id-stamp/001-unique-id-stamp-module"
     last_updated_at: "2026-08-27T12:27:53Z"
     last_updated_by: "phase-architect"
     recent_action: "Authored UniqueIdStamp module child from synthesis ranks 1 and 5 and final-plan step 1"

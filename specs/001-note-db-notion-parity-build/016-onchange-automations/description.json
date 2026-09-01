@@ -1,6 +1,6 @@
 {
   "level": "1",
-  "specFolder": "public/001-note-db-notion-parity-build/016-onchange-automations",
+  "specFolder": "001-note-db-notion-parity-build/016-onchange-automations",
   "description": "Notion-style on-change automations (\"when field X changes, do Y\"), triggers, and recurring/cron templates look like remaining parity gaps, but the",
   "keywords": [
     "notion-style",

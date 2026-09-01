@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "packet_id": "public/001-note-db-notion-parity-build/001-live-reports-rollups/002-display-only-amount-types",
-  "spec_folder": "public/001-note-db-notion-parity-build/001-live-reports-rollups/002-display-only-amount-types",
-  "parent_id": "public/001-note-db-notion-parity-build/001-live-reports-rollups",
+  "packet_id": "001-note-db-notion-parity-build/001-live-reports-rollups/002-display-only-amount-types",
+  "spec_folder": "001-note-db-notion-parity-build/001-live-reports-rollups/002-display-only-amount-types",
+  "parent_id": "001-note-db-notion-parity-build/001-live-reports-rollups",
   "children_ids": [],
   "manual": {
     "depends_on": [],
@@ -192,7 +192,7 @@
     ],
     "causal_summary": "The fork defaults to display-only (`ComputedSync.ts:3`; load-time coerce at `DataSource.ts:787`), but leaving the view-config UI on `automatic` would `updateFrontmatter` computed keys and enqueue Report/child paths",
     "created_at": "2026-08-25T19:11:30Z",
-    "last_save_at": "2026-08-27T12:27:54.553Z",
+    "last_save_at": "2026-09-01T10:50:15.629Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -201,12 +201,13 @@
       "tasks.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:2352b8c480d2286f653c25fc563c7341987bad555dcf3fe373f4e0580b14500c",
+    "source_fingerprint": "sha256:48a85eb761a3a64102b20c85e9f94d73993cd4a96d09ba8c29aac955e7aecea7",
+    "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "1cced63f74de309614deb5568f404343a4283eca85410cd1fc1e4ec91d003fec",
-      "plan.md": "221787a4678a71977508f53f9bcdd7cefec0039402fba4225a3923727b0addd3",
-      "tasks.md": "6ae8c8cd97be7b7f6807479d3cb5c3b882c0aedc54881454c2f801472bc1f69d",
-      "implementation-summary.md": "f677c32db23e2f73269225d1cb1dca8c71929fca54696f53bf207cb04bf413ff"
+      "spec.md": "ae16dd173ebbb84844a3885439809f98d252479a1fe7cd604b7c5f989a55088a",
+      "plan.md": "6da88f4de49f4a000953bc09f5bb43b51a5de8cb5130a1c4b5a27454ff1c8b1e",
+      "tasks.md": "5874fa5ef8d3e1d14f596e9c6f4c2231d0f432bf642115d191984a3655a9bdff",
+      "implementation-summary.md": "8618323a1c1a90d9b1b70561760ba5d4547361cc016b3d9b3d240fab83012c73"
     },
     "last_active_child_id": null,
     "last_active_at": null

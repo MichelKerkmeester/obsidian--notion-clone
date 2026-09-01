@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "packet_id": "public/005-component-surface-system/013-add-view-sheet",
-  "spec_folder": "public/005-component-surface-system/013-add-view-sheet",
-  "parent_id": "public/005-component-surface-system",
+  "packet_id": "005-component-surface-system/013-add-view-sheet",
+  "spec_folder": "005-component-surface-system/013-add-view-sheet",
+  "parent_id": "005-component-surface-system",
   "children_ids": [],
   "manual": {
     "depends_on": [],
@@ -200,7 +200,7 @@
     ],
     "causal_summary": "Rebuild the Add View surface against the design system: one control idiom per job, one affordance per action, a real grouping, and sheet presentation on a phone.",
     "created_at": "2026-08-30T16:47:05.287Z",
-    "last_save_at": "2026-09-01T07:22:01.494Z",
+    "last_save_at": "2026-09-01T10:50:16.382Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -211,13 +211,13 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:87e9bff308b31f1a569d0cd99dc1ca3c0144566fa8218f74251a7970c7b88289",
+    "source_fingerprint": "sha256:1adf72a4b8d624f371316f5922be004cee38130ebbcbdc89378490268e7f68be",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "09d252a0e0e4f8f8061d533c20a49dc40947bbbc9c233f467e9bd8a28980ed0b",
+      "spec.md": "bd56ff13d3bc1595718605fbac99a6b9e2d23c04565889032b836a84f3682240",
       "plan.md": "ca3345b39491355fd62a6d32845223c782614d95f89521360fca66c3392739db",
       "tasks.md": "227e25af8de655e4c3746f76794512ff956dd35826567d49e10a03b7830c61db",
-      "implementation-summary.md": "7c9e833bb5beaae2042dadfa6866429aaaea2f969be0eed658064a96edeec234"
+      "implementation-summary.md": "101cf02f20e6b1f44c78cea097078a0ca519ebd400144a597f6957d3bd6dcfa1"
     },
     "last_active_child_id": null,
     "last_active_at": null

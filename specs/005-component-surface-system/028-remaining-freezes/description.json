@@ -1,6 +1,6 @@
 {
   "level": "1",
-  "specFolder": "public/005-component-surface-system/028-remaining-freezes",
+  "specFolder": "005-component-surface-system/028-remaining-freezes",
   "description": "Six freeze reports across five surfaces resolve to one shared trigger and one unbounded render; the previous fix closed one of three instances of the",
   "keywords": [
     "six",

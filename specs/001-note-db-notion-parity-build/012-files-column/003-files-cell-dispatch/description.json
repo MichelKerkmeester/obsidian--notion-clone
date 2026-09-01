@@ -1,6 +1,6 @@
 {
   "level": "1",
-  "specFolder": "public/001-note-db-notion-parity-build/012-files-column/003-files-cell-dispatch",
+  "specFolder": "001-note-db-notion-parity-build/012-files-column/003-files-cell-dispatch",
   "description": "A `\"files\"` column would fall through the `displayType` switch (`CellRenderer.ts:185-234`) to `default` and `String(value)`",
   "keywords": [
     "files",

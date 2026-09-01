@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "packet_id": "public/005-component-surface-system/001-overlay-placement-and-menu-language",
-  "spec_folder": "public/005-component-surface-system/001-overlay-placement-and-menu-language",
-  "parent_id": "public/005-component-surface-system",
+  "packet_id": "005-component-surface-system/001-overlay-placement-and-menu-language",
+  "spec_folder": "005-component-surface-system/001-overlay-placement-and-menu-language",
+  "parent_id": "005-component-surface-system",
   "children_ids": [],
   "manual": {
     "depends_on": [],
@@ -207,7 +207,7 @@
     ],
     "causal_summary": "Placement has no authority and menus have no shared grammar",
     "created_at": "2026-08-29T12:35:11.814Z",
-    "last_save_at": "2026-09-01T07:45:08.530Z",
+    "last_save_at": "2026-09-01T10:50:16.277Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -218,13 +218,13 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:d17bede52597d16803dc3f396354d2d975c278297623c82884d0618d5181921b",
+    "source_fingerprint": "sha256:bdd93089e92641d32e8dc5a983d3304349a553d7d3aff631c610d7d859591cd5",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "4bb8a681b47c344ccd2c473ad69c195f6f5321e7b3fc8c6b47c1f40397c544c3",
+      "spec.md": "e8608207ca33a8ab90d6dc6f1bb259d2f2a4e7cdd4df49c0d04818f3c4dae6ed",
       "plan.md": "b98a78e625093aa2a211eddf0ead78cd9b04c902e8ddf6f5b19848c43269d6de",
       "tasks.md": "0ce46b748f354659d4aac99863218e1cbf676698b749ff66533c8c670e029394",
-      "implementation-summary.md": "8a406ea6627a9f1e0cbc6fc65b4c200a12f06b424a6ed981d7547107b193fe1b"
+      "implementation-summary.md": "31f7d508e1b56c8a6af19168e8bf7093a9abed7665a74a12cdbaacf35c6712c0"
     },
     "last_active_child_id": null,
     "last_active_at": null

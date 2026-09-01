@@ -12,7 +12,7 @@ importance_tier: "critical"
 contextType: "implementation"
 _memory:
   continuity:
-    packet_pointer: "public/005-component-surface-system/003-mobile-sheet-presentation"
+    packet_pointer: "005-component-surface-system/003-mobile-sheet-presentation"
     last_updated_at: "2026-08-31T00:00:00Z"
     last_updated_by: "harness-dependence-audit"
     recent_action: "Classified 14 criteria for harness dependence; 5 rest on the hand-built navbar"

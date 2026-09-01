@@ -1,6 +1,6 @@
 {
   "level": "1",
-  "specFolder": "public/001-note-db-notion-parity-build/012-files-column/001-files-column-module",
+  "specFolder": "001-note-db-notion-parity-build/012-files-column/001-files-column-module",
   "description": "The fork already resolves vault wikilinks (`CoverImage.ts:22-26`, `FileFieldRenderer.ts:74-84`) but has no files-column value type",
   "keywords": [
     "fork",

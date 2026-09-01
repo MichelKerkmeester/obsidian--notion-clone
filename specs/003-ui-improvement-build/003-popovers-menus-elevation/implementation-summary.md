@@ -9,7 +9,7 @@ importance_tier: "high"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "public/003-ui-improvement-build/003-popovers-menus-elevation"
+    packet_pointer: "003-ui-improvement-build/003-popovers-menus-elevation"
     last_updated_at: "2026-08-28T16:54:47.311Z"
     last_updated_by: "implementation-agent"
     recent_action: "Corrected unsupported checklist claims against the shipped code"

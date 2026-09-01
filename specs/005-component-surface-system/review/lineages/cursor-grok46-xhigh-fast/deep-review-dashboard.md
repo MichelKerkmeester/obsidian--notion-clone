@@ -15,7 +15,7 @@ Reducer-generated observability surface for the active review packet.
 <!-- /ANCHOR:overview -->
 <!-- ANCHOR:status -->
 ## 2. STATUS
-- Review Target: specs/public/005-component-surface-system (spec-folder)
+- Review Target: specs/005-component-surface-system (spec-folder)
 - Started: 2026-08-31T12:17:49.000Z
 - Status: COMPLETE
 - Iteration: 10 of 10
@@ -111,7 +111,7 @@ No corrupt JSONL lines detected.
 - candidateCoverage: covered=8, ruledOut=1, deferred=1, blocked=0
 
 ### Search Debt
-- iteration 10 stale_status (deferred): Expected remaining work, not a new P1; evidence=specs/public/005-component-surface-system/027-sheet-menu-grammar-and-motion/spec.md:18
+- iteration 10 stale_status (deferred): Expected remaining work, not a new P1; evidence=specs/005-component-surface-system/027-sheet-menu-grammar-and-motion/spec.md:18
 
 ### Ruled-Out Candidates
 - iteration 9 unsafe_scheme (ruled_out): Gallery shares the hole; F001 refined not replaced; evidence=src/data/cover-image.ts:47

@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "packet_id": "public/005-component-surface-system/008-integration-and-release-observability",
-  "spec_folder": "public/005-component-surface-system/008-integration-and-release-observability",
-  "parent_id": "public/005-component-surface-system",
+  "packet_id": "005-component-surface-system/008-integration-and-release-observability",
+  "spec_folder": "005-component-surface-system/008-integration-and-release-observability",
+  "parent_id": "005-component-surface-system",
   "children_ids": [],
   "manual": {
     "depends_on": [],
@@ -210,7 +210,7 @@
     ],
     "causal_summary": "Release 1.3.1 passed every gate and changed nothing",
     "created_at": "2026-08-29T14:23:23.345Z",
-    "last_save_at": "2026-09-01T04:20:17.364Z",
+    "last_save_at": "2026-09-01T10:50:16.339Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -221,13 +221,13 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:62aa6755b5385e39fe460b7288205f2942c93fa46a1174c0920c32849f27584d",
+    "source_fingerprint": "sha256:252804036857e55cf26c99400288d324217870c08acbadfb865fe698f6439162",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "a6480bac04b49e301d363de72e902d2da6ebc6929740ede38c4909786cbc216f",
+      "spec.md": "c6d98b8b9d9a2790ae1acb53c5e270c3ff7b0ccd82f08a1af8caaefbcc94f2ed",
       "plan.md": "fb4021ce452cd5ecf6c04d2145a0647fd3ad6f21b1bf7b1d098184e021f60383",
       "tasks.md": "9c166e5ac5b79a1f300f4460a3ca12fb3a30304e26efa3e2ca679b0805685815",
-      "implementation-summary.md": "497773bb170c58d797d5acde6936a6a299c1e56e0d7f28ab4ff08e08b0a8bdc4"
+      "implementation-summary.md": "922d8ec5defc05e8e7f0ca76fa28a6cd6b78b0717b9bc49516342e9558c91748"
     },
     "last_active_child_id": null,
     "last_active_at": null

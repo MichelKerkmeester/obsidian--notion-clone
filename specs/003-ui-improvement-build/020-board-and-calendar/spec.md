@@ -8,7 +8,7 @@ importance_tier: "high"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "public/003-ui-improvement-build/020-board-and-calendar"
+    packet_pointer: "003-ui-improvement-build/020-board-and-calendar"
     last_updated_at: "2026-08-29T07:00:00Z"
     last_updated_by: "phase-author"
     recent_action: "Phase cut from 013's decision matrix; not started"

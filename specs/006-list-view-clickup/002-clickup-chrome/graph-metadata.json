@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "packet_id": "public/006-list-view-clickup/002-clickup-chrome",
-  "spec_folder": "public/006-list-view-clickup/002-clickup-chrome",
-  "parent_id": "public/006-list-view-clickup",
+  "packet_id": "006-list-view-clickup/002-clickup-chrome",
+  "spec_folder": "006-list-view-clickup/002-clickup-chrome",
+  "parent_id": "006-list-view-clickup",
   "children_ids": [],
   "manual": {
     "depends_on": [],
@@ -198,7 +198,7 @@
     ],
     "causal_summary": "The visual language: row rhythm and dividers, group header pill and count, the reserved leading gutter, chip and pill cell treatments, empty-cell placeholders, density. Every value from the existing token scale. The phase most able to pass while nothing changes on screen.",
     "created_at": "2026-08-30T10:00:32.765Z",
-    "last_save_at": "2026-08-30T10:00:32.765Z",
+    "last_save_at": "2026-09-01T10:50:16.555Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -208,13 +208,13 @@
       "acceptance-criteria.md",
       "decision-record.md"
     ],
-    "source_fingerprint": "sha256:a2825ce0151a4369154b617c0cb0358435769e4a3da93d89989d4cc559c4c1bc",
+    "source_fingerprint": "sha256:b25c99c8d391ecf19f4a234e6f0de3d59075ec0d9ee637ab6aab7846ca63a9b2",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "5ab29bc642abb2c8d4f6a948f40e07f90c3e00b623dac5430d40a8a2810260e8",
+      "spec.md": "00668958c513a0ddfeffc7c20a571a7b5ee7e236b42e68157f2353021ffa819d",
       "plan.md": "5db0996c52dc0d9cd6ae083240ae7e1dc48464927f307da7c267d5427767d193",
       "tasks.md": "94c199f86f762dbb84c03d8ecf7ffbf9a88d6ba6a34adfebef71d8c25e72e8c5",
-      "decision-record.md": "dc1ad156ebb3bfbf248e8678f58ee6959d374ec5048818aeca76db5a115c1a77"
+      "decision-record.md": "0b44c12c2221c15bbb462724be7688e6e11c77f90aa7bb6be95b49b3cf7e852a"
     },
     "last_active_child_id": null,
     "last_active_at": null

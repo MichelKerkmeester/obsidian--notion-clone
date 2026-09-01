@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "packet_id": "public/004-component-screenshot-system/003-freshness-enforcement",
-  "spec_folder": "public/004-component-screenshot-system/003-freshness-enforcement",
-  "parent_id": "public/004-component-screenshot-system",
+  "packet_id": "004-component-screenshot-system/003-freshness-enforcement",
+  "spec_folder": "004-component-screenshot-system/003-freshness-enforcement",
+  "parent_id": "004-component-screenshot-system",
   "children_ids": [],
   "migrated": true,
   "migration_source": "legacy",
@@ -46,8 +46,13 @@
       "spec.md",
       "plan.md",
       "tasks.md",
+      "implementation-summary.md",
       "checklist.md",
-      "implementation-summary.md"
+      "tools/screenshots/verify.mjs",
+      "screenshots/README.md",
+      "tools/screenshots/scenarios.mjs",
+      "screenshots/manifest.json",
+      "tools/screenshots/capture.mjs"
     ],
     "entities": [
       {
@@ -69,15 +74,45 @@
         "source": "derived"
       },
       {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
         "name": "checklist.md",
         "kind": "doc",
         "path": "checklist.md",
         "source": "derived"
       },
       {
-        "name": "implementation-summary.md",
+        "name": "verify.mjs",
+        "kind": "file",
+        "path": "tools/screenshots/verify.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "README.md",
         "kind": "doc",
-        "path": "implementation-summary.md",
+        "path": "screenshots/README.md",
+        "source": "derived"
+      },
+      {
+        "name": "scenarios.mjs",
+        "kind": "file",
+        "path": "tools/screenshots/scenarios.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "manifest.json",
+        "kind": "config",
+        "path": "screenshots/manifest.json",
+        "source": "derived"
+      },
+      {
+        "name": "capture.mjs",
+        "kind": "file",
+        "path": "tools/screenshots/capture.mjs",
         "source": "derived"
       },
       {
@@ -163,57 +198,26 @@
         "kind": "proper_noun",
         "path": "tasks.md",
         "source": "derived"
-      },
-      {
-        "name": "Quality Checklist",
-        "kind": "proper_noun",
-        "path": "checklist.md",
-        "source": "derived"
-      },
-      {
-        "name": "Verification Protocol",
-        "kind": "proper_noun",
-        "path": "checklist.md",
-        "source": "derived"
-      },
-      {
-        "name": "Completion Impact",
-        "kind": "proper_noun",
-        "path": "checklist.md",
-        "source": "derived"
-      },
-      {
-        "name": "Code Quality",
-        "kind": "proper_noun",
-        "path": "checklist.md",
-        "source": "derived"
-      },
-      {
-        "name": "Enforcement Completeness",
-        "kind": "proper_noun",
-        "path": "checklist.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "A folder of screenshots decays quietly",
     "created_at": "2026-08-28T00:00:00.000Z",
-    "last_save_at": "2026-08-28T13:52:15.236Z",
+    "last_save_at": "2026-09-01T10:50:16.233Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
       "spec.md",
       "plan.md",
       "tasks.md",
-      "checklist.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:ed4bb6c0966ae21e925025f57d1b8fc36673129460533d7778ab31640c44c082",
+    "source_fingerprint": "sha256:f49b182d2f82dddf5fee42523122e342801cae4ec2459dbf14f27f17f538a972",
+    "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "3b17a63c2e2badcaf569ec2f2539459b046732323530c6022db1fb52b7c31548",
-      "plan.md": "28c4d857cd5cd52c4f91721f30c046c209d7d40292e3b00b0076016d83e31962",
-      "tasks.md": "1cecda53a387e4806cc7fbd852c7ba4ef67fb3f8b77073160115a8c70ef6d8d2",
-      "checklist.md": "f8174e2320248e0225937d1e768f172f35b07cd0c34a2b5f0540863e1d07f4c5",
-      "implementation-summary.md": "aac66dbeb6fcc667fad360fdf9fd8f8ac659d1ce7010e78522573399b065ef13"
+      "spec.md": "d8d499104559c407c2299238c1daaa392e6cf0ddf0974c1e3bebe18b7671c6c4",
+      "plan.md": "e540656cab530e6418c8bdab7733e8a7a51a81390b1eb638f4afc19bc6d77678",
+      "tasks.md": "dcc5c3b442277eff9ac46e5df7a1a4cd957a147b8a6d86cadb0a3abcd65c2cf7",
+      "implementation-summary.md": "ff28f03a498219d3367e5cbadc46461ff7e7a6a3874facf7a9b8953513e53e1c"
     },
     "last_active_child_id": null,
     "last_active_at": null

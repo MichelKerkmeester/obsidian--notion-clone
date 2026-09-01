@@ -9,7 +9,7 @@ importance_tier: "critical"
 contextType: "general"
 _memory:
   continuity:
-    packet_pointer: "public/005-component-surface-system/009-live-verification"
+    packet_pointer: "005-component-surface-system/009-live-verification"
     last_updated_at: "2026-08-30T18:30:00Z"
     last_updated_by: "phase-author"
     recent_action: "Transport built; exit 2 confirmed with app closed, app never driven"

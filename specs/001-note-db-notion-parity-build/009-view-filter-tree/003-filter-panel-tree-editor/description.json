@@ -1,6 +1,6 @@
 {
   "level": "2",
-  "specFolder": "public/001-note-db-notion-parity-build/009-view-filter-tree/003-filter-panel-tree-editor",
+  "specFolder": "001-note-db-notion-parity-build/009-view-filter-tree/003-filter-panel-tree-editor",
   "description": "The filter panel is a global AND/OR toggle plus a flat row list (`FilterPanelRenderer.ts` `renderHeader` `125-146` and the flat loop `81-90`)",
   "keywords": [
     "filter",

@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "packet_id": "public/001-note-db-notion-parity-build/011-table-multi-group/003-embedded-table-grouping",
-  "spec_folder": "public/001-note-db-notion-parity-build/011-table-multi-group/003-embedded-table-grouping",
-  "parent_id": "public/001-note-db-notion-parity-build/011-table-multi-group",
+  "packet_id": "001-note-db-notion-parity-build/011-table-multi-group/003-embedded-table-grouping",
+  "spec_folder": "001-note-db-notion-parity-build/011-table-multi-group/003-embedded-table-grouping",
+  "parent_id": "001-note-db-notion-parity-build/011-table-multi-group",
   "children_ids": [],
   "manual": {
     "depends_on": [],
@@ -188,7 +188,7 @@
     ],
     "causal_summary": "Spec §8 requires identical nested headers in linked/embedded views",
     "created_at": "2026-08-25T20:50:00Z",
-    "last_save_at": "2026-08-27T12:28:02.654Z",
+    "last_save_at": "2026-09-01T10:50:15.928Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -197,12 +197,13 @@
       "tasks.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:8ad61d238d53cd20d3272b8f1d39c150eae10d00ef185b329d04af87179cb9c6",
+    "source_fingerprint": "sha256:1ad87687a7394e70dedb38bb9964a513853e556eee71719823a009658450ea04",
+    "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "58eaafdb8dc997261f1a1111b19dcf655e7df5670bf45c687a275cd34c3ee8be",
-      "plan.md": "874f2e76c412e7032a80920eab02eb943fe45d1999469da327da8c9fd6dc8cad",
-      "tasks.md": "6423094d9971a8407e95332a2059b4fa09bc76dd3c7ec20159fd8d9d0e79ab90",
-      "implementation-summary.md": "07871f760d44544d8e6633484dc967b0a34e65dff37c761db2d8422521d47847"
+      "spec.md": "02f448a8500f6e34f494e6f6b388beabba72a98c306f3dacc0db768aada558d6",
+      "plan.md": "4bd3b4d9770eadb4be2f6b9d886a5706938ad409553869a0f0451eb10e34d0e3",
+      "tasks.md": "fdaac3a0ba158df889c7d79967cf7068d93139bcfc9eac9651faf1b8913b441b",
+      "implementation-summary.md": "d78bd3e0941431bf1a1b1f46d98e357f156c50998620bba6a6b146512b388896"
     },
     "last_active_child_id": null,
     "last_active_at": null

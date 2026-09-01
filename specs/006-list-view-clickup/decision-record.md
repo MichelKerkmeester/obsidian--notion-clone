@@ -12,7 +12,7 @@ importance_tier: "critical"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "public/006-list-view-clickup"
+    packet_pointer: "006-list-view-clickup"
     last_updated_at: "2026-08-30T12:00:00Z"
     last_updated_by: "desktop-screenshot-audit"
     recent_action: "ADR-004 added; ADR-001 re-judged on four desktop captures; ADR-002/003 re-sourced"
@@ -21,8 +21,8 @@ _memory:
     key_files:
       - "decision-record.md"
       - "reference-clickup-list-operator.png"
-      - "specs/public/context/clickup/list-view/clickup-desktop-list-view-3.png"
-      - "specs/public/context/clickup/list-view/clickup-desktop-list-view-4.png"
+      - "specs/context/clickup/list-view/clickup-desktop-list-view-3.png"
+      - "specs/context/clickup/list-view/clickup-desktop-list-view-4.png"
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "list-view-clickup-006"

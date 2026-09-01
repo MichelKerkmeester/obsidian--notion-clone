@@ -8,7 +8,7 @@ importance_tier: "high"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "public/001-note-db-notion-parity-build/014-record-detail-panel/004-peek-keyboard-open"
+    packet_pointer: "001-note-db-notion-parity-build/014-record-detail-panel/004-peek-keyboard-open"
     last_updated_at: "2026-08-27T12:27:53Z"
     last_updated_by: "docs-reconciliation"
     recent_action: "Reconciled docs to shipped state: Mod+Enter hunk landed in commit 02929b0"

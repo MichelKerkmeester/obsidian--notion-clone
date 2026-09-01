@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "packet_id": "public/001-note-db-notion-parity-build/010-conditional-format-icons/003-tree-aware-column-ops",
-  "spec_folder": "public/001-note-db-notion-parity-build/010-conditional-format-icons/003-tree-aware-column-ops",
-  "parent_id": "public/001-note-db-notion-parity-build/010-conditional-format-icons",
+  "packet_id": "001-note-db-notion-parity-build/010-conditional-format-icons/003-tree-aware-column-ops",
+  "spec_folder": "001-note-db-notion-parity-build/010-conditional-format-icons/003-tree-aware-column-ops",
+  "parent_id": "001-note-db-notion-parity-build/010-conditional-format-icons",
   "children_ids": [],
   "manual": {
     "depends_on": [],
@@ -190,7 +190,7 @@
     ],
     "causal_summary": "Column rename rewrites `rule.condition.field` (~193)",
     "created_at": "2026-08-25T21:00:24Z",
-    "last_save_at": "2026-08-27T12:28:01.332Z",
+    "last_save_at": "2026-09-01T10:50:15.893Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -199,12 +199,13 @@
       "tasks.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:4d975be0a0cab89ad8db4a5ce85398492a429e38a0132b6e4cbeded468fc3276",
+    "source_fingerprint": "sha256:b63f036f28a9cbbab863c9eefc6778ddeb61eb1d1dba6419622296225aac3e86",
+    "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "18451c74f858fd7a50942c963da9200f3f927841bc356be8e787abd5bccd5db0",
-      "plan.md": "f449a8e5b7bf5492faf8c6125bb6d9747c078a7fa3b9152eeff485c0c62e9435",
-      "tasks.md": "69c40002eaebe46fbdc6e4cc978a1e43e24b22fb787479adfadea253a05b6556",
-      "implementation-summary.md": "13aaffbcb7220513f36728fcd2ce4955413361d49efb788fa85668422f52b624"
+      "spec.md": "acd643f73aaab2c7ace17b258624879e2688db7abfe21199a8c36002741fc2de",
+      "plan.md": "518c2a26c1cee15520b0c88906b0da4dff6d47458ec9c11de47ee6bf2336f5a1",
+      "tasks.md": "2f2557d42804de9d32c2a481aab1eb96d2d4a6b811f0795f7953bfbda2fc4f32",
+      "implementation-summary.md": "eaebbb92dc83e480951256e1021450c43f61d58939b9406f133ffbbc733ace3b"
     },
     "last_active_child_id": null,
     "last_active_at": null

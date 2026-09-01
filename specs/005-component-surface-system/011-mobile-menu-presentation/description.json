@@ -1,5 +1,5 @@
 {
-  "specFolder": "public/005-component-surface-system/011-mobile-menu-presentation",
+  "specFolder": "005-component-surface-system/011-mobile-menu-presentation",
   "description": "Present the plugin's owned menus as bottom sheets on a phone instead of desktop dropdowns that run off both edges of the screen.",
   "keywords": [
     "present",

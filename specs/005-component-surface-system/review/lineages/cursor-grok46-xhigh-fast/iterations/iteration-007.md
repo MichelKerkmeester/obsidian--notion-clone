@@ -4,9 +4,9 @@
 maintainability
 
 ## Files Reviewed
-- `specs/public/005-component-surface-system/spec.md:259`
-- `specs/public/005-component-surface-system/028-remaining-freezes/spec.md:53`
-- `specs/public/005-component-surface-system/spec.md:157`
+- `specs/005-component-surface-system/spec.md:259`
+- `specs/005-component-surface-system/028-remaining-freezes/spec.md:53`
+- `specs/005-component-surface-system/spec.md:157`
 - `styles.css:1`
 
 ## Findings by Severity
@@ -18,9 +18,9 @@ None this iteration.
 None this iteration.
 
 ### P2, Suggestion
-- **F008**: Parent styles.css length is stale — `specs/public/005-component-surface-system/spec.md:259` — Spec says 19261 lines; styles.css is 20124 lines.
-- **F009**: 028 cites refresh at line 11421 — `specs/public/005-component-surface-system/028-remaining-freezes/spec.md:53` — Current refresh() is at database-view.ts:11484; 11421 is not that function.
-- **F012**: Parent says 010-017 lack plan.md — `specs/public/005-component-surface-system/spec.md:157` — 010-sheet-reading-and-keyboard/plan.md exists; 29 child plan.md files are present including 010-017.
+- **F008**: Parent styles.css length is stale — `specs/005-component-surface-system/spec.md:259` — Spec says 19261 lines; styles.css is 20124 lines.
+- **F009**: 028 cites refresh at line 11421 — `specs/005-component-surface-system/028-remaining-freezes/spec.md:53` — Current refresh() is at database-view.ts:11484; 11421 is not that function.
+- **F012**: Parent says 010-017 lack plan.md — `specs/005-component-surface-system/spec.md:157` — 010-sheet-reading-and-keyboard/plan.md exists; 29 child plan.md files are present including 010-017.
 
 ## Traceability Checks
 - `spec_code`: partial — Scaffold and constant claims outdated.

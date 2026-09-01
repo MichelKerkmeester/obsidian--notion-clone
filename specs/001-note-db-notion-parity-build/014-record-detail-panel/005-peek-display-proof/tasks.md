@@ -8,7 +8,7 @@ importance_tier: "high"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "public/001-note-db-notion-parity-build/014-record-detail-panel/005-peek-display-proof"
+    packet_pointer: "001-note-db-notion-parity-build/014-record-detail-panel/005-peek-display-proof"
     last_updated_at: "2026-08-27T17:27:13Z"
     last_updated_by: "phase-architect"
     recent_action: "Authored peek display-proof child from synthesis edge cases and final-plan step 8"

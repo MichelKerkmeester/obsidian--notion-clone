@@ -4,7 +4,7 @@
 
 The detached review packet contains 10 completed iterations under the requested max-iterations policy. Convergence telemetry was non-terminal before the ceiling. Final verdict: **CONDITIONAL** with 0 active P0, 17 active P1, and 5 active P2 findings.
 
-Session: fanout-codex-luna-xhigh-fast-1788178447595-968qzp. Target: specs/public/005-component-surface-system (spec-folder). Dimensions: correctness=covered, security=covered, traceability=covered, maintainability=covered. Release readiness remains in-progress until active P1 findings are reconciled.
+Session: fanout-codex-luna-xhigh-fast-1788178447595-968qzp. Target: specs/005-component-surface-system (spec-folder). Dimensions: correctness=covered, security=covered, traceability=covered, maintainability=covered. Release readiness remains in-progress until active P1 findings are reconciled.
 
 ## Planning Trigger
 
@@ -20,7 +20,7 @@ Planning is required because active P1 findings remain. The structured planning 
       "id": "F001",
       "severity": "P1",
       "title": "The parent phase map does not cover the live child set",
-      "file": "specs/public/005-component-surface-system/spec.md:149",
+      "file": "specs/005-component-surface-system/spec.md:149",
       "findingClass": "scope-coverage",
       "affectedSurfaceHints": [
         "parent phase map",
@@ -31,7 +31,7 @@ Planning is required because active P1 findings remain. The structured planning 
       "id": "F002",
       "severity": "P1",
       "title": "Handover validation status contradicts the transition rule",
-      "file": "specs/public/005-component-surface-system/handover.md:52",
+      "file": "specs/005-component-surface-system/handover.md:52",
       "findingClass": "verification-status",
       "affectedSurfaceHints": [
         "handover",
@@ -42,7 +42,7 @@ Planning is required because active P1 findings remain. The structured planning 
       "id": "F003",
       "severity": "P1",
       "title": "Phase 019 shipped without verification evidence",
-      "file": "specs/public/005-component-surface-system/019-card-field-value-formatting/implementation-summary.md:40",
+      "file": "specs/005-component-surface-system/019-card-field-value-formatting/implementation-summary.md:40",
       "findingClass": "missing-proof",
       "affectedSurfaceHints": [
         "card field renderer",
@@ -65,7 +65,7 @@ Planning is required because active P1 findings remain. The structured planning 
       "id": "F006",
       "severity": "P1",
       "title": "Phase 001's roadmap status is not supported by its phase-local closure artifacts",
-      "file": "specs/public/005-component-surface-system/roadmap.md:296",
+      "file": "specs/005-component-surface-system/roadmap.md:296",
       "findingClass": "status-traceability",
       "affectedSurfaceHints": [
         "phase 001",
@@ -77,7 +77,7 @@ Planning is required because active P1 findings remain. The structured planning 
       "id": "F007",
       "severity": "P1",
       "title": "The parent requires a live-verification gate before phase 000, but phase 009 has not produced the required evidence",
-      "file": "specs/public/005-component-surface-system/spec.md:192",
+      "file": "specs/005-component-surface-system/spec.md:192",
       "findingClass": "open-handoff-gate",
       "affectedSurfaceHints": [
         "009 live verification",
@@ -88,7 +88,7 @@ Planning is required because active P1 findings remain. The structured planning 
       "id": "F009",
       "severity": "P1",
       "title": "Phase 003's single-predicate contract remains explicitly unimplemented",
-      "file": "specs/public/005-component-surface-system/003-mobile-sheet-presentation/plan.md:87",
+      "file": "specs/005-component-surface-system/003-mobile-sheet-presentation/plan.md:87",
       "findingClass": "contract-drift",
       "affectedSurfaceHints": [
         "touch mode",
@@ -100,7 +100,7 @@ Planning is required because active P1 findings remain. The structured planning 
       "id": "F010",
       "severity": "P1",
       "title": "Phase 026's commit/provenance state is contradictory across its own summary and the roadmap",
-      "file": "specs/public/005-component-surface-system/026-production-render-assertions/implementation-summary.md:46",
+      "file": "specs/005-component-surface-system/026-production-render-assertions/implementation-summary.md:46",
       "findingClass": "provenance-drift",
       "affectedSurfaceHints": [
         "render assertion",
@@ -136,7 +136,7 @@ Planning is required because active P1 findings remain. The structured planning 
       "id": "F015",
       "severity": "P1",
       "title": "Phase 000's acceptance row still reports four old pinned runtime values although the current harness file says those values were removed and replaced with a different runtime-value policy",
-      "file": "specs/public/005-component-surface-system/000-surface-contract-and-truthful-harness/acceptance-criteria.md:116",
+      "file": "specs/005-component-surface-system/000-surface-contract-and-truthful-harness/acceptance-criteria.md:116",
       "findingClass": "stale-criterion",
       "affectedSurfaceHints": [
         "pinned values",
@@ -147,7 +147,7 @@ Planning is required because active P1 findings remain. The structured planning 
       "id": "F016",
       "severity": "P1",
       "title": "The capture-fingerprint criterion requires three harness edits to stale captures, but the current forced input set does not include two of them",
-      "file": "specs/public/005-component-surface-system/000-surface-contract-and-truthful-harness/acceptance-criteria.md:128",
+      "file": "specs/005-component-surface-system/000-surface-contract-and-truthful-harness/acceptance-criteria.md:128",
       "findingClass": "partial-fingerprint",
       "affectedSurfaceHints": [
         "screenshot freshness",
@@ -158,7 +158,7 @@ Planning is required because active P1 findings remain. The structured planning 
       "id": "F017",
       "severity": "P1",
       "title": "The implemented pinned-value scanner no longer enforces the acceptance criterion it is marked as closing",
-      "file": "specs/public/005-component-surface-system/000-surface-contract-and-truthful-harness/acceptance-criteria.md:240",
+      "file": "specs/005-component-surface-system/000-surface-contract-and-truthful-harness/acceptance-criteria.md:240",
       "findingClass": "criterion-rule-drift",
       "affectedSurfaceHints": [
         "pinned-value scanner",
@@ -180,7 +180,7 @@ Planning is required because active P1 findings remain. The structured planning 
       "id": "F019",
       "severity": "P1",
       "title": "The handover generalizes renderer-level coverage into host-level coverage that the assertion explicitly excludes",
-      "file": "specs/public/005-component-surface-system/handover.md:53",
+      "file": "specs/005-component-surface-system/handover.md:53",
       "findingClass": "coverage-boundary",
       "affectedSurfaceHints": [
         "DatabaseView",
@@ -204,7 +204,7 @@ Planning is required because active P1 findings remain. The structured planning 
       "id": "F022",
       "severity": "P1",
       "title": "REQ-007 names thirteen blind modules but its literal widened-matcher run reports fourteen missing modules",
-      "file": "specs/public/005-component-surface-system/verification-audit.md:376",
+      "file": "specs/005-component-surface-system/verification-audit.md:376",
       "findingClass": "acceptance-control-mismatch",
       "affectedSurfaceHints": [
         "REQ-007",
@@ -227,7 +227,7 @@ Planning is required because active P1 findings remain. The structured planning 
       "id": "F008",
       "severity": "P2",
       "title": "The adversarial review carries a historical nine-child target without a current-scope qualifier",
-      "file": "specs/public/005-component-surface-system/adversarial-review.md:13",
+      "file": "specs/005-component-surface-system/adversarial-review.md:13",
       "findingClass": "historical-scope",
       "affectedSurfaceHints": [
         "adversarial review",
@@ -364,25 +364,25 @@ Planning is required because active P1 findings remain. The structured planning 
 
 ## Active Finding Registry
 
-- **F001 — P1 — The parent phase map does not cover the live child set** — [SOURCE: specs/public/005-component-surface-system/spec.md:149] The parent declares twenty phase folders but omits rows 020-028; the roadmap says those phases exist. Recommendation: Reconcile the parent phase map with every live child or formally exclude the omitted phases. Class: scope-coverage; affected surfaces: parent phase map, roadmap status.
-- **F002 — P1 — Handover validation status contradicts the transition rule** — [SOURCE: specs/public/005-component-surface-system/handover.md:52] Handover says parent strict validation is clean while the parent says every child fails strict validation. Recommendation: Publish one dated, scope-matched validation status and reconcile child results before release claims. Class: verification-status; affected surfaces: handover, phase transition gate.
-- **F003 — P1 — Phase 019 shipped without verification evidence** — [SOURCE: specs/public/005-component-surface-system/019-card-field-value-formatting/implementation-summary.md:40] The phase summary says code landed but no verification exists and criteria remain unmet. Recommendation: Run and record formatter parity and acceptance evidence against the shipped tree before closure. Class: missing-proof; affected surfaces: card field renderer, number formatting.
+- **F001 — P1 — The parent phase map does not cover the live child set** — [SOURCE: specs/005-component-surface-system/spec.md:149] The parent declares twenty phase folders but omits rows 020-028; the roadmap says those phases exist. Recommendation: Reconcile the parent phase map with every live child or formally exclude the omitted phases. Class: scope-coverage; affected surfaces: parent phase map, roadmap status.
+- **F002 — P1 — Handover validation status contradicts the transition rule** — [SOURCE: specs/005-component-surface-system/handover.md:52] Handover says parent strict validation is clean while the parent says every child fails strict validation. Recommendation: Publish one dated, scope-matched validation status and reconcile child results before release claims. Class: verification-status; affected surfaces: handover, phase transition gate.
+- **F003 — P1 — Phase 019 shipped without verification evidence** — [SOURCE: specs/005-component-surface-system/019-card-field-value-formatting/implementation-summary.md:40] The phase summary says code landed but no verification exists and criteria remain unmet. Recommendation: Run and record formatter parity and acceptance evidence against the shipped tree before closure. Class: missing-proof; affected surfaces: card field renderer, number formatting.
 - **F004 — P1 — Record-detail listeners are bound through the global active document instead of the panel's owning document** — [SOURCE: src/views/record-detail-panel.ts:196] Registration and cleanup use window.activeDocument and window, unlike the owned-menu path which derives event.view.document. Recommendation: Derive the document and window from host.ownerDocument/panel.ownerDocument and keep registration, cleanup, and focus in that realm. Class: cross-window-boundary; affected surfaces: record detail panel, popped-out window, dismissal listeners.
-- **F006 — P1 — Phase 001's roadmap status is not supported by its phase-local closure artifacts** — [SOURCE: specs/public/005-component-surface-system/roadmap.md:296] Roadmap says 001 is shipped and verified, while local spec/summary/checklist remain In Progress, 0/67 and unchecked. Recommendation: Reconcile phase-local status, checklist, summary, and acceptance evidence to the same shipped tree. Class: status-traceability; affected surfaces: phase 001, roadmap, checklist.
-- **F007 — P1 — The parent requires a live-verification gate before phase 000, but phase 009 has not produced the required evidence** — [SOURCE: specs/public/005-component-surface-system/spec.md:192] The handoff requires a defect reproduced in the running app; 009 records only one of three transport legs and an unmet citation audit. Recommendation: Complete and record 009's required live evidence before treating the 009-to-000 handoff as satisfied. Class: open-handoff-gate; affected surfaces: 009 live verification, 000 handoff.
-- **F009 — P1 — Phase 003's single-predicate contract remains explicitly unimplemented** — [SOURCE: specs/public/005-component-surface-system/003-mobile-sheet-presentation/plan.md:87] The plan requires one exported predicate, while the implementation summary says both symbols remain live and disagree in the 601-760px band. Recommendation: Unify the predicate or amend the contract to define and test two policies before treating phase 003 as shipped. Class: contract-drift; affected surfaces: touch mode, phone sheets, 601-760px band.
-- **F010 — P1 — Phase 026's commit/provenance state is contradictory across its own summary and the roadmap** — [SOURCE: specs/public/005-component-surface-system/026-production-render-assertions/implementation-summary.md:46] Phase summary says committed at 1bac3c2 while roadmap says no commit and working tree holds the check; N5 is still pending. Recommendation: Reconcile parent and phase provenance to one commit/tree and record the clean N5 result or open status consistently. Class: provenance-drift; affected surfaces: render assertion, reproducibility, roadmap.
+- **F006 — P1 — Phase 001's roadmap status is not supported by its phase-local closure artifacts** — [SOURCE: specs/005-component-surface-system/roadmap.md:296] Roadmap says 001 is shipped and verified, while local spec/summary/checklist remain In Progress, 0/67 and unchecked. Recommendation: Reconcile phase-local status, checklist, summary, and acceptance evidence to the same shipped tree. Class: status-traceability; affected surfaces: phase 001, roadmap, checklist.
+- **F007 — P1 — The parent requires a live-verification gate before phase 000, but phase 009 has not produced the required evidence** — [SOURCE: specs/005-component-surface-system/spec.md:192] The handoff requires a defect reproduced in the running app; 009 records only one of three transport legs and an unmet citation audit. Recommendation: Complete and record 009's required live evidence before treating the 009-to-000 handoff as satisfied. Class: open-handoff-gate; affected surfaces: 009 live verification, 000 handoff.
+- **F009 — P1 — Phase 003's single-predicate contract remains explicitly unimplemented** — [SOURCE: specs/005-component-surface-system/003-mobile-sheet-presentation/plan.md:87] The plan requires one exported predicate, while the implementation summary says both symbols remain live and disagree in the 601-760px band. Recommendation: Unify the predicate or amend the contract to define and test two policies before treating phase 003 as shipped. Class: contract-drift; affected surfaces: touch mode, phone sheets, 601-760px band.
+- **F010 — P1 — Phase 026's commit/provenance state is contradictory across its own summary and the roadmap** — [SOURCE: specs/005-component-surface-system/026-production-render-assertions/implementation-summary.md:46] Phase summary says committed at 1bac3c2 while roadmap says no commit and working tree holds the check; N5 is still pending. Recommendation: Reconcile parent and phase provenance to one commit/tree and record the clean N5 result or open status consistently. Class: provenance-drift; affected surfaces: render assertion, reproducibility, roadmap.
 - **F012 — P1 — The record-detail panel closes on window resize instead of satisfying the sheet's resize-preservation contract** — [SOURCE: src/views/record-detail-panel.ts:226] onResize calls close whenever the body is not editing, while AC-003 requires an open sheet to survive resize. Recommendation: Preserve and reposition a sheet on resize; keep close behavior only for presentation states that require it. Class: transition-contract; affected surfaces: record detail panel, keyboard resize, mobile sheet.
 - **F013 — P1 — Sheet placement can compute bounds from the global active document even when the panel belongs to another document** — [SOURCE: src/views/popover-position.ts:329] placeSheet's default bounds call reaches getVisiblePopoverBounds(null), which selects window.activeDocument. Recommendation: Resolve bounds from panel.ownerDocument/defaultView or pass owner-scoped bounds at every sheet call. Class: document-coordinate-mismatch; affected surfaces: sheet geometry, popped-out window, keyboard inset.
-- **F015 — P1 — Phase 000's acceptance row still reports four old pinned runtime values although the current harness file says those values were removed and replaced with a different runtime-value policy** — [SOURCE: specs/public/005-component-surface-system/000-surface-contract-and-truthful-harness/acceptance-criteria.md:116] Acceptance reports four pins while runtime-vars reports five removed values and tasks record a changed scan rule. Recommendation: Separate the dated baseline from current results and reconcile the acceptance population. Class: stale-criterion; affected surfaces: pinned values, acceptance criteria.
-- **F016 — P1 — The capture-fingerprint criterion requires three harness edits to stale captures, but the current forced input set does not include two of them** — [SOURCE: specs/public/005-component-surface-system/000-surface-contract-and-truthful-harness/acceptance-criteria.md:128] CAPTURE_INPUTS includes runtime-vars, scenarios and capture, but not preview.ts or verify-placement.mjs. Recommendation: Reconcile the criterion with actual capture dependencies or fingerprint the named files. Class: partial-fingerprint; affected surfaces: screenshot freshness, harness inputs.
-- **F017 — P1 — The implemented pinned-value scanner no longer enforces the acceptance criterion it is marked as closing** — [SOURCE: specs/public/005-component-surface-system/000-surface-contract-and-truthful-harness/acceptance-criteria.md:240] AC-016 requires one property population while T4a closes a different rule and explicitly says the old rule was changed. Recommendation: Rewrite or supersede AC-016 with the implemented rule and a matching negative control. Class: criterion-rule-drift; affected surfaces: pinned-value scanner, negative controls.
+- **F015 — P1 — Phase 000's acceptance row still reports four old pinned runtime values although the current harness file says those values were removed and replaced with a different runtime-value policy** — [SOURCE: specs/005-component-surface-system/000-surface-contract-and-truthful-harness/acceptance-criteria.md:116] Acceptance reports four pins while runtime-vars reports five removed values and tasks record a changed scan rule. Recommendation: Separate the dated baseline from current results and reconcile the acceptance population. Class: stale-criterion; affected surfaces: pinned values, acceptance criteria.
+- **F016 — P1 — The capture-fingerprint criterion requires three harness edits to stale captures, but the current forced input set does not include two of them** — [SOURCE: specs/005-component-surface-system/000-surface-contract-and-truthful-harness/acceptance-criteria.md:128] CAPTURE_INPUTS includes runtime-vars, scenarios and capture, but not preview.ts or verify-placement.mjs. Recommendation: Reconcile the criterion with actual capture dependencies or fingerprint the named files. Class: partial-fingerprint; affected surfaces: screenshot freshness, harness inputs.
+- **F017 — P1 — The implemented pinned-value scanner no longer enforces the acceptance criterion it is marked as closing** — [SOURCE: specs/005-component-surface-system/000-surface-contract-and-truthful-harness/acceptance-criteria.md:240] AC-016 requires one property population while T4a closes a different rule and explicitly says the old rule was changed. Recommendation: Rewrite or supersede AC-016 with the implemented rule and a matching negative control. Class: criterion-rule-drift; affected surfaces: pinned-value scanner, negative controls.
 - **F018 — P1 — Phase 026's coverage evidence is stale and internally contradictory** — [SOURCE: tools/live/renderer-coverage.json:21] Stamped artifact says 6 constructed while phase acceptance and summary say 2 of 22; current scenario list names six renderer families. Recommendation: Reconcile the stamp and phase prose to one dated authoritative coverage count. Class: coverage-provenance; affected surfaces: renderer coverage, phase 026 evidence.
-- **F019 — P1 — The handover generalizes renderer-level coverage into host-level coverage that the assertion explicitly excludes** — [SOURCE: specs/public/005-component-surface-system/handover.md:53] Handover says every reported view is asserted while phase 026 excludes DatabaseView and EmbeddedDatabaseRenderer host construction. Recommendation: Add host-level scenarios or narrow the handover claim and link excluded-host status. Class: coverage-boundary; affected surfaces: DatabaseView, EmbeddedDatabaseRenderer, operator reports.
+- **F019 — P1 — The handover generalizes renderer-level coverage into host-level coverage that the assertion explicitly excludes** — [SOURCE: specs/005-component-surface-system/handover.md:53] Handover says every reported view is asserted while phase 026 excludes DatabaseView and EmbeddedDatabaseRenderer host construction. Recommendation: Add host-level scenarios or narrow the handover claim and link excluded-host status. Class: coverage-boundary; affected surfaces: DatabaseView, EmbeddedDatabaseRenderer, operator reports.
 - **F020 — P1 — The CSS lane history contains a stylesheet acquisition for phase 001 with no matching release** — [SOURCE: tools/lane/css-lane.json:638] The outstanding record says phase 001 acquired the lane a second time and made four edits, with no release event; the live holder is null while the lane contract requires history to answer ownership and baseline provenance. Recommendation: Add a matching release or explicit supersession event with baseline and current stylesheet hashes, then reconcile the history. Class: ownership-provenance; affected surfaces: styles.css, phase 001 handoff, capture provenance.
-- **F022 — P1 — REQ-007 names thirteen blind modules but its literal widened-matcher run reports fourteen missing modules** — [SOURCE: specs/public/005-component-surface-system/verification-audit.md:376] The audit distinguishes the 13 newly revealed modules from the 14 modules reported missing on the tree as received and says the un-skippable control used a substitute run. Recommendation: Change REQ-007 to require the 14-module literal result or explicitly require the 13-module set-difference run, then link the resulting control to phase closure. Class: acceptance-control-mismatch; affected surfaces: REQ-007, pinned-value scanner, phase closure.
+- **F022 — P1 — REQ-007 names thirteen blind modules but its literal widened-matcher run reports fourteen missing modules** — [SOURCE: specs/005-component-surface-system/verification-audit.md:376] The audit distinguishes the 13 newly revealed modules from the 14 modules reported missing on the tree as received and says the un-skippable control used a substitute run. Recommendation: Change REQ-007 to require the 14-module literal result or explicitly require the 13-module set-difference run, then link the resulting control to phase closure. Class: acceptance-control-mismatch; affected surfaces: REQ-007, pinned-value scanner, phase closure.
 - **F005 — P2 — Mobile-sheet detection mixes an owner document with the global navigator** — [SOURCE: src/views/popover-position.ts:621] isMobileBottomSheet receives a document but reads maxTouchPoints from the global navigator. Recommendation: Read touch-point capability from the owner document's defaultView navigator or define the global realm as an explicit contract. Class: cross-window-boundary; affected surfaces: mobile sheet predicate, popped-out window.
-- **F008 — P2 — The adversarial review carries a historical nine-child target without a current-scope qualifier** — [SOURCE: specs/public/005-component-surface-system/adversarial-review.md:13] The review says all nine children although the parent and roadmap now describe later phase generations. Recommendation: Mark the historical scope as-of-date or link a current review inventory. Class: historical-scope; affected surfaces: adversarial review, review coverage.
+- **F008 — P2 — The adversarial review carries a historical nine-child target without a current-scope qualifier** — [SOURCE: specs/005-component-surface-system/adversarial-review.md:13] The review says all nine children although the parent and roadmap now describe later phase generations. Recommendation: Mark the historical scope as-of-date or link a current review inventory. Class: historical-scope; affected surfaces: adversarial review, review coverage.
 - **F011 — P2 — The shared surface registry has an unproven equality boundary** — [SOURCE: src/views/surface-contract.ts:224] The type-closed registry declares five producers while the phase inventory describes 33 positioner call sites and 11 owned menus. Recommendation: Complete the census-to-registry equality check or mark the remaining producers as intentionally outside the registry. Class: partial-registry; affected surfaces: surface registry, producer census.
 - **F014 — P2 — Anchor lease fallback timeout has no evidence-backed budget for asynchronous rebuilds** — [SOURCE: src/views/anchor-ref.ts:53] Default pending timeout is 250ms, but no inspected phase evidence establishes the slowest replacement-anchor latency. Recommendation: Measure the rebuild latency or make the timeout a documented host contract with a transition test. Class: unbounded-async-budget; affected surfaces: anchor lease, async refresh.
 - **F021 — P2 — Capture churn and sign-off remain only partially attributable** — [SOURCE: tools/lane/css-lane.json:637] The outstanding record says only 5 of 19 changed images have individual verdicts, 14 are under one bulk expected-change line, and all verdicts are assistant readings while device confirmation remains outstanding. Recommendation: Attach per-image verdicts and the required device confirmation, or explicitly preserve the unresolved evidence boundary in the release gate. Class: capture-evidence-completeness; affected surfaces: PNG captures, release sign-off, device confirmation.
@@ -417,7 +417,7 @@ Planning is required because active P1 findings remain. The structured planning 
 ## Deferred Items
 
 - F005: Mobile-sheet detection mixes an owner document with the global navigator — [SOURCE: src/views/popover-position.ts:621]
-- F008: The adversarial review carries a historical nine-child target without a current-scope qualifier — [SOURCE: specs/public/005-component-surface-system/adversarial-review.md:13]
+- F008: The adversarial review carries a historical nine-child target without a current-scope qualifier — [SOURCE: specs/005-component-surface-system/adversarial-review.md:13]
 - F011: The shared surface registry has an unproven equality boundary — [SOURCE: src/views/surface-contract.ts:224]
 - F014: Anchor lease fallback timeout has no evidence-backed budget for asynchronous rebuilds — [SOURCE: src/views/anchor-ref.ts:53]
 - F021: Capture churn and sign-off remain only partially attributable — [SOURCE: tools/lane/css-lane.json:637]

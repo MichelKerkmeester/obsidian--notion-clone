@@ -14,7 +14,7 @@ importance_tier: "high"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "public/001-note-db-notion-parity-build"
+    packet_pointer: "001-note-db-notion-parity-build"
     last_updated_at: "2026-08-27T17:17:44Z"
     last_updated_by: "swarm"
     recent_action: "Phases 002-014 In Progress with documented deferrals"

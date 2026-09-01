@@ -9,7 +9,7 @@ importance_tier: "high"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "public/001-note-db-notion-parity-build/012-files-column/005-files-column-proof"
+    packet_pointer: "001-note-db-notion-parity-build/012-files-column/005-files-column-proof"
     last_updated_at: "2026-08-27T17:27:13Z"
     last_updated_by: "phase-architect"
     recent_action: "Authored files-column-proof child from synthesis edges and final-plan step 6"

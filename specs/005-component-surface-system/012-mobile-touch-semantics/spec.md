@@ -11,7 +11,7 @@ importance_tier: "critical"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "public/005-component-surface-system/012-mobile-touch-semantics"
+    packet_pointer: "005-component-surface-system/012-mobile-touch-semantics"
     last_updated_at: "2026-08-31T18:30:00Z"
     last_updated_by: "sk-design"
     recent_action: "Title-cell check rebuilt on the real opener; four controls installed"

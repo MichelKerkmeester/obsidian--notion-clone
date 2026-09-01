@@ -1,6 +1,6 @@
 {
   "level": "1",
-  "specFolder": "public/001-note-db-notion-parity-build/017-excluded-parity-items",
+  "specFolder": "001-note-db-notion-parity-build/017-excluded-parity-items",
   "description": "The Notion-parity research (10 iterations, evidence in `research/research.md`, decision-ready summary in `research/synthesis.md`) surfaced a long",
   "keywords": [
     "notion-parity",

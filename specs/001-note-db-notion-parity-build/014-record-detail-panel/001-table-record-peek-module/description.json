@@ -1,5 +1,5 @@
 {
-  "specFolder": "public/001-note-db-notion-parity-build/014-record-detail-panel/001-table-record-peek-module",
+  "specFolder": "001-note-db-notion-parity-build/014-record-detail-panel/001-table-record-peek-module",
   "description": "The fork already hydrates records (`RowData` at `src/data/types.ts:113-119`) and stringifies values (`getColumnValue` at `ColumnDisplay.ts:63`;",
   "keywords": [
     "fork",

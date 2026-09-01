@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "packet_id": "public/001-note-db-notion-parity-build/012-files-column/001-files-column-module",
-  "spec_folder": "public/001-note-db-notion-parity-build/012-files-column/001-files-column-module",
-  "parent_id": "public/001-note-db-notion-parity-build/012-files-column",
+  "packet_id": "001-note-db-notion-parity-build/012-files-column/001-files-column-module",
+  "spec_folder": "001-note-db-notion-parity-build/012-files-column/001-files-column-module",
+  "parent_id": "001-note-db-notion-parity-build/012-files-column",
   "children_ids": [],
   "manual": {
     "depends_on": [],
@@ -192,7 +192,7 @@
     ],
     "causal_summary": "The fork already resolves vault wikilinks (`CoverImage.ts:22-26`, `FileFieldRenderer.ts:74-84`) but has no files-column value type",
     "created_at": "2026-08-25T21:08:49Z",
-    "last_save_at": "2026-08-27T12:28:03.383Z",
+    "last_save_at": "2026-09-01T10:50:15.952Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -201,12 +201,13 @@
       "tasks.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:d3eac929c0a515e433a9e8063c734f94fa4cc40422b72bfa5ad393a62fde7186",
+    "source_fingerprint": "sha256:766a1e6a8636a627a867925c0bcc23f740fac7a41c0270ae10adf24206ba87fd",
+    "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "1c6393af79940ed885bbb96a9f3d9d90ebf71ddce9d954cef1e6f042cda95f91",
-      "plan.md": "27b32d0e1f3d6245bede7e4d894b7d02cf8375f18bbbf1048d4572abe09dae69",
-      "tasks.md": "e2b7150cce65dd25b0601cc6c781239e1e7ad547eb309d38968bebc75a59098a",
-      "implementation-summary.md": "353e3fc06897a0d44d46b4a3aecfab4e95f63d8c4e40ae8cf05c4d266a932e16"
+      "spec.md": "925c4f4b25ed56a4964aa064b13dec00f214821863c5f7e437af2c7c96ab6422",
+      "plan.md": "df2a2adcdf77605d1f998c89921c3b6b8b064cf7158709b3328639cfc74ef3e4",
+      "tasks.md": "20f90377bac7b14db17fadf24c123edeb7b209d2134daa9f32be8286aced4359",
+      "implementation-summary.md": "b85ad337318b93c7a78be87355ebb86e3486112232ef748bf291883e9be7cafe"
     },
     "last_active_child_id": null,
     "last_active_at": null

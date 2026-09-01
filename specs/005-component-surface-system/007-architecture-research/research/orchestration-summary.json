@@ -1,8 +1,8 @@
 {
   "run_id": "1788086960712-j1qo41",
   "loop_type": "research",
-  "spec_folder": "specs/public/005-component-surface-system/007-architecture-research",
-  "base_artifact_dir": "specs/public/005-component-surface-system/007-architecture-research/research",
+  "spec_folder": "specs/005-component-surface-system/007-architecture-research",
+  "base_artifact_dir": "specs/005-component-surface-system/007-architecture-research/research",
   "total_cli_lineages": 1,
   "orphaned_lineages": [],
   "total": 1,

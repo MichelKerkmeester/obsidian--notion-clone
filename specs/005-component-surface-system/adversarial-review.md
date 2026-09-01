@@ -10,7 +10,7 @@ contextType: "research"
 ---
 # Adversarial Review: 005-component-surface-system
 
-**Target:** `specs/public/005-component-surface-system/` and all nine children (000–009)
+**Target:** `specs/005-component-surface-system/` and all nine children (000–009)
 **Question:** What in this program would let the 1.3.1 failure happen again?
 **Date:** 2026-08-29
 **Method:** Read-only review of every spec, plan, tasks, checklist, acceptance-criteria and goal file across the parent and all nine children, cross-referenced against the actual source files cited.

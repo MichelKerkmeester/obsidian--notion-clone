@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "packet_id": "public/005-component-surface-system/024-list-view-freeze",
-  "spec_folder": "public/005-component-surface-system/024-list-view-freeze",
-  "parent_id": "public/005-component-surface-system",
+  "packet_id": "005-component-surface-system/024-list-view-freeze",
+  "spec_folder": "005-component-surface-system/024-list-view-freeze",
+  "parent_id": "005-component-surface-system",
   "children_ids": [],
   "manual": {
     "depends_on": [],
@@ -207,7 +207,7 @@
     ],
     "causal_summary": "The operator, on a shipped build: \"opening list view bugs out obsidian freezes and you cant do",
     "created_at": "2026-08-30T16:53:58.480Z",
-    "last_save_at": "2026-08-31T22:51:22.668Z",
+    "last_save_at": "2026-09-01T10:50:16.459Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -218,13 +218,13 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:bdff27de941d380e59fe5158501a01f52149974461f727fc3aa5ca2e47a363d6",
+    "source_fingerprint": "sha256:f883a50b3b92417c55b4dcd8fcf3c64897d2993f4a6ca941725ada2a1d59c2d6",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "65a3b1bdf6bbb2a837b86bda35fd4f752a5f8aab443879c292af720400a70797",
-      "plan.md": "181fc0ff510cdd6a86539e155101607a4bf83047454f55019979ab7c7edc069c",
-      "tasks.md": "c83762562a1de1d2bbb881ae605859cdbf9a7215a47c5ef849330552cd5e809d",
-      "implementation-summary.md": "f80fb6b7971c5f9f91f30124a57da40612b23b9c557631cda3dee010f789c8cb"
+      "spec.md": "342bb80776a67f234eddbee9ab9802178f971b71a6922e435d111133c1c44511",
+      "plan.md": "74d146088f7f156e37e1a4273050d46ddbe579801cac3c2aca9ad64c4adca0ee",
+      "tasks.md": "663b24b46470747da9124e481c7d1122cbda8aa44a9c8232ef42e81215bb949a",
+      "implementation-summary.md": "773f44b1bff537a1344f0dee1726e2dcfe86155d9396fd42635781518e85f4a4"
     },
     "last_active_child_id": null,
     "last_active_at": null

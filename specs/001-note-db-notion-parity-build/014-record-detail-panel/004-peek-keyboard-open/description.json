@@ -1,5 +1,5 @@
 {
-  "specFolder": "public/001-note-db-notion-parity-build/014-record-detail-panel/004-peek-keyboard-open",
+  "specFolder": "001-note-db-notion-parity-build/014-record-detail-panel/004-peek-keyboard-open",
   "description": "Spec §8 requires a keyboard path beside hover",
   "keywords": [
     "spec",

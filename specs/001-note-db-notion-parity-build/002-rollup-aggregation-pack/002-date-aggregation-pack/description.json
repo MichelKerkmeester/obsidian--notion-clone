@@ -1,6 +1,6 @@
 {
   "level": "1",
-  "specFolder": "public/001-note-db-notion-parity-build/002-rollup-aggregation-pack/002-date-aggregation-pack",
+  "specFolder": "001-note-db-notion-parity-build/002-rollup-aggregation-pack/002-date-aggregation-pack",
   "description": "Notion Date-property rollups expose Earliest date / Latest date / Date range",
   "keywords": [
     "notion",

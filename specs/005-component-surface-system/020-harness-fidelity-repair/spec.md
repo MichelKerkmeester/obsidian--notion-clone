@@ -12,7 +12,7 @@ importance_tier: "critical"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "public/005-component-surface-system/020-harness-fidelity-repair"
+    packet_pointer: "005-component-surface-system/020-harness-fidelity-repair"
     last_updated_at: "2026-08-30T16:30:00Z"
     last_updated_by: "phase-author"
     recent_action: "Eight instrument repairs shipped; gate 14 green, placement 173/177"

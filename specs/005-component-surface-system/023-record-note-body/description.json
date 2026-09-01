@@ -1,5 +1,5 @@
 {
-  "specFolder": "public/005-component-surface-system/023-record-note-body",
+  "specFolder": "005-component-surface-system/023-record-note-body",
   "description": "Every row is a markdown note whose frontmatter the plugin renders as properties, while the note's actual body is never surfaced anywhere in the",
   "keywords": [
     "every",

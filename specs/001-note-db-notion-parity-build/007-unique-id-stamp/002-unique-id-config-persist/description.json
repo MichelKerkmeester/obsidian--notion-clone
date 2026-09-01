@@ -1,6 +1,6 @@
 {
   "level": "1",
-  "specFolder": "public/001-note-db-notion-parity-build/007-unique-id-stamp/002-unique-id-config-persist",
+  "specFolder": "001-note-db-notion-parity-build/007-unique-id-stamp/002-unique-id-config-persist",
   "description": "Notion owns the unique-ID counter server-side (only `prefix` is configurable)",
   "keywords": [
     "notion",

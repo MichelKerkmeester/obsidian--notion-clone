@@ -11,7 +11,7 @@ importance_tier: "high"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "public/001-note-db-notion-parity-build/011-table-multi-group"
+    packet_pointer: "001-note-db-notion-parity-build/011-table-multi-group"
     last_updated_at: "2026-08-28T10:54:50.080Z"
     last_updated_by: "docs-reconciliation"
     recent_action: "Corrected unsupported checklist claims against the shipped code"
@@ -73,7 +73,7 @@ Independently verified by a fresh, read-only Claude Sonnet 5 review (2026-08-26)
 | `src/views/EmbeddedDatabaseRenderer.ts` | Modified | Same tree/flatten as top-level; `groupByFields` copy-back |
 | `src/views/ToolbarRenderer.ts` | Modified | Sub-group popover section, computed-field filter |
 | `styles.css` | Modified (via `929769d`) | `db-group-header--depth-N` indent, sticky-at-depth-0-only, consecutive-header margin |
-| `specs/public/001-note-db-notion-parity-build/011-table-multi-group/{spec,plan,tasks,checklist,implementation-summary}.md` | Reconciled | Docs updated to reflect shipped state (this pass) |
+| `specs/001-note-db-notion-parity-build/011-table-multi-group/{spec,plan,tasks,checklist,implementation-summary}.md` | Reconciled | Docs updated to reflect shipped state (this pass) |
 
 <!-- /ANCHOR:what-built -->
 ---

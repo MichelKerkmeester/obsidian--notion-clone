@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "packet_id": "public/001-note-db-notion-parity-build/008-derived-inverse-relations/002-rollup-inverse-resolution",
-  "spec_folder": "public/001-note-db-notion-parity-build/008-derived-inverse-relations/002-rollup-inverse-resolution",
-  "parent_id": "public/001-note-db-notion-parity-build/008-derived-inverse-relations",
+  "packet_id": "001-note-db-notion-parity-build/008-derived-inverse-relations/002-rollup-inverse-resolution",
+  "spec_folder": "001-note-db-notion-parity-build/008-derived-inverse-relations/002-rollup-inverse-resolution",
+  "parent_id": "001-note-db-notion-parity-build/008-derived-inverse-relations",
   "children_ids": [],
   "manual": {
     "depends_on": [],
@@ -190,7 +190,7 @@
     ],
     "causal_summary": "Notion rollups compute over the related-pages set on whichever side the rollup column lives",
     "created_at": "2026-08-25T19:36:49Z",
-    "last_save_at": "2026-08-27T12:27:59.379Z",
+    "last_save_at": "2026-09-01T10:50:15.829Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -199,12 +199,13 @@
       "tasks.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:b17d7e6142ec18dbe70ed60fd85da9f20d6a5de850a83c4dd96eb1eb6537eec2",
+    "source_fingerprint": "sha256:10c5b7d4532b7b6c9a521373333b1b73bdef10fc1d1a47e3c102f87f100f9ea8",
+    "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "7ed593576b23fe8b2afabeab56792a9a696de55697e784e62af8d511a66fefe1",
-      "plan.md": "9083beb08cbb50377558324be0957ed89a7bbfda8857a785c423ea1edce3fb30",
-      "tasks.md": "790041c6271c3fa622f527056c08ef11e8428322b54ee2d9e830551dc8a6ce3d",
-      "implementation-summary.md": "a2a6fdefbeb8ebc554d011ed6c24a17b5c75145d9660a18f8a8ac7a07a33d1ae"
+      "spec.md": "24c148cce87dd382b98603f9fc211c5f2d680400a47ba99d9e61aa6d137e50e6",
+      "plan.md": "8b934ba3c6a9e775951700aaa4bca148b78d7ce7f85a2dbf022620c5db7662f6",
+      "tasks.md": "7f49e198cece3d508bab79729b7131a708807f7baecc93d5c9475aaf24d70d09",
+      "implementation-summary.md": "01b66a6bb2f622c935b156b3a236fe155d4ef89280c4b998b04e4cef52f8700b"
     },
     "last_active_child_id": null,
     "last_active_at": null

@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "packet_id": "/Users/michelkerkmeester/MEGA/Development/Obsidian Plugin/specs/public/003-ui-improvement-build/020-board-and-calendar",
-  "spec_folder": "/Users/michelkerkmeester/MEGA/Development/Obsidian Plugin/specs/public/003-ui-improvement-build/020-board-and-calendar",
-  "parent_id": null,
+  "packet_id": "003-ui-improvement-build/020-board-and-calendar",
+  "spec_folder": "003-ui-improvement-build/020-board-and-calendar",
+  "parent_id": "003-ui-improvement-build",
   "children_ids": [],
   "manual": {
     "depends_on": [],
@@ -11,30 +11,154 @@
   },
   "derived": {
     "trigger_phrases": [
-      "board pagination and the notion phone calendar"
+      "board pagination and the notion phone calendar",
+      "020 board and calendar",
+      "020 board and calendar plan",
+      "020 board and calendar tasks"
     ],
     "key_topics": [
-      "15",
-      "16",
-      "18"
+      "board",
+      "pagination",
+      "notion",
+      "phone",
+      "calendar",
+      "plan",
+      "tasks",
+      "position",
+      "sticky",
+      "bare",
+      "literal",
+      "z-index"
     ],
-    "importance_tier": "important",
+    "importance_tier": "high",
     "status": "planned",
     "key_files": [
       "spec.md",
       "plan.md",
       "tasks.md"
     ],
-    "entities": [],
-    "causal_summary": "Phase 020: Board Pagination and the Notion Phone Calendar",
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Board Pagination",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Notion Phone Calendar",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Spec Folder",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Problem Statement Board",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Purpose Make",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Plan",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "those",
+        "kind": "key_phrase",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "no",
+        "kind": "key_phrase",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "1. SUMMARY",
+        "kind": "heading",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Breakdown",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "read",
+        "kind": "key_phrase",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "evidence",
+        "kind": "key_phrase",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "cited",
+        "kind": "key_phrase",
+        "path": "tasks.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "Board pagination is `position: sticky` with a bare literal `z-index: 30` outside the declared scale, so it paints over the cards",
     "created_at": "2026-08-29T07:00:00Z",
-    "last_save_at": "2026-08-29T07:00:00Z",
+    "last_save_at": "2026-09-01T10:50:16.210Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
       "spec.md",
       "plan.md",
       "tasks.md"
-    ]
+    ],
+    "source_fingerprint": "sha256:4f087b7689afa4fcaa095bd087e6c58bf6cac9935a332ab02aa9381843981054",
+    "source_fingerprint_docset": 3,
+    "source_doc_hashes": {
+      "spec.md": "0ea9f35fae4c6457d1fabe38c432f4e6dfb2c19fb90e32f3e5ec9039dbbdcaf1",
+      "plan.md": "8325c5c06c31e641b46c208415f4fa9be6779756c1435b35d381244f46107062",
+      "tasks.md": "a2d7441c3c2567801ff794e47e0d5419208f32a863858f4c6b8c47454ea8031a"
+    },
+    "last_active_child_id": null,
+    "last_active_at": null
   }
 }

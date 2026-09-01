@@ -196,7 +196,7 @@ the archived generation 1. Disposition is against the tree at `3d4d2f2`.
 ### O1 — The embed host is absent from the packet that is about to change the list
 
 `grep -rn "embedded-database-renderer\|EmbeddedDatabaseRenderer\|embed" --include='*.md'` across
-`specs/public/006-list-view-clickup/` — parent and all five children — returns **zero matches**.
+`specs/006-list-view-clickup/` — parent and all five children — returns **zero matches**.
 
 The embed is not a detail. It is a second Obsidian host, 4,069 lines, that constructs its own
 `TableRenderer`, `BoardRenderer`, `GalleryRenderer` and `ListRenderer`

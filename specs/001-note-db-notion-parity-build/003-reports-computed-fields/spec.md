@@ -14,7 +14,7 @@ importance_tier: "high"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "public/001-note-db-notion-parity-build/003-reports-computed-fields"
+    packet_pointer: "001-note-db-notion-parity-build/003-reports-computed-fields"
     last_updated_at: "2026-08-27T17:09:01Z"
     last_updated_by: "phase-architect"
     recent_action: "Nested sub-phases authored; live inspect first"

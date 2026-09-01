@@ -12,7 +12,7 @@ importance_tier: "critical"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "public/005-component-surface-system/011-mobile-menu-presentation"
+    packet_pointer: "005-component-surface-system/011-mobile-menu-presentation"
     last_updated_at: "2026-08-30T05:30:00Z"
     last_updated_by: "phase-author"
     recent_action: "Phase cut from an operator device report with a screenshot; not started"

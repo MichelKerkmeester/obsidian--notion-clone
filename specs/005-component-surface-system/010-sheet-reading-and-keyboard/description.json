@@ -1,5 +1,5 @@
 {
-  "specFolder": "public/005-component-surface-system/010-sheet-reading-and-keyboard",
+  "specFolder": "005-component-surface-system/010-sheet-reading-and-keyboard",
   "description": "Make the phone record sheet read like a record rather than a two-column ledger, and keep the field being edited visible when the software keyboard",
   "keywords": [
     "phone",

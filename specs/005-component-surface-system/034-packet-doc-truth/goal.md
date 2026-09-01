@@ -6,7 +6,7 @@ importance_tier: "critical"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "public/005-component-surface-system/034-packet-doc-truth"
+    packet_pointer: "005-component-surface-system/034-packet-doc-truth"
     last_updated_at: "2026-09-01T00:30:00Z"
     last_updated_by: "phase-author"
     recent_action: "Independent audit run: 10 of 11 verified, and the one it caught was fixed"

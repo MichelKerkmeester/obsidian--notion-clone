@@ -1,6 +1,6 @@
 {
   "level": "1",
-  "specFolder": "public/001-note-db-notion-parity-build/003-reports-computed-fields/001-live-reports-inspect",
+  "specFolder": "001-note-db-notion-parity-build/003-reports-computed-fields/001-live-reports-inspect",
   "description": "The single biggest risk for this phase is writing the wrong `[field]` names or Saved expression before inspecting live Reports column ids after",
   "keywords": [
     "single",

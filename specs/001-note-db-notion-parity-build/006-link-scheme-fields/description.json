@@ -1,6 +1,6 @@
 {
   "level": "2",
-  "specFolder": "public/001-note-db-notion-parity-build/006-link-scheme-fields",
+  "specFolder": "001-note-db-notion-parity-build/006-link-scheme-fields",
   "description": "Notion treats URL, email, and phone property values as first-class clickable links: URL opens in a new tab, Email launches the mail client, Phone",
   "keywords": [
     "notion",

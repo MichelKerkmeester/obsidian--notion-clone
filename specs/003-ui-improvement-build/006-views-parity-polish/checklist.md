@@ -15,7 +15,7 @@ importance_tier: "high"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "public/003-ui-improvement-build/006-views-parity-polish"
+    packet_pointer: "003-ui-improvement-build/006-views-parity-polish"
     last_updated_at: "2026-08-28T04:30:57Z"
     last_updated_by: "phase-author"
     recent_action: "Verified views parity checklist gates"
@@ -162,11 +162,11 @@ _memory:
 <!-- ANCHOR:protocol -->
 ## File Organization
 
-- [x] CHK-033 [P0] `spec.md`, `plan.md`, `tasks.md`, `checklist.md`, and `implementation-summary.md` adhere strictly to the SPECKIT template contract (REQ-001 through REQ-020) [EVIDENCE: specs/public/003-ui-improvement-build/006-views-parity-polish/spec.md:1-250 SPECKIT level 2 contract]
+- [x] CHK-033 [P0] `spec.md`, `plan.md`, `tasks.md`, `checklist.md`, and `implementation-summary.md` adhere strictly to the SPECKIT template contract (REQ-001 through REQ-020) [EVIDENCE: specs/003-ui-improvement-build/006-views-parity-polish/spec.md:1-250 SPECKIT level 2 contract]
   - **Evidence**: SPECKIT template structure preserved across all phase documents.
-- [x] CHK-034 [P0] All anchor tags opened and closed in the exact required order (REQ-001 through REQ-020) [EVIDENCE: specs/public/003-ui-improvement-build/006-views-parity-polish/checklist.md:45,57,60,76,79,95,98,110,113,124,126,136,139,156,159,169,172,187 matching ANCHOR tags]
+- [x] CHK-034 [P0] All anchor tags opened and closed in the exact required order (REQ-001 through REQ-020) [EVIDENCE: specs/003-ui-improvement-build/006-views-parity-polish/checklist.md:45,57,60,76,79,95,98,110,113,124,126,136,139,156,159,169,172,187 matching ANCHOR tags]
   - **Evidence**: Verified opening and closing of all ANCHOR tags.
-- [x] CHK-035 [P0] Frontmatter fields contain valid values, single-clause descriptions <= 96 characters, and zero sha256 session fingerprints (REQ-001 through REQ-020) [EVIDENCE: specs/public/003-ui-improvement-build/006-views-parity-polish/checklist.md:1-37 valid frontmatter]
+- [x] CHK-035 [P0] Frontmatter fields contain valid values, single-clause descriptions <= 96 characters, and zero sha256 session fingerprints (REQ-001 through REQ-020) [EVIDENCE: specs/003-ui-improvement-build/006-views-parity-polish/checklist.md:1-37 valid frontmatter]
   - **Evidence**: Frontmatter validated across all files.
 
 <!-- /ANCHOR:protocol -->

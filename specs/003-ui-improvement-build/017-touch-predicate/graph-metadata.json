@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "packet_id": "/Users/michelkerkmeester/MEGA/Development/Obsidian Plugin/specs/public/003-ui-improvement-build/017-touch-predicate",
-  "spec_folder": "/Users/michelkerkmeester/MEGA/Development/Obsidian Plugin/specs/public/003-ui-improvement-build/017-touch-predicate",
-  "parent_id": null,
+  "packet_id": "003-ui-improvement-build/017-touch-predicate",
+  "spec_folder": "003-ui-improvement-build/017-touch-predicate",
+  "parent_id": "003-ui-improvement-build",
   "children_ids": [],
   "manual": {
     "depends_on": [],
@@ -11,31 +11,160 @@
   },
   "derived": {
     "trigger_phrases": [
-      "one canonical touch predicate"
+      "one canonical touch predicate",
+      "017 touch predicate",
+      "017 touch predicate plan",
+      "017 touch predicate tasks"
     ],
     "key_topics": [
-      "2",
-      "3",
-      "9",
-      "10"
+      "one",
+      "canonical",
+      "touch",
+      "predicate",
+      "plan",
+      "tasks",
+      "two",
+      "predicates",
+      "disagree",
+      "feature",
+      "specification",
+      "retire"
     ],
-    "importance_tier": "important",
+    "importance_tier": "high",
     "status": "planned",
     "key_files": [
       "spec.md",
       "plan.md",
       "tasks.md"
     ],
-    "entities": [],
-    "causal_summary": "Phase 017: One Canonical Touch Predicate",
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "One Canonical Touch Predicate",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Spec Folder",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Problem Statement Two",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Purpose Make",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "In Scope",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Plan",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "those",
+        "kind": "key_phrase",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "no",
+        "kind": "key_phrase",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "1. SUMMARY",
+        "kind": "heading",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "2. QUALITY GATES",
+        "kind": "heading",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Breakdown",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "read",
+        "kind": "key_phrase",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "evidence",
+        "kind": "key_phrase",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "cited",
+        "kind": "key_phrase",
+        "path": "tasks.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "Two predicates disagree",
     "created_at": "2026-08-29T07:00:00Z",
-    "last_save_at": "2026-08-29T07:00:00Z",
+    "last_save_at": "2026-09-01T10:50:16.197Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
       "spec.md",
       "plan.md",
       "tasks.md"
-    ]
+    ],
+    "source_fingerprint": "sha256:8c65e9dc15f0e8f77849d859ed6c25a5ff6e74c9a1c99821640c215a95350c38",
+    "source_fingerprint_docset": 3,
+    "source_doc_hashes": {
+      "spec.md": "ac0f408e2208d1ba1a15f578cb9bf915e139e158fa7b0657dbeaec4d79f75361",
+      "plan.md": "566c565ba97b49df55f15e021b24b831e46c281e02b7f9d77c97fc12eaefe77c",
+      "tasks.md": "bf4023dabe3de10ddfe0dfcb2736bf7d93ed718f196aa89f755f1c5a7ecc93b2"
+    },
+    "last_active_child_id": null,
+    "last_active_at": null
   }
 }

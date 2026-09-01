@@ -1,7 +1,7 @@
 # Review Report — Component Surface System (fan-out lineage cursor-grok46-xhigh-fast)
 
 Lineage: `fanout-cursor-grok46-xhigh-fast-1788178447595-968qzp`
-Target: `specs/public/005-component-surface-system` (spec-folder)
+Target: `specs/005-component-surface-system` (spec-folder)
 Executor: cli-cursor / cursor-grok-4.6-xhigh-fast
 Stop policy: max-iterations (10/10). Convergence is telemetry only.
 Generated: 2026-08-31T12:21:00.000Z
@@ -36,11 +36,11 @@ Planning Packet:
   "activeFindings": [
     {"findingId": "F001", "severity": "P0", "dimension": "security", "findingClass": "unsafe-scheme-open", "file": "src/views/board-renderer.ts:971", "title": "Non-files cover fields open javascript and data scheme targets via window.open"},
     {"findingId": "F002", "severity": "P1", "dimension": "correctness", "findingClass": "state-transition", "file": "src/views/database-view.ts:11484", "title": "Sort and filter mutations still destroy and rebuild every view"},
-    {"findingId": "F003", "severity": "P1", "dimension": "correctness", "findingClass": "spec-code-drift", "file": "specs/public/005-component-surface-system/000-surface-contract-and-truthful-harness/spec.md:59", "title": "Child 000 still specifies deleted openSurface as the create path"},
-    {"findingId": "F004", "severity": "P1", "dimension": "traceability", "findingClass": "inventory-gap", "file": "specs/public/005-component-surface-system/spec.md:69", "title": "Parent phase map is incomplete and under-counts folders"},
-    {"findingId": "F005", "severity": "P1", "dimension": "maintainability", "findingClass": "playbook-capability", "file": "specs/public/005-component-surface-system/009-live-verification/implementation-summary.md:48", "title": "009 never drove the running Obsidian so the circular harness remains in force"},
-    {"findingId": "F006", "severity": "P1", "dimension": "traceability", "findingClass": "checklist-evidence", "file": "specs/public/005-component-surface-system/004-checkbox-ownership/checklist.md:31", "title": "Completion marks and parent evidence are missing or unchecked"},
-    {"findingId": "F007", "severity": "P1", "dimension": "correctness", "findingClass": "spec-code-drift", "file": "specs/public/005-component-surface-system/spec.md:133", "title": "Parent lists 006 as Planned while the child is in progress without the resolver"},
+    {"findingId": "F003", "severity": "P1", "dimension": "correctness", "findingClass": "spec-code-drift", "file": "specs/005-component-surface-system/000-surface-contract-and-truthful-harness/spec.md:59", "title": "Child 000 still specifies deleted openSurface as the create path"},
+    {"findingId": "F004", "severity": "P1", "dimension": "traceability", "findingClass": "inventory-gap", "file": "specs/005-component-surface-system/spec.md:69", "title": "Parent phase map is incomplete and under-counts folders"},
+    {"findingId": "F005", "severity": "P1", "dimension": "maintainability", "findingClass": "playbook-capability", "file": "specs/005-component-surface-system/009-live-verification/implementation-summary.md:48", "title": "009 never drove the running Obsidian so the circular harness remains in force"},
+    {"findingId": "F006", "severity": "P1", "dimension": "traceability", "findingClass": "checklist-evidence", "file": "specs/005-component-surface-system/004-checkbox-ownership/checklist.md:31", "title": "Completion marks and parent evidence are missing or unchecked"},
+    {"findingId": "F007", "severity": "P1", "dimension": "correctness", "findingClass": "spec-code-drift", "file": "specs/005-component-surface-system/spec.md:133", "title": "Parent lists 006 as Planned while the child is in progress without the resolver"},
     {"findingId": "F013", "severity": "P1", "dimension": "traceability", "findingClass": "feature-catalog-gap", "file": "src/views/surface-contract.ts:224", "title": "SURFACE_REGISTRY names five producers and omits live panels"}
   ],
   "remediationWorkstreams": [

@@ -8,8 +8,8 @@ Whether stylesheet ownership and capture evidence can be reconstructed reliably 
 
 - `tools/lane/css-lane.json`
 - `tools/lane/README.md`
-- `specs/public/005-component-surface-system/roadmap.md`
-- `specs/public/005-component-surface-system/handover.md`
+- `specs/005-component-surface-system/roadmap.md`
+- `specs/005-component-surface-system/handover.md`
 
 ## Findings - New
 

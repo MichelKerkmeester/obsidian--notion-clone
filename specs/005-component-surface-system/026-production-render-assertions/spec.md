@@ -11,7 +11,7 @@ importance_tier: "critical"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "public/005-component-surface-system/026-production-render-assertions"
+    packet_pointer: "005-component-surface-system/026-production-render-assertions"
     last_updated_at: "2026-08-30T17:00:00Z"
     last_updated_by: "007-harvest"
     recent_action: "Opened from the 007 architecture-research harvest; failing numbers measured, none built"

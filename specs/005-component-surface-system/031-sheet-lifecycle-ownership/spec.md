@@ -10,7 +10,7 @@ importance_tier: "critical"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "public/005-component-surface-system/031-sheet-lifecycle-ownership"
+    packet_pointer: "005-component-surface-system/031-sheet-lifecycle-ownership"
     last_updated_at: "2026-08-31T16:00:00Z"
     last_updated_by: "phase-author"
     recent_action: "Flick threshold settled at 0.8 px/ms and the lane's drags given a clock they choose"

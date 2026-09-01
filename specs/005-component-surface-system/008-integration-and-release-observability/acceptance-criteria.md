@@ -12,7 +12,7 @@ importance_tier: "critical"
 contextType: "implementation"
 _memory:
   continuity:
-    packet_pointer: "public/005-component-surface-system/008-integration-and-release-observability"
+    packet_pointer: "005-component-surface-system/008-integration-and-release-observability"
     last_updated_at: "2026-08-29T18:10:00Z"
     last_updated_by: "phase-architect"
     recent_action: "Harness audit: AC-010 stands, but freshness certifies vintage and not validity"

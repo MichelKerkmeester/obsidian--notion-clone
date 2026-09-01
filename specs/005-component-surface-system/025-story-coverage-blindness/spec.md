@@ -11,7 +11,7 @@ importance_tier: "critical"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "public/005-component-surface-system/025-story-coverage-blindness"
+    packet_pointer: "005-component-surface-system/025-story-coverage-blindness"
     last_updated_at: "2026-08-30T16:30:00Z"
     last_updated_by: "phase-author"
     recent_action: "All 7 criteria met; C7 control run, matcher 31 vs 18, names 13 hidden modules"

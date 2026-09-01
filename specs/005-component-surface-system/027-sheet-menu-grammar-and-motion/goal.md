@@ -9,7 +9,7 @@ importance_tier: "critical"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "public/005-component-surface-system/027-sheet-menu-grammar-and-motion"
+    packet_pointer: "005-component-surface-system/027-sheet-menu-grammar-and-motion"
     last_updated_at: "2026-08-30T21:20:00Z"
     last_updated_by: "goal-reconcile"
     recent_action: "Criteria re-read against the 220/224 capture; 13 of 14 met, only the operator row open"

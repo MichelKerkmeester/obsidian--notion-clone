@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "packet_id": "public/005-component-surface-system/022-selection-bar-keyboard-docking",
-  "spec_folder": "public/005-component-surface-system/022-selection-bar-keyboard-docking",
-  "parent_id": "public/005-component-surface-system",
+  "packet_id": "005-component-surface-system/022-selection-bar-keyboard-docking",
+  "spec_folder": "005-component-surface-system/022-selection-bar-keyboard-docking",
+  "parent_id": "005-component-surface-system",
   "children_ids": [],
   "manual": {
     "depends_on": [],
@@ -201,7 +201,7 @@
     ],
     "causal_summary": "The cell-selection action bar floats over the table at a fixed offset from the viewport floor, so an open keyboard covers or crowds it, and its own content is taller than the box that holds it.",
     "created_at": "2026-08-30T15:07:29.327Z",
-    "last_save_at": "2026-08-31T20:01:17.651Z",
+    "last_save_at": "2026-09-01T10:50:16.446Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -212,13 +212,13 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:49e1db3034367eea43da929595ae9aa82c4150c6f4a79a3ad0114757dc78477c",
+    "source_fingerprint": "sha256:8217ae05b1336820bd7df3ed5e84bb8cd46806608dc2bb90259f84c9438856b7",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "1f6a78f8d5f58b261ac31b528a4404ee2582cc70c9e72626b6af755473f68e68",
+      "spec.md": "fd4f6b2d087c3a19a66da7dcd1d44f44ee49e168fb86fc8e933770deeaa7eab9",
       "plan.md": "6d6a41a091dcf7f2022ec99cf778a0bea3eee0b96c332c1df8b27600033a5261",
       "tasks.md": "ac392b5bf71f6a67028bc055c29a446510c6a36b1840f1e969d8218f0125ec6b",
-      "implementation-summary.md": "350c4513599865220f3f9aedc4bfbd6df45afe0cd334f20a3c08eb24be870a7d"
+      "implementation-summary.md": "af81d8ce7008aa4f318b05279026763291b75206bc4ce0a16cf2e65cd59bb3a3"
     },
     "last_active_child_id": null,
     "last_active_at": null

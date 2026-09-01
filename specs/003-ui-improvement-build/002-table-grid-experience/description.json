@@ -1,5 +1,5 @@
 {
-  "specFolder": "public/003-ui-improvement-build/002-table-grid-experience",
+  "specFolder": "003-ui-improvement-build/002-table-grid-experience",
   "description": "The table/grid view is the primary data surface of the Note Database plugin, but its user experience is compromised by structural layout stutter,",
   "keywords": [
     "table",

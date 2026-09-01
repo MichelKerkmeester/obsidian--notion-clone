@@ -12,7 +12,7 @@ importance_tier: "high"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "public/001-note-db-notion-parity-build/014-record-detail-panel"
+    packet_pointer: "001-note-db-notion-parity-build/014-record-detail-panel"
     last_updated_at: "2026-08-27T17:09:01Z"
     last_updated_by: "phase-architect"
     recent_action: "Nested sub-phases authored from synthesis and final-plan"
@@ -97,11 +97,11 @@ Ship a **display-only CSS-docked right side-peek** from a new `src/views/TableRe
 
 | File Path | Change Type | Description |
 |-----------|-------------|-------------|
-| `specs/public/001-note-db-notion-parity-build/014-record-detail-panel/spec.md` | Edit | Level 2 specification rewritten to match synthesis + final-plan review |
-| `specs/public/001-note-db-notion-parity-build/014-record-detail-panel/plan.md` | Edit | Level 2 implementation plan rewritten to match synthesis + final-plan review |
-| `specs/public/001-note-db-notion-parity-build/014-record-detail-panel/tasks.md` | Edit | Level 2 task list rewritten to match synthesis ranked backlog + final-plan review |
-| `specs/public/001-note-db-notion-parity-build/014-record-detail-panel/checklist.md` | Edit | Level 2 verification checklist rewritten to match synthesis edge cases + final-plan review |
-| `specs/public/001-note-db-notion-parity-build/014-record-detail-panel/implementation-summary.md` | Untouched | Nothing is implemented yet |
+| `specs/001-note-db-notion-parity-build/014-record-detail-panel/spec.md` | Edit | Level 2 specification rewritten to match synthesis + final-plan review |
+| `specs/001-note-db-notion-parity-build/014-record-detail-panel/plan.md` | Edit | Level 2 implementation plan rewritten to match synthesis + final-plan review |
+| `specs/001-note-db-notion-parity-build/014-record-detail-panel/tasks.md` | Edit | Level 2 task list rewritten to match synthesis ranked backlog + final-plan review |
+| `specs/001-note-db-notion-parity-build/014-record-detail-panel/checklist.md` | Edit | Level 2 verification checklist rewritten to match synthesis edge cases + final-plan review |
+| `specs/001-note-db-notion-parity-build/014-record-detail-panel/implementation-summary.md` | Untouched | Nothing is implemented yet |
 | `src/views/TableRecordPeek.ts` (fork) | Create (planned) | Display-only CSS-docked side-peek panel + title-cell OPEN affordance; distinct exports (`attachTitleOpenAffordance`, `openTableRecordPeek`, `closeTableRecordPeek`, `syncTableRecordPeek`); no `DataSource` import; sibling of — and distinct from — the existing calendar `src/views/RecordDetailPanel.ts` |
 | `src/views/DatabaseView.ts` (fork) | Edit (planned) | Three hunks: (A) `renderCell` (~7840-7848) attaches the affordance for `col.key === "file.name"` or the first visible data column when the title is hidden; (B) `handleDatabaseKeydown` (~1523) handles Mod+Enter before `editAtCellSelection()`; (C) overlay lifecycle — `hasActiveOverlay` (`:834`), `closeActiveOverlays` (`:864`), `refresh()` (`:10483-10488`) |
 | `src/i18n.ts` (fork) | Edit (planned) | Add `panel.open`, `panel.noProperties`, `panel.hiddenProperties` × en / zh-CN / zh-TW |

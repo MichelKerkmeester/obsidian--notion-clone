@@ -14,7 +14,7 @@ importance_tier: "high"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "public/001-note-db-notion-parity-build/004-formula-ifs-switch-math"
+    packet_pointer: "001-note-db-notion-parity-build/004-formula-ifs-switch-math"
     last_updated_at: "2026-08-27T12:25:50Z"
     last_updated_by: "phase-architect"
     recent_action: "Nested sub-phases authored; engine module first"
@@ -104,11 +104,11 @@ Build it, as named wrappers over an engine that needs no new evaluation machiner
 | `<fork>/src/__tests__/setup.ts` | New (planned) | Minimal `globalThis.moment` stub enabling node-side vitest runs |
 | `<fork>/src/data/__tests__/computed-formulas.test.ts` | New (planned) | Alias-equivalence and wrapper-scenario unit tests (no `obsidian` types needed) |
 | `<fork>/src/data/SafeEval.ts` | No change (verify) | Sandbox gate must show zero diff against the upstream base |
-| `specs/public/001-note-db-notion-parity-build/004-formula-ifs-switch-math/spec.md` | Scaffolded | This specification |
-| `specs/public/001-note-db-notion-parity-build/004-formula-ifs-switch-math/plan.md` | Scaffolded | Implementation plan |
-| `specs/public/001-note-db-notion-parity-build/004-formula-ifs-switch-math/tasks.md` | Scaffolded | Task breakdown |
-| `specs/public/001-note-db-notion-parity-build/004-formula-ifs-switch-math/checklist.md` | Scaffolded | Verification checklist |
-| `specs/public/001-note-db-notion-parity-build/004-formula-ifs-switch-math/implementation-summary.md` | Scaffolded | Implementation summary |
+| `specs/001-note-db-notion-parity-build/004-formula-ifs-switch-math/spec.md` | Scaffolded | This specification |
+| `specs/001-note-db-notion-parity-build/004-formula-ifs-switch-math/plan.md` | Scaffolded | Implementation plan |
+| `specs/001-note-db-notion-parity-build/004-formula-ifs-switch-math/tasks.md` | Scaffolded | Task breakdown |
+| `specs/001-note-db-notion-parity-build/004-formula-ifs-switch-math/checklist.md` | Scaffolded | Verification checklist |
+| `specs/001-note-db-notion-parity-build/004-formula-ifs-switch-math/implementation-summary.md` | Scaffolded | Implementation summary |
 
 <!-- /ANCHOR:scope -->
 ---

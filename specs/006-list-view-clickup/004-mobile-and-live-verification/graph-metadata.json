@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "packet_id": "public/006-list-view-clickup/004-mobile-and-live-verification",
-  "spec_folder": "public/006-list-view-clickup/004-mobile-and-live-verification",
-  "parent_id": "public/006-list-view-clickup",
+  "packet_id": "006-list-view-clickup/004-mobile-and-live-verification",
+  "spec_folder": "006-list-view-clickup/004-mobile-and-live-verification",
+  "parent_id": "006-list-view-clickup",
   "children_ids": [],
   "manual": {
     "depends_on": [],
@@ -179,7 +179,7 @@
     ],
     "causal_summary": "Phone layout and touch targets, the two deferred guards, and the only evidence that closes the packet: the operator opens the plugin and confirms the screen changed.",
     "created_at": "2026-08-30T10:00:33.643Z",
-    "last_save_at": "2026-08-30T10:00:33.643Z",
+    "last_save_at": "2026-09-01T10:50:16.563Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -188,10 +188,10 @@
       "tasks.md",
       "acceptance-criteria.md"
     ],
-    "source_fingerprint": "sha256:a44f86f2075219dd2dd550c8b246cf054ccf901b0df639327267ee0ceae9fe2c",
+    "source_fingerprint": "sha256:9a8e4764f42e318173fd751a2b54bef3cf682fccd27cd3aa1401c86908db498e",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "29a74392436b4e4622b4cfea3ca75db77dd4b91479d5dcedd155e4788fd6c1af",
+      "spec.md": "4e98f275e3fec19f36bd5f48b3e0af4e005b06774571ebd4fa4d40b1de1f7681",
       "plan.md": "d746e2e83e41020754581c0a473f66e7b7884b74c5817fdf20746082ce942454",
       "tasks.md": "edc2bf5f3fd5305c438e831840ed70ca230459412b4031eb852feb4fa91c4d03"
     },

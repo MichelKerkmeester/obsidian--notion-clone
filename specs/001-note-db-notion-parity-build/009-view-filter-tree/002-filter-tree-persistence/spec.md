@@ -11,7 +11,7 @@ importance_tier: "high"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "public/001-note-db-notion-parity-build/009-view-filter-tree/002-filter-tree-persistence"
+    packet_pointer: "001-note-db-notion-parity-build/009-view-filter-tree/002-filter-tree-persistence"
     last_updated_at: "2026-08-27T12:27:53Z"
     last_updated_by: "phase-architect"
     recent_action: "Authored filter-tree-persistence child from synthesis ranks 2-3 and final-plan steps 6-7"

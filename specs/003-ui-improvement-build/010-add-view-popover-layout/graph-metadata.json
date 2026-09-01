@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "packet_id": "public/003-ui-improvement-build/010-add-view-popover-layout",
-  "spec_folder": "public/003-ui-improvement-build/010-add-view-popover-layout",
-  "parent_id": "public/003-ui-improvement-build",
+  "packet_id": "003-ui-improvement-build/010-add-view-popover-layout",
+  "spec_folder": "003-ui-improvement-build/010-add-view-popover-layout",
+  "parent_id": "003-ui-improvement-build",
   "children_ids": [],
   "manual": {
     "depends_on": [],
@@ -44,8 +44,8 @@
       "spec.md",
       "plan.md",
       "tasks.md",
-      "checklist.md",
-      "implementation-summary.md"
+      "implementation-summary.md",
+      "checklist.md"
     ],
     "entities": [
       {
@@ -67,15 +67,15 @@
         "source": "derived"
       },
       {
-        "name": "checklist.md",
-        "kind": "doc",
-        "path": "checklist.md",
-        "source": "derived"
-      },
-      {
         "name": "implementation-summary.md",
         "kind": "doc",
         "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "checklist.md",
+        "kind": "doc",
+        "path": "checklist.md",
         "source": "derived"
       },
       {
@@ -175,43 +175,42 @@
         "source": "derived"
       },
       {
-        "name": "Quality Checklist",
+        "name": "Implementation Summary",
         "kind": "proper_noun",
-        "path": "checklist.md",
+        "path": "implementation-summary.md",
         "source": "derived"
       },
       {
-        "name": "Verification Protocol",
+        "name": "Phase Name",
         "kind": "proper_noun",
-        "path": "checklist.md",
+        "path": "implementation-summary.md",
         "source": "derived"
       },
       {
-        "name": "Completion Impact",
+        "name": "Completion Pct",
         "kind": "proper_noun",
-        "path": "checklist.md",
+        "path": "implementation-summary.md",
         "source": "derived"
       }
     ],
     "causal_summary": "A user reported that \"the view selector is completely broken ui wise\"",
     "created_at": "2026-08-28T12:45:09.189Z",
-    "last_save_at": "2026-08-28T16:54:48.875Z",
+    "last_save_at": "2026-09-01T10:50:16.158Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
       "spec.md",
       "plan.md",
       "tasks.md",
-      "checklist.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:84d369ebd9c4044d6080ef01399309b3906e7b4246551083d29f7819cc2f3be8",
+    "source_fingerprint": "sha256:b2cbcffe0a9bfb4f3a4c9b69ec3193318312470c34daa1ecb05125a77cb4f5b7",
+    "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "4074b0c3b96bd958d9f91db63f6f785b1d579a8368b2f75f34b49c3e2f85a31b",
-      "plan.md": "f45b34ba2391165cbc3a6b1a6a61f228317f2bc02770b3f627ded28adcd09a40",
-      "tasks.md": "e104744cf891bd00d5563c848448ef35d3cdd2317a62e5f3923e4fc483082c8a",
-      "checklist.md": "7da6e6c668142769170275a6da376146b930e8dbedf815a76562873d7e6da715",
-      "implementation-summary.md": "11103e2c480e8a7adc90c7db8cfeed6a6e2b02ad08f63fe6d6e07d46ccb0e55d"
+      "spec.md": "dac34d535a9b2b76b38a159f161e710ab89f6ea84f4649af32bd264758733095",
+      "plan.md": "04c2c86f5a4a3fea2092e91c877cc57541c28394b69f85abcdf38ea3c2168f9a",
+      "tasks.md": "62c93bf46bb88e8d3f5e54cb845345c613b818ce61cbc692a6c4c9a4a405daef",
+      "implementation-summary.md": "d03dc21d6c8ed8c5b0be65d4a6d057a021e449dda4b3ed560c789d547f093e8f"
     },
     "last_active_child_id": null,
     "last_active_at": null

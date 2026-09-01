@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "packet_id": "public/006-list-view-clickup/003-group-affordances-and-selection",
-  "spec_folder": "public/006-list-view-clickup/003-group-affordances-and-selection",
-  "parent_id": "public/006-list-view-clickup",
+  "packet_id": "006-list-view-clickup/003-group-affordances-and-selection",
+  "spec_folder": "006-list-view-clickup/003-group-affordances-and-selection",
+  "parent_id": "006-list-view-clickup",
   "children_ids": [],
   "manual": {
     "depends_on": [],
@@ -190,7 +190,7 @@
     ],
     "causal_summary": "Wire and reach the per-group create row, the group count, and the selection-sync defect that leaves the list group checkbox stale after any change from another surface.",
     "created_at": "2026-08-30T10:00:33.202Z",
-    "last_save_at": "2026-08-30T10:00:33.202Z",
+    "last_save_at": "2026-09-01T10:50:16.560Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -199,10 +199,10 @@
       "tasks.md",
       "acceptance-criteria.md"
     ],
-    "source_fingerprint": "sha256:c5aaaf8ed5e1895a553dbbb54954771a7069bb02ff60485b0d620100b82f7f49",
+    "source_fingerprint": "sha256:0ad458c184ae17ede17f1f01de85fde6dc9e7ae19683b8869481cb62caf265b7",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "60aaddced2c64403a22c2543e2c38930b11a92f34d75047404e0cf1e1732c24e",
+      "spec.md": "2548ab8b9da1560348c13fc52aff8378bf9fc16726d72299e75aef28cc17642f",
       "plan.md": "61e98f95280cb6ddcf559380d189dc6c8790d535f206b7fb755994d0ab9a2d1c",
       "tasks.md": "af4ff883dba0491c97dd7782b6b331668f2637066f58fa0c00df872f865dd392"
     },

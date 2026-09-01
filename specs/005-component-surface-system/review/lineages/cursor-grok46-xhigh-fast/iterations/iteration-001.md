@@ -4,7 +4,7 @@
 correctness
 
 ## Files Reviewed
-- `specs/public/005-component-surface-system/028-remaining-freezes/spec.md:53`
+- `specs/005-component-surface-system/028-remaining-freezes/spec.md:53`
 - `src/views/database-view.ts:11484`
 - `src/views/database-view.ts:2833`
 - `src/views/sort-panel-renderer.ts:81`

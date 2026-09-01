@@ -1,6 +1,6 @@
 {
   "level": "2",
-  "specFolder": "public/001-note-db-notion-parity-build/011-table-multi-group/005-multigroup-display-proof",
+  "specFolder": "001-note-db-notion-parity-build/011-table-multi-group/005-multigroup-display-proof",
   "description": "Without the locked proofs, a 2-field table can \"pass\" while 1-field hide keys change, while persist drops `groupByFields`, while a Type header writes",
   "keywords": [
     "without",

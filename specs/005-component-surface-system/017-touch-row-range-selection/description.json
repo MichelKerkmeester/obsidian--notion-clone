@@ -1,6 +1,6 @@
 {
   "level": "1",
-  "specFolder": "public/005-component-surface-system/017-touch-row-range-selection",
+  "specFolder": "005-component-surface-system/017-touch-row-range-selection",
   "description": "Remove the device predicate that made every touch press on a row checkbox extend a range, and give touch a real gesture for the range it lost — a held",
   "keywords": [
     "remove",

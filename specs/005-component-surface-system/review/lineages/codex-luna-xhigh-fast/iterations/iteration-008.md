@@ -9,10 +9,10 @@ The boundary between renderer-level headless scenarios and actual DatabaseView/e
 - `tools/live/render-assertions.mjs`
 - `tools/live/render-assertion-harness.ts`
 - `tools/live/renderer-coverage.json`
-- `specs/public/005-component-surface-system/026-production-render-assertions/acceptance-criteria.md`
-- `specs/public/005-component-surface-system/026-production-render-assertions/implementation-summary.md`
-- `specs/public/005-component-surface-system/handover.md`
-- `specs/public/005-component-surface-system/roadmap.md`
+- `specs/005-component-surface-system/026-production-render-assertions/acceptance-criteria.md`
+- `specs/005-component-surface-system/026-production-render-assertions/implementation-summary.md`
+- `specs/005-component-surface-system/handover.md`
+- `specs/005-component-surface-system/roadmap.md`
 
 ## Findings - New
 
@@ -23,7 +23,7 @@ The boundary between renderer-level headless scenarios and actual DatabaseView/e
 ### P1 Findings
 
 - **F018**: Phase 026's coverage evidence is stale and internally contradictory — `tools/live/renderer-coverage.json:21` — the stamped artifact says 6 renderers are constructed, while the phase acceptance and implementation summary still say 2 of 22 at `026-production-render-assertions/acceptance-criteria.md:91` and `026-production-render-assertions/implementation-summary.md:60`; the current scenario list names six renderer families at `tools/live/render-assertions.mjs:58`.
-- **F019**: The handover generalizes renderer-level coverage into host-level coverage that the assertion explicitly excludes — `specs/public/005-component-surface-system/handover.md:53` — handover says every reported view is now asserted, while phase 026 says DatabaseView and EmbeddedDatabaseRenderer are not constructed and no device is involved at `026-production-render-assertions/implementation-summary.md:121`; the harness creates a synthetic container and casts an undefined App at `tools/live/render-assertion-harness.ts:887`.
+- **F019**: The handover generalizes renderer-level coverage into host-level coverage that the assertion explicitly excludes — `specs/005-component-surface-system/handover.md:53` — handover says every reported view is now asserted, while phase 026 says DatabaseView and EmbeddedDatabaseRenderer are not constructed and no device is involved at `026-production-render-assertions/implementation-summary.md:121`; the harness creates a synthetic container and casts an undefined App at `tools/live/render-assertion-harness.ts:887`.
 
 ### P2 Findings
 
@@ -34,13 +34,13 @@ The boundary between renderer-level headless scenarios and actual DatabaseView/e
 ### Claim adjudication — F018
 
 ```json
-{"findingId":"F018","claim":"The phase 026 coverage artifact and its acceptance/summary documents describe different constructed-renderer counts.","evidenceRefs":["tools/live/renderer-coverage.json:21","specs/public/005-component-surface-system/026-production-render-assertions/acceptance-criteria.md:91","specs/public/005-component-surface-system/026-production-render-assertions/implementation-summary.md:60","tools/live/render-assertions.mjs:58"],"counterevidenceSought":"Compared the stamped JSON, phase acceptance, implementation summary, and current scenario declarations.","alternativeExplanation":"The JSON may be a newer stamp and the prose may be historical, but neither document labels itself historical or points to the newer artifact, so current coverage is ambiguous.","finalSeverity":"P1","confidence":0.99,"downgradeTrigger":"Regenerate or reconcile the coverage stamp and phase prose so one dated count and scenario set is authoritative."}
+{"findingId":"F018","claim":"The phase 026 coverage artifact and its acceptance/summary documents describe different constructed-renderer counts.","evidenceRefs":["tools/live/renderer-coverage.json:21","specs/005-component-surface-system/026-production-render-assertions/acceptance-criteria.md:91","specs/005-component-surface-system/026-production-render-assertions/implementation-summary.md:60","tools/live/render-assertions.mjs:58"],"counterevidenceSought":"Compared the stamped JSON, phase acceptance, implementation summary, and current scenario declarations.","alternativeExplanation":"The JSON may be a newer stamp and the prose may be historical, but neither document labels itself historical or points to the newer artifact, so current coverage is ambiguous.","finalSeverity":"P1","confidence":0.99,"downgradeTrigger":"Regenerate or reconcile the coverage stamp and phase prose so one dated count and scenario set is authoritative."}
 ```
 
 ### Claim adjudication — F019
 
 ```json
-{"findingId":"F019","claim":"A green phase 026 renderer-level run does not establish that DatabaseView and EmbeddedDatabaseRenderer host integrations work, despite the handover's broad coverage claim.","evidenceRefs":["specs/public/005-component-surface-system/handover.md:53","specs/public/005-component-surface-system/026-production-render-assertions/implementation-summary.md:121","tools/live/render-assertion-harness.ts:887"],"counterevidenceSought":"Read the phase's explicit limitations and the harness construction path rather than relying on renderer names alone.","alternativeExplanation":"Renderer-level coverage may be the intended proxy, but the handover must say proxy/renderer coverage rather than every reported view if host integration is excluded.","finalSeverity":"P1","confidence":0.96,"downgradeTrigger":"Add host-level scenarios or narrow the handover claim and link the excluded host verification status."}
+{"findingId":"F019","claim":"A green phase 026 renderer-level run does not establish that DatabaseView and EmbeddedDatabaseRenderer host integrations work, despite the handover's broad coverage claim.","evidenceRefs":["specs/005-component-surface-system/handover.md:53","specs/005-component-surface-system/026-production-render-assertions/implementation-summary.md:121","tools/live/render-assertion-harness.ts:887"],"counterevidenceSought":"Read the phase's explicit limitations and the harness construction path rather than relying on renderer names alone.","alternativeExplanation":"Renderer-level coverage may be the intended proxy, but the handover must say proxy/renderer coverage rather than every reported view if host integration is excluded.","finalSeverity":"P1","confidence":0.96,"downgradeTrigger":"Add host-level scenarios or narrow the handover claim and link the excluded host verification status."}
 ```
 
 ## Traceability Checks

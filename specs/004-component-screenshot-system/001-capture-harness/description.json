@@ -1,6 +1,6 @@
 {
   "level": "1",
-  "specFolder": "public/004-component-screenshot-system/001-capture-harness",
+  "specFolder": "004-component-screenshot-system/001-capture-harness",
   "description": "Photographing the plugin's surfaces means putting the shipped stylesheet in front of a browser, and four things stand in the way of doing that naively",
   "keywords": [
     "photographing",

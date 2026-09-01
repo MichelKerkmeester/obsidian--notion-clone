@@ -11,7 +11,7 @@ importance_tier: "critical"
 contextType: "implementation"
 _memory:
   continuity:
-    packet_pointer: "public/005-component-surface-system/002-properties-panel"
+    packet_pointer: "005-component-surface-system/002-properties-panel"
     last_updated_at: "2026-08-31T00:00:00Z"
     last_updated_by: "harness-dependence-audit"
     recent_action: "Classified 12 criteria for harness dependence; 2 rest on host control heights"

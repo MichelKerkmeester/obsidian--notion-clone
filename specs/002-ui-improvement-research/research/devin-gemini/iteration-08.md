@@ -2,7 +2,7 @@
 
 Track: `devin-gemini` (Gemini 3.7 Flash High)  
 Focus Area: Views beyond table: board, gallery, calendar, list — parity, polish, per-view affordances.  
-Target Artifact: `specs/public/002-ui-improvement-research/research/devin-gemini/iteration-08.md`  
+Target Artifact: `specs/002-ui-improvement-research/research/devin-gemini/iteration-08.md`  
 
 ---
 

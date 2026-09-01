@@ -1,6 +1,6 @@
 {
   "level": "1",
-  "specFolder": "public/001-note-db-notion-parity-build/007-unique-id-stamp/001-unique-id-stamp-module",
+  "specFolder": "001-note-db-notion-parity-build/007-unique-id-stamp/001-unique-id-stamp-module",
   "description": "The fork writes frontmatter in `planCreateEntry` (`CreateEntryPlan.ts:119-173`) but has no sequential identity allocator",
   "keywords": [
     "fork",

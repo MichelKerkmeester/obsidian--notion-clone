@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "packet_id": "public/001-note-db-notion-parity-build/011-table-multi-group/002-grouped-table-flatten",
-  "spec_folder": "public/001-note-db-notion-parity-build/011-table-multi-group/002-grouped-table-flatten",
-  "parent_id": "public/001-note-db-notion-parity-build/011-table-multi-group",
+  "packet_id": "001-note-db-notion-parity-build/011-table-multi-group/002-grouped-table-flatten",
+  "spec_folder": "001-note-db-notion-parity-build/011-table-multi-group/002-grouped-table-flatten",
+  "parent_id": "001-note-db-notion-parity-build/011-table-multi-group",
   "children_ids": [],
   "manual": {
     "depends_on": [],
@@ -189,7 +189,7 @@
     ],
     "causal_summary": "Table dispatch is still one string (`DatabaseView.ts:6332-6333` → `renderGroupedTable` `9539-9545`)",
     "created_at": "2026-08-25T20:50:00Z",
-    "last_save_at": "2026-08-27T12:28:02.373Z",
+    "last_save_at": "2026-09-01T10:50:15.922Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -198,12 +198,13 @@
       "tasks.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:d77a0d3ca1be8ecd40c9f760b79bad62c6f09dcd4e6a794c39c372e0be8cc5f7",
+    "source_fingerprint": "sha256:9cb6cab1b761114e1db2f1be507d821806bceb4a4c044c56800bcbabd55e315e",
+    "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "62c1c66977153e92477fe358dc2d4078931f8c74ecd6a9d0cf95ddc3e5cd96b3",
-      "plan.md": "9679fd041b73c5fa07130f9eff66c5d31648685ffa3a0630eaf99dad0a1491d9",
-      "tasks.md": "684d4e401cdde906c45ec8a4cf24225ae65d3c19e608dc96a1f9120899732df6",
-      "implementation-summary.md": "0f99a585a819180ce67923183b82f766b6fc9482e0de189c68e0d715ae0ee054"
+      "spec.md": "07ecb7029e8e9ea9f5ad62b51724ec59f11bc587e1a139656acebc67d16e9967",
+      "plan.md": "12197201536c0ec444f79bc3c9c5dd7cd98d814e41105ebbf380a00a6e5caee2",
+      "tasks.md": "0ba4ea4f125bdfa01c21c49547b6b44096a1887f3f80a0589391784e18e69759",
+      "implementation-summary.md": "084e188ccb15bf994583755fa652fe37addc6797c9885d89df664725ad5703b4"
     },
     "last_active_child_id": null,
     "last_active_at": null

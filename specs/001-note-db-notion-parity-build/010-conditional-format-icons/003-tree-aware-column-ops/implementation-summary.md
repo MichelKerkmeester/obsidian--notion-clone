@@ -7,7 +7,7 @@ importance_tier: "high"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "public/001-note-db-notion-parity-build/010-conditional-format-icons/003-tree-aware-column-ops"
+    packet_pointer: "001-note-db-notion-parity-build/010-conditional-format-icons/003-tree-aware-column-ops"
     last_updated_at: "2026-08-27T12:27:53Z"
     last_updated_by: "phase-architect"
     recent_action: "Completion docs reconciled to shipped state; gate green; Sonnet-verified"

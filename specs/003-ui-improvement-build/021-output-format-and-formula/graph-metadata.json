@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "packet_id": "/Users/michelkerkmeester/MEGA/Development/Obsidian Plugin/specs/public/003-ui-improvement-build/021-output-format-and-formula",
-  "spec_folder": "/Users/michelkerkmeester/MEGA/Development/Obsidian Plugin/specs/public/003-ui-improvement-build/021-output-format-and-formula",
-  "parent_id": null,
+  "packet_id": "003-ui-improvement-build/021-output-format-and-formula",
+  "spec_folder": "003-ui-improvement-build/021-output-format-and-formula",
+  "parent_id": "003-ui-improvement-build",
   "children_ids": [],
   "manual": {
     "depends_on": [],
@@ -11,30 +11,154 @@
   },
   "derived": {
     "trigger_phrases": [
-      "computed output format and the formula workbench"
+      "computed output format and the formula workbench",
+      "021 output format and formula",
+      "021 output format and formula plan",
+      "021 output format and formula tasks"
     ],
     "key_topics": [
-      "11",
-      "19",
-      "20"
+      "computed",
+      "output",
+      "format",
+      "formula",
+      "workbench",
+      "plan",
+      "tasks",
+      "computedfielddef",
+      "carries",
+      "key",
+      "label",
+      "expression"
     ],
-    "importance_tier": "important",
+    "importance_tier": "high",
     "status": "planned",
     "key_files": [
       "spec.md",
       "plan.md",
       "tasks.md"
     ],
-    "entities": [],
-    "causal_summary": "Phase 021: Computed Output Format and the Formula Workbench",
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Computed Output Format",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Formula Workbench",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Spec Folder",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Problem Statement",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Purpose Add",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Plan",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "those",
+        "kind": "key_phrase",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "no",
+        "kind": "key_phrase",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "1. SUMMARY",
+        "kind": "heading",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Breakdown",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "read",
+        "kind": "key_phrase",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "evidence",
+        "kind": "key_phrase",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "cited",
+        "kind": "key_phrase",
+        "path": "tasks.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "`ComputedFieldDef` carries key, label, expression, result type and syntax — but no output format, and computed columns cannot resolve to currency at all",
     "created_at": "2026-08-29T07:00:00Z",
-    "last_save_at": "2026-08-29T07:00:00Z",
+    "last_save_at": "2026-09-01T10:50:16.214Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
       "spec.md",
       "plan.md",
       "tasks.md"
-    ]
+    ],
+    "source_fingerprint": "sha256:72ee390f9e1348a37931796ef1d6be36b42a2c644af332c9aa0d5ddbcbc6c15a",
+    "source_fingerprint_docset": 3,
+    "source_doc_hashes": {
+      "spec.md": "83771443e2c4e8322e6a2af632cb91ffe8bfe5801ed2e3fb5828663f857feda6",
+      "plan.md": "fd14a7e496a34421635b04d6cea0d62a7a0d370cf01ad8cf2f90141abb9a634a",
+      "tasks.md": "99ed33a19d89c45d29fe07491e125b4b4566faa8bcb6d52d58f4e0495da2861d"
+    },
+    "last_active_child_id": null,
+    "last_active_at": null
   }
 }

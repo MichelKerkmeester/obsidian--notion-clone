@@ -1,15 +1,18 @@
 {
   "schema_version": 1,
-  "packet_id": "public/001-note-db-notion-parity-build/005-formula-let-variables",
-  "spec_folder": "public/001-note-db-notion-parity-build/005-formula-let-variables",
-  "parent_id": "public/001-note-db-notion-parity-build",
+  "packet_id": "001-note-db-notion-parity-build/005-formula-let-variables",
+  "spec_folder": "001-note-db-notion-parity-build/005-formula-let-variables",
+  "parent_id": "001-note-db-notion-parity-build",
   "children_ids": [
     "obsidian/002-note-db-notion-parity-build/005-formula-let-variables/001-let-variables-module",
     "obsidian/002-note-db-notion-parity-build/005-formula-let-variables/002-let-vitest-matrix",
     "obsidian/002-note-db-notion-parity-build/005-formula-let-variables/003-formula-modal-let-help",
     "public/001-note-db-notion-parity-build/005-formula-let-variables/001-let-variables-module",
     "public/001-note-db-notion-parity-build/005-formula-let-variables/002-let-vitest-matrix",
-    "public/001-note-db-notion-parity-build/005-formula-let-variables/003-formula-modal-let-help"
+    "public/001-note-db-notion-parity-build/005-formula-let-variables/003-formula-modal-let-help",
+    "001-note-db-notion-parity-build/005-formula-let-variables/001-let-variables-module",
+    "001-note-db-notion-parity-build/005-formula-let-variables/002-let-vitest-matrix",
+    "001-note-db-notion-parity-build/005-formula-let-variables/003-formula-modal-let-help"
   ],
   "manual": {
     "depends_on": [],
@@ -29,7 +32,7 @@
       "computed field context",
       "formula tasks",
       "computed field",
-      "checklist"
+      "implementation summary"
     ],
     "key_topics": [
       "let",
@@ -51,11 +54,13 @@
       "spec.md",
       "plan.md",
       "tasks.md",
-      "checklist.md",
       "implementation-summary.md",
+      "research/research.md",
+      "checklist.md",
+      "src/i18n.ts",
       "research/sonnet-verification.md",
-      "research/synthesis.md",
-      "research/research.md"
+      "src/__tests__/setup.ts",
+      "research/synthesis.md"
     ],
     "entities": [
       {
@@ -77,15 +82,27 @@
         "source": "derived"
       },
       {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "research.md",
+        "kind": "doc",
+        "path": "research/research.md",
+        "source": "derived"
+      },
+      {
         "name": "checklist.md",
         "kind": "doc",
         "path": "checklist.md",
         "source": "derived"
       },
       {
-        "name": "implementation-summary.md",
-        "kind": "doc",
-        "path": "implementation-summary.md",
+        "name": "i18n.ts",
+        "kind": "code",
+        "path": "src/i18n.ts",
         "source": "derived"
       },
       {
@@ -95,15 +112,15 @@
         "source": "derived"
       },
       {
-        "name": "synthesis.md",
-        "kind": "doc",
-        "path": "research/synthesis.md",
+        "name": "setup.ts",
+        "kind": "code",
+        "path": "src/__tests__/setup.ts",
         "source": "derived"
       },
       {
-        "name": "research.md",
+        "name": "synthesis.md",
         "kind": "doc",
-        "path": "research/research.md",
+        "path": "research/synthesis.md",
         "source": "derived"
       },
       {
@@ -189,40 +206,27 @@
         "kind": "proper_noun",
         "path": "tasks.md",
         "source": "derived"
-      },
-      {
-        "name": "Core Transform",
-        "kind": "proper_noun",
-        "path": "tasks.md",
-        "source": "derived"
-      },
-      {
-        "name": "Engine Call Sites",
-        "kind": "proper_noun",
-        "path": "tasks.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "Notion formulas support `let()` / `lets()` to bind named intermediate values in a per-row child scope (`let(person, \"Alan\", \"Hello, \" + person + \"!\")` = `\"Hello, Alan!\"`); the fork's native engine (`ComputedField.ts` over the `SafeEval.ts` sandbox) has no binding construct, so long formulas duplicate sub-expressions",
     "created_at": "2026-08-24T17:58:35.358Z",
-    "last_save_at": "2026-08-28T10:56:21.325Z",
+    "last_save_at": "2026-09-01T10:50:15.735Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
       "spec.md",
       "plan.md",
       "tasks.md",
-      "checklist.md",
       "implementation-summary.md",
       "research/research.md"
     ],
-    "source_fingerprint": "sha256:c5c963ff7db9e7e35e1fc9df2b6d195905c578b47c67de56f09afaceef4e05a8",
+    "source_fingerprint": "sha256:0337bf89e5c981902688f86d2a60e57180b2597248db7da3246a067ac56c1dfe",
+    "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "9490315a48d77a3b135c20159cdc4b62e3b339ea384f0370755bed1daae34690",
-      "plan.md": "41ccdfda39166576ddcf599eb58539811f582a90f168c44ed9645d801e1a5202",
-      "tasks.md": "cbef854786943fda4d4711438ce66869e2f6bead9e310697073d7194039d4e38",
-      "checklist.md": "602b0078ec6bbf032e6fe0b5e0846fab4eee8b0fed08766ff9aa71f7a7c23a6e",
-      "implementation-summary.md": "98522f3e7d889b1cd211915ac15c8867c587361b2f0b1971f141585824b4e736",
+      "spec.md": "3ea02a1b2eeef4097d32849cc360a612071b77a690c54e92b4c8fe8b3fe3f207",
+      "plan.md": "1eed614c6c3b3471794bafa628ae5b8cb3577fef032214d86831d7b2c8d89e7d",
+      "tasks.md": "9f07681346d6d2ed8ce470b56911c6bbca279753246d60f9b9d4a5e703f3bb5e",
+      "implementation-summary.md": "c98f8da301501f20e93365d9486b927c59768a0020af0d39ec9859aec26fb721",
       "research/research.md": "634323b1d235e2b3ffe2ae77aa2b4b0b32b7c7bd88e7a51a7dfdc18efba92893"
     },
     "last_active_child_id": "obsidian/002-note-db-notion-parity-build/005-formula-let-variables/003-formula-modal-let-help",

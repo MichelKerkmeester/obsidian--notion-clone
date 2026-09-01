@@ -1,6 +1,6 @@
 {
   "level": "1",
-  "specFolder": "public/005-component-surface-system/016-sheet-drag-and-audit",
+  "specFolder": "005-component-surface-system/016-sheet-drag-and-audit",
   "description": "Find why the phone sheet's drag-to-dismiss kept dying after it had been fixed twice, and settle every one of the operator's bottom-sheet asks against",
   "keywords": [
     "find",

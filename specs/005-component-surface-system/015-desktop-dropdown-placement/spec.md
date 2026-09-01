@@ -12,7 +12,7 @@ importance_tier: "critical"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "public/005-component-surface-system/015-desktop-dropdown-placement"
+    packet_pointer: "005-component-surface-system/015-desktop-dropdown-placement"
     last_updated_at: "2026-08-30T21:15:00Z"
     last_updated_by: "criteria-adjudication"
     recent_action: "Search clamp lifted to one exported function; phone dead-anchor arm built"

@@ -12,7 +12,7 @@ importance_tier: "high"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "public/003-ui-improvement-build/002-table-grid-experience"
+    packet_pointer: "003-ui-improvement-build/002-table-grid-experience"
     last_updated_at: "2026-08-28T04:30:57Z"
     last_updated_by: "implementation-session"
     recent_action: "Reconciled table and grid experience task documentation"
@@ -59,7 +59,7 @@ Tasks below follow the research synthesis's RANKED BACKLOG order (rank # in pare
 <!-- ANCHOR:phase-1 -->
 ## Phase 1: Setup
 
-- [x] T001 Read this phase's decision-ready findings and evidence trail (`specs/public/002-ui-improvement-research/research/synthesis.md:1-20`, `specs/public/002-ui-improvement-research/research/devin-gemini/iteration-02.md`, `specs/public/002-ui-improvement-research/research/codex-luna/iteration-02.md`) [15m]
+- [x] T001 Read this phase's decision-ready findings and evidence trail (`specs/002-ui-improvement-research/research/synthesis.md:1-20`, `specs/002-ui-improvement-research/research/devin-gemini/iteration-02.md`, `specs/002-ui-improvement-research/research/codex-luna/iteration-02.md`) [15m]
 - [x] T002 Record the fork's baseline test, typecheck, and lint state (`vitest.config.ts:1-9`, `npx vitest run`, `npx tsc --noEmit`) [10m]
 
 <!-- /ANCHOR:phase-1 -->

@@ -11,7 +11,7 @@ importance_tier: "high"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "public/001-note-db-notion-parity-build/004-formula-ifs-switch-math"
+    packet_pointer: "001-note-db-notion-parity-build/004-formula-ifs-switch-math"
     last_updated_at: "2026-08-28T10:54:48.859Z"
     last_updated_by: "swarm"
     recent_action: "Corrected unsupported checklist claims against the shipped code"

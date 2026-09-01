@@ -11,7 +11,7 @@
 - **Defect:** every built phase's `spec.md` Status, `implementation-summary.md`, `checklist.md`, and `graph-metadata.json` still read "Planned / 0% / not built," despite shipped, gate-green, Sonnet-verified code. Flagged by all 13 verdicts.
 - **Root cause:** the build's in-loop gate approved code per sub-phase but never wrote completion state back into the packet docs; the metadata is derived from those docs, so it stays "planned."
 - **Proposed fix:** for phases 002–014 (parents + children), mark `checklist.md` items `[x]` with the real gate evidence (commit hash + tsc/vitest result), set each `implementation-summary.md` to the shipped state (module + call sites + tests, which `synthesis.md` §2 already enumerates), flip `spec.md` Status → Complete, then regenerate `graph-metadata.json` via `backfill-graph-metadata.js`.
-- **Re-gate:** `validate.sh specs/public/001-note-db-notion-parity-build --recursive --strict` → Errors 0 Warnings 0.
+- **Re-gate:** `validate.sh specs/001-note-db-notion-parity-build --recursive --strict` → Errors 0 Warnings 0.
 - **Cost/risk:** large-mechanical (~13 phases × several files), zero code risk. Best done as one dedicated pass; deliberately NOT bundled into the code fix stage.
 
 ## R2 — Reports "Saved" field classification  [P2, deferred feature]

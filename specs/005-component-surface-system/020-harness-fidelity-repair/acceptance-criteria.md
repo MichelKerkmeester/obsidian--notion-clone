@@ -9,7 +9,7 @@ importance_tier: "critical"
 contextType: "implementation"
 _memory:
   continuity:
-    packet_pointer: "public/005-component-surface-system/020-harness-fidelity-repair"
+    packet_pointer: "005-component-surface-system/020-harness-fidelity-repair"
     last_updated_at: "2026-08-31T06:00:00Z"
     last_updated_by: "harness-supply-audit"
     recent_action: "Supply audit: 12 rows sound as worded; keyboard-height supply never in scope"
@@ -67,7 +67,7 @@ _memory:
 | AC-009 | REQ-007 | The role-agreement check takes its expectation from the call site, proven by swapping a modal fixture's role from field to row | the swapped fixture fails | **passed 3/3** — the expectation was derived from the fixture being checked, so a fixture at the wrong role agreed with itself | fails, naming the source file and the role it asks for | `tools/live/checkbox-appearance.mjs:1` | Met |
 | AC-010 | REQ-008 | `setCssProps` matches the shipped runtime, which calls `setProperty` and silently drops a camelCase key | 0 camelCase keys reaching it | **23 across 6 files**, all working in the harness and vanishing on a phone | 0; correcting the shim surfaced `inline=NaNpx` on the inline-cap check | `tools/storybook/obsidian-dom-shim.mjs:137` | Met |
 | AC-011 | REQ-009 | Orphaned probe checks running inside the shared harness, with none weakened on the way in | all 63 | **0 of 63**; they lived in five files nothing re-ran | 63; placement 114 -> 177 checks | `tools/storybook/verify-placement.mjs:1888` | Met, **arrival only** — see §4 |
-| AC-012 | REQ-010 | Every product defect the repaired instruments revealed is fixed here or recorded with its number and its owner | 0 dropped | n/a — the instruments could not reveal them | 1 handed to `022` with its number; 3 declared in `KNOWN` | `specs/public/005-component-surface-system/022-selection-bar-keyboard-docking/spec.md:1` | Met, **of what was revealed** — see §4 |
+| AC-012 | REQ-010 | Every product defect the repaired instruments revealed is fixed here or recorded with its number and its owner | 0 dropped | n/a — the instruments could not reveal them | 1 handed to `022` with its number; 3 declared in `KNOWN` | `specs/005-component-surface-system/022-selection-bar-keyboard-docking/spec.md:1` | Met, **of what was revealed** — see §4 |
 
 <!-- /ANCHOR:criteria -->
 

@@ -12,7 +12,7 @@ importance_tier: "high"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "public/001-note-db-notion-parity-build/006-link-scheme-fields"
+    packet_pointer: "001-note-db-notion-parity-build/006-link-scheme-fields"
     last_updated_at: "2026-08-28T10:54:49.206Z"
     last_updated_by: "docs-reconciliation"
     recent_action: "Corrected unsupported checklist claims against the shipped code"
@@ -72,10 +72,10 @@ A fresh Claude Sonnet 5 adversarial review (`research/sonnet-verification.md`) r
 | `src/views/ColumnWidth.ts` | Modified | Scheme-hint cells measured like link-mode labels |
 | `src/i18n.ts` | Modified | Link-scheme picker labels in en / zh-Hans / zh-Hant (fix `29d7b14`) |
 | `src/data/__tests__/textLinkScheme.test.ts` | Created | 15 tests (T1–T11 + guards + JSON round-trip) |
-| `specs/public/001-note-db-notion-parity-build/006-link-scheme-fields/spec.md` | Reconciled | Status Planned → Complete |
-| `specs/public/001-note-db-notion-parity-build/006-link-scheme-fields/plan.md` / `tasks.md` | Unchanged | Already matched the shipped design |
-| `specs/public/001-note-db-notion-parity-build/006-link-scheme-fields/checklist.md` | Reconciled | All items verified against the shipped commits |
-| `specs/public/001-note-db-notion-parity-build/006-link-scheme-fields/implementation-summary.md` | Reconciled | This record — shipped-state evidence |
+| `specs/001-note-db-notion-parity-build/006-link-scheme-fields/spec.md` | Reconciled | Status Planned → Complete |
+| `specs/001-note-db-notion-parity-build/006-link-scheme-fields/plan.md` / `tasks.md` | Unchanged | Already matched the shipped design |
+| `specs/001-note-db-notion-parity-build/006-link-scheme-fields/checklist.md` | Reconciled | All items verified against the shipped commits |
+| `specs/001-note-db-notion-parity-build/006-link-scheme-fields/implementation-summary.md` | Reconciled | This record — shipped-state evidence |
 
 Commits on branch `impl`: `74b836a` (001-text-link-scheme-module), `1b0527f`+`be9516b` (002-layout-scheme-honor + review fix), `c3d3a01` (003-column-menu-scheme-picker), `30ce2ea`+`a179b97` (004-scheme-column-width + review fix), `29d7b14` (i18n fix, packet-wide fix stage).
 

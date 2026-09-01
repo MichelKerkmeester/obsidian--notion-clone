@@ -179,6 +179,6 @@ criterion, and the criterion is rewritten rather than waived.
 - [ ] `styles.css` lane released against all four conditions
 - [ ] Captures recaptured, `screenshots:verify` exit 0, and **reviewed by a human, signed off here by name:** `________________`
 - [ ] AC-26 closed — the operator looked at the running plugin and confirmed the change
-- [ ] `validate.sh specs/public/006-list-view-clickup --strict` reports `RESULT: PASSED`
+- [ ] `validate.sh specs/006-list-view-clickup --strict` reports `RESULT: PASSED`
 
 <!-- /ANCHOR:summary -->

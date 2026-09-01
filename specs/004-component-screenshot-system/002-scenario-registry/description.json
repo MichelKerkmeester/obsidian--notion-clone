@@ -1,6 +1,6 @@
 {
   "level": "1",
-  "specFolder": "public/004-component-screenshot-system/002-scenario-registry",
+  "specFolder": "004-component-screenshot-system/002-scenario-registry",
   "description": "A harness that can photograph a page still needs to be told what to photograph, and three constraints shape the answer",
   "keywords": [
     "harness",

@@ -1,5 +1,5 @@
 {
-  "specFolder": "public/003-ui-improvement-build/004-toolbar-and-view-controls",
+  "specFolder": "003-ui-improvement-build/004-toolbar-and-view-controls",
   "description": "The toolbar and view controls form the primary operational command deck of the Note Database plugin",
   "keywords": [
     "toolbar",

@@ -8,7 +8,7 @@ importance_tier: "high"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "public/001-note-db-notion-parity-build/014-record-detail-panel/001-table-record-peek-module"
+    packet_pointer: "001-note-db-notion-parity-build/014-record-detail-panel/001-table-record-peek-module"
     last_updated_at: "2026-08-27T12:27:53Z"
     last_updated_by: "docs-reconciliation"
     recent_action: "Reconciled docs to shipped state: TableRecordPeek.ts + i18n landed in commit c4ceb74"

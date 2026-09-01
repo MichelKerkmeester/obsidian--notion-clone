@@ -14,7 +14,7 @@ importance_tier: "critical"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "public/005-component-surface-system/008-integration-and-release-observability"
+    packet_pointer: "005-component-surface-system/008-integration-and-release-observability"
     last_updated_at: "2026-08-30T18:30:00Z"
     last_updated_by: "phase-author"
     recent_action: "Deliverable A replay re-verified green; 0 of 13 criteria Met"
@@ -371,7 +371,7 @@ concurrently and produce the exact 87-selector / 124-conflict pattern this progr
       "releasedAt": "2026-09-13T16:20:00Z",
       "releaseHash": "9732449e4746",
       "handoffReplay": "replay/handoff/000-1.json",
-      "captureReview": "specs/public/005-component-surface-system/000-surface-contract-and-truthful-harness/capture-review.md#release-1"
+      "captureReview": "specs/005-component-surface-system/000-surface-contract-and-truthful-harness/capture-review.md#release-1"
     }
   ]
 }
@@ -440,7 +440,7 @@ human review that was supposed to compensate had no artefact, no reviewer field 
 
 ### The file
 
-**`specs/public/005-component-surface-system/<phase-folder>/capture-review.md`** — authored by the
+**`specs/005-component-surface-system/<phase-folder>/capture-review.md`** — authored by the
 releasing phase, one `## Release N` section per lane release, checked by
 `tools/lane/check-capture-review.mjs`.
 

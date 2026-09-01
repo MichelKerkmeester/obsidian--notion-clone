@@ -1,6 +1,6 @@
 {
   "level": "1",
-  "specFolder": "public/001-note-db-notion-parity-build/009-view-filter-tree/001-kleene-eval-module",
+  "specFolder": "001-note-db-notion-parity-build/009-view-filter-tree/001-kleene-eval-module",
   "description": "View filters are a flat `FilterRule[]` plus one global `filterLogic`, so `(A and B) or C` is inexpressible",
   "keywords": [
     "view",

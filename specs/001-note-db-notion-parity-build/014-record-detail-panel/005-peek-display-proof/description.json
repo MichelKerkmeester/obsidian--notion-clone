@@ -1,5 +1,5 @@
 {
-  "specFolder": "public/001-note-db-notion-parity-build/014-record-detail-panel/005-peek-display-proof",
+  "specFolder": "001-note-db-notion-parity-build/014-record-detail-panel/005-peek-display-proof",
   "description": "Without the locked proofs, OPEN can look done while still navigating (title `<a>` at `CellRenderer.ts:126-129`), fighting Page Preview",
   "keywords": [
     "without",

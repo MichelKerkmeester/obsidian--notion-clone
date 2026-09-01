@@ -9,7 +9,7 @@ importance_tier: "critical"
 contextType: "verification"
 _memory:
   continuity:
-    packet_pointer: "public/005-component-surface-system/000-surface-contract-and-truthful-harness"
+    packet_pointer: "005-component-surface-system/000-surface-contract-and-truthful-harness"
     last_updated_at: "2026-08-30T19:00:00Z"
     last_updated_by: "markdown-agent"
     recent_action: "Verified 9 harness tasks; wrote impl-summary; corrected spec.md Status"

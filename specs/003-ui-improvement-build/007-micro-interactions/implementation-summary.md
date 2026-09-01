@@ -18,7 +18,7 @@ importance_tier: "high"
 contextType: "implementation"
 _memory:
   continuity:
-    packet_pointer: "public/003-ui-improvement-build/007-micro-interactions"
+    packet_pointer: "003-ui-improvement-build/007-micro-interactions"
     last_updated_at: "2026-08-28T16:54:48.665Z"
     last_updated_by: "phase-author"
     recent_action: "Corrected unsupported checklist claims against the shipped code"

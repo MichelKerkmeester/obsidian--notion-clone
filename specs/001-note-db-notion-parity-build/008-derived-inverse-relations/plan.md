@@ -13,7 +13,7 @@ importance_tier: "high"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "public/001-note-db-notion-parity-build/008-derived-inverse-relations"
+    packet_pointer: "001-note-db-notion-parity-build/008-derived-inverse-relations"
     last_updated_at: "2026-08-27T12:25:50Z"
     last_updated_by: "markdown-agent"
     recent_action: "Compacted continuity fields after final-plan findings applied to docs"
@@ -160,7 +160,7 @@ Relation edits keep flowing through `DataSource.enqueueWrite` keyed by the edite
 | Refresh | With a Report view open, changing `Expenses.Month` to that Report updates the inverse `count` without a manual refresh (`handleDataChangeBatch` sees `sourceDatabaseIds` + `sourcePaths`) | `vitest` / manual |
 | Write-path | Relation click does not rewrite the Report; `SYNC_WRITES_DEFAULT = false`; `RelationInverse.ts` contains no write APIs | `vitest` spying `processFrontmatter` / `vault.create` (not `enqueueWrite` — it is private) or asserting Report file mtime/content unchanged |
 | Regression | Formula engines, column types, view types, footers, charts untouched | Diff review: only `RelationInverse.ts` + `RelationRollup.ts` + the two `buildRowsWithRelations` copies (or a shared helper) |
-| Strict packet | This phase folder | `bash .opencode/skills/system-spec-kit/scripts/spec/validate.sh specs/public/001-note-db-notion-parity-build/008-derived-inverse-relations --strict` |
+| Strict packet | This phase folder | `bash .opencode/skills/system-spec-kit/scripts/spec/validate.sh specs/001-note-db-notion-parity-build/008-derived-inverse-relations --strict` |
 
 <!-- /ANCHOR:testing -->
 ---

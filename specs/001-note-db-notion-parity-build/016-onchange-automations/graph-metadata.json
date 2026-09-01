@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "packet_id": "public/001-note-db-notion-parity-build/016-onchange-automations",
-  "spec_folder": "public/001-note-db-notion-parity-build/016-onchange-automations",
-  "parent_id": "public/001-note-db-notion-parity-build",
+  "packet_id": "001-note-db-notion-parity-build/016-onchange-automations",
+  "spec_folder": "001-note-db-notion-parity-build/016-onchange-automations",
+  "parent_id": "001-note-db-notion-parity-build",
   "children_ids": [],
   "manual": {
     "depends_on": [],
@@ -45,8 +45,12 @@
       "plan.md",
       "tasks.md",
       "implementation-summary.md",
+      "research/research.md",
+      "src/main.ts",
+      "src/settings.ts",
+      "src/i18n.ts",
       "research/synthesis.md",
-      "research/research.md"
+      "src/data/types.ts"
     ],
     "entities": [
       {
@@ -74,15 +78,39 @@
         "source": "derived"
       },
       {
+        "name": "research.md",
+        "kind": "doc",
+        "path": "research/research.md",
+        "source": "derived"
+      },
+      {
+        "name": "main.ts",
+        "kind": "code",
+        "path": "src/main.ts",
+        "source": "derived"
+      },
+      {
+        "name": "settings.ts",
+        "kind": "code",
+        "path": "src/settings.ts",
+        "source": "derived"
+      },
+      {
+        "name": "i18n.ts",
+        "kind": "code",
+        "path": "src/i18n.ts",
+        "source": "derived"
+      },
+      {
         "name": "synthesis.md",
         "kind": "doc",
         "path": "research/synthesis.md",
         "source": "derived"
       },
       {
-        "name": "research.md",
-        "kind": "doc",
-        "path": "research/research.md",
+        "name": "types.ts",
+        "kind": "code",
+        "path": "src/data/types.ts",
         "source": "derived"
       },
       {
@@ -168,35 +196,11 @@
         "kind": "proper_noun",
         "path": "tasks.md",
         "source": "derived"
-      },
-      {
-        "name": "Vault Change Feed",
-        "kind": "proper_noun",
-        "path": "tasks.md",
-        "source": "derived"
-      },
-      {
-        "name": "Thomas Frank",
-        "kind": "proper_noun",
-        "path": "tasks.md",
-        "source": "derived"
-      },
-      {
-        "name": "Implementation Summary",
-        "kind": "proper_noun",
-        "path": "implementation-summary.md",
-        "source": "derived"
-      },
-      {
-        "name": "Spec Folder",
-        "kind": "proper_noun",
-        "path": "implementation-summary.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "Notion-style on-change automations (\"when field X changes, do Y\"), triggers, and recurring/cron templates look like remaining parity gaps, but the synthesis Verdict is DO-NOT-BUILD / HOLD",
     "created_at": "2026-08-24T17:59:00.271Z",
-    "last_save_at": "2026-08-28T10:56:23.478Z",
+    "last_save_at": "2026-09-01T10:50:16.056Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -206,12 +210,13 @@
       "implementation-summary.md",
       "research/research.md"
     ],
-    "source_fingerprint": "sha256:5e353108491a24164350d559ba83319d2573df5a2e446dcf61efe0784614a14d",
+    "source_fingerprint": "sha256:212c277cee9d134bf2b0f07d5cc9369d456de56963c8117703dc5ca199d3543c",
+    "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "fb15b4b0f2f0dba82ea1b780c14336ccfd252cb47eebeec421c4656faadbd7ae",
-      "plan.md": "dc0033f49779b2a3f124169370bf35cb55c14dc047b903eaf8fd6b587fade23c",
-      "tasks.md": "e43af5d28daf9c98c74d4f67d031fc39bf35a4e0b5472e2107021e345eeacd38",
-      "implementation-summary.md": "daeac4043898cf752b13c372b0887e9b446c0ed2f3d70023c12cee2f43e50168",
+      "spec.md": "b6bb5b52b0e60ae2d26c5d057eebae0ed8d7c792ff935f55cf62da71ccfb4375",
+      "plan.md": "ff42ecb60d56df284a7c1fbe4a5fbccf8182fb4aa9b944c6e217dd9d9c39ea69",
+      "tasks.md": "50cbddb7bdd397a27e62e9ada986ed6cc3b1f16b7f545ec4f55ed313f8ef3677",
+      "implementation-summary.md": "278204e04c46b67735044adbaf7dbbf7f9c370a02aead93e3ecaf9e735b5fd53",
       "research/research.md": "c27447e55e042c8b362b5626d8d580c5084aba0765f612a04c5e1448395abb81"
     },
     "last_active_child_id": null,

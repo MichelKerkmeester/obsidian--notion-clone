@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "packet_id": "public/001-note-db-notion-parity-build/007-unique-id-stamp/002-unique-id-config-persist",
-  "spec_folder": "public/001-note-db-notion-parity-build/007-unique-id-stamp/002-unique-id-config-persist",
-  "parent_id": "public/001-note-db-notion-parity-build/007-unique-id-stamp",
+  "packet_id": "001-note-db-notion-parity-build/007-unique-id-stamp/002-unique-id-config-persist",
+  "spec_folder": "001-note-db-notion-parity-build/007-unique-id-stamp/002-unique-id-config-persist",
+  "parent_id": "001-note-db-notion-parity-build/007-unique-id-stamp",
   "children_ids": [],
   "manual": {
     "depends_on": [],
@@ -41,7 +41,8 @@
       "spec.md",
       "plan.md",
       "tasks.md",
-      "implementation-summary.md"
+      "implementation-summary.md",
+      "src/data/types.ts"
     ],
     "entities": [
       {
@@ -66,6 +67,12 @@
         "name": "implementation-summary.md",
         "kind": "doc",
         "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "types.ts",
+        "kind": "code",
+        "path": "src/data/types.ts",
         "source": "derived"
       },
       {
@@ -181,17 +188,11 @@
         "kind": "proper_noun",
         "path": "implementation-summary.md",
         "source": "derived"
-      },
-      {
-        "name": "What Was Built Shipped",
-        "kind": "proper_noun",
-        "path": "implementation-summary.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "Notion owns the unique-ID counter server-side (only `prefix` is configurable)",
     "created_at": "2026-08-25T19:29:59Z",
-    "last_save_at": "2026-08-27T12:27:58.833Z",
+    "last_save_at": "2026-09-01T10:50:15.803Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -200,12 +201,13 @@
       "tasks.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:6b2dcc280fe4918fc7174ad9da77aa920cf7d849e21f68da2887ad88b46f7adc",
+    "source_fingerprint": "sha256:af9f29859e3e42a5fcafe8a5267117591826d1949b1fcaf910b54bcac8ad140c",
+    "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "1e4eb29f29db96c8e54c6cf6e07eb6c63321adf200db479c76c7335e28d9a166",
-      "plan.md": "fe4a87549a60d2bba57100ab83b8279e34cc00efe9bba429fefcc663d9d14ee8",
-      "tasks.md": "3c256641ea54a2b5383fb8f113362a1259161f8d2be32b678c9082b0cb170e77",
-      "implementation-summary.md": "32ed2d223244a32541749a99e470c7feb839dd1c9a596f8161f5067116f735c7"
+      "spec.md": "96a50869559b66c5c8b9baf4b1ae0c5dfa3c4c8b8adf022f28c70aca92dd9809",
+      "plan.md": "bc87495128ac26e302d22dcc2106b214e56d3465130b24b308830a7e5ce2a3f5",
+      "tasks.md": "324ae098f7b1799f0ab3083c367f7e4127a045188a87bde21ac0b7d67b77889e",
+      "implementation-summary.md": "891582a1103205b82802fe23ee8d1b6dedb41b342ac3ed4ae3f602bb9ddd49fe"
     },
     "last_active_child_id": null,
     "last_active_at": null

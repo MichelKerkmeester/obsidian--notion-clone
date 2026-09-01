@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "packet_id": "public/001-note-db-notion-parity-build/001-live-reports-rollups/004-sum-rollups",
-  "spec_folder": "public/001-note-db-notion-parity-build/001-live-reports-rollups/004-sum-rollups",
-  "parent_id": "public/001-note-db-notion-parity-build/001-live-reports-rollups",
+  "packet_id": "001-note-db-notion-parity-build/001-live-reports-rollups/004-sum-rollups",
+  "spec_folder": "001-note-db-notion-parity-build/001-live-reports-rollups/004-sum-rollups",
+  "parent_id": "001-note-db-notion-parity-build/001-live-reports-rollups",
   "children_ids": [],
   "manual": {
     "depends_on": [],
@@ -191,7 +191,7 @@
     ],
     "causal_summary": "The vault still stores screenshot-era static totals",
     "created_at": "2026-08-25T19:11:31Z",
-    "last_save_at": "2026-08-27T12:27:54.894Z",
+    "last_save_at": "2026-09-01T10:50:15.638Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -200,12 +200,13 @@
       "tasks.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:7e59e376c47fde982279eaffc78b2acc9e591db5ce6536070982d2a328b14a55",
+    "source_fingerprint": "sha256:e9b77cc6101634987db07307b5e6c50d5cb54f2886e02688f704664bfe0dad35",
+    "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "dac0bdf9ad3ee99d91ee6dd3f5230964461af477ca3502ebdd9f6c025985950e",
-      "plan.md": "658b293cc828b3087cc6f728fb2cfd96a0d87b35d92392375e36eb0a3994f998",
-      "tasks.md": "f53448918ab96d5955aef49fe24f813982c0774d80bade28521f5420a9bce0d3",
-      "implementation-summary.md": "1bb16ea0556cd0808704a938120a07c8e0b5b390213e161793ef0344365e8953"
+      "spec.md": "48412835100ac107f3bcb309b9e5ebcc5a0b814348311caf86cc0d366fb97b06",
+      "plan.md": "437b6bb1fbead89b4cbe483c1e9960e439576d54b9d3a547b9f2e7e45933c5a3",
+      "tasks.md": "c04f3ea473810e921653b484f06b8a57f39923ace9c07ce3a8e5dfd21ea9b662",
+      "implementation-summary.md": "fad3a6acdd963c996254b197a599d228be328cf116aa685bd5ec889cd31d476a"
     },
     "last_active_child_id": null,
     "last_active_at": null

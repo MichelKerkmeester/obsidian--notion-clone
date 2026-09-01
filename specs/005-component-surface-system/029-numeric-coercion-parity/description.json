@@ -1,6 +1,6 @@
 {
   "level": "1",
-  "specFolder": "public/005-component-surface-system/029-numeric-coercion-parity",
+  "specFolder": "005-component-surface-system/029-numeric-coercion-parity",
   "description": "Two renderers read the same stored value differently, and the table row is the wrong one",
   "keywords": [
     "two",

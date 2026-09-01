@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "packet_id": "public/001-note-db-notion-parity-build/011-table-multi-group/005-multigroup-display-proof",
-  "spec_folder": "public/001-note-db-notion-parity-build/011-table-multi-group/005-multigroup-display-proof",
-  "parent_id": "public/001-note-db-notion-parity-build/011-table-multi-group",
+  "packet_id": "001-note-db-notion-parity-build/011-table-multi-group/005-multigroup-display-proof",
+  "spec_folder": "001-note-db-notion-parity-build/011-table-multi-group/005-multigroup-display-proof",
+  "parent_id": "001-note-db-notion-parity-build/011-table-multi-group",
   "children_ids": [],
   "manual": {
     "depends_on": [],
@@ -17,7 +17,6 @@
       "1-field patch",
       "multigroup display proof plan",
       "multigroup display proof tasks",
-      "multigroup display proof checklist",
       "multigroup display proof summary"
     ],
     "key_topics": [
@@ -40,8 +39,8 @@
       "spec.md",
       "plan.md",
       "tasks.md",
-      "checklist.md",
-      "implementation-summary.md"
+      "implementation-summary.md",
+      "checklist.md"
     ],
     "entities": [
       {
@@ -63,15 +62,15 @@
         "source": "derived"
       },
       {
-        "name": "checklist.md",
-        "kind": "doc",
-        "path": "checklist.md",
-        "source": "derived"
-      },
-      {
         "name": "implementation-summary.md",
         "kind": "doc",
         "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "checklist.md",
+        "kind": "doc",
+        "path": "checklist.md",
         "source": "derived"
       },
       {
@@ -171,43 +170,42 @@
         "source": "derived"
       },
       {
-        "name": "Verification Checklist",
+        "name": "Implementation Summary",
         "kind": "proper_noun",
-        "path": "checklist.md",
+        "path": "implementation-summary.md",
         "source": "derived"
       },
       {
-        "name": "Verification Protocol",
+        "name": "Spec Folder",
         "kind": "proper_noun",
-        "path": "checklist.md",
+        "path": "implementation-summary.md",
         "source": "derived"
       },
       {
-        "name": "Completion Impact",
+        "name": "Actual Effort",
         "kind": "proper_noun",
-        "path": "checklist.md",
+        "path": "implementation-summary.md",
         "source": "derived"
       }
     ],
     "causal_summary": "Without the locked proofs, a 2-field table can \"pass\" while 1-field hide keys change, while persist drops `groupByFields`, while a Type header writes on drop, or while empty months of grouping (nulls, multi-select fan-out, computed leftovers) throw",
     "created_at": "2026-08-25T20:50:01Z",
-    "last_save_at": "2026-08-27T17:27:13.658Z",
+    "last_save_at": "2026-09-01T10:50:15.936Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
       "spec.md",
       "plan.md",
       "tasks.md",
-      "checklist.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:61673e705f0d049a871b3da2db5832ee0a20ba8efea46a0096644b91b3803eb5",
+    "source_fingerprint": "sha256:7b5e7cbe732afb511c0a7786dc51e6a6459b59f734df4487eb6ecaa0d875d3ce",
+    "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "a2799a593f4e9e70c5998feb451815d79f21dfc1fa0c64f2bec46ddddd1dea0d",
-      "plan.md": "66970857057d4f201211b0b2d0cc37567acf613f2f4682cb7499dac5c48ac3c1",
-      "tasks.md": "325152a08099fe4a75856b648e41a34a93ef0e77b21615ae4ce46ceb2469fbc2",
-      "checklist.md": "95af5b3956856f0ecdc428bc061cf74253354082c9cbca6c39ff44820345e315",
-      "implementation-summary.md": "ae890bde61ff425605b5ff7c399e4a1464bc767472656d93ed1cad8461fe6e14"
+      "spec.md": "230397b3c6301629082bccce02c4bc364a763787ae013db6e3b5dd38dd0e857c",
+      "plan.md": "ae3fff76cd5a7ca5b632420538fe50f5b63d39d0de210aaab0c0e9b899a9dd0b",
+      "tasks.md": "4a1c38f46f245586c9d30e7c5c3dc28b8218fc995a02e06998940f732f529ab4",
+      "implementation-summary.md": "f6ac77cda3e422eaa54297da81f11b5760739ef12763257d35484cf0779d552f"
     },
     "last_active_child_id": null,
     "last_active_at": null

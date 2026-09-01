@@ -14,7 +14,7 @@ importance_tier: "high"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "public/001-note-db-notion-parity-build/001-live-reports-rollups"
+    packet_pointer: "001-note-db-notion-parity-build/001-live-reports-rollups"
     last_updated_at: "2026-08-28T10:54:48.353Z"
     last_updated_by: "swarm"
     recent_action: "Corrected unsupported checklist claims against the shipped code"

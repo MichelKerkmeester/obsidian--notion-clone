@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "packet_id": "public/001-note-db-notion-parity-build/001-live-reports-rollups/006-nowrite-proof-runbook",
-  "spec_folder": "public/001-note-db-notion-parity-build/001-live-reports-rollups/006-nowrite-proof-runbook",
-  "parent_id": "public/001-note-db-notion-parity-build/001-live-reports-rollups",
+  "packet_id": "001-note-db-notion-parity-build/001-live-reports-rollups/006-nowrite-proof-runbook",
+  "spec_folder": "001-note-db-notion-parity-build/001-live-reports-rollups/006-nowrite-proof-runbook",
+  "parent_id": "001-note-db-notion-parity-build/001-live-reports-rollups",
   "children_ids": [],
   "manual": {
     "depends_on": [],
@@ -42,7 +42,8 @@
       "spec.md",
       "plan.md",
       "tasks.md",
-      "implementation-summary.md"
+      "implementation-summary.md",
+      "src/data/Aggregate.ts"
     ],
     "entities": [
       {
@@ -67,6 +68,12 @@
         "name": "implementation-summary.md",
         "kind": "doc",
         "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "Aggregate.ts",
+        "kind": "code",
+        "path": "src/data/Aggregate.ts",
         "source": "derived"
       },
       {
@@ -182,17 +189,11 @@
         "kind": "proper_noun",
         "path": "implementation-summary.md",
         "source": "derived"
-      },
-      {
-        "name": "What Was Built Nothing",
-        "kind": "proper_noun",
-        "path": "implementation-summary.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "Notion rollups are not page storage",
     "created_at": "2026-08-25T19:11:32Z",
-    "last_save_at": "2026-08-27T12:27:55.218Z",
+    "last_save_at": "2026-09-01T10:50:15.648Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -201,12 +202,13 @@
       "tasks.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:8bba161dfecb131ebca6bddf872f1cdaae5673aaba9e816738224f5ecec5e66b",
+    "source_fingerprint": "sha256:69d92f6ea579e9b96db204016bf1ae8e057efaa5bd18e87ee7614d9d2763cead",
+    "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "7fd97948b80f859de1365bc6e066bda73c8ed72f1d20079b81dd0fe697396bb0",
-      "plan.md": "2bad94af0ebb297564bfff9210049b48dd7d7f2cdc21c10b544fb8d395332c50",
-      "tasks.md": "3f49fbc12bd3a58b2bbe346884afbe70d821c4edc006f1732ec66b1831ff863d",
-      "implementation-summary.md": "abdb742c65f48a4d19b13725bc513bc2cad81437d3977ac68c7d9ebc8e8b46c9"
+      "spec.md": "8c68e0ef85f9e0a8feda201fd52239fdce972cec2aa7facf3fe63da06b9138d0",
+      "plan.md": "4f6787207aaeb9e9fdf4a1a7b5472fae8912cdba2805e586abec40fc03724d1f",
+      "tasks.md": "75be339f161aced76daaa9eb4150bef310b8a5d56c7b4cc5132bfd9ae5b175dc",
+      "implementation-summary.md": "dcd04789686b3eec7329805fd4abbe26dc7da0457cda3bf6cd91dce07fd4c233"
     },
     "last_active_child_id": null,
     "last_active_at": null

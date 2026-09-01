@@ -9,7 +9,7 @@ importance_tier: "critical"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "public/006-list-view-clickup/003-group-affordances-and-selection"
+    packet_pointer: "006-list-view-clickup/003-group-affordances-and-selection"
     last_updated_at: "2026-08-30T00:00:00Z"
     last_updated_by: "phase-scaffold"
     recent_action: "Scaffolded phase 003; the selection-sync criterion trap carried in"
@@ -43,7 +43,7 @@ _memory:
 
 | Field | Value |
 |---|---|
-| **Spec Folder** | `specs/public/006-list-view-clickup/003-group-affordances-and-selection/` |
+| **Spec Folder** | `specs/006-list-view-clickup/003-group-affordances-and-selection/` |
 | **Parent Spec** | [`../spec.md`](../spec.md) |
 | **Predecessor** | [`../002-clickup-chrome/spec.md`](../002-clickup-chrome/spec.md) |
 | **Successor** | [`../004-mobile-and-live-verification/spec.md`](../004-mobile-and-live-verification/spec.md) |

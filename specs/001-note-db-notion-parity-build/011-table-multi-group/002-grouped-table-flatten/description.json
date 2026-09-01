@@ -1,6 +1,6 @@
 {
   "level": "1",
-  "specFolder": "public/001-note-db-notion-parity-build/011-table-multi-group/002-grouped-table-flatten",
+  "specFolder": "001-note-db-notion-parity-build/011-table-multi-group/002-grouped-table-flatten",
   "description": "Table dispatch is still one string (`DatabaseView.ts:6332-6333` → `renderGroupedTable` `9539-9545`)",
   "keywords": [
     "table",

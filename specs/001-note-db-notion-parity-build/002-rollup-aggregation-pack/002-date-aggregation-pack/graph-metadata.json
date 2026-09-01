@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "packet_id": "public/001-note-db-notion-parity-build/002-rollup-aggregation-pack/002-date-aggregation-pack",
-  "spec_folder": "public/001-note-db-notion-parity-build/002-rollup-aggregation-pack/002-date-aggregation-pack",
-  "parent_id": "public/001-note-db-notion-parity-build/002-rollup-aggregation-pack",
+  "packet_id": "001-note-db-notion-parity-build/002-rollup-aggregation-pack/002-date-aggregation-pack",
+  "spec_folder": "001-note-db-notion-parity-build/002-rollup-aggregation-pack/002-date-aggregation-pack",
+  "parent_id": "001-note-db-notion-parity-build/002-rollup-aggregation-pack",
   "children_ids": [],
   "manual": {
     "depends_on": [],
@@ -39,7 +39,10 @@
       "spec.md",
       "plan.md",
       "tasks.md",
-      "implementation-summary.md"
+      "implementation-summary.md",
+      "src/data/Aggregate.ts",
+      "src/data/types.ts",
+      "src/data/Aggregate.test.ts"
     ],
     "entities": [
       {
@@ -64,6 +67,24 @@
         "name": "implementation-summary.md",
         "kind": "doc",
         "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "Aggregate.ts",
+        "kind": "code",
+        "path": "src/data/Aggregate.ts",
+        "source": "derived"
+      },
+      {
+        "name": "types.ts",
+        "kind": "code",
+        "path": "src/data/types.ts",
+        "source": "derived"
+      },
+      {
+        "name": "Aggregate.test.ts",
+        "kind": "test",
+        "path": "src/data/Aggregate.test.ts",
         "source": "derived"
       },
       {
@@ -167,29 +188,11 @@
         "kind": "proper_noun",
         "path": "implementation-summary.md",
         "source": "derived"
-      },
-      {
-        "name": "Spec Folder",
-        "kind": "proper_noun",
-        "path": "implementation-summary.md",
-        "source": "derived"
-      },
-      {
-        "name": "Actual Effort",
-        "kind": "proper_noun",
-        "path": "implementation-summary.md",
-        "source": "derived"
-      },
-      {
-        "name": "What Was Built Shipped",
-        "kind": "proper_noun",
-        "path": "implementation-summary.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "Notion Date-property rollups expose Earliest date / Latest date / Date range",
     "created_at": "2026-08-25T18:58:58Z",
-    "last_save_at": "2026-08-27T12:27:55.577Z",
+    "last_save_at": "2026-09-01T10:50:15.670Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -198,12 +201,13 @@
       "tasks.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:638f0aca50c62851cee7de5abbfef9bee67ad0ece2efcf081b2019e98ba361e8",
+    "source_fingerprint": "sha256:7545e9ec395f63cb3515dd90e2ebafbfa0343022e8e4d1b0f32b58452c3f523f",
+    "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "dda1bedc42a680bde4580370101ae691de40a803c18377e28c26038afa53731c",
-      "plan.md": "7d1db49ddb77473d9a767f9d122c0e83e5285139c881e10bc8a8813e27503820",
-      "tasks.md": "de116c68db060a0cdf9e85fc84866f171178d9a917ee1c69f8813fa8e6c38fd0",
-      "implementation-summary.md": "69bdbb0059054cddf79568831a427c6200b564f8a5eb0c829ec866bb65a8b3ca"
+      "spec.md": "3f728082e55e6df59fcf434aa2067ea81ddab0cbcd9b739f4a8f0cdcf80cfe61",
+      "plan.md": "58751c1559e8d9b0b9b6a7f747e474e01c1efc79e50f4e1a06b1ae87d311403e",
+      "tasks.md": "a8744229c1f8f4da910565f7d51318d6e55e4a36f7e55481b29ccf028c531a9e",
+      "implementation-summary.md": "d0d48d7e0bb7926fe1db6327f50ff193421f19e3e7af32669df3fa8148a3f1b9"
     },
     "last_active_child_id": null,
     "last_active_at": null

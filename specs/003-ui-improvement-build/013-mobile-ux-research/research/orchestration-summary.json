@@ -1,8 +1,8 @@
 {
   "run_id": "1787982407523-v5hrg1",
   "loop_type": "research",
-  "spec_folder": "specs/public/003-ui-improvement-build/013-mobile-ux-research",
-  "base_artifact_dir": "specs/public/003-ui-improvement-build/013-mobile-ux-research/research",
+  "spec_folder": "specs/003-ui-improvement-build/013-mobile-ux-research",
+  "base_artifact_dir": "specs/003-ui-improvement-build/013-mobile-ux-research/research",
   "total_cli_lineages": 1,
   "orphaned_lineages": [],
   "total": 1,

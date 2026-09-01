@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "packet_id": "public/001-note-db-notion-parity-build/009-view-filter-tree/004-nonpanel-filter-coherence",
-  "spec_folder": "public/001-note-db-notion-parity-build/009-view-filter-tree/004-nonpanel-filter-coherence",
-  "parent_id": "public/001-note-db-notion-parity-build/009-view-filter-tree",
+  "packet_id": "001-note-db-notion-parity-build/009-view-filter-tree/004-nonpanel-filter-coherence",
+  "spec_folder": "001-note-db-notion-parity-build/009-view-filter-tree/004-nonpanel-filter-coherence",
+  "parent_id": "001-note-db-notion-parity-build/009-view-filter-tree",
   "children_ids": [],
   "manual": {
     "depends_on": [],
@@ -190,7 +190,7 @@
     ],
     "causal_summary": "The fork also mutates `state.filters` from the active rail, column delete/rename, and chart drilldown",
     "created_at": "2026-08-25T20:51:13Z",
-    "last_save_at": "2026-08-27T12:28:00.456Z",
+    "last_save_at": "2026-09-01T10:50:15.865Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -199,12 +199,13 @@
       "tasks.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:827f5f0d11e00c76b23297cee2073b0bbc78072b89de53783a7eaa5b59747eb6",
+    "source_fingerprint": "sha256:1b74bfc2d8d71f9bb3f267b09926d1a695729953139c3598d8022309b549b664",
+    "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "b0a823b37be4777d0bca6df46b43835750c77a910ffa7d5ea20616bb34a01a62",
-      "plan.md": "35e59baee2db7c5ac482e70a642fa7cb93977d7b79ab5fda7c647ca96dc0e0c1",
-      "tasks.md": "465e19102bb02949a6727327a786f38e6e1db36f91bfa7ecaf5986bf0cad44b3",
-      "implementation-summary.md": "28fb97e71d186a96e3a15a744fcb07024f200758d86a62df1af1e87ce98b8dbf"
+      "spec.md": "99bd72b8a6acad87464b37d0543b91e1467d443b21e01b293d44014797fcaa00",
+      "plan.md": "08f9a77f1e5914a79f802fd85d69199b266c8c1a5751a2339579f6f79e78c7bc",
+      "tasks.md": "ca4fd9577060f1655e19e47f77639f0ea246f767c56cdc173f789db2e3573060",
+      "implementation-summary.md": "9517396f032084cd87514b90cfeda3fc2d35d69218a9bb48f0871ab9bd2e3b30"
     },
     "last_active_child_id": null,
     "last_active_at": null

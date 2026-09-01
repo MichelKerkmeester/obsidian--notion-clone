@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "packet_id": "public/001-note-db-notion-parity-build/004-formula-ifs-switch-math/003-computed-formulas-vitest",
-  "spec_folder": "public/001-note-db-notion-parity-build/004-formula-ifs-switch-math/003-computed-formulas-vitest",
-  "parent_id": "public/001-note-db-notion-parity-build/004-formula-ifs-switch-math",
+  "packet_id": "001-note-db-notion-parity-build/004-formula-ifs-switch-math/003-computed-formulas-vitest",
+  "spec_folder": "001-note-db-notion-parity-build/004-formula-ifs-switch-math/003-computed-formulas-vitest",
+  "parent_id": "001-note-db-notion-parity-build/004-formula-ifs-switch-math",
   "children_ids": [],
   "manual": {
     "depends_on": [],
@@ -39,7 +39,9 @@
       "spec.md",
       "plan.md",
       "tasks.md",
-      "implementation-summary.md"
+      "implementation-summary.md",
+      "src/__tests__/setup.ts",
+      "src/data/__tests__/computed-formulas.test.ts"
     ],
     "entities": [
       {
@@ -64,6 +66,18 @@
         "name": "implementation-summary.md",
         "kind": "doc",
         "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "setup.ts",
+        "kind": "code",
+        "path": "src/__tests__/setup.ts",
+        "source": "derived"
+      },
+      {
+        "name": "computed-formulas.test.ts",
+        "kind": "test",
+        "path": "src/data/__tests__/computed-formulas.test.ts",
         "source": "derived"
       },
       {
@@ -173,23 +187,11 @@
         "kind": "proper_noun",
         "path": "implementation-summary.md",
         "source": "derived"
-      },
-      {
-        "name": "Actual Effort",
-        "kind": "proper_noun",
-        "path": "implementation-summary.md",
-        "source": "derived"
-      },
-      {
-        "name": "What Was Built Shipped",
-        "kind": "proper_noun",
-        "path": "implementation-summary.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "Parent plan.md's “run the plugin test suite” currently has nothing to run",
     "created_at": "2026-08-25T19:11:19Z",
-    "last_save_at": "2026-08-27T12:27:56.983Z",
+    "last_save_at": "2026-09-01T10:50:15.727Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -198,12 +200,13 @@
       "tasks.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:e31bf36161fca258edc3660ba517b06281fa18c12581cd6c4795573f49959305",
+    "source_fingerprint": "sha256:6337961985be1a06db96f8248bd00abcec8df31cde9095959aa2ba7e90bd8096",
+    "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "ca195491cc77650093a1cbfb2003b733e8be591bddc6b3f2a09292ead4ee38d6",
-      "plan.md": "1c621ec947569a8b11f2fea5e07e3bc5c1e453f9cb2935eb312ef6ce38f8d190",
-      "tasks.md": "96d4648b714ddf28454071e959cabe4a678094b8e997f38dea09907368bf3baf",
-      "implementation-summary.md": "8489641ca1ef1b097967525c9fb9f0e79eb840ac8ad8944aec08e382c01351a9"
+      "spec.md": "a7a45f681ff85da8025d34102ec7b99712c484090215dfe9039e431b32dc51cc",
+      "plan.md": "c8954986077c4a6f8afe623760c157e074f7003034aa66f58e6ed369075a40ac",
+      "tasks.md": "f9a0c4b5234e13918afcf52fd9461da7d2584f92c187270a9e4005d1928398de",
+      "implementation-summary.md": "50a68d2d0862e83d6459118529091b028128606b38a4b6998460084c498f5560"
     },
     "last_active_child_id": null,
     "last_active_at": null

@@ -1,6 +1,6 @@
 {
   "level": "3",
-  "specFolder": "public/005-component-surface-system/001-overlay-placement-and-menu-language",
+  "specFolder": "005-component-surface-system/001-overlay-placement-and-menu-language",
   "description": "Placement has no authority and menus have no shared grammar",
   "keywords": [
     "placement",

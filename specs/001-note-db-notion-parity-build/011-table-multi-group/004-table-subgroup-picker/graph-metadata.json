@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "packet_id": "public/001-note-db-notion-parity-build/011-table-multi-group/004-table-subgroup-picker",
-  "spec_folder": "public/001-note-db-notion-parity-build/011-table-multi-group/004-table-subgroup-picker",
-  "parent_id": "public/001-note-db-notion-parity-build/011-table-multi-group",
+  "packet_id": "001-note-db-notion-parity-build/011-table-multi-group/004-table-subgroup-picker",
+  "spec_folder": "001-note-db-notion-parity-build/011-table-multi-group/004-table-subgroup-picker",
+  "parent_id": "001-note-db-notion-parity-build/011-table-multi-group",
   "children_ids": [],
   "manual": {
     "depends_on": [],
@@ -189,7 +189,7 @@
     ],
     "causal_summary": "Parse acceptance (child 001) meets REQ-001 technically, but Notion's View settings surface needs a Group + Sub-group control",
     "created_at": "2026-08-25T20:50:01Z",
-    "last_save_at": "2026-08-27T12:28:02.936Z",
+    "last_save_at": "2026-09-01T10:50:15.932Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -198,12 +198,13 @@
       "tasks.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:978ea6b84e14890403032a71837df5320c7e13503bfdf60b2e4849c8c8935b6d",
+    "source_fingerprint": "sha256:5344f24418df2a2fc963f7fe53b5d5b95b66da8cce1714e14881978ccc76dec0",
+    "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "3989248ecab4b58da58bea05d94d3dd0688c3d25deb7fc8479c6687e8a4d798b",
-      "plan.md": "ea0e62c496912102bd8e4ba7c15a9c8a6fdfaf820e7189c1b408eabd92c9bf8a",
-      "tasks.md": "ed92ae132995c6110772fa5f651ee0ba75761f904d27921efe4a2c036d934d64",
-      "implementation-summary.md": "d6c5c169a45b4f617709355e673d90e5acbf2a0e236c23ca01e3e051a3c57fc0"
+      "spec.md": "bf12def8166760c41ce5610787bc98a48a8658b0b26681801a63f306b8bb7dbe",
+      "plan.md": "a552c0680dfea5f134e28f7e9c87aededa95821c2146132bb82d93323bc6e900",
+      "tasks.md": "c14ef58b781e6b5552c7f1a452e45173bb4ed4d1d145ce8544fb7523d8f324ce",
+      "implementation-summary.md": "000602bf61024f4bd61ae959dfee105744563f6d15d2608911da60241e451d21"
     },
     "last_active_child_id": null,
     "last_active_at": null

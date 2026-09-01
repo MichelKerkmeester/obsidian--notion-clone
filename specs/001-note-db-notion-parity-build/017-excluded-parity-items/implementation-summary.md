@@ -13,7 +13,7 @@ importance_tier: "medium"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "public/001-note-db-notion-parity-build/017-excluded-parity-items"
+    packet_pointer: "001-note-db-notion-parity-build/017-excluded-parity-items"
     last_updated_at: "2026-08-28T10:54:51.091Z"
     last_updated_by: "markdown-agent"
     recent_action: "Corrected unsupported checklist claims against the shipped code"

@@ -6,7 +6,7 @@ importance_tier: "important"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "public/005-component-surface-system/031-sheet-lifecycle-ownership"
+    packet_pointer: "005-component-surface-system/031-sheet-lifecycle-ownership"
     last_updated_at: "2026-08-31T16:00:00Z"
     last_updated_by: "phase-author"
     recent_action: "Task list drafted; T1 is the discriminating control"

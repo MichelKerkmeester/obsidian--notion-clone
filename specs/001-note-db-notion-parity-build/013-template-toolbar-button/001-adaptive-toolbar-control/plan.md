@@ -10,7 +10,7 @@ importance_tier: "high"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "public/001-note-db-notion-parity-build/013-template-toolbar-button/001-adaptive-toolbar-control"
+    packet_pointer: "001-note-db-notion-parity-build/013-template-toolbar-button/001-adaptive-toolbar-control"
     last_updated_at: "2026-08-27T12:27:53Z"
     last_updated_by: "phase-architect"
     recent_action: "Authored adaptive-toolbar-control child from synthesis ranks 1,4,5 and final-plan steps 1-4"

@@ -8,7 +8,7 @@ importance_tier: "critical"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "public/005-component-surface-system/011-mobile-menu-presentation"
+    packet_pointer: "005-component-surface-system/011-mobile-menu-presentation"
     last_updated_at: "2026-09-01T01:20:00Z"
     last_updated_by: "goal-authoring"
     recent_action: "Menu sheets now track the keyboard; band relation, identity and ownership measured"

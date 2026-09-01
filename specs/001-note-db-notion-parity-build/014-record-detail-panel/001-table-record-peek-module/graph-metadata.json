@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "packet_id": "public/001-note-db-notion-parity-build/014-record-detail-panel/001-table-record-peek-module",
-  "spec_folder": "public/001-note-db-notion-parity-build/014-record-detail-panel/001-table-record-peek-module",
-  "parent_id": "public/001-note-db-notion-parity-build/014-record-detail-panel",
+  "packet_id": "001-note-db-notion-parity-build/014-record-detail-panel/001-table-record-peek-module",
+  "spec_folder": "001-note-db-notion-parity-build/014-record-detail-panel/001-table-record-peek-module",
+  "parent_id": "001-note-db-notion-parity-build/014-record-detail-panel",
   "children_ids": [],
   "manual": {
     "depends_on": [],
@@ -40,7 +40,8 @@
       "spec.md",
       "plan.md",
       "tasks.md",
-      "implementation-summary.md"
+      "implementation-summary.md",
+      "src/i18n.ts"
     ],
     "entities": [
       {
@@ -65,6 +66,12 @@
         "name": "implementation-summary.md",
         "kind": "doc",
         "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "i18n.ts",
+        "kind": "code",
+        "path": "src/i18n.ts",
         "source": "derived"
       },
       {
@@ -180,17 +187,11 @@
         "kind": "proper_noun",
         "path": "implementation-summary.md",
         "source": "derived"
-      },
-      {
-        "name": "What Was Built Shipped",
-        "kind": "proper_noun",
-        "path": "implementation-summary.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "The fork already hydrates records (`RowData` at `src/data/types.ts:113-119`) and stringifies values (`getColumnValue` at `ColumnDisplay.ts:63`; `stringifyValue` at `Stringify.ts:1`)",
     "created_at": "2026-08-25T21:14:46Z",
-    "last_save_at": "2026-08-27T12:28:05.362Z",
+    "last_save_at": "2026-09-01T10:50:16.016Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -199,12 +200,13 @@
       "tasks.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:8caa26293cbc41b942473497d2bf57fe48210e4208614194f39a87c27a0cc390",
+    "source_fingerprint": "sha256:7bd4f7430977514b6dab5ed2af5d31b7f8de6a9fecfa63c2de3245f45fdb6011",
+    "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "c96f6ce0c416bbf7852ab1128424ef67e3a1823b37b1529bce9d582f6ece83f4",
-      "plan.md": "e8e4c2af9c0888efa8c2d5b3d7546ffc77a98bdd710e3564e2d7c654344ef378",
-      "tasks.md": "d082dc11b2cc47cadcf49ec0a6827a9a836f5bbe00104be5457f0e733234b7c1",
-      "implementation-summary.md": "885c64bea1a80cd983da4feb8a7f5545c09a56999922fd76270ac1743b11d6af"
+      "spec.md": "2357b7d3112e8fba323fd5a3c9afc2fdde02b89e83060d664eca07e214f63b29",
+      "plan.md": "d46d12fe94e50b4c11b37ebada14f6e2307235e48ccf8114c997ae1506d3d117",
+      "tasks.md": "09449a61c746f7dcf748e17dbad59335cc18f26b3fa062d1d7a6873a2341dd49",
+      "implementation-summary.md": "6de7aa78b413228eb5e2dd0fcf63746856f09b3a00569e616f576481f6225265"
     },
     "last_active_child_id": null,
     "last_active_at": null

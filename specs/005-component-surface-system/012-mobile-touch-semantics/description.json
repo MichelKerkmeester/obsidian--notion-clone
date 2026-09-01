@@ -1,5 +1,5 @@
 {
-  "specFolder": "public/005-component-surface-system/012-mobile-touch-semantics",
+  "specFolder": "005-component-surface-system/012-mobile-touch-semantics",
   "description": "Give a touch in the table the meaning a touch has, rather than replaying the desktop pointer grammar: a tap edits the cell it lands on, a tap on the",
   "keywords": [
     "give",

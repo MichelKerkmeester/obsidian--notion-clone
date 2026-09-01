@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "packet_id": "public/001-note-db-notion-parity-build/005-formula-let-variables/002-let-vitest-matrix",
-  "spec_folder": "public/001-note-db-notion-parity-build/005-formula-let-variables/002-let-vitest-matrix",
-  "parent_id": "public/001-note-db-notion-parity-build/005-formula-let-variables",
+  "packet_id": "001-note-db-notion-parity-build/005-formula-let-variables/002-let-vitest-matrix",
+  "spec_folder": "001-note-db-notion-parity-build/005-formula-let-variables/002-let-vitest-matrix",
+  "parent_id": "001-note-db-notion-parity-build/005-formula-let-variables",
   "children_ids": [],
   "manual": {
     "depends_on": [],
@@ -41,7 +41,8 @@
       "spec.md",
       "plan.md",
       "tasks.md",
-      "implementation-summary.md"
+      "implementation-summary.md",
+      "src/__tests__/setup.ts"
     ],
     "entities": [
       {
@@ -66,6 +67,12 @@
         "name": "implementation-summary.md",
         "kind": "doc",
         "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "setup.ts",
+        "kind": "code",
+        "path": "src/__tests__/setup.ts",
         "source": "derived"
       },
       {
@@ -181,17 +188,11 @@
         "kind": "proper_noun",
         "path": "implementation-summary.md",
         "source": "derived"
-      },
-      {
-        "name": "What Was Built Shipped",
-        "kind": "proper_noun",
-        "path": "implementation-summary.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "Parent success criteria assume “the fork’s formula test suite.” It does not exist",
     "created_at": "2026-08-25T19:25:11Z",
-    "last_save_at": "2026-08-27T12:27:57.353Z",
+    "last_save_at": "2026-09-01T10:50:15.750Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -200,12 +201,13 @@
       "tasks.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:a4de12939940c2f2040e1abe8d684c07a5e0b551da655dad2b623cb9047ffeea",
+    "source_fingerprint": "sha256:ad70f0b84db5fa9ca8d29b023d80212dcbc67e757f5ae16ab81a0b0cd69d8480",
+    "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "bbf8ea33b5f010021017ab46aa0f6c4d4e985cb36b4284d517f1b4b01ae26097",
-      "plan.md": "21595019b8691d8390b38aec88791e26fe0dacaa5703b3486cd5242d7ac4d32d",
-      "tasks.md": "a4558c83ade3d825e669661e11b9914e00c0fa27a5cf5aee010f84a115ced5c1",
-      "implementation-summary.md": "5f2de2195d48ff540dbe4fbe78181b550e8c7e18b447989d820ab197ecbfea87"
+      "spec.md": "e406a848c1e43b99ea77f626ee94fc3b24d206e6fd3f0dd7c9204a987f298277",
+      "plan.md": "92f2c4ea28a70d56a4276b1d78bfa52099dd57d6370a7b7735ebbf6d955f9a4e",
+      "tasks.md": "31a50c5400ceb02546ef93db4761796eec7c52243646264b2f4093a966b7b545",
+      "implementation-summary.md": "7ba3a3c0fa49dbbeb543d5ddea52d0c2a050c1a04de615408b23b0e6d9102fb2"
     },
     "last_active_child_id": null,
     "last_active_at": null

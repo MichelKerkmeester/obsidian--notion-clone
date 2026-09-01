@@ -1,8 +1,8 @@
 {
   "run_id": "1788178447595-968qzp",
   "loop_type": "review",
-  "spec_folder": "specs/public/005-component-surface-system",
-  "base_artifact_dir": "specs/public/005-component-surface-system/review",
+  "spec_folder": "specs/005-component-surface-system",
+  "base_artifact_dir": "specs/005-component-surface-system/review",
   "total_cli_lineages": 2,
   "orphaned_lineages": [],
   "total": 2,

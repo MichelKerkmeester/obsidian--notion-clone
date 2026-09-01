@@ -1,6 +1,6 @@
 {
   "level": "2",
-  "specFolder": "public/001-note-db-notion-parity-build/013-template-toolbar-button",
+  "specFolder": "001-note-db-notion-parity-build/013-template-toolbar-button",
   "description": "The note-database fork already implements Notion-style record templates and already wires them to the toolbar New button",
   "keywords": [
     "note-database",

@@ -11,7 +11,7 @@ importance_tier: "critical"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "public/005-component-surface-system/017-touch-row-range-selection"
+    packet_pointer: "005-component-surface-system/017-touch-row-range-selection"
     last_updated_at: "2026-09-01T18:20:00Z"
     last_updated_by: "announcement-and-menu-term"
     recent_action: "Live region persisted outside the bar; row-menu term driven, not counted"

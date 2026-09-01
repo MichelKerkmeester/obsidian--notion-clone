@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "packet_id": "public/001-note-db-notion-parity-build/003-reports-computed-fields/002-remaining-saved-config",
-  "spec_folder": "public/001-note-db-notion-parity-build/003-reports-computed-fields/002-remaining-saved-config",
-  "parent_id": "public/001-note-db-notion-parity-build/003-reports-computed-fields",
+  "packet_id": "001-note-db-notion-parity-build/003-reports-computed-fields/002-remaining-saved-config",
+  "spec_folder": "001-note-db-notion-parity-build/003-reports-computed-fields/002-remaining-saved-config",
+  "parent_id": "001-note-db-notion-parity-build/003-reports-computed-fields",
   "children_ids": [],
   "manual": {
     "depends_on": [],
@@ -194,7 +194,7 @@
     ],
     "causal_summary": "Reports still lacks Remaining and Saved as live computed columns",
     "created_at": "2026-08-25T19:12:37Z",
-    "last_save_at": "2026-08-27T12:27:56.193Z",
+    "last_save_at": "2026-09-01T10:50:15.698Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -203,12 +203,13 @@
       "tasks.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:da10454b684180ba712c7c5cd697ff2919366650532b80319f8cde854ce426d6",
+    "source_fingerprint": "sha256:b0fce0f5e218f802a7f6bd46df22a4a6c3244bf0852f275c0f89e0f900373c56",
+    "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "ea810d442804990dadce93724d237ddb44f82af6b96c6098db39bbefeffe94f7",
-      "plan.md": "4406412ee7325653525a00062be012653b790c9883f9950f8c24cf30026762da",
-      "tasks.md": "6da062d9607527d4e62d71eb62ca34479d672bf4d41e5168f6ad7804c8e00106",
-      "implementation-summary.md": "7b2cf24a149403706721a7f021fb4e309eaf98a914674d106a5116d64986ec9e"
+      "spec.md": "5ba32fb87c820e66964d9fec13f2223ae88bfc31889e145e20e19fa4abae40ff",
+      "plan.md": "a105cb7fb8a8374412768704851424ec69dbd1996df6a7b1930e39193713f36c",
+      "tasks.md": "77d2c9e9b3ebac81ce02160f84ab63ecb2fcc6e5ec1286436e75d039db6c259e",
+      "implementation-summary.md": "01e029cb5c917c55a9f8b8130adf302f89faae996d6433c7c05c3900675728f7"
     },
     "last_active_child_id": null,
     "last_active_at": null

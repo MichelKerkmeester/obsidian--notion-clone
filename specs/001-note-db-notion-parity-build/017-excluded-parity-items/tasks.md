@@ -13,7 +13,7 @@ importance_tier: "medium"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "public/001-note-db-notion-parity-build/017-excluded-parity-items"
+    packet_pointer: "001-note-db-notion-parity-build/017-excluded-parity-items"
     last_updated_at: "2026-08-26T00:00:00Z"
     last_updated_by: "markdown-agent"
     recent_action: "Retired T004-T008 from Implementation; fixed QueryEngine and 014 cites"

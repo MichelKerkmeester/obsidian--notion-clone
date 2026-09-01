@@ -1,6 +1,6 @@
 {
   "level": "3",
-  "specFolder": "public/005-component-surface-system/006-record-open-target",
+  "specFolder": "005-component-surface-system/006-record-open-target",
   "description": "On desktop, clicking Open in the table shows a small card listing properties",
   "keywords": [
     "desktop",

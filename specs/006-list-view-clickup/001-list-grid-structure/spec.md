@@ -10,7 +10,7 @@ importance_tier: "critical"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "public/006-list-view-clickup/001-list-grid-structure"
+    packet_pointer: "006-list-view-clickup/001-list-grid-structure"
     last_updated_at: "2026-08-30T00:00:00Z"
     last_updated_by: "phase-scaffold"
     recent_action: "Scaffolded phase 001; FR-17 reversed per the operator's reading-identity decision"
@@ -47,7 +47,7 @@ _memory:
 
 | Field | Value |
 |---|---|
-| **Spec Folder** | `specs/public/006-list-view-clickup/001-list-grid-structure/` |
+| **Spec Folder** | `specs/006-list-view-clickup/001-list-grid-structure/` |
 | **Parent Spec** | [`../spec.md`](../spec.md) |
 | **Predecessor** | [`../000-grid-contract-and-list-harness/spec.md`](../000-grid-contract-and-list-harness/spec.md) |
 | **Successor** | [`../002-clickup-chrome/spec.md`](../002-clickup-chrome/spec.md) |

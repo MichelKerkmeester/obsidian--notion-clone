@@ -1,5 +1,5 @@
 {
-  "specFolder": "public/005-component-surface-system/021-sheet-inline-edit-alignment",
+  "specFolder": "005-component-surface-system/021-sheet-inline-edit-alignment",
   "description": "Tapping a value in the phone record sheet opens an editor 6.6px below the line the value sat on, and",
   "keywords": [
     "tapping",

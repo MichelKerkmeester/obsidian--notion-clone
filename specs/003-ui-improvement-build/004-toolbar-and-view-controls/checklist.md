@@ -14,7 +14,7 @@ importance_tier: "high"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "public/003-ui-improvement-build/004-toolbar-and-view-controls"
+    packet_pointer: "003-ui-improvement-build/004-toolbar-and-view-controls"
     last_updated_at: "2026-08-28T04:30:57Z"
     last_updated_by: "phase-author"
     recent_action: "Verified toolbar and view controls checklist gates"
@@ -56,10 +56,10 @@ _memory:
 <!-- ANCHOR:pre-impl -->
 ## Pre-Implementation
 
-- [x] CHK-001 [P0] Requirements documented in `spec.md` with real `file:line` citations [EVIDENCE: specs/public/003-ui-improvement-build/004-toolbar-and-view-controls/spec.md:50-250 REQ-001 through REQ-018]
-  - **Evidence**: `specs/public/003-ui-improvement-build/004-toolbar-and-view-controls/spec.md:50-250` covers REQ-001 through REQ-018.
-- [x] CHK-002 [P0] Technical architecture and 4-cluster layout defined in `plan.md` [EVIDENCE: specs/public/003-ui-improvement-build/004-toolbar-and-view-controls/plan.md:50-200]
-  - **Evidence**: `specs/public/003-ui-improvement-build/004-toolbar-and-view-controls/plan.md:50-200` defines cluster structure and layout rules.
+- [x] CHK-001 [P0] Requirements documented in `spec.md` with real `file:line` citations [EVIDENCE: specs/003-ui-improvement-build/004-toolbar-and-view-controls/spec.md:50-250 REQ-001 through REQ-018]
+  - **Evidence**: `specs/003-ui-improvement-build/004-toolbar-and-view-controls/spec.md:50-250` covers REQ-001 through REQ-018.
+- [x] CHK-002 [P0] Technical architecture and 4-cluster layout defined in `plan.md` [EVIDENCE: specs/003-ui-improvement-build/004-toolbar-and-view-controls/plan.md:50-200]
+  - **Evidence**: `specs/003-ui-improvement-build/004-toolbar-and-view-controls/plan.md:50-200` defines cluster structure and layout rules.
 - [x] CHK-003 [P1] Dependencies identified and available (`ViewSelection.ts`, `TemplateToolbarAction.ts`) [EVIDENCE: src/data/ViewSelection.ts:1-43; src/data/TemplateToolbarAction.ts:1-32]
   - **Evidence**: `src/data/ViewSelection.ts:1-43` and `src/data/TemplateToolbarAction.ts:1-32` are in place.
 
@@ -149,7 +149,7 @@ _memory:
 <!-- ANCHOR:docs -->
 ## Documentation
 
-- [x] CHK-050 [P1] Specification (`spec.md`), plan (`plan.md`), and tasks (`tasks.md`) synchronized [EVIDENCE: specs/public/003-ui-improvement-build/004-toolbar-and-view-controls/spec.md:50-250; tasks.md:50-100]
+- [x] CHK-050 [P1] Specification (`spec.md`), plan (`plan.md`), and tasks (`tasks.md`) synchronized [EVIDENCE: specs/003-ui-improvement-build/004-toolbar-and-view-controls/spec.md:50-250; tasks.md:50-100]
   - **Evidence**: Phase documents synchronized across all sections in `spec.md:50-250`.
 - [x] CHK-051 [P1] Code comments explain durable intent and architectural rationale (no narrating obvious code) [EVIDENCE: src/views/ToolbarRenderer.ts:252-258; src/data/ViewSelection.ts:1-15]
   - **Evidence**: Code comments in `ToolbarRenderer.ts:252-258` and `ViewSelection.ts:1-15` focus on non-obvious layout constraints.

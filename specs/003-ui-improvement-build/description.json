@@ -1,5 +1,5 @@
 {
-  "specFolder": "public/003-ui-improvement-build",
+  "specFolder": "003-ui-improvement-build",
   "description": "The forked Note Database plugin is functionally rich — 12 column types, 7 view types, live relations and rollups — but its interface has not kept pace",
   "keywords": [
     "forked",

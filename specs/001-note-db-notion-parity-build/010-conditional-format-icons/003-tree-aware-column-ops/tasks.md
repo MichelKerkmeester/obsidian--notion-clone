@@ -8,7 +8,7 @@ importance_tier: "high"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "public/001-note-db-notion-parity-build/010-conditional-format-icons/003-tree-aware-column-ops"
+    packet_pointer: "001-note-db-notion-parity-build/010-conditional-format-icons/003-tree-aware-column-ops"
     last_updated_at: "2026-08-27T12:27:53Z"
     last_updated_by: "phase-architect"
     recent_action: "Authored tree-aware-column-ops child from synthesis rank 5 and final-plan step 6"

@@ -11,7 +11,7 @@ importance_tier: "critical"
 contextType: "implementation"
 _memory:
   continuity:
-    packet_pointer: "public/005-component-surface-system/009-live-verification"
+    packet_pointer: "005-component-surface-system/009-live-verification"
     last_updated_at: "2026-08-29T18:00:00Z"
     last_updated_by: "phase-architect"
     recent_action: "Harness audit: AC-006 green is subject-absent, not product-correct"

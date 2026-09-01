@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "packet_id": "public/003-ui-improvement-build/006-views-parity-polish",
-  "spec_folder": "public/003-ui-improvement-build/006-views-parity-polish",
-  "parent_id": "public/003-ui-improvement-build",
+  "packet_id": "003-ui-improvement-build/006-views-parity-polish",
+  "spec_folder": "003-ui-improvement-build/006-views-parity-polish",
+  "parent_id": "003-ui-improvement-build",
   "children_ids": [],
   "manual": {
     "depends_on": [],
@@ -44,8 +44,14 @@
       "spec.md",
       "plan.md",
       "tasks.md",
+      "implementation-summary.md",
       "checklist.md",
-      "implementation-summary.md"
+      "src/data/types.ts",
+      "src/i18n.ts",
+      "specs/002-ui-improvement-research/research/synthesis.md",
+      "specs/002-ui-improvement-research/research/devin-gemini/iteration-06.md",
+      "specs/002-ui-improvement-research/research/devin-gemini/iteration-08.md",
+      "specs/002-ui-improvement-research/research/codex-luna/iteration-08.md"
     ],
     "entities": [
       {
@@ -67,15 +73,45 @@
         "source": "derived"
       },
       {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
         "name": "checklist.md",
         "kind": "doc",
         "path": "checklist.md",
         "source": "derived"
       },
       {
-        "name": "implementation-summary.md",
+        "name": "types.ts",
+        "kind": "code",
+        "path": "src/data/types.ts",
+        "source": "derived"
+      },
+      {
+        "name": "i18n.ts",
+        "kind": "code",
+        "path": "src/i18n.ts",
+        "source": "derived"
+      },
+      {
+        "name": "synthesis.md",
         "kind": "doc",
-        "path": "implementation-summary.md",
+        "path": "specs/002-ui-improvement-research/research/synthesis.md",
+        "source": "derived"
+      },
+      {
+        "name": "iteration-06.md",
+        "kind": "doc",
+        "path": "specs/002-ui-improvement-research/research/devin-gemini/iteration-06.md",
+        "source": "derived"
+      },
+      {
+        "name": "iteration-08.md",
+        "kind": "doc",
+        "path": "specs/002-ui-improvement-research/research/devin-gemini/iteration-08.md",
         "source": "derived"
       },
       {
@@ -161,57 +197,26 @@
         "kind": "proper_noun",
         "path": "tasks.md",
         "source": "derived"
-      },
-      {
-        "name": "Quality Checklist",
-        "kind": "proper_noun",
-        "path": "checklist.md",
-        "source": "derived"
-      },
-      {
-        "name": "Verification Protocol",
-        "kind": "proper_noun",
-        "path": "checklist.md",
-        "source": "derived"
-      },
-      {
-        "name": "Code Quality",
-        "kind": "proper_noun",
-        "path": "checklist.md",
-        "source": "derived"
-      },
-      {
-        "name": "Calendar Week",
-        "kind": "proper_noun",
-        "path": "checklist.md",
-        "source": "derived"
-      },
-      {
-        "name": "Implementation Summary",
-        "kind": "proper_noun",
-        "path": "implementation-summary.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "While the Table view provides the tabular foundation for high-density record management, the Note Database plugin's non-table views (Board, Gallery, Calendar, Timeline, and List) suffer from acute cross-view feature disparities, layout fragmentation, duplicated rendering logic, and missing per-view affordances:",
     "created_at": "2026-08-27T19:53:20.436Z",
-    "last_save_at": "2026-08-28T16:54:48.050Z",
+    "last_save_at": "2026-09-01T10:50:16.127Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
       "spec.md",
       "plan.md",
       "tasks.md",
-      "checklist.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:6bd6cb0dad489502f94776575d540a31e0e547d030b47b389d9d7fdd73cad5dc",
+    "source_fingerprint": "sha256:f67806728c0adb9388a063783614766010d9cafd0716907dc09e5207d25b89d0",
+    "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "7f2d892b4ca8b6236075314b71447ea55d412b2c86a19cb2214472aa7b063c13",
-      "plan.md": "955c6f2ed8e0aa97438c76dc575695756d1ae22f07ac35fe4d1840a0ec1d42a4",
-      "tasks.md": "89a3d2166ba93657bcc1758b4c09f70ff443d2ab44deb18bb6ad4bd8fa7a173c",
-      "checklist.md": "47c6d4eaf4d9b075faca24845de82beabc92839c348368ad496388b7e3420b15",
-      "implementation-summary.md": "6169a74a28fbdbbb44e4d39e97dd920edb75faa8ba4f445bcb3810da61331bbb"
+      "spec.md": "5b63e1aa807a8371294a4adbfbea78c29a143a64517c5b7954dc4a546ddd54df",
+      "plan.md": "ac6d5821edac3c1b8b5d273cf9d7cea40317b3a308e51fb4b1d935b7ccddfc93",
+      "tasks.md": "924b9f1aa30401f821a6d4fa21b62d27db9f2bac79becb75b865718c321eec7c",
+      "implementation-summary.md": "3892cdd4025bffd7f20b345cddf7d72dfc64af84f57f5e9cabdf6b552cfa1c91"
     },
     "last_active_child_id": null,
     "last_active_at": null

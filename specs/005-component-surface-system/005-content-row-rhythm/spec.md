@@ -12,7 +12,7 @@ importance_tier: "critical"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "public/005-component-surface-system/005-content-row-rhythm"
+    packet_pointer: "005-component-surface-system/005-content-row-rhythm"
     last_updated_at: "2026-08-30T18:40:00Z"
     last_updated_by: "summary-author"
     recent_action: "List rows shipped over three lane cycles; the header rail is untouched and unmeasured"

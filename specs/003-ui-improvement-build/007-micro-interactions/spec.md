@@ -18,7 +18,7 @@ importance_tier: "high"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "public/003-ui-improvement-build/007-micro-interactions"
+    packet_pointer: "003-ui-improvement-build/007-micro-interactions"
     last_updated_at: "2026-08-28T04:30:57Z"
     last_updated_by: "phase-author"
     recent_action: "Reconciled micro-interactions specification metadata"
@@ -297,10 +297,10 @@ All implementation choices follow the research synthesis recommendations; no ope
 
 - **Parent Spec**: [`../spec.md`](../spec.md)
 - **Predecessor Spec**: [`../006-views-parity-polish/spec.md`](../006-views-parity-polish/spec.md)
-- **Research Synthesis**: `specs/public/002-ui-improvement-research/research/synthesis.md`
-- **Research Iteration 07 (Devin Track)**: `specs/public/002-ui-improvement-research/research/devin-gemini/iteration-07.md`
-- **Research Iteration 09 (Devin Track)**: `specs/public/002-ui-improvement-research/research/devin-gemini/iteration-09.md`
-- **Research Iteration 09 (Codex Track)**: `specs/public/002-ui-improvement-research/research/codex-luna/iteration-09.md`
+- **Research Synthesis**: `specs/002-ui-improvement-research/research/synthesis.md`
+- **Research Iteration 07 (Devin Track)**: `specs/002-ui-improvement-research/research/devin-gemini/iteration-07.md`
+- **Research Iteration 09 (Devin Track)**: `specs/002-ui-improvement-research/research/devin-gemini/iteration-09.md`
+- **Research Iteration 09 (Codex Track)**: `specs/002-ui-improvement-research/research/codex-luna/iteration-09.md`
 - **Implementation Plan**: See `plan.md`
 - **Task Breakdown**: See `tasks.md`
 - **Verification Checklist**: See `checklist.md`

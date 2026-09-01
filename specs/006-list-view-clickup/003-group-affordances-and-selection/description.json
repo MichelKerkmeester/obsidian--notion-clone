@@ -1,5 +1,5 @@
 {
-  "specFolder": "public/006-list-view-clickup/003-group-affordances-and-selection",
+  "specFolder": "006-list-view-clickup/003-group-affordances-and-selection",
   "description": "Wire and reach the per-group create row, the group count, and the selection-sync defect that leaves the list group checkbox stale after any change",
   "keywords": [
     "wire",

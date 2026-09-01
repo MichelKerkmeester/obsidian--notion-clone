@@ -1,6 +1,6 @@
 {
   "level": "2",
-  "specFolder": "public/003-ui-improvement-build/001-empty-and-first-run-states",
+  "specFolder": "003-ui-improvement-build/001-empty-and-first-run-states",
   "description": "Currently, empty and first-run states across the Note Database plugin are visually stark, inconsistent, and functionally dead ends:",
   "keywords": [
     "currently",

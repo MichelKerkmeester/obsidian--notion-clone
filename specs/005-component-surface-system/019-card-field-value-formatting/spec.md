@@ -11,7 +11,7 @@ importance_tier: "critical"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "public/005-component-surface-system/019-card-field-value-formatting"
+    packet_pointer: "005-component-surface-system/019-card-field-value-formatting"
     last_updated_at: "2026-08-30T10:40:00Z"
     last_updated_by: "roadmap-reconciliation"
     recent_action: "Phase opened retroactively for an operator report fixed in the renderer with no owning spec"

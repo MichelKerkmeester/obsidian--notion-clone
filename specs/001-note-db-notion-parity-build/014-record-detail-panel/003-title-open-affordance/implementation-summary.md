@@ -8,7 +8,7 @@ importance_tier: "high"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "public/001-note-db-notion-parity-build/014-record-detail-panel/003-title-open-affordance"
+    packet_pointer: "001-note-db-notion-parity-build/014-record-detail-panel/003-title-open-affordance"
     last_updated_at: "2026-08-27T12:27:53Z"
     last_updated_by: "docs-reconciliation"
     recent_action: "Reconciled docs to shipped state: renderCell attach + overlay lifecycle landed in commit 668bc97"

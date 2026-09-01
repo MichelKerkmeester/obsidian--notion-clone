@@ -9,7 +9,7 @@ importance_tier: "high"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "public/001-note-db-notion-parity-build/008-derived-inverse-relations/003-inverse-refresh-membership"
+    packet_pointer: "001-note-db-notion-parity-build/008-derived-inverse-relations/003-inverse-refresh-membership"
     last_updated_at: "2026-08-27T12:27:53Z"
     last_updated_by: "phase-architect"
     recent_action: "Authored inverse refresh-membership child from synthesis rank 7 and final-plan step 4"

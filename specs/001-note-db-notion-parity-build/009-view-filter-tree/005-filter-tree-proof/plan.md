@@ -9,7 +9,7 @@ importance_tier: "high"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "public/001-note-db-notion-parity-build/009-view-filter-tree/005-filter-tree-proof"
+    packet_pointer: "001-note-db-notion-parity-build/009-view-filter-tree/005-filter-tree-proof"
     last_updated_at: "2026-08-27T12:27:53Z"
     last_updated_by: "phase-architect"
     recent_action: "Authored filter-tree-proof child from synthesis rank 9 and final-plan steps 10-12"

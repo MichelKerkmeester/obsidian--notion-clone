@@ -1,6 +1,6 @@
 {
   "level": "1",
-  "specFolder": "public/001-note-db-notion-parity-build/010-conditional-format-icons/004-format-editor-panel",
+  "specFolder": "001-note-db-notion-parity-build/010-conditional-format-icons/004-format-editor-panel",
   "description": "`renderConditionalFormatting` (`ViewConfigPanelRenderer.ts:552-766`) is one field/op/value row per rule",
   "keywords": [
     "renderconditionalformatting",

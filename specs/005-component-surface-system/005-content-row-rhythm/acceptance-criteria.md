@@ -11,7 +11,7 @@ importance_tier: "critical"
 contextType: "implementation"
 _memory:
   continuity:
-    packet_pointer: "public/005-component-surface-system/005-content-row-rhythm"
+    packet_pointer: "005-component-surface-system/005-content-row-rhythm"
     last_updated_at: "2026-08-31T00:00:00Z"
     last_updated_by: "harness-dependence-audit"
     recent_action: "Classified 13 criteria for harness dependence; 8 read intrinsic widths with no app.css"

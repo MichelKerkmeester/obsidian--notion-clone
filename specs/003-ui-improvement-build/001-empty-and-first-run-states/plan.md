@@ -11,7 +11,7 @@ importance_tier: "high"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "public/003-ui-improvement-build/001-empty-and-first-run-states"
+    packet_pointer: "003-ui-improvement-build/001-empty-and-first-run-states"
     last_updated_at: "2026-08-28T04:30:57Z"
     last_updated_by: "phase-author"
     recent_action: "Authored implementation plan for empty and first-run states"

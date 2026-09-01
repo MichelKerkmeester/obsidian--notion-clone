@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "packet_id": "public/001-note-db-notion-parity-build/008-derived-inverse-relations/003-inverse-refresh-membership",
-  "spec_folder": "public/001-note-db-notion-parity-build/008-derived-inverse-relations/003-inverse-refresh-membership",
-  "parent_id": "public/001-note-db-notion-parity-build/008-derived-inverse-relations",
+  "packet_id": "001-note-db-notion-parity-build/008-derived-inverse-relations/003-inverse-refresh-membership",
+  "spec_folder": "001-note-db-notion-parity-build/008-derived-inverse-relations/003-inverse-refresh-membership",
+  "parent_id": "001-note-db-notion-parity-build/008-derived-inverse-relations",
   "children_ids": [],
   "manual": {
     "depends_on": [],
@@ -190,7 +190,7 @@
     ],
     "causal_summary": "`handleDataChangeBatch` refreshes when `relationTargetPaths.has(change.path)` or the record matches `relationTargetDatabases` (`DatabaseView.ts:2120-2128`)",
     "created_at": "2026-08-25T19:36:49Z",
-    "last_save_at": "2026-08-27T12:27:59.592Z",
+    "last_save_at": "2026-09-01T10:50:15.834Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -199,12 +199,13 @@
       "tasks.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:d755bf2bcc804a285ddf9033d178c63b0a9a5be0a86086aa7d87e51b9016ee7a",
+    "source_fingerprint": "sha256:9e9ef464ff3899cc65614950df115565f6f9a1709bf58b73c2121199a9e7154a",
+    "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "762b48e440388c9f5847c3c0107555e16d776c8d5987927ad65ed61dcb8f6c66",
-      "plan.md": "6b135eaa21f3217952e3cf913f48bf76c2958831f69880fe7b729fb2d4193bfe",
-      "tasks.md": "8f7811f8d84044ac3bcb481a3dad651533654161e986e10f4b7fdbbbf1f5c7d0",
-      "implementation-summary.md": "b826e62dd97cec787a637251fede80dc48505d9122b610bb9c237a772264dbb6"
+      "spec.md": "d632273f0a63ebb2eacd88f922ff65ab7e57c4095fa2edfe7edffc2eab232dfe",
+      "plan.md": "2e02831c98a4b2e1c406c861aefd1ef75ab1adfe284ecc4f323707b10089eaf7",
+      "tasks.md": "a7d92e3bedf9c80d41b14d18ef97279f657c6b06de82450f93e487629aa71901",
+      "implementation-summary.md": "8349e88eafe79f635082381340bd1c8c6231a1be021a586685708859e683d8bb"
     },
     "last_active_child_id": null,
     "last_active_at": null

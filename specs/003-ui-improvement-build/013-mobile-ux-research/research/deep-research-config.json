@@ -13,7 +13,7 @@
   "maxToolCallsPerIteration": 12,
   "maxMinutesPerIteration": 10,
   "progressiveSynthesis": true,
-  "specFolder": "specs/public/003-ui-improvement-build/013-mobile-ux-research",
+  "specFolder": "specs/003-ui-improvement-build/013-mobile-ux-research",
   "createdAt": "2026-08-29T05:44:02.011Z",
   "status": "initialized",
   "executionMode": "auto",

@@ -9,7 +9,7 @@ importance_tier: "high"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "public/001-note-db-notion-parity-build/014-record-detail-panel/005-peek-display-proof"
+    packet_pointer: "001-note-db-notion-parity-build/014-record-detail-panel/005-peek-display-proof"
     last_updated_at: "2026-08-27T17:27:13Z"
     last_updated_by: "docs-reconciliation"
     recent_action: "Completion docs reconciled to shipped state; gate green; Sonnet-verified"

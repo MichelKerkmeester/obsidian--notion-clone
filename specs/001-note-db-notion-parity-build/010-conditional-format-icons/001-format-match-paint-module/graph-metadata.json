@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "packet_id": "public/001-note-db-notion-parity-build/010-conditional-format-icons/001-format-match-paint-module",
-  "spec_folder": "public/001-note-db-notion-parity-build/010-conditional-format-icons/001-format-match-paint-module",
-  "parent_id": "public/001-note-db-notion-parity-build/010-conditional-format-icons",
+  "packet_id": "001-note-db-notion-parity-build/010-conditional-format-icons/001-format-match-paint-module",
+  "spec_folder": "001-note-db-notion-parity-build/010-conditional-format-icons/001-format-match-paint-module",
+  "parent_id": "001-note-db-notion-parity-build/010-conditional-format-icons",
   "children_ids": [],
   "manual": {
     "depends_on": [],
@@ -41,7 +41,8 @@
       "spec.md",
       "plan.md",
       "tasks.md",
-      "implementation-summary.md"
+      "implementation-summary.md",
+      "src/data/types.ts"
     ],
     "entities": [
       {
@@ -66,6 +67,12 @@
         "name": "implementation-summary.md",
         "kind": "doc",
         "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "types.ts",
+        "kind": "code",
+        "path": "src/data/types.ts",
         "source": "derived"
       },
       {
@@ -181,17 +188,11 @@
         "kind": "proper_noun",
         "path": "implementation-summary.md",
         "source": "derived"
-      },
-      {
-        "name": "What Was Built Shipped",
-        "kind": "proper_noun",
-        "path": "implementation-summary.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "The shared helper already matches Notion's core CF contract through `getConditionalFormatMatch` / `applyConditionalFormat` (`ConditionalFormatting.ts:23-69`) and returns `{ color, ruleId }` only",
     "created_at": "2026-08-25T21:00:23Z",
-    "last_save_at": "2026-08-27T12:28:00.926Z",
+    "last_save_at": "2026-09-01T10:50:15.884Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -200,12 +201,13 @@
       "tasks.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:924e20e4e000a55d867d9575784868d1bf046e8d7d151b05752b1a4bb1758b72",
+    "source_fingerprint": "sha256:95de0b5a4c39b40a30bbeb923ac1a5d8b7aafc47b647967fdc919d858c01971d",
+    "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "a6e50f9020a0fb140f20620400eb6c2940b5a004245c980bf495550b66892c69",
-      "plan.md": "7e0f812fb6c7809216bb03b8f13c63e2191599e832560351df4e549ef354593b",
-      "tasks.md": "9735eda23b1bbfd5210b291da81937419f36c7c210ab3589d76e9e15f5af46d6",
-      "implementation-summary.md": "051fd42fa45b232aee99ebcc087743f1710d016c2cf1be19308f295b2dbe2681"
+      "spec.md": "c91833878e0dc9b1395bc1db07b02d48f35e2935886b91f65ae886e70385fd0b",
+      "plan.md": "ed0a95906c6ebf35b961831a3a9889700a53a70e6aa3cf1e740a842bdbc3c7fb",
+      "tasks.md": "09b4acf392dfcaa87d38310b5880b903778d33cc488ca4a5c39288934b405146",
+      "implementation-summary.md": "8b10b7339f97756d391cc63899fc070ffd92493373d4d2915b0c3682ebdffd44"
     },
     "last_active_child_id": null,
     "last_active_at": null

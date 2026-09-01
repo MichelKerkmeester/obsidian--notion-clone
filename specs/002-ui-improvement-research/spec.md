@@ -5,7 +5,7 @@ importance_tier: "high"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "public/002-ui-improvement-research"
+    packet_pointer: "002-ui-improvement-research"
     last_updated_at: "2026-08-27T00:00:00Z"
     last_updated_by: "research-orchestrator"
     recent_action: "Scaffolded two-executor UI-improvement research packet"

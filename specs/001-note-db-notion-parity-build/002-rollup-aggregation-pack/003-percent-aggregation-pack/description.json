@@ -1,6 +1,6 @@
 {
   "level": "1",
-  "specFolder": "public/001-note-db-notion-parity-build/002-rollup-aggregation-pack/003-percent-aggregation-pack",
+  "specFolder": "001-note-db-notion-parity-build/002-rollup-aggregation-pack/003-percent-aggregation-pack",
   "description": "Notion universal rollups include Percent empty / Percent not empty",
   "keywords": [
     "notion",

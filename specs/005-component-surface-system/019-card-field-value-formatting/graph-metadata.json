@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "packet_id": "public/005-component-surface-system/019-card-field-value-formatting",
-  "spec_folder": "public/005-component-surface-system/019-card-field-value-formatting",
-  "parent_id": "public/005-component-surface-system",
+  "packet_id": "005-component-surface-system/019-card-field-value-formatting",
+  "spec_folder": "005-component-surface-system/019-card-field-value-formatting",
+  "parent_id": "005-component-surface-system",
   "children_ids": [],
   "manual": {
     "depends_on": [],
@@ -200,7 +200,7 @@
     ],
     "causal_summary": "The operator, looking at the record sheet: \"the data doesnt use proper formatting here like in",
     "created_at": "2026-08-30T17:52:46.407Z",
-    "last_save_at": "2026-09-01T10:01:44.813Z",
+    "last_save_at": "2026-09-01T10:50:16.426Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -211,13 +211,13 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:277f94d5b7f9496dbdfe093c3d18297fea965df3782bfb25da849c43881f2199",
+    "source_fingerprint": "sha256:aa42654748fe725b15da716f1eb51493013ef44a9a03a829e7817267009e1a92",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "2921ba64e3731833a6005cb08482588918b1b08c0db355a48425b18693899298",
+      "spec.md": "885468e64a9252c6c19bed55c2affc7a61cc81f76675b1afdc4b84447ea3efac",
       "plan.md": "105818edf9645cd3bd0356310ff1ddbb433524bd80a176dbee52c586ec35870f",
       "tasks.md": "8d64f31585cc52284e445ee5384df902810d3cae70cabcdc111496f0e28ff1b0",
-      "implementation-summary.md": "ac4f0bc9348dc77bdc198530298646ca51df949eb578065275e60a4e49100b98"
+      "implementation-summary.md": "2672a4e466f080b615c6b0875aab837fa7b7a6ac0675e0deb2dc37be1da99013"
     },
     "last_active_child_id": null,
     "last_active_at": null

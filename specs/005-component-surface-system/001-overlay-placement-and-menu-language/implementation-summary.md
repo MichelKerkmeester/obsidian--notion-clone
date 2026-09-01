@@ -10,7 +10,7 @@ importance_tier: "critical"
 contextType: "verification"
 _memory:
   continuity:
-    packet_pointer: "public/005-component-surface-system/001-overlay-placement-and-menu-language"
+    packet_pointer: "005-component-surface-system/001-overlay-placement-and-menu-language"
     last_updated_at: "2026-08-30T20:30:00Z"
     last_updated_by: "phase-reconciliation"
     recent_action: "Factory deleted; portal chrome self-owned; 292px default. Census and 33 call sites not run"

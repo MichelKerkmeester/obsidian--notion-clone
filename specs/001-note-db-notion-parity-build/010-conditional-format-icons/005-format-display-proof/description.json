@@ -1,6 +1,6 @@
 {
   "level": "2",
-  "specFolder": "public/001-note-db-notion-parity-build/010-conditional-format-icons/005-format-display-proof",
+  "specFolder": "001-note-db-notion-parity-build/010-conditional-format-icons/005-format-display-proof",
   "description": "The fork has zero `.test.ts` files and `vitest.config.ts:1-8` points at a missing `src/tests/setup.ts`",
   "keywords": [
     "fork",

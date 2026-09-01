@@ -9,7 +9,7 @@ importance_tier: "critical"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "public/005-component-surface-system"
+    packet_pointer: "005-component-surface-system"
     last_updated_at: "2026-08-31T08:25:00Z"
     last_updated_by: "timeline-freeze-diagnosis"
     recent_action: "Deep review returned FAIL; the report criterion un-ticked against the right denominator"

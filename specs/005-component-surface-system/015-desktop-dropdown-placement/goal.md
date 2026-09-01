@@ -8,7 +8,7 @@ importance_tier: "critical"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "public/005-component-surface-system/015-desktop-dropdown-placement"
+    packet_pointer: "005-component-surface-system/015-desktop-dropdown-placement"
     last_updated_at: "2026-08-31T23:55:00Z"
     last_updated_by: "harness-dependence-review"
     recent_action: "Search clamp lifted to one exported function; phone dead-anchor arm built"

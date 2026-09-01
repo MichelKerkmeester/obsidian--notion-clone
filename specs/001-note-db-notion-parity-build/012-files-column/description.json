@@ -1,6 +1,6 @@
 {
   "level": "2",
-  "specFolder": "public/001-note-db-notion-parity-build/012-files-column",
+  "specFolder": "001-note-db-notion-parity-build/012-files-column",
   "description": "Notion databases natively carry a first-class Files & Media property (images, PDFs, attachments), but the note-database fork's column union is 12",
   "keywords": [
     "notion",

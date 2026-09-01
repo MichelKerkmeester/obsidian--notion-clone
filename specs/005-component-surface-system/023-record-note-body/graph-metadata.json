@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "packet_id": "public/005-component-surface-system/023-record-note-body",
-  "spec_folder": "public/005-component-surface-system/023-record-note-body",
-  "parent_id": "public/005-component-surface-system",
+  "packet_id": "005-component-surface-system/023-record-note-body",
+  "spec_folder": "005-component-surface-system/023-record-note-body",
+  "parent_id": "005-component-surface-system",
   "children_ids": [],
   "manual": {
     "depends_on": [],
@@ -196,7 +196,7 @@
     ],
     "causal_summary": "Every row is a markdown note whose frontmatter the plugin renders as properties, while the note's actual body is never surfaced anywhere in the plugin.",
     "created_at": "2026-08-30T15:07:29.613Z",
-    "last_save_at": "2026-08-31T20:43:00.360Z",
+    "last_save_at": "2026-09-01T10:50:16.454Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -206,13 +206,13 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:eff01846571dc02cde0b0991cd4413cd51ebd10cc2e6f145a520c0acc2469b47",
+    "source_fingerprint": "sha256:7c971a14b34bd83e1d005f912573df34e4d53bfa79b15a99539d9abd4bc59764",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "b8d509606884cd2357df8ac5d1fc74700c081eae046ff40e52a559a549b96cab",
+      "spec.md": "87ff83e691ae7be154cbb303d644574a0a472e213798d7c56dfa9214b73c28d0",
       "plan.md": "33c796d934285a7235531e6329ade64f92ae9750902a0a8ed8cbd690f7823d61",
       "tasks.md": "d05793a827252062cca1522b6a27c6a607c6b26ca25b0a13be588ad5854876c0",
-      "implementation-summary.md": "68354d40d001d8bd3bdb0e0f609a6557e4e4474fa6324db61abec55d80bced96"
+      "implementation-summary.md": "15d245a48249f1716e75c50d2feea478b65c63f04e55d37967dc63be02ec1a1d"
     },
     "last_active_child_id": null,
     "last_active_at": null

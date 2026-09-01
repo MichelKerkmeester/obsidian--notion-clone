@@ -1,6 +1,6 @@
 {
   "level": "1",
-  "specFolder": "public/001-note-db-notion-parity-build/010-conditional-format-icons/003-tree-aware-column-ops",
+  "specFolder": "001-note-db-notion-parity-build/010-conditional-format-icons/003-tree-aware-column-ops",
   "description": "Column rename rewrites `rule.condition.field` (~193)",
   "keywords": [
     "column",

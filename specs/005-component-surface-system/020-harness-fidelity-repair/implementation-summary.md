@@ -9,7 +9,7 @@ importance_tier: "critical"
 contextType: "general"
 _memory:
   continuity:
-    packet_pointer: "public/005-component-surface-system/020-harness-fidelity-repair"
+    packet_pointer: "005-component-surface-system/020-harness-fidelity-repair"
     last_updated_at: "2026-08-31T06:00:00Z"
     last_updated_by: "harness-supply-audit"
     recent_action: "Supply audit: 2 of the 63 lifted checks set --keyboard-height themselves"

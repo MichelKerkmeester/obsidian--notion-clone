@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "packet_id": "public/001-note-db-notion-parity-build/005-formula-let-variables/003-formula-modal-let-help",
-  "spec_folder": "public/001-note-db-notion-parity-build/005-formula-let-variables/003-formula-modal-let-help",
-  "parent_id": "public/001-note-db-notion-parity-build/005-formula-let-variables",
+  "packet_id": "001-note-db-notion-parity-build/005-formula-let-variables/003-formula-modal-let-help",
+  "spec_folder": "001-note-db-notion-parity-build/005-formula-let-variables/003-formula-modal-let-help",
+  "parent_id": "001-note-db-notion-parity-build/005-formula-let-variables",
   "children_ids": [],
   "manual": {
     "depends_on": [],
@@ -41,7 +41,8 @@
       "spec.md",
       "plan.md",
       "tasks.md",
-      "implementation-summary.md"
+      "implementation-summary.md",
+      "src/i18n.ts"
     ],
     "entities": [
       {
@@ -66,6 +67,12 @@
         "name": "implementation-summary.md",
         "kind": "doc",
         "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "i18n.ts",
+        "kind": "code",
+        "path": "src/i18n.ts",
         "source": "derived"
       },
       {
@@ -181,17 +188,11 @@
         "kind": "proper_noun",
         "path": "implementation-summary.md",
         "source": "derived"
-      },
-      {
-        "name": "What Was Built Shipped",
-        "kind": "proper_noun",
-        "path": "implementation-summary.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "Even after child 001 evaluates `let`/`lets`, the editor's own registry drives autocomplete, `NAME(` highlighting, and help",
     "created_at": "2026-08-25T19:25:12Z",
-    "last_save_at": "2026-08-27T12:27:57.537Z",
+    "last_save_at": "2026-09-01T10:50:15.755Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -200,12 +201,13 @@
       "tasks.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:a68c61b2ab80cb66e5ae95c1a24deed999bd03e92e2ea478484f7646613c6f52",
+    "source_fingerprint": "sha256:7893b8cb35f69a3b0e874ed2617cc878ee8fb058851827837786743ad290bcc8",
+    "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "ecc82a72fc6ffd103ce224c934646ff44be29421b9b238b76388d8ca6e03f1c2",
-      "plan.md": "0f558c60ae08ce5daf622f6f2cf862111bc91372362e060443fb19cf51e044ff",
-      "tasks.md": "2a6e2418afc9de1ee4009332dac9d9131503138428f615b724f1f9dfaa7d19b1",
-      "implementation-summary.md": "3e20e1db9ba84de588642648bde61d0d6d3f8f722c22750aaed86779bb106576"
+      "spec.md": "7d42739e5bd804c2c61239351e3281dd9592e3da9fc6d26843c8f870e5466253",
+      "plan.md": "29d3444cac359a67cdd3d448892a2af69b26b46252538735cb53cdac77c41318",
+      "tasks.md": "e9be4b54bbd5803d85d9cf7f395b84bea3fa0440e980cf0dd574e8059b2374bd",
+      "implementation-summary.md": "25667753666c1c49c95c1711368e0f11dddc46dd2aef685aa7427bbf7cdf34ce"
     },
     "last_active_child_id": null,
     "last_active_at": null

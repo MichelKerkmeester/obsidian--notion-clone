@@ -6,7 +6,7 @@ importance_tier: "important"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "public/005-component-surface-system/033-list-virtualisation"
+    packet_pointer: "005-component-surface-system/033-list-virtualisation"
     last_updated_at: "2026-08-31T16:00:00Z"
     last_updated_by: "phase-author"
     recent_action: "Opened as the only remaining lever on the list freeze"

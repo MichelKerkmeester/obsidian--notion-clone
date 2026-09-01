@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "packet_id": "public/001-note-db-notion-parity-build/010-conditional-format-icons/004-format-editor-panel",
-  "spec_folder": "public/001-note-db-notion-parity-build/010-conditional-format-icons/004-format-editor-panel",
-  "parent_id": "public/001-note-db-notion-parity-build/010-conditional-format-icons",
+  "packet_id": "001-note-db-notion-parity-build/010-conditional-format-icons/004-format-editor-panel",
+  "spec_folder": "001-note-db-notion-parity-build/010-conditional-format-icons/004-format-editor-panel",
+  "parent_id": "001-note-db-notion-parity-build/010-conditional-format-icons",
   "children_ids": [],
   "manual": {
     "depends_on": [],
@@ -40,7 +40,8 @@
       "spec.md",
       "plan.md",
       "tasks.md",
-      "implementation-summary.md"
+      "implementation-summary.md",
+      "src/i18n.ts"
     ],
     "entities": [
       {
@@ -65,6 +66,12 @@
         "name": "implementation-summary.md",
         "kind": "doc",
         "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "i18n.ts",
+        "kind": "code",
+        "path": "src/i18n.ts",
         "source": "derived"
       },
       {
@@ -180,17 +187,11 @@
         "kind": "proper_noun",
         "path": "implementation-summary.md",
         "source": "derived"
-      },
-      {
-        "name": "What Was Built Shipped",
-        "kind": "proper_noun",
-        "path": "implementation-summary.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "`renderConditionalFormatting` (`ViewConfigPanelRenderer.ts:552-766`) is one field/op/value row per rule",
     "created_at": "2026-08-25T21:00:25Z",
-    "last_save_at": "2026-08-27T12:28:01.527Z",
+    "last_save_at": "2026-09-01T10:50:15.897Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -199,12 +200,13 @@
       "tasks.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:606a3cfe5496b7c20e736286647bd2fd5fcef8cb251b303ba11c5fba5bfab39f",
+    "source_fingerprint": "sha256:0fb86d3e353d1b4db438d7df5b5f9d14da0bac69fd0e8abeab93c7a4c9e353f9",
+    "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "ef61d35a237b49078c74c70010b154d266e5ab05b07d0d06ac9ac4212586c7d2",
-      "plan.md": "766e9dfe025a5c26ae188c05a07001a7634036a4c10edd86ab13dca430572517",
-      "tasks.md": "3fac50b8683140a33f9ee4b45f11c61290ef98c5c10e8a67c613002964b6373c",
-      "implementation-summary.md": "b6d780ef62ee7ffbf89244b01f5b63c30e52d1c76ff78de258d8a8be337a085a"
+      "spec.md": "89313110c16447e405f3c1981a840643a58de7593239d320641ac66622f8bece",
+      "plan.md": "0f64b27e650ab298aa77b61ed67c024d2ebc95a43a17071e473380e75c0b8d5b",
+      "tasks.md": "d318cca7dd640e3e351dd9b4f0c7d883309659c4948cd9ca8156efb7fee0905a",
+      "implementation-summary.md": "a1ca094ecfe120afc7dad05c0f96ee7fac998637238eb91d1383ee74724f865a"
     },
     "last_active_child_id": null,
     "last_active_at": null

@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "packet_id": "public/005-component-surface-system/005-content-row-rhythm",
-  "spec_folder": "public/005-component-surface-system/005-content-row-rhythm",
-  "parent_id": "public/005-component-surface-system",
+  "packet_id": "005-component-surface-system/005-content-row-rhythm",
+  "spec_folder": "005-component-surface-system/005-content-row-rhythm",
+  "parent_id": "005-component-surface-system",
   "children_ids": [],
   "manual": {
     "depends_on": [],
@@ -207,7 +207,7 @@
     ],
     "causal_summary": "Two operator defects, one question",
     "created_at": "2026-08-29T12:48:53.568Z",
-    "last_save_at": "2026-09-01T07:10:25.911Z",
+    "last_save_at": "2026-09-01T10:50:16.319Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -218,13 +218,13 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:0f648a5e5fe0f2e8531eaed7ab572ec18cb8202901027fa0e5316425b4302ef5",
+    "source_fingerprint": "sha256:5290ad88590814132d2368bcb72cf7e0e22d5d3db6682d4d11d9f1de64ebb62a",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "7a1ce9a462c10ae95b5103b0912d85e3604791af0b0598bab324309e103c4d85",
+      "spec.md": "52ce33cd850eb6e323e88263d568330bae0ee2821ee8da39e7ffde0a944a69d4",
       "plan.md": "beb128acf893029dc9b273ad85092a97ec424b2a64240f7f124d0a326a0bac6e",
       "tasks.md": "ed6f83db9d8d29121c5eee74c00f45ff6f13321deaea555346e91e1599fe6665",
-      "implementation-summary.md": "9642d9dc37b76feeb6a536ec67d042c67cb54d42138975072916b57f9d212d04"
+      "implementation-summary.md": "e32303f86a532145f5a3a2ac26bcdf6b069c7ecad7f463d2dfe020d5a82625db"
     },
     "last_active_child_id": null,
     "last_active_at": null

@@ -1,6 +1,6 @@
 {
   "level": "2",
-  "specFolder": "public/001-note-db-notion-parity-build",
+  "specFolder": "001-note-db-notion-parity-build",
   "description": "The forked Note Database plugin is already far more capable than the legacy feature list assumed: it ships two formula engines (the Excel-style",
   "keywords": [
     "forked",

@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "packet_id": "public/005-component-surface-system/020-harness-fidelity-repair",
-  "spec_folder": "public/005-component-surface-system/020-harness-fidelity-repair",
-  "parent_id": "public/005-component-surface-system",
+  "packet_id": "005-component-surface-system/020-harness-fidelity-repair",
+  "spec_folder": "005-component-surface-system/020-harness-fidelity-repair",
+  "parent_id": "005-component-surface-system",
   "children_ids": [],
   "manual": {
     "depends_on": [],
@@ -202,7 +202,7 @@
     ],
     "causal_summary": "Six of seven verifier findings were instruments that could not fail for the reason they claimed to",
     "created_at": "2026-08-30T15:15:27.011Z",
-    "last_save_at": "2026-08-31T20:01:15.934Z",
+    "last_save_at": "2026-09-01T10:50:16.432Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -213,13 +213,13 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:e46d92f80b30a7f2bcb56935f1f378b6c26bb0112685fbfb4f6470de29c78d44",
+    "source_fingerprint": "sha256:d6510da721bb8d5c7d3340b99a9d27d04a05aa2dfdff85d62d742833a00372be",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "9820f79d39a736be2d4656f38461a3146f8db9511bb7c02051594a3aea57e09a",
+      "spec.md": "e783398ab727d7d07e94d20292779edc2253a978925797d7fb6ef0fce8867a7e",
       "plan.md": "d6b90a6afcec22af0807cd83b07ee4864fc942c3769c3218fdfadd71a42fa741",
       "tasks.md": "bce05c66f57d8a60a9995713e589e2a5356dbc8a3b2acd89b15bf81b54564927",
-      "implementation-summary.md": "d58930b65f48349546d5a91950d75951342fc254fda8c8fc71a80297543524d8"
+      "implementation-summary.md": "52566513f95eb576e3be658717e775fdd570da0183b9997d3354f02a49584f91"
     },
     "last_active_child_id": null,
     "last_active_at": null

@@ -1,5 +1,5 @@
 {
-  "specFolder": "public/006-list-view-clickup/002-clickup-chrome",
+  "specFolder": "006-list-view-clickup/002-clickup-chrome",
   "description": "The visual language: row rhythm and dividers, group header pill and count, the reserved leading gutter, chip and pill cell treatments, empty-cell",
   "keywords": [
     "visual",

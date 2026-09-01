@@ -15,7 +15,7 @@ Reducer-generated observability surface for the active review packet.
 <!-- /ANCHOR:overview -->
 <!-- ANCHOR:status -->
 ## 2. STATUS
-- Review Target: specs/public/005-component-surface-system (spec-folder)
+- Review Target: specs/005-component-surface-system (spec-folder)
 - Started: 2026-08-31T10:30:21.750Z
 - Status: COMPLETE
 - Iteration: 10 of 10

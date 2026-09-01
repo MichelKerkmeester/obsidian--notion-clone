@@ -1,6 +1,6 @@
 {
   "level": "1",
-  "specFolder": "public/001-note-db-notion-parity-build/008-derived-inverse-relations/001-relation-inverse-module",
+  "specFolder": "001-note-db-notion-parity-build/008-derived-inverse-relations/001-relation-inverse-module",
   "description": "Notion shows related pages on the target via a second stored relation (`dualproperty`)",
   "keywords": [
     "notion",

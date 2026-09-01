@@ -1,6 +1,6 @@
 {
   "level": "3",
-  "specFolder": "public/005-component-surface-system/025-story-coverage-blindness",
+  "specFolder": "005-component-surface-system/025-story-coverage-blindness",
   "description": "A gate lane's name is the only thing most readers ever check",
   "keywords": [
     "gate",

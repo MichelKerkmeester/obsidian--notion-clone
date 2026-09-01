@@ -1,6 +1,6 @@
 {
   "level": "2",
-  "specFolder": "public/005-component-surface-system/002-properties-panel",
+  "specFolder": "005-component-surface-system/002-properties-panel",
   "description": "The properties panel's row is a positional grid contract: it says \"the third track is 96px wide\"",
   "keywords": [
     "properties",

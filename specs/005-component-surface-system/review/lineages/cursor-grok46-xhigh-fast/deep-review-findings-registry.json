@@ -89,7 +89,7 @@
       "findingId": "F003",
       "severity": "P1",
       "title": "Child 000 still specifies deleted openSurface as the create path",
-      "file": "specs/public/005-component-surface-system/000-surface-contract-and-truthful-harness/spec.md",
+      "file": "specs/005-component-surface-system/000-surface-contract-and-truthful-harness/spec.md",
       "line": 59,
       "description": "Rewrite 000 to SURFACE_REGISTRY and drop openSurface/surface.ts as deliverables.",
       "findingClass": "spec-code-drift",
@@ -127,7 +127,7 @@
       "findingId": "F004",
       "severity": "P1",
       "title": "Parent phase map is incomplete and under-counts folders",
-      "file": "specs/public/005-component-surface-system/spec.md",
+      "file": "specs/005-component-surface-system/spec.md",
       "line": 69,
       "description": "Rewrite the parent PHASE DOCUMENTATION MAP to list 000-029 with current status.",
       "findingClass": "inventory-gap",
@@ -164,7 +164,7 @@
       "findingId": "F005",
       "severity": "P1",
       "title": "009 never drove the running Obsidian so the circular harness remains in force",
-      "file": "specs/public/005-component-surface-system/009-live-verification/implementation-summary.md",
+      "file": "specs/005-component-surface-system/009-live-verification/implementation-summary.md",
       "line": 48,
       "description": "Record an exit-0 live probe against a known defect with before/after numbers, then gate later handoffs on it.",
       "findingClass": "playbook-capability",
@@ -202,7 +202,7 @@
       "findingId": "F006",
       "severity": "P1",
       "title": "Completion marks and parent evidence are missing or unchecked",
-      "file": "specs/public/005-component-surface-system/004-checkbox-ownership/checklist.md",
+      "file": "specs/005-component-surface-system/004-checkbox-ownership/checklist.md",
       "line": 31,
       "description": "Add a parent checklist with evidenced rows and mark 004 B-rows from the census command.",
       "findingClass": "checklist-evidence",
@@ -240,7 +240,7 @@
       "findingId": "F007",
       "severity": "P1",
       "title": "Parent lists 006 as Planned while the child is in progress without the resolver",
-      "file": "specs/public/005-component-surface-system/spec.md",
+      "file": "specs/005-component-surface-system/spec.md",
       "line": 133,
       "description": "Ship the open-target resolver and align parent status with the child.",
       "findingClass": "spec-code-drift",
@@ -316,7 +316,7 @@
       "findingId": "F008",
       "severity": "P2",
       "title": "Parent styles.css length is stale",
-      "file": "specs/public/005-component-surface-system/spec.md",
+      "file": "specs/005-component-surface-system/spec.md",
       "line": 259,
       "description": "Update the line-count claim or drop the exact number.",
       "findingClass": "stale-constant",
@@ -347,7 +347,7 @@
       "findingId": "F009",
       "severity": "P2",
       "title": "028 cites refresh at line 11421",
-      "file": "specs/public/005-component-surface-system/028-remaining-freezes/spec.md",
+      "file": "specs/005-component-surface-system/028-remaining-freezes/spec.md",
       "line": 53,
       "description": "Retarget the citation to 11484.",
       "findingClass": "stale-citation",
@@ -411,7 +411,7 @@
       "findingId": "F011",
       "severity": "P2",
       "title": "Parent still narrates the deleted factory as the overlay sequence",
-      "file": "specs/public/005-component-surface-system/spec.md",
+      "file": "specs/005-component-surface-system/spec.md",
       "line": 235,
       "description": "Replace leftover factory language with SURFACE_REGISTRY wording.",
       "findingClass": "stale-prose",
@@ -442,7 +442,7 @@
       "findingId": "F012",
       "severity": "P2",
       "title": "Parent says 010-017 lack plan.md",
-      "file": "specs/public/005-component-surface-system/spec.md",
+      "file": "specs/005-component-surface-system/spec.md",
       "line": 157,
       "description": "Drop or rewrite the scaffold-gap sentence.",
       "findingClass": "stale-prose",
@@ -473,7 +473,7 @@
       "findingId": "F014",
       "severity": "P2",
       "title": "Parent still labels 004 Contested after roadmap 7.1 resolved it",
-      "file": "specs/public/005-component-surface-system/spec.md",
+      "file": "specs/005-component-surface-system/spec.md",
       "line": 132,
       "description": "Update the parent map row to match roadmap 7.1 and the child status.",
       "findingClass": "stale-status",
@@ -745,17 +745,17 @@
       "id": "SL-010",
       "dimension": "maintainability",
       "targetRefs": [
-        "specs/public/005-component-surface-system/027-sheet-menu-grammar-and-motion/spec.md",
-        "specs/public/005-component-surface-system/spec.md",
-        "specs/public/005-component-surface-system/roadmap.md",
-        "specs/public/005-component-surface-system/004-checkbox-ownership/spec.md",
+        "specs/005-component-surface-system/027-sheet-menu-grammar-and-motion/spec.md",
+        "specs/005-component-surface-system/spec.md",
+        "specs/005-component-surface-system/roadmap.md",
+        "specs/005-component-surface-system/004-checkbox-ownership/spec.md",
         "src/views/popover-position.ts"
       ],
       "bugClass": "stale_status",
       "disposition": "deferred",
       "rationale": "packet already records it as the one open criterion pending a device pass",
       "evidenceRefs": [
-        "specs/public/005-component-surface-system/027-sheet-menu-grammar-and-motion/spec.md:18"
+        "specs/005-component-surface-system/027-sheet-menu-grammar-and-motion/spec.md:18"
       ],
       "reason": "Expected remaining work, not a new P1"
     }
@@ -842,8 +842,8 @@
           "skipped": 0
         },
         "evidence": [
-          "specs/public/005-component-surface-system/027-sheet-menu-grammar-and-motion/spec.md:18",
-          "specs/public/005-component-surface-system/spec.md:132"
+          "specs/005-component-surface-system/027-sheet-menu-grammar-and-motion/spec.md:18",
+          "specs/005-component-surface-system/spec.md:132"
         ],
         "findingRefs": [
           "F014",
@@ -863,8 +863,8 @@
           "skipped": 0
         },
         "evidence": [
-          "specs/public/005-component-surface-system/004-checkbox-ownership/checklist.md:31",
-          "specs/public/005-component-surface-system/004-checkbox-ownership/spec.md:17"
+          "specs/005-component-surface-system/004-checkbox-ownership/checklist.md:31",
+          "specs/005-component-surface-system/004-checkbox-ownership/spec.md:17"
         ],
         "findingRefs": [
           "F006"
@@ -903,8 +903,8 @@
           "skipped": 0
         },
         "evidence": [
-          "specs/public/005-component-surface-system/027-sheet-menu-grammar-and-motion/spec.md:18",
-          "specs/public/005-component-surface-system/spec.md:132"
+          "specs/005-component-surface-system/027-sheet-menu-grammar-and-motion/spec.md:18",
+          "specs/005-component-surface-system/spec.md:132"
         ],
         "findingRefs": [
           "F014",

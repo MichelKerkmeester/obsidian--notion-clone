@@ -1,5 +1,5 @@
 {
-  "specFolder": "public/001-note-db-notion-parity-build/013-template-toolbar-button/002-row-menu-template-item",
+  "specFolder": "001-note-db-notion-parity-build/013-template-toolbar-button/002-row-menu-template-item",
   "description": "Notion exposes templates from the New control",
   "keywords": [
     "notion",

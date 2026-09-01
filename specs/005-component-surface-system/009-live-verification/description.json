@@ -1,6 +1,6 @@
 {
   "level": "3",
-  "specFolder": "public/005-component-surface-system/009-live-verification",
+  "specFolder": "005-component-surface-system/009-live-verification",
   "description": "The program's founding fact is that a release passed every gate and changed nothing on device",
   "keywords": [
     "program",

@@ -8,7 +8,7 @@ importance_tier: "critical"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "public/005-component-surface-system/024-list-view-freeze"
+    packet_pointer: "005-component-surface-system/024-list-view-freeze"
     last_updated_at: "2026-08-30T18:45:00Z"
     last_updated_by: "docs-remediation"
     recent_action: "Authored tasks.md retroactively; AC-6 kept open, not marked done"

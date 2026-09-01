@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "packet_id": "public/001-note-db-notion-parity-build",
-  "spec_folder": "public/001-note-db-notion-parity-build",
+  "packet_id": "001-note-db-notion-parity-build",
+  "spec_folder": "001-note-db-notion-parity-build",
   "parent_id": null,
   "children_ids": [
     "obsidian/002-note-db-notion-parity-build/001-live-reports-rollups",
@@ -37,7 +37,24 @@
     "public/001-note-db-notion-parity-build/014-record-detail-panel",
     "public/001-note-db-notion-parity-build/015-two-way-write-back",
     "public/001-note-db-notion-parity-build/016-onchange-automations",
-    "public/001-note-db-notion-parity-build/017-excluded-parity-items"
+    "public/001-note-db-notion-parity-build/017-excluded-parity-items",
+    "001-note-db-notion-parity-build/001-live-reports-rollups",
+    "001-note-db-notion-parity-build/002-rollup-aggregation-pack",
+    "001-note-db-notion-parity-build/003-reports-computed-fields",
+    "001-note-db-notion-parity-build/004-formula-ifs-switch-math",
+    "001-note-db-notion-parity-build/005-formula-let-variables",
+    "001-note-db-notion-parity-build/006-link-scheme-fields",
+    "001-note-db-notion-parity-build/007-unique-id-stamp",
+    "001-note-db-notion-parity-build/008-derived-inverse-relations",
+    "001-note-db-notion-parity-build/009-view-filter-tree",
+    "001-note-db-notion-parity-build/010-conditional-format-icons",
+    "001-note-db-notion-parity-build/011-table-multi-group",
+    "001-note-db-notion-parity-build/012-files-column",
+    "001-note-db-notion-parity-build/013-template-toolbar-button",
+    "001-note-db-notion-parity-build/014-record-detail-panel",
+    "001-note-db-notion-parity-build/015-two-way-write-back",
+    "001-note-db-notion-parity-build/016-onchange-automations",
+    "001-note-db-notion-parity-build/017-excluded-parity-items"
   ],
   "manual": {
     "depends_on": [],
@@ -73,6 +90,7 @@
     "status": "in_progress",
     "key_files": [
       "spec.md",
+      "roadmap.md",
       "003-reports-computed-fields/spec.md",
       "001-live-reports-rollups/spec.md",
       "002-rollup-aggregation-pack/spec.md",
@@ -94,6 +112,12 @@
         "name": "spec.md",
         "kind": "doc",
         "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "roadmap.md",
+        "kind": "doc",
+        "path": "roadmap.md",
         "source": "derived"
       },
       {
@@ -135,15 +159,16 @@
     ],
     "causal_summary": "The forked Note Database plugin is already far more capable than the legacy feature list assumed: it ships two formula engines (the Excel-style ComputedField.ts and the Bases method-chaining dialect BaseExpression.ts), 12 column types, 7 view types, and live cross-database relations with display-only rollups",
     "created_at": "2026-08-24T17:59:05.431Z",
-    "last_save_at": "2026-08-27T17:17:44.727Z",
+    "last_save_at": "2026-09-01T10:50:15.601Z",
     "save_lineage": "same_pass",
     "last_accessed_at": null,
     "source_docs": [
       "spec.md"
     ],
-    "source_fingerprint": "sha256:1f3736158f47d9dc89b1d6c0e6ee0f13e46d134aad50a7667734a58b23329e93",
+    "source_fingerprint": "sha256:c1ec0be4f891dd8c872de7515a7545faa642c622d2baa8cb89adb91684f8cbbd",
+    "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "56cc2f69340b07039c96ffc6dcb3a1ccc462dd47bacee33b68c90c6b276f7399"
+      "spec.md": "195bf5118620d5933ec3712d27e20b763449ea934329b0eaa1f3d9d80bbb4258"
     },
     "last_active_child_id": "obsidian/002-note-db-notion-parity-build/011-table-multi-group",
     "last_active_at": "2026-08-25T14:53:26.525Z"

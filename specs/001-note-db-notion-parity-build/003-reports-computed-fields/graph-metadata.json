@@ -1,15 +1,18 @@
 {
   "schema_version": 1,
-  "packet_id": "public/001-note-db-notion-parity-build/003-reports-computed-fields",
-  "spec_folder": "public/001-note-db-notion-parity-build/003-reports-computed-fields",
-  "parent_id": "public/001-note-db-notion-parity-build",
+  "packet_id": "001-note-db-notion-parity-build/003-reports-computed-fields",
+  "spec_folder": "001-note-db-notion-parity-build/003-reports-computed-fields",
+  "parent_id": "001-note-db-notion-parity-build",
   "children_ids": [
     "obsidian/002-note-db-notion-parity-build/003-reports-computed-fields/001-live-reports-inspect",
     "obsidian/002-note-db-notion-parity-build/003-reports-computed-fields/002-remaining-saved-config",
     "obsidian/002-note-db-notion-parity-build/003-reports-computed-fields/003-reports-display-proof",
     "public/001-note-db-notion-parity-build/003-reports-computed-fields/001-live-reports-inspect",
     "public/001-note-db-notion-parity-build/003-reports-computed-fields/002-remaining-saved-config",
-    "public/001-note-db-notion-parity-build/003-reports-computed-fields/003-reports-display-proof"
+    "public/001-note-db-notion-parity-build/003-reports-computed-fields/003-reports-display-proof",
+    "001-note-db-notion-parity-build/003-reports-computed-fields/001-live-reports-inspect",
+    "001-note-db-notion-parity-build/003-reports-computed-fields/002-remaining-saved-config",
+    "001-note-db-notion-parity-build/003-reports-computed-fields/003-reports-display-proof"
   ],
   "manual": {
     "depends_on": [],
@@ -51,11 +54,12 @@
       "spec.md",
       "plan.md",
       "tasks.md",
-      "checklist.md",
       "implementation-summary.md",
+      "research/research.md",
+      "checklist.md",
+      "src/main.ts",
       "research/sonnet-verification.md",
       "research/synthesis.md",
-      "research/research.md",
       "research/final-plan.md"
     ],
     "entities": [
@@ -78,15 +82,27 @@
         "source": "derived"
       },
       {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "research.md",
+        "kind": "doc",
+        "path": "research/research.md",
+        "source": "derived"
+      },
+      {
         "name": "checklist.md",
         "kind": "doc",
         "path": "checklist.md",
         "source": "derived"
       },
       {
-        "name": "implementation-summary.md",
-        "kind": "doc",
-        "path": "implementation-summary.md",
+        "name": "main.ts",
+        "kind": "code",
+        "path": "src/main.ts",
         "source": "derived"
       },
       {
@@ -99,12 +115,6 @@
         "name": "synthesis.md",
         "kind": "doc",
         "path": "research/synthesis.md",
-        "source": "derived"
-      },
-      {
-        "name": "research.md",
-        "kind": "doc",
-        "path": "research/research.md",
         "source": "derived"
       },
       {
@@ -196,34 +206,27 @@
         "kind": "proper_noun",
         "path": "tasks.md",
         "source": "derived"
-      },
-      {
-        "name": "Verification Checklist",
-        "kind": "proper_noun",
-        "path": "checklist.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "The finance Reports view lacks Remaining and Saved as live computed columns",
     "created_at": "2026-08-24T17:58:31.318Z",
-    "last_save_at": "2026-08-28T10:56:20.871Z",
+    "last_save_at": "2026-09-01T10:50:15.687Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
       "spec.md",
       "plan.md",
       "tasks.md",
-      "checklist.md",
       "implementation-summary.md",
       "research/research.md"
     ],
-    "source_fingerprint": "sha256:f8dde070a9f851178e28cf67eb62ddb95a7dd3f7bbf69154e360a7f087439661",
+    "source_fingerprint": "sha256:52034a6810dddd8fd3532bbc8da9e1d4f79adc0ce3fc4f5affa4df3adf4c02ff",
+    "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "c351bbb3f52a6e866721c5191135aeba310ea86b17e43a11844ece82fd783374",
-      "plan.md": "035eb06efa65942956d50cf66d61ec80c3aaddfd329d31f03d2dfb800bc31e32",
-      "tasks.md": "3057be4f28516780762ad1f57cc3794f76f52b17980cb0d73e243741c486f71f",
-      "checklist.md": "e7b38a9845cfcc02539c543b08c7aa332e74c8c0b5621cf072ba1c92c4e4b759",
-      "implementation-summary.md": "383413e9b0260a6b6fe7813cb1ea97550182980aba7f0be8153fecfee7e6eab5",
+      "spec.md": "db6c2f91189988d9d5fa52bae0676a5aed5a4bdd40b3fc49d76db81a2bb75398",
+      "plan.md": "3eb7bfc660a1dba26deecf061a98c7be28f80992441b352e45b7cac2b5af00ca",
+      "tasks.md": "e106fe643a1ae01eb60613e4ce510bd1c64af88ad9bdcf13982d500a09ebc5b2",
+      "implementation-summary.md": "a629441f088e3c697afcf3adb20e579e6f24309b104feb685066444b083d7871",
       "research/research.md": "8729da9b654dc4ba16bf105550b3bdbc51837d64aa7aa9f2e285c43f010d3b39"
     },
     "last_active_child_id": "obsidian/002-note-db-notion-parity-build/003-reports-computed-fields/003-reports-display-proof",

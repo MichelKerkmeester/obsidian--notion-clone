@@ -8,7 +8,7 @@ importance_tier: "critical"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "public/005-component-surface-system/001-overlay-placement-and-menu-language"
+    packet_pointer: "005-component-surface-system/001-overlay-placement-and-menu-language"
     last_updated_at: "2026-08-29T14:00:00Z"
     last_updated_by: "phase-author"
     recent_action: "Checklist cut alongside the spec; nothing verified yet"

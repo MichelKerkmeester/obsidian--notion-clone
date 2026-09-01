@@ -1,6 +1,6 @@
 {
   "level": "2",
-  "specFolder": "public/001-note-db-notion-parity-build/011-table-multi-group",
+  "specFolder": "001-note-db-notion-parity-build/011-table-multi-group",
   "description": "TABLE views in the note-database fork group rows by a single string (`groupByField`) only, while Notion's current View settings expose Group +",
   "keywords": [
     "table",

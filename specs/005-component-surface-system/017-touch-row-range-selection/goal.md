@@ -8,7 +8,7 @@ importance_tier: "critical"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "public/005-component-surface-system/017-touch-row-range-selection"
+    packet_pointer: "005-component-surface-system/017-touch-row-range-selection"
     last_updated_at: "2026-08-31T09:00:00Z"
     last_updated_by: "harness-dependence-review"
     recent_action: "AC-9 tick withdrawn: its row-menu term is a counter, not a menu being shown"

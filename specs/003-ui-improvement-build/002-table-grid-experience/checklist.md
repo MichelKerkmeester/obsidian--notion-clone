@@ -11,7 +11,7 @@ importance_tier: "high"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "public/003-ui-improvement-build/002-table-grid-experience"
+    packet_pointer: "003-ui-improvement-build/002-table-grid-experience"
     last_updated_at: "2026-08-28T04:30:57Z"
     last_updated_by: "implementation-session"
     recent_action: "Verified table and grid experience checklist gates"
@@ -53,9 +53,9 @@ _memory:
 <!-- ANCHOR:pre-impl -->
 ## Pre-Implementation
 
-- [x] CHK-001 [P0] Requirements documented and traceable in spec.md (REQ-001 through REQ-016) [EVIDENCE: specs/public/003-ui-improvement-build/002-table-grid-experience/spec.md:50-250 REQ-001 through REQ-016]
+- [x] CHK-001 [P0] Requirements documented and traceable in spec.md (REQ-001 through REQ-016) [EVIDENCE: specs/003-ui-improvement-build/002-table-grid-experience/spec.md:50-250 REQ-001 through REQ-016]
   - **Evidence**: Requirements and acceptance criteria documented in `spec.md:50-250`.
-- [x] CHK-002 [P0] Technical architecture defined in plan.md with verified call-site citations [EVIDENCE: specs/public/003-ui-improvement-build/002-table-grid-experience/plan.md:50-200 technical architecture and call-site citations]
+- [x] CHK-002 [P0] Technical architecture defined in plan.md with verified call-site citations [EVIDENCE: specs/003-ui-improvement-build/002-table-grid-experience/plan.md:50-200 technical architecture and call-site citations]
   - **Evidence**: Technical architecture and call-site citations documented in `plan.md:50-200`.
 - [x] CHK-003 [P1] Dependencies identified and available in codebase (`src/data/Aggregate.ts`, `CreatePropertyModal.ts`, `RowMenu.ts`) [EVIDENCE: src/data/Aggregate.ts:1-70; src/views/TableFooterRenderer.ts:1-15; src/views/RowMenu.ts:1-120]
   - **Evidence**: Existing aggregate helpers, property modal bridge, and RowMenu integration consumed in `src/views/TableFooterRenderer.ts:1-15`.
@@ -146,7 +146,7 @@ _memory:
 <!-- ANCHOR:docs -->
 ## Documentation
 
-- [x] CHK-050 [P1] Spec, plan, tasks, and checklist synchronized with exact file:line citations [EVIDENCE: specs/public/003-ui-improvement-build/002-table-grid-experience/spec.md:50-250; tasks.md:50-100]
+- [x] CHK-050 [P1] Spec, plan, tasks, and checklist synchronized with exact file:line citations [EVIDENCE: specs/003-ui-improvement-build/002-table-grid-experience/spec.md:50-250; tasks.md:50-100]
   - **Evidence**: Implementation summary and phase documents synchronized in `spec.md:50-250`.
 - [x] CHK-051 [P1] Code comments explain durable intent and architecture constraints [EVIDENCE: src/views/TableFooterRenderer.ts:21-48; src/data/ColumnConfig.ts:92-105]
   - **Evidence**: Code comments explain schema stability and calculation logic in `src/views/TableFooterRenderer.ts:21-48` and `src/data/ColumnConfig.ts:92-105`.

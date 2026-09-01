@@ -10,7 +10,7 @@ importance_tier: "high"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "public/001-note-db-notion-parity-build/001-live-reports-rollups/002-display-only-amount-types"
+    packet_pointer: "001-note-db-notion-parity-build/001-live-reports-rollups/002-display-only-amount-types"
     last_updated_at: "2026-08-27T12:27:53Z"
     last_updated_by: "phase-architect"
     recent_action: "Authored display-only and amount-types child"

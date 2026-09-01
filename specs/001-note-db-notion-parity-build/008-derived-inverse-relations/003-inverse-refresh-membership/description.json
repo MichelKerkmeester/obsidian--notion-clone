@@ -1,6 +1,6 @@
 {
   "level": "1",
-  "specFolder": "public/001-note-db-notion-parity-build/008-derived-inverse-relations/003-inverse-refresh-membership",
+  "specFolder": "001-note-db-notion-parity-build/008-derived-inverse-relations/003-inverse-refresh-membership",
   "description": "`handleDataChangeBatch` refreshes when `relationTargetPaths.has(change.path)` or the record matches `relationTargetDatabases`",
   "keywords": [
     "handledatachangebatch",

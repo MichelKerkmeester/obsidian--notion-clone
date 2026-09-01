@@ -8,7 +8,7 @@ importance_tier: "high"
 contextType: "planning"
 _memory:
   continuity:
-    packet_pointer: "public/001-note-db-notion-parity-build/010-conditional-format-icons/005-format-display-proof"
+    packet_pointer: "001-note-db-notion-parity-build/010-conditional-format-icons/005-format-display-proof"
     last_updated_at: "2026-08-27T12:50:04Z"
     last_updated_by: "phase-architect"
     recent_action: "Authored format-display-proof child from synthesis rank 8 and final-plan steps 8-9"
