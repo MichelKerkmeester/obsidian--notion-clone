@@ -401,6 +401,72 @@ today.
   own `spec.md` read *Draft — nothing built* while that lane was green.
 <!-- /ANCHOR:now-next-later -->
 
+### 5.0 The derived board, 2026-09-01
+
+§3.2 settled that a phase's figure is `ticked ÷ total` over its own `goal.md` checklist, derived and
+never judged. This is that computation run across every phase on the date above, so the board and the
+tree cannot drift apart without one command showing it.
+
+**Regenerate, and prefer the output to anything written below it:**
+
+```sh
+for d in specs/public/005-component-surface-system/0*/; do
+  f="$d/goal.md"; [ -f "$f" ] || continue
+  t=$(grep -c '^- \[' "$f"); x=$(grep -c '^- \[x\]' "$f"); [ "$t" -eq 0 ] && continue
+  printf '%3s%%  %2s/%-2s  %s\n' "$(python3 -c "print(round($x/$t*100))")" "$x" "$t" "$(basename $d)"
+done | sort -n
+```
+
+| Phase | Derived | Open | Operator-only | Harness-reachable |
+|---|---|---|---|---|
+| `000-surface-contract-and-truthful-harness` | **20%** — 2/10 | 8 | 1 | 7 |
+| `001-overlay-placement-and-menu-language` | **50%** — 4/8 | 4 | 1 | 3 |
+| `002-properties-panel` | **43%** — 3/7 | 4 | 1 | 3 |
+| `003-mobile-sheet-presentation` | **50%** — 4/8 | 4 | 1 | 3 |
+| `004-checkbox-ownership` | **62%** — 5/8 | 3 | 1 | 2 |
+| `005-content-row-rhythm` | **57%** — 4/7 | 3 | 1 | 2 |
+| `006-record-open-target` | **43%** — 3/7 | 4 | 1 | 3 |
+| `007-architecture-research` | **100%** — 2/2 | 0 | 0 | 0 |
+| `008-integration-and-release-observability` | **40%** — 4/10 | 6 | 1 | 5 |
+| `009-live-verification` | **17%** — 1/6 | 5 | 1 | 4 |
+| `010-sheet-reading-and-keyboard` | **91%** — 10/11 | 1 | 1 | 0 |
+| `011-mobile-menu-presentation` | **91%** — 10/11 | 1 | 1 | 0 |
+| `012-mobile-touch-semantics` | **80%** — 8/10 | 2 | 1 | 1 |
+| `013-add-view-sheet` | **83%** — 10/12 | 2 | 1 | 1 |
+| `014-desktop-select-checkbox` | **71%** — 5/7 | 2 | 1 | 1 |
+| `015-desktop-dropdown-placement` | **88%** — 7/8 | 1 | 1 | 0 |
+| `016-sheet-drag-and-audit` | **80%** — 8/10 | 2 | 1 | 1 |
+| `017-touch-row-range-selection` | **73%** — 8/11 | 3 | 1 | 2 |
+| `018-select-column-affordance-fit` | **80%** — 4/5 | 1 | 1 | 0 |
+| `019-card-field-value-formatting` | **71%** — 5/7 | 2 | 1 | 1 |
+| `020-harness-fidelity-repair` | **92%** — 12/13 | 1 | 1 | 0 |
+| `021-sheet-inline-edit-alignment` | **88%** — 7/8 | 1 | 1 | 0 |
+| `022-selection-bar-keyboard-docking` | **75%** — 6/8 | 2 | 1 | 1 |
+| `023-record-note-body` | **89%** — 8/9 | 1 | 1 | 0 |
+| `024-list-view-freeze` | **83%** — 5/6 | 1 | 1 | 0 |
+| `025-story-coverage-blindness` | **80%** — 8/10 | 2 | 1 | 1 |
+| `026-production-render-assertions` | **100%** — 9/9 | 0 | 0 | 0 |
+| `027-sheet-menu-grammar-and-motion` | **93%** — 13/14 | 1 | 1 | 0 |
+| `028-remaining-freezes` | **67%** — 4/6 | 2 | 0 | 2 |
+| `029-numeric-coercion-parity` | **71%** — 5/7 | 2 | 1 | 1 |
+| `030-gallery-view-deprecation` | **67%** — 4/6 | 2 | 1 | 1 |
+| `031-sheet-lifecycle-ownership` | **83%** — 5/6 | 1 | 1 | 0 |
+| `032-cover-target-scheme-safety` | **100%** — 4/4 | 0 | 0 | 0 |
+| `033-list-virtualisation` | **83%** — 5/6 | 1 | 1 | 0 |
+| `034-packet-doc-truth` | **100%** — 4/4 | 0 | 0 | 0 |
+
+**Program: 206/281 = 73%.** 75 rows open — 30 closable only by the operator's device, 45 still reachable here.
+
+**The two columns after "Open" are the ones worth reading.** A row only the operator can close is not
+work waiting to be done here — it is the program's closing condition, and §4A records why it is
+deferred. A harness-reachable row is work. Counting them together is what made "N% complete" mean
+nothing, and it is why this table separates them.
+
+**Every phase that this program's own hook lists as blocked on implementation now reads otherwise in
+the tree.** `030` carries the migration and the importer change; `031` and `033` have one row each
+and it is the operator's; `032` and `034` are 4/4. The figures above are the answer to that, and the
+command above is how to disbelieve them.
+
 ### 5.1 Status table
 
 | Phase | Declared | Actual | Evidence for "actual" |
