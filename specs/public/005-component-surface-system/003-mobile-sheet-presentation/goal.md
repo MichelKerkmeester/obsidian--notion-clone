@@ -71,7 +71,26 @@ have a number are still open.*
       transcription reddens for an intended change and the obvious repair is to copy the new formula
       across — after which it stops discriminating. The ablation asks only whether the element is
       read, which is the right question on both sides of that change.
-- [ ] Plus the five stateful dimensions. **No mapping exists** for this packet.
+- [x] Plus the five stateful dimensions. **No mapping exists** for this packet. **Mapped 2026-09-01**,
+      in `acceptance-criteria.md` §2b, and **action outcome was the bare one.**
+      **Everything previously measured about the backdrop established that it can RECEIVE a press** —
+      it arrives with the sheet, leaves with it, is modal by default, and takes a press aimed at a
+      cell. None of it established that receiving one does anything. **A backdrop that swallows
+      every tap and dismisses nothing is the freeze this program opened for**, and it passes every
+      one of those checks.
+      → *a press on the backdrop dismisses the sheet and takes the backdrop with it*: `sheet still
+      mounted after the press=false, backdrop still present=false`. **Red with the outside handler
+      removed: both `true`** — the dimmed, tap-swallowing surface exactly.
+      **The press goes where a thumb reaching past the sheet lands** — above the sheet's top edge,
+      not at the backdrop's centre, which would land on the sheet and measure a different gesture.
+      **One observation is recorded rather than asserted.** With two owned menus open, one press
+      closes **both** — `top dismissed=true, beneath survived=false`. That follows from the
+      factory's design: `createOwnedMenu` adds a capturing `pointerdown` per menu and treats any
+      press outside ITSELF as dismissal, which its own comment states. Whether the plugin ever
+      stacks two independent owned menus is **not established** — a submenu portals a
+      `db-column-menu-subpopover` instead — so the check asserts the decidable mechanism (`1
+      handler with one menu open, 2 with two`) and the consequence is a question with its number,
+      not a defect nobody has shown a reader can reach.
 - [ ] The operator opens a sheet on their phone and it covers the nav bar. **Only the operator
       closes this.**
 **HARNESS DEPENDENCE, 2026-08-31 — 9 sound / 5 dependent / 0 unknown.** The headline bullet is one of

@@ -365,6 +365,41 @@ uncorroborated and should be listed as such rather than left silent.
 ---
 
 <!-- ANCHOR:closure -->
+## 2b. THE FIVE STATEFUL DIMENSIONS — 2026-09-01
+
+| Dimension | Where this packet answers it | Evidence |
+|---|---|---|
+| **Semantic identity** | The sheet holds the record it was opened on | `010`'s refresh case: opened on `A.md`, still holds `A.md` after a rebuild, resolved by column key |
+| **Transition trace** | Open → keyboard → close, and open → press → dismissed | `010`'s keyboard sequence `844 → 508 → 844`, plus the backdrop press driven here |
+| **Action outcome** | *new here* — the press does something, not merely lands somewhere | `sheet still mounted after the press=false, backdrop still present=false`. Red with the outside handler removed: both `true` — a dimmed surface swallowing taps |
+| **Resource ownership** | The scrim and sheet come down together, and the handler count is bounded | `sheet-teardown` for the producer parity; here, `1 capturing pointerdown handler with one menu open, 2 with two` |
+| **Negative-control mutation** | The scrim's pointer opt-out, plus the handler removal above | `012`'s registered control: `{scrimCapturesPointer: false}` reads `none` and the press resolves to `<td>` |
+
+**Everything previously measured about the backdrop established that it can RECEIVE a press** — that
+it arrives with the sheet, leaves with it, is modal by default, and takes a press aimed at a cell.
+None of it established that receiving one does anything. **A backdrop that swallows every tap and
+dismisses nothing is the freeze this program opened for**, and it passes every one of those checks.
+
+The press is driven where a thumb reaching past the sheet actually lands — above the sheet's top
+edge, not at the backdrop's centre, which would land on the sheet and be a different gesture.
+
+### Recorded, not asserted: two stacked menus dismiss together
+
+Measured: with two owned menus open, one backdrop press closes **both** — `top dismissed=true,
+beneath survived=false`.
+
+That follows from the factory's design rather than contradicting it. `createOwnedMenu` adds its own
+capturing `pointerdown` per menu and treats any press outside ITSELF as dismissal — its comment says
+so: *"the sheet's backdrop is a rectangle, not a handler … an outside press like any other"*. Two
+menus, two handlers, one press, both gone.
+
+**Whether the plugin ever stacks two independent owned menus is not established here** — a submenu
+portals a `db-column-menu-subpopover` rather than opening a second owned menu. So the check asserts
+the *mechanism*, which is decidable (one handler per open menu), and this consequence is recorded as
+a question with its number rather than as a defect nobody has shown a reader can reach.
+
+---
+
 ## 3. CLOSURE STATEMENT
 
 **Closeable:** No

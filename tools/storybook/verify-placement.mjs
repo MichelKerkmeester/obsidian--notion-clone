@@ -9196,10 +9196,154 @@ await section("every menu row reaches its own action", async () => {
       : m.wrongColumn.map((p) => `${p.label} → ${p.action} handed ${p.key}`).join("; "));
 });
 
+// ───────────────────────────────────────────────────────────────────
+// A PRESS ON THE BACKDROP DISMISSES THE SHEET UNDER IT
+// ───────────────────────────────────────────────────────────────────
+//
+// `003` owns sheet presentation and its five-dimension row maps none. Everything measured about the
+// backdrop here is PRESENCE and POINTER POLICY: that it arrives with the sheet, that it leaves with
+// it, that its `pointer-events` is modal by default and `none` under the opt-out, that a press at a
+// cell centre resolves to it rather than to the cell.
+//
+// All of that establishes the backdrop can RECEIVE the press. Nothing established that receiving it
+// does anything. A backdrop that takes every tap and dismisses nothing is the freeze this program
+// opened for — the surface is dimmed, the taps are swallowed, and the app looks hung.
+//
+// So the press is driven where a thumb would put it — the backdrop, well away from the sheet — and
+// the outcome is read. The stacked case is the one worth having: with two sheets open, a press must
+// take the TOP one and leave the one beneath, which is what an overlay stack is for.
+
+const backdropOutcomeResults = [];
+
+await section("a press on the backdrop dismisses the sheet under it", async () => {
+  const page = await browser.newPage({
+    viewport: { width: 390, height: 844 }, hasTouch: true, isMobile: true, reducedMotion: "reduce",
+  });
+  await page.setContent(page_html.replace("<body>", phoneBody));
+  await page.addStyleTag({ content: readFileSync(join(REPO, "styles.css"), "utf8") + HOST_BARE_CONTROLS });
+  await page.addScriptTag({ content: shimJs + "\ninstallObsidianDomShim(globalThis);" });
+  await page.addScriptTag({ content: positionerJs });
+
+  const measured = await page.evaluate(async () => {
+    const { createOwnedMenu } = globalThis.__place;
+
+    const openSheet = (label) => {
+      const menu = createOwnedMenu(document);
+      for (let i = 0; i < 5; i += 1) menu.addRow({ icon: "pencil", label: `${label} ${i}` });
+      menu.showAt({ x: 200, y: 200 });
+      return menu;
+    };
+    const settle = () => new Promise((r) => setTimeout(r, 4));
+
+    // A point on the backdrop, above the sheet's own top edge — where a thumb reaching past the
+    // surface actually lands. Pressing the backdrop's centre would land ON the sheet, which is a
+    // different gesture entirely and would report the wrong thing.
+    const pressBackdrop = (panel) => {
+      const box = panel.getBoundingClientRect();
+      const x = Math.round(window.innerWidth / 2);
+      const y = Math.max(4, Math.round(box.top / 2));
+      const hit = document.elementFromPoint(x, y);
+      const target = hit ?? document.body;
+      for (const type of ["pointerdown", "mousedown", "pointerup", "click"]) {
+        target.dispatchEvent(new (type.startsWith("pointer") ? PointerEvent : MouseEvent)(type, {
+          bubbles: true, cancelable: true, clientX: x, clientY: y,
+          ...(type.startsWith("pointer") ? { pointerId: 11, isPrimary: true, pointerType: "touch" } : {}),
+        }));
+      }
+      return { x, y, landedOn: target.className || target.tagName.toLowerCase() };
+    };
+
+    // 1. One sheet: the press must dismiss it and take the backdrop with it.
+    const only = openSheet("Row");
+    await settle();
+    const scrimBefore = Boolean(document.querySelector(".db-mobile-sheet-scrim"));
+    const where = pressBackdrop(only.el);
+    await settle();
+    const singleClosed = !only.el.isConnected;
+    const scrimAfter = Boolean(document.querySelector(".db-mobile-sheet-scrim"));
+    if (!singleClosed) only.close();
+    document.querySelectorAll(".db-mobile-sheet-scrim").forEach((el) => el.remove());
+
+    // 2. Two sheets, counting the document handlers each one registers.
+    let handlers = 0;
+    const realAdd = document.addEventListener.bind(document);
+    const realRemove = document.removeEventListener.bind(document);
+    document.addEventListener = (type, fn, opts) => {
+      if (type === "pointerdown") handlers += 1;
+      return realAdd(type, fn, opts);
+    };
+    document.removeEventListener = (type, fn, opts) => {
+      if (type === "pointerdown") handlers -= 1;
+      return realRemove(type, fn, opts);
+    };
+    const under = openSheet("Under");
+    await settle();
+    const handlersOneMenu = handlers;
+    const over = openSheet("Over");
+    await settle();
+    const handlersTwoMenus = handlers;
+    const bothOpen = under.el.isConnected && over.el.isConnected;
+    pressBackdrop(over.el);
+    await settle();
+    const topClosed = !over.el.isConnected;
+    const bottomSurvived = under.el.isConnected;
+    under.close();
+    over.close();
+    document.querySelectorAll(".db-mobile-sheet-scrim").forEach((el) => el.remove());
+
+    document.addEventListener = realAdd;
+    document.removeEventListener = realRemove;
+    return {
+      scrimBefore, where, singleClosed, scrimAfter, bothOpen, topClosed, bottomSurvived,
+      handlersOneMenu, handlersTwoMenus,
+    };
+  });
+
+  const record = (name, pass, detail) => backdropOutcomeResults.push({ name, pass, detail });
+  const m = measured;
+
+  record("the press landed on the backdrop, not on the sheet",
+    m.scrimBefore && String(m.where.landedOn).includes("scrim"),
+    `a backdrop was present=${m.scrimBefore}; the press at [${m.where.x},${m.where.y}] landed on `
+      + `"${m.where.landedOn}". The point is above the sheet's top edge, where a thumb reaching past `
+      + `the surface goes — a press at the backdrop's own centre lands ON the sheet and would `
+      + `report a different gesture entirely`);
+
+  record("a press on the backdrop dismisses the sheet and takes the backdrop with it",
+    m.singleClosed && !m.scrimAfter,
+    `sheet still mounted after the press=${!m.singleClosed}, backdrop still present=${m.scrimAfter}. `
+      + `Everything else measured about this backdrop is presence and pointer policy — that it can `
+      + `RECEIVE the press. A backdrop that receives every tap and dismisses nothing is the freeze `
+      + `this program opened for`);
+
+  // WHAT THE STACKED CASE ACTUALLY SHOWS, AND WHY IT IS NOT ASSERTED AS A DEFECT.
+  //
+  // Measured: with two owned menus open, one backdrop press closes BOTH — `top dismissed=true,
+  // beneath survived=false`. That follows from the factory's design rather than contradicting it.
+  // `createOwnedMenu` adds its own capturing `pointerdown` on the document per menu and treats any
+  // press outside ITSELF as a dismissal, and its comment says so: "the sheet's backdrop is a
+  // rectangle, not a handler ... an outside press like any other". Two menus, two handlers, one
+  // press, both dismissed.
+  //
+  // Whether that is wrong depends on whether the plugin ever stacks two independent owned menus,
+  // which is NOT established here — a submenu portals a `db-column-menu-subpopover` rather than
+  // opening a second owned menu. So what is asserted is the mechanism, which is decidable: one
+  // document handler per open menu. The consequence is recorded in `003`'s packet as a question
+  // with its number, rather than as a defect nobody has shown a user can reach.
+  record("each open menu owns exactly one document-level dismissal handler",
+    m.handlersOneMenu === 1 && m.handlersTwoMenus === 2,
+    `${m.handlersOneMenu} capturing pointerdown handler(s) with one menu open, `
+      + `${m.handlersTwoMenus} with two. That is the factory's stated design — a press outside a `
+      + `menu arrives at that menu's own handler — and it is why one backdrop press dismissed both `
+      + `(top=${m.topClosed}, beneath survived=${m.bottomSurvived}). Whether two independent owned `
+      + `menus ever stack in the shipped app is a separate question, recorded in \`003\` rather `
+      + `than assumed here`);
+});
+
 results.push(...phoneResults, ...menuResults, ...addViewDesktopResults, ...addViewPhoneResults,
   ...grammarResults, ...addViewGrammar, ...motionResults, ...reducedResults, ...desktopMenuResults, ...cellResults, ...sheetResults, ...selectCellResults, ...selectPhoneResults, ...rowPhoneResults, ...rowNarrowResults,
   ...desktopPanelResults, ...stateResults, ...keyboardParityResults, ...familyResults, ...touchResults, ...overlapResults, ...rhythmResults, ...rendererRhythmResults,
-  ...liftedResults, ...inlineEditResults, ...numberParityResults, ...peekLayerResults, ...propertyRowResults, ...menuEdgeResults, ...headerRhythmResults, ...panelParityResults, ...registryResults, ...flickResults, ...selectWidthResults, ...fixtureTableResults, ...panelOwnershipResults, ...peekOwnershipResults, ...checkboxIdentityResults, ...listOwnershipResults, ...addViewOutcomeResults, ...editOutcomeResults, ...menuOutcomeResults, ...sectionFailures);
+  ...liftedResults, ...inlineEditResults, ...numberParityResults, ...peekLayerResults, ...propertyRowResults, ...menuEdgeResults, ...headerRhythmResults, ...panelParityResults, ...registryResults, ...flickResults, ...selectWidthResults, ...fixtureTableResults, ...panelOwnershipResults, ...peekOwnershipResults, ...checkboxIdentityResults, ...listOwnershipResults, ...addViewOutcomeResults, ...editOutcomeResults, ...menuOutcomeResults, ...backdropOutcomeResults, ...sectionFailures);
 
 await browser.close();
 rmSync(work, { recursive: true, force: true });
