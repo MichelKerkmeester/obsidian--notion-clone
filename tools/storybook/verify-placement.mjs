@@ -8807,6 +8807,8 @@ let titleLinksChecked = 0;
 const bareTitleOffenders = [];
 let dropdownFieldsChecked = 0;
 const iconlessOffenders = [];
+let menuRowsChecked = 0;
+const sharedGlyphOffenders = [];
 
 await section("every fixture table has as many cells as it has headers", async () => {
   const page = await browser.newPage({ viewport: VIEWPORT, reducedMotion: "reduce" });
@@ -8878,8 +8880,45 @@ await section("every fixture table has as many cells as it has headers", async (
         if (field.classList.contains("has-current-icon")) continue;
         iconlessRows.push({ scenario: id, text: (field.textContent || "").trim().replace(/\s+/g, " ").slice(0, 34) });
       }
+      // One glyph serving two actions in one menu.
+      //
+      // In a row list the icon is what separates two settings at a glance, so two rows drawing the
+      // same SVG read as the same control twice. The fixtures did it three times — the utilities
+      // popover drew the plain refresh for both "Save computed results" and "Refresh database"
+      // where the toolbar draws a recalculate badge for the first, and the timeline options drew
+      // the dotted calendar for "Year display" where the renderer draws the plain one.
+      //
+      // One pair is EXEMPT because it is faithful: the calendar options give "Event start date" and
+      // "First day of the week" the same icon in the renderer too, and they sit under different
+      // section headings. A check that flagged it would be asking the fixture to disagree with the
+      // product.
+      const SHARED_GLYPH_EXEMPT = ["First day of the week"];
+      const sharedGlyphs = [];
+      for (const group of document.querySelectorAll(
+        ".db-toolbar-utilities-popover, .db-view-tab-popover, .db-owned-menu, .db-chart-options-popover, .db-calendar-options-content, .db-calendar-timeline-options-content",
+      )) {
+        const byIcon = new Map();
+        for (const row of group.querySelectorAll("button, .db-menu-item, .db-utilities-row")) {
+          const svg = row.querySelector("svg");
+          const label = (row.textContent || "").trim().split("\n")[0].trim();
+          if (!svg || !label) continue;
+          const key = svg.innerHTML.replace(/\s+/g, "");
+          if (!key) continue;
+          if (!byIcon.has(key)) byIcon.set(key, new Set());
+          byIcon.get(key).add(label);
+        }
+        for (const [, labels] of byIcon) {
+          const list = [...labels];
+          if (list.length < 2) continue;
+          if (list.some((l) => SHARED_GLYPH_EXEMPT.includes(l))) continue;
+          sharedGlyphs.push({ scenario: id, labels: list.slice(0, 3) });
+        }
+      }
       return {
-        rows, tables, bareTitles, iconlessRows,
+        rows, tables, bareTitles, iconlessRows, sharedGlyphs,
+        menuRows: document.querySelectorAll(
+          ".db-toolbar-utilities-popover .db-menu-item, .db-view-tab-popover .db-menu-item, .db-owned-menu .db-menu-item, .db-chart-options-popover button",
+        ).length,
         titleLinks: document.querySelectorAll(".db-title-cell a.internal-link").length,
         dropdownFields: document.querySelectorAll(".db-dropdown-field").length,
       };
@@ -8891,6 +8930,8 @@ await section("every fixture table has as many cells as it has headers", async (
     bareTitleOffenders.push(...found.bareTitles);
     dropdownFieldsChecked += found.dropdownFields;
     iconlessOffenders.push(...found.iconlessRows);
+    menuRowsChecked += found.menuRows;
+    sharedGlyphOffenders.push(...found.sharedGlyphs);
   }
 
   await page.close();
@@ -8922,6 +8963,16 @@ await section("every fixture table has as many cells as it has headers", async (
         : "")
       + `. The stylesheet hides the icon without that class, and a hidden element leaves the grid, so `
       + `every later child slides one track left and the label ends up in the icon's column`);
+
+  record("no menu draws one glyph for two different actions",
+    menuRowsChecked > 0 && sharedGlyphOffenders.length === 0,
+    `${menuRowsChecked} menu row(s) across the fixture set; ${sharedGlyphOffenders.length} pair(s) share a glyph`
+      + (sharedGlyphOffenders.length
+        ? `: ${sharedGlyphOffenders.map((o) => `${o.scenario} ${JSON.stringify(o.labels)}`).join("; ")}`
+        : "")
+      + `. The icon is what separates two settings at a glance, so the same SVG twice reads as the `
+      + `same control twice. One pair is exempt as faithful: the calendar's start-date and `
+      + `first-day rows share an icon in the renderer too, under different section headings`);
 
   record("no fixture body row disagrees with its own header about the column count",
     offenders.length === 0,

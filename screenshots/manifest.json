@@ -615,7 +615,7 @@
       },
       "note": "What the chart view uses instead of a toolbar of its own: the chart-options button in the toolbar opens this panel. Every row is a 18px/1fr/16px grid, so selects, switches, drill-in entries and export buttons line up on one set of columns.",
       "capture": "element",
-      "bytes": 89612
+      "bytes": 89716
     },
     {
       "id": "chrome-chart-options-popover",
@@ -1566,7 +1566,7 @@
         "src/views/toolbar-renderer.ts",
         "src/views/menu-row.ts"
       ],
-      "layoutHash": "628023d4d8b9",
+      "layoutHash": "73004480e1c8",
       "sourceHashes": {
         "src/views/toolbar-renderer.ts": "2990d93c5c19",
         "src/views/menu-row.ts": "dd0e9eeeb997",
@@ -1578,7 +1578,7 @@
       },
       "note": "The toolbar's overflow menu. Rows come from the shared createMenuRow but carry db-toolbar-menu-row, whose own inline padding is what the heading is aligned to.",
       "capture": "element",
-      "bytes": 37165
+      "bytes": 37097
     },
     {
       "id": "chrome-utilities-popover",
@@ -1591,7 +1591,7 @@
         "src/views/toolbar-renderer.ts",
         "src/views/menu-row.ts"
       ],
-      "layoutHash": "628023d4d8b9",
+      "layoutHash": "73004480e1c8",
       "sourceHashes": {
         "src/views/toolbar-renderer.ts": "2990d93c5c19",
         "src/views/menu-row.ts": "dd0e9eeeb997",
@@ -1603,7 +1603,7 @@
       },
       "note": "The toolbar's overflow menu. Rows come from the shared createMenuRow but carry db-toolbar-menu-row, whose own inline padding is what the heading is aligned to.",
       "capture": "element",
-      "bytes": 37264
+      "bytes": 37365
     },
     {
       "id": "chrome-utilities-popover",
@@ -1616,7 +1616,7 @@
         "src/views/toolbar-renderer.ts",
         "src/views/menu-row.ts"
       ],
-      "layoutHash": "f78c994e218d",
+      "layoutHash": "bcea6e9beaf2",
       "sourceHashes": {
         "src/views/toolbar-renderer.ts": "2990d93c5c19",
         "src/views/menu-row.ts": "dd0e9eeeb997",
@@ -1628,7 +1628,7 @@
       },
       "note": "The toolbar's overflow menu. Rows come from the shared createMenuRow but carry db-toolbar-menu-row, whose own inline padding is what the heading is aligned to.",
       "capture": "element",
-      "bytes": 35911
+      "bytes": 36013
     },
     {
       "id": "chrome-utilities-popover",
@@ -1641,7 +1641,7 @@
         "src/views/toolbar-renderer.ts",
         "src/views/menu-row.ts"
       ],
-      "layoutHash": "f78c994e218d",
+      "layoutHash": "bcea6e9beaf2",
       "sourceHashes": {
         "src/views/toolbar-renderer.ts": "2990d93c5c19",
         "src/views/menu-row.ts": "dd0e9eeeb997",
@@ -1653,7 +1653,7 @@
       },
       "note": "The toolbar's overflow menu. Rows come from the shared createMenuRow but carry db-toolbar-menu-row, whose own inline padding is what the heading is aligned to.",
       "capture": "element",
-      "bytes": 36168
+      "bytes": 36271
     },
     {
       "id": "chrome-view-switcher",
@@ -5738,7 +5738,7 @@
         "src/views/calendar-timeline-toolbar-renderer.ts",
         "src/views/dropdown-field.ts"
       ],
-      "layoutHash": "6202984bbf81",
+      "layoutHash": "e4f8628c06d3",
       "sourceHashes": {
         "src/views/calendar-timeline-toolbar-renderer.ts": "f32a3186bb24",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
@@ -5750,7 +5750,7 @@
       },
       "note": "Column width is a switch plus a slider here, not the calendar's mode dropdown; the slider only appears once the switch is on.",
       "capture": "viewport",
-      "bytes": 100188
+      "bytes": 100048
     },
     {
       "id": "timeline-toolbar-options",
@@ -5763,7 +5763,7 @@
         "src/views/calendar-timeline-toolbar-renderer.ts",
         "src/views/dropdown-field.ts"
       ],
-      "layoutHash": "6202984bbf81",
+      "layoutHash": "e4f8628c06d3",
       "sourceHashes": {
         "src/views/calendar-timeline-toolbar-renderer.ts": "f32a3186bb24",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
@@ -5775,7 +5775,7 @@
       },
       "note": "Column width is a switch plus a slider here, not the calendar's mode dropdown; the slider only appears once the switch is on.",
       "capture": "viewport",
-      "bytes": 104546
+      "bytes": 104407
     },
     {
       "id": "timeline-toolbar-options",
@@ -5788,7 +5788,7 @@
         "src/views/calendar-timeline-toolbar-renderer.ts",
         "src/views/dropdown-field.ts"
       ],
-      "layoutHash": "dcd3710528c4",
+      "layoutHash": "25732fe4a476",
       "sourceHashes": {
         "src/views/calendar-timeline-toolbar-renderer.ts": "f32a3186bb24",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
@@ -5800,7 +5800,7 @@
       },
       "note": "Column width is a switch plus a slider here, not the calendar's mode dropdown; the slider only appears once the switch is on.",
       "capture": "viewport",
-      "bytes": 81759
+      "bytes": 81652
     },
     {
       "id": "timeline-toolbar-options",
@@ -5813,7 +5813,7 @@
         "src/views/calendar-timeline-toolbar-renderer.ts",
         "src/views/dropdown-field.ts"
       ],
-      "layoutHash": "dcd3710528c4",
+      "layoutHash": "25732fe4a476",
       "sourceHashes": {
         "src/views/calendar-timeline-toolbar-renderer.ts": "f32a3186bb24",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
@@ -5825,7 +5825,7 @@
       },
       "note": "Column width is a switch plus a slider here, not the calendar's mode dropdown; the slider only appears once the switch is on.",
       "capture": "viewport",
-      "bytes": 85566
+      "bytes": 85464
     },
     {
       "id": "timeline-view",
@@ -5848,7 +5848,7 @@
       },
       "note": "Two weeks at one column per day; the April band marks the month boundary and the today line sits at 25 March 13:45.",
       "capture": "viewport",
-      "bytes": 147239
+      "bytes": 146959
     },
     {
       "id": "timeline-view",

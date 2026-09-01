@@ -69,6 +69,13 @@ const I = {
      `arrow-left-right` and `file-output`; the first two had no glyph here, and the same omission
      that drew a bare delete row would have drawn bare utility rows. */
   refresh: glyph('<path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 3v6h-6"/>'),
+  // Two actions, two glyphs, because the toolbar draws two. Saving computed results uses a custom
+  // recalculate badge and refreshing the database uses the host's plain refresh; the fixture drew
+  // the plain one twice, which is the same rendering for two different actions and exactly the
+  // "no visible difference between states" the capture review exists to catch.
+  refreshFx: glyph('<path d="M15 7a7 7 0 1 0 2 5"/><path d="M15 4v4h-4"/>'
+    + '<g transform="translate(12 10)"><g transform="scale(0.6)" stroke-width="4">'
+    + '<path d="M6.5 5.5h10.5l-5.5 6.5l5.5 6.5h-10.5"/></g></g>'),
   settings: glyph('<circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M19.1 4.9 17 7M7 17l-2.1 2.1"/>'),
   arrowLeftRight: glyph('<path d="m8 3-5 5 5 5"/><path d="M3 8h13"/><path d="m16 21 5-5-5-5"/><path d="M21 16H8"/>'),
   fileOutput: glyph('<path d="M14 2H7a2 2 0 0 0-2 2v6"/><path d="M14 2v5h5"/><path d="M19 7v13a2 2 0 0 1-2 2H9"/><path d="M3 15h8"/><path d="m7 11-4 4 4 4"/>'),
@@ -435,7 +442,7 @@ export const CHROME_SCENARIOS = [
         <div class="db-view-tab-popover db-toolbar-utilities-popover" role="menu" aria-label="Utilities">
           <div class="db-panel-header"><div class="db-panel-title">Utilities</div></div>
           ${utilitiesRow("Wide display", I.arrowLeftRight)}
-          ${utilitiesRow("Save computed results", I.refresh)}
+          ${utilitiesRow("Save computed results", I.refreshFx)}
           ${utilitiesRow("Refresh database", I.refresh)}
           ${utilitiesRow("Copy formatting", I.copy)}
           ${utilitiesRow("Open database file", I.fileOutput)}

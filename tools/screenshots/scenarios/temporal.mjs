@@ -45,6 +45,11 @@ const ICON = {
   calendarDays:
     '<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>' +
     '<path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01M16 18h.01"/>',
+  // The plain calendar, which is not the dotted one. Year display takes this and the event start
+  // date takes `calendarDays`; drawing both with `calendarDays` gave two different settings the
+  // same glyph in a menu where the glyph is the only thing distinguishing them at a glance.
+  calendar:
+    '<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>',
   calendarRange:
     '<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18M17 14h-6M13 18H7"/>',
   clock: '<circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>',
@@ -712,7 +717,7 @@ export const TEMPORAL_SCENARIOS = [
               ${dropdownRow(ICON.calendarRange, "Event end date", "Ends")}
               ${dropdownRow(ICON.textCursor, "Event title", "Name")}
               ${dropdownRow(ICON.layoutGrid, "Timeline scale", "Week")}
-              ${dropdownRow(ICON.calendarDays, "Year display", "Smart")}
+              ${dropdownRow(ICON.calendar, "Year display", "Smart")}
               ${switchRow(ICON.rows, "Show empty fields", false)}`)}
             ${section("Layout", `
               ${switchRow(ICON.columns, "Custom column width", true)}
