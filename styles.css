@@ -15794,6 +15794,35 @@ body.is-mobile .note-database-container .db-timeline-scale-menu,
   display: none;
 }
 
+/* A phone's week column is narrower than any title, so every event is compact by width.
+ *
+ * The compact treatment above is keyed to event DURATION — a short event has room for one line and
+ * not two. On a phone the constraint is the other axis: seven day columns inside 286px leave each
+ * one 41px, and after the event's inset and the content's own padding the title is left 16px. The
+ * two-line clamp then does what it is asked to and wraps, so "Adobe CC renewal" renders as three
+ * stacked lines of a single glyph and an ellipsis. That is not a title, it is noise where a title
+ * should be, and it is what four captures of this surface showed.
+ *
+ * So width gets the same answer duration already had, written with the same declarations rather
+ * than a second mechanism: one line, no wrap, and the time label stands down to give the title the
+ * block's whole height. The time is recoverable — the row sits at its own hour in the grid, and the
+ * record opens on a tap. A truncated title is not recoverable from anywhere. */
+.is-phone .note-database-container .db-calendar-week-event-title {
+  display: block;
+  -webkit-line-clamp: 1;
+  white-space: nowrap;
+}
+
+.is-phone .note-database-container .db-calendar-week-event-time {
+  display: none;
+}
+
+.is-phone .note-database-container .db-calendar-week-event-content {
+  padding-left: var(--db-space-2);
+  padding-right: var(--db-space-2);
+  justify-content: center;
+}
+
 
 /* Timed event in week view */
 .note-database-container .db-calendar-week-timed-event {
