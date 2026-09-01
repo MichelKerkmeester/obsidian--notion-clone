@@ -185,6 +185,62 @@ and `000`'s AC-006 had already flagged the same matcher.
 
 **Not operator-signed.** The two new modal fixtures have not had per-image sign-off.
 
+**An eighth fixture/renderer divergence, found by reading a capture rather than by any check.**
+`screenshots/views/table-view-desktop-dark.png` showed Design, Infrastructure and Personal as the
+same green chip, and Yearly and Monthly as the same orange one. The renderer does not do that:
+`cell-renderer.ts:465` and `group-label-renderer.ts:57` both colour a `.status-badge` from the
+matching option's own colour and fall back to grey only when no option matches, so in the product two
+different values of one column look different. Five fixture files hand-picked a tone per column
+instead — `pill(r.payment, "gray")`, `r.category === "Business" ? "blue" : "green"` — so a corpus
+read to decide whether the product has a states-with-no-visible-difference defect contained a picture
+of one that it does not have.
+
+The same read found the second half. `listGroupHeader`, `galleryGroupHeader` and `boardSubgroupHeader`
+wrote their title as bare text, which is a branch `renderGroupLabel` reaches only for a non-option
+field or the empty group — while the titles passed were option values. A badge is taller and wider
+than the text it replaced, so the header height the group-selection checkboxes are aligned against
+was wrong too, in a capture whose stated purpose is comparing those checkboxes. Both halves were
+present before this change and neither is caused by it: the pre-change capture is in `HEAD` and shows
+the bare titles.
+
+Fixed in `scenarios/shared.mjs` by giving each option value one tone and routing every call site
+through `optionPill` / `optionTone`, and by badging an option-typed group title. Guarded by
+`tools/screenshots/scan-option-tones.mjs`, gate lane 25, which asks three questions the fixture source
+answers on its own: does one column map two distinct values onto one tone, does a fixture pick a tone
+at the call site, does a group-header helper render an option value as bare text. Each observed red
+first — a collided tone, a reintroduced ternary, a helper reverted to bare text — and the ternary rule
+exists because the first version watched only `pill()` and reported the multi-select badge clean while
+it painted three categories one colour.
+
+**What that guard cannot check, stated because D6 demands it.** It cannot compare a fixture tone to
+the option colour a real vault configures; those colours live in a user's schema, not this repository.
+The property it holds is that distinct values are distinguishable, which is the property the capture
+is read for. A column deliberately uniform in a real vault would still be flagged here, and the answer
+is to say so in the packet rather than to widen the rule.
+
+**A reading hazard in the visual pass itself, found by nearly recording a defect that was not one.**
+Reading `field-status-colors-desktop-dark.png` after that fix, the sixteen-chip colour strip appeared
+washed out and six of the sixteen labels unreadable, which reads exactly like a dark-theme contrast
+failure across the plugin's whole colour vocabulary. It was not. Every badge fill in that vocabulary
+is `color-mix(<hue> 24%, transparent)`, element captures are taken with `omitBackground: true` on a
+deliberately transparent ground, and the chips are therefore written to the PNG at **alpha 61** —
+24% of 255, exactly as specified. What looked like a defect was the image viewer compositing a
+correct translucent capture onto white.
+
+The finding is real but it is about the instrument: **a capture of a translucent-fill component on a
+transparent ground cannot be read for legibility, because what it looks like is decided by the
+reader's viewer rather than by the stylesheet.** The transparent ground is right for an opaque
+component — one that can sit on any background — and wrong for a component that has no appearance
+without one. `field-status-colors` now supplies the surface the product always has behind these chips
+(`--background-primary`, via `captureCss`) and all sixteen labels are legible in both themes.
+
+**Measured rather than assumed to be the only one.** A census over all 168 captures carrying an alpha
+channel, taken after the fix, puts the largest share of any single partial-alpha value at **1.66%**,
+and every image at or near that figure has its dominant alpha between 9 and 18 — shadow and scrim
+edges, not a fill. The strip was the population, and it is one. No lane is added for it: a check
+built for a single fixed instance is a check that never fails, and the census is the evidence, held
+here rather than in a green light.
+
 **The harness's largest remaining supply was never in this phase's scope, and two of the 63 lifted
 checks carry it.** `verify-placement.mjs` sets `--keyboard-height` on the document element at three
 sites — `:819`, `:4724`, `:4753` — and measures what moved. Nothing in `src/` publishes that

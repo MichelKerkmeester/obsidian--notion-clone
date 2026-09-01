@@ -46,6 +46,10 @@ const CHECKS = [
   { name: "naming", cmd: ["node", "tools/naming/scan-naming.mjs"] },
   { name: "failing-values", cmd: ["node", "tools/naming/scan-failing-values.mjs"] },
   { name: "pinned-values", cmd: ["node", "tools/screenshots/scan-pinned-values.mjs"] },
+  // Reads the fixtures rather than the pictures, because the defect it catches is invisible in a
+  // single capture: a column where two values share a chip looks like a rendered column, and only
+  // knowing that the values differ makes it wrong.
+  { name: "option-tones", cmd: ["node", "tools/screenshots/scan-option-tones.mjs"] },
   { name: "css-lane", cmd: ["node", "tools/lane/check-lane.mjs"] },
   // Runs here, not only at release. Every phase edits the same stylesheet in turn, so a result
   // measured green three phases ago describes a tree that no longer exists unless something checks.

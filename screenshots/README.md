@@ -81,7 +81,7 @@ Sources: `src/views/chart-toolbar-renderer.ts`
 
 ### Grouped table header rows
 
-An option-typed group field renders its key as a colored status badge; a field with no options renders plain text, as the nested Revolut subgroup does. Per-group summaries sit at the right of each divider.
+Every group field here is option-typed, so every divider title is a colored status badge — at both nesting depths. Per-group summaries sit at the right of each divider.
 
 | dark | light |
 |---|---|
@@ -343,7 +343,7 @@ Sources: `src/views/relation-value-renderer.ts`
 
 ### Status colour range
 
-Every select, status, multi-select and tag value in the plugin is a status-badge in one of these sixteen status-color-* variants, so this is the whole colour vocabulary in one shot. The multi-select remove buttons only become visible on hover.
+The strip is the whole colour vocabulary — every select, status, multi-select and tag value in the plugin is a status-badge in one of these sixteen status-color-* variants. The table below it is a normally configured schema, one tone per option value, which is what the renderer builds. The multi-select remove buttons only become visible on hover.
 
 | dark | light |
 |---|---|

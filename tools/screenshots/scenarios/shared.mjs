@@ -90,6 +90,28 @@ export const ICONS = {
    its own that no shipped rule would ever match. */
 export const pill = (text, tone) => `<span class="status-badge status-color-${tone}">${text}</span>`;
 
+/**
+ * One tone per option VALUE, the way a configured database assigns them.
+ *
+ * The renderer writes `status-color-${option.color}` from each option's own colour and falls back to
+ * grey only where none is set, so distinct values normally look distinct. These fixtures used to
+ * hand a whole column one tone — every payment grey, both billing values orange — and map three of
+ * the four categories onto a single green. That photographs a table where Yearly and Monthly are
+ * indistinguishable and three categories are the same chip, which is a picture of a "states with no
+ * visible difference" defect the product does not have.
+ *
+ * A value with no entry falls back to grey, which is exactly what the renderer does for an option
+ * whose colour was never chosen.
+ */
+export const OPTION_TONES = {
+  Yearly: "purple", Monthly: "cyan",
+  Revolut: "indigo", ING: "orange", Apple: "slate",
+  Design: "pink", Business: "blue", Infrastructure: "teal", Personal: "green",
+};
+
+export const optionTone = (value) => OPTION_TONES[value] || "gray";
+export const optionPill = (value) => pill(value, optionTone(value));
+
 
 /**
  * The checkbox markup the renderer actually produces.
@@ -152,10 +174,10 @@ export function tableRows() {
       <td class="db-select-col"><div class="db-select-inner">${rowCheckbox()}</div></td>
       <td>${r.name}</td>
       <td>${r.cost}</td>
-      <td>${pill(r.cycle, "orange")}</td>
-      <td>${pill(r.payment, "gray")}</td>
+      <td>${optionPill(r.cycle)}</td>
+      <td>${optionPill(r.payment)}</td>
       <td>${r.renew}</td>
-      <td>${pill(r.category, r.category === "Business" ? "blue" : "green")}</td>
+      <td>${optionPill(r.category)}</td>
     </tr>`).join("");
 }
 
@@ -195,37 +217,56 @@ export function boardColumn(title, rows) {
  * `db-list-group-header-label`, the gallery puts them straight on the header, and the board's
  * subgroup keeps its title and count in `db-board-header-text`.
  */
-export const listGroupHeader = (title, count) => `
+/**
+ * The group title, as `renderGroupLabel` builds it.
+ *
+ * All four grouped views route their header title through that one function, and it does NOT write
+ * the label as text: for a status, select or multi-select group field it nests a `.status-badge`
+ * inside the title span, coloured from the matching option and grey when no option matches. Only a
+ * non-option field and the empty "uncategorized" group get bare text.
+ *
+ * These helpers used to write bare text for every title, which meant the list, gallery and board
+ * group headers were photographed in a state the renderer only reaches when grouping by a date or a
+ * number — while the titles they were given ("Design", "Business", "Monthly") are all option values.
+ * A badge is taller and wider than the text it replaces, so that also mis-stated the header height
+ * every control in the row is aligned against.
+ *
+ * Passing no tone is still a legitimate picture: it is the non-option branch.
+ */
+const groupTitle = (cls, title, tone) =>
+  `<span class="${cls}">${tone ? pill(title, tone) : title}</span>`;
+
+export const listGroupHeader = (title, count, tone = OPTION_TONES[title]) => `
   <div class="db-list-group">
     <div class="db-list-group-header">
       <span class="db-list-group-header-label">
         ${collapseToggle("db-list-group-toggle")}
         ${rowCheckbox("db-list-group-checkbox")}
-        <span class="db-list-group-title">${title}</span>
+        ${groupTitle("db-list-group-title", title, tone)}
         <span class="db-list-group-count">${count}</span>
       </span>
       <button type="button" class="db-list-group-new">+ New</button>
     </div>
   </div>`;
 
-export const galleryGroupHeader = (title, count) => `
+export const galleryGroupHeader = (title, count, tone = OPTION_TONES[title]) => `
   <div class="db-gallery-group">
     <div class="db-gallery-group-header">
       ${collapseToggle("db-gallery-group-toggle")}
       ${rowCheckbox("db-gallery-group-checkbox")}
-      <span class="db-gallery-group-title">${title}</span>
+      ${groupTitle("db-gallery-group-title", title, tone)}
       <span class="db-gallery-group-count">${count}</span>
       <button type="button" class="db-gallery-group-new">+ New</button>
     </div>
   </div>`;
 
-export const boardSubgroupHeader = (title, count) => `
+export const boardSubgroupHeader = (title, count, tone = OPTION_TONES[title]) => `
   <div class="db-board-subgroup">
     <div class="db-board-subgroup-header">
       ${collapseToggle("db-board-subgroup-toggle")}
       ${rowCheckbox("db-board-subgroup-checkbox")}
       <div class="db-board-header-text">
-        <span class="db-board-subgroup-title">${title}</span>
+        ${groupTitle("db-board-subgroup-title", title, tone)}
         <span class="db-board-subgroup-count">${count}</span>
       </div>
     </div>

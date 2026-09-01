@@ -23,8 +23,8 @@
 // 1. IMPORTS
 // ───────────────────────────────────────────────────────────────────
 
-import { ROWS, ICONS, boardSubgroupHeader, dots, galleryGroupHeader, glyph, listGroupHeader,
-  pill, rowCheckbox } from "./shared.mjs";
+import { OPTION_TONES, ROWS, ICONS, boardSubgroupHeader, dots, galleryGroupHeader, glyph, listGroupHeader,
+  optionPill, pill, rowCheckbox } from "./shared.mjs";
 
 // ───────────────────────────────────────────────────────────────────
 // 2. ICONS
@@ -197,8 +197,8 @@ const fullRow = (r) => `
     ${utilityCell()}
     <td data-note-database-column-key="name">${r.name}</td>
     <td data-note-database-column-key="cost">${r.cost}</td>
-    <td data-note-database-column-key="billing">${pill(r.cycle, "orange")}</td>
-    <td data-note-database-column-key="payment">${pill(r.payment, "gray")}</td>
+    <td data-note-database-column-key="billing">${optionPill(r.cycle)}</td>
+    <td data-note-database-column-key="payment">${optionPill(r.payment)}</td>
     <td data-note-database-column-key="renew">${r.renew}</td>
     <td class="db-add-column-cell" aria-hidden="true"></td>
   </tr>`;
@@ -218,8 +218,11 @@ const footerCell = (key, values) => `
     </button>
   </td>`;
 
-/* `renderGroupLabel` puts a colored `.status-badge` inside the title span for option-typed
-   group fields, and plain text for everything else. Both are shown. */
+/* `renderGroupLabel` puts a colored `.status-badge` inside the title span for option-typed group
+   fields, and plain text only for a non-option field or the empty "uncategorized" group. The
+   subgroup here used to pass no tone and be described as the plain-text case, but it groups by
+   payment, which is option-typed — the renderer badges it. Passing "" still renders text, for
+   whenever a non-option group field is photographed; nothing does yet. */
 const groupDividerRow = (title, field, count, badgeTone, summaries, depth = 0) => `
   <tr class="db-group-divider-row db-group-header${depth ? ` db-group-header--depth-${depth}` : ""}"
     data-note-database-group-key="${title}" data-note-database-group-field="${field}"
@@ -522,7 +525,7 @@ export const CHROME_SCENARIOS = [
     group: "components",
     width: 1100,
     sources: ["src/views/group-label-renderer.ts", "src/views/table-renderer.ts", "src/views/summary-renderer.ts"],
-    note: "An option-typed group field renders its key as a colored status badge; a field with no options renders plain text, as the nested Revolut subgroup does. Per-group summaries sit at the right of each divider.",
+    note: "Every group field here is option-typed, so every divider title is a colored status badge — at both nesting depths. Per-group summaries sit at the right of each divider.",
     html: () => {
       const business = ROWS.filter((r) => r.category === "Business");
       const personal = ROWS.filter((r) => r.category === "Personal");
@@ -533,10 +536,10 @@ export const CHROME_SCENARIOS = [
             <table class="db-table" role="grid">
               ${fullHeader()}
               <tbody>
-                ${groupDividerRow("Business", "category", business.length, "blue", [["Cost Sum", "177,50"], ["Cost Average", "59,17"]])}
-                ${groupDividerRow("Revolut", "payment", business.length, "", [["Cost Sum", "177,50"]], 1)}
+                ${groupDividerRow("Business", "category", business.length, OPTION_TONES.Business, [["Cost Sum", "177,50"], ["Cost Average", "59,17"]])}
+                ${groupDividerRow("Revolut", "payment", business.length, OPTION_TONES.Revolut, [["Cost Sum", "177,50"]], 1)}
                 ${business.map(fullRow).join("")}
-                ${groupDividerRow("Personal", "category", personal.length, "green", [["Cost Sum", "14,25"], ["Cost Average", "7,13"]])}
+                ${groupDividerRow("Personal", "category", personal.length, OPTION_TONES.Personal, [["Cost Sum", "14,25"], ["Cost Average", "7,13"]])}
                 ${personal.map(fullRow).join("")}
               </tbody>
             </table>

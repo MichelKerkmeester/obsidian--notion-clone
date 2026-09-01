@@ -24,7 +24,7 @@
 // 1. IMPORTS
 // ───────────────────────────────────────────────────────────────────
 
-import { ROWS, fieldCheckbox, glyph, pill, rowCheckbox, tableHeader } from "./shared.mjs";
+import { ROWS, fieldCheckbox, glyph, optionPill, rowCheckbox, tableHeader } from "./shared.mjs";
 
 // ───────────────────────────────────────────────────────────────────
 // 2. ICONS
@@ -589,10 +589,10 @@ Cancel before the renewal date or it bills for another year. Support answer on w
               <td class="db-select-col"><div class="db-select-inner">${rowCheckbox()}</div></td>
               <td>${r.name}</td>
               <td>${r.cost}</td>
-              <td>${pill(r.cycle, "orange")}</td>
-              <td>${pill(r.payment, "gray")}</td>
+              <td>${optionPill(r.cycle)}</td>
+              <td>${optionPill(r.payment)}</td>
               <td>${r.renew}</td>
-              <td>${pill(r.category, r.category === "Business" ? "blue" : "green")}</td>
+              <td>${optionPill(r.category)}</td>
             </tr>`).join("")}</tbody>
         </table>
         <div class="db-record-peek-panel" role="dialog" aria-modal="true"

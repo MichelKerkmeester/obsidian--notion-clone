@@ -7,7 +7,7 @@
 // 1. IMPORTS
 // ───────────────────────────────────────────────────────────────────
 
-import { COLUMNS, ICONS, ROWS, boardColumn, dots, glyph, pill, rowCheckbox, tableHeader, tableRows } from "./shared.mjs";
+import { COLUMNS, ICONS, ROWS, boardColumn, dots, glyph, optionPill, rowCheckbox, tableHeader, tableRows } from "./shared.mjs";
 
 // ───────────────────────────────────────────────────────────────────
 // 2. SCENARIOS
@@ -262,9 +262,9 @@ export const CORE_SCENARIOS = [
           <button type="button" class="db-record-open-btn db-record-open-btn-icon" aria-label="Open">${openIcon}</button>
         </td>`;
       const dataCells = (r) => `
-        ${titleCell(r)}<td>${r.cost}</td><td>${pill(r.cycle, "orange")}</td>
-        <td>${pill(r.payment, "gray")}</td><td>${r.renew}</td>
-        <td>${pill(r.category, r.category === "Business" ? "blue" : "green")}</td>`;
+        ${titleCell(r)}<td>${r.cost}</td><td>${optionPill(r.cycle)}</td>
+        <td>${optionPill(r.payment)}</td><td>${r.renew}</td>
+        <td>${optionPill(r.category)}</td>`;
       const bodyRows = rows.map((r) => `
         <tr>
           <td class="db-select-col"><div class="db-select-inner">

@@ -22,7 +22,7 @@
 // 1. IMPORTS
 // ───────────────────────────────────────────────────────────────────
 
-import { ROWS, ICONS, dots, glyph, pill } from "./shared.mjs";
+import { ROWS, ICONS, dots, glyph, optionPill, optionTone, pill } from "./shared.mjs";
 
 // ───────────────────────────────────────────────────────────────────
 // 2. ICONS
@@ -256,7 +256,7 @@ export const FIELDS_SCENARIOS = [
           <thead><tr>${th("Name", "file-text")}${th("Category", "circle-dot")}</tr></thead>
           <tbody><tr>
             <td class="db-cell db-title-cell db-editable-cell"><a class="internal-link" href="#"><span class="db-file-title-inline"><span class="db-file-title-name">Adobe CC</span></span></a></td>
-            <td class="db-cell db-editable-cell db-cell-editing">${pill("Business", "blue")}</td>
+            <td class="db-cell db-editable-cell db-cell-editing">${optionPill("Business")}</td>
           </tr></tbody>
         </table>
 
@@ -553,7 +553,7 @@ export const FIELDS_SCENARIOS = [
           ${cell}
           <td class="db-cell db-title-cell db-editable-cell"><a class="internal-link" href="#"><span class="db-file-title-inline"><span class="db-file-title-name">${r.name}</span></span></a></td>
           <td class="db-cell db-editable-cell db-numeric-value">${r.cost}</td>
-          <td class="db-cell db-editable-cell">${pill(r.category, r.category === "Business" ? "blue" : "green")}</td>
+          <td class="db-cell db-editable-cell">${optionPill(r.category)}</td>
         </tr>`;
       const fileText = glyph('<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/>');
       return `
@@ -584,7 +584,16 @@ export const FIELDS_SCENARIOS = [
     group: "fields",
     width: 820,
     sources: ["src/data/status-colors.ts", "src/views/cell-renderer.ts"],
-    note: "Every select, status, multi-select and tag value in the plugin is a status-badge in one of these sixteen status-color-* variants, so this is the whole colour vocabulary in one shot. The multi-select remove buttons only become visible on hover.",
+    // Every badge fill in this vocabulary is `color-mix(<hue> 24%, transparent)`, so what a chip
+    // looks like is decided by what is behind it. Element captures use a transparent ground on
+    // purpose — a component that can sit on any background — but a translucent component cannot,
+    // and this one is captured to be looked at. Composited against nothing, the dark theme's pale
+    // foregrounds land on whatever the reader's image viewer paints, and on a white viewer the
+    // whole strip reads as illegible when in the product it is not. The surface the product always
+    // has behind these chips is `--background-primary`; supplying it here is what makes the
+    // capture answerable rather than a picture of the viewer.
+    captureCss: `.note-database-container { background: var(--background-primary); padding: 8px; }`,
+    note: "The strip is the whole colour vocabulary — every select, status, multi-select and tag value in the plugin is a status-badge in one of these sixteen status-color-* variants. The table below it is a normally configured schema, one tone per option value, which is what the renderer builds. The multi-select remove buttons only become visible on hover.",
     html: () => `
       <div class="note-database-container">
         <div class="db-multi-select-values">
@@ -593,13 +602,13 @@ export const FIELDS_SCENARIOS = [
         <table class="db-table">
           <thead><tr>${th("Name", "file-text")}${th("Billing", "circle-dot")}${th("Payment", "circle-dot")}${th("Category", "circle-dot")}</tr></thead>
           <tbody>
-            ${ROWS.map((r, i) => `
+            ${ROWS.map((r) => `
             <tr>
               <td class="db-cell db-title-cell"><a class="internal-link" href="#"><span class="db-file-title-inline"><span class="db-file-title-name">${r.name}</span></span></a></td>
-              <td class="db-cell">${pill(r.cycle, r.cycle === "Yearly" ? "indigo" : "cyan")}</td>
-              <td class="db-cell">${pill(r.payment, COLORS[(i * 3 + 5) % COLORS.length])}</td>
+              <td class="db-cell">${optionPill(r.cycle)}</td>
+              <td class="db-cell">${optionPill(r.payment)}</td>
               <td class="db-cell"><div class="db-multi-select-values">
-                <span class="status-badge db-multi-select-badge status-color-${r.category === "Business" ? "blue" : "green"}">
+                <span class="status-badge db-multi-select-badge status-color-${optionTone(r.category)}">
                   <span class="db-multi-select-label">${r.category}</span>
                   <button type="button" class="db-multi-select-remove" aria-label="Remove ${r.category}">×</button>
                 </span>

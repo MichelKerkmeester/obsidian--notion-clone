@@ -10,9 +10,9 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/020-harness-fidelity-repair"
-    last_updated_at: "2026-08-30T21:00:00Z"
-    last_updated_by: "harness-supply-audit"
-    recent_action: "Supply audit: 2 of the 63 lifted checks set --keyboard-height themselves"
+    last_updated_at: "2026-09-01T18:40:00Z"
+    last_updated_by: "option-tone-divergence"
+    recent_action: "Option-tone divergence closed; gate lane 25 added"
     next_safe_action: "Add a placement check that never sets --keyboard-height, so the fallback can fail"
     blockers: []
     key_files:
@@ -89,6 +89,9 @@ own content is `022`'s, the `create|render` filter is `025`'s.
 - [x] Orphaned probe checks in the shared harness: **0 of 63** -> **63**; placement **114 -> 177**.
 - [x] Every product defect these instruments revealed is fixed or recorded with its number and
       owner: **0 dropped**.
+- [x] A fixture cannot paint two distinct option values as one chip, or an option-typed group title
+      as bare text: **5 files flattening 3 columns, 3 helpers writing bare text** -> **0**, guarded as
+      gate lane 25 with all three rules observed red.
 - [ ] The operator signs off the two new modal fixtures, per image.
 <!-- /ANCHOR:completion -->
 

@@ -675,7 +675,7 @@
         "src/views/table-renderer.ts",
         "src/views/summary-renderer.ts"
       ],
-      "layoutHash": "dcb748ca4513",
+      "layoutHash": "1058ed4f019a",
       "sourceHashes": {
         "src/views/group-label-renderer.ts": "3fee8449607c",
         "src/views/table-renderer.ts": "2044cea151d8",
@@ -686,9 +686,9 @@
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "f334950d918a"
       },
-      "note": "An option-typed group field renders its key as a colored status badge; a field with no options renders plain text, as the nested Revolut subgroup does. Per-group summaries sit at the right of each divider.",
+      "note": "Every group field here is option-typed, so every divider title is a colored status badge — at both nesting depths. Per-group summaries sit at the right of each divider.",
       "capture": "element",
-      "bytes": 26798
+      "bytes": 27740
     },
     {
       "id": "chrome-group-header-row",
@@ -702,7 +702,7 @@
         "src/views/table-renderer.ts",
         "src/views/summary-renderer.ts"
       ],
-      "layoutHash": "dcb748ca4513",
+      "layoutHash": "1058ed4f019a",
       "sourceHashes": {
         "src/views/group-label-renderer.ts": "3fee8449607c",
         "src/views/table-renderer.ts": "2044cea151d8",
@@ -713,9 +713,9 @@
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "f334950d918a"
       },
-      "note": "An option-typed group field renders its key as a colored status badge; a field with no options renders plain text, as the nested Revolut subgroup does. Per-group summaries sit at the right of each divider.",
+      "note": "Every group field here is option-typed, so every divider title is a colored status badge — at both nesting depths. Per-group summaries sit at the right of each divider.",
       "capture": "element",
-      "bytes": 25881
+      "bytes": 26442
     },
     {
       "id": "chrome-group-header-row",
@@ -729,7 +729,7 @@
         "src/views/table-renderer.ts",
         "src/views/summary-renderer.ts"
       ],
-      "layoutHash": "1088dc430045",
+      "layoutHash": "0db42fbae511",
       "sourceHashes": {
         "src/views/group-label-renderer.ts": "3fee8449607c",
         "src/views/table-renderer.ts": "2044cea151d8",
@@ -740,9 +740,9 @@
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "f334950d918a"
       },
-      "note": "An option-typed group field renders its key as a colored status badge; a field with no options renders plain text, as the nested Revolut subgroup does. Per-group summaries sit at the right of each divider.",
+      "note": "Every group field here is option-typed, so every divider title is a colored status badge — at both nesting depths. Per-group summaries sit at the right of each divider.",
       "capture": "element",
-      "bytes": 101442
+      "bytes": 101544
     },
     {
       "id": "chrome-group-header-row",
@@ -756,7 +756,7 @@
         "src/views/table-renderer.ts",
         "src/views/summary-renderer.ts"
       ],
-      "layoutHash": "1088dc430045",
+      "layoutHash": "0db42fbae511",
       "sourceHashes": {
         "src/views/group-label-renderer.ts": "3fee8449607c",
         "src/views/table-renderer.ts": "2044cea151d8",
@@ -767,9 +767,9 @@
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "f334950d918a"
       },
-      "note": "An option-typed group field renders its key as a colored status badge; a field with no options renders plain text, as the nested Revolut subgroup does. Per-group summaries sit at the right of each divider.",
+      "note": "Every group field here is option-typed, so every divider title is a colored status badge — at both nesting depths. Per-group summaries sit at the right of each divider.",
       "capture": "element",
-      "bytes": 98729
+      "bytes": 99380
     },
     {
       "id": "chrome-group-selection-controls",
@@ -783,7 +783,7 @@
         "src/views/gallery-renderer.ts",
         "src/views/board-renderer.ts"
       ],
-      "layoutHash": "3a3ff7624ac2",
+      "layoutHash": "b5475805db61",
       "sourceHashes": {
         "src/views/list-renderer.ts": "722b433d196c",
         "src/views/gallery-renderer.ts": "c7d6e9216f39",
@@ -796,7 +796,7 @@
       },
       "note": "The whole-group selection box from the list, the gallery and a board subgroup. One role, so all three boxes must be the same size and radius.",
       "capture": "element",
-      "bytes": 16166
+      "bytes": 19160
     },
     {
       "id": "chrome-group-selection-controls",
@@ -810,7 +810,7 @@
         "src/views/gallery-renderer.ts",
         "src/views/board-renderer.ts"
       ],
-      "layoutHash": "3a3ff7624ac2",
+      "layoutHash": "b5475805db61",
       "sourceHashes": {
         "src/views/list-renderer.ts": "722b433d196c",
         "src/views/gallery-renderer.ts": "c7d6e9216f39",
@@ -823,7 +823,7 @@
       },
       "note": "The whole-group selection box from the list, the gallery and a board subgroup. One role, so all three boxes must be the same size and radius.",
       "capture": "element",
-      "bytes": 16525
+      "bytes": 18273
     },
     {
       "id": "chrome-group-selection-controls",
@@ -837,7 +837,7 @@
         "src/views/gallery-renderer.ts",
         "src/views/board-renderer.ts"
       ],
-      "layoutHash": "c5ee3528b5f7",
+      "layoutHash": "f5596e514d12",
       "sourceHashes": {
         "src/views/list-renderer.ts": "722b433d196c",
         "src/views/gallery-renderer.ts": "c7d6e9216f39",
@@ -850,7 +850,7 @@
       },
       "note": "The whole-group selection box from the list, the gallery and a board subgroup. One role, so all three boxes must be the same size and radius.",
       "capture": "element",
-      "bytes": 15214
+      "bytes": 17823
     },
     {
       "id": "chrome-group-selection-controls",
@@ -864,7 +864,7 @@
         "src/views/gallery-renderer.ts",
         "src/views/board-renderer.ts"
       ],
-      "layoutHash": "c5ee3528b5f7",
+      "layoutHash": "f5596e514d12",
       "sourceHashes": {
         "src/views/list-renderer.ts": "722b433d196c",
         "src/views/gallery-renderer.ts": "c7d6e9216f39",
@@ -877,7 +877,7 @@
       },
       "note": "The whole-group selection box from the list, the gallery and a board subgroup. One role, so all three boxes must be the same size and radius.",
       "capture": "element",
-      "bytes": 15548
+      "bytes": 17298
     },
     {
       "id": "chrome-owned-menu",
@@ -1282,7 +1282,7 @@
         "src/views/table-footer-renderer.ts",
         "src/views/table-renderer.ts"
       ],
-      "layoutHash": "855b802022af",
+      "layoutHash": "ac1889ad8394",
       "sourceHashes": {
         "src/views/table-footer-renderer.ts": "2a076187efd5",
         "src/views/table-renderer.ts": "2044cea151d8",
@@ -1294,7 +1294,7 @@
       },
       "note": "A column with summary rules stacks each kind over its result; a column without one shows a + Calculate hint that the stylesheet keeps at zero opacity until the trigger is hovered, so it is invisible here by design.",
       "capture": "element",
-      "bytes": 418571
+      "bytes": 414493
     },
     {
       "id": "chrome-table-footer",
@@ -1307,7 +1307,7 @@
         "src/views/table-footer-renderer.ts",
         "src/views/table-renderer.ts"
       ],
-      "layoutHash": "855b802022af",
+      "layoutHash": "ac1889ad8394",
       "sourceHashes": {
         "src/views/table-footer-renderer.ts": "2a076187efd5",
         "src/views/table-renderer.ts": "2044cea151d8",
@@ -1319,7 +1319,7 @@
       },
       "note": "A column with summary rules stacks each kind over its result; a column without one shows a + Calculate hint that the stylesheet keeps at zero opacity until the trigger is hovered, so it is invisible here by design.",
       "capture": "element",
-      "bytes": 402151
+      "bytes": 403247
     },
     {
       "id": "chrome-table-footer",
@@ -1332,7 +1332,7 @@
         "src/views/table-footer-renderer.ts",
         "src/views/table-renderer.ts"
       ],
-      "layoutHash": "ceed7e9d54d9",
+      "layoutHash": "89473acf95e6",
       "sourceHashes": {
         "src/views/table-footer-renderer.ts": "2a076187efd5",
         "src/views/table-renderer.ts": "2044cea151d8",
@@ -1357,7 +1357,7 @@
         "src/views/table-footer-renderer.ts",
         "src/views/table-renderer.ts"
       ],
-      "layoutHash": "ceed7e9d54d9",
+      "layoutHash": "89473acf95e6",
       "sourceHashes": {
         "src/views/table-footer-renderer.ts": "2a076187efd5",
         "src/views/table-renderer.ts": "2044cea151d8",
@@ -3003,7 +3003,7 @@
         "src/views/table-renderer.ts",
         "src/data/record-icon.ts"
       ],
-      "layoutHash": "362b9ec65f32",
+      "layoutHash": "be8d752d3f91",
       "sourceHashes": {
         "src/views/record-icon-renderer.ts": "3d90a87b2a0b",
         "src/views/table-renderer.ts": "2044cea151d8",
@@ -3016,7 +3016,7 @@
       },
       "note": "The table puts record icons in a 28px gutter column of their own, whose header is blank so the first property header can borrow the width. An unparsed token falls back to file-text and is-default; a lucide token carries db-record-icon-color-*; an emoji token renders through db-record-icon-emoji.",
       "capture": "element",
-      "bytes": 53827
+      "bytes": 53596
     },
     {
       "id": "field-record-icon",
@@ -3030,7 +3030,7 @@
         "src/views/table-renderer.ts",
         "src/data/record-icon.ts"
       ],
-      "layoutHash": "362b9ec65f32",
+      "layoutHash": "be8d752d3f91",
       "sourceHashes": {
         "src/views/record-icon-renderer.ts": "3d90a87b2a0b",
         "src/views/table-renderer.ts": "2044cea151d8",
@@ -3043,7 +3043,7 @@
       },
       "note": "The table puts record icons in a 28px gutter column of their own, whose header is blank so the first property header can borrow the width. An unparsed token falls back to file-text and is-default; a lucide token carries db-record-icon-color-*; an emoji token renders through db-record-icon-emoji.",
       "capture": "element",
-      "bytes": 52372
+      "bytes": 52467
     },
     {
       "id": "field-record-icon",
@@ -3057,7 +3057,7 @@
         "src/views/table-renderer.ts",
         "src/data/record-icon.ts"
       ],
-      "layoutHash": "14a9ef880f3c",
+      "layoutHash": "ea7d1407b21d",
       "sourceHashes": {
         "src/views/record-icon-renderer.ts": "3d90a87b2a0b",
         "src/views/table-renderer.ts": "2044cea151d8",
@@ -3070,7 +3070,7 @@
       },
       "note": "The table puts record icons in a 28px gutter column of their own, whose header is blank so the first property header can borrow the width. An unparsed token falls back to file-text and is-default; a lucide token carries db-record-icon-color-*; an emoji token renders through db-record-icon-emoji.",
       "capture": "element",
-      "bytes": 52782
+      "bytes": 52453
     },
     {
       "id": "field-record-icon",
@@ -3084,7 +3084,7 @@
         "src/views/table-renderer.ts",
         "src/data/record-icon.ts"
       ],
-      "layoutHash": "14a9ef880f3c",
+      "layoutHash": "ea7d1407b21d",
       "sourceHashes": {
         "src/views/record-icon-renderer.ts": "3d90a87b2a0b",
         "src/views/table-renderer.ts": "2044cea151d8",
@@ -3097,7 +3097,7 @@
       },
       "note": "The table puts record icons in a 28px gutter column of their own, whose header is blank so the first property header can borrow the width. An unparsed token falls back to file-text and is-default; a lucide token carries db-record-icon-color-*; an emoji token renders through db-record-icon-emoji.",
       "capture": "element",
-      "bytes": 51475
+      "bytes": 51607
     },
     {
       "id": "field-relation-values",
@@ -3202,7 +3202,7 @@
         "src/data/status-colors.ts",
         "src/views/cell-renderer.ts"
       ],
-      "layoutHash": "0f7ec1787f06",
+      "layoutHash": "fc1438c16348",
       "sourceHashes": {
         "src/data/status-colors.ts": "954425583842",
         "src/views/cell-renderer.ts": "6b23762ee384",
@@ -3212,9 +3212,9 @@
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "f334950d918a"
       },
-      "note": "Every select, status, multi-select and tag value in the plugin is a status-badge in one of these sixteen status-color-* variants, so this is the whole colour vocabulary in one shot. The multi-select remove buttons only become visible on hover.",
+      "note": "The strip is the whole colour vocabulary — every select, status, multi-select and tag value in the plugin is a status-badge in one of these sixteen status-color-* variants. The table below it is a normally configured schema, one tone per option value, which is what the renderer builds. The multi-select remove buttons only become visible on hover.",
       "capture": "element",
-      "bytes": 352417
+      "bytes": 350033
     },
     {
       "id": "field-status-colors",
@@ -3227,7 +3227,7 @@
         "src/data/status-colors.ts",
         "src/views/cell-renderer.ts"
       ],
-      "layoutHash": "0f7ec1787f06",
+      "layoutHash": "fc1438c16348",
       "sourceHashes": {
         "src/data/status-colors.ts": "954425583842",
         "src/views/cell-renderer.ts": "6b23762ee384",
@@ -3237,9 +3237,9 @@
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "f334950d918a"
       },
-      "note": "Every select, status, multi-select and tag value in the plugin is a status-badge in one of these sixteen status-color-* variants, so this is the whole colour vocabulary in one shot. The multi-select remove buttons only become visible on hover.",
+      "note": "The strip is the whole colour vocabulary — every select, status, multi-select and tag value in the plugin is a status-badge in one of these sixteen status-color-* variants. The table below it is a normally configured schema, one tone per option value, which is what the renderer builds. The multi-select remove buttons only become visible on hover.",
       "capture": "element",
-      "bytes": 329536
+      "bytes": 328717
     },
     {
       "id": "field-status-colors",
@@ -3252,7 +3252,7 @@
         "src/data/status-colors.ts",
         "src/views/cell-renderer.ts"
       ],
-      "layoutHash": "32d2fd8bf560",
+      "layoutHash": "660cedf5a0f2",
       "sourceHashes": {
         "src/data/status-colors.ts": "954425583842",
         "src/views/cell-renderer.ts": "6b23762ee384",
@@ -3262,9 +3262,9 @@
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "f334950d918a"
       },
-      "note": "Every select, status, multi-select and tag value in the plugin is a status-badge in one of these sixteen status-color-* variants, so this is the whole colour vocabulary in one shot. The multi-select remove buttons only become visible on hover.",
+      "note": "The strip is the whole colour vocabulary — every select, status, multi-select and tag value in the plugin is a status-badge in one of these sixteen status-color-* variants. The table below it is a normally configured schema, one tone per option value, which is what the renderer builds. The multi-select remove buttons only become visible on hover.",
       "capture": "element",
-      "bytes": 189925
+      "bytes": 184668
     },
     {
       "id": "field-status-colors",
@@ -3277,7 +3277,7 @@
         "src/data/status-colors.ts",
         "src/views/cell-renderer.ts"
       ],
-      "layoutHash": "32d2fd8bf560",
+      "layoutHash": "660cedf5a0f2",
       "sourceHashes": {
         "src/data/status-colors.ts": "954425583842",
         "src/views/cell-renderer.ts": "6b23762ee384",
@@ -3287,9 +3287,9 @@
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "f334950d918a"
       },
-      "note": "Every select, status, multi-select and tag value in the plugin is a status-badge in one of these sixteen status-color-* variants, so this is the whole colour vocabulary in one shot. The multi-select remove buttons only become visible on hover.",
+      "note": "The strip is the whole colour vocabulary — every select, status, multi-select and tag value in the plugin is a status-badge in one of these sixteen status-color-* variants. The table below it is a normally configured schema, one tone per option value, which is what the renderer builds. The multi-select remove buttons only become visible on hover.",
       "capture": "element",
-      "bytes": 181422
+      "bytes": 178123
     },
     {
       "id": "panel-column-manager",
@@ -4026,7 +4026,7 @@
         "src/views/table-record-peek.ts",
         "src/views/table-renderer.ts"
       ],
-      "layoutHash": "2cf9561e9ecb",
+      "layoutHash": "bd765e468644",
       "sourceHashes": {
         "src/views/table-record-peek.ts": "ca49c8ce6aab",
         "src/views/table-renderer.ts": "2044cea151d8",
@@ -4038,7 +4038,7 @@
       },
       "note": "Docks against the right edge of the table it was opened from. Values are display-only text, and properties hidden from the table sit behind the disclosure.",
       "capture": "element",
-      "bytes": 387130
+      "bytes": 382296
     },
     {
       "id": "panel-record-peek",
@@ -4051,7 +4051,7 @@
         "src/views/table-record-peek.ts",
         "src/views/table-renderer.ts"
       ],
-      "layoutHash": "2cf9561e9ecb",
+      "layoutHash": "bd765e468644",
       "sourceHashes": {
         "src/views/table-record-peek.ts": "ca49c8ce6aab",
         "src/views/table-renderer.ts": "2044cea151d8",
@@ -4063,7 +4063,7 @@
       },
       "note": "Docks against the right edge of the table it was opened from. Values are display-only text, and properties hidden from the table sit behind the disclosure.",
       "capture": "element",
-      "bytes": 369911
+      "bytes": 370755
     },
     {
       "id": "panel-record-peek",
@@ -4076,7 +4076,7 @@
         "src/views/table-record-peek.ts",
         "src/views/table-renderer.ts"
       ],
-      "layoutHash": "e78a5ab225cc",
+      "layoutHash": "0c23dd051db4",
       "sourceHashes": {
         "src/views/table-record-peek.ts": "ca49c8ce6aab",
         "src/views/table-renderer.ts": "2044cea151d8",
@@ -4101,7 +4101,7 @@
         "src/views/table-record-peek.ts",
         "src/views/table-renderer.ts"
       ],
-      "layoutHash": "e78a5ab225cc",
+      "layoutHash": "0c23dd051db4",
       "sourceHashes": {
         "src/views/table-record-peek.ts": "ca49c8ce6aab",
         "src/views/table-renderer.ts": "2044cea151d8",
@@ -4874,7 +4874,7 @@
       },
       "note": "Multi-day all-day bars, timed events, an overflow week and one event carried across the week boundary.",
       "capture": "viewport",
-      "bytes": 86697
+      "bytes": 87137
     },
     {
       "id": "calendar-month-view",
@@ -5499,7 +5499,7 @@
         "src/views/table-record-peek.ts",
         "styles.css"
       ],
-      "layoutHash": "220c077fa070",
+      "layoutHash": "6b9ed8c27896",
       "sourceHashes": {
         "src/views/table-renderer.ts": "2044cea151d8",
         "src/views/table-column-layout-sync.ts": "a678b28c2bf2",
@@ -5515,7 +5515,7 @@
       },
       "note": "The full table the renderer builds: a select gutter, a record-icon gutter and a runtime <colgroup> of fixed px widths. On desktop those widths hold; on the phone (is-phone) the columns auto-fit to content and the select column is no longer clipped by the scroll-area fade mask. The name column is the title cell — a content-sized link plus the always-visible open affordance, rendered on touch as a compact maximize icon so its width goes to the note name instead of a text label.",
       "capture": "viewport",
-      "bytes": 206621
+      "bytes": 205380
     },
     {
       "id": "table-mobile",
@@ -5533,7 +5533,7 @@
         "src/views/table-record-peek.ts",
         "styles.css"
       ],
-      "layoutHash": "220c077fa070",
+      "layoutHash": "6b9ed8c27896",
       "sourceHashes": {
         "src/views/table-renderer.ts": "2044cea151d8",
         "src/views/table-column-layout-sync.ts": "a678b28c2bf2",
@@ -5549,7 +5549,7 @@
       },
       "note": "The full table the renderer builds: a select gutter, a record-icon gutter and a runtime <colgroup> of fixed px widths. On desktop those widths hold; on the phone (is-phone) the columns auto-fit to content and the select column is no longer clipped by the scroll-area fade mask. The name column is the title cell — a content-sized link plus the always-visible open affordance, rendered on touch as a compact maximize icon so its width goes to the note name instead of a text label.",
       "capture": "viewport",
-      "bytes": 199695
+      "bytes": 199902
     },
     {
       "id": "table-mobile",
@@ -5567,7 +5567,7 @@
         "src/views/table-record-peek.ts",
         "styles.css"
       ],
-      "layoutHash": "50f1941fbfb9",
+      "layoutHash": "8c0db149b67b",
       "sourceHashes": {
         "src/views/table-renderer.ts": "2044cea151d8",
         "src/views/table-column-layout-sync.ts": "a678b28c2bf2",
@@ -5601,7 +5601,7 @@
         "src/views/table-record-peek.ts",
         "styles.css"
       ],
-      "layoutHash": "50f1941fbfb9",
+      "layoutHash": "8c0db149b67b",
       "sourceHashes": {
         "src/views/table-renderer.ts": "2044cea151d8",
         "src/views/table-column-layout-sync.ts": "a678b28c2bf2",
@@ -5631,7 +5631,7 @@
         "src/views/column-header-controller.ts",
         "src/views/cell-renderer.ts"
       ],
-      "layoutHash": "b518b455de1a",
+      "layoutHash": "2dd0c14be836",
       "sourceHashes": {
         "src/views/table-renderer.ts": "2044cea151d8",
         "src/views/column-header-controller.ts": "7714b894b5b0",
@@ -5644,7 +5644,7 @@
       },
       "note": null,
       "capture": "viewport",
-      "bytes": 475527
+      "bytes": 471059
     },
     {
       "id": "table-view",
@@ -5658,7 +5658,7 @@
         "src/views/column-header-controller.ts",
         "src/views/cell-renderer.ts"
       ],
-      "layoutHash": "b518b455de1a",
+      "layoutHash": "2dd0c14be836",
       "sourceHashes": {
         "src/views/table-renderer.ts": "2044cea151d8",
         "src/views/column-header-controller.ts": "7714b894b5b0",
@@ -5671,7 +5671,7 @@
       },
       "note": null,
       "capture": "viewport",
-      "bytes": 452164
+      "bytes": 452121
     },
     {
       "id": "table-view",
@@ -5685,7 +5685,7 @@
         "src/views/column-header-controller.ts",
         "src/views/cell-renderer.ts"
       ],
-      "layoutHash": "e391620af1de",
+      "layoutHash": "82f67d364703",
       "sourceHashes": {
         "src/views/table-renderer.ts": "2044cea151d8",
         "src/views/column-header-controller.ts": "7714b894b5b0",
@@ -5712,7 +5712,7 @@
         "src/views/column-header-controller.ts",
         "src/views/cell-renderer.ts"
       ],
-      "layoutHash": "e391620af1de",
+      "layoutHash": "82f67d364703",
       "sourceHashes": {
         "src/views/table-renderer.ts": "2044cea151d8",
         "src/views/column-header-controller.ts": "7714b894b5b0",
