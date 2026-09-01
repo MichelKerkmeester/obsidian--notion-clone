@@ -581,7 +581,7 @@
       "sources": [
         "src/views/chart-toolbar-renderer.ts"
       ],
-      "layoutHash": "5fc4ac8b29e8",
+      "layoutHash": "95d60bda22a1",
       "sourceHashes": {
         "src/views/chart-toolbar-renderer.ts": "f69b96f55d80",
         "styles.css": "13860e4b908a",
@@ -592,7 +592,7 @@
       },
       "note": "What the chart view uses instead of a toolbar of its own: the chart-options button in the toolbar opens this panel. Every row is a 18px/1fr/16px grid, so selects, switches, drill-in entries and export buttons line up on one set of columns.",
       "capture": "element",
-      "bytes": 70672
+      "bytes": 89007
     },
     {
       "id": "chrome-chart-options-popover",
@@ -604,7 +604,7 @@
       "sources": [
         "src/views/chart-toolbar-renderer.ts"
       ],
-      "layoutHash": "5fc4ac8b29e8",
+      "layoutHash": "95d60bda22a1",
       "sourceHashes": {
         "src/views/chart-toolbar-renderer.ts": "f69b96f55d80",
         "styles.css": "13860e4b908a",
@@ -615,7 +615,7 @@
       },
       "note": "What the chart view uses instead of a toolbar of its own: the chart-options button in the toolbar opens this panel. Every row is a 18px/1fr/16px grid, so selects, switches, drill-in entries and export buttons line up on one set of columns.",
       "capture": "element",
-      "bytes": 71089
+      "bytes": 89716
     },
     {
       "id": "chrome-chart-options-popover",
@@ -627,7 +627,7 @@
       "sources": [
         "src/views/chart-toolbar-renderer.ts"
       ],
-      "layoutHash": "30ed67541f94",
+      "layoutHash": "134d3dd840f2",
       "sourceHashes": {
         "src/views/chart-toolbar-renderer.ts": "f69b96f55d80",
         "styles.css": "13860e4b908a",
@@ -638,7 +638,7 @@
       },
       "note": "What the chart view uses instead of a toolbar of its own: the chart-options button in the toolbar opens this panel. Every row is a 18px/1fr/16px grid, so selects, switches, drill-in entries and export buttons line up on one set of columns.",
       "capture": "element",
-      "bytes": 64198
+      "bytes": 81771
     },
     {
       "id": "chrome-chart-options-popover",
@@ -650,7 +650,7 @@
       "sources": [
         "src/views/chart-toolbar-renderer.ts"
       ],
-      "layoutHash": "30ed67541f94",
+      "layoutHash": "134d3dd840f2",
       "sourceHashes": {
         "src/views/chart-toolbar-renderer.ts": "f69b96f55d80",
         "styles.css": "13860e4b908a",
@@ -661,7 +661,7 @@
       },
       "note": "What the chart view uses instead of a toolbar of its own: the chart-options button in the toolbar opens this panel. Every row is a 18px/1fr/16px grid, so selects, switches, drill-in entries and export buttons line up on one set of columns.",
       "capture": "element",
-      "bytes": 64573
+      "bytes": 82457
     },
     {
       "id": "chrome-group-header-row",
@@ -4780,7 +4780,7 @@
       },
       "note": "Days with events carry a short accent underline; the visible week reads as the selected pill run.",
       "capture": "viewport",
-      "bytes": 42401
+      "bytes": 42427
     },
     {
       "id": "calendar-mini-calendar",
@@ -4828,7 +4828,7 @@
       },
       "note": "Multi-day all-day bars, timed events, an overflow week and one event carried across the week boundary.",
       "capture": "viewport",
-      "bytes": 130108
+      "bytes": 129143
     },
     {
       "id": "calendar-month-view",
@@ -4851,7 +4851,7 @@
       },
       "note": "Multi-day all-day bars, timed events, an overflow week and one event carried across the week boundary.",
       "capture": "viewport",
-      "bytes": 132656
+      "bytes": 132404
     },
     {
       "id": "calendar-month-view",
@@ -4897,7 +4897,7 @@
       },
       "note": "Multi-day all-day bars, timed events, an overflow week and one event carried across the week boundary.",
       "capture": "viewport",
-      "bytes": 88453
+      "bytes": 88121
     },
     {
       "id": "calendar-toolbar-options",
@@ -5848,7 +5848,7 @@
       },
       "note": "Two weeks at one column per day; the April band marks the month boundary and the today line sits at 25 March 13:45.",
       "capture": "viewport",
-      "bytes": 147239
+      "bytes": 146959
     },
     {
       "id": "timeline-view",
@@ -5871,7 +5871,7 @@
       },
       "note": "Two weeks at one column per day; the April band marks the month boundary and the today line sits at 25 March 13:45.",
       "capture": "viewport",
-      "bytes": 151947
+      "bytes": 152396
     },
     {
       "id": "timeline-view",

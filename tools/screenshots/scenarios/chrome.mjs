@@ -257,8 +257,13 @@ const IN_FLOW_PANEL = `position: static !important; top: auto !important; right:
   left: auto !important; max-height: none !important;`;
 
 const chartOptionsRow = {
+  // `has-current-icon` is not decoration: the row is a three-column grid and the stylesheet hides
+  // `.db-dropdown-field-icon` without it. A hidden element is not a grid item, so every remaining
+  // child shifts one column left — the label lands in the 18px icon track and the chevron takes the
+  // 458px text track. The renderer sets this class whenever an icon exists, and a fixture that
+  // supplies the icon without the class photographs a row the plugin never draws.
   select: (label, value, icon) => `
-    <button type="button" class="db-dropdown-field db-chart-options-row db-chart-options-select-row"
+    <button type="button" class="db-dropdown-field db-chart-options-row db-chart-options-select-row${icon ? " has-current-icon" : ""}"
       aria-haspopup="listbox" aria-expanded="false">
       <span class="db-dropdown-field-icon">${icon}</span>
       <div class="db-dropdown-field-text">

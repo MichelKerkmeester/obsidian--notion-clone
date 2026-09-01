@@ -8805,6 +8805,8 @@ await section("the select column is as wide as what it draws", async () => {
 const fixtureTableResults = [];
 let titleLinksChecked = 0;
 const bareTitleOffenders = [];
+let dropdownFieldsChecked = 0;
+const iconlessOffenders = [];
 
 await section("every fixture table has as many cells as it has headers", async () => {
   const page = await browser.newPage({ viewport: VIEWPORT, reducedMotion: "reduce" });
@@ -8862,13 +8864,33 @@ await section("every fixture table has as many cells as it has headers", async (
           text: (link.textContent || "").trim().replace(/\s+/g, " ").slice(0, 40),
         });
       }
-      return { rows, tables, bareTitles, titleLinks: document.querySelectorAll(".db-title-cell a.internal-link").length };
+      // An icon supplied without the class that reveals it.
+      //
+      // The renderer sets `has-current-icon` whenever an icon exists. Without it the stylesheet
+      // hides `.db-dropdown-field-icon`, and a hidden element is not a grid item — so on a
+      // three-column row every remaining child shifts one track left, the label lands in the icon's
+      // 18px column and the chevron takes the label's. Five rows of one popover rendered as single
+      // clipped glyphs that way, and four captures of it were kept as though that were the surface.
+      const iconlessRows = [];
+      for (const field of document.querySelectorAll(".db-dropdown-field")) {
+        const icon = field.querySelector(".db-dropdown-field-icon");
+        if (!icon || !icon.children.length) continue;
+        if (field.classList.contains("has-current-icon")) continue;
+        iconlessRows.push({ scenario: id, text: (field.textContent || "").trim().replace(/\s+/g, " ").slice(0, 34) });
+      }
+      return {
+        rows, tables, bareTitles, iconlessRows,
+        titleLinks: document.querySelectorAll(".db-title-cell a.internal-link").length,
+        dropdownFields: document.querySelectorAll(".db-dropdown-field").length,
+      };
     }, scenario.id);
 
     tablesChecked += found.tables;
     offenders.push(...found.rows);
     titleLinksChecked += found.titleLinks;
     bareTitleOffenders.push(...found.bareTitles);
+    dropdownFieldsChecked += found.dropdownFields;
+    iconlessOffenders.push(...found.iconlessRows);
   }
 
   await page.close();
@@ -8890,6 +8912,16 @@ await section("every fixture table has as many cells as it has headers", async (
         : "")
       + `. The ellipsis lives on that inner span, so a bare-text anchor hard-clips a long name at the `
       + `cell wall and the capture then shows a truncation the plugin does not produce`);
+
+  record("a fixture dropdown that supplies an icon also says it has one",
+    dropdownFieldsChecked > 0 && iconlessOffenders.length === 0,
+    `${dropdownFieldsChecked} dropdown field(s) across the fixture set; ${iconlessOffenders.length} carry `
+      + `icon markup without has-current-icon`
+      + (iconlessOffenders.length
+        ? `: ${[...new Set(iconlessOffenders.map((o) => o.scenario))].join(", ")}`
+        : "")
+      + `. The stylesheet hides the icon without that class, and a hidden element leaves the grid, so `
+      + `every later child slides one track left and the label ends up in the icon's column`);
 
   record("no fixture body row disagrees with its own header about the column count",
     offenders.length === 0,
