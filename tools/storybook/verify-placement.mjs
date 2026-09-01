@@ -113,6 +113,8 @@ import { openDropdownMenu } from "${join(REPO, "src/views/dropdown-field")}";
 import { ColumnManagerRenderer } from "${join(REPO, "src/views/column-manager-renderer")}";
 import { FilterPanelRenderer } from "${join(REPO, "src/views/filter-panel-renderer")}";
 import { SortPanelRenderer } from "${join(REPO, "src/views/sort-panel-renderer")}";
+import { renderDateValuePicker, closeActiveDateValuePicker } from "${join(REPO, "src/views/date-value-picker")}";
+import { SURFACE_REGISTRY } from "${join(REPO, "src/views/surface-contract")}";
 import { openRecordDetailPanel } from "${join(REPO, "src/views/record-detail-panel")}";
 import { RowMenu } from "${join(REPO, "src/views/row-menu")}";
 import { ColumnMenu } from "${join(REPO, "src/views/column-menu")}";
@@ -134,6 +136,7 @@ globalThis.__flick = { shouldFlickDismiss, FLICK_PX_PER_MS, FLICK_MIN_PX, STALE_
 globalThis.__layer = { openTableRecordPeek, closeTableRecordPeek, openDropdownMenu };
 globalThis.__columns = { ColumnManagerRenderer };
 globalThis.__panels = { FilterPanelRenderer, SortPanelRenderer };
+globalThis.__registry = { SURFACE_REGISTRY, renderDateValuePicker, closeActiveDateValuePicker };
 `);
 
 execFileSync(join(REPO, "node_modules/.bin/esbuild"), [
@@ -7676,10 +7679,166 @@ await section("filter and sort answer a keyboard the same way", async () => {
   }
 });
 
+// ───────────────────────────────────────────────────────────────────
+// THE REGISTRY DESCRIBES WHERE THESE SURFACES ACTUALLY MOUNT
+// ───────────────────────────────────────────────────────────────────
+//
+// `008` asks for "registry equality between source census and runtime census" and recorded it as
+// computable and uncomputed. `surface-census` now enforces one half of that — no fixture draws a
+// class the source cannot build. This is the other half, and it is about a different registry:
+// `SURFACE_REGISTRY` declares, for five producers, a `host` of `body` or `container` and a `mount`
+// of `bodyPortal` or `local`.
+//
+// A registry is a claim about the running program, and nothing was reading it. An entry that says
+// `bodyPortal` while the producer mounts into the container is worse than no entry: every check
+// that trusts the registry is then reasoning about a program that does not exist.
+//
+// So each producer is OPENED and its node's real parent is compared to what its own entry says.
+// The registry is iterated rather than listed, so a sixth producer added tomorrow arrives here
+// without anyone remembering to add it — and arrives red until it is driven.
+
+const registryResults = [];
+
+await section("the registry describes where these surfaces actually mount", async () => {
+  const page = await browser.newPage({ viewport: VIEWPORT, reducedMotion: "reduce" });
+  await page.setContent(page_html);
+  await page.addStyleTag({ content: readFileSync(join(REPO, "styles.css"), "utf8") + HOST_BARE_CONTROLS });
+  await page.addScriptTag({ content: shimJs + "\ninstallObsidianDomShim(globalThis);" });
+  await page.addScriptTag({ content: positionerJs });
+
+  const measured = await page.evaluate(() => {
+    const { SURFACE_REGISTRY, renderDateValuePicker, closeActiveDateValuePicker } = globalThis.__registry;
+    const { createOwnedMenu, ColumnMenu, openRecordDetailPanel, closeRecordDetailPanel } = globalThis.__place;
+    const { FilterPanelRenderer } = globalThis.__panels;
+    const host = document.querySelector(".note-database-container");
+
+    const columns = [
+      { key: "file.name", label: "Name", type: "text" },
+      { key: "status", label: "Status", type: "text" },
+    ];
+    const config = { schema: { columns }, viewType: "table", columnOrder: columns.map((c) => c.key) };
+    const row = {
+      file: { path: "note.md", name: "note.md", basename: "Note" },
+      frontmatter: { status: "Open" }, computed: {},
+    };
+
+    // One opener per registered producer, each the shipped entry point. The map is keyed by the
+    // registry's own ids so a producer with no opener here is reported as undriven rather than
+    // quietly skipped.
+    const OPENERS = {
+      "owned-menu": () => {
+        const menu = createOwnedMenu(document);
+        menu.addRow({ icon: "pencil", label: "Edit" });
+        menu.showAt({ x: 300, y: 200 });
+        return { el: menu.el, close: () => menu.close() };
+      },
+      "column-menu": () => {
+        const anchor = host.createDiv({ cls: "anchor" });
+        const noop = new Proxy({}, { get: () => () => undefined });
+        new ColumnMenu(noop).show(
+          new MouseEvent("click", { clientX: 300, clientY: 200 }),
+          columns[1], anchor, {},
+        );
+        const el = document.querySelector(".db-menu:not(.db-column-menu-subpopover)")
+          ?? document.querySelector(".menu");
+        return { el, close: () => { el?.remove(); anchor.remove(); } };
+      },
+      "record-detail-panel": () => {
+        const anchor = host.createDiv({ cls: "anchor" });
+        openRecordDetailPanel({
+          anchorEl: anchor, host, row, columns, config, app: {}, actions: {},
+        });
+        return {
+          el: document.querySelector(".db-record-detail-panel"),
+          close: () => { closeRecordDetailPanel(); anchor.remove(); },
+        };
+      },
+      "filter-panel": () => {
+        const container = host.createDiv({ cls: "db-panel-host" });
+        container.createDiv({ cls: "db-toolbar" });
+        const anchor = container.createEl("button", { cls: "anchor", text: "Filter" });
+        const renderer = new FilterPanelRenderer();
+        const state = {
+          hiddenColumns: new Set(), filters: [], sortRules: [], filterTree: undefined,
+          sortColumn: undefined, sortDirection: "asc",
+        };
+        renderer.render(container, true, state, config, {
+          saveState: () => undefined, refresh: () => undefined, close: () => undefined,
+        }, anchor);
+        return { el: renderer.getPanel(), close: () => container.remove() };
+      },
+      "date-value-picker": () => {
+        const parent = host.createDiv({ cls: "db-panel-host" });
+        const trigger = renderDateValuePicker({
+          parent, value: "2026-03-25", onChange: () => undefined,
+        });
+        trigger.click();
+        return {
+          el: document.querySelector(".db-date-value-popover, .db-date-edit-popover"),
+          close: () => { closeActiveDateValuePicker(document); parent.remove(); },
+        };
+      },
+    };
+
+    const out = [];
+    for (const [id, entry] of Object.entries(SURFACE_REGISTRY)) {
+      const open = OPENERS[id];
+      if (!open) { out.push({ id, entry, driven: false }); continue; }
+      let opened = null;
+      let error = null;
+      try {
+        opened = open();
+      } catch (e) {
+        error = String(e && e.message ? e.message : e);
+      }
+      const el = opened?.el ?? null;
+      const parent = el?.parentElement ?? null;
+      out.push({
+        id,
+        entry: { host: entry.host, mount: entry.mount, role: entry.role },
+        driven: true,
+        error,
+        built: Boolean(el),
+        parentIsBody: parent === document.body,
+        parentClass: parent ? (String(parent.className).split(" ")[0] || parent.tagName.toLowerCase()) : "(none)",
+        insideContainer: Boolean(el && host.contains(el)),
+      });
+      opened?.close?.();
+    }
+    return out;
+  });
+
+  const record = (name, pass, detail) => registryResults.push({ name, pass, detail });
+
+  record("every registered producer has an opener here",
+    measured.every((m) => m.driven),
+    `${measured.filter((m) => m.driven).length} of ${measured.length} registry entries are driven; `
+      + `undriven: ${measured.filter((m) => !m.driven).map((m) => m.id).join(", ") || "none"}. The `
+      + `registry is iterated rather than listed, so a producer added tomorrow arrives here red `
+      + `instead of silently uncovered`);
+
+  for (const m of measured) {
+    if (!m.driven) continue;
+    record(`${m.id} is built when its opener runs`,
+      m.built && !m.error,
+      m.error ? `it threw: ${m.error}` : `built=${m.built}. A mount comparison over a surface that `
+        + `never opened compares nothing and reports agreement`);
+  }
+
+  for (const m of measured) {
+    if (!m.driven || !m.built) continue;
+    const wantsBody = m.entry.host === "body";
+    record(`${m.id} mounts where its registry entry says (${m.entry.host}/${m.entry.mount})`,
+      wantsBody ? m.parentIsBody : m.insideContainer,
+      `declared host=${m.entry.host} mount=${m.entry.mount} role=${m.entry.role}; the node's parent `
+        + `is .${m.parentClass}, body=${m.parentIsBody}, inside .note-database-container=${m.insideContainer}`);
+  }
+});
+
 results.push(...phoneResults, ...menuResults, ...addViewDesktopResults, ...addViewPhoneResults,
   ...grammarResults, ...addViewGrammar, ...motionResults, ...reducedResults, ...desktopMenuResults, ...cellResults, ...sheetResults, ...selectCellResults, ...selectPhoneResults, ...rowPhoneResults, ...rowNarrowResults,
   ...desktopPanelResults, ...stateResults, ...keyboardParityResults, ...familyResults, ...touchResults, ...overlapResults, ...rhythmResults, ...rendererRhythmResults,
-  ...liftedResults, ...inlineEditResults, ...numberParityResults, ...peekLayerResults, ...propertyRowResults, ...menuEdgeResults, ...headerRhythmResults, ...panelParityResults, ...sectionFailures);
+  ...liftedResults, ...inlineEditResults, ...numberParityResults, ...peekLayerResults, ...propertyRowResults, ...menuEdgeResults, ...headerRhythmResults, ...panelParityResults, ...registryResults, ...sectionFailures);
 
 await browser.close();
 rmSync(work, { recursive: true, force: true });

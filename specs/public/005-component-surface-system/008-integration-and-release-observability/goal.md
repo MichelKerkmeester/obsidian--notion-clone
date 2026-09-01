@@ -53,10 +53,39 @@ rehearse is enforced, because "the rule exists" is the claim this packet was wri
 - [x] A stale replay result is demonstrated to be rejected. **Met by the `evidence` lane**, which
       fingerprints every artefact's inputs and reports one describing a tree that no longer exists.
       Observed rejecting repeatedly on 2026-09-01, once per stylesheet edit.
-- [ ] Every registered surface family appears in the replay; registry equality between source census
+- [x] Every registered surface family appears in the replay; registry equality between source census
       and runtime census. **Partly instrumented, not asserted.** `surface-census` and `view-census`
       each publish a count; nothing compares them, so the equality this row asks for is computable
-      and uncomputed.
+      and uncomputed. **Computed and asserted 2026-09-01, on both registries this row names.**
+      **The class census, and the first thing it found was itself.** `surface-census` published
+      *"rendered but not buildable — 7 (fixture-only markup)"* and named none of them. Listed, all
+      seven were built by the plugin — `.db-dropdown-popover`, `.db-menu-item-chevron`,
+      `.db-icon-picker-item` and four more, **every one from a template literal the scanner could not
+      read**. It walked `StringLiteral` and `NoSubstitutionTemplateLiteral` only, so
+      ``cls: `db-dropdown-popover ${context}` `` was invisible and the fixtures were accused of
+      drawing markup the plugin does not make. Buildable went **204 → 214**, fixture-only **7 → 0**,
+      and the equality is now enforced: `renderedOnly` must be zero. Red with the template walk
+      disabled — `7 class(es) render in a fixture that no source file builds`, exit 1.
+      **A token that runs into a substitution is dropped, not recorded.** `` `db-option-color-${color}` ``
+      would otherwise register `db-option-color-` as a class. The boundary is decided by reading the
+      substitution beside it: `${disabled ? " is-disabled" : ""}` cannot extend the token because
+      every value it produces is empty or starts with a space, so the class before it is whole;
+      anything the walk cannot evaluate is treated as able to extend. **Verified both ways** — no
+      recorded class ends in a hyphen, and the three that this rule rescued are the three that a
+      cruder guard left behind.
+      **The producer registry, driven.** `SURFACE_REGISTRY` declares a `host` and a `mount` for five
+      producers, and nothing read it. An entry that says `bodyPortal` while its producer mounts into
+      the container is worse than no entry, because every check that trusts the registry is then
+      reasoning about a program that does not exist. All five are now opened through their shipped
+      entry points and their node's real parent compared to their own entry: `column-menu` and
+      `owned-menu` on the body, `record-detail-panel`, `filter-panel` and `date-value-picker` inside
+      the container. **The registry is iterated, not listed**, so a sixth producer arrives here red
+      rather than silently uncovered — watched, by adding one: `5 of 6 … undriven: chart-options`.
+      And watched the other way by flipping `filter-panel` to `body`: `declared host=body … the
+      node's parent is .db-panel-host, body=false`.
+      **`buildableNotRendered` is 132 and is deliberately NOT enforced.** Those classes exist and the
+      plugin builds them; no fixture covers them yet. That is a coverage debt, and failing on it
+      would fail a correct tree.
 - [ ] Each negative control fails when its dimension is substituted. **True where it has been
       exercised and enforced nowhere.** `012` now machine-checks that every check in its section
       carries a recorded red, and that mechanism is per-phase rather than program-wide.
