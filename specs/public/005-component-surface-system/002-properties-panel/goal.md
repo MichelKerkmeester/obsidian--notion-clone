@@ -95,7 +95,26 @@ evidence in this folder or in a lane.*
       unwired: three of four.
       **What is still not closed here:** AC-009's mutation trace and AC-010's rename and reorder
       deltas. This row asked about delete, and delete is what was driven.
-- [ ] Plus the five stateful dimensions. **No mapping exists** for this packet.
+- [x] Plus the five stateful dimensions. **No mapping exists** for this packet. **Mapped 2026-09-01**,
+      in `acceptance-criteria.md` §2b — a dimension → criteria → evidence table covering all five, so
+      "covered" can be read off something instead of asserted.
+      **Three already had evidence** and now have a row naming it: semantic identity is the delete
+      that reaches the property its row names (`"Status [status]"` → handed `"status"`, red at
+      `"file.name"`), action outcome is the model delta a click produces rather than the call it
+      makes, and negative-control mutation is the four controls those rows already quote.
+      **Resource ownership had no measurement here, and building it nearly produced a false
+      defect.** The probe first reported **40 subscriptions outstanding after a close** — 4 per
+      render across window, document and `visualViewport`, ten renders deep — which reads exactly
+      like a leak. It is not one. The positioner releases itself when `schedule` finds its panel
+      disconnected, so **one window resize collects all 40**.
+      **A lazy release and a leak are indistinguishable until something fires**, so the check
+      dispatches the event rather than asserting absence — asserting zero between renders would fail
+      a correct implementation. Red with the self-release removed: `40 after a single window resize`.
+      A second row pins the accumulation at exactly `4 × 10`, because a render subscribing twice is
+      the one shape no amount of collecting takes back.
+      **Transition trace is a re-render, not a schema mutation.** AC-009's full trace — add, rename
+      and reorder with the panel open — and AC-010's rename and reorder deltas stay unmeasured, and
+      the mapping says so rather than counting delete for all of them.
 - [ ] The operator opens Properties on a phone and can read every property name. **Only the operator
       closes this.**
 **HARNESS DEPENDENCE, 2026-08-31 — 10 sound / 2 dependent / 0 unknown.** The panel came through well,

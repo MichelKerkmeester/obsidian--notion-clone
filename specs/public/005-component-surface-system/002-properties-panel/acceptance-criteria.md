@@ -319,6 +319,32 @@ predicted for every `styles.css` line number in the program; cite the selector p
 ---
 
 <!-- ANCHOR:closure -->
+## 2b. THE FIVE STATEFUL DIMENSIONS — 2026-09-01
+
+`000` asks every packet to map its criteria onto five dimensions, and this one carried none. The
+mapping comes first, because without it "covered" cannot be read off anything.
+
+| Dimension | Where this packet answers it | Evidence |
+|---|---|---|
+| **Semantic identity** | AC-008 — a driven action must reach the property the ROW names, never the one an index names | *the delete on a named row deletes the property that row names*: the row reads `"Status [status]"` and its delete was handed `"status"`, asserted by the column object the action received. Red with the delete pointed at `columns[0]`: `handed "file.name"` |
+| **Transition trace** | AC-009 — the panel re-rendered, then re-asked | *stale subscriptions are collected by the first event that would use them*: `0 before, 4 after one render, 40 after ten, 40 after the close, 0 after a single window resize`. Ten renders is the trace |
+| **Action outcome** | AC-005/AC-010 — the model delta a click produces, not the call it makes | `column-delete-confirmation.test.ts`: every branch interposes a confirmation, a refusal is a zero delta, consent deletes. Red twice — no question asked, and the property gone while its question was still on screen |
+| **Resource ownership** | *new here* — what the panel subscribes to and who takes it back | The positioner takes 4 subscriptions per render across three targets. Measured, not reasoned: **one window resize collects all 40**, so the accumulation between renders is deferred collection, not a leak. Red with the positioner's `!panel.isConnected` self-release removed: `40 after a single window resize` |
+| **Negative-control mutation** | Each row above names its own | Four controls quoted: the delete pointed at another column, the confirmation removed, the mutation moved ahead of the await, and the self-release removed |
+
+**One finding was withdrawn on measurement rather than published.** The resource-ownership probe first
+reported *40 subscriptions outstanding after a close* and that reads exactly like a leak. It is not:
+the positioner releases itself when `schedule` finds its panel disconnected, so a stale subscription
+is collected by the first event that would have used it. **A lazy release and a leak are
+indistinguishable until something fires**, which is why the check dispatches the event instead of
+asserting absence — asserting zero between renders would fail a correct implementation.
+
+**What the mapping does not claim.** AC-009's full trace (add, rename and reorder while the panel is
+open) and AC-010's rename and reorder deltas are still unmeasured. Delete is what was driven, and
+the transition trace here is a re-render rather than a schema mutation.
+
+---
+
 ## 3. CLOSURE STATEMENT
 
 **Closeable:** No

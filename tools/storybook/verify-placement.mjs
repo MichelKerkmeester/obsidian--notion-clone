@@ -8270,10 +8270,151 @@ await section("every fixture table has as many cells as it has headers", async (
         + `${o.bodyCells} ("${o.first}")`).join("; "));
 });
 
+// ───────────────────────────────────────────────────────────────────
+// THE PROPERTIES PANEL OWNS WHAT IT SUBSCRIBES
+// ───────────────────────────────────────────────────────────────────
+//
+// `002`'s five-dimension row says "No mapping exists for this packet", and of the five, RESOURCE
+// OWNERSHIP is the one nothing here had ever measured. `010` mapped the same dimension for the
+// record sheet and its first run found a real leak — `0 listeners before, 4 while open, 2 after` —
+// which is the reason to measure rather than reason.
+//
+// The column manager is the shape that makes this worth asking. It re-renders on every mutation:
+// adding a property, toggling one, reordering, deleting. Each render calls `positionToolbarPopover`,
+// which subscribes to window resize, document scroll and both `visualViewport` events, and each
+// render removes the previous panel node. A node removed is not a subscription released.
+//
+// So the question is not "does one render leak" but "does the tenth". A single open-and-close can
+// balance while a re-render path accumulates, and a panel a reader has poked at four times has
+// re-rendered four times.
+
+const panelOwnershipResults = [];
+
+await section("the properties panel owns what it subscribes", async () => {
+  const page = await browser.newPage({ viewport: VIEWPORT, reducedMotion: "reduce" });
+  await page.setContent(page_html);
+  await page.addStyleTag({ content: readFileSync(join(REPO, "styles.css"), "utf8") + HOST_BARE_CONTROLS });
+  await page.addScriptTag({ content: shimJs + "\ninstallObsidianDomShim(globalThis);" });
+  await page.addScriptTag({ content: positionerJs });
+
+  const measured = await page.evaluate(async () => {
+    const { ColumnManagerRenderer } = globalThis.__columns;
+    const host = document.querySelector(".note-database-container");
+
+    // Count every window-level subscription the panel path can take, not only the viewport ones.
+    // `positionToolbarPopover` takes four across three targets, and counting one target would
+    // report a quarter of a leak as none.
+    const live = new Map();
+    const targets = [
+      ["window", window],
+      ["document", document],
+      ["visualViewport", window.visualViewport],
+    ].filter(([, t]) => t);
+    for (const [name, target] of targets) {
+      const add = target.addEventListener.bind(target);
+      const remove = target.removeEventListener.bind(target);
+      target.addEventListener = (type, fn, opts) => {
+        const key = `${name}:${type}`;
+        live.set(key, (live.get(key) || 0) + 1);
+        return add(type, fn, opts);
+      };
+      target.removeEventListener = (type, fn, opts) => {
+        const key = `${name}:${type}`;
+        const held = live.get(key) || 0;
+        if (held <= 1) live.delete(key); else live.set(key, held - 1);
+        return remove(type, fn, opts);
+      };
+    }
+    const outstanding = () => [...live.values()].reduce((a, b) => a + b, 0);
+
+    const columns = [
+      { key: "file.name", label: "Name", type: "text" },
+      { key: "status", label: "Status", type: "text" },
+      { key: "owner", label: "Owner", type: "text" },
+    ];
+    const config = { schema: { columns }, viewType: "table", columnOrder: columns.map((c) => c.key) };
+    const state = { hiddenColumns: new Set(), filters: [], sortRules: [], sortDirection: "asc" };
+    const actions = new Proxy({ isReadOnly: false }, {
+      get(target, key) {
+        if (key in target) return target[key];
+        if (typeof key === "symbol") return undefined;
+        return () => undefined;
+      },
+      has: () => true,
+    });
+
+    const container = host.createDiv({ cls: "db-cm-host" });
+    container.createDiv({ cls: "db-toolbar" });
+    const anchor = container.createEl("button", { cls: "anchor", text: "Properties" });
+    const renderer = new ColumnManagerRenderer();
+
+    const before = outstanding();
+    renderer.render(container, true, config, state, columns, actions, anchor);
+    const afterFirst = outstanding();
+
+    // Nine more renders, which is what toggling a few properties costs a reader.
+    for (let i = 0; i < 9; i += 1) {
+      renderer.render(container, true, config, state, columns, actions, anchor);
+    }
+    const afterTen = outstanding();
+
+    // And the close: `render(..., visible=false)` is how the panel is dismissed.
+    renderer.render(container, false, config, state, columns, actions, anchor);
+    await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
+    const afterClose = outstanding();
+    const nodesLeft = document.querySelectorAll(".db-column-manager").length;
+
+    // The positioner's `schedule` releases itself when it finds its panel disconnected — but only
+    // when an event arrives to run it. So the question is not whether the subscriptions exist after
+    // ten renders, it is whether they are still there after the first thing that would use them.
+    // A lazy release and a leak look identical until something fires.
+    window.dispatchEvent(new Event("resize"));
+    await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
+    const afterOneEvent = outstanding();
+
+    container.remove();
+    return {
+      before, afterFirst, afterTen, afterClose, afterOneEvent, nodesLeft,
+      perRender: afterFirst - before,
+      byKey: [...live.entries()].map(([k, n]) => `${k}=${n}`).join(", ") || "none",
+    };
+  });
+
+  const record = (name, pass, detail) => panelOwnershipResults.push({ name, pass, detail });
+  const m = measured;
+
+  record("opening the properties panel subscribes to something",
+    m.afterFirst > m.before,
+    `${m.before} subscription(s) before, ${m.afterFirst} after one render. A panel that subscribes `
+      + `to nothing makes every count below trivially balanced, so this is the premise rather than `
+      + `an aside`);
+
+  // STATED AS COLLECTION, NOT AS ABSENCE — because absence is not what this design promises.
+  //
+  // The positioner releases itself when `schedule` finds its panel disconnected, which means a
+  // stale subscription is collected by the first event that would have used it rather than at
+  // teardown. Asserting zero between renders would fail a correct implementation; asserting they
+  // never go would miss a real leak. What is asserted is that ONE event collects the lot.
+  record("stale subscriptions are collected by the first event that would use them",
+    m.afterOneEvent === m.before && m.nodesLeft === 0,
+    `${m.before} before, ${m.afterFirst} after one render, ${m.afterTen} after ten, `
+      + `${m.afterClose} after the close, and ${m.afterOneEvent} after a single window resize. `
+      + `${m.nodesLeft} panel node(s) remain. Outstanding by key at the close: ${m.byKey}. `
+      + `The positioner self-releases when it finds its panel disconnected, so the accumulation `
+      + `between renders is deferred collection rather than a leak — but only if an event actually `
+      + `collects it, which is what this measures instead of assuming`);
+
+  record("the accumulation between renders is bounded by the renders, not unbounded",
+    m.afterTen === m.afterFirst * 10,
+    `${m.afterFirst} per render and ${m.afterTen} after ten — exactly ten times, so each render `
+      + `subscribes once and nothing subscribes on its own. A number above this would mean a `
+      + `render subscribing more than once, which no event count would collect back`);
+});
+
 results.push(...phoneResults, ...menuResults, ...addViewDesktopResults, ...addViewPhoneResults,
   ...grammarResults, ...addViewGrammar, ...motionResults, ...reducedResults, ...desktopMenuResults, ...cellResults, ...sheetResults, ...selectCellResults, ...selectPhoneResults, ...rowPhoneResults, ...rowNarrowResults,
   ...desktopPanelResults, ...stateResults, ...keyboardParityResults, ...familyResults, ...touchResults, ...overlapResults, ...rhythmResults, ...rendererRhythmResults,
-  ...liftedResults, ...inlineEditResults, ...numberParityResults, ...peekLayerResults, ...propertyRowResults, ...menuEdgeResults, ...headerRhythmResults, ...panelParityResults, ...registryResults, ...flickResults, ...selectWidthResults, ...fixtureTableResults, ...sectionFailures);
+  ...liftedResults, ...inlineEditResults, ...numberParityResults, ...peekLayerResults, ...propertyRowResults, ...menuEdgeResults, ...headerRhythmResults, ...panelParityResults, ...registryResults, ...flickResults, ...selectWidthResults, ...fixtureTableResults, ...panelOwnershipResults, ...sectionFailures);
 
 await browser.close();
 rmSync(work, { recursive: true, force: true });
