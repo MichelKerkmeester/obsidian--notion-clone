@@ -8804,10 +8804,148 @@ await section("the list gives back its scroll listener on both paths", async () 
   }
 });
 
+// ───────────────────────────────────────────────────────────────────
+// CHOOSING A VIEW TYPE ASKS FOR THAT VIEW TYPE
+// ───────────────────────────────────────────────────────────────────
+//
+// `013`'s five-dimension row is unticked and the reason is visible in this file: every existing
+// add-view check drives the menu with `{ addView() {} }` — a no-op stub. They measure the surface's
+// layout, its row grammar, its width and its placement, and not one of them looks at what the menu
+// ASKS FOR when a row is pressed.
+//
+// That is the false-green shape `000`'s audit names by hand: "the action-outcome dimension here
+// drives `openRow` and `editCell`, which are no-op stubs — the same false green the title-cell tap
+// had." The add-view menu has it too.
+//
+// So every type row is pressed and the arguments `addView` received are read: the type, and the
+// form fields the row is supposed to carry with it. A menu that offered seven rows and asked for
+// "table" every time would pass every check this file already has.
+
+const addViewOutcomeResults = [];
+
+await section("choosing a view type asks for that view type", async () => {
+  const page = await browser.newPage({ viewport: VIEWPORT, reducedMotion: "reduce" });
+  await page.setContent(page_html);
+  await page.addStyleTag({ content: readFileSync(join(REPO, "styles.css"), "utf8") + HOST_BARE_CONTROLS });
+  await page.addScriptTag({ content: shimJs + "\ninstallObsidianDomShim(globalThis);" });
+  await page.addScriptTag({ content: positionerJs });
+
+  const measured = await page.evaluate(() => {
+    const { ToolbarRenderer } = globalThis.__place;
+    const host = document.querySelector(".note-database-container");
+
+    const db = {
+      schema: { columns: [
+        { key: "file.name", label: "Name" },
+        { key: "due", label: "Due" },
+      ] },
+      views: [{ viewType: "table", name: "All" }],
+    };
+
+    const asked = [];
+    const open = () => {
+      const anchor = host.createDiv({ cls: "anchor" });
+      new ToolbarRenderer().showAddViewMenu(
+        new MouseEvent("click"),
+        {
+          addView: (type, options) => asked.push({ type, options: options ?? null }),
+          closeToolbarPopovers: () => undefined,
+        },
+        anchor, db, 0,
+      );
+      return anchor;
+    };
+
+    // One press per row, each on a freshly opened menu — pressing a row closes the popover, so a
+    // single open cannot exercise the second row at all.
+    const anchor0 = open();
+    const panel = document.querySelector(".db-add-view-popover");
+    const labels = panel
+      ? [...panel.querySelectorAll(".db-add-view-choices .db-menu-item")]
+        .map((row) => (row.querySelector(".db-menu-item-label")?.textContent || "").trim())
+      : [];
+    anchor0.remove();
+    panel?.remove();
+
+    const pressed = [];
+    for (let i = 0; i < labels.length; i += 1) {
+      const anchor = open();
+      const menu = document.querySelector(".db-add-view-popover");
+      const rows = [...menu.querySelectorAll(".db-add-view-choices .db-menu-item")];
+      const before = asked.length;
+      // Name the view before pressing, so the options the row carries can be read too — a row that
+      // asks for the right TYPE and drops the form is still the wrong outcome.
+      const nameInput = menu.querySelector("input[type=text], .db-add-view-name input, input");
+      if (nameInput) nameInput.value = `View ${i}`;
+      rows[i].click();
+      const got = asked.slice(before)[0] ?? null;
+      pressed.push({
+        label: labels[i],
+        type: got?.type ?? "(nothing)",
+        name: got?.options?.name ?? "(none)",
+        duplicate: got?.options?.duplicateCurrent === true,
+        isDuplicateRow: rows[i].classList.contains("db-add-view-duplicate-action"),
+      });
+      anchor.remove();
+      document.querySelector(".db-add-view-popover")?.remove();
+    }
+
+    const typeRows = pressed.filter((p) => !p.isDuplicateRow);
+    return {
+      labels, pressed, typeRows,
+      duplicateRows: pressed.filter((p) => p.isDuplicateRow),
+      distinctTypes: [...new Set(typeRows.map((p) => p.type))].length,
+    };
+  });
+
+  const record = (name, pass, detail) => addViewOutcomeResults.push({ name, pass, detail });
+  const m = measured;
+
+  record("the add view menu offers more than one type row to press",
+    m.labels.length > 2,
+    `${m.labels.length} row(s) in the choices group: ${m.labels.join(", ") || "none"}. One row `
+      + `cannot show a menu that asks for the same type whatever is pressed`);
+
+  record("every row reached the action",
+    m.pressed.length > 0 && m.pressed.every((p) => p.type !== "(nothing)"),
+    m.pressed.map((p) => `${p.label} → ${p.type}`).join("; ")
+      + `. Existing add-view checks pass a no-op \`addView\`, so none of them can tell a wired row `
+      + `from a dead one`);
+
+  // THE DUPLICATE ROW IS NOT A SEVENTH TYPE, AND ASSERTING IT WAS FOUND A FAULT IN THE CHECK.
+  //
+  // The first version of this required all seven rows to ask for different types and reported
+  // `6 distinct type(s) from 7 row(s)` — because "Duplicate current view" correctly asks for the
+  // CURRENT view's type, which is `table` here, the same as the Table row. The product was right
+  // and the assertion was wrong. Splitting them is stronger than loosening the count: the six type
+  // rows must each ask for something different, and the duplicate row must ask for the current
+  // type WITH `duplicateCurrent`, which is what distinguishes it from a type row that shares a name.
+  record("each type row asks for a different type, so the menu is not answering with one answer",
+    m.distinctTypes === m.typeRows.length && m.typeRows.length > 2,
+    `${m.distinctTypes} distinct type(s) from ${m.typeRows.length} type row(s): `
+      + `${m.typeRows.map((p) => `${p.label} → ${p.type}`).join("; ")}. A menu wired to ask for `
+      + `"table" from every row passes every layout, grammar and placement check in this file`);
+
+  record("the duplicate row asks for the current view's type and says it is a duplicate",
+    m.duplicateRows.length === 1 && m.duplicateRows[0].type === "table"
+      && m.duplicateRows[0].duplicate === true
+      && m.typeRows.every((p) => p.duplicate === false),
+    `${m.duplicateRows.length} duplicate row(s): `
+      + `${m.duplicateRows.map((p) => `${p.label} → ${p.type}, duplicateCurrent=${p.duplicate}`).join("; ")}. `
+      + `The current view is a table, so its type matching the Table row is correct — the flag is `
+      + `what separates them, and the type rows all carry it false`);
+
+  record("the row carries the form's name with it, not only the type",
+    m.pressed.every((p, i) => p.name === `View ${i}`),
+    `names received: ${m.pressed.map((p) => p.name).join(", ")}. A row that asks for the right type `
+      + `and drops the name the operator just typed is still the wrong outcome, and a type-only `
+      + `assertion cannot see it`);
+});
+
 results.push(...phoneResults, ...menuResults, ...addViewDesktopResults, ...addViewPhoneResults,
   ...grammarResults, ...addViewGrammar, ...motionResults, ...reducedResults, ...desktopMenuResults, ...cellResults, ...sheetResults, ...selectCellResults, ...selectPhoneResults, ...rowPhoneResults, ...rowNarrowResults,
   ...desktopPanelResults, ...stateResults, ...keyboardParityResults, ...familyResults, ...touchResults, ...overlapResults, ...rhythmResults, ...rendererRhythmResults,
-  ...liftedResults, ...inlineEditResults, ...numberParityResults, ...peekLayerResults, ...propertyRowResults, ...menuEdgeResults, ...headerRhythmResults, ...panelParityResults, ...registryResults, ...flickResults, ...selectWidthResults, ...fixtureTableResults, ...panelOwnershipResults, ...peekOwnershipResults, ...checkboxIdentityResults, ...listOwnershipResults, ...sectionFailures);
+  ...liftedResults, ...inlineEditResults, ...numberParityResults, ...peekLayerResults, ...propertyRowResults, ...menuEdgeResults, ...headerRhythmResults, ...panelParityResults, ...registryResults, ...flickResults, ...selectWidthResults, ...fixtureTableResults, ...panelOwnershipResults, ...peekOwnershipResults, ...checkboxIdentityResults, ...listOwnershipResults, ...addViewOutcomeResults, ...sectionFailures);
 
 await browser.close();
 rmSync(work, { recursive: true, force: true });

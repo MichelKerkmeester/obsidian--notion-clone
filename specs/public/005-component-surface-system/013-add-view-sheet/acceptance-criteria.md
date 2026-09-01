@@ -212,6 +212,31 @@ next reader does not repeat the mistake.
 
 ---
 
+## 4b. THE FIVE STATEFUL DIMENSIONS — 2026-09-01
+
+| Dimension | Where this packet answers it | Evidence |
+|---|---|---|
+| **Semantic identity** | The row pressed is the type asked for | Six type rows driven, each asking for its own type; the duplicate row asks for the *current* type and carries `duplicateCurrent` |
+| **Transition trace** | Open → press → close, once per row | Pressing a row closes the popover, so each of the seven presses runs on a freshly opened menu. A single open cannot reach the second row at all |
+| **Action outcome** | *new here* — what `addView` was handed, not that it was called | `Table view → table; Board view → board; List view → list; Chart view → chart; Calendar view → calendar; Timeline view → timeline`, plus the form's name on each. Red with the type pinned: `1 distinct type(s) from 6 type row(s)`. Red with the name dropped: `(none)` six times |
+| **Resource ownership** | The popover's positioner subscription, shared with every panel | Covered by `005`'s measurement of the same positioner: ten renders add ten and release nine |
+| **Negative-control mutation** | The two controls above, plus this packet's existing grammar controls | Type pinned to `table`; name dropped from the options |
+
+**Every add-view check in this repository drove the menu with a no-op `addView`.** They measured
+layout, row grammar, width and placement — and not one could tell a wired row from a dead one. That
+is the false-green shape `000`'s audit names by hand for `openRow` and `editCell`; this surface had
+it too.
+
+**The duplicate row is not a seventh type, and asserting that it was found a fault in the check.**
+The first version required all seven rows to ask for different types and reported `6 distinct
+type(s) from 7 row(s)` — because "Duplicate current view" correctly asks for the CURRENT view's
+type, `table` here, the same as the Table row. **The product was right and the assertion was wrong.**
+Splitting them is stronger than loosening the count: the six type rows must each ask for something
+different, and the duplicate row must ask for the current type *with* `duplicateCurrent` — which is
+what separates it from a type row that happens to share a name.
+
+---
+
 ## 5. WHAT IS DELIBERATELY NOT DONE
 
 - **The tile border cannot reach 3:1 and is not being forced to.** Measured against the panel:

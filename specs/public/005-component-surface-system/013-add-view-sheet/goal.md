@@ -170,7 +170,27 @@ the sentence alone.
       drifted from the renderer's `aria-label` still satisfies. The added assertion is set equality
       between the accessible names the fixture markup resolves to and the names `showAddViewMenu`
       emits, 0 differing.
-- [ ] The five stateful dimensions are covered.
+- [x] The five stateful dimensions are covered. **Mapped 2026-09-01**, in
+      `acceptance-criteria.md` §4b, and **action outcome was the bare one for a reason worth naming.**
+      **Every add-view check in this repository drove the menu with a no-op `addView`.** They measure
+      layout, row grammar, width and placement — and not one could tell a wired row from a dead one.
+      That is the false-green shape `000`'s audit names by hand for `openRow` and `editCell`; this
+      surface had it too.
+      → *each type row asks for a different type*: `Table view → table; Board view → board; List
+      view → list; Chart view → chart; Calendar view → calendar; Timeline view → timeline`. Red with
+      the type pinned: `1 distinct type(s) from 6 type row(s)`.
+      → *the row carries the form's name with it, not only the type*: a row that asks for the right
+      type and drops the name the operator just typed is still the wrong outcome. Red with the name
+      dropped: `(none)` six times.
+      **Each press runs on a freshly opened menu**, because pressing a row closes the popover — a
+      single open cannot reach the second row at all, which is the transition trace this dimension
+      needs rather than an extra one.
+      **The duplicate row is not a seventh type, and asserting that it was found a fault in the
+      check.** The first version required all seven rows to differ and reported `6 distinct type(s)
+      from 7 row(s)` — because "Duplicate current view" correctly asks for the CURRENT view's type.
+      **The product was right and the assertion was wrong.** Splitting them is stronger than
+      loosening the count: the duplicate row must ask for the current type *with*
+      `duplicateCurrent`, which is what separates it from a type row sharing a name.
 
       Named in `000/goal.md` as semantic identity, transition trace, action outcome, resource
       ownership and negative-control mutation. Every Add View check in the captured run measures one
