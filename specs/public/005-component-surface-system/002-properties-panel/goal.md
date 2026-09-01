@@ -46,8 +46,25 @@ evidence in this folder or in a lane.*
       floors are `minmax(120px, 1fr)` and `minmax(96px, 1fr)` in the stylesheet.
       **The recorded 22px is optimistic and the packet says so:** the three `auto` action tracks are
       host-padded wider on a device, so the name is squeezed harder there, not less.
-- [ ] Panel height ≤ min(560px, 70% of visible bounds) at 40 properties. **Today the inline maxHeight
-      takes the full bounds.** **The clamp is in the stylesheet and no check asserts it at 40 rows.**
+- [x] Panel height ≤ min(560px, 70% of visible bounds) at 40 properties. **Today the inline maxHeight
+      takes the full bounds.** **Measured at 40 rows, 2026-09-01.**
+      → *a forty-property panel stays inside the cap its own criterion states*: `40 rows measure
+      380px against a cap of 517 = min(560, 70% of the 738px visible bounds) … the panel declares
+      max-height 380px and overflow-y auto, and its content wants 1296px — so what bounds it here is
+      the cap, with the rest scrolling`.
+      **Measured against the criterion's terms, not the stylesheet's.** The shipped rule caps at
+      `min(560px, 100vh - 140px)` — the VIEWPORT — while the criterion says 70% of the visible
+      bounds. They agree on a desktop and differ on a phone by the navbar and the safe-area inset,
+      which is the surface this was written about. Reading the rule back to itself would have proven
+      nothing; what keeps it inside is a separate phone rule capping at `min(380px, 100vh - 240px)`.
+      **Watched failing** by widening that phone cap to the desktop one: `40 rows measure 560px
+      against a cap of 517`.
+      **The first version of this check passed for the wrong reason and is worth recording.** It
+      built each row as a bare span and measured 40 rows at 380px — 9px a row, a height no property
+      panel has ever had — comfortably under a cap it was never near. That is the "the harness made
+      the content small" failure this packet's own audit names, reproduced while writing a check to
+      answer one of its criteria. The rows now carry the children the shipped one has, and the
+      content wants 1296px.
 - [ ] Delete is not a bare one-click target in the row's primary line. **No check.** This is
       information architecture rather than layout, and the packet's own summary records that half
       as not started.

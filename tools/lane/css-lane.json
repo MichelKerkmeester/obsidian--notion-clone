@@ -1,7 +1,7 @@
 {
   "holder": null,
-  "acquiredAt": "2026-09-01T04:45:00Z",
-  "baselineHash": "a4bb85a2e2ab",
+  "acquiredAt": "2026-09-01T05:25:00Z",
+  "baselineHash": "1ce52a63b090",
   "baselineCommit": "3990be47b525",
   "history": [
     {
@@ -694,6 +694,27 @@
       "at": "2026-09-01T04:45:00Z",
       "hash": "a4bb85a2e2ab",
       "note": "Recaptured and reviewed. A focus ring is a :focus-visible state and no capture holds focus, so no PNG moves for this edit and none did beyond the usual churn — which is itself worth stating rather than presenting an unchanged capture set as sign-off. The state pass is the evidence here, and it is in the tool rather than in a picture. Per-image operator sign-off still owed, as for every prior release."
+    },
+    {
+      "event": "acquire",
+      "phase": "006-record-open-target",
+      "at": "2026-09-01T05:10:00Z",
+      "hash": "a4bb85a2e2ab",
+      "note": "Taken for this packet's own criterion: 'on phone the action never produces a sub-half-height panel'. The cap had been asserted since 003; the floor never was, and a two-field record measured 189px on an 844px screen."
+    },
+    {
+      "event": "edit",
+      "phase": "006-record-open-target",
+      "at": "2026-09-01T05:12:00Z",
+      "hash": "1ce52a63b090",
+      "note": "One declaration: min-height: 50svh on .db-record-detail-panel.db-mobile-bottom-sheet. A MINIMUM rather than a fixed height, so a record with more in it still grows to content and still stops at the 90svh cap beside it; svh rather than vh because that is the unit the cap already uses and the two differ by the mobile browser chrome. Watched failing in BOTH directions: removed, the same record measures 145px; pinned to 100svh it measures 844 against a 760 cap. A floor-only check would have passed the second, which is the opposite defect and the one 003's cap exists to prevent."
+    },
+    {
+      "event": "release",
+      "phase": "006-record-open-target",
+      "at": "2026-09-01T05:25:00Z",
+      "hash": "1ce52a63b090",
+      "note": "Recaptured and reviewed; the record-detail sheet captures were opened and read at phone light and dark. A sparse record now fills half the screen rather than sitting as a strip at the bottom edge, and a full one is unchanged because the floor is a minimum. The empty space below a short record is the trade this makes and it is visible in the capture rather than argued for here. Per-image operator sign-off still owed."
     }
   ],
   "outstanding": [

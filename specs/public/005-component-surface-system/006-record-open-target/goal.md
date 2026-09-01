@@ -39,9 +39,22 @@ have a number are still open.*
       the record sheet survives a re-render with its node rebuilt and its identity intact, asserted
       by column key rather than by index, with a control that requires a different record to close
       the sheet rather than re-point it.
-- [ ] On phone the action never produces a sub-half-height panel. **Today: a 360px dock on a 402px
-      screen, and a 50vh detail panel.** **No check asserts the floor.** The sheet's cap is
-      asserted; its minimum is not.
+- [x] On phone the action never produces a sub-half-height panel. **Today: a 360px dock on a 402px
+      screen, and a 50vh detail panel.** **Floor declared and asserted 2026-09-01.**
+      **The measurement that started it:** the emptiest record the panel builds measured **145px on
+      an 844px screen — 17%** — and a two-field one 189px. A sliver a thumb has to aim at, with the
+      grab bar at the very bottom edge of the screen.
+      **`min-height: 50svh` on the phone record sheet.** A minimum rather than a fixed height, so a
+      record with more in it still grows to its content and still stops at the 90svh cap beside it;
+      `svh` because that is the unit the cap already uses and the two differ by the mobile browser
+      chrome.
+      → *a record sheet on a phone is at least half the screen and never more than the cap*: `1 field
+      row(s) … measures 422px on a 844px screen, against a floor of 422 and the 90svh cap at 760`.
+      **Both ends in one check, and watched failing at both.** With the floor removed the same record
+      measures 145px; pinned to `100svh` it measures 844 against a 760 cap. A floor-only check passes
+      the second, which is the opposite defect and the one `003`'s cap exists to prevent.
+      **The trade is visible rather than argued.** A short record now carries empty space below its
+      fields, where the note editor grows. The capture was recaptured and read.
 - [ ] The peek's layer sits inside the token scale; a dropdown opened inside it paints **above** it.
       **Today `998` beats popover and submenu.** **No check.**
 - [ ] The setting round-trips and **every** affordance honours it — no path bypasses the policy.

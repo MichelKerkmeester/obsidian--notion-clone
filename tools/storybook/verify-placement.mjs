@@ -3344,6 +3344,97 @@ const keyboardParityResults = await section("both sheet families under one keybo
   window.visualViewport.addEventListener = realVvAdd;
   window.visualViewport.removeEventListener = realVvRemove;
 
+  // ── A PANEL OF FORTY PROPERTIES STILL FITS THE SCREEN ──
+  //
+  // `002` states the cap as `min(560px, 70% of the visible bounds)` at 40 properties, and nothing
+  // asserted it at that count — the fixtures draw a handful of rows, and a handful fits any cap.
+  //
+  // 70% of the VISIBLE BOUNDS, not of the viewport: the two are the same number on a desktop and
+  // differ by the navbar and the safe-area inset on a phone, which is the surface the criterion was
+  // written about. The shipped rule caps at `min(560px, 100vh - 140px)`, which is the viewport, so
+  // the two agree on a desktop and can disagree here. Measuring against the criterion's own terms is
+  // the point; agreeing with the stylesheet would be reading the rule back to itself.
+  // The row is built with the children the shipped one has, not with a bare span. A first version
+  // put a text node in each row and measured 40 rows at 380px — 9px a row, a height no property
+  // panel has ever had — and passed comfortably under a cap it was never near. That is the "the
+  // harness made the content small" failure these packets' own audits keep naming, reproduced while
+  // writing a check to answer one of them.
+  const propsPanel = host.createDiv({ cls: "db-column-manager db-surface" });
+  for (let i = 0; i < 40; i += 1) {
+    const row = propsPanel.createDiv({ cls: "db-column-manager-row" });
+    row.createSpan({ cls: "db-column-drag", text: "⋮⋮" });
+    const box = row.createEl("input", { cls: "db-checkbox db-checkbox-field" });
+    box.type = "checkbox";
+    row.createSpan({ cls: "db-column-type", text: "T" });
+    row.createSpan({ cls: "db-column-name", text: `Property ${i}` });
+    for (const icon of ["wrap", "edit", "delete"]) {
+      row.createEl("button", { cls: "clickable-icon", text: icon[0] });
+    }
+  }
+  const propsRect = propsPanel.getBoundingClientRect();
+  const propsStyle = getComputedStyle(propsPanel);
+  const propsDeclaredCap = propsStyle.maxHeight;
+  const propsOverflow = propsStyle.overflowY;
+  const propsScroll = propsPanel.scrollHeight;
+  const visible = P.getVisiblePopoverBounds(null);
+  const propsCap = Math.min(560, visible.height * 0.7);
+  propsPanel.remove();
+
+  out.push({
+    name: "a forty-property panel stays inside the cap its own criterion states",
+    pass: propsRect.height <= propsCap + 1,
+    detail: `40 rows measure ${Math.round(propsRect.height)}px against a cap of`
+      + ` ${Math.round(propsCap)} = min(560, 70% of the ${Math.round(visible.height)}px visible`
+      + ` bounds). The shipped rule caps at min(560px, 100vh - 140px) — the VIEWPORT — so on a`
+      + ` desktop the two agree and on a phone they differ by the navbar and the safe-area inset,`
+      + ` which is the surface this criterion was written about.`
+      + ` The panel declares max-height ${propsDeclaredCap} and overflow-y ${propsOverflow}, and its`
+      + ` content wants ${propsScroll}px — so what bounds it here is`
+      + ` ${propsScroll > propsRect.height + 1 ? "the cap, with the rest scrolling" : "its own content"},`
+      + ` which is the distinction a height alone cannot report`,
+  });
+
+  // ── A SHEET IS A SURFACE, NOT A STRIP ──
+  //
+  // `006` asks that the action never produce a sub-half-height panel, and nothing asserted the
+  // floor — the cap was asserted from the start, the minimum never. A two-field record measured
+  // 189px on an 844px screen, 22%, which is a sliver a thumb has to aim at.
+  //
+  // Both ends in one check, deliberately. A floor alone passes on a sheet pinned to the full screen,
+  // which is the opposite defect and the one `003`'s cap exists to prevent; a cap alone is what has
+  // been here all along. The sparse record is the case that matters — a full one clears any floor by
+  // having content — so the check opens the emptiest record the panel will build.
+  const floorAnchor = host.createDiv({ cls: "anchor" });
+  floorAnchor.setCssProps({ position: "absolute", left: "40px", top: "40px" });
+  openRecordDetailPanel({
+    anchorEl: floorAnchor,
+    host,
+    row: { file: { path: "thin.md", basename: "Thin", name: "thin.md" }, frontmatter: { one: 1 }, computed: {} },
+    columns: [{ key: "file.name", label: "Name", type: "text" }, { key: "one", label: "One", type: "number" }],
+    config: { viewType: "table", schema: { computedFields: [] }, titleField: "file.name" },
+    app: {},
+    actions: { editCell: () => {}, openRow: () => {}, editFileName: () => {}, isReadOnly: false },
+  });
+  const thin = document.querySelector(".db-record-detail-panel");
+  const thinRect = thin.getBoundingClientRect();
+  const thinFields = thin.querySelectorAll(".db-record-detail-field").length;
+  const cap = window.innerHeight * 0.9;
+  closeRecordDetailPanel();
+  floorAnchor.remove();
+  await tick();
+
+  out.push({
+    name: "a record sheet on a phone is at least half the screen and never more than the cap",
+    pass: thinRect.height >= window.innerHeight / 2 - 1 && thinRect.height <= cap + 1,
+    detail: `the emptiest record the panel builds — ${thinFields} field row(s) — measures`
+      + ` ${Math.round(thinRect.height)}px on a ${window.innerHeight}px screen, against a floor of`
+      + ` ${Math.round(window.innerHeight / 2)} and the 90svh cap at ${Math.round(cap)}. The same`
+      + ` record measures 145px with the floor removed — 17% of the screen, a strip rather than a`
+      + ` surface; a two-field one measured 189px, which is where this started.`
+      + ` Both ends are asserted here because a floor alone passes on a sheet pinned to the full`
+      + ` screen, which is the opposite defect and the one the cap exists to prevent`,
+  });
+
   // ── NO SURFACE DEPENDS ON AN UNDECLARED PIGGYBACK ──
   //
   // `001` asks that removing any one class from a panel change a measured value. It is the strongest

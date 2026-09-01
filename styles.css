@@ -9463,6 +9463,16 @@ input[type="checkbox"].db-toggle-switch:disabled {
 }
 
 .db-record-detail-panel.db-mobile-bottom-sheet {
+  /* A sheet is a surface, not a strip. A two-field record measured 189px on an 844px screen — 22% —
+     which is a sliver a thumb has to aim at and a reader has to squint past to find the grab bar.
+     `006` states it as a criterion: the action never produces a sub-half-height panel.
+
+     A minimum rather than a fixed height, so a record with more in it still grows to its content and
+     still stops at the 90svh cap above. `svh` rather than `vh` because the two differ by the mobile
+     browser chrome, and this is the unit the cap beside it already uses — one unit for both ends of
+     the same range. */
+  min-height: 50svh;
+
   /* WCAG 2.5.5 target size, and the only value here that is not a step on the spacing scale. The
      neighbouring steps miss it in both directions: 32px is under the standard, 48px costs a row of
      content on every screen.
