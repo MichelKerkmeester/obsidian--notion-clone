@@ -8942,10 +8942,111 @@ await section("choosing a view type asks for that view type", async () => {
       + `assertion cannot see it`);
 });
 
+// ───────────────────────────────────────────────────────────────────
+// A TAP ON A FIELD EDITS THAT FIELD
+// ───────────────────────────────────────────────────────────────────
+//
+// `000`'s five-dimension row names its own gap: "the action-outcome dimension here drives `openRow`
+// and `editCell`, which are no-op stubs — the same false green the title-cell tap had."
+//
+// The record sheet has nine checks on its inline editor in this file. Every one is about GEOMETRY —
+// where the editor lands, whether it is an overlay, whether it clears the thumb floor, whether it
+// stays inside its row. Not one reads which COLUMN it opened for. A sheet that answered every tap
+// by editing the first field would pass all nine.
+//
+// So each field row is tapped in turn and the column `editCell` received is compared to the column
+// the row was drawn for. The row is identified by its own declared column key, never by its index,
+// because index-matching is the bug being looked for.
+
+const editOutcomeResults = [];
+
+await section("a tap on a field edits that field", async () => {
+  const page = await browser.newPage({
+    viewport: { width: 390, height: 844 }, hasTouch: true, isMobile: true, reducedMotion: "reduce",
+  });
+  await page.setContent(page_html.replace("<body>", phoneBody));
+  await page.addStyleTag({ content: readFileSync(join(REPO, "styles.css"), "utf8") + HOST_BARE_CONTROLS });
+  await page.addScriptTag({ content: shimJs + "\ninstallObsidianDomShim(globalThis);" });
+  await page.addScriptTag({ content: positionerJs });
+
+  const measured = await page.evaluate(() => {
+    const { openRecordDetailPanel, closeRecordDetailPanel } = globalThis.__edit;
+    const host = document.querySelector(".note-database-container");
+
+    const columns = [
+      { key: "file.name", label: "Name", type: "text" },
+      { key: "income", label: "Income", type: "number" },
+      { key: "expenses", label: "Expenses", type: "number" },
+      { key: "status", label: "Status", type: "text" },
+    ];
+    const row = {
+      file: { path: "note.md", name: "note.md", basename: "Note" },
+      frontmatter: { income: 100, expenses: 40, status: "Open" },
+      computed: {},
+    };
+
+    const edits = [];
+    const anchor = host.createDiv({ cls: "anchor" });
+    openRecordDetailPanel({
+      anchorEl: anchor, host, row, columns,
+      config: { viewType: "table", schema: { computedFields: [] }, titleField: "file.name" },
+      app: {},
+      actions: {
+        editCell: (target, editRow, col) => edits.push(col?.key ?? String(col)),
+        openRow: () => undefined,
+        editFileName: () => edits.push("file.name"),
+        isReadOnly: false,
+      },
+    });
+
+    const panel = document.querySelector(".db-record-detail-panel");
+    if (!panel) return { built: false, pairs: [] };
+
+    // Rows carry their own column key, so the pairing is by declaration and never by position.
+    const fieldRows = [...panel.querySelectorAll("[data-note-database-column-key]")];
+    const pairs = [];
+    for (const el of fieldRows) {
+      const declared = el.getAttribute("data-note-database-column-key");
+      const value = el.querySelector(".db-record-detail-value, .db-record-detail-field-value") ?? el;
+      const before = edits.length;
+      value.dispatchEvent(new MouseEvent("click", { bubbles: true, cancelable: true }));
+      pairs.push({ declared, received: edits.slice(before)[0] ?? "(nothing)" });
+    }
+
+    closeRecordDetailPanel();
+    anchor.remove();
+    return { built: true, pairs, rows: fieldRows.length };
+  });
+
+  const record = (name, pass, detail) => editOutcomeResults.push({ name, pass, detail });
+  const m = measured;
+  const reached = m.pairs.filter((p) => p.received !== "(nothing)");
+  const wrong = reached.filter((p) => p.declared !== p.received);
+
+  record("the sheet drew field rows carrying their own column key",
+    m.built && m.rows > 2,
+    `${m.rows} row(s) with a declared column key. Fewer than three cannot show a tap answering with `
+      + `its neighbour's column, and pairing by INDEX would hide exactly the bug this looks for`);
+
+  record("at least one tap reached the edit action",
+    reached.length > 0,
+    `${reached.length} of ${m.pairs.length} taps reached \`editCell\`: `
+      + `${m.pairs.map((p) => `${p.declared} → ${p.received}`).join("; ")}. The nine existing checks `
+      + `on this editor are all geometry and pass a no-op action, so none can tell a wired row `
+      + `from a dead one`);
+
+  record("every tap that reached the action edited the column its row declares",
+    reached.length > 0 && wrong.length === 0,
+    wrong.length === 0
+      ? `${reached.length} tap(s), each answering with its own column: `
+        + `${reached.map((p) => p.declared).join(", ")}`
+      : wrong.map((p) => `row declares ${p.declared} but edited ${p.received}`).join("; "));
+});
+
 results.push(...phoneResults, ...menuResults, ...addViewDesktopResults, ...addViewPhoneResults,
   ...grammarResults, ...addViewGrammar, ...motionResults, ...reducedResults, ...desktopMenuResults, ...cellResults, ...sheetResults, ...selectCellResults, ...selectPhoneResults, ...rowPhoneResults, ...rowNarrowResults,
   ...desktopPanelResults, ...stateResults, ...keyboardParityResults, ...familyResults, ...touchResults, ...overlapResults, ...rhythmResults, ...rendererRhythmResults,
-  ...liftedResults, ...inlineEditResults, ...numberParityResults, ...peekLayerResults, ...propertyRowResults, ...menuEdgeResults, ...headerRhythmResults, ...panelParityResults, ...registryResults, ...flickResults, ...selectWidthResults, ...fixtureTableResults, ...panelOwnershipResults, ...peekOwnershipResults, ...checkboxIdentityResults, ...listOwnershipResults, ...addViewOutcomeResults, ...sectionFailures);
+  ...liftedResults, ...inlineEditResults, ...numberParityResults, ...peekLayerResults, ...propertyRowResults, ...menuEdgeResults, ...headerRhythmResults, ...panelParityResults, ...registryResults, ...flickResults, ...selectWidthResults, ...fixtureTableResults, ...panelOwnershipResults, ...peekOwnershipResults, ...checkboxIdentityResults, ...listOwnershipResults, ...addViewOutcomeResults, ...editOutcomeResults, ...sectionFailures);
 
 await browser.close();
 rmSync(work, { recursive: true, force: true });

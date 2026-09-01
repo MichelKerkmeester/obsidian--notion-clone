@@ -65,10 +65,29 @@ than as unmeasured. That is the failure mode this packet exists to name, and it 
 - [ ] Paired with a negative control, for every criterion. **Same shape as the row above, and the
       same gap.** Building the controls found three checks that could not fail and two that passed
       on a defect, so the controls are load-bearing rather than ceremonial.
-- [ ] Plus the five stateful dimensions: semantic identity, transition trace, action outcome,
+- [x] Plus the five stateful dimensions: semantic identity, transition trace, action outcome,
       resource ownership, negative-control mutation. **Two packets have the mapping and this one
-      does not.** The audit also records that the **action-outcome** dimension here drives `openRow`
-      and `editCell`, which are no-op stubs — the same false green the title-cell tap had.
+      does not.** **Six do now, and this row's own named gap is closed — 2026-09-01.**
+      **The audit named the defect precisely:** *"the action-outcome dimension here drives `openRow`
+      and `editCell`, which are no-op stubs — the same false green the title-cell tap had."*
+      **The record sheet carries nine checks on its inline editor in `verify-placement.mjs`, and
+      every one is geometry** — where the editor lands, whether it is an overlay, whether it clears
+      the thumb floor, whether it stays inside its row. **Not one reads which COLUMN it opened for.**
+      A sheet answering every tap by editing the first field passes all nine.
+      → *every tap that reached the action edited the column its row declares*: `income → income;
+      expenses → expenses; status → status`. Rows are paired by their **declared column key, never
+      by index**, because index-matching is the bug being looked for.
+      **Watched red** with the panel reporting one column for every field: `row declares expenses
+      but edited income; row declares status but edited income`.
+      **A first control was discarded rather than recorded.** Pinning the call to `columns[1]` threw
+      — that binding is not in scope there — so the check went red because nothing reached the
+      action at all, which is a different failure from the one being demonstrated. `0 tap(s)` is not
+      evidence for a misrouting claim.
+      **Resource ownership, semantic identity and the two remaining dimensions** are mapped through
+      the packets that measure them — `002`'s subscription ledger, `004`'s per-row checkbox identity,
+      `005`'s scroll-listener ledger and `006`'s deferred-listener count — each of which this phase's
+      audit is the reason for.
+
 - [ ] **Plus the tenth condition: an instrument this phase did not repair.** **The audit says this is
       the row that holds**, and it is the only one in the program that can catch a supply nobody has
       named yet. It is left open because it is a standing condition rather than a state.
