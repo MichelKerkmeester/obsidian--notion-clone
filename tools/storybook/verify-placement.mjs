@@ -10477,6 +10477,50 @@ for (const name of [...PHASE_CONTROLS.keys()].filter((n) => !phaseChecks.some((r
   });
 }
 
+// ───────────────────────────────────────────────────────────────────
+// HOW MUCH OF THIS LANE HAS PROVENANCE, PROGRAM-WIDE
+// ───────────────────────────────────────────────────────────────────
+//
+// The block above enforces provenance for ONE section: every check attributed to that phase must
+// carry a red someone watched, and every recorded red must still belong to a live check. It is the
+// right mechanism and it covers a fraction of the lane.
+//
+// Making it literally program-wide would demand a recorded red for every check here, and most of
+// them never had one — they were written against correct code and never failed. Demanding a number
+// for those is demanding fiction, which is the mistake the failing-values baseline was created to
+// avoid and says so in its own reason field.
+//
+// So the program-wide form is a RATCHET over the same fact: how many of this lane's checks sit in a
+// section that carries provenance at all. It may not fall. A section that gains attribution raises
+// it; a rename that drops a check out of an attributed section lowers it and is refused. That turns
+// "enforced nowhere" into "enforced in one place and unable to shrink", which is what can honestly
+// be claimed without inventing reds nobody watched.
+const ATTRIBUTION_BASELINE = join(REPO, "tools/lane/control-attribution-baseline.json");
+const attributedNames = new Set(phaseChecks.map((r) => r.name));
+const attributedLive = results.filter((r) => attributedNames.has(r.name)).length;
+const attributionBaseline = existsSync(ATTRIBUTION_BASELINE)
+  ? JSON.parse(readFileSync(ATTRIBUTION_BASELINE, "utf8"))
+  : null;
+if (attributionBaseline && attributedLive < attributionBaseline.attributed) {
+  results.push({
+    name: "the lane's provenance coverage has not shrunk",
+    pass: false,
+    detail: `${attributedLive} check(s) sit in a section that records the red it was watched failing`
+      + ` at, against a recorded ${attributionBaseline.attributed}. Coverage fell, which means a`
+      + ` check left an attributed section — by a rename, a move or a deletion — and took its`
+      + ` provenance with it. The count may rise and may not fall.`,
+  });
+} else {
+  results.push({
+    name: "the lane's provenance coverage has not shrunk",
+    pass: true,
+    detail: `${attributedLive} of ${results.length} checks sit in a section that records a watched red,`
+      + ` against a recorded floor of ${attributionBaseline ? attributionBaseline.attributed : attributedLive}.`
+      + ` This is a ratchet rather than a target: most checks here were written against correct code`
+      + ` and never failed, and demanding a red for those would be demanding fiction`,
+  });
+}
+
 const failed = results.filter((r) => !r.pass);
 const unexpectedFail = failed.filter((r) => !KNOWN.has(r.name));
 const unexpectedPass = results.filter((r) => r.pass && KNOWN.has(r.name));

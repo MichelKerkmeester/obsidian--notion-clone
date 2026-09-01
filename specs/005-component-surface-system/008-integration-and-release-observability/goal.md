@@ -106,6 +106,22 @@ rehearse is enforced, because "the rule exists" is the claim this packet was wri
 - [ ] Each negative control fails when its dimension is substituted. **True where it has been
       exercised and enforced nowhere.** `012` now machine-checks that every check in its section
       carries a recorded red, and that mechanism is per-phase rather than program-wide.
+      **Enforcement now exists program-wide and the row still does not close, which is the honest
+      reading.** The placement lane carries a ratchet over provenance coverage: **12 of 384** checks
+      sit in a section that records the red it was watched failing at, and that number may rise and
+      may not fall. Control: dropping one check out of the attributed section takes it to 11 and the
+      lane red.
+
+      **Why a ratchet and not the row's literal demand.** Making it literal means a recorded red for
+      every check in the lane, and most were written against correct code and never failed. Demanding
+      a number for those is demanding fiction — the same mistake `failing-values` exists to avoid and
+      names in its own reason field. So what is enforced is that coverage cannot shrink, not that
+      every control has been substituted.
+
+      **This row stays open because 12 of 384 is not "each".** Ticking it would claim the program-wide
+      property the ratchet deliberately does not assert. What closes it is sections adopting
+      attribution until the count is the whole lane, and the ratchet is what makes that progress
+      one-way rather than a number someone re-reads.
 - [ ] No compatibility path removed without its agreements recorded. **No check.** The gallery
       deprecation is the live test of it: `030` records the decision and the undo, and nothing
       would have stopped a deletion that did not.

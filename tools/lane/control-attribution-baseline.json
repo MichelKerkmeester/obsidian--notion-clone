@@ -1,0 +1,6 @@
+{
+  "attributed": 12,
+  "total": 384,
+  "recorded": "2026-09-02",
+  "why": "Checks in this lane that sit in a section carrying provenance — one whose every check records the red it was watched failing at, and whose recorded reds are checked to still belong to live checks. It is a RATCHET, not a target. Most checks here were written against correct code and never failed; demanding a recorded red for those would be demanding fiction, which is the same mistake the failing-values baseline exists to avoid and says so in its own reason. The count may rise as sections adopt attribution and may not fall: a fall means a check left an attributed section by a rename, a move or a deletion, and took its provenance with it."
+}
