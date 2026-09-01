@@ -8809,6 +8809,8 @@ let dropdownFieldsChecked = 0;
 const iconlessOffenders = [];
 let menuRowsChecked = 0;
 const sharedGlyphOffenders = [];
+let listRowsChecked = 0;
+const flatListOffenders = [];
 
 await section("every fixture table has as many cells as it has headers", async () => {
   const page = await browser.newPage({ viewport: VIEWPORT, reducedMotion: "reduce" });
@@ -8914,8 +8916,20 @@ await section("every fixture table has as many cells as it has headers", async (
           sharedGlyphs.push({ scenario: id, labels: list.slice(0, 3) });
         }
       }
+      // A list row without the wrapper the renderer builds.
+      //
+      // `list-renderer` makes `controls` then a `db-list-row-main` holding the title and meta lines.
+      // A fixture that drops those in as bare siblings turns the row into a two-column auto grid,
+      // and the first column then sizes to whichever is wider — the controls, or the cost sitting
+      // underneath them. The title starts at a different x on almost every row as a result.
+      const flatListRows = [];
+      for (const row of document.querySelectorAll(".db-list-row")) {
+        if (row.querySelector(":scope > .db-list-row-main")) continue;
+        flatListRows.push({ scenario: id });
+      }
       return {
-        rows, tables, bareTitles, iconlessRows, sharedGlyphs,
+        rows, tables, bareTitles, iconlessRows, sharedGlyphs, flatListRows,
+        listRows: document.querySelectorAll(".db-list-row").length,
         menuRows: document.querySelectorAll(
           ".db-toolbar-utilities-popover .db-menu-item, .db-view-tab-popover .db-menu-item, .db-owned-menu .db-menu-item, .db-chart-options-popover button",
         ).length,
@@ -8932,6 +8946,8 @@ await section("every fixture table has as many cells as it has headers", async (
     iconlessOffenders.push(...found.iconlessRows);
     menuRowsChecked += found.menuRows;
     sharedGlyphOffenders.push(...found.sharedGlyphs);
+    listRowsChecked += found.listRows;
+    flatListOffenders.push(...found.flatListRows);
   }
 
   await page.close();
@@ -8963,6 +8979,16 @@ await section("every fixture table has as many cells as it has headers", async (
         : "")
       + `. The stylesheet hides the icon without that class, and a hidden element leaves the grid, so `
       + `every later child slides one track left and the label ends up in the icon's column`);
+
+  record("every fixture list row carries the wrapper the renderer builds",
+    listRowsChecked > 0 && flatListOffenders.length === 0,
+    `${listRowsChecked} list row(s) across the fixture set; ${flatListOffenders.length} lack `
+      + `.db-list-row-main`
+      + (flatListOffenders.length
+        ? `: ${[...new Set(flatListOffenders.map((o) => o.scenario))].join(", ")}`
+        : "")
+      + `. Without it the row is a two-column auto grid whose first column sizes to the wider of the `
+      + `controls and the cost beneath them, so the title starts at a different x on almost every row`);
 
   record("no menu draws one glyph for two different actions",
     menuRowsChecked > 0 && sharedGlyphOffenders.length === 0,

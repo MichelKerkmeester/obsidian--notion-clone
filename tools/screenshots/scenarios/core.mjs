@@ -96,6 +96,14 @@ export const CORE_SCENARIOS = [
     html: () => `
       <div class="note-database-container">
         <div class="db-list" role="grid">
+          ${/*
+            The renderer builds `controls` then a `db-list-row-main` holding a title line and a meta
+            line. This fixture used to drop the title and both values in as bare siblings of the
+            controls, which makes the row a two-column auto grid: the first column then sizes to
+            whichever is wider, the controls or the COST sitting under them, so the title started at
+            a different x on almost every row — measured 103 to 114 across six distinct positions,
+            where the two fixtures that build the real shape both measure a spread of 0.
+          */""}
           ${ROWS.map((r) => `
             <div class="db-list-row" role="row" aria-keyshortcuts="Enter Space F2" tabindex="-1">
               <div class="db-list-row-controls">
@@ -103,9 +111,13 @@ export const CORE_SCENARIOS = [
                 <button type="button" class="db-list-row-open" aria-label="Open note">${ICONS.maximize}</button>
                 <button type="button" class="db-list-mobile-move-btn" aria-label="Move">${ICONS.move}</button>
               </div>
-              <span class="db-list-row-title">${r.name}</span>
-              <span class="db-list-field-value">${r.cost}</span>
-              <span class="db-list-field-value">${r.renew}</span>
+              <div class="db-list-row-main">
+                <div class="db-record-title-line"><span class="db-list-row-title">${r.name}</span></div>
+                <div class="db-list-row-meta">
+                  <div class="db-list-field"><span class="db-list-field-label">Cost</span><div class="db-list-field-value">${r.cost}</div></div>
+                  <div class="db-list-field"><span class="db-list-field-label">Renews</span><div class="db-list-field-value">${r.renew}</div></div>
+                </div>
+              </div>
             </div>`).join("")}
         </div>
       </div>`,

@@ -5394,7 +5394,7 @@
         "src/views/list-renderer.ts",
         "src/views/card-field-renderer.ts"
       ],
-      "layoutHash": "b3dd2485cbe3",
+      "layoutHash": "b7b80a144ee7",
       "sourceHashes": {
         "src/views/list-renderer.ts": "722b433d196c",
         "src/views/card-field-renderer.ts": "33212bef3422",
@@ -5406,7 +5406,7 @@
       },
       "note": "The desktop list row, controls included. The row checkbox is not a phone-only control; the renderer builds it at every width.",
       "capture": "viewport",
-      "bytes": 154822
+      "bytes": 228390
     },
     {
       "id": "list-view",
@@ -5419,7 +5419,7 @@
         "src/views/list-renderer.ts",
         "src/views/card-field-renderer.ts"
       ],
-      "layoutHash": "b3dd2485cbe3",
+      "layoutHash": "b7b80a144ee7",
       "sourceHashes": {
         "src/views/list-renderer.ts": "722b433d196c",
         "src/views/card-field-renderer.ts": "33212bef3422",
@@ -5431,7 +5431,7 @@
       },
       "note": "The desktop list row, controls included. The row checkbox is not a phone-only control; the renderer builds it at every width.",
       "capture": "viewport",
-      "bytes": 153720
+      "bytes": 228902
     },
     {
       "id": "list-view",
@@ -5444,7 +5444,7 @@
         "src/views/list-renderer.ts",
         "src/views/card-field-renderer.ts"
       ],
-      "layoutHash": "dfb0ac134030",
+      "layoutHash": "20d781aba9ad",
       "sourceHashes": {
         "src/views/list-renderer.ts": "722b433d196c",
         "src/views/card-field-renderer.ts": "33212bef3422",
@@ -5456,7 +5456,7 @@
       },
       "note": "The desktop list row, controls included. The row checkbox is not a phone-only control; the renderer builds it at every width.",
       "capture": "viewport",
-      "bytes": 123778
+      "bytes": 148359
     },
     {
       "id": "list-view",
@@ -5469,7 +5469,7 @@
         "src/views/list-renderer.ts",
         "src/views/card-field-renderer.ts"
       ],
-      "layoutHash": "dfb0ac134030",
+      "layoutHash": "20d781aba9ad",
       "sourceHashes": {
         "src/views/list-renderer.ts": "722b433d196c",
         "src/views/card-field-renderer.ts": "33212bef3422",
@@ -5481,7 +5481,7 @@
       },
       "note": "The desktop list row, controls included. The row checkbox is not a phone-only control; the renderer builds it at every width.",
       "capture": "viewport",
-      "bytes": 122018
+      "bytes": 147619
     },
     {
       "id": "table-mobile",
