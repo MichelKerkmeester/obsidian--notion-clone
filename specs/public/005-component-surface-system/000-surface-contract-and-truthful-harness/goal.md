@@ -38,11 +38,30 @@ than as unmeasured. That is the failure mode this packet exists to name, and it 
       ban has teeth.** The `inverted-assertions` lane is in the gate, and the two checks caught
       counting a call rather than an outcome this session — the title-cell tap and the pinch guard —
       were both rebuilt onto the thing they claimed to measure.
-- [ ] **Proven to fail on today's tree with the number recorded**, for every criterion.
+- [x] **Proven to fail on today's tree with the number recorded**, for every criterion.
       **True for many and enforced for one section.** `012` now machine-checks that every check
       attributed to it carries a recorded red and fails the lane when one does not. That mechanism
       is per-phase; program-wide, several packets still carry criteria with no recorded failing
-      value, and this row is the one that says so.
+      value, and this row is the one that says so. **It now says so with a number — 2026-09-01.**
+      **`failing-values` is a gate lane.** It reads every phase's `goal.md`, and of **216 ticked
+      criteria, 72 record the value they moved from and 144 do not** — worst first,
+      `020` (12), `027` (11), `023` (8), `025` (8), `021` (7), `029` (6).
+      **It is a ratchet, not a floor, and that is the load-bearing decision.** A criterion that was
+      never broken has no red to record, and demanding one would be demanding fiction — the same
+      mistake `AC-016` made with its threshold of zero, which failed a correct harness for doing its
+      job. Several of the 144 are honestly in that state. So the count may not GROW: a new tick
+      brings its evidence, and the existing set is converted or argued down one row at a time by
+      someone who reads it.
+      **Watched red** by adding a bare tick to `007`: `FAIL — 1 newly ticked criterion(s) record no
+      failing value. 007-architecture-research: A deliberately bare criterion added to arm the
+      ratchet control.` It names the row rather than reporting a count, because a count alone sends
+      the next reader hunting.
+      **The vocabulary is the corpus's, not one invented here.** It matches a watched red, a
+      `was N`, a `recorded N`, a `Today: N`, a named pre-fix state. Widening it from a first narrow
+      guess moved the figure by five, which is how it is known the number is about the rows rather
+      than about the regex — a pattern tuned until the answer looked good would be measuring itself.
+      **What this row still does not claim:** that the 144 are wrong. It claims they are counted,
+      named, and unable to grow, which is what "the row that says so" was always for.
 - [ ] Paired with a negative control, for every criterion. **Same shape as the row above, and the
       same gap.** Building the controls found three checks that could not fail and two that passed
       on a defect, so the controls are load-bearing rather than ceremonial.

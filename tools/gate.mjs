@@ -43,6 +43,7 @@ const CHECKS = [
   { name: "comments", cmd: ["node", "tools/naming/scan-comments.mjs"] },
   { name: "folder-docs", cmd: ["node", "tools/naming/scan-folder-docs.mjs"] },
   { name: "naming", cmd: ["node", "tools/naming/scan-naming.mjs"] },
+  { name: "failing-values", cmd: ["node", "tools/naming/scan-failing-values.mjs"] },
   { name: "pinned-values", cmd: ["node", "tools/screenshots/scan-pinned-values.mjs"] },
   { name: "css-lane", cmd: ["node", "tools/lane/check-lane.mjs"] },
   // Runs here, not only at release. Every phase edits the same stylesheet in turn, so a result
