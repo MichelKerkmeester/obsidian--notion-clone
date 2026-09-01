@@ -146,6 +146,16 @@ try {
     // So the hit test is the gate, not the wait. A bar that is not under the cursor is refused
     // rather than pressed, because a press that misses can still close the sheet for the wrong
     // reason and there is no way to tell that apart from the outside.
+    //
+    // AND IT HAS TO HAVE STOPPED MOVING. Hit-testable is true on the first frame of the entrance
+    // as well as the last, and the coordinate is read here while the press lands a few milliseconds
+    // later — by which time a rising sheet has carried the bar further up. The press then hits the
+    // panel instead of the bar, `onDown` refuses it because it checks `event.target`, and the
+    // gesture is inert. That reported as "the bar is back but inert" on two runs in three, on a
+    // tree that had not touched the sheet: a flake that accuses the product.
+    //
+    // So the position must be unchanged across two consecutive frames before the coordinate is
+    // taken. Same gate, one more condition, and the condition is the one the race lives in.
     const hit = await page
       .waitForFunction(() => {
         const handle = document.querySelector(".db-mobile-bottom-sheet-handle");
@@ -155,10 +165,15 @@ try {
         const x = box.x + box.width / 2;
         const y = box.y + box.height / 2;
         if (y < 0 || y > window.innerHeight || x < 0 || x > window.innerWidth) return null;
-        return document.elementFromPoint(x, y) === handle ? { x, y } : null;
-      }, null, { timeout: 4000 })
+        if (document.elementFromPoint(x, y) !== handle) return null;
+        const settled = window.__lastHandleY !== undefined
+          && Math.abs(window.__lastHandleY - y) < 0.5;
+        window.__lastHandleY = y;
+        return settled ? { x, y } : null;
+      }, null, { timeout: 4000, polling: "raf" })
       .then((handleResult) => handleResult.jsonValue())
       .catch(() => null);
+    await page.evaluate(() => { delete window.__lastHandleY; });
 
     if (!hit) {
       return { staged: false, closed: false, detail: "the grab bar never became hit-testable, so no press could reach it" };
@@ -167,6 +182,15 @@ try {
     const centreX = hit.x;
     const centreY = hit.y;
     await page.mouse.move(centreX, centreY);
+    // The last thing checked before the press is the thing the press depends on. Everything above
+    // is about a moment that has already passed by the time the cursor is actually here.
+    const onBar = await page.evaluate(([x, y]) => {
+      const el = document.elementFromPoint(x, y);
+      return Boolean(el && el.classList.contains("db-mobile-bottom-sheet-handle"));
+    }, [centreX, centreY]);
+    if (!onBar) {
+      return { staged: false, closed: false, detail: "the bar moved out from under the cursor between the hit test and the press" };
+    }
     await page.mouse.down();
     for (let step = 1; step <= steps; step += 1) {
       await page.mouse.move(centreX, centreY + (distance * step) / steps);
