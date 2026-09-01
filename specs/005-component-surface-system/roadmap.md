@@ -383,7 +383,7 @@ today.
 - `001` — the overlay census has not run; the factory question was settled by deleting it (§7.2).
 - `002-properties-panel` — **Shipped + verified, awaiting device — 6 of 7.** Held the lane nine times with substantial edits while continuity read "not started". The geometry row is now measured on the shipped renderer at both viewports: one grid track with every laid-out child inside its band, and 30px against a 36px ceiling where the failing value was 52px. The clause recorded as undecidable turned out not to be — the host's `--input-height` is declared now, read from the installed app stylesheet, and it moved `layoutHash` for 0 of 240 captures. Exit signal: the operator reading every property name on a phone.
 - `006-record-open-target` — **Shipped + verified, awaiting device — 6 of 7.** The setting, the resolver and every measurement were outstanding and are now in: `recordOpenTarget` on `PluginSettings` with five options and `panel` as the unset default, one `resolveRecordOpenTarget` that folds by platform and anchor, and fourteen call sites routed through a single opener — including the Open button's hardcoded touch branch and `Mod+Enter`, which had no touch guard and disagreed with the button beside it. Driven in the placement lane: five settings produce five distinct surfaces, and a control that ignores the resolver collapses all five to one. Exit signal: the operator clicking Open and reading the note.
-- `008-integration-and-release-observability` — **Deliverable A shipped**: `tools/live/replay.mjs` exists and `npm run replay` re-asserts 8 results against recorded pre-fix numbers. The release decision stays last.
+- `008-integration-and-release-observability` — **Deliverable A shipped**: `tools/live/replay.mjs` exists and `npm run replay` re-asserts 8 results against recorded pre-fix numbers. The lane now refuses a release that leaves a changed capture unnamed — observed red at exit 1 on an unnamed PNG and green once the release names it, so the *per-image sign-off still owed* that ended every release note is a gate rather than a promise. The release decision stays last.
 - `007-architecture-research` — Complete. 10 iterations plus synthesis; not a phase.
 - `022-selection-bar-keyboard-docking` — **Shipped + verified, awaiting device — 6 of 8.** This
   bullet read *Planned. Needs the bar measured against an open keyboard before a docking mechanism
@@ -435,7 +435,7 @@ done | sort -n
 | `005-content-row-rhythm` | **86%** — 6/7 | 1 | 1 | 0 |
 | `006-record-open-target` | **86%** — 6/7 | 1 | 1 | 0 |
 | `007-architecture-research` | **100%** — 2/2 | 0 | 0 | 0 |
-| `008-integration-and-release-observability` | **50%** — 5/10 | 5 | 1 | 4 |
+| `008-integration-and-release-observability` | **60%** — 6/10 | 4 | 1 | 3 |
 | `009-live-verification` | **33%** — 2/6 | 4 | 1 | 3 |
 | `010-sheet-reading-and-keyboard` | **91%** — 10/11 | 1 | 1 | 0 |
 | `011-mobile-menu-presentation` | **91%** — 10/11 | 1 | 1 | 0 |

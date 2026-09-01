@@ -46,10 +46,27 @@ rehearse is enforced, because "the rule exists" is the claim this packet was wri
       fails when the stylesheet hash moves and no phase holds the lane. Observed refusing on
       2026-08-31 and again on 2026-09-01: `check-lane: FAIL — the stylesheet changed and no phase
       claimed the edit`.
-- [ ] A lane release with an unreviewed changed PNG is demonstrated to be refused. **Not enforced,
+- [x] A lane release with an unreviewed changed PNG is demonstrated to be refused. **Not enforced,
       and the record says so every time.** Every lane release note in `css-lane.json` ends with
-      *per-image operator sign-off still owed* — the reviewing is done and recorded in prose, and
-      nothing refuses a release that skipped it.
+      *per-image operator sign-off still owed* — the reviewing was done and recorded in prose, and
+      nothing refused a release that skipped it.
+      **Enforced now, and demonstrated in both directions.** `check-lane` reads the newest history
+      entry; when it is a release sitting on the current baseline, it compares the captures git
+      reports as changed against a `reviewed` array on that entry. A capture the release does not
+      name is refused.
+
+      **Observed red:** appending a byte to `board-view-desktop-light.png` takes the check to
+      **exit 1** — *"1 changed capture(s) this release does not name"*, the file listed, and the
+      entry reported as carrying no `reviewed` list at all. **Observed green in the other
+      direction:** adding that same path to the release's `reviewed` array returns *"release names
+      all 1 changed capture(s)"* and exit 0. Both were run, because a rule that only ever refuses is
+      a rule nobody can satisfy, and one that only ever passes is not a rule.
+
+      **What it does not claim.** Naming a file asserts that someone opened it, and no check can
+      confirm that — this refuses the release that never looked at all, which is the failure the row
+      was written about. Older release entries are grandfathered on purpose: only the newest is
+      checked, because back-filling `reviewed` onto releases whose reviews nobody did would be
+      manufacturing exactly the evidence this rule exists to require.
 - [x] A stale replay result is demonstrated to be rejected. **Met by the `evidence` lane**, which
       fingerprints every artefact's inputs and reports one describing a tree that no longer exists.
       Observed rejecting repeatedly on 2026-09-01, once per stylesheet edit.
