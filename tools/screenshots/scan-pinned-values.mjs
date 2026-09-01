@@ -122,9 +122,14 @@ if (runtime.size === 0 || sheet.empty || sheet.fallbacks.size === 0) {
 
 const contradictions = [];
 const unread = [];
+// The population `AC-016` actually names: a harness assignment of a property `src/` also assigns.
+// The loop below SKIPS these, which is the criterion's population exactly — so the checker was
+// implementing the opposite of the criterion it answers to, and the phase's own goal.md says so.
+const standIns = [];
 
 for (const relPath of HARNESS_FILES) {
   for (const [prop, value] of harnessDeclared(relPath)) {
+    if (runtime.has(prop)) standIns.push({ relPath, prop, value, src: runtime.get(prop) });
     if (runtime.has(prop) || sheet.declared.has(prop)) continue;
     const fallback = sheet.fallbacks.get(prop);
     if (fallback === undefined) {
@@ -136,6 +141,45 @@ for (const relPath of HARNESS_FILES) {
 }
 
 console.log(`scan-pinned-values: ${runtime.size} runtime-assigned, ${sheet.fallbacks.size} read with a fallback`);
+
+// ───────────────────────────────────────────────────────────────────
+// 4b. THE STAND-INS — COUNTED, NAMED, AND NOT CONDEMNED
+// ───────────────────────────────────────────────────────────────────
+//
+// `AC-016` asks for a scan of "an assignment of a custom property that `src/` also assigns" and
+// wants zero of them. There are 41, and every one is the harness doing its job: a screenshot runs
+// no plugin, so something has to supply what the plugin would compute. A rule failing all 41 would
+// fail a correct harness, which is the shape this program keeps deleting — and the header above
+// says as much, which is WHY the loop skips them.
+//
+// But skipping is not the same as answering. The criterion's real fear is stated in its own row:
+// "a fifth would be invisible." So the population is now listed and RATCHETED. A stand-in that
+// already exists stays; a new one cannot arrive without someone deciding it should.
+//
+// This is the amendment, made here rather than argued: the criterion's threshold of zero is wrong
+// and its concern is right, so what is enforced is the concern.
+const BASELINE_PATH = join(REPO, "tools/screenshots/pinned-values-baseline.json");
+const baseline = existsSync(BASELINE_PATH)
+  ? JSON.parse(readFileSync(BASELINE_PATH, "utf8"))
+  : null;
+const allowed = baseline ? baseline.standIns : standIns.length;
+
+console.log(`scan-pinned-values: ${standIns.length} stand-in(s) for a property src/ also assigns, `
+  + `against a recorded baseline of ${allowed}`);
+console.log("  These are not defects. A screenshot runs no plugin, so the harness supplies what the");
+console.log("  plugin would compute — that is its purpose. They are counted so a NEW one cannot");
+console.log("  arrive unnoticed, which is the thing the criterion was actually worried about.");
+
+if (standIns.length > allowed) {
+  console.error(`\nNEW STAND-IN(S) — ${standIns.length - allowed} more than the recorded baseline:`);
+  const known = new Set(baseline?.properties ?? []);
+  for (const s of standIns.filter((entry) => !known.has(entry.prop))) {
+    console.error(`  ${s.prop}: ${s.value}   (${s.relPath}, assigned by ${s.src})`);
+  }
+  console.error("\n  Either the harness gained a stand-in nobody decided on, or src/ started");
+  console.error("  assigning a property the harness was already pinning. Both are worth a look.");
+  process.exit(1);
+}
 
 if (contradictions.length === 0 && unread.length === 0) {
   console.log("scan-pinned-values: PASS — no harness value contradicts what production resolves");

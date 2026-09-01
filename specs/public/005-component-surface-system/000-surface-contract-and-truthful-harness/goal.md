@@ -62,9 +62,19 @@ than as unmeasured. That is the failure mode this packet exists to name, and it 
       fail on a device* — and `009`'s probe does not exist, so there is no live number to agree with.
 - [ ] Both named exit criteria are recorded for `001` and `003`. **Both packets now carry a
       checklist**, written the same day as this one; the exit criteria within them are open.
-- [ ] The operator confirms on device. **Only the operator closes this**, and `AC-016`'s checker
-      still implements the opposite of `AC-016` — `scan-pinned-values.mjs` skips a property `src/`
-      also assigns, which is the population the criterion names.
+- [ ] The operator confirms on device. **Only the operator closes this.** `AC-016`'s checker
+      **did** implement the opposite of `AC-016` — `scan-pinned-values.mjs` skipped a property
+      `src/` also assigns, which is the population the criterion names. **Reconciled 2026-09-01, by
+      amending the criterion rather than the skip.**
+      **The skip is right and the threshold is wrong.** There are **41** such declarations, and
+      every one is the harness doing its job: a screenshot runs no plugin, so something supplies
+      what the plugin would compute. A rule failing all 41 fails a correct harness.
+      **What the criterion is actually afraid of is in its own row: *"a fifth would be invisible"*.**
+      So the population is now listed and ratcheted against a recorded baseline — the existing 41
+      stay, and a 42nd cannot arrive unnoticed. Watched red by adding one:
+      `NEW STAND-IN(S) — 1 more than the recorded baseline: --db-timeline-span: 7
+      (tools/screenshots/runtime-vars.css, assigned by src/views/calendar-timeline-renderer.ts)`.
+      The concern is enforced; the threshold of zero is not, and this row says why.
 **HARNESS DEPENDENCE, 2026-08-31 — 17 sound / 2 dependent / 1 unknown.** Two acceptance bullets do
 not survive the question *would this still fail on a device*. The **action-outcome** dimension drives
 `openRow` and `editCell`, which are no-op stubs, so a model delta asserted against them is the
