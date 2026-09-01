@@ -201,7 +201,7 @@
     ],
     "causal_summary": "A gate lane's name is the only thing most readers ever check",
     "created_at": "2026-08-30T15:00:28.772Z",
-    "last_save_at": "2026-08-31T20:01:19.864Z",
+    "last_save_at": "2026-09-01T09:57:41.032Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -212,13 +212,13 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:a1a1fb3aa39156c0d201c395332a5ec6575d8395d71f1fe20df0f208c6f588f9",
+    "source_fingerprint": "sha256:a18922d25d268bce37e531912bad0cd30ae7f97c0c2f124ad1d84952952faa23",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "0ab76959f574cd10f11c113a3101ec61d4fdc26395347db1bd275991b72dc2c8",
+      "spec.md": "dd05660d2f26bc9811fc3f228ff7bd2775af127a89b987fa503c0d83ece86538",
       "plan.md": "0c8658cd69033439ed1084720d77659118c2cecfc47d1a190e7b0be8237bac6c",
-      "tasks.md": "20c6826b7d00b7f1bb11ff38c46a03cffde7eba01c4bb6a9b66dd5b46cb48a64",
-      "implementation-summary.md": "ce11bf669a55dfc7f09e78fc4c90de57aa66c0ffe6eee02a526129640821c1f7"
+      "tasks.md": "875ddf0ac177d7c5e9f43c703bdcdf988a1fc3eb207636ccca71fe98a77b8572",
+      "implementation-summary.md": "8059bb0b0ff892a3112e9dac7d994fc519a02ce934b5a27c95a8a67587ebb3d0"
     },
     "last_active_child_id": null,
     "last_active_at": null

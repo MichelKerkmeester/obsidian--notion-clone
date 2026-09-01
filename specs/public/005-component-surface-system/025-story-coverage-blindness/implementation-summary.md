@@ -115,15 +115,16 @@ records that a module was skipped, and a written one records why nobody could wr
 <!-- ANCHOR:limitations -->
 ## 6. LIMITATIONS
 
-**The demonstration control substitutes for the one its requirement names.** The requirement says
-the widened matcher must report *the thirteen* blind modules against the tree **as received**. The
-control that ran restores the name test to the live matcher on today's tree: 31 drops to 18 and
-names 13. Run literally against the earlier tree it reports **fourteen**, the extra being the
-checkbox module, which the narrow matcher could already see and which a different requirement owns.
+**The substitute control has been replaced by the one its requirement names.** The requirement says
+the widened matcher must report *the thirteen* blind modules against the tree **as received**. That
+run has now been made: the tree was reconstructed with `git archive` from the commit before this
+phase opened, and both matchers were run against it. The narrow matcher names **1** missing module,
+`checkbox`. The widened matcher names **14**. The thirteen it adds are this phase's thirteen exactly.
 
-Both numbers are true about different sets. The gap is recorded rather than closed because a control
-standing in for the one a requirement names is the same drift this phase exists to catch, one level
-up.
+So the two numbers reconcile rather than disagree — fourteen is a total, thirteen is the yield, and
+`checkbox` is the module both matchers see and another requirement owns. What remains worth stating
+is the order it happened in: the substitute ran first and was recorded as evidence for a requirement
+it did not discharge, which is the same drift this phase exists to catch, one level up.
 
 **Nothing here has been seen by a person.** Eight commands agreeing is not somebody opening the
 catalogue and recognising the surfaces in it.

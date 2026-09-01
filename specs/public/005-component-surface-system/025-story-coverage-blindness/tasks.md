@@ -75,10 +75,12 @@ exit status were read, without a pipe.
 - [ ] **T9** Replace the name-and-parameter test with the parameter test alone — REQ-005.
       *Evidence to close:* the `EXPORTED` regex matches any `export function`, and the existing
       `HTMLElement` / `parent`-options logic is unchanged beneath it.
-- [ ] **T10** **Run the negative control** — REQ-007. The task this phase can most easily skip.
-      *Evidence to close:* the widened matcher, against the tree as received, names **all 13** blind
-      modules as missing. A widened matcher that reports nothing new has not been shown to be wider;
-      it has been shown to be green, which is where it started.
+- [x] **T10** **Run the negative control** — REQ-007. The task this phase can most easily skip.
+      *Closed by running it literally.* The tree as received was reconstructed with `git archive`
+      from the commit before this phase opened, and both matchers were run against it. The narrow one
+      names 1 missing module; the widened one names 14, and the 13 it adds are C7's thirteen exactly.
+      The widened matcher therefore reports thirteen modules the narrow one could not see on the same
+      tree, which is the thing the requirement asked to be shown rather than asserted.
 - [ ] **T11** Confirm the exclusion the old comment protected still holds — REQ-008.
       *Evidence to close:* `createStarterViewConfig` and its kind are absent from the renderable set,
       excluded by the parameter test rather than by their names. The original comment names this case

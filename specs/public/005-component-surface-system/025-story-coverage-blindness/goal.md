@@ -84,8 +84,29 @@ Widening must not demand stories that cannot exist — a function returning a co
       13.
 - [x] The checkbox module — another phase's central control — has a story, not an exemption.
 - [x] A config-returning function stays out: **no view-config module is among the 31.**
-- [ ] The widened matcher demonstrated on **the tree as received**. The control that ran used
-      today's tree and names 13; the requirement's tree names 14. See the log.
+- [x] The widened matcher demonstrated on **the tree as received**, and the 13-versus-14 gap this
+      row recorded turns out not to be a gap.
+      **Run literally, both matchers, same tree.** `src/views` and the allowlist at the commit before
+      this phase opened, reconstructed with `git archive`, with each matcher dropped in beside it:
+
+      | Matcher | Renderable | With stories | Exempt | Missing |
+      |---|---|---|---|---|
+      | Narrow — `(?:create\|render)\w+` | 18 | 10 | 7 | **1** |
+      | Widened — any `export function` | 31 | 10 | 7 | **14** |
+
+      **The failing value is the narrow matcher's own count on that same tree: it was 1.** That is the
+      number this phase moved, and it is what makes the widening visible rather than asserted — the
+      narrow matcher names exactly one blind module, `checkbox`, and the widened one names fourteen.
+      **The difference is thirteen, and it is C7's thirteen with nothing left over** — every name on
+      that list appears, and the only widened name absent from it is `checkbox`, which the narrow
+      matcher had already found. So 13 and 14 were never two answers to one question: 14 is the
+      widened matcher's total, 13 is what widening *revealed*, and the fourteenth is the module both
+      matchers see and another requirement owns.
+
+      This is what D4 asks for and the substitute control could not give: a widened matcher shown
+      reporting thirteen things the narrow one, on the same tree, could not report at all. Four of
+      them — `mobile-bottom-sheet`, `popover-position`, `table-cell-gesture`, `table-record-peek` —
+      are the modules the sheet and placement work runs through.
 - [ ] The operator opens the catalogue and confirms it lists the surfaces they expect.
 <!-- /ANCHOR:completion -->
 

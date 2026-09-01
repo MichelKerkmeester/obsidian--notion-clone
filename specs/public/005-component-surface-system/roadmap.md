@@ -390,11 +390,14 @@ today.
 - `023-record-note-body` — Planned, and **deliberately not startable**: the operator has not
   yet picked display-only or editable, which the phase's own spec says decides its size by
   roughly an order of magnitude.
-- `025-story-coverage-blindness` — **Shipped + verified, awaiting device — 8 of 10.** The
+- `025-story-coverage-blindness` — **Shipped + verified, awaiting device — 9 of 10.** The
   sentence this bullet used to carry — *the gate lane named `story-coverage` runs the DOM-shim
   checker* — was the defect, and it was fixed: `tools/gate.mjs:58-59` now carries `shim-coverage`
-  and `story-coverage` as two distinct lanes running two distinct scripts. Open: the control that
-  was substituted rather than run on the tree as received, and the operator opening the catalogue.
+  and `story-coverage` as two distinct lanes running two distinct scripts. The substituted control
+  has been replaced by the specified one: the tree as received was reconstructed with `git archive`
+  and both matchers run against it — narrow names 1 blind module, widened names 14, and the 13 it
+  adds are the phase's thirteen exactly, so the recorded 13-versus-14 gap was arithmetic rather than
+  disagreement. Open: the operator opening the catalogue.
 - `026-production-render-assertions` — **Shipped + verified — 9 of 9.** `render-assertions` is a
   gate lane (`tools/gate.mjs:67`) and renderer coverage stands at 6 of 22. This phase owes no device
   confirmation: its deliverable is a check in the gate, and the gate is where it is confirmed. Its
@@ -444,7 +447,7 @@ done | sort -n
 | `022-selection-bar-keyboard-docking` | **75%** — 6/8 | 2 | 1 | 1 |
 | `023-record-note-body` | **89%** — 8/9 | 1 | 1 | 0 |
 | `024-list-view-freeze` | **83%** — 5/6 | 1 | 1 | 0 |
-| `025-story-coverage-blindness` | **80%** — 8/10 | 2 | 1 | 1 |
+| `025-story-coverage-blindness` | **90%** — 9/10 | 1 | 1 | 0 |
 | `026-production-render-assertions` | **100%** — 9/9 | 0 | 0 | 0 |
 | `027-sheet-menu-grammar-and-motion` | **93%** — 13/14 | 1 | 1 | 0 |
 | `028-remaining-freezes` | **83%** — 5/6 | 1 | 0 | 1 |
