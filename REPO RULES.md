@@ -51,6 +51,7 @@ is not.
 | Answer without certainty · contradict the operator · fill a gap with a plausible guess · hit a contradiction between two things that must both be true | [`uncertainty-and-honesty.md`](repo-rules/uncertainty-and-honesty.md) | Confidence bands, UNKNOWN, contradiction halts |
 | Write any substantive reply · present a recommendation, a fork, or a trade-off · answer a complex or ambiguous request · the reader says they did not follow | [`communication.md`](repo-rules/communication.md) | How a reply reads: sentence shape, length, filler, verdict-first order, Ask→Do framing |
 | Wire, rewire or remove a mode in a parent-hub skill · edit a hub's registry, router, `ROUTER.md`, `graph-metadata.json` or `SKILL.md` mode table · report that a mode is registered, routed or integrated · quote a per-hub gate result | [`skill-hub-routing.md`](repo-rules/skill-hub-routing.md) | The two routing stages, what "integrated" requires, and checking the hub you actually changed |
+| Answer the documentation-scope question · write into a spec folder · cite, build or follow a `specs/` path · move, rename or create a top-level packet · decide whether something under `specs/` is tracked | [`spec-tree-layout.md`](repo-rules/spec-tree-layout.md) **local** | Where packets live since the flattening, what a move breaks silently, and the one place a stale path is correct |
 | Add or change a view, component or state · claim UI work is done · read a capture to judge a surface | [`screenshot-currency.md`](repo-rules/screenshot-currency.md) **local** | Which captures go stale, what registers a new surface, and what the harness is not |
 | Say done, complete, fixed or passing · quote a gate result · hand work back | [`verification-gates.md`](repo-rules/verification-gates.md) **local** | The three commands that must pass, and why a green run that changed nothing proves nothing |
 
@@ -69,6 +70,7 @@ is not.
 | [Uncertainty and honesty](repo-rules/uncertainty-and-honesty.md) | Never fabricate; mark the confidence you actually have. |
 | [Communication](repo-rules/communication.md) | Write so the reader can act after one pass: one idea per sentence, verdict first, nothing that does not carry information. |
 | [Skill hub routing](repo-rules/skill-hub-routing.md) | A hub projects one advisor identity and routes in two stages; registered is not routed, and a gate run without its hub argument checks something else. |
+| [Spec tree layout](repo-rules/spec-tree-layout.md) **local** | Packets sit directly under `specs/`; a path with `public/` in it is stale everywhere except a run record, where it is history. |
 | [Screenshot currency](repo-rules/screenshot-currency.md) **local** | A surface is not done until a current capture of it exists and you have looked at the image. |
 | [Verification gates](repo-rules/verification-gates.md) **local** | All three gates pass, and you read the output and the exit status rather than assuming them. |
 
@@ -82,7 +84,9 @@ reads, and what you may claim about wiring you have changed. Plus, in the **loca
 rules only, the paths, commands, numbers and baselines true of this repository.
 
 **Out:** skill routing, workflow selection, spec-folder mechanics, and the *mechanics*
-of agent and CLI dispatch, which agent, which command, which model, which flags.
+of agent and CLI dispatch, which agent, which command, which model, which flags. Spec-folder
+**layout** is in, and is not the same thing: where the packets sit on disk is a repo-local path
+fact, while which documents a packet owes and when is the kit's.
 Those belong to `AGENTS.md` §2 and the skills it routes to. The line is between
 plumbing and posture: how to dispatch is theirs, how to think while dispatching is ours.
 

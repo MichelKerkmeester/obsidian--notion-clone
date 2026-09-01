@@ -58,4 +58,4 @@ documenting a shape nobody ships.
 ## 5. RELATED
 
 - `tools/screenshots/` — the fixture-based capture harness this is intended to retire
-- `specs/public/003-ui-improvement-build/024-storybook-harness/boundary-scope.md` — why, and the measurements behind it
+- `specs/003-ui-improvement-build/024-storybook-harness/boundary-scope.md` — why, and the measurements behind it

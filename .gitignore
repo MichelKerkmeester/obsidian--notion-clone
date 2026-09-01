@@ -1,7 +1,12 @@
 # Override the operator's global /specs ignore so the plugin specs live in this repo.
 !/specs/
 # Keep real finance-data packet + heavy working dirs OUT of the public repo.
-specs/public/000-personal/
+# Path-anchored on purpose: this must track wherever the packet actually lives. It moved out of
+# specs/public/ on 2026-09-01 and the old line silently stopped matching, which is the failure mode
+# a leading-slash ignore has — it goes quiet rather than wrong.
+/specs/000-personal/
+# The pre-move path, kept so a stale checkout or a partial revert cannot re-expose it.
+/specs/public/000-personal/
 specs/**/context/
 specs/**/scratch/
 specs/**/research/**/lineages/

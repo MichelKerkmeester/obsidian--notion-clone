@@ -38,7 +38,7 @@ import { fileURLToPath } from "node:url";
 // ───────────────────────────────────────────────────────────────────
 
 const REPO = fileURLToPath(new URL("../..", import.meta.url));
-const PROGRAM = join(REPO, "specs/public/005-component-surface-system");
+const PROGRAM = join(REPO, "specs/005-component-surface-system");
 const BASELINE_PATH = join(REPO, "tools/naming/failing-values-baseline.json");
 
 /** The evidence vocabulary the packets already write in. */

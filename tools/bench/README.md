@@ -55,7 +55,7 @@ in the JavaScript loop, not in layout.
 
 The full write-up, including why this argues against windowing as the first fix and the measurement
 trap waiting for whoever implements the real change, is in
-`specs/public/003-ui-improvement-build/023-performance-research/baseline-finding.md`.
+`specs/003-ui-improvement-build/023-performance-research/baseline-finding.md`.
 
 ## 3. WHAT IT DOES NOT MEASURE
 
@@ -70,4 +70,4 @@ Read the output as one input to a performance decision, never as the whole pictu
 
 - `CODE.md` — the topology, what each bench varies, and how to read the output
 - `tools/storybook/` — supplies the Obsidian DOM shim and stub both benches reuse
-- `specs/public/003-ui-improvement-build/023-performance-research/` — the research and the finding
+- `specs/003-ui-improvement-build/023-performance-research/` — the research and the finding

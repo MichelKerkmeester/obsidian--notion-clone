@@ -1,0 +1,229 @@
+{
+  "schema_version": 1,
+  "packet_id": "public/005-component-surface-system/002-properties-panel",
+  "spec_folder": "public/005-component-surface-system/002-properties-panel",
+  "parent_id": "public/005-component-surface-system",
+  "children_ids": [],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "properties panel",
+      "column manager row",
+      "property row grid",
+      "named grid areas",
+      "002 properties panel",
+      "002 properties panel plan",
+      "property row grid approach",
+      "002 properties panel tasks",
+      "acceptance criteria",
+      "closure gate",
+      "ac traceability",
+      "002 properties panel criteria"
+    ],
+    "key_topics": [
+      "properties",
+      "panel",
+      "column",
+      "manager",
+      "row",
+      "property",
+      "grid",
+      "named",
+      "areas",
+      "plan",
+      "approach",
+      "tasks"
+    ],
+    "importance_tier": "critical",
+    "status": "in_progress",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "acceptance-criteria.md",
+      "goal.md",
+      "implementation-summary.md",
+      "checklist.md",
+      "tools/lane/css-lane.json",
+      "tools/storybook/verify-placement.mjs",
+      "src/views/card-field-renderer.ts",
+      "tools/live/renderer-coverage.json",
+      "src/views/overlay-stack.ts",
+      "src/views/interaction-scope.ts",
+      "src/views/column-delete-confirmation.test.ts"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "acceptance-criteria.md",
+        "kind": "doc",
+        "path": "acceptance-criteria.md",
+        "source": "derived"
+      },
+      {
+        "name": "goal.md",
+        "kind": "doc",
+        "path": "goal.md",
+        "source": "derived"
+      },
+      {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "checklist.md",
+        "kind": "doc",
+        "path": "checklist.md",
+        "source": "derived"
+      },
+      {
+        "name": "css-lane.json",
+        "kind": "config",
+        "path": "tools/lane/css-lane.json",
+        "source": "derived"
+      },
+      {
+        "name": "verify-placement.mjs",
+        "kind": "file",
+        "path": "tools/storybook/verify-placement.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "card-field-renderer.ts",
+        "kind": "code",
+        "path": "src/views/card-field-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "renderer-coverage.json",
+        "kind": "config",
+        "path": "tools/live/renderer-coverage.json",
+        "source": "derived"
+      },
+      {
+        "name": "overlay-stack.ts",
+        "kind": "code",
+        "path": "src/views/overlay-stack.ts",
+        "source": "derived"
+      },
+      {
+        "name": "interaction-scope.ts",
+        "kind": "code",
+        "path": "src/views/interaction-scope.ts",
+        "source": "derived"
+      },
+      {
+        "name": "column-delete-confirmation.test.ts",
+        "kind": "test",
+        "path": "src/views/column-delete-confirmation.test.ts",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Properties Panel",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Spec Folder",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Problem Statement The",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Purpose One",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "In Scope",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Plan",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Checklist",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Execution Rules",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Status Reporting Format Report",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "The properties panel's row is a positional grid contract: it says \"the third track is 96px wide\"",
+    "created_at": "2026-08-29T12:37:20.727Z",
+    "last_save_at": "2026-09-01T10:43:01.895Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "acceptance-criteria.md",
+      "goal.md",
+      "implementation-summary.md"
+    ],
+    "source_fingerprint": "sha256:0dcc3f69eb0319b42999c9c632cbe1163a483d0699a44641868b13ca44ad5a1c",
+    "source_fingerprint_docset": 3,
+    "source_doc_hashes": {
+      "spec.md": "c252fb4b7130ce5bad5ba2d79dc72e4cd9a027e510f5e0d878cc032f3a57c74d",
+      "plan.md": "9930d86cdc3393986c1e6202d8ce05a4d565bfed694d03c6c72909899eb2b873",
+      "tasks.md": "fac4aac0a28947fa323c81ca8e44f3fc646f684158b57e52cc1edea90cb15004",
+      "implementation-summary.md": "d4d5182746d4e5851a934ac5abc54be763759e1ffb5ff798d4acf7feb7c0ece2"
+    },
+    "last_active_child_id": null,
+    "last_active_at": null
+  }
+}

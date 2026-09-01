@@ -29,7 +29,7 @@
 //
 // It earns its place as an on-demand tool scoped to the packet being worked.
 //
-// Usage: node tools/naming/scan-spec-references.mjs [--json] [--path=specs/public/<packet>]
+// Usage: node tools/naming/scan-spec-references.mjs [--json] [--path=specs/<packet>]
 // Exit:  0 when every source path referenced by a spec doc exists; 1 otherwise.
 
 // ───────────────────────────────────────────────────────────────────
