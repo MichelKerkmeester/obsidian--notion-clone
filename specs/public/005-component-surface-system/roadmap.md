@@ -441,7 +441,7 @@ done | sort -n
 | `011-mobile-menu-presentation` | **91%** — 10/11 | 1 | 1 | 0 |
 | `012-mobile-touch-semantics` | **90%** — 9/10 | 1 | 1 | 0 |
 | `013-add-view-sheet` | **92%** — 11/12 | 1 | 1 | 0 |
-| `014-desktop-select-checkbox` | **71%** — 5/7 | 2 | 1 | 1 |
+| `014-desktop-select-checkbox` | **86%** — 6/7 | 1 | 1 | 0 |
 | `015-desktop-dropdown-placement` | **88%** — 7/8 | 1 | 1 | 0 |
 | `016-sheet-drag-and-audit` | **90%** — 9/10 | 1 | 1 | 0 |
 | `017-touch-row-range-selection` | **91%** — 10/11 | 1 | 1 | 0 |

@@ -132,8 +132,15 @@ carries the criterion.
 
 **Threshold.** Two clauses. In the source, no border, fill or checkmark declaration is reintroduced
 into the select-column block. In the browser, a select checkbox's computed `appearance`,
-`border-width`, `border-radius` and `background-color` are identical to a role-mate the same factory
-builds elsewhere — set equality, 0 differing properties.
+`border-width`, `border-radius`, `background-color` **and `border-color`** are identical to a
+role-mate the same factory builds elsewhere — set equality, 0 differing properties.
+
+**The fifth property is an amendment, and it is why this criterion can close.** It was written with
+four, and against four the negative control moved nothing: the select column's own `:not(.db-checkbox)`
+fallback agrees with the component on all four, so stripping the shared class woke a second owner
+instead of removing the only one. `border-color` is the one property on which the two disagree, and
+the disagreement crosses WCAG 1.4.11's 3:1 non-text minimum. Widening the threshold here is a
+criterion admitting it was measuring the wrong set, not a threshold being relaxed to fit a result.
 
 **Why the second clause.** The first is an absence in a file, and an absence passes before anything
 is written. It cannot distinguish a repair that respected the boundary from a repair that never
@@ -185,17 +192,24 @@ change that makes the control discharging *and* puts a WCAG floor under a value 
 none. The arithmetic above is derived here from the measured colours, not read off a check — nothing
 in the harness asserts a contrast ratio for this control today.
 
-**So AC-5 stays open, and the reason is the dead code the packet declined to delete.** Two agreeing
-owners are indistinguishable from one owner until one of them is taken away, and this control cannot
-take the second one away. Three ways to close it, none taken here because each is a decision this
-phase does not own:
+**AC-5 is closed, by route 1.** Two agreeing owners are indistinguishable from one owner until one of
+them is taken away, and against four properties this control could not take the second away. The
+comparison now names five, and the same control discharges: `PLACEMENT_SELECT_CONTROL=strip-select`
+reports **`1 of 5 properties differ: borderColor rgb(221, 221, 221) vs rgb(138, 144, 153)`**, the
+appearance check red and exit 1, while the unarmed run reads 0 of 5 and exit 0.
 
-1. Assert `border-color` as a fifth property. One line, and this exact control becomes discharging.
-   The role-mate reads `rgb(138, 144, 153)` too, so the check stays green on correct code.
-2. Delete the three dead guarded blocks. That is D3's open question, and it moves captures.
-3. Run the control against a role-mate with no per-site fallback, which is a different claim about a
-   different element. Measured for contrast: stripping the class from the gallery role-mate moves all
-   four, and takes the check red at `4 of 4 properties differ`.
+Three routes were available and the first was taken, because it is the only one that makes the
+control discharging *and* puts a floor under a value that had none:
+
+1. **Taken.** Assert `border-color` as a fifth property. One line. The role-mate reads
+   `rgb(138, 144, 153)` too, so the check stays green on correct code, and the dormant fallback's
+   `rgb(221, 221, 221)` is what the control now exposes — at **1.36:1** against the white fill where
+   WCAG 1.4.11 requires 3:1, against the component's **3.22:1**. Both ratios are derived here from
+   the measured colours rather than asserted by any check, and the property itself is asserted.
+2. Not taken. Delete the three dead guarded blocks — D3's open question, and it moves captures.
+3. Not taken. Run the control against a role-mate with no per-site fallback: a different claim about
+   a different element. Measured for contrast, stripping the class from the gallery role-mate moves
+   all four original properties and takes the check red at `4 of 4 properties differ`.
 
 ## AC-6 — the lane records the edit
 

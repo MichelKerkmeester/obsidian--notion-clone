@@ -9,12 +9,11 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "public/005-component-surface-system/014-desktop-select-checkbox"
-    last_updated_at: "2026-08-31T03:40:00Z"
-    last_updated_by: "criteria-instrumentation"
-    recent_action: "The coincidence clause withdrawn on its own evidence; clearance carries the row"
+    last_updated_at: "2026-09-01T21:00:00Z"
+    last_updated_by: "fifth-property-control"
+    recent_action: "borderColor added as a fifth property; the strip control now discharges"
     next_safe_action: "The operator opens the table on desktop and sees a whole checkbox"
-    blockers:
-      - "AC-5's specified control moves 0 of 4 properties, so the criterion cannot close in the form it was written"
+    blockers: []
     key_files:
       - "spec.md"
       - "acceptance-criteria.md"
@@ -23,7 +22,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-014-goal"
       parent_session_id: null
-    completion_pct: 71
+    completion_pct: 86
     open_questions:
       - "Delete the three dead :not(shared-checkbox) blocks, given they are capture-affecting"
       - "Assert border-color as a fifth appearance property, which is what makes AC-5's control discharging"
@@ -172,43 +171,37 @@ the sentence alone.
       `right: 4px` → `6px` — and reverting only the column measures `−12px`, a state that never
       shipped (`verification-audit.md` §3.2, F-1). Neither number is a measurement of this phase's
       clearances and neither belongs in this folder.
-- [ ] Two owed negative controls observed red. **(a) is discharged. (b) was run and is unsatisfiable
-      as specified**, so the criterion stays open.
+- [x] Two owed negative controls observed red. **Both now discharge, by taking the route this row
+      recommended: a fifth property, one line.**
 
       **(a) Run, observed red, both ways.** `PLACEMENT_SELECT_CONTROL=strip-select` removes
       `db-checkbox` from exactly one select checkbox and takes `the select column's checkbox is the
-      shared owned control` to `FAIL 24/25 select checkboxes carry the shared component class`, the
-      run to 223/227, exit 1. Unset, it returns 25/25 at 224/227, exit 0.
+      shared owned control` to `FAIL 24/25 select checkboxes carry the shared component class`, exit
+      1. Unset, it returns 25/25 and exit 0.
 
-      **(b) Run, and it moves nothing.** The same control strips the class from a select checkbox and
-      **0 of the 4 named properties change.** The select column keeps its own `:not(.db-checkbox)`
-      fallback block, and that block declares `appearance: none`, a 1px border, the same
-      `--db-radius-sm` radius and the same `--background-primary` fill. Stripping the class does not
-      remove an owner — it wakes the second one, and the second one agrees. The only property that
-      moves is `border-color`, `rgb(138, 144, 153)` from the component against `rgb(221, 221, 221)`
-      from the fallback, and `border-color` is not one of the four the criterion names.
+      **(b) Was unsatisfiable against four properties, and is satisfiable against five.** The same
+      control strips the class and **0 of the 4 originally named properties changed**, because the
+      select column keeps its own `:not(.db-checkbox)` fallback block declaring the same
+      `appearance: none`, the same 1px border, the same `--db-radius-sm` and the same fill.
+      Stripping the class did not remove an owner; it woke a second one that agrees. Two agreeing
+      owners are indistinguishable from one until one is taken away, and this control could not take
+      the second away.
 
-      By this criterion's own argument that is the answer, not an inconvenience: two agreeing owners
-      are indistinguishable from one owner until one of them is taken away, and this control cannot
-      take the second one away. **The obstacle is the dead code D3 declined to delete**, which is
-      dormant rather than dead — a negative control reanimates it.
+      **`borderColor` is where they disagree, and they disagree across an accessibility floor.** The
+      comparison now names five properties, and the same control reports **`1 of 5 properties differ:
+      borderColor rgb(221, 221, 221) vs rgb(138, 144, 153)`** — red on the appearance check, exit 1 —
+      while the unarmed run reads 0 of 5 and exit 0. A checkbox border is the only thing identifying
+      an unchecked control, so WCAG 1.4.11 puts it at 3:1 against its own fill. Derived from the
+      measured colours against the white the same run reports: the component's `rgb(138, 144, 153)`
+      is **3.22:1** and the dormant fallback's `rgb(221, 221, 221)` is **1.36:1** — the figure
+      `styles.css` already records beside the inherited token this ownership work replaced.
 
-      Three ways to close it, none taken here because each is a decision this phase does not own:
-      assert `border-color` as a fifth property, one line, and this exact control becomes discharging
-      (the role-mate reads `rgb(138, 144, 153)` too, so the check stays green on correct code);
-      delete the three dead blocks, which is D3's open question and moves captures; or run the
-      control against a role-mate with no per-site fallback, which is a different claim about a
-      different element — measured for contrast, stripping the class from the gallery role-mate moves
-      all four and takes the appearance check red at `4 of 4 properties differ`.
-
-      **The first route is the recommended one, because the fifth property carries a WCAG floor.** A
-      checkbox border is the only thing identifying the control, so WCAG 1.4.11 puts it at 3:1. The
-      component's `rgb(138, 144, 153)` computes **3.22:1** against the white fill the same run
-      reports; the dormant fallback's `rgb(221, 221, 221)` computes **1.36:1** — the number
-      `styles.css` already records as the inherited token the ownership work replaced. The four
-      properties this criterion names are the four the two owners agree on; the fifth is where they
-      disagree by an accessibility threshold. Ratios derived from the measured colours, not asserted
-      by any check today.
+      **Why this route and not the other two.** Deleting the three dormant blocks is D3's open
+      question and moves captures. Running the control against a role-mate with no per-site fallback
+      answers a different claim about a different element — measured for contrast, stripping the
+      class from the gallery role-mate moves all four original properties. The fifth property was the
+      one-line route, and it is the one that carries a floor rather than only a difference: without
+      it the fallback is dormant rather than dead and nothing in the harness can tell.
 - [ ] The operator opens the table on desktop and sees a whole checkbox.
 
       Operator-confirmed is the only state that closes this, per D3.

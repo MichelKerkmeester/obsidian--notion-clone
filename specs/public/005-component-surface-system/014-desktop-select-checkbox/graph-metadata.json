@@ -184,21 +184,21 @@
         "source": "derived"
       },
       {
-        "name": "no",
+        "name": "four",
         "kind": "key_phrase",
         "path": "acceptance-criteria.md",
         "source": "derived"
       },
       {
-        "name": "1. DURABLE DIRECTIVE",
-        "kind": "heading",
+        "name": "no",
+        "kind": "key_phrase",
         "path": "goal.md",
         "source": "derived"
       }
     ],
     "causal_summary": "Restore the select-column checkbox pin on desktop, lost when the shared checkbox component took ownership of appearance and the fallback guard switched off placement with it.",
     "created_at": "2026-08-30T16:46:48.681Z",
-    "last_save_at": "2026-08-31T20:48:09.039Z",
+    "last_save_at": "2026-09-01T10:27:07.368Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -209,7 +209,7 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:2d4e92fbce47c20b51ca18c76c8a51023e6a351d6db92d4527b0923cf07d89c8",
+    "source_fingerprint": "sha256:d0227a51f17672d3b76d8cd35641bdc9e0c43dc3e464f19de0ef32c351bf3bec",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "76d33f4d60c4024553ef1dc1a23096c76cfe4d2a451a5e70deafed97d7742905",
