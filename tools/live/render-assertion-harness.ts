@@ -884,6 +884,42 @@ function calendarAssertions(container: HTMLElement): AssertionResult[] {
       : "no event segment was drawn: every bound below this passes trivially on an empty grid, "
         + "so this run proves nothing about the calendar",
   });
+
+  // A multi-day bar is positioned against its week row, and the arithmetic that places it is not the
+  // arithmetic that draws the grid. Reading a phone capture, the last row's bar looked as though it
+  // started outside the grid's left edge while a bar two rows above started inside it — two
+  // different offsets on one surface, which a picture can suggest and only a measurement can settle.
+  //
+  // Stated as containment rather than as an offset, because the offset is allowed to differ between
+  // a bar that starts mid-week and one that starts on Sunday; what is never allowed is ink outside
+  // the row that owns it.
+  const rows = Array.from(container.querySelectorAll<HTMLElement>(".db-calendar-month-week"));
+  const escaped: string[] = [];
+  let bars = 0;
+  for (const row of rows) {
+    const rowBox = row.getBoundingClientRect();
+    if (rowBox.width === 0) continue;
+    for (const bar of Array.from(row.querySelectorAll<HTMLElement>(".db-calendar-month-segment"))) {
+      const box = bar.getBoundingClientRect();
+      if (box.width === 0) continue;
+      bars += 1;
+      const overLeft = Math.round(rowBox.left - box.left);
+      const overRight = Math.round(box.right - rowBox.right);
+      if (overLeft > 1 || overRight > 1) {
+        escaped.push(`"${(bar.textContent || "").trim().slice(0, 18)}" `
+          + `${overLeft > 1 ? `${overLeft}px past the left` : `${overRight}px past the right`}`);
+      }
+    }
+  }
+  results.push({
+    name: "no month segment paints outside the week row that owns it",
+    pass: bars > 0 && escaped.length === 0,
+    detail: bars === 0
+      ? `${rows.length} week row(s) and no measurable segment inside any of them, so this asserts `
+        + "nothing — the containment it checks is vacuous on a row with no bar"
+      : `${bars} segment(s) across ${rows.length} week row(s); ${escaped.length} outside their row`
+        + (escaped.length ? `: ${escaped.join("; ")}` : ""),
+  });
   return results;
 }
 

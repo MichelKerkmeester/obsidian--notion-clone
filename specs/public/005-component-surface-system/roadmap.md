@@ -544,6 +544,26 @@ decision that lives only in a conversation gets relitigated by the next agent.
 14px to sit on the type scale, and whether the record sheet should survive a window resize instead of
 closing — which decides whether report 4 is finished or blocked on the operator's handset.
 
+**A third, opened 2026-09-01 by reading a capture: the month grid on a phone cannot carry event
+titles, and no CSS change fixes that.** Measured at 402px: the day column is **45px**, the segment
+**41px**, and after the timed dot and its padding the title gets **30px** — so **8 of 11 titles are
+clipped**, several to three characters. `"Notion sync"` wants 62px and `"Q1 renewals sweep"` wants
+100px.
+
+*What was ruled out, with numbers, rather than argued.* The `+` day-add button is not the thief — it
+sits in the day heading, not in the segment row, and it is the only tap path to create on a day, since
+the alternative is `ondblclick` and a double-tap on a phone is the browser's zoom gesture. The time
+prefix is not the thief either: `.db-calendar-month-time` already computes to `display: none` on a
+phone. Wrapping the title to a second line is not a small change — the segment is `height: 20px` with
+`line-height: 20px` and its lane is placed by `grid-row`, so the lane arithmetic assumes that height.
+Dropping the dot recovers 7px and would rescue **2 of the 8**.
+
+*So this is a presentation decision, not a repair, and it is the operator's.* The candidates are the
+ones real calendars pick: dots only on a phone month grid (Apple), a taller week row that fits two
+lines, or leaving the truncation as it is. **Nothing is changed here.** Vertical room is not the
+constraint — the week rows measure ~145px with events occupying the top 40 — which is what makes the
+taller-row option cheap and the horizontal ones impossible.
+
 ---
 
 ## 7. WHERE A PHASE'S OWN DOCUMENTS DISAGREE
