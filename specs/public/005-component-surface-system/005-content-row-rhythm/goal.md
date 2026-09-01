@@ -76,7 +76,23 @@ green-looking rows are ticked with their exposure attached and the rest are not 
 - [x] The rail scrolls rather than grows: `scrollWidth > clientWidth` with parent width unchanged.
       **Sound by the audit's own reading** — a relation between two measurements of the same element
       rather than an absolute size, so a host that pads the content moves both terms.
-- [ ] Switching view type changes header height by at most one token step. **No check.**
+- [x] Switching view type changes header height by at most one token step. **No check.**
+      **Checked 2026-09-01**, in the placement lane, by performing six switches rather than
+      describing one. `ToolbarRenderer.render` forks per view type — calendar and timeline hand off
+      to their own toolbar renderer entirely — so the cost of a switch is not readable from the
+      source. Measured: `table=109px, board=109px, gallery=109px, list=109px, calendar=109px,
+      timeline=109px`, **spread 0px against one `--db-space-2` step of 4px**.
+      **The bound is a token step, not a pixel count**, because that is what this row says and
+      because a pixel bound needs re-tuning every time the scale moves. The step is read off the
+      surface rather than written down.
+      **Watched red** by giving the calendar and timeline branch a second toolbar row:
+      `calendar=151px, timeline=151px … spread 42px`.
+      **The count is its own row beside it.** A height comparison over one rendered header passes
+      while five others throw, and the first version of this check reported exactly that: six null
+      heights and no error, because the stub answered `hideHeaderChrome` with a function and
+      `if (actions.hideHeaderChrome) return;` is the first line of the render. **A truthy stub is
+      not a neutral one** — flags now resolve to booleans and never to functions, and
+      *every view type renders a header to measure* fails if any of the six stops drawing.
 - [ ] Plus the five stateful dimensions. **No mapping exists.** One negative control is recorded —
       *no list column holds more than one property*, was 3, recorded 0 — and it was repaired on
       2026-09-01 after it turned out to be counting an unlabelled reserved box as a property.

@@ -7425,10 +7425,129 @@ await section("a menu's heading and its rows share one left edge", async () => {
       + `desktop report, and this is the measurement that says so instead of arguing it`);
 });
 
+// ───────────────────────────────────────────────────────────────────
+// THE HEADER KEEPS ITS HEIGHT WHEN THE VIEW TYPE CHANGES
+// ───────────────────────────────────────────────────────────────────
+//
+// `005` asks that switching view type changes the header's height by at most one token step, and
+// recorded "No check". The reason it matters is not tidiness: the header sits above the content, so
+// every pixel it gains or loses on a switch is a pixel of content that jumps. A reader who changes
+// from table to board should not have the rows move under them.
+//
+// The toolbar is driven, not described. `ToolbarRenderer.render` is the shipped entry point and it
+// forks per view type — calendar and timeline hand off to their own toolbar renderer entirely — so
+// the only way to know what a switch costs is to perform six of them and measure.
+//
+// The bound is stated as a TOKEN STEP rather than as a pixel count, because that is what the
+// criterion says and because a pixel bound would have to be re-tuned every time the scale moves.
+// `--db-space-2` is read off the surface rather than assumed.
+
+const headerRhythmResults = [];
+
+await section("the header keeps its height when the view type changes", async () => {
+  const page = await browser.newPage({ viewport: VIEWPORT, reducedMotion: "reduce" });
+  await page.setContent(page_html);
+  await page.addStyleTag({ content: readFileSync(join(REPO, "styles.css"), "utf8") + HOST_BARE_CONTROLS });
+  await page.addScriptTag({ content: shimJs + "\ninstallObsidianDomShim(globalThis);" });
+  await page.addScriptTag({ content: positionerJs });
+
+  const measured = await page.evaluate(() => {
+    const { ToolbarRenderer } = globalThis.__place;
+    const host = document.querySelector(".note-database-container");
+
+    const columns = [
+      { key: "file.name", label: "Name", type: "text" },
+      { key: "status", label: "Status", type: "select", options: [{ value: "open", text: "Open" }] },
+      { key: "due", label: "Due", type: "date" },
+      { key: "cost", label: "Cost", type: "number" },
+    ];
+
+    // Every action a no-op, every FLAG a boolean. The distinction is the whole of this block.
+    //
+    // A Proxy that answers everything with a function answers `hideHeaderChrome` with a function
+    // too, and `if (actions.hideHeaderChrome) return;` is the first line of the render — so the
+    // toolbar returned immediately, drew nothing, threw nothing, and the first version of this
+    // check reported six null heights as though the surface had no header. A truthy stub is not a
+    // neutral one.
+    //
+    // So a key that reads as a flag resolves to a boolean and never to a function. `show*` defaults
+    // true and `hide*`, `is*` and `disable*` default false, which is the full-chrome toolbar a
+    // reader sees; anything else is a method and gets a no-op, because a render is not supposed to
+    // call one and a render that did would be its own defect.
+    const flags = {
+      isReadOnly: false, hideWidthSelect: false, standalone: true,
+      hideCreateEntry: false, showViewTabs: true, showDatabaseChrome: true,
+    };
+    const looksLikeFlag = (key) => /^(hide|show|is|disable|allow|can)[A-Z]/.test(key);
+    const actions = new Proxy(flags, {
+      get(target, key) {
+        if (key in target) return target[key];
+        if (typeof key === "symbol") return undefined;
+        if (looksLikeFlag(key)) return key.startsWith("show");
+        return () => undefined;
+      },
+      has: () => true,
+    });
+
+    const state = {
+      hiddenColumns: new Set(), filters: [], sortRules: [], filterTree: undefined,
+      sortColumn: undefined, sortDirection: "asc", searchText: "", groupByField: "",
+    };
+
+    const step = Number.parseFloat(getComputedStyle(host).getPropertyValue("--db-space-2")) || 0;
+
+    const VIEW_TYPES = ["table", "board", "gallery", "list", "calendar", "timeline"];
+    const heights = [];
+    const renderer = new ToolbarRenderer();
+    for (const viewType of VIEW_TYPES) {
+      const container = host.createDiv({ cls: "db-view-host" });
+      const view = { viewType, name: viewType, schema: { columns }, columnOrder: columns.map((c) => c.key) };
+      const db = { id: "db", name: "Subs", schema: { columns }, views: [view], sourceRules: [] };
+      let error = null;
+      try {
+        renderer.render(container, [{ config: db, sourcePath: "db.md" }], 0, 0, state, actions);
+      } catch (e) {
+        error = String(e && e.message ? e.message : e);
+      }
+      const header = container.querySelector(".db-header") ?? container.querySelector(".db-toolbar");
+      heights.push({
+        viewType,
+        error,
+        height: header ? Math.round(header.getBoundingClientRect().height) : null,
+        drew: header ? header.querySelectorAll("button, input, select").length : 0,
+      });
+      container.remove();
+    }
+    return { step, heights };
+  });
+
+  const record = (name, pass, detail) => headerRhythmResults.push({ name, pass, detail });
+  const { step, heights } = measured;
+  const drawn = heights.filter((h) => h.height !== null);
+  const values = drawn.map((h) => h.height);
+  const spread = values.length ? Math.max(...values) - Math.min(...values) : null;
+  const listing = heights
+    .map((h) => `${h.viewType}=${h.error ? `threw(${h.error.slice(0, 40)})` : `${h.height}px/${h.drew} controls`}`)
+    .join(", ");
+
+  // A height comparison over one rendered header would pass while five others threw, so the count
+  // is its own row. This is the shape `020` repaired elsewhere: an empty measurement reads as a
+  // clean one.
+  record("every view type renders a header to measure",
+    drawn.length === heights.length && drawn.every((h) => h.drew > 0),
+    `${drawn.length} of ${heights.length} view types produced a header: ${listing}`);
+
+  record("switching view type changes header height by at most one token step",
+    spread !== null && step > 0 && spread <= step,
+    `header heights ${listing}; spread ${spread}px against one --db-space-2 step of ${step}px. `
+      + `Stated in token steps because that is what the criterion says and because a pixel bound `
+      + `would need re-tuning every time the scale moves`);
+});
+
 results.push(...phoneResults, ...menuResults, ...addViewDesktopResults, ...addViewPhoneResults,
   ...grammarResults, ...addViewGrammar, ...motionResults, ...reducedResults, ...desktopMenuResults, ...cellResults, ...sheetResults, ...selectCellResults, ...selectPhoneResults, ...rowPhoneResults, ...rowNarrowResults,
   ...desktopPanelResults, ...stateResults, ...keyboardParityResults, ...familyResults, ...touchResults, ...overlapResults, ...rhythmResults, ...rendererRhythmResults,
-  ...liftedResults, ...inlineEditResults, ...numberParityResults, ...peekLayerResults, ...propertyRowResults, ...menuEdgeResults, ...sectionFailures);
+  ...liftedResults, ...inlineEditResults, ...numberParityResults, ...peekLayerResults, ...propertyRowResults, ...menuEdgeResults, ...headerRhythmResults, ...sectionFailures);
 
 await browser.close();
 rmSync(work, { recursive: true, force: true });
