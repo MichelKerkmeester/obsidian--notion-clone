@@ -12,7 +12,7 @@ _memory:
     packet_pointer: "005-component-surface-system/020-harness-fidelity-repair"
     last_updated_at: "2026-09-01T18:40:00Z"
     last_updated_by: "option-tone-divergence"
-    recent_action: "Option-tone divergence closed; gate lane 25 added"
+    recent_action: "Group-title and card-cover fixture divergences closed; lane 25 derives coverage from src"
     next_safe_action: "Add a placement check that never sets --keyboard-height, so the fallback can fail"
     blockers: []
     key_files:
@@ -90,8 +90,14 @@ own content is `022`'s, the `create|render` filter is `025`'s.
 - [x] Every product defect these instruments revealed is fixed or recorded with its number and
       owner: **0 dropped**.
 - [x] A fixture cannot paint two distinct option values as one chip, or an option-typed group title
-      as bare text: **5 files flattening 3 columns, 3 helpers writing bare text** -> **0**, guarded as
-      gate lane 25 with all three rules observed red.
+      as bare text: **5 files flattening 3 columns, 4 helpers writing bare text** -> **0**, guarded as
+      gate lane 25 with every rule observed red. The rule's coverage is read off `renderGroupLabel`'s
+      own call sites, not listed: **3 of 5 title classes watched** -> **5 of 5**.
+- [x] The card cover is photographed by something. Fixtures reaching any of its four classes **was
+      0**, and the only one the corpus named was the other view's, inside no wrapper, so it matched
+      no rule and painted nothing -> **4 of 4**, in `card-cover-states` and the gallery view. The
+      pre-fix count is checkable in `HEAD~`: one occurrence of `db-board-card-cover-placeholder`,
+      inside `db-gallery-card`, and no occurrence of the other three.
 - [ ] The operator signs off the two new modal fixtures, per image.
 <!-- /ANCHOR:completion -->
 

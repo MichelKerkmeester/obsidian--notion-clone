@@ -19,6 +19,16 @@ Settings above, actions below, one row grammar for both the seven types and the 
 
 Sources: `src/views/toolbar-renderer.ts`
 
+### Card covers, board and gallery
+
+The empty cover, in the board's card and the gallery's. Both draw the same Lucide image glyph on --background-secondary at a 0.75 aspect ratio; the board sizes the glyph at 24px and the gallery at 28px, which is the one difference between them.
+
+| dark | light |
+|---|---|
+| ![card-cover-states dark](components/card-cover-states-mobile-dark.png) | ![card-cover-states light](components/card-cover-states-mobile-light.png) |
+
+Sources: `src/views/board-renderer.ts`, `src/views/gallery-renderer.ts`
+
 ### Active rule popover — filter
 
 Editing one chip opens the filter panel's single-rule editor: field, operator and value, with no remove button.
@@ -534,6 +544,8 @@ Sticky day header and all-day strip over the 08–16 time grid; the current-time
 Sources: `src/views/calendar-renderer.ts`
 
 ### Gallery view
+
+A gallery whose image field is configured but whose rows resolve no image: every card carries the cover wrapper in its empty state. A gallery with no image field configured draws no cover at all and is the board fixture's shape.
 
 | dark | light |
 |---|---|

@@ -96,6 +96,106 @@
       "bytes": 63714
     },
     {
+      "id": "card-cover-states",
+      "title": "Card covers, board and gallery",
+      "group": "components",
+      "theme": "dark",
+      "device": "desktop",
+      "file": "screenshots/components/card-cover-states-desktop-dark.png",
+      "sources": [
+        "src/views/board-renderer.ts",
+        "src/views/gallery-renderer.ts"
+      ],
+      "layoutHash": "661433e9060d",
+      "sourceHashes": {
+        "src/views/board-renderer.ts": "31a49df5b500",
+        "src/views/gallery-renderer.ts": "c7d6e9216f39",
+        "styles.css": "9a84a91b5cf1",
+        "tools/screenshots/theme.css": "868563a663de",
+        "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
+        "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
+        "tools/screenshots/capture.mjs": "f334950d918a"
+      },
+      "note": "The empty cover, in the board's card and the gallery's. Both draw the same Lucide image glyph on --background-secondary at a 0.75 aspect ratio; the board sizes the glyph at 24px and the gallery at 28px, which is the one difference between them.",
+      "capture": "element",
+      "bytes": 22699
+    },
+    {
+      "id": "card-cover-states",
+      "title": "Card covers, board and gallery",
+      "group": "components",
+      "theme": "light",
+      "device": "desktop",
+      "file": "screenshots/components/card-cover-states-desktop-light.png",
+      "sources": [
+        "src/views/board-renderer.ts",
+        "src/views/gallery-renderer.ts"
+      ],
+      "layoutHash": "661433e9060d",
+      "sourceHashes": {
+        "src/views/board-renderer.ts": "31a49df5b500",
+        "src/views/gallery-renderer.ts": "c7d6e9216f39",
+        "styles.css": "9a84a91b5cf1",
+        "tools/screenshots/theme.css": "868563a663de",
+        "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
+        "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
+        "tools/screenshots/capture.mjs": "f334950d918a"
+      },
+      "note": "The empty cover, in the board's card and the gallery's. Both draw the same Lucide image glyph on --background-secondary at a 0.75 aspect ratio; the board sizes the glyph at 24px and the gallery at 28px, which is the one difference between them.",
+      "capture": "element",
+      "bytes": 23505
+    },
+    {
+      "id": "card-cover-states",
+      "title": "Card covers, board and gallery",
+      "group": "components",
+      "theme": "dark",
+      "device": "mobile",
+      "file": "screenshots/components/card-cover-states-mobile-dark.png",
+      "sources": [
+        "src/views/board-renderer.ts",
+        "src/views/gallery-renderer.ts"
+      ],
+      "layoutHash": "8c468ec9860a",
+      "sourceHashes": {
+        "src/views/board-renderer.ts": "31a49df5b500",
+        "src/views/gallery-renderer.ts": "c7d6e9216f39",
+        "styles.css": "9a84a91b5cf1",
+        "tools/screenshots/theme.css": "868563a663de",
+        "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
+        "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
+        "tools/screenshots/capture.mjs": "f334950d918a"
+      },
+      "note": "The empty cover, in the board's card and the gallery's. Both draw the same Lucide image glyph on --background-secondary at a 0.75 aspect ratio; the board sizes the glyph at 24px and the gallery at 28px, which is the one difference between them.",
+      "capture": "element",
+      "bytes": 18509
+    },
+    {
+      "id": "card-cover-states",
+      "title": "Card covers, board and gallery",
+      "group": "components",
+      "theme": "light",
+      "device": "mobile",
+      "file": "screenshots/components/card-cover-states-mobile-light.png",
+      "sources": [
+        "src/views/board-renderer.ts",
+        "src/views/gallery-renderer.ts"
+      ],
+      "layoutHash": "8c468ec9860a",
+      "sourceHashes": {
+        "src/views/board-renderer.ts": "31a49df5b500",
+        "src/views/gallery-renderer.ts": "c7d6e9216f39",
+        "styles.css": "9a84a91b5cf1",
+        "tools/screenshots/theme.css": "868563a663de",
+        "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
+        "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
+        "tools/screenshots/capture.mjs": "f334950d918a"
+      },
+      "note": "The empty cover, in the board's card and the gallery's. Both draw the same Lucide image glyph on --background-secondary at a 0.75 aspect ratio; the board sizes the glyph at 24px and the gallery at 28px, which is the one difference between them.",
+      "capture": "element",
+      "bytes": 19493
+    },
+    {
       "id": "chrome-active-rule-popover-filter",
       "title": "Active rule popover — filter",
       "group": "components",
@@ -4511,7 +4611,7 @@
         "src/views/group-label-renderer.ts",
         "src/views/card-field-renderer.ts"
       ],
-      "layoutHash": "8bbc1b7a953f",
+      "layoutHash": "20e21d51036c",
       "sourceHashes": {
         "src/views/board-renderer.ts": "31a49df5b500",
         "src/views/group-label-renderer.ts": "3fee8449607c",
@@ -4524,7 +4624,7 @@
       },
       "note": "The board inside the default-width container. On the phone (is-phone) the container no longer centres the grid off-screen, and the sticky group header is taken out of sticky flow so it cannot float down over the cards; columns page horizontally with snap-scroll.",
       "capture": "viewport",
-      "bytes": 192084
+      "bytes": 194911
     },
     {
       "id": "board-mobile",
@@ -4538,7 +4638,7 @@
         "src/views/group-label-renderer.ts",
         "src/views/card-field-renderer.ts"
       ],
-      "layoutHash": "8bbc1b7a953f",
+      "layoutHash": "20e21d51036c",
       "sourceHashes": {
         "src/views/board-renderer.ts": "31a49df5b500",
         "src/views/group-label-renderer.ts": "3fee8449607c",
@@ -4551,7 +4651,7 @@
       },
       "note": "The board inside the default-width container. On the phone (is-phone) the container no longer centres the grid off-screen, and the sticky group header is taken out of sticky flow so it cannot float down over the cards; columns page horizontally with snap-scroll.",
       "capture": "viewport",
-      "bytes": 197030
+      "bytes": 199006
     },
     {
       "id": "board-mobile",
@@ -4565,7 +4665,7 @@
         "src/views/group-label-renderer.ts",
         "src/views/card-field-renderer.ts"
       ],
-      "layoutHash": "9f680d1c0f35",
+      "layoutHash": "57642e4a1ba7",
       "sourceHashes": {
         "src/views/board-renderer.ts": "31a49df5b500",
         "src/views/group-label-renderer.ts": "3fee8449607c",
@@ -4578,7 +4678,7 @@
       },
       "note": "The board inside the default-width container. On the phone (is-phone) the container no longer centres the grid off-screen, and the sticky group header is taken out of sticky flow so it cannot float down over the cards; columns page horizontally with snap-scroll.",
       "capture": "viewport",
-      "bytes": 78580
+      "bytes": 79361
     },
     {
       "id": "board-mobile",
@@ -4592,7 +4692,7 @@
         "src/views/group-label-renderer.ts",
         "src/views/card-field-renderer.ts"
       ],
-      "layoutHash": "9f680d1c0f35",
+      "layoutHash": "57642e4a1ba7",
       "sourceHashes": {
         "src/views/board-renderer.ts": "31a49df5b500",
         "src/views/group-label-renderer.ts": "3fee8449607c",
@@ -4605,7 +4705,7 @@
       },
       "note": "The board inside the default-width container. On the phone (is-phone) the container no longer centres the grid off-screen, and the sticky group header is taken out of sticky flow so it cannot float down over the cards; columns page horizontally with snap-scroll.",
       "capture": "viewport",
-      "bytes": 81405
+      "bytes": 81883
     },
     {
       "id": "board-view",
@@ -4618,7 +4718,7 @@
         "src/views/board-renderer.ts",
         "src/views/card-field-renderer.ts"
       ],
-      "layoutHash": "1c1408e8b829",
+      "layoutHash": "6460b4a6d0f6",
       "sourceHashes": {
         "src/views/board-renderer.ts": "31a49df5b500",
         "src/views/card-field-renderer.ts": "33212bef3422",
@@ -4630,7 +4730,7 @@
       },
       "note": null,
       "capture": "viewport",
-      "bytes": 252622
+      "bytes": 257283
     },
     {
       "id": "board-view",
@@ -4643,7 +4743,7 @@
         "src/views/board-renderer.ts",
         "src/views/card-field-renderer.ts"
       ],
-      "layoutHash": "1c1408e8b829",
+      "layoutHash": "6460b4a6d0f6",
       "sourceHashes": {
         "src/views/board-renderer.ts": "31a49df5b500",
         "src/views/card-field-renderer.ts": "33212bef3422",
@@ -4655,7 +4755,7 @@
       },
       "note": null,
       "capture": "viewport",
-      "bytes": 259062
+      "bytes": 262566
     },
     {
       "id": "board-view",
@@ -4668,7 +4768,7 @@
         "src/views/board-renderer.ts",
         "src/views/card-field-renderer.ts"
       ],
-      "layoutHash": "35187ea9fd14",
+      "layoutHash": "f27f91f12a52",
       "sourceHashes": {
         "src/views/board-renderer.ts": "31a49df5b500",
         "src/views/card-field-renderer.ts": "33212bef3422",
@@ -4680,7 +4780,7 @@
       },
       "note": null,
       "capture": "viewport",
-      "bytes": 78580
+      "bytes": 79361
     },
     {
       "id": "board-view",
@@ -4693,7 +4793,7 @@
         "src/views/board-renderer.ts",
         "src/views/card-field-renderer.ts"
       ],
-      "layoutHash": "35187ea9fd14",
+      "layoutHash": "f27f91f12a52",
       "sourceHashes": {
         "src/views/board-renderer.ts": "31a49df5b500",
         "src/views/card-field-renderer.ts": "33212bef3422",
@@ -4705,7 +4805,7 @@
       },
       "note": null,
       "capture": "viewport",
-      "bytes": 81405
+      "bytes": 81883
     },
     {
       "id": "calendar-mini-calendar",
@@ -4874,7 +4974,7 @@
       },
       "note": "Multi-day all-day bars, timed events, an overflow week and one event carried across the week boundary.",
       "capture": "viewport",
-      "bytes": 87137
+      "bytes": 86697
     },
     {
       "id": "calendar-month-view",
@@ -5102,7 +5202,7 @@
         "src/views/gallery-renderer.ts",
         "src/views/card-field-renderer.ts"
       ],
-      "layoutHash": "1dc1be3c5a76",
+      "layoutHash": "21e6070cb5d5",
       "sourceHashes": {
         "src/views/gallery-renderer.ts": "c7d6e9216f39",
         "src/views/card-field-renderer.ts": "33212bef3422",
@@ -5112,9 +5212,9 @@
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "f334950d918a"
       },
-      "note": null,
+      "note": "A gallery whose image field is configured but whose rows resolve no image: every card carries the cover wrapper in its empty state. A gallery with no image field configured draws no cover at all and is the board fixture's shape.",
       "capture": "viewport",
-      "bytes": 40126
+      "bytes": 68276
     },
     {
       "id": "gallery-view",
@@ -5127,7 +5227,7 @@
         "src/views/gallery-renderer.ts",
         "src/views/card-field-renderer.ts"
       ],
-      "layoutHash": "1dc1be3c5a76",
+      "layoutHash": "21e6070cb5d5",
       "sourceHashes": {
         "src/views/gallery-renderer.ts": "c7d6e9216f39",
         "src/views/card-field-renderer.ts": "33212bef3422",
@@ -5137,9 +5237,9 @@
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "f334950d918a"
       },
-      "note": null,
+      "note": "A gallery whose image field is configured but whose rows resolve no image: every card carries the cover wrapper in its empty state. A gallery with no image field configured draws no cover at all and is the board fixture's shape.",
       "capture": "viewport",
-      "bytes": 40129
+      "bytes": 68227
     },
     {
       "id": "gallery-view",
@@ -5152,7 +5252,7 @@
         "src/views/gallery-renderer.ts",
         "src/views/card-field-renderer.ts"
       ],
-      "layoutHash": "c456d41aa4a2",
+      "layoutHash": "b12fcc67bad2",
       "sourceHashes": {
         "src/views/gallery-renderer.ts": "c7d6e9216f39",
         "src/views/card-field-renderer.ts": "33212bef3422",
@@ -5162,9 +5262,9 @@
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "f334950d918a"
       },
-      "note": null,
+      "note": "A gallery whose image field is configured but whose rows resolve no image: every card carries the cover wrapper in its empty state. A gallery with no image field configured draws no cover at all and is the board fixture's shape.",
       "capture": "viewport",
-      "bytes": 38567
+      "bytes": 17689
     },
     {
       "id": "gallery-view",
@@ -5177,7 +5277,7 @@
         "src/views/gallery-renderer.ts",
         "src/views/card-field-renderer.ts"
       ],
-      "layoutHash": "c456d41aa4a2",
+      "layoutHash": "b12fcc67bad2",
       "sourceHashes": {
         "src/views/gallery-renderer.ts": "c7d6e9216f39",
         "src/views/card-field-renderer.ts": "33212bef3422",
@@ -5187,9 +5287,9 @@
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "f334950d918a"
       },
-      "note": null,
+      "note": "A gallery whose image field is configured but whose rows resolve no image: every card carries the cover wrapper in its empty state. A gallery with no image field configured draws no cover at all and is the board fixture's shape.",
       "capture": "viewport",
-      "bytes": 38403
+      "bytes": 17582
     },
     {
       "id": "list-mobile",
@@ -5848,7 +5948,7 @@
       },
       "note": "Two weeks at one column per day; the April band marks the month boundary and the today line sits at 25 March 13:45.",
       "capture": "viewport",
-      "bytes": 146959
+      "bytes": 147239
     },
     {
       "id": "timeline-view",

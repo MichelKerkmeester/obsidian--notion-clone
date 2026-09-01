@@ -24,6 +24,8 @@
 // ───────────────────────────────────────────────────────────────────
 
 import { spawnSync } from "node:child_process";
+import { mkdirSync, writeFileSync } from "node:fs";
+import { join, relative } from "node:path";
 import { fileURLToPath } from "node:url";
 
 // ───────────────────────────────────────────────────────────────────
@@ -112,6 +114,18 @@ const CHECKS = [
 // 3. RUN
 // ───────────────────────────────────────────────────────────────────
 
+// A surprising result keeps its whole output on disk.
+//
+// This used to hold two lines truncated to 120 characters, which says WHICH lane went red and
+// nothing about why. That is survivable for a deterministic lane and useless for an intermittent
+// one: the only way to get the detail is to run it again, and running it again is exactly what
+// loses the failure. A lane that reddens under load and passes on its own has been observed here.
+// The gate that decides whether work ships must not discard the evidence for its own verdict.
+//
+// Written only for a surprise, so a passing run leaves nothing behind, and the path is printed with
+// the result rather than left to be discovered.
+const LOG_DIR = join(REPO, "tools/lane/gate-logs");
+
 const results = [];
 for (const check of CHECKS) {
   const [command, ...args] = check.cmd;
@@ -119,11 +133,20 @@ for (const check of CHECKS) {
   // A signal or a missing binary leaves status null, which is not a pass and must not read as one.
   const code = run.status === null ? 1 : run.status;
   const failed = code !== 0;
+  const surprise = check.expectFail ? !failed : failed;
+  let log = null;
+  if (surprise) {
+    mkdirSync(LOG_DIR, { recursive: true });
+    log = join(LOG_DIR, `${check.name.replace(/[^a-z0-9]+/gi, "-")}.log`);
+    writeFileSync(log, `$ ${check.cmd.join(" ")}\nexit ${code}\nsignal ${run.signal ?? "none"}\n\n`
+      + `--- stdout ---\n${run.stdout || ""}\n--- stderr ---\n${run.stderr || ""}\n`);
+  }
   results.push({
     ...check,
     code,
     failed,
-    surprise: check.expectFail ? !failed : failed,
+    surprise,
+    log,
     tail: (run.stderr || run.stdout || "").trim().split("\n").slice(-2).join(" | ").slice(0, 120),
   });
 }
@@ -137,6 +160,7 @@ for (const r of results) {
   const mark = r.failed ? (r.expectFail ? "red (expected)" : "RED") : r.expectFail ? "GREEN (unexpected)" : "green";
   console.log(`  ${r.name.padEnd(width)}  ${mark}`);
   if (r.surprise && r.tail) console.log(`  ${" ".repeat(width)}  ${r.tail}`);
+  if (r.surprise && r.log) console.log(`  ${" ".repeat(width)}  full output: ${relative(REPO, r.log)}`);
 }
 
 const unexpectedRed = results.filter((r) => r.failed && !r.expectFail);

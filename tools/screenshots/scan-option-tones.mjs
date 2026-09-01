@@ -36,7 +36,8 @@ import { readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import {
-  OPTION_TONES, ROWS, boardSubgroupHeader, galleryGroupHeader, listGroupHeader, optionPill,
+  OPTION_TONES, ROWS, boardColumn, boardSubgroupHeader, galleryGroupHeader, listGroupHeader,
+  optionPill, tableGroupTitle,
 } from "./scenarios/shared.mjs";
 
 // ───────────────────────────────────────────────────────────────────
@@ -98,18 +99,44 @@ for (const name of scenarioFiles) {
 // only thing the renderer builds for one. Each helper is called with a value drawn from the fixture
 // rows, so a helper that stopped badging is caught with its own data rather than a chosen constant.
 const bareTitles = [];
+// Every helper that builds a group title, not the three that were wrong first. The board lane was
+// the fourth and it was missed: `boardColumn` writes the same `db-board-column-title` span through
+// the same `renderGroupLabel` call, and the first version of this check did not know it existed —
+// so the board view kept photographing a bare lane title while the check reported the family clean.
 const HEADERS = [
-  ["listGroupHeader", listGroupHeader, ROWS[0].category],
-  ["galleryGroupHeader", galleryGroupHeader, ROWS[4].category],
-  ["boardSubgroupHeader", boardSubgroupHeader, ROWS[2].cycle],
+  ["listGroupHeader", listGroupHeader, ROWS[0].category, "db-list-group-title"],
+  ["galleryGroupHeader", galleryGroupHeader, ROWS[4].category, "db-gallery-group-title"],
+  ["boardSubgroupHeader", boardSubgroupHeader, ROWS[2].cycle, "db-board-subgroup-title"],
+  ["boardColumn", (title, count) => boardColumn(title, ROWS.slice(0, count)), ROWS[11].category,
+    "db-board-column-title"],
+  ["tableGroupTitle", (title) => tableGroupTitle(title), ROWS[18].category, "db-group-title-text"],
 ];
-for (const [name, helper, title] of HEADERS) {
+for (const [name, helper, title, cls] of HEADERS) {
   if (!OPTION_TONES[title]) {
     bareTitles.push({ name, title, why: "no tone is registered for this value, so the check is blind" });
     continue;
   }
-  if (!helper(title, 4).includes(`status-color-${OPTION_TONES[title]}`)) {
+  const built = helper(title, 4);
+  if (!built.includes(`status-color-${OPTION_TONES[title]}`)) {
     bareTitles.push({ name, title, why: "renders the option value as bare text; renderGroupLabel badges it" });
+  } else if (!built.includes(cls)) {
+    bareTitles.push({ name, title, why: `no longer writes ${cls}, so the class this rule is keyed to is gone` });
+  }
+}
+
+// Which title classes does the renderer actually badge? Read them off its own call sites rather
+// than listing them here, so a fifth grouped view fails this check on the day it is written and not
+// on the day somebody happens to look at its fixture. The board lane was exactly that miss: a
+// fourth `renderGroupLabel` call with its own title class, absent from a list written by hand from
+// the three helpers that were already known to be wrong.
+const RENDER_GROUP_LABEL = /renderGroupLabel\([^)]*?"([a-z-]+)"\s*\)/gs;
+const covered = new Set(HEADERS.map(([, , , cls]) => cls));
+const uncovered = new Set();
+const viewsDir = join(REPO, "src", "views");
+for (const name of readdirSync(viewsDir).filter((file) => file.endsWith(".ts"))) {
+  const source = readFileSync(join(viewsDir, name), "utf8");
+  for (const match of source.matchAll(RENDER_GROUP_LABEL)) {
+    if (!covered.has(match[1])) uncovered.add(`${match[1]} (src/views/${name})`);
   }
 }
 
@@ -124,9 +151,11 @@ if (scenarioFiles.length === 0 || ROWS.length === 0) {
   process.exit(2);
 }
 
-if (collisions.length === 0 && handPicked.length === 0 && bareTitles.length === 0) {
+if (collisions.length === 0 && handPicked.length === 0 && bareTitles.length === 0
+    && uncovered.size === 0) {
   console.log(`scan-option-tones: PASS — ${OPTION_FIELDS.length} option columns, `
-    + `${scenarioFiles.length} scenario files, every distinct value its own chip`);
+    + `${scenarioFiles.length} scenario files, ${covered.size} badged group titles, `
+    + "every distinct value its own chip");
   process.exit(0);
 }
 
@@ -144,6 +173,11 @@ for (const b of bareTitles) {
   console.error(`\nBARE TITLE   ${b.name}("${b.title}")`);
   console.error(`  ${b.why}`);
 }
+for (const u of uncovered) {
+  console.error(`\nUNCOVERED    ${u}`);
+  console.error("  renderGroupLabel badges this title class and no fixture helper here is checked for it.");
+  console.error("  Add the helper that builds it to HEADERS, or write one if no fixture photographs it yet.");
+}
 console.error(`\nscan-option-tones: ${collisions.length} flattened, ${handPicked.length} hand-picked, `
-  + `${bareTitles.length} bare`);
+  + `${bareTitles.length} bare, ${uncovered.size} uncovered`);
 process.exit(1);

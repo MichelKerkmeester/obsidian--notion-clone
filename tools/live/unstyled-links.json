@@ -1,10 +1,10 @@
 {
-  "measuredAt": "2026-09-01T14:52:59.234Z",
+  "measuredAt": "2026-09-01T15:28:54.370Z",
   "inputs": {
     "styles.css": "9a84a91b5cf1",
     "tools/screenshots/theme.css": "868563a663de",
     "tools/live/unstyled-links.mjs": "58854cd67e97"
   },
   "links": 112,
-  "scenarios": 60
+  "scenarios": 61
 }

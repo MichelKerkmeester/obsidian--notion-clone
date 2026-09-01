@@ -79,7 +79,33 @@ export const ICONS = {
   // declare inline, so a fixture built from either source draws the same button.
   move: glyph('<path d="m8 9 4-4 4 4M8 15l4 4 4-4"/>'),
   maximize: glyph('<path d="M15 3h6v6"/><path d="m21 3-7 7"/><path d="M9 21H3v-6"/><path d="m3 21 7-7"/>'),
+  // Lucide's `image`, which is what `setIcon(placeholder, "image")` injects into an empty cover.
+  // The 14px attributes are defaults; `.db-*-cover-placeholder svg` sizes it to 28px.
+  image: glyph('<rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/>'
+    + '<path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/>'),
 };
+
+/**
+ * A card cover with no image behind it.
+ *
+ * Both card views build this and only when an image field is configured: `renderCover` creates the
+ * wrapper, and with nothing to resolve it adds `is-empty` and puts Lucide's `image` glyph in a
+ * placeholder span. The wrapper is what carries the aspect ratio, so a card that has one is roughly
+ * three times the height of a card that does not — which is why a fixture cannot leave it out and
+ * still be a picture of the surface.
+ *
+ * The gallery fixture had the placeholder class from the OTHER view, with no wrapper and no glyph,
+ * so `.db-gallery-cover`, `.db-gallery-cover-placeholder`, `.db-board-card-cover` and
+ * `.db-board-card-cover-placeholder` were four families the whole corpus never photographed, and
+ * the one class it did name matched no rule.
+ */
+export const emptyCover = (base) => `
+  <div class="${base} is-empty">
+    <span class="${base}-placeholder">${ICONS.image}</span>
+  </div>`;
+
+/** The two bases, spelt out because they do not follow one pattern: the board's carries `card`. */
+export const COVER_BASES = { board: "db-board-card-cover", gallery: "db-gallery-cover" };
 
 // ───────────────────────────────────────────────────────────────────
 // 3. RENDER HELPERS
@@ -111,6 +137,35 @@ export const OPTION_TONES = {
 
 export const optionTone = (value) => OPTION_TONES[value] || "gray";
 export const optionPill = (value) => pill(value, optionTone(value));
+
+/**
+ * The group title, as `renderGroupLabel` builds it.
+ *
+ * All four grouped views route their header title through that one function, and it does NOT write
+ * the label as text: for a status, select or multi-select group field it nests a `.status-badge`
+ * inside the title span, coloured from the matching option and grey when no option matches. Only a
+ * non-option field and the empty "uncategorized" group get bare text.
+ *
+ * These helpers used to write bare text for every title, which meant the list, gallery and board
+ * group headers were photographed in a state the renderer only reaches when grouping by a date or a
+ * number — while the titles they were given ("Design", "Business", "Monthly") are all option values.
+ * A badge is taller and wider than the text it replaces, so that also mis-stated the header height
+ * every control in the row is aligned against.
+ *
+ * Passing no tone is still a legitimate picture: it is the non-option branch.
+ */
+const groupTitle = (cls, title, tone) =>
+  `<span class="${cls}">${tone ? pill(title, tone) : title}</span>`;
+
+/**
+ * The grouped table's divider title. Exported rather than kept beside the `<tr>` that uses it so the
+ * parity check can build one: a title helper the check cannot call is a title helper nothing
+ * watches, which is how the board lane went un-noticed.
+ *
+ * An explicit empty tone renders bare text — the non-option branch — and overrides the default.
+ */
+export const tableGroupTitle = (title, tone = OPTION_TONES[title]) =>
+  groupTitle("db-group-title-text", title, tone);
 
 
 /**
@@ -189,14 +244,19 @@ export const boardCard = (r) => `
     <div class="db-board-card-field"><span class="db-board-card-field-label">Renews</span><span class="db-board-card-value">${r.renew}</span></div>
   </div>`;
 
-export function boardColumn(title, rows) {
+/**
+ * A board lane. Its title is `renderGroupLabel`'s too — `board-renderer.ts:314` passes
+ * `db-board-column-title` to the same function the list, gallery and subgroup headers use — so an
+ * option-typed lane field arrives as a badge here exactly as it does there.
+ */
+export function boardColumn(title, rows, tone = OPTION_TONES[title]) {
   return `
   <div class="db-board-column">
     <div class="db-board-column-header">
       <button type="button" class="db-board-group-toggle"><span class="db-collapse-triangle"></span></button>
       ${rowCheckbox("db-board-column-checkbox")}
       <div class="db-board-header-text">
-        <span class="db-board-column-title">${title}</span>
+        ${groupTitle("db-board-column-title", title, tone)}
         <span class="db-board-count">${rows.length}</span>
       </div>
       <button type="button" class="db-board-column-options" aria-label="Column options">${dots}</button>
@@ -217,25 +277,6 @@ export function boardColumn(title, rows) {
  * `db-list-group-header-label`, the gallery puts them straight on the header, and the board's
  * subgroup keeps its title and count in `db-board-header-text`.
  */
-/**
- * The group title, as `renderGroupLabel` builds it.
- *
- * All four grouped views route their header title through that one function, and it does NOT write
- * the label as text: for a status, select or multi-select group field it nests a `.status-badge`
- * inside the title span, coloured from the matching option and grey when no option matches. Only a
- * non-option field and the empty "uncategorized" group get bare text.
- *
- * These helpers used to write bare text for every title, which meant the list, gallery and board
- * group headers were photographed in a state the renderer only reaches when grouping by a date or a
- * number — while the titles they were given ("Design", "Business", "Monthly") are all option values.
- * A badge is taller and wider than the text it replaces, so that also mis-stated the header height
- * every control in the row is aligned against.
- *
- * Passing no tone is still a legitimate picture: it is the non-option branch.
- */
-const groupTitle = (cls, title, tone) =>
-  `<span class="${cls}">${tone ? pill(title, tone) : title}</span>`;
-
 export const listGroupHeader = (title, count, tone = OPTION_TONES[title]) => `
   <div class="db-list-group">
     <div class="db-list-group-header">

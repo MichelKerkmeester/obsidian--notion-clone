@@ -241,6 +241,77 @@ edges, not a fill. The strip was the population, and it is one. No lane is added
 built for a single fixed instance is a check that never fails, and the census is the evidence, held
 here rather than in a green light.
 
+**The guard's own list was the next defect, and it was found the same way.** Reading
+`board-view-mobile-dark.png` showed the board lane title as bare text. `board-renderer.ts:314` passes
+`db-board-column-title` to the same `renderGroupLabel`, so a lane grouped by an option field is a
+badge there too — but `boardColumn` is a fixture helper of its own and was not among the three the
+new rule watched, because that list had been written by hand from the three helpers already known to
+be wrong. **A check whose coverage is a list somebody remembered has the same failure mode as the
+fixtures it checks.**
+
+It now reads the coverage off `src/`: every `renderGroupLabel(..., "<class>")` call in `src/views/`
+must have a fixture helper this rule can build and assert. Turning that on immediately named a
+fifth site nobody had listed — `db-group-title-text`, the grouped table's divider, in
+`table-renderer.ts` — which is why `tableGroupTitle` is now exported from `shared.mjs` rather than
+living inside the `<tr>` that uses it. Observed red by adding a sixth `renderGroupLabel` call with a
+new class to `gallery-renderer.ts`: `UNCOVERED db-gallery-total-title`. Five title classes covered,
+and a new grouped view fails on the day it is written.
+
+**The cover family was in source and in no fixture, and the one class that named it was the wrong
+view's.** The gallery fixture wrote `<div class="db-board-card-cover-placeholder"></div>` — the
+board's placeholder class, with no wrapper around it and no glyph inside. `renderCover` builds
+`.db-gallery-cover`, adds `is-empty` when nothing resolves, and puts Lucide's image glyph in
+`.db-gallery-cover-placeholder`; the board does the same through its own two classes. So all four
+were unreachable by any check, the one name present matched no rule and painted nothing, and the
+wrapper — which carries the `0.75` aspect ratio and therefore most of a card's height — was absent
+entirely. A gallery card photographed about a third of the height the renderer gives it.
+
+Fixed, and given a fixture of its own: `card-cover-states` puts the board's card and the gallery's
+side by side in the empty state, each inside its real parent (`.db-board-column` at 280px,
+`.db-gallery` at 250px) rather than at the scenario's width, because a cover photographed at 620px
+is 827px tall and no lane or grid column ever gives it that. The gallery view fixture also drew
+**4 of 24 rows**, which at 900px is one row of cards over eleven hundred pixels of nothing — the
+empty-looking-product shape `ROWS` was sized to avoid. It draws 12.
+
+**One product difference measured and deliberately not fixed.** The two empty covers are the same
+role — *no image here* — and size their glyph differently: **24px on the board, 28px in the gallery**
+(`styles.css:9257` and `:10026`). The side-by-side capture is what makes it visible. It is left
+alone: it is a decorative placeholder rather than a target, one of the two surfaces is being
+withdrawn by `030`, and closing it means taking the stylesheet lane and moving captures for a
+difference with no functional consequence. Recorded with its numbers so it stays visible rather than
+closed by silence, which is the same disposition this phase took on the 169x34 cell.
+
+**Why no existing lane caught the cover family, checked rather than assumed.** `surface-census.mjs`
+is the instrument built for exactly this gap — buildable from the source, rendered by no fixture —
+and it reported none. It is not wrong: its `SURFACE_WORDS` filter scopes both inventories to overlay
+surfaces (`menu|popover|panel|sheet|modal|dropdown|picker|peek|tooltip`), so cards, covers and cells
+are outside it by construction. The consequence is worth stating where the number is read: its
+**"130 awaiting a fixture" is a count over overlays, not over plugin classes**, and taking it for the
+latter overstates fixture coverage by every card, cell and cover family in the plugin. The fixture is
+the durable fix here — a family a fixture draws is a family the capture, checkbox and placement lanes
+can all reach — and no new lane is added for it.
+
+**A lane that was green seven times and red twice, and a gate that threw away the reason.** During
+this work `npm run gate` reported `placement RED` twice, at **384/386** and **383/386** against the
+same one declared red, while seven consecutive standalone `npm run storybook:placement` runs — one of
+them started immediately after another browser lane — all read **385/386**. The failing checks were
+never identified, and that is the second finding rather than an aside: the gate kept **two lines of a
+lane's output, truncated to 120 characters**, which says which lane went red and nothing about why.
+An intermittent red cannot be diagnosed from that, and the only way to get the detail — run it again
+— is the step that loses the failure.
+
+`gate.mjs` now writes a surprising lane's full stdout, stderr, exit code and signal to
+`tools/lane/gate-logs/<lane>.log` and prints the path beside the result. Written only on a surprise,
+so a green run leaves nothing behind, and gitignored, because it is a diagnostic of one run on one
+machine rather than a fact about the tree. Observed working by arming a control lane that exits 3:
+the summary line, the log path, and a file holding both streams. Disarmed, and the two other lanes
+that correctly reddened on the control file — `comments` and `folder-docs`, which found it carried no
+module banner — went green again with it removed.
+
+The flake itself stays open and unexplained. It is recorded because it is a property of the evidence:
+this lane's count is not deterministic under load, a single green from it is weaker than it reads,
+and the next occurrence will now leave the detail behind that this one did not.
+
 **The harness's largest remaining supply was never in this phase's scope, and two of the 63 lifted
 checks carry it.** `verify-placement.mjs` sets `--keyboard-height` on the document element at three
 sites — `:819`, `:4724`, `:4753` — and measures what moved. Nothing in `src/` publishes that

@@ -7,7 +7,8 @@
 // 1. IMPORTS
 // ───────────────────────────────────────────────────────────────────
 
-import { COLUMNS, ICONS, ROWS, boardColumn, dots, glyph, optionPill, rowCheckbox, tableHeader, tableRows } from "./shared.mjs";
+import { COLUMNS, COVER_BASES, ICONS, ROWS, boardColumn, dots, emptyCover, glyph, optionPill,
+  rowCheckbox, tableHeader, tableRows } from "./shared.mjs";
 
 // ───────────────────────────────────────────────────────────────────
 // 2. SCENARIOS
@@ -69,13 +70,27 @@ export const CORE_SCENARIOS = [
     group: "views",
     width: 900,
     sources: ["src/views/gallery-renderer.ts", "src/views/card-field-renderer.ts"],
+    // Two things this fixture used to get wrong, both of which made the gallery photograph as
+    // something the renderer does not build.
+    //
+    // It drew four cards out of twenty-four, so a 900px-wide capture was one row of cards over
+    // eleven hundred pixels of nothing — the empty-looking-product shape the row fixture was sized
+    // to avoid in the first place.
+    //
+    // And its cover was `db-board-card-cover-placeholder`: the OTHER view's class, with no wrapper
+    // around it and no glyph inside. `renderCover` builds `.db-gallery-cover`, adds `is-empty` when
+    // nothing resolves, and puts Lucide's image glyph in `.db-gallery-cover-placeholder`. The
+    // wrapper carries the aspect ratio, so the card it produces is about three times the height of
+    // the one this drew — and the class the fixture did name matched no rule, so it painted nothing
+    // at all. A gallery with no cover is the surface with its subject removed.
+    note: "A gallery whose image field is configured but whose rows resolve no image: every card carries the cover wrapper in its empty state. A gallery with no image field configured draws no cover at all and is the board fixture's shape.",
     html: () => `
       <div class="note-database-container">
         <div class="db-gallery" role="grid">
-          ${ROWS.slice(0, 4).map((r) => `
+          ${ROWS.slice(0, 12).map((r) => `
             <div class="db-gallery-card" role="row" aria-keyshortcuts="Enter Space F2" tabindex="-1">
               <div class="db-gallery-card-controls">${rowCheckbox("db-gallery-card-checkbox")}</div>
-              <div class="db-board-card-cover-placeholder"></div>
+              ${emptyCover(COVER_BASES.gallery)}
               <div class="db-gallery-card-title">${r.name}</div>
               <div class="db-gallery-field"><span class="db-gallery-field-label">Cost</span><span class="db-gallery-field-value">${r.cost}</span></div>
             </div>`).join("")}
@@ -337,6 +352,49 @@ export const CORE_SCENARIOS = [
           ${[...new Set(ROWS.map((r) => r.category))]
             .map((cat) => boardColumn(cat, ROWS.filter((r) => r.category === cat)))
             .join("")}
+        </div>
+      </div>`,
+  },
+  {
+    id: "card-cover-states",
+    title: "Card covers, board and gallery",
+    group: "components",
+    width: 620,
+    sources: ["src/views/board-renderer.ts", "src/views/gallery-renderer.ts"],
+    // Two families that were in source and in no fixture. `renderCover` runs in both card views
+    // whenever an image field is configured, and every capture in this corpus was of a view with
+    // none — so `.db-board-card-cover`, `.db-board-card-cover-placeholder`, `.db-gallery-cover` and
+    // `.db-gallery-cover-placeholder` were unreachable by any check. The only mention of any of
+    // them anywhere was one placeholder class in the gallery fixture, from the wrong view, with no
+    // wrapper: a name that matched no rule and painted nothing.
+    //
+    // Side by side on purpose. The two are the same idea implemented twice, with their own wrapper
+    // class and their own placeholder class, and the glyph sized 24px on the board against 28px in
+    // the gallery. A divergence between them is only visible when they are in one picture. The
+    // empty state is the one a fixture can produce honestly: resolving a real image needs a vault.
+    note: "The empty cover, in the board's card and the gallery's. Both draw the same Lucide image glyph on --background-secondary at a 0.75 aspect ratio; the board sizes the glyph at 24px and the gallery at 28px, which is the one difference between them.",
+    // Each card sits in its real parent rather than on the container. The cover's height is its
+    // width over a 0.75 ratio, so a card photographed at the scenario's own width is a cover eight
+    // hundred pixels tall — a shape no lane or grid column ever gives it. `.db-board-column` and
+    // `.db-gallery` carry the shipped widths (280px and 250px), which is what makes the two
+    // covers comparable to each other and to the product.
+    html: () => `
+      <div class="note-database-container" style="display: flex; gap: 16px; align-items: flex-start">
+        <div class="db-board-column">
+          <div class="db-board-cards" role="rowgroup">
+            <div class="db-board-card" role="row" tabindex="-1">
+              ${emptyCover(COVER_BASES.board)}
+              <div class="db-board-card-title">Figma</div>
+              <div class="db-board-card-field"><span class="db-board-card-field-label">Cost</span><span class="db-board-card-value">€ 18,75</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="db-gallery" role="grid">
+          <div class="db-gallery-card" role="row" tabindex="-1">
+            ${emptyCover(COVER_BASES.gallery)}
+            <div class="db-gallery-card-title">Figma</div>
+            <div class="db-gallery-field"><span class="db-gallery-field-label">Cost</span><span class="db-gallery-field-value">€ 18,75</span></div>
+          </div>
         </div>
       </div>`,
   },

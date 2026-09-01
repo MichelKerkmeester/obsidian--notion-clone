@@ -24,7 +24,7 @@
 // ───────────────────────────────────────────────────────────────────
 
 import { OPTION_TONES, ROWS, ICONS, boardSubgroupHeader, dots, galleryGroupHeader, glyph, listGroupHeader,
-  optionPill, pill, rowCheckbox } from "./shared.mjs";
+  optionPill, rowCheckbox, tableGroupTitle } from "./shared.mjs";
 
 // ───────────────────────────────────────────────────────────────────
 // 2. ICONS
@@ -234,7 +234,7 @@ const groupDividerRow = (title, field, count, badgeTone, summaries, depth = 0) =
           <button type="button" class="db-group-collapse-toggle" aria-label="Collapse" aria-expanded="true">
             <span class="db-collapse-triangle"></span>
           </button>
-          <span class="db-group-title-text">${badgeTone ? pill(title, badgeTone) : title}</span>
+          ${tableGroupTitle(title, badgeTone)}
           <span class="db-group-count">${count}</span>
         </span>
         <div class="db-group-divider-summaries">
