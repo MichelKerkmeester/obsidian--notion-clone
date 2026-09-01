@@ -31,10 +31,18 @@ Repo `~/MEGA/Development/Obsidian Plugin`. **Runs third.** No overlay dependency
 denominator, which reads as finished rather than as unmeasured. The audit below is why the two
 green-looking rows are ticked with their exposure attached and the rest are not ticked at all.*
 
-- [ ] 20 rows, wrapping off: standard deviation of row heights is **0**. Wrapping on: every height a
-      whole multiple of the line box. **The number exists and the audit disowns it:** row-height
-      uniformity here is a property of the fixtures, which give every row the same content. A device
-      pads bare controls from `app.css`, which the instruments do not load.
+- [x] 20 rows, wrapping off: standard deviation of row heights is **0**. **Measured against varying
+      content 2026-09-01, which is what the audit's objection was about.**
+      **What was wrong.** Every synthesised row carried the same string, so a spread of zero was
+      guaranteed by construction: twenty identical rows are the same height however the row is laid
+      out, and the check was reading its own fixture back to itself.
+      **What changed.** The content lengths now run from a single character to a paragraph, so a row
+      that WRAPS is a taller row and the deviation moves. `sd 0` at every one of the twelve
+      width × field-count × device combinations, so the values truncate as the stylesheet says they
+      do — a claim about the product rather than about the input.
+      **Watched failing** with `overflow: hidden`, `text-overflow: ellipsis` and `white-space: nowrap`
+      removed from `.db-list-field-value`: the deviation goes from `0` to between **99.2 and
+      1475.63** across the same twelve combinations.
 - [x] **Nothing sized `max-content` paints outside the container that bounds it**, 4 widths × 7
       views; every legitimate overflow scrolls rather than grows. **Held, with its exposure stated.**
       `replay` carries *no list row paints outside its container*: was 26, recorded 0, now 0. The
@@ -42,8 +50,23 @@ green-looking rows are ticked with their exposure attached and the rest are not 
       reason — what keeps the tick is that the failing value was 26 on the same instrument, so the
       instrument can distinguish, and the repair moved it.
 - [ ] No descendant of `.db-header` has a right edge beyond the header's content box — 4 widths ×
-      7 views. **Same exposure, no failing baseline recorded.** Without a red on this instrument
-      there is nothing to say it discriminates rather than measures a narrow harness.
+      7 views. **Now measured, and it names an operator decision rather than a repair.**
+      **The check exists.** `view-census` measures every descendant against the HEADER's content box
+      rather than against its immediate parent's, which is a different question: a control can sit
+      neatly inside its own wrapper while the wrapper hangs off the header's edge, and a
+      parent-by-parent measurement reports that chain as clean.
+      **One spill, at one width.** `320px chrome-toolbar-search
+      .db-toolbar-cluster.db-toolbar-utilities-cluster by 10px`. Nothing spills at 402, 768 or 1440.
+      **Why this is not a repair to make unasked.** The cluster is `flex: 0 0 auto` with fixed-size
+      icon children, so letting it shrink moves the overflow from the header to the cluster rather
+      than removing it — the buttons still paint past the edge, because the cluster carries
+      `overflow: visible`. Removing it properly means letting the toolbar WRAP at very narrow widths,
+      which changes the chrome's shape.
+      **The decision this waits on: what is the narrowest width the plugin supports?** 320px is below
+      the narrowest common handset — this program's own list-width sweep starts at 360 for that
+      reason. If 360 is the floor, this criterion is met as it stands and the census width should
+      say so. If 320 is supported, the toolbar needs a wrapping rule and every chrome capture moves.
+      Both are one-line changes in opposite directions, which is why it is not taken here.
 - [x] The rail scrolls rather than grows: `scrollWidth > clientWidth` with parent width unchanged.
       **Sound by the audit's own reading** — a relation between two measurements of the same element
       rather than an absolute size, so a host that pads the content moves both terms.

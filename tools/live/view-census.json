@@ -1,8 +1,8 @@
 {
-  "measuredAt": "2026-09-01T00:09:32.176Z",
+  "measuredAt": "2026-09-01T00:15:21.906Z",
   "inputs": {
     "styles.css": "1ce52a63b090",
-    "tools/live/view-census.mjs": "f911f2e4a8cb",
+    "tools/live/view-census.mjs": "2ce0c7f439a4",
     "tools/screenshots/scenarios.mjs": "1395f2dacbfd"
   },
   "widths": [
@@ -377,7 +377,8 @@
       "cls": "db-column-menu-trigger",
       "parentCls": "db-th-content",
       "by": 33.2,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -387,7 +388,8 @@
       "cls": "db-column-menu-trigger",
       "parentCls": "db-th-content",
       "by": 33.2,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -397,7 +399,8 @@
       "cls": "db-column-menu-trigger",
       "parentCls": "db-th-content",
       "by": 33.2,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -407,7 +410,8 @@
       "cls": "db-column-menu-trigger",
       "parentCls": "db-th-content",
       "by": 33.2,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -417,7 +421,8 @@
       "cls": "db-column-menu-trigger",
       "parentCls": "db-th-content",
       "by": 33.2,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -427,7 +432,8 @@
       "cls": "db-column-menu-trigger",
       "parentCls": "db-th-content",
       "by": 32.1,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -437,7 +443,8 @@
       "cls": "db-board-column",
       "parentCls": "db-board",
       "by": 40,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -447,7 +454,8 @@
       "cls": "db-board-column-header",
       "parentCls": "db-board-column",
       "by": 8,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -457,7 +465,8 @@
       "cls": "db-board-column",
       "parentCls": "db-board",
       "by": 348,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -467,7 +476,8 @@
       "cls": "db-board-column-header",
       "parentCls": "db-board-column",
       "by": 8,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -477,7 +487,8 @@
       "cls": "db-board-column",
       "parentCls": "db-board",
       "by": 656,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -487,7 +498,8 @@
       "cls": "db-board-column-header",
       "parentCls": "db-board-column",
       "by": 8,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -497,7 +509,8 @@
       "cls": "db-board-column",
       "parentCls": "db-board",
       "by": 964,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -507,7 +520,8 @@
       "cls": "db-board-column-header",
       "parentCls": "db-board-column",
       "by": 8,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -517,7 +531,8 @@
       "cls": "db-list",
       "parentCls": "note-database-container",
       "by": 146,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -537,7 +552,8 @@
       "cls": "db-view-tab-popover.db-add-view-popover",
       "parentCls": "note-database-container",
       "by": 32,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -547,7 +563,8 @@
       "cls": "db-empty-hero",
       "parentCls": "note-database-container",
       "by": 26,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -557,7 +574,8 @@
       "cls": "db-table-wrap",
       "parentCls": "note-database-container.db-width-default",
       "by": 704,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -567,7 +585,8 @@
       "cls": "db-record-open-btn.db-record-open-btn-icon",
       "parentCls": "db-cell.db-title-cell",
       "by": 4,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -577,7 +596,8 @@
       "cls": "db-record-open-btn.db-record-open-btn-icon",
       "parentCls": "db-cell.db-title-cell",
       "by": 4,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -587,7 +607,8 @@
       "cls": "db-record-open-btn.db-record-open-btn-icon",
       "parentCls": "db-cell.db-title-cell",
       "by": 4,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -597,7 +618,8 @@
       "cls": "db-record-open-btn.db-record-open-btn-icon",
       "parentCls": "db-cell.db-title-cell",
       "by": 4,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -607,7 +629,8 @@
       "cls": "db-record-open-btn.db-record-open-btn-icon",
       "parentCls": "db-cell.db-title-cell",
       "by": 4,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -617,7 +640,8 @@
       "cls": "db-record-open-btn.db-record-open-btn-icon",
       "parentCls": "db-cell.db-title-cell",
       "by": 4,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -627,7 +651,8 @@
       "cls": "db-record-open-btn.db-record-open-btn-icon",
       "parentCls": "db-cell.db-title-cell",
       "by": 4,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -637,7 +662,8 @@
       "cls": "db-record-open-btn.db-record-open-btn-icon",
       "parentCls": "db-cell.db-title-cell",
       "by": 4,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -647,7 +673,8 @@
       "cls": "db-record-open-btn.db-record-open-btn-icon",
       "parentCls": "db-cell.db-title-cell",
       "by": 4,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -657,7 +684,8 @@
       "cls": "db-record-open-btn.db-record-open-btn-icon",
       "parentCls": "db-cell.db-title-cell",
       "by": 4,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -667,7 +695,8 @@
       "cls": "db-record-open-btn.db-record-open-btn-icon",
       "parentCls": "db-cell.db-title-cell",
       "by": 4,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -677,7 +706,8 @@
       "cls": "db-list",
       "parentCls": "note-database-container.db-width-default",
       "by": 448,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -697,7 +727,8 @@
       "cls": "db-board-column",
       "parentCls": "db-board",
       "by": 40,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -707,7 +738,8 @@
       "cls": "db-board-column-header",
       "parentCls": "db-board-column",
       "by": 8,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -717,7 +749,8 @@
       "cls": "db-board-column",
       "parentCls": "db-board",
       "by": 348,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -727,7 +760,8 @@
       "cls": "db-board-column-header",
       "parentCls": "db-board-column",
       "by": 8,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -737,7 +771,8 @@
       "cls": "db-board-column",
       "parentCls": "db-board",
       "by": 656,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -747,7 +782,8 @@
       "cls": "db-board-column-header",
       "parentCls": "db-board-column",
       "by": 8,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -757,7 +793,8 @@
       "cls": "db-board-column",
       "parentCls": "db-board",
       "by": 964,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -767,7 +804,8 @@
       "cls": "db-board-column-header",
       "parentCls": "db-board-column",
       "by": 8,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -777,7 +815,8 @@
       "cls": "db-list",
       "parentCls": "note-database-container.db-width-default",
       "by": 428,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -797,7 +836,8 @@
       "cls": "db-calendar-controls",
       "parentCls": "db-calendar-header",
       "by": 55.9,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -807,7 +847,8 @@
       "cls": "db-calendar-col-resize-handle",
       "parentCls": "db-calendar-weekday",
       "by": 4,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -817,7 +858,8 @@
       "cls": "db-calendar-col-resize-handle",
       "parentCls": "db-calendar-weekday",
       "by": 4,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -827,7 +869,8 @@
       "cls": "db-calendar-col-resize-handle",
       "parentCls": "db-calendar-weekday",
       "by": 4,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -837,7 +880,8 @@
       "cls": "db-calendar-col-resize-handle",
       "parentCls": "db-calendar-weekday",
       "by": 4,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -847,7 +891,8 @@
       "cls": "db-calendar-col-resize-handle",
       "parentCls": "db-calendar-weekday",
       "by": 4,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -857,7 +902,8 @@
       "cls": "db-calendar-col-resize-handle",
       "parentCls": "db-calendar-weekday",
       "by": 4,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -867,7 +913,8 @@
       "cls": "db-calendar-col-resize-handle",
       "parentCls": "db-calendar-weekday",
       "by": 4,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -877,7 +924,8 @@
       "cls": "db-calendar-add-button",
       "parentCls": "db-calendar-day-heading",
       "by": 11.4,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -887,7 +935,8 @@
       "cls": "db-calendar-add-button",
       "parentCls": "db-calendar-day-heading",
       "by": 12.2,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -897,7 +946,8 @@
       "cls": "db-calendar-add-button",
       "parentCls": "db-calendar-day-heading",
       "by": 12.5,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -907,7 +957,8 @@
       "cls": "db-calendar-add-button",
       "parentCls": "db-calendar-day-heading",
       "by": 12.7,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -917,7 +968,8 @@
       "cls": "db-calendar-add-button",
       "parentCls": "db-calendar-day-heading",
       "by": 12.4,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -927,7 +979,8 @@
       "cls": "db-calendar-add-button",
       "parentCls": "db-calendar-day-heading",
       "by": 12.6,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -937,7 +990,8 @@
       "cls": "db-calendar-add-button",
       "parentCls": "db-calendar-day-heading",
       "by": 11.8,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -947,7 +1001,8 @@
       "cls": "db-calendar-month-title",
       "parentCls": "db-calendar-month-segment.is-timed",
       "by": 15,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -957,7 +1012,8 @@
       "cls": "db-calendar-month-title",
       "parentCls": "db-calendar-month-segment.is-timed",
       "by": 15,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -967,7 +1023,8 @@
       "cls": "db-calendar-add-button",
       "parentCls": "db-calendar-day-heading",
       "by": 13.7,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -977,7 +1034,8 @@
       "cls": "db-calendar-add-button",
       "parentCls": "db-calendar-day-heading",
       "by": 12.6,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -987,7 +1045,8 @@
       "cls": "db-calendar-add-button",
       "parentCls": "db-calendar-day-heading",
       "by": 18.5,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -997,7 +1056,8 @@
       "cls": "db-calendar-add-button",
       "parentCls": "db-calendar-day-heading",
       "by": 16.3,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -1007,7 +1067,8 @@
       "cls": "db-calendar-add-button",
       "parentCls": "db-calendar-day-heading",
       "by": 18.2,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -1017,7 +1078,8 @@
       "cls": "db-calendar-add-button",
       "parentCls": "db-calendar-day-heading",
       "by": 18.5,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -1027,7 +1089,8 @@
       "cls": "db-calendar-add-button",
       "parentCls": "db-calendar-day-heading",
       "by": 18.7,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -1037,7 +1100,8 @@
       "cls": "db-calendar-month-title",
       "parentCls": "db-calendar-month-segment.is-timed",
       "by": 15,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -1047,7 +1111,8 @@
       "cls": "db-calendar-month-title",
       "parentCls": "db-calendar-month-segment.is-timed",
       "by": 15,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -1057,7 +1122,8 @@
       "cls": "db-calendar-add-button",
       "parentCls": "db-calendar-day-heading",
       "by": 19.4,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -1067,7 +1133,8 @@
       "cls": "db-calendar-add-button",
       "parentCls": "db-calendar-day-heading",
       "by": 18.6,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -1077,7 +1144,8 @@
       "cls": "db-calendar-add-button",
       "parentCls": "db-calendar-day-heading",
       "by": 17.7,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -1087,7 +1155,8 @@
       "cls": "db-calendar-add-button",
       "parentCls": "db-calendar-day-heading",
       "by": 18.6,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -1097,7 +1166,8 @@
       "cls": "db-calendar-add-button",
       "parentCls": "db-calendar-day-heading",
       "by": 18.6,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -1107,7 +1177,8 @@
       "cls": "db-calendar-add-button",
       "parentCls": "db-calendar-day-heading",
       "by": 20.3,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -1117,7 +1188,8 @@
       "cls": "db-calendar-add-button",
       "parentCls": "db-calendar-day-heading",
       "by": 18.2,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -1127,7 +1199,8 @@
       "cls": "db-calendar-month-title",
       "parentCls": "db-calendar-month-segment.is-timed",
       "by": 15,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -1137,7 +1210,8 @@
       "cls": "db-calendar-add-button",
       "parentCls": "db-calendar-day-heading",
       "by": 21,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -1147,7 +1221,8 @@
       "cls": "db-calendar-add-button",
       "parentCls": "db-calendar-day-heading",
       "by": 20.3,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -1157,7 +1232,8 @@
       "cls": "db-calendar-add-button",
       "parentCls": "db-calendar-day-heading",
       "by": 20.3,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -1167,7 +1243,8 @@
       "cls": "db-calendar-add-button",
       "parentCls": "db-calendar-day-heading",
       "by": 18.6,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -1177,7 +1254,8 @@
       "cls": "db-calendar-add-button",
       "parentCls": "db-calendar-day-heading",
       "by": 20.4,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -1187,7 +1265,8 @@
       "cls": "db-calendar-add-button",
       "parentCls": "db-calendar-day-heading",
       "by": 19.5,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -1197,7 +1276,8 @@
       "cls": "db-calendar-add-button",
       "parentCls": "db-calendar-day-heading",
       "by": 20.4,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -1207,7 +1287,8 @@
       "cls": "db-calendar-month-title",
       "parentCls": "db-calendar-month-segment.is-timed",
       "by": 15,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -1217,7 +1298,8 @@
       "cls": "db-calendar-add-button",
       "parentCls": "db-calendar-day-heading",
       "by": 21.4,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -1227,7 +1309,8 @@
       "cls": "db-calendar-add-button",
       "parentCls": "db-calendar-day-heading",
       "by": 20.6,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -1237,7 +1320,8 @@
       "cls": "db-calendar-add-button",
       "parentCls": "db-calendar-day-heading",
       "by": 18.5,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -1247,7 +1331,8 @@
       "cls": "db-calendar-add-button",
       "parentCls": "db-calendar-day-heading",
       "by": 10.4,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -1257,7 +1342,8 @@
       "cls": "db-calendar-add-button",
       "parentCls": "db-calendar-day-heading",
       "by": 12.2,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -1267,7 +1353,8 @@
       "cls": "db-calendar-add-button",
       "parentCls": "db-calendar-day-heading",
       "by": 12.5,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -1277,7 +1364,8 @@
       "cls": "db-calendar-add-button",
       "parentCls": "db-calendar-day-heading",
       "by": 12.7,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -1287,7 +1375,8 @@
       "cls": "db-calendar-controls",
       "parentCls": "db-calendar-header",
       "by": 55.9,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -1297,7 +1386,8 @@
       "cls": "db-calendar-week-day-name",
       "parentCls": "db-calendar-time-header-day.",
       "by": 18.1,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -1307,7 +1397,8 @@
       "cls": "db-calendar-col-resize-handle",
       "parentCls": "db-calendar-time-header-day.",
       "by": 12,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -1317,7 +1408,8 @@
       "cls": "db-calendar-week-day-name",
       "parentCls": "db-calendar-time-header-day.",
       "by": 21.3,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -1327,7 +1419,8 @@
       "cls": "db-calendar-col-resize-handle",
       "parentCls": "db-calendar-time-header-day.",
       "by": 12,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -1337,7 +1430,8 @@
       "cls": "db-calendar-week-day-name",
       "parentCls": "db-calendar-time-header-day.",
       "by": 16.9,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -1347,7 +1441,8 @@
       "cls": "db-calendar-col-resize-handle",
       "parentCls": "db-calendar-time-header-day.",
       "by": 12,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -1357,7 +1452,8 @@
       "cls": "db-calendar-week-day-name",
       "parentCls": "db-calendar-time-header-day.is-today",
       "by": 22,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -1367,7 +1463,8 @@
       "cls": "db-calendar-col-resize-handle",
       "parentCls": "db-calendar-time-header-day.is-today",
       "by": 12,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -1377,7 +1474,8 @@
       "cls": "db-calendar-week-day-name",
       "parentCls": "db-calendar-time-header-day.",
       "by": 18.1,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -1387,7 +1485,8 @@
       "cls": "db-calendar-col-resize-handle",
       "parentCls": "db-calendar-time-header-day.",
       "by": 12,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -1397,7 +1496,8 @@
       "cls": "db-calendar-week-day-name",
       "parentCls": "db-calendar-time-header-day.",
       "by": 10.2,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -1407,7 +1507,8 @@
       "cls": "db-calendar-col-resize-handle",
       "parentCls": "db-calendar-time-header-day.",
       "by": 12,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -1417,7 +1518,8 @@
       "cls": "db-calendar-week-day-name",
       "parentCls": "db-calendar-time-header-day.",
       "by": 14.8,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -1427,7 +1529,8 @@
       "cls": "db-calendar-col-resize-handle",
       "parentCls": "db-calendar-time-header-day.",
       "by": 12,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -1437,7 +1540,8 @@
       "cls": "db-calendar-week-event-content",
       "parentCls": "db-calendar-week-timed-event.",
       "by": 10.4,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -1447,7 +1551,8 @@
       "cls": "db-calendar-week-event-content",
       "parentCls": "db-calendar-week-timed-event.is-compact",
       "by": 10.4,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -1457,7 +1562,8 @@
       "cls": "db-calendar-mini-popover",
       "parentCls": "note-database-container",
       "by": 4,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -1467,7 +1573,8 @@
       "cls": "db-timeline-controls",
       "parentCls": "db-timeline-header",
       "by": 180.4,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -1477,7 +1584,8 @@
       "cls": "db-timeline-axis",
       "parentCls": "db-timeline-scroll",
       "by": 752,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -1487,7 +1595,8 @@
       "cls": "db-timeline-body",
       "parentCls": "db-timeline-scroll",
       "by": 752,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -1497,7 +1606,8 @@
       "cls": "db-timeline-create-content",
       "parentCls": "db-timeline-create-button",
       "by": 6,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -1507,7 +1617,8 @@
       "cls": "db-timeline-create-content",
       "parentCls": "db-timeline-create-button",
       "by": 6,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -1517,7 +1628,8 @@
       "cls": "db-dropdown-field-chevron",
       "parentCls": "db-dropdown-field.db-panel-dropdown",
       "by": 22,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -1527,7 +1639,8 @@
       "cls": "db-source-rule-icon-button",
       "parentCls": "db-panel-row",
       "by": 33,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -1537,7 +1650,8 @@
       "cls": "db-source-rule-icon-button",
       "parentCls": "db-panel-row",
       "by": 65,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -1547,7 +1661,8 @@
       "cls": "db-panel-button",
       "parentCls": "db-panel-row",
       "by": 98.6,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -1557,7 +1672,8 @@
       "cls": "db-source-rule-icon-button",
       "parentCls": "db-panel-row",
       "by": 33,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -1567,7 +1683,8 @@
       "cls": "db-source-rule-icon-button",
       "parentCls": "db-panel-row",
       "by": 65,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -1577,7 +1694,8 @@
       "cls": "db-panel-button",
       "parentCls": "db-panel-row",
       "by": 98.6,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -1587,7 +1705,8 @@
       "cls": "db-source-rule-icon-button",
       "parentCls": "db-panel-row",
       "by": 26.3,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -1597,7 +1716,8 @@
       "cls": "db-source-rule-icon-button",
       "parentCls": "db-panel-row",
       "by": 58.3,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -1607,7 +1727,8 @@
       "cls": "db-panel-button",
       "parentCls": "db-panel-row",
       "by": 91.9,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -1627,7 +1748,8 @@
       "cls": "db-dropdown-field-chevron",
       "parentCls": "db-dropdown-field.db-panel-dropdown",
       "by": 22,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -1637,7 +1759,8 @@
       "cls": "db-source-rule-icon-button",
       "parentCls": "db-panel-row",
       "by": 33,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -1647,7 +1770,8 @@
       "cls": "db-source-rule-icon-button",
       "parentCls": "db-panel-row",
       "by": 65,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -1657,7 +1781,8 @@
       "cls": "db-panel-button",
       "parentCls": "db-panel-row",
       "by": 98.6,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -1667,7 +1792,8 @@
       "cls": "db-dropdown-field.db-panel-dropdown",
       "parentCls": "db-panel-row",
       "by": 10,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -1677,7 +1803,8 @@
       "cls": "db-dropdown-field-chevron",
       "parentCls": "db-dropdown-field.db-panel-dropdown",
       "by": 22,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -1687,7 +1814,8 @@
       "cls": "db-source-rule-icon-button",
       "parentCls": "db-panel-row",
       "by": 42,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -1697,7 +1825,8 @@
       "cls": "db-source-rule-icon-button",
       "parentCls": "db-panel-row",
       "by": 74,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -1707,7 +1836,8 @@
       "cls": "db-panel-button",
       "parentCls": "db-panel-row",
       "by": 107.6,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -1717,7 +1847,8 @@
       "cls": "db-source-rule-actions",
       "parentCls": "db-source-rule-header",
       "by": 10,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -1727,7 +1858,8 @@
       "cls": "",
       "parentCls": "db-panel-row",
       "by": 10,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -1737,7 +1869,8 @@
       "cls": "db-source-rule-icon-button",
       "parentCls": "db-panel-row",
       "by": 42,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -1747,7 +1880,8 @@
       "cls": "db-panel-button",
       "parentCls": "db-panel-row",
       "by": 75.6,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -1757,7 +1891,8 @@
       "cls": "db-dropdown-field.db-panel-dropdown",
       "parentCls": "db-panel-row",
       "by": 10,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -1767,7 +1902,8 @@
       "cls": "db-dropdown-field-chevron",
       "parentCls": "db-dropdown-field.db-panel-dropdown",
       "by": 22,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -1777,7 +1913,8 @@
       "cls": "db-source-rule-icon-button",
       "parentCls": "db-panel-row",
       "by": 42,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -1787,7 +1924,8 @@
       "cls": "db-panel-button",
       "parentCls": "db-panel-row",
       "by": 75.6,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -1797,7 +1935,8 @@
       "cls": "db-panel-button",
       "parentCls": "db-panel-row.db-sort-rule-row",
       "by": 5.6,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -1807,7 +1946,8 @@
       "cls": "db-panel-button",
       "parentCls": "db-panel-row.db-sort-rule-row",
       "by": 5.6,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -1817,7 +1957,8 @@
       "cls": "clickable-icon",
       "parentCls": "db-column-manager-row",
       "by": 18,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -1827,7 +1968,8 @@
       "cls": "clickable-icon.db-column-delete-btn",
       "parentCls": "db-column-manager-row",
       "by": 42,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -1837,7 +1979,8 @@
       "cls": "clickable-icon",
       "parentCls": "db-column-manager-row",
       "by": 18,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -1847,7 +1990,8 @@
       "cls": "clickable-icon.db-column-delete-btn",
       "parentCls": "db-column-manager-row",
       "by": 42,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -1857,7 +2001,8 @@
       "cls": "clickable-icon",
       "parentCls": "db-column-manager-row",
       "by": 18,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -1867,7 +2012,8 @@
       "cls": "clickable-icon.db-column-delete-btn",
       "parentCls": "db-column-manager-row",
       "by": 42,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -1877,7 +2023,8 @@
       "cls": "clickable-icon",
       "parentCls": "db-column-manager-row",
       "by": 18,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -1887,7 +2034,8 @@
       "cls": "clickable-icon.db-column-delete-btn",
       "parentCls": "db-column-manager-row",
       "by": 42,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -1897,7 +2045,8 @@
       "cls": "clickable-icon",
       "parentCls": "db-column-manager-row",
       "by": 18,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -1907,7 +2056,8 @@
       "cls": "clickable-icon.db-column-delete-btn",
       "parentCls": "db-column-manager-row",
       "by": 42,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -1917,7 +2067,8 @@
       "cls": "clickable-icon",
       "parentCls": "db-column-manager-row",
       "by": 18,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -1927,7 +2078,8 @@
       "cls": "clickable-icon.db-column-delete-btn",
       "parentCls": "db-column-manager-row",
       "by": 42,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -1937,7 +2089,8 @@
       "cls": "db-record-detail-panel.db-anchored-popover",
       "parentCls": "note-database-container.db-width-default",
       "by": 28,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -1947,7 +2100,8 @@
       "cls": "db-record-detail-panel.db-anchored-popover",
       "parentCls": "note-database-container.db-width-default",
       "by": 28,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -1957,7 +2111,8 @@
       "cls": "db-record-detail-panel.db-anchored-popover",
       "parentCls": "note-database-container.db-width-default",
       "by": 28,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -1967,7 +2122,8 @@
       "cls": "db-column-menu-trigger",
       "parentCls": "db-th-content",
       "by": 33.2,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -1977,7 +2133,8 @@
       "cls": "db-column-menu-trigger",
       "parentCls": "db-th-content",
       "by": 33.2,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -1987,7 +2144,8 @@
       "cls": "db-column-menu-trigger",
       "parentCls": "db-th-content",
       "by": 33.2,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -1997,7 +2155,8 @@
       "cls": "db-column-menu-trigger",
       "parentCls": "db-th-content",
       "by": 33.2,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -2007,7 +2166,8 @@
       "cls": "db-column-menu-trigger",
       "parentCls": "db-th-content",
       "by": 33.2,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -2017,7 +2177,8 @@
       "cls": "db-column-menu-trigger",
       "parentCls": "db-th-content",
       "by": 32.1,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -2027,7 +2188,8 @@
       "cls": "db-record-peek-panel",
       "parentCls": "note-database-container",
       "by": 4,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -2037,7 +2199,8 @@
       "cls": "db-invalid-event-col-time",
       "parentCls": "db-invalid-event-grid-header",
       "by": 110,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -2047,7 +2210,8 @@
       "cls": "db-invalid-event-col-time",
       "parentCls": "db-invalid-event-grid-header",
       "by": 286,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -2057,7 +2221,8 @@
       "cls": "db-invalid-event-col-span",
       "parentCls": "db-invalid-event-grid-header",
       "by": 410,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -2067,7 +2232,8 @@
       "cls": "db-invalid-event-time-field.is-start",
       "parentCls": "db-invalid-event-row",
       "by": 110,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -2077,7 +2243,8 @@
       "cls": "db-invalid-event-time-field.is-end",
       "parentCls": "db-invalid-event-row",
       "by": 286,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -2087,7 +2254,8 @@
       "cls": "db-invalid-event-span-cell",
       "parentCls": "db-invalid-event-row",
       "by": 410,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -2097,7 +2265,8 @@
       "cls": "db-invalid-event-time-field.is-start",
       "parentCls": "db-invalid-event-row",
       "by": 110,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -2107,7 +2276,8 @@
       "cls": "db-invalid-event-time-field.is-end",
       "parentCls": "db-invalid-event-row",
       "by": 286,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -2117,7 +2287,8 @@
       "cls": "db-invalid-event-span-cell",
       "parentCls": "db-invalid-event-row",
       "by": 410,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -2127,7 +2298,8 @@
       "cls": "db-invalid-event-time-field.is-start",
       "parentCls": "db-invalid-event-row",
       "by": 110,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -2137,7 +2309,8 @@
       "cls": "db-invalid-event-time-field.is-end",
       "parentCls": "db-invalid-event-row",
       "by": 286,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -2147,7 +2320,8 @@
       "cls": "db-invalid-event-span-cell",
       "parentCls": "db-invalid-event-row",
       "by": 410,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -2157,7 +2331,8 @@
       "cls": "base-import-table",
       "parentCls": "note-database-modal",
       "by": 27.7,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -2167,7 +2342,8 @@
       "cls": "db-header",
       "parentCls": "note-database-container",
       "by": 4,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -2177,7 +2353,8 @@
       "cls": "db-view-tabs",
       "parentCls": "db-toolbar-left",
       "by": 80.5,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 80.5
     },
     {
       "width": 320,
@@ -2187,7 +2364,8 @@
       "cls": "db-toolbar-badge",
       "parentCls": "db-toolbar-icon-button.db-filter-btn",
       "by": 5,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -2197,7 +2375,8 @@
       "cls": "db-toolbar-badge",
       "parentCls": "db-toolbar-icon-button.db-sort-btn",
       "by": 5,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -2207,7 +2386,8 @@
       "cls": "db-toolbar-badge.db-toolbar-badge-neutral",
       "parentCls": "db-toolbar-icon-button.db-col-manager-btn",
       "by": 5,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -2217,7 +2397,8 @@
       "cls": "db-toolbar-cluster.db-toolbar-utilities-cluster",
       "parentCls": "db-toolbar-right",
       "by": 38,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 32
     },
     {
       "width": 320,
@@ -2227,7 +2408,8 @@
       "cls": "db-toolbar-cluster.db-toolbar-creation-cluster",
       "parentCls": "db-toolbar-right",
       "by": 145.9,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 139.9
     },
     {
       "width": 320,
@@ -2237,7 +2419,8 @@
       "cls": "db-header",
       "parentCls": "note-database-container",
       "by": 4,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -2247,7 +2430,8 @@
       "cls": "db-view-tabs",
       "parentCls": "db-toolbar-left",
       "by": 178.7,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 178.7
     },
     {
       "width": 320,
@@ -2257,7 +2441,8 @@
       "cls": "db-header",
       "parentCls": "note-database-container",
       "by": 4,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -2267,7 +2452,8 @@
       "cls": "db-toolbar-cluster.db-toolbar-utilities-cluster",
       "parentCls": "db-toolbar-right",
       "by": 16,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 10
     },
     {
       "width": 320,
@@ -2277,7 +2463,8 @@
       "cls": "db-header",
       "parentCls": "note-database-container",
       "by": 4,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -2287,7 +2474,8 @@
       "cls": "db-active-control-group.is-sort",
       "parentCls": "db-active-view-controls-scroll",
       "by": 186.3,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 129.8
     },
     {
       "width": 320,
@@ -2297,7 +2485,8 @@
       "cls": "db-active-control-order",
       "parentCls": "db-active-control-icon",
       "by": 4,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -2307,7 +2496,8 @@
       "cls": "db-active-control-order",
       "parentCls": "db-active-control-icon",
       "by": 4,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -2317,7 +2507,8 @@
       "cls": "db-active-control-group.is-filter",
       "parentCls": "db-active-view-controls-scroll",
       "by": 706.8,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 650.2
     },
     {
       "width": 320,
@@ -2327,7 +2518,8 @@
       "cls": "db-table-wrap",
       "parentCls": "note-database-container",
       "by": 570,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -2337,7 +2529,8 @@
       "cls": "db-table-wrap",
       "parentCls": "db-grouped-table",
       "by": 999744,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -2347,7 +2540,8 @@
       "cls": "db-list-group-header",
       "parentCls": "db-list-group",
       "by": 8,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -2357,7 +2551,8 @@
       "cls": "db-board-subgroup-header",
       "parentCls": "db-board-subgroup",
       "by": 8,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -2367,7 +2562,8 @@
       "cls": "db-selection-status-bar",
       "parentCls": "note-database-container",
       "by": 18.4,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -2377,7 +2573,8 @@
       "cls": "db-selection-action",
       "parentCls": "db-selection-status-bar",
       "by": 27.8,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -2387,7 +2584,8 @@
       "cls": "db-icon-picker-remove",
       "parentCls": "db-icon-picker-header",
       "by": 10.3,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -2397,7 +2595,8 @@
       "cls": "db-icon-picker-random",
       "parentCls": "db-icon-picker-header",
       "by": 54.3,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -2407,7 +2606,8 @@
       "cls": "db-icon-picker-settings",
       "parentCls": "db-icon-picker-header",
       "by": 98.3,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -2417,7 +2617,8 @@
       "cls": "db-icon-picker-item.db-record-icon-color-blue",
       "parentCls": "db-icon-picker-grid",
       "by": 8.5,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -2427,7 +2628,8 @@
       "cls": "db-icon-picker-item.db-record-icon-color-blue",
       "parentCls": "db-icon-picker-grid",
       "by": 8.5,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -2437,7 +2639,8 @@
       "cls": "db-icon-picker-item.db-record-icon-color-blue",
       "parentCls": "db-icon-picker-grid",
       "by": 8.5,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -2457,7 +2660,8 @@
       "cls": "internal-link.db-file-link-list-item",
       "parentCls": "db-file-link-list",
       "by": 12,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -2467,7 +2671,8 @@
       "cls": "internal-link.db-file-link-list-item",
       "parentCls": "db-file-link-list",
       "by": 3.1,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -2477,7 +2682,8 @@
       "cls": "db-file-tag-remove",
       "parentCls": "status-badge.db-file-tag-badge",
       "by": 8.2,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -2487,7 +2693,8 @@
       "cls": "internal-link.db-file-link-list-item",
       "parentCls": "db-file-link-list",
       "by": 12,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -2497,7 +2704,8 @@
       "cls": "[object.SVGAnimatedString]",
       "parentCls": "db-rating-star-fg",
       "by": 7,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -2507,7 +2715,8 @@
       "cls": "db-column-menu-trigger",
       "parentCls": "db-th-content",
       "by": 5,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -2517,7 +2726,8 @@
       "cls": "db-column-menu-trigger",
       "parentCls": "db-th-content",
       "by": 5,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -2527,7 +2737,8 @@
       "cls": "db-column-menu-trigger",
       "parentCls": "db-th-content",
       "by": 5,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -2537,7 +2748,8 @@
       "cls": "db-column-menu-trigger",
       "parentCls": "db-th-content",
       "by": 4,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -2547,7 +2759,8 @@
       "cls": "db-multi-select-label",
       "parentCls": "status-badge.db-multi-select-badge",
       "by": 6,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -2557,7 +2770,8 @@
       "cls": "db-multi-select-remove",
       "parentCls": "status-badge.db-multi-select-badge",
       "by": 17.7,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -2567,7 +2781,8 @@
       "cls": "db-multi-select-label",
       "parentCls": "status-badge.db-multi-select-badge",
       "by": 6,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -2577,7 +2792,8 @@
       "cls": "db-multi-select-remove",
       "parentCls": "status-badge.db-multi-select-badge",
       "by": 17.7,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -2587,7 +2803,8 @@
       "cls": "db-multi-select-label",
       "parentCls": "status-badge.db-multi-select-badge",
       "by": 6,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -2597,7 +2814,8 @@
       "cls": "db-multi-select-remove",
       "parentCls": "status-badge.db-multi-select-badge",
       "by": 17.7,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -2607,7 +2825,8 @@
       "cls": "db-multi-select-label",
       "parentCls": "status-badge.db-multi-select-badge",
       "by": 6,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -2617,7 +2836,8 @@
       "cls": "db-multi-select-remove",
       "parentCls": "status-badge.db-multi-select-badge",
       "by": 17.7,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -2627,7 +2847,8 @@
       "cls": "db-multi-select-label",
       "parentCls": "status-badge.db-multi-select-badge",
       "by": 17.7,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -2637,7 +2858,8 @@
       "cls": "db-multi-select-remove",
       "parentCls": "status-badge.db-multi-select-badge",
       "by": 29.4,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -2647,7 +2869,8 @@
       "cls": "db-multi-select-label",
       "parentCls": "status-badge.db-multi-select-badge",
       "by": 17.7,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -2657,7 +2880,8 @@
       "cls": "db-multi-select-remove",
       "parentCls": "status-badge.db-multi-select-badge",
       "by": 29.4,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -2667,7 +2891,8 @@
       "cls": "db-multi-select-label",
       "parentCls": "status-badge.db-multi-select-badge",
       "by": 17.7,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -2677,7 +2902,8 @@
       "cls": "db-multi-select-remove",
       "parentCls": "status-badge.db-multi-select-badge",
       "by": 29.4,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -2687,7 +2913,8 @@
       "cls": "db-multi-select-label",
       "parentCls": "status-badge.db-multi-select-badge",
       "by": 17.7,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -2697,7 +2924,8 @@
       "cls": "db-multi-select-remove",
       "parentCls": "status-badge.db-multi-select-badge",
       "by": 29.4,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -2707,7 +2935,8 @@
       "cls": "db-multi-select-label",
       "parentCls": "status-badge.db-multi-select-badge",
       "by": 17.7,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -2717,7 +2946,8 @@
       "cls": "db-multi-select-remove",
       "parentCls": "status-badge.db-multi-select-badge",
       "by": 29.4,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -2727,7 +2957,8 @@
       "cls": "db-multi-select-label",
       "parentCls": "status-badge.db-multi-select-badge",
       "by": 17.7,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -2737,7 +2968,8 @@
       "cls": "db-multi-select-remove",
       "parentCls": "status-badge.db-multi-select-badge",
       "by": 29.4,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -2747,7 +2979,8 @@
       "cls": "db-multi-select-label",
       "parentCls": "status-badge.db-multi-select-badge",
       "by": 17.7,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -2757,7 +2990,8 @@
       "cls": "db-multi-select-remove",
       "parentCls": "status-badge.db-multi-select-badge",
       "by": 29.4,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -2767,7 +3001,8 @@
       "cls": "db-multi-select-label",
       "parentCls": "status-badge.db-multi-select-badge",
       "by": 45.8,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -2777,7 +3012,8 @@
       "cls": "db-multi-select-remove",
       "parentCls": "status-badge.db-multi-select-badge",
       "by": 57.5,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -2787,7 +3023,8 @@
       "cls": "db-multi-select-label",
       "parentCls": "status-badge.db-multi-select-badge",
       "by": 45.8,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -2797,7 +3034,8 @@
       "cls": "db-multi-select-remove",
       "parentCls": "status-badge.db-multi-select-badge",
       "by": 57.5,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -2807,7 +3045,8 @@
       "cls": "db-multi-select-label",
       "parentCls": "status-badge.db-multi-select-badge",
       "by": 45.8,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -2817,7 +3056,8 @@
       "cls": "db-multi-select-remove",
       "parentCls": "status-badge.db-multi-select-badge",
       "by": 57.5,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -2827,7 +3067,8 @@
       "cls": "db-multi-select-label",
       "parentCls": "status-badge.db-multi-select-badge",
       "by": 45.8,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -2837,7 +3078,8 @@
       "cls": "db-multi-select-remove",
       "parentCls": "status-badge.db-multi-select-badge",
       "by": 57.5,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -2847,7 +3089,8 @@
       "cls": "db-multi-select-label",
       "parentCls": "status-badge.db-multi-select-badge",
       "by": 45.8,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -2857,7 +3100,8 @@
       "cls": "db-multi-select-remove",
       "parentCls": "status-badge.db-multi-select-badge",
       "by": 57.5,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -2867,7 +3111,8 @@
       "cls": "db-multi-select-label",
       "parentCls": "status-badge.db-multi-select-badge",
       "by": 45.8,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -2877,7 +3122,8 @@
       "cls": "db-multi-select-remove",
       "parentCls": "status-badge.db-multi-select-badge",
       "by": 57.5,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -2887,7 +3133,8 @@
       "cls": "db-multi-select-label",
       "parentCls": "status-badge.db-multi-select-badge",
       "by": 45.8,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -2897,7 +3144,8 @@
       "cls": "db-multi-select-remove",
       "parentCls": "status-badge.db-multi-select-badge",
       "by": 57.5,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -2907,7 +3155,8 @@
       "cls": "db-multi-select-label",
       "parentCls": "status-badge.db-multi-select-badge",
       "by": 16,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -2917,7 +3166,8 @@
       "cls": "db-multi-select-remove",
       "parentCls": "status-badge.db-multi-select-badge",
       "by": 27.7,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -2927,7 +3177,8 @@
       "cls": "db-multi-select-label",
       "parentCls": "status-badge.db-multi-select-badge",
       "by": 16,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -2937,7 +3188,8 @@
       "cls": "db-multi-select-remove",
       "parentCls": "status-badge.db-multi-select-badge",
       "by": 27.7,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -2947,7 +3199,8 @@
       "cls": "db-multi-select-label",
       "parentCls": "status-badge.db-multi-select-badge",
       "by": 16,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -2957,7 +3210,8 @@
       "cls": "db-multi-select-remove",
       "parentCls": "status-badge.db-multi-select-badge",
       "by": 27.7,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -2967,7 +3221,8 @@
       "cls": "db-multi-select-label",
       "parentCls": "status-badge.db-multi-select-badge",
       "by": 16,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -2977,7 +3232,8 @@
       "cls": "db-multi-select-remove",
       "parentCls": "status-badge.db-multi-select-badge",
       "by": 27.7,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -2987,7 +3243,8 @@
       "cls": "db-multi-select-label",
       "parentCls": "status-badge.db-multi-select-badge",
       "by": 16,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -2997,7 +3254,8 @@
       "cls": "db-multi-select-remove",
       "parentCls": "status-badge.db-multi-select-badge",
       "by": 27.7,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -3007,7 +3265,8 @@
       "cls": "db-multi-select-label",
       "parentCls": "status-badge.db-multi-select-badge",
       "by": 16,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 320,
@@ -3017,7 +3276,8 @@
       "cls": "db-multi-select-remove",
       "parentCls": "status-badge.db-multi-select-badge",
       "by": 27.7,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -3027,7 +3287,8 @@
       "cls": "db-column-menu-trigger",
       "parentCls": "db-th-content",
       "by": 19.5,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -3037,7 +3298,8 @@
       "cls": "db-column-menu-trigger",
       "parentCls": "db-th-content",
       "by": 19.5,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -3047,7 +3309,8 @@
       "cls": "db-column-menu-trigger",
       "parentCls": "db-th-content",
       "by": 19.5,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -3057,7 +3320,8 @@
       "cls": "db-column-menu-trigger",
       "parentCls": "db-th-content",
       "by": 19.5,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -3067,7 +3331,8 @@
       "cls": "db-column-menu-trigger",
       "parentCls": "db-th-content",
       "by": 19.5,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -3077,7 +3342,8 @@
       "cls": "db-column-menu-trigger",
       "parentCls": "db-th-content",
       "by": 18.5,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -3087,7 +3353,8 @@
       "cls": "db-board-column-header",
       "parentCls": "db-board-column",
       "by": 8,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -3097,7 +3364,8 @@
       "cls": "db-board-column",
       "parentCls": "db-board",
       "by": 266,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -3107,7 +3375,8 @@
       "cls": "db-board-column-header",
       "parentCls": "db-board-column",
       "by": 8,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -3117,7 +3386,8 @@
       "cls": "db-board-column",
       "parentCls": "db-board",
       "by": 574,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -3127,7 +3397,8 @@
       "cls": "db-board-column-header",
       "parentCls": "db-board-column",
       "by": 8,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -3137,7 +3408,8 @@
       "cls": "db-board-column",
       "parentCls": "db-board",
       "by": 882,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -3147,7 +3419,8 @@
       "cls": "db-board-column-header",
       "parentCls": "db-board-column",
       "by": 8,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -3157,7 +3430,8 @@
       "cls": "db-list",
       "parentCls": "note-database-container",
       "by": 64,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -3177,7 +3451,8 @@
       "cls": "db-view-tab-popover.db-add-view-popover",
       "parentCls": "note-database-container",
       "by": 14,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -3187,7 +3462,8 @@
       "cls": "db-empty-hero",
       "parentCls": "note-database-container",
       "by": 34,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -3197,7 +3473,8 @@
       "cls": "db-table-wrap",
       "parentCls": "note-database-container.db-width-default",
       "by": 622,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -3207,7 +3484,8 @@
       "cls": "db-record-open-btn.db-record-open-btn-icon",
       "parentCls": "db-cell.db-title-cell",
       "by": 4,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -3217,7 +3495,8 @@
       "cls": "db-record-open-btn.db-record-open-btn-icon",
       "parentCls": "db-cell.db-title-cell",
       "by": 4,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -3227,7 +3506,8 @@
       "cls": "db-record-open-btn.db-record-open-btn-icon",
       "parentCls": "db-cell.db-title-cell",
       "by": 4,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -3237,7 +3517,8 @@
       "cls": "db-record-open-btn.db-record-open-btn-icon",
       "parentCls": "db-cell.db-title-cell",
       "by": 4,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -3247,7 +3528,8 @@
       "cls": "db-record-open-btn.db-record-open-btn-icon",
       "parentCls": "db-cell.db-title-cell",
       "by": 4,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -3257,7 +3539,8 @@
       "cls": "db-record-open-btn.db-record-open-btn-icon",
       "parentCls": "db-cell.db-title-cell",
       "by": 4,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -3267,7 +3550,8 @@
       "cls": "db-record-open-btn.db-record-open-btn-icon",
       "parentCls": "db-cell.db-title-cell",
       "by": 4,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -3277,7 +3561,8 @@
       "cls": "db-record-open-btn.db-record-open-btn-icon",
       "parentCls": "db-cell.db-title-cell",
       "by": 4,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -3287,7 +3572,8 @@
       "cls": "db-record-open-btn.db-record-open-btn-icon",
       "parentCls": "db-cell.db-title-cell",
       "by": 4,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -3297,7 +3583,8 @@
       "cls": "db-record-open-btn.db-record-open-btn-icon",
       "parentCls": "db-cell.db-title-cell",
       "by": 4,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -3307,7 +3594,8 @@
       "cls": "db-record-open-btn.db-record-open-btn-icon",
       "parentCls": "db-cell.db-title-cell",
       "by": 4,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -3317,7 +3605,8 @@
       "cls": "db-list",
       "parentCls": "note-database-container.db-width-default",
       "by": 366,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -3337,7 +3626,8 @@
       "cls": "db-board-column-header",
       "parentCls": "db-board-column",
       "by": 8,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -3347,7 +3637,8 @@
       "cls": "db-board-column",
       "parentCls": "db-board",
       "by": 266,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -3357,7 +3648,8 @@
       "cls": "db-board-column-header",
       "parentCls": "db-board-column",
       "by": 8,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -3367,7 +3659,8 @@
       "cls": "db-board-column",
       "parentCls": "db-board",
       "by": 574,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -3377,7 +3670,8 @@
       "cls": "db-board-column-header",
       "parentCls": "db-board-column",
       "by": 8,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -3387,7 +3681,8 @@
       "cls": "db-board-column",
       "parentCls": "db-board",
       "by": 882,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -3397,7 +3692,8 @@
       "cls": "db-board-column-header",
       "parentCls": "db-board-column",
       "by": 8,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -3407,7 +3703,8 @@
       "cls": "db-list",
       "parentCls": "note-database-container.db-width-default",
       "by": 346,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -3427,7 +3724,8 @@
       "cls": "db-calendar-title-year",
       "parentCls": "db-calendar-title",
       "by": 16.6,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -3437,7 +3735,8 @@
       "cls": "db-calendar-col-resize-handle",
       "parentCls": "db-calendar-weekday",
       "by": 4,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -3447,7 +3746,8 @@
       "cls": "db-calendar-col-resize-handle",
       "parentCls": "db-calendar-weekday",
       "by": 4,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -3457,7 +3757,8 @@
       "cls": "db-calendar-col-resize-handle",
       "parentCls": "db-calendar-weekday",
       "by": 4,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -3467,7 +3768,8 @@
       "cls": "db-calendar-col-resize-handle",
       "parentCls": "db-calendar-weekday",
       "by": 4,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -3477,7 +3779,8 @@
       "cls": "db-calendar-col-resize-handle",
       "parentCls": "db-calendar-weekday",
       "by": 4,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -3487,7 +3790,8 @@
       "cls": "db-calendar-col-resize-handle",
       "parentCls": "db-calendar-weekday",
       "by": 4,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -3497,7 +3801,8 @@
       "cls": "db-calendar-col-resize-handle",
       "parentCls": "db-calendar-weekday",
       "by": 4,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -3507,7 +3812,8 @@
       "cls": "db-calendar-month-title",
       "parentCls": "db-calendar-month-segment.is-timed",
       "by": 15,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -3517,7 +3823,8 @@
       "cls": "db-calendar-month-title",
       "parentCls": "db-calendar-month-segment.is-timed",
       "by": 15,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -3527,7 +3834,8 @@
       "cls": "db-calendar-add-button",
       "parentCls": "db-calendar-day-heading",
       "by": 2,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -3537,7 +3845,8 @@
       "cls": "db-calendar-add-button",
       "parentCls": "db-calendar-day-heading",
       "by": 6.8,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -3547,7 +3856,8 @@
       "cls": "db-calendar-add-button",
       "parentCls": "db-calendar-day-heading",
       "by": 4.6,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -3557,7 +3867,8 @@
       "cls": "db-calendar-add-button",
       "parentCls": "db-calendar-day-heading",
       "by": 6.5,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -3567,7 +3878,8 @@
       "cls": "db-calendar-add-button",
       "parentCls": "db-calendar-day-heading",
       "by": 6.8,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -3577,7 +3889,8 @@
       "cls": "db-calendar-add-button",
       "parentCls": "db-calendar-day-heading",
       "by": 7,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -3587,7 +3900,8 @@
       "cls": "db-calendar-month-title",
       "parentCls": "db-calendar-month-segment.is-timed",
       "by": 15,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -3597,7 +3911,8 @@
       "cls": "db-calendar-month-title",
       "parentCls": "db-calendar-month-segment.is-timed",
       "by": 15,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -3607,7 +3922,8 @@
       "cls": "db-calendar-add-button",
       "parentCls": "db-calendar-day-heading",
       "by": 7.6,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -3617,7 +3933,8 @@
       "cls": "db-calendar-add-button",
       "parentCls": "db-calendar-day-heading",
       "by": 6.9,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -3627,7 +3944,8 @@
       "cls": "db-calendar-add-button",
       "parentCls": "db-calendar-day-heading",
       "by": 6,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -3637,7 +3955,8 @@
       "cls": "db-calendar-add-button",
       "parentCls": "db-calendar-day-heading",
       "by": 6.9,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -3647,7 +3966,8 @@
       "cls": "db-calendar-add-button",
       "parentCls": "db-calendar-day-heading",
       "by": 6.9,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -3657,7 +3977,8 @@
       "cls": "db-calendar-add-button",
       "parentCls": "db-calendar-day-heading",
       "by": 8.6,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -3667,7 +3988,8 @@
       "cls": "db-calendar-add-button",
       "parentCls": "db-calendar-day-heading",
       "by": 6.5,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -3677,7 +3999,8 @@
       "cls": "db-calendar-month-title",
       "parentCls": "db-calendar-month-segment.is-timed",
       "by": 15,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -3687,7 +4010,8 @@
       "cls": "db-calendar-add-button",
       "parentCls": "db-calendar-day-heading",
       "by": 9.3,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -3697,7 +4021,8 @@
       "cls": "db-calendar-add-button",
       "parentCls": "db-calendar-day-heading",
       "by": 8.6,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -3707,7 +4032,8 @@
       "cls": "db-calendar-add-button",
       "parentCls": "db-calendar-day-heading",
       "by": 8.6,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -3717,7 +4043,8 @@
       "cls": "db-calendar-add-button",
       "parentCls": "db-calendar-day-heading",
       "by": 6.9,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -3727,7 +4054,8 @@
       "cls": "db-calendar-add-button",
       "parentCls": "db-calendar-day-heading",
       "by": 8.7,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -3737,7 +4065,8 @@
       "cls": "db-calendar-add-button",
       "parentCls": "db-calendar-day-heading",
       "by": 7.8,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -3747,7 +4076,8 @@
       "cls": "db-calendar-add-button",
       "parentCls": "db-calendar-day-heading",
       "by": 8.7,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -3757,7 +4087,8 @@
       "cls": "db-calendar-month-title",
       "parentCls": "db-calendar-month-segment.is-timed",
       "by": 15,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -3767,7 +4098,8 @@
       "cls": "db-calendar-add-button",
       "parentCls": "db-calendar-day-heading",
       "by": 9.7,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -3777,7 +4109,8 @@
       "cls": "db-calendar-add-button",
       "parentCls": "db-calendar-day-heading",
       "by": 8.9,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -3787,7 +4120,8 @@
       "cls": "db-calendar-add-button",
       "parentCls": "db-calendar-day-heading",
       "by": 6.8,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -3797,7 +4131,8 @@
       "cls": "db-calendar-add-button",
       "parentCls": "db-calendar-day-heading",
       "by": 1,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -3807,7 +4142,8 @@
       "cls": "db-calendar-title-year",
       "parentCls": "db-calendar-title",
       "by": 16.6,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -3817,7 +4153,8 @@
       "cls": "db-calendar-week-day-name",
       "parentCls": "db-calendar-time-header-day.",
       "by": 6.4,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -3827,7 +4164,8 @@
       "cls": "db-calendar-col-resize-handle",
       "parentCls": "db-calendar-time-header-day.",
       "by": 12,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -3837,7 +4175,8 @@
       "cls": "db-calendar-week-day-name",
       "parentCls": "db-calendar-time-header-day.",
       "by": 9.5,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -3847,7 +4186,8 @@
       "cls": "db-calendar-col-resize-handle",
       "parentCls": "db-calendar-time-header-day.",
       "by": 12,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -3857,7 +4197,8 @@
       "cls": "db-calendar-week-day-name",
       "parentCls": "db-calendar-time-header-day.",
       "by": 5.2,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -3867,7 +4208,8 @@
       "cls": "db-calendar-col-resize-handle",
       "parentCls": "db-calendar-time-header-day.",
       "by": 12,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -3877,7 +4219,8 @@
       "cls": "db-calendar-week-day-name",
       "parentCls": "db-calendar-time-header-day.is-today",
       "by": 10.3,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -3887,7 +4230,8 @@
       "cls": "db-calendar-col-resize-handle",
       "parentCls": "db-calendar-time-header-day.is-today",
       "by": 12,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -3897,7 +4241,8 @@
       "cls": "db-calendar-week-day-name",
       "parentCls": "db-calendar-time-header-day.",
       "by": 6.4,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -3907,7 +4252,8 @@
       "cls": "db-calendar-col-resize-handle",
       "parentCls": "db-calendar-time-header-day.",
       "by": 12,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -3917,7 +4263,8 @@
       "cls": "db-calendar-col-resize-handle",
       "parentCls": "db-calendar-time-header-day.",
       "by": 12,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -3927,7 +4274,8 @@
       "cls": "db-calendar-week-day-name",
       "parentCls": "db-calendar-time-header-day.",
       "by": 3.1,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -3937,7 +4285,8 @@
       "cls": "db-calendar-col-resize-handle",
       "parentCls": "db-calendar-time-header-day.",
       "by": 12,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -3947,7 +4296,8 @@
       "cls": "db-calendar-week-event-content",
       "parentCls": "db-calendar-week-timed-event.",
       "by": 4.6,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -3957,7 +4307,8 @@
       "cls": "db-calendar-week-event-content",
       "parentCls": "db-calendar-week-timed-event.is-compact",
       "by": 4.6,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -3967,7 +4318,8 @@
       "cls": "db-calendar-mini-popover",
       "parentCls": "note-database-container",
       "by": 4,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -3977,7 +4329,8 @@
       "cls": "db-timeline-controls",
       "parentCls": "db-timeline-header",
       "by": 98.4,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -3987,7 +4340,8 @@
       "cls": "db-timeline-axis",
       "parentCls": "db-timeline-scroll",
       "by": 670,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -3997,7 +4351,8 @@
       "cls": "db-timeline-body",
       "parentCls": "db-timeline-scroll",
       "by": 670,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -4007,7 +4362,8 @@
       "cls": "db-timeline-create-content",
       "parentCls": "db-timeline-create-button",
       "by": 6,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -4017,7 +4373,8 @@
       "cls": "db-timeline-create-content",
       "parentCls": "db-timeline-create-button",
       "by": 6,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -4027,7 +4384,8 @@
       "cls": "db-dropdown-field-chevron",
       "parentCls": "db-dropdown-field.db-panel-dropdown",
       "by": 22,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -4037,7 +4395,8 @@
       "cls": "db-panel-button",
       "parentCls": "db-panel-row",
       "by": 16.6,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -4047,7 +4406,8 @@
       "cls": "db-panel-button",
       "parentCls": "db-panel-row",
       "by": 16.6,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -4057,7 +4417,8 @@
       "cls": "db-panel-button",
       "parentCls": "db-panel-row",
       "by": 9.9,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -4077,7 +4438,8 @@
       "cls": "db-dropdown-field-chevron",
       "parentCls": "db-dropdown-field.db-panel-dropdown",
       "by": 22,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -4087,7 +4449,8 @@
       "cls": "db-panel-button",
       "parentCls": "db-panel-row",
       "by": 16.6,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -4097,7 +4460,8 @@
       "cls": "db-dropdown-field-chevron",
       "parentCls": "db-dropdown-field.db-panel-dropdown",
       "by": 22,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -4107,7 +4471,8 @@
       "cls": "db-panel-button",
       "parentCls": "db-panel-row",
       "by": 25.6,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -4117,7 +4482,8 @@
       "cls": "db-dropdown-field-chevron",
       "parentCls": "db-dropdown-field.db-panel-dropdown",
       "by": 15.6,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -4127,7 +4493,8 @@
       "cls": "db-record-detail-panel.db-anchored-popover",
       "parentCls": "note-database-container.db-width-default",
       "by": 28,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -4137,7 +4504,8 @@
       "cls": "db-record-detail-panel.db-anchored-popover",
       "parentCls": "note-database-container.db-width-default",
       "by": 28,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -4147,7 +4515,8 @@
       "cls": "db-record-detail-panel.db-anchored-popover",
       "parentCls": "note-database-container.db-width-default",
       "by": 28,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -4157,7 +4526,8 @@
       "cls": "db-column-menu-trigger",
       "parentCls": "db-th-content",
       "by": 19.5,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -4167,7 +4537,8 @@
       "cls": "db-column-menu-trigger",
       "parentCls": "db-th-content",
       "by": 19.5,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -4177,7 +4548,8 @@
       "cls": "db-column-menu-trigger",
       "parentCls": "db-th-content",
       "by": 19.5,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -4187,7 +4559,8 @@
       "cls": "db-column-menu-trigger",
       "parentCls": "db-th-content",
       "by": 19.5,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -4197,7 +4570,8 @@
       "cls": "db-column-menu-trigger",
       "parentCls": "db-th-content",
       "by": 19.5,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -4207,7 +4581,8 @@
       "cls": "db-column-menu-trigger",
       "parentCls": "db-th-content",
       "by": 18.5,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -4217,7 +4592,8 @@
       "cls": "db-record-peek-panel",
       "parentCls": "note-database-container",
       "by": 4,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -4227,7 +4603,8 @@
       "cls": "db-invalid-event-col-time",
       "parentCls": "db-invalid-event-grid-header",
       "by": 28,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -4237,7 +4614,8 @@
       "cls": "db-invalid-event-col-time",
       "parentCls": "db-invalid-event-grid-header",
       "by": 204,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -4247,7 +4625,8 @@
       "cls": "db-invalid-event-col-span",
       "parentCls": "db-invalid-event-grid-header",
       "by": 328,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -4257,7 +4636,8 @@
       "cls": "db-invalid-event-time-field.is-start",
       "parentCls": "db-invalid-event-row",
       "by": 28,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -4267,7 +4647,8 @@
       "cls": "db-invalid-event-time-field.is-end",
       "parentCls": "db-invalid-event-row",
       "by": 204,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -4277,7 +4658,8 @@
       "cls": "db-invalid-event-span-cell",
       "parentCls": "db-invalid-event-row",
       "by": 328,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -4287,7 +4669,8 @@
       "cls": "db-invalid-event-time-field.is-start",
       "parentCls": "db-invalid-event-row",
       "by": 28,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -4297,7 +4680,8 @@
       "cls": "db-invalid-event-time-field.is-end",
       "parentCls": "db-invalid-event-row",
       "by": 204,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -4307,7 +4691,8 @@
       "cls": "db-invalid-event-span-cell",
       "parentCls": "db-invalid-event-row",
       "by": 328,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -4317,7 +4702,8 @@
       "cls": "db-invalid-event-time-field.is-start",
       "parentCls": "db-invalid-event-row",
       "by": 28,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -4327,7 +4713,8 @@
       "cls": "db-invalid-event-time-field.is-end",
       "parentCls": "db-invalid-event-row",
       "by": 204,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -4337,7 +4724,8 @@
       "cls": "db-invalid-event-span-cell",
       "parentCls": "db-invalid-event-row",
       "by": 328,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -4347,7 +4735,8 @@
       "cls": "db-header",
       "parentCls": "note-database-container",
       "by": 4,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -4357,7 +4746,8 @@
       "cls": "db-toolbar-badge",
       "parentCls": "db-toolbar-icon-button.db-filter-btn",
       "by": 5,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -4367,7 +4757,8 @@
       "cls": "db-toolbar-badge",
       "parentCls": "db-toolbar-icon-button.db-sort-btn",
       "by": 5,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -4377,7 +4768,8 @@
       "cls": "db-toolbar-badge.db-toolbar-badge-neutral",
       "parentCls": "db-toolbar-icon-button.db-col-manager-btn",
       "by": 5,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -4387,7 +4779,8 @@
       "cls": "db-toolbar-cluster.db-toolbar-creation-cluster",
       "parentCls": "db-toolbar-right",
       "by": 63.9,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 57.9
     },
     {
       "width": 402,
@@ -4397,7 +4790,8 @@
       "cls": "db-header",
       "parentCls": "note-database-container",
       "by": 4,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -4407,7 +4801,8 @@
       "cls": "db-view-tabs",
       "parentCls": "db-toolbar-left",
       "by": 96.7,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 96.7
     },
     {
       "width": 402,
@@ -4417,7 +4812,8 @@
       "cls": "db-header",
       "parentCls": "note-database-container",
       "by": 4,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -4427,7 +4823,8 @@
       "cls": "db-header",
       "parentCls": "note-database-container",
       "by": 4,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -4437,7 +4834,8 @@
       "cls": "db-active-control-group.is-sort",
       "parentCls": "db-active-view-controls-scroll",
       "by": 104.3,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 47.8
     },
     {
       "width": 402,
@@ -4447,7 +4845,8 @@
       "cls": "db-active-control-order",
       "parentCls": "db-active-control-icon",
       "by": 4,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -4457,7 +4856,8 @@
       "cls": "db-active-control-order",
       "parentCls": "db-active-control-icon",
       "by": 4,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -4467,7 +4867,8 @@
       "cls": "db-active-control-group.is-filter",
       "parentCls": "db-active-view-controls-scroll",
       "by": 624.8,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 568.2
     },
     {
       "width": 402,
@@ -4477,7 +4878,8 @@
       "cls": "db-table-wrap",
       "parentCls": "note-database-container",
       "by": 488,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -4487,7 +4889,8 @@
       "cls": "db-table-wrap",
       "parentCls": "db-grouped-table",
       "by": 999662,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -4497,7 +4900,8 @@
       "cls": "db-list-group-header",
       "parentCls": "db-list-group",
       "by": 8,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -4507,7 +4911,8 @@
       "cls": "db-board-subgroup-header",
       "parentCls": "db-board-subgroup",
       "by": 8,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -4517,7 +4922,8 @@
       "cls": "db-selection-status-bar",
       "parentCls": "note-database-container",
       "by": 15.9,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -4527,7 +4933,8 @@
       "cls": "db-icon-picker-random",
       "parentCls": "db-icon-picker-header",
       "by": 32.3,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -4537,7 +4944,8 @@
       "cls": "db-icon-picker-settings",
       "parentCls": "db-icon-picker-header",
       "by": 76.3,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -4547,7 +4955,8 @@
       "cls": "db-icon-picker-item.db-record-icon-color-blue",
       "parentCls": "db-icon-picker-grid",
       "by": 12.5,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -4557,7 +4966,8 @@
       "cls": "db-icon-picker-item.db-record-icon-color-blue",
       "parentCls": "db-icon-picker-grid",
       "by": 12.5,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -4567,7 +4977,8 @@
       "cls": "db-icon-picker-item.db-record-icon-color-blue",
       "parentCls": "db-icon-picker-grid",
       "by": 12.5,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -4587,7 +4998,8 @@
       "cls": "internal-link.db-file-link-list-item",
       "parentCls": "db-file-link-list",
       "by": 9.9,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -4597,7 +5009,8 @@
       "cls": "[object.SVGAnimatedString]",
       "parentCls": "db-rating-star-fg",
       "by": 7,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -4607,7 +5020,8 @@
       "cls": "db-multi-select-remove",
       "parentCls": "status-badge.db-multi-select-badge",
       "by": 8.9,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -4617,7 +5031,8 @@
       "cls": "db-multi-select-remove",
       "parentCls": "status-badge.db-multi-select-badge",
       "by": 8.9,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -4627,7 +5042,8 @@
       "cls": "db-multi-select-remove",
       "parentCls": "status-badge.db-multi-select-badge",
       "by": 8.9,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -4637,7 +5053,8 @@
       "cls": "db-multi-select-remove",
       "parentCls": "status-badge.db-multi-select-badge",
       "by": 8.9,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -4647,7 +5064,8 @@
       "cls": "db-multi-select-remove",
       "parentCls": "status-badge.db-multi-select-badge",
       "by": 8.9,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -4657,7 +5075,8 @@
       "cls": "db-multi-select-remove",
       "parentCls": "status-badge.db-multi-select-badge",
       "by": 8.9,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -4667,7 +5086,8 @@
       "cls": "db-multi-select-remove",
       "parentCls": "status-badge.db-multi-select-badge",
       "by": 8.9,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -4677,7 +5097,8 @@
       "cls": "db-multi-select-label",
       "parentCls": "status-badge.db-multi-select-badge",
       "by": 25.3,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -4687,7 +5108,8 @@
       "cls": "db-multi-select-remove",
       "parentCls": "status-badge.db-multi-select-badge",
       "by": 37,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -4697,7 +5119,8 @@
       "cls": "db-multi-select-label",
       "parentCls": "status-badge.db-multi-select-badge",
       "by": 25.3,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -4707,7 +5130,8 @@
       "cls": "db-multi-select-remove",
       "parentCls": "status-badge.db-multi-select-badge",
       "by": 37,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -4717,7 +5141,8 @@
       "cls": "db-multi-select-label",
       "parentCls": "status-badge.db-multi-select-badge",
       "by": 25.3,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -4727,7 +5152,8 @@
       "cls": "db-multi-select-remove",
       "parentCls": "status-badge.db-multi-select-badge",
       "by": 37,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -4737,7 +5163,8 @@
       "cls": "db-multi-select-label",
       "parentCls": "status-badge.db-multi-select-badge",
       "by": 25.3,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -4747,7 +5174,8 @@
       "cls": "db-multi-select-remove",
       "parentCls": "status-badge.db-multi-select-badge",
       "by": 37,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -4757,7 +5185,8 @@
       "cls": "db-multi-select-label",
       "parentCls": "status-badge.db-multi-select-badge",
       "by": 25.3,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -4767,7 +5196,8 @@
       "cls": "db-multi-select-remove",
       "parentCls": "status-badge.db-multi-select-badge",
       "by": 37,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -4777,7 +5207,8 @@
       "cls": "db-multi-select-label",
       "parentCls": "status-badge.db-multi-select-badge",
       "by": 25.3,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -4787,7 +5218,8 @@
       "cls": "db-multi-select-remove",
       "parentCls": "status-badge.db-multi-select-badge",
       "by": 37,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -4797,7 +5229,8 @@
       "cls": "db-multi-select-label",
       "parentCls": "status-badge.db-multi-select-badge",
       "by": 25.3,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -4807,7 +5240,8 @@
       "cls": "db-multi-select-remove",
       "parentCls": "status-badge.db-multi-select-badge",
       "by": 37,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -4817,7 +5251,8 @@
       "cls": "db-multi-select-remove",
       "parentCls": "status-badge.db-multi-select-badge",
       "by": 7.2,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -4827,7 +5262,8 @@
       "cls": "db-multi-select-remove",
       "parentCls": "status-badge.db-multi-select-badge",
       "by": 7.2,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -4837,7 +5273,8 @@
       "cls": "db-multi-select-remove",
       "parentCls": "status-badge.db-multi-select-badge",
       "by": 7.2,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -4847,7 +5284,8 @@
       "cls": "db-multi-select-remove",
       "parentCls": "status-badge.db-multi-select-badge",
       "by": 7.2,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -4857,7 +5295,8 @@
       "cls": "db-multi-select-remove",
       "parentCls": "status-badge.db-multi-select-badge",
       "by": 7.2,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 402,
@@ -4867,7 +5306,8 @@
       "cls": "db-multi-select-remove",
       "parentCls": "status-badge.db-multi-select-badge",
       "by": 7.2,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 768,
@@ -4877,7 +5317,8 @@
       "cls": "db-board",
       "parentCls": "note-database-container",
       "by": 532,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 768,
@@ -4887,7 +5328,8 @@
       "cls": "db-board-column-header",
       "parentCls": "db-board-column",
       "by": 8,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 768,
@@ -4897,7 +5339,8 @@
       "cls": "db-board-column-header",
       "parentCls": "db-board-column",
       "by": 8,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 768,
@@ -4907,7 +5350,8 @@
       "cls": "db-board-column-header",
       "parentCls": "db-board-column",
       "by": 8,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 768,
@@ -4917,7 +5361,8 @@
       "cls": "db-board-column-header",
       "parentCls": "db-board-column",
       "by": 8,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 768,
@@ -4937,7 +5382,8 @@
       "cls": "db-empty-hero",
       "parentCls": "note-database-container",
       "by": 50,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 768,
@@ -4947,7 +5393,8 @@
       "cls": "db-table-wrap",
       "parentCls": "note-database-container.db-width-default",
       "by": 280,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 768,
@@ -4957,7 +5404,8 @@
       "cls": "db-record-open-btn.db-record-open-btn-icon",
       "parentCls": "db-cell.db-title-cell",
       "by": 4,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 768,
@@ -4967,7 +5415,8 @@
       "cls": "db-record-open-btn.db-record-open-btn-icon",
       "parentCls": "db-cell.db-title-cell",
       "by": 4,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 768,
@@ -4977,7 +5426,8 @@
       "cls": "db-record-open-btn.db-record-open-btn-icon",
       "parentCls": "db-cell.db-title-cell",
       "by": 4,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 768,
@@ -4987,7 +5437,8 @@
       "cls": "db-record-open-btn.db-record-open-btn-icon",
       "parentCls": "db-cell.db-title-cell",
       "by": 4,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 768,
@@ -4997,7 +5448,8 @@
       "cls": "db-record-open-btn.db-record-open-btn-icon",
       "parentCls": "db-cell.db-title-cell",
       "by": 4,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 768,
@@ -5007,7 +5459,8 @@
       "cls": "db-record-open-btn.db-record-open-btn-icon",
       "parentCls": "db-cell.db-title-cell",
       "by": 4,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 768,
@@ -5017,7 +5470,8 @@
       "cls": "db-record-open-btn.db-record-open-btn-icon",
       "parentCls": "db-cell.db-title-cell",
       "by": 4,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 768,
@@ -5027,7 +5481,8 @@
       "cls": "db-record-open-btn.db-record-open-btn-icon",
       "parentCls": "db-cell.db-title-cell",
       "by": 4,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 768,
@@ -5037,7 +5492,8 @@
       "cls": "db-record-open-btn.db-record-open-btn-icon",
       "parentCls": "db-cell.db-title-cell",
       "by": 4,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 768,
@@ -5047,7 +5503,8 @@
       "cls": "db-record-open-btn.db-record-open-btn-icon",
       "parentCls": "db-cell.db-title-cell",
       "by": 4,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 768,
@@ -5057,7 +5514,8 @@
       "cls": "db-record-open-btn.db-record-open-btn-icon",
       "parentCls": "db-cell.db-title-cell",
       "by": 4,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 768,
@@ -5067,7 +5525,8 @@
       "cls": "db-list",
       "parentCls": "note-database-container.db-width-default",
       "by": 24,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 768,
@@ -5087,7 +5546,8 @@
       "cls": "db-board",
       "parentCls": "note-database-container.db-width-default",
       "by": 532,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 768,
@@ -5097,7 +5557,8 @@
       "cls": "db-board-column-header",
       "parentCls": "db-board-column",
       "by": 8,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 768,
@@ -5107,7 +5568,8 @@
       "cls": "db-board-column-header",
       "parentCls": "db-board-column",
       "by": 8,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 768,
@@ -5117,7 +5579,8 @@
       "cls": "db-board-column-header",
       "parentCls": "db-board-column",
       "by": 8,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 768,
@@ -5127,7 +5590,8 @@
       "cls": "db-board-column-header",
       "parentCls": "db-board-column",
       "by": 8,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 768,
@@ -5137,7 +5601,8 @@
       "cls": "db-list",
       "parentCls": "note-database-container.db-width-default",
       "by": 4,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 768,
@@ -5157,7 +5622,8 @@
       "cls": "db-calendar-col-resize-handle",
       "parentCls": "db-calendar-weekday",
       "by": 4,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 768,
@@ -5167,7 +5633,8 @@
       "cls": "db-calendar-col-resize-handle",
       "parentCls": "db-calendar-weekday",
       "by": 4,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 768,
@@ -5177,7 +5644,8 @@
       "cls": "db-calendar-col-resize-handle",
       "parentCls": "db-calendar-weekday",
       "by": 4,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 768,
@@ -5187,7 +5655,8 @@
       "cls": "db-calendar-col-resize-handle",
       "parentCls": "db-calendar-weekday",
       "by": 4,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 768,
@@ -5197,7 +5666,8 @@
       "cls": "db-calendar-col-resize-handle",
       "parentCls": "db-calendar-weekday",
       "by": 4,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 768,
@@ -5207,7 +5677,8 @@
       "cls": "db-calendar-col-resize-handle",
       "parentCls": "db-calendar-weekday",
       "by": 4,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 768,
@@ -5217,7 +5688,8 @@
       "cls": "db-calendar-col-resize-handle",
       "parentCls": "db-calendar-weekday",
       "by": 4,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 768,
@@ -5227,7 +5699,8 @@
       "cls": "db-calendar-col-resize-handle",
       "parentCls": "db-calendar-time-header-day.",
       "by": 12,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 768,
@@ -5237,7 +5710,8 @@
       "cls": "db-calendar-col-resize-handle",
       "parentCls": "db-calendar-time-header-day.",
       "by": 12,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 768,
@@ -5247,7 +5721,8 @@
       "cls": "db-calendar-col-resize-handle",
       "parentCls": "db-calendar-time-header-day.",
       "by": 12,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 768,
@@ -5257,7 +5732,8 @@
       "cls": "db-calendar-col-resize-handle",
       "parentCls": "db-calendar-time-header-day.is-today",
       "by": 12,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 768,
@@ -5267,7 +5743,8 @@
       "cls": "db-calendar-col-resize-handle",
       "parentCls": "db-calendar-time-header-day.",
       "by": 12,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 768,
@@ -5277,7 +5754,8 @@
       "cls": "db-calendar-col-resize-handle",
       "parentCls": "db-calendar-time-header-day.",
       "by": 12,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 768,
@@ -5287,7 +5765,8 @@
       "cls": "db-calendar-col-resize-handle",
       "parentCls": "db-calendar-time-header-day.",
       "by": 12,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 768,
@@ -5297,7 +5776,8 @@
       "cls": "db-calendar-mini-popover",
       "parentCls": "note-database-container",
       "by": 16,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 768,
@@ -5307,7 +5787,8 @@
       "cls": "db-timeline-axis",
       "parentCls": "db-timeline-scroll",
       "by": 328,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 768,
@@ -5317,7 +5798,8 @@
       "cls": "db-timeline-body",
       "parentCls": "db-timeline-scroll",
       "by": 328,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 768,
@@ -5327,7 +5809,8 @@
       "cls": "db-timeline-create-content",
       "parentCls": "db-timeline-create-button",
       "by": 6,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 768,
@@ -5337,7 +5820,8 @@
       "cls": "db-timeline-create-content",
       "parentCls": "db-timeline-create-button",
       "by": 6,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 768,
@@ -5357,7 +5841,8 @@
       "cls": "db-record-detail-panel.db-anchored-popover",
       "parentCls": "note-database-container.db-width-default",
       "by": 40,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 768,
@@ -5367,7 +5852,8 @@
       "cls": "db-record-detail-panel.db-anchored-popover",
       "parentCls": "note-database-container.db-width-default",
       "by": 40,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 768,
@@ -5377,7 +5863,8 @@
       "cls": "db-record-detail-panel.db-anchored-popover",
       "parentCls": "note-database-container.db-width-default",
       "by": 40,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 768,
@@ -5387,7 +5874,8 @@
       "cls": "db-record-peek-panel",
       "parentCls": "note-database-container",
       "by": 16,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 768,
@@ -5397,7 +5885,8 @@
       "cls": "db-header",
       "parentCls": "note-database-container",
       "by": 4,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 768,
@@ -5407,7 +5896,8 @@
       "cls": "db-view-tabs",
       "parentCls": "db-toolbar-left",
       "by": 108.4,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 768,
@@ -5417,7 +5907,8 @@
       "cls": "db-toolbar-badge",
       "parentCls": "db-toolbar-icon-button.db-filter-btn",
       "by": 5,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 768,
@@ -5427,7 +5918,8 @@
       "cls": "db-toolbar-badge",
       "parentCls": "db-toolbar-icon-button.db-sort-btn",
       "by": 5,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 768,
@@ -5437,7 +5929,8 @@
       "cls": "db-toolbar-badge.db-toolbar-badge-neutral",
       "parentCls": "db-toolbar-icon-button.db-col-manager-btn",
       "by": 5,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 768,
@@ -5447,7 +5940,8 @@
       "cls": "db-header",
       "parentCls": "note-database-container",
       "by": 4,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 768,
@@ -5457,7 +5951,8 @@
       "cls": "db-header",
       "parentCls": "note-database-container",
       "by": 4,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 768,
@@ -5467,7 +5962,8 @@
       "cls": "db-header",
       "parentCls": "note-database-container",
       "by": 4,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 768,
@@ -5477,7 +5973,8 @@
       "cls": "db-active-control-order",
       "parentCls": "db-active-control-icon",
       "by": 4,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 768,
@@ -5487,7 +5984,8 @@
       "cls": "db-active-control-order",
       "parentCls": "db-active-control-icon",
       "by": 4,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 768,
@@ -5497,7 +5995,8 @@
       "cls": "db-active-control-group.is-filter",
       "parentCls": "db-active-view-controls-scroll",
       "by": 226.8,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 170.2
     },
     {
       "width": 768,
@@ -5507,7 +6006,8 @@
       "cls": "db-table-wrap",
       "parentCls": "note-database-container",
       "by": 146,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 768,
@@ -5517,7 +6017,8 @@
       "cls": "db-table-wrap",
       "parentCls": "db-grouped-table",
       "by": 999320,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 768,
@@ -5527,7 +6028,8 @@
       "cls": "db-list-group-header",
       "parentCls": "db-list-group",
       "by": 8,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 768,
@@ -5537,7 +6039,8 @@
       "cls": "db-board-subgroup-header",
       "parentCls": "db-board-subgroup",
       "by": 8,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 768,
@@ -5547,7 +6050,8 @@
       "cls": "db-icon-picker-random",
       "parentCls": "db-icon-picker-header",
       "by": 32.3,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 768,
@@ -5557,7 +6061,8 @@
       "cls": "db-icon-picker-settings",
       "parentCls": "db-icon-picker-header",
       "by": 76.3,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 768,
@@ -5567,7 +6072,8 @@
       "cls": "db-icon-picker-item.db-record-icon-color-blue",
       "parentCls": "db-icon-picker-grid",
       "by": 12.5,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 768,
@@ -5577,7 +6083,8 @@
       "cls": "db-icon-picker-item.db-record-icon-color-blue",
       "parentCls": "db-icon-picker-grid",
       "by": 12.5,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 768,
@@ -5587,7 +6094,8 @@
       "cls": "db-icon-picker-item.db-record-icon-color-blue",
       "parentCls": "db-icon-picker-grid",
       "by": 12.5,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 768,
@@ -5607,7 +6115,8 @@
       "cls": "[object.SVGAnimatedString]",
       "parentCls": "db-rating-star-fg",
       "by": 7,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 1440,
@@ -5617,7 +6126,8 @@
       "cls": "db-board-column-header",
       "parentCls": "db-board-column",
       "by": 8,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 1440,
@@ -5627,7 +6137,8 @@
       "cls": "db-board-column-header",
       "parentCls": "db-board-column",
       "by": 8,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 1440,
@@ -5637,7 +6148,8 @@
       "cls": "db-board-column-header",
       "parentCls": "db-board-column",
       "by": 8,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 1440,
@@ -5647,7 +6159,8 @@
       "cls": "db-board-column-header",
       "parentCls": "db-board-column",
       "by": 8,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 1440,
@@ -5667,7 +6180,8 @@
       "cls": "db-table-wrap",
       "parentCls": "note-database-container.db-width-default",
       "by": 208,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 1440,
@@ -5677,7 +6191,8 @@
       "cls": "db-record-open-btn.db-record-open-btn-icon",
       "parentCls": "db-cell.db-title-cell",
       "by": 4,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 1440,
@@ -5687,7 +6202,8 @@
       "cls": "db-record-open-btn.db-record-open-btn-icon",
       "parentCls": "db-cell.db-title-cell",
       "by": 4,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 1440,
@@ -5697,7 +6213,8 @@
       "cls": "db-record-open-btn.db-record-open-btn-icon",
       "parentCls": "db-cell.db-title-cell",
       "by": 4,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 1440,
@@ -5707,7 +6224,8 @@
       "cls": "db-record-open-btn.db-record-open-btn-icon",
       "parentCls": "db-cell.db-title-cell",
       "by": 4,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 1440,
@@ -5717,7 +6235,8 @@
       "cls": "db-record-open-btn.db-record-open-btn-icon",
       "parentCls": "db-cell.db-title-cell",
       "by": 4,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 1440,
@@ -5727,7 +6246,8 @@
       "cls": "db-record-open-btn.db-record-open-btn-icon",
       "parentCls": "db-cell.db-title-cell",
       "by": 4,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 1440,
@@ -5737,7 +6257,8 @@
       "cls": "db-record-open-btn.db-record-open-btn-icon",
       "parentCls": "db-cell.db-title-cell",
       "by": 4,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 1440,
@@ -5747,7 +6268,8 @@
       "cls": "db-record-open-btn.db-record-open-btn-icon",
       "parentCls": "db-cell.db-title-cell",
       "by": 4,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 1440,
@@ -5757,7 +6279,8 @@
       "cls": "db-record-open-btn.db-record-open-btn-icon",
       "parentCls": "db-cell.db-title-cell",
       "by": 4,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 1440,
@@ -5767,7 +6290,8 @@
       "cls": "db-record-open-btn.db-record-open-btn-icon",
       "parentCls": "db-cell.db-title-cell",
       "by": 4,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 1440,
@@ -5777,7 +6301,8 @@
       "cls": "db-record-open-btn.db-record-open-btn-icon",
       "parentCls": "db-cell.db-title-cell",
       "by": 4,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 1440,
@@ -5797,7 +6322,8 @@
       "cls": "db-board",
       "parentCls": "note-database-container.db-width-default",
       "by": 460,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 1440,
@@ -5807,7 +6333,8 @@
       "cls": "db-board-column-header",
       "parentCls": "db-board-column",
       "by": 8,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 1440,
@@ -5817,7 +6344,8 @@
       "cls": "db-board-column-header",
       "parentCls": "db-board-column",
       "by": 8,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 1440,
@@ -5827,7 +6355,8 @@
       "cls": "db-board-column-header",
       "parentCls": "db-board-column",
       "by": 8,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 1440,
@@ -5837,7 +6366,8 @@
       "cls": "db-board-column-header",
       "parentCls": "db-board-column",
       "by": 8,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 1440,
@@ -5857,7 +6387,8 @@
       "cls": "db-calendar-col-resize-handle",
       "parentCls": "db-calendar-weekday",
       "by": 4,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 1440,
@@ -5867,7 +6398,8 @@
       "cls": "db-calendar-col-resize-handle",
       "parentCls": "db-calendar-weekday",
       "by": 4,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 1440,
@@ -5877,7 +6409,8 @@
       "cls": "db-calendar-col-resize-handle",
       "parentCls": "db-calendar-weekday",
       "by": 4,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 1440,
@@ -5887,7 +6420,8 @@
       "cls": "db-calendar-col-resize-handle",
       "parentCls": "db-calendar-weekday",
       "by": 4,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 1440,
@@ -5897,7 +6431,8 @@
       "cls": "db-calendar-col-resize-handle",
       "parentCls": "db-calendar-weekday",
       "by": 4,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 1440,
@@ -5907,7 +6442,8 @@
       "cls": "db-calendar-col-resize-handle",
       "parentCls": "db-calendar-weekday",
       "by": 4,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 1440,
@@ -5917,7 +6453,8 @@
       "cls": "db-calendar-col-resize-handle",
       "parentCls": "db-calendar-weekday",
       "by": 4,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 1440,
@@ -5927,7 +6464,8 @@
       "cls": "db-calendar-col-resize-handle",
       "parentCls": "db-calendar-time-header-day.",
       "by": 12,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 1440,
@@ -5937,7 +6475,8 @@
       "cls": "db-calendar-col-resize-handle",
       "parentCls": "db-calendar-time-header-day.",
       "by": 12,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 1440,
@@ -5947,7 +6486,8 @@
       "cls": "db-calendar-col-resize-handle",
       "parentCls": "db-calendar-time-header-day.",
       "by": 12,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 1440,
@@ -5957,7 +6497,8 @@
       "cls": "db-calendar-col-resize-handle",
       "parentCls": "db-calendar-time-header-day.is-today",
       "by": 12,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 1440,
@@ -5967,7 +6508,8 @@
       "cls": "db-calendar-col-resize-handle",
       "parentCls": "db-calendar-time-header-day.",
       "by": 12,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 1440,
@@ -5977,7 +6519,8 @@
       "cls": "db-calendar-col-resize-handle",
       "parentCls": "db-calendar-time-header-day.",
       "by": 12,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 1440,
@@ -5987,7 +6530,8 @@
       "cls": "db-calendar-col-resize-handle",
       "parentCls": "db-calendar-time-header-day.",
       "by": 12,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 1440,
@@ -5997,7 +6541,8 @@
       "cls": "db-calendar-mini-popover",
       "parentCls": "note-database-container",
       "by": 16,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 1440,
@@ -6007,7 +6552,8 @@
       "cls": "db-timeline-create-content",
       "parentCls": "db-timeline-create-button",
       "by": 6,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 1440,
@@ -6017,7 +6563,8 @@
       "cls": "db-timeline-create-content",
       "parentCls": "db-timeline-create-button",
       "by": 6,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 1440,
@@ -6037,7 +6584,8 @@
       "cls": "db-record-detail-panel.db-anchored-popover",
       "parentCls": "note-database-container.db-width-default",
       "by": 340,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 1440,
@@ -6047,7 +6595,8 @@
       "cls": "db-record-detail-panel.db-anchored-popover",
       "parentCls": "note-database-container.db-width-default",
       "by": 340,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 1440,
@@ -6057,7 +6606,8 @@
       "cls": "db-record-detail-panel.db-anchored-popover",
       "parentCls": "note-database-container.db-width-default",
       "by": 340,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 1440,
@@ -6067,7 +6617,8 @@
       "cls": "db-record-peek-panel",
       "parentCls": "note-database-container",
       "by": 16,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 1440,
@@ -6077,7 +6628,8 @@
       "cls": "db-header",
       "parentCls": "note-database-container",
       "by": 4,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 1440,
@@ -6087,7 +6639,8 @@
       "cls": "db-toolbar-badge",
       "parentCls": "db-toolbar-icon-button.db-filter-btn",
       "by": 5,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 1440,
@@ -6097,7 +6650,8 @@
       "cls": "db-toolbar-badge",
       "parentCls": "db-toolbar-icon-button.db-sort-btn",
       "by": 5,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 1440,
@@ -6107,7 +6661,8 @@
       "cls": "db-toolbar-badge.db-toolbar-badge-neutral",
       "parentCls": "db-toolbar-icon-button.db-col-manager-btn",
       "by": 5,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 1440,
@@ -6117,7 +6672,8 @@
       "cls": "db-header",
       "parentCls": "note-database-container",
       "by": 4,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 1440,
@@ -6127,7 +6683,8 @@
       "cls": "db-header",
       "parentCls": "note-database-container",
       "by": 4,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 1440,
@@ -6137,7 +6694,8 @@
       "cls": "db-header",
       "parentCls": "note-database-container",
       "by": 4,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 1440,
@@ -6147,7 +6705,8 @@
       "cls": "db-active-control-order",
       "parentCls": "db-active-control-icon",
       "by": 4,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 1440,
@@ -6157,7 +6716,8 @@
       "cls": "db-active-control-order",
       "parentCls": "db-active-control-icon",
       "by": 4,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 1440,
@@ -6167,7 +6727,8 @@
       "cls": "db-table-wrap",
       "parentCls": "db-grouped-table",
       "by": 998648,
-      "scrolls": true
+      "scrolls": true,
+      "pastHeader": 0
     },
     {
       "width": 1440,
@@ -6177,7 +6738,8 @@
       "cls": "db-list-group-header",
       "parentCls": "db-list-group",
       "by": 8,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 1440,
@@ -6187,7 +6749,8 @@
       "cls": "db-board-subgroup-header",
       "parentCls": "db-board-subgroup",
       "by": 8,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 1440,
@@ -6197,7 +6760,8 @@
       "cls": "db-icon-picker-random",
       "parentCls": "db-icon-picker-header",
       "by": 32.3,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 1440,
@@ -6207,7 +6771,8 @@
       "cls": "db-icon-picker-settings",
       "parentCls": "db-icon-picker-header",
       "by": 76.3,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 1440,
@@ -6217,7 +6782,8 @@
       "cls": "db-icon-picker-item.db-record-icon-color-blue",
       "parentCls": "db-icon-picker-grid",
       "by": 12.5,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 1440,
@@ -6227,7 +6793,8 @@
       "cls": "db-icon-picker-item.db-record-icon-color-blue",
       "parentCls": "db-icon-picker-grid",
       "by": 12.5,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 1440,
@@ -6237,7 +6804,8 @@
       "cls": "db-icon-picker-item.db-record-icon-color-blue",
       "parentCls": "db-icon-picker-grid",
       "by": 12.5,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     },
     {
       "width": 1440,
@@ -6257,7 +6825,8 @@
       "cls": "[object.SVGAnimatedString]",
       "parentCls": "db-rating-star-fg",
       "by": 7,
-      "scrolls": false
+      "scrolls": false,
+      "pastHeader": 0
     }
   ],
   "probes": [

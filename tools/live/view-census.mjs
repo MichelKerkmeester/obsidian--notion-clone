@@ -127,12 +127,29 @@ for (const width of WIDTHS) {
           scrolls = a.scrollWidth > a.clientWidth + 1;
           break;
         }
+        // Is this inside the header, and does it reach past the HEADER's content box rather than
+        // its immediate parent's? `005` states that separately, and it is a different question: a
+        // control can sit neatly inside its own wrapper while the wrapper itself hangs off the
+        // header's edge, so measuring parent-by-parent reports the chain as clean and the header as
+        // ragged. The header is the box a reader sees.
+        const header = el.closest(".db-header");
+        let pastHeader = 0;
+        if (header && header !== el) {
+          const hs = getComputedStyle(header);
+          const hr = header.getBoundingClientRect();
+          const headerContentRight = hr.right - (parseFloat(hs.paddingRight) || 0)
+            - (parseFloat(hs.borderRightWidth) || 0);
+          if (er.right > headerContentRight + tolerance) {
+            pastHeader = Math.round((er.right - headerContentRight) * 10) / 10;
+          }
+        }
         escaping.push({
           tag: el.tagName.toLowerCase(),
           cls: (el.className || "").toString().split(/\s+/).slice(0, 2).join("."),
           parentCls: (parent.className || "").toString().split(/\s+/).slice(0, 2).join("."),
           by: Math.round((er.right - contentRight) * 10) / 10,
           scrolls,
+          pastHeader,
         });
       });
 
@@ -206,9 +223,22 @@ for (const width of WIDTHS) {
     for (const phone of [false, true]) {
       const template = Array.from({ length: fields }, () => "150px").join(" ");
       const html = Array.from({ length: 20 }, (_, r) => {
+        // CONTENT LENGTH VARIES PER ROW, and that is the whole point of the standard deviation.
+        //
+        // Every row used to carry the same string, so a spread of zero was guaranteed by
+        // construction: twenty identical rows are the same height however the row is laid out, and
+        // the criterion this answers — "20 rows, wrapping off: standard deviation of row heights is
+        // 0" — was reading its own fixture back to itself. This packet's own audit says so, and it
+        // is the reason that bullet stayed open while a green number sat beside it.
+        //
+        // The lengths run from a single character to a paragraph, so a row that WRAPS is a taller
+        // row and the deviation moves. Zero now means the values truncate as the stylesheet says
+        // they do, which is a claim about the product rather than about the input.
+        const filler = "lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod ";
         const cells = Array.from({ length: fields }, (_, f) =>
           `<div class="db-list-field" style="grid-column: ${f + 1}"><span class="db-list-field-label">Field ${f}</span>` +
-          `<div class="db-list-field-value">Value ${r}-${f} some longer text</div></div>`
+          `<div class="db-list-field-value">${"x".repeat(r % 3) || ""}Value ${r}-${f} ` +
+          `${filler.repeat(r % 5)}</div></div>`
         ).join("");
         return `<div class="db-list-row" role="row"><div class="db-list-row-controls">` +
           `<input type="checkbox" class="db-checkbox db-checkbox-row db-list-row-checkbox"></div>` +
@@ -350,6 +380,11 @@ const ragged = rhythms.filter((r) => r.sd > 0);
 console.log(`  elements past their container      ${escaping.length}`);
 console.log(`    scrolling (a decision)           ${scrolls.length}`);
 console.log(`    growing the parent (the defect)  ${grows.length}`);
+// `005`: no descendant of `.db-header` has a right edge beyond the header's content box. A
+// descendant that scrolls is still inside a scroller, and a scroller inside the header is the
+// header's own decision — so the count that matters is the one that neither scrolls nor fits.
+const headerSpill = escaping.filter((r) => r.pastHeader > 0 && !r.scrolls);
+console.log(`  header descendants past the header's content box  ${headerSpill.length}`);
 console.log(`  sibling groups measured            ${rhythms.length}`);
 console.log(`    ragged (height sd > 0)           ${ragged.length}\n`);
 
@@ -371,6 +406,14 @@ if (worstRagged.length) {
 }
 
 await browser.close();
+
+if (headerSpill.length) {
+  console.log("\nPAST THE HEADER'S CONTENT BOX — widest first:");
+  for (const r of [...headerSpill].sort((a, b) => b.pastHeader - a.pastHeader).slice(0, 10)) {
+    console.log(`  ${String(r.width).padStart(5)}px  ${(r.fixture || "").padEnd(24)} .${r.cls} by ${r.pastHeader}px`);
+  }
+  console.log("");
+}
 
 console.log("ROW RHYTHM — 20 synthesised rows, height spread:");
 console.log("  width  fields  device   mean     sd   content escaping the row");
