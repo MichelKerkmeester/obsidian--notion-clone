@@ -20262,8 +20262,26 @@ input[type="checkbox"].db-checkbox {
   padding: 0;
   /* The border is the only thing identifying this control, so it needs 3:1 against its
      background, not the hairline used for dividing content. The inherited token measured 1.36:1
-     in light and 1.47:1 in dark — a checkbox a person has to look for. */
-  border: 1px solid var(--checkbox-border-color, var(--db-checkbox-border-strong, #8a9099));
+     in light and 1.47:1 in dark — a checkbox a person has to look for.
+
+     This line used to read the host's --checkbox-border-color FIRST, which defeated the sentence
+     above it. The host always defines that token, so the fallback chain never reached the strong
+     value on a device: it resolves to --text-faint, which is #ababab in the default light theme
+     and #666666 in the default dark one, measuring 2.30:1 and 2.90:1 against the box's own
+     background. Both are below the 3:1 non-text minimum, and the strong value clears it at 3.22:1
+     and 5.18:1.
+
+     No harness ever saw it, because none of them declares --checkbox-border-color, so every check
+     and every capture has been reading the fallback the app never reaches. Preferring the plugin's
+     own value inverts that. A theme that wants this control still has --db-checkbox-border-strong,
+     and a hook a theme sets deliberately is a better contract than one it satisfies by accident.
+
+     The strong value is the switch's border rather than a third grey. #8a9099 cleared 3:1 against
+     white and against nothing else the checkbox actually sits on — 2.90:1 on the secondary surface,
+     2.87:1 and 2.75:1 on the two mixed popover greys, which is 13 of the 250 checkboxes in the
+     fixture set. #82878e clears every one of them at 3.09:1 or better and stays at 4.18:1 in dark,
+     and the toggle switch two thousand lines above already draws its border with it. */
+  border: 1px solid var(--db-checkbox-border-strong, #82878e);
   border-radius: var(--db-radius-sm);
   background: var(--background-primary);
   box-shadow: none;

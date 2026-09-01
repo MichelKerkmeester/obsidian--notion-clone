@@ -1,6 +1,6 @@
 {
   "generatedFrom": {
-    "stylesheet": "styles.css@44351ed7a9bd"
+    "stylesheet": "styles.css@13860e4b908a"
   },
   "scenarios": [
     {
@@ -16,15 +16,15 @@
       "layoutHash": "e0bec454db5f",
       "sourceHashes": {
         "src/views/toolbar-renderer.ts": "2990d93c5c19",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
       },
       "note": "Settings above, actions below, one row grammar for both the seven types and the duplicate.",
       "capture": "element",
-      "bytes": 60970
+      "bytes": 60969
     },
     {
       "id": "add-view-popover",
@@ -39,15 +39,15 @@
       "layoutHash": "e0bec454db5f",
       "sourceHashes": {
         "src/views/toolbar-renderer.ts": "2990d93c5c19",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
       },
       "note": "Settings above, actions below, one row grammar for both the seven types and the duplicate.",
       "capture": "element",
-      "bytes": 61938
+      "bytes": 61954
     },
     {
       "id": "add-view-popover",
@@ -62,15 +62,15 @@
       "layoutHash": "1e2926d8db7d",
       "sourceHashes": {
         "src/views/toolbar-renderer.ts": "2990d93c5c19",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
       },
       "note": "Settings above, actions below, one row grammar for both the seven types and the duplicate.",
       "capture": "element",
-      "bytes": 62688
+      "bytes": 62683
     },
     {
       "id": "add-view-popover",
@@ -85,15 +85,15 @@
       "layoutHash": "1e2926d8db7d",
       "sourceHashes": {
         "src/views/toolbar-renderer.ts": "2990d93c5c19",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
       },
       "note": "Settings above, actions below, one row grammar for both the seven types and the duplicate.",
       "capture": "element",
-      "bytes": 63710
+      "bytes": 63714
     },
     {
       "id": "chrome-active-rule-popover-filter",
@@ -110,8 +110,8 @@
       "sourceHashes": {
         "src/views/active-rule-popover-renderer.ts": "d9143edf30ba",
         "src/views/filter-panel-renderer.ts": "a231643a2078",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -135,8 +135,8 @@
       "sourceHashes": {
         "src/views/active-rule-popover-renderer.ts": "d9143edf30ba",
         "src/views/filter-panel-renderer.ts": "a231643a2078",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -160,8 +160,8 @@
       "sourceHashes": {
         "src/views/active-rule-popover-renderer.ts": "d9143edf30ba",
         "src/views/filter-panel-renderer.ts": "a231643a2078",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -185,8 +185,8 @@
       "sourceHashes": {
         "src/views/active-rule-popover-renderer.ts": "d9143edf30ba",
         "src/views/filter-panel-renderer.ts": "a231643a2078",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -210,8 +210,8 @@
       "sourceHashes": {
         "src/views/active-rule-popover-renderer.ts": "d9143edf30ba",
         "src/views/sort-panel-renderer.ts": "e1776153a092",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -235,8 +235,8 @@
       "sourceHashes": {
         "src/views/active-rule-popover-renderer.ts": "d9143edf30ba",
         "src/views/sort-panel-renderer.ts": "e1776153a092",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -260,8 +260,8 @@
       "sourceHashes": {
         "src/views/active-rule-popover-renderer.ts": "d9143edf30ba",
         "src/views/sort-panel-renderer.ts": "e1776153a092",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -285,8 +285,8 @@
       "sourceHashes": {
         "src/views/active-rule-popover-renderer.ts": "d9143edf30ba",
         "src/views/sort-panel-renderer.ts": "e1776153a092",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -308,8 +308,8 @@
       "layoutHash": "e7c70d9c8e78",
       "sourceHashes": {
         "src/views/active-view-controls-renderer.ts": "28f8d85134ed",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -331,8 +331,8 @@
       "layoutHash": "e7c70d9c8e78",
       "sourceHashes": {
         "src/views/active-view-controls-renderer.ts": "28f8d85134ed",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -354,8 +354,8 @@
       "layoutHash": "a3e88e554ebf",
       "sourceHashes": {
         "src/views/active-view-controls-renderer.ts": "28f8d85134ed",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -377,8 +377,8 @@
       "layoutHash": "a3e88e554ebf",
       "sourceHashes": {
         "src/views/active-view-controls-renderer.ts": "28f8d85134ed",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -400,8 +400,8 @@
       "layoutHash": "59a5c5cb481f",
       "sourceHashes": {
         "src/views/chart-renderer.ts": "6d99b1cfa4fd",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -423,8 +423,8 @@
       "layoutHash": "59a5c5cb481f",
       "sourceHashes": {
         "src/views/chart-renderer.ts": "6d99b1cfa4fd",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -446,8 +446,8 @@
       "layoutHash": "87148f643385",
       "sourceHashes": {
         "src/views/chart-renderer.ts": "6d99b1cfa4fd",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -469,8 +469,8 @@
       "layoutHash": "87148f643385",
       "sourceHashes": {
         "src/views/chart-renderer.ts": "6d99b1cfa4fd",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -492,8 +492,8 @@
       "layoutHash": "37f4b0680593",
       "sourceHashes": {
         "src/views/chart-renderer.ts": "6d99b1cfa4fd",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -515,8 +515,8 @@
       "layoutHash": "37f4b0680593",
       "sourceHashes": {
         "src/views/chart-renderer.ts": "6d99b1cfa4fd",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -538,8 +538,8 @@
       "layoutHash": "a11e6c3a81b0",
       "sourceHashes": {
         "src/views/chart-renderer.ts": "6d99b1cfa4fd",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -561,8 +561,8 @@
       "layoutHash": "a11e6c3a81b0",
       "sourceHashes": {
         "src/views/chart-renderer.ts": "6d99b1cfa4fd",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -584,8 +584,8 @@
       "layoutHash": "5fc4ac8b29e8",
       "sourceHashes": {
         "src/views/chart-toolbar-renderer.ts": "f69b96f55d80",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -607,8 +607,8 @@
       "layoutHash": "5fc4ac8b29e8",
       "sourceHashes": {
         "src/views/chart-toolbar-renderer.ts": "f69b96f55d80",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -630,8 +630,8 @@
       "layoutHash": "30ed67541f94",
       "sourceHashes": {
         "src/views/chart-toolbar-renderer.ts": "f69b96f55d80",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -653,8 +653,8 @@
       "layoutHash": "30ed67541f94",
       "sourceHashes": {
         "src/views/chart-toolbar-renderer.ts": "f69b96f55d80",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -680,15 +680,15 @@
         "src/views/group-label-renderer.ts": "3fee8449607c",
         "src/views/table-renderer.ts": "2044cea151d8",
         "src/views/summary-renderer.ts": "c6752fec0dfe",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
       },
       "note": "An option-typed group field renders its key as a colored status badge; a field with no options renders plain text, as the nested Revolut subgroup does. Per-group summaries sit at the right of each divider.",
       "capture": "element",
-      "bytes": 30457
+      "bytes": 30415
     },
     {
       "id": "chrome-group-header-row",
@@ -707,15 +707,15 @@
         "src/views/group-label-renderer.ts": "3fee8449607c",
         "src/views/table-renderer.ts": "2044cea151d8",
         "src/views/summary-renderer.ts": "c6752fec0dfe",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
       },
       "note": "An option-typed group field renders its key as a colored status badge; a field with no options renders plain text, as the nested Revolut subgroup does. Per-group summaries sit at the right of each divider.",
       "capture": "element",
-      "bytes": 29446
+      "bytes": 29481
     },
     {
       "id": "chrome-group-header-row",
@@ -734,15 +734,15 @@
         "src/views/group-label-renderer.ts": "3fee8449607c",
         "src/views/table-renderer.ts": "2044cea151d8",
         "src/views/summary-renderer.ts": "c6752fec0dfe",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
       },
       "note": "An option-typed group field renders its key as a colored status badge; a field with no options renders plain text, as the nested Revolut subgroup does. Per-group summaries sit at the right of each divider.",
       "capture": "element",
-      "bytes": 101553
+      "bytes": 101442
     },
     {
       "id": "chrome-group-header-row",
@@ -761,15 +761,15 @@
         "src/views/group-label-renderer.ts": "3fee8449607c",
         "src/views/table-renderer.ts": "2044cea151d8",
         "src/views/summary-renderer.ts": "c6752fec0dfe",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
       },
       "note": "An option-typed group field renders its key as a colored status badge; a field with no options renders plain text, as the nested Revolut subgroup does. Per-group summaries sit at the right of each divider.",
       "capture": "element",
-      "bytes": 98552
+      "bytes": 98729
     },
     {
       "id": "chrome-group-selection-controls",
@@ -788,15 +788,15 @@
         "src/views/list-renderer.ts": "722b433d196c",
         "src/views/gallery-renderer.ts": "c7d6e9216f39",
         "src/views/board-renderer.ts": "31a49df5b500",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
       },
       "note": "The whole-group selection box from the list, the gallery and a board subgroup. One role, so all three boxes must be the same size and radius.",
       "capture": "element",
-      "bytes": 14603
+      "bytes": 14524
     },
     {
       "id": "chrome-group-selection-controls",
@@ -815,15 +815,15 @@
         "src/views/list-renderer.ts": "722b433d196c",
         "src/views/gallery-renderer.ts": "c7d6e9216f39",
         "src/views/board-renderer.ts": "31a49df5b500",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
       },
       "note": "The whole-group selection box from the list, the gallery and a board subgroup. One role, so all three boxes must be the same size and radius.",
       "capture": "element",
-      "bytes": 14747
+      "bytes": 14790
     },
     {
       "id": "chrome-group-selection-controls",
@@ -842,15 +842,15 @@
         "src/views/list-renderer.ts": "722b433d196c",
         "src/views/gallery-renderer.ts": "c7d6e9216f39",
         "src/views/board-renderer.ts": "31a49df5b500",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
       },
       "note": "The whole-group selection box from the list, the gallery and a board subgroup. One role, so all three boxes must be the same size and radius.",
       "capture": "element",
-      "bytes": 15383
+      "bytes": 15329
     },
     {
       "id": "chrome-group-selection-controls",
@@ -869,15 +869,15 @@
         "src/views/list-renderer.ts": "722b433d196c",
         "src/views/gallery-renderer.ts": "c7d6e9216f39",
         "src/views/board-renderer.ts": "31a49df5b500",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
       },
       "note": "The whole-group selection box from the list, the gallery and a board subgroup. One role, so all three boxes must be the same size and radius.",
       "capture": "element",
-      "bytes": 15560
+      "bytes": 15589
     },
     {
       "id": "chrome-owned-menu",
@@ -894,8 +894,8 @@
       "sourceHashes": {
         "src/views/owned-menu.ts": "f32cc37ad4be",
         "src/views/menu-row.ts": "dd0e9eeeb997",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -919,8 +919,8 @@
       "sourceHashes": {
         "src/views/owned-menu.ts": "f32cc37ad4be",
         "src/views/menu-row.ts": "dd0e9eeeb997",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -944,8 +944,8 @@
       "sourceHashes": {
         "src/views/owned-menu.ts": "f32cc37ad4be",
         "src/views/menu-row.ts": "dd0e9eeeb997",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -969,8 +969,8 @@
       "sourceHashes": {
         "src/views/owned-menu.ts": "f32cc37ad4be",
         "src/views/menu-row.ts": "dd0e9eeeb997",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -996,8 +996,8 @@
         "src/views/owned-menu.ts": "f32cc37ad4be",
         "src/views/menu-row.ts": "dd0e9eeeb997",
         "src/views/mobile-bottom-sheet.ts": "2da2bd058754",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -1023,8 +1023,8 @@
         "src/views/owned-menu.ts": "f32cc37ad4be",
         "src/views/menu-row.ts": "dd0e9eeeb997",
         "src/views/mobile-bottom-sheet.ts": "2da2bd058754",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -1050,8 +1050,8 @@
         "src/views/owned-menu.ts": "f32cc37ad4be",
         "src/views/menu-row.ts": "dd0e9eeeb997",
         "src/views/mobile-bottom-sheet.ts": "2da2bd058754",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -1077,8 +1077,8 @@
         "src/views/owned-menu.ts": "f32cc37ad4be",
         "src/views/menu-row.ts": "dd0e9eeeb997",
         "src/views/mobile-bottom-sheet.ts": "2da2bd058754",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -1100,8 +1100,8 @@
       "layoutHash": "13af8008d02e",
       "sourceHashes": {
         "src/views/embedded-database-renderer.ts": "3f29b25c256d",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -1123,8 +1123,8 @@
       "layoutHash": "13af8008d02e",
       "sourceHashes": {
         "src/views/embedded-database-renderer.ts": "3f29b25c256d",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -1146,8 +1146,8 @@
       "layoutHash": "fa689a16d602",
       "sourceHashes": {
         "src/views/embedded-database-renderer.ts": "3f29b25c256d",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -1169,8 +1169,8 @@
       "layoutHash": "fa689a16d602",
       "sourceHashes": {
         "src/views/embedded-database-renderer.ts": "3f29b25c256d",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -1192,8 +1192,8 @@
       "layoutHash": "306bac521073",
       "sourceHashes": {
         "src/views/summary-renderer.ts": "c6752fec0dfe",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -1215,8 +1215,8 @@
       "layoutHash": "306bac521073",
       "sourceHashes": {
         "src/views/summary-renderer.ts": "c6752fec0dfe",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -1238,8 +1238,8 @@
       "layoutHash": "2a35afe97b79",
       "sourceHashes": {
         "src/views/summary-renderer.ts": "c6752fec0dfe",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -1261,8 +1261,8 @@
       "layoutHash": "2a35afe97b79",
       "sourceHashes": {
         "src/views/summary-renderer.ts": "c6752fec0dfe",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -1286,15 +1286,15 @@
       "sourceHashes": {
         "src/views/table-footer-renderer.ts": "2a076187efd5",
         "src/views/table-renderer.ts": "2044cea151d8",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
       },
       "note": "A column with summary rules stacks each kind over its result; a column without one shows a + Calculate hint that the stylesheet keeps at zero opacity until the trigger is hovered, so it is invisible here by design.",
       "capture": "element",
-      "bytes": 435332
+      "bytes": 433901
     },
     {
       "id": "chrome-table-footer",
@@ -1311,15 +1311,15 @@
       "sourceHashes": {
         "src/views/table-footer-renderer.ts": "2a076187efd5",
         "src/views/table-renderer.ts": "2044cea151d8",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
       },
       "note": "A column with summary rules stacks each kind over its result; a column without one shows a + Calculate hint that the stylesheet keeps at zero opacity until the trigger is hovered, so it is invisible here by design.",
       "capture": "element",
-      "bytes": 416599
+      "bytes": 417043
     },
     {
       "id": "chrome-table-footer",
@@ -1336,15 +1336,15 @@
       "sourceHashes": {
         "src/views/table-footer-renderer.ts": "2a076187efd5",
         "src/views/table-renderer.ts": "2044cea151d8",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
       },
       "note": "A column with summary rules stacks each kind over its result; a column without one shows a + Calculate hint that the stylesheet keeps at zero opacity until the trigger is hovered, so it is invisible here by design.",
       "capture": "element",
-      "bytes": 151347
+      "bytes": 151006
     },
     {
       "id": "chrome-table-footer",
@@ -1361,15 +1361,15 @@
       "sourceHashes": {
         "src/views/table-footer-renderer.ts": "2a076187efd5",
         "src/views/table-renderer.ts": "2044cea151d8",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
       },
       "note": "A column with summary rules stacks each kind over its result; a column without one shows a + Calculate hint that the stylesheet keeps at zero opacity until the trigger is hovered, so it is invisible here by design.",
       "capture": "element",
-      "bytes": 150989
+      "bytes": 151054
     },
     {
       "id": "chrome-toolbar",
@@ -1384,8 +1384,8 @@
       "layoutHash": "09b4c18a8d8b",
       "sourceHashes": {
         "src/views/toolbar-renderer.ts": "2990d93c5c19",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -1407,8 +1407,8 @@
       "layoutHash": "09b4c18a8d8b",
       "sourceHashes": {
         "src/views/toolbar-renderer.ts": "2990d93c5c19",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -1430,8 +1430,8 @@
       "layoutHash": "63543946cbb9",
       "sourceHashes": {
         "src/views/toolbar-renderer.ts": "2990d93c5c19",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -1453,8 +1453,8 @@
       "layoutHash": "63543946cbb9",
       "sourceHashes": {
         "src/views/toolbar-renderer.ts": "2990d93c5c19",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -1476,8 +1476,8 @@
       "layoutHash": "a5bc6b18803f",
       "sourceHashes": {
         "src/views/toolbar-renderer.ts": "2990d93c5c19",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -1499,8 +1499,8 @@
       "layoutHash": "a5bc6b18803f",
       "sourceHashes": {
         "src/views/toolbar-renderer.ts": "2990d93c5c19",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -1522,8 +1522,8 @@
       "layoutHash": "b252703f1475",
       "sourceHashes": {
         "src/views/toolbar-renderer.ts": "2990d93c5c19",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -1545,8 +1545,8 @@
       "layoutHash": "b252703f1475",
       "sourceHashes": {
         "src/views/toolbar-renderer.ts": "2990d93c5c19",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -1570,8 +1570,8 @@
       "sourceHashes": {
         "src/views/toolbar-renderer.ts": "2990d93c5c19",
         "src/views/menu-row.ts": "dd0e9eeeb997",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -1595,8 +1595,8 @@
       "sourceHashes": {
         "src/views/toolbar-renderer.ts": "2990d93c5c19",
         "src/views/menu-row.ts": "dd0e9eeeb997",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -1620,8 +1620,8 @@
       "sourceHashes": {
         "src/views/toolbar-renderer.ts": "2990d93c5c19",
         "src/views/menu-row.ts": "dd0e9eeeb997",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -1645,8 +1645,8 @@
       "sourceHashes": {
         "src/views/toolbar-renderer.ts": "2990d93c5c19",
         "src/views/menu-row.ts": "dd0e9eeeb997",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -1668,8 +1668,8 @@
       "layoutHash": "697c8d866e6b",
       "sourceHashes": {
         "src/views/toolbar-renderer.ts": "2990d93c5c19",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -1691,8 +1691,8 @@
       "layoutHash": "697c8d866e6b",
       "sourceHashes": {
         "src/views/toolbar-renderer.ts": "2990d93c5c19",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -1714,8 +1714,8 @@
       "layoutHash": "9c9324a36cd6",
       "sourceHashes": {
         "src/views/toolbar-renderer.ts": "2990d93c5c19",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -1737,8 +1737,8 @@
       "layoutHash": "9c9324a36cd6",
       "sourceHashes": {
         "src/views/toolbar-renderer.ts": "2990d93c5c19",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -1760,8 +1760,8 @@
       "layoutHash": "df83991d92fe",
       "sourceHashes": {
         "src/views/dropdown-field.ts": "1a4c6e81f793",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -1783,8 +1783,8 @@
       "layoutHash": "df83991d92fe",
       "sourceHashes": {
         "src/views/dropdown-field.ts": "1a4c6e81f793",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -1806,8 +1806,8 @@
       "layoutHash": "d7b3c15ee9e9",
       "sourceHashes": {
         "src/views/dropdown-field.ts": "1a4c6e81f793",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -1829,8 +1829,8 @@
       "layoutHash": "d7b3c15ee9e9",
       "sourceHashes": {
         "src/views/dropdown-field.ts": "1a4c6e81f793",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -1852,15 +1852,15 @@
       "layoutHash": "19d283cd877e",
       "sourceHashes": {
         "src/views/modals/base-import-confirm-modal.ts": "3c72d0eb0b46",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
       },
       "note": "The include box in the base-import column table. Same field role as every other modal box, mounted in a centred table cell.",
       "capture": "element",
-      "bytes": 65729
+      "bytes": 65698
     },
     {
       "id": "panel-base-import-modal",
@@ -1875,15 +1875,15 @@
       "layoutHash": "19d283cd877e",
       "sourceHashes": {
         "src/views/modals/base-import-confirm-modal.ts": "3c72d0eb0b46",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
       },
       "note": "The include box in the base-import column table. Same field role as every other modal box, mounted in a centred table cell.",
       "capture": "element",
-      "bytes": 64349
+      "bytes": 64324
     },
     {
       "id": "panel-base-import-modal",
@@ -1898,15 +1898,15 @@
       "layoutHash": "840034240139",
       "sourceHashes": {
         "src/views/modals/base-import-confirm-modal.ts": "3c72d0eb0b46",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
       },
       "note": "The include box in the base-import column table. Same field role as every other modal box, mounted in a centred table cell.",
       "capture": "element",
-      "bytes": 59173
+      "bytes": 59147
     },
     {
       "id": "panel-base-import-modal",
@@ -1921,15 +1921,15 @@
       "layoutHash": "840034240139",
       "sourceHashes": {
         "src/views/modals/base-import-confirm-modal.ts": "3c72d0eb0b46",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
       },
       "note": "The include box in the base-import column table. Same field role as every other modal box, mounted in a centred table cell.",
       "capture": "element",
-      "bytes": 57886
+      "bytes": 57861
     },
     {
       "id": "panel-computed-cleanup-modal",
@@ -1944,15 +1944,15 @@
       "layoutHash": "c1fff0e26506",
       "sourceHashes": {
         "src/views/modals/computed-frontmatter-cleanup-modal.ts": "24b15fd9a08b",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
       },
       "note": "The one checkbox family that mounts under the modal root instead of the view container. Its box must match every other field-role box.",
       "capture": "element",
-      "bytes": 71160
+      "bytes": 71118
     },
     {
       "id": "panel-computed-cleanup-modal",
@@ -1967,15 +1967,15 @@
       "layoutHash": "c1fff0e26506",
       "sourceHashes": {
         "src/views/modals/computed-frontmatter-cleanup-modal.ts": "24b15fd9a08b",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
       },
       "note": "The one checkbox family that mounts under the modal root instead of the view container. Its box must match every other field-role box.",
       "capture": "element",
-      "bytes": 68755
+      "bytes": 68763
     },
     {
       "id": "panel-computed-cleanup-modal",
@@ -1990,15 +1990,15 @@
       "layoutHash": "dc4ee8a72ec0",
       "sourceHashes": {
         "src/views/modals/computed-frontmatter-cleanup-modal.ts": "24b15fd9a08b",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
       },
       "note": "The one checkbox family that mounts under the modal root instead of the view container. Its box must match every other field-role box.",
       "capture": "element",
-      "bytes": 72110
+      "bytes": 72080
     },
     {
       "id": "panel-computed-cleanup-modal",
@@ -2013,15 +2013,15 @@
       "layoutHash": "dc4ee8a72ec0",
       "sourceHashes": {
         "src/views/modals/computed-frontmatter-cleanup-modal.ts": "24b15fd9a08b",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
       },
       "note": "The one checkbox family that mounts under the modal root instead of the view container. Its box must match every other field-role box.",
       "capture": "element",
-      "bytes": 69738
+      "bytes": 69778
     },
     {
       "id": "panel-invalid-events-modal",
@@ -2036,8 +2036,8 @@
       "layoutHash": "509174c27537",
       "sourceHashes": {
         "src/views/modals/invalid-time-events-modal.ts": "4c30e014eed6",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -2059,8 +2059,8 @@
       "layoutHash": "509174c27537",
       "sourceHashes": {
         "src/views/modals/invalid-time-events-modal.ts": "4c30e014eed6",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -2082,8 +2082,8 @@
       "layoutHash": "5125f6698512",
       "sourceHashes": {
         "src/views/modals/invalid-time-events-modal.ts": "4c30e014eed6",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -2105,8 +2105,8 @@
       "layoutHash": "5125f6698512",
       "sourceHashes": {
         "src/views/modals/invalid-time-events-modal.ts": "4c30e014eed6",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -2128,8 +2128,8 @@
       "layoutHash": "74acbf6357de",
       "sourceHashes": {
         "src/views/column-header-controller.ts": "7714b894b5b0",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -2151,8 +2151,8 @@
       "layoutHash": "74acbf6357de",
       "sourceHashes": {
         "src/views/column-header-controller.ts": "7714b894b5b0",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -2174,8 +2174,8 @@
       "layoutHash": "e32867528bc1",
       "sourceHashes": {
         "src/views/column-header-controller.ts": "7714b894b5b0",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -2197,8 +2197,8 @@
       "layoutHash": "e32867528bc1",
       "sourceHashes": {
         "src/views/column-header-controller.ts": "7714b894b5b0",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -2222,8 +2222,8 @@
       "sourceHashes": {
         "src/views/cell-renderer.ts": "6b23762ee384",
         "src/data/column-types.ts": "c48057b05309",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -2247,8 +2247,8 @@
       "sourceHashes": {
         "src/views/cell-renderer.ts": "6b23762ee384",
         "src/data/column-types.ts": "c48057b05309",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -2272,8 +2272,8 @@
       "sourceHashes": {
         "src/views/cell-renderer.ts": "6b23762ee384",
         "src/data/column-types.ts": "c48057b05309",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -2297,8 +2297,8 @@
       "sourceHashes": {
         "src/views/cell-renderer.ts": "6b23762ee384",
         "src/data/column-types.ts": "c48057b05309",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -2320,8 +2320,8 @@
       "layoutHash": "505d8e1a1950",
       "sourceHashes": {
         "src/views/cell-renderer.ts": "6b23762ee384",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -2343,8 +2343,8 @@
       "layoutHash": "505d8e1a1950",
       "sourceHashes": {
         "src/views/cell-renderer.ts": "6b23762ee384",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -2366,8 +2366,8 @@
       "layoutHash": "e028e449ac94",
       "sourceHashes": {
         "src/views/cell-renderer.ts": "6b23762ee384",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -2389,8 +2389,8 @@
       "layoutHash": "e028e449ac94",
       "sourceHashes": {
         "src/views/cell-renderer.ts": "6b23762ee384",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -2414,8 +2414,8 @@
       "sourceHashes": {
         "src/views/date-value-picker.ts": "1f7347ded726",
         "src/views/calendar-mini-calendar-renderer.ts": "14853dcd3917",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -2439,8 +2439,8 @@
       "sourceHashes": {
         "src/views/date-value-picker.ts": "1f7347ded726",
         "src/views/calendar-mini-calendar-renderer.ts": "14853dcd3917",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -2464,8 +2464,8 @@
       "sourceHashes": {
         "src/views/date-value-picker.ts": "1f7347ded726",
         "src/views/calendar-mini-calendar-renderer.ts": "14853dcd3917",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -2489,8 +2489,8 @@
       "sourceHashes": {
         "src/views/date-value-picker.ts": "1f7347ded726",
         "src/views/calendar-mini-calendar-renderer.ts": "14853dcd3917",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -2514,8 +2514,8 @@
       "sourceHashes": {
         "src/views/date-value-picker.ts": "1f7347ded726",
         "src/views/calendar-mini-calendar-renderer.ts": "14853dcd3917",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -2539,8 +2539,8 @@
       "sourceHashes": {
         "src/views/date-value-picker.ts": "1f7347ded726",
         "src/views/calendar-mini-calendar-renderer.ts": "14853dcd3917",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -2564,8 +2564,8 @@
       "sourceHashes": {
         "src/views/date-value-picker.ts": "1f7347ded726",
         "src/views/calendar-mini-calendar-renderer.ts": "14853dcd3917",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -2589,8 +2589,8 @@
       "sourceHashes": {
         "src/views/date-value-picker.ts": "1f7347ded726",
         "src/views/calendar-mini-calendar-renderer.ts": "14853dcd3917",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -2612,8 +2612,8 @@
       "layoutHash": "f11d6b2cccd7",
       "sourceHashes": {
         "src/views/file-field-renderer.ts": "4a6891fdd59e",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -2635,8 +2635,8 @@
       "layoutHash": "f11d6b2cccd7",
       "sourceHashes": {
         "src/views/file-field-renderer.ts": "4a6891fdd59e",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -2658,8 +2658,8 @@
       "layoutHash": "c775d126efd9",
       "sourceHashes": {
         "src/views/file-field-renderer.ts": "4a6891fdd59e",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -2681,8 +2681,8 @@
       "layoutHash": "c775d126efd9",
       "sourceHashes": {
         "src/views/file-field-renderer.ts": "4a6891fdd59e",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -2706,8 +2706,8 @@
       "sourceHashes": {
         "src/views/icon-picker-popover.ts": "ef97335f5ff2",
         "src/views/record-icon-renderer.ts": "3d90a87b2a0b",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -2731,8 +2731,8 @@
       "sourceHashes": {
         "src/views/icon-picker-popover.ts": "ef97335f5ff2",
         "src/views/record-icon-renderer.ts": "3d90a87b2a0b",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -2756,8 +2756,8 @@
       "sourceHashes": {
         "src/views/icon-picker-popover.ts": "ef97335f5ff2",
         "src/views/record-icon-renderer.ts": "3d90a87b2a0b",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -2781,8 +2781,8 @@
       "sourceHashes": {
         "src/views/icon-picker-popover.ts": "ef97335f5ff2",
         "src/views/record-icon-renderer.ts": "3d90a87b2a0b",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -2806,8 +2806,8 @@
       "sourceHashes": {
         "src/views/number-display-renderer.ts": "626e6b487cf1",
         "src/data/number-display.ts": "b0967db0f269",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -2831,8 +2831,8 @@
       "sourceHashes": {
         "src/views/number-display-renderer.ts": "626e6b487cf1",
         "src/data/number-display.ts": "b0967db0f269",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -2856,8 +2856,8 @@
       "sourceHashes": {
         "src/views/number-display-renderer.ts": "626e6b487cf1",
         "src/data/number-display.ts": "b0967db0f269",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -2881,8 +2881,8 @@
       "sourceHashes": {
         "src/views/number-display-renderer.ts": "626e6b487cf1",
         "src/data/number-display.ts": "b0967db0f269",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -2906,8 +2906,8 @@
       "sourceHashes": {
         "src/views/option-color-picker.ts": "7f69a2433a4f",
         "src/data/status-colors.ts": "954425583842",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -2931,8 +2931,8 @@
       "sourceHashes": {
         "src/views/option-color-picker.ts": "7f69a2433a4f",
         "src/data/status-colors.ts": "954425583842",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -2956,8 +2956,8 @@
       "sourceHashes": {
         "src/views/option-color-picker.ts": "7f69a2433a4f",
         "src/data/status-colors.ts": "954425583842",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -2981,8 +2981,8 @@
       "sourceHashes": {
         "src/views/option-color-picker.ts": "7f69a2433a4f",
         "src/data/status-colors.ts": "954425583842",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -3008,8 +3008,8 @@
         "src/views/record-icon-renderer.ts": "3d90a87b2a0b",
         "src/views/table-renderer.ts": "2044cea151d8",
         "src/data/record-icon.ts": "dd6940af82f2",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -3035,8 +3035,8 @@
         "src/views/record-icon-renderer.ts": "3d90a87b2a0b",
         "src/views/table-renderer.ts": "2044cea151d8",
         "src/data/record-icon.ts": "dd6940af82f2",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -3062,8 +3062,8 @@
         "src/views/record-icon-renderer.ts": "3d90a87b2a0b",
         "src/views/table-renderer.ts": "2044cea151d8",
         "src/data/record-icon.ts": "dd6940af82f2",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -3089,8 +3089,8 @@
         "src/views/record-icon-renderer.ts": "3d90a87b2a0b",
         "src/views/table-renderer.ts": "2044cea151d8",
         "src/data/record-icon.ts": "dd6940af82f2",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -3112,8 +3112,8 @@
       "layoutHash": "71c4e1c98e2f",
       "sourceHashes": {
         "src/views/relation-value-renderer.ts": "8eb0d49c5c0a",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -3135,8 +3135,8 @@
       "layoutHash": "71c4e1c98e2f",
       "sourceHashes": {
         "src/views/relation-value-renderer.ts": "8eb0d49c5c0a",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -3158,8 +3158,8 @@
       "layoutHash": "1d56a86a0a8e",
       "sourceHashes": {
         "src/views/relation-value-renderer.ts": "8eb0d49c5c0a",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -3181,8 +3181,8 @@
       "layoutHash": "1d56a86a0a8e",
       "sourceHashes": {
         "src/views/relation-value-renderer.ts": "8eb0d49c5c0a",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -3206,8 +3206,8 @@
       "sourceHashes": {
         "src/data/status-colors.ts": "954425583842",
         "src/views/cell-renderer.ts": "6b23762ee384",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -3231,8 +3231,8 @@
       "sourceHashes": {
         "src/data/status-colors.ts": "954425583842",
         "src/views/cell-renderer.ts": "6b23762ee384",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -3256,8 +3256,8 @@
       "sourceHashes": {
         "src/data/status-colors.ts": "954425583842",
         "src/views/cell-renderer.ts": "6b23762ee384",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -3281,8 +3281,8 @@
       "sourceHashes": {
         "src/data/status-colors.ts": "954425583842",
         "src/views/cell-renderer.ts": "6b23762ee384",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -3306,15 +3306,15 @@
       "sourceHashes": {
         "src/views/column-manager-renderer.ts": "7bad4b84666c",
         "src/views/property-type-icon.ts": "ae5fe0065e84",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
       },
       "note": "One row per property: drag handle, visibility checkbox, type icon, name with its frontmatter key, then wrap, edit and delete.",
       "capture": "element",
-      "bytes": 55274
+      "bytes": 55250
     },
     {
       "id": "panel-column-manager",
@@ -3331,15 +3331,15 @@
       "sourceHashes": {
         "src/views/column-manager-renderer.ts": "7bad4b84666c",
         "src/views/property-type-icon.ts": "ae5fe0065e84",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
       },
       "note": "One row per property: drag handle, visibility checkbox, type icon, name with its frontmatter key, then wrap, edit and delete.",
       "capture": "element",
-      "bytes": 55358
+      "bytes": 55333
     },
     {
       "id": "panel-column-manager",
@@ -3356,15 +3356,15 @@
       "sourceHashes": {
         "src/views/column-manager-renderer.ts": "7bad4b84666c",
         "src/views/property-type-icon.ts": "ae5fe0065e84",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
       },
       "note": "One row per property: drag handle, visibility checkbox, type icon, name with its frontmatter key, then wrap, edit and delete.",
       "capture": "element",
-      "bytes": 52297
+      "bytes": 52271
     },
     {
       "id": "panel-column-manager",
@@ -3381,15 +3381,15 @@
       "sourceHashes": {
         "src/views/column-manager-renderer.ts": "7bad4b84666c",
         "src/views/property-type-icon.ts": "ae5fe0065e84",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
       },
       "note": "One row per property: drag handle, visibility checkbox, type icon, name with its frontmatter key, then wrap, edit and delete.",
       "capture": "element",
-      "bytes": 52608
+      "bytes": 52607
     },
     {
       "id": "panel-filter-conditions",
@@ -3406,8 +3406,8 @@
       "sourceHashes": {
         "src/views/filter-panel-renderer.ts": "a231643a2078",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -3431,8 +3431,8 @@
       "sourceHashes": {
         "src/views/filter-panel-renderer.ts": "a231643a2078",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -3456,8 +3456,8 @@
       "sourceHashes": {
         "src/views/filter-panel-renderer.ts": "a231643a2078",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -3481,8 +3481,8 @@
       "sourceHashes": {
         "src/views/filter-panel-renderer.ts": "a231643a2078",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -3506,8 +3506,8 @@
       "sourceHashes": {
         "src/views/filter-panel-renderer.ts": "a231643a2078",
         "src/data/view-filter-tree.ts": "1efdb923d4bb",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -3531,8 +3531,8 @@
       "sourceHashes": {
         "src/views/filter-panel-renderer.ts": "a231643a2078",
         "src/data/view-filter-tree.ts": "1efdb923d4bb",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -3556,8 +3556,8 @@
       "sourceHashes": {
         "src/views/filter-panel-renderer.ts": "a231643a2078",
         "src/data/view-filter-tree.ts": "1efdb923d4bb",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -3581,8 +3581,8 @@
       "sourceHashes": {
         "src/views/filter-panel-renderer.ts": "a231643a2078",
         "src/data/view-filter-tree.ts": "1efdb923d4bb",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -3608,8 +3608,8 @@
         "src/views/record-detail-panel.ts": "f6d0308b4df2",
         "src/views/card-field-renderer.ts": "33212bef3422",
         "src/views/note-body-region.ts": "4660f1f93bd7",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -3635,8 +3635,8 @@
         "src/views/record-detail-panel.ts": "f6d0308b4df2",
         "src/views/card-field-renderer.ts": "33212bef3422",
         "src/views/note-body-region.ts": "4660f1f93bd7",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -3662,8 +3662,8 @@
         "src/views/record-detail-panel.ts": "f6d0308b4df2",
         "src/views/card-field-renderer.ts": "33212bef3422",
         "src/views/note-body-region.ts": "4660f1f93bd7",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -3689,8 +3689,8 @@
         "src/views/record-detail-panel.ts": "f6d0308b4df2",
         "src/views/card-field-renderer.ts": "33212bef3422",
         "src/views/note-body-region.ts": "4660f1f93bd7",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -3714,8 +3714,8 @@
       "sourceHashes": {
         "src/views/record-detail-panel.ts": "f6d0308b4df2",
         "src/views/note-body-region.ts": "4660f1f93bd7",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -3739,8 +3739,8 @@
       "sourceHashes": {
         "src/views/record-detail-panel.ts": "f6d0308b4df2",
         "src/views/note-body-region.ts": "4660f1f93bd7",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -3764,8 +3764,8 @@
       "sourceHashes": {
         "src/views/record-detail-panel.ts": "f6d0308b4df2",
         "src/views/note-body-region.ts": "4660f1f93bd7",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -3789,8 +3789,8 @@
       "sourceHashes": {
         "src/views/record-detail-panel.ts": "f6d0308b4df2",
         "src/views/note-body-region.ts": "4660f1f93bd7",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -3814,8 +3814,8 @@
       "sourceHashes": {
         "src/views/record-detail-panel.ts": "f6d0308b4df2",
         "src/views/note-body-region.ts": "4660f1f93bd7",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -3839,15 +3839,15 @@
       "sourceHashes": {
         "src/views/record-detail-panel.ts": "f6d0308b4df2",
         "src/views/note-body-region.ts": "4660f1f93bd7",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
       },
       "note": "A record whose note has frontmatter and nothing else. One faint line rather than an empty box: without an affordance the records most in need of a body would be exactly the ones that could not be given one.",
       "capture": "viewport",
-      "bytes": 52923
+      "bytes": 52914
     },
     {
       "id": "panel-record-detail-sheet-body-empty",
@@ -3864,8 +3864,8 @@
       "sourceHashes": {
         "src/views/record-detail-panel.ts": "f6d0308b4df2",
         "src/views/note-body-region.ts": "4660f1f93bd7",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -3889,8 +3889,8 @@
       "sourceHashes": {
         "src/views/record-detail-panel.ts": "f6d0308b4df2",
         "src/views/note-body-region.ts": "4660f1f93bd7",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -3918,8 +3918,8 @@
         "src/views/popover-position.ts": "48a6ffec6b38",
         "src/views/card-field-renderer.ts": "33212bef3422",
         "src/views/note-body-region.ts": "4660f1f93bd7",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -3947,8 +3947,8 @@
         "src/views/popover-position.ts": "48a6ffec6b38",
         "src/views/card-field-renderer.ts": "33212bef3422",
         "src/views/note-body-region.ts": "4660f1f93bd7",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -3976,8 +3976,8 @@
         "src/views/popover-position.ts": "48a6ffec6b38",
         "src/views/card-field-renderer.ts": "33212bef3422",
         "src/views/note-body-region.ts": "4660f1f93bd7",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -4005,8 +4005,8 @@
         "src/views/popover-position.ts": "48a6ffec6b38",
         "src/views/card-field-renderer.ts": "33212bef3422",
         "src/views/note-body-region.ts": "4660f1f93bd7",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -4030,15 +4030,15 @@
       "sourceHashes": {
         "src/views/table-record-peek.ts": "ca49c8ce6aab",
         "src/views/table-renderer.ts": "2044cea151d8",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
       },
       "note": "Docks against the right edge of the table it was opened from. Values are display-only text, and properties hidden from the table sit behind the disclosure.",
       "capture": "element",
-      "bytes": 490058
+      "bytes": 489589
     },
     {
       "id": "panel-record-peek",
@@ -4055,15 +4055,15 @@
       "sourceHashes": {
         "src/views/table-record-peek.ts": "ca49c8ce6aab",
         "src/views/table-renderer.ts": "2044cea151d8",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
       },
       "note": "Docks against the right edge of the table it was opened from. Values are display-only text, and properties hidden from the table sit behind the disclosure.",
       "capture": "element",
-      "bytes": 473592
+      "bytes": 473854
     },
     {
       "id": "panel-record-peek",
@@ -4080,8 +4080,8 @@
       "sourceHashes": {
         "src/views/table-record-peek.ts": "ca49c8ce6aab",
         "src/views/table-renderer.ts": "2044cea151d8",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -4105,8 +4105,8 @@
       "sourceHashes": {
         "src/views/table-record-peek.ts": "ca49c8ce6aab",
         "src/views/table-renderer.ts": "2044cea151d8",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -4128,8 +4128,8 @@
       "layoutHash": "6d599788ac66",
       "sourceHashes": {
         "src/views/sort-panel-renderer.ts": "e1776153a092",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -4151,8 +4151,8 @@
       "layoutHash": "6d599788ac66",
       "sourceHashes": {
         "src/views/sort-panel-renderer.ts": "e1776153a092",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -4174,8 +4174,8 @@
       "layoutHash": "fcfd2cde39f9",
       "sourceHashes": {
         "src/views/sort-panel-renderer.ts": "e1776153a092",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -4197,8 +4197,8 @@
       "layoutHash": "fcfd2cde39f9",
       "sourceHashes": {
         "src/views/sort-panel-renderer.ts": "e1776153a092",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -4222,8 +4222,8 @@
       "sourceHashes": {
         "src/views/sort-panel-renderer.ts": "e1776153a092",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -4247,8 +4247,8 @@
       "sourceHashes": {
         "src/views/sort-panel-renderer.ts": "e1776153a092",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -4272,8 +4272,8 @@
       "sourceHashes": {
         "src/views/sort-panel-renderer.ts": "e1776153a092",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -4297,8 +4297,8 @@
       "sourceHashes": {
         "src/views/sort-panel-renderer.ts": "e1776153a092",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -4322,8 +4322,8 @@
       "sourceHashes": {
         "src/views/view-config-panel-renderer.ts": "9e7f8e147bfd",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -4347,8 +4347,8 @@
       "sourceHashes": {
         "src/views/view-config-panel-renderer.ts": "9e7f8e147bfd",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -4372,8 +4372,8 @@
       "sourceHashes": {
         "src/views/view-config-panel-renderer.ts": "9e7f8e147bfd",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -4397,8 +4397,8 @@
       "sourceHashes": {
         "src/views/view-config-panel-renderer.ts": "9e7f8e147bfd",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -4420,8 +4420,8 @@
       "layoutHash": "7af249524fa5",
       "sourceHashes": {
         "src/views/empty-state-renderer.ts": "0b9797e5bfdb",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -4443,8 +4443,8 @@
       "layoutHash": "7af249524fa5",
       "sourceHashes": {
         "src/views/empty-state-renderer.ts": "0b9797e5bfdb",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -4466,8 +4466,8 @@
       "layoutHash": "2c1162d2cc69",
       "sourceHashes": {
         "src/views/empty-state-renderer.ts": "0b9797e5bfdb",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -4489,8 +4489,8 @@
       "layoutHash": "2c1162d2cc69",
       "sourceHashes": {
         "src/views/empty-state-renderer.ts": "0b9797e5bfdb",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -4516,15 +4516,15 @@
         "src/views/board-renderer.ts": "31a49df5b500",
         "src/views/group-label-renderer.ts": "3fee8449607c",
         "src/views/card-field-renderer.ts": "33212bef3422",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
       },
       "note": "The board inside the default-width container. On the phone (is-phone) the container no longer centres the grid off-screen, and the sticky group header is taken out of sticky flow so it cannot float down over the cards; columns page horizontally with snap-scroll.",
       "capture": "viewport",
-      "bytes": 192213
+      "bytes": 192084
     },
     {
       "id": "board-mobile",
@@ -4543,15 +4543,15 @@
         "src/views/board-renderer.ts": "31a49df5b500",
         "src/views/group-label-renderer.ts": "3fee8449607c",
         "src/views/card-field-renderer.ts": "33212bef3422",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
       },
       "note": "The board inside the default-width container. On the phone (is-phone) the container no longer centres the grid off-screen, and the sticky group header is taken out of sticky flow so it cannot float down over the cards; columns page horizontally with snap-scroll.",
       "capture": "viewport",
-      "bytes": 196733
+      "bytes": 197030
     },
     {
       "id": "board-mobile",
@@ -4570,15 +4570,15 @@
         "src/views/board-renderer.ts": "31a49df5b500",
         "src/views/group-label-renderer.ts": "3fee8449607c",
         "src/views/card-field-renderer.ts": "33212bef3422",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
       },
       "note": "The board inside the default-width container. On the phone (is-phone) the container no longer centres the grid off-screen, and the sticky group header is taken out of sticky flow so it cannot float down over the cards; columns page horizontally with snap-scroll.",
       "capture": "viewport",
-      "bytes": 78657
+      "bytes": 78580
     },
     {
       "id": "board-mobile",
@@ -4597,15 +4597,15 @@
         "src/views/board-renderer.ts": "31a49df5b500",
         "src/views/group-label-renderer.ts": "3fee8449607c",
         "src/views/card-field-renderer.ts": "33212bef3422",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
       },
       "note": "The board inside the default-width container. On the phone (is-phone) the container no longer centres the grid off-screen, and the sticky group header is taken out of sticky flow so it cannot float down over the cards; columns page horizontally with snap-scroll.",
       "capture": "viewport",
-      "bytes": 81396
+      "bytes": 81405
     },
     {
       "id": "board-view",
@@ -4622,15 +4622,15 @@
       "sourceHashes": {
         "src/views/board-renderer.ts": "31a49df5b500",
         "src/views/card-field-renderer.ts": "33212bef3422",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
       },
       "note": null,
       "capture": "viewport",
-      "bytes": 252889
+      "bytes": 252622
     },
     {
       "id": "board-view",
@@ -4647,15 +4647,15 @@
       "sourceHashes": {
         "src/views/board-renderer.ts": "31a49df5b500",
         "src/views/card-field-renderer.ts": "33212bef3422",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
       },
       "note": null,
       "capture": "viewport",
-      "bytes": 259007
+      "bytes": 259062
     },
     {
       "id": "board-view",
@@ -4672,15 +4672,15 @@
       "sourceHashes": {
         "src/views/board-renderer.ts": "31a49df5b500",
         "src/views/card-field-renderer.ts": "33212bef3422",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
       },
       "note": null,
       "capture": "viewport",
-      "bytes": 78657
+      "bytes": 78580
     },
     {
       "id": "board-view",
@@ -4697,15 +4697,15 @@
       "sourceHashes": {
         "src/views/board-renderer.ts": "31a49df5b500",
         "src/views/card-field-renderer.ts": "33212bef3422",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
       },
       "note": null,
       "capture": "viewport",
-      "bytes": 81396
+      "bytes": 81405
     },
     {
       "id": "calendar-mini-calendar",
@@ -4722,8 +4722,8 @@
       "sourceHashes": {
         "src/views/calendar-mini-calendar-renderer.ts": "14853dcd3917",
         "src/views/calendar-renderer.ts": "ec0b922af690",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -4747,15 +4747,15 @@
       "sourceHashes": {
         "src/views/calendar-mini-calendar-renderer.ts": "14853dcd3917",
         "src/views/calendar-renderer.ts": "ec0b922af690",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
       },
       "note": "Days with events carry a short accent underline; the visible week reads as the selected pill run.",
       "capture": "viewport",
-      "bytes": 60938
+      "bytes": 60997
     },
     {
       "id": "calendar-mini-calendar",
@@ -4772,8 +4772,8 @@
       "sourceHashes": {
         "src/views/calendar-mini-calendar-renderer.ts": "14853dcd3917",
         "src/views/calendar-renderer.ts": "ec0b922af690",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -4797,8 +4797,8 @@
       "sourceHashes": {
         "src/views/calendar-mini-calendar-renderer.ts": "14853dcd3917",
         "src/views/calendar-renderer.ts": "ec0b922af690",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -4820,8 +4820,8 @@
       "layoutHash": "913ca45b27bf",
       "sourceHashes": {
         "src/views/calendar-renderer.ts": "ec0b922af690",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -4843,8 +4843,8 @@
       "layoutHash": "913ca45b27bf",
       "sourceHashes": {
         "src/views/calendar-renderer.ts": "ec0b922af690",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -4866,8 +4866,8 @@
       "layoutHash": "6f6ea378e478",
       "sourceHashes": {
         "src/views/calendar-renderer.ts": "ec0b922af690",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -4889,8 +4889,8 @@
       "layoutHash": "6f6ea378e478",
       "sourceHashes": {
         "src/views/calendar-renderer.ts": "ec0b922af690",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -4914,8 +4914,8 @@
       "sourceHashes": {
         "src/views/calendar-toolbar-renderer.ts": "b8348c8d80ba",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -4939,8 +4939,8 @@
       "sourceHashes": {
         "src/views/calendar-toolbar-renderer.ts": "b8348c8d80ba",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -4964,8 +4964,8 @@
       "sourceHashes": {
         "src/views/calendar-toolbar-renderer.ts": "b8348c8d80ba",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -4989,8 +4989,8 @@
       "sourceHashes": {
         "src/views/calendar-toolbar-renderer.ts": "b8348c8d80ba",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -5012,8 +5012,8 @@
       "layoutHash": "6352305dcf50",
       "sourceHashes": {
         "src/views/calendar-renderer.ts": "ec0b922af690",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -5035,8 +5035,8 @@
       "layoutHash": "6352305dcf50",
       "sourceHashes": {
         "src/views/calendar-renderer.ts": "ec0b922af690",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -5058,8 +5058,8 @@
       "layoutHash": "1227060b4ab1",
       "sourceHashes": {
         "src/views/calendar-renderer.ts": "ec0b922af690",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -5081,8 +5081,8 @@
       "layoutHash": "1227060b4ab1",
       "sourceHashes": {
         "src/views/calendar-renderer.ts": "ec0b922af690",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -5106,15 +5106,15 @@
       "sourceHashes": {
         "src/views/gallery-renderer.ts": "c7d6e9216f39",
         "src/views/card-field-renderer.ts": "33212bef3422",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
       },
       "note": null,
       "capture": "viewport",
-      "bytes": 40133
+      "bytes": 40126
     },
     {
       "id": "gallery-view",
@@ -5131,15 +5131,15 @@
       "sourceHashes": {
         "src/views/gallery-renderer.ts": "c7d6e9216f39",
         "src/views/card-field-renderer.ts": "33212bef3422",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
       },
       "note": null,
       "capture": "viewport",
-      "bytes": 40132
+      "bytes": 40129
     },
     {
       "id": "gallery-view",
@@ -5156,15 +5156,15 @@
       "sourceHashes": {
         "src/views/gallery-renderer.ts": "c7d6e9216f39",
         "src/views/card-field-renderer.ts": "33212bef3422",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
       },
       "note": null,
       "capture": "viewport",
-      "bytes": 38566
+      "bytes": 38567
     },
     {
       "id": "gallery-view",
@@ -5181,15 +5181,15 @@
       "sourceHashes": {
         "src/views/gallery-renderer.ts": "c7d6e9216f39",
         "src/views/card-field-renderer.ts": "33212bef3422",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
       },
       "note": null,
       "capture": "viewport",
-      "bytes": 38393
+      "bytes": 38403
     },
     {
       "id": "list-mobile",
@@ -5206,15 +5206,15 @@
       "sourceHashes": {
         "src/views/list-renderer.ts": "722b433d196c",
         "src/views/card-field-renderer.ts": "33212bef3422",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
       },
       "note": "The list row the renderer builds: controls, a title line and a meta row of fixed-width fields. On desktop the fields sit on one line; on the phone (is-phone) the card fills the viewport and the fields wrap inside its border instead of escaping it.",
       "capture": "viewport",
-      "bytes": 244301
+      "bytes": 244022
     },
     {
       "id": "list-mobile",
@@ -5231,15 +5231,15 @@
       "sourceHashes": {
         "src/views/list-renderer.ts": "722b433d196c",
         "src/views/card-field-renderer.ts": "33212bef3422",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
       },
       "note": "The list row the renderer builds: controls, a title line and a meta row of fixed-width fields. On desktop the fields sit on one line; on the phone (is-phone) the card fills the viewport and the fields wrap inside its border instead of escaping it.",
       "capture": "viewport",
-      "bytes": 245378
+      "bytes": 245534
     },
     {
       "id": "list-mobile",
@@ -5256,15 +5256,15 @@
       "sourceHashes": {
         "src/views/list-renderer.ts": "722b433d196c",
         "src/views/card-field-renderer.ts": "33212bef3422",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
       },
       "note": "The list row the renderer builds: controls, a title line and a meta row of fixed-width fields. On desktop the fields sit on one line; on the phone (is-phone) the card fills the viewport and the fields wrap inside its border instead of escaping it.",
       "capture": "viewport",
-      "bytes": 137583
+      "bytes": 137514
     },
     {
       "id": "list-mobile",
@@ -5281,15 +5281,15 @@
       "sourceHashes": {
         "src/views/list-renderer.ts": "722b433d196c",
         "src/views/card-field-renderer.ts": "33212bef3422",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
       },
       "note": "The list row the renderer builds: controls, a title line and a meta row of fixed-width fields. On desktop the fields sit on one line; on the phone (is-phone) the card fills the viewport and the fields wrap inside its border instead of escaping it.",
       "capture": "viewport",
-      "bytes": 137387
+      "bytes": 137479
     },
     {
       "id": "list-sparse-fields",
@@ -5304,15 +5304,15 @@
       "layoutHash": "217731024cdf",
       "sourceHashes": {
         "src/views/list-renderer.ts": "722b433d196c",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
       },
       "note": "The shape every other list fixture cannot produce: each row missing a different subset of its properties. A fixture that gives every row every field shows a tidy grid whichever way the row is laid out, so it cannot tell a column claimed by index from a slot taken by count. The mobile capture hides the reserved boxes rather than drawing them: `shouldReserveColumns` reserves only where two properties can share a line, and at 402px only one fits — so the phone capture used to photograph blank gaps the renderer never draws. Static markup cannot make that decision, so `captureCss` makes it instead, at the one width where the answer differs.",
       "capture": "viewport",
-      "bytes": 204457
+      "bytes": 204157
     },
     {
       "id": "list-sparse-fields",
@@ -5327,15 +5327,15 @@
       "layoutHash": "217731024cdf",
       "sourceHashes": {
         "src/views/list-renderer.ts": "722b433d196c",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
       },
       "note": "The shape every other list fixture cannot produce: each row missing a different subset of its properties. A fixture that gives every row every field shows a tidy grid whichever way the row is laid out, so it cannot tell a column claimed by index from a slot taken by count. The mobile capture hides the reserved boxes rather than drawing them: `shouldReserveColumns` reserves only where two properties can share a line, and at 402px only one fits — so the phone capture used to photograph blank gaps the renderer never draws. Static markup cannot make that decision, so `captureCss` makes it instead, at the one width where the answer differs.",
       "capture": "viewport",
-      "bytes": 205133
+      "bytes": 205281
     },
     {
       "id": "list-sparse-fields",
@@ -5350,15 +5350,15 @@
       "layoutHash": "53a1e4dcf00d",
       "sourceHashes": {
         "src/views/list-renderer.ts": "722b433d196c",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
       },
       "note": "The shape every other list fixture cannot produce: each row missing a different subset of its properties. A fixture that gives every row every field shows a tidy grid whichever way the row is laid out, so it cannot tell a column claimed by index from a slot taken by count. The mobile capture hides the reserved boxes rather than drawing them: `shouldReserveColumns` reserves only where two properties can share a line, and at 402px only one fits — so the phone capture used to photograph blank gaps the renderer never draws. Static markup cannot make that decision, so `captureCss` makes it instead, at the one width where the answer differs.",
       "capture": "viewport",
-      "bytes": 135169
+      "bytes": 134970
     },
     {
       "id": "list-sparse-fields",
@@ -5373,15 +5373,15 @@
       "layoutHash": "53a1e4dcf00d",
       "sourceHashes": {
         "src/views/list-renderer.ts": "722b433d196c",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
       },
       "note": "The shape every other list fixture cannot produce: each row missing a different subset of its properties. A fixture that gives every row every field shows a tidy grid whichever way the row is laid out, so it cannot tell a column claimed by index from a slot taken by count. The mobile capture hides the reserved boxes rather than drawing them: `shouldReserveColumns` reserves only where two properties can share a line, and at 402px only one fits — so the phone capture used to photograph blank gaps the renderer never draws. Static markup cannot make that decision, so `captureCss` makes it instead, at the one width where the answer differs.",
       "capture": "viewport",
-      "bytes": 134785
+      "bytes": 134831
     },
     {
       "id": "list-view",
@@ -5398,15 +5398,15 @@
       "sourceHashes": {
         "src/views/list-renderer.ts": "722b433d196c",
         "src/views/card-field-renderer.ts": "33212bef3422",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
       },
       "note": "The desktop list row, controls included. The row checkbox is not a phone-only control; the renderer builds it at every width.",
       "capture": "viewport",
-      "bytes": 155015
+      "bytes": 154822
     },
     {
       "id": "list-view",
@@ -5423,15 +5423,15 @@
       "sourceHashes": {
         "src/views/list-renderer.ts": "722b433d196c",
         "src/views/card-field-renderer.ts": "33212bef3422",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
       },
       "note": "The desktop list row, controls included. The row checkbox is not a phone-only control; the renderer builds it at every width.",
       "capture": "viewport",
-      "bytes": 153643
+      "bytes": 153720
     },
     {
       "id": "list-view",
@@ -5448,15 +5448,15 @@
       "sourceHashes": {
         "src/views/list-renderer.ts": "722b433d196c",
         "src/views/card-field-renderer.ts": "33212bef3422",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
       },
       "note": "The desktop list row, controls included. The row checkbox is not a phone-only control; the renderer builds it at every width.",
       "capture": "viewport",
-      "bytes": 123942
+      "bytes": 123778
     },
     {
       "id": "list-view",
@@ -5473,15 +5473,15 @@
       "sourceHashes": {
         "src/views/list-renderer.ts": "722b433d196c",
         "src/views/card-field-renderer.ts": "33212bef3422",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
       },
       "note": "The desktop list row, controls included. The row checkbox is not a phone-only control; the renderer builds it at every width.",
       "capture": "viewport",
-      "bytes": 121913
+      "bytes": 122018
     },
     {
       "id": "table-mobile",
@@ -5507,15 +5507,15 @@
         "src/views/cell-renderer.ts": "6b23762ee384",
         "src/views/file-title-display.ts": "53ac58228638",
         "src/views/table-record-peek.ts": "ca49c8ce6aab",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
       },
       "note": "The full table the renderer builds: a select gutter, a record-icon gutter and a runtime <colgroup> of fixed px widths. On desktop those widths hold; on the phone (is-phone) the columns auto-fit to content and the select column is no longer clipped by the scroll-area fade mask. The name column is the title cell — a content-sized link plus the always-visible open affordance, rendered on touch as a compact maximize icon so its width goes to the note name instead of a text label.",
       "capture": "viewport",
-      "bytes": 206781
+      "bytes": 206621
     },
     {
       "id": "table-mobile",
@@ -5541,15 +5541,15 @@
         "src/views/cell-renderer.ts": "6b23762ee384",
         "src/views/file-title-display.ts": "53ac58228638",
         "src/views/table-record-peek.ts": "ca49c8ce6aab",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
       },
       "note": "The full table the renderer builds: a select gutter, a record-icon gutter and a runtime <colgroup> of fixed px widths. On desktop those widths hold; on the phone (is-phone) the columns auto-fit to content and the select column is no longer clipped by the scroll-area fade mask. The name column is the title cell — a content-sized link plus the always-visible open affordance, rendered on touch as a compact maximize icon so its width goes to the note name instead of a text label.",
       "capture": "viewport",
-      "bytes": 199675
+      "bytes": 199695
     },
     {
       "id": "table-mobile",
@@ -5575,15 +5575,15 @@
         "src/views/cell-renderer.ts": "6b23762ee384",
         "src/views/file-title-display.ts": "53ac58228638",
         "src/views/table-record-peek.ts": "ca49c8ce6aab",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
       },
       "note": "The full table the renderer builds: a select gutter, a record-icon gutter and a runtime <colgroup> of fixed px widths. On desktop those widths hold; on the phone (is-phone) the columns auto-fit to content and the select column is no longer clipped by the scroll-area fade mask. The name column is the title cell — a content-sized link plus the always-visible open affordance, rendered on touch as a compact maximize icon so its width goes to the note name instead of a text label.",
       "capture": "viewport",
-      "bytes": 59795
+      "bytes": 59643
     },
     {
       "id": "table-mobile",
@@ -5609,15 +5609,15 @@
         "src/views/cell-renderer.ts": "6b23762ee384",
         "src/views/file-title-display.ts": "53ac58228638",
         "src/views/table-record-peek.ts": "ca49c8ce6aab",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
       },
       "note": "The full table the renderer builds: a select gutter, a record-icon gutter and a runtime <colgroup> of fixed px widths. On desktop those widths hold; on the phone (is-phone) the columns auto-fit to content and the select column is no longer clipped by the scroll-area fade mask. The name column is the title cell — a content-sized link plus the always-visible open affordance, rendered on touch as a compact maximize icon so its width goes to the note name instead of a text label.",
       "capture": "viewport",
-      "bytes": 59008
+      "bytes": 58935
     },
     {
       "id": "table-view",
@@ -5636,15 +5636,15 @@
         "src/views/table-renderer.ts": "2044cea151d8",
         "src/views/column-header-controller.ts": "7714b894b5b0",
         "src/views/cell-renderer.ts": "6b23762ee384",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
       },
       "note": null,
       "capture": "viewport",
-      "bytes": 475638
+      "bytes": 475527
     },
     {
       "id": "table-view",
@@ -5663,15 +5663,15 @@
         "src/views/table-renderer.ts": "2044cea151d8",
         "src/views/column-header-controller.ts": "7714b894b5b0",
         "src/views/cell-renderer.ts": "6b23762ee384",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
       },
       "note": null,
       "capture": "viewport",
-      "bytes": 452153
+      "bytes": 452164
     },
     {
       "id": "table-view",
@@ -5690,15 +5690,15 @@
         "src/views/table-renderer.ts": "2044cea151d8",
         "src/views/column-header-controller.ts": "7714b894b5b0",
         "src/views/cell-renderer.ts": "6b23762ee384",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
       },
       "note": null,
       "capture": "viewport",
-      "bytes": 137928
+      "bytes": 137577
     },
     {
       "id": "table-view",
@@ -5717,15 +5717,15 @@
         "src/views/table-renderer.ts": "2044cea151d8",
         "src/views/column-header-controller.ts": "7714b894b5b0",
         "src/views/cell-renderer.ts": "6b23762ee384",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
       },
       "note": null,
       "capture": "viewport",
-      "bytes": 136344
+      "bytes": 136373
     },
     {
       "id": "timeline-toolbar-options",
@@ -5742,8 +5742,8 @@
       "sourceHashes": {
         "src/views/calendar-timeline-toolbar-renderer.ts": "f32a3186bb24",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -5767,8 +5767,8 @@
       "sourceHashes": {
         "src/views/calendar-timeline-toolbar-renderer.ts": "f32a3186bb24",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -5792,8 +5792,8 @@
       "sourceHashes": {
         "src/views/calendar-timeline-toolbar-renderer.ts": "f32a3186bb24",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -5817,8 +5817,8 @@
       "sourceHashes": {
         "src/views/calendar-timeline-toolbar-renderer.ts": "f32a3186bb24",
         "src/views/dropdown-field.ts": "1a4c6e81f793",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -5840,15 +5840,15 @@
       "layoutHash": "1f513083a592",
       "sourceHashes": {
         "src/views/calendar-timeline-renderer.ts": "422432b43e60",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
       },
       "note": "Two weeks at one column per day; the April band marks the month boundary and the today line sits at 25 March 13:45.",
       "capture": "viewport",
-      "bytes": 146959
+      "bytes": 147239
     },
     {
       "id": "timeline-view",
@@ -5863,8 +5863,8 @@
       "layoutHash": "1f513083a592",
       "sourceHashes": {
         "src/views/calendar-timeline-renderer.ts": "422432b43e60",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -5886,8 +5886,8 @@
       "layoutHash": "8b9cff53e9d8",
       "sourceHashes": {
         "src/views/calendar-timeline-renderer.ts": "422432b43e60",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"
@@ -5909,8 +5909,8 @@
       "layoutHash": "8b9cff53e9d8",
       "sourceHashes": {
         "src/views/calendar-timeline-renderer.ts": "422432b43e60",
-        "styles.css": "44351ed7a9bd",
-        "tools/screenshots/theme.css": "534a1eae2f4f",
+        "styles.css": "13860e4b908a",
+        "tools/screenshots/theme.css": "54000bf75466",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
         "tools/screenshots/scenarios.mjs": "1395f2dacbfd",
         "tools/screenshots/capture.mjs": "12d1c327b69c"

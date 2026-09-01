@@ -85,8 +85,61 @@ why most of them are still open even where a number looks green.*
       and a pseudo-element read all had to be ruled out first. Recording it as written would have
       been a fabricated defect in a shipped control, and the mitigation is now in the tool: that pass
       disables transitions and says why.
-- [ ] Unchanged under three third-party themes, at least one that restyles native checkboxes.
-      **Unreachable here.** No harness in this repository loads a third-party theme.
+- [x] Unchanged under three third-party themes, at least one that restyles native checkboxes.
+      **Reachable after all, and it found a shipped defect on the way.**
+
+      **Three profiles, and the first is not a model.** `tools/screenshots/host-checkbox.css` carries
+      the `input[type=checkbox]` block transcribed from the *installed* application stylesheet with
+      its own token defaults resolved from the same file. The other two are deliberate models,
+      labelled as such: one moving only the host's variables, one handing the control back to the
+      browser with `appearance: auto`, which is the declaration no inherited rule survives. All 250
+      real fixture checkboxes are measured under each. **Every one holds its appearance.**
+
+      **The premise is what makes that mean anything:** a bare unclassed checkbox riding in the same
+      document moves under 3 of 3 profiles. A profile that reached nothing would report every family
+      "unchanged" for the one reason that proves nothing.
+
+      **The first run said all 250 moved, and that was the harness.** The component rule is
+      `input[type="checkbox"].db-checkbox` and a profile selector is `.stress-x input[type="checkbox"]`
+      — both 0-2-1, so the tie goes to source order, and the run was appending the host sheet *last*.
+      Obsidian loads its own stylesheet and then injects plugin styles, so the plugin wins ties on a
+      device. Loading them in that order is the difference between measuring the plugin and measuring
+      an append sequence.
+
+      **What survived that correction was one real defect.** With the order right, only `border-color`
+      still moved — because the rule asked it to: `var(--checkbox-border-color, …)` put the host's
+      token first, and the comment two lines above it says the border needs 3:1 because the inherited
+      token measured 1.36:1. The host always defines that token. It resolves to `--text-faint`:
+      **#ababab in the default light theme, 2.30:1**, and **#666666 in dark, 2.90:1** — both under
+      WCAG 1.4.11's 3:1 non-text minimum, both on the shipped defaults.
+
+      **No harness had ever seen it**, because none of them declared `--checkbox-border-color`, so
+      every check and every capture had been reading a fallback the app never reaches. That is this
+      packet's own stated exposure, arriving exactly where it said it would.
+
+      **Fixed by preferring the plugin's own value and unifying on the switch's.** `#8a9099` cleared
+      3:1 against white and nothing else the control sits on — 2.90:1 on the secondary surface,
+      2.87:1 and 2.75:1 on the two mixed popover greys, **13 of 250 below the floor**. `#82878e`,
+      which the toggle switch already draws with, clears every one at **3.09:1 or better** and holds
+      4.18:1 in dark. `theme.css` now declares the host tokens too, so the harness renders what the
+      app renders and a rule that defers to them shows it.
+
+      **The contrast check took three wrong pairs before the right one, and each is recorded.**
+      Border against the box's own background scored the *checked* switch at 1:1, which is correct
+      design — a filled control identifies itself by fill. Track against the page scored the switch
+      1.22:1 while saying nothing about the checkboxes. The rule asks for the boundary against the
+      colour *outside* the control, which for an empty checkbox is the same thing and for a filled
+      switch is not. A colour parser that read `color(srgb 0.95 0.95 0.95)` on the 0-255 scale
+      reported a #dddddd track at **15.37:1** against a near-white page and the check passed on it —
+      an absurd number nobody would have read.
+
+      **Both failures now exit non-zero**, so a checkbox that moves under a host stylesheet or a
+      border under 3:1 stops the tool. Neither is a threshold that has never been crossed: 13 borders
+      sat between 2.75:1 and 2.90:1 when this was written.
+
+      **What it still does not prove:** these are three profiles, not three community themes
+      downloaded and installed. The first is the real host's own rules; the other two are adversarial
+      models chosen to find the seam rather than to imitate a particular theme.
 - [x] Hit target ≥ 28×28 on coarse pointer, per family. **Measured with the pointer mode that
       matters.** `checkbox-appearance` sends every phone scenario to a `hasTouch` page, and the
       stylesheet's `@media (pointer: coarse)` rule raises the box to 28×28; the touch-target census

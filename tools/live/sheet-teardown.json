@@ -1,5 +1,5 @@
 {
-  "measuredAt": "2026-09-01T11:09:40.033Z",
+  "measuredAt": "2026-09-01T11:35:32.702Z",
   "inputs": {
     "tools/live/sheet-teardown.mjs": "977e3a475380",
     "tools/live/sheet-teardown-harness.ts": "e0276d251779",

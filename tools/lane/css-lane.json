@@ -1,7 +1,7 @@
 {
   "holder": null,
   "acquiredAt": "2026-09-01T17:30:00Z",
-  "baselineHash": "44351ed7a9bd",
+  "baselineHash": "13860e4b908a",
   "baselineCommit": "be6c16e",
   "history": [
     {
@@ -904,6 +904,27 @@
       "at": "2026-09-01T17:50:00Z",
       "hash": "44351ed7a9bd",
       "note": "Recaptured; the region is invisible by construction so no capture changed. Nothing to sign off per-image here."
+    },
+    {
+      "event": "acquire",
+      "phase": "004-checkbox-ownership",
+      "at": "2026-09-01T23:10:00Z",
+      "hash": "44351ed7a9bd",
+      "note": "Reverse the checkbox border fallback: the host token it prefers fails WCAG 1.4.11 on both default themes."
+    },
+    {
+      "event": "edit",
+      "phase": "004-checkbox-ownership",
+      "at": "2026-09-01T23:55:00Z",
+      "hash": "13860e4b908a",
+      "note": "Checkbox border stops preferring the host token and takes the switch's own value. The host token resolves to text-faint, 2.30:1 in the default light theme and 2.90:1 in dark, both under the 3:1 non-text minimum the rule's own comment demands. No harness declared that token, so every check and capture had been reading a fallback the app never reaches."
+    },
+    {
+      "event": "release",
+      "phase": "004-checkbox-ownership",
+      "at": "2026-09-02T00:05:00Z",
+      "hash": "13860e4b908a",
+      "note": "Recaptured: 66 images changed, colour only, layoutHash moved for 0 of 240. Read the group header row in light and the add-view popover in dark \u2014 the box reads clearly against both, and nothing moved."
     }
   ],
   "outstanding": [

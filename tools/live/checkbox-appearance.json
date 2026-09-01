@@ -1,8 +1,8 @@
 {
-  "measuredAt": "2026-09-01T08:59:54.872Z",
+  "measuredAt": "2026-09-01T11:30:45.734Z",
   "inputs": {
-    "styles.css": "44351ed7a9bd",
-    "tools/live/checkbox-appearance.mjs": "3173162bff2a",
+    "styles.css": "13860e4b908a",
+    "tools/live/checkbox-appearance.mjs": "3b49f9254b92",
     "tools/screenshots/scenarios.mjs": "1395f2dacbfd"
   },
   "totals": {
@@ -19,7 +19,12 @@
     "roleGroups": 4,
     "roleShapeSplits": 0,
     "mountGroups": 7,
-    "mountShapeSplits": 0
+    "mountShapeSplits": 0,
+    "hostProfilesApplied": 3,
+    "boxesUnderHostProfiles": 250,
+    "movedUnderAHostProfile": 0,
+    "worstBorderContrast": 3.09,
+    "belowNonTextMinimum": 0
   },
   "shapes": {
     "16x16 r=4px": 168,
@@ -38,7 +43,7 @@
       "indeterminateDiffers": true,
       "disabledDiffers": true,
       "focusDiffers": true,
-      "rest": "rgb(255, 255, 255) | rgb(138, 144, 153) | none | none | 1"
+      "rest": "rgb(255, 255, 255) | rgb(130, 135, 142) | none | none | 1"
     },
     {
       "shape": "18x18 r=4px",
@@ -50,7 +55,7 @@
       "indeterminateDiffers": true,
       "disabledDiffers": true,
       "focusDiffers": true,
-      "rest": "rgb(255, 255, 255) | rgb(138, 144, 153) | none | none | 1"
+      "rest": "rgb(255, 255, 255) | rgb(130, 135, 142) | none | none | 1"
     },
     {
       "shape": "28x28 r=4px",
@@ -62,7 +67,7 @@
       "indeterminateDiffers": true,
       "disabledDiffers": true,
       "focusDiffers": true,
-      "rest": "rgb(255, 255, 255) | rgb(138, 144, 153) | none | none | 1"
+      "rest": "rgb(255, 255, 255) | rgb(130, 135, 142) | none | none | 1"
     },
     {
       "shape": "34x18 r=9999px",

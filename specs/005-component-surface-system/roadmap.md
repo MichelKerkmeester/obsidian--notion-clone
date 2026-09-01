@@ -336,7 +336,7 @@ from §3.1; read that, not the heading above it.
 **Now:** Six phases held by other agents — four unaudited since this morning's snapshot, two opened
 today.
 
-- ⚠ `004-checkbox-ownership` — **state UNKNOWN, see §7.1.** Holds the `styles.css` lane.
+- `004-checkbox-ownership` — **Shipped + verified, awaiting device — 7 of 8.** The theme row was recorded unreachable and was not: three host profiles now run against all 250 fixture checkboxes, the first transcribed from the installed application stylesheet, and every checkbox holds its appearance. Getting there found a shipped accessibility defect — the border preferred a host token resolving to 2.30:1 in the default light theme and 2.90:1 in dark, under WCAG's 3:1 non-text minimum, invisible to every harness because none declared that token. The border now takes the switch's own #82878e and clears 3.09:1 or better everywhere. Exit signal: the operator seeing squares on a board on their phone.
 - ⚠ `005-content-row-rhythm` — shipped: list-row border-box, list meta ruled into columns, renderer-declared tracks. Continuity still reads "not started".
 - `016-sheet-drag-and-audit` — **Shipped + verified, awaiting device — 9 of 10.** Root-caused report 1 and re-measured all eight sheet asks together on the shipped build. The fill ask no longer reads one declaration nine times: the nine surfaces are built under nine wrappers each declaring its own `--background-primary` and still measure one colour, because `setSheetMount` relocates every sheet to `document.body` and it stops inheriting from its builder. The in-run control — the same class left unportalled, measuring its wrapper's colour — is what makes that not vacuous. Exit signal: the operator swiping between a record sheet and a menu sheet.
 - ⚠ `017-touch-row-range-selection` — 91%. Predicate removed from both views, hold gesture added, checks added, negative controls run and restored by hash. The announcement decision is answered — the code had already taken it with an `aria-live` attribute the bar's own rebuild made inert, and a persistent live region outside the bar now carries it. The row-menu term is no longer a counter: the hold builds the shipped menu and the check measures it. Exit signal: one operator row, a tap on a real phone.
@@ -431,7 +431,7 @@ done | sort -n
 | `001-overlay-placement-and-menu-language` | **88%** — 7/8 | 1 | 1 | 0 |
 | `002-properties-panel` | **86%** — 6/7 | 1 | 1 | 0 |
 | `003-mobile-sheet-presentation` | **62%** — 5/8 | 3 | 1 | 2 |
-| `004-checkbox-ownership` | **75%** — 6/8 | 2 | 1 | 1 |
+| `004-checkbox-ownership` | **88%** — 7/8 | 1 | 1 | 0 |
 | `005-content-row-rhythm` | **86%** — 6/7 | 1 | 1 | 0 |
 | `006-record-open-target` | **71%** — 5/7 | 2 | 1 | 1 |
 | `007-architecture-research` | **100%** — 2/2 | 0 | 0 | 0 |

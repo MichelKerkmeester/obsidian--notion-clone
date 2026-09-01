@@ -60,6 +60,18 @@
   --menu-radius: var(--radius-m);
   --menu-shadow: var(--shadow-s);
 
+  /* Checkbox tokens the host always defines. Their absence here is what hid a real defect: the
+     plugin's checkbox border preferred --checkbox-border-color, no harness declared it, so every
+     check read a fallback the device never reaches. Declaring them means the harness now renders
+     what the app renders, and a rule that defers to them shows it. Values resolve --text-faint and
+     --interactive-accent from the installed app stylesheet. */
+  --checkbox-border-color: #ababab;
+  --checkbox-border-color-hover: #8a9099;
+  --checkbox-color: #5b62d6;
+  --checkbox-marker-color: #ffffff;
+  --checkbox-radius: 4px;
+  --checkbox-size: 16px;
+
   /* Control height. The host sizes buttons, dropdowns and text inputs to this, and the plugin's
      surfaces inherit it wherever they do not set their own. Absent, every such control measures
      its content and a row built out of them measures shorter here than on any device — which is
@@ -72,6 +84,8 @@
 }
 
 .theme-dark {
+  --checkbox-border-color: #666666;
+  --checkbox-border-color-hover: #999999;
   --background-primary: #1e1e1e;
   --background-primary-alt: #262626;
   --background-secondary: #252525;

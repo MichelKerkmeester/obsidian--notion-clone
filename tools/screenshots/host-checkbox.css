@@ -1,0 +1,92 @@
+/* What a host imposes on a checkbox, as opposed to what a host supplies.
+ *
+ * `theme.css` models the variables the plugin READS and the host declares. This file is the other
+ * direction: rules the host applies to controls whether the plugin asked for them or not. It is
+ * adversarial, it is never loaded by the capture harness, and loading it there would move every
+ * screenshot for a reason no device has.
+ *
+ * It exists because `styles.css` contains no unconditional `input[type="checkbox"]` rule. Every
+ * appearance the plugin gives a checkbox is reached through an ancestor or through a class the
+ * input carries, so a checkbox the plugin fails to claim is styled by whatever else is in the
+ * document. In the app that is the host, and the host's rule IS unconditional.
+ *
+ * PROFILE 1 is not a model. It is the block at `input[type=checkbox]` in the installed
+ * application stylesheet, transcribed with its own token defaults resolved from the same file, so
+ * the first profile tests against what actually ships rather than against an idea of it. The other
+ * two are deliberate models and are labelled as such — they push the same surface harder than any
+ * shipped theme in order to find the seam, not to imitate a particular one.
+ */
+
+/* ─────────────────────────────────────────────────────────────────
+   1. PROFILE host-default — the installed application's own rules
+   ───────────────────────────────────────────────────────────────── */
+
+.stress-host-default {
+  --checkbox-radius: 4px;
+  --checkbox-size: 16px;
+  --checkbox-marker-color: #ffffff;
+  --checkbox-color: #5b62d6;
+  --checkbox-color-hover: #4c56c0;
+  --checkbox-border-color: #b3b3b3;
+  --checkbox-border-color-hover: #8a9099;
+}
+
+.stress-host-default input[type="checkbox"] {
+  -webkit-appearance: none;
+  appearance: none;
+  border-radius: var(--checkbox-radius);
+  border: 1px solid var(--checkbox-border-color);
+  flex-shrink: 0;
+  padding: 0;
+  margin: 0;
+  margin-inline-end: 6px;
+  width: var(--checkbox-size);
+  height: var(--checkbox-size);
+  position: relative;
+}
+
+.stress-host-default input[type="checkbox"]:checked {
+  background-color: var(--checkbox-color);
+  border-color: var(--checkbox-color);
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   2. PROFILE theme-accent — a model, tokens pushed to extremes
+   ───────────────────────────────────────────────────────────────── */
+
+/* A theme that keeps the host's structure and only moves its variables. This is the commonest
+   shape a community theme takes, and it is the one a plugin most easily survives — which is why
+   it is here rather than assumed harmless. */
+.stress-theme-accent {
+  --checkbox-radius: 50%;
+  --checkbox-size: 24px;
+  --checkbox-color: #ff2d55;
+  --checkbox-border-color: #ff2d55;
+}
+
+.stress-theme-accent input[type="checkbox"] {
+  -webkit-appearance: none;
+  appearance: none;
+  border-radius: var(--checkbox-radius);
+  border: 3px solid var(--checkbox-border-color);
+  width: var(--checkbox-size);
+  height: var(--checkbox-size);
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   3. PROFILE theme-native — a model, and the worst case
+   ───────────────────────────────────────────────────────────────── */
+
+/* A theme that gives the control back to the browser. `appearance: auto` is the one declaration
+   that cannot be survived by inheriting: a plugin checkbox that does not set its own appearance
+   becomes the operating system's checkbox, at the operating system's size, with no radius the
+   stylesheet can reach. If any family moves under this profile and not the others, this is the
+   declaration that moved it. */
+.stress-theme-native input[type="checkbox"] {
+  -webkit-appearance: auto;
+  appearance: auto;
+  border-radius: 0;
+  border: initial;
+  width: 13px;
+  height: 13px;
+}

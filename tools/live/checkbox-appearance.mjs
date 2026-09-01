@@ -315,7 +315,198 @@ const stateResults = await statePage.evaluate((families) => {
   chainClass: r.chain[r.chain.length - 1] || "note-database-container",
 })));
 await statePage.close();
+
+// ───────────────────────────────────────────────────────────────────
+// 5. WHAT A HOST STYLESHEET DOES TO A CHECKBOX THE PLUGIN DID NOT CLAIM
+// ───────────────────────────────────────────────────────────────────
+//
+// `styles.css` carries no unconditional `input[type="checkbox"]` rule. Every appearance the plugin
+// gives a checkbox is reached through an ancestor or through a class the input carries, so a
+// checkbox the plugin fails to claim takes whatever else is in the document. The application's own
+// rule IS unconditional, which makes "unchanged under a third-party theme" a question about which
+// side wins a specificity contest the plugin never entered.
+//
+// Three profiles, and only the first is a transcription: the installed application's own checkbox
+// block with its token defaults resolved from the same stylesheet. The other two are models pushed
+// harder than any shipped theme — one moving only variables, one handing the control back to the
+// browser with `appearance: auto`, which is the declaration no inherited rule survives.
+//
+// The premise row is the whole reason the result means anything. A bare unclassed checkbox must
+// MOVE under each profile. If it does not, the profile is not reaching the page and every family
+// below is "unchanged" for the one reason that proves nothing.
+const hostCss = readFileSync(join(REPO, "tools/screenshots/host-checkbox.css"), "utf8");
+const themePage = await browser.newPage({ viewport: { width: 1200, height: 900 }, reducedMotion: "reduce" });
+await themePage.addStyleTag({ content: styles }).catch(() => undefined);
+
+// Measured on the REAL fixtures, not on a mount built here.
+//
+// The first version of this built one checkbox per family under the last class in its ancestor
+// chain, and its own baseline came back with `border-radius: 0px` for a family every fixture
+// renders at 4px. The plugin's rules are written against a chain, so a node standing in for one
+// does not receive them, and the profile was then beating a control the plugin had never styled.
+// A "MOVED" from that mount says nothing about the plugin — it says the mount was wrong. So this
+// walks the same fixtures the resting pass measured and toggles the profile class on the fixture
+// root, which is the only version where both readings describe the shipped markup.
+const themeProfiles = ["stress-host-default", "stress-theme-accent", "stress-theme-native"];
+const themeMovedBoxes = [];
+const contrastFailures = [];
+let worstContrast = { contrast: Infinity, classes: "(none measured)", scenario: "(none)", borderColor: "", behind: "" };
+let themeBoxesChecked = 0;
+let themePremiseMoved = [];
+
+for (const scenario of scenarios) {
+  let html;
+  try {
+    html = scenario.html();
+  } catch {
+    continue;
+  }
+  const page = pageFor(scenario.id);
+  // The bare control rides along inside the same fixture, so the premise is measured under exactly
+  // the document the families are measured under rather than on a page of its own.
+  await page.setContent(`<body><div id="shot">${html}<input type="checkbox" id="bare-probe"></div></body>`);
+  // Host first, plugin second, because that is the cascade the app builds.
+  //
+  // The first version appended the host sheet LAST and reported all 250 checkboxes moving under
+  // every profile. That was the harness, not the plugin: the component rule is
+  // `input[type="checkbox"].db-checkbox` and the profile selector is
+  // `.stress-x input[type="checkbox"]` — both 0-2-1, so the tie goes to whichever came later, and
+  // appending the host afterwards handed it every tie it should have lost. Obsidian loads its own
+  // stylesheet and then injects plugin styles, so the plugin wins ties on device and the harness
+  // has to load them in that order or it is measuring its own append sequence.
+  for (const content of [hostCss, styles, theme, runtime]) await page.addStyleTag({ content });
+  await page.addStyleTag({ content: "*, *::before, *::after { transition: none !important; animation: none !important; }" });
+
+  const result = await page.evaluate((profiles) => {
+    const shot = document.getElementById("shot");
+    const signature = (el) => {
+      const s = getComputedStyle(el);
+      const r = el.getBoundingClientRect();
+      return [
+        s.appearance || s.webkitAppearance || "",
+        s.borderRadius, s.borderWidth, s.borderColor, s.backgroundColor,
+        `${Math.round(r.width * 100) / 100}x${Math.round(r.height * 100) / 100}`,
+      ].join(" | ");
+    };
+    // The border is the only thing identifying an unchecked control, which puts it under WCAG
+    // 1.4.11's 3:1 non-text minimum against its own background. Computed from what the browser
+    // resolved rather than from token names, because the defect this catches was a fallback chain
+    // resolving to one value on a device and another in a harness.
+    // Two colour syntaxes, two scales, and reading one as the other is silent.
+    //
+    // `getComputedStyle` returns `rgb(221, 221, 221)` for most values and `color(srgb 0.95 0.95
+    // 0.95)` wherever a `color-mix()` produced it — which this stylesheet uses for its surfaces. A
+    // parser that pulls the first three numbers and divides by 255 turns 0.95 into near-black and
+    // reported a #dddddd switch track at 15.37:1 against a near-white page. The number was absurd
+    // and the check passed on it, which is the shape of a measurement nobody reads.
+    const channels = (value) => {
+      const nums = (value.match(/-?\d*\.?\d+(?:e[-+]?\d+)?/gi) || []).map(Number);
+      if (/^color\(/i.test(value)) return nums.slice(0, 3).map((v) => v * 255);
+      return nums.slice(0, 3);
+    };
+    const luminance = (value) => {
+      const [r, g, b] = channels(value);
+      const lin = (v) => { const c = v / 255; return c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4; };
+      return 0.2126 * lin(r) + 0.7152 * lin(g) + 0.0722 * lin(b);
+    };
+    const contrast = (a, b) => {
+      const la = luminance(a);
+      const lb = luminance(b);
+      return (Math.max(la, lb) + 0.05) / (Math.min(la, lb) + 0.05);
+    };
+    const boxes = [...shot.querySelectorAll('input[type="checkbox"]')];
+    const base = boxes.map(signature);
+    const moved = boxes.map(() => []);
+    const under = boxes.map(() => ({}));
+    for (const profile of profiles) {
+      shot.classList.add(profile);
+      boxes.forEach((box, i) => {
+        const sig = signature(box);
+        if (sig !== base[i]) { moved[i].push(profile); under[i][profile] = sig; }
+      });
+      shot.classList.remove(profile);
+    }
+    // Which FIELD moved, not merely that the signature did. A border colour shifting one shade and
+    // a control reverting to the operating system's box are both "moved", and they are not the
+    // same finding.
+    const FIELDS = ["appearance", "radius", "border-width", "border-color", "background", "size"];
+    return boxes.map((box, i) => {
+      const cs = getComputedStyle(box);
+      // The box's own painted background, or the nearest ancestor that paints one: a transparent
+      // control is read against whatever is actually behind it.
+      let behind = cs.backgroundColor;
+      if (!behind || behind === "rgba(0, 0, 0, 0)") {
+        for (let n = box.parentElement; n; n = n.parentElement) {
+          const bg = getComputedStyle(n).backgroundColor;
+          if (bg && bg !== "rgba(0, 0, 0, 0)") { behind = bg; break; }
+        }
+      }
+      behind = behind && behind !== "rgba(0, 0, 0, 0)" ? behind : "rgb(255, 255, 255)";
+      // The page behind the control, skipping the control itself — what a filled track is read against.
+      let surface = "rgb(255, 255, 255)";
+      for (let n = box.parentElement; n; n = n.parentElement) {
+        const bg = getComputedStyle(n).backgroundColor;
+        if (bg && bg !== "rgba(0, 0, 0, 0)") { surface = bg; break; }
+      }
+      return {
+        isBare: box.id === "bare-probe",
+        classes: box.className || "(none)",
+        base: base[i],
+        moved: moved[i],
+        borderColor: cs.borderTopColor,
+        behind,
+        surface,
+        // Only the UNCHECKED control is measured, and that is the requirement rather than a
+        // convenience. A checked box identifies itself by its fill, so its border legitimately
+        // matches that fill and reads 1:1 — scoring it against the same floor would report the
+        // filled state as the worst offender in the run, which is what the first version did. What
+        // the floor is about is the box with nothing in it, where the border is the only thing
+        // saying a control is there at all.
+        checkedish: box.checked || box.indeterminate,
+        // The boundary against what sits OUTSIDE the control, which is the pair the rule names.
+        //
+        // WCAG 1.4.11 asks for 3:1 between what identifies a control and the colour adjacent to it.
+        // For an empty checkbox that is the border against the page showing through, and the box's
+        // own background is that page — so border-versus-own-background happens to be right. For a
+        // switch it is not: its own background is a filled track, and scoring the border against
+        // the thing it sits on measures the control's internal decoration rather than whether the
+        // control can be seen. Both readings were tried and both were wrong for the switch — 2.66:1
+        // for border-on-track, 1.22:1 for track-on-page — and neither is the boundary.
+        isSwitch: box.classList.contains("db-toggle-switch"),
+        contrast: box.checked || box.indeterminate
+          ? null
+          : Math.round(contrast(cs.borderTopColor, surface) * 100) / 100,
+        fields: Object.fromEntries(Object.entries(under[i]).map(([profile, sig]) => {
+          const a = base[i].split(" | ");
+          const b = sig.split(" | ");
+          return [profile, FIELDS.filter((_name, k) => a[k] !== b[k]).join(",") || "(none)"];
+        })),
+      };
+    });
+  }, themeProfiles);
+
+  for (const r of result) {
+    if (r.isBare) {
+      if (r.moved.length > themePremiseMoved.length) themePremiseMoved = r.moved;
+      continue;
+    }
+    themeBoxesChecked += 1;
+    if (r.moved.length) themeMovedBoxes.push({ scenario: scenario.id, ...r });
+    if (typeof r.contrast === "number") {
+      if (r.contrast < 3) contrastFailures.push({ scenario: scenario.id, ...r });
+      if (r.contrast < worstContrast.contrast) worstContrast = { scenario: scenario.id, ...r };
+    }
+  }
+}
+await themePage.close();
 await browser.close();
+
+const themeMovedClasses = new Map();
+for (const r of themeMovedBoxes) {
+  const key = `${r.classes} :: ${r.moved.join(", ")}`;
+  if (!themeMovedClasses.has(key)) themeMovedClasses.set(key, { ...r, count: 0 });
+  themeMovedClasses.get(key).count += 1;
+}
 
 /**
  * A switch has no indeterminate state, and that is a fact about the control rather than a gap.
@@ -385,6 +576,32 @@ if (stateFailures.length) {
   console.log("  A STATE THAT LOOKS LIKE ANOTHER STATE reports nothing to the reader, and no capture");
   console.log("  catches it, because a capture shows one state at a time.\n");
 }
+console.log(`  under a host stylesheet, ${themeBoxesChecked} real checkboxes x 3 profiles:`);
+console.log(`    PREMISE an unclassed checkbox moves under ${themePremiseMoved.length} of 3 profiles`
+  + `${themePremiseMoved.length === 3 ? "" : "   <-- a profile that reaches nothing proves nothing below"}`);
+if (!themeMovedClasses.size) {
+  console.log(`    every plugin checkbox holds its appearance under all three`);
+} else {
+  for (const g of themeMovedClasses.values()) {
+    console.log(`    ${g.classes} MOVED under ${g.moved.join(", ")} (${g.count} instance(s), e.g. ${g.scenario})`);
+    console.log(`        base: ${g.base}`);
+    for (const [profile, fields] of Object.entries(g.fields || {})) {
+      console.log(`        ${profile} changes: ${fields}`);
+    }
+  }
+}
+console.log(`  border contrast against the page beside it, WCAG 1.4.11 wants 3:1:`);
+console.log(`    worst of ${themeBoxesChecked}: ${worstContrast.contrast}:1 `
+  + `(${worstContrast.borderColor} on ${worstContrast.surface}, ${worstContrast.classes} in ${worstContrast.scenario})`);
+if (contrastFailures.length) {
+  console.log(`    ${contrastFailures.length} checkbox(es) BELOW the 3:1 non-text minimum:`);
+  const byClass = new Map();
+  for (const f of contrastFailures) {
+    const key = `${f.classes} ${f.contrast}:1 ${f.borderColor} on ${f.surface}`;
+    byClass.set(key, (byClass.get(key) || 0) + 1);
+  }
+  for (const [k, n] of byClass) console.log(`      ${k}  (${n})`);
+}
 console.log("");
 
 stamp("tools/live/checkbox-appearance.json", {
@@ -403,8 +620,37 @@ stamp("tools/live/checkbox-appearance.json", {
     roleShapeSplits: roleSplits.length,
     mountGroups: byMount.size,
     mountShapeSplits: mountSplits.length,
+    hostProfilesApplied: themeProfiles.length,
+    boxesUnderHostProfiles: themeBoxesChecked,
+    movedUnderAHostProfile: themeMovedBoxes.length,
+    worstBorderContrast: worstContrast.contrast,
+    belowNonTextMinimum: contrastFailures.length,
   },
   shapes: Object.fromEntries(shapes),
   states: stateResults,
   rows,
 }, ["styles.css", "tools/live/checkbox-appearance.mjs", "tools/screenshots/scenarios.mjs"]);
+
+// ───────────────────────────────────────────────────────────────────
+// 7. EXIT
+// ───────────────────────────────────────────────────────────────────
+
+// Two failures this tool now refuses to report as a clean run.
+//
+// A checkbox that moves under a host stylesheet has lost the specificity contest it exists to win,
+// and a border under 3:1 against the page beside it is a control a reader has to hunt for. Both
+// were true when this arm was written — 13 checkboxes sat between 2.75:1 and 2.90:1 — so neither
+// is a threshold that has never been crossed.
+const hostFailures = [];
+if (themeMovedBoxes.length) {
+  hostFailures.push(`${themeMovedBoxes.length} checkbox(es) changed appearance under a host stylesheet`);
+}
+if (contrastFailures.length) {
+  hostFailures.push(`${contrastFailures.length} checkbox border(s) below the 3:1 non-text minimum`);
+}
+if (hostFailures.length) {
+  console.error(`checkbox-appearance: FAIL — ${hostFailures.join("; ")}`);
+  process.exit(1);
+}
+console.log(`checkbox-appearance: PASS — ${themeBoxesChecked} checkboxes hold their appearance under `
+  + `${themeProfiles.length} host profiles, worst border contrast ${worstContrast.contrast}:1`);
