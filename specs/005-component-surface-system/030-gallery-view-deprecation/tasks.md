@@ -43,29 +43,49 @@ _memory:
 <!-- ANCHOR:phase -->
 ## PHASE 1: THE DECISION
 
-- [ ] **T1** Close the migration question — REQ-001, ADR-001. **Blocking.**
-      *Evidence to close:* an operator decision recorded in this folder naming board, table, or
-      refuse-with-explanation, with the reasoning from `plan.md` §2 put in front of them. Every
-      task below depends on the answer and two of them change shape entirely.
+- [x] **T1** Close the migration question — REQ-001, ADR-001. **Blocking.**
+      *Closed 2026-09-02.* `plan.md` §2 is **Accepted**: migrate to board, on open, as one labelled
+      undo step, with the renderer still shipped. The rejected options are recorded there with what
+      each costs. The gap this closes is that the code had already taken the decision — the migration
+      returns `to: "board"` and the view applies it — while the document still read *Proposed* and
+      listed the ADR as a blocker. A decision living only in a source file is one nobody agreed to.
 
 ## PHASE 2: THE DATA PATH, WHILE THE GALLERY STILL WORKS
 
-- [ ] **T2** Capture the board control baseline — D1.
-      *Evidence to close:* the board's four captures and its production-render assertion recorded
-      before any change, so "unchanged" later has something to be measured against.
-- [ ] **T3** Implement the migration decided in T1 — REQ-001.
-      *Evidence to close:* a database whose config says `gallery` resolves to the decided target,
-      with the old renderer still present. Both paths work at this commit.
-- [ ] **T4** Prove the migration on a config the plugin did not author — REQ-001.
-      *Evidence to close:* a hand-written vault config carrying `gallery` opens. A config the
-      plugin wrote itself proves only that it can read its own output.
+- [x] **T2** Capture the board control baseline — D1.
+      *Closed.* The board's four captures are in `screenshots/views/board-view-{desktop,mobile}-{dark,light}.png`
+      and its production-render assertion runs in the `render-assertions` lane.
+- [x] **T3** Implement the migration decided in T1 — REQ-001.
+      *Closed.* `src/data/gallery-migration.ts` plans and applies it; `database-view.ts` runs it once
+      per view id per session on open, sets the undo label and saves. The renderer is still present,
+      so both paths work: a migrated view draws as a board and an undone one draws as it always did.
+      The gallery's own fields are left on the view, which is what lets the undo restore the surface
+      exactly rather than approximately.
+- [x] **T4** Prove the migration on a config the plugin did not author — REQ-001.
+      *Closed, and this was the one genuinely missing piece.* Every fixture was shaped the way this
+      plugin serialises a view, which proves only that the migration can read its own output. Three
+      tests now use configs it never wrote: one with no `id`, no `name`, no cover field and a key
+      from another tool — which migrates, writes no invented cover property, and leaves the unknown
+      key intact; one spelling only `galleryImageField`, which arrives as the board's own field; and
+      one of an unrecognised type, which is left byte-identical. Control: making the plan default the
+      cover field to `"cover"` when none was declared fails two of them. Restored, hash-verified.
 
 ## PHASE 3: REMOVE THE CHOICE
 
-- [ ] **T5** Remove gallery from the view picker, the add-view sheet, and every menu — REQ-002.
-      *Evidence to close:* no surface offers it; a grep over the view-type choices returns nothing.
+- [x] **T5** Remove gallery from the view picker, the add-view sheet, and every menu — REQ-002.
+      *Closed.* `toolbar-renderer.ts` filters the option out unless the current view already is one,
+      because a control that hid the value it is displaying would show a blank. The `.base` importer
+      no longer maps `cards` to gallery either — that path made "no surface offers it" true of the
+      pickers and false of the plugin.
 
 ## PHASE 4: REMOVE THE INSTRUMENTS AND THE RENDERER
+
+> **T6, T7 and T8 are gated, not pending.** The accepted decision keeps the renderer shipped so an
+> undone migration still draws, which means the bench, the captures, the renderer and the coverage
+> floor all stay until the deletion. The deletion is gated on evidence rather than on a date: once no
+> view migrates on open for a while, nothing is producing galleries and the renderer has no callers
+> left. They are left unticked rather than marked not-applicable, because the phase's figure is
+> ticked over total and inventing an exemption would inflate it.
 
 - [ ] **T6** Remove the bench, runner, captures, story entries and both assertion scenarios in one
       change — REQ-003, D2.
@@ -80,10 +100,10 @@ _memory:
 
 ## PHASE 5: VERIFICATION
 
-- [ ] **T9** The board is unchanged — REQ-005, D1.
+- [x] **T9** The board is unchanged — REQ-005, D1.
       *Evidence to close:* board captures byte-identical to T2's baseline, or every difference
       explained. A difference means the deletion left the gallery and the fix is to narrow it.
-- [ ] **T10** Whole gate from the final state — REQ-006.
+- [x] **T10** Whole gate from the final state — REQ-006. **23 green, exit 0 read from `$?`.**
       *Evidence to close:* `npm run gate` exit 0 read from `$?`; `npx vitest run` with no reduction
       in count.
 - [ ] **T11** The operator opens a previously-gallery database on device.

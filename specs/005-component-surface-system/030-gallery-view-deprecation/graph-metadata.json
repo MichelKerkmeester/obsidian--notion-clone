@@ -46,7 +46,8 @@
       "tasks.md",
       "goal.md",
       "implementation-summary.md",
-      "tools/bench/gallery-render-bench.ts"
+      "tools/bench/gallery-render-bench.ts",
+      "src/data/gallery-migration.ts"
     ],
     "entities": [
       {
@@ -83,6 +84,12 @@
         "name": "gallery-render-bench.ts",
         "kind": "code",
         "path": "tools/bench/gallery-render-bench.ts",
+        "source": "derived"
+      },
+      {
+        "name": "gallery-migration.ts",
+        "kind": "code",
+        "path": "src/data/gallery-migration.ts",
         "source": "derived"
       },
       {
@@ -158,6 +165,12 @@
         "source": "derived"
       },
       {
+        "name": "what",
+        "kind": "key_phrase",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
         "name": "no",
         "kind": "key_phrase",
         "path": "tasks.md",
@@ -166,12 +179,6 @@
       {
         "name": "its",
         "kind": "key_phrase",
-        "path": "tasks.md",
-        "source": "derived"
-      },
-      {
-        "name": "PHASE 1: THE DECISION",
-        "kind": "heading",
         "path": "tasks.md",
         "source": "derived"
       },
@@ -190,7 +197,7 @@
     ],
     "causal_summary": "Remove the gallery view from the plugin, including the migration path for databases already configured to use it and the gate coverage that currently counts it.",
     "created_at": "2026-08-31T13:08:59.395Z",
-    "last_save_at": "2026-09-01T10:50:16.503Z",
+    "last_save_at": "2026-09-01T12:03:58.183Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -200,12 +207,12 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:35c13243b718a794f83e3c4e84cf626ffe4de28068aa9e483b7b787a921d939e",
+    "source_fingerprint": "sha256:a65263b22402ee3be57b0f0b525c27de8264c77920a60f2e309d80af160d642b",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "f43e9dda25c5806e37d4c50b2b1afa0690d3700b467532cf373755bd6bcc81c3",
-      "plan.md": "7ea995e7bf47104c7297f543bc5ba8aa04fcc72737a894fe512bd95c78f39b2c",
-      "tasks.md": "56017ec8c1c7ed3aafeb7d844e8e9b4a746b837ffb32eefadbfd4658388e80f9",
+      "plan.md": "d28a5d93688b53a1828b2154970600ccf92aa1cc7f48e68480d88037d062d35f",
+      "tasks.md": "724166a442b75d9b5bbdf31fafb4b03ee6a0ffe4d2e461178c335f9449e87f51",
       "implementation-summary.md": "578fbca58ba6d79a1f7337f9f3087f61eb26f32c5465010955c136a489dcf0df"
     },
     "last_active_child_id": null,

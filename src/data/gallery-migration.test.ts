@@ -89,3 +89,50 @@ describe("the migration leaves the way back intact", () => {
     }
   });
 });
+
+// ───────────────────────────────────────────────────────────────────
+// 5. A CONFIG THE PLUGIN DID NOT WRITE
+// ───────────────────────────────────────────────────────────────────
+
+// Every fixture above is shaped the way this plugin serialises a view, which proves the migration
+// can read its own output and nothing more. What arrives from a vault is a YAML block a person or
+// another tool wrote: keys in a different order, fields this build has never emitted, and — the
+// case that matters — the required ones simply absent.
+describe("a gallery this plugin did not author", () => {
+  it("migrates a hand-written view that carries none of the fields the plugin emits", () => {
+    // No `id`, no `name`, no `galleryImageField`, plus a key from nowhere. The only thing this has
+    // in common with a plugin-written view is the type string, which is all the vault guarantees.
+    const foreign = {
+      viewType: "gallery",
+      sortBy: "created",
+      "x-made-by": "some other tool",
+    } as unknown as ViewConfig;
+
+    const plan = planGalleryMigration(foreign);
+    expect(plan).toEqual({ from: "gallery", to: "board", imageField: undefined });
+    expect(applyGalleryMigration(foreign, plan!)).toBe(true);
+    expect(foreign.viewType).toBe("board");
+    // No cover field is written when the source declared none. Inventing one would put a property
+    // name into the reader's file that nothing in their vault uses.
+    expect(foreign.boardImageField).toBeUndefined();
+    // And the unknown key survives, because a migration that dropped what it did not recognise
+    // would quietly discard another tool's data on the way past.
+    expect((foreign as unknown as Record<string, unknown>)["x-made-by"]).toBe("some other tool");
+  });
+
+  it("carries a hand-written cover field across under the name the board reads", () => {
+    // A vault file that spells the gallery's cover field but none of the rest of the plugin's shape.
+    const foreign = { viewType: "gallery", galleryImageField: "banner" } as unknown as ViewConfig;
+    applyGalleryMigration(foreign, planGalleryMigration(foreign)!);
+    expect(foreign.viewType).toBe("board");
+    expect(foreign.boardImageField).toBe("banner");
+  });
+
+  it("leaves a hand-written view of another type completely alone", () => {
+    // The migration runs on open, so a view it must not touch is every other view in the vault.
+    const foreign = { viewType: "kanban-from-another-plugin" } as unknown as ViewConfig;
+    const before = JSON.stringify(foreign);
+    expect(planGalleryMigration(foreign)).toBeNull();
+    expect(JSON.stringify(foreign)).toBe(before);
+  });
+});

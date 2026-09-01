@@ -12,9 +12,9 @@ _memory:
     last_updated_at: "2026-08-31T14:10:00Z"
     last_updated_by: "phase-author"
     recent_action: "Plan drafted against the measured footprint"
-    next_safe_action: "Answer ADR-001 before executing any task"
+    next_safe_action: "Operator opens a previously-gallery database on device"
     blockers:
-      - "ADR-001 is Proposed, not Accepted"
+      - "T6 to T8 are gated on the renderer's deletion, which the accepted decision defers"
     key_files:
       - "spec.md"
       - "tasks.md"
@@ -23,10 +23,10 @@ _memory:
       session_id: "surface-system-030-plan"
       parent_session_id: null
     completion_pct: 67
-    open_questions:
-      - "ADR-001: which migration target"
+    open_questions: []
     answered_questions:
       - "Order is decided by reversibility: config path first, deletion last"
+      - "ADR-001 accepted 2026-09-02: migrate to board, on open, as one undo step, with the renderer still shipped so an undone view renders as it always did"
 ---
 # Implementation Plan: Gallery View Deprecation
 
@@ -56,7 +56,7 @@ the renderer while old configurations still point at it.
 <!-- /ANCHOR:summary -->
 
 <!-- ANCHOR:architecture -->
-## 2. ADR-001 — the migration target (**Proposed**, not Accepted)
+## 2. ADR-001 — the migration target (**Accepted**)
 
 **Context.** `DatabaseViewType` includes `"gallery"`, and that string is persisted in user vault
 files. Removing the renderer without a decision leaves those databases pointing at nothing.
@@ -70,7 +70,26 @@ structural twin — one card per row through the same field pipeline — so the 
 recognisable shape rather than becoming a table of rows or a dead end. The cost is that the
 migration is a real config rewrite rather than a fallback branch.
 
-**Status: Proposed.** D5 blocks execution until this is Accepted.
+**Status: Accepted, 2026-09-02** — migrate to **board**, on open, reversibly.
+
+The shape accepted is narrower than "migrate", and the three parts are what make it reversible:
+existing gallery views keep rendering, because the renderer is still shipped; nothing new can become
+one, because the type is withdrawn from every picker; and a view migrates the first time it is
+opened, as one labelled undo step, with the gallery's own fields left on the view so the undo
+restores the surface exactly rather than approximately.
+
+**The code had already taken this decision and the record had not.** `gallery-migration.ts` returns
+`to: "board"` and `database-view.ts` applies it on open with an undo label, while this document still
+read *Proposed* and its continuity still listed the ADR as a blocker. That gap is the reason the
+decision is now written where the blocker was, rather than assumed from the implementation: a
+decision that lives only in a source file is one nobody agreed to.
+
+**What was rejected and why.** Table is the safest render and the least similar — a card grid becomes
+a spreadsheet, and the reader loses the covers with no way to see what changed. Keeping the value
+accepted behind an explanatory empty state is the smallest change and the worst outcome, since a
+reader who did nothing wrong gets a dead surface. Board is the gallery's structural twin: one card
+per row through the same field pipeline, and `resolveCoverImage` is the same call, so carrying the
+field over keeps the covers and the card shape.
 <!-- /ANCHOR:architecture -->
 
 <!-- ANCHOR:testing -->
@@ -108,7 +127,7 @@ only after ADR-001 is Accepted, and the migration must be idempotent so a re-run
 
 Before any file in this phase is touched:
 
-- [ ] ADR-001 is **Accepted**, not Proposed. D5 blocks everything on it, and the answer changes
+- [x] ADR-001 is **Accepted**, not Proposed. D5 blocks everything on it, and the answer changes
       whether this phase writes a migration or only deletes files.
 - [ ] The board control baseline is captured (T2). "Unchanged" needs something to be measured
       against, and capturing it after the deletion proves nothing.
