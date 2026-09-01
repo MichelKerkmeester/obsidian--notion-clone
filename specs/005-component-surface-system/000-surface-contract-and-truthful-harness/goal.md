@@ -98,8 +98,24 @@ than as unmeasured. That is the failure mode this packet exists to name, and it 
       reason.** **The second half is met and the first is unreachable.** Every packet now carries a
       harness-dependence audit naming which of its numbers survive the question *would this still
       fail on a device* — and `009`'s probe does not exist, so there is no live number to agree with.
-- [ ] Both named exit criteria are recorded for `001` and `003`. **Both packets now carry a
+- [x] Both named exit criteria are recorded for `001` and `003`. **Both packets now carry a
       checklist**, written the same day as this one; the exit criteria within them are open.
+      **Recorded then, and resolved now.** The figure this row moved from is `003`'s own: it **was 5**
+      of 8 when this line was written, and the two rows that stood between it and 7 were the pair the
+      harness-dependence audit had marked unmeasurable. Derived from the two checklists rather than
+      judged:
+      `001-overlay-placement-and-menu-language` is **7 of 8** and
+      `003-mobile-sheet-presentation` is **7 of 8**, and in each the single remaining row is the
+      operator's own — *"opens three different dropdowns and they look like one family"* and
+      *"opens a sheet on their phone and it covers the nav bar"*.
+
+      `003`'s two harness-dependent rows were the last to close, and they closed by removing an
+      invention rather than by arguing with the audit: the navbar they hit-tested was a hand-written
+      div at `height: 72px; z-index: 100`, where the installed application stylesheet gives
+      `.mobile-navbar` `position: fixed`, `height: 80px` and **no z-index at all**.
+
+      This row asked that the exit criteria be recorded, and the reason it stayed open was that they
+      were unresolved. Neither packet now holds a criterion that anything but a device can close.
 - [ ] The operator confirms on device. **Only the operator closes this.** `AC-016`'s checker
       **did** implement the opposite of `AC-016` — `scan-pinned-values.mjs` skipped a property
       `src/` also assigns, which is the population the criterion names. **Reconciled 2026-09-01, by

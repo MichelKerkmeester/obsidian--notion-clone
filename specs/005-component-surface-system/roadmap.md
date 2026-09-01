@@ -427,7 +427,7 @@ done | sort -n
 
 | Phase | Derived | Open | Operator-only | Harness-reachable |
 |---|---|---|---|---|
-| `000-surface-contract-and-truthful-harness` | **40%** — 4/10 | 6 | 1 | 5 |
+| `000-surface-contract-and-truthful-harness` | **50%** — 5/10 | 5 | 1 | 4 |
 | `001-overlay-placement-and-menu-language` | **88%** — 7/8 | 1 | 1 | 0 |
 | `002-properties-panel` | **86%** — 6/7 | 1 | 1 | 0 |
 | `003-mobile-sheet-presentation` | **88%** — 7/8 | 1 | 1 | 0 |
