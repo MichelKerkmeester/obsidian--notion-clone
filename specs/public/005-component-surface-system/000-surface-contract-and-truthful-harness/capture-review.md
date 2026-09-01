@@ -188,6 +188,45 @@ measurement before it becomes a row anywhere.
 
 ---
 
+## Release 5 — the first cluster off the triage queue, 2026-09-01
+
+Release 4 left roughly sixty reviewer observations as a queue rather than a defect list, with five
+clusters named as worth measuring first. This is the first of them, and it held.
+
+**Two palette entries rendered identically, so the picker could not express a choice it offered.**
+Measured rather than taken on the reviewer's word, and as **two separate properties** — the chip
+paints the background token and the picker swatch paints the FOREGROUND one, so "the chips look the
+same" and "the swatches look the same" are different claims:
+
+| | Before | After |
+|---|---|---|
+| light chip and swatch | `gray ≡ slate (rgb(51, 65, 85))` | all 16 distinct |
+| dark chip and swatch | `brown ≡ orange (rgb(254, 215, 170))` | all 16 distinct |
+
+`gray` and `slate` were both built on `#64748b` with a `#334155` foreground — the same ramp under
+two names. Gray now takes the gray ramp (`#6b7280` / `#374151`). `brown` and `orange` were kept apart
+in the light theme (`#713f12` against `#9a3412`) and collapsed onto `#fed7aa` in the dark one; brown
+now carries its own tint derived from its own background hue.
+
+**And the picker's own layout was doing the thing the goal calls "spacing fighting the token
+scale".** Sixteen swatches in a 124px popover wrap five to a row: three full rows and a single
+orphan, with **94px of unused track** pushing the block off-centre in its own frame. Four per row is
+the only count that divides sixteen evenly, so the width is now derived — `4 × 18 + 3 gaps + padding
+= 96` — with the arithmetic written down so a change to the swatch size or the palette length has to
+move it.
+
+All four checks were observed red on the tree as received, and the layout one reports
+`[5, 5, 5, 1], and the last one ends 94px short` when the old width is restored.
+
+**The attribution is loose and worth saying.** The lane was taken under `004`, and this is not
+`004`'s work — it came out of this review. There is no palette packet to hold it.
+
+*Still on the queue:* the date picker's selected-day contrast at 1.10:1, the unstyled `#0000EE` link
+in dark, truncation where the row still has slack, and the `-mobile-*` captures that are byte-
+identical to their desktop counterparts.
+
+---
+
 ## Standing caveat
 
 Every verdict above is the assistant's reading of a regenerated PNG. **None of it is device

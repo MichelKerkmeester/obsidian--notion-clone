@@ -1,7 +1,7 @@
 {
-  "measuredAt": "2026-09-01T05:04:00.199Z",
+  "measuredAt": "2026-09-01T08:05:35.712Z",
   "inputs": {
-    "styles.css": "078298819983",
+    "styles.css": "0c4581aea761",
     "tools/live/surface-census.mjs": "8eddb1d0c81c",
     "src/views/surface-contract.ts": "ff7e6bafd3c8"
   },
@@ -1372,7 +1372,7 @@
       "mountParent": "(body)",
       "tokens": true,
       "role": null,
-      "rect": "138x98",
+      "rect": "110x98",
       "scenarios": [
         "field-option-color-picker"
       ]

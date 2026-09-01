@@ -119,8 +119,12 @@
   --db-row-height: var(--db-row-height-default);
   --db-row-cell-padding: var(--db-space-4);
   --db-row-font-size: var(--db-font-md);
-  --status-color-bg-gray: color-mix(in srgb, #64748b 16%, transparent);
-  --status-color-fg-gray: #334155;
+  /* The GRAY ramp, not the slate one. Both entries were built on #64748b with a #334155
+     foreground, so a reader who picked "slate" got a chip indistinguishable from "gray" — the
+     picker offered a choice it could not express. Measured before this change:
+     `gray ≡ slate (rgb(51, 65, 85))` in the light theme, on both the chip and the swatch. */
+  --status-color-bg-gray: color-mix(in srgb, #6b7280 16%, transparent);
+  --status-color-fg-gray: #374151;
   --status-color-bg-brown: color-mix(in srgb, #9f6b53 16%, transparent);
   --status-color-fg-brown: #713f12;
   --status-color-bg-orange: color-mix(in srgb, #d9730d 16%, transparent);
@@ -740,8 +744,14 @@
   --db-elevation-3: 0 18px 50px rgba(0, 0, 0, 0.48), 0 6px 18px rgba(0, 0, 0, 0.32);
   --status-color-bg-gray: color-mix(in srgb, #94a3b8 24%, transparent);
   --status-color-fg-gray: #e2e8f0;
+  /* Brown's own tint, not orange's. Both resolved to #fed7aa here while the light theme kept them
+     apart (#713f12 against #9a3412), and the pickers paint the FOREGROUND token as their swatch —
+     so the two swatches were the same colour. Measured before this change:
+     `brown ≡ orange (rgb(254, 215, 170))` in the dark theme. This tint is derived from brown's own
+     background hue rather than picked, so the pair stays related to its base the way every other
+     entry does. */
   --status-color-bg-brown: color-mix(in srgb, #d97745 24%, transparent);
-  --status-color-fg-brown: #fed7aa;
+  --status-color-fg-brown: #f0cdb4;
   --status-color-bg-orange: color-mix(in srgb, #f97316 24%, transparent);
   --status-color-fg-orange: #fed7aa;
   --status-color-bg-yellow: color-mix(in srgb, #eab308 24%, transparent);
@@ -6907,7 +6917,13 @@ input[type="checkbox"].db-toggle-switch:disabled {
   display: flex;
   flex-wrap: wrap;
   gap: 4px;
-  width: 124px;
+  /* Sized from the swatches, not rounded to a convenient number. Sixteen swatches at 124px wrapped
+     five to a row — three full rows and a single orphan on the fourth — and left 6px of unused
+     track on the right, so the grid read as off-centre inside its own popover. Four per row is the
+     only count that divides sixteen evenly: 4 x 18 + 3 x 4 gaps + 2 x 6 padding = 96. Change the
+     swatch size or the palette length and this number has to move with them, which is why the
+     arithmetic is written down rather than the result alone. */
+  width: 96px;
   padding: 6px;
   border: 1px solid var(--background-modifier-border);
   border-radius: var(--db-radius-md);
