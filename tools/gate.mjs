@@ -42,6 +42,7 @@ const CHECKS = [
   { name: "lint:tools", cmd: ["npm", "run", "lint:tools"] },
   { name: "comments", cmd: ["node", "tools/naming/scan-comments.mjs"] },
   { name: "folder-docs", cmd: ["node", "tools/naming/scan-folder-docs.mjs"] },
+  { name: "operator-list", cmd: ["node", "tools/naming/build-operator-checklist.mjs", "--check"] },
   { name: "naming", cmd: ["node", "tools/naming/scan-naming.mjs"] },
   { name: "failing-values", cmd: ["node", "tools/naming/scan-failing-values.mjs"] },
   { name: "pinned-values", cmd: ["node", "tools/screenshots/scan-pinned-values.mjs"] },
