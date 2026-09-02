@@ -4503,7 +4503,7 @@ input[type="checkbox"].db-toggle-switch:disabled {
   border: 0;
   border-radius: var(--db-radius-md);
   background: transparent;
-  color: var(--text-muted);
+  color: var(--text-normal);
   font-size: 12px;
   font-weight: 600;
   box-shadow: none;
@@ -4628,7 +4628,7 @@ input[type="checkbox"].db-toggle-switch:disabled {
 
 .note-database-container .db-chart-options-value {
   overflow: hidden;
-  color: var(--text-faint);
+  color: var(--text-muted);
   font-size: 12px;
   font-weight: 400;
   text-overflow: ellipsis;
@@ -4772,8 +4772,12 @@ input[type="checkbox"].db-toggle-switch:disabled {
   cursor: pointer;
 }
 
+/* No colour here. The tone that made "Export PNG" and "Copy PNG" read as disabled was set on the
+   label, not on the button, so recolouring the button alone changed nothing a person can see —
+   this nested rule outranked it. Dropping the declaration lets `.db-chart-options-label` apply,
+   which is what every other row in the popover already gets. The heavier weight stays, because it
+   is what marks these two rows as the ones that act. */
 .note-database-container .db-chart-options-export .db-chart-options-label {
-  color: var(--text-muted);
   font-weight: 600;
 }
 
@@ -7014,9 +7018,18 @@ input[type="checkbox"].db-toggle-switch:disabled {
 }
 
 .note-database-container .db-file-tag-badge {
-  background: var(--background-modifier-hover);
-  color: var(--text-muted);
+  background: var(--db-status-bg, var(--background-modifier-hover));
+  color: var(--db-status-fg, var(--text-muted));
   border: 1px solid var(--background-modifier-border);
+}
+
+/* An unregistered tag gets the gray pair, which is the fallback the badge renderer already reaches
+   for elsewhere. Only the tokens: pinning the border to the foreground as well was tried and gave
+   this one tag a hard outline no other tag has in the light theme, 10.31:1 against a surrounding
+   1.22:1. Setting the pair and leaving the edge to the theme puts it back among its siblings. */
+.note-database-container .db-file-tag-badge:not([class*="status-color-"]) {
+  --db-status-bg: var(--status-color-bg-gray);
+  --db-status-fg: var(--status-color-fg-gray);
 }
 
 .note-database-container .db-file-link-list-item {
@@ -7038,9 +7051,15 @@ input[type="checkbox"].db-toggle-switch:disabled {
   text-decoration: underline;
 }
 
-.note-database-container .db-cell-option-popover .is-hidden,
-.db-cell-option-popover .is-hidden {
+.note-database-container .db-cell-option-popover .is-hidden:not(.db-option-drag-handle),
+.db-cell-option-popover .is-hidden:not(.db-option-drag-handle) {
   display: none;
+}
+
+.note-database-container .db-cell-option-popover .db-option-drag-handle.is-hidden,
+.db-cell-option-popover .db-option-drag-handle.is-hidden {
+  visibility: hidden;
+  pointer-events: none;
 }
 
 /* 复选框单元格居中 */
@@ -9150,7 +9169,7 @@ input[type="checkbox"].db-toggle-switch:disabled {
 }
 
 .note-database-container .db-board-card.is-drop-target {
-  background: var(--background-interactive-hover);
+  background: var(--db-hover-bg);
 }
 
 .note-database-container .db-board-card.is-drop-before {
@@ -10440,12 +10459,21 @@ body.is-phone .note-database-container .db-record-detail-panel {
   color: var(--text-muted);
 }
 
+/* The declared width is a floor, not a cage. It was `flex: 0 0 var(--db-card-field-width, 150px)`,
+   which is why a date read "February 14, 2027" as an ellipsis beside most of an empty row. Dropping
+   it entirely is worse than the truncation: the renderer sets that custom property per column, and
+   a field sized purely from its own content stops lining up with the field above it — measured on
+   the sparse fixture, four columns declared 110/190/150/130 collapsed to 73/141/97/75. So the
+   declared value becomes `min-width`, content is allowed past it, and a cap stops one long value
+   from claiming the row. */
 .note-database-container .db-list-field {
   display: inline-flex;
   align-items: center;
-  flex: 0 0 var(--db-card-field-width, 150px);
+  flex: 0 0 auto;
+  width: max-content;
+  min-width: var(--db-card-field-width, 150px);
+  max-width: 190px;
   gap: var(--db-space-3);
-  min-width: 0;
   color: var(--text-muted);
   font-size: 12px;
 }
@@ -11206,8 +11234,8 @@ body.is-phone .note-database-container .db-record-detail-panel {
 .note-database-modal.is-invalid-events-compact .db-invalid-event-row {
   grid-template-columns: 28px minmax(0, 1fr) minmax(0, 1fr) max-content;
   grid-template-areas:
-    "select name name span"
-    ". start end span";
+    "select name name event-span"
+    ". start end event-span";
   align-items: start;
   gap: 8px 12px;
   padding: var(--db-space-5);
@@ -11241,7 +11269,7 @@ body.is-phone .note-database-container .db-record-detail-panel {
 }
 
 .note-database-modal.is-invalid-events-compact .db-invalid-event-span-cell {
-  grid-area: span;
+  grid-area: event-span;
   justify-self: end;
   align-self: center;
 }
@@ -11256,7 +11284,7 @@ body.is-phone .note-database-container .db-record-detail-panel {
     "select name"
     ". start"
     ". end"
-    ". span";
+    ". event-span";
   row-gap: 8px;
 }
 
@@ -11398,6 +11426,84 @@ body.is-phone .note-database-container .db-record-detail-panel {
 .note-database-container .db-view-config-range input[type="range"] {
   flex: 1;
   min-width: 0;
+}
+
+/* The 4px line is the TRACK, never the control. Painting it on the input itself gave the slider a
+   4px-tall hit area — a bare `353x4` in the touch-target census, thinner than anything else the
+   plugin ships. The box stays thumb-height and transparent, and the line is drawn by the track
+   pseudo-element inside it. Every colour here is a host token; none is picked. */
+.note-database-container .db-view-config-range input[type="range"],
+.note-database-container .db-calendar-range-row input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 28px;
+  margin: 0;
+  border: 0;
+  background: transparent;
+  accent-color: var(--interactive-accent);
+  cursor: pointer;
+}
+
+.note-database-container .db-view-config-range input[type="range"]::-webkit-slider-runnable-track,
+.note-database-container .db-calendar-range-row input[type="range"]::-webkit-slider-runnable-track {
+  height: 4px;
+  border: 0;
+  border-radius: var(--db-radius-full);
+  background: var(--background-modifier-border);
+}
+
+.note-database-container .db-view-config-range input[type="range"]::-webkit-slider-thumb,
+.note-database-container .db-calendar-range-row input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  box-sizing: border-box;
+  width: 14px;
+  height: 14px;
+  margin-top: -5px;
+  border: 2px solid var(--background-primary);
+  border-radius: 50%;
+  background: var(--interactive-accent);
+}
+
+.note-database-container .db-view-config-range input[type="range"]::-moz-range-track,
+.note-database-container .db-calendar-range-row input[type="range"]::-moz-range-track {
+  height: 4px;
+  border: 0;
+  border-radius: var(--db-radius-full);
+  background: var(--background-modifier-border);
+}
+
+.note-database-container .db-view-config-range input[type="range"]::-moz-range-progress,
+.note-database-container .db-calendar-range-row input[type="range"]::-moz-range-progress {
+  height: 4px;
+  border-radius: var(--db-radius-full);
+  background: var(--interactive-accent);
+}
+
+.note-database-container .db-view-config-range input[type="range"]::-moz-range-thumb,
+.note-database-container .db-calendar-range-row input[type="range"]::-moz-range-thumb {
+  box-sizing: border-box;
+  width: 14px;
+  height: 14px;
+  border: 2px solid var(--background-primary);
+  border-radius: 50%;
+  background: var(--interactive-accent);
+}
+
+.note-database-container .db-view-config-range input[type="range"]:focus-visible,
+.note-database-container .db-calendar-range-row input[type="range"]:focus-visible {
+  outline: none;
+}
+
+.note-database-container .db-view-config-range input[type="range"]:focus-visible::-webkit-slider-thumb,
+.note-database-container .db-calendar-range-row input[type="range"]:focus-visible::-webkit-slider-thumb {
+  box-shadow: var(--db-accent-focus-ring);
+}
+
+.note-database-container .db-view-config-range input[type="range"]:focus-visible::-moz-range-thumb,
+.note-database-container .db-calendar-range-row input[type="range"]:focus-visible::-moz-range-thumb {
+  box-shadow: var(--db-accent-focus-ring);
 }
 
 .note-database-container .db-view-config-number {
@@ -11870,9 +11976,10 @@ body.is-phone .note-database-container .db-record-detail-panel {
   border: 0;
   border-radius: var(--db-radius-lg);
   background: transparent;
-  color: var(--text-muted);
+  color: var(--text-normal);
   cursor: pointer;
   font-size: 12px;
+  font-weight: 600;
   box-shadow: none;
 }
 
@@ -18364,6 +18471,32 @@ img.db-text-md-image {
 }
 .db-icon-picker-header, .db-icon-picker-colors, .db-icon-picker-nav { display: flex; align-items: center; }
 .db-icon-picker-header { flex: 0 0 37px; height: 37px; min-height: 37px; padding: 0 var(--db-space-6); border-bottom: 1px solid var(--background-modifier-border); }
+
+@media (max-width: 480px) {
+  .db-icon-picker-header {
+    flex: 0 0 auto;
+    flex-wrap: wrap;
+    height: auto;
+    min-height: 37px;
+    gap: 4px;
+    padding: 4px 8px;
+  }
+
+  .db-icon-picker-header .db-icon-picker-tabs {
+    flex: 1 1 auto;
+    min-width: 0;
+    gap: 8px;
+  }
+
+  .db-icon-picker-popover .db-icon-picker-search {
+    order: 3;
+    flex: 1 1 100%;
+    box-sizing: border-box;
+    width: 100%;
+    min-width: 0;
+    margin-left: 0;
+  }
+}
 .db-icon-picker-tabs { display: flex; align-self: stretch; align-items: center; gap: 22px; }
 .db-icon-picker-popover .db-icon-picker-tabs button,
 .db-icon-picker-popover button.db-icon-picker-remove,
@@ -18475,6 +18608,17 @@ img.db-text-md-image {
     opacity: 1;
   }
 
+  .note-database-container .db-calendar-day-heading {
+    min-height: 28px;
+  }
+
+  .note-database-container .db-calendar-day-heading .db-calendar-add-button {
+    position: absolute;
+    top: 0;
+    right: 4px;
+    z-index: 2;
+  }
+
   .note-database-container .db-table .db-select-col .db-select-inner input[type="checkbox"],
   .note-database-container .db-group-divider-checkbox,
   .note-database-container .db-selection-clear-checkbox {
@@ -18550,6 +18694,17 @@ img.db-text-md-image {
     inset: -4px;
     content: "";
     pointer-events: auto;
+  }
+}
+
+@media (pointer: coarse) {
+  .note-database-modal .db-invalid-event-row :is(
+    .db-invalid-event-select,
+    .db-invalid-event-datetime,
+    .db-invalid-event-row-fix
+  ) {
+    min-width: 28px;
+    min-height: 28px;
   }
 }
 
@@ -18999,6 +19154,21 @@ img.db-text-md-image {
   flex-wrap: wrap;
   gap: 4px;
   min-width: 0;
+}
+
+.db-relation-values.is-compact {
+  gap: 2px;
+}
+
+.db-relation-values.is-compact .db-relation-link {
+  gap: 2px;
+  padding: var(--db-space-1) var(--db-space-2);
+  font-size: var(--db-font-xs);
+}
+
+.db-relation-values.is-compact .db-relation-link-icon svg {
+  width: 12px;
+  height: 12px;
 }
 
 .note-database-modal.db-relation-rollup-config-modal {
@@ -20150,9 +20320,29 @@ body.is-tablet .note-database-container .db-record-open-btn {
 }
 
 .note-database-container .db-toolbar-badge-neutral {
+  position: static;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: max-content;
+  min-width: max-content;
+  height: 18px;
+  padding: 0 var(--db-space-3);
+  border: 1px solid var(--background-primary);
+  border-radius: var(--db-radius-full);
   background: var(--background-modifier-border);
-  color: var(--text-muted);
-  font-weight: 500;
+  color: var(--text-normal);
+  font-size: var(--db-font-xs);
+  font-weight: 600;
+  line-height: 16px;
+}
+
+.note-database-container .db-toolbar-badge-button:has(> .db-toolbar-badge-neutral) {
+  width: max-content;
+  min-width: 28px;
+  justify-content: flex-start;
+  gap: var(--db-space-2);
+  padding: 0 var(--db-space-3);
 }
 
 .note-database-container .db-view-config-section-title {

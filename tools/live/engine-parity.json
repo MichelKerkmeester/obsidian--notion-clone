@@ -1,7 +1,7 @@
 {
-  "measuredAt": "2026-09-01T15:51:31.255Z",
+  "measuredAt": "2026-09-02T16:16:38.233Z",
   "inputs": {
-    "styles.css": "92022f8399f1",
+    "styles.css": "b89722c133ec",
     "tools/live/engine-parity.mjs": "0264fc2e3d90",
     "tools/screenshots/scenarios.mjs": "1395f2dacbfd"
   },
@@ -97,7 +97,6 @@
       "selector": "button",
       "index": 0,
       "notes": [
-        "background color(srgb 0 0 0 / 0.0310588) vs color(srgb 0 0 0 / 0.0324)",
         "width 1094 vs 1102"
       ]
     },

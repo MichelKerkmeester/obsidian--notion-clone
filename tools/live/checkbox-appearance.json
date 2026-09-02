@@ -1,7 +1,7 @@
 {
-  "measuredAt": "2026-09-01T15:50:29.484Z",
+  "measuredAt": "2026-09-02T16:15:20.011Z",
   "inputs": {
-    "styles.css": "92022f8399f1",
+    "styles.css": "b89722c133ec",
     "tools/live/checkbox-appearance.mjs": "3b49f9254b92",
     "tools/screenshots/scenarios.mjs": "1395f2dacbfd"
   },
@@ -4734,7 +4734,7 @@
       "chain": [
         "note-database-modal db-invalid-events-modal",
         "db-invalid-event-grid",
-        "db-invalid-event-row"
+        "db-invalid-event-row is-invalid"
       ],
       "measured": {
         "appearance": "none",
@@ -4757,7 +4757,7 @@
       "chain": [
         "note-database-modal db-invalid-events-modal",
         "db-invalid-event-grid",
-        "db-invalid-event-row"
+        "db-invalid-event-row is-invalid"
       ],
       "measured": {
         "appearance": "none",
@@ -4780,7 +4780,7 @@
       "chain": [
         "note-database-modal db-invalid-events-modal",
         "db-invalid-event-grid",
-        "db-invalid-event-row"
+        "db-invalid-event-row is-invalid"
       ],
       "measured": {
         "appearance": "none",

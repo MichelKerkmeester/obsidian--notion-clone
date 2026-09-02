@@ -13,7 +13,7 @@
 // ───────────────────────────────────────────────────────────────────
 
 import { describe, expect, it, vi } from "vitest";
-import { calculateTableAggregate, getCalculationColumnIndex, normalizeCalculationKind } from "./table-footer-renderer";
+import { calculateTableAggregate, formatCalculationValue, getCalculationColumnIndex, normalizeCalculationKind } from "./table-footer-renderer";
 import type { ColumnDef } from "../data/types";
 
 // ───────────────────────────────────────────────────────────────────
@@ -55,5 +55,9 @@ describe("TableFooterRenderer calculations", () => {
     expect(normalizeCalculationKind("standard-deviation")).toBe("STDDEV");
     expect(normalizeCalculationKind("count_empty")).toBe("EMPTY");
     expect(normalizeCalculationKind("unknown")).toBeNull();
+  });
+
+  it("formats date aggregates with the column display formatter", () => {
+    expect(formatCalculationValue(new Date(Date.UTC(2026, 2, 1)), "date")).toBe("March 1, 2026");
   });
 });

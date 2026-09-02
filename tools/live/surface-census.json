@@ -1,7 +1,7 @@
 {
-  "measuredAt": "2026-09-01T15:51:33.996Z",
+  "measuredAt": "2026-09-02T16:16:14.687Z",
   "inputs": {
-    "styles.css": "92022f8399f1",
+    "styles.css": "b89722c133ec",
     "tools/live/surface-census.mjs": "8eddb1d0c81c",
     "src/views/surface-contract.ts": "ff7e6bafd3c8"
   },
@@ -202,6 +202,7 @@
         "chrome-utilities-popover",
         "chrome-utilities-popover",
         "chrome-utilities-popover",
+        "chrome-owned-menu",
         "chrome-owned-menu",
         "chrome-owned-menu",
         "chrome-owned-menu",
@@ -744,7 +745,7 @@
       "mountParent": "note-database-container",
       "tokens": true,
       "role": null,
-      "rect": "538x511",
+      "rect": "538x513",
       "scenarios": [
         "timeline-toolbar-options"
       ]
@@ -904,7 +905,7 @@
       "mountParent": "db-panel-button",
       "tokens": true,
       "role": null,
-      "rect": "85x12",
+      "rect": "89x12",
       "scenarios": [
         "panel-column-manager",
         "panel-column-manager"
@@ -1094,7 +1095,8 @@
       "role": null,
       "rect": "1406x24",
       "scenarios": [
-        "panel-computed-cleanup-modal"
+        "panel-computed-cleanup-modal",
+        "panel-invalid-events-modal"
       ]
     },
     "db-invalid-events-modal": {
@@ -1102,7 +1104,7 @@
       "mountParent": "(body)",
       "tokens": true,
       "role": null,
-      "rect": "1408x225",
+      "rect": "1408x305",
       "scenarios": [
         "panel-invalid-events-modal"
       ]

@@ -14,7 +14,8 @@
 
 import { ColumnDef, RowData, TableCalculationKind, ViewConfig } from "../data/types";
 import { toChartNumber } from "../data/chart-aggregation";
-import { isDateLikeColumnType, parseDateTimeParts, toDateTimestamp } from "../data/date-time-format";
+import { getColumnDisplayType } from "../data/column-display";
+import { formatDateTimeValueDisplay, formatDateValueDisplay, isDateLikeColumnType, toDateTimestamp } from "../data/date-time-format";
 import { formatEuroNumber2 } from "../data/euro-format";
 import { getRowFileFieldValue, isBaseFileField } from "../data/file-fields";
 import { stringifyValue } from "../data/stringify";
@@ -149,7 +150,7 @@ export class TableFooterRenderer {
         for (const { kind, rawKind, value } of values) {
           const item = trigger.createSpan({ cls: "db-table-footer-value" });
           item.createSpan({ cls: "db-table-footer-kind", text: kind ? getCalculationLabel(kind) : rawKind });
-          item.createSpan({ cls: "db-table-footer-result", text: formatCalculationValue(value) });
+          item.createSpan({ cls: "db-table-footer-result", text: formatCalculationValue(value, getColumnDisplayType(column, config.schema.computedFields)) });
         }
       } else {
         trigger.createSpan({ cls: "db-table-footer-calculate-hint", text: t("table.calculate") });
@@ -210,8 +211,12 @@ function getCalculationLabel(kind: TableCalculationKind): string {
   return t(`table.calculation.${kind.toLowerCase()}`);
 }
 
-function formatCalculationValue(value: unknown): string {
-  if (value instanceof Date) return parseDateTimeParts(value)?.dateKey || value.toISOString().slice(0, 10);
+export function formatCalculationValue(value: unknown, displayType?: string): string {
+  if (value instanceof Date) {
+    return displayType === "datetime"
+      ? formatDateTimeValueDisplay(value, { mode: "full", showTimeWhenMissing: true })
+      : formatDateValueDisplay(value);
+  }
   if (typeof value === "number") return formatEuroNumber2(value);
   return stringifyValue(value);
 }

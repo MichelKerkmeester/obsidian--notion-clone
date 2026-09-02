@@ -137,6 +137,7 @@ for (const check of CHECKS) {
   let log = null;
   if (surprise) {
     mkdirSync(LOG_DIR, { recursive: true });
+    writeFileSync(join(LOG_DIR, "README.md"), "Gate diagnostics are generated here for failed checks.\n");
     log = join(LOG_DIR, `${check.name.replace(/[^a-z0-9]+/gi, "-")}.log`);
     writeFileSync(log, `$ ${check.cmd.join(" ")}\nexit ${code}\nsignal ${run.signal ?? "none"}\n\n`
       + `--- stdout ---\n${run.stdout || ""}\n--- stderr ---\n${run.stderr || ""}\n`);
