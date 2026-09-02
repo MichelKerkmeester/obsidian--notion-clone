@@ -9,10 +9,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/018-select-column-affordance-fit"
-    last_updated_at: "2026-08-31T09:00:00Z"
-    last_updated_by: "harness-dependence-review"
-    recent_action: "Three rows measured and closed; the column width is now summed from painted boxes"
-    next_safe_action: "The operator opens the table on the phone and reports the button has room"
+    last_updated_at: "2026-09-02T08:00:00Z"
+    last_updated_by: "goal-audit"
+    recent_action: "Goal audit: AC-1 and AC-2 un-ticked to match the withdrawal"
+    next_safe_action: "Measure the desktop select cell on a row TableRenderer builds, not the fixture"
     blockers:
       - "The desktop cell production paints holds a drag handle the fixture never contains"
       - "The phone column width is declared twice; only the CSS copy is measured"
@@ -24,7 +24,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-018-goal"
       parent_session_id: null
-    completion_pct: 80
+    completion_pct: 40
     open_questions:
       - "Do the desktop drag handle and the row checkbox clear each other in a 40px column"
       - "Does the renderer build the reorder button only on touch, measured rather than read"
@@ -67,14 +67,33 @@ nothing owned it.
 <!-- ANCHOR:completion -->
 ## 2. COMPLETION CRITERIA
 
-- [x] The gap between the button's right edge and the checkbox's left edge is ≥ 0 on every surface
+- [ ] The gap between the button's right edge and the checkbox's left edge is ≥ 0 on every surface
       that renders both. Recorded failing at −14px phone and −17px desktop; recorded after at +4px in
       a 65px cell.
-      **Met, re-measured on this tree:** `11 cells show both; narrowest gap 4px in a 65px cell`. The
-      desktop surface renders no button at all, so it has no pair to collide.
-- [x] Zero reorder buttons render in a desktop list or gallery row, which is what production builds —
-      the table creates it only on touch. **Met:** `no reorder button is shown in 11 select cells,
-      so nothing can collide`. Was present and unstyled in every desktop row, because a
+      **Phone arm measured:** `11 cells show both; narrowest gap 4px in a 65px cell`.
+      **Un-ticked 2026-09-02, because the desktop arm is false on disk and the criterion says *every*
+      surface.** The row closed the desktop arm with "the desktop surface renders no button at all,
+      so it has no pair to collide". The desktop surface does render one. `table-renderer.ts:1006`
+      builds a `db-table-row-drag-handle` into the select cell and returns early only when
+      `isTouchRender()` — so the button exists precisely off touch, which is the surface this arm
+      claimed was empty. What is empty is the **fixture**: the check mounts the `table-mobile`
+      scenario (`verify-placement.mjs:4850`), whose select cell carries a `db-table-mobile-move-btn`
+      and no drag handle (`tools/screenshots/scenarios/core.mjs:284-287`), and it then looks for
+      `.db-table-mobile-move-btn` — a selector the desktop cell was never going to match. So the
+      desktop pair is unmeasured rather than absent, in a column
+      `getSelectionColumnWidth()` sizes at **40px** off touch. This is the packet's own withdrawal,
+      already recorded in §3 and in `acceptance-criteria.md`; only the tick had not followed it.
+- [ ] Zero reorder buttons render in a desktop list or gallery row, which is what production builds —
+      the table creates it only on touch. Reported as `no reorder button is shown in 11 select cells,
+      so nothing can collide`.
+      **Un-ticked 2026-09-02: the evidence measures `display` on a fixture, not presence in a
+      renderer, and it is a table fixture rather than the list or gallery row the criterion names.**
+      The check filters on `getComputedStyle(button).display !== "none"` over cells the
+      `table-mobile` scenario hand-wrote, so it answers "is the CSS hiding it" and never "did a
+      renderer build one". The distinction is load-bearing here because the desktop table row **does**
+      build a reorder control — the drag handle above — so a count that reads zero is reading the
+      absence of one selector from one fixture. The underlying fix is not in doubt; the measurement
+      does not reach it. Was present and unstyled in every desktop row, because a
       **touch-floor block declared `display: inline-flex`** at equal specificity and later in the
       file than the `display: none` written for the non-phone case. A minimum-size rule decided
       visibility, and a check on the gap alone would have gone green the moment the button
@@ -104,11 +123,16 @@ nothing owned it.
       one edit and its control restores it; the phone's was two and its control now reverts both —
       and each moves only its own surface, which is what makes them discriminating. What they prove
       is that the check is wired to `styles.css`. They cannot prove it is wired to the product,
-      because the subject they move is a **hand-written fixture**: `verify-placement.mjs:3228`
+      because the subject they move is a **hand-written fixture**: `verify-placement.mjs:4850`
       renders the `table-mobile` screenshot scenario's markup, not a table `TableRenderer` built. The
       two consequences are in `acceptance-criteria.md` — the desktop gap is measured on a cell whose
       real occupant is a drag handle the fixture omits, and the phone width has a second declaration
-      in `table-renderer.ts:475` that an inline style makes authoritative on device.
+      in `table-renderer.ts:564` — `getSelectionColumnWidth()`, today `this.isTouchRender() &&
+      this.renderCanReorder ? 64 : 40` — that an inline style makes authoritative on device. *Checked
+      2026-09-02:* both declarations are still on disk, so this blocker stands; what has moved since
+      it was written is that the TypeScript copy is now conditional, and the stylesheet has grown a
+      matching `:not(:has(.db-table-mobile-move-btn))` narrowing at `styles.css:17993`. Two
+      conditional copies of one width are harder to keep in step than two constants, not easier.
 
       **The phone control has to revert two edits, not one, and the first attempt reverted one.**
       This phase widened the column 48px to 64px *and* moved the phone checkbox pin from `right: 6px`
@@ -133,12 +157,17 @@ the table has grown a row because AC-1's two arms have different answers. What b
 longer a blank cell. It is that two rows are withdrawn — the desktop gap and the button-presence
 count both measure a hand-written fixture rather than the renderer — and that AC-4 was never
 requested. **This phase may not close today**, for those reasons rather than the earlier one.
+*Updated 2026-09-02:* the checklist above now agrees with this paragraph. AC-1 and AC-2 were still
+carrying ticks while this section and the Progress table below both called them withdrawn, so the
+derived figure read 80% against two rows the packet had already stopped believing. Both are
+un-ticked, each with the disk evidence in its own row, and the figure is 40%.
 
 ### Progress
 
 | Item | State | Evidence |
 |------|-------|----------|
 | Code | Shipped | Lane journal entry 64, under `004`'s hold |
+| Completion figure | 2 of 5 rows, derived | Was 80% against a checklist the withdrawal had already emptied |
 | Numbers | Recorded, not reproduced | `acceptance-criteria.md` provenance note |
 | Negative controls | Run, both red | Desktop -17px; phone -14px with both of its edits reverted |
 | What they moved | A fixture, not the renderer | `verify-placement.mjs:3228` mounts the `table-mobile` screenshot scenario |

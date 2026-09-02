@@ -77,6 +77,13 @@ evidence in this folder or in a lane.*
       operator rows are marked as only the operator can close them. It is a discipline rather than
       a check, and it is ticked because the artefacts exist and are cited, not because anything
       enforces it.
+      **"Every packet" is wrong, measured 2026-09-02.** A harness-dependence audit is present in
+      **12 of the 35 phase folders** — `000`-`006`, this one, and `015`-`018`. The other 23 carry
+      none under that name or under the *would this still fail on a device* phrasing. The tick is
+      left standing because the criterion is about **claims about mobile states**, and most of those
+      23 make none — but the sentence above asserted a program-wide artefact that is not there, and
+      an unaudited packet that does make a mobile claim would be invisible to it. What is actually
+      true is the narrower thing: where a packet reasons about a phone, it carries the audit.
 - [ ] `000` receives both cross-check artefacts. **Nothing to receive** until the probe exists.
       **The probe exists and now produces one, so what is missing is a run rather than a mechanism.**
       `--check navbar` writes `tools/live/probe-navbar.json` carrying the live reading beside the

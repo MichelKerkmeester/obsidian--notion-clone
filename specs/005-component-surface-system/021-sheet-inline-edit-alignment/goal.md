@@ -10,9 +10,9 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/021-sheet-inline-edit-alignment"
-    last_updated_at: "2026-08-30T21:00:00Z"
-    last_updated_by: "goal-authoring"
-    recent_action: "Host token read from Obsidian 1.13.4: 15px on desktop, user text size on mobile"
+    last_updated_at: "2026-09-02T08:00:00Z"
+    last_updated_by: "goal-audit"
+    recent_action: "Goal audit: the log's 85 corrected to the documents' 88"
     next_safe_action: "The operator taps a value and the title on device"
     blockers: []
     key_files:
@@ -148,10 +148,17 @@ cannot fail, one level up.
 
 **`spec.md` and `implementation-summary.md` still read 2.4px and Open** for the title editor, and
 `completion_pct: 88`. `acceptance-criteria.md`, written later, recorded AC-006 Met at 0.9px. The
-supply audit has since moved it to `Provisional` and every document now reads 85: the 0.9px is real
-and the correction is right, but the margin belongs to a `--font-ui-medium` the harness declares and
-this repo infers. Those two documents' `Open` was closer to the truth than the closure that replaced
-it.
+supply audit has since moved it to `Provisional`: the 0.9px is real and the correction is right, but
+the margin belongs to a `--font-ui-medium` the harness declares and this repo infers. Those two
+documents' `Open` was closer to the truth than the closure that replaced it.
+
+*Corrected 2026-09-02.* This paragraph said **every document now reads 85**, and none of them does.
+Read off the four frontmatters today, `goal.md`, `spec.md`, `acceptance-criteria.md` and
+`implementation-summary.md` all carry **88** — the figure the sentence beside it already quoted, so
+the paragraph contradicted itself in consecutive lines. 88 is what stands, and `roadmap.md` §3.2's
+one-number rule is satisfied by it. Everything else here was checked and holds: `spec.md` and
+`implementation-summary.md` do still read **2.4px** and **Open** for the title editor, and
+`acceptance-criteria.md` does record AC-006 as `Provisional` at 0.9px. Only the 85 was wrong.
 
 **Verification at ship:** `npm run gate` 14 green exit 0; `npx vitest run` 444 passed;
 `npm run storybook:placement` 186/190 with 4 red for a declared reason, exit 0;

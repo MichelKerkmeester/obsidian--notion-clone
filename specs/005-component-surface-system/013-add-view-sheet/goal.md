@@ -9,9 +9,9 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/013-add-view-sheet"
-    last_updated_at: "2026-09-01T02:40:00Z"
-    last_updated_by: "criteria-adjudication"
-    recent_action: "AC-6 controls run; heading text and between-group gap now load-bearing"
+    last_updated_at: "2026-09-02T08:00:00Z"
+    last_updated_by: "goal-audit"
+    recent_action: "Derived completion recomputed from the criteria checklist"
     next_safe_action: "Cover the remaining state dimensions for the Add View panel"
     blockers: []
     key_files:
@@ -21,7 +21,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-013-goal"
       parent_session_id: null
-    completion_pct: 83
+    completion_pct: 92
     open_questions:
       - "--text-muted at 12px measures 4.1:1; program-wide token decision, escalated"
       - "Do the remaining state dimensions need a check each, or one driving showAddViewMenu"
@@ -271,7 +271,7 @@ the host's declaration is outranked rather than absent.
 | Every action row is the shared grammar | SOUND, with two absolutes narrowed | see below |
 | 0 elements drawn as bare rules | SOUND | a structural count of content shape, not a colour reading |
 | Group gap 16px against item gap 8px | SOUND | both derive from `--db-space-*`, which is this plugin's token namespace and not the host's |
-| Headings load-bearing | open already | unchanged; the control is still unrun |
+| Headings load-bearing | **SOUND, reclassified 2026-09-02** | this row read *open already — the control is still unrun*, which the criterion above refutes: both controls were run on 2026-09-01, and `add view: the groups carry headings` is a standing check at `verify-placement.mjs:1795` beside `groups are further apart than the items inside them` at `:1776`. Control (a) reddens the heading check at `2 headings ["", "Create"], 1 of them carrying text`; control (b) reddens the gap clause at 9px against the `2 × within` threshold |
 | One content left edge | SOUND | see below |
 | A resting row paints no fill | SOUND — **and this is a repaired instance** | `background: transparent` at `styles.css:453` |
 | Phone sheet, desktop inverted | SOUND | every sheet property is `!important` on the plugin's own class (`styles.css:177-198`); the 48px band comes from the plugin's `::before` |
@@ -318,7 +318,7 @@ survives a keyboard, and no criterion here asks.
 | Six reported defects adjudicated | Done | 4 real, 1 half real, 1 fixture artifact |
 | Redesign | Shipped, verified | AC-1 to AC-7, each with a before-number |
 | Two criteria found during implementation | Shipped, verified | AC-9 left edges, AC-10 resting fill |
-| Fixture parity test | Shipped, never run | `add-view-popover-layout.test.ts`; no run recorded here |
+| Fixture parity test | Shipped, run, recorded | `src/views/add-view-popover-layout.test.ts` exists on disk. This row read *never run — no run recorded here*, which was true when written and stopped being true on 2026-09-01: `npx vitest run` reports `Test Files 1 passed (1), Tests 11 passed (11)`, exit 0 from `$?`, and the accessible-name equality clause was added and watched failing |
 | Operator confirmation | Open | — |
 
 ### Deviations and findings

@@ -7,19 +7,23 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/033-list-virtualisation"
-    last_updated_at: "2026-08-31T23:30:00Z"
-    last_updated_by: "phase-author"
-    recent_action: "Grouped lists windowed too; header survives a recycle"
+    last_updated_at: "2026-09-02T08:00:00Z"
+    last_updated_by: "goal-audit"
+    recent_action: "Goal audit: windowing claims verified in list-renderer"
     next_safe_action: "The operator opens their real database on device"
-    blockers: []
+    blockers:
+      - "The windowed list is bench-only: 48.4ms at 3,000 rows, unconfirmed on device"
     key_files: ["spec.md", "tasks.md"]
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-033-goal"
       parent_session_id: null
     completion_pct: 83
-    open_questions: ["Do drag, range selection and group collapse survive rows that are not in the DOM"]
-    answered_questions: ["Windowing breaks range selection only, and silently — drag and group collapse are data-driven"]
+    open_questions: []
+    answered_questions:
+      - "Windowing breaks range selection only, and silently — drag and group collapse are data-driven"
+      - "Drag and range selection are asserted against a row the renderer declined to mount"
+      - "The packet's inherited figures reproduced on this tree; the node count matched exactly"
 ---
 # Goal: List Virtualisation
 
@@ -86,4 +90,17 @@ of layout, 225,007 nodes — appear in four prose documents in this packet and i
 Nothing under `tools/bench/` records the run that produced them. They are inherited rather than
 introduced here, and they are load-bearing for a whole phase, so the first measurement should
 reproduce them rather than assume them. If they do not reproduce, that is the finding.
+
+*2026-09-02 audit: both paragraphs are history now, and the caveat resolved the good way.* The
+numbers reproduced — `implementation-summary.md` records the node count matching exactly — and the
+windowing is on disk rather than in prose: `ListWindow`, `mountWindow`, `updateWindow` and
+`paintWindow` in `src/views/list-renderer.ts`, with the spacer height re-measured on each recycle
+(the bound that caught the per-row layout read is documented at its `measureRowHeight`). The
+off-window contracts are asserted by a harness that makes a row off-window by scrolling rather than
+by omitting it from a list, and the grouped arm asserts the section header survives a recycle
+(`tools/live/list-window-harness.ts`), stamped at `tools/live/list-window.json` — 16 checks.
+
+**What that does not settle.** Every figure above is a bench figure. The remaining criterion is the
+operator on their own database, and no artefact in this tree can close it — which is why it is now
+carried as a blocker rather than as an empty list.
 <!-- /ANCHOR:log -->

@@ -10,13 +10,13 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/023-record-note-body"
-    last_updated_at: "2026-08-30T21:00:00Z"
-    last_updated_by: "goal-authoring"
-    recent_action: "Body home defaulted below the properties; the four sheet surfaces re-verified green"
+    last_updated_at: "2026-09-02T08:00:00Z"
+    last_updated_by: "goal-audit"
+    recent_action: "Goal audit: the log's 80 corrected to the documents' 89"
     next_safe_action: "The operator opens a record on device and sees the note"
     blockers:
       - "Device confirmation: the operator has not yet opened a record and seen the body"
-      - "The body's home in a sheet already carrying 13+ properties is undecided"
+      - "The body's home is a shipped default below the properties, still the operator's to overturn"
     key_files:
       - "spec.md"
       - "plan.md"
@@ -70,8 +70,14 @@ invisible.
 The parent packet's `goal.md` outranks this document. Its third decision governs closure here:
 shipped, verified and operator-confirmed are three states, and only the third closes anything.
 
-**Not started, and not startable.** The first criterion below is the operator's to answer and it
-changes the size of the work by roughly an order of magnitude.
+~~**Not started, and not startable.** The first criterion below is the operator's to answer and it
+changes the size of the work by roughly an order of magnitude.~~
+
+*Superseded, dated 2026-09-02.* That was true when written and has not been true for some time: the
+operator answered the fork — **editable in place** — and eight of the nine criteria below are
+ticked with evidence. Kept rather than deleted because it records why nothing started until the
+answer arrived, which is the discipline the first criterion exists to enforce. What remains open is
+the operator's device row, not the fork.
 
 The two criteria marked *editable only* do not apply if display-only is chosen. They are not waived
 by that choice; they cease to exist. Every other criterion holds either way.
@@ -143,7 +149,16 @@ Volatile. Not part of the directive.
 **Three completion figures disagreed inside one folder** — this file and `spec.md` read 0 while
 `implementation-summary.md` read 80, after the feature had shipped and been summarised. Zero for
 shipped work is not defensible under either side of the packet's spec-versus-goal argument, so
-all three now read 80: fifteen of nineteen tasks discharged, two open, device unconfirmed.
+all three were moved to 80.
+
+*Corrected 2026-09-02, twice over.* **The figure is 89, not 80.** `goal.md`, `spec.md` and
+`implementation-summary.md` all carry **89** today, so the paragraph above described a reconciliation
+that a later one has since superseded — and `roadmap.md` §3.2's one-number rule is satisfied by 89,
+not by the 80 this text still asserted. **And the task count beside it was wrong when written:**
+`tasks.md` holds nineteen boxes, fifteen ticked, and **four** open, not two. Fifteen of nineteen is
+right; *two open* is not, and the two figures in one sentence did not sum to their own denominator.
+The reason the reconciliation was owed at all still stands: zero for shipped work is not defensible,
+and the four open tasks plus the untouched device are what the remaining 11 is.
 
 **Decided and shipped: editable in place.** The operator chose editable, conditional on the write
 path being correct before it ships, and that condition is met rather than outstanding.

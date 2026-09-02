@@ -9,12 +9,12 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/024-list-view-freeze"
-    last_updated_at: "2026-09-01T01:50:00Z"
-    last_updated_by: "goal-reconcile"
-    recent_action: "AC-5 width half built: six phone widths, arm chosen by the shipped decision"
+    last_updated_at: "2026-09-02T08:00:00Z"
+    last_updated_by: "goal-audit"
+    recent_action: "Goal audit: 028 blocker re-derived against its closed criteria"
     next_safe_action: "Operator confirms the list view opens on device"
     blockers:
-      - "Non-table views still freeze on device; 028 owns the remaining cause"
+      - "028 closed its six criteria on the bench; the device pass has not run"
     key_files:
       - "spec.md"
       - "acceptance-criteria.md"
@@ -158,6 +158,13 @@ row loop touches it. It is a virtualisation question and it is unanswered; `028`
 needs the operator's row count **and fill rate** — at full fill the budget breaks near 1,300 rows,
 while the same 1,600 rows at 30% fill cost 1,227ms and clear it.
 
+**Answered since, and on a bench only. Recorded 2026-09-02.** `028` reports all six of its criteria
+met: the operator confirmed 1,000-3,000 rows at 80-100% fill, the un-windowed list broke the budget
+at 1,300 rows and reached **4,908.6ms at 3,000**, and windowing the same shape measures **48.4ms at
+3,000 rows** with node count flat at 2,184 rather than 225,007. That closes the cause this section
+handed over. It does not close the row below it: every one of those numbers is a bench number, and
+nothing has been opened on the operator's device since.
+
 ### Three checks covered this code and each was blind in a different direction
 
 The screenshot fixture writes its own markup and imports nothing from `src/`, so it reported green
@@ -216,8 +223,8 @@ where only one property fits. Written literally, this criterion fails a correct 
 | Surface-conditional reservation | Shipped | Predicate read off the element, not a flag |
 | Renderer-driven alignment check | Shipped | Section 5k, three assertions |
 | Reservation by width under `is-phone` | Shipped, swept | Six widths in the placement lane; the arm is chosen by the shipped decision, and a reserve-everywhere rig reddens 360 and 402 |
-| Remaining layout at scale | Handed to `028` | 2,684ms over 960,007 nodes at 12,800 rows |
-| Operator confirmation | Open, and currently contradicted on device | `028` |
+| Remaining layout at scale | Handed to `028`, and closed there on the bench | 2,684ms over 960,007 nodes at 12,800 rows; windowed, 48.4ms at 3,000 rows |
+| Operator confirmation | Open. Last device evidence predates `028` | `028` reports 6 of 6 criteria met, none of them an operator row |
 
 ### Deviations and findings
 

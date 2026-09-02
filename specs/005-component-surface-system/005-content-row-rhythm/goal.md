@@ -129,13 +129,23 @@ harness made the content small**. Row-height standard deviation and the header-h
 the same floor — and the row-height cell already concedes its uniformity is a property of the
 fixtures. **Sound:** the rail scrolls-not-grows relation, the deletion and mutation controls, the
 scroll-owner count, and AC-008, which closes on `min-height: 44px` and a `--db-*` token — values only
-`styles.css` can supply. Rows in `acceptance-criteria.md` § Harness-dependence audit.
+`styles.css` can supply.
+**2026-09-02 — the `HOST_BARE_CONTROLS` half of this is spent, and the 5/8/0 count is left standing as
+the reading of 2026-08-31 rather than restated.** `verify-placement.mjs` now appends
+`HOST_BARE_CONTROLS` to `styles.css` on every page it builds, the desktop page included (`:316`), and
+both rhythm sections carry it (`:3314`, `:3461`). So chips, rail controls and header actions are no
+longer measured narrower than the host draws them, and the two overflow bullets no longer pass
+because the harness made the content small. What is **not** spent is the wider point: `HOST_BARE_CONTROLS`
+is a modelled subset of `app.css`, not the file, and the row-height bullet's answer is that it now
+varies its content rather than that it has a host. Rows in `acceptance-criteria.md` § Harness-dependence audit.
 <!-- /ANCHOR:completion -->
 
 ---
 
 <!-- ANCHOR:log -->
 **YOUR DESKTOP HARNESS HAS NO CASCADE, AND THAT IS THIS PHASE'S BIGGEST EXPOSURE.** `verify-placement.mjs:220` is the only `addStyleTag` call for `styles.css` and it targets the **phone** page. **The desktop page is already running a "render without the stylesheet" substitution and reporting green** — the exact substitution your own AC-013 exists to catch, running permanently and unlabelled. On such a page `.db-list-row` has no `min-height`, no `--db-*` token resolves, the rail has no `overflow-x`, and **A6's sweep finds zero elements: a clean pass that means nothing.** `000` fixes the load. Until it has, **no desktop number here is admissible**, and one recorded before the repair is discarded rather than re-used. **A8 is the gate that proves it landed** and is written as a probe for a value that cannot exist without the stylesheet, precisely so it can fail.
+
+**RESOLVED 2026-09-02, and the paragraph above is kept as the exposure the phase was opened on.** The load landed: `verify-placement.mjs:316` adds `styles.css` plus `HOST_BARE_CONTROLS` to the desktop page, and every other page it builds does the same. The desktop numbers this packet records are therefore admissible, and the substitution described above is no longer running.
 
 **LINE NUMBERS ARE HINTS, NOT ADDRESSES.** Every `styles.css:NNNN` below was correct on 2026-08-29; `000` deletes dead blocks and you then collapse seven rail blocks yourself. `acceptance-criteria.md` carries the resolution table. The three-act `mask-image` reversal matters most: **the order of the three is the whole argument**, so read `rg -n -A6 '\.db-active-view-controls-scroll' styles.css` in order and record which act computed the winner, before and after your collapse.
 
@@ -152,8 +162,9 @@ scroll-owner count, and AC-008, which closes on `min-height: 44px` and a `--db-*
 - `--db-card-field-width` pinned to 120px where the stylesheet falls back to 150px: captures render list fields 30px narrow.
 - `--db-timeline-row` set to `34px` when it is a **grid line index** — `grid-row: 34px` is invalid, so **every timeline band collapses to `auto` in every capture ever taken**.
 Fix all three before measuring anything. Only two capture devices exist (1440, 402), so 320 and 768 are new work, and `verify-placement.mjs` renders no view at all today.
+**All three pins are gone as of 2026-09-02**: `tools/screenshots/runtime-vars.css:99-102` now carries them as a record of what was removed rather than as declarations, so captures no longer render list fields 30px narrow or collapse every timeline band. And 320 and 768 are no longer new work — `view-census.json` records all four widths, 320 included.
 
 **A6 AND A8 WERE REWRITTEN.** A6 asked you to resolve each of the 31 `width: max-content` declarations and walk its ancestors, targeting "0 unclassified" — a classification task you satisfy by finishing the spreadsheet, with the user seeing no difference. It now closes on **0 elements painting outside the container that bounds them**, at 4 widths x 7 view types, with every legitimate overflow scrolling rather than growing (**parent width delta 0**). The **31** is preserved as the static input that makes the sweep exhaustive — reproduce it with `rg -c 'width:\s*max-content' styles.css`. A8 closed on the harness "being able to see the widths"; it now closes on a stylesheet-dependent probe returning a non-default value on **both** pages at all four widths.
 
-**EVERY CRITERION HERE HAS A BLANK FAILING NUMBER.** Not some — all of them. `verify-placement.mjs` renders no view at all, so nothing in this packet has ever been measured. Every row is `Blocked`, not `Unmet`. `acceptance-criteria.md` names what produces each number and at which stage. **Do not invent one.** Stage 3 may not write the sizing contract before Stage 2 fills the cells, and **Stage 2 may not run before A8's probe passes.**
+**EVERY CRITERION HERE HAD A BLANK FAILING NUMBER on 2026-08-29.** Not some — all of them. `verify-placement.mjs` rendered no view at all, so nothing in this packet had been measured, and every row was `Blocked` rather than `Unmet`. **That is no longer the state, and it is corrected here rather than deleted because the ordering below still binds.** Six of the seven rows above now carry a measured number and a watched red, `tools/live/view-census.json` stamps the four-width sweep, and the header-height row is measured by performing six real view switches in the placement lane. The one row still open is the operator's, which no measurement closes. `acceptance-criteria.md` names what produces each number and at which stage. **Do not invent one.** Stage 3 may not write the sizing contract before Stage 2 fills the cells, and **Stage 2 may not run before A8's probe passes.**
 <!-- /ANCHOR:log -->

@@ -10,14 +10,14 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-08-31T08:25:00Z"
-    last_updated_by: "timeline-freeze-diagnosis"
-    recent_action: "Deep review returned FAIL; the report criterion un-ticked against the right denominator"
-    next_safe_action: "Get the operator a build with the timeline fix, then confirm the sheet drag"
+    last_updated_at: "2026-09-02T08:00:00Z"
+    last_updated_by: "goal-audit"
+    recent_action: "Goal audit: report denominators and blockers re-derived"
+    next_safe_action: "The operator runs the deferred device pass on the installed 1.3.9 build"
     blockers:
-      - "Every fix is measured on a bench; 1 of 16 reports is confirmed on the operator device"
+      - "Every fix is measured on a bench; 1 of 27 reports is confirmed on the operator device"
       - "Every fix is bench-measured; none of the six renderers is asserted against a live Obsidian host"
-      - "The list needs virtualisation: at the operator shape it blocks 2.0-4.9s and the shape is already LINEAR"
+      - "The windowed list is bench-only: 48.4ms at 3,000 rows, unconfirmed on the operator device"
     key_files:
       - "roadmap.md"
       - "spec.md"
@@ -106,9 +106,12 @@ resolve them silently.
       the sixteen that existed when the sentence was written. Reading a criterion loosely is the
       same failure as reading it strictly, pointed the other way.
 
-      Today: **1 confirmed** (report 10, an accepted shortfall), **15 deferred with terms**
-      (`roadmap.md` §4A), **12 in neither state** (21-28). D3 still governs — only
-      operator-confirmed closes a defect.
+      Today, re-derived 2026-09-02 so the parts sum to the 27 rows in `roadmap.md` §4:
+      **1 confirmed** (report 10, an accepted shortfall), **15 deferred with terms** in §4A's
+      table, **3 more deferred in its prose** (18-20, the freezes 1.3.9 was cut for), and
+      **8 in neither state** (21-28). The figure here previously read *12 in neither state*
+      against the same eight rows — a third denominator error in the criterion written to record
+      the first two. D3 still governs — only operator-confirmed closes a defect.
 - [ ] Every view opens on device without freezing. Today only the table does.
 - [x] A gate check constructs a production renderer for **every** view. One lane does now, for
       List, Table, Board, Gallery, Calendar and Timeline — **6 of 22**, a ratchet, twelve
@@ -158,6 +161,14 @@ rows **3,722.5ms of the 4,908.6ms is layout** over 225,007 nodes. Cost is propor
 count, so no further loop work reaches it. **Virtualisation is the only remaining lever**, and
 clearing the budget at 3,000 rows means rendering roughly a fifth of the nodes rendered now.
 
+**2026-09-02: `033-list-virtualisation` pulled that lever, and the paragraph above is now history.**
+The flat and grouped lists are windowed: **4,748.6ms → 48.4ms** blocked main thread at 3,000 rows
+and **225,007 → 2,184** nodes, flat across 1,000, 3,000 and 3,400 rows, with `list-window` a gate
+lane carrying 16 checks. Five of that phase's six criteria are met and the sixth is the operator's
+own, so this is bench-measured and **not confirmed on device** — which is why the blocker above
+now names the bench rather than the missing lever, and why §4A's advance warning that *the list is
+expected to still stall* no longer describes the build the operator will install.
+
 Two other operator decisions, recorded here because both had been escalated rather than picked:
 the **editable note body is accepted** (its writer already runs inside the per-file write queue,
 with a negative control proving the interleaving check can fail), and the **output-number-format
@@ -171,6 +182,8 @@ thread; `028` then found and fixed a **second, unrelated quadratic in the timeli
 layout per event — measuring 8,547.9ms → 234.2ms at 6,400 rows, and established that **the
 calendar was never superlinear at all** (30.3ms at 12,800 rows, constant DOM). So three of the
 four reported views now have a measured, fixed cause and one has a measured absence of one.
+`033` then windowed the list, which is the only one of the four whose remaining cost was layout
+over node count rather than a loop.
 None of it is confirmed on the operator's device. Treat these as evidence about the render
 loops, not as evidence that the views open.
 
@@ -212,19 +225,24 @@ same specificity, nothing in-container moves — took the unrecoverable count **
 
 | Item | State | Evidence |
 |------|-------|----------|
-| Reports with an owning phase | Done | 16 of 16; `roadmap.md` §4 |
-| Reports shipped | In Progress | 14 of 16 |
-| Reports operator-confirmed | In Progress | 1 of 16, as an accepted shortfall |
+| Reports with an owning phase | Done | **27 of 27** — re-read off `roadmap.md` §4 on 2026-09-02, where the table now runs 1-16 and 18-28. This cell read *16 of 16* against a table that had grown |
+| Reports shipped | In Progress | **15 of the original 16** (report 13 is the version bump, deliberately not a phase); **0 of the 11 later rows** have shipped code under the phase they name. Was recorded as *14 of 16*; `roadmap.md` §4 says fifteen |
+| Reports operator-confirmed | In Progress | 1 of **27**, as an accepted shortfall (report 10) |
 | Every phase has a `goal.md` | Done | 035 folders, all carrying one. **This row was briefly false:** 032, 033 and 034 were opened without one by the same commit that opened 034 to fix documentation drift — the drift mechanism reproducing itself inside its own remedy. Added and re-checked across every folder rather than assumed | The four that did not — `020`, `021`, `023`, `025` — were written after an audit counted, having been claimed complete twice |
 | Report 1, the sheet drag | Fixed, awaiting device | The panel's render destroyed the grab bar; a 60px drag now moves 60.0px after a re-render, was 0.0px |
-| Non-table views on device | Unconfirmed | Two quadratics found and fixed (list `024`, timeline `028`); the calendar measured clean. None confirmed on device |
-| Gate checks constructing a renderer | 1 of 16 | `026`. `render-assertion-harness.ts` builds all six view renderers across twelve scenarios and both bags, green in the gate, all six sources fingerprinted as declared inputs. Coverage 6 of 22 |
+| Non-table views on device | Unconfirmed | Two quadratics found and fixed (list `024`, timeline `028`); the calendar measured clean; the list then windowed in `033`. None confirmed on device |
+| Gate checks constructing a renderer | 1 of **25** | `026`. `render-assertion-harness.ts` builds all six view renderers across twelve scenarios and both bags, green in the gate, all six sources fingerprinted as declared inputs. Coverage 6 of 22, read off `tools/live/renderer-coverage.json` (`constructed: 6`, `total: 22`). The denominator here was the lane count and it was 16; `tools/gate.mjs` declares **25** lanes on 2026-09-02 |
 | `004` state | Unknown | Three sources disagree; `roadmap.md` §7.1 |
-| Gate | Green | 16 lanes, exit 0. This row read Red 12/13 long after it went green |
-| Version | Done | `manifest.json` and `package.json` both at 1.3.7. The freeze was reported on 1.3.4 and 1.3.5 and is unconfirmed on 1.3.7 |
+| Gate | Green when last run, at 16 lanes | `tools/gate.mjs` now declares **25** lanes and the gate was **not re-run for this audit**, so Green is a dated verdict rather than a current one. This row read Red 12/13 long after it went green, and then 16 lanes long after there were 25 |
+| Version | Done | `manifest.json` and `package.json` both at **1.3.9** (read 2026-09-02; this cell said 1.3.7). The freeze was reported on 1.3.4, 1.3.5 and again on 1.3.9, and no view is confirmed on any of them |
 
-`completion_pct: 50` is derived, not felt: 14 of 16 reports shipped, 1 of 16 confirmed, and seven
-later phases opened of which one has shipped.
+`completion_pct: 50` is derived, not felt — but **its basis was measured against the wrong
+denominator and is corrected here rather than the figure.** It read *14 of 16 reports shipped, 1 of
+16 confirmed*. The ledger says **15 of the original 16 shipped, 0 of the later 11, and 1 of 27
+confirmed**. The figure stays at 50 because `roadmap.md` §3.2 requires one number across `spec.md`,
+`goal.md` and `handover.md`, and moving it in this file alone would recreate the divergence that
+rule exists to abolish — re-deriving it is a change to three documents and is owed. Recorded
+2026-09-02.
 
 ### Deviations and findings
 

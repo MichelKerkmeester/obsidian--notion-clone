@@ -9,12 +9,11 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/015-desktop-dropdown-placement"
-    last_updated_at: "2026-08-31T23:55:00Z"
-    last_updated_by: "harness-dependence-review"
-    recent_action: "Search clamp lifted to one exported function; phone dead-anchor arm built"
+    last_updated_at: "2026-09-02T08:00:00Z"
+    last_updated_by: "goal-audit"
+    recent_action: "Transcription blocker dropped; the arithmetic is exported and called"
     next_safe_action: "Operator opens a desktop dropdown and says whether it is where they expected"
-    blockers:
-      - "AC-4 and AC-5 still transcribe arithmetic from private renderer methods"
+    blockers: []
     key_files:
       - "spec.md"
       - "acceptance-criteria.md"
@@ -80,12 +79,29 @@ the sentence alone.
 
 **Three ticks were withdrawn on review, and the question that took them is not "is it green".** It
 is: *if this value came from the device instead of the harness, would the check still pass — and
-could it still fail?* AC-4, AC-5 and AC-7 are measured on **transcriptions** — the arithmetic copied
+could it still fail?* AC-4, AC-5 and AC-7 were measured on **transcriptions** — the arithmetic copied
 out of a private renderer method into the probe, because the method needs a live Obsidian `App`.
-A transcribed check answers a question about the copy. AC-4 is the severe case: its copy passes
-`null` where `column-menu.ts:616` passes `panel`, and this folder has already measured that the
-shipped argument returns the whole viewport. AC-5 and AC-7 are the milder case: their copies match
-their sources today, verified by reading both, but neither can go red if its source loses the clamp.
+A transcribed check answers a question about the copy. AC-4 was the severe case: its copy passed
+`null` where `column-menu.ts:616` passes `panel`, and this folder had already measured that the
+shipped argument returns the whole viewport. AC-5 and AC-7 were the milder case: their copies matched
+their sources, verified by reading both, but neither could go red if its source lost the clamp.
+
+**All three ticks are restored, and the withdrawal is what earned the repairs.** Each was settled by
+removing the reason a transcription existed rather than by arguing the copy was faithful — checked
+against `src/` on 2026-09-02 by opening the files:
+
+| Was transcribed | Now exported and called | Read by the harness |
+|---|---|---|
+| AC-4, the anchorless submenu | `anchorlessSubmenuPlacement`, `popover-position.ts:468`, called at `column-menu.ts:621` | imported from `src/views/popover-position` at `verify-placement.mjs:110` |
+| AC-5, the formula clamp | `clampSuggestionLeft` (`formula-modal.ts:159`, called `:1388`) and `suppressesInlineSuggestions` (`:171`, called `:1401`) | `formula-suggestion-placement.test.ts` imports both |
+| AC-7, the search clamp | `calendarSearchResultsPlacement`, `popover-position.ts:437`, called at `database-view.ts:7023` and `embedded-database-renderer.ts:1329` | imported at `verify-placement.mjs:110`; `calendar-search-placement.test.ts` covers 8 cases |
+
+And AC-4's severe case is fixed **at the source**, not routed around: `getVisiblePopoverBounds` now
+ignores an unlaid-out container's empty rect rather than intersecting it
+(`popover-position.ts:640-642`), so `column-menu.ts:616` may keep passing `panel` — which it does —
+without collapsing into the degenerate guard at `:654`. The blocker this frontmatter carried, *"AC-4
+and AC-5 still transcribe arithmetic from private renderer methods"*, is false on disk and is
+dropped.
 
 **AC-1, AC-2 and AC-3 survive the same question and are the phase's real result.** Each drives a
 shipped module — `createOwnedMenu`, `positionToolbarPopover`, the reposition loop — through the
@@ -341,6 +357,16 @@ Recorded rather than fixed: it is outside this phase, and the same transcription
 fix here could not be proven either. What is owed is a check that drives the real method, and
 before that a shimmed probe measuring the bounds for a freshly created panel — an unshimmed one
 throws in the element guard, which is its own finding about that guard.
+
+**Fixed after all, and the record above is kept because the prediction in it was exactly right.**
+Confirmed on disk 2026-09-02. The owed check was built — `getVisiblePopoverBounds` is called with a
+freshly created, not-yet-laid-out panel alongside the same call with `null`, and the two must agree —
+and it was **observed red first** at `(panel).right=1440` against `(null).right=1140`. The repair is
+at the source: an empty rect is missing information rather than a constraint of zero width, so it is
+ignored rather than intersected (`src/views/popover-position.ts:640-642`, comment and all). The
+call site is unchanged and still passes `panel` (`column-menu.ts:616`), which is what the popped-out
+window case needs. So the sentence *"the anchorless-submenu fix may not work in the shipped build,
+and its check cannot see that"* was true when written and is false now, in both halves.
 ## 3. LOG
 
 Volatile. Not part of the directive.
@@ -386,6 +412,6 @@ anchor, destroy the anchor, let the loop tick. Only the loop can observe it.
 | "Every change sits in a desktop-only branch" was over-broad too | True of `owned-menu.ts:168`, false of the dead-anchor guard at `popover-position.ts:182`, which precedes the `mobileSheet` branch and so reaches a phone sheet |
 | The clamp repair is phone-visible too, and was measured | `getVisiblePopoverBounds` subtracts the mobile navbar and safe-area inset from `bottom`, and nothing gates this panel to desktop — `isDesktopOnly` is false and the render path has no `is-phone` branch. On a 390×844 phone with a 72px navbar and a 34px inset, `bounds` ends at 738 rather than 844, so the vertical cap moves **up 76px** — but only when the anchor sits low enough to bind: with `anchor.bottom=728` the top goes 734 → 658, while a high anchor at `bottom=128` is unchanged at 134. Width and left are identical on a phone, since there are no sidebars and `bounds.left + 8` is the old literal `8`. The direction is right — it stops the panel being placed under the navbar — but it is a phone-visible change out of a desktop phase, and no phone check covers it |
 | The line numbers this folder recorded were stale in three places | `database-view.ts:6890` and `embedded-database-renderer.ts:1305` named the **callers**, not the method, and were ~60 lines out; the method is at `:6953` and `:1323`. `filter-panel-renderer.ts:532` named nothing — the draft commit that destroys the trigger is `commitDraftValue` at `:624`, refreshing at `:637`. All three corrected. `owned-menu.ts:168` and `popover-position.ts:182`/`:200`/`:491` were checked and are right |
-| `column-menu.ts:616` passes the panel and gets the whole viewport | Out of this work's scope, reported not fixed. The AC-4 repair calls `getVisiblePopoverBounds(panel)`, but that function intersects the container's own rect into its result, so a body-portalled fixed panel trips the degenerate guard and gets `[0..1440]` — the full viewport, the very bound the repair was removing. Measured on the harness page: `bounds(sub)` for a 292px submenu with five rows returns `[0..1440]`. AC-4 reads green only because **both harnesses transcribe it with `null`**, which the source does not do. So the anchorless-submenu fix may not work in the shipped build, and its check cannot see that |
-| Both harnesses transcribe rather than call | Verified in both directions. Reverting the transcription to `window.innerWidth` turns the check red and the run to exit 1, so it is not decoration. Reverting the **source** while leaving the transcription fixed leaves the run at exit 0 — a source-only regression is invisible to the gate. The transcription carries its file and line for exactly this reason |
+| ~~`column-menu.ts:616` passes the panel and gets the whole viewport~~ **Fixed at the source** | The finding was right and is kept: `getVisiblePopoverBounds` intersected the container's own rect, so a body-portalled fixed panel that had not laid out tripped the degenerate guard and got `[0..1440]` — the very bound the repair was removing, measured at `bounds(sub)=[0..1440]` for a 292px five-row submenu. **Resolved 2026-09-02, verified by reading `src/`:** an empty rect is ignored rather than intersected (`popover-position.ts:640-642`), the call site still passes `panel` (`:616`), and the two-argument agreement check that found it was watched red at `(panel).right=1440` before it went green at 1140 |
+| ~~Both harnesses transcribe rather than call~~ **Retired by lifting the arithmetic** | The finding is the reason the lift happened and is kept: reverting the *transcription* turned the run to exit 1 while reverting the *source* left it at exit 0, so a source-only regression was invisible to the gate. **Resolved 2026-09-02:** `verify-placement.mjs:110` imports `calendarSearchResultsPlacement` and `anchorlessSubmenuPlacement` from `src/views/popover-position` and calls them, and the formula pair is exported from `formula-modal.ts` and called by the modal itself. Deleting a clamp from a shipped function now turns its unit tests red, which is the observation the withdrawal said did not exist |
 <!-- /ANCHOR:log -->

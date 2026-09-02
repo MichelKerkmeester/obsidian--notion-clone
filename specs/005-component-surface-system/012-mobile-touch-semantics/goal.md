@@ -9,9 +9,9 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/012-mobile-touch-semantics"
-    last_updated_at: "2026-08-31T18:30:00Z"
-    last_updated_by: "goal-authoring"
-    recent_action: "Title-cell check rebuilt on the real opener; four controls installed"
+    last_updated_at: "2026-09-02T08:00:00Z"
+    last_updated_by: "goal-audit"
+    recent_action: "Derived completion recomputed from the criteria checklist"
     next_safe_action: "Operator drags a finger across the table on device"
     blockers: []
     key_files:
@@ -21,7 +21,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-012-goal"
       parent_session_id: null
-    completion_pct: 80
+    completion_pct: 90
     open_questions:
       - "Phone title rename has no reachable entry point; acceptable or not"
       - "Should AC-8 stay keyed to the whole-tree gate or be split into phase-owned legs"
@@ -248,16 +248,28 @@ settle it and **no number**, because none ran.
 
 Volatile. Not part of the directive.
 
-**8 of 10 criteria are ticked. The two that are not are the scrim-control row, whose first clause is
-measured and whose second is a control now living in the `sheet-teardown` lane, and the operator row
-that no harness can reach.** The title-cell outcome clause was rebuilt against the real
-`openRecordDetailPanel` and the provenance claim now has a mechanism behind it rather than prose.
+**9 of 10 criteria are ticked. The one that is not is the operator row, which no harness can
+reach.** The title-cell outcome clause was rebuilt against the real `openRecordDetailPanel` and the
+provenance claim now has a mechanism behind it rather than prose.
 
-### Two things are recorded honestly rather than green
+*Corrected 2026-09-02.* This paragraph read "8 of 10" and named the scrim-control row as still open.
+That row was ticked when its control stopped being prose: `control: the scrim check reacts when the
+scrim stops taking pointers` is a standing case at `tools/storybook/verify-placement.mjs:2935`, and
+`sheet-teardown` carries "the backdrop's pointer contract, both directions" at
+`tools/live/sheet-teardown-harness.ts:355-392`. Both were confirmed by opening the files, not by
+reading this paragraph.
+
+### One thing is recorded honestly rather than green
 
 AC-6b — that an editor-opening tap does not scroll the table — is **UNVERIFIED**, because it is not
-measurable without a live Obsidian `App`. It is not marked passed. And AC-8 is **FAIL**, not
-"green with a footnote": the threshold asks for exit 0.
+measurable without a live Obsidian `App`. It is not marked passed.
+
+*Corrected 2026-09-02.* This section also said "AC-8 is **FAIL**, not 'green with a footnote'". AC-8
+was ticked afterwards, on the 2026-08-31 run that read exit 0 from `$?`, so the sentence contradicted
+its own criterion and is withdrawn. **The scoping finding under AC-8 is not withdrawn and is worth
+more than the tick:** a per-phase criterion keyed to the whole-tree gate stays hostage to lanes this
+phase neither causes nor repairs, and `tools/gate.mjs` has since grown to **25** lanes against the 20
+that run recorded. No gate run is claimed from the current working tree, which is dirty.
 
 ### Two behaviours this phase removes from a phone, recorded as removals
 
@@ -285,7 +297,7 @@ driven gesture terminates in a stubbed action.
 | The gesture reader routes real events | SOUND — **the strongest check here** | four values from one binding on real pointer events, with `Platform` and `isTouchDevice` deliberately disagreeing, so the answer can only have come from `pointerType` |
 | The tap truth table, 5 of 5 | SOUND as a truth table | `resolveCellTapAction` is pure and called with literal inputs, so it proves the mapping. That a real tap supplies those inputs is proven separately, by the main-item check and by the title-cell press |
 | The whole title cell opens the record | **Reclassified SOUND, 2026-08-31** | `openRecord` now drives the shipped `openRecordDetailPanel`, and the assertion is taken on the panel: `getOpenRecordDetailPath()` names the record, the node is connected and carries `db-mobile-bottom-sheet`, its fields are drawn, its box is on screen, and a second row is required to open a different record. The push-to-array stub it replaced is the exact shape this table warns about |
-| A tap does not fight the sheet | open already | scrim geometry is plugin-declared (`inset: 0`, `pointer-events: auto`, `styles.css:222-229`), so the first clause is SOUND; the missing control is the recorded gap |
+| A tap does not fight the sheet | **Reclassified SOUND, 2026-09-02** | scrim geometry is plugin-declared (`inset: 0`, `pointer-events: auto`, `styles.css:222-229`), so the first clause was always SOUND. The row read *open already — the missing control is the recorded gap*; the control is no longer missing, and the gap it recorded is closed by a standing case rather than by a sentence |
 | The long-press row menu survives | SOUND | real timers, real pointer events, and the criterion is worded about the gesture firing rather than about what the menu then does |
 
 **The pattern worth carrying to `000`.** Three of this phase's checks call pure shipped functions
@@ -311,7 +323,7 @@ classification is stated per criterion above rather than in general.
 | Desktop range preserved | Verified | `mouse+shift across 8 rows x 3 columns = 24 cell(s)`, with `hasTouch=true` |
 | Title tap shared by both hosts | Shipped, and now watched failing | The check drives the shipped `openRecordDetailPanel` and asserts the panel it builds. Two recorded reds: the stub restored (`held "null" ... box 0x0`) and every open forced to one row (`different from the first=false`) |
 | Scroll-during-edit | Unverified | Needs a live `App` |
-| Scrim negative control | Registered in a lane | `sheet-teardown` carries "the backdrop's pointer contract, both directions"; the opt-out reads `none` and, with the option ignored, reads `""` and the case fails |
+| Scrim negative control | Registered, and standing in two places | `sheet-teardown` carries "the backdrop's pointer contract, both directions" (`sheet-teardown-harness.ts:355-392`); the opt-out reads `none` and, with the option ignored, reads `""` and the case fails. `verify-placement.mjs:2935` runs `control: the scrim check reacts when the scrim stops taking pointers` on every pass, beside its subject |
 | Gate | Re-run 2026-08-31 | `gate: PASS — 20 green, 0 red for a declared reason`, exit 0 read from `$?` rather than through a pipe |
 | Operator confirmation | Open | — |
 

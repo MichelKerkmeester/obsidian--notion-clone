@@ -53,7 +53,8 @@
       "src/views/database-view.ts",
       "src/views/embedded-database-renderer.ts",
       "tools/storybook/verify-placement.mjs",
-      "src/views/cell-renderer.ts"
+      "src/views/cell-renderer.ts",
+      "tools/gate.mjs"
     ],
     "entities": [
       {
@@ -135,6 +136,12 @@
         "source": "derived"
       },
       {
+        "name": "gate.mjs",
+        "kind": "file",
+        "path": "tools/gate.mjs",
+        "source": "derived"
+      },
+      {
         "name": "Feature Specification",
         "kind": "proper_noun",
         "path": "spec.md",
@@ -193,17 +200,11 @@
         "kind": "proper_noun",
         "path": "tasks.md",
         "source": "derived"
-      },
-      {
-        "name": "every",
-        "kind": "key_phrase",
-        "path": "tasks.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "Give a touch in the table the meaning a touch has, rather than replaying the desktop pointer grammar: a tap edits the cell it lands on, a tap on the row's main item opens the record sheet, and dragging does not paint a selection range.",
     "created_at": "2026-08-30T16:47:05.145Z",
-    "last_save_at": "2026-09-01T10:50:16.375Z",
+    "last_save_at": "2026-09-02T08:56:31.842Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -214,7 +215,7 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:be57b60a9dc6d454118941f0a7e02b21c332c1f5d2e00def46840a3f5a672f2b",
+    "source_fingerprint": "sha256:40a612906d046b719639cf596ee02b68dcfabd10a7cc073636241833fedae086",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "f8229e333fc518f817478781bcca732a30ed7d8045c24dba21897748f25efa4f",

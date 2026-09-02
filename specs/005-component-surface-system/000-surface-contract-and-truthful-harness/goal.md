@@ -46,6 +46,15 @@ than as unmeasured. That is the failure mode this packet exists to name, and it 
       **`failing-values` is a gate lane.** It reads every phase's `goal.md`, and of **216 ticked
       criteria, 72 record the value they moved from and 144 do not** — worst first,
       `020` (12), `027` (11), `023` (8), `025` (8), `021` (7), `029` (6).
+      **Re-run 2026-09-02: 241 ticked criteria across 35 phases, 96 recording (40%) and 145 not**,
+      exit 0, the same six phases worst-first in the same order. Two runs an hour apart in the same
+      session read 242/97 and then 241/96, because a concurrent audit pass was un-ticking rows —
+      **the ticked total is a moving figure and should be re-run rather than cited**; the bare count
+      is the one the ratchet holds. The bare count moved 144 → 145
+      once, deliberately, on 2026-09-01 — `tools/naming/failing-values-baseline.json` carries the
+      raise and the reason for it in the file rather than in anyone's memory, which is the only
+      shape of raise this ratchet permits. The figures above are kept as the dated reading they
+      were; the ratchet held across every tick added since.
       **It is a ratchet, not a floor, and that is the load-bearing decision.** A criterion that was
       never broken has no red to record, and demanding one would be demanding fiction — the same
       mistake `AC-016` made with its threshold of zero, which failed a correct harness for doing its

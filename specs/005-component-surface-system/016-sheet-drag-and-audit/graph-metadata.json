@@ -199,7 +199,7 @@
     ],
     "causal_summary": "Find why the phone sheet's drag-to-dismiss kept dying after it had been fixed twice, and settle every one of the operator's bottom-sheet asks against the shipped build with a measured number rather than a reading of the source.",
     "created_at": "2026-08-30T16:46:51.404Z",
-    "last_save_at": "2026-09-01T10:50:16.403Z",
+    "last_save_at": "2026-09-02T09:05:02.754Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -210,7 +210,7 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:a4a71a3ff172905af9d0d127fa76b7d9b76432b37b324485a63d70942f75d72b",
+    "source_fingerprint": "sha256:130dbc47cbc35cb3b15b6f748994c4abaa46d53495206228b1c258a599c1d50d",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "8904337047d4c8428ad74a792bee497ed32155a146837b6c56f0b2d2ee3fd212",

@@ -9,12 +9,13 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/017-touch-row-range-selection"
-    last_updated_at: "2026-08-31T09:00:00Z"
-    last_updated_by: "harness-dependence-review"
-    recent_action: "AC-9 tick withdrawn: its row-menu term is a counter, not a menu being shown"
-    next_safe_action: "Drive RowMenu in the AC-9 check instead of counting onLongPress calls"
+    last_updated_at: "2026-09-02T08:00:00Z"
+    last_updated_by: "goal-audit"
+    recent_action: "Goal audit: AC-9 restored, RowMenu driven not counted"
+    next_safe_action: "Operator taps a row checkbox on their phone"
     blockers:
-      - "AC-9 counts handler calls where production shows a menu; the editFileName shape"
+      - "Gestures are synthetic PointerEvents; hit-testing and touch-action stay unmeasured"
+      - "Not operator-confirmed on device"
     key_files:
       - "spec.md"
       - "acceptance-criteria.md"
@@ -22,12 +23,13 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-017-goal"
       parent_session_id: null
-    completion_pct: 73
+    completion_pct: 90
     open_questions:
-      - "Does the hold gesture get an announcement in the selection status bar"
       - "Would a real thumb reach the checkbox; synthetic dispatch skips hit-testing"
+      - "Whether the count is the right wording to hear on a hold, rather than the range"
     answered_questions:
       - "Row range-select moves behind a long press, sharing attachLongPress with the row menu"
+      - "The hold is announced: a persistent db-selection-live-region outside the rebuilt bar"
 ---
 # Goal: Touch Row Range Selection
 
@@ -85,8 +87,8 @@ the next reader does not have to re-derive them.
 
 *The row is hand-built and the adapter around it is a mirror.* The checks assemble a `<table>` by
 hand and wire the shipped modules to a local `Set`. That mirror was compared against production
-line by line and **matches**: `database-view.ts:8156` passes
-`onExtendRange: () => setRowSelection(row, true, { shiftKey: false, heldPress: true })` and `:4475`
+line by line and **matches**: `database-view.ts:8243` passes
+`onExtendRange: () => setRowSelection(row, true, { shiftKey: false, heldPress: true })` and `:4534`
 passes `heldPress: false` from a click, which is exactly what the harness's adapter passes; the
 `ignoreTarget` closure is the same predicate; and `createCheckbox({ role: "row" })` produces the bare
 `input.db-checkbox-row[type=checkbox]` that `isRowSelectionCheckbox` matches, with no wrapper to
@@ -210,7 +212,7 @@ and does not have this gap; this phase does.
       **Operator.** This sentence used to read "`Input.dispatchTouchEvent` enters where a thumb
       enters and respects hit-testing and `touch-action`, but it is one clean finger" — which is
       true of phase 016 and **false here**. These checks use `el.dispatchEvent(new PointerEvent(…))`
-      (`verify-placement.mjs:2878`), which is aimed at the element and therefore skips hit-testing
+      (built at `verify-placement.mjs:183`), which is aimed at the element and therefore skips hit-testing
       entirely: it cannot notice an overlay, a `pointer-events` rule or a `touch-action` that would
       stop a real thumb reaching the checkbox. So the gap to the device is wider than the sentence
       claimed, and only the device closes it.
@@ -223,7 +225,10 @@ and does not have this gap; this phase does.
 
 Volatile. Not part of the directive.
 
-**95%: 12 checks added, six negative controls run and restored by hash.**
+**12 checks added, six negative controls run and restored by hash.**
+*Corrected 2026-09-02:* this line opened with a bare **95%**, a second completion figure beside the
+frontmatter's. Under the parent's D13 a phase carries one figure and it is derived from the checklist
+above — 9 of 10 ticked, **90%** — so the judged number is dropped rather than reconciled.
 
 ### Why the haptic is counted
 

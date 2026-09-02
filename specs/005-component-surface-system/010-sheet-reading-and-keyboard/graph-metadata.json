@@ -203,7 +203,7 @@
     ],
     "causal_summary": "Make the phone record sheet read like a record rather than a two-column ledger, and keep the field being edited visible when the software keyboard opens.",
     "created_at": "2026-08-30T16:47:04.848Z",
-    "last_save_at": "2026-09-01T10:50:16.358Z",
+    "last_save_at": "2026-09-02T08:58:27.794Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -214,7 +214,7 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:ee9f9e70be4924e66fc06aa0f1665ff56363a9b763c4cb5cb13036ebc7af5532",
+    "source_fingerprint": "sha256:ea11e9e9deefffe50a6bd9a46b21323a68f8cdc5e5528b7867cfb826b3244968",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "ba633afdee8b94bc4c923fcff017c99c1233f67bf2faa758eb93027598951869",

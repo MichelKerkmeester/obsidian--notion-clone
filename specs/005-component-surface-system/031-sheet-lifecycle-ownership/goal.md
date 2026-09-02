@@ -9,11 +9,12 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/031-sheet-lifecycle-ownership"
-    last_updated_at: "2026-08-31T20:30:00Z"
-    last_updated_by: "phase-implementer"
-    recent_action: "Unwired bars made unrepresentable; flick dismissal landed at a measured threshold"
+    last_updated_at: "2026-09-02T08:00:00Z"
+    last_updated_by: "goal-audit"
+    recent_action: "Goal audit: five criteria verified against src/views on disk"
     next_safe_action: "The operator opens and closes each sheet on device"
-    blockers: []
+    blockers:
+      - "Nothing here is confirmed on the operator's device"
     key_files:
       - "spec.md"
       - "tasks.md"
@@ -22,9 +23,9 @@ _memory:
       session_id: "surface-system-031-goal"
       parent_session_id: null
     completion_pct: 83
-    open_questions:
-      - "Microtask prune or explicit teardown for the live-sheet set"
+    open_questions: []
     answered_questions:
+      - "Neither: a MutationObserver prunes the per-document live-sheet set on removal"
       - "The two drag failures are unrelated; fixing one does not fix the other"
       - "The harness could not see the scrim leak because it cleaned the leak up to keep testing"
 ---
@@ -112,6 +113,16 @@ Volatile. Not part of the directive.
 Opened from a research pass that verified each finding against the shipped 1.3.9 bundle rather than
 source alone. Findings 1, 2 and 3 are now fixed and gated; 4, 5 and 6 are untouched, and none of the six is
 device-confirmed.
+
+*2026-09-02 audit: that sentence stopped being true of 4 and 6.* Both landed after it was written,
+which the criteria above already record and this paragraph did not. On disk: `hasSheetDrag`
+(`src/views/mobile-bottom-sheet.ts:342`) is the guard that makes an unwired bar unrepresentable,
+closing #4, and the flick threshold shipped with it, closing #6. **#5 is the one still untouched**,
+and deliberately: `publishKeyboardInset` writes `--db-keyboard-inset` on the container
+(`src/views/popover-position.ts:757-782`), which is the container-wide write the finding names —
+kept there for correctness, because a `position: fixed` descendant has to inherit it. The sizing
+below still holds, so the cost is unchanged rather than removed. Five of six criteria are met, none
+of them device-confirmed, and the sixth is the operator's to close.
 
 ### The six findings, ranked as delivered
 

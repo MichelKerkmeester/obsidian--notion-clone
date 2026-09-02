@@ -5,7 +5,7 @@
 Every row below is unticked in its own phase's `goal.md` and nothing in this repository can close
 it. They are gathered here because one list is actionable and thirty files are not.
 
-Derived 2026-09-01: **35 phases**, **5 with nothing left**, **42 rows** waiting on a device.
+Derived 2026-09-02: **35 phases**, **5 with nothing left**, **45 rows** waiting on a device.
 
 The figure beside each phase is a count of its own checkboxes. It is derived, never judged.
 
@@ -41,8 +41,9 @@ The figure beside each phase is a count of its own checkboxes. It is derived, ne
 
 - [ ] The operator clicks Open and reads the note. Only the operator closes this.
 
-## 008-integration-and-release-observability — 6/10
+## 008-integration-and-release-observability — 5/10
 
+- [ ] A lane release with an unreviewed changed PNG is demonstrated to be refused. Not enforced, and the record says so every time. Every lane release note in `css-lane.json` ends with *per-image operator sign-off still owed* — the reviewing was done and recorded in prose, and nothing refused a release that skipped it.
 - [ ] Each negative control fails when its dimension is substituted. True where it has been exercised and enforced nowhere. `012` now machine-checks that every check in its section carries a recorded red, and that mechanism is per-phase rather than program-wide.
 - [ ] No compatibility path removed without its agreements recorded. No check. The gallery deprecation is the live test of it: `030` records the decision and the undo, and nothing would have stopped a deletion that did not.
 - [ ] A red operator device review is demonstrated to block a release with the pipeline green — the rehearsal, not just the rule. Never rehearsed. The pipeline has been green while operator rows stayed open throughout this program, which is the condition, not the rehearsal.
@@ -87,8 +88,10 @@ The figure beside each phase is a count of its own checkboxes. It is derived, ne
 
 - [ ] The operator taps a row checkbox on their phone and one row is selected.
 
-## 018-select-column-affordance-fit — 4/5
+## 018-select-column-affordance-fit — 2/5
 
+- [ ] The gap between the button's right edge and the checkbox's left edge is ≥ 0 on every surface that renders both. Recorded failing at −14px phone and −17px desktop; recorded after at +4px in a 65px cell.
+- [ ] Zero reorder buttons render in a desktop list or gallery row, which is what production builds — the table creates it only on touch. Reported as `no reorder button is shown in 11 select cells, so nothing can collide`.
 - [ ] The operator opens the table on the phone and reports that the button has room. A positive gap in a headless browser is necessary and never sufficient.
 
 ## 019-card-field-value-formatting — 6/7

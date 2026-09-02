@@ -48,7 +48,8 @@
       "goal.md",
       "implementation-summary.md",
       "device-desktop-checkbox-clipped.png",
-      "tools/storybook/verify-placement.mjs"
+      "tools/storybook/verify-placement.mjs",
+      "tools/gate.mjs"
     ],
     "entities": [
       {
@@ -97,6 +98,12 @@
         "name": "verify-placement.mjs",
         "kind": "file",
         "path": "tools/storybook/verify-placement.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "gate.mjs",
+        "kind": "file",
+        "path": "tools/gate.mjs",
         "source": "derived"
       },
       {
@@ -188,17 +195,11 @@
         "kind": "key_phrase",
         "path": "acceptance-criteria.md",
         "source": "derived"
-      },
-      {
-        "name": "no",
-        "kind": "key_phrase",
-        "path": "goal.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "Restore the select-column checkbox pin on desktop, lost when the shared checkbox component took ownership of appearance and the fallback guard switched off placement with it.",
     "created_at": "2026-08-30T16:46:48.681Z",
-    "last_save_at": "2026-09-01T10:50:16.389Z",
+    "last_save_at": "2026-09-02T08:56:32.072Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -209,7 +210,7 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:3cc164710c4c7fa4a1737f1541a512e9e30e7dbbb47c2765d9c2d701cd855303",
+    "source_fingerprint": "sha256:ccf967208dd3be8f5b8c0733d49f3bbc1dc32e1cdc02708cb7cbf3d39f4ab9b4",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "708f62588f678cc482ca2c68dcc9d6e82ff155645ec8dadbb9ef627438626ff1",

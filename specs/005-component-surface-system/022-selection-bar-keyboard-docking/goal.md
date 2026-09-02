@@ -10,9 +10,9 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/022-selection-bar-keyboard-docking"
-    last_updated_at: "2026-08-31T05:15:00Z"
-    last_updated_by: "goal-reconcile"
-    recent_action: "AC-1 met: plugin publishes --db-keyboard-inset; host-silent bar 828px to 513px"
+    last_updated_at: "2026-09-02T08:00:00Z"
+    last_updated_by: "goal-audit"
+    recent_action: "Goal audit: the log's 55 corrected to the frontmatter 75"
     next_safe_action: "Operator opens the keyboard on device and confirms the bar is reachable"
     blockers: []
     key_files:
@@ -148,5 +148,6 @@ the defect became visible second.
 |------|------|
 | D1 amended | Was "consume the host's `--keyboard-height`". No host here writes it, so the decision described a mechanism that could only ever pass under a harness. Now: the plugin publishes its own inset and the host value is one input to it |
 | The documents lagged the code | Spec, plan and tasks were written, the rule shipped, and the folder then sat at `completion_pct: 75` with no criteria and no summary — the same drift eight other phases in this packet carry. The numbers here were recovered from the harness afterwards, not recorded as the work happened |
-| `completion_pct` held at 55 | A criterion closed today, but the operator row is what moves this number and the device has not been touched |
+| ~~`completion_pct` held at 55~~ | **Stale, corrected 2026-09-02.** The reasoning holds and the number does not: the operator row is still what moves this figure and the device is still untouched, but no document in this folder reads 55. `goal.md`, `spec.md`, `acceptance-criteria.md` and `implementation-summary.md` all carry **75**, which is what stands and what satisfies `roadmap.md` §3.2's one-number rule. 55 was this row describing a figure the frontmatter beside it had already moved past — the divergence between prose and frontmatter that the one-number rule exists to catch, reproduced inside the row written to record it |
+| `tasks.md` is 0 of 17 | Measured 2026-09-02. Six criteria are ticked with browser-produced numbers and every task box is empty, so `roadmap.md` §3's mandatory *In progress — N of M tasks* fraction cannot be derived for this phase at all. **Recorded, not cleared:** ticking seventeen boxes to make the fraction computable would assert per-task evidence nobody gathered. This is the same shape as the six task lists the parent's ledger already names, and it is a seventh — not on that list, which counted phases whose goal checklist was 86-90% complete |
 <!-- /ANCHOR:log -->

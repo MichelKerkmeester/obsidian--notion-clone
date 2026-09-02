@@ -10,9 +10,9 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/025-story-coverage-blindness"
-    last_updated_at: "2026-08-30T21:05:00Z"
-    last_updated_by: "phase-reconciliation"
-    recent_action: "Goal authored after the fact; 8 of 9 criteria measured, C7 caveated"
+    last_updated_at: "2026-09-02T08:00:00Z"
+    last_updated_by: "goal-audit"
+    recent_action: "Goal audit: pct derived 9/10; log's untick claim corrected"
     next_safe_action: "Operator opens the catalogue and confirms the surfaces it now lists"
     blockers: []
     key_files:
@@ -23,7 +23,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-025"
       parent_session_id: null
-    completion_pct: 80
+    completion_pct: 90
     open_questions: []
     answered_questions:
       - "checkbox.ts got a story rather than an exemption, which is the argued choice"
@@ -78,7 +78,10 @@ Widening must not demand stories that cannot exist — a function returning a co
 - [x] The story-coverage script exits 0: **13 of 31 renderable modules carry a story, 18 carry a
       written exemption.** It exited 1.
 - [x] The whole gate is green with both lanes present and distinct: **16 lanes, exit 0**, up from 13
-      with one of them mislabelled.
+      with one of them mislabelled. **The 16 is this phase's run, not the tree.** Checked 2026-09-02,
+      `tools/gate.mjs` declares **25** lanes; `shim-coverage` and `story-coverage` are both still
+      there and still distinct, which is what this row asserts. The lane count moved because later
+      phases added lanes, so read 16 as the figure on the day and 25 as the tree today.
 - [x] Modules the matcher considers renderable: **31**, from 18.
 - [x] Modules exporting a parent-taking function with neither a story nor an exemption: **0**, from
       13.
@@ -124,9 +127,16 @@ directory at the commit before this phase opened — it reports **fourteen**. Th
 checkbox module, which the narrow matcher could already see and which another requirement owns.
 
 Both numbers are defensible about different sets. Thirteen is what the widening reveals today;
-fourteen is what was blind on the tree the requirement points at. The criterion above stays unticked
-because a control that quietly substitutes for the one a requirement names is how a criterion drifts
-away from its own text — which is the same drift, one level up, that this phase was opened to fix.
+fourteen is what was blind on the tree the requirement points at. That kept the criterion unticked
+for a while, because a control that quietly substitutes for the one a requirement names is how a
+criterion drifts away from its own text — the same drift, one level up, that this phase was opened
+to fix.
+
+**The criterion is ticked now, and this paragraph is the reason it took two passes. Noted
+2026-09-02.** It closed once the control was run literally rather than substituted: both matchers,
+against the pre-phase tree reconstructed with `git archive`, which is the table in the criterion
+above. The 13-versus-14 gap resolved into two answers to two different questions, so nothing was
+left to substitute for. **This packet's one open row is the operator row**, which no run closes.
 
 **What the 13 turned out to be.** Four of them are the modules the sheet and placement work runs
 through. A naming convention was deciding which of this plugin's most-edited surfaces the catalogue

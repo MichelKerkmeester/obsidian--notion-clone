@@ -9,12 +9,13 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/016-sheet-drag-and-audit"
-    last_updated_at: "2026-08-31T22:00:00Z"
-    last_updated_by: "harness-dependence-review"
-    recent_action: "Resize dismissal fixed at the handler; keyboard arrival read from the host bundle"
+    last_updated_at: "2026-09-02T08:00:00Z"
+    last_updated_by: "goal-audit"
+    recent_action: "Goal audit: 9 of 10 criteria ticked, log recount"
     next_safe_action: "Operator drags a sheet on device"
     blockers:
-      - "The nine sheet fills are read off bare divs, not off nine real surfaces"
+      - "Nine sheet fills are measured on varied bare wrappers, not on nine real renderers"
+      - "Not operator-confirmed: no thumb has dragged a sheet on device"
     key_files:
       - "spec.md"
       - "acceptance-criteria.md"
@@ -23,7 +24,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-016-goal"
       parent_session_id: null
-    completion_pct: 80
+    completion_pct: 90
     open_questions:
       - "Do the nine sheet surfaces agree in situ, with a theme and the host stylesheet present"
     answered_questions:
@@ -132,8 +133,8 @@ host or the harness contributes.
 
       **Tick held; one number in it is the harness's own.** The 0px gap, the 1px width, the 40% alpha
       and the 16px are all declared outright in `styles.css` — `--db-border-subtle` is
-      `color-mix(in srgb, var(--background-modifier-border) 40%, transparent)` at `:71`, applied at
-      `:9481` — so they reproduce on any host. The **colour** does not: `srgb 0.2 0.2 0.2` is
+      `color-mix(in srgb, var(--background-modifier-border) 40%, transparent)` at `:78`, applied at
+      `:9619` — so they reproduce on any host. The **colour** does not: `srgb 0.2 0.2 0.2` is
       `#333333`, which `probe/sheet-audit.mjs:105` sets inline as `--background-modifier-border`. On
       a device the theme supplies it. Read the row as "1px at 40% of whatever the host's border
       colour is", which is what the stylesheet says and what the operator asked for; the specific
@@ -266,8 +267,12 @@ host or the harness contributes.
 
 Volatile. Not part of the directive.
 
-**8 of 10 criteria are ticked. The two that are not are the nine-surface fill, whose settlement needs
-either nine real entry points or the operator's eye, and the operator's own thumb on a sheet.** The
+**9 of 10 criteria are ticked. The one that is not is the operator's own thumb on a sheet.**
+*Corrected 2026-09-02:* this paragraph read "8 of 10 … the nine-surface fill … and the operator's own
+thumb" after the fill row had already been restored above, so it argued for a figure the checklist no
+longer carried. The fill's residual is unchanged and is recorded in that row — nine surfaces built by
+their own renderers in a live host is still unmeasured — but it is a limit on a ticked row, not a
+tenth open one. The
 stylesheet has since been edited under this phase's name — one declaration on the record sheet's
 header — so the lane was taken, the captures were refreshed, and the record-detail images were opened
 and read. That is a change of state from the sentence this paragraph used to carry.

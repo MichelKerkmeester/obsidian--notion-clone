@@ -207,7 +207,7 @@
     ],
     "causal_summary": "Two operator defects, one question",
     "created_at": "2026-08-29T12:48:53.568Z",
-    "last_save_at": "2026-09-01T10:50:16.319Z",
+    "last_save_at": "2026-09-02T08:56:31.241Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -218,7 +218,7 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:5290ad88590814132d2368bcb72cf7e0e22d5d3db6682d4d11d9f1de64ebb62a",
+    "source_fingerprint": "sha256:f2136d09447cd5a9aa4c0fa6adff66168875a459c53fba85b0853b7a748cf614",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "52ce33cd850eb6e323e88263d568330bae0ee2821ee8da39e7ffde0a944a69d4",

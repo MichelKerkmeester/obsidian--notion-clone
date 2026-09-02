@@ -47,7 +47,8 @@
       "goal.md",
       "implementation-summary.md",
       "tools/bench/gallery-render-bench.ts",
-      "src/data/gallery-migration.ts"
+      "src/data/gallery-migration.ts",
+      "tools/gate.mjs"
     ],
     "entities": [
       {
@@ -90,6 +91,12 @@
         "name": "gallery-migration.ts",
         "kind": "code",
         "path": "src/data/gallery-migration.ts",
+        "source": "derived"
+      },
+      {
+        "name": "gate.mjs",
+        "kind": "file",
+        "path": "tools/gate.mjs",
         "source": "derived"
       },
       {
@@ -187,17 +194,11 @@
         "kind": "key_phrase",
         "path": "goal.md",
         "source": "derived"
-      },
-      {
-        "name": "Implementation Summary",
-        "kind": "proper_noun",
-        "path": "implementation-summary.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "Remove the gallery view from the plugin, including the migration path for databases already configured to use it and the gate coverage that currently counts it.",
     "created_at": "2026-08-31T13:08:59.395Z",
-    "last_save_at": "2026-09-01T12:03:58.183Z",
+    "last_save_at": "2026-09-02T09:09:54.567Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -207,7 +208,7 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:a65263b22402ee3be57b0f0b525c27de8264c77920a60f2e309d80af160d642b",
+    "source_fingerprint": "sha256:bf0aa1b618e2b7eee5e6b12141584694f6687032371ae0e3fd1a46e2dd6cbfdb",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "f43e9dda25c5806e37d4c50b2b1afa0690d3700b467532cf373755bd6bcc81c3",

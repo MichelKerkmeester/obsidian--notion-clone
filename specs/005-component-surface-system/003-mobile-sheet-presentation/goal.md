@@ -79,6 +79,14 @@ have a number are still open.*
       72px; the visible bounds end at 738 with it and 760 without, a move of 22px against the 1.35px
       fallback artefact the gate names` — sixteen times the artefact, and restored afterwards,
       because a gate that leaves the page in a different state has broken every check after it.
+      **2026-09-02: those three figures are the reading taken before the navbar was remodelled, and
+      are kept as history rather than as the current number.** The harness now declares the host's
+      own `--navbar-height: 80px` (`verify-placement.mjs:519`), and the row above records the
+      re-measured pair for the same page — bounds ending at 730 and a removal delta of 30px against
+      the positioner's 50px fallback. The detail string is composed at run time and no artefact on
+      disk stores it, so the current pair is read from this packet's own gate rather than quoted
+      from a stored run. The tick is unaffected: the check passes on `navbarHeight > 0` and a move
+      over 1.35px, and 30px clears that by the same margin 22px did.
       **The sign is the one intuition gets backwards.** Removing the navbar does not hand the surface
       the screen: `getVisiblePopoverBounds` falls back to a hardcoded 50px of guessed chrome instead
       of 72px of measured chrome. A check written against "no navbar means no inset" would pass on a
@@ -115,7 +123,8 @@ have a number are still open.*
       closes this.**
 **HARNESS DEPENDENCE, 2026-08-31 — 9 sound / 5 dependent / 0 unknown.** The headline bullet is one of
 the five. *"`elementFromPoint(centreX, navbarCentreY)` returns the sheet"* is measured against a
-hand-written `<div class="mobile-navbar" ... height:72px>` (`verify-placement.mjs:409`) with no
+hand-written `<div class="mobile-navbar" ... height:72px>` (`verify-placement.mjs:409`; the markup is
+now at `:540` and its rule at `:519`) with no
 `app.css` rule, no stacking context and no z-index — a stand-in for the element the operator's defect
 is about, which a body portal beats almost by default. The scrim bullet and the every-popover
 deletion bullet inherit the same stand-in, and the keyboard bullet is answered by an instrument that
@@ -123,7 +132,17 @@ deletion bullet inherit the same stand-in, and the keyboard bullet is answered b
 `keyboardInset()`. **Sound:** the anchor lease, the two-mechanism offset agreement, the transition
 trace, and the host-isolation read — that last one is a differential on one document, so the missing
 stylesheet cancels out of both sides. `--db-mobile-sheet-bottom` is no longer pinned, so that supply
-is spent. Rows in `acceptance-criteria.md` § Harness-dependence audit.
+is spent.
+**2026-09-02 — three more of those five are spent, and the count above is left standing as the reading
+of 2026-08-31 rather than restated.** The hand-written div is gone: `verify-placement.mjs:519`
+declares `.mobile-navbar` from the installed application stylesheet — `position: fixed`,
+`height: 80px`, full width, **no z-index at all** — so the headline hit test and the scrim bullet no
+longer read an invented stacking context, which is what the first and fifth rows above record. The
+keyboard bullet has gained a second arm that shrinks `visualViewport.height` and dispatches its
+`resize` with `--keyboard-height` unset (`:1029-1085`), so it is no longer answered only by writing
+the host's variable. What is **not** spent is the every-popover deletion bullet: that is
+`acceptance-criteria.md`'s AC-007 and it is not a row in this checklist. Rows in
+`acceptance-criteria.md` § Harness-dependence audit.
 <!-- /ANCHOR:completion -->
 
 ---

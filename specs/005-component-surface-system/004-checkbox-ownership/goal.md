@@ -181,7 +181,18 @@ that `app.css` gives every input its own height. **The source facts are untouche
 better evidence**: no unconditional rule, twelve families across four ancestors, ten classless
 creation sites, five borrowed parents. **AC-009 is the one sound row** — it joins node to creation
 site to declared role and asks no cascade anything. Build it first and re-derive the rest from it.
-Rows in `acceptance-criteria.md` § Harness-dependence audit.
+**2026-09-02 — that instruction was followed and its premise has moved, so the 1/16/1 count is left
+standing as the reading of 2026-08-31 rather than restated.** AC-009 is built and stamped:
+`tools/live/checkbox-inventory.json` records 10 sites, 2 classless, **0 unmentioned and 0 with no
+appearance rule**. `styles.css:20319` now carries `input[type="checkbox"].db-checkbox` as a single
+rule reached through the input's own class rather than through any ancestor, and
+`checkbox-appearance.json` reads **258 checkboxes, 258 self-owned, 0 owned by an ancestor, 0
+falling back to the platform box**. The "no `app.css`" exposure is answered in kind rather than
+argued away: `tools/screenshots/host-checkbox.css` transcribes the installed application's
+`input[type=checkbox]` block, `theme.css` declares the host tokens the rules defer to, and the
+fifth row above is where that reading found and fixed a real contrast defect. What is **not** spent
+is the device itself — three profiles are not three installed community themes, which the fifth row
+says in its own words. Rows in `acceptance-criteria.md` § Harness-dependence audit.
 <!-- /ANCHOR:completion -->
 
 ---
@@ -194,8 +205,12 @@ Rows in `acceptance-criteria.md` § Harness-dependence audit.
 **WHY THIS RUNS EARLY.** It is small, highly visible, and it **tests the doctrine cheaply**. If checkboxes ship and the operator still sees circles, the method is wrong and the cost is a week rather than a quarter. Do not reorder it behind the overlay chain.
 
 **MEASURED.** **1 of 12 families is actually owned.** All four selectors declaring `appearance: none` on a plugin checkbox are **ancestor-scoped** (`styles.css:5428, :6628, :8252, :11039`) — including `db-modal-checkbox`, which sits on the input but is still reached through `.note-database-modal`. `db-list-row-checkbox` (`list-renderer.ts:271`) has **no CSS rule anywhere**.
+**Superseded 2026-09-02, and kept because it is the reading the phase was opened on.** The
+unconditional class rule at `styles.css:20319` is the repair; `checkbox-appearance.json` now reads
+258 of 258 self-owned with 0 owned by an ancestor, and `checkbox-inventory.json` reads 0 sites with
+no appearance rule, so neither the "1 of 12" nor the rule-less class survives as a current fact.
 
-**THE DANGEROUS POPULATION — NOW FIVE NAMED CRITERIA, NOT A GROUP.** There are **10 classless checkbox inputs**, not four. Five are unstyled. The other five **work today only because the call site adds a class to their parent one line before creating the input** (`table-renderer.ts:514`, `:785`; `cell-renderer.ts:489`; `card-field-renderer.ts:184`; `record-detail-panel.ts:339`). They pass every check right now and are one wrapper refactor from silently reverting. **Migrate these first, not last.**
+**THE DANGEROUS POPULATION — NOW FIVE NAMED CRITERIA, NOT A GROUP.** There are **10 classless checkbox inputs**, not four. (**2026-09-02:** `checkbox-inventory.json` now reads 10 sites with **2** classless and 0 lacking an appearance rule; the ten below is the 2026-08-29 population, not today's.) Five are unstyled. The other five **work today only because the call site adds a class to their parent one line before creating the input** (`table-renderer.ts:514`, `:785`; `cell-renderer.ts:489`; `card-field-renderer.ts:184`; `record-detail-panel.ts:339`). They pass every check right now and are one wrapper refactor from silently reverting. **Migrate these first, not last.**
 
 They are unprotected between `000` Stage 1 and your Phase 4: `000` fixes the harness and the token root and never touches checkboxes, so in that window any wrapper change in those five files breaks them with no compiler warning and no failing test. `000` is gaining a guard; **your job is to close the window for good** by removing the dependency, not by protecting it.
 

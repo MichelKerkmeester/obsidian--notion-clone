@@ -9,11 +9,12 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/011-mobile-menu-presentation"
-    last_updated_at: "2026-09-01T01:20:00Z"
-    last_updated_by: "goal-authoring"
-    recent_action: "Menu sheets now track the keyboard; band relation, identity and ownership measured"
+    last_updated_at: "2026-09-02T08:00:00Z"
+    last_updated_by: "goal-audit"
+    recent_action: "Goal audit realigned the stale log tables to the ticked criteria"
     next_safe_action: "Operator opens the column menu on their phone"
-    blockers: []
+    blockers:
+      - "Only the operator's phone closes the last row; the icon defect was invisible here"
     key_files:
       - "spec.md"
       - "acceptance-criteria.md"
@@ -228,8 +229,14 @@ settle it and **no number**, because none ran.
 
 Volatile. Not part of the directive.
 
-**7 of 10 criteria closed against the captured `f64dd87` run; not operator-confirmed. The owed band
-clause is now measured at 44px and that measurement contradicts the clause rather than closing it.**
+**10 of 11 criteria closed; the eleventh is the operator's. Not operator-confirmed.**
+
+*Read "7 of 10 … the owed band clause is now measured at 44px and that measurement contradicts the
+clause rather than closing it" until 2026-09-02. The checklist carries eleven rows, and the band
+clause was resolved the way the sentence implied it should be: restated at AC-4's own wording — a
+band **at least** the record sheet's — so 44px against 32px satisfies it, and the relation is
+asserted against a declared floor rather than as two independent literals. The contradiction was
+between the goal line and the acceptance criterion, not between the measurement and the product.*
 
 ### The re-key's blast radius is measured, not assumed
 
@@ -262,10 +269,16 @@ worth recording rather than assuming.
 | 19 rows capped at 760, content 898 | SOUND | the cap is `calc(90svh - …) !important` (`:198`); the content floor is `min-height: 44px` (`:461`) |
 | Backdrop takes the tap | SOUND | scrim `inset: 0`, `pointer-events: auto`, `z-index: calc(var(--db-layer-modal, 1000) - 1)` — and `--db-layer-modal: 1000` is declared at `styles.css:87`, not pinned by `runtime-vars.css` |
 | Backdrop arrives and leaves | SOUND | node presence in both directions; no computed style involved |
-| Grab band | open already | unchanged — the goal line is the defective artefact, per the entry above |
+| Grab band | **open already — closed 2026-09-01** | The goal line was the defective artefact and it was corrected rather than the implementation. Now `menu sheet band 44px, record sheet band 32px`, walked by one function on one page, asserted as `menu >= record` with the record band against the project's 28px control floor |
 | Row grammar, spread 0px | SOUND — **and this is the repaired instance** | see below |
 | Desktop opens at its point | SOUND | position and width are the plugin's; the handle clause is settled by reading, as recorded |
-| Menu sheet re-placement | **UNKNOWN — no check, new** | `owned-menu.ts` registers no reposition loop at all |
+| Menu sheet re-placement | **UNKNOWN — superseded 2026-09-01** | Was "`owned-menu.ts` registers no reposition loop at all", and the check built for it found the state red on its first run: the menu did not move under a declared keyboard while the panel beside it lifted. `keepSheetPlaced` is exported from `popover-position.ts` and installed by `showAt` beside `placeSheet`, with the release checked over ten open/dismiss cycles |
+
+*This table is dated 2026-08-31; the two rows above moved the next day. The old classes are kept
+rather than overwritten because the classification is the finding, not its outcome. Re-read
+2026-09-02: the seven SOUND rows are unchanged, and so is the fallback-reading caveat below them —
+`--size-4-2` and `--size-4-4` are still Obsidian's tokens and every absolute padding figure in this
+packet is still a fallback value rather than a device one.*
 
 **The row-grammar criterion is the one the harness inventory says should have failed, and it no
 longer can.** The inventory's fifth item records that `app.css` declares `button {
@@ -306,8 +319,9 @@ This applies to every `var(host-token, fallback)` reading in the packet and is w
 | Phone sheet presentation | Shipped, verified | Docks 844/844, spans 390/390, capped 760 with content 898 |
 | Dismissal ownership | Shipped, verified | Dismiss at 140px, spring back at 40px, against a 96px threshold |
 | Shared row component | Shipped, verified | Spread 0px in both containers; identical 44px/8px 16px box metrics |
-| Handle hit band | **Measured, and the criterion is wrong** | Band is 44px against a record sheet's 32px; AC-4 asks ≥, the goal line says "matches" |
-| Five stateful dimensions | **Claimed, unmapped** | No dimension mapping in `acceptance-criteria.md`; no standalone control on this surface |
+| Handle hit band | Shipped, verified | Was **Measured, and the criterion is wrong**. The goal line was corrected to AC-4's own wording; the check now asserts the relation `menu >= record` — 44px against 32px — with the record band against the 28px control floor, and goes red at `menu sheet band 4px` when the handle inset is collapsed |
+| Menu sheet keyboard tracking | Shipped, verified | Not in this table before the state was checked. Red first — `menu 844 -> 844 -> 844` against `panel 844 -> 508 -> 844` — then `keepSheetPlaced`, then identical to the panel |
+| Five stateful dimensions | Shipped, verified | Was **Claimed, unmapped**. `acceptance-criteria.md` §5 maps them; the three with no measurement each have one, and building the control found the cap clause could not fail under it |
 | Gate | Not re-run | The captured run is `verify-placement` alone; a shared-gate number against a four-writer tree describes no tree |
 | Operator confirmation | Open | — |
 
@@ -317,5 +331,6 @@ This applies to every `var(host-token, fallback)` reading in the packet and is w
 |------|------|
 | The green gate is a reading of one moment | Three phases wrote to this tree during the work and the CSS lane changed hands twice. What is durable is the attribution: no capture cites any `src/` file this phase touched |
 | The owed band clause resolved backwards | It was owed because nobody had measured it. Measuring it did not close it — it showed the threshold was the wrong one. A clause that demands parity at 32px forbids the 44px thumb floor the rest of the program asserts, so meeting it would have been the regression |
+| Every `styles.css` and `src/` line citation in this file has drifted | Read them by rule content, not by line. Taken against `f64dd87`; a spot check on 2026-09-02 puts `justify-content: flex-start` at `styles.css:541` where the text says `:530`, and `applySheetChrome`/`placeSheet` at `owned-menu.ts:176`/`:177` where the text says `:167`/`:173`. Every rule and call named is present. Recorded rather than renumbered, in a stylesheet every phase edits and which the working tree is currently editing |
 | Desktop has no handle for a structural reason, not a measured one | The desktop check never reports the handle. `owned-menu.ts:167` is what settles it: `applySheetChrome` is the sole creator of the handle and the desktop branch never calls it. Worth keeping as a reading, because a check here would only ever confirm an unreachable branch |
 <!-- /ANCHOR:log -->

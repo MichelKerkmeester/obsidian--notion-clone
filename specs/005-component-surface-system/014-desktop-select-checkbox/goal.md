@@ -9,9 +9,9 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/014-desktop-select-checkbox"
-    last_updated_at: "2026-09-01T21:00:00Z"
-    last_updated_by: "fifth-property-control"
-    recent_action: "borderColor added as a fifth property; the strip control now discharges"
+    last_updated_at: "2026-09-02T08:00:00Z"
+    last_updated_by: "goal-audit"
+    recent_action: "Stale gate lane count corrected; derived completion re-checked"
     next_safe_action: "The operator opens the table on desktop and sees a whole checkbox"
     blockers: []
     key_files:
@@ -217,9 +217,15 @@ the sentence alone.
 
 Volatile. Not part of the directive.
 
-**Shipped and verified. The recapture debt is discharged — `npm run gate` is 16 green, exit 0, and
-`screenshots-fresh` is among the green.** `verify-placement` moved 221/224 to 224/227, three new
-checks, 3 red for a declared reason, exit 0.
+**Shipped and verified. The recapture debt is discharged — the `npm run gate` run that discharged it
+was 16 green at exit 0, with `screenshots-fresh` among the green.** `verify-placement` moved 221/224
+to 224/227, three new checks, 3 red for a declared reason, exit 0.
+
+*Corrected 2026-09-02.* The 16 was written as the gate's size rather than as one run's, and it has
+been overtaken twice: this folder's own operator row already cites 20 lanes, and `tools/gate.mjs`
+declares **25** today. The figure is kept as the dated run it was and no longer reads as a standing
+description of the gate. **No gate run is claimed from the current working tree, which is dirty** —
+an uncommitted `styles.css` edit with its lane release and refreshed `tools/live/*.json` artefacts.
 
 ### The negative control was run both ways, and that is the part to keep
 
@@ -269,9 +275,9 @@ lane's outstanding list rather than folded in here.
 | Header/row coincidence | Half measured, and it stays that way | One value at 7px, moving to 25px under `reguard-desktop`; the 0px height clause is measured, red on correct code, and blind to the defect, so it is recorded rather than built |
 | Fixture fidelity guard | Verified, control run | 25/25; `strip-select` takes it to 24/25 at exit 1 |
 | Appearance single-owner, computed | Measured, control run | 0 of 4 differ against a `db-gallery-card-checkbox` role-mate; `strip-mate` takes it to 4 of 4 |
-| Appearance single-owner, control | Unsatisfiable as specified | `strip-select` moves 0 of the 4 named properties; only `border-color` moves, and the column's own fallback block is why |
+| Appearance single-owner, control | Discharged, on a fifth property | Unsatisfiable against the **four** named properties — `strip-select` moves 0 of them, because the column's own fallback block agrees on all four. `borderColor` is where the two owners disagree, so the comparison names five (`verify-placement.mjs:4255`) and the same control reports `1 of 5 properties differ: borderColor rgb(221, 221, 221) vs rgb(138, 144, 153)`, exit 1, against 0 of 5 unarmed |
 | Phone arm | Measured, control run both ways | 32px left / 5px right; `reguard-phone` red at 0px/37px, `reguard-desktop` leaves it at 32/5 |
-| Recapture | Discharged | `npm run gate` 16 green, exit 0, `screenshots-fresh` among them |
+| Recapture | Discharged | The discharging run: `npm run gate` 16 green, exit 0, `screenshots-fresh` among them. Read as that run's size, not the gate's — `tools/gate.mjs` declares 25 lanes today, and nothing green is claimed from the current dirty tree |
 
 ### Deviations and findings
 
@@ -281,6 +287,6 @@ lane's outstanding list rather than folded in here.
 | AC-3's coincidence clause fails correct code | Header 32px against rows 33px and 34px on the shipped tree, and identical with the pin re-guarded. Specified, measured, not built |
 | AC-4's recorded 26/7 pair does not reproduce | The re-executable pair is 32/5. The old numbers came from a run nobody could repeat, which this folder had already named as evidence it does not accept |
 | AC-5 was a source-text absence | An absence passes before anything is written and cannot distinguish a repair that respected the boundary from one that never approached it |
-| AC-5's control cannot discharge AC-5 | Stripping the class wakes the column's guarded fallback, which agrees on all four properties. Two agreeing owners, and the control cannot remove the second |
+| AC-5's control could not discharge AC-5 against four properties | Stripping the class wakes the column's guarded fallback, which agrees on all four. Two agreeing owners, and the control cannot remove the second. **Resolved 2026-09-01 by naming a fifth rather than by removing the second owner:** `borderColor` is where they disagree, and they disagree across an accessibility floor — 3.22:1 for the component against 1.36:1 for the dormant fallback. The finding stands as written; only its "cannot" does not |
 | One distinct value is not a coincidence test | On desktop and on phone alike, a column whose boxes are all wrong in the same way still reports one distinct right clearance — 25px and 37px respectively |
 <!-- /ANCHOR:log -->

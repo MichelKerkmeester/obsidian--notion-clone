@@ -10,11 +10,13 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/010-sheet-reading-and-keyboard"
-    last_updated_at: "2026-09-01T00:40:00Z"
-    last_updated_by: "goal-authoring"
-    recent_action: "Pinch guard, desktop four values and both missing state dimensions now measured"
+    last_updated_at: "2026-09-02T08:00:00Z"
+    last_updated_by: "goal-audit"
+    recent_action: "Goal audit realigned the stale log tables to the ticked criteria"
     next_safe_action: "Operator reads a record on the phone and taps a field"
-    blockers: []
+    blockers:
+      - "Only the operator's phone closes the last row; no harness here opens a keyboard"
+      - "The resize path is a declared red: onResize closes the record sheet outright"
     key_files:
       - "spec.md"
       - "acceptance-criteria.md"
@@ -268,9 +270,15 @@ settle it and **no number**, because none ran.
 
 Volatile. Not part of the directive.
 
-**6 of 9 criteria closed against the captured `f64dd87` run. Not operator-confirmed, the keyboard half
-is mechanism-verified only, and two criteria that read as verified turn out to have no check behind
-them at all.**
+**10 of 11 criteria closed; the eleventh is the operator's and nothing here can close it. Not
+operator-confirmed, and the keyboard half is mechanism-verified only.**
+
+*Read "6 of 9 … two criteria that read as verified turn out to have no check behind them at all"
+until 2026-09-02. Both figures were stale: the checklist carries eleven rows, and the two criteria
+with no check — the desktop four values and the five stateful dimensions — were built and measured
+on 2026-09-01, which is what their own entries above now record. The sentence is kept because the
+audit that produced it is how the gap was found, and the tables below carried the old reading for a
+day after the rows had moved.*
 
 ### Two criteria were defective before they were met, and this is where the program learned both shapes
 
@@ -295,8 +303,8 @@ this half is finished or blocked.**
 |------|-------|----------|
 | Reading rhythm | Shipped, verified | 5 goal criteria closed against the `f64dd87` run |
 | Keyboard inset | Shipped, mechanism-verified | Closed for the reporting path; the resize path is a declared red |
-| Desktop non-regression | **Claimed, unmeasured** | No check measures the four values; row height alone appears, incidentally, in another phase's check |
-| Five stateful dimensions | **Claimed, unmapped** | Only negative-control mutation is evidenced; `acceptance-criteria.md` never names the five |
+| Desktop non-regression | Shipped, verified | Was **Claimed, unmeasured**. A check now mounts the panel through `openRecordDetailPanel` at 1440×900 and reports all four in one line — 26.84px, 2px, `0px none`, right — with a phone-rule control that moves three at once |
+| Five stateful dimensions | Shipped, verified | Was **Claimed, unmapped**. `acceptance-criteria.md` §5 now maps dimension → criteria → evidence; semantic identity and resource ownership were built, and the ownership check found and closed a real listener leak |
 | Operator confirmation | Open | — |
 
 ### Harness-dependency classification, 2026-08-31
@@ -312,10 +320,15 @@ check still pass — and could it still fail?*
 | Divider, 0.0px gap, 16px value | SOUND | `border-bottom` and `font-size` declared on the phone rule |
 | Long label moves the value box 0px | SOUND | `flex` basis declared; a before/after delta on one box |
 | Keyboard clearance 513/513 | **HARNESS-DEPENDENT** | `--keyboard-height`, written by the check and read back as its own `want`. Narrowed above, not withdrawn: `keyboardInset()` has a second source the bar lacks |
-| Pinch-zoom guard (AC-14) | **WITHDRAWN** | two harness constants; the assertion is true by construction and cannot go red |
-| Fallback alone (AC-15) | **UNKNOWN — no check** | nothing shrinks `visualViewport.height` anywhere in the repository |
-| Desktop four values (AC-16) | UNKNOWN — no check | unchanged from the previous audit |
-| Five stateful dimensions | UNKNOWN — no check, no mapping | unchanged from the previous audit |
+| Pinch-zoom guard (AC-14) | **WITHDRAWN — superseded 2026-09-01** | Was two harness constants. Replaced by `resolveKeyboardInset(hostDeclared, layoutHeight, visual)`, three answers from the same shrink, plus `src/views/keyboard-inset.test.ts` — 9 cases, verified present |
+| Fallback alone (AC-15) | **UNKNOWN — superseded 2026-09-01** | Was "nothing shrinks `visualViewport.height` anywhere in the repository". Still true of the browser; the arithmetic that reads it is now driven against a stub, observed red first |
+| Desktop four values (AC-16) | **UNKNOWN — superseded 2026-09-01** | Was "no check". Measured on the shipped panel; each of the four clauses separately falsifiable |
+| Five stateful dimensions | **UNKNOWN — superseded 2026-09-01** | Was "no check, no mapping". Mapped in `acceptance-criteria.md` §5 and all five measured |
+
+*This table is dated 2026-08-31 and the four rows above it moved the next day. The old classes are
+kept rather than overwritten because the classification is the finding — a criterion resting on a
+harness constant is worth being able to look up after it is repaired, and losing that history is how
+the same shape gets rediscovered a third time. Re-read 2026-09-02: the five SOUND rows are unchanged.*
 
 **What this phase does not share with `022`.** The bar docks in CSS on `var(--keyboard-height, 0px)`
 and has no second source, so a silent host leaves it where it was. The sheet's number is computed in
@@ -330,8 +343,9 @@ variable, so the difference is currently an argument from source rather than a m
 
 | Item | Note |
 |------|------|
-| Continuity conflict | `spec.md` says 0% and "not started"; `implementation-summary.md` says 90% and shipped, and the working tree agrees with the summary. Recorded in `roadmap.md` §7.6; do not resolve it by picking the nearer file |
+| Continuity conflict | **Resolved; kept for the record.** `spec.md` said 0% and "not started" while `implementation-summary.md` said 90% and shipped, and the working tree agreed with the summary. Re-read 2026-09-02: neither "not started" nor "0%" occurs in `spec.md` any more, and `implementation-summary.md:175` records the string being removed. `roadmap.md` §7.6 still lists this phase among the eight |
 | Label at 13px | Deliberate under D4, later raised by `016` as a one-token operator decision. Not a defect |
-| Two criteria were carrying no measurement | The desktop non-regression and the five-dimension claim were both written as though verified. Neither has a check. Found by auditing the goal against the captured run rather than against the phase's own prose — which is the only way this shape is ever found |
+| Two criteria were carrying no measurement | The desktop non-regression and the five-dimension claim were both written as though verified, and neither had a check. Found by auditing the goal against the captured run rather than against the phase's own prose — which is the only way this shape is ever found. **Both were built and measured on 2026-09-01**, and one of them found a real listener leak on its first run, which is the argument for auditing rather than assuming |
+| Every `styles.css` and `src/` line citation in this file has drifted | Read them by rule content, not by line. The citations were taken against `f64dd87`; the stylesheet has changed hands several times since and the working tree carries an uncommitted phone rule, so a spot check on 2026-09-02 found every sampled citation landing on the wrong line — `styles.css:461` by eleven, `:346` by rather more, and `record-detail-panel.ts:200` and `popover-position.ts:284` likewise. The rules and functions named are all still present. Recorded rather than renumbered: renumbering them buys one day of accuracy in a file every phase edits, and the next reader would trust the new numbers more than they deserve |
 | The label's 13px is a declared red, not a silence | *the row's label size is on the type scale* stands `RED (declared)`: `label 13px; nearest scale steps are 12px and 14px`. Consistent with D4; it sits under the shared row grammar, so moving it moves every menu and sheet at once |
 <!-- /ANCHOR:log -->

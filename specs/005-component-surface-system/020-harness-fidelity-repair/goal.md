@@ -10,9 +10,9 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/020-harness-fidelity-repair"
-    last_updated_at: "2026-09-01T18:40:00Z"
-    last_updated_by: "option-tone-divergence"
-    recent_action: "Peek panel badges option values; 7 more flattened tones closed"
+    last_updated_at: "2026-09-02T08:00:00Z"
+    last_updated_by: "goal-audit"
+    recent_action: "Goal audit: three new criteria rows verified against disk"
     next_safe_action: "Add a placement check that never sets --keyboard-height, so the fallback can fail"
     blockers: []
     key_files:
@@ -91,7 +91,10 @@ own content is `022`'s, the `create|render` filter is `025`'s.
       owner: **0 dropped**.
 - [x] A fixture cannot paint two distinct option values as one chip, or an option-typed group title
       as bare text: **5 files flattening 3 columns, 4 helpers writing bare text** -> **0**, guarded as
-      gate lane 25 with every rule observed red. The rule's coverage is read off `renderGroupLabel`'s
+      the `option-tones` gate lane with every rule observed red. *Re-read 2026-09-02: this said "gate
+      lane 25", which reads as an ordinal and is wrong — `option-tones` is the 10th of the 25 lanes
+      `tools/gate.mjs` declares. The lane exists and the row stands; only its number was the gate's
+      total, not its position.* The rule's coverage is read off `renderGroupLabel`'s
       own call sites, not listed: **3 of 5 title classes watched** -> **5 of 5**.
 - [x] One option value looks the same on every surface that shows it: **4 surfaces badged and the
       record peek plain text, plus 7 call sites in `panels.mjs` hand-picking a tone** -> **all
@@ -100,8 +103,11 @@ own content is `022`'s, the `create|render` filter is `025`'s.
 - [x] The card cover is photographed by something. Fixtures reaching any of its four classes **was
       0**, and the only one the corpus named was the other view's, inside no wrapper, so it matched
       no rule and painted nothing -> **4 of 4**, in `card-cover-states` and the gallery view. The
-      pre-fix count is checkable in `HEAD~`: one occurrence of `db-board-card-cover-placeholder`,
-      inside `db-gallery-card`, and no occurrence of the other three.
+      pre-fix count is checkable at **`d7da631~1`**: one occurrence of
+      `db-board-card-cover-placeholder`, inside `db-gallery-card`, and no occurrence of the other
+      three. *Re-read 2026-09-02: this said `HEAD~`, which was true when written and is not now —
+      `6b65667` has since landed on top, so `HEAD~` is the fixing commit rather than the state
+      before it. Pinned to the commit so the number stops moving with the branch.*
 - [ ] The operator signs off the two new modal fixtures, per image.
 <!-- /ANCHOR:completion -->
 
@@ -128,7 +134,7 @@ run so the number stays visible rather than closed by silence.
 exit 0; `npm run screenshots:verify` 224 entries; `evidence.mjs --check-all` 8 of 8. Five commits:
 `9d4f569`, `0a38723`, `780a736`, `1e6397d`, `99214f5`.
 
-**Why `completion_pct` is 80 and not 100.** It was 95 here against 100 in the other three documents,
+**Why `completion_pct` was 80 and not 100**, and why it now reads 92. It was 95 here against 100 in the other three documents,
 which counted shipped-and-harness-verified; the parent's D3 does not let that close anything and the
 fixture sign-off is outstanding. All four now read 80, for a reason found later and larger than the
 sign-off: this phase is named for the harness's truthfulness and never audited the harness's own
@@ -137,6 +143,23 @@ nothing in `src/` publishes it, and two of those three sites are inside the 63 c
 as a fidelity gain. No acceptance row is false as worded — `acceptance-criteria.md` §4 carries the
 audit and withdraws nothing — but a phase that certified six instruments and left that channel
 uncatalogued is not at 100.
+
+**2026-09-02: the paragraph above is history, and the figure is 92 in all four documents.** Three
+criteria rows were added on 2026-09-01 and 2026-09-02 — the option-tone flattening, the record
+peek's plain text, and the unphotographed card cover — and the checklist this figure derives from
+grew with them to sixteen rows, fifteen ticked. `goal.md`, `spec.md`, `acceptance-criteria.md` and
+`implementation-summary.md` all read **92**, so `roadmap.md` §3.2's one-number rule is satisfied and
+nothing here diverges. The 80 is kept above rather than overwritten because its reasoning still
+holds: the `--keyboard-height` channel is still uncatalogued and the operator's fixture sign-off is
+still the one open row, so the remaining 8 is that row and that audit, not a rounding.
+
+**On disk and not shipped, recorded so it is not mistaken for either.** A one-rule `styles.css` edit
+— the base-import modal dropping its key column on `.is-phone` — sits uncommitted in the working
+tree on 2026-09-02, with its lane release and refreshed `tools/live/*.json` artefacts and two
+re-captured `panel-base-import-modal-mobile-*` images. It is real and it is measured, and it is
+**not** committed, so no criterion above rests on it and none is ticked for it. Named here only
+because the open operator row concerns those same two modal fixtures, and a sign-off taken against
+an uncommitted capture would be a sign-off on something the branch does not carry.
 
 **A discrepancy left alone.** `acceptance-criteria.md`'s own title and description say "Ten criteria"
 while its table carries twelve rows, AC-001 to AC-012. The twelve are what this goal counts.

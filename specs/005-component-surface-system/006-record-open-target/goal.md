@@ -150,7 +150,16 @@ produced a surface other than the configured target"* is satisfied vacuously —
 false green exactly. The write-attribution row needs a vault the harness does not have, and it is the
 packet's highest-value criterion because a misattributed write is silent and permanent. One further
 row, *the view is still rendered in its own leaf*, cannot be answered here at all: leaf lifetime is
-`009`'s live probe or nothing. Rows in `acceptance-criteria.md` § Harness-dependence audit.
+`009`'s live probe or nothing.
+**2026-09-02 — the stub exposure on the setting row is spent, and the 9/4/0 count is left standing as
+the reading of 2026-08-31 rather than restated.** That row is no longer answered through an
+`openRow` stub: `verify-placement.mjs:7659` calls the shipped `DatabaseView.prototype.openRecordAt`
+on a real view object once per setting and reads what appeared in the document, which is what the
+fifth row above records with its five outcomes and its collapse-to-`panel` control. The
+`openRow: () => undefined` stubs still stand elsewhere in the file — they are other pages' fixtures,
+not this criterion's instrument. **Untouched and still open:** the write-attribution row, which needs
+a vault this harness does not have, and the leaf-lifetime row, which remains `009`'s. Rows in
+`acceptance-criteria.md` § Harness-dependence audit.
 <!-- /ANCHOR:completion -->
 
 ---
@@ -159,10 +168,12 @@ row, *the view is still rendered in its own leaf*, cannot be answered here at al
 **LINE NUMBERS ARE HINTS, NOT ADDRESSES.** Every `styles.css:NNNN` and `src/**/*.ts:NNNN` below was correct on 2026-08-29; five phases edit `styles.css` before you start. `acceptance-criteria.md` carries the resolution table. **The `998` is the exception worth stating: its *value* is the evidence, not its address** — it is the literal that beats two declared tiers.
 
 **A6 CANNOT BE EVALUATED WITHOUT THE CASCADE.** `verify-placement.mjs:220` loads `styles.css` on the **phone** page only. Your entire A6 finding is that `z-index: 998` beats `--db-layer-popover: 100` and `--db-layer-submenu: 110` — and **on a page with no stylesheet no z-index applies to anything**, so the hit test returns whatever DOM order gives and tells you nothing. A3's phone half is safe; its desktop comparison is not, and AC-002's `elementFromPoint` is subject to the same rule. `000` fixes the load; no desktop number recorded before it is admissible.
+**Landed 2026-09-02, and the paragraph is kept because it is why the layering row is written as a hit test rather than as a declared comparison.** `verify-placement.mjs:316` adds `styles.css` to the desktop page, so a z-index does apply and the hit test discriminates — which is what the fourth row above demonstrates by forcing `998` back on and requiring the result to flip.
 
 **THE REAL SHAPE.** **20 affordances → 6 call paths → 4 surfaces**, and they disagree. Sharpest evidence: `db-record-open-btn`, `db-list-row-open`, `db-board-card-open` and `db-gallery-card-open` share the **same icon and the same label** — the table's opens a preview surface, the other three open a real leaf.
 
 **THE PEEK.** `table-record-peek.ts` is explicitly display-only, right-docked at `position: absolute; width: min(360px, 100%)`, with a hand-numbered **`z-index: 998`** outside the token scale. That number **beats `--db-layer-popover: 100` and `--db-layer-submenu: 110`**, so a dropdown opened inside the peek paints *underneath* it. The sibling detail panel documents having fixed exactly this and uses `var(--db-layer-panel, 50)`.
+**The peek uses it too, as of 2026-09-02.** `styles.css:19344` declares `z-index: var(--db-layer-panel, 50)` and the literal survives only as the comment at `:19340` recording what it was — so the `998` above is the defect's history, not a value still in the stylesheet.
 
 **TWO CORRECTIONS TO THE ORIGINAL REPORT.** The peek has **no `.is-phone` CSS at all**, but `database-view.ts:8419-8437` routes touch to the detail panel — so the 360px dock is reachable on a phone **only via `Mod+Enter`** (`:1717`), which has no touch guard. And the sub-half-height panel the operator saw is the **detail panel** (clamped to `50vh` on phone), not the peek, which is full container height. The desktop complaint stands unchanged.
 

@@ -45,7 +45,10 @@
       "acceptance-criteria.md",
       "goal.md",
       "implementation-summary.md",
-      "src/views/list-row-contracts.test.ts"
+      "src/views/list-row-contracts.test.ts",
+      "src/views/list-renderer.ts",
+      "tools/live/list-window-harness.ts",
+      "tools/live/list-window.json"
     ],
     "entities": [
       {
@@ -88,6 +91,24 @@
         "name": "list-row-contracts.test.ts",
         "kind": "test",
         "path": "src/views/list-row-contracts.test.ts",
+        "source": "derived"
+      },
+      {
+        "name": "list-renderer.ts",
+        "kind": "code",
+        "path": "src/views/list-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "list-window-harness.ts",
+        "kind": "code",
+        "path": "tools/live/list-window-harness.ts",
+        "source": "derived"
+      },
+      {
+        "name": "list-window.json",
+        "kind": "config",
+        "path": "tools/live/list-window.json",
         "source": "derived"
       },
       {
@@ -173,29 +194,11 @@
         "kind": "key_phrase",
         "path": "tasks.md",
         "source": "derived"
-      },
-      {
-        "name": "correction",
-        "kind": "key_phrase",
-        "path": "tasks.md",
-        "source": "derived"
-      },
-      {
-        "name": "Acceptance Criteria",
-        "kind": "proper_noun",
-        "path": "acceptance-criteria.md",
-        "source": "derived"
-      },
-      {
-        "name": "off-window",
-        "kind": "key_phrase",
-        "path": "acceptance-criteria.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "The list renders every row, so its cost is proportional to node count; at the operator's shape that is 2.0-4.9s of blocked main thread and no loop fix reaches it.",
     "created_at": "2026-08-31T14:46:50.524Z",
-    "last_save_at": "2026-09-01T11:05:06.523Z",
+    "last_save_at": "2026-09-02T09:09:54.631Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -206,7 +209,7 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:6c346bcfee487371b0cfe8ea8239817faac39da4d0c99152119a3b8211ca24ef",
+    "source_fingerprint": "sha256:f122e4c88b65c70ef2d3a3009e5e4a6c18204e99756562858bfdd6257d6fdc29",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "4461af647ae0a0e6a7dbdd64b4450edb9ad8d9a1a94d81f419ca326e11be6f90",

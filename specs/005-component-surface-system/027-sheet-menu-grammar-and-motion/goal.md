@@ -10,9 +10,9 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/027-sheet-menu-grammar-and-motion"
-    last_updated_at: "2026-08-30T21:20:00Z"
-    last_updated_by: "goal-reconcile"
-    recent_action: "Criteria re-read against the 220/224 capture; 13 of 14 met, only the operator row open"
+    last_updated_at: "2026-09-02T08:00:00Z"
+    last_updated_by: "goal-audit"
+    recent_action: "Goal audit: 220/224 dated; capture corpus now 244"
     next_safe_action: "Operator opens the column menu on a phone, tracks one left edge, taps Change type"
     blockers: []
     key_files:
@@ -98,7 +98,14 @@ and nowhere else. A shared row is only shared down to the last property it actua
       `column menu: every label starts at the same x` reads **1 distinct label x-position(s) across
       17 rows [45]**; `a row that opens a submenu carries a chevron and says so` reads `"Change
       type" chevron=true aria-haspopup=listbox`; and `a submenu opened from a sheet is in front of
-      that sheet and its backdrop` reads `submenu z=1000 scrim z=999 sheet z=1000`. What is left is
+      that sheet and its backdrop` reads `submenu z=1000 scrim z=999 sheet z=1000`.
+      **Those readings are dated 2026-08-30 and have not been re-run here. Noted 2026-09-02.** The
+      `220/224` is the placement lane's geometry-check count on that day — `verify-placement.mjs`
+      prints `<passed>/<total> geometry checks passed` — and not a capture count, which the original
+      wording ran together. The screenshot corpus has moved since: this packet's own run took it 224
+      → 228, and `npm run screenshots:verify` today reports **244 entries current, none blank or
+      identical across themes**, exit 0. The geometry total was not re-measured this session, so read
+      `220/224` as the figure on the day rather than as the tree. What is left is
       the part a harness cannot supply — the operator's own device, their own database, their own
       hand. Writing a check for it would only re-measure the emulator that is already green, which
       is the substitution this packet was opened over. It stays unticked until they say so.
@@ -143,7 +150,7 @@ transition belongs to the state being moved to.
 | Sheet drag | Shipped, verified | Gesture-driven, not a source grep |
 | Entrance | Shipped, verified | 477 → **315** at 60ms → 0 at 460ms, on `transform 0.26s ease-out`; and 0 running animations under reduced motion. The 60ms sample is read from the 2026-08-30 capture, which supersedes the 313 written here from an earlier run |
 | Harness host-blindness | Closed | Obsidian's `button` rule loaded on all 17 pages |
-| Gate | Dated | 13 of 14 green when this phase shipped, the red `comments`, from another agent's untracked `tools/bench/` files. `CHECKS` carries 16 entries today (`tools/gate.mjs:40-67`) and this session did not re-run it; a shared-gate number against a tree several sessions are editing describes none of them |
+| Gate | Dated | 13 of 14 green when this phase shipped, the red `comments`, from another agent's untracked `tools/bench/` files. `CHECKS` carried 16 entries when that sentence was written; checked 2026-09-02 it carries **25** (`tools/gate.mjs:41-111`). Neither session re-ran the gate; a shared-gate number against a tree several sessions are editing describes none of them |
 | Operator confirmation | Open | — |
 
 ### Deviations and findings

@@ -46,7 +46,7 @@ rehearse is enforced, because "the rule exists" is the claim this packet was wri
       fails when the stylesheet hash moves and no phase holds the lane. Observed refusing on
       2026-08-31 and again on 2026-09-01: `check-lane: FAIL — the stylesheet changed and no phase
       claimed the edit`.
-- [x] A lane release with an unreviewed changed PNG is demonstrated to be refused. **Not enforced,
+- [ ] A lane release with an unreviewed changed PNG is demonstrated to be refused. **Not enforced,
       and the record says so every time.** Every lane release note in `css-lane.json` ends with
       *per-image operator sign-off still owed* — the reviewing was done and recorded in prose, and
       nothing refused a release that skipped it.
@@ -67,6 +67,21 @@ rehearse is enforced, because "the rule exists" is the claim this packet was wri
       was written about. Older release entries are grandfathered on purpose: only the newest is
       checked, because back-filling `reviewed` onto releases whose reviews nobody did would be
       manufacturing exactly the evidence this rule exists to require.
+
+      **UN-TICKED 2026-09-02: the enforcement described above is not in the tree.** The paragraph
+      is kept because it records what was intended and what was reported, and both are part of the
+      finding. `tools/lane/check-lane.mjs` is 84 lines that hash `styles.css`, compare it to
+      `baselineHash` and read `SURFACE_PHASE`. It never opens `history`, never shells `git`, and
+      the string `reviewed` does not occur anywhere in `tools/` outside `css-lane.json` itself.
+      `git log -- tools/lane/check-lane.mjs` returns one commit, `bb265f29`, which predates this
+      row; the commit that ticked it, `b9eca12` *"refuse a release that leaves a changed capture
+      unnamed"*, changed eleven files — this `goal.md`, its `graph-metadata.json`, `roadmap.md` and
+      eight `tools/live/*.json` artefacts — **and no tool source at all.** The message describes
+      code that was never committed, and the observed red and green it quotes cannot be reproduced
+      from this tree. The newest release entry in `css-lane.json` does carry a `reviewed` array, so
+      the *data* the rule wants exists; nothing reads it. This is the exact shape the packet was
+      written to distrust — "the rule exists" standing in for the rehearsal — reproduced inside the
+      packet that names it.
 - [x] A stale replay result is demonstrated to be rejected. **Met by the `evidence` lane**, which
       fingerprints every artefact's inputs and reports one describing a tree that no longer exists.
       Observed rejecting repeatedly on 2026-09-01, once per stylesheet edit.
@@ -100,9 +115,12 @@ rehearse is enforced, because "the rule exists" is the claim this packet was wri
       rather than silently uncovered — watched, by adding one: `5 of 6 … undriven: chart-options`.
       And watched the other way by flipping `filter-panel` to `body`: `declared host=body … the
       node's parent is .db-panel-host, body=false`.
-      **`buildableNotRendered` is 132 and is deliberately NOT enforced.** Those classes exist and the
+      **`buildableNotRendered` is 130 and is deliberately NOT enforced.** Those classes exist and the
       plugin builds them; no fixture covers them yet. That is a coverage debt, and failing on it
-      would fail a correct tree.
+      would fail a correct tree. *(Read 132 until 2026-09-02; `tools/live/surface-census.json` at
+      `measuredAt 2026-09-01T15:51:33Z` reports `buildableNotRendered: 130` against `rendered: 84`,
+      `buildable: 214` and `renderedOnly: 0` — the two enforced figures are unchanged and the debt
+      figure moved by two.)*
 - [ ] Each negative control fails when its dimension is substituted. **True where it has been
       exercised and enforced nowhere.** `012` now machine-checks that every check in its section
       carries a recorded red, and that mechanism is per-phase rather than program-wide.
@@ -155,6 +173,11 @@ Part A also ships the two mechanisms the program was leaving to convention:
 - **Contents:** Reviewer, Date, the current `styles.css` hash, and one row per changed PNG — before hash, after hash, verdict, note. Verdicts are a closed set: `correct`, `expected-change`, `regression`, `pre-existing-defect (<finding id>)`.
 - **Enforces it:** `node tools/lane/check-capture-review.mjs --phase <folder> --release <n>` → `npm run lane:capture-review`, shelled by `lane:release`. The changed-PNG set is derived from **image byte hashes** against a baseline snapshot taken at `acquire`, not from the hand-maintained scenario source list — otherwise it would reproduce the hole it exists to close.
 - **Fails when:** a changed PNG has no row; a row names a PNG that did not change; a verdict is outside the vocabulary; any verdict is `regression`; Reviewer or Date is empty; the recorded stylesheet hash is not current; a `pre-existing-defect` names no finding. **A lane release without a complete sign-off fails, and the lane stays held.**
+
+**WHAT OF PART A ACTUALLY SHIPPED — audited 2026-09-02.** The two mechanisms above are written in the present tense and only the first half of the first one exists. Kept as written because it is the design, and marked because a reader was taking it for the tree.
+- **Shipped.** `tools/lane/css-lane.json` with `holder`, `acquiredAt`, `baselineHash`, `baselineCommit` and a 143-entry append-only `history`; `tools/lane/check-lane.mjs`; the `css-lane` gate lane; the `replay` and `evidence` lanes.
+- **Not shipped.** `check-lane.mjs` takes **no subcommand** — no `acquire`, no `verify`, no `release`. `package.json` declares `lane:check` and **neither `lane:acquire` nor `lane:release`**, so "fails when `release` is attempted by a non-holder" describes a command that cannot be typed. Acquire and release are `history` entries written by hand.
+- **Not shipped.** `tools/lane/check-capture-review.mjs` does not exist, `npm run lane:capture-review` is not a script, and `capture-review.md` exists in **one** phase folder (`000`) out of thirty-five. The capture-review schema is enforced nowhere, which is why the criterion above is un-ticked.
 
 **PART B — THE RELEASE GATE. Runs last.**
 

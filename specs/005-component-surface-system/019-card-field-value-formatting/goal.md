@@ -9,11 +9,13 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/019-card-field-value-formatting"
-    last_updated_at: "2026-09-01T19:10:00Z"
-    last_updated_by: "scope-exclusion-reconciliation"
-    recent_action: "Scope exclusion reconciled; the parent sentence now names its surface"
+    last_updated_at: "2026-09-02T08:00:00Z"
+    last_updated_by: "goal-audit"
+    recent_action: "Goal audit: 6 of 7 ticked; stale scope-open prose corrected"
     next_safe_action: "Operator compares the euro figure on a card and the table row behind it"
-    blockers: []
+    blockers:
+      - "Not operator-confirmed: nobody has compared a card and its row on device"
+      - "Card and cell coerce stored text differently; 10 of 12 pairs disagree, declared not fixed"
     key_files:
       - "spec.md"
       - "acceptance-criteria.md"
@@ -147,9 +149,13 @@ runtime and would shift together. Recorded so a future red on AC-1 is diagnosed 
 
 Volatile. Not part of the directive.
 
-**Five of seven criteria now carry an observed number.** What remains is not measurement: the scope
-exclusion is an operator decision, and the last one is the operator seeing the same figure on a card
-and in the row behind it, which under the parent `spec.md` §6 is the only thing that closes a phase.
+**Six of seven criteria are ticked; five of them carry an observed number.** The sixth is the scope
+exclusion, which was an operator decision and has been taken. What remains is the operator seeing the
+same figure on a card and in the row behind it, which under the parent `spec.md` §6 is the only thing
+that closes a phase.
+*Corrected 2026-09-02:* this paragraph read "Five of seven … the scope exclusion is an operator
+decision, and the last one is the operator" — a two-item remainder written before the exclusion was
+settled, and left standing after AC-6 was ticked above.
 
 The parity check found a second divergence the moment it existed, in the direction nobody was
 looking. It is declared, not fixed — see below.
@@ -160,12 +166,17 @@ Five surfaces render every number in the plugin through three untested functions
 rounding change, or an `Intl` option typo would alter every figure the operator sees and break no
 check.
 
-### It crosses a written scope exclusion, and that is not resolved
+### It crossed a written scope exclusion, and that is now resolved
 
-The parent `spec.md` §2 excludes "output number format" as remaining on the earlier track, and this
-work changed output number format inside this program. Either the exclusion means the formula
-editor's number format and the parent should say so, or this belongs elsewhere. Recorded, not
-decided.
+The parent `spec.md` §2 excluded "output number format" as remaining on the earlier track, and this
+work changed output number format inside this program. Either the exclusion meant the formula
+editor's number format and the parent should say so, or this belonged elsewhere.
+
+**Decided, and the parent says so.** The operator took the first reading, and `../spec.md:105` now
+reads "**and the formula editor's output number format** remain on the earlier track", with the
+amendment and its owner recorded in the paragraph beneath it. This phase is in scope where it sits
+and does not move. *This section previously ended "Recorded, not decided" and contradicted AC-6
+above; corrected 2026-09-02.*
 
 ### Progress
 
@@ -177,8 +188,8 @@ decided.
 | Bar and ring counts | Green, both counts, both styles | `1 bar elements ... want 1` and `0 text nodes carry "1.234,5", want 0` |
 | Formatter tests | Exist | `src/data/euro-format.test.ts`, 6 tests, exit 0 |
 | Harness total | 218/223, 5 red for a declared reason | Was 212/216 with 4. Seven checks added, one of them the new declared red |
-| Gate | 16 green, exit 0 | Read from `$?` directly, not through a pipe |
-| Scope question | Open | `spec.md` §7 states both readings |
+| Gate | 16 green, exit 0 | Read from `$?` directly, not through a pipe. *That was a run, not the tree: `tools/gate.mjs` carries **25** lanes today, so the 16 is a past reading and is not a coverage claim (2026-09-02).* |
+| Scope question | Settled | The exclusion names the formula editor at `../spec.md:105` |
 
 ### Deviations and findings
 

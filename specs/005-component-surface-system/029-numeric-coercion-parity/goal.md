@@ -10,12 +10,12 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/029-numeric-coercion-parity"
-    last_updated_at: "2026-08-30T18:50:00Z"
-    last_updated_by: "phase-author"
-    recent_action: "Cell coercion switched to whole-string; 10 harness disagreements closed to 0"
-    next_safe_action: "Refresh the 20 stale captures with npm run screenshots, then read them"
+    last_updated_at: "2026-09-02T08:00:00Z"
+    last_updated_by: "goal-audit"
+    recent_action: "Goal audit: screenshots-fresh green at 244; stale blocker cleared"
+    next_safe_action: "Operator types a hand-authored numeric field and reads it back on device"
     blockers:
-      - "screenshots-fresh is red on 20 captures this edit invalidated; the refresh writes outside this phase's scope"
+      - "Every number here is harness-measured; the operator device pass has not run"
     key_files:
       - "spec.md"
       - "acceptance-criteria.md"
@@ -24,7 +24,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-029"
       parent_session_id: null
-    completion_pct: 71
+    completion_pct: 86
     open_questions:
       - "Does sorting keep a leading-digits parse now that no display surface uses one"
     answered_questions:
@@ -92,6 +92,10 @@ Sorting, the record detail panel, the editor's write path and the card itself ar
       lane count is stated with it: 20 green, 0 red for a declared reason, against the 13 this row
       was written beside. The seven added since are `render-assertions`, the repaired `placement`,
       `sheet-teardown`, `sheet-rebuild`, `list-window`, `touch-targets` and `evidence`.
+      **Both lane counts are past runs. Checked 2026-09-02:** `tools/gate.mjs` declares **25** lanes
+      (`tools/gate.mjs:41-111`), and the whole gate was not re-run this session. The one lane this
+      row turned on was: `npm run screenshots:verify` exits **0** and reports **244 entries match
+      their sources, and none is blank or identical across themes**.
       **And one of those twenty was lying when this row was last read.** `sheet-rebuild` reported red
       on 4 of 10 runs from a race in its own staging, not from the tree — repaired the same day, 0 of
       10 after. A row that closes on "exit 0" closes on whatever the lanes happened to say that
@@ -142,7 +146,14 @@ the rating, progress and ring styles. And `cell-renderer.ts:1580` parses typed i
 **stores `1`**. That one writes data rather than displaying it, which makes it the more serious of
 the two and the one least suited to a drive-by.
 
-### The gate red is mine
+### The gate red is mine — and it was cleared on 2026-09-01
+
+**Resolved. Kept because the reasoning below is the part worth carrying.** The full capture run was
+made and the manifest rewritten. Re-checked 2026-09-02: `npm run screenshots:verify` exits **0** and
+reports **244 entries match their sources, and none is blank or identical across themes**. Nothing
+in this packet is waiting on a capture. The paragraph that follows describes the position before
+that run, and its account of *why* a source-fingerprint check goes stale on an edit that moves no
+pixel is still the reason this lane behaves the way it does.
 
 `screenshots-fresh` lists 20 stale captures and every one names `src/views/cell-renderer.ts`. The
 check compares source fingerprints rather than image bytes, on purpose, so editing the file makes

@@ -9,12 +9,12 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/030-gallery-view-deprecation"
-    last_updated_at: "2026-08-31T14:10:00Z"
-    last_updated_by: "phase-author"
-    recent_action: "Importer stops minting galleries; existing ones migrate to board on open with an undo"
+    last_updated_at: "2026-09-02T08:00:00Z"
+    last_updated_by: "goal-audit"
+    recent_action: "Goal audit: gallery migration verified implemented on disk"
     next_safe_action: "Operator opens a migrated gallery on device and tries the undo"
     blockers:
-      - "The migration shape for existing gallery-configured databases is undecided"
+      - "No migrated gallery has been opened on the operator's device"
     key_files:
       - "spec.md"
       - "tasks.md"
@@ -23,10 +23,11 @@ _memory:
       session_id: "surface-system-030-goal"
       parent_session_id: null
     completion_pct: 67
-    open_questions:
-      - "Migrate an existing gallery to board, to table, or refuse with an explanation?"
+    open_questions: []
     answered_questions:
       - "The board is the control: it is the gallery's structural twin and must render unchanged"
+      - "Board, not table and not a refusal: it is the only other surface that draws a cover image"
+      - "The renderer stays shipped, so the migration's undo restores the surface exactly"
 ---
 # Goal: Gallery View Deprecation
 
@@ -110,6 +111,9 @@ outcome this packet exists to prevent.
       not-applicable, because the figure is ticked over total and inventing an exemption would
       inflate it.
 - [x] `npm run gate` exits 0, read from `$?` and not through a pipe. **20 green, re-run 2026-09-01.**
+      *2026-09-02 audit:* the lane count on disk is now **25** (`tools/gate.mjs`). The row is about
+      the exit status, which the 2026-09-01 run read from `$?`; the figure beside it describes that
+      run's tree and not this one, and is left as the record of it.
 <!-- /ANCHOR:completion -->
 
 ---
@@ -121,6 +125,15 @@ Volatile. Not part of the directive.
 
 **Nothing has started.** The phase was opened on operator instruction and is blocked on one
 decision, deliberately.
+
+*2026-09-02 audit: that paragraph is now history.* The decision landed on 2026-09-01 and the work
+went with it — verified on disk, not on prose: the `.base` importer maps a `cards` view to `board`
+and lands the cover on `boardImageField` (`src/main.ts:1521-1593`); an existing gallery migrates on
+first render through `migrateGalleryViewOnOpen` with `undo.galleryMigration` as its own undo step
+(`src/views/database-view.ts:2727-2737`, `src/i18n.ts:363`); and `gallery-renderer.ts` is still
+shipped at 787 lines, which is what makes that undo restore the surface. Four of the six criteria
+are met. The two that remain are the operator's device and the deletion's coverage floor, and the
+frontmatter no longer carries the migration question as open.
 
 ### Measured footprint, not estimated
 

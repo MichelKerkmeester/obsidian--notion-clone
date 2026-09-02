@@ -170,6 +170,12 @@
         "source": "derived"
       },
       {
+        "name": "evidence",
+        "kind": "key_phrase",
+        "path": "goal.md",
+        "source": "derived"
+      },
+      {
         "name": "no",
         "kind": "key_phrase",
         "path": "goal.md",
@@ -186,17 +192,11 @@
         "kind": "key_phrase",
         "path": "goal.md",
         "source": "derived"
-      },
-      {
-        "name": "it",
-        "kind": "key_phrase",
-        "path": "goal.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "Every row is a markdown note whose frontmatter the plugin renders as properties, while the note's actual body is never surfaced anywhere in the plugin.",
     "created_at": "2026-08-30T15:07:29.613Z",
-    "last_save_at": "2026-09-01T10:50:16.454Z",
+    "last_save_at": "2026-09-02T09:05:03.173Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -206,7 +206,7 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:7c971a14b34bd83e1d005f912573df34e4d53bfa79b15a99539d9abd4bc59764",
+    "source_fingerprint": "sha256:c6be9e5073e832c611735e2e4c14d857fa6ba8f8fada020489e97777c0600e76",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "87ff83e691ae7be154cbb303d644574a0a472e213798d7c56dfa9214b73c28d0",
