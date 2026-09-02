@@ -11,10 +11,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/036-obsidian-pm-ui-harvest"
-    last_updated_at: "2026-09-02T00:00:00Z"
-    last_updated_by: "port-rescope"
-    recent_action: "Rescoped to a UI/UX port: timeline, board, calendar, subtasks"
-    next_safe_action: "Dispatch the 20-iteration /deep:research loop per plan.md §4"
+    last_updated_at: "2026-09-02T21:54:00Z"
+    last_updated_by: "loop-containment-note"
+    recent_action: "Iteration 1 rejected: containment_violation from sibling code phase"
+    next_safe_action: "Relaunch loop only after code phase and render-assertion controls commit"
     blockers: []
     key_files:
       - "spec.md"
@@ -25,7 +25,8 @@ _memory:
       session_id: "surface-system-036-goal"
       parent_session_id: null
     completion_pct: 0
-    open_questions: []
+    open_questions:
+      - "should research loops run in an isolated git worktree so they can overlap implement waves — operator's call (worktree vs branch)"
     answered_questions: []
 ---
 # Goal: Obsidian PM UI Harvest
@@ -125,4 +126,15 @@ Volatile section below; not part of the directive.
 run. Rescoped 2026-09-02 21:40-21:41 by the operator from a pattern-harvest catalog to a PORT: timeline,
 board, calendar and subtask surfaces plus overall UI/UX, near one-to-one, rewritten to this repo's
 standards and merged; table view, sheets and calcs stay ours (see D4, D5).
+
+2026-09-02 21:52-21:54: the 20-iteration `/deep:research` fan-out launched on `cli-codex`
+`gpt-5.6-luna` (`reasoningEffort=max`, `serviceTier=fast`) once its quota window opened at 21:52.
+Iteration 1 was rejected at 21:54 with a `containment_violation` — `observability-events.jsonl` under
+`research/` named a path under `tools/storybook` that a concurrent in-runtime code phase (the
+phone-chrome fixes for reports 30-33) had dirty in the same checkout. The runner's containment scans
+the whole worktree, so the rejection is attributable to the sibling work, not to this lane. The
+launcher then started the `devin` fallback (`deepseek-v4-flash-max`), which the orchestrator stopped
+before it could fail the same way. Decision (orchestrator, reversible default): the loop is relaunched
+only on a clean committed tree, after the code phase and the render-assertion controls commit; the
+executor order stays codex → devin → claude2 Sonnet (5 iterations) per D3.
 <!-- /ANCHOR:log -->
