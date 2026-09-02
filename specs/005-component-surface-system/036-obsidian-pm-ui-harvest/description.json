@@ -1,0 +1,21 @@
+{
+  "specFolder": "005-component-surface-system/036-obsidian-pm-ui-harvest",
+  "description": "Six packets in this program (022, 031, 010, 023, 001/027, 011) are actively deciding phone-surface",
+  "keywords": [
+    "six",
+    "packets",
+    "program",
+    "actively",
+    "deciding",
+    "phone-surface"
+  ],
+  "lastUpdated": "2026-09-02T19:31:01.008Z",
+  "specId": "036",
+  "folderSlug": "obsidian-pm-ui-harvest",
+  "parentChain": [
+    "005-component-surface-system"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": [],
+  "level": "2"
+}
