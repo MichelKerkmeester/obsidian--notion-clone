@@ -7,10 +7,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/031-sheet-lifecycle-ownership"
-    last_updated_at: "2026-08-31T17:00:00Z"
-    last_updated_by: "phase-author"
-    recent_action: "Acceptance criteria added; Level 2 requires them and they were missing"
-    next_safe_action: "Build the producer-parity check and observe it failing"
+    last_updated_at: "2026-09-02T19:30:00Z"
+    last_updated_by: "report-29-second-mechanism"
+    recent_action: "AC-8 met on the bench; AC-9 opened; one proposal refuted"
+    next_safe_action: "The operator long-presses a row on iOS and looks behind the menu"
     blockers: []
     key_files: ["spec.md", "goal.md"]
     session_dedup:
@@ -43,7 +43,20 @@ whose control has not been observed failing is not met, however green it looks.
 | AC-5 | Sheets drawing a handle with no drag attached | 0 | 16 |
 | AC-6 | A short fast flick | dismisses | springs back at 96px distance-only |
 | AC-7 | Operator opens and closes each sheet on device | no lock-up | unknown — **only the operator closes this** |
+| AC-8 | The target's tap handler after a completed long press | receives nothing | **was** `["mousedown", "click"]` — the row's tap ran on top of the menu; now `[]` |
+| AC-9 | Operator long-presses a row on iOS and looks behind the menu | no record sheet | unknown — **only the operator closes this** |
 <!-- /ANCHOR:criteria -->
+
+<!-- ANCHOR:refuted -->
+## REFUTED, AND WHY IT IS NOT A CRITERION
+
+A proposed criterion — *two registered sheets, one closes correctly, the backdrop goes when the last
+live sheet leaves; was `scrimsLeft: 1`, now 0* — was **not** added. The sheet it calls stale is
+classed and still on the body, which makes it an open sheet, and holding the backdrop up for an open
+sheet is this packet's recorded correct behaviour. Ticking it would re-import the inverted assertion
+the compounding case already had once. The reasoning and its three observations are in `goal.md`'s
+2026-09-02 second-mechanism entry.
+<!-- /ANCHOR:refuted -->
 
 ---
 

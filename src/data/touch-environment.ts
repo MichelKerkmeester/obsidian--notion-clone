@@ -78,17 +78,56 @@ export interface LongPressOptions {
   ignoreTarget?: (event: PointerEvent) => boolean;
 }
 
-/** Adds a touch/pen context-menu gesture without changing the native click path. */
+/**
+ * Adds a touch/pen context-menu gesture that consumes the press it completed.
+ *
+ * A completed hold has to end the gesture, not merely add to it. Calling
+ * `preventDefault()` when the timer fires cannot do that: the timer runs long after
+ * `pointerdown` finished dispatching, and an event that has finished dispatching has no
+ * default left to prevent. So the press stayed live, the browser sent its compatibility
+ * `mousedown` and `click` when the finger lifted, and the target's own tap handler ran on
+ * top of whatever the hold had just opened — one finger, two actions.
+ *
+ * The consuming is therefore done forward, on the events that have not happened yet: the
+ * next `mousedown` and the next `click` on this target are swallowed in the capture phase,
+ * once each, before any handler below can see them. Both are needed — a tap handler bound
+ * to either one would otherwise still fire.
+ *
+ * The flags clear on the next `pointerdown`, which is the one event guaranteed to precede a
+ * genuine later click, so a swallow that is never spent cannot carry over and eat an
+ * unrelated tap.
+ */
 export function attachLongPress(target: HTMLElement, options: LongPressOptions): () => void {
   let timer: ReturnType<typeof setTimeout> | undefined;
   let startX = 0;
   let startY = 0;
   let activePointerId: number | undefined;
+  let swallowClick = false;
+  let swallowMouseDown = false;
 
   const clear = () => {
     if (timer !== undefined) clearTimeout(timer);
     timer = undefined;
     activePointerId = undefined;
+  };
+
+  const onPointerDownCapture = () => {
+    swallowClick = false;
+    swallowMouseDown = false;
+  };
+  const onMouseDownCapture = (event: Event) => {
+    if (!swallowMouseDown) return;
+    swallowMouseDown = false;
+    event.preventDefault();
+    event.stopPropagation();
+    event.stopImmediatePropagation();
+  };
+  const onClickCapture = (event: Event) => {
+    if (!swallowClick) return;
+    swallowClick = false;
+    event.preventDefault();
+    event.stopPropagation();
+    event.stopImmediatePropagation();
   };
 
   const onPointerDown = (event: PointerEvent) => {
@@ -100,8 +139,8 @@ export function attachLongPress(target: HTMLElement, options: LongPressOptions):
     startY = event.clientY;
     timer = setTimeout(() => {
       timer = undefined;
-      event.preventDefault();
-      event.stopPropagation();
+      swallowClick = true;
+      swallowMouseDown = true;
       if (typeof navigator !== "undefined") navigator.vibrate?.(20);
       options.onLongPress(event);
     }, options.delay ?? 450);
@@ -115,6 +154,9 @@ export function attachLongPress(target: HTMLElement, options: LongPressOptions):
     if (activePointerId === event.pointerId) clear();
   };
 
+  target.addEventListener("pointerdown", onPointerDownCapture, true);
+  target.addEventListener("mousedown", onMouseDownCapture, true);
+  target.addEventListener("click", onClickCapture, true);
   target.addEventListener("pointerdown", onPointerDown);
   target.addEventListener("pointermove", onPointerMove);
   target.addEventListener("pointerup", onPointerEnd);
@@ -122,6 +164,9 @@ export function attachLongPress(target: HTMLElement, options: LongPressOptions):
   target.addEventListener("pointerleave", onPointerEnd);
   return () => {
     clear();
+    target.removeEventListener("pointerdown", onPointerDownCapture, true);
+    target.removeEventListener("mousedown", onMouseDownCapture, true);
+    target.removeEventListener("click", onClickCapture, true);
     target.removeEventListener("pointerdown", onPointerDown);
     target.removeEventListener("pointermove", onPointerMove);
     target.removeEventListener("pointerup", onPointerEnd);

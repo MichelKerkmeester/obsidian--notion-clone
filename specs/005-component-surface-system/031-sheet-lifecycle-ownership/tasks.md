@@ -9,8 +9,8 @@ _memory:
     packet_pointer: "005-component-surface-system/031-sheet-lifecycle-ownership"
     last_updated_at: "2026-09-02T20:10:00Z"
     last_updated_by: "report-29-verifier"
-    recent_action: "T11 closed: modal close tears the sheet chrome down"
-    next_safe_action: "The operator runs the menu-then-modal sequence on iOS, twice"
+    recent_action: "T12 closed: a long press consumes its compatibility click"
+    next_safe_action: "The operator long-presses a row on iOS and looks behind the menu"
     blockers: []
     key_files: ["plan.md", "spec.md"]
     session_dedup:
@@ -19,7 +19,7 @@ _memory:
       parent_session_id: null
     completion_pct: 83
     open_questions: []
-    answered_questions: ["The owned menu is the one producer that cleans up, so it is the parity reference"]
+    answered_questions: ["The owned menu is the one producer that cleans up, so it is the parity reference", "A gesture consumes forward, on events not yet dispatched, not backward"]
 ---
 # Tasks: Sheet Lifecycle Ownership
 
@@ -192,6 +192,27 @@ _memory:
       wrapper was removed` against the shipped `db-modal.ts`.
       *Green:* `sheet-teardown` `producers: 11, leaking: 0`; `npm run gate` **25 green, exit 0**;
       `npx vitest run` **645 tests**, up from 625.
+- [x] **T12** Let a long press consume its own compatibility click — report 29, second mechanism.
+      *Closed.* `touch-environment.ts:81-155`: the completed hold now swallows the next `mousedown`
+      and the next `click` on the target in the capture phase, once each, clearing on the next
+      `pointerdown`. The `preventDefault()` it replaces ran inside the timer, after `pointerdown`
+      had finished dispatching, and consumed nothing. The swallow reuses the shape at
+      `table-cell-gesture.ts:228-242` rather than adding a second one.
+      *Red observed:* with the fixed file stashed, `touch-environment.test.ts` recorded the row's
+      tap handler receiving `["mousedown", "click"]` after a completed hold.
+      *Green:* `[]`, both consumed; `npx vitest run` **648 tests**, up from 645; `npm run gate`
+      **25 green, exit 0**.
+- [ ] **T13** The operator long-presses a row on iOS and sees no record sheet behind the menu.
+      *Evidence to close:* the operator says so. The Chromium bench re-hit-tests the compatibility
+      click onto the backdrop, so it cannot observe this either way; WebKit delivers it to the
+      original target, which is where the defect lives.
+
+**Proposed and refuted, so it is not a task.** Pruning a registered sheet by its class as well as by
+connectedness guards a state nothing can reach: `mobile-bottom-sheet.ts:48` is the only writer of the
+class in `src/`, and `applySheetChrome(panel, false)` deregisters the panel on the same call. The
+`scrimsLeft: 1` offered as its red comes from a bench whose orphan is classed and still on the body —
+an open sheet, for which holding the backdrop up is correct. Reasoning and its three observations in
+`goal.md`, 2026-09-02 second-mechanism entry.
 <!-- /ANCHOR:phase -->
 
 <!-- ANCHOR:completion -->

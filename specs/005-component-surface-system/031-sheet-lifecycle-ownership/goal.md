@@ -9,10 +9,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/031-sheet-lifecycle-ownership"
-    last_updated_at: "2026-09-02T20:10:00Z"
-    last_updated_by: "report-29-verifier"
-    recent_action: "Report 29 fix landed: modal close tears the sheet chrome down"
-    next_safe_action: "The operator runs the menu-then-modal sequence on iOS, twice"
+    last_updated_at: "2026-09-02T19:30:00Z"
+    last_updated_by: "report-29-second-mechanism"
+    recent_action: "Long press now consumes its compat click; class-prune refuted"
+    next_safe_action: "The operator long-presses a row on iOS and looks behind the menu"
     blockers:
       - "Nothing here is confirmed on the operator's device"
     key_files:
@@ -26,6 +26,8 @@ _memory:
     open_questions:
       - "Does Obsidian's Modal.close() detach containerEl alone or also modalEl"
     answered_questions:
+      - "A long press consumed nothing: preventDefault in a timer has no default left"
+      - "Pruning a registered sheet by its class guards a state no producer can reach"
       - "Report 29: the DbModal body-portal orphan pins the scrim for the whole session"
       - "Neither: a MutationObserver prunes the per-document live-sheet set on removal"
       - "The two drag failures are unrelated; fixing one does not fix the other"
@@ -110,6 +112,16 @@ defect in this phase is a consequence of that shape.
       the host wrapper was removed`, lane `FAIL — 1 producer(s) leave the body dirty`.**
 - [ ] The operator opens and closes an owned-menu sheet, then a confirm/picker modal, on iOS from a
       fresh start, twice, and the app stays responsive.
+- [x] A long press consumes its own compatibility click, so one finger runs one action.
+      **Met on the bench, not on the phone.** Observed red first by stashing the fixed
+      `touch-environment.ts` and running the new unit case against the shipped file — **was: the
+      row's tap action ran after the press that opened the menu, recording
+      `["mousedown", "click"]`; now: `[]`, both events consumed in the capture phase.** The Chromium
+      bench cannot see this either way: it re-hit-tests the compatibility click onto the backdrop,
+      so the click never reaches the row there. WebKit delivers it to the original target, which is
+      the case the unit test models and the operator confirms.
+- [ ] The operator long-presses a table row on iOS and sees the menu alone — no record sheet opening
+      behind it. **Only the operator closes this.**
 <!-- /ANCHOR:completion -->
 
 ---
@@ -310,3 +322,81 @@ deleted from `popover-position.ts` took the durable why with it, and a dangling 
 and the whole gate `PASS — 25 green, 0 red` at exit 0. Both device rows above stay open: nothing
 here is confirmed on the operator's phone, and the bench says so itself — no Obsidian host is
 constructed, so it measures the chrome contract rather than any caller's real lifecycle.
+
+### 2026-09-02: The menu path's second mechanism — one half confirmed, one half refuted
+
+A brief carrying two proposed changes arrived with a bench script for each, both red. Treating both
+as hypotheses rather than findings was the whole value of this pass: **one was a real mechanism and
+is fixed; the other proposes a state no producer in this tree can reach, and its red is an
+assertion this packet has already recorded as wrong once.**
+
+**Who did the work, and why here.** The plan sends implementation to an external lane. All three
+were unavailable — codex out of quota, devin refusing an untrusted workspace, opencode holding no
+credentials — so this in-runtime model both implemented and verified, which is the weaker
+arrangement of the two and is recorded rather than smoothed over.
+
+**Confirmed: a long press did not consume the press it completed.** `touch-environment.ts` called
+`preventDefault()` from inside its `setTimeout`. The timer runs long after `pointerdown` has
+finished dispatching, and an event that has finished dispatching has no default left to prevent —
+so the call consumed nothing. The press stayed live, the browser sent its compatibility `mousedown`
+and `click` when the finger lifted, and the row's own tap handler ran on top of the menu the hold
+had just opened. One finger, two actions, which is the second sheet appearing behind the menu.
+
+The fix consumes forward instead: the next `mousedown` and the next `click` on the target are
+swallowed in the capture phase, once each, reusing the shape `table-cell-gesture.ts:228-242` already
+uses for the row-range gesture rather than inventing a second one. The flags clear on the next
+`pointerdown` — the one event guaranteed to precede a genuine later click — so an unspent swallow
+cannot carry over and eat an unrelated tap. That carry-over is a real hazard here, because the
+row-range gesture registers its own capture listeners on the same element first and can consume the
+click before this one sees it; a case pins the behaviour.
+
+**Observed red first, in the unit suite** (`touch-environment.test.ts`): with the shipped file
+stashed, the row's tap handler recorded `["mousedown", "click"]` after a completed hold — **was:
+the row's tap action ran after the press that opened the menu; now: `[]`, both events consumed.**
+
+**The bench script for this half cannot see the fix, and that is not a failure of the fix.**
+`longpress-compat-click.mjs` prints `doc:click target=div.db-mobile-sheet-scrim` after
+`LONGPRESS FIRED`, and the brief reads the disappearance of that line as the green condition. Read
+the target: the click lands on the **scrim**, not the row. In the same pre-change run the row's own
+listeners recorded no `mousedown` and no `click` at all — so on Blink the compatibility click is
+re-hit-tested onto the backdrop the menu had just put over everything, and never reaches the row.
+No target-bound swallow can remove that line, and nothing should: that click is how a tap on the
+backdrop dismisses the menu. The brief's own device note is the resolution — **WebKit delivers the
+compatibility click to the original touch target and Blink re-hit-tests** — so the double-action
+this fixes is reachable on the operator's phone and unreachable in this Chromium bench. The unit
+case models the WebKit delivery and is the only automated proof available here. **Only the device
+confirms the symptom is gone.**
+
+**Refuted: pruning a registered sheet by its class.** The proposal was that `pruneSheets` drop a
+sheet whose element no longer carries `db-mobile-bottom-sheet`, not only one that is disconnected,
+with `two-sheets.mjs` printing `scrimsLeft: 1` as the red. Three observations close it:
+
+1. **The bench's own orphan carries the class.** Probing the script's end state:
+   `{"scrimsLeft":1,"orphanClass":"db-mobile-bottom-sheet","orphanConnected":true}`. It is classed
+   and on the body, so a class-based prune would not drop it and the script would stay red after
+   the change — the proposed fix cannot produce its own green.
+2. **A classed, connected sheet on the body is an OPEN sheet, and holding the backdrop up for it is
+   correct.** That is this packet's own recorded answer, and
+   `sheet-teardown-harness.ts` states it in the compounding case: an earlier version of that case
+   re-attached its leaked node and "so asserted the opposite of the truth". `two-sheets.mjs`
+   reproduces exactly that mistake. A guard producer written to its shape would re-import a defect
+   this phase already removed.
+3. **No producer can reach the state the change is for.** `mobile-bottom-sheet.ts:48` is the only
+   writer of the class in `src/`, and `applySheetChrome(panel, false)` deregisters the panel on the
+   same call that removes it. A registered sheet whose element lost the class is unreachable by
+   construction, so the branch would be dead code guarding an impossible state.
+
+No change was made here, and no harness producer was added for it. The genuine leak shape — a node
+detached without its chrome taken down — is already covered by the `isConnected` prune and by the
+detached-host-wrapper producer added earlier today.
+
+**The `owned-menu-phone.mjs` bench row is a harness artefact, unchanged.** Its single FAIL comes
+from a synthetic `timeStamp` that makes `shouldFlickDismiss` read 0.875 px/ms; the clock, not the
+product, is what that row measures. Left alone deliberately: it is a scratch script, not a tracked
+lane, and fixing it is not this scope.
+
+**Evidence, exit codes read directly.** `npx tsc --noEmit` 0; `npx vitest run` **648 passed**, up
+from 645; `npm run lint:tools` 0; `scan-comments` 0 with `PASS`; `sheet-teardown` `producers: 11,
+leaking: 0` exit 0; `sheet-rebuild` `barsLost: 0` exit 0; `storybook:placement` 385/386 exit 0;
+`npm run replay` 8/8 exit 0; `SURFACE_PHASE=031-sheet-lifecycle-ownership npm run gate`
+**PASS — 25 green, 0 red** at exit 0. The device rows stay open.

@@ -166,6 +166,12 @@
         "source": "derived"
       },
       {
+        "name": "The Chromium",
+        "kind": "proper_noun",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
         "name": "the",
         "kind": "key_phrase",
         "path": "tasks.md",
@@ -174,12 +180,6 @@
       {
         "name": "its",
         "kind": "key_phrase",
-        "path": "tasks.md",
-        "source": "derived"
-      },
-      {
-        "name": "PHASE 1: THE CONTROL",
-        "kind": "heading",
         "path": "tasks.md",
         "source": "derived"
       },
@@ -198,7 +198,7 @@
     ],
     "causal_summary": "Every sheet has one owner for its whole life, so the scrim always comes down, the drag always survives a re-render, and no handle is drawn onto nothing.",
     "created_at": "2026-08-31T14:46:45.699Z",
-    "last_save_at": "2026-09-02T19:01:07.195Z",
+    "last_save_at": "2026-09-02T19:19:27.341Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -209,13 +209,13 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:f6181be3ae0bfbcfff1e0851dd1d8a231b700b4d1fc65346fb3d825ad5a7cc02",
+    "source_fingerprint": "sha256:06882946fe3563fbfe2e1d9162cddf7f61cc434d7dce2085141273cd5ce32433",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "32a8c75d00a449d536d16c67578fa7e027d593bcd252317957f6e19c009ea9aa",
       "plan.md": "b3552998690b88665d02c8ad2eb710e0e825a9f785f4400e22c8405ff78c553c",
-      "tasks.md": "cbe155ea44ac1cbbd8eb8bde105c91b4ef27c2f8c0c99b24a0f8b84b4d715fca",
-      "implementation-summary.md": "50916f979f7391c8df9a27998e8e1349ce46238557db6591512a43af3fe3a7b3"
+      "tasks.md": "2372a44931020ef2e1ad611bacec2ca675ca7297106820529cd3f134eadf5550",
+      "implementation-summary.md": "a77701f44d085080cbf1b0932babef0f4ec5fecac8947560d6be3877358cd5f1"
     },
     "last_active_child_id": null,
     "last_active_at": null

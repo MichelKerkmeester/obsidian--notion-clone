@@ -5,7 +5,7 @@
 Every row below is unticked in its own phase's `goal.md` and nothing in this repository can close
 it. They are gathered here because one list is actionable and thirty files are not.
 
-Derived 2026-09-02: **36 phases**, **5 with nothing left**, **47 rows** waiting on a device.
+Derived 2026-09-02: **36 phases**, **5 with nothing left**, **48 rows** waiting on a device.
 
 The figure beside each phase is a count of its own checkboxes. It is derived, never judged.
 
@@ -135,10 +135,11 @@ The figure beside each phase is a count of its own checkboxes. It is derived, ne
 - [ ] A database previously configured as a gallery opens on the operator's device. Only the operator closes this row.
 - [ ] Renderer coverage publishes its new floor, and the ratchet passes at it. Not applicable while the renderer ships — it still exists and is still covered, and the migration's undo depends on it continuing to. This row belongs to the deletion, which is now gated on evidence rather than on a question: once no view migrates on open for a while, nothing is producing galleries and the renderer has no callers left. It is left unticked rather than marked not-applicable, because the figure is ticked over total and inventing an exemption would inflate it.
 
-## 031-sheet-lifecycle-ownership — 6/8
+## 031-sheet-lifecycle-ownership — 7/10
 
 - [ ] The operator opens and closes each sheet on device without the app locking up. Only the operator closes this.
 - [ ] The operator opens and closes an owned-menu sheet, then a confirm/picker modal, on iOS from a fresh start, twice, and the app stays responsive.
+- [ ] The operator long-presses a table row on iOS and sees the menu alone — no record sheet opening behind it. Only the operator closes this.
 
 ## 033-list-virtualisation — 5/6
 

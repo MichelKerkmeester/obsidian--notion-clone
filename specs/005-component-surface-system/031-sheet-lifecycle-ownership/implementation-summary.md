@@ -9,10 +9,10 @@ contextType: "implementation"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/031-sheet-lifecycle-ownership"
-    last_updated_at: "2026-09-02T20:10:00Z"
-    last_updated_by: "report-29-verifier"
-    recent_action: "Report 29 fix landed: modal close tears the sheet chrome down"
-    next_safe_action: "The operator runs the menu-then-modal sequence on iOS, twice"
+    last_updated_at: "2026-09-02T19:30:00Z"
+    last_updated_by: "report-29-second-mechanism"
+    recent_action: "Long press consumes its compat click; class-prune refuted, not built"
+    next_safe_action: "The operator long-presses a row on iOS and looks behind the menu"
     blockers:
       - "Nothing here is confirmed on the operator's device"
     key_files:
@@ -28,6 +28,7 @@ _memory:
     answered_questions:
       - "The watcher closes the defect without changing any producer"
       - "A sheet still on the body is an open sheet; holding the backdrop for it is correct"
+      - "The long press consumed nothing; it now swallows the click it caused"
 ---
 # Implementation Summary: Sheet Lifecycle Ownership
 
@@ -270,6 +271,30 @@ judged the partial diff, finished the missing `pointercancel` binding, repaired 
 unguarded call, and ran the gate. **Two device rows remain open** — the criteria count is 6 of 8,
 and no part of this is confirmed on the operator's phone. The bench states its own limit: no
 Obsidian host is constructed, so it measures the chrome contract rather than a real lifecycle.
+
+### The second mechanism — Report 29 (2026-09-02, later the same day)
+
+A long press did not consume the press it completed. `touch-environment.ts` called `preventDefault()`
+from inside its `setTimeout`, which runs after `pointerdown` has finished dispatching, so there was
+no default left to prevent and the call consumed nothing. The browser sent its compatibility
+`mousedown` and `click` when the finger lifted, and the row's tap action ran on top of the menu the
+hold had just opened — the record sheet appearing behind the menu in the operator's report.
+
+The hold now swallows the next `mousedown` and `click` on the target in the capture phase, once each,
+clearing on the next `pointerdown` (`touch-environment.ts:81-155`), reusing the shape
+`table-cell-gesture.ts:228-242` already carries. **Observed red first:** with the fixed file stashed,
+the new unit case recorded the row's tap handler receiving `["mousedown", "click"]` after a completed
+hold; it now receives `[]`.
+
+**What the bench cannot prove, and why the device row is not decoration.** Chromium re-hit-tests the
+compatibility click onto the backdrop the menu just opened, so the row never receives it there — in
+the pre-change run the row's own listeners recorded no `mousedown` and no `click` at all. WebKit
+delivers that click to the original touch target, which is where the defect lives and where the fix
+acts. The unit case models WebKit's delivery. **Only the operator's phone confirms the symptom is
+gone.**
+
+The brief's second proposed change was refuted rather than built; see `goal.md`'s entry and §5.
+This pass implemented and verified in one runtime because all three external lanes were unavailable.
 <!-- /ANCHOR:limitations -->
 
 ---
@@ -289,5 +314,8 @@ Obsidian host is constructed, so it measures the chrome contract rather than a r
 | A harness case that raced itself | The two real-renderer cases share one body and each resets it, and they were first built as already-started promises — so the second would clear the body under the first before it read its result. Rewritten as thunks awaited in sequence. A harness racing itself reports a green |
 | I cited a reading that meant nothing, and shipped it | The 120px drag was committed as REQ-002's evidence while the press was landing off-screen and the overlay stack was doing the dismissing. Two things would have caught it earlier: a control gesture that must NOT close, and asking what the harness proves when it passes rather than only when it fails. Both exist now |
 | I nearly cited another reading that meant nothing | An early probe reported `dismissPanel === false` and it was tempting as evidence for REQ-003. That probe never registered anything, so `false` was the only answer it could give, in either mode. Discarded and measured properly instead |
+| A brief's two changes, one of which was already answered here | The second proposed change — prune a registered sheet by its class — would guard a state `applySheetChrome` cannot produce, and its red came from a bench asserting that an OPEN sheet should lose its backdrop. This packet had already made and reverted that exact inversion in the compounding case. It was not built, and the reasoning is written down so the next pass does not arrive at it a third time |
+| The bench that could not see its own fix | The long-press script was offered as the red for the click swallow, but its `doc:click` line is the backdrop's click, not the row's — Blink re-hit-tests, and the row's listeners recorded nothing in either run. The fix is real and the script cannot observe it. The unit case models WebKit's delivery instead, and the device row is what actually closes it |
+| Implemented and verified in one runtime | The plan sends implementation out to an external lane so the verifier is not the author. All three lanes were unavailable, so this pass is both. Recorded as the weaker arrangement rather than left implicit |
 | The gate's `evidence` lane self-heals | It checks artefact freshness at lane 9, and lanes 11, 16, 17 and 18 re-stamp their own artefacts afterwards. So the first run after a source change reds and the second greens with no human action. The re-stamps are genuine re-measurements, so nothing is hidden — but "just run it again" is the wrong habit to teach, and moving the lane last would fix it. Left for the packet that owns the gate |
 <!-- /ANCHOR:decisions -->
