@@ -7,18 +7,18 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/035-visual-pass-product-defects"
-    last_updated_at: "2026-09-02T18:30:00Z"
+    last_updated_at: "2026-09-02T23:55:00Z"
     last_updated_by: "in-runtime-verifier"
-    recent_action: "14 of 17 defects fixed and read on recaptures; P4 P6 P15 open"
-    next_safe_action: "Take the operator call on P6 scroll-versus-wrap and P15 threshold"
-    blockers: ["P6 contradicts the placement lane; P15 threshold met by no tag"]
+    recent_action: "16 of 17 defects fixed and read on recaptures; P4 open"
+    next_safe_action: "Take the operator call on P4 needing a wider month column"
+    blockers: ["P4 truncates 4 of 11 titles from a 48px column at 402px"]
     key_files: ["spec.md", "goal.md", "tasks.md"]
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-035"
       parent_session_id: null
-    completion_pct: 83
-    open_questions: ["Should the phone selection bar wrap or keep its scroll lane"]
+    completion_pct: 89
+    open_questions: ["Does a 48px phone column earn a wider month cell (P4)"]
     answered_questions: ["The selection bar clips because it scrolls and a capture cannot"]
 ---
 # Feature Specification: Visual Pass Product Defects
@@ -39,7 +39,7 @@ _memory:
 | **Level** | 2 |
 | **Parent Spec** | `../spec.md` |
 | **Predecessor** | `../034-packet-doc-truth/spec.md` |
-| **Status** | **In progress.** Fifteen of the seventeen are fixed and read on a recapture; P4 and P6 stay open with what was measured recorded against them — P4 improved 6 truncated segments to 4 without reaching the 0 it asks for. Every row below is a defect read on a capture and then re-verified against the source |
+| **Status** | **In progress.** Sixteen of the seventeen are fixed and read on a recapture; P4 stays open with what was measured recorded against it — P4 improved 6 truncated segments to 4 without reaching the 0 it asks for. Every row below is a defect read on a capture and then re-verified against the source |
 | **Complexity** | 41/100, confidence 80% |
 
 **On the declared level.** `recommend-level.sh --loc 400 --files 12` returned **Level 1** at 41/100
@@ -85,7 +85,7 @@ file:line as it is on disk today, and the shape a recapture must show.
 | **P3** | invalid-events modal, coarse pointer | **Twelve controls under the project's 28px floor.** `tools/live/touch-targets-baseline.json` was raised **224 → 228** on 2026-09-02 to record four of them as net new | `.db-invalid-event-row-fix` declares `height: 24px` at `styles.css:11161` — 4px short — and is **absent** from the coarse-pointer raise list at `styles.css:18458-18472`, where sibling modal controls get `min-width/min-height: 28px` | `touch-targets` reports **0** of the twelve under the floor and the baseline `under` falls from **228 to 216**; the modal's action bar is otherwise unchanged in the recapture |
 | **P4** | calendar-month-view, phone | An always-visible "+" in **all 35 day cells** eats ~40% of each cell, so every title truncates. Desktop shows it on hover only | Base `opacity: 0` at `styles.css:15505`, revealed on `:hover`/`:focus` at `styles.css:15518-15520`. Under `@media (pointer: coarse), (max-width: 760px)` it is forced `opacity: 1` at `styles.css:18474-18476` and floored to 28×28 at `styles.css:18469-18471` — a 28px control in a ~53px cell at 390px | Day titles render untruncated in cells that fit them, **and** the add affordance is still reachable by touch. The shipped pattern elsewhere is a corner control or a long-press; pick the smallest that keeps it reachable and **say which** |
 | **P5** | chrome-toolbar, "N hidden" badge | `position: absolute` with `right: -5px` and `min-width: 16px` carrying **~60px of text**, so it overhangs across the Group button. Its border-on-muted text reads **below AA** | `.db-toolbar-badge` at `styles.css:2293-2308` (`min-width: 16px` :2294, `right: -5px` :2304, `top: -5px` :2306); `.db-toolbar-badge-neutral` overrides to `background: var(--background-modifier-border)` / `color: var(--text-muted)` at `styles.css:20152-20156`. It carries a phrase, not a count: `src/views/database-view.ts:4972` writes `t("toolbar.hiddenCount", { count })` into it | The badge is sized to its content and stays inside its own button's box; its text-on-background pair measures **≥4.5:1**, using the badge tokens sibling badges use |
-| **P6** | chrome-selection-status-bar, phone | **"Copy CSV" clips to "Copy" at 402px**; the fixed bar's three actions do not fit | The bar is **already** built to scroll: `overflow-x: auto` with `width: max-content` at `styles.css:2497`, and the `.is-phone` rule repeats it at `styles.css:2509-2518` with `> * { flex: 0 0 auto }` at `styles.css:2520-2522`. `.db-selection-action` at `styles.css:2349-2360` sets no width and no truncation. **So the cause is not the missing scroll, and this pass did not find it** | The mechanism is **named before the fix** — a bar that already scrolls and still clips has a cause worth knowing. Then: all three labels render in full at 402px, none hidden, none shortened |
+| **P6** | chrome-selection-status-bar, phone | **"Copy CSV" clipped to "Cop" at 402px**; the fixed bar's three actions did not fit | The bar was built to scroll: `overflow-x: auto` with `width: max-content` at `styles.css:2497`, repeated by the `.is-phone` rule with `> * { flex: 0 0 auto }`. Nothing truncated — the box was capped at `calc(100vw - 32px)` = 370px against 416px of content, so "Copy CSV" sat 55px outside a port a capture cannot scroll. **The scroll lane was the cause, and it contradicted the wrap this row asks for; the operator chose the wrap on 2026-09-02** | **Closed.** The phone bar wraps at `styles.css:2511-2527` — `height: auto; min-height: 48px; flex-wrap: wrap; overflow-x: hidden`, the 44px action floor kept — and the placement check at `tools/storybook/verify-placement.mjs:907` was retargeted from the scroll lane to the wrapped shape. Observed red at maxActionRight 567px against clientRight 373px before the fix, green at 341px after; the content box 46px → 96px; all three labels read whole in the dark and light recaptures |
 | **P7** | list-view, field cell | `"February 14, 2027"` truncates at 150px while **~900px of row is empty** | `flex: 0 0 var(--db-card-field-width, 150px)` at `styles.css:10446` on `.note-database-container .db-list-field`. The case that already works is `.db-list.is-compact-fields .db-list-field:not(.db-list-field-wrap)` at `styles.css:10453-10457` — `flex: 0 1 auto; width: max-content` — the list-sparse-fields **190px** case. The phone rule at `styles.css:18880-18884` already uses `flex: 1 1` | A date field renders its value in full when the row has room, capped at a stated maximum; the 190px sparse case measures **unchanged** |
 | **P8** | field-cell-edit-select, desktop | The unregistered "Archive" row's dot and label sit **~35px left** of registered rows, because the hidden drag handle collapses the leading track | `src/views/cell-renderer.ts:1271` adds `is-hidden`; `.db-cell-option-popover .is-hidden` declares `display: none` at `styles.css:7041-7043`, which removes the element from flow rather than hiding it in place | Registered and unregistered rows share a leading edge — the track is reserved with `visibility`/`opacity`, not `display` — and the hidden handle is still non-interactive |
 | **P9** | relation values | The renderer sets `is-compact` and no rule consumes it — a dead class | `src/views/relation-value-renderer.ts:36` writes `db-relation-values${compact ? " is-compact" : ""}`. `grep -n "db-relation-values" styles.css` returns **exactly one line**, `styles.css:18997`, and it carries no `.is-compact` variant | **Either** a `.db-relation-values.is-compact` rule exists and the compact treatment is visible in the recapture, **or** the class is gone from the renderer. Read the renderer's intent first, then say which and why |

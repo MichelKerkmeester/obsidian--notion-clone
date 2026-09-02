@@ -7,18 +7,18 @@ contextType: "general"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/035-visual-pass-product-defects"
-    last_updated_at: "2026-09-02T22:40:00Z"
+    last_updated_at: "2026-09-02T23:55:00Z"
     last_updated_by: "in-runtime-verifier"
-    recent_action: "15 of 17 defects fixed and read; P4 improved, P4 P6 open"
-    next_safe_action: "Take the operator call on P6, and on P4 needing a wider column"
-    blockers: ["P6 contradicts the placement lane; P4 truncates from a 48px column"]
+    recent_action: "16 of 17 defects fixed and read; P4 improved and stays open"
+    next_safe_action: "Take the operator call on P4 needing a wider month column"
+    blockers: ["P4 truncates 4 of 11 titles from a 48px column at 402px"]
     key_files: ["styles.css", "src/views/table-footer-renderer.ts", "tools/gate.mjs"]
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-035-impl"
       parent_session_id: null
-    completion_pct: 83
-    open_questions: ["Should the phone selection bar wrap or keep its scroll lane"]
+    completion_pct: 89
+    open_questions: ["Does a 48px phone column earn a wider month cell (P4)"]
     answered_questions: ["The selection bar clips because it scrolls and a capture cannot"]
 ---
 # Implementation Summary
@@ -159,21 +159,22 @@ artefacts, which were re-measured, and `placement` on the contradiction recorded
 <!-- ANCHOR:limitations -->
 ## Known Limitations
 
-1. **P6 is a contradiction, not an unfinished fix.** The phone selection bar's box is capped at
-   `calc(100vw - 32px)` = 370px against 416px of content. No label truncates — "Copy CSV" measures
-   clientWidth 71 against scrollWidth 71 — it sits 55px outside the scroll port, and a screenshot
-   cannot scroll. A wrapping bar was built and measured green, all five children inside and none
-   truncated, then reverted: `tools/storybook/verify-placement.mjs:903` pins the opposite behaviour,
-   requiring `scrollWidth > clientWidth`, `overflow-x: auto` and `scrollbar-width: thin`, and went
-   red. Two shipped decisions disagree and the operator picks.
+1. **P6 was a contradiction, and the operator resolved it.** The phone selection bar's box was capped
+   at `calc(100vw - 32px)` = 370px against 416px of content. No label truncated — "Copy CSV" measured
+   clientWidth 71 against scrollWidth 71 — it sat 55px outside the scroll port, and a screenshot
+   cannot scroll. A wrapping bar built earlier measured green and was reverted, because
+   `tools/storybook/verify-placement.mjs:903` pinned the opposite behaviour and went red. Two shipped
+   decisions disagreed and the operator picked.
 
-   **Recorded 2026-09-02 as an open operator question, no side taken.** Two options, both whole:
-   **(a) wrap the actions**, which measured green at 5 of 5 inside a 102px bar, and retarget
-   `verify-placement.mjs:903` so it asserts the wrapped shape rather than `scrollWidth > clientWidth`,
-   `overflow-x: auto` and `scrollbar-width: thin`; or **(b) keep the scroll lane** that
-   `022-selection-bar-keyboard-docking` shipped under its D2, and accept that a capture of a 370px box
-   holding 416px of actions shows "Copy CSV" clipped 55px outside the port. The same question is
-   recorded in `022`'s `goal.md`; neither packet may take it alone.
+   **Decided 2026-09-02: option (a), wrap the actions.** The `.is-phone` bar went
+   `height: 48px; overflow-x: auto` to `height: auto; min-height: 48px; flex-wrap: wrap;
+   overflow-x: hidden` with a `row-gap`, keeping its 44px action floor, and the placement check was
+   retargeted at `verify-placement.mjs:907` to assert every action's right edge inside the bar's
+   client box and the content height inside that box. The retargeted check was observed red at
+   maxActionRight 567px against clientRight 373px with only the stylesheet stashed, and green at
+   341px inside 373px with it restored. The bar's content box reads 46px → 96px and both mobile
+   captures were recaptured and read: "Copy CSV" is whole on a second row. `022`'s fourth criterion
+   still pins the scroll lane in prose and is the operator's to retire; this packet did not tick it.
 
 2. **P4's reported mechanism is false, and the improvement stops short of the row.** The always-on
    "+" is an out-of-flow 28x28 corner control that hit-tests to itself; it never took the titles'

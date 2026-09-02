@@ -7,18 +7,18 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/035-visual-pass-product-defects"
-    last_updated_at: "2026-09-02T22:40:00Z"
+    last_updated_at: "2026-09-02T23:55:00Z"
     last_updated_by: "in-runtime-verifier"
-    recent_action: "22 of 24 criteria met; AC-19 closed on its edge, AC-5 AC-8 open"
-    next_safe_action: "Take the operator call on P6, and on P4 needing a wider column"
-    blockers: ["P6 contradicts the placement lane; P4 truncates from a 48px column"]
+    recent_action: "23 of 24 criteria met; AC-8 closed on a wrapped bar, AC-5 open"
+    next_safe_action: "Take the operator call on P4 needing a wider month column"
+    blockers: ["P4 truncates 4 of 11 titles from a 48px column at 402px"]
     key_files: ["spec.md", "goal.md"]
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-035-ac"
       parent_session_id: null
-    completion_pct: 83
-    open_questions: ["Should the phone selection bar wrap or keep its scroll lane"]
+    completion_pct: 89
+    open_questions: ["Does a 48px phone column earn a wider month cell (AC-5)"]
     answered_questions: ["A criterion without a failing number is a wish, not a criterion"]
 ---
 # Acceptance Criteria: Visual Pass Product Defects
@@ -45,8 +45,8 @@ implementing lane re-observes it before trusting it.
 | AC-5 | Share of a phone day cell taken by the always-on "+" | title not truncated | **NOT MET, improved, and the premise is still false.** The "+" is an out-of-flow 28x28 corner control that hit-tests to itself and never took the titles' width. Truncated segments read 6 before and **4** after, from 11 titles at the 402px frame: the segment gave back its `margin-inline`, `gap` and `padding-inline`, so the box goes 44.28 → 48.28px and the title 33 → 37px. Four still want more than a 48px column gives — "Spotify family" needs 72px in 37px. A relaxed title `flex` was tried and measured **7**, and was reverted |
 | AC-6 | Hidden-count badge overhang past its button | 0px | **MET.** Was 5px right and 22px left of a 28px button; now inset 6px right and 29px left of a 96px one |
 | AC-7 | Hidden-count badge text contrast | ≥ 4.5:1 | **MET.** 4.09:1 → 8.36:1 |
-| AC-8 | Selection-bar actions rendered in full at 402px | 3 of 3 | **NOT MET, and blocked on a contradiction.** A wrapping bar measured 3 of 3 and was reverted: `tools/storybook/verify-placement.mjs:903` requires the bar to overflow |
-| AC-9 | The named mechanism for AC-8 | one, stated | **MET.** The box is capped at `calc(100vw - 32px)` = 370px against 416px of content. Nothing truncates — "Copy CSV" reads clientWidth 71 against scrollWidth 71 — it sits 55px outside the scroll port, and a capture cannot scroll |
+| AC-8 | Selection-bar actions rendered in full at 402px | 3 of 3 | **MET.** Was 2 of 3 whole on the capture — 416px of content in a 370px box left "Copy CSV" 55px outside the port, clipped to "Cop". Now the bar wraps: 3 of 3 read whole in dark and light, the content box 46px → 96px, actions at maxActionRight 341px inside clientRight 373px. The check that blocked it was retargeted at `tools/storybook/verify-placement.mjs:907` and observed red at 567px before the fix |
+| AC-9 | The named mechanism for AC-8 | one, stated | **MET, and acted on.** The box was capped at `calc(100vw - 32px)` = 370px against 416px of content. Nothing truncates — "Copy CSV" reads clientWidth 71 against scrollWidth 71 — it sits 55px outside the scroll port, and a capture cannot scroll |
 | AC-10 | List date field rendering its value in full when the row has room | full | **MET.** 2 of 48 field values clipped → 0. The sparse capture is byte-identical, so its 110/190/150/130 columns did not move |
 | AC-11 | Leading-edge offset between registered and unregistered select rows | 0px | **MET.** Was 18px — x=33 against x=51, not the ~35px reported; now 0 |
 | AC-12 | Rules matching `.db-relation-values.is-compact` | 1, or the class removed | **MET.** 0 → 3, and the compact row photographs tighter than the two above it |

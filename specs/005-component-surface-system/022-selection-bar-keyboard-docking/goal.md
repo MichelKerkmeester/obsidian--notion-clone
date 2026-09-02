@@ -10,9 +10,9 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/022-selection-bar-keyboard-docking"
-    last_updated_at: "2026-09-02T21:10:00Z"
-    last_updated_by: "spec-doc-recorder"
-    recent_action: "Goal audit: the log's 55 corrected to the frontmatter 75"
+    last_updated_at: "2026-09-02T23:55:00Z"
+    last_updated_by: "in-runtime-verifier"
+    recent_action: "The P6 wrap landed; criterion 4 records stale scroll evidence"
     next_safe_action: "Operator opens the keyboard on device and confirms the bar is reachable"
     blockers: []
     key_files:
@@ -28,6 +28,7 @@ _memory:
       - "Which host shape is the operator's phone: visualViewport shrink or window resize"
     answered_questions:
       - "Both reported defects are fixed and each carries a browser-produced number"
+      - "The scroll-versus-wrap contradiction: the operator chose the wrap, landed 2026-09-02"
       - "The bar no longer depends on a host variable: the plugin publishes the inset itself"
       - "Decided 2026-09-02: wrap the actions and retarget tools/storybook/verify-placement.mjs:903 to assert every action inside the bar, amending D2's scroll lane"
 ---
@@ -173,4 +174,21 @@ Recorded, not resolved. See `../035-visual-pass-product-defects/goal.md` P6 and 
 `tools/storybook/verify-placement.mjs:903` to assert every action inside the bar, amending D2's
 scroll lane. Not yet implemented; this phase's fourth criterion stays as shipped until the wrap
 lands and the retargeted check is green.
+
+**2026-09-02: the wrap landed, and the check moved to `:907`.** Implemented in the `035` packet by an
+external `codex` lane on `gpt-5.6-luna` and verified in-runtime here. The `.is-phone` bar went
+`height: 48px; overflow-x: auto` to `height: auto; min-height: 48px; flex-wrap: wrap;
+overflow-x: hidden` with a `row-gap`, at `styles.css:2511-2527`, and the 44px action floor is
+untouched. The retargeted check now reads *"selection bar actions stay inside the phone bar after
+wrapping"* at `tools/storybook/verify-placement.mjs:907`, asserting every action's right edge inside
+the bar's client box and the content height inside that box. It was observed red at **maxActionRight
+567px against clientRight 373px** with the stylesheet stashed, and green at **341px inside 373px**
+with it restored; the bar's content box goes **46px → 96px**. `npm run gate` is PASS at 25 green.
+
+**This phase's fourth criterion now describes behaviour the tree no longer has**, and it is left
+ticked rather than corrected: it reads `scrollWidth 558px against clientWidth 356px`, `overflow-x:
+auto` and a visible thin scrollbar, and none of those is true after the wrap. The reachability it
+asserts still holds — by wrapping instead of scrolling — and the 44px floor is unchanged. Retiring
+or rewording the row amends D2's shipped decision, which is the operator's to take, not this
+runtime's. Recorded here so the stale evidence is visible rather than assumed current.
 <!-- /ANCHOR:log -->

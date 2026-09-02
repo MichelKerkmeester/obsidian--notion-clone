@@ -7,18 +7,18 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/035-visual-pass-product-defects"
-    last_updated_at: "2026-09-02T22:40:00Z"
+    last_updated_at: "2026-09-02T23:55:00Z"
     last_updated_by: "in-runtime-verifier"
-    recent_action: "T15 closed on a 3:1 edge; T4 improved 6 to 4 and stays open"
-    next_safe_action: "Take the operator call on P6, and on P4 needing a wider column"
-    blockers: ["P6 contradicts the placement lane; P4 truncates from a 48px column"]
+    recent_action: "T6 closed: phone bar wraps its actions; T4 stays open"
+    next_safe_action: "Take the operator call on P4 needing a wider month column"
+    blockers: ["P4 truncates 4 of 11 titles from a 48px column at 402px"]
     key_files: ["spec.md", "tasks.md"]
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-035-tasks"
       parent_session_id: null
-    completion_pct: 83
-    open_questions: ["Should the phone selection bar wrap or keep its scroll lane"]
+    completion_pct: 89
+    open_questions: ["Does a 48px phone column earn a wider month cell (T4)"]
     answered_questions: ["P12 is guarded on disk; P16 has no better-styled sibling to copy"]
 ---
 # Tasks: Visual Pass Product Defects
@@ -67,12 +67,13 @@ _memory:
 - [x] **T5** P5 · the "N hidden" badge overhanging the Group button, `styles.css:2293-2308` — REQ-001, REQ-004.
       *Closed:* the badge was 55px absolute at `right: -5px`, overhanging its 28px button by 5px right and
       22px left at 4.09:1. It is static, 61px, inside a 96px button, at 8.36:1.
-- [ ] **T6** P6 · "Copy CSV" clipping at 402px — REQ-001.
-      *Open, mechanism named:* the box is capped at `calc(100vw - 32px)` = 370px while the content runs
-      416px. Nothing truncates — "Copy CSV" measures clientWidth 71 against scrollWidth 71 — it sits 55px
-      outside the scroll port, and a capture cannot scroll. A wrapping bar was built and measured green,
-      then reverted: `tools/storybook/verify-placement.mjs:903` pins `scrollWidth > clientWidth`,
-      `overflow-x: auto` and `scrollbar-width: thin`, and went red. Operator call, not 035's.
+- [x] **T6** P6 · "Copy CSV" clipping at 402px — REQ-001. Proof: `styles.css:2511-2527`,
+      `tools/storybook/verify-placement.mjs:907-914`.
+      *Closed:* was 416px of content in a 370px box, "Copy CSV" 55px outside a port a capture cannot
+      scroll and clipped to "Cop". The phone bar now wraps, grows with its content, drops the horizontal
+      scroll lane and keeps the 44px action floor: the content box reads 46px → 96px and the actions
+      maxActionRight 341px inside clientRight 373px. The retargeted placement check was observed red at
+      567px with the stylesheet stashed, then green; both mobile captures were recaptured and read.
 - [x] **T7** P7 · list field truncating beside an empty row, `styles.css:10446` — REQ-001.
       *Closed:* 2 of 48 field values were clipped and 0 are. The sparse capture is byte-identical to its
       committed self, so the 110/190/150/130 columns are unchanged — the declared width is a floor now,

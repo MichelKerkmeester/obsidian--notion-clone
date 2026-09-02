@@ -2508,13 +2508,13 @@ input[type="checkbox"].db-toggle-switch:disabled {
    does not. */
 .is-phone .note-database-container:not(.note-database-embed) .db-selection-status-bar {
   bottom: max(16px, env(safe-area-inset-bottom), var(--db-keyboard-inset, 0px));
-  height: 48px;
+  height: auto;
+  min-height: 48px;
   max-width: calc(100vw - 32px);
-  overflow-x: auto;
+  flex-wrap: wrap;
+  overflow-x: hidden;
   overflow-y: hidden;
-  scrollbar-color: var(--interactive-accent) transparent;
-  scrollbar-width: thin;
-  overscroll-behavior-inline: contain;
+  row-gap: var(--db-space-4);
 }
 
 .is-phone .note-database-container:not(.note-database-embed) .db-selection-status-bar > * {

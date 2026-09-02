@@ -5,7 +5,7 @@
 Every row below is unticked in its own phase's `goal.md` and nothing in this repository can close
 it. They are gathered here because one list is actionable and thirty files are not.
 
-Derived 2026-09-02: **36 phases**, **5 with nothing left**, **47 rows** waiting on a device.
+Derived 2026-09-02: **36 phases**, **5 with nothing left**, **46 rows** waiting on a device.
 
 The figure beside each phase is a count of its own checkboxes. It is derived, never judged.
 
@@ -143,10 +143,9 @@ The figure beside each phase is a count of its own checkboxes. It is derived, ne
 
 - [ ] The operator opens their real database without a stall. Only the operator closes this.
 
-## 035-visual-pass-product-defects — 15/18
+## 035-visual-pass-product-defects — 16/18
 
 - [ ] P4 — the segment gave its own margin back and two titles stopped truncating, but the row asks for none and four still do. Was: 6 truncated, a 44.28px segment box in a 48.28px column, title 33px. Now: 4 truncated, the box 48.28px, the title 37px, measured on the 402px phone frame the corpus captures. The 4px came from the segment's `margin-inline`, `gap` and `padding-inline` — the only width a week-grid item can return to its own title — and it un-truncated "Spotify" and the four-day "Q1 renewals sweep". The remaining four need more than 48px of column: "Spotify family" wants 72px of text in 37px of box. The "+" is unrelated and always was: it is a 28x28 out-of-flow corner control that hit-tests to itself, and it never took the titles' width. The denominator is 11 title nodes in the month scenario at this frame; the earlier record said 6 of 12 and its ticked count was the same 6. The implementing lane also relaxed the title to `flex: 1 1 auto`, which was reverted here after measuring 7 truncated — the `1 0 min(8ch, 100%)` basis is a floor, and removing it handed the title 28px inside the wider box.
-- [ ] P6 — the mechanism is named and the fix is the operator's call. The bar's box is capped at `calc(100vw - 32px)` = 370px while its content runs 416px; no label is truncated — "Copy CSV" measures clientWidth 71 against scrollWidth 71 — it simply sits 55px outside the scroll port, and a capture cannot scroll. So the clip is the scroll container doing its job. A wrapping bar was built and measured green — all five children inside, none truncated, the bar 102px tall — and then reverted: `tools/storybook/verify-placement.mjs:903` pins the opposite behaviour, requiring `scrollWidth > clientWidth`, `overflow-x: auto` and `scrollbar-width: thin`, and it went red. Two shipped decisions contradict; this one is not 035's to overturn. Recorded 2026-09-02 as an open operator question, with two options and no side taken: (a) wrap the actions and retarget the placement check at `tools/storybook/verify-placement.mjs:903` so it asserts the wrapped shape instead of the scroll lane, which measured green at 5 of 5 actions inside a 102px bar; or (b) keep the scroll lane 022 shipped and accept that a capture shows the clip, because 416px of actions in a 370px box leaves "Copy CSV" 55px outside a port a screenshot cannot scroll. The same question is recorded in `../022-selection-bar-keyboard-docking/goal.md`, whose fourth criterion is the other half of the contradiction. Decided 2026-09-02: option (a). Wrap the actions and retarget `tools/storybook/verify-placement.mjs:903` to assert every action inside the bar. Not yet implemented — the row stays unticked until the wrap lands and the retargeted check is green.
 - [ ] The operator confirms the recaptures on device.
 
 ## Nothing left to check

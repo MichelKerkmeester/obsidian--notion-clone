@@ -7,18 +7,18 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/035-visual-pass-product-defects"
-    last_updated_at: "2026-09-02T18:30:00Z"
+    last_updated_at: "2026-09-02T23:55:00Z"
     last_updated_by: "in-runtime-verifier"
-    recent_action: "14 of 17 defects fixed and read on recaptures; P4 P6 P15 open"
-    next_safe_action: "Take the operator call on P6 scroll-versus-wrap and P15 threshold"
+    recent_action: "16 of 17 defects fixed and read on recaptures; P4 open"
+    next_safe_action: "Take the operator call on P4 needing a wider month column"
     blockers: ["Twelve of the seventeen close only on a recapture a person reads"]
     key_files: ["spec.md", "tasks.md"]
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-035-plan"
       parent_session_id: null
-    completion_pct: 83
-    open_questions: ["What clips Copy CSV when the bar already scrolls (P6)"]
+    completion_pct: 89
+    open_questions: ["Does a 48px phone column earn a wider month cell (P4)"]
     answered_questions: ["The implementing runtime cannot reach Chrome, so it cannot close a visual row"]
 ---
 # Implementation Plan: Visual Pass Product Defects

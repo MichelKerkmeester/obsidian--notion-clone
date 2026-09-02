@@ -888,10 +888,14 @@ const phoneResults = await section("the phone sheet and its selection bar", () =
   const selectionFloor = selectionBar.getBoundingClientRect().bottom;
   const selectionContentHeight = selectionBar.scrollHeight;
   const selectionContentBoxHeight = selectionBar.clientHeight;
-  const selectionStyle = getComputedStyle(selectionBar);
-  const selectionWidth = selectionBar.getBoundingClientRect();
-  const selectionHasOverflow = selectionBar.scrollWidth > selectionBar.clientWidth;
   const embeddedFloor = embeddedBar.getBoundingClientRect().bottom;
+  const selectionBarRect = selectionBar.getBoundingClientRect();
+  const selectionBarClientRight = selectionBarRect.left + selectionBar.clientLeft + selectionBar.clientWidth;
+  const selectionActions = [...selectionBar.querySelectorAll(
+    ".db-selection-action, .db-selection-clear-pill, .db-selection-delete",
+  )];
+  const selectionActionRights = selectionActions.map((el) => el.getBoundingClientRect().right);
+  const maxSelectionActionRight = Math.max(...selectionActionRights);
 
   out.push({
     name: "selection bar content fits inside its border box",
@@ -900,15 +904,14 @@ const phoneResults = await section("the phone sheet and its selection bar", () =
       + `(the measured pre-fix pair was 36px inside 28px)`,
   });
   out.push({
-    name: "selection bar exposes a deliberate horizontal scroll lane when actions exceed phone width",
-    pass: selectionHasOverflow && selectionStyle.overflowX === "auto" && selectionStyle.scrollbarWidth === "thin",
-    detail: `scrollWidth=${selectionBar.scrollWidth}px clientWidth=${selectionBar.clientWidth}px `
-      + `overflow-x=${selectionStyle.overflowX} scrollbar-width=${selectionStyle.scrollbarWidth || "auto"} `
-      + `(bar width ${Math.round(selectionWidth.width)}px)`,
+    name: "selection bar actions stay inside the phone bar after wrapping",
+    pass: selectionActions.length > 0
+      && maxSelectionActionRight <= selectionBarClientRight + 1
+      && selectionContentHeight <= selectionContentBoxHeight + 1,
+    detail: `actions=${selectionActions.length} maxActionRight=${maxSelectionActionRight.toFixed(1)}px `
+      + `clientRight=${selectionBarClientRight.toFixed(1)}px content=${selectionContentHeight}px `
+      + `box=${selectionContentBoxHeight}px (superseded decision: horizontal scroll lane when actions exceed phone width)`,
   });
-  const selectionActions = [...selectionBar.querySelectorAll(
-    ".db-selection-action, .db-selection-clear-pill, .db-selection-delete",
-  )];
   const minSelectionActionHeight = Math.min(...selectionActions.map((el) => el.getBoundingClientRect().height));
   out.push({
     name: "selection bar action targets reach the phone thumb floor",

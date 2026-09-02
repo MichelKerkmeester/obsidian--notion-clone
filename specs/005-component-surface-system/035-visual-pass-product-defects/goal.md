@@ -7,23 +7,23 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/035-visual-pass-product-defects"
-    last_updated_at: "2026-09-02T22:40:00Z"
+    last_updated_at: "2026-09-02T23:55:00Z"
     last_updated_by: "in-runtime-verifier"
-    recent_action: "P15 closed on a 3:1 edge; P4 truncation 6 to 4, still open"
-    next_safe_action: "Take the operator call on P6, and on P4 needing a wider column"
-    blockers: ["P6 contradicts the placement lane; P4 truncates from a 48px column"]
+    recent_action: "P6 closed: phone bar wraps, actions inside; P4 still open"
+    next_safe_action: "Take the operator call on P4 needing a wider month column"
+    blockers: ["P4 truncates 4 of 11 titles from a 48px column at 402px"]
     key_files: ["spec.md", "goal.md", "tasks.md"]
     session_dedup:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-035-goal"
       parent_session_id: null
-    completion_pct: 83
+    completion_pct: 89
     open_questions:
       - "P4: does a 48px phone column earn a wider month cell, or shorter segment titles"
     answered_questions:
       - "020 D5 forbids 020 from fixing what its own pass revealed"
       - "The uncoloured badge closes on its edge; the fill question is the corpus's"
-      - "P6 decided 2026-09-02: wrap the actions and retarget tools/storybook/verify-placement.mjs:903 to assert every action inside the bar, not the scroll lane"
+      - "P6 decided and implemented 2026-09-02: the bar wraps and the placement check at tools/storybook/verify-placement.mjs:907 asserts every action inside the bar, not the scroll lane"
 ---
 # Goal: Visual Pass Product Defects
 
@@ -61,16 +61,21 @@ that wrote the fix.
 - [x] **P3** — the invalid-events controls reach the 28px floor. **Was: 9 of the 12 measured under it — `db-invalid-event-row-fix` at 32x24 and the datetime inputs at 250x19. Now: 0 under.** The baseline falls **228 → 215**, measured twice before it was written; the packet predicted 216 and 215 is what the tree reads.
 - [ ] **P4** — the segment gave its own margin back and two titles stopped truncating, but the row asks for none and four still do. **Was: 6 truncated, a 44.28px segment box in a 48.28px column, title 33px. Now: 4 truncated, the box 48.28px, the title 37px**, measured on the 402px phone frame the corpus captures. The 4px came from the segment's `margin-inline`, `gap` and `padding-inline` — the only width a week-grid item can return to its own title — and it un-truncated "Spotify" and the four-day "Q1 renewals sweep". The remaining four need more than 48px of column: "Spotify family" wants 72px of text in 37px of box. The "+" is unrelated and always was: it is a 28x28 out-of-flow corner control that hit-tests to itself, and it never took the titles' width. **The denominator is 11 title nodes in the month scenario at this frame; the earlier record said 6 of 12 and its ticked count was the same 6.** The implementing lane also relaxed the title to `flex: 1 1 auto`, which was **reverted here after measuring 7 truncated** — the `1 0 min(8ch, 100%)` basis is a floor, and removing it handed the title 28px inside the wider box.
 - [x] **P5** — the hidden-count badge is sized to its content, inside its button, at ≥4.5:1. **Was 55px of "2 hidden" positioned absolutely at `right: -5px`, overhanging its own 28px button by 5px right and 22px left, text at 4.09:1. Now: static, 61px, inside a button that grew to 96px — inset 6px right and 29px left — at 8.36:1.**
-- [ ] **P6** — **the mechanism is named and the fix is the operator's call.** The bar's box is capped at `calc(100vw - 32px)` = 370px while its content runs 416px; no label is truncated — "Copy CSV" measures clientWidth 71 against scrollWidth 71 — it simply sits 55px outside the scroll port, and a capture cannot scroll. So the clip is the scroll container doing its job. A wrapping bar was built and measured green — all five children inside, none truncated, the bar 102px tall — and then **reverted**: `tools/storybook/verify-placement.mjs:903` pins the opposite behaviour, requiring `scrollWidth > clientWidth`, `overflow-x: auto` and `scrollbar-width: thin`, and it went red. Two shipped decisions contradict; this one is not 035's to overturn. **Recorded 2026-09-02 as an
-  open operator question, with two options and no side taken: (a) wrap the actions and retarget the
-  placement check at `tools/storybook/verify-placement.mjs:903` so it asserts the wrapped shape
-  instead of the scroll lane, which measured green at 5 of 5 actions inside a 102px bar; or (b) keep
-  the scroll lane 022 shipped and accept that a capture shows the clip, because 416px of actions in a
-  370px box leaves "Copy CSV" 55px outside a port a screenshot cannot scroll.** The same question is
-  recorded in `../022-selection-bar-keyboard-docking/goal.md`, whose fourth criterion is the other
-  half of the contradiction. **Decided 2026-09-02: option (a).** Wrap the actions and retarget
-  `tools/storybook/verify-placement.mjs:903` to assert every action inside the bar. Not yet
-  implemented — the row stays unticked until the wrap lands and the retargeted check is green.
+- [x] **P6** — the phone selection bar wraps its actions, and every action stays inside the box.
+  **Was: 416px of content in a `calc(100vw - 32px)` = 370px box at the 402px frame, with "Copy CSV"
+  55px outside a scroll port a capture cannot scroll — no label truncated, clientWidth 71 against
+  scrollWidth 71. Now: the bar wraps, its content box grows 46px → 96px, and the actions measure
+  maxActionRight 341px inside a clientRight of 373px.** The contradiction was resolved rather than
+  absorbed: the placement check at `tools/storybook/verify-placement.mjs:907` no longer pins the
+  scroll lane; it asserts every action's right edge inside the bar's client box and the content
+  height inside that box. That retargeted check was **observed red before the fix** — the same run
+  with only the stylesheet stashed read maxActionRight 567px against clientRight 373px — and green
+  after. Both mobile captures were recaptured and read in dark and light: all three copy actions
+  render whole, "Copy CSV" on a second row, nothing clipped, the capture 160 → 260 device px at 2x.
+  **Decided 2026-09-02: option (a).** Implemented by the external `codex` lane on `gpt-5.6-luna`;
+  measured, recaptured and read here. The 022 criterion that pinned the scroll lane is the other
+  half of the contradiction and stays the operator's, recorded in
+  `../022-selection-bar-keyboard-docking/goal.md`.
 - [x] **P7** — a list date field renders in full when the row has room, capped; the sparse case unchanged. **Was 2 of 48 field values clipped, "February 14, 2027" among them. Now: 0.** The declared width became `min-width` rather than being dropped: dropping it collapsed the sparse fixture's four declared columns from **110/190/150/130 to 73/141/97/75**, and that capture is byte-identical to its committed self again.
 - [x] **P8** — registered and unregistered select rows share a leading edge. **Was: the hidden handle at `display: none` and 0px wide, putting the unregistered row's dot at x=33 against x=51 for its three siblings. Now: `visibility: hidden` at 8px wide, all four dots at x=51.** The offset was 18px, not the ~35px the pass reported.
 - [x] **P9** — the compact relation treatment exists and is visible. **Was 0 rules matching `.db-relation-values.is-compact`. Now: 3**, and the compact row photographs visibly tighter than the two above it. The rule was written rather than the class removed, because the renderer sets it deliberately per row.
@@ -106,11 +111,12 @@ row in Chrome. Four of that lane's claims did not survive the measurement and we
 - **P15** pinned the badge border to the foreground token, which gave that one tag a 10.31:1 outline
   in the light theme against siblings at 1.22:1.
 
-**On the three that stay open.** P4's reported mechanism is false: the always-on "+" does not take
-the titles' width, because the titles are week-grid segments and not day-cell children — 6 of 12
-truncate before the change and 6 after, from a 48px column at 402px. P6 is a genuine contradiction
-rather than an unfinished fix, and it is recorded above. P15's fix landed and the threshold it was
-given is met by no tag in the corpus.
+**On the three that were open at the second round.** P4's reported mechanism is false: the always-on
+"+" does not take the titles' width, because the titles are week-grid segments and not day-cell
+children — 6 of 12 truncate before the change and 6 after, from a 48px column at 402px. P6 was a
+genuine contradiction rather than an unfinished fix; the operator resolved it and the third round
+below implemented the resolution. P15's fix landed and the threshold it was given is met by no tag
+in the corpus.
 
 **Second round, 2026-09-02.** The same external `codex` lane on `gpt-5.6-luna` took the two
 residuals; this runtime recaptured and measured, and one of the two claims did not survive again.
@@ -127,6 +133,18 @@ residuals; this runtime recaptured and measured, and one of the two claims did n
   That is the fifth of this lane's claims to fail measurement, and the second where the mechanism
   ran the opposite way to the one reported.
 
-**On the completion figure.** 15 of 18, derived from the checklist above per `roadmap.md` §3.2.
+**Third round, 2026-09-02.** The operator took option (a) on P6 and the same external `codex` lane
+on `gpt-5.6-luna` implemented it; this runtime measured, recaptured and read the result.
+
+- **P6 closed.** The phone bar went `height: 48px; overflow-x: auto` to `height: auto; min-height:
+  48px; flex-wrap: wrap; overflow-x: hidden`, keeping its 44px action floor. The placement check at
+  `tools/storybook/verify-placement.mjs:907` was retargeted from the scroll lane to the wrapped
+  shape, and was observed red at maxActionRight 567px against clientRight 373px with the stylesheet
+  stashed before it went green at 341px inside 373px. Both mobile captures were read: "Copy CSV" is
+  whole on a second row where it was clipped to "Cop". The whole gate is green at 25 lanes, and the
+  eight live artefacts the stylesheet hash invalidated were re-measured rather than edited — none of
+  their numbers moved, the touch-target census included.
+
+**On the completion figure.** 16 of 18, derived from the checklist above per `roadmap.md` §3.2.
 
 <!-- /ANCHOR:log -->

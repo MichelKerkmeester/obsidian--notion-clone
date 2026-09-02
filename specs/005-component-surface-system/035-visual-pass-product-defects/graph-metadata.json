@@ -192,7 +192,7 @@
         "source": "derived"
       },
       {
-        "name": "the       README",
+        "name": "the",
         "kind": "key_phrase",
         "path": "tasks.md",
         "source": "derived"
@@ -200,7 +200,7 @@
     ],
     "causal_summary": "The seventeen product defects the 2026-09-02 visual pass read on real surfaces, which 020's D5 forbids 020 from fixing.",
     "created_at": "2026-09-02T15:26:34.871Z",
-    "last_save_at": "2026-09-02T17:16:49.675Z",
+    "last_save_at": "2026-09-02T17:49:08.555Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -211,13 +211,13 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:65c8afe62c5bcf29e62e1dac1d7579ffdaa4b11e80ce9440a7b6899d2dd17275",
+    "source_fingerprint": "sha256:00490acd3d240193daf463ec51da9c1f20f6cdde50bdd9fbbb249b691f9a3507",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "519c32d798ba361e8296d8a7e52e9c67901da5a22d78116f44e3d04efa6f855c",
-      "plan.md": "157428a8b10258d7b6a35a5132dbed72fe491a968d5e7227d9b3d2c3cf3a8be8",
-      "tasks.md": "2165e6e09e0876ce1f7940418b15f09e5554570817fdfd6d9cf3bc4132006d1f",
-      "implementation-summary.md": "92b4bf94fdf157e1849014f36ada76dee44b60cff08340bac10ecd92ddb2f4ba"
+      "spec.md": "3293b71457ef554a66b8bf5df80bab83dc808a90da73e3807fb4b68ad74df957",
+      "plan.md": "4693f0da52dccc20cc2bf7721142e3d0696ad33ae3b6c88e0ea82ec7bdf3fd61",
+      "tasks.md": "605dc684479ef98d611509e21ef1cc009b9a89731f5e15d30f8b4b4fded8b68e",
+      "implementation-summary.md": "bdf2d7e1197c834ce8a1243f7b0688705b0b25f150d6c3314976caf40b42b300"
     },
     "last_active_child_id": null,
     "last_active_at": null
