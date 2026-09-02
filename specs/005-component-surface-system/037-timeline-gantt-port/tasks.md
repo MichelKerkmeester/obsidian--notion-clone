@@ -32,8 +32,13 @@ contextType: "general"
 <!-- ANCHOR:phase-1 -->
 ## Phase 1: Setup
 
-- [ ] T001 Observe the current renderer's dependency-link seam failing (no seam exists) and record the exact
+- [x] T001 Observe the current renderer's dependency-link seam failing (no seam exists) and record the exact
       failing value — D3 red-before-green (`src/views/calendar-timeline-renderer.ts`)
+      — evidence: stashing `calendar-interaction-model.ts` and running its isolated test file reproduces
+      12 failed of 12 seam tests, red `TypeError: resolveTimelineLinkChange is not a function` at
+      `src/data/calendar-interaction-model.test.ts:41` (vitest, 2026-09-03; combined-run figure from the
+      authoring session was 31 failed/2 passed across both timeline test files before the split); green
+      after the seam landed at `src/data/calendar-interaction-model.ts:270`
 - [ ] T002 Acquire `tools/lane/css-lane.json` before any `styles.css` edit begins (`tools/lane/css-lane.json`)
 - [ ] T003 [P] Read `cli-devin`'s and `cli-codex`'s `SKILL.md` before composing the first external-lane prompt
       (`.opencode/skills/cli-external-orchestration/cli-devin/SKILL.md`, `cli-codex/SKILL.md`)
@@ -44,10 +49,15 @@ contextType: "general"
 <!-- ANCHOR:phase-2 -->
 ## Phase 2: Implementation
 
-- [ ] T004 Extend `buildTimelineModel` with reference padding/min-span semantics from `TimelineConfig.ts:36-45`,
+- [x] T004 Extend `buildTimelineModel` with reference padding/min-span semantics from `TimelineConfig.ts:36-45`,
       `:47-61` (`src/data/calendar-timeline-model.ts`)
-- [ ] T005 Add a `resolveTimelineLinkChange`-shaped pure function rejecting same-side, duplicate, missing-task,
+      — evidence: `buildTimelineRangeGeometry` at `calendar-timeline-model.ts:1316` with padding/min-span
+      constants at `:207-228`; tests at `calendar-timeline-model.test.ts:64-112`
+- [x] T005 Add a `resolveTimelineLinkChange`-shaped pure function rejecting same-side, duplicate, missing-task,
       and cycle links, matching `GanttLinkHandler.ts:56-67`, `:77-97` (`src/data/calendar-interaction-model.ts`)
+      — evidence: `resolveTimelineLinkChange` at `calendar-interaction-model.ts:270`,
+      `wouldCreateTimelineDependencyCycle` at `:300`; four rejection tests at
+      `calendar-interaction-model.test.ts:55-78`
 - [ ] T006 Rewrite the five-level scale controls into the local i18n/navigation contract, matching
       `GanttView.ts:95-106` (`src/views/calendar-timeline-renderer.ts:832-854`)
 - [ ] T007 Rewrite header/grid bands (weekend/Monday/month boundaries, today line) matching
@@ -69,7 +79,9 @@ contextType: "general"
 <!-- ANCHOR:phase-3 -->
 ## Phase 3: Verification
 
-- [ ] T012 Run unit tests for padding/min-span and link-rejection cases; observe green after T004/T005
+- [x] T012 Run unit tests for padding/min-span and link-rejection cases; observe green after T004/T005
+      — evidence: `npx vitest run` 78 files / 682 tests green, 2026-09-03 (33 new tests across
+      `calendar-interaction-model.test.ts` and `calendar-timeline-model.test.ts`)
 - [ ] T013 Verify placement and observer/DOM teardown unchanged after the port
 - [ ] T014 Verify keyboard and touch-menu equivalents exist for every rewritten drag/resize/link affordance
 - [ ] T015 Recapture and read screenshots at all five zoom levels (day/week/month/quarter/year)

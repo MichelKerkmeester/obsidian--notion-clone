@@ -236,3 +236,82 @@ export function resolveUnitDragOffset(input: UnitDragOffsetInput): UnitDragOffse
   const offsetUnits = Math.max(0, Math.min(maxOffset, raw));
   return { offsetUnits, clamped: offsetUnits !== raw };
 }
+
+// ───────────────────────────────────────────────────────────────────
+// 6. DEPENDENCY-LINK SEAM
+// ───────────────────────────────────────────────────────────────────
+//
+// A dependency is a finish-to-start edge: the task whose right dot was
+// clicked is the predecessor, and the task whose left dot was clicked is
+// the successor that carries the dependency. The two-click resolution is a
+// pure state machine so the rejection rules (same-side, duplicate,
+// missing-task, cycle) can be pinned down without DOM or the plugin store.
+
+export type TimelineLinkSide = "left" | "right";
+
+export interface TimelineLinkClick {
+  taskId: string;
+  side: TimelineLinkSide;
+}
+
+export interface TimelineDependencyGraph {
+  /** Task id → ids of the tasks it depends on (finish-to-start predecessors). */
+  dependencies: Record<string, string[]>;
+  /** Ids of tasks present in the current view; a link whose successor is outside this set is rejected. */
+  taskIds: ReadonlySet<string>;
+}
+
+export type TimelineLinkResolution =
+  | { kind: "pending"; click: TimelineLinkClick }
+  | { kind: "cancelled" }
+  | { kind: "committed"; predecessorId: string; successorId: string; dependencies: string[] }
+  | { kind: "rejected"; reason: "same-side" | "duplicate" | "missing-task" | "cycle" };
+
+export function resolveTimelineLinkChange(
+  first: TimelineLinkClick | null,
+  second: TimelineLinkClick,
+  graph: TimelineDependencyGraph,
+): TimelineLinkResolution {
+  if (!first) return { kind: "pending", click: second };
+  if (first.taskId === second.taskId) return { kind: "cancelled" };
+  if (first.side === second.side) return { kind: "rejected", reason: "same-side" };
+
+  // Finish-to-start: the right dot is the predecessor (output), the left dot
+  // is the successor (input) that carries the dependency.
+  const predecessorId = second.side === "right" ? second.taskId : first.taskId;
+  const successorId = second.side === "left" ? second.taskId : first.taskId;
+
+  if (!graph.taskIds.has(successorId)) return { kind: "rejected", reason: "missing-task" };
+
+  const dependencies = graph.dependencies[successorId] ?? [];
+  if (dependencies.includes(predecessorId)) return { kind: "rejected", reason: "duplicate" };
+  if (wouldCreateTimelineDependencyCycle(graph, predecessorId, successorId)) {
+    return { kind: "rejected", reason: "cycle" };
+  }
+
+  return { kind: "committed", predecessorId, successorId, dependencies: [...dependencies, predecessorId] };
+}
+
+/**
+ * Adding "successor depends on predecessor" closes a loop exactly when the
+ * predecessor already reaches the successor transitively, so the reachability
+ * walk starts at the predecessor and follows its dependency edges.
+ */
+export function wouldCreateTimelineDependencyCycle(
+  graph: Pick<TimelineDependencyGraph, "dependencies">,
+  predecessorId: string,
+  successorId: string,
+): boolean {
+  const visited = new Set<string>();
+  const queue = [predecessorId];
+  while (queue.length > 0) {
+    const current = queue.shift()!;
+    if (current === successorId) return true;
+    if (visited.has(current)) continue;
+    visited.add(current);
+    for (const next of graph.dependencies[current] ?? []) {
+      if (!visited.has(next)) queue.push(next);
+    }
+  }
+  return false;
+}

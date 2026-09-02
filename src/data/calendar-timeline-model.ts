@@ -165,6 +165,8 @@ export interface TimelineTickModel {
   label: string;
   /** Column-unit offset of the tick from the window start. */
   offsetUnits: number;
+  /** True when the tick sits on a scale boundary line (Monday at week scale, month start at month scale, quarter start at quarter/year scale). */
+  isScaleBoundary?: boolean;
 }
 
 type EffectiveLocale = Exclude<LocaleCode, "system">;
@@ -201,6 +203,29 @@ export function resolveTimelineUnitWidth(config: Pick<ViewConfig, "timelineColum
   const baseWidth = Number.isFinite(configured) && configured > 0 ? configured : spec.defaultWidth;
   return Math.max(spec.min, Math.min(spec.max, baseWidth));
 }
+
+/** Days of padding added before the earliest task date when building the full range. */
+export const TIMELINE_RANGE_PADDING_BEFORE_DAYS = 7;
+/** Days of padding added after the latest task date when building the full range. */
+export const TIMELINE_RANGE_PADDING_AFTER_DAYS = 14;
+/** Per-scale minimum range span in days; a shorter task range is expanded to this floor. */
+export const TIMELINE_MIN_RANGE_DAYS: Record<TimelineScale, number> = {
+  day: 30,
+  week: 90,
+  month: 365,
+  quarter: 365,
+  year: 1095,
+};
+/** Per-scale day width in px. Rendering uses the local column widths; this keeps the reference's relative scale geometry. */
+export const TIMELINE_RANGE_DAY_WIDTH: Record<TimelineScale, number> = {
+  day: 44,
+  week: 22,
+  month: 9,
+  quarter: 5,
+  year: 2,
+};
+/** Smallest rendered bar width in px; a whole day narrower than this is widened to stay visible and grabbable. */
+export const TIMELINE_BAR_MIN_WIDTH_PX = 8;
 
 export function resolveTimelineViewportUnitCount(width: number, unitWidth: number, scale: TimelineScale): number | undefined {
   if (!Number.isFinite(width) || width <= 0 || !Number.isFinite(unitWidth) || unitWidth <= 0) return undefined;
@@ -836,13 +861,47 @@ export function buildTimelineTicks(window: TimelineWindow, scale: TimelineScale,
   // axis noise while preserving daily placement for event bars.
   const stepDays = scale === "quarter" ? 7 : scale === "year" ? 30 : 1;
   const ticks: TimelineTickModel[] = [];
+  // Quarter-start lines (1st of Jan/Apr/Jul/Oct) may fall between the stepped
+  // ticks, so boundary dates are collected by month iteration, not by the step.
+  const boundaryOffsets = new Map<number, Date>();
+  if (scale === "quarter" || scale === "year") {
+    for (
+      let monthStart = makeUtcDate(start.getUTCFullYear(), start.getUTCMonth(), 1);
+      monthStart.getTime() <= end.getTime();
+      monthStart = makeUtcDate(monthStart.getUTCFullYear(), monthStart.getUTCMonth() + 1, 1)
+    ) {
+      if (monthStart.getUTCMonth() % 3 === 0 && monthStart.getTime() >= start.getTime()) {
+        boundaryOffsets.set(daysBetweenDate(start, monthStart), monthStart);
+      }
+    }
+  }
   for (let tick = start; tick.getTime() <= end.getTime(); tick = addUtcDays(tick, stepDays)) {
+    const offset = daysBetweenDate(start, tick);
+    const boundary = boundaryOffsets.get(offset);
+    if (boundary) boundaryOffsets.delete(offset);
+    const isScaleBoundary = scale === "week"
+      ? tick.getUTCDay() === 1
+      : scale === "month"
+        ? tick.getUTCDate() === 1
+        : Boolean(boundary);
     ticks.push({
       dateKey: dateKeyFromUtc(tick),
       label: formatTimelineTickLabel(tick, scale, locale),
-      offsetUnits: daysBetweenDate(start, tick),
+      offsetUnits: offset,
+      ...(isScaleBoundary ? { isScaleBoundary: true } : {}),
     });
   }
+  // Boundary dates that fell between stepped ticks get their own tick so the
+  // quarter-start gridline exists at coarse scales.
+  for (const [offset, boundary] of boundaryOffsets) {
+    ticks.push({
+      dateKey: dateKeyFromUtc(boundary),
+      label: formatTimelineTickLabel(boundary, scale, locale),
+      offsetUnits: offset,
+      isScaleBoundary: true,
+    });
+  }
+  ticks.sort((a, b) => a.offsetUnits - b.offsetUnits);
   if (ticks.length === 0) {
     ticks.push({ dateKey: window.startDateKey, label: formatTimelineTickLabel(start, scale, locale), offsetUnits: 0 });
   }
@@ -1227,4 +1286,150 @@ export function resolveEventAbsoluteScale(
   }
   const endMin = event.endMinutes ?? (startMin + 60);
   return { start, end: endDayOffset * MINUTES_PER_DAY + endMin };
+}
+
+// ───────────────────────────────────────────────────────────────────
+// 7. RANGE & BAR GEOMETRY
+// ───────────────────────────────────────────────────────────────────
+//
+// The full task-driven range (earliest start/due minus padding, latest plus
+// padding, expanded to a per-scale minimum span) is the reference's
+// TimelineConfig geometry, kept separate from the visible window so
+// virtualization can stay window-based while the range semantics stay
+// pinned by tests.
+
+export interface TimelineRangeGeometry {
+  scale: TimelineScale;
+  startDateKey: string;
+  endDateKey: string;
+  /** Whole days from startDateKey to endDateKey (exclusive end). */
+  totalDays: number;
+  /** Reference day width in px at this scale. */
+  dayWidth: number;
+}
+
+export interface TimelineRangeGeometryOptions {
+  /** Overrides "today" for deterministic range building; defaults to the local date. */
+  todayDateKey?: string;
+}
+
+export function buildTimelineRangeGeometry(
+  rows: RowData[],
+  config: ViewConfig,
+  scale: TimelineScale,
+  options: TimelineRangeGeometryOptions = {},
+): TimelineRangeGeometry {
+  const startField = config.timelineStartDateField || config.calendarStartDateField || getDefaultEventDateField(config);
+  const endField = config.timelineEndDateField || config.calendarEndDateField;
+  const todayKey = options.todayDateKey || dateKeyFromUtc(startOfTodayUtc());
+  const events = startField ? buildCalendarTimelineEvents(rows, config, { startField, endField }) : [];
+
+  let minKey = todayKey;
+  let maxKey = todayKey;
+  for (const event of events) {
+    if (event.startDateKey < minKey) minKey = event.startDateKey;
+    if (event.startDateKey > maxKey) maxKey = event.startDateKey;
+    if (event.endDateKey < minKey) minKey = event.endDateKey;
+    if (event.endDateKey > maxKey) maxKey = event.endDateKey;
+  }
+
+  let startKey = addDateKeyDays(minKey, -TIMELINE_RANGE_PADDING_BEFORE_DAYS);
+  let endKey = addDateKeyDays(maxKey, TIMELINE_RANGE_PADDING_AFTER_DAYS);
+
+  const span = dateKeyDaysBetween(startKey, endKey) ?? 0;
+  const minSpan = TIMELINE_MIN_RANGE_DAYS[scale];
+  if (span < minSpan) {
+    const extra = Math.ceil((minSpan - span) / 2);
+    startKey = addDateKeyDays(startKey, -extra);
+    endKey = addDateKeyDays(endKey, extra);
+  }
+
+  // Coarse scales align the range start to a natural period so bands and grid
+  // boundaries land on real month edges; day scale keeps the exact date.
+  if (scale !== "day") {
+    const start = parseDateKey(startKey);
+    if (start) startKey = dateKeyFromUtc(makeUtcDate(start.getUTCFullYear(), start.getUTCMonth(), 1));
+  }
+
+  return {
+    scale,
+    startDateKey: startKey,
+    endDateKey: endKey,
+    totalDays: dateKeyDaysBetween(startKey, endKey) ?? 0,
+    dayWidth: TIMELINE_RANGE_DAY_WIDTH[scale],
+  };
+}
+
+export interface TimelineBarGeometryInput {
+  startDateKey: string;
+  /** Missing means the row has no end date: the bar occupies the start day only. */
+  endDateKey?: string;
+  /** True when the end column is date-only: the bar's right edge sits at end+1. */
+  endIsDateOnly?: boolean;
+  rangeStartDateKey: string;
+  scale: TimelineScale;
+  /** px per column unit (local column width). */
+  unitWidth: number;
+  /** Render a centered point marker (milestone) instead of a span bar. */
+  isMilestone?: boolean;
+}
+
+export interface TimelineBarGeometry {
+  startDateKey: string;
+  endDateKey: string;
+  /** Column-unit offset of the bar start from the range start (>= 0). */
+  offsetUnits: number;
+  /** Column units the bar spans on screen (never below the bar minimum). */
+  durationUnits: number;
+  durationDays: number;
+  isDueOnly: boolean;
+  isMilestone: boolean;
+}
+
+export function resolveTimelineBarMinUnits(scale: TimelineScale, unitWidth: number): number {
+  // Day scale columns are hours (timed events snap at 15 minutes); the
+  // eight-pixel bar minimum applies to the day-unit scales where a whole day
+  // can render narrower than the minimum.
+  if (scale === "day") return 0.25;
+  if (!Number.isFinite(unitWidth) || unitWidth <= 0) return 1;
+  return Math.max(1, Math.ceil(TIMELINE_BAR_MIN_WIDTH_PX / unitWidth));
+}
+
+export function resolveTimelineBarGeometry(input: TimelineBarGeometryInput): TimelineBarGeometry {
+  const isDueOnly = !input.endDateKey;
+  // A date-only end occupies its day, so the right edge sits at end+1; a
+  // due-only row occupies its single day the same way.
+  const endIsDateOnly = input.endIsDateOnly ?? true;
+  const endDateKey = endIsDateOnly ? addDateKeyDays(input.endDateKey ?? input.startDateKey, 1) : input.endDateKey!;
+  const offset = Math.max(0, dateKeyDaysBetween(input.rangeStartDateKey, input.startDateKey) ?? 0);
+
+  if (input.isMilestone) {
+    // Milestone markers center on their date and occupy one column unit.
+    return {
+      startDateKey: input.startDateKey,
+      endDateKey,
+      offsetUnits: offset + 0.5,
+      durationUnits: 1,
+      durationDays: 1,
+      isDueOnly,
+      isMilestone: true,
+    };
+  }
+
+  const durationDays = Math.max(1, dateKeyDaysBetween(input.startDateKey, endDateKey) ?? 1);
+  return {
+    startDateKey: input.startDateKey,
+    endDateKey,
+    offsetUnits: offset,
+    durationUnits: Math.max(durationDays, resolveTimelineBarMinUnits(input.scale, input.unitWidth)),
+    durationDays,
+    isDueOnly,
+    isMilestone: false,
+  };
+}
+
+export function resolveTimelineProgressFillUnits(progress: number, barDurationUnits: number): number {
+  if (!Number.isFinite(progress) || progress <= 0) return 0;
+  if (!Number.isFinite(barDurationUnits) || barDurationUnits <= 0) return 0;
+  return (progress / 100) * barDurationUnits;
 }

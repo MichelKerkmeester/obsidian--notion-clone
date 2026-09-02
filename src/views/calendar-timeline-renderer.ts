@@ -19,7 +19,7 @@ import { setIcon, setTooltip } from "obsidian";
 import { formatCalendarTime, getCalendarSlotDuration } from "../data/calendar-layout-model";
 import { isExplicitlySorted } from "../data/manual-order";
 import { CalendarTitleParts, buildTimelineAxisBands, formatCalendarTitleParts } from "../data/calendar-title-formatter";
-import { buildCalendarMonthModel, buildTimelineModel, buildTimelineTicks, CalendarTimelineEvent, collectUnscheduledTimelineRows, getDefaultEventDateField, getTimelineAnchor, getTimelineNavigationShiftUnits, getTimelineShortNavigationShiftUnits, getTimelineTitleWindow, getTimelineViewportContentWidth, getTimelineViewportStartAnchor, normalizeTimelineDayScale, resolveEventAbsoluteScale, resolveTimelineJumpAnchor, resolveTimelineReorderNeighbors, resolveTimelineUnitWidth, resolveTimelineViewportUnitCount, resolveTimelineViewportUnitSpan, shiftCalendarMonth, TimelineUnit, UNCATEGORIZED_TIMELINE_LANE, TimelineModel } from "../data/calendar-timeline-model";
+import { buildCalendarMonthModel, buildTimelineModel, buildTimelineRangeGeometry, buildTimelineTicks, CalendarTimelineEvent, collectUnscheduledTimelineRows, getDefaultEventDateField, getTimelineAnchor, getTimelineNavigationShiftUnits, getTimelineShortNavigationShiftUnits, getTimelineTitleWindow, getTimelineViewportContentWidth, getTimelineViewportStartAnchor, normalizeTimelineDayScale, resolveEventAbsoluteScale, resolveTimelineBarMinUnits, resolveTimelineJumpAnchor, resolveTimelineReorderNeighbors, resolveTimelineUnitWidth, resolveTimelineViewportUnitCount, resolveTimelineViewportUnitSpan, shiftCalendarMonth, TimelineUnit, UNCATEGORIZED_TIMELINE_LANE, TimelineModel } from "../data/calendar-timeline-model";
 import {
   CALENDAR_TIME_SNAP_MINUTES,
   MINUTES_PER_DAY,
@@ -311,6 +311,12 @@ export class CalendarTimelineRenderer {
 
     const wrap = container.createDiv({ cls: `db-timeline is-scale-${model.scale} is-slot-${this.getTimelineSlotDuration(config)}` });
     this.timelineRoot = wrap;
+    // The full task-driven range (padded, min-spanned) is grid metadata for the
+    // styles lane; the rendered window stays viewport-sized.
+    const range = buildTimelineRangeGeometry(rows, config, model.scale);
+    wrap.setAttribute("data-timeline-range-start", range.startDateKey);
+    wrap.setAttribute("data-timeline-range-end", range.endDateKey);
+    wrap.setAttribute("data-timeline-range-days", String(range.totalDays));
     this.timelineObservedUnitCount = visibleUnitCount;
     this.timelineObservedUnitSpan = visibleUnitSpan;
     this.observeTimelineViewport(container, config, rows);
@@ -382,7 +388,11 @@ export class CalendarTimelineRenderer {
       ].filter(Boolean).join(" ");
       const tickEl = ticksEl.createDiv({
         cls: tickClasses,
-        attr: { title: tick.dateKey, "data-date-key": tick.dateKey },
+        attr: {
+          title: tick.dateKey,
+          "data-date-key": tick.dateKey,
+          ...(tick.isScaleBoundary ? { "data-timeline-boundary": "true" } : {}),
+        },
       });
       tickEl.style.setProperty("--db-timeline-tick-offset", String(tick.offsetUnits + 1));
       this.renderTimelineTickLabel(tickEl, tick.label, model.scale);
@@ -424,11 +434,18 @@ export class CalendarTimelineRenderer {
         // 满宽（覆盖整个可见窗口）是 scale 覆盖 visible 的自然结果，无需特判。
         const scale = resolveEventAbsoluteScale(event, model.startDateKey || event.startDateKey);
         const renderStart = Math.max(scale.start, visible.startMinutes);
-        const renderEnd = Math.min(scale.end, visible.endMinutes);
+        let renderEnd = Math.min(scale.end, visible.endMinutes);
         const isClippedStart = scale.start < visible.startMinutes;
         const isClippedEnd = scale.end > visible.endMinutes;
         const isOverEvent = renderStart < renderEnd;
         if (isOverEvent) {
+          // A whole day can render narrower than the bar minimum at coarse
+          // scales; widen the rendered span so the bar stays visible and grabbable.
+          if (model.unit === "day") {
+            const minUnits = resolveTimelineBarMinUnits(model.scale, unitWidth);
+            const widthUnits = (renderEnd - renderStart) / MINUTES_PER_DAY;
+            if (widthUnits < minUnits) renderEnd = renderStart + minUnits * MINUTES_PER_DAY;
+          }
           this.renderTimelineEvent(events, config, event, lane.key, model, { renderStart, renderEnd, visible, isClippedStart, isClippedEnd }, lane.events, model.lanes, event.timelineRow || 1);
         }
         if (isClippedStart) {
