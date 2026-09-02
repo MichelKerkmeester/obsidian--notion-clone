@@ -200,7 +200,7 @@
     ],
     "causal_summary": "The seventeen product defects the 2026-09-02 visual pass read on real surfaces, which 020's D5 forbids 020 from fixing.",
     "created_at": "2026-09-02T15:26:34.871Z",
-    "last_save_at": "2026-09-02T17:05:18.560Z",
+    "last_save_at": "2026-09-02T17:16:49.675Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -211,7 +211,7 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:88aa222555f235db444b82a0a63740ba5707e8d173b62e769201585494f53222",
+    "source_fingerprint": "sha256:65c8afe62c5bcf29e62e1dac1d7579ffdaa4b11e80ce9440a7b6899d2dd17275",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "519c32d798ba361e8296d8a7e52e9c67901da5a22d78116f44e3d04efa6f855c",

@@ -26,10 +26,10 @@ _memory:
     completion_pct: 75
     open_questions:
       - "Which host shape is the operator's phone: visualViewport shrink or window resize"
-      - "Keep D2's scroll lane, or wrap the actions and retarget the placement check (035 P6)"
     answered_questions:
       - "Both reported defects are fixed and each carries a browser-produced number"
       - "The bar no longer depends on a host variable: the plugin publishes the inset itself"
+      - "Decided 2026-09-02: wrap the actions and retarget tools/storybook/verify-placement.mjs:903 to assert every action inside the bar, amending D2's scroll lane"
 ---
 # Goal: Dock the Selection Bar to the Keyboard
 
@@ -168,4 +168,9 @@ shape instead of the overflow triple, which amends D2; or **(b) keep the scroll 
 that the phone capture shows the clip, which leaves `035` P6 open by decision rather than by defect.
 Recorded, not resolved. See `../035-visual-pass-product-defects/goal.md` P6 and its
 `implementation-summary.md` Known Limitation 1.
+
+**2026-09-02: decided.** Option (a) is taken — wrap the actions and retarget
+`tools/storybook/verify-placement.mjs:903` to assert every action inside the bar, amending D2's
+scroll lane. Not yet implemented; this phase's fourth criterion stays as shipped until the wrap
+lands and the retargeted check is green.
 <!-- /ANCHOR:log -->

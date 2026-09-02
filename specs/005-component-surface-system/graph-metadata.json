@@ -245,6 +245,12 @@
         "source": "derived"
       },
       {
+        "name": "Never Fable",
+        "kind": "proper_noun",
+        "path": "goal.md",
+        "source": "derived"
+      },
+      {
         "name": "Live Preview",
         "kind": "proper_noun",
         "path": "goal.md",
@@ -263,12 +269,6 @@
         "source": "derived"
       },
       {
-        "name": "row",
-        "kind": "key_phrase",
-        "path": "goal.md",
-        "source": "derived"
-      },
-      {
         "name": "Session Handover",
         "kind": "proper_noun",
         "path": "handover.md",
@@ -277,7 +277,7 @@
     ],
     "causal_summary": "Phase parent for the program that gives floating surfaces, sheets, checkboxes and content rows one architecture, one placement authority, and acceptance criteria measured where users actually see them.",
     "created_at": "2026-08-29T12:53:52.104Z",
-    "last_save_at": "2026-09-02T16:37:20.665Z",
+    "last_save_at": "2026-09-02T17:16:46.594Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -285,11 +285,11 @@
       "goal.md",
       "handover.md"
     ],
-    "source_fingerprint": "sha256:409e9956f900e051c667dc7380f543d54843fbd4f60e8689affbd90c092d8564",
+    "source_fingerprint": "sha256:0279d902ce04b06523d120c1a359baf9452b3928022183c2e7fc37a46b0be3a0",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "d2da533033d1750cc6e3ce1bf9ccaab84b9221990f5e11ae06ee3556045dd0a0",
-      "handover.md": "063d74ea82160575d7578079e2388464971094f450324ff74422ca59f4200d08"
+      "handover.md": "5a84597707f3fd089207a233c00f96b6d36069943b241319f3849ed619c90c04"
     },
     "last_active_child_id": "005-component-surface-system/006-record-open-target",
     "last_active_at": null

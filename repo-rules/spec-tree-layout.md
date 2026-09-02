@@ -144,6 +144,11 @@ Until it is decided: **`npm run gate` is this repository's authority and it is g
 child packet passes. Validating a program root reports `SPECDOC_FRONTMATTER_004` and that is expected,
 not a regression to chase.
 
+**2026-09-02: the operator took disposition 1.** The shared rule will be amended to accept a
+single-segment `packet_pointer`. The edit lives in the Public monorepo, dispatched at
+`specs/system-speckit/050-single-segment-packet-pointer`; this repository's root pointers stay as they
+are, and each program's row 7 stays unticked, until that packet ships and validation is re-run.
+
 **2026-09-02: a fourth disposition was tested and rejected.** The Public monorepo's
 `specs/obsidian` is a symlink to this repository's `specs/` (same inode, verified with `stat`), so
 `obsidian/005-component-surface-system` is a real two-segment path to the same packet and satisfies

@@ -160,6 +160,12 @@ writing one.
    `max`, not xhigh (`cli-codex/references/providers-and-models.md:51`), so a re-run goes through
    cli-codex on `gpt-5.6-luna` at `model_reasoning_effort=max`, verified by a fresh in-runtime
    Opus agent — the only lane that can reach Chrome.
+
+   **2026-09-02: D14 itself was revised today.** The order is now (a) an initial pass through
+   cli-devin on `deepseek-v4-flash-max` under `--permission-mode dangerous`, operator-approved for
+   this repo's worktree, (b) then `gpt-5.6-luna` at `xhigh` or `max`, `service_tier=fast`, through
+   cli-codex or cli-opencode, (c) in-runtime verification unchanged — a fresh agent runs the
+   browser gate and `validate.sh` itself. See parent `goal.md` D14.
 3. ~~**Extend production-renderer coverage to board and gallery.**~~ **Done.** Coverage is **6 of
    22**: Calendar, Timeline, Board and Gallery were all added, twelve scenarios across both bags.
    The timeline scenario immediately caught a live quadratic at 964 layout reads against a bound

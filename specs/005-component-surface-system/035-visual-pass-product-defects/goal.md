@@ -19,12 +19,11 @@ _memory:
       parent_session_id: null
     completion_pct: 83
     open_questions:
-      - "P6: wrap the phone selection bar, or keep its scroll lane and the clipped capture"
-      - "P6 is a two-decision contradiction; the choice is the operator's, not this packet's"
       - "P4: does a 48px phone column earn a wider month cell, or shorter segment titles"
     answered_questions:
       - "020 D5 forbids 020 from fixing what its own pass revealed"
       - "The uncoloured badge closes on its edge; the fill question is the corpus's"
+      - "P6 decided 2026-09-02: wrap the actions and retarget tools/storybook/verify-placement.mjs:903 to assert every action inside the bar, not the scroll lane"
 ---
 # Goal: Visual Pass Product Defects
 
@@ -69,7 +68,9 @@ that wrote the fix.
   the scroll lane 022 shipped and accept that a capture shows the clip, because 416px of actions in a
   370px box leaves "Copy CSV" 55px outside a port a screenshot cannot scroll.** The same question is
   recorded in `../022-selection-bar-keyboard-docking/goal.md`, whose fourth criterion is the other
-  half of the contradiction.
+  half of the contradiction. **Decided 2026-09-02: option (a).** Wrap the actions and retarget
+  `tools/storybook/verify-placement.mjs:903` to assert every action inside the bar. Not yet
+  implemented — the row stays unticked until the wrap lands and the retargeted check is green.
 - [x] **P7** — a list date field renders in full when the row has room, capped; the sparse case unchanged. **Was 2 of 48 field values clipped, "February 14, 2027" among them. Now: 0.** The declared width became `min-width` rather than being dropped: dropping it collapsed the sparse fixture's four declared columns from **110/190/150/130 to 73/141/97/75**, and that capture is byte-identical to its committed self again.
 - [x] **P8** — registered and unregistered select rows share a leading edge. **Was: the hidden handle at `display: none` and 0px wide, putting the unregistered row's dot at x=33 against x=51 for its three siblings. Now: `visibility: hidden` at 8px wide, all four dots at x=51.** The offset was 18px, not the ~35px the pass reported.
 - [x] **P9** — the compact relation treatment exists and is visible. **Was 0 rules matching `.db-relation-values.is-compact`. Now: 3**, and the compact row photographs visibly tighter than the two above it. The rule was written rather than the class removed, because the renderer sets it deliberately per row.

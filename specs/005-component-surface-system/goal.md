@@ -10,9 +10,9 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-02T21:10:00Z"
-    last_updated_by: "spec-doc-recorder"
-    recent_action: "DONE row 7: shared-validator amendment is the last option"
+    last_updated_at: "2026-09-02T22:50:00Z"
+    last_updated_by: "delegation-policy-v2"
+    recent_action: "D14 revised: devin dangerous, then luna xhigh/max fast"
     next_safe_action: "The operator runs the deferred device pass on the installed 1.3.9 build"
     blockers:
       - "Every fix is measured on a bench; 1 of 27 reports is confirmed on the operator device"
@@ -73,7 +73,7 @@ production renderer**. One now does (`026`).
 | D11 | One phase holds `styles.css`, released only after a recapture a person looked at. |
 | D12 | Prefer **parity**: a harness cannot fake one without giving two independent producers the same wrong answer. |
 | D13 | One completion figure per phase, **derived** from its `goal.md` criteria checklist — never judged, never two. Status carries shipped/verified/confirmed; a percentage cannot. `roadmap.md` §3.1-3.2. |
-| D14 | **External delegation, decided 2026-09-02.** Implement, debug and review through cli-codex on `gpt-5.6-luna` at `model_reasoning_effort=max`, `service_tier=fast`, `--sandbox workspace-write`; cli-opencode only when the task itself needs the browser; fallback cli-devin on `deepseek-v4-flash-max` (that exact id, its effort baked in), read-only audits first. Every external result is verified by a fresh in-runtime Opus agent that runs `npm run gate` and `validate.sh --strict` itself — a delegate's report is a claim, not a result (D4). **No browser number from a sandboxed or cloud lane is evidence**, the lesson the queued-lane note in §4 already paid for. Model ids are passed exactly as each transport spells them — codex `gpt-5.6-luna`, devin `deepseek-v4-flash-max`, which do not share a spelling — never a near-miss. The orchestrator never runs a sub-agent on Fable. |
+| D14 | ~~**External delegation, decided 2026-09-02.** Implement, debug and review through cli-codex on `gpt-5.6-luna` at `model_reasoning_effort=max`, `service_tier=fast`, `--sandbox workspace-write`; cli-opencode only when the task itself needs the browser; fallback cli-devin on `deepseek-v4-flash-max` (that exact id, its effort baked in), read-only audits first. Every external result is verified by a fresh in-runtime Opus agent that runs `npm run gate` and `validate.sh --strict` itself — a delegate's report is a claim, not a result (D4). **No browser number from a sandboxed or cloud lane is evidence**, the lesson the queued-lane note in §4 already paid for. Model ids are passed exactly as each transport spells them — codex `gpt-5.6-luna`, devin `deepseek-v4-flash-max`, which do not share a spelling — never a near-miss. The orchestrator never runs a sub-agent on Fable.~~ **2026-09-02, revised.** The order is now: (a) an initial pass through cli-devin on `deepseek-v4-flash-max` under `--permission-mode dangerous`, which the operator approved for this repo's worktree; (b) then `gpt-5.6-luna` at `model_reasoning_effort=xhigh` or `max`, `service_tier=fast`, through cli-codex or cli-opencode; (c) in-runtime verification is unchanged — a fresh agent runs the browser gate and `validate.sh` itself, because sandboxed and cloud lanes cannot reach Chrome. In-runtime delegates default to Sonnet 5 (xhigh may be used more freely than before); Opus is used only where it is genuinely better. Never Fable, never fork. |
 <!-- /ANCHOR:directive -->
 
 ---
@@ -354,4 +354,10 @@ monorepo and read by every repository that uses it, so the edit is not local and
 it. **It awaits the operator.** Until then row 7 stays unticked, `npm run gate` remains this
 repository's authority, and a program root reporting `SPECDOC_FRONTMATTER_004` is expected rather than
 a regression to chase.
+
+**2026-09-02: the disposition is decided.** The first option above is taken: `SPECDOC_FRONTMATTER_004`
+will be amended to accept a single-segment `packet_pointer`. The edit is not local, so the work is
+dispatched to the Public repo, tracked at `specs/system-speckit/050-single-segment-packet-pointer`.
+Row 7 stays unticked here until that packet ships and this program's pointers are re-validated against
+it. See `repo-rules/spec-tree-layout.md` §4, updated to record this as the taken disposition.
 <!-- /ANCHOR:log -->
