@@ -10,13 +10,14 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/010-sheet-reading-and-keyboard"
-    last_updated_at: "2026-09-02T08:00:00Z"
-    last_updated_by: "goal-audit"
-    recent_action: "Goal audit realigned the stale log tables to the ticked criteria"
+    last_updated_at: "2026-09-02T23:57:00Z"
+    last_updated_by: "device-report-33"
+    recent_action: "Recorded report 33 (iOS): sheet overflow past 100vh, not investigated"
     next_safe_action: "Operator reads a record on the phone and taps a field"
     blockers:
       - "Only the operator's phone closes the last row; no harness here opens a keyboard"
       - "The resize path is a declared red: onResize closes the record sheet outright"
+      - "Report 33 (iOS, 2026-09-02 21:24): sheet doesn't fit content inside 100vh when it overflows, no screenshot yet, not investigated"
     key_files:
       - "spec.md"
       - "acceptance-criteria.md"
@@ -348,4 +349,15 @@ variable, so the difference is currently an argument from source rather than a m
 | Two criteria were carrying no measurement | The desktop non-regression and the five-dimension claim were both written as though verified, and neither had a check. Found by auditing the goal against the captured run rather than against the phase's own prose — which is the only way this shape is ever found. **Both were built and measured on 2026-09-01**, and one of them found a real listener leak on its first run, which is the argument for auditing rather than assuming |
 | Every `styles.css` and `src/` line citation in this file has drifted | Read them by rule content, not by line. The citations were taken against `f64dd87`; the stylesheet has changed hands several times since and the working tree carries an uncommitted phone rule, so a spot check on 2026-09-02 found every sampled citation landing on the wrong line — `styles.css:461` by eleven, `:346` by rather more, and `record-detail-panel.ts:200` and `popover-position.ts:284` likewise. The rules and functions named are all still present. Recorded rather than renumbered: renumbering them buys one day of accuracy in a file every phase edits, and the next reader would trust the new numbers more than they deserve |
 | The label's 13px is a declared red, not a silence | *the row's label size is on the type scale* stands `RED (declared)`: `label 13px; nearest scale steps are 12px and 14px`. Consistent with D4; it sits under the shared row grammar, so moving it moves every menu and sheet at once |
+
+### 2026-09-02: operator report 33 routed here
+
+**iOS, 21:24.** Quoted at `roadmap.md` §4 row 33: *"Open details sheet is buggy when overflow is
+present (content doesnt fit 100vh)."* No screenshot yet. Meaning: the record detail bottom sheet,
+when its properties and note body exceed the viewport height, does not behave — content doesn't fit
+100vh and the sheet presumably neither scrolls inside its own box nor keeps its handle reachable.
+Routed here rather than `023-record-note-body`: this phase already owns the phone record sheet's
+reading layout and scroll behaviour, while `023` is deliberately not startable per `roadmap.md` §5
+— the operator has not chosen display-only vs editable, and no note-body code has shipped — so a
+bug against the sheet as it currently exists cannot be `023`'s to hold. Not investigated.
 <!-- /ANCHOR:log -->

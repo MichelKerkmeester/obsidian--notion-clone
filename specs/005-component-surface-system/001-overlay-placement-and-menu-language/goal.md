@@ -194,4 +194,15 @@ outright. Rows in `acceptance-criteria.md` § Harness-dependence audit.
 **AC-008 WAS REWRITTEN.** It used to close on the dead block and the dead marker being *deleted*. A deletion is not an outcome — the criterion would have passed whether or not the user saw anything different. It now closes on a measurement: all eight panel selectors and every positioner surface must report an **identical computed geometry across the removal** (0 moving values, 3 widths x 2 sidebar states) and still pass the containment test. A value that moves means the block was live, the removal is rejected, and that value is what the replacement rule must declare.
 
 **SIX CRITERIA HAVE NO FAILING NUMBER YET.** AC-008 to AC-013 are `Blocked`, not `Unmet`: the doctrine makes a criterion invalid until it has failed on the current tree with the number written down, and these cells are empty. `acceptance-criteria.md` names, for each, exactly what produces the number and at which phase. **Do not invent one.** A stage that owes a number cannot be reported complete while its cell is blank.
+
+**2026-09-02: operator report 30 routed here.** iOS, 21:21, quoted at `roadmap.md` §4 row 30: the
+"All views" view-switcher bottom sheet draws five action icons per row on a 393px phone — rename,
+duplicate, reorder, delete, icon — titles truncate (*"Calendar vi…"*), and each row reads as a wall
+of glyphs; expected on a phone is one overflow control per row. Screenshot:
+`../scratch/device-2026-09-02/view-switcher-sheet-ios.png`. Routed here rather than `027` because
+`showAllViewsHub`/`renderInlineViewAction` (`toolbar-renderer.ts:1037-1111`) hand-build a bare-button
+row per action instead of calling `createMenuRow` — one of the exact "8 `render*Row` methods and 14
+row-class grammars in `toolbar-renderer.ts`" this phase's own `spec.md` §3 already scopes for
+retirement onto the shared factory. `027`'s inventory only covers rows already built through
+`createMenuRow`/`db-menu-item`; this row carries neither class. Not investigated.
 <!-- /ANCHOR:log -->

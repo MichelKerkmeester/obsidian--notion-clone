@@ -10,16 +10,17 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-02T23:45:00Z"
-    last_updated_by: "device-report-29"
-    recent_action: "Recorded operator report 29 (1.4.0, P0); dispatched to 031"
+    last_updated_at: "2026-09-02T23:50:00Z"
+    last_updated_by: "device-reports-30-33"
+    recent_action: "Recorded reports 30-33 (iOS device); routed to 001, 022, 010"
     next_safe_action: "The operator runs the deferred device pass on the installed 1.3.9 build"
     blockers:
-      - "Every fix is measured on a bench; 1 of 28 reports is confirmed on the operator device"
+      - "Every fix is measured on a bench; 1 of 32 reports is confirmed on the operator device"
       - "Every fix is bench-measured; none of the six renderers is asserted against a live Obsidian host"
       - "The windowed list is bench-only: 48.4ms at 3,000 rows, unconfirmed on the operator device"
       - "CI runs npm run storybook:coverage, a script package.json no longer defines (.github/workflows/gates.yml:64)"
-      - "Report 29 (1.4.0, P0): drag handle inert, some sheets uncloseable, one appears then freezes the app; OS and sheet identity unknown, undiagnosed"
+      - "Report 29 (1.4.0, P0): drag handle inert, some sheets uncloseable, one appears then freezes the app; OS and sheet identity unknown, undiagnosed; partially confirmed 2026-09-02 (sheets open and close), full discriminating sequence still owed"
+      - "Reports 30-33 (iOS, 2026-09-02 21:21-21:24): view-switcher icon-wall rows (30, 001), selection bar docking under a sheet/editor plus missing singular string (31-32, 022), record detail sheet overflow past 100vh (33, 010) — none investigated"
     key_files:
       - "roadmap.md"
       - "spec.md"
@@ -122,6 +123,19 @@ resolve them silently.
       release-blocking, dispatched to `031-sheet-lifecycle-ownership` for diagnosis). The **8 in
       neither state** above is now **9** (21-29). Not re-ticked: this addition only widens the
       gap between confirmed and total.
+
+      **2026-09-02, later the same day: three new device reports plus one bundled correction.**
+      `roadmap.md` §4 grew to **32 numbered rows** (1-16, 18-33) with rows 30-33, all four from the
+      operator's iOS device at 21:21-21:24: the view-switcher sheet's icon-wall rows (30, routed to
+      `001`), the selection bar staying docked over a sheet and under an inline editor plus its
+      missing singular string (31-32, both routed to `022`), and the record detail sheet not
+      fitting content inside 100vh when it overflows (33, routed to `010`). The **9 in neither
+      state** above is now **13** (21-33). Row 29 also gained a partial: the operator's *"Most
+      sheets seem to work now tho"*, reported against the build after `98da630`/`0c92f4d`, is
+      recorded in `roadmap.md` §4 as **partially confirmed on device** — sheets open and close —
+      with the full discriminating sequence still owed, and the row stays open rather than ticked.
+      Not re-ticked here either: four new rows in neither state widens the gap further, and a
+      partial confirmation on one row is not the same as this criterion's "every report."
 - [ ] Every view opens on device without freezing. Today only the table does.
 - [x] A gate check constructs a production renderer for **every** view. One lane does now, for
       List, Table, Board, Gallery, Calendar and Timeline — **6 of 22**, a ratchet, twelve
@@ -414,4 +428,35 @@ positioning and dismissal since the last release this program has device evidenc
 `031-sheet-lifecycle-ownership` owns the diagnosis: it already carries the drag-handle hypothesis
 for reports 26 and 27 (a panel's own content render destroying the grab bar it prepended), and
 this report's freeze-then-app-hang symptom is a new shape not yet covered by that hypothesis.
+
+### Reports 30-33: three fresh device reports plus one bundled correction, iOS, 2026-09-02
+
+**2026-09-02, 21:21-21:24.** Four new operator reports, all from the same iOS device that produced
+report 29, quoted in full at `roadmap.md` §4 rows 30-33. **Row 30** — the "All views" view-switcher
+bottom sheet draws five action icons per row on a 393px phone, titles truncate, and every row reads
+as a wall of glyphs where the operator expects one overflow control. Screenshot:
+`scratch/device-2026-09-02/view-switcher-sheet-ios.png`. Routed to **`001-overlay-placement-and-menu-language`**:
+the row is hand-built by `showAllViewsHub`/`renderInlineViewAction` (`toolbar-renderer.ts:1037-1111`)
+rather than the shared `createMenuRow` factory, and `001/spec.md` §3 already scopes exactly this —
+retiring `toolbar-renderer.ts`'s hand-rolled row builders onto the one row grammar — where `027`'s
+inventory only covers rows already built through `createMenuRow`/`db-menu-item`. **Rows 31-32** — the
+selection status bar stays docked over/under the floating add button while a sheet is open, and an
+inline numeric-cell editor lands on top of it, clipping the cell count and stacking a second action
+row above the keyboard; separately, `"1 cells selected"` has no singular form
+(`src/i18n.ts:287`, `toolbar.selectedCells`). Screenshot:
+`scratch/device-2026-09-02/cell-editor-over-selection-bar-ios.png`. Both routed to
+**`022-selection-bar-keyboard-docking`**, which already owns the bar's docking mechanism. **Row 33**
+— the record detail sheet does not behave when its content overflows 100vh; no screenshot yet.
+Routed to **`010-sheet-reading-and-keyboard`**, which owns the phone record sheet's reading layout
+and scroll behaviour; `023-record-note-body` was considered and rejected as owner because it is
+deliberately not startable (the operator has not chosen display-only vs editable) and ships no code
+today, so it cannot hold a bug against the sheet as it currently exists. None of the four is
+investigated yet.
+
+**Also 2026-09-02, same device, same session.** Row 29 gained a partial: the operator wrote *"Most
+sheets seem to work now tho"* on the build after `98da630`/`0c92f4d` (the modal-sheet-chrome-on-close
+and cancelled-gesture-dismissal fixes). Recorded at `roadmap.md` §4 row 29 as **partially confirmed
+on device** — sheets open and close on that build — with the full discriminating sequence (drag
+*after* editing a field, tried against each of the three named failure shapes) still owed. The row
+stays open; a partial is not a close under D3.
 <!-- /ANCHOR:log -->

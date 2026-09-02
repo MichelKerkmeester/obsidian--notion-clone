@@ -202,7 +202,7 @@
     ],
     "causal_summary": "The cell-selection action bar floats over the table at a fixed offset from the viewport floor, so an open keyboard covers or crowds it, and its own content is taller than the box that holds it.",
     "created_at": "2026-08-30T15:07:29.327Z",
-    "last_save_at": "2026-09-02T17:55:15.305Z",
+    "last_save_at": "2026-09-02T19:28:34.266Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -213,7 +213,7 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:e5a83776596af8694644e7804e0aaf08158ca198d1d6350e0fa05826180c861c",
+    "source_fingerprint": "sha256:b805a2c2daa93b5638b0c3edba2dfa3be5664f52a2c05a6e3b0fe1deff84cdef",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "fd4f6b2d087c3a19a66da7dcd1d44f44ee49e168fb86fc8e933770deeaa7eab9",

@@ -10,11 +10,12 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/022-selection-bar-keyboard-docking"
-    last_updated_at: "2026-09-02T23:55:00Z"
-    last_updated_by: "scroll-lane-retired"
-    recent_action: "D2 and criterion 4 marked superseded by the wrap decision"
+    last_updated_at: "2026-09-02T23:56:00Z"
+    last_updated_by: "device-reports-31-32"
+    recent_action: "Recorded reports 31-32 (iOS): docking clip and a singular string"
     next_safe_action: "Operator opens the keyboard on device and confirms the bar is reachable"
-    blockers: []
+    blockers:
+      - "Reports 31-32 (iOS, 2026-09-02 21:21): bar stays docked over/under the sheet and the add button; an inline numeric editor clips the count and stacks a second row; \"1 cells selected\" has no singular — neither investigated"
     key_files:
       - "spec.md"
       - "acceptance-criteria.md"
@@ -194,4 +195,16 @@ text stays visible, D2 is marked superseded pointing at this wrap decision and `
 stays ticked because the new observable — every action's right edge inside the bar's client box —
 is what it now asserts, and that is true on disk (`maxActionRight` 567px red past a 373px port,
 341px green inside it). The 44px floor is unchanged.
+
+### 2026-09-02: two fresh device reports, both bundled as one operator note
+
+**iOS, 21:21.** Quoted at `roadmap.md` §4 rows 31-32. **Row 31** — the selection status bar
+(*"× Esc · 1 cells selected · Copy TSV · Copy Markdown"*) stays docked while a bottom sheet is open,
+sits over/under the floating "+" add button, and when a numeric cell is edited the inline editor
+lands on top of the bar, clipping "1 cells selected" and stacking a second action row
+(Copy CSV · Paste · Income · Clear · Undo) above the keyboard. One docking owner is missing among
+sheet, bar, editor and floating button. Screenshot:
+`../scratch/device-2026-09-02/cell-editor-over-selection-bar-ios.png`. **Row 32** — `"1 cells
+selected"` has no singular form: `src/i18n.ts:287`, `"toolbar.selectedCells": "{count} cells
+selected"`, interpolated at every count including 1. Neither row is investigated yet.
 <!-- /ANCHOR:log -->
