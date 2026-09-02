@@ -27,6 +27,11 @@
 // a computed value that did not take effect. It belongs in the geometry harness,
 // not here.
 //
+// The mirror question is asked too, and it was the one nobody had asked: not "does a harness value
+// contradict production" but "does production read a token the harness never supplies". A
+// `var(--x)` with no fallback and no declaration anywhere is dropped entirely rather than
+// defaulted, so the rule reading it paints nothing in every capture. Section 4c owns that.
+//
 // Exit 0 clean, 1 with the list, 2 when the scan itself matched nothing.
 
 // ───────────────────────────────────────────────────────────────────
@@ -43,6 +48,9 @@ import { fileURLToPath } from "node:url";
 
 const REPO = fileURLToPath(new URL("../..", import.meta.url));
 const HARNESS_FILES = ["tools/screenshots/runtime-vars.css", "tools/screenshots/theme.css"];
+// Read for the supply direction below, where a rule declaring a token counts as supplying it
+// wherever the harness declares it.
+const SUPPLY_FILES = [...HARNESS_FILES, "tools/screenshots/host-checkbox.css"];
 
 // ───────────────────────────────────────────────────────────────────
 // 3. COLLECT
@@ -181,8 +189,73 @@ if (standIns.length > allowed) {
   process.exit(1);
 }
 
+// ───────────────────────────────────────────────────────────────────
+// 4c. THE OTHER DIRECTION — A TOKEN THE PLUGIN READS AND NOTHING SUPPLIES
+// ───────────────────────────────────────────────────────────────────
+//
+// Everything above asks whether a harness value contradicts production. This asks the mirror
+// question, and it is the one that was never asked: is there a token production supplies that the
+// harness does not?
+//
+// `var(--x)` with NO fallback and no declaration anywhere is not a soft failure. The substitution
+// is invalid at computed-value time, so the WHOLE declaration is dropped — not defaulted, dropped.
+// Every capture then shows the surface as if the author had never written that line.
+//
+// `--text-warning` was this: thirteen declarations in the stylesheet, an Obsidian token the host has
+// always defined, and no stand-in here. A dashed warning border, a warning label and a warning fill
+// painted nothing in every capture ever taken, and no check could have said so, because the token
+// is absent rather than wrong and nothing was looking for absence.
+//
+// The ratchet is on the NAMES and their read counts, for the same reason as §4b: the remaining
+// population is real and each entry needs a decision, not a blanket red that gets regenerated past.
+// A name leaving the list is fine — it was supplied. A name joining it, or a known name gaining
+// reads, means the stylesheet started depending on something no capture can show.
+const readNoFallback = new Map();
+{
+  const text = readFileSync(join(REPO, "styles.css"), "utf8");
+  const supplied = new Set([...text.matchAll(/(^|[;{\s])(--[a-zA-Z0-9-]+)\s*:/g)].map((m) => m[2]));
+  for (const rel of SUPPLY_FILES) {
+    const abs = join(REPO, rel);
+    if (!existsSync(abs)) continue;
+    const harness = readFileSync(abs, "utf8").replace(/\/\*[\s\S]*?\*\//g, " ");
+    for (const m of harness.matchAll(/(^|[;{\s])(--[a-zA-Z0-9-]+)\s*:/g)) supplied.add(m[2]);
+  }
+  for (const prop of runtime.keys()) supplied.add(prop);
+  for (const m of text.matchAll(/var\(\s*(--[a-zA-Z0-9-]+)\s*([,)])/g)) {
+    if (m[2] === "," || supplied.has(m[1])) continue;
+    readNoFallback.set(m[1], (readNoFallback.get(m[1]) || 0) + 1);
+  }
+}
+
+const unsuppliedBaseline = new Map(Object.entries(baseline?.unsupplied ?? {}));
+const newlyUnsupplied = [];
+for (const [prop, reads] of [...readNoFallback].sort()) {
+  const allowed = unsuppliedBaseline.get(prop);
+  if (allowed === undefined) newlyUnsupplied.push({ prop, reads, was: null });
+  else if (reads > allowed) newlyUnsupplied.push({ prop, reads, was: allowed });
+}
+
+console.log(`scan-pinned-values: ${readNoFallback.size} token(s) read with no fallback and supplied by `
+  + `nothing, against a recorded baseline of ${unsuppliedBaseline.size}`);
+console.log("  Each one silently drops the declaration that reads it. They are named in the baseline");
+console.log("  with the reason each is still open, so a new one cannot arrive unnoticed.");
+
+if (newlyUnsupplied.length) {
+  console.error(`\nUNSUPPLIED — ${newlyUnsupplied.length} token(s) the stylesheet reads that nothing declares:`);
+  for (const entry of newlyUnsupplied) {
+    console.error(entry.was === null
+      ? `  ${entry.prop}: ${entry.reads} declaration(s), not in the baseline`
+      : `  ${entry.prop}: ${entry.reads} declaration(s), baseline allows ${entry.was}`);
+  }
+  console.error("\n  A var() with no fallback and no declaration is invalid at computed-value time, so");
+  console.error("  every declaration reading it is dropped and every capture shows the rule missing.");
+  console.error("  Either stand the token in (theme.css, transcribed from the host) or record it.");
+  process.exit(1);
+}
+
 if (contradictions.length === 0 && unread.length === 0) {
-  console.log("scan-pinned-values: PASS — no harness value contradicts what production resolves");
+  console.log("scan-pinned-values: PASS — no harness value contradicts what production resolves,");
+  console.log("  and no token it reads without a fallback is left unsupplied beyond the baseline");
   process.exit(0);
 }
 

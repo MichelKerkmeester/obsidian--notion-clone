@@ -231,7 +231,7 @@ Sources: `src/views/modals/computed-frontmatter-cleanup-modal.ts`
 
 ### Invalid time events modal
 
-The select box in the invalid-events grid. It carries placement of its own — centred in the 28px lead column — on top of the shared field-role appearance.
+The select box in the invalid-events grid. It carries placement of its own — centred in the 28px lead column — on top of the shared field-role appearance. Every row is invalid, which is the only state this modal opens in: a red dot after the name, a red-bordered end input, and a span reading "Still invalid" rather than a duration. The phone form is the compact-and-narrow grid the modal's own ResizeObserver switches to below 1040 and 680.
 
 | dark | light |
 |---|---|

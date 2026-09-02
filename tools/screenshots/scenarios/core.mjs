@@ -141,10 +141,13 @@ export const CORE_SCENARIOS = [
     id: "add-view-popover",
     title: "Add view popover",
     group: "components",
-    // The width the positioner actually gives this panel. At 460 the capture was 1.6x the
-    // surface, so every judgement made from it — spacing, wrapping, how crowded a row looks —
-    // was made about a picture the product never draws.
-    width: 292,
+    // The width the stylesheet actually gives this panel, plus the 16px the capture box frames it
+    // with on each side. It read 292 — narrower than the surface — and `#shot` is `overflow:
+    // hidden`, so the capture cut 84px off the right: the three inputs ran out of the frame and the
+    // select lost its chevron. The panel takes `width: min(360px, calc(100vw - 24px))`, which is
+    // 360 at any viewport this is photographed in. A declared width narrower than the surface does
+    // not shrink it, it only crops the picture, which is now a capture failure rather than a shot.
+    width: 392,
     sources: ["src/views/toolbar-renderer.ts"],
     note: "Settings above, actions below, one row grammar for both the seven types and the duplicate.",
     // The popover anchors itself absolutely to the toolbar. With no toolbar to anchor to it
@@ -218,18 +221,28 @@ export const CORE_SCENARIOS = [
       // Without the check, the LABEL landed in the 16px track. Every option rendered as one
       // character and an ellipsis — "S…", "A…", "R…" — in a popover over a thousand pixels wide,
       // which is a picture of a dropdown the plugin does not build.
-      const option = (label, extra = "", attrs = "") => `
-          <button type="button" class="${`db-dropdown-option ${extra}`.trim()}" ${attrs}>
-            <span class="db-dropdown-option-check db-menu-item-check"></span>
+      //
+      // The row carries `db-menu-item` too, and that is not decoration: the disabled appearance
+      // both menus share is declared on `.db-menu-item[aria-disabled="true"]`, so a row with the
+      // attribute and not the class matched nothing. `is-disabled` was missing beside it, which is
+      // the other half — `.db-dropdown-option.is-disabled` is where the 0.45 opacity lives. The
+      // disabled option was therefore drawn exactly like the two available ones, in the one
+      // scenario whose whole title is "Dropdown with disabled option".
+      //
+      // The selected row's check span was empty. `openDropdownPopover` puts Lucide's `check` in it
+      // for the matching value, so the fixture claimed a selected state with nothing marking it.
+      const option = (label, extra = "", attrs = "", checked = false) => `
+          <button type="button" class="${`db-dropdown-option db-menu-item ${extra}`.trim()}" ${attrs}>
+            <span class="db-dropdown-option-check db-menu-item-check">${checked ? ICONS.check : ""}</span>
             <span class="db-dropdown-option-text db-menu-item-label"><span class="db-dropdown-option-label">${label}</span></span>
           </button>`;
       return `
       <div class="note-database-container">
         <div class="db-dropdown-popover db-dropdown-popover-context-container">
           <div class="db-dropdown-section-title">Aggregate</div>
-          ${option("Sum", "is-selected")}
+          ${option("Sum", "is-selected", "", true)}
           ${option("Average")}
-          ${option("Rollup", "", 'aria-disabled="true" title="Rollup needs a numeric target field"')}
+          ${option("Rollup", "is-disabled", 'aria-disabled="true" title="Rollup needs a numeric target field"')}
         </div>
       </div>`;
     },

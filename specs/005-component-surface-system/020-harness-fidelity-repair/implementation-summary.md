@@ -10,10 +10,10 @@ contextType: "general"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/020-harness-fidelity-repair"
-    last_updated_at: "2026-08-31T06:00:00Z"
-    last_updated_by: "harness-supply-audit"
-    recent_action: "Supply audit: 2 of the 63 lifted checks set --keyboard-height themselves"
-    next_safe_action: "Add a placement check that never sets --keyboard-height, so the fallback can fail"
+    last_updated_at: "2026-09-02T16:00:00Z"
+    last_updated_by: "harness-fidelity-visual-pass"
+    recent_action: "Stood in the host warning token; 13 rules painted nothing"
+    next_safe_action: "Operator signs off the two new modal fixtures, per image"
     blockers: []
     key_files:
       - "spec.md"
@@ -22,7 +22,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-020"
       parent_session_id: null
-    completion_pct: 92
+    completion_pct: 95
     open_questions:
       - "Which of the 63 lifted checks still measure a value the harness supplies"
     answered_questions:
@@ -377,5 +377,161 @@ bounded: on a phone, two properties whose labels have been edited to look alike 
 told apart by key. The css lane was acquired and released around the edit with both
 `panel-base-import-modal-mobile-*` captures read per image; the two timeline captures that also
 moved are the known churn set and carry no rule from this edit.
+
+**2026-09-02, second pass: a token the plugin reads thirteen times and nothing declares.** The
+twelfth divergence is the largest of its kind and it is an absence rather than a wrong value.
+`styles.css` reads `var(--text-warning)` in **13 declarations** — the unresolved relation chip's
+dashed border and text at `:6178`–`:6186`, the calendar's same-date and invalid-events warnings at
+`:10992`–`:11026`, the formula preview's warning state at `:12540`, and the timeline and calendar
+invalid toggles at `:15222`–`:15241` — with **no fallback on any of them** and no declaration in the
+stylesheet, in `src/`, or in either harness stand-in. A `var()` that resolves to nothing is invalid
+at computed-value time, so the whole declaration is dropped rather than defaulted: every one of
+those thirteen rules has painted nothing in every capture ever taken.
+
+Obsidian 1.13.7 defines it, and the value is transcribed rather than recalled: app.css resolves
+`--text-warning: var(--color-orange)` on `body`, with `--color-orange: #ec7500` under `.theme-light`
+and `#e9973f` under `.theme-dark`. Both are now in `theme.css` with the host version named beside
+them.
+
+**The most legible proof is a picture of two states that were one.** `field-relation-values` exists
+to show a resolved relation beside an unresolved one. Before this, both drew the same grey pill:
+the unresolved chip's dashed orange border and orange label were the dropped declarations. The
+pre-fix image is at `HEAD` and the two are side by side in the same cell, which is what makes the
+difference checkable rather than asserted.
+
+**The same absence hid the destructive button.** `.mod-warning` is on a `<button>` at all four of its
+call sites — `confirm-modal.ts:72`, `computed-frontmatter-cleanup-modal.ts:87`,
+`delete-database-modal.ts:94` and `invalid-time-events-modal.ts:178` — and `styles.css` styles only
+its position, at `:8565`. Everything else is the host's, and the harness's button baseline set
+`color` directly where the host routes it through `--text-color`, so it had no mechanism for a
+modifier class to recolour a button at all. **The computed-cleanup modal's Remove button was
+pixel-identical to the Cancel button beside it.** `button.mod-warning` and its phone form
+(`.is-mobile`, where the host drops the red fill for red bold text) are transcribed into the
+host-rules section, and both now read correctly in both themes.
+
+**The guard is the mirror of the one already here, and it is the question nobody had asked.**
+`scan-pinned-values` asked whether a harness value contradicts production. Its new section 4c asks
+whether production reads something the harness never supplies: a `var(--x)` with no fallback that
+nothing declares. Observed red by deleting the new declaration — `--text-warning: 13 declaration(s),
+not in the baseline` — and green with it restored. **Ten further names remain**, 17 declarations,
+ratcheted by name and by count in `pinned-values-baseline.json` with a disposition for each rather
+than a blanket red: seven are host tokens transcribable exactly as this one was and are not done in
+the same pass because each moves captures outside this review; two resolve through the host's
+`--accent-h/s/l` triple, which the harness's pinned accent does not produce, so supplying them is a
+decision rather than a transcription.
+
+**A capture width that crops the surface it was meant to frame.** `#shot` is `overflow: hidden`, so
+a surface wider than the declared width is cut at the edge and the PNG still looks finished.
+`add-view-popover` declared **292** against a panel that takes **360** from
+`width: min(360px, calc(100vw - 24px))`, and lost **84px**: the three inputs ran out of frame and the
+select lost its chevron. `chrome-active-rule-popover-sort` declared **480** against **538** — the
+filter panel's `min(520px, ...)` plus its own padding and border — and lost **74px**, photographing
+"Descending" as "Des" while the field chip, which is `flex: 1 1 0`, stretched into the space the cut
+hid. Both are element captures and both mobile twins were whole, which is why reading the pair
+looked like a responsive difference rather than a crop.
+
+Fixed at the cause and guarded there: `capture.mjs` now fails a capture whose declared width crops
+its own surface, naming the element, its width and the pixels lost. Observed red on both before
+either width moved. **The rule is deliberately narrow.** A census over every element capture found
+**17 clipping**, and the other 15 are honest: a table wider than a 402px phone scrolls in the product
+too, and failing those would be failing the product's own behaviour. So the check is scoped to the
+shot's own surfaces on a pass where a declared width was actually applied, which is the desktop pass
+of a scenario that declares one — and that is exactly the two.
+
+**A fixture that never drew the only state its modal opens in.** `panel-invalid-events-modal` lists
+events whose end is at or before their start; every row is invalid by construction, and
+`renderSpan` says so in three places — `is-invalid` on the row, on the **end** input, and on the span,
+whose text becomes "Still invalid". The fixture carried **0 of the 3** and wrote "-1h", "-30m",
+"-45m", durations the modal never writes. It also omitted the per-row quick-fix button and the entire
+sticky action bar, which is where the destructive confirm lives. All present now, and the red dot,
+the red-bordered end input and the red span are photographed for the first time.
+
+**Its width was wrong in a way that reads as a lesson about inference.** The two layout classes come
+from a ResizeObserver on the **modal**, and the first attempt derived them from the capture box —
+828px, therefore compact. The modal host is `width: min(1180px, calc(100vw - 24px))` at
+`styles.css:11037`, which is **1180 on a desktop and neither compact nor narrow**; the phone gets the
+fullscreen presentation and is both. Inferring from the box put the desktop shot in the compact
+layout, whose header is `display: none` — and a hidden header is a select-all checkbox measuring
+**0x0**, which `verify-placement`'s field-role check correctly read as a second box for one role.
+**The lane went 385/386 to 384/386 and exited 1 because of it**, and is back at 385/386 exit 0 with
+the width at **1212** (1180 plus the capture box's 16px frame) and the classes on the phone only.
+Worth stating plainly: the check was right, the fixture was wrong, and the failure was caused by
+this pass rather than found by it.
+
+**Two smaller fixture divergences, both a class or a glyph.** `dropdown-field` is the one scenario
+whose title is "Dropdown with disabled option", and its disabled option was drawn exactly like the
+two available ones: the row carried `aria-disabled` but not `db-menu-item`, so the shared rule at
+`styles.css:369` never matched, and not `is-disabled`, so the 0.45 opacity at `:2929` never matched
+either. The selected row carried `is-selected` with an **empty check span**, where
+`dropdown-field.ts:279` puts Lucide's `check` in it. Both fixed, with the glyph added to the shared
+`ICONS` map. And `chrome-owned-menu` drew "Delete property" bare while `column-menu.ts:209` builds it
+with `icon: "trash"` — the sibling sheet fixture had already been corrected and this one had not, so
+**the two presentations of one menu disagreed about one row while sitting side by side in the index**.
+
+**A phone surface photographed in a window no phone has.** `chrome-owned-menu-sheet` and
+`panel-record-detail-sheet` are bottom sheets, and their desktop captures put the sheet across a full
+**1440px** frame above 900px of empty page, with `is-phone` absent. That is not a weaker picture of
+the surface; it is a picture of a presentation the plugin never makes, and the row grammar those
+scenarios exist to show — one left edge, a fixed leading column, a 44px target — was being read off
+it. `capture.mjs` gains a `devices` field and both declare `["mobile"]`; the four desktop PNGs are
+deleted. **Framing the desktop pass at 402px instead was rejected**: it produces an image identical to
+the mobile one, which is the thing the device-parity ratchet exists to catch. The manifest goes
+**244 -> 240** and the parity lane, which skips a pair with no desktop twin, stays green.
+
+**A footer that contradicted the table it footed.** `chrome-table-footer` renders all of `ROWS` and
+then stated **COUNT 5** beneath **24 rows**, **SUM 191,75** against **576,27**, **AVERAGE 38,35**
+against **24,01**, and **EARLIEST 2026-03-02** when the earliest renewal present is March 1. All four
+are now derived from `ROWS` through the product's own aggregation semantics — `calculateTableAggregate`
+drops empties first — and its own nl-NL formatter, which has no minimum fraction digits, so a count
+prints as "24" and a sum as "576,27". Verified against an independent sum taken outside the module.
+**UNIQUE 3 was already correct** and is left as it was; it was right by luck rather than by
+derivation, and it is now derived.
+
+The first computed `EARLIEST` was **2026-02-28**, a date not in the table, because
+`new Date("March 1, 2026").toISOString()` moves local midnight back a day in a positive-offset zone.
+Caught by checking the output against the table rather than by trusting the arithmetic, and fixed by
+reading local parts.
+
+**Three product defects found by these repairs, none of them fixed here.** `styles.css` is
+lane-held and product findings belong to the next wave, so each is recorded with its measurement.
+
+- **`grid-area: span` has never applied, on any device.** `styles.css:11243` assigns the invalid-events
+  span cell to a grid area named `span`, and `span` is a grid-line keyword, so the declaration is
+  rejected by the parser — set it through CSSOM and `cssText` comes back empty, while `grid-area:
+  spanned` is accepted. The compact layout looked right only by auto-placement coincidence: the cell
+  fell into the first free grid cell, which happened to be the intended one. At narrow widths the
+  same coincidence puts it in the 28px gutter, where "Still invalid" measures **0px wide**. Found
+  because the fixture finally drew the span; invisible for as long as it did not.
+- **`--background-interactive-hover` is supplied by nobody.** Read once, at `styles.css:9153`, with no
+  fallback, and **zero occurrences** in the host stylesheet of Obsidian 1.13.7. Unlike the other ten
+  in the new baseline this is not a harness gap: it is a hover background the plugin asks for that
+  no device can give it, so the declaration is dropped for every user.
+- **Twelve controls in one modal sit under this project's own 28px floor.** Drawing the invalid-events
+  action bar and quick-fix buttons made them measurable for the first time; `db-invalid-event-row-fix`
+  declares `height: 24px` and the modal buttons inherit it. The `touch-targets` baseline moves
+  **224 -> 228** with the reason recorded in the file: these have always shipped this way, and the
+  confirm button of a destructive modal is not a control to resize in the pass that first
+  photographed it.
+
+**Left alone, deliberately.** The footer's `EARLIEST` prints `2026-03-01` where every cell above it
+prints "March 1, 2026". That inconsistency is `table-footer-renderer.ts:214`'s — `formatCalculationValue`
+returns a `dateKey` for a `Date` — and it is product, so the fixture reproduces it rather than
+correcting it.
+
+**A red lane that was the gate's own diagnostic.** The first full run reported `folder-docs` red on
+`tools/lane/gate-logs — missing-readme`. That directory is created only when another lane goes red,
+holds nothing but `.log` files, and is gitignored, so a red lane manufactures a second red lane. It
+is not caused by this change and it goes away when the directory does, which is how the run was
+confirmed: removed, re-run, green. Recorded because the next person to see two reds should know one
+of them is an echo.
+
+**Verification, exit codes read directly and not through a pipe.** `npm run screenshots` exit 0, 240
+entries, no clipped or oversize capture; `npm run screenshots:verify` exit 0, 240 entries current;
+`npm run gate` **`gate: PASS — 25 green, 0 red for a declared reason`** exit 0; `npx tsc --noEmit`
+exit 0; `npm run build` exit 0; `npx vitest run` exit 0, **643 tests across 76 files**. All 29 changed
+captures were opened and read in both themes and are named in the `reviewed` array of the lane
+entry this pass appended, which records that no stylesheet edit was taken and the hash is unchanged
+at `92022f8399f1`. `main.js` was reverted after the build: it carried 20 lines of esbuild identifier
+churn and no `src/` file was touched by this pass.
 
 <!-- /ANCHOR:limitations -->

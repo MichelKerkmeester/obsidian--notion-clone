@@ -490,6 +490,9 @@ export const PANEL_SCENARIOS = [
     group: "panels",
     width: 402,
     capture: "viewport",
+    // Photographed on the phone only, for the reason the owned-menu sheet carries: the desktop pass
+    // stretched a phone bottom sheet across a 1440px window the plugin never presents it in.
+    devices: ["mobile"],
     sources: [
       "src/views/record-detail-panel.ts",
       "src/views/popover-position.ts",
@@ -674,33 +677,56 @@ Cancel before the renewal date or it bills for another year. Support answer on w
     id: "panel-invalid-events-modal",
     title: "Invalid time events modal",
     group: "components",
-    width: 860,
+    width: 1212,
     sources: ["src/views/modals/invalid-time-events-modal.ts"],
     // Two families were declared with two classes on one `cls`, and the collector that reads those
     // declarations matched a single word, so both dropped out of the coverage set entirely and
     // "no family is uncovered" was a statement about ten families rather than twelve. This is one of
     // them, and the one that carries its own placement: the box is centred in a 28px grid column
     // here and moved to a named grid area in the compact layout, neither of which any capture showed.
-    note: "The select box in the invalid-events grid. It carries placement of its own — centred in the 28px lead column — on top of the shared field-role appearance.",
-    html: () => {
-      const row = (name, start, end, span) => `
-        <div class="db-invalid-event-row">
+    note: "The select box in the invalid-events grid. It carries placement of its own — centred in the 28px lead column — on top of the shared field-role appearance. Every row is invalid, which is the only state this modal opens in: a red dot after the name, a red-bordered end input, and a span reading \"Still invalid\" rather than a duration. The phone form is the compact-and-narrow grid the modal's own ResizeObserver switches to below 1040 and 680.",
+    // Every row this modal lists is invalid by definition — that is why it opened — and `renderSpan`
+    // says so in three places at once: `is-invalid` on the row, on the END input, and on the span,
+    // whose text becomes "Still invalid" rather than a duration. The fixture set none of them, so
+    // the red dot after the name, the red-bordered end input and the red span were three states the
+    // stylesheet declares and no capture had ever shown; the span instead read "-1h", a negative
+    // duration the modal never writes. The quick-fix button and the sticky action bar were absent
+    // as well, and the actions carry the destructive confirm this whole surface leads to.
+    //
+    // The two layout classes come from a ResizeObserver on the MODAL, at 1040 and 680, so they
+    // cannot be inferred from the markup and must not be inferred from the capture box either. The
+    // host is `width: min(1180px, 100vw - 24px)` on a desktop, which is 1180 and therefore neither
+    // compact nor narrow; on a phone the fullscreen presentation makes it the 402px viewport, which
+    // is both. Reading the capture box instead put the desktop shot in the compact layout, whose
+    // header is `display: none` — and a hidden header is a select-all checkbox measuring 0x0, which
+    // the placement lane correctly read as a second box for one role.
+    //
+    // The declared width is that 1180 plus the 16px the capture box frames it with on each side. At
+    // 860 the phone capture photographed the desktop five-column grid and pushed End and Span off
+    // the frame, which is the one thing a mobile capture of this surface exists to answer.
+    html: (device) => {
+      const narrow = device?.id === "mobile";
+      const row = (name, start, end) => `
+        <div class="db-invalid-event-row is-invalid">
           ${fieldCheckbox("db-modal-checkbox db-invalid-event-select").replace(" aria-label=", " checked aria-label=")}
-          <div class="db-invalid-event-name">${name}</div>
+          <div class="db-invalid-event-name" title="Timeline/${name}.md">${name}</div>
           <div class="db-invalid-event-time-field is-start">
             <span class="db-invalid-event-time-label">Start</span>
             <input type="datetime-local" class="db-invalid-event-datetime" value="${start}">
           </div>
           <div class="db-invalid-event-time-field is-end">
             <span class="db-invalid-event-time-label">End</span>
-            <input type="datetime-local" class="db-invalid-event-datetime" value="${end}">
+            <input type="datetime-local" class="db-invalid-event-datetime is-invalid" value="${end}">
           </div>
-          <div class="db-invalid-event-span-cell"><span class="db-invalid-event-span">${span}</span></div>
+          <div class="db-invalid-event-span-cell">
+            <span class="db-invalid-event-span is-invalid">Still invalid</span>
+            <button type="button" class="db-invalid-event-row-fix" title="Quick fix selected">Fix</button>
+          </div>
         </div>`;
       return `
-      <div class="note-database-modal db-invalid-events-modal">
-        <h3>3 events end before they start</h3>
-        <div class="db-modal-help">Adjust the start or end time of each event, then confirm.</div>
+      <div class="note-database-modal db-invalid-events-modal${narrow ? " is-invalid-events-compact is-invalid-events-narrow" : ""}">
+        <h3>Invalid time events (3)</h3>
+        <div class="db-modal-help">These events end at or before they start and are hidden from the timeline. Adjust start/end so end is after start.</div>
         <div class="db-invalid-event-grid">
           <div class="db-invalid-event-grid-header">
             ${fieldCheckbox("db-modal-checkbox db-invalid-event-select").replace(" aria-label=", " checked aria-label=")}
@@ -709,9 +735,19 @@ Cancel before the renewal date or it bills for another year. Support answer on w
             <div class="db-invalid-event-col-time">End</div>
             <div class="db-invalid-event-col-span">Span</div>
           </div>
-          ${row("Design review", "2026-03-04T14:00", "2026-03-04T13:00", "-1h")}
-          ${row("Quarterly planning", "2026-03-11T09:30", "2026-03-11T09:00", "-30m")}
-          ${row("Retrospective", "2026-03-18T16:00", "2026-03-18T15:15", "-45m")}
+          ${row("Design review", "2026-03-04T14:00", "2026-03-04T13:00")}
+          ${row("Quarterly planning", "2026-03-11T09:30", "2026-03-11T09:00")}
+          ${row("Retrospective", "2026-03-18T16:00", "2026-03-18T15:15")}
+        </div>
+        <div class="db-invalid-event-actions">
+          <div class="db-invalid-event-bulk-actions">
+            <button type="button">Quick fix selected</button>
+            <span class="db-invalid-event-selected-count">3 selected</span>
+          </div>
+          <div class="db-modal-actions">
+            <button type="button">Cancel</button>
+            <button type="button" class="mod-warning">Save changes</button>
+          </div>
         </div>
       </div>`;
     },

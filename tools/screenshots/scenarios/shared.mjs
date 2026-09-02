@@ -79,6 +79,9 @@ export const ICONS = {
   // declare inline, so a fixture built from either source draws the same button.
   move: glyph('<path d="m8 9 4-4 4 4M8 15l4 4 4-4"/>'),
   maximize: glyph('<path d="M15 3h6v6"/><path d="m21 3-7 7"/><path d="M9 21H3v-6"/><path d="m3 21 7-7"/>'),
+  // Lucide's `check`, which `openDropdownPopover` puts in the check span of the matching option.
+  // Without it a fixture can carry `is-selected` and still photograph an unmarked row.
+  check: glyph('<path d="M20 6 9 17l-5-5"/>'),
   // Lucide's `image`, which is what `setIcon(placeholder, "image")` injects into an empty cover.
   // The 14px attributes are defaults; `.db-*-cover-placeholder svg` sizes it to 28px.
   image: glyph('<rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/>'

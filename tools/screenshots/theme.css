@@ -24,6 +24,14 @@
   --text-faint: #999da3;
   --text-on-accent: #ffffff;
   --text-error: #c0392b;
+  /* The host's warning colour, and the token it resolves through. Thirteen declarations in the
+     plugin stylesheet read `var(--text-warning)` with no fallback, so with nothing declaring it
+     every one of them was invalid at computed-value time and painted nothing at all — a dashed
+     warning border, a warning label and a warning fill that no capture has ever shown. TRANSCRIBED
+     from the installed application stylesheet of Obsidian 1.13.7, not recalled: app.css resolves
+     `--text-warning: var(--color-orange)`, and gives `--color-orange` a different value per theme. */
+  --color-orange: #ec7500;
+  --text-warning: var(--color-orange);
   --text-accent: #5a67d8;
   --text-selection: rgba(90, 103, 216, 0.18);
   /* The host's link tokens. Their absence is why the file-field captures painted #0000EE — the
@@ -38,6 +46,11 @@
   --interactive-hover: #e9e9e9;
   --interactive-accent: #5a67d8;
   --interactive-accent-hover: #4c56c0;
+
+  /* The two the host's bold modifier is built from; its phone destructive button is the only rule
+     here that reads them, and a `calc()` over an undefined token drops the declaration entirely. */
+  --font-weight: 400;
+  --bold-modifier: 200;
 
   --radius-s: 4px;
   --radius-m: 8px;
@@ -104,6 +117,7 @@
   --text-normal: #dcddde;
   --text-muted: #9a9b9e;
   --text-faint: #6c6f74;
+  --color-orange: #e9973f;
   --text-accent: #a5b4fc;
   --text-selection: rgba(130, 145, 255, 0.22);
   --link-color: #a5b4fc;
@@ -260,15 +274,38 @@ input[type="checkbox"] {
   height: 16px;
 }
 
+/* The host routes a button's colour through `--text-color` rather than setting `color` directly,
+   which is the whole mechanism by which its modifier classes recolour a button. This baseline set
+   `color: var(--text-normal)` and so had no such mechanism. */
 button {
+  --text-color: var(--text-normal);
   background: var(--interactive-normal);
-  color: var(--text-normal);
+  color: var(--text-color);
   border: none;
   border-radius: var(--button-radius, 5px);
   padding: var(--size-4-1, 4px) var(--size-4-3, 12px);
   font-family: inherit;
   font-size: var(--font-ui-small, 13px);
   cursor: pointer;
+}
+
+/* The destructive button. Four modals build their confirm button with `mod-warning` and the plugin
+   styles only its position, so its whole appearance is the host's — and with no stand-in here the
+   Remove button photographed identical to the Cancel button beside it. That is a harness gap, not a
+   product one. TRANSCRIBED from the installed application stylesheet of Obsidian 1.13.7. The hover
+   arm is deliberately left out: a capture has no pointer, so it would be a rule that never runs. */
+button.mod-warning {
+  background-color: var(--background-modifier-error);
+  --text-color: var(--text-on-accent);
+}
+
+/* The phone form is a different button, not the same one narrower: the host drops the red fill and
+   states the destructive meaning in red bold text instead. Without it the phone capture of a
+   destructive modal shows the desktop button. */
+.is-mobile button.mod-warning {
+  background-color: var(--interactive-normal);
+  font-weight: calc(var(--font-weight) + var(--bold-modifier));
+  color: var(--text-error);
 }
 
 :root {

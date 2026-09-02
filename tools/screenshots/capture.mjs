@@ -110,6 +110,10 @@ function buildPage(scenario, theme, styles, themeCss, runtimeCss, device) {
   // against a toolbar contributes no height here and would photograph as an empty box.
   // It must never restyle what is being photographed, only make it visible.
   const overrides = scenario.captureCss ? `<style>${scenario.captureCss}</style>` : "";
+  // The device reaches the fixture, because some markup is device-dependent in the product and no
+  // stylesheet rule carries it. The invalid-events modal toggles two layout classes from a
+  // ResizeObserver on its own width; a fixture with no observer can only be told which frame it is
+  // being photographed in. Every other fixture ignores the argument.
   return `<!doctype html>
 <html class="${[theme === "dark" ? "theme-dark" : "theme-light", captureMode(scenario) === "element" ? "capture-element" : ""].filter(Boolean).join(" ")}" style="--capture-max-width: ${device.width}px${scenario.width && !device.bodyClass ? `; --capture-scenario-width: ${Math.min(scenario.width, device.width)}px` : ""}">
 <head><meta charset="utf-8">
@@ -124,7 +128,7 @@ function buildPage(scenario, theme, styles, themeCss, runtimeCss, device) {
 <style>${runtimeCss}</style>
 ${overrides}
 </head>
-<body class="${device.bodyClass}"><div id="shot">${scenario.html()}</div></body></html>`;
+<body class="${device.bodyClass}"><div id="shot">${scenario.html(device)}</div></body></html>`;
 }
 
 // ───────────────────────────────────────────────────────────────────
@@ -180,7 +184,17 @@ async function main() {
 
   try {
     for (const scenario of list) {
-      for (const device of devices) {
+      // A surface that only exists on one device gets photographed on that device only.
+      //
+      // Both mobile bottom sheets were captured on a 1440px desktop frame as well, where the sheet
+      // spans the full width of a window no phone has. That image is not a weaker picture of the
+      // surface, it is a picture of a surface the plugin never presents — and a corpus read to
+      // judge the sheet contained one. Naming the devices is narrower than skipping the capture
+      // wholesale: the scenario stays registered, stays fresh-checked, and stays in the index.
+      const wanted = scenario.devices
+        ? devices.filter((d) => scenario.devices.includes(d.id))
+        : devices;
+      for (const device of wanted) {
       for (const theme of themes) {
         // Reduced motion is emulated, not incidental. Several plugin properties are transitioned,
         // so a capture taken before they settle records an animation frame — and the same page
@@ -249,6 +263,43 @@ async function main() {
             });
             return parts.join("|");
           });
+
+          // A declared width has to FRAME the surface, not crop it.
+          //
+          // `#shot` is `overflow: hidden`, so a surface wider than the box is silently cut at the
+          // edge and the PNG still looks like a finished picture. Two were: the add-view popover
+          // takes 360px from `width: min(360px, 100vw - 24px)` and was declared at 292, and the
+          // sort popover takes 538px from the filter panel's `min(520px, ...)` plus its frame and
+          // was declared at 480. Both lost their right-hand controls — "Descending" read "Des" —
+          // and both are element captures nothing measured.
+          //
+          // Scoped to the surfaces the declared width is meant to frame: the shot's own children
+          // and the children of the plugin container it usually wraps them in. Anything deeper is
+          // content INSIDE a surface, and content that overflows its surface scrolls in the product
+          // too — a table on a phone is the honest example, and failing it would be failing the
+          // product's own behaviour. Scoped to captures where a width was actually applied, which
+          // by the rule above is the desktop pass of a scenario that declared one.
+          if (captureMode(scenario) === "element" && scenario.width && !device.bodyClass) {
+            const clipped = await page.evaluate(() => {
+              const shot = document.getElementById("shot");
+              const edge = shot.getBoundingClientRect().right;
+              let worst = null;
+              shot.querySelectorAll("#shot > *, #shot > * > *").forEach((el) => {
+                const r = el.getBoundingClientRect();
+                if (r.width === 0 || r.height === 0) return;
+                const over = Math.round(r.right - edge);
+                if (over > 1 && (!worst || over > worst.over)) {
+                  worst = { over, cls: `${el.tagName.toLowerCase()}.${el.className}`, width: Math.round(r.width) };
+                }
+              });
+              return worst;
+            });
+            if (clipped) {
+              failures.push(`${rel}: declared width ${scenario.width} crops the surface — `
+                + `${clipped.cls} renders ${clipped.width}px and loses ${clipped.over}px at the right edge`);
+              console.log(`  CLIPPED ${scenario.id}-${device.id}-${theme}: ${clipped.over}px lost`);
+            }
+          }
 
           // Wait for fonts before painting. Without this the same fixture photographed twice comes
           // back with two different byte streams, because a shot taken before the face resolves

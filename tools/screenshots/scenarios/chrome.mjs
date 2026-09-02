@@ -205,6 +205,34 @@ const fullRow = (r) => `
 
 /* `TableFooterRenderer` stacks a kind label over its result inside one trigger, and repeats
    the pair when a column carries several summary rules. */
+/* The footer's numbers, computed from the rows above them rather than typed beside them.
+ *
+ * They were hand-picked and contradicted the table they footed: COUNT 5 under 24 rows, SUM 191,75
+ * against 576,27, AVERAGE 38,35 against 24,01, EARLIEST 2026-03-02 when the earliest renewal in
+ * ROWS is March 1. A reader checking whether the footer adds up got a picture in which it does not,
+ * and the one aggregate that was right — UNIQUE 3 payment methods — was right by luck.
+ *
+ * `calculateTableAggregate` drops empty values first, so these mirror it: COUNT is the non-empty
+ * count, UNIQUE the size of the distinct set, EARLIEST the smallest timestamp. Results go through
+ * `formatEuroNumber2`, which is nl-NL with up to two fraction digits and no minimum — so a whole
+ * count prints as "24" and a sum as "576,27".
+ *
+ * ROWS holds cost as a display string ("€ 148,30") where the product holds a number, so the euro
+ * sign and the Dutch decimal comma are undone before summing and re-applied by the formatter.
+ */
+const nl2 = new Intl.NumberFormat("nl-NL", { minimumFractionDigits: 0, maximumFractionDigits: 2 });
+const costOf = (row) => Number(row.cost.replace(/[^0-9,.]/g, "").replace(/\./g, "").replace(",", "."));
+const footerSum = ROWS.reduce((total, row) => total + costOf(row), 0);
+// Local parts, not `toISOString()`: these dates parse as local midnight, and converting one to UTC
+// in a positive-offset zone moves it to the previous day. That put March 1 in the footer as
+// 2026-02-28 — a date not in the table, produced by the fix for a date not in the table.
+const footerEarliestDate = ROWS
+  .map((row) => new Date(row.renew))
+  .reduce((earliest, date) => (date < earliest ? date : earliest));
+const footerEarliest = `${footerEarliestDate.getFullYear()}-`
+  + `${String(footerEarliestDate.getMonth() + 1).padStart(2, "0")}-`
+  + `${String(footerEarliestDate.getDate()).padStart(2, "0")}`;
+
 const footerCell = (key, values) => `
   <td class="db-table-footer-cell" data-note-database-column-key="${key}">
     <button type="button" class="db-table-footer-trigger${values.length ? " has-calculation" : ""}"
@@ -477,7 +505,11 @@ export const CHROME_SCENARIOS = [
     id: "chrome-active-rule-popover-sort",
     title: "Active rule popover — sort",
     group: "components",
-    width: 480,
+    // 538px of surface plus the 16px the capture box frames it with on each side. It read 480,
+    // which cropped 74px: "Descending" was photographed as "Des" and the field chip, which is
+    // `flex: 1 1 0`, stretched into the space the cut hid. The panel inherits the filter panel's
+    // `width: min(520px, calc(100vw - 72px))` and adds its own 8px padding and 1px border.
+    width: 570,
     sources: ["src/views/active-rule-popover-renderer.ts", "src/views/sort-panel-renderer.ts"],
     note: "The sort variant adds db-sort-panel and drops the drag handle and reorder buttons the full panel shows.",
     captureCss: `.note-database-container .db-active-rule-popover { ${IN_FLOW_PANEL} }`,
@@ -507,11 +539,11 @@ export const CHROME_SCENARIOS = [
             <tfoot class="db-table-footer">
               <tr class="db-table-footer-row">
                 <td class="db-table-footer-utility"></td>
-                ${footerCell("name", [["Count", "5"]])}
-                ${footerCell("cost", [["Sum", "191,75"], ["Average", "38,35"]])}
+                ${footerCell("name", [["Count", nl2.format(ROWS.length)]])}
+                ${footerCell("cost", [["Sum", nl2.format(footerSum)], ["Average", nl2.format(footerSum / ROWS.length)]])}
                 ${footerCell("billing", [])}
-                ${footerCell("payment", [["Unique", "3"]])}
-                ${footerCell("renew", [["Earliest", "2026-03-02"]])}
+                ${footerCell("payment", [["Unique", nl2.format(new Set(ROWS.map((r) => r.payment)).size)]])}
+                ${footerCell("renew", [["Earliest", footerEarliest]])}
                 <td class="db-table-footer-add-column"></td>
               </tr>
             </tfoot>
@@ -652,6 +684,11 @@ export const CHROME_SCENARIOS = [
     width: 420,
     sources: ["src/views/owned-menu.ts", "src/views/menu-row.ts"],
     note: "Deliberately not wrapped in note-database-container: this menu mounts on document.body, so a fixture that wrapped it would photograph a surface the plugin never ships. Chromed from Obsidian's own menu variables so it matches the app's real menus and follows a theme that restyles them.",
+    // The destructive row carries its icon here as it does in the sheet below. `ColumnMenu` builds
+    // it with `icon: "trash"`, so drawn bare it was a picture of a row the renderer does not make,
+    // and it quietly exercised the icon-less alignment path on a menu that always has one. The
+    // sheet fixture was corrected and this one was not, so the two presentations of the same menu
+    // disagreed about the same row while sitting side by side in the index.
     html: () => `
       <div class="db-surface db-menu db-owned-menu" role="menu" tabindex="-1">
         <div class="db-menu-section">Column</div>
@@ -675,6 +712,7 @@ export const CHROME_SCENARIOS = [
           <span class="db-menu-item-label">Group by this column</span>
         </button>
         <button type="button" class="db-menu-item is-warning" aria-checked="false">
+          <span class="db-menu-item-icon">${I.trash}</span>
           <span class="db-menu-item-label">Delete property</span>
         </button>
       </div>`,
@@ -685,6 +723,13 @@ export const CHROME_SCENARIOS = [
     group: "components",
     width: 402,
     capture: "viewport",
+    // Photographed on the phone only. This surface exists because a phone gets it; the desktop pass
+    // put the same markup in a 1440px frame with `is-phone` absent, so the sheet spanned the whole
+    // window above 900px of empty page. Nothing in the product presents that, and the row grammar
+    // this scenario exists to show — one left edge, a fixed leading column, a 44px target — was
+    // being read off a width no phone has. Framing the desktop pass at 402px instead would produce
+    // an image identical to the mobile one, which the device-parity ratchet exists to catch.
+    devices: ["mobile"],
     sources: ["src/views/owned-menu.ts", "src/views/menu-row.ts", "src/views/mobile-bottom-sheet.ts"],
     // The same rows as the popover above, in the presentation a phone actually gets. It exists
     // because the row grammar the sheet applies — a fixed leading column, one left edge, a hairline

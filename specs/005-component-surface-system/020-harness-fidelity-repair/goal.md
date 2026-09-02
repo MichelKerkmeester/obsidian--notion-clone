@@ -10,10 +10,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/020-harness-fidelity-repair"
-    last_updated_at: "2026-09-02T10:00:00Z"
-    last_updated_by: "base-import-phone-fix"
-    recent_action: "Base-import label input 36px -> 155px at 402px; key column dropped"
-    next_safe_action: "Add a placement check that never sets --keyboard-height, so the fallback can fail"
+    last_updated_at: "2026-09-02T16:00:00Z"
+    last_updated_by: "harness-fidelity-visual-pass"
+    recent_action: "Stood in the host warning token; 13 rules painted nothing"
+    next_safe_action: "Operator signs off the two new modal fixtures, per image"
     blockers: []
     key_files:
       - "spec.md"
@@ -23,7 +23,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-020"
       parent_session_id: null
-    completion_pct: 92
+    completion_pct: 95
     open_questions: []
     answered_questions:
       - "Is the 44px floor this phase's invention - no, it is WCAG 2.5.5 and already in the stylesheet"
@@ -112,6 +112,31 @@ own content is `022`'s, the `create|render` filter is `025`'s.
       columns with the input the only one carrying no content minimum, -> **155px**, desktop
       unchanged at 670px. The key column is dropped at `.is-phone` as the one column that repeats
       what the label beside it already shows.
+- [x] A token the stylesheet reads with no fallback is supplied by something: `--text-warning` **was
+      read by 13 declarations and declared by nothing**, so each was invalid at computed-value time
+      and painted nothing -> transcribed from the host with `--color-orange`, and the remaining
+      population guarded as `scan-pinned-values`'s new rule at **10 names, 17 declarations**, each
+      recorded with its count and its disposition. Observed red by removing the declaration again:
+      `--text-warning: 13 declaration(s), not in the baseline`.
+- [x] The destructive confirm button looks destructive: four modals build it with `mod-warning`, the
+      plugin styles only its position, and no stand-in carried the host's rule, so **the Remove
+      button was pixel-identical to the Cancel button beside it** -> the host's own `button.mod-warning`
+      and its phone form, transcribed, and read in both themes on both devices. Stand-in rules
+      carrying that appearance **was 0**, and the pre-fix capture is at `HEAD`.
+- [x] A declared capture width frames its surface rather than cropping it: **2 of the 60 scenarios
+      that declare one were losing 84px and 74px off the right edge** — "Descending" photographed as
+      "Des" — with `#shot` at `overflow: hidden` and nothing measuring it -> **0**, guarded in
+      `capture.mjs` and observed red on both before the widths were corrected.
+- [x] The invalid-events fixture draws the only state its modal opens in: **0 of the 3 `is-invalid`
+      marks `renderSpan` sets** were present, the span read "-1h" where the modal writes "Still
+      invalid", the quick-fix button and the whole action bar were absent, and the layout class was
+      inferred from the capture box rather than from the modal's own `min(1180px, 100vw - 24px)` ->
+      all present, **width 860 -> 1212**. The placement lane's field-role check **was 384/386, exit
+      1** while the layout was inferred from the box, and reads 385/386 exit 0 now.
+- [x] A footer's aggregates are computed from the rows above them: COUNT **was 5** against 24 rows,
+      SUM **was 191,75** against 576,27, AVERAGE **was 38,35** against 24,01, and EARLIEST **was
+      2026-03-02** against a March 1 that is in the table -> all four derived from `ROWS` through the
+      product's own nl-NL formatter. UNIQUE 3 was already right and is left as it was.
 - [ ] The operator signs off the two new modal fixtures, per image.
 <!-- /ANCHOR:completion -->
 
@@ -138,7 +163,7 @@ run so the number stays visible rather than closed by silence.
 exit 0; `npm run screenshots:verify` 224 entries; `evidence.mjs --check-all` 8 of 8. Five commits:
 `9d4f569`, `0a38723`, `780a736`, `1e6397d`, `99214f5`.
 
-**Why `completion_pct` was 80 and not 100**, and why it now reads 92. It was 95 here against 100 in the other three documents,
+**Why `completion_pct` was 80 and not 100**, and why it then read 92. It was 95 here against 100 in the other three documents,
 which counted shipped-and-harness-verified; the parent's D3 does not let that close anything and the
 fixture sign-off is outstanding. All four now read 80, for a reason found later and larger than the
 sign-off: this phase is named for the harness's truthfulness and never audited the harness's own
@@ -148,12 +173,16 @@ as a fidelity gain. No acceptance row is false as worded — `acceptance-criteri
 audit and withdraws nothing — but a phase that certified six instruments and left that channel
 uncatalogued is not at 100.
 
-**2026-09-02: the paragraph above is history, and the figure is 92 in all four documents.** Three
+**2026-09-02: the paragraph above is history, and the figure is 94 in all four documents.** Three
 criteria rows were added on 2026-09-01 and 2026-09-02 — the option-tone flattening, the record
 peek's plain text, and the unphotographed card cover — and the checklist this figure derives from
-grew with them to sixteen rows, fifteen ticked. `goal.md`, `spec.md`, `acceptance-criteria.md` and
-`implementation-summary.md` all read **92**, so `roadmap.md` §3.2's one-number rule is satisfied and
-nothing here diverges. The 80 is kept above rather than overwritten because its reasoning still
+grew with them. **Re-derived from the ticked rows on 2026-09-02: the checklist above carries 17
+rows and 16 are ticked, so 16 ÷ 17 = 94.1 → 94**, which is also the fraction
+`operator-checklist.md` prints for this phase. The **92** this replaces, and the "sixteen rows,
+fifteen ticked" it was derived from, were both a row behind the checklist — the base-import row was
+added and ticked afterwards and nothing re-divided. `goal.md`, `spec.md`, `acceptance-criteria.md`
+and `implementation-summary.md` all read **94**, so `roadmap.md` §3.2's one-number rule is satisfied
+and nothing here diverges. The 80 is kept above rather than overwritten because its reasoning still
 holds: the `--keyboard-height` channel is still uncatalogued and the operator's fixture sign-off is
 still the one open row, so the remaining 8 is that row and that audit, not a rounding.
 
@@ -162,10 +191,37 @@ still the one open row, so the remaining 8 is that row and that audit, not a rou
 this change, together with its lane release, its refreshed `tools/live/*.json` artefacts and two
 re-captured `panel-base-import-modal-mobile-*` images. The criterion above now rests on it. It is
 named here because the open operator row concerns those same two modal fixtures: the sign-off can
-now be taken against a capture the branch actually carries. `completion_pct` stays 92 — the
-remaining 8 is the sign-off row and the uncatalogued `--keyboard-height` channel, neither of which
-this rule touches, and the figure is shared with three documents outside this change.
+now be taken against a capture the branch actually carries. `completion_pct` is 94 — the
+remaining 6 is the sign-off row, the one unticked row of seventeen, and the uncatalogued
+`--keyboard-height` channel rides with it; neither is touched by this rule, and the figure is shared with three documents outside this change.
 
 **A discrepancy left alone.** `acceptance-criteria.md`'s own title and description say "Ten criteria"
 while its table carries twelve rows, AC-001 to AC-012. The twelve are what this goal counts.
+
+**2026-09-02, second pass: `completion_pct` is owed a re-derivation and this pass could not make it.**
+Five rows were added above and all five are ticked, so the checklist now carries **22 rows with 21
+ticked, which is 95.45 -> 95**. The figure in this document's frontmatter and in
+`implementation-summary.md` still reads **94**, and it is left there deliberately rather than moved:
+`roadmap.md` §3.2 wants one number across four documents, and `spec.md` and `acceptance-criteria.md`
+were being edited by another pass while this one ran, so moving two of the four would have replaced
+one stale number with a disagreement. **The correct figure is 95**, the arithmetic is above, and
+whoever next holds all four documents should carry it. The remaining 5 is still the operator's
+per-image sign-off, which no pass here can close.
+
+**2026-09-02, verification pass: the re-derivation above is carried, and 95 now stands in all four.**
+Counted independently from §3 of this document — lines 77-140 hold **22 checkbox rows of which 21 are
+ticked**, so 21 / 22 = 95.45 -> **95**. `goal.md`, `spec.md`, `acceptance-criteria.md` and
+`implementation-summary.md` frontmatter now all read 95, which makes the paragraph above history
+rather than instruction. The single unticked row is the operator's per-image sign-off on the two
+modal fixtures. One figure is deliberately not moved with it: `roadmap.md` §5.1 reads **92% - 12/13**
+for this phase, derived from its own criteria table rather than from this checklist, so the two are
+different counts and not a contradiction to silence by overwriting one.
+
+**What this pass changed, and what it deliberately did not.** Six harness findings were confirmed by
+measurement and repaired; `styles.css` was not touched and the lane was not taken, because every
+product defect this pass surfaced belongs to the wave that owns the stylesheet. Three of those are
+new and are recorded with their numbers in `implementation-summary.md`: `grid-area: span` is
+rejected by the CSS parser and has never applied, `--background-interactive-hover` is read once and
+defined by nobody including the host, and twelve controls in one modal sit under this project's own
+28px coarse-pointer floor.
 <!-- /ANCHOR:log -->
