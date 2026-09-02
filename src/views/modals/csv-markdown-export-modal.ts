@@ -31,6 +31,7 @@ export class CsvMarkdownExportModal extends DbModal {
   }
 
   onOpen(): void {
+    super.onOpen();
     this.contentEl.empty();
     this.contentEl.addClass("note-database-modal");
     this.contentEl.createEl("h3", { text: t("csvMarkdownExport.title") });
@@ -66,6 +67,7 @@ export class CsvMarkdownExportModal extends DbModal {
   }
 
   onClose(): void {
+    super.onClose();
     this.contentEl.empty();
     this.resolve?.(null);
     this.resolve = undefined;

@@ -9,10 +9,10 @@ contextType: "implementation"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/031-sheet-lifecycle-ownership"
-    last_updated_at: "2026-08-31T20:45:00Z"
-    last_updated_by: "phase-implementer"
-    recent_action: "Unwired bars made unrepresentable; flick dismissal landed at a measured threshold"
-    next_safe_action: "The operator opens and closes each sheet on device"
+    last_updated_at: "2026-09-02T20:10:00Z"
+    last_updated_by: "report-29-verifier"
+    recent_action: "Report 29 fix landed: modal close tears the sheet chrome down"
+    next_safe_action: "The operator runs the menu-then-modal sequence on iOS, twice"
     blockers:
       - "Nothing here is confirmed on the operator's device"
     key_files:
@@ -43,7 +43,7 @@ _memory:
 |---|---|
 | **Spec Folder** | 031-sheet-lifecycle-ownership |
 | **Level** | 2 |
-| **Status** | In progress — 5 of 6 criteria met. Everything implementable is in; the last row needs the operator's device |
+| **Status** | In progress — 6 of 8 criteria met. Everything implementable is in; the two open rows need the operator's device |
 | **State** | Committed; gate 18 green, exit 0 **at the time — a past run**. Not device-confirmed |
 <!-- /ANCHOR:metadata -->
 
@@ -233,6 +233,43 @@ true against a real open sheet), the dead handles met by construction (`hasSheet
 criteria**, which the Status row above already said. What does remain is finding #5, the
 container-wide keyboard inset, which is a deliberate non-fix and not one of the six criteria, and
 the operator's device pass, which is the sixth.
+
+### Known Limitations / revealed defect — Report 29 (2026-09-02)
+
+A fresh read-only Opus debug pass on device report 29 (iOS, every sheet family, keyboard closed,
+release 1.4.0) found what this phase's own check could not see: `db-modal.ts:64,72` runs
+`applySheetChrome(this.modalEl, true)` in the `DbModal` constructor, and `DbModal` has no `onClose`
+that ever passes `false`. Obsidian's `Modal.close()` detaches `containerEl`, but `setSheetMount`
+(`mobile-bottom-sheet.ts:179`) had already portalled `modalEl` onto `document.body`, so the sheet
+node outlives the close and `pruneSheets()` (`:250`) reads it as connected forever — the scrim can
+then never be removed again for the life of the session, by any producer. Provenance: `f7ce99d`
+wired the chrome call into the constructor while it was pure presentation; `4bd11b83` moved the body
+portal inside `applySheetChrome` the same day, and the modal path inherited it without anyone
+designing for it.
+
+This is exactly the gap this section already named: **"a producer whose close path is never reached
+on a device would pass here and still leak there."** `tools/live/sheet-teardown-harness.ts:75` mounts
+a synthetic `div`, not a modal whose host detaches a different node than the one registered, and
+`tools/storybook/obsidian-stub.mjs:90` throws on `Modal` by design — so `sheet-teardown.json`
+(`producers: 10, leaking: 0`) was never evidence about `DbModal`. Full diagnosis, provenance,
+secondary/tertiary causes and rejected suspects recorded in `goal.md`'s LOG section
+(2026-09-02 entry).
+
+**Fixed and proved on the bench, not on the phone.** `DbModal` now applies its presentation in
+`onOpen()` and tears the chrome down in `onClose()` while the container is still connected
+(`db-modal.ts:62-70`), with all twenty subclasses calling `super` on both. The harness gap that hid
+this is closed by a producer modelling the shape directly — a wrapper the host detaches while the
+registered node sits on the body — since the Obsidian stub still cannot construct a `Modal`. That
+producer was observed red against the shipped base (`1 backdrop(s) and 1 sheet(s) left after the
+host wrapper was removed`) before going green at `producers: 11, leaking: 0`. Two smaller causes
+went with it: `pointercancel` no longer shares the dismissal handler, and an anchored sheet gives a
+disconnected anchor one frame to come back before hiding.
+
+Codex (gpt-5.6-luna xhigh) implemented up to its usage limit and returned no report; a verifier
+judged the partial diff, finished the missing `pointercancel` binding, repaired the bench producer's
+unguarded call, and ran the gate. **Two device rows remain open** — the criteria count is 6 of 8,
+and no part of this is confirmed on the operator's phone. The bench states its own limit: no
+Obsidian host is constructed, so it measures the chrome contract rather than a real lifecycle.
 <!-- /ANCHOR:limitations -->
 
 ---

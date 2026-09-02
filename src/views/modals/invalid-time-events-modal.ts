@@ -79,6 +79,7 @@ export class InvalidTimeEventsModal extends DbModal {
   }
 
   onOpen(): void {
+    super.onOpen();
     const { contentEl } = this;
     contentEl.empty();
     this.modalEl.addClass("invalid-events-modal-host");
@@ -198,6 +199,7 @@ export class InvalidTimeEventsModal extends DbModal {
   }
 
   onClose(): void {
+    super.onClose();
     this.resizeObserver?.disconnect();
     this.resizeObserver = undefined;
     this.contentEl.empty();

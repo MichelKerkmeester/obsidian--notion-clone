@@ -10,9 +10,8 @@
 //
 // Three constraints shaped this, each learned from a real modal here:
 //
-//   - Setup runs in the CONSTRUCTOR, not `onOpen`. StatusPresetManagerModal
-//     calls its own `onOpen()` as a re-render, so anything placed there runs
-//     several times per interaction.
+//   - Presentation runs in `onOpen`, not the CONSTRUCTOR. A modal can be built
+//     and never opened, so building it must not portal a panel or create a scrim.
 //   - `close()` is NOT wrapped. FormulaModal overrides it to raise a confirm
 //     dialog and defers `super.close()` until that resolves; a wrapper would
 //     break the deferral.
@@ -57,10 +56,17 @@ export class DbModal extends Modal {
 
   constructor(app: App, private readonly presentation: DbModalPresentation = "sheet") {
     super(app);
-    // Obsidian builds containerEl/modalEl/contentEl during super(), so the nodes exist here. Doing
-    // this now rather than in onOpen is deliberate — see the note at the top of the file.
     this.contentEl.addClass(DB_MODAL_HOST_CLASS);
+  }
+
+  onOpen(): void {
     this.applyPresentation();
+  }
+
+  onClose(): void {
+    this.releaseSheetDrag?.();
+    this.releaseSheetDrag = undefined;
+    applySheetChrome(this.modalEl, false);
   }
 
   /** Re-apply after a layout change, such as rotation moving the surface across the touch boundary. */

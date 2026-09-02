@@ -11,9 +11,9 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/031-sheet-lifecycle-ownership"
-    last_updated_at: "2026-08-31T16:00:00Z"
-    last_updated_by: "phase-author"
-    recent_action: "Flick threshold settled at 0.8 px/ms and the lane's drags given a clock they choose"
+    last_updated_at: "2026-09-02T20:10:00Z"
+    last_updated_by: "report-29-verifier"
+    recent_action: "Report 29 fix landed: modal close tears the sheet chrome down"
     next_safe_action: "The operator opens and closes each sheet family on device"
     blockers: []
     key_files:
@@ -47,7 +47,7 @@ _memory:
 |---|---|
 | **Spec Folder** | 031-sheet-lifecycle-ownership |
 | **Level** | 2 |
-| **Status** | **In progress — 5 of 6 criteria.** In the tree: the backdrop no longer outlives its sheet; the group sheet keeps its bar through a rebuild; the portalled header panels find their own panel and reach the overlay stack; an unwired grab bar is now unrepresentable; and a flick dismisses at a measured threshold. Open: the operator seeing the freeze gone |
+| **Status** | **In progress — 6 of 8 criteria.** In the tree: the backdrop no longer outlives its sheet; the group sheet keeps its bar through a rebuild; the portalled header panels find their own panel and reach the overlay stack; an unwired grab bar is now unrepresentable; a flick dismisses at a measured threshold; and a modal takes its sheet chrome down on close, which report 29 showed it never did. Open: both device rows — the operator seeing the freeze gone |
 | **Complexity** | 61/100, confidence 92% |
 <!-- /ANCHOR:metadata -->
 

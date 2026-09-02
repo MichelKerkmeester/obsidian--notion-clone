@@ -90,6 +90,7 @@ export class CreatePropertyModal extends DbModal {
   }
 
   onOpen(): void {
+    super.onOpen();
     const { contentEl } = this;
     contentEl.empty();
     contentEl.addClass("note-database-modal");
@@ -196,6 +197,7 @@ export class CreatePropertyModal extends DbModal {
   }
 
   onClose(): void {
+    super.onClose();
     this.resolve?.(null);
     this.contentEl.empty();
   }

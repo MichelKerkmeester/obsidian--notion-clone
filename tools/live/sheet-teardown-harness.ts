@@ -33,6 +33,7 @@
 // ───────────────────────────────────────────────────────────────────
 
 import { applySheetChrome } from "../../src/views/mobile-bottom-sheet";
+import { DbModal } from "../../src/views/modals/db-modal";
 import { ViewConfigPanelRenderer } from "../../src/views/view-config-panel-renderer";
 import { ColumnManagerRenderer } from "../../src/views/column-manager-renderer";
 import { installPopoverAutoClose } from "../../src/views/popover-auto-close";
@@ -172,6 +173,49 @@ async function runCompoundingCase(doc: Document): Promise<TeardownResult> {
       ? "the backdrop came down despite the earlier leak"
       : "the backdrop survived a correct teardown, because a detached sheet still counted"
         + " — one producer's leak would disable cleanup for every producer after it",
+  };
+}
+
+/**
+ * Model a host that detaches a wrapper other than the node we registered as a sheet.
+ *
+ * Every other producer here removes the registered panel itself, so the watcher sees it go. A modal
+ * does not: the chrome is applied to the modal element, the host owns the container above it, and
+ * closing detaches that container. The registered node is left on the body, reads as connected
+ * forever, and pins the backdrop over the whole app for the rest of the session.
+ *
+ * Obsidian's Modal cannot be constructed in the catalogue, so the shape is built directly and the
+ * shared base close hook is invoked on a prepared instance. The guard on that call is the point of
+ * the producer rather than defensiveness: a base that never takes its chrome down has no hook to
+ * invoke, and this must report that as a leak instead of failing to run.
+ */
+async function runDbModalDetachedHostCase(doc: Document): Promise<TeardownResult> {
+  clearBody(doc);
+  const container = doc.createElement("div");
+  const modal = container.appendChild(doc.createElement("div"));
+  applySheetChrome(modal, true);
+  doc.body.appendChild(container);
+  const mountedScrim = doc.body.querySelectorAll(SCRIM).length;
+
+  const takeChromeDown = (DbModal.prototype as Partial<DbModal>).onClose;
+  takeChromeDown?.call({ modalEl: modal } as unknown as DbModal);
+  container.remove();
+  await settle(doc);
+
+  const scrimLeft = doc.body.querySelectorAll(SCRIM).length;
+  const sheetsLeft = doc.body.querySelectorAll(SHEET).length;
+  const pass = mountedScrim === 1 && scrimLeft === 0 && sheetsLeft === 0;
+  return {
+    producer: "DbModal with a detached host wrapper",
+    closeShape: "base onClose before wrapper removal",
+    scrimLeft,
+    sheetsLeft,
+    pass,
+    detail: mountedScrim !== 1
+      ? `mount produced ${mountedScrim} backdrops, expected 1 — this run proves nothing about teardown`
+      : pass
+        ? "base close restored the panel before the host wrapper was removed"
+        : `${scrimLeft} backdrop(s) and ${sheetsLeft} sheet(s) left after the host wrapper was removed`,
   };
 }
 
@@ -404,6 +448,7 @@ export async function runSheetTeardownParity(doc: Document = document): Promise<
     await runProducer(doc, "group popover", "remove-only"),
     await runProducer(doc, "add-view sheet", "remove-only"),
     await runCompoundingCase(doc),
+    await runDbModalDetachedHostCase(doc),
   ];
   // Real renderers, started one at a time: each resets the body, so they must not overlap.
   for (const runCase of headerPanelCases(doc)) results.push(await runCase());

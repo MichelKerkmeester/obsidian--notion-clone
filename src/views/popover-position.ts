@@ -173,6 +173,21 @@ export function positionToolbarPopover(
   // `const cleanup` binding is initialised, so naming `cleanup` directly inside `place` would
   // throw on the very first call.
   let teardown: (() => void) | undefined;
+  let anchorRecoveryFrame: number | undefined;
+
+  // Hiding is the conservative answer: `visibility: hidden` takes the surface out of hit-testing,
+  // out of the tab order and out of the accessibility tree without deciding, on the owner's behalf,
+  // that the surface should be destroyed.
+  //
+  // The chrome comes down with it. A sheet's backdrop is a body-level sibling, not a child, so
+  // hiding the panel alone leaves a full-screen scrim swallowing every tap with nothing visible
+  // above it — a frozen app, not a conservative outcome. This decides that an unreachable sheet
+  // stops blocking the app, not that the owner's surface is destroyed behind its back.
+  const hideForDisconnectedAnchor = (): void => {
+    panel.setCssProps({ visibility: "hidden" });
+    applySheetChrome(panel, false);
+    teardown?.();
+  };
 
   const place = () => {
     // Resolved once: the answer cannot change within a single placement, and calling it again after
@@ -187,20 +202,26 @@ export function positionToolbarPopover(
     // and the refresh destroys the trigger button while the picker itself is mounted on the
     // container and survives.
     //
-    // Hiding is the conservative answer: `visibility: hidden` takes the surface out of
-    // hit-testing, out of the tab order and out of the accessibility tree without deciding, on the
-    // owner's behalf, that the surface should be destroyed. The reposition loop goes with it,
-    // because a removed node is never reconnected here — a rebuild produces a new node, so this
-    // anchor is gone for good.
+    // A disconnected anchor is given one frame to come back before the surface goes. Opening
+    // schedules a placement and then a second one on the next frame, and a re-render landing
+    // between the two took an anchored sheet down the instant it appeared — open, vanish, and a
+    // scrim left over the app. One frame is enough to tell a detach-and-reattach apart from a
+    // removal, because the reattach happens within the render that caused it.
+    //
+    // It is deliberately only a delay, not a recovery. The anchor arrives as a node, not as
+    // something re-resolvable, so a re-render that builds a *new* button is still a dead anchor
+    // here and still hides — a frame later than before, which costs nothing and is the price of
+    // not destroying the surfaces that were only ever moved.
     if (!anchorEl.isConnected) {
-      panel.setCssProps({ visibility: "hidden" });
-      // A sheet's backdrop is a body-level sibling, not a child, so hiding the panel alone leaves a
-      // full-screen scrim swallowing every tap with nothing visible above it — which is the freeze
-      // symptom, not a conservative outcome. The chrome comes down with the surface. The panel node
-      // itself is still only hidden: this decides that an unreachable sheet stops blocking the app,
-      // not that the owner's surface is destroyed behind its back.
-      applySheetChrome(panel, false);
-      teardown?.();
+      if (anchorRecoveryFrame !== undefined) return;
+      anchorRecoveryFrame = view.requestAnimationFrame(() => {
+        anchorRecoveryFrame = undefined;
+        if (anchorEl.isConnected) {
+          place();
+          return;
+        }
+        hideForDisconnectedAnchor();
+      });
       return;
     }
 
@@ -290,6 +311,8 @@ export function positionToolbarPopover(
   const cleanup = () => {
     releaseSheetDrag?.();
     releaseSheetDrag = undefined;
+    if (anchorRecoveryFrame !== undefined) view.cancelAnimationFrame(anchorRecoveryFrame);
+    anchorRecoveryFrame = undefined;
     if (frame !== undefined) view.cancelAnimationFrame(frame);
     view.removeEventListener("resize", schedule);
     ownerDocument.removeEventListener("scroll", schedule, true);

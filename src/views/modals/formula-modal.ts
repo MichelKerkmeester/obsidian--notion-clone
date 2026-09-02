@@ -218,6 +218,7 @@ export class FormulaModal extends DbModal {
   }
 
   onOpen(): void {
+    super.onOpen();
     this.contentEl.empty();
     this.modalEl.addClass("formula-workbench-modal-host");
     this.contentEl.addClass("note-database-modal");
@@ -1651,6 +1652,7 @@ export class FormulaModal extends DbModal {
   }
 
   onClose(): void {
+    super.onClose();
     this.resizeObserver?.disconnect();
     this.resizeObserver = undefined;
     this.closeConfirmationPending = false;

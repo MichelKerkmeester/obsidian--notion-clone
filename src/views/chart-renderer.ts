@@ -973,6 +973,7 @@ class ChartDrilldownModal extends DbModal {
   }
 
   onOpen(): void {
+    super.onOpen();
     const { contentEl } = this;
     contentEl.empty();
     contentEl.addClass("db-chart-drilldown-modal");

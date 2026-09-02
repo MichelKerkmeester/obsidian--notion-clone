@@ -7,10 +7,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/031-sheet-lifecycle-ownership"
-    last_updated_at: "2026-08-31T16:00:00Z"
-    last_updated_by: "phase-author"
-    recent_action: "Task list drafted; T1 is the discriminating control"
-    next_safe_action: "Build T1 and observe it red"
+    last_updated_at: "2026-09-02T20:10:00Z"
+    last_updated_by: "report-29-verifier"
+    recent_action: "T11 closed: modal close tears the sheet chrome down"
+    next_safe_action: "The operator runs the menu-then-modal sequence on iOS, twice"
     blockers: []
     key_files: ["plan.md", "spec.md"]
     session_dedup:
@@ -179,6 +179,19 @@ _memory:
       `npx vitest run` **625 tests**, up from the count this phase started at, so no reduction.
 - [ ] **T10** The operator opens and closes each sheet on device without the app locking up.
       *Evidence to close:* the operator says so. Nothing else closes this.
+- [x] **T11** Take the modal's sheet chrome down on close — report 29.
+      *Closed.* `db-modal.ts:62-70`: `applyPresentation()` moved into `onOpen()`, and a new
+      `onClose()` releases the drag and calls `applySheetChrome(this.modalEl, false)` while the
+      container is still connected, so the panel is reinserted before Obsidian detaches it. All
+      twenty `extends DbModal` classes call `super` on every override, verified by scanning each
+      definition against its super call. `mobile-bottom-sheet.ts:457-472`: `pointercancel` now
+      routes to a cancel path that springs back **and clears the pointer id** — clearing it is what
+      keeps a cancel from leaving the handle permanently dead.
+      *Red observed:* `sheet-flick.test.ts:104` failed `expected 1 to be +0` against the shipped
+      binding; the new bench producer reported `1 backdrop(s) and 1 sheet(s) left after the host
+      wrapper was removed` against the shipped `db-modal.ts`.
+      *Green:* `sheet-teardown` `producers: 11, leaking: 0`; `npm run gate` **25 green, exit 0**;
+      `npx vitest run` **645 tests**, up from 625.
 <!-- /ANCHOR:phase -->
 
 <!-- ANCHOR:completion -->

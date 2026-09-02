@@ -74,6 +74,7 @@ export class AddDatabaseModal extends DbModal {
   }
 
   onOpen(): void {
+    super.onOpen();
     const { contentEl } = this;
     contentEl.empty();
     contentEl.createEl("h3", { text: t("addDatabase.title") });
@@ -184,6 +185,7 @@ export class AddDatabaseModal extends DbModal {
   }
 
   onClose(): void {
+    super.onClose();
     this.resolve?.(null);
     this.contentEl.empty();
   }

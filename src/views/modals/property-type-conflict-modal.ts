@@ -104,6 +104,7 @@ export class PropertyTypeConflictModal extends DbModal {
   }
 
   onOpen(): void {
+    super.onOpen();
     const { contentEl } = this;
     contentEl.empty();
     this.modalEl.addClass("property-conflict-modal-host");
@@ -148,6 +149,7 @@ export class PropertyTypeConflictModal extends DbModal {
   }
 
   onClose(): void {
+    super.onClose();
     this.modalEl.removeClass("property-conflict-modal-host");
     this.contentEl.empty();
     if (this.closed) return;

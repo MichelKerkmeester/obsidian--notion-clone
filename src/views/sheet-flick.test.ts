@@ -20,6 +20,7 @@ import {
   FLICK_MIN_PX,
   FLICK_PX_PER_MS,
   STALE_SAMPLE_MS,
+  attachSheetDragToDismiss,
   shouldFlickDismiss,
 } from "./mobile-bottom-sheet";
 
@@ -64,5 +65,52 @@ describe("the guards that keep a tap and a rest from reading as a flick", () => 
   it("refuses a gesture with no measured velocity at all", () => {
     // The first move of a stream has nothing to differentiate against.
     expect(shouldFlickDismiss(40, 0, 8)).toBe(false);
+  });
+});
+
+describe("pointer cancellation", () => {
+  it("does not dismiss after a fast move is cancelled", () => {
+    const listeners = new Map<string, (event: PointerEvent) => void>();
+    const handle = {} as HTMLElement;
+    const panel = {
+      querySelector: () => handle,
+      addEventListener: (type: string, listener: EventListener) => {
+        listeners.set(type, listener as unknown as (event: PointerEvent) => void);
+      },
+      removeEventListener: (type: string) => {
+        listeners.delete(type);
+      },
+      setCssProps: () => undefined,
+      setPointerCapture: () => undefined,
+    } as unknown as HTMLElement;
+    let dismissed = 0;
+    const release = attachSheetDragToDismiss(panel, () => { dismissed++; });
+    const event = (type: string, clientY: number, timeStamp: number): PointerEvent => {
+      const listener = listeners.get(type);
+      if (!listener) throw new Error(`missing ${type} listener`);
+      return {
+        button: 0,
+        clientY,
+        pointerId: 1,
+        target: handle,
+        timeStamp,
+      } as unknown as PointerEvent;
+    };
+
+    listeners.get("pointerdown")?.(event("pointerdown", 0, 0));
+    listeners.get("pointermove")?.(event("pointermove", 40, 10));
+    listeners.get("pointercancel")?.(event("pointercancel", 40, 11));
+
+    expect(dismissed).toBe(0);
+
+    // The handle has to survive the cancellation. A cancel that stopped dismissing but left the
+    // gesture marked as still tracking would refuse this second drag outright, which is the dead
+    // grab band the operator reported rather than the unwanted close.
+    listeners.get("pointerdown")?.(event("pointerdown", 0, 20));
+    listeners.get("pointermove")?.(event("pointermove", 40, 30));
+    listeners.get("pointerup")?.(event("pointerup", 40, 31));
+    expect(dismissed).toBe(1);
+
+    release();
   });
 });

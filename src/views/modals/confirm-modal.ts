@@ -50,6 +50,7 @@ class ConfirmModal extends DbModal {
   }
 
   onOpen(): void {
+    super.onOpen();
     this.contentEl.empty();
     this.contentEl.addClass("note-database-modal");
     this.contentEl.createEl("h3", { text: this.options.title });
@@ -76,6 +77,7 @@ class ConfirmModal extends DbModal {
   }
 
   onClose(): void {
+    super.onClose();
     this.contentEl.empty();
     this.finish(false);
   }

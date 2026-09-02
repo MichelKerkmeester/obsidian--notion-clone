@@ -44,6 +44,7 @@ export class RelationRollupConfigModal extends DbModal {
   }
 
   onOpen(): void {
+    super.onOpen();
     this.contentEl.addClass("note-database-modal", "db-relation-rollup-config-modal");
     this.render();
   }
@@ -262,6 +263,7 @@ export class RelationRollupConfigModal extends DbModal {
   }
 
   onClose(): void {
+    super.onClose();
     this.contentEl.empty();
     this.onClosed?.();
   }

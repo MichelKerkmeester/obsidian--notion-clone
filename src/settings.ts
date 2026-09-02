@@ -540,6 +540,7 @@ class TrashManagerModal extends DbModal {
   }
 
   onOpen(): void {
+    super.onOpen();
     const { contentEl } = this;
     contentEl.empty();
     contentEl.addClass("note-database-modal");
@@ -620,6 +621,7 @@ class TrashManagerModal extends DbModal {
     };
     const restoreModal = new class extends DbModal {
       onOpen(): void {
+        super.onOpen();
         this.contentEl.empty();
         this.contentEl.addClass("note-database-modal");
         this.contentEl.createEl("h3", { text: t("settings.trash.restoreTitle", { name: item.database.name || t("common.untitled") }) });
@@ -660,12 +662,16 @@ class TrashManagerModal extends DbModal {
           }
         };
       }
-      onClose(): void { this.contentEl.empty(); }
+      onClose(): void {
+        super.onClose();
+        this.contentEl.empty();
+      }
     }(this.app);
     restoreModal.open();
   }
 
   onClose(): void {
+    super.onClose();
     this.contentEl.empty();
   }
 }

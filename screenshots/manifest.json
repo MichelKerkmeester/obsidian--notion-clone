@@ -499,7 +499,7 @@
       ],
       "layoutHash": "72cf3c4a8b69",
       "sourceHashes": {
-        "src/views/chart-renderer.ts": "6d99b1cfa4fd",
+        "src/views/chart-renderer.ts": "1a9fef67b5de",
         "styles.css": "d0d1827c9393",
         "tools/screenshots/theme.css": "32c4327c3764",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -522,7 +522,7 @@
       ],
       "layoutHash": "72cf3c4a8b69",
       "sourceHashes": {
-        "src/views/chart-renderer.ts": "6d99b1cfa4fd",
+        "src/views/chart-renderer.ts": "1a9fef67b5de",
         "styles.css": "d0d1827c9393",
         "tools/screenshots/theme.css": "32c4327c3764",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -545,7 +545,7 @@
       ],
       "layoutHash": "87148f643385",
       "sourceHashes": {
-        "src/views/chart-renderer.ts": "6d99b1cfa4fd",
+        "src/views/chart-renderer.ts": "1a9fef67b5de",
         "styles.css": "d0d1827c9393",
         "tools/screenshots/theme.css": "32c4327c3764",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -568,7 +568,7 @@
       ],
       "layoutHash": "87148f643385",
       "sourceHashes": {
-        "src/views/chart-renderer.ts": "6d99b1cfa4fd",
+        "src/views/chart-renderer.ts": "1a9fef67b5de",
         "styles.css": "d0d1827c9393",
         "tools/screenshots/theme.css": "32c4327c3764",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -591,7 +591,7 @@
       ],
       "layoutHash": "2b35b2f48312",
       "sourceHashes": {
-        "src/views/chart-renderer.ts": "6d99b1cfa4fd",
+        "src/views/chart-renderer.ts": "1a9fef67b5de",
         "styles.css": "d0d1827c9393",
         "tools/screenshots/theme.css": "32c4327c3764",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -614,7 +614,7 @@
       ],
       "layoutHash": "2b35b2f48312",
       "sourceHashes": {
-        "src/views/chart-renderer.ts": "6d99b1cfa4fd",
+        "src/views/chart-renderer.ts": "1a9fef67b5de",
         "styles.css": "d0d1827c9393",
         "tools/screenshots/theme.css": "32c4327c3764",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -637,7 +637,7 @@
       ],
       "layoutHash": "a11e6c3a81b0",
       "sourceHashes": {
-        "src/views/chart-renderer.ts": "6d99b1cfa4fd",
+        "src/views/chart-renderer.ts": "1a9fef67b5de",
         "styles.css": "d0d1827c9393",
         "tools/screenshots/theme.css": "32c4327c3764",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -660,7 +660,7 @@
       ],
       "layoutHash": "a11e6c3a81b0",
       "sourceHashes": {
-        "src/views/chart-renderer.ts": "6d99b1cfa4fd",
+        "src/views/chart-renderer.ts": "1a9fef67b5de",
         "styles.css": "d0d1827c9393",
         "tools/screenshots/theme.css": "32c4327c3764",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -1095,7 +1095,7 @@
       "sourceHashes": {
         "src/views/owned-menu.ts": "f32cc37ad4be",
         "src/views/menu-row.ts": "dd0e9eeeb997",
-        "src/views/mobile-bottom-sheet.ts": "2da2bd058754",
+        "src/views/mobile-bottom-sheet.ts": "ca3e8006a809",
         "styles.css": "d0d1827c9393",
         "tools/screenshots/theme.css": "32c4327c3764",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -1122,7 +1122,7 @@
       "sourceHashes": {
         "src/views/owned-menu.ts": "f32cc37ad4be",
         "src/views/menu-row.ts": "dd0e9eeeb997",
-        "src/views/mobile-bottom-sheet.ts": "2da2bd058754",
+        "src/views/mobile-bottom-sheet.ts": "ca3e8006a809",
         "styles.css": "d0d1827c9393",
         "tools/screenshots/theme.css": "32c4327c3764",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -1897,7 +1897,7 @@
       ],
       "layoutHash": "22f97640e4da",
       "sourceHashes": {
-        "src/views/modals/base-import-confirm-modal.ts": "3c72d0eb0b46",
+        "src/views/modals/base-import-confirm-modal.ts": "d7cd855b8ab3",
         "styles.css": "d0d1827c9393",
         "tools/screenshots/theme.css": "32c4327c3764",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -1920,7 +1920,7 @@
       ],
       "layoutHash": "22f97640e4da",
       "sourceHashes": {
-        "src/views/modals/base-import-confirm-modal.ts": "3c72d0eb0b46",
+        "src/views/modals/base-import-confirm-modal.ts": "d7cd855b8ab3",
         "styles.css": "d0d1827c9393",
         "tools/screenshots/theme.css": "32c4327c3764",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -1943,7 +1943,7 @@
       ],
       "layoutHash": "10be027aca09",
       "sourceHashes": {
-        "src/views/modals/base-import-confirm-modal.ts": "3c72d0eb0b46",
+        "src/views/modals/base-import-confirm-modal.ts": "d7cd855b8ab3",
         "styles.css": "d0d1827c9393",
         "tools/screenshots/theme.css": "32c4327c3764",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -1966,7 +1966,7 @@
       ],
       "layoutHash": "10be027aca09",
       "sourceHashes": {
-        "src/views/modals/base-import-confirm-modal.ts": "3c72d0eb0b46",
+        "src/views/modals/base-import-confirm-modal.ts": "d7cd855b8ab3",
         "styles.css": "d0d1827c9393",
         "tools/screenshots/theme.css": "32c4327c3764",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -1989,7 +1989,7 @@
       ],
       "layoutHash": "f2e2ea804b0d",
       "sourceHashes": {
-        "src/views/modals/computed-frontmatter-cleanup-modal.ts": "24b15fd9a08b",
+        "src/views/modals/computed-frontmatter-cleanup-modal.ts": "b59438b6ae03",
         "styles.css": "d0d1827c9393",
         "tools/screenshots/theme.css": "32c4327c3764",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -2012,7 +2012,7 @@
       ],
       "layoutHash": "f2e2ea804b0d",
       "sourceHashes": {
-        "src/views/modals/computed-frontmatter-cleanup-modal.ts": "24b15fd9a08b",
+        "src/views/modals/computed-frontmatter-cleanup-modal.ts": "b59438b6ae03",
         "styles.css": "d0d1827c9393",
         "tools/screenshots/theme.css": "32c4327c3764",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -2035,7 +2035,7 @@
       ],
       "layoutHash": "8442da367d66",
       "sourceHashes": {
-        "src/views/modals/computed-frontmatter-cleanup-modal.ts": "24b15fd9a08b",
+        "src/views/modals/computed-frontmatter-cleanup-modal.ts": "b59438b6ae03",
         "styles.css": "d0d1827c9393",
         "tools/screenshots/theme.css": "32c4327c3764",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -2058,7 +2058,7 @@
       ],
       "layoutHash": "8442da367d66",
       "sourceHashes": {
-        "src/views/modals/computed-frontmatter-cleanup-modal.ts": "24b15fd9a08b",
+        "src/views/modals/computed-frontmatter-cleanup-modal.ts": "b59438b6ae03",
         "styles.css": "d0d1827c9393",
         "tools/screenshots/theme.css": "32c4327c3764",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -2081,7 +2081,7 @@
       ],
       "layoutHash": "454a1bae11b8",
       "sourceHashes": {
-        "src/views/modals/invalid-time-events-modal.ts": "4c30e014eed6",
+        "src/views/modals/invalid-time-events-modal.ts": "d8e64dedb8a0",
         "styles.css": "d0d1827c9393",
         "tools/screenshots/theme.css": "32c4327c3764",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -2104,7 +2104,7 @@
       ],
       "layoutHash": "454a1bae11b8",
       "sourceHashes": {
-        "src/views/modals/invalid-time-events-modal.ts": "4c30e014eed6",
+        "src/views/modals/invalid-time-events-modal.ts": "d8e64dedb8a0",
         "styles.css": "d0d1827c9393",
         "tools/screenshots/theme.css": "32c4327c3764",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -2127,7 +2127,7 @@
       ],
       "layoutHash": "9eac040725c4",
       "sourceHashes": {
-        "src/views/modals/invalid-time-events-modal.ts": "4c30e014eed6",
+        "src/views/modals/invalid-time-events-modal.ts": "d8e64dedb8a0",
         "styles.css": "d0d1827c9393",
         "tools/screenshots/theme.css": "32c4327c3764",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -2150,7 +2150,7 @@
       ],
       "layoutHash": "9eac040725c4",
       "sourceHashes": {
-        "src/views/modals/invalid-time-events-modal.ts": "4c30e014eed6",
+        "src/views/modals/invalid-time-events-modal.ts": "d8e64dedb8a0",
         "styles.css": "d0d1827c9393",
         "tools/screenshots/theme.css": "32c4327c3764",
         "tools/screenshots/runtime-vars.css": "3a0dab6c9c5b",
@@ -3961,7 +3961,7 @@
       "layoutHash": "ad3a644047da",
       "sourceHashes": {
         "src/views/record-detail-panel.ts": "f6d0308b4df2",
-        "src/views/popover-position.ts": "48a6ffec6b38",
+        "src/views/popover-position.ts": "6cae246726c0",
         "src/views/card-field-renderer.ts": "33212bef3422",
         "src/views/note-body-region.ts": "4660f1f93bd7",
         "styles.css": "d0d1827c9393",
@@ -3990,7 +3990,7 @@
       "layoutHash": "ad3a644047da",
       "sourceHashes": {
         "src/views/record-detail-panel.ts": "f6d0308b4df2",
-        "src/views/popover-position.ts": "48a6ffec6b38",
+        "src/views/popover-position.ts": "6cae246726c0",
         "src/views/card-field-renderer.ts": "33212bef3422",
         "src/views/note-body-region.ts": "4660f1f93bd7",
         "styles.css": "d0d1827c9393",
@@ -5503,7 +5503,7 @@
       },
       "note": "The full table the renderer builds: a select gutter, a record-icon gutter and a runtime <colgroup> of fixed px widths. On desktop those widths hold; on the phone (is-phone) the columns auto-fit to content and the select column is no longer clipped by the scroll-area fade mask. The name column is the title cell — a content-sized link plus the always-visible open affordance, rendered on touch as a compact maximize icon so its width goes to the note name instead of a text label.",
       "capture": "viewport",
-      "bytes": 205383
+      "bytes": 205380
     },
     {
       "id": "table-mobile",

@@ -44,6 +44,7 @@ export class ColumnRenameModal extends DbModal {
   }
 
   onOpen(): void {
+    super.onOpen();
     const { contentEl } = this;
     contentEl.empty();
     contentEl.createEl("h3", { text: t("modal.editProperty", { label: this.col.label }) });
@@ -135,6 +136,7 @@ export class ColumnRenameModal extends DbModal {
   }
 
   onClose(): void {
+    super.onClose();
     this.contentEl.empty();
   }
 }

@@ -47,6 +47,7 @@ export class StatusPresetManagerModal extends DbModal {
   }
 
   onOpen(): void {
+    super.onOpen();
     this.contentEl.empty();
     this.contentEl.addClass("note-database-modal");
     this.contentEl.createEl("h3", { text: this.title });
@@ -163,6 +164,7 @@ export class StatusPresetManagerModal extends DbModal {
   }
 
   onClose(): void {
+    super.onClose();
     this.contentEl.empty();
   }
 }

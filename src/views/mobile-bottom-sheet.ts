@@ -454,16 +454,30 @@ export function attachSheetDragToDismiss(panel: HTMLElement, close: () => void):
     }
     reset();
   };
-
+  // A cancelled gesture is not a release, and must never be judged as one.
+  //
+  // The system takes the pointer away mid-drag — a scroll wins the gesture, a call arrives, the
+  // finger leaves the digitiser. The last move sample is still sitting there looking like a flick,
+  // so sharing the release handler closes a sheet on a gesture the thumb never finished. Springing
+  // back is the only honest answer to a gesture that was taken away.
+  //
+  // Clearing the pointer id here matters as much as not closing: a cancel that left it set would
+  // make every later press fail the "already tracking" guard, which is a permanently dead grab
+  // handle rather than an unwanted close.
+  const onCancel = (event: PointerEvent): void => {
+    if (event.pointerId !== pointerId) return;
+    pointerId = undefined;
+    reset();
+  };
   panel.addEventListener("pointerdown", onDown);
   panel.addEventListener("pointermove", onMove);
   panel.addEventListener("pointerup", onUp);
-  panel.addEventListener("pointercancel", onUp);
+  panel.addEventListener("pointercancel", onCancel);
   const release = () => {
     panel.removeEventListener("pointerdown", onDown);
     panel.removeEventListener("pointermove", onMove);
     panel.removeEventListener("pointerup", onUp);
-    panel.removeEventListener("pointercancel", onUp);
+    panel.removeEventListener("pointercancel", onCancel);
     if (activeSheetDrag.get(panel) === release) activeSheetDrag.delete(panel);
     reset();
   };

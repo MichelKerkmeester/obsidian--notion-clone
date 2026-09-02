@@ -9,10 +9,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/031-sheet-lifecycle-ownership"
-    last_updated_at: "2026-09-02T08:00:00Z"
-    last_updated_by: "goal-audit"
-    recent_action: "Goal audit: five criteria verified against src/views on disk"
-    next_safe_action: "The operator opens and closes each sheet on device"
+    last_updated_at: "2026-09-02T20:10:00Z"
+    last_updated_by: "report-29-verifier"
+    recent_action: "Report 29 fix landed: modal close tears the sheet chrome down"
+    next_safe_action: "The operator runs the menu-then-modal sequence on iOS, twice"
     blockers:
       - "Nothing here is confirmed on the operator's device"
     key_files:
@@ -22,10 +22,11 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-031-goal"
       parent_session_id: null
-    completion_pct: 83
+    completion_pct: 75
     open_questions:
-      - "Report 29 (1.4.0, P0): which OS and which sheets show the appear-then-freeze symptom"
+      - "Does Obsidian's Modal.close() detach containerEl alone or also modalEl"
     answered_questions:
+      - "Report 29: the DbModal body-portal orphan pins the scrim for the whole session"
       - "Neither: a MutationObserver prunes the per-document live-sheet set on removal"
       - "The two drag failures are unrelated; fixing one does not fix the other"
       - "The harness could not see the scrim leak because it cleaned the leak up to keep testing"
@@ -102,6 +103,13 @@ defect in this phase is a consequence of that shape.
       not argued away.
 - [ ] The operator opens and closes each sheet on device without the app locking up. **Only the
       operator closes this.**
+- [x] A sheet producer whose host detaches a wrapper other than the registered node leaves no scrim
+      on the body: the teardown lane reports leaking 0 for it. **Met.** `sheet-teardown.json` now
+      carries `producers: 11, leaking: 0`. Observed red first, by stashing the new `db-modal.ts` and
+      re-running the lane against the shipped base — **was: `1 backdrop(s) and 1 sheet(s) left after
+      the host wrapper was removed`, lane `FAIL — 1 producer(s) leave the body dirty`.**
+- [ ] The operator opens and closes an owned-menu sheet, then a confirm/picker modal, on iOS from a
+      fresh start, twice, and the app stays responsive.
 <!-- /ANCHOR:completion -->
 
 ---
@@ -197,3 +205,108 @@ models that.
 
 The watcher is asynchronous, so the check awaits a microtask and a frame before reading. That is the
 real budget — a backdrop still present after a rendered frame is one the user has seen.
+
+### 2026-09-02: Report 29 root-caused (read-only Opus debug pass)
+
+A fresh read-only Opus debugger closed the open question above for report 29 (iOS, every sheet
+family, keyboard closed, release 1.4.0) with a code-read chain, no bench run. Full diagnosis:
+`specs/005-component-surface-system/031-sheet-lifecycle-ownership/` context; source text carried
+verbatim into this entry.
+
+**Primary (high). `DbModal` portals `modalEl` out of `.modal-container` and never takes the chrome
+down.** `db-modal.ts:64` runs `applyPresentation()` in the constructor, not `onOpen`; `:72` calls
+`applySheetChrome(this.modalEl, asSheet)`, true on iOS for ~15 modals. `mobile-bottom-sheet.ts:59`
+`setSheetMount` creates `.db-mobile-sheet-scrim` on `body` at `:146` (before `open()` runs), adds
+`modalEl` to the per-document `liveSheets` set at `:150`, and at `:179` does
+`doc.body.appendChild(panel)` — tearing the modal body out of `.modal-container`. `DbModal` has no
+`onClose`; nothing calls `applySheetChrome(this.modalEl, false)`. Obsidian's `Modal.close()` detaches
+`containerEl`, but `modalEl` is no longer inside it, so the sheet node stays on `body` forever.
+`mobile-bottom-sheet.ts:250` `pruneSheets()` reads that orphan as `isConnected` → true forever →
+`:294` `setScrim(..., false)` returns early: **the full-screen scrim can never be removed again for
+the life of the session, by any producer of any family.**
+
+*Provenance:* `f7ce99d` (2026-08-29 11:48) wired `applySheetChrome` into the `DbModal` constructor
+while it was pure presentation; `4bd11b83` (same day, 23:17) moved the body portal *inside*
+`applySheetChrome`. The modal path silently inherited a portal nobody designed for it.
+
+*Symptom mapping:* open→vanish→freeze is the modal showing from our sheet CSS, Obsidian appending an
+empty `.modal-container` + dimmer over it, then only Obsidian's chrome going on close — the pinned
+scrim is the freeze. No-way-to-close and the dead drag handle are the same orphan: the leftover
+`.modal` (`styles.css:188-193`, `position:fixed`, `z-index:1000`) sits over the bottom of the screen
+taking presses meant for any sheet opened before it, including its grab band.
+
+**Why every gate stayed green:** `tools/live/sheet-teardown-harness.ts:75` mounts a synthetic `div`;
+the one producer whose host detaches a *different node than the one registered* is untested, because
+`tools/storybook/obsidian-stub.mjs:90` throws on `Modal` by design. `sheet-teardown.json`
+(`producers: 10, leaking: 0`) is therefore not evidence about `DbModal`.
+
+**Secondary (medium).** An anchored sheet can hide itself one frame after opening:
+`popover-position.ts:274-275` calls `place()` then `requestAnimationFrame(place)`; `:195-204`'s
+`place()` sets `visibility:hidden` and tears the loop down when `anchorEl` is disconnected. A
+re-render swapping the toolbar button between those two calls makes the sheet appear and vanish
+inside one frame. Explains the open→vanish half only for filter/sort/add-view — menus and modals have
+no anchor and cannot reach this branch.
+
+**Tertiary (low).** `mobile-bottom-sheet.ts:461` binds `pointercancel` to `onUp`; iOS fires it
+mid-gesture, and `onUp` evaluates `shouldFlickDismiss` (`:376`) against the last *move* sample, so a
+sheet can close on a gesture the system took away. An unwanted close, not a dead handle.
+
+**Rejected, with counter-evidence:** scrim-above-sheet stacking (token block gives the scrim 999
+against the sheet's 1000 — order is correct); a re-entering `MutationObserver` (the removal record
+dies with the same disconnect that triggers it — terminates); today's product wave swallowing the
+handle (the only `pointer-events`/`z-index` edits in `8dd7008` touch unrelated selectors inside
+`.note-database-container`; `1f9d7da` and `a5c779e` touch neither property); keyboard/visualViewport
+dismissal (operator reports the keyboard closed, and `record-detail-panel.ts:250` returns early on a
+width-preserving resize regardless).
+
+**The one device sequence that discriminates:** from a fresh app start, long-press a row to open an
+owned-menu sheet, close it, confirm the app is still responsive, then open any confirm/picker modal
+(delete database, create property) and close it. Alive after the menu and dead from the modal onward
+confirms the primary cause and rules the secondary and tertiary out as noise.
+
+**Status:** the fix (an `onClose()` on `DbModal` that releases the drag and tears down the chrome
+while `containerEl` is still connected, plus moving `applyPresentation()` into `onOpen()`) is
+dispatched to codex (gpt-5.6-luna xhigh) and will be verified in-runtime — bench (`sheet-teardown`
+red-to-green on a new detached-host-wrapper producer, `sheet-rebuild` unchanged, the flick threshold
+test unchanged) and the device sequence above, twice, with the app left responsive both times.
+
+### 2026-09-02: Report 29 fix landed, and who wrote which half
+
+The codex lane (gpt-5.6-luna xhigh) that the entry above dispatched **hit its usage limit mid-run
+and returned no report.** It left its edits uncommitted in the tree. A fresh in-runtime verifier
+read the whole diff, judged each of the four scope items, finished what was missing and proved the
+result on the bench. Recorded because the provenance matters: no part of this change arrived with a
+completion claim behind it.
+
+**What codex had finished.** The primary fix, complete and correct: `db-modal.ts:62-70` moves
+`applyPresentation()` into `onOpen()` and adds an `onClose()` that releases the drag and calls
+`applySheetChrome(this.modalEl, false)` while the container is still connected. The subclass sweep
+is exhaustive — all twenty `extends DbModal` classes call `super.onOpen()`/`super.onClose()` on
+every override, verified by scanning each definition against its super call. The edits to `main.ts`,
+`settings.ts` and `chart-renderer.ts` are that sweep and not drift: each holds a `DbModal` subclass
+(`CsvMarkdownImportModal`, `TrashManagerModal` and its anonymous restore modal,
+`ChartDrilldownModal`). The anchored-sheet deferral in `popover-position.ts` was mechanically sound.
+Nothing was reverted.
+
+**What it had not.** The tertiary fix was **absent from the tree**: `pointercancel` was still bound
+to the dismissal handler, and only a blank line had been removed. The unit case codex wrote for it
+was therefore sitting red in the suite — which made the red free to observe rather than something to
+stage: `expected 1 to be +0` at `sheet-flick.test.ts:104`, the sheet closing on a gesture iOS took
+away. Routing cancel to a handler that only calls `reset()` would have been the obvious fix and the
+wrong one — `reset()` does not clear `pointerId`, so every later press would fail the already-tracking
+guard and the grab handle would be permanently dead, which is the symptom being fixed. The cancel
+path clears the id as well, and the test now asserts a second drag still dismisses after a cancel.
+
+**What was wrong.** The bench producer called `DbModal.prototype.onClose.call(...)` unguarded, so
+against the shipped base — which has no `onClose` — the lane would have died on a `TypeError`
+instead of reporting a leak. A crash is not a red. The call is now guarded, and the absence of the
+hook is what the producer reports: **was `1 backdrop(s) and 1 sheet(s) left after the host wrapper
+was removed`, lane `FAIL — 1 producer(s) leave the body dirty`; now `producers: 11, leaking: 0`.**
+The comments were also repaired: the deferral rationale sat in the wrong function, a paragraph
+deleted from `popover-position.ts` took the durable why with it, and a dangling `//` was left behind.
+
+**Evidence.** `tsc` 0, `vitest` 645 passed, `lint:tools` 0, `scan-comments` 0, `sheet-teardown`
+11 producers 0 leaking, `sheet-rebuild` `barsLost: 0`, `storybook:placement` 385/386, `replay` 8/8,
+and the whole gate `PASS — 25 green, 0 red` at exit 0. Both device rows above stay open: nothing
+here is confirmed on the operator's phone, and the bench says so itself — no Obsidian host is
+constructed, so it measures the chrome contract rather than any caller's real lifecycle.

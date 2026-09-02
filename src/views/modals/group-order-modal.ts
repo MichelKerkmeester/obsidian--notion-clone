@@ -43,6 +43,7 @@ export class GroupOrderModal extends DbModal {
   }
 
   onOpen(): void {
+    super.onOpen();
     this.render();
   }
 

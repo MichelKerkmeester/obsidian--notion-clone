@@ -2833,10 +2833,12 @@ class CsvMarkdownImportModal extends DbModal {
   }
 
   onOpen(): void {
+    super.onOpen();
     this.render();
   }
 
   onClose(): void {
+    super.onClose();
     this.contentEl.empty();
     this.resolve?.(null);
     this.resolve = undefined;

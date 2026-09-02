@@ -28,6 +28,7 @@ export class CreateRecordIconFieldModal extends DbModal {
   ) { super(app, "sheet"); }
 
   onOpen(): void {
+    super.onOpen();
     const conflict = this.columns.some((column) => column.key === "icon");
     const suggested = conflict ? "record_icon" : "icon";
     this.contentEl.empty();
@@ -57,5 +58,8 @@ export class CreateRecordIconFieldModal extends DbModal {
     return input;
   }
 
-  onClose(): void { this.contentEl.empty(); }
+  onClose(): void {
+    super.onClose();
+    this.contentEl.empty();
+  }
 }

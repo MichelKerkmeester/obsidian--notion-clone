@@ -130,6 +130,7 @@ export class StatusOptionsModal extends DbModal {
   }
 
   onOpen(): void {
+    super.onOpen();
     this.contentEl.empty();
     this.contentEl.addClass("note-database-modal");
     this.contentEl.createEl("h3", { text: t("modal.statusOptions", { type: COLUMN_TYPE_LABELS()[this.col.type], label: this.col.label }) });
@@ -363,6 +364,7 @@ export class StatusOptionsModal extends DbModal {
   }
 
   onClose(): void {
+    super.onClose();
     this.contentEl.empty();
   }
 }

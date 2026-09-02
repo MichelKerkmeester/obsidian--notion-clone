@@ -36,6 +36,7 @@ export class ComputedFrontmatterCleanupModal extends DbModal {
   }
 
   onOpen(): void {
+    super.onOpen();
     const { contentEl } = this;
     contentEl.empty();
     contentEl.addClass("note-database-modal");
@@ -108,6 +109,7 @@ export class ComputedFrontmatterCleanupModal extends DbModal {
   }
 
   onClose(): void {
+    super.onClose();
     this.contentEl.empty();
   }
 }
