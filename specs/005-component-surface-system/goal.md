@@ -10,15 +10,16 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-02T23:30:00Z"
-    last_updated_by: "parent-basis-reconciled"
-    recent_action: "Reconciled completion_pct basis to 43 across spec/goal/handover"
+    last_updated_at: "2026-09-02T23:45:00Z"
+    last_updated_by: "device-report-29"
+    recent_action: "Recorded operator report 29 (1.4.0, P0); dispatched to 031"
     next_safe_action: "The operator runs the deferred device pass on the installed 1.3.9 build"
     blockers:
-      - "Every fix is measured on a bench; 1 of 27 reports is confirmed on the operator device"
+      - "Every fix is measured on a bench; 1 of 28 reports is confirmed on the operator device"
       - "Every fix is bench-measured; none of the six renderers is asserted against a live Obsidian host"
       - "The windowed list is bench-only: 48.4ms at 3,000 rows, unconfirmed on the operator device"
       - "CI runs npm run storybook:coverage, a script package.json no longer defines (.github/workflows/gates.yml:64)"
+      - "Report 29 (1.4.0, P0): drag handle inert, some sheets uncloseable, one appears then freezes the app; OS and sheet identity unknown, undiagnosed"
     key_files:
       - "roadmap.md"
       - "spec.md"
@@ -114,6 +115,13 @@ resolve them silently.
       **8 in neither state** (21-28). The figure here previously read *12 in neither state*
       against the same eight rows — a third denominator error in the criterion written to record
       the first two. D3 still governs — only operator-confirmed closes a defect.
+
+      **2026-09-02, same day: the denominator moved again.** `roadmap.md` §4 grew to **28 numbered
+      rows** (1-16, 18-29) with row 29, a new operator report against 1.4.0 (drag handle inert on
+      some sheets, no way to close others, one that appears then disappears then freezes the app —
+      release-blocking, dispatched to `031-sheet-lifecycle-ownership` for diagnosis). The **8 in
+      neither state** above is now **9** (21-29). Not re-ticked: this addition only widens the
+      gap between confirmed and total.
 - [ ] Every view opens on device without freezing. Today only the table does.
 - [x] A gate check constructs a production renderer for **every** view. One lane does now, for
       List, Table, Board, Gallery, Calendar and Timeline — **6 of 22**, a ratchet, twelve
@@ -388,4 +396,22 @@ will be amended to accept a single-segment `packet_pointer`. The edit is not loc
 dispatched to the Public repo, tracked at `specs/system-speckit/050-single-segment-packet-pointer`.
 Row 7 stays unticked here until that packet ships and this program's pointers are re-validated against
 it. See `repo-rules/spec-tree-layout.md` §4, updated to record this as the taken disposition.
+
+### Report 29: fresh operator report against 1.4.0, dispatched for diagnosis
+
+**2026-09-02.** A new operator report, quoted in full at `roadmap.md` §4 row 29: *"In this version a
+lot of sheets are bugged, drag handler dont work or no way to close or they pop up and than
+dissapear and than freeze app."* This is the first device evidence this program has had since
+1.3.1 — the operator's phone runs plugin release **1.4.0**, tagged today, and three distinct
+symptoms are bundled in the one report: the sheet drag handle does nothing, some sheets cannot be
+closed by any means, and one sheet appears, disappears immediately, then freezes the app entirely.
+OS and which specific sheets are affected are both unknown; both are asked. Severity is
+**release-blocking (P0)**.
+
+The suspect commit range is **1.3.1..HEAD** in `mobile-bottom-sheet.ts`, `popover-position.ts`,
+`record-detail-panel.ts` and `owned-menu.ts` — the four files that changed sheet lifecycle,
+positioning and dismissal since the last release this program has device evidence for.
+`031-sheet-lifecycle-ownership` owns the diagnosis: it already carries the drag-handle hypothesis
+for reports 26 and 27 (a panel's own content render destroying the grab bar it prepended), and
+this report's freeze-then-app-hang symptom is a new shape not yet covered by that hypothesis.
 <!-- /ANCHOR:log -->

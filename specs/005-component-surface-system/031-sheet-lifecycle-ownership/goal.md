@@ -23,7 +23,8 @@ _memory:
       session_id: "surface-system-031-goal"
       parent_session_id: null
     completion_pct: 83
-    open_questions: []
+    open_questions:
+      - "Report 29 (1.4.0, P0): which OS and which sheets show the appear-then-freeze symptom"
     answered_questions:
       - "Neither: a MutationObserver prunes the per-document live-sheet set on removal"
       - "The two drag failures are unrelated; fixing one does not fix the other"
@@ -167,6 +168,16 @@ nobody re-imports them: over-drag damping (the sheet cannot move upward at all),
 predicate with a lockout (the gesture can only start on the grab target, so it can never begin on
 scrollable content), and ignoring subsequent touches (already implemented). The 48dp handle standard
 is already dispositioned as an accepted operator shortfall — do not reopen it.
+
+### Report 29: a 1.4.0 device report widens the symptom set
+
+**2026-09-02.** A new operator report against release **1.4.0** — the first device evidence this
+program has had since 1.3.1 — names three symptoms on the same axis this phase already owns: the
+drag handle does nothing, some sheets cannot be closed, and one sheet appears, disappears
+immediately, then freezes the app. OS and which sheets are unknown, both asked. Suspect range
+1.3.1..HEAD in `mobile-bottom-sheet.ts`, `popover-position.ts`, `record-detail-panel.ts` and
+`owned-menu.ts`. Recorded as an open question above; not yet tested against the drag-handle or
+scrim-leak mechanisms already found for reports 26, 27 and #5.
 <!-- /ANCHOR:log -->
 
 ### The fix, and one thing the check taught me about itself

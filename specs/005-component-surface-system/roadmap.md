@@ -168,9 +168,11 @@ already has — and it is that phase's own work, not this board's.
 
 ## 4. OPERATOR REPORT TRACEABILITY
 
-**Twenty-seven reports** (1-16, 18-28), each resolved to a named phase. A seventeenth — refactoring the list view to
+**Twenty-eight reports** (1-16, 18-29), each resolved to a named phase. A seventeenth — refactoring the list view to
 look like ClickUp — is its own packet at `specs/006-list-view-clickup/`, is not part of
-this program, and does not occupy a row here; the table below runs 1-16 then 18-28 because of it.
+this program, and does not occupy a row here; the table below runs 1-16 then 18-29 because of it.
+*2026-09-02: row 29 added, the first device evidence since 1.3.1, raising the count from
+twenty-seven to twenty-eight.*
 
 | # | The report, shortened | Phase | State | Evidence |
 |---|---|---|---|---|
@@ -203,6 +205,7 @@ this program, and does not occupy a row here; the table below runs 1-16 then 18-
 | 27 | *"sometimes bug on closing freezing app"* | `031-sheet-lifecycle-ownership` | **New, this session. Not investigated.** | Operator report on 1.3.9, and note the word **sometimes** — an intermittent freeze is a different shape from reports 21-23, which froze on every close. Those were traced to dismissal routing through a full rebuild of every row, and `7ad775b` cut three rebuilds to one. **What is unexplained:** why a single remaining rebuild would freeze only sometimes. Candidates worth separating before spending a day: the rebuild cost crossing the budget only at certain row counts (the list already blocks 2.0-4.9s at the operator's shape), versus a distinct dismissal path that still triggers more than one rebuild |
 
 | 28 | *"this dropdown doesnt align with other components yet dropdowns and sheets"* — the desktop **More tools** toolbar dropdown | `027-sheet-menu-grammar-and-motion` | **New, this session. Not investigated.** | Operator report on 1.3.9, with a screenshot: the section heading sits at the panel's left inset while the rows below start far to its right, so heading and rows do not share a left edge. **Hypothesis, testable:** the shared row grammar declares `padding: 0 8px` and `justify-content: flex-start` on `.db-menu-item`, and `.db-menu-section` declares `padding: 6px 8px 2px` — the same 8px inset, so a surface built on the shared row cannot show this gap. That points at the More-tools dropdown not using `createMenuRow`. **The stylesheet already records why this shape is invisible to our checks:** the `justify-content` declaration exists precisely because an undeclared value computes to `normal` against the plugin stylesheet alone and only centres under the host's cascade, so a rule measured without the host looks correct. What refutes the hypothesis: finding this surface already on `createMenuRow`, which would make it a cascade escape rather than a grammar gap |
+| 29 | *"In this version a lot of sheets are bugged, drag handler dont work or no way to close or they pop up and than dissapear and than freeze app"* | `031-sheet-lifecycle-ownership` | open — diagnosis dispatched 2026-09-02 (fresh Opus via cli-claude-code, packet 031) | Operator report received 2026-09-02 against **1.4.0** — the first device evidence this program has had since 1.3.1. Three symptoms in one report: the drag handle does nothing, some sheets have no way to close, and one sheet appears, disappears immediately, then freezes the app. OS and which sheets: unknown, asked. **Severity: release-blocking (P0)** |
 
 **Reports 21-24 and report 27 are probably one defect with two owners.** 21, 22 and 23 are the sort
 and filter sheets bugging out and freezing on open or close; 24 is the column-setting sheet not
@@ -217,10 +220,10 @@ not this note, is what should move them.
 
 ### What the table says as a whole
 
-**All twenty-seven reports now have a named phase**, and fifteen of the original sixteen have
-shipped code — report 13 remains the exception, deliberately not a phase. None of the eight rows
-added later (18-28) have shipped code under the phase each now names, `027` or `028`, both opened
-today and still being investigated. Row 18 is the one worth naming apart from the rest: the phase
+**All twenty-eight reports now have a named phase**, and fifteen of the original sixteen have
+shipped code — report 13 remains the exception, deliberately not a phase. None of the nine rows
+added later (18-29) have shipped code under the phase each now names, `027`, `028` or `031`, each opened
+today or this session and still being investigated. Row 18 is the one worth naming apart from the rest: the phase
 it succeeds, `024`, did ship and rigorously verify a fix for the same symptom, and this report is
 that fix not holding on the operator's device.
 
@@ -283,12 +286,13 @@ exists to abolish.
 timeline fix. **Deferred at:** 2026-08-31. **Deferred by:** the operator, who chose a build first.
 
 **What this section does NOT cover, stated so the count cannot be read as complete.** The table
-below disposes of the original sixteen. Reports **21-28 are in neither state** — not confirmed, not
-deferred with terms. Eight of them: the sort, filter and column-setting sheets (21-24), the bundled
+below disposes of the original sixteen. Reports **21-29 are in neither state** — not confirmed, not
+deferred with terms. Nine of them: the sort, filter and column-setting sheets (21-24), the bundled
 sheet-grammar asks (25), the group and view sheets that will not drag (26), the intermittent
-close-freeze (27), and the More-tools dropdown alignment (28). Four of those eight arrived after
+close-freeze (27), the More-tools dropdown alignment (28), and the 1.4.0 report naming drag handle,
+close and freeze-on-open defects across multiple sheets (29). Four of those nine arrived after
 this section was written, which is exactly how a denominator goes stale: the section was correct
-when written and was not re-derived when the table grew.
+when written and was not re-derived when the table grew. *2026-09-02: row 29 added.*
 
 Report 10 is not in the table: it is the one report already **operator-confirmed**, as an accepted
 shortfall, and `spec.md` says do not reopen it.
