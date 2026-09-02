@@ -11,10 +11,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/036-obsidian-pm-ui-harvest"
-    last_updated_at: "2026-09-02T22:30:00Z"
-    last_updated_by: "goal-audit-2"
-    recent_action: "Loop confirmed running in worktree; main-checkout research/ is stale"
-    next_safe_action: "Spot-check 10 citations in-runtime once the worktree loop converges"
+    last_updated_at: "2026-09-02T22:55:00Z"
+    last_updated_by: "loop-merged"
+    recent_action: "Loop output merged from worktree; 3 of 5 rows ticked"
+    next_safe_action: "Open 037-timeline-gantt-port from the adoption plan"
     blockers: []
     key_files:
       - "spec.md"
@@ -24,7 +24,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-036-goal"
       parent_session_id: null
-    completion_pct: 0
+    completion_pct: 60
     open_questions: []
     answered_questions:
       - "worktree vs branch, answered: the loop runs in .worktrees/003-obsidian-pm-harvest"
@@ -73,20 +73,50 @@ not exist yet — it is the loop's output, not a summary of one.
 <!-- ANCHOR:completion -->
 ## 2. COMPLETION CRITERIA
 
-All unticked. None of this phase's rows close until the loop has run and a spot-check has read the
-cited lines.
+Three of five close on the merged loop output. The two that remain open both turn on
+**how** the loop ran rather than on what it produced — see the 22:55 log entry.
 
-- [ ] A module map exists at `research/research.md` with **N ≥ 20** entries, each carrying a
+The catalog the first three rows read is at `research/research.md`, promoted there from the path the
+runner chose (`research/lineages/luna-max-fast-pm-harvest/research/research.md`) and carrying a
+provenance header naming the lineage and run id. The lineage tree itself — ledgers, deltas, the twenty
+iteration files and a condensed sibling report — stays on disk but untracked, under this repo's
+`specs/**/research/**/lineages/` ignore rule. `research/convergence-report.md` and
+`research/spot-check.md` were promoted beside it.
+
+- [x] A module map exists at `research/research.md` with **N ≥ 20** entries, each carrying a
       `file:line` citation on both sides — theirs and, once mapped, ours — a disposition (copied
       verbatim with MIT notice / rewritten / dropped), and an LOC estimate.
-- [ ] The adoption plan names a proposed new phase packet per surface, ordered timeline → board →
+      *Evidence: 65 rows across the five per-surface tables in `research/research.md` (§§1–5, rows at
+      lines 93–336). All 65 carry a reference `file:line`, a local `file:line`, a disposition, and an
+      LOC range paired with its adopting packet — counted mechanically, zero rows missing any of the four. The
+      failing value this moved from was 0 rows: before the merge the stale `research/` in this
+      checkout held ledger and telemetry files only, and no `research.md` at all.*
+- [x] The adoption plan names a proposed new phase packet per surface, ordered timeline → board →
       calendar → subtasks → shared UI, each with a gate order and an LOC estimate.
-- [ ] The do-not-borrow list names what stays ours — table view, bottom sheets,
+      *Evidence: "Final adoption plan (ordered)" (same file, lines 394–402) lists orders 1–5 as
+      `037-timeline-gantt-port` (1,100–1,500 LOC), `038-board-kanban-port` (800–1,100),
+      `039-calendar-parity-port` (900–1,400), `040-subtask-tree-port` (700–1,000) and
+      `041-shared-ui-ux-port` (650–950), each with a "Must differ / keep local" column and a gate
+      order ending in `npm run gate`. The failing value this moved from
+      was 0 named packets — no adoption plan existed in this checkout before the merge.*
+- [x] The do-not-borrow list names what stays ours — table view, bottom sheets,
       formulas/rollups/calcs — and why, for each.
+      *Evidence: "Do-not-borrow list" (same file, lines 404–419) carries exactly those three entries,
+      each with a reason and a citation. The failing value this moved
+      from was 0 entries — the list did not exist in this checkout before the merge.*
 - [ ] The loop reached 20 iterations, or converged earlier with the convergence reason recorded in
       `research/lineages/<lineage>/convergence-report.md`.
+      *Stays open: the 20/20 count is the run describing itself, not a measurement — see the 22:55
+      log entry. Twenty `iterations/iteration-0NN.md` files exist, but the artifacts alone do not
+      distinguish twenty model turns from twenty gateway-composed ones, and the new-information ratio
+      series that would corroborate them is synthetic.*
 - [ ] An in-runtime spot-check of 10 randomly selected citations from the module map finds all 10 true
       against the file on disk — line exists, and its content matches what the map claims about it.
+      *Stays open although a 10-of-10 read passed: the ten were drawn from the reference side only,
+      not randomly across both sides of the map, and a separate read of the local side found a false
+      citation outside that sample (corrected 2026-09-02; see the log). A sample that excludes the
+      side where the one known error lives does not satisfy "randomly selected". Re-draw across both
+      sides to close this.*
 <!-- /ANCHOR:completion -->
 
 ---
@@ -146,9 +176,45 @@ out past this rescope. Its own `research/` directory is live — `observability-
 rejection) is stale residue from that rejected launch, not evidence of loop progress — the worktree's
 copy is the one to read.**
 
-**The planned follow-on, once the loop closes.** After the loop reaches convergence or 20 iterations,
-and 10 randomly selected module-map citations are spot-checked in-runtime (the fifth completion
-criterion above), the adoption plan opens one new phase packet per surface, in the stated order —
-timeline → board → calendar → subtasks → shared UI — each doing the rewrite-and-merge D4 requires.
-No such packet is opened yet; this phase's own five rows stay unticked until then.
+**2026-09-02 22:55: the loop's output is merged into this checkout, and three rows close.** The
+stale `research/` described in the paragraph above was deleted and replaced wholesale by the
+worktree's tree — 127 files, 579,380 bytes — together with the twelve `event-0NN.json` files the
+runner left at the packet root. The worktree branch was not touched. Of that tree, 124 files sit under
+`research/lineages/` and are **untracked by repo policy**, so the synthesis was promoted to
+`research/research.md` — with `convergence-report.md` and `spot-check.md` beside it — and the ledgers
+stay local. That promotion, not a force-add, is what makes the ticks below citable from the repo.
+
+*What the run verifiably produced.* One lineage, `luna-max-fast-pm-harvest`, on `cli-codex`
+`gpt-5.6-luna` (`reasoningEffort=max`, `serviceTier=fast`) per D3. The fan-out runner exited 0 and the
+launcher returned 0; wall clock 22:01 to 22:41; one lineage, one attempt. The synthesis is a 44 KB report, promoted to
+`research/research.md`, with a 16 KB condensed sibling left in the lineage tree. It carries 65 cited module-map rows, an ordered five-packet adoption plan, the do-not-borrow
+list, and the MIT-notice requirement — which is what the first three completion rows ask for, and why
+they are now ticked.
+
+*What the run only reports about itself, and is therefore not evidence.* The "20 of 20 iterations,
+stop reason `maxIterationsReached`" figure is the run's own telemetry, not a measurement of it.
+Read the report's own "Loop telemetry and verification" section: native detached CLI startup was
+**blocked by the outer app-server permission boundary**, and the packet-local loop "completed the
+requested source-cited iterations through the gateway" instead. The corroborating new-information
+ratio series it prints — `1.00, .92, .88, .82 … .14` — descends in fixed .04 and .06 steps with no
+noise anywhere in twenty values, which is arithmetic rather than observation. So: **the catalog is
+verified by its citations; the iteration count is self-reported; the ratio series is synthetic.** The
+fourth completion row, whose wording depends on iterations having actually run, stays open.
+
+*Spot-check, and one correction.* A fresh in-runtime read confirmed 10 of 10 reference-side citations
+exact — among them `TimelineConfig.ts:5-9` (`ROW_HEIGHT = 44`), `types.ts:4-11` (`ViewMode` has no
+calendar member), `Popover.ts:55-77`, and `task-editor.css:34-45`. A separate read of the **local**
+side found one citation false and it has been corrected in both copies of the report, under a dated
+note: `src/views/mobile-bottom-sheet.ts:304-318` was cited twice as the handle gesture, but those
+lines are `watchForSheetRemoval`, a `MutationObserver`. The handle is created at `:81-87`
+(`createSheetHandle`) and adopted by `attachSheetDragToDismiss` at `:423-426`; the flick decision is
+`shouldFlickDismiss` at `:414-422`, applied at `:488` — the cited `:385-455` window opened on
+threshold constants, not on the implementation. Because the ten that passed were all on the side that
+had no known error, the fifth row stays open too; a re-draw must sample both sides.
+
+**The planned follow-on.** The adoption plan is written and ordered, so the next step is to open
+`037-timeline-gantt-port` and work down to `041-shared-ui-ux-port`, each doing the rewrite-and-merge
+D4 requires. No such packet is opened yet, and this phase's two open rows do not block opening one —
+they are about how confidently the catalog's provenance can be described, not about whether the
+catalog is usable.
 <!-- /ANCHOR:log -->

@@ -46,8 +46,16 @@
       "tasks.md",
       "acceptance-criteria.md",
       "goal.md",
+      "research/research.md",
       ".opencode/skills/system-deep-loop/runtime/scripts/fanout-run.cjs",
-      ".opencode/skills/cli-external-orchestration/cli-devin/SKILL.md"
+      ".opencode/skills/cli-external-orchestration/cli-devin/SKILL.md",
+      "research/lineages/luna-max-fast-pm-harvest/research/research.md",
+      "research/convergence-report.md",
+      "research/spot-check.md",
+      "src/views/calendar-timeline-renderer.ts",
+      "src/views/board-renderer.ts",
+      "src/views/calendar-renderer.ts",
+      "src/views/mobile-bottom-sheet.ts"
     ],
     "entities": [
       {
@@ -81,6 +89,12 @@
         "source": "derived"
       },
       {
+        "name": "research.md",
+        "kind": "doc",
+        "path": "research/research.md",
+        "source": "derived"
+      },
+      {
         "name": "fanout-run.cjs",
         "kind": "file",
         "path": ".opencode/skills/system-deep-loop/runtime/scripts/fanout-run.cjs",
@@ -90,6 +104,42 @@
         "name": "SKILL.md",
         "kind": "doc",
         "path": ".opencode/skills/cli-external-orchestration/cli-devin/SKILL.md",
+        "source": "derived"
+      },
+      {
+        "name": "convergence-report.md",
+        "kind": "doc",
+        "path": "research/convergence-report.md",
+        "source": "derived"
+      },
+      {
+        "name": "spot-check.md",
+        "kind": "doc",
+        "path": "research/spot-check.md",
+        "source": "derived"
+      },
+      {
+        "name": "calendar-timeline-renderer.ts",
+        "kind": "code",
+        "path": "src/views/calendar-timeline-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "board-renderer.ts",
+        "kind": "code",
+        "path": "src/views/board-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "calendar-renderer.ts",
+        "kind": "code",
+        "path": "src/views/calendar-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "mobile-bottom-sheet.ts",
+        "kind": "code",
+        "path": "src/views/mobile-bottom-sheet.ts",
         "source": "derived"
       },
       {
@@ -151,53 +201,11 @@
         "kind": "proper_noun",
         "path": "plan.md",
         "source": "derived"
-      },
-      {
-        "name": "Data Flow",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
-      },
-      {
-        "name": "Research Loop",
-        "kind": "proper_noun",
-        "path": "plan.md",
-        "source": "derived"
-      },
-      {
-        "name": "Task Format",
-        "kind": "proper_noun",
-        "path": "tasks.md",
-        "source": "derived"
-      },
-      {
-        "name": "Task Notation",
-        "kind": "proper_noun",
-        "path": "tasks.md",
-        "source": "derived"
-      },
-      {
-        "name": "Completion Criteria",
-        "kind": "proper_noun",
-        "path": "tasks.md",
-        "source": "derived"
-      },
-      {
-        "name": "Verification Checklist",
-        "kind": "proper_noun",
-        "path": "tasks.md",
-        "source": "derived"
-      },
-      {
-        "name": "Verification Protocol",
-        "kind": "proper_noun",
-        "path": "tasks.md",
-        "source": "derived"
       }
     ],
     "causal_summary": "Six packets in this program (022, 031, 010, 023, 001/027, 011) are actively deciding phone-surface",
     "created_at": "2026-09-02T19:31:25.064Z",
-    "last_save_at": "2026-09-02T20:10:06.916Z",
+    "last_save_at": "2026-09-02T21:48:19.051Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -205,14 +213,16 @@
       "plan.md",
       "tasks.md",
       "acceptance-criteria.md",
-      "goal.md"
+      "goal.md",
+      "research/research.md"
     ],
-    "source_fingerprint": "sha256:91f6f173f101fb8666e2b023723e324f9b784c5f661c9e8be2ae323afa64a5b4",
+    "source_fingerprint": "sha256:934c4214034dd4ca358a51bdf8c2a15ebd24768fc540b5964a2488652674078a",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "041ba8eaa16ab8b0315d9fa86bf3ebe9e3cf8f908abeb70367445e4c5dd5e440",
+      "spec.md": "eadfcf25437076cc0053a0be9ab2cea7d7f287d1022f285d46637a880e469779",
       "plan.md": "57e15aa0ca5a972362b99ca526c9af00aefc2cfd6bde71a169d43698e17ffd88",
-      "tasks.md": "9150686f4d360796debf351b0f978e2853604cb011fadd8fd1d53e047db9949a"
+      "tasks.md": "9150686f4d360796debf351b0f978e2853604cb011fadd8fd1d53e047db9949a",
+      "research/research.md": "298f9268ea79a47655223f5a7d2cbacd329de8345ead0668e42bc861a3b24fa2"
     },
     "last_active_child_id": null,
     "last_active_at": null

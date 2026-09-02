@@ -1,0 +1,22 @@
+{
+  "run_id": "1788379278687-inumo2",
+  "loop_type": "research",
+  "spec_folder": "specs/005-component-surface-system/036-obsidian-pm-ui-harvest",
+  "base_artifact_dir": "specs/005-component-surface-system/036-obsidian-pm-ui-harvest/research",
+  "total_cli_lineages": 1,
+  "orphaned_lineages": [],
+  "total": 1,
+  "succeeded": 1,
+  "failed": 0,
+  "all_failed": false,
+  "gauges": {
+    "lag": 0,
+    "pending": 0,
+    "failed": 0
+  },
+  "failure_classes": {
+    "timeout": 0,
+    "exit": 0,
+    "salvage_miss": 0
+  }
+}

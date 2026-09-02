@@ -12,10 +12,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/036-obsidian-pm-ui-harvest"
-    last_updated_at: "2026-09-02T00:00:00Z"
-    last_updated_by: "port-rescope"
-    recent_action: "Rescoped to a UI/UX port: timeline, board, calendar, subtasks"
-    next_safe_action: "Dispatch the 20-iteration /deep:research loop per plan.md §4"
+    last_updated_at: "2026-09-02T22:55:00Z"
+    last_updated_by: "loop-merged"
+    recent_action: "Loop output merged from worktree; 3 of 5 rows ticked"
+    next_safe_action: "Open 037-timeline-gantt-port from the adoption plan"
     blockers: []
     key_files:
       - "goal.md"
@@ -25,7 +25,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-036"
       parent_session_id: null
-    completion_pct: 0
+    completion_pct: 60
     open_questions: []
     answered_questions: []
 ---
@@ -83,10 +83,17 @@ trap `007` already paid for applies here too: do not run the loop while an agent
 **Level:** 2 (Verification) — `recommend-level.sh --loc 0 --files 3` scores 5/100 at 75% confidence
 (no code changes; this phase produces documents), which is below Level 2's own floor. Level 2 is
 assigned by direct match to the research-shaped sibling `007-architecture-research`'s document
-weight and to the acceptance-criteria/waiver discipline this phase's four criteria need, not by the
+weight and to the acceptance-criteria/waiver discipline this phase's five criteria need, not by the
 script's LOC/files heuristic, which was built for code phases. The script does not recommend a
 higher level, so 007's precedent stands per dispatch instruction.
-**Status:** Draft — nothing has been read from `obsidian-pm-main` by this phase yet.
+**Status:** Catalog delivered, provenance partly unverified. The research loop ran once on
+`cli-codex` `gpt-5.6-luna` (runner exit 0) and its output is merged into this packet at
+`research/research.md` (promoted from the `luna-max-fast-pm-harvest` lineage, whose ledgers stay
+untracked under the repo's ignore rule) — a 65-row module map, an ordered five-packet adoption
+plan, and a do-not-borrow list. Three of `goal.md`'s five completion rows close on it; the two that
+remain turn on how the loop ran, not on what it produced (the 20-iteration count is self-reported
+through a gateway fallback, and the passing spot-check sampled one side of the map only). Not a
+Draft, and not complete.
 **Owner:** unassigned.
 **Lane:** does not take the `styles.css` lane. This phase writes no code and no stylesheet.
 **Opened:** 2026-09-02, Gate 3 option D under the session goal.
