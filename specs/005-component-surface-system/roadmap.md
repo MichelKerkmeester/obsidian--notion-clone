@@ -469,8 +469,14 @@ done | sort -n
 | `032-cover-target-scheme-safety` | **100%** — 4/4 | 0 | 0 | 0 |
 | `033-list-virtualisation` | **83%** — 5/6 | 1 | 1 | 0 |
 | `034-packet-doc-truth` | **100%** — 4/4 | 0 | 0 | 0 |
+| `035-visual-pass-product-defects` | **78%** — 14/18 | 4 | 1 | 3 |
 
-**Program: 225/281 = 80%.** 56 rows open — 30 closable only by the operator's device, 26 still reachable here.
+**Program: 239/299 = 80%.** 60 rows open — 31 closable only by the operator's device, 29 still reachable here.
+
+*The `035` row was added on 2026-09-02, after the 2026-09-01 computation above, and its figure moved
+the same day: 14 of its 18 rows are ticked, derived from its own `goal.md` checklist. The program
+totals are re-added to include it. Every other row still carries its 2026-09-01 value, so re-run the
+command above rather than trusting the mixture of two dates.*
 
 **The two columns after "Open" are the ones worth reading.** A row only the operator can close is not
 work waiting to be done here — it is the program's closing condition, and §4A records why it is

@@ -5,7 +5,7 @@
 Every row below is unticked in its own phase's `goal.md` and nothing in this repository can close
 it. They are gathered here because one list is actionable and thirty files are not.
 
-Derived 2026-09-02: **35 phases**, **5 with nothing left**, **44 rows** waiting on a device.
+Derived 2026-09-02: **36 phases**, **5 with nothing left**, **48 rows** waiting on a device.
 
 The figure beside each phase is a count of its own checkboxes. It is derived, never judged.
 
@@ -142,6 +142,13 @@ The figure beside each phase is a count of its own checkboxes. It is derived, ne
 ## 033-list-virtualisation — 5/6
 
 - [ ] The operator opens their real database without a stall. Only the operator closes this.
+
+## 035-visual-pass-product-defects — 14/18
+
+- [ ] P4 — the affordance moved and the reported mechanism did not survive measurement. The "+" is now a corner control: `position: relative` in a 46px flex heading became `position: absolute` top-right, so the day number no longer shares a row with a 28px button. But the titles are unchanged — 6 of 12 month segments truncated before and 6 after. They are not in the day cell at all; they are grid segments spanning the week, and at 402px a column is 48px wide while "09:00 iCloud" needs 48px of text in 41px of box. The "+" never took their width, so this row stays open rather than being ticked on a change that did not do what the row asks.
+- [ ] P6 — the mechanism is named and the fix is the operator's call. The bar's box is capped at `calc(100vw - 32px)` = 370px while its content runs 416px; no label is truncated — "Copy CSV" measures clientWidth 71 against scrollWidth 71 — it simply sits 55px outside the scroll port, and a capture cannot scroll. So the clip is the scroll container doing its job. A wrapping bar was built and measured green — all five children inside, none truncated, the bar 102px tall — and then reverted: `tools/storybook/verify-placement.mjs:903` pins the opposite behaviour, requiring `scrollWidth > clientWidth`, `overflow-x: auto` and `scrollbar-width: thin`, and it went red. Two shipped decisions contradict; this one is not 035's to overturn.
+- [ ] P15 — the tag carries the gray status tokens, and the 3:1 threshold is not met by any tag. Was: no fill at all — 1.00:1 — and a 20%-currentColor edge at 1.71:1 in dark. Now: fill 1.55:1 and edge 2.64:1, which is exactly where its registered siblings sit (design 1.37/2.27, personal 1.57/2.65). In light it moves 1.00 → 1.23 beside siblings at 1.22. So the tag is no longer the odd one out, and no tag in the corpus reaches 3:1 — the threshold indicts the shared badge design rather than this one tag, which is a question for the operator and not a repair to make here.
+- [ ] The operator confirms the recaptures on device.
 
 ## Nothing left to check
 

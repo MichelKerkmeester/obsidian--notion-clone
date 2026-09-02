@@ -73,7 +73,8 @@
     "005-component-surface-system/031-sheet-lifecycle-ownership",
     "005-component-surface-system/032-cover-target-scheme-safety",
     "005-component-surface-system/033-list-virtualisation",
-    "005-component-surface-system/034-packet-doc-truth"
+    "005-component-surface-system/034-packet-doc-truth",
+    "005-component-surface-system/035-visual-pass-product-defects"
   ],
   "manual": {
     "depends_on": [],
@@ -276,7 +277,7 @@
     ],
     "causal_summary": "Phase parent for the program that gives floating surfaces, sheets, checkboxes and content rows one architecture, one placement authority, and acceptance criteria measured where users actually see them.",
     "created_at": "2026-08-29T12:53:52.104Z",
-    "last_save_at": "2026-09-02T15:08:11.724Z",
+    "last_save_at": "2026-09-02T16:26:52.294Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -284,10 +285,10 @@
       "goal.md",
       "handover.md"
     ],
-    "source_fingerprint": "sha256:e9880e45b2637c10d95b248c1e666e84477cd3c0e8bb342d05ac44425defc8f1",
+    "source_fingerprint": "sha256:af23664a36b476b4da69874dcb954dc08e3451879b2f675fcd5240f45a372be2",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
-      "spec.md": "937e88a2a837b990002c7e2193ceeab83cf5c9914cef351c0edacbea91b24d60",
+      "spec.md": "d2da533033d1750cc6e3ce1bf9ccaab84b9221990f5e11ae06ee3556045dd0a0",
       "handover.md": "063d74ea82160575d7578079e2388464971094f450324ff74422ca59f4200d08"
     },
     "last_active_child_id": "005-component-surface-system/006-record-open-target",

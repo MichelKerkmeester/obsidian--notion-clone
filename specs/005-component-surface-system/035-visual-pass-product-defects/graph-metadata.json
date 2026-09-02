@@ -1,0 +1,225 @@
+{
+  "schema_version": 1,
+  "packet_id": "005-component-surface-system/035-visual-pass-product-defects",
+  "spec_folder": "005-component-surface-system/035-visual-pass-product-defects",
+  "parent_id": "005-component-surface-system",
+  "children_ids": [],
+  "manual": {
+    "depends_on": [],
+    "supersedes": [],
+    "related_to": []
+  },
+  "derived": {
+    "trigger_phrases": [
+      "visual pass defects",
+      "035 product defects",
+      "P1 P17 visual pass",
+      "035 visual pass",
+      "035 plan",
+      "035 tasks",
+      "035 acceptance criteria",
+      "035 goal",
+      "visual pass defects goal",
+      "035 implementation summary",
+      "visual pass defects summary"
+    ],
+    "key_topics": [
+      "visual",
+      "pass",
+      "defects",
+      "product",
+      "p17",
+      "plan",
+      "tasks",
+      "acceptance",
+      "criteria",
+      "goal",
+      "implementation",
+      "summary"
+    ],
+    "importance_tier": "important",
+    "status": "in_progress",
+    "key_files": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "acceptance-criteria.md",
+      "goal.md",
+      "implementation-summary.md",
+      "src/views/table-footer-renderer.ts",
+      "src/views/table-footer-renderer.test.ts",
+      "tools/gate.mjs",
+      "tools/live/touch-targets-baseline.json",
+      "tools/lane/css-lane.json"
+    ],
+    "entities": [
+      {
+        "name": "spec.md",
+        "kind": "doc",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "plan.md",
+        "kind": "doc",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "tasks.md",
+        "kind": "doc",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "acceptance-criteria.md",
+        "kind": "doc",
+        "path": "acceptance-criteria.md",
+        "source": "derived"
+      },
+      {
+        "name": "goal.md",
+        "kind": "doc",
+        "path": "goal.md",
+        "source": "derived"
+      },
+      {
+        "name": "implementation-summary.md",
+        "kind": "doc",
+        "path": "implementation-summary.md",
+        "source": "derived"
+      },
+      {
+        "name": "table-footer-renderer.ts",
+        "kind": "code",
+        "path": "src/views/table-footer-renderer.ts",
+        "source": "derived"
+      },
+      {
+        "name": "table-footer-renderer.test.ts",
+        "kind": "test",
+        "path": "src/views/table-footer-renderer.test.ts",
+        "source": "derived"
+      },
+      {
+        "name": "gate.mjs",
+        "kind": "file",
+        "path": "tools/gate.mjs",
+        "source": "derived"
+      },
+      {
+        "name": "touch-targets-baseline.json",
+        "kind": "config",
+        "path": "tools/live/touch-targets-baseline.json",
+        "source": "derived"
+      },
+      {
+        "name": "css-lane.json",
+        "kind": "config",
+        "path": "tools/lane/css-lane.json",
+        "source": "derived"
+      },
+      {
+        "name": "Feature Specification",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Visual Pass Product Defects",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Spec Folder",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Parent Spec",
+        "kind": "proper_noun",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "what",
+        "kind": "key_phrase",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "its",
+        "kind": "key_phrase",
+        "path": "spec.md",
+        "source": "derived"
+      },
+      {
+        "name": "Implementation Plan",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Task Checklist",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Execution Rules",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Status Reporting Format Task",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "Blocked Task Protocol Halt",
+        "kind": "proper_noun",
+        "path": "plan.md",
+        "source": "derived"
+      },
+      {
+        "name": "an",
+        "kind": "key_phrase",
+        "path": "tasks.md",
+        "source": "derived"
+      },
+      {
+        "name": "the",
+        "kind": "key_phrase",
+        "path": "tasks.md",
+        "source": "derived"
+      }
+    ],
+    "causal_summary": "The seventeen product defects the 2026-09-02 visual pass read on real surfaces, which 020's D5 forbids 020 from fixing.",
+    "created_at": "2026-09-02T15:26:34.871Z",
+    "last_save_at": "2026-09-02T16:26:51.561Z",
+    "save_lineage": "graph_only",
+    "last_accessed_at": null,
+    "source_docs": [
+      "spec.md",
+      "plan.md",
+      "tasks.md",
+      "acceptance-criteria.md",
+      "goal.md",
+      "implementation-summary.md"
+    ],
+    "source_fingerprint": "sha256:5f5d6f2bcdbab66ef295a943cab396047c7262b199607f33461fa4d2e09e3ccb",
+    "source_fingerprint_docset": 3,
+    "source_doc_hashes": {
+      "spec.md": "a07c23829387d9c439781b13031e7c01208730c216c0a7c1d5faef73d2c77e18",
+      "plan.md": "8d8fea90961ffb5055bf236c73047a69ee8367c8664c00dea1aa2d994db9b032",
+      "tasks.md": "c9c42e0865e383bb93ca03eeaa7f9c849b19a1c18708cf9a65c7bc505bcc607a",
+      "implementation-summary.md": "f8a30c5c19dbc3bd0a9d7c56bf3e1de16e3021f934e25a3cd683763693717088"
+    },
+    "last_active_child_id": null,
+    "last_active_at": null
+  }
+}

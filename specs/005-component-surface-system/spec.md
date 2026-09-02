@@ -147,10 +147,12 @@ are counted separately.
 | report-driven | `018-select-column-affordance-fit` | Room for the reorder button beside the row checkbox | Shipped, unverified |
 | report-driven | `019-card-field-value-formatting` | A number rendering the same in a card as in a cell | Shipped, unverified |
 | report-driven | `029-numeric-coercion-parity` | A row reading a numeric column whole rather than parsing its leading digits | Shipped, unverified; captures owed |
+| report-driven | `035-visual-pass-product-defects` | The seventeen product defects the 2026-09-02 visual pass read, which `020`'s D5 forbids `020` from fixing | In progress — 14 of 17 fixed and read on a recapture |
 
-**Rows for `020`-`028` are missing from this table.** Those folders exist and this map stops at
-`019`. The gap is recorded rather than filled by whoever noticed it, since each row carries a status
-claim its own phase owns.
+**Rows for `020`-`028` and `030`-`034` are missing from this table.** Those folders exist and this
+map otherwise stops at `029`. The gap is recorded rather than filled by whoever noticed it, since
+each row carries a status claim its own phase owns. `035` is here because the phase that opened it
+wrote its own row; the same is owed by the other fourteen and is theirs to write.
 
 ### Phase Transition Rules
 

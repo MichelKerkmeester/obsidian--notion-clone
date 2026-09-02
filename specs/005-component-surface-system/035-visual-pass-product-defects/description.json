@@ -1,0 +1,25 @@
+{
+  "specFolder": "005-component-surface-system/035-visual-pass-product-defects",
+  "description": "The seventeen product defects the 2026-09-02 visual pass read, which 020 D5 forbids 020 from fixing",
+  "keywords": [
+    "visual",
+    "pass",
+    "product",
+    "defects",
+    "recapture",
+    "styles",
+    "contrast",
+    "touch",
+    "targets",
+    "renderer"
+  ],
+  "lastUpdated": "2026-09-02T15:00:00Z",
+  "specId": "035",
+  "folderSlug": "visual-pass-product-defects",
+  "parentChain": [
+    "005-component-surface-system"
+  ],
+  "memorySequence": 0,
+  "memoryNameHistory": [],
+  "level": "2"
+}
