@@ -14,9 +14,9 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-08-30T10:45:00Z"
-    last_updated_by: "roadmap-reconciliation"
-    recent_action: "Scope, phase map and execution-order claims reconciled against the working tree"
+    last_updated_at: "2026-09-02T23:30:00Z"
+    last_updated_by: "parent-basis-reconciled"
+    recent_action: "Reconciled completion_pct basis to 43 across spec/goal/handover"
     next_safe_action: "Answer the scope-exclusion question in section 2 that phase 019 crosses"
     blockers:
       - "Report 1 (sheet drag) open on the shipped build; 004 state contested; gate red at 12/13"
@@ -28,7 +28,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-parent"
       parent_session_id: null
-    completion_pct: 50
+    completion_pct: 43
     open_questions:
       - "Does the out-of-scope exclusion on output number format cover card fields, or only the formula editor"
       - "Does report-driven scheduling replace the declared 009-first execution order"
@@ -61,6 +61,11 @@ block.
 
 This program replaces per-instance patching with one contract, and replaces mechanism-based checks
 with measurements taken where the user is standing.
+
+**`completion_pct: 43`, reconciled 2026-09-02.** `roadmap.md` §3.2 binds the figure to ticked ÷
+total over `goal.md`'s own completion-criteria checklist — 3 of the 7 §3 rows (`D13`) — not the
+operator-reports ledger this field previously carried at 50; that reading is dated history, not
+the current basis.
 
 ---
 

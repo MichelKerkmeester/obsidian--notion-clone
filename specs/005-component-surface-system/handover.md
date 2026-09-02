@@ -10,9 +10,9 @@ contextType: "handover"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-08-31T08:30:00Z"
-    last_updated_by: "timeline-freeze-diagnosis"
-    recent_action: "Deep review ran and returned FAIL; its fifteen findings are now recorded here"
+    last_updated_at: "2026-09-02T23:30:00Z"
+    last_updated_by: "parent-basis-reconciled"
+    recent_action: "Reconciled completion_pct basis to 43 across spec/goal/handover"
     next_safe_action: "031 T1: build the producer-parity check and observe it failing on the panel families"
     blockers:
       - "The list needs virtualisation; at the operator shape it blocks 2.0-4.9s and the shape is LINEAR"
@@ -26,7 +26,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-handover"
       parent_session_id: null
-    completion_pct: 50
+    completion_pct: 43
     open_questions: []
     answered_questions:
       - "spec.md vs goal.md completion_pct: reconciled, one derived figure per phase. D13, roadmap 3.2"
@@ -240,6 +240,11 @@ The decision, its three reasons and the derivation rule that replaces judgement 
 and the one-line record as **D13** in `goal.md`. Applied where the tree settles it — 020, 022, 025
 and 026. **Not applied to 010-019**, whose figures now need one re-derivation each against their own
 `goal.md` checklists; that is those phases' work, and the command is in §3.2.
+
+**Applied to this parent packet itself, 2026-09-02: `completion_pct: 43`.** The same §3.2 rule run
+against this packet's own `goal.md` checklist gives 3 of the 7 §3 COMPLETION CRITERIA rows ticked —
+the figure this field, `spec.md` and `goal.md` now all carry. It had read 50, on the older
+operator-reports ledger; that reading is dated history, not the current basis.
 <!-- /ANCHOR:when-to-use -->
 
 ---

@@ -11,8 +11,8 @@ _memory:
   continuity:
     packet_pointer: "005-component-surface-system/022-selection-bar-keyboard-docking"
     last_updated_at: "2026-09-02T23:55:00Z"
-    last_updated_by: "in-runtime-verifier"
-    recent_action: "The P6 wrap landed; criterion 4 records stale scroll evidence"
+    last_updated_by: "scroll-lane-retired"
+    recent_action: "D2 and criterion 4 marked superseded by the wrap decision"
     next_safe_action: "Operator opens the keyboard on device and confirms the bar is reachable"
     blockers: []
     key_files:
@@ -53,7 +53,7 @@ one: the user believes the feature exists.
 | ID | Decision |
 |----|----------|
 | D1 | The plugin publishes its own inset; the bar consumes that. The host's `--keyboard-height` is one input, never the source. **Amended**, see the log. |
-| D2 | Scroll rather than truncate. A shortened label is a control nobody can identify. |
+| D2 | ~~Scroll rather than truncate. A shortened label is a control nobody can identify.~~ **Superseded 2026-09-02:** the bar wraps its actions instead of scrolling them; see the wrap decision in the log and `../035-visual-pass-product-defects/goal.md` P6. |
 | D3 | Raise the box, not reduce the content. 44px is the thumb floor this surface already holds. |
 | D4 | The embed inherits nothing. It has no keyboard to clear. |
 <!-- /ANCHOR:directive -->
@@ -84,8 +84,11 @@ it. Desktop is out of scope: it has room and no keyboard.
       keyboard opens and closes.
 - [x] The bar's content fits its box at phone width. Was **36px inside 28px**, now **46px in 46px**. Shrinking the box shows 47px and 45px passing and 30px failing, so the equality is a fit
       rather than an artefact.
-- [x] Every action stays reachable, and an overflowing bar says so. **scrollWidth 558px against
-      clientWidth 356px**, `overflow-x: auto`, visible thin scrollbar, **44px** minimum action height.
+- [x] Every action stays reachable, and an overflowing bar says so. ~~**scrollWidth 558px against
+      clientWidth 356px**, `overflow-x: auto`, visible thin scrollbar~~ **Superseded 2026-09-02:** the
+      bar wraps instead of scrolling. Now every action's right edge stays inside the bar's client box:
+      observed red at **maxActionRight 567px past a 373px port**, green at **341px inside 373px**,
+      **44px** minimum action height unchanged.
 - [x] The embedded bar is untouched in both keyboard states. **828px** standalone and embedded,
       before and after a keyboard opens.
 - [x] The bar is photographed for real, not as an empty region.
@@ -140,7 +143,7 @@ the defect became visible second.
 | Plugin-owned inset published and consumed | Shipped, measured | Host silent: 828px → 513px |
 | Two controls on the inset | Observed | Revert reds the host-silent check only; listener release caught |
 | Content fits its box | Shipped, measured | 36px-in-28px → 46px-in-46px; 30px fails |
-| Overflow says so | Shipped, measured | 558px scroll against 356px client, 44px action height |
+| Overflow says so | Shipped, measured | Wraps instead of scrolling; 567px past 373px port red, 341px inside 373px green, 44px action height |
 | Embed untouched | Measured | 828px in both states |
 | Operator confirmation | Open | Only the device closes it |
 
@@ -185,10 +188,10 @@ the bar's client box and the content height inside that box. It was observed red
 567px against clientRight 373px** with the stylesheet stashed, and green at **341px inside 373px**
 with it restored; the bar's content box goes **46px → 96px**. `npm run gate` is PASS at 25 green.
 
-**This phase's fourth criterion now describes behaviour the tree no longer has**, and it is left
-ticked rather than corrected: it reads `scrollWidth 558px against clientWidth 356px`, `overflow-x:
-auto` and a visible thin scrollbar, and none of those is true after the wrap. The reachability it
-asserts still holds — by wrapping instead of scrolling — and the 44px floor is unchanged. Retiring
-or rewording the row amends D2's shipped decision, which is the operator's to take, not this
-runtime's. Recorded here so the stale evidence is visible rather than assumed current.
+**2026-09-02: the operator corrected the fourth criterion and D2.** The row and the decision it
+depended on now read superseded-and-replaced rather than stale-but-ticked: the struck scroll-lane
+text stays visible, D2 is marked superseded pointing at this wrap decision and `035`, and the row
+stays ticked because the new observable — every action's right edge inside the bar's client box —
+is what it now asserts, and that is true on disk (`maxActionRight` 567px red past a 373px port,
+341px green inside it). The 44px floor is unchanged.
 <!-- /ANCHOR:log -->

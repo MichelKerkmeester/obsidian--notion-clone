@@ -58,12 +58,18 @@ One rule keyed to a phone and guarded against the embed, and one publisher that 
 ```css
 .is-phone .note-database-container:not(.note-database-embed) .db-selection-status-bar {
   bottom: max(16px, env(safe-area-inset-bottom), var(--db-keyboard-inset, 0px));
-  height: 48px;
+  height: auto;
+  min-height: 48px;
   max-width: calc(100vw - 32px);
-  overflow-x: auto;
-  scrollbar-width: thin;
+  flex-wrap: wrap;
+  overflow-x: hidden;
+  row-gap: var(--db-space-4);
 }
 ```
+
+**Superseded 2026-09-02:** the block above showed `height: 48px; overflow-x: auto; scrollbar-width:
+thin` — the scroll lane. The `035` packet replaced it with the wrapping rule shown here, at
+`styles.css:2511-2527`; the 44px action floor is unchanged. See `goal.md` D2 and log.
 
 It answers both halves of the operator's report.
 
@@ -84,8 +90,9 @@ zero every time. It works; it had simply never been asked.
 
 **The bar's content now fits.** The box was 30px with `box-sizing: border-box` and a 1px border on
 each edge, leaving 28px for 36px of content, so labels wrapped and were cut. It is 48px now. Actions
-carry a 44px minimum height, and the bar scrolls horizontally with a visible thin scrollbar rather
-than running its right-hand actions silently off the screen.
+carry a 44px minimum height, and the bar wraps its actions onto additional rows — ~~scrolls
+horizontally with a visible thin scrollbar~~ **superseded 2026-09-02** — rather than running its
+right-hand actions silently off the screen.
 <!-- /ANCHOR:what-built -->
 
 ---
@@ -114,7 +121,7 @@ bar that had no reason to move.
 | Write the container, not `documentElement` | `--keyboard-height` is the host's namespace and a plugin has no business writing beside it, where one view's measurement would sit in front of every other view and the host's own chrome. Custom properties inherit through the DOM rather than through layout, so the `position: fixed` bar still reads a value set on its container |
 | Scope the subscription to the bar, not the view | The variable is only needed while a bar exists. Taken when one is created and released when the selection clears, the common case holds no viewport listener at all — strictly better than one per open view, and it is the path the harness can drive end to end |
 | Reuse `keyboardInset()` rather than write a second measurement | Two answers to "how much is the keyboard covering" would drift, and the sheet and the bar would disagree for the length of the keyboard animation. One function, two consumers |
-| Scroll the bar rather than shorten its labels | Copy TSV and Copy Markdown are the only route to those actions. A truncated label is a control the user cannot identify; a scrollable lane keeps every action reachable and says so with a visible scrollbar |
+| ~~Scroll the bar rather than shorten its labels~~ **Superseded 2026-09-02: wrap instead of scroll** | Copy TSV and Copy Markdown are the only route to those actions. A truncated label is a control the user cannot identify; a scrollable lane kept every action reachable and said so with a visible scrollbar. The `035` packet replaced it with wrapping — every action's right edge stays inside the bar's client box instead |
 | Raise the box to 48px rather than reduce the content | The content was already the minimum that names each action, and 44px is the thumb floor the rest of this phone surface holds |
 | Leave the desktop bar alone | It has room and there is no keyboard. The rule is keyed to `.is-phone` for exactly that reason |
 <!-- /ANCHOR:decisions -->
@@ -139,7 +146,7 @@ cannot pass on a value the harness supplied.
 | Bar clears the keyboard the host reports | bottom 513px, keyboard covers 513..844 |
 | Bar returns to its floor when the keyboard closes | 828px, matching its resting position |
 | Content fits its border box | 46px in 46px |
-| Overflow is deliberate and visible | scrollWidth 558px, clientWidth 356px, `overflow-x: auto` |
+| Overflow is deliberate and visible | ~~scrollWidth 558px, clientWidth 356px, `overflow-x: auto`~~ **Superseded 2026-09-02:** wraps instead; maxActionRight 567px past a 373px port (red), 341px inside 373px (green) |
 | Action hit height | 44px minimum |
 | Bar fully visible above the keyboard | occupies 465..513px |
 | Embedded bar keeps the viewport floor | 828px standalone and embedded |

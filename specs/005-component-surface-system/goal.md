@@ -10,9 +10,9 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-02T22:50:00Z"
-    last_updated_by: "delegation-policy-v2"
-    recent_action: "D14 revised: devin dangerous, then luna xhigh/max fast"
+    last_updated_at: "2026-09-02T23:30:00Z"
+    last_updated_by: "parent-basis-reconciled"
+    recent_action: "Reconciled completion_pct basis to 43 across spec/goal/handover"
     next_safe_action: "The operator runs the deferred device pass on the installed 1.3.9 build"
     blockers:
       - "Every fix is measured on a bench; 1 of 27 reports is confirmed on the operator device"
@@ -27,7 +27,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-parent"
       parent_session_id: null
-    completion_pct: 50
+    completion_pct: 43
     open_questions:
       - "Does report-driven scheduling replace the declared 009-first order"
     answered_questions:
@@ -118,11 +118,23 @@ resolve them silently.
 - [x] A gate check constructs a production renderer for **every** view. One lane does now, for
       List, Table, Board, Gallery, Calendar and Timeline — **6 of 22**, a ratchet, twelve
       scenarios driven by both action bags. Every view named in an operator report is asserted.
-- [ ] `SURFACE_PHASE=<phase> npm run gate` exits 0, read from `$?`, not a pipe.
+- [x] `SURFACE_PHASE=<phase> npm run gate` exits 0, read from `$?`, not a pipe. Was red on
+      2026-08-29: the gate was 13 green, reported red by an external lane that could not reach
+      Chrome. `SURFACE_PHASE=035-visual-pass-product-defects npm run gate`, `$?` read directly,
+      not through a pipe: today 25 green, exit 0.
 - [ ] `npm run replay` re-asserts every landed result against its recorded pre-fix number.
+      `npm run replay` passes today — 8 of 8 held, exit 0 — but observed red: N/A — no earlier
+      count recorded. `tools/live/replay.json`'s history carries no run where a claim's `held` was
+      `false`, and the parent log records no earlier held-count either, so this tick has no red to
+      cite. Left unticked: a tick needs its red.
 - [ ] No criterion's green depends on a value the harness supplies that a device would not — a
       pinned variable, a stubbed action, a hand-written mount, or an absent host stylesheet.
-- [ ] `validate.sh <this folder> --strict` reports the parent at Errors: 0.
+- [x] `validate.sh <this folder> --strict` reports the parent at Errors: 0. Was red: 3
+      `SPECDOC_FRONTMATTER_004` errors (`spec.md`, `handover.md`, `goal.md`) until the shared kit
+      accepted a single-segment `packet_pointer` today (Public commit `a3e3fe774e`, packet
+      `specs/system-speckit/050-single-segment-packet-pointer`). `validate.sh
+      specs/005-component-surface-system --strict`, first `RESULT:` line `PASSED`,
+      `grep -c SPECDOC_FRONTMATTER_004` now 0.
 <!-- /ANCHOR:completion -->
 
 ---
@@ -253,6 +265,22 @@ confirmed**. The figure stays at 50 because `roadmap.md` §3.2 requires one numb
 `goal.md` and `handover.md`, and moving it in this file alone would recreate the divergence that
 rule exists to abolish — re-deriving it is a change to three documents and is owed. Recorded
 2026-09-02.
+
+**Re-derived again, 2026-09-02, on a different basis: `completion_pct: 43`, 3 of the 7 §3
+COMPLETION CRITERIA rows ticked (rows 3, 4 and 7).** This is the checklist `D13` names as the
+per-phase basis, not the reports ledger the paragraph above used — the two bases disagree and
+only one can be `completion_pct`. Applying the checklist basis here recreates the exact
+`spec.md`/`handover.md` divergence the paragraph above declined to cause, because this dispatch's
+write scope is `goal.md` alone; those two files still carry 50 on the reports basis. Flagged, not
+silently reconciled — `roadmap.md` §3.2 needs one basis picked across all three documents, and
+that choice is the operator's.
+
+**Resolved 2026-09-02: the checklist basis binds.** `roadmap.md` §3.2 states the rule as
+`completion_pct` = ticked ÷ total over the phase's own `goal.md` completion-criteria checklist,
+rounded to a whole number, and `D13` names the same source as never judged, never two — neither
+names the reports ledger. `completion_pct` is **43** in every continuity block of this packet; the
+50-on-the-reports-basis paragraph above is dated history, superseded by this line, not the current
+figure.
 
 ### Deviations and findings
 
