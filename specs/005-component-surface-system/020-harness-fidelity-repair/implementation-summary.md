@@ -364,4 +364,18 @@ the failure shape this phase existed to remove. `022` withdrew its AC-1 on the s
 acceptance row is false as worded; the phase's own `100` was. It now reads `80`, and
 `acceptance-criteria.md` §4 carries the audit.
 
+**2026-09-02: the base-import modal's label input on a phone, and what the fix costs.** At 402px the
+label input measured 36px, against 670px on a desktop — about two characters of the name the modal
+exists to edit, with no horizontal scroll to reach the rest. Five columns do not fit a phone: key,
+files and the include checkbox hold fixed widths and the type control holds a min-width, so the
+input, the only box here with no content minimum, absorbed the entire shortfall. The key column is
+the one dropped at `.is-phone`, because it is the only column that repeats something already on
+screen — the label beside it is derived from it — where the file count is the evidence for the
+include decision the checkbox makes, and dropping that would remove the reason for the choice rather
+than a duplicate of it. Measured after: 155px, with the desktop unchanged. The cost is real and
+bounded: on a phone, two properties whose labels have been edited to look alike can no longer be
+told apart by key. The css lane was acquired and released around the edit with both
+`panel-base-import-modal-mobile-*` captures read per image; the two timeline captures that also
+moved are the known churn set and carry no rule from this edit.
+
 <!-- /ANCHOR:limitations -->

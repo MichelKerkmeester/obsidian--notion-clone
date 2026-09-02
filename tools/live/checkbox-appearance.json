@@ -1,17 +1,17 @@
 {
-  "measuredAt": "2026-09-01T13:39:46.107Z",
+  "measuredAt": "2026-09-01T15:50:29.484Z",
   "inputs": {
-    "styles.css": "9a84a91b5cf1",
+    "styles.css": "92022f8399f1",
     "tools/live/checkbox-appearance.mjs": "3b49f9254b92",
     "tools/screenshots/scenarios.mjs": "1395f2dacbfd"
   },
   "totals": {
-    "checkboxes": 250,
-    "fixtures": 60,
-    "owned": 250,
+    "checkboxes": 258,
+    "fixtures": 61,
+    "owned": 258,
     "appearanceOwnedByAncestor": 0,
-    "appearanceSelfOwned": 250,
-    "tokenDependent": 240,
+    "appearanceSelfOwned": 258,
+    "tokenDependent": 248,
     "platformBox": 0,
     "distinctShapes": 4,
     "stateFamilies": 4,
@@ -21,13 +21,13 @@
     "mountGroups": 7,
     "mountShapeSplits": 0,
     "hostProfilesApplied": 3,
-    "boxesUnderHostProfiles": 250,
+    "boxesUnderHostProfiles": 258,
     "movedUnderAHostProfile": 0,
     "worstBorderContrast": 3.09,
     "belowNonTextMinimum": 0
   },
   "shapes": {
-    "16x16 r=4px": 168,
+    "16x16 r=4px": 176,
     "18x18 r=4px": 20,
     "28x28 r=4px": 52,
     "34x18 r=9999px": 10
@@ -1396,6 +1396,190 @@
     {
       "scenario": "gallery-view",
       "index": 3,
+      "classes": [
+        "db-checkbox",
+        "db-checkbox-row",
+        "db-gallery-card-checkbox"
+      ],
+      "chain": [
+        "note-database-container",
+        "db-gallery",
+        "db-gallery-card",
+        "db-gallery-card-controls"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 16,
+        "height": 16
+      },
+      "appearanceOwnedBy": null,
+      "tokensFrom": "note-database-container"
+    },
+    {
+      "scenario": "gallery-view",
+      "index": 4,
+      "classes": [
+        "db-checkbox",
+        "db-checkbox-row",
+        "db-gallery-card-checkbox"
+      ],
+      "chain": [
+        "note-database-container",
+        "db-gallery",
+        "db-gallery-card",
+        "db-gallery-card-controls"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 16,
+        "height": 16
+      },
+      "appearanceOwnedBy": null,
+      "tokensFrom": "note-database-container"
+    },
+    {
+      "scenario": "gallery-view",
+      "index": 5,
+      "classes": [
+        "db-checkbox",
+        "db-checkbox-row",
+        "db-gallery-card-checkbox"
+      ],
+      "chain": [
+        "note-database-container",
+        "db-gallery",
+        "db-gallery-card",
+        "db-gallery-card-controls"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 16,
+        "height": 16
+      },
+      "appearanceOwnedBy": null,
+      "tokensFrom": "note-database-container"
+    },
+    {
+      "scenario": "gallery-view",
+      "index": 6,
+      "classes": [
+        "db-checkbox",
+        "db-checkbox-row",
+        "db-gallery-card-checkbox"
+      ],
+      "chain": [
+        "note-database-container",
+        "db-gallery",
+        "db-gallery-card",
+        "db-gallery-card-controls"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 16,
+        "height": 16
+      },
+      "appearanceOwnedBy": null,
+      "tokensFrom": "note-database-container"
+    },
+    {
+      "scenario": "gallery-view",
+      "index": 7,
+      "classes": [
+        "db-checkbox",
+        "db-checkbox-row",
+        "db-gallery-card-checkbox"
+      ],
+      "chain": [
+        "note-database-container",
+        "db-gallery",
+        "db-gallery-card",
+        "db-gallery-card-controls"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 16,
+        "height": 16
+      },
+      "appearanceOwnedBy": null,
+      "tokensFrom": "note-database-container"
+    },
+    {
+      "scenario": "gallery-view",
+      "index": 8,
+      "classes": [
+        "db-checkbox",
+        "db-checkbox-row",
+        "db-gallery-card-checkbox"
+      ],
+      "chain": [
+        "note-database-container",
+        "db-gallery",
+        "db-gallery-card",
+        "db-gallery-card-controls"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 16,
+        "height": 16
+      },
+      "appearanceOwnedBy": null,
+      "tokensFrom": "note-database-container"
+    },
+    {
+      "scenario": "gallery-view",
+      "index": 9,
+      "classes": [
+        "db-checkbox",
+        "db-checkbox-row",
+        "db-gallery-card-checkbox"
+      ],
+      "chain": [
+        "note-database-container",
+        "db-gallery",
+        "db-gallery-card",
+        "db-gallery-card-controls"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 16,
+        "height": 16
+      },
+      "appearanceOwnedBy": null,
+      "tokensFrom": "note-database-container"
+    },
+    {
+      "scenario": "gallery-view",
+      "index": 10,
+      "classes": [
+        "db-checkbox",
+        "db-checkbox-row",
+        "db-gallery-card-checkbox"
+      ],
+      "chain": [
+        "note-database-container",
+        "db-gallery",
+        "db-gallery-card",
+        "db-gallery-card-controls"
+      ],
+      "measured": {
+        "appearance": "none",
+        "radius": "4px",
+        "width": 16,
+        "height": 16
+      },
+      "appearanceOwnedBy": null,
+      "tokensFrom": "note-database-container"
+    },
+    {
+      "scenario": "gallery-view",
+      "index": 11,
       "classes": [
         "db-checkbox",
         "db-checkbox-row",

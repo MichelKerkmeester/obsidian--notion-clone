@@ -98,7 +98,7 @@ The figure beside each phase is a count of its own checkboxes. It is derived, ne
 
 - [ ] The operator sees the same euro figure on a card and in the table row behind it.
 
-## 020-harness-fidelity-repair — 15/16
+## 020-harness-fidelity-repair — 16/17
 
 - [ ] The operator signs off the two new modal fixtures, per image.
 

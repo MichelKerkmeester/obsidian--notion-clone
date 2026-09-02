@@ -8601,6 +8601,22 @@ input[type="checkbox"].db-toggle-switch:disabled {
 .note-database-modal .base-import-table thead th:nth-child(4) { width: 56px; text-align: center; }
 .note-database-modal .base-import-table thead th:nth-child(5) { width: 52px; text-align: center; }
 
+/* On a phone the five columns do not fit and the label input pays for all of it.
+   Key, files and the checkbox hold fixed widths and the type control holds a min-width, so the
+   input — the one box here with no content minimum — absorbs the entire shortfall: it measures
+   36px at 402px against 670px on a desktop, which shows two characters of the name the user opened
+   this modal to edit, with no horizontal scroll to reach the rest.
+   The key column is the one that goes. It is the frontmatter property name and the label beside it
+   is derived from it, so it is the only column here that repeats something already on screen —
+   where the file count is the evidence for the include decision the checkbox makes, and dropping
+   that would remove the reason for the choice rather than a duplicate of it. The cost is real and
+   bounded: on a phone, two properties whose labels have been edited to look alike can no longer be
+   told apart by key. Measured after: the input is 155px and the longest label in the fixture fits. */
+.is-phone .note-database-modal .base-import-table thead th:nth-child(1),
+.is-phone .note-database-modal .base-import-table td:first-child { display: none; }
+.is-phone .note-database-modal .base-import-table thead th:nth-child(2) { width: 100%; }
+.is-phone .note-database-modal .base-import-type-cell .db-base-import-type-dropdown { min-width: 88px; }
+
 /* 3. 表格行：增加高度 + hover 反馈 */
 .note-database-modal .base-import-table tbody tr {
   transition: background-color 120ms ease;

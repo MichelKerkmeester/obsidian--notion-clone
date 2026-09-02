@@ -1,7 +1,7 @@
 {
-  "measuredAt": "2026-09-01T13:41:11.119Z",
+  "measuredAt": "2026-09-01T15:51:43.785Z",
   "inputs": {
-    "styles.css": "9a84a91b5cf1",
+    "styles.css": "92022f8399f1",
     "tools/live/view-census.mjs": "2ce0c7f439a4",
     "tools/screenshots/scenarios.mjs": "1395f2dacbfd"
   },
@@ -360,10 +360,10 @@
     }
   ],
   "totals": {
-    "fixtures": 60,
-    "escaping": 567,
-    "growing": 259,
-    "scrolling": 308,
+    "fixtures": 61,
+    "escaping": 577,
+    "growing": 264,
+    "scrolling": 313,
     "rhythmGroups": 20,
     "ragged": 0,
     "probeBlind": 0
@@ -540,7 +540,7 @@
       "kind": "rhythm",
       "cls": "db-list-row",
       "count": 24,
-      "mean": 70.8,
+      "mean": 52.9,
       "sd": 0,
       "distinct": 1
     },
@@ -793,6 +793,61 @@
       "cls": "db-board-column-header",
       "parentCls": "db-board-column",
       "by": 8,
+      "scrolls": true,
+      "pastHeader": 0
+    },
+    {
+      "width": 320,
+      "fixture": "card-cover-states",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-board-column",
+      "parentCls": "note-database-container",
+      "by": 32,
+      "scrolls": true,
+      "pastHeader": 0
+    },
+    {
+      "width": 320,
+      "fixture": "card-cover-states",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-board-card-cover.is-empty",
+      "parentCls": "db-board-card",
+      "by": 8,
+      "scrolls": true,
+      "pastHeader": 0
+    },
+    {
+      "width": 320,
+      "fixture": "card-cover-states",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-gallery",
+      "parentCls": "note-database-container",
+      "by": 50,
+      "scrolls": true,
+      "pastHeader": 0
+    },
+    {
+      "width": 320,
+      "fixture": "card-cover-states",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-gallery-field",
+      "parentCls": "db-gallery-card",
+      "by": 4,
+      "scrolls": true,
+      "pastHeader": 0
+    },
+    {
+      "width": 320,
+      "fixture": "card-cover-states",
+      "kind": "escaping",
+      "tag": "span",
+      "cls": "db-gallery-field-label",
+      "parentCls": "db-gallery-field",
+      "by": 64,
       "scrolls": true,
       "pastHeader": 0
     },
@@ -3428,7 +3483,7 @@
       "kind": "rhythm",
       "cls": "db-list-row",
       "count": 24,
-      "mean": 70.8,
+      "mean": 52.9,
       "sd": 0,
       "distinct": 1
     },
@@ -3671,6 +3726,39 @@
       "parentCls": "db-board-column",
       "by": 8,
       "scrolls": true,
+      "pastHeader": 0
+    },
+    {
+      "width": 402,
+      "fixture": "card-cover-states",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-board-card-cover.is-empty",
+      "parentCls": "db-board-card",
+      "by": 8,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 402,
+      "fixture": "card-cover-states",
+      "kind": "escaping",
+      "tag": "span",
+      "cls": "db-gallery-cover-placeholder",
+      "parentCls": "db-gallery-cover.is-empty",
+      "by": 2,
+      "scrolls": false,
+      "pastHeader": 0
+    },
+    {
+      "width": 402,
+      "fixture": "card-cover-states",
+      "kind": "escaping",
+      "tag": "span",
+      "cls": "db-gallery-field-label",
+      "parentCls": "db-gallery-field",
+      "by": 44,
+      "scrolls": false,
       "pastHeader": 0
     },
     {
@@ -5370,7 +5458,7 @@
       "kind": "rhythm",
       "cls": "db-list-row",
       "count": 24,
-      "mean": 70.8,
+      "mean": 52.9,
       "sd": 0,
       "distinct": 1
     },
@@ -5580,6 +5668,17 @@
       "parentCls": "db-board-column",
       "by": 8,
       "scrolls": true,
+      "pastHeader": 0
+    },
+    {
+      "width": 768,
+      "fixture": "card-cover-states",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-board-card-cover.is-empty",
+      "parentCls": "db-board-card",
+      "by": 8,
+      "scrolls": false,
       "pastHeader": 0
     },
     {
@@ -6146,7 +6245,7 @@
       "kind": "rhythm",
       "cls": "db-list-row",
       "count": 24,
-      "mean": 70.8,
+      "mean": 52.9,
       "sd": 0,
       "distinct": 1
     },
@@ -6345,6 +6444,17 @@
       "parentCls": "db-board-column",
       "by": 8,
       "scrolls": true,
+      "pastHeader": 0
+    },
+    {
+      "width": 1440,
+      "fixture": "card-cover-states",
+      "kind": "escaping",
+      "tag": "div",
+      "cls": "db-board-card-cover.is-empty",
+      "parentCls": "db-board-card",
+      "by": 8,
+      "scrolls": false,
       "pastHeader": 0
     },
     {
@@ -6865,6 +6975,11 @@
     },
     {
       "width": 320,
+      "fixture": "card-cover-states",
+      "probe": "4px"
+    },
+    {
+      "width": 320,
       "fixture": "list-sparse-fields",
       "probe": "4px"
     },
@@ -7165,6 +7280,11 @@
     },
     {
       "width": 402,
+      "fixture": "card-cover-states",
+      "probe": "4px"
+    },
+    {
+      "width": 402,
       "fixture": "list-sparse-fields",
       "probe": "4px"
     },
@@ -7465,6 +7585,11 @@
     },
     {
       "width": 768,
+      "fixture": "card-cover-states",
+      "probe": "4px"
+    },
+    {
+      "width": 768,
       "fixture": "list-sparse-fields",
       "probe": "4px"
     },
@@ -7761,6 +7886,11 @@
     {
       "width": 1440,
       "fixture": "board-mobile",
+      "probe": "4px"
+    },
+    {
+      "width": 1440,
+      "fixture": "card-cover-states",
       "probe": "4px"
     },
     {

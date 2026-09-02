@@ -1,7 +1,7 @@
 {
   "holder": null,
-  "acquiredAt": "2026-09-01T17:30:00Z",
-  "baselineHash": "9a84a91b5cf1",
+  "acquiredAt": "2026-09-02T07:10:00Z",
+  "baselineHash": "92022f8399f1",
   "baselineCommit": "be6c16e",
   "history": [
     {
@@ -974,6 +974,24 @@
       "at": "2026-09-02T06:15:00Z",
       "hash": "9a84a91b5cf1",
       "note": "Recaptured and read. Three classes still overhang their parent and each was characterised rather than changed: the toolbar badge is position:absolute at left:9px on a button corner, and the board subgroup header carries an explicit margin-right:-8px. The list group header bleeds the same 8px by content-box instead, which makes the pair visually consistent through two different mechanisms \u2014 changing one alone would break that alignment, so it is a design question rather than a defect to take unilaterally."
+    },
+    {
+      "event": "acquire",
+      "phase": "visual-pass",
+      "at": "2026-09-02T07:10:00Z",
+      "hash": "9a84a91b5cf1",
+      "note": "The base-import modal's label input measures 36px at 402px, against 670px on a desktop. Five columns do not fit a phone and the input is the only one with no content minimum, so it absorbs the whole shortfall."
+    },
+    {
+      "event": "release",
+      "phase": "visual-pass",
+      "at": "2026-09-02T07:40:00Z",
+      "hash": "92022f8399f1",
+      "reviewed": [
+        "screenshots/components/panel-base-import-modal-mobile-dark.png",
+        "screenshots/components/panel-base-import-modal-mobile-light.png"
+      ],
+      "note": "One phone rule: the base-import modal drops its key column at .is-phone so the label input stops absorbing the whole five-column shortfall. Measured 36px -> 155px at 402px, desktop unchanged at 670px. Both phone captures read: all four labels now show in full, the excluded row keeps its strikethrough, and the files count and include boxes are untouched. The two timeline captures that also moved are the known churn set and carry no rule from this edit."
     }
   ],
   "outstanding": [

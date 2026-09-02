@@ -1,7 +1,7 @@
 {
-  "measuredAt": "2026-09-01T15:18:35.481Z",
+  "measuredAt": "2026-09-01T15:51:33.996Z",
   "inputs": {
-    "styles.css": "9a84a91b5cf1",
+    "styles.css": "92022f8399f1",
     "tools/live/surface-census.mjs": "8eddb1d0c81c",
     "src/views/surface-contract.ts": "ff7e6bafd3c8"
   },
@@ -971,7 +971,7 @@
       "mountParent": "db-record-peek-panel",
       "tokens": true,
       "role": null,
-      "rect": "335x142",
+      "rect": "335x146",
       "scenarios": [
         "panel-record-peek"
       ]

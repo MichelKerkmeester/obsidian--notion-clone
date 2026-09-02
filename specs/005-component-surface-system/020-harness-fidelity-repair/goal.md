@@ -10,9 +10,9 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/020-harness-fidelity-repair"
-    last_updated_at: "2026-09-02T08:00:00Z"
-    last_updated_by: "goal-audit"
-    recent_action: "Goal audit: three new criteria rows verified against disk"
+    last_updated_at: "2026-09-02T10:00:00Z"
+    last_updated_by: "base-import-phone-fix"
+    recent_action: "Base-import label input 36px -> 155px at 402px; key column dropped"
     next_safe_action: "Add a placement check that never sets --keyboard-height, so the fallback can fail"
     blockers: []
     key_files:
@@ -108,6 +108,10 @@ own content is `022`'s, the `create|render` filter is `025`'s.
       three. *Re-read 2026-09-02: this said `HEAD~`, which was true when written and is not now —
       `6b65667` has since landed on top, so `HEAD~` is the fixing commit rather than the state
       before it. Pinned to the commit so the number stops moving with the branch.*
+- [x] The base-import modal's label input is usable on a phone: it **was 36px at 402px**, five
+      columns with the input the only one carrying no content minimum, -> **155px**, desktop
+      unchanged at 670px. The key column is dropped at `.is-phone` as the one column that repeats
+      what the label beside it already shows.
 - [ ] The operator signs off the two new modal fixtures, per image.
 <!-- /ANCHOR:completion -->
 
@@ -153,13 +157,14 @@ nothing here diverges. The 80 is kept above rather than overwritten because its 
 holds: the `--keyboard-height` channel is still uncatalogued and the operator's fixture sign-off is
 still the one open row, so the remaining 8 is that row and that audit, not a rounding.
 
-**On disk and not shipped, recorded so it is not mistaken for either.** A one-rule `styles.css` edit
-— the base-import modal dropping its key column on `.is-phone` — sits uncommitted in the working
-tree on 2026-09-02, with its lane release and refreshed `tools/live/*.json` artefacts and two
-re-captured `panel-base-import-modal-mobile-*` images. It is real and it is measured, and it is
-**not** committed, so no criterion above rests on it and none is ticked for it. Named here only
-because the open operator row concerns those same two modal fixtures, and a sign-off taken against
-an uncommitted capture would be a sign-off on something the branch does not carry.
+**Shipped here, having been on disk and uncommitted earlier the same day.** The one-rule
+`styles.css` edit — the base-import modal dropping its key column on `.is-phone` — is committed with
+this change, together with its lane release, its refreshed `tools/live/*.json` artefacts and two
+re-captured `panel-base-import-modal-mobile-*` images. The criterion above now rests on it. It is
+named here because the open operator row concerns those same two modal fixtures: the sign-off can
+now be taken against a capture the branch actually carries. `completion_pct` stays 92 — the
+remaining 8 is the sign-off row and the uncatalogued `--keyboard-height` channel, neither of which
+this rule touches, and the figure is shared with three documents outside this change.
 
 **A discrepancy left alone.** `acceptance-criteria.md`'s own title and description say "Ten criteria"
 while its table carries twelve rows, AC-001 to AC-012. The twelve are what this goal counts.
