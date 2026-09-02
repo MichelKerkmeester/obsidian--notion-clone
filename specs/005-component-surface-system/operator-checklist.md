@@ -5,7 +5,7 @@
 Every row below is unticked in its own phase's `goal.md` and nothing in this repository can close
 it. They are gathered here because one list is actionable and thirty files are not.
 
-Derived 2026-09-02: **37 phases**, **5 with nothing left**, **52 rows** waiting on a device.
+Derived 2026-09-02: **37 phases**, **5 with nothing left**, **53 rows** waiting on a device.
 
 The figure beside each phase is a count of its own checkboxes. It is derived, never judged.
 
@@ -150,12 +150,13 @@ The figure beside each phase is a count of its own checkboxes. It is derived, ne
 - [ ] P4 — the segment gave its own margin back and two titles stopped truncating, but the row asks for none and four still do. Was: 6 truncated, a 44.28px segment box in a 48.28px column, title 33px. Now: 4 truncated, the box 48.28px, the title 37px, measured on the 402px phone frame the corpus captures. The 4px came from the segment's `margin-inline`, `gap` and `padding-inline` — the only width a week-grid item can return to its own title — and it un-truncated "Spotify" and the four-day "Q1 renewals sweep". The remaining four need more than 48px of column: "Spotify family" wants 72px of text in 37px of box. The "+" is unrelated and always was: it is a 28x28 out-of-flow corner control that hit-tests to itself, and it never took the titles' width. The denominator is 11 title nodes in the month scenario at this frame; the earlier record said 6 of 12 and its ticked count was the same 6. The implementing lane also relaxed the title to `flex: 1 1 auto`, which was reverted here after measuring 7 truncated — the `1 0 min(8ch, 100%)` basis is a floor, and removing it handed the title 28px inside the wider box.
 - [ ] The operator confirms the recaptures on device.
 
-## 036-obsidian-pm-ui-harvest — 0/4
+## 036-obsidian-pm-ui-harvest — 0/5
 
-- [ ] A pattern catalog exists at `research/research.md` with N ≥ 20 entries, each carrying a `file:line` citation into `obsidian-pm-main`, an adopting packet, and a license note.
-- [ ] Each of operator reports 30-33 has at least one harvested candidate that answers it, where applicable — see `acceptance-criteria.md` AC-2 for the per-report accounting.
+- [ ] A module map exists at `research/research.md` with N ≥ 20 entries, each carrying a `file:line` citation on both sides — theirs and, once mapped, ours — a disposition (copied verbatim with MIT notice / rewritten / dropped), and an LOC estimate.
+- [ ] The adoption plan names a proposed new phase packet per surface, ordered timeline → board → calendar → subtasks → shared UI, each with a gate order and an LOC estimate.
+- [ ] The do-not-borrow list names what stays ours — table view, bottom sheets, formulas/rollups/calcs — and why, for each.
 - [ ] The loop reached 20 iterations, or converged earlier with the convergence reason recorded in `research/lineages/<lineage>/convergence-report.md`.
-- [ ] An in-runtime spot-check of 10 randomly selected citations from the catalog finds all 10 true against the file on disk — line exists, and its content matches what the catalog claims about it.
+- [ ] An in-runtime spot-check of 10 randomly selected citations from the module map finds all 10 true against the file on disk — line exists, and its content matches what the map claims about it.
 
 ## Nothing left to check
 

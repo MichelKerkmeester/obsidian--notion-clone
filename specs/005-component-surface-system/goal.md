@@ -10,17 +10,17 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system"
-    last_updated_at: "2026-09-02T23:50:00Z"
-    last_updated_by: "device-reports-30-33"
-    recent_action: "Recorded reports 30-33 (iOS device); routed to 001, 022, 010"
-    next_safe_action: "The operator runs the deferred device pass on the installed 1.3.9 build"
+    last_updated_at: "2026-09-02T22:30:00Z"
+    last_updated_by: "goal-audit-2"
+    recent_action: "Reconciled the parent goal and roadmap against 1.4.1 evidence"
+    next_safe_action: "The operator confirms report 29 sheet by sheet on the installed 1.4.1 build"
     blockers:
-      - "Every fix is measured on a bench; 1 of 32 reports is confirmed on the operator device"
-      - "Every fix is bench-measured; none of the six renderers is asserted against a live Obsidian host"
-      - "The windowed list is bench-only: 48.4ms at 3,000 rows, unconfirmed on the operator device"
-      - "CI runs npm run storybook:coverage, a script package.json no longer defines (.github/workflows/gates.yml:64)"
-      - "Report 29 (1.4.0, P0): drag handle inert, some sheets uncloseable, one appears then freezes the app; OS and sheet identity unknown, undiagnosed; partially confirmed 2026-09-02 (sheets open and close), full discriminating sequence still owed"
-      - "Reports 30-33 (iOS, 2026-09-02 21:21-21:24): view-switcher icon-wall rows (30, 001), selection bar docking under a sheet/editor plus missing singular string (31-32, 022), record detail sheet overflow past 100vh (33, 010) — none investigated"
+      - "1 of 32 reports is confirmed on device; every other fix is bench-measured"
+      - "No renderer is asserted against a live Obsidian host"
+      - "The windowed list is bench-only: 48.4ms at 3,000 rows, unconfirmed on device"
+      - "Report 29 (P0): fixed in 98da630 and 0c92f4d, released in 1.4.1; per-row confirmation is owed"
+      - "Reports 30-33: recorded in 62c4fe7, owners 001, 022, 022, 010; the fix is uncommitted"
+      - "036's port research runs in the worktree .worktrees/003-obsidian-pm-harvest"
     key_files:
       - "roadmap.md"
       - "spec.md"
@@ -29,7 +29,7 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-parent"
       parent_session_id: null
-    completion_pct: 43
+    completion_pct: 57
     open_questions:
       - "Does report-driven scheduling replace the declared 009-first order"
     answered_questions:
@@ -75,7 +75,7 @@ production renderer**. One now does (`026`).
 | D11 | One phase holds `styles.css`, released only after a recapture a person looked at. |
 | D12 | Prefer **parity**: a harness cannot fake one without giving two independent producers the same wrong answer. |
 | D13 | One completion figure per phase, **derived** from its `goal.md` criteria checklist — never judged, never two. Status carries shipped/verified/confirmed; a percentage cannot. `roadmap.md` §3.1-3.2. |
-| D14 | ~~**External delegation, decided 2026-09-02.** Implement, debug and review through cli-codex on `gpt-5.6-luna` at `model_reasoning_effort=max`, `service_tier=fast`, `--sandbox workspace-write`; cli-opencode only when the task itself needs the browser; fallback cli-devin on `deepseek-v4-flash-max` (that exact id, its effort baked in), read-only audits first. Every external result is verified by a fresh in-runtime Opus agent that runs `npm run gate` and `validate.sh --strict` itself — a delegate's report is a claim, not a result (D4). **No browser number from a sandboxed or cloud lane is evidence**, the lesson the queued-lane note in §4 already paid for. Model ids are passed exactly as each transport spells them — codex `gpt-5.6-luna`, devin `deepseek-v4-flash-max`, which do not share a spelling — never a near-miss. The orchestrator never runs a sub-agent on Fable.~~ **2026-09-02, revised.** The order is now: (a) an initial pass through cli-devin on `deepseek-v4-flash-max` under `--permission-mode dangerous`, which the operator approved for this repo's worktree; (b) then `gpt-5.6-luna` at `model_reasoning_effort=xhigh` or `max`, `service_tier=fast`, through cli-codex or cli-opencode; (c) in-runtime verification is unchanged — a fresh agent runs the browser gate and `validate.sh` itself, because sandboxed and cloud lanes cannot reach Chrome. In-runtime delegates default to Sonnet 5 (xhigh may be used more freely than before); Opus is used only where it is genuinely better. Never Fable, never fork. |
+| D14 | ~~**External delegation, decided 2026-09-02.** Implement, debug and review through cli-codex on `gpt-5.6-luna` at `model_reasoning_effort=max`, `service_tier=fast`, `--sandbox workspace-write`; cli-opencode only when the task itself needs the browser; fallback cli-devin on `deepseek-v4-flash-max` (that exact id, its effort baked in), read-only audits first. Every external result is verified by a fresh in-runtime Opus agent that runs `npm run gate` and `validate.sh --strict` itself — a delegate's report is a claim, not a result (D4). **No browser number from a sandboxed or cloud lane is evidence**, the lesson the queued-lane note in §4 already paid for. Model ids are passed exactly as each transport spells them — codex `gpt-5.6-luna`, devin `deepseek-v4-flash-max`, which do not share a spelling — never a near-miss. The orchestrator never runs a sub-agent on Fable.~~ **2026-09-02, revised.** The order is now: (a) an initial pass through cli-devin on `deepseek-v4-flash-max` under `--permission-mode dangerous`, which the operator approved for this repo's worktree; (b) then `gpt-5.6-luna` at `model_reasoning_effort=xhigh` or `max`, `service_tier=fast`, through cli-codex or cli-opencode; (c) in-runtime verification is unchanged — a fresh agent runs the browser gate and `validate.sh` itself, because sandboxed and cloud lanes cannot reach Chrome. In-runtime delegates default to Sonnet 5 (xhigh may be used more freely than before); Opus is used only where it is genuinely better. Never Fable, never fork. **2026-09-02, the worktree named in (a) now exists:** `036`'s 20-iteration research loop runs in `.worktrees/003-obsidian-pm-harvest` on branch `worktrees/003-obsidian-pm-harvest` (`9642e43`), and the untracked `research/` in the main checkout is residue from a rejected launch rather than evidence. A devin lane's harness change for the board and gallery reds was verified in-runtime and committed as `c5566db`, which is the (c) leg working as written: the delegate's report was a claim until a fresh agent ran it here. |
 <!-- /ANCHOR:directive -->
 
 ---
@@ -136,7 +136,18 @@ resolve them silently.
       with the full discriminating sequence still owed, and the row stays open rather than ticked.
       Not re-ticked here either: four new rows in neither state widens the gap further, and a
       partial confirmation on one row is not the same as this criterion's "every report."
-- [ ] Every view opens on device without freezing. Today only the table does.
+
+      **2026-09-02, later still: two releases, and the count does not move.** 1.4.0 was cut in
+      `1e1d269` and 1.4.1 in `460d4d7`, the second carrying the report-29 fixes `98da630` (modal
+      sheet chrome taken down on close, `pointercancel`, anchor tolerance) and `0c92f4d` (a long
+      press consumes the click it caused). Reports 30-33 were recorded in `62c4fe7` with owners
+      `001`, `022`, `022` and `010`, and their fix is an uncommitted code phase in the working
+      tree. A cut release is a shipped state and an uncommitted phase is not even that, so this
+      reads **1 confirmed of 32** exactly as before. Row 29's per-row confirmation is what would
+      move it.
+- [ ] Every view opens on device without freezing. Today only the table does. **2026-09-02:** 1.4.1
+      carries sheet lifecycle fixes, not a view fix, so nothing here changed. The board and gallery
+      remain the two views with an observed red and no verified green.
 - [x] A gate check constructs a production renderer for **every** view. One lane does now, for
       List, Table, Board, Gallery, Calendar and Timeline — **6 of 22**, a ratchet, twelve
       scenarios driven by both action bags. Every view named in an operator report is asserted.
@@ -149,8 +160,15 @@ resolve them silently.
       count recorded. `tools/live/replay.json`'s history carries no run where a claim's `held` was
       `false`, and the parent log records no earlier held-count either, so this tick has no red to
       cite. Left unticked: a tick needs its red.
-- [ ] No criterion's green depends on a value the harness supplies that a device would not — a
+- [x] No criterion's green depends on a value the harness supplies that a device would not — a
       pinned variable, a stubbed action, a hand-written mount, or an absent host stylesheet.
+      **Ticked 2026-09-02, on an observed red verified in-runtime and committed as `c5566db`.** The
+      board, gallery and table scenarios had no owned negative control, so their green proved the
+      scenario ran rather than that it could fail. Armed, the controls read **1601 layout reads
+      during render, bound 8** on board/embed and on gallery/embed, and **2003 layout reads, bound
+      8, over 2000 rows** on table/embed, exit 1. Disarmed the same reads are **1, 1 and 3**, exit
+      0. A delegate produced the change and a fresh in-runtime agent ran it here before this tick,
+      per D4 and D14: a delegate's report is a claim, and this row waited for the result.
 - [x] `validate.sh <this folder> --strict` reports the parent at Errors: 0. Was red: 3
       `SPECDOC_FRONTMATTER_004` errors (`spec.md`, `handover.md`, `goal.md`) until the shared kit
       accepted a single-segment `packet_pointer` today (Public commit `a3e3fe774e`, packet
@@ -269,16 +287,16 @@ same specificity, nothing in-container moves — took the unrecoverable count **
 
 | Item | State | Evidence |
 |------|-------|----------|
-| Reports with an owning phase | Done | **27 of 27** — re-read off `roadmap.md` §4 on 2026-09-02, where the table now runs 1-16 and 18-28. This cell read *16 of 16* against a table that had grown |
-| Reports shipped | In Progress | **15 of the original 16** (report 13 is the version bump, deliberately not a phase); **0 of the 11 later rows** have shipped code under the phase they name. Was recorded as *14 of 16*; `roadmap.md` §4 says fifteen |
-| Reports operator-confirmed | In Progress | 1 of **27**, as an accepted shortfall (report 10) |
-| Every phase has a `goal.md` | Done | 36 folders, all carrying one — `035-visual-pass-product-defects`, opened 2026-09-02 for the visual pass's product defects, was the 36th and carried one from the start. **This row was briefly false:** 032, 033 and 034 were opened without one by the same commit that opened 034 to fix documentation drift — the drift mechanism reproducing itself inside its own remedy. Added and re-checked across every folder rather than assumed | The four that did not — `020`, `021`, `023`, `025` — were written after an audit counted, having been claimed complete twice |
+| Reports with an owning phase | Done | **32 of 32** — re-read off `roadmap.md` §4 on 2026-09-02, where the table now runs 1-16 and 18-33. This cell read *16 of 16*, then *27 of 27*, against a table that kept growing |
+| Reports shipped | In Progress | **15 of the original 16** (report 13 is the version bump, deliberately not a phase), plus **row 29**, whose fix shipped under `031` in `98da630`/`0c92f4d` and was released as 1.4.1 (`460d4d7`). **0 of the remaining 15 later rows** have shipped code: 30-33 are recorded in `62c4fe7` and their fix is uncommitted |
+| Reports operator-confirmed | In Progress | 1 of **32**, as an accepted shortfall (report 10). Row 29 carries a **partial** — *"Most sheets seem to work now tho"* — which under D3 is not a close |
+| Every phase has a `goal.md` | Done | **37 folders** (`000`-`036`), all carrying one, counted 2026-09-02 — `036-obsidian-pm-ui-harvest` was opened in `5b542fb` and rescoped in `7f00622`/`9642e43`, and it carried one from the start. This cell read *36 folders* before that phase existed. Earlier: 36 folders, all carrying one — `035-visual-pass-product-defects`, opened 2026-09-02 for the visual pass's product defects, was the 36th and carried one from the start. **This row was briefly false:** 032, 033 and 034 were opened without one by the same commit that opened 034 to fix documentation drift — the drift mechanism reproducing itself inside its own remedy. Added and re-checked across every folder rather than assumed | The four that did not — `020`, `021`, `023`, `025` — were written after an audit counted, having been claimed complete twice |
 | Report 1, the sheet drag | Fixed, awaiting device | The panel's render destroyed the grab bar; a 60px drag now moves 60.0px after a re-render, was 0.0px |
 | Non-table views on device | Unconfirmed | Two quadratics found and fixed (list `024`, timeline `028`); the calendar measured clean; the list then windowed in `033`. None confirmed on device |
 | Gate checks constructing a renderer | 1 of **25** | `026`. `render-assertion-harness.ts` builds all six view renderers across twelve scenarios and both bags, green in the gate, all six sources fingerprinted as declared inputs. Coverage 6 of 22, read off `tools/live/renderer-coverage.json` (`constructed: 6`, `total: 22`). The denominator here was the lane count and it was 16; `tools/gate.mjs` declares **25** lanes on 2026-09-02 |
 | `004` state | Unknown | Three sources disagree; `roadmap.md` §7.1 |
 | Gate | Green when last run, at 16 lanes | `tools/gate.mjs` now declares **25** lanes and the gate was **not re-run for this audit**, so Green is a dated verdict rather than a current one. This row read Red 12/13 long after it went green, and then 16 lanes long after there were 25 |
-| Version | Done | `manifest.json` and `package.json` both at **1.3.9** (read 2026-09-02; this cell said 1.3.7). The freeze was reported on 1.3.4, 1.3.5 and again on 1.3.9, and no view is confirmed on any of them |
+| Version | Done | `manifest.json` and `package.json` both at **1.4.1** (read 2026-09-02; this cell said 1.3.9, and 1.3.7 before that). Tags `1.4.0` (`1e1d269`) and `1.4.1` (`460d4d7`) are published on GitHub so the operator's phone can install them. The freeze was reported on 1.3.4, 1.3.5 and 1.3.9, and the sheet defects of report 29 on 1.4.0; no view is confirmed on any of them |
 
 `completion_pct: 50` is derived, not felt — but **its basis was measured against the wrong
 denominator and is corrected here rather than the figure.** It read *14 of 16 reports shipped, 1 of
@@ -300,9 +318,28 @@ that choice is the operator's.
 **Resolved 2026-09-02: the checklist basis binds.** `roadmap.md` §3.2 states the rule as
 `completion_pct` = ticked ÷ total over the phase's own `goal.md` completion-criteria checklist,
 rounded to a whole number, and `D13` names the same source as never judged, never two — neither
-names the reports ledger. `completion_pct` is **43** in every continuity block of this packet; the
+names the reports ledger. `completion_pct` was **43** in every continuity block of this packet on
+that date, and is 57 today for the reason the next paragraph gives; the
 50-on-the-reports-basis paragraph above is dated history, superseded by this line, not the current
 figure.
+
+**Re-derived 2026-09-02 by this audit: `completion_pct` is 57.** Four of the seven §3 rows are now
+ticked — 3, 4, 6 and 7 — 4 ÷ 7 = 57 on §3.2's rule, up from 43 at 3 ÷ 7. The row that moved is 6,
+on `c5566db`'s owned negative controls for the board, gallery and table scenarios, verified
+in-runtime rather than taken from the delegate that wrote them. Nothing else moved: two releases
+landed and report 29 gained a partial, which moves the report ledger and not the checklist, and the
+checklist is the basis §3.2 binds. `spec.md` and `handover.md` still carry the older figure and are
+outside this audit's write scope, so the divergence is flagged rather than fixed.
+
+**Two blockers this audit retired, and one it added.** *Retired:* the CI line reading
+`npm run storybook:coverage` is fixed — `.github/workflows/gates.yml:64` runs `npm run
+shim:coverage` and `:73` runs `npm run story:coverage`, both defined in `package.json`, since
+`dd6c13b`. And `SPECDOC_FRONTMATTER_004` no longer fires on this root: the single-segment
+`packet_pointer` amendment shipped, so `validate.sh` reports it zero times, which is what §3 row 7
+already claimed. *Added:* `036`'s port research runs in a worktree, `.worktrees/003-obsidian-pm-harvest`
+on branch `worktrees/003-obsidian-pm-harvest`, and the untracked `research/` directory in the main
+checkout is residue from a rejected launch — reading it as evidence would be reading a run that was
+thrown away.
 
 ### Deviations and findings
 
@@ -317,7 +354,9 @@ figure.
 | 44px table row height declined | Density outranks it, and the cell clips its own overflow so a hit-area expansion is a no-op. Closed with a number |
 | `024` missing `plan.md` and `tasks.md` | Level 1 requires both; `validate.sh --strict` reports 5 errors there, and its continuity block is 2806 bytes against a 2048 cap |
 | ~~22 of 29 children fail `--strict`~~; the parent passes | Measured per folder, not inferred from the recursive tail. The rule is **level-driven, not marker-driven**: a folder's level decides which docs are validated and which anchors their template renders. The acceptance-criteria body sits behind an `IF level:2,3,3+` guard, so at Level 1 it renders empty and the file is exempt — which is why `018` and `019` pass carrying no marker at all, and why removing a marker from a Level 3 folder trades one error for another rather than clearing it. So `goal.md` costs `000`-`009` two errors each, and `spec.md` costs `010`-`017` the same two — I had recorded only the first half and written that `010`-`026` "add nothing", which the scan refutes. `acceptance-criteria.md` carries no marker in 12 folders and that is free: `018` and `019` validate clean with none. `024` and `027` are each missing `plan.md` and `tasks.md`; `028` has no marker on any of its five docs. Content is sound throughout — this is conformance, not rewriting. **This row is stale and was re-measured: `000`, `010` and `018` all pass today. A fresh reviewer found only `022` and `024` failing, both from a metadata regeneration this session skipped after editing them, and both now at Errors: 0.** The count moved because the tree moved; re-derive it rather than citing it |
-| **The rows only a device can close are now one list, derived** | Every phase ends with a row nothing here can close, recorded one per packet across thirty folders — the right place to keep them and the wrong place to act on them. `operator-checklist.md` gathers them: **42 rows across 30 phases**, with 5 phases carrying none. It invents nothing — a row appears because it is unticked in its own `goal.md`, and each figure is a count of that packet's checkboxes. **Generated, and guarded**, because shipping a generated file nobody regenerates would add an instance of the doc-truth failure this program exists to catch: `build-operator-checklist.mjs --check` regenerates in memory and fails the gate on drift, comparing everything but its own derived date so it does not go red each morning for saying nothing. Control: ticking one row in the generated copy fails it. |
+| **The rows only a device can close are now one list, derived** | Every phase ends with a row nothing here can close, recorded one per packet across thirty folders — the right place to keep them and the wrong place to act on them. `operator-checklist.md` gathers them: regenerated 2026-09-02, **53 rows across 32 phases**, where it
+read 42 across 30 the day before. The figure moves because the tree moves, which is the argument for
+generating it rather than writing it down. It invents nothing — a row appears because it is unticked in its own `goal.md`, and each figure is a count of that packet's checkboxes. **Generated, and guarded**, because shipping a generated file nobody regenerates would add an instance of the doc-truth failure this program exists to catch: `build-operator-checklist.mjs --check` regenerates in memory and fails the gate on drift, comparing everything but its own derived date so it does not go red each morning for saying nothing. Control: ticking one row in the generated copy fails it. |
 | **The visual pass found three defects, and two of them were the harness** | Read rather than counted. `field-status-colors` and six siblings clipped a long note name mid-word with no ellipsis, because the fixtures built `<a>bare text</a>` where the renderer builds `.db-file-title-inline > .db-file-title-name` and the ellipsis lives on that inner span. `chrome-chart-options-popover` rendered **five rows as single clipped glyphs** — the fixture supplied icon markup without `has-current-icon`, the stylesheet hides the icon without it, and a hidden element is not a grid item, so every child slid one track left and the label landed in the icon's 18px column. **24 captures were showing defects the product does not have.** Both now carry parity checks with controls. The third is real: on a phone the calendar week grid gives each event title 16px, and the two-line clamp stacked single glyphs — fixed by giving width the same compact treatment duration already had. **What the pass did NOT find is also evidence:** a sweep of all 120 fixture-device combinations reports 0 squeezed text nodes, and that detector reports 10 with the chart control armed. **A fourth and fifth were the same shape:** the utilities popover drew one glyph for *Save computed results* and *Refresh database* where the toolbar draws a recalculate badge and a plain refresh, and the timeline options drew the dotted calendar for *Year display* where the renderer draws the plain one. A sixth pair was **rejected** — the calendar's start-date and first-day rows share an icon in the renderer too, and sit under different section headings, so flagging it would ask the fixture to disagree with the product. **And a spacing sweep corrected itself:** 118 off-scale padding and gap values fell to **78** once `theme.css`'s host-control baseline was transcribed from the installed application stylesheet instead of recalled — it claimed to mirror the host while carrying `5px 10px` on a button where the host resolves `4px 12px`, so 40 of the 118 were the harness's own invention being counted as the plugin's drift. The remaining 78 are real 3px half-steps in dense surfaces, recorded rather than refactored because each is plausibly deliberate and none has a demonstrated defect behind it. **Three product defects came out of it, all one fault:** a stated width with padding outside it. `db-empty-hero` is `width: min(100%, 780px)` with 28px padding and overflowed its pane by **26px**; the two inline cell editors are `width: 100%` over the host's input padding and overflowed the cell they edit by **24px**; the invalid-events modal overflowed by its own border. All four are `box-sizing: border-box` now. **Three overhangs were characterised and left:** the toolbar badge is `position: absolute` at `left: 9px` on a button corner, the board subgroup header carries an explicit `margin-right: -8px`, and the list group header reaches the same 8px bleed through content-box — so the pair is visually consistent through two different mechanisms, and changing one alone would break the alignment. **The harness had to be repaired to see any of it:** 60 scenarios declare a `width` and `capture.mjs` read it nowhere, so every element capture sized to `max-content` and a percentage width had nothing honest to resolve against. Honouring it then erased a real responsive difference — 392 declared against a 402px phone made two device captures identical — and `capture-device-parity` caught that as *newly identical*, which is the reading that rule exists for. The declared width frames the desktop shot only. |
 | **Seven task lists never advanced while their goals nearly finished** | Measured 2026-09-02: `001` 7/8 goal against **0/67** tasks, `002` 6/7 against **0/65**, `004` 7/8 against **0/28**, `005` 6/7 against **0/36**, `006` 6/7 against **0/32**, `025` 9/10 against **1/21**, and `022` 6/8 against **0/17** (added 2026-09-02) — **265 unticked tasks in phases whose goal checklist is 75-90% complete.** This is not a cosmetic gap: `roadmap.md` §3 makes the *In progress — N of M tasks* fraction mandatory and derives it from `grep -c '^- \[x\]' tasks.md`, so for these seven the status vocabulary cannot be applied at all. **Recorded rather than cleared, deliberately.** Ticking 265 boxes to make the fraction computable would assert per-task evidence nobody gathered, which is the exact failure this program exists to catch — and it would be far harder to detect afterwards than the zero is now. `030` and `031` were reconciled task-by-task against the tree in this session and are what that costs: each tick carries what closed it, and three of `030`'s were marked *gated* rather than done because the decision they wait on defers them. |
 | `000` declares Planned over nine checked tasks | `spec.md` declares Status Planned; `tasks.md` carries nine checked implementation tasks and the lane journal independently records the acquire, the token-root edit and a release "with a debt". Work started, so the contract also wants an implementation summary. Recorded, not resolved: writing one means asserting what `000` delivered without having verified it |
@@ -411,6 +450,12 @@ dispatched to the Public repo, tracked at `specs/system-speckit/050-single-segme
 Row 7 stays unticked here until that packet ships and this program's pointers are re-validated against
 it. See `repo-rules/spec-tree-layout.md` §4, updated to record this as the taken disposition.
 
+**2026-09-02, closed: that packet shipped and row 7 is ticked.** Re-validated by this audit —
+`validate.sh specs/005-component-surface-system --strict`, `grep -c SPECDOC_FRONTMATTER_004` returns
+**0**. So the paragraphs above are the record of a rule that no longer fires here, kept because the
+four dispositions and why three of them failed are the reason the fourth was taken. A program root
+reporting `SPECDOC_FRONTMATTER_004` is no longer expected; if one does, it is a regression.
+
 ### Report 29: fresh operator report against 1.4.0, dispatched for diagnosis
 
 **2026-09-02.** A new operator report, quoted in full at `roadmap.md` §4 row 29: *"In this version a
@@ -428,6 +473,15 @@ positioning and dismissal since the last release this program has device evidenc
 `031-sheet-lifecycle-ownership` owns the diagnosis: it already carries the drag-handle hypothesis
 for reports 26 and 27 (a panel's own content render destroying the grab bar it prepended), and
 this report's freeze-then-app-hang symptom is a new shape not yet covered by that hypothesis.
+
+**2026-09-02, same day: diagnosed, fixed and released, and still not closed.** Two commits landed
+under `031` — `98da630` takes a modal's sheet chrome down on close, honours `pointercancel` and
+widens the anchor tolerance, and `0c92f4d` makes a long press consume the compatibility click it
+caused. Both went out in **1.4.1** (`460d4d7`), which the operator installed. The operator's reading
+of that build is *"Most sheets seem to work now tho"* — real device evidence, and the first this
+program has had that a fix helped. It is a partial, not a close: which sheets, and which of the
+three named failure shapes each one still shows, are not established, so the row is owed a per-sheet
+confirmation. D3 is the whole reason this distinction is written down.
 
 ### Reports 30-33: three fresh device reports plus one bundled correction, iOS, 2026-09-02
 
@@ -450,8 +504,14 @@ row above the keyboard; separately, `"1 cells selected"` has no singular form
 Routed to **`010-sheet-reading-and-keyboard`**, which owns the phone record sheet's reading layout
 and scroll behaviour; `023-record-note-body` was considered and rejected as owner because it is
 deliberately not startable (the operator has not chosen display-only vs editable) and ships no code
-today, so it cannot hold a bug against the sheet as it currently exists. None of the four is
-investigated yet.
+today, so it cannot hold a bug against the sheet as it currently exists. The four were recorded in
+`62c4fe7`.
+
+**Where they stand, 2026-09-02.** A fix for them is **in flight and uncommitted** — the working tree
+carries edits to `src/i18n.ts`, `src/views/toolbar-renderer.ts`, `src/views/record-detail-panel.ts`
+and `src/views/mobile-bottom-sheet.ts` among others, plus a new `src/i18n-plural.test.ts`. Nothing of
+it is committed and none of it is released, so all four rows read as **not shipped** and the
+1.4.2 that would carry them does not exist yet.
 
 **Also 2026-09-02, same device, same session.** Row 29 gained a partial: the operator wrote *"Most
 sheets seem to work now tho"* on the build after `98da630`/`0c92f4d` (the modal-sheet-chrome-on-close

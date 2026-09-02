@@ -7,9 +7,9 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/032-cover-target-scheme-safety"
-    last_updated_at: "2026-08-31T22:30:00Z"
-    last_updated_by: "phase-author"
-    recent_action: "Covers routed through the allowlist; all ten external opens now sever the opener"
+    last_updated_at: "2026-09-02T22:30:00Z"
+    last_updated_by: "goal-audit-2"
+    recent_action: "Struck stale 'nothing has started' log line; shipped in 8ff9c3f4"
     next_safe_action: "The operator confirms a real cover still renders and opens on device"
     blockers: []
     key_files: ["spec.md", "tasks.md"]
@@ -69,7 +69,8 @@ directly. The fix is which function the cover path calls.
 
 Volatile. Not part of the directive.
 
-**Nothing has started.**
+~~**Nothing has started.**~~ *Stale, corrected 2026-09-02: shipped in `8ff9c3f4`, all four
+criteria met.*
 
 **On the severity.** The original finding rated this P0. A fresh reviewer found three mitigations it
 never weighed: the victim must configure the attacker-controlled key as the cover field; the cover's

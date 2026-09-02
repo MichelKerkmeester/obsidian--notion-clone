@@ -47,7 +47,7 @@ while succeeding, and both reported success with exit 0 while producing nothing.
 - `luna-xhigh` — 10 iterations, GPT-5.6 LUNA at xhigh, forced depth with no early convergence.
 - `grok46-xhigh-architecture` — 5 iterations, Grok 4.6 at xhigh through cli-cursor.
 
-Each lineage holds its synthesized `research.md` under `research/lineages/<lineage>/research/`, and its iterations under `research/lineages/<lineage>/iterations/` — one directory deeper than this file used to say, which matters when the whole point of the trap below is to go and look.
+Each lineage holds its synthesized `research.md` directly under `research/lineages/<lineage>/`, and its iterations under `research/lineages/<lineage>/iterations/`. **Corrected 2026-09-02:** the previous line put `research.md` one directory deeper, inside a `research/` subfolder — that subfolder exists but holds only `deep-research-state.jsonl`; the synthesized file sits beside it, which matters when the whole point of the trap below is to go and look.
 
 **HOW TO RE-RUN.** From **inside the plugin worktree** — containment rejects a run launched from the hub, which cost a full 5-minute lineage once:
 `node .opencode/skills/system-deep-loop/runtime/scripts/fanout-run.cjs --spec-folder specs/005-component-surface-system/007-architecture-research --loop-type research --research-topic "<topic>" --fanout-config-json '{"executors":[{"kind":"cli-codex","label":"<label>","model":"gpt-5.6-luna","reasoningEffort":"xhigh","serviceTier":"fast","iterations":10}]}' --base-artifact-dir <spec-folder>/research --stop-policy max-iterations`

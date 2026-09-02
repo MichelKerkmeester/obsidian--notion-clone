@@ -26,10 +26,10 @@ _memory:
       fingerprint: "sha256:0000000000000000000000000000000000000000000000000000000000000000"
       session_id: "surface-system-handover"
       parent_session_id: null
-    completion_pct: 43
+    completion_pct: 57
     open_questions: []
     answered_questions:
-      - "spec.md vs goal.md completion_pct: reconciled, one derived figure per phase. D13, roadmap 3.2"
+      - "spec.md vs goal.md completion_pct: reconciled at 57, one derived figure per phase (4 of 7 goal.md checklist rows ticked). D13, roadmap 3.2"
       - "The 036 research loop cannot run in the main checkout while a sibling code phase is dirty; it now runs in a worktree"
 ---
 # Session Handover: Component Surface System

@@ -11,10 +11,10 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/036-obsidian-pm-ui-harvest"
-    last_updated_at: "2026-09-02T21:54:00Z"
-    last_updated_by: "loop-containment-note"
-    recent_action: "Iteration 1 rejected: containment_violation from sibling code phase"
-    next_safe_action: "Relaunch loop only after code phase and render-assertion controls commit"
+    last_updated_at: "2026-09-02T22:30:00Z"
+    last_updated_by: "goal-audit-2"
+    recent_action: "Loop confirmed running in worktree; main-checkout research/ is stale"
+    next_safe_action: "Spot-check 10 citations in-runtime once the worktree loop converges"
     blockers: []
     key_files:
       - "spec.md"
@@ -25,9 +25,9 @@ _memory:
       session_id: "surface-system-036-goal"
       parent_session_id: null
     completion_pct: 0
-    open_questions:
-      - "should research loops run in an isolated git worktree so they can overlap implement waves — operator's call (worktree vs branch)"
-    answered_questions: []
+    open_questions: []
+    answered_questions:
+      - "worktree vs branch, answered: the loop runs in .worktrees/003-obsidian-pm-harvest"
 ---
 # Goal: Obsidian PM UI Harvest
 
@@ -137,4 +137,18 @@ launcher then started the `devin` fallback (`deepseek-v4-flash-max`), which the 
 before it could fail the same way. Decision (orchestrator, reversible default): the loop is relaunched
 only on a clean committed tree, after the code phase and the render-assertion controls commit; the
 executor order stays codex → devin → claude2 Sonnet (5 iterations) per D3.
+
+**2026-09-02, later: the loop runs in a dedicated worktree, not this checkout.** `git worktree list`
+confirms `.worktrees/003-obsidian-pm-harvest` (branch `worktrees/003-obsidian-pm-harvest`), checked
+out past this rescope. Its own `research/` directory is live — `observability-events.jsonl` and
+`orchestration-status.log` there carry timestamps after this checkout's rejected iteration 1.
+**The untracked `research/` in this main checkout (last written 21:54, the same minute as the
+rejection) is stale residue from that rejected launch, not evidence of loop progress — the worktree's
+copy is the one to read.**
+
+**The planned follow-on, once the loop closes.** After the loop reaches convergence or 20 iterations,
+and 10 randomly selected module-map citations are spot-checked in-runtime (the fifth completion
+criterion above), the adoption plan opens one new phase packet per surface, in the stated order —
+timeline → board → calendar → subtasks → shared UI — each doing the rewrite-and-merge D4 requires.
+No such packet is opened yet; this phase's own five rows stay unticked until then.
 <!-- /ANCHOR:log -->

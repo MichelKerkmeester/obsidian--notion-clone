@@ -197,7 +197,7 @@
     ],
     "causal_summary": "Six packets in this program (022, 031, 010, 023, 001/027, 011) are actively deciding phone-surface",
     "created_at": "2026-09-02T19:31:25.064Z",
-    "last_save_at": "2026-09-02T19:56:21.995Z",
+    "last_save_at": "2026-09-02T20:10:06.916Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -207,7 +207,7 @@
       "acceptance-criteria.md",
       "goal.md"
     ],
-    "source_fingerprint": "sha256:d5308b0774a553a00c31c9f709eb5b8999a04fc5ca3fe533bea67fdc3e20a9f5",
+    "source_fingerprint": "sha256:91f6f173f101fb8666e2b023723e324f9b784c5f661c9e8be2ae323afa64a5b4",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "041ba8eaa16ab8b0315d9fa86bf3ebe9e3cf8f908abeb70367445e4c5dd5e440",

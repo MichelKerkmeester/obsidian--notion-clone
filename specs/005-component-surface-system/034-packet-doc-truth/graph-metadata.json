@@ -196,7 +196,7 @@
     ],
     "causal_summary": "Eleven of the deep review's fifteen findings are untrue statements inside this packet's own documents; this phase corrects them and records why they drifted.",
     "created_at": "2026-08-31T14:46:51.989Z",
-    "last_save_at": "2026-09-01T10:50:16.525Z",
+    "last_save_at": "2026-09-02T20:10:06.902Z",
     "save_lineage": "graph_only",
     "last_accessed_at": null,
     "source_docs": [
@@ -207,7 +207,7 @@
       "goal.md",
       "implementation-summary.md"
     ],
-    "source_fingerprint": "sha256:75f6233cfddd63924e0ccf38e2756e22434da5c81548a794e3524651660f612c",
+    "source_fingerprint": "sha256:1efacf859f771e383266583088cec7cd8c41e7f960601a0ee7b0508a99419f0b",
     "source_fingerprint_docset": 3,
     "source_doc_hashes": {
       "spec.md": "b3a6e80c560d0375b82aa487e9ee7785743dd1df9f6ef81bf679a9f20b279410",

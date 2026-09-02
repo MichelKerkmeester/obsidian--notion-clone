@@ -10,9 +10,9 @@ contextType: "planning"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/025-story-coverage-blindness"
-    last_updated_at: "2026-09-02T08:00:00Z"
-    last_updated_by: "goal-audit"
-    recent_action: "Goal audit: pct derived 9/10; log's untick claim corrected"
+    last_updated_at: "2026-09-02T22:30:00Z"
+    last_updated_by: "goal-audit-2"
+    recent_action: "CI coverage-script log note struck; dd6c13b fixed it"
     next_safe_action: "Operator opens the catalogue and confirms the surfaces it now lists"
     blockers: []
     key_files:
@@ -142,11 +142,14 @@ left to substitute for. **This packet's one open row is the operator row**, whic
 through. A naming convention was deciding which of this plugin's most-edited surfaces the catalogue
 could see, on a rule with no relationship to whether a module draws anything.
 
-**CI still calls the script this phase renamed away. Found 2026-09-02, open and unfixed.**
+~~**CI still calls the script this phase renamed away. Found 2026-09-02, open and unfixed.**
 `.github/workflows/gates.yml:64` runs `npm run storybook:coverage` under the step name
 *Shim and stub cover the source*, and `package.json` defines no such script — the rename landed
 in `tools/` and in `package.json` (`shim:coverage`) and nowhere in CI. This is the same defect
 class as D1, one layer out: the lane the *workflow* names is not a lane that runs. Recorded as a
 log note rather than a completion row so the derived figure keeps its meaning — this packet's one
-open **row** is still the operator's. A code wave owns the fix; it is one line in `gates.yml`.
+open **row** is still the operator's. A code wave owns the fix; it is one line in `gates.yml`.~~
+**Fixed, 2026-09-02, `dd6c13b`.** `.github/workflows/gates.yml:64` now runs `npm run shim:coverage`,
+which `package.json` defines (`node tools/storybook/verify-coverage.mjs`). This packet's one open
+row is still the operator's; nothing else in this section remains open.
 <!-- /ANCHOR:log -->

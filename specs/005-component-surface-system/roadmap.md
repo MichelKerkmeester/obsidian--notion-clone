@@ -28,7 +28,7 @@ contextType: "planning"
 **Owner:** Operator, with several agents holding phase folders concurrently — the four
 flagged live in §5 this morning, plus `027` and `028`, opened today to investigate the reports
 below.
-**Last updated:** 2026-08-30
+**Last updated:** 2026-09-02
 
 **Reconciliation note.** Sections 2, 5 and 6 were rewritten on 2026-08-30 against the working tree,
 `tools/lane/css-lane.json` and each phase's continuity block. The previous version listed nine
@@ -43,6 +43,11 @@ own drift. `027` and `028` were being authored by other agents at the time of th
 their §5.1 state is UNKNOWN rather than assumed; `022`, `023`, `025` and `026` are Planned on
 their own explicit "Status" field, cross-checked against a git log and lane journal both
 silent on them.
+
+**Third reconciliation note, 2026-09-02.** §4 grew to thirty-two rows, 1.4.0 and 1.4.1 were
+published, and report 29 was fixed and partially confirmed. §1, §3, §4, §4A, §5.2, §5.3 and §9 are
+what this pass changed. §5, §5.0, §5.1, §6, §6A, §7, §8, §10, §11 and §12 were not re-audited and
+carry their own dates.
 
 **What this file does not do.** It does not resolve disagreements between a phase's own documents.
 Where they disagree, §7 names both readings and leaves the decision to the operator.
@@ -70,14 +75,19 @@ Every row in §4 and §5 uses one of these. Collapsing them is how 1.3.1 happene
 | **Verified** | A check drives the production path, has a threshold, and has been observed red before it went green | That the operator can see the difference |
 | **Operator-confirmed** | The operator looked at the device and said so | — |
 
-**The program's closing condition is the third** (`spec.md` §7). Of the twenty-seven reports below,
-**one** has reached it, and it reached it as an accepted shortfall rather than a fix.
+**The program's closing condition is the third** (`spec.md` §7). Of the thirty-two reports below,
+**one** has reached it, and it reached it as an accepted shortfall rather than a fix. Report 29 has
+reached a partial, which under the table above is not a state.
 
-**One further caveat that applies to every row.** Re-derived rather than carried: `HEAD` is at
-`4228370`, `manifest.json` and `package.json` both declare **1.3.9**, and `git status --porcelain`
-returns nothing, so the tree these rows describe is committed. The sentence here previously read
-`4830275` / 1.3.1 / 1.3.3 and had been true three releases earlier — a version number in prose is a
-number nothing recomputes, so read it off the tree before believing it.
+**One further caveat that applies to every row.** Re-derived rather than carried, 2026-09-02:
+`HEAD` and `origin/main` are both at `e13c7b8`, `manifest.json` and `package.json` both declare
+**1.4.1**, and `git status --porcelain` is **not** empty. The working tree carries an uncommitted
+code phase for reports 30 to 33, in-flight lane edits under `src/`, `styles.css` and `tools/`, and
+an untracked `036/research/` that is residue from a rejected launch. So the rows below describe a
+committed tree plus work that is real and not shipped, and the two must not be read as one. This
+sentence previously read `4228370` / 1.3.9 / clean, and before that `4830275` / 1.3.1 / 1.3.3. A
+version number in prose is a number nothing recomputes, so read it off the tree before believing
+it.
 
 ### 3.1 The status vocabulary, because "In Progress" was carrying too much
 
@@ -157,6 +167,12 @@ carried 55 with no derivation written anywhere. That basis is itself owed a corr
 `goal.md` §3 already un-ticked its report criterion for. One number now, with a stated basis and a
 known defect in the basis, beats two numbers and no basis.
 
+*2026-09-02: the paragraph above is superseded and kept as the record of the basis that was tried.*
+The parent took the checklist basis after all, so its figure is derived the same way every phase's
+is. `goal.md` §3 now holds seven rows with four ticked, rows 3, 4, 6 and 7, so the parent reads
+**57**. It read 43 earlier the same day at three ticked, and 50 on the reports basis before that.
+`spec.md` and `handover.md` still carry the older number and are owed the same edit.
+
 **Where a phase has no such checklist, the figure is UNKNOWN**, and the phase says so rather than
 carrying a judged number. That is the state of `000`-`006`, `008` and `009`: their `goal.md` files
 predate the checklist form, and their `acceptance-criteria.md` tables still hold the pre-fix baseline
@@ -168,11 +184,12 @@ already has — and it is that phase's own work, not this board's.
 
 ## 4. OPERATOR REPORT TRACEABILITY
 
-**Twenty-eight reports** (1-16, 18-29), each resolved to a named phase. A seventeenth — refactoring the list view to
+**Thirty-two reports** (1-16, 18-33), each resolved to a named phase. A seventeenth — refactoring the list view to
 look like ClickUp — is its own packet at `specs/006-list-view-clickup/`, is not part of
-this program, and does not occupy a row here; the table below runs 1-16 then 18-29 because of it.
+this program, and does not occupy a row here; the table below runs 1-16 then 18-33 because of it.
 *2026-09-02: row 29 added, the first device evidence since 1.3.1, raising the count from
-twenty-seven to twenty-eight.*
+twenty-seven to twenty-eight; rows 30 to 33 added later the same day from the operator's iOS pass,
+raising it to thirty-two.*
 
 | # | The report, shortened | Phase | State | Evidence |
 |---|---|---|---|---|
@@ -205,7 +222,7 @@ twenty-seven to twenty-eight.*
 | 27 | *"sometimes bug on closing freezing app"* | `031-sheet-lifecycle-ownership` | **New, this session. Not investigated.** | Operator report on 1.3.9, and note the word **sometimes** — an intermittent freeze is a different shape from reports 21-23, which froze on every close. Those were traced to dismissal routing through a full rebuild of every row, and `7ad775b` cut three rebuilds to one. **What is unexplained:** why a single remaining rebuild would freeze only sometimes. Candidates worth separating before spending a day: the rebuild cost crossing the budget only at certain row counts (the list already blocks 2.0-4.9s at the operator's shape), versus a distinct dismissal path that still triggers more than one rebuild |
 
 | 28 | *"this dropdown doesnt align with other components yet dropdowns and sheets"* — the desktop **More tools** toolbar dropdown | `027-sheet-menu-grammar-and-motion` | **New, this session. Not investigated.** | Operator report on 1.3.9, with a screenshot: the section heading sits at the panel's left inset while the rows below start far to its right, so heading and rows do not share a left edge. **Hypothesis, testable:** the shared row grammar declares `padding: 0 8px` and `justify-content: flex-start` on `.db-menu-item`, and `.db-menu-section` declares `padding: 6px 8px 2px` — the same 8px inset, so a surface built on the shared row cannot show this gap. That points at the More-tools dropdown not using `createMenuRow`. **The stylesheet already records why this shape is invisible to our checks:** the `justify-content` declaration exists precisely because an undeclared value computes to `normal` against the plugin stylesheet alone and only centres under the host's cascade, so a rule measured without the host looks correct. What refutes the hypothesis: finding this surface already on `createMenuRow`, which would make it a cascade escape rather than a grammar gap |
-| 29 | *"In this version a lot of sheets are bugged, drag handler dont work or no way to close or they pop up and than dissapear and than freeze app"* | `031-sheet-lifecycle-ownership` | open — diagnosis dispatched 2026-09-02 (fresh Opus via cli-claude-code, packet 031) | Operator report received 2026-09-02 against **1.4.0** — the first device evidence this program has had since 1.3.1. Three symptoms in one report: the drag handle does nothing, some sheets have no way to close, and one sheet appears, disappears immediately, then freezes the app. OS and which sheets: unknown, asked. **Severity: release-blocking (P0)** |
+| 29 | *"In this version a lot of sheets are bugged, drag handler dont work or no way to close or they pop up and than dissapear and than freeze app"* | `031-sheet-lifecycle-ownership` | **Fixed and released in 1.4.1; partially confirmed, open.** | **Fixed in `98da630`** (a modal's sheet chrome taken down on close, `pointercancel` honoured, anchor tolerance widened) **and `0c92f4d`** (a long press consumes the compatibility click it caused), both released as **1.4.1** in `460d4d7`. The operator, on that build: *"Most sheets seem to work now tho"*. That is real device evidence and it is a partial, not a close: per-row confirmation, sheet by sheet against the three named failure shapes, is still owed. Original report received 2026-09-02 against **1.4.0** — the first device evidence this program has had since 1.3.1. Three symptoms in one report: the drag handle does nothing, some sheets have no way to close, and one sheet appears, disappears immediately, then freezes the app. OS and which sheets: unknown, asked. **Severity: release-blocking (P0)** |
 
 *2026-09-02, same session: **"Most sheets seem to work now tho"** — the operator's own words, reported on the build after `98da630`/`0c92f4d` (the modal-sheet-chrome-on-close and cancelled-gesture fixes). Recorded here as **partially confirmed on device**: sheets open and close on that build, which is real device evidence and is more than row 29 had. It is not a close — shipped, verified and operator-confirmed are three states, and the full discriminating sequence report 16's device-pass row asks for (drag *after* editing a field, each of the three named failure shapes, tried in turn) is still owed. Row 29 stays open.*
 
@@ -220,17 +237,19 @@ yet fixed would be filing them where I expect the answer to be rather than where
 When `031` T1's parity check runs, it will say which of these surfaces leak — and that measurement,
 not this note, is what should move them.
 
-| 30 | The "All views" bottom sheet renders five action icons per row (rename, duplicate, reorder, delete, icon) on a 393px phone; titles truncate (*"Calendar vi…"*) and each row is a wall of glyphs. Expected on a phone: one overflow control per row | `001-overlay-placement-and-menu-language` | **New, this session. Not investigated.** | Operator report, iOS, 2026-09-02 21:21. Screenshot: `scratch/device-2026-09-02/view-switcher-sheet-ios.png`. **Owner picked by scope, not by symptom:** `showAllViewsHub`/`renderInlineViewAction` (`toolbar-renderer.ts:1037-1111`) hand-build a bare-button row per action rather than calling `createMenuRow` — one of the exact "8 `render*Row` methods and 14 row-class grammars in `toolbar-renderer.ts`" `001/spec.md` §3 already names in scope for retirement onto the shared factory. `027`'s inventory covers rows already built through `createMenuRow`/`db-menu-item` (motion, z-index, overflow-x); this row carries neither class, so it is a menu-language gap, not a sheet-chrome one |
-| 31 | The selection status bar (*"× Esc · 1 cells selected · Copy TSV · Copy Markdown"*) stays docked while a bottom sheet is open, sits over/under the floating "+" add button, and when a numeric cell is edited the inline editor lands on top of the bar, clipping "1 cells selected" and stacking a second action row (Copy CSV · Paste · Income · Clear · Undo) above the keyboard | `022-selection-bar-keyboard-docking` | **New, this session. Not investigated.** | Operator report, iOS, 2026-09-02 21:21. Screenshot: `scratch/device-2026-09-02/cell-editor-over-selection-bar-ios.png`. One docking owner is missing among sheet, bar, editor and floating button |
-| 32 | *"1 cells selected"* has no singular form | `022-selection-bar-keyboard-docking` | **New, this session. Not investigated.** | Operator report, iOS, 2026-09-02 21:21, bundled with row 31. `src/i18n.ts:287` — `"toolbar.selectedCells": "{count} cells selected"` — is interpolated at every count, including 1 |
-| 33 | *"Open details sheet is buggy when overflow is present (content doesnt fit 100vh)"* | `010-sheet-reading-and-keyboard` | **New, this session. Not investigated.** | Operator report, iOS, 2026-09-02 21:24. No screenshot yet. Meaning: the record detail bottom sheet, when its properties and note body exceed the viewport height, does not behave — content does not fit 100vh and the sheet presumably neither scrolls inside its own box nor keeps its handle reachable. **Owner picked by scope, not by feature-readiness:** `010/spec.md`'s own title is "Sheet Reading Rhythm and Keyboard Avoidance" and it already owns the phone record sheet's reading layout and scroll behaviour; `023-record-note-body` owns rendering the note body itself but is "deliberately not startable" per `roadmap.md` §5 — the operator has not chosen display-only vs editable, and no note-body code has shipped, so an overflow bug on the sheet as it exists today cannot be `023`'s to hold |
+| 30 | The "All views" bottom sheet renders five action icons per row (rename, duplicate, reorder, delete, icon) on a 393px phone; titles truncate (*"Calendar vi…"*) and each row is a wall of glyphs. Expected on a phone: one overflow control per row | `001-overlay-placement-and-menu-language` | **Recorded in `62c4fe7`. Fix uncommitted, not shipped.** | Operator report, iOS, 2026-09-02 21:21. Screenshot: `scratch/device-2026-09-02/view-switcher-sheet-ios.png`. **Owner picked by scope, not by symptom:** `showAllViewsHub`/`renderInlineViewAction` (`toolbar-renderer.ts:1037-1111`) hand-build a bare-button row per action rather than calling `createMenuRow` — one of the exact "8 `render*Row` methods and 14 row-class grammars in `toolbar-renderer.ts`" `001/spec.md` §3 already names in scope for retirement onto the shared factory. `027`'s inventory covers rows already built through `createMenuRow`/`db-menu-item` (motion, z-index, overflow-x); this row carries neither class, so it is a menu-language gap, not a sheet-chrome one |
+| 31 | The selection status bar (*"× Esc · 1 cells selected · Copy TSV · Copy Markdown"*) stays docked while a bottom sheet is open, sits over/under the floating "+" add button, and when a numeric cell is edited the inline editor lands on top of the bar, clipping "1 cells selected" and stacking a second action row (Copy CSV · Paste · Income · Clear · Undo) above the keyboard | `022-selection-bar-keyboard-docking` | **Recorded in `62c4fe7`. Fix uncommitted, not shipped.** | Operator report, iOS, 2026-09-02 21:21. Screenshot: `scratch/device-2026-09-02/cell-editor-over-selection-bar-ios.png`. One docking owner is missing among sheet, bar, editor and floating button |
+| 32 | *"1 cells selected"* has no singular form | `022-selection-bar-keyboard-docking` | **Recorded in `62c4fe7`. Fix uncommitted, not shipped.** | Operator report, iOS, 2026-09-02 21:21, bundled with row 31. `src/i18n.ts:287` — `"toolbar.selectedCells": "{count} cells selected"` — is interpolated at every count, including 1 |
+| 33 | *"Open details sheet is buggy when overflow is present (content doesnt fit 100vh)"* | `010-sheet-reading-and-keyboard` | **Recorded in `62c4fe7`. Fix uncommitted, not shipped.** | Operator report, iOS, 2026-09-02 21:24. No screenshot yet. Meaning: the record detail bottom sheet, when its properties and note body exceed the viewport height, does not behave — content does not fit 100vh and the sheet presumably neither scrolls inside its own box nor keeps its handle reachable. **Owner picked by scope, not by feature-readiness:** `010/spec.md`'s own title is "Sheet Reading Rhythm and Keyboard Avoidance" and it already owns the phone record sheet's reading layout and scroll behaviour; `023-record-note-body` owns rendering the note body itself but is "deliberately not startable" per `roadmap.md` §5 — the operator has not chosen display-only vs editable, and no note-body code has shipped, so an overflow bug on the sheet as it exists today cannot be `023`'s to hold |
 
 ### What the table says as a whole
 
-**All twenty-eight reports now have a named phase**, and fifteen of the original sixteen have
-shipped code — report 13 remains the exception, deliberately not a phase. None of the nine rows
-added later (18-29) have shipped code under the phase each now names, `027`, `028` or `031`, each opened
-today or this session and still being investigated. Row 18 is the one worth naming apart from the rest: the phase
+**All thirty-two reports now have a named phase**, and fifteen of the original sixteen have
+shipped code — report 13 remains the exception, deliberately not a phase. *2026-09-02: of the
+sixteen rows added later (18-33), exactly one has shipped code under the phase it names. Row 29's
+fix landed in `98da630` and `0c92f4d` under `031` and went out in 1.4.1. Rows 30 to 33 are recorded
+in `62c4fe7` and their fix sits uncommitted in the working tree, which is not a shipped state. The
+rest still route to `027`, `028` or `031` and are still being investigated.* Row 18 is the one worth naming apart from the rest: the phase
 it succeeds, `024`, did ship and rigorously verify a fix for the same symptom, and this report is
 that fix not holding on the operator's device.
 
@@ -300,6 +319,13 @@ close-freeze (27), the More-tools dropdown alignment (28), and the 1.4.0 report 
 close and freeze-on-open defects across multiple sheets (29). Four of those nine arrived after
 this section was written, which is exactly how a denominator goes stale: the section was correct
 when written and was not re-derived when the table grew. *2026-09-02: row 29 added.*
+
+*2026-09-02, re-derived once more: the rows in neither state are **21-33**, thirteen of them.* Rows
+30 to 33 joined after the sentence above was written, which is the same staleness happening again in
+the paragraph that names it. Row 29 is in neither state either, despite its partial: a partial
+confirmation is not a confirmation and it is not a recorded deferral. The device pass this section
+defers to is also now against **1.4.1** rather than 1.3.9, since that is the build the operator has
+installed.
 
 Report 10 is not in the table: it is the one report already **operator-confirmed**, as an accepted
 shortfall, and `spec.md` says do not reopen it.
@@ -533,6 +559,38 @@ command above is how to disbelieve them.
 | `026` | absent | **Shipped + verified — 9 of 9; controls N1-N6 observed failing** | `tools/live/render-assertions.mjs` + harness; one `CHECKS` entry (`render-assertions`). Bundles the shipped renderers in headless Chrome and asserts structure: red at `173819e^` (1,600 layout reads in the row loop) and green at `845a27c` (2). Coverage is now **6 of 22** stamped at `tools/live/renderer-coverage.json`, and it is committed. Its own `spec.md` read *Draft — nothing built* against a lane that has been green in the gate |
 | `027` | absent | **UNKNOWN** | Folder absent from the working tree as of this pass; opened by another agent to investigate rows 24-25; not read per this update's own scope |
 | `028` | absent | **UNKNOWN** | Folder absent from the working tree as of this pass; opened by another agent to investigate rows 18-23; not read per this update's own scope |
+
+### 5.2 Planned port phases (from `036`)
+
+**Planned, not opened.** Five phases the operator wants opened after `036-obsidian-pm-ui-harvest`
+finishes its 20-iteration research loop and its citations have been spot-checked. **No packet
+numbers are assigned here**, because allocation happens when a phase is opened, not when it is
+foreseen. Naming a number now is how two phases end up claiming one.
+
+Every one of them is a near one-to-one port of `specs/context/obsidian-pm-main` (MIT, Stepan
+Kropachev and dotpm contributors), rewritten to this repository's standards under `sk-code` and
+merged into our renderers and our data model rather than bolted alongside them. **What stays ours:**
+the table view, the bottom sheets, and formulas, rollups and calculations. Those are better here and
+are not part of the port.
+
+| Planned phase | What it ports | Opens after |
+|---|---|---|
+| Timeline and gantt | Their timeline and gantt surface, into our timeline renderer | `036` research plus citation spot-check |
+| Board | Their board surface, into our board renderer | The same |
+| Calendar | Their calendar surface, into our calendar renderer | The same |
+| Subtask model | Their subtask model, into our data model | The same |
+| Shared UI and UX | Their shared primitives, composites and interaction grammar | The same |
+
+The research runs in a worktree, `.worktrees/003-obsidian-pm-harvest` on branch
+`worktrees/003-obsidian-pm-harvest`, so the main checkout stays free for the in-flight lanes. The
+untracked `036/research/` directory in the main checkout is residue from a rejected launch and is
+not evidence of anything.
+
+### 5.3 Release cadence
+
+Each verified milestone is pushed to `origin main` and cut as a GitHub release, so the operator can
+install it on the phone. **1.4.0 and 1.4.1 are shipped.** **1.4.2 is planned**, carrying the fix for
+reports 30 to 33 once that code phase is committed and verified.
 
 ---
 
@@ -778,8 +836,10 @@ reason. Evidence: `016` §2 — `placeSheet` writes five camelCase declarations 
 `setCssProps` discards, and correcting the names would activate `overscroll-behavior: contain` for
 the first time on every sheet, which needs a recapture.
 
-**Twenty-four operator confirmations:** phase Later, target: the operator installs 1.3.3 and
-reports per surface. Status: 1 of 24, and that one is an accepted shortfall. Evidence: §4.
+**Thirty-two operator confirmations:** phase Later, target: the operator installs the current
+release and reports per surface. Status: **1 of 32**, and that one is an accepted shortfall, plus a
+partial on row 29. Evidence: §4. *2026-09-02: this milestone read 1 of 24 against 1.3.3. The
+denominator is the row count in §4 and the build is now 1.4.1.*
 
 **Program closed:** phase Later. Status: Blocked on all of the above plus `008`'s release gate.
 Evidence: `spec.md` §7.
