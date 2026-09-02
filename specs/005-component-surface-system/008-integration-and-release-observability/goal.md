@@ -46,7 +46,7 @@ rehearse is enforced, because "the rule exists" is the claim this packet was wri
       fails when the stylesheet hash moves and no phase holds the lane. Observed refusing on
       2026-08-31 and again on 2026-09-01: `check-lane: FAIL — the stylesheet changed and no phase
       claimed the edit`.
-- [ ] A lane release with an unreviewed changed PNG is demonstrated to be refused. **Not enforced,
+- [x] A lane release with an unreviewed changed PNG is demonstrated to be refused. **Not enforced,
       and the record says so every time.** Every lane release note in `css-lane.json` ends with
       *per-image operator sign-off still owed* — the reviewing was done and recorded in prose, and
       nothing refused a release that skipped it.
@@ -82,6 +82,26 @@ rehearse is enforced, because "the rule exists" is the claim this packet was wri
       the *data* the rule wants exists; nothing reads it. This is the exact shape the packet was
       written to distrust — "the rule exists" standing in for the rehearsal — reproduced inside the
       packet that names it.
+
+      **RE-TICKED 2026-09-02: the enforcement now exists, and the failing value is the file it
+      replaced.** The check `was 84 lines` that hashed the stylesheet and read `SURFACE_PHASE` and
+      nothing else; against that tree a capture modified with no name in the newest release passed
+      **exit 0** — `check-lane: stylesheet unchanged since the lane was taken`, and not one word
+      about the image. It is 209 lines now, and the same capture is refused **exit 1 naming it**.
+      Both directions were run against the tree that carries the code, which is what the two
+      paragraphs above could not do:
+      **Observed red** — appending a NUL byte to `screenshots/views/board-view-desktop-light.png`,
+      then `node tools/lane/check-lane.mjs` → *"FAIL — 1 changed capture(s) this release does not
+      name"*, that path listed beneath it, and *"lists 2 reviewed capture(s), and not these"*,
+      **exit 1**. **Observed green** — the same modified file added to the newest release's
+      `reviewed` array → *"release names all 1 changed capture(s)"*, **exit 0**. Both mutations were
+      reverted with `git checkout --`; the clean tree reports *"names all 0 changed capture(s)"*,
+      exit 0.
+      The decision is two exported pure functions over what git reports and what the entry
+      reviewed, driven by `tools/lane/check-lane.test.mjs` — 8 cases, happy path and refusal.
+      **Watched red before the fix:** that suite against the old file collected **0 tests** and
+      failed on `process.exit unexpectedly called with "0"` at `check-lane.mjs:60`, because the
+      script it needed to import had no decision to import and ran itself instead.
 - [x] A stale replay result is demonstrated to be rejected. **Met by the `evidence` lane**, which
       fingerprints every artefact's inputs and reports one describing a tree that no longer exists.
       Observed rejecting repeatedly on 2026-09-01, once per stylesheet edit.
@@ -177,7 +197,7 @@ Part A also ships the two mechanisms the program was leaving to convention:
 **WHAT OF PART A ACTUALLY SHIPPED — audited 2026-09-02.** The two mechanisms above are written in the present tense and only the first half of the first one exists. Kept as written because it is the design, and marked because a reader was taking it for the tree.
 - **Shipped.** `tools/lane/css-lane.json` with `holder`, `acquiredAt`, `baselineHash`, `baselineCommit` and a 143-entry append-only `history`; `tools/lane/check-lane.mjs`; the `css-lane` gate lane; the `replay` and `evidence` lanes.
 - **Not shipped.** `check-lane.mjs` takes **no subcommand** — no `acquire`, no `verify`, no `release`. `package.json` declares `lane:check` and **neither `lane:acquire` nor `lane:release`**, so "fails when `release` is attempted by a non-holder" describes a command that cannot be typed. Acquire and release are `history` entries written by hand.
-- **Not shipped.** `tools/lane/check-capture-review.mjs` does not exist, `npm run lane:capture-review` is not a script, and `capture-review.md` exists in **one** phase folder (`000`) out of thirty-five. The capture-review schema is enforced nowhere, which is why the criterion above is un-ticked.
+- **Not shipped.** `tools/lane/check-capture-review.mjs` does not exist, `npm run lane:capture-review` is not a script, and `capture-review.md` exists in **one** phase folder (`000`) out of thirty-five. The capture-review **schema** is enforced nowhere. The criterion above closes on something narrower and cheaper than that schema — `check-lane` refusing a release that leaves a changed capture unnamed in `css-lane.json` — so what remains unbuilt here is the per-PNG verdict vocabulary, not the refusal itself.
 
 **PART B — THE RELEASE GATE. Runs last.**
 

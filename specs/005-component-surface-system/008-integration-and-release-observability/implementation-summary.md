@@ -10,9 +10,9 @@ contextType: "general"
 _memory:
   continuity:
     packet_pointer: "005-component-surface-system/008-integration-and-release-observability"
-    last_updated_at: "2026-08-30T18:30:00Z"
+    last_updated_at: "2026-09-02T14:10:00Z"
     last_updated_by: "phase-author"
-    recent_action: "Deliverable A replay re-verified green; 0 of 13 criteria Met"
+    recent_action: "Lane release refusal built; capture-review goal row re-ticked"
     next_safe_action: "Seed a cascade reversal and observe N12 redden only its own phase"
     blockers:
       - "Every negative control N1-N14 needs a styles.css or input mutation nobody has run"
@@ -68,6 +68,20 @@ claim it broke and the phase that owns it, not as a failure count.
 | `tools/live/replay.mjs` | Created (`4ccfed4`, 187 lines; extended `4928626`) | Deliverable A: re-assert every landed phase result at each handoff |
 | `package.json` | Modified (`4ccfed4`) | `"replay": "node tools/live/replay.mjs"` |
 | `tools/gate.mjs` | Modified (`4ccfed4`) | Adds the `replay` lane, so it runs on every gate invocation |
+| `tools/lane/check-lane.mjs` | Modified (84 → 209 lines) | Refuses a lane release that leaves a git-changed capture unnamed in the newest history entry's `reviewed` array |
+| `tools/lane/check-lane.test.mjs` | Created (8 cases) | Drives that refusal both ways without a repository — the decision is two exported pure functions |
+
+**A commit message described this refusal before any of it existed, and the row it ticked stayed
+ticked for a day.** `b9eca12` — *"feat(lane): refuse a release that leaves a changed capture
+unnamed"* — narrates the history read, the git-derived changed set, the `reviewed` comparison, and
+quotes an observed red and an observed green. It changed eleven files: this packet's `goal.md`, its
+`graph-metadata.json`, `../roadmap.md` and eight `tools/live/*.json` artefacts, **and no tool source
+at all.** The message was the only artefact of the feature. Nothing in the pipeline compares a
+message against the diff it describes, and the criterion it closed was one whose whole subject is a
+review recorded in prose standing in for a check — so the packet failed in the exact shape it was
+written to distrust. The audit that caught it was reading the tool, not the message: 84 lines,
+no `git`, no `history`, and the string `reviewed` absent from `tools/` outside `css-lane.json`.
+The enforcement here is the one that message described, committed this time.
 
 ### Capabilities this phase's criteria depend on that shipped under other phases' names
 
